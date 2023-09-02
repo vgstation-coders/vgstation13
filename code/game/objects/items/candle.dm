@@ -10,10 +10,21 @@
 	light_color = LIGHT_COLOR_FIRE
 	autoignition_temperature = AUTOIGNITION_FABRIC //idk the wick lmao
 
-	var/wax = 200
+	var/wax = 900
 	var/lit = 0
 	var/flavor_text
 	var/trashtype = /obj/item/trash/candle
+
+/obj/item/candle/New(turf/loc)
+	..()
+	if(world.has_round_started())
+		initialize()
+
+/obj/item/candle/initialize()
+	..()
+	if (lit)//pre-mapped lit candles
+		lit = 0
+		light("",TRUE)
 
 /obj/item/candle/update_icon()
 	overlays.len = 0

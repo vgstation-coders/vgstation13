@@ -3,15 +3,15 @@
 /datum/component/cooktop/initialize()
 	if(!isobj(parent))
 		return FALSE
-	parent.register_event(/event/attackhand, src, .proc/on_attackhand)
-	parent.register_event(/event/attackby, src, .proc/on_attackby)
-	parent.register_event(/event/examined, src, .proc/on_examine)
+	parent.register_event(/event/attackhand, src, nameof(src::on_attackhand()))
+	parent.register_event(/event/attackby, src, nameof(src::on_attackby()))
+	parent.register_event(/event/examined, src, nameof(src::on_examine()))
 	return TRUE
 
 /datum/component/cooktop/Destroy()
-	parent.unregister_event(/event/attackhand, src, .proc/on_attackhand)
-	parent.unregister_event(/event/attackby, src, .proc/on_attackby)
-	parent.unregister_event(/event/examined, src, .proc/on_examine)
+	parent.unregister_event(/event/attackhand, src, nameof(src::on_attackhand()))
+	parent.unregister_event(/event/attackby, src, nameof(src::on_attackby()))
+	parent.unregister_event(/event/examined, src, nameof(src::on_examine()))
 	..()
 
 /datum/component/cooktop/proc/on_attackhand(mob/user, atom/target)

@@ -74,6 +74,7 @@
 	sharpness = 1.2
 	sharpness_flags = SHARP_BLADE | CHOPWOOD
 	force = 10
+	var/force_wielded = 40
 	slot_flags = SLOT_BACK
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
 	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
@@ -82,7 +83,7 @@
 /obj/item/weapon/fireaxe/update_wield(mob/user)
 	..()
 	item_state = "fireaxe[wielded ? 1 : 0]"
-	force = wielded ? 40 : initial(force)
+	force = wielded ? force_wielded : initial(force)
 	if(user)
 		user.update_inv_hands()
 
@@ -104,8 +105,7 @@
 			var/obj/structure/window/W = A
 			W.shatter()
 		else
-			qdel(A)
-			A = null
+			QDEL_NULL(A)
 
 /obj/item/weapon/fireaxe/attackby(obj/item/I, mob/user)
 	if(istype(I,/obj/item/tool/crowbar/halligan))
@@ -242,7 +242,7 @@
 
 /obj/item/binoculars/update_wield(mob/user)
 	if(wielded)
-		user.register_event(/event/moved, src, .proc/mob_moved)
+		user.register_event(/event/moved, src, nameof(src::mob_moved()))
 		user.visible_message("\The [user] holds \the [src] up to \his eyes.","You hold \the [src] up to your eyes.")
 		item_state = "binoculars_wielded"
 		user.regenerate_icons()
@@ -251,7 +251,7 @@
 			var/client/C = user.client
 			C.changeView(C.view + 7)
 	else
-		user.unregister_event(/event/moved, src, .proc/mob_moved)
+		user.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 		user.visible_message("\The [user] lowers \the [src].","You lower \the [src].")
 		item_state = "binoculars"
 		user.regenerate_icons()

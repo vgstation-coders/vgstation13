@@ -21,8 +21,7 @@
 		initialize()
 
 /obj/machinery/mineral/Destroy()
-	qdel(mover)
-	mover = null
+	QDEL_NULL(mover)
 	. = ..()
 
 /obj/machinery/mineral/stacking_machine/initialize()

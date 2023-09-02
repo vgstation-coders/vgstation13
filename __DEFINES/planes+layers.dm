@@ -167,16 +167,16 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define SHADOW_LAYER				0
 	#define VEHICLE_LAYER 				0
 	#define CHAIR_ARMREST_LAYER 		0
+	#define DISPOSALS_CHUTE_LAYER 		0
 	#define RAILING_BACK_LAYER 			0.1
 	#define RAILING_MID_LAYER 			0.2
 	#define RAILING_FRONT_LAYER 		0.3
 	#define WINDOOR_LAYER 				1
 	#define OPEN_CURTAIN_LAYER			2
-	// BELOW_OBJ_LAYER					2
-	// OBJ_LAYER 	 					3
-	// ABOVE_OBJ_LAYER					4
-	#define CLOSED_CURTAIN_LAYER		5
-	#define CLOSED_FIREDOOR_LAYER		6
+	#define CLOSED_CURTAIN_LAYER		3
+	#define CLOSED_FIREDOOR_LAYER		4
+	#define POTTED_PLANT_LAYER			5
+	#define LIGHT_FIXTURE_LAYER			6
 	#define CHAT_LAYER					7
 
 #define BLOB_PLANE 				(11 + FLOAT_PLANE)			// For Blobs, which are above humans.

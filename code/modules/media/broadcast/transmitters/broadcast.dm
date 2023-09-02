@@ -34,11 +34,9 @@
 
 /obj/machinery/media/transmitter/broadcast/Destroy()
 	if(wires)
-		qdel(wires)
-		wires = null
+		QDEL_NULL(wires)
 	if(power_connection)
-		qdel(power_connection)
-		power_connection = null
+		QDEL_NULL(power_connection)
 	. = ..()
 
 /obj/machinery/media/transmitter/broadcast/proc/cable_power_change(var/list/args)

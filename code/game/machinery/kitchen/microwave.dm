@@ -1,3 +1,4 @@
+#define CAN_AUTOMAKE_SOMETHING (auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
 
 /obj/machinery/microwave
 	name = "Microwave"
@@ -99,7 +100,7 @@
 		var/obj/item/weapon/storage/bag/B = AM
 		for (var/obj/item/weapon/reagent_containers/food/snacks/G in AM.contents)
 			B.remove_from_storage(G,src)
-			if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+			if(CAN_AUTOMAKE_SOMETHING)
 				cook()
 				break
 			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
@@ -108,13 +109,13 @@
 		if (istype(AM,/obj/item/stack))
 			var/obj/item/stack/ST = AM
 			if(ST.amount > 1)
-				new ST.type (src)
+				new ST.type (src,amount=1)
 				ST.use(1)
-				if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+				if(CAN_AUTOMAKE_SOMETHING)
 					cook()
 		else
 			AM.forceMove(src)
-			if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+			if(CAN_AUTOMAKE_SOMETHING)
 				cook()
 	else
 		return FALSE
@@ -174,6 +175,9 @@
 		else //Otherwise bad luck!!
 			to_chat(user, "<span class='warning'>It's too dirty!</span>")
 			return 1
+	else if(src.operating)
+		to_chat(user, "<span class='warning'>The microwave is currently on, you'll have to try again later.</span>")
+		return 1
 
 	if(..())
 		return 1
@@ -188,7 +192,7 @@
 			if(contents.len >= limit) //Sanity checking so the microwave doesn't overfill
 				to_chat(user, "<span class='notice'>You fill \the [src] to the brim.</span>")
 				break
-			if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+			if(CAN_AUTOMAKE_SOMETHING)
 				cook()
 		updateUsrDialog()
 
@@ -197,13 +201,13 @@
 		if (istype(O,/obj/item/stack))
 			var/obj/item/stack/ST = O
 			if(ST.amount > 1)
-				new ST.type (src)
+				new ST.type (src,amount=1)
 				ST.use(1)
 				user.visible_message( \
 					"<span class='notice'>[user] adds one of [O] to [src].</span>", \
 					"<span class='notice'>You add one of [O] to [src].</span>")
 				updateUsrDialog()
-				if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+				if(CAN_AUTOMAKE_SOMETHING)
 					cook()
 				return 1
 		if(user.drop_item(O, src))
@@ -211,7 +215,7 @@
 				"<span class='notice'>[user] adds [O] to [src].</span>", \
 				"<span class='notice'>You add [O] to [src].</span>")
 			updateUsrDialog()
-			if(auto_make_on_detect && scanning_power >= 2 && select_recipe(available_recipes,src))
+			if(CAN_AUTOMAKE_SOMETHING)
 				cook()
 			return 1
 	else if(is_type_in_list(O,accepts_reagents_from))
@@ -221,6 +225,8 @@
 			if (!(R.id in acceptable_reagents))
 				to_chat(user, "<span class='warning'>[O] contains substances unsuitable for cookery.</span>")
 				return 1
+		if(CAN_AUTOMAKE_SOMETHING)
+			cook()
 		//G.reagents.trans_to(src,G.amount_per_transfer_from_this)
 	else if(istype(O,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = O
@@ -483,6 +489,7 @@
 		return
 	for (var/obj/O in contents)
 		O.forceMove(src.loc)
+		O.update_icon()
 	if (src.reagents.total_volume)
 		src.dirty++
 		if(reagent_disposal)
@@ -537,8 +544,7 @@
 			var/id = O.reagents.get_master_reagent_id()
 			if (id)
 				amount+=O.reagents.get_reagent_amount(id)
-		qdel(O)
-		O = null
+		QDEL_NULL(O)
 	src.reagents.clear_reagents()
 	ffuu.reagents.add_reagent(CARBON, amount)
 	ffuu.reagents.add_reagent(TOXIN, amount/10)
@@ -579,7 +585,7 @@
 			list("Examine", "radial_examine")
 		)
 
-		var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
+		var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, nameof(src::radial_check()), user))
 		if(!radial_check(usr))
 			return
 
@@ -648,3 +654,5 @@
 
 	if(prob(50))
 		cook()
+
+#undef CAN_AUTOMAKE_SOMETHING

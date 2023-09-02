@@ -1,0 +1,345 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/floor/asteroid,
+/area)
+"f" = (
+/turf/unsimulated/mineral,
+/area)
+"j" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"n" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"p" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area)
+"r" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/warning_stripes/pathmarkers,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"s" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/airless{
+	dir = 1;
+	icon_state = "asteroidwarning"
+	},
+/area)
+"u" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/stack/rods,
+/obj/item/stack/sheet/metal/bigstack,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"D" = (
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area)
+"F" = (
+/turf/unsimulated/floor/airless{
+	dir = 1;
+	icon_state = "asteroidwarning"
+	},
+/area)
+"G" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/device/crank_charger,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"H" = (
+/turf/space,
+/area)
+"I" = (
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"S" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/weapon/cell/empty,
+/obj/item/weapon/cell/empty,
+/obj/item/weapon/cell/empty,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"X" = (
+/obj/effect/decal/warning_stripes/pathmarkers,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"Z" = (
+/obj/effect/landmark/keycard/easy,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+
+(1,1,1) = {"
+a
+a
+H
+H
+H
+H
+H
+a
+D
+n
+H
+H
+H
+a
+a
+"}
+(2,1,1) = {"
+a
+H
+H
+H
+I
+s
+a
+a
+p
+I
+I
+H
+H
+a
+a
+"}
+(3,1,1) = {"
+H
+H
+D
+I
+I
+F
+a
+a
+D
+I
+I
+F
+H
+H
+H
+"}
+(4,1,1) = {"
+H
+a
+D
+n
+I
+s
+a
+a
+p
+I
+n
+F
+a
+a
+H
+"}
+(5,1,1) = {"
+H
+a
+D
+I
+I
+F
+a
+a
+f
+I
+I
+s
+a
+a
+H
+"}
+(6,1,1) = {"
+a
+a
+p
+I
+n
+f
+f
+f
+f
+I
+n
+F
+a
+a
+f
+"}
+(7,1,1) = {"
+f
+f
+D
+X
+r
+f
+f
+f
+D
+X
+X
+F
+f
+f
+f
+"}
+(8,1,1) = {"
+f
+f
+S
+I
+n
+I
+I
+Z
+I
+n
+I
+j
+f
+f
+f
+"}
+(9,1,1) = {"
+f
+f
+u
+I
+I
+I
+I
+n
+I
+I
+I
+G
+f
+f
+f
+"}
+(10,1,1) = {"
+a
+f
+f
+r
+X
+f
+f
+f
+f
+X
+X
+F
+f
+a
+H
+"}
+(11,1,1) = {"
+a
+a
+D
+I
+I
+f
+f
+f
+f
+I
+n
+F
+a
+a
+H
+"}
+(12,1,1) = {"
+a
+a
+p
+I
+n
+f
+f
+f
+D
+n
+I
+s
+a
+a
+H
+"}
+(13,1,1) = {"
+H
+H
+D
+I
+I
+F
+a
+a
+D
+I
+I
+F
+a
+H
+H
+"}
+(14,1,1) = {"
+a
+H
+H
+H
+I
+s
+a
+a
+p
+I
+n
+F
+H
+H
+a
+"}
+(15,1,1) = {"
+a
+a
+a
+H
+H
+H
+a
+a
+p
+I
+n
+H
+H
+H
+a
+"}

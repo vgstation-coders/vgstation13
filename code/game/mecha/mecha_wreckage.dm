@@ -186,19 +186,13 @@
 								/obj/item/mecha_parts/part/ripley_right_leg)
 	welder_salvage += pick_random_loot(parts)
 
+/obj/effect/decal/mecha_wreckage/ripley/mk2
+	name = "Ripley MK-II wreckage"
+	icon_state = "ripleymkii-broken"
+
 /obj/effect/decal/mecha_wreckage/ripley/firefighter
 	name = "Firefighter wreckage"
 	icon_state = "firefighter-broken"
-
-/obj/effect/decal/mecha_wreckage/ripley/firefighter/New()
-	..()
-	var/list/parts = list(/obj/item/mecha_parts/part/ripley_torso,
-								/obj/item/mecha_parts/part/ripley_left_arm,
-								/obj/item/mecha_parts/part/ripley_right_arm,
-								/obj/item/mecha_parts/part/ripley_left_leg,
-								/obj/item/mecha_parts/part/ripley_right_leg,
-								/obj/item/clothing/suit/fire)
-	welder_salvage += pick_random_loot(parts)
 
 /obj/effect/decal/mecha_wreckage/ripley/deathripley
 	name = "Death-Ripley wreckage"

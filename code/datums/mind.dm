@@ -79,6 +79,10 @@
 /datum/mind/New(var/key)
 	src.key = key
 
+/datum/mind/Destroy()
+	stack_trace("A mind ([key],[name]) was destroyed and that's terrible, find where it occured and prevent that.")
+	..()
+
 /datum/mind/proc/transfer_to(mob/new_character)
 	if (!current)
 		transfer_to_without_current(new_character)
@@ -91,23 +95,21 @@
 		var/datum/role/R = antag_roles[role]
 		R.PreMindTransfer(current)
 
+	if(current)					//remove ourself from our old body's mind variable NOW THAT THE TRANSFER IS DONE
+		current.old_assigned_role = assigned_role
+		current.mind = null
+
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
 		new_character.mind.current = null
 
 	nanomanager.user_transferred(current, new_character)
 
-	//find a better way to do this, this is horrible
-	if(active)
-		new_character.key = key	//now transfer the key to link the client to our new body
-
-	if(current)					//remove ourself from our old body's mind variable NOW THAT THE TRANSFER IS DONE
-		current.old_assigned_role = assigned_role
-		current.mind = null
-
 	var/mob/old_character = current
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
-	new_character.mind.active = TRUE	//necessary for some reason
+
+	if(active)
+		new_character.key = key	//now transfer the key to link the client to our new body
 
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
@@ -128,7 +130,6 @@
 
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
-		to_chat(world, "transfered to successfully")
 
 	current = new_character		//link ourself to our new body
 	new_character.mind = src	//and link our new body to ourself
@@ -324,10 +325,14 @@
 				to_chat(usr, "<span class='danger'>Sorry, that feature is not coded yet. - Deity Link</span>")
 			else if (istype(all_factions[joined_faction], /datum/faction))//we got an existing faction
 				var/datum/faction/joined = all_factions[joined_faction]
+				joined.forgeObjectives()
+				joined.OnPostSetup()
 				joined.HandleRecruitedRole(newRole)
 			else //we got an inexisting faction, gotta create it first!
 				var/datum/faction/joined = ticker.mode.CreateFaction(all_factions[joined_faction], null, 1)
 				if (joined)
+					joined.forgeObjectives()
+					joined.OnPostSetup()
 					joined.HandleRecruitedRole(newRole)
 
 		newRole.OnPostSetup()
@@ -358,10 +363,14 @@
 					to_chat(usr, "<span class='danger'>Sorry, that feature is not coded yet. - Deity Link</span>")
 				else if (istype(all_factions[join_faction], /datum/faction))//we got an existing faction
 					var/datum/faction/joined = all_factions[join_faction]
+					joined.forgeObjectives()
+					joined.OnPostSetup()
 					joined.HandleRecruitedRole(R)
 				else //we got an inexisting faction, gotta create it first!
 					var/datum/faction/joined = ticker.mode.CreateFaction(all_factions[join_faction], null, 1)
 					if (joined)
+						joined.forgeObjectives()
+						joined.OnPostSetup()
 						joined.HandleRecruitedRole(R)
 
 	else if (href_list["obj_add"])
@@ -562,6 +571,8 @@
 /mob/proc/mind_initialize() // vgedit: /mob instead of /mob/living
 	if(mind)
 		mind.key = key
+		if(ticker)
+			ticker.minds |= mind
 	else
 		mind = new /datum/mind(key)
 		if(ticker)

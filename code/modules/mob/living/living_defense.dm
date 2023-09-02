@@ -46,7 +46,6 @@
 
 	return final_damage
 
-
 /mob/living/bullet_act(var/obj/item/projectile/P, var/def_zone)
 	var/obj/item/weapon/cloaking_device/C = locate(/obj/item/weapon/cloaking_device) in src
 	if(C && C.active)
@@ -94,7 +93,7 @@
 		if(istype(O,/obj/item/weapon))
 			var/obj/item/weapon/W = O
 			dtype = W.damtype
-		src.visible_message("<span class='warning'>[src] has been hit by [O].</span>")
+		visible_message("<span class='warning'>[src] has been hit by [O].</span>")
 		if(O.impactsound)
 			playsound(loc, O.impactsound, 80, 1, -1)
 		var/zone_normal_name
@@ -115,19 +114,12 @@
 			apply_damage(damage, dtype, zone, armor, O.is_sharp(), O)
 
 		// Begin BS12 momentum-transfer code.
-
-		var/client/assailant = directory[ckey(O.fingerprintslast)]
-		var/mob/M
-
-		if(assailant && assailant.mob && istype(assailant.mob,/mob))
-			M = assailant.mob
-
 		if(speed >= EMBED_THROWING_SPEED)
 			var/obj/item/weapon/W = O
 			var/momentum = speed/2
 
 			visible_message("<span class='warning'>[src] staggers under the impact!</span>","<span class='warning'>You stagger under the impact!</span>")
-			src.throw_at(get_edge_target_turf(src,dir),1,momentum)
+			throw_at(get_edge_target_turf(src,dir),1,momentum)
 
 			if(istype(W.loc,/mob/living) && W.sharpness_flags & SHARP_TIP) //Projectile is embedded and suitable for pinning.
 
@@ -143,26 +135,22 @@
 					src.anchored = 1
 					src.pinned += O
 
-		//Log stuf!
-
+		//Log stuff!
+		if(!src.ckey || src.isDead()) //Message admins if the hit mob is alive and has a ckey
+			return
 		if(!O.fingerprintslast)
 			return
-		var/throwByName = "an unknown inanimate object"
-		if(M)
-			throwByName = M.name
-			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Hit [src.name] ([src.ckey]) with a thrown [O] (speed: [speed])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been hit with a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed])</font>")
-		if(!src.isDead() && src.ckey) //Message admins if the hit mob is alive and has a ckey
-			msg_admin_attack("[src.name] ([src.ckey]) was hit by a thrown [O], last touched by [throwByName] ([assailant.ckey]) (speed: [speed]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
 
-		if(!iscarbon(M))
-			src.LAssailant = null
-		else
-			src.LAssailant = M
-			assaulted_by(M)
+		var/client/assailant = directory[ckey(O.fingerprintslast)]
+		if(assailant && assailant.ckey && assailant.mob)
+			msg_admin_attack("[src.name] ([src.ckey]) was hit by a thrown [O], last touched by [assailant.mob.name] ([assailant.ckey]) (speed: [speed]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
+			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been hit with a thrown [O], last touched by [assailant.mob.name] ([assailant.ckey]) (speed: [speed])</font>")
+			assailant.mob.attack_log += text("\[[time_stamp()]\] <font color='red'>Hit [src.name] ([src.ckey]) with a thrown [O] (speed: [speed])</font>")
+			src.LAssailant = assailant.mob
+			assaulted_by(assailant.mob)
+
 /*
 	Ear and eye protection
-
 	Some mobs have built-in ear or eye protection, mobs that can wear equipment may account their eye/ear wear into this proc
 */
 
@@ -172,10 +160,8 @@
 
 //eyecheck(): retuns 0 for no protection, 1 for partial protection, 2 for full protection
 //EYECHECK_NO_PROTECTION, EYECHECK_PARTIAL_PROTECTION, EYECHECK_FULL_PROTECTION
-
 /mob/living/proc/eyecheck()
 	return EYECHECK_NO_PROTECTION
-
 
 //BITES
 /mob/living/bite_act(mob/living/carbon/human/M as mob)

@@ -57,7 +57,8 @@
 		else
 			clear_fullscreen("oxy")
 		//Fire and Brute damage overlay (BSSR)
-		var/hurtdamage = (getBruteLoss()*100/maxHealth) + (getFireLoss()*100/maxHealth) + (damageoverlaytemp * 100 / maxHealth)
+		//Now ignoring peg limb damage! Metal legs do not hurt!
+		var/hurtdamage = (getBruteLoss(TRUE)*100/maxHealth) + (getFireLoss(TRUE)*100/maxHealth) + (damageoverlaytemp * 100 / maxHealth)
 		if (istype(src,/mob/living/simple_animal) || istype(src,/mob/living/carbon/slime))
 			hurtdamage = (100 - health_percent) + (damageoverlaytemp * 100 / maxHealth)
 		damageoverlaytemp = 0 // We do this so we can detect if someone hits us or not.
@@ -88,23 +89,15 @@
 			clear_fullscreen("numb")
 
 	if(stat != DEAD)
-		if(disabilities & NEARSIGHTED)	//This looks meh but saves a lot of memory by not requiring to add var/prescription
-			if (ishuman(src))
-				var/mob/living/carbon/human/H = src
-				if(H.glasses)	//To every /obj/item
-					var/obj/item/clothing/glasses/G = H.glasses
-					if(!G.prescription)
-						overlay_fullscreen("nearsighted", /obj/abstract/screen/fullscreen/impaired, 1)
-					else
-						clear_fullscreen("nearsighted")
-			else
-				overlay_fullscreen("nearsighted", /obj/abstract/screen/fullscreen/impaired, 1)
-		else
-			clear_fullscreen("nearsighted")
 		if(eye_blind || blinded)
 			overlay_fullscreen("blind", /obj/abstract/screen/fullscreen/blind)
 		else
 			clear_fullscreen("blind")
+		var/impaired_vision = get_impaired_vision_range()
+		if(impaired_vision)
+			overlay_fullscreen("nearsighted", /obj/abstract/screen/fullscreen/nearsighted, impaired_vision)
+		else
+			clear_fullscreen("nearsighted")
 		if(eye_blurry)
 			overlay_fullscreen("blurry", /obj/abstract/screen/fullscreen/blurry)
 		else
@@ -117,3 +110,31 @@
 			overlay_fullscreen("high_red", /obj/abstract/screen/fullscreen/high/red)
 		else
 			clear_fullscreen("high_red")
+
+/mob/living/proc/get_impaired_vision_range()
+	var/total = 0
+	if(nearsightedness)
+		total += nearsightedness
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		var/datum/organ/internal/eyes = H.internal_organs_by_name["eyes"]
+		if(eyes && eyes.is_bruised())
+			var/a = eyes.damage - eyes.min_bruised_damage
+			var/b = eyes.min_broken_damage - eyes.min_bruised_damage
+			total += Ceiling(10 * a / b) //10 is here because there's 10 different states in screen1_blindness.dmi
+		if(H.glasses && istype(H.glasses, /obj/item/clothing))
+			total += H.glasses.nearsighted_modifier
+		if(H.head && istype(H.head, /obj/item/clothing))
+			var/obj/item/clothing/hat = H.head
+			total += hat.nearsighted_modifier
+
+	if(ismonkey(src))
+		var/mob/living/carbon/monkey/M = src
+		if(M.hat && istype(M.hat, /obj/item/clothing))
+			total += M.hat.nearsighted_modifier
+		if(M.glasses && istype(M.glasses, /obj/item/clothing))
+			total += M.glasses.nearsighted_modifier
+
+	if(total <= 0)
+		return 0
+	return clamp(total,1,10)

@@ -347,6 +347,25 @@
 		if(7) //supply
 			return "Supply"
 
+/proc/get_region_accesses_positions(var/code)
+	switch(code)
+		if(0)
+			return all_jobs_txt
+		if(1) //security
+			return security_positions
+		if(2) //medbay
+			return medical_positions
+		if(3) //research
+			return science_positions
+		if(4) //engineering and maintenance
+			return engineering_positions
+		if(5) //command
+			return command_positions
+		if(6) //station general
+			return civilian_positions
+		if(7) //supply
+			return cargo_positions
+
 /proc/get_access_desc_list(var/list/L)
 	var/list/names = list()
 	for(var/access in L)
@@ -567,4 +586,4 @@ var/global/list/all_jobs
 			return ID.registered_name
 
 /proc/get_all_job_icons() //For all existing HUD icons
-	return get_all_jobs() + list("Prisoner", "visitor")
+	return get_all_jobs() + list("Prisoner", "visitor", "Nanotrasen")

@@ -9,7 +9,6 @@ var/dynamic_chosen_mode = LORENTZ
 var/dynamic_no_stacking = 1 // NO STACKING : only one "round-ender", except if we're above 80 threat
 var/dynamic_classic_secret = 0 // Only one roundstart ruleset, and only autotraitor + minor rules allowed
 var/dynamic_high_pop_limit = 45 // Will switch to "high pop override" if the roundstart population is above this
-var/dynamic_forced_extended = 0 // No rulesets will be drated, ever
 
 var/stacking_limit = 90
 
@@ -68,7 +67,10 @@ var/stacking_limit = 90
 	var/no_stacking = 1
 	var/classic_secret = 0
 	var/high_pop_limit = 45
-	var/forced_extended = 0
+
+	var/list/ruleset_category_weights = list()
+	var/dynamic_weight_increment = 1
+
 
 /datum/gamemode/dynamic/AdminPanelEntry()
 	var/dat = list()
@@ -78,7 +80,6 @@ var/stacking_limit = 90
 	dat += "<br/>"
 	dat += "Parameters: centre = [curve_centre_of_round] ; width = [curve_width_of_round].<br/>"
 	dat += "<i>On average, <b>[peaceful_percentage]</b>% of the rounds are more peaceful.</i><br/>"
-	dat += "Forced extended: <a href='?src=\ref[src];forced_extended=1'><b>[forced_extended ? "On" : "Off"]</b></a><br/>"
 	dat += "No stacking (only one round-ender): <a href='?src=\ref[src];no_stacking=1'><b>[no_stacking ? "On" : "Off"]</b></a><br/>"
 	dat += "Classic secret (only autotraitor): <a href='?src=\ref[src];classic_secret=1'><b>[classic_secret ? "On" : "Off"]</b></a><br/>"
 	dat += "Stacking limit: <a href='?src=\ref[usr.client.holder];stacking_limit=1'>[stacking_limit]</a>"
@@ -112,9 +113,6 @@ var/stacking_limit = 90
 		return
 	if(!usr.check_rights(R_ADMIN))
 		return
-	if (href_list["forced_extended"])
-		forced_extended =! forced_extended
-		message_admins("[key_name(usr)] has set 'forced extended' to [forced_extended].")
 	else if (href_list["no_stacking"])
 		no_stacking =! no_stacking
 		message_admins("[key_name(usr)] has set 'no stacking' to [no_stacking].")
@@ -174,24 +172,39 @@ var/stacking_limit = 90
 	send2maindiscord("Dynamic mode Roundstart Threat: **[starting_threat][(starting_threat!=threat_level)?" ([threat_level])":""]**, Midround Threat: **[midround_starting_threat][(midround_starting_threat!=midround_threat_level)?" ([midround_threat_level])":""]**, rulesets: [jointext(rules_text, ", ")]")
 
 /datum/gamemode/dynamic/can_start()
+	read_previous_dynamic_rounds()
+	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart) - /datum/dynamic_ruleset/roundstart/delayed/)
+		roundstart_rules += new rule()
+	for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
+		latejoin_rules += new rule()
+	for (var/rule in subtypesof(/datum/dynamic_ruleset/midround))
+		var/datum/dynamic_ruleset/midround/DR = rule
+		if (initial(DR.weight))
+			midround_rules += new rule()
+	for(var/mob/new_player/player in player_list)
+		if(player.mind && player.ready)
+			roundstart_pop_ready++
+			candidates.Add(player)
+
+	message_admins("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [roundstart_pop_ready] players ready.")
+	log_admin("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [roundstart_pop_ready] players ready.")
+
 	distribution_mode = dynamic_chosen_mode
 	message_admins("Distribution mode is : [dynamic_chosen_mode].")
 	curve_centre_of_round = dynamic_curve_centre
 	curve_width_of_round = dynamic_curve_width
 	message_admins("Curve centre and curve width are : [curve_centre_of_round], [curve_width_of_round]")
-	forced_extended = dynamic_forced_extended
-	if (forced_extended)
-		message_admins("The round will be forced to extended.")
+	if (admin_disable_rulesets)
+		message_admins("Rulesets are currently disabled.")
 	no_stacking = dynamic_no_stacking
 	if (no_stacking)
 		message_admins("Round-ending rulesets won't stack, unless the threat is above stacking_limit ([stacking_limit]).")
 	classic_secret = dynamic_classic_secret
 	if (classic_secret)
 		message_admins("Classic secret mode active: only autotraitors will spawn, and we will only have one roundstart ruleset.")
-	log_admin("Dynamic mode parameters for the round: distrib mode = [distribution_mode], centre = [curve_centre_of_round], width is [curve_width_of_round]. Extended : [forced_extended], no stacking : [no_stacking], classic secret: [classic_secret].")
+	log_admin("Dynamic mode parameters for the round: distrib mode = [distribution_mode], centre = [curve_centre_of_round], width is [curve_width_of_round]. Rulesets Disabled : [admin_disable_rulesets], no stacking : [no_stacking], classic secret: [classic_secret].")
 
 	generate_threat()
-
 
 	var/latejoin_injection_cooldown_middle = 0.5*(LATEJOIN_DELAY_MAX + LATEJOIN_DELAY_MIN)
 	latejoin_injection_cooldown = round(clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
@@ -205,9 +218,6 @@ var/stacking_limit = 90
 	message_admins("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
 	log_admin("Parameters were: centre = [curve_centre_of_round], width = [curve_width_of_round].")
 
-	if (roundstart_pop_ready >= high_pop_limit)
-		message_admins("DYNAMIC MODE: Mode: High Population Override is in effect! ([roundstart_pop_ready]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
-		log_admin("DYNAMIC MODE: High Population Override is in effect! ([roundstart_pop_ready]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
 	dynamic_stats = new
 	dynamic_stats.starting_threat_level = threat_level
 
@@ -217,45 +227,47 @@ var/stacking_limit = 90
 		log_admin("DYNAMIC MODE: 666 threat override.")
 		message_admins("DYNAMIC MODE: 666 threat override.", 1)
 
+
 	return 1
 
-/datum/gamemode/dynamic/proc/read_previous_rounds_rulesets()
+/datum/gamemode/dynamic/proc/read_previous_dynamic_rounds()
+	//Recapping the rulesets of the last 3 rounds
 	previously_executed_rules = list(
 		"one_round_ago" = list(),
 		"two_rounds_ago" = list(),
 		"three_rounds_ago" = list()
 	)
 	var/list/data = SSpersistence_misc.read_data(/datum/persistence_task/latest_dynamic_rulesets)
-	if(!length(data))
-		return
+	if(length(data))
+		for (var/entries in data)
+			var/previous_rulesets_text = data[entries]
+			var/list/previous_rulesets = list()
+			for(var/entry in previous_rulesets_text)
+				var/entry_path = text2path(entry)
+				if(entry_path) // It's possible that a ruleset that existed last round doesn't exist anymore
+					previous_rulesets += entry_path
+			previously_executed_rules[entries] = previous_rulesets
 
-	for (var/entries in data)
-		var/previous_rulesets_text = data[entries]
-		if(!length(previous_rulesets_text))
-			return
-		var/list/previous_rulesets = list()
-		for(var/entry in previous_rulesets_text)
-			var/entry_path = text2path(entry)
-			if(entry_path) // It's possible that a ruleset that existed last round doesn't exist anymore
-				previous_rulesets += entry_path
-		previously_executed_rules[entries] = previous_rulesets
+	//Recapping the weight of the various rulesets according to their categories
+	ruleset_category_weights = list()
+	data = SSpersistence_misc.read_data(/datum/persistence_task/dynamic_ruleset_weights)
+	for (var/rule in subtypesof(/datum/dynamic_ruleset))//first we dress the list of all categories according to the rulesets that currently exist
+		var/datum/dynamic_ruleset/ruletype = rule
+		var/rulecategory = initial(ruletype.weight_category)
+		if (rulecategory)
+			ruleset_category_weights[rulecategory] = 0
+
+	if(length(data))//then we update our categories with the weights as they were after last round
+		for (var/entry in data)
+			ruleset_category_weights[entry] = data[entry]
+
+	for (var/entry in ruleset_category_weights)//finally we increment all entries in the list by 1
+		ruleset_category_weights[entry] = ruleset_category_weights[entry] + dynamic_weight_increment
 
 /datum/gamemode/dynamic/Setup()
-	read_previous_rounds_rulesets()
-	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart) - /datum/dynamic_ruleset/roundstart/delayed/)
-		roundstart_rules += new rule()
-	for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
-		latejoin_rules += new rule()
-	for (var/rule in subtypesof(/datum/dynamic_ruleset/midround))
-		var/datum/dynamic_ruleset/midround/DR = rule
-		if (initial(DR.weight))
-			midround_rules += new rule()
-	for(var/mob/new_player/player in player_list)
-		if(player.mind && player.ready)
-			roundstart_pop_ready++
-			candidates.Add(player)
-	message_admins("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [roundstart_pop_ready] players ready.")
-	log_admin("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [roundstart_pop_ready] players ready.")
+	if (roundstart_pop_ready >= high_pop_limit)
+		message_admins("DYNAMIC MODE: Mode: High Population Override is in effect! ([roundstart_pop_ready]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
+		log_admin("DYNAMIC MODE: High Population Override is in effect! ([roundstart_pop_ready]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
 	if (roundstart_pop_ready <= 0)
 		message_admins("DYNAMIC MODE: Not a single player readied-up. The round will begin without any roles assigned.")
 		log_admin("DYNAMIC MODE: Not a single player readied-up. The round will begin without any roles assigned.")
@@ -301,9 +313,10 @@ var/stacking_limit = 90
 					threat_log += "[worldtime2text()]: Roundstart [rule.name] forced"
 
 					if (istype(rule, /datum/dynamic_ruleset/roundstart/delayed/))
-						message_admins("DYNAMIC MODE: with a delay of [rule:delay/10] seconds.")
-						log_admin("DYNAMIC MODE: with a delay of [rule:delay/10] seconds.")
-						return pick_delay(rule)
+						var/datum/dynamic_ruleset/roundstart/delayed/delayed_ruleset = rule
+						message_admins("DYNAMIC MODE: with a delay of [delayed_ruleset.delay/10] seconds.")
+						log_admin("DYNAMIC MODE: with a delay of [delayed_ruleset.delay/10] seconds.")
+						pick_delay(rule)
 
 					if (rule.execute())//this should never fail since ready() returned 1
 						rule.stillborn = IsRoundAboutToEnd()
@@ -312,7 +325,6 @@ var/stacking_limit = 90
 							current_rules += rule
 						for(var/mob/M in rule.assigned)
 							candidates -= M
-						return 1
 					else
 						message_admins("DYNAMIC MODE: ....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
 						log_admin("DYNAMIC MODE: ....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
@@ -323,9 +335,7 @@ var/stacking_limit = 90
 		roundstart()
 
 /datum/gamemode/dynamic/proc/roundstart()
-	if (forced_extended)
-		message_admins("DYNAMIC MODE: Starting a round of forced extended.")
-		log_admin("DYNAMIC MODE: Starting a round of forced extended.")
+	if (admin_disable_rulesets)
 		return 1
 
 	var/indice_pop = min(10,round(roundstart_pop_ready/5)+1)
@@ -355,8 +365,8 @@ var/stacking_limit = 90
 	var/list/drafted_rules = list()
 
 	for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
-		if (rule.acceptable(roundstart_pop_ready,threat_level) && threat >= rule.cost)	//if we got the population and threat required
-			i++																			//we check whether we've got eligible players
+		if (rule.acceptable())	//if we got the population and threat required
+			i++											//we check whether we've got eligible players
 			rule.candidates = candidates.Copy()
 			rule.trim_candidates()
 			if (rule.ready())
@@ -442,8 +452,9 @@ var/stacking_limit = 90
 // returns: 0 or 1 depending on success. (failure meaning something runtimed mid-code.)
 /datum/gamemode/dynamic/proc/executing_roundstart_rule(var/datum/dynamic_ruleset/the_rule)
 	if (istype(the_rule, /datum/dynamic_ruleset/roundstart/delayed/))
-		message_admins("DYNAMIC MODE: Delayed ruleset, with a delay of [the_rule:delay/10] seconds.")
-		log_admin("DYNAMIC MODE: Delayed ruleset, with a delay of [the_rule:delay/10] seconds.")
+		var/datum/dynamic_ruleset/roundstart/delayed/delayed_ruleset = the_rule
+		message_admins("DYNAMIC MODE: Delayed ruleset, with a delay of [delayed_ruleset.delay/10] seconds.")
+		log_admin("DYNAMIC MODE: Delayed ruleset, with a delay of [delayed_ruleset.delay/10] seconds.")
 		threat_log += "[worldtime2text()]: Roundstart [the_rule.name] spent [the_rule.cost]"
 		return pick_delay(the_rule)
 
@@ -533,7 +544,7 @@ var/stacking_limit = 90
 	current_players[CURRENT_LIVING_ANTAGS] = living_antags.Copy()
 	current_players[CURRENT_DEAD_PLAYERS] = dead_players.Copy()
 	current_players[CURRENT_OBSERVERS] = list_observers.Copy()
-	if (new_rule && (forced || (new_rule.acceptable(living_players.len,threat_level) && new_rule.cost <= threat)))
+	if (new_rule && (forced || new_rule.acceptable()))
 		new_rule.candidates = current_players.Copy()
 		new_rule.trim_candidates()
 		if (new_rule.ready(forced))
@@ -551,8 +562,8 @@ var/stacking_limit = 90
 					current_rules += new_rule
 				return 1
 		else if (forced)
-			message_admins("DYNAMIC MODE: The ruleset couldn't be executed due to lack of eligible players.")
-			log_admin("DYNAMIC MODE: The ruleset couldn't be executed due to lack of eligible players.")
+			message_admins("DYNAMIC MODE: The ruleset couldn't be executed for the above reason.")	//reason provided in the ruleset's ready()
+			log_admin("DYNAMIC MODE: The ruleset couldn't be executed for the above reason.")		//generally limited to cases where the antag lacks a necessary spawn point
 	return 0
 
 /datum/gamemode/dynamic/process()
@@ -566,13 +577,10 @@ var/stacking_limit = 90
 	if (latejoin_injection_cooldown)
 		latejoin_injection_cooldown--
 
-	for (var/datum/dynamic_ruleset/rule in current_rules)
-		rule.process()
-
 	if (midround_injection_cooldown)
 		midround_injection_cooldown--
 	else
-		if (forced_extended)
+		if (admin_disable_rulesets)
 			return
 		//time to inject some threat into the round
 		if(emergency_shuttle.departed)//unless the shuttle is gone
@@ -593,7 +601,7 @@ var/stacking_limit = 90
 			current_players[CURRENT_DEAD_PLAYERS] = dead_players.Copy()
 			current_players[CURRENT_OBSERVERS] = list_observers.Copy()
 			for (var/datum/dynamic_ruleset/midround/rule in midround_rules)
-				if (rule.acceptable(living_players.len,midround_threat_level) && midround_threat >= rule.cost)
+				if (rule.acceptable())
 					// Classic secret : only autotraitor/minor roles
 					if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))
 						message_admins("[rule] was refused because we're on classic secret mode.")
@@ -696,7 +704,7 @@ var/stacking_limit = 90
 	return rule_list
 
 /datum/gamemode/dynamic/latespawn(var/mob/living/newPlayer)
-	if (forced_extended)
+	if (admin_disable_rulesets)
 		return
 	if(emergency_shuttle.departed)//no more rules after the shuttle has left
 		return
@@ -711,11 +719,12 @@ var/stacking_limit = 90
 			if (forced_latejoin_rule.choose_candidates())
 				picking_latejoin_rule(list(forced_latejoin_rule))
 		forced_latejoin_rule = null
-
+	else if (persistent_rule_interaction(newPlayer))
+		return
 	else if (!latejoin_injection_cooldown && injection_attempt())
 		var/list/drafted_rules = list()
 		for (var/datum/dynamic_ruleset/latejoin/rule in latejoin_rules)
-			if (rule.acceptable(living_players.len,midround_threat_level) && midround_threat >= rule.cost)
+			if (rule.acceptable())
 				// Classic secret : only autotraitor/minor roles
 				if (classic_secret && !((rule.flags & TRAITOR_RULESET) || (rule.flags & MINOR_RULESET)))
 					message_admins("[rule] was refused because we're on classic secret mode.")
@@ -889,4 +898,11 @@ var/stacking_limit = 90
 
 /datum/gamemode/dynamic/proc/update_stillborn_rulesets()
 	for (var/datum/dynamic_ruleset/ruleset in executed_rules)
-		ruleset.stillborn = IsRoundAboutToEnd()
+		if (ruleset.stillborn)
+			ruleset.stillborn = IsRoundAboutToEnd()
+
+/datum/gamemode/dynamic/proc/persistent_rule_interaction(var/mob/living/newPlayer)
+	for (var/datum/dynamic_ruleset/ruleset in executed_rules)
+		if (ruleset.latespawn_interaction(newPlayer))
+			return TRUE
+	return FALSE

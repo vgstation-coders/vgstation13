@@ -24,8 +24,8 @@
 		spark(src)
 
 		if (istype(src.loc,/obj/item/device/assembly_holder))
-			if (istype(src.loc.loc, /obj/structure/reagent_dispensers/fueltank/))
-				var/obj/structure/reagent_dispensers/fueltank/tank = src.loc.loc
+			if (istype(src.loc.loc, /obj/structure/reagent_dispensers/))
+				var/obj/structure/reagent_dispensers/tank = src.loc.loc
 				if (tank && tank.modded)
 					tank.explode()
 

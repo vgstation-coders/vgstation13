@@ -124,11 +124,11 @@
 					eviltwinrecruiter.logging = TRUE
 
 					// A player has their role set to Yes or Always
-					eviltwinrecruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+					eviltwinrecruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
 					// ", but No or Never
-					eviltwinrecruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+					eviltwinrecruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
 
-					eviltwinrecruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+					eviltwinrecruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 
 					eviltwinrecruiter.request_player()
 			if(5 to INFINITY)
@@ -150,8 +150,7 @@
 /datum/role/time_agent/proc/recruiter_recruited(mob/dead/observer/player)
 	if(antag && antag.current && !antag.current.stat)
 		if(player)
-			qdel(eviltwinrecruiter)
-			eviltwinrecruiter = null
+			QDEL_NULL(eviltwinrecruiter)
 			var/mob/living/carbon/human/H = new /mob/living/carbon/human(pick(timeagentstart))
 			H.ckey = player.ckey
 			H.client.changeView()
@@ -442,20 +441,17 @@
 			for (var/list/L in list(data_core.general, data_core.medical, data_core.security,data_core.locked))
 				if (L)
 					var/datum/data/record/R = find_record("name", name, L)
-					qdel(R)
-					R = null
+					QDEL_NULL(R)
 			for(var/obj/machinery/telecomms/server/S in telecomms_list)
 				for(var/datum/comm_log_entry/C in S.log_entries)
 					if(C.parameters["realname"] == name)
 						S.log_entries.Remove(C)
-						qdel(C)
-						C = null
+						QDEL_NULL(C)
 			for(var/obj/machinery/message_server/S in message_servers)
 				for(var/datum/data_pda_msg/P in S.pda_msgs)
 					if((P.sender == name) || (P.recipient == name))
 						S.pda_msgs.Remove(P)
-						qdel(P)
-						P = null
+						QDEL_NULL(P)
 		M.drop_all()
 	var/target_location = get_turf(target)
 	message_admins("[user] ([user.ckey]) has ERASED [target] from existence at [formatJumpTo(target_location)]!")

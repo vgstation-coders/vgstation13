@@ -108,6 +108,8 @@
 				return 0
 		if( iscarbon(T) )
 			var/mob/living/carbon/MC = T
+			if(MC.mind?.assigned_role == "AI") // honk honk
+				return 0
 			if( !MC.stat )
 				if( !MC.isStunned() )
 					return 1
@@ -210,6 +212,8 @@
 	return
 
 /obj/machinery/turret/proc/shootAt(var/atom/movable/target)
+	if(stat & BROKEN)
+		return
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(target)
 	if (!istype(T) || !istype(U))
@@ -349,12 +353,11 @@
 	src.stat |= BROKEN // enables the BROKEN bit
 	src.icon_state = "destroyed_target_prism"
 	invisibility = 0
-	sleep(3)
-	flick("explosion", src)
-	src.setDensity(TRUE)
-	if (cover!=null) // deletes the cover - no need on keeping it there!
-		qdel(cover)
-		cover = null
+	spawn(3)
+		flick("explosion", src)
+		src.setDensity(TRUE)
+		if (cover!=null) // deletes the cover - no need on keeping it there!
+			QDEL_NULL(cover)
 
 
 /obj/machinery/turret/proc/malf_take_control(mob/living/silicon/ai/A)
@@ -519,6 +522,18 @@
 		updateTurrets()
 		return
 	return ..()
+
+/obj/machinery/turretid/CtrlClick(mob/user) //Lock the device
+	if(!(user) || !isliving(user)) //BS12 EDIT
+		return FALSE
+	if(user.incapacitated() || !Adjacent(user))
+		return FALSE
+
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		return
+	if(allowed(user))
+		locked = !locked
+		to_chat(usr, "<span class='notice'>You [locked ? "lock" : "unlock"] the switchboard panel.</span>")
 
 //All AI shortcuts. Basing this on what airlocks do, so slight clash with user (Alt is dangerous so toggle stun/lethal, Ctrl is bolts so lock, Shift is 'open' so toggle turrets)
 /obj/machinery/turretid/AIAltClick(mob/living/silicon/ai/user) //Stun/lethal toggle
@@ -731,8 +746,7 @@
 /obj/machinery/turret/Destroy()
 	// deletes its own cover with it
 	if(cover)
-		qdel(cover)
-		cover = null
+		QDEL_NULL(cover)
 	..()
 
 /obj/machinery/turret/centcomm

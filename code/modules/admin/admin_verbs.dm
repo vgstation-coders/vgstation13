@@ -88,7 +88,8 @@ var/list/admin_verbs_admin = list(
 	/client/proc/artifacts_panel,
 	/client/proc/body_archive_panel,
 	/client/proc/climate_panel,
-	/datum/admins/proc/ashInvokedEmotions	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
+	/datum/admins/proc/ashInvokedEmotions,	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
+	/client/proc/toggle_admin_examine
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -161,6 +162,7 @@ var/list/admin_verbs_server = list(
 	/client/proc/dump_chemreactions,
 	/client/proc/save_coordinates,
 	/datum/admins/proc/mass_delete_in_zone,
+	/client/proc/hub_panel,
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
@@ -213,6 +215,8 @@ var/list/admin_verbs_debug = list(
 #endif
 	/client/proc/update_all_open_spaces,
 	/client/proc/update_all_area_portals,
+	/client/proc/spam_blend_calls,
+	/client/proc/edit_motd,
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -351,6 +355,7 @@ var/list/admin_verbs_mod = list(
 		admin_verbs_debug,
 		admin_verbs_possess,
 		admin_verbs_permissions,
+		admin_verbs_polling,
 		/client/proc/stealth,
 		admin_verbs_rejuv,
 		admin_verbs_sounds,
@@ -376,7 +381,7 @@ var/list/admin_verbs_mod = list(
 		/client/proc/splash,
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
-		/proc/generateMiniMaps,
+		///proc/generateMiniMaps,
 		/client/proc/maprender,
 		/client/proc/cmd_admin_rejuvenate,
 		/datum/admins/proc/show_role_panel,
@@ -800,6 +805,14 @@ var/list/admin_verbs_mod = list(
 		else
 			config.log_hrefs = 1
 			to_chat(src, "<b>Started logging hrefs</b>")
+
+/client/proc/hub_panel()
+	set name = "Hub Panel"
+	set category = "Server"
+	if(holder)
+		holder.HubPanel()
+	feedback_add_details("admin_verb","HP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	return
 
 /client/proc/check_ai_laws()
 	set name = "Check AI Laws"
@@ -1360,4 +1373,14 @@ var/list/admin_verbs_mod = list(
 	if(holder)
 		holder.ViewAllRods()
 	feedback_add_details("admin_verb","V-ROD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	return
+
+/client/proc/toggle_admin_examine()
+	set name = "Toggle Admin-only Descriptions"
+	set category = "Admin"
+	set desc = "See admin-only text for certain objects."
+	if(holder)
+		holder.admin_examine = !(holder.admin_examine)
+		to_chat(usr, "<span class='notice'>You toggle [holder.admin_examine ? "on" : "off"] admin examining.")
+	feedback_add_details("admin_verb","admin_examine")
 	return

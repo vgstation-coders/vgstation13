@@ -77,13 +77,14 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 		sight = copying
 	if(removing)
 		sight &= ~removing
-		if((sight != oldsight) && (removing & (SEE_TURFS | SEE_MOBS | SEE_OBJS)))
-			sight |= SEE_BLACKNESS
 	if(adding)
 		sight |= adding
-		if((sight != oldsight) && (adding & (SEE_TURFS | SEE_MOBS | SEE_OBJS)))
-			sight &= ~SEE_BLACKNESS
 	if(sight != oldsight)
+		if(sight & (SEE_TURFS | SEE_MOBS | SEE_OBJS))
+			sight &= ~SEE_BLACKNESS
+		else
+			sight |= SEE_BLACKNESS
+
 		var/mob/virtualhearer/VH = mob_hearers[src]
 		if(VH)
 			VH.sight = sight

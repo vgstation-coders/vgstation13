@@ -12,6 +12,7 @@
 	projectile_type = /obj/item/projectile/beam/veryweaklaser
 	conventional_firearm = 0
 	charge_cost = 0
+	rechargeable = FALSE
 	siemens_coefficient = 1
 	var/obj/item/weapon/lens_assembly/loadedassembly = null //The lens assembly
 	var/lens_secure = 0
@@ -26,11 +27,9 @@
 
 /obj/item/weapon/gun/energy/lasmusket/Destroy()
 	if(loadedassembly)
-		qdel(loadedassembly)
-		loadedassembly = null
+		QDEL_NULL(loadedassembly)
 	if(loadedcell)
-		qdel(loadedcell)
-		loadedcell = null
+		QDEL_NULL(loadedcell)
 	..()
 
 /obj/item/weapon/gun/energy/lasmusket/attack_self(mob/user as mob)
@@ -273,18 +272,15 @@
 			if(strength > 50000 && !flawless)
 				to_chat(user, "<span class='warning'>\The [loadedassembly] inside \the [src] melts!</span>")
 				to_chat(user, "<span class='warning'>\The [loadedcell] inside \the [src]'s power bank ruptures!</span>")
-				qdel(loadedassembly)
-				loadedassembly = null
+				QDEL_NULL(loadedassembly)
 				lens_secure = 0
-				qdel(loadedcell)
-				loadedcell = null
+				QDEL_NULL(loadedcell)
 				cell_secure = 0
 			else if (!flawless)
 				loadedassembly.durability -= (strength/2000) //Lens assembly degrades with each shot. Ultra cell gives 4 shots.
 				if(loadedassembly.durability <= 0)
 					to_chat(user, "<span class='warning'>\The [loadedassembly] inside \the [src] [strength > 100 ? "shatters under" : "finally fractures from"] the stress!</span>")
-					qdel(loadedassembly)
-					loadedassembly = null
+					QDEL_NULL(loadedassembly)
 					lens_secure = 0
 			fire_sound = initial(fire_sound)
 		update_icon()

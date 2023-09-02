@@ -39,6 +39,8 @@
 // Proximity_flag is 1 if this afterattack was called on something adjacent, in your square, or on your person.
 // Click parameters is the params string from byond Click() code, see that documentation.
 /obj/item/proc/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(istype(target, /obj/structure/reagent_dispensers) && user.Adjacent(target))
+		target.attempt_heating(src,user)
 	if(daemon && daemon.flags & DAEMON_AFTATT)
 		daemon.afterattack(target, user, proximity_flag, click_parameters)
 	return
@@ -109,7 +111,7 @@
 				slime.Discipline = 0
 
 			if(power >= 3)
-				if(istype(slime, /mob/living/carbon/slime/adult))
+				if(slime.slime_lifestage == SLIME_ADULT)
 					if(prob(5 + round(power/2)))
 
 						if(slime.Victim)

@@ -181,6 +181,16 @@
 	..()
 	reagents.add_reagent(INSECTICIDE, 250)
 
+//Fake Xeno Creep Sprayer
+/obj/item/weapon/reagent_containers/spray/creepspray
+	name = "Alien Weed Spray"
+	desc = "You're unsure if this is meant to cull or create weeds. The Discount Dan logo is haphazardly slapped on top of a faded yellow 'W' and gray 'Y'"
+	volume = 250
+
+/obj/item/weapon/reagent_containers/spray/creepspray/New()
+	..()
+	reagents.add_reagent(FAKE_CREEP, 250)
+
 //chemsprayer
 /obj/item/weapon/reagent_containers/spray/chemsprayer
 	name = "chem sprayer"

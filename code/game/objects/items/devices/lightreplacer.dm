@@ -66,6 +66,33 @@
 /obj/item/device/lightreplacer/attack_self(mob/user)
 	ui_interact(user)
 
+/*
+preattack() handles two things here (aside from its normal function of allowing an attack to go through on 0, blocking it on 1):
+- Handle replacing the light fixture on the tile that's clicked. Will return with 1 if successful. This is intentional so it does one thing per click! (either replace light or pick up broken lights)
+- Handle picking up broken lights on the clicked tile. As with replacing lights, this also returns 1 if successful.
+This used to be handled by attackby() on the light fixtures and bulbs themselves (lol), but that has been removed with this implementation.
+*/
+
+/obj/item/device/lightreplacer/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag)
+		return 0
+	var/turf/gather_loc = isturf(target) ? target : target.loc
+	if(!gather_loc || !isturf(gather_loc))
+		return 0
+	var/obj/machinery/light/lightfixture = locate() in gather_loc.contents
+	var/obj/item/weapon/light/best_light = get_best_light(lightfixture)
+	if(lightfixture && lightfixture.current_bulb && is_light_better(best_light, lightfixture.current_bulb))
+		. = ReplaceLight(lightfixture, usr)
+		return .
+	else if(lightfixture && !lightfixture.current_bulb)
+		. = ReplaceLight(lightfixture, usr)
+		if(.)
+			return .
+	else
+		for(var/obj/O in gather_loc.contents)
+			. = insert_if_possible(O)
+		return .
+
 /obj/item/device/lightreplacer/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/stack/sheet/glass/glass))
 		if(!add_glass(CC_PER_SHEET_GLASS, force_fill = 1))
@@ -294,8 +321,11 @@
 				lsource.remove_from_storage(L, supply)
 			else
 				supply.handle_item_insertion(L, TRUE)
+				usr.visible_message("\proper[usr] picks up the broken [L] using \the [src].", \
+		"\proper You pick up \the [L] using \the [src].")
 			return 1
 		else
+			to_chat(usr, "<span class='warning'>\The [src] has no supply container!</span>")
 			return 0
 	else if(L.status == LIGHT_BROKEN || L.status == LIGHT_BURNED)
 		if(waste && waste.can_be_inserted(L, TRUE))
@@ -304,8 +334,11 @@
 				lsource.remove_from_storage(L, waste)
 			else
 				waste.handle_item_insertion(L, TRUE)
+				usr.visible_message("\proper[usr] picks up the broken [L] using \the [src].", \
+		"\proper You pick up the broken [L.name] using \the [src].")
 			return 1
 		else
+			to_chat(usr, "<span class='warning'>The [src] has no waste container!</span>")
 			return 0
 
 /obj/item/device/lightreplacer/proc/build_light()
@@ -316,8 +349,7 @@
 		if(usr)
 			to_chat(usr, "<span class='warning'>\The [src] doesn't have enough glass to make that!</span>")
 		if(L)
-			qdel(L)
-			L = null
+			QDEL_NULL(L)
 		return 1
 	glass -= (L.starting_materials[MAT_GLASS] * prod_eff)
 	L.switchcount = prod_quality
@@ -345,8 +377,7 @@
 						recycledglass += (L.materials.storage[MAT_GLASS] * 0.25)
 					if(LIGHT_BURNED)
 						recycledglass += (L.materials.storage[MAT_GLASS] * 0.50)
-				qdel(L)
-				L = null
+				QDEL_NULL(L)
 		if(recycledglass)
 			to_chat(usr, "<span class='notice'>\The [src] recycles its waste box, producing [recycledglass] units of glass.</span>")
 			add_glass(recycledglass, force_fill = 2)
@@ -375,19 +406,18 @@
 	var/obj/item/weapon/light/best_light = get_best_light(target)
 	if(best_light == 0)
 		to_chat(user, "<span class='warning'>\The [src] has no supply container!</span>")
-		return
+		return 0
 	else if(!best_light)
 		to_chat(user, "<span class='warning'>\The [src] has no compatible light!</span>")
-		return
+		return 0
 	if(target.current_bulb && !is_light_better(best_light, target.current_bulb))
 		to_chat(user, "<span class='notice'>\The [src] has no light better than the one already in \the [target].</span>")
-		return
-
+		return 0
 
 	to_chat(user, "<span class='notice'>You replace the [target.fitting] with \the [src].</span>")
 	playsound(src, 'sound/machines/click.ogg', 50, 1)
-
 	supply.remove_from_storage(best_light)
+	. = 1
 
 	if(target.current_bulb)
 		var/obj/item/weapon/light/L1 = target.current_bulb
@@ -417,6 +447,8 @@
 	if(!istype(supply))
 		return 0
 	var/best_light
+	if(!target.fitting) //no idea how this happens
+		target.fitting = initial(target.fitting)
 	switch(target.fitting)
 		if("bulb")
 			best_light = ((locate(/obj/item/weapon/light/bulb/smart) in supply) || (locate(/obj/item/weapon/light/bulb/he) in supply) || (locate(/obj/item/weapon/light/bulb) in supply))

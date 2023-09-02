@@ -117,7 +117,7 @@
 	icon = 'icons/obj/chemical.dmi'
 	item_state = "contsolid"
 	w_class = W_CLASS_SMALL
-	can_only_hold = list("/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/dice","/obj/item/weapon/paper", "/obj/item/weapon/reagent_containers/food/snacks/sweet")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/dice","/obj/item/weapon/paper", "/obj/item/weapon/reagent_containers/food/snacks/sweet", "/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint")
 	allow_quick_gather = 1
 	use_to_pickup = 1
 	storage_slots = 14
@@ -264,8 +264,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 		empty_contents_to(get_turf(attacked))
 
 /obj/item/weapon/storage/pill_bottle/dice/cup/throw_impact(atom/impacted_atom, speed, mob/user)
-	..()
-	if(contents.len)
+	if(..() && contents.len)
 		empty_contents_to(get_turf(src))
 
 /obj/item/weapon/storage/pill_bottle/dice/cup/empty_contents_to(var/atom/place)
@@ -350,6 +349,65 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/sweets/strange
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/sweet/strange = 10)
+
+/obj/item/weapon/storage/pill_bottle/syndiemints
+	name = "box of mints"
+	desc = "Gets rid of halitosis and satisfied customers in one go! You shouldn't be seeing this."
+	icon = 'icons/obj/candymachine.dmi'
+	icon_state = "mintboxgeneric"
+	storage_slots = 50
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint = 50)
+
+/obj/item/weapon/storage/pill_bottle/syndiemints/New()
+	..()
+	overlays = null //no overlay fuck you
+
+	switch(rand(3))
+		if(0)
+			name = "NanoFresh"
+			desc = "An explosion of freshness in each candy!"
+			icon_state = "mintboxnanotrasen"
+			items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/nano = 50)
+		if(1)
+			name = "Synd-Sacs"
+			desc = "Freshen your fate!"
+			icon_state = "mintboxsyndie"
+			items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/syndie = 50)
+		if(2)
+			name = "Discount Dan's Minty Delight"
+			desc = "Toxin 'Free'!"
+			icon_state = "mintboxgeneric"
+			items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/discount = 50)
+		if(3)
+			name = "Uncle Ian's homemade mints"
+			desc = "Graphic Design is my passion!"
+			icon_state = "mintboxgraphicdesign"
+			items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/homemade = 50)
+	..()
+
+/obj/item/weapon/storage/pill_bottle/mint
+	name = "You shouldn't be seeing this Mints!"
+	desc = "The lastest hip mint sensation in you shouldn't be seeing this! Tell your nearest poopmin(t)."
+	icon = 'icons/obj/candymachine.dmi'
+	storage_slots = 50
+
+/obj/item/weapon/storage/pill_bottle/mint/discount
+	name = "Discount Dan's Minty Delight"
+	desc = "Toxin 'Free'!"
+	icon_state = "mintboxgeneric"
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/discount/safe = 50)
+	
+/obj/item/weapon/storage/pill_bottle/mint/nano
+	name = "NanoFresh"
+	desc = "An explosion of freshness in each candy!"
+	icon_state = "mintboxnanotrasen"
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/nano/safe = 50)
+
+/obj/item/weapon/storage/pill_bottle/mint/homemade
+	name = "Uncle Ian's homemade mints"
+	desc = "Graphic Design is my passion!"
+	icon_state = "mintboxgraphicdesign"
+	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/homemade/safe = 50)
 
 /obj/item/weapon/storage/pill_bottle/lollipops
 	name = "bag of lollipops"

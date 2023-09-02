@@ -12,16 +12,12 @@
 
 	//New pAI's get a brand new mind to prevent meta stuff from their previous life. This new mind causes problems down the line if it's not deleted here.
 	//Read as: I have no idea what I'm doing but asking for help got me nowhere so this is what you get. - Nodrak
-	if(mind)
-		qdel(mind)
 	mind = null
 	living_mob_list -= src
 	if(pps_device)
-		qdel(pps_device)
-		pps_device = null
+		QDEL_NULL(pps_device)
 	if(holomap_device)
 		holomap_device.stopWatching()
-		qdel(holomap_device)
-		holomap_device = null
+		QDEL_NULL(holomap_device)
 	ghostize()
 	qdel(src)

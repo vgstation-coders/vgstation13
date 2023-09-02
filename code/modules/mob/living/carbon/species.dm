@@ -282,7 +282,7 @@ var/global/list/playable_species = list("Human")
 	else
 		return capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
 
-/datum/species/proc/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
+/datum/species/proc/handle_death(var/mob/living/carbon/human/H, var/gibbed = 0) //Handles any species-specific death events (such as dionaea nymph spawns).
 	return
 
 /datum/species/proc/can_artifact_revive()
@@ -356,7 +356,7 @@ var/global/list/playable_species = list("Human")
 	heat_level_2 = 420 //Default 400
 	heat_level_3 = 1200 //Default 1000
 
-	flags = WHITELISTED | NO_PAIN
+	flags = NO_PAIN
 	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
 
 	blood_color = PALE_BLOOD
@@ -652,6 +652,25 @@ var/global/list/playable_species = list("Human")
 					You are particularly allergic to water, which acts like acid to you, but the inverse is so for acid, so you're fun at parties.<br>\
 					You're not as good at swinging a toolbox or throwing a punch as a baseline human, but you make up for this by bullying them from afar by talking directly into peoples minds."
 
+/datum/species/grey/makeName(var/gender,var/mob/living/carbon/human/H=null) // Grey names are hard to pin down. Some have surnames, some lack surnames. And due to their long period of contact with humanity, a few have more humanized names
+	if(prob(90)) // More alien sounding name
+		switch(rand(0,1))
+			if(0) // No surname. Maybe we're a clone who has forgotten it, or we don't care
+				if(gender==FEMALE)
+					return capitalize(pick(grey_first_female))
+				else
+					return capitalize(pick(grey_first_male))
+			if(1) // Surname present. Maybe we held on to one for sentimental reasons, or wanted to feel more important
+				if(gender==FEMALE)
+					return capitalize(pick(grey_first_female)) + " " + capitalize(pick(grey_last))
+				else
+					return capitalize(pick(grey_first_male)) + " " + capitalize(pick(grey_last))
+	else // More humanized name
+		if(gender==FEMALE)
+			return capitalize(pick(grey_first_female_h)) + " " + capitalize(pick(grey_last_h))
+		else
+			return capitalize(pick(grey_first_male_h)) + " " + capitalize(pick(grey_last_h))
+
 /datum/species/grey/handle_post_spawn(var/mob/living/carbon/human/H)
 	if(myhuman != H)
 		return
@@ -776,7 +795,7 @@ var/global/list/playable_species = list("Human")
 //	belt_icons      = 'icons/mob/belt.dmi'
 	wear_suit_icons = 'icons/mob/species/vox/suit.dmi'
 	wear_mask_icons = 'icons/mob/species/vox/masks.dmi'
-//	back_icons      = 'icons/mob/back.dmi'
+	back_icons      = 'icons/mob/species/vox/back.dmi'
 
 	has_mutant_race = 0
 	has_organ = list(
@@ -1003,13 +1022,7 @@ var/list/has_died_as_golem = list()
 			else
 				if(!client)
 					to_chat(user, "<span class='notice'>As you press \the [A] into \the [src], it shudders briefly, but falls still.</span>")
-					var/mob/dead/observer/ghost = mind_can_reenter(mind)
-					if(ghost)
-						var/mob/ghostmob = ghost.get_top_transmogrification()
-						if(ghostmob)
-							ghostmob << 'sound/effects/adminhelp.ogg'
-							to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to resurrect you. Return to your body if you want to live again!</span> \
-								(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+					ghost_reenter_alert("Someone is trying to resurrect you. Return to your body if you want to live again!")
 				else
 					anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "reverse-dust-g", sleeptime = 15)
 					var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem
@@ -1117,11 +1130,35 @@ var/list/has_died_as_golem = list()
 		"brain" =    /datum/organ/internal/brain/slime_core,
 		)
 
-/datum/species/slime/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
-	H.dropBorers()
+/datum/species/slime/handle_death(var/mob/living/carbon/human/H, gibbed) //Handles any species-specific death events (such as dionaea nymph spawns).
+	H.dropBorers(gibbed)
 	for(var/atom/movable/I in H.contents)
 		I.forceMove(H.loc)
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", sleeptime = 15)
+	if(!gibbed)
+		handle_slime_puddle(H)
+
+/datum/species/slime/gib(mob/living/carbon/human/H)
+	handle_slime_puddle(H)
+	..()
+	H.monkeyizing = TRUE
+	for(var/datum/organ/external/E in H.organs)
+		if(istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin) || istype(E, /datum/organ/external/head))
+			continue
+		//Only make the limb drop if it's not too damaged
+		if(prob(100 - E.get_damage()))
+			//Override the current limb status and don't cause an explosion
+			E.droplimb(1, 1)
+	var/gib_radius = 0
+	if(H.reagents.has_reagent(LUBE))
+		gib_radius = 6
+
+	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
+	hgibs(H.loc, H.virus2, H.dna, flesh_color, blood_color, gib_radius)
+
+/datum/species/slime/proc/handle_slime_puddle(var/mob/living/carbon/human/H)
+	if(!H)
+		return
 	var/mob/living/slime_pile/S = new(H.loc)
 	if(H.real_name)
 		S.real_name = H.real_name
@@ -1132,10 +1169,6 @@ var/list/has_died_as_golem = list()
 	//Transfer the DNA and mind into the slime puddle.
 	S.dna=H.dna
 	S.mind=H.mind
-
-/datum/species/slime/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
 
 /mob/living/slime_pile //serves as the corpse of slime people
 	name = "puddle of slime"
@@ -1354,11 +1387,8 @@ var/list/has_died_as_golem = list()
 
 	var/all_switch = TRUE
 	for(var/mob/living/T in telepathic_target)
-		if(istype(T) && can_mind_interact(T.mind))
-			to_chat(T,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: \"[message]\"</span>")
-		else
-			to_chat(M,"<span class='notice'>[T] cannot sense your telepathy.</span>")
-			continue
+		if(istype(T) && M.can_mind_interact(T))
+			to_chat(T,"<span class='mushroom'>You feel <b>[M]</b>'s thoughts: </span><span class='mushroom'>[message]</span>")
 		if(all_switch)
 			all_switch = FALSE
 			if(T != M)

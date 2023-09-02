@@ -373,6 +373,7 @@ var/list/one_way_windows
 			log_attack("[user.name] ([user.ckey]) window slammed [M.name] ([M.ckey]) ([gstate]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			return
 
+    /* One-way windows have serious performance issues - N3X
 	if(iscrowbar(W) && one_way)
 		if(!is_fulltile && get_turf(user) != get_turf(src))
 			to_chat(user, "<span class='warning'>You can't pry the sheet of plastic off from this side of \the [src]!</span>")
@@ -381,7 +382,6 @@ var/list/one_way_windows
 			toggle_one_way()
 			drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1, user)
 			return
-    /* One-way windows have serious performance issues - N3X
 	if(istype(W, /obj/item/stack/sheet/mineral/plastic))
 		if(one_way)
 			to_chat(user, "<span class='notice'>This window already has one-way tint on it.</span>")
@@ -472,8 +472,7 @@ var/list/one_way_windows
 					relativewall()
 					relativewall_neighbours()
 					if(smartwindow)
-						qdel(smartwindow)
-						smartwindow = null
+						QDEL_NULL(smartwindow)
 						if (opacity)
 							smart_toggle()
 						drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
@@ -500,8 +499,7 @@ var/list/one_way_windows
 					relativewall()
 					relativewall_neighbours()
 					if(smartwindow)
-						qdel(smartwindow)
-						smartwindow = null
+						QDEL_NULL(smartwindow)
 						if (opacity)
 							smart_toggle()
 						drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
@@ -725,7 +723,7 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/tinted
 
 	name = "tinted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall?"
 	icon_state = "twindow0"
 	base_state = "twindow"
 	opacity = 1
@@ -734,7 +732,7 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/tinted/frosted
 
 	name = "frosted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall?"
 	icon_state = "rwindow0"
 	base_state = "rwindow"
 	health = 30

@@ -1,0 +1,403 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/wall,
+/area)
+"b" = (
+/obj/effect/landmark/keycard/easy,
+/obj/effect/decal/warning_stripes/pathmarkers,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"d" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"e" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/weapon/cell/empty,
+/obj/item/weapon/cell/empty,
+/obj/item/weapon/cell/empty,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"f" = (
+/turf/space,
+/area)
+"j" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/device/crank_charger,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"l" = (
+/turf/unsimulated/floor/airless{
+	dir = 8;
+	icon_state = "asteroidwarning"
+	},
+/area)
+"p" = (
+/obj/structure/lattice,
+/obj/machinery/docklight,
+/turf/space,
+/area)
+"r" = (
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area)
+"s" = (
+/turf/unsimulated/floor/airless{
+	dir = 1;
+	icon_state = "asteroidwarning"
+	},
+/area)
+"t" = (
+/turf/simulated/floor/plating/airless/damaged,
+/area)
+"u" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/weapon/storage/toolbox/mechanical,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"v" = (
+/obj/structure/lattice,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area)
+"x" = (
+/obj/structure/grille,
+/turf/space,
+/area)
+"B" = (
+/obj/machinery/docklight,
+/turf/unsimulated/floor/airless{
+	dir = 1;
+	icon_state = "asteroidwarning"
+	},
+/area)
+"C" = (
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless,
+/area)
+"D" = (
+/obj/structure/grille/broken,
+/turf/space,
+/area)
+"E" = (
+/obj/structure/grille/broken,
+/turf/simulated/floor/plating/airless,
+/area)
+"G" = (
+/obj/structure/lattice,
+/obj/structure/lattice,
+/turf/space,
+/area)
+"H" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"M" = (
+/obj/machinery/docklight,
+/turf/unsimulated/floor/airless{
+	icon_state = "asteroidwarning"
+	},
+/area)
+"N" = (
+/obj/structure/lattice,
+/turf/simulated/floor/plating/airless,
+/area)
+"Q" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/rack,
+/obj/item/stack/rods,
+/obj/item/stack/sheet/metal/bigstack,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"R" = (
+/turf/unsimulated/floor/airless{
+	dir = 4;
+	icon_state = "asteroidwarning"
+	},
+/area)
+"S" = (
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"T" = (
+/turf/simulated/floor/plating/airless,
+/area)
+"V" = (
+/obj/effect/decal/warning_stripes/pathmarkers,
+/turf/unsimulated/floor/asteroid/underground,
+/area)
+"X" = (
+/obj/structure/grille/broken,
+/turf/simulated/floor/plating/airless/damaged,
+/area)
+
+(1,1,1) = {"
+a
+a
+X
+a
+a
+T
+p
+H
+f
+a
+a
+a
+a
+f
+a
+"}
+(2,1,1) = {"
+a
+t
+t
+T
+T
+N
+v
+S
+S
+S
+S
+d
+S
+u
+f
+"}
+(3,1,1) = {"
+E
+T
+T
+f
+f
+f
+r
+S
+f
+H
+S
+S
+S
+j
+f
+"}
+(4,1,1) = {"
+D
+t
+t
+H
+T
+T
+r
+S
+S
+H
+f
+V
+V
+V
+a
+"}
+(5,1,1) = {"
+H
+t
+T
+H
+t
+t
+r
+d
+S
+B
+f
+f
+l
+l
+a
+"}
+(6,1,1) = {"
+f
+t
+f
+f
+T
+a
+f
+S
+d
+a
+T
+H
+T
+t
+a
+"}
+(7,1,1) = {"
+x
+T
+H
+T
+T
+r
+S
+S
+S
+s
+T
+H
+f
+t
+a
+"}
+(8,1,1) = {"
+a
+a
+a
+T
+a
+a
+V
+b
+V
+s
+T
+f
+T
+T
+C
+"}
+(9,1,1) = {"
+a
+T
+f
+t
+T
+a
+S
+S
+d
+a
+T
+a
+a
+a
+a
+"}
+(10,1,1) = {"
+a
+T
+f
+G
+T
+a
+d
+S
+S
+a
+T
+T
+T
+T
+f
+"}
+(11,1,1) = {"
+a
+R
+R
+H
+f
+M
+S
+S
+a
+T
+T
+f
+t
+t
+t
+"}
+(12,1,1) = {"
+E
+V
+V
+V
+V
+H
+H
+f
+a
+f
+H
+H
+T
+T
+a
+"}
+(13,1,1) = {"
+f
+e
+d
+S
+S
+S
+S
+S
+a
+t
+t
+T
+f
+T
+a
+"}
+(14,1,1) = {"
+H
+Q
+S
+S
+S
+r
+S
+d
+a
+T
+t
+t
+H
+T
+a
+"}
+(15,1,1) = {"
+a
+E
+a
+a
+T
+p
+S
+f
+a
+a
+a
+a
+T
+C
+a
+"}

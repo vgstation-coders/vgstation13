@@ -579,8 +579,7 @@
 /obj/structure/bed/chair/folding/Destroy()
 	if(folded)
 		folded.unfolded = null
-		qdel(folded)
-		folded = null
+		QDEL_NULL(folded)
 	..()
 
 /obj/item/folding_chair
@@ -603,8 +602,7 @@
 /obj/item/folding_chair/Destroy()
 	if(unfolded)
 		unfolded.folded = null
-		qdel(unfolded)
-		unfolded = null
+		QDEL_NULL(unfolded)
 	..()
 
 /obj/item/folding_chair/attack(mob/living/M, mob/living/user, def_zone, originator)

@@ -20,6 +20,7 @@
 	speak_emote = list("squeeks","squeeks","squiks")
 	emote_hear = list("squeeks","squeaks","squiks")
 	emote_see = list("runs in a circle", "shakes", "scritches at something")
+	emote_sound = list('sound/effects/mousesqueek.ogg')
 	pass_flags = PASSTABLE
 	flags = HEAR_ALWAYS | PROXMOVE
 	speak_chance = 1
@@ -71,8 +72,7 @@
 	..()
 	standard_damage_overlay_updates()
 	if(!stat && prob(speak_chance))
-		for(var/mob/M in view())
-			M << 'sound/effects/mousesqueek.ogg'
+		playsound(src, "[pick(emote_sound)]", 100, 1)
 
 	if(!ckey && stat == CONSCIOUS && prob(0.5) && !(status_flags & BUDDHAMODE))
 		stat = UNCONSCIOUS
@@ -90,8 +90,7 @@
 			emote("me", EMOTE_AUDIBLE, "snuffles")
 
 	if(nutrition >= MOUSETFAT)
-		visible_message("<span class = 'warning'>\The [src] explodes!</span>")
-		gib()
+		mouse_overeat()
 		return
 
 	if(nutrition >= MOUSEFAT && is_fat == 0)
@@ -353,24 +352,24 @@
 		share_contact_diseases(M,block,bleeding)
 
 /mob/living/simple_animal/mouse/Crossed(AM as mob|obj)
-	if(ishuman(AM) && can_be_infected())
+	if(ishuman(AM))
 		var/mob/living/carbon/human/M = AM
 		if (M.on_foot())
 			if(!stat)
 				to_chat(M, "<span class='notice'>[bicon(src)] Squeek!</span>")
-				M << 'sound/effects/mousesqueek.ogg'
+				playsound(src, "[pick(emote_sound)]", 100, 1)
+			if (can_be_infected())
+				var/block = 0
+				var/bleeding = 0
+				if (lying)
+					block = M.check_contact_sterility(FULL_TORSO)
+					bleeding = M.check_bodypart_bleeding(FULL_TORSO)
+				else
+					block = M.check_contact_sterility(FEET)
+					bleeding = M.check_bodypart_bleeding(FEET)
 
-			var/block = 0
-			var/bleeding = 0
-			if (lying)
-				block = M.check_contact_sterility(FULL_TORSO)
-				bleeding = M.check_bodypart_bleeding(FULL_TORSO)
-			else
-				block = M.check_contact_sterility(FEET)
-				bleeding = M.check_bodypart_bleeding(FEET)
-
-			//sharing diseases with people stepping on us
-			share_contact_diseases(M,block,bleeding)
+				//sharing diseases with people stepping on us
+				share_contact_diseases(M,block,bleeding)
 	..()
 
 /mob/living/simple_animal/mouse/death(var/gibbed = FALSE)
@@ -398,6 +397,10 @@
 		to_chat(M, "<span class='warning'>The force of the projectile completely overwhelms your tiny body...</span>")
 		M.splat()
 		return PROJECTILE_COLLISION_DEFAULT
+
+/mob/living/simple_animal/mouse/proc/mouse_overeat()
+	visible_message("<span class = 'warning'>\The [src] explodes!</span>")
+	gib()
 
 /*
  * Common mouse types
@@ -546,6 +549,9 @@
 /mob/living/simple_animal/mouse/transmog
 	maxHealth = 35
 	health = 35
+
+/mob/living/simple_animal/mouse/transmog/mouse_overeat()
+	transmog_death()
 
 /mob/living/simple_animal/mouse/transmog/transmog_death()
 	if(!transmogged_from)

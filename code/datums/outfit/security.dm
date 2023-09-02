@@ -269,8 +269,7 @@
 	H.dna.SetSEState(SOBERBLOCK,1)
 	if (H.mind.role_alt_title == "Gumshoe" || H.mind.role_alt_title == "Private Eye")
 		H.dna.SetSEState(NOIRBLOCK,1)
-		genemutcheck(H, NOIRBLOCK)
-	genemutcheck(H, SOBERBLOCK)
+	H.check_mutations = M_CHECK_JOB
 
 /datum/outfit/detective/post_equip_priority(var/mob/living/carbon/human/H)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)

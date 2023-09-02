@@ -155,8 +155,7 @@
 		if ( !(C:blood_DNA) )
 			to_chat(user, "<span class='notice'>No blood found on [C]</span>")
 			if(C:blood_DNA)
-				qdel(C:blood_DNA)
-				C:blood_DNA = null
+				QDEL_NULL(C:blood_DNA)
 		else
 			to_chat(user, "<span class='notice'>Blood found on [C]. Analysing...</span>")
 			spawn(15)

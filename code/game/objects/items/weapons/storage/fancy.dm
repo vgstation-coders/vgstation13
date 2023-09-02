@@ -272,6 +272,7 @@
 /obj/item/weapon/storage/fancy/matchbox/attackby(obj/item/weapon/match/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/match) && !W.lit)
 		W.light()
+		playsound(src, 'sound/items/lighter1.ogg', 50, 1)
 		return
 	return ..()
 
@@ -325,8 +326,7 @@
 	create_reagents(15 * storage_slots)//so people can inject cigarettes without opening a packet, now with being able to inject the whole one
 
 /obj/item/weapon/storage/fancy/cigarettes/Destroy()
-	qdel(reagents)
-	reagents = null
+	QDEL_NULL(reagents)
 	..()
 
 

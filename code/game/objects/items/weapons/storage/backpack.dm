@@ -15,6 +15,7 @@
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 21
 	autoignition_temperature = AUTOIGNITION_FABRIC
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(!stealthy(user))
@@ -30,9 +31,9 @@
 	name = "Santa's Gift Bag"
 	desc = "Space Santa uses this to deliver toys to all the nice children in space in Christmas! Wow, it's pretty big!"
 	icon_state = "giftbag0"
-	item_state = "giftbag"
+	item_state = "giftbag0"
 	w_class = W_CLASS_LARGE
-	storage_slots = 7
+	storage_slots = 0
 	fits_max_w_class = W_CLASS_LARGE
 	max_combined_w_class = 400 // can store a ton of shit!
 	flags = MECH_SCAN_FAIL
@@ -48,6 +49,31 @@
 			new gift(src)
 	. = ..()
 
+/obj/item/weapon/storage/backpack/santabag/refresh_all()
+	..()
+	update_icon()
+
+/obj/item/weapon/storage/backpack/santabag/pickup()
+	..()
+	update_icon()
+
+/obj/item/weapon/storage/backpack/santabag/update_icon()
+	var/bagtype = "giftbag"
+	var/bagfill = 0
+
+	if (istype(loc, /mob/living/simple_animal/hostile/gremlin/grinch))
+		bagtype = "grinchbag"
+
+	bagfill = min(2,round(contents.len/10))
+
+	icon_state = "[bagtype][bagfill]"
+	item_state = icon_state
+
+	if (ismob(loc))
+		var/mob/M = loc
+		M.update_inv_hands()
+		M.update_inv_back()
+
 /obj/item/weapon/storage/backpack/cultify()
 	new /obj/item/weapon/storage/backpack/cultpack(loc)
 	..()
@@ -57,6 +83,7 @@
 	desc = "It's a backpack made by Honk! Co."
 	icon_state = "clownpack"
 	item_state = "clownpack"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/medic
 	name = "medical backpack"
@@ -69,12 +96,14 @@
 	desc = "It's a very robust backpack."
 	icon_state = "securitypack"
 	item_state = "securitypack"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/captain
 	name = "captain's backpack"
 	desc = "It's a special backpack made exclusively for Nanotrasen officers."
 	icon_state = "captainpack"
 	item_state = "captainpack"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/industrial
 	name = "industrial backpack"
@@ -91,6 +120,7 @@
 	desc = "It's a very fancy satchel made with fine leather."
 	icon_state = "satchel"
 	item_state = "satchel"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/satchel/withwallet/New()
 	..()
@@ -100,44 +130,52 @@
 	name = "satchel"
 	desc = "A trendy looking satchel."
 	icon_state = "satchel-norm"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/satchel_eng
 	name = "industrial satchel"
 	desc = "A tough satchel with extra pockets."
 	icon_state = "satchel-eng"
 	item_state = "engiepack"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/satchel_med
 	name = "medical satchel"
 	desc = "A sterile satchel used in medical departments."
 	icon_state = "satchel-med"
 	item_state = "medicalpack"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/satchel_vir
 	name = "virologist satchel"
 	desc = "A sterile satchel with virologist colours."
 	icon_state = "satchel-vir"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/satchel_chem
 	name = "chemist satchel"
 	desc = "A sterile satchel with chemist colours."
 	icon_state = "satchel-chem"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/satchel_gen
 	name = "geneticist satchel"
 	desc = "A sterile satchel with geneticist colours."
 	icon_state = "satchel-gen"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/satchel_tox
 	name = "scientist satchel"
 	desc = "Useful for holding research materials."
 	icon_state = "satchel-tox"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/satchel_sec
 	name = "security satchel"
 	desc = "A robust satchel for security related needs."
 	icon_state = "satchel-sec"
 	item_state = "securitypack"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/satchel_hyd
 	name = "hydroponics satchel"
@@ -149,6 +187,7 @@
 	desc = "An exclusive satchel for Nanotrasen officers."
 	icon_state = "satchel-cap"
 	item_state = "captainpack"
+	species_fit = list(VOX_SHAPED)
 
 /*
  * Messenger Bags
@@ -158,6 +197,7 @@
 	name = "messenger bag"
 	desc = "A sturdy backpack worn over one shoulder."
 	icon_state = "courierbag"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/messenger/chem
 	name = "chemistry messenger bag"

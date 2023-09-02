@@ -12,7 +12,7 @@
 	var/corpsegender = G_MALE
 	var/list/possible_names
 
-	var/corpseuniform = null //Set this to an object path to have the slot filled with said object on the corpse.
+	var/list/corpseuniform = null //Set this to an object path to have the slot filled with said object on the corpse.
 	var/corpsesuit = null
 	var/corpseshoes = null
 	var/corpsegloves = null
@@ -1014,7 +1014,7 @@
 /obj/effect/landmark/corpse/dredd
 	name = "Judge Dredd"
 	corpseuniform = /obj/item/clothing/under/darkred
-	corpsesuit = /obj/item/clothing/suit/armor/xcomsquaddie/dredd
+	corpsesuit = /obj/item/clothing/suit/armor/dredd
 	corpseglasses = /obj/item/clothing/glasses/hud/security
 	corpsemask = /obj/item/clothing/mask/gas/swat
 	corpsehelmet = /obj/item/clothing/head/helmet/dredd
@@ -1110,7 +1110,7 @@
 
 /obj/effect/landmark/corpse/grey/soldier_space
 	name = "Grey Soldier"
-	corpsemask = /obj/item/clothing/mask/breath
+	corpsemask = /obj/item/clothing/mask/gas/mothership
 	corpsesuit = /obj/item/clothing/suit/space/rig/grey/soldier
 	corpseuniform = /obj/item/clothing/under/grey/grey_soldier
 	corpsebelt = /obj/item/weapon/storage/belt/mothership
@@ -1122,9 +1122,17 @@
 	corpseuniform = /obj/item/clothing/under/grey/grey_scout
 	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
 
+/obj/effect/landmark/corpse/grey/explorer_melee
+	name = "Grey Explorer"
+	corpsesuit = /obj/item/clothing/suit/armor/mothership/explorer
+	corpseuniform = /obj/item/clothing/under/grey/grey_scout
+	corpsebelt = /obj/item/weapon/storage/belt/mothership
+	corpseshoes = /obj/item/clothing/shoes/jackboots/mothership
+	corpsehelmet = /obj/item/clothing/head/helmet/mothership_explorer
+
 /obj/effect/landmark/corpse/grey/explorer_space
 	name = "Grey Explorer"
-	corpsemask = /obj/item/clothing/mask/breath
+	corpsemask = /obj/item/clothing/mask/gas/mothership
 	corpsegloves = /obj/item/clothing/gloves/black
 	corpsesuit = /obj/item/clothing/suit/space/grey
 	corpseuniform = /obj/item/clothing/under/grey/grey_scout
@@ -1150,8 +1158,7 @@
 
 /obj/effect/landmark/corpse/grey/leader
 	name = "Grey Administrator"
-	corpsegender = G_MALE
-	corpsemask = /obj/item/clothing/mask/breath
+	corpsemask = /obj/item/clothing/mask/gas/mothership/advanced
 	corpsesuit = /obj/item/clothing/suit/space/rig/grey/leader
 	corpseuniform = /obj/item/clothing/under/grey/grey_leader
 	corpseshoes = /obj/item/clothing/shoes/jackboots/steeltoe/mothership_superior
@@ -1209,6 +1216,15 @@
 
 /obj/effect/landmark/corpse/vox/spaceraider_leader
 	name = "Vox Raid Leader"
+	corpsegender = G_MALE
+	corpsemask = /obj/item/clothing/mask/gas/syndicate
+	corpsesuit = /obj/item/clothing/suit/space/rig/syndi
+	corpseuniform = /obj/item/clothing/under/vox/vox_casual
+	corpseshoes = /obj/item/clothing/shoes/magboots/vox
+	corpseback = /obj/item/weapon/tank/nitrogen
+
+/obj/effect/landmark/corpse/vox/spaceraider_leader_named
+	name = "Hakiyikachiyayi the Handchopper"
 	corpsegender = G_MALE
 	corpsemask = /obj/item/clothing/mask/gas/syndicate
 	corpsesuit = /obj/item/clothing/suit/space/rig/syndi
@@ -1302,8 +1318,8 @@
 	corpsehelmet = list(/obj/item/clothing/head/ushanka, /obj/item/clothing/head/squatter_hat) //heh
 
 /obj/effect/landmark/corpse/civilian/New()
-	corpseuniform += existing_typesof(/obj/item/clothing/under/color)
-	corpsehelmet += existing_typesof(/obj/item/clothing/head/soft)
+	corpseuniform = existing_typesof(/obj/item/clothing/under/color)
+	corpsehelmet = existing_typesof(/obj/item/clothing/head/soft)
 
 	return ..()
 

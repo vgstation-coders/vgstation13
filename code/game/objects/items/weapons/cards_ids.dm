@@ -206,7 +206,7 @@ var/list/global/id_cards = list()
 	var/blood_type = "\[UNSET\]"
 	var/dna_hash = "\[UNSET\]"
 	var/fingerprint_hash = "\[UNSET\]"
-	var/bans = null
+	var/obj/item/demote_chip/dchip = null
 	//alt titles are handled a bit weirdly in order to unobtrusively integrate into existing ID system
 	var/assignment = null	//can be alt title or the actual job
 	var/rank = null			//actual job
@@ -232,10 +232,18 @@ var/list/global/id_cards = list()
 	..()
 
 	if(Adjacent(user))
-		user.show_message(text("The current assignment on the card is [src.assignment]."),1)
-		user.show_message("The blood type on the card is [blood_type].",1)
-		user.show_message("The DNA hash on the card is [dna_hash].",1)
-		user.show_message("The fingerprint hash on the card is [fingerprint_hash].",1)
+		if (assignment)
+			user.show_message(text("The current assignment on the card is [assignment]."),1)
+		else
+			user.show_message(text("No assignment has been set. Use an identification computer to edit."),1)
+		if (dna_hash == "\[UNSET\]")
+			user.show_message(text("No biometric data referenced. Use a body scanner at Medbay to imprint."),1)
+		else
+			user.show_message("Blood Type: [blood_type].",1)
+			user.show_message("DNA: [dna_hash].",1)
+			user.show_message("Fingerprint: [fingerprint_hash].",1)
+		if(dchip && dchip.stamped.len)
+			to_chat(user,"<span class='bad'>It has a demotion modchip with the following stamps: [english_list(uniquenamelist(dchip.stamped))].</span>")
 
 /obj/item/weapon/card/id/attack_self(var/mob/user)
 	if(user.attack_delayer.blocked())
@@ -343,7 +351,13 @@ var/list/global/id_cards = list()
 		"A. N. Other",
 		"Guy Incognito",
 		"Hugh Zasking",
-		"Ivan Gottasecret"
+		"Ivan Gottasecret",
+		"Stan Batton",
+		"Zeke Ureety",
+		"Urist Macdonald",
+		"Nathan Aufweisser",
+		"Dee Tekteev",
+		"Scheitt Couritty",
 	)
 
 /obj/item/weapon/card/id/nt_disguise/attack_self(mob/user)
@@ -823,6 +837,7 @@ var/list/global/id_cards = list()
 	assignment = "Nanotrasen Navy Representative"
 	icon_state = "centcom"
 	item_state = "id_inv"
+	rank = "Nanotrasen"
 
 /obj/item/weapon/card/id/nt_rep/New()
 	..()
@@ -832,6 +847,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/centcom/nt_officer
 	name = "Nanotrasen Navy Officer ID card"
 	assignment = "Nanotrasen Navy Officer"
+	rank = "Nanotrasen"
 
 /obj/item/weapon/card/id/centcom/nt_officer/New()
 	..()
@@ -841,6 +857,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/centcom/nt_captain
 	name = "Nanotrasen Navy Captain ID card"
 	assignment = "Nanotrasen Navy Captain"
+	rank = "Nanotrasen"
 
 /obj/item/weapon/card/id/centcom/nt_captain/New()
 	..()
@@ -850,6 +867,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/centcom/nt_supreme
 	name = "Nanotrasen Supreme Commander ID card"
 	assignment = "Nanotrasen Supreme Commander"
+	rank = "Nanotrasen"
 
 /obj/item/weapon/card/id/centcom/nt_supreme/New()
 	..()
@@ -859,6 +877,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/emergency_responder
 	name = "Emergency Responder ID card"
 	assignment = "Emergency Responder"
+	rank = "Nanotrasen"
 	icon_state = "ERT_empty"
 
 /obj/item/weapon/card/id/emergency_responder/New()
@@ -868,6 +887,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/emergency_responder_leader
 	name = "Emergency Responder Leader ID card"
 	assignment = "Emergency Responder Leader"
+	rank = "Nanotrasen"
 	icon_state = "ERT_leader"
 
 /obj/item/weapon/card/id/emergency_responder_leader/New()

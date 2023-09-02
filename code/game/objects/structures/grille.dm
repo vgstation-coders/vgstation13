@@ -131,7 +131,7 @@
 	shock(user, 75) //Ditto above
 
 /obj/structure/grille/attack_slime(mob/user as mob)
-	if(!istype(user, /mob/living/carbon/slime/adult))
+	if(!isslimeadult(user))
 		return
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)
@@ -268,14 +268,6 @@
 
 	reset_vars_after_duration(resettable_vars, duration)
 
-/obj/structure/grille/AltClick(var/mob/user)
-	var/turf/T = loc
-	if (istype(T))
-		if (user.listed_turf == T)
-			user.listed_turf = null
-		else
-			user.listed_turf = T
-			user.client.statpanel = T.name
 
 //Mapping entities and alternatives !
 

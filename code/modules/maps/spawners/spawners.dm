@@ -1238,7 +1238,8 @@
 	/obj/item/weapon/gun/mahoguny,
 	/obj/item/weapon/gun/stickybomb,
 	/obj/item/weapon/gun/siren,
-	/obj/item/weapon/gun/portalgun
+	/obj/item/weapon/gun/portalgun,
+	/obj/item/weapon/gun/energy/gatling/rusty
 )
 
 /obj/abstract/map/spawner/safe/clothing
@@ -1318,6 +1319,14 @@
 	/obj/item/weapon/reagent_containers/food/snacks/bacon,
 	/obj/item/weapon/reagent_containers/food/snacks/bacon
 )
+/obj/abstract/map/spawner/allfood
+	name = "all food spawner"
+	icon_state = "food"
+
+/obj/abstract/map/spawner/allfood/perform_spawn()
+	var/type = pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks))
+	new type(src.loc)
+
 //Syndiecargo loot spawners////////////////////////
 /obj/abstract/map/spawner/misc/syndiecargo
 	name = "syndiecargo loot spawner"
@@ -1455,6 +1464,6 @@
 		/obj/item/clothing/head/helmet/dredd,
 		/obj/item/clothing/mask/gas/swat,
 		/obj/item/weapon/storage/belt/security,
-		/obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+		/obj/item/clothing/suit/armor/dredd,
 		/obj/item/weapon/gun/lawgiver,
 	)

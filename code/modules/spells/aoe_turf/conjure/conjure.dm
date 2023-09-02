@@ -91,8 +91,7 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 	return
 
 /spell/aoe_turf/conjure/proc/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
-	qdel(animation)
-	animation = null
+	QDEL_NULL(animation)
 
 /spell/aoe_turf/conjure/choice
 	var/input_message = "What would you like to spawn?"

@@ -213,7 +213,6 @@
 "aP" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 8;
-	icon_state = "heater";
 	tag = "icon-heater (WEST)"
 	},
 /turf/simulated/floor/plating/airless,
@@ -362,7 +361,6 @@
 "bp" = (
 /obj/structure/shuttle/engine/propulsion{
 	dir = 4;
-	icon_state = "propulsion";
 	tag = "icon-propulsion (EAST)"
 	},
 /turf/simulated/wall/shuttle/unsmoothed{
@@ -376,7 +374,6 @@
 "br" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 8;
-	icon_state = "heater";
 	tag = "icon-heater (WEST)"
 	},
 /turf/simulated/floor/shuttle/plating,
@@ -578,7 +575,6 @@
 "bW" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 1;
-	icon_state = "heater";
 	tag = "icon-heater (NORTH)"
 	},
 /turf/simulated/floor/shuttle/plating,
@@ -659,7 +655,6 @@
 "ci" = (
 /obj/machinery/atmospherics/pipe/simple{
 	dir = 4;
-	icon_state = "intact";
 	level = 2
 	},
 /turf/simulated/floor/airless{
@@ -685,7 +680,6 @@
 	stat = 2
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "warning"
 	},
 /area/awaymission/research)
@@ -728,7 +722,6 @@
 "co" = (
 /obj/structure/window/reinforced,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "warning"
 	},
 /area/awaymission/research)
@@ -798,7 +791,6 @@
 "cy" = (
 /obj/structure/shuttle/engine/propulsion{
 	dir = 4;
-	icon_state = "propulsion";
 	tag = "icon-propulsion (EAST)"
 	},
 /turf/space,
@@ -806,7 +798,6 @@
 "cz" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 8;
-	icon_state = "heater";
 	tag = "icon-heater (WEST)"
 	},
 /obj/structure/window/reinforced,
@@ -896,7 +887,6 @@
 "cK" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 8;
-	icon_state = "heater";
 	tag = "icon-heater (WEST)"
 	},
 /obj/structure/window/reinforced{
@@ -911,7 +901,6 @@
 "cL" = (
 /obj/effect/decal/remains/human{
 	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
-	icon_state = "remains";
 	name = "Syndicate agent remains"
 	},
 /obj/item/clothing/suit/storage/labcoat,
@@ -964,7 +953,6 @@
 "cR" = (
 /obj/machinery/atmospherics/pipe/simple{
 	dir = 9;
-	icon_state = "intact";
 	level = 2
 	},
 /turf/simulated/floor/airless{
@@ -1039,7 +1027,6 @@
 "da" = (
 /obj/machinery/shower{
 	dir = 4;
-	icon_state = "shower";
 	tag = "icon-shower (EAST)"
 	},
 /obj/structure/window/reinforced/tinted,
@@ -1181,8 +1168,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/research)
@@ -1190,8 +1176,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "delivery"
@@ -1207,8 +1192,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "showroomfloor"
@@ -1243,7 +1227,6 @@
 /obj/machinery/singularity/narsie/wizard/sc_Narsie{
 	current_size = 5;
 	pixel_x = -240;
-	pixel_y = -256;
 	throw_range = 5
 	},
 /turf/space,
@@ -1291,7 +1274,6 @@
 "dB" = (
 /obj/machinery/shower{
 	dir = 4;
-	icon_state = "shower";
 	pixel_y = -10
 	},
 /obj/structure/window/reinforced/tinted{
@@ -1654,8 +1636,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/northblock)
@@ -1663,8 +1644,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/airless{
 	icon_state = "damaged3"
@@ -1674,8 +1654,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/northblock)
@@ -1683,8 +1662,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/airless{
 	icon_state = "floorscorched1"
@@ -1694,8 +1672,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/airless{
 	icon_state = "damaged2"
@@ -1705,8 +1682,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -1717,8 +1693,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/airless{
 	icon_state = "floorscorched2"
@@ -1769,7 +1744,6 @@
 "eH" = (
 /obj/machinery/atmospherics/pipe/simple{
 	dir = 4;
-	icon_state = "intact";
 	level = 2
 	},
 /turf/simulated/floor{
@@ -1779,7 +1753,6 @@
 "eI" = (
 /obj/machinery/atmospherics/pipe/simple{
 	dir = 9;
-	icon_state = "intact";
 	level = 2
 	},
 /obj/machinery/light/small{
@@ -1792,7 +1765,6 @@
 "eJ" = (
 /obj/structure/shuttle/engine/heater{
 	dir = 8;
-	icon_state = "heater";
 	tag = "icon-heater (WEST)"
 	},
 /obj/structure/window/reinforced{
@@ -2238,7 +2210,6 @@
 /obj/item/clothing/head/helmet/space/syndicate,
 /obj/effect/decal/remains/human{
 	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
-	icon_state = "remains";
 	name = "Syndicate agent remains"
 	},
 /obj/item/clothing/shoes/syndigaloshes,
@@ -2269,8 +2240,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/airless{
 	icon_state = "damaged5"
@@ -2627,8 +2597,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/midblock)
@@ -2639,8 +2608,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /obj/effect/decal/cleanable/blood/splatter,
 /obj/item/weapon/gun/projectile/shotgun/pump/sc_pump,
@@ -2651,8 +2619,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/midblock)
@@ -2691,7 +2658,6 @@
 "gO" = (
 /obj/effect/decal/remains/human{
 	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
-	icon_state = "remains";
 	name = "Syndicate agent remains"
 	},
 /obj/effect/landmark/sc_bible_spawner,
@@ -2746,7 +2712,6 @@
 	},
 /obj/effect/decal/remains/human,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "warning"
 	},
 /area/awaymission/arrivalblock)
@@ -3125,7 +3090,6 @@
 "hU" = (
 /obj/effect/decal/remains/human{
 	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
-	icon_state = "remains";
 	name = "Syndicate agent remains"
 	},
 /obj/item/ammo_casing/a12mm,
@@ -3195,8 +3159,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/arrivalblock)
@@ -3207,8 +3170,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/arrivalblock)
@@ -3217,8 +3179,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 4;
@@ -3227,14 +3188,12 @@
 /area/awaymission/arrivalblock)
 "ie" = (
 /obj/machinery/door/airlock/glass_security{
-	name = "Glass Airlock";
-	req_access_txt = "0"
+	name = "Glass Airlock"
 	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/arrivalblock)
@@ -3242,8 +3201,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/airless,
 /area/awaymission/midblock)
@@ -3284,7 +3242,6 @@
 "ik" = (
 /obj/effect/decal/remains/human{
 	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
-	icon_state = "remains";
 	name = "Syndicate agent remains"
 	},
 /obj/item/ammo_casing/a12mm,
@@ -3382,7 +3339,6 @@
 "iA" = (
 /obj/effect/decal/remains/human{
 	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
-	icon_state = "remains";
 	name = "Syndicate agent remains"
 	},
 /obj/item/ammo_casing/a12mm,
@@ -3405,7 +3361,6 @@
 "iC" = (
 /obj/effect/decal/remains/human{
 	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
-	icon_state = "remains";
 	name = "Syndicate agent remains"
 	},
 /obj/item/ammo_casing/a12mm,
@@ -3640,8 +3595,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/airless,
 /area/awaymission/southblock)
@@ -3652,8 +3606,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/airless,
 /area/awaymission/southblock)
@@ -3661,8 +3614,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /obj/structure/cable{
 	d1 = 2;
@@ -3678,8 +3630,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/airless,
 /area/awaymission/southblock)
@@ -3729,9 +3680,7 @@
 /area/awaymission/southblock)
 "jv" = (
 /obj/machinery/door/airlock/glass_medical{
-	id_tag = null;
-	name = "Glass Airlock";
-	req_access_txt = "0"
+	name = "Glass Airlock"
 	},
 /turf/simulated/floor,
 /area/awaymission/southblock)
@@ -3792,7 +3741,6 @@
 "jE" = (
 /obj/effect/decal/remains/human{
 	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
-	icon_state = "remains";
 	name = "Syndicate agent remains"
 	},
 /turf/simulated/floor,
@@ -3962,13 +3910,11 @@
 "kh" = (
 /obj/machinery/light/small,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitehall"
 	},
 /area/awaymission/southblock)
 "ki" = (
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitehall"
 	},
 /area/awaymission/southblock)
@@ -3976,7 +3922,6 @@
 /obj/structure/table,
 /obj/item/weapon/paper_bin,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitehall"
 	},
 /area/awaymission/southblock)
@@ -4171,7 +4116,6 @@
 /obj/item/clothing/under/syndicate,
 /obj/effect/decal/remains/human{
 	desc = "This guy seemed to have died in terrible way! Half his remains are dust.";
-	icon_state = "remains";
 	name = "Syndicate agent remains"
 	},
 /obj/item/weapon/paper/sc_safehint_paper_hydro,
@@ -4647,8 +4591,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/southblock)
@@ -4656,8 +4599,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -4673,8 +4615,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -4685,8 +4626,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	dir = 5;
@@ -4697,8 +4637,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /obj/machinery/door/airlock/engineering,
 /turf/simulated/floor,
@@ -4707,8 +4646,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/gateroom)
@@ -4716,8 +4654,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /obj/structure/cable{
 	d1 = 1;
@@ -4773,14 +4710,12 @@
 	icon_state = "twindow"
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitehall"
 	},
 /area/awaymission/southblock)
 "mi" = (
 /obj/machinery/sleeper,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitehall"
 	},
 /area/awaymission/southblock)
@@ -4808,8 +4743,7 @@
 /obj/machinery/power/apc{
 	dir = 4;
 	name = "Gateroom APC";
-	pixel_x = 28;
-	pixel_y = 0
+	pixel_x = 28
 	},
 /obj/structure/cable{
 	d2 = 8;

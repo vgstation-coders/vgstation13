@@ -420,7 +420,7 @@
 /obj/item/clothing/accessory/rad_patch
 	name = "radiation detection patch"
 	desc = "A paper patch that you can attach to your clothing. Changes color to black when it absorbs over a certain amount of radiation."
-	icon_state = "rad_patch"
+	icon_state = "patch_0"
 	var/rad_absorbed = 0
 	var/rad_threshold = 45
 	var/triggered = FALSE
@@ -440,17 +440,17 @@
 		update_icon()
 		to_chat(user, "<span class = 'warning'>You hear \the [src] tick!</span>")
 
-		user.unregister_event(/event/irradiate, src, .proc/check_rads)
+		user.unregister_event(/event/irradiate, src, nameof(src::check_rads()))
 
 /obj/item/clothing/accessory/rad_patch/on_attached(obj/item/clothing/C)
 	..()
 	if(ismob(C.loc) && !triggered)
 		var/mob/user = C.loc
-		user.register_event(/event/irradiate, src, .proc/check_rads)
+		user.register_event(/event/irradiate, src, nameof(src::check_rads()))
 
 /obj/item/clothing/accessory/rad_patch/on_removed(mob/user)
 	..()
-	user?.unregister_event(/event/irradiate, src, .proc/check_rads)
+	user?.unregister_event(/event/irradiate, src, nameof(src::check_rads()))
 
 /obj/item/clothing/accessory/rad_patch/examine(mob/user)
 	..(user)

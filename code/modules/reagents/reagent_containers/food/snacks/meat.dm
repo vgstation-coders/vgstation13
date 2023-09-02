@@ -30,8 +30,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
 	..()
 	if(poisonsacs)
-		qdel(poisonsacs)
-		poisonsacs = null
+		QDEL_NULL(poisonsacs)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal //This meat spawns when an animal is butchered, and its name is set to '[animal.species_name] meat' (like "cat meat")
 	var/animal_name = "animal"
@@ -233,6 +232,10 @@
 	desc = "A chunk of meat from an above-average sized cockroach."
 	icon_state = "bigroachmeat"
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big/isopod
+	name = "Isopod meat"
+	desc = "A chunk of meat from an isopod."
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
@@ -392,7 +395,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/snail
 	icon_state = "snail_meat"
 	name = "snail meat"
-	desc = "How uncivilised ! You cannot be expected to eat that without cooking it, mon Dieu !"
+	desc = "How uncivilised! You cannot be expected to eat that without cooking it, mon Dieu!"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/snail/New()

@@ -289,8 +289,8 @@ var/global/list/nlist = list( \
 	"h/e pipe cap", \
 	"up pipe", \
 	"down pipe", \
-	"manual pressure valve", \
-	"digital pressure valve", \
+	"manual conditional valve", \
+	"digital conditional valve", \
 )
 /obj/item/pipe/proc/update()
 
@@ -568,8 +568,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	else
 		// If the pipe's still around, nuke it.
 		if(P)
-			qdel(P)
-			P = null
+			QDEL_NULL(P)
 	return 1
 	 //TODO: DEFERRED
 

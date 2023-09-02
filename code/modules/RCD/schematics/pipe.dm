@@ -38,6 +38,8 @@
 	else
 		qdel(AM)
 
+	AM.investigation_log(I_RCD,"was deconstructed by [user]")
+
 /datum/rcd_schematic/paint_pipes
 	name     = "Paint pipes"
 	category = "Utilities"
@@ -148,6 +150,7 @@
 		O.color = selected_color
 		O.update_icon()
 	user.visible_message("<span class='notice'>[user] paints \the [O] [selected_color].</span>","<span class='notice'>You paint \the [O] [selected_color].</span>")
+	// is pipe painting really worth logging? cmon now
 
 /datum/rcd_schematic/paint_pipes/Topic(var/href, var/list/href_list)
 	if(href_list["set_color"])
@@ -538,13 +541,13 @@ var/global/list/disposalpipeID2State = list(
 	pipe_type	= PIPE_BINARY
 
 /datum/rcd_schematic/pipe/mpvalve
-	name		= "Manual Pressure Valve"
+	name		= "Manual Conditional Valve"
 
 	pipe_id		= PIPE_MPVALVE
 	pipe_type	= PIPE_TRINARY
 
 /datum/rcd_schematic/pipe/dpvalve
-	name		= "Digital Pressure Valve"
+	name		= "Digital Conditional Valve"
 
 	pipe_id		= PIPE_DPVALVE
 	pipe_type	= PIPE_TRINARY

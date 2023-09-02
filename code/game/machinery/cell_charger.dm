@@ -114,7 +114,7 @@
 
 /obj/machinery/cell_charger/attack_hand(mob/user)
 	if(charging)
-		if(emagged) //Oh shit nigger what are you doing
+		if(emagged)
 			spark(src, 5)
 			spawn(15)
 				explosion(src.loc, -1, 1, 3, adminlog = 0, whodunnit = user) //Overload
@@ -198,8 +198,7 @@
 
 		new result(get_turf(holder))
 
-		qdel (holder)
-		holder = null
+		QDEL_NULL (holder)
 
 	feedback_inc("crank_charger_created",1)
 
@@ -271,8 +270,7 @@
 
 /obj/item/device/crank_charger/Destroy()
 	if(stored)
-		qdel(stored)
-		stored = null
+		QDEL_NULL(stored)
 	..()
 
 /obj/item/device/crank_charger/generous

@@ -1,3 +1,6 @@
+/mob/living/carbon
+	admin_desc = "The 'manual_emote_sound_override' variable can be set to 1 to enable a character to scream audibly whenever they want."
+
 /mob/living/carbon/Login()
 	..()
 	update_hud()
@@ -399,17 +402,17 @@
 		src << browse(null, t1)
 
 	if(href_list["hands"])
-		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+		if(usr.incapacitated() || !Adjacent(usr)|| (isanimal(usr) && !isgrinch(usr)))
 			return
 		handle_strip_hand(usr, text2num(href_list["hands"])) //href_list "hands" is the hand index, not the item itself. example, GRASP_LEFT_HAND
 
 	else if(href_list["item"])
-		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+		if(usr.incapacitated() || !Adjacent(usr)|| (isanimal(usr) && !isgrinch(usr)))
 			return
 		handle_strip_slot(usr, text2num(href_list["item"])) //href_list "item" would actually be the item slot, not the item itself. example: slot_head
 
 	else if(href_list["internals"])
-		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+		if(usr.incapacitated() || !Adjacent(usr)|| (isanimal(usr) && !isgrinch(usr)))
 			return
 		set_internals(usr)
 
@@ -646,9 +649,9 @@
 	. = ..()
 	if(!istype(loc, /turf/space))
 		for(var/obj/item/I in get_all_slots())
-			if(I.flags & SLOWDOWN_WHEN_CARRIED)
+			if(I == src.back)
 				. *= max(1,I.slowdown / 2) // heavy items worn on the back. those shouldn't slow you down as much.
-			else
+			else if(!isclothing(I) || (isclothing(I) && (I in get_clothing_items())))
 				. *= I.slowdown
 
 		for(var/obj/item/I in held_items)

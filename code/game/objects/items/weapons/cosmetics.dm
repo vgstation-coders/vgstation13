@@ -577,8 +577,7 @@
 	..()
 
 /obj/item/weapon/pocket_mirror/throw_impact(atom/hit_atom, var/speed, mob/user)
-	..()
-	if(!isturf(hit_atom))
+	if(..() || !isturf(hit_atom))
 		return
 	if (prob(25))
 		shatter(user)
@@ -614,6 +613,12 @@
 			handle_hair(user, target)
 	else
 		..()
+
+
+/obj/item/weapon/pocket_mirror/arcane
+	name = "strange pocket mirror"
+	desc = "is that your reflection? or someone elses."
+	arcanetampered = 1
 
 
 /obj/item/weapon/nanitecontacts

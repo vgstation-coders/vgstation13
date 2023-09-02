@@ -38,14 +38,11 @@
 
 /obj/item/weapon/gun/projectile/flamethrower/Destroy()
 	if(weldtool)
-		qdel(weldtool)
-		weldtool = null
+		QDEL_NULL(weldtool)
 	if(igniter)
-		qdel(igniter)
-		igniter = null
+		QDEL_NULL(igniter)
 	if(ptank)
-		qdel(ptank)
-		ptank = null
+		QDEL_NULL(ptank)
 	..()
 	return
 

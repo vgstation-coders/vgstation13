@@ -4,9 +4,9 @@
 
 /datum/artifact_trigger/energy/New()
 	..()
-	my_artifact.register_event(/event/attackby, src, .proc/owner_attackby)
-	my_artifact.register_event(/event/projectile, src, .proc/owner_projectile)
-	my_artifact.register_event(/event/beam_connect, src, .proc/owner_beam)
+	my_artifact.register_event(/event/attackby, src, nameof(src::owner_attackby()))
+	my_artifact.register_event(/event/projectile, src, nameof(src::owner_projectile()))
+	my_artifact.register_event(/event/beam_connect, src, nameof(src::owner_beam()))
 
 /datum/artifact_trigger/energy/proc/owner_attackby(mob/living/attacker, obj/item/item)
 	var/static/list/energy_weapons = list(
@@ -38,7 +38,7 @@
 		Triggered(null, "BEAMCONNECT", beam)
 
 /datum/artifact_trigger/energy/Destroy()
-	my_artifact.unregister_event(/event/attackby, src, .proc/owner_attackby)
-	my_artifact.unregister_event(/event/projectile, src, .proc/owner_projectile)
-	my_artifact.unregister_event(/event/beam_connect, src, .proc/owner_beam)
+	my_artifact.unregister_event(/event/attackby, src, nameof(src::owner_attackby()))
+	my_artifact.unregister_event(/event/projectile, src, nameof(src::owner_projectile()))
+	my_artifact.unregister_event(/event/beam_connect, src, nameof(src::owner_beam()))
 	..()

@@ -12,7 +12,6 @@ var/oocban_keylist[0]
 
 /proc/oocban_loadbanfile()
 	if(!SSdbcore.Connect())
-		world.log << "Database connection failed. Skipping ooc ban loading"
 		diary << "Database connection failed. Skipping ooc ban loading"
 		return
 

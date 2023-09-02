@@ -320,8 +320,7 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 			return //nothing to exhale
 		if(istype(S))
 			air_contents.merge(removed)
-		qdel(removed)
-		removed = null
+		QDEL_NULL(removed)
 	visible_message("<span class='sinister'>\The [src] [wielded ? "in" : "ex"]hales.</span>")
 	playsound(loc, 'sound/effects/spray.ogg', 50, 1)
 	var/image/void = image('icons/effects/effects.dmi',user ? user : src,"bhole3")

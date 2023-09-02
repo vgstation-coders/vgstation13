@@ -5,20 +5,20 @@
 	if(!isitem(parent))
 		return FALSE
 
-	parent.register_event(/event/item_attack_self, src, .proc/on_attack_self)
-	parent.register_event(/event/throw_impact, src, .proc/on_throw_impact)
-	parent.register_event(/event/equipped, src, .proc/equipped)
-	parent.register_event(/event/examined, src, .proc/examined)
+	parent.register_event(/event/item_attack_self, src, nameof(src::on_attack_self()))
+	parent.register_event(/event/throw_impact, src, nameof(src::on_throw_impact()))
+	parent.register_event(/event/equipped, src, nameof(src::equipped()))
+	parent.register_event(/event/examined, src, nameof(src::examined()))
 
 	sideup = pick(COIN_HEADS, COIN_TAILS)
 
 	return TRUE
 
 /datum/component/coinflip/Destroy()
-	parent.unregister_event(/event/item_attack_self, src, .proc/on_attack_self)
-	parent.unregister_event(/event/throw_impact, src, .proc/on_throw_impact)
-	parent.unregister_event(/event/equipped, src, .proc/equipped)
-	parent.unregister_event(/event/examined, src, .proc/examined)
+	parent.unregister_event(/event/item_attack_self, src, nameof(src::on_attack_self()))
+	parent.unregister_event(/event/throw_impact, src, nameof(src::on_throw_impact()))
+	parent.unregister_event(/event/equipped, src, nameof(src::equipped()))
+	parent.unregister_event(/event/examined, src, nameof(src::examined()))
 	..()
 
 /datum/component/coinflip/proc/on_attack_self(mob/living/user, obj/item/item)

@@ -33,7 +33,6 @@
 	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
 	qdel(src)
 
-
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
 	death(1)
 	monkeyizing = 1
@@ -77,12 +76,10 @@
 			to_chat(shade, "<span class='sinister'>Dark energies rip your dying body appart, anchoring your soul inside the form of a Shade. You retain your memories, and devotion to the cult.</span>")
 
 	if(species)
-		qdel(species)
-		species = null
+		QDEL_NULL(species)
 
 	if(vessel)
-		qdel(vessel)
-		vessel = null
+		QDEL_NULL(vessel)
 
 	my_appearance = null
 
@@ -134,7 +131,7 @@
 		dorfpod.scan_body(src)
 	if(ticker && ticker.mode)
 		sql_report_death(src)
-	species.handle_death(src)
+	species.handle_death(src, gibbed)
 	if(become_zombie)
 		spawn(20 SECONDS)
 			if(!gcDestroyed)

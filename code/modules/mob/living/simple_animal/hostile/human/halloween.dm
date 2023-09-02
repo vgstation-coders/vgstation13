@@ -476,8 +476,7 @@
 
 /mob/living/simple_animal/hostile/syphoner/Destroy()
 	if(power_connection)
-		qdel(power_connection)
-		power_connection = null
+		QDEL_NULL(power_connection)
 	. = ..()
 
 /mob/living/simple_animal/hostile/syphoner/get_cell()
@@ -640,7 +639,9 @@
 	switch(spell)
 		if(1) //Mass Hallucination
 			for(var/mob/living/carbon/human/H in victims)
-				if(!can_mind_interact(H.mind))
+				if(H.is_wearing_any(list(/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
+					continue
+				if(M_PSY_RESIST in H.mutations)
 					continue
 				to_chat(H, "<span class = 'warning'>You feel [diceroll>15 ? "incredibly" : ""] disorientated.</span>")
 				H.hallucination = clamp(rand(10,20)*diceroll, hallucination, 60) //Maximum of 120 seconds

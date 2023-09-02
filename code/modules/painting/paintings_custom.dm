@@ -42,8 +42,7 @@
 	var/list/gallery = score.global_paintings
 	if(gallery.len && gallery.Find(src))
 		gallery -= src
-	qdel(painting_data)
-	painting_data = null
+	QDEL_NULL(painting_data)
 	..()
 
 /obj/structure/painting/custom/attackby(obj/item/W, mob/user)
@@ -162,6 +161,8 @@
 	if (!blank)
 		name = (painting_data.title ? ("\proper[painting_data.title]") : "untitled artwork") + (painting_data.author ? ", by [painting_data.author]" : "")
 		desc = painting_data.description ? "A small plaque reads: \"<span class='info'>[painting_data.description]\"</span>" : "A painting... But what could it mean?"
+		if (painting_data.copy)
+			desc += "A tag on this artwork indicates that it's a replica reproduced from Nanotrasen's databanks."
 		if (render)
 			icon = painting_data.render_on(icon(base_icon, base_icon_state))
 	else
@@ -241,8 +242,7 @@
 	..()
 
 /obj/item/mounted/frame/painting/custom/Destroy()
-	qdel(painting_data)
-	painting_data = null
+	QDEL_NULL(painting_data)
 	..()
 
 /obj/item/mounted/frame/painting/custom/attackby(obj/item/W, mob/user)

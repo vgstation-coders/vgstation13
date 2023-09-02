@@ -71,8 +71,7 @@
 	flick("cultfloor",animation)
 	shadow(target,holder.loc,"artificer_convert")
 	spawn(10)
-		qdel(animation)
-		animation = null
+		QDEL_NULL(animation)
 
 /spell/aoe_turf/conjure/wall
 	name = "Conjure Wall"
@@ -110,8 +109,7 @@
 	flick("cultwall",animation)
 	shadow(target,holder.loc,"artificer_convert")
 	spawn(10)
-		qdel(animation)
-		animation = null
+		QDEL_NULL(animation)
 
 /spell/aoe_turf/conjure/door
 	name = "Conjure Door"
@@ -137,8 +135,7 @@
 	flick("",animation)
 	shadow(target,holder.loc,"artificer_convert")
 	spawn(10)
-		qdel(animation)
-		animation = null
+		QDEL_NULL(animation)
 
 /spell/aoe_turf/conjure/wall/reinforced//what?
 	name = "Greater Construction"

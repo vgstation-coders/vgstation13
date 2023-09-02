@@ -36,11 +36,11 @@
 			recruiter.display_name = name
 			recruiter.role = ROLE_MINOR
 		// Role set to Yes or Always
-		recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+		recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
 		// Role set to No or Never
-		recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+		recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
 
-		recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+		recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 		recruiter.request_player()
 	else
 		visible_message("<span class='notice'>\The [name] flickers to life and displays an error message: 'Unable to revive occupant, enviromental pressure inadequate for sustaining human life.'</span>")
@@ -53,8 +53,7 @@
 
 /obj/machinery/cryopod/proc/recruiter_recruited(mob/dead/observer/player, controls)
 	if(player)
-		qdel(recruiter)
-		recruiter = null
+		QDEL_NULL(recruiter)
 		visible_message("<span class='notice'>\The [name] opens with a hiss of frigid air!</span>")
 		playsound(src, 'sound/machines/pressurehiss.ogg', 30, 1)
 		icon_state = "ancientpod_used"

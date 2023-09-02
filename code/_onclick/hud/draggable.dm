@@ -7,6 +7,7 @@
 	screen_loc = ui_entire_screen
 	var/centerdist_x
 	var/centerdist_y
+	var/turf/last_turf_affected
 
 //Necessary because we have no way to detect if someone does a single click
 //So we put a temporary screen object to catch clicks until someone tries dragging
@@ -61,8 +62,7 @@
 		attachedmob.client.screen -= fuckbyond
 	attachedmob = null
 	if(fuckbyond)
-		qdel(fuckbyond)
-		fuckbyond = null
+		QDEL_NULL(fuckbyond)
 
 /obj/abstract/screen/draggable/MouseDown(turf/location,control,params)
 	mouse_opacity = 0 //Because dragging wont occur when you are inside of your own src, we hide the src to mouses
@@ -80,7 +80,8 @@
 	while(attachedmob && attachedmob.client)
 		if(isnum(centerdist_x)) //prevent automatically laying down rods below us if we have no centerdist
 			var/turf/T = locate(attachedmob.x + centerdist_x, attachedmob.y + centerdist_y, attachedmob.z)
-			if(T && attachedobject.can_drag_use(attachedmob, T))
+			if(T && last_turf_affected != T && attachedobject.can_drag_use(attachedmob, T))
+				last_turf_affected = T
 				if(attachedobject.drag_use(attachedmob, T)) //cancel our continuous use
 					qdel(src)
 					break
@@ -91,8 +92,7 @@
 		centerdist_x = over_location.x - attachedmob.x //maintains distance from usr in case usr moves
 		centerdist_y = over_location.y - attachedmob.y
 	if(fuckbyond) //This isn't a single click, therefore we can remove the FUCK BYOND object
-		qdel(fuckbyond)
-		fuckbyond = null
+		QDEL_NULL(fuckbyond)
 
 /obj/abstract/screen/draggable/MouseDrop(over_object,src_location,over_location,src_control,over_control,params)
 	if(attachedobject)

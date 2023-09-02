@@ -70,7 +70,7 @@
 		return
 	var/i = 1
 	for (var/obj/abstract/mind_ui_element/hoverable/blob_thumbnail_shortcut/smallblob in elements)
-		smallblob.Hide()
+		smallblob.invisibility = 101
 		var/obj/effect/blob/B = null
 		if(i<=M.special_blobs.len)
 			B = M.special_blobs[i]

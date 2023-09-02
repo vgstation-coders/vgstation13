@@ -80,8 +80,7 @@
 
 /obj/machinery/computer/powermonitor/Destroy()
 	if(power_connection)
-		qdel(power_connection)
-		power_connection = null
+		QDEL_NULL(power_connection)
 	. = ..()
 
 /obj/machinery/computer/powermonitor/initialize()

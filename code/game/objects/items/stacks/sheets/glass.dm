@@ -120,7 +120,7 @@
 	rglass = /obj/item/stack/sheet/glass/plasmarglass
 	perunit = 2875 //average of plasma and glass
 	melt_temperature = MELTPOINT_STEEL + 500
-	glass_quality = 1.15 //Can you imagine a world in which plasmaglass is worse than rglass
+	glass_quality = 1.5 //Can you imagine a world in which plasmaglass is worse than rglass
 	shealth = 20
 	shard_type = /obj/item/weapon/shard/plasma
 
@@ -143,7 +143,7 @@
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=2"
 	perunit = 2875
 	reinforced = 1
-	glass_quality = 1.3
+	glass_quality = 2
 	shealth = 30
 	shard_type = /obj/item/weapon/shard/plasma
 

@@ -160,7 +160,8 @@
 
 
 /obj/item/trash/plate/throw_impact(atom/hit_atom)
-	..()
+	if(..())
+		return
 	for (var/obj/item/trash/plate/P in plates)
 		plates -= P
 		if(prob(70))
@@ -542,6 +543,7 @@
 	bitesize = 2
 	ingMax = 0
 	plate_offset_y = -5
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie
 	name = "pie"
@@ -575,6 +577,8 @@
 	name = "donk pocket"
 	desc = "You wanna put a bangin-Oh nevermind."
 	icon_state = "donkcustom"
+	trash = null
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/cook/kebab
 	name = "kebab"
@@ -589,6 +593,7 @@
 	name = "waffles"
 	desc = "Made with love."
 	icon_state = "wafflecustom"
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/
 	trash = null
@@ -597,6 +602,7 @@
 	name = "cookie"
 	icon_state = "cookiecustom"
 	valid_utensils = 0
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/cotton
 	name = "flavored cotton candy"
@@ -631,6 +637,7 @@
 	name = "filled donut"
 	desc = "Nothing beats a jelly-filled donut."
 	icon_state = "donutcustom"
+	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/bar
 	name = "flavored chocolate bar"

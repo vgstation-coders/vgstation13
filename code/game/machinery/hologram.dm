@@ -71,6 +71,7 @@ var/list/holopads = list()
 				if(!AI.client)
 					continue
 				to_chat(AI, "<span class='big info'>Your presence is requested at <a href='?src=\ref[AI];jumptoholopad=\ref[src]'>\the [area]</a>.</span>")
+				AI << 'sound/machines/twobeep.ogg'
 		else
 			to_chat(user, "<span class='notice'>A request for AI presence was already sent recently.</span>")
 
@@ -82,7 +83,7 @@ var/list/holopads = list()
 	This may change in the future but for now will suffice.*/
 	user.cameraFollow = null // Stops tracking
 
-	if(master==user && holo)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
+	if(master && (master==user) && holo)//If there is a hologram, remove it. But only if the user is the master. Otherwise do nothing.
 		clear_holo()
 	else if(user.eyeobj.loc != src.loc)//Set client eye on the object if it's not already.
 		user.eyeobj.forceMove(get_turf(src))
@@ -120,11 +121,20 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 /obj/machinery/hologram/holopad/proc/create_holo(mob/living/silicon/ai/A, turf/T = loc)
 	ray = new(T)
 	holo = new(T)//Spawn a blank effect at the location.
-	holo.icon = A.holo_icon
 	// hologram.mouse_opacity = 0 Why would we not want to click on it
 	holo.name = "[A.name] (Hologram)"//If someone decides to right click.
-	set_light(2)			//pad lighting
+	set_light(2, 0, A.holocolor)			//pad lighting
 	icon_state = "holopad1"
+	var/icon/colored_holo = A.holo_icon
+	colored_holo.ColorTone(A.holocolor)
+	var/icon/alpha_mask = new('icons/effects/effects.dmi', "scanline")
+	colored_holo.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
+	holo.icon = colored_holo
+	
+	var/icon/colored_ray = getFlatIcon(ray)
+	colored_ray.ColorTone(A.holocolor)
+	ray.icon = colored_ray
+	
 	A.current = src
 	master = A//AI is the master.
 	use_power = MACHINE_POWER_USE_ACTIVE//Active power usage.
@@ -135,7 +145,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			if(ol.loc == src)
 				ol.icon_state = "holopad1"
 				break
-		
+
 	return 1
 
 /obj/machinery/hologram/holopad/proc/create_advanced_holo(var/mob/living/silicon/ai/A)
@@ -172,14 +182,14 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			continue
 		newlist["[M.name]"] = M
 	return newlist
-		
+
 /obj/machinery/hologram/holopad/proc/clear_holo()
 	if(master && master.holopadoverlays.len)
 		for(var/image/ol in master.holopadoverlays)
 			if(ol.loc == src)
 				ol.icon_state = "holopad0"
 				break
-	
+
 	set_light(0)			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
 	icon_state = "holopad0"
 	use_power = MACHINE_POWER_USE_IDLE//Passive power usage.
@@ -188,8 +198,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		if(master.current == src)
 			master.current = null
 		master = null //Null the master, since no-one is using it now.
-	qdel(ray)
-	ray = null
+	QDEL_NULL(ray)
 	if(holo)
 		var/obj/effect/overlay/hologram/H = holo
 		visible_message("<span class='warning'>The image of [holo] fades away.</span>")
@@ -261,6 +270,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	layer = FLY_LAYER//Above all the other objects/mobs. Or the vast majority of them.
 	plane = ABOVE_HUMAN_PLANE
 	anchored = 1//So space wind cannot drag it.
+	alpha = 200
 
 /obj/effect/overlay/hologram/New()
 	..()
@@ -347,7 +357,7 @@ Holographic project of everything else.
 	density = 1
 	anchored = 0
 	var/mob/camera/aiEye/eye
-	var/obj/machinery/hologram/holopad/parent 
+	var/obj/machinery/hologram/holopad/parent
 
 /obj/effect/overlay/hologram/lifelike/New(var/loc, var/mob/living/mob_to_copy, var/mob/eyeobj, var/obj/machinery/hologram/holopad/H)
 	..()
@@ -358,12 +368,12 @@ Holographic project of everything else.
 	set_light(0)
 
 /obj/effect/overlay/hologram/lifelike/proc/steal_appearance(var/mob/living/M)
-	name = M.name 
+	name = M.name
 	appearance = M.appearance
 	if(M.lying)  // make them stand up if they were lying down
 		pixel_y += 6 * PIXEL_MULTIPLIER
 		transform = transform.Turn(-90)
-	var/datum/log/L = new 
+	var/datum/log/L = new
 	M.examine(L)
 	desc = L.log
 	qdel(L)
@@ -371,7 +381,7 @@ Holographic project of everything else.
 /obj/effect/overlay/hologram/lifelike/examine(mob/user, var/size = "")
 	if(desc)
 		to_chat(user, desc)
-	
+
 
 /obj/effect/overlay/hologram/lifelike/attack_hand(var/mob/living/M)
 	M.visible_message(\

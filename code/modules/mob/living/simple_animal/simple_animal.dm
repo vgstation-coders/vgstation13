@@ -1,6 +1,7 @@
 var/const/ANIMAL_CHILD_CAP = 50
+var/const/ANIMAL_EXTENDED_CHILD_CAP = 100
 var/global/list/animal_count = list() //Stores types, and amount of animals of that type associated with the type (example: /mob/living/simple_animal/dog = 10)
-//Animals can't breed if amount of children exceeds 50
+//Animals can't breed if amount of children exceeds 50, except cockroaches, who can breed up to 100 children
 
 /mob/living/simple_animal
 	name = "animal"
@@ -164,6 +165,18 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/airflow_hit(atom/A)
 	return
+
+/mob/living/simple_animal/Topic(href, href_list) //not so simple anymore are we
+	..()
+	if(href_list["hands"])
+		if(usr.incapacitated() || !Adjacent(usr) || (isanimal(usr) && !isgrinch(usr)))
+			return
+		handle_strip_hand(usr, text2num(href_list["hands"])) //href_list "hands" is the hand index, not the item itself. example, GRASP_LEFT_HAND
+
+	else if(href_list["item"])
+		if(usr.incapacitated() || !Adjacent(usr) || (isanimal(usr) && !isgrinch(usr)))
+			return
+		handle_strip_slot(usr, text2num(href_list["item"])) //href_list "item" would actually be the item slot, not the item itself. example: slot_head
 
 // For changing wander behavior
 /mob/living/simple_animal/proc/wander_move(var/turf/dest)
@@ -515,7 +528,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/damage = rand(1, 3)
 
-	if(istype(M,/mob/living/carbon/slime/adult))
+	if(M.slime_lifestage == SLIME_ADULT)
 		damage = rand(20, 40)
 	else
 		damage = rand(5, 35)
@@ -548,7 +561,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return
 	if(supernatural && isholyweapon(O))
 		purge = 3
-	playsound(loc, O.hitsound, 50, 1, -1)
+	if(O.hitsound)
+		playsound(loc, O.hitsound, 50, 1, -1)
 	..()
 
 
@@ -845,6 +859,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	else
 		return ..()
 
+/mob/living/simple_animal/log_say_message(var/datum/speech/speech, var/message_mode, var/message)
+	if(client)
+		..()
 
 /mob/living/simple_animal/proc/name_mob(mob/user)
 	var/n_name = copytext(sanitize(input(user, "What would you like to name \the [src]?", "Renaming \the [src]", null) as text|null), 1, MAX_NAME_LEN)

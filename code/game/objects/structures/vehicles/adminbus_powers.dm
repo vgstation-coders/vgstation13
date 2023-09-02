@@ -591,31 +591,32 @@
 		freed(M)
 
 		var/obj/item/packobelongings/pack = null
-
+		var/obj/effect/landmark/packmark = pick(tdomepacks)
+		var/turf/packspawn = tdomepacks.len ? get_turf(packmark) : get_turf(src) //the players' belongings are stored there, in the Thunderdome Admin lodge.
 		switch(team)
 			if("Green")
-				pack = new /obj/item/packobelongings/green(src.loc)
-				pack.x = map.tDomeX+2
+				pack = new /obj/item/packobelongings/green(get_step(get_step(packspawn,EAST),EAST))
 			if("Red")
-				pack = new /obj/item/packobelongings/red(src.loc)
-				pack.x = map.tDomeX-2
-
-		pack.z = map.tDomeZ			//the players' belongings are stored there, in the Thunderdome Admin lodge.
-		pack.y = map.tDomeY
+				pack = new /obj/item/packobelongings/red(get_step(get_step(packspawn,WEST),WEST))
 
 		pack.name = "[M.real_name]'s belongings"
 
+		var/might_need_glasses = FALSE
 		for(var/obj/item/I in M)
 			if(istype(I,/obj/item/clothing/glasses))
 				var/obj/item/clothing/glasses/G = I
-				if(G.prescription)
-					continue
+				if(G.nearsighted_modifier != 0)
+					might_need_glasses = TRUE
 			M.u_equip(I)
 			if(I)
 				I.forceMove(M.loc)
 				I.reset_plane_and_layer()
 				I.dropped(M)
 				I.forceMove(pack)
+
+		if (might_need_glasses && ishuman(M))
+			var/mob/living/carbon/human/H = M
+			H.equip_to_slot_or_del(new /obj/item/clothing/glasses/regular(H), slot_glasses)
 
 		var/obj/item/weapon/card/id/thunderdome/ident = null
 

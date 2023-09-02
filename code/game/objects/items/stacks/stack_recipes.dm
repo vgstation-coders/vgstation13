@@ -324,7 +324,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe/chair("red couch straight",        /obj/structure/bed/chair/comfy/couch/mid/red,            2, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("red couch inwards turn",    /obj/structure/bed/chair/comfy/couch/turn/inward/red,    2, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("red couch outwards turn",   /obj/structure/bed/chair/comfy/couch/turn/outward/red,   2, one_per_turf = 1, on_floor = 1),
-		)),
+		), 2),
 	new/datum/stack_recipe("table parts", /obj/item/weapon/table_parts,                           2                                ),
 	new/datum/stack_recipe("rack parts",  /obj/item/weapon/rack_parts,                                                             ),
 	new/datum/stack_recipe("filing cabinet", /obj/structure/filingcabinet/filingcabinet,						  2, one_per_turf = 1, time = 15   ),
@@ -388,7 +388,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe("inverted fork tube",		/obj/structure/transit_tube_frame/fork_invert,	4, time = 4 SECONDS, one_per_turf = 0   ),
 		new/datum/stack_recipe("station",					/obj/structure/transit_tube_frame/station,		4, time = 4 SECONDS, one_per_turf = 0   ),
 		new/datum/stack_recipe("pod",						/obj/structure/transit_tube_frame/pod,			4, time = 4 SECONDS, one_per_turf = 0   ),
-		)),
+		), 4),
 	null,
 	new/datum/stack_recipe("iron door", /obj/machinery/door/mineral/iron, 					20, 			one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("stove", /obj/machinery/space_heater/campfire/stove, 			5, time = 25, 	one_per_turf = 1, on_floor = 1),
@@ -396,6 +396,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("spring", /obj/item/spring, 					1, time = 25, one_per_turf = 0, on_floor = 0),
 	new/datum/stack_recipe("cannonball", /obj/item/cannonball/iron, 20, time = 4 SECONDS, one_per_turf = 0, on_floor = 1),
 	new/datum/stack_recipe("frying pan", /obj/item/weapon/reagent_containers/pan, 10, time = 4 SECONDS, one_per_turf = 0, on_floor = 0),
+	new/datum/stack_recipe("lunch box", /obj/item/weapon/storage/lunchbox/metal, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0),
 	null,
 	blacksmithing_recipes,
 	null,
@@ -479,7 +480,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("item handle",		/obj/item/item_handle,					1,2,20,	time = 2 SECONDS							),
 	new/datum/stack_recipe("sword handle",		/obj/item/sword_handle,					1,2,10,	time = 2 SECONDS,							other_reqs = list(/obj/item/stack/sheet/metal = 1)),
 	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50									),
-	new/datum/stack_recipe("baseball bat",		/obj/item/weapon/baseball_bat,			10,		time = 8 SECONDS							),
+	new/datum/stack_recipe("baseball bat",		/obj/item/weapon/bat,					10,		time = 8 SECONDS							),
 	)
 
 /* =========================================================================

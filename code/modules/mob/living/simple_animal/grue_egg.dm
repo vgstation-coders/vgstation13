@@ -62,8 +62,7 @@
 	name = "grue egg remnants"
 	desc = "The remnants of a grue egg."
 	gender = "plural"
-	qdel(recruiter)
-	recruiter = null
+	QDEL_NULL(recruiter)
 	..()
 
 // Amount of time between retries for recruits. As to not spam ghosts every minute.
@@ -90,11 +89,11 @@
 //		recruiter.jobban_roles = list("pAI")
 
 		// A player has their role set to Yes or Always
-		recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+		recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
 		// ", but No or Never
-		recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+		recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
 
-		recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+		recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 
 /mob/living/simple_animal/grue_egg/proc/Hatch()
 	if(hatching)

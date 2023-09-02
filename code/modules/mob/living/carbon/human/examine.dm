@@ -57,55 +57,55 @@
 
 	//uniform
 	if(w_uniform && !(slot_w_uniform in obscured) && w_uniform.is_visible())
-		if(w_uniform.blood_DNA && w_uniform.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_is] wearing [bicon(w_uniform)] [w_uniform.gender==PLURAL?"some":"a"] blood-stained [w_uniform.name]! [format_examine(w_uniform, "Examine")][w_uniform.description_accessories()]</span>\n"
+		if(w_uniform.is_blood_stained())
+			msg += "<span class='warning'>[t_He] [t_is] wearing [bicon(w_uniform)] [w_uniform.a_stained()] [w_uniform.name]! [format_examine(w_uniform, "Examine")][w_uniform.description_accessories()]</span>\n"
 		else
 			msg += "[t_He] [t_is] wearing [bicon(w_uniform)] \a [w_uniform]. [format_examine(w_uniform, "Examine")][w_uniform.description_accessories()]\n"
 
 	//head
 	if(head && head.is_visible())
-		if(head.blood_DNA && head.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_is] wearing [bicon(head)] [head.gender==PLURAL?"some":"a"] blood-stained [head.name] on [t_his] head! [format_examine(head, "Examine")][head.description_accessories()]</span>\n"
+		if(head.is_blood_stained())
+			msg += "<span class='warning'>[t_He] [t_is] wearing [bicon(head)] [head.a_stained()] [head.name] on [t_his] head! [format_examine(head, "Examine")][head.description_accessories()]</span>\n"
 		else
 			msg += "[t_He] [t_is] wearing [bicon(head)] \a [head] on [t_his] head. [format_examine(head, "Examine")][head.description_accessories()][head.description_hats()]\n"
 
 	//suit/armour
 	if(wear_suit && wear_suit.is_visible())
-		if(wear_suit.blood_DNA && wear_suit.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_is] wearing [bicon(wear_suit)] [wear_suit.gender==PLURAL?"some":"a"] blood-stained [wear_suit.name]!  [format_examine(wear_suit, "Examine")][wear_suit.description_accessories()]</span>\n"
+		if(wear_suit.is_blood_stained())
+			msg += "<span class='warning'>[t_He] [t_is] wearing [bicon(wear_suit)] [wear_suit.a_stained()] [wear_suit.name]!  [format_examine(wear_suit, "Examine")][wear_suit.description_accessories()]</span>\n"
 		else
 			msg += "[t_He] [t_is] wearing [bicon(wear_suit)] \a [wear_suit]. [format_examine(wear_suit, "Examine")][wear_suit.description_accessories()]\n"
 
 		//suit/armour storage
 		if(s_store)
-			if(s_store.blood_DNA && s_store.blood_DNA.len)
-				msg += "<span class='warning'>[t_He] [t_is] carrying [bicon(s_store)] [s_store.gender==PLURAL?"some":"a"] blood-stained [s_store.name] on [t_his] [wear_suit.name]!  [format_examine(s_store, "Examine")]</span>\n"
+			if(s_store.is_blood_stained())
+				msg += "<span class='warning'>[t_He] [t_is] carrying [bicon(s_store)] [s_store.a_stained()] [s_store.name] on [t_his] [wear_suit.name]!  [format_examine(s_store, "Examine")]</span>\n"
 			else
 				msg += "[t_He] [t_is] carrying [bicon(s_store)] \a [s_store] on [t_his] [wear_suit.name].\n"
 
 	//back
 	if(back && back.is_visible())
-		if(back.blood_DNA && back.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_has] [bicon(back)] [back.gender==PLURAL?"some":"a"] blood-stained [back] on [t_his] back! [format_examine(back, "Examine")][back.description_accessories()]</span>\n"
+		if(back.is_blood_stained())
+			msg += "<span class='warning'>[t_He] [t_has] [bicon(back)] [back.a_stained()] [back.name] on [t_his] back! [format_examine(back, "Examine")][back.description_accessories()]</span>\n"
 		else
 			msg += "[t_He] [t_has] [bicon(back)] \a [back] on [t_his] back. [format_examine(back, "Examine")][back.description_accessories()]\n"
 
 	//hands
 	for(var/obj/item/I in held_items)
 		if(I.is_visible())
-			if(I.blood_DNA && I.blood_DNA.len)
-				msg += "<span class='warning'>[t_He] [t_is] holding [bicon(I)] [I.gender==PLURAL?"some":"a"] blood-stained [I.name] in [t_his] [get_index_limb_name(is_holding_item(I))]!  [format_examine(I, "Examine")]</span>\n"
+			if(I.is_blood_stained())
+				msg += "<span class='warning'>[t_He] [t_is] holding [bicon(I)] [I.a_stained()] [I.name] in [t_his] [get_index_limb_name(is_holding_item(I))]!  [format_examine(I, "Examine")]</span>\n"
 			else
 				msg += "[t_He] [t_is] holding [bicon(I)] \a [I] in [t_his] [get_index_limb_name(is_holding_item(I))]. [format_examine(I, "Examine")]\n"
 
 	//gloves
 	if(gloves && !(slot_gloves in obscured) && gloves.is_visible())
-		if(gloves.blood_DNA && gloves.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_has] [bicon(gloves)] [gloves.gender==PLURAL?"some":"a"] blood-stained [gloves.name] on [t_his] hands! [format_examine(gloves, "Examine")][gloves.description_accessories()]</span>\n"
+		if(gloves.is_blood_stained())
+			msg += "<span class='warning'>[t_He] [t_has] [bicon(gloves)] [gloves.a_stained()] [gloves.name] on [t_his] hands! [format_examine(gloves, "Examine")][gloves.description_accessories()]</span>\n"
 		else
 			msg += "[t_He] [t_has] [bicon(gloves)] \a [gloves] on [t_his] hands. [format_examine(gloves, "Examine")][gloves.description_accessories()]\n"
-	else if(blood_DNA && blood_DNA.len && !(slot_gloves in obscured))
-		msg += "<span class='warning'>[t_He] [t_has] blood-stained hands!</span>\n"
+	else if(bloody_hands && bloody_hands_data.len && !(slot_gloves in obscured))
+		msg += "<span class='warning'>[t_He] [t_has] <span style='color: [get_stain_text_color(bloody_hands_data["blood_colour"])]'>[get_stain_name(bloody_hands_data["blood_type"])]-stained</span> hands!</span>\n"
 
 	//handcuffed?
 	if((handcuffed && handcuffed.is_visible()) || (mutual_handcuffs && mutual_handcuffs.is_visible()))
@@ -116,35 +116,38 @@
 
 	//belt
 	if(belt && belt.is_visible())
-		if(belt.blood_DNA && belt.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_has] [bicon(belt)] [belt.gender==PLURAL?"some":"a"] blood-stained [belt.name] about [t_his] waist! [format_examine(belt, "Examine")][belt.description_accessories()]</span>\n"
+		if(belt.is_blood_stained())
+			msg += "<span class='warning'>[t_He] [t_has] [bicon(belt)] [belt.a_stained()] [belt.name] about [t_his] waist! [format_examine(belt, "Examine")][belt.description_accessories()]</span>\n"
 		else
 			msg += "[t_He] [t_has] [bicon(belt)] \a [belt] about [t_his] waist. [format_examine(belt, "Examine")][belt.description_accessories()]\n"
 
 	//shoes
 	if(shoes && !(slot_shoes in obscured) && shoes.is_visible())
-		if(shoes.blood_DNA && shoes.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_is] wearing [bicon(shoes)] [shoes.gender==PLURAL?"some":"a"] blood-stained [shoes.name] on [t_his] feet! [format_examine(shoes, "Examine")][shoes.description_accessories()]</span>\n"
+		if(shoes.is_blood_stained())
+			msg += "<span class='warning'>[t_He] [t_is] wearing [bicon(shoes)] [shoes.a_stained()] [shoes.name] on [t_his] feet! [format_examine(shoes, "Examine")][shoes.description_accessories()]</span>\n"
 		else
 			msg += "[t_He] [t_is] wearing [bicon(shoes)] \a [shoes] on [t_his] feet. [format_examine(shoes, "Examine")][shoes.description_accessories()]\n"
 
 	//mask
 	if(wear_mask && !(slot_wear_mask in obscured) && wear_mask.is_visible())
-		if(wear_mask.blood_DNA && wear_mask.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_has] [bicon(wear_mask)] [wear_mask.gender==PLURAL?"some":"a"] blood-stained [wear_mask.name] [wear_mask.goes_in_mouth ? "in" : "on"] [t_his] [wear_mask.goes_in_mouth ? "mouth" : "face"]! [format_examine(wear_mask, "Examine")][wear_mask.description_accessories()]</span>\n"
+		if(wear_mask.is_blood_stained())
+			msg += "<span class='warning'>[t_He] [t_has] [bicon(wear_mask)] [wear_mask.a_stained()] [wear_mask.name] [wear_mask.goes_in_mouth ? "in" : "on"] [t_his] [wear_mask.goes_in_mouth ? "mouth" : "face"]! [format_examine(wear_mask, "Examine")][wear_mask.description_accessories()]</span>\n"
 		else
 			msg += "[t_He] [t_has] [bicon(wear_mask)] \a [wear_mask] [wear_mask.goes_in_mouth ? "in" : "on"] [t_his] [wear_mask.goes_in_mouth ? "mouth" : "face"]. [format_examine(wear_mask, "Examine")][wear_mask.description_accessories()]\n"
 
 	//eyes
 	if(glasses && !(slot_glasses in obscured) && glasses.is_visible())
-		if(glasses.blood_DNA && glasses.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_has] [bicon(glasses)] [glasses.gender==PLURAL?"some":"a"] blood-stained [glasses] covering [t_his] eyes! [format_examine(glasses, "Examine")][glasses.description_accessories()]</span>\n"
+		if(glasses.is_blood_stained())
+			msg += "<span class='warning'>[t_He] [t_has] [bicon(glasses)] [glasses.a_stained()] [glasses.name] covering [t_his] eyes! [format_examine(glasses, "Examine")][glasses.description_accessories()]</span>\n"
 		else
 			msg += "[t_He] [t_has] [bicon(glasses)] \a [glasses] covering [t_his] eyes. [format_examine(glasses, "Examine")][glasses.description_accessories()]\n"
 
 	//ears
 	if(ears && !(slot_ears in obscured) && ears.is_visible())
-		msg += "[t_He] [t_has] [bicon(ears)] \a [ears] on [t_his] ears. [format_examine(ears, "Examine")][ears.description_accessories()]\n"
+		if(ears.is_blood_stained())
+			msg += "<span class='warning'>[t_He] [t_has] [bicon(ears)] [ears.a_stained()] [ears.name] on [t_his] ears! [format_examine(ears, "Examine")][ears.description_accessories()]</span>\n"
+		else
+			msg += "[t_He] [t_has] [bicon(ears)] \a [ears] on [t_his] ears. [format_examine(ears, "Examine")][ears.description_accessories()]\n"
 
 	//ID
 	if(wear_id)

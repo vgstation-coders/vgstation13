@@ -75,8 +75,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 
 /obj/item/wizard_apprentice_contract/Destroy()
 	owner = null
-	qdel(recruiter)
-	recruiter = null
+	QDEL_NULL(recruiter)
 	..()
 
 /obj/item/wizard_apprentice_contract/attack_self(mob/user)
@@ -149,11 +148,11 @@ var/list/wizard_apprentice_setups_by_name = list()
 		recruiter.jobban_roles = list("Syndicate")
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
-	recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
 	// Role set to No or Never
-	recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+	recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
 
-	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+	recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 
 	recruiter.request_player()
 

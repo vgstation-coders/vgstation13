@@ -5,7 +5,7 @@
 /obj/item/clothing/head/collectable
 	name = "collectable hat"
 	desc = "A rare collectable hat."
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/head/collectable/petehat
 	name = "ultra rare Pete's hat!"
@@ -22,6 +22,7 @@
 	desc = "Hiss hiss hiss!"
 	icon_state = "xenos"
 	item_state = "xenos_helm"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/collectable/chef
 	name = "collectable chef's hat"

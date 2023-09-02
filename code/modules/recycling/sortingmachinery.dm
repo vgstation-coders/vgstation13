@@ -115,6 +115,8 @@
 	desc = "A chute for big and small packages alike!"
 	density = 1
 	icon_state = "intake"
+	plane = ABOVE_HUMAN_PLANE
+	layer = DISPOSALS_CHUTE_LAYER
 	var/c_mode = 0
 	var/doFlushIn=0
 	var/num_contents=0
@@ -164,9 +166,11 @@
 
 
 /obj/machinery/disposal/deliveryChute/proc/receive_atom(var/atom/movable/AM)
-	AM.forceMove(src)
-	doFlushIn = 5
-	num_contents++
+	AM.forceMove(src.loc) // To make it look like it's moving into it better
+	spawn(1)
+		AM.forceMove(src)
+		doFlushIn = 5
+		num_contents++
 
 
 /obj/machinery/disposal/deliveryChute/flush()
@@ -273,8 +277,7 @@
 /obj/machinery/sorting_machine/Destroy()
 	. = ..()
 
-	qdel(mover)
-	mover = null
+	QDEL_NULL(mover)
 
 /obj/machinery/sorting_machine/RefreshParts()
 	var/T = 0
@@ -763,7 +766,7 @@
 	idle_power_usage = 100 //No active power usage because this thing passively uses 100, always. Don't ask me why N3X15 coded it like this.
 	plane = ABOVE_HUMAN_PLANE
 	var/circuitpath = /obj/item/weapon/circuitboard/autoprocessor
-	
+
 	var/atom/movable/mover //Virtual atom used to check passing ability on the out turf.
 
 	var/next_sound = 0
@@ -788,8 +791,7 @@
 /obj/machinery/autoprocessor/Destroy()
 	. = ..()
 
-	qdel(mover)
-	mover = null
+	QDEL_NULL(mover)
 
 /obj/machinery/autoprocessor/RefreshParts()
 	var/T = 0
@@ -826,11 +828,9 @@
 			continue
 
 		A.forceMove(get_turf(src))
-		spawn(1)
-			process_affecting(A)
-			A.forceMove(out_T)
+		process_affecting(A)
 
-			items_moved++
+		items_moved++
 
 /obj/machinery/autoprocessor/proc/process_affecting(var/atom/movable/target)
 	return
@@ -905,9 +905,11 @@
 	if(istype(target, /obj/item) && smallpath)
 		if (packagewrap >= 1)
 			var/obj/item/I = target
-			var/obj/item/P = new smallpath(get_turf(target.loc),target,round(I.w_class))
+			var/obj/item/P = new smallpath(get_turf(src.loc),target,round(I.w_class))
 			target.forceMove(P)
 			packagewrap += -1
+			if(syndiewrap)
+				syndiewrap += -1
 			tag_item(P)
 		else
 			if(world.time > next_sound)
@@ -926,9 +928,11 @@
 			if(MC.angry)
 				return
 		if(packagewrap >= 3)
-			var/obj/item/P = new bigpath(get_turf(target.loc),target)
+			var/obj/item/P = new bigpath(get_turf(src.loc),target)
 			target.forceMove(P)
 			packagewrap += -3
+			if(syndiewrap)
+				syndiewrap += -3
 			tag_item(P)
 		else
 			if(world.time > next_sound)
@@ -942,11 +946,11 @@
 		if(syndiewrap >= 2)
 			syndiewrap += -2
 			packagewrap += -2
-			var/obj/present = new manpath(get_turf(src),H)
+			var/obj/present = new /obj/item/delivery/large(get_turf(src),H)
 			if (H.client)
 				H.client.perspective = EYE_PERSPECTIVE
 				H.client.eye = present
-			H.visible_message("<span class='warning'>[src] wraps [H]!</span>")
+			H.visible_message("<span class='warning'>\The [src] wraps [H]!</span>")
 			H.forceMove(present)
 		else
 			if(world.time > next_sound)
@@ -1107,8 +1111,7 @@
 	outfit_datum = new outfit_type()
 
 /obj/machinery/autoprocessor/outfit/Destroy()
-	qdel(outfit_datum)
-	outfit_datum = null
+	QDEL_NULL(outfit_datum)
 	..()
 
 /obj/machinery/autoprocessor/outfit/process_affecting(var/atom/movable/target)

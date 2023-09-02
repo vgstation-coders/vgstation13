@@ -10,6 +10,10 @@
 	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_weapons)
 	minimal_access = list(access_bar,access_weapons)
 	outfit_datum = /datum/outfit/bartender
+	additional_information = "You can juggle most bottles and empty glasses by picking them up while on GRAB intent, so long as you remain unusually sober."
+
+/datum/job/bartender/post_init(var/mob/living/carbon/human/H)
+	genemutcheck(H, SOBERBLOCK)
 
 /datum/job/chef
 	title = "Chef"
@@ -36,6 +40,7 @@
 	minimal_access = list(access_hydroponics, access_morgue) // Removed tox and chem access because STOP PISSING OFF THE CHEMIST GUYS // //Removed medical access because WHAT THE FUCK YOU AREN'T A DOCTOR YOU GROW WHEAT //Given Morgue access because they have a viable means of cloning.
 	alt_titles = list("Hydroponicist", "Beekeeper", "Gardener")
 	outfit_datum = /datum/outfit/hydro
+	species_blacklist = list()
 
 //Cargo
 /datum/job/qm
@@ -168,6 +173,7 @@
 	access = list(access_janitor, access_maint_tunnels)
 	minimal_access = list(access_janitor, access_maint_tunnels)
 	outfit_datum = /datum/outfit/janitor
+	species_blacklist = list()//Mop it up, shroomie.
 
 /datum/job/janitor/get_wage()
 	if(Holiday == APRIL_FOOLS_DAY)

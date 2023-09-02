@@ -51,9 +51,9 @@
 		recruiter.role = role
 		recruiter.jobban_roles = jobban_roles
 
-	recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
-	recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
-	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
+	recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
+	recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 	recruiter.request_player()
 
 /obj/item/weapon/robot_spawner/proc/recruiter_recruiting(mob/dead/observer/player, controls)
@@ -66,8 +66,7 @@
 
 /obj/item/weapon/robot_spawner/proc/recruiter_recruited(mob/dead/observer/player)
 	if(player)
-		qdel(recruiter)
-		recruiter = null
+		QDEL_NULL(recruiter)
 		busy = FALSE
 		charge--
 		spark(src, 4)

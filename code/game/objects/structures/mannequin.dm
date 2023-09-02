@@ -292,8 +292,8 @@
 	var/msg = ""
 
 	for(var/obj/item/I in held_items)
-		if(I.blood_DNA && I.blood_DNA.len)
-			msg += "<span class='warning'>It's holding [bicon(I)] [I.gender==PLURAL?"some":"a"] blood-stained [I.name] in its [get_index_limb_name(is_holding_item(I))]!</span>\n"
+		if(I.is_blood_stained())
+			msg += "<span class='warning'>It's holding [bicon(I)] [I.a_stained()] [I.name] in its [get_index_limb_name(is_holding_item(I))]!</span>\n"
 		else
 			msg += "It's holding [bicon(I)] \a [I] in its [get_index_limb_name(is_holding_item(I))].\n"
 
@@ -320,8 +320,8 @@
 				if(SLOT_MANNEQUIN_EARS)
 					slot_examine = " on its ears"
 
-			if(clothToExamine.blood_DNA && clothToExamine.blood_DNA.len)
-				msg += "<span class='warning'>It's wearing [bicon(clothToExamine)] [clothToExamine.gender==PLURAL?"some":"a"] blood-stained [clothToExamine][slot_examine]![clothToExamine.description_accessories()]</span>\n"
+			if(clothToExamine.is_blood_stained())
+				msg += "<span class='warning'>It's wearing [bicon(clothToExamine)] [clothToExamine.a_stained()] [clothToExamine][slot_examine]![clothToExamine.description_accessories()]</span>\n"
 			else
 				msg += "It's wearing [bicon(clothToExamine)] \a [clothToExamine][slot_examine].[clothToExamine.description_accessories()] \n"
 
@@ -655,10 +655,14 @@
 	var/obj/abstract/Overlays/O = new /obj/abstract/Overlays/
 	O.layer = FLOAT_LAYER
 	O.overlays.len = 0
+	var/vox_suffix = ""
+
+	if (species && species.name == "Vox")
+		vox_suffix = "_0"
 
 	if (hair_style)
 		var/datum/sprite_accessory/hair_style_icon = hair_styles_list[hair_style]
-		var/icon/hair_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[hair_style_icon.icon_state]_s")
+		var/icon/hair_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[hair_style_icon.icon_state][vox_suffix]_s")
 		if(hair_style_icon.additional_accessories)
 			hair_s.Blend(icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[hair_style_icon.icon_state]_acc"), ICON_OVERLAY)
 		if (species && species.name != "Human")
@@ -1469,8 +1473,7 @@
 /datum/construction/mannequin_frame/custom_action(step, atom/used_atom, mob/user)
 	user.visible_message("[user] has connected [used_atom] to [holder].", "You connect [used_atom] to [holder]")
 	holder.overlays += image(holder.icon, used_atom.icon_state)
-	qdel (used_atom)
-	used_atom = null
+	QDEL_NULL (used_atom)
 	return 1
 
 /datum/construction/mannequin_frame/action(atom/used_atom,mob/user as mob)
@@ -1548,8 +1551,7 @@
 		C.req_access = const_holder.req_access
 		C.req_one_access = const_holder.req_one_access
 
-		qdel (holder)
-		holder = null
+		QDEL_NULL (holder)
 
 	feedback_inc("cyber_mannequin_created",1)
 

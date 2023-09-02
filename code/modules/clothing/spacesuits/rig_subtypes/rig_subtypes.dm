@@ -306,6 +306,7 @@
 	siemens_coefficient = 0.7
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/security
+	on_armory_manifest = TRUE
 
 /obj/item/clothing/suit/space/rig/security/fat
 	name = "expanded security hardsuit"
@@ -331,6 +332,7 @@
 
 /obj/item/clothing/head/helmet/space/rig/security/stormtrooper
 	icon_state = "rig0-storm"
+	item_state = "rig0-storm"
 	_color = "storm"
 	name = "stormtrooper helmet"
 	desc = "Even with the finest vision enhancement tech, you still can't hit shit."
@@ -338,6 +340,7 @@
 
 /obj/item/clothing/suit/space/rig/security/stormtrooper
 	icon_state = "rig-storm"
+	item_state = "rig-storm"
 	name = "stormtrooper hardsuit"
 	desc = "Now even more vulnerable to teddy bears!"
 	head_type = /obj/item/clothing/head/helmet/space/rig/security/stormtrooper

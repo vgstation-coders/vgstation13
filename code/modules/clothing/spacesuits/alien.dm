@@ -1,3 +1,10 @@
+/obj/item/clothing/head/helmet/space/unathi
+	name = "unathi space helmet"
+	nearsighted_modifier = 5
+
+/obj/item/clothing/suit/space/unathi
+	name = "unathi space suit"
+
 /obj/item/clothing/head/helmet/space/unathi/breacher
 	name = "unathi breacher helmet"
 	desc = "Some sort of ancient Unathi power helmet with ridiculous armor plating."
@@ -138,12 +145,14 @@
 	item_state = "vox-carapace"
 	desc = "A glowing visor, perhaps stolen from a depressed Cylon."
 	eyeprot = 3
+	blood_overlay_type = "mask"
 
 /obj/item/clothing/suit/space/vox/carapace
 	name = "alien carapace armor"
 	icon_state = "vox-carapace"
 	item_state = "vox-carapace"
 	desc = "An armored, segmented carapace with glowing purple lights. It looks pretty run-down."
+	body_parts_visible_override = HANDS|FEET
 
 /obj/item/clothing/head/helmet/space/vox/stealth
 	name = "alien stealth helmet"
@@ -276,6 +285,7 @@
 	icon_state = "vox-carapace"
 	item_state = "vox-carapace"
 	desc = "An armored, segmented carapace with glowing purple lights. It looks like someone stripped most of the armor off."
+	body_parts_visible_override = HANDS|FEET
 
 /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace //carapace helmet
 	name = "alien visor"
@@ -283,6 +293,7 @@
 	item_state = "vox-carapace"
 	desc = "A glowing visor, perhaps stolen from a depressed Cylon."
 	eyeprot = 3
+	blood_overlay_type = "mask"
 
 /obj/item/clothing/suit/space/vox/civ/trader/medic // aquasuit
 	name = "alien armor"
@@ -413,8 +424,24 @@
 
 /obj/item/clothing/head/helmet/space/vox/civ/mining
 	name = "vox mining pressure helmet"
-	icon_state = "vox-civ-mining"
+	icon_state = "vox-civ0_mining"
 	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE
+	var/brightness_on = 3 //luminosity when on
+	var/on = 0
+	_color = "mining"
+	actions_types = list(/datum/action/item_action/toggle_light)
+
+/obj/item/clothing/head/helmet/space/vox/civ/mining/attack_self(mob/user)
+	on = !on
+	icon_state = "vox-civ[on]_[_color]"
+	item_state = "vox-civ[on]_[_color]"
+
+	if(on)
+		set_light(brightness_on)
+	else
+		set_light(0)
+
+	user.update_inv_head()
 
 //Engineering
 /obj/item/clothing/suit/space/vox/civ/engineer
@@ -429,13 +456,29 @@
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer
 	name = "vox engineer pressure helmet"
-	icon_state = "vox-civ-engineer"
+	icon_state = "vox-civ0_engineer"
 	item_state = "vox-pressure-engineer"
 	desc = "A very alien-looking helmet for vox crewmembers. This one comes with more radiation protection."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 50)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
+	var/brightness_on = 3 //luminosity when on
+	var/on = 0
+	_color = "engineer"
+	actions_types = list(/datum/action/item_action/toggle_light)
+
+/obj/item/clothing/head/helmet/space/vox/civ/engineer/attack_self(mob/user)
+	on = !on
+	icon_state = "vox-civ[on]_[_color]"
+	item_state = "vox-civ[on]_[_color]"
+
+	if(on)
+		set_light(brightness_on)
+	else
+		set_light(0)
+
+	user.update_inv_head()
 
 /obj/item/clothing/suit/space/vox/civ/engineer/atmos
 	name = "vox atmos pressure suit"
@@ -447,11 +490,12 @@
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
 	name = "vox atmos pressure helmet"
-	icon_state = "vox-civ-atmos"
+	icon_state = "vox-civ0_atmos"
 	desc = "A very alien-looking helmet for vox crewmembers. Has some heat protection."
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	_color = "atmos"
 
 /obj/item/clothing/suit/space/vox/civ/engineer/ce
 	name = "vox chief engineer pressure suit"
@@ -463,10 +507,11 @@
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
 	name = "vox chief engineer pressure helmet"
-	icon_state = "vox-civ-ce"
+	icon_state = "vox-civ0_ce"
 	desc = "A very alien-looking helmet for vox crewmembers. Has some radiation and heat protection."
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	_color = "ce"
 
 //Science
 /obj/item/clothing/suit/space/vox/civ/science

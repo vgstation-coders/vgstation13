@@ -225,6 +225,32 @@
 
 	R.illegal_weapons = TRUE
 	R.SetEmagged()
+	
+/obj/item/borg/upgrade/bootyborg
+	name = "cyborg Backdoor Rearranging Activation Protocol upgrade"
+	icon_state = "gooncode"
+	
+/obj/item/borg/upgrade/bootyborg/New()
+	..()
+	required_modules = default_nanotrasen_robot_modules + emergency_nanotrasen_robot_modules
+	
+/obj/item/borg/upgrade/bootyborg/attempt_action(var/mob/living/silicon/robot/R, var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+	
+	if(R.modtype == SECURITY_MODULE || R.modtype == COMBAT_MODULE)
+		R.base_icon = "booty-red"
+	else if(R.modtype == ENGINEERING_MODULE || R.modtype == SUPPLY_MODULE)
+		R.base_icon = "booty-yellow"
+	else if(R.modtype == SERVICE_MODULE)
+		R.base_icon = "booty-flower"
+	else if(R.modtype == MEDICAL_MODULE)
+		R.base_icon = "booty-white"
+	else if(R.modtype == JANITOR_MODULE)
+		R.base_icon = "booty-green"
+	else
+		R.base_icon = "booty-blue"		
+	R.icon_state = R.base_icon
 
 //Medical Stuff
 /obj/item/borg/upgrade/medical_upgrade
@@ -508,5 +534,5 @@
 	required_upgrades = list(/obj/item/borg/upgrade/xenoarch)
 	modules_to_add = list(/obj/item/weapon/pickaxe/excavationdrill/adv,/obj/item/device/xenoarch_scanner/adv,/obj/item/device/artifact_finder)
 	modules_to_remove = list(/obj/item/weapon/pickaxe/excavationdrill)
-
+	
 #undef FAILED_TO_ADD

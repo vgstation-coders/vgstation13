@@ -144,7 +144,7 @@
 	if(H.op_stage.butt == SURGERY_NO_BUTT)
 		return FALSE // Can't fart without an arse (dummy)
 
-	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? 20 SECONDS : 40 SECONDS))
+	if(world.time - H.lastFart <= (H.disabilities & LACTOSE ? H.fartCooldown : H.fartCooldown  * 2))
 		if(H.stat != UNCONSCIOUS)
 			message = "strains, and nothing happens."
 			emote_type = EMOTE_VISIBLE
@@ -181,7 +181,7 @@
 
 	// Process toxic farts first.
 	if(M_TOXIC_FARTS in H.mutations)
-		playsound(src, 'sound/effects/superfart.ogg', 50, -1)
+		playsound(location, 'sound/effects/superfart.ogg', 50, -1)
 		has_farted = TRUE
 		if(wearing_suit)
 			if(!wearing_mask)
@@ -227,10 +227,10 @@
 				var/iterations = is_unconscious ? 5 : 3
 				for(var/i = 0, i < iterations, i++)
 					step_away(V,location,15)
-				var/turf/T = get_turf(H)
-				if (!T.has_gravity(H))
-					to_chat(H, "<span class = 'notice'>The gastrointestinal blast sends you careening through space!</span>")
-					H.throw_at(get_edge_target_turf(H, H.dir), 5, 5)
+			var/turf/T = get_turf(H)
+			if (!T.has_gravity(H))
+				to_chat(H, "<span class = 'notice'>The gastrointestinal blast sends you careening through space!</span>")
+				H.throw_at(get_edge_target_turf(H, H.dir), 5, 5)
 			if(is_unconscious)
 				H.gib()
 		else
@@ -302,7 +302,7 @@
 	if(user.reagents && user.reagents.has_reagent(PAROXETINE))
 		to_chat(user, "<span class='numb'>You're too medicated to wanna do that anymore.</span>")
 		return FALSE
-	
+
 	return ..()
 
 /datum/emote/living/carbon/human/dab/run_emote(mob/user, params, ignore_status = FALSE)

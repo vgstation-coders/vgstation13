@@ -42,8 +42,7 @@
 	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/throw_impact(atom/hit_atom, var/speed, mob/user)
-	..()
-	if(isturf(hit_atom))
+	if(!..() && isturf(hit_atom))
 		new/obj/effect/decal/cleanable/egg_smudge(loc)
 		new/obj/item/trash/egg(loc)
 		splat_reagent_reaction(hit_atom,user)

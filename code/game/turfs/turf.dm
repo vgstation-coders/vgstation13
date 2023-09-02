@@ -292,8 +292,7 @@
 /turf/proc/RemoveLattice()
 	var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
 	if(L)
-		qdel (L)
-		L = null
+		QDEL_NULL (L)
 
 /turf/proc/add_dust()
 	return
@@ -347,8 +346,7 @@
 		if(F.material=="phazon")
 			phazontiles -= src
 		if(F.floor_tile)
-			qdel(F.floor_tile)
-			F.floor_tile = null
+			QDEL_NULL(F.floor_tile)
 		F = null
 
 	if(ispath(N, /turf/simulated/floor))
@@ -464,10 +462,10 @@
 			M.take_damage(100, "brute")
 
 /turf/bless()
+	..()
 	if (holy)
 		return
 	holy = 1
-	..()
 	new /obj/effect/overlay/holywaterpuddle(src)
 
 /////////////////////////////////////////////////////////////////////////
@@ -607,6 +605,16 @@
 //Return a lattice to allow plating building, return 0 for error message, return -1 for silent fail.
 /turf/proc/canBuildPlating()
 	return BUILD_SILENT_FAILURE
+
+//Return true to allow floor tile coverings
+/turf/proc/canBuildFloortile(var/tiletype)
+	return !ispath(tiletype,/obj/item/stack/tile/metal/plasteel) && is_plating()
+
+/turf/simulated/floor/canBuildFloortile(var/tiletype)
+	return ..() && !burnt && !broken
+
+/turf/simulated/floor/engine/canBuildFloortile(var/tiletype)
+	return ispath(tiletype,/obj/item/stack/tile/metal/plasteel) && is_plating()
 
 /turf/proc/dismantle_wall()
 	return

@@ -385,7 +385,7 @@
 	var/datum/gas_mixture/env = T.return_air()
 	if(Floor(cell.charge/10) != lastcharge)
 		update_icon()
-	if((!(cell && cell.charge > 0) && nocell != 2) || !istype(T) || (env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME))
+	if((!(cell && cell.charge > 0) && (nocell != 2)) || !istype(T) || (env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME))
 		putOutFire()
 		return
 	lastcharge = Floor(cell.charge/10)

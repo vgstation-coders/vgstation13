@@ -134,13 +134,11 @@
 			if(index <= positive_locations.len)
 				var/datum/depth_scan/D = positive_locations[index]
 				positive_locations.Remove(D)
-				qdel(D)
-				D = null
+				QDEL_NULL(D)
 		else
 			//GC will hopefully pick them up before too long
 			positive_locations = list()
-			qdel(current)
-			current = null
+			QDEL_NULL(current)
 	else if(href_list["close"])
 		usr.unset_machine()
 		usr << browse(null, "window=depth_scanner")

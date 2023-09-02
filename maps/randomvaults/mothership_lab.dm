@@ -108,42 +108,371 @@
 	flags = NO_PACIFICATION
 
 //////////////////////////////
-// WALLS (An invulnerable wall subtype, and two icon-swapped riveted walls, applied to appropriate areas to prevent escaping the vault to the Centcomm Z-level, or tunneling into boss rooms)
+// WALLS (Invulnerable ayy-themed walls, applied to appropriate areas to prevent escaping the vault to the Centcomm Z-level, or tunneling into boss rooms)
 //////////////////////////////
 
-/turf/simulated/wall/invulnerable/r_wall/mothership
-	name = "super-reinforced wall"
-	desc = "Someone spent a lot of time and money on this bullet-proof, bomb-proof wall."
-	icon_state = "r_wall"
-	walltype = "rwall"
-
-/turf/simulated/wall/invulnerable/r_wall/mothership/canSmoothWith() // SMOOTH DAT WALL (For the mothership lab vault)
-	var/static/list/smoothables = list(/turf/simulated/wall/invulnerable/r_wall/mothership, /turf/unsimulated/wall/r_wall)
-	return smoothables
-
-/turf/unsimulated/wall/r_wall
-	name = "riveted reinforced wall"
-	desc = "A reinforced wall with massive rivets embedded in the struts. You'd need a station-sized industrial laser to cut through this."
-	icon = 'icons/turf/walls.dmi'
-	icon_state = "r_wall"
+/turf/unsimulated/wall/ayy
+	name = "alien alloy wall"
+	desc = "A solid wall of an unknown alloy. It's oddly warm to the touch, and seems to pulse rhymically."
+	icon_state = "alloy"
 	explosion_block = 9999
-	walltype = "rwall"
+	walltype = "alloy"
 
-/turf/unsimulated/wall/r_wall/canSmoothWith() // SMOOTH DAT WALL
-	var/static/list/smoothables = list(/turf/unsimulated/wall/r_wall, /turf/simulated/wall/invulnerable/r_wall)
+/turf/unsimulated/wall/ayy/canSmoothWith() // SMOOTH DAT WALL
+	var/static/list/smoothables = list(/turf/unsimulated/wall/ayy)
 	return smoothables
 
 /turf/unsimulated/wall/r_rock
 	name = "riveted porous rock"
 	desc = "Asteroid rock reinforced by a wall with massive rivets embedded in the struts."
 	icon = 'icons/turf/walls.dmi'
-	icon_state = "rock_rf0"
+	icon_state = "rock_rf"
 	explosion_block = 9999
 	walltype = "rock_rf"
 
 /turf/unsimulated/wall/r_rock/canSmoothWith() // SMOOTH DAT WALL
 	var/static/list/smoothables = list(/turf/unsimulated/wall/r_rock)
 	return smoothables
+
+//////////////////////////////
+// FLOORS (Some ayy-themed floors, with walking sound effects!)
+//////////////////////////////
+
+/turf/unsimulated/floor/ayy
+	name = "alien plating"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "alien_tile1"
+	temperature = T20C
+	plane = PLATING_PLANE
+
+/turf/unsimulated/floor/ayy/Entered(atom/A, atom/OL) // Ayy alloy tiles play walking sound effects!
+	..()
+	if(istype(A,/mob/living/simple_animal))
+		var/mob/living/simple_animal/L = A
+		if(L.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/metal_walk.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/metal_walk2.ogg', 50, 0)
+
+	if(istype(A,/mob/living/carbon))
+		var/mob/living/carbon/M = A
+		if(M.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/metal_walk.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/metal_walk2.ogg', 50, 0)
+
+/turf/unsimulated/floor/ayy/tech
+	name = "alien plating"
+	icon_state = "alien_tile2"
+
+/turf/unsimulated/floor/ayy/maint
+	name = "worn alien plating"
+	icon_state = "alien_tile_worn"
+
+/turf/unsimulated/floor/ayy/fancy
+	name = "ornate alien plating"
+	icon_state = "alien_tile_fancy"
+
+/turf/unsimulated/floor/grey_sand
+	name = "chalky soil"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "xeno_rock_tile_1"
+	temperature = T20C
+	plane = PLATING_PLANE
+
+/turf/unsimulated/floor/grey_sand/New()
+	..()
+	if(prob(33))
+		icon_state = "xeno_rock_tile_[rand(1,12)]"
+
+/turf/unsimulated/floor/grey_sand/Entered(atom/A, atom/OL) // Ayy dirt tiles play walking sound effects!
+	..()
+	if(istype(A,/mob/living/simple_animal))
+		var/mob/living/simple_animal/L = A
+		if(L.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/sand_walk1.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/sand_walk2.ogg', 50, 0)
+
+	if(istype(A,/mob/living/carbon))
+		var/mob/living/carbon/M = A
+		if(M.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/sand_walk1.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/sand_walk2.ogg', 50, 0)
+
+/turf/unsimulated/floor/lab_asteroid
+	name = "Asteroid"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "asteroid"
+	temperature = T20C
+	plane = PLATING_PLANE
+
+/turf/unsimulated/floor/lab_asteroid/New()
+	..()
+	if(prob(20))
+		icon_state = "asteroid[rand(0,12)]"
+
+/turf/unsimulated/floor/lab_asteroid/Entered(atom/A, atom/OL) // These play walking sound effects!
+	..()
+	if(istype(A,/mob/living/simple_animal))
+		var/mob/living/simple_animal/L = A
+		if(L.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/sand_walk1.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/sand_walk2.ogg', 50, 0)
+
+	if(istype(A,/mob/living/carbon))
+		var/mob/living/carbon/M = A
+		if(M.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/sand_walk1.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/sand_walk2.ogg', 50, 0)
+
+/turf/unsimulated/floor/lab_underplating
+	name = "plating"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "Floor3"
+	temperature = T20C
+	plane = PLATING_PLANE
+
+/turf/unsimulated/floor/lab_underplating/Entered(atom/A, atom/OL) // These play walking sound effects!
+	..()
+	if(istype(A,/mob/living/simple_animal))
+		var/mob/living/simple_animal/L = A
+		if(L.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/metal_walk.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/metal_walk2.ogg', 50, 0)
+
+	if(istype(A,/mob/living/carbon))
+		var/mob/living/carbon/M = A
+		if(M.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/metal_walk.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/metal_walk2.ogg', 50, 0)
+
+/turf/unsimulated/floor/lab_sterile
+	name = "sterile tile floor"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "freezerfloor"
+	temperature = T20C
+	plane = PLATING_PLANE
+
+/turf/unsimulated/floor/lab_sterile/Entered(atom/A, atom/OL) // These play walking sound effects!
+	..()
+	if(istype(A,/mob/living/simple_animal))
+		var/mob/living/simple_animal/L = A
+		if(L.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/tile_walk1.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/tile_walk2.ogg', 50, 0)
+
+	if(istype(A,/mob/living/carbon))
+		var/mob/living/carbon/M = A
+		if(M.on_foot() && prob(33)) // If the mob is flying, nothing happens. But if it's walking, 33% chance to play a sound effect
+			if(prob(50))
+				playsound(src, 'sound/effects/tile_walk1.ogg', 50, 0)
+			else
+				playsound(src, 'sound/effects/tile_walk2.ogg', 50, 0)
+
+//////////////////////////////
+// DECORATIVE FLORA (Some nice things to go in the facility's petting zoo and plant decorations)
+//////////////////////////////
+
+/obj/structure/flora/xeno_flora
+	name = "oork reed"
+	icon = 'icons/obj/flora/ausflora.dmi'
+	icon_state = "xeno_plant_1"
+	anchored = 1
+	shovelaway = TRUE
+
+/obj/structure/flora/xeno_flora/blue
+	name = "bvvak blossoms"
+	icon = 'icons/obj/flora/ausflora.dmi'
+	icon_state = "xeno_plant_2"
+
+/obj/structure/acid_puddle // What in the goddamn...
+	name = "sizzling puddle"
+	icon = 'icons/obj/acidcloset.dmi'
+	icon_state = "acid_puddle"
+	desc = "Watch your step..."
+	anchored = 1
+
+/obj/structure/acid_puddle/splashable()
+	return FALSE
+
+/obj/structure/acid_puddle/Crossed(AM)
+	if(isliving(AM) && isturf(src.loc))
+
+		var/mob/living/L = AM
+
+		if(L.on_foot()) //Flying mobs won't suffer the consequences of stepping in the acid, nor will lying mobs (we're assuming they're being smart and crawling around the pool)
+			if(ishuman(L))
+				var/mob/living/carbon/human/H = L
+				if(H.m_intent == "run") // Running over the puddle has a 60% chance of stepping in it, to nasty results
+					if(prob(60))
+						to_chat(H, "<span class='warning'>You step in [src]!</span>")
+						var /obj/item/clothing/shoes/melting_shoes = H.shoes
+						playsound(src, 'sound/effects/grue_burn.ogg', 50, 1) // Audio feedback is always good, so a player knows something just happened.
+
+						if(melting_shoes && !(melting_shoes.dissolvable() == PACID)) // Are our shoes acid proof? Lucky us!
+							to_chat(H, "<span class='warning'>Your footwear sizzles on contact, but remains intact.</span>")
+
+						if(melting_shoes && (melting_shoes.dissolvable() == PACID)) // If not, they melt away. Still not the worst thing that can happen.
+							to_chat(H, "<span class='warning'>Your footwear sizzles on contact, and dissolves!</span>")
+							H.drop_from_inventory(melting_shoes)
+							qdel(melting_shoes)
+							new/obj/effect/decal/cleanable/molten_item(H.loc)
+
+						if(!melting_shoes && isgrey(H)) // Are we a grey? We don't have any trouble with acid, even barefoot.
+							to_chat(H, "<span class='warning'>You feel a slight tingling as you step in [src], but it quickly subsides.</span>")
+
+						if(!melting_shoes && !isgrey(H)) // Otherwise we just lost a foot. How unfortunate.
+							var/datum/organ/external/foot_organ = H.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
+							to_chat(H, "<span class='danger'>You feel a horrific pain as you step in [src], and your foot melts away!</span>")
+							H.audible_scream()
+							foot_organ.droplimb(1, 0, 0)
+
+						else
+							return
+					else
+						to_chat(H, "<span class='warning'>You stumble over [src], barely avoiding stepping in it!</span>") // Fair warning to be careful, if you were spared.
+
+				else // Walking is safe
+					to_chat(H, "<span class='notice'>You step carefully over [src].</span>")
+					return
+
+//////////////////////////////
+// FURNITURE AND LOCKERS (Ayys need nice places to sit, lie down, and store their gear)
+//////////////////////////////
+
+/obj/structure/bed/chair/comfy/ayy1
+	icon_state = "ayychair1"
+	name = "GDR chair"
+	desc = "A plain chair manufactured by greys for other greys. Average comfort, but much better than a stool."
+
+/obj/structure/bed/chair/comfy/ayy2
+	icon_state = "ayychair2"
+	name = "GDR premium chair"
+	desc = "A premium chair manufactured by greys for more important greys. Surprisingly comfortable, good lumbar support."
+
+/obj/structure/bed/ayy1
+	name = "GDR standard bed"
+	desc = "Manufactured efficiently from basic alloys and sythetic threads. Quality may vary. "
+	icon_state = "ayybed1"
+
+/obj/structure/bed/ayy2
+	name = "GDR premium bed"
+	desc = "Significantly more comfortable than a standard issue bed. A luxury befitting a high-ranking researcher or administrator."
+	icon_state = "ayybed2"
+	sheet_type = /obj/item/stack/sheet/plasteel
+	sheet_amt = 2
+
+/obj/structure/closet/crate/ayy
+	name = "GDR crate"
+	desc = "A common storage crate, mass produced by grey laborers."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "ayycrate1"
+	density = 1
+	icon_opened = "ayycrate1open"
+	icon_closed = "ayycrate1"
+
+/obj/structure/closet/crate/ayy2
+	name = "MDF crate"
+	desc = "A rugged storage crate, for transporting mothership military supplies."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "ayycrate2"
+	density = 1
+	icon_opened = "ayycrate2open"
+	icon_closed = "ayycrate2"
+
+/obj/structure/closet/crate/ayy3
+	name = "GDR industrial crate"
+	desc = "A sturdy storage crate, for transporting tools, electronics, and building materials."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "ayycrate3"
+	density = 1
+	icon_opened = "ayycrate3open"
+	icon_closed = "ayycrate3"
+
+/obj/structure/closet/crate/secure/ayy_general
+	name = "GDR secure crate"
+	desc = "A common card-locked crate, for shipping mothership goods."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "ayysecurecrate2"
+	density = 1
+	icon_opened = "ayysecurecrate2open"
+	icon_closed = "ayysecurecrate2"
+
+/obj/structure/closet/crate/secure/ayy_mdf
+	name = "MDF secure crate"
+	desc = "A durable card-locked crate, for shipping disintegrators or other volatile ordnance."
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "ayysecurecrate"
+	density = 1
+	icon_opened = "ayysecurecrateopen"
+	icon_closed = "ayysecurecrate"
+
+/obj/structure/closet/ayy
+	name = "GDR locker"
+	desc = "A common storage unit, mass produced by grey laborers."
+	icon_state = "ayy1_closed"
+	icon_closed = "ayy1_closed"
+	icon_opened = "ayy1_open"
+
+/obj/structure/closet/ayy2
+	name = "MDF locker"
+	desc = "A rugged storage unit, for transporting mothership military supplies."
+	icon_state = "ayy2_closed"
+	icon_closed = "ayy2_closed"
+	icon_opened = "ayy2_open"
+
+/obj/structure/closet/ayy3
+	name = "Laborer locker"
+	desc = "A basic storage unit, for holding a grey laborer's spare uniforms and personal items."
+	icon_state = "ayy3_closed"
+	icon_closed = "ayy3_closed"
+	icon_opened = "ayy3_open"
+
+/obj/structure/closet/secure_closet/ayy
+	name = "GDR secure locker"
+	desc = "A mothership issued card-locked storage unit, perfect for storing a researcher's favorite labcoats."
+	icon_state = "ayysecure1"
+	icon_closed = "ayysecure"
+	icon_locked = "ayysecure1"
+	icon_opened = "ayysecureopen"
+	icon_broken = "ayysecurebroken"
+	icon_off = "ayysecureoff"
+
+/obj/structure/closet/secure_closet/ayy2
+	name = "MDF secure locker"
+	desc = "A rugged card-locked storage unit, for transporting mothership military supplies."
+	icon_state = "ayymdfsecure1"
+	icon_closed = "ayymdfsecure"
+	icon_locked = "ayymdfsecure1"
+	icon_opened = "ayymdfsecureopen"
+	icon_broken = "ayymdfsecurebroken"
+	icon_off = "ayymdfsecureoff"
+
+/obj/structure/closet/secure_closet/ayy_leader
+	name = "Administrator's secure locker"
+	desc = "A sleek card-locked storage unit, for keeping the personal effects of the best and brightest secure."
+	icon_state = "leadersecure1"
+	icon_closed = "leadersecure"
+	icon_locked = "leadersecure1"
+	icon_opened = "leadersecureopen"
+	icon_broken = "leadersecurebroken"
+	icon_off = "leadersecureoff"
 
 //////////////////////////////
 // NARRATION
@@ -199,7 +528,7 @@
 			<body>
 			<center><img src="https://ss13.moe/wiki/images/e/ec/Mothership_logo.png"> <h1>GDR-43X: Space Polyp Care Instructions</h1></center>
 			Caring for space polyps is a crucial task to maintain mothership food production. The following simple instructions have been written for you by an experienced Head Laborer. Adhere to them or risk consequences to life, limb, and continuation of cloning cycles.<BR><BR>
-			<b>Gelatin Harvesting</b>: Polyps secrete gelatin naturally that helps insulate them from vacuum. After some time has passed, collect excess gelatin from the tendrils below the bell using a bucket. Place a lid on the bucket first, or product will be wasted.<BR>
+			<b>Gelatin Harvesting</b>: Polyps secrete gelatin naturally that helps insulate them from vacuum. After some time has passed, collect excess gelatin from the tendrils below the bell using a bucket.<BR>
 			<b>Slaughtering</b>: Pull the polyp you are slaughtering away from its herd to a private room. Use a disintegrator in 40 watt range or a similar substitute. Make it quick.<BR>
 			<b>Injuries</b>: If one of your polyps is injured and remains so at the end of your shift, you will be held accountable. To quickly fix minor injuries, feed the polyp fresh meat. Polyps have a rapid metabolism, and proteins assist with natural healing processes.<BR>
 			<b>Calming</b>: If you abuse a polyp, or it is attacked, it will become defensive and sting any nearby lifeforms. A defensive polyp will not recognize you as its herder. Feed the agitated polyp fresh meat to calm it. If an entire herd has become agitated, isolate and call for assistance from mothership soldiers.<BR><BR>
@@ -242,6 +571,32 @@
 // AYY MILITARY CLOTHES
 //////////////////////////////
 
+//Ayy lmao gas mask
+/obj/item/clothing/mask/gas/mothership
+	name = "GDR half mask"
+	desc = "A close-fitting half mask that can be connected to an air supply. Acid resistant, water soluble."
+	icon_state = "ayy_mask"
+	item_state = "ayy_mask"
+	siemens_coefficient = 0.7
+	species_fit = list(GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED)
+	body_parts_visible_override = EYES
+	can_flip = 0
+	canstage = 0
+
+/obj/item/clothing/mask/gas/mothership/dissolvable()
+	return WATER
+
+//Superior ayy lmao gas mask
+/obj/item/clothing/mask/gas/mothership/advanced
+	name = "GDR Half Mask MKII"
+	desc = "A close-fitting half mask that can be connected to an air supply. This one is rated for both acid and water exposure."
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 75, rad = 0)
+	sterility = 100
+
+/obj/item/clothing/mask/gas/mothership/advanced/dissolvable()
+	return FALSE
+
 //Ayy lmao helmets
 /obj/item/clothing/head/helmet/mothership
 	name = "MDF Helmet"
@@ -254,6 +609,18 @@
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0) // Identical to default sec helmet, but a lot more stylish!
 
 /obj/item/clothing/head/helmet/mothership/dissolvable()
+	return WATER
+
+/obj/item/clothing/head/helmet/mothership_explorer
+	name = "Explorer Helmet"
+	icon_state = "explorer_helmet"
+	item_state = "explorer_helmet"
+	desc = "A segmented helmet of alien alloy, perfect for protecting an explorer's cranium from hostile fauna."
+	species_fit = list(GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
+	armor = list(melee = 50, bullet = 50, laser = 15, energy = 5, bomb = 30, bio = 0, rad = 0)
+
+/obj/item/clothing/head/helmet/mothership_explorer/dissolvable()
 	return WATER
 
 /obj/item/clothing/head/helmet/mothership_visor
@@ -276,12 +643,12 @@
 	body_parts_covered = FULL_HEAD
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
-	armor = list(melee = 65, bullet = 30, laser = 65, energy = 15, bomb = 40, bio = 0, rad = 0)
+	armor = list(melee = 75, bullet = 30, laser = 65, energy = 15, bomb = 50, bio = 0, rad = 0)
 
 /obj/item/clothing/head/helmet/mothership_visor_heavy/dissolvable()
 	return FALSE
 
-//Ayy lmao armor vest
+//Ayy lmao armor vests
 /obj/item/clothing/suit/armor/mothership
 	name = "MDF Armor"
 	desc = "An armored vest perfectly fitted for the thinnest of abdomens. Praise the mothership."
@@ -295,17 +662,24 @@
 /obj/item/clothing/suit/armor/mothership/dissolvable()
 	return WATER
 
+/obj/item/clothing/suit/armor/mothership/explorer
+	name = "Explorer Chestplate"
+	desc = "A segmented armored vest of alien alloy, favored by mothership explorers. Protects the vitals from blunt force and ballistic weapons."
+	icon_state = "explorer_chestplate"
+	item_state = "explorer_chestplate"
+	armor = list(melee = 50, bullet = 50, laser = 15, energy = 5, bomb = 30, bio = 0, rad = 0)
+
 //Ayy lmao heavy armor
 /obj/item/clothing/suit/armor/mothership_heavy
 	name = "MDF Heavy Armor"
-	desc = "An alternative to the common MDF vest, fitted with additional and thicker armor plates. It offers better protection and coverage at the cost of mobility."
+	desc = "An alternative to the common MDF vest, fitted with additional and thicker armor plates. It offers better protection and coverage at the cost of some mobility."
 	icon_state = "mdf_armor_heavy"
 	item_state = "mdf_armor_heavy"
-	slowdown = HARDSUIT_SLOWDOWN_HIGH // It's called heavy armor for a reason, after all
+	slowdown = HARDSUIT_SLOWDOWN_LOW // It's called heavy armor for a reason, after all
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|IGNORE_INV
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
-	armor = list(melee = 65, bullet = 30, laser = 65, energy = 15, bomb = 40, bio = 0, rad = 0) // Slightly better stats, but nothing too crazy
+	armor = list(melee = 75, bullet = 30, laser = 65, energy = 15, bomb = 50, bio = 0, rad = 0) // Notably better stats than the vest
 	siemens_coefficient = 0.5
 
 /obj/item/clothing/suit/armor/mothership_heavy/dissolvable()
@@ -338,7 +712,7 @@
 		"/obj/item/weapon/storage/fancy/cigarettes",
 		"/obj/item/weapon/lighter",
 		"/obj/item/clothing/glasses",
-		"/obj/item/clothing/mask/gas",
+		"/obj/item/clothing/mask/gas/mothership",
 		"/obj/item/weapon/tank/emergency_oxygen",
 		)
 
@@ -355,7 +729,7 @@
 	new /obj/item/weapon/reagent_containers/food/snacks/zambiscuit(src)
 	new /obj/item/weapon/storage/fancy/cigarettes/redsuits(src)
 	new /obj/item/weapon/lighter/zippo(src)
-	new /obj/item/clothing/mask/gas(src)
+	new /obj/item/clothing/mask/gas/mothership(src)
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 
 //////////////////////////////
@@ -634,8 +1008,7 @@
 
 /obj/item/weapon/melee/stunprobe/Destroy()
 	if (bcell)
-		qdel(bcell)
-		bcell = null
+		QDEL_NULL(bcell)
 
 	return ..()
 
@@ -1068,12 +1441,11 @@
 /obj/machinery/acidshower/update_icon()	//This handles the acid overlay when the shower is on, and makes the vapor appear after a while
 	overlays.len = 0
 	if(myvapor)
-		qdel(myvapor)
-		myvapor = null
+		QDEL_NULL(myvapor)
 
 	if(on)
 		var/image/acid = image('icons/obj/acidcloset.dmi', src, "acid", BELOW_OBJ_LAYER, dir)
-		acid.plane = ABOVE_HUMAN_PLANE
+		acid.plane = relative_plane(ABOVE_HUMAN_PLANE)
 		overlays += acid
 		if(acidtemp == "cold") //No vapor if the acid is cold
 			return
@@ -1090,8 +1462,7 @@
 		myvapor = new /obj/effect/acidvapor(get_turf(src))
 		spawn(250)
 			if(src && !on)
-				qdel(myvapor)
-				myvapor = null
+				QDEL_NULL(myvapor)
 				isvapor = 0
 
 /obj/machinery/acidshower/Crossed(atom/movable/O)

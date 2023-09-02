@@ -262,8 +262,7 @@
 		src.active_record = locate(href_list["view_rec"])
 		if(istype(src.active_record,/datum/dna2/record))
 			if ((isnull(src.active_record.ckey)))
-				qdel(src.active_record)
-				src.active_record = null
+				QDEL_NULL(src.active_record)
 				src.temp = "ERROR: Record Corrupt"
 			else
 				src.menu = 3
@@ -283,8 +282,7 @@
 			if (istype(C)||istype(C, /obj/item/device/pda))
 				if(src.check_access(C))
 					src.records.Remove(src.active_record)
-					qdel(src.active_record)
-					src.active_record = null
+					QDEL_NULL(src.active_record)
 					src.temp = "Record deleted."
 					src.menu = 2
 				else
@@ -354,29 +352,16 @@
 				temp = "Error: Unable to initiate cloning cycle."
 				return
 
-			var/success = pod1.growclone(C)
-			if(success)
+			if(pod1.growclone(C))
 				temp = "Initiating cloning cycle..."
 				records.Remove(C)
-				qdel(C)
-				C = null
+				QDEL_NULL(C)
 				menu = 1
+
 			else
-				//if growclone() failed, we can't clone the guy, so what is this even DOING here?
-				var/mob/selected = find_dead_player("[C.ckey]")
-				if(!selected)
-					temp = "Initiating cloning cycle...<br>Error: Post-initialisation failed. Cloning cycle aborted."
-					src.updateUsrDialog()
-					return
-				selected << 'sound/machines/chime.ogg'	//probably not the best sound but I think it's reasonable
-				var/answer = alert(selected,"Do you want to return to life?","Cloning","Yes","No")
-				if(answer != "No" && pod1.growclone(C))
-					temp = "Initiating cloning cycle..."
-					records.Remove(C)
-					qdel(C)
-					menu = 1
-				else
-					temp = "Initiating cloning cycle...<br>Error: Post-initialisation failed. Cloning cycle aborted."
+				temp = "Initiating cloning cycle...<br>Error: Post-initialisation failed. Cloning cycle aborted."
+				src.updateUsrDialog()
+				return
 
 		else
 			temp = "Error: Data corruption."
@@ -404,6 +389,13 @@
 	if((isnull(subject)) || (!ishuman(subject) && !istype(subject, /mob/living/slime_pile)) || (!subject.dna) || (ismanifested(subject)))
 		scantemp = "Error: Unable to locate valid genetic data." //Something went very wrong here
 		return
+	if(istype(subject, /mob/living/slime_pile))
+		var/mob/living/slime_pile/P = subject
+		if(P.slime_person && P.slime_person.has_brain())
+			subject = P.slime_person
+		else
+			scantemp = "Unable to locate genetic base within the slime puddle. Micro-MRI scans indicate its brain is missing."
+			return
 	if(!subject.has_brain())
 		scantemp = "Error: No signs of intelligence detected." //Self explainatory
 		return
@@ -428,35 +420,14 @@
 			scantemp = "Error: Unable to locate valid genetic data. However, mental interface initialized successfully."
 			to_chat(subject, "<span class='interface'><span class='big bold'>Someone is trying to clone your corpse.</span> \
 				You cannot be cloned as your body has been husked. However, your brain may still be used. Your ghost has been displayed as active and inside your body.</span>")
-			return
 		else
-			var/mob/dead/observer/ghost = mind_can_reenter(subject.mind)
-			if(ghost)
-				var/mob/ghostmob = ghost.get_top_transmogrification()
-				if(ghostmob)
-					scantemp = "Error: Unable to locate valid genetic data. Additionally, subject's brain is not responding to scanning stimuli."
-					ghostmob << 'sound/effects/adminhelp.ogg'
-					to_chat(ghostmob, "<span class='interface'><span class='big bold'>Someone is trying to clone your corpse.</span> \
-						You cannot be cloned as your body has been husked. However, your brain may still be used. To show you're still active, return to your body! (Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-					return
-			else
-				scantemp = "Error: Unable to locate valid genetic data. Additionally, mental interface failed to initialize."
-				return
+			scantemp = "Error: Unable to locate valid genetic data. Additionally, [subject.ghost_reenter_alert("Someone is trying to clone your corpse. You cannot be cloned as your body has been husked. However, your brain may still be used. To show you're still active, return to your body!") ? "subject's brain is not responding to scanning stimuli" : "mental interface failed to initialize"]."
+		return
 
 	//There's nothing wrong with the corpse itself past this point
 	if(!subject.client) //There is not a player "in control" of this corpse, maybe they ghosted, maybe they logged out
-		var/mob/dead/observer/ghost = mind_can_reenter(subject.mind)
-		if(ghost)
-			var/mob/ghostmob = ghost.get_top_transmogrification()
-			if(ghostmob) //Found this guy's ghost, and it still belongs to this corpse. There's nothing preventing this guy from being cloned, except them being ghosted
-				scantemp = "Error: Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds."
-				ghostmob << 'sound/effects/adminhelp.ogg'
-				to_chat(ghostmob, "<span class='interface big'><span class='bold'>Someone is trying to clone your corpse. Return to your body if you want to be cloned!</span> \
-					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
-				return
-		else //No ghost matching this corpse. Guy probably either logged out or was revived by out-of-body means.
-			scantemp = "Error: Mental interface failure."
-			return
+		scantemp = "Error: [subject.ghost_reenter_alert("Someone is trying to clone your corpse. Return to your body if you want to be cloned!") ? "Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds" : "Mental interface failure"]."
+		return
 
 	//Past this point, we know for sure the corpse is cloneable and has a ghost inside.
 	if(!subject.ckey) //ideally would never happen but a check never hurts

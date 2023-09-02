@@ -248,7 +248,7 @@
 		animate(src, pixel_y = pixel_y - 8 * PIXEL_MULTIPLIER, 5, 1, ELASTIC_EASING)
 
 /mob/living/simple_animal/cockroach/proc/lay_eggs()
-	if((cockroach_egg_amount >= max_unhatchable_eggs_in_world) && (animal_count[src.type] >= ANIMAL_CHILD_CAP)) //If roaches can't breed anymore (too many of them), and there are more than 30 eggs in the world, don't create eggs
+	if((cockroach_egg_amount >= max_unhatchable_eggs_in_world) && (animal_count[src.type] >= ANIMAL_EXTENDED_CHILD_CAP)) //If roaches can't breed anymore (too many of them), and there are more than 30 eggs in the world, don't create eggs
 		last_laid_eggs = world.time
 		return
 
@@ -259,7 +259,7 @@
 	E.pixel_x = src.pixel_x
 	E.pixel_y = src.pixel_y
 
-	if((animal_count[src.type] < ANIMAL_CHILD_CAP))
+	if((animal_count[src.type] < ANIMAL_EXTENDED_CHILD_CAP))
 		last_laid_eggs = world.time //If the eggs can hatch, cooldown is 30 seconds
 		E.fertilize()
 

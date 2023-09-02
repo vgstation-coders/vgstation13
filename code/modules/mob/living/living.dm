@@ -19,16 +19,13 @@
 	if(butchering_drops)
 		for(var/datum/butchering_product/B in butchering_drops)
 			butchering_drops -= B
-			qdel(B)
-			B = null
+			QDEL_NULL(B)
 
 	if(immune_system)
-		qdel(immune_system)
-		immune_system = null
+		QDEL_NULL(immune_system)
 
 	if(addicted_chems)
-		qdel(addicted_chems)
-		addicted_chems = null
+		QDEL_NULL(addicted_chems)
 	. = ..()
 
 /mob/living/examine(var/mob/user, var/size = "", var/show_name = TRUE, var/show_icon = TRUE) //Show the mob's size and whether it's been butchered
@@ -148,6 +145,12 @@
 
 	// Actually apply damage
 	apply_damage(damage, B.damage_type, B.def_zone)
+
+	// Emitter attack logging. Only when source of emitter beam is /mob/living and there's a ckey in either
+	if (B.sources.len >= 1 && (isliving(B.sources[1])))
+		var/mob/living/assailant = B.sources[1]
+		if (assailant.ckey || src.ckey)
+			log_attack("<font color='red'>[assailant.name][assailant.ckey ? "([assailant.ckey])" : "(no key)"] attacked [src.name][src.ckey ? "([src.ckey])" : "(no key)"] with [B.name]</font>")
 
 	// Update check time.
 	last_beamchecks["\ref[B]"]=world.time
@@ -586,8 +589,7 @@ Thanks.
 				if(istype(s))
 					O.implants -= s
 					H.contents -= s
-					qdel(s)
-					s = null
+					QDEL_NULL(s)
 			O.amputated = 0
 			O.brute_dam = 0
 			O.burn_dam = 0
@@ -826,8 +828,7 @@ Thanks.
 		if(istype(H.loc, /mob/living))
 			var/mob/living/Location = H.loc
 			Location.drop_from_inventory(H)
-		qdel(H)
-		H = null
+		QDEL_NULL(H)
 		return
 	else if(istype(src.loc, /obj/structure/strange_present))
 		var/obj/structure/strange_present/present = src.loc
@@ -914,8 +915,7 @@ Thanks.
 		var/resisting = 0
 		for(var/obj/O in L.requests)
 			L.requests.Remove(O)
-			qdel(O)
-			O = null
+			QDEL_NULL(O)
 			resisting++
 		for(var/obj/item/weapon/grab/G in usr.grabbed_by)
 			resisting++
@@ -1228,6 +1228,10 @@ Thanks.
 
 	if(client.move_delayer.blocked())
 		return
+	if(resting) /* If you're somehow already standing up while inside a crate (shouldn't happen), you can still rest. */
+		if(istype(loc, /obj/structure/closet/crate))
+			to_chat(src, "<span class='warning'>There isn't enough room to get up. Open the [loc.name] first!</span>")
+			return
 
 	rest_action()
 
@@ -1575,7 +1579,8 @@ Thanks.
 			to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
 			return FAILED_THROW
 
-		I.pre_throw()
+		if(I.pre_throw(target))
+			return FAILED_THROW
 
 	remove_from_mob(item)
 

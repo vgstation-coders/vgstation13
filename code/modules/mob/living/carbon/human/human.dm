@@ -10,6 +10,8 @@
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
 
+	var/fartCooldown = 20 SECONDS
+
 /mob/living/carbon/human/dummy
 	real_name = "Test Dummy"
 	status_flags = GODMODE|CANPUSH|UNPACIFIABLE
@@ -180,6 +182,7 @@
 	obj_overlays[FACEMASK_LAYER]	= new /obj/abstract/Overlays/facemask_layer
 	obj_overlays[HEAD_LAYER]		= new /obj/abstract/Overlays/head_layer
 	obj_overlays[HANDCUFF_LAYER]	= new /obj/abstract/Overlays/handcuff_layer
+	obj_overlays[MUTUALCUFF_LAYER]	= new /obj/abstract/Overlays/mutualcuff_layer
 	obj_overlays[LEGCUFF_LAYER]		= new /obj/abstract/Overlays/legcuff_layer
 	//obj_overlays[HAND_LAYER]		= new /obj/abstract/Overlays/hand_layer
 	obj_overlays[TAIL_LAYER]		= new /obj/abstract/Overlays/tail_layer
@@ -208,12 +211,15 @@
 				to_chat(src, "<b>You must eat to survive. Starvation for extended periods of time will kill you!</b>")
 				to_chat(src, "<b>Keep an eye out on the hunger indicator on the right of your screen; it will start flashing red and black when you're close to starvation.</b>")
 
+	if(buddha_mode_everyone)
+		status_flags ^= BUDDHAMODE
+
 	update_colour(0)
 
 	update_mutantrace()
 
-	register_event(/event/equipped, src, .proc/update_name)
-	register_event(/event/unequipped, src, .proc/update_name)
+	register_event(/event/equipped, src, nameof(src::update_name()))
+	register_event(/event/unequipped, src, nameof(src::update_name()))
 
 /mob/living/carbon/human/proc/update_name()
 	name = get_visible_name()
@@ -256,8 +262,7 @@
 
 		if (internal)
 			if (!internal.air_contents)
-				qdel(internal)
-				internal = null
+				QDEL_NULL(internal)
 			else
 				stat("Internal Atmosphere Info", internal.name)
 				stat("Tank Pressure", internal.air_contents.return_pressure())
@@ -320,21 +325,30 @@
 
 //gets assignment from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
-/mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job")
+/mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job", var/give_rank = FALSE)
 	var/obj/item/device/pda/pda = wear_id
 	var/obj/item/weapon/card/id/id = wear_id
 	var/obj/item/weapon/storage/wallet/wallet = wear_id
 	if (istype(pda))
 		if (pda.id && istype(pda.id, /obj/item/weapon/card/id))
-			. = pda.id.assignment
+			if (give_rank)
+				. = pda.id.rank
+			else
+				. = pda.id.assignment
 		else
 			. = pda.ownjob
 	else if (istype(wallet))
 		var/obj/item/weapon/card/id/wallet_id = wallet.GetID()
 		if(istype(wallet_id))
-			. = wallet_id.assignment
+			if (give_rank)
+				. = wallet_id.rank
+			else
+				. = wallet_id.assignment
 	else if (istype(id))
-		. = id.assignment
+		if (give_rank)
+			. = id.rank
+		else
+			. = id.assignment
 	else
 		return if_no_id
 	if (!.)
@@ -694,6 +708,9 @@
 	return
 
 /mob/living/carbon/human/proc/vomit(hairball = 0, instant = 0)
+	if(species && species.flags & SPECIES_NO_MOUTH)
+		return
+
 	if(!lastpuke)
 		lastpuke = 1
 		to_chat(src, "<spawn class='warning'>You feel nauseous...</span>")

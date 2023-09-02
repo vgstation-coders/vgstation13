@@ -75,9 +75,11 @@
 	/// Set to TRUE when the mob is being transformed into something else or gibbed.
 	/// Can be checked to avoid running expensive code for mobs that are about to not exist.
 	var/monkeyizing = null
+	var/is_dying = FALSE
 	var/other = 0.0
 	var/eye_blind = null	//Carbon
 	var/eye_blurry = null	//Carbon
+	var/nearsightedness = 0
 	var/ear_deaf = null		//Carbon
 	var/say_mute = null
 	var/ear_damage = null	//Carbon
@@ -231,6 +233,8 @@
 	var/update_icon = 1 //Set to 1 to trigger update_icons() at the next life() call
 
 	var/status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH	//bitflags defining which status effects can be inflicted (replaces CANKNOCKDOWN, canstun, etc)
+
+	var/digitalcamo = 0 // Can they be tracked by the AI?
 
 	var/list/radar_blips = list() // list of screen objects, radar blips
 	var/radar_open = 0 	// nonzero is radar is open

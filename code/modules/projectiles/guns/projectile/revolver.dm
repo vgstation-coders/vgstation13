@@ -244,6 +244,10 @@
 	..()
 
 /obj/item/weapon/gun/projectile/russian/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+	if(!getAmmo()) /* Check to ensure that russian revolvers that start empty don't runtime. */
+		user.visible_message("<span class='warning'>*click*</span>")
+		playsound(user, 'sound/weapons/empty.ogg', 100, 1)
+		return
 	var/obj/item/ammo_casing/AC = loaded[1]
 	if(!AC || !AC.BB)
 		user.visible_message("<span class='warning'>*click*</span>")
@@ -347,8 +351,7 @@
 		playsound(user, fire_sound, fire_volume, 1)
 		in_chamber.on_hit(user)
 		user.apply_damage(in_chamber.damage*1.5, in_chamber.damage_type, LIMB_HEAD, used_weapon = "Point blank shot in the mouth with \a [in_chamber]")
-		qdel(in_chamber)
-		in_chamber = null
+		QDEL_NULL(in_chamber)
 		make_peel(user)
 		user.visible_message("<span class='danger'>\The [src] explodes as \the [user] bites into it!</span>","<span class='danger'>\The [src] explodes as you bite into it!</span>")
 

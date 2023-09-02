@@ -103,6 +103,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/list/holiday_required = list() // The holiday this spell is restricted to ! Leave empty if none.
 	var/block = 0//prevents some spells from being spamed
 	var/obj/delay_animation = null
+	var/user_dir //Used by NO_TURNING to memorize the user's direction and turn them around
 
 ///////////////////////
 ///SETUP AND PROCESS///
@@ -152,7 +153,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/choose_targets(mob/user = usr) //depends on subtype - see targeted.dm, aoe_turf.dm, dumbfire.dm, or code in general folder
 	return
 
-/spell/proc/is_valid_target(var/target, mob/user, options)
+/spell/proc/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
+	if(bypass_range && istype(target, /mob/living))
+		return TRUE
 	if(options)
 		return (target in options)
 	return ((target in view_or_range(range, user, selection_type)) && istype(target, /mob/living))
@@ -221,30 +224,43 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!cast_check(skipcharge, user))
 			return 0
 		user.remove_spell_channeling() //In case we're swapping from an older spell to this new one
-		user.register_event(/event/uattack, src, .proc/channeled_spell)
+		user.register_event(/event/uattack, src, nameof(src::channeled_spell()))
 		user.spell_channeling = src
 		if(spell_flags & CAN_CHANNEL_RESTRAINED)
-			user.register_event(/event/ruattack, src, .proc/channeled_spell)
+			user.register_event(/event/ruattack, src, nameof(src::channeled_spell()))
 			user.spell_channeling = src
 		connected_button.name = "(Ready) [name]"
 		currently_channeled = 1
 		connected_button.add_channeling()
 	else
-		user.unregister_event(/event/uattack, src, .proc/channeled_spell)
-		user.unregister_event(/event/ruattack, src, .proc/channeled_spell)
+		user.unregister_event(/event/uattack, src, nameof(src::channeled_spell()))
+		user.unregister_event(/event/ruattack, src, nameof(src::channeled_spell()))
 		user.spell_channeling = null
 		currently_channeled = 0
 		connected_button.remove_channeling()
 		connected_button.name = name
 	return 1
 
-/spell/proc/channeled_spell(atom/atom)
+//Used by NO_TURNING to turn the user around
+//Due to the way the code is structured (/event/uattack happens after the user has turned around)
+//we have to check for the only thing that happens before turning, /event/clickon.
+//but since that has no way of directly interfering with face_atom() we instead memorize the direction of the user at the time
+//and then flip them around at the start of proper spellcasting.
+//Unfortunately this means that the user is still technically turning around.
+//The only viable solution would be restructuring click.dm code to support not turning around but that might break too many things.
+/spell/proc/memorize_user_direction(mob/user, list/modifiers, atom/target)
+	if(holder)
+		user_dir = holder.dir
+
+/spell/proc/channeled_spell(atom/atom, bypassrange = 0)
 	var/list/target = list(atom)
 	var/mob/user = holder
 	user.attack_delayer.delayNext(0)
-
-	if(cast_check(1, holder) && is_valid_target(atom, user))
-		target = before_cast(target, user) //applies any overlays and effects
+	if(spell_flags & NO_TURNING)
+		holder.dir = user_dir
+		holder.update_dir()
+	if(cast_check(1, holder) && is_valid_target(atom, user, bypass_range = bypassrange))
+		target = before_cast(target, user, bypassrange) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target
 			return
 		invocation(user, target)
@@ -308,12 +324,12 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /////CASTING WRAPPERS//////
 ///////////////////////////
 
-/spell/proc/before_cast(list/targets, user)
+/spell/proc/before_cast(list/targets, user, bypass_range = 0)
 	var/list/valid_targets = list()
 	var/list/options = view_or_range(range,user,selection_type)
 	for(var/atom/target in targets)
 		// Check range again (fixes long-range EI NATH)
-		if(!is_valid_target(target, user, options))
+		if(!is_valid_target(target, user, options, bypass_range))
 			continue
 		valid_targets += target
 
@@ -329,8 +345,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			spell.anchored = 1
 			spell.setDensity(FALSE)
 			spawn(overlay_lifespan)
-				qdel(spell)
-				spell = null
+				QDEL_NULL(spell)
 	return valid_targets
 
 /spell/proc/after_cast(list/targets)

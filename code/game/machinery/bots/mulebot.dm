@@ -118,11 +118,9 @@ var/global/mulebot_count = 0
 		radio_controller.remove_object(src, control_freq)
 		radio_controller.remove_object(src, beacon_freq)
 	if(wires)
-		qdel(wires)
-		wires = null
+		QDEL_NULL(wires)
 	if(cell)
-		qdel(cell)
-		cell = null
+		QDEL_NULL(cell)
 
 	..()
 
@@ -959,8 +957,7 @@ var/global/mulebot_count = 0
 /obj/item/mulebot_laser/Destroy()
 	. = ..()
 	laser_pointers_list -= src
-	qdel(radio)
-	radio = null
+	QDEL_NULL(radio)
 	my_mulebot = null
 
 /obj/item/mulebot_laser/attack_self(mob/user)

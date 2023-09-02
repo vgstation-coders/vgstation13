@@ -46,6 +46,28 @@
 /area/vault/podstation
 	requires_power = 1
 
+/area/vault/podstation/interior
+	name = "\improper Pod Station"
+	icon_state = "kitchen"
+
+/area/vault/podstation/exterior
+	name = "\improper Pod Station Asteroid"
+	icon_state = "pod"
+
+/area/vault/fastfood
+
+/area/vault/fastfood/dining
+	requires_power = 1
+	icon_state = "cafeteria"
+
+/area/vault/fastfood/kitchen
+	requires_power = 1
+	icon_state = "kitchen"
+
+/area/vault/fastfood/misc
+	requires_power = 1
+	icon_state = "fmaint"
+
 /area/vault/mechclubhouse
 	requires_power = 1
 
@@ -994,3 +1016,167 @@
 
 /obj/item/device/pda/clown/broken/attack_self(mob/user)
 	INVOKE_EVENT(src, /event/item_attack_self, "user" = user) // Minimalist version of original function
+
+/obj/structure/falserwall/doorobscurer
+	layer = ABOVE_DOOR_LAYER
+
+/mob/living/simple_animal/hostile/retaliate/cookbot
+	name = "cook bot"
+	desc = "Cooks food for the restaurant."
+	icon = 'icons/mob/robots.dmi'
+	icon_state = "kodiak-service"
+
+	melee_damage_lower = 10
+	melee_damage_upper = 25
+
+	maxHealth = 200
+	health = 200
+
+	attacktext = "electrocutes"
+	a_intent = I_HURT
+
+	attack_sound = 'sound/effects/eleczap.ogg'
+
+	ranged = 1
+	projectiletype = /obj/item/projectile/bullet
+	projectilesound = 'sound/weapons/Gunshot.ogg'
+	casingtype = /obj/item/ammo_casing/a357
+
+	unsuitable_atmos_damage = 0
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
+
+	mob_property_flags = MOB_ROBOTIC
+
+	environment_smash_flags = 0
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/New()
+	..()
+	var/datum/component/ai/area_territorial/signal/door/AT = add_component(/datum/component/ai/area_territorial/signal/door)
+	AT.SetArea(locate(/area/vault/fastfood/kitchen))
+	AT.id_tag = "vaultkitchen"
+	AT.enter_signal = /event/comp_ai_cmd_retaliate
+	AT.typefilter = /mob/living/carbon/human
+	register_event(/event/comp_ai_cmd_retaliate, src, nameof(src::Retaliate()))
+	add_component(/datum/component/ai/conversation)
+	var/datum/component/ai/area_territorial/say/fastfood/intruder/AT2 = add_component(/datum/component/ai/area_territorial/say/fastfood/intruder)
+	AT2.SetArea(locate(/area/vault/fastfood/kitchen))
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/Destroy()
+	unregister_event(/event/comp_ai_cmd_retaliate, src, nameof(src::Retaliate()))
+	..()
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/death(var/gibbed = FALSE)
+	..(gibbed)
+	visible_message("<b>[src]</b> blows apart!")
+	new /obj/effect/gibspawner/robot(src.loc)
+	qdel(src)
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter
+	name = "restaurant service bot"
+	desc = "Serves food asked for by a customer."
+	wander = FALSE
+	flags = HEAR_ALWAYS|PROXMOVE // for AI stuff
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/New()
+	..()
+	add_component(/datum/component/controller/movement/astar)
+	var/datum/component/ai/hearing/order/foodndrinks/FD = add_component(/datum/component/ai/hearing/order/foodndrinks)
+	FD.baseprice = rand(5,10) * 5
+	var/datum/component/ai/area_territorial/say/fastfood/welcome/AT = add_component(/datum/component/ai/area_territorial/say/fastfood/welcome)
+	AT.SetArea(locate(/area/vault/fastfood/dining))
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/examine(mob/user)
+	..()
+	var/datum/component/ai/hearing/order/foodndrinks/FD = get_component(/datum/component/ai/hearing/order/foodndrinks)
+	if(FD)
+		to_chat(user,"Current items in order: [counted_english_list(FD.items2deliver)]<br>Total credits due: [FD.currentprice] credit\s")
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/kitchen
+	name = "restaurant delivery bot"
+	desc = "Serves food asked for by a customer at the drive-thru."
+
+/mob/living/simple_animal/hostile/retaliate/cookbot/waiter/kitchen/New()
+	..()
+	var/datum/component/ai/hearing/order/foodndrinks/FD = get_component(/datum/component/ai/hearing/order/foodndrinks)
+	FD.inbag = TRUE
+
+/datum/component/ai/area_territorial/say/fastfood
+	typefilter = /mob/living/carbon/human
+
+/datum/component/ai/area_territorial/say/fastfood/welcome
+	enter_args = list("Welcome to #&*£%£&%, how may I take your order?") // TODO: name here
+
+/datum/component/ai/area_territorial/say/fastfood/intruder
+	enter_args = list("Stop! Intruder!")
+
+/obj/machinery/computer/allvaults
+	name = "space structure locator"
+	desc = "A console that shows a list of all coordinates of mysterious structures found in this sector of space."
+	icon_state = "comm_serv"
+	light_color = LIGHT_COLOR_GREEN
+	mech_flags = MECH_SCAN_FAIL
+
+/obj/machinery/computer/allvaults/attack_hand(mob/user)
+	add_fingerprint(user)
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		return
+	interact(user)
+
+/obj/machinery/computer/allvaults/interact(mob/user)
+	user.set_machine(src)
+	var/dat = ""
+	for (var/datum/map_element/vault/V in map_elements)
+		dat += "[V.name ? V.name : V.file_path], located in area [V.location ? "[V.location.z]" : "UNKNOWN"]<BR>"
+	var/datum/browser/popup = new(user, "allvaults", "List of found mysterious structures", 300, 400)
+	popup.set_content(dat)
+	popup.open()
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/barbot
+	name = "barbot cube"
+	contained_mob = /mob/living/simple_animal/robot/NPC/barbot
+
+/mob/living/simple_animal/robot/NPC/barbot
+	name = "bar service bot"
+	desc = "Serves drinks asked for by a customer."
+	icon_state = "kodiak-service"
+	var/panelopen = FALSE
+
+/mob/living/simple_animal/robot/NPC/barbot/New()
+	add_component(/datum/component/ai/conversation)
+	var/datum/component/ai/target_finder/simple_view/SV = add_component(/datum/component/ai/target_finder/simple_view)
+	SV.range = 3
+	var/datum/component/ai/hearing/order/bardrinks/select_reagents/BD = add_component(/datum/component/ai/hearing/order/bardrinks/select_reagents)
+	BD.baseprice = rand(5,10) * 5
+
+/mob/living/simple_animal/robot/NPC/barbot/examine(mob/user)
+	..()
+	var/datum/component/ai/hearing/order/bardrinks/select_reagents/BD = get_component(/datum/component/ai/hearing/order/bardrinks/select_reagents)
+	if(BD)
+		to_chat(user,"Current items in order: [counted_english_list(BD.items2deliver)]<br>Total credits due: [BD.currentprice] credit\s")
+
+/mob/living/simple_animal/robot/NPC/barbot/attackby(obj/item/O, mob/user, no_delay, originator)
+	..()
+	if(ismultitool(O))
+		var/datum/component/ai/hearing/order/bardrinks/select_reagents/BD = get_component(/datum/component/ai/hearing/order/bardrinks/select_reagents)
+		if(BD)
+			BD.baseprice = input(user,"Set a base price to serve at","Base price",BD.baseprice) as num
+	if(O.is_screwdriver(user))
+		panelopen = !panelopen
+		to_chat(user,"<span class='notice'>You [panelopen ? "open" : "close"] a panel on the back.</span>")
+	if(iscrowbar(O) && panelopen)
+		to_chat(user,"<span class='notice'>You attempt to pry out the cash storage system.</span>")
+		if(do_after(user,src,3 SECONDS))
+			var/datum/component/ai/hearing/order/bardrinks/select_reagents/BD = get_component(/datum/component/ai/hearing/order/bardrinks/select_reagents)
+			if(BD && BD.profits)
+				dispense_cash(BD.profits,loc)
+				BD.profits = 0
+			else
+				to_chat(user,"<span class='notice'>No cash found inside.</span>")

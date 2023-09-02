@@ -33,9 +33,6 @@
 	nameShort = "test_multiz"
 	nameLong = "Multi-Floor Test Station"
 	map_dir = "teststation_multiz"
-	tDomeX = 100
-	tDomeY = 100
-	tDomeZ = 1
 	zLevels = list(
 		/datum/zLevel/centcomm,
 		/datum/zLevel/subterranean,

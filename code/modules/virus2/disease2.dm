@@ -514,6 +514,10 @@ var/global/list/disease2_list = list()
 		ticks += speed
 		return
 
+	var/datum/role/changeling/C = ischangeling(mob)
+	if(C && C.disease_immunity) //Changeling is immune to symptoms
+		return
+
 	// Activating the disease's symptoms
 	for(var/datum/disease2/effect/e in effects)
 		if (e.count > 0)

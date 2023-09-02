@@ -269,11 +269,11 @@
 		recruiter.logging = TRUE
 
 		// A player has their role set to Yes or Always
-		recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+		recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
 		// ", but No or Never
-		recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+		recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
 
-		recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+		recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 
 	recruiter.request_player()
 

@@ -5,6 +5,7 @@
 	var/list/species_restricted = null //Only these species can wear this kit.
 	var/wizard_garb = 0 // Wearing this empowers a wizard.
 	var/eyeprot = 0 //for head and eyewear
+	var/nearsighted_modifier = 0 //positive values impair vision(welding goggles), negative values improve vision(prescription glasses)
 
 	//temperatures in Kelvin. These default values won't affect protections in any way.
 	var/cold_breath_protection = 300 //that cloth protects its wearer's breath from cold air down to that temperature
@@ -409,6 +410,7 @@
 	var/gave_out_gifts = FALSE //for snowman animation
 	var/obj/item/clothing/head/on_top = null //for stacking
 	var/stack_depth = 0
+	var/blood_overlay_type = "hat"
 
 var/global/hatStacking = 0
 var/global/maxStackDepth = 10
@@ -621,7 +623,7 @@ var/global/maxStackDepth = 10
 	name = "suit"
 	var/fire_resist = T0C+100
 	flags = FPRINT
-	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
+	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/tank/emergency_plasma)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_OCLOTHING
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
@@ -634,6 +636,12 @@ var/global/maxStackDepth = 10
 
 /obj/item/clothing/suit/proc/vine_protected()
 	return FALSE
+
+/obj/item/clothing/suit/proc/Extinguish(var/mob/living/carbon/human/H)
+	return
+
+/obj/item/clothing/suit/proc/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
+	return
 
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.

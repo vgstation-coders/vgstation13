@@ -25,6 +25,8 @@
 	var/y_co = 1         // Y coordinate
 	var/z_co = 1         // Z coordinate
 
+	var/ignores_jamming = FALSE
+
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 10
 	active_power_usage = 300
@@ -313,8 +315,7 @@ var/list/telesci_warnings = list(
 			return
 
 		if(prob(25))
-			qdel(telepad.amplifier)
-			telepad.amplifier = null
+			QDEL_NULL(telepad.amplifier)
 			src.visible_message("[bicon(src)]<span class='notice'>You hear something shatter.</span>","[bicon(src)]<span class='notice'>You hear something shatter.</span>")
 
 	spark(telepad, 5)
@@ -345,7 +346,7 @@ var/list/telesci_warnings = list(
 			message_admins(log)
 
 		log_admin(log)
-		do_teleport(ROI, dest, 0)
+		do_teleport(ROI, dest, 0, aijamming=ignores_jamming)
 		if(telepad.arcanetampered) // i have done nothing but arcane tamper telepads for 3 days!
 			breadtype = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread))
 			new breadtype(dest)
@@ -476,6 +477,9 @@ var/list/telesci_warnings = list(
 		to_chat(usr, "<span class='caution'>Calibration successful.</span>")
 		return TRUE
 	return FALSE
+
+/obj/machinery/computer/telescience/centcomm
+	ignores_jamming = TRUE
 
 #undef DIRECTION_SEND
 #undef DIRECTION_RECEIVE

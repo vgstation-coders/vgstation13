@@ -14,11 +14,9 @@
 /obj/item/device/hologram_projector/Destroy()
 	if(holoperson)
 		holoperson.unequip_everything()
-		qdel(holoperson)
-		holoperson = null
+		QDEL_NULL(holoperson)
 	if(ray)
-		qdel(ray)
-		ray = null
+		QDEL_NULL(ray)
 	..()
 
 /mob/living/simple_animal/hologram/advanced/projector
@@ -43,7 +41,7 @@
 			qdel(projector.ray)
 		projector = null
 	..()
-	
+
 /obj/item/device/hologram_projector/proc/clear_holo()
 	set_light(0)
 	if(holoperson)
@@ -53,18 +51,16 @@
 		animate(holoperson, alpha = 0, time = 5)
 		spawn(5)
 			holoperson.set_light(0)
-			qdel(ray)
-			ray = null
+			QDEL_NULL(ray)
 			holoperson.unequip_everything()
-			qdel(holoperson)
-			holoperson = null
+			QDEL_NULL(holoperson)
 			icon_state = "shield0"
 	return 1
 
 /obj/item/device/hologram_projector/emp_act()
 	if(holoperson)
 		clear_holo()
-	
+
 /obj/item/device/hologram_projector/attack_self()
 	if(polling_ghosts)
 		return
@@ -88,11 +84,11 @@
 		recruiter.jobban_roles = list(ROLE_POSIBRAIN)
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
-	recruiter.player_volunteering = new /callback(src, .proc/recruiter_recruiting)
+	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
 	// Role set to No or Never
-	recruiter.player_not_volunteering = new /callback(src, .proc/recruiter_not_recruiting)
+	recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
 
-	recruiter.recruited = new /callback(src, .proc/recruiter_recruited)
+	recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 	recruiter.request_player()
 
 /obj/item/device/hologram_projector/proc/recruiter_recruiting(mob/dead/observer/player, controls)
@@ -105,8 +101,7 @@
 	if(!player)
 		to_chat(usr, "Hologram generation failed!")
 		polling_ghosts = FALSE
-		qdel(recruiter)
-		recruiter = null
+		QDEL_NULL(recruiter)
 		return
 	polling_ghosts = FALSE
 
@@ -143,7 +138,7 @@
 			return 1
 
 	projector.clear_holo() //If not, we want to get rid of the hologram.
-	
+
 /mob/living/simple_animal/hologram/advanced/projector/Move()
 	..()
 	if(!projector)

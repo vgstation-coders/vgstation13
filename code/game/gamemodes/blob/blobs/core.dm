@@ -59,8 +59,7 @@
 			if(R.overmind == overmind)
 				R.overmind = null
 				R.update_icon()
-		qdel(overmind)
-		overmind = null
+		QDEL_NULL(overmind)
 	processing_objects.Remove(src)
 	..()
 
@@ -76,6 +75,12 @@
 
 	previous_health = health
 	..()
+
+/obj/effect/blob/core/update_looks(var/right_now = 0)
+	..()
+	var/icon/I = new(icon)
+	light_color = I.GetPixel(1,1,"core_color")
+	set_light(1, 3, light_color)
 
 /obj/effect/blob/core/Life()
 	if(timestopped)
@@ -96,7 +101,10 @@
 	if(!spawning)//no expanding on the first Life() tick
 
 		if(icon_size == 64)
-			anim(target = loc, a_icon = icon, flick_anim = "corepulse", sleeptime = 15, lay = layer+0.5, offX = -16, offY = -16, alph = 200, plane = BLOB_PLANE)
+			if (icon_state == "cerebrate")
+				anim(target = loc, a_icon = icon, flick_anim = "cerebratepulse", sleeptime = 15, lay = ABOVE_LIGHTING_LAYER, offX = -16, offY = -16, alph = 200, plane = ABOVE_LIGHTING_PLANE)
+			else
+				anim(target = loc, a_icon = icon, flick_anim = "corepulse", sleeptime = 15, lay = ABOVE_LIGHTING_LAYER, offX = -16, offY = -16, alph = 200, plane = ABOVE_LIGHTING_PLANE)
 			for(var/mob/M in viewers(src))
 				M.playsound_local(loc, adminblob_beat, 50, 0, null, FALLOFF_SOUNDS, 0)
 
@@ -116,6 +124,10 @@
 		spawning = 0
 	..()
 
+/obj/effect/blob/core/VisiblePulse(var/pulse = 0)
+	if (pulse > 0)
+		return
+	..(pulse)
 
 /obj/effect/blob/core/run_action()
 	return 0
@@ -159,8 +171,7 @@
 		return 0
 
 	if(overmind)
-		qdel(overmind)
-		overmind = null
+		QDEL_NULL(overmind)
 
 	var/mob/camera/blob/B = new(src.loc)
 	B.key = new_overmind.key

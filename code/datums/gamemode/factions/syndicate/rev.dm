@@ -62,8 +62,7 @@
 		for(var/obj/effect/landmark/A in landmarks_list)
 			if(A.name == "RevSq-Spawn")
 				revsq_spawn += get_turf(A)
-				qdel(A)
-				A = null
+				QDEL_NULL(A)
 				continue
 
 		var/spawnpos = 1
@@ -100,6 +99,8 @@
 #define ALL_REVS_DEAD 2
 
 /datum/faction/revolution/check_win()
+	if(antag_madness != ANTAG_MADNESS_OFF)
+		return FALSE
 	var/gameactivetime = world.time - ticker.gamestart_time*10 //gamestart_time is expressed in seconds, not deciseconds
 	if(gameactivetime < 5 MINUTES)
 		if(!(gameactivetime % 60))

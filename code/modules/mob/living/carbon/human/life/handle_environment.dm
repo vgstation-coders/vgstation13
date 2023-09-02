@@ -10,7 +10,6 @@
 	//Body temperature is adjusted in two steps. Firstly your body tries to stabilize itself a bit.
 	if(stat != DEAD)
 		handle_body_temperature()
-		//log_debug("Adjusting to atmosphere.")
 
 	//After then, it reacts to the surrounding atmosphere based on your thermal protection
 	if(!on_fire) //If you're on fire, you do not heat up or cool down based on surrounding gases

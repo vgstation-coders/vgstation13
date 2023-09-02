@@ -32,11 +32,6 @@
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
 
-	//Center of thunderdome admin room
-	var/tDomeX = 0
-	var/tDomeY = 0
-	var/tDomeZ = 0
-
 	//Holomap offsets
 	var/list/holomap_offset_x = list()
 	var/list/holomap_offset_y = list()
@@ -206,6 +201,9 @@ var/global/list/accessable_z_levels = list()
 				T.set_area(base_area)
 				T.ChangeTurf(base_turf)
 
+/datum/zLevel/proc/blur_holomap(var/area/aera, var/turf/truf)
+	return FALSE
+
 ////////////////////////////////
 
 /datum/zLevel/station
@@ -227,8 +225,16 @@ var/global/list/accessable_z_levels = list()
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
 /datum/zLevel/mining
-
 	name = "mining"
+
+/datum/zLevel/krakenroid
+	name = "krakenroid"
+
+/datum/zLevel/krakenroid/blur_holomap(var/area/aera, var/turf/truf)
+	if (istype(aera, /area/mine/explored) && !istype(truf, /turf/unsimulated/floor/airless))
+		if (prob(80)) //blurring the shape of Snaxi's Kraken asteroid so it's a bit more subtle.
+			return TRUE
+	return FALSE
 
 //for snowmap
 /datum/zLevel/snowsurface
