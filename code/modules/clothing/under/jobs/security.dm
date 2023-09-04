@@ -215,7 +215,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	armor = list(melee = 65, bullet = 30, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	siemens_coefficient = 0.6
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/hos/surveyor
 	name = "surveyor coat"
@@ -232,7 +232,7 @@
 	item_state = "jensensuit"
 	_color = "jensen"
 	siemens_coefficient = 0.6
-	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/hos/jensen
 	name = "armored trenchcoat"
@@ -241,7 +241,7 @@
 	item_state = "jensencoat"
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.6
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/hos/sundowner
 	name = "armoured greatcoat"

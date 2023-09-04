@@ -111,7 +111,7 @@
 	icon_state = "warden_jacket"
 	item_state = "armor"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list (VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list (GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/vest/wardenshort
 	name = "Warden's short jacket"
