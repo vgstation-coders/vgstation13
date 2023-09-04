@@ -2150,7 +2150,7 @@
 	reagents.add_reagent(TOXICWASTE, 8)
 	reagents.add_reagent(BUSTANUT, 2) //YOU FEELIN HARDCORE BRAH?
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/dangles
 	name = "Dangles"
 	desc = "Once you pop, you'll wish you stopped."
@@ -4996,7 +4996,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot
 	name = "Hot Chips"
 	desc = "Don't get the dust in your eyes!"
