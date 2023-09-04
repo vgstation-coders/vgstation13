@@ -1519,8 +1519,8 @@
 /area/vault/mothership_lab/raidtunnel_lower)
 "nj" = (
 /obj/structure/closet/crate/freezer,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter,
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter,
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter,

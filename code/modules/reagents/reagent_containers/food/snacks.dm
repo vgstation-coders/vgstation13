@@ -7699,6 +7699,49 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 //You have now entered the ayy food zone
 
+/obj/item/weapon/zambiscuit_package
+	name = "Zam Biscuit Package"
+	desc = "A package of Zam biscuits, popular fare for hungry grey laborers. They go perfectly with a cup of Earl's Grey tea. "
+	icon = 'icons/obj/food_container.dmi'
+	icon_state = "zambiscuitbox"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	item_state = "zambiscuitbox"
+	w_class = W_CLASS_SMALL
+
+/obj/item/weapon/zambiscuit_package/attack_self(mob/user)
+	to_chat(user, "<span class='notice'>You start to tear open the biscuit package's seal.</span>")
+	playsound(src, 'sound/items/poster_ripped.ogg', 100, 1)
+	if(do_after(user, src, 2 SECONDS))
+		qdel(src)
+		var/obj/item/weapon/storage/fancy/zam_biscuits/new_zam = new /obj/item/weapon/storage/fancy/zam_biscuits
+		user.put_in_hands(new_zam)
+
+/obj/item/weapon/storage/fancy/zam_biscuits
+	icon = 'icons/obj/food_container.dmi'
+	icon_state = "zambiscuitbox3"
+	icon_type = "zambiscuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	item_state = "zambiscuitbox"
+	name = "Zam Biscuit Package"
+	desc = "A package of Zam biscuits, popular fare for hungry grey laborers. They go perfectly with a cup of Earl's Grey tea. "
+	storage_slots = 3
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/zambiscuit","/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical")
+
+	w_class = W_CLASS_SMALL
+
+/obj/item/weapon/storage/fancy/zam_biscuits/empty
+	empty = 1
+	icon_state = "zambiscuitbox0"
+
+/obj/item/weapon/storage/fancy/zam_biscuits/New()
+	..()
+	if(empty)
+		update_icon() //Make it look actually empty
+		return
+	for(var/i = 1; i <= storage_slots; i++)
+		new /obj/item/weapon/reagent_containers/food/snacks/zambiscuit(src)
+	return
+
 /obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic
 	name = "Classic Steak and Nettles"
 	icon_state	= "box_tvdinnerclassic"

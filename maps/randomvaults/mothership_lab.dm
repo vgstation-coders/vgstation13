@@ -702,7 +702,7 @@
 		"/obj/item/weapon/grenade",
 		"/obj/item/weapon/handcuffs",
 		"/obj/item/weapon/reagent_containers/food/snacks/zambiscuit",
-		"/obj/item/weapon/storage/pill_bottle/zambiscuits",
+		"/obj/item/weapon/zambiscuit_package",
 		"/obj/item/weapon/storage/pill_bottle/hyperzine",
 		"/obj/item/weapon/reagent_containers/hypospray/autoinjector",
 		"/obj/item/stack/medical",
