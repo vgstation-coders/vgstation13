@@ -2155,20 +2155,24 @@
 	name = "Dangles"
 	desc = "Once you pop, you'll wish you stopped."
 	icon_state = "dangles"
-	trash = /obj/item/trash/danitos
+	trash = /obj/item/trash/dangles
 	filling_color = "#FF9933"
 	base_crumb_chance = 30
+	var/popped
+
+/obj/item/weapon/reagent_containers/food/snacks/dangles/can_consume(mob/user)
+	return popped
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/attack_self(var/mob/user)
-	if(!is_open_container())
+	if(!popped)
 		return pop_open(user)
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/proc/pop_open(var/mob/user)
 	to_chat(user, "You pop the top off \the [src].")
-	flags |= OPENCONTAINER
 	playsound(user, 'sound/effects/opening_snack_tube.ogg', 50, 1)
 	overlays.len = 0
+	popped = TRUE 
 	update_icon()
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/New()
