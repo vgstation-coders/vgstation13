@@ -265,7 +265,7 @@
 // Arguments:
 // mob/killer: the person who killed
 // mob/victim: the person who got killed
-/event/killed
+/event/kill
 
 // Arguments:
 // time: shuttle timer

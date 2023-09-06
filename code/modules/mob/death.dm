@@ -50,8 +50,8 @@ var/global/firstblood = FALSE
 		if(attack_log.len)
 			var/lastmsg = attack_log[attack_log.len]
 			for(var/mob/living/L in living_mob_list)
-				if(findtext(lastmsg,L.ckey))
-					INVOKE_EVENT(src, /event/killed, "killer" = L, "victim" = src)
+				if(L.ckey && findtext(lastmsg,L.ckey))
+					INVOKE_EVENT(L, /event/kill, "killer" = L, "victim" = src)
 					firstblood = TRUE
 					break
 		stat_collection.add_death_stat(src,place_of_death)

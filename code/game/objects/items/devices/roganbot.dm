@@ -237,11 +237,11 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 /obj/item/device/roganbot/killbot/New()
 	. = ..()
 	if(emergency_shuttle)
-		register_event(/event/shuttletimer, emergency_shuttle, nameof(src::on_shuttle_time()))
+		emergency_shuttle.register_event(/event/shuttletimer, src, nameof(src::on_shuttle_time()))
 
 /obj/item/device/roganbot/killbot/Destroy()
 	if(emergency_shuttle)
-		unregister_event(/event/shuttletimer, emergency_shuttle, nameof(src::on_shuttle_time()))
+		emergency_shuttle.unregister_event(/event/shuttletimer, src, nameof(src::on_shuttle_time()))
 	. = ..()
 
 
@@ -257,13 +257,13 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 
 /obj/item/device/roganbot/killbot/pickup(mob/user)
 	. = ..()
-	register_event(/event/killed, user, nameof(src::on_kill()))
-	register_event(/event/death, user, nameof(src::kill_reset()))
+	user.register_event(/event/kill, src, nameof(src::on_kill()))
+	user.register_event(/event/death, src, nameof(src::kill_reset()))
 
 /obj/item/device/roganbot/killbot/dropped(mob/user)
 	. = ..()
-	unregister_event(/event/killed, user, nameof(src::on_kill()))
-	unregister_event(/event/death, user, nameof(src::kill_reset()))
+	user.unregister_event(/event/kill, src, nameof(src::on_kill()))
+	user.unregister_event(/event/death, src, nameof(src::kill_reset()))
 	kill_reset()
 
 /obj/item/device/roganbot/killbot/proc/on_kill(mob/killer,mob/victim)
