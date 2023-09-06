@@ -233,6 +233,7 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 	var/killcount = 0
 	var/time_since_last_kill = 0
 	var/fastkillcount = 0
+	var/pickedup = FALSE
 
 /obj/item/device/roganbot/killbot/New()
 	. = ..()
@@ -259,6 +260,10 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 	. = ..()
 	user.register_event(/event/kill, src, nameof(src::on_kill()))
 	user.register_event(/event/death, src, nameof(src::kill_reset()))
+	if(!pickedup)
+		playsound(user.loc,'sound/effects/2003M/GoodLuckWarrior-3.wav',100)
+		say("Good luck, warrior.")
+		pickedup = TRUE
 
 /obj/item/device/roganbot/killbot/dropped(mob/user)
 	. = ..()
@@ -271,14 +276,17 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 	killcount++
 	if(!firstblood)
 		playsound(killer.loc,'sound/effects/2003M/first_blood.wav',100)
+		say("FIRST BLOOD!")
 		specialsoundplayed = TRUE
 	if(!specialsoundplayed && istype(get_area(victim),/area/shuttle/arrival))
 		playsound(killer.loc,'sound/effects/2003M/Spawn_Killer.wav',100)
+		say("SPAWN KILLER!")
 		specialsoundplayed = TRUE
 	if(!specialsoundplayed && killer.mind && killer.mind.antag_roles.len)
 		for(var/datum/role/R in killer.mind.antag_roles)
 			if(R.faction && (victim in R.faction.members))
 				playsound(killer.loc,'sound/effects/2003M/Team_Killer.wav',100)
+				say("TEAM KILLER!")
 				specialsoundplayed = TRUE
 				break
 	if((world.time - victim.timeofdeath < 3 SECONDS && world.time - time_since_last_kill < 3 SECONDS) || !time_since_last_kill)
@@ -287,20 +295,29 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 			switch(fastkillcount)
 				if(2)
 					playsound(killer.loc,'sound/effects/2003M/double_kill.wav',100)
+					say("DOUBLE KILL!")
 				if(3)
 					playsound(killer.loc,'sound/effects/2003M/triple_kill.wav',100)
+					say("TRIPLE KILL!")
 				if(4)
 					playsound(killer.loc,'sound/effects/2003M/multikill.wav',100)
+					say("MULTI KILL!")
 				if(5)
 					playsound(killer.loc,'sound/effects/2003M/ultrakill.wav',100)
+					say("ULTRA KILL!")
 				if(6)
 					playsound(killer.loc,'sound/effects/2003M/monster_kill.wav',100)
+					say("M-M-M-M-MONSTER KILL!")
 				if(7)
 					playsound(killer.loc,'sound/effects/2003M/LudicrousKill_F.wav',100)
+					say("L-L-L-L-LUDICROUS KILL!")
 				if(8 to INFINITY)
-					playsound(killer.loc,'sound/effects/2003M/HolyShit_F.wav',100)
+					if(fastkillcount > 30 || fastkillcount % 5 != 0)
+						playsound(killer.loc,'sound/effects/2003M/HolyShit_F.wav',100)
+						say("HOLY SHIT!")
 			time_since_last_kill = world.time
-			return
+			if(fastkillcount > 30 || fastkillcount < 8 || fastkillcount % 5 == 0)
+				return
 	else
 		fastkillcount = 0
 		time_since_last_kill = 0
@@ -308,18 +325,27 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 		switch(killcount)
 			if(5)
 				playsound(killer.loc,'sound/effects/2003M/killing_spree.wav',100)
+				killer.visible_message("<span class='danger'>[killer] is on a KILLING SPREE!</span>")
 			if(10)
 				playsound(killer.loc,'sound/effects/2003M/rampage.wav',100)
+				killer.visible_message("<span class='danger'>[killer] is on a RAMPAGE!</span>")
 			if(15)
 				playsound(killer.loc,'sound/effects/2003M/dominating.wav',100)
+				killer.visible_message("<span class='danger'>[killer] is DOMINATING!</span>")
 			if(20)
 				playsound(killer.loc,'sound/effects/2003M/unstoppable.wav',100)
+				killer.visible_message("<span class='danger'>[killer] is UNSTOPPABLE!</span>")
 			if(25)
 				playsound(killer.loc,'sound/effects/2003M/Godlike.wav',100)
+				killer.visible_message("<span class='danger'>[killer] is GODLIKE!</span>")
 			if(30)
 				playsound(killer.loc,'sound/effects/2003M/WhickedSick.wav',100)
+				killer.visible_message("<span class='danger'>[killer] is WICKED SICK!</span>")
 
 /obj/item/device/roganbot/killbot/proc/kill_reset(mob/user, body_destroyed)
+	if(killcount)
+		playsound(user.loc,'sound/effects/2003M/Reset.wav',100)
+		visible_message("<span class='danger'>[src] kill count reset!</span>")
 	killcount = 0
 	fastkillcount = 0
 	time_since_last_kill = 0
@@ -360,7 +386,7 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 			playsound(loc,'sound/effects/2003M/Two.wav',100)
 		if(1)
 			playsound(loc,'sound/effects/2003M/One.wav',100)
-		if(0)
+		/*if(0)
 			var/mob/M = get_holder_of_type(/mob)
 			var/flawless_victory = FALSE
 			var/failed_jectie = FALSE
@@ -385,4 +411,4 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 			else if(teamwon)
 				playsound(loc,'sound/effects/2003M/You_have_won_the_match.wav',100)
 			else
-				playsound(loc,'sound/effects/2003M/You_have_lost_the_match.wav',100)
+				playsound(loc,'sound/effects/2003M/You_have_lost_the_match.wav',100)*/
