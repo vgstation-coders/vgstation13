@@ -4,6 +4,7 @@
 	icon_state		= "decon"
 	category		= "Construction"
 	energy_cost		= 5
+	delaytime		= 50
 	var/can_r_wall	= 0
 
 /datum/rcd_schematic/decon/attack(var/atom/A, var/mob/user)
@@ -15,7 +16,7 @@
 		to_chat(user, "Deconstructing \the [T]...")
 		playsound(master, 'sound/machines/click.ogg', 50, 1)
 
-		if(master.delay(user, T, 4 SECONDS))
+		if(master.delay(user, T, delaytime - 10))
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
@@ -26,7 +27,7 @@
 	else if(istype(A, /turf/simulated/floor))
 		var/turf/simulated/floor/T = A
 		to_chat(user, "Deconstructing \the [T]...")
-		if(master.delay(user, T, 5 SECONDS))
+		if(master.delay(user, T, delaytime))
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
@@ -39,7 +40,7 @@
 	else if(istype(A, /obj/machinery/door/airlock))
 		var/obj/machinery/door/airlock/D = A
 		to_chat(user, "Deconstructing \the [D]...")
-		if(master.delay(user, D, 5 SECONDS))
+		if(master.delay(user, D, delaytime))
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
@@ -53,7 +54,7 @@
 		if(is_type_in_list(W, list(/obj/structure/window/plasma,/obj/structure/window/reinforced/plasma,/obj/structure/window/full/plasma,/obj/structure/window/full/reinforced/plasma)) && !can_r_wall)
 			return "it cannot deconstruct plasma glass!"
 		to_chat(user, "Deconstructing \the [W]...")
-		if(master.delay(user, W, 5 SECONDS))
+		if(master.delay(user, W, delaytime))
 			if(master.get_energy(user) < energy_cost)
 				return 1
 
@@ -100,6 +101,7 @@
 	icon_state			= "engine"
 	category			= "Construction"
 	energy_cost			= 2
+	delaytime			= 20
 
 	flags		= RCD_GET_TURF
 
@@ -115,7 +117,7 @@
 
 	to_chat(user, "Building floor...")
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
-	if(master.delay(user, A, 2 SECONDS))
+	if(master.delay(user, A, delaytime))
 		if(master.get_energy(user) < energy_cost)
 			return 1
 
@@ -131,6 +133,7 @@
 	icon_state	= "metal0"
 	category	= "Construction"
 	energy_cost	= 3
+	delaytime 	= 20
 
 /datum/rcd_schematic/con_walls/attack(var/atom/A, var/mob/user)
 	if(!istype(A, /turf/simulated/floor))
@@ -139,7 +142,7 @@
 	var/turf/simulated/floor/T = A
 	to_chat(user, "Building wall...")
 	playsound(master, 'sound/machines/click.ogg', 50, 1)
-	if(master.delay(user, A, 2 SECONDS))
+	if(master.delay(user, A, delaytime))
 		if(master.get_energy(user) < energy_cost)
 			return 1
 
@@ -156,6 +159,7 @@
 	icon_state			= "r_wall"
 	category			= "Construction"
 	energy_cost			= 5
+	delaytime 			= 20
 
 /datum/rcd_schematic/con_rwalls/attack(var/atom/A, var/mob/user)
 	if(A?.type != /turf/simulated/wall) // Only one with strict type like this for now
@@ -164,7 +168,7 @@
 	var/turf/simulated/floor/T = A
 	to_chat(user, "Building wall...")
 	playsound(master, 'sound/machines/click.ogg', 50, 1)
-	if(master.delay(user, A, 2 SECONDS))
+	if(master.delay(user, A, delaytime))
 		if(master.get_energy(user) < energy_cost)
 			return 1
 
@@ -181,6 +185,7 @@
 	icon_state					= "door_closed"
 	category					= "Construction"
 	energy_cost					= 3
+	delaytime					= 50
 
 	var/allow_access			= 1
 	var/selected_name			= "Airlock"
@@ -429,7 +434,7 @@
 
 	to_chat(user, "Building airlock...")
 
-	if(!master.delay(user, A, 5 SECONDS))
+	if(!master.delay(user, A, delaytime))
 		return 1
 
 	if(master.get_energy(user) < energy_cost)
@@ -461,6 +466,7 @@
 	icon_state 					= "window_grille"
 	category					= "Construction"
 	energy_cost					= 2
+	delaytime					= 50
 
 	var/list/schematics			= list()
 	var/ready
@@ -526,7 +532,7 @@
 
 	to_chat(user, "Building window...")
 
-	if(!master.delay(user, A, 5 SECONDS))
+	if(!master.delay(user, A, delaytime))
 		return 1
 
 	if(master.get_energy(user) < energy_cost)

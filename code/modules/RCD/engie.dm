@@ -57,10 +57,11 @@
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/delay(var/mob/user, var/atom/target, var/amount)
-	return do_after(user, target, amount/2)
+	return ..(user, target, amount/2)
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin
 	name = "experimental Rapid-Construction-Device (RCD)"
+	is_instant = TRUE
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin/afterattack(var/atom/A, var/mob/user)
 	if(!user.check_rights(R_ADMIN))
@@ -68,6 +69,3 @@
 		qdel(src)
 		return
 	return ..()
-
-/obj/item/device/rcd/matter/engineering/pre_loaded/adv/admin/delay(var/mob/user, var/atom/target, var/amount)
-	return TRUE

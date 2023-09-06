@@ -22,6 +22,7 @@
 	var/list/schematics = list(/datum/rcd_schematic/test)
 	// Make sparks. LOTS OF SPARKS.
 	var/sparky          = TRUE
+	var/is_instant		= FALSE
 
 	var/z_last_checked	= 0
 	// A list schematics can use for storing mutual data.
@@ -237,7 +238,7 @@
 	return 1
 
 /obj/item/device/rcd/MouseDropFrom(obj/over_object,src_location,over_location,src_control,over_control,params)
-	if(isturf(over_location))
+	if(isturf(over_location) && (is_instant || !selected.delaytime))
 		afterattack(over_location,usr)
 		return
 	return ..()
@@ -264,7 +265,9 @@
 
 // Called by schematics to delay their actions
 /obj/item/device/rcd/proc/delay(var/mob/user, var/atom/target, var/amount)
-	return do_after(user, target, amount)
+	if(!is_instant)
+		return do_after(user, target, amount)
+	return TRUE
 
 /obj/item/device/rcd/MouseWheeled(var/mob/user, var/delta_x, var/delta_y, var/params)
 	var/modifiers = params2list(params)

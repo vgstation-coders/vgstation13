@@ -247,6 +247,7 @@
 
 /obj/item/device/rcd/rpd/admin
 	name = "experimental Rapid-Piping-Device (RPD)"
+	is_instant = TRUE
 
 /obj/item/device/rcd/rpd/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is building pipes inside \himself! It looks like \he's trying to commit suicide!</span>")
@@ -269,6 +270,3 @@
 		qdel(src)
 		return
 	return ..()
-
-/obj/item/device/rcd/rpd/admin/delay(var/mob/user, var/atom/target, var/amount)
-	return TRUE

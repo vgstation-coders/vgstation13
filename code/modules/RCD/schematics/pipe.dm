@@ -13,6 +13,7 @@
 	name     = "Eat pipes"
 	category = "Utilities"
 	flags    = RCD_RANGE | RCD_ALLOW_SWITCH
+	delaytime = 5
 
 /datum/rcd_schematic/decon_pipes/attack(var/atom/A, var/mob/user)
 	if(!istype(A, /atom/movable))
@@ -25,7 +26,7 @@
 
 	to_chat(user, "Destroying Pipe...")
 	playsound(master, 'sound/machines/click.ogg', 50, 1)
-	if(!master.delay(user, AM, 0.5 SECONDS))
+	if(!master.delay(user, AM, delaytime))
 		return 1
 
 	if(!AM)
@@ -168,6 +169,7 @@
 	name     = "Gas sensor"
 	category = "Devices"
 	flags    = RCD_RANGE | RCD_GET_TURF | RCD_ALLOW_SWITCH
+	delaytime = 20
 
 /datum/rcd_schematic/gsensor/attack(var/atom/A, var/mob/user)
 	if(!isturf(A))
@@ -175,7 +177,7 @@
 
 	to_chat(user, "Building gas sensor...")
 	playsound(master, 'sound/machines/click.ogg', 50, 1)
-	if(!master.delay(user, A, 2 SECONDS))
+	if(!master.delay(user, A, delaytime))
 		return 1
 
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -185,6 +187,7 @@
 	name     = "Pipe meter"
 	category = "Devices"
 	flags    = RCD_RANGE | RCD_GET_TURF | RCD_ALLOW_SWITCH
+	delaytime = 20
 
 /datum/rcd_schematic/pmeter/attack(var/atom/A, var/mob/user)
 	if(!isturf(A))
@@ -192,7 +195,7 @@
 
 	to_chat(user, "Building pipe meter...")
 	playsound(master, 'sound/machines/click.ogg', 50, 1)
-	if(!master.delay(user, A, 2 SECONDS))
+	if(!master.delay(user, A, delaytime))
 		return 1
 
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -204,6 +207,7 @@
 	name             = "Pipe"
 	category         = "Regular pipes"
 	flags            = RCD_RANGE | RCD_GET_TURF | RCD_ALLOW_SWITCH
+	delaytime		 = 20
 
 	var/pipe_id      = PIPE_SIMPLE_STRAIGHT
 	var/pipe_type    = PIPE_BINARY
@@ -412,7 +416,7 @@
 	playsound(user, 'sound/machines/click.ogg', 50, 1)
 	var/thislayer = layer
 	var/thisdir = selected_dir
-	if(!master.delay(user, A, 2 SECONDS))
+	if(!master.delay(user, A, delaytime))
 		return 1
 
 	playsound(user, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -459,7 +463,7 @@
 	to_chat(user, "Building Pipes ...")
 	playsound(user, 'sound/machines/click.ogg', 50, 1)
 	var/thisdir = selected_dir
-	if(!master.delay(user, A, 2 SECONDS))
+	if(!master.delay(user, A, delaytime))
 		return 1
 
 	playsound(user, 'sound/items/Deconstruct.ogg', 50, 1)
