@@ -226,6 +226,8 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 	transcript = "Give me your extra resources."
 	soundfile = 'sound/effects/aoe2/38 give me your extra resources.ogg'
 
+var/static/list/headshot_zones = list(LIMB_HEAD,TARGET_EYES,TARGET_MOUTH)
+
 /obj/item/device/roganbot/killbot
 	name = "KILLbot"
 	desc = "A sound synthetizer with 38 preset phrases. To activate, say a number from 1 to 38 out loud. This one seems designed for an hero going for the high score."
@@ -233,6 +235,7 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 	var/killcount = 0
 	var/time_since_last_kill = 0
 	var/fastkillcount = 0
+	var/headshots = 0
 	var/pickedup = FALSE
 
 /obj/item/device/roganbot/killbot/New()
@@ -289,6 +292,17 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 				say("TEAM KILLER!")
 				specialsoundplayed = TRUE
 				break
+	if(killer.zone_sel && (killer.zone_sel.selecting in headshot_zones) && istype(killer.get_active_hand(),/obj/item/weapon/gun))
+		headshots++
+		if(!specialsoundplayed)
+			if(headshots == 15)
+				playsound(killer.loc,'sound/effects/2003M/HeadHunter.wav',100)
+				say("HEAD HUNTER!")
+				specialsoundplayed = TRUE
+			else if(!fastkillcount && killcount % 5 != 0)
+				playsound(killer.loc,'sound/effects/2003M/headshot.wav',100)
+				say("HEADSHOT!")
+				specialsoundplayed = TRUE
 	if((world.time - victim.timeofdeath < 3 SECONDS && world.time - time_since_last_kill < 3 SECONDS) || !time_since_last_kill)
 		fastkillcount++
 		if(!specialsoundplayed)
@@ -349,6 +363,7 @@ var/global/list/number2rogansound = list() //populated by /proc/make_datum_refer
 	killcount = 0
 	fastkillcount = 0
 	time_since_last_kill = 0
+	headshots = 0
 
 /obj/item/device/roganbot/killbot/proc/on_shuttle_time(time)
 	switch(time)
