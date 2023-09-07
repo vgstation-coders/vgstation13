@@ -358,7 +358,7 @@ var/static/list/headshot_zones = list(LIMB_HEAD,TARGET_EYES,TARGET_MOUTH)
 
 /obj/item/device/roganbot/killbot/proc/kill_reset(mob/user, body_destroyed)
 	if(killcount)
-		playsound(user.loc,'sound/effects/2003M/Reset.wav',100)
+		playsound(loc,'sound/effects/2003M/Reset.wav',100)
 		visible_message("<span class='danger'>[src] kill count reset!</span>")
 	killcount = 0
 	fastkillcount = 0
