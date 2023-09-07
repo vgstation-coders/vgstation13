@@ -158,6 +158,9 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 				to_chat(antag.current, "<span class='danger'>You feel sick!</span>")
 				current_disease_tier = 2
 
+/datum/role/catbeast/StatPanel()
+	stat(null, text("Threat generated: [threat_generated]"))
+
 
 /datum/role/catbeast/proc/OnStation()
 	if(antag.current.z != map.zMainStation)
