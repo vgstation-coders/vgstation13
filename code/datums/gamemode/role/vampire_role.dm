@@ -336,7 +336,7 @@
 			continue // We don't terrify our underlings
 		if (C.vampire_affected(antag) <= 0)
 			continue
-		C.stuttering += 20
+		C.stuttering = max(C.stuttering, 20)
 		C.Jitter(20)
 		C.Dizzy(20)
 		to_chat(C, "<span class='sinister'>Your heart is filled with dread, and you shake uncontrollably.</span>")
