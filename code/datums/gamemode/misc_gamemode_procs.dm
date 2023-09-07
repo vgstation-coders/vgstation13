@@ -111,6 +111,8 @@
 						<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"><BR>"}
 
 	var/list/threat_detected = round(starting_threat)
+	var/midround_threat = round(midround_starting_threat)
+	var/likelihood
 
 	switch(threat_detected)
 		if(0 to 19)
@@ -137,6 +139,21 @@
 			intercepttext += "<b>Impending Doom</b></center><BR>"
 			intercepttext += "Your station is somehow in the middle of hostile territory, in clear view of any enemy of the corporation. Your likelihood to survive is low, and station destruction is expected and almost inevitable. Secure any sensitive material and neutralize any enemy you will come across. It is important that you at least try to maintain the station.<BR>"
 			intercepttext += "Good luck."
+
+	switch(midround_threat)
+		if(0 to 9)
+			likelihood = "very low"
+		if(10 to 19)
+			likelihood = "low"
+		if(20 to 39)
+			likelihood = "average"
+		if(40 to 59)
+			likelihood = "high"
+		if(60 to 100)
+			likelihood = "very high"
+
+	intercepttext += "<BR><BR>In addition, the risks of additional enemies of the corporation assaulting the station are <b>[likelihood]</b>."
+
 
 	intercepttext += "</body></html>"
 
