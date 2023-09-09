@@ -1057,7 +1057,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/greyweapons
-	name = "MDF Surplus weapons"
+	name = "MDF surplus weapons"
 	contains = list(/obj/item/weapon/melee/stunprobe,
 					/obj/item/weapon/melee/stunprobe,
 					/obj/item/weapon/gun/energy/smalldisintegrator,

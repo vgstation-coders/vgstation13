@@ -616,6 +616,7 @@
 	icon_state = "explorer_helmet"
 	item_state = "explorer_helmet"
 	desc = "A segmented helmet of alien alloy, perfect for protecting an explorer's cranium from hostile fauna."
+	body_parts_covered = FULL_HEAD|MASKHEADHAIR
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
 	armor = list(melee = 50, bullet = 50, laser = 15, energy = 5, bomb = 30, bio = 0, rad = 0)
