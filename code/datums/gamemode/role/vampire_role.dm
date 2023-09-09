@@ -675,7 +675,3 @@
 				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
 				success = FALSE
 	return success
-
-// If the target is weakened, the spells take less time to complete.
-/mob/living/carbon/proc/get_vamp_enhancements()
-	return ((knockdown ? 2 : 0) + (stunned ? 1 : 0) + (sleeping || paralysis ? 3 : 0))

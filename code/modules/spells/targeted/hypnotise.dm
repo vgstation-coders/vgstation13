@@ -1,6 +1,6 @@
 /spell/targeted/hypnotise
 	name = "Hypnotise (10)"
-	desc = "A piercing stare that incapacitates your victim for a good length of time."
+	desc = "A piercing stare that paralyzes your victim for a good length of time."
 	abbreviation = "HN"
 
 	school = "vampire"
@@ -60,13 +60,9 @@
 		if ((C.sdisabilities & BLIND) || (C.sight & BLIND))
 			to_chat(user, "<span class='warning'>\the [C] is blind!</span>")
 			return FALSE
-		if(do_mob(user, C, 10 - C.get_vamp_enhancements()))
-			to_chat(user, "<span class='warning'>Your piercing gaze knocks out \the [C].</span>")
-			to_chat(C, "<span class='sinister'>You find yourself unable to move and barely able to speak.</span>")
-			apply_spell_damage(target)
-		else
-			to_chat(user, "<span class='warning'>You broke your gaze.</span>")
-			return FALSE
+		to_chat(user, "<span class='warning'>Your piercing gaze paralyzes \the [C].</span>")
+		to_chat(C, "<span class='sinister'>You find yourself unable to move and barely able to speak.</span>")
+		apply_spell_damage(target)
 	var/datum/role/vampire/V = isvampire(user)
 	if (V)
 		V.remove_blood(blood_cost)
