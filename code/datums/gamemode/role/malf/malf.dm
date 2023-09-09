@@ -97,6 +97,11 @@ Once done, you will be able to interface with all systems, notably the onboard n
 		if(!(H.particleimg in antag.current.client.images))
 			antag.current.client.images |= H.particleimg
 
+/datum/role/malfAI/StatPanel()
+	stat(null, text("APCs hacked: [apcs.len]"))
+	stat(null, text("APC hack limit: [currently_hacking_apcs.len]/[apc_hacklimit]"))
+	stat(null, text("Machine hack limit: [currently_hacking_machines.len]/[apcs.len]")) //Machine limit is equal to APCs hacked
+	stat(null, text("Processing power per minute: [apcs.len * 0.9]")) // 0.03 * 30 (process ticks, a tick is ~2 seconds)
 
 ////////////////////////////////////////////////
 
