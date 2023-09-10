@@ -654,9 +654,11 @@
 			if(!mute)
 				to_chat(src, "<span class='warning'>You are too hungry to keep draining light...")
 	return FALSE
-
+ // Light drain color is meant to compensate for grue vision being attuned too much to red,
+ // which would make the red color visually extremely bright when affected by shadow drain.
+ // As a consequence, it drains the red color from its surroundings. Spooky.
 /mob/living/simple_animal/hostile/grue/proc/drainlight_set()	//Set the strength of light drain.
-	set_light(7 + eatencount, -3 * eatencount - 3, GRUE_BLOOD)	//Eating sentients makes the drain more powerful.
+	set_light(7 + eatencount, -3 * eatencount - 3, "#872728")	//Eating sentients makes the drain more powerful.
 
 //Ventcrawling and hiding, only for gruespawn
 /mob/living/simple_animal/hostile/grue/proc/ventcrawl()
