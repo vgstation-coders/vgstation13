@@ -174,6 +174,12 @@ var/list/datum/stack_recipe/chain_recipes = list (
 	icon_state = "ansible_crystal"
 	mech_flags = MECH_SCAN_FAIL
 
+/obj/item/stack/telecrystal/fake
+	transferrable = FALSE
+
+/obj/item/stack/telecrystal/fake/attack_self(mob/user)
+	. = ..()
+	amount = input(user,"Set an amount to show","Set amount",amount) as num
 
 /obj/item/stack/rcd_ammo
 	name = "compressed matter cartridge"

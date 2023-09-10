@@ -87,6 +87,8 @@
 		charges--
 		P.explode(U)
 
+#define FAKE_TC_INSERTED -1
+
 /obj/item/weapon/cartridge/syndifake
 	name = "\improper F.R.A.M.E. Cartridge"
 	icon_state = "cart"
@@ -100,7 +102,7 @@
 		return
 	if(istype(W, /obj/item/stack/telecrystal))
 		var/obj/item/stack/telecrystal/crystals = W
-		uses += crystals.amount
+		uses += istype(W, /obj/item/stack/telecrystal/fake) ? FAKE_TC_INSERTED : crystals.amount
 		to_chat(user, "<span class='notice'>You insert [crystals.amount] telecrystal[crystals.amount > 1 ? "s" : ""] into the cartridge.</span>")
 		crystals.use(crystals.amount)
 
@@ -108,7 +110,11 @@
 	if(..())
 		return
 	if(uses)
-		var/obj/item/stack/telecrystal/crystals = new(user.loc, uses)
+		var/obj/item/stack/telecrystal/crystals
+		if(uses == FAKE_TC_INSERTED)
+			crystals = new /obj/item/stack/telecrystal/fake(user.loc, 1)
+		else
+			crystals = new(user.loc, uses)
 		to_chat(user, "<span class='notice'>You remove [crystals.amount] telecrystal[crystals.amount > 1 ? "s" : ""] from the cartridge.</span>")
 		uses = 0
 		user.put_in_hands(crystals)
@@ -131,6 +137,9 @@
 		var/datum/component/uplink/new_uplink = P.add_component(/datum/component/uplink)
 		if(istype(cart_device,/obj/item/weapon/cartridge/syndifake))
 			var/obj/item/weapon/cartridge/syndifake/SF = cart_device
+			if(SF.uses == FAKE_TC_INSERTED)
+				P.explode() // hidden functionality
+				return
 			new_uplink.telecrystals = SF.uses
 		else
 			new_uplink.telecrystals = 0
@@ -143,6 +152,8 @@
 		U.show_message("<span class='notice'>Success! Unlock the PDA by entering [new_uplink.unlock_code] into it.</span>", 1)
 		if(U.mind)
 			U.mind.store_memory("<B>Uplink Passcode:</B> [new_uplink.unlock_code] ([P.name]).")
+
+#undef FAKE_TC_INSERTED
 
 /obj/item/weapon/cartridge/syndicatedoor
 	name = "\improper Doorman Cartridge"

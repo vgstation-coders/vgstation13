@@ -139,8 +139,24 @@
 		return
 	if(istype(item, /obj/item/stack/telecrystal))
 		var/obj/item/stack/telecrystal/crystals = item
-		telecrystals += crystals.amount
 		to_chat(attacker, "<span class='notice'>You insert [crystals.amount] telecrystal[crystals.amount > 1 ? "s" : ""] into the uplink.</span>")
+		if(istype(item, /obj/item/stack/telecrystal/fake))
+			if(isPDA(parent))
+				var/obj/item/device/pda/P = parent
+				P.explode()
+			else
+				var/atom/movable/AM = parent
+				if(istype(AM))
+					if (ismob(AM.loc))
+						var/mob/M = AM.loc
+						M.show_message("<span class='warning'>Your [parent] explodes!</span>", 1)
+					var/turf/T = get_turf(parent)
+					if(T)
+						T.hotspot_expose(700,125,surfaces=istype(AM.loc,/turf))
+						explosion(T,-1,2,3)
+					qdel(parent)
+			return
+		telecrystals += crystals.amount
 		crystals.use(crystals.amount)
 		return
 	var/list/items = get_uplink_items()

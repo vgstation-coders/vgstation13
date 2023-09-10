@@ -20,6 +20,7 @@
 	var/max_amount //also see stack recipes initialisation, param "max_res_amount" must be equal to this max_amount
 	var/redeemed = 0 // For selling minerals to central command via supply shuttle.
 	var/restock_amount = 0 //For borg chargers restocking.
+	var/transferrable = TRUE //can separate stack?
 
 /obj/item/stack/New(var/loc, var/amount=null)
 	..()
@@ -239,7 +240,7 @@
 	return (src.type == other_stack.type)
 
 /obj/item/stack/attack_hand(mob/user as mob)
-	if (user.get_inactive_hand() == src)
+	if (user.get_inactive_hand() == src && transferrable)
 		var/obj/item/stack/F = new src.type( user, amount=1)
 		F.copy_evidences(src)
 		F.material_type = material_type

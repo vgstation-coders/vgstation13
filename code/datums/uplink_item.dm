@@ -333,6 +333,12 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/soap/syndie
 	cost = 1
 
+/datum/uplink_item/stealthy_weapons/fake_telecrystal
+	name = "Fake Explosive Telecrystal"
+	desc = "A telecrystal completely indistinguishable from the normal kind used to fund syndicate uplinks like these, when inserted into an uplink as normal, will cause them to explode. Can be used in hand to set an amount that gets displayed."
+	item = /obj/item/stack/telecrystal/fake
+	cost = 8
+
 // STEALTHY TOOLS
 // Any Syndicate item that helps with concealing one's identity, avoiding detection or fleeing if caught, without lethal or stun applications
 
