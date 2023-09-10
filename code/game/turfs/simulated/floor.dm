@@ -529,6 +529,12 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 					make_tiled_floor(T)
 			else
 				to_chat(user, "<span class='warning'>This section is too damaged to support a tile. Use a welder to fix the damage.</span>")
+		else if(iscrowbar(user.get_inactive_hand()))
+			var/obj/item/stack/tile/T = C
+			if(T.material == floor_tile.material)
+				return
+			if(T.use(1))
+				make_tiled_floor(T)
 	else if(isshovel(C))
 		if(is_grass_floor())
 			playsound(src, 'sound/items/shovel.ogg', 50, 1)
