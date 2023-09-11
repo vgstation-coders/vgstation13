@@ -144,6 +144,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 			if(!S.move_to_dock(S.transit_port, 0))
 				message_admins("Warning: [S] failed to move to transit.")
 		if("shuttle")
+			S.crashing_this_pod = 1
 			S.crash_into_shuttle()
 			playsound(shuttle.linked_port, 'sound/misc/weather_warning.ogg', 80, 0, 7, 0, 0)
 
