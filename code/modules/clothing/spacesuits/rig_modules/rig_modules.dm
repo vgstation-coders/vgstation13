@@ -11,6 +11,9 @@
 	rig = null
 	..()
 
+/obj/item/rig_module/proc/can_install(var/obj/item/clothing/suit/space/rig/target)
+   return !(locate(type) in target.modules) //by default only allow one module of a type
+
 /obj/item/rig_module/proc/examine_addition(mob/user)
 	return
 
@@ -162,6 +165,12 @@
 		rig.H.clothing_flags &= ~PLASMAGUARD
 	..()
 
+/obj/item/rig_module/plasma_proof/can_install(var/obj/item/clothing/suit/space/rig/target)
+   if(!..())
+      return FALSE
+   if(target.clothing_flags & PLASMAGUARD)
+      return FALSE
+   return TRUE
 
 //Muscle tissue/Hulk module
 /obj/item/rig_module/muscle_tissue
