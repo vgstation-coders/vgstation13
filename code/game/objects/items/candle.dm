@@ -69,6 +69,32 @@
 		processing_objects.Add(src)
 		update_icon()
 
+/obj/item/candle/proc/flicker(var/amount = rand(5, 15))
+	if(flickering)
+		return
+	flickering = 1
+	spawn(0)
+		if(lit)
+			for(var/i = 0; i < amount; i++)
+				lit = 0
+				update_icon()
+				sleep(rand(3,9))
+				lit = 1
+				update_icon()
+			flickering = 0
+
+/obj/item/candle/spook(mob/dead/observer/ghost)
+	if(..(ghost, TRUE))
+		flicker()
+
+/obj/item/candle/attack_ghost(mob/user)
+	if(!can_spook())
+		return
+	src.add_hiddenprint(user)
+	src.flicker(1)
+	investigation_log(I_GHOST, "|| was made to flicker by [key_name(user)][user.locked_to ? ", who was haunting [user.locked_to]" : ""]")
+	return
+
 /obj/item/candle/process()
 	if(!lit)
 		return
