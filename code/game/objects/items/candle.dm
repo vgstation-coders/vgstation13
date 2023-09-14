@@ -14,6 +14,7 @@
 	var/lit = 0
 	var/flavor_text
 	var/trashtype = /obj/item/trash/candle
+	var/flickering = 0
 
 /obj/item/candle/New(turf/loc)
 	..()
