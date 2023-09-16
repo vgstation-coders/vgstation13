@@ -94,7 +94,7 @@
 /obj/item/weapon/rcs/examine(mob/user)
 	..()
 	if(send_cost > 0)
-		to_chat(user, "<span class='info'>There are [round(cell.charge / send_cost)] charges left.</span>")
+		to_chat(user, "<span class='info'>There are [round(cell.charge / send_cost)] charges left in the powercell.</span>")
 
 /obj/item/weapon/rcs/Destroy()
 	if (cell)
@@ -116,6 +116,25 @@
 		emagged = 1
 		spark(src, 5)
 		to_chat(user, "<span class = 'caution'>You emag the RCS. Click on it to toggle between modes.</span>")
+
+	else if(W.is_screwdriver(user))
+		if(cell)
+			cell.updateicon()
+			cell.forceMove(get_turf(loc))
+			user.put_in_hands(cell)
+			cell = null
+			to_chat(user, "<span class='notice'>You remove the cell from the [src].</span>")
+			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			update_icon()
+	else if(ispowercell(W))
+		if(!cell)
+			if(user.drop_item(W, src))
+				cell = W
+				to_chat(user, "<span class='notice'>You install a cell in [src].</span>")
+				update_icon()
+				playsound(src, 'sound/items/Screwdriver2.ogg', 50, 1)
+		else
+			to_chat(user, "<span class='notice'>[src] already has a cell.</span>")
 
 /obj/item/weapon/rcs/preattack(var/obj/structure/closet/crate/target, var/mob/user, var/proximity_flag, var/click_parameters)
 	if (!istype(target) || target.opened || !proximity_flag || !cell || teleporting)
