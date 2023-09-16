@@ -53,6 +53,8 @@
 		/datum/malfhack_ability/oneuse/emag
 	)
 
+	var/last_id_processed = -1
+
 /obj/machinery/computer/library/checkout/attack_hand(var/mob/user)
 	if(..())
 		return
@@ -157,6 +159,7 @@
 					</tr>"}
 
 				for(var/datum/cachedbook/CB in get_page(page_num))
+					if(CB) last_id_processed = CB.id
 					var/author = CB.author
 					var/controls =  "<A href='?src=\ref[src];preview=[CB]'>\[Preview\]</A> <A href='?src=\ref[src];id=[CB.id]'>\[Order\]</A>"
 					if(isAdminGhost(user))

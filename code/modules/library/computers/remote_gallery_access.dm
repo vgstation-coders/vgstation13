@@ -60,6 +60,7 @@
 					</tr>"}
 
 		for(var/datum/cachedbook/C in get_page(page_num))
+			if(C) last_id_processed = C.id
 			var/author = C.author
 			var/datum/custom_painting/the_painting = json2painting(C.content)
 			var/controls =  "<A href='?src=\ref[src];id=[C.id]'>\[Order\]</A>"
