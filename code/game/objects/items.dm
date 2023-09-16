@@ -1425,7 +1425,7 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
 	var/datum/organ/external/kickingfoot = H.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
-	playsound(loc, "punch", 30, 1, -1)
+	playsound(loc, "kick, 30, 1, -1)
 	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())
 		H.visible_message("<span class='danger'>[H] attempts to kick \the [src]!</span>", "<span class='danger'>You attempt to kick \the [src]!</span>")
 		if(prob(70))
@@ -1466,7 +1466,7 @@ var/global/list/image/blood_overlays = list()
 	spawn()
 		var/original_pixel_y = pixel_y
 		var/time_to_zenith = min(distance, 5)
-		animate(src, pixel_y = original_pixel_y + (round(WORLD_ICON_SIZE * time_to_zenith / 5)), time = time_to_zenith, easing = QUAD_EASING | EASE_OUT)
+		animate(src, pixel_y = original_pixel_y + (round(WORLD_ICON_SIZE * time_to_zenith / 10)), time = time_to_zenith, easing = QUAD_EASING | EASE_OUT)
 		spawn(time_to_zenith)
 			animate(src, pixel_y = original_pixel_y, time = time_to_zenith, easing = QUAD_EASING | EASE_IN)
 		while(loc)
