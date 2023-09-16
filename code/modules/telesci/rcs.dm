@@ -120,7 +120,8 @@
 	else if(W.is_screwdriver(user))
 		if(cell)
 			cell.updateicon()
-			cell.forceMove(get_turf(src.loc))
+			cell.forceMove(get_turf(loc))
+			user.put_in_hands(cell)
 			cell = null
 			to_chat(user, "<span class='notice'>You remove the cell from the [src].</span>")
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
