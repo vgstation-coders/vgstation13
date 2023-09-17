@@ -161,7 +161,7 @@
 				for(var/datum/cachedbook/CB in get_page(page_num))
 					if(CB) last_id_processed = CB.id
 					var/author = CB.author
-					var/controls =  "<A href='?src=\ref[src];preview=[CB]'>\[Preview\]</A> <A href='?src=\ref[src];id=[CB.id]'>\[Order\]</A>"
+					var/controls =  "<A href='?src=\ref[src];preview=[CB.id]'>\[Preview\]</A> <A href='?src=\ref[src];id=[CB.id]'>\[Order\]</A>"
 					if(isAdminGhost(user))
 						author += " (<A style='color:red' href='?src=\ref[src];delbyckey=[ckey(CB.ckey)]'>[ckey(CB.ckey)])</A>)"
 					if(isAdminGhost(user) || allowed(user))
@@ -505,7 +505,7 @@
 			new the_manual_type(get_turf(src))
 
 	if(href_list["preview"])
-		var/datum/cachedbook/PVB = href_list["preview"]
+		var/datum/cachedbook/PVB = getItemByID(href_list["preview"], library_table)
 		if(!istype(PVB) || PVB.programmatic)
 			return
 		var/list/_http = world.Export("http://ss13.moe/index.php/book?id=[PVB.id]")
