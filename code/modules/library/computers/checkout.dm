@@ -545,19 +545,19 @@
 	send_prayer_to_admins(formal, raw, 'sound/effects/msn.ogg', "Centcomm", key_name(requester), get_turf(requester))
 
 /obj/machinery/computer/library/checkout/proc/get_scanner_title(var/obj/machinery/libraryscanner/LS)
-	return LS.cache.title
+	return LS.cache.title ? LS.cache.title : "Untitled Book"
 
 /obj/machinery/computer/library/checkout/proc/get_scanner_author(var/obj/machinery/libraryscanner/LS)
-	return LS.cache.author
+	return LS.cache.author ? LS.cache.author : "Anonymous"
 
 /obj/machinery/computer/library/checkout/proc/get_scanner_dat(var/obj/machinery/libraryscanner/LS)
-	return LS.cache.dat
+	return LS.cache.dat ? LS.cache.dat : "..."
 
 /obj/machinery/computer/library/checkout/proc/get_scanner_category(var/obj/machinery/libraryscanner/LS, var/upload_category)
-	return upload_category
+	return upload_category ? upload_category : "Fiction"
 
 /obj/machinery/computer/library/checkout/proc/get_scanner_desc(var/obj/machinery/libraryscanner/LS)
-	return LS.cache.book_desc
+	return LS.cache.book_desc ? LS.cache.book_desc : "No description available"
 
 /obj/machinery/computer/library/checkout/proc/has_cached_data()
 	return scanner.cache
