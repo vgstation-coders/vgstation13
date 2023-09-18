@@ -372,7 +372,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if(H.species.chem_flags & NO_DRINK)
 			reagents.reaction(get_turf(H), TOUCH)
 			H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
-			reagents.remove_any(amount_per_imbibe)
+			reagents.remove_any(amount_per_imbibe) //Should this really be here?
 			return 0
 
 
