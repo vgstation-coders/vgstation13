@@ -745,7 +745,7 @@ var/list/beam_master = list()
 	if(ishuman(A))
 		damage = 10
 	if(istype(A,/obj/effect/blob))
-		damage = 40
+		damage = 30
 		var/obj/effect/blob/B = A
 		var/splash_damage = damage/B.fire_resist - B.health
 		if(splash_damage > 0)
