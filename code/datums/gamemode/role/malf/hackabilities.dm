@@ -505,6 +505,7 @@
 /datum/malfhack_ability/core/explode
 	name = "Explosive Core"
 	desc = "Rigs your core to explode upon your untimely deactivation."
+	icon = "radial_alertboom"
 	cost = 20
 
 /datum/malfhack_ability/core/explode/activate(mob/living/silicon/ai/A)
