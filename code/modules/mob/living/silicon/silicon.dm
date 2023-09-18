@@ -227,10 +227,6 @@
 			var/F_stat = F.get_statpanel_addition()
 			if(F_stat)
 				stat(null, "[F_stat]")
-		if(mind)
-			for(var/role in mind.antag_roles)
-				var/datum/role/R = mind.antag_roles[role]
-				stat(R.StatPanel())
 
 // this function displays the stations manifest in a separate window
 /mob/living/silicon/proc/show_station_manifest()

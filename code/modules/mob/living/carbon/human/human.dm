@@ -284,11 +284,6 @@
 			if(R.activated)
 				stat("\The [R.name]", "Modules: [english_list(R.modules)]")
 
-		if (mind)
-			for (var/role in mind.antag_roles)
-				var/datum/role/R = mind.antag_roles[role]
-				stat(R.StatPanel())
-
 /mob/living/carbon/human/attack_slime(mob/living/carbon/slime/M as mob)
 	M.unarmed_attack_mob(src)
 
