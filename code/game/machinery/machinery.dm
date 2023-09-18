@@ -273,19 +273,18 @@ Class Procs:
 // increment the power usage stats for an area
 // defaults to power_channel
 /obj/machinery/proc/use_power(amount, chan = power_channel)
-	var/area/this_area = get_area(src)
 	if(connected_cell && connected_cell.charge > 0)   //If theres a cell directly providing power use it, only for cargo carts at the moment
 		if(connected_cell.charge < amount*0.75)	//Let them squeeze the last bit of power out.
 			connected_cell.charge = 0
 		else
 			connected_cell.use(amount*0.75)
 	else
-		if(!this_area)
-			return 0						// if not, then not powered.
-		if(!powered(chan)) //no point in trying if we don't have power
-			return 0
 
-		this_area.use_power(amount, chan)
+		var/area/power_area = get_area(src)
+		if(power_area && powered(chan, null, power_area)) //no point in trying if we don't have power
+			power_area.use_power(amount, chan)
+		else
+			return 0
 
 // called whenever the power settings of the containing area change
 // by default, check equipment channel & set flag
@@ -309,7 +308,7 @@ Class Procs:
 
 // returns true if the machine is powered (or doesn't require power).
 // performs basic checks every machine should do, then
-/obj/machinery/proc/powered(chan = power_channel, power_check_anyways = FALSE)
+/obj/machinery/proc/powered(chan = power_channel, power_check_anyways = FALSE, area/this_area)
 	if(!src.loc)
 		return FALSE
 
@@ -328,11 +327,10 @@ Class Procs:
 	if((machine_flags & FIXED2WORK) && !anchored)
 		return FALSE
 
-	var/area/this_area = get_area(src)
-	if(!this_area)
-		return FALSE
-
-	return this_area.powered(chan)
+	if(this_area)
+		return this_area.powered(chan)
+	else
+		return (get_area(src))?.powered(chan)
 
 /obj/machinery/proc/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
 	if("set_id" in href_list)

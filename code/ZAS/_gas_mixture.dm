@@ -209,7 +209,7 @@
 	for(var/g in gas)
 		var/moles = gas[g]
 		if(moles)
-			total_moles += gas[g]
+			total_moles += moles
 		else
 			gas -= g
 

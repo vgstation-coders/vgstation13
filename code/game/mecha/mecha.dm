@@ -1287,7 +1287,8 @@
 		src.Entered(mmi_as_oc)
 		src.Move(src.loc)
 		src.silicon_pilot = TRUE
-		src.icon_state = src.silicon_icon_state
+		if(src.silicon_icon_state)
+			src.icon_state = src.silicon_icon_state
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
 			set_light(light_range_off)

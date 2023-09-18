@@ -2150,25 +2150,29 @@
 	reagents.add_reagent(TOXICWASTE, 8)
 	reagents.add_reagent(BUSTANUT, 2) //YOU FEELIN HARDCORE BRAH?
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/dangles
 	name = "Dangles"
 	desc = "Once you pop, you'll wish you stopped."
 	icon_state = "dangles"
-	trash = /obj/item/trash/danitos
+	trash = /obj/item/trash/dangles
 	filling_color = "#FF9933"
 	base_crumb_chance = 30
+	var/popped
+
+/obj/item/weapon/reagent_containers/food/snacks/dangles/can_consume(mob/user)
+	return popped
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/attack_self(var/mob/user)
-	if(!is_open_container())
+	if(!popped)
 		return pop_open(user)
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/proc/pop_open(var/mob/user)
 	to_chat(user, "You pop the top off \the [src].")
-	flags |= OPENCONTAINER
 	playsound(user, 'sound/effects/opening_snack_tube.ogg', 50, 1)
 	overlays.len = 0
+	popped = TRUE 
 	update_icon()
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/New()
@@ -4996,7 +5000,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot
 	name = "Hot Chips"
 	desc = "Don't get the dust in your eyes!"
@@ -7698,6 +7702,49 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents.add_reagent(NUTRIMENT, 5)
 
 //You have now entered the ayy food zone
+
+/obj/item/weapon/zambiscuit_package
+	name = "Zam Biscuit Package"
+	desc = "A package of Zam biscuits, popular fare for hungry grey laborers. They go perfectly with a cup of Earl's Grey tea. "
+	icon = 'icons/obj/food_container.dmi'
+	icon_state = "zambiscuitbox"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	item_state = "zambiscuitbox"
+	w_class = W_CLASS_SMALL
+
+/obj/item/weapon/zambiscuit_package/attack_self(mob/user)
+	to_chat(user, "<span class='notice'>You start to tear open the biscuit package's seal.</span>")
+	playsound(src, 'sound/items/poster_ripped.ogg', 100, 1)
+	if(do_after(user, src, 2 SECONDS))
+		qdel(src)
+		var/obj/item/weapon/storage/fancy/zam_biscuits/new_zam = new /obj/item/weapon/storage/fancy/zam_biscuits
+		user.put_in_hands(new_zam)
+
+/obj/item/weapon/storage/fancy/zam_biscuits
+	icon = 'icons/obj/food_container.dmi'
+	icon_state = "zambiscuitbox3"
+	icon_type = "zambiscuit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	item_state = "zambiscuitbox"
+	name = "Zam Biscuit Package"
+	desc = "A package of Zam biscuits, popular fare for hungry grey laborers. They go perfectly with a cup of Earl's Grey tea. "
+	storage_slots = 3
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/zambiscuit","/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical")
+
+	w_class = W_CLASS_SMALL
+
+/obj/item/weapon/storage/fancy/zam_biscuits/empty
+	empty = 1
+	icon_state = "zambiscuitbox0"
+
+/obj/item/weapon/storage/fancy/zam_biscuits/New()
+	..()
+	if(empty)
+		update_icon() //Make it look actually empty
+		return
+	for(var/i = 1; i <= storage_slots; i++)
+		new /obj/item/weapon/reagent_containers/food/snacks/zambiscuit(src)
+	return
 
 /obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic
 	name = "Classic Steak and Nettles"

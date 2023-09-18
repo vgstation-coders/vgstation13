@@ -45,6 +45,9 @@ default behaviour is:
 	if(stat == DEAD || health <= config.health_threshold_crit)
 		return TRUE
 
+/mob/living/proc/get_splash_burn_damage(splash_vol, splash_temp)
+	return round(TEMPERATURE_DAMAGE_COEFFICIENT * SPLASH_SCALD_DAMAGE_COEFFICIENT * abs(splash_vol ** (1/3) * log(get_safe_temperature_excursion(splash_temp) + 1)))
+
 /mob/living/proc/get_safe_temperature_excursion(the_temp)
 	//Returns how many degrees K a temperature is outside of the safe range the mob can tolerate. returns 0 if within the safe range. can be negative for cold.
 	return 0
@@ -74,3 +77,4 @@ default behaviour is:
 	else if (the_temp < BODYTEMP_COLD_DAMAGE_LIMIT)
 		return the_temp - BODYTEMP_COLD_DAMAGE_LIMIT
 	return 0
+  
