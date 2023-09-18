@@ -32,6 +32,7 @@
 		laws.malfunction()
 		malfAI.show_laws()
 		malfAI.DisplayUI("Malf")
+		malfAI.explosive = TRUE
 
 		var/list/abilities = subtypesof(/datum/malfhack_ability) - typesof(/datum/malfhack_ability/core) - /datum/malfhack_ability/toggle - /datum/malfhack_ability/oneuse
 		for(var/A in abilities)
