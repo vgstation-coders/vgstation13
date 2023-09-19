@@ -140,7 +140,7 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 	if(!A)
 		return // offstation
 	ticks_survived++
-	if(!(ticks_survived % 10) && ticks_survived < 150) //every 20 seconds, for 5 minutes
+	if(!(ticks_survived % 10) && !(ticks_survived > 150)) //every 20 seconds, for 5 minutes
 		increment_threat(SURVIVAL_THREAT)
 	if(!(A in areas_defiled))
 		increment_threat(DEFILE_THREAT)
@@ -163,7 +163,8 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 
 
 /datum/role/catbeast/proc/OnStation()
-	if(antag.current.z != map.zMainStation)
+	var/turf/T = get_turf(antag.current)
+	if(T.z != map.zMainStation)
 		return FALSE
 	var/area/A = get_area(antag.current)
 	if (isspace(A))
