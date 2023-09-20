@@ -216,7 +216,7 @@
 			light("<span class='notice'>[user] lights \the [name] with \the [I].</span>")
 		return
 	if(istype(I, /obj/item/stack/sheet/wood))
-		var/woodnumber = input(user, "You may insert a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
+		var/woodnumber = input(user, "You may add a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
 		woodnumber = clamp(woodnumber,0,4)
 		var/obj/item/stack/sheet/wood/woody = I
 		woody.use(woodnumber)
