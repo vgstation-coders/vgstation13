@@ -629,7 +629,7 @@ Assign your candidates in choose_candidates() instead.
 	required_pop = list(30,30,30,30,30,30,30,30,30,30)
 	required_candidates = 0
 	weight = BASE_RULESET_WEIGHT * 0.5
-	weight_category = "Extended"
+//	weight_category = "Extended" //Commented out in order to prevent it from having its weight boosted
 	cost = 0
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	high_population_requirement = 101
