@@ -257,6 +257,19 @@
 	icon_state = "campfire_burnt"
 	mouse_opacity = 1
 
+/obj/effect/decal/cleanable/campfire/attackby(obj/item/I, mob/living/user)
+	if (istype(I, /obj/item/stack/sheet/wood))
+		var/woodnumber = input(user, "You may add a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
+		woodnumber = clamp(woodnumber,0,4)
+		if (woodnumber)
+			var/obj/item/stack/sheet/wood/woody = I
+			woody.use(woodnumber)
+			user.visible_message("<span class='notice'>[user] adds some wood to \the [src].</span>", "<span class='notice'>You add some wood to \the [src].</span>")
+			var/obj/machinery/space_heater/campfire/C = new /obj/machinery/space_heater/campfire(get_turf(src))
+			C.cell.charge = min(woodnumber*250, C.cell.maxcharge)
+			qdel(src)
+			C.update_icon()
+
 /obj/effect/decal/cleanable/clay_fragments
 	name = "clay fragments"
 	desc = "Pieces from a broken clay pot."

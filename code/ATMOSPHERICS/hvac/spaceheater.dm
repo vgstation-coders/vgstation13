@@ -215,7 +215,7 @@
 		else if(I.is_hot())
 			light("<span class='notice'>[user] lights \the [name] with \the [I].</span>")
 		return
-	if(istype(I, /obj/item/stack/sheet/wood) && ((on)||(nocell == 2)))
+	if(istype(I, /obj/item/stack/sheet/wood))
 		var/woodnumber = input(user, "You may insert a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
 		woodnumber = clamp(woodnumber,0,4)
 		var/obj/item/stack/sheet/wood/woody = I
@@ -234,10 +234,6 @@
 	T.visible_message(flavourtext)
 	on = 1
 	update_icon()
-
-/obj/machinery/space_heater/campfire/proc/snuff()
-	cell.charge = 0
-	process()
 
 /obj/machinery/space_heater/togglePanelOpen(var/obj/toggleitem, mob/user)
 	..()
@@ -393,8 +389,12 @@
 		playsound(src, pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
 
 /obj/machinery/space_heater/campfire/proc/putOutFire()
-	new /obj/effect/decal/cleanable/campfire(get_turf(src))
-	qdel(src)
+	if (cell.charge)
+		on = 0
+		update_icon()
+	else
+		new /obj/effect/decal/cleanable/campfire(get_turf(src))
+		qdel(src)
 
 /obj/machinery/space_heater/campfire/stove/putOutFire()
 	if(on)
