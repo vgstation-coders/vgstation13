@@ -157,13 +157,12 @@
 					<A href='?src=\ref[src];settitle=1'>Filter by Title: [query.title]</A><br />
 					<A href='?src=\ref[src];setauthor=1'>Filter by Author: [query.author]</A><br />
 					<A href="javascript:toggleForm();">Filter by Categories: [query.categories ? query.categories.Join(", ") : ""]</A><br />
-					<form id='category-form' name='setcategories' action='?src=\ref[src]' method='get' style='display:none;'>
+					<form id='category-form' name='setcategories' action='?src=\ref[src]' method='get' style='display:none; width: 130px'>
 						<input type='hidden' name='src' value='\ref[src]'>
 						<input type='hidden' name='setcategories' value='1'>
-						<select name='categories' multiple>
+						<select name='categories' multiple style='width: 100%; height: 80px; display: inline-block;'>
 							[category_elements]
 						</select>
-						<br />
 						<input type='submit' value='Set Categories' onclick='toggleForm();'>
 					</form>
 					[script]
@@ -181,7 +180,7 @@
 					<tr>
 						<td><A href='?src=\ref[src];orderby=author'>Author</A> [get_sort_arrow("author")]</td>
 						<td><A href='?src=\ref[src];orderby=title'>Title</A> [get_sort_arrow("title")]</td>
-						<td><A href='?src=\ref[src];orderby=category'>Category</A> [get_sort_arrow("category")]</td>
+						<td style='white-space: nowrap;'><A href='?src=\ref[src];orderby=category'>Category</A> [get_sort_arrow("category")]</td>
 						<td>Description</td>
 						<td>Controls</td>
 					</tr>"}
