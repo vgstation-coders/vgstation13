@@ -104,6 +104,7 @@
 	name = "wooden table parts"
 	desc = "Keep away from fire."
 	icon_state = "wood_tableparts"
+	w_type = RECYK_WOOD
 	flags = 0
 	table_type = /obj/structure/table/woodentable
 	sheet_type = /obj/item/stack/sheet/wood
