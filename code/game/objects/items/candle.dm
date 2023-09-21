@@ -77,9 +77,20 @@
 	spawn(0)
 		if(lit)
 			for(var/i = 0; i < amount; i++)
-				lit = 0
+				if(prob(95))
+					if(prob(30))
+						lit = 0
+					else
+						var/candleflick = pick(0.5, 0.7, 0.9, 1, 1.3, 1.5, 2) 
+						set_light(candleflick * CANDLE_LUM)
+				else
+					set_light(5 * CANDLE_LUM)
+					if(source_temperature == 0) //only holocandles don't have source temp
+						wax = 0.8 * wax //jury rigged so the wax reduction doesn't nuke the holocandles if flickered
+					visible_message("<span class='warning'>The [src]'s flame starts roaring unnaturally!</span>")
 				update_icon()
-				sleep(rand(3,9))
+				sleep(rand(5,8))
+				set_light(CANDLE_LUM)
 				lit = 1
 				update_icon()
 			flickering = 0
@@ -91,10 +102,9 @@
 /obj/item/candle/attack_ghost(mob/user)
 	if(!can_spook())
 		return
-	src.add_hiddenprint(user)
-	src.flicker(1)
+	add_hiddenprint(user)
+	flicker(1)
 	investigation_log(I_GHOST, "|| was made to flicker by [key_name(user)][user.locked_to ? ", who was haunting [user.locked_to]" : ""]")
-	return
 
 /obj/item/candle/process()
 	if(!lit)
