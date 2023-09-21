@@ -173,7 +173,7 @@
 			return
 
 /obj/machinery/space_heater/campfire/proc/addWood(obj/item/stack/sheet/wood/woody, mob/living/user)
-	var/woodnumber = input(user, "You may insert a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
+	var/woodnumber = input(user, "You may add a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
 	if (woodnumber)
 		woodnumber = clamp(woodnumber, 0, min(woody.amount, 4))
 		woody.use(woodnumber)
