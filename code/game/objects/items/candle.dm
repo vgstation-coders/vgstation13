@@ -74,25 +74,24 @@
 	if(flickering)
 		return
 	flickering = 1
-	spawn(0)
-		if(lit)
-			for(var/i = 0; i < amount; i++)
-				if(prob(95))
-					if(prob(30))
-						lit = 0
-					else
-						var/candleflick = pick(0.5, 0.7, 0.9, 1, 1.3, 1.5, 2) 
-						set_light(candleflick * CANDLE_LUM)
+	if(lit)
+		for(var/i = 0; i < amount; i++)
+			if(prob(95))
+				if(prob(30))
+					lit = 0
 				else
-					set_light(5 * CANDLE_LUM)
-					if(source_temperature == 0) //only holocandles don't have source temp
-						wax = 0.8 * wax //jury rigged so the wax reduction doesn't nuke the holocandles if flickered
-					visible_message("<span class='warning'>The [src]'s flame starts roaring unnaturally!</span>")
-				update_icon()
-				sleep(rand(5,8))
-				set_light(CANDLE_LUM)
-				lit = 1
-				update_icon()
+					var/candleflick = pick(0.5, 0.7, 0.9, 1, 1.3, 1.5, 2) 
+					set_light(candleflick * CANDLE_LUM)
+			else
+				set_light(5 * CANDLE_LUM)
+				if(source_temperature == 0) //only holocandles don't have source temp, using this so I don't add a new var
+					wax = 0.8 * wax //jury rigged so the wax reduction doesn't nuke the holocandles if flickered
+				visible_message("<span class='warning'>The [src]'s flame starts roaring unnaturally!</span>")
+			update_icon()
+			sleep(rand(5,8))
+			set_light(CANDLE_LUM)
+			lit = 1
+			update_icon()
 			flickering = 0
 
 /obj/item/candle/spook(mob/dead/observer/ghost)
