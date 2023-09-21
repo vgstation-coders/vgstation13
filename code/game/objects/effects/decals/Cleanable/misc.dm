@@ -260,6 +260,7 @@
 /obj/effect/decal/cleanable/campfire/attackby(obj/item/I, mob/living/user)
 	if (istype(I, /obj/item/stack/sheet/wood))
 		var/obj/machinery/space_heater/campfire/C = new /obj/machinery/space_heater/campfire
+		C.cell.charge = 0
 		if (C.addWood(I, user))
 			C.loc = src.loc
 			qdel(src)
