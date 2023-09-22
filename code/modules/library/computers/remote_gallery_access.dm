@@ -43,10 +43,36 @@
 		</ul>"}
 		var/pagelist = get_pagelist()
 
+		var/list/category_elements = list()
+		for(var/i=1,i<=library_section_names.len, ++i)
+			category_elements += "<option value='[library_section_names[i]]'>[library_section_names[i]]</option>"
+		category_elements = category_elements.Join("")
+
+		var/script = {"
+			<script type="text/javascript">
+				function toggleForm() {
+					var form = document.getElementById('category-form');
+					if (form.style.display === 'none' || form.style.display === '') {
+						form.style.display = 'block';
+					} else {
+						form.style.display = 'none';
+					}
+				}
+			</script>"}
+
 		dat += {"<h3>Search Settings</h3><br />
 			<A href='?src=\ref[src];settitle=1'>Filter by Title: [query.title]</A><br />
-			<A href='?src=\ref[src];setcategory=1'>Filter by Category: [query.category]</A><br />
 			<A href='?src=\ref[src];setauthor=1'>Filter by Author: [query.author]</A><br />
+			<A href="javascript:toggleForm();">Filter by Categories: [query.categories ? query.categories.Join(", ") : ""]</A><br />
+			<form id='category-form' name='setcategories' action='?src=\ref[src]' method='get' style='display:none; width: 130px'>
+				<input type='hidden' name='src' value='\ref[src]'>
+				<input type='hidden' name='setcategories' value='1'>
+				<select name='categories' multiple style='width: 100%; height: 80px; display: inline-block;'>
+					[category_elements]
+				</select>
+				<input type='submit' value='Set Categories' onclick='toggleForm();'>
+			</form>
+			[script]
 			<A href='?src=\ref[src];search=1'>\[Start Search\]</A><br />"}
 		dat += pagelist
 
@@ -60,6 +86,7 @@
 					</tr>"}
 
 		for(var/datum/cachedbook/C in get_page(page_num))
+			if(C) last_id_processed = C.id
 			var/author = C.author
 			var/datum/custom_painting/the_painting = json2painting(C.content)
 			var/controls =  "<A href='?src=\ref[src];id=[C.id]'>\[Order\]</A>"

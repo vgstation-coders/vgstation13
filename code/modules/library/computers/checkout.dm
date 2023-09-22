@@ -53,6 +53,8 @@
 		/datum/malfhack_ability/oneuse/emag
 	)
 
+	var/last_id_processed = -1
+
 /obj/machinery/computer/library/checkout/attack_hand(var/mob/user)
 	if(..())
 		return
@@ -134,10 +136,37 @@
 				</ul>"}
 				var/pagelist = get_pagelist()
 
+				var/list/category_elements = list()
+				for(var/i=1,i<=library_section_names.len, ++i)
+					category_elements += "<option value='[library_section_names[i]]'>[library_section_names[i]]</option>"
+				category_elements = category_elements.Join("")
+
+				var/script = {"
+					<script type="text/javascript">
+						function toggleForm() {
+							var form = document.getElementById('category-form');
+							if (form.style.display === 'none' || form.style.display === '') {
+								form.style.display = 'block';
+							} else {
+								form.style.display = 'none';
+							}
+						}
+					</script>"}
+
 				dat += {"<h2>Search Settings</h2><br />
 					<A href='?src=\ref[src];settitle=1'>Filter by Title: [query.title]</A><br />
-					<A href='?src=\ref[src];setcategory=1'>Filter by Category: [query.category]</A><br />
 					<A href='?src=\ref[src];setauthor=1'>Filter by Author: [query.author]</A><br />
+					<A href="javascript:toggleForm();">Filter by Categories: [query.categories ? query.categories.Join(", ") : ""]</A><br />
+					<form id='category-form' name='setcategories' action='?src=\ref[src]' method='get' style='display:none; width: 130px'>
+						<input type='hidden' name='src' value='\ref[src]'>
+						<input type='hidden' name='setcategories' value='1'>
+						<select name='categories' multiple style='width: 100%; height: 80px; display: inline-block;'>
+							[category_elements]
+						</select>
+						<input type='submit' value='Set Categories' onclick='toggleForm();'>
+					</form>
+					[script]
+					[query.order_by ? "Sorting By: [uppertext(copytext(query.order_by, 1, 2))][copytext(query.order_by, 2)] <A href='?src=\ref[src];clearsort=1'>Remove Sort</A><br />" : ""]
 					<A href='?src=\ref[src];search=1'>\[Start Search\]</A><br />"}
 				dat += pagelist
 
@@ -149,16 +178,17 @@
 
 				dat += {"<table border=\"0\">
 					<tr>
-						<td>Author</td>
-						<td>Title</td>
-						<td>Category</td>
+						<td><A href='?src=\ref[src];orderby=author'>Author</A> [get_sort_arrow("author")]</td>
+						<td><A href='?src=\ref[src];orderby=title'>Title</A> [get_sort_arrow("title")]</td>
+						<td style='white-space: nowrap;'><A href='?src=\ref[src];orderby=category'>Category</A> [get_sort_arrow("category")]</td>
 						<td>Description</td>
 						<td>Controls</td>
 					</tr>"}
 
 				for(var/datum/cachedbook/CB in get_page(page_num))
+					if(CB) last_id_processed = CB.id
 					var/author = CB.author
-					var/controls =  "<A href='?src=\ref[src];preview=[CB]'>\[Preview\]</A> <A href='?src=\ref[src];id=[CB.id]'>\[Order\]</A>"
+					var/controls =  "<A href='?src=\ref[src];preview=[CB.id]'>\[Preview\]</A> <A href='?src=\ref[src];id=[CB.id]'>\[Order\]</A>"
 					if(isAdminGhost(user))
 						author += " (<A style='color:red' href='?src=\ref[src];delbyckey=[ckey(CB.ckey)]'>[ckey(CB.ckey)])</A>)"
 					if(isAdminGhost(user) || allowed(user))
@@ -271,18 +301,38 @@
 			query.title = sanitize(newtitle)
 		else
 			query.title = null
-	if(href_list["setcategory"])
-		var/newcategory = input("Choose a category to search for:") in (list("Any") + library_section_names)
-		if(newcategory == "Any")
-			query.category = null
+	if(href_list["setcategories"])
+		var/list/newcategories
+		if(!islist(href_list["categories"]))
+			newcategories = list(href_list["categories"])
 		else
-			query.category = sanitize(newcategory)
+			newcategories = href_list["categories"]
+		if(newcategories)
+			if("Any" in newcategories)
+				query.categories = null
+			else
+				query.categories = list()
+				for(var/category in newcategories)
+					query.categories += sanitize(category)
+
+
 	if(href_list["setauthor"])
 		var/newauthor = input("Enter an author to search for:") as text|null
 		if(newauthor)
 			query.author = sanitize(newauthor)
 		else
 			query.author = null
+	if(href_list["orderby"])
+		var/neworderby = href_list["orderby"]
+		if(query.order_by == neworderby)
+			query.descending = !query.descending
+		else
+			query.order_by = neworderby
+			query.descending = FALSE
+
+	if(href_list["clearsort"])
+		query.order_by = null
+		query.descending = FALSE
 
 	if(href_list["search"])
 		num_results = src.get_num_results()
@@ -502,7 +552,7 @@
 			new the_manual_type(get_turf(src))
 
 	if(href_list["preview"])
-		var/datum/cachedbook/PVB = href_list["preview"]
+		var/datum/cachedbook/PVB = getItemByID(href_list["preview"], library_table)
 		if(!istype(PVB) || PVB.programmatic)
 			return
 		var/list/_http = world.Export("http://ss13.moe/index.php/book?id=[PVB.id]")

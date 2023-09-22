@@ -765,7 +765,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list(/obj/item/clothing/suit/space/grey,
 					/obj/item/clothing/head/helmet/space/grey,
 					/obj/item/weapon/tank/oxygen/red,
-					/obj/item/clothing/mask/breath)
+					/obj/item/clothing/mask/gas/mothership)
 	cost = 175
 	containertype = /obj/structure/closet/crate/ayy
 	containername = "grey Space-Ex crate"
@@ -778,14 +778,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/shoes/jackboots/mothership,
 					/obj/item/clothing/shoes/jackboots/mothership)
 	var/scientist = list(/obj/item/clothing/under/grey/grey_researcher,
+					/obj/item/clothing/under/grey/grey_researcher,
 					/obj/item/clothing/suit/storage/labcoat/mothership,
-					/obj/item/clothing/shoes/jackboots/mothership)
-	var/explorer = list(/obj/item/clothing/under/grey/grey_scout,
-					/obj/item/clothing/under/grey/grey_scout,
-					/obj/item/clothing/shoes/jackboots/mothership,
-					/obj/item/clothing/shoes/jackboots/mothership)
-	var/soldier = list(/obj/item/clothing/under/grey/grey_soldier,
-					/obj/item/clothing/under/grey/grey_soldier,
+					/obj/item/clothing/suit/storage/labcoat/mothership,
 					/obj/item/clothing/shoes/jackboots/mothership,
 					/obj/item/clothing/shoes/jackboots/mothership)
 	cost = 50
@@ -794,7 +789,21 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Clothing"
 
 /datum/supply_packs/grey_uniform/New()
-	selection_from = list(laborer, scientist, explorer, soldier)
+	selection_from = list(laborer, scientist)
+
+/datum/supply_packs/grey_internals
+	name = "GDR half-masks"
+	contains = list(/obj/item/clothing/mask/gas/mothership,
+					/obj/item/clothing/mask/gas/mothership,
+					/obj/item/clothing/mask/gas/mothership,
+					/obj/item/weapon/tank/emergency_oxygen/engi,
+					/obj/item/weapon/tank/emergency_oxygen/engi,
+					/obj/item/weapon/tank/emergency_oxygen/engi)
+	cost = 40
+	containertype = /obj/structure/closet/crate/ayy3
+	containername = "GDR half-mask crate"
+	contraband = 1
+	group = "Clothing"
 
 /datum/supply_packs/neorussian
 	name = "Neo-Russian supplies"
@@ -1048,7 +1057,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/greyweapons
-	name = "MDF Surplus weapons"
+	name = "MDF surplus weapons"
 	contains = list(/obj/item/weapon/melee/stunprobe,
 					/obj/item/weapon/melee/stunprobe,
 					/obj/item/weapon/gun/energy/smalldisintegrator,
@@ -1102,14 +1111,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/greyarmor
-	name = "MDF Surplus standard armor"
+	name = "MDF surplus standard armor"
 	contains = list(/obj/item/clothing/suit/armor/mothership,
 					/obj/item/clothing/suit/armor/mothership,
-					/obj/item/clothing/suit/armor/mothership,
-					/obj/item/clothing/head/helmet/mothership,
+					/obj/item/clothing/under/grey/grey_soldier,
+					/obj/item/clothing/under/grey/grey_soldier,
+					/obj/item/clothing/shoes/jackboots/mothership,
+					/obj/item/clothing/shoes/jackboots/mothership,
 					/obj/item/clothing/head/helmet/mothership,
 					/obj/item/clothing/head/helmet/mothership)
-	cost = 40
+	cost = 60
 	containertype = /obj/structure/closet/secure_closet/ayy2
 	containername = "MDF standard armor locker"
 	one_access = list(access_security, access_mothership_military)
@@ -1123,6 +1134,23 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/secure/ayy_mdf
 	one_access = list(access_armory, access_mothership_military)
 	containername = "MDF rig parts crate"
+	group = "Security"
+	contraband = 1
+
+/datum/supply_packs/greyexplorerarmor
+	name = "GDR surplus explorer armor"
+	contains = list(/obj/item/clothing/suit/armor/mothership/explorer,
+					/obj/item/clothing/suit/armor/mothership/explorer,
+					/obj/item/clothing/under/grey/grey_scout,
+					/obj/item/clothing/under/grey/grey_scout,
+					/obj/item/clothing/shoes/jackboots/mothership,
+					/obj/item/clothing/shoes/jackboots/mothership,
+					/obj/item/clothing/head/helmet/mothership_explorer,
+					/obj/item/clothing/head/helmet/mothership_explorer)
+	cost = 60
+	containertype = /obj/structure/closet/secure_closet/ayy
+	containername = "GDR explorer armor locker"
+	one_access = list(access_security, access_mothership_military)
 	group = "Security"
 	contraband = 1
 

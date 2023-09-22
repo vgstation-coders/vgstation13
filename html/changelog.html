@@ -73,6 +73,87 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2023.09.23</h2>
+			<h3 class="author">gheritt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">This adds the ability to filter books in the library by multiple categories, as well as to sort them by Title, Author, and Category.</li>
+			</ul>
+			<h2 class="date">2023.09.22</h2>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed the plasma suit mod being able to be applied to suits that are already sealed</li>
+				<li class="rscadd">rigsuit mods can now use custom install conditions</li>
+			</ul>
+			<h3 class="author">Hinaichigo updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Made item kicking arc have a lower zenith.</li>
+				<li class="tweak">Changed item kicking sound.</li>
+				<li class="bugfix">Frying pans can be removed from barrels.</li>
+				<li class="bugfix">Wooden table parts are made of wood.</li>
+				<li class="rscadd">Ghosts can drink from ectoplasm-containing drinks.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Malfunctioning AIs should now properly see their stats. The issue was that the code that added the stats was not being called, and the code that called it was instead human-exclusive. Now the code checks at all living mobs rather than just humans, which includes silicons.</li>
+				<li class="bugfix">&#34;Machine hack limit&#34; status in the Malfunctioning AI&#39;s status bar will now properly reflect on the AI&#39;s innate hacking limit of 1, rather than starting off as &#34;0/0&#34;.</li>
+				<li class="bugfix">The following Wizard spells can no longer use the floor as a target (in which case they had no effect and put the spell on cooldown): Buttbot&#39;s Revenge/Arse Nath, Flesh to Stone, Blind, Heal, Ice Barrage, Wrap.</li>
+				<li class="bugfix">The Wizard&#39;s &#34;Teleport&#34; spell will no longer go on cooldown if it is cancelled.</li>
+				<li class="rscadd">Malfunctioning AIs now once again have access to an upgrade that rigs them to explode if they are deactivated, with a significant blast radius.</li>
+				<li class="rscadd">Malfunctioning AIs with certain graphics displayed on their cores (Override and Xerxes) will now play unique audio upon activating System Override.</li>
+				<li class="bugfix">Fixed a bug where late-join rulesets (the prompt you may get to become an antagonist if you spawn in the game during the round) did not refund their Dynamic threat cost if the candidate refused to become an antagonist.</li>
+				<li class="rscadd">There is a new round-end credits song that plays when a Malfunctioning AI wins.</li>
+			</ul>
+			<h3 class="author">gheritt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Added chair clapping.</li>
+			</ul>
+			<h2 class="date">2023.09.21</h2>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Ghosts can make candles flicker via mouseclick or Boo!</li>
+			</ul>
+			<h2 class="date">2023.09.17</h2>
+			<h3 class="author">gheritt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed the library preview button.</li>
+				<li class="bugfix">Fixed conveyers not working</li>
+			</ul>
+			<h2 class="date">2023.09.16</h2>
+			<h3 class="author">DorainGrey updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Grue light drain range &amp; power no has a hard limit of 10 tiles</li>
+			</ul>
+			<h3 class="author">ErrorsWindows updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">you can no longer resist out of straitjackets</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed an oversight that required you to have warden access to open trader lockboxes (ricochet taser, energy shotgun) - now only requires security.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Malfunctioning AIs now gain access to extra information in the status panel.</li>
+				<li class="rscadd">Added behind-the-scenes code for how much processing power APCs give. This doesn&#39;t affect anything.</li>
+				<li class="tweak">Malfunctioning AIs now start with one innate slot for the purpose of hacking machinery.</li>
+			</ul>
+			<h3 class="author">voxhater78 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The powercell of the rapid crate sender (RCS) can now be removed with a screwdriver</li>
+			</ul>
+			<h2 class="date">2023.09.15</h2>
+			<h3 class="author">ManopolisJones updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added two new contraband mothership cargo entries to the supply ordering console</li>
+				<li class="tweak">Slightly alters the MDF armor entry, Grey Space Ex entry, and the Mothership uniform entry in the supply ordering console</li>
+				<li class="bugfix">Fixes mothership explorer helmet sprite not showing up properly</li>
+			</ul>
+			<h2 class="date">2023.09.12</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed admins being unable to open the Emergency Shuttle Panel</li>
+				<li class="rscadd">Admins can now manually crash pods into the emergency shuttle</li>
+			</ul>
 			<h2 class="date">2023.09.11</h2>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
 			<ul class="changes bgimages16">
@@ -2096,156 +2177,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="rscadd">Bagel: New ATM just outside Cargo to the east.</li>
 				<li class="bugfix">Bagel: Atmos freezer and heater piping conflict fixed, extra pipe removed.</li>
 				<li class="bugfix">Bagel: Duplicate switches/lights/cameras removed from Engineering Secure storage.</li>
-			</ul>
-			<h2 class="date">2022.09.27</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed newly arisen photography issues with objects not facing the right way.</li>
-			</ul>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Log doors can also be made using towercap logs.</li>
-				<li class="bugfix">Log doors no longer give 2x the logs you used to make it when disassembled.</li>
-				<li class="rscadd">You can buy dan sauce bottles for 25 credits and a coin in your nearest Discount Dan&#39;s vending machine.</li>
-			</ul>
-			<h3 class="author">kernikov updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Traders given a small EEL engine for power.</li>
-				<li class="tweak">Trader SMES no longer has infinite charge.</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Pepper spray no longer requires a bodypart to be targeted to work.</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added autoignition temperatures for many items.</li>
-			</ul>
-			<h2 class="date">2022.09.25</h2>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The powercreep packet&#39;s initial animation now displays properly.</li>
-				<li class="bugfix">Powercreepers will now correctly layer above piping devices such as vents/scrubbers, as well as structures such as tables.</li>
-			</ul>
-			<h3 class="author">pedr69 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">dansauce packets now look like packets and not condiment bottles</li>
-			</ul>
-			<h2 class="date">2022.09.24</h2>
-			<h3 class="author">Hinaichigo updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added more info to grue Drain Light ability description.</li>
-			</ul>
-			<h3 class="author">kacurasuo updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Flatpacks are now as upgraded as the source machine.</li>
-			</ul>
-			<h2 class="date">2022.09.23</h2>
-			<h3 class="author">DorainGrey updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Engineer Fuelcans now come stocked with Sulphuric Acid.</li>
-			</ul>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="spellcheck">Renamed the Vendomat vending machine (the one with stock parts and assemblies) to StockPro.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Gives the chief engineer a screwdriver soldering tool. It holds 60% more acid, completes work in 50% of the time, and eliminates the need to carry a separate screwdriver.</li>
-				<li class="rscadd">When a living, conscious wizard is above a conduction plate, it will burn him and output a large amount of power based on his relative health. You could make a wizard engine if you could hold him in place and feed him anti-burn meds.</li>
-			</ul>
-			<h3 class="author">Optimism333 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Gym rats have received several qol changes</li>
-				<li class="rscadd">Roid rats have been added</li>
-				<li class="rscadd">Station mice can be transformed into gym rats or roid rats if injected with creatine</li>
-			</ul>
-			<h3 class="author">kernikov updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Hobos no longer locked in their cabin.</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Observers&#39; Haunt verb now prioritizes actual players when presenting a list of people to spectate.</li>
-			</ul>
-			<h3 class="author">pedr69 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">advancements in discount packaging technology allowed Discount Dan to overhaul his Special Sauce packets, letting you apply them to food!</li>
-				<li class="rscadd">enthusiasts have heard rumors about Discount Dan expanding into the &#34;exotic garnishes&#34; scene</li>
-			</ul>
-			<h2 class="date">2022.09.22</h2>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The Yantar Medical Crate from Traders now costs 160 (from 220) and contains 6 items (from 3), like other crates. Also fixed its name.</li>
-				<li class="rscadd">You can now emag the chem dispenser to scramble it.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Space hobos now have their own custom outfit with less slowdown.</li>
-				<li class="tweak">The exit of hobo shacks now ventilate properly.</li>
-				<li class="bugfix">Hobo shack pipes are now less broken looking.</li>
-			</ul>
-			<h3 class="author">jwhitak updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Airshields can now be deconstructed with a screwdriver and welder.</li>
-				<li class="bugfix">Airshields no longer leave a permanent airshield effect behind when removed.</li>
-				<li class="bugfix">Airshields, despite using power, did not turn off when out of power. They turn off now. Beware of random events...</li>
-				<li class="tweak">Airshields draw power from the Environment power channel instead of the Equipment channel, turning off only when the APC is completely out of power.</li>
-				<li class="tweak">Powered airshields faintly glow, and unpowered airshields no longer have a visible field.</li>
-			</ul>
-			<h2 class="date">2022.09.21</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed bees being only able to be photographed when they&#39;re moving south.</li>
-				<li class="bugfix">Fixed the Immunity Scanner graph&#39;s bars not matching the letters and concentrations written below.</li>
-				<li class="tweak">The Immunity Scanner no longer mentions antibodies that have 0% concentration in the body, unless said body is affected by a disease that has those specific antigens (and has been analyzed).</li>
-			</ul>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscdel">Contraband cargo crates no longer have blood tomato seeds.</li>
-			</ul>
-			<h3 class="author">ManopolisJones updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds new leather jacket suit items to a suitmaster near you!</li>
-				<li class="tweak">greaser outfit now supports vox and grey races natively.</li>
-			</ul>
-			<h3 class="author">Optimism333 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Polyp pudding dribbles now have the correct color</li>
-				<li class="rscadd">A new brain damage line has been added</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Conveyor belt assembly pieces now return the 2 sheets of metal needed to build one instead of just 1.</li>
-				<li class="tweak">Conveyor belts now only cost 4 total metal to make.</li>
-			</ul>
-			<h3 class="author">ebakai updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Shield wall generators can no longer receive power by magic.</li>
-				<li class="tweak">Shield wall generators provide more information when examined.</li>
-			</ul>
-			<h3 class="author">jwhitak updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Suiciding on machines actually works now.</li>
-				<li class="bugfix">Plastic flaps now update ZAS when you crowbar them between airtight states.</li>
-			</ul>
-			<h3 class="author">kernikov updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Recoloured Box gasmix (yellow) manifolds to match the rest in atmos.</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added more hallway lights near Boxstation&#39;s hydroponics, and one more in the kitchen.</li>
-				<li class="bugfix">Cancelling the Haunt/Observe verb will no longer make you start haunting a cyborg.</li>
-			</ul>
-			<h3 class="author">smalIboss updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">New splashscreen.</li>
-			</ul>
-			<h2 class="date">2022.09.19</h2>
-			<h3 class="author">jellyveggie2 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The power monitor should no longer break whenever an APC breaks or is left half disassembled</li>
 			</ul>
 		</div>
 		<!--
