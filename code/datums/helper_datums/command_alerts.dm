@@ -433,6 +433,12 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	theme = "malfdelta"
 	alertlevel = "delta"
 
+/datum/command_alert/malf_announce/shodan
+	alert = 'sound/AI/aimalf_shodan.ogg'
+
+/datum/command_alert/malf_announce/xerxes
+	alert = 'sound/AI/aimalf_xerxes.ogg'
+
 /datum/command_alert/malf_win
 	name = "AI Malfunctioning Win"
 	alert = 'sound/effects/static/static4.ogg'

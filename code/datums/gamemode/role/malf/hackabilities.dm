@@ -482,6 +482,13 @@
 		return
 
 	MF.stage(FACTION_ENDGAME)
+	switch(A.chosen_core_icon_state)
+		if("ai-malf-shodan")
+			command_alert(/datum/command_alert/malf_announce/shodan)
+		if("ai-xerxes")
+			command_alert(/datum/command_alert/malf_announce/xerxes)
+		else
+			command_alert(/datum/command_alert/malf_announce)
 	M.core_upgrades -= src
 
 //--------------------------------------------------------
