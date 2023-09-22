@@ -276,11 +276,6 @@
 	else
 		return ..()
 
-/obj/machinery/computer/library/checkout/proc/get_sort_arrow(var/column)
-	if(query.order_by == column)
-		return query.descending ? "↓" : "↑"
-	return ""
-
 /obj/machinery/computer/library/checkout/Topic(href, href_list)
 	if(..())
 		usr << browse(null, "window=library")

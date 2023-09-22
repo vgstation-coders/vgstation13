@@ -54,7 +54,7 @@
 			arguments["query_category_[i]"] = query.categories[i]
 		searchquery_parts += "[searchquery_parts.len ? "AND" : "WHERE"] category IN ([in_placeholders.Join(", ")])"
 
-	if(query.order_by && (query.order_by in list("author", "title", "category")))
+	if(query.order_by && (query.order_by in list("author", "title", "category", "id")))
 //		to_chat(world, "\red query order_by ([query.order_by])")
 		var/option = query.descending ? "DESC" : "ASC"
 		searchquery_parts += "ORDER BY [query.order_by] [option]"
@@ -126,3 +126,8 @@
 /obj/machinery/computer/library/cultify()
 	new /obj/structure/cult_legacy/tome(loc)
 	..()
+
+/obj/machinery/computer/library/proc/get_sort_arrow(var/column)
+	if(query.order_by == column)
+		return query.descending ? "↓" : "↑"
+	return ""
