@@ -502,6 +502,20 @@
 
 //--------------------------------------------------------
 
+/datum/malfhack_ability/core/explode
+	name = "Explosive Core"
+	desc = "Rigs your core to explode upon your untimely deactivation."
+	icon = "radial_alertboom"
+	cost = 20
+
+/datum/malfhack_ability/core/explode/activate(mob/living/silicon/ai/A)
+	if(!..())
+		return
+	A.explosive = TRUE
+	to_chat(A, "<span class='warning'>Your core will now detonate if it gets destroyed.</span>")
+
+//--------------------------------------------------------
+
 /datum/malfhack_ability/oneuse/emag
 	name = "Scramble"
 	desc = "Scramble the software on this machine, making it behave as if emagged."
