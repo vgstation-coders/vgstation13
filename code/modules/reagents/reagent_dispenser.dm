@@ -36,7 +36,7 @@
 */
 
 /obj/structure/reagent_dispensers/attack_hand()
-	if (rig)
+	if (!cookvessel && rig)
 		usr.visible_message("[usr] begins to detach [rig] from \the [src].", "You begin to detach [rig] from \the [src].")
 		if(do_after(usr, src, 20))
 			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src].</span>")
@@ -45,6 +45,8 @@
 				rig.master = null
 				rig = null
 			overlays = new/list()
+	else
+		. = ..()
 
 /obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(W.is_wrench(user))
