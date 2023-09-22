@@ -73,6 +73,19 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2023.09.22</h2>
+			<h3 class="author">Hinaichigo updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Made item kicking arc have a lower zenith.</li>
+				<li class="tweak">Changed item kicking sound.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Malfunctioning AIs should now properly see their stats. The issue was that the code that added the stats was not being called, and the code that called it was instead human-exclusive. Now the code checks at all living mobs rather than just humans, which includes silicons.</li>
+				<li class="bugfix">&#34;Machine hack limit&#34; status in the Malfunctioning AI&#39;s status bar will now properly reflect on the AI&#39;s innate hacking limit of 1, rather than starting off as &#34;0/0&#34;.</li>
+				<li class="bugfix">The following Wizard spells can no longer use the floor as a target (in which case they had no effect and put the spell on cooldown): Buttbot&#39;s Revenge/Arse Nath, Flesh to Stone, Blind, Heal, Ice Barrage, Wrap.</li>
+				<li class="bugfix">The Wizard&#39;s &#34;Teleport&#34; spell will no longer go on cooldown if it is cancelled.</li>
+			</ul>
 			<h2 class="date">2023.09.21</h2>
 			<h3 class="author">Eneocho updated:</h3>
 			<ul class="changes bgimages16">
@@ -2167,16 +2180,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">west3436 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Added autoignition temperatures for many items.</li>
-			</ul>
-			<h2 class="date">2022.09.25</h2>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The powercreep packet&#39;s initial animation now displays properly.</li>
-				<li class="bugfix">Powercreepers will now correctly layer above piping devices such as vents/scrubbers, as well as structures such as tables.</li>
-			</ul>
-			<h3 class="author">pedr69 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">dansauce packets now look like packets and not condiment bottles</li>
 			</ul>
 		</div>
 		<!--
