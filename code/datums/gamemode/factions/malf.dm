@@ -83,7 +83,7 @@
 You may now choose to detonate the nuclear device!</span>"})
 		M.takeover = TRUE
 		M.antag.DisplayUI("Malf")
-
+	ticker.malfunctioning_AI_victory = 1
 
 	return
 
