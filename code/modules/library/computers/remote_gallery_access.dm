@@ -86,10 +86,10 @@
 	B.open()
 
 /obj/machinery/computer/library/checkout/remote_gallery/get_scanner_title(var/obj/machinery/libraryscanner/LS)
-	return LS.cached_painting.painting_data.title ? LS.cached_painting.painting_data.title : "Untitled painting"
+	return LS.cached_painting.painting_data.title || "Untitled painting"
 
 /obj/machinery/computer/library/checkout/remote_gallery/get_scanner_author(var/obj/machinery/libraryscanner/LS)
-	return LS.cached_painting.painting_data.author ? LS.cached_painting.painting_data.author : "Anonymous"
+	return LS.cached_painting.painting_data.author || "Anonymous"
 
 /obj/machinery/computer/library/checkout/remote_gallery/get_scanner_dat(var/obj/machinery/libraryscanner/LS)
 	return painting2json(LS.cached_painting.painting_data)
@@ -98,7 +98,7 @@
 	return "[LS.cached_painting.painting_height]x[LS.cached_painting.painting_width]"
 
 /obj/machinery/computer/library/checkout/remote_gallery/get_scanner_desc(var/obj/machinery/libraryscanner/LS)
-	return LS.cached_painting.painting_data.description ? LS.cached_painting.painting_data.description : "No description available"
+	return LS.cached_painting.painting_data.description || "No description available"
 
 /obj/machinery/computer/library/checkout/remote_gallery/has_cached_data()
 	return scanner.cached_painting
