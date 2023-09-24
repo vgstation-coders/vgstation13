@@ -198,9 +198,10 @@
 	..()
 	if(user.mind == bound_mind)
 		to_chat(user, "<span class='notice'>It has [charges ? "[charges]" : "no"] charges left!</span>")
-		if(iswizard(user)) //Wizards are scholars
-			to_chat(user, "<span class='notice'>You can charge it using filled soulstones. The more charges you have, the faster you will revive.</span>")
-			to_chat(user, "<span class='notice'>The phylactery will revive you about ten times faster if you are close to it when perishing.</span>")
+	if(iswizard(user)) //Wizards are scholars
+		to_chat(user, "<span class='notice'>This is a phylactery! Whoever is bound to it will come back as a lich wherever the phylactery may be, as long as it is charged.</span>")
+		to_chat(user, "<span class='notice'>You can charge it using filled soulstones. The more charges you have, the faster you will revive.</span>")
+		to_chat(user, "<span class='notice'>The phylactery will revive you about ten times faster if you are close to it when perishing.</span>")
 
 /obj/item/phylactery/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/soulstone))
