@@ -136,5 +136,5 @@
 	C.name = "[newbook.title] by [newbook.author]"
 	C.desc = newbook.description
 	C.set_painting_data(json2painting(newbook.content, newbook.title, newbook.author, newbook.description))
-	C.update_painting(1)
+	C.update_painting(TRUE)
 	return C
