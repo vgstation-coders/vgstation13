@@ -227,6 +227,8 @@ var/MAX_EXPLOSION_RANGE = 32
 #define CUT_WALL 64 //Will cut through walls and girders when the item has this flag
 #define CUT_AIRLOCK 128 //Will cut through airlocks when the item has this flag
 
+#define SHARPNESS_BROKENGLASS 3 //The sharpness of something like a glass shard, a broken glass bottle, or a broken thermometer.
+
 //flags for pass_flags
 #define PASSTABLE	1
 #define PASSGLASS	2
