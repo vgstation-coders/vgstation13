@@ -393,7 +393,7 @@
 		desc = "Though the blades are sharp, they are also fragile."
 		hitsound = "sound/weapons/bloodyslice.ogg"
 		force = blades_left * 2
-		sharpness = 2
+		sharpness = SHARPNESS_BROKENGLASS
 		attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cleaves")
 		sharpness_flags = SHARP_BLADE | INSULATED_EDGE
 	else
