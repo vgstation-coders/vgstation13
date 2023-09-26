@@ -1,4 +1,5 @@
 #define MAX_BLOOD_PER_TARGET 200
+#define BLOOD_SUCK_AMOUNT 20
 
 /datum/role/vampire
 	id = VAMPIRE
@@ -156,6 +157,10 @@
 		if(vamp_H.check_body_part_coverage(MOUTH))
 			to_chat(M, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
 
+	if(H.species.anatomy_flags & NO_BLOOD)
+		to_chat(M, "<span class='warning'>Not a drop of blood here.</span>")
+		return FALSE
+
 	return TRUE
 
 /datum/role/vampire/proc/handle_bloodsucking(var/mob/living/carbon/human/target)
@@ -163,7 +168,7 @@
 
 	var/mob/assailant = antag.current
 	var/targetref = "\ref[target]"
-	var/blood = 0
+	var/blood = 0 //How much blood will be sucked
 	var/blood_total_before = blood_total
 	var/blood_usable_before = blood_usable
 	assailant.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [key_name(target)] in the neck and draining their blood.</font>")
@@ -171,20 +176,18 @@
 	log_attack("[key_name(assailant)] bit [key_name(target)] in the neck")
 
 	to_chat(antag.current, "<span class='danger'>You latch on firmly to \the [target]'s neck.</span>")
-	target.show_message("<span class='userdanger'>\The [assailant] latches on to your neck!</span>")
+	if(!silentbite)
+		target.show_message("<span class='userdanger'>\The [assailant] latches on to your neck!</span>")
 
 	if(!iscarbon(assailant))
 		target.LAssailant = null
 	else
 		target.LAssailant = assailant
 		target.assaulted_by(assailant)
-	while(do_mob(assailant, target, (5 SECONDS) * (silentbite + 1)))
+	var/bite_type = silentbite //Keeps track of what sucking method the sucking started with to avoid cheesing by switching to loud and fast
+	while(do_mob(assailant, target, (5 SECONDS) * (bite_type + 1)))
 		if(!isvampire(assailant))
 			to_chat(assailant, "<span class='warning'>Your fangs have disappeared!</span>")
-			draining = null
-			return FALSE
-		if(target.species.anatomy_flags & NO_BLOOD)
-			to_chat(assailant, "<span class='warning'>Not a drop of blood here.</span>")
 			draining = null
 			return FALSE
 		if(!target.mind)
@@ -196,35 +199,37 @@
 			break
 		if (!(targetref in feeders))
 			feeders[targetref] = 0
+
+		blood = BLOOD_SUCK_AMOUNT //The default amount vampires will drain
 		var/mature = locate(/datum/power/vampire/mature) in current_powers
-		if(target.stat < DEAD) //alive
-			blood = min(mature ? 40 : 20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
-			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
-				blood_total += blood
-			else
-				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
-			blood_usable += blood
-			target.adjustBruteLoss(1)
-			var/datum/organ/external/head/head_organ = target.get_organ(LIMB_HEAD)
-			head_organ.add_autopsy_data("sharp teeth", 1)
+		if(mature) //Mature vampires will drain twice as much
+			blood *= 2
+		if(bite_type || target.stat == DEAD) //Vampires who drain silently will draw half as much blood, and dead targets provide half as much, but this won't stack for a 1/4th sucking speed
+			blood *= 0.5
+		blood = min(blood, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
+		if(feeders[targetref] < MAX_BLOOD_PER_TARGET)
+			blood_total += blood
+			feeders[targetref] += blood
 		else
-			blood = min(mature ? 20 : 10, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 10 blood
-			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
-				blood_total += blood
-			else
-				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
-		feeders[targetref] += blood
+			to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
+		blood_usable += blood
+		target.vessel.remove_reagent(BLOOD,blood*2) //1:2 ratio of vampire blood gained and victim blood sucked
+		if(!bite_type) //Careless when biting, do damage
+			target.adjustBruteLoss(1)
+		var/datum/organ/external/head/head_organ = target.get_organ(LIMB_HEAD)
+		if(head_organ)
+			head_organ.add_autopsy_data("sharp teeth", 1)
 		if(blood_total_before != blood_total)
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
-		target.vessel.remove_reagent(BLOOD,blood)
 		var/mob/living/carbon/V = assailant
 		if(V)
-			var/fatty_chemicals = target.reagents.has_any_reagents(list(CHEESYGLOOP, CORNOIL)) //If the target has these chemicals in his blood the vampire can get fat from sucking blood.
+			var/fatty_chemicals = target.reagents.has_any_reagents(list(CHEESYGLOOP, CORNOIL)) //If the target has these chemicals in their blood the vampire can get fat from sucking blood.
 			var/eating_threshold = fatty_chemicals ? OVEREAT_THRESHOLD * 2 : OVEREAT_THRESHOLD
 			if(V.nutrition < eating_threshold) //Gives the vampire a little bit of food, at a rate of 1/4 the blood sucked.
 				V.nutrition = round(min(V.nutrition + blood/4, OVEREAT_THRESHOLD), 1)
 		update_vamp_hud()
+
 
 	draining = null
 	to_chat(assailant, "<span class='notice'>You stop draining \the [target] of blood.</span>")
