@@ -929,7 +929,6 @@ var/global/list/damage_icon_parts = list()
 				if("Insectoid")
 					blood_icon_state = "shoeblood-vox"
 
-
 			//if bloody bare feet icons are added like with bloody hands, something should go here to avoid the blood showing where a missing foot would be
 
 			var/icon/shoebloodicon = icon('icons/effects/blood.dmi', blood_icon_state)
