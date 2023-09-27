@@ -1,9 +1,9 @@
 ////////////////////////SPECIAL/////////////////////////////////
 
 //Vampire Diseased Touch
-/datum/disease2/effect/organs/vampire
-	stage = 1
-	restricted = 2//symptoms won't randomly mutate into this one & won't appear in the symptom encyclopedia
+///datum/disease2/effect/organs/vampire
+//	stage = 1
+//	restricted = 2//symptoms won't randomly mutate into this one & won't appear in the symptom encyclopedia
 
 /datum/disease2/effect/wizarditis/single
 	stage = 1

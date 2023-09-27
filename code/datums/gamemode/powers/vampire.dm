@@ -30,10 +30,10 @@
 	granttext = "Your vampiric vision has improved."
 	store_in_memory = TRUE
 
-/datum/power/vampire/disease
-	cost = 150
-	spellpath = /spell/targeted/disease
-	granttext = "You have gained the Diseased Touch ability which causes those you touch to die shortly after unless treated medically."
+///datum/power/vampire/disease
+//	cost = 150
+//	spellpath = /spell/targeted/disease
+//	granttext = "You have gained the Diseased Touch ability which causes those you touch to die shortly after unless treated medically."
 
 /datum/power/vampire/cloak
 	cost = 150

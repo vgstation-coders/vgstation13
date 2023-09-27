@@ -1,3 +1,6 @@
+/*
+//A vampire spell that causes deadly infection in targets.
+//Removed from the game because it was just plain unfun to fight against
 /spell/targeted/disease
 	name = "Diseased Touch (50)"
 	desc = "Touches your victim with infected blood giving them the Shutdown Syndrome which quickly shuts down their major organs resulting in a quick painful death."
@@ -92,3 +95,4 @@
 	var/datum/role/vampire/V = isvampire(user)
 	if(V)
 		V.remove_blood(3*blood_cost)
+*/

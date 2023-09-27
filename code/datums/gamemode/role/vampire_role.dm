@@ -163,6 +163,30 @@
 
 	return TRUE
 
+//This is what will appear to the vampire when examining someone.
+/datum/role/vampire/proc/examine_can_suck(var/mob/living/carbon/human/H)
+	var/text = ""
+	var/targetref = "\ref[H]"
+	if(isReligiousLeader(H) || locate(/obj/item/weapon/nullrod) in get_contents_in_object(H)) //Chaplains and protected targets can't be examined
+		return "<span class='danger'><br>This vessel is protected by a holy aura!</span>"
+	if(!H.mind) //Target has no mind
+		return "<span class='warning'><br>This vessel only carries lifeless blood!</span>"
+	if(H.species.anatomy_flags & NO_BLOOD) //Target cannot carry blood
+		return "<span class='warning'><br>This vessel is incapable of having any blood!</span>"
+	var/amount_of_blood = H.vessel.get_reagent_amount(BLOOD)
+	if(amount_of_blood)
+		text += "<span class='notice'><br>This vessel has [amount_of_blood] units of blood left.</span>"
+		if(!(targetref in feeders) || feeders[targetref] < MAX_BLOOD_PER_TARGET) //Target has not been fed upon or is below the empowering blood limit they can give
+			text += "<span class='good'><br>This vessel's blood can empower you!</span>"
+		else
+			text += "<span class='warning'><br>This vessel's blood has no energy left...</span>"
+		if(H.check_body_part_coverage(MOUTH)) //Target is masked
+			if(!locate(/datum/power/vampire/mature) in current_powers) //Vampire is not mature enough to deal with that
+				text += "<span class='warning'><br>This vessel is masked! This will impede you from sucking their blood.</span>"
+	else
+		return "<span class='warning'><br>This vessel is completely drained of all blood!</span>"
+	return text
+
 /datum/role/vampire/proc/handle_bloodsucking(var/mob/living/carbon/human/target)
 	draining = target
 
@@ -661,12 +685,13 @@
 	//Other vampires aren't affected
 	var/success = TRUE
 	if(mind && mind.GetRole(VAMPIRE))
-		return 0
+		return FALSE
 
 	// Non-mature vampires are not stopped by holy things.
 	if(M)
+		var/religious_leader = isReligiousLeader(src)
 		//Chaplains are ALWAYS resistant to vampire powers
-		if(isReligiousLeader(src))
+		if(religious_leader)
 			to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
 			success = FALSE
 		// Null rod nullifies vampire powers, unless we're a young vamp.
@@ -674,10 +699,14 @@
 		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
 		if (N)
 			if (locate(/datum/power/vampire/undying) in V.current_powers)
-				to_chat(M.current, "<span class='warning'>A holy artifact has turned our powers against us!</span>")
-				success = VAMP_FAILURE
+				if(religious_leader) //Only chaplains will smite vampires with their nullrods, otherwise it simply protects everyone else
+					to_chat(M.current, "<span class='danger'>[src]'s holy artifact has turned our powers against us!</span>")
+					success = VAMP_FAILURE
+				else
+					to_chat(M.current, "<span class='warning'>A holy artifact protects [src]!</span>")
+					success = FALSE
 			else if (locate(/datum/power/vampire/jaunt) in V.current_powers)
-				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
+				to_chat(M.current, "<span class='warning'>A holy artifact protects [src]!</span>")
 				success = FALSE
 	return success
 

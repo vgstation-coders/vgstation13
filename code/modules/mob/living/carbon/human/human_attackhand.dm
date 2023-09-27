@@ -27,8 +27,7 @@
 				src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
 			else
 				to_chat(M, "<span class='danger'>You start to slowly reach for [src]'s neck to bite it!.</span>")
-			if(!V.silentbite || do_mob(M, src, (5 SECONDS)))
-				V.handle_bloodsucking(src)
+			V.handle_bloodsucking(src)
 			return
 	//end vampire code
 

@@ -464,6 +464,12 @@
 	if(flavor_text && can_show_flavor_text())
 		msg += "[print_flavor_text()]\n"
 
+	if(isvampire(user) && !(src == user))
+		if(ishuman(user)) //Silicons shouldn't get this
+			var/datum/role/vampire/V = isvampire(user)
+			msg += V.examine_can_suck(src)
+			msg += "<br>"
+
 	msg += "*---------*</span>"
 
 	return msg
