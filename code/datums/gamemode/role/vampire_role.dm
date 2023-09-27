@@ -331,19 +331,13 @@
 		H.color = "#FFFFFF"
 		return FALSE
 
-	if((T.get_lumcount() * 10) <= 2)
+	if((T.get_lumcount()) <= 0.4) //Lumcount goes from a value of 0 to 1 and 0.4 is moderately dark
 		if(locate(/datum/power/vampire/mature) in current_powers)
-			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.3), INVISIBILITY_LEVEL_TWO)
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.2), INVISIBILITY_LEVEL_TWO)
 		else
-			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.3))
-		return TRUE
+			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.5))
 	else
-		if(H.invisibility > 0)
-			H.make_visible(VAMPIRECLOAK)
-		if(locate(/datum/power/vampire/mature) in current_powers)
-			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.3))
-		else
-			H.make_invisible(VAMPIRECLOAK, 0, TRUE, round(255 * 0.8))
+		H.make_visible(VAMPIRECLOAK)
 
 /datum/role/vampire/proc/handle_menace(var/mob/living/carbon/human/H)
 	if(!istruevampire(H))
