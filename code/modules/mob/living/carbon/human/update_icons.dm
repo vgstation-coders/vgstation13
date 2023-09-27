@@ -657,15 +657,30 @@ var/global/list/damage_icon_parts = list()
 	O.color = null
 	if(gloves && !check_hidden_body_flags(HIDEGLOVES) && gloves.is_visible())
 
+		//todo: vox, other species masks
+		//todo: red ribbon considerations?
+		//todo: move mask icons elsewhere so they don't need to be generated each time
+		//todo: accessory overlay, and stuff, and edge cases where something could still appear
+		//todo: optimize? and don't have the icon-image step split up there if unnecessary
+		//todo: fix gloves from flying off when only one hand is removed
+
+		//todo: move this check somewhere or make a nice proc for it?
+		var/onehandedmask
+		if(!has_organ(LIMB_LEFT_HAND))
+			onehandedmask = "l"
+		else if(!has_organ(LIMB_RIGHT_HAND))
+			onehandedmask = "r"
 
 		var/t_state = gloves.item_state
 		if(!t_state)
 			t_state = gloves.icon_state
-		var/image/standing
-		if(gloves.wear_override)
-			standing = image("icon" = gloves.wear_override)
-		else
-			standing = image("icon" = ((gloves.icon_override) ? gloves.icon_override : 'icons/mob/hands.dmi'), "icon_state" = "[t_state]")
+
+		var/icon/standing_icon = gloves.wear_override ? icon(gloves.wear_override) : icon((gloves.icon_override) ? gloves.icon_override : 'icons/mob/hands.dmi', "[t_state]")
+
+		if(onehandedmask)
+			standing_icon.Blend(icon('icons/mob/hands.dmi', "mask_[onehandedmask]"), ICON_ADD)
+
+		var/image/standing = image(standing_icon)
 
 		var/datum/species/S = species
 		for(var/datum/organ/external/OE in get_organs_by_slot(slot_gloves, src)) //Display species-exclusive species correctly on attached limbs
@@ -695,7 +710,11 @@ var/global/list/damage_icon_parts = list()
 						blood_icon_state = "bloodyhands-vox"
 					if("Insectoid")
 						blood_icon_state = "bloodyhands-vox"
-				var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
+
+				var/icon/bloodgloveicon = icon('icons/effects/blood.dmi', blood_icon_state)
+				if(onehandedmask)
+					bloodgloveicon.Blend(icon('icons/mob/hands.dmi', "mask_[onehandedmask]"), ICON_ADD)
+				var/image/bloodsies	= image(bloodgloveicon)
 				bloodsies.color = actual_gloves.blood_color
 				standing.overlays	+= bloodsies
 				O.overlays += bloodsies
@@ -723,6 +742,17 @@ var/global/list/damage_icon_parts = list()
 					blood_icon_state = "bloodyhands-vox"
 			O.icon = 'icons/effects/blood.dmi'
 			O.icon_state = blood_icon_state
+
+			var/onehandedmask
+			if(!has_organ(LIMB_LEFT_HAND))
+				onehandedmask = "l"
+			else if(!has_organ(LIMB_RIGHT_HAND))
+				onehandedmask = "r"
+			if(onehandedmask)
+				var/icon/bloodyhandsicon = icon(O.icon)
+				bloodyhandsicon.Blend(icon('icons/mob/hands.dmi', "mask_[onehandedmask]"), ICON_ADD)
+				O.icon = bloodyhandsicon
+
 			O.color = bloody_hands_data["blood_colour"]
 			obj_to_plane_overlay(O,GLOVES_LAYER)
 	if(update_icons)
