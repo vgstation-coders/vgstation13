@@ -657,16 +657,6 @@ var/global/list/damage_icon_parts = list()
 	O.color = null
 	if(gloves && !check_hidden_body_flags(HIDEGLOVES) && gloves.is_visible())
 
-		//todo: move mask icons elsewhere so they don't need to be generated each time
-		//todo: accessory overlay, and stuff, and edge cases where something could still appear
-		//todo: optimize? and don't have the icon-image step split up there if unnecessary
-		//todo: fix gloves from flying off when only one hand is removed
-		//todo: foot masks
-		//todo: being able to add shoe to someone with no feet?
-		//todo: check species fit, gender fit
-		//todo: de-arming checking and stuff
-
-		//todo: move this check somewhere or make a nice proc for it? (and feet)
 		var/onehandedmask
 		if(!has_organ(LIMB_LEFT_HAND))
 			onehandedmask = "r"
@@ -901,17 +891,27 @@ var/global/list/damage_icon_parts = list()
 			if(has_icon(O.icon,"[shoes.icon_state]_f"))
 				O.icon_state = "[shoes.icon_state]_f"
 
-		//todo: move this check somewhere or make a nice proc for it?
-		//todo: blood, accessories check
 		var/onefootedmask
 		if(!has_organ(LIMB_LEFT_FOOT))
 			onefootedmask = "r"
 		else if(!has_organ(LIMB_RIGHT_FOOT))
 			onefootedmask = "l"
 
+		var/speciesname = get_species()
+
+
+		var/shoeiconpath
 		if(onefootedmask)
 			var/icon/oneshoeicon = icon(O.icon, O.icon_state)
-			oneshoeicon.Blend(icon('icons/mob/feet.dmi', "mask_[onefootedmask]"), ICON_ADD)
+			switch(speciesname)
+				if("Vox")
+					shoeiconpath = 'icons/mob/species/vox/shoes.dmi'
+				if("Insectoid")
+					shoeiconpath = 'icons/mob/species/insectoid/feet.dmi'
+				else
+					shoeiconpath = 'icons/mob/feet.dmi'
+
+			oneshoeicon.Blend(icon(shoeiconpath, "mask_[onefootedmask]"), ICON_ADD)
 			O.icon = oneshoeicon
 
 		if(shoes.clothing_flags & COLORS_OVERLAY)
@@ -923,7 +923,7 @@ var/global/list/damage_icon_parts = list()
 				O.overlays += dyn_overlay
 		if(shoes.blood_DNA && shoes.blood_DNA.len)
 			var/blood_icon_state = "shoeblood"
-			switch(get_species())
+			switch(speciesname)
 				if("Vox")
 					blood_icon_state = "shoeblood-vox"
 				if("Insectoid")
@@ -936,7 +936,7 @@ var/global/list/damage_icon_parts = list()
 
 			//only show blood on shoe on present foot
 			if(onefootedmask)
-				shoebloodicon.Blend(icon('icons/mob/feet.dmi', "mask_[onefootedmask]"), ICON_ADD)
+				shoebloodicon.Blend(icon(shoeiconpath, "mask_[onefootedmask]"), ICON_ADD)
 
 			var/image/bloodsies = image(shoebloodicon)
 			bloodsies.color = shoes.blood_color

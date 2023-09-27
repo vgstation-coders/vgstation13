@@ -803,15 +803,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 				var/drop_this_slot = TRUE
 
 				//can continue wearing a glove or shoe if a hand or foot remains
-				//todo: maybe replace this with a can_equip check or something
-				switch(slot_id)
-					if(slot_gloves)
-						if(owner.has_organ(LIMB_LEFT_HAND) || owner.has_organ(LIMB_RIGHT_HAND))
-							drop_this_slot = FALSE
+				if(owner.has_organ_for_slot(slot_id))
+					drop_this_slot = FALSE
+					switch(slot_id)
+						if(slot_gloves)
 							owner.update_inv_gloves()
-					if(slot_shoes)
-						if(owner.has_organ(LIMB_LEFT_FOOT) || owner.has_organ(LIMB_RIGHT_FOOT))
-							drop_this_slot = FALSE
+						if(slot_shoes)
 							owner.update_inv_shoes()
 
 				if(drop_this_slot)
