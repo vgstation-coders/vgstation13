@@ -657,19 +657,21 @@ var/global/list/damage_icon_parts = list()
 	O.color = null
 	if(gloves && !check_hidden_body_flags(HIDEGLOVES) && gloves.is_visible())
 
-		//todo: vox, other species masks
-		//todo: red ribbon considerations?
 		//todo: move mask icons elsewhere so they don't need to be generated each time
 		//todo: accessory overlay, and stuff, and edge cases where something could still appear
 		//todo: optimize? and don't have the icon-image step split up there if unnecessary
 		//todo: fix gloves from flying off when only one hand is removed
+		//todo: foot masks
+		//todo: being able to add shoe to someone with no feet?
+		//todo: check species fit, gender fit
+		//todo: de-arming checking and stuff
 
-		//todo: move this check somewhere or make a nice proc for it?
+		//todo: move this check somewhere or make a nice proc for it? (and feet)
 		var/onehandedmask
 		if(!has_organ(LIMB_LEFT_HAND))
-			onehandedmask = "l"
-		else if(!has_organ(LIMB_RIGHT_HAND))
 			onehandedmask = "r"
+		else if(!has_organ(LIMB_RIGHT_HAND))
+			onehandedmask = "l"
 
 		var/t_state = gloves.item_state
 		if(!t_state)
@@ -899,12 +901,25 @@ var/global/list/damage_icon_parts = list()
 			if(has_icon(O.icon,"[shoes.icon_state]_f"))
 				O.icon_state = "[shoes.icon_state]_f"
 
+		//todo: move this check somewhere or make a nice proc for it?
+		//todo: blood, accessories check
+		var/onefootedmask
+		if(!has_organ(LIMB_LEFT_FOOT))
+			onefootedmask = "r"
+		else if(!has_organ(LIMB_RIGHT_FOOT))
+			onefootedmask = "l"
+
+		if(onefootedmask)
+			var/icon/oneshoeicon = icon(O.icon, O.icon_state)
+			oneshoeicon.Blend(icon('icons/mob/feet.dmi', "mask_[onefootedmask]"), ICON_ADD)
+			O.icon = oneshoeicon
+
 		if(shoes.clothing_flags & COLORS_OVERLAY)
 			O.color = shoes.color
 		O.overlays.len = 0
 		if(shoes.dynamic_overlay)
 			if(shoes.dynamic_overlay["[SHOES_LAYER]"])
-				var/image/dyn_overlay = shoes.dynamic_overlay["[SHOES_LAYER]"]
+				var/image/dyn_overlay = shoes.dynamic_overlay["[SHOES_LAYER]"] //as far as i know no shoes use this, so for now no one-footed stuff here
 				O.overlays += dyn_overlay
 		if(shoes.blood_DNA && shoes.blood_DNA.len)
 			var/blood_icon_state = "shoeblood"
@@ -913,7 +928,17 @@ var/global/list/damage_icon_parts = list()
 					blood_icon_state = "shoeblood-vox"
 				if("Insectoid")
 					blood_icon_state = "shoeblood-vox"
-			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
+
+
+			//if bloody bare feet icons are added like with bloody hands, something should go here to avoid the blood showing where a missing foot would be
+
+			var/icon/shoebloodicon = icon('icons/effects/blood.dmi', blood_icon_state)
+
+			//only show blood on shoe on present foot
+			if(onefootedmask)
+				shoebloodicon.Blend(icon('icons/mob/feet.dmi', "mask_[onefootedmask]"), ICON_ADD)
+
+			var/image/bloodsies = image(shoebloodicon)
 			bloodsies.color = shoes.blood_color
 			//standing.overlays	+= bloodsies
 			O.overlays += bloodsies

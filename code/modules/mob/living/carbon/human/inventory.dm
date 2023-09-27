@@ -203,7 +203,7 @@
 		if(slot_head)
 			return has_organ(LIMB_HEAD)
 		if(slot_shoes)
-			return has_organ(LIMB_RIGHT_FOOT) && has_organ(LIMB_LEFT_FOOT)
+			return has_organ(LIMB_RIGHT_FOOT) || has_organ(LIMB_LEFT_FOOT)
 		if(slot_wear_suit)
 			return has_organ(LIMB_CHEST)
 		if(slot_w_uniform)
