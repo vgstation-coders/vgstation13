@@ -42,15 +42,22 @@
 	breath.volume = inhale_volume
 	breath.update_values()
 
+	// Instantiate a variable to determine if we should show the player a toxins_alert
+	var/toxic_gas_detected = FALSE
+
 	// First, we consume air.
 	for(var/datum/lung_gas/G in gasses)
 		G.set_context(src,breath,H)
-		G.handle_inhale()
+		toxic_gas_detected |= G.handle_inhale()
 
 	// Next, we exhale. At the moment, only /datum/lung_gas/waste uses this.
 	for(var/datum/lung_gas/G in gasses)
 		G.set_context(src,breath,H)
 		G.handle_exhale()
+
+	// If no toxic gas detected, ensure toxins_alert is disabled
+	if(!toxic_gas_detected)
+		H.toxins_alert = 0
 
 	if( (abs(310.15 - breath.temperature) > 50) && !(M_RESIST_HEAT in H.mutations)) // Hot air hurts :(
 		if(H.status_flags & GODMODE)
