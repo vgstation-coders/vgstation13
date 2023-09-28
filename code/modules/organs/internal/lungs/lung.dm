@@ -64,13 +64,13 @@
 			return 1	//godmode
 		if(breath.temperature < H.species.cold_level_1)
 			if(prob(20))
-				H << "<span class='warning'>You feel your face freezing and an icicle forming in your lungs!</span>"
+				to_chat(H, "<span class='warning'>You feel your face freezing and an icicle forming in your lungs!</span>")
 		else if(breath.temperature > H.species.heat_level_1)
 			if(prob(20))
 				if(isslimeperson(H))
-					H << "<span class='warning'>You feel supercharged by the extreme heat!</span>"
+					to_chat(H, "<span class='warning'>You feel supercharged by the extreme heat!</span>")
 				else
-					H << "<span class='warning'>You feel your face burning and a searing heat in your lungs!</span>"
+					to_chat(H, "<span class='warning'>You feel your face burning and a searing heat in your lungs!</span>")
 
 		if(isslimeperson(H))
 			if(breath.temperature < H.species.cold_level_1)
