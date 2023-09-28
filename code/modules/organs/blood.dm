@@ -205,7 +205,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	var/blood_factor = 1
 	if(species && species.anatomy_flags & NO_BLOOD) //Things that do not bleed do not bleed
 		return 0
-		
+
 	if(lying) //Lying down slows blood loss
 		blood_factor -= 0.3
 
@@ -214,16 +214,16 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	if(reagents.has_reagent(INAPROVALINE)) //Inaprov and Bicard slow bleeding, and stack
 		blood_factor -= 0.3
-		
+
 	if(reagents.has_reagent(BICARIDINE))
 		blood_factor -= 0.3
-		
+
 	if(reagents.has_reagent(CLOTTING_AGENT) || reagents.has_reagent(BIOFOAM)) //Clotting agent and biofoam stop bleeding entirely
 		blood_factor = 0
-	
+
 	if(bodytemperature < 170) //Cryo stops bleeding entirely
 		blood_factor = 0
-		
+
 	return max(0, blood_factor) //Do not return a negative percent, we don't want free blood healing!
 
 //Makes a blood drop, leaking amt units of blood from the mob
@@ -232,10 +232,10 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		return 0
 
 	amt = max(0, amt * calcbloodloss()) //determines how much blood to lose based on human's situation
-	
+
 	if(!amt)
 		return 0
-	
+
 	vessel.remove_reagent(BLOOD,amt)
 	blood_splatter(src,src)
 	stat_collection.blood_spilled += amt
@@ -416,7 +416,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	container.reagents.remove_reagent(BLOOD, amount)
 
-//Transfers blood from container ot vessels, respecting blood types compatability.
+//Transfers blood from container to vessels, respecting blood types compatability.
 /mob/living/carbon/human/inject_blood(obj/item/weapon/reagent_containers/container, var/amount)
 
 	var/datum/reagent/blood/injected = get_blood(container.reagents)
@@ -436,7 +436,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if (istype(container,/obj/item/weapon/reagent_containers/food/drinks/cult))//drinking from this cup is always toxic to non cultists, and safe to cultists
 		if (!iscultist(src))
 			toxic = 2
-	else if (blood_incompatible(injected.data["blood_type"],our.data["blood_type"]))
+	else if (blood_incompatible(injected.data["blood_type"],our.data["blood_type"]) && !isvampire(src)) //Vampires are universal receivers
 		toxic = 1
 
 	switch (toxic)
