@@ -168,11 +168,11 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define VEHICLE_LAYER 				0
 	#define CHAIR_ARMREST_LAYER 		0
 	#define DISPOSALS_CHUTE_LAYER 		0
-	#define RAILING_BACK_LAYER 			0.1
-	#define RAILING_MID_LAYER 			0.2
-	#define RAILING_FRONT_LAYER 		0.3
 	#define WINDOOR_LAYER 				1
-	#define OPEN_CURTAIN_LAYER			2
+	#define RAILING_BACK_LAYER 			2.1
+	#define RAILING_MID_LAYER 			2.2
+	#define RAILING_FRONT_LAYER 		2.3
+	#define OPEN_CURTAIN_LAYER			2.4
 	#define CLOSED_CURTAIN_LAYER		3
 	#define CLOSED_FIREDOOR_LAYER		4
 	#define POTTED_PLANT_LAYER			5
