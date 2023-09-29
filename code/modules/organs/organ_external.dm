@@ -800,18 +800,16 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 		if(slots_to_drop && slots_to_drop.len)
 			for(var/slot_id in slots_to_drop)
-				var/drop_this_slot = TRUE
 
 				//can continue wearing a glove or shoe if a hand or foot remains
 				if(owner.has_organ_for_slot(slot_id))
-					drop_this_slot = FALSE
 					switch(slot_id)
 						if(slot_gloves)
 							owner.update_inv_gloves()
 						if(slot_shoes)
 							owner.update_inv_shoes()
 
-				if(drop_this_slot)
+				else
 					owner.u_equip(owner.get_item_by_slot(slot_id), 1)
 
 		if(grasp_id && can_grasp)
