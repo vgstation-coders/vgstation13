@@ -262,122 +262,95 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	if((abs(x_offset) > 0 && !y_offset) || (abs(y_offset) > 0 && !x_offset))
 		num = FRONT_SHADOW
 
-	//due to only having one set of shadow templates, we need to rotate and flip them for up to 8 different directions
-	//first check is to see if we will need to "rotate" the shadow template
-	var/xy_swap = 0
-	if(abs(x_offset) > abs(y_offset))
-		xy_swap = 1
-
 	// Softer shadows for the side of the wall that's not occluded
+	var/block_1 = FALSE //
+	var/block_2 = FALSE //
 
-	var/block_1 = FALSE // West for FRONT_SHADOW, north for CORNER_SHADOW
-	var/block_2 = FALSE // East for both
+	// Get the grazing angle between the target_turf and the light source
+	var/grazing_angle = Atan2(x_offset, y_offset)
 
-	var/b1_dir = "NORTH"
-	var/b2_dir = "EAST"
 
 	//TODO: rewrite this comment:
 	//using scale to flip the shadow template if needed
 	//horizontal (x) flip is easy, we just check if the offset is negative
 	//vertical (y) flip is a little harder, if the shadow will be rotated we need to flip if the offset is positive,
 	// but if it wont be rotated then we just check if its negative to flip (like the x flip)
-	var/x_flip
-	var/y_flip
-	if(xy_swap)
-		x_flip = y_offset > 0 ? -1 : 1
-		y_flip = x_offset < 0 ? -1 : 1
-	else
-		x_flip = x_offset < 0 ? -1 : 1
-		y_flip = y_offset < 0 ? -1 : 1
+
+	// For offsets. Rewriting using grazing anlge at some point...
+
+	switch(grazing_angle)
+		if (-179 to -91)
+			block_1 = check_wall_occlusion_dir(target_turf, NORTH)
+			block_2 = check_wall_occlusion_dir(target_turf, WEST)
+
+		if (-90)
+			block_1 = check_wall_occlusion_dir(target_turf, EAST)
+			block_2 = check_wall_occlusion_dir(target_turf, WEST)
+
+		if (-89 to -1)
+			block_1 = check_wall_occlusion_dir(target_turf, NORTH)
+			block_2 = check_wall_occlusion_dir(target_turf, EAST)
+
+		if (0)
+			block_1 = check_wall_occlusion_dir(target_turf, NORTH)
+			block_2 = check_wall_occlusion_dir(target_turf, SOUTH)
+
+		if (1 to 89)
+			block_1 = check_wall_occlusion_dir(target_turf, SOUTH)
+			block_2 = check_wall_occlusion_dir(target_turf, WEST)
+
+		if (90)
+			block_1 = check_wall_occlusion_dir(target_turf, EAST)
+			block_2 = check_wall_occlusion_dir(target_turf, WEST)
+
+		if (91 to 179)
+			block_1 = check_wall_occlusion_dir(target_turf, SOUTH)
+			block_2 = check_wall_occlusion_dir(target_turf, WEST)
+
+		if (180)
+			block_1 = check_wall_occlusion_dir(target_turf, NORTH)
+			block_2 = check_wall_occlusion_dir(target_turf, SOUTH)
 
 	// Operation order => xy flip => xy_swap.
 	// Those are not commutative, and as such we have a total of 8 cases:
 	// xy_swap or not (2) and then (x_flip, y_flip, xy_flip, no_flip)
-
-	if (num == FRONT_SHADOW)
-		// Technically North-South...
-		if (xy_swap)
-			block_1 = check_wall_occlusion(get_step(target_turf, NORTH))
-			block_2 = check_wall_occlusion(get_step(target_turf, SOUTH))
-			b1_dir = "NORTH"
-			b2_dir = "SOUTH"
-		else
-			block_1 = check_wall_occlusion(get_step(target_turf, WEST))
-			block_2 = check_wall_occlusion(get_step(target_turf, EAST))
-			b1_dir = "WEST"
-			b2_dir = "EAST"
-	else
-		if (xy_swap)
-			if (x_flip && y_flip) // NE -> SW -> WN (EN ?)
-				block_1 = check_wall_occlusion(get_step(target_turf, EAST))
-				block_2 = check_wall_occlusion(get_step(target_turf, NORTH))
-				b1_dir = "EAST"
-				b2_dir = "NORTH"
-			else if (y_flip) // NE -> SE -> WS
-				block_1 = check_wall_occlusion(get_step(target_turf, WEST))
-				block_2 = check_wall_occlusion(get_step(target_turf, SOUTH))
-				b1_dir = "WEST"
-				b2_dir = "SOUTH"
-			else if (x_flip) // NE -> NW -> EN
-				block_1 = check_wall_occlusion(get_step(target_turf, EAST))
-				block_2 = check_wall_occlusion(get_step(target_turf, NORTH))
-				b1_dir = "EAST"
-				b2_dir = "NORTH"
-			else // NE -> NE -> ES
-				block_1 = check_wall_occlusion(get_step(target_turf, EAST))
-				block_2 = check_wall_occlusion(get_step(target_turf, SOUTH))
-				b1_dir = "EAST"
-				b2_dir = "SOUTH"
-		else
-			if (x_flip && y_flip) // NE -> SW
-				block_1 = check_wall_occlusion(get_step(target_turf, SOUTH))
-				block_2 = check_wall_occlusion(get_step(target_turf, WEST))
-				b1_dir = "SOUTH"
-				b2_dir = "WEST"
-			else if (y_flip) // NE -> SE
-				block_1 = check_wall_occlusion(get_step(target_turf, SOUTH))
-				block_2 = check_wall_occlusion(get_step(target_turf, EAST))
-				b1_dir = "SOUTH"
-				b2_dir = "EAST"
-			else if (x_flip) // NE -> NW
-				block_1 = check_wall_occlusion(get_step(target_turf, NORTH))
-				block_2 = check_wall_occlusion(get_step(target_turf, WEST))
-				b1_dir = "NORTH"
-				b2_dir = "WEST"
-			else // NE -> NE
-				block_1 = check_wall_occlusion(get_step(target_turf, NORTH))
-				block_2 = check_wall_occlusion(get_step(target_turf, EAST))
-				b1_dir = "NORTH"
-				b2_dir = "EAST"
-
-	target_turf.name = "[initial(target_turf.name)] [b1_dir]-[b2_dir]"
-
-	if (block_1)
-		var/obj/item/weapon/paper/P = new(target_turf)
-		P.name = "block1"
-
-	if (block_2)
-		var/obj/item/weapon/paper/nano/P = new(target_turf)
-		P.name = "block2"
-
-	var/shadowoffset = WORLD_ICON_SIZE/2 + (WORLD_ICON_SIZE*light_range)
 
 	var/matrix/M = matrix()
 
 	// Using BYOND's render_target magick here
 
 	var/image/I = new()
-	var/shadow_image_identifier = "shadow[num]_[light_range]_[x_flip]_[y_flip]_[xy_swap]_[abs(y_offset)]_[abs(x_offset)]_[block_1]_[block_2]"
+	var/shadow_image_identifier = "shadow[num]_[light_range]_[grazing_angle]_[abs(y_offset)]_[abs(x_offset)]_[block_1]_[block_2]"
+	var/delta = (abs(x_offset) - abs(y_offset))
+
 	// We've done this before...
 	if (shadow_image_identifier in pre_rendered_shadows)
 		I.render_source = shadow_image_identifier
 	// Or not!
 	else
+		switch(grazing_angle)
+			if (-179 to -91)
+				M.Scale(-1, -1)
 
-		M.Scale(x_flip, y_flip)
-		//here we do the actual rotate if needed
-		if(xy_swap)
-			M.Turn(90)
+			if (-90)
+				M.Scale(1, -1)
+
+			if (-89 to -1)
+				M.Scale(1, -1)
+
+			if (0)
+				M.Turn(90)
+
+			//if (1 to 89)
+
+			//if (90)
+
+			if (91 to 179)
+				M.Scale(-1, 1)
+
+			if (180)
+				M.Turn(-90)
+
 		// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
 		// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
 		// The downside is, of course, that you need to cover all the cases in your switch.
@@ -385,7 +358,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		I = image(shadowicon)
 
 		//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
-		if(xy_swap)
+		if(delta > 0)
 			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
 		else
 			I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
@@ -399,26 +372,52 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	// We caclulate the offset
 	// This is basically a traduction of the old translate matrix big-bang-wahoo
 	// into something more sensible and render_source friendly
-	if(num == CORNER_SHADOW)
-		if((x_flip == 1 && y_flip == 1 && xy_swap == 0) || (x_flip == -1 && y_flip == 1 && xy_swap == 1))
-			I.pixel_x += shadowoffset
-			I.pixel_y += shadowoffset
-		else if((x_flip == 1 && y_flip == -1 && xy_swap == 0) || (x_flip == 1 && y_flip == 1 && xy_swap == 1))
-			I.pixel_x += shadowoffset
-		else if((xy_swap == 0 && x_flip == -y_flip) || (xy_swap == 1 && x_flip == -1 && y_flip == -1))
-			I.pixel_y += shadowoffset
-	else
-		if(x_flip == 1 && y_flip == 1 && xy_swap == 0)
-			I.pixel_y = shadowoffset
-		else if(x_flip == 1 && y_flip == 1 && xy_swap == 1)
-			I.pixel_x += shadowoffset/2
-			I.pixel_y += shadowoffset/2
-		else if(x_flip == 1 && y_flip == -1 && xy_swap == 1)
-			I.pixel_x += -shadowoffset/2
-			I.pixel_y += shadowoffset/2
+	var/shadow_offset = (WORLD_ICON_SIZE/2) + (light_range*WORLD_ICON_SIZE)
+	switch (grazing_angle)
+		if (180)
+			I.pixel_x += -shadow_offset/2
+			I.pixel_y += shadow_offset/2
+
+		if (91 to 179)
+			if (delta < 0)
+				I.pixel_y += shadow_offset
+			else
+				I.pixel_y += shadow_offset - delta*WORLD_ICON_SIZE
+				I.pixel_x += -delta*WORLD_ICON_SIZE
+
+		if (90)
+			I.pixel_y += shadow_offset
+
+		if (1 to 81)
+			if (delta < 0)
+				I.pixel_x += shadow_offset
+				I.pixel_y += shadow_offset
+			else
+				I.pixel_x += shadow_offset + delta*WORLD_ICON_SIZE
+				I.pixel_y += shadow_offset - delta*WORLD_ICON_SIZE
+
+		if (0)
+			I.pixel_x += shadow_offset/2
+			I.pixel_y += shadow_offset/2
+
+		if (-89 to -1)
+			if (delta < 0)
+				I.pixel_x += shadow_offset
+			else
+				I.pixel_x += shadow_offset + delta*WORLD_ICON_SIZE
+				I.pixel_y += delta*WORLD_ICON_SIZE
+
+		//if (-90) do nothing
+
+		if (-179 to -81)
+			if (delta > 0)
+				I.pixel_y += delta*WORLD_ICON_SIZE
+				I.pixel_x += -delta*WORLD_ICON_SIZE
 
 	//and add it to the lights overlays
 	temp_appearance_shadows += I
+//	var/obj/item/weapon/paper/nano/P2 = new(target_turf)
+//	P2.name = "light_range is [light_range]. We are b1 = [block_1], b2 = [block_2] & x = [x_offset] & y = [y_offset], using ([I.icon_state])"
 
 /atom/movable/light/shadow/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	return
@@ -670,6 +669,9 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 // Just explicitly checks if something is a wall... we don't want to cast the hard shadow if the neighbouring occluding obj. is a door, as it will force us to update it
 /proc/check_wall_occlusion(var/turf/T)
 	return iswallturf(T)
+
+/proc/check_wall_occlusion_dir(var/turf/T, var/direction)
+	return iswallturf(get_step(T, direction))
 
 /turf/proc/check_double_occluded(var/atom/movable/light/source)
 	var/x_offset = source.x - x
