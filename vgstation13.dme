@@ -2887,4 +2887,5 @@
 #include "maps\RandomZLevels\stationCollision.dm"
 #include "maps\RandomZLevels\tomb.dm"
 #include "maps\RandomZLevels\wildwest.dm"
+#include "modular_brazuca\code\game\objects\structures\crates_lockers\closets\secure\secure_closets.dm"
 // END_INCLUDE
