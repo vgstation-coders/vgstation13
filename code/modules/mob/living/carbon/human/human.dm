@@ -1490,7 +1490,6 @@
 		var/datum/organ/internal/brain = internal_organs_by_name["brain"]
 		if(brain && istype(brain) && !(brain.status & ORGAN_CUT_AWAY))
 			return 1
-		return 0
 	return 0
 /mob/living/carbon/human/has_eyes()
 	if(internal_organs_by_name["eyes"])
