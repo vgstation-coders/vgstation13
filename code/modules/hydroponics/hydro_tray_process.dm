@@ -235,6 +235,12 @@
 				continue
 			environment.adjust_gas(gas, -(seed.consume_gasses[gas]), FALSE)
 		environment.update_values()
+		
+	// Special case for plasma cabbage plants to absorb plasma from the air
+	// doesn't affect seed/product potency because i can't figure out how to use check_for_divergence()
+	if(istype(seed,/datum/seed/plasmacabbage) && environment[GAS_PLASMA] > 0)
+		environment.adjust_gas(GAS_PLASMA, min(-2,environment[GAS_PLASMA]), FALSE)
+		environment.update_values()
 
 	// Handle gas production.
 	// If we're attached to a pipenet, then we should let the pipenet know we might have modified some gasses

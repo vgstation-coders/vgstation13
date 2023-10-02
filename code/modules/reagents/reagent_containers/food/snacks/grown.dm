@@ -407,9 +407,40 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 /obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage
 	name = "plasma cabbage"
 	desc = "Not to be confused with red cabbage."
+	icon = 'icons/obj/hydroponics/cabbageplasma.dmi'
 	potency = 25
 	filling_color = "#99335C"
 	plantname = "plasmacabbage"
+	var/max_capacity = 200
+	var/current_capacity = 0
+	var/consume_amount = 1
+	
+/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage/New(atom/loc, custom_plantname, mob/harvester)
+	..()
+	processing_objects.Add(src)
+	
+/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage/Destroy()
+	..()
+	processing_objects.Remove(src)
+	
+/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage/process()
+	var/turf/T = get_turf(src)
+	var/datum/gas_mixture/environment
+	if(!environment && istype(T))
+		environment = T.return_air()
+	else
+		environment = space_gas
+		
+	if(environment[GAS_PLASMA] > 0 && current_capacity < max_capacity)
+		var/amount_consumed = min(min(environment[GAS_PLASMA],consume_amount),min(consume_amount,max_capacity-current_capacity))
+		current_capacity += amount_consumed
+		potency += 0.1
+		reagents.reagent_list[2].volume += 0.1
+		environment.adjust_gas(GAS_PLASMA, -(amount_consumed), FALSE)
+		environment.update_values()
+		
+	if (current_capacity >= max_capacity)
+		processing_objects.Remove(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries
 	name = "bunch of berries"
