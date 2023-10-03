@@ -159,7 +159,7 @@ Frequency:
 	autoignition_temperature = AUTOIGNITION_PLASTIC
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_BLUESPACE + "=3"
 	var/list/portals = list()
-	var/charge = HANDTELE_MAX_CHARGE//how many pairs of portal can the hand-tele sustain at once. a new charge is added every 30 seconds until the maximum is reached..
+	var/charge = HANDTELE_MAX_CHARGE//how many pairs of portal can the hand-tele sustain at once. a new charge is added every 30 seconds until the maximum is reached.
 	var/recharging = 0
 	var/destination_id
 	var/destination_name
@@ -184,8 +184,10 @@ Frequency:
 	if((destination_name == "None (Dangerous)"))
 		if(prob(5))
 			T = locate(rand(7, world.maxx - 7), rand(7, world.maxy -7), map.zTCommSat)
+		else
+			destination_id = scramble_destination(user)
 
-	if(!destination_id)
+	else if(!destination_id)
 		if(!choose_destination(user))
 			return
 
