@@ -227,19 +227,15 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_gasses(var/datum/gas_mixture/environment)
 	// Handle gas consumption.
+	// If it has the absorbing trait, takes no damage from lack of gas
 	if(seed.consume_gasses && seed.consume_gasses.len && environment)
 		missing_gas = 0
 		for(var/gas in seed.consume_gasses)
 			if(environment[gas] < seed.consume_gasses[gas])
-				missing_gas++
+				if(!seed.gas_absorb)
+					missing_gas++
 				continue
 			environment.adjust_gas(gas, -(seed.consume_gasses[gas]), FALSE)
-		environment.update_values()
-		
-	// Special case for plasma cabbage plants to absorb plasma from the air
-	// doesn't affect seed/product potency because i can't figure out how to use check_for_divergence()
-	if(istype(seed,/datum/seed/plasmacabbage) && environment[GAS_PLASMA] > 0)
-		environment.adjust_gas(GAS_PLASMA, max(-2,-(environment[GAS_PLASMA])), FALSE)
 		environment.update_values()
 
 	// Handle gas production.

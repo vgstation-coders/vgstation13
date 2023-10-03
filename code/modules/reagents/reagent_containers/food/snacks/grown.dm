@@ -14,6 +14,8 @@ var/list/special_fruits = list()
 	var/hydroflags = 0
 	var/datum/seed/seed
 	var/fragrance
+	var/max_capacity = 200
+	var/current_capacity = 0
 
 	icon = 'icons/obj/hydroponics/apple.dmi'
 	icon_state = "produce"
@@ -26,12 +28,14 @@ var/list/special_fruits = list()
 		if(initial(G.hydroflags) & filter)
 			. += T
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/New(atom/loc, custom_plantname, mob/harvester)
+/obj/item/weapon/reagent_containers/food/snacks/grown/New(atom/loc, custom_plantname, mob/harvester, add_process=0)
 	..()
 	if(custom_plantname)
 		plantname = custom_plantname
 	if(ticker)
 		initialize(harvester)
+	if(add_process)
+		processing_objects.Add(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/initialize(mob/harvester)
 
@@ -260,6 +264,34 @@ var/list/special_fruits = list()
 		spawn()
 			spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
 	return 1
+	
+/obj/item/weapon/reagent_containers/food/snacks/grown/process()
+	var/turf/T = get_turf(src)
+	var/datum/gas_mixture/environment
+	if(!environment && istype(T))
+		environment = T.return_air()
+	else
+		environment = space_gas
+		
+	for (var/gas in seed.consume_gasses)
+		if(environment[gas] > 0 && current_capacity < max_capacity)
+			var/amount_consumed = min(min(environment[gas],seed.consume_gasses[gas]/10),min(seed.consume_gasses[gas]/10,max_capacity-current_capacity))
+			current_capacity += amount_consumed
+			potency += 0.1
+			switch(gas)
+				if(GAS_PLASMA)
+					reagents.add_reagent(PLASMA, seed.consume_gasses[gas]/100)
+				if(GAS_NITROGEN)
+					reagents.add_reagent(NITROGEN, seed.consume_gasses[gas]/100)
+				if(GAS_OXYGEN)
+					reagents.add_reagent(OXYGEN, seed.consume_gasses[gas]/100)
+				if(GAS_CARBON)
+					reagents.add_reagent(CARBON, seed.consume_gasses[gas]/100)
+			environment.adjust_gas(gas, -(amount_consumed), FALSE)
+	environment.update_values()
+		
+	if(current_capacity >= max_capacity)
+		processing_objects.Remove(src)
 
 //Types blacklisted from appearing as products of strange seeds and no-fruit.
 var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown/clover/) //Otherwise the selection would be biased by the relatively large number of multiple leaf-number-specific subtypes - the base type with randomized leaves is still valid.
@@ -411,36 +443,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 25
 	filling_color = "#99335C"
 	plantname = "plasmacabbage"
-	var/max_capacity = 200
-	var/current_capacity = 0
-	var/consume_amount = 1
-	
-/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage/New(atom/loc, custom_plantname, mob/harvester)
-	..()
-	processing_objects.Add(src)
-	
-/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage/Destroy()
-	..()
-	processing_objects.Remove(src)
-	
-/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage/process()
-	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/environment
-	if(!environment && istype(T))
-		environment = T.return_air()
-	else
-		environment = space_gas
-		
-	if(environment[GAS_PLASMA] > 0 && current_capacity < max_capacity)
-		var/amount_consumed = min(min(environment[GAS_PLASMA],consume_amount),min(consume_amount,max_capacity-current_capacity))
-		current_capacity += amount_consumed
-		potency += 0.1
-		reagents.reagent_list[2].volume += 0.1
-		environment.adjust_gas(GAS_PLASMA, -(amount_consumed), FALSE)
-		environment.update_values()
-		
-	if (current_capacity >= max_capacity)
-		processing_objects.Remove(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/berries
 	name = "bunch of berries"
