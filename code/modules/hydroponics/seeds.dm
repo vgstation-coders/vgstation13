@@ -1162,7 +1162,7 @@
 	lifespan = 50
 	maturation = 3
 	production = 5
-	yield = 1
+	yield = 4
 	potency = 10
 	growth_stages = 1
 	ideal_light = 8
