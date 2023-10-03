@@ -1220,6 +1220,9 @@ Thanks.
 /mob/living/proc/has_brain()
 	return 1
 
+/mob/living/proc/has_attached_brain()
+	return 1
+
 /mob/living/proc/has_eyes()
 	return 1
 

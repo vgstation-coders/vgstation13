@@ -159,6 +159,9 @@
 		if(!target.has_brain())
 			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. No central nervous system detected.</span>")
 			return
+		if(!target.has_attached_brain())
+			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Central nervous system detachment detected.</span>")
+			return
 		if(target.mind && target.mind.suiciding)
 			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Unrecoverable nerve trauma detected.</span>") // They suicided so they fried their brain. Space Magic.
 			return
