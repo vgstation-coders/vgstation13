@@ -179,13 +179,17 @@ Frequency:
 		user.show_message("<span class='notice'>\The [src] is recharging!</span>")
 		return
 
+	var/T
+
+	if((destination_name == "None (Dangerous)"))
+		if(prob(5))
+			T = locate(rand(7, world.maxx - 7), rand(7, world.maxy -7), map.zTCommSat)
+
 	if(!destination_id)
 		if(!choose_destination(user))
 			return
-	var/T = destination_id
 
-	if((destination_name == "None (Dangerous)") && prob(5))
-		T = locate(rand(7, world.maxx - 7), rand(7, world.maxy -7), map.zTCommSat)
+	T = destination_id
 
 	var/turf/U = get_turf(src)
 	U.visible_message("<span class='notice'>Locked In.</span>")
@@ -245,6 +249,16 @@ Frequency:
 		src.destination_name = destination_name
 		src.destination_id = destination_id
 		return 1
+
+/obj/item/weapon/hand_tele/proc/scramble_destination(var/mob/user)
+	var/list/turfs = list()
+	for(var/turf/T in trange(10, user))
+		if (T.x > world.maxx - 8 || T.x < 8)
+			continue
+		if (T.y > world.maxy - 8 || T.y < 8)
+			continue
+		turfs += T
+	return pick(turfs)
 
 /obj/item/weapon/hand_tele/AltClick(var/mob/usr)
 	if((usr.incapacitated() || !Adjacent(usr)))
