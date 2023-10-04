@@ -336,6 +336,8 @@
 
 #define iscluwnebanned(H) (jobban_isbanned(H, "Cluwne"))
 
+#define isobserverbanned(H) (jobban_isbanned(H, "Observer"))
+
 //Macro for AREAS!
 
 #define isspace(A) (A.type == /area)

@@ -145,7 +145,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 	if(!recruiter)
 		recruiter = new(src)
 		recruiter.display_name = name
-		recruiter.jobban_roles = list("Syndicate")
+		recruiter.jobban_roles += list("Syndicate")
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
 	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))

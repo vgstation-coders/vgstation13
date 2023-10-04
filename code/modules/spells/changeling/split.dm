@@ -36,7 +36,7 @@
 	if(!recruiter)
 		recruiter = new(owner.current)
 		recruiter.display_name = "Changeling"
-		recruiter.jobban_roles = list("Syndicate")
+		recruiter.jobban_roles += list("Syndicate")
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
 	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))

@@ -37,7 +37,7 @@
 		recruiter = new(src)
 		recruiter.display_name = "borer"
 		recruiter.role = ROLE_BORER
-		recruiter.jobban_roles = list("pAI")
+		recruiter.jobban_roles += list("pAI")
 
 		// A player has their role set to Yes or Always
 		recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))

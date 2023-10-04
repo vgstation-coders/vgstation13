@@ -49,7 +49,7 @@
 		recruiter = new(src)
 		recruiter.display_name = name
 		recruiter.role = role
-		recruiter.jobban_roles = jobban_roles
+		recruiter.jobban_roles += jobban_roles
 
 	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
 	recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))

@@ -65,6 +65,9 @@
 	if(iscluwnebanned(src))
 		output = "<div align='center'><p><a href='byond://?src=\ref[src];cluwnebanned=1'>cluwne</a></p></div>"
 
+	if(isobserverbanned(src))
+		output = "<div align='center'><p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p></div>"
+
 	var/datum/browser/popup = new(src, "playersetup", "<div align='center'>New Player Options</div>", 210, 250)
 	popup.set_content(output)
 	popup.set_window_options("focus=0;can_close=0;can_minimize=1;can_maximize=0;can_resize=1;titlebar=1;")
@@ -310,6 +313,8 @@
 	if(client.prefs.be_random_body)
 		client.prefs.randomize_appearance_for() // No argument means just the prefs are randomized.
 	client.prefs.update_preview_icon(1)
+	if(isobserverbanned(client))
+		client.prefs.preview_icon.Blend(new /icon('icons/mob/head.dmi', "duncecap"), ICON_OVERLAY)
 	observer.icon = client.prefs.preview_icon
 	observer.alpha = 127
 

@@ -120,7 +120,7 @@
 					eviltwinrecruiter = new(src)
 					eviltwinrecruiter.display_name = "time agent twin"
 					eviltwinrecruiter.role = TIMEAGENT
-					eviltwinrecruiter.jobban_roles = list("syndicate")
+					eviltwinrecruiter.jobban_roles += list("syndicate")
 					eviltwinrecruiter.logging = TRUE
 
 					// A player has their role set to Yes or Always

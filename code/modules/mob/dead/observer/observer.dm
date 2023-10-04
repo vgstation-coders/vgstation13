@@ -54,6 +54,11 @@ var/creating_arena = FALSE
 	see_in_dark = 100
 	verbs += /mob/dead/observer/proc/dead_tele
 
+	if (isobserverbanned(body))
+		verbs -= /mob/dead/observer/verb/become_hobo
+		verbs -= /mob/dead/observer/verb/become_mommi
+		verbs -= /mob/dead/observer/verb/become_mouse
+
 	// Our new boo spell.
 	add_spell(new /spell/aoe_turf/boo, "grey_spell_ready")
 	add_spell(new /spell/targeted/ghost/toggle_medHUD)
