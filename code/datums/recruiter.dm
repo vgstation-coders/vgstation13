@@ -6,7 +6,7 @@
 
 	var/display_name
 	var/role // ROLE_*
-	var/list/jobban_roles = list("Observer") // Players who may only observe should not be polled
+	var/list/jobban_roles
 	var/reject_antag_hud = 1
 	var/alien_whitelist_id = null // "Diona"
 	var/recruitment_timeout = 600
@@ -104,6 +104,10 @@
 
 /datum/recruiter/proc/check_observer(var/mob/dead/observer/O)
 	if(reject_antag_hud && O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
+		return 0
+
+	// "Observer" banned players may not be recruited
+	if(isobserverbanned(O))
 		return 0
 
 	if(jobban_roles.len > 0)

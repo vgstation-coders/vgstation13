@@ -81,7 +81,7 @@
 	if(!recruiter)
 		recruiter = new(src)
 		recruiter.display_name = "Holoperson"
-		recruiter.jobban_roles += list(ROLE_POSIBRAIN)
+		recruiter.jobban_roles = list(ROLE_POSIBRAIN)
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
 	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))

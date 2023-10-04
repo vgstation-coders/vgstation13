@@ -38,7 +38,7 @@
 		recruiter = new(src)
 		recruiter.display_name = "posibrain"
 		recruiter.role = ROLE_POSIBRAIN
-		recruiter.jobban_roles += list(ROLE_POSIBRAIN)
+		recruiter.jobban_roles = list(ROLE_POSIBRAIN)
 		recruiter.logging = TRUE
 
 		// A player has their role set to Yes or Always

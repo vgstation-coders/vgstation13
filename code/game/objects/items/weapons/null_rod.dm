@@ -364,7 +364,7 @@
 		recruiter = new(src)
 		recruiter.display_name = name
 		recruiter.role = ROLE_BORER //Uses the borer pref because preferences are scary and i don't want to touch them.
-		recruiter.jobban_roles += list("pAI") // pAI/Borers share the same jobban check so here we go too.
+		recruiter.jobban_roles = list("pAI") // pAI/Borers share the same jobban check so here we go too.
 
 	// Role set to Yes or Always
 	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
