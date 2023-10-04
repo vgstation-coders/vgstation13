@@ -14,8 +14,6 @@ var/list/special_fruits = list()
 	var/hydroflags = 0
 	var/datum/seed/seed
 	var/fragrance
-	var/max_capacity = 200
-	var/current_capacity = 0
 
 	icon = 'icons/obj/hydroponics/apple.dmi'
 	icon_state = "produce"
@@ -274,13 +272,12 @@ var/list/special_fruits = list()
 		environment = space_gas
 		
 	for (var/gas in seed.consume_gasses)
-		if(environment[gas] > 0 && current_capacity < max_capacity)
-			var/amount_consumed = min(min(environment[gas],seed.consume_gasses[gas]/10),min(seed.consume_gasses[gas]/10,max_capacity-current_capacity))
-			current_capacity += amount_consumed
+		if(environment[gas] > 0 && reagents.total_volume < reagents.maximum_volume)
+			var/amount_consumed = min(min(environment[gas],seed.consume_gasses[gas]/10),min(seed.consume_gasses[gas]/10,reagents.maximum_volume-reagents.total_volume))
 			potency += 0.1
 			switch(gas)
 				if(GAS_PLASMA)
-					reagents.add_reagent(PLASMA, seed.consume_gasses[gas]/100)
+					reagents.add_reagent(PLASMA, seed.consume_gasses[gas])
 				if(GAS_NITROGEN)
 					reagents.add_reagent(NITROGEN, seed.consume_gasses[gas]/100)
 				if(GAS_OXYGEN)
@@ -291,7 +288,7 @@ var/list/special_fruits = list()
 			environment.adjust_gas(gas, -(amount_consumed), FALSE)
 	environment.update_values()
 		
-	if(current_capacity >= max_capacity)
+	if(reagents.total_volume >= reagents.maximum_volume)
 		processing_objects.Remove(src)
 
 //Types blacklisted from appearing as products of strange seeds and no-fruit.
