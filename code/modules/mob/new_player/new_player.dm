@@ -61,12 +61,18 @@
 
 	output += "</div>"
 
-	//dumb but doesn't require rewriting this menu
+	// Special bans get different menus
+	if(isobserverbanned(src))
+		output = "<div align = 'center'<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"
+		if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
+			if(job_master)
+				output += "<a href='byond://?src=\ref[src];predict=1'>Manifest Prediction (Unreliable)</A><br>"
+		else
+			output += "<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br>"
+		output += "<p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p></div>"
+
 	if(iscluwnebanned(src))
 		output = "<div align='center'><p><a href='byond://?src=\ref[src];cluwnebanned=1'>cluwne</a></p></div>"
-
-	if(isobserverbanned(src))
-		output = "<div align='center'><p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p></div>"
 
 	var/datum/browser/popup = new(src, "playersetup", "<div align='center'>New Player Options</div>", 210, 250)
 	popup.set_content(output)
