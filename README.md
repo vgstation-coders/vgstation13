@@ -1,4 +1,4 @@
-# /vg/station [![Build Status](https://travis-ci.org/vgstation-coders/vgstation13.svg?branch=master)](https://travis-ci.org/vgstation-coders/vgstation13)
+ss# /vg/station [![Build Status](https://travis-ci.org/vgstation-coders/vgstation13.svg?branch=master)](https://travis-ci.org/vgstation-coders/vgstation13)
 
 [![forinfinityandbyond](https://user-images.githubusercontent.com/5211576/29499758-4efff304-85e6-11e7-8267-62919c3688a9.gif)](https://www.reddit.com/r/SS13/comments/5oplxp/what_is_the_main_problem_with_byond_as_an_engine/dclbu1a)
 
@@ -6,7 +6,7 @@
 
 [IRC](irc://irc.rizon.net/vgstation) (irc.rizon.net #vgstation), here is an embedded link to it:  [![Visit our IRC channel](https://kiwiirc.com/buttons/irc.rizon.net/vgstation.png)](https://kiwiirc.com/client/irc.rizon.net/?nick=Newcomer|?&theme=basic#vgstation)
 
-Discord Coding Server Invite Link:
+ss Discord Coding Server Invite Link:
 No longer available from github due to spambots using it.
 Ask on the /vg/ thread for a link or join the IRC at the link above and ask for an invite, there's a bot that relays messages between IRC and discord.
 
@@ -17,7 +17,7 @@ The simplest but least useful way to obtain the code is using the Github .zip fe
 
 ### Git client
 
-The more complicated but infinitely more useful way is to use a 'git' client.
+sss The more complicated but infinitely more useful way is to use a 'git' client.
 
 We recommend and support our users using the smartgit client, obtainable at [smartgit](http://www.syntevo.com/smartgit/). After installing it, create a new file folder where you want to host the code, right click on that folder and click on "Open in Smartgit".
 
