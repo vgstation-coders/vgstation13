@@ -330,9 +330,23 @@
 	observer.name = observer.real_name
 	if(!client.holder && !config.antag_hud_allowed)           // For new ghosts we remove the verb from even showing up if it's not allowed.
 		observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
+
+	if (isobserverbanned(src))
+		observer = remove_obs_banned_verbs(observer)
+
 	mind.transfer_to(observer)
 	log_admin("([observer.ckey]/[observer]) started the game as a ghost.")
 	qdel(src)
+
+/mob/new_player/proc/remove_obs_banned_verbs(mob/dead/observer/O)
+	O.verbs -= /mob/dead/observer/verb/become_hobo
+	O.verbs -= /mob/dead/observer/verb/become_mommi
+	O.verbs -= /mob/dead/observer/verb/become_mouse
+	O.verbs -= /mob/dead/observer/verb/pai_signup
+
+	for(var/spell/targeted/ghost/become_mouse/spell in O.spell_list)
+		O.remove_spell(spell)
+	return O
 
 /mob/new_player/proc/create_cluwne()
 	var/mob/living/simple_animal/hostile/retaliate/cluwne/cluwne = new()
