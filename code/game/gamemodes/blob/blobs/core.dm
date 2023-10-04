@@ -232,7 +232,7 @@
 		for(var/mob/camera/blob/O in blob_overminds)
 			if(O != B)
 				to_chat(O,"<span class='notice'>A new blob cerebrate has started thinking inside a blob core! [B] joins the blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
-
+	B.UpdateAllElementIcons()
 	return 1
 
 /obj/effect/blob/core/update_icon(var/spawnend = 0)
