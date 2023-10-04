@@ -6,7 +6,7 @@
 
 	var/display_name
 	var/role // ROLE_*
-	var/list/jobban_roles
+	var/list/ = list()
 	var/reject_antag_hud = 1
 	var/alien_whitelist_id = null // "Diona"
 	var/recruitment_timeout = 600
