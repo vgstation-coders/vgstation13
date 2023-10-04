@@ -600,7 +600,7 @@ var/global/objects_thrown_when_explode = FALSE
 								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
 							return CANNOT_EQUIP
 
-				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
+				if(goes_in_mouth && (!H.hasmouth() || ismushroom(H) )) //Item is equipped to the mouth but the species has no mouth.
 					to_chat(H, "<span class='warning'>You have no mouth.</span>")
 					return CANNOT_EQUIP
 
