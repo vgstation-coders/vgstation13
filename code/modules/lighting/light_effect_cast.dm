@@ -269,6 +269,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	// Get the grazing angle between the target_turf and the light source
 	var/grazing_angle = Atan2(x_offset, y_offset)
 
+	var/delta = (abs(x_offset) - abs(y_offset))
 
 	//TODO: rewrite this comment:
 	//using scale to flip the shadow template if needed
@@ -280,49 +281,48 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 	switch(grazing_angle)
 		if (-179 to -91)
-			block_1 = check_wall_occlusion_dir(target_turf, NORTH)
-			block_2 = check_wall_occlusion_dir(target_turf, WEST)
+			block_1 = check_wall_occlusion_dir(target_turf, NORTH) || check_wall_occlusion_dir(target_turf, EAST)
+			block_2 = check_wall_occlusion_dir(target_turf, WEST)  || check_wall_occlusion_dir(target_turf, SOUTH)
 
 		if (-90)
-			block_1 = check_wall_occlusion_dir(target_turf, EAST)
-			block_2 = check_wall_occlusion_dir(target_turf, WEST)
+			block_1 = check_wall_occlusion_dir(target_turf, WEST)
+			block_2 = check_wall_occlusion_dir(target_turf, EAST)
 
 		if (-89 to -1)
-			block_1 = check_wall_occlusion_dir(target_turf, NORTH)
-			block_2 = check_wall_occlusion_dir(target_turf, EAST)
+			block_1 = check_wall_occlusion_dir(target_turf, NORTH) || check_wall_occlusion_dir(target_turf, WEST)
+			block_2 = check_wall_occlusion_dir(target_turf, EAST)  || check_wall_occlusion_dir(target_turf, SOUTH)
 
 		if (0)
 			block_1 = check_wall_occlusion_dir(target_turf, NORTH)
 			block_2 = check_wall_occlusion_dir(target_turf, SOUTH)
 
 		if (1 to 89)
-			block_1 = check_wall_occlusion_dir(target_turf, SOUTH)
-			block_2 = check_wall_occlusion_dir(target_turf, WEST)
+			block_1 = check_wall_occlusion_dir(target_turf, WEST) || check_wall_occlusion_dir(target_turf, NORTH)
+			block_2 = check_wall_occlusion_dir(target_turf, EAST) || check_wall_occlusion_dir(target_turf, SOUTH)
 
 		if (90)
-			block_1 = check_wall_occlusion_dir(target_turf, EAST)
-			block_2 = check_wall_occlusion_dir(target_turf, WEST)
+			block_1 = check_wall_occlusion_dir(target_turf, WEST)
+			block_2 = check_wall_occlusion_dir(target_turf, EAST)
 
 		if (91 to 179)
-			block_1 = check_wall_occlusion_dir(target_turf, SOUTH)
-			block_2 = check_wall_occlusion_dir(target_turf, WEST)
+			block_1 = check_wall_occlusion_dir(target_turf, SOUTH) || check_wall_occlusion_dir(target_turf, EAST)
+			block_2 = check_wall_occlusion_dir(target_turf, WEST)  || check_wall_occlusion_dir(target_turf, NORTH)
 
 		if (180)
-			block_1 = check_wall_occlusion_dir(target_turf, NORTH)
-			block_2 = check_wall_occlusion_dir(target_turf, SOUTH)
+			block_1 = check_wall_occlusion_dir(target_turf, SOUTH)
+			block_2 = check_wall_occlusion_dir(target_turf, NORTH)
 
 	// Operation order => xy flip => xy_swap.
 	// Those are not commutative, and as such we have a total of 8 cases:
 	// xy_swap or not (2) and then (x_flip, y_flip, xy_flip, no_flip)
 
-	var/matrix/M = matrix()
+	var/matrix/M = matrix() //
+	var/shadowicon_txt
 
 	// Using BYOND's render_target magick here
 
 	var/image/I = new()
 	var/shadow_image_identifier = "shadow[num]_[light_range]_[grazing_angle]_[abs(y_offset)]_[abs(x_offset)]_[block_1]_[block_2]"
-	var/delta = (abs(x_offset) - abs(y_offset))
-
 	// We've done this before...
 	if (shadow_image_identifier in pre_rendered_shadows)
 		I.render_source = shadow_image_identifier
@@ -356,12 +356,24 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		// The downside is, of course, that you need to cover all the cases in your switch.
 		var/icon/shadowicon = try_get_light_range_icon(block_1, block_2, light_range, num)
 		I = image(shadowicon)
+		shadowicon_txt = "[shadowicon]"
 
 		//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
-		if(delta > 0)
-			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+		if (num == CORNER_SHADOW)
+			if(delta == 0)
+				I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+			else if (delta > 0)
+				I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
+			else
+				I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
 		else
-			I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
+			if (delta > 0)
+				I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+			else
+				I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
+
+		//var/obj/item/weapon/paper/nano/P2 = new(target_turf)
+		//P2.name = "[I.icon_state] && [shadowicon]"
 
 		I.transform = M
 		I.layer = LIGHTING_LAYER
@@ -379,45 +391,30 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 			I.pixel_y += shadow_offset/2
 
 		if (91 to 179)
-			if (delta < 0)
-				I.pixel_y += shadow_offset
-			else
-				I.pixel_y += shadow_offset - delta*WORLD_ICON_SIZE
-				I.pixel_x += -delta*WORLD_ICON_SIZE
+			I.pixel_y += shadow_offset
 
 		if (90)
 			I.pixel_y += shadow_offset
 
 		if (1 to 81)
-			if (delta < 0)
-				I.pixel_x += shadow_offset
-				I.pixel_y += shadow_offset
-			else
-				I.pixel_x += shadow_offset + delta*WORLD_ICON_SIZE
-				I.pixel_y += shadow_offset - delta*WORLD_ICON_SIZE
+			I.pixel_x += shadow_offset
+			I.pixel_y += shadow_offset
 
 		if (0)
 			I.pixel_x += shadow_offset/2
 			I.pixel_y += shadow_offset/2
 
 		if (-89 to -1)
-			if (delta < 0)
-				I.pixel_x += shadow_offset
-			else
-				I.pixel_x += shadow_offset + delta*WORLD_ICON_SIZE
-				I.pixel_y += delta*WORLD_ICON_SIZE
+			I.pixel_x += shadow_offset
 
 		//if (-90) do nothing
 
-		if (-179 to -81)
-			if (delta > 0)
-				I.pixel_y += delta*WORLD_ICON_SIZE
-				I.pixel_x += -delta*WORLD_ICON_SIZE
+		//if (-179 to -81)
 
 	//and add it to the lights overlays
 	temp_appearance_shadows += I
-//	var/obj/item/weapon/paper/nano/P2 = new(target_turf)
-//	P2.name = "light_range is [light_range]. We are b1 = [block_1], b2 = [block_2] & x = [x_offset] & y = [y_offset], using ([I.icon_state])"
+	var/obj/item/weapon/paper/nano/P2 = new(target_turf)
+	P2.name = "light_range is [light_range]. We are b1 = [block_1], b2 = [block_2] and [shadowicon_txt] && [I.icon_state]"
 
 /atom/movable/light/shadow/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	return
@@ -449,6 +446,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		img.pixel_x = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (x_offset * world.icon_size)
 		img.pixel_y = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (y_offset * world.icon_size)
 		img.layer = ROID_TURF_LIGHT_LAYER
+		temp_appearance_shadows
 		temp_appearance += img
 
 	var/turf_shadow_image_identifier = "white_turf"
@@ -496,7 +494,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	if (light_range < 3)
 		return
 
-
+	/*
 	// And then blacken out what's unvisible
 	// -- eliminating the underglow
 
@@ -519,6 +517,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 		black_turf.layer = ANTI_GLOW_PASS_LAYER
 		temp_appearance += black_turf
+	*/
 
 // Smooth out shadows and then blacken out the wall glow
 /atom/movable/light/shadow/post_processing()
@@ -526,12 +525,13 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	overlays = temp_appearance
 	filters = filter(type = "blur", size = BLUR_SIZE)
 
+	/*
 	// -- eliminating the underglow
 	for (var/turf/T in affected_shadow_walls)
 		for (var/dir in cardinal)
 
 			var/turf/neighbour = get_step(T, dir)
-			if (neighbour && !CHECK_OCCLUSION(neighbour))
+			if (neighbour && !(neighbour in view(src)))
 
 				var/image/black_turf = new()
 
@@ -543,13 +543,13 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 					black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
 					pre_rendered_shadows += "postprocess_black_turf_prerender"
 
-				var/x_offset = neighbour.x - x
-				var/y_offset = neighbour.y - y
+				var/x_offset = (neighbour.x - x)
+				var/y_offset = (neighbour.y - y)
 				black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 				black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 				black_turf.layer = ANTI_GLOW_PASS_LAYER
 				temp_appearance += black_turf
-
+	*/
 /atom/movable/light/proc/update_light_dir()
 	if(light_type == LIGHT_DIRECTIONAL)
 		follow_holder_dir()

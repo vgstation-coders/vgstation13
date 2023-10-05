@@ -8,7 +8,7 @@
 	var/on = 0
 	var/obj/item/weapon/cell/high/cell = /obj/item/weapon/cell/high
 	var/powercost = 5
-	light_range = 5
+	light_range = 9
 	light_power = 2
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE

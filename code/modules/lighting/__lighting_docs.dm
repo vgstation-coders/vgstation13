@@ -48,8 +48,6 @@ atom: (lighting_atom.dm)
   - var/atom/movable/light/shadow/shadow_obj; wall shadow source object for this atom, with TILE_BOUND to prevent it from bleeding over other walls
 
 	NB: this means that the object casts its light twice, one for the people who can see it, another for those who can't.
-    NB2: due to additive colour mixing, this means a normal colour would be shifted to white. To prevent this, light atoms have RGB numbers halved.
-	.... when they recombine, we see the original light.
 
   - var/moody_light_type; light type of the "glowing mask" on top of the atom. This mask is in 'icons/lighting/special.dmi'.
     use the icon_sate correspondoing to 'overlay[overlay_state]'. Black pixels are not glowing, transparent pixels (0 alpha) emit light.
