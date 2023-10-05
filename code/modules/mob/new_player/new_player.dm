@@ -318,9 +318,7 @@
 	// Has to be done here so we can get our random icon.
 	if(client.prefs.be_random_body)
 		client.prefs.randomize_appearance_for() // No argument means just the prefs are randomized.
-	client.prefs.update_preview_icon(1)
-	if(isobserverbanned(client))
-		client.prefs.preview_icon.Blend(new /icon('icons/mob/head.dmi', "duncecap"), ICON_OVERLAY)
+	client.prefs.update_preview_icon(1, src)
 	observer.icon = client.prefs.preview_icon
 	observer.alpha = 127
 

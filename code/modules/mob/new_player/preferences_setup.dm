@@ -158,7 +158,7 @@
 
 		.[key] = from_list[key]
 
-/datum/preferences/proc/update_preview_icon(var/for_observer=0)		//seriously. This is horrendous.
+/datum/preferences/proc/update_preview_icon(var/for_observer=0, var/mob/client=null)		//seriously. This is horrendous.
 	preview_icon_front = null
 	preview_icon_side = null
 	preview_icon = null
@@ -541,6 +541,10 @@
 				var/drink_icon = pick('icons/mob/in-hand/right/drinkingglass.dmi', 'icons/mob/in-hand/left/drinkingglass.dmi')
 				var/drink_icon_state = pick("coffee", "cafe_latte", "beer", "alebottle", "gargleblasterglass", "energy_drink", "sangria", "gintonicglass")
 				clothes_s.Blend(new /icon(drink_icon, drink_icon_state), ICON_OVERLAY)
+
+	// "Observer" banned players get a dunce cap
+	if(client != null && isobserverbanned(client))
+		clothes_s.Blend(new /icon('icons/mob/head.dmi', "duncecap"), ICON_OVERLAY)
 
 	if(disabilities & NEARSIGHTED)
 		preview_icon.Blend(new /icon('icons/mob/eyes.dmi', "glasses"), ICON_OVERLAY)
