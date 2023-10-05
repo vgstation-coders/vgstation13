@@ -11,7 +11,9 @@ Check the thread on /vg/ for a link or ask a player in-game for an invite.
 ---
 
 ### GETTING THE CODE
-The simplest but least useful way to obtain the code is using the Github .zip feature. You can click [here](https://github.com/vgstation-coders/vgstation13/archive/Bleeding-Edge.zip) to get the latest stable code as a .zip file, then unzip it to wherever you want. Alternatively, a much more useful method is to use a Git client, the process for getting and using one is described below. If you're still having difficulty, reach out to one of our coders on Discord and they should be happy to help.
+The simplest but least useful way to obtain the code is using the Github .zip feature. You can click [here](https://github.com/vgstation-coders/vgstation13/archive/Bleeding-Edge.zip) to get the latest stable code as a .zip file, then unzip it to wherever you want. This is mostly useful for people looking to get assets from the server or to host a quick short-term game between friends.
+
+Alternatively, the code can be acquired via the use of a Git client as described below. If you're still having difficulty, reach out to one of our coders on Discord and they should be happy to help.
 
 ### Git client
 
@@ -21,13 +23,11 @@ We recommend our users use the Github Desktop client, available [here](https://d
 
 Once the fork is complete, go back to the Github Desktop client and press the 'Current Reposistory' button at the top left. From there, click 'Add', then 'Clone Reposistory'. If your fork doesn't appear on the list immediately, press the refresh button at the top right and it should find it. Once you've selected it, Github Desktop will then begin downloading the codebase to the specified location on your machine. Once the clone finishes downloading, you've got your own copy of the code ready to go complete with easy tools to keep it sync'd and to make your own PRs to the repo.
 
-If your codebase is behind on the latest updates to the code, navigate to the page for your forked repository on Github and press the Sync Fork button near the top of the page. Once that's done, press the 'Fetch Origin' button on your Github Desktop client and after it completes that action it should prompt your to 'Pull' the newest updates which will bring your code back up to date with /vg/.
+If your repository is behind on the latest updates to the code, navigate to the page for your forked repository on Github and press the Sync Fork button near the top of the page. Once that's done, press the 'Fetch Origin' button on your Github Desktop client and after it completes that action it should prompt your to 'Pull' the newest updates which will bring your code back up to date with /vg/.
 
 #### Contributing Code
 
-To contribute code updates to /vg/, open your Github Desktop client and from the 'Branch' dropdown menu, select 'New Branch'. Give this new branch a name that reflects what you're looking to change or update. 
-
-Warning: If you checkout different branches or update the code while Dream Maker is open, this can cause problems when someone adds/removes files or when one of the files changed is currently open.
+To contribute code updates to /vg/, open your Github Desktop client and from the 'Branch' dropdown menu, select 'New Branch'. Give this new branch a name that reflects what you're looking to change or update. From the main screen, press the 'Publish Branch' button to add it to your repo. From there, it's simply a matter of editing the files you wish to change in your editor of choice. By pressing the 'Commit' button on Github Desktop, you save your current changes to your branch and then press 'Push Origin' to upload them to your online repository which means you can change branch to another project should you need to without losing any of your work. Once you've committed all the changes you wanted and have tested your work, you can press the 'Preview Pull Request' button to see a summary of all the changes you've made, then 'Create Pull Request' to submit your proposed changes to Github for review by the Collaborators in charge of the master codebase.
 
 #### Branches
 
