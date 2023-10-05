@@ -665,11 +665,11 @@ var/list/admin_verbs_mod = list(
 			var/heavy_impact_range = input("Heavy impact range (in tiles):") as num
 			var/light_impact_range = input("Light impact range (in tiles):") as num
 			var/flash_range = input("Flash range (in tiles):") as num
-			if(var/devastation_range > 299 || var/heavy_impact_range > 299 || var/light_impact_range > 299)
+			if(devastation_range > 299 || heavy_impact_range > 299 || light_impact_range > 299)
 				if(alert(usr, "THIS EXPLOSION MAY CRASH THE SERVER, ARE YOU REALLY SURE?", "DANGER ZONE", "Yes", "No") == "No")
 					return 0;
 				log_admin("[key_name(usr)] decided to set off a potentially server-crashing bomb despite the warning.")
-			else if (var/devastation_range > 149 || var/heavy_impact_range > 149 || var/light_impact_range > 149)
+			else if (devastation_range > 149 || heavy_impact_range > 149 || light_impact_range > 149)
 				if(alert(usr, "This explosion is likely to cause significant server lag, continue anyway?", "Lag Warning", "Yes", "No") == "No")
 					return 0;
 				log_admin("[key_name(usr)] decided to set off a potentially server-lagging bomb despite the warning.")
