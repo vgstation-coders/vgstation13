@@ -170,43 +170,6 @@ Attach to transfer valve and open. BOOM.
 
 	qdel(src)
 
-// Algorithm by Tanner Helland (https://tannerhelland.com/2012/09/18/convert-temperature-rgb-algorithm-code.html)
-/obj/effect/fire/proc/KelvinToRGB(k)
-	var/r = 0
-	var/g = 0
-	var/b = 0
-	var/const/fullBlue = 66 // Temperature where b is 255. (6600 K)
-
-	k = k / 100
-
-	if (k <= fullBlue)
-		r = 255
-	else
-		r = k - 60;
-		r = 329.698727466 * (r ** -0.1332047592)
-		r = clamp(r, 0, 255)
-	
-	if (k <= fullBlue)
-		g = k;
-		g = 99.4708025861 * log(g) - 161.1195681661;
-		g = clamp(g, 0, 255)
-	else
-		g = k - 60
-		g = 288.1221695283 * (g ** -0.0755148492)
-		g = clamp(g, 0, 255)
-
-	if (k >= fullBlue)
-		b = 255
-	else
-		if (k <= 19)
-			b = 0
-		else 
-			b = k - 10
-			b = 138.5177312231 * log(b) - 305.0447927307
-			b = clamp(b, 0, 255)
-
-	return rgb(r, g, b)
-
 /obj/effect/fire/process()
 	if(timestopped)
 		return 0
@@ -224,10 +187,6 @@ Attach to transfer valve and open. BOOM.
 		return
 
 	var/datum/gas_mixture/air_contents = S.return_air()
-	
-	// Update fire color.
-	color = KelvinToRGB(air_contents.temperature)
-	light_color = color
 
 	//since the air is processed in fractions, we need to make sure not to have any minuscle residue or
 	//the amount of moles might get to low for some functions to catch them and thus result in wonky behaviour
@@ -248,16 +207,20 @@ Attach to transfer valve and open. BOOM.
 
 	//get a firelevel and set the icon
 	var/firelevel = air_contents.calculate_firelevel(S)
+	var/heatlight = max(1, air_contents.temperature / 2000)
+
+	// Update fire color.
+	color = heat2color(air_contents.temperature)
 
 	if(firelevel > 6)
 		icon_state = "key3"
-		set_light(7, 3)
+		set_light(7, 3 * heatlight, color)
 	else if(firelevel > 2.5)
 		icon_state = "key2"
-		set_light(5, 2)
+		set_light(5, 2 * heatlight, color)
 	else
 		icon_state = "key1"
-		set_light(3, 1)
+		set_light(3, 1 * heatlight, color)
 
 	//im not sure how to implement a version that works for every creature so for now monkeys are firesafe
 	for(var/mob/living/carbon/human/M in loc)
