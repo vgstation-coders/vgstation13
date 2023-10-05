@@ -15,7 +15,7 @@ The simplest but least useful way to obtain the code is using the Github .zip fe
 
 ### Git client
 
-The slightly more complicated but way more useful way is to use a Git client.
+The slightly more complicated but way more useful way is to use a Git client. If you want to contribute code and updates to /vg/, you're going to want to do things this way.
 
 We recommend our users use the Github Desktop client, available [here](https://desktop.github.com/). After installing the client and logging in with your Github account, go back to the [Github page](https://github.com/vgstation-coders/vgstation13) for our code and press the "Fork" button at the top of the page. This will walk you through the process of creating a clone of our codebase on your account.
 
@@ -25,7 +25,7 @@ If your codebase is behind on the latest updates to the code, navigate to the pa
 
 #### Contributing Code
 
-To contribute code updates to /vg/,
+To contribute code updates to /vg/, open your Github Desktop client and from the 'Branch' dropdown menu, select 'New Branch'. Give this new branch a name that reflects what you're looking to change or update. 
 
 Warning: If you checkout different branches or update the code while Dream Maker is open, this can cause problems when someone adds/removes files or when one of the files changed is currently open.
 
