@@ -14,7 +14,7 @@ var/ape_mode = APE_MODE_OFF
 		if("Only new players are apes")
 			ape_mode = APE_MODE_NEW_PLAYERS
 			message_admins("<span class='notice'>[key_name_admin(usr)] turned on ape mode: Only new players are apes.</span>")
-	var/datum/persistence_task/task = SSpersistence_misc.tasks[/datum/persistence_task/ape_mode]
+	var/datum/persistence_task/task = SSpersistence_misc.tasks["/datum/persistence_task/ape_mode"]
 	task.on_shutdown()
 
 /mob/proc/apeify()

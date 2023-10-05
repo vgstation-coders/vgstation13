@@ -30,6 +30,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/after_consume(var/mob/M)
 
+	log_attack("[M]([M.ckey]) ate [src], last touched by [fingerprintslast]")
 	if(!contained_mob)
 		return
 	if(ispath(contained_mob))

@@ -18,34 +18,28 @@ var/datum/subsystem/more_init/SSmore_init
 	setup_news()
 
 	var/watch=start_watch()
-	log_startup_progress("Caching damage icons...")
 	cachedamageicons()
-	log_startup_progress("  Finished caching damage icons in [stop_watch(watch)]s.")
+	log_debug("  Finished caching damage icons in [stop_watch(watch)]s.", FALSE)
 
 	watch=start_watch()
-	log_startup_progress("Caching space parallax simulation...")
 	create_global_parallax_icons()
-	log_startup_progress("  Finished caching space parallax simulation in [stop_watch(watch)]s.")
+	log_debug("  Finished caching space parallax simulation in [stop_watch(watch)]s.", FALSE)
 
 	if (!config.skip_minimap_generation)
 		watch=start_watch()
-		log_startup_progress("Generating holominimaps...")
 		generateHoloMinimaps()
-		log_startup_progress("  Finished holominimaps in [stop_watch(watch)]s.")
+		log_debug("  Finished holominimaps in [stop_watch(watch)]s.", FALSE)
 	else
 		//holomaps_initialized = 1 //Assume holominimaps were prerendered, the worst thing that happens if they're missing is that the minimap consoles don't show a minimap - NO IT'S NOT YOU DUMBFUCK, THOSE VARS EXIST FOR A REASON
 		log_startup_progress("Not generating holominimaps - SKIP_HOLOMINIMAP_GENERATION found in config/config.txt")
-	..()
 
 	if(config.media_base_url)
 		watch = start_watch()
-		log_startup_progress("Caching jukebox playlists...")
 		load_juke_playlists()
-		log_startup_progress("  Finished caching jukebox playlists in [stop_watch(watch)]s.")
+		log_debug("  Finished caching jukebox playlists in [stop_watch(watch)]s.", FALSE)
 	..()
 
 	watch=start_watch()
-	log_startup_progress("Doing the other misc. initializations...")
 	process_teleport_locs()				//Sets up the wizard teleport locations
 	process_ghost_teleport_locs()		//Sets up ghost teleport locations.
 	process_adminbus_teleport_locs()	//Sets up adminbus teleport locations.
@@ -57,7 +51,7 @@ var/datum/subsystem/more_init/SSmore_init
 	CHECK_TICK
 	centcomm_store = new
 	create_randomized_reagents()
-	log_startup_progress("Finished doing the other misc. initializations in [stop_watch(watch)]s.")
+	log_debug("Finished doing the other misc. initializations in [stop_watch(watch)]s.", FALSE)
 
 /proc/cache_machinery_components_rating()
 	var/list/cache = list()

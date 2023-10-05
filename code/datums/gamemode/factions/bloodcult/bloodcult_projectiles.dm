@@ -64,9 +64,6 @@
 		blade.dir = get_dir(starting,target)
 	shadow_matrix = turn(matrix(),target_angle+45)
 	transform = shadow_matrix
-	//var/matrix/base_matrix = turn(matrix(),target_angle)
-	//var/image/I = image('icons/obj/cult_64x64.dmi',"[icon_state]_spin")
-	//I.transform = base_matrix
 	if (shade)
 		icon_state = "soulbullet_spin"
 		plane = HUD_PLANE
@@ -75,13 +72,6 @@
 		icon_state = "soulbullet-empty_spin"
 	spawn(5)
 		leave_shadows = 0
-		/*
-		if( !("[icon_state]_angle[target_angle]" in bullet_master) )
-			var/image/I = new('icons/obj/cult_64x64.dmi',"[icon_state]")
-			//I.transform = base_matrix
-			bullet_master["[icon_state]_angle[target_angle]"] = I
-		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
-		*/
 		if (shade)
 			icon_state = "soulbullet"
 		else
@@ -102,17 +92,19 @@
 	if (shade)
 		if (ismob(A))
 			var/mob/M = A
-			if (!iscultist(M))
+			if (!iscultist(M) && (M != shade.master))
 				A.attackby(blade,shade)
-			else if (!M.get_active_hand())//cultists can catch the blade on the fly
+			else if (!M.get_active_hand())//cultists and the blade's master can catch the blade on the fly
 				blade.forceMove(loc)
 				blade.attack_hand(M)
+				to_chat(M, "<span class='warning'>Your hand moves by itself and catches \the [blade] out of the air.</span>")
 				blade = null
 				qdel(src)
-			else if (!M.get_inactive_hand())//cultists can catch the blade on the fly
+			else if (!M.get_inactive_hand())
 				blade.forceMove(loc)
 				M.swap_hand() // guarrantees
 				blade.attack_hand(M)
+				to_chat(M, "<span class='warning'>Your hand moves by itself and catches \the [blade] out of the air.</span>")
 				M.swap_hand()
 				blade = null
 				qdel(src)
@@ -121,8 +113,22 @@
 	else
 		if (ismob(A))
 			var/mob/M = A
-			if (!iscultist(M))
+			if (!iscultist(M) && (M != shade.master))
 				A.hitby(blade)
+			else if (!M.get_active_hand())//cultists and the blade's master can catch the blade on the fly
+				blade.forceMove(loc)
+				blade.attack_hand(M)
+				to_chat(M, "<span class='warning'>Your hand moves by itself and catches \the [blade] out of the air.</span>")
+				blade = null
+				qdel(src)
+			else if (!M.get_inactive_hand())
+				blade.forceMove(loc)
+				M.swap_hand()
+				blade.attack_hand(M)
+				to_chat(M, "<span class='warning'>Your hand moves by itself and catches \the [blade] out of the air.</span>")
+				M.swap_hand()
+				blade = null
+				qdel(src)
 		else
 			A.hitby(blade)
 	if(isliving(A))
@@ -195,7 +201,7 @@
 //////////////////////////////
 
 /obj/item/projectile/bloodslash
-	name = "soul blade"
+	name = "blood slash"
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "bloodslash"
 	damage = 15

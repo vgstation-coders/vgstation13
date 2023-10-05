@@ -652,9 +652,11 @@
 	id = "occult_blood_test"
 	required_reagents = list(HOLYSALTS = 5)
 	required_catalysts = list(BLOOD = 5)
+	result = SODIUMCHLORIDE
+	result_amount = 5
 	quiet = TRUE
 
-/datum/chemical_reaction/cultcheck/on_reaction(var/datum/reagents/holder, var/created_volume)
+/datum/chemical_reaction/occult_blood_test/on_reaction(var/datum/reagents/holder, var/created_volume)
 	for(var/datum/reagent/blood/B in holder.reagent_list)
 		var/turf/T = get_turf(holder.my_atom)
 		if ("occult" in B.data)
@@ -1375,6 +1377,7 @@
 	if(istype(holder.my_atom, /obj/item/slime_extract))
 		var/obj/item/slime_extract/S = holder.my_atom
 		S.Uses--
+		S.update_icon()
 		if(S.Uses <= 0)
 			if(!istype(S.loc, /obj/item/weapon/grenade/chem_grenade) && !quiet)
 				S.visible_message("<span class='notice'>[bicon(holder.my_atom)] \The [holder.my_atom]'s power is consumed in the reaction.</span>")
@@ -3012,6 +3015,20 @@
 	required_reagents = list(GIN = 3, CHERRYJELLY = 1)
 	result_amount = 4
 
+/datum/chemical_reaction/mimosa
+	name = "Mimosa"
+	id = MIMOSA
+	result = MIMOSA
+	required_reagents = list(CHAMPAGNE = 1, ORANGEJUICE = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/lemondrop
+	name = "Lemon Drop"
+	id = LEMONDROP
+	result = LEMONDROP
+	required_reagents = list(LEMONJUICE = 1, TRIPLESEC = 1, VODKA = 1)
+	result_amount = 3
+
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
 /datum/chemical_reaction/sbiten
@@ -4098,7 +4115,7 @@
 	var/datum/reagent/bumcivilian/B = locate(/datum/reagent/bumcivilian) in holder.reagent_list
 	for(var/turf/T in view(get_turf(holder.my_atom)))
 		T.mute_time = world.time + B.mute_duration
-	
+
 /datum/chemical_reaction/random
 	name = "Random chemical"
 	id = "random"
@@ -4106,6 +4123,13 @@
 	required_reagents = list(NOTHING = 10, PHAZON = 10)
 	required_catalysts = list(MUTAGEN = 10, ENZYME = 10)
 	result_amount = 1
+
+/datum/chemical_reaction/fake_creep // Xenomorph weeds aka creep.
+	name = "Dan's Purple Drank"
+	id = FAKE_CREEP
+	result = FAKE_CREEP
+	required_reagents = list(MUTAGEN = 1, PLASMA = 1, DISCOUNT = 1)
+	result_amount = 3
 
 /datum/chemical_reaction/random/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()

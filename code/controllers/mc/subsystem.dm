@@ -157,7 +157,6 @@
 	var/time = (world.timeofday - start_timeofday) / 10
 	var/msg = "Initialized [name] subsystem within [time] seconds!"
 	log_debug(msg,FALSE) // Redundant chat output as whole world sees message below anyways
-	world.log << msg
 	to_chat(world, "<span class='danger'>[msg]</span>")
 	initialized = TRUE
 	return time

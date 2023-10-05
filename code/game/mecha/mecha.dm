@@ -86,6 +86,8 @@
 	var/obj/item/mecha_parts/mecha_equipment/selected
 	var/max_equip = 3 //The maximum amount of equipment this mecha an hold at one time.
 
+	var/obj/item/weapon/mecha_fist/fist = null
+
 	var/turf/crashing = null
 	var/list/mech_parts = list()
 
@@ -113,6 +115,7 @@
 		removeVerb(/obj/mecha/verb/connect_to_port)
 		removeVerb(/obj/mecha/verb/toggle_internal_tank)
 	add_cell()
+	add_fist()
 	if(starts_with_tracking_beacon)
 		add_tracking_beacon()
 	add_iterators()
@@ -174,6 +177,8 @@
 	connected_port = null
 	if(radio)
 		QDEL_NULL(radio)
+	if(fist)
+		QDEL_NULL(fist)
 	if(electropack)
 		QDEL_NULL(electropack)
 	if(tracking)
@@ -224,6 +229,11 @@
 		GAS_NITROGEN, N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature))
 	mech_parts.Add(cabin_air)
 	return cabin_air
+
+/obj/mecha/proc/add_fist()
+	fist = new
+	fist.name = "[src]'s fist"
+	fist.force = src.force
 
 /obj/mecha/proc/add_radio()
 	radio = new(src)
@@ -1277,7 +1287,8 @@
 		src.Entered(mmi_as_oc)
 		src.Move(src.loc)
 		src.silicon_pilot = TRUE
-		src.icon_state = src.silicon_icon_state
+		if(src.silicon_icon_state)
+			src.icon_state = src.silicon_icon_state
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
 			set_light(light_range_off)
@@ -1373,6 +1384,18 @@
 			continue
 		O.forceMove(loc) //Somehow got inside, drop it.
 
+/obj/mecha/Exited(var/atom/movable/O) // Used for teleportation from within the mecha.
+	if (O == occupant)
+		occupant << browse(null, "window=exosuit")
+		remove_mech_spells()
+		if(occupant.client)
+			occupant.client.mouse_pointer_icon = initial(occupant.client.mouse_pointer_icon)
+		occupant = null
+		icon_state = initial_icon+"-open"
+		for (var/datum/faction/F in factions_with_hud_icons)
+			F.update_hud_icons()
+	..()
+
 /obj/mecha/proc/go_out(var/exit = loc, var/exploding = FALSE)
 	if(!occupant)
 		return
@@ -1397,24 +1420,27 @@
 		return
 
 	var/obj/structure/deathsquad_gravpult/G = locate() in get_turf(src)
-	if(mob_container.forceMove(exit))//ejecting mob container
+	if(mob_container)
 		log_message("[mob_container] moved out.")
 		occupant.reset_view()
 		empty_bad_contents()
 		occupant << browse(null, "window=exosuit")
 		remove_mech_spells()
-		if(istype(mob_container, /obj/item/device/mmi) || istype(mob_container, /obj/item/device/mmi/posibrain))
-			var/obj/item/device/mmi/mmi = mob_container
-			if(mmi.brainmob)
-				occupant.forceMove(mmi)
-				mech_parts.Remove(mmi)
-			occupant.canmove = FALSE
-			mmi.mecha = null
-			verbs += /obj/mecha/verb/eject
 
 		//change the cursor
 		if(occupant && occupant.client)
 			occupant.client.mouse_pointer_icon = initial(occupant.client.mouse_pointer_icon)
+
+		mob_container.forceMove(exit)
+
+		if(istype(mob_container, /obj/item/device/mmi) || istype(mob_container, /obj/item/device/mmi/posibrain))
+			var/obj/item/device/mmi/mmi = mob_container
+			if(mmi.brainmob)
+				mmi.brainmob.forceMove(mmi)
+				mmi.brainmob.canmove = FALSE
+				mech_parts.Remove(mmi)
+			mmi.mecha = null
+			verbs += /obj/mecha/verb/eject
 
 		occupant = null
 		icon_state = initial_icon+"-open"
@@ -2279,6 +2305,11 @@
 			mecha.cell.charge -= min(20,mecha.cell.charge)
 			mecha.cell.maxcharge -= min(20,mecha.cell.maxcharge)
 
+/////////////
+/obj/item/weapon/mecha_fist/ // An invisible weapon representing the mech's punching force. Used for melee attacks.
+	name = "mecha fist"
+	desc = "The fist of a powerful mech. You probably shouldn't be seeing this."
+	abstract = TRUE
 
 /////////////
 

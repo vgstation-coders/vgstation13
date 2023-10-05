@@ -386,7 +386,7 @@ var/list/tag_suits_list = list()
 	desc = "Robes not meant to be worn by man."
 	icon_state = "hastur"
 	item_state = "hastur"
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
 
 /obj/item/clothing/suit/cassock
 	name = "Cassock"
@@ -1008,12 +1008,12 @@ var/list/tag_suits_list = list()
 		return
 	active = 1
 	canremove = 0
-	H.register_event(/event/touched, src, src::on_touched())
-	H.register_event(/event/attacked_by, src, src::on_attacked_by())
-	H.register_event(/event/hitby, src, src::on_hitby())
-	H.register_event(/event/unarmed_attack, src, src::on_unarmed_attack())
-	H.register_event(/event/to_bump, src, src::on_to_bump())
-	H.register_event(/event/bumped, src, src::on_bumped())
+	H.register_event(/event/touched, src, nameof(src::on_touched()))
+	H.register_event(/event/attacked_by, src, nameof(src::on_attacked_by()))
+	H.register_event(/event/hitby, src, nameof(src::on_hitby()))
+	H.register_event(/event/unarmed_attack, src, nameof(src::on_unarmed_attack()))
+	H.register_event(/event/to_bump, src, nameof(src::on_to_bump()))
+	H.register_event(/event/bumped, src, nameof(src::on_bumped()))
 
 /obj/item/clothing/suit/bomber_vest/proc/on_touched(mob/toucher, mob/touched)
 	if(toucher == touched) //No bombing ourselves by checking ourselves
@@ -1040,12 +1040,12 @@ var/list/tag_suits_list = list()
 	active = 0
 	var/mob/living/carbon/human/H = loc
 	if(H)
-		H.unregister_event(/event/touched, src, src::on_touched())
-		H.unregister_event(/event/attacked_by, src, src::on_attacked_by())
-		H.unregister_event(/event/hitby, src, src::on_hitby())
-		H.unregister_event(/event/unarmed_attack, src, src::on_unarmed_attack())
-		H.unregister_event(/event/to_bump, src, src::on_to_bump())
-		H.unregister_event(/event/bumped, src, src::on_bumped())
+		H.unregister_event(/event/touched, src, nameof(src::on_touched()))
+		H.unregister_event(/event/attacked_by, src, nameof(src::on_attacked_by()))
+		H.unregister_event(/event/hitby, src, nameof(src::on_hitby()))
+		H.unregister_event(/event/unarmed_attack, src, nameof(src::on_unarmed_attack()))
+		H.unregister_event(/event/to_bump, src, nameof(src::on_to_bump()))
+		H.unregister_event(/event/bumped, src, nameof(src::on_bumped()))
 
 /obj/item/clothing/suit/bomber_vest/examine(mob/user)
 	..()

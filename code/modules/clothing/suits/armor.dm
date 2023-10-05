@@ -111,7 +111,7 @@
 	icon_state = "warden_jacket"
 	item_state = "armor"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list (VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list (GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/vest/wardenshort
 	name = "Warden's short jacket"
@@ -228,32 +228,76 @@
 
 /obj/item/clothing/suit/armor/xcomsquaddie
 	name = "Squaddie Armor"
-	desc = "A suit of armor with heavy padding to protect against projectile attacks. Distributed to shadow organization squaddies."
+	desc = "A suit of armor with heavy kevlar plating that offers protection against projectile weapons. Distributed to shadow organization squaddies."
 	icon_state = "xcomarmor2"
 	item_state = "xcomarmor2"
 	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	armor = list(melee = 10, bullet = 50, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
+	armor = list(melee = 50, bullet = 50, laser = 15, energy = 5, bomb = 35, bio = 0, rad = 0)
+	slowdown = HARDSUIT_SLOWDOWN_LOW
 	siemens_coefficient = 0.5
 
-/obj/item/clothing/suit/armor/xcomsquaddie/dredd
+/obj/item/clothing/suit/armor/xcomsquaddie/verb/toggle_sleeves()
+	set name = "Roll Sleeves Up/Down"
+	set category = "Object"
+	set src in usr
+
+	if(!usr.canmove || usr.isUnconscious() || usr.restrained())
+		return 0
+
+	if(src.icon_state == "xcomarmor2_sleeveless")
+		src.icon_state = "xcomarmor2"
+		src.item_state = "xcomarmor2"
+		to_chat(usr, "You roll down your sleeves.")
+	else if(src.icon_state == "xcomarmor2")
+		src.icon_state = "xcomarmor2_sleeveless"
+		src.item_state = "xcomarmor2_sleeveless"
+		to_chat(usr, "You roll up your sleeves.")
+	else
+		to_chat(usr, "You roll up some imaginary sleeves on your [src].")
+		return
+	usr.update_inv_wear_suit()
+
+/obj/item/clothing/suit/armor/dredd
 	name = "Judge Armor"
 	desc = "A large suit of heavy armor, fit for a Judge."
 	icon_state = "dredd-suit"
 	item_state = "dredd-suit"
-
-
-/obj/item/clothing/suit/armor/xcomarmor
-	name = "Mysterious Armor"
-	desc = "A suit of armor with heavy plating to protect against melee attacks. Distributed to shadow organization squaddies."
-	icon_state = "xcomarmor1"
-	item_state = "xcomarmor1"
-	species_fit = list(INSECT_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED, GREY_SHAPED) //only has sprites for humans and human-shaped species
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	armor = list(melee = 50, bullet = 10, laser = 10, energy = 0, bomb = 0, bio = 0, rad = 0)
+	armor = list(melee = 50, bullet = 50, laser = 15, energy = 5, bomb = 35, bio = 0, rad = 0)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	siemens_coefficient = 0.5
 
+/obj/item/clothing/suit/armor/xcomarmor
+	name = "Mysterious Armor"
+	desc = "A suit of armor with heavy alloy plating that offers protection against laser and energy weapons. Distributed to shadow organization squaddies."
+	icon_state = "xcomarmor1"
+	item_state = "xcomarmor1"
+	species_fit = list(INSECT_SHAPED)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|IGNORE_INV
+	armor = list(melee = 50, bullet = 15, laser = 50, energy = 20, bomb = 25, bio = 0, rad = 0)
+	slowdown = HARDSUIT_SLOWDOWN_LOW
+	siemens_coefficient = 0.5
+
+/obj/item/clothing/suit/armor/xcomarmor/equipped(mob/living/carbon/human/H, equipped_slot)
+	if(equipped_slot == slot_wear_suit)
+		icon_state = H.gender==FEMALE ? "xcomarmor1_f" : "xcomarmor1"
+
+		if(H.gender==FEMALE)
+			sound_change = list(CLOTHING_SOUND_SCREAM)
+			sound_priority = CLOTHING_SOUND_MED_PRIORITY
+			sound_file = list('sound/misc/xcom_female1.ogg','sound/misc/xcom_female2.ogg','sound/misc/xcom_female3.ogg')
+			sound_species_whitelist = list("Human")
+			sound_genders_allowed = list(FEMALE)
+		if(H.gender==MALE)
+			sound_change = list(CLOTHING_SOUND_SCREAM)
+			sound_priority = CLOTHING_SOUND_MED_PRIORITY
+			sound_file = list('sound/misc/xcom_male1.ogg','sound/misc/xcom_male2.ogg','sound/misc/xcom_male3.ogg','sound/misc/xcom_male4.ogg')
+			sound_species_whitelist = list("Human")
+			sound_genders_allowed = list(MALE)
+
+		H.update_inv_wear_suit()
 
 /obj/item/clothing/suit/armor/bulletproof
 	name = "Bulletproof Vest"

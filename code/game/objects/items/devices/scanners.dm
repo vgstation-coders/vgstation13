@@ -177,6 +177,8 @@ Damage Specifics: <span class='notice'>0</span> - <font color='green'>0</font> -
 Blood Level Unknown: ???% ???cl
 Subject's pulse: ??? BPM"})
 			return
+	if(!istype(M))
+		return
 	if(!silent)
 		user.visible_message("<span class='notice'>[user] analyzes [M]'s vitals.</span>", ignore_self = TRUE)
 		playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)

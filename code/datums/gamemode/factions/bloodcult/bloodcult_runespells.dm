@@ -87,7 +87,7 @@
 	..()
 
 /datum/rune_spell/proc/invoke(var/mob/user, var/text="", var/whisper=0)
-	if(user.checkTattoo(TATTOO_SILENT))
+	if(user.checkTattoo(TATTOO_SILENT) || (spell_holder.icon_state == "temp"))
 		return
 	if(!whisper)
 		user.say(text,"C")
@@ -103,7 +103,7 @@
 			R.cast_word(R.word1.english)
 			R.cast_word(R.word2.english)
 			R.cast_word(R.word3.english)
-		if((rune_flags & RUNE_STAND) && (activator.loc != spell_holder.loc))
+		if((rune_flags & RUNE_STAND) && (get_turf(activator) != get_turf(spell_holder)))
 			abort(RITUALABORT_STAND)
 		else
 			invoke(activator,invocation)
@@ -1353,7 +1353,6 @@ var/list/converted_minds = list()
 				S.Knockdown(duration)//TODO: TEST THAT
 		qdel(src)
 
-var/list/confusion_victims = list()
 
 
 ////////////////////////////////////////////////////////////////////
@@ -1361,6 +1360,8 @@ var/list/confusion_victims = list()
 //								CONFUSION						  //
 //																  //
 ////////////////////////////////////////////////////////////////////
+
+var/list/confusion_victims = list()
 
 /datum/rune_spell/confusion
 	name = "Confusion"
@@ -1423,7 +1424,6 @@ var/list/confusion_victims = list()
 
 	//now let's round up our victims: any non-cultist with an unobstructed line of sight to the rune/talisman will be affected
 	var/list/potential_victims = list()
-	var/list/victims = list()
 
 	if (specific_victim)
 		potential_victims.Add(specific_victim)
@@ -1431,22 +1431,27 @@ var/list/confusion_victims = list()
 		for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
 			potential_victims.Add(M)
 
+	var/ritual_victim_count = 0
 	for(var/mob/living/M in potential_victims)
-		if (iscarbon(M))//mite do something with silicons later
+
+		if (iscarbon(M))
 			var/mob/living/carbon/C = M
 			if (iscultist(C))
 				continue
-			to_chat(C, "<span class='danger'>Your vision goes dark, panic and paranoia take their toll on your mind.</span>")
-			shadow(C,T)//shadow trail moving from the spell_holder to the victim
-			anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
-			if (!(C in confusion_victims))
-				C.overlay_fullscreen("blindborder", /obj/abstract/screen/fullscreen/confusion_border)//victims DO still get blinded for a second
-				C.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)//which will allow us to subtly reveal the surprise
-				C.update_fullscreen_alpha("blindblack", 255, 5)
+
+			if(C.stat == CONSCIOUS)
+				ritual_victim_count++
+
+			var/datum/confusion_manager/CM
+			if (M in confusion_victims)
+				CM = confusion_victims[M]
 			else
-				C.update_fullscreen_alpha("blindblack", 255, 5)
-			C.playsound_local(C, 'sound/effects/confusion.ogg', 50, 0, 0, 0, 0)
-			victims.Add(C)
+				CM = new(M,duration)
+				confusion_victims[M] = CM
+
+			spawn()
+				CM.apply_confusion(T,hallucinated_turfs)
+
 		if (issilicon(M) && !isAI(M))//Silicons get a fade to black, then just a flash, until I can think of something else
 			shadow(M,T)
 			M.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)
@@ -1454,6 +1459,10 @@ var/list/confusion_victims = list()
 			spawn(5)
 				M.clear_fullscreen("blindblack", animate = 0)
 				M.flash_eyes(visual = 1)
+
+	//temp ritual stuff
+	if(culprit && ritual_victim_count > 0)
+		TriggerCultRitual(/datum/bloodcult_ritual/sow_confusion, culprit, list("victimcount" = ritual_victim_count))
 
 	//now to blind cameras, the effects on cameras do not time out, but they can be fixed
 	if (!specific_victim)
@@ -1466,58 +1475,98 @@ var/list/confusion_victims = list()
 			C.vision_flags = BLIND//Anyone using a security cameras computer will only see darkness
 			C.setViewRange(-1)//The camera won't reveal the area for the AI anymore
 
-	spawn(10)
-		var/ritual_victim_count
-		for(var/mob/living/carbon/C in victims)
-			var/new_victim = 0
-			if (!(C in confusion_victims))
-				new_victim = 1
-				//if(C.client && C.stat == CONSCIOUS)
-				if(C.stat == CONSCIOUS)
-					ritual_victim_count++
-				C.overlay_fullscreen("blindblind", /obj/abstract/screen/fullscreen/blind)
-			C.update_fullscreen_alpha("blindblind", 255, 0)
-			C.update_fullscreen_alpha("blindblack", 0, 10)
-			C.update_fullscreen_alpha("blindblind", 0, 80)
-			C.update_fullscreen_alpha("blindborder", 150, 5)
-			if (C.client)
-				var/list/my_hallucinated_stuff = hallucinated_turfs.Copy()
-				for(var/mob/living/L in range(T,25))//All mobs in a large radius will look like monsters to the victims.
-					if (L == C)
-						continue//the victims still see themselves as humans (or whatever they are)
-					var/image/override_overlay = image(icon = 'icons/mob/animal.dmi', loc = L, icon_state = pick("faithless","forgotten","otherthing"))
-					override_overlay.override = TRUE
-					my_hallucinated_stuff.Add(override_overlay)
-				if (!new_victim)
-					my_hallucinated_stuff.Add(confusion_victims[C])
-					C.client.images.Remove(confusion_victims[C])//removing the images from client.images after adding them to my_hallucinated_stuff
-				confusion_victims[C] = my_hallucinated_stuff//allows us to seamlessly refresh their duration.
-				C.client.images.Add(my_hallucinated_stuff)
-				C.regular_hud_updates()//data huds are disabled for the duration of the confusion
-				var/hallenght = my_hallucinated_stuff.len
-				spawn(duration-5)
-					if (C in confusion_victims)
-						var/list/LI = confusion_victims[C]
-						if (LI.len == hallenght)//this checks whether this proc comes from the last blind rune the victim was affected from
-							C.update_fullscreen_alpha("blindborder", 0, 5)
-							C.overlay_fullscreen("blindwhite", /obj/abstract/screen/fullscreen/white)
-							C.update_fullscreen_alpha("blindwhite", 255, 3)
-							sleep(5)
-							confusion_victims.Remove(C)
-							C.update_fullscreen_alpha("blindwhite", 0, 12)
-							C.clear_fullscreen("blindblack", animate = 0)
-							C.clear_fullscreen("blindborder", animate = 0)
-							C.clear_fullscreen("blindblind", animate = 0)
-							anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind_remove", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
-							C.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
-							sleep(15)
-							C.clear_fullscreen("blindwhite", animate = 0)
-		if(culprit && ritual_victim_count > 0)
-			TriggerCultRitual(/datum/bloodcult_ritual/sow_confusion, culprit, list("victimcount" = ritual_victim_count))
-		while (confusion_victims.len > 0)//if the ritual atom stops existing while people are still confused, weird shit can occurs such as people remaining blinded forever.
-			sleep(10 SECONDS)
-		qdel(src)
+	qdel(src)
 
+//each affected mob gets their own
+/datum/confusion_manager
+	var/time_of_last_confusion = 0
+	var/list/my_hallucinated_stuff = list()
+	var/mob/victim = null
+	var/duration = 300
+
+/datum/confusion_manager/New(var/mob/M,var/D)
+	..()
+	victim = M
+	duration = D
+
+/datum/confusion_manager/Destroy()
+	my_hallucinated_stuff = list()
+	victim = null
+	..()
+
+/datum/confusion_manager/proc/apply_confusion(var/turf/T,var/list/hallucinated_turfs)
+	shadow(victim,T)//shadow trail moving from the spell_holder to the victim
+	anim(target = victim, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+
+	if (!time_of_last_confusion)
+		start_confusion(T,hallucinated_turfs)
+		return
+	if (victim.mind)
+		message_admins("BLOODCULT: [key_name(victim)] had the effects of Confusion refreshed back to [duration/10] seconds.")
+		log_admin("BLOODCULT: [key_name(victim)] had the effects of Confusion refreshed by back to [duration/10] seconds.")
+	var/time_key = world.time
+	time_of_last_confusion = time_key
+	victim.update_fullscreen_alpha("blindblack", 255, 5)
+	sleep (10)
+	refresh_confusion(T,hallucinated_turfs,time_key)
+
+/datum/confusion_manager/proc/start_confusion(var/turf/T,var/list/hallucinated_turfs)
+	var/time_key = world.time
+	time_of_last_confusion = time_key
+	if (victim.mind)
+		message_admins("BLOODCULT: [key_name(victim)] is now under the effects of Confusion for [duration/10] seconds.")
+		log_admin("BLOODCULT: [key_name(victim)] is now under the effects of Confusion for [duration/10] seconds.")
+	to_chat(victim, "<span class='danger'>Your vision goes dark, panic and paranoia take their toll on your mind.</span>")
+	victim.overlay_fullscreen("blindborder", /obj/abstract/screen/fullscreen/confusion_border)//victims DO still get blinded for a second
+	victim.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)//which will allow us to subtly reveal the surprise
+	victim.update_fullscreen_alpha("blindblack", 255, 5)
+	victim.playsound_local(victim, 'sound/effects/confusion.ogg', 50, 0, 0, 0, 0)
+	sleep(10)
+	victim.overlay_fullscreen("blindblind", /obj/abstract/screen/fullscreen/blind)
+	refresh_confusion(T,hallucinated_turfs,time_key)
+
+/datum/confusion_manager/proc/refresh_confusion(var/turf/T,var/list/hallucinated_turfs,var/time_key)
+	victim.update_fullscreen_alpha("blindblind", 255, 0)
+	victim.update_fullscreen_alpha("blindblack", 0, 10)
+	victim.update_fullscreen_alpha("blindblind", 0, 80)
+	victim.update_fullscreen_alpha("blindborder", 150, 5)
+
+	if (victim.client)
+		var/static/list/hallucination_mobs = list("faithless","forgotten","otherthing")
+		victim.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
+		my_hallucinated_stuff = hallucinated_turfs.Copy()
+		for(var/mob/living/L in range(T,25))//All mobs in a large radius will look like monsters to the victims.
+			if (L == victim)
+				continue//the victims still see themselves as humans (or whatever they are)
+			var/image/override_overlay = image(icon = 'icons/mob/animal.dmi', loc = L, icon_state = pick(hallucination_mobs))
+			override_overlay.override = TRUE
+			my_hallucinated_stuff.Add(override_overlay)
+		victim.client.images.Add(my_hallucinated_stuff)
+		victim.regular_hud_updates()//data huds are disabled for the duration of the confusion
+
+	sleep(duration-5)
+
+	if (time_of_last_confusion != time_key)//only the last applied confusion gets to end it
+		return
+
+	victim.update_fullscreen_alpha("blindborder", 0, 5)
+	victim.overlay_fullscreen("blindwhite", /obj/abstract/screen/fullscreen/white)
+	victim.update_fullscreen_alpha("blindwhite", 255, 3)
+	sleep(5)
+	confusion_victims.Remove(victim)
+	victim.update_fullscreen_alpha("blindwhite", 0, 12)
+	victim.clear_fullscreen("blindblack", animate = 0)
+	victim.clear_fullscreen("blindborder", animate = 0)
+	victim.clear_fullscreen("blindblind", animate = 0)
+	anim(target = victim, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind_remove", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	if (victim.client)
+		victim.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
+	if (victim.mind)
+		message_admins("BLOODCULT: [key_name(victim)] is no longer under the effects of Confusion.")
+		log_admin("BLOODCULT: [key_name(victim)] is no longer under the effects of Confusion.")
+	sleep(15)
+	victim.clear_fullscreen("blindwhite", animate = 0)
+	qdel(src)
 
 ////////////////////////////////////////////////////////////////////
 //																  //
@@ -1979,8 +2028,15 @@ var/list/seer_rituals = list()
 	if (istype(R))
 		R.one_pulse()
 
+
 	var/list/potential_targets = list()
 	var/turf/TU = get_turf(spell_holder)
+
+	var/snow = FALSE
+	var/datum/zLevel/Z = map.zLevels[TU.z]
+	if (istype(Z, /datum/zLevel/snowsurface))
+		snow = TRUE
+
 	for(var/mob/living/carbon/C in TU)
 		potential_targets += C
 	if(potential_targets.len == 0)
@@ -2028,15 +2084,25 @@ var/list/seer_rituals = list()
 		target.u_equip(user_slot)
 		user_slot.forceMove(BT)
 
-	if(isplasmaman(target))
-		target.equip_to_slot_or_drop(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(target), slot_head)
-		target.equip_to_slot_or_drop(new /obj/item/clothing/suit/space/plasmaman/cultist(target), slot_wear_suit)
+	if(snow)
+		target.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood/snow(target), slot_head)
+		if (ismonkey(target))
+			target.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes/snow(target), slot_w_uniform)
+		else
+			target.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes/snow(target), slot_wear_suit)
 	else
 		target.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood(target), slot_head)
 		if (ismonkey(target))
 			target.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes(target), slot_w_uniform)
 		else
 			target.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes(target), slot_wear_suit)
+
+	if(isplasmaman(target))
+		if (num2text(slot_s_store) in BT.stored_gear)
+			var/obj/item/I = BT.stored_gear[num2text(slot_s_store)]
+			BT.stored_gear -= num2text(slot_s_store)
+			I.forceMove(target)
+			target.equip_to_slot_or_drop(I, slot_s_store)
 
 	if (!ismonkey(target))
 		target.equip_to_slot_or_drop(new /obj/item/clothing/shoes/cult(target), slot_shoes)

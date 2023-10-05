@@ -8,8 +8,8 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "tube-construct-stage1"
 	anchored = 1
-	plane = OBJ_PLANE
-	layer = ABOVE_DOOR_LAYER
+	plane = ABOVE_HUMAN_PLANE
+	layer = LIGHT_FIXTURE_LAYER
 	var/stage = 1
 	var/fixture_type = "tube"
 	var/sheets_refunded = 2
@@ -313,13 +313,6 @@ var/list/light_source_images = list()
 
 /obj/machinery/light/attackby(obj/item/W, mob/living/user)
 	user.delayNextAttack(8)
-	//Light replacer code
-	if(istype(W, /obj/item/device/lightreplacer))
-		var/obj/item/device/lightreplacer/LR = W
-		if(isliving(user))
-			var/mob/living/U = user
-			LR.ReplaceLight(src, U)
-			return
 
 	// attempt to insert light
 	if(istype(W, /obj/item/weapon/light))
@@ -711,13 +704,6 @@ var/list/light_source_images = list()
 	brightness_color = "#FFFFFF"
 	cost = 1
 	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 30)
-
-/obj/item/weapon/light/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/device/lightreplacer))
-		var/obj/item/device/lightreplacer/LR = W
-		if(LR.insert_if_possible(src))
-			to_chat(user, "<span class='notice'>\the [LR] picks up \the [src].</span>")
-	..()
 
 /obj/item/weapon/light/throw_impact(atom/hit_atom)
 	if(!..())

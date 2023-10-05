@@ -38,11 +38,12 @@
 				return default
 	return default
 
-/proc/sanitize_hexcolor(color, default="#000000")
+/proc/sanitize_hexcolor(color, default="#00000000")
 	if(!istext(color))
 		return default
 	var/len = length(color)
-	if(len != 7 && len !=4)
+	if(len != 9 && len !=7 && len !=4)
+		world.log << "failed to sanitize"
 		return default
 	if(text2ascii(color,1) != 35)
 		return default	//35 is the ascii code for "#"

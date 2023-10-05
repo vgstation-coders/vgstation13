@@ -251,6 +251,7 @@
 	icon_state = "sith"
 	item_state = "sith"
 	species_fit = list(INSECT_SHAPED)
+	body_parts_covered = HIDEHAIR|HIDEBEARDHAIR
 	wizard_garb = 1 //Allows lightning to be used
 
 //stylish bs12 hats
@@ -768,6 +769,26 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
 /obj/item/clothing/head/bteamcaptain/unequipped(mob/user)
     user.overlays -= unusual_overlay
     return ..()
+
+/obj/item/clothing/head/kippah
+	name = "kippah"
+	desc = "A brimless hat made of cloth, worn by men within Orthdox Jewish communities as part of religious custom."
+	flags = FPRINT
+	icon_state = "kippah_black"
+
+/obj/item/clothing/head/kippah/kippah_random
+
+/obj/item/clothing/head/kippah/kippah_random/New()
+	icon_state = "kippah_[pick("blue","white","goldblack","black","yellow")]"
+
+/obj/item/clothing/head/kippah/kippah_blue
+	icon_state = "kippah_blue"
+/obj/item/clothing/head/kippah/kippah_white
+	icon_state = "kippah_white"
+/obj/item/clothing/head/kippah/kippah_goldblack
+	icon_state = "kippah_goldblack"
+/obj/item/clothing/head/kippah/kippah_yellow
+	icon_state = "kippah_yellow"
 
 // American "football"
 

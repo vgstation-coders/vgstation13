@@ -1,0 +1,193 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"c" = (
+/obj/item/device/radio/headset/headset_earmuffs,
+/obj/structure/table/plastic,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"i" = (
+/obj/machinery/computer/crew,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"j" = (
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"l" = (
+/obj/machinery/computer/message_monitor,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"n" = (
+/obj/machinery/station_map/strategic,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"q" = (
+/obj/machinery/telecomms/relay,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"v" = (
+/obj/machinery/computer/security,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"z" = (
+/obj/structure/bed/chair/comfy/black{
+	dir = 1
+	},
+/turf/simulated/floor/bluegrid,
+/area/vault/keycard)
+"B" = (
+/obj/machinery/door/airlock/highsecurity,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"F" = (
+/turf/simulated/floor/bluegrid,
+/area/vault/keycard)
+"H" = (
+/turf/simulated/wall/invulnerable/r_wall,
+/area/vault/keycard)
+"J" = (
+/obj/structure/table/plastic,
+/obj/item/weapon/paper/monitorkey,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"K" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"L" = (
+/obj/machinery/vending/offlicence,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"M" = (
+/obj/structure/falserwall,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"N" = (
+/obj/item/binoculars,
+/obj/structure/table/plastic,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"O" = (
+/turf/portal{
+	opacity = 1
+	},
+/area/vault/keycard)
+"P" = (
+/turf/portal,
+/area/vault/keycard)
+"R" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/machinery/computer/allvaults,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"S" = (
+/obj/machinery/sleeper{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"V" = (
+/obj/machinery/vending/discount,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"W" = (
+/obj/machinery/bodyscanner,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+
+(1,1,1) = {"
+H
+H
+H
+H
+H
+H
+H
+"}
+(2,1,1) = {"
+H
+J
+H
+H
+O
+H
+H
+"}
+(3,1,1) = {"
+H
+j
+H
+K
+P
+H
+H
+"}
+(4,1,1) = {"
+H
+M
+H
+B
+H
+H
+H
+"}
+(5,1,1) = {"
+H
+c
+a
+a
+a
+V
+H
+"}
+(6,1,1) = {"
+H
+v
+F
+F
+F
+S
+H
+"}
+(7,1,1) = {"
+H
+R
+z
+n
+F
+q
+H
+"}
+(8,1,1) = {"
+H
+i
+F
+F
+F
+W
+H
+"}
+(9,1,1) = {"
+H
+N
+a
+l
+a
+L
+H
+"}
+(10,1,1) = {"
+H
+H
+H
+H
+H
+H
+H
+"}

@@ -84,9 +84,6 @@
 	if(host.dna)
 		host.dna.real_name = host.real_name
 
-	// Update mode specific HUD icons.
-	callHook("harvest_podman", list(host))
-
 	to_chat(host, "<span class='good'><B>You awaken slowly, stirring into sluggish motion as the air caresses you.</B></span>")
 
 	// This is a hack, replace with some kind of species blurb proc.

@@ -28,7 +28,7 @@
 
 var/explosion_shake_message_cooldown = 0
 
-/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit, var/list/whitelist)
+/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit, var/list/whitelist, var/true_range)
 	var/explosion_time = world.time
 
 	spawn()
@@ -49,6 +49,9 @@ var/explosion_shake_message_cooldown = 0
 		if(adminlog)
 			message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ([formatJumpTo(epicenter,"JMP")]) [whodunnit ? " caused by [whodunnit] [whodunnit.ckey ? "([whodunnit.ckey])" : "(no key)"] ([formatJumpTo(whodunnit,"JMP")])" : ""]")
 			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] [whodunnit ? " caused by [whodunnit] [whodunnit.ckey ? "([whodunnit.ckey])" : "(no key)"]" : ""]")
+			if (true_range)
+				message_admins("If uncapped, its size would have been ([round(true_range*0.25)], [round(true_range*0.5)], [round(true_range)])")
+				log_game("If uncapped, its size would have been ([round(true_range*0.25)], [round(true_range*0.5)], [round(true_range)])")
 
 		//Pause the lighting updates for a bit.
 		var/postponeCycles = max(round(devastation_range/8),1)
@@ -59,18 +62,16 @@ var/explosion_shake_message_cooldown = 0
 		var/z0 = epicenter.z
 
 
-		explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit,whitelist)
+		var/datum/sensed_explosion/explosion_datum = explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit,whitelist,true_range)
 
 		var/took = stop_watch(watch)
+
+		if (explosion_datum)
+			explosion_datum.ready(took)
+
 		//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
 		if(Debug2)
 			world.log << "## DEBUG: Explosion([x0],[y0],[z0])(d[devastation_range],h[heavy_impact_range],l[light_impact_range]): Took [took] seconds."
-
-		//Machines which report explosions.
-		if(!ignored)
-			for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
-				if(bhangmeter && !bhangmeter.stat)
-					bhangmeter.sense_explosion(x0, y0, z0, devastation_range, heavy_impact_range, light_impact_range, took, 0, verbose)
 
 		sleep(8)
 
@@ -135,12 +136,14 @@ var/explosion_shake_message_cooldown = 0
 	else
 		epicenter.turf_animation('icons/effects/96x96.dmi',"explosion_small",-WORLD_ICON_SIZE, -WORLD_ICON_SIZE, 13)
 
-/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit, var/list/whitelist)
+/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit, var/list/whitelist, var/cap = 0)
 	var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
 
 	var/x0 = offcenter.x
 	var/y0 = offcenter.y
 	//var/z0 = offcenter.z
+
+	var/datum/sensed_explosion/explosion_datum = new(epicenter.x, epicenter.y, epicenter.z, devastation_range, heavy_impact_range, light_impact_range, cap)
 
 	var/list/affected_turfs = spiral_block(offcenter,max_range)
 	var/list/cached_exp_block = CalculateExplosionBlock(affected_turfs)
@@ -169,6 +172,8 @@ var/explosion_shake_message_cooldown = 0
 			//invulnerable therefore no further explosion
 			continue
 
+		if (explosion_datum)
+			explosion_datum.paint(T,dist)
 
 		var/turftime = world.time
 		for(var/atom/movable/A in T)
@@ -208,6 +213,8 @@ var/explosion_shake_message_cooldown = 0
 	explosion_destroy_multi_z(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time)
 	explosion_destroy_multi_z(epicenter, offcenter, devastation_range / 2, heavy_impact_range / 2, light_impact_range / 2, flash_range / 2, explosion_time, whodunnit)
 
+	return explosion_datum
+
 /proc/CalculateExplosionBlock(list/affected_turfs)
 	. = list()
 	// we cache the explosion block rating of every turf in the explosion area
@@ -226,3 +233,18 @@ var/explosion_shake_message_cooldown = 0
 			continue
 
 		.[T] = current_exp_block
+
+/proc/CalculateExplosionSingleBlock(var/turf/T)
+	var/current_exp_block = T.density ? T.explosion_block : 0
+	for (var/obj/machinery/door/D in T)
+		if(D.density && D.explosion_block)
+			current_exp_block += D.explosion_block
+			continue
+	for (var/obj/effect/forcefield/F in T)
+		current_exp_block += F.explosion_block
+		continue
+	for (var/obj/effect/energy_field/E in T)
+		current_exp_block += E.explosion_block
+		continue
+
+	return current_exp_block

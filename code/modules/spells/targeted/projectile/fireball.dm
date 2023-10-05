@@ -63,7 +63,7 @@
 
 	return "You have improved Fireball into [name]. [explosion_description]"
 
-/spell/targeted/projectile/dumbfire/fireball/is_valid_target(var/atom/target)
+/spell/targeted/projectile/dumbfire/fireball/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(!istype(target))
 		return 0
 	if(target == holder)

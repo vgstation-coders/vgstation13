@@ -98,3 +98,9 @@
 /obj/item/weapon/storage/wallet/trader/New()
 	..()
 	dispense_cash(rand(150,250),src)
+
+/obj/item/weapon/storage/wallet/nt
+	icon_state = "wallet-NT"
+
+/obj/item/weapon/storage/wallet/nt/update_icon()
+	return

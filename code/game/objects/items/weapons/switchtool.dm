@@ -34,7 +34,7 @@
 	var/removing_item = /obj/item/tool/screwdriver //the type of item that lets you take tools out
 
 /obj/item/weapon/switchtool/preattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if(istype(target, /obj/item/weapon/storage)) //we place automatically
+	if(istype(target, /obj/item/weapon/storage) && !istype(target, /obj/item/weapon/storage/pill_bottle)) //we place automatically, but want pill bottles to be meltable
 		return
 	if(deployed)
 		if(!deployed.preattack(target, user))
@@ -363,6 +363,7 @@
 	if(doedit)
 		if(istype(deployed, /obj/item/weapon/lighter/zippo))
 			var/obj/item/weapon/lighter/lighter = deployed
+			lighter.lit = 1
 			processing_objects.Add(deployed)
 			light_color = LIGHT_COLOR_FIRE
 			set_light(lighter.light_power)
@@ -370,6 +371,8 @@
 			undeploy_sound = 'sound/items/zippo_close.ogg'
 	else
 		if(istype(deployed, /obj/item/weapon/lighter/zippo))
+			var/obj/item/weapon/lighter/lighter = deployed
+			lighter.lit = 0
 			processing_objects.Remove(deployed)
 			set_light(0)
 			light_color = initial(light_color)

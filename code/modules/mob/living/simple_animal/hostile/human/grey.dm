@@ -432,6 +432,17 @@
 	..()
 	say(pick("Enemy of the mothership!","Pacifying target!","Engaging!","Attack!"), all_languages[LANGUAGE_GREY])
 
+///////////////////////////////////////////////////////////////////GDR EXPLORER///////////
+//Explorer subtype of the pacifier. Identical in behavior, health, and damage
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/pacifier/explorer
+	name = "Explorer Guard"
+	desc = "A thin alien humanoid. This one is armored and equipped with an alien stun baton."
+
+	icon_state = "greyexplorer_melee"
+	icon_living = "greyexplorer_melee"
+
+	corpse = /obj/effect/landmark/corpse/grey/explorer_melee
+
 ///////////////////////////////////////////////////////////////////GREY GRENADIER///////////
 //Soldier that can launch grenades, very dangerous. Slightly better vision than the average soldier
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/grenadier
@@ -632,8 +643,56 @@
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/space/Process_Spacemove(var/check_drift = 0) // They can follow enemies into space, and won't just drift off
 	return 1
 
-///////////////////////////////////////////////////////////////////GREY TROOPER///////////
-//Less tanky than the heavy soldier, but spaceworthy. A little more clever than a regular soldier with its tactics, will back off and shoot from further away if his health gets low
+///////////////////////////////////////////////////////////////////GREY MELEE TROOPER///////////
+//Spaceworthy ayy soldier with a baton. Quite mobile for an enemy in a hardsuit and has slightly less cooldown on the baton stun than a regular pacifier
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/melee
+	name = "MDF Trooper"
+	desc = "A thin alien humanoid. This one is wearing an armored rigsuit and armed with an alien stun baton."
+
+	icon_state = "greytrooper_melee"
+	icon_living = "greytrooper_melee"
+
+	maxHealth = 150 // Slightly more health than a standard trooper
+	health = 150
+	melee_damage_lower = 10
+	melee_damage_upper = 20 // Decent melee damage, but the stun is the real danger
+	move_to_delay = 1.8 // This is what he trained for! To fill the unforgiving minute with sixty seconds of distance sprinting
+
+	items_to_drop = list(/obj/item/weapon/melee/stunprobe)
+
+	attacktext = "beats"
+	attack_sound = 'sound/weapons/genhit1.ogg'
+
+	speak = list("Sweeping sector, be prepared for EVA.","Praise the mothership, and all hail the Chairman.","Air supply capacity check is green.","Terminate all unauthorized personnel and unidentified xenofauna.","Stun probe charged and ready.")
+	speak_chance = 1
+
+	var/last_shockattack = 0
+	var/const/shockattack_cooldown = 15 SECONDS // Some cooldown variables to remove the chance of getting stunlocked by a single one of these guys
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/melee/proc/shockAttack(mob/living/carbon/human/target) // It's not a great idea to fight these guys in CQC if you don't have some kind of stun resistance
+	var/damage = rand(5, 10)
+	target.electrocute_act(damage, src, incapacitation_duration = 6 SECONDS, def_zone = LIMB_CHEST) // 6 seconds is pretty rough, twice as long as a carp stun
+	if(iscarbon(target))
+		var/mob/living/L = target
+		L.apply_effect(6, STUTTER)
+	return
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/melee/AttackingTarget() // Won't keep stunning a downed player, so they should have a chance to run when they get up
+	var/mob/living/carbon/human/H = target
+	if((last_shockattack + shockattack_cooldown < world.time) && !H.lying && ishuman(H))
+		shockAttack(H)
+		H.visible_message("<span class='danger'>[src] shocks [H] with their stun probe!</span>")
+		playsound(src, 'sound/weapons/electriczap.ogg', 50, 1)
+		last_shockattack = world.time
+	else
+		..()
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/melee/Aggro()
+	..()
+	say(pick("Hostile sighted, my sector.","Report, target marked for pacification.","Pacifying target.","For the mothership!","Target acquired. Pacify with extreme prejudice."), all_languages[LANGUAGE_GREY])
+
+///////////////////////////////////////////////////////////////////GREY RANGED TROOPER///////////
+//Less tanky than the heavy soldier, but spaceworthy. A little more clever than a regular soldier with its tactics, will back off and shoot from further away if his health gets low. Can also throw drone grenades
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/space/ranged
 	name = "MDF Trooper"
 	desc = "A thin alien humanoid. This one is wearing an armored rigsuit and armed with a heavy disintegrator."
@@ -645,7 +704,7 @@
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/heavydisintegrator)
 
-	speak = list("Sweeping sector, be prepared for EVA.","Praise the mothership, and all hail the Chairman.","Air supply capacity check is green.","Terminate all unauthorized personnel and unidentified xenofauna.")
+	speak = list("Sweeping sector, prepared for EVA maneuvers.","Praise the mothership, and all hail the Chairman.","Air supply capacity check is green.","Terminate all unauthorized personnel and unidentified xenofauna.")
 	speak_chance = 1
 
 	projectiletype = /obj/item/projectile/beam/immolationray
@@ -658,17 +717,84 @@
 	..()
 	if(health <= 70 && defensive_stance == 0) // Health is getting low, lets back off and try to use range to our advantage
 		defensive_stance = 1
-		retreat_distance = 7
-		minimum_distance = 7
+		retreat_distance = 8
+		minimum_distance = 8
 		say("[pick("Trooper under heavy fire! Moving to reserve position.", "Hostile is proving resilient. Backup required.", "Covering fire! Now!")]")
 	if(health > 70 && defensive_stance == 1) // Health has somehow been restored, lets get closer and be more aggressive
 		defensive_stance = 0
 		retreat_distance = 5
 		minimum_distance = 5
 
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/ranged/Shoot(var/atom/target, var/atom/start, var/mob/user)
+	if(prob(5)) // Throw a grenade
+		visible_message("<span class = 'warning'>\The [src] primes a grenade and hurls it towards \the [target]!</span>")
+		say("[pick("A gift from the mothership.", "Ordinance away!", "Let's see how you like this.")]")
+		var/atom/movable/grenade_to_throw = new /obj/item/weapon/grenade/spawnergrenade/mothershipdrone(get_turf(src))
+		var/obj/item/weapon/grenade/F = grenade_to_throw
+		grenade_to_throw.throw_at(target,10,2)
+		F.activate()
+	else // Otherwise just fire a projectile normally
+		..()
+
 /mob/living/simple_animal/hostile/humanoid/grey/soldier/space/ranged/Aggro()
 	..()
 	say(pick("Hostile sighted, my sector.","Report, target marked for disintegration.","Sterilizing target.","For the mothership!","Target acquired. Disintegrate with extreme prejudice."), all_languages[LANGUAGE_GREY])
+
+///////////////////////////////////////////////////////////////////GREY COMMANDO///////////
+//Durable, spaceproof, and very dangerous. Uses two disintegrators to quickly melt enemies to ash, and can change firing modes in combat
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/commando
+	name = "MDF Commando"
+	desc = "A thin alien humanoid. This one is wearing an armored rigsuit and equipped with twin disintegrators."
+
+	icon_state = "greytrooper_commando"
+	icon_living = "greytrooper_commando"
+
+	maxHealth = 175 // More health than a standard trooper, less than a heavy soldier
+	health = 175
+	melee_damage_lower = 10
+	melee_damage_upper = 15
+
+	items_to_drop = list(/obj/item/weapon/gun/energy/smalldisintegrator, /obj/item/weapon/gun/energy/smalldisintegrator)
+
+	speak = list("Sweeping sector, prepared for EVA maneuvers.","We need more action in this sector.","Air supply capacity check is green.","This deployment hasn't had nearly enough disintegrations.")
+	speak_chance = 1
+
+	projectiletype = /obj/item/projectile/beam/scorchray
+	projectilesound = 'sound/weapons/ray1.ogg'
+	retreat_distance = 3
+	minimum_distance = 3
+	ranged = 1
+	doubleshot = 1
+
+	var/microwave = 0
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/commando/Life()
+	..()
+	if(microwave == 0)
+		projectiletype = /obj/item/projectile/beam/scorchray
+		projectilesound = 'sound/weapons/ray1.ogg'
+		icon_state = "greytrooper_commando"
+		icon_living = "greytrooper_commando"
+	if(microwave == 1)
+		projectiletype = /obj/item/projectile/energy/microwaveray
+		projectilesound = 'sound/weapons/ray2.ogg'
+		icon_state = "greytrooper_commando1"
+		icon_living = "greytrooper_commando1"
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/commando/Shoot()
+	if(prob(5)) //Handles switching firing modes in combat
+		if(microwave == 0)
+			visible_message("<span class='warning'>[src] switches their disintegrators to microwave mode!</span>")
+			microwave = 1
+		else
+			visible_message("<span class='warning'>[src] switches their disintegrators to scorch mode!</span>")
+			microwave = 0
+	else // Otherwise fire the projectile for whatever mode is active
+		..()
+
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/ranged/Aggro()
+	..()
+	say(pick("Hostile sighted, my sector.","No contest.","Time for cleanup.","Erasing hostile.","Target acquired. Disintegrate with extreme prejudice.","You've made your last mistake, scum."), all_languages[LANGUAGE_GREY])
 
 //////////////////////////////
 // GREY RESEARCHERS
@@ -820,31 +946,37 @@
 
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon/Shoot()
 	var/mob/living/carbon/human/H = target
-	if(can_mind_interact(H.mind)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+	if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
 		return
-	switch(rand(0,4))
-		if(0) //Minor brain damage
-			to_chat(H, "<span class='userdanger'>You get a blindingly painful headache.</span>")
-			H.adjustBrainLoss(10)
-			H.eye_blurry = max(H.eye_blurry, 5)
-		if(1) //Brief knockdown
-			to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
-			H.emote("me", 1, "collapses!")
-			H.Knockdown(2)
-		if(2) //Target gets put to sleep for a few seconds
-			to_chat(H, "<span class='userdanger'>You feel exhausted...</span>")
-			H.drowsyness += 4
-			spawn(2 SECONDS)
-				H.sleeping += 3
-		if(3) //Minor hallucinations and jittering
-			to_chat(H, "<span class='userdanger'>Your mind feels less stable, and you feel nervous.</span>")
-			H.hallucination += 60 // For some reason it has to be this high at least or seemingly nothing happens
-			H.Jitter(20)
-			H.stuttering += 20
-		if(4) //Ranged disarm
-			to_chat(H, "<span class='userdanger'>Your arm jerks involuntarily, and you drop what you're holding!</span>")
-			H.drop_item()
-	return 1
+	else
+		switch(rand(0,4))
+			if(0) //Minor brain damage
+				to_chat(H, "<span class='userdanger'>You get a blindingly painful headache.</span>")
+				H.adjustBrainLoss(10)
+				H.eye_blurry = max(H.eye_blurry, 5)
+				playsound(H, 'sound/effects/alien_psy.ogg', 50, 0, -4)
+			if(1) //Brief knockdown
+				to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
+				H.emote("me", 1, "collapses!")
+				H.Knockdown(2)
+				playsound(H, 'sound/effects/alien_psy.ogg', 50, 0, -4)
+			if(2) //Target gets put to sleep for a few seconds
+				to_chat(H, "<span class='userdanger'>You feel exhausted...</span>")
+				H.drowsyness += 4
+				playsound(H, 'sound/effects/alien_psy.ogg', 50, 0, -4)
+				spawn(2 SECONDS)
+					H.sleeping += 3
+			if(3) //Minor hallucinations and jittering
+				to_chat(H, "<span class='userdanger'>Your mind feels less stable, and you feel nervous.</span>")
+				H.hallucination += 60 // For some reason it has to be this high at least or seemingly nothing happens
+				H.Jitter(20)
+				H.stuttering += 20
+				playsound(H, 'sound/effects/alien_psy.ogg', 50, 0, -4)
+			if(4) //Ranged disarm
+				to_chat(H, "<span class='userdanger'>Your arm jerks involuntarily, and you drop what you're holding!</span>")
+				H.drop_item()
+				playsound(H, 'sound/effects/alien_psy.ogg', 50, 0, -4)
+		return 1
 
 /mob/living/simple_animal/hostile/humanoid/grey/researcher/surgeon/Aggro()
 	..()
@@ -855,13 +987,15 @@
 //////////////////////////////
 
 ///////////////////////////////////////////////////////////////////GREY LEADER///////////
-//The final bawss. Equipped with a decently damaging ranged weapon, and strong psychic attack capabilities. Can buff allies in the vicinity with a small health boost or drain their health to replenish its own
+//One of the big bawsses of the mothership. Equipped with a decently damaging ranged weapon, and strong psychic attack capabilities. Can buff allies in the vicinity with a small health boost or drain their health to replenish its own
 /mob/living/simple_animal/hostile/humanoid/grey/leader
-	name = "Administrator Zorb"
+	name = "GDR Administrator"
 	desc = "A thin alien humanoid. This one is wearing an armored pressure suit and brandishing an advanced disintegrator."
 
 	icon_state = "grey_leader"
 	icon_living = "grey_leader"
+
+	corpse = null
 
 	maxHealth = 300
 	health = 300
@@ -875,7 +1009,7 @@
 	melee_damage_upper = 40 // Moderate melee damage
 
 	attacktext = "telekinetically repels" // Not really the fisticuffs type, will just try to fling targets away
-	attack_sound = 'sound/weapons/punchmiss.ogg'
+	attack_sound = 'sound/effects/lightning/chainlightning2.ogg'
 
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_STRONG | OPEN_DOOR_SMART // Can smash many things open thanks to stronk brain muscles
 	status_flags = UNPACIFIABLE // Not pacifiable due to being a "boss" mob
@@ -900,9 +1034,7 @@
 	var/telekinesis_throw_speed = 3
 	var/telekinesis_throw_range = 10
 
-	corpse = /obj/effect/landmark/corpse/grey/leader
-
-	items_to_drop = list(/obj/item/weapon/gun/energy/advdisintegrator, /obj/item/weapon/card/id/mothership_leader)
+	items_to_drop = list(/obj/item/weapon/gun/energy/advdisintegrator, /obj/item/weapon/card/id/mothership_leader, /obj/item/clothing/under/grey/grey_leader, /obj/item/clothing/mask/gas/mothership/advanced, /obj/item/clothing/shoes/jackboots/steeltoe/mothership_superior, /obj/item/clothing/suit/space/rig/grey/leader)
 
 	speak = list("These imbeciles... it's all so tiresome.","The latest clone batch has been less than impressive.","I will not tolerate further failure.","The mothership and the Chairman are counting on us, cowardice and incompetence are unacceptable.","Do I have to tell you cretins how to do everything?","To think the Chairman assigned me to this backwater sector... what a waste of my talents.")
 	speak_chance = 5
@@ -911,13 +1043,13 @@
 
 	projectiletype = /obj/item/projectile/beam/atomizationray
 	projectilesound = 'sound/weapons/ray1.ogg'
-	retreat_distance = 7
-	minimum_distance = 7
+	retreat_distance = 8
+	minimum_distance = 8
 	ranged = 1
 
-/mob/living/simple_animal/hostile/humanoid/grey/leader/Life() // Can heal allies or drain health from them to heal himself. A good tactic could be to focus shooting at him so he eventually drains all the soldiers around him of all their health
+/mob/living/simple_animal/hostile/humanoid/grey/leader/Life()
 	..()
-	if(last_psychicrejuvenate + psychicrejuvenate_cooldown < world.time)
+	if(last_psychicrejuvenate + psychicrejuvenate_cooldown < world.time) // Can heal allies slightly
 		for(var/mob/living/simple_animal/hostile/humanoid/grey/soldier/S in view(src, psychic_range))
 			if(S.health < (S.maxHealth/2))
 				visible_message("<span class = 'warning'>\The [src] fixes an intense gaze on the wounded [S], and they suddenly appear to be slightly revitalized!</span>")
@@ -929,7 +1061,7 @@
 			if(target && S.target != target)
 				S.GiveTarget(target)
 
-	if(last_psychicdrain + psychicdrain_cooldown < world.time)
+	if(last_psychicdrain + psychicdrain_cooldown < world.time) // Or drain health from them to heal himself
 		for(var/mob/living/simple_animal/hostile/humanoid/grey/soldier/S in view(src, psychic_range))
 			if(health < (maxHealth/2))
 				visible_message("<span class = 'warning'>\The [src] fixes an intense gaze on [S], and they writhe in agony. \The [src] appears to have been rejuvenated by the exchange, however.</span>")
@@ -942,12 +1074,23 @@
 			if(target && S.target != target)
 				S.GiveTarget(target)
 
+	if(health >= (maxHealth/3)) // Decently high health? Stay far back
+		retreat_distance = 8
+		minimum_distance = 8
+
+	if(health < (maxHealth/3)) // Health getting really low? Lower than it should be with our psychic drain ability? Fuck it, we're getting aggressive
+		retreat_distance = 2
+		minimum_distance = 2
+
 /mob/living/simple_animal/hostile/humanoid/grey/leader/AttackingTarget() // Fling the people trying to beat him up awaaaaaay
 	..()
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
 		if(telekinesis_throw_range && prob(telekinesis_throw_chance))
 			visible_message("<span class='danger'>\The [M] is flung away from [src]!</span>")
+			if(ishuman(M))
+				M.Knockdown(2)
+				M.Stun(2)
 			var/turf/T = get_turf(src)
 			var/turf/target_turf
 			if(istype(T, /turf/space)) // if ended in space, then range is unlimited
@@ -957,48 +1100,69 @@
 			M.throw_at(target_turf,100,telekinesis_throw_speed)
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/Shoot()
-	// If not done cooling down from the previous psychic attack, just shoot a laser beem
-	if(last_psychicattack + psychicattack_cooldown > world.time)
-		..()
-		return
-	var/list/victims = list()
-	for(var/mob/living/carbon/human/H in view(src, psychic_range))
-		victims.Add(H)
-	if(!victims.len)
-		return
-	var/shot_choice = rand(0,4)
-	for(var/mob/living/carbon/human/H in victims)
-		if(!can_mind_interact(H.mind))
-			continue
-		switch(shot_choice)
+	if(last_psychicattack + psychicattack_cooldown < world.time)
+		var/list/victims = list()
+		for(var/mob/living/carbon/human/H in view(src, psychic_range))
+			victims.Add(H)
+
+		if(!victims.len)
+			return
+		switch(rand(0,4))
 			if(0) //Brain damage, confusion, and dizziness
-				to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
-				H.adjustBrainLoss(20)
-				H.eye_blurry = max(H.eye_blurry, 10)
-				H.confused += 10
-				H.dizziness += 10
-				if(prob(25))
-					H.audible_scream()
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
+					H.adjustBrainLoss(20)
+					H.eye_blurry = max(H.eye_blurry, 10)
+					H.confused += 10
+					H.dizziness += 10
+					playsound(H, 'sound/effects/alien_psy.ogg', 50, 0, -4)
+					last_psychicattack = world.time
+					if(prob(25))
+						H.audible_scream()
 			if(1) //A knockdown, with some dizziness
-				to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
-				H.emote("me", 1, "collapses!")
-				H.Knockdown(4)
-				H.confused += 6
-				H.dizziness += 6
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>You suddenly lose your sense of balance!</span>")
+					H.emote("me", 1, "collapses!")
+					H.Knockdown(4)
+					H.confused += 6
+					H.dizziness += 6
+					playsound(H, 'sound/effects/alien_psy.ogg', 50, 0, -4)
+					last_psychicattack = world.time
 			if(2) //Naptime
-				to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
-				H.drowsyness += 6
-				spawn(2 SECONDS)
-					H.sleeping += 5
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>You feel exhausted beyond belief. You can't keep your eyes open...</span>")
+					H.drowsyness += 6
+					playsound(H, 'sound/effects/alien_psy.ogg', 50, 0, -4)
+					last_psychicattack = world.time
+					spawn(2 SECONDS)
+						H.sleeping += 5
 			if(3) //Serious hallucinations and jittering
-				to_chat(H, "<span class='userdanger'>Your mind feels much less stable, and you feel a terrible dread.</span>")
-				H.hallucination += 75
-				H.Jitter(30)
-				H.stuttering += 30
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>Your mind feels much less stable, and you feel a terrible dread.</span>")
+					H.hallucination += 75
+					H.Jitter(30)
+					H.stuttering += 30
+					playsound(H, 'sound/effects/alien_psy.ogg', 50, 0, -4)
+					last_psychicattack = world.time
 			if(4) //Brief period of pacification
-				to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
-				H.reagents.add_reagent(CHILLWAX, 1)
-	last_psychicattack = world.time
+				for(var/mob/living/carbon/human/H in victims)
+					if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+						continue
+					to_chat(H, "<span class='userdanger'>You feel strangely calm and passive. What's the point in fighting?</span>")
+					H.reagents.add_reagent(CHILLWAX, 2)
+					playsound(H, 'sound/effects/alien_psy.ogg', 50, 0, -4)
+					last_psychicattack = world.time
+
+	if(!last_psychicattack + psychicattack_cooldown < world.time) // If not done cooling down from the previous psychic attack, just shoot a laser beem
+		..()
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/bullet_act(var/obj/item/projectile/P) // Lasers have a 50% chance to reflect off the armor, which matches up if the player takes it and puts it on
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
@@ -1018,8 +1182,35 @@
 	..()
 	say(pick("You came this far, even after being warned not to? So be it.","You are clearly too intellectually inferior to understand anything but force.","Attacking a mothership administrator? I almost pity your stupidity.","What do you even hope to accomplish from this?","What a grand and intoxicating insolence.","Once I've disintegrated your body I will keep your brain to study your unnatural behavior."), all_languages[LANGUAGE_GREY])
 
+/mob/living/simple_animal/hostile/humanoid/grey/leader/death(var/gibbed = FALSE) // One last act of defiance against the attackers that caused this
+	visible_message("<span class=danger><B>Before collapsing, the Administrator lets loose one last blast of psychic energy that tears their body apart!</span></B>")
+	say("[pick("NO- NO! IMPOSSIBLE!", "I WON'T ALLOW YOU TO SURVIVE MY FAILURE!", "DIE, REPROBATE!", "GLORY TO THE MOTHERSHIP!")]")
+
+
+	for(var/mob/living/carbon/human/H in view(src, psychic_range))
+		if(H.isUnconscious() || H.is_wearing_item(/obj/item/clothing/head/tinfoil) || (M_PSY_RESIST in H.mutations)) // Psy-attacks don't work if the target is unconsious, wearing a tin foil hat, or has genetic resistance
+			continue
+		to_chat(H, "<span class='userdanger'>An unbearable pain stabs into your mind!</span>")
+		H.adjustBrainLoss(20)
+		H.eye_blurry = max(H.eye_blurry, 10)
+		H.confused += 10
+		H.dizziness += 10
+		H.Knockdown(4)
+		H.Stun(4)
+		H.audible_scream()
+		playsound(H, 'sound/effects/alien_psy.ogg', 50, 0, -4)
+
+	playsound(src, 'sound/effects/flesh_squelch.ogg', 50, 1)
+	new /obj/effect/gibspawner/genericmothership(src.loc)
+	..(gibbed)
+
 /mob/living/simple_animal/hostile/humanoid/grey/leader/GetAccess()
 	return list(access_mothership_general, access_mothership_maintenance, access_mothership_military, access_mothership_research, access_mothership_leader)
 
 /mob/living/simple_animal/hostile/humanoid/grey/leader/Process_Spacemove(var/check_drift = 0) // The ayy leader can follow enemies into space, and won't just drift off
 	return 1
+
+///////////////////////////////////////////////////////////////////ADMINISTRATOR ZORB///////////
+//Named subtype of the ayy leader present in the lab vault
+/mob/living/simple_animal/hostile/humanoid/grey/leader/zorb
+	name = "Administrator Zorb"

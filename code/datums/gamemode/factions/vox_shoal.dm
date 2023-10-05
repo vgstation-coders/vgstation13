@@ -179,7 +179,7 @@ var/list/potential_bonus_items = list(
 
 	/*
 	spawn()
-		var/chosen_loadout = input(vox, "The raid is about to begin. What kind of operations would you like to specialize into ?") in list("Raider", "Engineer", "Saboteur", "Medic")
+		var/chosen_loadout = input(vox, "The raid is about to begin. What kind of operations would you like to specialize into?") in list("Raider", "Engineer", "Saboteur", "Medic")
 		concrete_outfit.chosen_spec = chosen_loadout
 		concrete_outfit.equip_special_items(vox)
 	*/

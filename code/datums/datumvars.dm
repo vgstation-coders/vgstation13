@@ -41,7 +41,7 @@
 
 		#ifdef VARSICON
 		if (A.icon)
-			body += "<li>"+debug_variable("icon", new/icon(A.icon, A.icon_state, A.dir), 0)+"<\li>"
+			body += "<li>"+debug_variable("icon", new/icon(A.icon, A.icon_state, A.dir))+"<\li>"
 		#endif
 
 	var/sprite
@@ -184,7 +184,7 @@
 	names = sortList(names)
 
 	for (var/V in names)
-		body += "<li>"+debug_variable(V, D.vars[V], 0, D)+"</li>"
+		body += "<li>"+debug_variable(V, D.vars[V], list(D.vars), D)+"</li>"
 
 	body += "</ul>"
 	body = jointext(body,"")
@@ -346,8 +346,10 @@ function loadPage(list) {
 
 	usr << browse(html, "window=variables\ref[D];size=475x650")
 
-/client/proc/debug_variable(name, value, level, var/datum/DA = null)
+/client/proc/debug_variable(name, value, list/searched, var/datum/DA = null)
 	var/html = ""
+
+	var/prefix = name ? "[name] = " : ""
 
 	if(DA)
 		if(name == "appearance")
@@ -362,55 +364,63 @@ function loadPage(list) {
 			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>S</a>) "}
 
 	if (isnull(value))
-		html += "[name] = <span class='value'>null</span>"
+		html += "[prefix]<span class='value'>null</span>"
 
 	else if (istext(value))
-		html += "[name] = <span class='value'>\"[html_encode(value)]\"</span>"
+		html += "[prefix]<span class='value'>\"[html_encode(value)]\"</span>"
 
 	else if (isicon(value))
 		#ifdef VARSICON
-		html += "[name] = /icon (<span class='value'>[value]</span>) [bicon(value)]"
+		html += "[prefix]/icon (<span class='value'>[value]</span>) [bicon(value)]"
 		#else
-		html += "[name] = /icon (<span class='value'>[value]</span>)"
+		html += "[prefix]/icon (<span class='value'>[value]</span>)"
 		#endif
 
 	else if(istype(value, /image))
 		#ifdef VARSICON
-		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = /image (<span class='value'>[value]</span>) [bicon(value)]"
+		html += "[prefix]<a href='?_src_=vars;Vars=\ref[value]'>/image (<span class='value'>[value]</span>) \ref[value] [bicon(value)]</a>"
 		#else
-		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = /image (<span class='value'>[value]</span>)"
+		html += "[prefix]<a href='?_src_=vars;Vars=\ref[value]'>/image (<span class='value'>[value]</span>) \ref[value]</a>"
 		#endif
 
 	else if (isfile(value))
-		html += "[name] = <span class='value'>'[value]'</span>"
+		html += "[prefix]<span class='value'>'[value]'</span>"
 
 	else if (istype(value, /datum))
 		var/datum/D = value
-		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = [D.type]"
+		html += "[prefix]<a href='?_src_=vars;Vars=\ref[value]'>[D.type] (<span class='value'>[D]</span>) \ref[value]</a>"
 
 	else if (istype(value, /client))
 		var/client/C = value
-		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = [C] [C.type]"
-//
-	else if (istype(value, /list))
-		var/list/L = value
-		html += "[name] = /list ([L.len])"
+		html += "[prefix]<a href='?_src_=vars;Vars=\ref[value]'>[C.type] (<span class='value'>[C]</span>) \ref[value]</a>"
 
-		if (L.len > 0 && !(name == "underlays" || name == "overlays" || name == "vars" || L.len > 500))
+	else if (islist(value))
+		var/list/L = value
+		html += "[prefix]/list ([L.len])"
+
+		if (L.len > 0 && L.len <= 500 && !(L in searched))
 			// not sure if this is completely right...
 			html += "<ul>"
 			var/index = 1
 			for (var/entry in L)
-				if(istext(entry))
-					html += "<li>"+debug_variable(entry, L[entry], level + 1)
+				var/assoc
+				if(!isnum(entry))
+					try //Certain wacky builtin lists will runtime on attempted associative access
+						assoc = L[entry]
+					catch
+						//Do nothing
+
+				if(!isnull(assoc))
+					html += "<li>[index]. " + debug_variable(entry, assoc, searched + list(L))
 				else
-					html += "<li>"+debug_variable(index, L[index], level + 1)
+					html += "<li>[index]. " + debug_variable(null, entry, searched + list(L))
+
 				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[DA]'>(Delete)</a></li>"
 				index++
 			html += "</ul>"
 
 	else
-		html += "[name] = <span class='value'>[value]</span>"
+		html += "[prefix]<span class='value'>[value]</span>"
 		/*
 		// Bitfield stuff
 		if(round(value)==value) // Require integers.
@@ -435,20 +445,11 @@ function loadPage(list) {
 	if(!istype(L))
 		return
 
-	var/html = "<h1>List Viewer</h1><i>Length: [L.len]</i>"
+	var/html = "<h1>List Viewer</h1>"
 
 	if(L.len)
-		html += "<hr><ul>"
-		var/index = 1
-		for (var/entry in L)
-			if(istext(entry))
-				html += "<li>"+debug_variable(entry, L[entry], 0)
-				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[L[entry]]'>(Delete)</a></li>"
-			else
-				html += "<li>"+debug_variable(index, L[index], 0)
-				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[L[index]]'>(Delete)</a></li>"
-			index++
-		html += "</ul>"
+		html += "<hr>"
+		html += debug_variable(null, L)
 
 	usr << browse(html, "window=listedit\ref[L];size=475x650")
 
@@ -903,9 +904,9 @@ function loadPage(list) {
 			to_chat(usr, "Only mobs with a /mind have their original body archived")
 			return
 		if (ishuman(M) && alert("Since you are resetting a human, do you want them to keep their current inventory equipped or drop it all on the floor?", "Body Resetting", "Keep Inventory", "Drop Everything") == "Keep Inventory")
-			M.reset_body(keep_clothes = TRUE)
-		else if (ishuman(M) && alert("Since you are resetting a human, do you want them to get their current job equipment again or not?", "Body Resetting", "Keep Outfit", "Spawn Naked") == "Keep Outfit")
-			M.reset_body(spawn_naked = FALSE)
+			M.reset_body(keep_inventory = TRUE)
+		else if (ishuman(M) && alert("Additionally, do you want them to get a new copy of their job outfit?", "Body Resetting", "New Outfit", "Stay Naked") == "New Outfit")
+			M.reset_body(job_outfit = TRUE)
 		else
 			M.reset_body()
 		add_gamelogs(usr, " reset [(M == usr) ? "their own" : "[key_name(M)]'s"] body from its archive.", admin = TRUE, tp_link = TRUE)

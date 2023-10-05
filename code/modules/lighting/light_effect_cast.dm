@@ -446,7 +446,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		img.pixel_x = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (x_offset * world.icon_size)
 		img.pixel_y = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (y_offset * world.icon_size)
 		img.layer = ROID_TURF_LIGHT_LAYER
-		temp_appearance_shadows
 		temp_appearance += img
 
 	var/turf_shadow_image_identifier = "white_turf"

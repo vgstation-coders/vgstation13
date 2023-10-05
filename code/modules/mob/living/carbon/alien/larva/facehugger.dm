@@ -19,6 +19,7 @@
 	icon = 'icons/mob/alien.dmi'
 	icon_state = "facehugger"
 	item_state = "facehugger"
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 	w_class = W_CLASS_TINY //note: can be picked up by aliens unlike most other items of w_class below 4
 	flags = FPRINT | PROXMOVE
 	clothing_flags = MASKINTERNALS

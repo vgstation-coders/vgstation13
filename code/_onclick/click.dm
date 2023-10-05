@@ -3,7 +3,9 @@
 	~Sayu
 */
 
-//A workaround for a BYOND bug (or at least weird behavior). It's classified.
+//BYOND has a quirk (maybe bug?) where, if you initiate a clickdrag with one mouse button, any clicks with another button during the drag hit the object being dragged.
+//This allowed you to, for example, start a middle-click drag on someone and then have an aimbot that allows you to effortlessly hit them in melee or ranged combat as long as you held MMB.
+//This code discards clicks performed during a drag to prevent this.
 /client/Click(object, location, control, params)
 	var/list/p = params2list(params)
 	if(p["drag"])
@@ -165,6 +167,17 @@
 			else
 				//Clicked on a non-adjacent atom that is not in view
 				RemoteClickOn(A, params, held_item, client.eye)
+		else if(mind && mind.assigned_role == "AI") // clown AI stuff
+			if(spell_channeling)
+				spell_channeling.channeled_spell(A, bypassrange = TRUE)
+			else if(istype(A,/obj/machinery/door/airlock))
+				var/obj/machinery/door/airlock/D = A
+				if(D.density)
+					D.Topic("aiEnable=7", list("aiEnable"="7"), 1)
+				else
+					D.Topic("aiDisable=7", list("aiDisable"="7"), 1)
+			else
+				RangedClickOn(A, params, held_item)
 		else
 			RangedClickOn(A, params, held_item)
 

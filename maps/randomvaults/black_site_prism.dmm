@@ -1058,7 +1058,6 @@
 /obj/item/weapon/bedsheet/purple,
 /obj/structure/window/reinforced,
 /mob/living/simple_animal/hostile/humanoid/wizard{
-	color = null;
 	name = "Garrious the Unpleasant"
 	},
 /turf/unsimulated/floor{

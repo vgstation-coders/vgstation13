@@ -339,4 +339,43 @@
 	icon_state = "metrocop_helmet"
 	item_state = "helmet"
 	species_fit = list(INSECT_SHAPED)
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = FULL_HEAD|MASKHEADHAIR
+
+/obj/item/clothing/head/helmet/xcom
+	name = "Mysterious Helmet"
+	desc = "A tactical balaclava reinforced with alloy plating. Distributed to shadow organization squaddies."
+	icon_state = "xcombalaclava_m1"
+	item_state = "xcombalaclava_m1"
+	species_fit = list("Human")
+	species_restricted = list("Human")
+	body_parts_covered = FULL_HEAD|HIDEHAIR
+	body_parts_visible_override = EYES
+
+/obj/item/clothing/head/helmet/xcom/equipped(mob/living/carbon/human/H, equipped_slot) // Give them an xcom ufo defense hair style. Thanks Blithering!
+	if(equipped_slot == slot_head)
+
+		if(H.gender==MALE)
+			switch(rand(1,3))
+				if(1)
+					icon_state = "xcombalaclava_m1"
+					item_state = "xcombalaclava_m1"
+				if(2)
+					icon_state = "xcombalaclava_m2"
+					item_state = "xcombalaclava_m2"
+				if(3)
+					icon_state = "xcombalaclava_m3"
+					item_state = "xcombalaclava_m3"
+
+		if(H.gender==FEMALE)
+			switch(rand(1,3))
+				if(1)
+					icon_state = "xcombalaclava_f1"
+					item_state = "xcombalaclava_f1"
+				if(2)
+					icon_state = "xcombalaclava_f2"
+					item_state = "xcombalaclava_f2"
+				if(3)
+					icon_state = "xcombalaclava_f3"
+					item_state = "xcombalaclava_f3"
+
+		H.update_inv_head()

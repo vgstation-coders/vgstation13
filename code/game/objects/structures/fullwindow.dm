@@ -32,6 +32,14 @@
 /obj/structure/window/full/setup_border_dummy()
 	return
 
+/obj/structure/window/full/AltClick(mob/user)
+	var/turf/T = get_turf(src)
+	if(T && (T in range(1, user.loc)) && (T in view(1, user.virtualhearer))) //If next to user's location (to allow locker and mech alt-clicks) and if the user can actually view it
+		if(user.listed_turf == T)
+			user.listed_turf = null
+		else
+			user.listed_turf = T
+			user.client.statpanel = T.name
 
 /obj/structure/window/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(pass_flags_self))
@@ -147,7 +155,7 @@
 /obj/structure/window/full/reinforced/tinted
 
 	name = "tinted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall?"
 	icon_state = "ftwindow0"
 	base_state = "ftwindow"
 	opacity = 1
@@ -156,7 +164,7 @@
 /obj/structure/window/full/reinforced/tinted/frosted
 
 	name = "frosted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall?"
 	icon_state = "frwindow0"
 	base_state = "frwindow"
 	health = 30

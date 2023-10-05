@@ -308,7 +308,8 @@ to destroy them and players will be able to make replacements.
 	"data"=/obj/item/weapon/circuitboard/disk_duplicator,
 	"Ez-bake oven"=/obj/item/weapon/circuitboard/cooking,
 	"candy machine"=/obj/item/weapon/circuitboard/cooking/candy,
-	"cereal maker"=/obj/item/weapon/circuitboard/cooking/cerealmaker)
+	"cereal maker"=/obj/item/weapon/circuitboard/cooking/cerealmaker,
+	"food press"=/obj/item/weapon/circuitboard/cooking/foodpress)
 	var/soldering = 0 //Busy check
 
 /obj/item/weapon/circuitboard/blank/New()
@@ -1501,6 +1502,17 @@ to destroy them and players will be able to make replacements.
 	req_components = list(
 						/obj/item/weapon/stock_parts/manipulator = 3,
 						/obj/item/weapon/stock_parts/console_screen = 1) //boring recipe I know, but they're very simple machines
+
+
+/obj/item/weapon/circuitboard/cooking/foodpress
+	name = "circuit board (food press)"
+	desc = "A circuit board for a food press."
+	board_type = MACHINE
+	build_path = /obj/machinery/cooking/foodpress
+	origin_tech = Tc_ENGINEERING + "=1;" + Tc_POWERSTORAGE + "=2"
+	req_components = list(
+						/obj/item/weapon/stock_parts/manipulator = 3,
+						/obj/item/weapon/stock_parts/console_screen = 1)
 
 /obj/item/weapon/circuitboard/medal_printer
 	name = "Circuit board (Medal Printer)"

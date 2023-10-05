@@ -11,10 +11,22 @@
 	light_type = LIGHT_SOFT_FLICKER
 	autoignition_temperature = AUTOIGNITION_FABRIC //idk the wick lmao
 
-	var/wax = 200
+	var/wax = 900
 	var/lit = 0
 	var/flavor_text
 	var/trashtype = /obj/item/trash/candle
+	var/flickering = 0
+
+/obj/item/candle/New(turf/loc)
+	..()
+	if(world.has_round_started())
+		initialize()
+
+/obj/item/candle/initialize()
+	..()
+	if (lit)//pre-mapped lit candles
+		lit = 0
+		light("",TRUE)
 
 /obj/item/candle/update_icon()
 	overlays.len = 0
@@ -58,6 +70,41 @@
 		set_light(CANDLE_LUM)
 		processing_objects.Add(src)
 		update_icon()
+
+/obj/item/candle/proc/flicker(var/amount = rand(5, 15))
+	if(flickering)
+		return
+	flickering = 1
+	if(lit)
+		for(var/i = 0; i < amount; i++)
+			if(prob(95))
+				if(prob(30))
+					lit = 0
+				else
+					var/candleflick = pick(0.5, 0.7, 0.9, 1, 1.3, 1.5, 2) 
+					set_light(candleflick * CANDLE_LUM)
+			else
+				set_light(5 * CANDLE_LUM)
+				if(source_temperature == 0) //only holocandles don't have source temp, using this so I don't add a new var
+					wax = 0.8 * wax //jury rigged so the wax reduction doesn't nuke the holocandles if flickered
+				visible_message("<span class='warning'>The [src]'s flame starts roaring unnaturally!</span>")
+			update_icon()
+			sleep(rand(5,8))
+			set_light(CANDLE_LUM)
+			lit = 1
+			update_icon()
+			flickering = 0
+
+/obj/item/candle/spook(mob/dead/observer/ghost)
+	if(..(ghost, TRUE))
+		flicker()
+
+/obj/item/candle/attack_ghost(mob/user)
+	if(!can_spook())
+		return
+	add_hiddenprint(user)
+	flicker(1)
+	investigation_log(I_GHOST, "|| was made to flicker by [key_name(user)][user.locked_to ? ", who was haunting [user.locked_to]" : ""]")
 
 /obj/item/candle/process()
 	if(!lit)

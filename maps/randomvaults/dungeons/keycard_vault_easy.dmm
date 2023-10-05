@@ -1,0 +1,165 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"d" = (
+/obj/item/weapon/cell/infinite,
+/obj/item/pod_parts/pod_frame/aft_port,
+/obj/item/pod_parts/pod_frame/aft_starboard,
+/obj/item/pod_parts/pod_frame/fore_port,
+/obj/item/pod_parts/pod_frame/fore_starboard,
+/obj/item/pod_parts/core,
+/obj/structure/rack,
+/obj/effect/decal/warning_stripes{
+	dir = 5;
+	icon_state = "warning";
+	tag = "icon-warning (NORTHEAST)"
+	},
+/obj/effect/decal/cleanable/cobweb2,
+/obj/structure/curtain/black,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"j" = (
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"m" = (
+/turf/portal{
+	opacity = 1
+	},
+/area/vault/keycard)
+"o" = (
+/obj/structure/reagent_dispensers/fueltank,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"u" = (
+/obj/effect/decal/warning_stripes{
+	dir = 10;
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHWEST)"
+	},
+/obj/structure/computerframe,
+/obj/item/stack/cable_coil{
+	amount = 2
+	},
+/obj/item/stack/sheet/glass/glass{
+	amount = 2
+	},
+/obj/item/weapon/circuitboard/rdconsole/pod,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"B" = (
+/obj/machinery/door/airlock/highsecurity,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"F" = (
+/obj/structure/rack,
+/obj/item/stack/rods,
+/obj/item/tool/wrench/socket,
+/obj/effect/decal/warning_stripes{
+	dir = 6;
+	icon_state = "warning";
+	tag = "icon-warning (SOUTHEAST)"
+	},
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"H" = (
+/turf/simulated/wall/invulnerable/r_wall,
+/area/vault/keycard)
+"M" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"P" = (
+/turf/portal,
+/area/vault/keycard)
+"Q" = (
+/obj/effect/decal/cleanable/soot,
+/obj/item/stack/sheet/metal{
+	amount = 5
+	},
+/obj/item/stack/cable_coil{
+	amount = 5
+	},
+/obj/item/weapon/reagent_containers/glass/beaker,
+/obj/item/weapon/reagent_containers/glass/beaker,
+/obj/item/weapon/stock_parts/matter_bin,
+/obj/item/weapon/stock_parts/manipulator,
+/obj/item/weapon/circuitboard/circuit_imprinter,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"U" = (
+/obj/structure/reagent_dispensers/fueltank,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"V" = (
+/obj/machinery/r_n_d/fabricator/pod,
+/obj/effect/decal/warning_stripes{
+	dir = 9;
+	icon_state = "warning";
+	tag = "icon-warning (NORTHWEST)"
+	},
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+
+(1,1,1) = {"
+H
+H
+H
+H
+H
+"}
+(2,1,1) = {"
+H
+H
+H
+m
+H
+"}
+(3,1,1) = {"
+H
+H
+M
+P
+H
+"}
+(4,1,1) = {"
+H
+H
+B
+H
+H
+"}
+(5,1,1) = {"
+H
+V
+j
+u
+H
+"}
+(6,1,1) = {"
+H
+U
+a
+Q
+H
+"}
+(7,1,1) = {"
+H
+d
+o
+F
+H
+"}
+(8,1,1) = {"
+H
+H
+H
+H
+H
+"}

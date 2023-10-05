@@ -38,6 +38,7 @@
 												/obj/item/weapon/reagent_containers/food/condiment,
 												/obj/item/weapon/reagent_containers/syringe,
 												/obj/item/weapon/reagent_containers/dropper)
+	var/open_container_override = FALSE
 
 
 /obj/item/weapon/reagent_containers/pan/New()
@@ -258,15 +259,22 @@
 		if((dropper.a_intent != I_HELP) && ismob(target))
 			var/mob/M = target
 			M.visible_message( \
-					"<span class='[spanclass]'>The contents of [src] spill out onto [M][spanclass == "warning" ? "!" : "."]</span>", \
-					"<span class='[spanclass]'>The contents of [src] spill out onto you[spanclass == "warning" ? "!" : "."]</span>")
+					"<span class='[spanclass]'>[src]'s contents spill out onto [M][spanclass == "warning" ? "!" : "."]</span>", \
+					"<span class='[spanclass]'>[src]'s contents spill out onto you[spanclass == "warning" ? "!" : "."]</span>")
 		//otherwise, say that the wielder spills it onto the target
 		else
 			dropper.visible_message( \
-					"<span class='[spanclass]'>[dropper] [splashverb][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? get_reflexive_pronoun(dropper.gender) : target]" : ""][spanclass == "warning" ? "!" : "."]</span>", \
-					"<span class='[spanclass]'>You [shift_verb_tense(splashverb)][target ? "" : " out"] the contents of [src][target ? " onto [target == dropper ? "yourself" : target]" : ""].</span>")
+					"<span class='[spanclass]'>[dropper] [splashverb][target ? "" : " out"] [src]'s contents [target ? " onto [target == dropper ? get_reflexive_pronoun(dropper.gender) : target]" : ""][spanclass == "warning" ? "!" : "."]</span>", \
+					"<span class='[spanclass]'>You [shift_verb_tense(splashverb)][target ? "" : " out"] [src]'s contents [target ? " onto [target == dropper ? "yourself" : target]" : ""].</span>")
 	else
-		visible_message("<span class='warning'>Everything [splashverb] out of [src] [target ? "onto [target]" : ""]!</span>")
+		var/mob/living/carbon/on_head_someone = is_on_someones_head()
+		if (on_head_someone)
+			spanclass = "notice"
+			on_head_someone.visible_message( \
+					"<span class='[spanclass]'>[src]'s contents spill out onto [on_head_someone][spanclass == "warning" ? "!" : "."]</span>", \
+					"<span class='[spanclass]'>[src]'s contents spill out onto you[spanclass == "warning" ? "!" : "."]</span>")
+		else
+			visible_message("<span class='warning'>[src]'s contents [shift_verb_tense(splashverb)] out[target ? " onto [target]" : ""]!</span>")
 
 	cook_abort() //sanity
 	update_icon()
@@ -276,7 +284,7 @@
 
 	var/datum/organ/external/affecting = user && user.zone_sel ? user.zone_sel.selecting : null //Find what the player is aiming at
 
-	reagents.reaction(target, TOUCH, amount_override = max(0,amount), zone_sels = affecting ? list(affecting) : ALL_LIMBS)
+	reagents.reaction(target, TOUCH, amount_override = max(0,amount), zone_sels = affecting ? list(affecting) : (is_on_someones_head() ? LIMB_HEAD : ALL_LIMBS))
 
 	if(user)
 		user.investigation_log(I_CHEMS, "has splashed [amount > 0 ? "[amount]u of [reagents.get_reagent_ids()]" : "[reagents.get_reagent_ids(1)]"] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""].")
@@ -446,7 +454,13 @@
 	. = .. ()
 	chef = user
 	if(slot == slot_head)
+		//Have to temporarily change a few values to get this to work properly.
+		open_container_override = TRUE
+		var/prev_heat_conductivity = heat_conductivity
+		heat_conductivity = 1
 		pour_on_self(user)
+		open_container_override = FALSE
+		heat_conductivity = prev_heat_conductivity
 
 /obj/item/weapon/reagent_containers/pan/proc/pour_on_self(mob/user)
 	drop_ingredients(target = user, dropper = null)
@@ -460,7 +474,7 @@
 
 /obj/item/weapon/reagent_containers/pan/is_open_container()
 	if(is_on_someones_head())
-		return FALSE
+		return open_container_override
 	return ..()
 
 /////////////////////Areas for to consider for further expansion/////////////////////
@@ -472,13 +486,12 @@
 	//Getting pans by crafting, cargo crates, and vending machines.
 	//Food being ready making a steam sprite that turns to smoke and fire if left on too long.
 	//Sizzling sound with hot reagents in the pan.
-	//Scalding people with hot reagents (the reagents are already heated on the pan I'm just not sure if there's a way to scald someone with hot reagents).
 	//Body-part specific splash text and also when you dump it onto yourself upon equipping to the head.
 	//Hot pans with glowing red sprite and extra damage.
 	//Stuff dumping out of the pan when attacking a breakable object, window, camera, etc.
 	//Generalize thermal transfer parameter.
 	//Componentize cooking vessels.
-	//Spilling (including onto people) when thrown impacting.
+	//Spilling when thrown impacting.
 	//Different cook timings based on heat, or cooking with heat transfer (defined at the recipe level?) rather than a timer.
 	//Frying stuff in oil (could use recipes for this).
 	//Address cases with large ingredient sprites (see the note in update_icon()).

@@ -46,7 +46,6 @@
 
 	return final_damage
 
-
 /mob/living/bullet_act(var/obj/item/projectile/P, var/def_zone)
 	var/obj/item/weapon/cloaking_device/C = locate(/obj/item/weapon/cloaking_device) in src
 	if(C && C.active)
@@ -141,7 +140,7 @@
 			return
 		if(!O.fingerprintslast)
 			return
-			
+
 		var/client/assailant = directory[ckey(O.fingerprintslast)]
 		if(assailant && assailant.ckey && assailant.mob)
 			msg_admin_attack("[src.name] ([src.ckey]) was hit by a thrown [O], last touched by [assailant.mob.name] ([assailant.ckey]) (speed: [speed]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")

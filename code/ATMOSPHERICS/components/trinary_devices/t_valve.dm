@@ -252,6 +252,14 @@
 	if(old_state != state)
 		investigation_log(I_ATMOS,"was [(state ? "opened (side)" : "closed (straight) ")] by a signal")
 
+/obj/machinery/atmospherics/trinary/tvalve/digital/alt //starts activated, used for mapping
+	icon_state = "tvalve1"
+	mirror = /obj/machinery/atmospherics/trinary/tvalve/digital/mirrored/alt
+
+/obj/machinery/atmospherics/trinary/tvalve/digital/alt/initialize()
+	. = ..()
+	go_to_side()
+
 /obj/machinery/atmospherics/trinary/tvalve/digital/mirrored
 	icon_state = "tvalvem0"
 	pipe_flags = IS_MIRROR
@@ -265,3 +273,10 @@
 
 /obj/machinery/atmospherics/trinary/tvalve/npc_tamper_act(mob/living/L)
 	attack_hand(L)
+
+/obj/machinery/atmospherics/trinary/tvalve/digital/mirrored/alt //starts activated, used for mapping
+	icon_state = "tvalvem1"
+
+/obj/machinery/atmospherics/trinary/tvalve/digital/mirrored/alt/initialize()
+	. = ..()
+	go_to_side()

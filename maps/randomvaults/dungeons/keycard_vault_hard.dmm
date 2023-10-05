@@ -1,0 +1,457 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"c" = (
+/obj/machinery/door/mineral/gold,
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"d" = (
+/obj/structure/sign/poster{
+	pixel_y = 32
+	},
+/obj/effect/decal/warning_stripes/siding{
+	dir = 9
+	},
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"e" = (
+/turf/simulated/wall/r_wall,
+/area/vault/keycard)
+"f" = (
+/obj/machinery/computer/arcade,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 4
+	},
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"g" = (
+/obj/effect/decal/warning_stripes/siding/gold,
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"h" = (
+/obj/structure/rack,
+/obj/structure/vendomatpack/offlicence,
+/obj/structure/vendomatpack/sovietsoda,
+/obj/structure/vendomatpack/nuka,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"i" = (
+/obj/structure/table/glass/plasma,
+/obj/structure/table/glass/plasma,
+/obj/item/weapon/lighter/zippo{
+	pixel_y = 7
+	},
+/obj/item/ashtray/bronze,
+/turf/simulated/floor/light,
+/area/vault/keycard)
+"j" = (
+/obj/structure/closet/crate,
+/obj/item/clothing/accessory/storage/bandolier,
+/obj/item/tool/wrench,
+/obj/item/tool/screwdriver,
+/obj/item/weapon/reagent_containers/food/drinks/shaker,
+/obj/item/device/rcd/matter/rsf,
+/obj/item/weapon/storage/box/beanbagshells,
+/obj/item/weapon/storage/box/drinkingglasses,
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel,
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/barbot,
+/obj/item/slime_extract/adamantine,
+/obj/item/slime_extract/adamantine,
+/turf/simulated/floor/mineral/diamond,
+/area/vault/keycard)
+"k" = (
+/turf/portal{
+	opacity = 1
+	},
+/area/vault/keycard)
+"l" = (
+/obj/effect/decal/warning_stripes/siding,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 6
+	},
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"m" = (
+/obj/machinery/media/jukebox/superjuke,
+/obj/structure/painting/random{
+	pixel_y = 32
+	},
+/turf/simulated/floor/mineral/diamond,
+/area/vault/keycard)
+"n" = (
+/obj/machinery/door/window/plasma,
+/turf/simulated/floor/light,
+/area/vault/keycard)
+"o" = (
+/obj/structure/table/glass/plasma,
+/obj/machinery/computer/security/telescreen/entertainment/wooden_tv,
+/turf/simulated/floor/light,
+/area/vault/keycard)
+"p" = (
+/obj/structure/railing/pglass{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 1
+	},
+/obj/structure/table/glass/plasma,
+/obj/item/pizzabox/meat,
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"q" = (
+/obj/machinery/chem_dispenser/scp_294,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/mineral/diamond,
+/area/vault/keycard)
+"r" = (
+/obj/machinery/computer/slot_machine,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding{
+	dir = 5
+	},
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"s" = (
+/obj/structure/table/glass/plasma,
+/turf/simulated/floor/light,
+/area/vault/keycard)
+"t" = (
+/obj/structure/railing/pglass{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 1
+	},
+/obj/structure/table/glass/plasma,
+/obj/item/toy/cards,
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"u" = (
+/obj/machinery/gashapon,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 4
+	},
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"v" = (
+/obj/effect/decal/warning_stripes/siding{
+	dir = 10
+	},
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"w" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"x" = (
+/obj/effect/decal/warning_stripes/siding{
+	dir = 8
+	},
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"y" = (
+/obj/structure/bed/chair/comfy/couch/left/lime{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding/gold,
+/obj/structure/painting/random{
+	pixel_y = -32
+	},
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"z" = (
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"A" = (
+/obj/effect/decal/cleanable/blood,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"B" = (
+/obj/machinery/door/airlock/highsecurity,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"C" = (
+/obj/effect/decal/warning_stripes/siding,
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"D" = (
+/obj/machinery/vending/boozeomat,
+/turf/simulated/floor/mineral/gold,
+/area/vault/keycard)
+"E" = (
+/obj/machinery/vending/artifact,
+/obj/effect/decal/cleanable/cobweb,
+/obj/effect/decal/cleanable/greenglow,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"F" = (
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 1
+	},
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"G" = (
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 1
+	},
+/obj/machinery/telepad,
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"H" = (
+/turf/simulated/wall/invulnerable/r_wall,
+/area/vault/keycard)
+"I" = (
+/obj/machinery/computer/telescience,
+/turf/simulated/wall/invulnerable/r_wall,
+/area/vault/keycard)
+"J" = (
+/obj/machinery/vending/cigarette,
+/turf/simulated/floor/light,
+/area/vault/keycard)
+"K" = (
+/turf/simulated/floor/mineral/gold,
+/area/vault/keycard)
+"L" = (
+/obj/structure/railing/pglass{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 9
+	},
+/obj/structure/bed/chair/comfy/couch/left/teal{
+	dir = 4
+	},
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"M" = (
+/obj/structure/bed/chair/comfy/couch/right/teal{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding/gold,
+/obj/structure/sign/poster{
+	pixel_y = -32
+	},
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"O" = (
+/obj/effect/decal/warning_stripes/siding/gold,
+/obj/machinery/computer/telescience/centcomm,
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"P" = (
+/turf/portal,
+/area/vault/keycard)
+"Q" = (
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 10
+	},
+/obj/structure/bed/chair/comfy/couch/turn/inward/teal{
+	dir = 1
+	},
+/obj/machinery/light/he,
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"R" = (
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 6
+	},
+/obj/structure/bed/chair/comfy/couch/turn/inward/lime{
+	dir = 8
+	},
+/obj/machinery/light/he,
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"T" = (
+/obj/structure/closet/secure_closet/bar,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"U" = (
+/obj/item/weapon/stool/bar,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding{
+	dir = 1
+	},
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"V" = (
+/obj/machinery/sweet,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 4
+	},
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+"W" = (
+/obj/item/stack/tile/mineral/phazon,
+/turf/simulated/floor/mineral/phazon,
+/area/vault/keycard)
+"X" = (
+/obj/structure/reagent_dispensers/beerkeg{
+	desc = "One of the more successful achievements of the NanoTrasen Corporate Warfare Division, their nuclear fission explosives are renowned for being cheap to produce and devestatingly effective. Signs explain that though this is just a model, every NanoTrasen station is equipped with one, just in case. All Captains carefully guard the disk needed to detonate them - at least, the sign says they do. There seems to be a tap on the back.";
+	icon = 'icons/obj/stationobjs.dmi';
+	icon_state = "nuclearbomb0";
+	name = "NanoTrasen-brand nuclear fission explosive"
+	},
+/obj/effect/decal/cleanable/cobweb,
+/turf/simulated/floor/plating,
+/area/vault/keycard)
+"Y" = (
+/obj/structure/railing/pglass{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes/siding/gold{
+	dir = 5
+	},
+/obj/structure/bed/chair/comfy/couch/right/lime{
+	dir = 8
+	},
+/turf/simulated/floor/wood,
+/area/vault/keycard)
+"Z" = (
+/obj/item/weapon/stool/bar,
+/obj/effect/decal/warning_stripes/siding{
+	dir = 1
+	},
+/turf/simulated/floor/engine,
+/area/vault/keycard)
+
+(1,1,1) = {"
+H
+H
+H
+H
+H
+H
+H
+H
+H
+"}
+(2,1,1) = {"
+H
+X
+h
+H
+H
+k
+H
+E
+H
+"}
+(3,1,1) = {"
+H
+T
+a
+H
+w
+P
+H
+A
+H
+"}
+(4,1,1) = {"
+H
+e
+c
+H
+B
+H
+H
+e
+H
+"}
+(5,1,1) = {"
+H
+q
+K
+i
+W
+v
+L
+Q
+H
+"}
+(6,1,1) = {"
+H
+m
+K
+s
+U
+C
+p
+M
+H
+"}
+(7,1,1) = {"
+H
+j
+K
+s
+Z
+C
+F
+g
+H
+"}
+(8,1,1) = {"
+H
+D
+K
+s
+Z
+C
+G
+O
+H
+"}
+(9,1,1) = {"
+I
+J
+n
+o
+Z
+C
+F
+g
+H
+"}
+(10,1,1) = {"
+H
+d
+x
+x
+z
+C
+t
+y
+H
+"}
+(11,1,1) = {"
+H
+r
+f
+u
+V
+l
+Y
+R
+H
+"}
+(12,1,1) = {"
+H
+H
+H
+H
+H
+H
+H
+H
+H
+"}

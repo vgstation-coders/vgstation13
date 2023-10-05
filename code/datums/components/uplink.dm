@@ -15,23 +15,23 @@
 	if(!isitem(parent))
 		return FALSE
 
-	parent.register_event(/event/attackby, src, src::on_attackby())
-	parent.register_event(/event/item_attack_self, src, src::on_attack_self())
+	parent.register_event(/event/attackby, src, nameof(src::on_attackby()))
+	parent.register_event(/event/item_attack_self, src, nameof(src::on_attack_self()))
 	if(istype(parent, /obj/item/device/pda))
 		generate_unlock_code()
-		parent.register_event(/event/pda_change_ringtone, src, src::on_pda_change_ringtone())
+		parent.register_event(/event/pda_change_ringtone, src, nameof(src::on_pda_change_ringtone()))
 
 	if(istype(parent, /obj/item/device/radio))
 		generate_frequency()
-		parent.register_event(/event/radio_new_frequency, src, src::on_radio_new_frequency())
+		parent.register_event(/event/radio_new_frequency, src, nameof(src::on_radio_new_frequency()))
 
 	return TRUE
 
 /datum/component/uplink/Destroy()
-	parent.unregister_event(/event/attackby, src, src::on_attackby())
-	parent.unregister_event(/event/item_attack_self, src, src::on_attack_self())
-	parent.unregister_event(/event/pda_change_ringtone, src, src::on_pda_change_ringtone())
-	parent.unregister_event(/event/radio_new_frequency, src, src::on_radio_new_frequency())
+	parent.unregister_event(/event/attackby, src, nameof(src::on_attackby()))
+	parent.unregister_event(/event/item_attack_self, src, nameof(src::on_attack_self()))
+	parent.unregister_event(/event/pda_change_ringtone, src, nameof(src::on_pda_change_ringtone()))
+	parent.unregister_event(/event/radio_new_frequency, src, nameof(src::on_radio_new_frequency()))
 	..()
 
 /datum/component/uplink/ui_host(mob/user)

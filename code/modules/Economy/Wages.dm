@@ -68,7 +68,11 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 	if(!station_account)
 		message_admins("Station allowance skipped, no station account found.")
 		return
-	station_account.money += station_allowance + WageBonuses()
+
+	for(var/obj/machinery/computer/accounting/A in machines)
+		A.new_cycle()
+	station_account.money += station_allowance + WageBonuses() + station_funding + station_bonus
+	station_bonus = 0
 
 	new /datum/transaction(station_account,"Nanotrasen station allowance","[station_allowance]","Nanotrasen Payroll Server",send2PDAs=FALSE)
 

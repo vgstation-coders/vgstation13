@@ -114,7 +114,7 @@ var/list/event_last_fired = list()
 					if("security robot module")
 						active_with_role["Security"]++
 
-		if(M.mind.assigned_role in engineering_positions && M.mind.assigned_role != "Mechanic")
+		if((M.mind.assigned_role in engineering_positions) && M.mind.assigned_role != "Mechanic")
 			active_with_role["Engineer"]++
 
 		if(M.mind.assigned_role in medical_positions)

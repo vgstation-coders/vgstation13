@@ -1,4 +1,23 @@
 
+/*
+	* Syndicate Traitors
+	* Syndicate Challengers
+	* Changelings
+	* Vampires
+	* Wizard
+	* Civil War of Casters
+	* Blood Cult
+	* Nuclear Emergency
+	* Malfunctioning AI
+	* Blob Conglomerate
+	* Extended
+	* Revolution
+	* The Grinch
+	* Tag mode
+	* Antag Madness
+*/
+
+
 //////////////////////////////////////////////
 //                                          //
 //           SYNDICATE TRAITORS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -13,6 +32,7 @@
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Traitor"
 	cost = 10
 	var/traitor_threshold = 3
 	var/additional_cost = 5
@@ -59,6 +79,7 @@
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 3
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Traitor"
 	cost = 15
 	var/traitor_threshold = 4
 	var/additional_cost = 5
@@ -125,6 +146,7 @@
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Changeling"
 	cost = 18
 	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
@@ -168,6 +190,7 @@
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Vampire"
 	cost = 15
 	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
@@ -211,6 +234,7 @@
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT/2
+	weight_category = "Wizard"
 	cost = 30
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -247,33 +271,14 @@
 	required_pop = list(25,25,20,20,20,20,15,15,15,5)
 	required_candidates = 4
 	weight = BASE_RULESET_WEIGHT/2
+	weight_category = "Wizard"
 	cost = 45
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
-	persistent = 1
 	flags = HIGHLANDER_RULESET
 //	var/wizard_cd = 210 //7 minutes
 	var/total_wizards = 4
 
-/*
-/datum/dynamic_ruleset/roundstart/cwc/process()
-	..()
-	if (wizard_cd)
-		wizard_cd--
-	else
-		wizard_cd = initial(wizard_cd)
-		var/sent_wizards = 1 + count_by_type(mode.executed_rules,/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages)
-		if(sent_wizards>=total_wizards)
-			return
-		var/datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/RM = new()
-		if(sent_wizards % 2) //An odd number of wizards have been sent
-			RM.my_fac = /datum/faction/wizard/civilwar/pfw
-		else
-			RM.my_fac = /datum/faction/wizard/civilwar/wpf
-		message_admins("Dynamic Mode: Civil War rages on. Trying to send mage [sent_wizards+1] for [initial(RM.my_fac.name)].")
-		RM.cost = 0
-		mode.picking_specific_rule(RM,TRUE) //forced
-*/
 
 /datum/dynamic_ruleset/roundstart/cwc/choose_candidates()
 	for(var/wizards_number = 1 to total_wizards)
@@ -320,6 +325,7 @@
 	required_candidates = 4
 	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Cult"
 	cost = 30
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	high_population_requirement = 40
@@ -417,6 +423,7 @@ Assign your candidates in choose_candidates() instead.
 	required_candidates = 5 //This value is useless, see operative_cap
 	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Nuke"
 	cost = 30
 	requirements = list(90, 80, 60, 30, 20, 10, 10, 10, 10, 10)
 	high_population_requirement = 40
@@ -494,6 +501,7 @@ Assign your candidates in choose_candidates() instead.
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Malf"
 	cost = 40
 	requirements = list(90,80,70,60,50,40,40,30,30,20)
 	high_population_requirement = 60
@@ -578,6 +586,7 @@ Assign your candidates in choose_candidates() instead.
 	required_enemies = list(4,4,4,4,4,4,4,3,2,1)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Blob"
 	weekday_rule_boost = list("Tue")
 	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
@@ -589,8 +598,8 @@ Assign your candidates in choose_candidates() instead.
 	if (!blob_fac)
 		blob_fac = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate, null, 1)
 	var/blob_number = 1 + round(mode.roundstart_pop_ready/25) // + 1 Blob per 25 pop. ready.
-	for (var/i = 1 to min(blob_number, candidates.len))
-		var/mob/M = pick(candidates)
+	for (var/i = 1 to min(blob_number, assigned.len))
+		var/mob/M = pick(assigned)
 		blob_fac.HandleNewMind(M.mind)
 		var/datum/role/blob = M.mind.GetRole(BLOBOVERMIND)
 		blob.Greet(GREET_ROUNDSTART)
@@ -602,6 +611,8 @@ Assign your candidates in choose_candidates() instead.
 				blob_looks_player["AME_new"] = 64
 			if("Chaplain")
 				blob_looks_player["skelleton"] = 64
+		if (calledBy == "antag madness")//one core is plenty on antag madness
+			break
 	return 1
 
 //////////////////////////////////////////////
@@ -617,10 +628,12 @@ Assign your candidates in choose_candidates() instead.
 	enemy_jobs = list()
 	required_pop = list(30,30,30,30,30,30,30,30,30,30)
 	required_candidates = 0
-	weight = 0.5*BASE_RULESET_WEIGHT
+	weight = BASE_RULESET_WEIGHT * 0.5
+	weight_category = "Extended"
 	cost = 0
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	high_population_requirement = 101
+
 
 // 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance.
 /datum/dynamic_ruleset/roundstart/extended/ready(var/forced=0)
@@ -633,7 +646,9 @@ Assign your candidates in choose_candidates() instead.
 /datum/dynamic_ruleset/roundstart/extended/execute()
 	message_admins("Starting a round of extended.")
 	log_admin("Starting a round of extended.")
-	mode.forced_extended = TRUE
+	admin_disable_rulesets = TRUE
+	log_admin("Dynamic rulesets are disabled in Extended.")
+	message_admins("Dynamic rulesets are disabled in Extended.")
 	return TRUE
 
 //////////////////////////////////////////////
@@ -650,6 +665,7 @@ Assign your candidates in choose_candidates() instead.
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 3
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Revolution"
 	cost = 40
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
 	high_population_requirement = 50
@@ -708,6 +724,7 @@ Assign your candidates in choose_candidates() instead.
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Special"//Admin only
 	cost = 10
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
 	high_population_requirement = 10
@@ -723,14 +740,19 @@ Assign your candidates in choose_candidates() instead.
 	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
 	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 9th of January
-	return accepted
+	return (accepted || forced)
 
 
 /datum/dynamic_ruleset/roundstart/grinch/execute()
-	var/mob/M = pick(assigned)
-	var/datum/role/grinch/G = new
-	G.AssignToRole(M.mind,1)
-	G.Greet(GREET_ROUNDSTART)
+	var/mob/new_player/M = pick(assigned)
+	if (M)
+		var/datum/role/grinch/newGrinch = new
+		var/mob/living/simple_animal/hostile/gremlin/grinch/G = new (pick(grinchstart))
+		G.key = M.client.ckey
+		qdel(M)
+		newGrinch.AssignToRole(G.mind,1)
+		newGrinch.Greet(GREET_ROUNDSTART)
+		G << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)// MAD JAMS cant last forever yo
 	return 1
 
 //////////////////////////////////////////////
@@ -747,6 +769,7 @@ Assign your candidates in choose_candidates() instead.
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Special"//Admin only
 	cost = 10
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
 	high_population_requirement = 101
@@ -777,3 +800,181 @@ Assign your candidates in choose_candidates() instead.
 		mime.AssignToRole(M2.mind,1)
 		mime.Greet(GREET_ROUNDSTART)
 	return 1
+
+
+//////////////////////////////////////////////
+//                                          //
+//             ANTAG MADNESS                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+var/antag_madness = ANTAG_MADNESS_OFF
+
+/datum/dynamic_ruleset/roundstart/antag_madness
+	name = "Antag Madness"
+	role_category = /datum/role/nanotrasen_official
+	role_category_override = HEAD
+	protected_from_jobs = list()
+	restricted_from_jobs = list()
+	cost = 0
+	weight_category = "Special"//Admin only
+	requirements = list(101,101,101,101,101,101,101,101,101,101) // Adminbus only
+	high_population_requirement = 101
+	persistent = TRUE//latejoiners will either be heads of staff or traitors (unless traitor is deactivated/antagbanned)
+	var/list/nanotrasen_staff = list("Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
+	var/escalation_delay = 18 MINUTES
+
+/datum/dynamic_ruleset/roundstart/antag_madness/trim_candidates()//All the heads of staff get the role, the rest of the players will get trimmed by the other rulesets
+	for(var/mob/P in candidates)
+		if (P.mind.assigned_role && (P.mind.assigned_role in nanotrasen_staff))
+			assigned.Add(P)
+			candidates.Remove(P)
+
+/datum/dynamic_ruleset/roundstart/antag_madness/choose_candidates()
+	message_admins("DYNAMIC MODE: starting [name] with [assigned.len] heads of staff out of [candidates.len] players.")
+	log_admin("DYNAMIC MODE:  starting [name] with [assigned.len] heads of staff out of [candidates.len] players.")
+	return TRUE
+
+/datum/dynamic_ruleset/roundstart/antag_madness/ready(var/forced = 0)
+	return TRUE
+
+/datum/dynamic_ruleset/roundstart/antag_madness/execute()
+	antag_madness = ANTAG_MADNESS_EARLY
+	//first we initialize the nanotrasen faction, even if there are no heads currently there
+	var/datum/faction/nanotrasen/nanotrasen = find_active_faction_by_type(/datum/faction/nanotrasen)
+	if (!nanotrasen)
+		nanotrasen = ticker.mode.CreateFaction(/datum/faction/nanotrasen, null, 1)
+
+	//next we throw every head currently there in it
+	for(var/mob/M in assigned)
+		var/datum/role/nanotrasen_official/head = new
+		head.name = M.mind.assigned_role
+		head.AssignToRole(M.mind,1)
+		nanotrasen.HandleRecruitedRole(head)
+		head.Greet(GREET_ROUNDSTART)
+
+	//and now we manipulate Dynamic to force a bunch of other rulesets. It just works...
+	var/list/the_madness = list(
+		"Malfunctioning AI",
+		"Blob Conglomerate",
+		"Blood Cult",
+		"Nuclear Emergency",
+		"Wizard",
+		"Revolution",
+		"Vampires",
+		"Changelings",
+		"Syndicate Traitors",
+		)//The order matters. As a rule of thumb, rarer rulesets should have their chance come first, while more common ones will fill the spots
+
+	if (assigned.len < 5)
+		the_madness -= "Revolution"//No revs unless there's at least 5 roundstart heads, because that'd be overkill
+
+	for (var/madness_ruleset in the_madness)
+		for (var/datum/dynamic_ruleset/roundstart/rule in mode.roundstart_rules)
+			if (madness_ruleset == rule.name)
+				rule.candidates = candidates.Copy()
+				rule.trim_candidates()
+				if (rule.ready(TRUE))
+					rule.calledBy = "antag madness"
+					rule.required_candidates = 1//because we're funny
+					if (madness_ruleset == "Syndicate Traitors")//no traitor limits
+						rule.protected_from_jobs = list()
+						rule.restricted_from_jobs = list("Mobile MMI")
+						for (var/mob/M in candidates)
+							rule.assigned += M
+							rule.candidates -= M
+					else
+						rule.choose_candidates()
+					if (rule.assigned.len)
+						message_admins("ANTAG MADNESS: <font size='3'>[rule.name]</font> OK!")
+						log_admin("ANTAG MADNESS: <font size='3'>[rule.name]</font> OK!")
+						mode.threat_log += "[worldtime2text()]: Roundstart [rule.name] forced by antag madness"
+
+						if (istype(rule, /datum/dynamic_ruleset/roundstart/delayed/))
+							var/datum/dynamic_ruleset/roundstart/delayed/delayed_ruleset = rule
+							message_admins("ANTAG MADNESS: with a delay of [delayed_ruleset.delay/10] seconds.")
+							log_admin("ANTAG MADNESS: with a delay of [delayed_ruleset.delay/10] seconds.")
+							mode.pick_delay(rule)
+
+						if (rule.execute())
+							rule.stillborn = IsRoundAboutToEnd()
+							mode.executed_rules += rule
+							if (rule.persistent)
+								mode.current_rules += rule
+							for(var/mob/M in rule.assigned)
+								candidates -= M
+					else
+						message_admins("ANTAG MADNESS: <font size='3'>[rule.name]</font> FAILED!")
+						log_admin("ANTAG MADNESS: <font size='3'>[rule.name]</font> FAILED!")
+				else
+					message_admins("ANTAG MADNESS: <font size='3'>[rule.name]</font> FAILED!")
+					log_admin("ANTAG MADNESS: <font size='3'>[rule.name]</font> FAILED!")
+
+	spawn(10)
+		message_admins("<span class='danger'>Antag Madness is now underway. In this very chaotic mode, admins are encouraged to proactively interfere with the round to keep things interesting, and help it reach a conclusion if necessary. Rev may no longer cause the round to suddenly end if all heads are dead, Malf, Blob and Nuke Ops still can if they destroy the station. If things get stale after 30 minutes and there are lots of dead players, consider bringing the round to a conclusion by either forcing a shuttle call, sending either the deathsquad or elite syndies to destroy the station, or trigger a supermatter cascade (or combination of those).</span>")
+		log_admin("<span class='danger'>Antag Madness is now underway. In this very chaotic mode, admins are encouraged to proactively interfere with the round to keep things interesting, and help it reach a conclusion if necessary. Rev may no longer cause the round to suddenly end if all heads are dead, Malf, Blob and Nuke Ops still can if they destroy the station. If things get stale after 30 minutes and there are lots of dead players, consider bringing the round to a conclusion by either forcing a shuttle call, sending either the deathsquad or elite syndies to destroy the station, or trigger a supermatter cascade (or combination of those).</span>")
+
+
+	spawn(escalation_delay)//ERT calling is automated after 18 minutes. Any further developments will have to be manually enacted by the badmin who forced this terrible ruleset in the first place. have fun!
+		antag_madness = ANTAG_MADNESS_LATE
+		var/datum/striketeam/ert/response_team = new()
+		response_team.trigger_strike(null,"Nanotrasen officials have been misled to a dummy Space Station filled with antagonistic forces. You must find, protect, and retrieve the various Heads of Staff and Internal Affair Agents aboard the station. Anyone else is a potential threat that must be dealt with extreme prejudice.")
+		for(var/mob/living/player in player_list)
+			if (!player.client)
+				continue
+			if (player.stat == DEAD)
+				continue
+			if (isMoMMI(player))
+				continue
+			if (!isanyantag(player))
+				var/datum/role/survivor/R = new
+				R.AssignToRole(player.mind,1)
+				R.Greet(GREET_MADNESSSURVIVOR)
+				R.OnPostSetup()
+				R.ForgeObjectives()
+				R.AnnounceObjectives()
+	return 1
+
+/datum/dynamic_ruleset/roundstart/antag_madness/latespawn_interaction(var/mob/living/newPlayer)
+	var/datum/faction/nanotrasen/nanotrasen = find_active_faction_by_type(/datum/faction/nanotrasen)
+	if (!nanotrasen)
+		nanotrasen = mode.CreateFaction(/datum/faction/nanotrasen, null, 1)
+	if (newPlayer.mind.assigned_role && (newPlayer.mind.assigned_role in nanotrasen_staff))//latejoining as a head? better start running
+		var/datum/role/nanotrasen_official/head = new
+		head.name = newPlayer.mind.assigned_role
+		head.AssignToRole(newPlayer.mind,1)
+		nanotrasen.HandleRecruitedRole(head)
+		switch(nanotrasen.delta)
+			if (0)
+				head.Greet(GREET_LATEJOIN)
+			if (1)
+				head.Greet(GREET_LATEJOIN_ERT_COMING)
+			if (2)
+				head.Greet(GREET_LATEJOIN_ERT_NOT_COMING)
+		return TRUE
+	else
+		for (var/datum/dynamic_ruleset/latejoin/rule in mode.latejoin_rules)//otherwise, you may become a traitor
+			if (rule.name == "Syndicate Infiltrator")
+				rule.candidates = list(newPlayer)
+				rule.protected_from_jobs = list()
+				rule.restricted_from_jobs = list("Mobile MMI")
+				rule.trim_candidates()//if you have it enabled/aren't traitorbanned
+				for (var/mob/M in rule.candidates)
+					var/datum/role/traitor/newTraitor = new
+					newTraitor.AssignToRole(M.mind,1)
+					if (nanotrasen.delta)
+						newTraitor.Greet(GREET_LATEJOINMADNESS)
+					else
+						newTraitor.Greet(GREET_LATEJOIN)
+					return TRUE
+	//tator disabled? tator banned? whatever you'll be a survivor if the round has gone on long enough
+	if (antag_madness == ANTAG_MADNESS_LATE)
+		var/datum/role/survivor/R = new
+		R.AssignToRole(newPlayer.mind,1)
+		R.Greet(GREET_MADNESSSURVIVOR)
+		R.OnPostSetup()
+		R.ForgeObjectives()
+		R.AnnounceObjectives()
+		return TRUE
+
+	return FALSE

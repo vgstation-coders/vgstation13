@@ -22,6 +22,8 @@
 #define SPIDERCLAN "spider clan"
 #define XENOMORPH_HIVE "alien hivemind"
 #define JUSTICE_DEPARTMENT "justice department"
+#define NANOTRASEN "Nanotrasen"
+
 //-------
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
@@ -46,7 +48,6 @@
 #define REV "revolutionary"
 #define WIZAPP_MASTER "wizard's master"
 #define WIZAPP "wizard's apprentice"
-#define WIZARD_CONVERT "wizard's faction convert"
 #define MADMONKEY "monkey fever infected"
 #define NINJA "Space Ninja"
 #define WISHGRANTERAVATAR "avatar of the Wish Granter"
@@ -83,14 +84,20 @@
 #define TAG_MIME "tag mime"
 #define JUDGE "judge"
 #define GRUE "grue"
+#define NANOTRASENOFFICIAL "nanotrasen official"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
 #define GREET_LATEJOIN		"latejoin"
+#define GREET_LATEJOIN_ERT_COMING		"latejoinertcoming"
+#define GREET_LATEJOIN_ERT_NOT_COMING		"latejoinertnotcoming"
+#define GREET_LATEJOINMADNESS		"latejoinmadness"
 #define GREET_ADMINTOGGLE	"admintoggle"
 #define GREET_CUSTOM		"custom"
 #define GREET_MIDROUND		"midround"
 #define GREET_MASTER		"master"
+#define GREET_RIGHTANDWRONG	"rightandwrong"
+#define GREET_MADNESSSURVIVOR		"madnesssurvivor"
 
 #define GREET_AUTOTATOR		"autotator"
 #define GREET_SYNDBEACON	"syndbeacon"
@@ -281,3 +288,7 @@
 
 #define BASE_RULESET_WEIGHT 10
 #define ADDITIONAL_RULESET_WEIGHT 1.4
+
+#define ANTAG_MADNESS_OFF		0
+#define ANTAG_MADNESS_EARLY		1
+#define ANTAG_MADNESS_LATE		2

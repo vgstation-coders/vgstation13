@@ -52,7 +52,7 @@
 	usr.mind.store_memory("Explosive implant in [imp_in] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.", 0, 0)
 	to_chat(usr, "The implanted explosive implant in [imp_in] can be activated by saying something containing the phrase ''[src.phrase]'', <B>say [src.phrase]</B> to attempt to activate.")
 	addHear()
-	source.register_event(/event/emote, src, src::trigger())
+	source.register_event(/event/emote, src, nameof(src::trigger()))
 	score.implant_phrases += "[usr.real_name] ([get_key(usr)]) rigged [imp_in.real_name] to explode on the phrase <font color='red'>\"[phrase]\"</font>!"
 	return 1
 
@@ -81,7 +81,7 @@
 	return 0
 
 /obj/item/weapon/implant/explosive/handle_removal(mob/remover)
-	imp_in?.unregister_event(/event/emote, src, src::trigger())
+	imp_in?.unregister_event(/event/emote, src, nameof(src::trigger()))
 	makeunusable(75)
 
 /obj/item/weapon/implant/explosive/proc/small_boom()
@@ -100,7 +100,7 @@
 			qdel(src)
 
 /obj/item/weapon/implant/explosive/nuclear/implanted(mob/source)
-	imp_in.register_event(/event/emote, src, src::trigger())
+	imp_in.register_event(/event/emote, src, nameof(src::trigger()))
 
 //emp proof implant for nuclear operatives
 /obj/item/weapon/implant/explosive/nuclear/emp_act(severity)

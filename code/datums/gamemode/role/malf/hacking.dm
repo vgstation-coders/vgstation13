@@ -16,7 +16,7 @@
 
 /obj/machinery/proc/initialize_malfhack_abilities()
 	var/list/initialized_abilities = list()
-	for(var/ability in hack_abilities) 
+	for(var/ability in hack_abilities)
 		if(!ispath(ability))
 			continue
 		initialized_abilities += new ability(src)
@@ -47,14 +47,14 @@
 
 /obj/machinery/proc/hack_interact(var/mob/living/silicon/malf)
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
-	if(!istype(M) || !istype(malf))		
+	if(!istype(M) || !istype(malf))
 		return
 	if(malf.stat != CONSCIOUS)
 		return
 	if(!(stat & (BROKEN|NOPOWER)))
 		if(M == malf_owner)
 			if(!malf_disrupted)
-				hack_radial(malf) 
+				hack_radial(malf)
 		else
 			take_control(malf)
 
@@ -101,13 +101,13 @@
 
 /obj/machinery/proc/malfhack_valid(var/mob/living/silicon/malf)
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
-	if(!istype(M) || !istype(malf))		
+	if(!istype(M) || !istype(malf))
 		to_chat(malf, "<span class='warning'>You are not a malfunctioning AI.</span>")
 		return FALSE
 	if(src in M.currently_hacking_machines)
 		to_chat(malf, "<span class='warning'>You are already taking control of the [src].</span>")
 		return FALSE
-	if(M.currently_hacking_machines.len >= M.apcs.len)
+	if(M.currently_hacking_machines.len >= (M.apcs.len + 1))
 		to_chat(malf, "<span class='warning'>You cannot hack any more machines at this time. Hack more APCs to increase your limit.</span>")
 		return FALSE
 	return TRUE
@@ -123,7 +123,7 @@
 
 /obj/machinery/proc/set_hack_overlay_icon(var/newstate)
 	hack_overlay.set_icon(newstate)
-	
+
 /obj/machinery/camera/set_hack_overlay_icon(var/newstate)
 	hack_overlay.set_icon("[newstate]-camera")
 
@@ -152,7 +152,7 @@
 		if(istype(A, /datum/malfhack_ability/toggle))
 			var/datum/malfhack_ability/toggle/AT = A
 			icon_to_display = AT.toggled ? AT.icon_toggled : AT.icon
-		else 
+		else
 			icon_to_display = A.icon
 		var/name_to_display = A.name
 		if(A.cost > 0)
@@ -169,7 +169,7 @@
 	var/datum/malfhack_ability/A = choice_to_ability[choice]
 	if(!A)
 		return
-	else 
+	else
 		A.activate(malf)
 
 
@@ -197,7 +197,7 @@
 	var/datum/malfhack_ability/A = choice_to_ability[choice]
 	if(!A)
 		return
-	else 
+	else
 		A.activate(src)
 
 
@@ -207,7 +207,7 @@
 
 /obj/machinery/portable_atmospherics/hack_interact(mob/living/silicon/malf)
 	return
-	
+
 /obj/machinery/door/poddoor/hack_interact(mob/living/silicon/malf)
 	return
 
@@ -226,9 +226,9 @@
 	mouse_opacity = 1
 	invisibility = 101
 	throwforce = 0
-	var/image/particleimg 
+	var/image/particleimg
 	var/obj/machinery/machine
-	
+
 // We want the "hack particles" to be only visible to the AI, but we also want it to be mutable.
 // Since image objects can't be directly added to vis_contents (i think?) they're instead carried by an effect obj
 // An invisible effect object is created, which carries an image object for the "hack particles"
@@ -250,12 +250,12 @@
 	var/datum/role/malfAI/M = malf.mind.GetRole(MALF)
 	if(M)
 		M.hack_overlays += src
-	
+
 /obj/effect/hack_overlay/proc/set_icon(var/newstate)
 	particleimg.icon_state = newstate
 
 // Any clicks on the overlay should to count as clicks on the machine. This is mostly
-// for convenience, but its necessary for doing things like re-enabling cameras 
+// for convenience, but its necessary for doing things like re-enabling cameras
 
 /obj/effect/hack_overlay/AIMiddleShiftClick(var/mob/living/silicon/ai/user)
 	machine.AIMiddleShiftClick(user)
@@ -269,4 +269,4 @@
 	machine.AIAltClick(user)
 /obj/effect/hack_overlay/attack_ai(var/mob/living/silicon/ai/user)
 	machine.attack_ai(user)
-	
+

@@ -192,10 +192,10 @@
 
 /obj/item/weapon/storage/bag/ore/auto/pickup(mob/user)
 	if(handling)
-		user.register_event(/event/moved, src, src::mob_moved())
+		user.register_event(/event/moved, src, nameof(src::mob_moved()))
 
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
-	user.unregister_event(/event/moved, src, src::mob_moved())
+	user.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 
 // -----------------------------
 //          Plant bag

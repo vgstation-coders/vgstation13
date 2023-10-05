@@ -216,6 +216,8 @@ var/list/admin_verbs_debug = list(
 #endif
 	/client/proc/update_all_open_spaces,
 	/client/proc/update_all_area_portals,
+	/client/proc/spam_blend_calls,
+	/client/proc/edit_motd,
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -354,6 +356,7 @@ var/list/admin_verbs_mod = list(
 		admin_verbs_debug,
 		admin_verbs_possess,
 		admin_verbs_permissions,
+		admin_verbs_polling,
 		/client/proc/stealth,
 		admin_verbs_rejuv,
 		admin_verbs_sounds,
@@ -379,7 +382,7 @@ var/list/admin_verbs_mod = list(
 		/client/proc/splash,
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
-		/proc/generateMiniMaps,
+		///proc/generateMiniMaps,
 		/client/proc/maprender,
 		/client/proc/cmd_admin_rejuvenate,
 		/datum/admins/proc/show_role_panel,
