@@ -11,21 +11,21 @@ Check the thread on /vg/ for a link or ask a player in-game for an invite.
 ---
 
 ### GETTING THE CODE
-The simplest but least useful way to obtain the code is using the Github .zip feature. You can click [here](https://github.com/vgstation-coders/vgstation13/archive/Bleeding-Edge.zip) to get the latest stable code as a .zip file, then unzip it to wherever you want. Alternatively, a much more useful method is to use a Git client, the process for getting and using one is described below, (for more information our coders on Discord can tell you how to use one).
+The simplest but least useful way to obtain the code is using the Github .zip feature. You can click [here](https://github.com/vgstation-coders/vgstation13/archive/Bleeding-Edge.zip) to get the latest stable code as a .zip file, then unzip it to wherever you want. Alternatively, a much more useful method is to use a Git client, the process for getting and using one is described below. If you're still having difficulty, reach out to one of our coders on Discord and they should be happy to help.
 
 ### Git client
 
 The slightly more complicated but way more useful way is to use a Git client.
 
-We recommend our users use the Github Desktop client, available [here](https://desktop.github.com/).
+We recommend our users use the Github Desktop client, available [here](https://desktop.github.com/). After installing the client and logging in with your Github account, go back to the [Github page](https://github.com/vgstation-coders/vgstation13) for our code and press the "Fork" button at the top of the page. This will walk you through the process of creating a clone of our codebase on your account.
 
+Once the fork is complete, go back to the Github Desktop client and press the 'Current Reposistory' button at the top left. From there, click 'Add', then 'Clone Reposistory'. If your fork doesn't appear on the list immediately, press the refresh button at the top right and it should find it. Once you've selected it, Github Desktop will then begin downloading the codebase to the specified location on your machine. Once the clone finishes downloading, you've got your own copy of the code ready to go complete with easy tools to keep it sync'd and to make your own PRs to the repo.
 
+If your codebase is behind on the latest updates to the code, navigate to the page for your forked repository on Github and press the Sync Fork button near the top of the page. Once that's done, press the 'Fetch Origin' button on your Github Desktop client and after it completes that action it should prompt your to 'Pull' the newest updates which will bring your code back up to date with /vg/.
 
-#### Updating the Code
+#### Contributing Code
 
-After you have cloned, make sure you have a remote to the main repository and your own forked repository by making a remote using the links above. By right clicking on your remote to this repo you can 'pull' the most recent version of the code from the main repository.
-
-You can then create new branches of code directly from our Bleeding-Edge branch on your computer.
+To contribute code updates to /vg/,
 
 Warning: If you checkout different branches or update the code while Dream Maker is open, this can cause problems when someone adds/removes files or when one of the files changed is currently open.
 
