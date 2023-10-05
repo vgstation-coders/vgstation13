@@ -4,24 +4,22 @@
 
 [Website](http://ss13.moe) - [Code](https://github.com/vgstation-coders/vgstation13)
 
-[IRC](irc://irc.rizon.net/vgstation) (irc.rizon.net #vgstation), here is an embedded link to it:  [![Visit our IRC channel](https://kiwiirc.com/buttons/irc.rizon.net/vgstation.png)](https://kiwiirc.com/client/irc.rizon.net/?nick=Newcomer|?&theme=basic#vgstation)
-
 Discord Coding Server Invite Link:
 No longer available from github due to spambots using it.
-Ask on the /vg/ thread for a link or join the IRC at the link above and ask for an invite, there's a bot that relays messages between IRC and discord.
+Check the thread on /vg/ for a link or ask a player in-game for an invite.
 
 ---
 
 ### GETTING THE CODE
-The simplest but least useful way to obtain the code is using the Github .zip feature. You can click [here](https://github.com/vgstation-coders/vgstation13/archive/Bleeding-Edge.zip) to get the latest stable code as a .zip file, then unzip it to wherever you want. Alternatively, a much more useful method is to use a git client, the process for getting and using one is described below, (for more information our coders in IRC can tell you how to use one).
+The simplest but least useful way to obtain the code is using the Github .zip feature. You can click [here](https://github.com/vgstation-coders/vgstation13/archive/Bleeding-Edge.zip) to get the latest stable code as a .zip file, then unzip it to wherever you want. Alternatively, a much more useful method is to use a Git client, the process for getting and using one is described below, (for more information our coders on Discord can tell you how to use one).
 
 ### Git client
 
-The more complicated but infinitely more useful way is to use a 'git' client.
+The slightly more complicated but way more useful way is to use a Git client.
 
-We recommend and support our users using the smartgit client, obtainable at [smartgit](http://www.syntevo.com/smartgit/). After installing it, create a new file folder where you want to host the code, right click on that folder and click on "Open in Smartgit".
+We recommend our users use the Github Desktop client, available [here](https://desktop.github.com/).
 
-When that opens, click repository at the top left and choose 'clone'. You can either use the link for the main repository https://github.com/vgstation-coders/vgstation13.git, or to clone your own fork the format is https://github.com/USERNAME/REPONAME.git, just copy the URL at your fork and add .git.
+
 
 #### Updating the Code
 
