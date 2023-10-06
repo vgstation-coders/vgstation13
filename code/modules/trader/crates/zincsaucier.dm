@@ -399,7 +399,8 @@ var/global/global_cricket_population = 0
 		visible_message("<span class='notice'>\The [src] stands up!</span>")
 		new /mob/living/simple_animal/hostile/mantini(T)
 		qdel(src)
-	..()
+	else
+		..()
 
 /mob/living/simple_animal/hostile/mantini
 	name = "mantini"

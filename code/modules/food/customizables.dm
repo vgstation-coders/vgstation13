@@ -666,7 +666,6 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable
 	volume = 100
-	gulp_size = 2
 	var/list/ingredients = list()
 	var/initReagent
 	var/ingMax = 3

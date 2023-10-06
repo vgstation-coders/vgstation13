@@ -1747,3 +1747,8 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
 	return FALSE
+
+/obj/item/get_heat_conductivity()
+	. = heat_conductivity
+	if (is_open_container())
+		. = max(. , 0.5) //Even if it's perfectly insulating, if it's open then some heat can be exchanged.
