@@ -81,6 +81,27 @@
 		return -1
 	return .
 
+/datum/recipe/proc/check_items_list(var/list/items_list)
+	if(!items) //If there's no items in our recipe
+		if(items_list) //but we find something, at the least.
+			return -1
+		else
+			return 1 //Technically, we've satisfied the requirements, as the requirements are null
+	. = 1
+	var/list/checklist = items.Copy()
+	for(var/obj/O in items_list) //Let's loop through all the objects in our recipe machine
+		var/found = 0 //If what we found is part of the recipe
+		for(var/type in checklist)
+			if(istype(O, type)) //Is that what we are looking for
+				checklist -= type //Good, strike it out of our checklist
+				found = TRUE
+				break //Break that loop, continue downwards
+		if(!found) //We found something that's not part of our recipe
+			. = -1
+	if(checklist.len) //Are there still items on our recipe checklist ?
+		return 0 //Something is missing, abort
+	return .
+
 /*
 	check_items function
 	Checks if the container passed, contains the objects required to satisfy the recipes requirements.
@@ -113,6 +134,34 @@
 	if(checklist.len) //Are there still items on our recipe checklist ?
 		return 0 //Something is missing, abort
 	return .
+
+/datum/recipe/proc/make_food_from_reagents_and_items(var/datum/reagents/reagents, var/list/items, var/mob/user)
+	diary << "/datum/recipe/proc/make_food_from_reagents_and_items"
+	// var/obj/result_obj = new result(container)
+	var/obj/result_obj = new result()
+	diary << "result_obj: [result_obj]"
+	for(var/obj/O in items)
+		diary << "O: [O]"
+		if(O.reagents)
+			//Should we have forbidden reagents, purge them first.
+			for(var/r_r in reagents_forbidden)
+				if(islist(r_r))
+					var/list/L = r_r
+					for(var/I in L)
+						O.reagents.del_reagent(I)
+				O.reagents.del_reagent(r_r)
+			//Transfer any reagents found in the object, to the resulting object
+			O.reagents.trans_to(result_obj, O.reagents.total_volume)
+		//Transfer any luckiness from the ingredients, to the resulting item
+		if(isitem(result_obj) && isitem(O))
+			var/obj/item/I = O
+			var/obj/item/result_item = result_obj
+			if(I.luckiness)
+				result_item.luckiness += I.luckiness
+		qdel(O)
+	reagents.clear_reagents() //Clear all the reagents we haven't transfered, for instance if we need to cook in water
+	score.meals++
+	return result_obj
 
 /*
 	make_food function
@@ -151,7 +200,44 @@
 	score.meals++
 	return result_obj
 
+/proc/select_recipe_from_reagents_and_items(var/list/datum/recipe/available_recipes, var/datum/reagents/reagents, var/list/obj/items, var/exact = TRUE)
+	diary << "/proc/select_recipe_from_reagents_and_items"
+	diary << "logging recipe reagents"
+	for(var/reagent in reagents)
+		diary << "reagent: [reagent]"
+	diary << "logging recipe items"
+	for(var/obj/O in items)
+		diary << "O: [O]"
+	if(!exact)
+		exact = -1 //Change it to -1 for simplicity, too much or not enough is the same problem now
+	var/list/possible_recipes = list()
 
+	for(var/datum/recipe/recipe in available_recipes)
+		if(recipe.check_reagents(reagents) == exact && recipe.check_items_list(items) == exact)
+			possible_recipes += recipe
+	//If there is no possible recipes, return a fail
+	if(possible_recipes.len == 0)
+		return null
+	//If only one possible recipe, return only it
+	else if(possible_recipes.len == 1)
+		return possible_recipes[1]
+	//Else, we return the best fitting recipe.
+	else
+		var/reagents_count = 0
+		var/items_count = 0
+		. = possible_recipes[1] //We'll estimate the first recipe we found is the correct one until we start looping, to avoid returning nothing
+
+		//Loop through all those recipes we found to be matching, return the last one that we find to be usable.
+		for(var/datum/recipe/recipe in possible_recipes)
+			var/items_number = (recipe.items) ? (recipe.items.len) : 0
+			var/reagents_number = (recipe.reagents) ? (recipe.reagents.len) : 0
+
+			 //If there's more items or as much items and more reagents than the previous recipe
+			if(items_number > items_count || (items_number == items_count && reagents_number > reagents_count))
+				reagents_count = reagents_number
+				items_count = items_number
+				. = recipe
+		return .
 /*
 	Select_recipe function
 	Loop through all recipes that we are passed, return the ones we can work with

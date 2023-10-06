@@ -813,7 +813,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/meatsteak/synth
 
 /datum/recipe/meatsteak
-	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
+	// reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat)
 	result = /obj/item/weapon/reagent_containers/food/snacks/meatsteak
 

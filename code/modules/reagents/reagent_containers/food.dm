@@ -17,6 +17,64 @@
 /obj/item/weapon/reagent_containers/food/fits_in_iv_drip()
 	return 1
 
+/obj/item/weapon/reagent_containers/food/proc/cook(obj/item/I, mob/user)
+	diary << "/datum/cooking/proc/cook"
+	diary << "I: [I]"
+	diary << "food: [src]"
+	diary << "user: [user]"
+
+	diary << "src.contents: [src.contents]"
+	diary << "src.contents.len: [src.contents.len]"
+
+	var/list/available_recipes = generate_available_recipes(flags = COOKABLE_WITH_MICROWAVE | COOKABLE_WITH_MIXING)
+	diary << "available_recipes.len: [available_recipes.len]"
+
+	// var/obj/container = new
+	// var/datum/reagents/reagents = new
+	// container.contents = list(src)
+	// container.reagents = reagents
+
+	var/list/items_list = list(src)
+	var/datum/reagents/reagents = new
+
+	//var/list/datum/recipe/available_recipes, var/datum/reagents/reagents, var/list/obj/items, var/exact = TRUE
+	var/datum/recipe/recipe = select_recipe_from_reagents_and_items(available_recipes, reagents, items_list)
+	var/obj/cooked
+
+	diary << "recipe: [recipe]"
+	diary << "cooked: [cooked]"
+
+	var/do_after_callback
+	if(do_after_callback)
+		diary << "do_after_callback is true"
+
+	if (!recipe)
+		to_chat(user, "<span class='warning'>This food is uncookable.</span>")
+		return
+
+	var/time_for_cooking = 5 SECONDS
+	user.visible_message("<span class='info'>[user] starts cooking \the [src] with \the [I].</span>",
+					"<span class='notice'>You start cooking \the [src].</span>")
+	spawn(0)
+		if(do_after(user, user, time_for_cooking))
+			diary << "making food"
+			cooked = recipe.make_food(src, user, FALSE)
+			cooked.forceMove(get_turf(src.loc))
+			user.visible_message("<span class='info'>[user] finished cooking \the [src].</span>",
+								 "<span class='notice'>You finish cooking \the [src].</span>")
+			qdel(src)
+		else
+			user.simple_message("<span class='warning'>Your cooking of \the [src] was interrupted.</span>")
+
+
+// Exists to enable cooking of food by any weapon capable of applying heat
+/obj/item/weapon/reagent_containers/food/attackby(obj/item/I, mob/user, params)
+	diary << "/obj/item/weapon/reagent_containers/food/attackby"
+	. = ..()
+	if(I.is_hot())
+		cook(I, user)
+
+
 /obj/item/weapon/reagent_containers/food/dipping_sauce
 	var/dip_message = ""
 
