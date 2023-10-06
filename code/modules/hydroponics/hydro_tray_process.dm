@@ -235,7 +235,7 @@
 				if(!seed.gas_absorb)
 					missing_gas++
 				continue
-			if (seed.gas_absorb)
+			if (seed.gas_absorb && seed.potency < 200)
 				seed = seed.diverge(1)
 				seed.potency += 0.2
 			environment.adjust_gas(gas, -(seed.consume_gasses[gas]), FALSE)

@@ -267,7 +267,7 @@ var/list/special_fruits = list()
 /obj/item/weapon/reagent_containers/food/snacks/grown/process()
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/environment
-	if(!environment && istype(T))
+	if(istype(T))
 		environment = T.return_air()
 	else
 		environment = space_gas
