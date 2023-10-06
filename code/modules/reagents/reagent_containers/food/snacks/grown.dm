@@ -26,14 +26,12 @@ var/list/special_fruits = list()
 		if(initial(G.hydroflags) & filter)
 			. += T
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/New(atom/loc, custom_plantname, mob/harvester, add_process=0)
+/obj/item/weapon/reagent_containers/food/snacks/grown/New(atom/loc, custom_plantname, mob/harvester)
 	..()
 	if(custom_plantname)
 		plantname = custom_plantname
 	if(ticker)
 		initialize(harvester)
-	if(add_process)
-		processing_objects.Add(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/initialize(mob/harvester)
 
@@ -57,6 +55,9 @@ var/list/special_fruits = list()
 			name = "stinging [name]"
 		if(seed.juicy == 2)
 			name = "slippery [name]"
+		
+		if(seed.gas_absorb)
+			processing_objects.Add(src)
 
 		if(!seed.chems)
 			return

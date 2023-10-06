@@ -501,10 +501,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(ispath(product_type, /obj/item/stack))
 			product = drop_stack(product_type, T, 1, null)
 		else if(ispath(product_type, /obj/item/weapon/reagent_containers/food/snacks/grown))
-			if(gas_absorb==1)
-				product = new product_type(T, custom_plantname = name, harvester = harvester, add_process = 1)
-			else
-				product = new product_type(T, custom_plantname = name, harvester = harvester)
+			product = new product_type(T, custom_plantname = name, harvester = harvester)
 		else if(ispath(product_type, /obj/item/weapon/grown))
 			product = new product_type(T, custom_plantname = name)
 		else
