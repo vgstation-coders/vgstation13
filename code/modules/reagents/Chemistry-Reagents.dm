@@ -762,7 +762,7 @@
 			cube.Expand()
 	else if(istype(O,/obj/machinery/space_heater/campfire))
 		var/obj/machinery/space_heater/campfire/campfire = O
-		campfire.snuff()
+		campfire.putOutFire()
 	else if(istype(O, /obj/item/weapon/book/manual/snow))
 		var/obj/item/weapon/book/manual/snow/S = O
 		S.trigger()

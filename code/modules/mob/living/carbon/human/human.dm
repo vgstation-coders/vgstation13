@@ -1485,6 +1485,12 @@
 		if(brain && istype(brain))
 			return 1
 	return 0
+/mob/living/carbon/human/has_attached_brain()
+	if(internal_organs_by_name["brain"])
+		var/datum/organ/internal/brain = internal_organs_by_name["brain"]
+		if(brain && istype(brain) && !(brain.status & ORGAN_CUT_AWAY))
+			return 1
+	return 0
 /mob/living/carbon/human/has_eyes()
 	if(internal_organs_by_name["eyes"])
 		var/datum/organ/internal/eyes = internal_organs_by_name["eyes"]

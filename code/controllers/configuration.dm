@@ -204,6 +204,9 @@
 	// Dynamic Mode
 	var/high_population_override = 1//If 1, what rulesets can or cannot be called depend on the threat level only
 
+	var/thermal_dissipation = 1 //Whether or not thermal dissipation occurs.
+	var/reagents_heat_air = 0 //Whether or not reagents exchanging heat with the surrounding air actually heat or the cool air. If off, the energy change only applies to the reagents.
+
 /datum/configuration/New()
 	. = ..()
 	var/list/L = subtypesof(/datum/gamemode)-/datum/gamemode/cult
@@ -455,6 +458,12 @@
 
 				if("allow_random_events")
 					config.allow_random_events = 1
+
+				if("thermal_dissipation")
+					config.thermal_dissipation = value
+
+				if("reagents_heat_air")
+					config.reagents_heat_air = value
 
 				if("kick_inactive")
 					config.kick_inactive = 1

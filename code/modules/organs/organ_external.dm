@@ -798,9 +798,24 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(body_part & (HAND_LEFT | HAND_RIGHT | ARM_LEFT | ARM_RIGHT))
 			owner.update_hands_icons()
 
+		if(body_part & (LEG_LEFT | LEG_RIGHT))
+			to_chat(owner, "<span class='danger'>The shock of losing your leg knocks you down!</span>")
+			owner.AdjustKnockdown(5)
+
 		if(slots_to_drop && slots_to_drop.len)
 			for(var/slot_id in slots_to_drop)
-				owner.u_equip(owner.get_item_by_slot(slot_id), 1)
+
+				//can continue wearing a glove or shoe if a hand or foot remains
+				if(owner.has_organ_for_slot(slot_id))
+					switch(slot_id)
+						if(slot_gloves)
+							owner.update_inv_gloves()
+						if(slot_shoes)
+							owner.update_inv_shoes()
+
+				else
+					owner.u_equip(owner.get_item_by_slot(slot_id), 1)
+
 		if(grasp_id && can_grasp)
 			if(owner.held_items[grasp_id])
 				owner.u_equip(owner.held_items[grasp_id], 1)

@@ -257,6 +257,18 @@
 	icon_state = "campfire_burnt"
 	mouse_opacity = 1
 
+/obj/effect/decal/cleanable/campfire/attackby(obj/item/I, mob/living/user)
+	if (istype(I, /obj/item/stack/sheet/wood))
+		var/obj/machinery/space_heater/campfire/C = new /obj/machinery/space_heater/campfire
+		C.cell.charge = 0
+		if (C.addWood(I, user))
+			C.loc = src.loc
+			qdel(src)
+		else
+			qdel(C)
+	else
+		. = ..()
+
 /obj/effect/decal/cleanable/clay_fragments
 	name = "clay fragments"
 	desc = "Pieces from a broken clay pot."
