@@ -6006,6 +6006,25 @@ var/procizine_tolerance = 0
 			H.heal_organ_damage(1, 1)
 			H.nutrition += nutriment_factor //Double nutrition
 
+/datum/reagent/blob_essence
+	name = "Blob Essence"
+	id = BLOB_ESSENCE
+	description = "A thick, transparent liquid extracted from live blob cores."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 0
+	color = "#FFD6A0"
+
+/datum/reagent/blob_essence/on_mob_life(var/mob/living/M)
+	// TODO UNIMPLEMENTED
+	return
+
+/datum/reagent/blobanine
+	name = "Blobanine"
+	id = BLOBANINE
+	description = "An oily green substance extracted from a blob."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#81EB00"
+	nutriment_factor = 0
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum//////////

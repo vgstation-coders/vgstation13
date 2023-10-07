@@ -488,6 +488,28 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		reagents.add_reagent(ROACHSHELL,1) //Sometimes a roach gets in. No nutritional value
 	//Total ranging from 18 to 57 nutrition. Normal meat provides 45.
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob
+	name = "meat"
+	desc = "A slab of glowing \"meat\" hacked off of a greater part. It has a spongy feel to it."
+	meatcolor = BLOB_MEAT
+	origin_tech = Tc_BIOTECH + "=2"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(BLOBANINE, 5)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob_core
+	name = "blob core"
+	desc = "A piece of a blob's core. It pulsates wildly."
+	origin_tech = Tc_BIOTECH + "=6"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob_core/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent(BLOB_ESSENCE, 1)
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/scraps
 	name = "meat scraps"
 	desc = "Some leftover scraps of meat, probably trimmed off a bigger slab."
