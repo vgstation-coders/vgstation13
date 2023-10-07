@@ -489,10 +489,11 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	//Total ranging from 18 to 57 nutrition. Normal meat provides 45.
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/blob
-	name = "meat"
-	desc = "A slab of glowing \"meat\" hacked off of a greater part. It has a spongy feel to it."
+	name = "blob meat"
+	desc = "A slab of glowing meat hacked off of a greater part. It has a spongy feel to it."
 	meatcolor = BLOB_MEAT
 	origin_tech = Tc_BIOTECH + "=2"
+	// throw_impact_sound = 'sound/effects/.........' TODO ADD A COOL SOUND!
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/blob/New()
 	..()
@@ -501,7 +502,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/blob_core
-	name = "blob core"
+	name = "blob core meat"
 	desc = "A piece of a blob's core. It pulsates wildly."
 	origin_tech = Tc_BIOTECH + "=6"
 
