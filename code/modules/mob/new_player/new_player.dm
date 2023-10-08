@@ -17,6 +17,9 @@
 
 	anchored = 1	//  don't get pushed around
 
+	//The locations of where the player's character's body should spawn.
+	var/character_loc
+
 /mob/new_player/verb/new_player_panel()
 	set src = usr
 	new_player_panel_proc()
@@ -748,11 +751,11 @@
 				break
 		if(S)
 			// Use the given spawn point
-			new_character.forceMove(S.loc)
+			character_loc = S.loc
 		else
 			// Use the arrivals shuttle spawn point
 			stack_trace("no spawn points for [rank]")
-			new_character.forceMove(pick(latejoin))
+			character_loc = S.loc
 		// 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 		new_character.DormantGenes(20,10,0,0)
 
@@ -760,6 +763,8 @@
 		if(R.converts_everyone && new_character.mind.assigned_role != "Chaplain")
 			R.convert(new_character,null,TRUE,TRUE)
 			break //Only autoconvert them once, and only if they aren't leading their own faith.
+
+	new_character.forceMove(character_loc)
 
 	if(late_join)
 		new_character.key = key
@@ -796,16 +801,19 @@
 	if(type == "AI")
 		var/mob/living/silicon/new_character
 		new_character = AIize()
+
+		new_character.forceMove(spawn_loc)
 		return new_character
+
 	else
 		var/mob/living/silicon/robot/new_character
-		forceMove(spawn_loc)
 		if(type == "Mobile MMI")
 			new_character = MoMMIfy()
 		else
 			new_character = Robotize()
 		new_character.mmi.create_identity(prefs) //Uses prefs to create a brain mob
 
+		new_character.forceMove(spawn_loc)
 		return new_character
 
 /mob/new_player/proc/ViewPrediction()

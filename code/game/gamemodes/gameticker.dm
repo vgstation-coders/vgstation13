@@ -52,6 +52,8 @@ var/datum/controller/gameticker/ticker
 	// Tag mode!
 	var/tag_mode_enabled = FALSE
 
+	var/list/roundstart_occupied_areas = list() //List of areas that are occupied at roundstart, used to handle the lights being on or off.
+
 
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
@@ -198,6 +200,7 @@ var/datum/controller/gameticker/ticker
 				S.store_position()
 				log_admin("([key]) started the game as a [S.mind.assigned_role].")
 				new_characters[key] = S
+				roundstart_occupied_areas += get_area(S)
 			if("MODE")
 				//antags aren't new players
 			else
@@ -206,10 +209,18 @@ var/datum/controller/gameticker/ticker
 				EquipCustomItems(H)
 				H.update_icons()
 				new_characters[key] = H
+				roundstart_occupied_areas += get_area(H)
 		CHECK_TICK
+
+	//Now that we have all of the occupied areas, we handle the lights being on or off, before actually putting the players into their bodies.
+	handle_lights()
+	//Force the lighting subsystem to update.
+	SSlighting.fire(FALSE, FALSE)
+	roundstart_occupied_areas = null //Don't need it anymore.
 
 	var/list/clowns = list()
 	var/already_an_ai = FALSE
+
 	//Transfer characters to players
 	for(var/i = 1, i <= new_characters.len, i++)
 		var/mob/M = new_characters[new_characters[i]]
@@ -227,8 +238,6 @@ var/datum/controller/gameticker/ticker
 		var/datum/job/job = job_master.GetJob(rank)
 		if(job)
 			job.equip(M, job.priority) // Outfit datum.
-
-	handle_lights()
 
 	//delete the new_player mob for those who readied
 	for(var/mob/np in new_players_ready)
@@ -649,17 +658,14 @@ var/datum/controller/gameticker/ticker
 	return roles
 
 /datum/controller/gameticker/proc/handle_lights()
-	var/list/discrete_areas = areas.Copy()
-	//Get department areas where there is a crewmember. This is used to turn on lights in occupied departments
-	for(var/mob/living/player in player_list)
-		discrete_areas -= get_department_areas(player)
-	//Toggle lightswitches and lamps on in occupied departments
-	for(var/area/DA in discrete_areas)
-		for(var/obj/machinery/light_switch/LS in DA)
-			LS.toggle_switch(0, playsound = FALSE)
-			break
-		for(var/obj/item/device/flashlight/lamp/L in DA)
-			L.toggle_onoff(0)
+	for(var/area/this_area in roundstart_occupied_areas)
+		for(var/obj/machinery/light_switch/LS in this_area)
+			LS.toggle_switch(1, playsound = FALSE)
+		for(var/obj/machinery/light/lightykun in this_area)
+			lightykun.on = 1
+			lightykun.update()
+		for(var/obj/item/device/flashlight/lamp/lampychan in this_area)
+			lampychan.toggle_onoff(1)
 
 /datum/controller/gameticker/proc/post_roundstart()
 	//Handle all the cyborg syncing
