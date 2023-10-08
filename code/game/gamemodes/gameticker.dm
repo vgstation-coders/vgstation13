@@ -229,8 +229,6 @@ var/datum/controller/gameticker/ticker
 		if(job)
 			job.equip(M, job.priority) // Outfit datum.
 
-	handle_lights()
-
 	//delete the new_player mob for those who readied
 	for(var/mob/np in new_players_ready)
 		qdel(np)
@@ -648,19 +646,6 @@ var/datum/controller/gameticker/ticker
 		if(player.mind && (player.mind.assigned_role in command_positions))
 			roles += player.mind.assigned_role
 	return roles
-
-/datum/controller/gameticker/proc/handle_lights()
-	var/list/discrete_areas = areas.Copy()
-	//Get department areas where there is a crewmember. This is used to turn on lights in occupied departments
-	for(var/mob/living/player in player_list)
-		discrete_areas -= get_department_areas(player)
-	//Toggle lightswitches and lamps on in occupied departments
-	for(var/area/DA in discrete_areas)
-		for(var/obj/machinery/light_switch/LS in DA)
-			LS.toggle_switch(0, playsound = FALSE)
-			break
-		for(var/obj/item/device/flashlight/lamp/L in DA)
-			L.toggle_onoff(0)
 
 /datum/controller/gameticker/proc/post_roundstart()
 	//Handle all the cyborg syncing
