@@ -755,7 +755,7 @@
 		else
 			// Use the arrivals shuttle spawn point
 			stack_trace("no spawn points for [rank]")
-			character_loc = S.loc
+			character_loc = pick(latejoin)
 		// 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 		new_character.DormantGenes(20,10,0,0)
 
