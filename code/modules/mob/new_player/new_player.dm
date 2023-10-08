@@ -17,7 +17,7 @@
 
 	anchored = 1	//  don't get pushed around
 
-	//The locations of where the player's character's body should spawn.
+	//The location where the player's character's body should spawn.
 	var/character_loc
 
 /mob/new_player/verb/new_player_panel()

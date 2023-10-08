@@ -200,7 +200,7 @@ var/datum/controller/gameticker/ticker
 				S.store_position()
 				log_admin("([key]) started the game as a [S.mind.assigned_role].")
 				new_characters[key] = S
-				roundstart_occupied_areas += get_area(S)
+				roundstart_occupied_areas |= get_area(S)
 			if("MODE")
 				//antags aren't new players
 			else
@@ -209,7 +209,7 @@ var/datum/controller/gameticker/ticker
 				EquipCustomItems(H)
 				H.update_icons()
 				new_characters[key] = H
-				roundstart_occupied_areas += get_area(H)
+				roundstart_occupied_areas |= get_area(H)
 		CHECK_TICK
 
 	//Now that we have all of the occupied areas, we handle the lights being on or off, before actually putting the players into their bodies.
