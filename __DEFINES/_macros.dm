@@ -162,6 +162,8 @@
 
 #define isfood(A) istype(A, /obj/item/weapon/reagent_containers/food)
 
+#define issnack(A) istype(A, /obj/item/weapon/reagent_containers/food/snacks)
+
 #define iswirecutter(A) (istype(A, /obj/item/tool/wirecutters) || (istype(A, /obj/item/weapon/switchtool) && istype(A:deployed, /obj/item/tool/wirecutters)))
 
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))

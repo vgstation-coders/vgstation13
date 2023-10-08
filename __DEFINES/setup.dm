@@ -1407,13 +1407,19 @@ var/proccalls = 1
 #define MESSAGE_HEAR	2 //Hearable message
 
 //Food flags. code/modules/reagents/reagent_containers/food/snacks.dm
-#define FOOD_MEAT	1
-#define FOOD_ANIMAL	2
-#define FOOD_SWEET	4
-#define FOOD_LIQUID	8
-#define FOOD_SKELETON_FRIENDLY 16 //Can be eaten by skeletons
-#define FOOD_LACTOSE	32 //Contains MILK
-#define FOOD_DIPPABLE	64 //Can be dipped in non-empty open reagent containers
+#define FOOD_MEAT	(1<<0)
+#define FOOD_ANIMAL	(1<<1)
+#define FOOD_SWEET	(1<<2)
+#define FOOD_LIQUID	(1<<3)
+#define FOOD_SKELETON_FRIENDLY (1<<4) //Can be eaten by skeletons
+#define FOOD_LACTOSE	(1<<5) //Contains MILK
+#define FOOD_DIPPABLE	(1<<6) //Can be dipped in non-empty open reagent containers
+
+
+//todo: add chopped etc.?
+#define FOOD_INGREDIENT_STRUCTURE_SLICED 1 //Ingredient is sliced (cut once)
+#define FOOD_INGREDIENT_STRUCTURE_DICED 2 //Ingredient is diced (cut twice)
+#define FOOD_INGREDIENT_STRUCTURE_MINCED 3 //Ingredient is minced (cut thrice)
 
 #define UTENSILE_FORK	1
 #define UTENSILE_SPOON	2

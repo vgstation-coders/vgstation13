@@ -46,6 +46,14 @@
 	var/timer = 0 //currently only used on skittering food
 	var/datum/reagents/dip
 
+	//todo: make this a list to hold different reagents until they're combined by eating or something
+	//todo: consolidate stuff like this/change format
+	var/list/toppings //list of strings describing what its been topped with
+	var/list/toppings_short //list of topping strings without "sliced" etc. modifiers
+
+//todo: make ingredient-ness into component
+/datum/ingredient_info
+
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
 	var/turf/T = get_turf(src)
 	if(contents.len)
@@ -408,8 +416,25 @@
 		return 1
 	return 0
 
+/obj/item/weapon/reagent_containers/food/snacks/proc/generate_topping_text()
+	if (toppings?.len)
+		. += "It's topped with " //todo: adding things to soup rather than topping with
+		for (var/topping_number in 1 to toppings.len)
+			. += toppings[topping_number].full_name
+			if (topping_number == toppings.len)
+				. += "."
+			else if (toppings.len == 2)
+				. += " and "
+			else if (topping_number == toppings.len - 1)
+				. += ", and "
+			else
+				. += ", "
+
 /obj/item/weapon/reagent_containers/food/snacks/examine(mob/user)
 	..()
+	var/topping_text = generate_topping_text()
+	if (topping_text)
+		to_chat(user, topping_text)
 	if (dip && dip.total_volume)
 		to_chat(user, "<span class='info'>\The [src] appears to have been dipped in [dip.get_master_reagent_name()].</span>")
 	if (bitecount)
@@ -515,6 +540,65 @@
 				A.forceMove(get_turf(src))
 			visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
 			return 1
+		if(!(food_flags & FOOD_LIQUID)) //If the item doesn't explicitly slice into a different item (ie. not like pizza into pizza slices), has nothing hidden inside, and isn't primarily liquid, chop it up into a sliced ingredient.
+			return handle_ingredient_cutting(W, user)
+
+	//Topping with ingredients
+	//todo: change order
+	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/ingredient))
+		//todo: can drop check
+		if (user.drop_item(W, src))
+			to_chat(user, "<span class='notice'>You top [src] with [W].</span>") //todo: change
+			if(!(toppings?.len))
+				toppings = new
+			var/obj/item/weapon/reagent_containers/food/snacks/ingredient/I = W
+			var/datum/topping_data/TD = new
+			TD.base_name = I.base_name
+			TD.full_name = I.name
+			toppings += TD
+//			toppings += W.name
+			W.reagents.trans_to(src, W.reagents.total_volume)
+			//todo: revisit with blood, food, etc.
+			//todo: blend/masking
+			//todo: topping limit
+			//todo: combining toppinges?
+			luckiness += W.luckiness
+
+			if (toppings.len == 1)
+				name += " with [I.base_name]"
+			else
+				name += "-and-[I.base_name]" //todo: consider hyphenation
+
+			//todo: move to function
+
+			var/topping_structure = "topping"
+			switch (I.food_structure)
+				if (FOOD_INGREDIENT_STRUCTURE_SLICED)
+					topping_structure += "_sliced"
+				if (FOOD_INGREDIENT_STRUCTURE_DICED)
+					topping_structure += "_diced"
+				if (FOOD_INGREDIENT_STRUCTURE_MINCED)
+					topping_structure += "_minced"
+
+
+			//todo: custom area just for toppings (eg only on top of cake? stuff like that)
+
+
+
+//			var/icon/new_topping_overlay = new /icon('icons/obj/food_custom.dmi', topping_structure)
+
+			var/icon/new_topping_icon = new /icon (icon, icon_state)
+			new_topping_icon.Blend(new /icon ('icons/obj/food_custom.dmi', topping_structure), ICON_ADD)
+			var/image/new_topping_image = image(new_topping_icon)
+			new_topping_image.color =  W.color
+
+//			W.icon_state = topping_structure
+//			new_topping_overlay.color = W.color
+//			new_topping_overlay.Blend(src, ICON_ADD)
+//			W.icon.Blend(src.icon, ICON_ADD)
+			overlays += new_topping_image
+			qdel(W)
+			return 1
 
 	//Slipping items into food. Because this is below slicing, sharp items can't go into food. No knife-bread, sorry.
 	if(can_hold(W))
@@ -531,6 +615,52 @@
 		add_fingerprint(user)
 		contents += W
 		return 1 //No afterattack here
+
+	//todo: make color in bicon
+	//todo: handle dip transfer
+	//todo: how are reagents mixed in
+	//todo: adding another ingredient to it
+	//todo: being able to mash things in a bowl or on the board?
+	//todo: being able to do all of this off of cutting board as well? (cutting directly on table/tray?)
+	//todo: attack cooldown for slicing?
+	//todo: possibly use datums for different ways to chop and cook stuff?
+	//todo: adding as topping into other food, or into soup etc.
+	//todo: some kind of recursive food check
+	//todo: slicing -> dicing -> mincing
+
+/datum/topping_data
+	var/base_name // "carrot"
+	var/full_name // "sliced carrot"
+
+
+//todo: consider return values here
+//todo: chopping sfx and also for pizza etc. slicing?
+//todo: touch reaction with cutting tool?
+/obj/item/weapon/reagent_containers/food/snacks/proc/handle_ingredient_cutting(obj/item/weapon/W, mob/user)
+	to_chat(user, "<span class='notice'>You slice [src] with [W].</span>")
+	var/obj/item/weapon/reagent_containers/food/snacks/ingredient/I = new
+	I.inherit_properties_from(src)
+	I.forceMove(src.loc)
+	qdel(src)
+	update_icon() //todo:
+	return 1
+
+//todo: move this
+/obj/item/weapon/reagent_containers/food/snacks/ingredient/handle_ingredient_cutting(obj/item/weapon/W, mob/user)
+	switch (food_structure)
+		if (FOOD_INGREDIENT_STRUCTURE_SLICED)
+			to_chat(user, "<span class='notice'>You dice [src] with [W].</span>")
+			food_structure = FOOD_INGREDIENT_STRUCTURE_DICED
+			on_food_structure_change()
+			return 1
+		if (FOOD_INGREDIENT_STRUCTURE_DICED)
+			to_chat(user, "<span class='notice'>You mince [src] with [W].</span>")
+			food_structure = FOOD_INGREDIENT_STRUCTURE_MINCED
+			on_food_structure_change()
+			return 1
+		if (FOOD_INGREDIENT_STRUCTURE_MINCED)
+			to_chat(user, "<span class='warning'>[src] is already finely minced.</span>")
+	return 0
 
 /obj/item/weapon/reagent_containers/food/snacks/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	..()
@@ -2172,7 +2302,7 @@
 	to_chat(user, "You pop the top off \the [src].")
 	playsound(user, 'sound/effects/opening_snack_tube.ogg', 50, 1)
 	overlays.len = 0
-	popped = TRUE 
+	popped = TRUE
 	update_icon()
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/New()

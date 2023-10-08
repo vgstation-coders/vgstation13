@@ -662,6 +662,72 @@
 	..()
 	add_component(/datum/component/coinflip)
 
+
+//ingredient made from another food. eg. sliced carrots
+//todo: size
+//todo: dont spawn ingredient in gold slime food stuff etc?
+//todo: handle color
+//todo: pluralization
+//todo: remove cutting board? handle tray cutting?
+//todo: grammar etc
+//todo: examine description, change name? keep log of what it's been garnished with somewhere?
+//todo: after_consume etc
+//todo: secondary colors etc so it doesn't look just one color
+//todo: move these procs etc to sep file
+//todo: move icons to sep file
+//todo: base name varying with deep fry order type thing?
+//todo: you slice the pizza [with] (consistency)
+
+/obj/item/weapon/reagent_containers/food/snacks/ingredient
+	name = "ingredient"
+	desc = "an ingredient"
+	var/base_name = "food"
+	var/base_desc = "some food"
+//todo: consider if this is the best way. but doing this we can inherit properites of the on_consume, etc. and make it more flexible. or maybe we can just not have ingredients as seperate items and instead have this be based on special flags for snacks
+//	var/obj/item/weapon/reagent_containers/food/snacks/base_snack 	desc = "an ingredient"
+	icon = 'icons/obj/food_custom.dmi'
+	icon_state = "ingredient_sliced" //todo: add this
+	var/food_structure = FOOD_INGREDIENT_STRUCTURE_SLICED
+
+/obj/item/weapon/reagent_containers/food/snacks/proc/ingredient_color()
+	if (filling_color && filling_color != "#FFFFFF")
+		return filling_color
+	else
+		return AverageColor(getFlatIcon(src, dir, 0), 1, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/ingredient/proc/inherit_properties_from(obj/item/weapon/reagent_containers/food/snacks/S)
+	base_name = S.name
+	base_desc = S.desc
+	name = "sliced [S.name]"
+	desc = "\A [S.name] cut into slices" //todo: change this and name?
+	S.reagents.trans_to(src, S.reagents.total_volume)
+	luckiness = S.luckiness
+	if (S.dip)
+		dip = new
+		if (S.dip.total_volume)
+			S.dip.trans_to(dip, S.dip.total_volume)
+	color = S.ingredient_color() //todo: revisit
+	//todo: other stuff
+
+/obj/item/weapon/reagent_containers/food/snacks/ingredient/proc/combine_with_ingredient(obj/item/weapon/reagent_containers/food/)
+	return //todo:
+
+//todo: other specific naming for like "cubed chicken" and stuff
+/obj/item/weapon/reagent_containers/food/snacks/ingredient/proc/on_food_structure_change()
+	switch (food_structure)
+		if (FOOD_INGREDIENT_STRUCTURE_SLICED)
+			name = "sliced [base_name]"
+			desc = "[base_desc], cut into slices."
+			icon_state = "ingredient_sliced"
+		if (FOOD_INGREDIENT_STRUCTURE_DICED)
+			name = "diced [base_name]"
+			desc = "[base_desc], diced into small pieces."
+			icon_state = "ingredient_diced"
+		if (FOOD_INGREDIENT_STRUCTURE_MINCED)
+			name = "minced [base_name]"
+			desc = "[base_desc], finely minced"
+			icon_state = "ingredient_minced"
+
 // Customizable Drinks /////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable
