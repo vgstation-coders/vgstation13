@@ -2,6 +2,7 @@
 	name       = "\improper Rapid-Piping-Device (RPD)"
 	desc       = "A device used to rapidly pipe things."
 	icon_state = "rpd"
+	frequency = 0
 	var/has_metal_slime = 0
 	var/has_yellow_slime = 0
 	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
@@ -195,9 +196,9 @@
 				our_schematic.set_layer(layer)
 				if(layer != 5 )
 					spawn(-1)
-						our_schematic.attack(A, user)
+						our_schematic.attack(A, user, frequency)
 				else
-					var/t = our_schematic.attack(A, user)
+					var/t = our_schematic.attack(A, user, frequency)
 					if(!t) // No errors
 						if(~our_schematic.flags & RCD_SELF_COST) // Handle energy costs unless the schematic does it itself.
 							use_energy(our_schematic.energy_cost, user)
@@ -211,7 +212,7 @@
 			return 1
 
 	busy  = TRUE // Busy to prevent switching schematic while it's in use.
-	var/t = selected.attack(A, user)
+	var/t = selected.attack(A, user, frequency)
 	if(!t) // No errors
 		if(~selected.flags & RCD_SELF_COST) // Handle energy costs unless the schematic does it itself.
 			use_energy(selected.energy_cost, user)

@@ -150,6 +150,12 @@
 	radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
 
 	return 1
+	
+/obj/machinery/atmospherics/binary/dp_vent_pump/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+    if(pipe.frequency)
+        set_frequency(pipe.frequency)
+    return ..()
+
 
 /obj/machinery/atmospherics/binary/dp_vent_pump/initialize()
 	..()

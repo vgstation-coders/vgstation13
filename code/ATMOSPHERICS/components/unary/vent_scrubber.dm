@@ -168,6 +168,10 @@
 		else //stalled and too much pressure, do nothing
 			return
 
+/obj/machinery/atmospherics/unary/vent_scrubber/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+    if(pipe.frequency)
+        set_frequency(pipe.frequency)
+    return ..()
 
 /obj/machinery/atmospherics/unary/vent_scrubber/initialize()
 	..()

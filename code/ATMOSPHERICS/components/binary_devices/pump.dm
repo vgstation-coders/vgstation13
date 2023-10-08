@@ -110,6 +110,11 @@ air2.volume
 
 	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
 	onclose(user, "atmo_pump")
+	
+/obj/machinery/atmospherics/binary/pump/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+    if(pipe.frequency)
+        set_frequency(pipe.frequency)
+    return ..()
 
 /obj/machinery/atmospherics/binary/pump/initialize()
 	..()

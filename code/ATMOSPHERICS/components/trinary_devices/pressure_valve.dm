@@ -346,6 +346,11 @@
 	frequency = new_frequency
 	if(frequency)
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
+		
+/obj/machinery/atmospherics/trinary/pressure_valve/digital/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+    if(pipe.frequency)
+        set_frequency(pipe.frequency)
+    return ..()
 
 /obj/machinery/atmospherics/trinary/pressure_valve/digital/initialize()
 	..()

@@ -111,7 +111,10 @@ Thus, the two variables affect pump operation are set in New():
 	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
 	onclose(user, "atmo_pump")
 
-
+/obj/machinery/atmospherics/binary/volume_pump/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+    if(pipe.frequency)
+        set_frequency(pipe.frequency)
+    return ..()
 
 /obj/machinery/atmospherics/binary/volume_pump/initialize()
 	..()

@@ -108,6 +108,11 @@
 	radio_connection.post_signal(src, signal)
 
 	return 1
+	
+/obj/machinery/atmospherics/unary/outlet_injector/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+    if(pipe.frequency)
+        set_frequency(pipe.frequency)
+    return ..()
 
 /obj/machinery/atmospherics/unary/outlet_injector/initialize()
 	..()

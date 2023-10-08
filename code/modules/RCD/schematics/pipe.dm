@@ -169,7 +169,7 @@
 	category = "Devices"
 	flags    = RCD_RANGE | RCD_GET_TURF | RCD_ALLOW_SWITCH
 
-/datum/rcd_schematic/gsensor/attack(var/atom/A, var/mob/user)
+/datum/rcd_schematic/gsensor/attack(var/atom/A, var/mob/user, frequency = 0)
 	if(!isturf(A))
 		return
 
@@ -179,14 +179,14 @@
 		return 1
 
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
-	new /obj/item/pipe_gsensor(A)
+	new /obj/item/pipe_gsensor(A, frequency)
 
 /datum/rcd_schematic/pmeter
 	name     = "Pipe meter"
 	category = "Devices"
 	flags    = RCD_RANGE | RCD_GET_TURF | RCD_ALLOW_SWITCH
 
-/datum/rcd_schematic/pmeter/attack(var/atom/A, var/mob/user)
+/datum/rcd_schematic/pmeter/attack(var/atom/A, var/mob/user, frequency = 0)
 	if(!isturf(A))
 		return
 
@@ -196,7 +196,7 @@
 		return 1
 
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
-	new /obj/item/pipe_meter(A)
+	new /obj/item/pipe_meter(A, frequency)
 
 //ACTUAL PIPES.
 
@@ -344,6 +344,12 @@
 			<a class="no_dec" href="?src=\ref[master.interface];set_layer=5"><div class="layer horizontal five  [layer == 5 ? "selected" : ""]"></div></a>
 		</div>
 	"}
+	
+	. += {"
+		<div>
+			<b>Frequency:</b> <a href="?src=\ref[master.interface];set_freq=-1">[format_frequency(master.frequency)] GHz</a> <a href="?src=\ref[master.interface];set_freq=reset">Reset</a>
+		</div>
+	"}
 
 /datum/rcd_schematic/pipe/proc/render_dir_image(var/dir, var/title)
 	var/selected = ""
@@ -369,6 +375,26 @@
 
 		set_layer(n_layer)
 
+		return 1
+		
+	if("set_freq" in href_list)
+		if(href_list["set_freq"]=="reset")
+			master.frequency = 0
+			master.rebuild_ui()
+			return 1
+		
+		var/newfreq=master.frequency
+		if(href_list["set_freq"]!="-1")
+			newfreq=text2num(href_list["set_freq"])
+		else
+			newfreq = input(usr, "Specify a new frequency (GHz). Decimals assigned automatically.", src, master.frequency) as null|num
+		if(newfreq)
+			if(findtext(num2text(newfreq), "."))
+				newfreq *= 10 // shift the decimal one place
+			if(newfreq < 10000)
+				master.frequency = newfreq
+			master.rebuild_ui()
+			
 		return 1
 
 /datum/rcd_schematic/pipe/proc/set_dir(var/new_dir)
@@ -407,7 +433,7 @@
 
 		set_dir(dirs[index])
 
-/datum/rcd_schematic/pipe/attack(var/atom/A, var/mob/user)
+/datum/rcd_schematic/pipe/attack(var/atom/A, var/mob/user, frequency = 0)
 	to_chat(user, "Building Pipes ...")
 	playsound(user, 'sound/machines/click.ogg', 50, 1)
 	var/thislayer = layer
@@ -417,7 +443,7 @@
 
 	playsound(user, 'sound/items/Deconstruct.ogg', 50, 1)
 
-	var/obj/item/pipe/P = new /obj/item/pipe(A, pipe_id, thisdir)
+	var/obj/item/pipe/P = new /obj/item/pipe(A, pipe_id, thisdir, null, frequency)
 	P.setPipingLayer(thislayer)
 	P.update()
 	P.add_fingerprint(user)

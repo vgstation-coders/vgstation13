@@ -211,6 +211,10 @@
 
 	return 1
 
+/obj/machinery/atmospherics/unary/vent_pump/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
+    if(pipe.frequency)
+        set_frequency(pipe.frequency)
+    return ..()
 
 /obj/machinery/atmospherics/unary/vent_pump/initialize()
 	..()
