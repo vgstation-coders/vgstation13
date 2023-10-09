@@ -215,7 +215,6 @@ var/datum/controller/gameticker/ticker
 	handle_lights(roundstart_occupied_areas)
 	//Force the lighting subsystem to update.
 	SSlighting.fire(FALSE, FALSE)
-	roundstart_occupied_areas = null //Don't need it anymore.
 
 	var/list/clowns = list()
 	var/already_an_ai = FALSE
