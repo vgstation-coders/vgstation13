@@ -185,6 +185,13 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/blob)
 	result = /obj/item/weapon/reagent_containers/food/snacks/blobburger
 
+/datum/recipe/blobkabob
+	items = list(
+		/obj/item/stack/rods,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/blob,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/blob,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobkabob
 /datum/recipe/jellyburger
 	reagents = list(CHERRYJELLY = 5, FLOUR = 15)
 	items = list()
@@ -2041,7 +2048,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno
-	
+
 /datum/recipe/hotchips
 	reagents = list (SODIUMCHLORIDE = 2)
 	items = list(
@@ -2049,7 +2056,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/chili,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot
-	
+
 /datum/recipe/novachips
 	reagents = list (SODIUMCHLORIDE = 2, NOVAFLOUR = 2)
 	items = list(

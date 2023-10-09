@@ -1580,7 +1580,17 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
 	reagents.add_reagent(BLOBANINE, 5)
-	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/blobkabob
+	name = "blob-kabob"
+	desc = "Blob meat, on a stick."
+	icon_state = "blobkabob"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/blobkabob/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(BLOBANINE, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
