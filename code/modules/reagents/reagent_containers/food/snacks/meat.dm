@@ -503,7 +503,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/blob/blob_act()
 	// Blobs ignore their own parts
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/blob/blob_core
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob/core
 	name = "blob core meat"
 	desc = "A piece of a blob's core. It pulsates wildly."
 	origin_tech = Tc_BIOTECH + "=6"

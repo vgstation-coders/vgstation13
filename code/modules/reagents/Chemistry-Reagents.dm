@@ -6006,25 +6006,40 @@ var/procizine_tolerance = 0
 			H.heal_organ_damage(1, 1)
 			H.nutrition += nutriment_factor //Double nutrition
 
+/datum/reagent/blobanine
+	name = "Blobanine"
+	id = BLOBANINE
+	description = "An oily, green substance extracted from a blob."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#81EB00"
+
+/datum/reagent/blobanine/on_mob_life(var/mob/living/M)
+	if (..() || !ishuman(M))
+		return
+	var/mob/living/carbon/human/H = M
+	change_eye_color_to_green(H)
+
+/datum/reagent/blobanine/proc/change_eye_color_to_green(var/mob/living/carbon/human/H)
+	var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+	if (!E)
+		return
+	H.my_appearance.r_eyes = 129
+	H.my_appearance.g_eyes = 235
+	H.my_appearance.b_eyes = 0
+	H.update_body()
+
 /datum/reagent/blob_essence
 	name = "Blob Essence"
 	id = BLOB_ESSENCE
 	description = "A thick, transparent liquid extracted from live blob cores."
 	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = 0
 	color = "#FFD6A0"
 
 /datum/reagent/blob_essence/on_mob_life(var/mob/living/M)
-	// TODO UNIMPLEMENTED
-	return
+	if (..() || !ishuman(M))
+		return
 
-/datum/reagent/blobanine
-	name = "Blobanine"
-	id = BLOBANINE
-	description = "An oily green substance extracted from a blob."
-	reagent_state = REAGENT_STATE_LIQUID
-	color = "#81EB00"
-	nutriment_factor = 0
+	var/mob/living/carbon/human/H = M
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum//////////
