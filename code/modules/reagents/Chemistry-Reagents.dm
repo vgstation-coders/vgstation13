@@ -8955,7 +8955,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/drink/coffee/engicoffee/on_mob_life(var/mob/living/M)
 	..()
 	M.hallucination = 0
-	M.reagents.add_reagent (HYRONALIN, 0.1)
+	M.reagents.add_reagent (HYRONALIN, 0.05)
 
 /datum/reagent/drink/coffee/medcoffee
 	name = "Lifeline"
