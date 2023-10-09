@@ -199,7 +199,9 @@ var/datum/controller/gameticker/ticker
 				S.store_position()
 				log_admin("([key]) started the game as a [S.mind.assigned_role].")
 				new_characters[key] = S
-				roundstart_occupied_areas |= get_area(S)
+				var/list/this_silicon_department_areas = get_department_areas(S)
+				for(var/area/this_area in this_silicon_department_areas)
+					roundstart_occupied_areas |= this_area
 			if("MODE")
 				//antags aren't new players
 			else
@@ -208,7 +210,9 @@ var/datum/controller/gameticker/ticker
 				EquipCustomItems(H)
 				H.update_icons()
 				new_characters[key] = H
-				roundstart_occupied_areas |= get_area(H)
+				var/list/this_human_department_areas = get_department_areas(H)
+				for(var/area/this_area in this_human_department_areas)
+					roundstart_occupied_areas |= this_area
 		CHECK_TICK
 
 	//Now that we have all of the occupied areas, we handle the lights being on or off, before actually putting the players into their bodies.
