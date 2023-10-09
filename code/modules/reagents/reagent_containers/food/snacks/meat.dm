@@ -497,7 +497,6 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/blob/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(BLOBANINE, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/blob/blob_act()
@@ -506,7 +505,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/blob/core
 	name = "blob core meat"
 	desc = "A piece of a blob's core. It pulsates wildly."
-	icon_state = "blob_bore_meat"
+	icon_state = "blob_core_meat"
 	origin_tech = Tc_BIOTECH + "=6"
 	throw_impact_sound = 'sound/effects/attackblob.ogg'
 
