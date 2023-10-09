@@ -508,7 +508,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	desc = "A piece of a blob's core. It pulsates wildly."
 	origin_tech = Tc_BIOTECH + "=6"
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/blob/blob_core/New()
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob/core/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 10)
 	reagents.add_reagent(BLOB_ESSENCE, 1)

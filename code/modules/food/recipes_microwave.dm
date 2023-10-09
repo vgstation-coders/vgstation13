@@ -192,6 +192,12 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/blob,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/blobkabob
+
+/datum/recipe/blobpudding
+	reagents = list(SUGARS = 5, CREAM = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/meat/blob)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobpudding
+
 /datum/recipe/jellyburger
 	reagents = list(CHERRYJELLY = 5, FLOUR = 15)
 	items = list()

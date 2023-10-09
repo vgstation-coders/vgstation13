@@ -1592,6 +1592,19 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	reagents.add_reagent(BLOBANINE, 5)
 
+/obj/item/weapon/reagent_containers/food/snacks/blobpudding
+	name = "blob à l'impératrice"
+	desc = "An extremely thick \"pudding\" that requires a tough jaw."
+	icon_state = "blobpudding"
+	trash = /obj/item/trash/emptybowl
+	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_MEAT
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_FORK | UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/blobpudding/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(BLOBANINE, 5)
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
 	desc = "That's all you can say!"
