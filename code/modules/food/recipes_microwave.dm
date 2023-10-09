@@ -206,6 +206,13 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris)
 	result = /obj/item/weapon/reagent_containers/food/snacks/blobegg
 
+/datum/recipe/blobsoup
+	reagents = list(FLOUR = 5, CREAM = 5, WATER = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/blob
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobsoup
+
 /datum/recipe/jellyburger
 	reagents = list(CHERRYJELLY = 5, FLOUR = 15)
 	items = list()
