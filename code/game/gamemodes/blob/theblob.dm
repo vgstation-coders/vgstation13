@@ -199,7 +199,6 @@ var/list/blob_overminds = list()
 				playsound(src, 'sound/effects/blobweld.ogg', 100, 1)
 		if("brute")
 			damage = (W.force / max(src.brute_resist,1))
-			// Blob might drop some pieces of meat
 			if(W.sharpness > 0 && prob((W.sharpness * W.force) * meat_drop_factor))
 				var/obj/item/I = new meat()
 				I.forceMove(src.loc)

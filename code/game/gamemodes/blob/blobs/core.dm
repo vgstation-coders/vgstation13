@@ -19,7 +19,7 @@
 	icon_new = "core"
 	icon_classic = "blob_core"
 
-	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/blob_core
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/blob/core
 
 
 /obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, var/mob/camera/blob/C = null,newlook = "new",no_morph = 0)

@@ -493,20 +493,22 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	desc = "A slab of glowing meat hacked off of a greater part. It has a spongy feel to it."
 	meatcolor = BLOB_MEAT
 	origin_tech = Tc_BIOTECH + "=2"
-	// throw_impact_sound = 'sound/effects/.........' TODO ADD A COOL SOUND!
+	throw_impact_sound = 'sound/effects/attackblob.ogg'
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/blob/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(BLOBANINE, 5)
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob/blob_act()
+	// Blobs ignore their own parts
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/blob_core
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob/blob_core
 	name = "blob core meat"
 	desc = "A piece of a blob's core. It pulsates wildly."
 	origin_tech = Tc_BIOTECH + "=6"
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/blob_core/New()
+/obj/item/weapon/reagent_containers/food/snacks/meat/blob/blob_core/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 10)
 	reagents.add_reagent(BLOB_ESSENCE, 1)
