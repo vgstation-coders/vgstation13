@@ -1360,7 +1360,7 @@ var/list/has_died_as_golem = list()
 	species_intro = "You are a Mushroom Person.<br>\
 					You are an odd creature. Your lack of a mouth prevents you from eating, but you can stand or lay on food to absorb it.<br>\
 					You have a resistance to burn and toxin, but you are vulnerable to brute attacks.<br>\
-					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the target chosen with your Fungal Telepathy.<br>\
+					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the targets chosen with your Fungal Telepathy.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
 	var/mob/living/telepathic_target[] = list()
 	var/local_telepathy = 1
