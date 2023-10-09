@@ -52,9 +52,6 @@ var/datum/controller/gameticker/ticker
 	// Tag mode!
 	var/tag_mode_enabled = FALSE
 
-	var/list/roundstart_occupied_areas = list() //List of areas that are occupied at roundstart, used to handle the lights being on or off.
-
-
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
 /datum/controller/gameticker/proc/pregame()
@@ -179,6 +176,8 @@ var/datum/controller/gameticker/ticker
 	//After antagonists have been removed from new_players in player_list, create crew
 	var/list/new_characters = list()	//list of created crew for transferring
 	var/list/new_players_ready = list() //unique list of people who have readied up, so we can delete mob/new_player later (ready is lost on mind transfer)
+	var/list/roundstart_occupied_areas = list() //List of areas that are occupied at roundstart, used to handle the lights being on or off.
+
 	for(var/mob/M in player_list)
 		if(!istype(M, /mob/new_player/))
 			var/mob/living/L = M
@@ -213,7 +212,7 @@ var/datum/controller/gameticker/ticker
 		CHECK_TICK
 
 	//Now that we have all of the occupied areas, we handle the lights being on or off, before actually putting the players into their bodies.
-	handle_lights()
+	handle_lights(roundstart_occupied_areas)
 	//Force the lighting subsystem to update.
 	SSlighting.fire(FALSE, FALSE)
 	roundstart_occupied_areas = null //Don't need it anymore.
@@ -657,8 +656,8 @@ var/datum/controller/gameticker/ticker
 			roles += player.mind.assigned_role
 	return roles
 
-/datum/controller/gameticker/proc/handle_lights()
-	for(var/area/this_area in roundstart_occupied_areas)
+/datum/controller/gameticker/proc/handle_lights(var/list/areas_to_turn_lights_on)
+	for(var/area/this_area in areas_to_turn_lights_on)
 		for(var/obj/machinery/light_switch/LS in this_area)
 			LS.toggle_switch(1, playsound = FALSE)
 		for(var/obj/machinery/light/lightykun in this_area)
