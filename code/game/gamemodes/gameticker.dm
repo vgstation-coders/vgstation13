@@ -656,7 +656,7 @@ var/datum/controller/gameticker/ticker
 			roles += player.mind.assigned_role
 	return roles
 
-/datum/controller/gameticker/proc/handle_lights(var/list/areas_to_turn_lights_on)
+/datum/controller/gameticker/proc/handle_lights(list/areas_to_turn_lights_on)
 	for(var/area/this_area in areas_to_turn_lights_on)
 		for(var/obj/machinery/light_switch/LS in this_area)
 			LS.toggle_switch(1, playsound = FALSE)
