@@ -135,6 +135,8 @@
 	hud_state = "gen_project"
 	compatible_mobs = list(/mob/living/carbon/human, /datum/mind)
 	mind_affecting = 1
+	var/local_telepathy = 0
+
 /spell/targeted/telepathy/cast_check(var/skipcharge = 0, var/mob/user = usr)
 	. = ..()
 	if (!.)
@@ -153,6 +155,7 @@
 			return 1
 	else
 		M.telepathic_target.len = 0
+		M.local_telepathy = local_telepathy
 
 	var/all_switch = TRUE
 	for(var/T in targets)
