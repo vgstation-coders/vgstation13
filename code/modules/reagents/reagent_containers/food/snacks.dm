@@ -1605,6 +1605,22 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
 	reagents.add_reagent(BLOBANINE, 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/blobegg
+	name = "oeufs en blob"
+	desc = "Baked egg in a delicious, sticky broth. Bón appetit!"
+	icon_state = "blobegg"
+	trash = /obj/item/trash/emptybowl
+	food_flags = FOOD_ANIMAL | FOOD_MEAT
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_FORK | UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/blobegg/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(BLOBANINE, 5)
+	bitesize = 3
+
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
 	desc = "That's all you can say!"

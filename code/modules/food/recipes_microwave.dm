@@ -198,6 +198,14 @@
 	items = list(/obj/item/weapon/reagent_containers/food/meat/blob)
 	result = /obj/item/weapon/reagent_containers/food/snacks/blobpudding
 
+/datum/recipe/blobegg
+	reagents = list(BLOBANINE = 5, CREAM = 5, BLACKPEPPER = 1, SODIUMCHLORIDE = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/egg
+		/obj/item/weapon/reagent_containers/food/cheesewedge
+		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobegg
+
 /datum/recipe/jellyburger
 	reagents = list(CHERRYJELLY = 5, FLOUR = 15)
 	items = list()
