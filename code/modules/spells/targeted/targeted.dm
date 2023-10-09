@@ -60,6 +60,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 			if(!user || !user.mind || !user.mind.heard_before.len)
 				return
 			var/list/possible_targets = user.mind.heard_before.Copy()
+			possible_targets += "Local"
 			possible_targets += "All"
 			if(spell_flags & INCLUDEUSER)
 				possible_targets[user.real_name] = user.mind
@@ -69,10 +70,18 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 			var/datum/mind/temp_target
 			if(target_name == "All")
 				for(var/T in possible_targets)
-					if(T == "All")
+					if(T == "All" || T == "Local")
 						continue
 					temp_target = possible_targets[T]
 					targets += temp_target.current
+			else if(target_name == "Local")
+				var/local_range = 7 //Same as default message range in /mob/living/say. Perhaps we can put that in __DEFINES? It might also be interesting to make this range adjustable by telepaths.
+				for(var/T in possible_targets)
+					if (T == "All" || T == "Local")
+						continue
+					temp_target = possible_targets[T]
+					if(temp_target.current && (get_dist(temp_target.current, user) <= local_range))
+						targets += temp_target.current
 			else
 				temp_target = possible_targets[target_name]
 				targets += temp_target.current
