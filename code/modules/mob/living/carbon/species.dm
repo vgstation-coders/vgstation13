@@ -1382,7 +1382,7 @@ var/list/has_died_as_golem = list()
 		to_chat(M, "<span class='warning'>You must be conscious to do this!</span>")
 		return
 
-	if(telepathy_type & LOCAL_TELEPATHY || telepathy_type & GLOBAL_TELEPATHY)
+	if(telepathy_type & (LOCAL_TELEPATHY | GLOBAL_TELEPATHY))
 		telepathic_target.len = 0
 		var/list/possible_targets = M.mind.heard_before
 		var/datum/mind/temp_target
