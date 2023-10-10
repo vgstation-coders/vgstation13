@@ -134,7 +134,7 @@
 		if(spell_levels[Sp_POWER] == 0)
 			return "Increases your binding skill, allowing otherwise immobile structures and machines to be moved."
 		if(spell_levels[Sp_POWER] == 1)
-			return "Further increases your binding skill, allowing you to bind certain incredibly destructive objects."
+			return "Further increases your binding skill, allowing you to bind [types_to_english_list(empower_limited)]."
 		else
 			return "You can already bind a great amount of things."
 	return ..()

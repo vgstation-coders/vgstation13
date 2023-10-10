@@ -507,3 +507,12 @@
     for(var/a in L)
         if(max == null || L[a] > max) max = L[a]
     return max
+
+//Convert a list of paths into a list of object names
+/proc/types_to_english_list(var/list/L)
+	var/list/names = list()
+	for(var/P in L)
+		if(!ispath(P))
+			continue
+		names += "\the [P:name]"
+	return english_list(names)
