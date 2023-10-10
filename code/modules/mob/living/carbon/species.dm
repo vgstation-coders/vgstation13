@@ -1363,7 +1363,7 @@ var/list/has_died_as_golem = list()
 					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the targets chosen with your Fungal Telepathy.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
 	var/mob/living/telepathic_target[] = list()
-	var/local_telepathy = 1
+	var/telepathy_type = LOCAL_TELEPATHY
 
 /datum/species/mushroom/makeName()
 	return capitalize(pick(mush_first)) + " " + capitalize(pick(mush_last))
@@ -1382,13 +1382,13 @@ var/list/has_died_as_golem = list()
 		to_chat(M, "<span class='warning'>You must be conscious to do this!</span>")
 		return
 
-	if(local_telepathy)
+	if(telepathy_type & LOCAL_TELEPATHY || telepathy_type & GLOBAL_TELEPATHY)
 		telepathic_target.len = 0
 		var/list/possible_targets = M.mind.heard_before
 		var/datum/mind/temp_target
 		for(var/T in possible_targets)
 			temp_target = possible_targets[T]
-			if(!temp_target.current || !(get_dist(temp_target.current, M) <= SPEECH_RANGE))
+			if(!temp_target.current || ((telepathy_type & LOCAL_TELEPATHY) && !(get_dist(temp_target.current, M) <= SPEECH_RANGE)))
 				continue
 			telepathic_target += temp_target.current
 

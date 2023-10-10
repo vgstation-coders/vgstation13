@@ -63,7 +63,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 			if(ismushroom(user) && istype(src, /spell/targeted/telepathy))
 				possible_targets += "Local"
 				var/spell/targeted/telepathy/telepathy = src
-				telepathy.local_telepathy = 0
+				telepathy.telepathy_type = SPECIFIC_TELEPATHY
 			possible_targets += "All"
 			if(spell_flags & INCLUDEUSER)
 				possible_targets[user.real_name] = user.mind
@@ -72,6 +72,9 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 				return
 			var/datum/mind/temp_target
 			if(target_name == "All")
+				if(ismushroom(user) && istype(src, /spell/targeted/telepathy))
+					var/spell/targeted/telepathy/telepathy = src
+					telepathy.telepathy_type = GLOBAL_TELEPATHY
 				for(var/T in possible_targets)
 					if(T == "All" || T == "Local")
 						continue
@@ -80,7 +83,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 			else if(target_name == "Local")
 				if(ismushroom(user) && istype(src, /spell/targeted/telepathy))
 					var/spell/targeted/telepathy/telepathy = src
-					telepathy.local_telepathy = 1
+					telepathy.telepathy_type = LOCAL_TELEPATHY
 				for(var/T in possible_targets)
 					if (T == "All" || T == "Local")
 						continue
