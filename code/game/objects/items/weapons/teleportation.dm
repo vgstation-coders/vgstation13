@@ -193,18 +193,7 @@ Frequency:
 
 	T = destination_id
 
-	//No stacking portals
-	if(locate(/obj/effect/portal) in get_turf(T))
-		user.show_message("<span class='notice'>\The [src] buzzes, there already is a portal there!</span>")
-		return
-	if(locate(/obj/effect/portal) in get_turf(src))
-		user.show_message("<span class='notice'>\The [src] buzzes, there already is a portal here!</span>")
-		return
-
 	var/turf/U = get_turf(src)
-	if(U == get_turf(T))
-		user.show_message("<span class='notice'>\The [src] buzzes, both destinations are the same!</span>")
-		return
 	U.visible_message("<span class='notice'>Locked In.</span>")
 	var/obj/effect/portal/P1 = new (U)
 	var/obj/effect/portal/P2 = new (get_turf(T))
