@@ -111,6 +111,10 @@
 
 /obj/machinery/atmospherics/unary/vent_scrubber/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	..()
+	if(pipe.frequency)
+		set_frequency(pipe.frequency)
+	if(pipe.id)
+		src.id_tag = pipe.id
 	src.broadcast_status()
 	return 1
 
@@ -167,11 +171,6 @@
 			update_icon()
 		else //stalled and too much pressure, do nothing
 			return
-
-/obj/machinery/atmospherics/unary/vent_scrubber/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
-    if(pipe.frequency)
-        set_frequency(pipe.frequency)
-    return ..()
 
 /obj/machinery/atmospherics/unary/vent_scrubber/initialize()
 	..()

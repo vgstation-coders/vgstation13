@@ -137,6 +137,8 @@
 /obj/machinery/atmospherics/binary/valve/digital/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	if(pipe.frequency)
 		set_frequency(pipe.frequency)
+	if(pipe.id)
+		src.id_tag = pipe.id
 	return ..()
 
 /obj/machinery/atmospherics/binary/valve/digital/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)

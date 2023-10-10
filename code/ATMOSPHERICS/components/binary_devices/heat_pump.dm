@@ -100,9 +100,11 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 	..()
 
 /obj/machinery/atmospherics/binary/heat_pump/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
-    if(pipe.frequency)
-        set_frequency(pipe.frequency)
-    return ..()
+	if(pipe.frequency)
+		set_frequency(pipe.frequency)
+	if(pipe.id)
+		src.id_tag = pipe.id
+	return ..()
 
 /obj/machinery/atmospherics/binary/heat_pump/initialize()
 	..()

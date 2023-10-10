@@ -19,6 +19,7 @@
 	origin_tech         = Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=2"
 	
 	var/frequency = 0
+	var/id = null
 
 	//list of schematics, in definitions of RCD subtypes, no organization is needed, in New() these get organized.
 	var/list/schematics = list(/datum/rcd_schematic/test)

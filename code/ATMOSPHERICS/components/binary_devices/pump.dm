@@ -112,9 +112,11 @@ air2.volume
 	onclose(user, "atmo_pump")
 	
 /obj/machinery/atmospherics/binary/pump/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
-    if(pipe.frequency)
-        set_frequency(pipe.frequency)
-    return ..()
+	if(pipe.frequency)
+		set_frequency(pipe.frequency)
+	if(pipe.id)
+		src.id_tag = pipe.id
+	return ..()
 
 /obj/machinery/atmospherics/binary/pump/initialize()
 	..()

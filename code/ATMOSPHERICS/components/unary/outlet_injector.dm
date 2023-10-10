@@ -110,9 +110,11 @@
 	return 1
 	
 /obj/machinery/atmospherics/unary/outlet_injector/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
-    if(pipe.frequency)
-        set_frequency(pipe.frequency)
-    return ..()
+	if(pipe.frequency)
+		set_frequency(pipe.frequency)
+	if(pipe.id)
+		src.id_tag = pipe.id
+	return ..()
 
 /obj/machinery/atmospherics/unary/outlet_injector/initialize()
 	..()
