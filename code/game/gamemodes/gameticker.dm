@@ -199,8 +199,7 @@ var/datum/controller/gameticker/ticker
 				S.store_position()
 				log_admin("([key]) started the game as a [S.mind.assigned_role].")
 				new_characters[key] = S
-				var/list/this_silicon_department_areas = get_department_areas(S)
-				for(var/area/this_area in this_silicon_department_areas)
+				for(var/area/this_area in get_department_areas(S))
 					roundstart_occupied_areas |= this_area
 			if("MODE")
 				//antags aren't new players
@@ -210,8 +209,7 @@ var/datum/controller/gameticker/ticker
 				EquipCustomItems(H)
 				H.update_icons()
 				new_characters[key] = H
-				var/list/this_human_department_areas = get_department_areas(H)
-				for(var/area/this_area in this_human_department_areas)
+				for(var/area/this_area in get_department_areas(H))
 					roundstart_occupied_areas |= this_area
 		CHECK_TICK
 
