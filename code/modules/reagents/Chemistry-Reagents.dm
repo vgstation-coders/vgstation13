@@ -8362,6 +8362,24 @@ var/procizine_tolerance = 0
 	glass_icon_state = "evoluatorglass"
 	glass_desc = "Blob evoluated with oxigen. Prickly!"
 
+/datum/reagent/ethanol/drink/blob_beer
+	name = "Blob beer"
+	id = BLOBBEER
+	description = "Enzymes in the blob, when under heat, entered a state of rapid fermentation. The result was this beverage."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = BLOB_MEAT
+	glass_icon_state = "blobbeerglass"
+	glass_desc = "Acidic beer with a grand foam head. Subtle hints of apple."
+
+/datum/reagent/ethanol/drink/liberator
+	name = "Liberator"
+	id = LIBERATOR
+	description = "Fruit juice and liquors balancing the blob's overwhelming taste."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = DEFAULT_BLOOD
+	glass_icon_state = "liberatorglass"
+	glass_desc = "Fruity and strong, for when you need a quick recharge."
+
 /datum/reagent/ethanol/drink/aloe
 	name = "Aloe"
 	id = ALOE

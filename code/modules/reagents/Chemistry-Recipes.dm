@@ -3081,6 +3081,21 @@
 	required_reagents = list(BLOBANINE = 1, OXYGEN = 2, APPLEJUICE = 1, VERMOUTH = 1)
 	result_amount = 5
 
+/datum/chemical_reaction/blob_beer
+	name = "Blob beer"
+	id = BLOBBEER
+	result = BLOBBEER
+	required_reagents = list(BLOBANINE = 1, SUGAR = 1)
+	required_temp = T0C + 60
+	result_amount = 10
+
+/datum/chemical_reaction/liberator
+	name = "Liberator"
+	id = LIBERATOR
+	result = LIBERATOR
+	required_reagents = list(BLOBANINE = 1, ORANGEJUICE = 1, VODKA = 1, TRIPLESEC = 1)
+	result_amount = 14
+
 /datum/chemical_reaction/soy_latte
 	name = "Soy Latte"
 	id = SOY_LATTE
