@@ -202,6 +202,10 @@ var/list/blob_overminds = list()
 			if(prob((W.sharpness * W.force) * meat_drop_factor))
 				var/obj/item/I = new meat()
 				I.forceMove(src.loc)
+				if (!(src.looks in blob_diseases))
+					CreateBlobDisease(src.looks)
+				var/datum/disease2/disease/D = blob_diseases[src.looks]
+				I.infect_disease2(D)
 				I.throw_at(user, 1, 1)
 
 	health -= damage
