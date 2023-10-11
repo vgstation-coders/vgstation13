@@ -48,17 +48,23 @@
 
 	//todo: make this a list to hold different reagents until they're combined by eating or something
 	//todo: consolidate stuff like this/change format
-	var/list/toppings //list of strings describing what its been topped with
-	var/list/toppings_short //list of topping strings without "sliced" etc. modifiers
+
+	var/ingredient_structure //if set, the snack has been processed into an ingredient. eg. FOOD_INGREDIENT_STRUCTURE_SLICED means it's sliced
+	var/base_name //todo: describe
+	var/base_desc //todo: describe
+//	var/datum/ingredientized/ingredientized //if set, the snack has been processed into an ingredient. eg. FOOD_INGREDIENT_STRUCTURE_SLICED means it's sliced
+	var/list/additional_ingredients //list of strings describing what its been topped etc. with
+	var/list/additional_ingredients_short //list of topping etc. strings without "sliced" etc. modifiers
+
+
 
 //todo: make ingredient-ness into component
-/datum/ingredient_info
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
-	var/turf/T = get_turf(src)
-	if(contents.len)
+	if(contents.len && (contents.len != additional_ingredients?.len))
 		for(var/atom/movable/A in src)
-			A.forceMove(T)
+			if(!(additional_ingredients && (A in additional_ingredients)))
+				A.forceMove(get_turf(src))
 		visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
 	..()
 
@@ -277,6 +283,9 @@
 		eatverb = pick("bite", "chew", "nibble", "gnaw", "gobble", "chomp")
 
 	before_consume(eater)
+	if(additional_ingredients?.len)
+		for(var/obj/item/weapon/reagent_containers/food/snacks/S in additional_ingredients)
+			S.before_consume(eater)
 
 	if(messages)
 		var/fullness = eater.nutrition + (eater.reagents.get_reagent_amount(NUTRIMENT) * 25)
@@ -295,6 +304,11 @@
 
 	var/datum/reagents/reagentreference = reagents //Even when the object is qdeleted, the reagents exist until this ref gets removed
 	var/datum/reagents/dipreference = dip
+	var/list/additional_ingredients_reagentreferences
+	if(additional_ingredients?.len)
+		additional_ingredients_reagentreferences = new
+		for(var/obj/item/weapon/reagent_containers/food/snacks/S in additional_ingredients)
+			additional_ingredients_reagentreferences += S.reagents
 
 	if(reagentreference)	//Handle ingestion of any reagents (Note : Foods always have reagents)
 		if(sounds)
@@ -346,6 +360,9 @@
 				reagentreference.trans_to(eater, min(reagentreference.total_volume,bitesize*bitesizemod))
 				bitecount++
 				after_consume(eater, reagentreference)
+				if(additional_ingredients?.len)
+					for(var/additional_ingredient_number in 1 to additional_ingredients.len)
+						additional_ingredients[additional_ingredient_number].after_consume(eater, additional_ingredients_reagentreferences[additional_ingredient_number])
 		return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/proc/can_consume(mob/living/carbon/eater, mob/user)
@@ -416,25 +433,25 @@
 		return 1
 	return 0
 
-/obj/item/weapon/reagent_containers/food/snacks/proc/generate_topping_text()
-	if (toppings?.len)
+/obj/item/weapon/reagent_containers/food/snacks/proc/generate_additional_ingredient_text()
+	if (additional_ingredients?.len)
 		. += "It's topped with " //todo: adding things to soup rather than topping with
-		for (var/topping_number in 1 to toppings.len)
-			. += toppings[topping_number].full_name
-			if (topping_number == toppings.len)
+		for (var/additional_ingredient_number in 1 to additional_ingredients.len)
+			. += additional_ingredients[additional_ingredient_number].name
+			if (additional_ingredient_number == additional_ingredients.len)
 				. += "."
-			else if (toppings.len == 2)
+			else if (additional_ingredients.len == 2)
 				. += " and "
-			else if (topping_number == toppings.len - 1)
+			else if (additional_ingredient_number == additional_ingredients.len - 1)
 				. += ", and "
 			else
 				. += ", "
 
 /obj/item/weapon/reagent_containers/food/snacks/examine(mob/user)
 	..()
-	var/topping_text = generate_topping_text()
-	if (topping_text)
-		to_chat(user, topping_text)
+	var/additional_ingredient_text = generate_additional_ingredient_text()
+	if (additional_ingredient_text)
+		to_chat(user, additional_ingredient_text)
 	if (dip && dip.total_volume)
 		to_chat(user, "<span class='info'>\The [src] appears to have been dipped in [dip.get_master_reagent_name()].</span>")
 	if (bitecount)
@@ -535,70 +552,86 @@
 				reagents.trans_to(slice, reagents_per_slice)
 			qdel(src) //So long and thanks for all the fish
 			return 1
-		if(contents.len) //Food item is not sliceable but still has items hidden inside. Using a knife on it should be an easy way to get them out.
+		if(contents.len && (contents.len != additional_ingredients?.len)) //Food item is not sliceable but still has items hidden inside. Using a knife on it should be an easy way to get them out.
 			for(var/atom/movable/A in src)
-				A.forceMove(get_turf(src))
+				if(!(additional_ingredients && (A in additional_ingredients)))
+					A.forceMove(get_turf(src))
 			visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
 			return 1
 		if(!(food_flags & FOOD_LIQUID)) //If the item doesn't explicitly slice into a different item (ie. not like pizza into pizza slices), has nothing hidden inside, and isn't primarily liquid, chop it up into a sliced ingredient.
-			return handle_ingredient_cutting(W, user)
+			if(additional_ingredients?.len && !recursiveFood)
+				to_chat(user, "<span class='warning'>You consider cutting [src], but decide not to.</span>") //todo: consider other message
+			else
+				return handle_ingredient_cutting(W, user)
 
 	//Topping with ingredients
+	//todo: consider scraping off ingredients
+	//todo: destroy when main dish is destroyed
+	//todo: consider using contents for this
+	//todo: use datum or component to store ingredient
 	//todo: change order
-	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/ingredient))
-		//todo: can drop check
-		if (user.drop_item(W, src))
-			to_chat(user, "<span class='notice'>You top [src] with [W].</span>") //todo: change
-			if(!(toppings?.len))
-				toppings = new
-			var/obj/item/weapon/reagent_containers/food/snacks/ingredient/I = W
-			var/datum/topping_data/TD = new
-			TD.base_name = I.base_name
-			TD.full_name = I.name
-			toppings += TD
-//			toppings += W.name
-			W.reagents.trans_to(src, W.reagents.total_volume)
-			//todo: revisit with blood, food, etc.
-			//todo: blend/masking
-			//todo: topping limit
-			//todo: combining toppinges?
-			luckiness += W.luckiness
+	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks))
+		var/obj/item/weapon/reagent_containers/food/snacks/S = W
+		if (S.ingredient_structure)
+			//todo: can drop check?
+			if (additional_ingredients?.len >= FOOD_MAX_ADDITIONAL_INGREDIENTS)
+				to_chat(user, "<span class='warning'>That's already looking pretty stuffed.</span>")
+				return
+			else if (user.drop_item(W, src))
+				to_chat(user, "<span class='notice'>You top [src] with [W].</span>") //todo: change
+				if(!(additional_ingredients?.len))
+					additional_ingredients = new
+				additional_ingredients += W
 
-			if (toppings.len == 1)
-				name += " with [I.base_name]"
-			else
-				name += "-and-[I.base_name]" //todo: consider hyphenation
+				//todo: make it so liquids can transfer
+	//			W.reagents.trans_to(src, W.reagents.total_volume)
+				//todo: revisit with blood, food, etc.
+				//todo: blend/masking
+				//todo: additional_ingredient limit
+				//todo: combining additional_ingredientes?
+				//todo: also don't keep deep fried etc?
+				//todo: also Cross, to bump, etc. on the ingredients?
+				//todo: can maybe not do the luck as that'll be handled normally
 
-			//todo: move to function
+				if (additional_ingredients.len == 1)
+					name += " with [S.base_name]"
+				else
+					name += "-and-[S.base_name]" //todo: consider hyphenation
 
-			var/topping_structure = "topping"
-			switch (I.food_structure)
-				if (FOOD_INGREDIENT_STRUCTURE_SLICED)
-					topping_structure += "_sliced"
-				if (FOOD_INGREDIENT_STRUCTURE_DICED)
-					topping_structure += "_diced"
-				if (FOOD_INGREDIENT_STRUCTURE_MINCED)
-					topping_structure += "_minced"
+				//todo: move to function
+
+				var/topping_structure = "topping"
+				switch (S.ingredient_structure)
+					if (FOOD_INGREDIENT_STRUCTURE_SLICED)
+						topping_structure += "_sliced"
+					if (FOOD_INGREDIENT_STRUCTURE_DICED)
+						topping_structure += "_diced"
+					if (FOOD_INGREDIENT_STRUCTURE_MINCED)
+						topping_structure += "_minced"
 
 
-			//todo: custom area just for toppings (eg only on top of cake? stuff like that)
+				//todo: custom area just for toppings (eg only on top of cake? stuff like that)
 
 
 
-//			var/icon/new_topping_overlay = new /icon('icons/obj/food_custom.dmi', topping_structure)
+	//			var/icon/new_topping_overlay = new /icon('icons/obj/food_custom.dmi', topping_structure)
 
-			var/icon/new_topping_icon = new /icon (icon, icon_state)
-			new_topping_icon.Blend(new /icon ('icons/obj/food_custom.dmi', topping_structure), ICON_ADD)
-			var/image/new_topping_image = image(new_topping_icon)
-			new_topping_image.color =  W.color
+				//todo: see if there's a better way of doing this
+				var/icon/new_topping_icon = new /icon (icon, icon_state)
+				new_topping_icon.Shift(NORTH, 3) //todo: fine tune this/custom behavior/etc./random shifts
+				new_topping_icon.Blend(new /icon ('icons/obj/food_custom.dmi', topping_structure), ICON_ADD)
+				new_topping_icon.Blend(new /icon (icon, icon_state))
 
-//			W.icon_state = topping_structure
-//			new_topping_overlay.color = W.color
-//			new_topping_overlay.Blend(src, ICON_ADD)
-//			W.icon.Blend(src.icon, ICON_ADD)
-			overlays += new_topping_image
-			qdel(W)
-			return 1
+				var/image/new_topping_image = image(new_topping_icon)
+				new_topping_image.color =  W.color
+
+	//			W.icon_state = topping_structure
+	//			new_topping_overlay.color = W.color
+	//			new_topping_overlay.Blend(src, ICON_ADD)
+	//			W.icon.Blend(src.icon, ICON_ADD)
+				overlays += new_topping_image
+	//			qdel(W)
+				return 1
 
 	//Slipping items into food. Because this is below slicing, sharp items can't go into food. No knife-bread, sorry.
 	if(can_hold(W))
@@ -628,39 +661,82 @@
 	//todo: some kind of recursive food check
 	//todo: slicing -> dicing -> mincing
 
-/datum/topping_data
-	var/base_name // "carrot"
-	var/full_name // "sliced carrot"
+	//ingredient made from another food. eg. sliced carrot //todo: move this descriptor
+	//todo: size
+	//todo: handle color, secondary color, etc?
+	//todo: pluralization
+	//todo: remove cutting board? handle tray cutting?
+	//todo: grammar etc
+	//todo: examine description, change name? keep log of what it's been garnished with somewhere?
+	//todo: after_consume etc
+	//todo: secondary colors etc so it doesn't look just one color
+	//todo: move these procs etc to sep file
+	//todo: move icons to sep file
+	//todo: base name varying with deep fry order type thing?
+	//todo: you slice the pizza [with] (consistency)
 
 
 //todo: consider return values here
 //todo: chopping sfx and also for pizza etc. slicing?
 //todo: touch reaction with cutting tool?
-/obj/item/weapon/reagent_containers/food/snacks/proc/handle_ingredient_cutting(obj/item/weapon/W, mob/user)
-	to_chat(user, "<span class='notice'>You slice [src] with [W].</span>")
-	var/obj/item/weapon/reagent_containers/food/snacks/ingredient/I = new
-	I.inherit_properties_from(src)
-	I.forceMove(src.loc)
-	qdel(src)
-	update_icon() //todo:
-	return 1
 
 //todo: move this
-/obj/item/weapon/reagent_containers/food/snacks/ingredient/handle_ingredient_cutting(obj/item/weapon/W, mob/user)
-	switch (food_structure)
+//todo: combine with below?
+//todo: revisit return values
+/obj/item/weapon/reagent_containers/food/snacks/proc/handle_ingredient_cutting(obj/item/weapon/W, mob/user)
+	switch (ingredient_structure)
 		if (FOOD_INGREDIENT_STRUCTURE_SLICED)
 			to_chat(user, "<span class='notice'>You dice [src] with [W].</span>")
-			food_structure = FOOD_INGREDIENT_STRUCTURE_DICED
-			on_food_structure_change()
-			return 1
+			ingredient_structure = FOOD_INGREDIENT_STRUCTURE_DICED
+			on_ingredient_structure_change()
+			return TRUE
 		if (FOOD_INGREDIENT_STRUCTURE_DICED)
 			to_chat(user, "<span class='notice'>You mince [src] with [W].</span>")
-			food_structure = FOOD_INGREDIENT_STRUCTURE_MINCED
-			on_food_structure_change()
-			return 1
+			ingredient_structure = FOOD_INGREDIENT_STRUCTURE_MINCED
+			on_ingredient_structure_change()
+			return TRUE
 		if (FOOD_INGREDIENT_STRUCTURE_MINCED)
 			to_chat(user, "<span class='warning'>[src] is already finely minced.</span>")
-	return 0
+			return FALSE
+		else	//Otherwise the food is being initially ingredientized
+			to_chat(user, "<span class='notice'>You slice [src] with [W].</span>")
+			ingredient_structure = FOOD_INGREDIENT_STRUCTURE_SLICED
+			on_ingredient_structure_change()
+			return TRUE
+	return FALSE
+
+//todo: not being able to cut certain things that are in a container etc.
+//todo: other stuff
+//todo: add comment //desc for base_name
+
+/obj/item/weapon/reagent_containers/food/snacks/proc/on_ingredient_structure_change(obj/item/weapon/W, mob/user)
+	if (!base_name)
+		base_name = name
+		base_desc = desc
+	color = ingredient_color() //todo: revisit
+//todo: other specific naming for like "cubed chicken" and stuff
+	if (ingredient_structure)
+		icon = 'icons/obj/food_custom.dmi'
+		switch (ingredient_structure)
+			if (FOOD_INGREDIENT_STRUCTURE_SLICED)
+				name = "sliced [base_name]"
+				desc = "[base_desc], cut into slices."
+				icon_state = "ingredient_sliced"
+			if (FOOD_INGREDIENT_STRUCTURE_DICED)
+				name = "diced [base_name]"
+				desc = "[base_desc], diced into small pieces."
+				icon_state = "ingredient_diced"
+			if (FOOD_INGREDIENT_STRUCTURE_MINCED)
+				name = "minced [base_name]"
+				desc = "[base_desc], finely minced"
+				icon_state = "ingredient_minced"
+
+//todo: rename/homogenize/change/use_elsewhere
+/obj/item/weapon/reagent_containers/food/snacks/proc/ingredient_color()
+	if (filling_color && filling_color != "#FFFFFF")
+		return filling_color
+	else
+		return AverageColor(getFlatIcon(src, dir, 0), 1, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	..()
@@ -3621,6 +3697,7 @@
 
 /////////////////////////////////////////////////Sliceable////////////////////////////////////////
 // All the food items that can be sliced into smaller bits like Meatbread and Cheesewheels
+// Other food items can be sliced, but they don't have defined slice types per se, and become snacks/ingredient
 
 // sliceable is just an organization type path, it doesn't have any additional code or variables tied to it.
 

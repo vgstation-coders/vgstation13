@@ -1417,6 +1417,7 @@ var/proccalls = 1
 
 
 //todo: add chopped etc.?
+#define FOOD_MAX_ADDITIONAL_INGREDIENTS 3 //How many additional ingredients can be added to a non-ingredient food.
 #define FOOD_INGREDIENT_STRUCTURE_SLICED 1 //Ingredient is sliced (cut once)
 #define FOOD_INGREDIENT_STRUCTURE_DICED 2 //Ingredient is diced (cut twice)
 #define FOOD_INGREDIENT_STRUCTURE_MINCED 3 //Ingredient is minced (cut thrice)
