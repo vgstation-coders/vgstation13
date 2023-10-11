@@ -8353,6 +8353,15 @@ var/procizine_tolerance = 0
 	glass_icon_state = "grogglass"
 	glass_desc = "The favorite of pirates everywhere."
 
+/datum/reagent/ethanol/drink/evoluator
+	name = "Evoluator"
+	id = EVOLUATOR
+	description = "Blobs that come into contact with oxygen really do evoluate."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = BLOB_MEAT
+	glass_icon_state = "evoluatorglass"
+	glass_desc = "Blob evoluated with oxigen. Prickly!"
+
 /datum/reagent/ethanol/drink/aloe
 	name = "Aloe"
 	id = ALOE

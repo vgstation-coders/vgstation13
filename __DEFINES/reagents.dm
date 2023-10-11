@@ -330,6 +330,7 @@
 #define DEVILSKISS 			"devilskiss"
 #define MEAD 			"mead"
 #define GROG 			"grog"
+#define EVOLUATOR		"evoluator"
 #define ALOE 			"aloe"
 #define ANDALUSIA 			"andalusia"
 #define ALLIESCOCKTAIL 			"alliescocktail"
