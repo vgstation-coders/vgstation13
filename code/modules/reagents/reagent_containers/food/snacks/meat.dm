@@ -498,6 +498,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/blob/New()
 	..()
 	reagents.add_reagent(BLOBANINE, 5)
+	reagents.add_reagent(NUTRIMENT, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/blob/blob_act()
 	// Blobs ignore their own parts
