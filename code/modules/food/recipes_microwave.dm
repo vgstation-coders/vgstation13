@@ -213,6 +213,13 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato)
 	result = /obj/item/weapon/reagent_containers/food/snacks/blobsoup
 
+/datum/recipe/blobvolcano
+	reagents = list(MUTAGEN = 10, NUTRIMENT = 10, MESCALINE = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/blob/core,
+	)
+	result = /obj/structure/blob_volcano
+
 /datum/recipe/jellyburger
 	reagents = list(CHERRYJELLY = 5, FLOUR = 15)
 	items = list()
