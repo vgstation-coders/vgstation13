@@ -3093,8 +3093,8 @@
 	name = "Liberator"
 	id = LIBERATOR
 	result = LIBERATOR
-	required_reagents = list(BLOBANINE = 1, ORANGEJUICE = 1, VODKA = 1, TRIPLESEC = 1)
-	result_amount = 14
+	required_reagents = list(BLOBANINE = 1, ORANGEJUICE = 1, TRIPLESEC = 1)
+	result_amount = 6
 
 /datum/chemical_reaction/soy_latte
 	name = "Soy Latte"
