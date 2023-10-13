@@ -398,12 +398,7 @@
 	user.forceMove(src)
 	update_icon()
 	user.reset_view()
-	if(user.reagents && !user.reagents.has_reagent(PRESLOMITE))
-		user.reagents.add_reagent(PRESLOMITE,3)
-		user.reagents.add_reagent(LEPORAZINE,1)
-		to_chat(user,"<span class='warning'>You feel a prick upon entering \the [src].</span>")
-	else
-		to_chat(user,"<span class='notice'>You enter \the [src].</span>")
+	to_chat(user,"<span class='notice'>You enter \the [src].</span>")
 
 /obj/structure/inflatable/shelter/proc/laundry(var/mob/living/carbon/human/user)
 	if(user.loc != src)

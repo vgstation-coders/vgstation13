@@ -1186,13 +1186,10 @@ FIRE ALARM
 	var/last_process = 0
 	var/wiresexposed = 0
 	var/buildstage = 2 // 2 = complete, 1 = no wires,  0 = circuit gone
-	var/shelter = 1
+	var/shelter = 0
 	var/alarm = 0
 	var/last_alarm_time = 0
 	var/alarm_delay = 10 SECONDS
-
-/obj/machinery/firealarm/empty
-	shelter = 0
 
 /obj/machinery/firealarm/supports_holomap()
 	return TRUE
@@ -1391,7 +1388,7 @@ FIRE ALARM
 	if(shelter)
 		dat += "An emergency shelter is mounted within. <A href='?src=\ref[src];shelter=1'>Retrieve</A>"
 	else
-		dat += "The shelter has been removed. <A href='?src=\ref[src];shelter=1'>Insert</A>"
+		dat += "There's an empty slot for storing an emergency shelter. <A href='?src=\ref[src];shelter=1'>Insert</A>"
 	user << browse(dat, "window=firealarm")
 	onclose(user, "firealarm")
 
