@@ -393,7 +393,7 @@ Subject's pulse: ??? BPM"})
 	if(total_moles)
 		message += "<br>[human_standard && abs(pressure - ONE_ATMOSPHERE) > 10 ? "<span class='bad'>" : "<span class='notice'>"] Pressure: [round(pressure, 0.1)] kPa</span>"
 		
-		for (var/id in XGM.gases)
+		for (var/id in scanned.gas)
 			var/class = "notice"
 			var/moles = scanned[id]
 			var/concentration = moles / total_moles
@@ -404,9 +404,12 @@ Subject's pulse: ??? BPM"})
 
 			if (human_standard)
 				switch (id)
-					if (GAS_OXYGEN) class = abs(concentration - O2STANDARD) > 2 ? "bad" : "notice"
-					if (GAS_NITROGEN) class = abs(concentration - N2STANDARD) > 20 ? "bad" : "notice"
-					else class = "bad"
+					if (GAS_OXYGEN)
+						class = abs(concentration - O2STANDARD) > 2 ? "bad" : "notice"
+					if (GAS_NITROGEN)
+						class = abs(concentration - N2STANDARD) > 20 ? "bad" : "notice"
+					else
+						class = "bad"
 			message += "<br><span class='[class]'>[gas.name]: [round(moles, 0.1)] mol, [round(concentration*100)]%</span>"
 
 		message += "<br>[human_standard && !IsInRange(scanned.temperature, BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [round(scanned.temperature-T0C)]&deg;C"
