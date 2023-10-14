@@ -15,6 +15,9 @@
 	var/explosion_sound = 'sound/effects/Explosion_Small1.ogg'
 	var/explosion_range = 3
 
+	var/max_spores = 10
+	var/list/spores = list()
+
 /obj/structure/blob_volcano/New()
 	..()
 	for (var/i = 1 to src.max_items)
@@ -97,7 +100,7 @@
 				src.process_internal_storage()
 		return TRUE
 
-	if (istype(W, /obj/item/weapon/reagent_containers/food) || allow_any_item)
+	if (istype(W, /obj/item/weapon/reagent_containers/food) || src.allow_any_item)
 		if (src.food_items.len >= src.max_items)
 			to_chat(user, "<span class='notice'>[src] is already filled to the brim!</span>")
 			return TRUE
@@ -113,11 +116,12 @@
 		src.processing_liquids = FALSE
 		visible_message("[src] calms down...")
 		return
+
 	for (var/datum/reagent/nutriment/N in src.internal_storage.reagents.reagent_list)
 		if (N.volume < 10)
 			break
 		if (src.food_items.len >= src.max_items)
-			return
+			break
 		var/obj/item/weapon/reagent_containers/food/snacks/meat/blob/B = new()
 		src.food_items.Add(B)
 		src.internal_storage.reagents.remove_reagent(NUTRIMENT, 10, TRUE)
@@ -125,7 +129,54 @@
 		spawn(100)
 			src.process_internal_storage()
 		return
+
+	for (var/datum/reagent/mutagen/M in src.internal_storage.reagents.reagent_list)
+		if (M.volume < 5)
+			break
+		if (src.spores.len >= src.max_spores)
+			break
+		new/mob/living/simple_animal/hostile/blobspore/domesticated(src.loc, src)
+		src.internal_storage.reagents.remove_reagent(MUTAGEN, 5, TRUE)
+		visible_message("[src] hisses!")
+		spawn(100)
+			src.process_internal_storage()
+		return
+
 	internal_storage.reagents.remove_any(10)
 	visible_message("[src] churns...")
 	spawn(100)
 		src.process_internal_storage()
+
+// Blob spores as created by the cookable blob volcano
+// This iteration of them will have them just be neutral pet critters, WIP in later PRs
+/mob/living/simple_animal/hostile/blobspore/domesticated
+	name = "Blob Spore"
+	desc = "A form of blob antibodies that have lost their overmind, desperately looking for a new host."
+	icon = 'icons/mob/blob/blob.dmi'
+	icon_state = "blobpod"
+	icon_living = "blobpod"
+	attacktext = "hits"
+	melee_damage_lower = 0
+	melee_damage_upper = 0
+	attack_sound = 'sound/weapons/tap.ogg'
+	faction = "neutral"
+
+	var/obj/structure/blob_volcano/parent = null
+
+/mob/living/simple_animal/hostile/blobspore/domesticated/New(loc, var/obj/structure/blob_volcano/parent_volcano)
+	if(istype(parent_volcano))
+		src.parent = parent_volcano
+		src.parent.spores += src
+	..()
+
+/mob/living/simple_animal/hostile/blobspore/domesticated/Destroy()
+	if(src.parent)
+		src.parent.spores -= src
+	..()
+
+/mob/living/simple_animal/hostile/blobspore/domesticated/attackby(obj/item/W, mob/user)
+	if (istype(W, /obj/item/weapon/pen/) || istype(W, /obj/item/toy/crayon))
+		var/new_name = input(user, "Set a new name for your friend!", "Spore name change", src.name)
+		src.name = new_name
+	else
+		..()
