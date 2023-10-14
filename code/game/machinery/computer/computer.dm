@@ -14,7 +14,7 @@
 	pass_flags_self = PASSMACHINE
 	use_auto_lights = 1
 	light_power_on = 1
-	light_range_on = 3
+	light_range_on = 1
 
 /obj/machinery/computer/cultify()
 	new /obj/structure/cult_legacy/tome(loc)

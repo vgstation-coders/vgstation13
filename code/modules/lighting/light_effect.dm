@@ -32,6 +32,7 @@
 	var/list/affected_shadow_walls = list()
 	var/list/temp_appearance
 	var/list/temp_appearance_shadows
+	var/list/blacken_out_turf = list()
 
 	var/light_swallowed = 0
 
@@ -41,6 +42,18 @@
 	base_light_color_state = "black"
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
 	animate_movement = NO_STEPS
+
+	var/list/glowing_walls = list()
+
+/atom/movable/wall_light_source
+	plane = LIGHTING_PLANE
+	anchored = 1
+	blend_mode = BLEND_ADD
+	invisibility = INVISIBILITY_LIGHTING
+	appearance_flags = KEEP_TOGETHER
+	alpha = 180
+	icon = 'icons/lighting/wall_lighting.dmi'
+	icon_state = "white"
 
 /atom/movable/light/smooth
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
@@ -155,7 +168,7 @@
 	return light_range
 
 /atom/movable/light/shadow/get_wall_view()
-	return light_range
+	return 0.75*light_range
 
 // -- Does a basic cheap raycast from the light to the turf.
 // Return true if it can see it.
@@ -169,6 +182,10 @@
 		if (CHECK_OCCLUSION(current_turf))
 			. = FALSE
 			return
+
+/mob/proc/seeable_lights()
+	for (var/atom/movable/light/shadow/S in view(src))
+		to_chat(src, "The [S.holder] at [formatJumpTo(S.loc)]")
 
 /image/shadow_overlay
 	appearance_flags = KEEP_TOGETHER
