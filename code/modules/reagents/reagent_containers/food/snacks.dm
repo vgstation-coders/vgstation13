@@ -1581,6 +1581,13 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	reagents.add_reagent(BLOBANINE, 5)
 
+/obj/item/weapon/reagent_containers/food/snacks/blobburger/consume(mob/living/carbon/eater, messages = 0, sounds = TRUE, bitesizemod = 1)
+	if(prob(50))
+		src.crumb_icon = "dribbles"
+	else
+		src.crumb_icon = "crumbs"
+	..()
+
 /obj/item/weapon/reagent_containers/food/snacks/blobkabob
 	name = "keblob"
 	desc = "Blob meat, on a stick."
