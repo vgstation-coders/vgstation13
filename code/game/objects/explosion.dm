@@ -197,7 +197,7 @@ var/explosion_shake_message_cooldown = 0
 				if(ismob(A))
 					to_chat(A, "<span class='warning'>You are blown away by the explosion!</span>")
 
-				A.throw_at(throwT,pushback+2,500)
+				A.throw_at(throwT,pushback+2,pushback)
 			A.ex_act(dist,null,whodunnit)
 			atomtime = world.time - atomtime
 			if(atomtime > 0)
