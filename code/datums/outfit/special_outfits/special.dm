@@ -649,7 +649,10 @@
 	disable_suit_sensors(H)
 	if(!apprentice)
 		H.put_in_hands(new /obj/item/weapon/teleportation_scroll(H))
-		H.put_in_hands(new /obj/item/weapon/spellbook(H))
+		if(is_roundstart_wizard(H))
+			H.put_in_hands(new /obj/item/weapon/spellbook/better(H))
+		else
+			H.put_in_hands(new /obj/item/weapon/spellbook(H))
 	else
 		H.put_in_hands(new /obj/item/weapon/teleportation_scroll/apprentice(H))
 	H.equip_to_slot_or_del(new /obj/item/weapon/hair_dye/skin_dye(H), slot_in_backpack)

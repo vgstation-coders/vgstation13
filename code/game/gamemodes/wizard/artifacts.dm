@@ -154,30 +154,6 @@
 	spawned_items = list(/obj/item/weapon/cloakingcloak)
 
 //WIZARDS, NO SENSE OF RIGHT OR WRONG
-/datum/spellbook_artifact/proc/is_roundstart_wizard(var/mob/user)
-	if (!ticker || !ticker.mode || !istype(ticker.mode,/datum/gamemode/dynamic))//if mode isn't Dynamic Mode, who cares
-		return TRUE
-
-	if (!user.mind)
-		return FALSE
-
-	var/datum/role/wizard/myWizard = user.mind.GetRole(WIZARD)
-
-	if (!myWizard)//ain't gonna let non-wizards use those.
-		return FALSE
-
-	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
-
-	var/datum/dynamic_ruleset/roundstart/wizard/wiz_rule = locate() in dynamic_mode.executed_rules
-
-	if (!wiz_rule)
-		return FALSE
-
-	if (myWizard in wiz_rule.roundstart_wizards)
-		return TRUE
-
-	return FALSE
-
 //SUMMON GUNS
 /datum/spellbook_artifact/summon_guns
 	name = "Summon Guns"

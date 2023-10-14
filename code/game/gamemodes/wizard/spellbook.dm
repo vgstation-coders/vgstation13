@@ -56,6 +56,9 @@
 	uses = 30 * Sp_BASE_PRICE
 	op = 0
 
+/obj/item/weapon/spellbook/better
+	uses = STARTING_USES * 1.2
+
 /obj/item/weapon/spellbook/New()
 	..()
 
