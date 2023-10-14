@@ -303,7 +303,9 @@
 	H.equip_to_slot(santasuit,slot_wear_suit)
 
 	H.real_name = pick("Santa Claus","Jolly St. Nick","Sandy Claws","Sinterklaas","Father Christmas","Kris Kringle")
+	H.mutations += M_FAT
 	H.nutrition += 1000
+	H.update_mutations()
 
 	H.add_spell(new/spell/passive/noclothes)
 	H.add_spell(new/spell/aoe_turf/conjure/snowmobile)
@@ -315,7 +317,10 @@
 	SetUniversalState(/datum/universal_state/christmas)
 
 /datum/spellbook_artifact/santa_bundle/can_buy(var/mob/user)
-	return (Holiday == XMAS && !istype(universe, /datum/universal_state/christmas))
+	var/month = text2num(time2text(world.timeofday, "MM"))
+	if(month == 12) //December!!
+		return !istype(universe, /datum/universal_state/christmas) //There already is Christmas!
+	return FALSE
 
 /datum/spellbook_artifact/phylactery
 	name = "phylactery"
