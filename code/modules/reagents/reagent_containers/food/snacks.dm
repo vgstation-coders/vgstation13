@@ -1582,7 +1582,7 @@
 	reagents.add_reagent(BLOBANINE, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/blobkabob
-	name = "blob-kabob"
+	name = "keblob"
 	desc = "Blob meat, on a stick."
 	icon_state = "blobkabob"
 	food_flags = FOOD_MEAT
@@ -2239,7 +2239,7 @@
 	to_chat(user, "You pop the top off \the [src].")
 	playsound(user, 'sound/effects/opening_snack_tube.ogg', 50, 1)
 	overlays.len = 0
-	popped = TRUE 
+	popped = TRUE
 	update_icon()
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/New()

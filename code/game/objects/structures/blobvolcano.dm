@@ -1,5 +1,6 @@
 /obj/structure/blob_volcano
 	name = "blob volcano"
+	desc = "A stunted blob entity that has been induced into an altered state through chemicals and microwave radiation. It reacts unexpectedly to certain reagents."
 
 	icon = 'icons/mob/blob/blob.dmi'
 	icon_state = "blob_factory_2"
