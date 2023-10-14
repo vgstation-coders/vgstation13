@@ -1629,7 +1629,7 @@
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/blobsoup
-	name = "blob bisque"
+	name = "blobisque"
 	desc = "A thick, creamy soup containing a spongy surprise with a tough bite."
 	icon_state = "blobsoup"
 	trash = /obj/item/trash/emptybowl
