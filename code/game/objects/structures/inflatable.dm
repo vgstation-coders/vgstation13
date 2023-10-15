@@ -315,6 +315,7 @@
 	ctrl_deflate = FALSE
 	var/list/exiting = list()
 	var/datum/gas_mixture/cabin_air
+	var/occupancy_limit = 25 //Occupancy is based on the square of mob size - humans take up 9, corgis take up 4, and mice take up 1. So one shelter can fit 2 humans + 1 corgi + 3 mice, or 25 mice.
 
 /obj/structure/inflatable/shelter/New()
 	..()
@@ -367,18 +368,29 @@
 	if(user.loc == src && ishuman(user))
 		if(!laundry(user))
 			to_chat(user,"<span class='warning'>You are not wearing any contaminated clothes. Did you mean to Resist free?</span>")
-	else
+	else if(enough_room_to_enter(user))
 		to_chat(user,"<span class='notice'>You begin to climb into the shelter.</span>")
-		if(do_after(user, src, 10))
-			enter_shelter(user)
+		if(do_after(user, src, 1 SECONDS))
+			if(enough_room_to_enter(user))
+				enter_shelter(user)
+			else
+				to_chat(user,"<span class='warning'>The shelter is too full.</span>")
+	else
+		to_chat(user,"<span class='warning'>The shelter is too full.</span>")
 
 /obj/structure/inflatable/shelter/attackby(obj/item/weapon/W,mob/user)
 	if(istype(W,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
 		var/mob/living/target = G.affecting
-		user.visible_message("<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
-		if(do_after_many(user,list(target,src),20)) //Twice the normal time
-			enter_shelter(target)
+		if(enough_room_to_enter(target))
+			user.visible_message("<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
+			if(do_after_many(user,list(target,src), 2 SECONDS)) //Twice the normal time
+				if(enough_room_to_enter(target))
+					enter_shelter(target)
+				else
+					to_chat(user,"<span class='warning'>The shelter is too full.</span>")
+		else
+			to_chat(user,"<span class='warning'>The shelter is too full.</span>")
 	else
 		..()
 
@@ -393,6 +405,14 @@
 
 /obj/structure/inflatable/shelter/return_air()
 	return cabin_air
+
+/obj/structure/inflatable/shelter/proc/enough_room_to_enter(mob/living/potential_entrant)
+	var/remaining_room = occupancy_limit
+	for (var/mob/living/occupant in contents)
+		remaining_room -= occupant.size ** 2
+	if (remaining_room - potential_entrant.size ** 2 >= 0)
+		return TRUE
+	return FALSE
 
 /obj/structure/inflatable/shelter/proc/enter_shelter(mob/user)
 	user.forceMove(src)
@@ -511,15 +531,23 @@
 			to_chat(usr, "[target.name] will not fit into the [src] because they have a slime latched onto their head.")
 			return
 
-	if(target == user)
-		to_chat(user,"<span class='notice'>You begin to climb into the shelter.</span>")
-		if(do_after(target,src,10))
-			enter_shelter(target)
+	if(enough_room_to_enter(target))
+		if(target == user)
+			to_chat(user,"<span class='notice'>You begin to climb into the shelter.</span>")
+			if(do_after(target,src, 1 SECONDS))
+				if(enough_room_to_enter(target)) //Re-check in case the occupancy changed in the interim.
+					enter_shelter(target)
+				else
+					to_chat(user,"<span class='warning'>The shelter is too full.</span>")
+		else
+			user.visible_message("<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
+			if(do_after_many(user,list(target,src), 2 SECONDS)) //Twice the normal time
+				if(enough_room_to_enter(target))
+					enter_shelter(target)
+				else
+					to_chat(user,"<span class='warning'>The shelter is too full.</span>")
 	else
-		user.visible_message("<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
-		if(do_after_many(user,list(target,src),20)) //Twice the normal time
-			enter_shelter(target)
-
+		to_chat(user,"<span class='warning'>The shelter is too full.</span>")
 
 /obj/structure/inflatable/shelter/MouseDropFrom(over_object, src_location, turf/over_location, src_control, over_control, params)
 	if(!Adjacent(over_location) || !istype(over_location) || usr.incapacitated())
