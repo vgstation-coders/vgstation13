@@ -1,9 +1,9 @@
 /obj/structure/blob_volcano
-	name = "blob volcano"
+	name = "bleb"
 	desc = "A stunted blob entity that has been induced into an altered state through chemicals and microwave radiation. It reacts unexpectedly to certain reagents."
 
-	icon = 'icons/mob/blob/blob.dmi'
-	icon_state = "blob_factory_2"
+	icon = 'icons/obj/food.dmi'
+	icon_state = "blob_volcano"
 	anchored = FALSE
 
 	var/obj/item/weapon/reagent_containers/glass/beaker/large/internal_storage = new()
@@ -14,6 +14,7 @@
 
 	var/explosion_sound = 'sound/effects/Explosion_Small1.ogg'
 	var/explosion_range = 3
+	var/exploding = FALSE
 
 	var/max_spores = 10
 	var/list/spores = list()
@@ -23,10 +24,17 @@
 	for (var/i = 1 to src.max_items)
 		food_items += new /obj/item/weapon/reagent_containers/food/snacks/meat/blob
 	src.internal_storage.name = "blob volcano"
+	src.exploding = TRUE
+	spawn (30)
+		src.explode()
 
 /obj/structure/blob_volcano/proc/explode()
-	playsound(src.loc, explosion_sound, 50, 1)
-	src.toss_items()
+	spawn (5)
+		var/matrix/transform = matrix()
+		transform.Scale(4, 4)
+		anim(target = src.loc, a_icon = src.icon, flick_anim = "blob_volcano_pulse", sleeptime = 15, lay = src.layer + 0.5, offX = 0, offY = 8, alph = 220, plane = BLOB_PLANE, trans = transform)
+		playsound(src.loc, explosion_sound, 50, 1)
+		src.toss_items()
 
 /obj/structure/blob_volcano/proc/toss_items()
 	var/list/target_turfs = list()
@@ -92,7 +100,8 @@
 	H.visible_message("<span class='danger'>[H] kicks \the [src][msg].</span>", "<span class='danger'>You kick \the [src][msg]</span>")
 
 /obj/structure/blob_volcano/attackby(obj/item/W, mob/user)
-	if (istype(W, /obj/item/weapon/reagent_containers))
+	if (user.a_intent == I_HURT)
+		if (istype(W, /obj/item/weapon/reagent_containers))
 		var/obj/item/weapon/reagent_containers/C = W
 		if (C.transfer(src.internal_storage, user, can_receive = FALSE, splashable_units = 0) && !src.processing_liquids)
 			src.processing_liquids = TRUE
@@ -110,6 +119,7 @@
 		return TRUE
 
 	to_chat(user, "<span class='notice'>The [src]'s maw closes shut as you approach it with \the [W].</span>")
+	return TRUE
 
 /obj/structure/blob_volcano/proc/process_internal_storage()
 	if (src.internal_storage.is_empty())
@@ -148,10 +158,10 @@
 		src.process_internal_storage()
 
 // Blob spores as created by the cookable blob volcano
-// This iteration of them will have them just be neutral pet critters, WIP in later PRs
+// This iteration of them will have them just be neutral pet critters
 /mob/living/simple_animal/hostile/blobspore/domesticated
 	name = "Blob Spore"
-	desc = "A form of blob antibodies that have lost their overmind, desperately looking for a new host."
+	desc = "A form of blob antibodies that have lost their overmind."
 	icon = 'icons/mob/blob/blob.dmi'
 	icon_state = "blobpod"
 	icon_living = "blobpod"
