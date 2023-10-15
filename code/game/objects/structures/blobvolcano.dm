@@ -100,8 +100,7 @@
 	H.visible_message("<span class='danger'>[H] kicks \the [src][msg].</span>", "<span class='danger'>You kick \the [src][msg]</span>")
 
 /obj/structure/blob_volcano/attackby(obj/item/W, mob/user)
-	if (user.a_intent == I_HURT)
-		if (istype(W, /obj/item/weapon/reagent_containers))
+	if (user.a_intent == I_HURT && istype(W, /obj/item/weapon/reagent_containers))
 		var/obj/item/weapon/reagent_containers/C = W
 		if (C.transfer(src.internal_storage, user, can_receive = FALSE, splashable_units = 0) && !src.processing_liquids)
 			src.processing_liquids = TRUE

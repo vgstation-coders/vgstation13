@@ -199,7 +199,7 @@ var/list/blob_overminds = list()
 				playsound(src, 'sound/effects/blobweld.ogg', 100, 1)
 		if("brute")
 			damage = (W.force / max(src.brute_resist,1))
-			if(prob((W.sharpness * W.force) * meat_drop_factor) && (meat != null))
+			if(prob((W.sharpness * W.force) * meat_drop_factor))
 				var/obj/item/I = new meat()
 				I.forceMove(src.loc)
 				if (!(src.looks in blob_diseases))
@@ -335,22 +335,16 @@ var/list/blob_overminds = list()
 			icon = 'icons/mob/blob/blob.dmi'
 		if("adminbus")
 			icon = adminblob_icon
-			meat = null
 		if("clownscape")
 			icon = 'icons/mob/blob/blob_honkscape.dmi'
-			meat = null
 		if("AME")
 			icon = 'icons/mob/blob/blob_AME.dmi'
-			meat = null
 		if("AME_new")
 			icon = 'icons/mob/blob/blob_AME_64x64.dmi'
-			meat = null
 		if("skelleton")
 			icon = 'icons/mob/blob/blob_skelleton_64x64.dmi'
-			meat = null
 		if("secblob")
 			icon = 'icons/mob/blob/blob_sec.dmi'
-			meat = null
 		//<----------------------------------------------------------------------------DEAR SPRITERS, THIS IS WHERE YOU ADD YOUR NEW BLOB DMIs
 		/*EXAMPLES
 		if("fleshy")
