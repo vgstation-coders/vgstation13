@@ -333,6 +333,7 @@
 #define EVOLUATOR		"evoluator"
 #define BLOBBEER		"blobbeer"
 #define LIBERATOR		"liberator"
+#define SPORE			"spore"
 #define ALOE 			"aloe"
 #define ANDALUSIA 			"andalusia"
 #define ALLIESCOCKTAIL 			"alliescocktail"

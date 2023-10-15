@@ -3096,6 +3096,13 @@
 	required_reagents = list(BLOBANINE = 1, ORANGEJUICE = 1, TRIPLESEC = 1)
 	result_amount = 6
 
+/datum/chemical_reaction/spore
+	name = "Spore"
+	id = SPORE
+	result = SPORE
+	required_reagents = list(BLOBANINE = 1, KARMOTRINE = 1, OXYGEN = 1)
+	result_amount = 3
+
 /datum/chemical_reaction/soy_latte
 	name = "Soy Latte"
 	id = SOY_LATTE

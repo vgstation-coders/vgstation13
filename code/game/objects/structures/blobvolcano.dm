@@ -160,6 +160,7 @@
 	melee_damage_upper = 0
 	attack_sound = 'sound/weapons/tap.ogg'
 	faction = "neutral"
+	turns_per_move = 3
 
 	var/obj/structure/blob_volcano/parent = null
 

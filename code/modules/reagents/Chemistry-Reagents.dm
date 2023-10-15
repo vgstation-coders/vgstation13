@@ -8378,6 +8378,34 @@ var/procizine_tolerance = 0
 	glass_icon_state = "liberatorglass"
 	glass_desc = "Fruity and strong, for when you need a quick recharge."
 
+/datum/reagent/ethanol/drink/spore
+	name = "Spore"
+	id = SPORE
+	description = "The special properties of karmotrine combined with blobanine create a disgusting but interesting drink."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = BLOB_MEAT
+	custom_metabolism = 0.1
+	glass_icon_state = "sporeglass"
+	glass_desc = "A tasteless drink with an almost unbearable aftertaste."
+
+/datum/reagent/ethanol/drink/spore/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	for(var/spell/S in M.spell_list)
+		if (istype(S, /spell/aoe_turf/conjure/spore))
+			return
+	var/spell/aoe_turf/conjure/spore/summon_spore = new()
+	M.add_spell(summon_spore)
+
+/datum/reagent/ethanol/drink/spore/on_removal(var/amount)
+	if (!iscarbon(src.holder.my_atom) || (max(0, src.volume - amount) >= 1))
+		return TRUE
+
+	var/mob/living/carbon/M = holder.my_atom
+	for(var/spell/aoe_turf/conjure/spore/S in M.spell_list)
+		M.remove_spell(S)
+	return TRUE
+
 /datum/reagent/ethanol/drink/aloe
 	name = "Aloe"
 	id = ALOE
