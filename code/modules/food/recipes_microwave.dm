@@ -180,6 +180,46 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/polyp)
 	result = /obj/item/weapon/reagent_containers/food/snacks/polypburger
 
+/datum/recipe/blobburger
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/blob)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobburger
+
+/datum/recipe/blobkabob
+	items = list(
+		/obj/item/stack/rods,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/blob,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/blob
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobkabob
+
+/datum/recipe/blobpudding
+	reagents = list(SUGARS = 5, CREAM = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/blob)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobpudding
+
+/datum/recipe/blobegg
+	reagents = list(BLOBANINE = 5, CREAM = 5, BLACKPEPPER = 1, SODIUMCHLORIDE = 1)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobegg
+
+/datum/recipe/blobsoup
+	reagents = list(FLOUR = 5, CREAM = 5, WATER = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/blob,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato)
+	result = /obj/item/weapon/reagent_containers/food/snacks/blobsoup
+
+/datum/recipe/blobvolcano
+	reagents = list(MUTAGEN = 10, NUTRIMENT = 10, MESCALINE = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/blob/core,
+	)
+	result = /obj/structure/blob_volcano
+
 /datum/recipe/jellyburger
 	reagents = list(CHERRYJELLY = 5, FLOUR = 15)
 	items = list()
@@ -2036,7 +2076,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno
-	
+
 /datum/recipe/hotchips
 	reagents = list (SODIUMCHLORIDE = 2)
 	items = list(
@@ -2044,7 +2084,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/chili,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot
-	
+
 /datum/recipe/novachips
 	reagents = list (SODIUMCHLORIDE = 2, NOVAFLOUR = 2)
 	items = list(
