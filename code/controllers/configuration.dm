@@ -199,7 +199,6 @@
 	// Discord crap.
 	var/discord_url
 	var/discord_password
-	var/kill_phrase = "All your bases are belong to us."
 
 	// Dynamic Mode
 	var/high_population_override = 1//If 1, what rulesets can or cannot be called depend on the threat level only
@@ -635,9 +634,6 @@
 					discord_url = value
 				if("discord_password")
 					discord_password = value
-
-				if ("kill_phrase")
-					kill_phrase = value
 
 				else
 					diary << "Unknown setting in configuration: '[name]'"

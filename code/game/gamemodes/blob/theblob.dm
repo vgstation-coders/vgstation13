@@ -485,7 +485,7 @@ var/list/blob_looks_player = list(//Options available to players
 	if(!ispath(type))
 		error("[type] is an invalid type for the blob.")
 	if(special) //Send additional information to the New()
-		new type(src.loc, 200, null, 1, M, newlook = looks)
+		new type(src.loc, 200, null, 1, 1, newlook = looks)
 	else
 		var/obj/effect/blob/B = new type(src.loc, newlook = looks)
 		B.dir = dir
