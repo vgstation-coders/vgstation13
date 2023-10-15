@@ -162,8 +162,8 @@
 	name = "Blob Spore"
 	desc = "A form of blob antibodies that have lost their overmind."
 	icon = 'icons/mob/blob/blob.dmi'
-	icon_state = "blobpod"
-	icon_living = "blobpod"
+	icon_state = "blobpodfriendly"
+	icon_living = "blobpodfriendly"
 	attacktext = "hits"
 	melee_damage_lower = 0
 	melee_damage_upper = 0

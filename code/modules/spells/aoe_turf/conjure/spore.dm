@@ -12,7 +12,7 @@
 	summon_type = list(/mob/living/simple_animal/hostile/blobspore/small)
 	summon_amt = 2
 
-	hud_state = "blobpodfriendly"
+	hud_state = "spawn_spores"
 
 /spell/aoe_turf/conjure/spore/cast_check(skipcharge = 0, mob/user = usr)
 	if (user.reagents && !user.reagents.has_reagent(SPORE))
