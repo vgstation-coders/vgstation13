@@ -8,11 +8,10 @@
 	still_recharging_msg = "<span class='notice'>You are still recovering.</span>"
 	spell_flags = 0
 	user_type = USER_TYPE_OTHER
-
+	charge_max = 300
 	summon_type = list(/mob/living/simple_animal/hostile/blobspore/small)
 	summon_amt = 2
 
-	charge_max = 300
 	hud_state = "blobpodfriendly"
 
 /spell/aoe_turf/conjure/spore/cast_check(skipcharge = 0, mob/user = usr)

@@ -1572,7 +1572,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/blobburger
 	name = "bloburger"
 	desc = "Careful, has a tendency to spill sauce in every direction when squeezed too hard."
-	icon_state = "bloburger"
+	icon_state = "blobburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
 

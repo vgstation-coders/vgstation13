@@ -8395,6 +8395,8 @@ var/procizine_tolerance = 0
 		if (istype(S, /spell/aoe_turf/conjure/spore))
 			return
 	var/spell/aoe_turf/conjure/spore/summon_spore = new()
+	summon_spore.charge_counter = 0 // Spell starts on cooldown
+	summon_spore.process()
 	M.add_spell(summon_spore)
 
 /datum/reagent/ethanol/drink/spore/on_removal(var/amount)
