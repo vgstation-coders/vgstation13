@@ -942,6 +942,3 @@ a {
 			display_name = "Coldsauce"
 		dat += {"<B>[display_name]:</B> [R.volume] unit\s<BR>"}
 	return dat
-
-/obj/get_heat_conductivity() //So keeping something in a closet can have an insulating effect.
-	return 0.5

@@ -75,9 +75,6 @@
 			return 0
 	return 1
 
-/obj/structure/closet/secure_closet/freezer/get_heat_conductivity()
-	return HEAT_CONDUCTIVITY_REFRIGERATOR
-
 /obj/structure/closet/secure_closet/freezer/kitchen
 	name = "Kitchen Cabinet"
 	req_access = list(access_kitchen)
@@ -107,6 +104,7 @@
 	return list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey = 4,
 	)
+
 
 /obj/structure/closet/secure_closet/freezer/fridge
 	name = "Refrigerator"

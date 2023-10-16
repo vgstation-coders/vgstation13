@@ -158,6 +158,7 @@
 	temperature += thermal_energy / heat_capacity
 	return thermal_energy
 
+
 //Returns the thermal energy change required to get to a new temperature
 /datum/gas_mixture/proc/get_thermal_energy_change(var/new_temperature)
 	return heat_capacity() * (max(new_temperature, 0) - temperature)
@@ -470,6 +471,7 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 
 /datum/gas_mixture/unsimulated/add_thermal_energy(var/thermal_energy)
 	return 0
+
 
 /datum/gas_mixture/unsimulated/get_thermal_energy_change(var/new_temperature)
 	return 0 //Real answer would be infinity, but that would be virtually guaranteed to cause problems.

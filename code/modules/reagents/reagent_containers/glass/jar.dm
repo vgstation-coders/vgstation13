@@ -85,7 +85,6 @@
 	return TRUE
 
 /obj/item/weapon/reagent_containers/glass/jar/on_reagent_change()
-	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/jar/pickup(mob/user)

@@ -124,9 +124,6 @@
 	var/target_temp = T0C - 40
 	var/cooling_power = 40
 
-/obj/structure/closet/crate/freezer/get_heat_conductivity()
-	return HEAT_CONDUCTIVITY_REFRIGERATOR
-
 /obj/structure/closet/crate/freezer/return_air()
 	var/datum/gas_mixture/gas = (..())
 	if(!gas)

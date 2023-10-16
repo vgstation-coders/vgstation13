@@ -513,7 +513,7 @@ var/global/ingredientLimit = 10
 	if(istype(ingredient,/obj/item/weapon/reagent_containers/food/snacks))
 		if(cooks_in_reagents)
 			transfer_reagents_to_food(ingredient)
-			if(!arcanetampered && (ingredient.reagents.chem_temp > COOKTEMP_HUMANSAFE)) //Make sure the food isn't scalding hot.
+			if(!arcanetampered && (ingredient.reagents.chem_temp > COOKTEMP_HUMANSAFE)) //Since gradual cooling isn't implemented, make sure the food isn't scalding hot.
 				ingredient.reagents.chem_temp = COOKTEMP_HUMANSAFE
 		ingredient.name = "deep fried [ingredient.name]"
 		ingredient.color = "#FFAD33"

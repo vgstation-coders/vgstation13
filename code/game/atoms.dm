@@ -1034,16 +1034,6 @@ its easier to just keep the beam vertical.
 		stain_text = "<span style='color: [get_stain_text_color()]'>[stain_text]</span>"
 	return indef_art + " " + stain_text
 
-/atom/proc/heat_dissipation_updates()
-	if (reagents in thermal_dissipation_reagents)
-		if (!reagents.total_volume)
-			thermal_dissipation_reagents -= reagents
-	else if (reagents.total_volume)
-		thermal_dissipation_reagents += reagents
-
-/atom/proc/get_heat_conductivity()
-	return 1
-
 /atom/proc/is_blood_stained()
 	if (blood_color && blood_DNA && blood_DNA.len)
 		return TRUE

@@ -9,6 +9,7 @@
 #define CHEMFLAG_DISHONORABLE 1
 #define CHEMFLAG_OBSCURING 2
 
+
 #define EXPLICITLY_INVALID_REAGENT_ID "Use this ID if the reagent is not supposed to be used, like for the base type of other reagents."
 
 //Reagents
@@ -523,9 +524,6 @@
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
-
-//Flag for skipping running handle_reactions() after reagent heating when it's already been determined that the given reagents have no reaction that could occur if only temperature was changed.
-#define SKIP_RXN_CHECK_ON_HEATING (1<<0)
 
 //Temperatures of things (Kelvin)
 #define TEMPERATURE_HOTMETAL 300

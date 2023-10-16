@@ -72,7 +72,6 @@
 		B.reagents.get_examine(user)
 
 /obj/item/weapon/reagent_containers/chempack/on_reagent_change()
-	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/chempack/update_icon()

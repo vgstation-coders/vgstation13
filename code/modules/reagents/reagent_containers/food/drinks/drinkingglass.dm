@@ -183,7 +183,6 @@
 	starting_materials = list(MAT_IRON = 500)
 
 /obj/item/weapon/reagent_containers/food/drinks/mug/on_reagent_change()
-	..()
 
 	if (reagents.reagent_list.len > 0)
 		item_state = "mug_empty"
