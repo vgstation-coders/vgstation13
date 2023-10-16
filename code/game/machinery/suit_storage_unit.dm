@@ -29,7 +29,7 @@
 	var/image/openimage
 	var/image/closeimage
 
-	machine_flags = SCREWTOGGLE | EMAGGABLE
+	machine_flags = SCREWTOGGLE | EMAGGABLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
@@ -224,6 +224,8 @@
 		return
 	if(stat & (FORCEDISABLE|NOPOWER))
 		return
+	if(!anchored)
+		return
 	if(emagged)
 
 		dat += {"<HEAD><TITLE>Suit storage unit</TITLE></HEAD>
@@ -298,6 +300,8 @@
 /obj/machinery/suit_storage_unit/Topic(href, href_list) //I fucking HATE this proc
 	if(..())
 		return 1
+	if(!anchored)
+		return
 	else
 		usr.set_machine(src)
 		if (href_list["toggleUV"])
@@ -650,8 +654,16 @@
 		if(do_after(user, src,20))
 			dump_everything()
 			update_icon()
+	if (iscrowbar(I) & panel_open)
+		if((occupant) || (helmet) || (suit) || (boots) || (mask)) //don't allow deconstruction if there's anything inside
+			to_chat(usr, "<span class='red'>Empty the [src] before disassembling it.</span>")
+			return
+		return ..()
 	if(stat & (FORCEDISABLE|NOPOWER))
-		return
+		if(!I.is_wrench(user))
+			return
+		else //still allow wrenches to interact with it while it's unpowered.
+			return ..()
 	if(..())
 		return 1
 	if ( istype(I, /obj/item/weapon/grab) )
@@ -755,3 +767,27 @@
 			R.cell.give(30)
 
 //////////////////////////////REMINDER: Make it lock once you place some fucker inside.
+
+
+obj/machinery/suit_storage_unit/wrenchAnchor(var/mob/user, var/obj/item/I)
+	if(isUV | issuperUV) 
+		to_chat(user, "<span class='warning'>Wait for the [src] to finish cauterising.</span>")
+		return FALSE
+	. = ..()
+	update_icon()	
+
+obj/machinery/suit_storage_unit/New()
+	. = ..()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/suit_storage_unit,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/console_screen
+	)
+
+	RefreshParts()
+
+
