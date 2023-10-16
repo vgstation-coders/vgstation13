@@ -9,7 +9,7 @@
 
 	level				= 1
 
-	var/frequency		= 1439
+	frequency		= 1439
 	var/datum/radio_frequency/radio_connection
 
 	var/on				= 0
@@ -96,7 +96,7 @@
 
 	..()
 
-/obj/machinery/atmospherics/unary/vent_scrubber/proc/set_frequency(new_frequency)
+/obj/machinery/atmospherics/unary/vent_scrubber/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	radio_connection = radio_controller.add_object(src, frequency, radio_filter_in)
@@ -108,13 +108,9 @@
 		name = "Air Scrubber"
 	else
 		broadcast_status()
-
+		
 /obj/machinery/atmospherics/unary/vent_scrubber/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	..()
-	if(pipe.frequency)
-		set_frequency(pipe.frequency)
-	if(pipe.id)
-		src.id_tag = pipe.id
 	src.broadcast_status()
 	return 1
 

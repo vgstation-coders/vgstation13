@@ -24,7 +24,7 @@
 	var/welded = 0 // Added for aliens -- TLE
 	var/canSpawnMice = 1 // Set to 0 to prevent spawning of mice.
 
-	var/frequency = 1439
+	frequency = 1439
 	var/datum/radio_frequency/radio_connection
 
 	var/radio_filter_out
@@ -159,7 +159,7 @@
 
 	return pressure_delta
 
-/obj/machinery/atmospherics/unary/vent_pump/proc/set_frequency(new_frequency)
+/obj/machinery/atmospherics/unary/vent_pump/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
@@ -172,13 +172,9 @@
 		name = "Vent Pump"
 	else
 		broadcast_status()
-
+		
 /obj/machinery/atmospherics/unary/vent_pump/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	..()
-	if(pipe.frequency)
-		set_frequency(pipe.frequency)
-	if(pipe.id)
-		src.id_tag = pipe.id
 	src.broadcast_status()
 	return 1
 

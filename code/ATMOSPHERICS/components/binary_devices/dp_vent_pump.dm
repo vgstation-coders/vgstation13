@@ -21,7 +21,7 @@
 	//2: Do not pass input_pressure_min
 	//4: Do not pass output_pressure_max
 
-	var/frequency = 0
+	frequency = 0
 	
 	var/datum/radio_frequency/radio_connection
 
@@ -122,7 +122,7 @@
 
 //Radio remote control
 
-/obj/machinery/atmospherics/binary/dp_vent_pump/proc/set_frequency(new_frequency)
+/obj/machinery/atmospherics/binary/dp_vent_pump/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
@@ -150,14 +150,6 @@
 	radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
 
 	return 1
-	
-/obj/machinery/atmospherics/binary/dp_vent_pump/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
-	if(pipe.frequency)
-		set_frequency(pipe.frequency)
-	if(pipe.id)
-		src.id_tag = pipe.id
-	return ..()
-
 
 /obj/machinery/atmospherics/binary/dp_vent_pump/initialize()
 	..()

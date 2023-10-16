@@ -9,7 +9,7 @@
 
 	var/open = FALSE
 
-	var/frequency = 0
+	frequency = 0
 
 	var/datum/radio_frequency/radio_connection
 	machine_flags = MULTITOOL_MENU
@@ -66,7 +66,7 @@
 //Radio remote control
 
 
-/obj/machinery/atmospherics/binary/passive_gate/proc/set_frequency(new_frequency)
+/obj/machinery/atmospherics/binary/passive_gate/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
@@ -90,13 +90,6 @@
 	radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
 
 	return 1
-	
-/obj/machinery/atmospherics/binary/passive_gate/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
-	if(pipe.frequency)
-		set_frequency(pipe.frequency)
-	if(pipe.id)
-		src.id_tag = pipe.id
-	return ..()
 
 /obj/machinery/atmospherics/binary/passive_gate/initialize()
 	..()

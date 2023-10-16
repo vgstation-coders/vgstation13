@@ -180,7 +180,7 @@
 	desc = "A digitally controlled valve."
 	icon = 'icons/obj/atmospherics/digital_valve.dmi'
 
-	var/frequency = 0
+	frequency = 0
 
 	var/datum/radio_frequency/radio_connection
 
@@ -227,18 +227,11 @@
 
 		//Radio remote control
 
-/obj/machinery/atmospherics/trinary/tvalve/digital/proc/set_frequency(new_frequency)
+/obj/machinery/atmospherics/trinary/tvalve/digital/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
-		
-/obj/machinery/atmospherics/trinary/tvalve/digital/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
-	if(pipe.frequency)
-		set_frequency(pipe.frequency)
-	if(pipe.id)
-		src.id_tag = pipe.id
-	return ..()
 
 /obj/machinery/atmospherics/trinary/tvalve/digital/initialize()
 	..()

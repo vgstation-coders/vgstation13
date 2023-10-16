@@ -14,13 +14,13 @@
 	active_power_usage = 4
 	machine_flags = MULTITOOL_MENU
 
-/obj/machinery/meter/New(newloc, new_target, frequency = 1439, id = null)
+/obj/machinery/meter/New(newloc, new_target, freq = 1439, id = null)
 	..(newloc)
 	src.target = new_target
 	if(target)
 		setAttachLayer(target.piping_layer)
-	src.frequency = frequency
-	src.id_tag = id
+	frequency = freq
+	id_tag = id
 	return 1
 
 /obj/machinery/meter/initialize()

@@ -12,7 +12,7 @@
 	var/volume_rate = CELL_VOLUME //1 tile worth of air by default
 	var/max_rate= 4*CELL_VOLUME // 10000L
 
-	var/frequency = 0
+	frequency = 0
 	var/datum/radio_frequency/radio_connection
 
 	level = 1
@@ -82,7 +82,7 @@
 
 	flick("inject", src)
 
-/obj/machinery/atmospherics/unary/outlet_injector/proc/set_frequency(new_frequency)
+/obj/machinery/atmospherics/unary/outlet_injector/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
@@ -108,13 +108,6 @@
 	radio_connection.post_signal(src, signal)
 
 	return 1
-	
-/obj/machinery/atmospherics/unary/outlet_injector/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
-	if(pipe.frequency)
-		set_frequency(pipe.frequency)
-	if(pipe.id)
-		src.id_tag = pipe.id
-	return ..()
 
 /obj/machinery/atmospherics/unary/outlet_injector/initialize()
 	..()

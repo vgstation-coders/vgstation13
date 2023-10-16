@@ -23,7 +23,7 @@ air2.volume
 	desc = "A pump."
 	var/target_pressure = ONE_ATMOSPHERE
 
-	var/frequency = 0
+	frequency = 0
 
 	var/datum/radio_frequency/radio_connection
 
@@ -76,7 +76,7 @@ air2.volume
 //Radio remote control
 
 
-/obj/machinery/atmospherics/binary/pump/proc/set_frequency(new_frequency)
+/obj/machinery/atmospherics/binary/pump/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
@@ -110,13 +110,6 @@ air2.volume
 
 	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
 	onclose(user, "atmo_pump")
-	
-/obj/machinery/atmospherics/binary/pump/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
-	if(pipe.frequency)
-		set_frequency(pipe.frequency)
-	if(pipe.id)
-		src.id_tag = pipe.id
-	return ..()
 
 /obj/machinery/atmospherics/binary/pump/initialize()
 	..()
