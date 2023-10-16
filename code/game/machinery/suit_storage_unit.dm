@@ -780,13 +780,6 @@
 //////////////////////////////REMINDER: Make it lock once you place some fucker inside.
 
 
-//obj/machinery/suit_storage_unit/wrenchAnchor(var/mob/user, var/obj/item/I)
-//	if(isUV | issuperUV) 
-//		to_chat(user, "<span class='warning'>Wait for the [src] to finish cauterising.</span>")
-//		return FALSE
-//	. = ..()
-//	update_icon()	
-
 obj/machinery/suit_storage_unit/New()
 	. = ..()
 	component_parts = newlist(
