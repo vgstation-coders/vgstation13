@@ -1569,6 +1569,80 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/blobburger
+	name = "bloburger"
+	desc = "Careful, has a tendency to spill sauce in every direction when squeezed too hard."
+	icon_state = "blobburger"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 20
+
+/obj/item/weapon/reagent_containers/food/snacks/blobburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(BLOBANINE, 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/blobburger/consume(mob/living/carbon/eater, messages = 0, sounds = TRUE, bitesizemod = 1)
+	if(prob(50))
+		src.crumb_icon = "dribbles"
+	else
+		src.crumb_icon = "crumbs"
+	..()
+
+/obj/item/weapon/reagent_containers/food/snacks/blobkabob
+	name = "keblob"
+	desc = "Blob meat, on a stick."
+	icon_state = "blobkabob"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/blobkabob/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(BLOBANINE, 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/blobpudding
+	name = "blob à l'impératrice"
+	desc = "An extremely thick \"pudding\" that requires a tough jaw."
+	icon_state = "blobpudding"
+	trash = /obj/item/trash/emptybowl
+	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_MEAT
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_FORK | UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/blobpudding/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	reagents.add_reagent(BLOBANINE, 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/blobegg
+	name = "oeufs en blob"
+	desc = "Baked egg in a delicious, sticky broth. Bón appetit!"
+	icon_state = "blobegg"
+	trash = /obj/item/trash/emptybowl
+	food_flags = FOOD_ANIMAL | FOOD_MEAT
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_FORK | UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/blobegg/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(BLOBANINE, 5)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/blobsoup
+	name = "blobisque"
+	desc = "A thick, creamy soup containing a spongy surprise with a tough bite."
+	icon_state = "blobsoup"
+	trash = /obj/item/trash/emptybowl
+	food_flags = FOOD_ANIMAL | FOOD_MEAT
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_FORK | UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/blobsoup/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 15)
+	reagents.add_reagent(BLOBANINE, 5)
+	bitesize = 3
+
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
 	desc = "That's all you can say!"
@@ -2172,7 +2246,7 @@
 	to_chat(user, "You pop the top off \the [src].")
 	playsound(user, 'sound/effects/opening_snack_tube.ogg', 50, 1)
 	overlays.len = 0
-	popped = TRUE 
+	popped = TRUE
 	update_icon()
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/New()

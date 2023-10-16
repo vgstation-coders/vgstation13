@@ -657,15 +657,22 @@ var/global/list/damage_icon_parts = list()
 	O.color = null
 	if(gloves && !check_hidden_body_flags(HIDEGLOVES) && gloves.is_visible())
 
+		var/onehandedmask
+		if(!has_organ(LIMB_LEFT_HAND))
+			onehandedmask = "r"
+		else if(!has_organ(LIMB_RIGHT_HAND))
+			onehandedmask = "l"
 
 		var/t_state = gloves.item_state
 		if(!t_state)
 			t_state = gloves.icon_state
-		var/image/standing
-		if(gloves.wear_override)
-			standing = image("icon" = gloves.wear_override)
-		else
-			standing = image("icon" = ((gloves.icon_override) ? gloves.icon_override : 'icons/mob/hands.dmi'), "icon_state" = "[t_state]")
+
+		var/icon/standing_icon = gloves.wear_override ? icon(gloves.wear_override) : icon((gloves.icon_override) ? gloves.icon_override : 'icons/mob/hands.dmi', "[t_state]")
+
+		if(onehandedmask)
+			standing_icon.Blend(icon('icons/mob/hands.dmi', "mask_[onehandedmask]"), ICON_ADD)
+
+		var/image/standing = image(standing_icon)
 
 		var/datum/species/S = species
 		for(var/datum/organ/external/OE in get_organs_by_slot(slot_gloves, src)) //Display species-exclusive species correctly on attached limbs
@@ -695,7 +702,11 @@ var/global/list/damage_icon_parts = list()
 						blood_icon_state = "bloodyhands-vox"
 					if("Insectoid")
 						blood_icon_state = "bloodyhands-vox"
-				var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
+
+				var/icon/bloodgloveicon = icon('icons/effects/blood.dmi', blood_icon_state)
+				if(onehandedmask)
+					bloodgloveicon.Blend(icon('icons/mob/hands.dmi', "mask_[onehandedmask]"), ICON_ADD)
+				var/image/bloodsies	= image(bloodgloveicon)
 				bloodsies.color = actual_gloves.blood_color
 				standing.overlays	+= bloodsies
 				O.overlays += bloodsies
@@ -723,6 +734,17 @@ var/global/list/damage_icon_parts = list()
 					blood_icon_state = "bloodyhands-vox"
 			O.icon = 'icons/effects/blood.dmi'
 			O.icon_state = blood_icon_state
+
+			var/onehandedmask
+			if(!has_organ(LIMB_LEFT_HAND))
+				onehandedmask = "l"
+			else if(!has_organ(LIMB_RIGHT_HAND))
+				onehandedmask = "r"
+			if(onehandedmask)
+				var/icon/bloodyhandsicon = icon(O.icon)
+				bloodyhandsicon.Blend(icon('icons/mob/hands.dmi', "mask_[onehandedmask]"), ICON_ADD)
+				O.icon = bloodyhandsicon
+
 			O.color = bloody_hands_data["blood_colour"]
 			obj_to_plane_overlay(O,GLOVES_LAYER)
 	if(update_icons)
@@ -869,21 +891,53 @@ var/global/list/damage_icon_parts = list()
 			if(has_icon(O.icon,"[shoes.icon_state]_f"))
 				O.icon_state = "[shoes.icon_state]_f"
 
+		var/onefootedmask
+		if(!has_organ(LIMB_LEFT_FOOT))
+			onefootedmask = "r"
+		else if(!has_organ(LIMB_RIGHT_FOOT))
+			onefootedmask = "l"
+
+		var/speciesname = get_species()
+
+
+		var/shoeiconpath
+		if(onefootedmask)
+			var/icon/oneshoeicon = icon(O.icon, O.icon_state)
+			switch(speciesname)
+				if("Vox")
+					shoeiconpath = 'icons/mob/species/vox/shoes.dmi'
+				if("Insectoid")
+					shoeiconpath = 'icons/mob/species/insectoid/feet.dmi'
+				else
+					shoeiconpath = 'icons/mob/feet.dmi'
+
+			oneshoeicon.Blend(icon(shoeiconpath, "mask_[onefootedmask]"), ICON_ADD)
+			O.icon = oneshoeicon
+
 		if(shoes.clothing_flags & COLORS_OVERLAY)
 			O.color = shoes.color
 		O.overlays.len = 0
 		if(shoes.dynamic_overlay)
 			if(shoes.dynamic_overlay["[SHOES_LAYER]"])
-				var/image/dyn_overlay = shoes.dynamic_overlay["[SHOES_LAYER]"]
+				var/image/dyn_overlay = shoes.dynamic_overlay["[SHOES_LAYER]"] //as far as i know no shoes use this, so for now no one-footed stuff here
 				O.overlays += dyn_overlay
 		if(shoes.blood_DNA && shoes.blood_DNA.len)
 			var/blood_icon_state = "shoeblood"
-			switch(get_species())
+			switch(speciesname)
 				if("Vox")
 					blood_icon_state = "shoeblood-vox"
 				if("Insectoid")
 					blood_icon_state = "shoeblood-vox"
-			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
+
+			//if bloody bare feet icons are added like with bloody hands, something should go here to avoid the blood showing where a missing foot would be
+
+			var/icon/shoebloodicon = icon('icons/effects/blood.dmi', blood_icon_state)
+
+			//only show blood on shoe on present foot
+			if(onefootedmask)
+				shoebloodicon.Blend(icon(shoeiconpath, "mask_[onefootedmask]"), ICON_ADD)
+
+			var/image/bloodsies = image(shoebloodicon)
 			bloodsies.color = shoes.blood_color
 			//standing.overlays	+= bloodsies
 			O.overlays += bloodsies

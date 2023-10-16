@@ -150,7 +150,7 @@
 	if (B.sources.len >= 1 && (isliving(B.sources[1])))
 		var/mob/living/assailant = B.sources[1]
 		if (assailant.ckey || src.ckey)
-			log_attack("<font color='red'>[assailant.name][assailant.ckey ? "([assailant.ckey])" : "(no key)"] attacked [src.name][src.ckey ? "([src.ckey])" : "(no key)"] with [B.name]</font>")
+			log_attack("<font color='red'>[assailant.name][assailant.ckey ? "([assailant.ckey])" : "(no key)"] attacked [src.name][src.ckey ? "([src.ckey])" : "(no key)"] with [B.name] ([damage] damage)</font>")
 
 	// Update check time.
 	last_beamchecks["\ref[B]"]=world.time
@@ -1218,6 +1218,9 @@ Thanks.
 	to_chat(src, "<span class='notice'>You are now [resting ? "resting" : "getting up"]</span>")
 
 /mob/living/proc/has_brain()
+	return 1
+
+/mob/living/proc/has_attached_brain()
 	return 1
 
 /mob/living/proc/has_eyes()
