@@ -615,9 +615,10 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if (!isliving(L))
 		return
 	var/ignore_thermal_prot = FALSE
-	if (method == INGEST) //Eating or drinking burns the mouth (head) regardless of targeting and isn't blocked by head thermal protection.
-		zone_sels = TARGET_MOUTH
-		ignore_thermal_prot = TRUE
+	if (method == INGEST) //Eating or drinking burns the mouth (head) regardless of targeting and isn't blocked by head thermal protection. (disabled for the time being)
+		return //Don't do anything when consuming, to avoid issues with heated food like hot ramen, and drinks.
+		//zone_sels = TARGET_MOUTH
+		//ignore_thermal_prot = TRUE
 	var/burn_dmg = L.get_splash_burn_damage(volume_used ? volume_used : total_volume, chem_temp)
 	var/datum/organ/external/which_organ
 	if (ishuman(L)) //Although monkeys can wear clothes, only humans have explicit organs that can be covered by specific worn items, so for now only humans get protection here. If this is expanded to include things like monkeys wearing clothes and getting non-organ-specific thermal protection, this could be changed to use type inheritance.
