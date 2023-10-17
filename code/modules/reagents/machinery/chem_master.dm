@@ -426,7 +426,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if (A)
 				if(abs(reagents.chem_temp - A.temperature) >= MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
 					var/new_temp
-					if (istype(A, /datum/gas_mixture/unsimulated))
+					if (istype(A, /datum/gas_mixture/unsimulated) || !(config.reagents_heat_air))
 						new_temp = A.temperature
 					else
 						new_temp = reagents.get_equalized_temperature(reagents.chem_temp, reagents.get_thermal_mass(), A.temperature, A.heat_capacity())

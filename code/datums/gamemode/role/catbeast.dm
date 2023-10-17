@@ -32,7 +32,7 @@
 		D.threat_log += "[worldtime2text()]: Loose catbeast created."
 		D.threat_log += src //The actual reporting on threat it made comes from this entry
 	spawn(1.5 MINUTES)
-		if(antag.current.stat!=DEAD && OnStation() == -1)
+		if(antag.current.stat!=DEAD)
 			command_alert("An escaped disease-ridden catbeast has been detected aboard your station. Crew should cooperate with security staff in its extermination or removal from the main station. Remember to get a medical checkup afterward in case of infection.", "Catbeast Detected",1)
 	return TRUE
 

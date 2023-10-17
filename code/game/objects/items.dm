@@ -600,6 +600,10 @@ var/global/objects_thrown_when_explode = FALSE
 								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
 							return CANNOT_EQUIP
 
+				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
+					to_chat(H, "<span class='warning'>You have no mouth.</span>")
+					return CANNOT_EQUIP
+
 				if(H.wear_mask)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -609,9 +613,7 @@ var/global/objects_thrown_when_explode = FALSE
 					else
 						return CANNOT_EQUIP
 
-				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
-					to_chat(H, "<span class='warning'>You have no mouth.</span>")
-					return CANNOT_EQUIP
+				
 
 				return CAN_EQUIP
 			if(slot_back)
@@ -1747,3 +1749,8 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
 	return FALSE
+
+/obj/item/get_heat_conductivity()
+	. = heat_conductivity
+	if (is_open_container())
+		. = max(. , 0.5) //Even if it's perfectly insulating, if it's open then some heat can be exchanged.

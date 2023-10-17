@@ -140,6 +140,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 					charge_counter--
 			else
 				charge_counter++
+		if(charge_counter >= charge_max)
+			return
 		sleep(1)
 	return
 
