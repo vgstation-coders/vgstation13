@@ -19,6 +19,7 @@
 	var/required_temp = 0
 	var/react_discretely = FALSE //Handle_reactions() won't find the maximum number of times the chemicals can react. Use only if it shouldn't react more than once at a time.
 	var/reaction_temp_change = 0 //How much to change the temperature of the result chemical after the reaction
+	var/reaction_heat_released = 0 //How much heat energy (J) is released per reaction, scales with amount.
 	var/alert_admins = 0 //1 to alert admins with name and amount, 2 to alert with name and amount of all reagents
 	var/quiet = 0
 
@@ -2507,7 +2508,7 @@
 	result = HOT_RAMEN
 	required_reagents = list(WATER = 1, DRY_RAMEN = 3)
 	result_amount = 3
-	required_temp = 100+T0C
+	required_temp = 98+T0C
 
 /datum/chemical_reaction/hell_ramen
 	name = "Hell Ramen"
@@ -3644,8 +3645,7 @@
 	result = CALCIUMHYDROXIDE
 	required_reagents = list(WATER = 1, CALCIUMOXIDE = 1)
 	result_amount = 1
-	reaction_temp_change = 47
-	react_discretely = TRUE
+	reaction_heat_released = 20000
 
 /datum/chemical_reaction/sodium_silicate
 	name = "Sodium Silicate"
