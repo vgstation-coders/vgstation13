@@ -49,8 +49,12 @@
 // Builds a SQL statement
 /datum/library_query
 	var/author
-	var/category
+	var/list/categories
 	var/title
+	var/order_by
+	var/descending
+
+	var/category
 
 // So we can have catalogs of books that are programmatic, and ones that aren't.
 /datum/library_catalog

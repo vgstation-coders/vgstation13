@@ -421,6 +421,19 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 			var/logged_message = " - [key_name(usr)] has made [count] pill[count > 1 ? "s, each" : ""] named '[name]' and containing "
 
+			//Bring the pills to ambient temperature, due to contact with the pilling machinery.
+			var/datum/gas_mixture/A = return_air()
+			if (A)
+				if(abs(reagents.chem_temp - A.temperature) >= MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)
+					var/new_temp
+					if (istype(A, /datum/gas_mixture/unsimulated) || !(config.reagents_heat_air))
+						new_temp = A.temperature
+					else
+						new_temp = reagents.get_equalized_temperature(reagents.chem_temp, reagents.get_thermal_mass(), A.temperature, A.heat_capacity())
+						A.temperature = new_temp
+					reagents.chem_temp = new_temp
+					reagents.handle_reactions()
+
 			while(count>0)
 				count--
 				if(amount_per_pill == 0 || reagents.total_volume == 0)
@@ -439,7 +452,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 						P.forceMove(loaded_pill_bottle)
 				if(count == 0) //only do this ONCE
 					logged_message += "[P.reagents.get_reagent_ids(1)]. Icon: [pillIcon2Name[text2num(pillsprite)]]"
-				
+
 
 			investigation_log(I_CHEMS, logged_message)
 
@@ -478,7 +491,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				bottletype.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
 				//bottletype.icon_state = "bottle"+bottlesprite
 				reagents.trans_to(bottletype,amount_per_bottle)
-				
+
 			src.updateUsrDialog()
 			return 1
 
@@ -490,10 +503,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			if(href_list["createpacket_multiple"])
 				count = isgoodnumber(input("Select the number of packets to make.", "Amount:", 10) as num)
 			count = clamp(count, 1, 10)
-			
+
 			var/amount_per_packet = reagents.total_volume > 0 ? reagents.total_volume/count : 0
 			amount_per_packet = min(amount_per_packet,5)
-			
+
 			var/name = stripped_input(usr,"Name:", "Name your packet!","[reagents.get_master_reagent_name()] ([amount_per_packet] units)")
 			if(!name)
 				to_chat(usr, "<span class='warning'>[bicon(src)] Invalid name!</span>")

@@ -220,7 +220,7 @@
 					dat += "<span title=\"This plant is carnivorous and poses a significant threat to living things around it.\">CARN </span>"
 			switch(P.seed.juicy)
 				if(1)
-					dat += "<span title=\"This plant's fruit is soft-skinned and abudantly juicy\">SPLAT</span>"
+					dat += "<span title=\"This plant's fruit is soft-skinned and abudantly juicy\">SPLAT </span>"
 				if(2)
 					dat += "<span title=\"This plant's fruit is excessively soft and juicy.\">SLIP </span>"
 			if(P.seed.immutable > 0)
@@ -229,8 +229,12 @@
 				dat += "<span title=\"This plant is a highly specialized hematophage that will only draw nutrients from blood.\">BLOOD </span>"
 			if(P.seed.alter_temp)
 				dat += "<span title=\"This plant will gradually alter the local room temperature to match it's ideal habitat.\">TEMP </span>"
+			if(P.seed.consume_gasses.len)
+				dat += "<span title=\"This plant will consume gas from the environment.\">CGAS </span>"
+			if(P.seed.gas_absorb)
+				dat += "<span title=\"This plant will convert consumed gas to reagents.\">ABSOR </span>"
 			if(P.seed.exude_gasses.len)
-				dat += "<span title=\"This plant will exude gas into the environment.\">GAS </span>"
+				dat += "<span title=\"This plant will exude gas into the environment.\">EGAS </span>"
 			if(P.seed.thorny)
 				dat += "<span title=\"This plant possesses a cover of sharp thorns.\">THORN </span>"
 			if(P.seed.stinging)

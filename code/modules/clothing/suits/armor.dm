@@ -111,7 +111,7 @@
 	icon_state = "warden_jacket"
 	item_state = "armor"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list (VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list (GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/vest/wardenshort
 	name = "Warden's short jacket"
@@ -275,7 +275,7 @@
 	icon_state = "xcomarmor1"
 	item_state = "xcomarmor1"
 	species_fit = list(INSECT_SHAPED)
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|IGNORE_INV
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 20, bomb = 25, bio = 0, rad = 0)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	siemens_coefficient = 0.5

@@ -241,7 +241,7 @@
 		if(!usr || usr.incapacitated())
 			return
 
-		var /datum/painting_utensil/pu = new /datum/painting_utensil(usr)
+		var/datum/painting_utensil/pu = new /datum/painting_utensil(usr)
 		if(!pu.palette.len)
 			to_chat(usr, "<span class='warning'>You need to be holding a painting utensil in your active hand.</span>")
 			return

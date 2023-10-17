@@ -587,6 +587,11 @@
 		M.dash_dir = dir
 		src.throwing = 2// mechas will crash through windows, grilles, tables, people, you name it
 
+	if(istype(src,/mob/living/simple_animal/hostile/humanoid/nurseunit))
+		var/mob/living/simple_animal/hostile/humanoid/nurseunit/M = src
+		M.dash_dir = dir
+		src.throwing = 2
+
 	var/afterimage = 0
 	if(istype(src,/mob/living/simple_animal/construct/armoured/perfect))
 		var/mob/living/simple_animal/construct/armoured/perfect/M = src

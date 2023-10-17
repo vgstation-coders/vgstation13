@@ -39,11 +39,20 @@
 	if(!inside.len)
 		icon_state = "morgue3" // no mobs at all, but objects inside
 		return
+	var/body_revivable = 0
 	for(var/mob/living/body in inside)
-		if(body && body.client && !(body.mind && body.mind.suiciding))
+		if(body.mind && body.mind.suiciding)
+			continue
+		if(body && body.client)
 			icon_state = "morgue4" // clone that mofo
 			return
-	icon_state = "morgue2" // dead no-client mob
+		var/mob/dead/observer/ghost = mind_can_reenter(body.mind)
+		if(ghost && ghost.get_top_transmogrification())
+			body_revivable = 1
+			icon_state = "morgue5" //dead and ghosted, but revivable if he re-enters body
+
+	if(!body_revivable)
+		icon_state = "morgue2" // dead no-client mob
 
 /obj/structure/morgue/proc/update()
 	update_icon()
@@ -65,6 +74,8 @@
 		if("morgue3")
 			to_chat(user, "<span class='info'>\The [src]'s light display indicates there are items inside.</span>")
 		if("morgue4")
+			to_chat(user, "<span class='info'>\The [src]'s light display indicates there is a revivable body inside.</span>")
+		if("morgue5")
 			to_chat(user, "<span class='info'>\The [src]'s light display indicates there is a potential clone candidate inside.</span>")
 
 /obj/structure/morgue/ex_act(severity)
@@ -180,7 +191,8 @@
 					Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 
 /obj/structure/morgue/on_logout(var/mob/M)
-	update()
+	spawn(1) //delay here because the ghostmob doesn't exist immediately after ghosting
+		update()
 
 /obj/structure/morgue/Destroy()
 	if(connected)

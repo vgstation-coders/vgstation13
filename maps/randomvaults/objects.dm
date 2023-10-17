@@ -46,6 +46,14 @@
 /area/vault/podstation
 	requires_power = 1
 
+/area/vault/podstation/interior
+	name = "\improper Pod Station"
+	icon_state = "kitchen"
+
+/area/vault/podstation/exterior
+	name = "\improper Pod Station Asteroid"
+	icon_state = "pod"
+
 /area/vault/fastfood
 
 /area/vault/fastfood/dining

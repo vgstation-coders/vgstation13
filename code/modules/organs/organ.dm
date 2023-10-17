@@ -196,12 +196,12 @@
 	has_limbs = check_crawl_ability()
 
 /mob/living/carbon/human/proc/check_stand_ability()
-	//All legs must be usable in order for a human to stand
+	//At least one leg must be usable in order for a human to stand
 	for(var/datum/organ/external/leg in get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
-		if(!leg.can_stand())
-			return FALSE
+		if(leg.can_stand())
+			return TRUE
 
-	return TRUE
+	return FALSE
 
 /mob/living/carbon/human/proc/check_crawl_ability()
 	//At least one limb has to be usable for a human to crawl

@@ -615,6 +615,12 @@
 		..()
 
 
+/obj/item/weapon/pocket_mirror/arcane
+	name = "strange pocket mirror"
+	desc = "is that your reflection? or someone elses."
+	arcanetampered = 1
+
+
 /obj/item/weapon/nanitecontacts
 	name = "nanite contacts"
 	desc = "Deploys nanobots to your eyes to change their color."

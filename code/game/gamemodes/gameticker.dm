@@ -43,6 +43,7 @@ var/datum/controller/gameticker/ticker
 	var/station_was_nuked
 	var/no_life_on_station
 	var/revolutionary_victory //If on, Castle can be voted if the conditions are right
+	var/malfunctioning_AI_victory //If on, will play a different credits song
 
 	var/list/datum/role/antag_types = list() // Associative list of all the antag types in the round (List[id] = roleNumber1) //Seems to be totally unused?
 

@@ -564,13 +564,13 @@ var/list/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT
 	if(istype(user))
 		if(user.mind)
 			if(isbomberman(user) && (honorable & HONORABLE_BOMBERMAN))
-				return TRUE
+				return VERY_HONORABLE
 			if(ishighlander(user) && (honorable & HONORABLE_HIGHLANDER))
-				return TRUE
+				return VERY_HONORABLE
 			if(iscarbon(user) && isninja(user) && (honorable & HONORABLE_NINJA))
-				return TRUE
+				return MERELY_HONORABLE
 			if((iswizard(user) || isapprentice(user) || ismagician(user)) && (user.flags & HONORABLE_NOGUNALLOWED))
-				return TRUE
+				return MERELY_HONORABLE
 	return FALSE
 
 // Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic()

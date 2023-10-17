@@ -585,6 +585,8 @@
 			grue_stat_updates(TRUE)
 		else
 			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
+		E.death(1)
+		E.drop_all()
 		E.gib()
 	busy=FALSE
 
@@ -656,7 +658,7 @@
 	return FALSE
 
 /mob/living/simple_animal/hostile/grue/proc/drainlight_set()	//Set the strength of light drain.
-	set_light(7 + eatencount, -3 * eatencount - 3, GRUE_BLOOD)	//Eating sentients makes the drain more powerful.
+	set_light(max(10, 7 + eatencount), max(-15, -3 * eatencount - 3), GRUE_BLOOD)	//Eating sentients makes the drain more powerful.
 
 //Ventcrawling and hiding, only for gruespawn
 /mob/living/simple_animal/hostile/grue/proc/ventcrawl()

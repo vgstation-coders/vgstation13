@@ -52,6 +52,7 @@ var/global/disable_vents     = 0
 #define HAZARD_LOW_PRESSURE 20		//This is when the black ultra-low pressure icon is displayed. (This one is set as a constant)
 
 #define TEMPERATURE_DAMAGE_COEFFICIENT 1.5	//This is used in handle_temperature_damage() for humans, and in reagents that affect body temperature. Temperature damage is multiplied by this amount.
+#define SPLASH_SCALD_DAMAGE_COEFFICIENT (2/3) //Reagent scalding damage via splashing is multiplied by this.
 #define BODYTEMP_AUTORECOVERY_DIVISOR 0.5 //This is the divisor which handles how much of the temperature difference between the current body temperature and 310.15K (optimal temperature) humans auto-regenerate each tick. The higher the number, the slower the recovery. This is applied each tick, so long as the mob is alive.
 #define BODYTEMP_AUTORECOVERY_MAXIMUM 2.0 //Maximum amount of kelvin moved toward 310.15K per tick. So long as abs(310.15 - bodytemp) is more than 0.5 .
 
@@ -1578,6 +1579,10 @@ var/proccalls = 1
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 
+//MERELY_HONORABLE means unable to use guns, VERY_HONORABLE means using a gun will blow up the hand
+#define MERELY_HONORABLE 1
+#define VERY_HONORABLE 2
+
 //Grasp indexes
 #define GRASP_RIGHT_HAND 1
 #define GRASP_LEFT_HAND 2
@@ -1658,6 +1663,7 @@ var/proccalls = 1
 #define PALE_BLOOD		"#272727"//Seek Paleblood to transcend the hunt.
 #define GHOUL_BLOOD		"#7FFF00"
 #define GRUE_BLOOD		"#272728"
+#define BLOB_MEAT		"#81EB00"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again

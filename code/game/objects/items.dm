@@ -332,11 +332,46 @@ var/global/objects_thrown_when_explode = FALSE
 	..(user, size, show_name)
 	if(price && price > 0)
 		to_chat(user, "You read '[price] space bucks' on the tag.")
-	if((cant_drop != FALSE) && user.is_holding_item(src)) //Item can't be dropped, and is either in left or right hand!
-		to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
+	if(user.is_holding_item(src))
+		if(reagents?.total_volume && isliving(user))
+			held_examine_temperature_message(user)
+		if(cant_drop != FALSE) //Item can't be dropped, and is either in left or right hand!
+			to_chat(user, "<span class='danger'>It's stuck to your hands!</span>")
 	if(daemon && daemon.flags & DAEMON_EXAMINE)
 		daemon.examine(user)
 
+/obj/item/proc/held_examine_temperature_message(mob/living/examiner)
+	#define HEAT_LEVEL_SPAN 20
+	var/temperature_delta = (reagents.chem_temp - examiner.bodytemperature) * heat_conductivity ** (1/3) //Cubed root to skew it towards being perceptible.
+	if (ishuman(examiner))
+		var/mob/living/carbon/human/H = examiner
+		temperature_delta *= (H.gloves ? H.gloves.heat_conductivity ** (1/3) : 1)
+	var/safetemp_excursion = examiner.get_safe_temperature_excursion(examiner.bodytemperature + temperature_delta)
+	if (!examiner.feels_pain() || examiner.has_painkillers())
+		safetemp_excursion = 0
+	else if(safetemp_excursion > 0)
+		safetemp_excursion = min(ceil(safetemp_excursion / HEAT_LEVEL_SPAN), 3)
+	else if (safetemp_excursion < 0)
+		safetemp_excursion = max(round(safetemp_excursion / HEAT_LEVEL_SPAN), -3)
+	switch (safetemp_excursion)
+		if (0)
+			if (temperature_delta >= HEAT_LEVEL_SPAN)
+				to_chat(examiner, "<span class='notice'>It feels warm.</span>")
+			else if(abs(temperature_delta) >= HEAT_LEVEL_SPAN)
+				to_chat(examiner, "<span class='notice'>It feels cool.</span>")
+		if (1)
+			to_chat(examiner, "<span class='warning'>It feels very hot.</span>")
+		if (-1)
+			to_chat(examiner, "<span class='warning'>It feels very cold.</span>")
+		if (2)
+			to_chat(examiner, "<span class='warning'>It feels searing hot.</span>")
+		if (-2)
+			to_chat(examiner, "<span class='warning'>It feels freezing cold.</span>")
+		if (3)
+			to_chat(examiner, "<span class='warning'>It feels blisteringly hot.</span>")
+		if (-3)
+			to_chat(examiner, "<span class='warning'>It feels piercingly cold.</span>")
+	#undef HEAT_LEVEL_SPAN
 
 /obj/item/attack_ai(mob/user as mob)
 	..()
@@ -565,6 +600,10 @@ var/global/objects_thrown_when_explode = FALSE
 								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
 							return CANNOT_EQUIP
 
+				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
+					to_chat(H, "<span class='warning'>You have no mouth.</span>")
+					return CANNOT_EQUIP
+
 				if(H.wear_mask)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -574,9 +613,7 @@ var/global/objects_thrown_when_explode = FALSE
 					else
 						return CANNOT_EQUIP
 
-				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
-					to_chat(H, "<span class='warning'>You have no mouth.</span>")
-					return CANNOT_EQUIP
+				
 
 				return CAN_EQUIP
 			if(slot_back)
@@ -1390,7 +1427,7 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/kick_act(mob/living/carbon/human/H) //Kick items around!
 	var/datum/organ/external/kickingfoot = H.pick_usable_organ(LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT)
-	playsound(loc, "punch", 30, 1, -1)
+	playsound(loc, "kick", 30, 1, -1)
 	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())
 		H.visible_message("<span class='danger'>[H] attempts to kick \the [src]!</span>", "<span class='danger'>You attempt to kick \the [src]!</span>")
 		if(prob(70))
@@ -1431,7 +1468,7 @@ var/global/list/image/blood_overlays = list()
 	spawn()
 		var/original_pixel_y = pixel_y
 		var/time_to_zenith = min(distance, 5)
-		animate(src, pixel_y = original_pixel_y + (round(WORLD_ICON_SIZE * time_to_zenith / 5)), time = time_to_zenith, easing = QUAD_EASING | EASE_OUT)
+		animate(src, pixel_y = original_pixel_y + (round(WORLD_ICON_SIZE * time_to_zenith / 10)), time = time_to_zenith, easing = QUAD_EASING | EASE_OUT)
 		spawn(time_to_zenith)
 			animate(src, pixel_y = original_pixel_y, time = time_to_zenith, easing = QUAD_EASING | EASE_IN)
 		while(loc)
@@ -1712,3 +1749,8 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
 	return FALSE
+
+/obj/item/get_heat_conductivity()
+	. = heat_conductivity
+	if (is_open_container())
+		. = max(. , 0.5) //Even if it's perfectly insulating, if it's open then some heat can be exchanged.

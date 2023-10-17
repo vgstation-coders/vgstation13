@@ -303,7 +303,9 @@
 	H.equip_to_slot(santasuit,slot_wear_suit)
 
 	H.real_name = pick("Santa Claus","Jolly St. Nick","Sandy Claws","Sinterklaas","Father Christmas","Kris Kringle")
+	H.mutations += M_FAT
 	H.nutrition += 1000
+	H.update_mutations()
 
 	H.add_spell(new/spell/passive/noclothes)
 	H.add_spell(new/spell/aoe_turf/conjure/snowmobile)
@@ -315,12 +317,15 @@
 	SetUniversalState(/datum/universal_state/christmas)
 
 /datum/spellbook_artifact/santa_bundle/can_buy(var/mob/user)
-	return (Holiday == XMAS && !istype(universe, /datum/universal_state/christmas))
+	var/month = text2num(time2text(world.timeofday, "MM"))
+	if(month == 12) //December!!
+		return !istype(universe, /datum/universal_state/christmas) //There already is Christmas!
+	return FALSE
 
 /datum/spellbook_artifact/phylactery
 	name = "phylactery"
 	desc = "Creates a soulbinding artifact that, upon the death of the user, resurrects them as best it can. You must bind yourself to this through making an incision on your palm, holding the phylactery in that hand, and squeezing it."
-	spawned_items = list(/obj/item/phylactery, /obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich)
+	spawned_items = list(/obj/item/phylactery, /obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich, /obj/item/soulstone)
 
 
 /datum/spellbook_artifact/darkness
@@ -353,6 +358,7 @@
 	H.add_spell(new/spell/targeted/create_trinket)
 	H.add_spell(new/spell/targeted/cool_object)
 	H.add_spell(new/spell/targeted/warm_object)
+	H.add_spell(new/spell/targeted/color_change)
 
 /datum/spellbook_artifact/blindingspeed
 	name = "Boots of Blinding Speed"

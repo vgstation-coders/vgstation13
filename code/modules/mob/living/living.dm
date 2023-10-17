@@ -150,7 +150,7 @@
 	if (B.sources.len >= 1 && (isliving(B.sources[1])))
 		var/mob/living/assailant = B.sources[1]
 		if (assailant.ckey || src.ckey)
-			log_attack("<font color='red'>[assailant.name][assailant.ckey ? "([assailant.ckey])" : "(no key)"] attacked [src.name][src.ckey ? "([src.ckey])" : "(no key)"] with [B.name]</font>")
+			log_attack("<font color='red'>[assailant.name][assailant.ckey ? "([assailant.ckey])" : "(no key)"] attacked [src.name][src.ckey ? "([src.ckey])" : "(no key)"] with [B.name] ([damage] damage)</font>")
 
 	// Update check time.
 	last_beamchecks["\ref[B]"]=world.time
@@ -1172,16 +1172,6 @@ Thanks.
 		cuffs = mutual_handcuffs
 		resist_time = cuffs.restraint_resist_time/2 //it's only one cuff
 		var_to_check = "mutual_handcuffs"
-	else if(is_wearing_item(/obj/item/clothing/suit/strait_jacket, slot_wear_suit))
-		cuffs = get_item_by_slot(slot_wear_suit)
-		if(!is_hulk)
-			do_after_callback = new /callback(GLOBAL_PROC, /proc/strait_jacket_resist_do_after)
-			var/left_arm = get_organ(LIMB_LEFT_ARM)
-			var/right_arm = get_organ(LIMB_RIGHT_ARM)
-			for(var/datum/organ/external/arm in list(left_arm, right_arm))
-				if(!arm.is_existing() || arm.is_broken())
-					resist_time = max(0, resist_time - 30 SECONDS)
-		var_to_check = "wear_suit"
 	else
 		return
 	if(is_hulk)
@@ -1208,20 +1198,6 @@ Thanks.
 			simple_message("<span class='warning'>Your attempt at [is_hulk ? "breaking" : "removing"] \the [cuffs] was interrupted.</span>",
 							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
 
-/proc/strait_jacket_resist_do_after(mob/living/carbon/user)
-	var/left_arm = user.get_organ(LIMB_LEFT_ARM)
-	var/right_arm = user.get_organ(LIMB_RIGHT_ARM)
-	for(var/datum/organ/external/arm in list(left_arm, right_arm))
-		if(!arm)
-			// Not a humanoid or something
-			continue
-		if(!arm.is_existing() || arm.is_broken() || !arm.is_organic())
-			continue
-		if(prob(5))
-			arm.fracture()
-			return FALSE
-	return TRUE
-
 /mob/living/verb/lay_down()
 	set name = "Rest"
 	set category = "IC"
@@ -1242,6 +1218,9 @@ Thanks.
 	to_chat(src, "<span class='notice'>You are now [resting ? "resting" : "getting up"]</span>")
 
 /mob/living/proc/has_brain()
+	return 1
+
+/mob/living/proc/has_attached_brain()
 	return 1
 
 /mob/living/proc/has_eyes()
@@ -1943,3 +1922,11 @@ Thanks.
 	if(B.host_brain.ckey)
 		to_chat(src, "<span class='danger'>You send a punishing spike of psychic agony lancing into your host's brain.</span>")
 		to_chat(B.host_brain, "<span class='danger'><FONT size=3>Horrific, burning agony lances through you, ripping a soundless scream from your trapped mind!</FONT></span>")
+
+/mob/living/Stat()
+	..()
+	if(statpanel("Status"))
+		if(mind)
+			for(var/role in mind.antag_roles)
+				var/datum/role/R = mind.antag_roles[role]
+				stat(R.StatPanel())

@@ -478,7 +478,7 @@
 	icon_state = "squatteroutfit"
 	item_state = "squatteroutfit"
 	_color = "squatteroutfit"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/russobluecamooutfit
 	name = "russian blue camo"
@@ -526,7 +526,7 @@
 	icon_state = "biker"
 	item_state = "biker"
 	_color = "biker"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/jacketsuit
 	name = "richard's outfit"

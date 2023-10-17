@@ -3015,6 +3015,20 @@
 	required_reagents = list(GIN = 3, CHERRYJELLY = 1)
 	result_amount = 4
 
+/datum/chemical_reaction/mimosa
+	name = "Mimosa"
+	id = MIMOSA
+	result = MIMOSA
+	required_reagents = list(CHAMPAGNE = 1, ORANGEJUICE = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/lemondrop
+	name = "Lemon Drop"
+	id = LEMONDROP
+	result = LEMONDROP
+	required_reagents = list(LEMONJUICE = 1, TRIPLESEC = 1, VODKA = 1)
+	result_amount = 3
+
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
 /datum/chemical_reaction/sbiten
@@ -3059,6 +3073,35 @@
 	result = GROG
 	required_reagents = list(RUM = 1, WATER = 1)
 	result_amount = 2
+
+/datum/chemical_reaction/evoluator
+	name = "Evoluator"
+	id = EVOLUATOR
+	result = EVOLUATOR
+	required_reagents = list(BLOBANINE = 1, OXYGEN = 2, APPLEJUICE = 1, VERMOUTH = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/blob_beer
+	name = "Blob beer"
+	id = BLOBBEER
+	result = BLOBBEER
+	required_reagents = list(BLOBANINE = 1, SUGAR = 1)
+	required_temp = T0C + 60
+	result_amount = 10
+
+/datum/chemical_reaction/liberator
+	name = "Liberator"
+	id = LIBERATOR
+	result = LIBERATOR
+	required_reagents = list(BLOBANINE = 1, ORANGEJUICE = 1, TRIPLESEC = 1)
+	result_amount = 6
+
+/datum/chemical_reaction/spore
+	name = "Spore"
+	id = SPORE
+	result = SPORE
+	required_reagents = list(BLOBANINE = 1, KARMOTRINE = 1, OXYGEN = 1)
+	result_amount = 3
 
 /datum/chemical_reaction/soy_latte
 	name = "Soy Latte"

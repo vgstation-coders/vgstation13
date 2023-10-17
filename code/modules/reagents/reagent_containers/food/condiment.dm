@@ -125,6 +125,8 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
 
+	..()
+
 	if(reagents.reagent_list.len > 0)
 		condiment_overlay = null
 		overlay_colored = FALSE
@@ -315,7 +317,7 @@
 				name = "Discount Dan's Special Sauce"
 				desc = "Discount Sauce now in a family sized package."
 				icon_state = "discount_sauce"
-				condiment_overlay = DISCOUNT 
+				condiment_overlay = DISCOUNT
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."
@@ -478,11 +480,11 @@
 /obj/item/weapon/reagent_containers/food/condiment/cinnamon/New()
 	..()
 	reagents.add_reagent(CINNAMON, 50)
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/discount
 	name = "Discount Dan's Special Sauce"
 	desc = "Discount Sauce now in a family sized package."
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/discount/New()
 	..()
 	reagents.add_reagent(DISCOUNT, 50)
@@ -673,7 +675,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/condiment/small
-	icon_state = "packet_" 
+	icon_state = "packet_"
 	possible_transfer_amounts = list(1, 5)
 	amount_per_transfer_from_this = 1
 	var/trash_type = /obj/item/trash/misc_packet
@@ -689,6 +691,8 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/small/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
 
+	heat_dissipation_updates() //since we don't supercall, call this directly
+
 	if(reagents.reagent_list.len > 0)
 		condiment_overlay = null
 		overlay_colored = FALSE
@@ -702,7 +706,7 @@
 			if(MAYO)
 				name = "mayonnaise packet"
 				desc = "Still not an instrument."
-				condiment_overlay = MAYO				
+				condiment_overlay = MAYO
 			if(CAPSAICIN)
 				name = "hotsauce packet"
 				desc = "For those who can't handle the real heat."
@@ -718,7 +722,7 @@
 			if(DISCOUNT)
 				name = "Discount Dan's Special Sauce"
 				desc = "Discount Dan brings you his very own special blend of delicious ingredients in one discount sauce!"
-				condiment_overlay = DISCOUNT 
+				condiment_overlay = DISCOUNT
 			if(ZAMSPICES)
 				name = "Zam Spice packet"
 				desc = "A tiny packet of mothership spices."
@@ -730,7 +734,7 @@
 			if(ZAMSPICYTOXIN)
 				name = "Zam's Spicy Sauce packet"
 				desc = "More portable than the bottle, just as spicy."
-				
+
 				condiment_overlay = ZAMSPICYTOXIN
 			else
 				if(!name) //these should probably just be ternaries
@@ -807,7 +811,7 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/vinegar/New()
 	..()
 	reagents.add_reagent(VINEGAR, 5)
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/small/hotsauce
 	name = "hotsauce packet"
 	desc = "For those who can't handle the real heat."
@@ -847,7 +851,7 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin/New()
 	..()
 	reagents.add_reagent(ZAMSPICYTOXIN, 5)
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/small/discount
 	name = "Discount Dan's Special Sauce"
 	desc = "Discount Dan brings you his very own special blend of delicious ingredients in one discount sauce!"

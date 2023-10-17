@@ -627,6 +627,12 @@ var/list/icon_state_to_appearance = list()
 	..()
 	icon_state = pick("cavefl_1","cavefl_2","cavefl_3","cavefl_4")
 
+/turf/unsimulated/floor/asteroid/underground/airless // Used by the pod station vault
+	name = "paved asteroid"
+	oxygen = 0.01
+	nitrogen = 0.01
+	temperature = TCMB
+
 /turf/unsimulated/floor/asteroid/New()
 	..()
 	if(prob(20) && icon_state == "asteroid")
