@@ -336,7 +336,7 @@
 	var/valid = FALSE
 	if(isAI(user))
 		var/mob/living/silicon/ai/ai = user
-		if(T && (T in range(8, ai.eyeobj.loc)))
+		if(T && (T in range(7, ai.eyeobj.loc)))
 			valid = TRUE
 	else if(T && (T in range(1, user.loc)) && (T in view(1, user.virtualhearer))) //If next to user's location (to allow locker and mech alt-clicks) and if the user can actually view it
 		valid = TRUE
