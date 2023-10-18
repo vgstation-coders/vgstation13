@@ -1,6 +1,7 @@
 /obj/machinery/power/solar/panel/tracker
 	name = "solar tracker"
-	desc = "A solar directional tracker."
+	desc = "It connects to solar panel control computers through the power net to enable accurate tracking of the nearest star."
+	icon = 'icons/obj/power.dmi'
 	icon_state = "tracker"
 	var/sun_angle = 0 // sun angle as set by sun datum
 	tracker = 1

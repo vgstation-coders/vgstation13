@@ -64,10 +64,9 @@ var/global/datum/sun/sun
 
 	for(S in solars_list)
 		if(!S.powernet)
-			solars_list.Remove(S)
+			continue//players can always add the wire afterwards
 
-		if(S.control)
-			occlusion(S)
+		occlusion(S)
 
 //For a solar panel, trace towards sun to see if we're in shadow.
 
