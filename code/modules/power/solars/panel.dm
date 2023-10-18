@@ -28,7 +28,7 @@
 	var/mob/manual_user = null
 	var/starting_angle	//tracking the starting angle of a manual rotation for progress bar purposes
 	var/target_angle	//tracking the target angle of a manual rotation for progress bar purposes
-	var/pulse = 0.02
+	var/pulse = 0.2
 	var/glow_intensity = 100
 
 /obj/machinery/power/solar/panel/New(loc, var/obj/machinery/power/solar_assembly/S)
