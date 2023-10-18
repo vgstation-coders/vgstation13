@@ -1172,6 +1172,8 @@
 	custom_metabolism = 0.1
 	density = 3.56
 	specheatcap = 17.15
+	overdose_tick = 240 // 8 minutes
+	overdose_am = REAGENTS_OVERDOSE // So you can't pretend that you "didn't know it was an OD"
 
 /datum/reagent/stoxin/on_mob_life(var/mob/living/M, var/alien)
 
@@ -1183,9 +1185,13 @@
 			M.eye_blurry = max(M.eye_blurry, 10)
 		if(15 to 25)
 			M.drowsyness  = max(M.drowsyness, 20)
-		if(25 to INFINITY)
+		if (25 to 240)
 			M.Paralyse(20)
 			M.drowsyness  = max(M.drowsyness, 30)
+		if(240 to INFINITY)
+			var/mob/living/carbon/human/H = M
+			var/datum/organ/internal/heart/damagedheart = H.get_heart()
+			damagedheart.damage++
 
 /datum/reagent/srejuvenate
 	name = "Soporific Rejuvenant"
