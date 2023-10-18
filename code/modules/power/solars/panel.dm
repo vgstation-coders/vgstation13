@@ -11,6 +11,7 @@
 	plane = ABOVE_HUMAN_PLANE
 	layer = LIGHT_FIXTURE_LAYER
 	//originally FLY_LAYER
+	luminosity = 1
 	var/obscured = 0
 	var/sunfrac = 0
 	var/adir = 180	//the current orientation of the panel (in degrees). Can be set in the map editor to have panels pre-rotated. 0 is north, 90 is east, 180 is south, 270 is west.
@@ -22,15 +23,32 @@
 	var/obj/machinery/power/solar/control/control
 	var/obj/machinery/power/solar_assembly/solar_assembly
 	var/image/base
+	var/image/glow
+	var/image/progbar = null	//progress bar for manual rotation
+	var/mob/manual_user = null
+	var/starting_angle	//tracking the starting angle of a manual rotation for progress bar purposes
+	var/target_angle	//tracking the target angle of a manual rotation for progress bar purposes
+	var/pulse = 0.02
+	var/glow_intensity = 100
 
 /obj/machinery/power/solar/panel/New(loc, var/obj/machinery/power/solar_assembly/S)
 	..(loc)
 	base = image(icon, src, "sp_base")
-	base.appearance_flags = RESET_TRANSFORM
+	base.appearance_flags = RESET_TRANSFORM|RESET_ALPHA|RESET_COLOR
+	base.plane = relative_plane(OBJ_PLANE)
 	underlays += base
+	glow = image(icon, src, "solar_glow")
+	glow.blend_mode = BLEND_ADD
+	var/matrix/glow_matrix = matrix()
+	glow.transform = glow_matrix.Scale(1.2)
 	transform = turn(matrix(), adir)
 	update_solar_exposure()
+	update_icon()
 	make(S)
+
+/obj/machinery/power/solar/panel/Destroy()
+	manual_user = null//just to be sure
+	..()
 
 /obj/machinery/power/solar/panel/proc/make(var/obj/machinery/power/solar_assembly/S)
 	if(!S)
@@ -65,14 +83,26 @@
 			"<span class='notice'>You take the [initial(G.name)] off the [src].</span>")
 			qdel(src)
 	if(iswrench(W) && !tracker)
-		var/target = input("Which orientation (in degrees) do you want the panel to face?","Set Orientation") as num|null
-		if (!isnull(target))
-			target = (360 + clamp(target,-360,360)) % 360//sanitizing
-			to_chat(user, "<span class='notice'>You begin rotating the solar panel.</span>")
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
-			spawn()
-				ndir = target
-				manual_rotation(user, target)
+		if (manual_user)
+			if (manual_user == user)
+				to_chat(user, "<span class='warning'>You are already rotating this solar panel.</span>")
+			else
+				to_chat(user, "<span class='warning'>Someone else is currently rotating this solar panel.</span>")
+		else
+			var/target = input("Which orientation (in degrees) do you want the panel to face?","Set Orientation",adir) as num|null
+			if (!isnull(target) && !manual_user && Adjacent(user) && iswrench(user.get_active_hand()) && !user.incapacitated())
+				target = (360 + clamp(target,-360,360)) % 360//sanitizing
+				to_chat(user, "<span class='notice'>You begin rotating the solar panel.</span>")
+				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				starting_angle = adir
+				target_angle = target
+				update_progbar()
+				manual_user = user
+				if (user.client)
+					user.client.images |= progbar
+				spawn()
+					ndir = target
+					manual_rotation(user, target)
 	else if(W)
 		user.do_attack_animation(src, user)
 		shake(1, 3)
@@ -87,25 +117,49 @@
 
 /obj/machinery/power/solar/panel/proc/panel_rotation(var/target, var/speed)
 	if(adir != target)
-		var/direction = target - adir
-		if (abs(direction) > 180)
-			direction = adir - target// so we don't do a near full rotation when our target is past the 0°|360° mark
-		adir = (360 + adir + clamp(direction, -speed, speed)) % 360
-		if (abs(direction) > (360 - speed))
-			adir = (360 + adir + clamp(target - adir, -speed, speed)) % 360//we went past the 0°|360° mark and past our target, so let's stop on top of it right away
-		update_icon()
+		// Take the shortest rotation possible
+		var/direction = ((abs(target - adir) < 180) ? (target - adir) : (adir - target))
+		adir = (360 + adir + clamp(clamp(direction,-1*(360 - max(target,adir) + min(target,adir)),360 - max(target,adir) + min(target,adir)), -speed, speed)) % 360
+		//the extra 360 ensures the result of the % is positive
+		//the inside clamp() prevents the rotation from overshooting its target if it passes the 0°|360° mark
 		update_solar_exposure()
+		update_icon()
 
 /obj/machinery/power/solar/panel/proc/manual_rotation(var/mob/living/carbon/human/user, var/target_rotation)
 	panel_rotation(target_rotation, rotation_speed * 3)
+	update_progbar()
 	sleep(20)
 	if(adir != target_rotation)
 		if (Adjacent(user) && iswrench(user.get_active_hand()) && !user.incapacitated())
 			manual_rotation(user, target_rotation)
+			return
 		else
 			to_chat(user,"<span class='warning'>You abort the rotation of the panel.</span>")
 	else
 		to_chat(user,"<span class='notice'>You finish rotating the panel.</span>")
+	manual_user = null
+	if (user.client)
+		user.client.images -= progbar
+
+/obj/machinery/power/solar/panel/proc/update_progbar()
+	if (!progbar)
+		progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = src, "icon_state" = "prog_bar_0")
+		progbar.pixel_z = WORLD_ICON_SIZE
+		progbar.plane = HUD_PLANE
+		progbar.pixel_x = 16 * PIXEL_MULTIPLIER
+		progbar.pixel_y = 16 * PIXEL_MULTIPLIER
+		progbar.appearance_flags = RESET_ALPHA|RESET_COLOR|RESET_TRANSFORM
+		progbar.layer = HUD_ABOVE_ITEM_LAYER
+
+	var/total_degrees = abs(starting_angle - target_angle)
+	var/remaining_degrees  = abs(adir - target_angle)
+
+	if (total_degrees > 180)
+		total_degrees = 360 - max(starting_angle,target_angle) + min(starting_angle,target_angle)
+	if (remaining_degrees > 180)
+		remaining_degrees = 360 - max(adir,target_angle) + min(adir,target_angle)
+	total_degrees = max(1, total_degrees)
+	progbar.icon_state = "prog_bar_[round((100 - min(1, remaining_degrees / total_degrees) * 100), 10)]"
 
 /obj/machinery/power/solar/panel/attack_animal(var/mob/living/simple_animal/user)
 	user.do_attack_animation(src, user)
@@ -155,10 +209,13 @@
 			new shard(loc)
 			new shard(loc)
 			qdel(src)
+			return
 	update_icon()
 
 /obj/machinery/power/solar/panel/update_icon()
 	..()
+	underlays.len = 0
+	underlays += base
 	if(!tracker)
 		var/obj/item/stack/sheet/glass/G = solar_assembly.glass_type
 		var/panel = "solar_panel_" + initial(G.sname)
@@ -168,11 +225,17 @@
 			panel += "-d"//damaged panels generate less power so we might as well help players notice those
 		icon_state = panel
 
-		animate(src, transform = turn(matrix(), adir), time = 20)
+		var/illumination = (pulse * sunfrac * max(0,health/maxHealth)) - (pulse/2)
+		animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,illumination,illumination,illumination,0), transform = turn(matrix(), adir), time = 20)
+
+		overlays.len = 0
+		if ((sunfrac > 0) && !(stat & BROKEN))
+			glow.alpha = sunfrac * max(0,health/maxHealth) * glow_intensity
+			overlays += glow
 	else
 		icon_state = "tracker"
 		if(stat & BROKEN)
-			icon_state += "tracker-b"
+			icon_state += "-b"
 
 /obj/machinery/power/solar/panel/proc/update_solar_exposure()
 	if(!sun)
@@ -180,7 +243,12 @@
 
 	if(obscured)
 		sunfrac = 0
+		plane = ABOVE_HUMAN_PLANE
+		layer = LIGHT_FIXTURE_LAYER
 		return
+
+	plane = ABOVE_LIGHTING_PLANE
+	layer = ABOVE_LIGHTING_LAYER
 
 	var/p_angle = abs((360 + adir) % 360 - (360 + sun.angle) % 360)
 
