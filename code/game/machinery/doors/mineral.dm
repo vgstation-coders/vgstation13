@@ -132,11 +132,13 @@
 /obj/machinery/door/mineral/silver
 	prefix = "silver"
 	icon_state = "silverdoor_closed"
+	twinkles = TRUE
 
 /obj/machinery/door/mineral/gold
 	prefix = "gold"
 	icon_state = "golddoor_closed"
 	hardness = 1
+	twinkles = TRUE
 
 /obj/machinery/door/mineral/uranium
 	prefix = "uranium"
@@ -194,6 +196,7 @@
 	icon_state = "diamonddoor_closed"
 	hardness = 10
 	explosion_block = 3
+	twinkles = TRUE
 
 /obj/machinery/door/mineral/wood
 	prefix = "wood"

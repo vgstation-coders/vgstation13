@@ -200,6 +200,13 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	else if(is_mineral_floor())
 		if(!broken && !burnt)
 			icon_state = floor_tile.material
+	if(twinkles)
+		if(burnt||broken)
+			twinkles = FALSE
+			end_twinkling()
+		else
+			begin_twinkling()
+
 	/*spawn(1)
 		if(istype(src,/turf/simulated/floor)) //Was throwing runtime errors due to a chance of it changing to space halfway through.
 			if(air)
@@ -408,6 +415,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		QDEL_NULL(floor_tile)
 	floor_tile = new T.type(null)
 	material = floor_tile.material
+	twinkles = T.twinkles
 	//Becomes a teleport destination for other phazon tiles
 	if(material=="phazon")
 		phazontiles += src

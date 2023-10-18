@@ -70,7 +70,8 @@
 	if(S.air)
 		var/datum/gas_mixture/GM = S.air
 		if(GM.pressure > HALF_ATM)
-			S.ChangeTurf(/turf/simulated/floor/plating)
+			var/turf/simulated/floor/plating/P
+			S.ChangeTurf(P)
 			return
 	S.ChangeTurf(/turf/simulated/floor/plating/airless)
 

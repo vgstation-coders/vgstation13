@@ -8,6 +8,7 @@
 /obj/item/stack/tile
 	var/material
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sheets_n_ores.dmi', "right_hand" = 'icons/mob/in-hand/right/sheets_n_ores.dmi')
+	var/twinkles = FALSE
 
 /obj/item/stack/tile/proc/adjust_slowdown(mob/living/L, current_slowdown)
 	return current_slowdown

@@ -67,6 +67,7 @@
 	icon_state = "gold0"
 	walltype = "gold"
 	mineral = "gold"
+	twinkles = TRUE
 	//var/electro = 1
 	//var/shocked = null
 
@@ -76,6 +77,7 @@
 	icon_state = "silver0"
 	walltype = "silver"
 	mineral = "silver"
+	twinkles = TRUE
 	//var/electro = 0.75
 	//var/shocked = null
 
@@ -86,6 +88,7 @@
 	walltype = "diamond"
 	mineral = "diamond"
 	explosion_block = 3
+	twinkles = TRUE
 
 /turf/simulated/wall/mineral/clown
 	name = "bananium wall"
