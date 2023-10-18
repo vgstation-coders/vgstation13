@@ -43,9 +43,15 @@
 	var/matrix/glow_matrix = matrix()
 	glow.transform = glow_matrix.Scale(1.2)
 	transform = turn(matrix(), adir)
-	update_solar_exposure()
-	update_icon()
 	make(S)
+	initialize()
+
+/obj/machinery/power/solar/panel/initialize()
+	..()
+	if (sun)
+		sun.occlusion(src)
+		update_solar_exposure()
+	update_icon()
 
 /obj/machinery/power/solar/panel/Destroy()
 	manual_user = null//just to be sure
@@ -211,11 +217,6 @@
 			new shard(loc)
 			qdel(src)
 			return
-	update_icon()
-
-/obj/machinery/power/solar/panel/initialize()
-	..()
-	update_solar_exposure()
 	update_icon()
 
 /obj/machinery/power/solar/panel/update_icon()
