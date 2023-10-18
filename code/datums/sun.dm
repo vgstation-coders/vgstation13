@@ -63,10 +63,8 @@ var/global/datum/sun/sun
 	var/obj/machinery/power/solar/panel/S
 
 	for(S in solars_list)
-		if(!S.powernet)
-			continue//players can always add the wire afterwards
-
-		occlusion(S)
+		if(S.powernet)
+			occlusion(S)
 
 //For a solar panel, trace towards sun to see if we're in shadow.
 
