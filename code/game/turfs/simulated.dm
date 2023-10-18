@@ -11,7 +11,6 @@
 
 	var/datum/custom_painting/advanced_graffiti
 	var/icon/advanced_graffiti_overlay
-	var/twinkles = FALSE //a check for a twinkling animation that plays for mineral turf overlays
 
 /turf/simulated/proc/render_advanced_graffiti(var/mob/user)
 	if (!advanced_graffiti)
@@ -27,7 +26,7 @@
 	if(istype(loc, /area/chapel))
 		holy = 1
 	levelupdate()
-	if(twinkles)
+	if(should_twinkle())
 		begin_twinkling()
 
 /turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD)
@@ -113,6 +112,6 @@
 		new /obj/effect/decal/cleanable/blood/oil(src)
 
 /turf/simulated/update_icon()
-	if(twinkles)
+	if(should_twinkle())
 		begin_twinkling()
 	return

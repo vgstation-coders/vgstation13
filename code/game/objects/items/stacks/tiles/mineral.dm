@@ -74,7 +74,6 @@
 	throw_speed = 3
 	throw_range = 7
 	max_amount = 60
-	twinkles = TRUE
 
 	material = "gold"
 	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD / 4) // Recipe requires 1 sheet for 4 tiles
@@ -91,7 +90,6 @@
 	throw_speed = 3
 	throw_range = 7
 	max_amount = 60
-	twinkles = TRUE
 
 	material = "silver"
 	starting_materials = list(MAT_SILVER = CC_PER_SHEET_SILVER / 4) // Recipe requires 1 sheet for 4 tiles
