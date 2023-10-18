@@ -178,12 +178,15 @@
 		var/medium_damage_range = 0
 		var/light_damage_range = 0
 
-		if(pressure > TANK_FRAGMENT_PRESSURE)
+		var/pressure_threshold = TANK_FRAGMENT_PRESSURE
+		if(has_slimes & SLIME_OIL)
+			pressure_threshold *= 0.9
+		if(pressure > pressure_threshold)
 			bomb_air_contents_2.react()
 			bomb_air_contents_2.react()
 			bomb_air_contents_2.react()
 			pressure = bomb_air_contents_2.return_pressure()
-			var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
+			var/range = (pressure-pressure_threshold)/TANK_FRAGMENT_SCALE
 			score.largest_TTV = max(score.largest_TTV, range)
 			if(!ignorecap && (range > MAX_EXPLOSION_RANGE))
 				overcap = range

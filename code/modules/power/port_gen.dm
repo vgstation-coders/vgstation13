@@ -7,6 +7,8 @@
 	density = 1
 	anchored = 0
 	use_power = MACHINE_POWER_USE_NONE
+	slimeadd_message = "You add the slime extract to the fuel port"
+	var/slimes_required = SLIME_GREY
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 
@@ -28,15 +30,27 @@
 	return
 
 /obj/machinery/power/port_gen/process()
-	if(active && HasFuel() && !crit_fail && anchored && powernet)
-		add_avail(power_gen * power_output)
-		UseFuel()
+	if(active && !crit_fail && anchored && powernet)
+		if(HasFuel())
+			add_avail(power_gen * power_output)
+			UseFuel()
+		if(has_slimes & slimes_required)
+			add_avail(power_gen)
 		src.updateDialog()
 
 	else
 		active = 0
 		update_icon()
 		handleInactive()
+
+/obj/machinery/power/port_gen/slime_act(primarytype, mob/user)
+	if(has_slimes & (slimes_required|primarytype))
+		slimeadd_message += ", and hear it begin to churn comfortably"
+	else if(slimes_required & primarytype)
+		slimeadd_message += ", and hear it begin to [pick("nudge","budge","rumble")] slightly"
+	slimeadd_message += "."
+	. = ..()
+	slimeadd_message = initial(slimeadd_message)
 
 /obj/machinery/power/port_gen/attack_hand(mob/user as mob)
 	if(..())
@@ -53,6 +67,7 @@
 
 /obj/machinery/power/port_gen/pacman
 	name = "P.A.C.M.A.N.-type Portable Generator"
+	slimes_required = SLIME_DARKPURPLE
 	var/sheets = 0
 	var/max_sheets = 100
 	var/sheet_name = ""
@@ -302,6 +317,8 @@
 	power_gen = 15000
 	time_per_sheet = 65
 	board_path = "/obj/item/weapon/circuitboard/pacman/super"
+	slimes_required = SLIME_DARKPURPLE|SLIME_METAL
+
 /obj/machinery/power/port_gen/pacman/super/overheat()
 	explosion(src.loc, 3, 3, 3, -1)
 
@@ -312,5 +329,7 @@
 	power_gen = 40000
 	time_per_sheet = 80
 	board_path = "/obj/item/weapon/circuitboard/pacman/mrs"
+	slimes_required = SLIME_DARKPURPLE|SLIME_METAL|SLIME_ADAMANTINE
+
 /obj/machinery/power/port_gen/pacman/mrs/overheat()
 	explosion(src.loc, 4, 4, 4, -1)

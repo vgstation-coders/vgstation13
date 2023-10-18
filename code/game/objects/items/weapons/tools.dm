@@ -85,13 +85,14 @@
 	starting_materials = list(MAT_IRON = 150)
 	force = 15.0
 	throwforce = 12.0
+	slimeadd_message = "You shove the slime extract inside SRCTAG's head"
 
 /obj/item/tool/wrench/socket/slime_act(primarytype, mob/user)
-	..()
-	if(primarytype == /mob/living/carbon/slime/bluespace)
-		has_slime=1
-		to_chat(user, "You shove the slime extract inside \the [src]'s head.")
-		return TRUE
+	if(primarytype == SLIME_BLUESPACE)
+		slimeadd_message += ", and feel a small draft of air sucking into it"
+	slimeadd_message += "."
+	. = ..()
+	slimeadd_message = initial(slimeadd_message)
 
 /*
  * Screwdriver

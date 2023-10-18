@@ -52,7 +52,7 @@
 			lastproduce--
 
 	// Advance plant age.
-	if(!has_slime)
+	if(!(has_slimes & SLIME_GREEN))
 		if(skip_aging)
 			skip_aging--
 		else

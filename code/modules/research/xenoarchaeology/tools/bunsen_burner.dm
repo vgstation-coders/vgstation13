@@ -9,6 +9,7 @@
 	pass_flags = PASSTABLE
 	var/heating = BUNSEN_OFF //whether the bunsen is turned on
 	var/obj/item/weapon/reagent_containers/held_container
+	slimeadd_message = "You add the slime extract to the fuel port."
 	ghost_read = 0
 	is_cooktop = TRUE
 
@@ -39,6 +40,16 @@
 	return cook_energy
 
 /////////////////////
+
+/obj/machinery/bunsen_burner/slime_act(primarytype, mob/user)
+	if(primarytype == SLIME_RED)
+		slimeadd_message += " It feels full now."
+	if(..())
+		reagents.clear_reagents()
+		reagents.add_reagent(GLYCEROL, 250)
+		slimeadd_message = initial(slimeadd_message)
+		return TRUE
+	slimeadd_message = initial(slimeadd_message)
 
 /obj/machinery/bunsen_burner/splashable()
 	return FALSE
@@ -126,16 +137,17 @@
 			try_refill_nearby()
 
 		for(var/possible_fuel in possible_fuels)
-			if(reagents.has_reagent(possible_fuel))
+			if(reagents.has_reagent(possible_fuel) || (possible_fuel == GLYCEROL && (has_slimes & SLIME_RED)))
 				var/list/fuel_stats = possible_fuels[possible_fuel]
 				max_temperature = fuel_stats["max_temperature"]
 				thermal_energy_transfer = fuel_stats["thermal_energy_transfer"]
 				consumption_rate = fuel_stats["consumption_rate"]
-				unsafety = fuel_stats["unsafety"]
-				o2_consumption = fuel_stats["o2_cons"]
-				co2_consumption = fuel_stats["co2_cons"]
+				unsafety = has_slimes & SLIME_RED ? fuel_stats["unsafety"] : 0
+				o2_consumption = has_slimes & SLIME_RED ? fuel_stats["o2_cons"] : 0
+				co2_consumption = has_slimes & SLIME_RED ? fuel_stats["co2_cons"] : 0
 
-				reagents.remove_reagent(possible_fuel, consumption_rate)
+				if(reagents.has_reagent(possible_fuel))
+					reagents.remove_reagent(possible_fuel, consumption_rate)
 				if(held_container)
 					if(!cookvessel) //Cooking vessels are heated differently.
 						held_container.reagents.heating(thermal_energy_transfer, max_temperature)

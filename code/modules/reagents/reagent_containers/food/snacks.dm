@@ -926,6 +926,7 @@
 	icon_state = "donut1"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_DIPPABLE //eggs are used
 	var/soggy = 0
+	var/frostchance = 30
 	base_crumb_chance = 30
 
 //Called in drinks.dm attackby
@@ -951,10 +952,13 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SPRINKLES, 1)
 	src.bitesize = 3
-	if(prob(30))
+	if(prob(frostchance))
 		src.icon_state = "donut2"
 		src.name = "frosted donut"
 		reagents.add_reagent(SPRINKLES, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/donut/normal/frosted
+	frostchance = 100
 
 /obj/item/weapon/reagent_containers/food/snacks/donut/chaos
 	name = "Chaos Donut"
@@ -986,11 +990,13 @@
 			reagents.add_reagent(BERRYJUICE, 3)
 		if(10)
 			reagents.add_reagent(TRICORDRAZINE, 3)
-	if(prob(30))
+	if(prob(frostchance))
 		icon_state = "donut2"
 		name = "frosted chaos donut"
 		reagents.add_reagent(SPRINKLES, 2)
 
+/obj/item/weapon/reagent_containers/food/snacks/donut/chaos/frosted
+	frostchance = 100
 
 /obj/item/weapon/reagent_containers/food/snacks/donut/jelly
 	name = "jelly donut"
@@ -1003,10 +1009,13 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SPRINKLES, 1)
 	reagents.add_reagent(BERRYJUICE, 5)
-	if(prob(30))
+	if(prob(frostchance))
 		icon_state = "jdonut2"
 		name = "Frosted Jelly Donut"
 		reagents.add_reagent(SPRINKLES, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/donut/jelly/frosted
+	frostchance = 100
 
 /obj/item/weapon/reagent_containers/food/snacks/donut/slimejelly
 	name = "jelly donut"
@@ -1019,10 +1028,13 @@
 	reagents.add_reagent(SPRINKLES, 1)
 	reagents.add_reagent(SLIMEJELLY, 5)
 	bitesize = 5
-	if(prob(30))
+	if(prob(frostchance))
 		icon_state = "jdonut2"
 		name = "Frosted Jelly Donut"
 		reagents.add_reagent(SPRINKLES, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/donut/slimejelly/frosted
+	frostchance = 100
 
 /obj/item/weapon/reagent_containers/food/snacks/donutiron //not a subtype of donuts to avoid inheritance
 	name = "ironman donut"
@@ -1046,10 +1058,13 @@
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(SPRINKLES, 1)
 	reagents.add_reagent(CHERRYJELLY, 5)
-	if(prob(30))
+	if(prob(frostchance))
 		icon_state = "jdonut2"
 		name = "Frosted Jelly Donut"
 		reagents.add_reagent(SPRINKLES, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/donut/cherryjelly/frosted
+	frostchance = 100
 
 /obj/item/weapon/reagent_containers/food/snacks/bagel
 	name = "bagel"
@@ -1901,10 +1916,12 @@
 	name = "plump pie"
 	desc = "I bet you love stuff made out of plump helmets!"
 	icon_state = "plump_pie"
+	var/exceptionalprob = 10
+
 /obj/item/weapon/reagent_containers/food/snacks/pie/plump_pie/New()
 	..()
 	reagents.clear_reagents()
-	if(prob(10))
+	if(prob(exceptionalprob))
 		name = "exceptional plump pie"
 		desc = "Microwave is taken by a fey mood! It has cooked an exceptional plump pie!"
 		reagents.add_reagent(NUTRIMENT, 8)
@@ -1913,6 +1930,9 @@
 	else
 		reagents.add_reagent(NUTRIMENT, 8)
 		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/pie/plump_pie/perfect
+	exceptionalprob = 100
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie
 	name = "Xeno-pie"
@@ -2017,13 +2037,15 @@
 	icon_state = "popcorn"
 	trash = /obj/item/trash/popcorn
 	var/unpopped = 0
+	var/unpopped_min = 1
+	var/unpopped_max = 10
 	filling_color = "#EFE5D4"
 	valid_utensils = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/popcorn/New()
 		..()
 		eatverb = pick("bite","crunch","nibble","gnaw","gobble","chomp")
-		unpopped = rand(1,10)
+		unpopped = rand(unpopped_min,unpopped_max)
 		reagents.add_reagent(NUTRIMENT, 2)
 		bitesize = 0.1 //this snack is supposed to be eating during looooong time. And this it not dinner food! --rastaf0
 
@@ -2032,6 +2054,11 @@
 		to_chat(usr, "<span class='warning'>You bite down on an un-popped kernel, and it hurts your teeth!</span>")
 		unpopped = max(0, unpopped-1)
 		reagents.add_reagent(SACID, 0.1) //only a little tingle.
+
+/obj/item/weapon/reagent_containers/food/snacks/popcorn/allpopped
+	desc = "Now let's find some pure kino. These ones seem evenly cooked to perfection."
+	unpopped_min = 0
+	unpopped_max = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/sosjerky
 	name = "\improper Scaredy's Private Reserve Beef Jerky"
@@ -2724,14 +2751,18 @@
 	crumb_icon = "dribbles"
 	filling_color = "#DEF7F5"
 	valid_utensils = UTENSILE_SPOON
+	var/wishprob = 25
 
 /obj/item/weapon/reagent_containers/food/snacks/wishsoup/New()
 	..()
 	reagents.add_reagent(WATER, 10)
 	bitesize = 5
-	if(prob(25))
+	if(prob(wishprob))
 		src.desc = "A wish come true!"
 		reagents.add_reagent(NUTRIMENT, 8)
+
+/obj/item/weapon/reagent_containers/food/snacks/wishsoup/perfect
+	wishprob = 100
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadosoup
 	name = "Avocado Soup"
@@ -3479,10 +3510,11 @@
 	desc = "This is a finely-prepared plump helmet biscuit. The ingredients are exceptionally minced plump helmet, and well-minced dwarven wheat flour."
 	icon_state = "phelmbiscuit"
 	food_flags = FOOD_DIPPABLE
+	var/exceptionalprob = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/plumphelmetbiscuit/New()
 	..()
-	if(prob(10))
+	if(prob(exceptionalprob))
 		name = "exceptional plump helmet biscuit"
 		desc = "Microwave is taken by a fey mood! It has cooked an exceptional plump helmet biscuit!"
 		reagents.add_reagent(NUTRIMENT, 8)
@@ -3491,6 +3523,9 @@
 	else
 		reagents.add_reagent(NUTRIMENT, 5)
 		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/plumphelmetbiscuit/perfect
+	exceptionalprob = 100
 
 /obj/item/weapon/reagent_containers/food/snacks/chawanmushi
 	name = "chawanmushi"
@@ -8130,11 +8165,12 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	crumb_icon = "dribbles"
 	filling_color = "#B38B26"
 	valid_utensils = UTENSILE_SPOON
+	var/abductionchance = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth/New()
 	..()
 	reagents.clear_reagents()
-	if(prob(10))
+	if(prob(abductionchance))
 		name = "Abducted Mothership Broth"
 		desc = "An unidentified microwave object has abducted your broth and made it slightly more nutritious!"
 		icon_state = "mothershipbroth_ufo"
@@ -8147,6 +8183,9 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		reagents.add_reagent(ZAMMILD, 5)
 		bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/mothershipbroth/abducted
+	abductionchance = 100
+
 /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth_spicy
 	name = "Mothership Spicy Broth"
 	desc = "A simple dish of mothership broth. Soothing, but not very nourishing. At least it's spicy."
@@ -8156,11 +8195,12 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	crumb_icon = "dribbles"
 	filling_color = "#D35A0D"
 	valid_utensils = UTENSILE_SPOON
+	var/abductionchance = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth_spicy/New()
 	..()
 	reagents.clear_reagents()
-	if(prob(10))
+	if(prob(abductionchance))
 		name = "Abducted Mothership Spicy Broth"
 		desc = "An unidentified microwave object has abducted your broth and made it slightly more nutritious!"
 		icon_state = "mothershipbroth_spicyufo"
@@ -8172,6 +8212,9 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		reagents.add_reagent(NUTRIMENT, 3)
 		reagents.add_reagent(ZAMSPICYTOXIN, 5)
 		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/mothershipbroth_spicy/abducted
+	abductionchance = 100
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesybroth
 	name = "Mothership Cheesy Broth"

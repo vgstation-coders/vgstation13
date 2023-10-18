@@ -7,6 +7,7 @@
 	volume = 100
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	slimeadd_message = "You attach the slime extract to SRCTAG's internal mechanisms"
 
 	var/draw_warnings = 1 // Set to 0 to stop it from drawing the alert lights.
 	var/tmp/update_icon_after_process = 0 // Will try to only call update_icon() when necessary.
@@ -406,11 +407,11 @@
 		return ..()
 
 /obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
-	..()
-	if(primarytype == /mob/living/carbon/slime/green)
-		has_slime=1
-		to_chat(user, "You attach the slime extract to \the [src]'s internal mechanisms.")
-		return TRUE
+	if(primarytype == SLIME_GREEN)
+		slimeadd_message += ", catching a faint whiff of clonexadone from them"
+	slimeadd_message += "."
+	. = ..()
+	slimeadd_message = initial(slimeadd_message)
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
 	if(harvest)

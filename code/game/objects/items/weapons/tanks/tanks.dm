@@ -14,6 +14,7 @@
 	throwforce = 10.0
 	throw_speed = 1
 	throw_range = 4
+	slimeadd_message = "You add the slime extract to the tank's nozzle."
 
 	var/datum/gas_mixture/air_contents = null
 	var/distribute_pressure = ONE_ATMOSPHERE
@@ -245,8 +246,10 @@
 		return 0
 
 	var/pressure = air_contents.return_pressure()
-
-	if(pressure > TANK_FRAGMENT_PRESSURE)
+	var/tank_fragment_threshold = TANK_FRAGMENT_PRESSURE
+	if(has_slimes & SLIME_OIL)
+		tank_fragment_threshold *= 0.9
+	if(pressure > tank_fragment_threshold)
 
 		if(!istype(src.loc,/obj/item/device/transfer_valve))
 			message_admins("Explosive tank rupture! last key to touch the tank was [src.fingerprintslast].")
@@ -257,7 +260,7 @@
 		air_contents.react()
 		air_contents.react()
 		pressure = air_contents.return_pressure()
-		var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
+		var/range = (pressure-tank_fragment_threshold)/TANK_FRAGMENT_SCALE
 		score.largest_TTV = max(score.largest_TTV, range)
 		if(range > MAX_EXPLOSION_RANGE)
 			cap = range

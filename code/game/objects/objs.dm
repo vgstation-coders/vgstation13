@@ -47,8 +47,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/impactsound
 	var/current_glue_state = GLUE_STATE_NONE
 
-	//Does this item have a slime installed?
-	var/has_slime = 0
+	//Does this item have slimes installed? Bitflag for each type.
+	var/has_slimes = 0
+	var/slimeadd_message = "You add the slime extract to SRCTAG."
 
 	var/on_armory_manifest = FALSE // Does this get included in the armory manifest paper?
 	var/holds_armory_items = FALSE // Does this check inside the object for stuff to include?
@@ -405,9 +406,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	return qdel(src)
 
 /obj/slime_act(primarytype, mob/user)
-	if(has_slime)
-		to_chat(user, "\the [src] already has a slime extract attached.")
+	if(has_slimes & primarytype)
+		to_chat(user, "\the [src] already has this kind of slime extract attached.")
 		return FALSE
+	has_slimes |= primarytype
+	slimeadd_message = replacetext(slimeadd_message,"SRCTAG","\the [src]")
+	to_chat(user, slimeadd_message)
+	return TRUE
 
 /obj/singularity_pull(S, current_size, repel = FALSE)
 	INVOKE_EVENT(src, /event/before_move)
