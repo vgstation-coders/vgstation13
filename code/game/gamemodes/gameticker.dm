@@ -654,7 +654,7 @@ var/datum/controller/gameticker/ticker
 /datum/controller/gameticker/proc/handle_lights() //This is used to turn on lights in occupied departments
 	var/list/lit_up_areas = list()
 	for(var/mob/living/player in player_list)
-		lit_up_areas += get_department_areas(player)
+		lit_up_areas |= get_department_areas(player)
 
 	for(var/obj/machinery/light_switch/LS in all_machines)
 		if(get_area(LS) in lit_up_areas)
