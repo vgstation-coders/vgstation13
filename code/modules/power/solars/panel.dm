@@ -28,8 +28,9 @@
 	var/mob/manual_user = null
 	var/starting_angle	//tracking the starting angle of a manual rotation for progress bar purposes
 	var/target_angle	//tracking the target angle of a manual rotation for progress bar purposes
-	var/pulse = 0.2
-	var/glow_intensity = 100
+
+	var/pulse = 0.2	//color matrix stuff
+	var/glow_intensity = 100	//max alpha of the glow when the panel is aligned with the star
 
 /obj/machinery/power/solar/panel/New(loc, var/obj/machinery/power/solar_assembly/S)
 	..(loc)
@@ -212,6 +213,11 @@
 			return
 	update_icon()
 
+/obj/machinery/power/solar/panel/initialize()
+	..()
+	update_solar_exposure()
+	update_icon()
+
 /obj/machinery/power/solar/panel/update_icon()
 	..()
 	underlays.len = 0
@@ -250,7 +256,10 @@
 	plane = ABOVE_LIGHTING_PLANE
 	layer = ABOVE_LIGHTING_LAYER
 
-	var/p_angle = abs((360 + adir) % 360 - (360 + sun.angle) % 360)
+	var/p_angle = abs(sun.angle - adir)
+
+	if (p_angle > 180)
+		p_angle = 360 - max(sun.angle, adir) + min(sun.angle, adir)
 
 	if(p_angle > 90)			//If facing more than 90deg from sun, zero output
 		sunfrac = 0
