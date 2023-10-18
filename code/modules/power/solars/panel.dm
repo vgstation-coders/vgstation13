@@ -34,6 +34,12 @@
 
 /obj/machinery/power/solar/panel/New(loc, var/obj/machinery/power/solar_assembly/S)
 	..(loc)
+	make(S)
+	update_icon()
+	//initialize() called by the parent New()
+
+/obj/machinery/power/solar/panel/initialize()
+	..()
 	base = image(icon, src, "sp_base")
 	base.appearance_flags = RESET_TRANSFORM|RESET_ALPHA|RESET_COLOR
 	base.plane = relative_plane(OBJ_PLANE)
@@ -43,15 +49,11 @@
 	var/matrix/glow_matrix = matrix()
 	glow.transform = glow_matrix.Scale(1.2)
 	transform = turn(matrix(), adir)
-	make(S)
-	initialize()
-
-/obj/machinery/power/solar/panel/initialize()
-	..()
 	if (sun)
-		sun.occlusion(src)
+		sun.occlusion(src)//calls update_solar_exposure and update_icon
+	else
 		update_solar_exposure()
-	update_icon()
+		update_icon()
 
 /obj/machinery/power/solar/panel/Destroy()
 	manual_user = null//just to be sure
@@ -70,7 +72,6 @@
 		maxHealth = initial(G.shealth)
 		health = initial(G.shealth)
 	solar_assembly.forceMove(src)
-	update_icon()
 
 /obj/machinery/power/solar/panel/attack_hand(var/mob/user)
 	to_chat(user,"<span class='info'>You could disassemble the panel with a crowbar, or manually adjust its rotation with a wrench.</span>")
@@ -222,15 +223,17 @@
 /obj/machinery/power/solar/panel/update_icon()
 	..()
 	underlays.len = 0
+	base.plane = relative_plane(OBJ_PLANE)
 	underlays += base
 	if(!tracker)
-		var/obj/item/stack/sheet/glass/G = solar_assembly.glass_type
-		var/panel = "solar_panel_" + initial(G.sname)
-		if(stat & BROKEN)
-			panel += "-b"
-		else if (health < maxHealth)
-			panel += "-d"//damaged panels generate less power so we might as well help players notice those
-		icon_state = panel
+		if (solar_assembly)
+			var/obj/item/stack/sheet/glass/G = solar_assembly.glass_type
+			var/panel = "solar_panel_" + initial(G.sname)
+			if(stat & BROKEN)
+				panel += "-b"
+			else if (health < maxHealth)
+				panel += "-d"//damaged panels generate less power so we might as well help players notice those
+			icon_state = panel
 
 		var/illumination = (pulse * sunfrac * max(0,health/maxHealth)) - (pulse/2)
 		animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,illumination,illumination,illumination,0), transform = turn(matrix(), adir), time = 20)
@@ -246,7 +249,7 @@
 
 /obj/machinery/power/solar/panel/proc/update_solar_exposure()
 	if(!sun)
-		return
+		obscured = 1
 
 	if(obscured)
 		sunfrac = 0
