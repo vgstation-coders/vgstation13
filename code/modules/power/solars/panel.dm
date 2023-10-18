@@ -194,7 +194,7 @@
 	if(stat & BROKEN)
 		return
 
-	if(control)
+	if(control && !(control.stat & (NOPOWER | BROKEN | FORCEDISABLE)))
 		panel_rotation(ndir, rotation_speed)//automatic panel rotation only occurs when connected to a solar panel control computer
 
 	if(obscured)
