@@ -406,7 +406,7 @@ var/global/objects_thrown_when_explode = FALSE
 			if(!user.put_in_hand_check(src, user.get_active_hand()))
 				return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
-		if(!canremove)
+		if(!canremove && user.is_wearing_item(src))
 			to_chat(user, "<span class='notice'>\The [src][cant_remove_msg]</span>")
 			return
 
