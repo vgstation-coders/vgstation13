@@ -47,7 +47,8 @@
 	/obj/item/clothing/under/vault13,
 	list(/obj/item/clothing/head/leather/xeno, /obj/item/clothing/suit/leather/xeno),
 	/obj/item/clothing/accessory/rabbit_foot,
-	/obj/item/clothing/accessory/wristwatch/black
+	/obj/item/clothing/accessory/wristwatch/black,
+	/obj/item/clothing/mask/gentling
 	)
 
 /obj/structure/closet/secure_closet/wonderful/spawn_contents()
