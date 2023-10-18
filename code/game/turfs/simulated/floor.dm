@@ -200,9 +200,8 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	else if(is_mineral_floor())
 		if(!broken && !burnt)
 			icon_state = floor_tile.material
-	if(twinkles)
+	if(should_twinkle())
 		if(burnt||broken)
-			twinkles = FALSE
 			end_twinkling()
 		else
 			begin_twinkling()
@@ -343,6 +342,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			return
 
 		src.icon_state = "[material]_broken"
+		update_icon()
 
 /turf/simulated/floor/proc/burn_tile()
 	if(istype(src,/turf/simulated/floor/engine))
@@ -405,6 +405,8 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		if(I.level == LEVEL_BELOW_FLOOR && !istype(I,/obj/item/projectile))
 			I.hide(intact)
 	update_icon()
+	if(is_twinkling())
+		end_twinkling()
 	levelupdate()
 
 //This proc will make the turf from a floor tile. The expected argument is the tile to make the turf with
@@ -415,7 +417,6 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		QDEL_NULL(floor_tile)
 	floor_tile = new T.type(null)
 	material = floor_tile.material
-	twinkles = T.twinkles
 	//Becomes a teleport destination for other phazon tiles
 	if(material=="phazon")
 		phazontiles += src
@@ -642,3 +643,9 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		current_slowdown = floor_tile.adjust_slowdown(L, current_slowdown)
 
 	return ..()
+
+/turf/simulated/floor/should_twinkle()
+	if(floor_tile.material == "gold"||floor_tile.material == "diamond"||floor_tile.material=="silver")
+		return TRUE
+	else
+		return FALSE

@@ -186,9 +186,13 @@
 	..()
 	if(density)
 		icon_state = "[mineral]0"
+		if(should_twinkle())
+			begin_twinkling()
 		src.relativewall()
 	else
 		icon_state = "[mineral]fwall_open"
+		if(should_twinkle() && is_twinkling())
+			end_twinkling()
 
 /obj/structure/falsewall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opening)
@@ -425,18 +429,25 @@
 	desc = "A wall with gold plating. Swag!"
 	icon_state = ""
 	mineral = "gold"
+/obj/structure/falsewall/gold/should_twinkle()
+	return TRUE
 
 /obj/structure/falsewall/silver
 	name = "silver wall"
 	desc = "A wall with silver plating. Shiny."
 	icon_state = ""
 	mineral = "silver"
+/obj/structure/falsewall/silver/should_twinkle()
+	return TRUE
+
 
 /obj/structure/falsewall/diamond
 	name = "diamond wall"
 	desc = "A wall with diamond plating. You monster."
 	icon_state = ""
 	mineral = "diamond"
+/obj/structure/falsewall/diamond/should_twinkle()
+	return TRUE
 
 /obj/structure/falsewall/plasma
 	name = "plasma wall"

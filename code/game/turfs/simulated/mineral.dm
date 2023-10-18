@@ -20,7 +20,6 @@
 /turf/simulated/floor/mineral/gold
 	name = "gold floor"
 	icon_state = "gold"
-	twinkles = TRUE
 
 /turf/simulated/floor/mineral/gold/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/gold(null)
@@ -30,7 +29,6 @@
 /turf/simulated/floor/mineral/silver
 	name = "silver floor"
 	icon_state = "silver"
-	twinkles = TRUE
 
 /turf/simulated/floor/mineral/silver/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/silver(null)
@@ -49,7 +47,6 @@
 /turf/simulated/floor/mineral/diamond
 	name = "diamond floor"
 	icon_state = "diamond"
-	twinkles = TRUE
 
 /turf/simulated/floor/mineral/diamond/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/mineral/diamond(null)

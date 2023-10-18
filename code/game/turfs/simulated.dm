@@ -12,7 +12,6 @@
 	var/datum/custom_painting/advanced_graffiti
 	var/icon/advanced_graffiti_overlay
 	var/twinkles = FALSE //a check for a twinkling animation that plays for mineral turf overlays
-	var/twinkle_overlay = null
 
 /turf/simulated/proc/render_advanced_graffiti(var/mob/user)
 	if (!advanced_graffiti)
@@ -112,13 +111,6 @@
 		this.blood_DNA["UNKNOWN BLOOD"] = "X*"
 	else if( istype(M, /mob/living/silicon/robot ))
 		new /obj/effect/decal/cleanable/blood/oil(src)
-
-/turf/simulated/proc/begin_twinkling()
-	twinkle_overlay = image('icons/turf/overlays.dmi',"twinkle_overlay")
-	overlays+=twinkle_overlay
-
-/turf/simulated/proc/end_twinkling()
-	overlays-=twinkle_overlay
 
 /turf/simulated/update_icon()
 	if(twinkles)

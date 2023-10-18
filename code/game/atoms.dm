@@ -42,6 +42,7 @@ var/global/list/ghdel_profiling = list()
 	var/list/last_beamchecks // timings for beam checks.
 	var/ignoreinvert = 0
 	var/timestopped
+	var/twinkle_overlay = null
 
 	appearance_flags = TILE_BOUND|LONG_GLIDE|TILE_MOVER
 
@@ -1047,4 +1048,23 @@ its easier to just keep the beam vertical.
 /atom/proc/is_blood_stained()
 	if (blood_color && blood_DNA && blood_DNA.len)
 		return TRUE
+	return FALSE
+
+/atom/proc/begin_twinkling()
+	if(!is_twinkling()) //prevent duplication
+		twinkle_overlay = image('icons/turf/overlays.dmi',"twinkle_overlay")
+		overlays+=twinkle_overlay
+
+/atom/proc/end_twinkling()
+	if(is_twinkling())
+		overlays -= twinkle_overlay
+		twinkle_overlay = null
+
+/atom/proc/is_twinkling()
+	if(twinkle_overlay in overlays)
+		return TRUE
+	else
+		return FALSE
+
+/atom/proc/should_twinkle()
 	return FALSE

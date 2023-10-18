@@ -32,6 +32,8 @@
 	var/turf/simulated/open/OS = GetAbove(src)
 	if(istype(OS))
 		OS.ChangeTurf(/turf/simulated/floor/plating)
+	if(should_twinkle())
+		begin_twinkling()
 
 /turf/simulated/wall/canSmoothWith()
 	var/static/list/smoothables = list(

@@ -25,8 +25,6 @@ var/list/all_doors = list()
 	var/autoclose = 0
 	var/glass = 0
 	var/normalspeed = 1
-	var/twinkles = FALSE
-	var/twinkle_overlay = null
 	pass_flags_self = PASSDOOR
 	machine_flags = SCREWTOGGLE
 
@@ -261,8 +259,12 @@ var/list/all_doors = list()
 /obj/machinery/door/update_icon()
 	if(!density)
 		icon_state = "[prefix]door_open"
+		if(should_twinkle()&&is_twinkling())
+			end_twinkling()
 	else
 		icon_state = "[prefix]door_closed"
+		if(should_twinkle())
+			begin_twinkling()
 
 
 /obj/machinery/door/proc/open()
@@ -294,8 +296,6 @@ var/list/all_doors = list()
 	plane = open_plane
 	layer = open_layer
 	setDensity(FALSE)
-	if(twinkles)
-		end_twinkling()
 	update_nearby_tiles()
 	if (animation_delay_predensity_opening)
 		sleep(animation_delay - animation_delay_predensity_opening)
@@ -341,8 +341,6 @@ var/list/all_doors = list()
 		sleep(animation_delay_predensity_closing)
 
 	setDensity(TRUE)
-	if(twinkles)
-		begin_twinkling()
 	update_nearby_tiles()
 
 	if (!glass)
@@ -376,7 +374,7 @@ var/list/all_doors = list()
 		// above most items if closed
 		plane = closed_plane
 		layer = closed_layer
-	if(twinkles&&density)
+	if(should_twinkle() && density)
 		begin_twinkling()
 	else
 		plane = open_plane
@@ -530,14 +528,6 @@ var/list/all_doors = list()
 		playsound(loc, 'sound/machines/denied.ogg', 50, 1)
 	if (density) //Why are we playing a denied animation on an OPEN DOOR
 		door_animate("deny")
-
-/obj/machinery/door/proc/begin_twinkling()
-	twinkle_overlay = image('icons/turf/overlays.dmi',"twinkle_overlay")
-	overlays+=twinkle_overlay
-
-/obj/machinery/door/proc/end_twinkling()
-	overlays-=twinkle_overlay
-
 
 /obj/machinery/door/morgue
 	icon = 'icons/obj/doors/morgue.dmi'

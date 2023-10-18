@@ -67,9 +67,11 @@
 	icon_state = "gold0"
 	walltype = "gold"
 	mineral = "gold"
-	twinkles = TRUE
 	//var/electro = 1
 	//var/shocked = null
+
+/turf/simulated/wall/mineral/gold/should_twinkle()
+	return TRUE
 
 /turf/simulated/wall/mineral/silver
 	name = "silver wall"
@@ -77,9 +79,11 @@
 	icon_state = "silver0"
 	walltype = "silver"
 	mineral = "silver"
-	twinkles = TRUE
 	//var/electro = 0.75
 	//var/shocked = null
+
+/turf/simulated/wall/mineral/silver/should_twinkle()
+	return TRUE
 
 /turf/simulated/wall/mineral/diamond
 	name = "diamond wall"
@@ -88,7 +92,9 @@
 	walltype = "diamond"
 	mineral = "diamond"
 	explosion_block = 3
-	twinkles = TRUE
+
+/turf/simulated/wall/mineral/diamond/should_twinkle()
+	return TRUE
 
 /turf/simulated/wall/mineral/clown
 	name = "bananium wall"
