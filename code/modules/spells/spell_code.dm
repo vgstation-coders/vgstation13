@@ -426,7 +426,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			return 0
 
 	//gentling check
-	if(((user_type == USER_TYPE_WIZARD) && (holder == user))
+	if((user_type == USER_TYPE_WIZARD) && (holder == user))
 		if(user.is_gentled())
 			return 0
 
