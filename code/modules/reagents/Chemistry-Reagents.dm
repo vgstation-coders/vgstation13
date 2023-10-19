@@ -1159,8 +1159,6 @@
 		if(25 to 240)
 			M.Paralyse(20)
 			M.drowsyness  = max(M.drowsyness, 30)
-		if(240 to INFINITY)
-			M.drowsyness = max(M.drowsyness, 5)
 
 /datum/reagent/srejuvenate
 	name = "Soporific Rejuvenant"
