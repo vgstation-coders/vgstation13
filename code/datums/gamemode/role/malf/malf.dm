@@ -101,7 +101,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 /datum/role/malfAI/StatPanel()
 	stat(null, text("APCs hacked: [apcs.len]"))
 	stat(null, text("APC hack limit: [currently_hacking_apcs.len]/[apc_hacklimit]"))
-	stat(null, text("Machine hack limit: [currently_hacking_machines.len]/[apcs.len]")) //Machine limit is equal to APCs hacked
+	stat(null, text("Machine hack limit: [currently_hacking_machines.len]/[apcs.len + 1]")) //Machine limit is equal to APCs hacked, and +1 from innate malf AI hacking slot
 	stat(null, text("Processing power per minute: [apcs.len * apc_process_power * 30]")) // 0.03 * 30 (process ticks, a tick is ~2 seconds)
 
 ////////////////////////////////////////////////

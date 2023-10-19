@@ -1177,6 +1177,8 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10),PLASMA = list(3,5))
+	gas_absorb = 1
+	consume_gasses = list(GAS_PLASMA = 10)
 
 	lifespan = 30
 	maturation = 3

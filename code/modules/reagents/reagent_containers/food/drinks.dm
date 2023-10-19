@@ -38,6 +38,7 @@
 	var/atom/movable/overlay/flipping = null
 
 /obj/item/weapon/reagent_containers/food/drinks/on_reagent_change()
+	..()
 	if(gulp_size < 5)
 		gulp_size = 5
 	else
@@ -161,8 +162,6 @@
 				playsound(loc,'sound/effects/slap2.ogg', 10, 1, -2)
 
 /obj/item/weapon/reagent_containers/food/drinks/attack(mob/living/M as mob, mob/user as mob, def_zone)
-	var/datum/reagents/R = src.reagents
-	var/fillevel = gulp_size
 
 	//Smashing on someone
 	if(user.a_intent == I_HURT && isGlass && molotov != 1)  //To smash a bottle on someone, the user must be harm intent, the bottle must be out of glass, and we don't want a rag in here
@@ -256,7 +255,7 @@
 
 		return 0
 
-	else if(!R.total_volume || !R)
+	else if(!reagents?.total_volume)
 		to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
 		return 0
 
@@ -299,9 +298,9 @@
 		if(isrobot(user)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
 			var/mob/living/silicon/robot/bro = user
 			bro.cell.use(30)
-			var/refill = R.get_master_reagent_id()
+			var/refill = reagents.get_master_reagent_id()
 			spawn(600)
-				R.add_reagent(refill, fillevel)
+				reagents.add_reagent(refill, gulp_size)
 
 		playsound(M.loc,'sound/items/drink.ogg', rand(10,50), 1)
 		return 1
@@ -352,6 +351,28 @@
 /obj/item/weapon/reagent_containers/food/drinks/New()
 	..()
 	base_icon_state = icon_state
+
+/obj/item/weapon/reagent_containers/food/drinks/attack_ghost(mob/dead/observer/user)
+	if(!src || !user)
+		return
+	if(get_dist(src, user) > 1)
+		return
+	if(reagents?.has_reagent(ECTOPLASM))
+		if(!is_open_container())
+			to_chat(user, "<span class='warning'>You can't, [src] is closed.</span>")
+			return
+
+		else if(!reagents?.total_volume)
+			to_chat(user, "<span class='warning'>[src] is empty.<span>")
+			return
+
+		else
+			//user.delayNextAttack(1 SECONDS) Since humans can rapid-drink, we'll leave this commented out for now.
+			to_chat(user, "<span  class='notice'>You swallow a gulp of [src].</span>")
+			reagents.remove_any(gulp_size)
+			playsound(user.loc,'sound/items/drink_ghost.ogg', rand(10,50), 1)
+	else
+		to_chat(user, "<span class='notice'>You pass right through [src].</span>")
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Drinks. END
@@ -1022,6 +1043,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/sillycup/on_reagent_change()
+	..()
 	if(reagents.total_volume)
 		icon_state = "water_cup"
 	else
@@ -1446,6 +1468,7 @@
 	starting_materials = list(MAT_IRON = 500)
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/on_reagent_change()
+	..()
 	if (reagents.reagent_list.len > 0)
 		mug_reagent_overlay()
 	else

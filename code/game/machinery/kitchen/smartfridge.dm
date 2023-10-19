@@ -261,7 +261,7 @@
 	icon_state = "bloodbank"
 	icon_on = "bloodbank"
 
-	accepted_types = list(/obj/item/weapon/reagent_containers/blood)	
+	accepted_types = list(/obj/item/weapon/reagent_containers/blood)
 
 /obj/machinery/smartfridge/bloodbank/New()
 	. = ..()
@@ -560,6 +560,9 @@
 	if(!istype(mover))
 		return !anchored
 	return ..()
+
+/obj/machinery/smartfridge/get_heat_conductivity()
+	return HEAT_CONDUCTIVITY_REFRIGERATOR
 
 #undef MAX_SHELVES
 #undef MINIICONS_ON

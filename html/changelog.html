@@ -73,6 +73,90 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2023.10.03</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Better eye emitter damage logging.</li>
+			</ul>
+			<h3 class="author">Hinaichigo updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Campfires, wood stoves, and fireplaces can be re-lit after being extinguished.</li>
+				<li class="rscadd">Wood can be added to burnt out campfires to make them usable again.</li>
+				<li class="rscadd">Added message for using a too-dull blade when trying to de-hair skin for leathermaking.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a 2 year old bug where shooting a window (and breaking that window) while you were standing on the same tile as it would hit you with the projectile you fired.</li>
+			</ul>
+			<h3 class="author">gheritt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Makes those with detached brains undefibable.</li>
+				<li class="bugfix">Fixed snackbars being uncreateable.</li>
+				<li class="bugfix">Fixes slime person cloning</li>
+				<li class="bugfix">Lets pill bottles be melted by swiss army knives in lighter mode.</li>
+			</ul>
+			<h3 class="author">pedr69 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">a new braindamage keeper has been added</li>
+			</ul>
+			<h2 class="date">2023.09.28</h2>
+			<h3 class="author">gheritt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Made railings rotatable.</li>
+				<li class="bugfix">Fixed vox gassing alert.</li>
+				<li class="tweak">Advanced lung buffs.</li>
+				<li class="bugfix">Fixed breathing hot air messages.</li>
+			</ul>
+			<h2 class="date">2023.09.25</h2>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Catbeasts will now properly generate a maximum of 15 threat points out of surviving rather than 14 threat points.</li>
+				<li class="bugfix">Fixed a bug where catbeasts could prevent the announcement that announced them by hiding in a locker, which previously considered them &#34;not on the station&#34; for the purpose of whether the announcement should run.</li>
+			</ul>
+			<h2 class="date">2023.09.24</h2>
+			<h3 class="author">gheritt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed plasma gas not being toxic to vox lungs.</li>
+			</ul>
+			<h2 class="date">2023.09.23</h2>
+			<h3 class="author">gheritt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">This adds the ability to filter books in the library by multiple categories, as well as to sort them by Title, Author, and Category.</li>
+			</ul>
+			<h2 class="date">2023.09.22</h2>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed the plasma suit mod being able to be applied to suits that are already sealed</li>
+				<li class="rscadd">rigsuit mods can now use custom install conditions</li>
+			</ul>
+			<h3 class="author">Hinaichigo updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Made item kicking arc have a lower zenith.</li>
+				<li class="tweak">Changed item kicking sound.</li>
+				<li class="bugfix">Frying pans can be removed from barrels.</li>
+				<li class="bugfix">Wooden table parts are made of wood.</li>
+				<li class="rscadd">Ghosts can drink from ectoplasm-containing drinks.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Malfunctioning AIs should now properly see their stats. The issue was that the code that added the stats was not being called, and the code that called it was instead human-exclusive. Now the code checks at all living mobs rather than just humans, which includes silicons.</li>
+				<li class="bugfix">&#34;Machine hack limit&#34; status in the Malfunctioning AI&#39;s status bar will now properly reflect on the AI&#39;s innate hacking limit of 1, rather than starting off as &#34;0/0&#34;.</li>
+				<li class="bugfix">The following Wizard spells can no longer use the floor as a target (in which case they had no effect and put the spell on cooldown): Buttbot&#39;s Revenge/Arse Nath, Flesh to Stone, Blind, Heal, Ice Barrage, Wrap.</li>
+				<li class="bugfix">The Wizard&#39;s &#34;Teleport&#34; spell will no longer go on cooldown if it is cancelled.</li>
+				<li class="rscadd">Malfunctioning AIs now once again have access to an upgrade that rigs them to explode if they are deactivated, with a significant blast radius.</li>
+				<li class="rscadd">Malfunctioning AIs with certain graphics displayed on their cores (Override and Xerxes) will now play unique audio upon activating System Override.</li>
+				<li class="bugfix">Fixed a bug where late-join rulesets (the prompt you may get to become an antagonist if you spawn in the game during the round) did not refund their Dynamic threat cost if the candidate refused to become an antagonist.</li>
+				<li class="rscadd">There is a new round-end credits song that plays when a Malfunctioning AI wins.</li>
+			</ul>
+			<h3 class="author">gheritt updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Added chair clapping.</li>
+			</ul>
+			<h2 class="date">2023.09.21</h2>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Ghosts can make candles flicker via mouseclick or Boo!</li>
+			</ul>
 			<h2 class="date">2023.09.17</h2>
 			<h3 class="author">gheritt updated:</h3>
 			<ul class="changes bgimages16">
@@ -2061,126 +2145,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="rscadd">A fireaxe can now be combined with a Halligan bar to form a set of irons which allows for easy transport.</li>
 				<li class="rscadd">A fireaxe can now be used in conjunction with a Halligan bar to open a bolted door.</li>
 				<li class="rscadd">Burning objects now emit smoke.</li>
-			</ul>
-			<h2 class="date">2022.10.02</h2>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="spellcheck">truely -&gt; truly</li>
-			</ul>
-			<h3 class="author">Optimism333 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Gym rats with clients in them won&#39;t freak out and spout aggro lines any longer</li>
-				<li class="rscadd">Gym rats can scavenge in disposal units or microwaves every 15 seconds to try to find meat or cheese scraps</li>
-				<li class="rscadd">Gym rats can eat ANY meaty dish, not just raw meat</li>
-				<li class="rscadd">Gym rats now have a &#34;How 2 Gainz&#34; verb that gives them some helpful info on how to get started</li>
-				<li class="tweak">Gym rats and Roid rats heal a little more from eating cheese wedges and wheels</li>
-				<li class="tweak">Gym rats and Roid rats have slightly higher max health caps. More gainz!</li>
-			</ul>
-			<h2 class="date">2022.09.30</h2>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Replaced the windoors on the hobo shack with a ghetto airlock made with towercap log doors.</li>
-			</ul>
-			<h3 class="author">PrimeDSS13 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Hopefully lowered how much midround blob rolls.</li>
-			</ul>
-			<h3 class="author">adacovsk updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed fish runtimes</li>
-				<li class="rscadd">Hologram projector devices now exist, get your very own holoperson! Talk to R&amp;D and see if you can get a projector!</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Maracas can no longer be emagged.</li>
-				<li class="soundadd">Maracas now play a familiar tune before exploding.</li>
-				<li class="tweak">The explosive power of explosive maracas has been drastically increased.</li>
-				<li class="tweak">Wearing the Championship Belt and the Luchador Mask at the same time will now significantly increase your unarmed damage and tackle power.</li>
-			</ul>
-			<h3 class="author">ebakai updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="experiment">Nanotrasen&#39;s pharmaceutical division is asking for volunteers to test the effects of simpolinol on complex sentient lifeforms</li>
-			</ul>
-			<h3 class="author">kacurasuo updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The AI can no longer nullspace defibs from the charger.</li>
-				<li class="bugfix">Fixes issues with initializing reactions where defined lists are the first reacting component.</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Dead people and observers can no longer trigger the briefcase full of bees.</li>
-				<li class="bugfix">AI eyes should now show up in the observer&#39;s Haunt list.</li>
-			</ul>
-			<h3 class="author">pedr69 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">upgraded chemmasters now properly dispense larger bottles, instead of just upgrading the label</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Hacked lotto vendors will now throw unprinted tickets instead of paper.</li>
-				<li class="bugfix">Hacked lotto vendors will no longer throw entire stacks of things when hacked.</li>
-				<li class="tweak">Removed metal autoignition.</li>
-				<li class="bugfix">Removes a fire runtime.</li>
-			</ul>
-			<h2 class="date">2022.09.29</h2>
-			<h3 class="author">GeneralVeers25 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Roidstation: Fixes a misplaced airlock in Medbay and rock wall in Atmos.</li>
-			</ul>
-			<h2 class="date">2022.09.28</h2>
-			<h3 class="author">GeneralVeers25 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Roidstation: Now has a new AI Core, Upload, and re-arranged TEG Engine.</li>
-				<li class="bugfix">Fixed a lot of missing wires.</li>
-			</ul>
-			<h3 class="author">kernikov updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Bagel: New ATM just outside Cargo to the east.</li>
-				<li class="bugfix">Bagel: Atmos freezer and heater piping conflict fixed, extra pipe removed.</li>
-				<li class="bugfix">Bagel: Duplicate switches/lights/cameras removed from Engineering Secure storage.</li>
-			</ul>
-			<h2 class="date">2022.09.27</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed newly arisen photography issues with objects not facing the right way.</li>
-			</ul>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Log doors can also be made using towercap logs.</li>
-				<li class="bugfix">Log doors no longer give 2x the logs you used to make it when disassembled.</li>
-				<li class="rscadd">You can buy dan sauce bottles for 25 credits and a coin in your nearest Discount Dan&#39;s vending machine.</li>
-			</ul>
-			<h3 class="author">kernikov updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Traders given a small EEL engine for power.</li>
-				<li class="tweak">Trader SMES no longer has infinite charge.</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Pepper spray no longer requires a bodypart to be targeted to work.</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added autoignition temperatures for many items.</li>
-			</ul>
-			<h2 class="date">2022.09.25</h2>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The powercreep packet&#39;s initial animation now displays properly.</li>
-				<li class="bugfix">Powercreepers will now correctly layer above piping devices such as vents/scrubbers, as well as structures such as tables.</li>
-			</ul>
-			<h3 class="author">pedr69 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">dansauce packets now look like packets and not condiment bottles</li>
-			</ul>
-			<h2 class="date">2022.09.24</h2>
-			<h3 class="author">Hinaichigo updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added more info to grue Drain Light ability description.</li>
-			</ul>
-			<h3 class="author">kacurasuo updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Flatpacks are now as upgraded as the source machine.</li>
 			</ul>
 		</div>
 		<!--

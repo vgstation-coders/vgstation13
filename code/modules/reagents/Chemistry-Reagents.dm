@@ -762,7 +762,7 @@
 			cube.Expand()
 	else if(istype(O,/obj/machinery/space_heater/campfire))
 		var/obj/machinery/space_heater/campfire/campfire = O
-		campfire.snuff()
+		campfire.putOutFire()
 	else if(istype(O, /obj/item/weapon/book/manual/snow))
 		var/obj/item/weapon/book/manual/snow/S = O
 		S.trigger()
@@ -6006,6 +6006,38 @@ var/procizine_tolerance = 0
 			H.heal_organ_damage(1, 1)
 			H.nutrition += nutriment_factor //Double nutrition
 
+/datum/reagent/blobanine
+	name = "Blobanine"
+	id = BLOBANINE
+	description = "An oily, green substance extracted from a blob."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#81EB00"
+
+/datum/reagent/blobanine/on_mob_life(var/mob/living/M)
+	if (..() || !ishuman(M))
+		return
+	var/mob/living/carbon/human/H = M
+	change_eye_color_to_green(H)
+
+/datum/reagent/blobanine/proc/change_eye_color_to_green(var/mob/living/carbon/human/H)
+	var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+	if (!E)
+		return
+	H.my_appearance.r_eyes = 129
+	H.my_appearance.g_eyes = 235
+	H.my_appearance.b_eyes = 0
+	H.update_body()
+
+/datum/reagent/blob_essence
+	name = "Blob Essence"
+	id = BLOB_ESSENCE
+	description = "A thick, transparent liquid extracted from live blob cores."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFD6A0"
+
+/datum/reagent/blob_essence/on_mob_life(var/mob/living/M)
+	if (..() || !ishuman(M))
+		return
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum//////////
@@ -8319,6 +8351,63 @@ var/procizine_tolerance = 0
 	glass_icon_state = "grogglass"
 	glass_desc = "The favorite of pirates everywhere."
 
+/datum/reagent/ethanol/drink/evoluator
+	name = "Evoluator"
+	id = EVOLUATOR
+	description = "Blobs that come into contact with oxygen really do evoluate."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = BLOB_MEAT
+	glass_icon_state = "evoluatorglass"
+	glass_desc = "Blob evoluated with oxigen. Prickly!"
+
+/datum/reagent/ethanol/drink/blob_beer
+	name = "Blob beer"
+	id = BLOBBEER
+	description = "Enzymes in the blob, when under heat, entered a state of rapid fermentation. The result was this beverage."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = BLOB_MEAT
+	glass_icon_state = "blobbeerglass"
+	glass_desc = "Acidic beer with a grand foam head. Subtle hints of apple."
+
+/datum/reagent/ethanol/drink/liberator
+	name = "Liberator"
+	id = LIBERATOR
+	description = "Fruit juice and liquors balancing the blob's overwhelming taste."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = DEFAULT_BLOOD
+	glass_icon_state = "liberatorglass"
+	glass_desc = "Fruity and strong, for when you need a quick recharge."
+
+/datum/reagent/ethanol/drink/spore
+	name = "Spore"
+	id = SPORE
+	description = "The special properties of karmotrine combined with blobanine create a disgusting but interesting drink."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = BLOB_MEAT
+	custom_metabolism = 0.1
+	glass_icon_state = "sporeglass"
+	glass_desc = "A tasteless drink with an almost unbearable aftertaste."
+
+/datum/reagent/ethanol/drink/spore/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	for(var/spell/S in M.spell_list)
+		if (istype(S, /spell/aoe_turf/conjure/spore))
+			return
+	var/spell/aoe_turf/conjure/spore/summon_spore = new()
+	summon_spore.charge_counter = 0 // Spell starts on cooldown
+	summon_spore.process()
+	M.add_spell(summon_spore)
+
+/datum/reagent/ethanol/drink/spore/on_removal(var/amount)
+	if (!iscarbon(src.holder.my_atom) || (max(0, src.volume - amount) >= 1))
+		return TRUE
+
+	var/mob/living/carbon/M = holder.my_atom
+	for(var/spell/aoe_turf/conjure/spore/S in M.spell_list)
+		M.remove_spell(S)
+	return TRUE
+
 /datum/reagent/ethanol/drink/aloe
 	name = "Aloe"
 	id = ALOE
@@ -8955,7 +9044,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/drink/coffee/engicoffee/on_mob_life(var/mob/living/M)
 	..()
 	M.hallucination = 0
-	M.reagents.add_reagent (HYRONALIN, 0.1)
+	M.reagents.add_reagent (HYRONALIN, 0.05)
 
 /datum/reagent/drink/coffee/medcoffee
 	name = "Lifeline"

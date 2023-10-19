@@ -194,6 +194,16 @@
 		var/mob/living/M = hit_atom
 		if(ishuman(M)) //if they're a human species
 			var/mob/living/carbon/human/H = M
+			if(!H.check_stand_ability()) //Target has no legs, how is this going to trip them up?
+				throw_failed()
+				return
+			var/leg_count //If one-legged, will halve the chance of getting caught by bolas
+			for(var/datum/organ/external/leg in H.get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
+				leg_count++
+			if(!prob(50*leg_count))
+				H.visible_message("<span class='borange'>The bolas miss [H]!</span>", "<span class='borange'>The bolas miss you!</span>")
+				throw_failed()
+				return
 			if(H.m_intent == "run") //if they're set to run (though not necessarily running at that moment)
 				if(prob(trip_prob)) //this probability is up for change and mostly a placeholder - Comic
 					step(H, H.dir)

@@ -150,7 +150,7 @@
 	if (B.sources.len >= 1 && (isliving(B.sources[1])))
 		var/mob/living/assailant = B.sources[1]
 		if (assailant.ckey || src.ckey)
-			log_attack("<font color='red'>[assailant.name][assailant.ckey ? "([assailant.ckey])" : "(no key)"] attacked [src.name][src.ckey ? "([src.ckey])" : "(no key)"] with [B.name]</font>")
+			log_attack("<font color='red'>[assailant.name][assailant.ckey ? "([assailant.ckey])" : "(no key)"] attacked [src.name][src.ckey ? "([src.ckey])" : "(no key)"] with [B.name] ([damage] damage)</font>")
 
 	// Update check time.
 	last_beamchecks["\ref[B]"]=world.time
@@ -1220,6 +1220,9 @@ Thanks.
 /mob/living/proc/has_brain()
 	return 1
 
+/mob/living/proc/has_attached_brain()
+	return 1
+
 /mob/living/proc/has_eyes()
 	return 1
 
@@ -1919,3 +1922,11 @@ Thanks.
 	if(B.host_brain.ckey)
 		to_chat(src, "<span class='danger'>You send a punishing spike of psychic agony lancing into your host's brain.</span>")
 		to_chat(B.host_brain, "<span class='danger'><FONT size=3>Horrific, burning agony lances through you, ripping a soundless scream from your trapped mind!</FONT></span>")
+
+/mob/living/Stat()
+	..()
+	if(statpanel("Status"))
+		if(mind)
+			for(var/role in mind.antag_roles)
+				var/datum/role/R = mind.antag_roles[role]
+				stat(R.StatPanel())
