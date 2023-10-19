@@ -35,7 +35,9 @@ var/global/datum/sun/sun
 		var/obj/machinery/power/solar/panel/tracker/T
 		for(T in solars_list)
 			if(T.powernet)
-				T.set_angle(angle)
+				occlusion(T)
+				if (!T.obscured)
+					T.set_angle(angle)
 		lastAngle = angle
 
 	if(world.time < nextTime)

@@ -44,7 +44,7 @@
 	base.appearance_flags = RESET_TRANSFORM|RESET_ALPHA|RESET_COLOR
 	base.plane = relative_plane(OBJ_PLANE)
 	underlays += base
-	glow = image(icon, src, "solar_glow")
+	glow = image(icon, src, "solar_glow[tracker]")
 	glow.blend_mode = BLEND_ADD
 	var/matrix/glow_matrix = matrix()
 	glow.transform = glow_matrix.Scale(1.2)
@@ -223,7 +223,6 @@
 /obj/machinery/power/solar/panel/update_icon()
 	..()
 	underlays.len = 0
-	base.plane = relative_plane(OBJ_PLANE)
 	underlays += base
 	if(!tracker)
 		if (solar_assembly)
@@ -243,9 +242,17 @@
 			glow.alpha = sunfrac * max(0,health/maxHealth) * glow_intensity
 			overlays += glow
 	else
+		overlays.len = 0
 		icon_state = "tracker"
 		if(stat & BROKEN)
 			icon_state += "-b"
+		else if(obscured)
+			icon_state += "-dark"
+		else
+			glow.transform = turn(matrix(), (sun.angle + 180) % 360)
+			glow.alpha = glow_intensity
+			overlays += glow
+
 
 /obj/machinery/power/solar/panel/proc/update_solar_exposure()
 	if(!sun)
