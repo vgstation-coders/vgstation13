@@ -90,7 +90,7 @@
 			user.visible_message("<span class='notice'>[user] takes the [initial(G.name)] off the [src].</span>",\
 			"<span class='notice'>You take the [initial(G.name)] off the [src].</span>")
 			qdel(src)
-	if(iswrench(W) && !tracker)
+	else if(iswrench(W) && !tracker)
 		if (manual_user)
 			if (manual_user == user)
 				to_chat(user, "<span class='warning'>You are already rotating this solar panel.</span>")
