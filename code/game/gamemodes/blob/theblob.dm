@@ -49,6 +49,9 @@ var/list/blob_overminds = list()
 
 	var/asleep = FALSE
 
+	var/meat = /obj/item/weapon/reagent_containers/food/snacks/meat/blob
+	var/meat_drop_factor = 1	// A weapon of force 8 and sharpness 0.5 will hack off meat with a probability of 4% at drop factor 1
+
 /obj/effect/blob/blob_act()
 	return
 
@@ -196,6 +199,14 @@ var/list/blob_overminds = list()
 				playsound(src, 'sound/effects/blobweld.ogg', 100, 1)
 		if("brute")
 			damage = (W.force / max(src.brute_resist,1))
+			if(prob((W.sharpness * W.force) * meat_drop_factor))
+				var/obj/item/I = new meat()
+				I.forceMove(src.loc)
+				if (!(src.looks in blob_diseases))
+					CreateBlobDisease(src.looks)
+				var/datum/disease2/disease/D = blob_diseases[src.looks]
+				I.infect_disease2(D)
+				I.throw_at(user, 1, 1)
 
 	health -= damage
 	update_health()

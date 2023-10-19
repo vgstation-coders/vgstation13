@@ -1579,6 +1579,10 @@ var/proccalls = 1
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 
+//MERELY_HONORABLE means unable to use guns, VERY_HONORABLE means using a gun will blow up the hand
+#define MERELY_HONORABLE 1
+#define VERY_HONORABLE 2
+
 //Grasp indexes
 #define GRASP_RIGHT_HAND 1
 #define GRASP_LEFT_HAND 2
@@ -1659,6 +1663,7 @@ var/proccalls = 1
 #define PALE_BLOOD		"#272727"//Seek Paleblood to transcend the hunt.
 #define GHOUL_BLOOD		"#7FFF00"
 #define GRUE_BLOOD		"#272728"
+#define BLOB_MEAT		"#81EB00"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again

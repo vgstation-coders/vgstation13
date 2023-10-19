@@ -278,11 +278,12 @@
 	var/list/languages[0]
 
 	var/list/alphas = list()
-	var/alpha_override = FALSE	
+	var/alpha_override = FALSE
 	var/spell/spell_channeling // The spell that's currently being channeled
 
 	var/see_in_dark_override = 0	//for general guaranteed modification of these variables
 	var/see_invisible_override = 0
+	var/dark_plane_alpha_override = 0
 
 	var/obj/transmog_body_container/transmogged_from	//holds a reference to the container holding the mob that this mob used to be before being transmogrified
 	var/mob/transmogged_to		//holds a reference to the mob which holds a reference to this mob in its transmogged_from var
