@@ -371,7 +371,7 @@
 	name = "No Gun Allowed"
 	abbreviation = "NGA"
 	desc = "Forgo the use of guns in exchange for magical power. Some within the Wizard Federation have lobbied to make this spell a legal obligation."
-	price = -0.5 * Sp_BASE_PRICE
+	price = -1 * Sp_BASE_PRICE
 	one_use = TRUE
 
 /datum/spellbook_artifact/nogunallowed/can_buy(var/mob/user)
