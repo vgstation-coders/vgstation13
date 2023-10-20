@@ -755,6 +755,11 @@ var/list/one_way_windows
 	sheetamount = 2
 	health = 80
 
+/obj/structure/window/reinforced/clockwork/relativewall()
+	// Ignores adjacent anchored window tiles for "merging", since there's only a single brass window sprite
+	// Remove this whenever someone sprites all the required icon states
+	return
+
 /obj/structure/window/reinforced/clockwork/cultify()
 	return
 

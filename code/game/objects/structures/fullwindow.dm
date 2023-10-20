@@ -172,6 +172,11 @@
 	sheetamount = 4
 	health = 80
 
+/obj/structure/window/full/reinforced/clockwork/relativewall()
+	// Ignores adjacent anchored window tiles for "merging", since there's only a single brass window sprite
+	// Remove this whenever someone sprites all the required icon states
+	return
+
 /obj/structure/window/full/reinforced/clockwork/loose
 	anchored = 0
 	d_state = 0
