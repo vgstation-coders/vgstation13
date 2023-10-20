@@ -90,9 +90,12 @@ var/list/one_way_windows
 	examine_health(user)
 
 /obj/structure/window/AltClick(mob/user)
-	if(user.incapacitated() || !Adjacent(user))
-		return
-	rotate()
+	if(is_fulltile)
+		. = ..()
+	else
+		if(user.incapacitated() || !Adjacent(user))
+			return
+		rotate()
 
 /obj/structure/window/proc/examine_health(mob/user)
 	if(!anchored)

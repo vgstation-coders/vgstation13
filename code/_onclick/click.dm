@@ -333,7 +333,14 @@
 
 /atom/proc/AltClick(var/mob/user)
 	var/turf/T = get_turf(src)
-	if(T && (T in range(1, user.loc)) && (T in view(1, user.virtualhearer))) //If next to user's location (to allow locker and mech alt-clicks) and if the user can actually view it
+	var/valid = FALSE
+	if(isAI(user))
+		var/mob/living/silicon/ai/ai = user
+		if(T && (T in range(7, ai.eyeobj.loc)))
+			valid = TRUE
+	else if(T && (T in range(1, user.loc)) && (T in view(1, user.virtualhearer))) //If next to user's location (to allow locker and mech alt-clicks) and if the user can actually view it
+		valid = TRUE
+	if(valid)
 		if(user.listed_turf == T)
 			user.listed_turf = null
 		else
