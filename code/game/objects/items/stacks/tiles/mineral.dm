@@ -106,7 +106,6 @@
 	throw_speed = 3
 	throw_range = 7
 	max_amount = 60
-	twinkles = TRUE
 
 	material = "diamond"
 	starting_materials = list(MAT_DIAMOND = CC_PER_SHEET_DIAMOND / 4) // Recipe requires 1 sheet for 4 tiles

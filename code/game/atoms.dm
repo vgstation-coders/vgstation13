@@ -1050,21 +1050,46 @@ its easier to just keep the beam vertical.
 		return TRUE
 	return FALSE
 
-/atom/proc/begin_twinkling()
-	if(!is_twinkling()) //prevent duplication
-		twinkle_overlay = image('icons/turf/overlays.dmi',"twinkle_overlay")
-		overlays+=twinkle_overlay
+//WIP twinkling code below
+
+/atom/proc/begin_twinkling() //overwritten by turf and movable atoms
+
 
 /atom/proc/end_twinkling()
-	if(is_twinkling())
-		overlays -= twinkle_overlay
-		twinkle_overlay = null
 
 /atom/proc/is_twinkling()
-	if(twinkle_overlay in overlays)
-		return TRUE
-	else
+	if(length(twinkle_image_list)<1) //list was never populated
 		return FALSE
 
 /atom/proc/should_twinkle()
 	return FALSE
+
+//note to self, move to designated file once testing complete
+var/global/obj/twinkle_image_holder = null
+var/global/obj/twinkle_image_list = list()
+
+/particles/twinkle
+	icon = 'icons/effects/twinkle.dmi'
+	icon_state = "1"
+	width = 32
+	height = 32
+	fadein =2
+	fade =2
+	count = 1.5
+	spawning = 0.1
+	lifespan = 5
+	position = generator("box", list(-12,-12,0), list(12,12,0))
+	grow = list(0,0.5)
+	spin = 50
+
+/obj/twinkle
+	particles = new/particles/twinkle
+
+/obj/twinkle/New()
+
+// can I make some kind of populator datum? when created it populates the list with twinkles
+
+/obj/twinkle/proc/populate_image_list()
+	if(!length(twinkle_image_list))
+		for(var/I=0,length(twinkle_image_list)<20,++I) //lets populate the list with 20 of these so the twinkles have variety//TODO don't hardcode this, make it a define  #define twinkleVariations = 20
+			twinkle_image_list += new/obj/twinkle
