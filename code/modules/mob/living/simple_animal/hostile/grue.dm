@@ -211,6 +211,10 @@
 	if((stat==CONSCIOUS) && !busy && !ismoulting && !client && !mind && !ckey) //Checks for AI
 		grue_ai()
 
+//Grues already have a way to check their own health and the damage indicator doesn't mesh well with the vision.
+/mob/living/simple_animal/hostile/grue/standard_damage_overlay_updates()
+	return
+
 //AI stuff:
 /mob/living/simple_animal/hostile/grue/proc/grue_ai()
 
