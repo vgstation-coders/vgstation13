@@ -71,7 +71,7 @@
 					new /obj/machinery/fishtank/bowl(get_turf(src))
 					qdel(src)
 				return
-			if (2)m
+			if (2)
 				if(iscrowbar(P))
 					if (C != null)
 						C.forceMove(get_turf(src))
