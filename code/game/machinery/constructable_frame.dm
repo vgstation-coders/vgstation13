@@ -71,7 +71,7 @@
 					new /obj/machinery/fishtank/bowl(get_turf(src))
 					qdel(src)
 				return
-			if (2)
+			if (2)m
 				if(iscrowbar(P))
 					if (C != null)
 						C.forceMove(get_turf(src))
@@ -1676,7 +1676,7 @@ to destroy them and players will be able to make replacements.
 	desc = "A circuit board used to clean, charge, and store a hardsuit"
 	build_path = /obj/machinery/suit_storage_unit
 	board_type = MACHINE
-	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2" + Tc_POWERSTORAGE + "=2"
+	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_POWERSTORAGE + "=2"
 	req_components = list(
 		/obj/item/weapon/stock_parts/micro_laser = 2,
 		/obj/item/weapon/stock_parts/manipulator = 1,
