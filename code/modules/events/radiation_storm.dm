@@ -21,7 +21,7 @@
 		/area/vox_trading_post,
 	)
 
-/datum/event/radiation_storm/can_start()
+/datum/event/radiation_storm/can_start(var/list/active_with_role)
 	if(active_with_role["Any"] > 6)
 		return 50
 	return 0
