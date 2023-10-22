@@ -22,7 +22,9 @@
 	)
 
 /datum/event/radiation_storm/can_start()
-	return 50
+	if(active_with_role["Any"] > 6)
+		return 50
+	return 0
 
 /datum/event/radiation_storm/announce()
 	// Don't do anything, we want to pack the announcement with the actual event
