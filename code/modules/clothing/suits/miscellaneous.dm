@@ -380,6 +380,8 @@ var/list/tag_suits_list = list()
 	wizard_garb = 1 //Allows lightning to be used
 	allowed = list(/obj/item/weapon/melee/energy/sword, /obj/item/weapon/melee/energy/sword/dualsaber) //Fits e-swords
 	species_fit = list(INSECT_SHAPED)
+	hood = new /obj/item/clothing/head/sith()
+	hood_suit_name = "robes"
 
 /obj/item/clothing/suit/hastur
 	name = "Hastur's Robes"
@@ -387,6 +389,18 @@ var/list/tag_suits_list = list()
 	icon_state = "hastur"
 	item_state = "hastur"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
+	hood = new /obj/item/clothing/head/hasturhood()
+	hood_suit_name = "robes"
+
+/obj/item/clothing/suit/reaper_robes
+	name = "\improper grim robes"
+	desc = "Tends to snag on tombstones"
+	icon_state = "reaper_hoodie" //edited version of chaplain_hoodie. 1px longer, and more open at the front
+	item_state = "reaper_hoodie"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	body_parts_covered = FULL_TORSO|LEGS|ARMS|IGNORE_INV
+	hood = new /obj/item/clothing/head/chaplain_hood()
+	hood_suit_name = "robes"
 
 /obj/item/clothing/suit/cassock
 	name = "Cassock"
@@ -935,6 +949,7 @@ var/list/tag_suits_list = list()
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/storage/bible, /obj/item/weapon/nullrod/spear)
+	hood = new /obj/item/clothing/head/clockwork_hood()
 
 
 /obj/item/clothing/suit/inquisitor

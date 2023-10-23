@@ -656,6 +656,7 @@
 	species_fit = list(INSECT_SHAPED)
 	desc = "A hood worn by the followers of Ratvar."
 	flags = FPRINT
+	body_parts_covered = HIDEHAIR
 
 /obj/item/clothing/head/franken_bolt
 	name = "neck bolts"
