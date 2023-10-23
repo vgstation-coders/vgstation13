@@ -3,7 +3,8 @@
 	sterility = 5
 	autoignition_temperature = AUTOIGNITION_FABRIC
 	var/list/species_restricted = null //Only these species can wear this kit.
-	var/wizard_garb = 0 // Wearing this empowers a wizard.
+	var/wizard_garb = 0 //Wearing this empowers a wizard.
+	var/gentling //If TRUE, prevents the wearer from casting wizard spells.
 	var/eyeprot = 0 //for head and eyewear
 	var/nearsighted_modifier = 0 //positive values impair vision(welding goggles), negative values improve vision(prescription glasses)
 

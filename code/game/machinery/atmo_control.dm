@@ -108,11 +108,13 @@
 		return
 	set_frequency(frequency)
 
-/obj/machinery/air_sensor/New(loc, freq = 1439, id = null)
+/obj/machinery/air_sensor/New(loc, freq, id)
 	..()
 
-	frequency = freq
-	id_tag = id
+	if (freq != null)
+		frequency = freq
+	if (id != null)
+		id_tag = id
 	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 
