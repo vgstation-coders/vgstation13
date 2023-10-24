@@ -141,9 +141,6 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	return istype(other_stack, /obj/item/stack/cable_coil) && !istype(other_stack, /obj/item/stack/cable_coil/heavyduty) //It can be any cable, except the fat stuff
 
 /obj/item/stack/cable_coil/update_icon()
-	if(!color)
-		color = pick("#FF0000", "#FFED00", "#005C84", "#0B8400")
-
 	if(amount == 1)
 		icon_state = "coil_1"
 		name = "cable piece"
@@ -398,9 +395,6 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 
 /obj/item/stack/cable_coil/white
 	color = "#D0D0D0"
-
-/obj/item/stack/cable_coil/random
-	desc = "A coil of power cable."
 
 /obj/item/stack/cable_coil/random/New(loc, amount, var/param_color = null)
 	..()

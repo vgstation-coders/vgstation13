@@ -150,3 +150,22 @@
 		to_chat(user, "<span class='notice'>You wrap the cable restraint around the top of the rod.</span>")
 
 		qdel(src)
+
+/obj/item/weapon/handcuffs/cable/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
+	if(proximity_flag == 0) // not adjacent
+		return
+
+	if(target.is_open_container() && target.reagents && !target.reagents.is_empty())
+		// Figure out how much water or cleaner there is
+		var/cleaner_percent = get_reagent_paint_cleaning_percent(target)
+
+		if (cleaner_percent >= 0.7)
+			// Clean up that cable
+			color = "#D0D0D0"
+			to_chat(user, "<span class='notice'>You clean \the [name] in \the [target.name].</span>")
+		else
+			// Take the reagent mix's color
+			var/list/paint_color_rgb = rgb2num(mix_color_from_reagents(target.reagents.reagent_list, TRUE))//only pigments
+			color = rgb(paint_color_rgb[1], paint_color_rgb[2], paint_color_rgb[3])
+			to_chat(user, "<span class='notice'>You dip \the [name] in \the [target.name].</span>")
+		user.update_inv_hands()

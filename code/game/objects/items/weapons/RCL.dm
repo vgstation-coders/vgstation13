@@ -102,7 +102,7 @@
 /obj/item/weapon/rcl/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag == 0) // not adjacent
 		return
-	if (isplacementoption(target))
+	if (isholder(target))//placing on table, rack, closet, or in a backpack etc
 		return
 	if(!loaded || !loaded.amount)
 		to_chat(user, "<span class='warning'>There isn't any cable left inside.</span>")
@@ -278,9 +278,36 @@
 
 //-----------------------------------------------------------------------------------------
 
+/obj/item/weapon/rcl/pre_loaded
+	var/cable_type = /obj/item/stack/cable_coil
+
 /obj/item/weapon/rcl/pre_loaded/New() //Comes preloaded with cable, for testing stuff
 	..()
-	loaded = new()
+	loaded = new cable_type()
 	loaded.max_amount = max_amount
 	loaded.amount = max_amount
 	update_icon()
+
+/obj/item/weapon/rcl/pre_loaded/yellow
+	cable_type = /obj/item/stack/cable_coil/yellow
+
+/obj/item/weapon/rcl/pre_loaded/blue
+	cable_type = /obj/item/stack/cable_coil/blue
+
+/obj/item/weapon/rcl/pre_loaded/green
+	cable_type = /obj/item/stack/cable_coil/green
+
+/obj/item/weapon/rcl/pre_loaded/pink
+	cable_type = /obj/item/stack/cable_coil/pink
+
+/obj/item/weapon/rcl/pre_loaded/orange
+	cable_type = /obj/item/stack/cable_coil/orange
+
+/obj/item/weapon/rcl/pre_loaded/cyan
+	cable_type = /obj/item/stack/cable_coil/cyan
+
+/obj/item/weapon/rcl/pre_loaded/white
+	cable_type = /obj/item/stack/cable_coil/white
+
+/obj/item/weapon/rcl/pre_loaded/random
+	cable_type = /obj/item/stack/cable_coil/random
