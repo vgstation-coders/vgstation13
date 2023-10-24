@@ -3537,12 +3537,6 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/games
 	name = "\improper Al's Fun And Games"
 	desc = "A vending machine that sells various games and toys."
-	product_slogans = list(
-		"It's all fun and games at Al's Fun And Games!",
-		"Roll for initiative!",
-		"It's a full house of fun!",
-		"Caves and Wyverns 3rd edition available now!"
-	)
 	product_ads = list(
 		"Sponsored by Warlocks of the Shore.",
 		"Al's Fun And Games Co. is not liable for friendships damaged by use of the Product."
