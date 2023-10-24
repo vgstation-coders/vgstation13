@@ -121,7 +121,7 @@
 /obj/item/weapon/rcl/proc/connect_two_floors(var/mob/user, var/turf/first_floor, var/turf/second_floor, var/clicked = FALSE)
 	if (!first_floor || !second_floor)
 		return
-	if(!first_floor.can_place_cables() || !second_floor.can_place_cables())
+	if(!first_floor.can_place_cables(TRUE) || !second_floor.can_place_cables(TRUE))
 		if (user)
 			to_chat(user, "<span class='warning'>You can't place cables between here and there.</span>")
 			if (active)
