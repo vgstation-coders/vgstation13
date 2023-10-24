@@ -281,6 +281,7 @@
 					continue
 				UnarmedAttack(B)
 	if(isgrue(A)) //No friendly firing other grues
+		to_chat(src, "<span class='notice'>You stop yourself from hitting a fellow grue.</span>")
 		return
 	..()
 
