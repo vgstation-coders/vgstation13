@@ -1428,7 +1428,6 @@ var/proccalls = 1
 #define GRUE_DIM 1	//light level neither heals nor burns
 #define GRUE_LIGHT 2//bright enough to burn
 #define GRUE_DRAINLIGHT 1 //Channeling the drain light ability
-#define GRUE_DAMAGE_LIMIT 50 //Grue damage will stop increasing past this point, instead they will gain extra armor penetration.
 /*
  *
  *

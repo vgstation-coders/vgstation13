@@ -595,9 +595,9 @@
 	//health regen in darkness
 	lightparams.regenbonus = lightparams.base_regenbonus * (1.5 ** eatencount) //increased health regen in darkness
 
-	//melee damage
-	melee_damage_lower = min(GRUE_DAMAGE_LIMIT, base_melee_dam_lw + (5 * eatencount))
-	melee_damage_upper = min(GRUE_DAMAGE_LIMIT, base_melee_dam_up + (5 * eatencount))
+	//melee damage, 50 damage limit
+	melee_damage_lower = min(50, base_melee_dam_lw + (5 * eatencount))
+	melee_damage_upper = min(50, base_melee_dam_up + (5 * eatencount))
 	//How much armor they ignore on hit, +10% armor penetration for every target consumed up to 100% of armor ignored.
 	armor_modifier = max(0, 1 - (0.1 * eatencount))
 
