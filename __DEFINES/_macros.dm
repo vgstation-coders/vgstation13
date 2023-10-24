@@ -196,6 +196,8 @@
 
 #define istable(A) (istype(A, /obj/structure/table))
 
+#define isplacementoption(A) (istype(A, /obj/structure/table) || istype(A, /obj/structure/rack) || istype(A, /obj/structure/closet))
+
 #define issilicatesprayer(A) (istype(A, /obj/item/device/silicate_sprayer))
 
 #define iswindow(A) (istype(A, /obj/structure/window))

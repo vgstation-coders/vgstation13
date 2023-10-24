@@ -109,45 +109,33 @@
 /obj/item/weapon/handcuffs/cable
 	name = "cable restraints"
 	desc = "Looks like some cables tied together. Could be used to tie something up."
-	icon_state = "cuff_red"
-	_color = "red"
+	icon_state = "cablecuff"
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list('sound/weapons/cablecuff.ogg')
 
 /obj/item/weapon/handcuffs/cable/red
-	icon_state = "cuff_red"
+	color = "#FF0000"
 
 /obj/item/weapon/handcuffs/cable/yellow
-	icon_state = "cuff_yellow"
-	_color = "yellow"
+	color = "#FFED00"
 
 /obj/item/weapon/handcuffs/cable/blue
-	icon_state = "cuff_blue"
-	_color = "blue"
+	color = "#005C84"
 
 /obj/item/weapon/handcuffs/cable/green
-	icon_state = "cuff_green"
-	_color = "green"
+	color = "#0B8400"
 
 /obj/item/weapon/handcuffs/cable/pink
-	icon_state = "cuff_pink"
-	_color = "pink"
+	color = "#CA00B6"
 
 /obj/item/weapon/handcuffs/cable/orange
-	icon_state = "cuff_orange"
-	_color = "orange"
+	color = "#CA6900"
 
 /obj/item/weapon/handcuffs/cable/cyan
-	icon_state = "cuff_cyan"
-	_color = "cyan"
+	color = "#00B5CA"
 
 /obj/item/weapon/handcuffs/cable/white
-	icon_state = "cuff_white"
-	_color = "white"
-
-/obj/item/weapon/handcuffs/cable/update_icon()
-	if(_color)
-		icon_state = "cuff_[_color]"
+	color = "#D0D0D0"
 
 /obj/item/weapon/handcuffs/cable/attackby(var/obj/item/I, mob/user as mob)
 	..()

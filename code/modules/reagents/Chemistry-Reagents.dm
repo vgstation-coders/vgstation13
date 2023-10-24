@@ -471,6 +471,7 @@
 	description = "Tomatoes made into juice. Probably. What a waste of big, juicy tomatoes, huh?"
 	id = BLOOD
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_PIGMENT
 	color = DEFAULT_BLOOD //rgb: 161, 8, 8
 	density = 1.05
 	specheatcap = 3.49
@@ -4719,6 +4720,7 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/mustard
 	name = "Mustard"
@@ -4727,6 +4729,7 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#cccc33" //rgb: 204, 204, 51
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/relish
 	name = "Relish"
@@ -5075,7 +5078,7 @@ var/procizine_tolerance = 0
 	id = BLACKCOLOR
 	description = "A black coloring used to dye food and drinks."
 	reagent_state = REAGENT_STATE_LIQUID
-	flags = CHEMFLAG_OBSCURING
+	flags = CHEMFLAG_OBSCURING|CHEMFLAG_PIGMENT
 	color = "#000000" //rgb: 0, 0, 0
 
 /datum/reagent/frostoil
@@ -9378,6 +9381,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = ZEAXANTHIN
 	description = "Zeaxanthin is a natural pigment which purportedly supports eye health."
 	color = "#CC4303" //rgb: 204, 67, 3
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/stoxin/valerenic_acid
 	name = "Valerenic Acid"

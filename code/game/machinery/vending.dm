@@ -2437,6 +2437,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/clothing/gloves/yellow = 1,
+		/obj/item/weapon/rcl = 2,
 		)
 
 	pack = /obj/structure/vendomatpack/tool
@@ -2467,6 +2468,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/blueprints/construction_permit = 4, // permits
 		/obj/item/taperoll/engineering = 5,
 		/obj/item/taperoll/atmos = 5,
+		/obj/item/weapon/rcl = 3,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
