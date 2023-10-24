@@ -189,7 +189,8 @@
 					to_chat(src, "<span class='danger'>The burning light sears your flesh!</span>")
 				else
 					to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
-				playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
+				for(var/mob/M in viewers(world.view, src)) //Only audible to those who can see the grue
+					M.playsound_local(src, 'sound/effects/grue_burn.ogg', 50, 1)
 
 		//update accum_light_expos_mult for light damage
 		lightparams.alem_adjust()
