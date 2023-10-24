@@ -682,6 +682,12 @@
 	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
+/obj/item/clothing/head/bedsheet_ghost
+	name = "Bedsheet Ghost"
+	desc = "You did cut out eye holes, but you don't remember drawing a face. Spooooky"
+	icon_state = "bedsheet_ghost"
+	body_parts_covered = FACE|FULL_HEAD|HIDEHAIR
+
 /obj/item/clothing/head/elfhat
 	name = "elf hat"
 	desc = "Wear this hat, and become one of Santa's little helpers!"

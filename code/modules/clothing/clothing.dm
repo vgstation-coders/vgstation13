@@ -502,15 +502,6 @@ var/global/maxStackDepth = 10
 /obj/item/clothing/head/proc/bite_action(mob/target)
 	return
 
-/obj/item/clothing/head/placeholder_hood
-	// Inherits the name, description, icon, etc. from suits using this as their hood
-
-/obj/item/clothing/head/placeholder_hood/proc/set_placeholder_hood_appearance(var/obj/item/clothing/suit/suit)
-	name = suit.name
-	icon = suit.icon
-	icon_state = suit.hood_up_icon_state
-	desc = suit.desc
-
 /obj/item/proc/islightshielded() // So as to avoid unneeded casts.
 	return FALSE
 
@@ -690,10 +681,6 @@ var/global/maxStackDepth = 10
 			hood_up_icon_state = icon_state
 
 		icon_state = hood_down_icon_state
-
-		if(istype(hood, /obj/item/clothing/head/placeholder_hood))
-			var/obj/item/clothing/head/placeholder_hood/PH = hood
-			PH.set_placeholder_hood_appearance(src)
 
 	..()
 
