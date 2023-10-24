@@ -1210,7 +1210,7 @@
 	for (var/datum/faction/F in factions_with_hud_icons)
 		F.update_hud_icons()
 
-/obj/mecha/proc/moved_inside(var/mob/living/carbon/H as mob)
+/obj/mecha/proc/moved_inside(var/mob/living/carbon/human/H as mob)
 	if(!isnull(src.loc) && H && H.client && (H in range(1)))
 		H.reset_view(src)
 		H.stop_pulling()
@@ -1291,6 +1291,8 @@
 		src.silicon_pilot = TRUE
 		if(src.silicon_icon_state)
 			src.icon_state = src.silicon_icon_state
+		else
+			icon_state = initial_icon
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
 			set_light(light_range_off)
