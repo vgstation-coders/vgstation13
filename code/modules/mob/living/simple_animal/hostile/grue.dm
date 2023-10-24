@@ -280,6 +280,8 @@
 				if(!L.current_bulb || L.current_bulb.status == LIGHT_BROKEN)
 					continue
 				UnarmedAttack(B)
+	if(isgrue(A)) //No friendly firing other grues
+		return
 	..()
 
 
