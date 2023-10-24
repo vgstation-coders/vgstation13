@@ -425,58 +425,79 @@
 		var/obj/item/I = held_items[i]
 		dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];hands=[i]'>[makeStrippingButton(I)]</A><BR>"
 
-	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[slot_back]'>[makeStrippingButton(back)]</A>"
+	if(slot_back in obscured)
+		dat += "<BR><font color=grey><B>Back:</B> Obscured by [wear_suit]</font>"
+	else
+		dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[slot_back]'>[makeStrippingButton(back)]</A>"
+
 	dat += "<BR>"
-	dat += "<BR><B>Head:</B> <A href='?src=\ref[src];item=[slot_head]'>[makeStrippingButton(head)]</A>"
+
+		dat += "<BR><B>Head:</B> <A href='?src=\ref[src];item=[slot_head]'>[makeStrippingButton(head)]</A>"
+
 	if(slot_wear_mask in obscured)
 		dat += "<BR><font color=grey><B>Mask:</B> Obscured by [head]</font>"
 	else
 		dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
+
 	if(has_breathing_mask())
 		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [src.internal ? "On" : "Off"]  <A href='?src=\ref[src];internals=1'>(Toggle)</A>"
+
 	if(slot_glasses in obscured)
 		dat += "<BR><font color=grey><B>Eyes:</B> Obscured by [head]</font>"
 	else
 		dat += "<BR><B>Eyes:</B> <A href='?src=\ref[src];item=[slot_glasses]'>[makeStrippingButton(glasses)]</A>"
+
 	if(slot_ears in obscured)
 		dat += "<BR><font color=grey><B>Ears:</B> Obscured by [head]</font>"
 	else
 		dat += "<BR><B>Ears:</B> <A href='?src=\ref[src];item=[slot_ears]'>[makeStrippingButton(ears)]</A>"
+
 	dat += "<BR>"
 	dat += "<BR><B>Exosuit:</B> <A href='?src=\ref[src];item=[slot_wear_suit]'>[makeStrippingButton(wear_suit)]</A>"
+
 	if(wear_suit)
 		dat += "<BR>[HTMLTAB]&#8627;<B>Suit Storage:</B> <A href='?src=\ref[src];item=[slot_s_store]'>[makeStrippingButton(s_store)]</A>"
+
 	if(slot_shoes in obscured)
 		dat += "<BR><font color=grey><B>Shoes:</B> Obscured by [wear_suit]</font>"
 	else
 		dat += "<BR><B>Shoes:</B> <A href='?src=\ref[src];item=[slot_shoes]'>[makeStrippingButton(shoes)]</A>"
+
 	if(slot_gloves in obscured)
 		dat += "<BR><font color=grey><B>Gloves:</B> Obscured by [wear_suit]</font>"
 	else
 		dat += "<BR><B>Gloves:</B> <A href='?src=\ref[src];item=[slot_gloves]'>[makeStrippingButton(gloves)]</A>"
+
 	dat += "<BR><B>Belt:</B> <A href='?src=\ref[src];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
+
 	if(slot_w_uniform in obscured)
 		dat += "<BR><font color=grey><B>Uniform:</B> Obscured by [wear_suit]</font>"
 	else
 		dat += "<BR><B>Uniform:</B> <A href='?src=\ref[src];item=[slot_w_uniform]'>[makeStrippingButton(w_uniform)]</A>"
+
 		if(w_uniform)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Suit Sensors:</B> <A href='?src=\ref[src];sensors=1'>Set</A>"
+
 		if(pickpocket)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
 			dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? r_store : "<font color=grey>Right (Empty)</font>"]</A>"
 		else
 			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? "Left (Full)" : "<font color=grey>Left (Empty)</font>"]</A>"
 			dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? "Right (Full)" : "<font color=grey>Right (Empty)</font>"]</A>"
+
 	dat += "<BR>[HTMLTAB]&#8627;<B>ID:</B> <A href='?src=\ref[src];id=1'>[makeStrippingButton(wear_id)]</A>"
 	dat += "<BR>"
+
 	if(handcuffed || mutual_handcuffs)
 		dat += "<BR><B>Handcuffed:</B> <A href='?src=\ref[src];item=[slot_handcuffed]'>Remove</A>"
+
 	if(legcuffed)
 		dat += "<BR><B>Legcuffed:</B> <A href='?src=\ref[src];item=[slot_legcuffed]'>Remove</A>"
 	dat += {"
 	<BR>
 	<BR><A href='?src=\ref[user];mach_close=mob\ref[src]'>Close</A>
 	"}
+
 	var/datum/browser/popup = new(user, "mob\ref[src]", "[src]", 340, 500)
 	popup.set_content(dat)
 	popup.open()

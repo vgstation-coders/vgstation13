@@ -1306,20 +1306,21 @@ var/global/list/damage_icon_parts = list()
 			if(has_icon(standing.icon, "[back.icon_state]_f"))
 				standing.icon_state = "[back.icon_state]_f"
 
-		var/obj/abstract/Overlays/O = obj_overlays[BACK_LAYER]
-		O.color = null
-		O.icon = standing
-		O.icon_state = standing.icon_state
-		if(I.clothing_flags & COLORS_OVERLAY)
-			O.color = I.color
-		O.overlays.len = 0
-		if(back.dynamic_overlay)
-			if(back.dynamic_overlay["[BACK_LAYER]"])
-				var/image/dyn_overlay = back.dynamic_overlay["[BACK_LAYER]"]
-				O.overlays += dyn_overlay
-		O.pixel_x = species.inventory_offsets["[slot_back]"]["pixel_x"] * PIXEL_MULTIPLIER
-		O.pixel_y = species.inventory_offsets["[slot_back]"]["pixel_y"] * PIXEL_MULTIPLIER
-		obj_to_plane_overlay(O,BACK_LAYER)
+		if (!check_hidden_body_flags(HIDEBACK))
+			var/obj/abstract/Overlays/O = obj_overlays[BACK_LAYER]
+			O.color = null
+			O.icon = standing
+			O.icon_state = standing.icon_state
+			if(I.clothing_flags & COLORS_OVERLAY)
+				O.color = I.color
+			O.overlays.len = 0
+			if(back.dynamic_overlay)
+				if(back.dynamic_overlay["[BACK_LAYER]"])
+					var/image/dyn_overlay = back.dynamic_overlay["[BACK_LAYER]"]
+					O.overlays += dyn_overlay
+			O.pixel_x = species.inventory_offsets["[slot_back]"]["pixel_x"] * PIXEL_MULTIPLIER
+			O.pixel_y = species.inventory_offsets["[slot_back]"]["pixel_y"] * PIXEL_MULTIPLIER
+			obj_to_plane_overlay(O,BACK_LAYER)
 
 		//overlays_standing[BACK_LAYER]	= standing
 	//else
@@ -1521,6 +1522,8 @@ var/global/list/damage_icon_parts = list()
 		update_inv_glasses()
 	if(is_slot_hidden(W.body_parts_covered, (HIDEEARS), 0, W.body_parts_visible_override))
 		update_inv_ears()
+	if(is_slot_hidden(W.body_parts_covered, (HIDEBACK), 0, W.body_parts_visible_override))
+		update_inv_back()
 
 /proc/is_slot_hidden(var/clothes, var/slot = -1,var/ignore_slot = 0, var/visibility_override = 0)
 	if(!clothes)

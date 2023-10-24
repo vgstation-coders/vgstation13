@@ -412,7 +412,6 @@
 	var/stack_depth = 0
 	var/blood_overlay_type = "hat"
 
-	var/is_hood = FALSE // Set to true if this hood is meant to belong to a suit
 	var/obj/item/clothing/suit/hood_suit = null // the suit this hood belongs to
 
 /obj/item/clothing/head/Destroy()
@@ -422,16 +421,14 @@
 	..()
 
 /obj/item/clothing/head/pickup(var/mob/living/carbon/human/user)
-	if(is_hood && hood_suit && istype(hood_suit) && user.get_item_by_slot(slot_wear_suit) == hood_suit)
+	if(hood_suit && istype(hood_suit) && user.get_item_by_slot(slot_wear_suit) == hood_suit)
 		hood_suit.hooddown(user, unequip = 0)
 		user.drop_from_inventory(src)
 		forceMove(hood_suit)
 
-/obj/item/clothing/head/pickup(var/mob/living/carbon/human/user)
-	if(hood_suit && istype(hood_suit) && user.get_item_by_slot(slot_wear_suit) == hood_suit)
-		hood_suit.hooddown(user,unequip = 0)
-		user.drop_from_inventory(src)
-		forceMove(hood_suit)
+		if (hood_suit.force_hood)
+			user.u_equip(hood_suit)
+			user.put_in_hands(hood_suit)
 
 var/global/hatStacking = 0
 var/global/maxStackDepth = 10
@@ -511,7 +508,7 @@ var/global/maxStackDepth = 10
 /obj/item/clothing/head/placeholder_hood/proc/set_placeholder_hood_appearance(var/obj/item/clothing/suit/suit)
 	name = suit.name
 	icon = suit.icon
-	icon_state = suit.icon_state_hood_up
+	icon_state = suit.hood_up_icon_state
 	desc = suit.desc
 
 /obj/item/proc/islightshielded() // So as to avoid unneeded casts.
@@ -674,11 +671,14 @@ var/global/maxStackDepth = 10
 	var/hood_down_icon_state = null // Defaults to the initial icon_state if not set
 	var/hood_up_icon_state = null   // Defaults to the initial icon_state if not set
 
+	var/force_hood = FALSE
+
 /obj/item/clothing/suit/New()
 	if (hood)
 		hood.hood_suit = src
-		hood.is_hood = TRUE
-		actions_types |= list(/datum/action/item_action/toggle_hood)
+
+		if (!force_hood)
+			actions_types |= list(/datum/action/item_action/toggle_hood)
 
 		if (wizard_garb)
 			hood.wizard_garb = TRUE
@@ -692,7 +692,8 @@ var/global/maxStackDepth = 10
 		icon_state = hood_down_icon_state
 
 		if(istype(hood, /obj/item/clothing/head/placeholder_hood))
-			set_placeholder_hood_appearance(src)
+			var/obj/item/clothing/head/placeholder_hood/PH = hood
+			PH.set_placeholder_hood_appearance(src)
 
 	..()
 
@@ -716,7 +717,7 @@ var/global/maxStackDepth = 10
 	if(!istype(user))
 		return
 	if(user.get_item_by_slot(slot_wear_suit) != src)
-		to_chat(user, "You have to put the [hood_suit_name] on first.")//FIXME !J do something about coat names
+		to_chat(user, "You have to put the [hood_suit_name] on first.")
 		return
 	if(!is_hood_up && !user.get_item_by_slot(slot_head) && hood.mob_can_equip(user,slot_head))
 		to_chat(user, "You put the hood up.")
@@ -730,7 +731,7 @@ var/global/maxStackDepth = 10
 	user.update_inv_wear_suit()
 
 /obj/item/clothing/suit/attack_self()
-	if (hood)
+	if (hood && !force_hood)
 		togglehood()
 
 /obj/item/clothing/suit/proc/hoodup(var/mob/living/carbon/human/user)
@@ -739,7 +740,6 @@ var/global/maxStackDepth = 10
 	is_hood_up = TRUE
 	user.update_inv_wear_suit()
 
-
 /obj/item/clothing/suit/proc/hooddown(var/mob/living/carbon/human/user, var/unequip = 1)
 	icon_state = hood_down_icon_state
 	if(unequip)
@@ -747,9 +747,25 @@ var/global/maxStackDepth = 10
 	is_hood_up = FALSE
 	user.update_inv_wear_suit()
 
+/obj/item/clothing/suit/equipped(var/mob/user, var/slot, hand_index = 0)
+	..()
+	if (hood && force_hood && !hand_index)
+		hoodup(user)
+
 /obj/item/clothing/suit/unequipped(var/mob/living/carbon/human/user)
+	..()
 	if(hood && istype(user) && user.get_item_by_slot(slot_head) == hood)
 		hooddown(user)
+
+/obj/item/clothing/suit/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	. = ..()
+
+	if (hood && force_hood && slot == slot_wear_suit)
+		if (M.get_item_by_slot(slot_head) && M.get_item_by_slot(slot_head) != hood)
+			to_chat(M, "You try to put the [hood_suit_name] on, but there is something in the way of it's hood.")
+			return FALSE
+		else if (!hood.mob_can_equip(M, slot_head))
+			return FALSE
 
 /obj/item/clothing/suit/proc/vine_protected()
 	return FALSE
