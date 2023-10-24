@@ -1249,7 +1249,7 @@
 		return 0
 	else if(dna)
 		if(!mmi_as_oc.brainmob.dna)
-			to_chat(user, "Remove the DNA-lock before proceeding.</span>") //Avoids a posibrain runtime since posibrains don't have DNA
+			to_chat(user, "Remove the DNA-lock before proceeding.") //Avoids a posibrain runtime since posibrains don't have DNA
 			return 0
 		if(mmi_as_oc.brainmob.dna && dna!=mmi_as_oc.brainmob.dna.unique_enzymes)
 			to_chat(user, "The DNA-lock rejects \the [mmi_as_oc], the DNAs do not match.") //Gives a clue that the MMI could be inserted if it was the original DNA lock holder.
