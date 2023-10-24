@@ -47,6 +47,7 @@
 		else
 			loaded.preattack(W,user,1)
 		update_icon()
+		playsound(loc, 'sound/items/zip.ogg', 20, 1)
 		to_chat(user, "<span class='notice'>You add the cables to the [src]. It now contains [loaded.amount].</span>")
 	else if(W.is_screwdriver(user))
 		if(!loaded)
@@ -208,7 +209,7 @@
 
 	else if (!wire_stub && (allow_stubs_unclicked || new_stubs))
 		//else let's add a new stub if we clicked (but only one per click, not two, and in priority on the tile we clicked at)
-		if (placed_stub)
+		if (placed_stub && !allow_stubs_unclicked)
 			return FALSE
 		placed_stub = TRUE
 		var/obj/structure/cable/C = new /obj/structure/cable(start_floor)

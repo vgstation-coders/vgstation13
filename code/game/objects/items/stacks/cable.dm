@@ -400,7 +400,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	color = "#D0D0D0"
 
 /obj/item/stack/cable_coil/random
-	desc = "A coil of power cable. This one has its insulation made in a material that changes color when pieces of it are separated."
+	desc = "A coil of power cable."
 
 /obj/item/stack/cable_coil/random/New(loc, amount, var/param_color = null)
 	..()
@@ -408,7 +408,6 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	update_icon()
 	if (ismob(loc))
 		var/mob/M = loc
-		to_chat(M, "<span class='notice'>You peel a wire piece off the cable coil, and its color flashes before settling down on a new one.</span>")
 		M.update_inv_hands()
 
 /obj/item/stack/cable_coil/persistent/turf_place(turf/simulated/floor/F, mob/user, var/dirnew)	//for cable coil that needs to not be capable of being used up entirely
