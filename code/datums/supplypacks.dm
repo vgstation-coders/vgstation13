@@ -493,6 +493,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/snake,
 					/obj/item/clothing/head/franken_bolt,
 					/obj/item/clothing/head/alien_antenna,
+					/obj/item/clothing/suit/bedsheet_ghost,
 
 					//Slasher set
 					/obj/item/toy/chainsaw,
