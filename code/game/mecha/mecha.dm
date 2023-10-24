@@ -1210,7 +1210,7 @@
 	for (var/datum/faction/F in factions_with_hud_icons)
 		F.update_hud_icons()
 
-/obj/mecha/proc/moved_inside(var/mob/living/carbon/human/H as mob)
+/obj/mecha/proc/moved_inside(var/mob/living/carbon/H as mob)
 	if(!isnull(src.loc) && H && H.client && (H in range(1)))
 		H.reset_view(src)
 		H.stop_pulling()
@@ -1261,8 +1261,6 @@
 
 	if(do_after(user, src, 40))
 		if(!occupant)
-			log_admin("[key_name(usr)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src] at X=[src.x];Y=[src.y];Z=[src.z]")
-			message_admins("[key_name(usr)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
 			return mmi_moved_inside(mmi_as_oc,user)
 		else
 			to_chat(user, "Occupant detected.")
@@ -1300,11 +1298,14 @@
 		src.log_message("[mmi_as_oc] moved in as pilot.")
 		if(!hasInternalDamage())
 			src.occupant << sound('sound/mecha/nominalsyndi.ogg',volume=50)
+		refresh_spells()
 
 		//change the cursor
 		if(occupant.client && cursor_enabled)
 			occupant.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
 
+		log_admin("[key_name(user)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src] at X=[src.x];Y=[src.y];Z=[src.z]")
+		message_admins("[key_name(user)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
 		return 1
 	else
 		return 0
@@ -1429,7 +1430,6 @@
 		occupant.reset_view()
 		empty_bad_contents()
 		occupant << browse(null, "window=exosuit")
-		remove_mech_spells()
 
 		//change the cursor
 		if(occupant && occupant.client)
