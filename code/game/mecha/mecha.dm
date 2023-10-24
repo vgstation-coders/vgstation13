@@ -2201,7 +2201,9 @@
 		return 1
 
 	var/icontype = input("Select the paint-job!")in M.mech_sprites
-
+//Sanity checks because icontype can be selected at an arbitrary amount of time.
+	if(!user.Adjacent(M) || user.incapacitated() || user.lying)
+		return 1
 	if(icontype == M.initial_icon)
 		to_chat(user, "<span class='warning'>This mech is already painted in that style.</span>")
 		return 1
