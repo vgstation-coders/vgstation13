@@ -288,3 +288,15 @@
 	set src in usr
 	if(!usr.incapacitated())
 		activate(usr)
+
+/obj/item/clothing/mask/gentling
+	name = "gentling mask"
+	desc = "In wool paper and acrylic the pain of experience is smoothed away into the aspect of a child. Neuronal clamps peek out from the concave interior surface. The mask is fastened by a brass chain, adorned by beads of glass, and branded on the forehead with the Holy Rhombus, a sign of the price of innocence."
+	icon_state = "gentlingmask"
+	item_state = "gentlingmask"
+	gentling = TRUE
+	canremove = FALSE
+	cant_remove_msg = " is clamped on!"
+	clothing_flags = MASKINTERNALS
+	origin_tech = Tc_BIOTECH + "=5"
+

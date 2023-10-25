@@ -2085,14 +2085,14 @@ var/list/seer_rituals = list()
 		user_slot.forceMove(BT)
 
 	if(snow)
-		target.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood/snow(target), slot_head)
 		if (ismonkey(target))
+			target.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood/snow(target), slot_head)	// hood now comes from the robes for humans
 			target.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes/snow(target), slot_w_uniform)
 		else
 			target.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes/snow(target), slot_wear_suit)
 	else
-		target.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood(target), slot_head)
 		if (ismonkey(target))
+			target.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood(target), slot_head)	// hood now comes from the robes for humans
 			target.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes(target), slot_w_uniform)
 		else
 			target.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes(target), slot_wear_suit)

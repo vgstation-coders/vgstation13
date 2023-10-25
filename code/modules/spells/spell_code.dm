@@ -427,6 +427,11 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!user.wearing_wiz_garb())
 			return 0
 
+	//gentling check
+	if((user_type == USER_TYPE_WIZARD) && (holder == user))
+		if(user.is_gentled())
+			return 0
+
 	return 1
 
 /spell/proc/check_charge(var/skipcharge, mob/user)
@@ -686,6 +691,15 @@ Made a proc so this is not repeated 14 (or more) times.*/
 		return 0
 	return 1
 */
+
+/mob/proc/is_gentled()
+	for(var/V in get_equipped_items())
+		if(isclothing(V))
+			var/obj/item/clothing/C = V
+			if(C.gentling)
+				to_chat(src, "<span class='warning'>You feel too humble to do that.</span>")
+				return TRUE
+	return FALSE
 
 //Atomizes what data the spell shows, that way different spells such as pulse demon and vampire spells can have their own descriptions.
 /spell/proc/generate_tooltip(var/previous_data = "")
