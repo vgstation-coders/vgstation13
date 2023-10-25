@@ -1335,18 +1335,18 @@
 	if(!twinkle_image_holder)
 		var/obj/twinkle/twinkle_prime = new/obj/twinkle
 		twinkle_prime.populate_image_list()
-	//if(!is_twinkling()) //prevent duplication //currently not working
+	if(!is_twinkling()) //prevent duplication //currently not working
 		vis_contents +=  pick(twinkle_image_list)
 
-/turf/end_twinkling()
-	//if(is_twinkling())
-	for(var/I=0,I<length(vis_contents),++I)
-		if(istype(I,/obj/twinkle))
-			vis_contents -= I
+/atom/movable/end_twinkling()
+	if(is_twinkling())
+		for(var/I=1,I<=length(vis_contents),++I)
+			if(istype(vis_contents[I],/obj/twinkle))
+				vis_contents -= vis_contents[I]
 
-/turf/is_twinkling()
+/atom/movable/is_twinkling()
 	..()
-	for(var/I=0,I<length(vis_contents),++I)
-		if(istype(I,/obj/twinkle))
+	for(var/item in vis_contents)
+		if(istype(item, /obj/twinkle))
 			return TRUE
 	return FALSE
