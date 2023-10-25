@@ -1323,6 +1323,7 @@ var/list/arcane_tomes = list()
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	mech_flags = MECH_SCAN_FAIL
 	hood = new /obj/item/clothing/head/culthood()
+	auto_hood = TRUE
 	hood_suit_name = "robes"
 
 	//plasmaman stuff

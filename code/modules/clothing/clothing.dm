@@ -426,10 +426,11 @@
 		hood_suit.hooddown(user, unequip = 0)
 		user.drop_from_inventory(src)
 		forceMove(hood_suit)
-
 		if (hood_suit.force_hood)
 			user.u_equip(hood_suit)
 			user.put_in_hands(hood_suit)
+		else
+			to_chat(user, "You put the hood down.")
 
 var/global/hatStacking = 0
 var/global/maxStackDepth = 10
@@ -663,7 +664,8 @@ var/global/maxStackDepth = 10
 	var/hood_down_icon_state = null // Defaults to the initial icon_state if not set
 	var/hood_up_icon_state = null   // Defaults to the initial icon_state if not set
 
-	var/force_hood = FALSE
+	var/force_hood = FALSE			// Automatically equips the hood when equipping the suit. Removing the hood will remove the suit.
+	var/auto_hood = FALSE			// Automatically equips the hood when equipping the suit.
 
 /obj/item/clothing/suit/New()
 	if (hood)
@@ -737,7 +739,7 @@ var/global/maxStackDepth = 10
 
 /obj/item/clothing/suit/equipped(var/mob/user, var/slot, hand_index = 0)
 	..()
-	if (hood && force_hood && !hand_index)
+	if (hood && (force_hood || auto_hood) && !hand_index)
 		hoodup(user)
 
 /obj/item/clothing/suit/unequipped(var/mob/living/carbon/human/user)
