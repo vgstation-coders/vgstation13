@@ -209,6 +209,7 @@ var/datum/controller/gameticker/ticker
 				new_characters[key] = H
 		CHECK_TICK
 
+
 	var/list/clowns = list()
 	var/already_an_ai = FALSE
 	//Transfer characters to players
@@ -229,11 +230,13 @@ var/datum/controller/gameticker/ticker
 		if(job)
 			job.equip(M, job.priority) // Outfit datum.
 
-	handle_lights()
+
 
 	//delete the new_player mob for those who readied
 	for(var/mob/np in new_players_ready)
 		qdel(np)
+
+	handle_lights()
 
 	if(!already_an_ai && clowns.len >= 2 && prob(1))
 		var/mob/living/carbon/human/H = pick(clowns)
@@ -649,18 +652,20 @@ var/datum/controller/gameticker/ticker
 			roles += player.mind.assigned_role
 	return roles
 
-/datum/controller/gameticker/proc/handle_lights()
+/datum/controller/gameticker/proc/handle_lights() //This is used to turn on lights in occupied departments
 	var/list/discrete_areas = areas.Copy()
-	//Get department areas where there is a crewmember. This is used to turn on lights in occupied departments
 	for(var/mob/living/player in player_list)
 		discrete_areas -= get_department_areas(player)
-	//Toggle lightswitches and lamps on in occupied departments
-	for(var/area/DA in discrete_areas)
-		for(var/obj/machinery/light_switch/LS in DA)
-			LS.toggle_switch(0, playsound = FALSE)
-			break
-		for(var/obj/item/device/flashlight/lamp/L in DA)
-			L.toggle_onoff(0)
+
+	for(var/obj/machinery/light_switch/LS in all_machines)
+		if((get_area(LS) in discrete_areas))
+			LS.toggle_switch(0,playsound=FALSE)
+
+	spawn(0)
+		for(var/area/DA in discrete_areas)
+			for(var/obj/item/device/flashlight/lamp/L in DA)
+				sleep(0.1)
+				L.toggle_onoff(0)
 
 /datum/controller/gameticker/proc/post_roundstart()
 	//Handle all the cyborg syncing
