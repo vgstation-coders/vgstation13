@@ -181,11 +181,13 @@
 	species_fit = list(INSECT_SHAPED)
 	hood = new /obj/item/clothing/head/wizard/necro()
 	hood_suit_name = "robes"
+	auto_hood = TRUE
 
 /obj/item/clothing/suit/wizrobe/necro/fake
 	desc = "An elegant robe woven with child labor somewhere in Space China."
 	wizard_garb = FALSE
 	hood = new /obj/item/clothing/head/wizard/necro/fake()
+	auto_hood = FALSE
 
 /obj/item/clothing/head/wizard/marisa/fake
 	name = "Witch Hat"

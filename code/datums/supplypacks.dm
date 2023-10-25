@@ -505,7 +505,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 					//Reaper set
 					/obj/item/clothing/mask/gas/grim_reaper,
-					/obj/item/clothing/head/chaplain_hood,
 					/obj/item/clothing/suit/reaper_robes,
 					/obj/item/toy/scythe,
 
@@ -606,7 +605,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	/obj/item/clothing/head/fez,
 	/obj/item/clothing/head/flatcap,
 	/obj/item/clothing/head/greenbandana,
-	/obj/item/clothing/head/hasturhood,
 	/obj/item/clothing/head/headband,
 	/obj/item/clothing/head/libertyhat,
 	/obj/item/clothing/head/mailman,
@@ -619,7 +617,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	/obj/item/clothing/head/ushanka,
 	/obj/item/clothing/head/wizard/magus/fake,
 	/obj/item/clothing/head/wizard/clown/fake,
-	/obj/item/clothing/head/wizard/necro/fake
 	)
 
 /datum/supply_packs/randomised/cheap_glasses
