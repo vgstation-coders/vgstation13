@@ -54,6 +54,8 @@
 
 	var/datum/grue_calc/grue/lightparams = new /datum/grue_calc/grue //used for light-related calculations
 
+	var/loop_active = FALSE //Prevents the loop from accidentally starting several times over
+
 	//AI related:
 	stop_automated_movement = TRUE //has custom light-related wander movement
 	wander = FALSE
@@ -136,7 +138,8 @@
 /mob/living/simple_animal/hostile/grue/regular_hud_updates()
 	..()
 	if(client && hud_used)
-		hud_used.grue_hud()
+		if(!healths || !healths2)
+			hud_used.grue_hud()
 
 //health indicator
 		if(health >= maxHealth)
@@ -153,24 +156,63 @@
 			healths.icon_state = "health5"
 		else
 			healths.icon_state = "health6"
-//darkness level indicator
+
+//A more lightweight proc that will get called every 0.1 seconds for a more responsive light indicator
+/mob/living/simple_animal/hostile/grue/proc/update_darkness_indicator(var/timer = 0)
+	if(client && hud_used) //Double-check since this proc can be called independently from regular_hud_updates()
 		if(lightparams.dark_dim_light==GRUE_DARK)
-			healths2.icon_state= "lightlevel_dark"
-			healths2.name="nice and dark"
+			healths2.icon_state = "lightlevel_dark"
+			healths2.name = "nice and dark"
 		else if(lightparams.dark_dim_light==GRUE_DIM)
-			healths2.icon_state= "lightlevel_dim"
-			healths2.name="adequately dim"
+			healths2.icon_state = "lightlevel_dim"
+			healths2.name = "adequately dim"
 		else if(lightparams.dark_dim_light==GRUE_LIGHT)
-			healths2.icon_state= "lightlevel_bright"
-			healths2.name="painfully bright"
+			healths2.name = "painfully bright"
+			switch(timer)
+				if(14 to 1.#INF)
+					healths2.icon_state = "lightlevel_bright_warning"
+				if(7 to 13)
+					healths2.icon_state = "lightlevel_bright_danger"
+				if(-1.#INF to 6)
+					healths2.icon_state = "lightlevel_bright"
+
+//Checks every 0.1 seconds to update the darkness level icon and count down a ticker
+//Allows the grue to stay in contact with bright lights for 2 seconds before getting roasted, regardless of Life() tick
+//Updates a screen indicator as well as the darkness indicator
+//Starts incrementing the timer when the grue goes back into the darkness, resets if the grue got burnt
+/mob/living/simple_animal/hostile/grue/proc/time_limit_in_light_loop()
+	var/time_limit = 2 SECONDS
+	while((stat != DEAD) && !gcDestroyed) //Happens for as long as the grue isn't dead AND isn't just outright gone
+		if(!timestopped)
+			lightparams.ddl_update(src) //Checks the light condition
+			update_darkness_indicator(time_limit)
+			if(lightparams.dark_dim_light == GRUE_LIGHT)
+				if(time_limit <= 0) //Timer expired, do the damage and reset it
+					var/thisdmg=lightparams.get_light_damage(src)
+					apply_damage(thisdmg,BURN) //burn in light
+					if(thisdmg>(maxHealth/7))
+						to_chat(src, "<span class='danger'>The burning light sears your flesh!</span>")
+					else
+						to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
+					playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
+					time_limit = 2 SECONDS
+				else //They are in the light, reduce the timer (by default has a value of 20)
+					time_limit--
+			else //Grue is in darkness, recover it twice as fast
+				time_limit = min(2 SECONDS, time_limit + 2)
+		sleep(1)
+	loop_active = FALSE
+	return
 
 /mob/living/simple_animal/hostile/grue/Life()
 	..()
 
 	//process nutrienergy and health according to current tile brightness level
 	if(stat!=DEAD)
-
-		lightparams.ddl_update(src)
+		if(!loop_active) //start the loop
+			loop_active = TRUE
+			spawn()
+				time_limit_in_light_loop()
 
 		//apply eating-based healing before processing light-based damage or healing
 		if(digest)
@@ -178,18 +220,9 @@
 			nutrienergy=min(maxnutrienergy,nutrienergy+digest_sp)
 			digest--
 
-		switch(lightparams.dark_dim_light)
-			if(GRUE_DARK) //dark
-				if(!ismoulting) //moulting temporarily stops healing via darkness
-					apply_damage(lightparams.get_dark_heal(src),BURN) //heal in dark
-			if(GRUE_LIGHT) //light
-				var/thisdmg=lightparams.get_light_damage(src)
-				apply_damage(thisdmg,BURN) //burn in light
-				if(thisdmg>(maxHealth/7))
-					to_chat(src, "<span class='danger'>The burning light sears your flesh!</span>")
-				else
-					to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
-				playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
+		if(lightparams.dark_dim_light == GRUE_DARK)
+			if(!ismoulting) //moulting temporarily stops healing via darkness
+				apply_damage(lightparams.get_dark_heal(src),BURN) //heal in dark
 
 		//update accum_light_expos_mult for light damage
 		lightparams.alem_adjust()
@@ -261,6 +294,10 @@
 
 /mob/living/simple_animal/hostile/grue/New()
 	..()
+	if(!loop_active) //start the loop
+		loop_active = TRUE
+		spawn()
+			time_limit_in_light_loop()
 	add_language(LANGUAGE_GRUE)
 	default_language = all_languages[LANGUAGE_GRUE]
 	number = rand(1, 1000)
