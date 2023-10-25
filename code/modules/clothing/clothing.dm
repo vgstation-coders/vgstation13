@@ -740,6 +740,8 @@ var/global/maxStackDepth = 10
 /obj/item/clothing/suit/equipped(var/mob/user, var/slot, hand_index = 0)
 	..()
 	if (hood && (force_hood || auto_hood) && !hand_index)
+		if (auto_hood && (user.get_item_by_slot(slot_head) && user.get_item_by_slot(slot_head) != hood))
+			return//we want to still be able to equip the suit even if the hood is blocked
 		hoodup(user)
 
 /obj/item/clothing/suit/unequipped(var/mob/living/carbon/human/user)
@@ -752,7 +754,7 @@ var/global/maxStackDepth = 10
 
 	if (hood && force_hood && slot == slot_wear_suit)
 		if (M.get_item_by_slot(slot_head) && M.get_item_by_slot(slot_head) != hood)
-			to_chat(M, "You try to put the [hood_suit_name] on, but there is something in the way of it's hood.")
+			to_chat(M, "You try to put the [hood_suit_name] on, but there is something in the way of its hood.")
 			return FALSE
 		else if (!hood.mob_can_equip(M, slot_head))
 			return FALSE
