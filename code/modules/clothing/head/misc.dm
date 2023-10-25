@@ -687,6 +687,7 @@
 	desc = "You did cut out eye holes, but you don't remember drawing a face. Spooooky"
 	icon_state = "bedsheet_ghost"
 	body_parts_covered = FACE|FULL_HEAD|HIDEHAIR
+	wear_override = new/icon("icon" = 'icons/misc/empty.dmi', "icon_state" = "empty_icon")
 
 /obj/item/clothing/head/elfhat
 	name = "elf hat"

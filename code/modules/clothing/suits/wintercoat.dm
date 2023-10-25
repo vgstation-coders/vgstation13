@@ -27,6 +27,7 @@
 	icon_state = "whood"
 	body_parts_covered = HIDEHEADHAIR
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
+	wear_override = new/icon("icon" = 'icons/misc/empty.dmi', "icon_state" = "empty")
 
 /obj/item/clothing/suit/storage/wintercoat/security/captain
 	name = "captain's winter coat"
