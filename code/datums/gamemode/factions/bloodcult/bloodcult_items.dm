@@ -1322,6 +1322,8 @@ var/list/arcane_tomes = list()
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	mech_flags = MECH_SCAN_FAIL
+	hood = new /obj/item/clothing/head/culthood()
+	hood_suit_name = "robes"
 
 	//plasmaman stuff
 	var/next_extinguish=0
@@ -1332,6 +1334,7 @@ var/list/arcane_tomes = list()
 	desc = "A set of warm armored robes worn by the followers of Nar-Sie."
 	icon_state = "cultrobes_snow"
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	hood = new /obj/item/clothing/head/culthood/snow()
 
 /obj/item/clothing/suit/cultrobes/get_cult_power()
 	return 50
@@ -1506,6 +1509,7 @@ var/list/arcane_tomes = list()
 	icon_state = "cultrobes_old"
 	item_state = "cultrobes_old"
 	species_fit = list()
+	hood = new /obj/item/clothing/head/culthood/old()
 
 /obj/item/clothing/head/magus
 	name = "magus helm"

@@ -915,14 +915,6 @@
 	clothing_flags = ONESIZEFITSALL
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 
-/obj/item/clothing/suit/reaper_robes
-	name = "grim robes"
-	desc = "Tends to snag on tombstones"
-	icon_state = "reaper_hoodie" //edited version of chaplain_hoodie. 1px longer, and more open at the front
-	item_state = "reaper_hoodie"
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
-	body_parts_covered = FULL_TORSO|LEGS|ARMS|IGNORE_INV
-
 /obj/item/clothing/under/clownpsyche
 	name = "Psychedelic clown outfit"
 	desc = "Do you know the definition of insanity?"
