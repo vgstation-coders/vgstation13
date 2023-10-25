@@ -91,7 +91,7 @@
 	range = 0
 	charge_type = Sp_GRADUAL | Sp_HOLDVAR
 	holder_var_type = "nutrienergy"
-	holder_var_amount = 0.1 //Around 1 nutrienergy per second.
+	holder_var_amount = 0.2 //Around 2 nutrienergy per second.
 	holder_var_name = "nutritive energy"
 	still_recharging_msg = "<span class='notice'>You need to feed more first.</span>"
 
