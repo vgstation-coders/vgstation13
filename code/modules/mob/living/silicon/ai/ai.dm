@@ -41,7 +41,8 @@ var/list/ai_list = list()
 	var/datum/intercom_settings/intercom_clipboard = null //Clipboard for copy/pasting intercom settings
 	var/mentions_on = FALSE
 	var/list/holopadoverlays = list()
-
+	var/list/obj/machinery/bot/list_bot_control = list()
+	var/obj/machinery/bot/directing_bot = null
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
 	var/vox_corrupted = FALSE
@@ -161,6 +162,11 @@ var/list/ai_list = list()
 				stored_freqs = 1
 
 			job = "AI"
+	for(var/obj/machinery/bot/Bot in bots_list)
+		var/turf/T = get_turf(Bot)
+		if(T.z == z)
+			list_bot_control += Bot
+
 	ai_list += src
 	..()
 	if(!safety)
@@ -296,7 +302,7 @@ var/static/list/ai_icon_states = list(
 		"Xerxes" = "ai-xerxes",
 		"Yes Man" = "yes-man",
 	)
-	
+
 /mob/living/silicon/ai/verb/pick_icon()
 	set category = "AI Commands"
 	set name = "Set AI Core Display"
@@ -955,3 +961,9 @@ var/static/list/ai_icon_states = list(
 		client?.darkness_planemaster.alpha = 150
 	else
 		client?.darkness_planemaster.alpha = 255
+
+/mob/living/silicon/ai/Stat()
+	..()
+
+	if(client && client.holder && client.inactivity < 1200)
+		statpanel("Bots",null,list_bot_control)

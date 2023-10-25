@@ -75,7 +75,7 @@
 	var/summoned = FALSE // Were they summoned?
 
 	var/commanding_radios = list(/obj/item/radio/integrated/signal/bot)
-
+	var/obj/machinery/camera/camera = null
 	// Queue of directions. Just like shift-clicking on age of empires 2. It'll go to the next direction after it's finished with this one
 	// It's a list of lists. These lists are coordinates
 	// Mulebots contain an extra fourth parameter used to load/unload at that position.
@@ -94,6 +94,12 @@
 		radio_controller.add_object(src, control_freq, filter = control_filter)
 	if(bot_flags & BOT_BEACON)
 		radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
+
+	if(!camera)
+		camera = new /obj/machinery/camera/flawless(src)
+		camera.c_tag = "[name][round(rand(111,999))]"
+		camera.setViewRange(3)
+		camera.network = list(CAMERANET_SS13)
 
 /obj/machinery/bot/Destroy()
 	. = ..()
@@ -724,6 +730,15 @@
 			return W.force
 		else
 			..()
+
+obj/machinery/bot/attack_hand(mob/user as mob)
+	. = ..()
+	if (.)
+		return
+	if(isAI(user))
+		var/mob/living/silicon/ai/S = user
+		S.list_bot_control += src
+
 
 /obj/machinery/bot/kick_act(mob/living/H)
 	..()
