@@ -26,6 +26,7 @@
 		return FALSE
 	if (istype(user.get_item_by_slot(slot_glasses), /obj/item/clothing/glasses/sunglasses/blindfold))
 		to_chat(user, "<span class='warning'>You're blindfolded!</span>")
+		return FALSE
 	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
 

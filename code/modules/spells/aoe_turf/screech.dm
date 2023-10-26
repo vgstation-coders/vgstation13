@@ -42,7 +42,7 @@
 				if (FALSE)
 					continue
 				if (VAMP_FAILURE)
-					critfail(targets, user)
+					return critfail(targets, user)
 	return targets
 
 /spell/aoe_turf/screech/cast(var/list/targets, var/mob/user)
