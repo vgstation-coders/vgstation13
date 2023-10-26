@@ -139,14 +139,83 @@
 	else
 		to_chat(user, "<span class='notice'>Where are the eyes on that?</span>")
 
-//you can wipe off eyeshadow with paper!
+/obj/item/weapon/facepaint_spray
+	name = "face paint spray"
+	desc = "A can of Dr. Frankenstein's instant facepaint. There is a dial on the top for pattern selection."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "face_paint"
+	flags = FPRINT
+	w_class = W_CLASS_TINY
+
+	var/selected_pattern = 1
+	var/list/pattern_list = list(
+		"Deathly Pallor" = "pallor",
+		"Zombie Fever" = "zombie",
+		"Martian Menace" = "alien",
+		"Impish Visage" = "devil"
+	)
+
+/obj/item/weapon/facepaint_spray/attack(mob/M, mob/user)
+	if(!istype(M, /mob))
+		return
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.face_style)	//if they already have facepaint on
+			to_chat(user, "<span class='notice'>You need to wipe off the old facepaint first!</span>")
+			return
+
+		var/pattern = pattern_list[pattern_list[selected_pattern]]
+
+		if(H == user)
+			user.visible_message("<span class='notice'>[user] sprays their face with \the [src].</span>", \
+								 "<span class='notice'>You shut your eyes and spray your face with \the [src], trying not to inhale any paint.</span>")
+			H.face_style = pattern
+			H.update_body()
+
+		else
+			user.visible_message("<span class='warning'>[user] begins to spray [H]'s face with \the [src].</span>", \
+								 "<span class='notice'>You begin to apply \the [src].</span>")
+			if(do_after(user,H, 20))	//user needs to keep their active hand, H does not.
+				user.visible_message("<span class='notice'>[user] does [H]'s eyes with \the [src].</span>", \
+									 "<span class='notice'>You apply \the [src].</span>")
+				H.face_style = pattern
+				H.update_body()
+
+	else
+		to_chat(user, "<span class='notice'>Where are the eyes on that?</span>")
+
+/obj/item/weapon/facepaint_spray/attack_self(mob/user as mob)
+	selected_pattern += 1
+	selected_pattern = selected_pattern > pattern_list.len ? 1 : selected_pattern
+	to_chat(user, "<span class='notice'>You set the spray to \"[pattern_list[selected_pattern]]\" mode</span>")
+
+/obj/item/weapon/facepaint_spray/examine(mob/user, size, show_name)
+	. = ..()
+	to_chat(user, "<span class='notice'>It is set to \"[pattern_list[selected_pattern]]\" mode</span>")
+
+//you can wipe off makeup with paper!
 /obj/item/weapon/paper/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!ishuman(M))
 		return
 
 	var/mob/living/carbon/human/H = M
 
-	if(user.zone_sel.selecting == "eyes")
+	if(user.zone_sel.selecting == "head")
+		if(H == user)
+			to_chat(user, "<span class='notice'>You wipe off the face paint with [src].</span>")
+			H.face_style = null
+			H.update_body()
+		else
+			user.visible_message("<span class='warning'>[user] begins to wipe [H]'s face paint  off with \the [src].</span>", \
+									"<span class='notice'>You begin to wipe off [H]'s face paint .</span>")
+			if(do_after(user, H, 10) && do_after(H, null, 10, 5, 0))	//user needs to keep their active hand, H does not.
+				user.visible_message("<span class='notice'>[user] wipes [H]'s face paint  off with \the [src].</span>", \
+										"<span class='notice'>You wipe off [H]'s face paint .</span>")
+				H.face_style = null
+				H.update_body()
+
+	else if(user.zone_sel.selecting == "eyes")
 		if(H == user)
 			to_chat(user, "<span class='notice'>You wipe off the eyeshadow with [src].</span>")
 			H.eye_style = null
@@ -159,6 +228,7 @@
 										"<span class='notice'>You wipe off [H]'s eyeshadow.</span>")
 				H.eye_style = null
 				H.update_body()
+
 	else if(user.zone_sel.selecting == "mouth")
 		if(H == user)
 			to_chat(user, "<span class='notice'>You wipe off the lipstick with [src].</span>")

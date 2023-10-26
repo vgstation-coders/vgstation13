@@ -488,7 +488,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/spookycostume
 	name = "Halloween costumes"
-	contains = list(/obj/item/clothing/suit/space/plasmaman/moltar,
+	contains = list(
+					/obj/item/weapon/facepaint_spray,
+
+					/obj/item/clothing/suit/space/plasmaman/moltar,
 					/obj/item/clothing/head/helmet/space/plasmaman/moltar,
 					/obj/item/clothing/head/snake,
 					/obj/item/clothing/head/franken_bolt,

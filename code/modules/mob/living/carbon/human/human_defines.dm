@@ -7,6 +7,7 @@
 
 	var/lip_style = null	//no lipstick by default- arguably misleading, as it could be used for general makeup
 	var/eye_style = null
+	var/face_style = null
 
 	mob_bump_flag = HUMAN
 	mob_push_flags = ALLMOBS
