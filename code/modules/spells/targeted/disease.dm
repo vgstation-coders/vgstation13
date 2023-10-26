@@ -25,7 +25,7 @@
 	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
 
-/spell/targeted/disease/is_valid_target(atom/target, mob/user, options, bypass_range = 0, before_cast)
+/spell/targeted/disease/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(!istype(target, /mob/living/carbon))
 		return FALSE
 	return ..()
