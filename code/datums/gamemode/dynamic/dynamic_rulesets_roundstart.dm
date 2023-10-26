@@ -271,7 +271,7 @@
 	required_pop = list(25,25,20,20,20,20,15,15,15,5)
 	required_candidates = 4
 	weight = BASE_RULESET_WEIGHT/2
-	weight_category = "Wizard"
+	weight_category = "CWC"
 	cost = 45
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
