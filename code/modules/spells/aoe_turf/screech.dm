@@ -33,16 +33,19 @@
 			continue
 		if(ishuman(C))
 			var/mob/living/carbon/human/H = C
-			if(H.earprot())
-				continue
 			var/success = C.vampire_affected(user.mind)
 			switch (success)
+				if (VAMP_FAILURE)
+					critfail(targets, user)
+					return FALSE //Does not cast
 				if (TRUE)
+					if(H.earprot())
+						continue
 					targets += C
 				if (FALSE)
 					continue
-				if (VAMP_FAILURE)
-					return critfail(targets, user)
+			if(H.earprot())
+				continue
 	return targets
 
 /spell/aoe_turf/screech/cast(var/list/targets, var/mob/user)
