@@ -1373,7 +1373,7 @@
 		ACL |= I.GetAccess()
 	if(wear_id)
 		ACL |= wear_id.GetAccess()
-	if(head && istype(head, /obj/item/clothing/head/bearpelt/real/spare))
+	if(head)
 		ACL |= head.GetAccess()
 	return ACL
 
