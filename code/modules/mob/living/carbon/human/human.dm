@@ -1373,6 +1373,8 @@
 		ACL |= I.GetAccess()
 	if(wear_id)
 		ACL |= wear_id.GetAccess()
+	if(head)
+		ACL |= head.GetAccess()
 	return ACL
 
 /mob/living/carbon/human/get_visible_id()
