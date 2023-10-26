@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS `erro_feedback` (
 
 );
 
- 
 
 Open the file config/dbconfig.txt and edit the following lines:
 
