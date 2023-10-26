@@ -48,7 +48,7 @@
 		if(C in immune_targets)
 			C.vampire_affected(user.mind)
 			continue
-		to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
+		to_chat(C, "<span class='danger'><font size='3'>You hear an ear piercing shriek and your senses dull!</font></span>")
 		C.Knockdown(8)
 		C.ear_deaf = 20
 		C.stuttering = 20

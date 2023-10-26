@@ -275,7 +275,7 @@
 	for(var/mob/living/carbon/human/H in view(7, src))
 		if((H.vampire_affected() <= 0) || H.earprot())
 			continue
-		to_chat(H, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
+		to_chat(H, "<span class='danger'><font size='3'>You hear an ear piercing shriek and your senses dull!</font></span>")
 		H.Knockdown(8)
 		H.ear_deaf = 20
 		H.stuttering = 20
