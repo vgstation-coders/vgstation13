@@ -46,6 +46,9 @@
 	var/timer = 0 //currently only used on skittering food
 	var/datum/reagents/dip
 
+	autoignition_temperature = AUTOIGNITION_ORGANIC
+	fire_fuel = 10
+
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
 	var/turf/T = get_turf(src)
 	if(contents.len)
@@ -5897,7 +5900,7 @@
 	slot_flags = SLOT_MASK
 	goes_in_mouth = TRUE
 	throwforce = 1
-	autoignition_temperature = 0
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	w_type = RECYK_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 100)
 	species_fit = list(INSECT_SHAPED)

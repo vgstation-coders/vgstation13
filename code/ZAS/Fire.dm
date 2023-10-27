@@ -78,6 +78,9 @@ Attach to transfer valve and open. BOOM.
 	spawn()
 		burnItselfUp()
 
+/atom/proc/try_spontaneous_combustion()
+	return
+
 /atom/proc/melt()
 	return //lolidk
 

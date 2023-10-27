@@ -1223,9 +1223,15 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		the_air.temperature = chem_temp
 
 		reactions_check
-		if(skip_flags & SKIP_RXN_CHECK_ON_HEATING)
-			return
-		handle_reactions()
+		if(!(skip_flags & SKIP_RXN_CHECK_ON_HEATING))
+			handle_reactions()
+
+		//Since the temperature of the reagents changed, check if the atom should spontaneously combust.
+		my_atom?.try_spontaneous_combustion()
+
+		//A check for melting could also occur here, but since it wouldn't really do anything for now, we'll skip it for now.
+
+
 
 #undef NO_REACTION_UNMET_TEMP_COND
 #undef NO_REACTION

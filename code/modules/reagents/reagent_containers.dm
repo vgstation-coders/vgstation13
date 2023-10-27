@@ -406,3 +406,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	. = ..()
 	//Reagent containers can exchange heat with the surrounding air.
 	heat_dissipation_updates() //Every reagent_containers that should be added to the heat dissipation subsystem should call this on_reagent_change(). If you add something that breaks the supercall chain, be sure to call this.
+
+/obj/item/weapon/reagent_containers/try_spontaneous_combustion()
+	if (gcDestroyed || timestopped)
+		return
+	if (reagents && reagents.total_volume && autoignition_temperature && reagents.chem_temp >= autoignition_temperature)
+		ignite()
