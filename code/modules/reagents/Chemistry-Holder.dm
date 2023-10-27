@@ -996,9 +996,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		chem_temp = min(chem_temp + temp_change, received_temperature)
 	else
 		chem_temp = max(chem_temp + temp_change, received_temperature, TCMB)
-	if(skip_flags & SKIP_RXN_CHECK_ON_HEATING)
-		return
-	handle_reactions()
+	if(!(skip_flags & SKIP_RXN_CHECK_ON_HEATING))
+		handle_reactions()
 	my_atom?.try_spontaneous_combustion()
 
 /datum/reagents/proc/get_examine(var/mob/user, var/vis_override, var/blood_type)
