@@ -999,6 +999,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(skip_flags & SKIP_RXN_CHECK_ON_HEATING)
 		return
 	handle_reactions()
+	my_atom?.try_spontaneous_combustion()
 
 /datum/reagents/proc/get_examine(var/mob/user, var/vis_override, var/blood_type)
 	if(obscured && !vis_override)
