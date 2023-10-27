@@ -47,7 +47,7 @@
 	var/datum/reagents/dip
 
 	autoignition_temperature = AUTOIGNITION_ORGANIC
-	fire_fuel = 10
+	fire_fuel = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
 	var/turf/T = get_turf(src)
