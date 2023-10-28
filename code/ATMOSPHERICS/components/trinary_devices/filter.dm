@@ -21,12 +21,12 @@ Filter types:
  4: Sleeping Agent (N2O)
 */
 
-	var/frequency = 0
+	frequency = 0
 	var/datum/radio_frequency/radio_connection
 
 	ex_node_offset = 5
 
-/obj/machinery/atmospherics/trinary/filter/proc/set_frequency(new_frequency)
+/obj/machinery/atmospherics/trinary/filter/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)

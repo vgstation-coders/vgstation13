@@ -1373,6 +1373,8 @@
 		ACL |= I.GetAccess()
 	if(wear_id)
 		ACL |= wear_id.GetAccess()
+	if(head)
+		ACL |= head.GetAccess()
 	return ACL
 
 /mob/living/carbon/human/get_visible_id()
@@ -1406,6 +1408,8 @@
 				if (catvision.count)
 					dark_plane.alphas["cattulism"] = clamp(15 + (catvision.count * 20),15,155) // The more it activates, the better we see, until we see as well as a tajaran would.
 					break
+		if(dark_plane_alpha_override)
+			dark_plane.alphas["override"] = dark_plane_alpha_override
 
 	if (istype(glasses))
 		glasses.update_perception(src)

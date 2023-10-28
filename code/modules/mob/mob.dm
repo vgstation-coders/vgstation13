@@ -1486,7 +1486,15 @@ Use this proc preferably at the end of an equipment loadout
 
 	if(client && client.inactivity < (1200))
 		if(listed_turf)
-			if(get_dist(listed_turf,src) > 1)
+			var/inrange = TRUE
+			if(isAI(src))
+				var/mob/living/silicon/ai/ai = src
+				if(get_dist(listed_turf, ai.eyeobj) > 7)
+					inrange = FALSE
+			else if(get_dist(listed_turf,src) > 1)
+				inrange = FALSE
+
+			if(!inrange)
 				listed_turf = null
 			else if(statpanel(listed_turf.name))
 				statpanel(listed_turf.name, null, listed_turf)

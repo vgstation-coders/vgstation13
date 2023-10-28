@@ -153,7 +153,7 @@ Attach to transfer valve and open. BOOM.
 	blend_mode = BLEND_ADD
 
 	icon = 'icons/effects/fire.dmi'
-	icon_state = "1"
+	icon_state = "key1"
 	layer = TURF_FIRE_LAYER
 	plane = ABOVE_TURF_PLANE
 
@@ -169,7 +169,6 @@ Attach to transfer valve and open. BOOM.
 		A.extinguish()
 
 	qdel(src)
-
 
 /obj/effect/fire/process()
 	if(timestopped)
@@ -208,16 +207,20 @@ Attach to transfer valve and open. BOOM.
 
 	//get a firelevel and set the icon
 	var/firelevel = air_contents.calculate_firelevel(S)
+	var/heatlight = max(1, air_contents.temperature / 2000)
+
+	// Update fire color.
+	color = heat2color(air_contents.temperature)
 
 	if(firelevel > 6)
-		icon_state = "3"
-		set_light(7, 3)
+		icon_state = "key3"
+		set_light(7, 3 * heatlight, color)
 	else if(firelevel > 2.5)
-		icon_state = "2"
-		set_light(5, 2)
+		icon_state = "key2"
+		set_light(5, 2 * heatlight, color)
 	else
-		icon_state = "1"
-		set_light(3, 1)
+		icon_state = "key1"
+		set_light(3, 1 * heatlight, color)
 
 	//im not sure how to implement a version that works for every creature so for now monkeys are firesafe
 	for(var/mob/living/carbon/human/M in loc)

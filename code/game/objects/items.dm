@@ -406,7 +406,7 @@ var/global/objects_thrown_when_explode = FALSE
 			if(!user.put_in_hand_check(src, user.get_active_hand()))
 				return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
-		if(!canremove)
+		if(!canremove && user.is_wearing_item(src))
 			to_chat(user, "<span class='notice'>\The [src][cant_remove_msg]</span>")
 			return
 
@@ -600,6 +600,10 @@ var/global/objects_thrown_when_explode = FALSE
 								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
 							return CANNOT_EQUIP
 
+				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
+					to_chat(H, "<span class='warning'>You have no mouth.</span>")
+					return CANNOT_EQUIP
+
 				if(H.wear_mask)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -609,9 +613,7 @@ var/global/objects_thrown_when_explode = FALSE
 					else
 						return CANNOT_EQUIP
 
-				if(goes_in_mouth && !H.hasmouth()) //Item is equipped to the mouth but the species has no mouth.
-					to_chat(H, "<span class='warning'>You have no mouth.</span>")
-					return CANNOT_EQUIP
+				
 
 				return CAN_EQUIP
 			if(slot_back)
