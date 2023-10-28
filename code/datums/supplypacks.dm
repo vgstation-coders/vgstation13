@@ -78,7 +78,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Supplies"
 	
 /datum/supply_packs/vox_supply
-	name = "Vox Internals resupply"
+	name = "Vox internals set"
 	contains = list(/obj/item/clothing/suit/space/vox/civ,
 					/obj/item/clothing/head/helmet/space/vox/civ,
 					/obj/item/weapon/tank/nitrogen,
@@ -90,7 +90,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Supplies"
 	
 /datum/supply_packs/plasmaman_supply
-	name = "Plasmaman Internals resupply"
+	name = "Plasmaman internals set"
 	contains = list(/obj/item/clothing/suit/space/plasmaman,
 					/obj/item/clothing/head/helmet/space/plasmaman,
 					/obj/item/weapon/tank/plasma/plasmaman,
