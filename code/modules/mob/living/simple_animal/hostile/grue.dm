@@ -176,16 +176,25 @@
 				if(-1.#INF to 6)
 					healths2.icon_state = "lightlevel_bright"
 
-//Checks every 0.1 seconds to update the darkness level icon and count down a ticker
+//Checks every 0.2 seconds to update the darkness level icon and count down a ticker
 //Allows the grue to stay in contact with bright lights for 2 seconds before getting roasted, regardless of Life() tick
 //Updates a screen indicator as well as the darkness indicator
 //Starts incrementing the timer when the grue goes back into the darkness, resets if the grue got burnt
 /mob/living/simple_animal/hostile/grue/proc/time_limit_in_light_loop()
 	var/time_limit = 2 SECONDS
+	var/penalty_timer //After 2 seconds, resets the speed and light damage multipliers
 	while((stat != DEAD) && !gcDestroyed) //Happens for as long as the grue isn't dead AND isn't just outright gone
 		if(!timestopped)
+			if(penalty_timer > 0)
+				if(lightparams.dark_dim_light != GRUE_LIGHT) //Only tick down the counter when the grue is not exposed to the light
+					penalty_timer = max(0, penalty_timer - 2)
+			else if(penalty_timer != -1) //if set at -1, it is disabled so that the procs don't run too many times
+				lightparams.speed_adjust(src)
+				lightparams.accum_light_expos_mult = 1
+				penalty_timer = -1
 			lightparams.ddl_update(src) //Checks the light condition
 			update_darkness_indicator(time_limit)
+			lightparams.nutri_adjust(src)
 			if(lightparams.dark_dim_light == GRUE_LIGHT)
 				if(time_limit <= 0) //Timer expired, do the damage and reset it
 					var/thisdmg=lightparams.get_light_damage(src)
@@ -196,11 +205,14 @@
 						to_chat(src, "<span class='warning'>The bright light scalds you!</span>")
 					playsound(src, 'sound/effects/grue_burn.ogg', 50, 1)
 					time_limit = 2 SECONDS
+					penalty_timer = 2 SECONDS
+					lightparams.speed_adjust(src) //Reduce their speed until they're back in darkness
+					lightparams.alem_adjust()
 				else //They are in the light, reduce the timer (by default has a value of 20)
-					time_limit--
-			else //Grue is in darkness, recover it twice as fast
-				time_limit = min(2 SECONDS, time_limit + 2)
-		sleep(1)
+					time_limit = max(0, time_limit - 2)
+			else //Grue is in darkness, recover the timer twice as fast
+				time_limit = min(2 SECONDS, time_limit + 4)
+		sleep(2)
 	loop_active = FALSE
 	return
 
@@ -223,15 +235,6 @@
 		if(lightparams.dark_dim_light == GRUE_DARK)
 			if(!ismoulting) //moulting temporarily stops healing via darkness
 				apply_damage(lightparams.get_dark_heal(src),BURN) //heal in dark
-
-		//update accum_light_expos_mult for light damage
-		lightparams.alem_adjust()
-
-		//handle light-based nutrienergy gain or drain
-		lightparams.nutri_adjust(src)
-
-		//update speed modifier based on light condition
-		lightparams.speed_adjust(src)
 
 		if(ismoulting)
 			moulttimer--
