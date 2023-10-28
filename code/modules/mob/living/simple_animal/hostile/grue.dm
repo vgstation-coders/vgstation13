@@ -182,7 +182,7 @@
 //Starts incrementing the timer when the grue goes back into the darkness, resets if the grue got burnt
 /mob/living/simple_animal/hostile/grue/proc/time_limit_in_light_loop()
 	var/time_limit = 2 SECONDS
-	var/penalty_timer //After 2 seconds, resets the speed and light damage multipliers
+	var/penalty_timer = -1 //After 2 seconds, resets the speed and light damage multipliers
 	while((stat != DEAD) && !gcDestroyed) //Happens for as long as the grue isn't dead AND isn't just outright gone
 		if(!timestopped)
 			if(penalty_timer > 0)
