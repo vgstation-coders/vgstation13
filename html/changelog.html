@@ -78,6 +78,7 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<ul class="changes bgimages16">
 				<li class="bugfix">Fixed a bug where the target that was initially hit by the wizard&#39;s &#34;Lightning&#34; spell would randomly cause the Lightning spell to not arc to nearby targets and randomly hit the same target twice. The Lightning spell will now properly arc to other targets and not have a random chance to instantly put someone into critical condition while at it.</li>
 				<li class="bugfix">The wizard that casts the &#39;Lightning&#34; spell will no longer be a valid target to be dealt damage to, which was caused by the Lightning spell arcing to a target that the wizard was in the way of. However, it will still arc off the wizard if it is able to do so.</li>
+				<li class="bugfix">Fixed a bug that caused Pain Mirror to be able to indefinitely ping-pong between different Pain Mirror users, provided that they were not human. This was, most notably, possible with the wizard&#39;s Arcane Golems.</li>
 			</ul>
 			<h2 class="date">2023.10.26</h2>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
