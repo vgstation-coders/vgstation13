@@ -365,6 +365,13 @@
 		keys += key
 	return keys
 
+//In an associative list, return a sum of the elements.
+/proc/get_sum_of_elements(var/list/L)
+	var/elements = 0
+	for(var/key in L)
+		elements += L[key]
+	return elements
+
 /proc/count_by_type(var/list/L, type)
 	var/i = 0
 	for(var/T in L)
