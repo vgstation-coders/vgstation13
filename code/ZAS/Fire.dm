@@ -22,6 +22,17 @@ Attach to transfer valve and open. BOOM.
 
 	var/volatility = BASE_ZAS_FUEL_REQ //the lower this is, the easier it burns with low fuel in it. Starts at the define value
 
+	var/atom/movable/firelightdummy/firelightdummy
+
+
+/atom/movable/firelightdummy //this is a dummy that gets added to the vis_contents of a burning atom that can be a light source when its on fire so that it doesnt overwrite the light the atom might already be making
+	mouse_opacity = 0
+	light_color = LIGHT_COLOR_FIRE
+
+/atom/movable/firelightdummy/New()
+	.=..()
+	set_light(3,4)
+
 /atom/proc/ashtype()
 	return /obj/effect/decal/cleanable/ash
 
@@ -31,9 +42,12 @@ Attach to transfer valve and open. BOOM.
 /atom/proc/burnFireFuel(used_fuel_ratio, used_reactants_ratio)
 	fire_fuel -= (fire_fuel * used_fuel_ratio * used_reactants_ratio) //* 5
 
+	var/turf/T = get_turf(loc)
+	if(T)
+		T.hotspot_expose(autoignition_temperature, CELL_VOLUME)
 	if(prob(10)) //10% chance of smoke creation per tick
 		var/datum/effect/system/smoke_spread/fire/smoke = new /datum/effect/system/smoke_spread()
-		smoke.set_up(4,0,get_turf(loc))
+		smoke.set_up(4,0,T)
 		smoke.time_to_live = 60 SECONDS
 		smoke.start()
 
@@ -68,6 +82,7 @@ Attach to transfer valve and open. BOOM.
 	on_fire=0
 	if(fire_overlay)
 		overlays -= fire_overlay
+	QDEL_NULL(firelightdummy)
 
 /atom/proc/ignite(var/temperature)
 	on_fire=1
@@ -75,6 +90,11 @@ Attach to transfer valve and open. BOOM.
 	if(fire_dmi && fire_sprite)
 		fire_overlay = image(fire_dmi,fire_sprite)
 		overlays += fire_overlay
+
+	var/atom/movable/AM = src
+	if(istype(AM))
+		firelightdummy = new (src)
+		AM.vis_contents += firelightdummy
 	spawn()
 		burnItselfUp()
 
