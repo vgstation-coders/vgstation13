@@ -198,8 +198,13 @@ By design, d1 is the smallest direction and d2 is the highest
 		cut(user, T)
 		return
 	else if(istype(W, /obj/item/stack/cable_coil))
-		var/obj/item/stack/cable_coil/coil = W
-		coil.cable_join(src, user)
+		var/turf/U = get_turf(user)
+		if (U.can_place_cables())
+			var/obj/item/stack/cable_coil/coil = W
+			coil.cable_join(src, user)
+		else
+			to_chat(user, "<span class='warning'>You can't place cables there.</span>")
+			return
 	else if(istype(W, /obj/item/weapon/rcl))
 		var/obj/item/weapon/rcl/R = W
 		if(R.loaded)
