@@ -196,7 +196,7 @@
 
 #define istable(A) (istype(A, /obj/structure/table))
 
-#define isholder(A) (istype(A, /obj/structure/table) || istype(A, /obj/structure/rack) || istype(A, /obj/structure/closet) || istype(A, /obj/item/weapon/storage))
+#define isshelf(A) (istype(A, /obj/structure/table) || istype(A, /obj/structure/rack) || istype(A, /obj/structure/closet) || istype(A, /obj/item/weapon/storage))
 
 #define issilicatesprayer(A) (istype(A, /obj/item/device/silicate_sprayer))
 

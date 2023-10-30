@@ -102,7 +102,7 @@
 /obj/item/weapon/rcl/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag == 0) // not adjacent
 		return
-	if (isholder(target))//placing on table, rack, closet, or in a backpack etc
+	if (isshelf(target))//placing on table, rack, closet, or in a backpack etc
 		return
 	if(!loaded || !loaded.amount)
 		to_chat(user, "<span class='warning'>There isn't any cable left inside.</span>")
