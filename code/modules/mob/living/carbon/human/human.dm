@@ -1913,6 +1913,7 @@
 	var/static/list/resettable_vars = list(
 		"lip_style",
 		"eye_style",
+		"face_style",
 		"wear_suit",
 		"w_uniform",
 		"shoes",

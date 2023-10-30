@@ -277,12 +277,16 @@ var/global/list/damage_icon_parts = list()
 			eyes.Blend(rgb(my_appearance.r_eyes, my_appearance.g_eyes, my_appearance.b_eyes), ICON_ADD)
 			stand_icon.Blend(eyes, ICON_OVERLAY)
 
+
+		if (face_style)
+			stand_icon.Blend(new/icon('icons/mob/makeup.dmi', "facepaint_[face_style]_s"), ICON_OVERLAY)
+
 		//Mouth	(lipstick!)
 		if(lip_style)
-			stand_icon.Blend(new/icon('icons/mob/hair_styles.dmi', "lips_[lip_style]_s"), ICON_OVERLAY)
+			stand_icon.Blend(new/icon('icons/mob/makeup.dmi', "lips_[lip_style]_s"), ICON_OVERLAY)
 
 		if(eye_style)
-			stand_icon.Blend(new/icon('icons/mob/hair_styles.dmi', "eyeshadow_[eye_style]_light_s"), ICON_OVERLAY)
+			stand_icon.Blend(new/icon('icons/mob/makeup.dmi', "eyeshadow_[eye_style]_light_s"), ICON_OVERLAY)
 
 
 	//Underwear
@@ -1494,11 +1498,15 @@ var/global/list/damage_icon_parts = list()
 	eyes_l.Blend(rgb(my_appearance.r_eyes, my_appearance.g_eyes, my_appearance.b_eyes), ICON_ADD)
 	face_lying.Blend(eyes_l, ICON_OVERLAY)
 
+
+	if (face_style)
+		stand_icon.Blend(new/icon('icons/mob/makeup.dmi', "facepaint_[face_style]_l"), ICON_OVERLAY)
+
 	if(lip_style)
-		face_lying.Blend(new/icon('icons/mob/hair_styles.dmi', "lips_[lip_style]_l"), ICON_OVERLAY)
+		face_lying.Blend(new/icon('icons/mob/makeup.dmi', "lips_[lip_style]_l"), ICON_OVERLAY)
 
 	if(eye_style)
-		face_lying.Blend(new/icon('icons/mob/hair_styles.dmi', "eyeshadow_[eye_style]_light_l"), ICON_OVERLAY)
+		face_lying.Blend(new/icon('icons/mob/makeup.dmi', "eyeshadow_[eye_style]_light_l"), ICON_OVERLAY)
 
 	var/image/face_lying_image = new /image(icon = face_lying)
 	return face_lying_image
