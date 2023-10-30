@@ -209,7 +209,6 @@ var/datum/controller/gameticker/ticker
 				new_characters[key] = H
 		CHECK_TICK
 
-	handle_lights()
 
 	var/list/clowns = list()
 	var/already_an_ai = FALSE
@@ -236,6 +235,8 @@ var/datum/controller/gameticker/ticker
 	//delete the new_player mob for those who readied
 	for(var/mob/np in new_players_ready)
 		qdel(np)
+
+	handle_lights()
 
 	if(!already_an_ai && clowns.len >= 2 && prob(1))
 		var/mob/living/carbon/human/H = pick(clowns)
@@ -652,18 +653,14 @@ var/datum/controller/gameticker/ticker
 	return roles
 
 /datum/controller/gameticker/proc/handle_lights() //This is used to turn on lights in occupied departments
-	var/list/lit_up_areas = list()
-	for(var/mob/living/player in player_list)
-		lit_up_areas |= get_department_areas(player)
-
-	for(var/obj/machinery/light_switch/LS in all_machines)
-		if(get_area(LS) in lit_up_areas)
-			LS.toggle_switch(1,playsound=FALSE)
-
-
-	var/list/discrete_areas = areas.Copy() //this is the old method because there is no list for lamps and it seems silly to make one.
+	var/list/discrete_areas = areas.Copy()
 	for(var/mob/living/player in player_list)
 		discrete_areas -= get_department_areas(player)
+
+	for(var/obj/machinery/light_switch/LS in all_machines)
+		if((get_area(LS) in discrete_areas))
+			LS.toggle_switch(0,playsound=FALSE)
+
 	spawn(0)
 		for(var/area/DA in discrete_areas)
 			for(var/obj/item/device/flashlight/lamp/L in DA)

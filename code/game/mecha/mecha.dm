@@ -1247,9 +1247,13 @@
 	else if(occupant)
 		to_chat(user, "Occupant detected.")
 		return 0
-	else if(dna && dna!=mmi_as_oc.brainmob.dna.unique_enzymes)
-		to_chat(user, "Stop it!")
-		return 0
+	else if(dna)
+		if(!mmi_as_oc.brainmob.dna)
+			to_chat(user, "Remove the DNA-lock before proceeding.") //Avoids a posibrain runtime since posibrains don't have DNA
+			return 0
+		if(mmi_as_oc.brainmob.dna && dna!=mmi_as_oc.brainmob.dna.unique_enzymes)
+			to_chat(user, "The DNA-lock rejects \the [mmi_as_oc], the DNAs do not match.") //Gives a clue that the MMI could be inserted if it was the original DNA lock holder.
+			return 0
 	//Added a message here since people assume their first click failed or something./N
 //	to_chat(user, "Installing MMI, please stand by.")
 
@@ -1257,8 +1261,6 @@
 
 	if(do_after(user, src, 40))
 		if(!occupant)
-			log_admin("[key_name(usr)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src] at X=[src.x];Y=[src.y];Z=[src.z]")
-			message_admins("[key_name(usr)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
 			return mmi_moved_inside(mmi_as_oc,user)
 		else
 			to_chat(user, "Occupant detected.")
@@ -1289,6 +1291,8 @@
 		src.silicon_pilot = TRUE
 		if(src.silicon_icon_state)
 			src.icon_state = src.silicon_icon_state
+		else
+			icon_state = initial_icon
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
 			set_light(light_range_off)
@@ -1296,11 +1300,14 @@
 		src.log_message("[mmi_as_oc] moved in as pilot.")
 		if(!hasInternalDamage())
 			src.occupant << sound('sound/mecha/nominalsyndi.ogg',volume=50)
+		refresh_spells()
 
 		//change the cursor
 		if(occupant.client && cursor_enabled)
 			occupant.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
 
+		log_admin("[key_name(user)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src] at X=[src.x];Y=[src.y];Z=[src.z]")
+		message_admins("[key_name(user)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
 		return 1
 	else
 		return 0
@@ -1425,7 +1432,6 @@
 		occupant.reset_view()
 		empty_bad_contents()
 		occupant << browse(null, "window=exosuit")
-		remove_mech_spells()
 
 		//change the cursor
 		if(occupant && occupant.client)

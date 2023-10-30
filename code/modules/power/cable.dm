@@ -38,8 +38,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	var/d2 = 1								// cable direction 2 (see above)
 	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in New()
 	layer = WIRE_LAYER
-	var/_color = "red"
-	color = "red"
+	color = "#FF0000"
 
 	//For rebuilding powernets from scratch
 	var/build_status = 0 //1 means it needs rebuilding during the next tick or on usage
@@ -51,39 +50,31 @@ By design, d1 is the smallest direction and d2 is the highest
 	return TRUE
 
 /obj/structure/cable/yellow
-	_color = "yellow"
-	color = "yellow"
+	color = "#FFED00"
 
 /obj/structure/cable/green
-	_color = "green"
-	color = "green"
+	color = "#0B8400"
 
 /obj/structure/cable/blue
-	_color = "blue"
-	color = "blue"
+	color = "#005C84"
 
 /obj/structure/cable/pink
-	_color = "pink"
-	color = CABLE_PINK
+	color = "#CA00B6"
 
 /obj/structure/cable/orange
-	_color = "orange"
-	color = CABLE_ORANGE
+	color = "#CA6900"
 
 /obj/structure/cable/cyan
-	_color = "cyan"
-	color = "cyan"
+	color = "#00B5CA"
 
 /obj/structure/cable/white
-	_color = "white"
-	color = "white"
+	color = "#D0D0D0"
 
 // the power cable object
 /obj/structure/cable/New(loc)
 	..(loc)
 
 	reset_plane()
-	cableColor(_color)
 
 	// ensure d1 & d2 reflect the icon_state for entering and exiting cable
 	var/dash = findtext(icon_state, "-")
@@ -198,13 +189,13 @@ By design, d1 is the smallest direction and d2 is the highest
 		cut(user, T)
 		return
 	else if(istype(W, /obj/item/stack/cable_coil))
-		var/obj/item/stack/cable_coil/coil = W
-		coil.cable_join(src, user)
-	else if(istype(W, /obj/item/weapon/rcl))
-		var/obj/item/weapon/rcl/R = W
-		if(R.loaded)
-			R.loaded.cable_join(src, user)
-			R.is_empty()
+		var/turf/U = get_turf(user)
+		if (U.can_place_cables())
+			var/obj/item/stack/cable_coil/coil = W
+			coil.cable_join(src, user)
+		else
+			to_chat(user, "<span class='warning'>You can't place cables there.</span>")
+			return
 	else if(W.is_multitool(user))
 		report_load(user)
 		shock(user, 5, 0.2)
@@ -239,9 +230,9 @@ By design, d1 is the smallest direction and d2 is the highest
 
 /obj/structure/cable/proc/cut(mob/user, var/turf/T)
 	if(src.d1)	// 0-X cables are 1 unit, X-X cables are 2 units long
-		new /obj/item/stack/cable_coil(T, 2, light_color)
+		new /obj/item/stack/cable_coil(T, 2, color)
 	else
-		new /obj/item/stack/cable_coil(T, 1, light_color)
+		new /obj/item/stack/cable_coil(T, 1, color)
 
 	user.visible_message("<span class='warning'>[user] cuts the cable.</span>", "<span class='info'>You cut the cable.</span>")
 
@@ -288,24 +279,14 @@ By design, d1 is the smallest direction and d2 is the highest
 			qdel(src)
 		if(2.0)
 			if(prob(50))
-				new /obj/item/stack/cable_coil(src.loc, src.d1 ? 2 : 1, light_color)
+				new /obj/item/stack/cable_coil(src.loc, src.d1 ? 2 : 1, color)
 				qdel(src)
 
 		if(3.0)
 			if(prob(25))
-				new /obj/item/stack/cable_coil(src.loc, src.d1 ? 2 : 1, light_color)
+				new /obj/item/stack/cable_coil(src.loc, src.d1 ? 2 : 1, color)
 				qdel(src)
 	return
-
-/obj/structure/cable/proc/cableColor(var/colorC = "red")
-	light_color = colorC
-	switch(colorC)
-		if("pink")
-			color = CABLE_PINK
-		if("orange")
-			color = CABLE_ORANGE
-		else
-			color = colorC
 
 ////////////////////////////////////////////
 // Power related

@@ -122,7 +122,7 @@
 /spell/lightning/proc/zapmuthafucka(var/mob/user, var/mob/living/target, var/chained = bounces, var/list/zapped = list(), var/oursound = null)
 	var/otarget = target
 	src.lastbumped = null
-	zapped.Add(target)
+	zapped |= target
 	var/turf/T = get_turf(user)
 	var/turf/U = get_turf(target)
 	var/obj/item/projectile/beam/lightning/spell/L = new /obj/item/projectile/beam/lightning/spell(T)
@@ -163,7 +163,7 @@
 				target = get_step_towards(target, get_dir(target, user))
 //				to_chat(world, "new target is [formatJumpTo(target)](<a href='?_src_=vars;Vars=\ref[target]'>VV</a>)")
 	if(istype(target))
-		if(!istype(target, /mob/living/simple_animal/hostile/glow_orb))
+		if(!istype(target, /mob/living/simple_animal/hostile/glow_orb) && !(target == holder)) //Not a glow orb nor the wizard who cast the spell
 			target.emp_act(2)
 			target.apply_damage((issilicon(target) ? basedamage*0.66 : basedamage), BURN, LIMB_CHEST, "blocked" = 0)
 	else if(target)
@@ -175,11 +175,11 @@
 	if(chained)
 		//DO IT AGAIN
 		var/mob/next_target
-		var/currdist = -1
+		var/currdist = -1 //Keeps track of which target is the closest for the purpose of which one to arc to
 		for(var/mob/living/M in view(target,bounce_range))
 //			to_chat(world, "checking [formatJumpTo(M)] (<a href='?_src_=vars;Vars=\ref[M]'>VV</a>) for a bounce")
-			if(M != holder && M != user)
-				if(!(M in zapped) && target == otarget)//we are chaining off something going to our original target
+			if(M != holder && M != user) //Don't consider the spell owner nor the target being arced from
+				if(M in zapped || target == otarget) //Target was already zapped, or is the one the spell has currently affected
 					continue
 				var/dist = get_dist(M, user)
 				if(currdist == -1)

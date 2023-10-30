@@ -902,7 +902,7 @@ var/global/list/playable_species = list("Human")
 	has_mutant_race = 0
 	burn_mod = 2.5 //treeeeees
 
-	move_speed_mod = 7
+	move_speed_mod = 4
 
 	species_intro = "You are a Diona.<br>\
 					You are a plant, so light is incredibly helpful for you, in both photosynthesis, and regenerating damage you have received.<br>\

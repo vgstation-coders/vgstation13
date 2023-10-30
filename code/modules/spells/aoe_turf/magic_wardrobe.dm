@@ -240,7 +240,6 @@
 		/obj/item/clothing/head/nursehat,
 		/obj/item/clothing/head/spaceninjafake,
 		/obj/item/clothing/head/cardborg,
-		/obj/item/clothing/head/sith,
 		/obj/item/clothing/head/beaverhat,
 		/obj/item/clothing/head/fedora,
 		/obj/item/clothing/head/fez,

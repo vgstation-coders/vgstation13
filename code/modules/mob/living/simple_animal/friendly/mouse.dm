@@ -76,16 +76,16 @@
 
 	if(!ckey && stat == CONSCIOUS && prob(0.5) && !(status_flags & BUDDHAMODE))
 		stat = UNCONSCIOUS
-		icon_state = icon_sleep
 		wander = 0
 		speak_chance = 0
+		update_icon()
 		//snuffles
 	else if(stat == UNCONSCIOUS)
 		if(ckey || prob(1))
 			stat = CONSCIOUS
-			icon_state = icon_living
 			wander = 1
 			speak_chance = initial(speak_chance)
+			update_icon()
 		else if(prob(5))
 			emote("me", EMOTE_AUDIBLE, "snuffles")
 
@@ -192,7 +192,21 @@
 
 
 
+/mob/living/simple_animal/mouse/rest_action()
+	..()
+	update_icon()
+
+/mob/living/simple_animal/mouse/update_icon()
+	..()
+	if (stat == DEAD)
+		icon_state = icon_dead
+	else if ((stat == UNCONSCIOUS) || resting)
+		icon_state = icon_sleep
+	else
+		icon_state = icon_living
+
 /mob/living/simple_animal/mouse/revive(refreshbutcher = 1)
+	splat = 0
 	for (var/ID in virus2)
 		var/datum/disease2/disease/V = virus2[ID]
 		V.cure(src)
@@ -207,7 +221,7 @@
 
 	if(stat == UNCONSCIOUS && prob(33))
 		stat = CONSCIOUS
-		icon_state = "mouse_[_color]"
+		update_icon()
 		wander = 1
 		speak_chance = initial(speak_chance)
 		visible_message("\The [src] wakes up.")
@@ -311,8 +325,8 @@
 /mob/living/simple_animal/mouse/proc/splat()
 	death()
 	splat = 1
-	src.icon_dead = icon_splat
-	src.icon_state = icon_splat
+	icon_dead = icon_splat
+	update_icon()
 	if(client)
 		client.time_died_as_mouse = world.time
 
