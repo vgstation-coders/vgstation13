@@ -44,7 +44,7 @@
 			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
 				return "This spell can't be made any more powerful than this!"
 			var/duration = 2/REAGENTS_METABOLISM*2 //2 extra units of Chillwax per rank, multiplied by 2 due to Life() happening every 2 seconds
-			return "Increases how long targets are pacified for by around [duration/10] seconds."
+			return "Increases how long targets are pacified for by around [duration] seconds."
 		if(Sp_RANGE)
 			if(spell_levels[Sp_RANGE] >= level_max[Sp_RANGE])
 				return "This spell's area of effect is at its maximum!"
