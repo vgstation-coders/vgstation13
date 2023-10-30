@@ -72,7 +72,6 @@
 				while(target.throwing)
 					sleep(1) //Moved it here so that it fixes a bug caused by throw_at() cancelling time stop for a split second
 					if(!target.timestopped)
-						to_chat(world, "SPIN!!")
 						target.transform = turn(target.transform, 45) //Spin the target
 						target.SetStunned(2) //We don't want the target to move during this time
 						turns += 45
