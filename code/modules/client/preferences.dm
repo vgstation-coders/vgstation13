@@ -165,7 +165,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/ambience_volume = 25
 	var/credits_volume = 75
 	var/window_flashing = 1
-	var/antag_objectives = 0 //If set to 1, solo antag roles will get the standard objectives. If set to 0, will give them a freeform objective instead.
+	var/antag_objectives = 1 //If set to 1, solo antag roles will get the standard objectives. If set to 0, will give them a freeform objective instead.
 	var/typing_indicator = 1
 
 		//Mob preview
