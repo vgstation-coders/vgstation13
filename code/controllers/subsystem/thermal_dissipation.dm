@@ -1,5 +1,5 @@
 var/datum/subsystem/thermal_dissipation/SStd
-var/list/thermal_dissipation_reagents = list()
+var/list/datum/reagents/thermal_dissipation_reagents = list()
 
 /datum/subsystem/thermal_dissipation
 	name          = "Thermal Dissipation"
@@ -8,7 +8,7 @@ var/list/thermal_dissipation_reagents = list()
 	priority      = SS_PRIORITY_THERM_DISS
 	display_order = SS_DISPLAY_THERM_DISS
 
-	var/list/currentrun
+	var/list/datum/reagents/currentrun
 	var/currentrun_index
 
 /datum/subsystem/thermal_dissipation/New()

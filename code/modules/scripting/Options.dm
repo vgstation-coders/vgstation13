@@ -89,29 +89,29 @@ associated values are <nS_Keyword> types of which the <n_Keyword.Parse()> proc w
 	)
 
 	var/list/unary_operators	= list(
-		"!"			= /datum/node/expression/operator/unary/LogicalNot,
-		"~"			= /datum/node/expression/operator/unary/BitwiseNot,
-		"-"			= /datum/node/expression/operator/unary/Minus
+		"!"			= /datum/node/expression/operation/unary/LogicalNot,
+		"~"			= /datum/node/expression/operation/unary/BitwiseNot,
+		"-"			= /datum/node/expression/operation/unary/Minus
 	)
 
 	var/list/binary_operators	= list(
-		"=="		= /datum/node/expression/operator/binary/Equal,
-		"!="		= /datum/node/expression/operator/binary/NotEqual,
-		">"			= /datum/node/expression/operator/binary/Greater,
-		"<" 		= /datum/node/expression/operator/binary/Less,
-		">="		= /datum/node/expression/operator/binary/GreaterOrEqual,
-		"<="		= /datum/node/expression/operator/binary/LessOrEqual,
-		"&&"		= /datum/node/expression/operator/binary/LogicalAnd,
-		"||"		= /datum/node/expression/operator/binary/LogicalOr,
-		"&"			= /datum/node/expression/operator/binary/BitwiseAnd,
-		"|"			= /datum/node/expression/operator/binary/BitwiseOr,
-		"`"			= /datum/node/expression/operator/binary/BitwiseXor,
-		"+"			= /datum/node/expression/operator/binary/Add,
-		"-"			= /datum/node/expression/operator/binary/Subtract, 
-		"*"			= /datum/node/expression/operator/binary/Multiply,
-		"/"			= /datum/node/expression/operator/binary/Divide,
-		"^"			= /datum/node/expression/operator/binary/Power,
-		"%"			= /datum/node/expression/operator/binary/Modulo
+		"=="		= /datum/node/expression/operation/binary/Equal,
+		"!="		= /datum/node/expression/operation/binary/NotEqual,
+		">"			= /datum/node/expression/operation/binary/Greater,
+		"<" 		= /datum/node/expression/operation/binary/Less,
+		">="		= /datum/node/expression/operation/binary/GreaterOrEqual,
+		"<="		= /datum/node/expression/operation/binary/LessOrEqual,
+		"&&"		= /datum/node/expression/operation/binary/LogicalAnd,
+		"||"		= /datum/node/expression/operation/binary/LogicalOr,
+		"&"			= /datum/node/expression/operation/binary/BitwiseAnd,
+		"|"			= /datum/node/expression/operation/binary/BitwiseOr,
+		"`"			= /datum/node/expression/operation/binary/BitwiseXor,
+		"+"			= /datum/node/expression/operation/binary/Add,
+		"-"			= /datum/node/expression/operation/binary/Subtract,
+		"*"			= /datum/node/expression/operation/binary/Multiply,
+		"/"			= /datum/node/expression/operation/binary/Divide,
+		"^"			= /datum/node/expression/operation/binary/Power,
+		"%"			= /datum/node/expression/operation/binary/Modulo
 	)
 
 /datum/n_scriptOptions/nS_Options/New()
