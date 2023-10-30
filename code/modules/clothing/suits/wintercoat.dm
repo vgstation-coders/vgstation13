@@ -223,6 +223,22 @@
 	name = "paramedic winter coat"
 	icon_state = "coatpara"
 	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
+	allowed = list(
+		/obj/item/device/analyzer,
+		/obj/item/stack/medical,
+		/obj/item/weapon/dnainjector,
+		/obj/item/weapon/reagent_containers/dropper,
+		/obj/item/weapon/reagent_containers/syringe,
+		/obj/item/weapon/reagent_containers/hypospray,
+		/obj/item/device/healthanalyzer,
+		/obj/item/device/flashlight/pen,
+		/obj/item/weapon/tank/emergency_oxygen,
+		/obj/item/weapon/tank/emergency_nitrogen,
+		/obj/item/device/radio,
+		/obj/item/device/gps,
+		/obj/item/roller,
+		/obj/item/weapon/autopsy_scanner/healthanalyzerpro,
+		/obj/item/device/pcmc)
 
 /obj/item/clothing/suit/storage/wintercoat/engineering/mechanic
 	name = "mechanics winter coat"
