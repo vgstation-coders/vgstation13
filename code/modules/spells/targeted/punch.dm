@@ -105,11 +105,14 @@
 	if(has_triggered)
 		return
 	var/list/explosion_whitelist = list()
+	var/list/projectile_whitelist = list()
 	explosion_whitelist += user //Wizard is immune to the ensuing explosion, because that's badass
+	projectile_whitelist += user //Wizard shouldn't have to worry too much about the shrapnel from explosions, fight on!
+	projectile_whitelist += T //Shrapnel causes the spell to be overkill on victims and way too unfair
 	if(empowered) //The unfortunate sod being thrown by it won't be that severely harmed compared to what they collide into
-		explosion(get_turf(bumped), 0, 1, 5, whodunnit = user, whitelist = explosion_whitelist, shrapnel_whitelist = explosion_whitelist)
+		explosion(get_turf(bumped), 0, 1, 5, whodunnit = user, whitelist = explosion_whitelist, shrapnel_whitelist = projectile_whitelist)
 	else
-		explosion(get_turf(bumped), 0, 0, 3, whodunnit = user, whitelist = explosion_whitelist, shrapnel_whitelist = explosion_whitelist)
+		explosion(get_turf(bumped), 0, 0, 3, whodunnit = user, whitelist = explosion_whitelist, shrapnel_whitelist = projectile_whitelist)
 	has_triggered = 1
 	spawn(1) //A 0.1 second delay, then we allow the spell to cause explosions again
 		has_triggered = 0
@@ -117,11 +120,14 @@
 //Explosion as a result of the target not flying away, significantly stronger than launching punches
 /spell/targeted/punch/proc/explosive_punch(atom/target)
 	var/list/explosion_whitelist = list()
+	var/list/projectile_whitelist = list()
 	explosion_whitelist += holder
+	projectile_whitelist += holder
+	projectile_whitelist += target
 	if(empowered)
-		explosion(get_turf(target), 0, 3, 7, whodunnit = holder, whitelist = explosion_whitelist, shrapnel_whitelist = explosion_whitelist)
+		explosion(get_turf(target), 0, 3, 7, whodunnit = holder, whitelist = explosion_whitelist, shrapnel_whitelist = projectile_whitelist)
 	else
-		explosion(get_turf(target), 0, 1, 5, whodunnit = holder, whitelist = explosion_whitelist, shrapnel_whitelist = explosion_whitelist)
+		explosion(get_turf(target), 0, 1, 5, whodunnit = holder, whitelist = explosion_whitelist, shrapnel_whitelist = projectile_whitelist)
 
 /spell/targeted/punch/proc/generate_punch_sprite()
 	return image(icon = 'icons/mob/screen_spells.dmi', icon_state = hud_state)
