@@ -213,9 +213,29 @@
 
 /obj/item/clothing/head/kitty/equipped(var/mob/user, var/slot, hand_index = 0)
 	..()
-	if((haircolored) && (slot == slot_head))
-		update_icon(user)
+	if(slot == slot_head)
+		if(haircolored)
+			update_icon(user)
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			to_chat(H, "<span class='sinister'>Something on your head is making you feel a little lightheaded...</span>")
+			H.adjustBrainLoss(20)
 
+
+/obj/item/clothing/head/kitty/unequipped(var/mob/user, var/slot, hand_index = 0)
+	..()
+	if(slot == slot_head && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		to_chat(H, "<span class='info'>Your head starts to feel better again.</span>")
+		H.adjustBrainLoss(-20)
+
+/*
+/obj/item/clothing/glasses/equipped(mob/M, slot)
+	..()
+	if(slot == slot_glasses)
+		M.handle_regular_hud_updates()
+/obj/item/clothing/glasses/unequipped(mob/living/carbon/human/M, from_slot)
+*/
 /obj/item/clothing/head/kitty/update_icon(var/mob/living/carbon/human/user)
 	if(!istype(user))
 		return
@@ -237,27 +257,6 @@
 /obj/item/clothing/head/kitty/anime/cursed
 	canremove = FALSE
 	cringe = TRUE
-
-/obj/item/clothing/head/kitty/equipped(mob/M, var/slot)
-	..()
-	var/mob/living/carbon/human/H = M
-	if(!istype(H))
-		return
-	if(slot == slot_head)
-		to_chat(H, "<span class='sinister'>Something on your head is making you feel a little lightheaded...</span>")
-
-/obj/item/clothing/head/kitty/unequipped(mob/living/carbon/human/user, var/from_slot = null)
-	..()
-	if(from_slot == slot_head && istype(user))
-		to_chat(user, "<span class='info'>Your head starts to feel better again.</span>")
-
-/obj/item/clothing/head/kitty/OnMobLife(var/mob/living/carbon/human/wearer)
-	if(!istype(wearer))
-		return
-	if(wearer.get_item_by_slot(slot_head) == src)
-		if(prob(20))
-			wearer.adjustBrainLoss(1)
-
 
 /obj/item/clothing/head/butt
 	name = "butt"
