@@ -47,6 +47,9 @@ var/global/list/falltempoverlays = list()
 
 #undef duration_increase_per_level
 
+/spell/aoe_turf/fall/get_upgrade_price()
+	return 10 //Costs 10 points to either empower or quicken
+
 /spell/aoe_turf/fall/New()
 	..()
 	buildimage()
