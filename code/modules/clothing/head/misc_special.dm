@@ -221,7 +221,6 @@
 			to_chat(H, "<span class='sinister'>Something on your head is making you feel a little lightheaded...</span>")
 			H.adjustBrainLoss(20)
 
-
 /obj/item/clothing/head/kitty/unequipped(var/mob/user, var/slot, hand_index = 0)
 	..()
 	if(slot == slot_head && ishuman(user))
@@ -229,13 +228,6 @@
 		to_chat(H, "<span class='info'>Your head starts to feel better again.</span>")
 		H.adjustBrainLoss(-20)
 
-/*
-/obj/item/clothing/glasses/equipped(mob/M, slot)
-	..()
-	if(slot == slot_glasses)
-		M.handle_regular_hud_updates()
-/obj/item/clothing/glasses/unequipped(mob/living/carbon/human/M, from_slot)
-*/
 /obj/item/clothing/head/kitty/update_icon(var/mob/living/carbon/human/user)
 	if(!istype(user))
 		return
