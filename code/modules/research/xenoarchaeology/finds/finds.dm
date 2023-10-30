@@ -492,9 +492,7 @@
 	//6.6% chance to get legacy cult helmet/armor
 
 	var/choice = pick(
-	75;/obj/item/clothing/head/culthood,
 	25;/obj/item/clothing/suit/cultrobes,
-	60;/obj/item/clothing/head/culthood/old,
 	20;/obj/item/clothing/suit/cultrobes/old,
 	45;/obj/item/clothing/head/magus,
 	15;/obj/item/clothing/suit/magusred,
