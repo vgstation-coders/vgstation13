@@ -286,6 +286,13 @@
 				UnarmedAttack(B)
 	..()
 
+/mob/living/simple_animal/hostile/grue/unarmed_attack_mob(target)
+	if(isgrue(target))
+		playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+		visible_message("<span class='notice'>[src] nuzzles \the [target].</span>", "<span class='notice'>You nuzzle \the [target].</span>")
+		return
+	return ..()
+
 
 /mob/living/simple_animal/hostile/grue/proc/get_ddl(var/turf/thisturf) //get the dark_dim_light status of a given turf
 	var/thisturf_brightness=10*thisturf.get_lumcount()
