@@ -68,12 +68,14 @@
 			L.visible_message("<span class='danger'>[L] throws a mighty punch that launches \the [target] away!</span>")
 			var/turns = 0 //Fixes a bug where the transform could occasionally get messed up such as when the target is lying down
 			spawn(0) //Continue spell-code
+				target.SetStunned(2) //Make sure this kicks in ASAP
 				while(target.throwing)
+					sleep(1) //Fixes a bug where throw_at() briefly cancelled the timestopped variable
 					if(!target.timestopped)
+						to_chat(world, "SPIN!!")
 						target.transform = turn(target.transform, 45) //Spin the target
 						target.SetStunned(2) //We don't want the target to move during this time
 						turns += 45
-					sleep(1)
 				target.transform = turn(target.transform, -turns)
 				target.Knockdown(2)
 				target.unregister_event(/event/to_bump, src, nameof(src::handle_bump())) //Just in case
@@ -106,9 +108,9 @@
 	var/list/explosion_whitelist = list()
 	explosion_whitelist += user //Wizard is immune to the ensuing explosion, because that's badass
 	if(empowered) //The unfortunate sod being thrown by it won't be that severely harmed compared to what they collide into
-		explosion(get_turf(bumped), 0, 1, 5, whodunnit = user, whitelist = explosion_whitelist)
+		explosion(get_turf(bumped), 0, 1, 5, whodunnit = user, whitelist = explosion_whitelist, shrapnel_whitelist = explosion_whitelist)
 	else
-		explosion(get_turf(bumped), 0, 0, 3, whodunnit = user, whitelist = explosion_whitelist)
+		explosion(get_turf(bumped), 0, 0, 3, whodunnit = user, whitelist = explosion_whitelist, shrapnel_whitelist = explosion_whitelist)
 	has_triggered = 1
 	spawn(1) //A 0.1 second delay, then we allow the spell to cause explosions again
 		has_triggered = 0
@@ -118,9 +120,9 @@
 	var/list/explosion_whitelist = list()
 	explosion_whitelist += holder
 	if(empowered)
-		explosion(get_turf(target), 0, 3, 7, whodunnit = holder, whitelist = explosion_whitelist)
+		explosion(get_turf(target), 0, 3, 7, whodunnit = holder, whitelist = explosion_whitelist, shrapnel_whitelist = explosion_whitelist)
 	else
-		explosion(get_turf(target), 0, 1, 5, whodunnit = holder, whitelist = explosion_whitelist)
+		explosion(get_turf(target), 0, 1, 5, whodunnit = holder, whitelist = explosion_whitelist, shrapnel_whitelist = explosion_whitelist)
 
 /spell/targeted/punch/proc/generate_punch_sprite()
 	return image(icon = 'icons/mob/screen_spells.dmi', icon_state = hud_state)
