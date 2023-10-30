@@ -58,7 +58,7 @@
 	switch(upgrade_type)
 		if(Sp_SPEED)
 			if(spell_levels[Sp_SPEED] >= level_max[Sp_SPEED])
-				return "This spell can't be made any quicker than this!"
+				return "The spell can't be made any quicker than this!"
 			return "Reduce this spell's cooldown by [cooldown_reduc/10] seconds."
 		if(Sp_POWER)
 			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])

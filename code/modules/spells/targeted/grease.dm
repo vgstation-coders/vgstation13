@@ -9,7 +9,7 @@
 	charge_max = 300
 	invocation = "GR'ESE LIT'NING"
 	invocation_type = SpI_SHOUT
-	range = 1
+	range = 0
 	spell_flags = NEEDSCLOTHES | INCLUDEUSER
 	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
 	hud_state = "bucket"
@@ -33,7 +33,7 @@
 		if(1)
 			name = "Slick Grease"
 			range = 4
-			explosion_description = "You can now point to a location within [range] to become a grease slick. Has spell congruency with fire-based spells."
+			explosion_description = "You can now point to a location up to [range] tiles away to become slick greased. Has spell congruency with fire-based spells."
 			spell_flags |= WAIT_FOR_CLICK
 		else
 			return

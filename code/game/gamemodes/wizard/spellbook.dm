@@ -120,8 +120,9 @@
 
 			var/spell_name = spell.name
 			var/spell_cooldown = get_spell_cooldown_string(spell.charge_max, spell.charge_type)
+			var/spell_range = get_spell_range_string(spell.range)
 
-			dat += "<strong>[spell_name]</strong>[spell_cooldown]<br>"
+			dat += "<strong>[spell_name]</strong>[spell_cooldown]<br>Range: [spell_range]<br>"
 
 			//Get spell properties
 			var/list/properties = get_spell_properties(spell.spell_flags, user)
@@ -148,7 +149,7 @@
 				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] ([upgrade_button])</a>  "
 
 			if(upgrade_data)
-				dat += "[upgrade_data]<br><br>"
+				dat += "[upgrade_data]<br>"
 			dat+= "<br>"
 
 //FORMATTING
@@ -259,6 +260,13 @@
 			return " - [charges] charge\s"
 		if(Sp_RECHARGE)
 			return " - cooldown: [(charges/10)]s"
+
+/obj/item/weapon/spellbook/proc/get_spell_range_string(var/range)
+	if(range == 1)
+		return "Adjacent"
+	if((range == SELFCAST) || (range == 0))
+		return "Self"
+	return range
 
 /obj/item/weapon/spellbook/proc/get_spell_price(spell/spell_type)
 	if(ispath(spell_type, /spell))

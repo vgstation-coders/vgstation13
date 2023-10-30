@@ -75,7 +75,7 @@
 /spell/aoe_turf/conjure/magical_wardrobe/get_upgrade_info(upgrade_type, level)
 	if(upgrade_type == Sp_SPEED)
 		if(spell_levels[Sp_SPEED] >= level_max[Sp_SPEED])
-			return "This spell can't be made any quicker than this!"
+			return "The spell can't be made any quicker than this!"
 		var/formula = round((initial_charge_max - cooldown_min)/level_max[Sp_SPEED])
 		return "Decreases the cooldown on summoning a new wardrobe by [formula/10]. Does not affect the recall or summon spells. Also increases its durability."
 	if(upgrade_type == Sp_MOVE)

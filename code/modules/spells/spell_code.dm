@@ -633,7 +633,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	switch(upgrade_type)
 		if(Sp_SPEED)
 			if(spell_levels[Sp_SPEED] >= level_max[Sp_SPEED])
-				return "This spell can't be made any quicker than this!"
+				return "The spell can't be made any quicker than this!"
 			var/formula
 			if(cooldown_reduc)
 				formula = min(charge_max - cooldown_min, cooldown_reduc)
@@ -642,7 +642,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			return "Reduce this spell's cooldown by [formula/10] seconds."
 		if(Sp_POWER)
 			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
-				return "This spell can't be made any more powerful than this!"
+				return "The spell can't be made any more powerful than this!"
 			return "Increase this spell's power."
 
 //Return a string that gets appended to the spell on the scoreboard

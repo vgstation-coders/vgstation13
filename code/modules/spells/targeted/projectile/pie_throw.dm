@@ -25,7 +25,7 @@
 	switch(upgrade_type)
 		if(Sp_POWER)
 			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
-				return "This spell can't be made any more powerful than this!"
+				return "The spell can't be made any more powerful than this!"
 			return "Allows you to throw an extra pie, and increases the throwing damage of each pie by 4."
 	return ..()
 
