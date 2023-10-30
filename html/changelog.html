@@ -120,6 +120,18 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="rscadd">Grues will now become increasingly more effective against armored targets the more people they eat. After eating 5 people they will reach the limit of reducing damage reduction by 50%, multiplicatively.</li>
 				<li class="tweak">Grues are now limited to a maximum of 50 damage per hit.</li>
 				<li class="tweak">Grues will gain slightly less damage out of every consumed player, from 7 to 5.</li>
+				<li class="bugfix">Fixed a bug where the vampire&#39;s Glare ability worked while blindfolded.</li>
+				<li class="bugfix">Fixed a bug where shapeshifted vampires didn&#39;t initially update their visible name when shapeshifting with no ID.</li>
+				<li class="bugfix">Fixed a bug where a max-power vampire using the Screech ability would get a backlash from every single nearby null rod wearer rather than just one. This also means the Screech ability will be properly stopped and blocked rather than still affecting everyone in the vicinity.</li>
+				<li class="bugfix">Null rods carried by people with ear protection will now properly cause a backlash against max-power vampires using the Screech ability instead of doing nothing.</li>
+				<li class="bugfix">Fixed a bug where the vampire&#39;s Screech ability would play its sound for every single target. It will now only play once per Screech.</li>
+				<li class="tweak">Reduced the amount of jittering caused by the vampire&#39;s Screech ability from 5 minutes to 40 seconds.</li>
+				<li class="tweak">The vampire&#39;s Screech ability can be used at any time, rather than only when there are living targets nearby.</li>
+				<li class="tweak">Failing to Enthrall someone as a vampire will no longer put the ability on cooldown.</li>
+				<li class="tweak">Failing to Hypnotise someone as a vampire, whether because they are blind or for other reasons, will no longer put the ability on cooldown.</li>
+				<li class="tweak">Vampire abilities that get backlashed by null rods will now go on cooldown. This also fixed a bug where the max-power vampire&#39;s Glare ability could be spammed non-stop.</li>
+				<li class="spellcheck">Fixed a tiny typo regarding the message that a vampire receives when a null rod causes a backlash.</li>
+				<li class="spellcheck">Fixed a tiny typo regarding the message that a victim of a vampire&#39;s Screech receives. This also extends to the NPC vampire creature.</li>
 			</ul>
 			<h3 class="author">brndd updated:</h3>
 			<ul class="changes bgimages16">
