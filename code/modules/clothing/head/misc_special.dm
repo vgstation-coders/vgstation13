@@ -238,6 +238,27 @@
 	canremove = FALSE
 	cringe = TRUE
 
+/obj/item/clothing/head/kitty/equipped(mob/M, var/slot)
+	..()
+	var/mob/living/carbon/human/H = M
+	if(!istype(H))
+		return
+	if(slot == slot_head)
+		to_chat(H, "<span class='sinister'>Something on your head is making you feel a little lightheaded...</span>")
+
+/obj/item/clothing/head/kitty/unequipped(mob/living/carbon/human/user, var/from_slot = null)
+	..()
+	if(from_slot == slot_head && istype(user))
+		to_chat(user, "<span class='info'>Your head starts to feel better again.</span>")
+
+/obj/item/clothing/head/kitty/OnMobLife(var/mob/living/carbon/human/wearer)
+	if(!istype(wearer))
+		return
+	if(wearer.get_item_by_slot(slot_head) == src)
+		if(prob(20))
+			wearer.adjustBrainLoss(1)
+
+
 /obj/item/clothing/head/butt
 	name = "butt"
 	desc = "So many butts, so little time."
