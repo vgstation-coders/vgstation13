@@ -13,7 +13,7 @@
 
 /obj/item/rig_module/proc/can_install(var/obj/item/clothing/suit/space/rig/target)
    if ((locate(type) in target.modules)) //by default only allow one module of a type
-      return list(FALSE, "could not install the " + name + ": module already present.") 
+      return list(FALSE, "Could not install the " + name + ": module already present.") 
    else
       return list(TRUE, name +": successfully installed.")  //redundant second string to return, but just in case
    
@@ -174,7 +174,7 @@
    if(!parent_check[1])
       return list(FALSE,parent_check[2]) 
    if(target.clothing_flags & PLASMAGUARD)
-      return list(FALSE,"could not install the " + name +": suit is already plasma sealed.")
+      return list(FALSE,"Could not install the " + name +": suit is already plasma sealed.")
    return list(TRUE, name +": successfully installed.") 
 
 //Muscle tissue/Hulk module
@@ -309,7 +309,7 @@
    if(!parent_check[1])
       return list(FALSE,parent_check[2])
    if(locate(/obj/item/rig_module/rad_shield/adv) in target.modules) //don't allow both rad mods at once
-      return list(FALSE,"could not install the " + name +": a radiation absorption device is already present.")
+      return list(FALSE,"Could not install the " + name +": a radiation absorption device is already present.")
    return list(TRUE, name +": successfully installed.") 
 
 
@@ -324,5 +324,5 @@
    if(!parent_check[1])
       return list(FALSE,parent_check[2])
    if(locate(/obj/item/rig_module/rad_shield) in target.modules) //don't allow both rad mods at once
-      return list(FALSE,"could not install the " + name +": a radiation absorption device is already present.")
+      return list(FALSE,"Could not install the " + name +": a radiation absorption device is already present.")
    return list(TRUE, name +": successfully installed.") 
