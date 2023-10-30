@@ -23,7 +23,7 @@ We recommend our users use the Github Desktop client, available [here](https://d
 
 Once the fork is complete, go back to the Github Desktop client and press the 'Current Reposistory' button at the top left. From there, click 'Add', then 'Clone Reposistory'. If your fork doesn't appear on the list immediately, press the refresh button at the top right and it should find it. Once you've selected it, Github Desktop will then begin downloading the codebase to the specified location on your machine. Once the clone finishes downloading, you've got your own copy of the code ready to go complete with easy tools to keep it sync'd and to make your own PRs to the repo.
 
-If your repository is behind on the latest updates to the code, navigate to the page for your forked repository on Github and press the Sync Fork button near the top of the page. Once that's done, press the 'Fetch Origin' button on your Github Desktop client and after it completes that action it should prompt your to 'Pull' the newest updates which will bring your code back up to date with /vg/.
+If your repository is behind on the latest updates to the code, navigate to the page for your forked repository on Github and press the 'Sync Fork' button near the top of the page and then press the 'Update Branch' button. Once that's done, press the 'Fetch Origin' button on your Github Desktop client and after it completes that action it should prompt your to 'Pull' the newest updates which will bring your code back up to date with /vg/.
 
 #### Contributing Code
 
@@ -33,8 +33,8 @@ To contribute code updates to /vg/, open your Github Desktop client and from the
 
 Keep in mind that we have multiple branches for various purposes.
 
-* *master* - "stable" but ancient code, it was used on the main server until we realized we like living on the edge  :sunglasses:.
 * *Bleeding-Edge* - The latest code, this code is run on the main server.  _Please do any development against this branch!_
+* *master* - "stable" but ancient code, it was used on the main server until we realized we like living on the edge  :sunglasses:.
 
 ### INSTALLATION
 
