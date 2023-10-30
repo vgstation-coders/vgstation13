@@ -94,6 +94,12 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="tweak">You no longer have a chance to slip when walking on catwalks.</li>
 				<li class="bugfix">Fixed an edge case where placing cables in space didn&#39;t check for proper support.</li>
 				<li class="rscadd">Player-controlled mice now visibly rest.</li>
+				<li class="rscadd">The Rapid Cable Layer (RCL) has been rewritten from scratch and is now much easier to use and less prone to accidentally placing unwanted wire knots. You can click adjacent tiles directly to create a pair of wires that connects both that tile and yours (and that tries to connect to existing nodes on both tiles even if you didn&#39;t pixel-perfect clicked them). Placing wires this way, or clicking the RCL enables its active mode, during which you can lay wires by just walking around. Unlike previously the RCL won&#39;t attempt to place extra nodes on tiles that already have wires connecting from the same direction, but you can still force that behaviour when clicking tiles. Clicking the RCL again disables it.</li>
+				<li class="rscadd">RCL added to YouTool vendors at a premium, and Engi-Vends as part of their regular stock.</li>
+				<li class="rscadd">Electricians (the Station Engineer alt-job) spawn with their own RCL in their backpack, and holding an electrical toolbox.</li>
+				<li class="imageadd">Of course the RCL had its sprites revamped and now displays not only better how much wire is in it, but also its color.</li>
+				<li class="bugfix">Fixed cable coil always appearing red in your character&#39;s hands despite sprites for other colours existing.</li>
+				<li class="rscadd">Actually fuck those sprites, cables are now entirely coloured through code, and you can paint coils by dipping them in reagent containers containing reagents flagged as pigments (such as paint buckets, but blood and a few others work as well). The colour carries over to placed wires and cable cuffs.</li>
 			</ul>
 			<h3 class="author">Irradiation updated:</h3>
 			<ul class="changes bgimages16">
