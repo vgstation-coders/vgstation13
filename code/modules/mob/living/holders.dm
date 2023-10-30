@@ -247,7 +247,7 @@
 	item_state = "borer"
 
 /obj/item/weapon/holder/animal/borer/attack_self(mob/user)
-	if(user.a_intent != I_HURT)
+	if(user.a_intent != I_HURT && user.zone_sel.selecting != "mouth")
 		..()
 		return
 
