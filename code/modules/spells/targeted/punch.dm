@@ -70,7 +70,7 @@
 			spawn(0) //Continue spell-code
 				target.SetStunned(2) //Make sure this kicks in ASAP
 				while(target.throwing)
-					sleep(1) //Fixes a bug where throw_at() briefly cancelled the timestopped variable
+					sleep(1) //Moved it here so that it fixes a bug caused by throw_at() cancelling time stop for a split second
 					if(!target.timestopped)
 						to_chat(world, "SPIN!!")
 						target.transform = turn(target.transform, 45) //Spin the target
