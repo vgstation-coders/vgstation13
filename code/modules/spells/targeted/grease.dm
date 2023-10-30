@@ -14,6 +14,14 @@
 	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
 	hud_state = "bucket"
 
+/spell/targeted/grease/get_upgrade_info(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_POWER)
+			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+				return "You can already emit grease at the targeted location!"
+			return "Allows you to target a different location within 4 tiles of you to cover it with grease."
+	return ..()
+
 
 /spell/targeted/grease/empower_spell()
 	spell_levels[Sp_POWER]++

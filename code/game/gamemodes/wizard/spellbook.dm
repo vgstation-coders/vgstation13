@@ -127,23 +127,25 @@
 			var/list/properties = get_spell_properties(spell.spell_flags, user)
 			var/property_data
 			for(var/P in properties)
-				property_data += "[P] "
+				property_data += "[P]<br>"
 
 			if(property_data)
-				dat += "<span style=\"color:blue\">[property_data]</span><br>"
+				dat += "[property_data]"
 
 			//Get the upgrades
 			var/upgrade_data = ""
 
 			for(var/upgrade in spell.spell_levels)
+				var/upgrade_button = "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade ([spell.get_upgrade_price(upgrade)] points)</a>"
 				var/lvl = spell.spell_levels[upgrade]
 				var/max = spell.level_max[upgrade]
 
 				//If maximum upgrade level is 0, skip
 				if(!max)
 					continue
-
-				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] (<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade ([spell.get_upgrade_price(upgrade)] points)</a>)  "
+				if(lvl >= max)
+					upgrade_button = "<strong>MAXED</strong>"
+				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] ([upgrade_button])</a>  "
 
 			if(upgrade_data)
 				dat += "[upgrade_data]<br><br>"
@@ -153,6 +155,7 @@
 //<b>Fireball</b> - 10 seconds (buy for 1 spell point)
 //<i>(Description)</i>
 //Requires robes to cast
+//Lost on mind transfer
 
 	if(shown_offensive_spells.len)
 		dat += "<span style=\"color:red\"><strong>OFFENSIVE SPELLS:</strong></span><br><br>"
@@ -219,9 +222,9 @@
 	var/list/properties = get_spell_properties(flags, user)
 	var/property_data
 	for(var/P in properties)
-		property_data += "[P] "
+		property_data += "[P]<br>"
 	if(property_data)
-		dat += "<span style=\"color:blue\">[property_data]</span><br>"
+		dat += "[property_data]"
 	dat += "<br>"
 	return dat
 
@@ -229,7 +232,7 @@
 	var/list/properties = list()
 
 	if(flags & NEEDSCLOTHES)
-		var/new_prop = "Requires wizard robes to cast."
+		var/new_prop = "<span style=\"color:blue\">Requires wizard robes to cast.</span>"
 
 		//If user has the robeless spell, strike the text out
 		if(user)
@@ -239,8 +242,11 @@
 
 		properties.Add(new_prop)
 
+	if(flags & LOSE_IN_TRANSFER)
+		properties.Add("<span style=\"color:red\">Lost on mind transfer.</span>")
+
 	if(flags & STATALLOWED)
-		properties.Add("Can be cast while unconscious.")
+		properties.Add("<span style=\"color:green\">Can be cast while unconscious.</span>")
 
 	return properties
 

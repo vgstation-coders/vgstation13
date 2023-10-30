@@ -42,6 +42,8 @@ var/global/list/falltempoverlays = list()
 
 /spell/aoe_turf/fall/get_upgrade_info(upgrade_type, level)
 	if(upgrade_type == Sp_POWER)
+		if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+			return "This spell can't be made any more powerful than this!"
 		return "Increase the spell's duration by [duration_increase_per_level/10] second\s and radius by 2 meters."
 	return ..()
 

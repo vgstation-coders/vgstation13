@@ -25,10 +25,9 @@
 
 /spell/targeted/punch/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
-			return "Reduce this spell's cooldown."
 		if(Sp_POWER)
-			return "Make the explosion more devastating."
+			return "Make the explosion more devastating, allowing it to cause more damage and even breach the ground."
+	return ..()
 
 /spell/targeted/punch/empower_spell()
 	..()
