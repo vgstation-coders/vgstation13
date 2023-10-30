@@ -40,6 +40,22 @@
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/under/color/grey/equipped(var/mob/user, var/slot, hand_index = 0)
+	..()	
+	if(slot == slot_w_uniform)
+		update_icon(user)
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			to_chat(H, "<span class='sinister'>Something on your skin is making you feel a little lightheaded...</span>")
+			H.adjustBrainLoss(20)
+
+/obj/item/clothing/under/color/grey/unequipped(var/mob/user, var/slot, hand_index = 0)
+	..()
+	if(slot == slot_w_uniform && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		to_chat(H, "<span class='info'>Your head starts to feel better again.</span>")
+		H.adjustBrainLoss(-20)
+
 /obj/item/clothing/under/color/orange
 	name = "orange jumpsuit"
 	icon_state = "orange"
