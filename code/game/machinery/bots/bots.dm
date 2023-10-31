@@ -39,6 +39,7 @@
 	var/bot_type // For HuD users.
 	var/declare_message = "" //What the bot will display to the HUD user.
 	var/bot_flags
+	var/list/AIradialChoices = list(list("summon","summon")) //list("hack","hack") taken out
 
 	var/frustration
 
@@ -110,6 +111,8 @@
 			if (PM.owner == src)
 				qdel(PM)
 	bots_list -= src
+	for(var/mob/living/silicon/ai/A in ai_list)
+		A.list_bot_control -= src
 	nearest_beacon_loc = null
 	patrol_target = null
 	nearest_beacon = null
@@ -737,7 +740,7 @@ obj/machinery/bot/attack_hand(mob/user as mob)
 		return
 	if(isAI(user))
 		var/mob/living/silicon/ai/S = user
-		S.list_bot_control += src
+		S.list_bot_control |= src
 
 
 /obj/machinery/bot/kick_act(mob/living/H)
@@ -806,10 +809,44 @@ obj/machinery/bot/attack_hand(mob/user as mob)
 		if (was_on)
 			turn_on()
 
-
-
 /obj/machinery/bot/cultify()
 	if(src.flags & INVULNERABLE)
 		return
 	else
 		qdel(src)
+
+
+
+// ------------ AI BOT CONTROL -------------------
+// STOP. Prevent your death. Go no farther.       |
+// There's nothing in this code worth dying for!  |
+// Do not go beyond this point.                   |
+
+/obj/machinery/bot/Click(location, control, params)
+	var/list/modifiers = params2list(params)
+	if(isAI(usr) && istext(location) && (modifiers["shift"] || (ismalf(usr) && modifiers["right"]))) // Welcome to the magical world of making sure AI's dont create radial menus in statpanels. t. toomy
+		move_camera_by_click()
+		return
+	..()
+/obj/machinery/bot/AIShiftClick(var/mob/user)
+	to_chat(user,"fuck yourself")
+	if(!isAI(user))
+		return
+	var/choice= show_radial_menu(user,src,AIradialChoices,icon_file='icons/obj/bots_radial.dmi',tooltip_theme="radial_center") //,var/tooltip_theme,var/callback/custom_check,var/uniqueid,var/radius,var/min_angle,var/starting_angle,var/ending_angle,var/recursive = FALSE, var/close_other_menus)
+	handleAIRadialCommand(user,choice)
+
+/obj/machinery/bot/AICtrlClick(var/mob/user)
+	handleAIRadialCommand(user,"summon")
+
+/obj/machinery/bot/proc/handleAIRadialCommand(var/mob/user,var/choice)
+	var/mob/living/silicon/ai/AI = user
+	switch(choice)
+		if("summon","default")
+			AI.handle_bot_click_command(src,choice)
+	/*	if("hack")
+			hack_interact(user)*/
+/obj/machinery/bot/proc/handleAIMouseCommand(atom/A,command)
+	switch(command)
+		if("summon","default")
+			target = A
+			process()
