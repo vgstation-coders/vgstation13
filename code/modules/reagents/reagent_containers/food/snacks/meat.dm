@@ -523,3 +523,25 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/scraps/New()
 	..()
 	reagents.remove_reagent(NUTRIMENT, 1) // A bit less nutriment
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/borer
+	name = "borer"
+	desc = "It's still twitching slightly."
+	icon_state = "slug0"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/mob_holders.dmi', "right_hand" = 'icons/mob/in-hand/right/mob_holders.dmi')
+	item_state = "borer"
+	crumb_icon = "dribbles"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/borer/New()
+	..()
+	reagents.add_reagent(GREYGOO, 1)
+	reagents.add_reagent(PERIDAXON, 1) //yes you will eat the slugs for their valuable nutrients
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/borer/after_consume(mob/user, datum/reagents/reagentreference)
+	..()
+	icon_state = "slug[min(bitecount,2)]"
+	if(bitecount == 1)
+		desc = pick("Whichever nerves were keeping it wriggling have been ripped off by now.", "It's a lot more foul smelling once you bite into it.", "There's some slimy substance leaking out of it.", "Was this really a good idea?")
+	else
+		desc = pick("There's barely anything left of it.", "It could have lived happily in your brain, you know.", "It was only here to help.", "Poor thing.", "You monster.", "At least it's nutritious.")
