@@ -8,7 +8,7 @@
 	heat_production = 1000
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
-	autoignition_temperature = TEMPERATURE_FLAME + 1 //so it doesnt light itself on fire
+	autoignition_temperature = AUTOIGNITION_FABRIC //idk the wick lmao
 
 	var/wax = 900
 	var/lit = 0
