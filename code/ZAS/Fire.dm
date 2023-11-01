@@ -44,7 +44,7 @@ Attach to transfer valve and open. BOOM.
 
 	var/turf/T = get_turf(loc)
 	if(T)
-		T.hotspot_expose(autoignition_temperature, CELL_VOLUME)
+		T.hotspot_expose(autoignition_temperature, CELL_VOLUME, surfaces=1)
 	if(prob(10)) //10% chance of smoke creation per tick
 		var/datum/effect/system/smoke_spread/fire/smoke = new /datum/effect/system/smoke_spread()
 		smoke.set_up(4,0,T)
@@ -136,19 +136,26 @@ Attach to transfer valve and open. BOOM.
 		return 0
 	if(fire_protection > world.time-300)
 		return 0
-	if(locate(/obj/effect/fire) in src)
-		return 1
+
 	var/datum/gas_mixture/air_contents = return_air()
-	if(!air_contents || exposed_temperature < PLASMA_MINIMUM_BURN_TEMPERATURE)
+
+	if(!air_contents)
 		return 0
 
 	var/igniting = 0
 
-	if(air_contents.check_combustability(src, surfaces))
+	if(surfaces && air_contents.molar_density(GAS_OXYGEN) >= (1 / CELL_VOLUME))
+		for(var/obj/O in contents)
+			if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && O.autoignition_temperature && exposed_temperature >= O.autoignition_temperature)
+				O.ignite()
+				igniting = 1
+				break
+	if(!igniting && exposed_temperature >= PLASMA_MINIMUM_BURN_TEMPERATURE && air_contents.check_combustability(src, surfaces))
 		igniting = 1
-		if(! (locate(/obj/effect/fire) in src))
-			new /obj/effect/fire(src)
-
+	if(locate(/obj/effect/fire) in src)
+		igniting = 1
+	else if(igniting)
+		new /obj/effect/fire(src)
 	return igniting
 
 // ignite_temp: 0 = Don't check, just get fuel.
