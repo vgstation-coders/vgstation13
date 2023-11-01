@@ -2873,6 +2873,7 @@
 #include "maps\_map_override.dm"
 #include "maps\tgstation.dm"
 #include "maps\defficiency\areas.dm"
+#include "maps\wheelstation\areas.dm"
 #include "maps\lampreystation\lamprey.dm"
 #include "maps\packedstation\telecomms.dm"
 #include "maps\randomvaults\dance_revolution.dm"
