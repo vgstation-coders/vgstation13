@@ -473,7 +473,6 @@
 	//add some spicy chemicals to the synth
 	for(var/M in modules)
 		if(istype(M, /obj/item/device/chem_synth/robot/service))
-			to_chat(world, "found")
 			var/obj/item/device/chem_synth/robot/service/synth = M
 			synth.emag_act(null)
 			break
