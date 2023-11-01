@@ -440,7 +440,7 @@
 
 	dat += "<BR>"
 
-		dat += "<BR><B>Head:</B> <A href='?src=\ref[src];item=[slot_head]'>[makeStrippingButton(head)]</A>"
+	dat += "<BR><B>Head:</B> <A href='?src=\ref[src];item=[slot_head]'>[makeStrippingButton(head)]</A>"
 
 	if(slot_wear_mask in obscured)
 		dat += "<BR><font color=grey><B>Mask:</B> Obscured by [head]</font>"
