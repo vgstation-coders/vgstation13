@@ -1205,6 +1205,7 @@ var/virology_encyclopedia = ""
 			time, turn them on one by one while observing engine conditions just to be safe.</li>
 			<li><b>Monitor:</b> Monitor the readouts on the supermatter monitor and Coolant Control computers to
 			ensure that the shard does not get hotter than 800 Kelvin.</li>
+			</ol>
 			</p>
 
 			<h2>Controlling the temperature</h2>
