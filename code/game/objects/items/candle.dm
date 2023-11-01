@@ -8,7 +8,7 @@
 	heat_production = 1000
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
-	autoignition_temperature = AUTOIGNITION_FABRIC //idk the wick lmao
+	autoignition_temperature = TEMPERATURE_FLAME + 1 //so it doesnt light itself on fire
 
 	var/wax = 900
 	var/lit = 0
@@ -80,7 +80,7 @@
 				if(prob(30))
 					lit = 0
 				else
-					var/candleflick = pick(0.5, 0.7, 0.9, 1, 1.3, 1.5, 2) 
+					var/candleflick = pick(0.5, 0.7, 0.9, 1, 1.3, 1.5, 2)
 					set_light(candleflick * CANDLE_LUM)
 			else
 				set_light(5 * CANDLE_LUM)
