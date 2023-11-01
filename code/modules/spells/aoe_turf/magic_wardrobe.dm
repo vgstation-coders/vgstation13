@@ -74,12 +74,21 @@
 
 /spell/aoe_turf/conjure/magical_wardrobe/get_upgrade_info(upgrade_type, level)
 	if(upgrade_type == Sp_SPEED)
-		return "Decreases the cooldown on summoning a new wardrobe. Does not effect the recall or summon spells. Also increases its durability."
+		if(spell_levels[Sp_SPEED] >= level_max[Sp_SPEED])
+			return "The spell can't be made any quicker than this!"
+		var/formula = round((initial_charge_max - cooldown_min)/level_max[Sp_SPEED])
+		return "Decreases the cooldown on summoning a new wardrobe by [formula/10]. Does not affect the recall or summon spells. Also increases its durability."
 	if(upgrade_type == Sp_MOVE)
+		if(spell_levels[Sp_MOVE] >= level_max[Sp_MOVE])
+			return "You can already summon the wardrobe to your location!"
 		return "Allows you to summon your wardrobe to your location. Also increases its durability."
 	if(upgrade_type == Sp_POWER)
+		if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+			return "You are already immune to the magical backlash of your wardrobe getting destroyed!"
 		return "Prevents magical backlash from affecting you when your wardrobe is destroyed. Also increases its durability."
 	if(upgrade_type == Sp_AMOUNT)
+		if(spell_levels[Sp_AMOUNT] >= level_max[Sp_AMOUNT])
+			return "You have already made the wardrobe as durable as it can be through this upgrade! You may try buying a different upgrade."
 		return "Significantly increases durability. Only wizards completely devoted to fashion should choose this."
 	return ..()
 

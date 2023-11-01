@@ -204,13 +204,15 @@
 		if(Sp_POWER)
 			switch(level)
 				if(1)
-					return "Allow the spell to arc to one additional target."
+					return "Allow the spell to arc to one additional target and slightly increases its damage."
 				if(2)
-					return "Allow the spell to arc up to 3 targets."
+					return "Allow the spell to arc up to 3 targets and slightly increases its damage."
 				if(3)
-					return "Allow the spell to arc up to 5 targets."
-		else
-			return ..()
+					return "Allow the spell to arc up to 5 targets and slightly increases its damage."
+		if(Sp_SPEED)
+			if(spell_levels[Sp_SPEED] == 2)
+				return "Allows you to multi-cast the spell, being able to fire up to two bolts of lightning before having to re-cast."
+	return ..()
 
 /spell/lightning/sith
 	basedamage = 25
