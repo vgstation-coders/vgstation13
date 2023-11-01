@@ -31,7 +31,7 @@
 
 	machine_flags = SCREWTOGGLE | EMAGGABLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | WELD_FIXED
 	state=2
-	
+
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
 		/datum/malfhack_ability/oneuse/overload_quiet,
@@ -225,7 +225,7 @@
 		return
 	if(!anchored)
 		to_chat(user, "The [src] must be secured to the floor first.")
-		return		
+		return
 	if(stat & (FORCEDISABLE|NOPOWER))
 		return
 	if(state!=2)
@@ -659,7 +659,7 @@
 		if(do_after(user, src,20))
 			dump_everything()
 			update_icon()
-		update_icon() 
+		update_icon()
 		updateUsrDialog() //prevents refiring of the crowbar action to disassemble it when prying out equipment with an open pannel.
 		return
 	if(iswelder(I)& (isUV | issuperUV) )
@@ -780,7 +780,7 @@
 //////////////////////////////REMINDER: Make it lock once you place some fucker inside.
 
 
-obj/machinery/suit_storage_unit/New()
+/obj/machinery/suit_storage_unit/New()
 	. = ..()
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/suit_storage_unit,

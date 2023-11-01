@@ -1029,7 +1029,7 @@
 	if(M.bodytemperature > 310) //copypasted from the cold drinks check so I don't have to change minttox internally and maybe most certainly break shit in the process
 		M.bodytemperature = max(310, M.bodytemperature + (-5 * TEMPERATURE_DAMAGE_COEFFICIENT)) //that minty freshness my dude, chill out
 
-	if(fatgokaboom && M_FAT in M.mutations)
+	if(fatgokaboom && (M_FAT in M.mutations))
 		M.gib()
 
 	if(ishuman(M))
