@@ -1118,6 +1118,15 @@ var/virology_encyclopedia = ""
 	wiki_page = "Guide_to_Snow_Map"
 	desc = "A guide to surviving on the surface of a snow planet. It even comes with a magnesium strip to ignite for emergency heating when applied to snow!</span>"
 
+/obj/item/weapon/book/manual/engineering_supermatter_guide
+	name = "\improper Introduction to Supermatter: Delamination (Not) Imminent"
+	icon_state = "bookSupermatter"
+	item_state = "bookSupermatter"
+	author = "Ashley Burns"
+	title = "Introduction to Supermatter: Delamination (Not) Imminent"
+	id = 23
+	wiki_page = "Supermatter"
+
 /obj/item/weapon/book/manual/snow/afterattack(atom/A, mob/user as mob)
 	if(!user.Adjacent(A) || !istype(A,/turf/unsimulated/floor/snow))
 		return
