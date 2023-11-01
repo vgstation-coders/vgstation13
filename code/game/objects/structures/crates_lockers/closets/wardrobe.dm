@@ -66,7 +66,6 @@
 		/obj/item/clothing/suit/nun,
 		/obj/item/clothing/head/nun_hood,
 		/obj/item/clothing/suit/chaplain_hoodie,
-		/obj/item/clothing/head/chaplain_hood,
 		/obj/item/clothing/suit/holidaypriest,
 		/obj/item/clothing/under/wedding/bride_white,
 		/obj/item/weapon/storage/backpack/cultpack,

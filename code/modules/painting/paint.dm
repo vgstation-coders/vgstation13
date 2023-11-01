@@ -187,6 +187,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	color = "#808080"
 	density = 1.808
 	specheatcap = 0.85
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/paint/reaction_turf(var/turf/T, var/volume)
 	if(!istype(T) || istype(T, /turf/space))

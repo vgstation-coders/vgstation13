@@ -211,6 +211,10 @@
 	if((stat==CONSCIOUS) && !busy && !ismoulting && !client && !mind && !ckey) //Checks for AI
 		grue_ai()
 
+//Grues already have a way to check their own health and the damage indicator doesn't mesh well with the vision.
+/mob/living/simple_animal/hostile/grue/standard_damage_overlay_updates()
+	return
+
 //AI stuff:
 /mob/living/simple_animal/hostile/grue/proc/grue_ai()
 
@@ -281,6 +285,13 @@
 					continue
 				UnarmedAttack(B)
 	..()
+
+/mob/living/simple_animal/hostile/grue/unarmed_attack_mob(target)
+	if(isgrue(target))
+		playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+		visible_message("<span class='notice'>[src] nuzzles \the [target].</span>", "<span class='notice'>You nuzzle \the [target].</span>")
+		return
+	return ..()
 
 
 /mob/living/simple_animal/hostile/grue/proc/get_ddl(var/turf/thisturf) //get the dark_dim_light status of a given turf
@@ -595,9 +606,11 @@
 	//health regen in darkness
 	lightparams.regenbonus = lightparams.base_regenbonus * (1.5 ** eatencount) //increased health regen in darkness
 
-	//melee damage
-	melee_damage_lower = base_melee_dam_lw + (7 * eatencount)
-	melee_damage_upper = base_melee_dam_up + (7 * eatencount)
+	//melee damage, 50 damage limit
+	melee_damage_lower = min(50, base_melee_dam_lw + (5 * eatencount))
+	melee_damage_upper = min(50, base_melee_dam_up + (5 * eatencount))
+	//How much armor they ignore on hit, +10% armor penetration for every target consumed up to 50% of armor ignored, meaning 80% damage reduction becomes 40%.
+	armor_modifier = max(0.5, 1 - (0.1 * eatencount))
 
 	//speed bonus in dark and dim conditions
 	lightparams.speed_m_dark_dim_light[1]=max(1/2,lightparams.base_speed_m_dark_dim_light[1]/(1.2 ** eatencount))//faster in darkness

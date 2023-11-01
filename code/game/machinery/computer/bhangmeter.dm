@@ -1,5 +1,5 @@
 var/list/bhangmeters = list()
-var/list/sensed_explosions = list()
+var/list/list/sensed_explosions = list()
 
 /*
 	/obj/machinery/computer/bhangmeter
