@@ -89,6 +89,10 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="spellcheck">Slightly reformatted the wizard&#39;s spellbook: multiple elements such as &#34;requires wizard robes&#34; and &#34;lost on mind transfer&#34; will stack on top of each other rather than one next to another, and the text for a spell that is capable of being used while unconscious is now green instead of blue.</li>
 				<li class="spellcheck">The &#34;Summon Snacks&#34; swapping description will now mention Dwarven snacks.</li>
 				<li class="spellcheck">Fixed up the &#34;Grease&#34; wizard spell&#39;s empowerment message.</li>
+				<li class="rscadd">Grues now take damage from lights based on constant exposure rather than at seemingly random intervals due to Life(), with a delay of 2 seconds before they take damage. This &#34;timer&#34; recovers by staying in darkness, at twice the normal speed it decays. The &#34;darkness&#34; indicator will also display differently-colored danger indicators for staying in the light, based on how long until the grue takes damage from the light.</li>
+				<li class="tweak">Changed some things about the way the movement penalty and increasing light damage are done for grues. The movement penalty and increasing light damage will happen after the grue is burnt by the light and will persist for 2 seconds before resetting. Continued exposure to the light will, however, delay both from recovering.</li>
+				<li class="tweak">The grue&#39;s &#34;darkness&#34; indicator will now update immediately.</li>
+				<li class="bugfix">Fixed a bug where duplicate grue HUD icons would spawn constantly over and over.</li>
 			</ul>
 			<h3 class="author">brndd updated:</h3>
 			<ul class="changes bgimages16">
