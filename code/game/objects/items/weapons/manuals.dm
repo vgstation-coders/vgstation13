@@ -1162,18 +1162,18 @@ var/virology_encyclopedia = ""
 			</style>
 			</head>
 			<body>
-			<h3>working this piece of junk legacy engine</h3>
+			<h1>Working This Piece of Junk Legacy Engine</h1>
 
 			<p>
 			So you were assigned to ol' NSS Wheelstation? My condolences. By the time you arrive,
 			I'll have rotated off this spinning bagel of rust. I'm leaving you some notes on this
 			ancient relic we call an engine so you can hopefully get it operational before reserve
 			power runs out. Good luck.
-
-			— Eris Bay, Engine Technician
+			<br><br>
+			- Eris Bay, Engine Technician
 			</p>
 
-			<h4>Cold-starting the Engine</h4>
+			<h2>Cold-starting the Engine</h2>
 
 			<p>
 			You arrived to find the engine fresh off its scheduled maintenance and have no idea how to
@@ -1181,35 +1181,38 @@ var/virology_encyclopedia = ""
 			</p>
 
 			<p>
-			<b>Check the shard:</b> Is the shard in the chamber? If all you see is a crate, the maintenance technician must've been too lazy or too scared to take the shard out of its box. Hit the bolts
+			<ol>
+			<li><b>Check the shard:</b> Is the shard in the chamber? If all you see is a crate, the maintenance technician must've been too lazy or too scared to take the shard out of its box. Hit the bolts
 			control button in the observation room to unlock the airlock, then go in the chamber and <u>CAREFULLY</u>
 			take the shard out of the crate and drag the crate out of the chamber. Remember that contrary to
 			what some of the old farts will tell you, leaving the crate in the chamber with the shard is
-			NOT up to code, and neither is leaving the doors unbolted after you're done.<br>
-			<b>Fill the coolant loops:</b> There are two pipes connected to canister connector ports in front of
+			NOT up to code, and neither is leaving the doors unbolted after you're done.</li>
+			<li><b>Fill the coolant loops:</b> There are two pipes connected to canister connector ports in front of
 			the observation room: green and cyan. Green is the "hot loop" that is injected into the chamber,
-			and cyan is the closed "cold loop" connected to the cooling pipes in space. Put two cans of CO₂ into
-			the green pipe, and two cans of plasma into the cold pipe. Remember to turn the pumps up all the way!<br>
-			<b>Set the filters:</b> Set the two gas filters in the green loop to filter for CO₂ and turn the
+			and cyan is the closed "cold loop" connected to the cooling pipes in space. Put two cans of CO2 into
+			the green pipe, and two cans of plasma into the cold pipe. Remember to turn the pumps up all the way!</li>
+			<li><b>Set the filters:</b> Set the two gas filters in the green loop to filter for CO2 and turn the
 			pressure up all the way. These will scrub out waste gases from the loop into the yellow canister,
-			which must be periodically switched out for an empty one.<br>
-			<b>Start the cooling system:</b> Switch the four volume pumps next to the thermoelectric generators
+			which must be periodically switched out for an empty one.</li>
+			<li><b>Start the cooling system:</b> Switch the four volume pumps next to the thermoelectric generators
 			on to enable the cold loop circulators. Then walk over to the Coolant Control computer in the
 			observation room and turn on the injector and the vent, and set the injector's rate to its maximum
-			of 10000.<br>
-			<b>Wait for the gas to get moving:</b> The loop takes a bit to get going. You'll know it's working
+			of 10000.</li>
+			<li><b>Wait for the gas to get moving:</b> The loop takes a bit to get going. You'll know it's working
 			when the circulators on the TEGs are spinning, and when the meter on the green pipe outside the SM
-			chamber reports a temperature under 200 Kelvin.<br>
-			<b>Turn on the emitters:</b> Turn on the emitters to start powering up the shard. If it's your first
-			time, turn them on one by one while observing engine conditions just to be safe.<br>
-			<b>Monitor:</b> Monitor the readouts on the supermatter monitor and Coolant Control computers to
-			ensure that the shard does not get hotter than 800 Kelvin.
+			chamber reports a temperature under 200 Kelvin.</li>
+			<li><b>Turn on the emitters:</b> Turn on the emitters to start powering up the shard. If it's your first
+			time, turn them on one by one while observing engine conditions just to be safe.</li>
+			<li><b>Monitor:</b> Monitor the readouts on the supermatter monitor and Coolant Control computers to
+			ensure that the shard does not get hotter than 800 Kelvin.</li>
 			</p>
 
-			<h4>Controlling the temperature</h4>
+			<h2>Controlling the temperature</h2>
 
 			<p>
 			If the shard is getting too toasty, you have three ways to regulate its temperature.
+			</p>
+			<p>
 			<ol>
 			<li><b>Turn off emitters.</b> Less emitters means less energy going into the shard, means less heat.
 			This may not help if oxygen concentrations in the chamber are too high, as the shard can enter a
@@ -1223,11 +1226,13 @@ var/virology_encyclopedia = ""
 			</ol>
 			</p>
 
-			<h4>OH SHIT IT'S DELAMINATING!!</h4>
+			<h2>OH SHIT IT'S DELAMINATING!!</h2>
 
 			<p>
 			The computer just announced some scary stuff over the radio and now the crew is out for blood!
 			First off, don't panic. You probably have over ten minutes to fix the situation.
+			</p>
+			<p>
 			<ol>
 			<li><b>Turn off all the emitters.</b> This should be a nobrainer. You don't want to excite the shard
 			any more than it already is.</li>
