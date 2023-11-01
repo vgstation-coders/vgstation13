@@ -246,7 +246,7 @@
 		icon_state = "tracker"
 		if(stat & BROKEN)
 			icon_state += "-b"
-		else if(obscured)
+		else if(obscured || !sun)
 			icon_state += "-dark"
 		else
 			glow.transform = turn(matrix(), (sun.angle + 180) % 360)
