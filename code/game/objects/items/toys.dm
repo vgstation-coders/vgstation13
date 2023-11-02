@@ -1153,6 +1153,11 @@
 	desc = "Cannot be worn as a mask, unfortunately."
 	icon_state = "huggertoy"
 
+/obj/item/toy/gasha/borertoy
+	name = "Mini Borer"
+	desc = "Probably not something you should be playing with."
+	icon_state = "borertoy"
+
 /obj/item/toy/gasha/minislime
 	name = "Pygmy Grey Slime"
 	desc = "If you experience a tingling sensation in your hands, please stop playing with your pygmy slime immediately."

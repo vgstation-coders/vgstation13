@@ -57,6 +57,7 @@
 	var/capsule_prize = pick(
 		/obj/item/toy/gasha/greyshirt,
 		/obj/item/toy/gasha/greytide,
+		/obj/item/toy/gasha/borertoy,
 		/obj/item/toy/gasha/minislime,
 		/obj/item/toy/gasha/AI,
 		/obj/item/toy/gasha/AI/malf,
