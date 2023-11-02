@@ -43,10 +43,10 @@ jobs:
           python-version: '3.x'
 
         #TODO: Cache Dreamchecker install
-      #- name: Run dreamchecker
-      #  run: |
-      #    SPACEMAN_DMM_GIT_TAG="suite-1.7.3" tools/travis/install_spaceman_dmm.sh dreamchecker
-      #    ~/dreamchecker
+      - name: Run dreamchecker
+        run: |
+          SPACEMAN_DMM_GIT_TAG="suite-1.8" tools/travis/install_spaceman_dmm.sh dreamchecker
+          ~/dreamchecker
 
       - name: Run map checker
         run: python tools/travis/check_map_files.py maps/
