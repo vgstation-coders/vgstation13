@@ -234,22 +234,8 @@ Attach to transfer valve and open. BOOM.
 		Extinguish()
 		return
 
-	//get a firelevel and set the icon
 	var/firelevel = air_contents.calculate_firelevel(S)
-	var/heatlight = max(1, air_contents.temperature / 2000)
-
-	// Update fire color.
-	color = heat2color(air_contents.temperature)
-
-	if(firelevel > 6)
-		icon_state = "key3"
-		set_light(7, 3 * heatlight, color)
-	else if(firelevel > 2.5)
-		icon_state = "key2"
-		set_light(5, 2 * heatlight, color)
-	else
-		icon_state = "key1"
-		set_light(3, 1 * heatlight, color)
+	setfirelight(firelevel, air_contents.temperature)
 
 	//im not sure how to implement a version that works for every creature so for now monkeys are firesafe
 	for(var/mob/living/carbon/human/M in loc)
@@ -296,6 +282,7 @@ Attach to transfer valve and open. BOOM.
 	//seperate part of the present gas
 	//this is done to prevent the fire burning all gases in a single pass
 	var/datum/gas_mixture/flow = air_contents.remove_volume(zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate) * CELL_VOLUME)
+
 ///////////////////////////////// FLOW HAS BEEN CREATED /// DONT DELETE THE FIRE UNTIL IT IS MERGED BACK OR YOU WILL DELETE AIR ///////////////////////////////////////////////
 
 	if(flow)
@@ -306,11 +293,12 @@ Attach to transfer valve and open. BOOM.
 
 ///////////////////////////////// FLOW HAS BEEN REMERGED /// feel free to delete the fire again from here on //////////////////////////////////////////////////////////////////
 
-
 /obj/effect/fire/New()
 	. = ..()
 	dir = pick(cardinal)
-	set_light(3)
+	var/datum/gas_mixture/air_contents=return_air()
+	if(air_contents)
+		setfirelight(air_contents.calculate_firelevel(get_turf(src)), air_contents.temperature)
 	SSair.add_hotspot(src)
 
 /obj/effect/fire/Destroy()
@@ -318,6 +306,25 @@ Attach to transfer valve and open. BOOM.
 
 	set_light(0)
 	..()
+
+/obj/effect/fire/proc/setfirelight(firelevel, firetemp)
+
+	var/heatlight = max(1, firetemp / 2000)
+
+	// Update fire color.
+	color = heat2color(firetemp)
+
+	if(firelevel > 6)
+		icon_state = "key3"
+		set_light(7, 3 * heatlight, color)
+	else if(firelevel > 2.5)
+		icon_state = "key2"
+		set_light(5, 2 * heatlight, color)
+	else
+		icon_state = "key1"
+		set_light(3, 1 * heatlight, color)
+
+
 
 /turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
 /turf/proc/apply_fire_protection()
