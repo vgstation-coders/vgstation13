@@ -1182,7 +1182,7 @@ var/virology_encyclopedia = ""
 
 			<p>
 			<ol>
-			<li><b>Check the shard:</b> Is the shard in the chamber? If all you see is a crate, the maintenance technician must've been too lazy or too scared to take the shard out of its box. Hit the bolts
+			<li><b>Check the shard:</b> Put on your mesons and go have a look. Is the shard in the chamber? If all you see is a crate, the maintenance technician must've been too lazy or too scared to take the shard out of its box. Hit the bolts
 			control button in the observation room to unlock the airlock, then go in the chamber and <u>CAREFULLY</u>
 			take the shard out of the crate and drag the crate out of the chamber. Remember that contrary to
 			what some of the old farts will tell you, leaving the crate in the chamber with the shard is
@@ -1190,7 +1190,7 @@ var/virology_encyclopedia = ""
 			<li><b>Fill the coolant loops:</b> There are two pipes connected to canister connector ports in front of
 			the observation room: green and cyan. Green is the "hot loop" that is injected into the chamber,
 			and cyan is the closed "cold loop" connected to the cooling pipes in space. Put two cans of CO2 into
-			the green pipe, and two cans of plasma into the cold pipe. Remember to turn the pumps up all the way!</li>
+			the green pipe, and two cans of plasma into the cyan pipe. Remember to turn the pumps up all the way!</li>
 			<li><b>Set the filters:</b> Set the two gas filters in the green loop to filter for CO2 and turn the
 			pressure up all the way. These will scrub out waste gases from the loop into the yellow canister,
 			which must be periodically switched out for an empty one.</li>
