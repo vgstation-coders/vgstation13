@@ -31,7 +31,7 @@ Attach to transfer valve and open. BOOM.
 
 /atom/movable/firelightdummy/New()
 	.=..()
-	set_light(3,4)
+	set_light(2,2)
 
 /atom/proc/ashtype()
 	return /obj/effect/decal/cleanable/ash
