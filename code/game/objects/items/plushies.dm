@@ -13,6 +13,10 @@
 	var/hug_sound = 'sound/weapons/thudswoosh.ogg'
 	autoignition_temperature = AUTOIGNITION_FABRIC
 
+/obj/item/toy/plushie/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>\The [user] is smothering \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
+	return(SUICIDE_ACT_OXYLOSS)
+
 /obj/item/toy/plushie/examine(mob/user)
 	..()
 	if(!stuffed && !grenade)
