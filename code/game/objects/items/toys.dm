@@ -1144,7 +1144,7 @@
 	icon_state = "bomberman4"
 
 /obj/item/toy/gasha/monkeytoy
-	name = "plush monkey"
+	name = "toy monkey"
 	desc = "Slightly less likely to throw poop than the real one."
 	icon_state = "monkeytoy"
 
