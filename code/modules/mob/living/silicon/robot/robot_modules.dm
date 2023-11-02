@@ -465,7 +465,7 @@
 	modules += new /obj/item/weapon/kitchen/rollingpin(src)
 	modules += new /obj/item/weapon/storage/bag/food/borg(src)
 
-	emag = new /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver(src)
+	emag = new /obj/item/weapon/kitchen/utensil/knife/large/butch(src)
 
 	fix_modules()
 
