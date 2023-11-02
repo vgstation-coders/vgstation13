@@ -146,7 +146,7 @@ Attach to transfer valve and open. BOOM.
 
 	if(surfaces && air_contents.molar_density(GAS_OXYGEN) >= (1 / CELL_VOLUME))
 		for(var/obj/O in contents)
-			if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && O.autoignition_temperature && exposed_temperature >= O.autoignition_temperature)
+			if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && !O.on_fire && O.autoignition_temperature && exposed_temperature >= O.autoignition_temperature)
 				O.ignite()
 				igniting = 1
 				break
