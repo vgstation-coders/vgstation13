@@ -223,6 +223,11 @@
 	desc = "The immortal immortalized as a stuffed doll. It has a deadpan expression on its face."
 	icon_state = "mokou"
 
+/obj/item/toy/plushie/fumo/nitori
+	name = "\improper Nitori fumo"
+	desc = "A stuffed doll depicting an aquatic engineer. It has a smug expression on its face."
+	icon_state = "nitori"
+
 /obj/item/toy/plushie/fumo/patchouli
 	name = "\improper Patchouli fumo"
 	desc = "The librarian witch depicted as a stuffed doll. It has a grumpy expression on its face."
