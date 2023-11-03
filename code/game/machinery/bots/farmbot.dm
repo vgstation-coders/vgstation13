@@ -216,7 +216,7 @@
 	return
 
 /obj/machinery/bot/farmbot/can_path()
-	return !mode
+	return mode == 5 || !mode
 
 /obj/machinery/bot/farmbot/process_bot()
 	//set background = 1

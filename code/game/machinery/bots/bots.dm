@@ -565,6 +565,7 @@
 		return TRUE
 	waiting_for_path = 1
 	. = AStar(src, callback, src.loc, target, cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+	//. = get_path_to(src, target, max_distance = 0, mintargetdist = 1, id=botcard, simulated_only = TRUE)
 	if (!.)
 		waiting_for_path = 0
 
@@ -829,7 +830,6 @@ obj/machinery/bot/attack_hand(mob/user as mob)
 		return
 	..()
 /obj/machinery/bot/AIShiftClick(var/mob/user)
-	to_chat(user,"fuck yourself")
 	if(!isAI(user))
 		return
 	var/choice= show_radial_menu(user,src,AIradialChoices,icon_file='icons/obj/bots_radial.dmi',tooltip_theme="radial_center") //,var/tooltip_theme,var/callback/custom_check,var/uniqueid,var/radius,var/min_angle,var/starting_angle,var/ending_angle,var/recursive = FALSE, var/close_other_menus)
@@ -849,4 +849,7 @@ obj/machinery/bot/attack_hand(mob/user as mob)
 	switch(command)
 		if("summon","default")
 			target = A
+			destination = A
+			path = list()
+			summoned = TRUE
 			process()

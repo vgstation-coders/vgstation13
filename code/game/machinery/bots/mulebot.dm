@@ -99,6 +99,7 @@ var/global/mulebot_count = 0
 	cell = new(src)
 	cell.charge = 2000
 	cell.maxcharge = 2000
+	AIradialChoices |= list(list("load","load"))
 
 /obj/machinery/bot/mulebot/initialize()
 	. = ..()
@@ -518,6 +519,9 @@ var/global/mulebot_count = 0
 
 	lock_atom(C, /datum/locking_category/mulebot)
 
+	AIradialChoices |= list(list("unload","unload"))
+	AIradialChoices -= list("load","load")  //yep
+
 /obj/machinery/bot/mulebot/proc/can_load(var/atom/movable/C)
 	if (C.anchored)
 		return FALSE
@@ -560,6 +564,8 @@ var/global/mulebot_count = 0
 			step(load, dirn)
 		else
 			load.forceMove(src.loc)//Drops you right there, so you shouldn't be able to get yourself stuck
+	AIradialChoices -= list("unload","unload")
+	AIradialChoices |= list(list("load","load")) //yep
 
 	// in case non-load items end up in contents, dump every else too
 	// this seems to happen sometimes due to race conditions //There are no race conditions in BYOND. It's single-threaded.
@@ -1023,6 +1029,27 @@ var/global/mulebot_count = 0
 	spawn(20)
 		if(point)
 			qdel(point)
+
+/obj/machinery/bot/mulebot/handleAIRadialCommand(var/mob/user,var/choice)
+	var/mob/living/silicon/ai/AI = user
+	switch(choice)
+		if("summon","default","load")
+			AI.handle_bot_click_command(src,choice)
+		if("unload")
+			unload()
+
+/obj/machinery/bot/mulebot/handleAIMouseCommand(atom/A,command)
+	switch(command)
+		if("summon","default")
+			target = A
+			destination = A
+			path = list()
+			summoned = TRUE
+			process()
+		if("load")
+			load(A)
+
+
 
 #undef LOAD_OR_MOVE_HERE
 #undef UNLOAD_HERE
