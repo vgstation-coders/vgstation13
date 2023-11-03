@@ -37,33 +37,38 @@
 	containertype = /obj/structure/closet/crate/internals
 	containername = "o2 internals crate"
 	group = "Supplies"
+	containsicon = /obj/item/weapon/tank/air
 	containsdesc = "Three sets of air tanks with gas masks, perfect for when your station is experiencing atmospherics issues."
 
 /datum/supply_packs/vox_supply
-	name = "Vox pressure suit set"
-	contains = list(/obj/item/clothing/suit/space/vox/civ,
-					/obj/item/clothing/head/helmet/space/vox/civ,
+	name = "N2 internals resupply"
+	contains = list(/obj/item/weapon/tank/nitrogen,
 					/obj/item/weapon/tank/nitrogen,
-					/obj/item/weapon/tank/emergency_nitrogen/engi,
+					/obj/item/weapon/tank/nitrogen,
+					/obj/item/clothing/mask/breath/vox,
+					/obj/item/clothing/mask/breath/vox,
 					/obj/item/clothing/mask/breath/vox)
-	cost = 100
+	cost = 30
 	containertype = /obj/structure/closet/crate/basic
-	containername = "vox suit crate"
+	containername = "n2 internals crate"
 	group = "Supplies"
-	containsdesc = "A full vox pressure suit crate, containing a standard assistant pressure suit. Includes a full nitrogen internals kit."
+	containsicon = /obj/item/weapon/tank/nitrogen
+	containsdesc = "For when the birds are in town but you don't have enough tanks to go around. Comes with three nitrogen tanks and three masks."
 
 /datum/supply_packs/plasmaman_supply
-	name = "Plasmaman pressure suit set"
-	contains = list(/obj/item/clothing/suit/space/plasmaman,
-					/obj/item/clothing/head/helmet/space/plasmaman,
+	name = "Plasma internals resupply"
+	contains = list(/obj/item/weapon/tank/plasma/plasmaman,
 					/obj/item/weapon/tank/plasma/plasmaman,
-					/obj/item/weapon/tank/emergency_plasma/engi,
+					/obj/item/weapon/tank/plasma/plasmaman,
+					/obj/item/clothing/mask/breath,
+					/obj/item/clothing/mask/breath,
 					/obj/item/clothing/mask/breath)
-	cost = 100
+	cost = 30
 	containertype = /obj/structure/closet/crate/basic
-	containername = "plasmaman suit crate"
+	containername = "plasma internals crate"
 	group = "Supplies"
-	containsdesc = "A full plasmaman suit, with a bonus plasma internals kit to go with it."
+	containsicon = /obj/item/weapon/tank/plasma/plasmaman
+	containsdesc = "Three tanks of plasma gas, perfect for replacing your used plasma air container. Comes with three bonus masks."
 
 /datum/supply_packs/evacuation
 	name = "Emergency equipment"

@@ -93,7 +93,7 @@
 	containername = "crate"
 	group = "Clothing"
 	require_holiday = APRIL_FOOLS_DAY
-	containsicon = /obj/structure/mann_co_crate
+	containsicon = /obj/item/mann_co_key
 	containsdesc = "This crate contains a crate for a key."
 
 /datum/supply_packs/randomised/cheap_hats
@@ -252,7 +252,36 @@
 	containertype = /obj/structure/closet/crate/basic
 	containername = "space suit crate"
 	group = "Clothing"
+	containsicon = /obj/item/clothing/suit/space
 	containsdesc = "Contains an entire space-worthy softsuit. Includes a small oxygen tank!"
+
+/datum/supply_packs/vox_suit
+	name = "Vox pressure suit set"
+	contains = list(/obj/item/clothing/suit/space/vox/civ,
+					/obj/item/clothing/head/helmet/space/vox/civ,
+					/obj/item/weapon/tank/nitrogen,
+					/obj/item/weapon/tank/emergency_nitrogen/engi,
+					/obj/item/clothing/mask/breath/vox)
+	cost = 100
+	containertype = /obj/structure/closet/crate/basic
+	containername = "vox suit crate"
+	group = "Clothing"
+	containsicon = /obj/item/clothing/suit/space/vox/civ
+	containsdesc = "A full vox pressure suit crate, containing a standard assistant pressure suit. Includes a full nitrogen internals kit."
+
+/datum/supply_packs/plasmaman_suit
+	name = "Plasmaman pressure suit set"
+	contains = list(/obj/item/clothing/suit/space/plasmaman,
+					/obj/item/clothing/head/helmet/space/plasmaman,
+					/obj/item/weapon/tank/plasma/plasmaman,
+					/obj/item/weapon/tank/emergency_plasma/engi,
+					/obj/item/clothing/mask/breath)
+	cost = 100
+	containertype = /obj/structure/closet/crate/basic
+	containername = "plasmaman suit crate"
+	group = "Clothing"
+	containsicon = /obj/item/clothing/suit/space/plasmaman
+	containsdesc = "A full plasmaman suit, with a bonus plasma internals kit to go with it."
 
 /datum/supply_packs/grey_supply
 	name = "Grey Space-Ex"
