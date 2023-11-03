@@ -359,6 +359,15 @@ var/global/list/obj/machinery/light/alllights = list()
 		to_chat(user, "You insert \the [W] into \the [src], allowing multitool customization.")
 		return
 	
+	
+	if(rgb_upgrade && iscrowbar(W))
+		W.playtoolsound(src, 75)
+		user.visible_message("[user.name] removes some plastic from \the [src].", \
+			"You remove some plastic from \the [src].", "You hear a noise.")
+		rgb_upgrade = FALSE
+		current_bulb.brightness_color = initial(current_bulb.brightness_color)
+		drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(src), 1, user)
+		return
 	user.delayNextAttack(8)
 	
 	// attempt to insert light
@@ -389,16 +398,8 @@ var/global/list/obj/machinery/light/alllights = list()
 				to_chat(user, "This type of light requires a [fitting].")
 				return
 
-	if(rgb_upgrade && iscrowbar(W))
-		W.playtoolsound(src, 75)
-		user.visible_message("[user.name] removes some plastic from \the [src].", \
-			"You remove some plastic from \the [src].", "You hear a noise.")
-		rgb_upgrade = FALSE
-		current_bulb.brightness_color = initial(current_bulb.brightness_color)
-		drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(src), 1, user)
-		return
 		// attempt to break the light
-		//If xenos decide they want to smash a light bulb with a toolbox, who am I to stop them? /N
+		//If xenos decide they want to smash a light bulb with a toolbox, who am I to stop them?
 
 	else if(current_bulb && current_bulb.status != LIGHT_BROKEN)
 
