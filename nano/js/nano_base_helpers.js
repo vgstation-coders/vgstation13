@@ -13,6 +13,8 @@ NanoBaseHelpers = function ()
 				$('#uiTitleFluff').css("background-position","50% 50%");
 				$('#uiTitleFluff').css("background-repeat", "no-repeat");
 
+				$('#uiTitleWrapper').css("background-color","#550202");
+
 				return '';
 			},
 			combine: function( arr1, arr2 ) {
