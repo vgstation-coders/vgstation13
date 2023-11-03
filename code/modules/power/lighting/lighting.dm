@@ -325,8 +325,8 @@ var/global/list/obj/machinery/light/alllights = list()
 
 /obj/machinery/light/attackby(obj/item/W, mob/living/user)
 	if(ismultitool(W)) //RGB gamer lights
-		if(rgb_upgrade)
-			to_chat(user, "There's nothing to connect \the [W] to on \the [src]")
+		if(!rgb_upgrade)
+			to_chat(user, "There's nothing to connect \the [W] to on \the [src].")
 			return
 		var/which = alert(user, "What would you like to change?", "RGB Gamer lights", "Color", "Power", "Range")
 		var/list/choice_color_list = list("custom") + light_colors
@@ -389,11 +389,18 @@ var/global/list/obj/machinery/light/alllights = list()
 				to_chat(user, "This type of light requires a [fitting].")
 				return
 
+	if(rgb_upgrade && iscrowbar(W))
+		W.playtoolsound(src, 75)
+		user.visible_message("[user.name] removes some plastic from \the [src].", \
+			"You remove some plastic from \the [src].", "You hear a noise.")
+		rgb_upgrade = FALSE
+		current_bulb.brightness_color = initial(current_bulb.brightness_color)
+		drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(src), 1, user)
+		return
 		// attempt to break the light
 		//If xenos decide they want to smash a light bulb with a toolbox, who am I to stop them? /N
 
 	else if(current_bulb && current_bulb.status != LIGHT_BROKEN)
-
 
 		user.do_attack_animation(src, W)
 		if(prob(1+W.force * 5))
@@ -413,14 +420,6 @@ var/global/list/obj/machinery/light/alllights = list()
 			to_chat(user, "You hit the light!")
 	// attempt to deconstruct / stick weapon into light socket
 	else if(!current_bulb)
-		if(rgb_upgrade && iscrowbar(W))
-			W.playtoolsound(src, 75)
-			user.visible_message("[user.name] removes some plastic from \the [src].", \
-				"You remove some plastic from \the [src].", "You hear a noise.")
-			rgb_upgrade = FALSE
-			current_bulb.brightness_color = initial(current_bulb.brightness_color)
-			drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(src), 1, user)
-			return
 		if(W.is_wirecutter(user)) //If it's a wirecutter take out the wires
 			W.playtoolsound(src, 75)
 			user.visible_message("[user.name] removes \the [src]'s wires.", \
