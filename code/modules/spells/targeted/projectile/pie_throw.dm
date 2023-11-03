@@ -21,6 +21,14 @@
 
 	hud_state = "pie"
 
+/spell/targeted/projectile/pie/get_upgrade_info(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_POWER)
+			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+				return "The spell can't be made any more powerful than this!"
+			return "Allows you to throw an extra pie, and increases the throwing damage of each pie by 4."
+	return ..()
+
 /spell/targeted/projectile/pie/empower_spell()
 	spell_levels[Sp_POWER]++
 	return "Your spell now throws [spell_levels[Sp_POWER]+1] pies at once!"
@@ -30,8 +38,8 @@
 		if (user.is_pacified(VIOLENCE_DEFAULT,target))
 			return
 	spawn()
-		var/turf/T = get_turf(user)
 		for(var/i = 0 to spell_levels[Sp_POWER])
+			var/turf/T = get_turf(user)
 			var/atom/target = pick(targets)
 			var/pie_to_spawn = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/pie))
 			var/obj/pie = new pie_to_spawn(T)

@@ -471,6 +471,7 @@
 	description = "Tomatoes made into juice. Probably. What a waste of big, juicy tomatoes, huh?"
 	id = BLOOD
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_PIGMENT
 	color = DEFAULT_BLOOD //rgb: 161, 8, 8
 	density = 1.05
 	specheatcap = 3.49
@@ -1028,7 +1029,7 @@
 	if(M.bodytemperature > 310) //copypasted from the cold drinks check so I don't have to change minttox internally and maybe most certainly break shit in the process
 		M.bodytemperature = max(310, M.bodytemperature + (-5 * TEMPERATURE_DAMAGE_COEFFICIENT)) //that minty freshness my dude, chill out
 
-	if(fatgokaboom && M_FAT in M.mutations)
+	if(fatgokaboom && (M_FAT in M.mutations))
 		M.gib()
 
 	if(ishuman(M))
@@ -1172,6 +1173,7 @@
 	custom_metabolism = 0.1
 	density = 3.56
 	specheatcap = 17.15
+	overdose_am = REAGENTS_OVERDOSE // So you can't pretend that you "didn't know it was an OD"
 
 /datum/reagent/stoxin/on_mob_life(var/mob/living/M, var/alien)
 
@@ -1183,9 +1185,13 @@
 			M.eye_blurry = max(M.eye_blurry, 10)
 		if(15 to 25)
 			M.drowsyness  = max(M.drowsyness, 20)
-		if(25 to INFINITY)
+		if (25 to 240)
 			M.Paralyse(20)
 			M.drowsyness  = max(M.drowsyness, 30)
+		if(240 to INFINITY) // 8 minutes
+			var/mob/living/carbon/human/H = M
+			var/datum/organ/internal/heart/damagedheart = H.get_heart()
+			damagedheart.damage += 10
 
 /datum/reagent/srejuvenate
 	name = "Soporific Rejuvenant"
@@ -4714,6 +4720,7 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/mustard
 	name = "Mustard"
@@ -4722,6 +4729,7 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#cccc33" //rgb: 204, 204, 51
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/relish
 	name = "Relish"
@@ -5070,7 +5078,7 @@ var/procizine_tolerance = 0
 	id = BLACKCOLOR
 	description = "A black coloring used to dye food and drinks."
 	reagent_state = REAGENT_STATE_LIQUID
-	flags = CHEMFLAG_OBSCURING
+	flags = CHEMFLAG_OBSCURING|CHEMFLAG_PIGMENT
 	color = "#000000" //rgb: 0, 0, 0
 
 /datum/reagent/frostoil
@@ -9373,6 +9381,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = ZEAXANTHIN
 	description = "Zeaxanthin is a natural pigment which purportedly supports eye health."
 	color = "#CC4303" //rgb: 204, 67, 3
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/stoxin/valerenic_acid
 	name = "Valerenic Acid"

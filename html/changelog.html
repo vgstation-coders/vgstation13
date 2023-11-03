@@ -73,6 +73,183 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2023.11.01</h2>
+			<h3 class="author">ValkyrieSkies updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Item attack animations are now enabled by default for new players.</li>
+				<li class="tweak">Moved Vox &amp; Plasmaman internal supply crates to the Supplies category</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The wizard&#39;s spellbook will now tell you which spell is lost upon transferring minds with spells such as Mind Swap.</li>
+				<li class="rscadd">The wizard&#39;s spellbook will now tell you a spell&#39;s range once purchased.</li>
+				<li class="rscadd">Many spells in the wizard&#39;s spellbook will be more descriptive when their attribute buttons (such as cooldown and power) are pressed. Most notably, the cooldown button will tell you by how many seconds the cooldown is reduced.</li>
+				<li class="bugfix">Fixed a bug where the &#34;Card Trick&#34; spell could be acquired from the spellbook bundle&#39;s ancient spellbook.</li>
+				<li class="bugfix">Fixed a bug where the &#34;Chariot&#34; spell could have its cooldown reduced despite being a one-time-use spell that summons a Firebird vehicle.</li>
+				<li class="spellcheck">The wizard&#39;s spellbook will now display &#34;MAXED!&#34; for a maxed spell level rather than the upgrade cost.</li>
+				<li class="spellcheck">Slightly reformatted the wizard&#39;s spellbook: multiple elements such as &#34;requires wizard robes&#34; and &#34;lost on mind transfer&#34; will stack on top of each other rather than one next to another, and the text for a spell that is capable of being used while unconscious is now green instead of blue.</li>
+				<li class="spellcheck">The &#34;Summon Snacks&#34; swapping description will now mention Dwarven snacks.</li>
+				<li class="spellcheck">Fixed up the &#34;Grease&#34; wizard spell&#39;s empowerment message.</li>
+				<li class="rscadd">Grues now take damage from lights based on constant exposure rather than at seemingly random intervals due to Life(), with a delay of 2 seconds before they take damage. This &#34;timer&#34; recovers by staying in darkness, at twice the normal speed it decays. The &#34;darkness&#34; indicator will also display differently-colored danger indicators for staying in the light, based on how long until the grue takes damage from the light.</li>
+				<li class="tweak">Changed some things about the way the movement penalty and increasing light damage are done for grues. The movement penalty and increasing light damage will happen after the grue is burnt by the light and will persist for 2 seconds before resetting. Continued exposure to the light will, however, delay both from recovering.</li>
+				<li class="tweak">The grue&#39;s &#34;darkness&#34; indicator will now update immediately.</li>
+				<li class="bugfix">Fixed a bug where duplicate grue HUD icons would spawn constantly over and over.</li>
+				<li class="tweak">The wizard&#39;s &#34;Projectile Pastry&#34; spell now happens from the wizard&#39;s location, rather than from the initial location where the spell was cast.</li>
+			</ul>
+			<h3 class="author">brndd updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Gasha captain, clown, mime and miner should now be using the correct sprites</li>
+				<li class="rscadd">Added a new in-game guidebook for the supermatter engine. It can be found near your nearest supermatter engine.</li>
+			</ul>
+			<h3 class="author">pedr69 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">a cargo centcom order coming in while an RC announcement is being written will no longer cancel the announcement</li>
+				<li class="bugfix">centcom orders will no longer make the entire RC message list bold</li>
+			</ul>
+			<h2 class="date">2023.10.31</h2>
+			<h3 class="author">toomykins updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">observers/ghosts are now able to possess the jack-o-lantern candy-buckets upon spooking</li>
+			</ul>
+			<h2 class="date">2023.10.30</h2>
+			<h3 class="author">ValkyrieSkies updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added some more lights to Boxstation.</li>
+			</ul>
+			<h3 class="author">gurfan updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added new thing: you can eat borers now. literally just pick them up and eat them.</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Radstorms no longer fire unless there&#39;s at least 7 active space mans.</li>
+			</ul>
+			<h2 class="date">2023.10.29</h2>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The spacesuit modification station will now say why a module was not installed.</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Solar Panels no longer sometimes do an almost complete rotation when their target orientation requires them to pass through the 0°|360° mark.</li>
+				<li class="imageadd">Solar Panels are no longer visually constrained to 8 directions, and can be observed rotating in real time.</li>
+				<li class="rscadd">Solar Panels can now generate powers even if they aren&#39;t connected to a Solar Panel Control computer.</li>
+				<li class="rscadd">Players can now use a wrench on Solar Panels to change their rotation manually. Rotating them this way is faster than doing it from a computer, but you need to remain adjacent until the rotation is over or it will be incomplete.</li>
+				<li class="rscadd">Solar Panels are now affected by EMPs, which cause them to spin to a random orientation. They will re-calibrate themselves on their own as long as they are connected to a working Solar Panel Control computer.</li>
+				<li class="imageadd">Solar Panels now feature visual cracks when they&#39;ve taken some damage, but not enough to break them. Since damage reduces their power output, this lets you identify at a glance which panels need repairs.</li>
+				<li class="rscadd">Attacking a Solar Panel with a weapon now gives visual and textual feedback</li>
+				<li class="rscadd">Simple Animals and Aliens can now attack solar panels.</li>
+				<li class="rscadd">Added proper descriptions to both Solar Panels and Solar Trackers.</li>
+				<li class="rscadd">Solar Panels can now be distinguished through darkness, and their panel becomes fully lit when in direct view of the star.</li>
+				<li class="imageadd">The color of Solar Panels now brightens slightly the better aligned with the star it is, producing a visible glow at near-perfect alignment.</li>
+				<li class="bugfix">Fixed Solar Panels not emitting any power in some cases despite them being nearly aligned with the sun.</li>
+				<li class="tweak">Solar Trackers now actually need line of sight to the star to provide its angle. Despite them iconically being mapped at the extremity of solar arrays, you could just build them inside the station.</li>
+				<li class="imageadd">Solar Trackers now have a broken sprite. While broken, they cannot be used by Solar Panel Control computers to automatically track the star. They also now more clearly indicate the current star&#39;s rotation as long as they have sight of it, while a solar tracker without view of a star will appear noticeable darker.</li>
+				<li class="tweak">Catwalks have had their cost reduced from 3 metal rods to just 2 (both including the 1 rod lattice cost). Their construction time has also been halved.</li>
+				<li class="tweak">You no longer have a chance to slip when walking on catwalks.</li>
+				<li class="bugfix">Fixed an edge case where placing cables in space didn&#39;t check for proper support.</li>
+				<li class="rscadd">Player-controlled mice now visibly rest.</li>
+				<li class="rscadd">The Rapid Cable Layer (RCL) has been rewritten from scratch and is now much easier to use and less prone to accidentally placing unwanted wire knots. You can click adjacent tiles directly to create a pair of wires that connects both that tile and yours (and that tries to connect to existing nodes on both tiles even if you didn&#39;t pixel-perfect clicked them). Placing wires this way, or clicking the RCL enables its active mode, during which you can lay wires by just walking around. Unlike previously the RCL won&#39;t attempt to place extra nodes on tiles that already have wires connecting from the same direction, but you can still force that behaviour when clicking tiles. Clicking the RCL again disables it.</li>
+				<li class="rscadd">RCL added to YouTool vendors at a premium, and Engi-Vends as part of their regular stock.</li>
+				<li class="rscadd">Electricians (the Station Engineer alt-job) spawn with their own RCL in their backpack, and holding an electrical toolbox.</li>
+				<li class="imageadd">Of course the RCL had its sprites revamped and now displays not only better how much wire is in it, but also its color.</li>
+				<li class="bugfix">Fixed cable coil always appearing red in your character&#39;s hands despite sprites for other colours existing.</li>
+				<li class="rscadd">Actually fuck those sprites, cables are now entirely coloured through code, and you can paint coils by dipping them in reagent containers containing reagents flagged as pigments (such as paint buckets, but blood and a few others work as well). The colour carries over to placed wires and cable cuffs.</li>
+			</ul>
+			<h3 class="author">Irradiation updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Metaclub: Added a Bhangmeter to the bridge.</li>
+				<li class="rscadd">Metaclub: Added some missing wires to power up some electrified grilles.</li>
+				<li class="tweak">Metaclub: Remodeled the Bridge command room to accommodate the Bhangmeter.</li>
+				<li class="tweak">Sleep Toxin now has an overdose amount (30 units) that will deal some toxin damage if you go over it.</li>
+				<li class="tweak">Sleep Toxin will now start destroying your heart if it&#39;s in your system for more than 8 minutes.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug where the target that was initially hit by the wizard&#39;s &#34;Lightning&#34; spell would randomly cause the Lightning spell to not arc to nearby targets and randomly hit the same target twice. The Lightning spell will now properly arc to other targets and not have a random chance to instantly put someone into critical condition while at it.</li>
+				<li class="bugfix">The wizard that casts the &#39;Lightning&#34; spell will no longer be a valid target to be dealt damage to, which was caused by the Lightning spell arcing to a target that the wizard was in the way of. However, it will still arc off the wizard if it is able to do so.</li>
+				<li class="bugfix">Fixed a bug that caused Pain Mirror to be able to indefinitely ping-pong between different Pain Mirror users, provided that they were not human. This was, most notably, possible with the wizard&#39;s Arcane Golems.</li>
+				<li class="bugfix">Fixed a bug where detaching a mech&#39;s jetpack while the jetpack was active would render the mech permanently immobile.</li>
+				<li class="bugfix">Fixed a bug where MMIs and posibrains getting inserted into a mech would not update its sprite, making it appear as if it was not occupied until they moved.</li>
+				<li class="bugfix">Fixed a bug where MMIs and posibrains getting inserted into a mech would not have their spell menu appear until their equipment changed.</li>
+				<li class="bugfix">Fixed a bug where users did not receive any message when failing to insert a posibrain into a mech with a DNA-lock active, because the posibrain does not have a DNA.</li>
+				<li class="bugfix">Fixed a bug where a mech that had its hydraulic clamp removed could still automatically collect ore when digging.</li>
+				<li class="spellcheck">Added more descriptive messages for when trying to insert an MMI or posibrain into a mech with a DNA-lock active.</li>
+				<li class="tweak">Grues will no longer see the red damage overlay as they get more damaged.</li>
+				<li class="tweak">Civil War of Casters is slightly more likely to happen.</li>
+				<li class="tweak">Grues will now nuzzle other grues instead of hitting them.</li>
+				<li class="rscadd">Grues will now become increasingly more effective against armored targets the more people they eat. After eating 5 people they will reach the limit of reducing damage reduction by 50%, multiplicatively.</li>
+				<li class="tweak">Grues are now limited to a maximum of 50 damage per hit.</li>
+				<li class="tweak">Grues will gain slightly less damage out of every consumed player, from 7 to 5.</li>
+				<li class="bugfix">Fixed a bug where the vampire&#39;s Glare ability worked while blindfolded.</li>
+				<li class="bugfix">Fixed a bug where shapeshifted vampires didn&#39;t initially update their visible name when shapeshifting with no ID.</li>
+				<li class="bugfix">Fixed a bug where a max-power vampire using the Screech ability would get a backlash from every single nearby null rod wearer rather than just one. This also means the Screech ability will be properly stopped and blocked rather than still affecting everyone in the vicinity.</li>
+				<li class="bugfix">Null rods carried by people with ear protection will now properly cause a backlash against max-power vampires using the Screech ability instead of doing nothing.</li>
+				<li class="bugfix">Fixed a bug where the vampire&#39;s Screech ability would play its sound for every single target. It will now only play once per Screech.</li>
+				<li class="tweak">Reduced the amount of jittering caused by the vampire&#39;s Screech ability from 5 minutes to 40 seconds.</li>
+				<li class="tweak">The vampire&#39;s Screech ability can be used at any time, rather than only when there are living targets nearby.</li>
+				<li class="tweak">Failing to Enthrall someone as a vampire will no longer put the ability on cooldown.</li>
+				<li class="tweak">Failing to Hypnotise someone as a vampire, whether because they are blind or for other reasons, will no longer put the ability on cooldown.</li>
+				<li class="tweak">Vampire abilities that get backlashed by null rods will now go on cooldown. This also fixed a bug where the max-power vampire&#39;s Glare ability could be spammed non-stop.</li>
+				<li class="spellcheck">Fixed a tiny typo regarding the message that a vampire receives when a null rod causes a backlash.</li>
+				<li class="spellcheck">Fixed a tiny typo regarding the message that a victim of a vampire&#39;s Screech receives. This also extends to the NPC vampire creature.</li>
+			</ul>
+			<h3 class="author">brndd updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">PackedStation now has a pneumatic disposals system.</li>
+				<li class="tweak">Dionae are now about 33% faster, making them slightly faster than using a wheelchair.</li>
+			</ul>
+			<h3 class="author">falcon2346 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">The paramedic winter coat suit slot now uses the correct list of objects.</li>
+			</ul>
+			<h3 class="author">jellyveggie2 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds a ghost costume to the halloween costume crate.</li>
+				<li class="rscadd">You may also craft your own ghost costume by cutting up a bed sheet while targeting the eyes.</li>
+				<li class="tweak">A number of robes now have toggleable hoods, just like winter coats.</li>
+				<li class="rscadd">Added a face paint spray can to the Halloween costume crate. Use in hand to switch modes. Use paper aiming at your head to clean it off.</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Low pop events that weren&#39;t supposed to fire will no longer fire.</li>
+				<li class="bugfix">Vines, Biomass, and Carp need 7 active players.</li>
+				<li class="bugfix">Powercreeper, Meteors (Waves/Showers), and Immovable Rods (Small/Large) need 7 active players with at least 1 Engineer.</li>
+			</ul>
+			<h3 class="author">toomykins updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">boxstation&#39;s medbay now has a  light switch</li>
+				<li class="tweak">roidstation&#39;s HoP OFFICE, HoP personal quarters and the abandoned smithy now have a light switch</li>
+				<li class="rscadd">boxstation tradefloor now has a double airlock system</li>
+				<li class="tweak">boxstation research outposts now has a soldering iron</li>
+				<li class="tweak">boxstation AI integrity restorer is now named correctly.</li>
+				<li class="tweak">boxstation incinerator air outlet now has unique frequency and id_tag</li>
+				<li class="tweak">boxstation HoS office shutters now start at the correct density</li>
+				<li class="tweak">Antag objectives are now enabled by default for new accounts.</li>
+			</ul>
+			<h2 class="date">2023.10.26</h2>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Spare Bear pelts now give their all access even when worn on the head.</li>
+			</ul>
+			<h3 class="author">d3athrow updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">Removed bad changelog entries</li>
+				<li class="bugfix">Fixed changelog?</li>
+			</ul>
+			<h2 class="date">2023.10.23</h2>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Suit Storage Units can now be (un)secured from the floor by unwelding and unwrenching them</li>
+				<li class="rscadd">Suit Storage Units can now be created with a machine frame and their respective board (requires 2 Programming, 2 Engineering, 2 Powerstorage research)</li>
+				<li class="rscadd">Suit Storage Units can now be deconstructed if they are empty</li>
+			</ul>
+			<h3 class="author">Irradiation updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Synergy: Added a missing stamp to the Chief Engineer&#39;s office and to the Judge&#39;s desk in the courtroom.</li>
+				<li class="rscdel">Synergy: Removed a redundant keycard authenticator that was on the floor in the Chief Engineer&#39;s office.</li>
+				<li class="rscadd">Bagelstation: Added a missing power cable wire under the North Solar SMES.</li>
+			</ul>
 			<h2 class="date">2023.10.22</h2>
 			<h3 class="author">brndd updated:</h3>
 			<ul class="changes bgimages16">
@@ -2046,102 +2223,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<ul class="changes bgimages16">
 				<li class="rscdel">Removed unused autoignition vars.</li>
 				<li class="rscadd">Fire alarms will now make a sound when they are triggered.</li>
-			</ul>
-			<h2 class="date">2022.10.12</h2>
-			<h3 class="author">gurfan updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Holomen can pick up things again.</li>
-			</ul>
-			<h2 class="date">2022.10.11</h2>
-			<h3 class="author">Hinaichigo updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Alt+click on medipop and cookie synths to get a medipop or cookie directly into your hand.</li>
-				<li class="bugfix">Medipop and cookie synths can deploy on top of tables.</li>
-				<li class="bugfix">Medipop and cookie synths can&#39;t deploy inside of walls.</li>
-				<li class="imageadd">New sprites for medipop and cookie synths.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">If your highest job preference is trader, you will now preview an appropriate outfit instead of a grey jumpsuit.</li>
-				<li class="bugfix">Fixes a bug where you had to register the Vox TradeVend with the Shoal Debit Card (it is supposed to start linked)</li>
-				<li class="rscadd">You can now toggle on ANY custom vendor whether or not you&#39;d like to display out of stock items. Stop cluttering your list with outdated products today!</li>
-				<li class="rscadd">Traders can now buy nanodictionaries originally intended for the Library of Babel.</li>
-				<li class="tweak">The Sea Devil now eats filth instead of adult fish.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Pulse demons are no longer sent to the shadow realm on attempting to take over a weapon that gets removed before the process finishes.</li>
-				<li class="rscadd">Admins can now use buildmode to restore a selected portion of the station to its state at the start of the round.</li>
-			</ul>
-			<h3 class="author">adacovsk updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">More projector fixes</li>
-				<li class="tweak">frankenline bar has a view again</li>
-			</ul>
-			<h3 class="author">gurfan updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed constructs sometimes getting blood tesseracts stuck in their hands.</li>
-			</ul>
-			<h3 class="author">jwhitak updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The Assistant Cap now considers the Free Assistant slots for latejoining assistants.</li>
-				<li class="rscadd">Adds a warning message before returning a cargo shuttle with incomplete crate forwards</li>
-				<li class="rscadd">If you can&#39;t afford something from a vending machine even if you combine your virtual wallet and bank account balance, your card is quickly rejected before any account security checks or charges are made.</li>
-				<li class="bugfix">Fixed virtual wallets losing all their money when trying to buy things you can&#39;t afford</li>
-				<li class="bugfix">Fixed an exploit letting you buy almost anything from a vending machine for only $1, so long as you had enough money to buy it to begin with</li>
-			</ul>
-			<h3 class="author">kernikov updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Roid Station completely re-piped.</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Matchboxes burn again.</li>
-				<li class="tweak">Increased the time it takes to self-extinguish when you are on fire.</li>
-				<li class="tweak">Quadrupled fire burn damage and added screaming, coughing, and confusion to people on fire.</li>
-				<li class="rscadd">Barrels can now be set on fire.</li>
-			</ul>
-			<h2 class="date">2022.10.07</h2>
-			<h3 class="author">adacovsk updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Hopefully fix hologram projector issues</li>
-			</ul>
-			<h2 class="date">2022.10.06</h2>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Restored missing screwsolder sprites</li>
-			</ul>
-			<h2 class="date">2022.10.05</h2>
-			<h3 class="author">jellyveggie2 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Artifacts with a &#34;prolonged energetic interaction&#34; trigger should work properly now</li>
-			</ul>
-			<h3 class="author">kacurasuo updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">You may now glue toolboxes again.</li>
-			</ul>
-			<h2 class="date">2022.10.04</h2>
-			<h3 class="author">DorainGrey updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Gives the admins more visibility over how likely they are to crash the server when pushing funny buttons</li>
-			</ul>
-			<h3 class="author">adacovsk updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">should slightly reduce the time being naked. More work to come. The end is in sight for nakedness</li>
-				<li class="bugfix">Clowns and mimes have their names displayed properly in the account database</li>
-				<li class="bugfix">Antags shouldn&#39;t get AI job text</li>
-				<li class="bugfix">Certain antags are not spawned as crew then teleported to their antag spawn</li>
-				<li class="bugfix">Admin log message should appear for silicons roundstart</li>
-			</ul>
-			<h3 class="author">falcon2346 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added painter&#39;s toolbox containing paints to the trade outfitter.</li>
-				<li class="imageadd">Added sprites for the painter&#39;s toolbox.</li>
-			</ul>
-			<h3 class="author">jwhitak updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The Assistant Cap correctly checks for Detectives.</li>
-				<li class="bugfix">The Assistant Cap now gives a second chance for assistants who missed the cap the first time but had more security players get selected after them.</li>
 			</ul>
 		</div>
 		<!--

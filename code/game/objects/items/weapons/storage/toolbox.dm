@@ -104,7 +104,7 @@
 
 /obj/item/weapon/storage/toolbox/electrical/New()
 	..()
-	var/color = pick("red","yellow","green","blue","pink","orange","cyan","white")
+	var/color = pick("#FF0000","#FFED00","#0B8400","#005C84","#CA00B6","#CA6900","#00B5CA","#D0D0D0")
 	new /obj/item/stack/cable_coil(src,30,color)
 	new /obj/item/stack/cable_coil(src,30,color)
 	if(prob(5))

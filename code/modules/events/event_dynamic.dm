@@ -85,10 +85,11 @@ var/list/event_last_fired = list()
 
 	return 1
 
-// Returns how many characters are currently active(not logged out, not AFK for more than 10 minutes)
-// with a specific role.
+// Returns a list of how many characters are currently active with a specific role
+// see: (not logged out, not AFK for more than 10 minutes)
 // Note that this isn't sorted by department, because e.g. having a roboticist shouldn't make meteors spawn.
-/proc/number_active_with_role(role)
+// Minor roles have lesser influence on events, Any just cares about active players at all
+/proc/number_active_with_role()
 	var/list/active_with_role = list()
 	active_with_role["Engineer"] = 0
 	active_with_role["Medical"] = 0
@@ -98,10 +99,14 @@ var/list/event_last_fired = list()
 	active_with_role["Cyborg"] = 0
 	active_with_role["Janitor"] = 0
 	active_with_role["Botanist"] = 0
+	active_with_role["Minor"] = 0
+	active_with_role["Any"] = 0
 
 	for(var/mob/M in player_list)
 		if(!M.mind || !M.client || M.client.inactivity > 10 * 10 * 60) // longer than 10 minutes AFK counts them as inactive
 			continue
+
+		active_with_role["Any"]++
 
 		if(isrobot(M))
 			var/mob/living/silicon/robot/tincan = M
@@ -113,29 +118,45 @@ var/list/event_last_fired = list()
 						active_with_role["Medical"]++
 					if("security robot module")
 						active_with_role["Security"]++
+					if("combat robot module")
+						active_with_role["Security"]++
+					if("janitorial robot module")
+						active_with_role["Janitor"]++
+					else
+						active_with_role["Minor"]++
 
 		if((M.mind.assigned_role in engineering_positions) && M.mind.assigned_role != "Mechanic")
 			active_with_role["Engineer"]++
+			continue
 
 		if(M.mind.assigned_role in medical_positions)
 			active_with_role["Medical"]++
+			continue
 
 		if(M.mind.assigned_role in security_positions)
 			active_with_role["Security"]++
+			continue
 
 		if(M.mind.assigned_role in science_positions)
 			active_with_role["Scientist"]++
+			continue
 
 		if(M.mind.assigned_role == "AI")
 			active_with_role["AI"]++
+			continue
 
 		if(M.mind.assigned_role == "Cyborg")
 			active_with_role["Cyborg"]++
+			continue
 
 		if(M.mind.assigned_role == "Janitor")
 			active_with_role["Janitor"]++
+			continue
 
 		if(M.mind.assigned_role == "Botanist")
 			active_with_role["Botanist"]++
+			continue
+
+		active_with_role["Minor"]++
 
 	return active_with_role

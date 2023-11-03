@@ -330,15 +330,15 @@ var/MAX_EXPLOSION_RANGE = 32
 
 // bitflags for clothing parts
 
-#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)
-#define FACE			(EYES|MOUTH|BEARD)	//38912
+#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)	// 6
+#define FACE			(EYES|MOUTH|BEARD)			// 38912
 #define BEARD			32768
-#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)
+#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)		// 14337
 #define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
-#define FEET			(FOOT_LEFT|FOOT_RIGHT) 	//96
-#define ARMS			(ARM_LEFT|ARM_RIGHT)		//384
-#define HANDS			(HAND_LEFT|HAND_RIGHT) //1536
-#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS)
+#define FEET			(FOOT_LEFT|FOOT_RIGHT) 		// 96
+#define ARMS			(ARM_LEFT|ARM_RIGHT)		// 384
+#define HANDS			(HAND_LEFT|HAND_RIGHT) 		// 1536
+#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS) // 16383
 #define IGNORE_INV		16384 // Don't make stuff invisible
 
 
@@ -346,7 +346,7 @@ var/MAX_EXPLOSION_RANGE = 32
 // Used in body_parts_covered
 
 #define HIDEGLOVES			HANDS
-#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)
+#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)		// 414
 #define HIDESHOES			FEET
 #define HIDEMASK			FACE
 #define HIDEEARS			EARS
@@ -355,8 +355,9 @@ var/MAX_EXPLOSION_RANGE = 32
 #define HIDEHEADHAIR 		65536
 #define MASKHEADHAIR		131072
 #define HIDEBEARDHAIR		BEARD
-#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)//98304
+#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR) // 98304
 #define	HIDESUITSTORAGE		LOWER_TORSO
+#define	HIDEBACK			262144
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
 // Used with human/proc/get_heat_protection() and human/proc/get_cold_protection() as well as calculate_affecting_pressure() now
