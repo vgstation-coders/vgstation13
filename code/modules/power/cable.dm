@@ -190,7 +190,7 @@ By design, d1 is the smallest direction and d2 is the highest
 		return
 	else if(istype(W, /obj/item/stack/cable_coil))
 		var/turf/U = get_turf(user)
-		if (U.can_place_cables())
+		if (U.can_place_cables() || (!d1 && (get_dir(src,user) != d2)))
 			var/obj/item/stack/cable_coil/coil = W
 			coil.cable_join(src, user)
 		else
