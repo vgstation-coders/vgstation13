@@ -23,7 +23,14 @@
 	if(!stuffed && !grenade)
 		to_chat(user, "It looks like its stuffing has been removed.")
 
-/obj/item/toy/plushie/ex_act()
+/obj/item/toy/plushie/ex_act(severity)
+	switch(severity)
+		if(2.0)
+			if(prob(25))
+				return
+		if(3.0)
+			if(prob(50))
+				return
 	playsound(src, death_sound, 50, 0)
 	qdel(src)
 	return
