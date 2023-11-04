@@ -775,7 +775,7 @@ For vending packs, see vending_packs.dm*/
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
-		ui = new(user, src, ui_key, "order_console.tmpl", name, 600, 720)
+		ui = new(user, src, ui_key, "order_console.tmpl", name, 600, 730)
 		ui.set_initial_data(data)
 		ui.open()
 
