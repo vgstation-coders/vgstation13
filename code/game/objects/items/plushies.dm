@@ -11,6 +11,7 @@
 	attack_verb = list("whomps", "bumps", "baps")
 	var/interact_sound
 	var/hug_sound = 'sound/weapons/thudswoosh.ogg'
+	var/death_sound //sound to play when the plushie is destroyed, e.g. in an explosion
 	autoignition_temperature = AUTOIGNITION_FABRIC
 
 /obj/item/toy/plushie/suicide_act(var/mob/living/user)
@@ -21,6 +22,11 @@
 	..()
 	if(!stuffed && !grenade)
 		to_chat(user, "It looks like its stuffing has been removed.")
+
+/obj/item/toy/plushie/ex_act()
+	playsound(src, death_sound, 50, 0)
+	qdel(src)
+	return
 
 /obj/item/toy/plushie/attack_self(mob/living/user)
 	. = ..()
@@ -202,53 +208,55 @@
 	icon_state = "teddy"
 
 
+/obj/item/toy/plushie/fumo/touhou
+	death_sound = 'sound/effects/pichuun.ogg'
 
-/obj/item/toy/plushie/fumo/alice
-	name = "\improper Alice fumo"
+/obj/item/toy/plushie/fumo/touhou/alice
+	name = "\improper fumo Alice"
 	desc = "The doll magician depicted as a stuffed doll. It has a deadpan expression on its face."
 	icon_state = "alice"
 
-/obj/item/toy/plushie/fumo/cirno
-	name = "\improper Cirno fumo"
+/obj/item/toy/plushie/fumo/touhou/cirno
+	name = "\improper fumo Cirno"
 	desc = "The strongest fumo-brand doll. It has a smug expression on its face."
 	icon_state = "cirno"
 
-/obj/item/toy/plushie/fumo/marisa
-	name = "\improper Marisa fumo"
+/obj/item/toy/plushie/fumo/touhou/marisa
+	name = "\improper fumo Marisa"
 	desc = "An ordinary magician doll that you shouldn't trust with your valuables. It has a smug expression on its face."
 	icon_state = "marisa"
 
-/obj/item/toy/plushie/fumo/mokou
-	name = "\improper Mokou fumo"
+/obj/item/toy/plushie/fumo/touhou/mokou
+	name = "\improper fumo Mokou"
 	desc = "The immortal immortalized as a stuffed doll. It has a deadpan expression on its face."
 	icon_state = "mokou"
 
-/obj/item/toy/plushie/fumo/nitori
-	name = "\improper Nitori fumo"
+/obj/item/toy/plushie/fumo/touhou/nitori
+	name = "\improper fumo Nitori"
 	desc = "A stuffed doll depicting an aquatic engineer. It has a smug expression on its face."
 	icon_state = "nitori"
 
-/obj/item/toy/plushie/fumo/patchouli
-	name = "\improper Patchouli fumo"
+/obj/item/toy/plushie/fumo/touhou/patchouli
+	name = "\improper fumo Patchouli"
 	desc = "The librarian witch depicted as a stuffed doll. It has a grumpy expression on its face."
 	icon_state = "patchouli"
 
-/obj/item/toy/plushie/fumo/reimu
-	name = "\improper Reimu fumo"
+/obj/item/toy/plushie/fumo/touhou/reimu
+	name = "\improper fumo Reimu"
 	desc = "The shrine maiden of paradise. It has a deadpan expression on its face."
 	icon_state = "reimu"
 
-/obj/item/toy/plushie/fumo/remilia
-	name = "\improper Remilia fumo"
+/obj/item/toy/plushie/fumo/touhou/remilia
+	name = "\improper fumo Remilia"
 	desc = "The Scarlet Devil depicted as a stuffed doll. It has a smug expression on its face."
 	icon_state = "remilia"
 
-/obj/item/toy/plushie/fumo/sakuya
-	name = "\improper Sakuya fumo"
+/obj/item/toy/plushie/fumo/touhou/sakuya
+	name = "\improper fumo Sakuya"
 	desc = "A perfect and elegant maid doll. It has a grumpy expression on its face."
 	icon_state = "sakuya"
 
-/obj/item/toy/plushie/fumo/yukari
-	name = "\improper Yukari fumo"
+/obj/item/toy/plushie/fumo/touhou/yukari
+	name = "\improper fumo Yukari"
 	desc = "An elusive and enigmatic stuffed doll. It has a smug expression on its face."
 	icon_state = "yukari"

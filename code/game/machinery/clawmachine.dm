@@ -44,16 +44,16 @@
 	)
 
 	var/list/prizes_premium = list(
-		/obj/item/toy/plushie/fumo/alice,
-		/obj/item/toy/plushie/fumo/cirno,
-		/obj/item/toy/plushie/fumo/marisa,
-		/obj/item/toy/plushie/fumo/mokou,
-		/obj/item/toy/plushie/fumo/nitori,
-		/obj/item/toy/plushie/fumo/patchouli,
-		/obj/item/toy/plushie/fumo/reimu,
-		/obj/item/toy/plushie/fumo/remilia,
-		/obj/item/toy/plushie/fumo/sakuya,
-		/obj/item/toy/plushie/fumo/yukari
+		/obj/item/toy/plushie/fumo/touhou/alice,
+		/obj/item/toy/plushie/fumo/touhou/cirno,
+		/obj/item/toy/plushie/fumo/touhou/marisa,
+		/obj/item/toy/plushie/fumo/touhou/mokou,
+		/obj/item/toy/plushie/fumo/touhou/nitori,
+		/obj/item/toy/plushie/fumo/touhou/patchouli,
+		/obj/item/toy/plushie/fumo/touhou/reimu,
+		/obj/item/toy/plushie/fumo/touhou/remilia,
+		/obj/item/toy/plushie/fumo/touhou/sakuya,
+		/obj/item/toy/plushie/fumo/touhou/yukari
 	)
 
 /obj/machinery/claw_machine/examine(mob/user)
