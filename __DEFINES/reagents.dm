@@ -476,6 +476,7 @@
 #define FAKE_CREEP		"fake_creep"
 #define BLOBANINE		"blobanine"
 #define BLOB_ESSENCE	"blob_essence"
+#define METHAMPHETAMINE "methamphetamine"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
