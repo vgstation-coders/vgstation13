@@ -17,7 +17,7 @@
 	containertype = /obj/structure/largecrate
 	containername = "tractor crate"
 	group = "Cargo"
-	containsicon = /obj/structure/bed/chair/vehicle/tractor
+	containsicon = "tractor"
 	containsdesc = "The classic ride for any cargo man. Comes with one tractor, and as a limited time bonus: a free cart!"
 
 /datum/supply_packs/carts

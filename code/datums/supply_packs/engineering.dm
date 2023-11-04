@@ -74,6 +74,7 @@
 	containertype = /obj/structure/closet/crate/engi
 	containername = "solar panels crate"
 	group = "Engineering"
+	containsicon = "solars"
 	containsdesc = "A solar panel starter kit. Comes with the framework for 20 solar panels, a solar tracker, and a computer to manage it. Glass and wires are not included."
 
 /datum/supply_packs/engine
@@ -85,7 +86,7 @@
 	containername = "emitter crate"
 	access = list(access_engine_minor)
 	group = "Engineering"
-	containsicon = /obj/machinery/power/emitter/antique
+	containsicon = "emitters"
 	containsdesc = "Two emitters. Perfect for... setting up the engines. Yes. Engines."
 
 /datum/supply_packs/engine/field_gen

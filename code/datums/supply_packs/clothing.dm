@@ -82,6 +82,7 @@
 	contains = list(/obj/item/mann_co_key)
 	containername = "crate"
 	group = "Clothing"
+	containsicon = "mannco_crate"
 	require_holiday = APRIL_FOOLS_DAY
 	containsdesc = "This crate contains a key for a crate."
 
@@ -93,7 +94,7 @@
 	containername = "crate"
 	group = "Clothing"
 	require_holiday = APRIL_FOOLS_DAY
-	containsicon = /obj/item/mann_co_key
+	containsicon = "mannco_key"
 	containsdesc = "This crate contains a crate for a key."
 
 /datum/supply_packs/randomised/cheap_hats
@@ -252,7 +253,7 @@
 	containertype = /obj/structure/closet/crate/basic
 	containername = "space suit crate"
 	group = "Clothing"
-	containsicon = /obj/item/clothing/suit/space
+	containsicon = "space_suit"
 	containsdesc = "Contains an entire space-worthy softsuit. Includes a small oxygen tank!"
 
 /datum/supply_packs/vox_suit
@@ -266,7 +267,7 @@
 	containertype = /obj/structure/closet/crate/basic
 	containername = "vox suit crate"
 	group = "Clothing"
-	containsicon = /obj/item/clothing/suit/space/vox/civ
+	containsicon = "vox_suit"
 	containsdesc = "A full vox pressure suit crate, containing a standard assistant pressure suit. Includes a full nitrogen internals kit."
 
 /datum/supply_packs/plasmaman_suit
@@ -280,7 +281,7 @@
 	containertype = /obj/structure/closet/crate/basic
 	containername = "plasmaman suit crate"
 	group = "Clothing"
-	containsicon = /obj/item/clothing/suit/space/plasmaman
+	containsicon = "plasmaman_suit"
 	containsdesc = "A full plasmaman suit, with a bonus plasma internals kit to go with it."
 
 /datum/supply_packs/grey_supply
@@ -310,7 +311,7 @@
 	cost = 50
 	containertype = /obj/structure/closet/ayy
 	containername = "mothership uniform locker"
-	containsicon = /obj/item/clothing/under/grey/grey_worker
+	containsicon = "grey_uniform"
 	containsdesc = "Two sets of clothing from the nearest Grey mothership."
 	group = "Clothing"
 
@@ -408,7 +409,7 @@
 	cost = 30
 	containertype = /obj/structure/closet/secure_closet/security/empty
 	containername = "Security Formalwear"
-	containsicon = /obj/item/clothing/head/beret/headofsecurity
+	containsicon = "security_formal_wear"
 	containsdesc = "Formalwear for the security team, ordered directly from Central Command. Includes one suit for the Hoss, one for the Warden, and one for a security officer."
 	access = list(access_security)
 	group = "Clothing"
@@ -513,7 +514,7 @@
 	containername = "cargo winter coats"
 	group = "Clothing"
 	containsdesc = "For when you're on a snow planet and someone's shot open your window. Again. Coats for three cargo men and three miners."
-	
+
 /datum/supply_packs/mscwinter
 	name = "Misc. Winterwear"
 	contains = list(/obj/item/clothing/suit/storage/wintercoat/security/captain,
