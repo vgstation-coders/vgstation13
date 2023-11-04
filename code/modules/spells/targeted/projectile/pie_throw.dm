@@ -38,8 +38,8 @@
 		if (user.is_pacified(VIOLENCE_DEFAULT,target))
 			return
 	spawn()
-		var/turf/T = get_turf(user)
 		for(var/i = 0 to spell_levels[Sp_POWER])
+			var/turf/T = get_turf(user)
 			var/atom/target = pick(targets)
 			var/pie_to_spawn = pick(existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/pie))
 			var/obj/pie = new pie_to_spawn(T)

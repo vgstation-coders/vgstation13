@@ -77,6 +77,7 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">ValkyrieSkies updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Item attack animations are now enabled by default for new players.</li>
+				<li class="tweak">Moved Vox &amp; Plasmaman internal supply crates to the Supplies category</li>
 			</ul>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
 			<ul class="changes bgimages16">
@@ -89,11 +90,21 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="spellcheck">Slightly reformatted the wizard&#39;s spellbook: multiple elements such as &#34;requires wizard robes&#34; and &#34;lost on mind transfer&#34; will stack on top of each other rather than one next to another, and the text for a spell that is capable of being used while unconscious is now green instead of blue.</li>
 				<li class="spellcheck">The &#34;Summon Snacks&#34; swapping description will now mention Dwarven snacks.</li>
 				<li class="spellcheck">Fixed up the &#34;Grease&#34; wizard spell&#39;s empowerment message.</li>
+				<li class="rscadd">Grues now take damage from lights based on constant exposure rather than at seemingly random intervals due to Life(), with a delay of 2 seconds before they take damage. This &#34;timer&#34; recovers by staying in darkness, at twice the normal speed it decays. The &#34;darkness&#34; indicator will also display differently-colored danger indicators for staying in the light, based on how long until the grue takes damage from the light.</li>
+				<li class="tweak">Changed some things about the way the movement penalty and increasing light damage are done for grues. The movement penalty and increasing light damage will happen after the grue is burnt by the light and will persist for 2 seconds before resetting. Continued exposure to the light will, however, delay both from recovering.</li>
+				<li class="tweak">The grue&#39;s &#34;darkness&#34; indicator will now update immediately.</li>
+				<li class="bugfix">Fixed a bug where duplicate grue HUD icons would spawn constantly over and over.</li>
+				<li class="tweak">The wizard&#39;s &#34;Projectile Pastry&#34; spell now happens from the wizard&#39;s location, rather than from the initial location where the spell was cast.</li>
 			</ul>
 			<h3 class="author">brndd updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Gasha captain, clown, mime and miner should now be using the correct sprites</li>
 				<li class="rscadd">Added a new in-game guidebook for the supermatter engine. It can be found near your nearest supermatter engine.</li>
+			</ul>
+			<h3 class="author">pedr69 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">a cargo centcom order coming in while an RC announcement is being written will no longer cancel the announcement</li>
+				<li class="bugfix">centcom orders will no longer make the entire RC message list bold</li>
 			</ul>
 			<h2 class="date">2023.10.31</h2>
 			<h3 class="author">toomykins updated:</h3>
