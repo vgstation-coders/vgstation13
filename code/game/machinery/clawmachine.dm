@@ -166,7 +166,10 @@
 				playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
 				damaged()
 				return
-			if(2 to 16)
+			if(2 to 5)
+				to_chat(user, "<span class='notice'>You miss the chute, and the plushie falls back in \the [src].</span>")
+				return
+			if(6 to 16)
 				P = pick(prizes_standard)
 			else
 				P = pick(prizes_premium)
