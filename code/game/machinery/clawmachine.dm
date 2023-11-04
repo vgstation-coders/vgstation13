@@ -14,6 +14,8 @@
 	anchored = 1
 	density = 1
 	machine_flags = WRENCHMOVE | FIXED2WORK
+	health = 100
+	maxHealth = 100
 	var/busy = FALSE
 	var/cost_per_game = 5 //credits
 	var/winning_odds_standard = 50 //percentage
@@ -57,6 +59,14 @@
 	)
 
 /obj/machinery/claw_machine/examine(mob/user)
+	. = ..()
+	if(stat & BROKEN)
+		to_chat(user, "It looks to be broken.")
+		return
+	if(stat & NOPOWER)
+		to_chat(user, "It looks to be unpowered.")
+		return
+
 	if(cost_per_game)
 		to_chat(user, "A small screen displays \"$[cost_per_game]\".")
 	else
@@ -64,15 +74,94 @@
 
 /obj/machinery/claw_machine/update_icon()
 	..()
-	if((stat & BROKEN) && icon_state != "claw-broken")
+	if(stat & BROKEN)
 		icon_state = "claw-broken"
+	else if(stat & (NOPOWER | FORCEDISABLE))
+		icon_state = "claw-off"
 	else
 		icon_state = "claw"
 
-/obj/machinery/claw_machine/attackby(var/obj/O as obj, var/mob/user as mob)
+/obj/machinery/claw_machine/power_change()
+	if(!(stat & BROKEN))
+		if( powered() )
+			stat &= ~NOPOWER
+			update_icon()
+		else
+			spawn(rand(0, 15))
+				stat |= NOPOWER
+				update_icon()
+
+//Dump some random plushies and then break
+//this kick code is mostly aped from vending machines
+/obj/machinery/claw_machine/proc/malfunction()
+	var/lost_inventory = rand(1, 6)
+	for(var/i=0, i < lost_inventory, i++)
+		//this is imitated from kickcode
+		var/D = pick(alldirs)
+		var/turf/T = get_edge_target_turf(loc, D)
+		var/power = rand(1, 2)
+		var/P
+		if(rand(1, 6) == 1) //1 in 6 will be a rare plushie
+			P = pick(prizes_premium)
+		else
+			P = pick(prizes_standard)
+		var/obj/item/plush = new P(src.loc)
+		plush.kicked_item_arc_animation(power)
+		plush.throw_at(T, power, 1)
+	src.visible_message("<span class='notice'>Some plushies spill out of \the [src].</span>")
+	stat |= BROKEN
+	update_icon()
+
+/obj/machinery/claw_machine/proc/damaged(var/mult=1)
+	src.health -= 4*mult
+	if(src.health <= 0)
+		stat |= BROKEN
+		src.update_icon()
+		return
+	if(prob(2*mult)) //Jackpot!
+		malfunction()
+
+/obj/machinery/claw_machine/kick_act(mob/living/carbon/human/user)
+	. = ..()
+	damaged()
+
+/obj/machinery/claw_machine/attack_construct(var/mob/user)
+	if (!Adjacent(user))
+		return 0
+	if(istype(user,/mob/living/simple_animal/construct/armoured))
+		shake(1, 3)
+		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
+		damaged(4)
+		return 1
+	return 0
+
+/obj/machinery/claw_machine/proc/usage_check(var/mob/user as mob)
+
+/obj/machinery/claw_machine/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	add_fingerprint(user)
+	if(stat & BROKEN && !O.is_wrench(user))
+		if(istype(O, /obj/item/stack/sheet/glass/rglass))
+			var/obj/item/stack/sheet/glass/rglass/G = O
+			to_chat(user, "<span class='notice'>You replace the broken glass.</span>")
+			G.use(1)
+			stat &= ~BROKEN
+			src.health = 100
+			power_change()
+			new /obj/item/weapon/shard(loc)
+		else
+			to_chat(user, "<span class='warning'>\The [src] is broken! Replace the reinforced glass first.</span>")
+		return
+
+	if(stat & NOPOWER && !O.is_wrench(user))
+		to_chat(user, "<span class='warning'>\The [src] is unpowered!</span>")
+		return
 	if(busy)
 		to_chat(user, "<span class='notice'>\The [src] is already being used.</span>")
 		return
+
+	. = ..()
+	if(.)
+		return .
 
 	if(is_type_in_list(O, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin)))
 		//take coin, play premium game
@@ -91,6 +180,7 @@
 				qdel(O)
 			to_chat(user, "<span class='notice'>You insert a coin into \the [src] and grab the joystick...</span>")
 			play_game(user, PRIZEPOOL_PREMIUM)
+			return 1
 	else if(istype(O, /obj/item/weapon/spacecash))
 		//take money, dispense change, play regular game
 		var/obj/item/weapon/spacecash/cash = O
@@ -109,16 +199,18 @@
 				playsound(src, 'sound/items/polaroid2.ogg', 25, 1)
 		to_chat(user, "<span class='notice'>You insert some credits into \the [src] and grab the joystick...</span>")
 		play_game(user, PRIZEPOOL_STANDARD)
+		return 1
 	else if(!cost_per_game)
 		//the games are on the house
 		to_chat(user,"<span class='notice'>You hit the blinking start button on \the [src] and grab the joystick...</span>")
 		play_game(user, PRIZEPOOL_STANDARD)
-
+		return 1
 
 /obj/machinery/claw_machine/proc/play_game(var/mob/user, var/prizepool = PRIZEPOOL_STANDARD)
 	if(busy)
 		return
 	busy = TRUE
+	use_power(10)
 	flick("claw-playing", src)
 	sleep(ANIMATION_LENGTH)
 	var/winning_odds = prizepool == PRIZEPOOL_STANDARD ? winning_odds_standard : winning_odds_premium
