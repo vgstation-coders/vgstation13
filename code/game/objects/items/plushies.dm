@@ -9,8 +9,8 @@
 	var/stuffed = TRUE //stuffing has to be removed before a grenade can be inserted
 	var/obj/item/weapon/grenade/grenade //the grenade, if the plush contains one
 	attack_verb = list("whomps", "bumps", "baps")
-	var/interact_sound
-	var/hug_sound = 'sound/weapons/thudswoosh.ogg'
+	var/interact_sound //plays when the plushie is interacted with (attack_self etc.)
+	var/hug_sound = 'sound/weapons/thudswoosh.ogg' //plays when the plushie hugs someone
 	var/death_sound //sound to play when the plushie is destroyed, e.g. in an explosion
 	autoignition_temperature = AUTOIGNITION_FABRIC
 
