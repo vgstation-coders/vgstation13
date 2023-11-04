@@ -664,7 +664,8 @@
 "Uj" = (
 /obj/machinery/door/airlock/external{
 	icon = 'icons/obj/doors/Doorglass.dmi';
-	name = "Laundromat"
+	name = "Laundromat";
+	opacity = 0
 	},
 /obj/structure/airshield{
 	alpha = 0;
