@@ -10329,7 +10329,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/punchualite
 	name = "Punchualite"
 	id = PUNCHUALITE
-	description = "Nicknamed mad chemist's alarm clock. Explodes on the hour When being actively metabolized. "
+	description = "Nicknamed mad chemist's alarm clock. Explodes on the hour when being actively metabolized. "
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#8d8791" //rgb: 200, 165, 220
 	custom_metabolism = 0 //Wouldn't be much fun if it all got metabolized beforehand
@@ -10340,14 +10340,17 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 	if(!currentHour)
 		currentHour = floor(world.time / 36000) + 1
+	if(prob(5) && prob(5)) //0.25% chance per tick
+		M.visible_message("<span class='notice'>Tick.. tock</span>")
 	if((floor(world.time / 36000) + 1) > currentHour)
 		punchualiteExplode(M)
+		currentHour = floor(world.time / 36000) + 1
 
 /datum/reagent/punchualite/proc/punchualiteExplode(var/mob/living/H)
 	var/bigBoom = 0
 	var/medBoom = 0
 	var/litBoom = 0
-	bigBoom = min(floor(volume/100), 2) //Max breach is 3, around a welder tank
+	bigBoom = min(floor(volume/150), 2) //Max breach is 2, twice a welder tank
 	medBoom = min(floor(volume/50), 4)
 	litBoom = min(floor(volume/20), 7)
 	explosion(get_turf(H), bigBoom, medBoom, litBoom, litBoom)
