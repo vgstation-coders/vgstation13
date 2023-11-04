@@ -53,46 +53,44 @@ Used In File(s): code/game/machinery/computer/cargo.dm
 </div>
 {{if data.show_permissions}}
 <br>
-	<div class="item">
-		<div class="itemLabel" style="width: 26%">
-			Order Approval:
-		</div>
-		<div class="itemContent">
-			{{:helper.link('Auto-Approve', '', {'access_restriction' : 0}, data.restriction ? null : 'selected')}}{{:helper.link('Needs Approval', '', {'access_restriction' : 1}, data.restriction==1 ? 'selected' : null)}}{{:helper.link('Needs Physical ID', '', {'access_restriction' : 2}, data.restriction==2 ? 'selected' : null)}}{{:helper.link('Needs PIN', '', {'access_restriction' : 3}, data.restriction==3 ? 'selected' : null)}}
-		</div>
-	</div>
-	<div class="item">
-		<div class="itemLabel" style="width: 26%">
-			Cargo Requisitioning:
-		</div>
-		<div class="itemContent">
-			{{:helper.link('Off', '', {'requisition_status' : 0}, data.requisition ? null : 'selected')}}{{:helper.link('On', '', {'requisition_status' : 1}, data.requisition==1 ? 'selected' : null)}}
-		</div>
-	</div>
-	<div class="item">
-		<div class="itemLabel" style="width: 26%">
-			Print Command Requests:
-		</div>
-		<div class="itemContent">
-			{{:helper.link('Off', '', {'access_ccrequests' : 0}, data.printccrequests ? null : 'selected')}}{{:helper.link('On', '', {'access_ccrequests' : 1}, data.printccrequests==1 ? 'selected' : null)}}
-		</div>
-	</div>
-	<div class="item">
-		<div class="itemLabel" style="width: 26%">
-			Print Individual Orders:
-		</div>
-		<div class="itemContent">
-			{{:helper.link('Off', '', {'access_ordermanifests' : 0}, data.printordermanifests ? null : 'selected')}}{{:helper.link('On', '', {'access_ordermanifests' : 1}, data.printordermanifests==1 ? 'selected' : null)}}
-		</div>
-	</div>
-	<div class="item">
-		<div class="itemLabel" style="width: 26%">
-			Print Shuttle Manifest:
-		</div>
-		<div class="itemContent">
-			{{:helper.link('Off', '', {'access_shuttlemanifests' : 0}, data.printshuttlemanifests ? null : 'selected')}}{{:helper.link('On', '', {'access_shuttlemanifests' : 1}, data.printshuttlemanifests==1 ? 'selected' : null)}}
+<div class="itemLabel" style="width: 94%">
+Permissions Panel
+<div class="item">
+	<div class="itemContentWide" style="margin:left; width: 94%">
+		<div class="statusDisplay">
+			<span class="itemLabel" style="width: 29%">
+				Order Approval:
+			</span>
+			<span class="itemContent">
+				{{:helper.link('Auto-Approve', '', {'access_restriction' : 0}, data.restriction ? null : 'selected')}}{{:helper.link('Needs Approval', '', {'access_restriction' : 1}, data.restriction==1 ? 'selected' : null)}}{{:helper.link('Needs Physical ID', '', {'access_restriction' : 2}, data.restriction==2 ? 'selected' : null)}}{{:helper.link('Needs PIN', '', {'access_restriction' : 3}, data.restriction==3 ? 'selected' : null)}}
+			</span>
+			<span class="itemLabel" style="width: 29%">
+				Cargo Requisitioning:
+			</span>
+			<span class="itemContent">
+				{{:helper.link('Off', '', {'requisition_status' : 0}, data.requisition ? null : 'selected')}}{{:helper.link('On', '', {'requisition_status' : 1}, data.requisition==1 ? 'selected' : null)}}
+			</span>
+			<span class="itemLabel" style="width: 29%">
+				Print CC Requests:
+			</span>
+			<span class="itemContent">
+				{{:helper.link('Off', '', {'access_ccrequests' : 0}, data.printccrequests ? null : 'selected')}}{{:helper.link('On', '', {'access_ccrequests' : 1}, data.printccrequests==1 ? 'selected' : null)}}
+			</span>
+			<span class="itemLabel" style="width: 29%">
+				Print Individual Orders:
+			</span>
+			<span class="itemContent">
+				{{:helper.link('Off', '', {'access_ordermanifests' : 0}, data.printordermanifests ? null : 'selected')}}{{:helper.link('On', '', {'access_ordermanifests' : 1}, data.printordermanifests==1 ? 'selected' : null)}}
+			</span>
+			<span class="itemLabel" style="width: 29%">
+				Print Shuttle Manifest:
+			</span>
+			<span class="itemContent">
+				{{:helper.link('Off', '', {'access_shuttlemanifests' : 0}, data.printshuttlemanifests ? null : 'selected')}}{{:helper.link('On', '', {'access_shuttlemanifests' : 1}, data.printshuttlemanifests==1 ? 'selected' : null)}}
+			</span>
 		</div>
 	</div>
+</div>
 {{else}}
 <div style="float: left; width: 26%;">
 	<div class="itemLabel" style="margin-bottom: 3px; height: 21px">
