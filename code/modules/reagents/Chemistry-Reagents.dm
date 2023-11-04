@@ -10325,3 +10325,29 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			new /obj/effect/alien/weeds(T)
 		if(!locate(/obj/effect/decal/cleanable/purpledrank) in T)
 			new /obj/effect/decal/cleanable/purpledrank(T)
+
+/datum/reagent/punchualite
+	name = "Punchualite"
+	id = PUNCHUALITE
+	description = "Nicknamed mad chemist's alarm clock. Explodes on the hour When being actively metabolized. "
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#8d8791" //rgb: 200, 165, 220
+	custom_metabolism = 0 //Wouldn't be much fun if it all got metabolized beforehand
+	var/currentHour = 0 //The hour it was introduced into the system so it doesn't blow right away
+
+/datum/reagent/punchualite/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(!currentHour)
+		currentHour = floor(world.time / 36000) + 1
+	if((floor(world.time / 36000) + 1) > currentHour)
+		punchualiteExplode(M)
+
+/datum/reagent/punchualite/proc/punchualiteExplode(var/mob/living/H)
+	var/bigBoom = 0
+	var/medBoom = 0
+	var/litBoom = 0
+	bigBoom = min(floor(volume/100), 2) //Max breach is 3, around a welder tank
+	medBoom = min(floor(volume/50), 4)
+	litBoom = min(floor(volume/20), 7)
+	explosion(get_turf(H), bigBoom, medBoom, litBoom, litBoom)

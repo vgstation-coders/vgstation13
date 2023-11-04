@@ -485,6 +485,7 @@
 #define MIDAZOLINE		"midazoline"
 #define LOCUTOGEN		"locutogen"
 #define BUMCIVILIAN		"bumcivilian"
+#define PUNCHUALITE		"punchualite"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"
