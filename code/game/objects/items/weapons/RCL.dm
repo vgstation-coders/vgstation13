@@ -75,6 +75,7 @@
 	overlays.len = 0
 	if(!loaded)
 		item_state = "rcl-0"
+		dynamic_overlay.len = 0
 		color = null
 		if (ismob(loc))
 			var/mob/M = loc
@@ -97,6 +98,14 @@
 	if (ismob(loc))
 		var/mob/O = loc
 		O.update_inv_hands()
+
+	//dynamic in-hand overlay
+	var/image/rclleft = image(inhand_states["left_hand"], src, "rcl-cover")
+	var/image/rclright = image(inhand_states["right_hand"], src, "rcl-cover")
+	rclleft.appearance_flags = RESET_COLOR
+	rclright.appearance_flags = RESET_COLOR
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = rclleft
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = rclright
 
 
 /obj/item/weapon/rcl/afterattack(obj/target, mob/user, proximity_flag, click_parameters)

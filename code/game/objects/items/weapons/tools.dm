@@ -174,10 +174,8 @@
 			if(C.amount < 10)
 				to_chat(usr, "<span class='warning'>You need at least 10 lengths to make a bolas wire!</span>")
 				return
-			var/obj/item/weapon/legcuffs/bolas/cable/B = new /obj/item/weapon/legcuffs/bolas/cable(usr.loc)
+			var/obj/item/weapon/legcuffs/bolas/cable/B = new /obj/item/weapon/legcuffs/bolas/cable(usr.loc,C.color)
 			qdel(src)
-			B.icon_state = "cbolas_[C._color]"
-			B.cable_color = C._color
 			B.screw_state = item_state
 			B.screw_istate = icon_state
 			to_chat(M, "<span class='notice'>You wind some cable around the screwdriver handle to make a bolas wire.</span>")
