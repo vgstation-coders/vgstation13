@@ -213,6 +213,16 @@
 	desc = "This special edition Sylveon plushie was never officially released to the public."
 	icon_state = "sylveon"
 
+/*
+ * Fumos
+ */
+
+/obj/item/toy/plushie/fumo/vox
+	name = "\improper fumo vox"
+	desc = "A doll depicting a vox trader in their trademark space suit. The laundry label has several spelling mistakes on it."
+	icon_state = "vox"
+
+
 /obj/item/toy/plushie/fumo/touhou
 	death_sound = 'sound/effects/pichuun.ogg'
 
