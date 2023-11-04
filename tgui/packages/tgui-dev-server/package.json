@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "tgui-dev-server",
+  "name": "vgui-dev-server",
   "version": "4.3.0",
   "type": "module",
   "dependencies": {

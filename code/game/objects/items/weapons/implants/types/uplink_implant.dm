@@ -22,7 +22,7 @@
 /obj/item/weapon/implant/uplink/activate()
 	var/datum/component/uplink/uplink_comp = get_component(/datum/component/uplink)
 	uplink_comp.locked = FALSE
-	uplink_comp.tgui_interact(imp_in)
+	uplink_comp.vgui_interact(imp_in)
 
 /obj/item/weapon/implant/uplink/trigger(emote, mob/source)
 	if(emote != activation_emote)

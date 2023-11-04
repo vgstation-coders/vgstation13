@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "tgui-bench",
+  "name": "vgui-bench",
   "version": "4.3.0",
   "dependencies": {
     "common": "workspace:*",
@@ -10,6 +10,6 @@
     "inferno-vnode-flags": "^7.4.8",
     "lodash": "^4.17.21",
     "platform": "^1.3.6",
-    "tgui": "workspace:*"
+    "vgui": "workspace:*"
   }
 }

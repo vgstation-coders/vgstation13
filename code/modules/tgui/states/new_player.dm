@@ -1,5 +1,5 @@
 /**
- * tgui state: new_player_state
+ * vgui state: new_player_state
  *
  * Checks that the user is a new_player, or if user is an admin
  */

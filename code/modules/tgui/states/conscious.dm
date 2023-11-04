@@ -4,7 +4,7 @@
  */
 
 /**
- * tgui state: conscious_state
+ * vgui state: conscious_state
  *
  * Only checks if the user is conscious.
  */

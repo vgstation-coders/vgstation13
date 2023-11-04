@@ -307,7 +307,7 @@ var/list/camera_messages = list()
 		for(var/obj/machinery/computer/security/tv in tv_monitors)
 			if(tv.active_camera != src)
 				continue
-			for(var/datum/tgui/ui in SStgui.open_uis_by_src[tv])
+			for(var/datum/vgui/ui in SSvgui.open_uis_by_src[tv])
 				to_chat(ui.user, "[U] holds <a href='byond://?src=\ref[src];message_id=[key]'>[W]</a> up to one of the cameras ...")
 	else
 		..()

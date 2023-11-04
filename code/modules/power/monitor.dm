@@ -103,10 +103,10 @@
 	. = ..()
 	if(.)
 		return
-	tgui_interact(user)
+	vgui_interact(user)
 
-/obj/machinery/computer/powermonitor/tgui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
+/obj/machinery/computer/powermonitor/vgui_interact(mob/user, datum/vgui/ui)
+	ui = SSvgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "PowerMonitor")
 		ui.open()
@@ -225,7 +225,7 @@
 /obj/machinery/computer/powermonitor/process()
 	record()
 
-/obj/machinery/computer/powermonitor/ui_act(action, params, datum/tgui/ui)
+/obj/machinery/computer/powermonitor/ui_act(action, params, datum/vgui/ui)
 	. = ..()
 	if(.)
 		return

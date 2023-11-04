@@ -4,7 +4,7 @@
  */
 
 /**
- * tgui state: admin_state
+ * vgui state: admin_state
  *
  * Checks that the user is an admin, end-of-story.
  */

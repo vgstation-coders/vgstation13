@@ -8405,9 +8405,9 @@ resolve@^2.0.0-next.3:
   languageName: unknown
   linkType: soft
 
-"tgui-bench@workspace:packages/tgui-bench":
+"vgui-bench@workspace:packages/vgui-bench":
   version: 0.0.0-use.local
-  resolution: "tgui-bench@workspace:packages/tgui-bench"
+  resolution: "vgui-bench@workspace:packages/vgui-bench"
   dependencies:
     common: "workspace:*"
     fastify: ^3.29.4
@@ -8416,13 +8416,13 @@ resolve@^2.0.0-next.3:
     inferno-vnode-flags: ^7.4.8
     lodash: ^4.17.21
     platform: ^1.3.6
-    tgui: "workspace:*"
+    vgui: "workspace:*"
   languageName: unknown
   linkType: soft
 
-"tgui-dev-server@workspace:*, tgui-dev-server@workspace:packages/tgui-dev-server":
+"vgui-dev-server@workspace:*, vgui-dev-server@workspace:packages/vgui-dev-server":
   version: 0.0.0-use.local
-  resolution: "tgui-dev-server@workspace:packages/tgui-dev-server"
+  resolution: "vgui-dev-server@workspace:packages/vgui-dev-server"
   dependencies:
     axios: ^0.21.2
     glob: ^7.1.7
@@ -8432,22 +8432,22 @@ resolve@^2.0.0-next.3:
   languageName: unknown
   linkType: soft
 
-"tgui-panel@workspace:packages/tgui-panel":
+"vgui-panel@workspace:packages/vgui-panel":
   version: 0.0.0-use.local
-  resolution: "tgui-panel@workspace:packages/tgui-panel"
+  resolution: "vgui-panel@workspace:packages/vgui-panel"
   dependencies:
     common: "workspace:*"
     dompurify: ^2.3.1
     inferno: ^7.4.8
-    tgui: "workspace:*"
-    tgui-dev-server: "workspace:*"
-    tgui-polyfill: "workspace:*"
+    vgui: "workspace:*"
+    vgui-dev-server: "workspace:*"
+    vgui-polyfill: "workspace:*"
   languageName: unknown
   linkType: soft
 
-"tgui-polyfill@workspace:*, tgui-polyfill@workspace:packages/tgui-polyfill":
+"vgui-polyfill@workspace:*, vgui-polyfill@workspace:packages/vgui-polyfill":
   version: 0.0.0-use.local
-  resolution: "tgui-polyfill@workspace:packages/tgui-polyfill"
+  resolution: "vgui-polyfill@workspace:packages/vgui-polyfill"
   dependencies:
     core-js: ^3.16.1
     regenerator-runtime: ^0.13.9
@@ -8455,9 +8455,9 @@ resolve@^2.0.0-next.3:
   languageName: unknown
   linkType: soft
 
-"tgui-workspace@workspace:.":
+"vgui-workspace@workspace:.":
   version: 0.0.0-use.local
-  resolution: "tgui-workspace@workspace:."
+  resolution: "vgui-workspace@workspace:."
   dependencies:
     "@babel/core": ^7.15.0
     "@babel/eslint-parser": ^7.15.0
@@ -8499,9 +8499,9 @@ resolve@^2.0.0-next.3:
   languageName: unknown
   linkType: soft
 
-"tgui@workspace:*, tgui@workspace:packages/tgui":
+"vgui@workspace:*, vgui@workspace:packages/vgui":
   version: 0.0.0-use.local
-  resolution: "tgui@workspace:packages/tgui"
+  resolution: "vgui@workspace:packages/vgui"
   dependencies:
     "@popperjs/core": ^2.9.3
     common: "workspace:*"
@@ -8511,8 +8511,8 @@ resolve@^2.0.0-next.3:
     inferno-vnode-flags: ^7.4.8
     js-yaml: ^4.1.0
     marked: ^4.0.10
-    tgui-dev-server: "workspace:*"
-    tgui-polyfill: "workspace:*"
+    vgui-dev-server: "workspace:*"
+    vgui-polyfill: "workspace:*"
   languageName: unknown
   linkType: soft
 

@@ -1,5 +1,5 @@
 /*!
- * External tgui definitions, such as src_object APIs.
+ * External vgui definitions, such as src_object APIs.
  *
  * Copyright (c) 2020 Aleksej Komarov
  * SPDX-License-Identifier: MIT
@@ -12,9 +12,9 @@
  * If this proc is not implemented properly, the UI will not update correctly.
  *
  * required user mob The mob who opened/is using the UI.
- * optional ui datum/tgui The UI to be updated, if it exists.
+ * optional ui datum/vgui The UI to be updated, if it exists.
  */
-/datum/proc/tgui_interact(mob/user, datum/tgui/ui)
+/datum/proc/vgui_interact(mob/user, datum/vgui/ui)
 	return FALSE // Not implemented.
 
 /**
@@ -56,9 +56,9 @@
  * required user the mob currently interacting with the ui
  * optional ui ui to be updated
  */
-/datum/proc/update_static_data(mob/user, datum/tgui/ui)
+/datum/proc/update_static_data(mob/user, datum/vgui/ui)
 	if(!ui)
-		ui = SStgui.get_open_ui(user, src)
+		ui = SSvgui.get_open_ui(user, src)
 	if(ui)
 		ui.send_full_update()
 
@@ -73,7 +73,7 @@
  *
  * return bool If the user's input has been handled and the UI should update.
  */
-/datum/proc/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+/datum/proc/ui_act(action, list/params, datum/vgui/ui, datum/ui_state/state)
 	SHOULD_CALL_PARENT(TRUE)
 	INVOKE_EVENT(src, /event/ui_act, usr, action)
 	// If UI is not interactive or usr calling Topic is not the UI user, bail.
@@ -83,8 +83,8 @@
 /**
  * public
  *
- * Called on an object when a tgui object is being created, allowing you to
- * push various assets to tgui, for examples spritesheets.
+ * Called on an object when a vgui object is being created, allowing you to
+ * push various assets to vgui, for examples spritesheets.
  *
  * return list List of asset datums or file paths.
  */
@@ -114,30 +114,30 @@
  * global
  *
  * Associative list of JSON-encoded shared states that were set by
- * tgui clients.
+ * vgui clients.
  */
-/datum/var/list/tgui_shared_states
+/datum/var/list/vgui_shared_states
 
 /**
  * global
  *
  * Tracks open UIs for a user.
  */
-/mob/var/list/tgui_open_uis = list()
+/mob/var/list/vgui_open_uis = list()
 
 /**
  * global
  *
  * Tracks open windows for a user.
  */
-/client/var/list/tgui_windows = list()
+/client/var/list/vgui_windows = list()
 
 /**
  * global
  *
- * TRUE if cache was reloaded by tgui dev server at least once.
+ * TRUE if cache was reloaded by vgui dev server at least once.
  */
-/client/var/tgui_cache_reloaded = FALSE
+/client/var/vgui_cache_reloaded = FALSE
 
 /**
  * public
@@ -163,49 +163,49 @@
 	var/mob/user = src?.mob
 	if(!user)
 		return
-	// Close all tgui datums based on window_id.
-	SStgui.force_close_window(user, window_id)
+	// Close all vgui datums based on window_id.
+	SSvgui.force_close_window(user, window_id)
 
 /**
  * Middleware for /client/Topic.
  *
  * return bool If TRUE, prevents propagation of the topic call.
  */
-/proc/tgui_Topic(href_list)
-	// Skip non-tgui topics
-	if(!href_list["tgui"])
+/proc/vgui_Topic(href_list)
+	// Skip non-vgui topics
+	if(!href_list["vgui"])
 		return FALSE
 	var/type = href_list["type"]
-	// Unconditionally collect tgui logs
+	// Unconditionally collect vgui logs
 	if(type == "log")
 		var/context = href_list["window_id"]
 		if (href_list["ns"])
 			context += " ([href_list["ns"]])"
-		log_tgui(usr, href_list["message"],
+		log_vgui(usr, href_list["message"],
 			context = context)
-	// Reload all tgui windows
+	// Reload all vgui windows
 	if(type == "cacheReloaded")
-		if(!check_rights(R_ADMIN) || usr.client.tgui_cache_reloaded)
+		if(!check_rights(R_ADMIN) || usr.client.vgui_cache_reloaded)
 			return TRUE
 		// Mark as reloaded
-		usr.client.tgui_cache_reloaded = TRUE
+		usr.client.vgui_cache_reloaded = TRUE
 		// Notify windows
-		var/list/windows = usr.client.tgui_windows
+		var/list/windows = usr.client.vgui_windows
 		for(var/window_id in windows)
-			var/datum/tgui_window/window = windows[window_id]
+			var/datum/vgui_window/window = windows[window_id]
 			if (window.status == TGUI_WINDOW_READY)
 				window.on_message(type, null, href_list)
 		return TRUE
 	// Locate window
 	var/window_id = href_list["window_id"]
-	var/datum/tgui_window/window
+	var/datum/vgui_window/window
 	if(window_id)
-		window = usr.client.tgui_windows[window_id]
+		window = usr.client.vgui_windows[window_id]
 		if(!window)
-			log_tgui(usr,
+			log_vgui(usr,
 				"Error: Couldn't find the window datum, force closing.",
 				context = window_id)
-			SStgui.force_close_window(usr, window_id)
+			SSvgui.force_close_window(usr, window_id)
 			return TRUE
 	// Decode payload
 	var/payload

@@ -4,7 +4,7 @@
  */
 
 /**
- * tgui state: self_state
+ * vgui state: self_state
  *
  * Only checks that the user and src_object are the same.
  */

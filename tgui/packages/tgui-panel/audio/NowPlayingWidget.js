@@ -6,7 +6,7 @@
 
 import { toFixed } from 'common/math';
 import { useDispatch, useSelector } from 'common/redux';
-import { Button, Flex, Knob } from 'tgui/components';
+import { Button, Flex, Knob } from 'vgui/components';
 import { useSettings } from '../settings';
 import { selectAudio } from './selectors';
 

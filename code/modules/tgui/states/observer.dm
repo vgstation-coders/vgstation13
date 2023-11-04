@@ -4,7 +4,7 @@
  */
 
 /**
- * tgui state: observer_state
+ * vgui state: observer_state
  *
  * Checks that the user is an observer/ghost.
  */

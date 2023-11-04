@@ -16,10 +16,10 @@
 /obj/machinery/computer/mecha/attack_hand(var/mob/user as mob)
 	if(..())
 		return
-	tgui_interact(user)
+	vgui_interact(user)
 
-/obj/machinery/computer/mecha/tgui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
+/obj/machinery/computer/mecha/vgui_interact(mob/user, datum/vgui/ui)
+	ui = SSvgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "MechaControlConsole")
 		ui.open()

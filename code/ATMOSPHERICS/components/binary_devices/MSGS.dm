@@ -119,8 +119,8 @@
 			update_icon()
 			return TRUE
 
-/obj/machinery/atmospherics/binary/msgs/tgui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
+/obj/machinery/atmospherics/binary/msgs/vgui_interact(mob/user, datum/vgui/ui)
+	ui = SSvgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "MSGS")
 		ui.set_autoupdate(TRUE)
@@ -131,7 +131,7 @@
 	if(.)
 		return
 
-	tgui_interact(user)
+	vgui_interact(user)
 
 /obj/machinery/atmospherics/binary/msgs/attackby(obj/item/W, mob/user)
 	. = ..()

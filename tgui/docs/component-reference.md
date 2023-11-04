@@ -9,7 +9,7 @@ Make sure to add new items to this list if you document new components.
 -->
 
 - [General Concepts](#general-concepts)
-- [`tgui/components`](#tguicomponents)
+- [`vgui/components`](#vguicomponents)
   - [`AnimatedNumber`](#animatednumber)
   - [`BlockQuote`](#blockquote)
   - [`Box`](#box)
@@ -50,7 +50,7 @@ Make sure to add new items to this list if you document new components.
   - [`Tabs`](#tabs)
   - [`Tabs.Tab`](#tabstab)
   - [`Tooltip`](#tooltip)
-- [`tgui/layouts`](#tguilayouts)
+- [`vgui/layouts`](#vguilayouts)
   - [`Window`](#window)
   - [`Window.Content`](#windowcontent)
 
@@ -79,7 +79,7 @@ lowercase event handlers unless you really know what you are doing.
 - [Button](#button) component does not support the lowercase `onclick` event.
 Use the camel case `onClick` instead.
 
-## `tgui/components`
+## `vgui/components`
 
 ### `AnimatedNumber`
 
@@ -406,7 +406,7 @@ effectively places the last flex item to the very end of the flex container.
 **Props:**
 
 - See inherited props: [Box](#box)
-- ~~`spacing: number`~~ - **Removed in tgui 4.3**,
+- ~~`spacing: number`~~ - **Removed in vgui 4.3**,
 use [Stack](#stack) instead.
 - `inline: boolean` - Makes flexbox container inline, with similar behavior
 to an `inline` property on a `Box`.
@@ -1094,7 +1094,7 @@ Intended for usage on interfaces where tab color has relevance.
 
 ### `Tooltip`
 
-A boxy tooltip from tgui 1. It is very hacky in its current state, and
+A boxy tooltip from vgui 1. It is very hacky in its current state, and
 requires setting `position: relative` on the container.
 
 Please note, that [Button](#button) component has a `tooltip` prop, and
@@ -1116,12 +1116,12 @@ Usage:
 - `content: string` - Content of the tooltip. Must be a plain string.
 Fragments or other elements are **not** supported.
 
-## `tgui/layouts`
+## `vgui/layouts`
 
 ### `Window`
 
 A root-level component, which draws the window chrome, titlebar, resize
-handlers, and controls the UI theme. All tgui interfaces must implement
+handlers, and controls the UI theme. All vgui interfaces must implement
 it in one way or another.
 
 Example:
@@ -1139,7 +1139,7 @@ Example:
 - See inherited props: [Box](#box)
 - `className: string` - Applies a CSS class to the element.
 - `theme: string` - A name of the theme.
-  - For a list of themes, see `packages/tgui/styles/themes`.
+  - For a list of themes, see `packages/vgui/styles/themes`.
 - `title: string` - Window title.
 - `width: number` - Window width.
 - `height: number` - Window height.

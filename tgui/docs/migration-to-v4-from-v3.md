@@ -1,25 +1,25 @@
-# tgui Migration Guide to v4 from v3
+# vgui Migration Guide to v4 from v3
 
 ## The Easy Part
 
 - Copy and replace the following files in bulk:
-  - `code/__DEFINES/tgui.dm`
-  - `code/controllers/subsystem/tgui.dm`
-  - `code/modules/tgui/**`
-  - `tgui/**`
-    - Except: `tgui/packages/tgui/interfaces`
+  - `code/__DEFINES/vgui.dm`
+  - `code/controllers/subsystem/vgui.dm`
+  - `code/modules/vgui/**`
+  - `vgui/**`
+    - Except: `vgui/packages/vgui/interfaces`
     - Manually resolve conflicts for files that were touched outside the
       `interfaces` folder.
-- Copy the updated `log_tgui` proc from:
+- Copy the updated `log_vgui` proc from:
   - `code/__HELPERS/_logging.dm`
 
-If you have a dual nano/tgui setup, then make sure to rename all ui procs
-on `/datum`, such as `ui_interact` to `tgui_interact`, to avoid namespace
+If you have a dual nano/vgui setup, then make sure to rename all ui procs
+on `/datum`, such as `ui_interact` to `vgui_interact`, to avoid namespace
 clashing. Usual stuff.
 
 ## Update `ui_interact` proc signatures
 
-First of all, tgui states need to move from `ui_interact` to `ui_state`.
+First of all, vgui states need to move from `ui_interact` to `ui_state`.
 
 One way of doing it, is to just cherry pick those procs from upstream.
 
@@ -34,8 +34,8 @@ extract those things into `ui_state` procs like so:
 Then reduce `ui_interact` until you finish with something like this:
 
 ```dm
-.../ui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
+.../ui_interact(mob/user, datum/vgui/ui)
+	ui = SSvgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "FooBar", "Foo Bar UI", 600, 400)
 		ui.open()
@@ -43,7 +43,7 @@ Then reduce `ui_interact` until you finish with something like this:
 
 ## Update asset delivery code
 
-Remove all asset code that injects stylesheets by modifying tgui's `basehtml`.
+Remove all asset code that injects stylesheets by modifying vgui's `basehtml`.
 You no longer need to do that.
 
 Find all occurences of `asset.send(user)` in `ui_interact`, and refactor those

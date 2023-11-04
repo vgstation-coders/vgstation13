@@ -4,7 +4,7 @@
  */
 
 /**
- * tgui state: physical_state
+ * vgui state: physical_state
  *
  * Short-circuits the default state to only check physical distance.
  */
@@ -30,7 +30,7 @@ var/datum/ui_state/physical/physical_state = new
 
 
 /**
- * tgui state: physical_obscured_state
+ * vgui state: physical_obscured_state
  *
  * Short-circuits the default state to only check physical distance, being in view doesn't matter
  */

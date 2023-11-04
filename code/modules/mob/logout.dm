@@ -1,5 +1,5 @@
 /mob/Logout()
-	SStgui.on_logout(src)
+	SSvgui.on_logout(src)
 	nanomanager.close_user_uis(src)
 
 	if (isobj(loc))

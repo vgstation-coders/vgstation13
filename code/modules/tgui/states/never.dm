@@ -4,7 +4,7 @@
  */
 
 /**
- * tgui state: never_state
+ * vgui state: never_state
  *
  * Always closes the UI, no matter what. See the ui_state in religious_tool.dm to see an example
  */

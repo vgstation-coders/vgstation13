@@ -1,6 +1,6 @@
 ## Jest
 
-You can now write and run unit tests in tgui.
+You can now write and run unit tests in vgui.
 
 It's quite simple: create a file ending in `.test.ts` or `.spec.ts` (usually with the same filename as the file you're testing), and create a test case:
 
@@ -13,7 +13,7 @@ test('something', () => {
 To run the tests, type the following into the terminal:
 
 ```
-bin/tgui --test
+bin/vgui --test
 ```
 
 There is an example test in `packages/common/react.spec.ts`.

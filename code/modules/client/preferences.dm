@@ -238,7 +238,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/obj_chat_on_map = FALSE
 	var/no_goonchat_for_obj = FALSE
 
-	var/tgui_fancy = TRUE
+	var/vgui_fancy = TRUE
 	var/fps = -1
 
 	var/client/client
@@ -447,8 +447,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=credits_volume'><b>[credits_volume]</b></a><br>
 	<b>Window Flashing</b>
 	<a href='?_src_=prefs;preference=window_flashing'><b>[(window_flashing) ? "Yes":"No"]</b></a><br>
-	<b>Fancy tgui:</b>
-	<a href='?_src_=prefs;preference=tgui_fancy'>[tgui_fancy ? "Enabled" : "Disabled"]</a><br>
+	<b>Fancy vgui:</b>
+	<a href='?_src_=prefs;preference=vgui_fancy'>[vgui_fancy ? "Enabled" : "Disabled"]</a><br>
 	<b>
 	<center>Runechat prefererences</center>
 	<b>Chat on map for mobs:</b>
@@ -1358,8 +1358,8 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 				if("typing_indicator")
 					typing_indicator = !typing_indicator
 
-				if("tgui_fancy")
-					tgui_fancy = !tgui_fancy
+				if("vgui_fancy")
+					vgui_fancy = !vgui_fancy
 
 				if ("mob_chat_on_map")
 					mob_chat_on_map = !mob_chat_on_map

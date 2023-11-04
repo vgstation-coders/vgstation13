@@ -4,7 +4,7 @@
  */
 
 /**
- * tgui state: default_state
+ * vgui state: default_state
  *
  * Checks a number of things -- mostly physical distance for humans
  * and view for robots.

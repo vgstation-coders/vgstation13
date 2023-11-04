@@ -4,7 +4,7 @@
  */
 
 /**
- * tgui state: notcontained_state
+ * vgui state: notcontained_state
  *
  * Checks that the user is not inside src_object, and then makes the
  * default checks.

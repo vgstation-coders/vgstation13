@@ -40,55 +40,55 @@
 		},
 		{
 			"type": "shell",
-			"command": "bin/tgui-build",
+			"command": "bin/vgui-build",
 			"windows": {
-				"command": ".\\bin\\tgui-build.cmd"
+				"command": ".\\bin\\vgui-build.cmd"
 			},
 			"problemMatcher": [
 				"$tsc",
 				"$eslint-stylish"
 			],
 			"group": "build",
-			"label": "tgui: build"
+			"label": "vgui: build"
 		},
 		{
 			"type": "shell",
-			"command": "bin/tgui-dev",
+			"command": "bin/vgui-dev",
 			"windows": {
-				"command": ".\\bin\\tgui-dev.cmd"
+				"command": ".\\bin\\vgui-dev.cmd"
 			},
 			"problemMatcher": [
 				"$tsc",
 				"$eslint-stylish"
 			],
 			"group": "build",
-			"label": "tgui: dev server"
+			"label": "vgui: dev server"
 		},
 		{
 			"type": "shell",
-			"command": "bin/tgui-bench",
+			"command": "bin/vgui-bench",
 			"windows": {
-				"command": ".\\bin\\tgui-bench.cmd"
+				"command": ".\\bin\\vgui-bench.cmd"
 			},
 			"problemMatcher": [
 				"$tsc",
 				"$eslint-stylish"
 			],
 			"group": "build",
-			"label": "tgui: bench"
+			"label": "vgui: bench"
 		},
 		{
 			"type": "shell",
-			"command": "bin/tgui-sonar",
+			"command": "bin/vgui-sonar",
 			"windows": {
-				"command": ".\\bin\\tgui-sonar.cmd"
+				"command": ".\\bin\\vgui-sonar.cmd"
 			},
 			"problemMatcher": [
 				"$tsc",
 				"$eslint-stylish"
 			],
 			"group": "build",
-			"label": "tgui: sonar"
+			"label": "vgui: sonar"
 		}
 	]
 }

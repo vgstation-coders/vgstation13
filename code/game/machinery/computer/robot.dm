@@ -43,11 +43,11 @@
 	if (z > 6)
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
-	tgui_interact(user)
+	vgui_interact(user)
 
 
-/obj/machinery/computer/robotics/tgui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
+/obj/machinery/computer/robotics/vgui_interact(mob/user, datum/vgui/ui)
+	ui = SSvgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "RoboticsControlConsole")
 		ui.open()

@@ -37,8 +37,8 @@
 /datum/component/uplink/ui_host(mob/user)
 	return parent
 
-/datum/component/uplink/tgui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
+/datum/component/uplink/vgui_interact(mob/user, datum/vgui/ui)
+	ui = SSvgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "Uplink")
 		ui.set_autoupdate(FALSE)
@@ -100,7 +100,7 @@
 			return TRUE
 		if("lock")
 			locked = TRUE
-			SStgui.close_uis(src)
+			SSvgui.close_uis(src)
 		if("select")
 			selected_category = params["category"]
 			return TRUE
@@ -162,20 +162,20 @@
 /datum/component/uplink/proc/on_attack_self(mob/user)
 	if(locked)
 		return
-	tgui_interact(user)
+	vgui_interact(user)
 	return TRUE
 
 /datum/component/uplink/proc/on_pda_change_ringtone(mob/user, new_ringtone)
 	if(trim(lowertext(new_ringtone)) != trim(lowertext(unlock_code)))
 		return
 	locked = FALSE
-	tgui_interact(user)
+	vgui_interact(user)
 	return TRUE
 
 /datum/component/uplink/proc/on_radio_new_frequency(mob/user, new_frequency)
 	if(new_frequency != unlock_frequency)
 		return
 	locked = FALSE
-	tgui_interact(user)
+	vgui_interact(user)
 	return TRUE
 

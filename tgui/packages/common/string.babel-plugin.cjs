@@ -5,7 +5,7 @@
  * We are using a .cjs extension because:
  *
  * 1. Webpack CLI only supports CommonJS modules;
- * 2. tgui-dev-server supports both, but we still need to signal NodeJS
+ * 2. vgui-dev-server supports both, but we still need to signal NodeJS
  * to import it as a CommonJS module, hence .cjs extension.
  *
  * We need to copy-paste the whole "multiline" function because we can't

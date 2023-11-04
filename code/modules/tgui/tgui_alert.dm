@@ -10,7 +10,7 @@
  * * timeout - The timeout of the alert, after which the modal will close and qdel itself. Set to zero for no timeout.
  * * autofocus - The bool that controls if this alert should grab window focus.
  */
-/proc/tgui_alert(mob/user, message = null, title = null, list/buttons = list("Ok"), timeout = 0, autofocus = TRUE)
+/proc/vgui_alert(mob/user, message = null, title = null, list/buttons = list("Ok"), timeout = 0, autofocus = TRUE)
 	if (!user)
 		user = usr
 	if (!istype(user))
@@ -19,8 +19,8 @@
 			user = client.mob
 		else
 			return
-	var/datum/tgui_modal/alert = new(user, message, title, buttons, timeout, autofocus)
-	alert.tgui_interact(user)
+	var/datum/vgui_modal/alert = new(user, message, title, buttons, timeout, autofocus)
+	alert.vgui_interact(user)
 	alert.wait()
 	if (alert)
 		. = alert.choice
@@ -39,7 +39,7 @@
  * * timeout - The timeout of the alert, after which the modal will close and qdel itself. Disabled by default, can be set to seconds otherwise.
  * * autofocus - The bool that controls if this alert should grab window focus.
  */
-/proc/tgui_alert_async(mob/user, message = null, title = null, list/buttons = list("Ok"), callback/callback, timeout = 0, autofocus = TRUE)
+/proc/vgui_alert_async(mob/user, message = null, title = null, list/buttons = list("Ok"), callback/callback, timeout = 0, autofocus = TRUE)
 	if (!user)
 		user = usr
 	if (!istype(user))
@@ -48,16 +48,16 @@
 			user = client.mob
 		else
 			return
-	var/datum/tgui_modal/async/alert = new(user, message, title, buttons, callback, timeout, autofocus)
-	alert.tgui_interact(user)
+	var/datum/vgui_modal/async/alert = new(user, message, title, buttons, callback, timeout, autofocus)
+	alert.vgui_interact(user)
 
 /**
- * # tgui_modal
+ * # vgui_modal
  *
  * Datum used for instantiating and using a TGUI-controlled modal that prompts the user with
  * a message and has buttons for responses.
  */
-/datum/tgui_modal
+/datum/vgui_modal
 	/// The title of the TGUI window
 	var/title
 	/// The textual body of the TGUI window
@@ -66,16 +66,16 @@
 	var/list/buttons
 	/// The button that the user has pressed, null if no selection has been made
 	var/choice
-	/// The time at which the tgui_modal was created, for displaying timeout progress.
+	/// The time at which the vgui_modal was created, for displaying timeout progress.
 	var/start_time
-	/// The lifespan of the tgui_modal, after which the window will close and delete itself.
+	/// The lifespan of the vgui_modal, after which the window will close and delete itself.
 	var/timeout
 	/// The bool that controls if this modal should grab window focus
 	var/autofocus
-	/// Boolean field describing if the tgui_modal was closed by the user.
+	/// Boolean field describing if the vgui_modal was closed by the user.
 	var/closed
 
-/datum/tgui_modal/New(mob/user, message, title, list/buttons, timeout, autofocus)
+/datum/vgui_modal/New(mob/user, message, title, list/buttons, timeout, autofocus)
 	src.title = title
 	src.message = message
 	src.buttons = buttons.Copy()
@@ -86,33 +86,33 @@
 		spawn(timeout)
 			qdel(src)
 
-/datum/tgui_modal/Destroy(force, ...)
-	SStgui.close_uis(src)
+/datum/vgui_modal/Destroy(force, ...)
+	SSvgui.close_uis(src)
 	QDEL_NULL(buttons)
 	. = ..()
 
 /**
- * Waits for a user's response to the tgui_modal's prompt before returning. Returns early if
+ * Waits for a user's response to the vgui_modal's prompt before returning. Returns early if
  * the window was closed by the user.
  */
-/datum/tgui_modal/proc/wait()
+/datum/vgui_modal/proc/wait()
 	while (!choice && !closed && !src.gcDestroyed)
 		stoplag()
 
-/datum/tgui_modal/tgui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
+/datum/vgui_modal/vgui_interact(mob/user, datum/vgui/ui)
+	ui = SSvgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "AlertModal")
 		ui.open()
 
-/datum/tgui_modal/ui_close(mob/user)
+/datum/vgui_modal/ui_close(mob/user)
 	. = ..()
 	closed = TRUE
 
-/datum/tgui_modal/ui_state(mob/user)
+/datum/vgui_modal/ui_state(mob/user)
 	return global.always_state
 
-/datum/tgui_modal/ui_data(mob/user)
+/datum/vgui_modal/ui_data(mob/user)
 	. = list(
 		"title" = title,
 		"message" = message,
@@ -123,7 +123,7 @@
 	if(timeout)
 		.["timeout"] = CLAMP01((timeout - (world.time - start_time) - 1 SECONDS) / (timeout - 1 SECONDS))
 
-/datum/tgui_modal/ui_act(action, list/params)
+/datum/vgui_modal/ui_act(action, list/params)
 	. = ..()
 	if (.)
 		return
@@ -132,33 +132,33 @@
 			if (!(params["choice"] in buttons))
 				return
 			set_choice(params["choice"])
-			SStgui.close_uis(src)
+			SSvgui.close_uis(src)
 			return TRUE
 
-/datum/tgui_modal/proc/set_choice(choice)
+/datum/vgui_modal/proc/set_choice(choice)
 	src.choice = choice
 
 /**
- * # async tgui_modal
+ * # async vgui_modal
  *
- * An asynchronous version of tgui_modal to be used with callbacks instead of waiting on user responses.
+ * An asynchronous version of vgui_modal to be used with callbacks instead of waiting on user responses.
  */
-/datum/tgui_modal/async
-	/// The callback to be invoked by the tgui_modal upon having a choice made.
+/datum/vgui_modal/async
+	/// The callback to be invoked by the vgui_modal upon having a choice made.
 	var/callback/callback
 
-/datum/tgui_modal/async/New(mob/user, message, title, list/buttons, callback, timeout, autofocus)
+/datum/vgui_modal/async/New(mob/user, message, title, list/buttons, callback, timeout, autofocus)
 	..(user, message, title, buttons, timeout, autofocus)
 	src.callback = callback
 
-/datum/tgui_modal/async/Destroy(force, ...)
+/datum/vgui_modal/async/Destroy(force, ...)
 	QDEL_NULL(callback)
 	. = ..()
 
-/datum/tgui_modal/async/set_choice(choice)
+/datum/vgui_modal/async/set_choice(choice)
 	. = ..()
 	if(!isnull(src.choice))
 		callback?.invoke_async(src.choice)
 
-/datum/tgui_modal/async/wait()
+/datum/vgui_modal/async/wait()
 	return
