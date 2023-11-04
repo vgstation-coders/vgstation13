@@ -82,7 +82,7 @@
 	containertype = /obj/structure/closet/crate/engi
 	containername = "automation supplies crate"
 	group = "Cargo"
-	containsdesc = "A starter pack for automating cargo. Includes an automatic crate opener, closer, wrapper, sorter, and even a dresser."
+	containsdesc = "A starter pack for automating cargo. Includes an automatic crate opener, closer, wrapper, sorter, and even an auto-dresser."
 
 /datum/supply_packs/package_wrap
 	name = "Package wrap"
