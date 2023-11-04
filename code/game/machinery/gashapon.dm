@@ -15,6 +15,7 @@
 		if(user.drop_item(O, src))
 			user.visible_message("<span class='notice'>[user] puts a coin into [src] and turns the knob.</span>", "<span class='notice'>You put a coin into [src] and turn the knob.</span>")
 			src.visible_message("<span class='notice'>[src] clicks softly.</span>")
+			playsound(src, 'sound/machines/capsulebuy.ogg', 50, 1)
 			sleep(rand(10,15))
 			src.visible_message("<span class='notice'>[src] dispenses a capsule!</span>")
 			new /obj/item/weapon/capsule(src.loc)
