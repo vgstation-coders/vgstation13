@@ -693,6 +693,7 @@
 #include "code\game\machinery\candymachine.dm"
 #include "code\game\machinery\cell_charger.dm"
 #include "code\game\machinery\chemHandC.dm"
+#include "code\game\machinery\clawmachine.dm"
 #include "code\game\machinery\constructable_frame.dm"
 #include "code\game\machinery\cryo.dm"
 #include "code\game\machinery\defibcharger.dm"
