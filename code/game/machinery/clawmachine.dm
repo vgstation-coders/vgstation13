@@ -81,7 +81,7 @@
 			if(istype(O, /obj/item/weapon/coin))
 				var/obj/item/weapon/coin/C = O
 				if(C.string_attached)
-					if(prob(30))
+					if(prob(50))
 						to_chat(user, "<span class='notice'>You manage to yank the coin back out before the machine swallows it!</span>")
 						user.put_in_hands(O)
 					else
