@@ -382,7 +382,9 @@
 		if(can_operate(M, user, src))
 			if(do_surgery(M, user, src))
 				return
-		var/datum/organ/external/S = M:organs_by_name[user.zone_sel.selecting]
+		//hasorgans() literally just calls ishuman(), which is a typecheck for...
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/external/S = H.get_organ(user.zone_sel.selecting)
 		if (!S)
 			return
 		if(!(S.status & ORGAN_ROBOT) || user.a_intent != I_HELP)
