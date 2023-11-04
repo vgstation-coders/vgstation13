@@ -217,12 +217,17 @@
  * Fumos
  */
 
+/obj/item/toy/plushie/fumo/clownette
+	name = "\improper fumo clownette"
+	desc = "A female clown doll that will not accept your appeals. It has a smug expression on its face."
+	icon_state = "clownette"
+
 /obj/item/toy/plushie/fumo/vox
 	name = "\improper fumo vox"
-	desc = "A doll depicting a vox trader in their trademark space suit. The laundry label has several spelling mistakes on it."
+	desc = "A fumo-style doll depicting a vox trader in their trademark space suit. The label has several spelling mistakes on it."
 	icon_state = "vox"
 
-
+//Touhous
 /obj/item/toy/plushie/fumo/touhou
 	death_sound = 'sound/effects/pichuun.ogg'
 
