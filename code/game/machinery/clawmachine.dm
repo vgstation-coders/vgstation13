@@ -4,7 +4,7 @@
 
 #define PRIZEPOOL_STANDARD 1
 #define PRIZEPOOL_PREMIUM 2
-#define ANIMATION_LENGTH 28
+#define ANIMATION_LENGTH 27
 
 /obj/machinery/claw_machine
 	name = "claw machine"
@@ -104,9 +104,9 @@
 			for(var/obj/item/weapon/spacecash/C in change)
 				user.put_in_hands(C)
 			if(prob(50))
-				playsound(src, 'sound/items/polaroid1.ogg', 50, 1)
+				playsound(src, 'sound/items/polaroid1.ogg', 25, 1)
 			else
-				playsound(src, 'sound/items/polaroid2.ogg', 50, 1)
+				playsound(src, 'sound/items/polaroid2.ogg', 25, 1)
 		to_chat(user, "<span class='notice'>You insert some credits into \the [src] and grab the joystick...</span>")
 		play_game(user, PRIZEPOOL_STANDARD)
 	else if(!cost_per_game)
