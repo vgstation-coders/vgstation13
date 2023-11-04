@@ -142,7 +142,6 @@
 	cost = 30
 	containertype = /obj/structure/largecrate/cow
 	containername = "cow crate"
-	access = list(access_hydroponics)
 	group = "Hydroponics"
 	containsicon = /mob/living/simple_animal/cow
 	containsdesc = "Contains the whole cow."
@@ -152,7 +151,6 @@
 	cost = 25
 	containertype = /obj/structure/largecrate/goat
 	containername = "goat crate"
-	access = list(access_hydroponics)
 	group = "Hydroponics"
 	containsicon = /mob/living/simple_animal/hostile/retaliate/goat
 	containsdesc = "When weeds have your station, call in the goat."
@@ -162,7 +160,6 @@
 	cost = 75
 	containertype = /obj/structure/largecrate/polyp
 	containername = "polyp crate"
-	access = list(access_hydroponics)
 	group = "Hydroponics"
 	containsicon = /mob/living/simple_animal/hostile/retaliate/polyp
 	containsdesc = "Blub, blub..."
@@ -172,7 +169,6 @@
 	cost = 20
 	containertype = /obj/structure/largecrate/chick
 	containername = "chicken crate"
-	access = list(access_hydroponics)
 	group = "Hydroponics"
 	containsicon = /mob/living/simple_animal/chick
 	containsdesc = "A crate filled to the brim with chickens. We fit in as many as we could."
