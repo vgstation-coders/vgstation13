@@ -14,6 +14,11 @@
 	var/death_sound //sound to play when the plushie is destroyed, e.g. in an explosion
 	autoignition_temperature = AUTOIGNITION_FABRIC
 
+/obj/item/toy/plushie/Destroy()
+	if(grenade)
+		qdel(grenade)
+	return ..()
+
 /obj/item/toy/plushie/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>\The [user] is smothering \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
