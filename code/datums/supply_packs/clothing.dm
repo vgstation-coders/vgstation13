@@ -316,6 +316,7 @@
 	group = "Clothing"
 
 /datum/supply_packs/grey_uniform/New()
+	..()
 	selection_from = list(laborer, scientist)
 
 /datum/supply_packs/grey_internals
@@ -415,6 +416,7 @@
 	group = "Clothing"
 
 /datum/supply_packs/security_formal_wear/New()
+	..()
 	selection_from = list(Blue, Navy, Tan)
 
 //Winter Coats//
