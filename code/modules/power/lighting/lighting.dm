@@ -328,7 +328,7 @@ var/global/list/obj/machinery/light/alllights = list()
 		if(!rgb_upgrade)
 			to_chat(user, "There's nothing to connect \the [W] to on \the [src].")
 			return
-		var/which = alert(user, "What would you like to change?", "RGB Gamer lights", "Color", "Power", "Range")
+		var/which = alert(user, "What would you like to change?", "Programmable Lights", "Color", "Power", "Range")
 		var/list/choice_color_list = list("custom") + light_colors
 
 		switch(which)
