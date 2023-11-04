@@ -4,6 +4,7 @@
 
 #define PRIZEPOOL_STANDARD 1
 #define PRIZEPOOL_PREMIUM 2
+#define PRIZEPOOL_POMF 3
 #define ANIMATION_LENGTH 27
 
 /obj/machinery/claw_machine
@@ -56,6 +57,11 @@
 		/obj/item/toy/plushie/fumo/touhou/remilia,
 		/obj/item/toy/plushie/fumo/touhou/sakuya,
 		/obj/item/toy/plushie/fumo/touhou/yukari
+	)
+
+	//These are only available with a pomf coin
+	var/list/prizes_pomf = list(
+		/obj/item/toy/plushie/sylveon
 	)
 
 /obj/machinery/claw_machine/examine(mob/user)
@@ -179,7 +185,10 @@
 			else
 				qdel(O)
 			to_chat(user, "<span class='notice'>You insert a coin into \the [src] and grab the joystick...</span>")
-			play_game(user, PRIZEPOOL_PREMIUM)
+			if(istype(O, /obj/item/weapon/coin/pomf))
+				play_game(user, PRIZEPOOL_POMF)
+			else
+				play_game(user, PRIZEPOOL_PREMIUM)
 			return 1
 	else if(istype(O, /obj/item/weapon/spacecash))
 		//take money, dispense change, play regular game
@@ -213,12 +222,21 @@
 	use_power(10)
 	flick("claw-playing", src)
 	sleep(ANIMATION_LENGTH)
-	var/winning_odds = prizepool == PRIZEPOOL_STANDARD ? winning_odds_standard : winning_odds_premium
+	var/winning_odds
+	switch(prizepool)
+		if(PRIZEPOOL_STANDARD)
+			winning_odds = winning_odds_standard
+		if(PRIZEPOOL_PREMIUM)
+			winning_odds = winning_odds_premium
+		if(PRIZEPOOL_POMF)
+			winning_odds = 100
 	if(prob(winning_odds))
 		//dispense prize
 		var/P
 		if(prizepool == PRIZEPOOL_STANDARD)
 			P = pick(prizes_standard)
+		else if(prizepool == PRIZEPOOL_POMF)
+			P = pick(prizes_pomf)
 		else
 			P = pick(prizes_premium)
 		var/obj/item/toy/plushie/prize = new P(src.loc)
@@ -232,4 +250,5 @@
 
 #undef PRIZEPOOL_STANDARD
 #undef PRIZEPOOL_PREMIUM
+#undef PRIZEPOOL_POMF
 #undef ANIMATION_LENGTH

@@ -207,6 +207,11 @@
 	desc = "An extra-large version of the classic stuffed bear."
 	icon_state = "teddy"
 
+//This one is only available with a pomfcoin
+/obj/item/toy/plushie/sylveon
+	name = "plush Sylveon"
+	desc = "This special edition Sylveon plushie was never officially released to the public."
+	icon_state = "sylveon"
 
 /obj/item/toy/plushie/fumo/touhou
 	death_sound = 'sound/effects/pichuun.ogg'
