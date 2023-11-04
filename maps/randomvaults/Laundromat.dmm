@@ -6,14 +6,25 @@
 	dir = 4
 	},
 /area/vault/laundromat)
+"ap" = (
+/obj/abstract/map/spawner/laundromat/clothing,
+/turf/simulated/floor/glass,
+/area/vault/laundromat)
 "aw" = (
 /obj/machinery/light/he{
 	dir = 4
 	},
 /obj/item/weapon/paper/crumpled/bloody{
-	info = "Well... I did it, honey. I finally started my own business. It's going great! I've had people from all walks of life come here, even wizards and syndicate agents. I don't mind, though. That fake TTV on the center pillar keeps everyone humble. Can't wait to for you to come check, it'll be awes- "<B>The rest of the text is covered in blood...</B>";
+	info = "Well... I did it, honey. I finally started my own business. It's going great! I've had people from all walks of life come here, even wizards and syndicate agents. I don't mind, though. That fake TTV on the center pillar keeps everyone humble. Can't wait to for you to come check, it'll be awes- <B>The rest of the text is covered in blood...</B>";
 	name = "crumpled letter"
 	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"az" = (
+/obj/machinery/power/port_gen/pacman,
+/obj/structure/cable/yellow,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -35,6 +46,24 @@
 "aY" = (
 /turf/space,
 /area)
+"bo" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/obj/structure/rack,
+/obj/item/weapon/reagent_containers/glass/bottle/bleach{
+	pixel_x = -4;
+	pixel_y = 5
+	},
+/obj/item/weapon/reagent_containers/glass/bottle/bleach,
+/obj/item/weapon/reagent_containers/glass/bottle/bleach{
+	pixel_y = -4;
+	pixel_x = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
 "bw" = (
 /obj/spacepod/random,
 /obj/structure/lattice,
@@ -294,10 +323,20 @@
 	dir = 4
 	},
 /obj/structure/cable/yellow{
+	d1 = 1;
 	d2 = 8;
-	icon_state = "0-8"
+	icon_state = "1-8"
 	},
-/obj/machinery/power/port_gen/pacman,
+/obj/structure/rack,
+/obj/item/weapon/reagent_containers/spray/cleaner,
+/obj/item/weapon/reagent_containers/spray/cleaner{
+	pixel_y = -4;
+	pixel_x = -7
+	},
+/obj/item/weapon/soap{
+	pixel_y = -7;
+	pixel_x = 1
+	},
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -574,6 +613,15 @@
 	icon_state = "dark vault full"
 	},
 /area/vault/laundromat)
+"QX" = (
+/obj/structure/window{
+	dir = 1
+	},
+/obj/structure/cable/yellow{
+	icon_state = "2-4"
+	},
+/turf/simulated/floor,
+/area/vault/laundromat)
 "Rr" = (
 /obj/machinery/door/airlock/external{
 	icon = 'icons/obj/doors/Doorglass.dmi';
@@ -586,6 +634,16 @@
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
+/area/vault/laundromat)
+"Sz" = (
+/obj/structure/window{
+	dir = 1
+	},
+/obj/machinery/light/he,
+/obj/structure/cable/yellow{
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
 /area/vault/laundromat)
 "SO" = (
 /obj/structure/bed/chair/comfy/couch/turn/inward/red{
@@ -616,6 +674,9 @@
 /area/vault/laundromat)
 "Us" = (
 /obj/effect/landmark/corpse/pirate/ranged,
+/obj/structure/cable/yellow{
+	icon_state = "2-8"
+	},
 /turf/simulated/floor,
 /area/vault/laundromat)
 "US" = (
@@ -628,6 +689,12 @@
 "Vd" = (
 /obj/machinery/light/he{
 	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/laundromat)
+"Vr" = (
+/obj/structure/cable/yellow{
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/vault/laundromat)
@@ -971,7 +1038,7 @@ fg
 LA
 wP
 RS
-wP
+ap
 lf
 fg
 la
@@ -996,7 +1063,7 @@ RS
 wP
 lf
 fg
-la
+QX
 tP
 og
 aY
@@ -1018,7 +1085,7 @@ EY
 wP
 lf
 fg
-zW
+Sz
 og
 og
 aY
@@ -1040,8 +1107,8 @@ yX
 Of
 pj
 sX
-yX
-TX
+Vr
+bo
 og
 aY
 "}
@@ -1063,7 +1130,7 @@ qP
 Kj
 yX
 Us
-RS
+az
 og
 aY
 "}
