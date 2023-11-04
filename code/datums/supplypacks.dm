@@ -26,8 +26,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	var/containsdesc = "No description of the contents is available." // Description of the pack for the cargo computers
 
 /datum/supply_packs/New()
-	if(containsicon == null)
-		containsicon = pick(contains)
+	if(!containsicon)
+		containsicon = bicon(pick(contains))
+	else if (ispath(containsicon))
+		containsicon = bicon(containsicon)
+	else
+		containsicon = bicon(icon('icons/misc/cargo_icons_override.dmi',containsicon))
 	manifest += "<ul>"
 	for(var/path in contains)
 		if(!path)

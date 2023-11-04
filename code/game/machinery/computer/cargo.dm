@@ -664,7 +664,7 @@ For vending packs, see vending_packs.dm*/
 				if(can_access(user.GetAccess(),list(),P.one_access))
 					has_access = TRUE
 
-		pack_data.Add(list(name = "[pack_name]", access = "[access_required]", has_access = "[has_access]", packicon = "[bicon(P.containertype)]", containsicon = "[bicon(P.containsicon)]", containsdesc = "[P.containsdesc]"))
+		pack_data.Add(list(name = "[pack_name]", access = "[access_required]", has_access = "[has_access]", packicon = "[bicon(P.containertype)]", containsicon = "[P.containsicon]", containsdesc = "[P.containsdesc]"))
 	return pack_data
 
 
@@ -932,7 +932,7 @@ For vending packs, see vending_packs.dm*/
 				if(can_access(user.GetAccess(),list(),P.one_access))
 					has_access = TRUE
 
-		pack_data.Add(list(name = "[pack_name]", access = "[access_required]", has_access = "[has_access]", packicon = "[bicon(P.containertype)]", containsicon = "[bicon(P.containsicon)]", containsdesc = "[P.containsdesc]"))
+		pack_data.Add(list(name = "[pack_name]", access = "[access_required]", has_access = "[has_access]", packicon = "[bicon(P.containertype)]", containsicon = "[P.containsicon]", containsdesc = "[P.containsdesc]"))
 	return pack_data
 
 #undef SCR_MAIN
