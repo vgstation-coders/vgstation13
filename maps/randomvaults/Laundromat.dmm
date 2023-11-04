@@ -582,7 +582,7 @@
 /turf/simulated/floor,
 /area/vault/laundromat)
 "Ny" = (
-/obj/effect/landmark/corpse/centcom,
+/obj/effect/landmark/corpse/cargotechnician,
 /turf/simulated/floor,
 /area/vault/laundromat)
 "Of" = (
