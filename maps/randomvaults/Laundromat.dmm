@@ -8,6 +8,7 @@
 /area/vault/laundromat)
 "ap" = (
 /obj/abstract/map/spawner/laundromat/clothing,
+/obj/item/weapon/stool,
 /turf/simulated/floor/glass,
 /area/vault/laundromat)
 "aw" = (
@@ -69,6 +70,15 @@
 /obj/structure/lattice,
 /turf/space,
 /area)
+"bA" = (
+/obj/structure/table/glass,
+/obj/item/weapon/paper_bin/blue{
+	pixel_y = 7
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
 "bO" = (
 /obj/structure/window/full/reinforced,
 /obj/structure/window/reinforced{
@@ -107,6 +117,12 @@
 	icon_state = "dark vault full"
 	},
 /area/vault/laundromat)
+"cY" = (
+/obj/machinery/washing_machine,
+/turf/simulated/floor{
+	icon_state = "whitehall"
+	},
+/area/vault/laundromat)
 "dt" = (
 /obj/structure/table/glass,
 /obj/item/weapon/storage/fancy/cigarettes/starlights{
@@ -133,6 +149,17 @@
 	},
 /turf/space,
 /area)
+"ee" = (
+/obj/structure/table/glass,
+/obj/item/weapon/storage/fancy/crayons{
+	pixel_x = -4;
+	pixel_y = 7
+	},
+/obj/item/weapon/storage/fancy/crayons,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
 "eR" = (
 /obj/effect/landmark/corpse/syndicatecommando,
 /turf/simulated/floor,
@@ -214,6 +241,7 @@
 /area/vault/laundromat)
 "kZ" = (
 /obj/effect/landmark/corpse/syndicateexec,
+/obj/item/weapon/stool,
 /turf/simulated/floor/glass,
 /area/vault/laundromat)
 "la" = (
@@ -247,6 +275,13 @@
 /obj/structure/grille,
 /turf/simulated/floor/plating,
 /area/vault/laundromat)
+"mA" = (
+/obj/structure/table/glass,
+/obj/abstract/map/spawner/laundromat/clothing,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
 "og" = (
 /turf/simulated/wall,
 /area/vault/laundromat)
@@ -255,6 +290,12 @@
 	icon_state = "whitecorner";
 	dir = 8
 	},
+/area/vault/laundromat)
+"qh" = (
+/obj/machinery/washing_machine,
+/obj/abstract/map/spawner/laundromat/clothing,
+/obj/machinery/washing_machine,
+/turf/simulated/floor/dark,
 /area/vault/laundromat)
 "qi" = (
 /obj/structure/window{
@@ -309,6 +350,15 @@
 	},
 /turf/simulated/floor,
 /area/vault/laundromat)
+"th" = (
+/obj/structure/ladder{
+	pixel_x = 1;
+	pixel_y = 1;
+	id = "laundromat_drug_lab";
+	height = 1
+	},
+/turf/simulated/floor/dark,
+/area/vault/laundromat)
 "tM" = (
 /obj/structure/catwalk{
 	icon_state = "catwalk1"
@@ -355,6 +405,7 @@
 /turf/simulated/floor/plating,
 /area/vault/laundromat)
 "wP" = (
+/obj/item/weapon/stool,
 /turf/simulated/floor/glass,
 /area/vault/laundromat)
 "yu" = (
@@ -400,6 +451,24 @@
 	},
 /turf/space,
 /area)
+"Cy" = (
+/obj/structure/table/glass,
+/obj/item/toy/crayon/rainbow,
+/obj/item/toy/crayon/rainbow{
+	pixel_y = 8
+	},
+/obj/item/weapon/paper{
+	pixel_x = 8;
+	pixel_y = -3
+	},
+/obj/item/weapon/paper{
+	pixel_x = -11;
+	pixel_y = 13
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
 "Dk" = (
 /obj/structure/grille,
 /obj/structure/window/full/reinforced,
@@ -477,6 +546,12 @@
 	icon_state = "dark vault full"
 	},
 /area/vault/laundromat)
+"Hc" = (
+/obj/structure/table/glass,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
 "He" = (
 /turf/simulated/floor{
 	dir = 1;
@@ -526,6 +601,15 @@
 	dir = 4
 	},
 /area/vault/laundromat)
+"KA" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/obj/abstract/map/spawner/laundromat/clothing,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
 "Lk" = (
 /obj/item/stack/sheet/mineral/plasma{
 	amount = 30
@@ -566,6 +650,7 @@
 /area/vault/laundromat)
 "LX" = (
 /obj/effect/landmark/corpse/captain,
+/obj/item/weapon/stool,
 /turf/simulated/floor/glass,
 /area/vault/laundromat)
 "Mh" = (
@@ -584,6 +669,10 @@
 "Ny" = (
 /obj/effect/landmark/corpse/cargotechnician,
 /turf/simulated/floor,
+/area/vault/laundromat)
+"NN" = (
+/obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen,
+/turf/simulated/wall,
 /area/vault/laundromat)
 "Of" = (
 /obj/effect/landmark/corpse,
@@ -635,6 +724,15 @@
 	icon_state = "dark vault full"
 	},
 /area/vault/laundromat)
+"RU" = (
+/obj/structure/ladder{
+	pixel_x = 1;
+	pixel_y = 1;
+	id = "laundromat_drug_lab";
+	height = 1
+	},
+/turf/space,
+/area)
 "Sz" = (
 /obj/structure/window{
 	dir = 1
@@ -857,17 +955,17 @@ sb
 sb
 bw
 og
-og
+NN
 US
 fg
 LA
 wP
-EY
+bA
 wP
 lf
-fg
+qh
 zW
-og
+NN
 og
 aY
 "}
@@ -884,12 +982,12 @@ Ov
 fg
 LA
 wP
-RS
+Cy
 wP
-lf
-fg
+cY
+th
 la
-TX
+KA
 og
 aY
 "}
@@ -906,7 +1004,7 @@ Ov
 fg
 LA
 wP
-RS
+ee
 LX
 lf
 fg
@@ -928,7 +1026,7 @@ Ov
 fg
 LA
 wP
-RS
+mA
 wP
 lf
 fg
@@ -949,9 +1047,9 @@ RS
 Mh
 sX
 He
-wP
+yX
 Xa
-wP
+yX
 pj
 sX
 Mh
@@ -993,9 +1091,9 @@ RS
 yX
 qi
 aa
-wP
+yX
 TX
-wP
+yX
 Gc
 qi
 yX
@@ -1016,7 +1114,7 @@ Ov
 fg
 LA
 kZ
-RS
+Hc
 wP
 lf
 fg
@@ -1038,7 +1136,7 @@ Ov
 fg
 LA
 wP
-RS
+mA
 ap
 lf
 fg
@@ -1060,14 +1158,14 @@ Ov
 fg
 LA
 wP
-RS
+Hc
 wP
 lf
 fg
 QX
 tP
 og
-aY
+RU
 "}
 (16,1,1) = {"
 aY
@@ -1077,17 +1175,17 @@ sb
 sb
 sb
 og
-og
+NN
 US
 fg
 LA
 wP
-EY
+Hc
 wP
 lf
 fg
 Sz
-og
+NN
 og
 aY
 "}
