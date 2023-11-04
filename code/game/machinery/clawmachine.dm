@@ -47,6 +47,18 @@
 	)
 
 	var/list/prizes_premium = list(
+		/obj/item/toy/plushie/fumo/clown,
+		/obj/item/toy/plushie/fumo/clownette,
+		/obj/item/toy/plushie/fumo/captain,
+		/obj/item/toy/plushie/fumo/librarian,
+		/obj/item/toy/plushie/fumo/mime,
+		/obj/item/toy/plushie/fumo/miner,
+		/obj/item/toy/plushie/fumo/nukeop,
+		/obj/item/toy/plushie/fumo/nurse,
+		/obj/item/toy/plushie/fumo/scientist,
+		/obj/item/toy/plushie/fumo/secofficer,
+		/obj/item/toy/plushie/fumo/vox,
+		/obj/item/toy/plushie/fumo/wizard,
 		/obj/item/toy/plushie/fumo/touhou/alice,
 		/obj/item/toy/plushie/fumo/touhou/cirno,
 		/obj/item/toy/plushie/fumo/touhou/marisa,

@@ -9,8 +9,8 @@
 	var/stuffed = TRUE //stuffing has to be removed before a grenade can be inserted
 	var/obj/item/weapon/grenade/grenade //the grenade, if the plush contains one
 	attack_verb = list("whomps", "bumps", "baps")
-	var/interact_sound //plays when the plushie is interacted with (attack_self etc.)
-	var/hug_sound = 'sound/weapons/thudswoosh.ogg' //plays when the plushie hugs someone
+	var/list/interact_sounds = list()//plays when the plushie is interacted with (attack_self etc.)
+	var/list/hug_sounds = list('sound/weapons/thudswoosh.ogg') //plays when the plushie hugs someone
 	var/death_sound //sound to play when the plushie is destroyed, e.g. in an explosion
 	autoignition_temperature = AUTOIGNITION_FABRIC
 
@@ -43,6 +43,7 @@
 /obj/item/toy/plushie/attack_self(mob/living/user)
 	. = ..()
 	if(stuffed || grenade)
+		var/interact_sound = pick(interact_sounds)
 		if(interact_sound)
 			playsound(src, interact_sound, 50, 1, -1)
 		user.visible_message("<span class='notice'>\The [user] plays with \the [src].</span>", "<span class='notice'>You play with \the [src].</span>")
@@ -55,6 +56,7 @@
 /obj/item/toy/plushie/attack(mob/living/M as mob, mob/living/user as mob)
 	if(user.a_intent != I_HELP)
 		return ..()
+	var/hug_sound = pick(hug_sounds)
 	if(hug_sound)
 		playsound(src, hug_sound, 50, 1, -1)
 	if(stuffed || grenade)
@@ -229,15 +231,65 @@
  * Fumos
  */
 
+/obj/item/toy/plushie/fumo/clown
+	name = "\improper fumo clown"
+	desc = "Made of authentic clown fabric and manufactured on the clown planet. It has a deadpan expression on its face."
+	icon_state = "clownfumo"
+
 /obj/item/toy/plushie/fumo/clownette
 	name = "\improper fumo clownette"
 	desc = "A female clown doll that will not accept your appeals. It has a smug expression on its face."
 	icon_state = "clownette"
 
+/obj/item/toy/plushie/fumo/captain
+	name = "\improper fumo captain"
+	desc = "A fumo-style doll depicting the captain. It has a deadpan expression on its face."
+	icon_state = "capfumo"
+
+/obj/item/toy/plushie/fumo/librarian
+	name = "\improper fumo librarian"
+	desc = "A stuffed doll depicting a nerdy librarian. It has a deadpan expression on its face."
+	icon_state = "libfumo"
+
+/obj/item/toy/plushie/fumo/mime
+	name = "\improper fumo mime"
+	desc = "..."
+	icon_state = "mimefumo"
+
+/obj/item/toy/plushie/fumo/miner
+	name = "\improper fumo miner"
+	desc = "The station's richest crew member depicted as a doll."
+	icon_state = "minerfumo"
+
+/obj/item/toy/plushie/fumo/nukeop
+	name = "\improper fumo nuclear operative"
+	desc = "A menacing doll in a blood-red hardsuit that should be kept away from the nuclear authentication disk. The label says it's manufactured by the Donk Corporation."
+	icon_state = "nukefumo"
+
+/obj/item/toy/plushie/fumo/nurse
+	name = "\improper fumo nurse"
+	desc = "A stuffed doll depicting a nurse. It has a smug expression on its face."
+	icon_state = "nursefumo"
+
+/obj/item/toy/plushie/fumo/scientist
+	name = "\improper fumo scientist"
+	desc = "A doll depicting a slime person scientist. It has a deadpan expression on its face."
+	icon_state = "scifumo"
+
+/obj/item/toy/plushie/fumo/secofficer
+	name = "\improper fumo security officer"
+	desc = "A female security officer depicted as a stuffed doll. It has a grumpy expression on its face."
+	icon_state = "secfumo"
+
 /obj/item/toy/plushie/fumo/vox
 	name = "\improper fumo vox"
 	desc = "A fumo-style doll depicting a vox trader in their trademark space suit. The label has several spelling mistakes on it."
-	icon_state = "vox"
+	icon_state = "voxfumo"
+
+/obj/item/toy/plushie/fumo/wizard
+	name = "\improper fumo wizard"
+	desc = "A stuffed doll depicting a space wizard. It has a smug expression on its face."
+	icon_state = "wizfumo"
 
 //Touhous
 /obj/item/toy/plushie/fumo/touhou
