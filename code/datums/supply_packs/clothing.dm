@@ -20,7 +20,7 @@
 	containername = "standard costumes crate"
 	access = list(access_theatre)
 	group = "Clothing"
-	containsdesc = "A set of replacement clown and mime costumes."
+	containsdesc = "A set of replacement clown and mime costumes, for when the originals mysteriously wind up lost in space alongside the person inside them. Includes a little bit of Nothing extra."
 
 /datum/supply_packs/spookycostume
 	name = "Halloween costumes"
