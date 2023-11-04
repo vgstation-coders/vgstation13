@@ -142,7 +142,7 @@ export const TgFontTarget = new Juke.Target({
   executes: () => yarn('tgfont:build'),
 });
 
-export const TguiTarget = new Juke.Target({
+export const vguiTarget = new Juke.Target({
   dependsOn: [YarnTarget],
   inputs: [
     'vgui/.yarn/install-target',
@@ -159,57 +159,57 @@ export const TguiTarget = new Juke.Target({
   executes: () => yarn('vgui:build'),
 });
 
-export const TguiEslintTarget = new Juke.Target({
+export const vguiEslintTarget = new Juke.Target({
   parameters: [CiParameter],
   dependsOn: [YarnTarget],
   executes: ({ get }) => yarn('vgui:lint', !get(CiParameter) && '--fix'),
 });
 
-export const TguiSonarTarget = new Juke.Target({
+export const vguiSonarTarget = new Juke.Target({
   dependsOn: [YarnTarget],
   executes: () => yarn('vgui:sonar'),
 });
 
-export const TguiTscTarget = new Juke.Target({
+export const vguiTscTarget = new Juke.Target({
   dependsOn: [YarnTarget],
   executes: () => yarn('vgui:tsc'),
 });
 
-export const TguiTestTarget = new Juke.Target({
+export const vguiTestTarget = new Juke.Target({
   parameters: [CiParameter],
   dependsOn: [YarnTarget],
   executes: ({ get }) => yarn(`vgui:test-${get(CiParameter) ? 'ci' : 'simple'}`),
 });
 
-export const TguiLintTarget = new Juke.Target({
-  dependsOn: [YarnTarget, TguiEslintTarget, TguiTscTarget],
+export const vguiLintTarget = new Juke.Target({
+  dependsOn: [YarnTarget, vguiEslintTarget, vguiTscTarget],
 });
 
-export const TguiDevTarget = new Juke.Target({
+export const vguiDevTarget = new Juke.Target({
   dependsOn: [YarnTarget],
   executes: ({ args }) => yarn('vgui:dev', ...args),
 });
 
-export const TguiAnalyzeTarget = new Juke.Target({
+export const vguiAnalyzeTarget = new Juke.Target({
   dependsOn: [YarnTarget],
   executes: () => yarn('vgui:analyze'),
 });
 
-export const TguiBenchTarget = new Juke.Target({
+export const vguiBenchTarget = new Juke.Target({
   dependsOn: [YarnTarget],
   executes: () => yarn('vgui:bench'),
 });
 
 export const TestTarget = new Juke.Target({
-  dependsOn: [DmTestTarget, TguiTestTarget],
+  dependsOn: [DmTestTarget, vguiTestTarget],
 });
 
 export const LintTarget = new Juke.Target({
-  dependsOn: [TguiLintTarget],
+  dependsOn: [vguiLintTarget],
 });
 
 export const BuildTarget = new Juke.Target({
-  dependsOn: [TguiTarget, DmTarget],
+  dependsOn: [vguiTarget, DmTarget],
 });
 
 export const ServerTarget = new Juke.Target({
@@ -224,7 +224,7 @@ export const AllTarget = new Juke.Target({
   dependsOn: [TestTarget, LintTarget, BuildTarget],
 });
 
-export const TguiCleanTarget = new Juke.Target({
+export const vguiCleanTarget = new Juke.Target({
   executes: async () => {
     Juke.rm('vgui/public/.tmp', { recursive: true });
     Juke.rm('vgui/public/*.map');
@@ -239,7 +239,7 @@ export const TguiCleanTarget = new Juke.Target({
 });
 
 export const CleanTarget = new Juke.Target({
-  dependsOn: [TguiCleanTarget],
+  dependsOn: [vguiCleanTarget],
   executes: async () => {
     Juke.rm('*.{dmb,rsc}');
     Juke.rm('*.mdme*');
@@ -273,7 +273,7 @@ const prependDefines = (...defines) => {
 };
 
 export const TgsTarget = new Juke.Target({
-  dependsOn: [TguiTarget],
+  dependsOn: [vguiTarget],
   executes: async () => {
     Juke.logger.info('Prepending TGS define');
     prependDefines('TGS');

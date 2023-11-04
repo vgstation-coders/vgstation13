@@ -46,7 +46,7 @@ var NanoTemplate = function () {
 					// dataType forces the incoming data to be parsed a certain way and this breaks on certain PCs
 					// or so it seems. Commenting it out may fix the issue since it leaves it up to ajax itself
 					// to determine what the input data is, based on the data itself. Please port everything
-					// TO TGUI ALREADY PLEASE END THIS STUPID BUG AAAAA
+					// TO VGUI ALREADY PLEASE END THIS STUPID BUG AAAAA
 					//dataType: 'html',
 					timeout: 1000
 				}))

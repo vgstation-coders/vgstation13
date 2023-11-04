@@ -9,7 +9,7 @@
 	var/pooled
 	var/pool_index
 	var/is_browser = FALSE
-	var/status = TGUI_WINDOW_CLOSED
+	var/status = VGUI_WINDOW_CLOSED
 	var/locked = FALSE
 	var/datum/vgui/locked_by
 	var/datum/subscriber_object
@@ -35,7 +35,7 @@
 	src.client.vgui_windows[id] = src
 	src.pooled = pooled
 	if(pooled)
-		src.pool_index = TGUI_WINDOW_INDEX(id)
+		src.pool_index = VGUI_WINDOW_INDEX(id)
 
 /**
  * public
@@ -59,7 +59,7 @@
 		return
 	src.inline_assets = inline_assets
 	src.fancy = fancy
-	status = TGUI_WINDOW_LOADING
+	status = VGUI_WINDOW_LOADING
 	fatally_errored = FALSE
 	// Build window options
 	var/options = "file=[id].html;can_minimize=0;auto_format=0;"
@@ -105,7 +105,7 @@
  * return bool
  */
 /datum/vgui_window/proc/is_ready()
-	return status == TGUI_WINDOW_READY
+	return status == VGUI_WINDOW_READY
 
 /**
  * public
@@ -118,8 +118,8 @@
 	return !fatally_errored \
 		&& pooled \
 		&& pool_index > 0 \
-		&& pool_index <= TGUI_WINDOW_SOFT_LIMIT \
-		&& status == TGUI_WINDOW_READY
+		&& pool_index <= VGUI_WINDOW_SOFT_LIMIT \
+		&& status == VGUI_WINDOW_READY
 
 /**
  * public
@@ -184,14 +184,14 @@
 		log_vgui(client,
 			context = "[id]/close (suspending)",
 			window = src)
-		status = TGUI_WINDOW_READY
+		status = VGUI_WINDOW_READY
 		send_message("suspend")
 		return
 	log_vgui(client,
 		context = "[id]/close",
 		window = src)
 	release_lock()
-	status = TGUI_WINDOW_CLOSED
+	status = VGUI_WINDOW_CLOSED
 	message_queue = null
 	// Do not close the window to give user some time
 	// to read the error message.
@@ -210,9 +210,9 @@
 /datum/vgui_window/proc/send_message(type, payload, force)
 	if(!client)
 		return
-	var/message = TGUI_CREATE_MESSAGE(type, payload)
+	var/message = VGUI_CREATE_MESSAGE(type, payload)
 	// Place into queue if window is still loading
-	if(!force && status != TGUI_WINDOW_READY)
+	if(!force && status != VGUI_WINDOW_READY)
 		if(!message_queue)
 			message_queue = list()
 		message_queue += list(message)
@@ -233,7 +233,7 @@
 	if(!client)
 		return
 	// Place into queue if window is still loading
-	if(!force && status != TGUI_WINDOW_READY)
+	if(!force && status != VGUI_WINDOW_READY)
 		if(!message_queue)
 			message_queue = list()
 		message_queue += list(message)
@@ -260,7 +260,7 @@
 	if(istype(instance, /datum/asset/spritesheet))
 		var/datum/asset/spritesheet/spritesheet = instance
 		send_message("asset/stylesheet", spritesheet.css_filename())
-	send_raw_message(TGUI_CREATE_MESSAGE("asset/mappings", instance.get_url_mappings()))
+	send_raw_message(VGUI_CREATE_MESSAGE("asset/mappings", instance.get_url_mappings()))
 
 /**
  * private
@@ -283,7 +283,7 @@
  */
 /datum/vgui_window/proc/on_message(type, payload, href_list)
 	// Status can be READY if user has refreshed the window.
-	if(type == "ready" && status == TGUI_WINDOW_READY)
+	if(type == "ready" && status == VGUI_WINDOW_READY)
 		// Resend the assets
 		for(var/asset in sent_assets)
 			send_asset(asset)
@@ -292,8 +292,8 @@
 	if(type == "log" && href_list["fatal"])
 		fatally_errored = TRUE
 	// Mark window as ready since we received this message from somewhere
-	if(status != TGUI_WINDOW_READY)
-		status = TGUI_WINDOW_READY
+	if(status != VGUI_WINDOW_READY)
+		status = VGUI_WINDOW_READY
 		flush_message_queue()
 	// Pass message to UI that requested the lock
 	if(locked && locked_by)

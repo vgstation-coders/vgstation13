@@ -150,7 +150,7 @@ var/list/asset_datums = list()
 	return
 
 // TG uses this to allow hosting files on external URLs and have pages load from there rather than the BYOND cache.
-// We don't do that so this is just here to facilitate porting tgui, and always returns the filename of the asset instead of a url.
+// We don't do that so this is just here to facilitate porting vgui, and always returns the filename of the asset instead of a url.
 /datum/asset/proc/get_url_mappings()
 	CRASH("not implemented")
 
@@ -443,17 +443,17 @@ var/list/asset_datums = list()
 		"v4shim.css"          = 'html/font-awesome/css/v4-shims.min.css'
 	)
 
-/datum/asset/simple/tgui
+/datum/asset/simple/vgui
 	assets = list(
-		"tgui.bundle.js" = file("tgui/public/tgui.bundle.js"),
-		"tgui.bundle.css" = file("tgui/public/tgui.bundle.css"),
+		"vgui.bundle.js" = file("vgui/public/vgui.bundle.js"),
+		"vgui.bundle.css" = file("vgui/public/vgui.bundle.css"),
 	)
 
 /datum/asset/simple/tgfont
 	assets = list(
-		"tgfont.eot" = file("tgui/packages/tgfont/static/tgfont.eot"),
-		"tgfont.woff2" = file("tgui/packages/tgfont/static/tgfont.woff2"),
-		"tgfont.css" = file("tgui/packages/tgfont/static/tgfont.css"),
+		"tgfont.eot" = file("vgui/packages/tgfont/static/tgfont.eot"),
+		"tgfont.woff2" = file("vgui/packages/tgfont/static/tgfont.woff2"),
+		"tgfont.css" = file("vgui/packages/tgfont/static/tgfont.css"),
 	)
 
 /datum/asset/simple/other_fonts

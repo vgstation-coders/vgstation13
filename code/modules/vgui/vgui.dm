@@ -251,7 +251,7 @@
 		close(can_be_suspended = FALSE)
 		return
 	// Validate ping
-	if(!initialized && world.time - opened_at > TGUI_PING_TIMEOUT)
+	if(!initialized && world.time - opened_at > VGUI_PING_TIMEOUT)
 		log_vgui(user, "Error: Zombie window detected, closing.",
 			window = window,
 			src_object = src_object)

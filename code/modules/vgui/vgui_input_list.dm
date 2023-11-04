@@ -1,11 +1,11 @@
 /**
- * Creates a TGUI input list window and returns the user's response.
+ * Creates a VGUI input list window and returns the user's response.
  *
  * This proc should be used to create alerts that the caller will wait for a response from.
  * Arguments:
  * * user - The user to show the input box to.
- * * message - The content of the input box, shown in the body of the TGUI window.
- * * title - The title of the input box, shown on the top of the TGUI window.
+ * * message - The content of the input box, shown in the body of the VGUI window.
+ * * title - The title of the input box, shown on the top of the VGUI window.
  * * buttons - The options that can be chosen by the user, each string is assigned a button on the UI.
  * * timeout - The timeout of the input box, after which the input box will close and qdel itself. Set to zero for no timeout.
  */
@@ -28,13 +28,13 @@
 		qdel(input)
 
 /**
- * Creates an asynchronous TGUI input list window with an associated callback.
+ * Creates an asynchronous VGUI input list window with an associated callback.
  *
  * This proc should be used to create inputs that invoke a callback with the user's chosen option.
  * Arguments:
  * * user - The user to show the input box to.
- * * message - The content of the input box, shown in the body of the TGUI window.
- * * title - The title of the input box, shown on the top of the TGUI window.
+ * * message - The content of the input box, shown in the body of the VGUI window.
+ * * title - The title of the input box, shown on the top of the VGUI window.
  * * buttons - The options that can be chosen by the user, each string is assigned a button on the UI.
  * * callback - The callback to be invoked when a choice is made.
  * * timeout - The timeout of the input box, after which the menu will close and qdel itself. Set to zero for no timeout.
@@ -56,15 +56,15 @@
 /**
  * # vgui_list_input
  *
- * Datum used for instantiating and using a TGUI-controlled list input that prompts the user with
+ * Datum used for instantiating and using a VGUI-controlled list input that prompts the user with
  * a message and shows a list of selectable options
  */
 /datum/vgui_list_input
-	/// The title of the TGUI window
+	/// The title of the VGUI window
 	var/title
-	/// The textual body of the TGUI window
+	/// The textual body of the VGUI window
 	var/message
-	/// The list of buttons (responses) provided on the TGUI window
+	/// The list of buttons (responses) provided on the VGUI window
 	var/list/buttons
 	/// Buttons (strings specifically) mapped to the actual value (e.g. a mob or a verb)
 	var/list/buttons_map

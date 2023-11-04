@@ -160,7 +160,7 @@
 /proc/log_vgui(user, message, context,
 		datum/vgui_window/window,
 		datum/src_object)
-	var/entry = list("TGUI: ")
+	var/entry = list("VGUI: ")
 	// Insert user info
 	if(!user)
 		entry += "<nobody>"

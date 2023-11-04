@@ -40,7 +40,7 @@
 #define SS_PRIORITY_BOTS           145
 #define SS_PRIORITY_COMPONENT      125
 #define SS_PRIORITY_NANOUI         120
-#define SS_PRIORITY_TGUI           115
+#define SS_PRIORITY_VGUI           115
 #define SS_PRIORITY_VOTE           110
 #define SS_PRIORITY_FAST_OBJECTS   105
 #define SS_PRIORITY_OBJECTS        100

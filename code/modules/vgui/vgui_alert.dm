@@ -1,11 +1,11 @@
 /**
- * Creates a TGUI alert window and returns the user's response.
+ * Creates a VGUI alert window and returns the user's response.
  *
  * This proc should be used to create alerts that the caller will wait for a response from.
  * Arguments:
  * * user - The user to show the alert to.
- * * message - The content of the alert, shown in the body of the TGUI window.
- * * title - The of the alert modal, shown on the top of the TGUI window.
+ * * message - The content of the alert, shown in the body of the VGUI window.
+ * * title - The of the alert modal, shown on the top of the VGUI window.
  * * buttons - The options that can be chosen by the user, each string is assigned a button on the UI.
  * * timeout - The timeout of the alert, after which the modal will close and qdel itself. Set to zero for no timeout.
  * * autofocus - The bool that controls if this alert should grab window focus.
@@ -27,13 +27,13 @@
 		qdel(alert)
 
 /**
- * Creates an asynchronous TGUI alert window with an associated callback.
+ * Creates an asynchronous VGUI alert window with an associated callback.
  *
  * This proc should be used to create alerts that invoke a callback with the user's chosen option.
  * Arguments:
  * * user - The user to show the alert to.
- * * message - The content of the alert, shown in the body of the TGUI window.
- * * title - The of the alert modal, shown on the top of the TGUI window.
+ * * message - The content of the alert, shown in the body of the VGUI window.
+ * * title - The of the alert modal, shown on the top of the VGUI window.
  * * buttons - The options that can be chosen by the user, each string is assigned a button on the UI.
  * * callback - The callback to be invoked when a choice is made.
  * * timeout - The timeout of the alert, after which the modal will close and qdel itself. Disabled by default, can be set to seconds otherwise.
@@ -54,15 +54,15 @@
 /**
  * # vgui_modal
  *
- * Datum used for instantiating and using a TGUI-controlled modal that prompts the user with
+ * Datum used for instantiating and using a VGUI-controlled modal that prompts the user with
  * a message and has buttons for responses.
  */
 /datum/vgui_modal
-	/// The title of the TGUI window
+	/// The title of the VGUI window
 	var/title
-	/// The textual body of the TGUI window
+	/// The textual body of the VGUI window
 	var/message
-	/// The list of buttons (responses) provided on the TGUI window
+	/// The list of buttons (responses) provided on the VGUI window
 	var/list/buttons
 	/// The button that the user has pressed, null if no selection has been made
 	var/choice

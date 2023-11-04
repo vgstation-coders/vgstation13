@@ -26,7 +26,7 @@ const createStats = verbose => ({
 
 module.exports = (env = {}, argv) => {
   const mode = argv.mode || 'production';
-  const bench = env.TGUI_BENCH;
+  const bench = env.VGUI_BENCH;
   const config = {
     mode: mode === 'production' ? 'production' : 'development',
     context: path.resolve(__dirname),

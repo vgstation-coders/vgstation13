@@ -9,7 +9,7 @@ var/datum/subsystem/vgui/SSvgui
 	name     = "vgui"
 	flags    = SS_FIRE_IN_LOBBY
 	wait     = 0.9 SECONDS
-	priority = SS_PRIORITY_TGUI
+	priority = SS_PRIORITY_VGUI
 
 	/// A list of UIs scheduled to process
 	var/list/current_run = list()
@@ -66,8 +66,8 @@ var/datum/subsystem/vgui/SSvgui
 	var/datum/vgui_window/window
 	var/window_found = FALSE
 	// Find a usable window
-	for(var/i in 1 to TGUI_WINDOW_HARD_LIMIT)
-		window_id = TGUI_WINDOW_ID(i)
+	for(var/i in 1 to VGUI_WINDOW_HARD_LIMIT)
+		window_id = VGUI_WINDOW_ID(i)
 		window = windows[window_id]
 		// As we are looping, create missing window datums
 		if(!window)
@@ -75,10 +75,10 @@ var/datum/subsystem/vgui/SSvgui
 		// Skip windows with acquired locks
 		if(window.locked)
 			continue
-		if(window.status == TGUI_WINDOW_READY)
+		if(window.status == VGUI_WINDOW_READY)
 			return window
-		if(window.status == TGUI_WINDOW_CLOSED)
-			window.status = TGUI_WINDOW_LOADING
+		if(window.status == VGUI_WINDOW_CLOSED)
+			window.status = VGUI_WINDOW_LOADING
 			window_found = TRUE
 			break
 	if(!window_found)
@@ -98,8 +98,8 @@ var/datum/subsystem/vgui/SSvgui
 	log_vgui(user, context = "SSvgui/force_close_all_windows")
 	if(user.client)
 		user.client.vgui_windows = list()
-		for(var/i in 1 to TGUI_WINDOW_HARD_LIMIT)
-			var/window_id = TGUI_WINDOW_ID(i)
+		for(var/i in 1 to VGUI_WINDOW_HARD_LIMIT)
+			var/window_id = VGUI_WINDOW_ID(i)
 			user << browse(null, "window=[window_id]")
 
 /**
