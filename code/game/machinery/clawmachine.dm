@@ -141,7 +141,42 @@
 		return 1
 	return 0
 
-/obj/machinery/claw_machine/proc/usage_check(var/mob/user as mob)
+/obj/machinery/claw_machine/attack_hand(mob/living/user as mob)
+	if(!isAdminGhost(usr) && (user.lying || user.incapacitated() || !Adjacent(user)))
+		return 0
+	if(stat & BROKEN)
+		to_chat(user, "<span class='warning'>\The [src] is broken! Replace the reinforced glass first.</span>")
+		return
+	if(stat & (NOPOWER|FORCEDISABLE))
+		to_chat(user, "<span class='warning'>\The [src] is dark and unresponsive.</span>")
+		return
+
+	//Telekinetic thievery requires focus, so you have to be next to the machine to see what you're doing
+	if((M_TK in user.mutations) && iscarbon(user))
+		to_chat(user, "<span class='notice'>You try to use your telekinetic powers to lift a plushie out of \the [src]...</span>")
+		if(!do_after(user, src, 20))
+			to_chat(user, "<span class='notice'>You get distracted and the plushie falls back in \the [src].</span>")
+			return
+		var/P
+		switch(rand(1, 20))
+			if(1)
+				to_chat(user, "<span class='danger'>You accidentally damage \the [src]!</span>")
+				visible_message("<span class='danger'>\The [src] rattles violently!</span>")
+				shake(1, 1)
+				playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
+				damaged()
+				return
+			if(2 to 16)
+				P = pick(prizes_standard)
+			else
+				P = pick(prizes_premium)
+		var/obj/item/toy/plushie/prize = new P(src.loc)
+		to_chat(user, "<span class='notice'>You manage to telekinetically carry \a [prize] into the winnings chute, and it falls out of the machine with a satisfying clank.</span>")
+		playsound(src, 'sound/machines/claw_machine_success.ogg', 50, 1)
+		return
+
+	add_fingerprint(user)
+	to_chat(user, "<span class='notice'>The display on the machine scrolls: \"INSERT CREDIT\".</span>")
 
 /obj/machinery/claw_machine/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	add_fingerprint(user)
@@ -158,8 +193,8 @@
 			to_chat(user, "<span class='warning'>\The [src] is broken! Replace the reinforced glass first.</span>")
 		return
 
-	if(stat & NOPOWER && !O.is_wrench(user))
-		to_chat(user, "<span class='warning'>\The [src] is unpowered!</span>")
+	if(stat & (NOPOWER|FORCEDISABLE) && !O.is_wrench(user))
+		to_chat(user, "<span class='warning'>\The [src] is dark and unresponsive.</span>")
 		return
 	if(busy)
 		to_chat(user, "<span class='notice'>\The [src] is already being used.</span>")
