@@ -41,14 +41,14 @@
 	transmitting = FALSE
 	set_light(0)
 	update_icon()
-	SStgui.update_uis(src)
+	SSvgui.update_uis(src)
 	spawn(120 SECONDS)
 		emped = FALSE
 		update_icon()
-		SStgui.update_uis(src)
+		SSvgui.update_uis(src)
 
 /obj/item/device/pcmc/attack_self(mob/user)
-	tgui_interact(user)
+	vgui_interact(user)
 
 /obj/item/device/pcmc/examine(mob/user)
 	if(Adjacent(user) || isobserver(user))
@@ -166,9 +166,9 @@
 				crewlist += list(data)
 	return crewlist
 
-// Begin tgui
-/obj/item/device/pcmc/tgui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
+// Begin vgui
+/obj/item/device/pcmc/vgui_interact(mob/user, datum/vgui/ui)
+	ui = SSvgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "PCMC")
 		ui.open()
@@ -189,7 +189,7 @@
 	data["fullmode"] = fullmode
 	return data
 
-/obj/item/device/pcmc/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+/obj/item/device/pcmc/ui_act(action, list/params, datum/vgui/ui, datum/ui_state/state)
 	if(..())
 		return
 	switch(action)
@@ -216,7 +216,7 @@
 				return TRUE
 			else
 				return FALSE
-// end tgui
+// end vgui
 
 /obj/item/device/pcmc/paramed
 	name = "Vito-tron"

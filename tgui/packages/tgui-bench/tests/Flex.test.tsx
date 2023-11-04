@@ -1,5 +1,5 @@
-import { Flex } from 'tgui/components';
-import { createRenderer } from 'tgui/renderer';
+import { Flex } from 'vgui/components';
+import { createRenderer } from 'vgui/renderer';
 
 const render = createRenderer();
 

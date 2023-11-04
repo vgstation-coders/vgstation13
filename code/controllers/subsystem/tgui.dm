@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: MIT
  */
 
-var/datum/subsystem/tgui/SStgui
+var/datum/subsystem/vgui/SSvgui
 
-/datum/subsystem/tgui
-	name     = "tgui"
+/datum/subsystem/vgui
+	name     = "vgui"
 	flags    = SS_FIRE_IN_LOBBY
 	wait     = 0.9 SECONDS
 	priority = SS_PRIORITY_TGUI
@@ -20,26 +20,26 @@ var/datum/subsystem/tgui/SStgui
 	/// The HTML base used for all UIs.
 	var/basehtml
 
-/datum/subsystem/tgui/New()
-	NEW_SS_GLOBAL(SStgui)
+/datum/subsystem/vgui/New()
+	NEW_SS_GLOBAL(SSvgui)
 
-/datum/subsystem/tgui/Initialize(timeofday)
-	basehtml = file2text('tgui/public/tgui.html')
+/datum/subsystem/vgui/Initialize(timeofday)
+	basehtml = file2text('vgui/public/vgui.html')
 	..()
 
-/datum/subsystem/tgui/Shutdown()
+/datum/subsystem/vgui/Shutdown()
 	close_all_uis()
 
-/datum/subsystem/tgui/stat_entry()
+/datum/subsystem/vgui/stat_entry()
 	..("P:[length(open_uis)]")
 
-/datum/subsystem/tgui/fire(resumed = FALSE)
+/datum/subsystem/vgui/fire(resumed = FALSE)
 	if(!resumed)
 		src.current_run = open_uis.Copy()
 	// Cache for sanic speed (lists are references anyways)
 	var/list/current_run = src.current_run
 	while(current_run.len)
-		var/datum/tgui/ui = current_run[current_run.len]
+		var/datum/vgui/ui = current_run[current_run.len]
 		current_run.len--
 		// TODO: Move user/src_object check to process()
 		if(ui?.user && ui.src_object)
@@ -52,18 +52,18 @@ var/datum/subsystem/tgui/SStgui
 /**
  * public
  *
- * Requests a usable tgui window from the pool.
+ * Requests a usable vgui window from the pool.
  * Returns null if pool was exhausted.
  *
  * required user mob
- * return datum/tgui
+ * return datum/vgui
  */
-/datum/subsystem/tgui/proc/request_pooled_window(mob/user)
+/datum/subsystem/vgui/proc/request_pooled_window(mob/user)
 	if(!user.client)
 		return null
-	var/list/windows = user.client.tgui_windows
+	var/list/windows = user.client.vgui_windows
 	var/window_id
-	var/datum/tgui_window/window
+	var/datum/vgui_window/window
 	var/window_found = FALSE
 	// Find a usable window
 	for(var/i in 1 to TGUI_WINDOW_HARD_LIMIT)
@@ -82,22 +82,22 @@ var/datum/subsystem/tgui/SStgui
 			window_found = TRUE
 			break
 	if(!window_found)
-		log_tgui(user, "Error: Pool exhausted",
-			context = "SStgui/request_pooled_window")
+		log_vgui(user, "Error: Pool exhausted",
+			context = "SSvgui/request_pooled_window")
 		return null
 	return window
 
 /**
  * public
  *
- * Force closes all tgui windows.
+ * Force closes all vgui windows.
  *
  * required user mob
  */
-/datum/subsystem/tgui/proc/force_close_all_windows(mob/user)
-	log_tgui(user, context = "SStgui/force_close_all_windows")
+/datum/subsystem/vgui/proc/force_close_all_windows(mob/user)
+	log_vgui(user, context = "SSvgui/force_close_all_windows")
 	if(user.client)
-		user.client.tgui_windows = list()
+		user.client.vgui_windows = list()
 		for(var/i in 1 to TGUI_WINDOW_HARD_LIMIT)
 			var/window_id = TGUI_WINDOW_ID(i)
 			user << browse(null, "window=[window_id]")
@@ -105,15 +105,15 @@ var/datum/subsystem/tgui/SStgui
 /**
  * public
  *
- * Force closes the tgui window by window_id.
+ * Force closes the vgui window by window_id.
  *
  * required user mob
  * required window_id string
  */
-/datum/subsystem/tgui/proc/force_close_window(mob/user, window_id)
-	log_tgui(user, context = "SStgui/force_close_window")
-	// Close all tgui datums based on window_id.
-	for(var/datum/tgui/ui in user.tgui_open_uis)
+/datum/subsystem/vgui/proc/force_close_window(mob/user, window_id)
+	log_vgui(user, context = "SSvgui/force_close_window")
+	// Close all vgui datums based on window_id.
+	for(var/datum/vgui/ui in user.vgui_open_uis)
 		if(ui.window && ui.window.id == window_id)
 			ui.close(can_be_suspended = FALSE)
 	// Unset machine just to be sure.
@@ -128,15 +128,15 @@ var/datum/subsystem/tgui/SStgui
  *
  * required user mob The mob who opened/is using the UI.
  * required src_object datum The object/datum which owns the UI.
- * optional ui datum/tgui The UI to be updated, if it exists.
+ * optional ui datum/vgui The UI to be updated, if it exists.
  * optional force_open bool If the UI should be re-opened instead of updated.
  *
- * return datum/tgui The found UI.
+ * return datum/vgui The found UI.
  */
-/datum/subsystem/tgui/proc/try_update_ui(
+/datum/subsystem/vgui/proc/try_update_ui(
 		mob/user,
 		datum/src_object,
-		datum/tgui/ui)
+		datum/vgui/ui)
 	// Look up a UI if it wasn't passed
 	if(isnull(ui))
 		ui = get_open_ui(user, src_object)
@@ -161,14 +161,14 @@ var/datum/subsystem/tgui/SStgui
  * required user mob The mob who opened/is using the UI.
  * required src_object datum The object/datum which owns the UI.
  *
- * return datum/tgui The found UI.
+ * return datum/vgui The found UI.
  */
-/datum/subsystem/tgui/proc/get_open_ui(mob/user, datum/src_object)
+/datum/subsystem/vgui/proc/get_open_ui(mob/user, datum/src_object)
 	var/key = "[ref(src_object)]"
 	// No UIs opened for this src_object
 	if(isnull(open_uis_by_src[key]) || !istype(open_uis_by_src[key], /list))
 		return null
-	for(var/datum/tgui/ui in open_uis_by_src[key])
+	for(var/datum/vgui/ui in open_uis_by_src[key])
 		// Make sure we have the right user
 		if(ui.user == user)
 			return ui
@@ -183,13 +183,13 @@ var/datum/subsystem/tgui/SStgui
  *
  * return int The number of UIs updated.
  */
-/datum/subsystem/tgui/proc/update_uis(datum/src_object)
+/datum/subsystem/vgui/proc/update_uis(datum/src_object)
 	var/count = 0
 	var/key = "[ref(src_object)]"
 	// No UIs opened for this src_object
 	if(isnull(open_uis_by_src[key]) || !istype(open_uis_by_src[key], /list))
 		return count
-	for(var/datum/tgui/ui in open_uis_by_src[key])
+	for(var/datum/vgui/ui in open_uis_by_src[key])
 		// Check if UI is valid.
 		if(ui?.src_object && ui.user && ui.src_object.ui_host(ui.user))
 			ui.process(wait * 0.1, force = 1)
@@ -205,13 +205,13 @@ var/datum/subsystem/tgui/SStgui
  *
  * return int The number of UIs closed.
  */
-/datum/subsystem/tgui/proc/close_uis(datum/src_object)
+/datum/subsystem/vgui/proc/close_uis(datum/src_object)
 	var/count = 0
 	var/key = "[ref(src_object)]"
 	// No UIs opened for this src_object
 	if(isnull(open_uis_by_src[key]) || !istype(open_uis_by_src[key], /list))
 		return count
-	for(var/datum/tgui/ui in open_uis_by_src[key])
+	for(var/datum/vgui/ui in open_uis_by_src[key])
 		// Check if UI is valid.
 		if(ui?.src_object && ui.user && ui.src_object.ui_host(ui.user))
 			ui.close()
@@ -225,10 +225,10 @@ var/datum/subsystem/tgui/SStgui
  *
  * return int The number of UIs closed.
  */
-/datum/subsystem/tgui/proc/close_all_uis()
+/datum/subsystem/vgui/proc/close_all_uis()
 	var/count = 0
 	for(var/key in open_uis_by_src)
-		for(var/datum/tgui/ui in open_uis_by_src[key])
+		for(var/datum/vgui/ui in open_uis_by_src[key])
 			// Check if UI is valid.
 			if(ui?.src_object && ui.user && ui.src_object.ui_host(ui.user))
 				ui.close()
@@ -245,11 +245,11 @@ var/datum/subsystem/tgui/SStgui
  *
  * return int The number of UIs updated.
  */
-/datum/subsystem/tgui/proc/update_user_uis(mob/user, datum/src_object)
+/datum/subsystem/vgui/proc/update_user_uis(mob/user, datum/src_object)
 	var/count = 0
-	if(length(user?.tgui_open_uis) == 0)
+	if(length(user?.vgui_open_uis) == 0)
 		return count
-	for(var/datum/tgui/ui in user.tgui_open_uis)
+	for(var/datum/vgui/ui in user.vgui_open_uis)
 		if(isnull(src_object) || ui.src_object == src_object)
 			ui.process(wait * 0.1, force = 1)
 			count++
@@ -265,11 +265,11 @@ var/datum/subsystem/tgui/SStgui
  *
  * return int The number of UIs closed.
  */
-/datum/subsystem/tgui/proc/close_user_uis(mob/user, datum/src_object)
+/datum/subsystem/vgui/proc/close_user_uis(mob/user, datum/src_object)
 	var/count = 0
-	if(length(user?.tgui_open_uis) == 0)
+	if(length(user?.vgui_open_uis) == 0)
 		return count
-	for(var/datum/tgui/ui in user.tgui_open_uis)
+	for(var/datum/vgui/ui in user.vgui_open_uis)
 		if(isnull(src_object) || ui.src_object == src_object)
 			ui.close()
 			count++
@@ -280,13 +280,13 @@ var/datum/subsystem/tgui/SStgui
  *
  * Add a UI to the list of open UIs.
  *
- * required ui datum/tgui The UI to be added.
+ * required ui datum/vgui The UI to be added.
  */
-/datum/subsystem/tgui/proc/on_open(datum/tgui/ui)
+/datum/subsystem/vgui/proc/on_open(datum/vgui/ui)
 	var/key = "[ref(ui.src_object)]"
 	if(isnull(open_uis_by_src[key]) || !istype(open_uis_by_src[key], /list))
 		open_uis_by_src[key] = list()
-	ui.user.tgui_open_uis |= ui
+	ui.user.vgui_open_uis |= ui
 	var/list/uis = open_uis_by_src[key]
 	uis |= ui
 	open_uis |= ui
@@ -296,11 +296,11 @@ var/datum/subsystem/tgui/SStgui
  *
  * Remove a UI from the list of open UIs.
  *
- * required ui datum/tgui The UI to be removed.
+ * required ui datum/vgui The UI to be removed.
  *
  * return bool If the UI was removed or not.
  */
-/datum/subsystem/tgui/proc/on_close(datum/tgui/ui)
+/datum/subsystem/vgui/proc/on_close(datum/vgui/ui)
 	var/key = "[ref(ui.src_object)]"
 	if(isnull(open_uis_by_src[key]) || !istype(open_uis_by_src[key], /list))
 		return FALSE
@@ -308,7 +308,7 @@ var/datum/subsystem/tgui/SStgui
 	open_uis.Remove(ui)
 	// If the user exists, remove it from them too.
 	if(ui.user)
-		ui.user.tgui_open_uis.Remove(ui)
+		ui.user.vgui_open_uis.Remove(ui)
 	var/list/uis = open_uis_by_src[key]
 	uis.Remove(ui)
 	if(length(uis) == 0)
@@ -324,7 +324,7 @@ var/datum/subsystem/tgui/SStgui
  *
  * return int The number of UIs closed.
  */
-/datum/subsystem/tgui/proc/on_logout(mob/user)
+/datum/subsystem/vgui/proc/on_logout(mob/user)
 	close_user_uis(user)
 
 /**
@@ -337,17 +337,17 @@ var/datum/subsystem/tgui/SStgui
  *
  * return bool If the UIs were transferred.
  */
-/datum/subsystem/tgui/proc/on_transfer(mob/source, mob/target)
+/datum/subsystem/vgui/proc/on_transfer(mob/source, mob/target)
 	// The old mob had no open UIs.
-	if(length(source?.tgui_open_uis) == 0)
+	if(length(source?.vgui_open_uis) == 0)
 		return FALSE
-	if(isnull(target.tgui_open_uis) || !istype(target.tgui_open_uis, /list))
-		target.tgui_open_uis = list()
+	if(isnull(target.vgui_open_uis) || !istype(target.vgui_open_uis, /list))
+		target.vgui_open_uis = list()
 	// Transfer all the UIs.
-	for(var/datum/tgui/ui in source.tgui_open_uis)
+	for(var/datum/vgui/ui in source.vgui_open_uis)
 		// Inform the UIs of their new owner.
 		ui.user = target
-		target.tgui_open_uis.Add(ui)
+		target.vgui_open_uis.Add(ui)
 	// Clear the old list.
-	source.tgui_open_uis.Cut()
+	source.vgui_open_uis.Cut()
 	return TRUE

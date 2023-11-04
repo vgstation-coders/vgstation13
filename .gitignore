@@ -75,5 +75,5 @@ cfg
 # Thumbs.db (windows image caching)
 Thumbs.db
 
-# Bootstrapped node installation for the tgui build system
+# Bootstrapped node installation for the vgui build system
 .cache

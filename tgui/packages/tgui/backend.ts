@@ -211,13 +211,13 @@ export const backendMiddleware = store => {
 };
 
 /**
- * Sends a message to /datum/tgui_window.
+ * Sends a message to /datum/vgui_window.
  */
 export const sendMessage = (message: any = {}) => {
   const { payload, ...rest } = message;
   const data: any = {
     // Message identifying header
-    tgui: 1,
+    vgui: 1,
     window_id: window.__windowId__,
     // Message body
     ...rest,
@@ -230,7 +230,7 @@ export const sendMessage = (message: any = {}) => {
 };
 
 /**
- * Sends an action to `ui_act` on `src_object` that this tgui window
+ * Sends an action to `ui_act` on `src_object` that this vgui window
  * is associated with.
  */
 export const sendAct = (action: string, payload: object = {}) => {
@@ -283,7 +283,7 @@ export const selectBackend = <TData>(state: any): BackendState<TData> => (
 );
 
 /**
- * A React hook (sort of) for getting tgui state and related functions.
+ * A React hook (sort of) for getting vgui state and related functions.
  *
  * This is supposed to be replaced with a real React Hook, which can only
  * be used in functional components.

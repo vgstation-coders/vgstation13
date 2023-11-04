@@ -38,14 +38,14 @@
 	closed = TRUE
 	qdel(src)
 
-/datum/religion_ui/tgui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
+/datum/religion_ui/vgui_interact(mob/user, datum/vgui/ui)
+	ui = SSvgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "ChooseReligion")
 		ui.set_autoupdate(FALSE)
 		ui.open()
 
-/datum/religion_ui/ui_act(action, params, datum/tgui/ui)
+/datum/religion_ui/ui_act(action, params, datum/vgui/ui)
 	. = ..()
 	if(.)
 		return
@@ -54,10 +54,10 @@
 	choice = params
 	ui.close()
 
-var/list/tgui_religion_data
+var/list/vgui_religion_data
 
 /datum/religion_ui/ui_static_data(mob/user)
-	if(!tgui_religion_data)
+	if(!vgui_religion_data)
 		var/list/data = list("religions" = list(), "bibleStyles" = list())
 
 		var/list/data_religions = data["religions"]
@@ -92,8 +92,8 @@ var/list/tgui_religion_data
 				"name" = name,
 				"iconName" = icon_name
 			))
-		tgui_religion_data = data
-	return tgui_religion_data
+		vgui_religion_data = data
+	return vgui_religion_data
 
 /proc/get_religion_by_name(name)
 	for(var/entry in subtypesof(/datum/religion))
@@ -104,7 +104,7 @@ var/list/tgui_religion_data
 
 /proc/ChooseReligion(mob/living/carbon/human/user)
 	var/datum/religion_ui/ui = new
-	ui.tgui_interact(user)
+	ui.vgui_interact(user)
 	ui.wait()
 
 	var/list/data = ui.choice
@@ -150,7 +150,7 @@ var/list/tgui_religion_data
 	new_religion.OnPostActivation()
 	if(ticker)
 		ticker.religions += new_religion
-	SStgui.close_uis(ui)
+	SSvgui.close_uis(ui)
 	qdel(ui)
 
 /datum/religion/proc/spawn_bible(atom/where)

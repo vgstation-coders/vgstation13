@@ -155,10 +155,10 @@
 		return "(nullspace)"
 
 /**
- * Appends a tgui-related log entry. All arguments are optional.
+ * Appends a vgui-related log entry. All arguments are optional.
  */
-/proc/log_tgui(user, message, context,
-		datum/tgui_window/window,
+/proc/log_vgui(user, message, context,
+		datum/vgui_window/window,
 		datum/src_object)
 	var/entry = list("TGUI: ")
 	// Insert user info

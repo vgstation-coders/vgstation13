@@ -111,7 +111,7 @@
 		// Search for people looking at camera monitors
 		for(var/obj/machinery/computer/security/monitor in tv_monitors)
 			// This is greater than 0 if someone is looking at this console
-			if(length(SStgui.open_uis_by_src[ref(monitor)]))
+			if(length(SSvgui.open_uis_by_src[ref(monitor)]))
 				// cam_screen.vis_contents contains all turfs the selected camera is currently looking at
 				if(our_turf in monitor.cam_screen.vis_contents)
 					src.detected |= DETECT_AI

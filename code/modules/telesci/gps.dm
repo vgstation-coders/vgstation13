@@ -53,15 +53,15 @@ var/list/all_GPS_list = list()
 	emped = TRUE
 	transmitting = FALSE
 	update_icon()
-	SStgui.update_uis(src)
+	SSvgui.update_uis(src)
 	spawn(30 SECONDS)
 		emped = FALSE
 		update_icon()
-		SStgui.update_uis(src)
+		SSvgui.update_uis(src)
 
 /obj/item/device/gps/attack_self(mob/user)
-	if(user.client.prefs.tgui_fancy)
-		tgui_interact(user)
+	if(user.client.prefs.vgui_fancy)
+		vgui_interact(user)
 	else
 		ui_interact(user)
 
@@ -91,9 +91,9 @@ var/list/all_GPS_list = list()
 	else
 		return "[format_text(device_area.name)] ([device_turf.x-WORLD_X_OFFSET[device_turf.z]], [device_turf.y-WORLD_Y_OFFSET[device_turf.z]], [device_turf.z])"
 
-// Begin tgui
-/obj/item/device/gps/tgui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
+// Begin vgui
+/obj/item/device/gps/vgui_interact(mob/user, datum/vgui/ui)
+	ui = SSvgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "Gps")
 		ui.open()
@@ -123,7 +123,7 @@ var/list/all_GPS_list = list()
 	data["devices"] = devices
 	return data
 
-/obj/item/device/gps/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+/obj/item/device/gps/ui_act(action, list/params, datum/vgui/ui, datum/ui_state/state)
 	if(..())
 		return
 	switch(action)
@@ -152,7 +152,7 @@ var/list/all_GPS_list = list()
 		if("toggle_refresh")
 			autorefreshing = !autorefreshing
 			return TRUE
-// end tgui
+// end vgui
 
 // Begin NanoUI
 /obj/item/device/gps/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)

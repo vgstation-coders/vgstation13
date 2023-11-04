@@ -40,7 +40,7 @@ export const captureExternalLinks = () => {
     }
     // Open the link
     Byond.topic({
-      tgui: 1,
+      vgui: 1,
       window_id: window.__windowId__,
       type: 'openLink',
       url,

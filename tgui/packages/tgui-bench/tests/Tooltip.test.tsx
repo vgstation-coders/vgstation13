@@ -1,5 +1,5 @@
-import { Box, Tooltip } from "tgui/components";
-import { createRenderer } from "tgui/renderer";
+import { Box, Tooltip } from "vgui/components";
+import { createRenderer } from "vgui/renderer";
 
 const render = createRenderer();
 

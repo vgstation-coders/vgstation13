@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "tgui-polyfill",
+  "name": "vgui-polyfill",
   "version": "4.3.0",
   "dependencies": {
     "core-js": "^3.16.1",

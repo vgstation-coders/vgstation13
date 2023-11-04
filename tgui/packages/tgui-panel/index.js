@@ -10,11 +10,11 @@ import './styles/themes/light.scss';
 
 import { perf } from 'common/perf';
 import { combineReducers } from 'common/redux';
-import { setupHotReloading } from 'tgui-dev-server/link/client.cjs';
-import { setupGlobalEvents } from 'tgui/events';
-import { captureExternalLinks } from 'tgui/links';
-import { createRenderer } from 'tgui/renderer';
-import { configureStore, StoreProvider } from 'tgui/store';
+import { setupHotReloading } from 'vgui-dev-server/link/client.cjs';
+import { setupGlobalEvents } from 'vgui/events';
+import { captureExternalLinks } from 'vgui/links';
+import { createRenderer } from 'vgui/renderer';
+import { configureStore, StoreProvider } from 'vgui/store';
 import { audioMiddleware, audioReducer } from './audio';
 import { chatMiddleware, chatReducer } from './chat';
 import { gameMiddleware, gameReducer } from './game';

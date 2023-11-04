@@ -5,15 +5,15 @@
 <meta charset="utf-8">
 
 <!-- Inlined data -->
-<meta id="tgui:windowId" content="[tgui:windowId]">
+<meta id="vgui:windowId" content="[vgui:windowId]">
 
 <!-- Early setup -->
 <script type="text/javascript">
 // Read window id into a global
 window.__windowId__ = document
-  .getElementById('tgui:windowId')
+  .getElementById('vgui:windowId')
   .getAttribute('content');
-if (window.__windowId__ === '[' + 'tgui:windowId' + ']') {
+if (window.__windowId__ === '[' + 'vgui:windowId' + ']') {
   window.__windowId__ = null;
 }
 
@@ -354,7 +354,7 @@ window.onerror = function (msg, url, line, col, error) {
   setInterval(setFatalErrorGeometry, 1000);
   // Send logs to the game server
   Byond.topic({
-    tgui: 1,
+    vgui: 1,
     window_id: window.__windowId__,
     type: 'log',
     fatal: 1,
@@ -390,7 +390,7 @@ window.update = function (message) {
   window.__updateQueue__.push(message);
 };
 Byond.topic({
-  tgui: 1,
+  vgui: 1,
   window_id: window.__windowId__,
   type: 'ready',
 });
@@ -530,12 +530,12 @@ if (!Array.prototype['forEach']) {
 <body>
 
 <!-- Inline assets -->
-<!-- tgui:assets -->
+<!-- vgui:assets -->
 
 <!-- Inline HTML -->
-<!-- tgui:html -->
+<!-- vgui:html -->
 
-<!-- tgui container -->
+<!-- vgui container -->
 <div id="react-root"></div>
 
 <!-- Fatal error container -->

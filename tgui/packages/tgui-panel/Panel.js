@@ -4,8 +4,8 @@
  * @license MIT
  */
 
-import { Button, Section, Stack } from 'tgui/components';
-import { Pane } from 'tgui/layouts';
+import { Button, Section, Stack } from 'vgui/components';
+import { Pane } from 'vgui/layouts';
 import { NowPlayingWidget, useAudio } from './audio';
 import { ChatPanel, ChatTabs } from './chat';
 import { useGame } from './game';
@@ -24,7 +24,7 @@ export const Panel = (props, context) => {
   const settings = useSettings(context);
   const game = useGame(context);
   if (process.env.NODE_ENV !== 'production') {
-    const { useDebug, KitchenSink } = require('tgui/debug');
+    const { useDebug, KitchenSink } = require('vgui/debug');
     const debug = useDebug(context);
     if (debug.kitchenSink) {
       return (

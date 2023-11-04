@@ -32,13 +32,13 @@ module.exports = (env = {}, argv) => {
     context: path.resolve(__dirname),
     target: ['web', 'es3', 'browserslist:ie 8'],
     entry: {
-      'tgui': [
-        './packages/tgui-polyfill',
-        './packages/tgui',
+      'vgui': [
+        './packages/vgui-polyfill',
+        './packages/vgui',
       ],
-      'tgui-panel': [
-        './packages/tgui-polyfill',
-        './packages/tgui-panel',
+      'vgui-panel': [
+        './packages/vgui-polyfill',
+        './packages/vgui-panel',
       ],
     },
     output: {
@@ -129,9 +129,9 @@ module.exports = (env = {}, argv) => {
 
   if (bench) {
     config.entry = {
-      'tgui-bench': [
-        './packages/tgui-polyfill',
-        './packages/tgui-bench/entrypoint',
+      'vgui-bench': [
+        './packages/vgui-polyfill',
+        './packages/vgui-bench/entrypoint',
       ],
     };
   }

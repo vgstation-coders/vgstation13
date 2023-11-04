@@ -70,7 +70,7 @@ export const canRender = (value: unknown) => {
 };
 
 /**
- * A common case in tgui, when you pass a value conditionally, these are
+ * A common case in vgui, when you pass a value conditionally, these are
  * the types that can fall through the condition.
  */
 export type BooleanLike = number | boolean | null | undefined;

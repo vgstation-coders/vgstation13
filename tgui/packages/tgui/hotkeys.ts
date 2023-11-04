@@ -192,7 +192,7 @@ export const setupHotKeys = () => {
 /**
  * Registers for any key events, such as key down or key up.
  * This should be preferred over directly connecting to keydown/keyup
- * as it lets tgui prevent the key from reaching BYOND.
+ * as it lets vgui prevent the key from reaching BYOND.
  *
  * If using in a component, prefer KeyListener, which automatically handles
  * stopping listening when unmounting.

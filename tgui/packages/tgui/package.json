@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "tgui",
+  "name": "vgui",
   "version": "4.3.0",
   "dependencies": {
     "@popperjs/core": "^2.9.3",
@@ -11,7 +11,7 @@
     "inferno-vnode-flags": "^7.4.8",
     "js-yaml": "^4.1.0",
     "marked": "^4.0.10",
-    "tgui-dev-server": "workspace:*",
-    "tgui-polyfill": "workspace:*"
+    "vgui-dev-server": "workspace:*",
+    "vgui-polyfill": "workspace:*"
   }
 }

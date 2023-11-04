@@ -4,7 +4,7 @@
  * @license MIT
  */
 
-import { createLogger } from 'tgui/logging';
+import { createLogger } from 'vgui/logging';
 
 const logger = createLogger('AudioPlayer');
 

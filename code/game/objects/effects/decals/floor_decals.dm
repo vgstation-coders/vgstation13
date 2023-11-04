@@ -39,7 +39,7 @@
 	desc = "White holographic lines hovering above the ground. If your sense of direction is under average, just follow the Nanotrasen-approved Maintenance Path Indicator to never get lost again. Nanotrasen declines all responsibility if you decide to stray off the path indicated by the Nanotrasen-approved Maintenance Path Indicator."
 
 	icon = 'icons/effects/floor_decals.dmi'
-	icon_state = "maintguide"
+	icon_state = "mainvguide"
 	anchored = 1  //Otherwise people move them using crates
 
 //Old parts of the station are not shielded against radiations, but don't blink because they lack power. Those big ass warnings should be enough to inform people.

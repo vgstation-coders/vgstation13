@@ -21,10 +21,10 @@
 	if(.)
 		return
 
-	tgui_interact(user)
+	vgui_interact(user)
 
-/obj/machinery/computer/merch/tgui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
+/obj/machinery/computer/merch/vgui_interact(mob/user, datum/vgui/ui)
+	ui = SSvgui.try_update_ui(user, src, ui)
 	if(!ui)
 		ui = new(user, src, "Merch")
 		ui.set_autoupdate(FALSE)

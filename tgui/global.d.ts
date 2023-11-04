@@ -139,7 +139,7 @@ type ByondType = {
 
 /**
  * Object that provides access to Byond Skin API and is available in
- * any tgui application.
+ * any vgui application.
  */
 const Byond: ByondType;
 

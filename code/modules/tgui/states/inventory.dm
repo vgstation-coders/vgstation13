@@ -4,7 +4,7 @@
  */
 
 /**
- * tgui state: inventory_state
+ * vgui state: inventory_state
  *
  * Checks that the src_object is in the user's top-level
  * (hand, ear, pocket, belt, etc) inventory.

@@ -117,12 +117,12 @@ export const DmTestTarget = new Juke.Target({
 export const YarnTarget = new Juke.Target({
   parameters: [CiParameter],
   inputs: [
-    'tgui/.yarn/+(cache|releases|plugins|sdks)/**/*',
-    'tgui/**/package.json',
-    'tgui/yarn.lock',
+    'vgui/.yarn/+(cache|releases|plugins|sdks)/**/*',
+    'vgui/**/package.json',
+    'vgui/yarn.lock',
   ],
   outputs: [
-    'tgui/.yarn/install-target',
+    'vgui/.yarn/install-target',
   ],
   executes: ({ get }) => yarn('install', get(CiParameter) && '--immutable'),
 });
@@ -130,14 +130,14 @@ export const YarnTarget = new Juke.Target({
 export const TgFontTarget = new Juke.Target({
   dependsOn: [YarnTarget],
   inputs: [
-    'tgui/.yarn/install-target',
-    'tgui/packages/tgfont/**/*.+(js|cjs|svg)',
-    'tgui/packages/tgfont/package.json',
+    'vgui/.yarn/install-target',
+    'vgui/packages/tgfont/**/*.+(js|cjs|svg)',
+    'vgui/packages/tgfont/package.json',
   ],
   outputs: [
-    'tgui/packages/tgfont/dist/tgfont.css',
-    'tgui/packages/tgfont/dist/tgfont.eot',
-    'tgui/packages/tgfont/dist/tgfont.woff2',
+    'vgui/packages/tgfont/dist/tgfont.css',
+    'vgui/packages/tgfont/dist/tgfont.eot',
+    'vgui/packages/tgfont/dist/tgfont.woff2',
   ],
   executes: () => yarn('tgfont:build'),
 });
@@ -145,40 +145,40 @@ export const TgFontTarget = new Juke.Target({
 export const TguiTarget = new Juke.Target({
   dependsOn: [YarnTarget],
   inputs: [
-    'tgui/.yarn/install-target',
-    'tgui/webpack.config.js',
-    'tgui/**/package.json',
-    'tgui/packages/**/*.+(js|cjs|ts|tsx|scss)',
+    'vgui/.yarn/install-target',
+    'vgui/webpack.config.js',
+    'vgui/**/package.json',
+    'vgui/packages/**/*.+(js|cjs|ts|tsx|scss)',
   ],
   outputs: [
-    'tgui/public/tgui.bundle.css',
-    'tgui/public/tgui.bundle.js',
-    'tgui/public/tgui-panel.bundle.css',
-    'tgui/public/tgui-panel.bundle.js',
+    'vgui/public/vgui.bundle.css',
+    'vgui/public/vgui.bundle.js',
+    'vgui/public/vgui-panel.bundle.css',
+    'vgui/public/vgui-panel.bundle.js',
   ],
-  executes: () => yarn('tgui:build'),
+  executes: () => yarn('vgui:build'),
 });
 
 export const TguiEslintTarget = new Juke.Target({
   parameters: [CiParameter],
   dependsOn: [YarnTarget],
-  executes: ({ get }) => yarn('tgui:lint', !get(CiParameter) && '--fix'),
+  executes: ({ get }) => yarn('vgui:lint', !get(CiParameter) && '--fix'),
 });
 
 export const TguiSonarTarget = new Juke.Target({
   dependsOn: [YarnTarget],
-  executes: () => yarn('tgui:sonar'),
+  executes: () => yarn('vgui:sonar'),
 });
 
 export const TguiTscTarget = new Juke.Target({
   dependsOn: [YarnTarget],
-  executes: () => yarn('tgui:tsc'),
+  executes: () => yarn('vgui:tsc'),
 });
 
 export const TguiTestTarget = new Juke.Target({
   parameters: [CiParameter],
   dependsOn: [YarnTarget],
-  executes: ({ get }) => yarn(`tgui:test-${get(CiParameter) ? 'ci' : 'simple'}`),
+  executes: ({ get }) => yarn(`vgui:test-${get(CiParameter) ? 'ci' : 'simple'}`),
 });
 
 export const TguiLintTarget = new Juke.Target({
@@ -187,17 +187,17 @@ export const TguiLintTarget = new Juke.Target({
 
 export const TguiDevTarget = new Juke.Target({
   dependsOn: [YarnTarget],
-  executes: ({ args }) => yarn('tgui:dev', ...args),
+  executes: ({ args }) => yarn('vgui:dev', ...args),
 });
 
 export const TguiAnalyzeTarget = new Juke.Target({
   dependsOn: [YarnTarget],
-  executes: () => yarn('tgui:analyze'),
+  executes: () => yarn('vgui:analyze'),
 });
 
 export const TguiBenchTarget = new Juke.Target({
   dependsOn: [YarnTarget],
-  executes: () => yarn('tgui:bench'),
+  executes: () => yarn('vgui:bench'),
 });
 
 export const TestTarget = new Juke.Target({
@@ -226,15 +226,15 @@ export const AllTarget = new Juke.Target({
 
 export const TguiCleanTarget = new Juke.Target({
   executes: async () => {
-    Juke.rm('tgui/public/.tmp', { recursive: true });
-    Juke.rm('tgui/public/*.map');
-    Juke.rm('tgui/public/*.{chunk,bundle,hot-update}.*');
-    Juke.rm('tgui/packages/tgfont/dist', { recursive: true });
-    Juke.rm('tgui/.yarn/{cache,unplugged,webpack}', { recursive: true });
-    Juke.rm('tgui/.yarn/build-state.yml');
-    Juke.rm('tgui/.yarn/install-state.gz');
-    Juke.rm('tgui/.yarn/install-target');
-    Juke.rm('tgui/.pnp.*');
+    Juke.rm('vgui/public/.tmp', { recursive: true });
+    Juke.rm('vgui/public/*.map');
+    Juke.rm('vgui/public/*.{chunk,bundle,hot-update}.*');
+    Juke.rm('vgui/packages/tgfont/dist', { recursive: true });
+    Juke.rm('vgui/.yarn/{cache,unplugged,webpack}', { recursive: true });
+    Juke.rm('vgui/.yarn/build-state.yml');
+    Juke.rm('vgui/.yarn/install-state.gz');
+    Juke.rm('vgui/.yarn/install-target');
+    Juke.rm('vgui/.pnp.*');
   },
 });
 

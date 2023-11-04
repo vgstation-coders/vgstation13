@@ -114,7 +114,7 @@ export const reloadByondCache = async bundleDir => {
     logger.log(`notifying dreamseeker`);
     for (let dreamseeker of dss) {
       dreamseeker.topic({
-        tgui: 1,
+        vgui: 1,
         type: 'cacheReloaded',
       });
     }

@@ -4,7 +4,7 @@
  * @license MIT
  */
 
-import { sendLogEntry } from 'tgui-dev-server/link/client.cjs';
+import { sendLogEntry } from 'vgui-dev-server/link/client.cjs';
 
 const LEVEL_DEBUG = 0;
 const LEVEL_LOG = 1;
@@ -33,7 +33,7 @@ const log = (level, ns, ...args) => {
       .join(' ')
       + '\nUser Agent: ' + navigator.userAgent;
     Byond.topic({
-      tgui: 1,
+      vgui: 1,
       window_id: window.__windowId__,
       type: 'log',
       ns,

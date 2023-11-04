@@ -1,7 +1,7 @@
 /**
  * Tools for dealing with Windows Registry bullshit.
  *
- * Adapted from `tgui/packages/tgui-dev-server/winreg.js`.
+ * Adapted from `vgui/packages/vgui-dev-server/winreg.js`.
  *
  * @file
  * @copyright 2021 Aleksej Komarov

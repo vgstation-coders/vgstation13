@@ -4,7 +4,7 @@
  */
 
 /**
- * tgui state: contained_state
+ * vgui state: contained_state
  *
  * Checks that the user is inside the src_object.
  */

@@ -475,8 +475,8 @@
 	if(!isAI(user) && !istype(user.client.eye, /obj/item/device/camera_bug)) //crappy check, but without it AI photos would be subject to line of sight from the AI Eye object. Made the best of it by moving the sec camera check inside
 		if(user.client)		//To make shooting through security cameras possible
 			seen = get_hear(world.view, user.client.eye) //To make shooting through security cameras possible
-			// To make shooting through the tgui cameras possible
-			for(var/datum/tgui/ui in user.tgui_open_uis)
+			// To make shooting through the vgui cameras possible
+			for(var/datum/vgui/ui in user.vgui_open_uis)
 				var/obj/machinery/computer/security/tv = ui.src_object.ui_host()
 				if(istype(tv, /obj/machinery/computer/security))
 					if(tv.active_camera)

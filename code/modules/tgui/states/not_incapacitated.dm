@@ -4,14 +4,14 @@
  */
 
 /**
- * tgui state: not_incapacitated_state
+ * vgui state: not_incapacitated_state
  *
  * Checks that the user isn't incapacitated
  */
 
 var/datum/ui_state/not_incapacitated_state/not_incapacitated_state = new
 /**
- * tgui state: not_incapacitated_turf_state
+ * vgui state: not_incapacitated_turf_state
  *
  * Checks that the user isn't incapacitated and that their loc is a turf
  */

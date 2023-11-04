@@ -2,10 +2,10 @@
 
 ## Main concepts
 
-Basic tgui backend code consists of the following vars and procs:
+Basic vgui backend code consists of the following vars and procs:
 
 ```
-ui_interact(mob/user, datum/tgui/ui)
+ui_interact(mob/user, datum/vgui/ui)
 ui_data(mob/user)
 ui_act(action, params)
 ui_state()
@@ -14,7 +14,7 @@ ui_state()
 - `src_object` - The atom, which UI corresponds to in the game world.
 - `ui_interact` - The proc where you will handle a request to open an
 interface. Typically, you would update an existing UI (if it exists),
-or set up a new instance of UI by calling the `SStgui` subsystem.
+or set up a new instance of UI by calling the `SSvgui` subsystem.
 - `ui_data` - In this proc you munges whatever complex data your `src_object`
 has into an associative list, which will then be sent to UI as a JSON string.
 - `ui_act` - This proc receives user actions and reacts to them by changing
@@ -26,7 +26,7 @@ conscious, or more.
 Once backend is complete, you create an new interface component on the
 frontend, which will receive this JSON data and render it on screen.
 
-States are easy to write and extend, and what make tgui interactions so
+States are easy to write and extend, and what make vgui interactions so
 powerful. Because states can be overridden from other procs, you can build
 powerful interactions for embedded objects or remote access.
 
@@ -37,8 +37,8 @@ powerful interactions for embedded objects or remote access.
 Let's start with a very basic hello world.
 
 ```dm
-/obj/machinery/my_machine/ui_interact(mob/user, datum/tgui/ui)
-  ui = SStgui.try_update_ui(user, src, ui)
+/obj/machinery/my_machine/ui_interact(mob/user, datum/vgui/ui)
+  ui = SSvgui.try_update_ui(user, src, ui)
   if(!ui)
     ui = new(user, src, "MyMachine")
     ui.open()
@@ -67,7 +67,7 @@ data for our object to use. Let's imagine our object has a few vars:
   return data
 ```
 
-The `ui_data` proc is what people often find the hardest about tgui, but its
+The `ui_data` proc is what people often find the hardest about vgui, but its
 really quite simple! You just need to represent your object as numbers, strings,
 and lists, instead of atoms and datums.
 
@@ -160,7 +160,7 @@ export const SampleInterface = (props, context) => {
 
 Here are the key variables you get from a `useBackend(context)` function:
 
-- `config` is part of core tgui. It contains meta-information about the
+- `config` is part of core vgui. It contains meta-information about the
 interface and who uses it, BYOND refs to various objects, and so forth.
 You are rarely going to use it, but sometimes it can be used to your
 advantage when doing complex UIs.
@@ -246,7 +246,7 @@ and builds a new array based on what was returned by that function.
 ```
 
 If you need more examples of what you can do with React, see the
-[interface conversion guide](docs/converting-old-tgui-interfaces.md).
+[interface conversion guide](docs/converting-old-vgui-interfaces.md).
 
 #### Splitting UIs into smaller, modular components
 
@@ -295,13 +295,13 @@ const HealthStatus = (props, context) => {
 
 ## Copypasta
 
-We all do it, even the best of us. If you just want to make a tgui **fast**,
+We all do it, even the best of us. If you just want to make a vgui **fast**,
 here's what you need (note that you'll probably be forced to clean your shit up
 upon code review):
 
 ```dm
-/obj/copypasta/ui_interact(mob/user, datum/tgui/ui)
-  ui = SStgui.try_update_ui(user, src, ui)
+/obj/copypasta/ui_interact(mob/user, datum/vgui/ui)
+  ui = SSvgui.try_update_ui(user, src, ui)
   if(!ui)
     ui = new(user, src, "copypasta")
     ui.open()

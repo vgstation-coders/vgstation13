@@ -14,7 +14,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	var/obj/machinery/camera/active_camera
 	var/list/network = list(CAMERANET_SS13)
 	var/mapping = 0//For the overview file, interesting bit of code.
-	var/tgui_interface = "CameraConsole"
+	var/vgui_interface = "CameraConsole"
 	light_color = LIGHT_COLOR_RED
 
 	/// The turf where the camera was last updated.
@@ -101,10 +101,10 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		return
 	if(!is_operational())
 		return
-	tgui_interact(user)
+	vgui_interact(user)
 
-/obj/machinery/computer/security/tgui_interact(mob/user, datum/tgui/ui)
-	ui = SStgui.try_update_ui(user, src, ui)
+/obj/machinery/computer/security/vgui_interact(mob/user, datum/vgui/ui)
+	ui = SSvgui.try_update_ui(user, src, ui)
 
 	// Update the camera, showing static if necessary and updating data if the location has moved.
 	update_active_camera_screen()
@@ -116,7 +116,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 			user.client.register_map_obj(plane)
 		user.client.register_map_obj(cam_background)
 		// Open UI
-		ui = new(user, src, tgui_interface)
+		ui = new(user, src, vgui_interface)
 		ui.open()
 
 /obj/machinery/computer/security/ui_data()
@@ -245,7 +245,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	icon_state = "crt"
 	network = list(CAMERANET_SPESSTV)
 	density = TRUE
-	tgui_interface = "SpessTVCameraConsole"
+	vgui_interface = "SpessTVCameraConsole"
 
 /obj/machinery/computer/security/telescreen/entertainment/spesstv/ui_act(action, list/params)
 	. = ..()

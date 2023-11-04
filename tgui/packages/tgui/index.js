@@ -19,7 +19,7 @@ import './styles/themes/wizard.scss';
 import './styles/themes/admin.scss';
 
 import { perf } from 'common/perf';
-import { setupHotReloading } from 'tgui-dev-server/link/client.cjs';
+import { setupHotReloading } from 'vgui-dev-server/link/client.cjs';
 import { setupHotKeys } from './hotkeys';
 import { captureExternalLinks } from './links';
 import { createRenderer } from './renderer';

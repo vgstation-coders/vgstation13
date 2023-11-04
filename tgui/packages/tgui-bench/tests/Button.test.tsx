@@ -1,6 +1,6 @@
 import { linkEvent } from 'inferno';
-import { Button } from 'tgui/components';
-import { createRenderer } from 'tgui/renderer';
+import { Button } from 'vgui/components';
+import { createRenderer } from 'vgui/renderer';
 
 const render = createRenderer();
 
