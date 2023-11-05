@@ -1,7 +1,7 @@
 /obj/abstract/map/spawner/laundromat/clothing
 	name = "Laundromat clothing spawner"
 	amount = 4
-	chance = 15
+	chance = 25
 	jiggle = 10
 
 /obj/abstract/map/spawner/laundromat/clothing/New()
