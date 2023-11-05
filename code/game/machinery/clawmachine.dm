@@ -28,6 +28,7 @@
 		/obj/item/toy/plushie/bunny,
 		/obj/item/toy/plushie/carp,
 		/obj/item/toy/plushie/cat,
+		/obj/item/toy/plushie/chicken,
 		/obj/item/toy/plushie/corgi,
 		/obj/item/toy/plushie/fancypenguin,
 		/obj/item/toy/plushie/goat,
