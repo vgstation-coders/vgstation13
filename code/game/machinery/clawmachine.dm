@@ -51,7 +51,7 @@
 		/obj/item/toy/plushie/fumo/borg,
 		/obj/item/toy/plushie/fumo/chef,
 		/obj/item/toy/plushie/fumo/clown,
-		/obj/item/toy/plushie/fumo/clownette,
+		/obj/item/toy/plushie/fumo/clown/clownette,
 		/obj/item/toy/plushie/fumo/captain,
 		/obj/item/toy/plushie/fumo/librarian,
 		/obj/item/toy/plushie/fumo/mime,

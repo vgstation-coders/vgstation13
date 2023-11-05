@@ -248,13 +248,19 @@
 
 /obj/item/toy/plushie/fumo/clown
 	name = "\improper fumo clown"
-	desc = "Made of authentic clown fabric and manufactured on the clown planet. It has a deadpan expression on its face."
+	desc = "Made of authentic clown fabric, this plushie contains an authentic honk. It has a deadpan expression on its face."
 	icon_state = "clownfumo"
+	interact_sounds = list("sound/effects/clownstep1.ogg", "sound/effects/clownstep2.ogg")
+	hug_sounds = list("sound/items/bikehorn.ogg")
 
-/obj/item/toy/plushie/fumo/clownette
+/obj/item/toy/plushie/fumo/clown/clownette
 	name = "\improper fumo clownette"
 	desc = "A female clown doll that will not accept your appeals. It has a smug expression on its face."
 	icon_state = "clownette"
+
+/obj/item/toy/plushie/fumo/clown/kick_act(mob/living/carbon/human/H)
+	playsound(loc, "sound/items/bikehorn.ogg", 30, 1, -1)
+	. = ..()
 
 /obj/item/toy/plushie/fumo/captain
 	name = "\improper fumo captain"
