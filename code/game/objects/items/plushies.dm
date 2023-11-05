@@ -121,14 +121,9 @@
 	return ..()
 
 
-/obj/item/toy/plushie/bee
-	name = "plush bee"
-	desc = "A stuffed toy that resembles a bee."
-	icon_state = "bee"
-
 /obj/item/toy/plushie/bumbler
 	name = "plush bumblebee"
-	desc = "A stuffed toy in the shape of a huge, adorable bumblebee."
+	desc = "A stuffed toy in the shape of a big, adorable bumblebee."
 	icon_state = "bumbler"
 
 /obj/item/toy/plushie/bunny

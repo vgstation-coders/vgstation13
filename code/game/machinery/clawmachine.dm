@@ -23,7 +23,6 @@
 	var/winning_odds_premium = 50
 
 	var/list/prizes_standard = list(
-		/obj/item/toy/plushie/bee,
 		/obj/item/toy/plushie/bumbler,
 		/obj/item/toy/plushie/bunny,
 		/obj/item/toy/plushie/carp,
