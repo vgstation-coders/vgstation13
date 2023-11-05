@@ -38,11 +38,8 @@
 "dD" = (
 /obj/machinery/power/apc{
 	dir = 1;
-	pixel_y = 24
-	},
-/obj/structure/cable/yellow{
-	d2 = 4;
-	icon_state = "0-4"
+	pixel_y = 24;
+	cell_type_path = /obj/item/weapon/cell/rad/large
 	},
 /turf/simulated/floor/engine,
 /area/vault/laundromat/drug_lab)
@@ -60,15 +57,35 @@
 	},
 /area/vault/laundromat/drug_lab)
 "em" = (
-/obj/structure/window/barricade{
-	icon = 'icons/obj/structures/railing.dmi';
-	icon_state = "plasteelrailing0";
-	opacity = 0
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = 11;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
 	},
-/turf/simulated/floor/engine,
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = 0;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = -10;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/decal/cleanable/blood/drip,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
 /area/vault/laundromat/drug_lab)
 "et" = (
 /obj/effect/landmark/corpse/assistant/robust,
+/obj/effect/decal/cleanable/blood,
 /turf/simulated/floor/engine{
 	icon_state = "floor4"
 	},
@@ -127,7 +144,7 @@
 /obj/effect/nmpi{
 	dir = 4;
 	tag = "icon-maintguide (EAST)";
-	pixel_x = -10;
+	pixel_x = -16;
 	name = "drainage channel";
 	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
 	},
@@ -179,7 +196,10 @@
 /area/vault/laundromat/drug_lab)
 "ka" = (
 /obj/structure/table/reinforced,
-/obj/item/weapon/hammer,
+/obj/item/weapon/hammer{
+	name = "cracking hammer";
+	desc = "Used to break solid methamphetamine into tiny crystal chunks."
+	},
 /turf/simulated/floor/engine{
 	icon_state = "floor4"
 	},
@@ -217,15 +237,23 @@
 	icon_state = "floor4"
 	},
 /area/vault/laundromat/drug_lab)
-"nJ" = (
-/obj/structure/stairs/east,
-/obj/structure/window/barricade{
-	icon = 'icons/obj/structures/railing.dmi';
-	icon_state = "plasteelrailing0";
-	opacity = 0
+"np" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
 	},
 /turf/simulated/floor/engine{
 	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"nJ" = (
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4";
+	mouse_opacity = 0;
+	desc = "Why did you feel like you needed to inspect this? What did you gain? Look, man, I can't do magic, I had to do this to not have this room breached while the pretty stairs are there. Congrats on finding it I guess. Here's a tip: Meth has 30u OD, rather than 15u. There's enough for 160 25u pills, and they last much longer than 'zine. Best of luck. You might want to turn the Laundromat on top into a homebase of sorts, you don't get access to a lab while roaming space that often. Did you notice that the white line that's supposed to be a drainage channel into a drain hole are actually the Deff maint decals and a human spawner respectively? Took a while to make too, but it looks nice. You might want to make some turbomeds while in here to better survive the more hostile places in space, but you do you. I really like how the horizontal barrels look, all stacked like that. They're empty, though, no methylamine on the barrels. It's uhh, this is the Breaking Bad superlab AFTER they tried destroying it, sure lets go with that. Have you gotten tired of these inane ramblings yet? You're the one who had to alt click on the invisible unconspicuous floor tile. I had originally intended for the top railings to be solid, so you couldn't leap through, cause on the show it was a whole floor above the ground, and leaping that height would be dangerous, but I didn't wanna add a snowflake railing, so I instead had VV'd a wooden barricade look like them instead, but it broke in a different way. I eventually gave up and used the regular barricades. I really like how the laundromat looks. It keeps the vibe of the original laundromat but enhanced, if you would. I know you are gonna see this, do not mention it. Apologies for wasting your time, or I guess giving you a good read? Go back to spacing, spessman.";
+	name = "inconspicuous floor"
 	},
 /area/vault/laundromat/drug_lab)
 "nN" = (
@@ -304,6 +332,9 @@
 /obj/machinery/light/he{
 	dir = 4
 	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
 /turf/simulated/floor/engine{
 	icon_state = "floor4"
 	},
@@ -312,7 +343,6 @@
 /obj/structure/ladder{
 	pixel_y = 0;
 	id = "laundromat_drug_lab";
-	height = 1;
 	icon_state = "ladder10"
 	},
 /turf/simulated/floor/engine,
@@ -363,12 +393,10 @@
 	},
 /area/vault/laundromat/drug_lab)
 "uX" = (
-/obj/structure/cable/yellow{
-	d2 = 8;
-	icon_state = "0-8"
+/obj/effect/decal/cleanable/blood,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
 	},
-/obj/machinery/power/battery/smes/infinite,
-/turf/simulated/floor/engine,
 /area/vault/laundromat/drug_lab)
 "vx" = (
 /obj/machinery/chem_dispenser/laundromat,
@@ -442,12 +470,25 @@
 	icon_state = "floor4"
 	},
 /area/vault/laundromat/drug_lab)
+"Hs" = (
+/obj/machinery/chem_dispenser/laundromat,
+/obj/structure/railing/plasteel/pglass{
+	dir = 1;
+	name = ssssssssssssssss
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
 "Hu" = (
 /obj/machinery/camera{
 	dir = 4;
 	name = "Chemistry Laboratory Camera"
 	},
 /obj/structure/closet/l3closet/virology,
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
 /turf/simulated/floor/engine{
 	icon_state = "floor4"
 	},
@@ -488,6 +529,12 @@
 	name = "drainage channel";
 	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
 	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Mv" = (
+/obj/effect/decal/cleanable/blood/drip,
 /turf/simulated/floor/engine{
 	icon_state = "floor4"
 	},
@@ -575,13 +622,14 @@
 /turf/simulated/wall/invulnerable/r_wall,
 /area/vault/laundromat/drug_lab)
 "PA" = (
-/obj/structure/window/barricade{
-	icon = 'icons/obj/structures/railing.dmi';
-	icon_state = "plasteelrailing0";
-	opacity = 0
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
 	},
 /turf/simulated/floor/engine{
-	icon_state = "floor4"
+	icon_state = "stairs";
+	icon = 'icons/obj/stairs.dmi';
+	dir = 4;
+	name = "stairs"
 	},
 /area/vault/laundromat/drug_lab)
 "PJ" = (
@@ -606,6 +654,35 @@
 	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
 	},
 /obj/machinery/light/he,
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
+"Qi" = (
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = 11;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = 0;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/effect/nmpi{
+	dir = 1;
+	tag = "icon-maintguide (NORTH)";
+	pixel_y = -10;
+	name = "drainage channel";
+	desc = "A small indentation on the floor used to capture and chanel liquids to a central drain."
+	},
+/obj/structure/railing/plasteel/pglass{
+	dir = 1
+	},
 /turf/simulated/floor/engine{
 	icon_state = "floor4"
 	},
@@ -773,7 +850,7 @@ JD
 MI
 rT
 rT
-em
+rT
 Hu
 Fa
 Lg
@@ -795,11 +872,11 @@ JD
 MI
 rT
 ql
-em
+rT
+np
 mB
-mB
-mB
-mB
+uX
+uX
 mB
 ej
 mB
@@ -817,11 +894,11 @@ JD
 MI
 Fn
 rT
-em
-mB
-mB
+rT
+np
+uX
 et
-mB
+uX
 Bf
 DG
 mB
@@ -839,10 +916,10 @@ JD
 MI
 rT
 rT
-em
+rT
+np
 mB
-mB
-mB
+Mv
 Oe
 mB
 DG
@@ -861,11 +938,11 @@ JD
 MI
 rT
 rT
+rT
+Qi
+Sj
 em
-Sj
-Sj
-Sj
-Sj
+em
 Sj
 eY
 Sj
@@ -883,8 +960,8 @@ JD
 MI
 rT
 rT
-em
-mB
+rT
+np
 mB
 mB
 mB
@@ -905,8 +982,8 @@ JD
 MI
 Fn
 rT
-em
-mB
+rT
+np
 mB
 Xy
 mB
@@ -927,8 +1004,8 @@ JD
 MI
 rT
 rT
-em
-mB
+rT
+np
 mB
 al
 mB
@@ -949,13 +1026,13 @@ JD
 MI
 rT
 rT
-em
-mB
+rT
+np
 mB
 vx
 TE
 wx
-vx
+Hs
 TE
 wx
 vx
@@ -971,8 +1048,8 @@ JD
 MI
 rT
 rT
-em
-mB
+rT
+np
 mB
 Rl
 mB
@@ -993,8 +1070,8 @@ JD
 MI
 Fn
 rT
-em
-mB
+rT
+np
 mB
 mB
 mB
@@ -1015,8 +1092,8 @@ JD
 MI
 rT
 rT
-em
-mB
+rT
+np
 mB
 mB
 mB
@@ -1037,8 +1114,8 @@ JD
 MI
 rT
 rT
-em
-mB
+rT
+np
 mB
 bR
 mB
@@ -1059,8 +1136,8 @@ JD
 MI
 rT
 rT
-em
-mB
+rT
+np
 mB
 dP
 mB
@@ -1081,9 +1158,9 @@ JD
 MI
 Fn
 rT
-em
+rT
 PA
-mB
+np
 ka
 mB
 mB
@@ -1103,9 +1180,9 @@ JD
 MI
 dD
 rT
-em
+rT
 nJ
-mB
+np
 nn
 mB
 mB
@@ -1123,10 +1200,10 @@ JD
 (19,1,1) = {"
 JD
 MI
-uX
 rT
 rT
-em
+rT
+rT
 os
 Nc
 fh
