@@ -252,7 +252,7 @@
 /turf/simulated/floor/engine{
 	icon_state = "floor4";
 	mouse_opacity = 0;
-	desc = "Why did you feel like you needed to inspect this? What did you gain? Look, man, I can't do magic, I had to do this to not have this room breached while the pretty stairs are there. Congrats on finding it I guess. Here's a tip: Meth has 30u OD, rather than 15u. There's enough for 160 25u pills, and they last much longer than 'zine. Best of luck. You might want to turn the Laundromat on top into a homebase of sorts, you don't get access to a lab while roaming space that often. Did you notice that the white line that's supposed to be a drainage channel into a drain hole are actually the Deff maint decals and a human spawner respectively? Took a while to make too, but it looks nice. You might want to make some turbomeds while in here to better survive the more hostile places in space, but you do you. I really like how the horizontal barrels look, all stacked like that. They're empty, though, no methylamine on the barrels. It's uhh, this is the Breaking Bad superlab AFTER they tried destroying it, sure lets go with that. Have you gotten tired of these inane ramblings yet? You're the one who had to alt click on the invisible unconspicuous floor tile. I had originally intended for the top railings to be solid, so you couldn't leap through, cause on the show it was a whole floor above the ground, and leaping that height would be dangerous, but I didn't wanna add a snowflake railing, so I instead had VV'd a wooden barricade look like them instead, but it broke in a different way. I eventually gave up and used the regular barricades. I really like how the laundromat looks. It keeps the vibe of the original laundromat but enhanced, if you would. I know you are gonna see this, do not mention it. Apologies for wasting your time, or I guess giving you a good read? Go back to spacing, spessman.";
+	desc = "Why did you feel like you needed to inspect this? What did you gain? Look, man, I can't do magic, I had to do this to not have this room breached while the pretty stairs are there. Congrats on finding it I guess. Here's a tip: Meth has 30u OD, rather than 15u. There's enough for 160 25u pills, and they last much longer than 'zine. Best of luck. You might want to turn the Laundromat on top into a homebase of sorts, you don't get access to a lab while roaming space that often. Did you notice that the white line that's supposed to be a drainage channel into a drain hole are actually the Deff maint decals and a human spawner respectively? Took a while to make too, but it looks nice. You should make some turbomeds while in here to better survive the more hostile places in space, but you do you. I really like how the horizontal barrels look, all stacked like that. They're empty, though, no methylamine on the barrels. It's uhh, this is the Breaking Bad superlab AFTER they tried destroying it, sure lets go with that. Have you gotten tired of these inane ramblings yet? You're the one who had to alt click on the invisible unconspicuous floor tile. I had originally intended for the top railings to be solid, so you couldn't leap through, cause on the show it was a whole floor above the ground, and leaping that height would be dangerous, but I didn't wanna add a snowflake railing, so I instead had VV'd a wooden barricade look like them instead, but it broke in a different way. I eventually gave up and used the regular barricades. I really like how the laundromat looks. It keeps the vibe of the original laundromat but enhanced, if you would. I know you are gonna see this, do not mention it. Apologies for wasting your time, or I guess giving you a good read? Go back to spacing, spessman.";
 	name = "inconspicuous floor"
 	},
 /area/vault/laundromat/drug_lab)
@@ -465,16 +465,6 @@
 "Gt" = (
 /obj/structure/filingcabinet/chestdrawer{
 	name = "Autopsy Reports"
-	},
-/turf/simulated/floor/engine{
-	icon_state = "floor4"
-	},
-/area/vault/laundromat/drug_lab)
-"Hs" = (
-/obj/machinery/chem_dispenser/laundromat,
-/obj/structure/railing/plasteel/pglass{
-	dir = 1;
-	name = ssssssssssssssss
 	},
 /turf/simulated/floor/engine{
 	icon_state = "floor4"
@@ -1032,7 +1022,7 @@ mB
 vx
 TE
 wx
-Hs
+vx
 TE
 wx
 vx
