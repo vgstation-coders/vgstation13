@@ -47,6 +47,9 @@
 	)
 
 	var/list/prizes_premium = list(
+		/obj/item/toy/plushie/fumo/assistant,
+		/obj/item/toy/plushie/fumo/borg,
+		/obj/item/toy/plushie/fumo/chef,
 		/obj/item/toy/plushie/fumo/clown,
 		/obj/item/toy/plushie/fumo/clownette,
 		/obj/item/toy/plushie/fumo/captain,
@@ -55,6 +58,7 @@
 		/obj/item/toy/plushie/fumo/miner,
 		/obj/item/toy/plushie/fumo/nukeop,
 		/obj/item/toy/plushie/fumo/nurse,
+		/obj/item/toy/plushie/fumo/plasmaman,
 		/obj/item/toy/plushie/fumo/scientist,
 		/obj/item/toy/plushie/fumo/secofficer,
 		/obj/item/toy/plushie/fumo/vox,
