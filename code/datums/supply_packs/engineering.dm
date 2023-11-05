@@ -251,7 +251,7 @@
 	containername = "Starscreen shield generator crate"
 	group = "Engineering"
 	access = list(access_engine_minor)
-	containsdesc = "An external shielding system for a space station. Requires a lot of power!"
+	containsdesc = "A Starscreen shield generator kit. Used to make a moderately large force field inside of your space station!"
 
 /datum/supply_packs/shield_gen/post_creation(var/atom/movable/container)
 	var/obj/structure/closet/crate/flatpack/flatpack1 = locate(/obj/structure/closet/crate/flatpack/starscreen_generator/) in container
@@ -267,7 +267,7 @@
 	containername = "Starscreen-EX shield generator crate"
 	group = "Engineering"
 	access = list(access_engine_minor)
-	containsdesc = "A starscreen shield generator, but even more powerful. Needs a LOT of power!"
+	containsdesc = "A Starscreen-EX shield generator kit. Powerful enough to make a force field around the entire outer hull of your space station!"
 
 /datum/supply_packs/shield_gen_ex/post_creation(var/atom/movable/container)
 	var/obj/structure/closet/crate/flatpack/flatpack1 = locate(/obj/structure/closet/crate/flatpack/starscreen_ex_generator/) in container
