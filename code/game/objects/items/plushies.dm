@@ -248,7 +248,7 @@
 
 /obj/item/toy/plushie/fumo/clown
 	name = "\improper fumo clown"
-	desc = "Made of authentic clown fabric, this plushie contains an authentic honk. It has a deadpan expression on its face."
+	desc = "Made of real clown fabric, this plushie contains an authentic honk. It has a deadpan expression on its face."
 	icon_state = "clownfumo"
 	interact_sounds = list("sound/effects/clownstep1.ogg", "sound/effects/clownstep2.ogg")
 	hug_sounds = list("sound/items/bikehorn.ogg")
