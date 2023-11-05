@@ -36,14 +36,6 @@
 	. = ..()
 	reagents.add_reagent(SPACE_DRUGS, 1000)
 
-/datum/reagent/hyperzine/methamphetamine //slightly better than 'zine
-	name = "Methamphetamine"
-	id = METHAMPHETAMINE
-	description = "It uses a different manufacture method but it is every bit as pure."
-	color = "#89CBF0" //baby blue
-	custom_metabolism = 0.01
-	overdose_am = 30
-
 /obj/machinery/chem_dispenser/laundromat
 	desc = "A man provides for his family."
 	upgraded = 1
