@@ -32,7 +32,7 @@
 	cost = 20
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "fruit crate"
-	containsdesc = "A large container filled with nothing but fruit! Orders whatever is in season from the local Space Farm."
+	containsdesc = "A large container filled with nothing but fruit! Comes with whatever is in season from the local Space Farm."
 	group = "Hospitality"
 
 /datum/supply_packs/exotic_garnishes //We don't use a randomised crate because we want some special reagents, and also to control chances

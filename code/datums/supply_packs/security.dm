@@ -246,7 +246,7 @@
 	containername = "exile implant crate"
 	access = list(access_armory)
 	group = "Security"
-	containsdesc = "A lockbox containing exile implants, preventing their bearers from returning to the station when cast away."
+	containsdesc = "A lockbox containing exile implants. Prevents their bearers from returning to the station when cast away."
 
 /datum/supply_packs/tracking
 	name = "Tracking implants"
@@ -300,7 +300,7 @@
 	containername = "shotgun shells crate"
 	access = list(access_armory)
 	group = "Security"
-	containsdesc = "A refill of various shotgun shells, including buckshot, stun, and darts."
+	containsdesc = "A refill of various shotgun shells. Includes standard, buckshot, stun, and darts."
 
 /datum/supply_packs/expenergy
 	name = "High-Tech energy weapons"

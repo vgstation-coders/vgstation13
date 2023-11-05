@@ -38,7 +38,7 @@
 	containername = "o2 internals crate"
 	group = "Supplies"
 	containsicon = /obj/item/weapon/tank/air
-	containsdesc = "Three sets of air tanks with gas masks, perfect for when your station is experiencing atmospherics issues."
+	containsdesc = "Three sets of air tanks with gas masks, perfect for when your station is experiencing atmospherics issues and all of the O2 lockers are empty."
 
 /datum/supply_packs/vox_supply
 	name = "N2 internals resupply"
@@ -115,7 +115,7 @@
 	containertype = /obj/structure/closet/crate/basic
 	containername = "janitorial supplies crate"
 	group = "Supplies"
-	containsdesc = "A basic janitorial supply kit, including a soap and bucket, a large trash bag, and three cleaning grenades. Does NOT include PPE, please remember to order those supplies separately. Mop and cautions signs also sold separately."
+	containsdesc = "A basic janitorial supply kit. Includes a soap and bucket, a large trash bag, and three cleaning grenades. Does NOT include PPE! Please remember to order those supplies separately. Mop and cautions signs also sold separately."
 
 /datum/supply_packs/mopbucket
 	name = "Mop and Bucket"
@@ -169,7 +169,7 @@
 	containertype = /obj/structure/closet/crate/basic
 	containername = "newscaster crate"
 	group = "Supplies"
-	containsdesc = "Three newscasters, perfect to make sure your journalism is heard."
+	containsdesc = "Three newscasters. Perfect to make sure your journalism is heard."
 
 /datum/supply_packs/office_supplies
 	name = "Office supplies"
@@ -189,7 +189,7 @@
 	containertype = /obj/structure/closet/crate/basic
 	containername = "office supply crate"
 	group = "Supplies"
-	containsdesc = "Paperwork supplies, including a paper pack, folders, pens, and some desk lamps."
+	containsdesc = "Paperwork supplies. Includes a paper pack, folders, pens, and some desk lamps."
 
 /datum/supply_packs/space_heaters
 	name = "Space Heaters"
@@ -326,7 +326,7 @@
 	containertype = /obj/structure/largecrate
 	containername = "water tank crate"
 	group = "Supplies"
-	containsdesc = "A water tank, containing a little over six full buckets worth of water."
+	containsdesc = "A water tank. Contains a little over six full buckets worth of water."
 
 /datum/supply_packs/fueltank
 	name = "Fuel tank"

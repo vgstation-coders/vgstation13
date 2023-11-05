@@ -17,7 +17,7 @@
 	containertype = /obj/structure/closet/crate/medical
 	containername = "medical crate"
 	group = "Medical"
-	containsdesc = "Emergency medical supplies, perfect for stocking an OSHA first aid station. Includes four first aid kits, a box of emergency auto-injectors, several medicines, and a stethoscope."
+	containsdesc = "Emergency medical supplies, perfect for stocking an OSHA compliant first aid station. Includes four first aid kits, a box of emergency auto-injectors, several medicines, and a stethoscope."
 
 /datum/supply_packs/virus
 	name = "Disease dishes"
@@ -30,7 +30,7 @@
 	containername = "disease crate"
 	access = list(access_biohazard)
 	group = "Medical"
-	containsdesc = "Several samples of deadly diseases from exotic worlds, provided by Central Command. Take great care in handling these."
+	containsdesc = "Several samples of deadly diseases from exotic worlds, provided by Central Command. Take great care in handling these, unless you wish to unleash a deadly disease upon your station!"
 
 /datum/supply_packs/surgery
 	name = "Surgery tools"

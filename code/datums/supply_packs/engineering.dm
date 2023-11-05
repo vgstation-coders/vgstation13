@@ -367,7 +367,7 @@
 	containername = "radiation suit crate"
 	group = "Engineering"
 	containsicon = /obj/item/clothing/suit/radiation
-	containsdesc = "A single radiation-proof suit."
+	containsdesc = "A single radiation-proof suit, for when you need to stand before the Shard."
 
 /datum/supply_packs/engine_parts
 	name = "DIY Shuttle Engine kit"

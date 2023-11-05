@@ -38,7 +38,7 @@
 	containername = "research and development experimental crate"
 	access = list(access_science)
 	group = "Science"
-	containsdesc = "A disk directly from Central Command containing data regarding their most recent high tech experimental research."
+	containsdesc = "A disk directly from Central Command containing data regarding their most recent high tech experimental research, including plasma-fueled cutting tools and mind-swapping devices."
 
 /datum/supply_packs/robotics
 	name = "Robotics assembly kit"
@@ -152,7 +152,7 @@
 	containername = "borer egg crate"
 	access = list(access_xenobiology)
 	group = "Science"
-	containsdesc = "Contains one xeno egg, perfect for raising your own snack."
+	containsdesc = "Contains one borer egg, perfect for raising your own snack."
 
 /datum/supply_packs/anomaly_container
 	name = "Anomaly container"

@@ -38,7 +38,7 @@
 	containername = "\improper Theatre, Bar, Kitchen stack of packs"
 	group = "Vending Machine packs"
 	containsicon = /obj/machinery/vending/boozeomat
-	containsdesc = "A set of three packs, including one Booze-O-Mat, one Dinnerware machine, and one Autodrobe."
+	containsdesc = "A set of three packs. Includes one Booze-O-Mat, one Dinnerware machine, and one Autodrobe."
 
 /datum/supply_packs/securitymachines
 	name = "Security stack of packs"
@@ -49,7 +49,7 @@
 	containername = "security stack of packs"
 	group = "Vending Machine packs"
 	containsicon = /obj/machinery/vending/security
-	containsdesc = "Two SecTech packs, for when you've got so many clowns but only so many donuts to go around."
+	containsdesc = "Two SecTech packs. For when you've got so many clowns, but only so many donuts to go around."
 
 /datum/supply_packs/medbaymachines
 	name = "Medical stack of packs"
@@ -71,7 +71,7 @@
 	containername = "hydroponics stack of packs"
 	group = "Vending Machine packs"
 	containsicon = /obj/machinery/vending/hydronutrients
-	containsdesc = "A NutriMax and a MegaSeed pack, the best in selection for a new hydroponics expert."
+	containsdesc = "A NutriMax and a MegaSeed pack. The best in selection for a new hydroponics expert."
 
 /datum/supply_packs/toolsmachines
 	name = "Tools n Engineering stack of packs"
@@ -107,7 +107,7 @@
 	containername = "\improper Barber stack of packs"
 	group = "Vending Machine packs"
 	containsicon = /obj/machinery/vending/barber
-	containsdesc = "Two packs of BarberVend, great for restyling the whole crew."
+	containsdesc = "Two packs of BarberVend. Great for restyling the whole crew!"
 
 /datum/supply_packs/makeupmachines
 	name = "Cosmetics packs"
@@ -186,7 +186,7 @@
 	containername = "\improper Mining stack of packs"
 	group = "Vending Machine packs"
 	containsicon = /obj/machinery/vending/mining
-	containsdesc = "Did ya lose ya vendin machines to a singularity, sonny? Don't'cha worry, got two more right here for dem miners of yers."
+	containsdesc = "Did ya lose ya vendin' machines to a singularity, sonny? Don't'cha worry, got two more right here for dem miners of yers."
 
 /datum/supply_packs/gamesmachines
 	name = "Al's Fun And Games stack of packs"
@@ -250,7 +250,7 @@
 	containername = "\improper Meat Fridge stack of packs"
 	group = "Vending Machine packs"
 	containsicon = /obj/machinery/vending/meat
-	containsdesc = "The latest from Discount Dan, the Meat Fridge. Includes two packs, and a bonus voucher for a free slab of meat!"
+	containsdesc = "The latest from Discount Dan, the Meat Fridge. Includes two packs and a bonus voucher for a free slab of meat!"
 
 /datum/supply_packs/art
 	name = "Art Supply stack of packs"

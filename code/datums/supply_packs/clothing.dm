@@ -20,7 +20,7 @@
 	containername = "standard costumes crate"
 	access = list(access_theatre)
 	group = "Clothing"
-	containsdesc = "A set of replacement clown and mime costumes, for when the originals mysteriously wind up lost in space alongside the person inside them. Includes a little bit of Nothing extra."
+	containsdesc = "A set of replacement clown and mime costumes, for when the originals mysteriously wind up lost in space alongside the person inside them. Includes a bottle of Nothing extra."
 
 /datum/supply_packs/spookycostume
 	name = "Halloween costumes"
@@ -131,7 +131,7 @@
 	/obj/item/clothing/head/wizard/magus/fake,
 	/obj/item/clothing/head/wizard/clown/fake,
 	)
-	containsdesc = "A random assortment of assorted hats from the surplus hat company. Always contains exactly three random hats."
+	containsdesc = "A random assortment of assorted hats from the Surplus Hat Company™. Always contains exactly three random hats."
 
 /datum/supply_packs/randomised/cheap_glasses
 	name = "Cheap glasses"
@@ -411,7 +411,7 @@
 	containertype = /obj/structure/closet/secure_closet/security/empty
 	containername = "Security Formalwear"
 	containsicon = "security_formal_wear"
-	containsdesc = "Formalwear for the security team, ordered directly from Central Command. Includes one suit for the Hoss, one for the Warden, and one for a security officer."
+	containsdesc = "Formalwear for the security team, ordered directly from Central Command. Includes one suit for the Head of Security, one for the Warden, and one for a Security Officer of any rank."
 	access = list(access_security)
 	group = "Clothing"
 
