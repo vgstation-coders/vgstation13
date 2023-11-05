@@ -43,8 +43,8 @@
 /obj/item/toy/plushie/attack_self(mob/living/user)
 	. = ..()
 	if(stuffed || grenade)
-		var/interact_sound = pick(interact_sounds)
-		if(interact_sound)
+		if(interact_sounds.len)
+			var/interact_sound = pick(interact_sounds)
 			playsound(src, interact_sound, 50, 1, -1)
 		user.visible_message("<span class='notice'>\The [user] plays with \the [src].</span>", "<span class='notice'>You play with \the [src].</span>")
 		if(grenade && !grenade.active)
@@ -56,8 +56,8 @@
 /obj/item/toy/plushie/attack(mob/living/M as mob, mob/living/user as mob)
 	if(user.a_intent != I_HELP)
 		return ..()
-	var/hug_sound = pick(hug_sounds)
-	if(hug_sound)
+	if(hug_sounds.len)
+		var/hug_sound = pick(hug_sounds)
 		playsound(src, hug_sound, 50, 1, -1)
 	if(stuffed || grenade)
 		src.visible_message("<span class='notice'>\The [src] gives \the [M] a [pick("hug", "warm embrace")].</span>")
@@ -231,6 +231,16 @@
  * Fumos
  */
 
+/obj/item/toy/plushie/fumo/assistant
+	name = "\improper fumo assistant"
+	desc = "This greyshirt doll is complete with insulated gloves, gas mask and toolbelt."
+	icon_state = "assistantfumo"
+
+/obj/item/toy/plushie/fumo/borg
+	name = "\improper fumo cyborg"
+	desc = "A stuffed doll depicting a station cyborg."
+	icon_state = "borgfumo"
+
 /obj/item/toy/plushie/fumo/chef
 	name = "\improper fumo chef"
 	desc = "A stuffed doll depicting a chef. It has a deadpan expression on its face."
@@ -275,6 +285,11 @@
 	name = "\improper fumo nurse"
 	desc = "A stuffed doll depicting a nurse. It has a smug expression on its face."
 	icon_state = "nursefumo"
+
+/obj/item/toy/plushie/fumo/plasmaman
+	name = "\improper fumo plasmaman"
+	desc = "A stuffed doll depicting a plasmaman. The face is thankfully not visible."
+	icon_state = "plasmafumo"
 
 /obj/item/toy/plushie/fumo/scientist
 	name = "\improper fumo scientist"
