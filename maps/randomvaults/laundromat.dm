@@ -16,9 +16,11 @@
 
 /area/vault/laundromat
 	name = "Laundromat"
+	icon_state = "laundromat"
 
 /area/vault/laundromat/drug_lab
 	name = "Drug Lab"
+	icon_state = "druglab"
 
 /obj/structure/reagent_dispensers/cauldron/laundromat/meth
 	name = "meth cauldron"
