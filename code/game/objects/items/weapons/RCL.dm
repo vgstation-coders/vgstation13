@@ -71,6 +71,7 @@
 	if (!loaded)
 		loaded = cable
 		loaded.max_amount = max_amount //We store a lot.
+		loaded.forceMove(src)
 	else if (loaded.amount >= max_amount)
 		to_chat(user, "\The [src] cannot hold any further length of cable.")
 		return FALSE
