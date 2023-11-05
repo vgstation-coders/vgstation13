@@ -190,16 +190,6 @@
 	desc = "A large plushie of the Geometer of Blood himself. More likely to cause nightmares than dispel them."
 	icon_state = "narsie"
 
-/obj/item/toy/plushie/ratvar
-	name = "plush Ratvar"
-	desc = "A large plushie of the Clockwork Justiciar himself. Though it contains no mechanism, you can hear a faint ticking sound from within."
-	icon_state = "ratvar"
-
-/obj/item/toy/plushie/nukie
-	name = "plush operative"
-	desc = "A stuffed toy that resembles a syndicate nuclear operative, manufactured by the Donk Corporation."
-	icon_state = "nukie"
-
 /obj/item/toy/plushie/orca
 	name = "plush orca"
 	desc = "A large stuffed toy in the shape of the long-extinct killer whale."
@@ -224,6 +214,16 @@
 	name = "plush possum"
 	desc = "A stuffed toy depicting the only North American marsupial."
 	icon_state = "possum"
+
+/obj/item/toy/plushie/ratvar
+	name = "plush Ratvar"
+	desc = "A large plushie of the Clockwork Justiciar himself. Though it contains no mechanism, you can hear a faint ticking sound from within."
+	icon_state = "ratvar"
+
+/obj/item/toy/plushie/roach
+	name = "plush roach"
+	desc = "It is friend-shaped."
+	icon_state = "roach"
 
 /obj/item/toy/plushie/spacebear
 	name = "plush space bear"

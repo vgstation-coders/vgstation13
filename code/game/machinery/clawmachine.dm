@@ -36,13 +36,13 @@
 		/obj/item/toy/plushie/kitten/wizard,
 		/obj/item/toy/plushie/monkey,
 		/obj/item/toy/plushie/narsie,
-		/obj/item/toy/plushie/ratvar,
-		/obj/item/toy/plushie/nukie,
 		/obj/item/toy/plushie/orca,
 		/obj/item/toy/plushie/parrot,
 		/obj/item/toy/plushie/penguin,
 		/obj/item/toy/plushie/peacekeeper,
 		/obj/item/toy/plushie/possum,
+		/obj/item/toy/plushie/ratvar,
+		/obj/item/toy/plushie/roach,
 		/obj/item/toy/plushie/spacebear,
 		/obj/item/toy/plushie/teddy
 	)
