@@ -231,6 +231,11 @@
  * Fumos
  */
 
+/obj/item/toy/plushie/fumo/chef
+	name = "\improper fumo chef"
+	desc = "A stuffed doll depicting a chef. It has a deadpan expression on its face."
+	icon_state = "cheffumo"
+
 /obj/item/toy/plushie/fumo/clown
 	name = "\improper fumo clown"
 	desc = "Made of authentic clown fabric and manufactured on the clown planet. It has a deadpan expression on its face."
