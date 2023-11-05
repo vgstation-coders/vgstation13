@@ -126,12 +126,8 @@
 	if(!loaded || !loaded.amount)
 		to_chat(user, "<span class='warning'>There isn't any cable left inside.</span>")
 		return
-	var/turf/U = get_turf(target)
-	var/list/modifiers = params2list(click_parameters)
-	if(modifiers["alt"])
-		collect_loose_cables(U)
-		return
 	var/turf/T = get_turf(src)
+	var/turf/U = get_turf(target)
 	placed_stub = FALSE
 	if (connect_two_floors(user, T, U, TRUE))
 		playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -139,11 +135,12 @@
 		set_move_event(user)
 		update_icon()
 
-/obj/item/weapon/rcl/proc/collect_loose_cables(var/turf/target_floor,var/mob/user)
+/obj/item/weapon/rcl/AltFrom(var/turf/target_floor,var/mob/user)//Returning null so we can also check tile content
 	for (var/obj/item/stack/cable_coil/cable in target_floor)
 		if (!add_cable(cable,user))
 			return
 	to_chat(user, "<span class='warning'>No loose cables to collect on that tile.</span>")
+	return
 
 
 /obj/item/weapon/rcl/proc/connect_two_floors(var/mob/user, var/turf/first_floor, var/turf/second_floor, var/clicked = FALSE)
