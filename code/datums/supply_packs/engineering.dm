@@ -202,7 +202,7 @@
 	contains = list(/obj/item/weapon/am_containment/big)
 	cost = 200	//10x the fuel, 10x the cost + 50 for convenience
 	containername = "Large antimatter containment jar crate"
-	containsdesc = "One large can of antimatter. Comes at a slight premium."
+	containsdesc = "One very large can of antimatter, ten times the size of a regular can. Comes at a slight premium."
 
 /datum/supply_packs/rust
 	contains = list(/obj/item/weapon/module/rust_fuel_compressor,
@@ -357,7 +357,7 @@
 	containername = "advanced firefighting equipment crate"
 	access = list(access_atmospherics)
 	group = "Engineering"
-	containsdesc = "Firefighting accessories. Includes an axe, a halligan bar, and two extinguishers. Fire jacket and red hard hat not included."
+	containsdesc = "Advanced firefighting accessories. Includes an axe, a halligan bar, and two foam extinguishers. Fire jacket and red hard hat not included - try the standard equipment crate."
 
 /datum/supply_packs/radiation_suit
 	name = "Radiation suit"

@@ -12,7 +12,7 @@
 	containertype = /obj/structure/closet/crate/basic
 	containername = "toner cartridges crate"
 	group = "Supplies"
-	containsdesc = "For when the clown decides to use up all of your scanner ink. Contains an excessive six sets of replacement toner."
+	containsdesc = "For when the clown decides to use up all of your photocopier ink. Contains an excessive six sets of replacement toner."
 
 /datum/supply_packs/labels
 	name = "Label rolls"
@@ -354,7 +354,7 @@
 	containername = "sulphuric acid tank crate"
 	group = "Supplies"
 	one_access = list(access_engine_minor, access_science)
-	containsdesc = "A tank filled to the brim with sulfuric acid. For when you're doing a lot of circuit board work, or you're a really thirsty alien."
+	containsdesc = "A tank filled to the brim with sulphuric acid. For when you're doing a lot of circuit board work, or you're a really thirsty alien."
 
 /datum/supply_packs/firefighting
 	name = "Firefighting equipment"
@@ -370,7 +370,7 @@
 	containertype = /obj/structure/closet/crate/basic
 	containername = "firefighting equipment crate"
 	group = "Supplies"
-	containsdesc = "Firefighting gear. Includes two full suits to protect upcoming firemen against the dangers of fire. Fire axe not included."
+	containsdesc = "Standard firefighting gear. Includes two full suits to protect upcoming firemen against the dangers of fire, plus two classic fire extinguishers. Fire axe not included."
 
 /datum/supply_packs/artscrafts
 	name = "Arts and Crafts supplies"
@@ -399,7 +399,7 @@
 	containertype = /obj/structure/closet/crate
 	containername = "\improper Arts and Crafts crate"
 	group = "Supplies"
-	containsdesc = "An all-in-one crate containing anything an artist would ever desire."
+	containsdesc = "An all-in-one crate containing anything an artist could ever desire."
 
 /datum/supply_packs/photoset
 	name = "Photography equipment"
@@ -413,7 +413,7 @@
 	group = "Supplies"
 	containsicon = /obj/item/device/camera
 	containsdesc = "A starter photography kit. Comes with a camera, some film, and a photo album."
-	
+
 /datum/supply_packs/marbleblock
 	name = "Marble block"
 	contains = list(/obj/structure/block)

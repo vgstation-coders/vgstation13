@@ -130,7 +130,7 @@
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "pizza crate"
 	containsicon = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/margherita
-	containsdesc = "Order a bunch of pizza from the local pizza joint. They deliver in five box increments."
+	containsdesc = "Order a bunch of pizza from the local pizza joint. It's run by assistants, so expect your order to get mixed up. They deliver in sets of five."
 	group = "Hospitality"
 
 /datum/supply_packs/randomised/pizza/post_creation(var/atom/movable/container)

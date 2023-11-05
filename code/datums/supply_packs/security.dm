@@ -236,7 +236,7 @@
 	containername = "loyalty implant crate"
 	access = list(access_armory)
 	group = "Security"
-	containsdesc = "Directly from Central Command, these implants will insure loyalty to Nanotrasen."
+	containsdesc = "Directly from Central Command, these implants will insure loyalty to NanoTrasen."
 
 /datum/supply_packs/exile
 	name = "Exile implants"

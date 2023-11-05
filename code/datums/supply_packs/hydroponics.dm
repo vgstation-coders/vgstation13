@@ -249,7 +249,7 @@
 	containername = "exotic seeds crate"
 	one_access = list(access_hydroponics, access_science)
 	group = "Hydroponics"
-	containsdesc = "Direct from Central Command's hydroponics research facility, this crate contains samples of several exotic plants. Includes six popularly researched samples and six experimental samples."
+	containsdesc = "Direct from Central Command's hydroponics research facility, this crate contains samples of several exotic plants. Includes six commonly researched samples and six experimental samples."
 
 /datum/supply_packs/bee_keeper
 	name = "Beekeeping kit"

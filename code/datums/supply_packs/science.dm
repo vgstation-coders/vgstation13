@@ -170,7 +170,7 @@
 	containertype = /obj/structure/closet/crate/flatpack/suit_modifier
 	group = "Science"
 	containsicon = /obj/machinery/suit_modifier
-	containsdesc = "The suit modification station is an all-in-one hardsuit modification machine. Comes with a sample "
+	containsdesc = "The suit modification station is an all-in-one hardsuit modification machine. Comes with a sample health readout upgrade."
 
 /datum/supply_packs/hardsuit_frames
 	name = "Hardsuit frames"
