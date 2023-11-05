@@ -294,7 +294,7 @@
 	containertype = /obj/structure/closet/crate/ayy
 	containername = "grey Space-Ex crate"
 	group = "Clothing"
-	containsdesc = "Contains an entire space-worthy softsuit that would fit a Grey. Includes a fancy red oxygen tank!"
+	containsdesc = "Contains a space-worthy softsuit that is perfectly fitted for a grey. Includes a fancy red oxygen tank!"
 
 /datum/supply_packs/grey_uniform
 	name = "Mothership uniforms"
@@ -312,7 +312,7 @@
 	containertype = /obj/structure/closet/ayy
 	containername = "mothership uniform locker"
 	containsicon = "grey_uniform"
-	containsdesc = "Two sets of clothing from the nearest Grey mothership."
+	containsdesc = "A batch of clothing from the grey mothership. Comes with either two outfits for workers, or two outfits for researchers. Whatever they had extra."
 	group = "Clothing"
 
 /datum/supply_packs/grey_uniform/New()
@@ -332,7 +332,7 @@
 	containername = "GDR half-mask crate"
 	contraband = 1
 	group = "Clothing"
-	containsdesc = "Three half-mask kits from the nearest Grey mothership."
+	containsdesc = "Three respirator mask units from the nearest mothership outpost."
 
 /datum/supply_packs/neorussian
 	name = "Neo-Russian supplies"

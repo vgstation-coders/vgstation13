@@ -84,7 +84,7 @@
 	one_access = list(access_armory, access_mothership_military)
 	group = "Security"
 	hidden = 1
-	containsdesc = "Surplus from the nearest mothership, in case of human uprising."
+	containsdesc = "Surplus weapons from the nearest mothership military outpost, for quelling a human uprising."
 
 /datum/supply_packs/smartlaser
 	name = "Smart laser guns"
@@ -157,7 +157,7 @@
 	containername = "MDF rig parts crate"
 	group = "Security"
 	contraband = 1
-	containsdesc = "Basic parts for a heavy hardsuit from the mothership. A human can't fit in this one."
+	containsdesc = "A mothership military shipment containing the parts for an armored hardsuit. A human won't be able to squeeze their fat body into this."
 
 /datum/supply_packs/greyexplorerarmor
 	name = "GDR surplus explorer armor"
@@ -175,7 +175,7 @@
 	one_access = list(access_security, access_mothership_military)
 	group = "Security"
 	contraband = 1
-	containsdesc = "Surplus from the mothership. Contains two full explorer armor kits."
+	containsdesc = "Surplus equipment from the mothership. Contains two explorer armor kits."
 
 /datum/supply_packs/riot
 	name = "Riot gear"

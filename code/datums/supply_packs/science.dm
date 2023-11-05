@@ -194,4 +194,4 @@
 	containername = "GDR rig parts crate"
 	group = "Science"
 	contraband = 1
-	containsdesc = "A package from the mothership offering two kits for their advanced hardsuits."
+	containsdesc = "A package from the mothership with two hardsuit construction kits: one for a laborer and one for a researcher. A human won't be able to squeeze their fat body into these."
