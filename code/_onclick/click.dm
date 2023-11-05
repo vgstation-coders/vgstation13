@@ -83,7 +83,7 @@
 		ShiftClickOn(A)
 		return
 	if(modifiers["alt"]) // alt and alt-gr (rightalt)
-		if (held_item.AltFrom(A,src))
+		if (held_item.AltFrom(A,src,A.Adjacent(src, MAX_ITEM_DEPTH),params))
 			return
 		AltClickOn(A)
 		return
