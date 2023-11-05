@@ -23,6 +23,11 @@
 	to_chat(viewers(user), "<span class='danger'>\The [user] is smothering \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
+/obj/item/toy/plushie/kick_act(mob/living/carbon/human/H, var/no_default_sound = FALSE)
+	if(!no_default_sound && interact_sounds.len)
+		playsound(loc, pick(interact_sounds), 30, 1, -1)
+	. = ..()
+
 /obj/item/toy/plushie/examine(mob/user)
 	..()
 	if(!stuffed && !grenade)
@@ -140,11 +145,19 @@
 	name = "plush cat"
 	desc = "Marginally less affectionate than an actual cat."
 	icon_state = "cat"
+	interact_sounds = list("sound/voice/catmeow.ogg")
+
+/obj/item/toy/plushie/chicken
+	name = "plush chicken"
+	desc = "A very soft and plushy chicken. Cluck!"
+	icon_state = "chicken"
+	interact_sounds = list("sound/voice/chicken.ogg")
 
 /obj/item/toy/plushie/corgi
 	name = "plush corgi"
 	desc = "Perfect for the pet owner on a tight budget!"
 	icon_state = "corgi"
+	interact_sounds = list("sound/voice/corgibark.ogg")
 
 /obj/item/toy/plushie/fancypenguin
 	name = "plush penguin"
@@ -155,6 +168,7 @@
 	name = "plush goat"
 	desc = "This little goat gives only the softest headbutts. Eheheheheh!"
 	icon_state = "goat"
+	interact_sounds = list("sound/voice/goat.ogg")
 
 /obj/item/toy/plushie/kitten
 	name = "plush kitten"
