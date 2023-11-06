@@ -33,6 +33,7 @@
 		/obj/item/toy/plushie/goat,
 		/obj/item/toy/plushie/kitten,
 		/obj/item/toy/plushie/kitten/wizard,
+		/obj/item/toy/plushie/ladybug,
 		/obj/item/toy/plushie/monkey,
 		/obj/item/toy/plushie/narsie,
 		/obj/item/toy/plushie/orca,

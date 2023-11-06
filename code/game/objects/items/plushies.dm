@@ -175,6 +175,11 @@
 	desc = "An adorable ragdoll kitten. This one must be a wizard's familiar."
 	icon_state = "kitten_wizard"
 
+/obj/item/toy/plushie/ladybug
+	name = "plush ladybug"
+	desc = "A stuffed toy in the shape of a big, adorable ladybug."
+	icon_state = "ladybug"
+
 /obj/item/toy/plushie/monkey
 	name = "plush monkey"
 	desc = "Much cuter and less smelly than a real monkey."
