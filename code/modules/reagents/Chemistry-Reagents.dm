@@ -10326,16 +10326,16 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		if(!locate(/obj/effect/decal/cleanable/purpledrank) in T)
 			new /obj/effect/decal/cleanable/purpledrank(T)
 
-/datum/reagent/punchualite
-	name = "Punchualite"
-	id = PUNCHUALITE
+/datum/reagent/punctualite
+	name = "Punctualite"
+	id = PUNCTUALITE
 	description = "Nicknamed mad chemist's alarm clock. Explodes on the hour when being actively metabolized. "
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#8d8791" //rgb: 200, 165, 220
 	custom_metabolism = 0 //Wouldn't be much fun if it all got metabolized beforehand
 	var/currentHour = 0 //The hour it was introduced into the system so it doesn't blow right away
 
-/datum/reagent/punchualite/on_mob_life(var/mob/living/M)
+/datum/reagent/punctualite/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	if(!currentHour)
@@ -10343,10 +10343,10 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(prob(5) && prob(5)) //0.25% chance per tick
 		M.visible_message("<span class='notice'>Tick.. tock</span>")
 	if((floor(world.time / 36000) + 1) > currentHour)
-		punchualiteExplode(M)
+		punctualiteExplode(M)
 		currentHour = floor(world.time / 36000) + 1
 
-/datum/reagent/punchualite/proc/punchualiteExplode(var/mob/living/H)
+/datum/reagent/punctualite/proc/punctualiteExplode(var/mob/living/H)
 	var/bigBoom = 0
 	var/medBoom = 0
 	var/litBoom = 0
