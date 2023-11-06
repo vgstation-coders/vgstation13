@@ -2207,18 +2207,22 @@
 		return 1
 
 	var/icontype = input("Select the paint-job!")in M.mech_sprites
-
+//Sanity checks because icontype can be selected at an arbitrary amount of time.
+	if(!user.Adjacent(M) || user.incapacitated() || user.lying)
+		return 1
+	if(M.occupant)
+		to_chat(user, "<span class='warning'>This mech has an occupant. It must be empty before you can paint it.</span>")
+		return 1
 	if(icontype == M.initial_icon)
 		to_chat(user, "<span class='warning'>This mech is already painted in that style.</span>")
 		return 1
 	if(icontype)
-		to_chat(user, "<span class='info'>You begin repainting the mech.</span>")
-		if (do_after(user, M , 30))
-			M.initial_icon = icontype
-			M.icon_state = icontype +"-open"
-			for(var/spell/mech/MS in M.intrinsic_spells)
-				MS.update_spell_icon()
-			M.refresh_spells() //I think this does something important
+		to_chat(user, "<span class='info'>You paint the mech.</span>")
+		M.initial_icon = icontype
+		M.icon_state = icontype +"-open"
+		for(var/spell/mech/MS in M.intrinsic_spells)
+			MS.update_spell_icon()
+		M.refresh_spells() //I think this does something important
 	return 1
 
 
