@@ -320,6 +320,9 @@
 /datum/rcd_schematic/tile/tatami
 	name = "Tatami"
 
+/datum/rcd_schematic/tile/mothership
+	name = "Mothership"
+
 /datum/rcd_schematic/tile/ss13_logo
 	name = "SS13 logo"
 
@@ -627,6 +630,12 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info(DIR_ONE,		"tatami-yellow-2mat-verti"),
 		new /datum/paint_info(DIR_ORTHO,	"tatami-yellow-3mat"),
 		new /datum/paint_info(DIR_ONE,		"tatami-yellow-spiral"),
+	),
+
+	"Mothership" = list(
+		new /datum/paint_info(DIR_ONE,		"alien_tile1"),
+		new /datum/paint_info(DIR_ONE,		"alien_tile_worn"),
+		new /datum/paint_info(DIR_ONE,		"alien_tile_fancy")
 	),
 
 	"SS13 logo" = list(
