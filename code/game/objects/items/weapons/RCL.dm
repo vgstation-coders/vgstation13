@@ -42,13 +42,9 @@
 	if(istype(W,/obj/item/stack/cable_coil))
 		if(!loaded)
 			if(user.drop_item(W,src))
-				loaded = W
-				loaded.max_amount = max_amount //We store a lot.
+				add_cable(W,user)
 		else
-			loaded.preattack(W,user,1)
-		update_icon()
-		playsound(loc, 'sound/items/zip.ogg', 20, 1)
-		to_chat(user, "<span class='notice'>You add the cables to the [src]. It now contains [loaded.amount].</span>")
+			add_cable(W,user)
 	else if(W.is_screwdriver(user))
 		if(!loaded)
 			to_chat(user, "<span class='warning'>There are no wires to remove.</span>")
@@ -70,6 +66,21 @@
 		update_icon()
 	else
 		..()
+
+/obj/item/weapon/rcl/proc/add_cable(var/obj/item/stack/cable_coil/cable, var/mob/user)
+	if (!loaded)
+		loaded = cable
+		loaded.max_amount = max_amount //We store a lot.
+		loaded.forceMove(src)
+	else if (loaded.amount >= max_amount)
+		to_chat(user, "\The [src] cannot hold any further length of cable.")
+		return FALSE
+	else
+		loaded.preattack(cable,user,1)
+	update_icon()
+	playsound(loc, 'sound/items/zip.ogg', 20, 1)
+	to_chat(user, "<span class='notice'>You add the cables to the [src]. It now contains [loaded.amount].</span>")
+	return TRUE
 
 /obj/item/weapon/rcl/update_icon()
 	overlays.len = 0
@@ -116,21 +127,29 @@
 	if(!loaded || !loaded.amount)
 		to_chat(user, "<span class='warning'>There isn't any cable left inside.</span>")
 		return
-
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(target)
 	placed_stub = FALSE
-
 	if (connect_two_floors(user, T, U, TRUE))
 		playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 		active = TRUE
 		set_move_event(user)
 		update_icon()
 
+/obj/item/weapon/rcl/AltFrom(var/turf/target_floor,var/mob/user, var/proximity_flag, var/click_parameters)//Returning null so we can also check tile content
+	if(proximity_flag == 0) // not adjacent
+		return
+	for (var/obj/item/stack/cable_coil/cable in target_floor)
+		if (!add_cable(cable,user))
+			return
+	to_chat(user, "<span class='warning'>No loose cables to collect on that tile.</span>")
+	return
+
+
 /obj/item/weapon/rcl/proc/connect_two_floors(var/mob/user, var/turf/first_floor, var/turf/second_floor, var/clicked = FALSE)
 	if (!first_floor || !second_floor)
 		return
-	if(!first_floor.can_place_cables(TRUE) || !second_floor.can_place_cables(TRUE))
+	if(!first_floor.can_place_cables(TRUE) && !second_floor.can_place_cables(TRUE))
 		if (user)
 			to_chat(user, "<span class='warning'>You can't place cables between here and there.</span>")
 			if (active)
@@ -154,6 +173,8 @@
 	return used
 
 /obj/item/weapon/rcl/proc/connect_toward(var/mob/user, var/turf/start_floor, var/turf/target_floor, var/new_stubs = FALSE)
+	if (!start_floor.can_place_cables(TRUE))
+		return
 	if(!loaded || !loaded.amount)
 		return FALSE
 	//first we search for a node on that tile
@@ -212,6 +233,8 @@
 
 		if(valid_node.d2 & (valid_node.d2 - 1)) //If the cable is layed diagonally, check the others 2 possible directions
 			valid_node.mergeDiagonalsNetworks(valid_node.d2)
+
+		placed_stub = TRUE//we didn't place a stub but we did connect with one, so we don't want the other tile to make a stub toward us if they already have a full wire toward us
 
 		loaded.use(1)
 		return TRUE
