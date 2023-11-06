@@ -74,6 +74,12 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		-->
 		<div class="commit sansserif">
 			<h2 class="date">2023.11.06</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">RCL no longer entirely prevent cable placement between two tiles if at least one of the tiles is valid (cables will still only be placed on the valid tile)</li>
+				<li class="bugfix">Fixed a specific case where the RCL would place an extra unwanted node on your tile after clicking an adjacent tile that already had a node despite your tile already having a full wire going toward that tile.</li>
+				<li class="rscadd">AltClicking an adjacent tile with the RCL equipped will cause it to try and absorb all the loose cable pieces on that tile</li>
+			</ul>
 			<h3 class="author">DorainGrey updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Engicoffee is now brewable again.</li>
