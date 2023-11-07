@@ -4,6 +4,8 @@ var/req_console_assistance = list()
 var/req_console_supplies = list()
 var/req_console_information = list()
 var/list/obj/machinery/requests_console/requests_consoles = list()
+var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" = list(),"Medical" = list(),"Research" = list(),"Service" = list(),"Security" = list(),"Cargo" = list(),"Civillian" = list(),"other" = list())
+var/image/phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "phone_overlay")
 
 /obj/machinery/requests_console
 	name = "requests console"
@@ -12,6 +14,8 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "req_comp0"
 	var/department = "Unknown" //The list of all departments on the station (Determined from this variable on each unit) Set this to the same thing if you want several consoles in one department
+	var/list/master_department = list()
+	var/list/globalconsoles 
 	var/list/messages = list() //List of all messages
 	var/departmentType = 0
 		// 0 = none (not listed, can only repeplied to)
@@ -55,6 +59,12 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	var/priority = -1 ; //Priority of the message being sent
 	var/announceSound = 'sound/vox/_bloop.wav'
 	luminosity = 0
+	
+	var/obj/item/telephone/phone = null
+	var/ringer = TRUE
+	var/chosen_department //department we are calling
+							//console we are calling
+	var/sneed2
 
 /obj/machinery/requests_console/power_change()
 	..()
@@ -70,7 +80,11 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 
 /obj/machinery/requests_console/New()
 	requests_consoles += src
+	set_master_department(department)
 	set_department(department,departmentType)
+	globalconsoles = requests_consoles_categorised
+	phone = new /obj/item/telephone (src)
+	overlays.Add(phone_overlay)
 	return ..()
 
 /obj/machinery/requests_console/Destroy()
@@ -120,6 +134,51 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			if(!("[department]" in req_console_information))
 				req_console_information += department
 
+/obj/machinery/requests_console/proc/add_to_global_rc_list()
+	for(var/dept in master_department)
+		requests_consoles_categorised[dept] += src
+
+/obj/machinery/requests_console/proc/set_master_department(var/name)//this is fucking awful but less awful than updating all the maps and consoles i think
+	if(!isemptylist(master_department))
+		add_to_global_rc_list()
+		return "already setup"
+	var/list/command = list("Bridge","Captain's Desk","Chief Engineer's Desk","Chief Medical Officer's Desk","Head of Personnel's Desk","Head of Security's Desk","Research Director's Desk")
+	var/list/engineering = list("Atmospherics","Chief Engineer's Desk","Engineering","Mechanics")
+	var/list/medical = list("Chief Medical Officer's Desk","Genetics","Medbay","Chemistry","Virology")
+	var/list/research = list("Genetics","Research Director's Desk","Robotics","Science","Xenoarchaeology","Xenobiology","Mechanics")
+	var/list/security = list("Head of Security's Desk","Security")
+	var/list/service = list("Bar","Hydroponics","Kitchen","Head of Personnel's Desk")
+	var/list/cargo = list("Head of Personnel's Desk","Cargo Bay")
+	var/list/civillian = list("Pod Bay","Tool Storage","Chapel","EVA","Arrival shuttle","Locker Room","Janitorial","Head of Personnel's Desk")
+	for(var/subdept in command)
+		if(name == subdept)
+			master_department += "Command"
+	for(var/subdept in engineering)
+		if(name == subdept)
+			master_department += "Engineering"
+	for(var/subdept in medical)
+		if(name == subdept)
+			master_department += "Medical"
+	for(var/subdept in research)
+		if(name == subdept)
+			master_department += "Research"
+	for(var/subdept in security)
+		if(name == subdept)
+			master_department += "Security"
+	for(var/subdept in cargo)
+		if(name == subdept)
+			master_department += "Cargo"
+	for(var/subdept in service)
+		if(name == subdept)
+			master_department += "Service"
+	for(var/subdept in civillian)
+		if(name == subdept)
+			master_department += "Civillian"
+	if(isemptylist(master_department))
+		master_department += "other" //stuff without a proper department, ie telecomms and AIcore
+	add_to_global_rc_list()
+	
+
 /obj/machinery/requests_console/attack_ghost(user as mob)
 	if(..())
 		return
@@ -168,6 +227,17 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 //							dat += text(" or <A href='?src=\ref[src];write=[ckey(dpt)];priority=3'>EXTREME</A>)")
 						dat += text(")<BR>")
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
+			if(4) //select department to dial
+				dat += text("<B>Where would you like to dial?</B><BR><BR>") //TODO replace this if the servers are down
+				for(var/dept in globalconsoles)
+					dat += text("<A href='?src=\ref[src];dialDepartment=[dept]'>[dept]</A><BR>")
+				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
+			if(11) //select console to dial from previously chosen department
+				dat += text("Available [chosen_department] telephones:<BR>")
+				sneed2 = globalconsoles[chosen_department]
+				for(var/obj/machinery/requests_console/subdept in globalconsoles[chosen_department])
+					dat += ("[subdept.department]<BR>")
+				dat += text("<BR><A href='?src=\ref[src];setScreen=4'>Back</A><BR>")
 			if(5)   //configure panel
 				dat += text("<B>Configure Panel</B><BR><BR>")
 				if(announceAuth)
@@ -236,13 +306,14 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				dat += text("<A href='?src=\ref[src];setScreen=1'>Request Assistance</A><BR>")
 				dat += text("<A href='?src=\ref[src];setScreen=2'>Request Supplies</A><BR>")
 				dat += text("<A href='?src=\ref[src];setScreen=3'>Relay Anonymous Information</A><BR><BR>")
-				dat += text("<A href='?src=\ref[src];setScreen=5'>Configure Panel</A><BR><BR>")
+				
+				dat += text("<A href='?src=\ref[src];setScreen=4'>Make a call</A><BR><BR>")
 				if(announcementConsole)
 					dat += text("<A href='?src=\ref[src];setScreen=10'>Send station-wide announcement</A><BR><BR>")
-				if (silent)
-					dat += text("Speaker <A href='?src=\ref[src];setSilent=0'>OFF</A>")
-				else
-					dat += text("Speaker <A href='?src=\ref[src];setSilent=1'>ON</A>")
+				
+				dat += text("<A href='?src=\ref[src];setScreen=5'>Configure Panel</A><BR>")
+				dat += text("Speaker:<A href='?src=\ref[src];toggleSilent=1'>[silent ? "OFF" : "ON"]</A>")
+				dat += text("  Ringer:<A href='?src=\ref[src];toggleRinger=1'>[ringer ? "ON" : "OFF"]</A>")
 
 		user << browse("[dat]", "window=request_console")
 		onclose(user, "req_console")
@@ -323,7 +394,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 									Console.icon_state = "req_comp3"
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request_urgent.ogg', 50, 1)
-									visible_message("The [src] beeps; <span class='bold'>PRIORITY Alert at [department]</span>")
+									Console.visible_message("The [Console] beeps; <span class='bold'>PRIORITY Alert at [department]</span>")
 									sleep(10)
 									playsound(Console.loc, 'sound/machines/request_urgent.ogg', 50, 1)
 									sleep(10)
@@ -346,12 +417,12 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 									Console.icon_state = "req_comp2"
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
-									visible_message("The [src] beeps; Message from [department]")
+									Console.visible_message("The [Console] beeps; Message from [department]")
 									sleep(10)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
 									sleep(10)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
-								Console.messages += "<B>Message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[message]"
+								Console.messages += "<B>Message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[sending]"
 						Console.set_light(2)
 				messages += "<B>Message sent to [dpt]</B><BR>[message]"
 			else
@@ -367,8 +438,8 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			screen = 2
 		if(3)		//relay information
 			screen = 3
-//		if(4)		//write message
-//			screen = 4
+		if(4)		//landline telephone 
+			screen = 4
 		if(5)		//configure
 			screen = 5
 		if(6)		//sent successfully
@@ -392,18 +463,24 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			screen = 0
 
 	//Handle silencing the console
-	switch( href_list["setSilent"] )
+	switch( href_list["toggleSilent"] )
 		if(null)	//skip
 		if("1")
-			silent = 1
-		else
-			silent = 0
-
+			silent = !silent
+	switch( href_list["toggleRinger"] )
+		if(null)
+		if("1")
+			ringer = !ringer
 	switch( href_list["setDepartment"] )
 		if(null)	//skip
 		else
 			var/name = reject_bad_text(input(usr,"Name:","Name this department.","Public") as null|text)
 			set_department(name,text2num(href_list["setDepartment"]))
+	switch( href_list["dialDepartment"] )
+		if(null)
+		else
+			chosen_department = href_list["dialDepartment"]
+			screen = 11
 
 	updateUsrDialog()
 	return
@@ -493,9 +570,52 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			var/obj/item/weapon/stamp/T = O
 			msgStamped = text("<font color='blue'><b>Stamped with the [T.name]</b></font>")
 			updateUsrDialog()
+	if (istype(O, /obj/item/telephone))
+		if(phone)
+			to_chat(user, "<span class='notice'>There is already a telephone on the hook.</span>")
+			return
+		if(!user.drop_item(O))
+			to_chat(user, "<span class='warning'>It's stuck to your hand!</span>")
+			return
+		user.visible_message("<span class='notice'>[user] puts \the [O] onto \the [src].</span>")
+		//TODO playsound
+		phone = O
+		O.forceMove(src)
+		overlays.Add(phone_overlay)
 	return
+
+/obj/machinery/requests_console/verb/pick_up_phone()
+	set category = "Object"
+	set name = "Pick up telephone"
+	set src in oview(1)
+	if(!ishuman(usr))
+		to_chat(usr, "You are not capable of such fine manipulation.")
+		return
+	if(usr.incapacitated())
+		to_chat(usr, "You cannot do this while incapacitated.")
+		return
+	if(!phone)
+		to_chat(usr, "/the [src] does not have a telephone!")
+		return
+		
+	usr.put_in_hands(src.phone)
+	phone = null //do not delete the phone
+	overlays.Remove(phone_overlay)
+	//TODO stop playing ringing
+	//TODO play pickup sound
+
+/obj/machinery/requests_console/CtrlClick(mob/user)
+	if(!Adjacent(user))
+		to_chat(user, "<span class='notice'>You are too far away!</span>")
+		return
+	src.pick_up_phone(user)
 
 /obj/machinery/requests_console/mechanic
 	name = "\improper Mechanics requests console"
 	department = "Mechanics"
 	departmentType = 4
+	
+/obj/item/telephone
+	name = "telephone"
+	icon = 'icons/obj/terminals.dmi'
+	icon_state = "phone"
