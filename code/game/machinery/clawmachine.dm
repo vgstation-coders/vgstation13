@@ -5,7 +5,7 @@
 #define PRIZEPOOL_STANDARD 1
 #define PRIZEPOOL_PREMIUM 2
 #define PRIZEPOOL_POMF 3
-#define ANIMATION_LENGTH 27
+#define ANIMATION_LENGTH 31
 
 /obj/machinery/claw_machine
 	name = "claw machine"
