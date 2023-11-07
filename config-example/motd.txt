@@ -1,6 +1,6 @@
-```<p><b><font size="32">Welcome to /vg/station</font></b>
+<p><b><font size="32">Welcome to /vg/station</font></b>
 <b><font size = "4">The current thread can be found by <font color="purple"><a href="https://boards.4channel.org/vg/catalog#s=ss13g">(clicking here)</a></font></font><br></b>
-<font size = "4">Server's byond version is: <a href="https://www.byond.com/docs/notes/515.html">515.1603</a></font>
+<font size = "4">Server's byond version is: <a href="https://www.byond.com/docs/notes/515.html">515.1608</a></font>
 <font size = "4">Read the <a href="http://ss13.moe/wiki/">wiki,</a> and consider <a href="http://ss13.moe/wiki/index.php/Guide_to_Contributing_to_the_Wiki">contributing!</a></font><br>
 <font color="#DF0101" size=5>Donate to help keep the server running: <a href="http://ss13.moe/donate">Paypal</a> or <a href="http://patreon.com/pomf">Patreon</a>.</font><br>
 -------- Info --------
@@ -10,5 +10,3 @@
 • If you have a concern about a player or the round, please press F1 to adminhelp it.
 • Admins need to know about problems to fix them, so help us help you!
 ----------------------<br>
-<font color='purple' size='4'><a href="http://ss13.moe/forum/viewtopic.php?f=40&t=6132">Pomf rumors #30</a></font></p>
-```
