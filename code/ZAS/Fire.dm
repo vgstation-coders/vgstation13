@@ -25,7 +25,11 @@ Attach to transfer valve and open. BOOM.
 	var/atom/movable/firelightdummy/firelightdummy
 
 
-/atom/movable/firelightdummy //this is a dummy that gets added to the vis_contents of a burning atom that can be a light source when its on fire so that it doesnt overwrite the light the atom might already be making
+/atom/movable/firelightdummy
+	//this is a dummy that gets added to the vis_contents of a burning atom that can be a light source when its on fire so that it doesnt overwrite the light the atom might already be making
+		//ideally instead of this you could directly add multiple light source datums to a single atom that would all be processed by the lighting system nicely
+		//however, thats not how the lighting system currently works
+	//are you up to the challenge?
 	gender = PLURAL
 	name = "fire"
 	mouse_opacity = 0
