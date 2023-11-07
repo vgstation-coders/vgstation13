@@ -33,6 +33,7 @@ Attach to transfer valve and open. BOOM.
 	gender = PLURAL
 	name = "fire"
 	mouse_opacity = 0
+	vis_flags = VIS_INHERIT_ID
 	light_color = LIGHT_COLOR_FIRE
 
 /atom/movable/firelightdummy/New()
