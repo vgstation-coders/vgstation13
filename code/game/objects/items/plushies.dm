@@ -245,6 +245,11 @@
  * Fumos
  */
 
+/obj/item/toy/plushie/fumo/atmostech
+	name = "\improper fumo atmospheric technician"
+	desc = "A stuffed doll depicting the person who fixes and causes plasmafloods."
+	icon_state = "atmosfumo"
+
 /obj/item/toy/plushie/fumo/assistant
 	name = "\improper fumo assistant"
 	desc = "This greyshirt doll is complete with insulated gloves, gas mask and toolbelt."
@@ -280,6 +285,11 @@
 	name = "\improper fumo captain"
 	desc = "A fumo-style doll depicting the captain. It has a deadpan expression on its face."
 	icon_state = "capfumo"
+
+/obj/item/toy/plushie/fumo/engi
+	name = "\improper fumo engineer"
+	desc = "A stuffed doll depicting the person who contains and looses the singularity."
+	icon_state = "engifumo"
 
 /obj/item/toy/plushie/fumo/librarian
 	name = "\improper fumo librarian"
