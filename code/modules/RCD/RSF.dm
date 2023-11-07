@@ -8,6 +8,7 @@
 	starting_materials	= list(MAT_IRON = 40000)
 
 	max_matter = 40
+	sparky = FALSE
 
 	schematics			= list(
 	/datum/rcd_schematic/rsf/glass,
@@ -40,6 +41,7 @@
 	icon_state			= "rsf"
 
 	cell_power_per_energy = 50
+	sparky = FALSE
 
 	schematics			= list(
 	/datum/rcd_schematic/rsf/glass,

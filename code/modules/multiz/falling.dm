@@ -126,7 +126,7 @@
 	return FALSE
 
 // Function handling going over open spaces, pre-extension to normal throw hit checks
-/atom/movable/hit_check(var/speed, mob/user)
+/atom/movable/hit_check(speed, mob/user, hit_whitelist)
 	if(isopenspace(get_turf(src)))
 		src.fall()
 	. = ..()

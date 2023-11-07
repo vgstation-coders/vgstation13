@@ -613,7 +613,7 @@ var/global/objects_thrown_when_explode = FALSE
 					else
 						return CANNOT_EQUIP
 
-				
+
 
 				return CAN_EQUIP
 			if(slot_back)
@@ -1748,6 +1748,9 @@ var/global/list/image/blood_overlays = list()
 		playsound(A, surgerysound, volume, vary = TRUE)
 
 /obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
+	return FALSE
+
+/obj/item/proc/AltFrom(var/atom/A,var/mob/user)
 	return FALSE
 
 /obj/item/get_heat_conductivity()

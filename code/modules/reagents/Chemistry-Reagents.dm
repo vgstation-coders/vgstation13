@@ -10334,3 +10334,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			new /obj/effect/alien/weeds(T)
 		if(!locate(/obj/effect/decal/cleanable/purpledrank) in T)
 			new /obj/effect/decal/cleanable/purpledrank(T)
+
+/datum/reagent/hyperzine/methamphetamine //slightly better than 'zine
+	name = "Methamphetamine" //Only used on the Laundromat spess vault
+	id = METHAMPHETAMINE
+	description = "It uses a different manufacture method but it is every bit as pure."
+	color = "#89CBF0" //baby blue
+	custom_metabolism = 0.01
+	overdose_am = 30
