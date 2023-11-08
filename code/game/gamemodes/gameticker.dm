@@ -216,7 +216,7 @@ var/datum/controller/gameticker/ticker
 		CHECK_TICK
 
 	//Now that we have all of the occupied areas, we handle the lights being on or off, before actually putting the players into their bodies.
-	handle_lights(roundstart_occupied_areas)
+	activate_area_lights(roundstart_occupied_areas)
 	//Force the lighting subsystem to update.
 	SSlighting.fire(FALSE, FALSE)
 
@@ -661,7 +661,7 @@ var/datum/controller/gameticker/ticker
 			roles += player.mind.assigned_role
 	return roles
 
-/datum/controller/gameticker/proc/handle_lights(list/areas_to_turn_lights_on)
+/datum/controller/gameticker/proc/activate_area_lights(list/areas_to_turn_lights_on)
 	for(var/area/this_area in areas_to_turn_lights_on)
 		for(var/obj/machinery/light_switch/LS in this_area)
 			LS.toggle_switch(1, playsound = FALSE)
