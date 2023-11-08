@@ -349,12 +349,12 @@ var/global/list/obj/machinery/light/alllights = list()
 		update()
 		return
 		
-	if (istype(W,/obj/item/stack/sheet/mineral/plastic))
+	if (istype(W,/obj/item/stack/light_w))
 		if(rgb_upgrade)
 			to_chat(user, "This light is already customizable.")
 			return
-		var/obj/item/stack/sheet/mineral/plastic/plasticsheet = W
-		plasticsheet.use(1)
+		var/obj/item/stack/light_w/lightstack = W
+		lightstack.use(1)
 		rgb_upgrade = TRUE
 		to_chat(user, "You insert \the [W] into \the [src], allowing multitool customization.")
 		return
@@ -366,7 +366,7 @@ var/global/list/obj/machinery/light/alllights = list()
 			"You remove some plastic from \the [src].", "You hear a noise.")
 		rgb_upgrade = FALSE
 		current_bulb.brightness_color = initial(current_bulb.brightness_color)
-		drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(src), 1, user)
+		drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 		return
 	user.delayNextAttack(8)
 	
