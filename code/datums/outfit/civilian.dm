@@ -117,7 +117,6 @@
 
 /datum/outfit/bartender/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.check_mutations = M_CHECK_JOB
 
@@ -589,8 +588,6 @@
 
 /datum/outfit/librarian/post_equip(var/mob/living/carbon/human/H)
 	..()
-	var/obj/item/weapon/storage/bag/plasticbag/P = new /obj/item/weapon/storage/bag/plasticbag(H)
-	H.put_in_hands(P)
 	var/list/new_languages = list()
 	for(var/L in all_languages)
 		var/datum/language/lang = all_languages[L]
