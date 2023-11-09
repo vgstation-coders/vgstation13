@@ -662,15 +662,6 @@ var/datum/controller/gameticker/ticker
 			roles += player.mind.assigned_role
 	return roles
 
-/datum/controller/gameticker/proc/activate_lights_in_area(area/A)
-	for(var/obj/machinery/light_switch/LS in A)
-		LS.toggle_switch(1, playsound = FALSE)
-	for(var/obj/machinery/light/lightykun in A)
-		lightykun.on = 1
-		lightykun.update()
-	for(var/obj/item/device/flashlight/lamp/lampychan in A)
-		lampychan.toggle_onoff(1)
-
 /datum/controller/gameticker/proc/post_roundstart()
 	//Handle all the cyborg syncing
 	var/list/active_ais = active_ais()

@@ -530,3 +530,19 @@
 		if(thirdslash)
 			return typesof(text2path(copytext(areapathtext, 1, thirdslash)))
 	return typesof(text2path(areapathtext))
+
+/proc/activate_lights_in_area(area/A)
+	var/obj/machinery/light_switch/LS
+	var/obj/machinery/light/lightykun
+	var/obj/item/device/flashlight/lamp/lampychan
+	for(var/obj/O in A)
+		LS = O
+		lampychan = O
+		lightykun = O
+		if(istype(LS))
+			LS.toggle_switch(1, playsound = FALSE)
+		else if(istype(lightykun))
+			lightykun.on = 1
+			lightykun.update()
+		else if(istype(lampychan))
+			lampychan.toggle_onoff(1)
