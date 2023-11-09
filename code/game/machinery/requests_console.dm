@@ -652,7 +652,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 			if(phone)
 				//TODO destination add message("missed call from [src]")
 				//TODO source add phonelog ("you hung up")
-				return "you hung up"
+				return
 			destination.ring()
 			sleep(5 SECONDS)
 
@@ -727,6 +727,8 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	if(!linked_console)
 		return
 	if(!linked_console.calling)
+		return
+	if(linked_console.calling.ringing)
 		return
 	if(!linked_console.calling.linked_phone)
 		return
