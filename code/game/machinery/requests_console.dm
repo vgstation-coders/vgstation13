@@ -5,7 +5,6 @@ var/req_console_supplies = list()
 var/req_console_information = list()
 var/list/obj/machinery/requests_console/requests_consoles = list()
 var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" = list(),"Medical" = list(),"Research" = list(),"Service" = list(),"Security" = list(),"Cargo" = list(),"Civillian" = list(),"other" = list())
-var/image/phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "phone_overlay")
 
 /obj/machinery/requests_console
 	name = "requests console"
@@ -15,7 +14,6 @@ var/image/phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "
 	icon_state = "req_comp0"
 	var/department = "Unknown" //The list of all departments on the station (Determined from this variable on each unit) Set this to the same thing if you want several consoles in one department
 	var/list/master_department = list()
-	var/list/globalconsoles 
 	var/list/messages = list() //List of all messages
 	var/departmentType = 0
 		// 0 = none (not listed, can only repeplied to)
@@ -60,11 +58,17 @@ var/image/phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "
 	var/announceSound = 'sound/vox/_bloop.wav'
 	luminosity = 0
 	
+	var/obj/item/telephone/linked_phone = null
 	var/obj/item/telephone/phone = null
+	var/image/phone_overlay
 	var/ringer = TRUE
-	var/chosen_department //department we are calling
-							//console we are calling
+	var/ringing = FALSE
+	var/chosen_department //department we want to call
+	var/obj/machinery/requests_console/calling = null	//console we are in a call with
 	var/sneed2
+	var/last_call_log
+	//var/datum/phone_conversation/ongoing_call
+	var/list/globalconsoles 
 
 /obj/machinery/requests_console/power_change()
 	..()
@@ -83,7 +87,10 @@ var/image/phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "
 	set_master_department(department)
 	set_department(department,departmentType)
 	globalconsoles = requests_consoles_categorised
-	phone = new /obj/item/telephone (src)
+	linked_phone = new /obj/item/telephone (src)
+	linked_phone.linked_console = src
+	phone = linked_phone
+	phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "phone_overlay")
 	overlays.Add(phone_overlay)
 	return ..()
 
@@ -138,7 +145,7 @@ var/image/phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "
 	for(var/dept in master_department)
 		requests_consoles_categorised[dept] += src
 
-/obj/machinery/requests_console/proc/set_master_department(var/name)//this is fucking awful but less awful than updating all the maps and consoles i think
+/obj/machinery/requests_console/proc/set_master_department(var/name)//this is fucking awful but less awful than updating all the maps and consoles
 	if(!isemptylist(master_department))
 		add_to_global_rc_list()
 		return "already setup"
@@ -232,12 +239,6 @@ var/image/phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "
 				for(var/dept in globalconsoles)
 					dat += text("<A href='?src=\ref[src];dialDepartment=[dept]'>[dept]</A><BR>")
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
-			if(11) //select console to dial from previously chosen department
-				dat += text("Available [chosen_department] telephones:<BR>")
-				sneed2 = globalconsoles[chosen_department]
-				for(var/obj/machinery/requests_console/subdept in globalconsoles[chosen_department])
-					dat += ("[subdept.department]<BR>")
-				dat += text("<BR><A href='?src=\ref[src];setScreen=4'>Back</A><BR>")
 			if(5)   //configure panel
 				dat += text("<B>Configure Panel</B><BR><BR>")
 				if(announceAuth)
@@ -293,7 +294,19 @@ var/image/phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "
 				if ((announceAuth || is_malf_owner(user)) && message)
 					dat += text("<A href='?src=\ref[src];sendAnnouncement=1'>Announce</A><BR>")
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
-
+				
+			if(11) //select console to dial from previously chosen department
+				dat += text("Available [chosen_department] telephones:<BR>")
+				sneed2 = globalconsoles[chosen_department]
+				for(var/obj/machinery/requests_console/subdept in globalconsoles[chosen_department])
+					dat += ("<A href='?src=\ref[src];dialConsole=\ref[subdept]'>[subdept.department]</A><BR>")
+					//apostrophes in the string break the hrefs so i'm referencing and locate()ing the thing
+				dat += text("<BR><A href='?src=\ref[src];setScreen=4'>Back</A><BR>")
+				
+			if(12) //last call log
+				dat += last_call_log
+				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back to main menu</A><BR>")
+			
 			else	//main menu
 				screen = 0
 				announceAuth = 0
@@ -454,6 +467,8 @@ var/image/phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "
 			if(!announcementConsole)
 				return
 			screen = 10
+		if(12)		//last call log
+			screen = 12
 		else		//main menu
 			dpt = ""
 			msgVerified = ""
@@ -481,7 +496,14 @@ var/image/phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "
 		else
 			chosen_department = href_list["dialDepartment"]
 			screen = 11
-
+	switch( href_list["dialConsole"] )
+		if(null)
+		else
+			last_call_log = text("<B>Last call log:</B><BR><BR>")
+			var/a = start_call(locate(href_list["dialConsole"]))
+			last_call_log += text("[a]")
+			screen = 12
+		
 	updateUsrDialog()
 	return
 
@@ -577,8 +599,12 @@ var/image/phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "
 		if(!user.drop_item(O))
 			to_chat(user, "<span class='warning'>It's stuck to your hand!</span>")
 			return
+		if(calling)
+			//TODO add phonelog ("call end")
+			calling.calling = null
+			calling = null
 		user.visible_message("<span class='notice'>[user] puts \the [O] onto \the [src].</span>")
-		//TODO playsound
+		playsound(source=src, soundin='sound/items/telephone_pickup.ogg', vol=100, vary=TRUE, channel=0)
 		phone = O
 		O.forceMove(src)
 		overlays.Add(phone_overlay)
@@ -598,24 +624,119 @@ var/image/phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "
 		to_chat(usr, "/the [src] does not have a telephone!")
 		return
 		
+	ringing = FALSE
+	//TODO add phonelog "picked up"
 	usr.put_in_hands(src.phone)
-	phone = null //do not delete the phone
+	phone = null //do not delete phone
 	overlays.Remove(phone_overlay)
-	//TODO stop playing ringing
-	//TODO play pickup sound
+	playsound(source=src, soundin='sound/items/telephone_pickup.ogg', vol=100, vary=TRUE, channel=CHANNEL_TELEPHONES, wait=0)
 
 /obj/machinery/requests_console/CtrlClick(mob/user)
 	if(!Adjacent(user))
 		to_chat(user, "<span class='notice'>You are too far away!</span>")
 		return
 	src.pick_up_phone(user)
+	
+/obj/machinery/requests_console/proc/start_call(var/obj/machinery/requests_console/destination)
+	if(calling)
+		return "you are already calling [calling]"
+	if(destination.calling || !destination.phone)
+		return "line busy"
+	if(phone)
+		return "pick up the phone first"
+	calling = destination
+	destination.calling = src
+	destination.ringing = TRUE
+	spawn(0)
+		while(destination && destination.calling == src && destination.ringing)
+			if(phone)
+				//TODO destination add message("missed call from [src]")
+				//TODO source add phonelog ("you hung up")
+				return "you hung up"
+			destination.ring()
+			sleep(5 SECONDS)
 
+/obj/machinery/requests_console/proc/ring()
+	if(!linked_phone)
+		return
+	if(ringer)
+		playsound(source=src, soundin='sound/items/telephone_ring.ogg', vol=100, vary=FALSE, channel=CHANNEL_TELEPHONES)
+	//TODO shake phone overlay
+	
 /obj/machinery/requests_console/mechanic
 	name = "\improper Mechanics requests console"
 	department = "Mechanics"
 	departmentType = 4
 	
+/*/datum/phone_conversation
+	var/list/obj/machinery/requests_console/call_makers = list()
+	var/list/obj/machinery/requests_console/call_receivers = list()
+	var/ringing = FALSE
+	
+/datum/phone_conversation/New(var/c1, var/d2, var/c2)
+	message_admins("c1:[c1] d2:[d2] c2:[c2]")
+	for(var/obj/machinery/requests_console/i in requests_consoles)
+		if(i.department == c1)
+			call_makers += i
+	for(var/obj/machinery/requests_console/i in requests_consoles_categorised[d2])
+		if(i.department == c2)
+			call_receivers += i
+	
+/datum/phone_conversation/proc/start_call()
+	var/a = TRUE
+	for(var/obj/machinery/requests_console/i in call_makers)
+		if(!i.phone)
+			a = FALSE
+	if(a)
+		return "you hung up"
+	for(var/obj/machinery/requests_console/i in call_receivers)
+		if(!i.phone)
+			a = TRUE
+	if(a)
+		return "line busy"
+	ringing = TRUE
+	spawn(0)
+		while(ringing)
+			for(var/obj/machinery/requests_console/i in call_receivers)
+				playsound(source=i, soundin='sound/items/telephone_ring.ogg', vol=100, vary=FALSE, channel=CHANNEL_TELEPHONES)
+			sleep(5 SECONDS)
+	
+/datum/phone_conversation/proc/check_if_call_should_end() //all phones on either end are hung up -> call should end
+	var/a = TRUE
+	var/b = TRUE
+	for(var/obj/machinery/requests_console/i in call_makers)
+		if(!i.phone)
+			a = FALSE
+	for(var/obj/machinery/requests_console/i in call_receivers)
+		if(!i.phone)
+			b = FALSE
+	return (a || b)	
+*/
+
 /obj/item/telephone
 	name = "telephone"
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "phone"
+	flags = HEAR
+	var/hear_range = 3
+	var/obj/machinery/requests_console/linked_console = null
+	
+/obj/item/telephone/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(get_dist(src, speech.speaker) > hear_range)
+		return
+	if(!linked_console)
+		return
+	if(!linked_console.calling)
+		return
+	if(!linked_console.calling.linked_phone)
+		return
+	speech.name += "(Telephone)"//DOESNT WORK
+	//TODO fix this so you know the sound is coming from the telephone
+	var/speaker = linked_console.calling.linked_phone
+	var/listeners = get_hearers_in_view(2, speaker) | observers
+	var/eavesdroppers = get_hearers_in_view(3, speaker) - listeners
+	for (var/atom/movable/listener in listeners)
+		listener.Hear(speech, rendered_speech)
+	speech.message = stars(speech.message)
+	for (var/atom/movable/eavesdropper in eavesdroppers)
+		eavesdropper.Hear(speech, rendered_speech)
