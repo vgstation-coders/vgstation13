@@ -476,6 +476,7 @@
 #define FAKE_CREEP		"fake_creep"
 #define BLOBANINE		"blobanine"
 #define BLOB_ESSENCE	"blob_essence"
+#define METHAMPHETAMINE "methamphetamine"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -557,7 +558,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define BICARIDINES list(BICARIDINE, OPIUM)
 #define SPACE_DRUGGS list(SPACE_DRUGS, MESCALINE)
 #define SYNAPTIZINES list(SYNAPTIZINE, CYTISINE)
-#define HYPERZINES list(HYPERZINE, COCAINE)
+#define HYPERZINES list(HYPERZINE, COCAINE, METHAMPHETAMINE)
 #define IMIDAZOLINES list(IMIDAZOLINE, ZEAXANTHIN)
 #define STOXINS list(STOXIN, STOXIN2, VALERENIC_ACID)
 #define SACIDS list(SACID, FORMIC_ACID)

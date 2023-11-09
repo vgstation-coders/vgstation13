@@ -73,6 +73,82 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2023.11.09</h2>
+			<h3 class="author">brndd updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Wheelstation: fixed missing turfs on supply shuttle</li>
+			</ul>
+			<h2 class="date">2023.11.07</h2>
+			<h3 class="author">brndd updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Wheelstation: fixed mining outpost airlocks starting as a vacuum.</li>
+				<li class="bugfix">Wheelstation: made medbay airlocks not require access to bump open from the inside.</li>
+				<li class="bugfix">Wheelstation: removed some extraneous rad collectors and camera boards in engineering.</li>
+				<li class="tweak">Wheelstation: added masks and laser tag equipment to dorms, some more windows in medbay and around cargo, and one (1) coin.</li>
+			</ul>
+			<h2 class="date">2023.11.06</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">RCL no longer entirely prevent cable placement between two tiles if at least one of the tiles is valid (cables will still only be placed on the valid tile)</li>
+				<li class="bugfix">Fixed a specific case where the RCL would place an extra unwanted node on your tile after clicking an adjacent tile that already had a node despite your tile already having a full wire going toward that tile.</li>
+				<li class="rscadd">AltClicking an adjacent tile with the RCL equipped will cause it to try and absorb all the loose cable pieces on that tile</li>
+			</ul>
+			<h3 class="author">DorainGrey updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Engicoffee is now brewable again.</li>
+			</ul>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Laundromat vault, coming to a space quadrant near YOU! Do not go down the ladder.</li>
+			</ul>
+			<h3 class="author">GreatBigFailure updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Conveyor belts can now move specific numbers of items, controllable via multitool menu</li>
+			</ul>
+			<h3 class="author">Securitymain updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Ablative deconstructable by science for combat 3 and materials 4</li>
+				<li class="tweak">Ablative vest can be scanned by mechanics</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The mech painter is instant and no longer takes 4 seconds to paint a mech.</li>
+				<li class="rscadd">The Wizard&#39;s &#34;Punch&#34; spell will now also make both the wizard and their target immune to the damage caused by any shrapnel launched by the ensuing explosion. It will not, however, cancel any effect that the shrapnel may have, such as bolas entangling their targets.</li>
+				<li class="bugfix">Fixed a bug where if a wizard used the &#34;Punch&#34; spell on a target frozen in time it would permanently displace their sprite.</li>
+				<li class="tweak">Empowering Time Stop now costs 10 points instead of 20.</li>
+			</ul>
+			<h3 class="author">brndd updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Readded Wheelstation with some new changes and additions.</li>
+				<li class="tweak">Boxstation: MoMMI nest starts out as a vacuum</li>
+				<li class="bugfix">Fixed incorrect directional sprites on the particle acceleration emitter.</li>
+				<li class="rscadd">Service cyborgs now have a general-purpose drink synthesizer to replace their old space beer. This device can scan most types of drinks and then synthesize them out of battery power. They also come with a shaker, a rag and cooking tools out of the box, and get spicy chemicals and a new toy when emagged.</li>
+				<li class="rscdel">The service cyborg chef upgrade has been removed as it is now part of their standard loadout.</li>
+				<li class="tweak">Service gripper can now pick up more things (basically everything the Rapid Service Fabricator can create, plus things needed in the kitchen). The gripper can now be directly synthesized to from the RSF.</li>
+				<li class="tweak">The Rapid Service Fabricator no longer throws sparks all over the place when selecting what to fabricate. Instead it plays a clicking sound.</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Welding tools now properly attack the head while targetting the eyes and mouth, instead of doing nothing.</li>
+			</ul>
+			<h3 class="author">nervere updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Cyborgs are no longer disallowed from choosing the combat module on code delta.</li>
+			</ul>
+			<h3 class="author">pedr69 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">mechanic and geneticist PDAs now take both their respective departments into account when receiving multicasted messages</li>
+			</ul>
+			<h2 class="date">2023.11.04</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed cable bolas being invisible.</li>
+				<li class="bugfix">Fixed cable laying being prevented in some setups where it should be allowed.</li>
+			</ul>
+			<h3 class="author">nervere updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed being able to walk out of the gibber.</li>
+			</ul>
 			<h2 class="date">2023.11.01</h2>
 			<h3 class="author">ValkyrieSkies updated:</h3>
 			<ul class="changes bgimages16">
@@ -2138,91 +2214,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="tweak">A Set of Irons can now be stored in atmos tech and CE hardsuit storage slots.</li>
 				<li class="bugfix">Fire alarm sounds can no longer be spammed.</li>
 				<li class="bugfix">Fire alarm sounds will no longer fire if unpowered.</li>
-			</ul>
-			<h2 class="date">2022.10.20</h2>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed broken icon for dead (not crushed) crickets.</li>
-			</ul>
-			<h2 class="date">2022.10.19</h2>
-			<h3 class="author">DorainGrey updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added Energizer &amp; Supermatter Sea Salt Soda cans, they contains Hyronalin &amp; cures hallucinations.</li>
-				<li class="rscadd">Valuable Asteroid, priority reward for Mechanics, breaks down into 5 sheets of Uranium, Silver, Gold &amp; Plasma.</li>
-				<li class="tweak">Changed Chief Engineer Priority Reward to an Omnitool, Atmospheric Analysis Scope &amp; can of Supermatter Sea Salt Soda</li>
-				<li class="tweak">Changed Station Engineer Priority Reward to an Omnitool &amp; can of Supermatter Sea Salt Soda</li>
-				<li class="tweak">Changed Atmospheric Technician Priority Reward to an Atmospheric Analysis Scope &amp; can of Energizer</li>
-				<li class="tweak">Changed Mechanic Priority Reward to an Valuable Asteroid &amp; can of Energizer</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Zinc Saucier service crates are now available at the trader.</li>
-			</ul>
-			<h2 class="date">2022.10.15</h2>
-			<h3 class="author">DorainGrey updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Reorganizes Engineering Secure storage into a layout that makes sense, fixes some missing R-Walls in Engineering.</li>
-				<li class="tweak">Replaces the Security Hardsuits in EVA with Atmospheric Hardsuits, as is standard, also reinforces EVA&#39;s walls.</li>
-				<li class="bugfix">Gives CE the advanced RCD and removes the excess stacks of RCD Ammo.</li>
-				<li class="bugfix">Fixes Engineering External airlocks being Arrivals Airlocks.</li>
-				<li class="tweak">Makes the Airlock Near Bridge smaller, by replacing O2 Locker with Wallmounted O2 Locker.</li>
-				<li class="tweak">Fixes some missing firedoors.</li>
-				<li class="tweak">Removes window and backdoor to teleporter room. Keeps shutter.</li>
-				<li class="tweak">Moves Atmos Tech Gear out of the hallway into a dedicated area beside atmos monitoring.</li>
-				<li class="rscadd">Added new thing. Adds Airlock to shard chamber, so engineers don&#39;t need to leave Engineering to setup the shard.</li>
-				<li class="tweak">Rewires engineering a bit, to make more sense.</li>
-			</ul>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Whipped Clover Pies. These can be thrown to people&#39;s faces just like banana cream pies and will transfer the ingredient&#39;s luck to the victim. Made with 3 clovers and 10 flour.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Players can now flick a new switch on deactivated SaMMIs to find a personality for it.</li>
-			</ul>
-			<h3 class="author">adacovsk updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed some vision bugs, and made vision better in certain situations</li>
-			</ul>
-			<h3 class="author">falcon2346 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The gold hardsuit&#39;s helmet now puts out light just like all the others.</li>
-				<li class="imageadd">Added new sprites for gold hardsuit helmet with light</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Removed agony damage from fire.</li>
-				<li class="tweak">Slightly reduced damage caused from burning.</li>
-				<li class="bugfix">You will no longer cough or get confused while burning in a hardsuit with adequate heat protection.</li>
-			</ul>
-			<h2 class="date">2022.10.13</h2>
-			<h3 class="author">Hinaichigo updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Changed size class examine description for items.</li>
-				<li class="tweak">Chewing gum now goes in one&#39;s mouth.</li>
-				<li class="rscadd">Added three clover-related recipes: clover cream pie, clover con carne, and tontes de pelouse.</li>
-				<li class="rscadd">Lucky ingredients make for lucky dishes.</li>
-			</ul>
-			<h3 class="author">SECBATON-GRIFFON updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Inflatable shelters now give a message to the user if they can&#39;t be exited due to something blocking the way.</li>
-				<li class="bugfix">Inflatable shelters can now be properly exited next to them when moved.</li>
-				<li class="bugfix">Inflatable shelters can no longer push users into dense spaces if they become dense after the exiting process begins.</li>
-				<li class="tweak">All living mobs can now be visible inside shelters</li>
-				<li class="tweak">The shelter cover no longer appears when no mobs are inside</li>
-			</ul>
-			<h3 class="author">kacurasuo updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Colliding chemical reactions no longer consume multiple alias ingredients while only producing the output for one.</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Wizard dens on all maps now have access to a magic mirror and a scrying orb.</li>
-			</ul>
-			<h3 class="author">west3436 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscdel">Removed unused autoignition vars.</li>
-				<li class="rscadd">Fire alarms will now make a sound when they are triggered.</li>
 			</ul>
 		</div>
 		<!--
