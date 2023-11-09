@@ -537,8 +537,8 @@
 	var/obj/item/device/flashlight/lamp/lampychan
 	for(var/obj/O in A)
 		LS = O
-		lampychan = O
 		lightykun = O
+		lampychan = O
 		if(istype(LS))
 			LS.toggle_switch(1, playsound = FALSE)
 		else if(istype(lightykun))
