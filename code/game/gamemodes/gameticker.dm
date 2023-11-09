@@ -178,7 +178,7 @@ var/datum/controller/gameticker/ticker
 	//After antagonists have been removed from new_players in player_list, create crew
 	var/list/new_characters = list()	//list of created crew for transferring
 	var/list/new_players_ready = list() //unique list of people who have readied up, so we can delete mob/new_player later (ready is lost on mind transfer)
-	var/list/roundstart_occupied_areas = list() //List of areas that are occupied at roundstart, used to handle the lights being on or off.
+	var/list/roundstart_occupied_area_paths = list() //List of typepaths of areas in departments that are occupied at roundstart, used to handle the lights being on or off.
 
 	for(var/mob/M in player_list)
 		if(!istype(M, /mob/new_player/))
@@ -201,8 +201,7 @@ var/datum/controller/gameticker/ticker
 				S.store_position()
 				log_admin("([key]) started the game as a [S.mind.assigned_role].")
 				new_characters[key] = S
-				for(var/area/this_area in get_department_areas(S))
-					roundstart_occupied_areas |= this_area
+				roundstart_occupied_area_paths |= get_department_area_typepaths(S)
 			if("MODE")
 				//antags aren't new players
 			else
@@ -211,14 +210,16 @@ var/datum/controller/gameticker/ticker
 				EquipCustomItems(H)
 				H.update_icons()
 				new_characters[key] = H
-				for(var/area/this_area in get_department_areas(H))
-					roundstart_occupied_areas |= this_area
+				roundstart_occupied_area_paths |= get_department_area_typepaths(H)
 		CHECK_TICK
 
 	//Now that we have all of the occupied areas, we handle the lights being on or off, before actually putting the players into their bodies.
-	activate_area_lights(roundstart_occupied_areas)
-	//Force the lighting subsystem to update.
-	SSlighting.fire(FALSE, FALSE)
+	if(roundstart_occupied_area_paths.len)
+		for(var/area/A in areas)
+			if(A.type in roundstart_occupied_area_paths)
+				activate_lights_in_area(A)
+		//Force the lighting subsystem to update.
+		SSlighting.fire(FALSE, FALSE)
 
 	var/list/clowns = list()
 	var/already_an_ai = FALSE
@@ -661,15 +662,14 @@ var/datum/controller/gameticker/ticker
 			roles += player.mind.assigned_role
 	return roles
 
-/datum/controller/gameticker/proc/activate_area_lights(list/areas_to_turn_lights_on)
-	for(var/area/this_area in areas_to_turn_lights_on)
-		for(var/obj/machinery/light_switch/LS in this_area)
-			LS.toggle_switch(1, playsound = FALSE)
-		for(var/obj/machinery/light/lightykun in this_area)
-			lightykun.on = 1
-			lightykun.update()
-		for(var/obj/item/device/flashlight/lamp/lampychan in this_area)
-			lampychan.toggle_onoff(1)
+/datum/controller/gameticker/proc/activate_lights_in_area(area/A)
+	for(var/obj/machinery/light_switch/LS in A)
+		LS.toggle_switch(1, playsound = FALSE)
+	for(var/obj/machinery/light/lightykun in A)
+		lightykun.on = 1
+		lightykun.update()
+	for(var/obj/item/device/flashlight/lamp/lampychan in A)
+		lampychan.toggle_onoff(1)
 
 /datum/controller/gameticker/proc/post_roundstart()
 	//Handle all the cyborg syncing
