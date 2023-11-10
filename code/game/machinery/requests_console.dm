@@ -718,11 +718,13 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "phone"
 	flags = HEAR
-	var/hear_range = 3
+	var/mic_range = 3
+	var/speaker_range = 3
 	var/obj/machinery/requests_console/linked_console = null
+	var/datum/speech/lastmsg
 	
 /obj/item/telephone/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(get_dist(src, speech.speaker) > hear_range)
+	if(get_dist(src, speech.speaker) > mic_range)
 		return
 	if(!linked_console)
 		return
@@ -732,13 +734,8 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 		return
 	if(!linked_console.calling.linked_phone)
 		return
-	speech.name += "(Telephone)"//DOESNT WORK
-	//TODO fix this so you know the sound is coming from the telephone
-	var/speaker = linked_console.calling.linked_phone
-	var/listeners = get_hearers_in_view(2, speaker) | observers
-	var/eavesdroppers = get_hearers_in_view(3, speaker) - listeners
-	for (var/atom/movable/listener in listeners)
-		listener.Hear(speech, rendered_speech)
-	speech.message = stars(speech.message)
-	for (var/atom/movable/eavesdropper in eavesdroppers)
-		eavesdropper.Hear(speech, rendered_speech)
+	lastmsg = speech
+	speech.name += "(Telephone)"
+	var/obj/item/telephone/speaker = linked_console.calling.linked_phone
+	speaker.send_speech(speech, speaker.speaker_range, bubble_type = "")
+	
