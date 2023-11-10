@@ -8,7 +8,7 @@ var/list/atom/burnableatoms = list()
 	priority      = SS_PRIORITY_BURNABLE
 	display_order = SS_DISPLAY_BURNABLE
 
-	var/list/currentrun
+	var/list/atom/currentrun
 	var/currentrun_index
 
 /datum/subsystem/burnable/New()
