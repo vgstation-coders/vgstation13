@@ -215,6 +215,7 @@ var/datum/controller/gameticker/ticker
 
 	//Now that we have all of the occupied areas, we handle the lights being on or off, before actually putting the players into their bodies.
 	if(roundstart_occupied_area_paths.len)
+		var/tick = get_game_time()
 		var/obj/machinery/light_switch/LS
 		var/obj/machinery/light/lightykun
 		var/obj/item/device/flashlight/lamp/lampychan
@@ -233,6 +234,7 @@ var/datum/controller/gameticker/ticker
 						lampychan.toggle_onoff(1)
 		//Force the lighting subsystem to update.
 		SSlighting.fire(FALSE, FALSE)
+		log_admin("Turned the lights on in [(get_game_time() - tick) / 10] seconds.")
 
 	var/list/clowns = list()
 	var/already_an_ai = FALSE
