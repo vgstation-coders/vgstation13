@@ -484,7 +484,8 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 		if(null)
 		else
 			landline.last_call_log = text("<B>Last call log:</B><BR><BR>")
-			var/a = landline.start_call(locate(href_list["dialConsole"]).landline)
+			var/obj/machinery/requests_console/R = locate(href_list["dialConsole"])
+			var/a = landline.start_call(R.landline)
 			landline.last_call_log += text("[a]")
 			screen = 12
 		
