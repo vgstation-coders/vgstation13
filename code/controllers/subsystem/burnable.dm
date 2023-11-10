@@ -1,5 +1,5 @@
 var/datum/subsystem/burnable/SSburnable
-var/list/burnableatoms = list()
+var/list/atom/burnableatoms = list()
 
 /datum/subsystem/burnable
 	name          = "Burnable"
