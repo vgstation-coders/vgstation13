@@ -7,10 +7,10 @@
 	var/chosen_department //department we want to call
 	var/obj/landline/calling = null	//landline we are in a call with
 	var/last_call_log
-	var/attached_to
+	var/obj/attached_to
 	var/ringtone = 'sound/items/telephone_ring.ogg'
 
-/obj/landline/New(var/A)
+/obj/landline/New(var/obj/A)
 	attached_to = A
 	linked_phone = new /obj/item/telephone (src)
 	linked_phone.linked_landline = src
@@ -60,11 +60,13 @@
 	ringing = FALSE
 	//TODO add phonelog "picked up"
 	user.put_in_hands(src.phone)
-	phone = null //do not delete phone
 	playsound(source=src, soundin= phone.pickup_sound, vol=100, vary=TRUE, channel=CHANNEL_TELEPHONES, wait=0)
+	phone = null //do not delete phone
 	attached_to.overlays.Remove(phone_overlay)
 
 /obj/landline/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
+	if(!istype(O, /obj/item/telephone))
+		return
 	if(phone)
 		to_chat(user, "<span class='notice'>There is already a telephone on the hook.</span>")
 		return
@@ -77,7 +79,8 @@
 		calling = null
 	
 	user.visible_message("<span class='notice'>[user] puts \the [O] onto \the [src].</span>")
-	playsound(source=O, soundin=O.pickup_sound, vol=100, vary=TRUE, channel=0)
+	var/obj/item/telephone/P = O
+	playsound(source=O, soundin=P.pickup_sound, vol=100, vary=TRUE, channel=0)
 	phone = O
 	O.forceMove(src)
 	attached_to.overlays.Add(phone_overlay)
