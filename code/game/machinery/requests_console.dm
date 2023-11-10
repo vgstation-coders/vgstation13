@@ -58,17 +58,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	var/announceSound = 'sound/vox/_bloop.wav'
 	luminosity = 0
 	
-	var/obj/item/telephone/linked_phone = null
-	var/obj/item/telephone/phone = null
-	var/image/phone_overlay
-	var/ringer = TRUE
-	var/ringing = FALSE
-	var/chosen_department //department we want to call
-	var/obj/machinery/requests_console/calling = null	//console we are in a call with
-	var/sneed2
-	var/last_call_log
-	//var/datum/phone_conversation/ongoing_call
-	var/list/globalconsoles 
+	var/obj/landline/landline
 
 /obj/machinery/requests_console/power_change()
 	..()
@@ -86,12 +76,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	requests_consoles += src
 	set_master_department(department)
 	set_department(department,departmentType)
-	globalconsoles = requests_consoles_categorised
-	linked_phone = new /obj/item/telephone (src)
-	linked_phone.linked_console = src
-	phone = linked_phone
-	phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "phone_overlay")
-	overlays.Add(phone_overlay)
+	landline = new /obj/landline (src, src)
 	return ..()
 
 /obj/machinery/requests_console/Destroy()
@@ -296,15 +281,14 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
 				
 			if(11) //select console to dial from previously chosen department
-				dat += text("Available [chosen_department] telephones:<BR>")
-				sneed2 = globalconsoles[chosen_department]
-				for(var/obj/machinery/requests_console/subdept in globalconsoles[chosen_department])
+				dat += text("Available [landline.chosen_department] telephones:<BR>")
+				for(var/obj/machinery/requests_console/subdept in requests_consoles_categorised[landline.chosen_department])
 					dat += ("<A href='?src=\ref[src];dialConsole=\ref[subdept]'>[subdept.department]</A><BR>")
 					//apostrophes in the string break the hrefs so i'm referencing and locate()ing the thing
 				dat += text("<BR><A href='?src=\ref[src];setScreen=4'>Back</A><BR>")
 				
 			if(12) //last call log
-				dat += last_call_log
+				dat += landline.last_call_log
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back to main menu</A><BR>")
 			
 			else	//main menu
@@ -485,7 +469,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	switch( href_list["toggleRinger"] )
 		if(null)
 		if("1")
-			ringer = !ringer
+			landline.ringer = !landline.ringer
 	switch( href_list["setDepartment"] )
 		if(null)	//skip
 		else
@@ -494,14 +478,14 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	switch( href_list["dialDepartment"] )
 		if(null)
 		else
-			chosen_department = href_list["dialDepartment"]
+			landline.chosen_department = href_list["dialDepartment"]
 			screen = 11
 	switch( href_list["dialConsole"] )
 		if(null)
 		else
-			last_call_log = text("<B>Last call log:</B><BR><BR>")
+			landline.last_call_log = text("<B>Last call log:</B><BR><BR>")
 			var/a = start_call(locate(href_list["dialConsole"]))
-			last_call_log += text("[a]")
+			landline.last_call_log += text("[a]")
 			screen = 12
 		
 	updateUsrDialog()
@@ -592,44 +576,19 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 			var/obj/item/weapon/stamp/T = O
 			msgStamped = text("<font color='blue'><b>Stamped with the [T.name]</b></font>")
 			updateUsrDialog()
-	if (istype(O, /obj/item/telephone))
-		if(phone)
-			to_chat(user, "<span class='notice'>There is already a telephone on the hook.</span>")
-			return
-		if(!user.drop_item(O))
-			to_chat(user, "<span class='warning'>It's stuck to your hand!</span>")
-			return
-		if(calling)
-			//TODO add phonelog ("call end")
-			calling.calling = null
-			calling = null
-		user.visible_message("<span class='notice'>[user] puts \the [O] onto \the [src].</span>")
-		playsound(source=src, soundin='sound/items/telephone_pickup.ogg', vol=100, vary=TRUE, channel=0)
-		phone = O
-		O.forceMove(src)
-		overlays.Add(phone_overlay)
+	if (istype(O, /obj/item/telephone) && landline)
+		landline.attackby(O, user)
 	return
 
 /obj/machinery/requests_console/verb/pick_up_phone()
 	set category = "Object"
 	set name = "Pick up telephone"
 	set src in oview(1)
-	if(!ishuman(usr))
-		to_chat(usr, "You are not capable of such fine manipulation.")
+	if(!landline)
+		to_chat(usr, "\the [src] model does not come with a telephone!")
 		return
-	if(usr.incapacitated())
-		to_chat(usr, "You cannot do this while incapacitated.")
-		return
-	if(!phone)
-		to_chat(usr, "/the [src] does not have a telephone!")
-		return
-		
-	ringing = FALSE
-	//TODO add phonelog "picked up"
-	usr.put_in_hands(src.phone)
-	phone = null //do not delete phone
-	overlays.Remove(phone_overlay)
-	playsound(source=src, soundin='sound/items/telephone_pickup.ogg', vol=100, vary=TRUE, channel=CHANNEL_TELEPHONES, wait=0)
+	//moved to landline
+	landline.pick_up_phone(usr)
 
 /obj/machinery/requests_console/CtrlClick(mob/user)
 	if(!Adjacent(user))
@@ -637,31 +596,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 		return
 	src.pick_up_phone(user)
 	
-/obj/machinery/requests_console/proc/start_call(var/obj/machinery/requests_console/destination)
-	if(calling)
-		return "you are already calling [calling]"
-	if(destination.calling || !destination.phone)
-		return "line busy"
-	if(phone)
-		return "pick up the phone first"
-	calling = destination
-	destination.calling = src
-	destination.ringing = TRUE
-	spawn(0)
-		while(destination && destination.calling == src && destination.ringing)
-			if(phone)
-				//TODO destination add message("missed call from [src]")
-				//TODO source add phonelog ("you hung up")
-				return
-			destination.ring()
-			sleep(5 SECONDS)
 
-/obj/machinery/requests_console/proc/ring()
-	if(!linked_phone)
-		return
-	if(ringer)
-		playsound(source=src, soundin='sound/items/telephone_ring.ogg', vol=100, vary=FALSE, channel=CHANNEL_TELEPHONES)
-	//TODO shake phone overlay
 	
 /obj/machinery/requests_console/mechanic
 	name = "\improper Mechanics requests console"
@@ -713,29 +648,5 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	return (a || b)	
 */
 
-/obj/item/telephone
-	name = "telephone"
-	icon = 'icons/obj/terminals.dmi'
-	icon_state = "phone"
-	flags = HEAR
-	var/mic_range = 3
-	var/speaker_range = 3
-	var/obj/machinery/requests_console/linked_console = null
-	var/datum/speech/lastmsg
-	
-/obj/item/telephone/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(get_dist(src, speech.speaker) > mic_range)
-		return
-	if(!linked_console)
-		return
-	if(!linked_console.calling)
-		return
-	if(linked_console.calling.ringing)
-		return
-	if(!linked_console.calling.linked_phone)
-		return
-	lastmsg = speech
-	speech.name += "(Telephone)"
-	var/obj/item/telephone/speaker = linked_console.calling.linked_phone
-	speaker.send_speech(speech, speaker.speaker_range, bubble_type = "")
+
 	
