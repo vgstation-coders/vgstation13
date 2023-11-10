@@ -221,7 +221,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
 			if(4) //select department to dial
 				dat += text("<B>Where would you like to dial?</B><BR><BR>") //TODO replace this if the servers are down
-				for(var/dept in globalconsoles)
+				for(var/dept in requests_consoles_categorised)
 					dat += text("<A href='?src=\ref[src];dialDepartment=[dept]'>[dept]</A><BR>")
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
 			if(5)   //configure panel
@@ -310,7 +310,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 				
 				dat += text("<A href='?src=\ref[src];setScreen=5'>Configure Panel</A><BR>")
 				dat += text("Speaker:<A href='?src=\ref[src];toggleSilent=1'>[silent ? "OFF" : "ON"]</A>")
-				dat += text("  Ringer:<A href='?src=\ref[src];toggleRinger=1'>[ringer ? "ON" : "OFF"]</A>")
+				dat += text("  Ringer:<A href='?src=\ref[src];toggleRinger=1'>[landline.ringer ? "ON" : "OFF"]</A>")
 
 		user << browse("[dat]", "window=request_console")
 		onclose(user, "req_console")
@@ -484,7 +484,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 		if(null)
 		else
 			landline.last_call_log = text("<B>Last call log:</B><BR><BR>")
-			var/a = start_call(locate(href_list["dialConsole"]))
+			var/a = landline.start_call(locate(href_list["dialConsole"]).landline)
 			landline.last_call_log += text("[a]")
 			screen = 12
 		
