@@ -93,6 +93,7 @@
 		GAS_CARBON = "Carbon Dioxide",
 		GAS_PLASMA = "Plasma",
 		GAS_SLEEPING = "Nitrous Oxide",
+		GAS_CRYOTHEUM = "Cryotheum"
 	)
 	var/total_moles = air.total_moles
 	for(var/gas in display_gases)

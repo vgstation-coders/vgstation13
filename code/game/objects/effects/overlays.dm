@@ -75,9 +75,19 @@
 	icon = 'icons/effects/water.dmi'
 	icon_state = "wet_floor"
 	anchored = 1
+	plane = OBJ_PLANE
 	var/wet = TURF_WET_LUBE
 	var/lifespan
 	mouse_opacity = 0
+
+/obj/effect/overlay/puddle/ice
+	name = "Ice"
+	icon_state = "icy_floor"
+	wet = TURF_WET_ICE
+	var/current_temp
+	var/ice_thickness = 5
+	var/time_based_melt = FALSE
+
 
 /obj/effect/overlay/puddle/New(var/turf/T, var/new_wet, var/new_lifespan)
 	..()
@@ -100,6 +110,23 @@
 	var/mob/living/L = AM
 	if (!L.ApplySlip(src))
 		return ..()
+
+/obj/effect/overlay/puddle/ice/New(var/turf/T, var/zone/zone)
+	..()
+	current_temp = T.temperature
+	if( zone != null )
+		zone.ice_puddle_list += src
+
+/obj/effect/overlay/puddle/ice/process()
+	if(time_based_melt && world.time >= lifespan)
+		qdel(src)
+	var/temp_delta = current_temp - T0C
+	// Increase or decrease HP based on temperature. Scales logarithmically.
+	if(temp_delta != 0)
+		ice_thickness = min( 100, ice_thickness + ((temp_delta < 0) ? 1 : -1 * log(8, abs(temp_delta)) * rand(0.3, 1.0)))
+	if(ice_thickness < 0)
+		new /obj/effect/overlay/puddle(get_turf(src))
+		qdel(src)
 
 /obj/effect/overlay/holywaterpuddle
 	name = "Puddle"

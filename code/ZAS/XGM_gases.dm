@@ -119,3 +119,22 @@
 
 /datum/gas/oxygen_agent_b/is_human_safe(moles, datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
+
+/datum/gas/cryotheum
+	id = GAS_CRYOTHEUM
+	name = "Cryotheum"
+
+	specific_heat = 10
+
+	molar_mass = 0.032
+
+	tile_overlay = new /obj/effect/overlay/gas_overlay/cryotheum()
+	overlay_limit = MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME
+	flags = XGM_GAS_OXIDIZER | XGM_GAS_LOGGED
+
+/datum/gas/cryotheum/is_human_safe(moles, datum/gas_mixture/mixture)
+	return moles/mixture.total_moles() < 0.01
+
+/obj/effect/overlay/gas_overlay/cryotheum
+	name = "cryotheum"
+	icon_state = "cryotheum"
