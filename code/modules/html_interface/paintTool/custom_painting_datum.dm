@@ -33,7 +33,7 @@
 	if (istype(held_item, /obj/item/toy/crayon))
 		for (var/obj/item/weapon/storage/fancy/crayons/box in user.held_items)
 			for (var/crayon in box)
-				var/obj/item/toy/crayon/c = held_item
+				var/obj/item/toy/crayon/c = crayon
 				max_strength = PENCIL_STRENGTH_MAX
 				min_strength = PENCIL_STRENGTH_MIN
 				palette += c.mainColour
