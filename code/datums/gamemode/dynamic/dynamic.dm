@@ -67,6 +67,8 @@ var/stacking_limit = 90
 	var/no_stacking = 1
 	var/classic_secret = 0
 	var/high_pop_limit = 45
+	var/count_non_ready = 1 //If on, non-ready players will still count towards ruleset eligibility
+	var/real_ready_players = 0 //Gets incremented in most cases as roundstart_pop_ready
 
 	var/list/ruleset_category_weights = list()
 	var/dynamic_weight_increment = 1
@@ -182,12 +184,16 @@ var/stacking_limit = 90
 		if (initial(DR.weight))
 			midround_rules += new rule()
 	for(var/mob/new_player/player in player_list)
-		if(player.mind && player.ready)
-			roundstart_pop_ready++
-			candidates.Add(player)
+		if(player.mind)
+			if(player.ready)
+				candidates.Add(player)
+				roundstart_pop_ready++
+				real_ready_players++
+			else if(count_non_ready) //Non-ready players will also count
+				roundstart_pop_ready++
 
-	message_admins("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [roundstart_pop_ready] players ready.")
-	log_admin("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [roundstart_pop_ready] players ready.")
+	message_admins("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [real_ready_players] players ready.")
+	log_admin("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [real_ready_players] players ready.")
 
 	distribution_mode = dynamic_chosen_mode
 	message_admins("Distribution mode is : [dynamic_chosen_mode].")
@@ -268,7 +274,7 @@ var/stacking_limit = 90
 	if (roundstart_pop_ready >= high_pop_limit)
 		message_admins("DYNAMIC MODE: Mode: High Population Override is in effect! ([roundstart_pop_ready]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
 		log_admin("DYNAMIC MODE: High Population Override is in effect! ([roundstart_pop_ready]/[high_pop_limit]) Threat Level will have more impact on which roles will appear, and player population less.")
-	if (roundstart_pop_ready <= 0)
+	if (real_ready_players <= 0)
 		message_admins("DYNAMIC MODE: Not a single player readied-up. The round will begin without any roles assigned.")
 		log_admin("DYNAMIC MODE: Not a single player readied-up. The round will begin without any roles assigned.")
 		return 1
