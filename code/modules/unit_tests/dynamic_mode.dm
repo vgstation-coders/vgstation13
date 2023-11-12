@@ -30,7 +30,7 @@
 		player_list += N
 	..()
 	assert_eq(player_list.len, 5)
-	assert_eq(dynamic_mode.roundstart_pop_ready, 3)
+	assert_eq(dynamic_mode.real_ready_players, 3)
 	for(var/mob/M in player_list)
 		qdel(M)
 
