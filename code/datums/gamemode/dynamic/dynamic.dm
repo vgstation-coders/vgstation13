@@ -69,6 +69,7 @@ var/stacking_limit = 90
 	var/high_pop_limit = 45
 	var/count_non_ready = 1 //If on, non-ready players will still count towards ruleset eligibility
 	var/real_ready_players = 0 //Gets incremented in most cases as roundstart_pop_ready
+	var/non_ready_count_limit = 5 //Limits the amount of non-ready players that will be counted for increasing roundstart Dynamic severity, by default 5.
 
 	var/list/ruleset_category_weights = list()
 	var/dynamic_weight_increment = 1
@@ -183,14 +184,16 @@ var/stacking_limit = 90
 		var/datum/dynamic_ruleset/midround/DR = rule
 		if (initial(DR.weight))
 			midround_rules += new rule()
+	var/non_ready_count = 0 //Keeps track and is used in limiting how many non-ready players are counted for roundstart_pop_ready
 	for(var/mob/new_player/player in player_list)
 		if(player.mind)
 			if(player.ready)
 				candidates.Add(player)
 				roundstart_pop_ready++
 				real_ready_players++
-			else if(count_non_ready) //Non-ready players will also count
+			else if(count_non_ready && !(non_ready_count >= non_ready_count_limit)) //Non-ready players will also count up to a limit
 				roundstart_pop_ready++
+				non_ready_count++
 
 	message_admins("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [real_ready_players] players ready.")
 	log_admin("DYNAMIC MODE: Listing [roundstart_rules.len] round start rulesets, and [real_ready_players] players ready.")
