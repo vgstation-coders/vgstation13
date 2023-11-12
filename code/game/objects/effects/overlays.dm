@@ -123,7 +123,7 @@
 	var/temp_delta = current_temp - T0C
 	// Increase or decrease HP based on temperature. Scales logarithmically.
 	if(temp_delta != 0)
-		ice_thickness = min( 100, ice_thickness + ((temp_delta < 0) ? 1 : -1 * log(8, abs(temp_delta)) * rand(0.3, 1.0)))
+		ice_thickness = min( 100, ice_thickness + ((temp_delta < 0) ? 1 : -1 * log(8, abs(temp_delta)) / rand(1,3)))
 	if(ice_thickness < 0)
 		new /obj/effect/overlay/puddle(get_turf(src))
 		qdel(src)

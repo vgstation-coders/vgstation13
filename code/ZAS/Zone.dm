@@ -218,12 +218,12 @@ Class Procs:
 		for(var/obj/effect/overlay/puddle/ice/existing_ice in ice_puddle_list)
 			existing_ice.current_temp = air.temperature
 		// Below freezing and cryotheum in the air, create ice.
-		if( air.temperature <= T0C && air.molar_density(GAS_CRYOTHEUM) > MOLES_PLASMA_VISIBLE / CELL_VOLUME )
+		if( air.temperature <= T0C && air.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME )
 			for(var/turf/simulated/T in contents)
 				if(isemptylist(T.search_contents_for(/obj/effect/overlay/puddle/ice)))
 					var/obj/effect/overlay/puddle/ice/new_ice = new /obj/effect/overlay/puddle/ice(T, T.zone)
 					new_ice.wet = TURF_WET_ICE
-	else if ( air.molar_density(GAS_CRYOTHEUM) > MOLES_PLASMA_VISIBLE / CELL_VOLUME )
+	else if ( air.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME )
 		ice_puddle_list = list()
 
 /zone/proc/handle_events_add(turf/simulated/T)

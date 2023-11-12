@@ -212,6 +212,7 @@
 #include "code\ATMOSPHERICS\components\unary\vent_pump.dm"
 #include "code\ATMOSPHERICS\components\unary\vent_scrubber.dm"
 #include "code\ATMOSPHERICS\hvac\chiller.dm"
+#include "code\ATMOSPHERICS\hvac\cryotheum_resonator.dm"
 #include "code\ATMOSPHERICS\hvac\geyser.dm"
 #include "code\ATMOSPHERICS\hvac\spaceheater.dm"
 #include "code\ATMOSPHERICS\pipe\construction.dm"
