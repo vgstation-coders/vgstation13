@@ -224,12 +224,6 @@
 
 /event/ui_act
 
-// Called when living calls a life() tick
-// Arguments:
-// mob/living/L: thing that ticker
-// life_ticks: the amounts of lifetick processed
-/lazy_event/on_life
-
 // Called by attack_self
 // Arguments:
 // mob/living/user
