@@ -268,6 +268,13 @@
 // atom/movable/exiter: the movable exiting the area
 /event/area_exited
 
+// Called by both area/Entered and area/Exited if the atom changing areas is a mob
+// Arguments:
+// mob: the mob changing areas
+// newarea: the new area being entered
+// oldarea: the old area being left
+/event/mob_area_changed
+
 // Note: the following are used by datum/component/ai subtypes to give instructions to each other.
 // AI components are expected to INVOKE_EVENT these to send commands to other components
 // on the same datum without having to hold references to them.
