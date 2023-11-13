@@ -55,9 +55,6 @@
 	var/area/controlling_area										// Area controlled from an APC
 	var/obj/structure/cable/current_cable							// Current cable we're on
 	var/obj/machinery/power/current_power							// Current power machine we're in
-	var/mob/living/silicon/robot/current_robot						// Currently controlled robot
-	var/obj/machinery/bot/current_bot								// Currently controlled bot
-	var/obj/item/weapon/current_weapon								// Current gun we're controlling
 
 	//LISTS
 	var/list/image/cables_shown = list()							// In cable views
@@ -235,9 +232,6 @@
 		if(new_cable)
 			current_cable = new_cable
 			current_power = null
-			current_robot = null
-			current_bot = null
-			current_weapon = null
 			if(!isturf(loc))
 				loc = get_turf(NewLoc)
 			controlling_area = null
@@ -246,9 +240,6 @@
 		else
 			current_cable = null
 			current_power = null
-			current_robot = null
-			current_bot = null
-			current_weapon = null
 
 /mob/living/simple_animal/hostile/pulse_demon/movement_tally_multiplier()
 	. = ..()

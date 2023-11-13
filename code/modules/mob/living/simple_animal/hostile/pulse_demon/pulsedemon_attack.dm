@@ -81,13 +81,6 @@
 /obj/machinery/power/apc/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
 	if(user.loc != src.loc)
 		user.forceMove(src.loc)
-		if(user.current_bot)
-			user.current_bot.PD_occupant = null
-			if(user.current_bot.pAImove_delayer && !user.current_bot.integratedpai)
-				QDEL_NULL(user.current_bot.pAImove_delayer)
-		user.current_robot = null
-		user.current_bot = null
-		user.current_weapon = null
 		user.change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
 	else
 		attack_ai(user)
