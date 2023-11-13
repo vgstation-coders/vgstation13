@@ -107,7 +107,11 @@
 
 		if(M_FARSIGHT in mutations)
 			client.changeView(max(client.view, world.view+1))
-	CallHook("Login", list("client" = src.client, "mob" = src))
+
+	/* Handle media initialization */
+	client.media = new /datum/media_manager(src)
+	client.media.open()
+	client.media.update_music()
 
 	if(spell_masters)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)

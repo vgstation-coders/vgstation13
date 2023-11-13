@@ -76,15 +76,6 @@ function SetMusic(url, time, volume) {
 		if(M && M.client)
 			M.stop_all_music()
 
-// Hook into the events we desire.
-// Set up player on login
-/hook_handler/soundmanager/proc/OnLogin(var/list/args)
-	//testing("Received OnLogin.")
-	var/client/C = args["client"]
-	C.media = new /datum/media_manager(args["mob"])
-	C.media.open()
-	C.media.update_music()
-
 // Update when moving between areas.
 /hook_handler/soundmanager/proc/OnMobAreaChange(var/list/args)
 	var/mob/M = args["mob"]
