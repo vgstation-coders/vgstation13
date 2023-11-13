@@ -1,6 +1,7 @@
 
 /obj/machinery/cryotheum_resonator
 	density = 1
+	// Thank you Falcon2436 for making the sprites!
 	icon = 'icons/obj/machines/cryotheum_resonator.dmi'
 	icon_state = "machine_active"
 	name = "bluespace cryotheum resonator"

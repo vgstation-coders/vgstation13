@@ -17,6 +17,8 @@
 	var/list/overlay_limit = list()
 	// Flags.
 	var/list/flags = list()
+	// All possible gas reactions in no particular order.
+	var/list/reactions = list()
 
 /datum/xgm_data/New()
 	for(var/p in subtypesof(/datum/gas))
@@ -24,6 +26,8 @@
 
 		if(!add(gas))
 			stack_trace("Duplicate gas id '[gas.id]' in from typepath '[p]'")
+	for(var/reaction_path in subtypesof(/datum/gas_reaction))
+		reactions += new reaction_path
 
 /datum/xgm_data/proc/add(var/datum/gas/gas)
 	if(gases[gas.id])

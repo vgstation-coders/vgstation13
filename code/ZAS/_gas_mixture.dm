@@ -45,6 +45,8 @@
 	if(!moles)
 		return
 
+	if(!src[gasid])
+		src[gasid] = 0
 	src[gasid] += moles
 
 	if(update)
@@ -202,7 +204,8 @@
 //	//return R_IDEAL_GAS_EQUATION * ( log (1 + IDEAL_GAS_ENTROPY_CONSTANT/partial_pressure) + 20 )
 
 
-//Updates the calculated vars (total_moles, pressure, etc.) (actually currently only those two), and culls empty gases from the mix.
+//Updates the calculated vars (total_moles, pressure, etc.) (actually currently only those two), culls empty gases from the mix,
+//and caches reactions if allow_reactions is true. Does not actually perform the reactions - just prepares them to be used.
 //Called by default by all methods that alter a gas_mixture, and should be called if you manually alter it.
 /datum/gas_mixture/proc/update_values()
 	total_moles = 0
@@ -217,6 +220,8 @@
 		pressure = total_moles * R_IDEAL_GAS_EQUATION * temperature / volume
 	else
 		pressure = 0
+
+	cache_reactions()
 
 
 /datum/gas_mixture/proc/total_moles()
@@ -512,3 +517,30 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 
 /datum/gas_mixture/unsimulated/divide(factor)
 	return FALSE
+
+
+/datum/gas_mixture/unsimulated
+	allow_reactions = FALSE
+
+/datum/gas_mixture
+	var/allow_reactions = TRUE
+	// This is a list of all gas reactions that can take place in this mixture. Maintained on every update to this gas_mixture.
+	// For instance, if only one reaction existed in the codebase (2*N + O = N2O) and this mixture had no nitrogen, this would be empty.
+	// But if after an update there was now nitrogen and oxygen, that reaction would be added to this list. The exact requirements to be added
+	// to this list are defined by whether /datum/gas_reaction/proc/reaction_is_possible( datum/gas_mixture/mixture ) returns true or not.
+	var/list/possible_reactions = list()
+
+
+/datum/gas_mixture/proc/cache_reactions()
+	if(allow_reactions)
+		for(var/datum/gas_reaction/reaction in XGM.reactions)
+			possible_reactions = list()
+			if(reaction.reaction_is_possible(src))
+				possible_reactions += reaction
+
+// Ticks all reactions once.
+/datum/gas_mixture/proc/reaction_tick()
+	if(allow_reactions)
+		for(var/datum/gas_reaction/reaction in possible_reactions)
+			var/requested = reaction.reaction_amounts_requested(src)
+			reaction.perform_reaction(src, requested)

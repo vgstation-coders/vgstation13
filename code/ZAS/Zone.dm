@@ -56,6 +56,9 @@ Class Procs:
 	var/turf_color
 	#endif
 
+	// Hardcoded-event specific variables.
+	var/ice_puddle_list
+
 /zone/New()
 	SSair.add_zone(src)
 	air.temperature = TCMB
@@ -167,6 +170,7 @@ Class Procs:
 
 /zone/proc/tick()
 	check_for_events()
+	air.reaction_tick()
 	if(air.check_tile_graphic(graphic_add, graphic_remove))
 		for(var/turf/simulated/T in contents)
 			T.update_graphic(graphic_add, graphic_remove)
@@ -204,11 +208,7 @@ Class Procs:
 	//for(var/turf/T in unsimulated_contents)
 //		to_chat(M, "[T] at ([T.x],[T.y])")
 
-
-/zone
-	var/ice_puddle_list
-
-// There are some behaviors that we want to happen upon a temperature change. For instance, if slippery ice is spread across many turfs that melts upon a certain temperature,
+// There are some behaviors that we want to happen upon certain thresholds. For instance, if slippery ice is spread across many turfs that melts upon a certain temperature,
 // we want to know when the zone's temperature is raised above that threshold.
 // In an ideal non-BYOND environment we could use something like events to hookup each ice tile to. However, our in-house implementation of events suck for performance. So you
 // can just hardcode the check here.
