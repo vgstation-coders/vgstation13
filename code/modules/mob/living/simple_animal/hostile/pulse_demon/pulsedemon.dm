@@ -272,37 +272,12 @@
 	. = ..()
 	if(.)
 		return .
-
-	if(current_robot)
-		if (!speech.message)
-			return 1
-		current_robot.say(speech.message)
-		speech.message = sanitize(speech.message)
-		var/turf/T = get_turf(src)
-		// Again, so no mistaken BWOINKs
-		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) made [current_robot]([key_name(current_robot)]) say: [speech.message]")
-		log_admin("[key_name(src)] made [key_name(current_robot)] say: [speech.message]")
-		message_admins("<span class='notice'>[key_name(src)] made [key_name(current_robot)] say: [speech.message]</span>")
-		return 1 // This ensures we don't end up speaking by ourselves too
-
-	else if(current_bot && istype(current_bot,/obj/machinery/bot/buttbot))
-		if (!speech.message)
-			return 1
-		var/obj/machinery/bot/buttbot/BB = current_bot
-		if(prob(BB.buttchance) && !findtext(speech.message,"butt"))
-			sleep(rand(1,3))
-			BB.say(buttbottify(speech.message, 3, 9)) // 3 times as intense
-			BB.fart()
-			score.buttbotfarts++
-			return 1 // This ensures we don't end up speaking by ourselves too
-
-	else
-		playsound(loc, "[pick(emote_sound)]", 50, 1) // Play sound if in an intercom or not
-		var/radio = locate(/obj/item/device/radio) in loc
-		var/holopad = locate(/obj/machinery/hologram/holopad) in loc
-		if(!radio && !holopad) // if not in a machine you can speak out of, just sizzle
-			emote("me", MESSAGE_HEAR, "[pick(emote_hear)].") // Just do normal NPC emotes if not in them
-			return 1 // To stop speaking normally
+	playsound(loc, "[pick(emote_sound)]", 50, 1) // Play sound if in an intercom or not
+	var/radio = locate(/obj/item/device/radio) in loc
+	var/holopad = locate(/obj/machinery/hologram/holopad) in loc
+	if(!radio && !holopad) // if not in a machine you can speak out of, just sizzle
+		emote("me", MESSAGE_HEAR, "[pick(emote_hear)].") // Just do normal NPC emotes if not in them
+		return 1 // To stop speaking normally
 
 // Helper stuff for attacks
 /mob/living/simple_animal/hostile/pulse_demon/hasFullAccess()
