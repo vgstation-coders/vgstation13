@@ -40,7 +40,6 @@
 /obj/machinery/power/apc{
 	dir = 1;
 	name = "area power controller";
-	pixel_x = 0;
 	pixel_y = 24
 	},
 /obj/structure/cable{
@@ -77,8 +76,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/example)
@@ -146,8 +144,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating,
 /area/awaymission/example)
@@ -155,8 +152,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/example)
@@ -261,7 +257,6 @@
 /area/awaymission/example)
 "aR" = (
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitehall"
 	},
 /area/awaymission/example)
@@ -563,7 +558,6 @@
 "bD" = (
 /obj/structure/sink{
 	dir = 8;
-	icon_state = "sink";
 	pixel_x = -12;
 	pixel_y = 2
 	},
@@ -586,8 +580,7 @@
 /area/awaymission/example)
 "bG" = (
 /obj/machinery/door/airlock{
-	name = "Unisex Restrooms";
-	req_access_txt = "0"
+	name = "Unisex Restrooms"
 	},
 /turf/simulated/floor,
 /area/awaymission/example)
@@ -849,7 +842,6 @@
 	},
 /obj/machinery/light_construct/small{
 	dir = 8;
-	icon_state = "bulb-construct-stage1";
 	tag = "icon-bulb-construct-stage1 (WEST)"
 	},
 /turf/simulated/floor,

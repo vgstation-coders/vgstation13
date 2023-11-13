@@ -1083,14 +1083,6 @@
 	new /obj/item/clothing/shoes/protoboots(src)
 	..()
 
-/obj/item/weapon/storage/box/smartbox/clothing_box/hastur
-	name = "Hastur outfit box"
-
-/obj/item/weapon/storage/box/smartbox/clothing_box/hastur/New()
-	new	/obj/item/clothing/head/hasturhood(src)
-	new /obj/item/clothing/suit/hastur(src)
-	..()
-
 /obj/item/weapon/storage/box/smartbox/clothing_box/owl
 	name = "Owl outfit box"
 
@@ -1224,14 +1216,6 @@
 	new /obj/item/clothing/head/that/magic(src)
 	new /obj/item/clothing/suit/wizrobe/magician(src)
 	new /obj/item/clothing/shoes/sandal/marisa/leather(src)
-	..()
-
-/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer
-	name = "Necromancer robe box"
-
-/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer/New()
-	new /obj/item/clothing/head/wizard/necro(src)
-	new /obj/item/clothing/suit/wizrobe/necro(src)
 	..()
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/pharaoh

@@ -158,7 +158,6 @@
 /area/awaymission/articwasteland/gateway)
 "aI" = (
 /turf/simulated/floor/plating{
-	dir = 2;
 	icon_state = "warnplate"
 	},
 /area/awaymission/articwasteland/gateway)
@@ -179,7 +178,6 @@
 "aM" = (
 /obj/machinery/space_heater,
 /turf/simulated/floor/plating{
-	dir = 2;
 	icon_state = "warnplate"
 	},
 /area/awaymission/articwasteland/gateway)

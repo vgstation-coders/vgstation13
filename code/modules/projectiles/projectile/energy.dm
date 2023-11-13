@@ -270,6 +270,8 @@
 			P.starting = starting
 			P.shot_from = shot_from
 			P.current = current
+			P.target = target
+			P.original = original
 			var/turf/T = get_step(proj_target, pick_n_take(vdirs))
 			P.OnFired(T)
 			P.process()

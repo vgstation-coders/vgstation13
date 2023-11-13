@@ -317,6 +317,13 @@ var/global/num_vending_terminals = 1
 		D.amount = D.original_amount
 	for (var/datum/data/vending_product/D in hidden_records)
 		D.amount = D.original_amount
+	for (var/datum/data/vending_product/D in coin_records)
+		D.amount = D.original_amount
+	for (var/datum/data/vending_product/D in voucher_records)
+		D.amount = D.original_amount
+	for (var/datum/data/vending_product/D in holiday_records)
+		D.amount = D.original_amount
+
 	new /obj/item/stack/sheet/cardboard(P.loc, 4)
 	qdel(P)
 	if(user.machine==src)
@@ -1511,6 +1518,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/pill_bottle/lollipops = 5,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 100,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 2,
+		/obj/item/weapon/storage/pill_bottle/mint/nano = 5,
+		/obj/item/weapon/storage/lunchbox/plastic/nt/getmore = 6,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grandpatiks = 4,
@@ -1531,8 +1540,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/magbites = 110,
 		/obj/item/weapon/storage/fancy/cigarettes/gum = 10,
 		/obj/item/weapon/storage/pill_bottle/lollipops = 10,
+		/obj/item/weapon/storage/pill_bottle/mint/nano = 30,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 1,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine = 100,
+		/obj/item/weapon/storage/lunchbox/plastic/nt/getmore = 10,
 		)
 	vouched = list(
 		/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating = 2
@@ -2295,7 +2306,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/marisa_wiz = 5,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/hallowiz = 5,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/magician = 5,
-		/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer = 5,
+		/obj/item/clothing/suit/wizrobe/necro = 5,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/pharaoh = 5,
 		/obj/item/clothing/suit/storage/wintercoat/druid = 5,
 		/obj/item/clothing/head/wizard/magus = 5,
@@ -2352,6 +2363,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/condiment/peppermill = 5,
 		/obj/item/weapon/reagent_containers/food/condiment/saltshaker	= 5,
 		/obj/item/weapon/reagent_containers/food/condiment/vinegar = 5,
+		/obj/item/weapon/storage/lunchbox/plastic/nt = 10,
 		/obj/item/weapon/storage/bag/food = 5
 		)
 	contraband = list(
@@ -2361,6 +2373,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/kitchen/utensil/knife/large/butch = 2,
 		)
 	premium = list(
+		/obj/item/weapon/kitchen/utensil/spork = 10,
 		/obj/item/weapon/reagent_containers/dropper/baster = 1)
 
 	pack = /obj/structure/vendomatpack/dinnerware
@@ -2424,6 +2437,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/clothing/gloves/yellow = 1,
+		/obj/item/weapon/rcl = 2,
 		)
 
 	pack = /obj/structure/vendomatpack/tool
@@ -2454,6 +2468,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/blueprints/construction_permit = 4, // permits
 		/obj/item/taperoll/engineering = 5,
 		/obj/item/taperoll/atmos = 5,
+		/obj/item/weapon/rcl = 3,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
@@ -2623,7 +2638,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/liberty = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/aviator = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/proto = AUTO_DROBE_DEFAULT_STOCK,
-		/obj/item/weapon/storage/box/smartbox/clothing_box/hastur = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/clothing/suit/hastur = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/owl = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/pirateoutfit = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/lordadmiral = AUTO_DROBE_DEFAULT_STOCK,
@@ -2664,6 +2679,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/red_suit = 3,
 		/obj/item/clothing/head/nt_football_helmet = 5,
 		/obj/item/clothing/suit/nt_football = 5,
+		/obj/item/weapon/storage/lunchbox/plastic/clown = 2,
+		/obj/item/weapon/storage/lunchbox/plastic/mime = 2,
 		) //Pretty much everything that had a chance to spawn.
 	contraband = list(
 		/obj/item/weapon/storage/box/smartbox/clothing_box/clownpsyche = AUTO_DROBE_DEFAULT_STOCK,
@@ -2674,6 +2691,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/syndie_football_helmet = 5,
 		/obj/item/clothing/suit/syndie_football = 5,
 		/obj/item/toy/gun = 3,
+		/obj/item/weapon/reagent_containers/spray/creepspray = 2,
 		/obj/item/weapon/glue/temp_glue = 1
 		)
 	premium = list(
@@ -3066,12 +3084,16 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/discountburger = 6,
 		/obj/item/weapon/reagent_containers/food/drinks/discount_ramen = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 6,
+		/obj/item/weapon/reagent_containers/food/snacks/dangles = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 6,
-		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 12
+		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 12,
+		/obj/item/weapon/storage/lunchbox/discount = 6,
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/condiment/discount = 2,
+		/obj/item/weapon/storage/lunchbox/discount/pre_filled = 2,
+		/obj/item/weapon/storage/pill_bottle/mint/discount = 3
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/pill/antitox = 10
@@ -3082,11 +3104,14 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/discountburger = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/discount_ramen = 3,
 		/obj/item/weapon/reagent_containers/food/snacks/discountburrito = 5,
+		/obj/item/weapon/reagent_containers/food/snacks/dangles = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/discount = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins = 3,
 		/obj/item/weapon/reagent_containers/pill/antitox = 10,
 		/obj/item/weapon/reagent_containers/food/condiment/small/discount = 1,
-		/obj/item/weapon/reagent_containers/food/condiment/discount = 25
+		/obj/item/weapon/reagent_containers/food/condiment/discount = 25,
+		/obj/item/weapon/storage/lunchbox/discount = 5,
+		/obj/item/weapon/storage/lunchbox/discount/pre_filled = 30,
 		)
 
 	pack = /obj/structure/vendomatpack/discount
@@ -3168,8 +3193,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/nun = 2,
 		/obj/item/clothing/head/nun_hood = 2,
 		/obj/item/clothing/suit/chaplain_hoodie = 2,
-		/obj/item/clothing/head/chaplain_hood = 2,
 		/obj/item/clothing/suit/holidaypriest = 2,
+		/obj/item/clothing/head/kippah/kippah_random = 5,
 		/obj/item/clothing/under/wedding/bride_white = 2,
 		/obj/item/clothing/suit/cassock = 2,
 		/obj/item/clothing/head/hasturhood = 2,
@@ -3190,7 +3215,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/fancy/collection_plate = 1,
 		)
 	contraband = list(
-		/obj/item/clothing/head/clockwork_hood = 2,
 		/obj/item/clothing/suit/clockwork_robes = 2,
 		/obj/item/clothing/shoes/clockwork_boots = 2,
 		/obj/item/clothing/suit/kimono/ronin = 2
@@ -3232,7 +3256,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/stamp/trader = 3,
 		/obj/item/crackerbox = 1,
 		/obj/item/device/dses = 1,
-		/obj/item/weapon/storage/box/biscuit = 2,
+		/obj/item/weapon/storage/lunchbox/metal/trader/pre_filled = 3,
 		/obj/item/talonprosthetic = 3,
 		/obj/machinery/vending/sale/trader = 1,
 		/obj/item/weapon/storage/toolbox/paint = 1,
@@ -3723,6 +3747,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 6,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped = 4,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins = 4,
+		/obj/item/weapon/storage/lunchbox/metal/zam = 6,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin = 6,
@@ -3744,11 +3769,14 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin = 10,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical = 20,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_humanhydrator = 40,
+		/obj/item/weapon/storage/lunchbox/metal/zam = 10,
+		/obj/item/weapon/storage/lunchbox/metal/zam/pre_filled = 50,
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky = 4,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_polytrinicpalooza = 2,
 		/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter = 2,
+		/obj/item/weapon/storage/lunchbox/metal/zam/pre_filled = 2,
 		)
 
 	pack = /obj/structure/vendomatpack/zamsnax
@@ -4100,3 +4128,61 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 	new hiddenmouse(get_turf(src))
 
 
+/obj/machinery/vending/art
+	name = "\improper Le Patron des Arts"  //Mécène won't render
+	desc = "A vendor for art supplies. Pas sans mon béret !"
+	product_slogans = list(
+		"Il est temps pour vous de jeter des perles devant ces porcs incultes.",
+		"Oui, j'ai capitulé. Vous pouvez aussi acheter des crayons maintenant.",
+		"Il y a la peinture sur toile, et puis il y a l'art véritable. Pouvez-vous voir la différence ?"
+	)
+	product_ads = list(
+		"This is not a cigarette vendor."
+	)
+	icon_state = "art"
+	products = list (
+		/obj/item/weapon/storage/toolbox/paint = 2,
+		/obj/item/weapon/storage/fancy/crayons = 2,
+		/obj/item/weapon/pen/multi = 3,
+		/obj/item/weapon/painting_brush = 2,
+		/obj/item/weapon/palette = 2,
+		/obj/structure/painting/custom = 3,
+		/obj/structure/painting/custom/landscape = 3,
+		/obj/structure/painting/custom/portrait = 3,
+		/obj/structure/painting/custom/large = 3,
+		/obj/structure/easel = 2,
+		/obj/structure/block/wood = 2,
+		/obj/item/weapon/chisel = 2
+		)
+
+	contraband = list(
+		/obj/item/stack/sheet/wood/bigstack = 3,
+		/obj/item/clothing/mask/cigarette/pipe = 2
+		)
+
+	premium = list(
+		/obj/item/weapon/reagent_containers/glass/jar = 2
+		)
+
+	prices = list(
+		/obj/item/weapon/storage/toolbox/paint = 40,
+		/obj/item/weapon/storage/fancy/crayons = 10,
+		/obj/item/weapon/pen/multi = 20,
+		/obj/item/weapon/painting_brush = 10,
+		/obj/item/weapon/palette = 10,
+		/obj/structure/painting/custom = 10,
+		/obj/structure/painting/custom/landscape = 10,
+		/obj/structure/painting/custom/portrait = 10,
+		/obj/structure/painting/custom/large = 10,
+		/obj/structure/easel = 20,
+		/obj/structure/block/wood = 40,
+		/obj/item/weapon/chisel = 10,
+		/obj/item/stack/sheet/wood/bigstack = 20,
+		/obj/item/clothing/mask/cigarette/pipe = 40
+		)
+	slogan_languages = list(LANGUAGE_HUMAN)
+
+/obj/machinery/vending/art/examine(mob/user)
+	..()
+	if(stat & BROKEN)
+		to_chat(user, "<span class='warning'>It's no longer art!</span>")

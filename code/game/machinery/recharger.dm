@@ -104,15 +104,11 @@
 		to_chat(user, "<span class='warning'>You must secure \the [src] before you can make use of it!</span>")
 		return 1
 	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/weapon/melee/stunprobe) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver) || istype(G, /obj/item/weapon/rcs) || istype(G, /obj/item/clothing/head/helmet/stun))
-		if (istype(G, /obj/item/weapon/gun/energy/gun/nuclear) || istype(G, /obj/item/weapon/gun/energy/crossbow))
-			to_chat(user, "<span class='notice'>Your gun's recharge port was removed to make room for a miniaturized reactor.</span>")
-			return 1
-		if (istype(G, /obj/item/weapon/gun/energy/staff))
-			to_chat(user, "<span class='notice'>The recharger rejects the magical apparatus.</span>")
-			return 1
-		if (istype(G, /obj/item/weapon/gun/energy/lasmusket))
-			to_chat(user, "<span class='notice'>The makeshift gun lacks a recharge port.</span>")
-			return 1
+		if (istype(G, /obj/item/weapon/gun/energy))
+			var/obj/item/weapon/gun/energy/gun = G
+			if (!gun.rechargeable)
+				to_chat(user, gun.non_rechargeable_reason)
+				return 1
 
 		if(!user.drop_item(G, src))
 			user << "<span class='warning'>You can't let go of \the [G]!</span>"

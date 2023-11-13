@@ -3,7 +3,9 @@
 	~Sayu
 */
 
-//A workaround for a BYOND bug (or at least weird behavior). It's classified.
+//BYOND has a quirk (maybe bug?) where, if you initiate a clickdrag with one mouse button, any clicks with another button during the drag hit the object being dragged.
+//This allowed you to, for example, start a middle-click drag on someone and then have an aimbot that allows you to effortlessly hit them in melee or ranged combat as long as you held MMB.
+//This code discards clicks performed during a drag to prevent this.
 /client/Click(object, location, control, params)
 	var/list/p = params2list(params)
 	if(p["drag"])
@@ -67,6 +69,8 @@
 		build_click(src, client.buildmode, params, A)
 		return
 
+	var/obj/item/held_item = get_active_hand()
+
 	var/list/modifiers = params2list(params)
 	INVOKE_EVENT(src, /event/clickon, "user" = src,	"modifiers" = modifiers, "target" = A)
 	if(modifiers["middle"])
@@ -79,6 +83,8 @@
 		ShiftClickOn(A)
 		return
 	if(modifiers["alt"]) // alt and alt-gr (rightalt)
+		if (held_item && held_item.AltFrom(A,src,A.Adjacent(src, MAX_ITEM_DEPTH),params))
+			return
 		AltClickOn(A)
 		return
 	if(modifiers["ctrl"])
@@ -116,7 +122,6 @@
 			throw_item(A)
 		return
 
-	var/obj/item/held_item = get_active_hand()
 	var/item_attack_delay = 0
 
 	if(held_item == A)
@@ -165,6 +170,17 @@
 			else
 				//Clicked on a non-adjacent atom that is not in view
 				RemoteClickOn(A, params, held_item, client.eye)
+		else if(mind && mind.assigned_role == "AI") // clown AI stuff
+			if(spell_channeling)
+				spell_channeling.channeled_spell(A, bypassrange = TRUE)
+			else if(istype(A,/obj/machinery/door/airlock))
+				var/obj/machinery/door/airlock/D = A
+				if(D.density)
+					D.Topic("aiEnable=7", list("aiEnable"="7"), 1)
+				else
+					D.Topic("aiDisable=7", list("aiDisable"="7"), 1)
+			else
+				RangedClickOn(A, params, held_item)
 		else
 			RangedClickOn(A, params, held_item)
 
@@ -320,7 +336,14 @@
 
 /atom/proc/AltClick(var/mob/user)
 	var/turf/T = get_turf(src)
-	if(T && (T in range(1, user.loc)) && (T in view(1, user.virtualhearer))) //If next to user's location (to allow locker and mech alt-clicks) and if the user can actually view it
+	var/valid = FALSE
+	if(isAI(user))
+		var/mob/living/silicon/ai/ai = user
+		if(T && (T in range(7, ai.eyeobj.loc)))
+			valid = TRUE
+	else if(T && (T in range(1, user.loc)) && (T in view(1, user.virtualhearer))) //If next to user's location (to allow locker and mech alt-clicks) and if the user can actually view it
+		valid = TRUE
+	if(valid)
 		if(user.listed_turf == T)
 			user.listed_turf = null
 		else

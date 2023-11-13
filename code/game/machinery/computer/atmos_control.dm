@@ -18,7 +18,7 @@ var/global/list/atmos_controllers = list()
 	var/obj/item/weapon/card/id/log_in_id = null //the ID that's currently logged in
 	var/screen = ACA_SCREEN_DETAILSVIEW //the current screen in the UI
 	var/datum/airalarm_preset/selected_preset = null //stores the preset settings while they're being edited
-	machine_flags = EMAGGABLE
+	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE
 
 	light_color = LIGHT_COLOR_CYAN
 
@@ -160,9 +160,9 @@ var/global/list/atmos_controllers = list()
 		done_areas += alarm_area
 
 /obj/machinery/computer/atmoscontrol/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(user.client)
-		var/datum/asset/simple/nanoui_maps/asset_datum = new
-		send_asset_list(user.client, asset_datum.assets)
+	//if(user.client)
+	//	var/datum/asset/simple/nanoui_maps/asset_datum = new
+	//	send_asset_list(user.client, asset_datum.assets)
 
 	var/list/data[0]
 	data["alarm"]=null

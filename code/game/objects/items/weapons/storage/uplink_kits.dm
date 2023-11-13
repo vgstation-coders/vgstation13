@@ -135,7 +135,6 @@
 				new /obj/item/weapon/dnainjector/nofail/jumpy(src)
 				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
 				new /obj/item/weapon/spellbook/oneuse/lightning/sith(src) //UNLIMITED POWER, requires wizard garb
-				new /obj/item/clothing/head/sith(src)
 				new /obj/item/clothing/suit/sith(src)
 				new /obj/item/clothing/shoes/sandal(src)
 

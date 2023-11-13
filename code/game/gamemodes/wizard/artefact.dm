@@ -118,11 +118,11 @@
 		user.update_inv_hands()
 		if(wielded)
 			user.visible_message("<span class='danger'>\The [user] throws \the [src] over \himself and disappears!</span>","<span class='notice'>You throw \the [src] over yourself and disappear.</span>")
-			user.register_event(/event/moved, src, src::mob_moved())
+			user.register_event(/event/moved, src, nameof(src::mob_moved()))
 			user.make_invisible(CLOAKINGCLOAK, 0, TRUE, 1, INVISIBILITY_LEVEL_TWO)
 		else
 			user.visible_message("<span class='warning'>\The [user] appears out of thin air!</span>","<span class='notice'>You take \the [src] off and become visible again.</span>")
-			user.unregister_event(/event/moved, src, src::mob_moved())
+			user.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 			user.make_visible(CLOAKINGCLOAK)
 
 /obj/item/weapon/glow_orb
@@ -196,8 +196,12 @@
 
 /obj/item/phylactery/examine(mob/user, size, show_name)
 	..()
-	if(iswizard(user))
-		to_chat(user, "<span class='sinister'>You can use charged soulstones to refill it. The more charges you have, the faster you will revive.</span>")
+	if(user.mind == bound_mind)
+		to_chat(user, "<span class='notice'>It has [charges ? "[charges]" : "no"] charges left!</span>")
+	if(iswizard(user)) //Wizards are scholars
+		to_chat(user, "<span class='notice'>This is a phylactery! Whoever is bound to it will come back as a lich wherever the phylactery may be, as long as it is charged.</span>")
+		to_chat(user, "<span class='notice'>You can charge it using filled soulstones. The more charges you have, the faster you will revive.</span>")
+		to_chat(user, "<span class='notice'>The phylactery will revive you faster the closer you are to it when perishing, up to ten times faster if you are 3 tiles away from it.</span>")
 
 /obj/item/phylactery/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/soulstone))
@@ -214,8 +218,8 @@
 
 /obj/item/phylactery/Destroy()
 	if(bound_soul)
-		bound_soul.unregister_event(/event/death, src, src::revive_soul())
-		bound_soul.unregister_event(/event/z_transition, src, src::z_block())
+		bound_soul.unregister_event(/event/death, src, nameof(src::revive_soul()))
+		bound_soul.unregister_event(/event/z_transition, src, nameof(src::z_block()))
 		to_chat(bound_soul, "<span class = 'warning'><b>You feel your form begin to unwind!</b></span>")
 		spawn(rand(5 SECONDS, 15 SECONDS))
 			bound_soul.dust()
@@ -266,11 +270,15 @@
 		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H), slot_shoes)
 		H.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(H), slot_w_uniform)
 		original.mind.transfer_to(H) // rebinding on transfer now handled by mind
-		if(!body_destroyed)
-			original.dust()
 		var/release_time = round(rand(60 SECONDS, 120 SECONDS)/charges, 10) //In deciseconds
+		var/distance = get_dist(get_turf(src), get_turf(original)) //Make the revival faster the closer the user is to the phylactery
+		release_time = round(release_time/clamp(16-distance*2,1,10), 10) //In increments of 2, starting at 2x when 7 tiles away and ending at 10x when 3 tiles away
+		if(!body_destroyed)
+			original.dust(TRUE)
 		H.Paralyse(release_time/20) //Divide by 20 because Paralyse goes down by 1 every Life() tick (roughly every 2 secs)
 		to_chat(H, "<span class = 'notice'>\The [src] will permit you exit in [release_time/10] seconds.</span>")
+		if(charges < 2) //It will get reduced from 1 to 0 further in the code, and it is instead done here because H is not defined a layer above and the original is gone
+			to_chat(H, "<span class='warning'>\The [src] is devoid of any power and will fail to revive you if it not recharged with souls.</span>")
 		spawn(release_time)
 			to_chat(H, "<span class = 'notice'>\The [src] permits you exit from it.</span>")
 			H.forceMove(get_turf(src))
@@ -279,23 +287,23 @@
 
 /obj/item/phylactery/proc/unbind()
 	if(bound_soul)
-		bound_soul.unregister_event(/event/z_transition, src, src::z_block())
-		bound_soul.unregister_event(/event/death, src, src::revive_soul())
+		bound_soul.unregister_event(/event/z_transition, src, nameof(src::z_block()))
+		bound_soul.unregister_event(/event/death, src, nameof(src::revive_soul()))
 	bound_soul = null
 	update_icon()
 
 /obj/item/phylactery/proc/bind(var/mob/to_bind)
-	to_bind.register_event(/event/death, src, src::revive_soul())
-	to_bind.register_event(/event/z_transition, src, src::z_block())
+	to_bind.register_event(/event/death, src, nameof(src::revive_soul()))
+	to_bind.register_event(/event/z_transition, src, nameof(src::z_block()))
 	bound_soul = to_bind
 
 /obj/item/phylactery/proc/unbind_mind()
 	if(bound_mind)
-		bound_mind.unregister_event(/event/after_mind_transfer, src, src::follow_mind())
+		bound_mind.unregister_event(/event/after_mind_transfer, src, nameof(src::follow_mind()))
 	bound_mind = null
 
 /obj/item/phylactery/proc/bind_mind(var/datum/mind/to_bind)
-	to_bind.register_event(/event/after_mind_transfer, src, src::follow_mind())
+	to_bind.register_event(/event/after_mind_transfer, src, nameof(src::follow_mind()))
 	bound_mind = to_bind
 
 /obj/item/phylactery/proc/follow_mind(datum/mind/mind)

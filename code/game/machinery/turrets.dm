@@ -108,6 +108,8 @@
 				return 0
 		if( iscarbon(T) )
 			var/mob/living/carbon/MC = T
+			if(MC.mind?.assigned_role == "AI") // honk honk
+				return 0
 			if( !MC.stat )
 				if( !MC.isStunned() )
 					return 1
@@ -138,19 +140,19 @@
 	return 0
 
 /obj/machinery/turret/proc/get_new_target()
+	var/static/list/types_to_search = list(
+		/mob,
+		/obj/mecha,
+		/obj/structure/bed/chair/vehicle,
+		/obj/effect/blob
+		)
 	var/list/new_targets = new
 	var/new_target
-	for(var/mob/M in view(7, src))
-		if(check_target(M))
-			new_targets += M
-	for(var/obj/mecha/ME in view(7, src))
-		if(check_target(ME))
-			new_targets += ME
-	for(var/obj/structure/bed/chair/vehicle/V in view(7, src))
-		if(check_target(V))
-			new_targets += V
-	for(var/obj/effect/blob/B in view(7, src))
-		new_targets += B
+
+	for(var/atom/movable/A in view(7, src))
+		if(is_type_in_list(A, types_to_search))
+			if(check_target(A))
+				new_targets += A
 	if(new_targets.len)
 		new_target = pick(new_targets)
 	return new_target
@@ -520,6 +522,18 @@
 		updateTurrets()
 		return
 	return ..()
+
+/obj/machinery/turretid/CtrlClick(mob/user) //Lock the device
+	if(!(user) || !isliving(user)) //BS12 EDIT
+		return FALSE
+	if(user.incapacitated() || !Adjacent(user))
+		return FALSE
+
+	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		return
+	if(allowed(user))
+		locked = !locked
+		to_chat(usr, "<span class='notice'>You [locked ? "lock" : "unlock"] the switchboard panel.</span>")
 
 //All AI shortcuts. Basing this on what airlocks do, so slight clash with user (Alt is dangerous so toggle stun/lethal, Ctrl is bolts so lock, Shift is 'open' so toggle turrets)
 /obj/machinery/turretid/AIAltClick(mob/living/silicon/ai/user) //Stun/lethal toggle

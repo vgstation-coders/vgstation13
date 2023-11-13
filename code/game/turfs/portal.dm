@@ -30,6 +30,12 @@
 		teleport_y *= -1
 	update_icon()
 
+/turf/portal/proc/update_teleport(x,y,z)
+	teleport_x = x
+	teleport_y = y
+	teleport_z = z
+	update_icon()
+
 /turf/portal/update_icon()
 	overlays.Cut()
 	vis_contents.Cut()

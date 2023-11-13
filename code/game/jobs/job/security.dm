@@ -54,6 +54,11 @@
 	outfit_datum = /datum/outfit/detective
 	minimal_player_age = 7
 
+/datum/job/detective/post_init(var/mob/living/carbon/human/H)
+	genemutcheck(H, SOBERBLOCK)
+	if (H.mind.role_alt_title == "Gumshoe" || H.mind.role_alt_title == "Private Eye")
+		genemutcheck(H, NOIRBLOCK)
+
 /datum/job/officer
 	title = "Security Officer"
 	faction = "Station"

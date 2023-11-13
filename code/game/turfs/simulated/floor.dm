@@ -131,6 +131,9 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	else if(is_light_floor())
 		var/obj/item/stack/tile/light/T = floor_tile
 		overlays -= floor_overlay //Removes overlay without removing other overlays. Replaces it a few lines down if on.
+		advanced_graffiti_overlay = null
+		overlays -= advanced_graffiti_overlay
+		qdel(advanced_graffiti)
 		if(T.on)
 			set_light(5)
 			floor_overlay = T.get_turf_image()
@@ -245,6 +248,20 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 					spam_flag = 0
 	..()
 
+// -- Advanced painting stuff...
+/turf/simulated/floor/attackby(obj/item/W, mob/user)
+	if (istype(W, /obj/item/toy/crayon))
+		if (advanced_graffiti)
+			var/datum/painting_utensil/p = new(user, W)
+			advanced_graffiti.interact(user, p)
+
+/turf/simulated/Topic(href, href_list)
+	if (..())
+		return
+	// Let /datum/custom_painting handle Topic(). If succesful, update appearance
+	if (advanced_graffiti?.Topic(href, href_list))
+		render_advanced_graffiti(usr)
+
 /turf/simulated/floor/proc/gets_drilled()
 	return
 
@@ -322,26 +339,27 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 /turf/simulated/floor/proc/burn_tile()
 	if(istype(src,/turf/simulated/floor/engine))
-		return
+		return//Reinforced floors don't burn
 	if(istype(src,/turf/unsimulated/floor/asteroid))
 		return//Asteroid tiles don't burn
-	if(is_metal_floor())
-		src.icon_state = "damaged[pick(1,2,3,4,5)]"
+	if(istype(src,/turf/simulated/floor/shuttle))
+		if(!(locate(/obj/effect/decal/cleanable/soot) in src))
+			new /obj/effect/decal/cleanable/soot(src)
 		burnt = 1
 	else if(is_metal_floor())
-		src.icon_state = "floorscorched[pick(1,2)]"
+		icon_state = "damaged[pick(1,2,3,4,5)]"
 		burnt = 1
 	else if(is_plating())
-		src.icon_state = "panelscorched"
+		icon_state = "panelscorched"
 		burnt = 1
 	else if(is_wood_floor())
-		src.icon_state = "wood-broken"
+		icon_state = "wood-broken"
 		burnt = 1
 	else if((is_carpet_floor()) || (is_arcade_floor()))
-		src.icon_state = "carpet-broken"
+		icon_state = "carpet-broken"
 		burnt = 1
 	else if(is_grass_floor())
-		src.icon_state = "sand[pick("1","2","3")]"
+		icon_state = "sand[pick("1","2","3")]"
 		burnt = 1
 	else if(is_mineral_floor())
 		burnt = 1
@@ -456,6 +474,9 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 				var/obj/item/stack/tile/light/T = floor_tile
 				floor_overlay = T.get_turf_image()
 				overlays -= floor_overlay // This removes the light floor overlay, but not other floor overlays.
+				overlays -= advanced_graffiti_overlay
+				advanced_graffiti_overlay = null
+				qdel(advanced_graffiti)
 				floor_tile.forceMove(src)
 				floor_tile = null
 			else

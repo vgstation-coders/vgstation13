@@ -628,6 +628,7 @@
 	id = ANFOBOMB
 	required_reagents = list(AMMONIUMNITRATE = 16, FUEL = 1)  // rough approximation of the 94%-6% mix
 	required_temp = AUTOIGNITION_WELDERFUEL-1 // just for priority and to stop recipe conflicts
+	result_amount = 17
 	fire_temp = AUTOIGNITION_WELDERFUEL
 	power = 1
 
@@ -651,9 +652,11 @@
 	id = "occult_blood_test"
 	required_reagents = list(HOLYSALTS = 5)
 	required_catalysts = list(BLOOD = 5)
+	result = SODIUMCHLORIDE
+	result_amount = 5
 	quiet = TRUE
 
-/datum/chemical_reaction/cultcheck/on_reaction(var/datum/reagents/holder, var/created_volume)
+/datum/chemical_reaction/occult_blood_test/on_reaction(var/datum/reagents/holder, var/created_volume)
 	for(var/datum/reagent/blood/B in holder.reagent_list)
 		var/turf/T = get_turf(holder.my_atom)
 		if ("occult" in B.data)
@@ -1374,6 +1377,7 @@
 	if(istype(holder.my_atom, /obj/item/slime_extract))
 		var/obj/item/slime_extract/S = holder.my_atom
 		S.Uses--
+		S.update_icon()
 		if(S.Uses <= 0)
 			if(!istype(S.loc, /obj/item/weapon/grenade/chem_grenade) && !quiet)
 				S.visible_message("<span class='notice'>[bicon(holder.my_atom)] \The [holder.my_atom]'s power is consumed in the reaction.</span>")
@@ -3011,6 +3015,20 @@
 	required_reagents = list(GIN = 3, CHERRYJELLY = 1)
 	result_amount = 4
 
+/datum/chemical_reaction/mimosa
+	name = "Mimosa"
+	id = MIMOSA
+	result = MIMOSA
+	required_reagents = list(CHAMPAGNE = 1, ORANGEJUICE = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/lemondrop
+	name = "Lemon Drop"
+	id = LEMONDROP
+	result = LEMONDROP
+	required_reagents = list(LEMONJUICE = 1, TRIPLESEC = 1, VODKA = 1)
+	result_amount = 3
+
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
 /datum/chemical_reaction/sbiten
@@ -3055,6 +3073,35 @@
 	result = GROG
 	required_reagents = list(RUM = 1, WATER = 1)
 	result_amount = 2
+
+/datum/chemical_reaction/evoluator
+	name = "Evoluator"
+	id = EVOLUATOR
+	result = EVOLUATOR
+	required_reagents = list(BLOBANINE = 1, OXYGEN = 2, APPLEJUICE = 1, VERMOUTH = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/blob_beer
+	name = "Blob beer"
+	id = BLOBBEER
+	result = BLOBBEER
+	required_reagents = list(BLOBANINE = 1, SUGAR = 1)
+	required_temp = T0C + 60
+	result_amount = 10
+
+/datum/chemical_reaction/liberator
+	name = "Liberator"
+	id = LIBERATOR
+	result = LIBERATOR
+	required_reagents = list(BLOBANINE = 1, ORANGEJUICE = 1, TRIPLESEC = 1)
+	result_amount = 6
+
+/datum/chemical_reaction/spore
+	name = "Spore"
+	id = SPORE
+	result = SPORE
+	required_reagents = list(BLOBANINE = 1, KARMOTRINE = 1, OXYGEN = 1)
+	result_amount = 3
 
 /datum/chemical_reaction/soy_latte
 	name = "Soy Latte"
@@ -3488,7 +3535,7 @@
 	name = "NT Standard Battery Acid"
 	id = ENGICOFFEE
 	result = ENGICOFFEE
-	required_reagents = list(COFFEE = 5, FUEL = 1, SULFURIC = 5)
+	required_reagents = list(COFFEE = 5, FUEL = 1, SACID = 5)
 	result_amount = 10
 
 /datum/chemical_reaction/medcoffee
@@ -4078,20 +4125,22 @@
 	required_reagents = list(PICCOLYN = 1, INACUSIATE = 1, SUGARS = 1)
 	result_amount = 3
 
-/datum/chemical_reaction/bumcivilian
+/datum/chemical_reaction/bumcivilian //same reaction type as midazoline, you must dunk the iron sheet on sacid to get bumcivillian
 	name = "Bumcivilian"
 	id = BUMCIVILIAN
 	result = BUMCIVILIAN
-	required_reagents = list(IRON = 1, SACIDS = 1) //..5.05 Mg
+	required_reagents = list(SACIDS = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/bumcivilian/required_condition_check(datum/reagents/holder)
-	for(var/obj/item/device/deskbell/B in view(3,get_turf(holder.my_atom)))
-		if(world.time - B.last_ring_time <= 30)
-			return 1
+	if(istype(holder.my_atom, /obj/item/weapon/reagent_containers))
+		return (locate(/obj/item/stack/sheet/metal) in holder.my_atom.contents)
+	return 0
 
 /datum/chemical_reaction/bumcivilian/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()
+	var/atom/A = get_holder_at_turf_level(holder.my_atom)
+	holder.my_atom.visible_message("<span class='warning'>Suddenly, everything around [A ? "\the [A] " : "\the [holder.my_atom] "]becomes perfectly silent...</span>")
 	var/datum/reagent/bumcivilian/B = locate(/datum/reagent/bumcivilian) in holder.reagent_list
 	for(var/turf/T in view(get_turf(holder.my_atom)))
 		T.mute_time = world.time + B.mute_duration
@@ -4103,6 +4152,13 @@
 	required_reagents = list(NOTHING = 10, PHAZON = 10)
 	required_catalysts = list(MUTAGEN = 10, ENZYME = 10)
 	result_amount = 1
+
+/datum/chemical_reaction/fake_creep // Xenomorph weeds aka creep.
+	name = "Dan's Purple Drank"
+	id = FAKE_CREEP
+	result = FAKE_CREEP
+	required_reagents = list(MUTAGEN = 1, PLASMA = 1, DISCOUNT = 1)
+	result_amount = 3
 
 /datum/chemical_reaction/random/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()

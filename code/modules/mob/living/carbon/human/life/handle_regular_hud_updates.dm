@@ -251,7 +251,7 @@
 					isRemoteObserve = 0
 
 				//Does he have psy resist?
-				if(!can_mind_interact(remoteview_target.mind))
+				if(M_PSY_RESIST in remoteview_target.mutations)
 					to_chat(src, "<span class='warning'>Your mind is shut out!</span>")
 					isRemoteObserve = 0
 

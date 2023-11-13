@@ -63,6 +63,8 @@
 	item_state = "chaplain_hoodie"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO|LEGS|ARMS|IGNORE_INV
+	hood = new /obj/item/clothing/head/chaplain_hood()
+	hood_suit_name = "robes"
 
 
 //Chaplain

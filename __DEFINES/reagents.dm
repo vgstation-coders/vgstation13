@@ -7,8 +7,8 @@
 
 // Use in chem.flags.
 #define CHEMFLAG_DISHONORABLE 1
-#define CHEMFLAG_OBSCURING 2
-
+#define CHEMFLAG_OBSCURING	2
+#define CHEMFLAG_PIGMENT	4
 
 #define EXPLICITLY_INVALID_REAGENT_ID "Use this ID if the reagent is not supposed to be used, like for the base type of other reagents."
 
@@ -32,6 +32,7 @@
 #define POTASSIUM_HYDROXIDE 			"potassium_hydroxide"
 #define CHEFSPECIAL 			"chefspecial"
 #define MINTTOXIN 			"minttoxin"
+#define MINTESSENCE				"mintessence"
 #define MUTATIONTOXIN 			"mutationtoxin"
 #define AMUTATIONTOXIN 			"amutationtoxin"
 #define STOXIN 			"stoxin"
@@ -330,6 +331,10 @@
 #define DEVILSKISS 			"devilskiss"
 #define MEAD 			"mead"
 #define GROG 			"grog"
+#define EVOLUATOR		"evoluator"
+#define BLOBBEER		"blobbeer"
+#define LIBERATOR		"liberator"
+#define SPORE			"spore"
 #define ALOE 			"aloe"
 #define ANDALUSIA 			"andalusia"
 #define ALLIESCOCKTAIL 			"alliescocktail"
@@ -468,6 +473,10 @@
 #define DSYRUP			"dsyrup"
 #define GRUE_BILE		"grue_bile"
 #define PINKLADY		"pinklady"
+#define FAKE_CREEP		"fake_creep"
+#define BLOBANINE		"blobanine"
+#define BLOB_ESSENCE	"blob_essence"
+#define METHAMPHETAMINE "methamphetamine"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -511,9 +520,14 @@
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"
 #define CAFFEINE		"caffeine"
+#define MIMOSA			"mimosa"
+#define LEMONDROP		"lemondrop"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
+
+//Flag for skipping running handle_reactions() after reagent heating when it's already been determined that the given reagents have no reaction that could occur if only temperature was changed.
+#define SKIP_RXN_CHECK_ON_HEATING (1<<0)
 
 //Temperatures of things (Kelvin)
 #define TEMPERATURE_HOTMETAL 300
@@ -522,7 +536,7 @@
 #define TEMPERATURE_WELDER 3480
 #define TEMPERATURE_PLASMA 4500
 #define TEMPERATURE_ETHANOL (T0C+1560)
-#define HEAT_TRANSFER_MULTIPLIER 7 //Multiplies the numbers above when heating a reagent container. A truly magical number.
+#define HEAT_TRANSFER_MULTIPLIER 7 //Multiplies the numbers above when heating a reagent container. A truly magical number. Not currently used anywhere due to a bug with reagent heating being fixed.
 
 // By defining the effect multiplier this way, it'll exactly adjust
 // all effects according to how they originally were with the 0.4 metabolism
@@ -544,7 +558,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define BICARIDINES list(BICARIDINE, OPIUM)
 #define SPACE_DRUGGS list(SPACE_DRUGS, MESCALINE)
 #define SYNAPTIZINES list(SYNAPTIZINE, CYTISINE)
-#define HYPERZINES list(HYPERZINE, COCAINE)
+#define HYPERZINES list(HYPERZINE, COCAINE, METHAMPHETAMINE)
 #define IMIDAZOLINES list(IMIDAZOLINE, ZEAXANTHIN)
 #define STOXINS list(STOXIN, STOXIN2, VALERENIC_ACID)
 #define SACIDS list(SACID, FORMIC_ACID)
@@ -561,6 +575,9 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define ALLNANITES list(NANITES, AUTISTNANITES)
 #define SUGARS list(SUGAR, CORNSYRUP)
 #define GUNKS list(CHEMICAL_WASTE, TOXICWASTE, VOMIT, TOXIN, SOLANINE, RADIUM, MUTAGEN, UNTABLE_MUTAGEN, SPIDERS)
+#define COLDDRINKS list(ICECOFFEE, ICETEA, ARNOLDPALMER, TONIC, SODAWATER, ICE, COLA, NUKA_COLA, GEOMETER, SPACEMOUNTAINWIND, DR_GIBB, SPACE_UP, LEMON_LIME, LEMONADE, KIRASPECIAL, MILKSHAKE, BROWNSTAR, REWRITER, DIY_SODA)
+#define HOTDRINKS list(COFFEE, SOY_LATTE, TEA, GATORMIX, HOT_COCO, HOT_COCO_SUBHUMAN, CREAMY_HOT_COCO) //Blisterol not included as that's medicine, not a warm drink
+//HOT and COLD drinks defines used for the mint toxin/mint essence checks for tooth pain and shit, maybe you can find another use for it
 
 #define INCENSE_HAREBELLS	"harebells"
 #define INCENSE_POPPIES		"poppies"
@@ -575,10 +592,3 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define INCENSE_CRAVE		"vales"
 #define INCENSE_CORNOIL 	"cornoils"
 #define INCENSE_MUSTARDPLANT "mustardplant"
-
-#define GLUCOSE "Glucose"
-#define CELLULOSE "Cellulose"
-#define PROTEIN "Protein"
-#define STARCH "Starch"
-#define CHITIN "Chitin"
-#define XENOPHYLL "Xenophyll"

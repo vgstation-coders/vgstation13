@@ -152,6 +152,7 @@
 	persistent_type_replacement = /obj/effect/decal/cleanable/vomit/pre_dry
 
 	fake_DNA = "vomit splatters"
+	stain_name = "vomit"
 
 /obj/effect/decal/cleanable/vomit/pre_dry
 	name = "dry vomit"
@@ -255,6 +256,18 @@
 	icon = 'icons/obj/atmos.dmi'
 	icon_state = "campfire_burnt"
 	mouse_opacity = 1
+
+/obj/effect/decal/cleanable/campfire/attackby(obj/item/I, mob/living/user)
+	if (istype(I, /obj/item/stack/sheet/wood))
+		var/obj/machinery/space_heater/campfire/C = new /obj/machinery/space_heater/campfire
+		C.cell.charge = 0
+		if (C.addWood(I, user))
+			C.loc = src.loc
+			qdel(src)
+		else
+			qdel(C)
+	else
+		. = ..()
 
 /obj/effect/decal/cleanable/clay_fragments
 	name = "clay fragments"
@@ -482,3 +495,12 @@ var/list/salts_particle_emitters = list(
 	icon_state = "holysalt"
 	anchored = 1
 	act_delay = 20 SECONDS
+
+/obj/effect/decal/cleanable/purpledrank
+	name = "weeds?"
+	desc = "Someone spilled some grape juice? here."
+	gender = PLURAL
+	density = 0
+	anchored = 1
+	icon = 'icons/mob/alien.dmi'
+	icon_state = "weeds"

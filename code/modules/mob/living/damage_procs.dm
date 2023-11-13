@@ -12,6 +12,8 @@
 	if(!damage)
 		return 0
 	var/damage_done = (damage/100)*(100-blocked)
+	if(!ignore_events && INVOKE_EVENT(src, /event/damaged, "kind" = damagetype, "amount" = damage))
+		return 0
 	switch(damagetype)
 		if(BRUTE)
 			adjustBruteLoss(damage_done)
@@ -54,8 +56,8 @@
 
 
 /mob/living/proc/critlog(curH,prevH)
-	if (istype(loc, /obj/machinery/cloning/clonepod))
-		return FALSE // Mob probably just spawned
+	if (istype(loc, /obj/machinery/cloning/clonepod) || iscorpse)
+		return FALSE // Mob probably just spawned or is a corpse that we don't care to track
 	return TRUE
 
 /mob/living/carbon/critlog(curH,prevH)

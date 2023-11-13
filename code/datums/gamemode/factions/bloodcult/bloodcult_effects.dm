@@ -182,6 +182,8 @@
 
 	var/force_jaunt = FALSE
 
+	var/failsafe = 100
+
 /obj/effect/bloodcult_jaunt/New(var/turf/loc, var/mob/user, var/turf/destination, var/turf/packup, var/mob/activator)
 	..()
 	if (!user && !packup && !force_jaunt)
@@ -243,6 +245,8 @@
 	bump_target_check()
 	if (!src||!loc)
 		return
+	//calculating how many tiles we should have to cross so we can abort the jaunt if we go off-track
+	failsafe = abs(starting.x - target.x) + abs(starting.y - target.y)
 	//next, let's rotate the jaunter's sprite to face our destination
 	init_angle()
 	//now, let's launch the jaunter at our target
@@ -323,12 +327,8 @@
 		error = dist_y/2 - dist_x
 
 	target_angle = round(Get_Angle(starting,target))
-
-	if( !("[icon_state]_angle[target_angle]" in bullet_master) )//totally hijacking my own bullet code in case that wasn't already obvious.
-		var/icon/I = new(icon,icon_state)
-		I.Turn(target_angle+45)
-		bullet_master["[icon_state]_angle[target_angle]"] = I
-	icon = bullet_master["[icon_state]_angle[target_angle]"]
+	var/transform_matrix = turn(matrix(),target_angle+45)
+	transform = transform_matrix
 
 /obj/effect/bloodcult_jaunt/proc/update_pixel()
 	if(src && starting && target)
@@ -370,14 +370,16 @@
 		if(!step)
 			qdel(src)
 		src.Move(step)
+		failsafe--
 		error += distA
 		bump_target_check()
-		return 0//so that bullets going in diagonals don't move twice slower
+		return 0//so that we don't move twice slower in diagonals
 	else
 		var/atom/step = get_step(src, dA)
 		if(!step)
 			qdel(src)
 		src.Move(step)
+		failsafe--
 		error -= distB
 		dir = dA
 		if(error < 0)
@@ -396,6 +398,7 @@
 		sleep(sleeptime)
 
 /obj/effect/bloodcult_jaunt/proc/init_jaunt()
+	set waitfor = 0
 	if (!rider && packed.len <= 0 && !force_jaunt)
 		qdel(src)
 		return
@@ -410,10 +413,10 @@
 		process_step()
 
 /obj/effect/bloodcult_jaunt/proc/bump_target_check()
-	if (loc == target)
-		playsound(loc, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
+	if (loc == target || failsafe <= 0)
+		playsound(target, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
 		if (force_jaunt)
-			playsound(loc, 'sound/effects/convert_failure.ogg', 30, 0, -1)
+			playsound(target, 'sound/effects/convert_failure.ogg', 30, 0, -1)
 		if (rider)
 			rider.forceMove(target)
 			if (ismob(rider))

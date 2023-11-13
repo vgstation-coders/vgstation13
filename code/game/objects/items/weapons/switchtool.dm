@@ -8,6 +8,8 @@
 	siemens_coefficient = 1
 	force = 3
 	w_class = W_CLASS_SMALL
+	sharpness = 0
+	sharpness_flags = 0
 	var/deploy_sound = "sound/weapons/switchblade.ogg"
 	var/undeploy_sound = "sound/weapons/switchblade.ogg"
 	throwforce = 6.0
@@ -32,7 +34,7 @@
 	var/removing_item = /obj/item/tool/screwdriver //the type of item that lets you take tools out
 
 /obj/item/weapon/switchtool/preattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if(istype(target, /obj/item/weapon/storage)) //we place automatically
+	if(istype(target, /obj/item/weapon/storage) && !istype(target, /obj/item/weapon/storage/pill_bottle)) //we place automatically, but want pill bottles to be meltable
 		return
 	if(deployed)
 		if(!deployed.preattack(target, user))
@@ -190,6 +192,8 @@
 
 /obj/item/weapon/switchtool/proc/undeploy(mob/user)
 	playsound(src, undeploy_sound, 10, 1)
+	deploy_sound = initial(deploy_sound)
+	undeploy_sound = initial(undeploy_sound)
 	edit_deploy(0)
 	deployed = null
 	overlays.len = 0
@@ -207,7 +211,6 @@
 		return FALSE
 	if(deployed)
 		return FALSE
-	playsound(src, deploy_sound, 10, 1)
 	deployed = stored_modules[module]
 	if(arcanetampered)
 		module = pick(stored_modules)
@@ -223,6 +226,8 @@
 	if(arcanetampered)
 		module = pick(stored_modules)
 		fakename = "[stored_modules[module]]"
+	edit_deploy(1)
+	playsound(src, deploy_sound, 10, 1)
 	return TRUE
 
 /obj/item/weapon/switchtool/proc/edit_deploy(var/doedit)
@@ -230,6 +235,7 @@
 		return
 	if(doedit) //Makes the deployed item take on the features of the switchtool for attack animations and text. Other bandaid fixes for snowflake issues can go here.
 		sharpness = deployed.sharpness
+		sharpness_flags = deployed.sharpness_flags
 		deployed.name = name
 		deployed.icon = icon
 		//deployed.icon_state = icon_state
@@ -238,6 +244,7 @@
 	//Revert the changes to the deployed item.
 	else
 		sharpness = initial(sharpness)
+		sharpness_flags = initial(sharpness_flags)
 		deployed.name = initial(deployed.name)
 		deployed.icon = initial(deployed.icon)
 		deployed.icon_state = initial(deployed.icon_state)
@@ -261,7 +268,6 @@
 		for(var/m in stored_modules)
 			if(stored_modules[m])
 				deploy(m,user)
-				edit_deploy(1)
 				return TRUE
 		return
 
@@ -280,7 +286,6 @@
 					break
 			if(deploy(true_module,user))
 				to_chat(user, "You deploy \the [arcanetampered ? fakename : deployed].")
-				edit_deploy(1)
 			return TRUE
 		return
 
@@ -347,30 +352,54 @@
 						"/obj/item/weapon/kitchen/utensil/fork:fork" = null,
 						"/obj/item/weapon/hatchet/metalhandle:hatchet" = null,
 						"/obj/item/weapon/lighter/zippo:Zippo lighter" = null,
-						"/obj/item/weapon/match/strike_anywhere:strike-anywhere match" = null,
+						"/obj/item/weapon/match/strike_anywhere/s_a_k:strike-anywhere match" = null,
 						"/obj/item/weapon/pen:pen" = null)
 
-/obj/item/weapon/switchtool/swiss_army_knife/undeploy()
-	if(istype(deployed, /obj/item/weapon/lighter))
-		var/obj/item/weapon/lighter/lighter = deployed
-		lighter.lit = 0
+
+/obj/item/weapon/switchtool/swiss_army_knife/edit_deploy(var/doedit)
 	..()
+	if(!deployed)
+		return
+	if(doedit)
+		if(istype(deployed, /obj/item/weapon/lighter/zippo))
+			var/obj/item/weapon/lighter/lighter = deployed
+			lighter.lit = 1
+			processing_objects.Add(deployed)
+			light_color = LIGHT_COLOR_FIRE
+			set_light(lighter.brightness_on)
+			deploy_sound = 'sound/items/zippo_open.ogg'
+			undeploy_sound = 'sound/items/zippo_close.ogg'
+	else
+		if(istype(deployed, /obj/item/weapon/lighter/zippo))
+			var/obj/item/weapon/lighter/lighter = deployed
+			lighter.lit = 0
+			processing_objects.Remove(deployed)
+			set_light(0)
+			light_color = initial(light_color)
+		if(istype(deployed, /obj/item/weapon/match/strike_anywhere))
+			var/obj/item/weapon/match/strike_anywhere/match = deployed
+			match.lit = 0
+			processing_objects.Remove(deployed)
+			set_light(0)
+			light_color = initial(light_color)
 
-/obj/item/weapon/switchtool/swiss_army_knife/deploy(var/module,mob/user)
-	..()
-	if(istype(deployed, /obj/item/weapon/lighter))
-		var/obj/item/weapon/lighter/lighter = deployed
-		lighter.lit = 1
-		..()
-
-/obj/item/weapon/switchtool/swiss_army_knife/choose_deploy(mob/user)
+/obj/item/weapon/switchtool/swiss_army_knife/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	. = ..()
-	if(. && deployed)
-		sharpness_flags = deployed.sharpness_flags
-
-/obj/item/weapon/switchtool/swiss_army_knife/undeploy(mob/user)
-	. = ..()
-	sharpness_flags = 0
+	if (. && istype(deployed, /obj/item/weapon/match/strike_anywhere))
+		var/obj/item/weapon/match/strike_anywhere/match = deployed
+		if (match.lit && (hmodule != "strike-anywhere match_lit"))
+			overlays.len = 0
+			hmodule = "strike-anywhere match_lit"
+			var/image/inhand_overlayr = image('icons/mob/in-hand/right/switchtool.dmi', src, "[hmodule]")
+			var/image/inhand_overlayl = image('icons/mob/in-hand/left/switchtool.dmi', src, "[hmodule]")
+			overlays += hmodule
+			update_icon()
+			dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = inhand_overlayr
+			dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = inhand_overlayl
+			user.update_inv_hands()
+			processing_objects.Add(match)
+			light_color = LIGHT_COLOR_FIRE
+			set_light(match.brightness_on)
 
 /obj/item/weapon/switchtool/switchblade
 	name = "switchblade"

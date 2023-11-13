@@ -82,7 +82,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(istype(loc, /obj/machinery/iv_drip))
 		var/obj/machinery/iv_drip/holder = loc
 		holder.remove_container()
- . = ..()
+	thermal_dissipation_reagents -= reagents
+	. = ..()
 
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
 	return
@@ -219,8 +220,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.clear_reagents()
 	if(user)
 		if(user.Adjacent(target))
-			user.visible_message("<span class='warning'>\The [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""] has been splashed with something by [user]!</span>",
-								"<span class='notice'>You splash [amount > 0 ? "some of " : ""]the solution onto \the [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""].</span>")
+			user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
+			                     "<span class='notice'>You splash the solution onto \the [target].</span>")
 
 //Define this wrapper as well to allow for proc overrides eg. for frying pan
 /obj/item/weapon/reagent_containers/proc/container_splash_sub(var/datum/reagents/reagents, var/atom/target, var/amount, var/mob/user = null)
@@ -258,6 +259,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			var/tx_amount = transfer_sub(target, src, reagents.maximum_volume, user)
 			if (tx_amount > 0)
 				to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
+				var/obj/machinery/cooking/deepfryer/F = target
+				F.empty_icon()
 			return tx_amount
 	// Transfer to container
 	if (can_send /*&& target.reagents**/)
@@ -370,7 +373,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if(H.species.chem_flags & NO_DRINK)
 			reagents.reaction(get_turf(H), TOUCH)
 			H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
-			reagents.remove_any(amount_per_imbibe)
+			reagents.remove_any(amount_per_imbibe) //Should this really be here?
 			return 0
 
 
@@ -398,3 +401,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	//We have to check for a /mob/virtualhearer/one_time here, and kill it ourselves. This is fairly bad OOP.
 	if(virtualhearer && istype(virtualhearer, /mob/virtualhearer/one_time))
 		removeHear()
+
+/obj/item/weapon/reagent_containers/on_reagent_change()
+	. = ..()
+	//Reagent containers can exchange heat with the surrounding air.
+	heat_dissipation_updates() //Every reagent_containers that should be added to the heat dissipation subsystem should call this on_reagent_change(). If you add something that breaks the supercall chain, be sure to call this.

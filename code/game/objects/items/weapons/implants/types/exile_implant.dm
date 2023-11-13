@@ -35,7 +35,7 @@
 	siteOfImplant = get_turf(imp_in)
 	zlevels -= illegalZ
 	to_chat(imp_in, "<span class='notice'>You shiver as you feel a weak, unsettling film surround you.</span>")
-	imp_in.register_event(/event/moved, src, src::zBan())
+	imp_in.register_event(/event/moved, src, nameof(src::zBan()))
 
 /obj/item/weapon/implant/exile/proc/zBan(atom/movable/mover)
 	var/turf/T = get_turf(src)
@@ -108,7 +108,7 @@
 /obj/item/weapon/implant/exile/proc/freeFromExile()
 	playsound(imp_in, "sound/machines/notify.ogg", 100, 1)
 	to_chat(imp_in, "<span class='notice'>You feel a sudden shooting pain. The film-like sensation fades. Your implant has jaunted out of your body.</span>" )
-	imp_in.unregister_event(/event/moved, src, src::zBan())
+	imp_in.unregister_event(/event/moved, src, nameof(src::zBan()))
 	src.forceMove(siteOfImplant)
 	imp_in = null
 

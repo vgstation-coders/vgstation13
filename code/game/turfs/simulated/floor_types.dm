@@ -91,6 +91,7 @@
 	icon_plating = "engine"
 	thermal_conductivity = 0.025
 	heat_capacity = 325000
+	protect_infrastructure = TRUE
 
 	soot_type = null
 	melt_temperature = 0 // Doesn't melt.
@@ -141,24 +142,64 @@
 			C.playtoolsound(src, 80)
 			update_icon()
 
+/turf/simulated/floor/engine/proc/explode_layers(var/layers = 1)
+	if(secured)		//plasteel tile, screwed in
+		secured = FALSE
+		update_icon()
+		layers -= 1
+		if(!layers)
+			return
+	if(floor_tile)	//plasteel tile, unscrewed
+		qdel(floor_tile)
+		floor_tile = null
+		icon_state = "engine"
+		update_icon()
+		layers -= 1
+		if(!layers)
+			return
+	//reinforced floor
+	new /obj/item/stack/rods(src, 1)
+	ChangeTurf(/turf/simulated/floor)
+	var/turf/simulated/floor/F = src
+	F.make_plating()
+	layers -= 1
+
+	//normal plating
+	if(!layers)
+		return
+
+	var/severity = 2
+	if(layers > 1)
+		severity = 1
+	for(var/obj/structure/cable/C in src)
+		C.ex_act(severity)
+	for(var/obj/machinery/atmospherics/pipe/P in src)
+		P.ex_act(severity)
+	for(var/obj/structure/disposalpipe/D in src)
+		D.ex_act(severity)
+	src.ex_act(severity)
+
 /turf/simulated/floor/engine/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			if(prob(80 / (1 + secured)))
-				src.ReplaceWithLattice()
-			else if(prob(50 / (1 + secured)))
-				src.ChangeTurf(get_underlying_turf())
-			else
-				var/turf/simulated/floor/F = src
-				F.make_plating()
+			explode_layers(pick(2,3))
 		if(2.0)
-			if(prob(50 / (1 + secured)))
-				var/turf/simulated/floor/F = src
-				F.make_plating()
-			else
-				return
+			explode_layers(1)
 		if(3.0)
-			return
+			if(prob(10))
+				explode_layers(1)
+
+/turf/simulated/floor/engine/make_plating()
+	if(floor_tile)
+		floor_tile.forceMove(src)
+		floor_tile = null
+	intact = 0
+	broken = 0
+	burnt = 0
+	material = "metal"
+
+	update_icon()
+	levelupdate()
 
 /turf/simulated/floor/engine/update_icon()
 	overlays.Cut()
@@ -235,6 +276,7 @@
 
 /turf/simulated/floor/plating/deck
 	name = "deck"
+	icon_state = "deck"
 	icon_plating = "deck"
 	desc = "Children love to play on this deck."
 

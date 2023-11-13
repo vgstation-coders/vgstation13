@@ -1,8 +1,7 @@
 <!--
-Title: Supply Console UI
-Used In File(s): \code\game\supplyshuttle.dm
+Title: Cargo Supply Console UI
+Used In File(s): code/game/machinery/computer/cargo.dm
 -->
-
 <style type='text/css'>
 	#category
 	{
@@ -10,114 +9,175 @@ Used In File(s): \code\game\supplyshuttle.dm
 		float:left;
 	}
 </style>
-<div style="float: right; margin-top: 3px;">
-	<div class="line">
+<div style="margin-top: 3px;">
+	<span class="line" style="width: 100%; float: right">
+		{{if data.hacked}}
+			<span class="bad" style="float: left;"><b>ACCESS OVERRIDDEN</b></span>
+		{{/if}}
+		<span style="float: right;">
 		{{if !data.forwarding}}
 			{{:helper.link('Enable Crate Forwarding', 'circle-triangle-e', data.forward, null)}}
 		{{else}}
 			{{:helper.link('Disable Crate Fowarding', 'circle-triangle-w', data.forward, null)}}
 		{{/if}}
-		{{:helper.link('Permissions', 'key', {'permissions' : 1})}}
-		{{if data.hacked}}
-			<span class='bad'>ACCESS OVERRIDDEN</span>
+		{{:helper.link('Permissions', 'key', {'permissions' : 1}, null, (data.show_permissions)?'linkOn':'')}}
+		{{if !data.moving && !data.at_station}}
+			{{:helper.link('Call Shuttle', 'circle-triangle-e', data.send, null, (data.shuttle_bad_status)?'disabled':'')}}
+		{{else !data.moving && data.at_station}}
+			{{:helper.link('Return Shuttle', 'circle-triangle-w', data.send, null, (data.shuttle_bad_status)?'disabled':'')}}
+		{{else data.moving}}
+			{{:helper.link(('TTA: ' + data.supply_shuttle_timer), 'clock', {'updateclock': true}, null, 'disabled')}}
 		{{/if}}
-	</div>
-	{{if !data.moving && !data.at_station}}
-		{{:helper.link('Call Shuttle', 'circle-triangle-e', data.send, null)}}
-	{{else !data.moving && data.at_station}}
-		{{:helper.link('Return Shuttle', 'circle-triangle-w', data.send, null)}}
-	{{else data.moving}}
-		<div class="line">Shuttle is en route.</div>
-	{{/if}}
+		</span>
+	</span>
 </div>
-<div class="item" style="float: left; width:67%; margin-bottom: 3px;">
-	<div class="itemLabel">
+<div class="item" style="float: left; width:100%; margin-bottom: 0px;">
+	<span class="itemLabel" style="width: 26%">
 		Account Name:
-	</div>
-	<div class="itemContent">
+	</span>
+	<span class="itemContent">
 		{{if data.authorized_name != ""}}
 			{{:data.name_of_source_account}} as {{:data.authorized_name}}
 		{{else}}
 			{{:data.name_of_source_account}}
 		{{/if}}
-	</div>
+	</span>
 </div>
-<div class="item" style="width:67%; margin-bottom: 3px;">
-	<div class="itemLabel">
+<div class="item" style="width:100%; margin-bottom: 3px;">
+	<span class="itemLabel" style="width: 26%">
 		Account Funds:
-	</div>
-	<div class="itemContent">
+	</span>
+	<span class="itemContent">
 		{{:data.money}}
+	</span>
+</div>
+{{if data.show_permissions}}
+<br>
+<div class="itemLabel" style="width: 94%">
+Permissions Panel
+<div class="item">
+	<div class="itemContentWide" style="margin:left; width: 94%">
+		<div class="statusDisplay">
+			<span class="itemLabel" style="width: 29%">
+				Order Approval:
+			</span>
+			<span class="itemContent">
+				{{:helper.link('Auto-Approve', '', {'access_restriction' : 0}, data.restriction ? null : 'selected')}}{{:helper.link('Needs Approval', '', {'access_restriction' : 1}, data.restriction==1 ? 'selected' : null)}}{{:helper.link('Needs Physical ID', '', {'access_restriction' : 2}, data.restriction==2 ? 'selected' : null)}}{{:helper.link('Needs PIN', '', {'access_restriction' : 3}, data.restriction==3 ? 'selected' : null)}}
+			</span>
+			<span class="itemLabel" style="width: 29%">
+				Cargo Requisitioning:
+			</span>
+			<span class="itemContent">
+				{{:helper.link('Off', '', {'requisition_status' : 0}, data.requisition ? null : 'selected')}}{{:helper.link('On', '', {'requisition_status' : 1}, data.requisition==1 ? 'selected' : null)}}
+			</span>
+			<span class="itemLabel" style="width: 29%">
+				Print CC Requests:
+			</span>
+			<span class="itemContent">
+				{{:helper.link('Off', '', {'access_ccrequests' : 0}, data.printccrequests ? null : 'selected')}}{{:helper.link('On', '', {'access_ccrequests' : 1}, data.printccrequests==1 ? 'selected' : null)}}
+			</span>
+			<span class="itemLabel" style="width: 29%">
+				Print Individual Orders:
+			</span>
+			<span class="itemContent">
+				{{:helper.link('Off', '', {'access_ordermanifests' : 0}, data.printordermanifests ? null : 'selected')}}{{:helper.link('On', '', {'access_ordermanifests' : 1}, data.printordermanifests==1 ? 'selected' : null)}}
+			</span>
+			<span class="itemLabel" style="width: 29%">
+				Print Shuttle Manifest:
+			</span>
+			<span class="itemContent">
+				{{:helper.link('Off', '', {'access_shuttlemanifests' : 0}, data.printshuttlemanifests ? null : 'selected')}}{{:helper.link('On', '', {'access_shuttlemanifests' : 1}, data.printshuttlemanifests==1 ? 'selected' : null)}}
+			</span>
+		</div>
 	</div>
 </div>
-<br />
-<div style="border-bottom:3px solid #fff;width:100%px;height:100%;"></div>
-{{if data.show_permissions}}
-	<div class="item">
-		<div class="itemLabel">
-			Order Approval:
-		</div>
-		<div class="itemContent">
-			{{:helper.link('Any', '', {'access_restriction' : 0}, data.restriction ? null : 'selected')}}{{:helper.link('Allowed', '', {'access_restriction' : 1}, data.restriction==1 ? 'selected' : null)}}{{:helper.link('ID Only', '', {'access_restriction' : 2}, data.restriction==2 ? 'selected' : null)}}{{:helper.link('Enter PIN', '', {'access_restriction' : 3}, data.restriction==3 ? 'selected' : null)}}
-		</div>
-	</div>
-	<div class="item">
-		<div class="itemLabel">
-			Requisitions Status:
-		</div>
-		<div class="itemContent">
-			{{:helper.link('Never', '', {'requisition_status' : 0}, data.requisition ? null : 'selected')}}{{:helper.link('Always', '', {'requisition_status' : 1}, data.requisition==1 ? 'selected' : null)}}
-		</div>
-	</div>
 {{else}}
-<div id="container" style="width:100%; height:100%;display:flex;border-bottom:3px solid #fff;">
-	<div style="float: left; width: 32%; height:auto;">
-		<div class="itemLabel" style="margin-left:15%;">
-			Categories
-		</div>
-		{{for data.all_supply_groups}}
-		<div class="line">
-			{{:helper.link(value.category, null, {'last_viewed_group': value.category}, (data.last_viewed_group==value.category)?'linkOn':'', 'noOverflow', 'category')}}
-		</div>
-		{{/for}}
+<div style="float: left; width: 26%;">
+	<div class="itemLabel" style="margin-bottom: 3px; height: 21px">
+		Categories
 	</div>
-	<div style="float: right; width: 66%;">
-		<div class="itemLabel">
-			Supply Crates
+	<div class="itemContentWide" style="width: 100%;">
+		<div class="statusDisplay">
+			{{for data.all_supply_groups}}
+			<div class="line">
+				{{:helper.link(value.category, null, {'last_viewed_group': value.category}, (data.last_viewed_group==value.category)?'linkOn':'', 'noOverflow', 'category')}}
+			</div>
+			{{/for}}
 		</div>
-		<div class="itemContentWide" style="width: 100%;">
-			<div class="statusDisplay style="height:100%;">
-				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height:200px;">
-					{{for data.supply_packs}}
-						<div class="line">
-							<div class="statusValue">
-								{{:helper.link(value.name, null, value.command1, null, 'fixedLeftWidest noOverflow')}}
-								{{:helper.link('#', null, value.command2, null)}}${{:value.cost}}
-							</div>
+	</div>
+</div>
+<div style="float: right; width: 74%;">
+	<span class="itemLabel" style="width: 23%">
+		Supply Crates
+	</span>
+	<span style="width: 52%;">
+		{{:helper.link("Sort: " + data.sort_method, 'refresh', {'sort': true}, null, '')}}
+	</span>
+	<span style="float: right; width: 24%; padding-right: 1px">
+		{{:helper.link("Search", 'search', {'search': true}, '', (data.last_viewed_group=='Search')?'linkOn':'')}}
+	</span>
+	<div class="itemContentWide" style="width: 92%;">
+		<div class="statusDisplay">
+			<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 240px">
+				{{for data.supply_packs}}
+					<div class="line">
+						<div class="statusValue">
+							{{:helper.link(value.name, null, value.command1, null, 'fixedLeftWidest noOverflow')}}
+							{{:helper.link('#', null, value.command2, null)}}
+							{{:helper.link('ⓘ', null, value.command3, (data.supply_pack_info.name==value.name)?'linkOn':'')}}${{:value.cost}}
 						</div>
-					{{/for}}
-				</div>
+					</div>
+				{{/for}}
 			</div>
 		</div>
 	</div>
 </div>
 {{/if}}
 <div class="item">
-	<div class="itemLabel">Screen:</div>
-	<div style="float:right;" class="itemContents">
-		{{:helper.link('Main',      'gear',{'screen':1},(data.screen==1)?'linkOn':'')}}
-		{{:helper.link('Central Command Requests',     'gear',{'screen':2},(data.screen==2)?'linkOn':'')}}
-		{{if data.are_forwards}}
-			{{:helper.link('Cargo Crates to Forward',     'gear',{'screen':3},(data.screen==3)?'linkOn':'')}}
-		{{/if}}
+	<div class="itemContentWide" style="margin:left; width: 94%">
+		<div class="statusDisplay">
+			<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 80px;">
+				<span><u><b>{{:data.supply_pack_info.name}}</b></u></span>
+				{{if data.supply_pack_info.access}}
+					 <span style="float: right"><i> Access Required: {{:data.supply_pack_info.access}}</i></span>
+					{{if data.supply_pack_info.has_access == 1}}
+						<span style="float: right; background-image: url(uiIcons16Green.png);" class="uiIcon16 icon-check"></span>
+					{{else}}
+						<span style="float: right; background-image: url(uiIcons16Red.png);" class="uiIcon16 icon-closethick"></span>
+					{{/if}}
+				{{/if}}
+				<br>
+				<div style="float: left; width: 36px;">
+					{{:data.supply_pack_info.packicon}}
+				</div>
+				{{if data.supply_pack_info.containsicon}}
+					<div style="float: left; width: 36px;">
+						{{:data.supply_pack_info.containsicon}}
+					</div>
+				{{/if}}
+				<div>
+					{{:data.supply_pack_info.containsdesc}}
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
+
+<div class="item">
+	<span class="itemLabel">Screen:</span>
+	<span style="float:left;" class="itemContents">
+		{{:helper.link('Main',      'gear',{'screen':1},(data.screen==1)?'linkOn':'')}}
+		{{:helper.link('Central Command Requests',     'gear',{'screen':2},(data.screen==2)?'linkOn':'')}}
+		{{:helper.link('Cargo Crates to Forward',     'gear',{'screen':3},(data.screen==3)?'linkOn':'', (data.are_forwards)?'linkDanger':'')}}
+	</span>
+</div>
+
 {{if data.screen == 1}}
 	<div class="item">
 		<div class="itemLabel">
 			Supply Orders
 		</div>
-		<div class="itemContentWide">
+		<div class="itemContentWide" style="width: 94%;">
 			<div class="statusDisplay">
 				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 220px;">
 					<u><b>Requests</b></u>
@@ -158,7 +218,7 @@ Used In File(s): \code\game\supplyshuttle.dm
 		<div class="itemLabel">
 			Centcomm Requests
 		</div>
-		<div class="itemContentWide">
+		<div class="itemContentWide" style="width: 94%;">
 			<div class="statusDisplay">
 				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 220px;">
 					<u><b>Requests</b></u>
@@ -190,7 +250,7 @@ Used In File(s): \code\game\supplyshuttle.dm
 		<div class="itemLabel">
 			Cargo Crates to Forward
 		</div>
-		<div class="itemContentWide">
+		<div class="itemContentWide" style="width: 94%;">
 			<div class="statusDisplay">
 				<div class="line" style="overflow-y: auto; overflow-x: hidden; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; height: 220px;">
 					<u><b>Crates</b></u>

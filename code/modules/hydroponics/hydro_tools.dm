@@ -77,7 +77,6 @@
 	dat += "<tr><td><b>Maturation time</b></td><td>[round(grown_seed.maturation, 0.01)]</td></tr>"
 	dat += "<tr><td><b>Production time</b></td><td>[round(grown_seed.production, 0.01)]</td></tr>"
 	dat += "<tr><td><b>Potency</b></td><td>[round(grown_seed.potency, 0.01)]</td></tr>"
-	dat += "<tr><td><b>Primary Molecules</b></td><td>[jointext(grown_seed.molecule_type, ", ")]</td></tr>"
 	dat += "</table>"
 
 	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
@@ -140,6 +139,8 @@
 	if(grown_seed.consume_gasses)
 		for(var/gas in grown_seed.consume_gasses)
 			dat += "<br>It will consume [gas] from the environment."
+	if(grown_seed.gas_absorb)
+		dat += "<br>It will turn absorbed gasses into reagents."
 	if(grown_seed.exude_gasses)
 		for(var/gas in grown_seed.exude_gasses)
 			dat += "<br>It will exude [gas] into the environment."

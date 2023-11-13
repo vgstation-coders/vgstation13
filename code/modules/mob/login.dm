@@ -17,15 +17,17 @@
 	computer_id	= client.computer_id
 	log_access("Login: [key_name(src)] from [lastKnownIP ? lastKnownIP : "localhost"]-[computer_id] || BYOND v[client.byond_version]")
 	if(config.log_access)
+		if(lastKnownIP == "127.0.0.1") //localhost
+			return
 		for(var/mob/M in player_list)
 			if(M == src)
 				continue
-			if( M.key && (M.key != key) )
+			if(M.key && (M.key != key))
 				var/matches
 				var/matches_both = FALSE
-				if( (M.lastKnownIP == client.address) )
+				if((M.lastKnownIP == client.address))
 					matches += "IP ([client.address])"
-				if( (M.computer_id == client.computer_id) )
+				if((M.computer_id == client.computer_id))
 					if(matches)
 						matches += " and "
 						matches_both = TRUE
@@ -44,7 +46,7 @@
 					var/available_admins = admins_number - admin_number_afk
 					//Dunno if it's okay to log IP or ID here
 					send2adminirc("Notice: [key_name(src)] has the same IP and ID as [key_name(M)][M.client ? "" : " (no longer logged in)"].  [available_admins ? "" : "No non-AFK admins online"]")
-					send2admindiscord("**Notice: [key_name(src)] has the same IP and ID as [key_name(M)][M.client ? "" : " (no longer logged in)"].  [available_admins ? "" : "No non-AFK admins online"]**", !available_admins)
+					send2admindiscord("**Notice: [key_name(src)] has the same IP and ID as [key_name(M)][M.client ? "" : " (no longer logged in)"].  [available_admins ? "" : "No non-AFK admins online"]**")
 
 // Do not call ..()
 // If you do so and the mob is in nullspace BYOND will attempt to move the mob a gorillion times

@@ -126,6 +126,8 @@
 		episode_names += new /datum/episode_name/rare("MY HEART WILL GO ON", "[score.heartattacks] hearts were reanimated and burst out of someone's chest this round.", min(1500, score.heartattacks*250))
 	if(score.richestcash > 30000)
 		episode_names += new /datum/episode_name/rare("[pick("WAY OF THE WALLET", "THE IRRESISTIBLE RISE OF [uppertext(score.richestname)]", "PRETTY PENNY", "IT'S THE ECONOMY, STUPID")]", "Scrooge Mc[score.richestkey] racked up [score.richestcash] credits this round.", min(450, score.richestcash/500))
+	if(score.biggestshoalcash > 30000)
+		episode_names += new /datum/episode_name/rare("[pick("WAY OF WALLET", "IRRESISTING RISE OF [uppertext(score.richestname)]", "PRETTY COIN", "IS ECONOMY, STUPID")]", "Scrooge Mc[score.biggestshoalkey] racked up [score.biggestshoalcash] credits this round.", min(450, score.biggestshoalcash/500))
 	if(score.deadaipenalty > 3)
 		episode_names += new /datum/episode_name/rare("THE ONE WHERE [score.deadaipenalty] AIS DIE", "That's a lot of dead AIs.", min(1500, score.deadaipenalty*300))
 	if(score.lawchanges > 12)

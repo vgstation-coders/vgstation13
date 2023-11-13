@@ -68,6 +68,7 @@
 		/obj/item/weapon/stock_parts/manipulator/nano/pico = 150,
 		/obj/item/weapon/stock_parts/scanning_module/adv/phasic = 150,
 		/obj/item/weapon/stock_parts/capacitor/adv/super = 150,
+		/obj/item/borg/upgrade/bootyborg = 250,
 		/obj/item/slime_extract/grey = 100,
 		/obj/item/slime_extract/silver = 130,
 		/obj/item/slime_extract/pink = 150,
@@ -75,7 +76,7 @@
 		/obj/item/weapon/pickaxe/drill/diamond = 500,
 		/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube = 150,
 		/obj/item/weapon/storage/box/large/mystery_material = 150,
-
+		/obj/item/weapon/storage/pill_bottle/mint/homemade = 30
 	)
 
 	var/list/uncommonStock = list(

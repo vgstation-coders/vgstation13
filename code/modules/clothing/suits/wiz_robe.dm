@@ -58,10 +58,11 @@
 	icon_state = "necromancer"
 	item_state = "necrohood"
 	siemens_coefficient = 0.8
+	body_parts_covered = HIDEHAIR
 
 /obj/item/clothing/head/wizard/necro/fake
 	desc = "An elegant hood woven with child labor somewhere in Space China."
-	wizard_garb = 0
+	wizard_garb = FALSE
 
 /*
 //No longer required due to /obj/item/clothing/head/that/magic
@@ -178,6 +179,15 @@
 	icon_state = "necromancer"
 	item_state = "necrorobe"
 	species_fit = list(INSECT_SHAPED)
+	hood = new /obj/item/clothing/head/wizard/necro()
+	hood_suit_name = "robes"
+	auto_hood = TRUE
+
+/obj/item/clothing/suit/wizrobe/necro/fake
+	desc = "An elegant robe woven with child labor somewhere in Space China."
+	wizard_garb = FALSE
+	hood = new /obj/item/clothing/head/wizard/necro/fake()
+	auto_hood = FALSE
 
 /obj/item/clothing/head/wizard/marisa/fake
 	name = "Witch Hat"

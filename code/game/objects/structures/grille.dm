@@ -131,7 +131,7 @@
 	shock(user, 75) //Ditto above
 
 /obj/structure/grille/attack_slime(mob/user as mob)
-	if(!istype(user, /mob/living/carbon/slime/adult))
+	if(!isslimeadult(user))
 		return
 	user.do_attack_animation(src, user)
 	user.delayNextAttack(8)

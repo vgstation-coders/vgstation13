@@ -96,6 +96,8 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 
 	var/lights_always_start_on = FALSE
 
+	var/destroy_after_marker = FALSE	//The area is deleted after its holomap marker is created. Useful for shuttle docking zones that need to remain area-free.
+
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
 var/list/teleportlocs = list()
@@ -302,12 +304,20 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Security Shuttle"
 	icon_state = "shuttlered"
 
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+
 /area/shuttle/mining
 	name = "\improper Mining Shuttle"
 	music = "music/escape.ogg"
 
 /area/shuttle/mining/station
 	icon_state = "shuttle2"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
 
 /area/shuttle/mining/outpost
 	icon_state = "shuttle"
@@ -423,6 +433,42 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/shuttle/research/station
 	icon_state = "shuttle2"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+
+
+//------------------------------------------------------These are only used to place the holomap markers
+
+/area/shuttle/snaxi_platform1
+	name = "\improper Orbital Platform Dock 1"
+	icon_state = "shuttlered"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+	destroy_after_marker = TRUE
+
+/area/shuttle/snaxi_platform2
+	name = "\improper Orbital Platform Dock 1"
+	icon_state = "shuttlered"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+	destroy_after_marker = TRUE
+
+/area/shuttle/snaxi_platform3
+	name = "\improper Orbital Platform Dock 1"
+	icon_state = "shuttlered"
+
+	//Snaxi
+	holomap_marker = "taxi"
+	holomap_filter = HOLOMAP_FILTER_TAXI
+	destroy_after_marker = TRUE
+
+//------------------------------------------------------
 
 /area/shuttle/research/outpost
 	icon_state = "shuttle"
@@ -1918,6 +1964,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "The Blizzard"
 	icon_state = "sno"
 	construction_zone = FALSE
+	holomap_draw_override = HOLOMAP_DRAW_PATH
 
 /area/surface/icecore
 	name = "\improper Frozen Core"
@@ -2789,13 +2836,32 @@ var/list/the_station_areas = list (
 /area/maintenance/engine
 	name = "Engine"
 
+var/list/shack_names = list("abandoned","deserted","forsaken","stranded","isolated")
+
 /area/shack
-	name = "abandoned shack"
+	name = "shack"
 	requires_power = 0
 	icon_state = "firingrange"
 	dynamic_lighting = 1
 
 	holomap_draw_override = HOLOMAP_DRAW_FULL
+
+/area/shack/spawned_by_map_element(datum/map_element/ME, list/objects)//So each shack is its own area. Copied from /area/vault/automap.
+	var/area/shack/new_area = new src.type
+
+	for(var/turf/T in src.contents)
+		new_area.contents.Add(T)
+
+		T.change_area(src, new_area)
+		for(var/atom/allthings in T.contents)
+			allthings.change_area(src, new_area)
+
+	new_area.tag = "[new_area.type]/\ref[ME]"
+
+	var/pick_name = pick(shack_names)
+	shack_names -= pick_name
+	new_area.name = "[pick_name] shack"//having a different name for every shack so they are separate entries in the Jump to Area list
+	ghostteleportlocs[new_area.name] = new_area
 
 // BEGIN Horizon
 /area/hallway/primary/foreport

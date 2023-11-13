@@ -90,9 +90,12 @@ var/list/one_way_windows
 	examine_health(user)
 
 /obj/structure/window/AltClick(mob/user)
-	if(user.incapacitated() || !Adjacent(user))
-		return
-	rotate()
+	if(is_fulltile)
+		. = ..()
+	else
+		if(user.incapacitated() || !Adjacent(user))
+			return
+		rotate()
 
 /obj/structure/window/proc/examine_health(mob/user)
 	if(!anchored)
@@ -375,6 +378,7 @@ var/list/one_way_windows
 			log_attack("[user.name] ([user.ckey]) window slammed [M.name] ([M.ckey]) ([gstate]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			return
 
+    /* One-way windows have serious performance issues - N3X
 	if(iscrowbar(W) && one_way)
 		if(!is_fulltile && get_turf(user) != get_turf(src))
 			to_chat(user, "<span class='warning'>You can't pry the sheet of plastic off from this side of \the [src]!</span>")
@@ -383,7 +387,6 @@ var/list/one_way_windows
 			toggle_one_way()
 			drop_stack(/obj/item/stack/sheet/mineral/plastic, get_turf(user), 1, user)
 			return
-    /* One-way windows have serious performance issues - N3X
 	if(istype(W, /obj/item/stack/sheet/mineral/plastic))
 		if(one_way)
 			to_chat(user, "<span class='notice'>This window already has one-way tint on it.</span>")
@@ -726,7 +729,7 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/tinted
 
 	name = "tinted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall?"
 	icon_state = "twindow0"
 	base_state = "twindow"
 	opacity = 1
@@ -735,7 +738,7 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/tinted/frosted
 
 	name = "frosted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall?"
 	icon_state = "rwindow0"
 	base_state = "rwindow"
 	health = 30
@@ -751,6 +754,11 @@ var/list/one_way_windows
 	reinforcetype = /obj/item/stack/sheet/ralloy
 	sheetamount = 2
 	health = 80
+
+/obj/structure/window/reinforced/clockwork/relativewall()
+	// Ignores adjacent anchored window tiles for "merging", since there's only a single brass window sprite
+	// Remove this whenever someone sprites all the required icon states
+	return
 
 /obj/structure/window/reinforced/clockwork/cultify()
 	return

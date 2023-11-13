@@ -933,12 +933,12 @@
 /obj/item/toy/gasha/miner
 	name = "toy miner"
 	desc = "Walk softly, and carry a ton of monsters."
-	icon_state = "miner"
+	icon_state = "gashaminer"
 
 /obj/item/toy/gasha/clown
 	name = "toy clown"
 	desc = "HONK"
-	icon_state = "clown"
+	icon_state = "gashaclown"
 
 /obj/item/toy/gasha/goliath
 	name = "toy goliath"
@@ -1008,12 +1008,12 @@
 /obj/item/toy/gasha/mime
 	name = "toy mime"
 	desc = "..."
-	icon_state = "mime"
+	icon_state = "gashamime"
 
 /obj/item/toy/gasha/captain
 	name = "toy captain"
 	desc = "Though some say the captain should always go down with his ship, captains on NT stations tend to be the first on escape shuttles whenever the time comes."
-	icon_state = "captain"
+	icon_state = "gashacaptain"
 
 /obj/item/toy/gasha/comdom
 	name = "toy comdom"
@@ -1049,7 +1049,7 @@
 
 /obj/item/toy/gasha/snowflake
 	name = "toy snowflake"
-	desc = "What a faggot."
+	desc = "What a snowflake."
 	icon_state = "fag"
 
 /obj/item/toy/gasha/shade
@@ -1102,7 +1102,7 @@
 	icon_state = ""
 
 /obj/item/toy/gasha/mimiga/sue
-	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'best girl'."
+	desc = "It looks like some sort of rabbit-thing. For some reason you get the feeling that this one is the 'best girl'."
 	icon_state = "sue"
 
 /obj/item/toy/gasha/mimiga/toroko
@@ -1112,7 +1112,7 @@
 	icon_state = "king"
 
 /obj/item/toy/gasha/mimiga/chaco
-	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'worst girl'."
+	desc = "It looks like some sort of rabbit-thing. For some reason you get the feeling that this one is the 'worst girl'."
 	icon_state = "chaco"
 
 /obj/item/toy/gasha/mario

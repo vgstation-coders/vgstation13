@@ -18,7 +18,8 @@
 /obj/machinery/door/mineral/New(location)
 	..()
 	icon_state = "[prefix]door_closed"
-	name = "[prefix] door"
+	if(name == "mineral door") //preserve mapped names
+		name = "[prefix] door"
 
 /obj/machinery/door/mineral/Bumped(atom/user)
 	if(operating)

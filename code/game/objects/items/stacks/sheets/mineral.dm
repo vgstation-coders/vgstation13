@@ -188,7 +188,9 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic floor tile", /obj/item/stack/tile/mineral/plastic, 1, 4, 20), \
 	new/datum/stack_recipe("plastic crate", /obj/structure/closet/pcrate, 10, one_per_turf = 1, on_floor = 1, one_per_turf = 1), \
 	new/datum/stack_recipe("plastic ashtray", /obj/item/ashtray/plastic, 1, on_floor = 1), \
+	new/datum/stack_recipe("lunch box", /obj/item/weapon/storage/lunchbox/plastic, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0), \
 	new/datum/stack_recipe("plastic fork", /obj/item/weapon/kitchen/utensil/fork/plastic, 1, on_floor = 1), \
+	new/datum/stack_recipe("plastic spork", /obj/item/weapon/kitchen/utensil/spork/plastic, 1, on_floor = 1), \
 	new/datum/stack_recipe("plastic spoon", /obj/item/weapon/kitchen/utensil/spoon/plastic, 1, on_floor = 1), \
 	new/datum/stack_recipe("plastic knife", /obj/item/weapon/kitchen/utensil/knife/plastic, 1, on_floor = 1), \
 	new/datum/stack_recipe("plastic bag", /obj/item/weapon/storage/bag/plasticbag, 3, on_floor = 1), \

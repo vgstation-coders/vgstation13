@@ -133,12 +133,6 @@
 
 /obj/machinery/power/apc/New(loc, var/ndir, var/building=0)
 	..(loc)
-	var/area/this_area = get_area(src)
-	if(this_area.areaapc || this_area.forbid_apc)
-		var/turf/T = get_turf(src)
-		world.log << "[this_area.forbid_apc ? "Forbidden" : "Second"] APC detected in area: [this_area.name] [T.x], [T.y], [T.z]. Deleting the second APC."
-		qdel(src)
-		return
 
 	wires = new(src)
 	// offset 24 pixels in direction of dir
@@ -147,8 +141,6 @@
 		dir = ndir
 	src.tdir = dir		// to fix Vars bug
 	dir = SOUTH
-
-	this_area.set_apc(src)
 
 	if(src.tdir & 3)
 		pixel_x = 0
@@ -189,8 +181,15 @@
 /obj/machinery/power/apc/initialize()
 	..()
 	var/area/this_area = get_area(src)
-	if(this_area)
-		name = "[this_area.name] APC"
+	if(this_area.areaapc || this_area.forbid_apc)
+		var/turf/T = get_turf(src)
+		world.log << "[this_area.forbid_apc ? "Forbidden" : "Second"] APC detected in area: [this_area.name] [T.x], [T.y], [T.z]. Deleting the second APC."
+		qdel(src)
+		return
+
+	name = "[this_area.name] APC"
+
+	this_area.set_apc(src)
 
 	update_icon()
 	add_self_to_holomap()

@@ -2,13 +2,13 @@
 	range = 7
 
 /datum/component/ai/target_finder/human/initialize()
-	parent.register_event(/event/attackby, src, src::on_attackby())
-	parent.register_event(/event/comp_ai_cmd_find_targets, src, src::cmd_find_targets())
+	parent.register_event(/event/attackby, src, nameof(src::on_attackby()))
+	parent.register_event(/event/comp_ai_cmd_find_targets, src, nameof(src::cmd_find_targets()))
 	return TRUE
 
 /datum/component/ai/target_finder/human/Destroy()
-	parent.unregister_event(/event/attackby, src, src::on_attackby())
-	parent.unregister_event(/event/comp_ai_cmd_find_targets, src, src::cmd_find_targets())
+	parent.unregister_event(/event/attackby, src, nameof(src::on_attackby()))
+	parent.unregister_event(/event/comp_ai_cmd_find_targets, src, nameof(src::cmd_find_targets()))
 	..()
 
 /datum/component/ai/target_finder/human/cmd_find_targets()

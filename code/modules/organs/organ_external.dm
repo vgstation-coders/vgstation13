@@ -779,6 +779,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.status &= ~ORGAN_BLEEDING
 		src.status &= ~ORGAN_SPLINTED
 		src.status &= ~ORGAN_DEAD
+		src.status &= ~ORGAN_MALFUNCTIONING
 
 		//No limb, no damage
 		brute_dam = 0
@@ -797,9 +798,24 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(body_part & (HAND_LEFT | HAND_RIGHT | ARM_LEFT | ARM_RIGHT))
 			owner.update_hands_icons()
 
+		if(body_part & (LEG_LEFT | LEG_RIGHT))
+			to_chat(owner, "<span class='danger'>The shock of losing your leg knocks you down!</span>")
+			owner.AdjustKnockdown(5)
+
 		if(slots_to_drop && slots_to_drop.len)
 			for(var/slot_id in slots_to_drop)
-				owner.u_equip(owner.get_item_by_slot(slot_id), 1)
+
+				//can continue wearing a glove or shoe if a hand or foot remains
+				if(owner.has_organ_for_slot(slot_id))
+					switch(slot_id)
+						if(slot_gloves)
+							owner.update_inv_gloves()
+						if(slot_shoes)
+							owner.update_inv_shoes()
+
+				else
+					owner.u_equip(owner.get_item_by_slot(slot_id), 1)
+
 		if(grasp_id && can_grasp)
 			if(owner.held_items[grasp_id])
 				owner.u_equip(owner.held_items[grasp_id], 1)
@@ -983,6 +999,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status &= ~ORGAN_ATTACHABLE
 	src.status &= ~ORGAN_DESTROYED
 	src.status &= ~ORGAN_PEG
+	src.status &= ~ORGAN_MALFUNCTIONING
 	src.status |= ORGAN_ROBOT
 	src.species = null
 	src.destspawn = 0
@@ -998,25 +1015,17 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status &= ~ORGAN_ATTACHABLE
 	src.status &= ~ORGAN_DESTROYED
 	src.status &= ~ORGAN_ROBOT
+	src.status &= ~ORGAN_MALFUNCTIONING
 	src.status |= ORGAN_PEG
 	src.species = null
+	src.destspawn = 0
 	src.wounds.len = 0
 
+/datum/organ/external/proc/peggify_all()
+	peggify()
 	for (var/datum/organ/external/T in children)
 		if(T)
-			if(body_part == ARM_LEFT || body_part == ARM_RIGHT || body_part == LEG_RIGHT || body_part == LEG_LEFT)
-				T.peggify()
-				src.destspawn = 0
-			else
-				T.droplimb(1, 1)
-				T.status &= ~ORGAN_BROKEN
-				T.status &= ~ORGAN_BLEEDING
-				T.status &= ~ORGAN_CUT_AWAY
-				T.status &= ~ORGAN_SPLINTED
-				T.status &= ~ORGAN_ATTACHABLE
-				T.status &= ~ORGAN_DESTROYED
-				T.status &= ~ORGAN_ROBOT
-				T.wounds.len = 0
+			T.peggify_all()
 
 
 /datum/organ/external/proc/fleshify()
@@ -1028,6 +1037,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	src.status &= ~ORGAN_DESTROYED
 	src.status &= ~ORGAN_PEG
 	src.status &= ~ORGAN_ROBOT
+	src.status &= ~ORGAN_MALFUNCTIONING
 	src.destspawn = 0
 
 /datum/organ/external/proc/attach(obj/item/I)
@@ -1556,6 +1566,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 	disfigured = TRUE
 
 	owner.update_hair()
+
+/datum/organ/external/head/droplimb(override, no_explode, spawn_limb, display_message)
+	. = ..()
+	owner.update_hair(1)
+	return .
 
 /****************************************************
 			   EXTERNAL ORGAN ITEMS

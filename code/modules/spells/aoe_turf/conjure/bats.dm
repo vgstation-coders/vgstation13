@@ -41,7 +41,7 @@
 
 	return locs
 
-/spell/aoe_turf/conjure/bats/before_cast(list/targets, user)
+/spell/aoe_turf/conjure/bats/before_cast(list/targets, user, bypass_range = 0)
 	return targets
 
 /spell/aoe_turf/conjure/bats/on_creation(atom/movable/AM, mob/user)

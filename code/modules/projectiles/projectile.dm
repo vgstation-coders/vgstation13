@@ -9,7 +9,6 @@
 #define SET "set"
 */
 
-var/list/bullet_master = list()
 var/list/impact_master = list()
 
 /obj/item/projectile
@@ -316,8 +315,6 @@ var/list/impact_master = list()
 
 	if (special_collision != PROJECTILE_COLLISION_MISS)
 		special_collision = A.bullet_act(src, def_zone) // searches for return value
-		if (A.gcDestroyed) // We killed the poor thing
-			A = A_turf
 	if(special_collision != PROJECTILE_COLLISION_DEFAULT && special_collision != PROJECTILE_COLLISION_BLOCKED) // the bullet is still flying, either from missing its target, bouncing off it, or going through a portal
 		bumped = 0 // reset bumped variable!
 
@@ -452,7 +449,7 @@ var/list/impact_master = list()
 /obj/item/projectile/proc/OnFired(var/proj_target = original)	//if assigned, allows for code when the projectile gets fired
 	target = get_turf(proj_target)
 
-	if(!original && !target)
+	if(!original || !target)
 		qdel(src) //If for some reason the target stops existing as the weapon is fired, just delete the projectile
 		return
 
@@ -857,4 +854,7 @@ var/list/impact_master = list()
 	color = proj_color
 
 /obj/item/projectile/proc/apply_projectile_color_shift(var/proj_color_shift)
+	return
+
+/obj/item/projectile/proc/teleport_act()
 	return

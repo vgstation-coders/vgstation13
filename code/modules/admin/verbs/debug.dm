@@ -1443,3 +1443,69 @@ var/global/blood_virus_spreading_disabled = 0
 		return
 	sort = sortlist[sort]
 	profile_show(src, sort)
+
+var/blend_calling = FALSE
+var/obj/blend_test = null
+
+/client/proc/spam_blend_calls()
+	set category = "Debug"
+	set name = "Spam Blend Calls"
+	set desc = "There is no testing like stress testing."
+
+	if (!check_rights(R_DEBUG))
+		return
+	blend_calling = FALSE
+	var/blendlist = list(
+		"ICON_ADD"		=	ICON_ADD,
+		"ICON_SUBTRACT"	=	ICON_SUBTRACT,
+		"ICON_MULTIPLY"	=	ICON_MULTIPLY,
+		"ICON_OVERLAY"		=	ICON_OVERLAY,
+		"ICON_AND"	=	ICON_AND,
+		"ICON_OR"	=	ICON_OR,
+		"ICON_UNDERLAY"	=	ICON_UNDERLAY
+	)
+	var/blendmode = input(src, "Blend type?", "Blend Type", "ICON_ADD") as null|anything in blendlist
+	if (!blendmode)
+		return
+	blend_calling = TRUE
+	if (!blend_test || blend_test.gcDestroyed)
+		blend_test = new (mob.loc)
+	blend_test.loc = mob.loc
+	message_admins("<span class='adminnotice'>[key_name_admin(src)] started spamming icon.Blend() calls with blend mode [blendmode].</span>")
+	feedback_add_details("admin_verb","Start blend spamming")
+	log_admin("[key_name(src)] started blend spamming.")
+	blendmode = blendlist[blendmode]
+	spawn()
+		while(blend_calling)
+			var/icon/I = icon('icons/debug.dmi',"first")
+			var/icon/J = icon('icons/debug.dmi',"second")
+			I.Blend(J,blendmode,rand(-3,3),rand(-3,3))
+			blend_test.icon = I
+			sleep(1)
+		message_admins("<span class='adminnotice'>icon.Blend() spamming ended.</span>")
+		feedback_add_details("admin_verb","Finish blend spamming")
+		log_admin("[key_name(src)] finished blend spamming.")
+
+/client/proc/edit_motd()
+	set category = "Server"
+	set name = "Edit MotD"
+	set desc = "Appears to players upon lobby entry."
+
+	if(!check_rights(R_PERMISSIONS))
+		return
+	if(alert("You are about to edit the MotD, which is displayed to anyone who enters the lobby. All changes persist across rounds. Continue?", "Warning", "Yes", "Cancel") == "Cancel")
+		return
+
+	var/oldmotd = return_file_text("config/motd.txt")
+	message_admins("[key_name(usr)] has begun editing the message of the day. An archive of what the MotD was beforehand has been printed to the server logs in case a mistake was made.")
+	log_admin("[key_name(usr)] has begun editing the message of the day. An archive of the old MotD is as follows: [oldmotd]")
+
+	var/newmotd = input(usr, "These changes will be persistent across shifts!", "Edit MotD", "[oldmotd]") as message|null
+	if(!newmotd)
+		return
+	fdel("config/motd.txt")
+	text2file(newmotd, "config/motd.txt")
+	join_motd = newmotd	//Sets the current round's motd
+	log_admin("[key_name(usr)] has edited the message of the day. The new text is as follows: [newmotd].")
+	feedback_add_details("admin_verb", "Edit MotD")
+	message_admins("[key_name(usr)] has edited the message of the day. Check the game log for the full text.")

@@ -455,7 +455,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidplating"
 	},
-/area/mine/explored)
+/area/shack)
 "Zu" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/storage/wallet/random,
@@ -470,7 +470,7 @@
 /turf/unsimulated/floor/airless{
 	icon_state = "asteroidplating"
 	},
-/area/mine/explored)
+/area/shack)
 
 (1,1,1) = {"
 zH

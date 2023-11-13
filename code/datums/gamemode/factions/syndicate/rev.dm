@@ -99,6 +99,8 @@
 #define ALL_REVS_DEAD 2
 
 /datum/faction/revolution/check_win()
+	if(antag_madness != ANTAG_MADNESS_OFF)
+		return FALSE
 	var/gameactivetime = world.time - ticker.gamestart_time*10 //gamestart_time is expressed in seconds, not deciseconds
 	if(gameactivetime < 5 MINUTES)
 		if(!(gameactivetime % 60))
@@ -155,8 +157,8 @@
 	if(stage >= FACTION_ENDGAME)
 		var/anyone = FALSE
 		for(var/datum/role/R in members)
-			if(R.antag.current && !R.antag.current.stat)
-				anyone = TRUE //If one rev is still not incapacitated
+			if(R.antag.current && !(R.antag.current.stat == DEAD))
+				anyone = TRUE //If one rev is still not killed
 		if(!anyone)
 			stage(FACTION_DEFEATED)
 			command_alert(/datum/command_alert/revolutiontoppled)

@@ -38,6 +38,7 @@
 	walltype = "log"
 	mineral = "log"
 	icon_state = "log0"
+	var/deconstruct_type = /turf/unsimulated/floor/snow/empty
 
 /turf/simulated/wall/mineral/wood/log/dismantle_wall()
 	new /obj/item/weapon/grown/log/tree(src)
@@ -47,8 +48,11 @@
 		if(istype(O,/obj/structure/sign/poster))
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
-	ChangeTurf(/turf/unsimulated/floor/snow/empty)
+	ChangeTurf(deconstruct_type)
 	update_near_walls()
+
+/turf/simulated/wall/mineral/wood/log/desert
+	deconstruct_type = /turf/simulated/floor/plating/ironsand
 
 /turf/simulated/wall/mineral/brick
 	name = "brick wall"

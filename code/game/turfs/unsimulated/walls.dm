@@ -74,7 +74,10 @@
 
 /turf/unsimulated/wall/splashscreen/New()
 	if(SNOW_THEME)
-		icon = 'icons/snowstation.gif' // not in the splashworks file so it doesn't appear in other cases
+		icon = 'icons/splashworks_alt/snowstation.gif' // uses splashworks_alt folder instead of splashworks so it only appears when we want it to
+		return
+	if(SOCIALISM_WON)
+		icon = 'icons/splashworks_alt/viva.png'
 		return
 	var/path = "icons/splashworks/"
 	var/list/filenames = flist(path)

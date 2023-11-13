@@ -60,9 +60,9 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 	.=..()
 	emergency_shuttle.escape_pods.Add(src)
 	podcomputer = locate(/obj/machinery/podcomputer) in linked_area
-	if(podcomputer)	
+	if(podcomputer)
 		podcomputer.linked_pod = src
-	
+
 	// I fucking hate shuttle wall smoothing it is such an annoying feature that only causes problems
 
 
@@ -74,7 +74,7 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 /datum/shuttle/escape/pod/proc/crash_into_shuttle()
 	if(!crashing_this_pod)
 		return
-		
+
 	crashing_this_pod = 0
 
 	if(!dock_shuttle)
@@ -94,14 +94,14 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 		playsound(dock_shuttle, 'sound/machines/hyperspace_begin.ogg', 60, 0, 0, 0, 0)
 
 		spawn(5 SECONDS)
-	
+
 		if(!move_to_dock(dock_shuttle, 0, 180))
 			message_admins("Warning: [src] failed to crash into shuttle.")
 		else
 			explosion(get_turf(dock_shuttle), 2, 3, 4, 6)
 
 			for(var/mob/living/M in emergency_shuttle.shuttle.linked_area)
-				shake_camera(M, 10, 1) 
+				shake_camera(M, 10, 1)
 				if(iscarbon(M) || !M.anchored)
 					M.Knockdown(3)
 
@@ -109,7 +109,7 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 			// The pod crashed into the shuttle. Make it part of the shuttle
 			// Automatic wall smoothing is gay and causes the pod to 'merge' with the shuttle visually
 			// instead of wasting time solving an issue caused by a worthless feature im going to cheat
-			
+
 			spawn(2 SECONDS)
 				for(var/turf/T in linked_area)
 					T.set_area(emergency_shuttle.shuttle.linked_area)

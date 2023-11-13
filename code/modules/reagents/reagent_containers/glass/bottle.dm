@@ -37,6 +37,7 @@
 		return 1
 
 /obj/item/weapon/reagent_containers/glass/bottle/on_reagent_change()
+	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bottle/pickup(mob/user)

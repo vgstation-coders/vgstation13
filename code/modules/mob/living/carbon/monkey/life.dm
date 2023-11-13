@@ -355,8 +355,6 @@
 		if(prob(20))
 			to_chat(src, "<span class='warning'>You feel a searing heat in your lungs!</span>")
 		fire_alert = max(fire_alert, 2)
-	else
-		fire_alert = 0
 
 	//breathing diseases
 	var/block = 0
@@ -432,11 +430,27 @@
 			if(thermal_protection < 1)
 				bodytemperature += min((1 - thermal_protection) * ((loc_temp - get_skin_temperature()) / BODYTEMP_HEAT_DIVISOR), BODYTEMP_HEATING_MAX)
 
-	if(stat==DEAD)
+	if(stat!=DEAD)//this is sweating/shiverring, right?....
 		bodytemperature += 0.1*(environment.temperature - bodytemperature)*environment_heat_capacity/(environment_heat_capacity + 270000)
 
-	//Account for massive pressure differences
+	if (status_flags & GODMODE)
+		fire_alert = 0
+		pressure_alert = 0
+		return
 
+	// Slimed carbons are protected against heat damage
+	if (bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT || (bodytemperature > BODYTEMP_HEAT_DAMAGE_LIMIT))
+		// Update fire/cold overlay
+		var/temp_alert = (bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT) ? 1 : 2
+		fire_alert = max(fire_alert, temp_alert)
+		if(!(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)))
+			var/temp_damage = get_body_temperature_damage(bodytemperature)
+			var/temp_weapon = (bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT) ? WPN_LOW_BODY_TEMP : WPN_HIGH_BODY_TEMP
+			apply_damage(temp_damage, BURN, used_weapon = temp_weapon)
+	else
+		fire_alert = 0
+
+	//Account for massive pressure differences
 	var/pressure = environment.return_pressure()
 	var/adjusted_pressure = calculate_affecting_pressure(pressure) //Returns how much pressure actually affects the mob.
 	switch(adjusted_pressure)
@@ -459,7 +473,7 @@
 					pressure_alert = -1
 
 	return
-
+/*
 /mob/living/carbon/monkey/proc/handle_temperature_damage(body_part, exposed_temperature, exposed_intensity)
 	if(status_flags & GODMODE)
 		return
@@ -470,7 +484,24 @@
 		adjustFireLoss(20.0*discomfort)
 
 	else
-		adjustFireLoss(5.0*discomfort)
+		adjustFireLoss(5.0*discomfort)*/
+
+/mob/living/carbon/monkey/proc/get_body_temperature_damage(var/temperature)
+	var/datum/species/species = all_species[greaterform]
+	if (temperature < species.cold_level_3)
+		return COLD_DAMAGE_LEVEL_3
+	else if (temperature < species.cold_level_2)
+		return COLD_DAMAGE_LEVEL_2
+	else if (temperature < species.cold_level_1)
+		return COLD_DAMAGE_LEVEL_1
+	else if (temperature >= species.heat_level_1)
+		return HEAT_DAMAGE_LEVEL_1
+	else if (temperature >= species.heat_level_2)
+		return HEAT_DAMAGE_LEVEL_2
+	else if (temperature >= species.heat_level_3)
+		return HEAT_DAMAGE_LEVEL_3
+	else
+		return 0
 
 /mob/living/carbon/monkey/proc/handle_chemicals_in_body()
 

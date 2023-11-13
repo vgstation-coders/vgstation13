@@ -6,6 +6,7 @@
 /obj/structure/window/full
 	name = "window"
 	icon_state = "fwindow0" //Specifically for the map
+	base_state = "fwindow"
 	sheetamount = 2
 	mouse_opacity = 2 // Complete opacity //What in the name of everything is this variable ?
 	layer = FULL_WINDOW_LAYER
@@ -30,7 +31,6 @@
 
 /obj/structure/window/full/setup_border_dummy()
 	return
-
 
 /obj/structure/window/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(istype(mover) && mover.checkpass(pass_flags_self))
@@ -146,7 +146,7 @@
 /obj/structure/window/full/reinforced/tinted
 
 	name = "tinted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall?"
 	icon_state = "ftwindow0"
 	base_state = "ftwindow"
 	opacity = 1
@@ -155,7 +155,7 @@
 /obj/structure/window/full/reinforced/tinted/frosted
 
 	name = "frosted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall?"
 	icon_state = "frwindow0"
 	base_state = "frwindow"
 	health = 30
@@ -171,6 +171,11 @@
 	reinforcetype = /obj/item/stack/sheet/ralloy
 	sheetamount = 4
 	health = 80
+
+/obj/structure/window/full/reinforced/clockwork/relativewall()
+	// Ignores adjacent anchored window tiles for "merging", since there's only a single brass window sprite
+	// Remove this whenever someone sprites all the required icon states
+	return
 
 /obj/structure/window/full/reinforced/clockwork/loose
 	anchored = 0
