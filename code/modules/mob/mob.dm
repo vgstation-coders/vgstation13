@@ -2270,9 +2270,9 @@ Use this proc preferably at the end of an equipment loadout
 	return FALSE
 
 /mob/proc/OnMobAreaChanged()
-	if(M.client && M.client.media && !M.client.media.forced)
+	if(src.client && src.client.media && !src.client.media.forced)
 		spawn()
-			M.update_music()
+			src.update_music()
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING
