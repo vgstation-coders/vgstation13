@@ -300,7 +300,7 @@
 				highest_job = job
 
 		var/datum/job/highest_job_datum = job_master.GetJob(highest_job)
-		if(!highest_job_datum) //Fixes a bug where players with a high preference in a job that wasn't in the game couldn't access Setup Character.
+		if(!highest_job_datum) //Fixes a bug where players with a high preference in a job that wasn't in the round couldn't access Setup Character.
 		else switch(highest_job_datum.type)
 			if(/datum/job/hop)
 				clothes_s = new /icon(uniform_dmi, "hop_s")
