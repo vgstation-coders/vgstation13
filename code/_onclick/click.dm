@@ -69,6 +69,8 @@
 		build_click(src, client.buildmode, params, A)
 		return
 
+	var/obj/item/held_item = get_active_hand()
+
 	var/list/modifiers = params2list(params)
 	INVOKE_EVENT(src, /event/clickon, "user" = src,	"modifiers" = modifiers, "target" = A)
 	if(modifiers["middle"])
@@ -81,6 +83,8 @@
 		ShiftClickOn(A)
 		return
 	if(modifiers["alt"]) // alt and alt-gr (rightalt)
+		if (held_item && held_item.AltFrom(A,src,A.Adjacent(src, MAX_ITEM_DEPTH),params))
+			return
 		AltClickOn(A)
 		return
 	if(modifiers["ctrl"])
@@ -118,7 +122,6 @@
 			throw_item(A)
 		return
 
-	var/obj/item/held_item = get_active_hand()
 	var/item_attack_delay = 0
 
 	if(held_item == A)
@@ -333,7 +336,14 @@
 
 /atom/proc/AltClick(var/mob/user)
 	var/turf/T = get_turf(src)
-	if(T && (T in range(1, user.loc)) && (T in view(1, user.virtualhearer))) //If next to user's location (to allow locker and mech alt-clicks) and if the user can actually view it
+	var/valid = FALSE
+	if(isAI(user))
+		var/mob/living/silicon/ai/ai = user
+		if(T && (T in range(7, ai.eyeobj.loc)))
+			valid = TRUE
+	else if(T && (T in range(1, user.loc)) && (T in view(1, user.virtualhearer))) //If next to user's location (to allow locker and mech alt-clicks) and if the user can actually view it
+		valid = TRUE
+	if(valid)
 		if(user.listed_turf == T)
 			user.listed_turf = null
 		else

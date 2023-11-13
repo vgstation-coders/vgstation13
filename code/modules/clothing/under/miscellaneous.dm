@@ -478,7 +478,7 @@
 	icon_state = "squatteroutfit"
 	item_state = "squatteroutfit"
 	_color = "squatteroutfit"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/russobluecamooutfit
 	name = "russian blue camo"
@@ -526,7 +526,7 @@
 	icon_state = "biker"
 	item_state = "biker"
 	_color = "biker"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/jacketsuit
 	name = "richard's outfit"
@@ -914,14 +914,6 @@
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
-
-/obj/item/clothing/suit/reaper_robes
-	name = "grim robes"
-	desc = "Tends to snag on tombstones"
-	icon_state = "reaper_hoodie" //edited version of chaplain_hoodie. 1px longer, and more open at the front
-	item_state = "reaper_hoodie"
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
-	body_parts_covered = FULL_TORSO|LEGS|ARMS|IGNORE_INV
 
 /obj/item/clothing/under/clownpsyche
 	name = "Psychedelic clown outfit"

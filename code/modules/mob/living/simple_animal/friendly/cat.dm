@@ -48,18 +48,15 @@
 	gender = FEMALE
 	is_pet = TRUE
 
-/mob/living/simple_animal/cat/Runtime/attackby(obj/item/weapon/reagent_containers/syringe/W as obj, mob/user as mob)
-	if(W.mode == 1 && src.icon_living != "original")
-		var/amount = W.reagents.get_reagent_amount(METHYLIN)
-		if(amount >= 5)
-			src.visible_message("<span class='notice'>[user] injects the syringe's solution into [src]... and \she transforms!</span>",\
-			"<span class='notice'>You inject the syringe's solution into [src]... and \she transforms!</span>")
-			playsound(W, 'sound/effects/bubbles.ogg', 80, 1)
-			W.reagents.remove_reagent(METHYLIN, amount)
+/mob/living/simple_animal/cat/Runtime/on_reagent_change()
+	if(src.icon_living != "original")
+		var/m_amount = reagents.get_reagent_amount(METHYLIN)
+		if(m_amount >= 4) /* We want 5 units, but we're accounting for metabolism ticks here. */
+			reagents.remove_reagent_by_type(METHYLIN, m_amount)
+			playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
+			for(var/mob/M in view())
+				to_chat(M, "<span class='notice'>\The [src]'s fur vibrates and shimmers as a mind-enhancing solution flows through \his... and \she transforms!</span>") /* BYOND doesn't have an equivalent macro for "her"... */
 			espify()
-		
-	else
-		. = ..()
 
 /mob/living/simple_animal/cat/Proc
 	name = "Proc"

@@ -15,8 +15,6 @@
 
 	var/iscloaking = FALSE
 	var/silentbite = FALSE
-	var/deadchat_timer = 0
-	var/deadchat = FALSE
 	var/nullified = 0
 	var/smitecounter = 0
 
@@ -273,7 +271,6 @@
 	handle_cloak(H)
 	handle_menace(H)
 	handle_smite(H)
-	handle_deadspeak(H)
 	if(istype(H.loc, /turf/space))
 		H.check_sun()
 	if(istype(H.loc, /obj/structure/closet/coffin))
@@ -336,23 +333,10 @@
 			continue // We don't terrify our underlings
 		if (C.vampire_affected(antag) <= 0)
 			continue
-		C.stuttering += 20
+		C.stuttering = max(C.stuttering, 20)
 		C.Jitter(20)
 		C.Dizzy(20)
 		to_chat(C, "<span class='sinister'>Your heart is filled with dread, and you shake uncontrollably.</span>")
-
-/datum/role/vampire/proc/handle_deadspeak(var/mob/living/carbon/human/H)
-	if(deadchat)
-		return
-	if(H.stat == DEAD)
-		return
-	if((locate(/datum/power/vampire/charisma) in current_powers) && world.time > deadchat_timer)
-		deadchat = TRUE
-		//have deadchat for 30 seconds every five minutes
-		spawn(rand(200, 400))
-			if(H.stat != DEAD)
-				deadchat_timer = world.time + 1800 + rand(300, 1200)
-				deadchat = FALSE
 
 /datum/role/vampire/proc/handle_smite(var/mob/living/carbon/human/H)
 	var/smitetemp = 0
@@ -668,7 +652,7 @@
 		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil!</span>")
 	return TRUE
 
-/mob/proc/vampire_affected(var/datum/mind/M) // M is the attacker, src is the target.
+/mob/proc/vampire_affected(var/datum/mind/M, var/send_message = TRUE) // M is the attacker, src is the target.
 	//Other vampires aren't affected
 	var/success = TRUE
 	if(mind && mind.GetRole(VAMPIRE))
@@ -678,17 +662,20 @@
 	if(M)
 		//Chaplains are ALWAYS resistant to vampire powers
 		if(isReligiousLeader(src))
-			to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
+			if(send_message)
+				to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
 			success = FALSE
 		// Null rod nullifies vampire powers, unless we're a young vamp.
 		var/datum/role/vampire/V = M.GetRole(VAMPIRE)
 		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
 		if (N)
 			if (locate(/datum/power/vampire/undying) in V.current_powers)
-				to_chat(M.current, "<span class='warning'>A holy artifact has turned our powers against us!</span>")
+				if(send_message)
+					to_chat(M.current, "<span class='warning'>A holy artifact has turned our powers against us!</span>")
 				success = VAMP_FAILURE
 			else if (locate(/datum/power/vampire/jaunt) in V.current_powers)
-				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
+				if(send_message)
+					to_chat(M.current, "<span class='warning'>A holy artifact protects [src]!</span>")
 				success = FALSE
 	return success
 

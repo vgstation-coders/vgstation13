@@ -61,7 +61,7 @@ var/runechat_icon = null
 	if (owned_by)
 		owned_by.seen_messages.Remove(src)
 		owned_by.images.Remove(message)
-		owned_by.mob.unregister_event(/event/destroyed, src, src::qdel_self())
+		owned_by.mob.unregister_event(/event/destroyed, src, nameof(src::qdel_self()))
 	owned_by = null
 	message_loc = null
 	message = null
@@ -81,7 +81,7 @@ var/runechat_icon = null
 	set waitfor = FALSE
 	// Register client who owns this message
 	owned_by = owner.client
-	owner.register_event(/event/destroyed, src, src::qdel_self())
+	owner.register_event(/event/destroyed, src, nameof(src::qdel_self()))
 
 	// Clip message
 	var/maxlen = owned_by.prefs.max_chat_length
@@ -136,7 +136,7 @@ var/runechat_icon = null
 	if(!TICK_CHECK)
 		return finish_image_generation(mheight, target, owner, complete_text, lifespan)
 
-	var/callback/our_callback = new /callback(src, src::finish_image_generation(), mheight, target, owner, complete_text, lifespan)
+	var/callback/our_callback = new /callback(src, nameof(src::finish_image_generation()), mheight, target, owner, complete_text, lifespan)
 	SSrunechat.message_queue += our_callback
 	return
 

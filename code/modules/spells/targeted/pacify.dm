@@ -40,12 +40,16 @@
 
 /spell/targeted/pacify/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
-			return "Reduce this spell's cooldown."
 		if(Sp_POWER)
-			return "Increases how long targets are pacified for."
+			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+				return "The spell can't be made any more powerful than this!"
+			var/duration = 2/REAGENTS_METABOLISM*2 //2 extra units of Chillwax per rank, multiplied by 2 due to Life() happening every 2 seconds
+			return "Increases how long targets are pacified for by around [duration] seconds."
 		if(Sp_RANGE)
-			return "Increases the area of the spell's impact."
+			if(spell_levels[Sp_RANGE] >= level_max[Sp_RANGE])
+				return "This spell's area of effect is at its maximum!"
+			return "Increases the area of the spell's impact by 1 tile."
+	return ..()
 
 /spell/targeted/pacify/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(!istype(target))

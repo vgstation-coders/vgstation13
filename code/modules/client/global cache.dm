@@ -375,12 +375,13 @@ var/list/asset_datums = list()
 		"cmc_6.png" = 'icons/cmc/css_icons/6.png',
 		"cmc_7.png" = 'icons/cmc/css_icons/7.png'
 	)
-
+/*
 /datum/asset/simple/nanoui_maps/New()
 	for(var/z in 1 to world.maxz)
 		if(z == map.zCentcomm)
 			continue
 		assets["[map.nameShort][z].png"] = file("[getMinimapFile(z)].png")
+*/
 
 //Registers HTML I assets.
 /datum/asset/HTML_interface/register()

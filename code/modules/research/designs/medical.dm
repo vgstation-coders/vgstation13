@@ -99,6 +99,16 @@
 	category = "Medical"
 	build_path = /obj/item/clothing/glasses/hud/health
 
+/datum/design/health_hud_prescription
+	name = "Health Scanner Glasses"
+	desc = "Prescription lenses featuring a heads-up display that scans the humans in view and provides accurate data about their health status."
+	id = "health_hud_prescription"
+	req_tech = list(Tc_BIOTECH = 2, Tc_MAGNETS = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 50, MAT_GLASS = 50)
+	category = "Medical"
+	build_path = /obj/item/clothing/glasses/hud/health/prescription
+
 /datum/design/chemmask
 	name = "Chemical Mask"
 	desc = "A rather sinister mask designed for connection to a chemical pack, providing the pack's safeties are disabled."

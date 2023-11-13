@@ -60,6 +60,9 @@
 /obj/abstract/Overlays/handcuff_layer
 	layer = FLOAT_LAYER - (TOTAL_LAYERS - HANDCUFF_LAYER)
 
+/obj/abstract/Overlays/mutualcuff_layer
+	layer = FLOAT_LAYER - (TOTAL_LAYERS - MUTUALCUFF_LAYER)
+
 /obj/abstract/Overlays/legcuff_layer
 	layer = FLOAT_LAYER - (TOTAL_LAYERS - LEGCUFF_LAYER)
 

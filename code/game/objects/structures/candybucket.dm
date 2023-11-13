@@ -89,13 +89,19 @@
 		spooky = TRUE
 
 
-/obj/structure/candybucket/candy_jack/spook()
+/obj/structure/candybucket/candy_jack/spook(mob/dead/observer/ghost)
 	if(..())
-		becomeSpooky()
+		becomeSpooky(ghost)
+	else
+		to_chat(ghost,"<span class='notice'>That jack-o-lantern has spooked its last spook.</span>")
 
-/obj/structure/candybucket/candy_jack/proc/becomeSpooky()
+/obj/structure/candybucket/candy_jack/proc/becomeSpooky(mob/dead/observer/ghost)
 	var/mob/living/simple_animal/hostile/skeletonjack/ourJack = new /mob/living/simple_animal/hostile/skeletonjack(loc)
 	forceMove(ourJack)
 	ourJack.candyEnhance(contents.len)
 	ourJack.ourBucket = src
 	spooky = FALSE //So ghosts can't just infinitely revive the thing. One haunting per bucket.
+	if(ghost)
+		switch(alert(ghost,"Are you sure you wish to become a spooky bucket-boy? You won't be able to re-enter any previous body.","To spook or not to spook","DOKTOR, TURN OFF MY SPOOK INHIBITORS","I just want to animate it"))
+			if("DOKTOR, TURN OFF MY SPOOK INHIBITORS")
+				ghost.mind.transfer_to(ourJack)

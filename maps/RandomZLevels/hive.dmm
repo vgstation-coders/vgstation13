@@ -1456,8 +1456,7 @@
 	activate_id = "5";
 	name = "shortcut 5";
 	one_time = 1;
-	pixel_x = -32;
-	pixel_y = 0
+	pixel_x = -32
 	},
 /turf/unsimulated/floor/evil/breathing,
 /area/awaymission/hive)

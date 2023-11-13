@@ -50,6 +50,7 @@
 #define ARCHAEO_SUPERSHARD "supermatter shard"
 #define ARCHAEO_TOYBOX "mechanical toybox"
 #define ARCHAEO_POCKETWATCH "pocketwatch"
+#define ARCHAEO_MIRROR "pocket mirror"
 
 #define DIGSITE_GARDEN "garden"
 #define DIGSITE_ANIMAL "animal"

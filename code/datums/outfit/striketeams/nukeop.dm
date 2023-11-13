@@ -25,7 +25,7 @@
 		// Classic alternate setup with a twist. Laser Rifle as a primary, but ion carbine as a backup and extra EMP nades for those ENERGY needs. Zap-zap the borgs
 		"Energy" = list(
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/prescription,
-			slot_belt_str = /obj/item/weapon/gun/energy/laser,
+			slot_belt_str = /obj/item/weapon/gun/energy/laser/rifle/syndie,
 			slot_in_backpack_str = list(
 				/obj/item/weapon/gun/energy/ionrifle/ioncarbine = 1,
 				/obj/item/weapon/grenade/empgrenade = 2,
@@ -167,7 +167,6 @@
 	R.set_frequency(SYND_FREQ)
 	if(H.mind.GetRole(NUKE_OP_LEADER))
 		H.equip_to_slot_or_del(new /obj/item/device/modkit/syndi_commander(H), slot_in_backpack)
-		H.equip_to_slot_or_del(new /obj/item/device/nuclear_challenge, slot_in_backpack)
 	if (H.active_genes.len > 0)
 		to_chat(H, "The Syndicate has provided you with a ryetalyn pill to cure your genetic defects. Use it at your own discretion.")
 		var/obj/item/weapon/reagent_containers/pill/ryetalyn/pill = new (H)

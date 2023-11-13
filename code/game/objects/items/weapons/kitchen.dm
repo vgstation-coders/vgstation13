@@ -95,6 +95,8 @@
 	name = "spoon"
 	desc = "SPOON!"
 	icon_state = "spoon"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	force = 4
 	attack_verb = list("attacks", "pokes", "hits")
 	melt_temperature = MELTPOINT_STEEL
 	var/bendable = TRUE
@@ -182,11 +184,122 @@
 	name = "plastic spoon"
 	desc = "Super dull action!"
 	icon_state = "pspoon"
+	force = 1
 	melt_temperature = MELTPOINT_PLASTIC
 	autoignition_temperature = AUTOIGNITION_PLASTIC
 	bendable = FALSE
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
+
+/*
+ * Sporks
+ */
+/obj/item/weapon/kitchen/utensil/spork
+	name = "spork"
+	desc = "SPORK!"
+	icon_state = "spork"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	attack_verb = list("attacks", "pokes", "hits")
+	melt_temperature = MELTPOINT_STEEL
+	sharpness_flags = SHARP_TIP
+	sharpness = 0.3
+	var/liquid_content = FALSE
+
+/obj/item/weapon/kitchen/utensil/spork/New()
+	..()
+	reagents = new(10)
+	reagents.my_atom = src
+
+/obj/item/weapon/kitchen/utensil/spork/examine(mob/user)
+	..()
+	if(loaded_food)
+		user.show_message("It has a sporkful of [loaded_food] on it.")
+
+/obj/item/weapon/kitchen/utensil/spork/load_food_appearance(var/obj/item/weapon/reagent_containers/food/snacks/snack)
+	if (liquid_content)
+		food_overlay = image(icon,src,"spoon-fillings")
+		var/newcolor
+		if (istype(snack, /obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom))
+			var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/plated_food = snack
+			if (plated_food.ingredients.len)
+				var/obj/item/weapon/reagent_containers/food/snacks/ingredient = pick(plated_food.ingredients)
+				newcolor = ingredient.filling_color != "#FFFFFF" ? ingredient.filling_color : AverageColor(getFlatIcon(ingredient, ingredient.dir, 0), 1, 1)
+			else
+				newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIcon(snack, snack.dir, 0), 1, 1)
+		else
+			newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIcon(snack, snack.dir, 0), 1, 1)
+		food_overlay.color = newcolor
+		overlays += food_overlay
+	else
+		var/icon/food_to_load
+		if (istype(snack, /obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom))
+			var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/plated_food = snack
+			if (plated_food.ingredients.len)
+				food_to_load = getFlatIcon(pick(plated_food.ingredients)) // So the plate doesn't appear on the fork
+			else
+				food_to_load = getFlatIcon(snack)
+		else
+			food_to_load = getFlatIcon(snack)
+		food_to_load.Scale(16,16)
+		food_overlay = image(food_to_load)
+		food_overlay.pixel_x = 8 * PIXEL_MULTIPLIER + pixel_x
+		food_overlay.pixel_y = 17 * PIXEL_MULTIPLIER + pixel_y
+		overlays += food_overlay
+
+/obj/item/weapon/kitchen/utensil/spork/attack(var/mob/living/carbon/M, var/mob/living/carbon/user)
+	if(!istype(M) || !istype(user))
+		return ..()
+
+	if(can_operate(M, user, src))
+		if(do_surgery(M, user, src))
+			return
+
+	if(arcanetampered && M.hasmouth())
+		M.visible_message("<span class='sinister'>[M] eats a delicious spork!</span>")
+		feed_to(user, M)
+		playsound(M, 'sound/items/eatfood.ogg', 50, 0)
+		qdel(src)
+		return
+	else if (loaded_food)
+		reagents.update_total()
+		if(!M.hasmouth())
+			to_chat(user, "<span class='warning'>[M] can't eat that with no mouth!</span>")
+			return
+		if(M == user)
+			user.visible_message("<span class='notice'>[user] eats a delicious sporkful of [loaded_food]!</span>")
+			feed_to(user, user)
+			return
+		else
+			user.visible_message("<span class='notice'>[user] attempts to feed [M] a delicious sporkful of [loaded_food].</span>")
+			if(do_mob(user, M))
+				if(!loaded_food)
+					return
+
+				user.visible_message("<span class='notice'>[user] feeds [M] a delicious sporkful of [loaded_food]!</span>")
+				feed_to(user, M)
+				return
+	else
+		if(clumsy_check(user) && prob(50))
+			return eyestab(user,user)
+		else
+			return eyestab(M, user)
+
+/obj/item/weapon/kitchen/utensil/spork/plastic
+	name = "plastic spork"
+	desc = "Plork!"
+	icon_state = "pspork"
+	melt_temperature = MELTPOINT_PLASTIC
+	autoignition_temperature = AUTOIGNITION_PLASTIC
+	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
+	w_type = RECYK_PLASTIC
+
+/obj/item/weapon/kitchen/utensil/spork/plastic/teflon
+	name = "teflon spork"
+	desc = "Tlork!"
+	icon_state = "tspork"
+
+/obj/item/weapon/kitchen/utensil/spork/plastic/teflon/dissolvable()
+	return FALSE
 
 /*
  * Forks
@@ -195,6 +308,7 @@
 	name = "fork"
 	desc = "Pointy."
 	icon_state = "fork"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	sharpness_flags = SHARP_TIP
 	sharpness = 0.6
 	melt_temperature = MELTPOINT_STEEL

@@ -6,6 +6,7 @@
 	desc = "A speedloader, used to load a gun without any of that annoying fumbling."
 	exact = 0 //load anything in the class!
 	materials = list(MAT_IRON = 200)
+	reload_delay = 0
 /obj/item/ammo_storage/speedloader/c38
 	name = "speed loader (.38)"
 	icon_state = "38"

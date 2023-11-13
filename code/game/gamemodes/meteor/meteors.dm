@@ -19,7 +19,8 @@
 	var/greek_alphabet = list("Alpha", "Beta", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda", "Mu", \
 						 "Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega")
 	var/wave_final_name = "[number > 25 ? "Major":"Minor"] Meteor [pick("Wave", "Cluster", "Group")] [pick(greek_alphabet)]-[rand(1, 999)]"
-	output_information(meteor_wave_delay, chosen_dir, max_size, number, wave_final_name)
+	var/datum/meteor_warning/warning = new (meteor_wave_delay, chosen_dir, max_size, number, wave_final_name, types == null)
+	output_information(warning)
 	spawn(meteor_wave_delay)
 		for(var/i = 0 to number)
 			sleep(rand(1, 3)) //0.1 to 0.3 seconds between meteors
@@ -31,11 +32,88 @@
 		meteor_wave_active = 0
 	return chosen_dir
 
+var/list/meteor_warnings = list()
+
+/datum/meteor_warning
+	var/delay
+	var/dir
+	var/size
+	var/num
+	var/name
+	var/meteors
+	var/image/display
+
+/datum/meteor_warning/New(meteor_wave_delay, chosen_dir, max_size, number, wave_final_name, actually_meteors)
+	..()
+	delay	= meteor_wave_delay
+	dir		= chosen_dir
+	size	= max_size
+	num		= number
+	name	= wave_final_name
+	meteors	= actually_meteors
+
+	//preparing the image that will be displayed on bhangmeters
+	display = image('icons/480x480.dmi',null, "blank")
+	var/icon = "meteorunknown"
+	if (meteors)
+		switch(max_size)
+			if(1)
+				icon = "meteorsmall"
+			if(2)
+				icon = "meteormedium"
+			if(3)
+				icon = "meteorbig"
+			if(4)
+				icon = "meteoraaaaa"
+	var/image/A = image('icons/holomap_markers_32x32.dmi',null, icon)
+	A.overlays += "[dir]"
+	var/image/B = image('icons/holomap_markers_32x32.dmi',null, icon)
+	B.overlays += "[dir]"
+	var/image/C = image('icons/holomap_markers_32x32.dmi',null, icon)
+	C.overlays += "[dir]"
+	switch(dir)
+		if (NORTH)
+			A.pixel_x = 192
+			A.pixel_y = 416
+			B.pixel_x = 224
+			B.pixel_y = 384
+			C.pixel_x = 256
+			C.pixel_y = 416
+		if (SOUTH)
+			A.pixel_x = 192
+			A.pixel_y = 32
+			B.pixel_x = 224
+			B.pixel_y = 64
+			C.pixel_x = 256
+			C.pixel_y = 32
+		if (WEST)
+			A.pixel_x = 32
+			A.pixel_y = 192
+			B.pixel_x = 64
+			B.pixel_y = 224
+			C.pixel_x = 32
+			C.pixel_y = 256
+		if (EAST)
+			A.pixel_x = 416
+			A.pixel_y = 192
+			B.pixel_x = 384
+			B.pixel_y = 224
+			C.pixel_x = 416
+			C.pixel_y = 256
+	display.overlays += A
+	display.overlays += B
+	display.overlays += C
+	meteor_warnings += src
+
+/datum/meteor_warning/Destroy()
+	meteor_warnings -= src
+	..()
+
 //A bunch of information to be used by the bhangmeter (doubles as a meteor monitoring computer), and sent to the admins otherwise
-/proc/output_information(var/meteor_delay, var/wave_dir, var/meteor_size, var/wave_size, var/wave_name)
+/proc/output_information(var/datum/meteor_warning/warning)
 
 	var/meteor_l_size = "unknown"
-	switch(meteor_size)
+	switch(warning.size)
 		if(1)
 			meteor_l_size = "small"
 		if(2)
@@ -46,8 +124,9 @@
 			meteor_l_size = "apocalyptic"
 		else
 			meteor_l_size = "unknown"
+	warning.size = meteor_l_size
 	var/wave_l_dir = "north"
-	switch(wave_dir)
+	switch(warning.dir)
 		if(1)
 			wave_l_dir = "north"
 		if(2)
@@ -56,13 +135,16 @@
 			wave_l_dir = "east"
 		if(8)
 			wave_l_dir = "west"
+	warning.dir = wave_l_dir
 
-	message_admins("[wave_name], containing [wave_size] objects up to [meteor_l_size] size and incoming from the [wave_l_dir], will strike in [meteor_delay/10] seconds.")
+	message_admins("[warning.name], containing [warning.num] objects up to [warning.size] size and incoming from the [warning.dir], will strike in [warning.delay/10] seconds.")
 
 	//Send to all Bhangmeters
-	for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
-		if(bhangmeter && !bhangmeter.stat)
-			bhangmeter.say("Detected: [wave_name], containing [wave_size] objects up to [meteor_l_size] size and incoming from the [wave_l_dir], will strike in [meteor_delay/10] seconds.")
+	for(var/obj/machinery/computer/bhangmeter/bhangmeter in bhangmeters)
+		bhangmeter.announce_meteors(warning)
+
+	spawn(warning.delay + 30 SECONDS)
+		qdel(warning)
 
 /proc/spawn_meteor(var/chosen_dir, var/meteorpath = null, var/offset_origin = 0, var/offset_dest = 0)
 

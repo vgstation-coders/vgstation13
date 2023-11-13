@@ -39,11 +39,20 @@
 	if(!inside.len)
 		icon_state = "morgue3" // no mobs at all, but objects inside
 		return
+	var/body_revivable = 0
 	for(var/mob/living/body in inside)
-		if(body && body.client && !(body.mind && body.mind.suiciding))
+		if(body.mind && body.mind.suiciding)
+			continue
+		if(body && body.client)
 			icon_state = "morgue4" // clone that mofo
 			return
-	icon_state = "morgue2" // dead no-client mob
+		var/mob/dead/observer/ghost = mind_can_reenter(body.mind)
+		if(ghost && ghost.get_top_transmogrification())
+			body_revivable = 1
+			icon_state = "morgue5" //dead and ghosted, but revivable if he re-enters body
+
+	if(!body_revivable)
+		icon_state = "morgue2" // dead no-client mob
 
 /obj/structure/morgue/proc/update()
 	update_icon()
@@ -65,6 +74,8 @@
 		if("morgue3")
 			to_chat(user, "<span class='info'>\The [src]'s light display indicates there are items inside.</span>")
 		if("morgue4")
+			to_chat(user, "<span class='info'>\The [src]'s light display indicates there is a revivable body inside.</span>")
+		if("morgue5")
 			to_chat(user, "<span class='info'>\The [src]'s light display indicates there is a potential clone candidate inside.</span>")
 
 /obj/structure/morgue/ex_act(severity)
@@ -144,20 +155,22 @@
 	qdel(connected)
 
 /obj/structure/morgue/attackby(obj/item/P, mob/user)
-	if(iscrowbar(P)&&!contents.len)
+	if(iscrowbar(P))
 		user.visible_message("<span class='notice'>\The [user] begins dismantling \the [src].</span>", "<span class='notice'>You begin dismantling \the [src].</span>")
-		if(do_after(user, src,50))
+		if(do_after(user, src, 50))
 			user.visible_message("<span class='notice'>\The [user] dismantles \the [src].</span>", "<span class='notice'>You dismantle \the [src].</span>")
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			new /obj/structure/closet/body_bag(src.loc)
-			new /obj/item/stack/sheet/metal(src.loc,5)
+			new /obj/item/stack/sheet/metal(src.loc, 5)
+			for (var/atom/movable/content in contents)
+				content.forceMove(src.loc)
 			qdel(src)
 	if(P.is_wrench(user))
 		P.playtoolsound(src, 50)
-		if(dir==4)
-			dir=8
+		if(dir == 4)
+			dir = 8
 		else
-			dir=4
+			dir = 4
 	if (istype(P, /obj/item/weapon/pen))
 		set_tiny_label(user, " - '", "'", maxlength=32)
 	src.add_fingerprint(user)
@@ -178,7 +191,8 @@
 					Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 
 /obj/structure/morgue/on_logout(var/mob/M)
-	update()
+	spawn(1) //delay here because the ghostmob doesn't exist immediately after ghosting
+		update()
 
 /obj/structure/morgue/Destroy()
 	if(connected)
@@ -222,6 +236,9 @@
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
+	if (!iscarbon(user) && !isrobot(user))
+		return
+
 	O.forceMove(src.loc)
 	if (user != O)
 		visible_message("<span class='warning'>[user] stuffs [O] into [src]!</span>")
@@ -440,6 +457,9 @@
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
+	if (!iscarbon(user) && !isrobot(user))
+		return
+
 	O.forceMove(src.loc)
 	if (user != O)
 		for(var/mob/B in viewers(user, 3))

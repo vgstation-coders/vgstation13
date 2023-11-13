@@ -5,7 +5,6 @@
 "ab" = (
 /obj/structure/window/barricade{
 	dir = 1;
-	icon_state = "barricade";
 	tag = "icon-barricade (NORTH)"
 	},
 /turf/simulated/floor/grass{
@@ -41,12 +40,10 @@
 "ak" = (
 /obj/structure/window/barricade{
 	dir = 8;
-	icon_state = "barricade";
 	tag = "icon-barricade (WEST)"
 	},
 /obj/structure/window/barricade{
 	dir = 1;
-	icon_state = "barricade";
 	tag = "icon-barricade (NORTH)"
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -57,7 +54,6 @@
 "al" = (
 /obj/structure/window/barricade{
 	dir = 1;
-	icon_state = "barricade";
 	tag = "icon-barricade (NORTH)"
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -68,7 +64,6 @@
 "am" = (
 /obj/structure/window/barricade{
 	dir = 1;
-	icon_state = "barricade";
 	tag = "icon-barricade (NORTH)"
 	},
 /obj/effect/decal/cleanable/soot,
@@ -79,7 +74,6 @@
 "an" = (
 /obj/structure/window/barricade{
 	dir = 1;
-	icon_state = "barricade";
 	tag = "icon-barricade (NORTH)"
 	},
 /turf/simulated/floor/grass{
@@ -89,7 +83,6 @@
 "ao" = (
 /obj/structure/window/barricade{
 	dir = 8;
-	icon_state = "barricade";
 	tag = "icon-barricade (WEST)"
 	},
 /obj/effect/decal/cleanable/dirt,
@@ -133,7 +126,6 @@
 "au" = (
 /obj/structure/window/barricade{
 	dir = 1;
-	icon_state = "barricade";
 	tag = "icon-barricade (NORTH)"
 	},
 /obj/item/trash/cigbutt,
@@ -144,12 +136,10 @@
 "av" = (
 /obj/structure/window/barricade{
 	dir = 1;
-	icon_state = "barricade";
 	tag = "icon-barricade (NORTH)"
 	},
 /obj/structure/window/barricade{
 	dir = 4;
-	icon_state = "barricade";
 	tag = "icon-barricade (EAST)"
 	},
 /turf/simulated/floor/grass{
@@ -196,18 +186,15 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow0";
 	tag = "icon-rwindow (EAST)"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow0";
 	tag = "icon-rwindow (NORTH)"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow0";
 	tag = "icon-rwindow (WEST)"
 	},
 /turf/simulated/floor/plating,
@@ -438,17 +425,14 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow0";
 	tag = "icon-rwindow (EAST)"
 	},
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow0";
 	tag = "icon-rwindow (NORTH)"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow0";
 	tag = "icon-rwindow (WEST)"
 	},
 /turf/simulated/floor/plating,
@@ -489,12 +473,10 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow0";
 	tag = "icon-rwindow (EAST)"
 	},
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow0";
 	tag = "icon-rwindow (NORTH)"
 	},
 /turf/simulated/floor/plating,
@@ -515,13 +497,11 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 4;
-	icon_state = "rwindow0";
 	tag = "icon-rwindow (EAST)"
 	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow0";
 	tag = "icon-rwindow (WEST)"
 	},
 /turf/simulated/floor/plating,
@@ -646,12 +626,10 @@
 /obj/structure/grille,
 /obj/structure/window/reinforced{
 	dir = 1;
-	icon_state = "rwindow0";
 	tag = "icon-rwindow (NORTH)"
 	},
 /obj/structure/window/reinforced{
 	dir = 8;
-	icon_state = "rwindow0";
 	tag = "icon-rwindow (WEST)"
 	},
 /turf/simulated/floor/plating,
@@ -705,7 +683,6 @@
 "bY" = (
 /obj/structure/bed/chair/holowood/normal{
 	dir = 4;
-	icon_state = "wooden_chair";
 	tag = "icon-wooden_chair (EAST)"
 	},
 /turf/simulated/floor/wood,
@@ -751,7 +728,6 @@
 	},
 /obj/machinery/shower{
 	dir = 4;
-	icon_state = "shower";
 	tag = "icon-shower (EAST)"
 	},
 /obj/structure/curtain/black,

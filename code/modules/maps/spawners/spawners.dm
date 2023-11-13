@@ -1238,7 +1238,8 @@
 	/obj/item/weapon/gun/mahoguny,
 	/obj/item/weapon/gun/stickybomb,
 	/obj/item/weapon/gun/siren,
-	/obj/item/weapon/gun/portalgun
+	/obj/item/weapon/gun/portalgun,
+	/obj/item/weapon/gun/energy/gatling/rusty
 )
 
 /obj/abstract/map/spawner/safe/clothing
@@ -1463,6 +1464,6 @@
 		/obj/item/clothing/head/helmet/dredd,
 		/obj/item/clothing/mask/gas/swat,
 		/obj/item/weapon/storage/belt/security,
-		/obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+		/obj/item/clothing/suit/armor/dredd,
 		/obj/item/weapon/gun/lawgiver,
 	)

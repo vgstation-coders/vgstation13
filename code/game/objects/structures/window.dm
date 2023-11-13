@@ -90,9 +90,12 @@ var/list/one_way_windows
 	examine_health(user)
 
 /obj/structure/window/AltClick(mob/user)
-	if(user.incapacitated() || !Adjacent(user))
-		return
-	rotate()
+	if(is_fulltile)
+		. = ..()
+	else
+		if(user.incapacitated() || !Adjacent(user))
+			return
+		rotate()
 
 /obj/structure/window/proc/examine_health(mob/user)
 	if(!anchored)
@@ -726,7 +729,7 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/tinted
 
 	name = "tinted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall?"
 	icon_state = "twindow0"
 	base_state = "twindow"
 	opacity = 1
@@ -735,7 +738,7 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/tinted/frosted
 
 	name = "frosted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall?"
 	icon_state = "rwindow0"
 	base_state = "rwindow"
 	health = 30
@@ -751,6 +754,11 @@ var/list/one_way_windows
 	reinforcetype = /obj/item/stack/sheet/ralloy
 	sheetamount = 2
 	health = 80
+
+/obj/structure/window/reinforced/clockwork/relativewall()
+	// Ignores adjacent anchored window tiles for "merging", since there's only a single brass window sprite
+	// Remove this whenever someone sprites all the required icon states
+	return
 
 /obj/structure/window/reinforced/clockwork/cultify()
 	return

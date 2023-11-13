@@ -433,6 +433,12 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	theme = "malfdelta"
 	alertlevel = "delta"
 
+/datum/command_alert/malf_announce/shodan
+	alert = 'sound/AI/aimalf_shodan.ogg'
+
+/datum/command_alert/malf_announce/xerxes
+	alert = 'sound/AI/aimalf_xerxes.ogg'
+
 /datum/command_alert/malf_win
 	name = "AI Malfunctioning Win"
 	alert = 'sound/effects/static/static4.ogg'
@@ -740,16 +746,6 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/nuclear_operatives/announce()
 	message = "Presence of hostile Syndicate operatives has been confirmed in the vicinity of [station_name()]. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration."
-	..()
-
-/datum/command_alert/nuclear_operatives_war
-	name = "Nuclear Operatives"
-	alert_title = "Imminent Assault"
-	theme = "nukesquad"
-	alertlevel = "red"
-
-/datum/command_alert/nuclear_operatives_war/announce()
-	message = "Syndicate Communications Intercepted: Hostile Syndicate Operatives are preparing to assault [station_name()] ETA 10 minutes. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration. "
 	..()
 
 /datum/command_alert/blizzard_end

@@ -404,8 +404,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating/airless/damaged,
 /area/vault/rust)
@@ -423,8 +422,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/damaged/airless,
 /area/vault/rust)
@@ -433,8 +431,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/damaged/airless,
 /area/vault/rust)
@@ -537,7 +534,6 @@
 /obj/machinery/power/terminal,
 /obj/structure/cable,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "loading_area";
 	tag = "icon-loading_area"
 	},
@@ -709,7 +705,6 @@
 	icon_state = "1-2"
 	},
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "radiation-w"
 	},
 /obj/effect/decal/warning_stripes{

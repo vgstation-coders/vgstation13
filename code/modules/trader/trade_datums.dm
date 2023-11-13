@@ -169,3 +169,8 @@
 	restocks_left = 3
 	sales_category = TRADE_VARIETY
 
+/datum/trade_product/gentlingmask
+	name = "gentling mask"
+	path = /obj/item/clothing/mask/gentling
+	baseprice = 35
+	restocks_left = 3

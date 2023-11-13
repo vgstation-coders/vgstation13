@@ -308,7 +308,8 @@ to destroy them and players will be able to make replacements.
 	"data"=/obj/item/weapon/circuitboard/disk_duplicator,
 	"Ez-bake oven"=/obj/item/weapon/circuitboard/cooking,
 	"candy machine"=/obj/item/weapon/circuitboard/cooking/candy,
-	"cereal maker"=/obj/item/weapon/circuitboard/cooking/cerealmaker)
+	"cereal maker"=/obj/item/weapon/circuitboard/cooking/cerealmaker,
+	"food press"=/obj/item/weapon/circuitboard/cooking/foodpress)
 	var/soldering = 0 //Busy check
 
 /obj/item/weapon/circuitboard/blank/New()
@@ -988,21 +989,6 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/subspace/crystal = 2,
 							/obj/item/weapon/stock_parts/subspace/transmitter = 4)
 
-/obj/item/weapon/circuitboard/telehub/syndicate
-	name = "Circuit Board (Teleporter Generator)"
-	desc = "A circuit board used to run a machine that generates a teleporter horizon."
-	build_path = /obj/machinery/teleport/hub/syndicate
-	board_type = MACHINE
-	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3"
-	req_components = list(
-							/obj/item/weapon/stock_parts/scanning_module/adv/phasic = 2,
-							/obj/item/weapon/stock_parts/capacitor/adv/super = 3,
-							/obj/item/weapon/stock_parts/subspace/ansible = 2,
-							/obj/item/weapon/stock_parts/subspace/filter = 2,
-							/obj/item/weapon/stock_parts/subspace/treatment = 1,
-							/obj/item/weapon/stock_parts/subspace/crystal = 2,
-							/obj/item/weapon/stock_parts/subspace/transmitter = 4)
-
 /obj/item/weapon/circuitboard/telestation
 	name = "Circuit Board (Teleporter Controller)"
 	desc = "A circuit board used to co-ordinate teleporter generators."
@@ -1517,6 +1503,17 @@ to destroy them and players will be able to make replacements.
 						/obj/item/weapon/stock_parts/manipulator = 3,
 						/obj/item/weapon/stock_parts/console_screen = 1) //boring recipe I know, but they're very simple machines
 
+
+/obj/item/weapon/circuitboard/cooking/foodpress
+	name = "circuit board (food press)"
+	desc = "A circuit board for a food press."
+	board_type = MACHINE
+	build_path = /obj/machinery/cooking/foodpress
+	origin_tech = Tc_ENGINEERING + "=1;" + Tc_POWERSTORAGE + "=2"
+	req_components = list(
+						/obj/item/weapon/stock_parts/manipulator = 3,
+						/obj/item/weapon/stock_parts/console_screen = 1)
+
 /obj/item/weapon/circuitboard/medal_printer
 	name = "Circuit board (Medal Printer)"
 	desc = "A circuit board for the medal printer."
@@ -1673,3 +1670,18 @@ to destroy them and players will be able to make replacements.
 		/obj/item/weapon/stock_parts/manipulator = 3,
 		/obj/item/weapon/stock_parts/micro_laser = 1
 	)
+
+/obj/item/weapon/circuitboard/suit_storage_unit
+	name = "Circuit board (Suit Storage Unit)"
+	desc = "A circuit board used to clean, charge, and store a hardsuit"
+	build_path = /obj/machinery/suit_storage_unit
+	board_type = MACHINE
+	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_POWERSTORAGE + "=2"
+	req_components = list(
+		/obj/item/weapon/stock_parts/micro_laser = 2,
+		/obj/item/weapon/stock_parts/manipulator = 1,
+		/obj/item/weapon/stock_parts/scanning_module = 1,	
+		/obj/item/weapon/stock_parts/capacitor = 1,	
+		/obj/item/weapon/stock_parts/console_screen = 1
+	)
+	

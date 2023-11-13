@@ -117,6 +117,8 @@
 	var/description = ""
 	var/contributing_artists = list()
 
+	var/copy = 0
+
 /datum/custom_painting/New(parent, bitmap_width, bitmap_height, offset_x=0, offset_y=0, base_color=src.base_color)
 	src.parent = parent
 	src.bitmap_width = bitmap_width
@@ -125,12 +127,16 @@
 	src.offset_y = offset_y
 	src.base_color = base_color
 	mp_handler = new /datum/href_multipart_handler(parent)
-
 	blank_contents()
 	setup_UI()
 
 /datum/custom_painting/Destroy()
 	..()
+
+	if (istype(parent, /turf/simulated))
+		var/turf/simulated/S = parent
+		S.advanced_graffiti = null
+
 	parent = null
 
 	QDEL_NULL(interface)
@@ -182,7 +188,10 @@
 	src.interface = new/datum/html_interface/nanotrasen(src, "Canvas", 600, 600, head)
 
 	// Setup contents
-	interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas.tmpl"))
+	if (bitmap_height < 32)
+		interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas.tmpl"))
+	else
+		interface.updateContent("content", file2text("code/modules/html_interface/paintTool/canvas_tile.tmpl"))
 
 /datum/custom_painting/proc/interact(mob/user, datum/painting_utensil/p)
 	if(jobban_isbanned(user, "artist"))
@@ -213,6 +222,9 @@
 	delay += send_asset(user.client, "canvas.css")
 	delay += send_asset(user.client, "checkerboard.png")
 	spawn(delay)
+		if (bitmap_height > 26 || bitmap_width > 26)
+			interface.height = 800
+			interface.width = 960
 		interface.show(user)
 		interface.callJavaScript("initCanvas", list(paint_init_inputs,canvas_init_inputs), user)
 
@@ -229,7 +241,7 @@
 		if(!usr || usr.incapacitated())
 			return
 
-		var /datum/painting_utensil/pu = new /datum/painting_utensil(usr)
+		var/datum/painting_utensil/pu = new /datum/painting_utensil(usr)
 		if(!pu.palette.len)
 			to_chat(usr, "<span class='warning'>You need to be holding a painting utensil in your active hand.</span>")
 			return
@@ -247,6 +259,12 @@
 		title = copytext(sanitize(url_decode(href_list["title"])), 1, MAX_NAME_LEN)
 		description = copytext(sanitize(url_decode(href_list["description"])), 1, MAX_MESSAGE_LEN)
 		contributing_artists += usr.ckey
+
+		// Should I be using COMSIG or events for this ? :thinking:
+		if (istype(parent, /turf/simulated/floor))
+			var/turf/simulated/floor/F = parent
+			F.render_advanced_graffiti(src, usr)
+
 		return TRUE
 
 /datum/custom_painting/proc/render_on(icon/ico, offset_x = src.offset_x, offset_y = src.offset_y)
@@ -263,6 +281,31 @@
 		ico.DrawBox(bitmap[pixel + 1], x, y)
 
 	return ico
+
+// -- export/import stuff
+// -- don't we have a serializer for this? :thinking:
+
+/proc/painting2json(var/datum/custom_painting/painting)
+	var/list/L = list(
+		painting.bitmap_width,
+		painting.bitmap_height,
+		painting.offset_x,
+		painting.offset_y,
+		painting.base_color,
+		painting.bitmap
+	)
+	return json_encode(L)
+
+/proc/json2painting(var/json_data, var/title, var/author, var/description)
+	var/list/L = json_decode(json_data)
+	var/datum/custom_painting/painting = new(null, L[1], L[2], L[3], L[4], L[5]) // no parents
+	var/list/bitmap_to_copy = L[6]
+	painting.bitmap = bitmap_to_copy.Copy()
+	painting.title = title
+	painting.author = author
+	painting.description = description
+	painting.copy = 1
+	return painting
 
 #undef PENCIL_STRENGTH_MAX
 #undef PENCIL_STRENGTH_MIN

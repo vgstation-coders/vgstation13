@@ -16,10 +16,10 @@
 	update_icon()
 
 /obj/item/device/geiger_counter/pickup(mob/user)
-	user.register_event(/event/irradiate, src, src::measure_rad())
+	user.register_event(/event/irradiate, src, nameof(src::measure_rad()))
 
 /obj/item/device/geiger_counter/dropped(mob/user)
-	user.unregister_event(/event/irradiate, src, src::measure_rad())
+	user.unregister_event(/event/irradiate, src, nameof(src::measure_rad()))
 
 
 /obj/item/device/geiger_counter/proc/measure_rad(mob/living/carbon/human/user, rads)

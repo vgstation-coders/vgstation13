@@ -1,5 +1,5 @@
 /datum/unit_test/highscores/start()
-    var/datum/persistence_task/highscores/task = SSpersistence_misc.tasks[/datum/persistence_task/highscores]
+    var/datum/persistence_task/highscores/task = SSpersistence_misc.tasks["/datum/persistence_task/highscores"]
     task.file_path = "data/persistence/money_highscores_test.json"
     task.clear_records()
 
