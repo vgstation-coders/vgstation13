@@ -115,6 +115,8 @@
 	client.media.open()
 	client.media.update_music()
 
+	register_event(/event/mob_area_changed, src, src::OnMobAreaChanged())
+
 	if(spell_masters)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			client.screen += spell_master

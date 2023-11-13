@@ -76,23 +76,6 @@ function SetMusic(url, time, volume) {
 		if(M && M.client)
 			M.stop_all_music()
 
-// Update when moving between areas.
-/hook_handler/soundmanager/proc/OnMobAreaChange(var/list/args)
-	var/mob/M = args["mob"]
-	//if(istype(M, /mob/living/carbon/human)||istype(M, /mob/dead/observer))
-	//	testing("Received OnMobAreaChange for [M.type] [M] (M.client=[M.client==null?"null":"/client"]).")
-	if(M.client && M.client.media && !M.client.media.forced)
-		spawn()
-			M.update_music()
-
-
-/hook_handler/shuttlejukes/proc/OnEmergencyShuttleDeparture(var/list/args)
-	spawn(0)
-		for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
-			SJ.playing=1
-			SJ.update_music()
-			SJ.update_icon()
-
 /mob/proc/update_music()
 	if (client && client.media && !client.media.forced)
 		client.media.update_music()
