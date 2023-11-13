@@ -28,14 +28,15 @@
 	var/datum/job/warden = job_master.GetJob("Warden")
 	var/datum/job/hos = job_master.GetJob("Head of Security")
 	var/datum/job/detective = job_master.GetJob("Detective")
-// Additional check to prevent runtimes in case there's zero Security jobs in the round
-	var/officer_jobs = officer ? officer.current_positions : -1
-	var/warden_jobs = warden ? warden.current_positions : -1
-	var/hos_jobs = hos ? hos.current_positions : -1
-	var/detective_jobs = detective ? detective.current_positions : -1
 // No security roles can be selected, no limit.
-	if((officer_jobs == -1) && (warden_jobs == -1) && (hos_jobs == -1) && (detective_jobs == -1))
+	if((isnull(officer)) && (isnull(warden)) && (isnull(hos)) && (isnull(detective)))
 		return 99
+// Additional check to prevent runtimes in case there's zero Security jobs in the round
+	var/officer_jobs = officer ? officer.current_positions : 0
+	var/warden_jobs = warden ? warden.current_positions : 0
+	var/hos_jobs = hos ? hos.current_positions : 0
+	var/detective_jobs = detective ? detective.current_positions : 0
+
 	var/sec_jobs = (officer_jobs + warden_jobs + hos_jobs + detective_jobs)
 
 	if(sec_jobs > 5)
