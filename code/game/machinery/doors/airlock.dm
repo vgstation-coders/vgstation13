@@ -647,11 +647,6 @@ About the new airlock wires panel:
 			// disable/6 is not in Topic; disable/5 disables both temporary and permenant shock
 			Topic("aiDisable=5", list("aiDisable"="5"), 1)
 
-/turf/AIAltClick()
-	for(var/obj/machinery/door/airlock/A in contents)
-		A.AIAltClick()
-		break
-
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
 	if(allowed(usr))
 		if(locked)
@@ -1176,7 +1171,10 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/togglePanelOpen(var/obj/item/toggleitem, mob/user)
 	if(!operating)
 		panel_open = !panel_open
-		toggleitem.playtoolsound(src, 50, TRUE, -6)
+		if (toggleitem)
+			toggleitem.playtoolsound(src, 50, TRUE, -6)
+		else
+			playsound(loc, pick(list('sound/items/Screwdriver.ogg', 'sound/items/Screwdriver2.ogg')), 50, TRUE, TRUE)//grinch
 		to_chat(user, "<span class='notice'>You [panel_open?"open":"close"] the panel.</span>")
 		update_icon()
 		return 1

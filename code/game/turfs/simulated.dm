@@ -9,6 +9,17 @@
 	var/max_fire_temperature_sustained = 0 //The max temperature of the fire which it was subjected to
 	var/can_exist_under_lattice = 0 //If 1, RemoveLattice() is not called when a turf is changed to this.
 
+	var/datum/custom_painting/advanced_graffiti
+	var/icon/advanced_graffiti_overlay
+
+/turf/simulated/proc/render_advanced_graffiti(var/mob/user)
+	if (!advanced_graffiti)
+		return FALSE
+	overlays -= advanced_graffiti_overlay
+	advanced_graffiti_overlay = advanced_graffiti.render_on(icon(icon, icon_state))
+	//advanced_graffiti_overlay.SwapColor("#aaaaaaff", "#ffffff00")
+	overlays += advanced_graffiti_overlay
+
 /turf/simulated/New()
 	..()
 

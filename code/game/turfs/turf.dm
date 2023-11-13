@@ -247,7 +247,7 @@
 
 /turf/proc/is_plating()
 	return 0
-/turf/proc/can_place_cables()
+/turf/proc/can_place_cables(var/override_space = FALSE)
 	return is_plating()
 /turf/proc/is_asteroid_floor()
 	return 0

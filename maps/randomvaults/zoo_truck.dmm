@@ -344,8 +344,7 @@
 /obj/effect/decal/warning_stripes{
 	color = "#FF0000";
 	dir = 8;
-	icon_state = "zoo";
-	pixel_x = 0
+	icon_state = "zoo"
 	},
 /turf/simulated/wall/shuttle,
 /area/vault/automap)
@@ -799,7 +798,6 @@
 "cj" = (
 /obj/effect/plantsegment/single,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -818,7 +816,6 @@
 	name = "Food Delivery"
 	},
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -832,7 +829,6 @@
 /obj/machinery/light_construct,
 /obj/item/weapon/light/tube,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -841,7 +837,6 @@
 "cm" = (
 /obj/effect/plantsegment/single,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -851,7 +846,6 @@
 /obj/effect/plantsegment/single,
 /obj/structure/disposalpipe/trunk,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -861,7 +855,6 @@
 /obj/effect/plantsegment/single,
 /obj/machinery/light_construct,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},
@@ -871,7 +864,6 @@
 "cp" = (
 /obj/effect/plantsegment/single,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "warning";
 	tag = "icon-warning"
 	},

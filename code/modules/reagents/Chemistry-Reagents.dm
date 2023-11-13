@@ -72,32 +72,26 @@
 			var/block  = 0
 
 			for(var/obj/item/clothing/C in M.get_equipped_items())
-				var/covered = FALSE
-				for(var/part in list(TARGET_MOUTH,LIMB_HEAD))
-					if(C.body_parts_covered & limb_define_to_part_define(part))
-						covered = TRUE
-						break
-				if(covered)
-					if(C.permeability_coefficient < chance)
-						chance = C.permeability_coefficient
+				if(C.permeability_coefficient < chance)
+					chance = C.permeability_coefficient
 
-					//Hardcode, but convenient until protection is fixed
-					if(istype(C, /obj/item/clothing/suit/bio_suit))
-						if(prob(75))
-							block = 1
+				//Hardcode, but convenient until protection is fixed
+				if(istype(C, /obj/item/clothing/suit/bio_suit))
+					if(prob(75))
+						block = 1
 
-					if(istype(C, /obj/item/clothing/head/bio_hood))
-						if(prob(75))
-							block = 1
+				if(istype(C, /obj/item/clothing/head/bio_hood))
+					if(prob(75))
+						block = 1
 
 			chance = chance * 100
 
 			if(self.id == HOLYWATER && istype(self.holder.my_atom, /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater))
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, min(5,self.volume/2)) //holy water flasks only splash 5u at a time. But for deconversion purposes they will always be ingested.
-			else if(prob(chance) && !block && ((LIMB_HEAD in zone_sels) || (TARGET_MOUTH in zone_sels)))
+			else if(prob(chance) && !block)
 				if(M.reagents)
-					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume only if aiming at general mouth area
+					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
 
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
@@ -477,6 +471,7 @@
 	description = "Tomatoes made into juice. Probably. What a waste of big, juicy tomatoes, huh?"
 	id = BLOOD
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_PIGMENT
 	color = DEFAULT_BLOOD //rgb: 161, 8, 8
 	density = 1.05
 	specheatcap = 3.49
@@ -722,29 +717,18 @@
 		var/mob/living/carbon/human/H = M
 		if(H.species && H.species.anatomy_flags & ACID4WATER) //oof ouch, water is spicy now
 			if(method == TOUCH)
-				var/splashed = FALSE
-				var/screamed = FALSE
-				for(var/part in zone_sels)
-					if(H.check_body_part_coverage(limb_define_to_part_define(part)))
-						to_chat(H, "<span class='warning'>Your [parse_zone(part)] is protected from a splash of water!</span>")
-						return
-
-					if(prob(15) && volume >= 30)
-						splashed = TRUE
-						var/datum/organ/external/ext_organ = H.get_organ(part)
-						if(ext_organ)
-							if(ext_organ.take_damage(0, (25 / zone_sels.len))) // Balance for precisions vs general.
-								H.UpdateDamageIcon(1)
-								screamed = TRUE
-							if(istype(ext_organ,/datum/organ/external/head))
-								var/datum/organ/external/head/head_organ = ext_organ
-								head_organ.disfigure("burn")
-				if(screamed)
-					H.audible_scream()
-				if(!splashed)
-					H.take_organ_damage(0, min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
-			else
-				H.take_organ_damage(0, min(15, volume * 2))
+				if(H.check_body_part_coverage(EYES|MOUTH))
+					to_chat(H, "<span class='warning'>Your face is protected from a splash of water!</span>")
+					return
+				if(prob(15) && volume >= 30)
+					var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+					if(head_organ)
+						if(head_organ.take_damage(0, 25))
+							H.UpdateDamageIcon(1)
+						head_organ.disfigure("burn")
+						H.audible_scream()
+				else
+					H.take_organ_damage(0, min(15, volume * 2))
 
 		else if(isslimeperson(H))
 
@@ -779,7 +763,7 @@
 			cube.Expand()
 	else if(istype(O,/obj/machinery/space_heater/campfire))
 		var/obj/machinery/space_heater/campfire/campfire = O
-		campfire.snuff()
+		campfire.putOutFire()
 	else if(istype(O, /obj/item/weapon/book/manual/snow))
 		var/obj/item/weapon/book/manual/snow/S = O
 		S.trigger()
@@ -1045,9 +1029,9 @@
 	if(M.bodytemperature > 310) //copypasted from the cold drinks check so I don't have to change minttox internally and maybe most certainly break shit in the process
 		M.bodytemperature = max(310, M.bodytemperature + (-5 * TEMPERATURE_DAMAGE_COEFFICIENT)) //that minty freshness my dude, chill out
 
-	if(fatgokaboom && M_FAT in M.mutations)
+	if(fatgokaboom && (M_FAT in M.mutations))
 		M.gib()
-		
+
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(holder.has_any_reagents(COLDDRINKS) & prob(25))
@@ -1068,7 +1052,8 @@
 				else
 					J.amount = 0
 					H.custom_pain("Your teeth crack and tremble before breaking all of a sudden! THE PAIN!", 100) //you dun fucked up lad
-					H.pain_level = BASE_CARBON_PAIN_RESIST + 25 //pain threshold + 25, so you go into shock from pain
+					H.visible_message("<span class='warning'>[H]'s teeth start cracking and suddenly explode! That must hurt.</span>")
+					H.pain_level = 2 * BASE_CARBON_PAIN_RESIST //so you go into shock from pain
 					playsound(H, 'sound/effects/toothshatter.ogg', 50, 1)
 					H.audible_scream()
 					H.adjustBruteLoss(50) //imagine all your teeth violently exploding, shrapnel and shit
@@ -1188,6 +1173,7 @@
 	custom_metabolism = 0.1
 	density = 3.56
 	specheatcap = 17.15
+	overdose_am = REAGENTS_OVERDOSE // So you can't pretend that you "didn't know it was an OD"
 
 /datum/reagent/stoxin/on_mob_life(var/mob/living/M, var/alien)
 
@@ -1199,9 +1185,13 @@
 			M.eye_blurry = max(M.eye_blurry, 10)
 		if(15 to 25)
 			M.drowsyness  = max(M.drowsyness, 20)
-		if(25 to INFINITY)
+		if (25 to 240)
 			M.Paralyse(20)
 			M.drowsyness  = max(M.drowsyness, 30)
+		if(240 to INFINITY) // 8 minutes
+			var/mob/living/carbon/human/H = M
+			var/datum/organ/internal/heart/damagedheart = H.get_heart()
+			damagedheart.damage += 10
 
 /datum/reagent/srejuvenate
 	name = "Soporific Rejuvenant"
@@ -1611,7 +1601,7 @@
 
 	if(..())
 		return 1
-	if(ishuman(M) && ((LIMB_HEAD in zone_sels) || (TARGET_MOUTH in zone_sels)))
+	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if((H.species && H.species.flags & NO_BREATHE) || (M_NO_BREATH in H.mutations))
 			return
@@ -1770,42 +1760,56 @@
 	if(..())
 		return 1
 
-	var/list/targeted_zones = zone_sels.Copy()
 	if(method == TOUCH)
-		if(ishuman(M) || ismonkey(M))
-			var/mob/living/carbon/H = M
-			for(var/obj/item/clothing/C in H.get_equipped_items())
-				var/covered = FALSE
-				for(var/part in zone_sels)
-					if(C.body_parts_covered & limb_define_to_part_define(part))
-						covered = TRUE
-						targeted_zones.Remove(part)
-						break
-				if(covered)
-					if(C.dissolvable() == PACID && prob(15))	//not PACID but it will do
-						to_chat(H, "<span class='warning'>Your [C.name] melts away but protects you from the acid!</span>")
-						H.u_equip(C,0)
-						qdel(C)
-					else
-						to_chat(H, "<span class='warning'>Your [C.name] protects you from the acid!</span>")
-
-	if(M.dissolvable() == PACID && targeted_zones.len) //not PACID but it will do
-		if(prob(15) && ishuman(M) && volume >= 30)
+		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-			var/screamed = FALSE
-			for(var/part in targeted_zones)
-				var/datum/organ/external/ext_organ = H.get_organ(part)
-				if(ext_organ)
-					if(ext_organ.take_damage((25 / zone_sels.len), 0)) // Balance for precisions vs general.
+
+			if(H.wear_mask)
+				if(H.wear_mask.dissolvable() == PACID)
+					qdel(H.wear_mask)
+					H.wear_mask = null
+					H.update_inv_wear_mask()
+					to_chat(H, "<span class='warning'>Your mask melts away but protects you from the acid!</span>")
+				else
+					to_chat(H, "<span class='warning'>Your mask protects you from the acid!</span>")
+				return
+
+			if(H.head && !istype(H.head, /obj/item/weapon/reagent_containers/glass/bucket))
+				if(prob(15) && H.head.dissolvable() == PACID)
+					qdel(H.head)
+					H.head = null
+					H.update_inv_head()
+					to_chat(H, "<span class='warning'>Your helmet melts away but protects you from the acid</span>")
+				else
+					to_chat(H, "<span class='warning'>Your helmet protects you from the acid!</span>")
+				return
+
+		else if(ismonkey(M))
+			var/mob/living/carbon/monkey/MK = M
+			if(MK.wear_mask)
+				if(MK.wear_mask.dissolvable() == PACID)
+					qdel(MK.wear_mask)
+					MK.wear_mask = null
+					MK.update_inv_wear_mask()
+					to_chat(MK, "<span class='warning'>Your mask melts away but protects you from the acid!</span>")
+				else
+					to_chat(MK, "<span class='warning'>Your mask protects you from the acid!</span>")
+				return
+
+		if(M.dissolvable() == PACID)
+			if(prob(15) && ishuman(M) && volume >= 30)
+				var/mob/living/carbon/human/H = M
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ)
+					if(head_organ.take_damage(min(25, volume * 2), 0))
 						H.UpdateDamageIcon(1)
-						screamed = TRUE
-					if(istype(ext_organ,/datum/organ/external/head))
-						var/datum/organ/external/head/head_organ = ext_organ
-						head_organ.disfigure("burn")
-			if(screamed)
-				H.audible_scream()
-		else
-			M.take_organ_damage(min(15, volume * 2)) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+					head_organ.disfigure("burn")
+					H.audible_scream()
+			else
+				M.take_organ_damage(min(15, volume * 2), 0) //uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
+	else
+		if(M.dissolvable() == PACID)
+			M.take_organ_damage(min(15, volume * 2), 0)
 
 /datum/reagent/sacid/reaction_obj(var/obj/O, var/volume)
 	if(..())
@@ -1849,42 +1853,61 @@
 	if(..())
 		return 1
 
-	var/list/targeted_zones = zone_sels.Copy()
 	if(method == TOUCH)
-		if(ishuman(M) || ismonkey(M))
-			var/mob/living/carbon/H = M
-			for(var/obj/item/clothing/C in H.get_equipped_items())
-				var/covered = FALSE
-				for(var/part in zone_sels)
-					if(C.body_parts_covered & limb_define_to_part_define(part))
-						covered = TRUE
-						targeted_zones.Remove(part)
-						break
-				if(covered)
-					if(C.dissolvable() == PACID && prob(15))
-						to_chat(H, "<span class='warning'>Your [C.name] melts away but protects you from the acid!</span>")
-						H.u_equip(C,0)
-						qdel(C)
-					else
-						to_chat(H, "<span class='warning'>Your [C.name] protects you from the acid!</span>")
-
-	if(M.dissolvable() == PACID && targeted_zones.len) //I think someone doesn't know what this does
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-			var/screamed = FALSE
-			for(var/part in targeted_zones)
-				var/datum/organ/external/ext_organ = H.get_organ(part)
-				if(ext_organ)
-					if(ext_organ.take_damage((15 / zone_sels.len), 0)) // Balance for precisions vs general.
-						H.UpdateDamageIcon(1)
-						screamed = TRUE
-					if(istype(ext_organ,/datum/organ/external/head))
-						var/datum/organ/external/head/head_organ = ext_organ
-						head_organ.disfigure("burn")
-			if(screamed)
+
+			if(H.wear_mask)
+				if(H.wear_mask.dissolvable() == PACID)
+					qdel(H.wear_mask)
+					H.wear_mask = null
+					H.update_inv_wear_mask()
+					to_chat(H, "<span class='warning'>Your mask melts away but protects you from the acid!</span>")
+				else
+					to_chat(H, "<span class='warning'>Your mask protects you from the acid!</span>")
+				return
+
+			if(H.head && !istype(H.head, /obj/item/weapon/reagent_containers/glass/bucket))
+				if(prob(15) && H.head.dissolvable() == PACID)
+					qdel(H.head)
+					H.head = null
+					H.update_inv_head()
+					to_chat(H, "<span class='warning'>Your helmet melts away but protects you from the acid</span>")
+				else
+					to_chat(H, "<span class='warning'>Your helmet protects you from the acid!</span>")
+				return
+
+			if(H.dissolvable() == PACID)
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ.take_damage(min(15, volume * 4), 0))
+					H.UpdateDamageIcon(1)
 				H.audible_scream()
-		else
-			M.take_organ_damage(min(15, volume * 4)) //Same deal as sulphuric acid
+
+		else if(ismonkey(M))
+			var/mob/living/carbon/monkey/MK = M
+			if(MK.wear_mask)
+				if(MK.wear_mask.dissolvable() == PACID)
+					qdel(MK.wear_mask)
+					MK.wear_mask = null
+					MK.update_inv_wear_mask()
+					to_chat(MK, "<span class='warning'>Your mask melts away but protects you from the acid!</span>")
+				else
+					to_chat(MK, "<span class='warning'>Your mask protects you from the acid!</span>")
+				return
+
+			if(MK.dissolvable() == PACID)
+				MK.take_organ_damage(min(15, volume * 4), 0) //Same deal as sulphuric acid
+	else
+		if(M.dissolvable() == PACID) //I think someone doesn't know what this does
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+				if(head_organ.take_damage(min(15, volume * 4), 0))
+					H.UpdateDamageIcon(1)
+				H.audible_scream()
+				head_organ.disfigure("burn")
+			else
+				M.take_organ_damage(min(15, volume * 4), 0)
 
 /datum/reagent/pacid/reaction_obj(var/obj/O, var/volume)
 	if(..())
@@ -2469,6 +2492,12 @@
 		return 1
 
 	if(volume >= 1)
+
+		if (T.advanced_graffiti)
+			T.overlays -= T.advanced_graffiti_overlay
+			T.advanced_graffiti_overlay = null
+			qdel(T.advanced_graffiti)
+
 		T.clean_blood()
 
 		for(var/mob/living/carbon/slime/M in T)
@@ -2495,8 +2524,7 @@
 				H.update_inv_by_slot(C.slot_flags)
 
 		M.clean_blood()
-		if(!iswizconvert(M))
-			M.color = ""
+		M.color = ""
 
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
@@ -2530,6 +2558,8 @@
 	if(..())
 		return 1
 
+	M.color = ""
+
 	switch(tick)
 		if(1 to 10)
 			M.adjustBruteLoss(3 * REM) //soft tissue damage
@@ -2541,8 +2571,6 @@
 					H.drip(10)
 				else if(prob(5))
 					H.vomit()
-	if(!iswizconvert(M))
-		M.color = ""
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.species.anatomy_flags & MULTICOLOR && !(initial(H.species.anatomy_flags) & MULTICOLOR))
@@ -2555,8 +2583,7 @@
 	if(..())
 		return 1
 
-	if(!iswizconvert(M))
-		M.color = ""
+	M.color = ""
 
 	if(method == TOUCH && ((TARGET_EYES in zone_sels) || (LIMB_HEAD in zone_sels)))
 		if(ishuman(M))
@@ -2718,19 +2745,13 @@
 		return 1
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
-		if(((TARGET_MOUTH in zone_sels) || (LIMB_HEAD in zone_sels)) && !C.wear_mask) //If not wearing a mask
+		if(!C.wear_mask) //If not wearing a mask
 			C.adjustToxLoss(REM) //4 toxic damage per application, doubled for some reason
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			if(H.dna)
 				if(H.species.flags & IS_PLANT) //Plantmen take a LOT of damage //aren't they toxin-proof anyways?
-					for(var/part in zone_sels)
-						if(H.check_body_part_coverage(limb_define_to_part_define(part)))
-							to_chat(H, "<span class='warning'>Your [parse_zone(part)] is protected from a splash of plant-b-gone!</span>")
-							return
-						H.adjustToxLoss((10 / zone_sels.len) * REM) // Balance for precisions vs general.
-		else if(istype(M,/mob/living/carbon/monkey/diona)) // Can't do it that way for these, so have this
-			M.adjustToxLoss(10 * REM)
+					H.adjustToxLoss(10 * REM)
 
 
 /datum/reagent/toxin/plantbgone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
@@ -2752,16 +2773,9 @@
 		return 1
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
-		if(((TARGET_MOUTH in zone_sels) || (LIMB_HEAD in zone_sels)) && !C.wear_mask) //If not wearing a mask
+		if(!C.wear_mask) //If not wearing a mask
 			C.adjustToxLoss(REM) //4 toxic damage per application, doubled for some reason
-		if(isinsectoid(C)) //Insecticide being poisonous to bugmen, who'd've thunk
-			var/mob/living/carbon/human/H = C
-			for(var/part in zone_sels)
-				if(H.check_body_part_coverage(limb_define_to_part_define(part)))
-					to_chat(H, "<span class='warning'>Your [parse_zone(part)] is protected from a splash of insecticide!</span>")
-					return
-				H.adjustToxLoss((10 / zone_sels.len) * REM) // Balance for precisions vs general.
-		else if(istype(C, /mob/living/carbon/monkey/roach)) // Can't do it that way for these, so have this
+		if(isinsectoid(C) || istype(C, /mob/living/carbon/monkey/roach)) //Insecticide being poisonous to bugmen, who'd've thunk
 			M.adjustToxLoss(10 * REM)
 
 /datum/reagent/toxin/insecticide/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
@@ -3384,19 +3398,20 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	if(method == TOUCH && ishuman(M) && (TARGET_EYES in zone_sels))
-		var/mob/living/carbon/human/H = M
-		var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
-		if(eyes_covered)
-			return
-		else //eyedrops, why not
-			var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
-			if(istype(E) && !E.robotic)
-				M.eye_blurry = 0
-				M.eye_blind = 0
-				if(E.damage > 0)
-					E.damage = 0 //cosmic technologies
-				to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
+	if(method == TOUCH)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
+			if(eyes_covered)
+				return
+			else //eyedrops, why not
+				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+				if(istype(E) && !E.robotic)
+					M.eye_blurry = 0
+					M.eye_blind = 0
+					if(E.damage > 0)
+						E.damage = 0 //cosmic technologies
+					to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
 
 /datum/reagent/imidazoline/reaction_dropper_mob(var/mob/living/M)
 	. = ..()
@@ -4204,7 +4219,7 @@ var/procizine_tolerance = 0
 	if(..())
 		return 1
 
-	if((prob(10) && method == TOUCH && ((TARGET_MOUTH in zone_sels) || (LIMB_HEAD in zone_sels))) || method == INGEST)
+	if((prob(10) && method == TOUCH) || method == INGEST)
 		M.infect_disease2_predefined(disease_type, 1, "Robotic Nanites")
 
 /datum/reagent/nanites/reaction_dropper_mob(var/mob/living/M)
@@ -4229,7 +4244,7 @@ var/procizine_tolerance = 0
 
 	if(..())
 		return 1
-	if((prob(10) && method == TOUCH && ((TARGET_MOUTH in zone_sels) || (LIMB_HEAD in zone_sels))) || method == INGEST)
+	if((prob(10) && method == TOUCH) || method == INGEST)
 		M.infect_disease2_predefined(DISEASE_XENO, 1, "Xenimicrobes")
 
 /datum/reagent/xenomicrobes/reaction_dropper_mob(var/mob/living/M)
@@ -4273,7 +4288,7 @@ var/procizine_tolerance = 0
 			for(var/datum/wound/internal_bleeding/W in E.wounds)
 				W.heal_damage(0.8, TRUE)
 				holder.remove_reagent(MEDNANOBOTS, 0.25)
-		for(var/datum/organ/internal/I in H.organs)
+		for(var/datum/organ/internal/I in H.internal_organs)
 			if(I.damage)
 				I.damage = max(0, I.damage - 5) //Heals a whooping 5 organ damage.
 				holder.remove_reagent(MEDNANOBOTS, 0.10) //Less so it doesn't vanish the nanobot supply
@@ -4705,6 +4720,7 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/mustard
 	name = "Mustard"
@@ -4713,6 +4729,7 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#cccc33" //rgb: 204, 204, 51
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/relish
 	name = "Relish"
@@ -5061,7 +5078,7 @@ var/procizine_tolerance = 0
 	id = BLACKCOLOR
 	description = "A black coloring used to dye food and drinks."
 	reagent_state = REAGENT_STATE_LIQUID
-	flags = CHEMFLAG_OBSCURING
+	flags = CHEMFLAG_OBSCURING|CHEMFLAG_PIGMENT
 	color = "#000000" //rgb: 0, 0, 0
 
 /datum/reagent/frostoil
@@ -5997,6 +6014,38 @@ var/procizine_tolerance = 0
 			H.heal_organ_damage(1, 1)
 			H.nutrition += nutriment_factor //Double nutrition
 
+/datum/reagent/blobanine
+	name = "Blobanine"
+	id = BLOBANINE
+	description = "An oily, green substance extracted from a blob."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#81EB00"
+
+/datum/reagent/blobanine/on_mob_life(var/mob/living/M)
+	if (..() || !ishuman(M))
+		return
+	var/mob/living/carbon/human/H = M
+	change_eye_color_to_green(H)
+
+/datum/reagent/blobanine/proc/change_eye_color_to_green(var/mob/living/carbon/human/H)
+	var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+	if (!E)
+		return
+	H.my_appearance.r_eyes = 129
+	H.my_appearance.g_eyes = 235
+	H.my_appearance.b_eyes = 0
+	H.update_body()
+
+/datum/reagent/blob_essence
+	name = "Blob Essence"
+	id = BLOB_ESSENCE
+	description = "A thick, transparent liquid extracted from live blob cores."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFD6A0"
+
+/datum/reagent/blob_essence/on_mob_life(var/mob/living/M)
+	if (..() || !ishuman(M))
+		return
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum//////////
@@ -8310,6 +8359,63 @@ var/procizine_tolerance = 0
 	glass_icon_state = "grogglass"
 	glass_desc = "The favorite of pirates everywhere."
 
+/datum/reagent/ethanol/drink/evoluator
+	name = "Evoluator"
+	id = EVOLUATOR
+	description = "Blobs that come into contact with oxygen really do evoluate."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = BLOB_MEAT
+	glass_icon_state = "evoluatorglass"
+	glass_desc = "Blob evoluated with oxigen. Prickly!"
+
+/datum/reagent/ethanol/drink/blob_beer
+	name = "Blob beer"
+	id = BLOBBEER
+	description = "Enzymes in the blob, when under heat, entered a state of rapid fermentation. The result was this beverage."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = BLOB_MEAT
+	glass_icon_state = "blobbeerglass"
+	glass_desc = "Acidic beer with a grand foam head. Subtle hints of apple."
+
+/datum/reagent/ethanol/drink/liberator
+	name = "Liberator"
+	id = LIBERATOR
+	description = "Fruit juice and liquors balancing the blob's overwhelming taste."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = DEFAULT_BLOOD
+	glass_icon_state = "liberatorglass"
+	glass_desc = "Fruity and strong, for when you need a quick recharge."
+
+/datum/reagent/ethanol/drink/spore
+	name = "Spore"
+	id = SPORE
+	description = "The special properties of karmotrine combined with blobanine create a disgusting but interesting drink."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = BLOB_MEAT
+	custom_metabolism = 0.1
+	glass_icon_state = "sporeglass"
+	glass_desc = "A tasteless drink with an almost unbearable aftertaste."
+
+/datum/reagent/ethanol/drink/spore/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	for(var/spell/S in M.spell_list)
+		if (istype(S, /spell/aoe_turf/conjure/spore))
+			return
+	var/spell/aoe_turf/conjure/spore/summon_spore = new()
+	summon_spore.charge_counter = 0 // Spell starts on cooldown
+	summon_spore.process()
+	M.add_spell(summon_spore)
+
+/datum/reagent/ethanol/drink/spore/on_removal(var/amount)
+	if (!iscarbon(src.holder.my_atom) || (max(0, src.volume - amount) >= 1))
+		return TRUE
+
+	var/mob/living/carbon/M = holder.my_atom
+	for(var/spell/aoe_turf/conjure/spore/S in M.spell_list)
+		M.remove_spell(S)
+	return TRUE
+
 /datum/reagent/ethanol/drink/aloe
 	name = "Aloe"
 	id = ALOE
@@ -8625,6 +8731,26 @@ var/procizine_tolerance = 0
 	glass_name = "\improper festive eggnog"
 	glass_desc = "Eggnog, complete with booze and a dusting of cinnamon for that winter warmth."
 
+/datum/reagent/ethanol/drink/mimosa
+	name = "Mimosa"
+	id = MIMOSA
+	description = "Champagne and orange juice."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFCA24" //rgb: 255, 202, 36
+	glass_icon_state = "mimosa"
+	glass_name = "\improper mimosa"
+	glass_desc = "Tangy and light. Perfect for brunch."
+
+/datum/reagent/ethanol/drink/lemondrop
+	name = "Lemon Drop"
+	id = LEMONDROP
+	description = "Vodka, lemon juice, and triple sec."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFF353" //rgb: 255, 243, 83
+	glass_icon_state = "lemondrop"
+	glass_name = "\improper lemon drop"
+	glass_desc = "A strong and sour drink, served with a sugar coated rim."
+
 //Eventually there will be a way of making vinegar.
 /datum/reagent/vinegar
 	name = "Vinegar"
@@ -8926,7 +9052,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/drink/coffee/engicoffee/on_mob_life(var/mob/living/M)
 	..()
 	M.hallucination = 0
-	M.reagents.add_reagent (HYRONALIN, 0.1)
+	M.reagents.add_reagent (HYRONALIN, 0.05)
 
 /datum/reagent/drink/coffee/medcoffee
 	name = "Lifeline"
@@ -9159,8 +9285,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/fishbleach/on_mob_life(var/mob/living/carbon/human/H)
 	if(..())
 		return 1
-	if(!iswizconvert(H))
-		H.color = "#12A7C9"
+	H.color = "#12A7C9"
 	return
 
 /datum/reagent/roach_shell
@@ -9224,6 +9349,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "Opium"
 	id = OPIUM
 	description = "Opium is an exceptional natural analgesic."
+	pain_resistance = 80
 	color = "#AE9260" //rgb: 174, 146, 96
 
 /datum/reagent/bicaridine/opium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
@@ -9255,6 +9381,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = ZEAXANTHIN
 	description = "Zeaxanthin is a natural pigment which purportedly supports eye health."
 	color = "#CC4303" //rgb: 204, 67, 3
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/stoxin/valerenic_acid
 	name = "Valerenic Acid"
@@ -9662,12 +9789,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 
 /datum/reagent/colorful_reagent/on_mob_life(mob/living/M)
-	if(M && isliving(M) && !iswizconvert(M))
+	if(M && isliving(M))
 		M.color = pick(random_color_list)
 	..()
 
 /datum/reagent/colorful_reagent/reaction_mob(mob/living/M, reac_volume)
-	if(M && isliving(M) && !iswizconvert(M))
+	if(M && isliving(M))
 		M.color = pick(random_color_list)
 	..()
 
@@ -9873,7 +10000,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	if(!spookvision && tick >= 30 && volume >= 1) //ghostsight after 1m and having more than 1u inside
+	if(!spookvision && tick >= 5 && volume >= 1) //ghostsight after 10s and having more than 1u inside
 		spookvision = TRUE
 		to_chat(M, "<span class='notice'>You start seeing through the veil!</span>")
 		M.see_invisible = SEE_INVISIBLE_OBSERVER
@@ -10205,3 +10332,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(volume >= 1)
 		if(!locate(/obj/effect/alien/weeds) in T)
 			new /obj/effect/alien/weeds(T)
+		if(!locate(/obj/effect/decal/cleanable/purpledrank) in T)
+			new /obj/effect/decal/cleanable/purpledrank(T)
+
+/datum/reagent/hyperzine/methamphetamine //slightly better than 'zine
+	name = "Methamphetamine" //Only used on the Laundromat spess vault
+	id = METHAMPHETAMINE
+	description = "It uses a different manufacture method but it is every bit as pure."
+	color = "#89CBF0" //baby blue
+	custom_metabolism = 0.01
+	overdose_am = 30

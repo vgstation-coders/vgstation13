@@ -275,7 +275,7 @@
 	for(var/mob/living/carbon/human/H in view(7, src))
 		if((H.vampire_affected() <= 0) || H.earprot())
 			continue
-		to_chat(H, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
+		to_chat(H, "<span class='danger'><font size='3'>You hear an ear piercing shriek and your senses dull!</font></span>")
 		H.Knockdown(8)
 		H.ear_deaf = 20
 		H.stuttering = 20
@@ -639,7 +639,9 @@
 	switch(spell)
 		if(1) //Mass Hallucination
 			for(var/mob/living/carbon/human/H in victims)
-				if(!can_mind_interact(H.mind))
+				if(H.is_wearing_any(list(/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
+					continue
+				if(M_PSY_RESIST in H.mutations)
 					continue
 				to_chat(H, "<span class = 'warning'>You feel [diceroll>15 ? "incredibly" : ""] disorientated.</span>")
 				H.hallucination = clamp(rand(10,20)*diceroll, hallucination, 60) //Maximum of 120 seconds

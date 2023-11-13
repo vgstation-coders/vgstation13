@@ -839,8 +839,7 @@
 /area/awaymission/leviathan/mining)
 "cE" = (
 /obj/machinery/door/airlock/glass_medical{
-	name = "Infirmary";
-	req_access_txt = "0"
+	name = "Infirmary"
 	},
 /turf/simulated/floor/airless{
 	icon_state = "asteroidfloor"
@@ -1138,8 +1137,7 @@
 /area/awaymission/leviathan/research/mining)
 "dq" = (
 /obj/machinery/recharger{
-	pixel_x = -24;
-	pixel_y = 0
+	pixel_x = -24
 	},
 /obj/machinery/light/small{
 	dir = 1
@@ -1158,8 +1156,7 @@
 "ds" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /obj/machinery/status_display{
-	pixel_x = 32;
-	pixel_y = 0
+	pixel_x = 32
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -1169,8 +1166,7 @@
 "dt" = (
 /obj/machinery/portable_atmospherics/canister/oxygen,
 /obj/machinery/status_display{
-	pixel_x = -32;
-	pixel_y = 0
+	pixel_x = -32
 	},
 /turf/simulated/floor{
 	dir = 1;
@@ -1179,8 +1175,7 @@
 /area/awaymission/leviathan/research/mining)
 "du" = (
 /obj/machinery/recharger{
-	pixel_x = 24;
-	pixel_y = 0
+	pixel_x = 24
 	},
 /obj/machinery/light/small{
 	dir = 1
@@ -1193,8 +1188,7 @@
 "dv" = (
 /obj/structure/closet/emcloset,
 /obj/machinery/recharger{
-	pixel_x = -24;
-	pixel_y = 0
+	pixel_x = -24
 	},
 /turf/simulated/floor,
 /area/awaymission/leviathan/research/mining)
@@ -1232,8 +1226,7 @@
 "dA" = (
 /obj/structure/closet/emcloset,
 /obj/machinery/recharger{
-	pixel_x = 24;
-	pixel_y = 0
+	pixel_x = 24
 	},
 /turf/simulated/floor,
 /area/awaymission/leviathan/research/mining)
@@ -1266,8 +1259,7 @@
 /obj/structure/table,
 /obj/item/clothing/gloves/latex,
 /obj/machinery/status_display{
-	pixel_x = -32;
-	pixel_y = 0
+	pixel_x = -32
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -1295,8 +1287,7 @@
 	},
 /obj/structure/table,
 /obj/machinery/status_display{
-	pixel_x = 32;
-	pixel_y = 0
+	pixel_x = 32
 	},
 /obj/machinery/light{
 	dir = 4
@@ -1600,7 +1591,6 @@
 	},
 /obj/machinery/power/apc{
 	name = "Mining";
-	pixel_x = 0;
 	pixel_y = -24
 	},
 /turf/simulated/floor,
@@ -1712,7 +1702,6 @@
 	dir = 1
 	},
 /obj/machinery/newscaster{
-	pixel_x = 0;
 	pixel_y = 32
 	},
 /turf/simulated/floor/wood,
@@ -1833,8 +1822,7 @@
 "fa" = (
 /obj/machinery/door/window{
 	dir = 2;
-	name = "Shower";
-	req_access_txt = "0"
+	name = "Shower"
 	},
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 1;
@@ -1865,8 +1853,7 @@
 /area/awaymission/leviathan/research)
 "fe" = (
 /obj/machinery/door/airlock/glass{
-	name = "Quarters";
-	req_access_txt = "0"
+	name = "Quarters"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -1896,8 +1883,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/leviathan/research/mining)
@@ -1909,8 +1895,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/leviathan/research/mining)
@@ -1924,8 +1909,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/leviathan/research/mining)
@@ -1939,8 +1923,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/leviathan/research/mining)
@@ -1955,8 +1938,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/leviathan/research/mining)
@@ -1973,8 +1955,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/leviathan/research/mining)
@@ -1989,8 +1970,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/leviathan/research/mining)
@@ -1999,8 +1979,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /obj/structure/cable{
 	d1 = 1;
@@ -2016,8 +1995,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor,
 /area/awaymission/leviathan/research/mining)
@@ -2032,8 +2010,7 @@
 /area/awaymission/leviathan/research/mining)
 "fq" = (
 /obj/machinery/door/airlock/glass{
-	name = "Hydroponics";
-	req_access_txt = "0"
+	name = "Hydroponics"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -2212,9 +2189,7 @@
 /area/awaymission/leviathan/research/mining)
 "fL" = (
 /obj/machinery/door/airlock/glass_medical{
-	id_tag = null;
-	name = "Infirmary";
-	req_access_txt = "0"
+	name = "Infirmary"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
@@ -2234,8 +2209,7 @@
 /area/awaymission/leviathan/research/mining)
 "fN" = (
 /obj/machinery/door/airlock/glass{
-	name = "Crew Area";
-	req_access_txt = "0"
+	name = "Crew Area"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor{
@@ -2355,7 +2329,6 @@
 /obj/machinery/power/apc{
 	dir = 1;
 	name = "Research";
-	pixel_x = 0;
 	pixel_y = 24
 	},
 /turf/simulated/floor/plating,
@@ -2457,7 +2430,6 @@
 	desc = "Used for watching the isolation room cameras.";
 	name = "Isolation Room Telescreen";
 	network = list("isolation");
-	pixel_x = 0;
 	pixel_y = -32
 	},
 /turf/simulated/floor/plating,
@@ -2473,14 +2445,12 @@
 "gq" = (
 /obj/machinery/door/airlock/maintenance{
 	name = "Maintenance Storage";
-	req_access_txt = "0";
 	req_one_access_txt = "11;47"
 	},
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating,
 /area/awaymission/leviathan/research)
@@ -2488,8 +2458,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -2684,7 +2653,6 @@
 	dir = 8
 	},
 /obj/machinery/computer/security/telescreen/entertainment{
-	pixel_x = 0;
 	pixel_y = -32
 	},
 /turf/simulated/floor{
@@ -2725,7 +2693,6 @@
 "gT" = (
 /obj/machinery/door/airlock/maintenance{
 	name = "Auxiliary Storage";
-	req_access_txt = "0";
 	req_one_access_txt = "11;47"
 	},
 /turf/simulated/floor/plating,
@@ -2794,8 +2761,7 @@
 /obj/structure/sign/examroom{
 	desc = "A guidance sign which reads 'ISOLATION ROOM ONE'";
 	name = "\improper ISOLATION ROOM ONE";
-	pixel_x = -32;
-	pixel_y = 0
+	pixel_x = -32
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -3012,8 +2978,6 @@
 	name = "Door Bolt Control";
 	normaldoorcontrol = 1;
 	pixel_x = -25;
-	pixel_y = 0;
-	req_access_txt = "0";
 	specialfunctions = 4
 	},
 /turf/simulated/floor{
@@ -3056,8 +3020,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -3073,8 +3036,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -3093,8 +3055,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -3111,8 +3072,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /obj/structure/cable{
 	d1 = 2;
@@ -3128,8 +3088,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -3147,8 +3106,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -3214,8 +3172,7 @@
 /obj/structure/sign/examroom{
 	desc = "A guidance sign which reads 'ISOLATION ROOM TWO'";
 	name = "\improper ISOLATION ROOM TWO";
-	pixel_x = -32;
-	pixel_y = 0
+	pixel_x = -32
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -3321,8 +3278,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating,
 /area/awaymission/leviathan/research/mining)
@@ -3333,8 +3289,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating,
 /area/awaymission/leviathan/research/mining)
@@ -3458,7 +3413,6 @@
 "io" = (
 /obj/machinery/disposal,
 /obj/structure/sign/deathsposal{
-	pixel_x = 0;
 	pixel_y = 32
 	},
 /obj/structure/disposalpipe/trunk,
@@ -3673,11 +3627,9 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitegreencorner"
 	},
 /area/awaymission/leviathan/research/gateway)
@@ -3693,7 +3645,6 @@
 	icon_state = "1-8"
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitegreen"
 	},
 /area/awaymission/leviathan/research/gateway)
@@ -3707,17 +3658,14 @@
 	dir = 1;
 	name = "Gateway";
 	operating = 0;
-	pixel_x = 0;
 	pixel_y = 24
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitegreen"
 	},
 /area/awaymission/leviathan/research/gateway)
 "iM" = (
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "whitegreen"
 	},
 /area/awaymission/leviathan/research/gateway)
@@ -3741,8 +3689,6 @@
 	name = "Door Bolt Control";
 	normaldoorcontrol = 1;
 	pixel_x = -25;
-	pixel_y = 0;
-	req_access_txt = "0";
 	specialfunctions = 4
 	},
 /turf/simulated/floor{
@@ -4167,7 +4113,6 @@
 	dir = 9
 	},
 /obj/machinery/door/window{
-	dir = 4;
 	name = "Spectroscopy"
 	},
 /turf/simulated/floor{
@@ -4176,7 +4121,6 @@
 /area/awaymission/leviathan/research)
 "jJ" = (
 /obj/machinery/door/window{
-	dir = 4;
 	name = "Spectroscopy"
 	},
 /turf/simulated/floor{
@@ -4308,8 +4252,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_x = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor{
 	icon_state = "white"

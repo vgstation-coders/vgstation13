@@ -60,19 +60,19 @@
 		#define MAP_OVERRIDE 12
 	#elif MAP_OVERRIDE == 13
 		#undef MAP_OVERRIDE
-		#include "island.dm"
+		#include "line.dm"
 		#define MAP_OVERRIDE 13
 	#elif MAP_OVERRIDE == 14
 		#undef MAP_OVERRIDE
-		#include "line.dm"
+		#include "test_very_tiny.dm"
 		#define MAP_OVERRIDE 14
 	#elif MAP_OVERRIDE == 15
 		#undef MAP_OVERRIDE
-		#include "test_very_tiny.dm"
+		#include "test_vault.dm"
 		#define MAP_OVERRIDE 15
 	#elif MAP_OVERRIDE == 16
 		#undef MAP_OVERRIDE
-		#include "test_vault.dm"
+		#include "wheelstation.dm"
 		#define MAP_OVERRIDE 16
 	#endif
 #endif

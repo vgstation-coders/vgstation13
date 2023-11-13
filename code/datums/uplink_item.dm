@@ -200,6 +200,12 @@ var/list/uplink_items = list()
 	item = /obj/structure/closet/crate/secure/weapon/experimental/gatling
 	cost = 40
 
+/datum/uplink_item/nukeprice/gatling_laser
+	name = "Gatling Laser"
+	desc = "A massive rapid-firing multiple-barrel laser. Can be reloaded quickly by swapping its internal cell. Spares not included."
+	item = /obj/item/weapon/gun/energy/gatling
+	cost = 60
+
 /datum/uplink_item/nukeprice/nikita
 	name = "Nikita RC Missile Launcher"
 	desc = "A remote-controlled missile launcher, trades in raw explosive power for extreme steering precision, allowing it to make perfect turns around corners or turn around at will, or simply accelerate normally. Comes with four spare RC rockets."
@@ -218,7 +224,6 @@ var/list/uplink_items = list()
 	item = /obj/effect/spawner/newbomb/timer
 	cost = 25
 	refundable = TRUE
-	num_in_stock = 3
 
 /datum/uplink_item/nukeprice/robot
 	name = "Syndicate-modified Combat Robot Teleporter"
@@ -562,7 +567,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/ayylmao/harmor
 	name = "MDF Heavy Armor"
-	desc = "A set of cumbersome but sturdy alien armor that excels at protecting the wearer from energy weapons and melee attacks. The armor plates were measured for a grey, but can be adjusted to fit a human as well. Not guaranteed to fit any other species. A soldier's uniform and boots are included with the kit."
+	desc = "A set of durable alien armor that excels at protecting the wearer from energy weapons and melee attacks. The armor plates were measured for a grey, but can be adjusted to fit a human as well. Not guaranteed to fit any other species. A soldier's uniform and boots are included with the kit."
 	item = /obj/item/weapon/storage/box/syndie_kit/ayylmao_harmor
 	cost = 4
 	discounted_cost = 3
@@ -685,6 +690,12 @@ var/list/uplink_items = list()
 		feedback_add_details("traitor_uplink_items_bought","RN")
 		return I
 
+/datum/uplink_item/badass/syndie_lunch
+	name = "Syndicate Lunch"
+	desc = "A service cyborg unit at HQ has packed you a lunch, ready to be delivered. You can't sabotage Nanotrasen on an empty stomach."
+	item = /obj/item/weapon/storage/lunchbox/metal/syndie/pre_filled
+	cost = 1
+
 /datum/uplink_item/jobspecific/command_security
 	category = "Security Specials"
 
@@ -716,9 +727,9 @@ var/list/uplink_items = list()
 	name = "Batling gun"
 	desc = "A gatling gun modified to fire stun batons. The batons are launched in such a way that guarantees the stunning end always connects, and the launch velocity is high enough to cause injuries. Can be reloaded with stun batons."
 	item = /obj/item/weapon/gun/gatling/batling
-	cost = 18
-	discounted_cost = 12
-	jobs_with_discount = list("Warden", "Head of Security")
+	cost = 16
+	discounted_cost = 10
+	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
 
 /datum/uplink_item/jobspecific/command_security/remoteexplosive
 	name = "Remote Explosive Implants"
@@ -884,6 +895,14 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndie_kit/flaregun
 	cost = 6
 	discounted_cost = 4
+	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
+
+/datum/uplink_item/jobspecific/engineering/canned_heat
+	name = "Canned Heat"
+	desc = "A can that when opened agitates the air molecules in the surrounding atmosphere to raise its temperature by 1000 Kelvin. Use in a large area and several numbers for maximum impact."
+	item = /obj/item/canned_heat
+	cost = 12
+	discounted_cost = 6
 	jobs_with_discount = list("Atmospheric Technician", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/engineering/dev_analyser

@@ -136,8 +136,7 @@
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
-	icon_state = "1-2";
-	pixel_y = 0
+	icon_state = "1-2"
 	},
 /turf/simulated/floor/plating,
 /area/vault/research)
@@ -182,8 +181,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_y = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating,
 /area/vault/research)
@@ -192,8 +190,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_y = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating,
 /area/vault/research)
@@ -245,9 +242,7 @@
 /turf/simulated/floor/plating,
 /area/vault/research)
 "aJ" = (
-/obj/machinery/vending/wallmed1{
-	pixel_y = 0
-	},
+/obj/machinery/vending/wallmed1,
 /turf/simulated/wall/r_wall,
 /area/vault/research)
 "aK" = (
@@ -286,8 +281,7 @@
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
-	icon_state = "1-2";
-	pixel_y = 0
+	icon_state = "1-2"
 	},
 /obj/machinery/door/poddoor{
 	id_tag = "madagascar";
@@ -303,8 +297,7 @@
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
-	icon_state = "1-2";
-	pixel_y = 0
+	icon_state = "1-2"
 	},
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating,
@@ -368,9 +361,7 @@
 /obj/item/weapon/switchtool/surgery,
 /obj/item/weapon/reagent_containers/spray/cleaner{
 	desc = "Someone has crossed out the Space from Space Cleaner and written in Surgery. 'Do not remove under punishment of death!!!' is scrawled on the back.";
-	name = "Surgery Cleaner";
-	pixel_x = 0;
-	pixel_y = 0
+	name = "Surgery Cleaner"
 	},
 /obj/effect/decal/cleanable/cobweb2,
 /obj/item/weapon/barricade_kit,
@@ -393,8 +384,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_y = 0
+	icon_state = "4-8"
 	},
 /obj/machinery/door/poddoor{
 	id_tag = "madagascar";
@@ -455,8 +445,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_y = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating,
 /area/vault/research)
@@ -465,8 +454,7 @@
 /obj/structure/cable{
 	d1 = 4;
 	d2 = 8;
-	icon_state = "4-8";
-	pixel_y = 0
+	icon_state = "4-8"
 	},
 /turf/simulated/floor/plating,
 /area/vault/research)
@@ -781,10 +769,7 @@
 /obj/structure/table,
 /obj/item/weapon/storage/box/beakers,
 /obj/item/weapon/storage/box/beakers,
-/obj/item/stack/medical/advanced/bruise_pack{
-	pixel_x = 0;
-	pixel_y = 0
-	},
+/obj/item/stack/medical/advanced/bruise_pack,
 /turf/simulated/floor{
 	icon_state = "white"
 	},
@@ -979,8 +964,7 @@
 /obj/item/weapon/reagent_containers/glass/beaker/large,
 /obj/structure/sink{
 	dir = 8;
-	pixel_x = -12;
-	pixel_y = 0
+	pixel_x = -12
 	},
 /turf/simulated/floor{
 	icon_state = "white"
@@ -1002,7 +986,6 @@
 "cO" = (
 /obj/machinery/door/airlock/security{
 	name = "Armory";
-	req_access = null;
 	req_access_txt = "3"
 	},
 /turf/simulated/floor{
@@ -1257,7 +1240,6 @@
 "dz" = (
 /obj/machinery/door/airlock/security{
 	name = "Armory";
-	req_access = null;
 	req_access_txt = "3"
 	},
 /obj/machinery/door/poddoor/preopen{
@@ -1671,7 +1653,6 @@
 "eR" = (
 /obj/structure/toilet{
 	dir = 1;
-	icon_state = "toilet00";
 	tag = "icon-toilet00 (NORTH)"
 	},
 /turf/simulated/floor{

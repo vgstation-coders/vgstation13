@@ -192,10 +192,10 @@
 
 /obj/item/weapon/storage/bag/ore/auto/pickup(mob/user)
 	if(handling)
-		user.register_event(/event/moved, src, src::mob_moved())
+		user.register_event(/event/moved, src, nameof(src::mob_moved()))
 
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
-	user.unregister_event(/event/moved, src, src::mob_moved())
+	user.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 
 // -----------------------------
 //          Plant bag
@@ -232,8 +232,8 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	icon_state = plantbag_colour
 
 /obj/item/weapon/storage/bag/plants/portactor
-	name = "portable seed extractor"
-	desc = "A heavy-duty, yet portable seed extractor. Less efficient than the stationary machine, this version can extract at most two seeds per sample."
+	name = "advanced plant bag"
+	desc = "A heavy-duty plant bag that doubles as a portable seed extractor. Use the \"Dissolve Contents\" function to extract seeds from whatever is inside."
 	icon_state = "portaseeder"
 	actions_types = list(/datum/action/item_action/dissolve_contents)
 

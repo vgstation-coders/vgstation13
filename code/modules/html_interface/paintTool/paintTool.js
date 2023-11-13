@@ -267,7 +267,7 @@ function colorOverlayBlend(c1, c2, alpha) {
 function colorRybBlend(c1, c2, alpha) {
 	var c1Ryb = rgbToRyb(c1);
 	var c2Ryb = rgbToRyb(c2);
-	var resultRyb = {r:0, y:0, b:0, a:c2Ryb.a};
+	var resultRyb = {r:0, y:0, b:0, a:Math.min(255.0, c1Ryb.a*alpha + c2Ryb.a)};
 
 	alpha *= c1Ryb.a / 255.0;
 
@@ -462,6 +462,8 @@ function lineDraw(x1, y1, x2, y2, rgb, a) {
  * Draws the bitmap's contents on screen, scaled up for visibility
  */
 function display_bitmap() {
+	ctx.clearRect(0, 0, width*scaleX, height*scaleY);
+
 	//Go through our pixel data and draw scaled up squares with the corresponding color
 	for (var x = 0; x < width; x++) {
 		for(var y = 0; y < height; y++) {
@@ -469,13 +471,17 @@ function display_bitmap() {
 			var pixel = (y * width + x);
 
 			//Grab the pixel's color
-			ctx.fillStyle = bitmap[pixel];
+			var color = hexToRgba(bitmap[pixel]);
+			var alpha = color.a/255.0;
+			ctx.globalAlpha = alpha;
+			color.a = 255;
+			ctx.fillStyle = rgbaToHex(color);
 
 			//Draw a square, scaled up as needed
 			ctx.fillRect(x*scaleX, y*scaleY, scaleX, scaleY);
 		}
 	}
-	
+
 	if (grid_enabled) {
 		ctx.beginPath();
 		ctx.lineWidth = 1;

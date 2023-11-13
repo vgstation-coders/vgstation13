@@ -145,9 +145,6 @@
 		return 0
 
 	antag = M
-	if(M.current.client)
-		antag.key = M.current.client.ckey
-		antag.active = TRUE
 	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
 	objectives.owner = M
@@ -271,8 +268,8 @@
 
 /datum/role/proc/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/icon/logo = icon(logo_icon, logo_state)
-	if(!antag || !antag.current)
-		return
+	if(!antag)
+		return {"Mind destroyed. That shouldn't ever happen."}
 	if (!ismob(usr))
 		return
 	var/mob/user = usr
@@ -281,7 +278,7 @@
 	var/mob/M = antag.current
 	if (M)
 		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
-	[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
+	[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[antag.key]</a>[M.client ? "" : " <i> - ([loggedOutHow()])</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
 	 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(admin PM)</a>
 	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>
 	 - <a href='?src=\ref[src]&mind=\ref[antag]&role_speak=\ref[M]'>(Message as:</a><a href='?src=\ref[src]&mind=\ref[antag]&role_set_speaker=\ref[M]'>\[[voice_per_admin[user.ckey]]\])</a>"}
@@ -292,6 +289,9 @@
 	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>
 	 - <a href='?src=\ref[src]&mind=\ref[antag]&role_speak=\ref[M]'>(Message as:</a><a href='?src=\ref[src]&mind=\ref[antag]&role_set_speaker=\ref[M]'>\[[voice_per_admin[user.ckey]]\])</a>"}
 
+
+/datum/role/proc/loggedOutHow()
+	return "logged out"
 
 /datum/role/proc/Greet(var/greeting,var/custom)
 	if(!greeting)

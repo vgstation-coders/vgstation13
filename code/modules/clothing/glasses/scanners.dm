@@ -140,6 +140,7 @@ var/list/meson_wearers = list()
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	glasses_fit = TRUE
+	prescription_type = /obj/item/clothing/glasses/scanner/meson/prescription
 	var/mob/viewing
 
 	my_dark_plane_alpha_override = "mesons"
@@ -323,11 +324,11 @@ var/list/meson_images = list()
 	clear()
 
 	if (viewing)
-		viewing.unregister_event(/event/logout, src, src::mob_logout())
+		viewing.unregister_event(/event/logout, src, nameof(src::mob_logout()))
 		viewing = null
 
 	if (new_mob)
-		new_mob.register_event(/event/logout, src, src::mob_logout())
+		new_mob.register_event(/event/logout, src, nameof(src::mob_logout()))
 		viewing = new_mob
 
 /obj/item/clothing/glasses/scanner/material/proc/mob_logout(mob/living/carbon/user)
@@ -335,7 +336,7 @@ var/list/meson_images = list()
 		return
 
 	clear()
-	viewing.unregister_event(/event/logout, src, src::mob_logout())
+	viewing.unregister_event(/event/logout, src, nameof(src::mob_logout()))
 	viewing = null
 
 /obj/item/clothing/glasses/scanner/material/proc/get_images(var/turf/T, var/view)

@@ -69,6 +69,7 @@
 	flags = FPRINT | OPENCONTAINER
 
 /obj/item/weapon/reagent_containers/glass/solution_tray/on_reagent_change()
+	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/solution_tray/pickup(mob/user)

@@ -27,15 +27,21 @@ var/list/station_holomaps = list()
 	var/image/panel = null
 
 	var/original_zLevel = 1	//zLevel on which the station map was initialized.
+	var/forced_zLevel = 0	//can be set by mappers to override the Station Map's zLevel
 	var/bogus = 0			//set to 1 when you initialize the station map on a zLevel that doesn't have its own icon formatted for use by station holomaps.
 							//currently, the only supported zLevels are the Station, the Asteroid, and the Derelict.
 
 	var/datum/station_holomap/holomap_datum
 
+	var/obj/abstract/screen/interface/button_workplace = null
+
 /obj/machinery/station_map/New()
 	..()
 	holomap_datum = new()
-	original_zLevel = loc.z
+	if (forced_zLevel)
+		original_zLevel = forced_zLevel
+	else
+		original_zLevel = loc.z
 	station_holomaps += src
 	flow_flags |= ON_BORDER
 	component_parts = 0
@@ -69,8 +75,14 @@ var/list/station_holomaps = list()
 
 /obj/machinery/station_map/initialize()
 	bogus = 0
-	var/turf/T = get_turf(src)
-	original_zLevel = T.z
+	var/turf/T
+	if (forced_zLevel)
+		var/turf/U = get_turf(src)
+		T = locate(U.x,U.y,forced_zLevel)
+		original_zLevel = forced_zLevel
+	else
+		T = get_turf(src)
+		original_zLevel = T.z
 	if(!((HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]") in extraMiniMaps))
 		bogus = 1
 		holomap_datum.initialize_holomap_bogus()
@@ -78,6 +90,9 @@ var/list/station_holomaps = list()
 		return
 
 	holomap_datum.initialize_holomap(T)
+
+	if (forced_zLevel)
+		holomap_datum.station_map.overlays -= holomap_datum.cursor
 
 	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[original_zLevel]"])
 	small_station_map.plane = ABOVE_LIGHTING_PLANE
@@ -90,9 +105,13 @@ var/list/station_holomaps = list()
 	update_icon()
 
 /obj/machinery/station_map/attack_hand(var/mob/user)
-	if(watching_mob && (watching_mob != user))
-		to_chat(user, "<span class='warning'>Someone else is currently watching the holomap.</span>")
-		return
+	if(watching_mob)
+		if(watching_mob != user)
+			to_chat(user, "<span class='warning'>Someone else is currently watching the holomap.</span>")
+			return
+		else
+			stopWatching()
+			return
 
 	if(user.loc != loc)
 		to_chat(user, "<span class='warning'>You need to stand in front of \the [src].</span>")
@@ -112,11 +131,43 @@ var/list/station_holomaps = list()
 			else
 				to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
+			if (ishuman(user))
+				var/mob/living/carbon/human/H = user
+				var/get_rank = H.get_assignment(null,null,TRUE)
+				if (!get_rank)
+					return
+				if ("[get_rank]_[original_zLevel]" in workplace_markers)
+					button_workplace = new (user.hud_used.holomap_obj,user,src,"Find Workplace",'icons/effects/64x32.dmi',"workplace",l="CENTER+3,CENTER-4")
+					button_workplace.name = "Find Workplace"
+					button_workplace.alpha = 0
+					animate(button_workplace, alpha = 255, time = 5, easing = LINEAR_EASING)
+					user.client.screen += button_workplace
+
+/obj/machinery/station_map/interface_act(var/mob/i_user,var/action)
+	switch(action)
+		if("Find Workplace")
+			holomap_datum.station_map.overlays -= holomap_datum.workplaceMarker
+			QDEL_NULL(holomap_datum.workplaceMarker)
+			i_user.playsound_local(src, 'sound/misc/click.ogg', 50, 0, 0, 0, 0)
+			if (ishuman(i_user))
+				var/mob/living/carbon/human/H = i_user
+				var/get_rank = H.get_assignment(null,null,TRUE)
+				var/datum/holomap_marker/workplaceMarker = pick(workplace_markers["[get_rank]_[original_zLevel]"])
+				holomap_datum.workplaceMarker = new('icons/holomap_markers_32x32.dmi',src,"workplace")
+				if(map.holomap_offset_x.len >= workplaceMarker.z)
+					holomap_datum.workplaceMarker.pixel_x = workplaceMarker.x - 6 + map.holomap_offset_x[workplaceMarker.z]
+					holomap_datum.workplaceMarker.pixel_y = workplaceMarker.y - 4 + map.holomap_offset_y[workplaceMarker.z]
+				else
+					holomap_datum.workplaceMarker.pixel_x = workplaceMarker.x - 6
+					holomap_datum.workplaceMarker.pixel_y = workplaceMarker.y - 4
+				i_user.playsound_local(src, 'sound/effects/ping_warning.ogg', 25, 0, 0, 0, 0)
+				holomap_datum.station_map.overlays += holomap_datum.workplaceMarker
+
 /obj/machinery/station_map/attack_paw(var/mob/user)
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/machinery/station_map/attack_animal(var/mob/user)
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/machinery/station_map/attack_ghost(var/mob/user)
 	if(!can_spook())
@@ -140,11 +191,16 @@ var/list/station_holomaps = list()
 /obj/machinery/station_map/proc/stopWatching()
 	if(watching_mob)
 		if(watching_mob.client)
+			watching_mob.client.screen -= button_workplace
 			var/mob/M = watching_mob
 			spawn(5)//we give it time to fade out
-				M.client.images -= holomap_datum.station_map
+				if (watching_mob != M)//in case they immediately start watching it again
+					M.client.images -= holomap_datum.station_map
 		watching_mob.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 	watching_mob = null
+	QDEL_NULL(button_workplace)
+	holomap_datum.station_map.overlays -= holomap_datum.workplaceMarker
+	QDEL_NULL(holomap_datum.workplaceMarker)
 	animate(holomap_datum.station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
 
 /obj/machinery/station_map/power_change()
@@ -186,7 +242,9 @@ var/list/station_holomaps = list()
 			else
 				holomap_datum.cursor.pixel_x = (x-6)*PIXEL_MULTIPLIER
 				holomap_datum.cursor.pixel_y = (y-6)*PIXEL_MULTIPLIER
-			holomap_datum.station_map.overlays |= holomap_datum.cursor
+
+			if (!forced_zLevel)
+				holomap_datum.station_map.overlays |= holomap_datum.cursor
 			holomap_datum.station_map.overlays |= holomap_datum.legend
 
 	switch(dir)
@@ -271,6 +329,8 @@ var/list/station_holomaps = list()
 	if(user.hud_used && user.hud_used.holomap_obj)
 		watching_mob = user
 		var/turf/T = get_turf(user)
+		if (isAI)
+			T = get_turf(watching_mob.client.eye)
 		bogus = 0
 		if(!((HOLOMAP_EXTRA_STATIONMAP+"_[T.z]") in extraMiniMaps))
 			bogus = 1
@@ -292,12 +352,14 @@ var/list/station_holomaps = list()
 		else
 			to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
-/obj/item/device/station_map/proc/update_holomap()
+/obj/item/device/station_map/proc/update_holomap(var/isAI = FALSE)
 	if (!watching_mob || !watching_mob.client || !watching_mob.hud_used)
 		return
 	watching_mob.client.images -= holomap_datum.station_map
 	holomap_datum.station_map.overlays.len = 0
 	var/turf/T = get_turf(src)
+	if (isAI)
+		T = get_turf(watching_mob.client.eye)
 	if (lastZ != T.z)
 		lastZ = T.z
 		bogus = 0
@@ -348,6 +410,8 @@ var/list/station_holomaps = list()
 	var/image/station_map
 	var/image/cursor
 	var/image/legend
+	var/image/workplaceMarker
+	var/z
 
 /datum/station_holomap/proc/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null)
 	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[T.z]"])
@@ -361,7 +425,10 @@ var/list/station_holomaps = list()
 	else
 		cursor.pixel_x = (T.x-6)*PIXEL_MULTIPLIER
 		cursor.pixel_y = (T.y-6)*PIXEL_MULTIPLIER
-	legend = image('icons/effects/64x64.dmi', "legend")
+	if (map.snow_theme)
+		legend = image('icons/effects/64x64.dmi', "legend_taxi")
+	else
+		legend = image('icons/effects/64x64.dmi', "legend")
 	legend.pixel_x = 3*WORLD_ICON_SIZE
 	legend.pixel_y = 3*WORLD_ICON_SIZE
 	station_map.overlays |= cursor
@@ -393,7 +460,7 @@ var/list/station_holomaps = list()
 		initialize()
 
 /obj/machinery/station_map/strategic/initialize()
-	holomap_datum.initialize_holomap()
+	holomap_datum.initialize_holomap(get_turf(src))
 
 	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"])
 	small_station_map.plane = ABOVE_LIGHTING_PLANE

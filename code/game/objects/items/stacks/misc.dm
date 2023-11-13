@@ -49,24 +49,18 @@
 			var/turf/T = get_turf(Target)
 			var/obj/structure/lattice/L = T.canBuildCatwalk(src)
 			if(istype(L))
-				if(amount < 2)
-					to_chat(user, "<span class='warning'>You need atleast 2 rods to build a catwalk!</span>")
-					return
 				if(busy) //We are already building a catwalk, avoids stacking catwalks
 					return
 				to_chat(user, "<span class='notice'>You begin to build a catwalk.</span>")
 				busy = 1
-				if(do_after(user, Target, 30))
+				if(do_after(user, Target, 15))
 					busy = 0
-					if(amount < 2)
-						to_chat(user, "<span class='warning'>You ran out of rods!</span>")
-						return
 					if(!istype(L) || L.loc != T)
 						to_chat(user, "<span class='warning'>You need a lattice first!</span>")
 						return
 					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You build a catwalk!</span>")
-					use(2)
+					use(1)
 					new /obj/structure/catwalk(T)
 					qdel(L)
 					return

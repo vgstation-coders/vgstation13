@@ -111,14 +111,17 @@
 
 /spell/targeted/summon_snacks/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
-			return "Lowers the cooldown of the spell."
 		if(Sp_POWER)
+			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+				return "Your snacks already carry a small amount of disabeetusol!"
 			return "Your snacks will now contain a small amount of diabeetusol. Full of flavor and calories!"
 		if(Sp_AMOUNT)
+			if(spell_levels[Sp_AMOUNT] >= level_max[Sp_AMOUNT])
+				return "Your snacks have reached the limit of how many bites are needed to finish eating them!"
 			return "Increases how many bites it takes to finish eating."
 		if(Sp_MOVE)
-			return "Changes the type of snack and drink. Resets at max level to allow cycling through the menu. Level 0: Filling, Level 1: Discount, Level 2: Horrible, Level 3: Pub, Level 4: Patrol, Level 5: Spicy."
+			return "Changes the type of snack and drink. Resets at max level to allow cycling through the menu. Level 0: Filling, Level 1: Discount, Level 2: Horrible, Level 3: Pub, Level 4: Patrol, Level 5: Spicy, Level 6: Dwarven."
+	return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/summoned
 	name = "wizard snack"

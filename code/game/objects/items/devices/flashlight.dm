@@ -138,6 +138,7 @@
 	flags = FPRINT
 	brightness_on = 5
 	has_sound = 1
+	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
 	sound_on = 'sound/items/flare_on.ogg'
 	sound_off = 'sound/items/cautery.ogg'

@@ -140,19 +140,19 @@
 	return 0
 
 /obj/machinery/turret/proc/get_new_target()
+	var/static/list/types_to_search = list(
+		/mob,
+		/obj/mecha,
+		/obj/structure/bed/chair/vehicle,
+		/obj/effect/blob
+		)
 	var/list/new_targets = new
 	var/new_target
-	for(var/mob/M in view(7, src))
-		if(check_target(M))
-			new_targets += M
-	for(var/obj/mecha/ME in view(7, src))
-		if(check_target(ME))
-			new_targets += ME
-	for(var/obj/structure/bed/chair/vehicle/V in view(7, src))
-		if(check_target(V))
-			new_targets += V
-	for(var/obj/effect/blob/B in view(7, src))
-		new_targets += B
+
+	for(var/atom/movable/A in view(7, src))
+		if(is_type_in_list(A, types_to_search))
+			if(check_target(A))
+				new_targets += A
 	if(new_targets.len)
 		new_target = pick(new_targets)
 	return new_target

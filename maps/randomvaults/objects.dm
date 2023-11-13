@@ -46,6 +46,14 @@
 /area/vault/podstation
 	requires_power = 1
 
+/area/vault/podstation/interior
+	name = "\improper Pod Station"
+	icon_state = "kitchen"
+
+/area/vault/podstation/exterior
+	name = "\improper Pod Station Asteroid"
+	icon_state = "pod"
+
 /area/vault/fastfood
 
 /area/vault/fastfood/dining
@@ -1056,13 +1064,13 @@
 	AT.id_tag = "vaultkitchen"
 	AT.enter_signal = /event/comp_ai_cmd_retaliate
 	AT.typefilter = /mob/living/carbon/human
-	register_event(/event/comp_ai_cmd_retaliate, src, src::Retaliate())
+	register_event(/event/comp_ai_cmd_retaliate, src, nameof(src::Retaliate()))
 	add_component(/datum/component/ai/conversation)
 	var/datum/component/ai/area_territorial/say/fastfood/intruder/AT2 = add_component(/datum/component/ai/area_territorial/say/fastfood/intruder)
 	AT2.SetArea(locate(/area/vault/fastfood/kitchen))
 
 /mob/living/simple_animal/hostile/retaliate/cookbot/Destroy()
-	unregister_event(/event/comp_ai_cmd_retaliate, src, src::Retaliate())
+	unregister_event(/event/comp_ai_cmd_retaliate, src, nameof(src::Retaliate()))
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/cookbot/death(var/gibbed = FALSE)

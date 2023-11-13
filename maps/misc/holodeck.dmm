@@ -1899,9 +1899,7 @@
 /area/holodeck/source_thunderdomecourt)
 "fC" = (
 /obj/structure/table/holotable,
-/obj/machinery/readybutton{
-	pixel_y = 0
-	},
+/obj/machinery/readybutton,
 /turf/simulated/floor/holofloor{
 	dir = 1;
 	icon_state = "red"
@@ -2210,9 +2208,7 @@
 	},
 /area/holodeck/source_wildride)
 "gB" = (
-/obj/machinery/conveyor/auto{
-	dir = 2
-	},
+/obj/machinery/conveyor/auto,
 /turf/simulated/floor/holofloor{
 	icon_state = "engine";
 	name = "Holodeck Projector Floor"
@@ -3357,9 +3353,7 @@
 /area/holodeck/source_thunderdomecourt)
 "jN" = (
 /obj/structure/table/holotable,
-/obj/machinery/readybutton{
-	pixel_y = 0
-	},
+/obj/machinery/readybutton,
 /turf/simulated/floor/holofloor{
 	icon_state = "green"
 	},

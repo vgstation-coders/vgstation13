@@ -251,6 +251,7 @@
 	icon_state = "sith"
 	item_state = "sith"
 	species_fit = list(INSECT_SHAPED)
+	body_parts_covered = HIDEHAIR|HIDEBEARDHAIR
 	wizard_garb = 1 //Allows lightning to be used
 
 //stylish bs12 hats
@@ -655,6 +656,7 @@
 	species_fit = list(INSECT_SHAPED)
 	desc = "A hood worn by the followers of Ratvar."
 	flags = FPRINT
+	body_parts_covered = HIDEHAIR
 
 /obj/item/clothing/head/franken_bolt
 	name = "neck bolts"
@@ -679,6 +681,13 @@
 	item_state = "devil_horns"
 	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
+
+/obj/item/clothing/head/bedsheet_ghost
+	name = "Bedsheet Ghost"
+	desc = "You did cut out eye holes, but you don't remember drawing a face. Spooooky"
+	icon_state = "bedsheet_ghost"
+	body_parts_covered = FACE|FULL_HEAD|HIDEHAIR
+	wear_override = new/icon("icon" = 'icons/misc/empty.dmi', "icon_state" = "empty_icon")
 
 /obj/item/clothing/head/elfhat
 	name = "elf hat"
@@ -768,6 +777,26 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
 /obj/item/clothing/head/bteamcaptain/unequipped(mob/user)
     user.overlays -= unusual_overlay
     return ..()
+
+/obj/item/clothing/head/kippah
+	name = "kippah"
+	desc = "A brimless hat made of cloth, worn by men within Orthdox Jewish communities as part of religious custom."
+	flags = FPRINT
+	icon_state = "kippah_black"
+
+/obj/item/clothing/head/kippah/kippah_random
+
+/obj/item/clothing/head/kippah/kippah_random/New()
+	icon_state = "kippah_[pick("blue","white","goldblack","black","yellow")]"
+
+/obj/item/clothing/head/kippah/kippah_blue
+	icon_state = "kippah_blue"
+/obj/item/clothing/head/kippah/kippah_white
+	icon_state = "kippah_white"
+/obj/item/clothing/head/kippah/kippah_goldblack
+	icon_state = "kippah_goldblack"
+/obj/item/clothing/head/kippah/kippah_yellow
+	icon_state = "kippah_yellow"
 
 // American "football"
 

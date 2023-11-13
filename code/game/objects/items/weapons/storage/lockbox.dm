@@ -470,6 +470,7 @@
 	health = 200
 	storage_slots = 1
 	fits_max_w_class = W_CLASS_LARGE
+	req_one_access = null
 
 /obj/item/weapon/storage/lockbox/advanced/ex_act()
 	react()

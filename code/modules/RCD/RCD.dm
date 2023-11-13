@@ -18,6 +18,9 @@
 	melt_temperature    = MELTPOINT_STEEL // Lots of metal
 	origin_tech         = Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=2"
 
+	var/frequency = 0
+	var/id = null
+
 	//list of schematics, in definitions of RCD subtypes, no organization is needed, in New() these get organized.
 	var/list/schematics = list(/datum/rcd_schematic/test)
 	// Make sparks. LOTS OF SPARKS.
@@ -240,6 +243,8 @@
 	if (sparky && next_spark < world.time)
 		spark(src, 5, FALSE)
 		next_spark = world.time + 0.5 SECONDS
+	else
+		playsound(src, 'sound/machines/click.ogg', 20, 1)
 
 /obj/item/device/rcd/proc/get_energy(var/mob/user)
 	return INFINITY

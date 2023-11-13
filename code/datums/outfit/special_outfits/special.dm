@@ -117,7 +117,7 @@
 			slot_head_str = /obj/item/clothing/head/helmet/dredd,
 			slot_wear_mask_str = /obj/item/clothing/mask/gas/swat,
 			slot_belt_str = /obj/item/weapon/storage/belt/security,
-			slot_wear_suit_str = /obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+			slot_wear_suit_str = /obj/item/clothing/suit/armor/dredd,
 			slot_s_store_str = /obj/item/weapon/gun/lawgiver,
 		),
 	)
@@ -354,7 +354,6 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/clown,
 			slot_shoes_str = /obj/item/clothing/shoes/clown_shoes,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_head_str = /obj/item/clothing/head/chaplain_hood,
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
 			slot_wear_suit_str = /obj/item/clothing/suit/chaplain_hoodie,

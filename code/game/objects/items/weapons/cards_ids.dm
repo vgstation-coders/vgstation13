@@ -351,7 +351,13 @@ var/list/global/id_cards = list()
 		"A. N. Other",
 		"Guy Incognito",
 		"Hugh Zasking",
-		"Ivan Gottasecret"
+		"Ivan Gottasecret",
+		"Stan Batton",
+		"Zeke Ureety",
+		"Urist Macdonald",
+		"Nathan Aufweisser",
+		"Dee Tekteev",
+		"Scheitt Couritty",
 	)
 
 /obj/item/weapon/card/id/nt_disguise/attack_self(mob/user)
@@ -831,6 +837,7 @@ var/list/global/id_cards = list()
 	assignment = "Nanotrasen Navy Representative"
 	icon_state = "centcom"
 	item_state = "id_inv"
+	rank = "Nanotrasen"
 
 /obj/item/weapon/card/id/nt_rep/New()
 	..()
@@ -840,6 +847,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/centcom/nt_officer
 	name = "Nanotrasen Navy Officer ID card"
 	assignment = "Nanotrasen Navy Officer"
+	rank = "Nanotrasen"
 
 /obj/item/weapon/card/id/centcom/nt_officer/New()
 	..()
@@ -849,6 +857,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/centcom/nt_captain
 	name = "Nanotrasen Navy Captain ID card"
 	assignment = "Nanotrasen Navy Captain"
+	rank = "Nanotrasen"
 
 /obj/item/weapon/card/id/centcom/nt_captain/New()
 	..()
@@ -858,6 +867,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/centcom/nt_supreme
 	name = "Nanotrasen Supreme Commander ID card"
 	assignment = "Nanotrasen Supreme Commander"
+	rank = "Nanotrasen"
 
 /obj/item/weapon/card/id/centcom/nt_supreme/New()
 	..()
@@ -867,6 +877,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/emergency_responder
 	name = "Emergency Responder ID card"
 	assignment = "Emergency Responder"
+	rank = "Nanotrasen"
 	icon_state = "ERT_empty"
 
 /obj/item/weapon/card/id/emergency_responder/New()
@@ -876,6 +887,7 @@ var/list/global/id_cards = list()
 /obj/item/weapon/card/id/emergency_responder_leader
 	name = "Emergency Responder Leader ID card"
 	assignment = "Emergency Responder Leader"
+	rank = "Nanotrasen"
 	icon_state = "ERT_leader"
 
 /obj/item/weapon/card/id/emergency_responder_leader/New()

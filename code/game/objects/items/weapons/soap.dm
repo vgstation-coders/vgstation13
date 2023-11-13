@@ -94,6 +94,12 @@
 			if(CC.on_wall == target)
 				cleanables += CC
 
+		if (T.advanced_graffiti)
+			T.overlays -= T.advanced_graffiti_overlay
+			T.advanced_graffiti_overlay = null
+			qdel(T.advanced_graffiti)
+			cleanables += "advanced graffiti"
+
 		if(!cleanables.len)
 			user.simple_message("<span class='notice'>You fail to clean anything.</span>",
 				"<span class='notice'>There is nothing for you to vandalize.</span>")

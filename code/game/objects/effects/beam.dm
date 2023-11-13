@@ -226,9 +226,9 @@
 	BM.target=AM
 	BM.update_end_icon()
 	if(istype(AM))
-		AM.register_event(/event/moved, BM, src::target_moved())
-		AM.register_event(/event/destroyed, BM, src::target_destroyed())
-	AM.register_event(/event/density_change, BM, src::target_density_change())
+		AM.register_event(/event/moved, BM, nameof(src::target_moved()))
+		AM.register_event(/event/destroyed, BM, nameof(src::target_destroyed()))
+	AM.register_event(/event/density_change, BM, nameof(src::target_density_change()))
 	BM.targetContactLoc = AM.loc
 	beam_testing("\ref[BM] - Connected to [AM]")
 	AM.beam_connect(BM)
@@ -269,8 +269,8 @@
 	var/obj/effect/beam/_master=get_master()
 	if(_master.target)
 		if(ismovable(_master.target))
-			_master.target.unregister_event(/event/moved, _master, src::target_moved())
-			_master.target.unregister_event(/event/destroyed, src, src::target_destroyed())
+			_master.target.unregister_event(/event/moved, _master, nameof(src::target_moved()))
+			_master.target.unregister_event(/event/destroyed, src, nameof(src::target_destroyed()))
 		_master.target.beam_disconnect(_master)
 		_master.target=null
 		//if(_master.next)
@@ -382,7 +382,7 @@
 
 	var/turf/T = get_turf(src)
 	if(T)
-		T.register_event(/event/density_change, src, src::turf_density_change())
+		T.register_event(/event/density_change, src, nameof(src::turf_density_change()))
 
 	next = spawn_child()
 	if(next)
@@ -428,11 +428,11 @@
 /obj/effect/beam/Destroy()
 	var/turf/T = get_turf(src)
 	if(T)
-		T.unregister_event(/event/density_change, src, src::turf_density_change())
+		T.unregister_event(/event/density_change, src, nameof(src::turf_density_change()))
 	var/obj/effect/beam/ourselves = src
 	var/obj/effect/beam/ourmaster = get_master()
 	if(target)
-		target.unregister_event(/event/density_change, src, src::target_density_change())
+		target.unregister_event(/event/density_change, src, nameof(src::target_density_change()))
 		if(target.beams)
 			target.beams -= ourselves
 	for(var/obj/machinery/mirror/M in mirror_list)

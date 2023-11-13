@@ -39,13 +39,13 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 		return 0
 	if(ismob(target) && mind_affecting)
 		var/mob/M = target
-		if (!can_mind_interact(M.mind))
+		if (!user.can_mind_interact(M.mind))
 			return 0
 	return !compatible_mobs.len || is_type_in_list(target, compatible_mobs)
 
 /spell/targeted/choose_targets(mob/user = usr)
-	if(mind_affecting && !can_mind_interact(user.mind))
-		to_chat(user, "<span class='warning'>Interference is disrupting the connection with the target.</span>")
+	if(mind_affecting && tinfoil_check(user))
+		to_chat(user, "<span class='warning'>Something is interfering with your ability to target minds.</span>")
 		return
 	var/list/targets = list()
 	if(max_targets == 0) //unlimited
@@ -96,7 +96,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 					continue
 				if(mind_affecting)
 					if(iscarbon(user))
-						if(!M.mind || !can_mind_interact(M.mind))
+						if(!M.mind || !user.can_mind_interact(M.mind))
 							continue
 				possible_targets += M
 
@@ -185,3 +185,12 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	target.confused += amt_confused
 	target.confused_intensity = CONFUSED_MAGIC
 	target.stuttering += amt_stuttering
+
+/spell/targeted/proc/tinfoil_check(mob/living/carbon/human/user)
+	if(!istype(user))
+		return 0
+
+	if(user.is_wearing_any(list(/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
+		return 1
+
+	return 0

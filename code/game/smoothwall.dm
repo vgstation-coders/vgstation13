@@ -150,8 +150,8 @@
 
 var/list/smoothable_unsims = list(
 	"riveted",
-	"r_wall",
-	"rock_rf0",
+	"alloy",
+	"rock_rf",
 	)
 
 /turf/unsimulated/wall/initialize()
