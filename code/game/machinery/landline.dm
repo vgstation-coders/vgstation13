@@ -37,7 +37,7 @@
 		while(destination && destination.calling == src && destination.ringing)
 			if(phone)
 				//TODO destination add message("missed call from [src]")
-				//TODO source add phonelog ("you hung up")
+				last_call_log += text("<B>you hung up.<BR>")
 				return
 			destination.ring()
 			sleep(5 SECONDS)
@@ -61,12 +61,16 @@
 	if(!phone)
 		to_chat(user, "\the [src] has no telephone!")
 		return
-	ringing = FALSE
-	//TODO add phonelog "picked up"
+	
 	user.put_in_hands(src.phone)
 	playsound(source=src, soundin= phone.pickup_sound, vol=100, vary=TRUE, channel=CHANNEL_TELEPHONES, wait=0)
 	phone = null //do not delete phone
 	attached_to.overlays.Remove(phone_overlay)
+	if(ringing && calling)
+		last_call_log = text("<B>Last call log:</B><BR><BR>")
+		last_call_log += text("picked up call from [calling.attached_to]<BR>")
+		calling.last_call_log += text("[attached_to] picked up call<BR>")
+	ringing = FALSE
 
 /obj/landline/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
 	if(!istype(O, /obj/item/telephone))
@@ -78,7 +82,8 @@
 		to_chat(user, "<span class='warning'>It's stuck to your hand!</span>")
 		return
 	if(calling)
-		//TODO add phonelog ("call end")
+		last_call_log += text("you hung up<BR>")
+		calling.last_call_log += text("[attached_to] hung up<BR>")
 		calling.calling = null
 		calling = null
 	
@@ -128,6 +133,7 @@
 	
 	
 /obj/item/telephone/Hear(var/datum/speech/speech, var/rendered_speech="")
+	//TODO make it not loop infinitely if you call 2 phones and put them next to each other
 	if(get_dist(src, speech.speaker) > mic_range)
 		return
 	if(!linked_landline)
@@ -138,6 +144,9 @@
 		return
 	if(!linked_landline.calling.linked_phone)
 		return
+	var/msg = text("<B>[speech.name]: [speech.message]<BR>")
+	linked_landline.last_call_log += msg
+	linked_landline.calling.last_call_log += msg
 	lastmsg = speech
 	speech.name += "(Telephone)"
 	var/obj/item/telephone/speaker = linked_landline.calling.linked_phone
