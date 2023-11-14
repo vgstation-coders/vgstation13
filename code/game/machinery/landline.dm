@@ -8,18 +8,22 @@
 	var/obj/landline/calling = null	//landline we are in a call with
 	var/last_call_log
 	var/obj/attached_to
-	var/ringtone = 'sound/items/telephone_ring.ogg'
+	var/phone_type = "/obj/item/telephone"
+	var/overlay_icon = 'icons/obj/terminals.dmi'
+	var/overlay_iconstate = "phone_overlay"
 
 /obj/landline/New(var/obj/A)
 	attached_to = A
-	linked_phone = new /obj/item/telephone (src)
+	linked_phone = new phone_type (src)
 	linked_phone.linked_landline = src
 	phone = linked_phone
 	
-	phone_overlay = image(icon = 'icons/obj/terminals.dmi', icon_state = "phone_overlay")
+	phone_overlay = image(icon = overlay_icon, icon_state = overlay_iconstate)
 	attached_to.overlays.Add(phone_overlay) //TODO make this less shit
 	
 /obj/landline/proc/start_call(var/obj/landline/destination)
+	if(!destination)
+		return "critical error"
 	if(calling)
 		return "you are already calling [calling]"
 	if(destination.calling || !destination.phone)
@@ -44,7 +48,7 @@
 	if(!attached_to)
 		return
 	if(ringer)
-		playsound(source=attached_to.loc, soundin=ringtone, vol=100, vary=FALSE, channel=CHANNEL_TELEPHONES)
+		playsound(source=attached_to.loc, soundin=linked_phone.ringtone, vol=100, vary=FALSE, channel=CHANNEL_TELEPHONES)
 	//TODO shake phone overlay
 
 /obj/landline/proc/pick_up_phone(mob/user)
@@ -78,15 +82,16 @@
 		calling.calling = null
 		calling = null
 	
-	user.visible_message("<span class='notice'>[user] puts \the [O] onto \the [src].</span>")
+	user.visible_message("<span class='notice'>[user] puts \the [O] onto \the [src.attached_to].</span>")
 	var/obj/item/telephone/P = O
 	playsound(source=O, soundin=P.pickup_sound, vol=100, vary=TRUE, channel=0)
 	phone = O
 	O.forceMove(src)
 	attached_to.overlays.Add(phone_overlay)
 	
-	
-	
+/obj/landline/red
+	overlay_icon = 'icons/obj/items.dmi'
+	overlay_iconstate = "red_phone_handset"
 	
 	
 	
@@ -100,6 +105,27 @@
 	var/obj/landline/linked_landline = null
 	var/datum/speech/lastmsg
 	var/pickup_sound = 'sound/items/telephone_pickup.ogg'
+	var/ringtone = 'sound/items/telephone_ring.ogg'
+	var/clowned = FALSE
+	
+/obj/item/telephone/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
+	if(istype(O,/obj/item/toy/crayon/rainbow) && clowned == FALSE)
+		to_chat(user, "<span class = 'notice'>You begin modifying \the [src].</span>")
+		if(do_after(user, src, 4 SECONDS))
+			to_chat(user, "<span class = 'notice'>You finish modifying \the [src]!</span>")
+			honkify()
+			clowned = TRUE
+			
+/obj/item/telephone/proc/honkify()
+	name = "Bananaphone"
+	icon = 'icons/obj/hydroponics/banana.dmi'
+	icon_state = "produce"
+	pickup_sound = 'sound/items/bikehorn.ogg'
+	ringtone = 'sound/items/bananaphone_ring.wav'
+	if(linked_landline)
+		linked_landline.phone_overlay = image(icon = linked_landline.overlay_icon, icon_state = "phone_overlay_banana")
+	update_icon()
+	
 	
 /obj/item/telephone/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(get_dist(src, speech.speaker) > mic_range)
