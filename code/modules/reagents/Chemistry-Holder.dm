@@ -21,6 +21,7 @@ var/const/INGEST = 2
 	var/obscured = FALSE
 	var/total_thermal_mass = 0
 	var/skip_flags = 0 //Flags for skipping certain calculations where unnecessary. See __DEFINES/reagents.dm.
+
 /datum/reagents/New(maximum=100)
 	maximum_volume = maximum
 
@@ -42,13 +43,14 @@ var/const/INGEST = 2
 		// chemical_reaction_list[PLASMA] is a list of all reactions relating to plasma
 
 		chemical_reactions_list = list()
-		
+
 		//variables that we want to reuse
-		var/list/reaction_ids = list()		
+		var/list/reaction_ids = list()
 		var/smallest_number_of_reactants = INFINITY
 		var/smallest_reactants_list_index = 1
 		var/list/reactant_list
 		var/datum/chemical_reaction/D
+		var/i
 
 		for(var/path in typesof(/datum/chemical_reaction) - /datum/chemical_reaction)
 
@@ -56,13 +58,13 @@ var/const/INGEST = 2
 			reaction_ids.len = 0
 
 			if(D.required_reagents && D.required_reagents.len)
-				
+
 				//to minimize the size of the reactions lists, we ideally want each reaction that requires an individual (non-list) reagent to have that as the "key" reagent of the reaction
 				//if a reaction only requires lists of reagents, then we want to pick the smallest list
 				smallest_number_of_reactants = INFINITY
 				smallest_reactants_list_index = 1
-				
-				var/i = 0
+
+				i = 0
 				for(var/reactant in D.required_reagents)
 					i++
 					if(islist(reactant))
@@ -74,9 +76,9 @@ var/const/INGEST = 2
 						else
 							smallest_reactants_list_index = i
 							smallest_number_of_reactants = reactant_list.len
-							
 					else
 						smallest_number_of_reactants = 1
+						reaction_ids.len = 0
 						reaction_ids += reactant
 						break
 
