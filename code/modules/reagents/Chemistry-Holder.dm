@@ -43,20 +43,49 @@ var/const/INGEST = 2
 		// chemical_reaction_list[PLASMA] is a list of all reactions relating to plasma
 
 		chemical_reactions_list = list()
+		var/list/reaction_ids = list()
 
-		for (var/path in typesof(/datum/chemical_reaction) - /datum/chemical_reaction)
 
-			var/datum/chemical_reaction/D = new path()
-			var/list/reaction_ids = list()
+		//variables that we want to reuse
+		var/smallest_number_of_reactants = INFINITY
+		var/smallest_reactants_list_index = 1
+		var/list/reactant_list
+		var/datum/chemical_reaction/D
+
+
+		for(var/path in typesof(/datum/chemical_reaction) - /datum/chemical_reaction)
+
+			D = new path()
+			reaction_ids.len = 0
 
 			if(D.required_reagents && D.required_reagents.len)
-				var/reaction = D.required_reagents[1]
-				if(islist(reaction))
-					var/list/L = reaction
-					for(var/content in L)
-						reaction_ids += content
-				else
-					reaction_ids += reaction
+
+				//to minimize the size of the reactions lists, we ideally want each reaction that requires an individual (non-list) reagent to have that as the "key" reagent of the reaction
+				//if a reaction only requires lists of reagents, then we want to pick the smallest list
+				smallest_number_of_reactants = INFINITY
+				smallest_reactants_list_index = 1
+
+				var/i = 0
+				for(var/reactant in D.required_reagents)
+					i++
+					if(islist(reactant))
+						reactant_list = reactant
+						if(smallest_reactants_list_index)
+							if(reactant_list.len < smallest_number_of_reactants)
+								smallest_reactants_list_index = i
+								smallest_number_of_reactants = reactant_list.len
+						else
+							smallest_reactants_list_index = i
+							smallest_number_of_reactants = reactant_list.len
+
+					else
+						smallest_number_of_reactants = 1
+						reaction_ids += reactant
+						break
+
+				if(smallest_number_of_reactants > 1)
+					for(var/reactant in D.required_reagents[smallest_reactants_list_index])
+						reaction_ids += reactant
 
 			// Create filters based on each reagent id in the required reagents list
 			for(var/id in reaction_ids)
@@ -65,7 +94,8 @@ var/const/INGEST = 2
 				chemical_reactions_list[id] += D
 				//previously we broke here, which meant that we were only testing the first reagent - even if the first reagent was a list
 				//now we no longer break because we didn't add all the reagents to reaction_ids - we want to add the reaction to everything in
-				//reaction_ids, which will be over everything in the first reagent in the table
+				//reaction_ids, which will be everything in the key reagent(s) in the table
+
 
 
 /datum/reagents/proc/remove_any(var/amount=1)
