@@ -59,7 +59,7 @@ var/const/INGEST = 2
 
 			if(D.required_reagents && D.required_reagents.len)
 
-				//to minimize the size of the reactions lists, we ideally want each reaction that requires an individual (non-list) reagent to have that as the "key" reagent of the reaction
+				//to minimize the size of the reactions lists, we ideally want each reaction that requires an individual (non-list) reactant to have that as the "key" reactant of the reaction
 				//if a reaction only requires lists of reagents, then we want to pick the smallest list
 				smallest_number_of_reactants = INFINITY
 				smallest_reactants_list_index = 1
@@ -89,7 +89,7 @@ var/const/INGEST = 2
 				chemical_reactions_list[id] += D
 				//previously we broke here, which meant that we were only testing the first reagent - even if the first reagent was a list
 				//now we no longer break because we didn't add all the reagents to reaction_ids - we want to add the reaction to everything in
-				//reaction_ids, which will be everything in the key reagent(s) in the table
+				//reaction_ids, which will be everything in the key reactants(s) in the table
 
 /datum/reagents/proc/remove_any(var/amount=1)
 	var/total_transfered = 0
