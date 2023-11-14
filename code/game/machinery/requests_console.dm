@@ -304,7 +304,8 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 				dat += text("<A href='?src=\ref[src];setScreen=2'>Request Supplies</A><BR>")
 				dat += text("<A href='?src=\ref[src];setScreen=3'>Relay Anonymous Information</A><BR><BR>")
 				
-				dat += text("<A href='?src=\ref[src];setScreen=4'>Make a call</A><BR><BR>")
+				dat += text("<A href='?src=\ref[src];setScreen=4'>Make a call</A><BR>")
+				dat += text("<A href='?src=\ref[src];setScreen=12'>Last call log</A><BR><BR>")
 				if(announcementConsole)
 					dat += text("<A href='?src=\ref[src];setScreen=10'>Send station-wide announcement</A><BR><BR>")
 				
@@ -596,8 +597,6 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 		to_chat(user, "<span class='notice'>You are too far away!</span>")
 		return
 	src.pick_up_phone(user)
-	
-
 	
 /obj/machinery/requests_console/mechanic
 	name = "\improper Mechanics requests console"
