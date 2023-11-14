@@ -390,8 +390,10 @@
 //This is the proc you want to use to FORCE a shuttle to move. It always moves it, unless the shuttle or its area don't exist. Transit is skipped, after_flight() is called
 /datum/shuttle/proc/move_to_dock(var/obj/docking_port/D, var/ignore_innacuracy = 0, var/rotate_after = 0) //A direct proc with no bullshit
 	if(!D)
+		message_admins("W3C")
 		return
 	if(!linked_port)
+		message_admins("W2C")
 		return
 
 	//List of all shuttles docked to this shuttle. They will be moved together with their parent.
@@ -465,7 +467,7 @@
 		after_flight() //Shake the shuttle, weaken unbuckled mobs, etc.
 
 		return 1
-
+	message_admins("W4C")
 	return
 
 /datum/shuttle/proc/close_all_doors()
