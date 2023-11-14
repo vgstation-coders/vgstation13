@@ -69,11 +69,7 @@ var/const/INGEST = 2
 					i++
 					if(islist(reactant))
 						reactant_list = reactant
-						if(smallest_reactants_list_index)
-							if(reactant_list.len < smallest_number_of_reactants)
-								smallest_reactants_list_index = i
-								smallest_number_of_reactants = reactant_list.len
-						else
+						if(reactant_list.len < smallest_number_of_reactants)
 							smallest_reactants_list_index = i
 							smallest_number_of_reactants = reactant_list.len
 					else
