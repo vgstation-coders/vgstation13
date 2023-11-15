@@ -83,3 +83,15 @@ The database is automatically installed during server startup, but you need to e
 ### IRC Bot Setup
 
 Included in the repo is an IRC bot capable of relaying adminhelps to a specified IRC channel/server (replaces the older one by Skibiliano).  Instructions for bot setup are included in the /bot/ folder along with the bot/relay script itself.
+
+---
+
+### LICENSE
+
+All code is licensed under the [GNU GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.html) unless specified otherwise.
+
+TGUI is licensed under the MIT license.
+
+Goonchat is licensed under [CC BY-NC-SA 3.0](http://creativecommons.org/licenses/by-nc-sa/3.0/us/).
+
+Assets, including icons and sounds, are licensed under [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/us/) unless specified otherwise.
