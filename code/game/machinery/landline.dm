@@ -1,3 +1,9 @@
+/obj/phone_cord
+	name = "telephone cord"
+	icon = 'icons/obj/chain.dmi'
+	icon_state = "phone_cord"
+	anchored = TRUE
+
 /obj/landline
 	var/obj/item/telephone/linked_phone = null
 	var/obj/item/telephone/phone = null
@@ -11,6 +17,8 @@
 	var/phone_type = "/obj/item/telephone"
 	var/overlay_icon = 'icons/obj/terminals.dmi'
 	var/overlay_iconstate = "phone_overlay"
+	var/tether_length = 4
+	var/list/obj/phone_cord/linked_cord = list()
 
 /obj/landline/New(var/obj/A)
 	attached_to = A
@@ -20,7 +28,35 @@
 	
 	phone_overlay = image(icon = overlay_icon, icon_state = overlay_iconstate)
 	attached_to.overlays.Add(phone_overlay) //TODO make this less shit
-	
+
+/obj/landline/proc/delete_cord()
+	for(var/obj/C in linked_cord)
+		qdel(C)
+	linked_cord = list()
+
+/obj/landline/proc/make_cord()
+	if(!linked_phone)
+		return
+	if(get_dist(src, linked_phone) > tether_length)
+		//TODO cut the cord
+		message_admins("cord too long, halting")
+		return
+	var/obj/cable1
+	var/obj/cable2
+	var/turf/T = attached_to.loc
+	cable1 = new /obj/phone_cord (T) //TODO turn depending on console pixel_x and pixel_y
+	linked_cord += cable1
+	var/list/getstepto = get_steps_to(src.attached_to, linked_phone.loc)
+	for(var/D in getstepto)
+		cable2 = new /obj/phone_cord (T)
+		cable2.dir = D
+		T = get_step(T,D)
+		cable1 = new /obj/phone_cord (T)
+		cable1.dir = turn(D,180)
+		linked_cord += cable1
+		linked_cord += cable2
+		
+
 /obj/landline/proc/start_call(var/obj/landline/destination)
 	if(!destination)
 		return "critical error"
@@ -131,6 +167,12 @@
 		linked_landline.phone_overlay = image(icon = linked_landline.overlay_icon, icon_state = "phone_overlay_banana")
 	update_icon()
 	
+/obj/item/telephone/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	..()
+	if(!linked_landline)
+		return
+	linked_landline.delete_cord()
+	linked_landline.make_cord()
 	
 /obj/item/telephone/Hear(var/datum/speech/speech, var/rendered_speech="")
 	//TODO make it not loop infinitely if you call 2 phones and put them next to each other
@@ -144,7 +186,7 @@
 		return
 	if(!linked_landline.calling.linked_phone)
 		return
-	var/msg = text("<B>[speech.name]: [speech.message]<BR>")
+	var/msg = text("[speech.name]: [speech.message]<BR>")
 	linked_landline.last_call_log += msg
 	linked_landline.calling.last_call_log += msg
 	lastmsg = speech
