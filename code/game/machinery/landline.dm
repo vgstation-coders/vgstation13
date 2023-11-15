@@ -167,6 +167,20 @@
 		linked_landline.phone_overlay = image(icon = linked_landline.overlay_icon, icon_state = "phone_overlay_banana")
 	update_icon()
 	
+/obj/item/telephone/proc/make_cord()
+	if(!linked_landline)
+		return
+	linked_landline.delete_cord()
+	linked_landline.make_cord()
+	
+/obj/item/telephone/pickup(var/mob/user)
+	..()
+	user.register_event(/event/after_move, src, /obj/item/telephone/proc/make_cord)	
+	
+/obj/item/telephone/dropped(var/mob/user)
+	..()
+	user.unregister_event(/event/after_move, src, /obj/item/telephone/proc/make_cord)	
+
 /obj/item/telephone/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(!linked_landline)
