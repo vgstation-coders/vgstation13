@@ -161,7 +161,7 @@
 	name = "Bananaphone"
 	icon = 'icons/obj/hydroponics/banana.dmi'
 	icon_state = "produce"
-	pickup_sound = 'sound/items/bikehorn.ogg'
+	pickup_sound = 'sound/items/bananaphone_pickup.wav'
 	ringtone = 'sound/items/bananaphone_ring.wav'
 	if(linked_landline)
 		linked_landline.phone_overlay = image(icon = linked_landline.overlay_icon, icon_state = "phone_overlay_banana")
@@ -175,10 +175,12 @@
 	
 /obj/item/telephone/pickup(var/mob/user)
 	..()
+	make_cord()
 	user.register_event(/event/after_move, src, /obj/item/telephone/proc/make_cord)	
 	
 /obj/item/telephone/dropped(var/mob/user)
 	..()
+	make_cord()
 	user.unregister_event(/event/after_move, src, /obj/item/telephone/proc/make_cord)	
 
 /obj/item/telephone/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
