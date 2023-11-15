@@ -117,6 +117,7 @@
 	if(!user.drop_item(O))
 		to_chat(user, "<span class='warning'>It's stuck to your hand!</span>")
 		return
+	delete_cord()
 	if(calling)
 		last_call_log += text("you hung up<BR>")
 		calling.last_call_log += text("[attached_to] hung up<BR>")
@@ -140,6 +141,8 @@
 	name = "telephone"
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "phone"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	item_state = "rpb_phone"	
 	flags = HEAR | FPRINT
 	var/mic_range = 3
 	var/speaker_range = 3
@@ -161,7 +164,7 @@
 	name = "Bananaphone"
 	icon = 'icons/obj/hydroponics/banana.dmi'
 	icon_state = "produce"
-	pickup_sound = 'sound/items/bananaphone_pickup.wav'
+	pickup_sound = 'sound/items/bananaphone pickup.wav'
 	ringtone = 'sound/items/bananaphone_ring.wav'
 	if(linked_landline)
 		linked_landline.phone_overlay = image(icon = linked_landline.overlay_icon, icon_state = "phone_overlay_banana")
