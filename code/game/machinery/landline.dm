@@ -1,6 +1,6 @@
 /obj/phone_cord
 	name = "telephone cord"
-	icon = 'icons/obj/chain.dmi'
+	icon = 'icons/obj/terminals.dmi'
 	icon_state = "phone_cord"
 	anchored = TRUE
 
