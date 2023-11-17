@@ -75,7 +75,7 @@
 	icon = 'icons/effects/water.dmi'
 	icon_state = "wet_floor"
 	anchored = 1
-	plane = OBJ_PLANE
+	plane = ABOVE_TURF_PLANE
 	var/wet = TURF_WET_LUBE
 	var/lifespan
 	mouse_opacity = 0

@@ -30,6 +30,7 @@
 	if(!connected_port) //only react when pipe_network will not it do it for you
 		//Allow for reactions
 		air_contents.react()
+		air_contents.reaction_tick()
 	else
 		update_icon()
 

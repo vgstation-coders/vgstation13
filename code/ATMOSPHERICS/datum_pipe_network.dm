@@ -122,6 +122,7 @@
 		//Allow air mixture to react
 		if(air_transient.react())
 			update = 1
+		air_transient.reaction_tick()
 
 		air_transient.update_values()
 		for(var/datum/gas_mixture/gas in gases)

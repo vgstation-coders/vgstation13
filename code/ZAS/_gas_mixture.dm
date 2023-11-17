@@ -45,8 +45,6 @@
 	if(!moles)
 		return
 
-	if(!src[gasid])
-		src[gasid] = 0
 	src[gasid] += moles
 
 	if(update)
@@ -533,8 +531,8 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 
 /datum/gas_mixture/proc/cache_reactions()
 	if(allow_reactions)
+		possible_reactions = list()
 		for(var/datum/gas_reaction/reaction in XGM.reactions)
-			possible_reactions = list()
 			if(reaction.reaction_is_possible(src))
 				possible_reactions += reaction
 

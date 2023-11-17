@@ -76,10 +76,11 @@
 #define PLASMA_OXYGEN_FULLBURN				10
 
 // XGM gas flags.
-#define XGM_GAS_FUEL        1
-#define XGM_GAS_OXIDIZER    2
-#define XGM_GAS_CONTAMINANT 4
-#define XGM_GAS_LOGGED      8
+// Whether this gas is "relevant", used for various things like whether to display it on an air alarm v.s. lump it in with "other gases".
+#define XGM_GAS_NOTEWORTHY	1
+// Some events will only be logged with this flag, i.e. opening a canister is only logged if it contains a logged gas.
+#define XGM_GAS_LOGGED      2
+
 
 #define TANK_LEAK_PRESSURE		(30.*ONE_ATMOSPHERE)	// Tank starts leaking
 #define TANK_RUPTURE_PRESSURE	(40.*ONE_ATMOSPHERE) // Tank spills all contents into atmosphere
