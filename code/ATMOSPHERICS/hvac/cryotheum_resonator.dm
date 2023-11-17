@@ -74,53 +74,44 @@
 		else
 			// Emagging it makes it run faster, but has a small chance to cause problems.
 			if(emagged && prob(0.1))
-				if(prob(75))
-					// Try a max of 5 times to find a good turf to spawn portals on.
-					var/turf/A_location
-					var/turf/B_location
-					for(var/i = 1 to 5)
-						var/x_offset = rand(-1, 1)
-						var/y_offset = rand(-1, 1)
-						if(x_offset == 0 && y_offset == 0)
-							x_offset = 1
-						A_location = locate(loc.x+x_offset, loc.y+y_offset, loc.z)
-						if(istype(A_location, /turf) || !istype(A_location, /turf/simulated/wall))
-							break
-						else if(i == 5)
-							return
-					for(var/i = 1 to 5)
-						var/x_offset = rand(-8,8)
-						var/y_offset = rand(-8,8)
-						if(x_offset == 0 && y_offset == 0)
-							x_offset = 1
-						B_location = locate(loc.x+x_offset, loc.y+y_offset, loc.z)
-						if(istype(B_location, /turf) || !istype(B_location, /turf/simulated/wall))
-							break
-						else if(i == 5)
-							return
-					var/obj/effect/portal/portal_A = new(A_location, 600) // One minute duration.
-					var/obj/effect/portal/portal_B = new(B_location, 600)
-					portal_A.target = portal_B
-					portal_B.target = portal_A
-					portal_A.blend_icon(portal_B)
-					portal_B.blend_icon(portal_A)
-					portal_A.purge_beams()
-					portal_B.purge_beams()
-					portal_A.add_beams()
-					portal_B.add_beams()
-					portal_B.connect_atmospheres()
-					return
-				else
-					var/x_offset = rand(-4, 4)
-					var/y_offset = rand(-4, 4)
+				// Try a max of 5 times to find a good turf to spawn portals on.
+				var/turf/A_location
+				var/turf/B_location
+				for(var/i = 1 to 5)
+					var/x_offset = rand(-1, 1)
+					var/y_offset = rand(-1, 1)
 					if(x_offset == 0 && y_offset == 0)
 						x_offset = 1
-					var/turf/supermatter_location = locate(loc.x+x_offset, loc.y+y_offset, loc.z)
-					var/turf/unsimulated/wall/supermatter/no_spread/new_sea = new(supermatter_location)
-					playsound(supermatter_location, 'sound/hallucinations/scary.ogg', 60, 0)
-					shake_animation(5, 5, 0.1, 15)
-					visible_message("<span class='danger'>\The [new_sea] pops into reality!")
-
+					A_location = locate(loc.x+x_offset, loc.y+y_offset, loc.z)
+					if(istype(A_location, /turf) || !istype(A_location, /turf/simulated/wall))
+						break
+					else if(i == 5)
+						return
+				for(var/i = 1 to 5)
+					var/x_offset = rand(-8,8)
+					var/y_offset = rand(-8,8)
+					if(x_offset == 0 && y_offset == 0)
+						x_offset = 1
+					B_location = locate(loc.x+x_offset, loc.y+y_offset, loc.z)
+					if(istype(B_location, /turf) || !istype(B_location, /turf/simulated/wall))
+						break
+					else if(i == 5)
+						return
+				playsound(loc, 'sound/hallucinations/scary.ogg', 60, 0)
+				shake_animation(5, 5, 0.1, 15)
+				visible_message("<span class='danger'>\The [src] begins to shake and warp reality!")
+				var/obj/effect/portal/portal_A = new(A_location, 600) // One minute duration.
+				var/obj/effect/portal/portal_B = new(B_location, 600)
+				portal_A.target = portal_B
+				portal_B.target = portal_A
+				portal_A.blend_icon(portal_B)
+				portal_B.blend_icon(portal_A)
+				portal_A.purge_beams()
+				portal_B.purge_beams()
+				portal_A.add_beams()
+				portal_B.add_beams()
+				portal_B.connect_atmospheres()
+				return
 			var/turf/simulated/L = get_turf(src)
 			if(istype(L))
 				var/datum/gas_mixture/environment = L.return_air()
@@ -152,7 +143,7 @@
 		else
 			amount = 4
 	if(emagged)
-		amount *= 5
+		amount *= 1.2
 	return amount
 
 /obj/machinery/cryotheum_resonator/attackby(obj/item/I, mob/user)

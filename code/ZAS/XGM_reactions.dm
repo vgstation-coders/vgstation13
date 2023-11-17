@@ -1,6 +1,3 @@
-// reaction_is_possible will only be called whenever a gas's concentration drops to 0 or rises from 0 to a non-zero value
-#define ONLY_ABSOLUTES 1 << 0
-
 /datum/gas_reaction
 	var/name = "Empty Gas Reaction"
 	var/caching_flags = 0
@@ -27,7 +24,6 @@
 // Cryotheum reacts with nitrogen at a 1:2 ratio to produce N2O and also consumes a lot of heat.
 /datum/gas_reaction/cryotheum_nitrogen_reaction
 	name = "Cryotheum-Nitrogen Reaction"
-	caching_flags = ONLY_ABSOLUTES
 
 /datum/gas_reaction/cryotheum_nitrogen_reaction/reaction_is_possible(datum/gas_mixture/mixture)
 	return mixture[GAS_CRYOTHEUM] > 0 && mixture[GAS_NITROGEN] > 0
@@ -53,7 +49,6 @@
 // Cryotheum dissapates when above 20C. Goes faster the hotter it is.
 /datum/gas_reaction/cryotheum_dissapation
 	name = "Cryotheum Dissapation"
-	caching_flags = ONLY_ABSOLUTES
 
 // "Possible" here means that we want to run perform_reaction. reaction_is_possible is called an absolute ton and it's much more efficient
 // if we can use a caching_flag to reduce the amount of calls, so here we only check if there is any cryotheum and we can decide whether to
@@ -75,50 +70,4 @@
 /datum/gas_reaction/cryotheum_dissapation/perform_reaction(datum/gas_mixture/mixture, reactant_amounts)
 	mixture[GAS_CRYOTHEUM] -= reactant_amounts[GAS_CRYOTHEUM]
 	return
-
-
-
-
-/datum/gas_reaction/oxygen_nitrogen_test
-	name = "Test 1"
-
-/datum/gas_reaction/oxygen_nitrogen_test/reaction_is_possible(datum/gas_mixture/mixture)
-	return mixture[GAS_OXYGEN] > 0 && mixture[GAS_NITROGEN] > 0
-
-/datum/gas_reaction/oxygen_nitrogen_test/reaction_amounts_requested(datum/gas_mixture/mixture)
-	var/base_amount = min(mixture[OXYGEN], mixture[GAS_NITROGEN]) * 0.2
-	var/to_return[] = list()
-	to_return[GAS_CRYOTHEUM] = base_amount
-	to_return[GAS_NITROGEN] = base_amount
-	return to_return
-
-/datum/gas_reaction/oxygen_nitrogen_test/perform_reaction(datum/gas_mixture/mixture, reactant_amounts)
-	mixture.add_thermal_energy( 50, 0.5)
-	return
-
-/datum/gas_reaction/oxygen_nitrogen_test/two
-	name = "Test 2"
-
-/datum/gas_reaction/oxygen_nitrogen_test/three
-	name = "Test 3"
-
-/datum/gas_reaction/oxygen_nitrogen_test/four
-	name = "Test 4"
-
-/datum/gas_reaction/oxygen_nitrogen_test/five
-	name = "Test 5"
-
-/datum/gas_reaction/oxygen_nitrogen_test/six
-	name = "Test 6"
-
-/datum/gas_reaction/oxygen_nitrogen_test/seven
-	name = "Test 7"
-
-/datum/gas_reaction/oxygen_nitrogen_test/eight
-	name = "Test 8"
-
-/datum/gas_reaction/oxygen_nitrogen_test/nine
-	name = "Test 9"
-
-
 
