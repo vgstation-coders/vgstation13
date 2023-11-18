@@ -293,27 +293,27 @@ var/global/datum/research/research_archive_datum
 	use_power(200)
 	spawn(3 SECONDS)
 
-	for(var/datum/tech/T in get_list_of_elements(research_archive_datum.known_tech))
-		if(T.id != diskslot.stored.id)
-			continue
-		if(T.level > diskslot.stored.level)
-			if(T.level>=6)
-				visible_message("<span class='warning'>\The [src] rejects the data disk as [T.id] data has already reached its maximum.")
-				break
-			//Pick the lowest: +3 levels, level 6, maximum level of tech, or the maximum level on the disk
-			//Example: increase to level 4 in one pass, then increase to level 6 in second pass
-			T.level = min(T.level+3, 6, T.max_level, diskslot.stored.level)
-			qdel(diskslot)
-			diskslot = null
-			playsound(loc, "sound/machines/paistartup.ogg", 50, 1)
-			visible_message("<span class='good'>\The [src] accepts the data disk, increasing the [T.id] archive to [T.level].</span>")
-		else
-			playsound(loc, "sound/machines/buzz-sigh.ogg", 50, 1)
-			visible_message("<span class='warning'>\The [src] rejects the data disk as it contains no new information.</span>")
-			diskslot.forceMove(loc)
-			diskslot = null
-		break
-	busy = FALSE
+		for(var/datum/tech/T in get_list_of_elements(research_archive_datum.known_tech))
+			if(T.id != diskslot.stored.id)
+				continue
+			if(T.level > diskslot.stored.level)
+				if(T.level>=6)
+					visible_message("<span class='warning'>\The [src] rejects the data disk as [T.id] data has already reached its maximum.")
+					break
+				//Pick the lowest: +3 levels, level 6, maximum level of tech, or the maximum level on the disk
+				//Example: increase to level 4 in one pass, then increase to level 6 in second pass
+				T.level = min(T.level+3, 6, T.max_level, diskslot.stored.level)
+				qdel(diskslot)
+				diskslot = null
+				playsound(loc, "sound/machines/paistartup.ogg", 50, 1)
+				visible_message("<span class='good'>\The [src] accepts the data disk, increasing the [T.id] archive to [T.level].</span>")
+			else
+				playsound(loc, "sound/machines/buzz-sigh.ogg", 50, 1)
+				visible_message("<span class='warning'>\The [src] rejects the data disk as it contains no new information.</span>")
+				diskslot.forceMove(loc)
+				diskslot = null
+			break
+		busy = FALSE
 
 /obj/machinery/researcharchive/kick_act(var/mob/user)
 	..()
