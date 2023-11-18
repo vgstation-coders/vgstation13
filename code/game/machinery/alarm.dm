@@ -227,6 +227,8 @@ var/global/list/air_alarms = list()
 
 	var/list/TLV = list()
 
+	var/next_chirp_time = null
+
 	machine_flags = WIREJACK
 
 /obj/machinery/alarm/supports_holomap()
@@ -351,7 +353,14 @@ var/global/list/air_alarms = list()
 /obj/machinery/alarm/process()
 	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || shorted || buildstage != 2)
 		use_power = MACHINE_POWER_USE_NONE
+		if(!next_chirp_time)
+			next_chirp_time = world.time + rand(2400, 3000)
+		else if(world.time >= next_chirp_time)
+			playsound(src, 'sound/effects/smoke_detector_chirp.ogg', 50, 0)
+			next_chirp_time = world.time + rand(2400, 3000)
 		return
+
+	next_chirp_time = null
 
 	var/turf/simulated/location = loc
 	if(!istype(location))
