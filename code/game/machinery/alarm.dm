@@ -66,9 +66,9 @@
 	// This should probably be a flag or something but I'm too lazy to change it from how it was before.
 	if( raw_values[1] == -1 && raw_values[2] == -1 && raw_values[3] == -1 && raw_values[4] == -1 )
 		return 0
-	if (input >= raw_values[4] || input <= raw_values[1])
+	if ((raw_values[4] != -1 && input >= raw_values[4]) || (raw_values[1] != -1 && input <= raw_values[1]))
 		return 2
-	if (input >= raw_values[3] || input <= raw_values[2])
+	if ((raw_values[3] != -1 && input >= raw_values[3]) || (raw_values[2] != -1 && input <= raw_values[2]))
 		return 1
 	return 0
 
@@ -83,9 +83,10 @@
 
 /datum/airalarm_threshold/proc/adjust_threshold(var/input, var/raw_location)
 	raw_values[raw_location] = input
-	for(var/i = 1; i <= 4; i++)
-		if((i < raw_location && raw_values[i] > input) || (i > raw_location && raw_values[i] < input))
-			raw_values[i] = input
+	if(input != -1)
+		for(var/i = 1; i <= 4; i++)
+			if(raw_values[i] != -1 && ((i < raw_location && raw_values[i] > input) || (i > raw_location && raw_values[i] < input)))
+				raw_values[i] = input
 
 /datum/airalarm_threshold/proc/get_index(var/index)
 	return raw_values[index]
@@ -306,6 +307,7 @@ var/global/list/air_alarms = list()
 	var/danger_averted_confidence=0
 	var/buildstage = 2 //2 is built, 1 is building, 0 is frame.
 	var/cycle_after_preset = 1 // Whether we automatically cycle when presets are changed
+	var/next_chirp_time = null
 
 	var/target_temperature = T0C+20
 	var/regulating_temperature = 0
@@ -408,7 +410,14 @@ var/global/list/air_alarms = list()
 /obj/machinery/alarm/process()
 	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || shorted || buildstage != 2)
 		use_power = MACHINE_POWER_USE_NONE
+		if(!next_chirp_time)
+			next_chirp_time = world.time + 1200 + rand(0, 600)
+		else if(world.time >= next_chirp_time)
+			playsound(src, 'sound/effects/smoke_detector_chirp.ogg', 50, 0)
+			next_chirp_time = world.time + 1200 + rand(0, 600)
 		return
+
+	next_chirp_time = null
 
 	var/turf/simulated/location = loc
 	if(!istype(location))

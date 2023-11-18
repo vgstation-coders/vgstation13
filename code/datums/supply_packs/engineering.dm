@@ -408,7 +408,7 @@
 	containername = "Small Cryotheum Tank Crate"
 	access = list(access_engine_minor)
 	group = "Engineering"
-	containsdesc = "Contains a small amount of cryotheum, the anomalous gas which assists engineers in their task of cooling things down. This amount is more than enough to kick-start a Cryotheum Resonator."
+	containsdesc = "Contains a small amount of cryotheum, the anomalous gas with cooling properties. This tank is more than enough to kick-start a Cryotheum Resonator."
 
 /datum/supply_packs/cryotheum_resonator
 	name = "Cryotheum Resonator"

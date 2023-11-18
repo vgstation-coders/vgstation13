@@ -39,33 +39,11 @@
 /datum/gas_reaction/cryotheum_nitrogen_reaction/perform_reaction(datum/gas_mixture/mixture, reactant_amounts)
 	var/reaction_coefficient = reactant_amounts[GAS_CRYOTHEUM]
 	mixture[GAS_CRYOTHEUM] = max(0, mixture[GAS_CRYOTHEUM] - reaction_coefficient)
-	mixture.add_thermal_energy( reaction_coefficient * -20000, 0.2)
+	// Cryotheum can only cool things down to 0.1K. As we approach that temperature, it cools less and less. Conversely, at higher temperatures it cools more.
+	var/distance_to_min_temp = max(0, mixture.temperature - 0.1)
+	var/logarithmic_modifier = max(0, log(40, distance_to_min_temp+1))
+	mixture.add_thermal_energy( logarithmic_modifier * reaction_coefficient * -60000, 0.2)
 	mixture.adjust_gas()
-
-/*
-// Cryotheum reacts with nitrogen at a 1:2 ratio to produce N2O and also consumes a lot of heat.
-/datum/gas_reaction/cryotheum_nitrogen_reaction
-	name = "Cryotheum-Nitrogen Reaction"
-
-/datum/gas_reaction/cryotheum_nitrogen_reaction/reaction_is_possible(datum/gas_mixture/mixture)
-	return mixture[GAS_CRYOTHEUM] > 0 && mixture[GAS_NITROGEN] > 0
-
-/datum/gas_reaction/cryotheum_nitrogen_reaction/reaction_amounts_requested(datum/gas_mixture/mixture)
-	var/base_amount = min(mixture[GAS_CRYOTHEUM], mixture[GAS_NITROGEN]/2) * 0.5
-	var/to_return[] = list()
-	to_return[GAS_CRYOTHEUM] = base_amount
-	to_return[GAS_NITROGEN] = base_amount*2
-	return to_return
-
-/datum/gas_reaction/cryotheum_nitrogen_reaction/perform_reaction(datum/gas_mixture/mixture, reactant_amounts)
-	var/reaction_coefficient = reactant_amounts[GAS_CRYOTHEUM]
-
-	mixture[GAS_CRYOTHEUM] -= reactant_amounts[GAS_CRYOTHEUM]
-	mixture[GAS_NITROGEN] -= reactant_amounts[GAS_NITROGEN]
-	mixture.adjust_gas(GAS_SLEEPING, reaction_coefficient)
-	mixture.add_thermal_energy( reaction_coefficient * -80000, 0.5)
-	return
-*/
 
 // Cryotheum dissapates when above 20C. Goes faster the hotter it is.
 /datum/gas_reaction/cryotheum_dissapation
