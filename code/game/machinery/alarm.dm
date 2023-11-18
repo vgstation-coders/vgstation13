@@ -351,7 +351,7 @@ var/global/list/air_alarms = list()
 
 
 /obj/machinery/alarm/process()
-	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || shorted || buildstage != 2)
+	if(stat & (NOPOWER))
 		use_power = MACHINE_POWER_USE_NONE
 		if(!next_chirp_time)
 			next_chirp_time = world.time + rand(2400, 3000)
@@ -361,6 +361,10 @@ var/global/list/air_alarms = list()
 		return
 
 	next_chirp_time = null
+
+	if((stat & (BROKEN|FORCEDISABLE)) || shorted || buildstage != 2)
+		use_power = MACHINE_POWER_USE_NONE
+		return
 
 	var/turf/simulated/location = loc
 	if(!istype(location))
