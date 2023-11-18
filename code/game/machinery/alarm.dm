@@ -307,7 +307,6 @@ var/global/list/air_alarms = list()
 	var/danger_averted_confidence=0
 	var/buildstage = 2 //2 is built, 1 is building, 0 is frame.
 	var/cycle_after_preset = 1 // Whether we automatically cycle when presets are changed
-	var/next_chirp_time = null
 
 	var/target_temperature = T0C+20
 	var/regulating_temperature = 0
@@ -410,14 +409,7 @@ var/global/list/air_alarms = list()
 /obj/machinery/alarm/process()
 	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || shorted || buildstage != 2)
 		use_power = MACHINE_POWER_USE_NONE
-		if(!next_chirp_time)
-			next_chirp_time = world.time + 1200 + rand(0, 600)
-		else if(world.time >= next_chirp_time)
-			playsound(src, 'sound/effects/smoke_detector_chirp.ogg', 50, 0)
-			next_chirp_time = world.time + 1200 + rand(0, 600)
 		return
-
-	next_chirp_time = null
 
 	var/turf/simulated/location = loc
 	if(!istype(location))
