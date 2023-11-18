@@ -332,7 +332,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	if(!research_archive_datum)
 		research_archive_datum = new /datum/research()
 	var/list/techs = read_file()
-	message_admins("DEBUG ARCHIVE: [json_encode(techs)]")
+	log_debug("DEBUG ARCHIVE: [json_encode(techs)]")
 	var/skip_reporting = TRUE
 	for(var/obj/machinery/computer/rdconsole/C in machines)
 		for(var/element in techs)
