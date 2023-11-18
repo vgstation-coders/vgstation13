@@ -87,11 +87,13 @@
 	if (istype(W, /obj/item/weapon/reagent_containers))
 		var/obj/item/weapon/reagent_containers/R = W
 		if(R.fits_in_iv_drip())
-			if(!isnull(src.beaker))
+			if(!isnull(src.beaker) && beaker.reagents.total_volume > 0)
 				to_chat(user, "There is already a reagent container loaded!")
 				return
 
 			if(user.drop_item(R, src))
+				if (src.beaker)
+					src.remove_container()
 				src.beaker = R
 				to_chat(user, "You attach \the [R] to \the [src].")
 				investigation_log(I_CHEMS, "was loaded with \a [R] by [key_name(user)], containing [R.reagents.get_reagent_ids(1)]")
