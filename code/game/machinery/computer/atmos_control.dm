@@ -284,7 +284,11 @@ var/global/list/atmos_controllers = list()
 			to_chat(usr, "<span class='warning'>Invalid description.</span>")
 			return 1
 		//use the settings from whatever was previously selected to add this new one, but make sure it's not core (ie. can be deleted)
-		selected_preset = selected_preset.deep_preset_copy()
+		if(selected_preset)
+			selected_preset = selected_preset.deep_preset_copy()
+		else
+			var/datum/airalarm_configuration/preset/human = airalarm_presets["Human"]
+			selected_preset = human.deep_preset_copy()
 		selected_preset.name = name
 		selected_preset.desc = desc
 		selected_preset.core = FALSE

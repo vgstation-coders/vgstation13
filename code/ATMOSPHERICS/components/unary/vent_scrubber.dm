@@ -288,6 +288,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/receive_signal(datum/signal/signal)
 	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
 		return
+
 	if(!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command") || (signal.data["type"] && signal.data["type"] != "scrubber"))
 		return 0
 
@@ -319,7 +320,6 @@
 		scrubbing = text2num(signal.data["scrubbing"])
 	if(signal.data["toggle_scrubbing"])
 		scrubbing = !scrubbing
-
 	for(var/gas_id in scrubbed_gases)
 		if(signal.data[gas_id+"_scrub"] != null)
 			scrubbed_gases[gas_id] = text2num(signal.data[gas_id+"_scrub"])

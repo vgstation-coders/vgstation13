@@ -76,7 +76,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/internals
 	containername = "o2 internals crate"
 	group = "Supplies"
-	
+
 /datum/supply_packs/vox_supply
 	name = "Vox pressure suit set"
 	contains = list(/obj/item/clothing/suit/space/vox/civ,
@@ -88,7 +88,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/basic
 	containername = "vox suit crate"
 	group = "Supplies"
-	
+
 /datum/supply_packs/plasmaman_supply
 	name = "Plasmaman pressure suit set"
 	contains = list(/obj/item/clothing/suit/space/plasmaman,
@@ -1969,6 +1969,25 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 75
 	containertype = /obj/structure/closet/crate/secure/engisec
 	containername = "Gourmonger Crate"
+	access = list(access_engine_minor)
+	group = "Engineering"
+
+/datum/supply_packs/cryotheum
+	name = "Small Cryotheum Tank"
+	contains = list(/obj/item/weapon/tank/cryotheum)
+	cost = 60
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "Small Cryotheum Tank Crate"
+	access = list(access_engine_minor)
+	group = "Engineering"
+
+/datum/supply_packs/cryotheum_resonator
+	name = "Cryotheum Resonator"
+	contains = list(/obj/machinery/cryotheum_resonator,
+					/obj/item/bluespace_crystal/artificial)
+	cost = 140
+	containertype = /obj/structure/closet/crate/secure/large/reinforced
+	containername = "Cryotheum Resonator Crate"
 	access = list(access_engine_minor)
 	group = "Engineering"
 

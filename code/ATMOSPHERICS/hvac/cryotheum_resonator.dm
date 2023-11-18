@@ -3,7 +3,7 @@
 	density = 1
 	// Thank you Falcon2436 for making the sprites!
 	icon = 'icons/obj/machines/cryotheum_resonator.dmi'
-	icon_state = "machine_active"
+	icon_state = "machine_powered"
 	name = "bluespace cryotheum resonator"
 	desc = "Cutting-edge technology that uses a bluespace crystal to resonate the properties of cryotheum into nearby oxygen."
 	flags = FPRINT
@@ -22,13 +22,15 @@
 /obj/machinery/cryotheum_resonator/update_icon()
 	overlays.len = 0
 	if(stat & ( NOPOWER | FORCEDISABLE | BROKEN ))
-		//set sprite to  inactive version
-		return
+		icon_state = "machine_unpowered"
+		if(crystal != null)
+			overlays += image(icon = icon, icon_state = "crystal_unpowered")
 	else
-		icon_state = "machine_active"
-		if( crystal != null )
+		icon_state = "machine_powered"
+		if(crystal != null)
+			overlays += image(icon = icon, icon_state = "field")
 			overlays += image(icon = icon, icon_state = "crystal")
-		if( activated )
+		if(activated)
 			overlays += image(icon = icon, icon_state = "pulse")
 
 /obj/machinery/cryotheum_resonator/emp_act(severity)
@@ -52,27 +54,17 @@
 /obj/machinery/cryotheum_resonator/process()
 	if(activated)
 		if(stat & (NOPOWER))
-			/*if( crystal != null)
-				visible_message("<span class='info'>\The [src] deactivates as it runs out of power, dropping [crystal] to the floor!</span>")
-				crystal.forceMove(loc)
-				crystal = null
-			else*/
 			visible_message("<span class='info'>\The [src] deactivates as it runs out of power!")
 			activated = 0
 			update_icon()
 			return
 		else if(stat & ( FORCEDISABLE | BROKEN | EMPED))
-			/*if( crystal != null)
-				visible_message("<span class='info'>\The [src] hums as it deactivates, dropping [crystal] to the floor!</span>")
-				crystal.forceMove(loc)
-				crystal = null
-			else*/
 			visible_message("<span class='info'>\The [src] hums as it deactivates!</span>")
 			activated = 0
 			update_icon()
 			return
 		else
-			// Emagging it makes it run faster, but has a small chance to cause problems.
+			// Emagging it makes it run a tiny bit faster, but has a small chance to cause problems.
 			if(emagged && prob(0.1))
 				// Try a max of 5 times to find a good turf to spawn portals on.
 				var/turf/A_location
@@ -125,23 +117,21 @@
 						var/oxygen_mols_to_convert = min( get_conversion_amount(), tile_above_gas[GAS_OXYGEN])
 						tile_above_gas[GAS_OXYGEN] -= oxygen_mols_to_convert
 						tile_above_gas[GAS_CRYOTHEUM] += oxygen_mols_to_convert
+						tile_above_gas.add_thermal_energy(oxygen_mols_to_convert * -6000, 253.15)
 					environment.merge( tile_above_gas )
-	//else if(crystal != null && (stat & (NOPOWER | FORCEDISABLE | BROKEN | EMPED)))
-	//	visible_message("<span class='info'>\The [src] deactivates as it runs out of power!</span>")
-	//	crystal.forceMove(loc)
-	//	crystal = null
-
+	else if( icon_state == "machine_unpowered" && !(stat & ( NOPOWER | FORCEDISABLE | BROKEN )))
+		update_icon()
 
 // Returns how many mols of oxygen on the tile directly above the machine are turned into cryotheum per process tick.
 /obj/machinery/cryotheum_resonator/proc/get_conversion_amount()
 	var/amount = 0
 	if(crystal != null)
 		if(istype(crystal, /obj/item/bluespace_crystal/artificial))
-			amount = 1
+			amount = 3
 		else if(istype(crystal, /obj/item/bluespace_crystal/flawless))
-			amount = 10
+			amount = 12
 		else
-			amount = 4
+			amount = 28
 	if(emagged)
 		amount *= 1.2
 	return amount

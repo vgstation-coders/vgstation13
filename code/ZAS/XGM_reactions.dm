@@ -21,6 +21,28 @@
 
 
 
+
+
+// Cryotheum reacts with itself in the presence of plasma, disappearing but lowering temperatures.
+/datum/gas_reaction/cryotheum_plasma_reaction
+	name = "Plasma Catalyzed Cryotheum Reaction"
+
+/datum/gas_reaction/cryotheum_nitrogen_reaction/reaction_is_possible(datum/gas_mixture/mixture)
+	return mixture[GAS_CRYOTHEUM] > 0 && mixture[GAS_PLASMA] > 0
+
+/datum/gas_reaction/cryotheum_nitrogen_reaction/reaction_amounts_requested(datum/gas_mixture/mixture)
+	var/to_return[] = list()
+	var/catalyst_coefficient = min(1.0, mixture[GAS_PLASMA] / mixture[GAS_CRYOTHEUM] * 10)
+	to_return[GAS_CRYOTHEUM] = catalyst_coefficient * mixture[GAS_CRYOTHEUM]*0.2
+	return to_return
+
+/datum/gas_reaction/cryotheum_nitrogen_reaction/perform_reaction(datum/gas_mixture/mixture, reactant_amounts)
+	var/reaction_coefficient = reactant_amounts[GAS_CRYOTHEUM]
+	mixture[GAS_CRYOTHEUM] = max(0, mixture[GAS_CRYOTHEUM] - reaction_coefficient)
+	mixture.add_thermal_energy( reaction_coefficient * -20000, 0.2)
+	mixture.adjust_gas()
+
+/*
 // Cryotheum reacts with nitrogen at a 1:2 ratio to produce N2O and also consumes a lot of heat.
 /datum/gas_reaction/cryotheum_nitrogen_reaction
 	name = "Cryotheum-Nitrogen Reaction"
@@ -29,7 +51,7 @@
 	return mixture[GAS_CRYOTHEUM] > 0 && mixture[GAS_NITROGEN] > 0
 
 /datum/gas_reaction/cryotheum_nitrogen_reaction/reaction_amounts_requested(datum/gas_mixture/mixture)
-	var/base_amount = min(mixture[GAS_CRYOTHEUM], mixture[GAS_NITROGEN]/2) * 0.2
+	var/base_amount = min(mixture[GAS_CRYOTHEUM], mixture[GAS_NITROGEN]/2) * 0.5
 	var/to_return[] = list()
 	to_return[GAS_CRYOTHEUM] = base_amount
 	to_return[GAS_NITROGEN] = base_amount*2
@@ -41,18 +63,14 @@
 	mixture[GAS_CRYOTHEUM] -= reactant_amounts[GAS_CRYOTHEUM]
 	mixture[GAS_NITROGEN] -= reactant_amounts[GAS_NITROGEN]
 	mixture.adjust_gas(GAS_SLEEPING, reaction_coefficient)
-	mixture.add_thermal_energy( reaction_coefficient * -5000, 0.5)
+	mixture.add_thermal_energy( reaction_coefficient * -80000, 0.5)
 	return
-
-
+*/
 
 // Cryotheum dissapates when above 20C. Goes faster the hotter it is.
 /datum/gas_reaction/cryotheum_dissapation
 	name = "Cryotheum Dissapation"
 
-// "Possible" here means that we want to run perform_reaction. reaction_is_possible is called an absolute ton and it's much more efficient
-// if we can use a caching_flag to reduce the amount of calls, so here we only check if there is any cryotheum and we can decide whether to
-// actually disappated in perform_reaction.
 /datum/gas_reaction/cryotheum_dissapation/reaction_is_possible(datum/gas_mixture/mixture)
 	return mixture[GAS_CRYOTHEUM] > 0
 
@@ -68,6 +86,5 @@
 	return to_return
 
 /datum/gas_reaction/cryotheum_dissapation/perform_reaction(datum/gas_mixture/mixture, reactant_amounts)
-	mixture[GAS_CRYOTHEUM] -= reactant_amounts[GAS_CRYOTHEUM]
-	return
+	mixture[GAS_CRYOTHEUM] = max(0, mixture[GAS_CRYOTHEUM] - reactant_amounts[GAS_CRYOTHEUM])
 

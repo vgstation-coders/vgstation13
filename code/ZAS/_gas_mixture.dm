@@ -24,6 +24,13 @@
 
 	var/tmp/fuel_burnt = 0
 
+	var/allow_reactions = TRUE
+	// This is a list of all gas reactions that can take place in this mixture. Maintained on every update to this gas_mixture.
+	// For instance, if only one reaction existed in the codebase (2*N + O = N2O) and this mixture had no nitrogen, this would be empty.
+	// But if after an update there was now nitrogen and oxygen, that reaction would be added to this list. The exact requirements to be added
+	// to this list are defined by whether /datum/gas_reaction/proc/reaction_is_possible( datum/gas_mixture/mixture ) returns true or not.
+	var/list/possible_reactions = list()
+
 /datum/gas_mixture/New(datum/gas_mixture/to_copy)
 	..()
 	if(istype(to_copy))
@@ -519,15 +526,6 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 
 /datum/gas_mixture/unsimulated
 	allow_reactions = FALSE
-
-/datum/gas_mixture
-	var/allow_reactions = TRUE
-	// This is a list of all gas reactions that can take place in this mixture. Maintained on every update to this gas_mixture.
-	// For instance, if only one reaction existed in the codebase (2*N + O = N2O) and this mixture had no nitrogen, this would be empty.
-	// But if after an update there was now nitrogen and oxygen, that reaction would be added to this list. The exact requirements to be added
-	// to this list are defined by whether /datum/gas_reaction/proc/reaction_is_possible( datum/gas_mixture/mixture ) returns true or not.
-	var/list/possible_reactions = list()
-
 
 /datum/gas_mixture/proc/cache_reactions()
 	if(allow_reactions)
