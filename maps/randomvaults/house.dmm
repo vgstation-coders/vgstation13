@@ -382,7 +382,7 @@
 /turf/simulated/floor/wood,
 /area/vault/zathura)
 "bj" = (
-/obj/item/toy/gasha/carptoy,
+/obj/item/toy/plushie/carp,
 /obj/effect/decal/cleanable/soot,
 /turf/simulated/floor/wood,
 /area/vault/zathura)
