@@ -172,7 +172,6 @@
 
 /datum/outfit/cargo_tech/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 
 // -- Shaft Miner
 
