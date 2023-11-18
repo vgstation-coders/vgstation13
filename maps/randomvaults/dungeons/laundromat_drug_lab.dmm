@@ -250,7 +250,8 @@
 	dir = 1
 	},
 /turf/simulated/floor/engine{
-	icon_state = "leftfacingstairs2"
+	dir = 8;
+	icon_state = "ramptop"
 	},
 /area/vault/laundromat/drug_lab)
 "nN" = (
@@ -613,7 +614,8 @@
 	dir = 1
 	},
 /turf/simulated/floor/engine{
-	icon_state = "leftfacingstairs1"
+	dir = 8;
+	icon_state = "rampbottom"
 	},
 /area/vault/laundromat/drug_lab)
 "PJ" = (
