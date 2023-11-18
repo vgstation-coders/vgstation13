@@ -80,11 +80,13 @@
 /mob/living/proc/thrown_defense(var/obj/O)
 	return 1
 
-/mob/living/hitby(atom/movable/AM as mob|obj,var/speed = 5,var/dir)//Standardization and logging -Sieve
+/mob/living/hitby(atom/movable/AM as mob|obj,var/speed = 5,var/dir,var/list/hit_whitelist)//Standardization and logging -Sieve
 	. = ..()
 	if(.)
 		return
 	if(flags & INVULNERABLE)
+		return
+	if(hit_whitelist && (src in hit_whitelist))
 		return
 	if(istype(AM,/obj/) && !istype(AM,/obj/effect/))
 		var/obj/O = AM

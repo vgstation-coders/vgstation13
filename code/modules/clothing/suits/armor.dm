@@ -315,6 +315,7 @@
 	desc = "A vest that excels in protecting the wearer against energy projectiles."
 	icon_state = "armor_reflec"
 	item_state = "armor_reflec"
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=4;"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 	blood_overlay_type = "armor"

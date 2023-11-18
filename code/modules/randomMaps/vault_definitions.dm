@@ -244,3 +244,9 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/fastfoodjoint
 	name = "Fast food joint"
 	file_path = "maps/randomvaults/fastfoodjoint.dmm"
+
+/datum/map_element/vault/laundromat/pre_load()
+	load_dungeon(/datum/map_element/dungeon/laundromat_drug_lab,rotation)
+
+/datum/map_element/dungeon/laundromat_drug_lab
+	file_path = "maps/randomvaults/dungeons/laundromat_drug_lab.dmm"

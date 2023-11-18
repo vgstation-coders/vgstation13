@@ -2306,7 +2306,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/marisa_wiz = 5,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/hallowiz = 5,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/magician = 5,
-		/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer = 5,
+		/obj/item/clothing/suit/wizrobe/necro = 5,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/pharaoh = 5,
 		/obj/item/clothing/suit/storage/wintercoat/druid = 5,
 		/obj/item/clothing/head/wizard/magus = 5,
@@ -2437,6 +2437,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/clothing/gloves/yellow = 1,
+		/obj/item/weapon/rcl = 2,
 		)
 
 	pack = /obj/structure/vendomatpack/tool
@@ -2467,6 +2468,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/blueprints/construction_permit = 4, // permits
 		/obj/item/taperoll/engineering = 5,
 		/obj/item/taperoll/atmos = 5,
+		/obj/item/weapon/rcl = 3,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
@@ -2636,7 +2638,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/smartbox/clothing_box/liberty = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/aviator = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/proto = AUTO_DROBE_DEFAULT_STOCK,
-		/obj/item/weapon/storage/box/smartbox/clothing_box/hastur = AUTO_DROBE_DEFAULT_STOCK,
+		/obj/item/clothing/suit/hastur = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/owl = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/pirateoutfit = AUTO_DROBE_DEFAULT_STOCK,
 		/obj/item/weapon/storage/box/smartbox/clothing_box/lordadmiral = AUTO_DROBE_DEFAULT_STOCK,
@@ -3191,7 +3193,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/nun = 2,
 		/obj/item/clothing/head/nun_hood = 2,
 		/obj/item/clothing/suit/chaplain_hoodie = 2,
-		/obj/item/clothing/head/chaplain_hood = 2,
 		/obj/item/clothing/suit/holidaypriest = 2,
 		/obj/item/clothing/head/kippah/kippah_random = 5,
 		/obj/item/clothing/under/wedding/bride_white = 2,
@@ -3214,7 +3215,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/fancy/collection_plate = 1,
 		)
 	contraband = list(
-		/obj/item/clothing/head/clockwork_hood = 2,
 		/obj/item/clothing/suit/clockwork_robes = 2,
 		/obj/item/clothing/shoes/clockwork_boots = 2,
 		/obj/item/clothing/suit/kimono/ronin = 2

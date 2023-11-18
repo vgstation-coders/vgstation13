@@ -9,7 +9,7 @@ var/global/list/alcatraz_stuff = list(
 	//2 of a kind
 	/obj/item/weapon/autocuffer,/obj/item/weapon/autocuffer,
 	/obj/item/clothing/mask/gas/hecu,/obj/item/clothing/mask/gas/hecu,
-	/obj/item/clothing/gloves/swat/operator,/obj/item/clothing/gloves/swat/operator,
+	/obj/item/clothing/gloves/swat/specops,/obj/item/clothing/gloves/swat/specops,
 	//1 of a kind
 	/obj/item/clothing/under/securityskirt/elite,
 	/obj/item/clothing/head/helmet/donutgiver,

@@ -245,7 +245,7 @@
 /obj/item/weapon/legcuffs/bolas/cable
 	name = "cable bolas"
 	desc = "A poorly made bolas, tied together with cable."
-	icon_state = ""
+	icon_state = "cbolas"
 	item_state = "cbolas"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	throw_speed = 1
@@ -253,27 +253,29 @@
 	trip_prob = 20 //gets updated below in update_icon()
 	var/obj/item/weight1 = null //the two items that are attached to the cable
 	var/obj/item/weight2 = null
-	var/cable_color = ""
+	var/cable_color = "#FF0000"
 	var/desc_empty = "A poorly made bolas, tied together with cable. It has nothing on it."
 	var/screw_state = "" //used for storing info about the screwdriver
 	var/screw_istate = ""
 
-/obj/item/weapon/legcuffs/bolas/cable/New()
+/obj/item/weapon/legcuffs/bolas/cable/New(var/turf/loc, var/_cable_color = "#FF0000")
 	..()
 	desc = desc_empty
 	weight1 = null
 	weight2 = null
+	cable_color = _cable_color
 	update_icon()
 
 /obj/item/weapon/legcuffs/bolas/cable/update_icon()
+	overlays.len = 0
+	var/image/cable_overlay = image(icon,src,"cbolas_color")
+	cable_overlay.color = cable_color
+	overlays += cable_overlay
 	if (!weight1 && !weight2)
-		icon_state = "cbolas_[cable_color]"
-		overlays.len = 0
 		desc = desc_empty
 		trip_prob = 0
 		return
 	else
-		overlays.len = 0
 		if (weight1)
 			trip_prob = 20
 			overlays += icon("icons/obj/weapons.dmi", "cbolas_weight1")
@@ -281,6 +283,14 @@
 			trip_prob = 60
 			overlays += icon("icons/obj/weapons.dmi", "cbolas_weight2")
 		desc = "A poorly made bolas, made out of \a [weight1] and [weight2 ? "\a [weight2]": "missing a second weight"], tied together with cable."
+
+	//dynamic in-hand overlay
+	var/image/cableleft = image(inhand_states["left_hand"], src, "cbolas_color")
+	var/image/cableright = image(inhand_states["right_hand"], src, "cbolas_color")
+	cableleft.color = cable_color
+	cableright.color = cable_color
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = cableleft
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = cableright
 
 /obj/item/weapon/legcuffs/bolas/cable/throw_failed()
 	if(prob(20))
@@ -307,8 +317,7 @@
 				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(user.loc) //we get back the wire lengths we put in
 				var /obj/item/stack/cable_coil/S = new /obj/item/tool/screwdriver(user.loc)
 				C.amount = 10
-				C._color = cable_color
-				C.icon_state = "coil_[C._color]"
+				C.color = cable_color
 				C.update_icon()
 				S.item_state = screw_state
 				S.icon_state = screw_istate

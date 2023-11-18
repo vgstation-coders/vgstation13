@@ -14,24 +14,11 @@
 		/obj/item/device/flashlight,
 		/obj/item/weapon/tank/emergency_oxygen,
 		/obj/item/weapon/tank/emergency_nitrogen)
-	var/is_hooded = 0
-	var/nohood = 0
-	var/obj/item/clothing/head/winterhood/hood
-	actions_types = list(/datum/action/item_action/toggle_hood)
+	hood = new /obj/item/clothing/head/winterhood()
 
 /obj/item/clothing/suit/storage/wintercoat/New()
-	if(!nohood)
-		hood = new(src)
-		if(wizard_garb)
-			hood.wizard_garb = 1
-	else
-		actions_types = null
-
-	..()
-
-/obj/item/clothing/suit/storage/wintercoat/Destroy()
-	if(hood)
-		QDEL_NULL(hood)
+	if (!hood_up_icon_state)
+		hood_up_icon_state = "[icon_state]_t"
 	..()
 
 /obj/item/clothing/head/winterhood
@@ -40,20 +27,7 @@
 	icon_state = "whood"
 	body_parts_covered = HIDEHEADHAIR
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
-	var/obj/item/clothing/suit/storage/wintercoat/coat
-
-/obj/item/clothing/head/winterhood/New(var/obj/item/clothing/suit/storage/wintercoat/wc)
-	..()
-	if(istype(wc))
-		coat = wc
-	else if(!coat)
-		qdel(src)
-
-/obj/item/clothing/head/winterhood/Destroy()
-	if(coat)
-		coat.hood = null
-		coat = null
-	..()
+	wear_override = new/icon("icon" = 'icons/misc/empty.dmi', "icon_state" = "empty")
 
 /obj/item/clothing/suit/storage/wintercoat/security/captain
 	name = "captain's winter coat"
@@ -91,7 +65,7 @@
 	clothing_flags = 0
 	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 	armor = list(melee = 65, bullet = 30, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
-	nohood = 1
+	hood = null
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 
 /obj/item/clothing/suit/storage/wintercoat/security/warden
@@ -99,7 +73,7 @@
 	icon_state = "coatwarden"
 	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
-	nohood = 1
+	hood = null
 
 /obj/item/clothing/suit/storage/wintercoat/medical
 	name = "medical winter coat"
@@ -249,6 +223,22 @@
 	name = "paramedic winter coat"
 	icon_state = "coatpara"
 	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
+	allowed = list(
+		/obj/item/device/analyzer,
+		/obj/item/stack/medical,
+		/obj/item/weapon/dnainjector,
+		/obj/item/weapon/reagent_containers/dropper,
+		/obj/item/weapon/reagent_containers/syringe,
+		/obj/item/weapon/reagent_containers/hypospray,
+		/obj/item/device/healthanalyzer,
+		/obj/item/device/flashlight/pen,
+		/obj/item/weapon/tank/emergency_oxygen,
+		/obj/item/weapon/tank/emergency_nitrogen,
+		/obj/item/device/radio,
+		/obj/item/device/gps,
+		/obj/item/roller,
+		/obj/item/weapon/autopsy_scanner/healthanalyzerpro,
+		/obj/item/device/pcmc)
 
 /obj/item/clothing/suit/storage/wintercoat/engineering/mechanic
 	name = "mechanics winter coat"
@@ -292,6 +282,7 @@
 
 #define HAS_HOOD 1
 #define NO_HOOD 0
+/*
 /obj/item/clothing/suit/storage/wintercoat/proc/togglehood()
 	set name = "Toggle Hood"
 	set category = "Object"
@@ -341,6 +332,7 @@
 		coat.hooddown(user,unequip = 0)
 		user.drop_from_inventory(src)
 		forceMove(coat)
+*/
 
 /obj/item/clothing/suit/storage/wintercoat/hoodie
 	name = "Grey hoodie"
@@ -351,6 +343,7 @@
 	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	clothing_flags = COLORS_OVERLAY
+	hood_suit_name = "hoodie"
 
 /obj/item/clothing/suit/storage/wintercoat/hoodie/black
 	name = "Black hoodie"
@@ -386,15 +379,14 @@
 
 /obj/item/clothing/suit/storage/wintercoat/fur // think one of those big vintage fur coats you find in your grandmothers closet
 	name = "A heavy fur coat"
-//	icon_state = "furcoat"
+	icon_state = "furcoat"
 	item_state = "furcoat"
 	var/base_icon_state = "labcoat"
-	base_icon_state = "furcoat"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS //the sprite extends down to the ankles, it can protect the legs
 	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 	desc = "A thick fur coat. Your not sure what animal its fur from."
-	nohood = 1 //most fur coats dont have a hood
+	hood = null //most fur coats dont have a hood
 	var/belted = 1
 	armor = list(melee = 10, bullet = 5, laser = 10, energy = 10, bomb = 5, bio = 0, rad = 0) //its a big thick frontiersman fur coat, putting it on as partially protective
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
@@ -415,9 +407,9 @@
 
 /obj/item/clothing/suit/storage/wintercoat/fur/update_icon()
 	if(!belted)
-		icon_state="[base_icon_state]_beltless"
+		icon_state="[is_hood_up ? hood_up_icon_state : hood_down_icon_state]_beltless"
 	else
-		icon_state="[base_icon_state]"
+		icon_state="[is_hood_up ? hood_up_icon_state : hood_down_icon_state]"
 
 /obj/item/clothing/suit/storage/wintercoat/fur/verb/toggle()
 	set name = "Toggle Coat Belt"
@@ -441,5 +433,8 @@
 
 /obj/item/clothing/suit/storage/wintercoat/fur/New()
 	. = ..()
+	actions_types |= list(/datum/action/item_action/toggle_belt)
 	update_icon()
+
+
 

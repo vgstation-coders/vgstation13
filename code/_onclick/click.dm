@@ -69,6 +69,8 @@
 		build_click(src, client.buildmode, params, A)
 		return
 
+	var/obj/item/held_item = get_active_hand()
+
 	var/list/modifiers = params2list(params)
 	INVOKE_EVENT(src, /event/clickon, "user" = src,	"modifiers" = modifiers, "target" = A)
 	if(modifiers["middle"])
@@ -81,6 +83,8 @@
 		ShiftClickOn(A)
 		return
 	if(modifiers["alt"]) // alt and alt-gr (rightalt)
+		if (held_item && held_item.AltFrom(A,src,A.Adjacent(src, MAX_ITEM_DEPTH),params))
+			return
 		AltClickOn(A)
 		return
 	if(modifiers["ctrl"])
@@ -118,7 +122,6 @@
 			throw_item(A)
 		return
 
-	var/obj/item/held_item = get_active_hand()
 	var/item_attack_delay = 0
 
 	if(held_item == A)
