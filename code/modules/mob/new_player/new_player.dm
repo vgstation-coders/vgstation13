@@ -802,11 +802,11 @@
 		return new_character
 	else
 		var/mob/living/silicon/robot/new_character
+		forceMove(spawn_loc)
 		if(type == "Mobile MMI")
 			new_character = MoMMIfy()
 		else
 			new_character = Robotize()
-		new_character.forceMove(spawn_loc)
 		new_character.mmi.create_identity(prefs) //Uses prefs to create a brain mob
 
 		return new_character
