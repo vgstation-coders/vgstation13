@@ -431,6 +431,8 @@
 			if (!(machine.check_eye(src)))
 				reset_view(null)
 		else
+			if (is_using_look_spell)
+				return TRUE
 			if(client && !client.adminobs && !isTeleViewing(client.eye))
 				reset_view(null)
 

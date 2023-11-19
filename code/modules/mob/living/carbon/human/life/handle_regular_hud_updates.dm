@@ -261,7 +261,7 @@
 				if(temp_turf && (temp_turf.z != map.zMainStation && temp_turf.z != map.zAsteroid) || remoteview_target.stat!=CONSCIOUS)
 					to_chat(src, "<span class='warning'>Your psy-connection grows too faint to maintain!</span>")
 					isRemoteObserve = 0
-			if(!isRemoteObserve && client && !client.adminobs && !isTeleViewing(client.eye))
+			if(!is_using_look_spell && !isRemoteObserve && client && !client.adminobs && !isTeleViewing(client.eye))
 				remoteview_target = null
 				reset_view(null)
 	return 1

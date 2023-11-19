@@ -908,6 +908,7 @@ Use this proc preferably at the end of an equipment loadout
 			client.perspective = EYE_PERSPECTIVE
 			client.eye = A
 		else
+			is_using_look_spell = FALSE
 			client.eye = client.mob
 			client.perspective = MOB_PERSPECTIVE
 

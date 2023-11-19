@@ -14,6 +14,8 @@
 		if(machine)
 			if(!machine.check_eye(src))
 				reset_view(null)
+			if (is_using_look_spell)
+				return TRUE
 		else
 			if(!isTeleViewing(client.eye))
 				reset_view(null)
