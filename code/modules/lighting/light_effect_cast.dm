@@ -521,7 +521,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	I.layer = HIGHEST_LIGHTING_LAYER
-	image_comp += I
 	temp_appearance_shadows += I
 
 

@@ -43,8 +43,6 @@
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
 	animate_movement = NO_STEPS
 
-	var/list/image/image_comp = list()
-
 /atom/movable/wall_light_source
 	plane = LIGHTING_PLANE
 	anchored = 1
