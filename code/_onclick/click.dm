@@ -362,6 +362,47 @@
 			return
 	..()
 
+/turf/CtrlClick(mob/user)
+	. = ..()
+	if (!check_if_unobscured_turf(src, user, 3))
+		return FALSE
+
+	user.reset_view()
+	user.is_using_look_spell = TRUE
+
+	//user.client.perspective = EYE_PERSPECTIVE
+	user.client.eye = src
+	user.visible_message("<span class='notice'>[user] leans in and looks in the direction of \the [get_area(src)].</span>", \
+	"<span class='notice'>You lean in and look in the direction of \the [get_area(src)].</span>")
+	user.register_event(/event/moved, user, /mob/proc/reset_view)
+	user.register_event(/event/after_move, user, /mob/proc/reset_view)
+	user.register_event(/event/hitby, user, /mob/proc/reset_view)
+	user.register_event(/event/touched, user, /mob/proc/reset_view)
+	user.register_event(/event/attacked_by, user, /mob/proc/reset_view)
+
+/proc/check_if_unobscured_turf(var/turf/T, var/mob/user, var/range)
+	if (!(T in view(range, user)))
+		return FALSE
+
+	if (T.Adjacent(user))
+		if (istype(T, /turf/simulated/wall))
+			return T.bullet_marks // Peeper code
+		else if (istype(T, /turf/simulated/floor))
+			return TRUE
+
+	// Other case: seeing if we can reach the user uninterrupted
+	var/turf/current_turf = T
+	var/turf/hometurf = get_turf(user)
+	var/i = 0
+	while(current_turf != hometurf && i < 2*range)
+		i++
+		var/vector/V = atoms2vector(current_turf, hometurf)
+		var/D = vector2ClosestDir(V)
+		current_turf = get_step(current_turf, D)
+		if (!(current_turf in view(user)))
+			return FALSE
+	return TRUE
+
 /*
 	Misc helpers
 

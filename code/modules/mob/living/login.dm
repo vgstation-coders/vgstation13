@@ -10,13 +10,6 @@
 	ResendAllUIs() // Re-sends mind UIs
 	INVOKE_EVENT(src, /event/living_login, "user" = src)
 
-	var/found_view_spell = FALSE
-	for (var/spell/S in spell_list)
-		if (istype(S, /spell/look_at_tile))
-			found_view_spell = TRUE
-	if (!found_view_spell)
-		add_spell(/spell/look_at_tile)
-
 	//login during ventcrawl
 	if(is_ventcrawling && istype(loc, /obj/machinery/atmospherics)) //attach us back into the pipes
 		remove_ventcrawl()
