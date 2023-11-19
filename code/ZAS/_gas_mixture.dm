@@ -226,8 +226,6 @@
 	else
 		pressure = 0
 
-	cache_reactions()
-
 
 /datum/gas_mixture/proc/total_moles()
 	return total_moles
@@ -527,16 +525,47 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 /datum/gas_mixture/unsimulated
 	allow_reactions = FALSE
 
+
+// This currently only gets called in reaction_tick(), but in the future an optimization could be made to only call this on
+// certain events, like when a room's quantity of a certain gas type goes above or below 0, then add flags to reactions that only care about
+// such events (most reactions probably only care about whether a gas exists, so this would be a big improvement). This function would still need
+// to exist for reactions that DO care about something more strange, though.
 /datum/gas_mixture/proc/cache_reactions()
 	if(allow_reactions)
-		possible_reactions = list()
+		possible_reactions.Cut()
 		for(var/datum/gas_reaction/reaction in XGM.reactions)
 			if(reaction.reaction_is_possible(src))
 				possible_reactions += reaction
 
 // Ticks all reactions once.
 /datum/gas_mixture/proc/reaction_tick()
-	if(allow_reactions)
+	cache_reactions()
+	if(allow_reactions && possible_reactions.len)
+		var/list/reaction_to_requested = list()
+		// First, grab the amount of reagents each reaction wants to use.
 		for(var/datum/gas_reaction/reaction in possible_reactions)
-			var/requested = reaction.reaction_amounts_requested(src)
-			reaction.perform_reaction(src, requested)
+			reaction_to_requested[reaction] = reaction.reaction_amounts_requested(src)
+		// Calculate the sum of all requested reagents and see if that's more gas than the environment has (i.e. two reactions are both requesting 80%
+		// of the oxygen, which sums up to 160%). Then we divide all reaction amounts by the worst offender so that at most 100% of a gas is used.
+		// Only need to do this if there's more than one reaction though (since a reaction SHOULDN'T be trying to use 150% of oxygen in a room)
+		if(possible_reactions.len > 1)
+			var/list/total_requested = list()
+			for(var/datum/gas_reaction/reaction in reaction_to_requested)
+				var/list/requested = reaction_to_requested[reaction]
+				for(var/gas_ID in requested)
+					total_requested[gas_ID] += requested[gas_ID]
+
+			var/worst_ratio = 1.0
+			for(var/gas_ID in total_requested)
+				var/environment_amount = gas[gas_ID] != null ? gas[gas_ID] : 0
+				worst_ratio = max(worst_ratio, total_requested[gas_ID] / environment_amount)
+
+			if(worst_ratio > 1.0)
+				for(var/datum/gas_reaction/reaction in reaction_to_requested)
+					var/list/requested = reaction_to_requested[reaction]
+					for(var/gas_ID in requested)
+						requested[gas_ID] /= worst_ratio
+
+		// Now actually perform the reactions.
+		for(var/datum/gas_reaction/reaction in reaction_to_requested)
+			reaction.perform_reaction(src, reaction_to_requested[reaction])

@@ -117,7 +117,7 @@
 						var/oxygen_mols_to_convert = min( get_conversion_amount(), tile_above_gas[GAS_OXYGEN])
 						tile_above_gas[GAS_OXYGEN] -= oxygen_mols_to_convert
 						tile_above_gas[GAS_CRYOTHEUM] += oxygen_mols_to_convert
-						tile_above_gas.add_thermal_energy(oxygen_mols_to_convert * -6000, 253.15)
+						tile_above_gas.add_thermal_energy(oxygen_mols_to_convert * -20000, 232.8952)
 					environment.merge( tile_above_gas )
 	else if( icon_state == "machine_unpowered" && !(stat & ( NOPOWER | FORCEDISABLE | BROKEN )))
 		update_icon()
@@ -127,11 +127,11 @@
 	var/amount = 0
 	if(crystal != null)
 		if(istype(crystal, /obj/item/bluespace_crystal/artificial))
-			amount = 14
+			amount = 120
 		else if(istype(crystal, /obj/item/bluespace_crystal/flawless))
-			amount = 70
+			amount = 250
 		else
-			amount = 38
+			amount = 630
 	if(emagged)
 		amount *= 1.2
 	return amount

@@ -642,8 +642,6 @@ var/global/list/air_alarms = list()
 			target = config.other_gas_threshold
 		else
 			target = config.gas_thresholds[env]
-			if(!istype(target))
-				to_chat(world, "ERROR HERE BZejriobejro")
 
 	target.adjust_threshold(value, index)
 
