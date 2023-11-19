@@ -88,7 +88,7 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 			var/turf/T = thing
 			T.lumcount = -1
 			affecting_turfs += T
-			if (get_dist(T, location) <= distance_to_wall_illum && CHECK_OCCLUSION(T) && is_valid_projection(T))
+			if (get_dist(T, location) <= distance_to_wall_illum && CHECK_OCCLUSION(T))
 				affected_shadow_walls += T
 
 	if(!isturf(loc))
@@ -96,15 +96,6 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 			T.lumcount = -1
 		affecting_turfs.Cut()
 		return
-
-/atom/movable/light/shadow/cast_light_init()
-	. = ..()
-	for (var/thing in glowing_walls)
-		qdel(thing)
-	glowing_walls = list()
-
-/atom/movable/light/proc/is_valid_projection(var/turf/T)
-	return TRUE
 
 /atom/movable/light/smooth/cast_light_init()
 	. = ..()
@@ -482,86 +473,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 /atom/movable/light/proc/cast_turf_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 
-/*
-/atom/movable/light/shadow/cast_turf_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
-
-
-	var/block_north = check_wall_occlusion_dir(target_turf, NORTH)
-	var/block_south = check_wall_occlusion_dir(target_turf, SOUTH)
-	var/block_east = check_wall_occlusion_dir(target_turf, EAST)
-	var/block_west = check_wall_occlusion_dir(target_turf, WEST)
-
-	var/delta_x = 0
-	var/delta_y = 0
-	var/grazing_angle = Atan2(x_offset, y_offset)
-
-	var/targ_dir = get_dir(target_turf, src)
-	var/turf/turf_light_angle = get_step(target_turf, targ_dir)
-
-	if (CHECK_OCCLUSION(turf_light_angle) || !(turf_light_angle in affecting_turfs))
-		affected_shadow_walls -= src
-		return
-
-	// -- Illuminating turfs
-	if (istype(target_turf, /turf/unsimulated/mineral))
-		var/image/img = new
-		var/roid_turf_prerender_identifier = "roid_turf_prerender_[light_power]"
-		if (roid_turf_prerender_identifier in pre_rendered_shadows)
-			img.render_source = roid_turf_prerender_identifier
-		else
-			img = image('icons/turf/rock_overlay.dmi', loc = get_turf(src))
-			img.alpha = min(150,max(0,round(light_power*light_power_multiplier*25)))
-			img.render_target = roid_turf_prerender_identifier
-			pre_rendered_shadows += roid_turf_prerender_identifier
-
-		img.pixel_x = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (x_offset * world.icon_size)
-		img.pixel_y = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (y_offset * world.icon_size)
-		img.layer = ROID_TURF_LIGHT_LAYER
-		temp_appearance += img
-
-	switch (grazing_angle)
-		if (90.01 to 179.99)
-			if (block_south && block_north)
-				delta_x += 1
-
-			else if (block_east && block_west)
-				delta_y -= 1
-
-		if (0.01 to 89.99)
-			if (block_south && block_north)
-				delta_x -= 1
-
-			else if (block_east && block_west)
-				delta_y -= 1
-
-		if (-89.99 to -0.01)
-			if (block_south && block_north)
-				delta_x -= 1
-
-			else if (block_east && block_west)
-				delta_y += 1
-
-
-		if (-179.99 to -89.99)
-			if (block_south && block_north)
-				delta_x += 1
-
-			else if (block_east && block_west)
-				delta_y += 1
-
-	var/turf/T = locate(target_turf.x + delta_x, target_turf.y + delta_y, target_turf.z)
-	if (iswallturf(T))
-		return
-	var/atom/movable/wall_light_source/reflec_wall = new(T)
-
-	glowing_walls += reflec_wall
-	reflec_wall.pixel_x -= delta_x*WORLD_ICON_SIZE
-	reflec_wall.pixel_y -= delta_y*WORLD_ICON_SIZE
-	var/intensity = min(255,max(0,round(light_power*light_power_multiplier*25)))
-	var/fadeout = max(get_dist(src, target_turf)/FADEOUT_STEP, 1)
-	reflec_wall.alpha =  round(intensity/fadeout)
-*/
-
 
 // While this proc is quite involuted, the highest it can do is :
 // 8 loops in the first "for"
@@ -577,6 +488,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		return
 	*/
 	// -- Illuminating turfs
+
 	if (istype(target_turf, /turf/unsimulated/mineral))
 		var/image/img = new
 		var/roid_turf_prerender_identifier = "roid_turf_prerender_[light_power]"
@@ -609,8 +521,8 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 	I.layer = HIGHEST_LIGHTING_LAYER
-
-	temp_appearance += I
+	image_comp += I
+	temp_appearance_shadows += I
 
 
 /atom/movable/light/proc/update_appearance()
@@ -619,8 +531,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	else
 		temp_appearance += temp_appearance_shadows
 	overlays = temp_appearance
-	if (blacken_out_turf.len)
-		overlays += blacken_out_turf
 	temp_appearance = null
 	color = light_color
 
@@ -662,15 +572,19 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 		black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 		black_turf.layer = ANTI_GLOW_PASS_LAYER
-		blacken_out_turf += black_turf
+		temp_appearance += black_turf
 
 
 // Smooth out shadows and then blacken out the wall glow
 /atom/movable/light/shadow/post_processing()
 	//consolidate_shadows()
-	overlays = temp_appearance
-	filters = filter(type = "blur", size = BLUR_SIZE)
+	var/image/shadow_overlay/combined_shadow_walls = new()
+	for (var/image/I in temp_appearance_shadows)
+		combined_shadow_walls.temp_appearance += I
 
+	combined_shadow_walls.overlays = combined_shadow_walls.temp_appearance
+	combined_shadow_walls.filters = filter(type = "blur", size = BLUR_SIZE)
+	temp_appearance += combined_shadow_walls
 
 	// -- eliminating the underglow
 	for (var/turf/T in affected_shadow_walls)
@@ -678,7 +592,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 			var/turf/neighbour = get_step(T, dir)
 			if (neighbour && !(neighbour in view(src)))
-
 				var/image/black_turf = new()
 
 				if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
@@ -694,7 +607,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 				black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 				black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 				black_turf.layer = ANTI_GLOW_PASS_LAYER
-				overlays += black_turf
+				temp_appearance += black_turf
 
 /atom/movable/light/proc/update_light_dir()
 	if(light_type == LIGHT_DIRECTIONAL)
@@ -837,7 +750,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 			var/turf/T = thing
 			T.lumcount = -1
 			affecting_turfs += T
-			if (get_dist(T, get_turf(src)) <= distance_to_wall_illum && CHECK_OCCLUSION(T) && is_valid_projection(T))
+			if (get_dist(T, get_turf(src)) <= distance_to_wall_illum && CHECK_OCCLUSION(T))
 				var/intensity = min(255,max(0,round(light_power*light_power_multiplier*25)))
 				var/fadeout = max(get_dist(src, T)/FADEOUT_STEP, 1)
 				var/x = round(intensity/fadeout)
@@ -850,7 +763,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		i++
 		var/dist = S.get_wall_view()
 		S.holder.name = "[S.holder.name] #[i]"
-		if (get_dist(get_turf(S), src) <= dist && S.is_valid_projection(src))
+		if (get_dist(get_turf(S), src) <= dist)
 			var/intensity = min(255,max(0,round(S.light_power*light_power_multiplier*25)))
 			var/fadeout = max(get_dist(src, S)/FADEOUT_STEP, 1)
 			var/x = round(intensity/fadeout)

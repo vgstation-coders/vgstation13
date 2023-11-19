@@ -43,7 +43,7 @@
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
 	animate_movement = NO_STEPS
 
-	var/list/glowing_walls = list()
+	var/list/image/image_comp = list()
 
 /atom/movable/wall_light_source
 	plane = LIGHTING_PLANE
@@ -168,7 +168,7 @@
 	return light_range
 
 /atom/movable/light/shadow/get_wall_view()
-	return 0.75*light_range
+	return light_range
 
 // -- Does a basic cheap raycast from the light to the turf.
 // Return true if it can see it.
@@ -190,6 +190,11 @@
 /image/shadow_overlay
 	appearance_flags = KEEP_TOGETHER
 	var/list/temp_appearance = list()
+
+/atom/movable/light/shadow/proc/vis_check(var/mob/M)
+	if (M in view(src))
+		return TRUE
+	return FALSE
 
 #undef LIGHT_CPU_THRESHOLD
 #undef TURF_SHADOW_FRACTION
