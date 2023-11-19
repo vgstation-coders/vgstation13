@@ -549,7 +549,6 @@ var/datum/controller/gameticker/ticker
 			else if(!delay_end)
 				sleep(restart_timeout)
 				if(!delay_end)
-					CallHook("Reboot",list())
 					world.Reboot()
 				else
 					to_chat(world, "<span class='notice'><B>An admin has delayed the round end</B></span>")
