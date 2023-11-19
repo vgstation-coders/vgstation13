@@ -137,6 +137,9 @@
 				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/mob/living/silicon/ai/A = new /mob/living/silicon/ai ( loc, laws, brain )
+				if(brain)
+					brain.forceMove(A)
+					A.brain = brain
 				A.show_intro_text()
 				if(A) //if there's no brain, the mob is deleted and a structure/AIcore is created
 					mob_rename_self(A,"ai", null, 1)
@@ -177,7 +180,11 @@ That prevents a few funky behaviors.
 							if(T.mind.GetRole(MALF))
 								to_chat(U, "<span class='danger'>ERROR:</span> Remote transfer interface disabled.")//Do ho ho ho~
 								return
-							new /obj/structure/AIcore/deactivated(T.loc)//Spawns a deactivated terminal at AI location.
+							var/obj/structure/AIcore/deactivated/I = new /obj/structure/AIcore/deactivated(T.loc)//Spawns a deactivated terminal at AI location.
+							if(T.brain)
+								I.brain = T.brain	//move the MMI from the active core to the inactive one, instead of the mob inside the card
+								T.brain.forceMove(I)
+								T.brain = null
 							//T.aiRestorePowerRoutine = 0//So the AI initially has power.
 							T.control_disabled = 1//Can't control things remotely if you're stuck in a card!
 							T.forceMove(C)//Throw AI into the card.
@@ -201,6 +208,10 @@ That prevents a few funky behaviors.
 						var/obj/item/device/aicard/C = src
 						var/mob/living/silicon/ai/A = locate() in C//I love locate(). Best proc ever.
 						if(A)//If AI exists on the card. Else nothing since both are empty.
+							if(T.brain)
+								A.brain = T.brain	//no qdel because the brain is (hopefully) in another core
+								T.brain.forceMove(A)
+								T.brain = null
 							A.control_disabled = 0
 							A.forceMove(T.loc)//To replace the terminal.
 							A.update_icon()

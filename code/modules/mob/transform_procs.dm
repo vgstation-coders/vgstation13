@@ -143,6 +143,8 @@
 	var/mob/living/silicon/ai/O = new (get_turf(src), base_law_type,,1)//No MMI but safety is in effect.
 	O.invisibility = 0
 	O.aiRestorePowerRoutine = 0
+	O.brain = new /obj/item/device/mmi(O)
+	O.brain.transfer_identity(src)
 	if(!spawn_here)
 		for (var/obj/item/device/radio/intercom/comm in O.loc)
 			comm.ai += O

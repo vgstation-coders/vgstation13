@@ -41,6 +41,8 @@ var/list/ai_list = list()
 	var/datum/intercom_settings/intercom_clipboard = null //Clipboard for copy/pasting intercom settings
 	var/mentions_on = FALSE
 	var/list/holopadoverlays = list()
+	var/obj/item/device/mmi/brain = null
+	var/locked = TRUE //can only deconstruct if the cover is unlocked
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
@@ -309,6 +311,17 @@ var/static/list/ai_icon_states = list(
 	ASSERT(chosen_state)
 	chosen_core_icon_state = chosen_state
 	update_icon()
+	
+/mob/living/silicon/ai/verb/unlock_own_cover()
+	set category = "AI Commands"
+	set name = "Unlock Cover"
+	set desc = "Unlocks your own cover if it is locked, allowing deconstruction."
+
+	if(!isDead() && locked)
+		switch(alert("You can not lock your cover again, are you sure?\n      (You can still ask for a human to lock it)", "Allow deconstruction", "Yes", "No"))
+			if("Yes")
+				locked = FALSE
+				to_chat(usr, "You unlock your cover.")
 
 /mob/living/silicon/ai/verb/pick_hologram_color()
 	set category = "AI Commands"
@@ -444,6 +457,13 @@ var/static/list/ai_icon_states = list(
 				if(call_shuttle_proc(src))
 					message_admins("[key_name_admin(src)] called the shuttle due to being hit with an EMP.'.")
 	..()
+	
+/mob/living/silicon/ai/emag_act(mob/user as mob)
+	spark(src, 5, FALSE)
+	if(locked)
+		locked = FALSE
+		to_chat(user, "You emag the cover lock, exposing the screws.")
+		to_chat(src, "<span class='info' style=\"font-family:Courier\">Interface unlocked.</span>")
 
 /mob/living/silicon/ai/ex_act(severity, var/child=null, var/mob/whodunnit)
 	if(flags & INVULNERABLE)
@@ -912,6 +932,45 @@ var/static/list/ai_icon_states = list(
 			user.visible_message("<span class='notice'>\The [user] finishes fastening down \the [src]!</span>")
 			anchored = TRUE
 			return
+	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+		var/obj/item/weapon/card/id/card
+		if(istype(W, /obj/item/device/pda))
+			var/obj/item/device/pda/PDA = W
+			if(PDA.id)
+				card = PDA.id
+		if(istype(W, /obj/item/weapon/card/id))
+			card = W
+		if(card && card.access && (access_ai_upload in card.access))
+			locked = !locked
+			to_chat(user, "You [ locked ? "lock" : "unlock"] [src]'s interface, [ locked ? "hiding" : "exposing"] the screws.")
+			to_chat(src, "<span class='info' style=\"font-family:Courier\">Interface [ locked ? "locked" : "unlocked"].</span>")
+		else
+			to_chat(user, "<span class='warning'>Access denied.</span>")
+			return
+		
+	else if (W.is_screwdriver(user) && user.a_intent == I_HELP)
+		if(locked)
+			to_chat(user, "<span class='warning'>The cover is locked.</span>")
+			return
+		if(health < maxHealth)
+			to_chat(user, "<span class='warning'>Repair \the [src] before deconstructing it!</span>")
+			return
+		user.visible_message("<span class='notice'>\The [user] begins carefully unscrewing \the [src]'s panel...</span>")
+		if(!do_after(user, src,100))
+			user.visible_message("<span class='notice'>\The [user] decides not to deconstruct \the [src].</span>")
+			return
+		user.visible_message("<span class='notice'>\The [user] finishes unfastening \the [src]'s panel!</span>")
+		log_attack("AI [src]([src.ckey]) has been deconstructed by [user.name]([user.ckey])")
+		var/obj/structure/AIcore/core = new /obj/structure/AIcore/(src.loc)
+		core.state = 4 
+		core.circuit = new /obj/item/weapon/circuitboard/aicore
+		if(brain)
+			brain.forceMove(core)
+			core.brain = brain
+			if(ckey)
+				core.brain.brainmob.ckey = ckey
+		core.update_icon()
+		qdel(src)
 	else
 		return ..()
 

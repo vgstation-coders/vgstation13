@@ -15,6 +15,10 @@
 		msg += "It looks barely operational.\n"
 	msg += "</span>"
 
+	msg += "Its maintenance panel is [locked ? "" : "un"]locked.\n"
+	if(!locked)
+		msg += "It can be deconstructed with a screwdriver.\n"
+	
 	switch(stat)
 		if(UNCONSCIOUS)
 			msg += "<span class='warning'>It is non-responsive and displaying the text: \"RUNTIME: Sensory Overload, stack 26/3\".</span>\n"
