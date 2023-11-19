@@ -21616,7 +21616,7 @@
 	},
 /area/crew_quarters/fitness)
 "bev" = (
-/obj/item/toy/gasha/carptoy,
+/obj/item/toy/plushie/carp,
 /turf/simulated/floor{
 	icon_state = "dark vault full"
 	},
@@ -33447,7 +33447,7 @@
 "cfm" = (
 /obj/structure/closet/secure_closet/hop2,
 /obj/item/clothing/suit/armor/hos,
-/obj/item/toy/gasha/corgitoy,
+/obj/item/toy/plushie/corgi,
 /turf/simulated/floor,
 /area/crew_quarters/hop)
 "cfn" = (
@@ -73022,7 +73022,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
-/obj/item/toy/gasha/beartoy,
+/obj/item/toy/plushie/spacebear,
 /turf/simulated/floor/wood,
 /area/crew_quarters/sleep)
 "hOn" = (
@@ -77326,7 +77326,7 @@
 	pixel_y = 1
 	},
 /obj/structure/closet/secure_closet/CMO,
-/obj/item/toy/gasha/cattoy,
+/obj/item/toy/plushie/cat,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "barber"
@@ -106229,7 +106229,7 @@
 /area/construction/mommi_nest)
 "tJf" = (
 /obj/structure/closet/secure_closet/engineering_chief,
-/obj/item/toy/gasha/parrottoy,
+/obj/item/toy/plushie/parrot,
 /turf/simulated/floor{
 	dir = 8;
 	icon_state = "neutralfull"

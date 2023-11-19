@@ -67,8 +67,6 @@ var/global/list/hidden_tech = list(
 			design_list += new D()
 	RefreshResearch()
 
-
-
 //Checks to see if tech has all the required pre-reqs.
 //Input: datum/tech; Output: 0/1 (false/true)
 /datum/research/proc/TechHasReqs(var/datum/tech/T)

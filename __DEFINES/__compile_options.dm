@@ -44,6 +44,8 @@
 //#define MAP_OVERRIDE 15
 // wheelstation.dm
 //#define MAP_OVERRIDE 16
+// tgstation-sec.dm
+//#define MAP_OVERRIDE 17
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this
