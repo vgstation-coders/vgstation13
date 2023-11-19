@@ -591,7 +591,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		for (var/dir in cardinal)
 
 			var/turf/neighbour = get_step(T, dir)
-			if (neighbour && !(neighbour in view(src)))
+			if (neighbour && !CHECK_OCCLUSION(neighbour))
 				var/image/black_turf = new()
 
 				if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
