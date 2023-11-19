@@ -89,7 +89,8 @@
 	data["gases"] = list()
 	var/static/list/display_gases = list()
 	for(var/gas_id in XGM.gases)
-		display_gases[gas_id] = XGM.gases[gas_id].name
+		var/datum/gas/gas_datum = XGM.gases[gas_id]
+		display_gases[gas_id] = gas_datum.name
 	var/total_moles = air.total_moles
 	for(var/gas in display_gases)
 		data["gases"] += list(list(
