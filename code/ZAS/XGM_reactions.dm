@@ -32,14 +32,14 @@
 /datum/gas_reaction/cryotheum_oxygen_reaction/reaction_amounts_requested(datum/gas_mixture/mixture)
 	var/to_return[] = list()
 	var/catalyst_coefficient = min(1.0, mixture[GAS_CRYOTHEUM] / mixture[GAS_OXYGEN] * 50)
-	to_return[GAS_OXYGEN] = catalyst_coefficient * mixture[GAS_OXYGEN]*0.015
+	to_return[GAS_OXYGEN] = catalyst_coefficient * mixture[GAS_OXYGEN]*0.0015
 	return to_return
 
 /datum/gas_reaction/cryotheum_oxygen_reaction/perform_reaction(datum/gas_mixture/mixture, reactant_amounts)
 	var/reaction_coefficient = reactant_amounts[GAS_OXYGEN]
 	mixture[GAS_OXYGEN] = max(0, mixture[GAS_OXYGEN] - reaction_coefficient)
-	// -12000 times 0.015 * mols of oxygen should reduce a normal room by about 1.7C every time this ticks.
-	mixture.add_thermal_energy( reaction_coefficient * -12000, 232.8952)
+	// -120000 times 0.0015 * mols of oxygen should reduce a normal room by about 1.7C every time this ticks.
+	mixture.add_thermal_energy( reaction_coefficient * -120000, 232.8952)
 
 
 // Cryotheum reacts with itself in the presence of plasma, disappearing but drastically lowering temperatures. Small amounts of gas will near-instantly turn to 0.1K, whereas
