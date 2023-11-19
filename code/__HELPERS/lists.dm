@@ -365,6 +365,13 @@
 		keys += key
 	return keys
 
+//In an associative list, return a sum of the elements.
+/proc/get_sum_of_elements(var/list/L)
+	var/elements = 0
+	for(var/key in L)
+		elements += L[key]
+	return elements
+
 /proc/count_by_type(var/list/L, type)
 	var/i = 0
 	for(var/T in L)
@@ -507,3 +514,12 @@
     for(var/a in L)
         if(max == null || L[a] > max) max = L[a]
     return max
+
+//Convert a list of paths into a list of object names
+/proc/types_to_english_list(var/list/L)
+	var/list/names = list()
+	for(var/P in L)
+		if(!ispath(P))
+			continue
+		names += "\the [P:name]"
+	return english_list(names)

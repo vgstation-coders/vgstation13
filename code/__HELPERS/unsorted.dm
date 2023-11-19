@@ -1385,7 +1385,7 @@ Game Mode config tags:
 		CRASH("Something called seedify() without anything to make seeds of.")
 
 	var/min_seeds = 1
-	var/max_seeds = 2
+	var/max_seeds = 4
 	var/seedloc = O.loc
 	var/datum/seed/new_seed_type
 

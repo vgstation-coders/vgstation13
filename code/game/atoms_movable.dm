@@ -549,7 +549,7 @@
 /atom/proc/PreImpact(atom/movable/A, speed)
 	return TRUE
 
-/atom/movable/proc/hit_check(var/speed, mob/user)
+/atom/movable/proc/hit_check(var/speed, mob/user, var/list/hit_whitelist)
 	. = 1
 
 	if(throwing)
@@ -558,12 +558,12 @@
 				continue
 
 			if(!A.PreImpact(src,speed))
-				throw_impact(A,speed,user)
+				throw_impact(A,speed,user, hit_whitelist)
 				if(throwing==1)
 					throwing = 0
 					. = 0
 
-/atom/movable/proc/throw_at(atom/target, range, speed, override = TRUE, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
+/atom/movable/proc/throw_at(atom/target, range, speed, override = TRUE, var/fly_speed = 0, var/list/whitelist) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
 	set waitfor = FALSE
 	if(!target || !src)
 		return 0
@@ -647,7 +647,7 @@
 					break
 
 				src.Move(step, dy, glide_size_override = DELAY2GLIDESIZE(fly_speed))
-				. = hit_check(speed, user)
+				. = hit_check(speed, user, whitelist)
 				error += dist_x
 				dist_travelled++
 				dist_since_sleep++
@@ -661,7 +661,7 @@
 					break
 
 				src.Move(step, dx, glide_size_override = DELAY2GLIDESIZE(fly_speed))
-				. = hit_check(speed, user)
+				. = hit_check(speed, user, whitelist)
 				error -= dist_y
 				dist_travelled++
 				dist_since_sleep++
@@ -688,7 +688,7 @@
 					break
 
 				src.Move(step, dx, glide_size_override = DELAY2GLIDESIZE(fly_speed))
-				. = hit_check(speed, user)
+				. = hit_check(speed, user, whitelist)
 				error += dist_y
 				dist_travelled++
 				dist_since_sleep++
@@ -702,7 +702,7 @@
 					break
 
 				src.Move(step, dy, glide_size_override = DELAY2GLIDESIZE(fly_speed))
-				. = hit_check(speed, user)
+				. = hit_check(speed, user, whitelist)
 				error -= dist_x
 				dist_travelled++
 				dist_since_sleep++
@@ -716,7 +716,7 @@
 	src.throwing = 0
 	kinetic_acceleration = 0
 	if(isobj(src))
-		src.throw_impact(get_turf(src), speed, user)
+		src.throw_impact(get_turf(src), speed, user, whitelist)
 
 //Overlays
 

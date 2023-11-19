@@ -1,7 +1,7 @@
 /datum/event/powercreeper
 
 /datum/event/powercreeper/can_start(var/list/active_with_role)
-	if(active_with_role["Engineer"] > 1 && active_with_role.len > 6)
+	if(active_with_role["Engineer"] > 1 && active_with_role["Any"] > 6)
 		return 15
 	return 0
 

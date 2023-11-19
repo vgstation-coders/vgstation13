@@ -471,6 +471,7 @@
 	description = "Tomatoes made into juice. Probably. What a waste of big, juicy tomatoes, huh?"
 	id = BLOOD
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_PIGMENT
 	color = DEFAULT_BLOOD //rgb: 161, 8, 8
 	density = 1.05
 	specheatcap = 3.49
@@ -1028,7 +1029,7 @@
 	if(M.bodytemperature > 310) //copypasted from the cold drinks check so I don't have to change minttox internally and maybe most certainly break shit in the process
 		M.bodytemperature = max(310, M.bodytemperature + (-5 * TEMPERATURE_DAMAGE_COEFFICIENT)) //that minty freshness my dude, chill out
 
-	if(fatgokaboom && M_FAT in M.mutations)
+	if(fatgokaboom && (M_FAT in M.mutations))
 		M.gib()
 
 	if(ishuman(M))
@@ -1172,6 +1173,7 @@
 	custom_metabolism = 0.1
 	density = 3.56
 	specheatcap = 17.15
+	overdose_am = REAGENTS_OVERDOSE // So you can't pretend that you "didn't know it was an OD"
 
 /datum/reagent/stoxin/on_mob_life(var/mob/living/M, var/alien)
 
@@ -1183,9 +1185,13 @@
 			M.eye_blurry = max(M.eye_blurry, 10)
 		if(15 to 25)
 			M.drowsyness  = max(M.drowsyness, 20)
-		if(25 to INFINITY)
+		if (25 to 240)
 			M.Paralyse(20)
 			M.drowsyness  = max(M.drowsyness, 30)
+		if(240 to INFINITY) // 8 minutes
+			var/mob/living/carbon/human/H = M
+			var/datum/organ/internal/heart/damagedheart = H.get_heart()
+			damagedheart.damage += 10
 
 /datum/reagent/srejuvenate
 	name = "Soporific Rejuvenant"
@@ -4714,6 +4720,7 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/mustard
 	name = "Mustard"
@@ -4722,6 +4729,7 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#cccc33" //rgb: 204, 204, 51
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/relish
 	name = "Relish"
@@ -5070,7 +5078,7 @@ var/procizine_tolerance = 0
 	id = BLACKCOLOR
 	description = "A black coloring used to dye food and drinks."
 	reagent_state = REAGENT_STATE_LIQUID
-	flags = CHEMFLAG_OBSCURING
+	flags = CHEMFLAG_OBSCURING|CHEMFLAG_PIGMENT
 	color = "#000000" //rgb: 0, 0, 0
 
 /datum/reagent/frostoil
@@ -6006,6 +6014,38 @@ var/procizine_tolerance = 0
 			H.heal_organ_damage(1, 1)
 			H.nutrition += nutriment_factor //Double nutrition
 
+/datum/reagent/blobanine
+	name = "Blobanine"
+	id = BLOBANINE
+	description = "An oily, green substance extracted from a blob."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#81EB00"
+
+/datum/reagent/blobanine/on_mob_life(var/mob/living/M)
+	if (..() || !ishuman(M))
+		return
+	var/mob/living/carbon/human/H = M
+	change_eye_color_to_green(H)
+
+/datum/reagent/blobanine/proc/change_eye_color_to_green(var/mob/living/carbon/human/H)
+	var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+	if (!E)
+		return
+	H.my_appearance.r_eyes = 129
+	H.my_appearance.g_eyes = 235
+	H.my_appearance.b_eyes = 0
+	H.update_body()
+
+/datum/reagent/blob_essence
+	name = "Blob Essence"
+	id = BLOB_ESSENCE
+	description = "A thick, transparent liquid extracted from live blob cores."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#FFD6A0"
+
+/datum/reagent/blob_essence/on_mob_life(var/mob/living/M)
+	if (..() || !ishuman(M))
+		return
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum//////////
@@ -8319,6 +8359,63 @@ var/procizine_tolerance = 0
 	glass_icon_state = "grogglass"
 	glass_desc = "The favorite of pirates everywhere."
 
+/datum/reagent/ethanol/drink/evoluator
+	name = "Evoluator"
+	id = EVOLUATOR
+	description = "Blobs that come into contact with oxygen really do evoluate."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = BLOB_MEAT
+	glass_icon_state = "evoluatorglass"
+	glass_desc = "Blob evoluated with oxigen. Prickly!"
+
+/datum/reagent/ethanol/drink/blob_beer
+	name = "Blob beer"
+	id = BLOBBEER
+	description = "Enzymes in the blob, when under heat, entered a state of rapid fermentation. The result was this beverage."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = BLOB_MEAT
+	glass_icon_state = "blobbeerglass"
+	glass_desc = "Acidic beer with a grand foam head. Subtle hints of apple."
+
+/datum/reagent/ethanol/drink/liberator
+	name = "Liberator"
+	id = LIBERATOR
+	description = "Fruit juice and liquors balancing the blob's overwhelming taste."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = DEFAULT_BLOOD
+	glass_icon_state = "liberatorglass"
+	glass_desc = "Fruity and strong, for when you need a quick recharge."
+
+/datum/reagent/ethanol/drink/spore
+	name = "Spore"
+	id = SPORE
+	description = "The special properties of karmotrine combined with blobanine create a disgusting but interesting drink."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = BLOB_MEAT
+	custom_metabolism = 0.1
+	glass_icon_state = "sporeglass"
+	glass_desc = "A tasteless drink with an almost unbearable aftertaste."
+
+/datum/reagent/ethanol/drink/spore/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	for(var/spell/S in M.spell_list)
+		if (istype(S, /spell/aoe_turf/conjure/spore))
+			return
+	var/spell/aoe_turf/conjure/spore/summon_spore = new()
+	summon_spore.charge_counter = 0 // Spell starts on cooldown
+	summon_spore.process()
+	M.add_spell(summon_spore)
+
+/datum/reagent/ethanol/drink/spore/on_removal(var/amount)
+	if (!iscarbon(src.holder.my_atom) || (max(0, src.volume - amount) >= 1))
+		return TRUE
+
+	var/mob/living/carbon/M = holder.my_atom
+	for(var/spell/aoe_turf/conjure/spore/S in M.spell_list)
+		M.remove_spell(S)
+	return TRUE
+
 /datum/reagent/ethanol/drink/aloe
 	name = "Aloe"
 	id = ALOE
@@ -8955,7 +9052,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/drink/coffee/engicoffee/on_mob_life(var/mob/living/M)
 	..()
 	M.hallucination = 0
-	M.reagents.add_reagent (HYRONALIN, 0.1)
+	M.reagents.add_reagent (HYRONALIN, 0.05)
 
 /datum/reagent/drink/coffee/medcoffee
 	name = "Lifeline"
@@ -9284,6 +9381,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = ZEAXANTHIN
 	description = "Zeaxanthin is a natural pigment which purportedly supports eye health."
 	color = "#CC4303" //rgb: 204, 67, 3
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/stoxin/valerenic_acid
 	name = "Valerenic Acid"
@@ -10236,3 +10334,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			new /obj/effect/alien/weeds(T)
 		if(!locate(/obj/effect/decal/cleanable/purpledrank) in T)
 			new /obj/effect/decal/cleanable/purpledrank(T)
+
+/datum/reagent/hyperzine/methamphetamine //slightly better than 'zine
+	name = "Methamphetamine" //Only used on the Laundromat spess vault
+	id = METHAMPHETAMINE
+	description = "It uses a different manufacture method but it is every bit as pure."
+	color = "#89CBF0" //baby blue
+	custom_metabolism = 0.01
+	overdose_am = 30

@@ -1,7 +1,7 @@
 /spell/targeted/projectile/dumbfire/fireball
 	name = "Fireball"
 	abbreviation = "FB"
-	desc = "This spell conjures a fireball that will fly in the direction you're facing and explode on collision with anything, or when it gets close to anyone else."
+	desc = "This spell conjures a fireball that will fly in the direction you're facing and explode on collision with anything."
 	user_type = USER_TYPE_WIZARD
 	specialization = SSOFFENSIVE
 
@@ -19,6 +19,7 @@
 	spell_aspect_flags = SPELL_FIRE
 	duration = 20
 	projectile_speed = 1
+	cast_prox_range = 0
 
 	amt_dam_brute = 40
 	amt_dam_fire = 45

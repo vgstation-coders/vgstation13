@@ -140,6 +140,7 @@
 		return 1
 
 /obj/item/weapon/reagent_containers/glass/beaker/on_reagent_change()
+	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/beaker/pickup(mob/user)
@@ -251,6 +252,9 @@
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
 	opaque = TRUE
+
+/obj/item/weapon/reagent_containers/glass/beaker/noreact/get_heat_conductivity()
+	return 0
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/arcane_act(mob/user, recursive)
 	flags &= ~NOREACT
@@ -443,6 +447,7 @@
 	attempt_heating(D, user)
 
 /obj/item/weapon/reagent_containers/glass/bucket/on_reagent_change()
+	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bucket/update_icon()
@@ -474,6 +479,7 @@
 		to_chat(usr, "<span class = 'notice'>You can't reseal the can's lid.")
 
 /obj/item/weapon/reagent_containers/glass/soupcan/on_reagent_change()
+	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/soupcan/update_icon()

@@ -3,7 +3,8 @@
 	sterility = 5
 	autoignition_temperature = AUTOIGNITION_FABRIC
 	var/list/species_restricted = null //Only these species can wear this kit.
-	var/wizard_garb = 0 // Wearing this empowers a wizard.
+	var/wizard_garb = 0 //Wearing this empowers a wizard.
+	var/gentling //If TRUE, prevents the wearer from casting wizard spells.
 	var/eyeprot = 0 //for head and eyewear
 	var/nearsighted_modifier = 0 //positive values impair vision(welding goggles), negative values improve vision(prescription glasses)
 
@@ -412,6 +413,25 @@
 	var/stack_depth = 0
 	var/blood_overlay_type = "hat"
 
+	var/obj/item/clothing/suit/hood_suit = null // the suit this hood belongs to
+
+/obj/item/clothing/head/Destroy()
+	if(hood_suit)
+		hood_suit.hood = null
+		hood_suit = null
+	..()
+
+/obj/item/clothing/head/pickup(var/mob/living/carbon/human/user)
+	if(hood_suit && istype(hood_suit) && user.get_item_by_slot(slot_wear_suit) == hood_suit)
+		hood_suit.hooddown(user, unequip = 0)
+		user.drop_from_inventory(src)
+		forceMove(hood_suit)
+		if (hood_suit.force_hood)
+			user.u_equip(hood_suit)
+			user.put_in_hands(hood_suit)
+		else
+			to_chat(user, "You put the hood down.")
+
 var/global/hatStacking = 0
 var/global/maxStackDepth = 10
 
@@ -633,6 +653,111 @@ var/global/maxStackDepth = 10
 	siemens_coefficient = 0.9
 	clothing_flags = CANEXTINGUISH
 	sterility = 30
+
+	// Hood stuff
+	var/obj/item/clothing/head/hood // Headgear to be used as hood, if any.
+									// Doesn't actually need a 'icons/mob/head.dmi' sprite if the hood_up_icon_state
+									//  already provides the visuals for that (eg: most wintercoats in wintercoat.dm)
+	var/is_hood_up = FALSE
+	var/hood_suit_name = "coat" 	// What to call these garments when talking hood stuff. eg: coat, robes, hoodie...
+
+	var/hood_down_icon_state = null // Defaults to the initial icon_state if not set
+	var/hood_up_icon_state = null   // Defaults to the initial icon_state if not set
+
+	var/force_hood = FALSE			// Automatically equips the hood when equipping the suit. Removing the hood will remove the suit.
+	var/auto_hood = FALSE			// Automatically equips the hood when equipping the suit.
+
+/obj/item/clothing/suit/New()
+	if (hood)
+		hood.hood_suit = src
+
+		if (!force_hood)
+			actions_types |= list(/datum/action/item_action/toggle_hood)
+
+		if (wizard_garb)
+			hood.wizard_garb = TRUE
+
+		if (!hood_down_icon_state)
+			hood_down_icon_state = icon_state
+
+		if (!hood_up_icon_state)
+			hood_up_icon_state = icon_state
+
+		icon_state = hood_down_icon_state
+
+	..()
+
+/obj/item/clothing/suit/Destroy()
+	if (hood)
+		QDEL_NULL(hood)
+	..()
+
+/obj/item/clothing/suit/proc/togglehood()
+	set name = "Toggle Hood"
+	set category = "Object"
+	set src in usr
+
+	if (!hood)
+		return
+
+	if(usr.incapacitated())
+		return
+
+	var/mob/living/carbon/human/user = usr
+	if(!istype(user))
+		return
+	if(user.get_item_by_slot(slot_wear_suit) != src)
+		to_chat(user, "You have to put the [hood_suit_name] on first.")
+		return
+	if(!is_hood_up && !user.get_item_by_slot(slot_head) && hood.mob_can_equip(user,slot_head))
+		to_chat(user, "You put the hood up.")
+		hoodup(user)
+	else if(user.get_item_by_slot(slot_head) == hood)
+		hooddown(user)
+		to_chat(user, "You put the hood down.")
+	else
+		to_chat(user, "You try to put your hood up, but there is something in the way.")
+		return
+	user.update_inv_wear_suit()
+
+/obj/item/clothing/suit/attack_self()
+	if (hood && !force_hood)
+		togglehood()
+
+/obj/item/clothing/suit/proc/hoodup(var/mob/living/carbon/human/user)
+	user.equip_to_slot(hood, slot_head)
+	icon_state = hood_up_icon_state
+	is_hood_up = TRUE
+	user.update_inv_wear_suit()
+
+/obj/item/clothing/suit/proc/hooddown(var/mob/living/carbon/human/user, var/unequip = 1)
+	icon_state = hood_down_icon_state
+	if(unequip)
+		user.u_equip(user.head,0)
+	is_hood_up = FALSE
+	user.update_inv_wear_suit()
+
+/obj/item/clothing/suit/equipped(var/mob/user, var/slot, hand_index = 0)
+	..()
+	if (hood && (force_hood || auto_hood) && !hand_index)
+		if (auto_hood && (user.get_item_by_slot(slot_head) && user.get_item_by_slot(slot_head) != hood))
+			return//we want to still be able to equip the suit even if the hood is blocked
+		hoodup(user)
+
+/obj/item/clothing/suit/unequipped(var/mob/living/carbon/human/user)
+	..()
+	if(hood && istype(user) && user.get_item_by_slot(slot_head) == hood)
+		hooddown(user)
+
+/obj/item/clothing/suit/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	. = ..()
+
+	if (hood && force_hood && slot == slot_wear_suit)
+		if (M.get_item_by_slot(slot_head) && M.get_item_by_slot(slot_head) != hood)
+			to_chat(M, "You try to put the [hood_suit_name] on, but there is something in the way of its hood.")
+			return FALSE
+		else if (!hood.mob_can_equip(M, slot_head))
+			return FALSE
 
 /obj/item/clothing/suit/proc/vine_protected()
 	return FALSE

@@ -87,6 +87,8 @@
 
 /spell/targeted/equip_item/robesummon/get_upgrade_info(upgrade_type, level)
 	if(upgrade_type == Sp_POWER)
+		if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+			return "It already summons a gem-encrusted hardsuit and internals!"
 		return "Make the spell summon a gem-encrusted hardsuit and internals."
 	return ..()
 

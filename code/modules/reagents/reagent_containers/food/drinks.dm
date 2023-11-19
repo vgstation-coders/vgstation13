@@ -38,6 +38,7 @@
 	var/atom/movable/overlay/flipping = null
 
 /obj/item/weapon/reagent_containers/food/drinks/on_reagent_change()
+	..()
 	if(gulp_size < 5)
 		gulp_size = 5
 	else
@@ -1042,6 +1043,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/sillycup/on_reagent_change()
+	..()
 	if(reagents.total_volume)
 		icon_state = "water_cup"
 	else
@@ -1466,6 +1468,7 @@
 	starting_materials = list(MAT_IRON = 500)
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/on_reagent_change()
+	..()
 	if (reagents.reagent_list.len > 0)
 		mug_reagent_overlay()
 	else

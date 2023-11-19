@@ -199,12 +199,12 @@ var/auxtools_path
 	..()
 
 /world/proc/pre_shutdown()
+	stop_all_media()
+
 	for(var/datum/html_interface/D in html_interfaces)
 		D.closeAll()
 
 	Master.Shutdown()
-
-	stop_all_media()
 
 	end_credits.on_world_reboot_start()
 	sleep(max(10, end_credits.audio_post_delay))

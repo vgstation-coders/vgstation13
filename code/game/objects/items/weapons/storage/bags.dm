@@ -232,8 +232,8 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	icon_state = plantbag_colour
 
 /obj/item/weapon/storage/bag/plants/portactor
-	name = "portable seed extractor"
-	desc = "A heavy-duty, yet portable seed extractor. Less efficient than the stationary machine, this version can extract at most two seeds per sample."
+	name = "advanced plant bag"
+	desc = "A heavy-duty plant bag that doubles as a portable seed extractor. Use the \"Dissolve Contents\" function to extract seeds from whatever is inside."
 	icon_state = "portaseeder"
 	actions_types = list(/datum/action/item_action/dissolve_contents)
 

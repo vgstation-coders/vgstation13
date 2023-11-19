@@ -933,12 +933,12 @@
 /obj/item/toy/gasha/miner
 	name = "toy miner"
 	desc = "Walk softly, and carry a ton of monsters."
-	icon_state = "miner"
+	icon_state = "gashaminer"
 
 /obj/item/toy/gasha/clown
 	name = "toy clown"
 	desc = "HONK"
-	icon_state = "clown"
+	icon_state = "gashaclown"
 
 /obj/item/toy/gasha/goliath
 	name = "toy goliath"
@@ -1008,12 +1008,12 @@
 /obj/item/toy/gasha/mime
 	name = "toy mime"
 	desc = "..."
-	icon_state = "mime"
+	icon_state = "gashamime"
 
 /obj/item/toy/gasha/captain
 	name = "toy captain"
 	desc = "Though some say the captain should always go down with his ship, captains on NT stations tend to be the first on escape shuttles whenever the time comes."
-	icon_state = "captain"
+	icon_state = "gashacaptain"
 
 /obj/item/toy/gasha/comdom
 	name = "toy comdom"
@@ -1102,7 +1102,7 @@
 	icon_state = ""
 
 /obj/item/toy/gasha/mimiga/sue
-	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'best girl'."
+	desc = "It looks like some sort of rabbit-thing. For some reason you get the feeling that this one is the 'best girl'."
 	icon_state = "sue"
 
 /obj/item/toy/gasha/mimiga/toroko
@@ -1112,7 +1112,7 @@
 	icon_state = "king"
 
 /obj/item/toy/gasha/mimiga/chaco
-	desc = "It looks like some sort of rabbit-thing, for some reason you get the feeling that this one is the 'worst girl'."
+	desc = "It looks like some sort of rabbit-thing. For some reason you get the feeling that this one is the 'worst girl'."
 	icon_state = "chaco"
 
 /obj/item/toy/gasha/mario
@@ -1143,32 +1143,8 @@
 /obj/item/toy/gasha/bomberman/blue
 	icon_state = "bomberman4"
 
-/obj/item/toy/gasha/corgitoy
-	name = "plush corgi"
-	desc = "Perfect for the pet owner on a tight budget!"
-	icon_state = "corgitoy"
-
-/obj/item/toy/gasha/cattoy
-	name = "plush cat"
-	desc = "Marginally less affectionate than an actual cat."
-	icon_state = "cattoy"
-
-/obj/item/toy/gasha/parrottoy
-	name = "plush parrot"
-	desc = "All the fun of a real parrot, without the obnoxious talking!"
-	icon_state = "parrottoy"
-
-/obj/item/toy/gasha/beartoy
-	name = "plush bear"
-	desc = "HOO, HA! HOO, HA!"
-	icon_state = "beartoy"
-
-/obj/item/toy/gasha/carptoy
-	name = "plush carp"
-	desc = "Can not be used as a distraction during a space carp attack."
-	icon_state = "carptoy"
 /obj/item/toy/gasha/monkeytoy
-	name = "plush monkey"
+	name = "toy monkey"
 	desc = "Slightly less likely to throw poop than the real one."
 	icon_state = "monkeytoy"
 

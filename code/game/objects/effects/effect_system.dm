@@ -152,12 +152,16 @@ steam.start() -- spawns the effect
 
 	var/move_dir = 0
 	var/energy = 0
+	var/surfaceburn = 1
+
+/obj/effect/sparks/nosurfaceburn
+	surfaceburn = 0
 
 /obj/effect/sparks/New(var/travel_dir)
 	..()
 	var/turf/T = loc
 	if(istype(T))
-		T.hotspot_expose(1000, 100, surfaces = 1)
+		T.hotspot_expose(1000, 100, surfaces = surfaceburn)
 	set_light(1, 1, LIGHT_COLOR_YELLOW)
 
 /obj/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
@@ -166,14 +170,14 @@ steam.start() -- spawns the effect
 	processing_objects.Add(src)
 	var/turf/T = loc
 	if (istype(T, /turf))
-		T.hotspot_expose(1000, 100, surfaces = 1)
+		T.hotspot_expose(1000, 100, surfaces = surfaceburn)
 
 /obj/effect/sparks/Destroy()
 	processing_objects.Remove(src)
 	var/turf/T = src.loc
 
 	if (istype(T, /turf))
-		T.hotspot_expose(1000, 100, surfaces = 1)
+		T.hotspot_expose(1000, 100, surfaces = surfaceburn)
 
 	..()
 
@@ -181,7 +185,7 @@ steam.start() -- spawns the effect
 	..()
 	var/turf/T = src.loc
 	if (istype(T, /turf))
-		T.hotspot_expose(1000,100, surfaces = 1)
+		T.hotspot_expose(1000,100, surfaces = surfaceburn)
 	return
 
 /obj/effect/sparks/process()
@@ -202,7 +206,7 @@ steam.start() -- spawns the effect
 	else
 		location = get_turf(loca)
 
-/datum/effect/system/spark_spread/start()
+/datum/effect/system/spark_spread/start(surfaceburn = TRUE)
 	if (holder)
 		location = get_turf(holder)
 	if(!location)
@@ -217,15 +221,18 @@ steam.start() -- spawns the effect
 	for (var/i = 1 to number)
 		var/nextdir=pick_n_take(directions)
 		if(nextdir)
-			var/obj/effect/sparks/sparks = new /obj/effect/sparks(location)
-			sparks.start(nextdir)
-
+			if(surfaceburn)
+				var/obj/effect/sparks/sparks = new /obj/effect/sparks(location)
+				sparks.start(nextdir)
+			else
+				var/obj/effect/sparks/nosurfaceburn/sparks = new /obj/effect/sparks/nosurfaceburn(location)
+				sparks.start(nextdir)
 // This sparks.
-/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE)
+/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = TRUE) //surfaceburn means the sparks can ignite things on the ground. set it to false to keep eg. portals like in the time agent event from burning down the station
 	loc = get_turf(loc)
 	var/datum/effect/system/spark_spread/S = new
 	S.set_up(amount, cardinals, loc)
-	S.start()
+	S.start(surfaceburn)
 
 /////////////////////////////////////////////
 //// SMOKE SYSTEMS

@@ -8,7 +8,7 @@
 	icon_state = "light1"
 	anchored = 1.0
 	var/buildstage = 2
-	var/on = 1
+	var/on = 0
 	var/image/overlay
 
 	moody_light_type = /atom/movable/light/moody/light_switch

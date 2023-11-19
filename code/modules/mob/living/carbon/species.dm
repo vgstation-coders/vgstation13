@@ -902,7 +902,7 @@ var/global/list/playable_species = list("Human")
 	has_mutant_race = 0
 	burn_mod = 2.5 //treeeeees
 
-	move_speed_mod = 7
+	move_speed_mod = 4
 
 	species_intro = "You are a Diona.<br>\
 					You are a plant, so light is incredibly helpful for you, in both photosynthesis, and regenerating damage you have received.<br>\
@@ -1360,9 +1360,10 @@ var/list/has_died_as_golem = list()
 	species_intro = "You are a Mushroom Person.<br>\
 					You are an odd creature. Your lack of a mouth prevents you from eating, but you can stand or lay on food to absorb it.<br>\
 					You have a resistance to burn and toxin, but you are vulnerable to brute attacks.<br>\
-					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the target chosen with your Fungal Telepathy.<br>\
+					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the targets chosen with your Fungal Telepathy.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
 	var/mob/living/telepathic_target[] = list()
+	var/telepathy_type = LOCAL_TELEPATHY
 
 /datum/species/mushroom/makeName()
 	return capitalize(pick(mush_first)) + " " + capitalize(pick(mush_last))
@@ -1380,6 +1381,16 @@ var/list/has_died_as_golem = list()
 	if (M.stat == UNCONSCIOUS)
 		to_chat(M, "<span class='warning'>You must be conscious to do this!</span>")
 		return
+
+	if(telepathy_type & (LOCAL_TELEPATHY | GLOBAL_TELEPATHY))
+		telepathic_target.len = 0
+		var/list/possible_targets = M.mind.heard_before
+		var/datum/mind/temp_target
+		for(var/T in possible_targets)
+			temp_target = possible_targets[T]
+			if(!temp_target.current || ((telepathy_type & LOCAL_TELEPATHY) && !(get_dist(temp_target.current, M) <= SPEECH_RANGE)))
+				continue
+			telepathic_target += temp_target.current
 
 	if(!telepathic_target.len)
 		var/mob/living/L = M

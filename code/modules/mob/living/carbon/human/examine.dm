@@ -84,7 +84,7 @@
 				msg += "[t_He] [t_is] carrying [bicon(s_store)] \a [s_store] on [t_his] [wear_suit.name].\n"
 
 	//back
-	if(back && back.is_visible())
+	if(back && !(slot_back in obscured) && back.is_visible())
 		if(back.is_blood_stained())
 			msg += "<span class='warning'>[t_He] [t_has] [bicon(back)] [back.a_stained()] [back.name] on [t_his] back! [format_examine(back, "Examine")][back.description_accessories()]</span>\n"
 		else

@@ -449,12 +449,12 @@ var/area/space_area
 		thing.area_entered(src)
 
 	for(var/mob/mob_in_obj in Obj.contents)
-		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = src, "old" = oldArea))
+		INVOKE_EVENT(src, /event/mob_area_changed, "mob" = mob_in_obj, "newarea" = src, "oldarea" = oldArea)
 
 	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
-		CallHook("MobAreaChange", list("mob" = M, "new" = src, "old" = oldArea)) // /vg/ - EVENTS!
+		INVOKE_EVENT(src, /event/mob_area_changed, "mob" = M, "newarea" = src, "oldarea" = oldArea)
 		if(narrator)
 			narrator.Crossed(M)
 

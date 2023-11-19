@@ -26,20 +26,15 @@
 		return FALSE
 	if (istype(user.get_item_by_slot(slot_glasses), /obj/item/clothing/glasses/sunglasses/blindfold))
 		to_chat(user, "<span class='warning'>You're blindfolded!</span>")
+		return FALSE
 	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
 
 /spell/aoe_turf/glare/choose_targets(var/mob/user = usr)
 	var/list/targets = list()
-	for(var/mob/living/carbon/C in oview(inner_radius))
-		var/success = C.vampire_affected(user.mind)
-		switch (success)
-			if (TRUE)
-				targets += C
-			if (FALSE)
-				continue
-			if (VAMP_FAILURE)
-				return critfail(targets, user)
+	for(var/mob/living/carbon/C in oview(inner_radius)) //Silicons are excluded
+		if(istype(C))
+			targets += C
 
 	if (!targets.len)
 		to_chat(user, "<span class='warning'>There are no targets.</span>")
@@ -51,12 +46,28 @@
 	var/datum/role/vampire/V = isvampire(user) // Shouldn't ever be null, as cast_check checks if we're a vamp.
 	if (!V)
 		return FALSE
+	var/critical_fail = FALSE
+	var/list/immune_targets = list() //Helps keep things tidy by telling the vampire everyone who is divinely-shielded
+	for(var/mob/living/carbon/affected in targets) //Check for whether the spell should fail, then proceed
+		var/success = affected.vampire_affected(user.mind, FALSE) //We are just checking, don't send messages
+		switch (success)
+			if (FALSE)
+				immune_targets += affected
+			if (VAMP_FAILURE)
+				affected.vampire_affected(user.mind)
+				critical_fail = TRUE
+				break
+	if(critical_fail) //Cancel the spell because a null rod caused a backlash against the vampire
+		critfail(targets, user)
+		return
 	user.visible_message("<span class='danger'>\The [user]'s eyes emit a blinding flash!</span>")
-	for (var/T in targets)
-		var/mob/living/carbon/C = T
-		var/dist = get_dist(user, C)
-		if (C.is_blind())
+	for (var/mob/living/carbon/C in targets)
+		if(C.is_blind())
 			continue
+		if(C in immune_targets)
+			C.vampire_affected(user.mind) //Send the message related to whether they are resistant or being shielded by a null rod
+			continue
+		var/dist = get_dist(user, C)
 		switch (dist)
 			if (0 to 1) // Close mobs
 				C.Stun(8)
@@ -80,6 +91,3 @@
 	user.Stun(4)
 	user.Knockdown(4)
 	user.stuttering += 15
-	var/datum/role/vampire/V = isvampire(user)
-	if (V)
-		V.remove_blood(3*blood_cost)

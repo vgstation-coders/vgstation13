@@ -434,6 +434,9 @@
 		to_chat(character, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
 		to_chat(character, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
 
+	for(var/datum/faction/F in ticker.mode.factions) /* Ensure all existing factions receive notice of the latejoin to handle what they need to. */
+		register_event(/event/late_arrival, F, nameof(F::OnLateArrival())) //Wrapped in nameof() to ensure that the parent proc doesn't get called. Possibly a BYOND bug?
+
 	if(character.mind.assigned_role != "MODE")
 		if(character.mind.assigned_role != "Cyborg")
 			data_core.manifest_inject(character)
@@ -449,7 +452,7 @@
 						handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character.real_name] has arrived in the sector from space.</span></span>",character) //handle_render generates a Follow link
 			else
 				AnnounceArrival(character, rank)
-				CallHook("Arrival", list("character" = character, "rank" = rank))
+				INVOKE_EVENT(src, /event/late_arrival, "character" = character, "rank" = rank)
 			character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 		else
 			character.Robotize()
@@ -799,11 +802,11 @@
 		return new_character
 	else
 		var/mob/living/silicon/robot/new_character
-		forceMove(spawn_loc)
 		if(type == "Mobile MMI")
 			new_character = MoMMIfy()
 		else
 			new_character = Robotize()
+		new_character.forceMove(spawn_loc)
 		new_character.mmi.create_identity(prefs) //Uses prefs to create a brain mob
 
 		return new_character

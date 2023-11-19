@@ -158,11 +158,11 @@ var/global/list/ghdel_profiling = list()
 // throw_impact is called multiple times when an item is thrown: see /atom/movable/proc/hit_check at atoms_movable.dm
 // Do NOT delete an item as part of its throw_impact unless you've checked the hit_atom is a turf, as that's effectively the last time throw_impact is called in a single throw.
 // Otherwise, shit will runtime in the subsequent throw_impact calls.
-/atom/proc/throw_impact(atom/hit_atom, var/speed, mob/user)
+/atom/proc/throw_impact(atom/hit_atom, var/speed, mob/user, var/list/impact_whitelist)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
 		playsound(src, src.throw_impact_sound, 80, 1)
-		M.hitby(src,speed,src.dir)
+		M.hitby(src,speed,src.dir,impact_whitelist)
 		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by [user] ([user ? user.ckey : "what"])</font>")
 
 	else if(isobj(hit_atom))
@@ -183,8 +183,7 @@ var/global/list/ghdel_profiling = list()
 	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user)
 
 /atom/Destroy()
-	if(reagents)
-		QDEL_NULL(reagents)
+	QDEL_NULL(reagents)
 
 	if(density)
 		densityChanged()
@@ -209,6 +208,7 @@ var/global/list/ghdel_profiling = list()
 	if(smooth_light_obj)
 		qdel(smooth_light_obj)
 		smooth_light_obj = null
+	QDEL_NULL(firelightdummy)
 	..()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
@@ -1052,6 +1052,16 @@ its easier to just keep the beam vertical.
 	if (colored_text && blood_color)
 		stain_text = "<span style='color: [get_stain_text_color()]'>[stain_text]</span>"
 	return indef_art + " " + stain_text
+
+/atom/proc/heat_dissipation_updates()
+	if (reagents in thermal_dissipation_reagents)
+		if (!reagents.total_volume)
+			thermal_dissipation_reagents -= reagents
+	else if (reagents.total_volume)
+		thermal_dissipation_reagents += reagents
+
+/atom/proc/get_heat_conductivity()
+	return 1
 
 /atom/proc/is_blood_stained()
 	if (blood_color && blood_DNA && blood_DNA.len)

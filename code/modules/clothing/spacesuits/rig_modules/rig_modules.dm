@@ -12,7 +12,11 @@
 	..()
 
 /obj/item/rig_module/proc/can_install(var/obj/item/clothing/suit/space/rig/target)
-   return !(locate(type) in target.modules) //by default only allow one module of a type
+   if ((locate(type) in target.modules)) //by default only allow one module of a type
+      return list(FALSE, "Could not install the " + name + ": module already present.") 
+   else
+      return list(TRUE, name +": successfully installed.")  //redundant second string to return, but just in case
+   
 
 /obj/item/rig_module/proc/examine_addition(mob/user)
 	return
@@ -166,11 +170,12 @@
 	..()
 
 /obj/item/rig_module/plasma_proof/can_install(var/obj/item/clothing/suit/space/rig/target)
-   if(!..())
-      return FALSE
+   var/parent_check=..()
+   if(!parent_check[1])
+      return list(FALSE,parent_check[2]) 
    if(target.clothing_flags & PLASMAGUARD)
-      return FALSE
-   return TRUE
+      return list(FALSE,"Could not install the " + name +": suit is already plasma sealed.")
+   return list(TRUE, name +": successfully installed.") 
 
 //Muscle tissue/Hulk module
 /obj/item/rig_module/muscle_tissue
@@ -299,7 +304,25 @@
 	if(current_capacity >= max_capacity)
 		deactivate()
 
+/obj/item/rig_module/rad_shield/can_install(var/obj/item/clothing/suit/space/rig/target)
+   var/parent_check=..()
+   if(!parent_check[1])
+      return list(FALSE,parent_check[2])
+   if(locate(/obj/item/rig_module/rad_shield/adv) in target.modules) //don't allow both rad mods at once
+      return list(FALSE,"Could not install the " + name +": a radiation absorption device is already present.")
+   return list(TRUE, name +": successfully installed.") 
+
+
+
 /obj/item/rig_module/rad_shield/adv
 	name = "high capacity radiation absorption device"
 	desc = "Its acronym, R.A.D., and full name both convey the application of this module. By using similar technology as radiation collectors, it protects the suit wearer from incoming radiation until its collectors are full. This model features a higher capacity than the basic version. It can be reset by using a suit storage unit's cleaning operation."
 	max_capacity = 1600 //About 7-8 "item touches" worth based on the same conditions as the above testing.
+
+/obj/item/rig_module/rad_shield/adv/can_install(var/obj/item/clothing/suit/space/rig/target)
+   var/parent_check=..()
+   if(!parent_check[1])
+      return list(FALSE,parent_check[2])
+   if(locate(/obj/item/rig_module/rad_shield) in target.modules) //don't allow both rad mods at once
+      return list(FALSE,"Could not install the " + name +": a radiation absorption device is already present.")
+   return list(TRUE, name +": successfully installed.") 

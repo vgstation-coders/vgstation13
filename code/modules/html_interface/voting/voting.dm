@@ -257,7 +257,6 @@ var/global/datum/controller/vote/vote = new()
 		feedback_set_details("end_error","restart vote")
 		if(blackbox)
 			blackbox.save_all_data_to_sql()
-		CallHook("Reboot",list())
 		sleep(50)
 		log_game("Rebooting due to restart vote")
 		world.Reboot()
@@ -376,7 +375,7 @@ var/global/datum/controller/vote/vote = new()
 				var/msg = "A map vote was initiated with these options: [english_list(get_list_of_keys(maps))]."
 				send2maindiscord(msg)
 				send2mainirc(msg)
-				send2ickdiscord(config.kill_phrase) // This the magic kill phrase
+				send2ickdiscord("**A round has ended.** You can discuss it at https://boards.4chan.org/vg/catalog#s=ss13g. A new round will begin soon.")
 			else
 				return 0
 
