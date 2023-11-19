@@ -223,7 +223,6 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 
 #define ABOVE_LIGHTING_PLANE	(16)
-	#define ABOVE_LIGHTING_LAYER		0
 	#define SUPERMATTER_WALL_LAYER 		1
 	#define SUPER_PORTAL_LAYER			2
 	#define NARSIE_GLOW 				3
