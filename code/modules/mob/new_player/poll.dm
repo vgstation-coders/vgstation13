@@ -62,6 +62,7 @@
 			pollendtime = select_query.item[2]
 			pollquestion = select_query.item[3]
 			polltype = select_query.item[4]
+			multiplechoiceoptions = select_query.item[5]
 			found = 1
 			break
 		qdel(select_query)
@@ -298,10 +299,6 @@
 					if(PO.optionid < minoptionid || !minoptionid)
 						minoptionid = PO.optionid
 					options += PO
-
-
-				if(select_query.item[5])
-					multiplechoiceoptions = text2num(select_query.item[5])
 
 				var/output = "<div align='center'><B>Player poll</B>"
 
