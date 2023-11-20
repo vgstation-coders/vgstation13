@@ -16,6 +16,7 @@
 	var/active = FALSE
 	var/watches_nuke = TRUE
 	var/pinpointable = TRUE//is it being tracked by the pinpointer pinpointer
+	var/datum/faction/malf/malf_faction
 var/list/pinpointerpinpointer_list = list()
 
 /obj/item/weapon/pinpointer/New()
@@ -53,6 +54,11 @@ var/list/pinpointerpinpointer_list = list()
 /obj/item/weapon/pinpointer/process()
 	if(target)
 		point_at(target)
+		return
+	malf_faction = find_active_faction_by_type(/datum/faction/malf)
+	if(malf_faction && malf_faction.stage >= FACTION_ENDGAME)
+		var/mob/AI = malf_faction.members[1].antag.current
+		point_at(AI)
 		return
 	point_at(nukedisk)
 
@@ -137,11 +143,6 @@ var/list/pinpointerpinpointer_list = list()
 		if(2)
 			point_at(target)
 
-/obj/item/weapon/pinpointer/advpinpointer/AltClick(var/mob/user)
-	if((usr.incapacitated() || !Adjacent(usr)))
-		return
-	toggle_mode()
-
 /obj/item/weapon/pinpointer/advpinpointer/verb/toggle_mode()
 	set category = "Object"
 	set name = "Toggle Pinpointer Mode"
@@ -160,12 +161,15 @@ var/list/pinpointerpinpointer_list = list()
 			if(!locationx || !Adjacent(usr))
 				return
 			var/locationy = input(usr, "Please input the y coordinate to search for.", "Location?" , "") as num
-			if(!locationy || !Adjacent(usr))
+			if(!locationy || !!Adjacent(usr))
 				return
 
-			var/turf/locationz = get_turf(src)
-			location = locate(locationx,locationy,locationz.z)
-			to_chat(usr, "<span class='notice'>You set the pinpointer to locate ([locationx], [locationy], [locationz.z])</span>")
+			var/turf/Z = get_turf(src)
+
+			location = locate(locationx,locationy,Z.z)
+
+			to_chat(usr,"You set the pinpointer to locate [locationx],[locationy]")
+
 
 			return attack_self()
 
@@ -265,8 +269,7 @@ var/list/pinpointerpinpointer_list = list()
 
 /obj/item/weapon/pinpointer/pdapinpointer/examine(mob/user)
 	..()
-	var/timeuntil = altFormatTimeDuration(max(0, nextuse-world.time))
-	to_chat(user, "<span class='notice'>[src] [timeuntil ? "can select a target again in [timeuntil]." : "is ready to select a new target!"]</span>") 
+	to_chat(user, "<span class='notice'>[src] can select a target again in [altFormatTimeDuration(nextuse-world.time)].</span>") 
 	
 
 /obj/item/weapon/pinpointer/pdapinpointer/attack_self()
