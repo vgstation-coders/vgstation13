@@ -490,6 +490,8 @@
 		else
 			command_alert(/datum/command_alert/malf_announce)
 	M.core_upgrades -= src
+	for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
+		point.target = A
 
 //--------------------------------------------------------
 
