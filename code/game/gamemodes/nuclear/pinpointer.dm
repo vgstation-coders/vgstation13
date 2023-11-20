@@ -57,7 +57,8 @@ var/list/pinpointerpinpointer_list = list()
 		return
 	malf_faction = find_active_faction_by_type(/datum/faction/malf)
 	if(malf_faction && malf_faction.stage >= FACTION_ENDGAME)
-		var/mob/AI = malf_faction.members[1].antag.current
+		var/datum/role/malfAI/MR = malf_faction.members[1] //ideally i'd use Find(/datum/role/malfAI) for this but it doesn't work
+		var/mob/AI = MR.antag.current
 		point_at(AI)
 		return
 	point_at(nukedisk)
