@@ -333,7 +333,7 @@ var/list/headset_modes = list(
 /mob/living/proc/hear_radio_only()
 	return 0
 
-/mob/living/send_speech(var/datum/speech/speech, var/message_range=7, var/bubble_type) // what is bubble type?
+/mob/living/send_speech(var/datum/speech/speech, var/message_range=10, var/bubble_type) // what is bubble type?
 	var/visual_range = message_range //the range of hearers who can see that something was said, but not hear the message
 	say_testing(src, "/mob/living/send_speech() start, msg = [speech.message]; message_range = [message_range]; language = [speech.language ? speech.language.name : "None"]; speaker = [speech.speaker];")
 	if(isnull(message_range))

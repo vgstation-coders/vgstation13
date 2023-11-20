@@ -902,6 +902,7 @@ Use this proc preferably at the end of an equipment loadout
 				return 0
 		return 0 //Unsupported slot
 		//END HUMAN
+
 /mob/proc/reset_view(atom/A)
 	if (client)
 		if (istype(A, /atom/movable))

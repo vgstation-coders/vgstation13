@@ -368,17 +368,45 @@
 		return FALSE
 
 	user.reset_view()
+	user.face_atom(src)
 	user.is_using_look_spell = TRUE
 
 	//user.client.perspective = EYE_PERSPECTIVE
 	user.client.eye = src
-	user.visible_message("<span class='notice'>[user] leans in and looks in the direction of \the [get_area(src)].</span>", \
-	"<span class='notice'>You lean in and look in the direction of \the [get_area(src)].</span>")
-	user.register_event(/event/moved, user, /mob/proc/reset_view)
-	user.register_event(/event/after_move, user, /mob/proc/reset_view)
-	user.register_event(/event/hitby, user, /mob/proc/reset_view)
-	user.register_event(/event/touched, user, /mob/proc/reset_view)
-	user.register_event(/event/attacked_by, user, /mob/proc/reset_view)
+
+	var/mob/virtualhearer/new_hearer = new(user)
+	new_hearer.loc = src
+	movable_hearers -= new_hearer // Because the hearer isn't fixed with his old body
+	message_admins("newhearer for [user] at [src.x], [src.y]")
+
+	user.register_event(/event/moved, user, nameof(user::reset_view_from_look()))
+	user.register_event(/event/after_move, user, nameof(user::reset_view_from_look()))
+	user.register_event(/event/hitby, user, nameof(user::reset_view_from_look()))
+	user.register_event(/event/touched, user, nameof(user::reset_view_from_look()))
+	user.register_event(/event/attacked_by, user, nameof(user::reset_view_from_look()))
+
+	user.register_event(/event/moved, new_hearer, nameof(new_hearer::qdel_self()))
+	user.register_event(/event/after_move, new_hearer, nameof(new_hearer::qdel_self()))
+	user.register_event(/event/hitby, new_hearer, nameof(new_hearer::qdel_self()))
+	user.register_event(/event/touched, new_hearer, nameof(new_hearer::qdel_self()))
+	user.register_event(/event/attacked_by, new_hearer, nameof(new_hearer::qdel_self()))
+
+	var/clownpeeper = 0
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if (H.mind.assigned_role == "Clown")
+			clownpeeper = 1
+
+	if (clownpeeper)
+		user.visible_message("<span class='notice'>[user] puts his hands close to his eyes, his fists half-closed.</span>", \
+		"<span class='notice'>You put on your imaginary googles and  \the [get_area(src)].</span>")
+	else
+		user.visible_message("<span class='notice'>[user] leans in and looks in the direction of \the [get_area(src)].</span>", \
+		"<span class='notice'>You lean in and look in the direction of \the [get_area(src)].</span>")
+
+// Need to get rid of the arguments...
+/mob/proc/reset_view_from_look(...)
+	reset_view()
 
 /proc/check_if_unobscured_turf(var/turf/T, var/mob/user, var/range)
 	if (!(T in view(range, user)))
