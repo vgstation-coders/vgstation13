@@ -411,6 +411,9 @@
 	if (!(T in view(range, user)))
 		return FALSE
 
+	if (user.incapacitated())
+		return FALSE
+
 	if (T.Adjacent(user))
 		if (istype(T, /turf/simulated/wall))
 			return T.bullet_marks // Peeper code
