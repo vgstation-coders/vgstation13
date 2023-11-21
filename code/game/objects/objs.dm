@@ -63,8 +63,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		breakable_init()
 	if(is_cooktop)
 		add_component(/datum/component/cooktop)
-	if(autoignition_temperature)
-		burnableatoms+=src
 
 //More cooking stuff:
 /obj/proc/can_cook() //Returns true if object is currently in a state that would allow for food to be cooked on it (eg. the grill is currently powered on). Can (and generally should) be overriden to check for more specific conditions.

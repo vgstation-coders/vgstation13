@@ -173,7 +173,8 @@ var/global/list/ghdel_profiling = list()
 	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user)
 
 /atom/Destroy()
-	QDEL_NULL(reagents)
+	if(reagents)
+		QDEL_NULL(reagents)
 
 	if(density)
 		densityChanged()
@@ -189,7 +190,6 @@ var/global/list/ghdel_profiling = list()
 				B.master.target = null
 		beams.len = 0
 	*/
-	QDEL_NULL(firelightdummy)
 	..()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
