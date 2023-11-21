@@ -156,7 +156,7 @@ Attach to transfer valve and open. BOOM.
 	#define IGNITE_DELAYED 1
 	#define IGNITE_INSTANT 2
 
-	var/igniting = 0
+	var/igniting = IGNITE_NONE
 	var/atom/firesource
 
 	if(surfaces)
