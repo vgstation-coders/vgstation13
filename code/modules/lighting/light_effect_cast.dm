@@ -570,7 +570,8 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 		image_result.overlays = image_result.temp_appearance
 		// Apply a filter
-		image_result.filters = filter(type = "blur", size = BLUR_SIZE)
+		if (!found_prerendered_white_light_glob)
+			image_result.filters = filter(type = "blur", size = BLUR_SIZE)
 		temp_appearance += image_result
 	else
 		temp_appearance += temp_appearance_shadows
