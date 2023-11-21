@@ -36,7 +36,7 @@
 	icon_state = "wood"
 
 	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 10
+	fire_fuel = 5
 	soot_type = null
 	melt_temperature = 0 // Doesn't melt.
 
@@ -64,7 +64,7 @@
 	icon_state = "wood"
 
 	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 10
+	fire_fuel = 5
 	soot_type = null
 	melt_temperature = 0 // Doesn't melt.
 

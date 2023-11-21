@@ -49,7 +49,7 @@ Attach to transfer valve and open. BOOM.
 /atom/proc/burnFireFuel(used_fuel_ratio, used_reactants_ratio)
 	fire_fuel -= (fire_fuel * used_fuel_ratio * used_reactants_ratio) //* 5
 
-	var/turf/T = get_turf(loc)
+	var/turf/T = isturf(src) ? src : get_turf(loc)
 	if(T)
 		T.hotspot_expose(autoignition_temperature, CELL_VOLUME, surfaces=1)
 	if(prob(10)) //10% chance of smoke creation per tick
@@ -91,16 +91,18 @@ Attach to transfer valve and open. BOOM.
 		overlays -= fire_overlay
 	QDEL_NULL(firelightdummy)
 
+/atom/proc/can_ignite() //extra check to disable ignition
+	return TRUE
+
 /atom/proc/ignite(var/temperature)
 	on_fire=1
 	//visible_message("\The [src] bursts into flame!")
 	if(fire_dmi && fire_sprite)
 		fire_overlay = image(fire_dmi,fire_sprite)
 		overlays += fire_overlay
-
-	var/atom/movable/AM = src
-	if(istype(AM))
-		firelightdummy = new (src)
+	firelightdummy = new (src)
+	if(ismovable(src))
+		var/atom/movable/AM = src
 		AM.vis_contents += firelightdummy
 	spawn()
 		burnItselfUp()
@@ -138,6 +140,7 @@ Attach to transfer valve and open. BOOM.
 /turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume, var/soh = 0, var/surfaces=0)
 
 /turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh, surfaces)
+
 	var/obj/effect/foam/fire/W = locate() in contents
 	if(istype(W))
 		return 0
@@ -149,21 +152,48 @@ Attach to transfer valve and open. BOOM.
 	if(!air_contents)
 		return 0
 
-	var/igniting = 0
+	#define IGNITE_NONE 0
+	#define IGNITE_DELAYED 1
+	#define IGNITE_INSTANT 2
 
-	if(surfaces && air_contents.molar_density(GAS_OXYGEN) >= (1 / CELL_VOLUME))
-		for(var/obj/O in contents)
-			if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && !O.on_fire && O.autoignition_temperature && exposed_temperature >= O.autoignition_temperature)
-				O.ignite()
-				igniting = 1
-				break
-	if(!igniting && exposed_temperature >= PLASMA_MINIMUM_BURN_TEMPERATURE && air_contents.check_combustability(src, surfaces))
-		igniting = 1
+	var/igniting = 0
+	var/atom/firesource
+
+	if(surfaces)
+		if(air_contents.molar_density(GAS_OXYGEN) >= (1 / CELL_VOLUME))
+			for(var/obj/O in contents)
+				if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && !O.on_fire && O.autoignition_temperature && exposed_temperature >= O.autoignition_temperature)
+					O.ignite()
+					firesource = O
+					igniting = IGNITE_DELAYED
+					break
+			if(!igniting)
+				if(on_fire)
+					igniting = IGNITE_DELAYED
+					firesource = src
+				else if(prob(exposed_volume * 100 / CELL_VOLUME) && autoignition_temperature && can_ignite() && exposed_temperature >= autoignition_temperature)
+					ignite()
+					firesource = src
+					igniting = IGNITE_DELAYED
+	if(exposed_temperature >= PLASMA_MINIMUM_BURN_TEMPERATURE && air_contents.check_combustability(src, surfaces))
+		igniting = IGNITE_INSTANT
 	if(locate(/obj/effect/fire) in src)
-		igniting = 1
-	else if(igniting)
-		new /obj/effect/fire(src)
+		igniting = IGNITE_INSTANT
+	else
+		switch(igniting)
+			if(IGNITE_DELAYED)
+				spawn((SS_WAIT_BURNABLE / 2) * rand())
+					if(firesource)
+						if(firesource.on_fire && !(firesource.gcDestroyed || firesource.timestopped))
+							new /obj/effect/fire(src)
+			if(IGNITE_INSTANT)
+				if(!(gcDestroyed || timestopped))
+					new /obj/effect/fire(src)
 	return igniting
+
+	#undef IGNITE_NONE
+	#undef IGNITE_DELAYED
+	#undef IGNITE_INSTANT
 
 // ignite_temp: 0 = Don't check, just get fuel.
 /turf/simulated/proc/getAmtFuel(var/ignite_temp=0)
@@ -350,6 +380,7 @@ Attach to transfer valve and open. BOOM.
 
 		var/can_use_turf=(T && istype(T))
 		if(can_use_turf)
+			total_fuel += T.getFireFuel()
 			for(var/atom/A in T)
 				if(!A)
 					continue
@@ -419,10 +450,12 @@ Attach to transfer valve and open. BOOM.
 
 	// We have to check all objects in order to extinguish object fires.
 	var/still_burning=0
+	var/extinguishing=!gas[GAS_OXYGEN]
 	for(var/atom/A in T)
 		if(!A)
 			continue
-		if(!gas[GAS_OXYGEN]/* || A.autoignition_temperature > temperature*/)
+//		if(!gas[GAS_OXYGEN]/* || A.autoignition_temperature > temperature*/)
+		if(extinguishing)
 			A.extinguish()
 			continue
 //		if(!A.autoignition_temperature)
@@ -432,6 +465,14 @@ Attach to transfer valve and open. BOOM.
 		else if(A.on_fire)
 			//A.extinguish()
 			A.ashify()
+
+	// We can also keep burning the turf itself eg. wooden floors
+	if(extinguishing)
+		T.extinguish()
+	else if(QUANTIZE(T.getFireFuel() * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= T.volatility)
+		still_burning=1
+	else if(T.on_fire)
+		T.ashify()
 
 	return still_burning
 

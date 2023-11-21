@@ -37,13 +37,21 @@ var/list/atom/burnableatoms = list()
 	currentrun_index = c
 
 #define MINOXY2BURN (1 / CELL_VOLUME)
+
 /atom/proc/checkburn()
-	if(on_fire)
+	if(!on_fire && autoignition_temperature && (isturf(src) || isturf(loc)))
 		var/datum/gas_mixture/G = return_air()
-		if(!G || G.molar_density(GAS_OXYGEN) < MINOXY2BURN) //no oxygen so it goes out
-			extinguish()
-	else if(autoignition_temperature && isturf(loc))
-		var/datum/gas_mixture/G = return_air()
-		if(G && G.temperature >= autoignition_temperature && G.molar_density(GAS_OXYGEN) >= MINOXY2BURN)
-			ignite()
+		if(G?.burnable(autoignition_temperature))
+			if(can_ignite())
+				spawn((SS_WAIT_BURNABLE / 2) * rand()) //stagger it a bit so everything doesnt all burst into flames at once
+					if(src && !on_fire && G?.burnable(autoignition_temperature) && !(gcDestroyed || timestopped) && can_ignite())
+						ignite()
+
+/datum/gas_mixture/proc/burnable(var/temp_threshold)
+	if(src && temperature >= temp_threshold && molar_density(GAS_OXYGEN) > MINOXY2BURN)
+		return TRUE
+	return FALSE
+
 #undef MINOXY2BURN
+
+

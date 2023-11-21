@@ -25,6 +25,8 @@
 
 	if(istype(loc, /area/chapel))
 		holy = 1
+	if(autoignition_temperature)
+		burnableatoms+=src
 	levelupdate()
 
 /turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD)

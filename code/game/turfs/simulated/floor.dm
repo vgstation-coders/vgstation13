@@ -337,6 +337,9 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 		src.icon_state = "[material]_broken"
 
+/turf/simulated/floor/can_ignite()
+	return !burnt
+
 /turf/simulated/floor/proc/burn_tile()
 	if(istype(src,/turf/simulated/floor/engine))
 		return//Reinforced floors don't burn
@@ -363,6 +366,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		burnt = 1
 	else if(is_mineral_floor())
 		burnt = 1
+	extinguish()
 
 //This proc will delete the floor_tile and the update_iocn() proc will then change the icon_state of the turf
 //This proc auto corrects the grass tiles' siding.
