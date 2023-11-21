@@ -221,6 +221,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 			for (var/atom/movable/light/neighbour in get_turf(src)) // This light atom is rendered from point A to point B, so it's fine
 				if (white_light_identifier in neighbour.pre_rendered_shadows)
 					I.render_source = white_light_identifier
+					I.icon_state = "overlay"
 					found_prerendered_white_light = TRUE
 					found_prerendered_white_light_glob = TRUE
 					break
@@ -334,13 +335,28 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		I.render_source = shadow_image_identifier
 	else
 		var/found_shadow_identif = 0
+		/*
 		// Same tile has done it before.......
 		for (var/atom/movable/light/neighbour in get_turf(src)) // This light atom is rendered from point A to point B, so it's fine
 			if (shadow_image_identifier in neighbour.pre_rendered_shadows)
 				I.render_source = shadow_image_identifier
 				I.layer = LIGHTING_LAYER
 				found_shadow_identif = TRUE
+				if (num == CORNER_SHADOW)
+					if(delta == 0)
+						I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+					else if (delta > 0)
+						I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
+					else
+						I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
+				else
+					if (delta > 0)
+						I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+					else
+						I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
+
 				break
+		*/
 		// Or not!
 		if (!found_shadow_identif)
 			switch(grazing_angle)
