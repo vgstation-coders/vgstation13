@@ -143,6 +143,8 @@ steam.start() -- spawns the effect
 // will always spawn at the items location.
 /////////////////////////////////////////////
 
+#define SPARK_TEMP 500
+
 /obj/effect/sparks
 	name = "sparks"
 	desc = "it's a spark what do you need to know?"
@@ -164,20 +166,21 @@ steam.start() -- spawns the effect
 		T.hotspot_expose(1000, 100, surfaces = surfaceburn)
 	set_light(1, 1, LIGHT_COLOR_YELLOW)
 
+
 /obj/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
 	move_dir=travel_dir
 	energy=rand(1,max_energy)
 	processing_objects.Add(src)
 	var/turf/T = loc
 	if (istype(T, /turf))
-		T.hotspot_expose(1000, 100, surfaces = surfaceburn)
+		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 
 /obj/effect/sparks/Destroy()
 	processing_objects.Remove(src)
 	var/turf/T = src.loc
 
 	if (istype(T, /turf))
-		T.hotspot_expose(1000, 100, surfaces = surfaceburn)
+		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 
 	..()
 
@@ -185,7 +188,7 @@ steam.start() -- spawns the effect
 	..()
 	var/turf/T = src.loc
 	if (istype(T, /turf))
-		T.hotspot_expose(1000,100, surfaces = surfaceburn)
+		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 	return
 
 /obj/effect/sparks/process()
@@ -233,6 +236,8 @@ steam.start() -- spawns the effect
 	var/datum/effect/system/spark_spread/S = new
 	S.set_up(amount, cardinals, loc)
 	S.start(surfaceburn)
+
+#undef SPARK_TEMP
 
 /////////////////////////////////////////////
 //// SMOKE SYSTEMS

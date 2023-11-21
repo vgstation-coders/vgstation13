@@ -140,7 +140,7 @@
 /datum/next_map/synergy
 	name = "Synergy Station"
 	path = "Synergy"
-	max_players = 30
+	min_players = 15
 
 /datum/next_map/waystation
 	name = "Waystation"
