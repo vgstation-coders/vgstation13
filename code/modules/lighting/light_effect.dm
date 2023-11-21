@@ -23,6 +23,7 @@
 	animate_movement = NO_STEPS
 
 	alpha = 180
+	color = "#FFFFFF"
 
 	var/current_power = 1
 	var/base_light_color_state = "white"

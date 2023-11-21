@@ -62,7 +62,7 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 	//cap light range to the max
 	luminosity = 3*light_range
 	light_range = min(MAX_LIGHT_RANGE, light_range)
-	light_color = (holder.light_color || light_color)
+	//light_color = (holder.light_color || light_color)
 
 	var/atom/location = get_turf(src)
 	var/distance_to_wall_illum = get_wall_view()
@@ -559,7 +559,15 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		temp_appearance += temp_appearance_shadows
 	overlays = temp_appearance
 	temp_appearance = null
-	color = light_color
+
+	// Coloring!
+	var/image/I = new
+	I.icon = src.icon
+	I.icon_state = "white"
+	I.alpha = 255
+	I.blend_mode = BLEND_MULTIPLY // acts a color map on top of us
+	I.color = light_color
+	overlays += I
 
 // -- Smoothing out shadows
 /atom/movable/light/proc/post_processing()
