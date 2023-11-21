@@ -394,3 +394,5 @@
 	name = "\improper fumo Yukari"
 	desc = "An elusive and enigmatic stuffed doll. It has a smug expression on its face."
 	icon_state = "yukari"
+
+//Familiar
