@@ -14,7 +14,7 @@
 	if(istype(T))
 		T.blocks_light = -1
 		for(var/atom/movable/light/L in range(world.view, T)) //view(world.view, dview_mob))
-			if (world.cpu > 50 && ticker.current_state > GAME_STATE_PREGAME)
+			if (world.tick_usage < TICK_LIMIT_RUNNING && ticker.current_state > GAME_STATE_PREGAME)
 				lighting_update_lights |= L
 			else
 				L.cast_light()

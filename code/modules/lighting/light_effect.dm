@@ -1,4 +1,4 @@
-#define LIGHT_CPU_THRESHOLD 80
+#define LIGHT_CPU_THRESHOLD TICK_LIMIT_RUNNING
 #define TURF_SHADOW_FRACTION 1
 
 /atom/movable/light
@@ -120,7 +120,7 @@
 			else
 				forceMove(holder.loc, glide_size_override = get_glide()) // Hopefully whatever we're gliding with has smooth movement.
 
-			if (world.cpu < LIGHT_CPU_THRESHOLD || !ticker || ticker.current_state < GAME_STATE_SETTING_UP)
+			if (world.tick_usage < LIGHT_CPU_THRESHOLD || !ticker || ticker.current_state < GAME_STATE_SETTING_UP)
 				cast_light() // We don't use the subsystem queue for this since it's too slow to prevent shadows not being updated quickly enough
 			else
 				lighting_update_lights |= src

@@ -35,6 +35,9 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 
 // cast_light() is the "master proc", shared by the two kinds.
 
+/atom/movable/light
+	var/found_prerendered_white_light_glob = FALSE
+
 /atom/movable/light/proc/cast_light()
 	cast_light_init()
 	cast_main_light()
@@ -197,7 +200,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		var/image/I = new
 
 		// Find proper identifier
-		var/white_light_identifier = "white_[light_power]_[light_range]"
+		var/white_light_identifier = "white_[light_range]"
 
 		// Proper icon state for directional lights
 		var/directional_light_overlay
@@ -215,12 +218,11 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 			I.render_source = white_light_identifier
 		else
 			var/found_prerendered_white_light = FALSE
-			for (var/atom/movable/light/neighbour in view(max(1, light_range - 1), src)) // This light atom is rendered from point A to point B, so it's fine
-				if (neighbour.light_range < light_range)
-					continue
+			for (var/atom/movable/light/neighbour in get_turf(src)) // This light atom is rendered from point A to point B, so it's fine
 				if (white_light_identifier in neighbour.pre_rendered_shadows)
 					I.render_source = white_light_identifier
 					found_prerendered_white_light = TRUE
+					found_prerendered_white_light_glob = TRUE
 					break
 			if (!found_prerendered_white_light)
 				I = image(icon)
@@ -229,6 +231,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 				else
 					I.icon_state = "overlay"
 				I.render_target = white_light_identifier
+				pre_rendered_shadows += white_light_identifier
 
 		temp_appearance += I
 
@@ -329,55 +332,64 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	// We've done this before...
 	if (shadow_image_identifier in pre_rendered_shadows)
 		I.render_source = shadow_image_identifier
-	// Or not!
 	else
-		switch(grazing_angle)
-			if (-179 to -91)
-				M.Scale(-1, -1)
+		var/found_shadow_identif = 0
+		// Same tile has done it before.......
+		for (var/atom/movable/light/neighbour in get_turf(src)) // This light atom is rendered from point A to point B, so it's fine
+			if (shadow_image_identifier in neighbour.pre_rendered_shadows)
+				I.render_source = shadow_image_identifier
+				I.layer = LIGHTING_LAYER
+				found_shadow_identif = TRUE
+				break
+		// Or not!
+		if (!found_shadow_identif)
+			switch(grazing_angle)
+				if (-179 to -91)
+					M.Scale(-1, -1)
 
-			if (-90)
-				M.Scale(1, -1)
+				if (-90)
+					M.Scale(1, -1)
 
-			if (-89 to -1)
-				M.Scale(1, -1)
+				if (-89 to -1)
+					M.Scale(1, -1)
 
-			if (0)
-				M.Turn(90)
+				if (0)
+					M.Turn(90)
 
-			//if (1 to 89)
+				//if (1 to 89)
 
-			//if (90)
+				//if (90)
 
-			if (91 to 179)
-				M.Scale(-1, 1)
+				if (91 to 179)
+					M.Scale(-1, 1)
 
-			if (180)
-				M.Turn(-90)
+				if (180)
+					M.Turn(-90)
 
-		// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
-		// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
-		// The downside is, of course, that you need to cover all the cases in your switch.
-		var/icon/shadowicon = try_get_light_range_icon(block_1, block_2, light_range, num)
-		I = image(shadowicon)
+			// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
+			// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
+			// The downside is, of course, that you need to cover all the cases in your switch.
+			var/icon/shadowicon = try_get_light_range_icon(block_1, block_2, light_range, num)
+			I = image(shadowicon)
 
-		//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
-		if (num == CORNER_SHADOW)
-			if(delta == 0)
-				I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
-			else if (delta > 0)
-				I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
+			//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
+			if (num == CORNER_SHADOW)
+				if(delta == 0)
+					I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+				else if (delta > 0)
+					I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
+				else
+					I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
 			else
-				I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
-		else
-			if (delta > 0)
-				I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
-			else
-				I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
+				if (delta > 0)
+					I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+				else
+					I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
 
-		I.transform = M
-		I.layer = LIGHTING_LAYER
-		I.render_target = shadow_image_identifier
-		pre_rendered_shadows += shadow_image_identifier
+			I.transform = M
+			I.layer = LIGHTING_LAYER
+			I.render_target = shadow_image_identifier
+			pre_rendered_shadows += shadow_image_identifier
 
 	// Once that's done...
 	// We caclulate the offset
