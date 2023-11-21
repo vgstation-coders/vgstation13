@@ -37,7 +37,7 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	if(!is_type_in_list(attachedto,stationary_hearers))
 		movable_hearers += src
 
-/mob/virtualhearer/proc/qdel_self(...)
+/mob/virtualhearer/proc/qdel_self(var/mover, var/attacker, var/item)
 	qdel(src)
 
 /mob/virtualhearer/Destroy()

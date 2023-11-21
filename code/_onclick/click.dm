@@ -377,7 +377,6 @@
 	var/mob/virtualhearer/new_hearer = new(user)
 	new_hearer.loc = src
 	movable_hearers -= new_hearer // Because the hearer isn't fixed with his old body
-	message_admins("newhearer for [user] at [src.x], [src.y]")
 
 	user.register_event(/event/moved, user, nameof(user::reset_view_from_look()))
 	user.register_event(/event/after_move, user, nameof(user::reset_view_from_look()))
@@ -405,7 +404,7 @@
 		"<span class='notice'>You lean in and look in the direction of \the [get_area(src)].</span>")
 
 // Need to get rid of the arguments...
-/mob/proc/reset_view_from_look(...)
+/mob/proc/reset_view_from_look(var/mover, var/attacker, var/item)
 	reset_view()
 
 /proc/check_if_unobscured_turf(var/turf/T, var/mob/user, var/range)
