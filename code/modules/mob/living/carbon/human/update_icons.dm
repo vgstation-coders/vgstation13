@@ -671,26 +671,41 @@ var/global/list/damage_icon_parts = list()
 		if(!t_state)
 			t_state = gloves.icon_state
 
-		var/icon/standing_icon = gloves.wear_override ? icon(gloves.wear_override) : icon((gloves.icon_override) ? gloves.icon_override : 'icons/mob/hands.dmi', "[t_state]")
 
-		if(onehandedmask)
-			standing_icon.Blend(icon('icons/mob/hands.dmi', "mask_[onehandedmask]"), ICON_ADD)
 
-		var/image/standing = image(standing_icon)
 
+		//inhale
+
+		var/standing_icon_path
+		var/standing_icon_state
+		if(gloves.wear_override)
+			standing_icon_path = gloves.wear_override
+		else if(gloves.icon_override)
+			standing_icon_path = gloves.icon_override
+		else
+			standing_icon_path = 'icons/mob/hands.dmi'
+			standing_icon_state = "[t_state]"
 		var/datum/species/S = species
 		for(var/datum/organ/external/OE in get_organs_by_slot(slot_gloves, src)) //Display species-exclusive species correctly on attached limbs
 			if(OE.species)
 				S = OE.species
 				break
-
 		if(S.name in gloves.species_fit) //Allows clothes to display differently for multiple species
 			if(S.gloves_icons && has_icon(S.gloves_icons, t_state))
-				standing.icon = S.gloves_icons
-
+				standing_icon_path = S.gloves_icons
 		if((gender == FEMALE) && (gloves.clothing_flags & GENDERFIT)) //genderfit
-			if(has_icon(standing.icon,"[gloves.icon_state]_f"))
-				standing.icon_state = "[gloves.icon_state]_f"
+			if(has_icon(standing_icon_path,"[gloves.icon_state]_f"))
+				standing_icon_state= "[gloves.icon_state]_f"
+
+		//exhale
+
+
+
+
+		var/icon/standing_icon = icon(standing_icon_path, standing_icon_state)
+		if(onehandedmask)
+			standing_icon.Blend(icon('icons/mob/hands.dmi', "mask_[onehandedmask]"), ICON_ADD)
+		var/image/standing = image(standing_icon)
 
 		if(gloves.dynamic_overlay)
 			if(gloves.dynamic_overlay["[GLOVES_LAYER]"])

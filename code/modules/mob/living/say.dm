@@ -216,7 +216,7 @@ var/list/headset_modes = list(
 			if(findtext(speech.message, syn))
 				score.syndisponses += 1
 
-	var/message_range = 7
+	var/message_range = SPEECH_RANGE
 	treat_speech(speech)
 	if(!speech.message)
 		qdel(speech)
