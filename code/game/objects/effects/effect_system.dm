@@ -151,10 +151,10 @@ steam.start() -- spawns the effect
 
 	var/move_dir = 0
 	var/energy = 0
-	var/surfaceburn = 1
+	var/surfaceburn = 0
 
-/obj/effect/sparks/nosurfaceburn
-	surfaceburn = 0
+/obj/effect/sparks/surfaceburn
+	surfaceburn = 1
 
 /obj/effect/sparks/New(var/travel_dir)
 	..()
@@ -204,7 +204,7 @@ steam.start() -- spawns the effect
 	else
 		location = get_turf(loca)
 
-/datum/effect/system/spark_spread/start(surfaceburn = TRUE)
+/datum/effect/system/spark_spread/start(surfaceburn = FALSE)
 	if (holder)
 		location = get_turf(holder)
 	if(!location)
@@ -220,13 +220,14 @@ steam.start() -- spawns the effect
 		var/nextdir=pick_n_take(directions)
 		if(nextdir)
 			if(surfaceburn)
-				var/obj/effect/sparks/sparks = new /obj/effect/sparks(location)
+				var/obj/effect/sparks/surfaceburn/sparks = new /obj/effect/sparks/surfaceburn(location)
 				sparks.start(nextdir)
 			else
-				var/obj/effect/sparks/nosurfaceburn/sparks = new /obj/effect/sparks/nosurfaceburn(location)
+				var/obj/effect/sparks/sparks = new /obj/effect/sparks(location)
 				sparks.start(nextdir)
+
 // This sparks.
-/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = TRUE) //surfaceburn means the sparks can ignite things on the ground. set it to false to keep eg. portals like in the time agent event from burning down the station
+/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = FALSE) //surfaceburn means the sparks can ignite things on the ground. set it to false to keep eg. portals like in the time agent event from burning down the station
 	loc = get_turf(loc)
 	var/datum/effect/system/spark_spread/S = new
 	S.set_up(amount, cardinals, loc)
