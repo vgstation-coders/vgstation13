@@ -242,6 +242,7 @@
 /obj/item/toy/plushie/chicken/pomf
 	name = "plush pomf chicken"
 	desc = "An extremely soft and plushy chicken. Cluck!"
+	icon_state = "chicken_pomf"
 	hug_reagents = list(DOCTORSDELIGHT,PARACETAMOL)
 
 /obj/item/toy/plushie/sylveon
