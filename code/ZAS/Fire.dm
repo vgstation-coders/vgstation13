@@ -184,7 +184,7 @@ Attach to transfer valve and open. BOOM.
 			if(IGNITE_DELAYED)
 				spawn((SS_WAIT_BURNABLE / 2) * rand())
 					if(firesource)
-						if(firesource.on_fire && !(firesource.gcDestroyed || firesource.timestopped))
+						if(firesource.on_fire && !(firesource.gcDestroyed || firesource.timestopped) && !(locate(/obj/effect/fire) in src))
 							new /obj/effect/fire(src)
 			if(IGNITE_INSTANT)
 				if(!(gcDestroyed || timestopped))
