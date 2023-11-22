@@ -17,7 +17,6 @@
 
 /obj/item/toy/plushie/New()
 	..()
-	item_state = icon_state
 
 /obj/item/toy/plushie/Destroy()
 	if(grenade)
