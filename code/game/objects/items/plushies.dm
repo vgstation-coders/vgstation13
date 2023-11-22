@@ -15,9 +15,6 @@
 	var/death_sound //sound to play when the plushie is destroyed, e.g. in an explosion
 	autoignition_temperature = AUTOIGNITION_FABRIC
 
-/obj/item/toy/plushie/New()
-	..()
-
 /obj/item/toy/plushie/Destroy()
 	if(grenade)
 		qdel(grenade)
