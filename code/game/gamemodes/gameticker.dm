@@ -227,9 +227,6 @@ var/datum/controller/gameticker/ticker
 					lampychan = O
 					if(istype(LS))
 						LS.toggle_switch(1, playsound = FALSE)
-					else if(istype(lightykun))
-						lightykun.on = 1
-						lightykun.update()
 					else if(istype(lampychan))
 						lampychan.toggle_onoff(1)
 		//Force the lighting subsystem to update.
