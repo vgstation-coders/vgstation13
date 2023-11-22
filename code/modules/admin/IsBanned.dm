@@ -5,6 +5,7 @@
 	if (type == "world")
 		return ..()
 
+	var/ckey = ckey(key)
 	var/client/C = directory[ckey]
 	if (C && ckey == C.ckey && computer_id == C.computer_id && address == C.address)
 		return //don't recheck connected clients.
