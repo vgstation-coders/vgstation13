@@ -39,11 +39,11 @@ def resize_sprite(sprite, scale=0.5, resampler=Image.Resampling.NEAREST):
     return resized
 
 # Mirrors a sprite and then translates it left by 1 pixel if it's an odd number of pixels in width
-def mirror_and_translate(sprite):
+def mirror_and_translate(sprite, force_translate=False):
     flipped = sprite.transpose(method=Image.Transpose.FLIP_LEFT_RIGHT)
     bbox = flipped.getbbox()
     width = bbox[2] - bbox[1]
-    if (width % 2) == 1:
+    if (width % 2 == 1) or force_translate:
         shifted = ImageChops.offset(flipped, -1, 0)
         flipped.close()
         return shifted
@@ -120,10 +120,10 @@ def open_masks(south, north, east, west):
     r_northimg = open_and_convert(north, "L")
     r_eastimg = open_and_convert(east, "L")
     r_westimg = open_and_convert(west, "L")
-    l_southimg = mirror_and_translate(r_southimg)
-    l_northimg = mirror_and_translate(r_northimg)
-    l_eastimg = mirror_and_translate(r_westimg) #note how this is actually the mirrored west
-    l_westimg = mirror_and_translate(r_eastimg) #and vice versa
+    l_southimg = mirror_and_translate(r_southimg, True)
+    l_northimg = mirror_and_translate(r_northimg, True)
+    l_eastimg = mirror_and_translate(r_westimg, True) #note how this is actually the mirrored west
+    l_westimg = mirror_and_translate(r_eastimg, True) #and vice versa
     
     right = SpriteDirs(r_southimg, r_northimg, r_eastimg, r_westimg)
     left = SpriteDirs(l_southimg, l_northimg, l_eastimg, l_westimg)
