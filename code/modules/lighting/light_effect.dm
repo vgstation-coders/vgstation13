@@ -47,7 +47,7 @@
 /atom/movable/wall_light_source
 	plane = LIGHTING_PLANE
 	anchored = 1
-	blend_mode = BLEND_ADD
+	blend_mode = BLEND_INSET_OVERLAY
 	invisibility = INVISIBILITY_LIGHTING
 	appearance_flags = KEEP_TOGETHER
 	alpha = 180

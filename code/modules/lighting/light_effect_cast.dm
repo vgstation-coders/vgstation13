@@ -59,6 +59,8 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 	affected_shadow_walls = list()
 	pre_rendered_shadows = list()
 
+	found_prerendered_white_light_glob = FALSE
+
 	//cap light range to the max
 	luminosity = 3*light_range
 	light_range = min(MAX_LIGHT_RANGE, light_range)
