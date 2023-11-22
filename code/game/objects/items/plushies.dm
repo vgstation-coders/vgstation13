@@ -66,6 +66,12 @@
 		playsound(src, hug_sound, 50, 1, -1)
 	if(stuffed || grenade)
 		src.visible_message("<span class='notice'>\The [src] gives \the [M] a [pick("hug", "warm embrace")].</span>")
+		if(M.reagents)
+			if(M == user)
+				if(!M.has_reagent_in_blood(PARACETAMOL))
+					M.reagents.add_reagent(PARACETAMOL, 1)
+			else
+				M.reagents.add_reagent(PARACETAMOL, 1)
 	else
 		src.visible_message("<span class='notice'>\The [src] gives \the [M] a limp hug.</span>")
 	if(grenade && !grenade.active)
