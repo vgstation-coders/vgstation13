@@ -631,7 +631,7 @@ Assign your candidates in choose_candidates() instead.
 	weight = BASE_RULESET_WEIGHT * 0.5
 	weight_category = "Extended"
 	cost = 0
-	requirements = list(0,0,0,0,0,101,101,101,101,101) //Does not fire at 25 pop and above.
+	requirements = list(0,0,0,0,101,101,101,101,101,101) //Does not fire at 20 pop and above.
 	high_population_requirement = 101
 
 
