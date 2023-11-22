@@ -1,6 +1,10 @@
 /world/IsBanned(key, address, computer_id, type)
 	var/real_login = type != "goonchat" //Certain actions don't make sense to perform for the cookie checks.
 
+	// Some "world-type" bans relegated to BYOND's internal cuisine. That's how TG does it.
+	if (type == "world")
+		return ..()
+
 	log_access("IsBanned: Checking [ckey(key)], [address], [computer_id], [type]")
 	if(real_login) //There are valid reasons for the cookie to contain certain blank fields or guest ckeys, which caused lots of false positives. The rest of these are just not necessary for cookie checks.
 		if(!key || !address || !computer_id)
