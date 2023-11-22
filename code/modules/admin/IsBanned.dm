@@ -5,6 +5,10 @@
 	if (type == "world")
 		return ..()
 
+	var/client/C = directory[ckey]
+	if (C && ckey == C.ckey && computer_id == C.computer_id && address == C.address)
+		return //don't recheck connected clients.
+
 	log_access("IsBanned: Checking [ckey(key)], [address], [computer_id], [type]")
 	if(real_login) //There are valid reasons for the cookie to contain certain blank fields or guest ckeys, which caused lots of false positives. The rest of these are just not necessary for cookie checks.
 		if(!key || !address || !computer_id)

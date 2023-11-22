@@ -128,9 +128,6 @@
 /client/New(TopicData)
 	// world.log << "creating chatOutput"
 
-	var/tdata = TopicData //save this for later use
-	TopicData = null //Prevent calls to client.Topic from connect
-
 	chatOutput = new /datum/chatOutput(src) // Right off the bat.
 	// world.log << "Done creating chatOutput"
 	if(config)
