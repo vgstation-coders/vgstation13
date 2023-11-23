@@ -217,13 +217,11 @@ var/datum/controller/gameticker/ticker
 	if(roundstart_occupied_area_paths.len)
 		var/tick = get_game_time()
 		var/obj/machinery/light_switch/LS
-		var/obj/machinery/light/lightykun
 		var/obj/item/device/flashlight/lamp/lampychan
 		for(var/area/A in areas)
 			if(A.type in roundstart_occupied_area_paths)
 				for(var/obj/O in A)
 					LS = O
-					lightykun = O
 					lampychan = O
 					if(istype(LS))
 						LS.toggle_switch(1, playsound = FALSE)

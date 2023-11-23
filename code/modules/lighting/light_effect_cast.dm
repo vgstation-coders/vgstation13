@@ -102,13 +102,6 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 		affecting_turfs.Cut()
 		return
 
-/atom/movable/light/smooth/cast_light_init()
-	. = ..()
-	light_range = 2
-	var/color = rgb2num(light_color)
-	light_color = rgb(round(color[1]/2), round(color[2]/2), round(color[2]/2))
-
-
 /*
 
 Commented out as this doesn't works well with performance currently.
@@ -533,6 +526,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		img.pixel_x = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (x_offset * world.icon_size)
 		img.pixel_y = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (y_offset * world.icon_size)
 		img.layer = ROID_TURF_LIGHT_LAYER
+		img.color = light_color
 		temp_appearance += img
 
 	var/turf_shadow_image_identifier = "white_turf"
@@ -550,6 +544,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	I.alpha =  round(intensity/fadeout)
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
+	I.color = light_color
 	I.layer = HIGHEST_LIGHTING_LAYER
 	temp_appearance_shadows += I
 
@@ -569,6 +564,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	I.alpha = 255
 	I.blend_mode = BLEND_MULTIPLY // acts a color map on top of us
 	I.color = light_color
+	I.layer = HIGHEST_LIGHTING_LAYER + 1
 	overlays += I
 
 // -- Smoothing out shadows
