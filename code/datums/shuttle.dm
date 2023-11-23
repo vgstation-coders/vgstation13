@@ -465,7 +465,6 @@
 		after_flight() //Shake the shuttle, weaken unbuckled mobs, etc.
 
 		return 1
-
 	return
 
 /datum/shuttle/proc/close_all_doors()
