@@ -572,16 +572,16 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	switch (holder.dir)
 		if (NORTH)
 			if (CHECK_OCCLUSION(get_step(loc, SOUTH)))
-				bound_y -= WORLD_ICON_SIZE
+				bound_y -= WORLD_ICON_SIZE/2
 		if (SOUTH)
 			if (CHECK_OCCLUSION(get_step(loc, NORTH)))
-				bound_y += WORLD_ICON_SIZE
+				bound_y += WORLD_ICON_SIZE/2
 		if (EAST)
 			if (CHECK_OCCLUSION(get_step(loc, WEST)))
-				bound_x -= WORLD_ICON_SIZE
+				bound_x -= WORLD_ICON_SIZE/2
 		if (WEST)
 			if (CHECK_OCCLUSION(get_step(loc, EAST)))
-				bound_x += WORLD_ICON_SIZE
+				bound_x += WORLD_ICON_SIZE/2
 
 
 // -- Smoothing out shadows

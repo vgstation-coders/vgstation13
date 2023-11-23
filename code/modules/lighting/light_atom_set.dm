@@ -22,7 +22,7 @@
 			light_obj = null
 			shadow_obj = null
 		if(smooth_light_obj)
-			qdel(smooth_light_obj)
+			qdel()
 			smooth_light_obj = null
 		return
 
