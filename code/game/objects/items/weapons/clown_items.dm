@@ -81,9 +81,13 @@
 		add_fingerprint(user)
 
 /obj/item/weapon/bikehorn/Crossed(var/mob/living/AM)
-	if (isliving(AM) && world.time > next_honk) // Honking these while under floortiles is fine though
-		honk(AM)
-		next_honk = world.time + honk_delay
+	if(isliving(AM))
+		var/real_next_honk = next_honk
+		if(clumsy_check(AM))
+			real_next_honk -= honk_delay * 0.75
+		if (world.time > real_next_honk) // Honking these while under floortiles is fine though
+			honk(AM)
+			next_honk = world.time + honk_delay
 
 /obj/item/weapon/bikehorn/afterattack(atom/target, mob/user as mob, proximity_flag)
 	//hitsound takes care of that
@@ -108,14 +112,16 @@
 	honk(H)
 
 /obj/item/weapon/bikehorn/proc/honk(var/mob/user)
-	if(world.time - last_honk_time >= honk_delay)
+	var/is_clowny = clumsy_check(user)
+	if(world.time - last_honk_time >= honk_delay - (is_clowny ? honk_delay*0.75 : 0)) //Clowns can honk 4x faster
 		var/initial_hitsound = hitsound
 		if(ishuman(user)) //Merry Cico Del Mayo, ai caramba!!!!!
 			var/mob/living/carbon/human/H = user
-			if(clumsy_check(H) && H.is_wearing_item(/obj/item/clothing/head/sombrero) && H.is_wearing_item(/obj/item/clothing/suit/poncho))
-				hitsound = 'sound/items/bikehorn_curaracha.ogg'
-				spawn(0)
-					hitsound = initial_hitsound
+			if(is_clowny)
+				if(H.is_wearing_item(/obj/item/clothing/head/sombrero) && H.is_wearing_item(/obj/item/clothing/suit/poncho))
+					hitsound = 'sound/items/bikehorn_curaracha.ogg'
+					spawn(0)
+						hitsound = initial_hitsound
 		last_honk_time = world.time
 		playsound(src, hitsound, 50, vary_pitch)
 		return 1
