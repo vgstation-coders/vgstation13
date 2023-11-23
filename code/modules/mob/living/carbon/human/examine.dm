@@ -439,6 +439,17 @@
 					msg += "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"
 				msg += {"[wpermit(src) ? "<span class = 'deptradio'>Has weapon permit.</span>\n" : ""]"}
 
+		if(user.hasHUD(HUD_WAGE))
+			var/perpname = get_identification_name(get_face_name())
+			var/employment = "None"
+
+			var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
+			if(gen_record)
+				employment = gen_record.fields["notes"]
+
+				msg += {"<span class = 'deptradio'>Employment Records:</span></a>\n"}
+				msg += {"<span class = 'deptradio'>[employment]</span>\n"}
+
 		if(user.hasHUD(HUD_MEDICAL))
 			var/perpname = get_identification_name(get_face_name())
 			var/medical = "None"

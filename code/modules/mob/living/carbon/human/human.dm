@@ -153,7 +153,8 @@
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
-	hud_list[RECORD_HUD]      = image('icons/mob/hud.dmi', src, "hudactive")
+	hud_list[PHYSRECORD_HUD]  = image('icons/mob/hud.dmi', src, "hudactive")
+	hud_list[MENTRECORD_HUD]  = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
@@ -162,6 +163,7 @@
 	hud_list[IMPTRACK_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[WAGE_HUD]        = image('icons/mob/hud.dmi', src, "hudblank")
 
 	obj_overlays[FIRE_LAYER]		= new /obj/abstract/Overlays/fire_layer
 	obj_overlays[MUTANTRACE_LAYER]	= new /obj/abstract/Overlays/mutantrace_layer
@@ -2042,15 +2044,18 @@
 			G.on_wearer_threw_item(src,target,item)
 
 /mob/living/carbon/human/hasHUD(var/hud_kind)
-	var/glasses = get_item_by_slot(slot_glasses)
 	switch(hud_kind)
 		if(HUD_MEDICAL)
-			return istype(glasses, /obj/item/clothing/glasses/hud/health)
+			return is_type_in_list(/datum/hud/medical,huds)
 		if(HUD_SECURITY)
-			if(istype(glasses, /obj/item/clothing/glasses/sunglasses/sechud/syndishades))
-				var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/S = glasses
-				return S.full_access
-			return is_type_in_list(glasses, list(/obj/item/clothing/glasses/hud/security, /obj/item/clothing/glasses/sunglasses/sechud))
+			var/glasses = get_item_by_slot(slot_glasses)
+			if(glasses)
+				if(istype(glasses, /obj/item/clothing/glasses/sunglasses/sechud/syndishades))
+					var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/S = glasses
+					return S.full_access
+			return is_type_in_list(/datum/hud/security,huds)
+		if(HUD_WAGE)
+			return is_type_in_list(/datum/hud/accountdb/wage,huds)
 	return FALSE
 
 /mob/living/carbon/human/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)

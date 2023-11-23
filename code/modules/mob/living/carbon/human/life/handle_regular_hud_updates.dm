@@ -53,6 +53,7 @@
 			see_invisible = see_in_dark > 2 ? SEE_INVISIBLE_LEVEL_ONE : SEE_INVISIBLE_LIVING
 
 		// Moiving this "see invisble" thing here so that it can be overriden by xrays, vampires...
+		//This proc no longer handles HUDs, but it will handle see_in_dark and other basic modifications done by glasses
 		if(glasses)
 			handle_glasses_vision_updates(glasses)
 		else if (!V)

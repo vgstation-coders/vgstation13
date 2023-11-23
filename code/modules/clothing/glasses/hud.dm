@@ -6,13 +6,33 @@
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
 	var/list/icon/current = list() //the current hud icons
+	var/list/stored_huds = list() // Stores a hud datum instance to apply to a mob
+	var/list/hud_types = list() // What HUD the glasses provides, if any
 
-/obj/item/clothing/glasses/hud/proc/process_hud(var/mob/M)
-	return
+/obj/item/clothing/glasses/hud/New()
+	..()
+	if(hud_types.len)
+		for(var/H in hud_types)
+			if(ispath(H))
+				stored_huds += new H
+
+/obj/item/clothing/glasses/hud/equipped(mob/M, slot)
+	..()
+	if(slot == slot_glasses && stored_huds.len)
+		for(var/datum/hud/H in stored_huds)
+			M.huds += H
+		M.regular_hud_updates()
+
+/obj/item/clothing/glasses/hud/unequipped(mob/M, slot)
+	..()
+	if(slot == slot_glasses && stored_huds.len)
+		for(var/datum/hud/H in stored_huds)
+			M.huds -= H
+		M.regular_hud_updates()
 
 /obj/item/clothing/glasses/hud/harm_label_update()
+	//TODO - Harm labeling removing hud capacity
 	return
-
 
 /obj/item/clothing/glasses/hud/health
 	name = "health scanner HUD"
@@ -20,11 +40,14 @@
 	icon_state = "healthhud"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	prescription_type = /obj/item/clothing/glasses/hud/health/prescription
+	hud_types = list(/datum/hud/medical)
 
-/obj/item/clothing/glasses/hud/health/process_hud(var/mob/M)
-	if(harm_labeled < min_harm_label)
-		process_med_hud(M)
 
+/obj/item/clothing/glasses/hud/curseddoublehud
+	name = "cursed health scanner HUD"
+	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status."
+	icon_state = "healthhud"
+	hud_types = list(/datum/hud/medical, /datum/hud/security)
 
 /obj/item/clothing/glasses/hud/health/cmo
 	name = "advanced health scanner HUD"
@@ -113,6 +136,7 @@
 	name = "security HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
 	icon_state = "securityhud"
+	hud_types = list(/datum/hud/security)
 
 /obj/item/clothing/glasses/hud/security/jensenshades
 	name = "augmented shades"
@@ -131,21 +155,33 @@
 	else
 		vision_flags &= ~BLIND
 
-/obj/item/clothing/glasses/hud/security/process_hud(var/mob/M)
-	if(harm_labeled < min_harm_label)
-		process_sec_hud(M,1)
-
 /obj/item/clothing/glasses/hud/diagnostic
 	name = "diagnostic HUD"
 	icon_state = "diagnostichud"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	desc = "A heads-up display that displays diagnostic information for compatible cyborgs and exosuits."
 	prescription_type = /obj/item/clothing/glasses/hud/diagnostic/prescription
+	hud_types = list(/datum/hud/diagnostic)
 
 /obj/item/clothing/glasses/hud/diagnostic/prescription
 	name = "prescription diagnostic HUD"
 	nearsighted_modifier = -3
 
-/obj/item/clothing/glasses/hud/diagnostic/process_hud(var/mob/M)
-	if(harm_labeled < min_harm_label)
-		process_diagnostic_hud(M)
+
+/obj/item/clothing/glasses/hud/wage
+	name = "wage HUD"
+	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
+	icon_state = "securityhud"
+	hud_types = list(/datum/hud/accountdb/wage)
+
+/obj/item/clothing/glasses/hud/wage/attack_self(mob/user)
+	if(isemptylist(stored_huds))
+		to_chat(user, "HUD Error.")
+		return
+	for(var/datum/hud/accountdb/W in stored_huds)
+		if(!W.linked_db)
+			to_chat(user, "No DB found. Trying reconnect.")
+			W.reconnect_db()
+		else
+			to_chat(user, "DB looks OK!")
+
