@@ -2269,5 +2269,10 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/isBloodedAnimal()
 	return FALSE
 
+/mob/proc/OnMobAreaChanged()
+	if(src.client && src.client.media && !src.client.media.forced)
+		spawn()
+			src.update_music()
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

@@ -98,7 +98,7 @@
 	initialize_basic_NPC_components()
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
-	var/list/valid_species = (all_species - list("Krampus", "Horror"))
+	var/list/valid_species = (all_species - list("Krampus", "Horror", "Manifested"))
 
 	var/datum/species/new_species = all_species[pick(valid_species)]
 	..(new_loc, new_species.name)
@@ -2088,7 +2088,7 @@
 		return FALSE
 	if(!isfloor(target) || !isfloor(get_turf(src)) || !Adjacent(target))
 		return FALSE
-	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked())
+	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || grabbed_by.len || locked_to || client.move_delayer.blocked())
 		return FALSE
 	var/crawldelay = 0.2 SECONDS
 	if (crawlcounter >= max_crawls_before_fatigue)

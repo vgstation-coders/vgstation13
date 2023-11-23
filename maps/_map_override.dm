@@ -74,5 +74,13 @@
 		#undef MAP_OVERRIDE
 		#include "wheelstation.dm"
 		#define MAP_OVERRIDE 16
+	#elif MAP_OVERRIDE == 17
+		#undef MAP_OVERRIDE
+		#include "tgstation-sec.dm"
+		#define MAP_OVERRIDE 17
+	#elif MAP_OVERRIDE == 18
+		#undef MAP_OVERRIDE
+		#include "horizon.dm"
+		#define MAP_OVERRIDE 18
 	#endif
 #endif
