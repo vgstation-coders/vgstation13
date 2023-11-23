@@ -567,6 +567,23 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	I.layer = HIGHEST_LIGHTING_LAYER + 1
 	overlays += I
 
+/atom/movable/light/shadow/update_appearance()
+	. = ..()
+	switch (holder.dir)
+		if (NORTH)
+			if (CHECK_OCCLUSION(get_step(loc, SOUTH)))
+				bound_y -= WORLD_ICON_SIZE
+		if (SOUTH)
+			if (CHECK_OCCLUSION(get_step(loc, NORTH)))
+				bound_y += WORLD_ICON_SIZE
+		if (EAST)
+			if (CHECK_OCCLUSION(get_step(loc, WEST)))
+				bound_x -= WORLD_ICON_SIZE
+		if (WEST)
+			if (CHECK_OCCLUSION(get_step(loc, EAST)))
+				bound_x += WORLD_ICON_SIZE
+
+
 // -- Smoothing out shadows
 /atom/movable/light/proc/post_processing()
 	if (light_post_processing == ALL_SHADOWS)
