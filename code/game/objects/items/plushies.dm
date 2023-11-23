@@ -67,13 +67,9 @@
 		playsound(src, hug_sound, 50, 1, -1)
 	if(stuffed || grenade)
 		src.visible_message("<span class='notice'>\The [src] gives \the [M] a [pick("hug", "warm embrace")].</span>")
-		if(hug_reagents && M.reagents)
-			if(M == user)
-				for(var/R in hug_reagents)
-					if(!M.has_reagent_in_blood(R))
-						M.reagents.add_reagent(R, 1)
-			else
-				for(var/R in hug_reagents)
+		if(hug_reagents.len == 0 && M.reagents)
+			for(var/R in hug_reagents)
+				if(!M.has_reagent_in_blood(R))
 					M.reagents.add_reagent(R, 1)
 	else
 		src.visible_message("<span class='notice'>\The [src] gives \the [M] a limp hug.</span>")
