@@ -134,10 +134,6 @@
 	S.name = "[A.name] APC Copy"
 	S.add_spell(new /spell/aoe_turf/corereturn, "malf_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 
-	var/datum/faction/malf/malf_faction = find_active_faction_by_member(A.mind.GetRole(MALF), A.mind)
-	if(malf_faction && malf_faction.stage >= FACTION_ENDGAME) /* If the shunting, malfunctioning AI is currently taking over the station... */
-		for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
-			point.target = machine /* ...then override all pinpointer targets to point at the APC in which the AI is shunted. */
 	S.update_perception()
 	A.mind.transfer_to(S)
 	S.cancel_camera()
