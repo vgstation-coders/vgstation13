@@ -29,11 +29,11 @@
 	var/base_light_color_state = "white"
 	var/atom/movable/holder
 	var/point_angle
+
 	var/list/affecting_turfs = list()
 	var/list/affected_shadow_walls = list()
 	var/list/temp_appearance
 	var/list/temp_appearance_shadows
-	var/list/blacken_out_turf = list()
 
 	var/light_swallowed = 0
 
@@ -44,19 +44,17 @@
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
 	animate_movement = NO_STEPS
 
-/atom/movable/wall_light_source
-	plane = LIGHTING_PLANE
-	anchored = 1
-	blend_mode = BLEND_INSET_OVERLAY
-	invisibility = INVISIBILITY_LIGHTING
-	appearance_flags = KEEP_TOGETHER
-	alpha = 180
-	icon = 'icons/lighting/wall_lighting.dmi'
-	icon_state = "white"
+	var/list/shadow_component_turfs = list()
+	var/list/shadow_component_atoms = list()
 
-/atom/movable/light/smooth
+/atom/movable/light/secondary_shadow
+	base_light_color_state = "black"
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
-	animate_movement = SLIDE_STEPS
+	animate_movement = NO_STEPS
+
+	var/dir_to_source
+	var/atom/movable/light/shadow/parent
+
 
 /atom/movable/light/New(..., var/atom/newholder)
 	holder = newholder
@@ -131,15 +129,6 @@
 
 /atom/movable/light/proc/get_glide(var/holder)
 	return WORLD_ICON_SIZE
-
-/atom/movable/light/smooth/get_glide(var/holder)
-	if (!holder)
-		return 8
-	if (holder)
-		if (ismob(holder))
-			var/mob/M = holder
-			return M.glide_size
-		return 8
 
 /atom/movable/light/proc/set_dir(new_dir)
 	if(dir != new_dir)

@@ -54,7 +54,6 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 	filters = list()
 	temp_appearance = list()
 	temp_appearance_shadows = list()
-	blacken_out_turf = list()
 	affecting_turfs = list()
 	affected_shadow_walls = list()
 	pre_rendered_shadows = list()
@@ -93,8 +92,9 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 			var/turf/T = thing
 			T.lumcount = -1
 			affecting_turfs += T
-			if (get_dist(T, location) <= distance_to_wall_illum && CHECK_OCCLUSION(T))
-				affected_shadow_walls += T
+			if (CHECK_OCCLUSION(T))
+				if (get_dist(T, location) <= distance_to_wall_illum)
+					affected_shadow_walls += T
 
 	if(!isturf(loc))
 		for(var/turf/T in affecting_turfs)
@@ -102,48 +102,40 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 		affecting_turfs.Cut()
 		return
 
-/*
+/atom/movable/light/shadow/cast_light_init()
+	. = ..()
+	var/turf/last_turf_in_group = null
+	var/list/turf_group = list()
+	for (var/turf/T in spiral_block(get_turf(src), light_range, only_view = TRUE))
 
-Commented out as this doesn't works well with performance currently.
-If you feel like fixing it, try to find a way to calculate the bounds that is less retarded.
+		if (!CHECK_OCCLUSION(T))
+			continue
 
-*/
+		if (last_turf_in_group && ((get_dist(T, last_turf_in_group) > 1) || (turf_group.len >= 3)))
+			shadow_component_turfs += list(turf_group)
+			turf_group = list()
 
-///atom/movable/light/shadow/cast_light_init()
-//	. = ..()
-//	if (light_range < 2)
-//		return
-//	if (light_type == LIGHT_DIRECTIONAL)
-//		return
-//
-//	// Basically we check if our cardinals + adjacent tiles are occluded and we adjust our bounds if we are able to.
-//	var/occlusion_north = CheckOcclusion(get_step(loc, NORTH))
-//	var/occlusion_south = CheckOcclusion(get_step(loc, SOUTH))
-//	var/occlusion_east = CheckOcclusion(get_step(loc, EAST))
-//	var/occlusion_west = CheckOcclusion(get_step(loc, WEST))
-//	var/occlusion_northeast = CheckOcclusion(get_step(loc, NORTHEAST))
-//	var/occlusion_northwest = CheckOcclusion(get_step(loc, NORTHWEST))
-//	var/occlusion_southeast = CheckOcclusion(get_step(loc, SOUTHEAST))
-//	var/occlusion_southwest = CheckOcclusion(get_step(loc, SOUTHWEST))
-//
-//	var/visible_top = !(occlusion_north && occlusion_northeast && occlusion_northwest)
-//	var/visible_bottom = !(occlusion_south && occlusion_southeast && occlusion_southwest)
-//	var/visible_left = !(occlusion_east && occlusion_northeast && occlusion_southeast)
-//	var/visible_right = !(occlusion_west && occlusion_southwest && occlusion_northwest)
-//
-//	// If we are visible from the left or right, we have to translate one tile in order for bounds to work
-//	if (visible_left || visible_bottom)
-//		var/vector/V = new(-visible_left, -visible_left)
-//		var/turf/T = loc.get_translated_turf(V)
-//		forceMove(T)
-//		pixel_x = visible_left*WORLD_ICON_SIZE
-//		pixel_y = visible_bottom*WORLD_ICON_SIZE
-//
-//	bound_width = (visible_left + visible_right)*WORLD_ICON_SIZE
-//	bound_height = (visible_top + visible_bottom)*WORLD_ICON_SIZE
+		last_turf_in_group = T
+		turf_group += last_turf_in_group
+
+	shadow_component_turfs += list(turf_group)
+
+	for (var/list/L in shadow_component_turfs)
+		// Picking the 2nd element in the list
+		var/index = max(L.len - 1, 1)
+		var/turf/wanted_turf = L[index]
+
+		// Getting the direction towards the light
+		var/vector/direction_vec = atoms2vector(wanted_turf, get_turf(src))
+		var/dir_to_light = vector2ClosestDir(direction_vec)
+		var/turf/new_source_turf = get_step(wanted_turf, dir_to_light)
+
+		var/obj/item/weapon/paper/P = new(new_source_turf)
+		P.name = "[dir2text(dir_to_light)]"
+
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
-// -- The procs related to the sources of lights
+// -- The procs related to the source of light
 
 /atom/movable/light/proc/cast_main_light()
 
@@ -231,27 +223,56 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 		temp_appearance += I
 
-// On how many turfs do we cast a shadow ?
+// The shadow component does not cast any light in itself
+/atom/movable/light/shadow/cast_main_light()
+	return
+
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+// -- The procs related to the shadow
+
+// On every turf that's affected, we cast a shadow.
 /atom/movable/light/proc/cast_shadows()
 	//no shadows
 	if(light_range < 2 || light_type == LIGHT_DIRECTIONAL)
 		return
 
-	for(var/turf/T in view(light_range, src))
+	for(var/turf/T in affected_shadow_walls)
 		if(CHECK_OCCLUSION(T))
 			CastShadow(T)
 
-/atom/movable/light/smooth/cast_shadows()
-	return
+// We take out our turf chunks and cast secondary sources on the middle ones.
+/atom/movable/light/shadow/cast_shadows()
+	for (var/list/L in shadow_component_turfs)
+		// Picking the 2nd element in the list
+		var/index = max(L.len - 1, 1)
+		var/turf/wanted_turf = L[index]
+
+		// Getting the direction towards the light
+		var/vector/direction_vec = atoms2vector(wanted_turf, get_turf(src))
+		var/dir_to_light = vector2ClosestDir(direction_vec)
+		var/turf/new_source_turf = get_step(wanted_turf, dir_to_light)
+
+		// Create a secondary light source, located on that direction towards the light
+		var/atom/movable/light/secondary_shadow/secondary_source = new(new_source_turf, newholder = src.holder)
+		shadow_component_atoms += secondary_source
+
+		// Initialise it
+		secondary_source.icon = 'icons/lighting/light_range_3.dmi'
+		secondary_source.dir_to_source = dir_to_light
+		secondary_source.parent = src
+		secondary_source.affected_shadow_walls = L
+
+		// Then cast the shadows!
+		for (var/turf/target_turf in secondary_source.affected_shadow_walls)
+			var/x_offset = (target_turf.x - secondary_source.x)
+			var/y_offset = (target_turf.y - secondary_source.y)
+			secondary_source.cast_turf_shadow(target_turf, x_offset, y_offset, src)
 
 /atom/movable/light/proc/CastShadow(var/turf/target_turf)
 	//get the x and y offsets for how far the target turf is from the light
 	var/x_offset = (target_turf.x - x)
 	var/y_offset = (target_turf.y - y)
 	cast_main_shadow(target_turf, x_offset, y_offset)
-
-	if ((target_turf in affected_shadow_walls) && is_valid_turf(target_turf))
-		cast_turf_shadow(target_turf, x_offset, y_offset)
 
 /atom/movable/light/proc/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 
@@ -431,6 +452,9 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 			I.pixel_x += shadow_offset
 
 	/*
+
+	Botched reflection code. Might work someday. Might not.
+
 	if (get_dist(target_turf, src) < 0.75*light_range && get_dist(target_turf, src) > 2)
 		var/found_reflction = FALSE
 		var/delta_x = 0
@@ -495,12 +519,12 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	return
 
 /atom/movable/light/proc/cast_turf_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
-
+	return
 
 // While this proc is quite involuted, the highest it can do is :
 // 8 loops in the first "for"
 // 4 loops in the second "for"
-/atom/movable/light/shadow/cast_turf_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
+/atom/movable/light/shadow/cast_turf_shadow(var/turf/target_turf, var/x_offset, var/y_offset, var/atom/movable/light/shadow/parent)
 	/*
 	var/targ_dir = get_dir(target_turf, src)
 
@@ -539,8 +563,10 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		I.icon_state = "white"
 		I.render_target = turf_shadow_image_identifier
 		pre_rendered_shadows += turf_shadow_image_identifier
+
 	var/intensity = min(255,max(0,round(light_power*light_power_multiplier*25)))
-	var/fadeout = max(get_dist(src, target_turf)/FADEOUT_STEP, 1)
+	var/fadeout = max(get_dist(parent, target_turf)/FADEOUT_STEP, 1)
+
 	I.alpha =  round(intensity/fadeout)
 	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
@@ -548,6 +574,16 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	I.layer = HIGHEST_LIGHTING_LAYER
 	temp_appearance_shadows += I
 
+	/*
+	var/atom/movable/wall_light_source/WLS = new(get_turf(src))
+	target_turf.vis_contents += WLS
+
+	var/intensity = min(255,max(0,round(light_power*light_power_multiplier*25)))
+	var/fadeout = max(get_dist(src, target_turf)/FADEOUT_STEP, 1)
+	WLS.alpha =  round(intensity/fadeout)
+	WLS.color = light_color
+	WLS.layer = HIGHEST_LIGHTING_LAYER
+	*/
 
 /atom/movable/light/proc/update_appearance()
 	if (light_post_processing)
@@ -568,8 +604,12 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 	overlays += I
 
 /atom/movable/light/shadow/update_appearance()
+	for (var/atom/movable/light/secondary_shadow/shadow_comp in shadow_component_atoms)
+		shadow_comp.update_appearance()
+
+/atom/movable/light/secondary_shadow/update_appearance()
 	. = ..()
-	switch (holder.dir)
+	switch (dir_to_source)
 		if (NORTH)
 			if (CHECK_OCCLUSION(get_step(loc, SOUTH)))
 				bound_y -= WORLD_ICON_SIZE/2
@@ -582,7 +622,6 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 		if (WEST)
 			if (CHECK_OCCLUSION(get_step(loc, EAST)))
 				bound_x += WORLD_ICON_SIZE/2
-
 
 // -- Smoothing out shadows
 /atom/movable/light/proc/post_processing()
@@ -627,7 +666,7 @@ If you feel like fixing it, try to find a way to calculate the bounds that is le
 
 
 // Smooth out shadows and then blacken out the wall glow
-/atom/movable/light/shadow/post_processing()
+/atom/movable/light/secondary_source/post_processing()
 	//consolidate_shadows()
 	var/image/shadow_overlay/combined_shadow_walls = new()
 	for (var/image/I in temp_appearance_shadows)

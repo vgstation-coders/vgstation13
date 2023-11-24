@@ -1626,12 +1626,14 @@ Game Mode config tags:
 		max(list_x),
 		max(list_y))
 
-/proc/spiral_block(turf/epicenter, range, draw_red=FALSE)
+/proc/spiral_block(turf/epicenter, range, draw_red=FALSE, only_view = FALSE)
 	if(!epicenter)
 		return list()
 
 	if(!range)
 		return list(epicenter)
+
+	var/epicenter_view = view(range, epicenter)
 
 	. = list()
 
@@ -1648,6 +1650,8 @@ Game Mode config tags:
 		for(x in x to epicenter.x+c_dist)
 			T = locate(x,y,epicenter.z)
 			if(T)
+				if (only_view && !(T in epicenter_view))
+					continue
 				. += T
 				if(draw_red)
 					T.color = "red"
@@ -1658,6 +1662,8 @@ Game Mode config tags:
 		for(y in y to epicenter.y-c_dist step -1)
 			T = locate(x,y,epicenter.z)
 			if(T)
+				if (only_view && !(T in epicenter_view))
+					continue
 				. += T
 				if(draw_red)
 					T.color = "red"
@@ -1668,6 +1674,8 @@ Game Mode config tags:
 		for(x in  x to epicenter.x-c_dist step -1)
 			T = locate(x,y,epicenter.z)
 			if(T)
+				if (only_view && !(T in epicenter_view))
+					continue
 				. += T
 				if(draw_red)
 					T.color = "red"
@@ -1678,6 +1686,8 @@ Game Mode config tags:
 		for(y in y to epicenter.y+c_dist)
 			T = locate(x,y,epicenter.z)
 			if(T)
+				if (only_view && !(T in epicenter_view))
+					continue
 				. += T
 				if(draw_red)
 					T.color = "red"
