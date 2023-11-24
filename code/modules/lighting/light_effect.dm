@@ -53,6 +53,7 @@
 	animate_movement = NO_STEPS
 
 	var/dir_to_source
+	var/turf/source_turf
 	var/atom/movable/light/shadow/parent
 
 
@@ -72,6 +73,7 @@
 	appearance = null
 	overlays = null
 	temp_appearance = null
+	temp_appearance_shadows = null
 
 	if(holder)
 		if(holder.light_obj == src)
@@ -82,7 +84,25 @@
 	for(var/thing in affecting_turfs)
 		var/turf/T = thing
 		T.lumcount = -1
-	affecting_turfs.Cut()
+
+	affecting_turfs = null
+	affected_shadow_walls = null
+
+	. = ..()
+
+/atom/movable/light/secondary_shadow/Destroy()
+	parent = null
+	source_turf = null
+	. = ..()
+
+/atom/movable/light/shadow/Destroy()
+	for (var/shadow in shadow_component_atoms)
+		qdel(shadow)
+		shadow_component_atoms -= shadow
+
+	shadow_component_atoms = null
+	shadow_component_turfs = null
+
 	. = ..()
 
 /atom/movable/light/initialize()
@@ -126,6 +146,9 @@
 
 	else
 		init_lights |= src
+
+/atom/movable/light/secondary_shadow/follow_holder()
+	return
 
 /atom/movable/light/proc/get_glide(var/holder)
 	return WORLD_ICON_SIZE

@@ -29,6 +29,16 @@
 	backdrop = new(client)
 	self_vision = new(client)
 
+	var/image/black_turf = image('icons/lighting/wall_lighting.dmi', loc = src)
+	black_turf.icon_state = "black"
+	black_turf.render_target = "*black_turf_prerender"
+	client.images += black_turf
+
+	var/image/white_turf = image('icons/lighting/wall_lighting.dmi', loc = src)
+	white_turf.icon_state = "white"
+	white_turf.render_target = "*white_turf_prerender"
+	client.images += white_turf
+
 	update_darkness()
 	register_event(/event/before_move, src, /mob/proc/check_dark_vision)
 

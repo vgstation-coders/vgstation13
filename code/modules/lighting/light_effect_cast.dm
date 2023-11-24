@@ -45,6 +45,9 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 	cast_shadows()
 	update_appearance()
 
+/atom/movable/light/secondary_shadow/cast_light()
+	return // We don't cast light ourself!
+
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 // -- The shared procs between lights and pesudo-lights.
 
@@ -57,7 +60,6 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 	affecting_turfs = list()
 	affected_shadow_walls = list()
 	pre_rendered_shadows = list()
-
 	found_prerendered_white_light_glob = FALSE
 
 	//cap light range to the max
@@ -104,8 +106,15 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 
 /atom/movable/light/shadow/cast_light_init()
 	. = ..()
+
+	shadow_component_turfs = list()
+	for (var/stuff in shadow_component_atoms)
+		qdel(stuff)
+		shadow_component_atoms -= stuff
+
 	var/turf/last_turf_in_group = null
 	var/list/turf_group = list()
+	// View? It just works.
 	for (var/turf/T in spiral_block(get_turf(src), light_range, only_view = TRUE))
 
 		if (!CHECK_OCCLUSION(T))
@@ -119,20 +128,6 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 		turf_group += last_turf_in_group
 
 	shadow_component_turfs += list(turf_group)
-
-	for (var/list/L in shadow_component_turfs)
-		// Picking the 2nd element in the list
-		var/index = max(L.len - 1, 1)
-		var/turf/wanted_turf = L[index]
-
-		// Getting the direction towards the light
-		var/vector/direction_vec = atoms2vector(wanted_turf, get_turf(src))
-		var/dir_to_light = vector2ClosestDir(direction_vec)
-		var/turf/new_source_turf = get_step(wanted_turf, dir_to_light)
-
-		var/obj/item/weapon/paper/P = new(new_source_turf)
-		P.name = "[dir2text(dir_to_light)]"
-
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 // -- The procs related to the source of light
@@ -242,6 +237,7 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 
 // We take out our turf chunks and cast secondary sources on the middle ones.
 /atom/movable/light/shadow/cast_shadows()
+
 	for (var/list/L in shadow_component_turfs)
 		// Picking the 2nd element in the list
 		var/index = max(L.len - 1, 1)
@@ -254,19 +250,25 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 
 		// Create a secondary light source, located on that direction towards the light
 		var/atom/movable/light/secondary_shadow/secondary_source = new(new_source_turf, newholder = src.holder)
+		secondary_source.source_turf = new_source_turf
 		shadow_component_atoms += secondary_source
+
+		secondary_source.loc = secondary_source.source_turf
 
 		// Initialise it
 		secondary_source.icon = 'icons/lighting/light_range_3.dmi'
 		secondary_source.dir_to_source = dir_to_light
 		secondary_source.parent = src
 		secondary_source.affected_shadow_walls = L
+		secondary_source.temp_appearance = list()
+		secondary_source.temp_appearance_shadows = list()
 
 		// Then cast the shadows!
 		for (var/turf/target_turf in secondary_source.affected_shadow_walls)
 			var/x_offset = (target_turf.x - secondary_source.x)
 			var/y_offset = (target_turf.y - secondary_source.y)
 			secondary_source.cast_turf_shadow(target_turf, x_offset, y_offset, src)
+
 
 /atom/movable/light/proc/CastShadow(var/turf/target_turf)
 	//get the x and y offsets for how far the target turf is from the light
@@ -524,7 +526,7 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 // While this proc is quite involuted, the highest it can do is :
 // 8 loops in the first "for"
 // 4 loops in the second "for"
-/atom/movable/light/shadow/cast_turf_shadow(var/turf/target_turf, var/x_offset, var/y_offset, var/atom/movable/light/shadow/parent)
+/atom/movable/light/secondary_shadow/cast_turf_shadow(var/turf/target_turf, var/x_offset, var/y_offset, var/atom/movable/light/shadow/parent)
 	/*
 	var/targ_dir = get_dir(target_turf, src)
 
@@ -547,12 +549,13 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 			img.render_target = roid_turf_prerender_identifier
 			pre_rendered_shadows += roid_turf_prerender_identifier
 
-		img.pixel_x = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (x_offset * world.icon_size)
-		img.pixel_y = 4*PIXEL_MULTIPLIER + (world.icon_size * light_range) + (y_offset * world.icon_size)
+		img.pixel_x = 4*PIXEL_MULTIPLIER + (x_offset * world.icon_size)
+		img.pixel_y = 4*PIXEL_MULTIPLIER + (y_offset * world.icon_size)
 		img.layer = ROID_TURF_LIGHT_LAYER
 		img.color = light_color
 		temp_appearance += img
 
+	/*
 	var/turf_shadow_image_identifier = "white_turf"
 	var/image/I = new()
 
@@ -563,13 +566,18 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 		I.icon_state = "white"
 		I.render_target = turf_shadow_image_identifier
 		pre_rendered_shadows += turf_shadow_image_identifier
+	*/
+
+	var/image/I = new()
+	I.render_source = "*white_turf_prerender"
+	I.icon_state = "white"
 
 	var/intensity = min(255,max(0,round(light_power*light_power_multiplier*25)))
 	var/fadeout = max(get_dist(parent, target_turf)/FADEOUT_STEP, 1)
 
 	I.alpha =  round(intensity/fadeout)
-	I.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
-	I.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
+	I.pixel_x = WORLD_ICON_SIZE/2 + (x_offset * world.icon_size)
+	I.pixel_y = WORLD_ICON_SIZE/2 + (y_offset * world.icon_size)
 	I.color = light_color
 	I.layer = HIGHEST_LIGHTING_LAYER
 	temp_appearance_shadows += I
@@ -647,16 +655,9 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 	for (var/turf/T in affected_shadow_walls)
 
 		var/image/black_turf = new()
-
-		if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
-			black_turf.render_source = "postprocess_black_turf_prerender"
-		else
-			black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-			black_turf.icon_state = "black"
-			black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
-			pre_rendered_shadows += "postprocess_black_turf_prerender"
-
+		black_turf.render_source = "*black_turf_prerender"
 		black_turf.icon_state = "black"
+
 		var/x_offset = T.x - x
 		var/y_offset = T.y - y
 		black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
@@ -666,7 +667,7 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 
 
 // Smooth out shadows and then blacken out the wall glow
-/atom/movable/light/secondary_source/post_processing()
+/atom/movable/light/secondary_shadow/post_processing()
 	//consolidate_shadows()
 	var/image/shadow_overlay/combined_shadow_walls = new()
 	for (var/image/I in temp_appearance_shadows)
@@ -684,18 +685,12 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 			if (neighbour && !CHECK_OCCLUSION(neighbour))
 				var/image/black_turf = new()
 
-				if ("postprocess_black_turf_prerender" in pre_rendered_shadows)
-					black_turf.render_source = "postprocess_black_turf_prerender"
-				else
-					black_turf = image('icons/lighting/wall_lighting.dmi', loc = get_turf(src))
-					black_turf.icon_state = "black"
-					black_turf.render_target = "postprocess_black_turf_prerender" // Cannot use the previous black_turf_prerender as it has been squeezed to make a filter.
-					pre_rendered_shadows += "postprocess_black_turf_prerender"
+				black_turf.render_source = "*black_turf_prerender"
 
 				var/x_offset = (neighbour.x - x)
 				var/y_offset = (neighbour.y - y)
-				black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
-				black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
+				black_turf.pixel_x = (WORLD_ICON_SIZE/2) + (x_offset * world.icon_size)
+				black_turf.pixel_y = (WORLD_ICON_SIZE/2) + (y_offset * world.icon_size)
 				black_turf.layer = ANTI_GLOW_PASS_LAYER
 				temp_appearance += black_turf
 
@@ -845,6 +840,7 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 				var/fadeout = max(get_dist(src, T)/FADEOUT_STEP, 1)
 				var/x = round(intensity/fadeout)
 				var/obj/item/weapon/paper/P = new(T)
+				P.autoignition_temperature = 1e9
 				P.name = "[x]"
 
 /turf/proc/check_sum_lighting()

@@ -1652,6 +1652,8 @@ Game Mode config tags:
 			if(T)
 				if (only_view && !(T in epicenter_view))
 					continue
+				if (T in .)
+					CRASH("spiral block doubles")
 				. += T
 				if(draw_red)
 					T.color = "red"
@@ -1664,6 +1666,8 @@ Game Mode config tags:
 			if(T)
 				if (only_view && !(T in epicenter_view))
 					continue
+				if (T in .)
+					CRASH("spiral block doubles")
 				. += T
 				if(draw_red)
 					T.color = "red"
@@ -1676,6 +1680,8 @@ Game Mode config tags:
 			if(T)
 				if (only_view && !(T in epicenter_view))
 					continue
+				if (T in .)
+					CRASH("spiral block doubles")
 				. += T
 				if(draw_red)
 					T.color = "red"
@@ -1688,6 +1694,8 @@ Game Mode config tags:
 			if(T)
 				if (only_view && !(T in epicenter_view))
 					continue
+				if (T in .)
+					CRASH("spiral block doubles")
 				. += T
 				if(draw_red)
 					T.color = "red"
