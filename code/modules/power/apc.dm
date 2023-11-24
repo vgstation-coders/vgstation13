@@ -1043,11 +1043,6 @@
 	if(src.occupant.parent && src.occupant.parent.stat != 2)
 		src.occupant.parent.adjustOxyLoss(src.occupant.getOxyLoss())
 		src.occupant.parent.cancel_camera()
-		if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
-			for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
-				var/mob/living/silicon/ai/A = occupant.parent // the current mob the mind owns
-				if(A.stat != DEAD)
-					point.target = A //The pinpointer tracks the AI back into its core.
 		new /obj/effect/malf_jaunt(loc, occupant, occupant.parent, TRUE)
 		src.occupant = null
 	else
@@ -1055,7 +1050,6 @@
 			src.occupant.forceMove(src.loc)
 			src.occupant.death()
 			src.occupant.gib()
-			for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 				point.target = null //the pinpointer will go back to pointing at the nuke disc.
 		else
 			to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
