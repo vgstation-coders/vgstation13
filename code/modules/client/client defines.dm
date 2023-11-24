@@ -23,7 +23,7 @@
 	var/datum/tooltip/tooltips //datum that controls the displaying and hiding of tooltips
 	var/list/radial_menu_anchors = list() //keeping track of open menus so we're not gonna have several on top of each other.
 	var/list/radial_menus = list()
-	
+
 		///////////////
 		//SOUND STUFF//
 		///////////////
@@ -80,7 +80,7 @@
 	var/obj/abstract/screen/plane_master/ghost_planemaster_dummy/darkness_planemaster_dummy = null
 	var/obj/abstract/screen/plane_master/ghost_planemaster/fakecamera_planemaster = null
 	var/obj/abstract/screen/plane_master/ghost_planemaster_dummy/fakecamera_planemaster_dummy = null
-	
+
 
 
 	// This gets set by goonchat.
@@ -106,6 +106,11 @@
 
 	// Last Round Scoreboard images have been sent
 	var/received_last_round_images = FALSE
+
+	//init stuff
+	var/init_point = 0
+	var/fully_initialized = 0
+	var/last_init_check = 0
 
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()
