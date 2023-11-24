@@ -203,15 +203,15 @@
 			return
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards!
 	if(istype(W, grille_material) && broken)
-		ASSERT(istype(W, /obj/item/stack)) //in case someone adds a grille with a non-stackable item as a grille_material
-		var/obj/item/stack/stack = W
-		health = initial(health)
-		broken = 0
-		healthcheck()
-		user.visible_message("<span class='notice'>[user] repairs the [src] with [stack].</span>", \
-		"<span class='notice'>You repair the [src] with [stack].</span>")
-		stack.use(1) //use 1 of whatever the grille_material is to repair the grille
-		return
+		if(ASSERT(istype(W, /obj/item/stack))) //in case someone adds a grille with a non-stackable item as a grille_material
+			var/obj/item/stack/stack = W
+			health = initial(health)
+			broken = 0
+			healthcheck()
+			user.visible_message("<span class='notice'>[user] repairs the [src] with [stack].</span>", \
+			"<span class='notice'>You repair the [src] with [stack].</span>")
+			stack.use(1) //use 1 of whatever the grille_material is to repair the grille
+			return
 
 	else if((W.is_screwdriver(user)) && (istype(loc, /turf/simulated) || anchored))
 		if(!shock(user, 90, W.siemens_coefficient))
