@@ -240,6 +240,8 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 
 	for (var/list/L in shadow_component_turfs)
 		// Picking the 2nd element in the list
+		if (!L.len)
+			continue
 		var/index = max(L.len - 1, 1)
 		var/turf/wanted_turf = L[index]
 

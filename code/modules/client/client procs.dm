@@ -128,12 +128,13 @@
 /client/New(TopicData)
 	// world.log << "creating chatOutput"
 	chatOutput = new /datum/chatOutput(src) // Right off the bat.
+	init_point = 1
 	// world.log << "Done creating chatOutput"
 	if(config)
 		winset(src, null, "window1.msay_output.style=[config.world_style_config];")
 	else
 		to_chat(src, "<span class='warning'>The stylesheet wasn't properly setup call an administrator to reload the stylesheet or relog.</span>")
-
+	init_point = 2
 	TopicData = null							//Prevent calls to client.Topic from connect
 
 	if(connection != "seeker")			//Invalid connection type.
@@ -142,24 +143,24 @@
 				return null
 		else
 			return null
-
+	init_point = 3
 	if(byond_version < MIN_CLIENT_VERSION)		//Out of date client.
 		message_admins("[key]/[ckey] has connected with an out of date client! Their version: [byond_version]. They will be kicked shortly.")
 		alert(src,"Your BYOND client is out of date. Please make sure you have have at least version [MIN_CLIENT_VERSION] installed. Check for a beta update if necessary.", "Update Yo'Self", "OK")
 		spawn(5 SECONDS)
 			del(src)
-
+	init_point = 4
 	if(!guests_allowed && IsGuestKey(key))
 		alert(src,"This server doesn't allow guest accounts to play. Please go to http://www.byond.com/ and register for a key.","Guest","OK")
 		del(src)
 		return
-
+	init_point = 5
 	// Change the way they should download resources.
 	if(config.resource_urls)
 		src.preload_rsc = pick(config.resource_urls)
 	else
 		src.preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
-
+	init_point = 6
 	to_chat(src, "<span class='warning'>If the title screen is black, resources are still downloading. Please be patient until the title screen appears.</span>")
 
 	clients += src
@@ -175,7 +176,7 @@
 	prefs.last_id = computer_id			//these are gonna be used for banning
 	prefs.client = src
 	prefs.initialize_preferences(client_login = 1)
-
+	init_point = 6
 	. = ..()	//calls mob.Login()
 	chatOutput.start()
 
@@ -188,18 +189,18 @@
 	if( (world.address == address || !address) && !host )
 		host = key
 		world.update_status()
-
+	init_point = 7
 	log_client_to_db()
-
+	init_point = 8
 	send_resources()
-
+	init_point = 9
 	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, ckey, ip, computerid, a_ckey, reason, expiration_time, duration, bantime, bantype, unbanned, unbanned_ckey, unbanned_datetime FROM erro_ban WHERE (ckey = :ckey [address ? "OR ip = :address" : ""]  [computer_id ? "OR computerid = :computer_id" : ""]) AND unbanned_notification = 0;",
 		list(
 			"ckey" = ckey,
 			"address" = address,
 			"computer_id" = computer_id,
 	))
-
+	init_point = 10
 	if(!query.Execute())
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")
@@ -238,7 +239,7 @@
 				log_sql("Error: [update_query.ErrorMsg()]")
 			qdel(update_query)
 	qdel(query)
-
+	init_point = 11
 	if (prefs && prefs.show_warning_next_time)
 		to_chat(src, "<span class='notice'><b>You, or another user of this ckey ([ckey]) were warned by [prefs.warning_admin].</b></span>")
 		to_chat(src, "<span class='notice'>The reason was: '[prefs.last_warned_message]'.</span>")
@@ -246,12 +247,12 @@
 		to_chat(src, "<span class='notice'><b>You can now play the game.</b></span>")
 		prefs.show_warning_next_time = 0
 		prefs.save_preferences_sqlite(src, src.ckey)
-
+	init_point = 12
 	if(prefs.lastchangelog != changelog_hash) //bolds the changelog button on the interface so we know there are updates.
 		winset(src, "rpane.changelog", "background-color=#eaeaea;font-style=bold")
 		prefs.SetChangelog(ckey,changelog_hash)
 		to_chat(src, "<span class='info'>Changelog has changed since your last visit.</span>")
-
+	init_point = 13
 	//Set map label to correct map name
 	winset(src, "rpane.mapb", "text=\"[map.nameLong]\"")
 
@@ -264,7 +265,7 @@
 	else
 		winset(src, "rpane.round_end", "is-visible=false")
 		winset(src, "rpane.last_round_end", "is-visible=false")
-
+	init_point = 14
 	if (runescape_pvp)
 		to_chat(src, "<span class='userdanger'>WARNING: Wilderness mode is enabled; players can only harm one another in maintenance areas!</span>")
 
@@ -273,7 +274,7 @@
 	//This is down here because of the browse() calls in tooltip/New()
 	if(!tooltips)
 		tooltips = new /datum/tooltip(src)
-
+	init_point = 15
 	//Admin Authorisation
 	var/static/list/localhost_addresses = list("127.0.0.1","::1")
 	if(config.localhost_autoadmin)
@@ -281,7 +282,7 @@
 			holder = new /datum/admins("Host", R_HOST, src.ckey)
 	else
 		holder = admin_datums[ckey]
-
+	init_point = 16
 	if(holder)
 		if(prefs.toggles & AUTO_DEADMIN)
 			message_admins("[src] was automatically de-admined.")
@@ -293,8 +294,10 @@
 		else
 			holder.associate(src)
 			admin_memo_show()
-
+	init_point = 17
 	fps = (prefs.fps < 0) ? RECOMMENDED_CLIENT_FPS : prefs.fps
+	init_point = 18
+	fully_initialized = 1
 	//////////////
 	//DISCONNECT//
 	//////////////
