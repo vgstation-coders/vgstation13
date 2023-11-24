@@ -10347,8 +10347,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 /datum/reagent/punctualite/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	if(!currentHour)
-		currentHour = time2text(world.timeofday, "hh")
 	if(prob(5) && prob(5)) //0.25% chance per tick
 		var/mob/living/carbon/human/earProtMan = null
 		if(ishuman(M))
@@ -10358,9 +10356,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 				to_chat(M, "<span class='notice'>You hear a ticking sound</span>")
 			else
 				to_chat(M, "<span class='notice'>You hear a tocking sound</span>")
-	if(time2text(world.timeofday, "hh") > currentHour)
-		punctualiteExplode(M)
-		currentHour = time2text(world.timeofday, "hh")
+	if((floor(world.time / (1 HOURS)) + 1) > currentHour)
+		if(!currentHour)
+			currentHour = floor(world.time / (1 HOURS)) + 1
+		else
+			punctualiteExplode(M)
+			currentHour = floor(world.time / (1 HOURS)) + 1
 
 /datum/reagent/punctualite/proc/punctualiteExplode(var/mob/living/H)
 	var/bigBoom = 0
