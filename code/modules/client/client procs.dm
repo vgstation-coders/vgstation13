@@ -126,6 +126,7 @@
 	//CONNECT//
 	///////////
 /client/New(TopicData)
+	lastproc += "Start client/New([list2params(args)]), "
 	// world.log << "creating chatOutput"
 	chatOutput = new /datum/chatOutput(src) // Right off the bat.
 	init_point = 1
@@ -298,16 +299,19 @@
 	fps = (prefs.fps < 0) ? RECOMMENDED_CLIENT_FPS : prefs.fps
 	init_point = 18
 	fully_initialized = 1
+	lastproc += "End client/New([list2params(args)]), "
 	//////////////
 	//DISCONNECT//
 	//////////////
 /client/Del()
+	lastproc += "Start client/Del([list2params(args)]), "
 	if(holder)
 		holder.owner = null
 		admins -= src
 	directory -= ckey
 	clients -= src
-
+	lastproc += "End client/Del([list2params(args)]), "
+	world.log << "DEBUG: [src] is being deleted, their proc order is [lastproc]"
 	return ..()
 
 /client/proc/log_client_to_db()

@@ -52,6 +52,7 @@
 // If you do so and the mob is in nullspace BYOND will attempt to move the mob a gorillion times
 // See http://www.byond.com/docs/ref/info.html#/mob/proc/Login and http://www.byond.com/forum/?post=2151126
 /mob/Login()
+	client.lastproc += "Start mob/Login([list2params(args)]), "
 	player_list |= src
 	update_Login_details()
 	world.update_status()
@@ -139,3 +140,4 @@
 		log_admin("Cluwnebanned player [key_name(src)] attempted to join and was kicked.")
 		message_admins("<span class='notice'>Cluwnebanned player [key_name(src)] attempted to join and was kicked.</span>", 1)
 		del(client)
+	client.lastproc += "End mob/Login([list2params(args)]), "

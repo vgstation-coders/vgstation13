@@ -1,10 +1,11 @@
 /mob/new_player/Login()
+	client.lastproc += "Start new_player/Login([list2params(args)]), "
 	update_Login_details()	//handles setting lastKnownIP and computer_id for use by the ban systems as well as checking for multikeying
 	if(join_motd)
 		to_chat(src, "<div class=\"motd\">[join_motd]</div>")
 
 	client.reset_screen()
-	
+
 	if(!mind)
 		mind = new /datum/mind(key)
 		mind.active = 1
@@ -14,7 +15,7 @@
 		loc = pick(newplayer_start)
 	else
 		loc = locate(1,1,1)
-	
+
 	change_sight(adding = SEE_TURFS)
 	player_list |= src
 
@@ -70,3 +71,4 @@
 				client.prefs.SetChangelog(ckey, changelog_hash)
 				winset(client, "rpane.changelog", "background-color=none;font-style=;")
 #endif
+	client.lastproc += "End new_player/Login([list2params(args)]), "
