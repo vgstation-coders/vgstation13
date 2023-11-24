@@ -47,7 +47,8 @@
 /obj/structure/grille/proc/healthcheck(var/hitsound = 0) //Note : Doubles as the destruction proc()
 	if(hitsound)
 		playsound(loc, 'sound/effects/grillehit.ogg', 80, 1)
-	if(health <= (0.25*initial(health)) && !broken) //Modular, 1/4th of original health. Do make sure the grille isn't broken !
+	relativewall() //update smoothing
+	if(health <= (0.25*initial(health)) && !broken) //Modular, 1/4th of original health. Do make sure the grille isn't broken!
 		broken = 1
 		icon_state = "[initial(icon_state)]-b"
 		setDensity(FALSE) //Not blocking anything anymore
@@ -197,10 +198,21 @@
 	if(W.is_wirecutter(user))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
 			W.playtoolsound(loc, 100)
-			drop_stack(grille_material, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
+			drop_stack(grille_material, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not!
 			qdel(src)
 			return
-		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards !
+		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards!
+	if(istype(W, grille_material) && broken)
+		ASSERT(istype(W, /obj/item/stack)) //in case someone adds a grille with a non-stackable item as a grille_material
+		var/obj/item/stack/stack = W
+		health = initial(health)
+		broken = 0
+		healthcheck()
+		user.visible_message("<span class='notice'>[user] repairs the [src] with [stack].</span>", \
+		"<span class='notice'>You repair the [src] with [stack].</span>")
+		stack.use(1) //use 1 of whatever the grille_material is to repair the grille
+		return
+
 	else if((W.is_screwdriver(user)) && (istype(loc, /turf/simulated) || anchored))
 		if(!shock(user, 90, W.siemens_coefficient))
 			W.playtoolsound(loc, 100)
@@ -216,7 +228,7 @@
 	else
 		switch(W.damtype)
 			if("fire")
-				dam = W.force //Fire-based tools like welding tools are ideal to work through small metal rods !
+				dam = W.force //Fire-based tools like welding tools are ideal to work through small metal rods!
 			if("brute")
 				dam = W.force * 0.5 //Rod matrices have an innate resistance to brute damage
 
@@ -233,7 +245,7 @@
 //Returns 1 if shocked, 0 otherwise
 
 /obj/structure/grille/proc/shock(mob/user as mob, prb, siemens_coeff)
-	if(!anchored || broken)	//De-anchored and destroyed grilles are never connected to the powernet !
+	if(!anchored || broken)	//De-anchored and destroyed grilles are never connected to the powernet!
 		return 0
 	if(!prob(prb)) //If the probability roll failed, don't go further
 		return 0
@@ -269,7 +281,7 @@
 	reset_vars_after_duration(resettable_vars, duration)
 
 
-//Mapping entities and alternatives !
+//Mapping entities and alternatives!
 
 /obj/structure/grille/broken //THIS IS ONLY TO BE USED FOR MAPPING, THANK YOU FOR YOUR UNDERSTANDING
 
