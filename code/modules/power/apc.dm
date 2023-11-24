@@ -1050,7 +1050,6 @@
 			src.occupant.forceMove(src.loc)
 			src.occupant.death()
 			src.occupant.gib()
-				point.target = null //the pinpointer will go back to pointing at the nuke disc.
 		else
 			to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 
