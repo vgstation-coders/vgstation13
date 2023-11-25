@@ -26,7 +26,7 @@ var/list/body_archives = list()
 	name = source.mind.name
 	key = source.mind.key
 	rank = source.mind.assigned_role
-	log_debug("[key_name(source)] has has had their body ([mob_type]) archived.")
+	log_debug("[key_name(source)] has had their body ([mob_type]) archived.")
 	source.archive_body(src)
 
 //Admin toys
