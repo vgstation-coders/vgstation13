@@ -69,7 +69,6 @@ var/list/ubiquitous_light_ranges = list(5, 6)
 	light_range = min(MAX_LIGHT_RANGE, light_range)
 	//light_color = (holder.light_color || light_color)
 
-	var/atom/location = get_turf(src)
 	var/distance_to_wall_illum = get_wall_view()
 
 	if (light_swallowed > 0)
@@ -88,7 +87,8 @@ var/list/ubiquitous_light_ranges = list(5, 6)
 			animate(src, alpha = 180, time = 5, loop = -1, easing = CIRCULAR_EASING)
 			animate(alpha = 255, time = 5, loop = -1, easing = CIRCULAR_EASING)
 
-	for (var/thing in view(min(world.view, distance_to_wall_illum), src))
+	var/list/cached_view = view(distance_to_wall_illum, src)
+	for (var/thing in cached_view)
 		if (ismob(thing))
 			var/mob/M = thing
 			M.check_dark_vision()
@@ -97,8 +97,13 @@ var/list/ubiquitous_light_ranges = list(5, 6)
 			T.lumcount = -1
 			affecting_turfs += T
 			if (CHECK_OCCLUSION(T))
-				if (get_dist(T, location) <= distance_to_wall_illum)
-					affected_shadow_walls += T
+				affected_shadow_walls += T
+
+				for (var/dir in cardinal)
+					var/turf/T2 = get_step(T, dir)
+					if (!(T2 in cached_view) && CHECK_OCCLUSION(T2))
+						affected_shadow_walls += T2
+
 
 	if(!isturf(loc))
 		for(var/turf/T in affecting_turfs)
@@ -269,7 +274,7 @@ var/list/ubiquitous_light_ranges = list(5, 6)
 				// We turn 45 deg in hopes of finding the light again
 				new_source_turf = get_step(wanted_turf, turn(dir_to_light, 45))
 				// If we can't, then we just turn in the opposite direction.
-				if (!(new_source_turf in view(light_range, src)))
+				if (!(new_source_turf in view(light_range, src)) || CHECK_OCCLUSION(new_source_turf))
 					new_source_turf = get_step(wanted_turf, turn(dir_to_light, -45))
 
 		// Create a secondary light source, located on that direction towards the light
