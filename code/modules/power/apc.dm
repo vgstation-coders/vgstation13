@@ -335,10 +335,10 @@
 
 	// Update color only
 	if (old_light_color != light_color)
-		light_obj.cast_light(TRUE)
+		moody_light_obj.cast_light(TRUE)
 
 	if (old_light_range != light_range || old_light_power != light_power)
-		light_obj.cast_light()
+		moody_light_obj.cast_light()
 
 
 /obj/machinery/power/apc/proc/check_updates()

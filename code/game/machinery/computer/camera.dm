@@ -240,6 +240,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	lighting_flags = FOLLOW_PIXEL_OFFSET
 	light_color = "#ffffff"
 	light_power = 1
+	light_range_on = 0
 	light_range = 1
 
 /obj/machinery/computer/security/telescreen/entertainment/spesstv

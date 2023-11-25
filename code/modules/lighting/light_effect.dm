@@ -25,7 +25,6 @@
 	alpha = 180
 	color = "#FFFFFF"
 
-	var/current_power = 1
 	var/base_light_color_state = "white"
 	var/atom/movable/holder
 	var/point_angle
@@ -109,13 +108,6 @@
 	..()
 	if(holder)
 		follow_holder()
-
-// Applies power value to size (via Scale()) and updates the current rotation (via Turn())
-// angle for directional lights. This is only ever called before cast_light() so affected turfs
-// are updated elsewhere.
-/atom/movable/light/proc/update_transform(var/newrange)
-	if(!isnull(newrange) && current_power != newrange)
-		current_power = newrange
 
 // Orients the light to the holder's (or the holder's holder) current dir.
 // Also updates rotation for directional lights when appropriate.

@@ -21,3 +21,9 @@
 
 /atom/movable/light/moody/holomap
 	overlay_state = "_holomap"
+
+/atom/movable/light/moody/tube
+	overlay_state = "_light_tube"
+
+/atom/movable/light/moody/bulb
+	overlay_state = "_light_bulb"

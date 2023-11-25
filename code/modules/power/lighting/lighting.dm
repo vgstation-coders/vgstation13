@@ -147,6 +147,9 @@ var/list/light_source_images = list()
 	ghost_read=0
 	ghost_write=0
 
+	lighting_flags = MOODY_AND_REGULAR_LIGHT_SOURCE | FOLLOW_PIXEL_OFFSET
+	moody_light_type = /atom/movable/light/moody/tube
+
 	var/idle = 0 // For process().
 
 // create a new lighting fixture
@@ -217,6 +220,7 @@ var/list/light_source_images = list()
 	fitting = "bulb"
 	desc = "A small lighting fixture."
 	spawn_with_bulb = /obj/item/weapon/light/bulb
+	moody_light_type = /atom/movable/light/moody/bulb
 
 /obj/machinery/light/small/broken
 	icon_state = "lbulb-broken" //for the mapper
@@ -292,6 +296,7 @@ var/list/light_source_images = list()
 		else
 			use_power = 2
 			set_light(current_bulb.brightness_range, current_bulb.brightness_power, current_bulb.brightness_color)
+			set_moody_light()
 	else
 		use_power = 1
 		kill_light()

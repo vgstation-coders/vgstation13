@@ -49,8 +49,8 @@
 		overlays += overlay
 		// Now can be a nice and soft one-tile light again.
 		light_color = on  ? LIGHT_COLOR_GREEN : LIGHT_COLOR_RED
-		if (light_obj)
-			light_obj.cast_light(TRUE)
+		if (moody_light_obj)
+			moody_light_obj.cast_light(TRUE)
 
 /obj/machinery/light_switch/examine(mob/user)
 	..()

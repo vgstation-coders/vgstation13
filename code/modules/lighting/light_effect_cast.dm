@@ -765,18 +765,13 @@ var/list/ubiquitous_light_ranges = list(5, 6)
 	else
 		luminosity = max(3, 2*light_range)
 
-	//cap light range to 5
-	light_range = min(5, light_range)
+	light_range = 1
 
 	alpha = min(255,max(0,round(light_power*light_power_multiplier*25)))
 	light_color = (holder.light_color || light_color)
 
 	for (var/mob/M in view(world.view, src))
 		M.check_dark_vision()
-
-	for(var/turf/T in view(2*light_range, src))
-		T.lumcount = -1
-		affecting_turfs += T
 
 	switch (light_type)
 		if (LIGHT_SOFT_FLICKER)
@@ -796,7 +791,7 @@ var/list/ubiquitous_light_ranges = list(5, 6)
 
 	icon_state = "white"
 	var/image/I = image(icon)
-	I.layer = HIGHEST_LIGHTING_LAYER
+	I.layer = HIGHEST_LIGHTING_LAYER + 3
 	I.icon_state = "overlay[overlay_state]"
 	overlays += I
 

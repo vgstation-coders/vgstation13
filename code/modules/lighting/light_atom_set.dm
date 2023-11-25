@@ -6,6 +6,9 @@
 	if (shadow_obj)
 		qdel(shadow_obj)
 		shadow_obj = null
+	if (moody_light_obj)
+		qdel(moody_light_obj)
+		moody_light_obj = null
 
 // Updates all appropriate lighting values and then applies all changed values
 // to the objects light_obj overlay atom.
@@ -15,12 +18,10 @@
 		if(light_obj)
 			qdel(light_obj)
 			qdel(shadow_obj)
+			qdel(moody_light_obj)
 			light_obj = null
 			shadow_obj = null
-		return
-
-	if (moody_light_type)
-		set_moody_light(l_range, l_power, l_color, l_type)
+			moody_light_obj = null
 		return
 
 	light_value_inits(l_range, l_power, l_color, l_type)
@@ -71,10 +72,6 @@
 		update_cast = 1
 		target.light_power = light_power
 
-	if(light_obj.current_power != light_range)
-		update_cast = 1
-		target.update_transform(light_range)
-
 	if(target.light_type != light_type)
 		update_cast = 1
 		target.light_type = light_type
@@ -91,11 +88,11 @@
 // -- A lightweight version of the proc for cosmetic light overlays only.
 // They are not added to the subsystem and must be properly updated by their parent atoms.
 /atom/proc/set_moody_light(var/l_range, var/l_power, var/l_color, var/l_type, var/fadeout)
-	if (light_obj?.type != moody_light_type)
-		qdel(light_obj)
-		light_obj = null
-	if (!light_obj)
-		light_obj = new moody_light_type(newholder = src)
+	if (moody_light_obj?.type != moody_light_type)
+		qdel(moody_light_obj)
+		moody_light_obj = null
+	if (!moody_light_obj)
+		moody_light_obj = new moody_light_type(newholder = src)
 	light_value_inits(l_range, l_power, l_color, l_type)
-	light_atom_update(light_obj)
-	light_obj.cast_light()
+	light_atom_update(moody_light_obj, 1)
+	moody_light_obj.cast_light()
