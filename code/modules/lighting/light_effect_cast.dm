@@ -35,6 +35,8 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 
 // cast_light() is the "master proc", shared by the two kinds.
 
+var/list/ubiquitous_light_ranges = list(5, 6)
+
 /atom/movable/light
 	var/found_prerendered_white_light_glob = FALSE
 
@@ -200,15 +202,19 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 			I.render_source = white_light_identifier
 		else
 			var/found_prerendered_white_light = FALSE
-			for (var/atom/movable/light/neighbour in get_turf(src)) // This light atom is rendered from point A to point B, so it's fine
-				if (white_light_identifier in neighbour.pre_rendered_shadows)
-					I.render_source = white_light_identifier
-					I.icon_state = "overlay"
-					found_prerendered_white_light = TRUE
-					found_prerendered_white_light_glob = TRUE
-					break
+			if (light_range > 1)
+				for (var/atom/movable/light/neighbour in get_turf(src)) // This light atom is rendered from point A to point B, so it's fine
+					if (white_light_identifier in neighbour.pre_rendered_shadows)
+						I.render_source = white_light_identifier
+						I.icon_state = "overlay"
+						found_prerendered_white_light = TRUE
+						found_prerendered_white_light_glob = TRUE
+						break
 			if (!found_prerendered_white_light)
-				I = image(icon)
+				if (light_range in ubiquitous_light_ranges)
+					I.render_source = "*light_range_[light_range]_prerender"
+				else
+					I = image(icon)
 				if (light_type == LIGHT_DIRECTIONAL)
 					I.icon_state = directional_light_overlay
 				else
@@ -247,8 +253,24 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 
 		// Getting the direction towards the light
 		var/vector/direction_vec = atoms2vector(wanted_turf, get_turf(src))
-		var/dir_to_light = vector2ClosestDir(direction_vec)
-		var/turf/new_source_turf = get_step(wanted_turf, dir_to_light)
+		var/angle_to_light = direction_vec.toAngle()
+		var/dir_to_light
+		var/turf/new_source_turf
+		// We are on the same turf as the light source
+		if (angle_to_light == -1)
+			dir_to_light = 0
+			new_source_turf = get_step(wanted_turf, dir_to_light)
+		// We aren't, so we point towards it
+		else
+			dir_to_light = angle2dir(angle_to_light)
+			new_source_turf = get_step(wanted_turf, dir_to_light)
+			// Need to check if it's not a wall
+			if (CHECK_OCCLUSION(new_source_turf))
+				// We turn 45 deg in hopes of finding the light again
+				new_source_turf = get_step(wanted_turf, turn(dir_to_light, 45))
+				// If we can't, then we just turn in the opposite direction.
+				if (!(new_source_turf in view(light_range, src)))
+					new_source_turf = get_step(wanted_turf, turn(dir_to_light, -45))
 
 		// Create a secondary light source, located on that direction towards the light
 		var/atom/movable/light/secondary_shadow/secondary_source = new(new_source_turf, newholder = src.holder)
@@ -603,6 +625,9 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 	overlays = temp_appearance
 	temp_appearance = null
 
+	update_color()
+
+/atom/movable/light/proc/update_color()
 	// Coloring!
 	var/image/I = new
 	I.icon = src.icon
@@ -616,6 +641,9 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 /atom/movable/light/shadow/update_appearance()
 	for (var/atom/movable/light/secondary_shadow/shadow_comp in shadow_component_atoms)
 		shadow_comp.update_appearance()
+
+/atom/movable/light/secondary_shadow/update_color()
+	return
 
 /atom/movable/light/secondary_shadow/update_appearance()
 	. = ..()

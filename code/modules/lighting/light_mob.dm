@@ -29,15 +29,34 @@
 	backdrop = new(client)
 	self_vision = new(client)
 
-	var/image/black_turf = image('icons/lighting/wall_lighting.dmi', loc = src)
+
+	var/image/black_turf = image('icons/lighting/wall_lighting.dmi', loc = hud_used.holomap_obj)
 	black_turf.icon_state = "black"
 	black_turf.render_target = "*black_turf_prerender"
+	black_turf.mouse_opacity = 0
+	black_turf.invisibility = 101
 	client.images += black_turf
 
-	var/image/white_turf = image('icons/lighting/wall_lighting.dmi', loc = src)
+	var/image/white_turf = image('icons/lighting/wall_lighting.dmi', loc = hud_used.holomap_obj)
 	white_turf.icon_state = "white"
 	white_turf.render_target = "*white_turf_prerender"
+	white_turf.mouse_opacity = 0
+	white_turf.invisibility = 101
 	client.images += white_turf
+
+	var/image/light_range_5_im = image('icons/lighting/light_range_5.dmi', loc = hud_used.holomap_obj)
+	light_range_5_im.icon_state = "overlay"
+	light_range_5_im.render_target = "*light_range_5_prerender"
+	light_range_5_im.mouse_opacity = 0
+	light_range_5_im.invisibility = 101
+	client.images += light_range_5_im
+
+	var/image/light_range_6_im = image('icons/lighting/light_range_6.dmi', loc = hud_used.holomap_obj)
+	light_range_6_im.icon_state = "overlay"
+	light_range_6_im.render_target = "*light_range_6_prerender"
+	light_range_6_im.mouse_opacity = 0
+	light_range_6_im.invisibility = 101
+	client.images += light_range_6_im
 
 	update_darkness()
 	register_event(/event/before_move, src, /mob/proc/check_dark_vision)
