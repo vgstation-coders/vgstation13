@@ -598,9 +598,9 @@
 	icon_state = "gun_turret"
 
 /obj/structure/turret/gun_turret/examine(mob/user)
-	if(admin_only)
-		desc += "<br><span class='warning'>This turret's control panel is glowing red and appears to be remotely locked down.</span>"
 	..()
+	if(admin_only)
+		to_chat(user, "<span class='warning'>This turret's control panel is glowing red and appears to be remotely locked down.</span>")
 
 /obj/structure/turret/gun_turret/ex_act()
 	qdel (src)
