@@ -639,7 +639,7 @@
 				<b>Admin-only mode:</b> <a href='?src=\ref[src];admin_only=1'>[admin_only?"ON":"OFF"]</a><br>
 				<b>Projectile type:</b> <a href='?src=\ref[src];projectile_type=1'>[projectile_type]</a><br>
 				<b>Projectiles per burst:</b> <a href='?src=\ref[src];projectile_burst=1'>[projectiles_per_shot]</a><br>
-				<b>Firing delay:</b> <a href='?src=\ref[src];firing_delay=1'>[cooldown]</a><br>
+				<b>Firing delay:</b> <a href='?src=\ref[src];firing_delay=1'>[cooldown] deci-seconds</a><br>
 				<b>Set ammo #:</b> <a href='?src=\ref[src];force_ammo_amt=1'>[projectiles]</a><br>
 				
 			
