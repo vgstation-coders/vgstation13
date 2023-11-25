@@ -4323,6 +4323,13 @@
 								if(H.client)
 									to_chat(H, "<span class='warning'>The tranquility that once filled your soul has vanished. You are once again a slave to your worldly desires.</span>")
 
+			if("spawn_custom_turret")
+				if(alert("Are you sure you'd like to spawn a custom turret at your location?", "Confirmation", "Yes", "Cancel") == "Cancel")
+					return
+				new /obj/structure/turret/gun_turret/admin(get_turf(usr))
+				log_admin("[key_name(usr)] has spawned a customizable turret at [get_coordinates_string(usr)].")
+				message_admins("[key_name(usr)] has spawned a customizable turret at [get_coordinates_string(usr)].")
+
 			if("vermin_infestation")
 				var/list/locations = list(
 					"RANDOM" = null,
