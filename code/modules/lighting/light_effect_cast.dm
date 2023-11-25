@@ -371,83 +371,67 @@ var/list/ubiquitous_light_ranges = list(5, 6)
 	// Using BYOND's render_target magick here
 
 	var/image/I = new()
-	var/shadow_image_identifier = "shadow[num]_[light_range]_[grazing_angle]_[abs(y_offset)]_[abs(x_offset)]_[block_1]_[block_2]"
+	var/shadow_image_identifier = "shadow[num]_[light_range]_[grazing_angle]_[abs(y_offset)]_[abs(x_offset)]_[block_1]_[block_2]_[delta]"
 	// We've done this before...
-	if (shadow_image_identifier in pre_rendered_shadows)
-		I.render_source = shadow_image_identifier
+
+	var/found_shadow_identif = 0
+
+	// Same tile has done it before.......
+	for (var/atom/movable/light/neighbour in get_turf(src)) // This light atom is rendered from point A to point B, so it's fine
+		if (shadow_image_identifier in neighbour.pre_rendered_shadows)
+			I.render_source = shadow_image_identifier
+			found_shadow_identif = TRUE
+
+	// Or not!
+	if (!found_shadow_identif)
+		// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
+		// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
+		// The downside is, of course, that you need to cover all the cases in your switch.
+		var/icon/shadowicon = try_get_light_range_icon(block_1, block_2, light_range, num)
+		I = image(shadowicon)
+		//I.render_target = shadow_image_identifier
+		pre_rendered_shadows += shadow_image_identifier
+
+	switch(grazing_angle)
+		if (-179 to -91)
+			M.Scale(-1, -1)
+
+		if (-90)
+			M.Scale(1, -1)
+
+		if (-89 to -1)
+			M.Scale(1, -1)
+
+		if (0)
+			M.Turn(90)
+
+		//if (1 to 89)
+
+		//if (90)
+
+		if (91 to 179)
+			M.Scale(-1, 1)
+
+		if (180)
+			M.Turn(-90)
+
+
+	//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
+	if (num == CORNER_SHADOW)
+		if(delta == 0)
+			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+		else if (delta > 0)
+			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
+		else
+			I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
 	else
-		var/found_shadow_identif = 0
-		/*
-		// Same tile has done it before.......
-		for (var/atom/movable/light/neighbour in get_turf(src)) // This light atom is rendered from point A to point B, so it's fine
-			if (shadow_image_identifier in neighbour.pre_rendered_shadows)
-				I.render_source = shadow_image_identifier
-				I.layer = LIGHTING_LAYER
-				found_shadow_identif = TRUE
-				if (num == CORNER_SHADOW)
-					if(delta == 0)
-						I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
-					else if (delta > 0)
-						I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
-					else
-						I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
-				else
-					if (delta > 0)
-						I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
-					else
-						I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
+		if (delta > 0)
+			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+		else
+			I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
 
-				break
-		*/
-		// Or not!
-		if (!found_shadow_identif)
-			switch(grazing_angle)
-				if (-179 to -91)
-					M.Scale(-1, -1)
-
-				if (-90)
-					M.Scale(1, -1)
-
-				if (-89 to -1)
-					M.Scale(1, -1)
-
-				if (0)
-					M.Turn(90)
-
-				//if (1 to 89)
-
-				//if (90)
-
-				if (91 to 179)
-					M.Scale(-1, 1)
-
-				if (180)
-					M.Turn(-90)
-
-			// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
-			// Setting icon explicitly allows us to use byond rsc instead of fetching the file everytime.
-			// The downside is, of course, that you need to cover all the cases in your switch.
-			var/icon/shadowicon = try_get_light_range_icon(block_1, block_2, light_range, num)
-			I = image(shadowicon)
-
-			//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
-			if (num == CORNER_SHADOW)
-				if(delta == 0)
-					I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
-				else if (delta > 0)
-					I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
-				else
-					I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
-			else
-				if (delta > 0)
-					I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
-				else
-					I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
-
-			I.transform = M
-			I.layer = LIGHTING_LAYER
-			I.render_target = shadow_image_identifier
-			pre_rendered_shadows += shadow_image_identifier
+	I.transform = M
+	I.layer = LIGHTING_LAYER
 
 	// Once that's done...
 	// We caclulate the offset
@@ -645,22 +629,6 @@ var/list/ubiquitous_light_ranges = list(5, 6)
 /atom/movable/light/secondary_shadow/update_color()
 	return
 
-/atom/movable/light/secondary_shadow/update_appearance()
-	. = ..()
-	switch (dir_to_source)
-		if (NORTH)
-			if (CHECK_OCCLUSION(get_step(loc, SOUTH)))
-				bound_y -= WORLD_ICON_SIZE/2
-		if (SOUTH)
-			if (CHECK_OCCLUSION(get_step(loc, NORTH)))
-				bound_y += WORLD_ICON_SIZE/2
-		if (EAST)
-			if (CHECK_OCCLUSION(get_step(loc, WEST)))
-				bound_x -= WORLD_ICON_SIZE/2
-		if (WEST)
-			if (CHECK_OCCLUSION(get_step(loc, EAST)))
-				bound_x += WORLD_ICON_SIZE/2
-
 // -- Smoothing out shadows
 /atom/movable/light/proc/post_processing()
 	if (light_post_processing == ALL_SHADOWS)
@@ -704,7 +672,8 @@ var/list/ubiquitous_light_ranges = list(5, 6)
 		combined_shadow_walls.temp_appearance += I
 
 	combined_shadow_walls.overlays = combined_shadow_walls.temp_appearance
-	combined_shadow_walls.filters = filter(type = "blur", size = BLUR_SIZE)
+	if (!parent.found_prerendered_white_light_glob)
+		combined_shadow_walls.filters = filter(type = "blur", size = BLUR_SIZE)
 	temp_appearance += combined_shadow_walls
 
 	// -- eliminating the underglow
@@ -756,6 +725,7 @@ var/list/ubiquitous_light_ranges = list(5, 6)
 		qdel(src)
 		return
 
+	overlays = list()
 	light_color = (holder.light_color || light_color)
 	dir = holder.dir
 
