@@ -67,9 +67,6 @@
 			for(var/datum/comm_log_entry/C in SelectedServer.log_entries)
 				i++
 
-				if (i > 75) // No more than 75 entries at the same time
-					break
-
 				// If the log is a speech file
 				if(C.input_type == "Speech File")
 
@@ -81,24 +78,18 @@
 					var/language = "Human" // MMIs, pAIs, Cyborgs and humans all speak Human
 					var/mobtype = C.parameters["mobtype"]
 
-					var/list/humans = typesof(/mob/living/carbon/human, /mob/living/carbon/brain)
-					var/list/monkeys = typesof(/mob/living/carbon/monkey)
-					var/list/silicons = typesof(/mob/living/silicon)
-					var/list/slimes = typesof(/mob/living/carbon/slime)
-					var/list/animals = typesof(/mob/living/simple_animal)
-
-					if(mobtype in humans)
+					if(ishuman(mobtype))
 						race = "Human"
 						language = race
 
-					else if(mobtype in monkeys)
+					else if(ismonkey(mobtype))
 						race = "Monkey"
 						language = race
 
-					else if(mobtype in silicons || C.parameters["job"] == "AI") // sometimes M gets deleted prematurely for AIs... just check the job
+					else if(issilicon(mobtype) || C.parameters["job"] == "AI") // sometimes M gets deleted prematurely for AIs... just check the job
 						race = "Artificial Life"
 
-					else if(mobtype in slimes) // NT knows a lot about slimes, but not aliens. Can identify slimes
+					else if(isslime(mobtype)) // NT knows a lot about slimes, but not aliens. Can identify slimes
 						race = "slime"
 						language = race
 
@@ -106,7 +97,7 @@
 						race = "Machinery"
 						language = race
 
-					else if(mobtype in animals)
+					else if(isanimal(mobtype))
 						race = "Domestic Animal"
 						language = race
 
