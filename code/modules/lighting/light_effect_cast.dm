@@ -371,7 +371,7 @@ var/list/ubiquitous_light_ranges = list(5, 6)
 	// Using BYOND's render_target magick here
 
 	var/image/I = new()
-	var/shadow_image_identifier = "shadow[num]_[light_range]_[grazing_angle]_[abs(y_offset)]_[abs(x_offset)]_[block_1]_[block_2]_[delta]"
+	var/shadow_image_identifier = "shadow[num]_[light_range]_[grazing_angle]_[abs(y_offset)]_[abs(x_offset)]_[block_1]_[block_2]"
 	// We've done this before...
 
 	var/found_shadow_identif = 0
@@ -416,22 +416,22 @@ var/list/ubiquitous_light_ranges = list(5, 6)
 			M.Turn(-90)
 
 
-	//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
-	if (num == CORNER_SHADOW)
-		if(delta == 0)
-			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
-		else if (delta > 0)
-			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
+		//due to the way the offsets are named, we can just swap the x and y offsets to "rotate" the icon state
+		if (num == CORNER_SHADOW)
+			if(delta == 0)
+				I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+			else if (delta > 0)
+				I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
+			else
+				I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
 		else
-			I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
-	else
-		if (delta > 0)
-			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
-		else
-			I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
+			if (delta > 0)
+				I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
+			else
+				I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
 
-	I.transform = M
-	I.layer = LIGHTING_LAYER
+		I.transform = M
+		I.layer = LIGHTING_LAYER
 
 	// Once that's done...
 	// We caclulate the offset
