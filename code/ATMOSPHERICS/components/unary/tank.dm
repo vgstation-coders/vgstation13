@@ -101,6 +101,11 @@
 
 	air_contents.adjust_gas(GAS_NITROGEN, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
+/obj/machinery/atmospherics/unary/tank/nitrogen/coldroom/New()
+	..()
+	air_contents.temperature = 90
+	air_contents.adjust_gas(GAS_NITROGEN, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
+
 /obj/machinery/atmospherics/unary/tank/air
 	icon_state = "air"
 	name = "Pressure Tank (Air)"
