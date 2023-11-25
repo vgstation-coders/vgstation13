@@ -17,10 +17,24 @@
 
 	var/universal_translate = 0 // set to 1 if it can translate nonhuman speech
 
+	//Used to track what type of mob said a message. Done only once instead of every time someone opens the comm log.
+	var/list/humans = list()
+	var/list/monkeys = list()
+	var/list/silicons = list()
+	var/list/slimes = list()
+	var/list/animals = list()
+
 	circuit = "/obj/item/weapon/circuitboard/comm_server"
 
 	req_access = list(access_tcomsat)
 
+/obj/machinery/computer/telecomms/server/New()
+	..()
+	humans = typesof(/mob/living/carbon/human, /mob/living/carbon/brain)
+	monkeys = typesof(/mob/living/carbon/monkey)
+	silicons = typesof(/mob/living/silicon)
+	slimes = typesof(/mob/living/carbon/slime)
+	animals = typesof(/mob/living/simple_animal)
 
 /obj/machinery/computer/telecomms/server/attack_hand(mob/user as mob)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
@@ -78,18 +92,18 @@
 					var/language = "Human" // MMIs, pAIs, Cyborgs and humans all speak Human
 					var/mobtype = C.parameters["mobtype"]
 
-					if(ishuman(mobtype))
+					if(mobtype in humans)
 						race = "Human"
 						language = race
 
-					else if(ismonkey(mobtype))
+					else if(mobtype in monkeys)
 						race = "Monkey"
 						language = race
 
-					else if(issilicon(mobtype) || C.parameters["job"] == "AI") // sometimes M gets deleted prematurely for AIs... just check the job
+					else if((mobtype in silicons) || (C.parameters["job"] == "AI")) // sometimes M gets deleted prematurely for AIs... just check the job
 						race = "Artificial Life"
 
-					else if(isslime(mobtype)) // NT knows a lot about slimes, but not aliens. Can identify slimes
+					else if(mobtype in slimes) // NT knows a lot about slimes, but not aliens. Can identify slimes
 						race = "slime"
 						language = race
 
@@ -97,7 +111,7 @@
 						race = "Machinery"
 						language = race
 
-					else if(isanimal(mobtype))
+					else if(mobtype in animals)
 						race = "Domestic Animal"
 						language = race
 
