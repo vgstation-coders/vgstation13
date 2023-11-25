@@ -1,8 +1,6 @@
-var/clientdebugdiary = file("data/logs/runtime/[time2text(world.realtime,"YYYY-MM-DD")]-clients.log")
-
 /world/IsBanned(key, address, computer_id, type)
 	var/real_login = type != "goonchat" //Certain actions don't make sense to perform for the cookie checks.
-	if(real_login) clientdebugdiary << "CLIENT DEBUG: IsBanned start [world.timeofday] for [list2params(args)]"
+	if(real_login) world.log << "CLIENT DEBUG: IsBanned start [world.timeofday] for [list2params(args)]"
 	log_access("IsBanned: Checking [ckey(key)], [address], [computer_id], [type]")
 	if(real_login) //There are valid reasons for the cookie to contain certain blank fields or guest ckeys, which caused lots of false positives. The rest of these are just not necessary for cookie checks.
 		if(!key || !address || !computer_id)
@@ -24,7 +22,7 @@ var/clientdebugdiary = file("data/logs/runtime/[time2text(world.realtime,"YYYY-M
 		if(.)
 			log_access("Failed Login: [key] [computer_id] [address] - Banned [.["reason"]]")
 			message_admins("<span class='notice'>Failed Login: [key] id:[computer_id] ip:[address] - Banned [.["reason"]]</span>")
-			if(real_login) clientdebugdiary << "CLIENT DEBUG: IsBanned end [world.timeofday] for [list2params(args)]"
+			if(real_login) world.log << "CLIENT DEBUG: IsBanned end [world.timeofday] for [list2params(args)]"
 
 			return .
 		//sticky ban logging
@@ -41,7 +39,7 @@ var/clientdebugdiary = file("data/logs/runtime/[time2text(world.realtime,"YYYY-M
 				what.Remove("message")
 				what["desc"] = "[desc]"
 				what["reason"] = "PERMABAN"
-		if(real_login) clientdebugdiary << "CLIENT DEBUG: IsBanned end [world.timeofday] for [list2params(args)]"
+		if(real_login) world.log << "CLIENT DEBUG: IsBanned end [world.timeofday] for [list2params(args)]"
 		return .	//default pager ban stuff
 
 	else
@@ -73,7 +71,7 @@ var/clientdebugdiary = file("data/logs/runtime/[time2text(world.realtime,"YYYY-M
 			message_admins("Error: [query.ErrorMsg()]")
 			log_sql("Error: [query.ErrorMsg()]")
 			qdel(query)
-			if(real_login) clientdebugdiary << "CLIENT DEBUG: IsBanned end with bad query [world.timeofday] for [list2params(args)]"
+			if(real_login) world.log << "CLIENT DEBUG: IsBanned end with bad query [world.timeofday] for [list2params(args)]"
 			return
 		while(query.NextRow())
 			var/pckey = query.item[1]
@@ -97,7 +95,7 @@ var/clientdebugdiary = file("data/logs/runtime/[time2text(world.realtime,"YYYY-M
 				desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\n[reason]\nThis ban was applied by [ackey] on [bantime] \nBan type: [bantype] \nExpires: [expires] \nAppeal: <span class='warning'>No ban appeals link set</span>"
 			log_access("Failed Login: [key] [computer_id] [address] - Banned [desc]")
 			qdel(query)
-			if(real_login) clientdebugdiary << "CLIENT DEBUG: IsBanned end banned [world.timeofday] for [list2params(args)]"
+			if(real_login) world.log << "CLIENT DEBUG: IsBanned end banned [world.timeofday] for [list2params(args)]"
 
 			return list("reason"="[bantype]", "desc"="[desc]")
 			//return "[bantype][desc]"
@@ -120,32 +118,22 @@ var/clientdebugdiary = file("data/logs/runtime/[time2text(world.realtime,"YYYY-M
 				what.Remove("message")
 				what["desc"] = "[desc]"
 				what["reason"] = "PERMABAN"
-		if(real_login) clientdebugdiary << "CLIENT DEBUG: IsBanned default end [world.timeofday] for [list2params(args)]"
+		if(real_login) world.log << "CLIENT DEBUG: IsBanned default end [world.timeofday] for [list2params(args)]"
 
 		return .	//default pager ban stuff
 
-/client/var/client_initialized = FALSE
 /datum/notreal
-	var/client/attached
-
 /datum/notreal/New()
-	for(var/client/C)
-		if(!C.client_initialized)
-			attached = C
-			break
-	clientdebugdiary << "CLIENT DEBUG: tracker datum (\ref[src]) for [attached] was initialized on [world.timeofday]"
+	..()
+	world.log << "tracker datum was initialized on [world.timeofday]"
 
-	while(!attached.client_initialized)
-		clientdebugdiary << "Client [attached] is being held in stasis because it hasn't yet called client/New() [world.timeofday]"
-		sleep(10)
-
-/client/var/datum/notreal/tracker = new /datum/notreal()
-
+/client/var/client_initialized = FALSE
+/client/var/datum/notreal/tracker = new /datum/notreal
 /client/New()
-    clientdebugdiary << "CLIENT DEBUG: /client/New(): [world.timeofday] [src] (\ref[src])"
+    world.log << "/client/New(): [world.timeofday] [src] (\ref[src])"
     client_initialized = TRUE
     ..()
 
 /client/Del()
-    if(!client_initialized) clientdebugdiary << "CLIENT DEBUG: /client/Del(): [world.timeofday] [src] (\ref[src])[client_initialized ? "" : " UNINITIALIZED"]"
+    if(!client_initialized) world.log << "/client/Del(): [world.timeofday] [src] (\ref[src])[client_initialized ? "" : " UNINITIALIZED"]"
     ..()
