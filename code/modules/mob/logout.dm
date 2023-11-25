@@ -1,6 +1,4 @@
 /mob/Logout()
-	if(client)
-		client.lastproc += "Start mob/Logout([list2params(args)]), "
 	SStgui.on_logout(src)
 	nanomanager.close_user_uis(src)
 
@@ -60,7 +58,5 @@
 				send2admindiscord("[key_name(src, showantag = FALSE)] logged out. **No more non-AFK admins online.** - **[admin_number_afk]** AFK", TRUE)
 
 	INVOKE_EVENT(src, /event/logout, "user" = src)
-	if(client)
-		client.lastproc += "End mob/Logout([list2params(args)]), "
 
 	..()

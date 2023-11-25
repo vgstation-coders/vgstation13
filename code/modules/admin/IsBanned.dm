@@ -1,9 +1,6 @@
 /world/IsBanned(key, address, computer_id, type)
 	var/real_login = type != "goonchat" //Certain actions don't make sense to perform for the cookie checks.
-	var/client/C
-	if(usr)
-		C = usr:client
-		C.lastproc += "Start IsBanned([key],[address],[computer_id],[type]), "
+
 	log_access("IsBanned: Checking [ckey(key)], [address], [computer_id], [type]")
 	if(real_login) //There are valid reasons for the cookie to contain certain blank fields or guest ckeys, which caused lots of false positives. The rest of these are just not necessary for cookie checks.
 		if(!key || !address || !computer_id)
@@ -40,9 +37,7 @@
 				what.Remove("message")
 				what["desc"] = "[desc]"
 				what["reason"] = "PERMABAN"
-		if(C)
 
-			C.lastproc += "End IsBanned([key],[address],[computer_id],[type]), "
 		return .	//default pager ban stuff
 
 	else
@@ -118,7 +113,4 @@
 				what.Remove("message")
 				what["desc"] = "[desc]"
 				what["reason"] = "PERMABAN"
-		if(C)
-
-			C.lastproc += "End IsBanned([key],[address],[computer_id],[type]), "
 		return .	//default pager ban stuff
