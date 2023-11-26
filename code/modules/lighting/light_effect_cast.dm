@@ -35,7 +35,7 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 
 // cast_light() is the "master proc", shared by the two kinds.
 
-var/list/ubiquitous_light_ranges = list(5, 6)
+var/list/ubiquitous_light_ranges = list(1, 4, 5, 6)
 
 /atom/movable/light
 	var/found_prerendered_white_light_glob = FALSE

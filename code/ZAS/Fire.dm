@@ -194,6 +194,8 @@ Attach to transfer valve and open. BOOM.
 	light_color = LIGHT_COLOR_FIRE
 	light_type = LIGHT_SOFT_FLICKER
 
+	var/firelevel_stored
+
 /obj/effect/fire/proc/Extinguish()
 	var/turf/simulated/S=loc
 
@@ -241,6 +243,7 @@ Attach to transfer valve and open. BOOM.
 		return
 
 	var/firelevel = air_contents.calculate_firelevel(S)
+	firelevel_stored = firelevel
 	setfirelight(firelevel, air_contents.temperature)
 
 	//im not sure how to implement a version that works for every creature so for now monkeys are firesafe
@@ -320,15 +323,33 @@ Attach to transfer valve and open. BOOM.
 	// Update fire color.
 	color = heat2color(firetemp)
 
+	var/l_power
+
 	if(firelevel > 6)
 		icon_state = "key3"
-		set_light(7, 3 * heatlight, color)
+		l_power = 3*heatlight
 	else if(firelevel > 2.5)
 		icon_state = "key2"
-		set_light(5, 2 * heatlight, color)
+		l_power = 2*heatlight
 	else
 		icon_state = "key1"
-		set_light(3, 1 * heatlight, color)
+		l_power = 1*heatlight
+
+	var/neighbour_count = 0
+	var/obj/effect/fire/neighbour
+	var/l_range = 4
+
+	for (var/dir in alldirs)
+		var/turf/T = get_step(src, dir)
+		neighbour = locate(/obj/effect/fire) in T
+		if (neighbour && neighbour.firelevel_stored >= firelevel_stored)
+			neighbour_count++
+
+	if (neighbour_count > 5)
+		l_range = 1
+		world.log << "Fire light icon optimised"
+
+	set_light(l_range, l_power, color, null, 0, neighbour)
 
 
 

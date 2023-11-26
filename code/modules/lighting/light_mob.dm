@@ -44,6 +44,22 @@
 	white_turf.invisibility = 101
 	client.images += white_turf
 
+	// Common atoms
+	var/image/light_range_1_im = image('icons/lighting/light_range_1.dmi', loc = hud_used.holomap_obj)
+	light_range_1_im.icon_state = "overlay"
+	light_range_1_im.render_target = "*light_range_1_prerender"
+	light_range_1_im.mouse_opacity = 0
+	light_range_1_im.invisibility = 101
+	client.images += light_range_1_im
+
+	// Fires
+	var/image/light_range_4_im = image('icons/lighting/light_range_4.dmi', loc = hud_used.holomap_obj)
+	light_range_4_im.icon_state = "overlay"
+	light_range_4_im.render_target = "*light_range_4_prerender"
+	light_range_4_im.mouse_opacity = 0
+	light_range_4_im.invisibility = 101
+	client.images += light_range_4_im
+
 	var/image/light_range_5_im = image('icons/lighting/light_range_5.dmi', loc = hud_used.holomap_obj)
 	light_range_5_im.icon_state = "overlay"
 	light_range_5_im.render_target = "*light_range_5_prerender"
