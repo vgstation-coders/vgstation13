@@ -607,7 +607,7 @@
 	if (t == LIMB_HEAD)
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-			if (H.stat < 2 && H.health < 50 && prob(90))
+			if(H.stat < 2 && H.health < 50 && prob(90))
 				// ******* Check
 				if (istype(H, /obj/item/clothing/head) && H.flags & 8 && prob(80))
 					to_chat(H, "<span class='warning'>The helmet protects you from being hit hard in the head!</span>")
@@ -619,9 +619,9 @@
 					H.Paralyse(time)
 					H.stat = 1
 					return
-			else
-				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")
-				H.eye_blurry += 3
+				else
+					H.eye_blurry += 3
+			H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")	
 	return ..()
 
 /*
