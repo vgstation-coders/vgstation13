@@ -16,7 +16,7 @@
 
 	NO DON'T DO THAT, IF YOU'RE NOT SURE JUST KEEP IT AT WATER'S. IF YOU GET SOMETHING ABOVE 10 LET ALONE IN THE HUNDREDS YOU'RE PROBABLY DOING SOMETHING VERY WRONG
 
-	It is very common to use REAGENTS_METABOLISM or REM used in this file. Both are the same value, 0.5
+	It is very common to use REAGENTS_METABOLISM (0.2) or REM / REGEANTS_EFFECT_MULTIPLIER (0.5) in this file.
 
 */
 
@@ -6133,7 +6133,7 @@ var/procizine_tolerance = 0
 	color = "#D9C0E7" //rgb: 217, 192, 231
 	custom_metabolism = 0.1
 
-//Anticoagulent. Great for helping the body fight off viruses but makes vulnerable to pain, bleeding, and brute damage.
+//Anticoagulant. Great for helping the body fight off viruses but makes one vulnerable to pain, bleeding, and brute damage.
 /datum/reagent/antipathogenic/feverfew
 	name = "Feverfew"
 	id = FEVERFEW

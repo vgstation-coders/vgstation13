@@ -30,7 +30,7 @@
 	var/image/img = image('icons/turf/rock_overlay.dmi', "flesh_overlay",layer = SIDE_LAYER)
 	img.pixel_x = -4*PIXEL_MULTIPLIER
 	img.pixel_y = -4*PIXEL_MULTIPLIER
-	img.plane = BELOW_TURF_PLANE
+	img.plane = relative_plane(plane)
 	overlays += img
 
 //Objects
@@ -84,7 +84,7 @@
 		/obj/item/weapon/gun/projectile/hecate/hunting = 10,
 		/obj/item/weapon/reagent_containers/food/snacks/sausage = 10,
 		/obj/item/ammo_storage/box/a357 = 20
-		)
+	)
 
 /obj/item/weapon/card/id/deputy
 	name = "deputy badge"
@@ -218,9 +218,9 @@
 		return
 	throw_at(get_turf(pick(orange(7,src))), 10,2)
 
-/obj/structure/sarcophagous
-	name = "sarcophagous"
-	desc = "Although often associated with Egyptians, sarchopagous is a Greek word meaning 'eater of flesh'. It refers to any stone burial recepticle."
+/obj/structure/sarcophagus
+	name = "sarcophagus"
+	desc = "Although often associated with Egyptians, sarcophagus is a Greek word meaning 'eater of flesh'. It refers to any stone burial receptacle."
 	density = TRUE
 	anchored = TRUE
 	icon = 'icons/obj/stationobjs.dmi'
@@ -293,7 +293,7 @@
 	if(!active)
 		var/choosefile = pick('sound/items/jinglebell1.ogg','sound/items/jinglebell2.ogg','sound/items/jinglebell3.ogg')
 		playsound(user, choosefile, 100, 1)
-		user.register_event(/event/damaged, src, .proc/dismount)
+		user.register_event(/event/damaged, src, nameof(src::dismount()))
 		user.overlays.Add(my_overlay)
 		active = TRUE
 		if(istype(user,/mob/living/simple_animal))
@@ -307,7 +307,7 @@
 	var/mob/living/user = src.holder
 	playsound(user, 'sound/voice/cow.ogg', 100, 1)
 	user.overlays.Remove(my_overlay)
-	user.unregister_event(/event/damaged, src, .proc/dismount)
+	user.unregister_event(/event/damaged, src, nameof(src::dismount()))
 	active = FALSE
 	if(istype(user,/mob/living/simple_animal))
 		var/mob/living/simple_animal/SA = user
@@ -318,7 +318,5 @@
 	icon = 'icons/mob/in-hand/left/items_lefthand.dmi'
 	icon_state = "horsebroom0"
 	layer = VEHICLE_LAYER
-	plane = ABOVE_HUMAN_PLANE
-	mouse_opacity = 0
-	pixel_x = 0
-	pixel_y = 0
+	plane = FLOAT_PLANE + 2
+	mouse_opacity = 0 // Probably does nothing on overlays
