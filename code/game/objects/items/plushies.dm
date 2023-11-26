@@ -230,6 +230,10 @@
 	icon_state = "teddy"
 
 //This one is only available with a pomfcoin
+/obj/item/toy/plushie/chicken/pomf
+	name = "plush pomf chicken"
+	desc = "An extremely soft and plushy chicken. Cluck!"
+
 /obj/item/toy/plushie/sylveon
 	name = "plush Sylveon"
 	desc = "This special edition Sylveon plushie was never officially released to the public."
