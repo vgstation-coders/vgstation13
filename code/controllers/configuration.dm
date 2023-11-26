@@ -669,14 +669,6 @@
 					config.limbs_can_break = value
 				if("respawn_delay")
 					config.respawn_delay = value
-				if("emag_energy")
-					config.emag_energy = value
-				if("emag_starts_charged")
-					config.emag_starts_charged = value
-				if("emag_recharge_rate")
-					config.emag_recharge_rate = value
-				if("emag_recharge_ticks")
-					config.emag_recharge_ticks = value
 				if("silent_ai")
 					config.silent_ai = 1
 				if("silent_borg")
