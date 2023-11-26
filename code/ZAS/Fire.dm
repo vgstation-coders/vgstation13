@@ -337,17 +337,7 @@ Attach to transfer valve and open. BOOM.
 
 	var/neighbour_count = 0
 	var/obj/effect/fire/neighbour
-	var/l_range = 4
-
-	for (var/dir in alldirs)
-		var/turf/T = get_step(src, dir)
-		neighbour = locate(/obj/effect/fire) in T
-		if (neighbour && neighbour.firelevel_stored >= firelevel_stored)
-			neighbour_count++
-
-	if (neighbour_count > 5)
-		l_range = 1
-		world.log << "Fire light icon optimised"
+	var/l_range = 1
 
 	set_light(l_range, l_power, color, null, 0, neighbour)
 

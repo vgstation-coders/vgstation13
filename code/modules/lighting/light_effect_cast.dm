@@ -37,6 +37,9 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 
 var/list/ubiquitous_light_ranges = list(1, 4, 5, 6)
 
+#define TURF_GROUP_LENGTH 7
+#define TURF_GROUP_MIDPOINT round(TURF_GROUP_LENGTH/2)
+
 /atom/movable/light
 	var/found_prerendered_white_light_glob = FALSE
 
@@ -127,7 +130,7 @@ var/list/ubiquitous_light_ranges = list(1, 4, 5, 6)
 		if (!CHECK_OCCLUSION(T))
 			continue
 
-		if (last_turf_in_group && ((get_dist(T, last_turf_in_group) > 1) || (turf_group.len >= 3)))
+		if (last_turf_in_group && ((get_dist(T, last_turf_in_group) > 1) || (turf_group.len >= TURF_GROUP_LENGTH)))
 			shadow_component_turfs += list(turf_group)
 			turf_group = list()
 
@@ -253,7 +256,7 @@ var/list/ubiquitous_light_ranges = list(1, 4, 5, 6)
 		// Picking the 2nd element in the list
 		if (!L.len)
 			continue
-		var/index = max(L.len - 1, 1)
+		var/index = min(TURF_GROUP_MIDPOINT, 1)
 		var/turf/wanted_turf = L[index]
 
 		// Getting the direction towards the light
