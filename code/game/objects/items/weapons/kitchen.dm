@@ -614,12 +614,15 @@
 					return
 				var/time = rand(2, 6)
 				if (prob(75))
+					if(!H.stat)
+						user.visible_message("<span class='danger'><B>[H] has been knocked unconscious!</B>", "<span class='warning'>You knock [H] unconscious!</span></span>")
+						playsound(H, 'sound/effects/bonk.ogg', 75, 1)
 					H.Paralyse(time)
+					
 				else
 					H.Stun(time)
-				if(H.stat != 2)
+				if(!H.stat)
 					H.stat = 1
-				user.visible_message("<span class='danger'><B>[H] has been knocked unconscious!</B>", "<span class='warning'>You knock [H] unconscious!</span></span>")
 				return
 			else
 				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")
