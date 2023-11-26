@@ -55,24 +55,12 @@
  * ID CARDS
  */
 /obj/item/weapon/card/emag
-	desc = "It's a card with a magnetic strip attached to some circuitry."
+	desc = "It's a card with a magnetic strip attached to some circuitry.<br><span class=\"info\">\The [name] has a tiny fusion generator for power.</span>"
 	name = "cryptographic sequencer"
 	icon_state = "emag"
 	item_state = "card-id"
 	slot_flags = SLOT_ID
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=2"
-
-/obj/item/weapon/card/emag/examine(mob/user)
-	..()
-	if(energy==-1)
-		to_chat(user, "<span class=\"info\">\The [name] has a tiny fusion generator for power.</span>")
-	else
-		var/class="info"
-		if(energy/max_energy < 0.1 /* 10% energy left */)
-			class="warning"
-		to_chat(user, "<span class=\"[class]\">This [name] has [energy]MJ left in its capacitor ([max_energy]MJ capacity).</span>")
-	if(recharge_rate && recharge_ticks)
-		to_chat(user, "<span class=\"info\">A small label on a thermocouple notes that it recharges at a rate of [recharge_rate]MJ for every [recharge_ticks<=1?"":"[recharge_ticks] "]oscillator tick[recharge_ticks>1?"s":""].</span>")
 
 //don't perform emag_act() stuff in this method
 /obj/item/weapon/card/emag/attack()
