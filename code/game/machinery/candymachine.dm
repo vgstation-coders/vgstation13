@@ -9,7 +9,6 @@
 	anchored = 1
 	density = 1
 	machine_flags = WRENCHMOVE | FIXED2WORK | EMAGGABLE
-	emag_cost = 0
 	emagged = 0
 	use_power = MACHINE_POWER_USE_NONE
 

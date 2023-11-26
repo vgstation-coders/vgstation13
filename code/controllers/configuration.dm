@@ -171,11 +171,6 @@
 	var/assistantlimit = 0 //enables assistant limiting
 	var/assistantratio = 2 //how many assistants to security members
 
-	var/emag_energy = -1
-	var/emag_starts_charged = 1
-	var/emag_recharge_rate = 0
-	var/emag_recharge_ticks = 0
-
 	var/renders_url = ""
 
 	var/grue_egglaying = 1 //Whether or not grues can lay eggs to reproduce
