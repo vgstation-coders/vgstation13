@@ -614,6 +614,7 @@
 					return
 				var/time = rand(2, 6)
 				if (prob(75) && !H.stat)
+					user.do_attack_animation(H, src)
 					user.visible_message("<span class='danger'><B>[H] has been knocked unconscious!</B>", "<span class='warning'>You knock [H] unconscious!</span></span>")
 					playsound(H, 'sound/effects/bonk.ogg', 75)
 					H.Paralyse(time)
