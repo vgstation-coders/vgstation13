@@ -64,14 +64,6 @@ List of hard deletions:"}
 	var/collectionTimeScope = world.timeofday - GC_COLLECTION_TIMEOUT
 	if(narsie_cometh)
 		return //don't even fucking bother, its over.
-	//hijacking this
-	for(var/client/C in clients)
-		if(!C.fully_initialized)
-			if(!C.last_init_check)
-				C.last_init_check = world.timeofday
-			else if(C.last_init_check < world.timeofday - 500)
-				world.log << "CLIENT INIT DEBUG: [C] WAS FOUND UNINITIALIZED MORE THAN ONCE IN 10 SECONDS. INIT POINT: [C.init_point]"
-				C.fully_initialized = 1
 	while(queue.len)
 		var/refID = queue[1]
 		var/destroyedAtTime = queue[refID]

@@ -4171,5 +4171,13 @@
 		var/list/allowed_reagents = chemical_reagents_list - blocked_chems
 		holder.add_reagent(pick(allowed_reagents),created_volume)
 
+/datum/chemical_reaction/punctualite
+	name = "Punctualite"
+	id = PUNCTUALITE
+	result = PUNCTUALITE
+	required_reagents = list(HYPERZINE = 10, FUEL = 10)
+	required_catalysts = list(ZOMBIEPOWDER = 5)
+	result_amount = 5
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS
