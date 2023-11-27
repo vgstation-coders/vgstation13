@@ -10335,6 +10335,43 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		if(!locate(/obj/effect/decal/cleanable/purpledrank) in T)
 			new /obj/effect/decal/cleanable/purpledrank(T)
 
+/datum/reagent/punctualite
+	name = "Punctualite"
+	id = PUNCTUALITE
+	description = "Nicknamed mad chemist's alarm clock. Explodes on the turn of the hour when within a living creature."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#8d8791" //rgb: 200, 165, 220
+	custom_metabolism = 0 //Wouldn't be much fun if it all got metabolized beforehand
+	var/currentHour = 0 //The hour it was introduced into the system so it doesn't blow right away
+
+/datum/reagent/punctualite/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(prob(5) && prob(5)) //0.25% chance per tick
+		var/mob/living/carbon/human/earProtMan = null
+		if(ishuman(M))
+			earProtMan = M
+		if(!M.is_deaf() && !earProtMan || !earProtMan.earprot())
+			if(prob(50))
+				to_chat(M, "<span class='notice'>You hear a ticking sound</span>")
+			else
+				to_chat(M, "<span class='notice'>You hear a tocking sound</span>")
+	if((floor(world.time / (1 HOURS)) + 1) > currentHour)
+		if(!currentHour)
+			currentHour = floor(world.time / (1 HOURS)) + 1
+		else
+			punctualiteExplode(M)
+			currentHour = floor(world.time / (1 HOURS)) + 1
+
+/datum/reagent/punctualite/proc/punctualiteExplode(var/mob/living/H)
+	var/bigBoom = 0
+	var/medBoom = 0
+	var/litBoom = 0
+	bigBoom = min(floor(volume/150), 2) //Max breach is 2, twice a welder tank
+	medBoom = min(floor(volume/50), 4)
+	litBoom = min(floor(volume/20), 7)
+	explosion(get_turf(H), bigBoom, medBoom, litBoom)
+
 /datum/reagent/hyperzine/methamphetamine //slightly better than 'zine
 	name = "Methamphetamine" //Only used on the Laundromat spess vault
 	id = METHAMPHETAMINE
