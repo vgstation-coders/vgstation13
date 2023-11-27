@@ -67,7 +67,7 @@
 				var/time = rand(2, 6)
 				if (prob(75) && !H.stat && !(M.status_flags & BUDDHAMODE))
 					user.do_attack_animation(H, src)
-					playsound(H, I.hitsound, 50, 1, -1)
+					playsound(H, hitsound, 50, 1, -1)
 					user.visible_message("<span class='danger'><B>[H] has been knocked unconscious!</B>", "<span class='warning'>You knock [H] unconscious!</span></span>")
 					H.Paralyse(time)
 					H.stat = UNCONSCIOUS
