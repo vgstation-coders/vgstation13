@@ -30,7 +30,7 @@
 	var/image/img = image('icons/turf/rock_overlay.dmi', "flesh_overlay",layer = SIDE_LAYER)
 	img.pixel_x = -4*PIXEL_MULTIPLIER
 	img.pixel_y = -4*PIXEL_MULTIPLIER
-	img.plane = relative_plane(plane)
+	img.plane = relative_plane(ABOVE_TURF_PLANE)
 	overlays += img
 
 //Objects
@@ -73,9 +73,9 @@
 		"Please have your scrip ready for vending."
 	)
 	product_ads = list(
-		"Time is money, so get back to digging!"
+		"Insert scrip."
 	)
-	vend_reply = "What a glorious time to mine!"
+	vend_reply = "Scrip, scip, lovely scrip!"
 	icon_state = "mining"
 	vouched = list(
 		/obj/item/weapon/pickaxe/drill = 10,
@@ -111,33 +111,36 @@
 	icon_state = "crystal"
 	light_color = "#00FF00"
 	anchored = TRUE
-	var/lit = FALSE
+	var/lit = 0
 
 /obj/structure/uraninitecrystal/New()
 	..()
 	set_light(2, l_color = light_color)
 
 /obj/structure/uraninitecrystal/bullet_act()
-	rad_pulse()
+	rad_pulse(10)
 
 /obj/structure/uraninitecrystal/kick_act()
-	rad_pulse()
+	shake(1, 3)
+	rad_pulse(10)
 
 /obj/structure/uraninitecrystal/ex_act()
-	rad_pulse()
+	rad_pulse(4)
+	..()
 
-/obj/structure/uraninitecrystal/proc/rad_pulse()
-	if(lit)
+/obj/structure/uraninitecrystal/proc/rad_pulse(remaining)
+	lit += remaining
+	lit = clamp(0,lit,40)
+	if(!lit)
+		set_light(2, l_color = light_color)
 		return
-	lit = TRUE
 	set_light(6, l_color = light_color)
-	sleep(10 SECONDS)
-	set_light(2, l_color = light_color)
-	lit = FALSE
 	emitted_harvestable_radiation(get_turf(src), 20, range = 5)
 	for(var/mob/living/carbon/M in view(src,3))
 		var/rads = 50 * sqrt( 1 / (get_dist(M, src) + 1) )
 		M.apply_radiation(round(rads/2),RAD_EXTERNAL)
+	spawn(2 SECONDS)
+		rad_pulse(-2) //After 2 seconds, recurse with decrement
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/dorf/New()
 	..()
@@ -153,8 +156,7 @@
 /obj/structure/rustycart
 	name = "rusty cart"
 	desc = "This isn't going anywhere fast."
-	//icon = 'icons/obj/vehicles.dmi'
-	//icon_state = "mining_cart"
+	//old icon and state in 'icons/obj/vehicles.dmi' "mining_cart"
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "miningcar"
 	anchored = TRUE
@@ -237,7 +239,7 @@
 
 /obj/effect/floating_candle/New()
 	..()
-	set_light(8, 4, LIGHT_COLOR_CYAN)
+	set_light(4, 2, LIGHT_COLOR_CYAN)
 
 /obj/effect/tractorbeam
 	name = "tractor beam"
@@ -288,6 +290,10 @@
 
 /spell/mountup/choose_targets(var/mob/user = usr)
 	return list(user)
+
+/spell/mountup/perform(mob/user = usr, skipcharge = 0, list/target_override)
+	cast_delay = active ? 0 : initial(cast_delay)
+	..()
 
 /spell/mountup/cast(var/list/targets, var/mob/user)
 	if(!active)

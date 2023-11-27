@@ -6143,8 +6143,9 @@ var/procizine_tolerance = 0
 	data = list ("threshold" = 80)
 
 /datum/reagent/feverfew/on_mob_life(var/mob/living/M)
-	if(istype(M))
-		M.adjustBruteLoss(3 * REM) //1.5 per tick
+	if(..())
+		return 1
+	M.adjustBruteLoss(5 * REM) //2.5 per tick, human healing is around 1.5~2 so this is just barely noticable
 
 /datum/reagent/caffeine
 	name = "Caffeine"
