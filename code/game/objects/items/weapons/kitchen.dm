@@ -593,8 +593,6 @@
 		user.take_organ_damage(10)
 		user.Paralyse(2)
 		return
-	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 
 	log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to attack [M.name] ([M.ckey])</font>")
 	if(!iscarbon(user))
@@ -607,22 +605,22 @@
 	if (t == LIMB_HEAD)
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
-			if(H.stat < 2 && H.health < 50 && prob(90))
-				// ******* Check
+			if(H.stat < DEAD && H.health < 50 && prob(90))
 				if (istype(H, /obj/item/clothing/head) && H.flags & 8 && prob(80))
 					to_chat(H, "<span class='warning'>The helmet protects you from being hit hard in the head!</span>")
 					return
 				var/time = rand(2, 6)
-				if (prob(75) && !H.stat)
+				if (prob(75) && !H.stat && !(M.status_flags & BUDDHAMODE))
 					user.do_attack_animation(H, src)
 					user.visible_message("<span class='danger'><B>[H] has been knocked unconscious!</B>", "<span class='warning'>You knock [H] unconscious!</span></span>")
 					playsound(H, 'sound/effects/bonk.ogg', 75)
 					H.Paralyse(time)
-					H.stat = 1
+					H.stat = UNCONSCIOUS
 					return
 				else
 					H.eye_blurry += 3
-			H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")	
+			if(H.stat < UNCONSCIOUS)
+				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")	
 	return ..()
 
 /*
