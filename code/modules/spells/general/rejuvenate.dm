@@ -41,7 +41,7 @@
 	else
 		to_chat(H, "<span class='notice'>You flush your system with clean blood and remove any incapacitating effects.</span>")
 	spawn() // sleep() causes issues with cooldown.
-		if(V.blood_total >= 200)
+		if(empowered)
 			var/wound_count = 0
 			for(var/datum/organ/external/E in H.organs)
 				for(var/datum/wound/W in E.wounds)
