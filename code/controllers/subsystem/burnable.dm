@@ -57,10 +57,11 @@ var/list/atom/burnableatoms = list()
 	//autoignition temperature decreases with increasing oxygen content, at a 30% decrease in autoignition temperature at double the standard oxygen content, beyond which the effect is capped
 		//based on doi: 10.1016/j.jlp.2019.103971
 
-	if(omd < 0.2 * STD_OXY) //doesn't autoignite below 1/5th of standard oxygen conditions
-		return INFINITY
 	if(ait)
-		return ait * (1 - (0.3 * (min(2, (1 / STD_OXY) * omd) - 1)))
+		if(omd < 0.2 * STD_OXY) //doesn't autoignite below 1/5th of standard oxygen conditions
+			return INFINITY
+		else
+			return ait * (1 - (0.3 * (min(2, (1 / STD_OXY) * omd) - 1)))
 
 #undef STD_OXY
 
