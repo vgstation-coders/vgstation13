@@ -37,7 +37,10 @@ var/list/atom/burnableatoms = list()
 	currentrun_index = c
 
 /atom/proc/checkburn()
-	if(!on_fire && autoignition_temperature && (isturf(src) || isturf(loc)))
+	if(on_fire)
+		if(!((return_air())?.molar_density(GAS_OXYGEN) >= 0.05 * STD_OXY))
+			extinguish()	
+	else if(autoignition_temperature && (isturf(src) || isturf(loc)))
 		if(can_ignite())
 			var/datum/gas_mixture/G = return_air()
 			if(air_based_ignitability_check(src, G))
