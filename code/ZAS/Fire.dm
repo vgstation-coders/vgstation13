@@ -159,20 +159,25 @@ Attach to transfer valve and open. BOOM.
 
 	if(surfaces)
 		if(air_contents.molar_density(GAS_OXYGEN) >= (1 / CELL_VOLUME))
-			for(var/obj/O in contents)
-				if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && !O.on_fire && O.autoignition_temperature && exposed_temperature >= O.autoignition_temperature)
-					O.ignite()
-					firesource = O
-					igniting = IGNITE_DELAYED
-					break
-			if(!igniting)
-				if(on_fire)
-					igniting = IGNITE_DELAYED
-					firesource = src
-				else if(prob(exposed_volume * 100 / CELL_VOLUME) && autoignition_temperature && can_ignite() && exposed_temperature >= autoignition_temperature)
-					ignite()
-					firesource = src
-					igniting = IGNITE_DELAYED
+			var/check_contents_anyway = FALSE
+			if(on_fire)
+				igniting = IGNITE_DELAYED
+				firesource = src
+				check_contents_anyway = TRUE
+			else if(prob(exposed_volume * 100 / CELL_VOLUME) && autoignition_temperature && can_ignite() && air_based_ignitability_check(src, air_contents))
+				ignite()
+				firesource = src
+				igniting = IGNITE_DELAYED
+			if(check_contents_anyway || !igniting)
+				for(var/obj/O in contents)
+					if(O.on_fire)
+						firesource = O
+						igniting = IGNITE_DELAYED
+					else if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && O.autoignition_temperature && O.can_ignite() && air_based_ignitability_check(O, air_contents))
+						O.ignite()
+						firesource = O
+						igniting = IGNITE_DELAYED
+						break
 	if(exposed_temperature >= PLASMA_MINIMUM_BURN_TEMPERATURE && air_contents.check_combustability(src, surfaces))
 		igniting = IGNITE_INSTANT
 	if(locate(/obj/effect/fire) in src)

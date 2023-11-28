@@ -1328,3 +1328,6 @@
 			change_dir(new_dir)
 			sleep(1)
 	change_dir(prev_dir)
+
+/atom/movable/can_ignite()
+	return !(gcDestroyed || timestopped)
