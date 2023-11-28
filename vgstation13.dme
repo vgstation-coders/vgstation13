@@ -809,6 +809,7 @@
 #include "code\game\machinery\computer\robot.dm"
 #include "code\game\machinery\computer\security.dm"
 #include "code\game\machinery\computer\security_alert.dm"
+#include "code\game\machinery\computer\ship_control.dm"
 #include "code\game\machinery\computer\shuttle.dm"
 #include "code\game\machinery\computer\shuttle_computers.dm"
 #include "code\game\machinery\computer\slot_machine.dm"

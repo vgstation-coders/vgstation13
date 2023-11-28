@@ -121,6 +121,7 @@ var/shuttle_z = map.zCentcomm	//default
 var/airtunnel_start = 68 // default
 var/airtunnel_stop = 68 // default
 var/airtunnel_bottom = 72 // default
+var/dodge = FALSE // Whether the station has dodged the ROD / RADSTORM or not
 var/list/monkeystart = list()
 var/list/wizardstart = list()
 var/list/grinchstart = list()

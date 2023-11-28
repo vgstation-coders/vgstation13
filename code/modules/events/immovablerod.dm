@@ -23,6 +23,9 @@ var/list/all_rods = list()
 	return 0
 
 /datum/event/immovable_rod/announce()
+	if(map.has_engines)
+		command_alert(/datum/command_alert/immovable_rod_engines)
+		return
 	command_alert(/datum/command_alert/immovable_rod)
 
 /datum/event/immovable_rod/start()
@@ -33,7 +36,19 @@ var/list/all_rods = list()
 	immovablerod(2)
 
 /proc/immovablerod(var/rodlevel = 0)
+	if(map.has_engines)
+		sleep(30 SECONDS)
 	var/obj/item/projectile/immovablerod/myrod
+	if (dodge):
+		switch(rodlevel)
+			// Pass just alongside station
+			if(0)
+				myrod = new /obj/item/projectile/immovablerod(locate(180,230,1))
+			if(1)
+				myrod = new /obj/item/projectile/immovablerod/big(locate(180,230,1))
+			if(2)
+				myrod = new /obj/item/projectile/immovablerod/hyper(locate(180,230,1))
+
 	switch(rodlevel)
 		if(0)
 			myrod = new /obj/item/projectile/immovablerod(locate(1,1,1))

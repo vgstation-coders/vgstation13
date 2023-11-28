@@ -50,6 +50,19 @@
 
 		sleep(30 SECONDS)
 
+		if (dodge):
+			command_alert(/datum/command_alert/radiation_storm/dodge)
+			for(var/area/A in areas)
+				if(A.z != map.zMainStation || is_safe_zone(A))
+					continue
+				var/area/ma = get_area(A)
+				ma.reset_radiation_alert()
+
+			sleep(600) // Want to give them time to get out of maintenance.
+
+
+			revoke_doors_all_access(list(access_maint_tunnels))
+			return
 
 		command_alert(/datum/command_alert/radiation_storm/start)
 
