@@ -36,6 +36,8 @@ var/list/atom/burnableatoms = list()
 			break
 	currentrun_index = c
 
+#define STD_OXY (MOLES_O2STANDARD / CELL_VOLUME)
+
 /atom/proc/checkburn()
 	if(on_fire)
 		if(!((return_air())?.molar_density(GAS_OXYGEN) >= 0.05 * STD_OXY))
@@ -47,8 +49,6 @@ var/list/atom/burnableatoms = list()
 				spawn((SS_WAIT_BURNABLE / 2) * rand()) //stagger it a bit so everything doesnt all burst into flames at once
 					if(src && can_ignite() && !on_fire && air_based_ignitability_check(src, G))
 						ignite()
-
-#define STD_OXY (MOLES_O2STANDARD / CELL_VOLUME)
 
 /proc/oxyscaled_ait(ait, omd) //oxygen-scaled autoignition temperature
 	//returns the value of the autoignition_temperature var at standard atmospheric conditions
