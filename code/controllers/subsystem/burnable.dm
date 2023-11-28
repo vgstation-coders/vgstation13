@@ -45,23 +45,24 @@ var/list/atom/burnableatoms = list()
 					if(src && can_ignite() && !on_fire && air_based_ignitability_check(src, G))
 						ignite()
 
-#define MINOXY2BURN 0.2 * (MOLES_O2STANDARD / CELL_VOLUME) //1/5th of normal oxygen conditions
+#define STD_OXY (MOLES_O2STANDARD / CELL_VOLUME)
 
 /proc/oxyscaled_ait(ait, omd) //oxygen-scaled autoignition temperature
-	//returns approximately the value of the autoignition_temperature var at normal atmospheric conditions
-	//but decreases (more readily combustible) with increased oxygen
+	//returns the value of the autoignition_temperature var at standard atmospheric conditions
+	//but decreases (more readily ignitable) with increased oxygen
 	//arguments:
-		//ait: base autoignition temperature (at standard station atmosphere)
+		//ait: base autoignition temperature (in standard station atmosphere)
 		//omd: oxygen molar density
 
-	//autoignition temperature scales inversely with molar oxygen content, up to halving at double the default oxygen content
+	//autoignition temperature decreases with increasing molar oxygen content, at a 30% decrease in autoignition temperature at double the standard oxygen content, beyond which the effect is capped
 		//based on doi: 10.1016/j.jlp.2019.103971
 
-	if(omd < MINOXY2BURN)
+	if(omd < 0.2 * STD_OXY) //doesn't autoignite below 1/5th of standard oxygen conditions
 		return INFINITY
-	return ait / clamp(omd / (MOLES_O2STANDARD / CELL_VOLUME), 0.5, 2)
+	if(ait)
+		return ait * (1 - (0.3 * min(1, (min(2, (1 / STD_OXY) * omd) - 1))))
 
-#undef MINOXY2BURN
+#undef STD_OXY
 
 /proc/air_based_ignitability_check(atom/A, datum/gas_mixture/G)
 	if(G && G.temperature >= oxyscaled_ait(A.autoignition_temperature, G.molar_density(GAS_OXYGEN)))
