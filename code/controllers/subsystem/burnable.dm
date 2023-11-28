@@ -54,7 +54,7 @@ var/list/atom/burnableatoms = list()
 		//ait: base autoignition temperature (in standard station atmosphere)
 		//omd: oxygen molar density
 
-	//autoignition temperature decreases with increasing molar oxygen content, at a 30% decrease in autoignition temperature at double the standard oxygen content, beyond which the effect is capped
+	//autoignition temperature decreases with increasing oxygen content, at a 30% decrease in autoignition temperature at double the standard oxygen content, beyond which the effect is capped
 		//based on doi: 10.1016/j.jlp.2019.103971
 
 	if(omd < 0.2 * STD_OXY) //doesn't autoignite below 1/5th of standard oxygen conditions
