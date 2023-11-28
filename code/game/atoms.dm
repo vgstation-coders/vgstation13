@@ -198,7 +198,7 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/remove_air(amount)
 	return null
 
-/atom/proc/datum/gas_mixture/return_air()
+/atom/proc/return_air() as /datum/gas_mixture
 	if(loc)
 		return loc.return_air()
 	else
