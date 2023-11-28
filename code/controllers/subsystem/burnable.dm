@@ -60,7 +60,7 @@ var/list/atom/burnableatoms = list()
 	if(omd < 0.2 * STD_OXY) //doesn't autoignite below 1/5th of standard oxygen conditions
 		return INFINITY
 	if(ait)
-		return ait * (1 - (0.3 * min(1, (min(2, (1 / STD_OXY) * omd) - 1))))
+		return ait * (1 - (0.3 * (min(2, (1 / STD_OXY) * omd) - 1)))
 
 #undef STD_OXY
 
