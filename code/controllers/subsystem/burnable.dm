@@ -37,11 +37,12 @@ var/list/atom/burnableatoms = list()
 	currentrun_index = c
 
 #define STD_OXY (MOLES_O2STANDARD / CELL_VOLUME)
+#define MIN_OXY2BURN (STD_OXY / 20)
 
 /atom/proc/checkburn()
 	if(on_fire)
 		var/datum/gas_mixture/G = return_air()
-		if(!(G?.molar_density(GAS_OXYGEN) >= 0.05 * STD_OXY))
+		if(!(G?.molar_density(GAS_OXYGEN) >= MIN_OXY2BURN))
 			extinguish()	
 	else if(autoignition_temperature && (isturf(src) || isturf(loc)))
 		if(can_ignite())
@@ -62,12 +63,13 @@ var/list/atom/burnableatoms = list()
 		//based on doi: 10.1016/j.jlp.2019.103971
 
 	if(ait)
-		if(omd < 0.2 * STD_OXY) //doesn't autoignite below 1/5th of standard oxygen conditions
+		if(omd < MIN_OXY2BURN) //doesn't autoignite if oxygen is low
 			return INFINITY
 		else
 			return ait * (1 - (0.3 * (min(2, (1 / STD_OXY) * omd) - 1)))
 
 #undef STD_OXY
+#undef MIN_OXY2BURN
 
 /proc/air_based_ignitability_check(atom/A, datum/gas_mixture/G)
 	if(G && G.temperature >= oxyscaled_ait(A.autoignition_temperature, G.molar_density(GAS_OXYGEN)))
