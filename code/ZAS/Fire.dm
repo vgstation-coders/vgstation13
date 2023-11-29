@@ -112,7 +112,7 @@ Attach to transfer valve and open. BOOM.
 	return //lolidk
 
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(autoignition_temperature && !on_fire && exposed_temperature > autoignition_temperature)
+	if(autoignition_temperature && !on_fire && air_based_ignitability_check(src, air))
 		ignite(exposed_temperature)
 		return 1
 	return 0
@@ -198,6 +198,7 @@ Attach to transfer valve and open. BOOM.
 	#undef IGNITE_DELAYED
 	#undef IGNITE_INSTANT
 
+//not used anywhere but if it is should be made to use oxyscaled_ait()
 // ignite_temp: 0 = Don't check, just get fuel.
 /turf/simulated/proc/getAmtFuel(var/ignite_temp=0)
 	var/fuel_found=0
@@ -479,6 +480,7 @@ Attach to transfer valve and open. BOOM.
 
 	return still_burning
 
+//not used anywhere but if it is should be made to use oxyscaled_ait()
 /datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 	//this check comes up very often and is thus centralized here to ease adding stuff
 	// zburn is used in tank fires, as well. This check, among others, broke tankbombs. - N3X
