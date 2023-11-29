@@ -109,17 +109,17 @@
 		L.fields["identity"]	= H.dna.UI // "
 
 		H.regenerate_icons() // ensuring that we don't end up with bald default-species humans before taking their picture
-		spawn() //This is a heavy proc
-			var/icon/I = icon('icons/effects/32x32.dmi', "blank")
-			var/icon/result = icon(I, "")
-			result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = SOUTH, ignore_spawn_items = TRUE),  "", dir = SOUTH)
-			result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = NORTH, ignore_spawn_items = TRUE),  "", dir = NORTH)
-			result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = EAST, ignore_spawn_items = TRUE),  "", dir = EAST)
-			result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = WEST, ignore_spawn_items = TRUE),  "", dir = WEST)
-			result.Crop(1,1,32,32)
 
-			G.fields["photo"]		= result
-			L.fields["image"]		= result
+		var/icon/I = icon('icons/effects/32x32.dmi', "blank")
+		var/icon/result = icon(I, "")
+		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = SOUTH, ignore_spawn_items = TRUE),  "", dir = SOUTH)
+		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = NORTH, ignore_spawn_items = TRUE),  "", dir = NORTH)
+		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = EAST, ignore_spawn_items = TRUE),  "", dir = EAST)
+		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = WEST, ignore_spawn_items = TRUE),  "", dir = WEST)
+		result.Crop(1,1,32,32)
+
+		G.fields["photo"]		= result
+		L.fields["image"]		= result
 
 		general += G
 		locked += L
