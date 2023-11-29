@@ -1,4 +1,4 @@
-obj/item/weapon/phone
+/obj/item/weapon/phone
 	name = "red phone"
 	desc = "Should anything ever go wrong..."
 	icon = 'icons/obj/items.dmi'
