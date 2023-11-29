@@ -58,7 +58,7 @@
 		null,
 		null,
 		DISP_BAR,
-		null,
+		DISP_KITCHEN,
 		DISP_HYDROPONICS,
 		null,
 		DISP_GENETICS,
