@@ -240,17 +240,20 @@ var/datum/controller/gameticker/ticker
 	var/list/clowns = list()
 	var/already_an_ai = FALSE
 
+	//Keep track of the spawn landmark so that we can reset player views to it
+	var/obj/effect/landmark/start/S
+	for(var/obj/effect/landmark/start/searching in landmarks_list)
+		S = searching
+		break
+
 	//Transfer characters to players
 	for(var/i = 1, i <= new_characters.len, i++)
 		var/mob/M = new_characters[new_characters[i]]
 		var/key = new_characters[i]
 		M.key = key
+		M.reset_view(S) //Reset the view back to the starting screen until we finish all this setup, to prevent players from seeing things they shouldn't see, like naked players
 		if(istype(M, /mob/living/carbon/human/))
 			var/mob/living/carbon/human/H = M
-			if (H.client)
-				message_admins("[H.key]")
-				H.overlay_fullscreen("client_fadein", /obj/abstract/screen/fullscreen/client_fadein)
-				H.clear_fullscreen("client_fadein", 3 SECONDS)
 			job_master.PostJobSetup(H)
 		//minds are linked to accounts... And accounts are linked to jobs.
 		var/rank = M.mind.assigned_role
@@ -262,7 +265,13 @@ var/datum/controller/gameticker/ticker
 		if(job)
 			job.equip(M, job.priority) // Outfit datum.
 
-
+	//Reset views back to the players
+	for(var/i = 1, i <= new_characters.len, i++)
+		var/mob/M = new_characters[new_characters[i]]
+		M.reset_view()
+		if(M.client)
+			M.overlay_fullscreen("client_fadein", /obj/abstract/screen/fullscreen/client_fadein)
+			M.clear_fullscreen("client_fadein", 3 SECONDS)
 
 	//delete the new_player mob for those who readied
 	for(var/mob/np in new_players_ready)
