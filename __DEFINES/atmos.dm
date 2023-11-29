@@ -56,6 +56,10 @@
 #define THERM_DISS_MAX_SAFE_TEMP 1000000000 //At temperatures beyond this limit, thermal dissipation switches to a simpler calculation to avoid blowing out any values.
 #define HEAT_CONDUCTIVITY_REFRIGERATOR 0.05 //Heat conductivity of things like refrigerators.
 
+//Combustion stuff
+#define STD_OXY (MOLES_O2STANDARD / CELL_VOLUME)
+#define MIN_OXY2BURN (STD_OXY / 20)
+
 // Fire Damage
 #define CARBON_LIFEFORM_FIRE_RESISTANCE (200+T0C)
 #define CARBON_LIFEFORM_FIRE_DAMAGE		4

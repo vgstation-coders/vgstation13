@@ -841,6 +841,8 @@
 		bullet_die()
 		return
 	var/turf/T = get_turf(src)
+	if(T && gas_jet)
+		T.hotspot_expose(max(TEMPERATURE_FLAME, gas_jet.temperature), CELL_VOLUME, surfaces = TRUE)
 	for(var/obj/effect/E in T)
 		if(istype(E, /obj/effect/blob))
 			stepped_range += 3

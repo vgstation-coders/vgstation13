@@ -137,7 +137,7 @@
 	else
 		if(fire_sound)
 			playsound(user, fire_sound, fire_volume, 1)
-		else if (in_chamber.fire_sound)
+		else if (in_chamber?.fire_sound)
 			playsound(user, in_chamber.fire_sound, fire_volume, 1)
 		if(!silenced)
 			user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \

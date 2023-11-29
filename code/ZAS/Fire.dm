@@ -112,7 +112,7 @@ Attach to transfer valve and open. BOOM.
 	return //lolidk
 
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(autoignition_temperature && !on_fire && air_based_ignitability_check(src, air))
+	if(autoignition_temperature && !on_fire && !(air && exposed_temperature < oxyscaled_ait(autoignition_temperature, air.molar_density(GAS_OXYGEN))))
 		ignite(exposed_temperature)
 		return 1
 	return 0
@@ -158,13 +158,13 @@ Attach to transfer valve and open. BOOM.
 	var/atom/firesource
 
 	if(surfaces)
-		if(air_contents.molar_density(GAS_OXYGEN) >= (1 / CELL_VOLUME))
+		if(air_contents.molar_density(GAS_OXYGEN) >= MIN_OXY2BURN)
 			var/check_contents_anyway = FALSE
 			if(on_fire)
 				igniting = IGNITE_DELAYED
 				firesource = src
 				check_contents_anyway = TRUE
-			else if(prob(exposed_volume * 100 / CELL_VOLUME) && autoignition_temperature && can_ignite() && air_based_ignitability_check(src, air_contents))
+			else if(prob(exposed_volume * 100 / CELL_VOLUME) && autoignition_temperature && can_ignite() && exposed_temperature >= oxyscaled_ait(autoignition_temperature, air_contents.molar_density(GAS_OXYGEN)))
 				ignite()
 				firesource = src
 				igniting = IGNITE_DELAYED
@@ -173,7 +173,7 @@ Attach to transfer valve and open. BOOM.
 					if(O.on_fire)
 						firesource = O
 						igniting = IGNITE_DELAYED
-					else if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && O.autoignition_temperature && O.can_ignite() && air_based_ignitability_check(O, air_contents))
+					else if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && O.autoignition_temperature && O.can_ignite() && exposed_temperature >= oxyscaled_ait(autoignition_temperature, air_contents.molar_density(GAS_OXYGEN)))
 						O.ignite()
 						firesource = O
 						igniting = IGNITE_DELAYED
