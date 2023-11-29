@@ -216,8 +216,8 @@
 	name = "Bananaphone"
 	icon = 'icons/obj/hydroponics/banana.dmi'
 	icon_state = "produce"
-	pickup_sound = 'sound/items/bananaphone pickup.wav'
-	ringtone = 'sound/items/bananaphone_ring.wav'
+	pickup_sound = 'sound/items/bananaphone pickup.ogg'
+	ringtone = 'sound/items/bananaphone_ring.ogg'
 	if(linked_landline)
 		linked_landline.phone_overlay = image(icon = linked_landline.overlay_icon, icon_state = "phone_overlay_banana")
 	update_icon()
