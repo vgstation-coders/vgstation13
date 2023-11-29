@@ -243,8 +243,9 @@ var/datum/controller/gameticker/ticker
 	//Keep track of the spawn landmark so that we can reset player views to it
 	var/obj/effect/landmark/start/S
 	for(var/obj/effect/landmark/start/searching in landmarks_list)
-		S = searching
-		break
+		if(searching.name == "start")
+			S = searching
+			break
 
 	//Transfer characters to players
 	for(var/i = 1, i <= new_characters.len, i++)
