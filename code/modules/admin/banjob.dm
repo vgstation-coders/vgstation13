@@ -176,7 +176,6 @@ DEBUG
 
 /proc/jobban_remove(X)
 
-	var/list/list_of_bans = list()
 	var/list/these_bans
 	var/reason
 	for(var/ckey in jobban_keylist)
