@@ -183,7 +183,7 @@ DEBUG
 		these_bans = jobban_keylist[ckey]
 		for(var/this_rank in these_bans)
 			reason = these_bans[this_rank]
-			if(findtext("[ckey] - [this_rank]" + reason ? " ## [reason]" : null, "[X]")
+			if(findtext("[ckey] - [this_rank]" + reason ? " ## [reason]" : null, "[X]"))
 				jobban_keylist[ckey].Remove(this_rank)
 				jobban_savebanfile()
 				return 1
