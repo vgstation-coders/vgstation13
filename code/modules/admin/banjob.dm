@@ -183,27 +183,8 @@ DEBUG
 		these_bans = jobban_keylist[ckey]
 		for(var/this_rank in these_bans)
 			reason = these_bans[this_rank]
-			list_of_bans += "[ckey] - [this_rank]" + reason ? " ## [reason]" : null
-	for (var/i = 1; i <= length(list_of_bans); i++)
-		if( findtext(list_of_bans[i], "[X]") )
-			list_of_bans.Remove(list_of_bans[i])
-
-			jobban_keylist = list()
-			var/first_space
-			var/doublehash
-			var/ckey
-			var/rank
-			for(var/this_ban in list_of_bans)
-				first_space = findtext(this_ban, " ")
-				ckey = copytext(this_ban, 1, first_space)
-				doublehash = findtext(this_ban, "##")
-				rank = copytext(this_ban, first_space + 3, doublehash ? doublehash - 1 : 0)
-				reason = doublehash ? copytext(this_ban, doublehash + 3, 0) : null
-				if(!jobban_keylist[ckey])
-					jobban_keylist[ckey] = list()
-				jobban_keylist[ckey][rank] = reason
-
-			jobban_savebanfile()
-			return 1
-
+			if(findtext("[ckey] - [this_rank]" + reason ? " ## [reason]" : null, "[X]")
+				jobban_keylist[ckey].Remove(this_rank)
+				jobban_savebanfile()
+				return 1
 	return 0
