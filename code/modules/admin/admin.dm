@@ -661,15 +661,13 @@ var/global/floorIsLava = 0
 	var/dat = "<B>Job Bans!</B><HR><table>"
 	var/list/these_bans
 	var/reason
-	var/t
 	var/r
 	for(var/ckey in jobban_keylist)
 		these_bans = jobban_keylist[ckey]
 		for(var/this_rank in these_bans)
 			reason = these_bans[this_rank]
 			r = "[ckey] - [this_rank]"
-			t = reason ? r + " ## [reason]" : r
-			dat += text("<tr><td>[t] (<A href='?src=\ref[src];removejobban=[r]'>unban</A>)</td></tr>")
+			dat += text("<tr><td>[reason ? r + " ## [reason]" : r] (<A href='?src=\ref[src];removejobban=[r]'>unban</A>)</td></tr>")
 	dat += "</table>"
 	usr << browse(dat, "window=ban;size=400x400")
 

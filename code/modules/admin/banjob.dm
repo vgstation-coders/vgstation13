@@ -12,7 +12,6 @@ var/jobban_keylist[0]		//to store the keys & ranks
 		jobban_keylist[M.ckey][rank] = reason
 	else
 		jobban_keylist[M.ckey] = list(rank = reason)
-	//jobban_keylist.Add(text("[M.ckey] - [rank] ## [reason]"))
 	jobban_savebanfile()
 
 //unused
@@ -22,7 +21,6 @@ var/jobban_keylist[0]		//to store the keys & ranks
 	if(!islist(jobban_keylist[ckey]))
 		jobban_keylist[ckey][rank] = list()
 	jobban_keylist[ckey] = list(rank = null)
-	//jobban_keylist.Add(text("[ckey] - [rank]"))
 	jobban_savebanfile()
 
 //returns a reason if M is banned from rank, returns 0 otherwise
@@ -150,10 +148,9 @@ DEBUG
 	var/reason
 	for(var/ckey in jobban_keylist)
 		these_bans = jobban_keylist[ckey]
-		if(islist(these_bans))
-			for(var/this_rank in these_bans)
-				reason = these_bans[this_rank]
-				list_of_bans += "[ckey] - [this_rank]" + reason ? " ## [reason]" : null
+		for(var/this_rank in these_bans)
+			reason = these_bans[this_rank]
+			list_of_bans += "[ckey] - [this_rank]" + reason ? " ## [reason]" : null
 
 	S["keys[0]"] << list_of_bans
 //	S["keys[0]"] << jobban_keylist
@@ -184,10 +181,9 @@ DEBUG
 	var/reason
 	for(var/ckey in jobban_keylist)
 		these_bans = jobban_keylist[ckey]
-		if(islist(these_bans))
-			for(var/this_rank in these_bans)
-				reason = these_bans[this_rank]
-				list_of_bans += "[ckey] - [this_rank]" + reason ? " ## [reason]" : null
+		for(var/this_rank in these_bans)
+			reason = these_bans[this_rank]
+			list_of_bans += "[ckey] - [this_rank]" + reason ? " ## [reason]" : null
 	for (var/i = 1; i <= length(list_of_bans); i++)
 		if( findtext(list_of_bans[i], "[X]") )
 			list_of_bans.Remove(list_of_bans[i])
