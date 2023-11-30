@@ -86,7 +86,16 @@
 	set category = "Debug"
 
 	to_chat(usr, "<b>Jobbans active in this round.</b>")
-	for(var/t in jobban_keylist)
+	var/list/list_of_bans = list()
+	var/list/these_bans
+	var/reason
+	for(var/ckey in jobban_keylist)
+		these_bans = jobban_keylist[ckey]
+		if(islist(these_bans))
+			for(var/this_rank in these_bans)
+				reason = these_bans[this_rank]
+				list_of_bans += "[ckey] - [this_rank]" + reason ? " ## [reason]" : null
+	for(var/t in list_of_bans)
 		to_chat(usr, "[t]")
 
 /client/proc/print_jobban_old_filter()
@@ -99,7 +108,16 @@
 		return
 
 	to_chat(usr, "<b>Jobbans active in this round.</b>")
-	for(var/t in jobban_keylist)
+	var/list/list_of_bans = list()
+	var/list/these_bans
+	var/reason
+	for(var/ckey in jobban_keylist)
+		these_bans = jobban_keylist[ckey]
+		if(islist(these_bans))
+			for(var/this_rank in these_bans)
+				reason = these_bans[this_rank]
+				list_of_bans += "[ckey] - [this_rank]" + reason ? " ## [reason]" : null
+	for(var/t in list_of_bans)
 		if(findtext(t, filter))
 			to_chat(usr, "[t]")
 

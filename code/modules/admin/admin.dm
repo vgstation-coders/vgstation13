@@ -659,7 +659,16 @@ var/global/floorIsLava = 0
 		return
 
 	var/dat = "<B>Job Bans!</B><HR><table>"
-	for(var/t in jobban_keylist)
+	var/list/list_of_bans = list()
+	var/list/these_bans
+	var/reason
+	for(var/ckey in jobban_keylist)
+		these_bans = jobban_keylist[ckey]
+		if(islist(these_bans))
+			for(var/this_rank in these_bans)
+				reason = these_bans[this_rank]
+				list_of_bans += "[ckey] - [this_rank]" + reason ? " ## [reason]" : null
+	for(var/t in list_of_bans)
 		var/r = t
 		if( findtext(r,"##") )
 			r = copytext( r, 1, findtext(r,"##") )//removes the description
