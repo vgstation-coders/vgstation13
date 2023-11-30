@@ -659,15 +659,21 @@ var/global/floorIsLava = 0
 		return
 
 	var/dat = "<B>Job Bans!</B><HR><table>"
-	var/list/list_of_bans = list()
 	var/list/these_bans
 	var/reason
+	var/t
+	var/r
 	for(var/ckey in jobban_keylist)
 		these_bans = jobban_keylist[ckey]
-		if(islist(these_bans))
-			for(var/this_rank in these_bans)
-				reason = these_bans[this_rank]
-				list_of_bans += "[ckey] - [this_rank]" + reason ? " ## [reason]" : null
+		for(var/this_rank in these_bans)
+			reason = these_bans[this_rank]
+			r = "[ckey] - [this_rank]"
+			t = reason ? r + " ## [reason]" : r
+			dat += text("<tr><td>[t] (<A href='?src=\ref[src];removejobban=[r]'>unban</A>)</td></tr>")
+	dat += "</table>"
+	usr << browse(dat, "window=ban;size=400x400")
+
+/*
 	for(var/t in list_of_bans)
 		var/r = t
 		if( findtext(r,"##") )
@@ -675,6 +681,7 @@ var/global/floorIsLava = 0
 		dat += text("<tr><td>[t] (<A href='?src=\ref[src];removejobban=[r]'>unban</A>)</td></tr>")
 	dat += "</table>"
 	usr << browse(dat, "window=ban;size=400x400")
+*/
 
 /datum/admins/proc/Game()
 	if(!check_rights(0))

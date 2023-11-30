@@ -86,17 +86,18 @@
 	set category = "Debug"
 
 	to_chat(usr, "<b>Jobbans active in this round.</b>")
-	var/list/list_of_bans = list()
+//	var/list/list_of_bans = list()
 	var/list/these_bans
 	var/reason
 	for(var/ckey in jobban_keylist)
 		these_bans = jobban_keylist[ckey]
-		if(islist(these_bans))
-			for(var/this_rank in these_bans)
-				reason = these_bans[this_rank]
-				list_of_bans += "[ckey] - [this_rank]" + reason ? " ## [reason]" : null
-	for(var/t in list_of_bans)
-		to_chat(usr, "[t]")
+//		if(islist(these_bans))
+		for(var/this_rank in these_bans)
+			reason = these_bans[this_rank]
+			to_chat(usr, "[ckey] - [this_rank]" + reason ? " ## [reason]" : null)
+//			list_of_bans += "[ckey] - [this_rank]" + reason ? " ## [reason]" : null
+//	for(var/t in list_of_bans)
+//		to_chat(usr, "[t]")
 
 /client/proc/print_jobban_old_filter()
 	set name = "Search Jobban Log"
@@ -108,18 +109,21 @@
 		return
 
 	to_chat(usr, "<b>Jobbans active in this round.</b>")
-	var/list/list_of_bans = list()
+//	var/list/list_of_bans = list()
 	var/list/these_bans
 	var/reason
+	var/t
 	for(var/ckey in jobban_keylist)
 		these_bans = jobban_keylist[ckey]
-		if(islist(these_bans))
-			for(var/this_rank in these_bans)
-				reason = these_bans[this_rank]
-				list_of_bans += "[ckey] - [this_rank]" + reason ? " ## [reason]" : null
-	for(var/t in list_of_bans)
-		if(findtext(t, filter))
-			to_chat(usr, "[t]")
+//		if(islist(these_bans))
+		for(var/this_rank in these_bans)
+			reason = these_bans[this_rank]
+			t = "[ckey] - [this_rank]" + reason ? " ## [reason]" : null
+			if(findtext(t, filter))
+				to_chat(usr, "[t]")
+	//for(var/t in list_of_bans)
+	//	if(findtext(t, filter))
+	//		to_chat(usr, "[t]")
 
 // For /vg/ Wiki docs
 /client/proc/dump_chemreactions()
