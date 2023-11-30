@@ -1,7 +1,7 @@
 
 
 var/jobban_runonce			// Updates legacy bans with new info
-var/jobban_keylist[0]		//to store the keys & ranks
+var/list/jobban_keylist[0]		//to store the keys & ranks
 	//is now a list-of-lists:
 		//jobban_keylist["playerckey1"] is an associative list with key: rank, value: reason
 
