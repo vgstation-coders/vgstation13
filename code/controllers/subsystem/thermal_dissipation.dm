@@ -9,6 +9,7 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 	display_order = SS_DISPLAY_THERM_DISS
 
 	var/list/datum/reagents/currentrun
+	var/list/turf_air_list
 	var/currentrun_index
 
 /datum/subsystem/thermal_dissipation/New()
@@ -30,6 +31,7 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 		currentrun = thermal_dissipation_reagents.Copy()
 
 	var/c = currentrun_index
+	turf_air_list = list()
 
 	if(config.thermal_dissipation)
 		var/simulate_air = config.reagents_heat_air

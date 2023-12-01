@@ -1136,9 +1136,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if (!total_volume || !total_thermal_mass)
 		return
 
-	var/datum/gas_mixture/the_air = (get_turf(my_atom))?.return_air()
+	var/turf/T = get_turf(my_atom)
+	var/datum/gas_mixture/the_air = SStd.turf_air_list[T] ? SStd.turf_air_list[T] : T?.return_air()
 	if (!the_air)
 		return
+
+	SStd.turf_air_list[T] = the_air
 
 	if (!(abs(chem_temp - the_air.temperature) >= MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)) //Do it this way to catch NaNs.
 		return
