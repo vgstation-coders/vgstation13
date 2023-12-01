@@ -2,10 +2,18 @@
 	item_state = "glasses"
 	species_fit = list(GREY_SHAPED)
 	var/on = TRUE
+	var/list/stored_huds = list() // Stores a hud datum instance to apply to a mob
+	var/list/hud_types = list() // What HUD the glasses provides, if any
+
+/obj/item/clothing/glasses/scanner/New()
+	..()
+	if(hud_types.len)
+		for(var/H in hud_types)
+			if(ispath(H))
+				stored_huds += new H
 
 /obj/item/clothing/glasses/scanner/attack_self()
 	toggle()
-
 
 /obj/item/clothing/glasses/scanner/equipped(var/mob/living/carbon/M, glasses)
 	if(istype(M, /mob/living/carbon/monkey))
@@ -19,15 +27,19 @@
 	else
 		return
 	if(on)
-		if(iscarbon(M))
+		if(iscarbon(M) && glasses == slot_glasses)
+			for(var/datum/visioneffect/H in stored_huds)
+				M.apply_hud(H)
 			M.update_perception()
 			M.update_darkness()
 	..()
 
-/obj/item/clothing/glasses/scanner/unequipped(mob/living/carbon/user, var/from_slot = null)
+/obj/item/clothing/glasses/scanner/unequipped(mob/living/carbon/M, var/from_slot = null)
 	if(from_slot == slot_glasses)
 		if(on)
-			user.seedarkness = TRUE
+			for(var/datum/visioneffect/H in stored_huds)
+				M.remove_hud(H)
+			M.seedarkness = TRUE
 	..()
 
 /obj/item/clothing/glasses/scanner/update_icon()
@@ -56,10 +68,14 @@
 
 /obj/item/clothing/glasses/scanner/proc/enable(var/mob/living/carbon/C)
 	on = TRUE
+	for(var/datum/visioneffect/H in stored_huds)
+		C.apply_hud(H)
 	to_chat(C, "You turn \the [src] on.")
 
 /obj/item/clothing/glasses/scanner/proc/disable(var/mob/living/carbon/C)
 	on = FALSE
+	for(var/datum/visioneffect/H in stored_huds)
+		C.remove_hud(H)
 	to_chat(C, "You turn \the [src] off.")
 
 /obj/item/clothing/glasses/scanner/night
@@ -126,133 +142,44 @@
 				user.update_perception()
 	..()
 
-var/list/meson_wearers = list()
-
 /obj/item/clothing/glasses/scanner/meson
 	name = "optical meson scanner"
 	desc = "Used for seeing walls, floors, and stuff through anything."
 	icon_state = "meson"
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=2"
-	vision_flags = SEE_TURFS
-	eyeprot = -1
-	see_invisible = SEE_INVISIBLE_MINIMUM
-	seedarkness = FALSE
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	glasses_fit = TRUE
 	prescription_type = /obj/item/clothing/glasses/scanner/meson/prescription
-	var/mob/viewing
-
-	my_dark_plane_alpha_override = "mesons"
-	my_dark_plane_alpha_override_value = 255
+	hud_types = list(/datum/visioneffect/meson)
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/living/carbon/C)
-	on = 1
-	update_mob(viewing)
 	var/area/A = get_area(src)
 	if(A.flags & NO_MESONS)
 		to_chat(C, "<span class = 'warning'>\The [src] flickers, but refuses to come online!</span>")
 		return
-	eyeprot = initial(eyeprot)
-	vision_flags |= SEE_TURFS
-	see_invisible |= SEE_INVISIBLE_MINIMUM
-	seedarkness = FALSE
-	my_dark_plane_alpha_override_value = 255
-
-//	body_parts_covered |= EYES
 	..()
 
 /obj/item/clothing/glasses/scanner/meson/disable(var/mob/living/carbon/C)
-	update_mob(viewing)
-	eyeprot = 0
-	on = 0
-//	body_parts_covered &= ~EYES
-	vision_flags &= ~SEE_TURFS
-	see_invisible &= ~SEE_INVISIBLE_MINIMUM
-	my_dark_plane_alpha_override_value = 0
-	seedarkness = TRUE
-	C.update_perception()
+	..()
+	if (C)
+		C.dark_plane?.alphas -= "mesons"
+		C.update_darkness()
+		C.check_dark_vision()
+		C.update_perception()
 
-/obj/item/clothing/glasses/scanner/meson/unequipped(mob/living/carbon/user, from_slot)
-	. = ..()
-	if (user)
-		user.dark_plane?.alphas -= "mesons"
-		user.update_darkness()
-		user.check_dark_vision()
-		user.update_perception()
+/obj/item/clothing/glasses/scanner/meson/unequipped(mob/living/carbon/C, from_slot)
+	..()
+	if (C)
+		C.dark_plane?.alphas -= "mesons"
+		C.update_darkness()
+		C.check_dark_vision()
+		C.update_perception()
 
 /obj/item/clothing/glasses/scanner/meson/area_entered(area/A)
 	if(A.flags & NO_MESONS && on)
 		visible_message("<span class = 'warning'>\The [src] sputter out.</span>")
 		disable()
-
-/obj/item/clothing/glasses/scanner/meson/proc/clear()
-	if (viewing)
-		meson_wearers -= viewing
-		if (viewing.client)
-			viewing.client.images -= meson_images
-
-/obj/item/clothing/glasses/scanner/meson/proc/apply()
-	if (!viewing || !viewing.client || !on)
-		return
-
-	meson_wearers += viewing
-	viewing.client.images += meson_images
-
-/obj/item/clothing/glasses/scanner/meson/unequipped(var/mob/living/carbon/M)
-	update_mob()
-	..()
-
-/obj/item/clothing/glasses/scanner/meson/equipped(var/mob/living/carbon/M)
-	update_mob(M)
-	..()
-
-/obj/item/clothing/glasses/scanner/meson/proc/update_mob(var/mob/living/carbon/new_mob)
-	if (new_mob == viewing)
-		clear()
-		apply()
-		return
-
-	if (new_mob != viewing)
-		clear()
-		if (viewing)
-			viewing = null
-		if (new_mob)
-			viewing = new_mob
-			apply()
-
-
-var/list/meson_images = list()
-
-/atom/movable
-	var/image/meson_image
-	var/is_on_mesons = FALSE
-
-/atom/movable/New()
-	..()
-	if(is_on_mesons)
-		update_meson_image()
-
-/atom/movable/Destroy()
-	if(meson_image)
-		for (var/mob/L in meson_wearers)
-			if (L.client)
-				L.client.images -= meson_image
-		meson_images -= meson_image
-	..()
-
-/atom/movable/proc/update_meson_image()
-	for (var/mob/L in meson_wearers)
-		if (L.client)
-			L.client.images -= meson_image
-	meson_images -= meson_image
-	if(is_on_mesons)
-		meson_image = image(icon,loc,icon_state,layer,dir)
-		meson_image.plane = relative_plane_to_plane(plane, loc.plane)
-		meson_images += meson_image
-		for (var/mob/L in meson_wearers)
-			if (L.client)
-				L.client.images |= meson_image
 
 /obj/item/clothing/glasses/scanner/material
 	name = "optical material scanner"

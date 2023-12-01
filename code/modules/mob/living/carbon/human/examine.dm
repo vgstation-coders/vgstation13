@@ -453,12 +453,15 @@
 		if(user.hasHUD(HUD_MEDICAL))
 			var/perpname = get_identification_name(get_face_name())
 			var/medical = "None"
+			var/medicalsanity = "None"
 
 			var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
 			if(gen_record)
 				medical = gen_record.fields["p_stat"]
+				medicalsanity = gen_record.fields["m_stat"]
 
-			msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n
+			msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>
+				<span class = 'deptradio'>Mental status:</span> <a href='?src=\ref[src];medicalsanity=1'>\[[medicalsanity]\]</a>\n
 				<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]\n</a>"}
 			for (var/ID in virus2)
 				if (ID in virusDB)

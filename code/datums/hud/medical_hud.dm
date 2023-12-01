@@ -1,9 +1,9 @@
 //Medical HUD
 
-/datum/hud/medical
+/datum/visioneffect/medical
 	name = "medical hud"
 
-/datum/hud/medical/process_hud(var/mob/M)
+/datum/visioneffect/medical/process_hud(var/mob/M)
 	..()
 	if(!(M in med_hud_users))
 		med_hud_users += M
@@ -124,5 +124,7 @@
 						holder.icon_state = "hudunstable"
 					if("*Watch*")
 						holder.icon_state = "hudwatch"
+					if("Stable")
+						holder.icon_state = "hudblank"
 				holder.pixel_y = 7 * PIXEL_MULTIPLIER
 				C.images += holder

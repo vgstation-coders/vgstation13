@@ -1,4 +1,4 @@
 //Thermal Vision
 
-/datum/hud/thermal
+/datum/visioneffect/thermal
 	name = "thermal hud"

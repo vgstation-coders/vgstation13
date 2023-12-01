@@ -59,6 +59,8 @@
 		else if (!V)
 			see_invisible = SEE_INVISIBLE_LIVING
 
+		handle_vision_effect_updates()
+
 		if(dna)
 			switch(dna.mutantrace)
 				if("slime")

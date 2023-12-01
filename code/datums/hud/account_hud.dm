@@ -2,15 +2,15 @@
 
 #define ACCOUNT_DB_OFFLINE (!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER|FORCEDISABLE))
 
-/datum/hud/accountdb
+/datum/visioneffect/accountdb
 	name = "accounts database hud"
 	var/obj/machinery/account_database/linked_db
 
-/datum/hud/accountdb/New()
+/datum/visioneffect/accountdb/New()
 	..()
 	reconnect_db()
 
-/datum/hud/accountdb/proc/reconnect_db()
+/datum/visioneffect/accountdb/proc/reconnect_db()
 	for(var/obj/machinery/account_database/DB in account_DBs)
 		//Will only check for a database at the main Station.
 		if(DB.z == map.zMainStation)
@@ -18,10 +18,10 @@
 				linked_db = DB
 				break
 
-/datum/hud/accountdb/wage
+/datum/visioneffect/accountdb/wage
 	name = "wage hud"
 
-/datum/hud/accountdb/wage/process_hud(var/mob/M)
+/datum/visioneffect/accountdb/wage/process_hud(var/mob/M)
 	..()
 	if(!(M in wage_hud_users))
 		wage_hud_users += M
@@ -78,5 +78,44 @@
 
 
 
-/datum/hud/accountdb/balance
+/datum/visioneffect/accountdb/balance
 	name = "account balance hud"
+
+/datum/visioneffect/accountdb/balance/process_hud(var/mob/M)
+	..()
+	var/client/C = M.client
+	var/image/holder
+	var/turf/T
+	var/icon/S
+	T = get_turf(M)
+	for(var/mob/living/carbon/human/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
+		if(!check_HUD_visibility(perp, M))
+			continue
+		if(perp.head && istype(perp.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
+			S = getStaticIcon(getFlatIcon(perp))
+			C.images += image(S, perp, "hudstatic")
+			continue
+		var/obj/item/weapon/card/id/card = perp.get_id_card()
+		if(card)
+			holder = perp.hud_list[WAGE_HUD]
+			if(!holder)
+				continue
+			var/datum/money_account/bankacc = get_money_account(card.associated_account_number)
+			var/datum/money_account/virtualacc = card.virtual_wallet
+			var/cashdisplay = "ERR"
+			var/cash = 0
+			if(!linked_db) // Catch a missing database before a runtime!
+				cashdisplay = html_encode(Gibberish("ERRO",100))
+			else if (ACCOUNT_DB_OFFLINE) // Have to call this after the first if because it will runtime if linked_db doesn't exist
+				cashdisplay = html_encode(Gibberish("ERRO",100))
+			else //not an error case
+				if(virtualacc)
+					cash += virtualacc.money
+				if(bankacc)
+					cash += bankacc.money
+			cashdisplay = "$[cash]"
+			//if(cash < 150)
+			S = getStaticIcon(getFlatIcon(perp))
+			C.images += image(S, perp, "hudstatic")
+			holder.maptext = "<span class='maptext yell black_outline' style='text-align: center; vertical-align: top; color: white;'>[cashdisplay]</span>"
+			C.images += holder

@@ -1,9 +1,9 @@
 //Security HUD
 
-/datum/hud/security
+/datum/visioneffect/security
 	name = "security hud"
 
-/datum/hud/security/process_hud(var/mob/M)
+/datum/visioneffect/security/process_hud(var/mob/M)
 	..()
 	if(!(M in sec_hud_users))
 		sec_hud_users += M

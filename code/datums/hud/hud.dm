@@ -4,7 +4,7 @@ A datum that defines huds and how to implement them with respect to the mob type
 
 */
 
-/datum/hud
+/datum/visioneffect
 	var/name
 	var/vision_flags = 0 //Contains SEE_TURFS, SEE_MOBS, SEE_OBJS
 
@@ -17,9 +17,27 @@ A datum that defines huds and how to implement them with respect to the mob type
 	var/darkness_view = 0
 
 	var/see_invisible = 0
-	var/seedarkness = TRUE
 
-/datum/hud/proc/process_hud(var/mob/M)
+	//This says if you see actual darkness or not. Think mesons giving perfect flat brightness as an example.
+	var/seedarkness = TRUE
+	var/eyeprot = 0
+	var/my_dark_plane_alpha_override = null
+	var/my_dark_plane_alpha_override_value = 0
+
+
+/datum/visioneffect/proc/process_hud(var/mob/M)
+	if(!M)
+		return
+	if(!M.client)
+		return
+
+/datum/visioneffect/proc/on_apply(var/mob/M)
+	if(!M)
+		return
+	if(!M.client)
+		return
+
+/datum/visioneffect/proc/on_remove(var/mob/M)
 	if(!M)
 		return
 	if(!M.client)
@@ -29,7 +47,20 @@ A datum that defines huds and how to implement them with respect to the mob type
 Helper procs and procs used in mobs
 */
 
-//General mob HUD processing
+//Handle specific on-apply effects. Useful mainly for scanners like Mesons
+/mob/proc/apply_hud(var/datum/visioneffect/V)
+	if(!(V in huds)) //Prevent basic dupes of HUD instances
+		huds += V
+	V.on_apply(src)
+	regular_hud_updates()
+
+//Clean up certain HUDs with permanent non-on-update effects, like Mesons
+/mob/proc/remove_hud(var/datum/visioneffect/V)
+	V.on_remove(src)
+	huds -= V
+	regular_hud_updates()
+
+//General mob HUD processing proc
 /mob/proc/regular_hud_updates()
 	clean_up_hud()
 	handle_hud_vision_updates()
@@ -50,26 +81,24 @@ Helper procs and procs used in mobs
 
 //Checks what HUDs the mob has and applies their effects
 /mob/proc/handle_hud_vision_updates()
-	for(var/datum/hud/H in huds)
-		H.process_hud(src)
+	for(var/datum/visioneffect/V in huds)
+		V.process_hud(src)
 
-//This is the current life.dm proc to handle glasses behavior
-/mob/proc/handle_glasses_vision_updates(var/obj/item/clothing/glasses/G)
-	if(istype(G))
-		if(G.see_in_dark)
-			see_in_dark = max(see_in_dark, G.see_in_dark)
-		see_in_dark += G.darkness_view
-		if(G.vision_flags) //MESONS
-			change_sight(adding = G.vision_flags)
+//Handles HUD special visual effects such as see_in_dark. Has to be handled after the vision updates above.
+/mob/proc/handle_vision_effect_updates()
+	for(var/datum/visioneffect/V in huds)
+		if(V.see_in_dark)
+			see_in_dark = max(see_in_dark, V.see_in_dark)
+		see_in_dark += V.darkness_view
+		if(V.vision_flags) //MESONS
+			change_sight(adding = V.vision_flags)
 			if(!druggy)
 				see_invisible = SEE_INVISIBLE_MINIMUM
-		if(G.see_invisible)
-			see_invisible = G.see_invisible
+		if(V.see_invisible)
+			see_invisible = V.see_invisible
 
-	seedarkness = G.seedarkness
+		seedarkness = V.seedarkness
 	update_darkness()
-
-
 
 //Helper proc to determine if someone is visible to the HUD systems
 /proc/check_HUD_visibility(var/atom/target, var/mob/user)

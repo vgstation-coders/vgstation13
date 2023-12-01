@@ -1,9 +1,9 @@
 //Silicon Diagnostic HUD
 
-/datum/hud/diagnostic
+/datum/visioneffect/diagnostic
 	name = "diagnostic hud"
 
-/datum/hud/diagnostic/process_hud(var/mob/M)
+/datum/visioneffect/diagnostic/process_hud(var/mob/M)
 	..()
 	diagnostic_hud_users |= M
 

@@ -30,6 +30,22 @@
 /obj/item/clothing/glasses/proc/update_perception(var/mob/living/carbon/human/M)
 	return
 
+//This is the current life.dm proc to handle glasses behavior
+/mob/proc/handle_glasses_vision_updates(var/obj/item/clothing/glasses/G)
+	if(istype(G))
+		if(G.see_in_dark)
+			see_in_dark = max(see_in_dark, G.see_in_dark)
+		see_in_dark += G.darkness_view
+		if(G.vision_flags) //MESONS
+			change_sight(adding = G.vision_flags)
+			if(!druggy)
+				see_invisible = SEE_INVISIBLE_MINIMUM
+		if(G.see_invisible)
+			see_invisible = G.see_invisible
+
+	seedarkness = G.seedarkness
+	update_darkness()
+
 /*
 SEE_SELF  // can see self, no matter what
 SEE_MOBS  // can see all mobs, no matter what

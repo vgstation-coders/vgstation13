@@ -1,4 +1,4 @@
 //Nightvision HUD
 
-/datum/hud/night
+/datum/visioneffect/night
 	name = "nightvision hud"

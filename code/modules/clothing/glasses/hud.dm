@@ -19,15 +19,14 @@
 /obj/item/clothing/glasses/hud/equipped(mob/M, slot)
 	..()
 	if(slot == slot_glasses && stored_huds.len)
-		for(var/datum/hud/H in stored_huds)
-			M.huds += H
-		M.regular_hud_updates()
+		for(var/datum/visioneffect/H in stored_huds)
+			M.apply_hud(H)
 
 /obj/item/clothing/glasses/hud/unequipped(mob/M, slot)
 	..()
 	if(slot == slot_glasses && stored_huds.len)
-		for(var/datum/hud/H in stored_huds)
-			M.huds -= H
+		for(var/datum/visioneffect/H in stored_huds)
+			M.remove_hud(H)
 		M.regular_hud_updates()
 
 /obj/item/clothing/glasses/hud/harm_label_update()
@@ -40,20 +39,20 @@
 	icon_state = "healthhud"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	prescription_type = /obj/item/clothing/glasses/hud/health/prescription
-	hud_types = list(/datum/hud/medical)
+	hud_types = list(/datum/visioneffect/medical)
 
 
 /obj/item/clothing/glasses/hud/curseddoublehud
 	name = "cursed health scanner HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status."
 	icon_state = "healthhud"
-	hud_types = list(/datum/hud/medical, /datum/hud/security)
+	hud_types = list(/datum/visioneffect/medical, /datum/visioneffect/security)
 
 /obj/item/clothing/glasses/hud/health/cmo
 	name = "advanced health scanner HUD"
 	nearsighted_modifier = -3
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status as well as reveals pathogens in sight. The tinted glass protects the wearer from bright flashes of light."
-	icon_state = "cmohud"
+	icon_state = "suncmo"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	eyeprot = 1
 	mech_flags = MECH_SCAN_ILLEGAL
@@ -136,7 +135,7 @@
 	name = "security HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
 	icon_state = "securityhud"
-	hud_types = list(/datum/hud/security)
+	hud_types = list(/datum/visioneffect/security)
 
 /obj/item/clothing/glasses/hud/security/jensenshades
 	name = "augmented shades"
@@ -161,7 +160,7 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	desc = "A heads-up display that displays diagnostic information for compatible cyborgs and exosuits."
 	prescription_type = /obj/item/clothing/glasses/hud/diagnostic/prescription
-	hud_types = list(/datum/hud/diagnostic)
+	hud_types = list(/datum/visioneffect/diagnostic)
 
 /obj/item/clothing/glasses/hud/diagnostic/prescription
 	name = "prescription diagnostic HUD"
@@ -171,17 +170,34 @@
 /obj/item/clothing/glasses/hud/wage
 	name = "wage HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
-	icon_state = "securityhud"
-	hud_types = list(/datum/hud/accountdb/wage)
+	icon_state = "wagehud"
+	darkness_view = -1
+	eyeprot = 1
+	hud_types = list(/datum/visioneffect/accountdb/wage)
 
 /obj/item/clothing/glasses/hud/wage/attack_self(mob/user)
 	if(isemptylist(stored_huds))
 		to_chat(user, "HUD Error.")
 		return
-	for(var/datum/hud/accountdb/W in stored_huds)
+	for(var/datum/visioneffect/accountdb/W in stored_huds)
 		if(!W.linked_db)
 			to_chat(user, "No DB found. Trying reconnect.")
 			W.reconnect_db()
 		else
 			to_chat(user, "DB looks OK!")
 
+/obj/item/clothing/glasses/hud/wage/cash
+	name = "money HUD"
+	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
+	icon_state = "securityhud"
+	darkness_view = 0
+	eyeprot = 0
+	hud_types = list(/datum/visioneffect/accountdb/balance)
+
+/obj/item/clothing/glasses/hud/omni
+	name = "omniHUD"
+	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
+	icon_state = "aviators_gold"
+	darkness_view = -1
+	eyeprot = 1
+	hud_types = list(/datum/visioneffect/medical, /datum/visioneffect/security, /datum/visioneffect/accountdb/wage)

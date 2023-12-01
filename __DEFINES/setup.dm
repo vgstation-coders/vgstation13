@@ -1704,6 +1704,7 @@ var/proccalls = 1
 #define HUD_MEDICAL 1
 #define HUD_SECURITY 2
 #define HUD_WAGE 3
+#define HUD_MESON 4
 
 //Cyborg components
 #define COMPONENT_BROKEN -1

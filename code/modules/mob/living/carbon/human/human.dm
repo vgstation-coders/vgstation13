@@ -584,10 +584,24 @@
 		if(!gen_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
 			return
-		var/setmedical = input(usr, "Specify a new medical status for this person.", "Medical HUD", gen_record.fields["p_stat"]) as null|anything in list("*SSD*", "*Deceased*", "Physically Unfit", "Active", "Disabled")
+		var/setmedical = input(usr, "Specify a new physical medical status for this person.", "Medical HUD", gen_record.fields["p_stat"]) as null|anything in list("*SSD*", "*Deceased*", "Physically Unfit", "Active", "Disabled")
 		if(!setmedical|| (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
 			return
 		gen_record.fields["p_stat"] = setmedical
+		if(PDA_Manifest.len)
+			PDA_Manifest.len = 0
+	else if (href_list["medicalsanity"])
+		if(!usr.hasHUD(HUD_MEDICAL) || isjustobserver(usr))
+			return
+		var/perpname = get_identification_name(get_face_name())
+		var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
+		if(!gen_record)
+			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
+			return
+		var/setmedical = input(usr, "Specify a new mental medical status for this person.", "Medical HUD", gen_record.fields["m_stat"]) as null|anything in list("*Insane*", "*Unstable*", "*Watch*", "Stable")
+		if(!setmedical|| (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
+			return
+		gen_record.fields["m_stat"] = setmedical
 		if(PDA_Manifest.len)
 			PDA_Manifest.len = 0
 	else if (href_list["medrecord"])
@@ -670,6 +684,9 @@
 
 	if (istype(eyewear))
 		. += eyewear.eyeprot
+
+	for(var/datum/visioneffect/V in huds)
+		. += V.eyeprot
 
 	if(E)
 		. += E.eyeprot
@@ -1442,6 +1459,10 @@
 		if(dark_plane_alpha_override)
 			dark_plane.alphas["override"] = dark_plane_alpha_override
 
+	for(var/datum/visioneffect/V in huds)
+		if (dark_plane && V.my_dark_plane_alpha_override && V.my_dark_plane_alpha_override_value)
+			dark_plane.alphas["[V.my_dark_plane_alpha_override]"] = V.my_dark_plane_alpha_override_value
+
 	if (istype(glasses))
 		glasses.update_perception(src)
 		if (dark_plane && glasses.my_dark_plane_alpha_override && glasses.my_dark_plane_alpha_override_value)
@@ -2046,16 +2067,26 @@
 /mob/living/carbon/human/hasHUD(var/hud_kind)
 	switch(hud_kind)
 		if(HUD_MEDICAL)
-			return is_type_in_list(/datum/hud/medical,huds)
+			for(var/datum/visioneffect/medical/H in huds)
+				return TRUE
+			return FALSE
 		if(HUD_SECURITY)
 			var/glasses = get_item_by_slot(slot_glasses)
 			if(glasses)
 				if(istype(glasses, /obj/item/clothing/glasses/sunglasses/sechud/syndishades))
 					var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/S = glasses
 					return S.full_access
-			return is_type_in_list(/datum/hud/security,huds)
+			for(var/datum/visioneffect/security/H in huds)
+				return TRUE
+			return FALSE
 		if(HUD_WAGE)
-			return is_type_in_list(/datum/hud/accountdb/wage,huds)
+			for(var/datum/visioneffect/accountdb/wage/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_MESON)
+			for(var/datum/visioneffect/meson/H in huds)
+				return TRUE
+			return FALSE
 	return FALSE
 
 /mob/living/carbon/human/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
