@@ -6,6 +6,7 @@
 
 /obj/item/toy/plushie
 	icon = 'icons/obj/plushie.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/plushie.dmi', "right_hand" = 'icons/mob/in-hand/right/plushie.dmi')
 	var/stuffed = TRUE //stuffing has to be removed before a grenade can be inserted
 	var/obj/item/weapon/grenade/grenade //the grenade, if the plush contains one
 	attack_verb = list("whomps", "bumps", "baps")

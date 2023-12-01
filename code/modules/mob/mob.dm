@@ -301,6 +301,9 @@
 		if(stat != UNCONSCIOUS)
 			to_chat(src, msg)
 		return
+	if(stat == DEAD) //They can ghost and have the same benefit.
+		to_chat(src, msg)
+		return
 
 	var/awareness = 0
 	if(stat != UNCONSCIOUS)
