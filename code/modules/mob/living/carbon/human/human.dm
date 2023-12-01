@@ -1460,6 +1460,7 @@
 			dark_plane.alphas["override"] = dark_plane_alpha_override
 
 	for(var/datum/visioneffect/V in huds)
+		V.process_update_perception(src)
 		if (dark_plane && V.my_dark_plane_alpha_override && V.my_dark_plane_alpha_override_value)
 			dark_plane.alphas["[V.my_dark_plane_alpha_override]"] = V.my_dark_plane_alpha_override_value
 

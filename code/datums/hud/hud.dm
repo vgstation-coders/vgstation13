@@ -31,6 +31,12 @@ A datum that defines huds and how to implement them with respect to the mob type
 	if(!M.client)
 		return
 
+/datum/visioneffect/proc/process_update_perception(var/mob/M)
+	if(!M)
+		return
+	if(!M.client)
+		return
+
 /datum/visioneffect/proc/on_apply(var/mob/M)
 	if(!M)
 		return

@@ -20,6 +20,10 @@ var/list/meson_images = list()
 	..()
 	meson_wearers -= M
 	M.client.images -= meson_images
+	M.dark_plane?.alphas -= "mesons"
+	M.update_darkness()
+	M.check_dark_vision()
+	M.update_perception()
 
 /atom/movable
 	var/image/meson_image

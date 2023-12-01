@@ -35,12 +35,12 @@
 	..()
 
 /obj/item/clothing/glasses/scanner/unequipped(mob/living/carbon/M, var/from_slot = null)
+	..()
 	if(from_slot == slot_glasses)
 		if(on)
 			for(var/datum/visioneffect/H in stored_huds)
 				M.remove_hud(H)
 			M.seedarkness = TRUE
-	..()
 
 /obj/item/clothing/glasses/scanner/update_icon()
 	icon_state = initial(icon_state)
@@ -84,63 +84,9 @@
 	icon_state = "night"
 	item_state = "glasses"
 	origin_tech = Tc_MAGNETS + "=2"
-	see_invisible = 0
-	seedarkness = TRUE
-	see_in_dark = 8
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-	eyeprot = -1
-
-/obj/item/clothing/glasses/scanner/night/enable(var/mob/living/carbon/C)
-	see_in_dark = initial(see_in_dark)
-	eyeprot = initial(eyeprot)
-	my_dark_plane_alpha_override = "night_vision"
-	if (ishuman(C))
-		var/mob/living/carbon/human/H = C
-		if (H.glasses == src)
-			C.update_perception()
-	else if (ismonkey(C))
-		var/mob/living/carbon/monkey/M = C
-		if (M.glasses == src)
-			C.update_perception()
-	return ..()
-
-/obj/item/clothing/glasses/scanner/night/disable(var/mob/living/carbon/C)
-	. = ..()
-	see_in_dark = 0
-	my_dark_plane_alpha_override = null
-	eyeprot = 0
-	if (ishuman(C))
-		var/mob/living/carbon/human/H = C
-		if (H.glasses == src)
-			if (C.client)
-				C.client.color = null
-			C.update_perception()
-	else if (ismonkey(C))
-		var/mob/living/carbon/monkey/M = C
-		if (M.glasses == src)
-			if (C.client)
-				C.client.color = null
-			C.update_perception()
-
-/obj/item/clothing/glasses/scanner/night/update_perception(var/mob/living/carbon/human/M)
-	if (on)
-		if (M.master_plane)
-			M.master_plane.blend_mode = BLEND_ADD
-		if (M.client)
-			M.client.color = "#33FF33"
-	else
-		my_dark_plane_alpha_override = null
-		if (M.master_plane)
-			M.master_plane.blend_mode = BLEND_MULTIPLY
-
-/obj/item/clothing/glasses/scanner/night/unequipped(mob/living/carbon/user, var/from_slot = null)
-	if(from_slot == slot_glasses)
-		if(on)
-			if (user.client)
-				user.client.color = null
-				user.update_perception()
-	..()
+	hud_types = list(/datum/visioneffect/night)
 
 /obj/item/clothing/glasses/scanner/meson
 	name = "optical meson scanner"
@@ -159,22 +105,6 @@
 		to_chat(C, "<span class = 'warning'>\The [src] flickers, but refuses to come online!</span>")
 		return
 	..()
-
-/obj/item/clothing/glasses/scanner/meson/disable(var/mob/living/carbon/C)
-	..()
-	if (C)
-		C.dark_plane?.alphas -= "mesons"
-		C.update_darkness()
-		C.check_dark_vision()
-		C.update_perception()
-
-/obj/item/clothing/glasses/scanner/meson/unequipped(mob/living/carbon/C, from_slot)
-	..()
-	if (C)
-		C.dark_plane?.alphas -= "mesons"
-		C.update_darkness()
-		C.check_dark_vision()
-		C.update_perception()
 
 /obj/item/clothing/glasses/scanner/meson/area_entered(area/A)
 	if(A.flags & NO_MESONS && on)
