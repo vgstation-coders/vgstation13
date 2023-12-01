@@ -31,11 +31,11 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 		currentrun = thermal_dissipation_reagents.Copy()
 
 	var/c = currentrun_index
-	turf_air_list = list()
 
 	if(config.thermal_dissipation)
 
 		var/simulate_air = config.reagents_heat_air
+		var/turf_air_list = list()
 
 		//Variables to reuse
 		var/datum/reagents/R
@@ -76,11 +76,12 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 				continue
 
 			T = get_turf(R.my_atom)
-			the_air = SStd.turf_air_list[T] ? SStd.turf_air_list[T] : T?.return_air()
+			the_air = turf_air_list[T]
+			if(!the_air)
+				the_air = T?.return_air()
+				turf_air_list[T] = the_air
 			if (!the_air)
 				continue
-
-			SStd.turf_air_list[T] = the_air
 
 			if (!(abs(R.chem_temp - the_air.temperature) >= MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)) //Do it this way to catch NaNs.
 				continue
