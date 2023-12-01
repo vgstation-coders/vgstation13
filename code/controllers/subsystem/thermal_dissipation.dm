@@ -77,7 +77,7 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 
 			T = get_turf(R.my_atom)
 			the_air = turf_air_list[T]
-			if(!the_air)
+			if (!the_air)
 				the_air = T?.return_air()
 				turf_air_list[T] = the_air
 			if (!the_air)
