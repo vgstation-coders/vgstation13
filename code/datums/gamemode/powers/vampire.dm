@@ -58,9 +58,8 @@
 /datum/power/vampire/heal/post_upgrade()
 	var/mob/M = role.antag.current
 	for(var/spell/rejuvenate/R in M.spell_list)
-		if(istype(R))
-			R.desc = "Flush your system with spare blood to remove any incapacitating effects. Now also provides a mild healing effect, and closes any bleeding wounds."
-			break
+		R.desc = "Flush your system with spare blood to remove any incapacitating effects. Now also provides a mild healing effect, and closes any bleeding wounds."
+		break
 
 /datum/power/vampire/jaunt
 	cost = 250
