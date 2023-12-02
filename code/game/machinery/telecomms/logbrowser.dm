@@ -1,3 +1,9 @@
+var/list/static/list_of_human_types = typesof(/mob/living/carbon/human, /mob/living/carbon/brain)
+var/list/static/list_of_monkey_types = typesof(/mob/living/carbon/monkey)
+var/list/static/list_of_silicon_types = typesof(/mob/living/silicon)
+var/list/static/list_of_slime_types = typesof(/mob/living/carbon/slime)
+var/list/static/list_of_animal_types = typesof(/mob/living/simple_animal)
+
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 /obj/machinery/computer/telecomms
 
@@ -17,24 +23,9 @@
 
 	var/universal_translate = 0 // set to 1 if it can translate nonhuman speech
 
-	//Used to track what type of mob said a message. Done only once instead of every time someone opens the comm log.
-	var/list/humans = list()
-	var/list/monkeys = list()
-	var/list/silicons = list()
-	var/list/slimes = list()
-	var/list/animals = list()
-
 	circuit = "/obj/item/weapon/circuitboard/comm_server"
 
 	req_access = list(access_tcomsat)
-
-/obj/machinery/computer/telecomms/server/New()
-	..()
-	humans = typesof(/mob/living/carbon/human, /mob/living/carbon/brain)
-	monkeys = typesof(/mob/living/carbon/monkey)
-	silicons = typesof(/mob/living/silicon)
-	slimes = typesof(/mob/living/carbon/slime)
-	animals = typesof(/mob/living/simple_animal)
 
 /obj/machinery/computer/telecomms/server/attack_hand(mob/user as mob)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
@@ -92,18 +83,18 @@
 					var/language = "Human" // MMIs, pAIs, Cyborgs and humans all speak Human
 					var/mobtype = C.parameters["mobtype"]
 
-					if(mobtype in humans)
+					if(mobtype in list_of_human_types)
 						race = "Human"
 						language = race
 
-					else if(mobtype in monkeys)
+					else if(mobtype in list_of_monkey_types)
 						race = "Monkey"
 						language = race
 
-					else if((mobtype in silicons) || (C.parameters["job"] == "AI")) // sometimes M gets deleted prematurely for AIs... just check the job
+					else if((mobtype in list_of_silicon_types) || (C.parameters["job"] == "AI")) // sometimes M gets deleted prematurely for AIs... just check the job
 						race = "Artificial Life"
 
-					else if(mobtype in slimes) // NT knows a lot about slimes, but not aliens. Can identify slimes
+					else if(mobtype in list_of_slime_types) // NT knows a lot about slimes, but not aliens. Can identify slimes
 						race = "slime"
 						language = race
 
@@ -111,7 +102,7 @@
 						race = "Machinery"
 						language = race
 
-					else if(mobtype in animals)
+					else if(mobtype in list_of_animal_types)
 						race = "Domestic Animal"
 						language = race
 
