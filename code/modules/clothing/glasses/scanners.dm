@@ -30,17 +30,16 @@
 		if(iscarbon(M) && glasses == slot_glasses)
 			for(var/datum/visioneffect/H in stored_huds)
 				M.apply_hud(H)
-			M.update_perception()
-			M.update_darkness()
+			//M.update_perception()
+			//M.update_darkness()
+
 	..()
 
 /obj/item/clothing/glasses/scanner/unequipped(mob/living/carbon/M, var/from_slot = null)
 	..()
 	if(from_slot == slot_glasses)
-		if(on)
-			for(var/datum/visioneffect/H in stored_huds)
-				M.remove_hud(H)
-			M.seedarkness = TRUE
+		for(var/datum/visioneffect/H in stored_huds)
+			M.remove_hud(H)
 
 /obj/item/clothing/glasses/scanner/update_icon()
 	icon_state = initial(icon_state)
@@ -68,14 +67,17 @@
 
 /obj/item/clothing/glasses/scanner/proc/enable(var/mob/living/carbon/C)
 	on = TRUE
-	for(var/datum/visioneffect/H in stored_huds)
-		C.apply_hud(H)
+	//check if equipped
+	if(src == C.get_item_by_slot(slot_glasses))
+		for(var/datum/visioneffect/H in stored_huds)
+			C.apply_hud(H)
 	to_chat(C, "You turn \the [src] on.")
 
 /obj/item/clothing/glasses/scanner/proc/disable(var/mob/living/carbon/C)
 	on = FALSE
-	for(var/datum/visioneffect/H in stored_huds)
-		C.remove_hud(H)
+	if(src == C.get_item_by_slot(slot_glasses))
+		for(var/datum/visioneffect/H in stored_huds)
+			C.remove_hud(H)
 	to_chat(C, "You turn \the [src] off.")
 
 /obj/item/clothing/glasses/scanner/night

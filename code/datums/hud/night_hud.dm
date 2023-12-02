@@ -3,7 +3,6 @@
 /datum/visioneffect/night
 	name = "nightvision hud"
 	see_invisible = 0
-	seedarkness = TRUE
 	see_in_dark = 8
 	eyeprot = -1
 	my_dark_plane_alpha_override = "night_vision"
@@ -14,9 +13,9 @@
 	M.client.color = "#33FF33"
 	if (M.master_plane)
 		M.master_plane.blend_mode = BLEND_ADD
+	M.update_perception()
 	M.update_darkness()
 	M.check_dark_vision()
-	M.update_perception()
 
 /datum/visioneffect/night/process_update_perception(var/mob/M)
 	..()
@@ -28,6 +27,8 @@
 	M.client.color = null
 	if (M.master_plane)
 		M.master_plane.blend_mode = BLEND_MULTIPLY
+	M.update_perception()
 	M.update_darkness()
 	M.check_dark_vision()
-	M.update_perception()
+	//M.update_darkness()
+	//M.update_perception()

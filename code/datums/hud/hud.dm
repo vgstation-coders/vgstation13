@@ -17,9 +17,6 @@ A datum that defines huds and how to implement them with respect to the mob type
 	var/darkness_view = 0
 
 	var/see_invisible = 0
-
-	//This says if you see actual darkness or not. Think mesons giving perfect flat brightness as an example.
-	var/seedarkness = TRUE
 	var/eyeprot = 0
 	var/my_dark_plane_alpha_override = null
 	var/my_dark_plane_alpha_override_value = 0
@@ -62,8 +59,8 @@ Helper procs and procs used in mobs
 
 //Clean up certain HUDs with permanent non-on-update effects, like Mesons
 /mob/proc/remove_hud(var/datum/visioneffect/V)
-	V.on_remove(src)
 	huds -= V
+	V.on_remove(src)
 	regular_hud_updates()
 
 //General mob HUD processing proc
@@ -102,8 +99,6 @@ Helper procs and procs used in mobs
 				see_invisible = SEE_INVISIBLE_MINIMUM
 		if(V.see_invisible)
 			see_invisible = V.see_invisible
-
-		seedarkness = V.seedarkness
 	update_darkness()
 
 //Helper proc to determine if someone is visible to the HUD systems

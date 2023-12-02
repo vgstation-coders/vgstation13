@@ -6,7 +6,6 @@ var/list/meson_images = list()
 	name = "mesons hud"
 	vision_flags = SEE_TURFS
 	see_invisible = SEE_INVISIBLE_MINIMUM
-	seedarkness = FALSE
 	eyeprot = -1
 	my_dark_plane_alpha_override = "mesons"
 	my_dark_plane_alpha_override_value = 255
@@ -15,15 +14,21 @@ var/list/meson_images = list()
 	..()
 	meson_wearers += M
 	M.client.images += meson_images
+	M.seedarkness = FALSE
+	M.update_darkness()
+	M.handle_regular_hud_updates()
+//	M.update_perception()
 
 /datum/visioneffect/meson/on_remove(var/mob/M)
 	..()
 	meson_wearers -= M
 	M.client.images -= meson_images
-	M.dark_plane?.alphas -= "mesons"
+	if(M.dark_plane)
+		M.dark_plane.alphas -= "mesons"
+	M.seedarkness = TRUE
 	M.update_darkness()
-	M.check_dark_vision()
-	M.update_perception()
+	M.handle_regular_hud_updates()
+//	M.update_perception()
 
 /atom/movable
 	var/image/meson_image
