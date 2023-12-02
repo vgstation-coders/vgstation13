@@ -50,10 +50,8 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 		var/Ta
 		var/reagents_thermal_mass_reciprocal
 		var/air_thermal_mass_reciprocal
-		var/which_is_hotter
 		var/slices
 		var/this_slice_energy
-		var/this_slice
 
 		while (c)
 
@@ -61,136 +59,116 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 			c--
 
 			if(!R)
-				continue
+				goto tick_check
 
 			//Exchange heat between reagents and the surrounding air.
 			//Although the heat is exchanged directly between reagents and air, for now this is based on thermal radiation, not convection per se.
 
 			if(gcDestroyed)
-				continue
+				goto tick_check
 
 			if (!R.my_atom || R.my_atom.gcDestroyed || R.my_atom.timestopped)
-				continue
+				goto tick_check
 
 			if (!R.total_volume || !R.total_thermal_mass)
-				continue
+				goto tick_check
 
 			T = get_turf(R.my_atom)
-			the_air = turf_air_list[T]
-			if (!the_air)
-				the_air = T?.return_air()
-				turf_air_list[T] = the_air
-			if (!the_air)
-				continue
+			if (the_air := (turf_air_list[T] || (turf_air_list[T] := T?.return_air())))
 
-			if (!(abs(R.chem_temp - the_air.temperature) >= MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)) //Do it this way to catch NaNs.
-				continue
+				if (!(abs(R.chem_temp - the_air.temperature) >= MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER)) //Do it this way to catch NaNs.
+					goto tick_check
 
-			//We treat the reagents like a spherical grey body with an emissivity of THERM_DISS_SCALING_FACTOR.
+				//We treat the reagents like a spherical grey body with an emissivity of THERM_DISS_SCALING_FACTOR.
 
-			emission_factor = THERM_DISS_SCALING_FACTOR * (SS_WAIT_THERM_DISS / (1 SECONDS)) * STEFAN_BOLTZMANN_CONSTANT * (36 * PI) ** (1/3) * (CC_PER_U / 1000) ** (2/3) * R.total_volume ** (2/3)
+				emission_factor = THERM_DISS_SCALING_FACTOR * (SS_WAIT_THERM_DISS / (1 SECONDS)) * STEFAN_BOLTZMANN_CONSTANT * (36 * PI) ** (1/3) * (CC_PER_U / 1000) ** (2/3) * R.total_volume ** (2/3)
 
-			//Here we reduce thermal transfer to account for insulation of the container.
-			//We iterate though each loc until the loc is the turf containing the_air, to account for things like nested containers, each time multiplying emission_factor by a factor than can range between [0 and 1], representing heat insulation.
+				//Here we reduce thermal transfer to account for insulation of the container.
+				//We iterate though each loc until the loc is the turf containing the_air, to account for things like nested containers, each time multiplying emission_factor by a factor than can range between [0 and 1], representing heat insulation.
 
-			this_potentially_insulative_layer = R.my_atom
-			i = 0
-			while (emission_factor)
-				emission_factor *= this_potentially_insulative_layer.get_heat_conductivity()
-				if (isturf(this_potentially_insulative_layer) || isarea(this_potentially_insulative_layer))
-					break
-				else if (i <= ARBITRARILY_LARGE_NUMBER)
-					if (isatom(this_potentially_insulative_layer.loc))
-						this_potentially_insulative_layer = this_potentially_insulative_layer.loc
-						i++
-					else
+				this_potentially_insulative_layer = R.my_atom
+				i = ARBITRARILY_LARGE_NUMBER
+				while (emission_factor)
+					emission_factor *= this_potentially_insulative_layer.get_heat_conductivity()
+					if (this_potentially_insulative_layer == T)
 						break
-				else
-					log_admin("Something went wrong with [R.my_atom]'s handle_heat_dissipation() at iteration #[i] at [this_potentially_insulative_layer].")
-					break //Avoid infinite loops.
+					else if (i && (this_potentially_insulative_layer := this_potentially_insulative_layer.loc))
+						i--
+					else
+						log_admin("Something went wrong with [R.my_atom]'s handle_heat_dissipation() at iteration #[i] at [this_potentially_insulative_layer].")
+						break //Avoid infinite loops and nullspace issues.
 
-			if (emission_factor)
+				if (emission_factor)
 
-				is_the_air_simulated = simulate_air && !istype(the_air, /datum/gas_mixture/unsimulated)
-				air_thermal_mass = the_air.heat_capacity()
+					is_the_air_simulated = simulate_air && !istype(the_air, /datum/gas_mixture/unsimulated)
+					air_thermal_mass = the_air.heat_capacity()
 
-				Tr = R.chem_temp
-				Ta = the_air.temperature
+					Tr = R.chem_temp
+					Ta = the_air.temperature
 
-				if (max(Tr, Ta) <= THERM_DISS_MAX_SAFE_TEMP)
+					if (max(Tr, Ta) <= THERM_DISS_MAX_SAFE_TEMP)
 
-					reagents_thermal_mass_reciprocal = (1 / R.total_thermal_mass)
-					air_thermal_mass_reciprocal = (1 / air_thermal_mass)
+						reagents_thermal_mass_reciprocal = (1 / R.total_thermal_mass)
+						air_thermal_mass_reciprocal = (1 / air_thermal_mass)
 
-					#define REAGENTS_HOTTER 1
-					#define AIR_HOTTER -1
-
-					which_is_hotter = Tr > Ta ? REAGENTS_HOTTER : AIR_HOTTER
-
-					if (is_the_air_simulated)
-						//If either temperature would change by more than a factor of THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO, we do a more granular calculation.
-						slices = ceil((1 / THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO) * abs(emission_factor * (Tr ** 4 - Ta ** 4) * max(reagents_thermal_mass_reciprocal / Tr, air_thermal_mass_reciprocal / Ta)))
-						emission_factor /= slices
-						switch (which_is_hotter)
-							if (REAGENTS_HOTTER)
-								for (this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+						if (is_the_air_simulated)
+							//If either temperature would change by more than a factor of THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO, we do a more granular calculation.
+							emission_factor /= (slices = ceil((1 / THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO) * abs(emission_factor * (Tr ** 4 - Ta ** 4) * max(reagents_thermal_mass_reciprocal / Tr, air_thermal_mass_reciprocal / Ta))))
+							if (Tr > Ta)
+								for (slices = min(slices, THERM_DISS_MAX_PER_TICK_SLICES), slices, slices--)
 									this_slice_energy = emission_factor * (Tr ** 4 - Ta ** 4)
 									Tr -= this_slice_energy * reagents_thermal_mass_reciprocal
 									Ta += this_slice_energy * air_thermal_mass_reciprocal
 									//If the discrete nature of the calculation would cause the reagents temperature to go past the equalization temperature, we equalize the temperatures.
 									if (!(Tr > Ta))
 										goto temperature_equalization_simmed_air
-							if (AIR_HOTTER)
-								for (this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+							else
+								for (slices = min(slices, THERM_DISS_MAX_PER_TICK_SLICES), slices, slices--)
 									this_slice_energy = emission_factor * (Tr ** 4 - Ta ** 4)
 									Tr -= this_slice_energy * reagents_thermal_mass_reciprocal
 									Ta += this_slice_energy * air_thermal_mass_reciprocal
 									if (!(Tr < Ta))
 										goto temperature_equalization_simmed_air
-					else
-						slices = ceil((1 / THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO) * abs(emission_factor * (Tr ** 4 - Ta ** 4) * reagents_thermal_mass_reciprocal / Tr))
-						emission_factor /= slices
-						switch (which_is_hotter)
-							if (REAGENTS_HOTTER)
-								for (this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+						else
+							emission_factor /= (slices = ceil((1 / THERM_DISS_MAX_PER_TICK_TEMP_CHANGE_RATIO) * abs(emission_factor * (Tr ** 4 - Ta ** 4) * reagents_thermal_mass_reciprocal / Tr)))
+							if (Tr > Ta)
+								for (slices = min(slices, THERM_DISS_MAX_PER_TICK_SLICES), slices, slices--)
 									Tr -= emission_factor * (Tr ** 4 - Ta ** 4) * reagents_thermal_mass_reciprocal
 									if (!(Tr > Ta))
 										goto temperature_equalization_unsimmed_air
-							if (AIR_HOTTER)
-								for (this_slice in 1 to min(slices, THERM_DISS_MAX_PER_TICK_SLICES))
+							else
+								for (slices = min(slices, THERM_DISS_MAX_PER_TICK_SLICES), slices, slices--)
 									Tr -= emission_factor * (Tr ** 4 - Ta ** 4) * reagents_thermal_mass_reciprocal
 									if (!(Tr < Ta))
 										goto temperature_equalization_unsimmed_air
 
-					#undef REAGENTS_HOTTER
-					#undef AIR_HOTTER
+						the_air.temperature = Ta
+						R.chem_temp = Tr
 
-					the_air.temperature = Ta
-					R.chem_temp = Tr
+					else //At extreme temperatures, we do a simpler calculation to avoid blowing out any values.
+						if (is_the_air_simulated) //For simmed air, we equalize the temperatures.
+							goto temperature_equalization_simmed_air
+						else //For unsimmed, air, the reagents temperature is set to the average of the two temperatures.
+							R.chem_temp = (1/2) * Tr + (1/2) * Ta
 
-				else //At extreme temperatures, we do a simpler calculation to avoid blowing out any values.
-					if (is_the_air_simulated) //For simmed air, we equalize the temperatures.
-						goto temperature_equalization_simmed_air
-					else //For unsimmed, air, the reagents temperature is set to the average of the two temperatures.
-						R.chem_temp = (1/2) * Tr + (1/2) * Ta
+					goto reactions_check
 
-				goto reactions_check
+					temperature_equalization_unsimmed_air:
+					//If the air is unsimulated we consider the air to have infinite thermal mass so the equalization temperature is the air temperature.
+					R.chem_temp = the_air.temperature
 
-				temperature_equalization_unsimmed_air:
-				//If the air is unsimulated we consider the air to have infinite thermal mass so the equalization temperature is the air temperature.
-				R.chem_temp = the_air.temperature
+					goto reactions_check
 
-				goto reactions_check
+					temperature_equalization_simmed_air:
+					//If the air is simulated we consider the thermal mass of the air.
+					R.chem_temp = (R.total_thermal_mass * R.chem_temp + air_thermal_mass * the_air.temperature) / (R.total_thermal_mass + air_thermal_mass) //Use the original values in case something went wrong.
+					the_air.temperature = R.chem_temp
 
-				temperature_equalization_simmed_air:
-				//If the air is simulated we consider the thermal mass of the air.
-				R.chem_temp = (R.total_thermal_mass * R.chem_temp + air_thermal_mass * the_air.temperature) / (R.total_thermal_mass + air_thermal_mass) //Use the original values in case something went wrong.
-				the_air.temperature = R.chem_temp
+					reactions_check:
+					if(!(R.skip_flags & SKIP_RXN_CHECK_ON_HEATING))
+						R.handle_reactions()
 
-				reactions_check:
-				if(!(R.skip_flags & SKIP_RXN_CHECK_ON_HEATING))
-					R.handle_reactions()
-
+			tick_check:
 			if (MC_TICK_CHECK)
 				break
 
