@@ -107,6 +107,12 @@
 	path = "lowfatbagel"
 	min_players = 25
 
+/datum/next_map/horizon
+	name = "NRV Horizon"
+	path = "horizon"
+	min_players = 5
+	max_players = 25
+
 /datum/next_map/metaclub
 	name = "Meta Club"
 	path = "Metaclub"
@@ -140,7 +146,7 @@
 /datum/next_map/synergy
 	name = "Synergy Station"
 	path = "Synergy"
-	max_players = 30
+	min_players = 15
 
 /datum/next_map/waystation
 	name = "Waystation"

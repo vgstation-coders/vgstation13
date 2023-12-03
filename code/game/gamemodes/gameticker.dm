@@ -185,6 +185,7 @@ var/datum/controller/gameticker/ticker
 			var/mob/living/L = M
 			L.store_position()
 			M.close_spawn_windows()
+
 			continue
 		var/mob/new_player/np = M
 		if(!(np.ready && np.mind && np.mind.assigned_role))
@@ -246,6 +247,10 @@ var/datum/controller/gameticker/ticker
 		M.key = key
 		if(istype(M, /mob/living/carbon/human/))
 			var/mob/living/carbon/human/H = M
+			if (H.client)
+				message_admins("[H.key]")
+				H.overlay_fullscreen("client_fadein", /obj/abstract/screen/fullscreen/client_fadein)
+				H.clear_fullscreen("client_fadein", 3 SECONDS)
 			job_master.PostJobSetup(H)
 		//minds are linked to accounts... And accounts are linked to jobs.
 		var/rank = M.mind.assigned_role
@@ -535,7 +540,7 @@ var/datum/controller/gameticker/ticker
 				else
 					blackbox.save_all_data_to_sql()
 
-			//stat_collection.Process()
+			stat_collection.Process()
 
 			if (watchdog.waiting)
 				to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in [player_list.len ? "[(restart_timeout/10)] seconds." : "a few seconds."]</B></span>")
@@ -549,7 +554,6 @@ var/datum/controller/gameticker/ticker
 			else if(!delay_end)
 				sleep(restart_timeout)
 				if(!delay_end)
-					CallHook("Reboot",list())
 					world.Reboot()
 				else
 					to_chat(world, "<span class='notice'><B>An admin has delayed the round end</B></span>")

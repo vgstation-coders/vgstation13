@@ -263,10 +263,15 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				direction = 2 // heading to centcom
 				settimeleft(SHUTTLETRANSITTIME)
 
-				// Shuttle Radio
-				CallHook("EmergencyShuttleDeparture", list())
 				command_alert(/datum/command_alert/emergency_shuttle_left)
 				vote_preload()
+				
+				/* Handle jukebox updates */
+				spawn()
+					for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
+						SJ.playing=1
+						SJ.update_music()
+						SJ.update_icon()
 
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))
 				var/datum/shuttle/escape/E = shuttle

@@ -10,7 +10,6 @@
 
 	var/on = 1
 	var/list/metrics_monitored = list("pressure", "temperature")
-	//var/output = 3
 	//Flags:
 	// 1 for pressure
 	// 2 for temperature

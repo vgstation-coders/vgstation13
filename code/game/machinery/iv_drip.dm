@@ -71,7 +71,7 @@
 		src.attached = over_object
 		src.update_icon()
 
-/obj/machinery/iv_drip/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/iv_drip/attackby(obj/item/weapon/W, mob/user)
 	if(isobserver(user))
 		return
 	if(user.stat)
@@ -87,11 +87,10 @@
 	if (istype(W, /obj/item/weapon/reagent_containers))
 		var/obj/item/weapon/reagent_containers/R = W
 		if(R.fits_in_iv_drip())
-			if(!isnull(src.beaker))
-				to_chat(user, "There is already a reagent container loaded!")
-				return
 
 			if(user.drop_item(R, src))
+				if (src.beaker)
+					user.put_in_hands(src.beaker)
 				src.beaker = R
 				to_chat(user, "You attach \the [R] to \the [src].")
 				investigation_log(I_CHEMS, "was loaded with \a [R] by [key_name(user)], containing [R.reagents.get_reagent_ids(1)]")

@@ -70,43 +70,11 @@ function SetMusic(url, time, volume) {
 	</script>"}
 
 /proc/stop_all_media()
+	log_startup_progress("Stopping all playing media...")
+	log_debug("Stopping all playing media...")
 	for(var/mob/M in mob_list)
 		if(M && M.client)
 			M.stop_all_music()
-
-// Hook into the events we desire.
-// Set up player on login
-/hook_handler/soundmanager/proc/OnLogin(var/list/args)
-	//testing("Received OnLogin.")
-	var/client/C = args["client"]
-	C.media = new /datum/media_manager(args["mob"])
-	C.media.open()
-	C.media.update_music()
-
-/hook_handler/soundmanager/proc/OnReboot(var/list/args)
-	//testing("Received OnReboot.")
-	log_startup_progress("Stopping all playing media...")
-	// Stop all music.
-	stop_all_media()
-	//  SHITTY HACK TO AVOID RACE CONDITION WITH SERVER REBOOT.
-	sleep(10)
-
-// Update when moving between areas.
-/hook_handler/soundmanager/proc/OnMobAreaChange(var/list/args)
-	var/mob/M = args["mob"]
-	//if(istype(M, /mob/living/carbon/human)||istype(M, /mob/dead/observer))
-	//	testing("Received OnMobAreaChange for [M.type] [M] (M.client=[M.client==null?"null":"/client"]).")
-	if(M.client && M.client.media && !M.client.media.forced)
-		spawn()
-			M.update_music()
-
-
-/hook_handler/shuttlejukes/proc/OnEmergencyShuttleDeparture(var/list/args)
-	spawn(0)
-		for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
-			SJ.playing=1
-			SJ.update_music()
-			SJ.update_icon()
 
 /mob/proc/update_music()
 	if (client && client.media && !client.media.forced)

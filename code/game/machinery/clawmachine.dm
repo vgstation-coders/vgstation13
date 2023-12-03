@@ -314,7 +314,7 @@
 		playsound(src, 'sound/machines/claw_machine_success.ogg', 50, 1)
 	else
 		//dispense disappointment
-		src.visible_message("<span class='notice'>\The [src]'s claw drops the prize it was carrying prematurely. Disappointing!</span>")
+		to_chat(user, "<span class='notice'>\The [src]'s claw drops the prize it was carrying prematurely. Disappointing!</span>")
 		playsound(src, 'sound/machines/claw_machine_fail.ogg', 50, 1)
 	busy = FALSE
 
