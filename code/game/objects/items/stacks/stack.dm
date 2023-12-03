@@ -20,6 +20,7 @@
 	var/max_amount //also see stack recipes initialisation, param "max_res_amount" must be equal to this max_amount
 	var/redeemed = 0 // For selling minerals to central command via supply shuttle.
 	var/restock_amount = 0 //For borg chargers restocking.
+	var/sheettype = null //this is used for girders in the creation of walls/false walls. Used by both tiles and sheets.
 
 /obj/item/stack/New(var/loc, var/amount=null)
 	..()
