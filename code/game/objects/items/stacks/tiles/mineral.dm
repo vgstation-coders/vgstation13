@@ -79,6 +79,14 @@
 	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD / 4) // Recipe requires 1 sheet for 4 tiles
 	w_type = RECYK_METAL
 
+/obj/item/stack/tile/mineral/gold/gold_old
+	icon_state = "tile_gold_old"
+	sheettype = "gold"
+
+/obj/item/stack/tile/mineral/gold/gold_old/examine(var/mob/user)
+	..()
+	to_chat(user,"<span class = 'notice'>This alternate tile can reinforce girders to create matching walls.</span>")
+
 /obj/item/stack/tile/mineral/silver
 	name = "silver tile"
 	singular_name = "silver floor tile"
@@ -94,6 +102,14 @@
 	material = "silver"
 	starting_materials = list(MAT_SILVER = CC_PER_SHEET_SILVER / 4) // Recipe requires 1 sheet for 4 tiles
 	w_type = RECYK_METAL
+
+/obj/item/stack/tile/mineral/silver/silver_old
+	icon_state = "tile_silver_old"
+	sheettype = "silver"
+
+/obj/item/stack/tile/mineral/silver/silver_old/examine(var/mob/user)
+	..()
+	to_chat(user,"<span class = 'notice'>This alternate tile can reinforce girders to create matching walls.</span>")
 
 /obj/item/stack/tile/mineral/diamond
 	name = "diamond tile"

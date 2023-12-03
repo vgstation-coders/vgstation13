@@ -447,12 +447,13 @@ var/area/space_area
 		thing.area_entered(src)
 
 	for(var/mob/mob_in_obj in Obj.contents)
-		INVOKE_EVENT(src, /event/mob_area_changed, "mob" = mob_in_obj, "newarea" = src, "oldarea" = oldArea)
+		if(istype(mob_in_obj))
+			INVOKE_EVENT(mob_in_obj, /event/mob_area_changed, "mob" = mob_in_obj, "newarea" = src, "oldarea" = oldArea)
 
 	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
-		INVOKE_EVENT(src, /event/mob_area_changed, "mob" = M, "newarea" = src, "oldarea" = oldArea)
+		INVOKE_EVENT(M, /event/mob_area_changed, "mob" = M, "newarea" = src, "oldarea" = oldArea)
 		if(narrator)
 			narrator.Crossed(M)
 
