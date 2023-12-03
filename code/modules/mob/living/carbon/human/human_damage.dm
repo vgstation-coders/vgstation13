@@ -379,7 +379,7 @@ This function restores all organs.
 		damage = (damage/100)*(100-blocked)
 
 	if(!ignore_events && INVOKE_EVENT(src, /event/damaged, "kind" = damagetype, "amount" = damage))
-		return 0
+		return 0 //This event code is also in the mob/living parent which this proc mostly overrides.
 
 	switch(damagetype)
 		if(BRUTE)

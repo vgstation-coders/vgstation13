@@ -15,6 +15,7 @@
 		if(user.drop_item(O, src))
 			user.visible_message("<span class='notice'>[user] puts a coin into [src] and turns the knob.</span>", "<span class='notice'>You put a coin into [src] and turn the knob.</span>")
 			src.visible_message("<span class='notice'>[src] clicks softly.</span>")
+			playsound(src, 'sound/machines/capsulebuy.ogg', 50, 1)
 			sleep(rand(10,15))
 			src.visible_message("<span class='notice'>[src] dispenses a capsule!</span>")
 			new /obj/item/weapon/capsule(src.loc)
@@ -57,7 +58,6 @@
 	var/capsule_prize = pick(
 		/obj/item/toy/gasha/greyshirt,
 		/obj/item/toy/gasha/greytide,
-		/obj/item/toy/gasha/corgitoy,
 		/obj/item/toy/gasha/borertoy,
 		/obj/item/toy/gasha/minislime,
 		/obj/item/toy/gasha/AI,
@@ -93,10 +93,6 @@
 		/obj/item/toy/gasha/harvester,
 		/obj/item/toy/gasha/skub,
 		/obj/item/toy/gasha/fingerbox,
-		/obj/item/toy/gasha/cattoy,
-		/obj/item/toy/gasha/parrottoy,
-		/obj/item/toy/gasha/beartoy,
-		/obj/item/toy/gasha/carptoy,
 		/obj/item/toy/gasha/monkeytoy,
 		/obj/item/toy/gasha/huggertoy,
 		/obj/item/toy/gasha/narnar,

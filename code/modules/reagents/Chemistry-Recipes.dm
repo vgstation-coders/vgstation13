@@ -3535,7 +3535,7 @@
 	name = "NT Standard Battery Acid"
 	id = ENGICOFFEE
 	result = ENGICOFFEE
-	required_reagents = list(COFFEE = 5, FUEL = 1, SULFURIC = 5)
+	required_reagents = list(COFFEE = 5, FUEL = 1, SACID = 5)
 	result_amount = 10
 
 /datum/chemical_reaction/medcoffee
@@ -4170,6 +4170,14 @@
 		var/list/blocked_chems = list(ADMINORDRAZINE, PROCIZINE, BLOCKIZINE, PAISMOKE) // Bad ideas to spawn
 		var/list/allowed_reagents = chemical_reagents_list - blocked_chems
 		holder.add_reagent(pick(allowed_reagents),created_volume)
+
+/datum/chemical_reaction/punctualite
+	name = "Punctualite"
+	id = PUNCTUALITE
+	result = PUNCTUALITE
+	required_reagents = list(HYPERZINE = 10, FUEL = 10)
+	required_catalysts = list(ZOMBIEPOWDER = 5)
+	result_amount = 5
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

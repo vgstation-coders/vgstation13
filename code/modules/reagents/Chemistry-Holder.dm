@@ -44,19 +44,43 @@ var/const/INGEST = 2
 
 		chemical_reactions_list = list()
 
-		for (var/path in typesof(/datum/chemical_reaction) - /datum/chemical_reaction)
+		//variables that we want to reuse
+		var/list/reaction_ids = list()
+		var/smallest_number_of_reactants = INFINITY
+		var/smallest_reactants_list_index = 1
+		var/list/reactant_list
+		var/datum/chemical_reaction/D
+		var/i
 
-			var/datum/chemical_reaction/D = new path()
-			var/list/reaction_ids = list()
+		for(var/path in typesof(/datum/chemical_reaction) - /datum/chemical_reaction)
+
+			D = new path()
+			reaction_ids.len = 0
 
 			if(D.required_reagents && D.required_reagents.len)
-				var/reaction = D.required_reagents[1]
-				if(islist(reaction))
-					var/list/L = reaction
-					for(var/content in L)
-						reaction_ids += content
-				else
-					reaction_ids += reaction
+
+				//to minimize the size of the reactions lists, we ideally want each reaction that requires an individual (non-list) reactant to have that as the "key" reactant of the reaction
+				//if a reaction only requires lists of reagents, then we want to pick the smallest list
+				smallest_number_of_reactants = INFINITY
+				smallest_reactants_list_index = 1
+
+				i = 0
+				for(var/reactant in D.required_reagents)
+					i++
+					if(islist(reactant))
+						reactant_list = reactant
+						if(reactant_list.len < smallest_number_of_reactants)
+							smallest_reactants_list_index = i
+							smallest_number_of_reactants = reactant_list.len
+					else
+						smallest_number_of_reactants = 1
+						reaction_ids.len = 0
+						reaction_ids += reactant
+						break
+
+				if(smallest_number_of_reactants > 1)
+					for(var/reactant in D.required_reagents[smallest_reactants_list_index])
+						reaction_ids += reactant
 
 			// Create filters based on each reagent id in the required reagents list
 			for(var/id in reaction_ids)
@@ -65,8 +89,7 @@ var/const/INGEST = 2
 				chemical_reactions_list[id] += D
 				//previously we broke here, which meant that we were only testing the first reagent - even if the first reagent was a list
 				//now we no longer break because we didn't add all the reagents to reaction_ids - we want to add the reaction to everything in
-				//reaction_ids, which will be over everything in the first reagent in the table
-
+				//reaction_ids, which will be everything in the key reactants(s) in the table
 
 /datum/reagents/proc/remove_any(var/amount=1)
 	var/total_transfered = 0
@@ -1211,18 +1234,18 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 		goto reactions_check
 
-		temperature_equalization_unsimmed_air
+		temperature_equalization_unsimmed_air:
 		//If the air is unsimulated we consider the air to have infinite thermal mass so the equalization temperature is the air temperature.
 		chem_temp = the_air.temperature
 
 		goto reactions_check
 
-		temperature_equalization_simmed_air
+		temperature_equalization_simmed_air:
 		//If the air is simulated we consider the thermal mass of the air.
 		chem_temp = (total_thermal_mass * chem_temp + air_thermal_mass * the_air.temperature) / (total_thermal_mass + air_thermal_mass) //Use the original values in case something went wrong.
 		the_air.temperature = chem_temp
 
-		reactions_check
+		reactions_check:
 		if(skip_flags & SKIP_RXN_CHECK_ON_HEATING)
 			return
 		handle_reactions()

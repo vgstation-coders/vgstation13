@@ -521,3 +521,12 @@
 		if(istype(A,department_type))
 			department_areas += A
 	return department_areas
+
+/proc/get_department_area_typepaths(atom/AM)
+	var/areapathtext = "[get_area(AM).type]"
+	var/secondslash = findtext(areapathtext, "/", 2)
+	if(secondslash)
+		var/thirdslash = findtext(areapathtext, "/", secondslash + 1)
+		if(thirdslash)
+			return typesof(text2path(copytext(areapathtext, 1, thirdslash)))
+	return typesof(text2path(areapathtext))

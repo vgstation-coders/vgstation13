@@ -2,9 +2,9 @@
 
 
 /mob/living/silicon/pai/var/list/available_software = list(
-															SOFT_FL = 15,
-															SOFT_RT = 15,
-															SOFT_RS = 15,
+															SOFT_FL = 10,
+															SOFT_RT = 10,
+															SOFT_RS = 10,
 
 															SOFT_WJ = 30,
 															SOFT_CS = 30,

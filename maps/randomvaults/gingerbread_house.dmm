@@ -593,7 +593,7 @@
 /turf/simulated/floor/mineral/gingerbread_nest,
 /area/vault/gingerbread_house)
 "uj" = (
-/obj/item/toy/gasha/beartoy,
+/obj/item/toy/plushie/spacebear,
 /turf/simulated/floor/mineral/gingerbread_floor,
 /area/vault/gingerbread_house)
 "vr" = (

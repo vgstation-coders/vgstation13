@@ -55,3 +55,13 @@
 			paint_color = rgb(paint_color_rgb[1], paint_color_rgb[2], paint_color_rgb[3], mix_alpha_from_reagents(target.reagents.reagent_list))
 			to_chat(user, "<span class='notice'>You dip \the [name] in \the [target.name].</span>")
 		update_icon()
+
+//presumably this will allow painting on the floor, credit to Anonymous user No.453861032
+	if(istype(target, /turf/simulated)) 
+		var/turf/simulated/the_turf = target
+		var/datum/painting_utensil/p = new(user, src)
+		if (!the_turf.advanced_graffiti)
+			var/datum/custom_painting/advanced_graffiti = new(the_turf, 32, 32, base_color = "#00000000")
+			the_turf.advanced_graffiti = advanced_graffiti
+		the_turf.advanced_graffiti.interact(user, p)
+		return

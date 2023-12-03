@@ -249,4 +249,4 @@
 /obj/effect/plantsegment/proc/is_mature()
 	return (health >= (maxHealth/2) && age > mature_time)
 
-#undef CREEPER_GROWTH_DISTANCE
+#undef CREEPER_GROWTH_DISTANCE_LIMIT

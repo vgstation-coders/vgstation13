@@ -61,6 +61,7 @@
 #define SS_PRIORITY_SUN            3
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1
+#define SS_PRIORITY_BURNABLE	  -50
 #define SS_PRIORITY_DAYNIGHT	  -200
 
 #define SS_WAIT_WEATHER         	2 SECONDS
@@ -71,6 +72,7 @@
 #define SS_WAIT_THERM_DISS			1 SECONDS
 #define SS_WAIT_TICKER              2 SECONDS
 #define SS_WAIT_ENGINES				30 SECONDS
+#define SS_WAIT_BURNABLE			7.5 SECONDS
 
 #define SS_DISPLAY_TIMER          -110
 #define SS_DISPLAY_GARBAGE        -100
@@ -94,6 +96,7 @@
 #define SS_DISPLAY_THERM_DISS      14
 #define SS_DISPLAY_DBCORE		   15
 #define SS_DISPLAY_DAYNIGHT		   20
+#define SS_DISPLAY_BURNABLE		   21
 
 #define SS_TRASH                  "trash"
 #define SS_CLEANABLE              "cleanable_decals"

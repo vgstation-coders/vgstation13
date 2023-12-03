@@ -50,6 +50,8 @@
 			obscured |= slot_w_uniform
 		if(is_slot_hidden(wear_suit.body_parts_covered, (HIDESHOES), 0))
 			obscured |= slot_shoes
+		if(is_slot_hidden(wear_suit.body_parts_covered, (HIDEBACK), 0))
+			obscured |= slot_back
 	if(head)
 		if(is_slot_hidden(head.body_parts_covered, (HIDEMASK), 0))
 			obscured |= slot_wear_mask

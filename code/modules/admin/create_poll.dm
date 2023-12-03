@@ -15,8 +15,8 @@
 			polltype = "TEXT"
 		if("Rating")
 			polltype = "NUMVAL"
-		if("Multiple Choice")
-			polltype = "MULTICHOICE"
+		if("Select All That Apply")
+			polltype = "SELECT_ALL_THAT_APPLY"
 			choice_amount = input("How many choices should be allowed?","Select choice amount") as num
 	var/starttime = SQLtime()
 	var/endtime = input("Set end time for poll as format YYYY-MM-DD HH:MM:SS. All times in server time. HH:MM:SS is optional and 24-hour. Must be later than starting time for obvious reasons.", "Set end time", SQLtime()) as text

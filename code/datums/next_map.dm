@@ -74,12 +74,12 @@
 		warning(msg)
 		return FALSE
 	return ..()
-	
+
 /datum/next_map/line
 	name = "Frankenline Station"
 	path = "line"
 	min_players = 25
-	
+
 /datum/next_map/line/is_votable()
 	var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
 	if (MM != 10)
@@ -106,6 +106,12 @@
 	name = "Lowfat Bagel"
 	path = "lowfatbagel"
 	min_players = 25
+
+/datum/next_map/horizon
+	name = "NRV Horizon"
+	path = "horizon"
+	min_players = 5
+	max_players = 25
 
 /datum/next_map/metaclub
 	name = "Meta Club"
@@ -140,7 +146,7 @@
 /datum/next_map/synergy
 	name = "Synergy Station"
 	path = "Synergy"
-	max_players = 30
+	min_players = 15
 
 /datum/next_map/waystation
 	name = "Waystation"
@@ -176,6 +182,11 @@
 	name = "Nerve Station"
 	path = "nervestation"
 	min_players = 20
+
+/datum/next_map/wheelstation
+	name = "Wheelstation"
+	path = "wheelstation"
+	min_players = 30
 
 /proc/get_votable_maps()
 	var/list/votable_maps = list()

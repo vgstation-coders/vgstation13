@@ -868,6 +868,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode (removes access on doors except for Command and Security)</A><BR>
 			<A href='?src=\ref[src];secretsfun=RandomizedLawset'>Give the AIs a randomly generated Lawset.</A><BR>
 			<A href='?src=\ref[src];secretsfun=buddha_mode_everyone'>Toggle Buddha Mode on/off for everyone</A><BR>
+			<A href='?src=\ref[src];secretsfun=spawn_custom_turret'>Spawn a customizable turret</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=power'>Make all areas powered</A><BR>
 			<A href='?src=\ref[src];secretsfun=unpower'>Make all areas unpowered</A><BR>
@@ -1019,8 +1020,6 @@ var/global/floorIsLava = 0
 
 		if(blackbox)
 			blackbox.save_all_data_to_sql()
-
-		CallHook("Reboot",list())
 
 		if (watchdog.waiting)
 			to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in a few seconds.</B></span>")
@@ -1255,8 +1254,6 @@ var/global/floorIsLava = 0
 
 	if(blackbox)
 		blackbox.save_all_data_to_sql()
-
-	CallHook("Reboot",list())
 
 	if (watchdog.waiting)
 		to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in a few seconds.</B></span>")
