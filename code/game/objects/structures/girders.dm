@@ -306,14 +306,22 @@
 					wallpath = text2path("/turf/simulated/wall/mineral/[M]/[M]_old")
 				if(!ispath(wallpath))
 					return ..()
-				user.visible_message("<span class='notice'>[user] starts installing plating to \the [src].</span>", \
-				"<span class='notice'>You start installing plating to \the [src].</span>")
+				if(!isLegacy)
+					user.visible_message("<span class='notice'>[user] starts installing plating to \the [src].</span>", \
+					"<span class='notice'>You start installing plating to \the [src].</span>")
+				else
+					user.visible_message("<span class='notice'>[user] starts reinforcing \the [src] with the [S.name].</span>", \
+					"<span class='notice'>You start reinforcing \the [src] with the [S.name].</span>")
 				if(do_after(user, src,construction_length))
 					if(S.amount < use_amount) //Don't be tricky now
 						return
 					S.use(use_amount)
-					user.visible_message("<span class='notice'>[user] finishes installing plating to \the [src].</span>", \
-					"<span class='notice'>You finish installing plating to \the [src].</span>")
+					if(!isLegacy)
+						user.visible_message("<span class='notice'>[user] finishes installing plating to \the [src].</span>", \
+						"<span class='notice'>You finish installing plating to \the [src].</span>")
+					else
+						user.visible_message("<span class='notice'>[user] finishes reinforcing \the [src] with the [S.name].</span>", \
+						"<span class='notice'>You finish reinforcing \the [src] with the [S.name].</span>")
 					var/turf/Tsrc = get_turf(src)
 					var/turf/simulated/wall/mineral/X = Tsrc.ChangeTurf(wallpath)
 					if(X)
