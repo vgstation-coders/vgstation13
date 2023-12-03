@@ -521,13 +521,10 @@
 	var/target_loc = target.loc
 	var/holding = user.get_active_hand()
 	var/delayfraction = round(delay/numticks)
-	var/image/progressbar/progbar
-	if(user && user.client && user.client.prefs.progress_bars)
-		if(!progbar)
-			progbar = new("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-		//if(!barbar)
-			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "none")
-			//barbar.pixel_y = 36
+	var/image/progressbar/progbar = new("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+	//if(!barbar)
+		//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "none")
+		//barbar.pixel_y = 36
 	//var/oldstate
 	for (var/i = 1 to numticks)
 		if(progbar)
@@ -659,9 +656,7 @@
 		Location = user.loc
 	var/holding = user.get_active_hand()
 	var/target_location = target.loc
-	var/image/progressbar/progbar
-	if(!progbar)
-		progbar = new("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+	var/image/progressbar/progbar = new("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
 	for (var/i = 1 to numticks)
 		if(!progbar && target)
 			progbar = new("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
