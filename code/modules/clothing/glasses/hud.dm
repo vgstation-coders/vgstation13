@@ -17,21 +17,41 @@
 				stored_huds += new H
 
 /obj/item/clothing/glasses/hud/equipped(mob/M, slot)
-	..()
 	if(slot == slot_glasses && stored_huds.len)
 		for(var/datum/visioneffect/H in stored_huds)
 			M.apply_hud(H)
+	..()
 
 /obj/item/clothing/glasses/hud/unequipped(mob/M, slot)
-	..()
 	if(slot == slot_glasses && stored_huds.len)
 		for(var/datum/visioneffect/H in stored_huds)
 			M.remove_hud(H)
-		M.regular_hud_updates()
+	//the parent calls for a full redraw of the hud
+	..()
 
+//This is for harm labels blocking your vision. It also will stop most huds...
+//Though, some are overridden for reality (labels won't stop your thermals, but you will be blind otherwise)
 /obj/item/clothing/glasses/hud/harm_label_update()
-	//TODO - Harm labeling removing hud capacity
-	return
+	..()
+	if(istype(src.loc, /mob/living/carbon/human))
+		var/mob/living/carbon/human/M = src.loc
+		if(M.glasses == src)
+			if(harm_labeled >= min_harm_label)
+				for(var/datum/visioneffect/H in stored_huds)
+					M.remove_hud(H)
+			else
+				if(!stored_huds.len)
+					for(var/H in hud_types)
+						if(ispath(H))
+							stored_huds += new H
+							M.apply_hud(H)
+	if(harm_labeled >= min_harm_label)
+		stored_huds = list()
+	else
+		if(!stored_huds.len)
+			for(var/H in hud_types)
+				if(ispath(H))
+					stored_huds += new H
 
 /obj/item/clothing/glasses/hud/health
 	name = "health scanner HUD"
@@ -41,12 +61,12 @@
 	prescription_type = /obj/item/clothing/glasses/hud/health/prescription
 	hud_types = list(/datum/visioneffect/medical)
 
-
 /obj/item/clothing/glasses/hud/curseddoublehud
 	name = "cursed health scanner HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status."
-	icon_state = "healthhud"
-	hud_types = list(/datum/visioneffect/medical, /datum/visioneffect/security)
+	icon_state = "curseddoublehud"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	hud_types = list(/datum/visioneffect/medical, /datum/visioneffect/nullrod, /datum/visioneffect/security)
 
 /obj/item/clothing/glasses/hud/health/cmo
 	name = "advanced health scanner HUD"
@@ -170,9 +190,8 @@
 /obj/item/clothing/glasses/hud/wage
 	name = "wage HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
-	icon_state = "wagehud"
-	darkness_view = -1
-	eyeprot = 1
+	icon_state = "wagemonocle"
+	species_fit = list(VOX_SHAPED)
 	hud_types = list(/datum/visioneffect/accountdb/wage)
 
 /obj/item/clothing/glasses/hud/wage/attack_self(mob/user)
@@ -209,3 +228,76 @@
 	darkness_view = -1
 	eyeprot = 1
 	hud_types = list(/datum/visioneffect/nullrod)
+
+/*
+	THERMAL GLASSES
+*/
+/obj/item/clothing/glasses/hud/thermal
+	name = "optical thermal scanner"
+	desc = "Thermals in the shape of glasses."
+	icon_state = "thermal"
+	item_state = "glasses"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	origin_tech = Tc_MAGNETS + "=3"
+	glasses_fit = TRUE
+	stored_huds = list() // Stores a hud datum instance to apply to a mob
+	hud_types = list(/datum/visioneffect/thermal) // What HUD the glasses provides, if any
+
+/obj/item/clothing/glasses/hud/thermal/emp_act(severity)
+	if(istype(src.loc, /mob/living/carbon/human))
+		var/mob/living/carbon/human/M = src.loc
+		to_chat(M, "<span class='warning'>\The [src] overloads and blinds you!</span>")
+		if(M.glasses == src)
+			M.eye_blind = 3
+			M.eye_blurry = 5
+			M.disabilities |= NEARSIGHTED
+			spawn(100)
+				M.disabilities &= ~NEARSIGHTED
+	..()
+
+/obj/item/clothing/glasses/hud/thermal/harm_label_update()
+	//Thermals aren't blocked by labels, but you'll still be blind!
+	if(harm_labeled >= min_harm_label)
+		vision_flags |= BLIND
+	else
+		vision_flags &= ~BLIND
+
+/obj/item/clothing/glasses/hud/thermal/syndi	//These are now a traitor item, concealed as mesons.	-Pete
+	name = "optical meson scanner"
+	desc = "Used for seeing walls, floors, and stuff through anything."
+	icon_state = "meson"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/glasses/hud/thermal/monocle
+	name = "thermonocle"
+	desc = "A monocle thermal."
+	icon_state = "thermoncle"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	flags = 0 //doesn't protect eyes because it's a monocle, duh
+	min_harm_label = 3
+	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
+
+/obj/item/clothing/glasses/hud/thermal/monocle/harm_label_update()
+	//Thermals aren't blocked by labels, and covering one eye doesn't fully blind you!
+	return
+
+/obj/item/clothing/glasses/hud/thermal/eyepatch
+	name = "optical thermal eyepatch"
+	desc = "An eyepatch with built-in thermal optics."
+	icon_state = "eyepatch0"
+	item_state = "eyepatch0"
+	species_fit = list(GREY_SHAPED)
+	min_harm_label = 3
+	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
+
+/obj/item/clothing/glasses/hud/thermal/eyepatch/harm_label_update()
+	//Thermals aren't blocked by labels, and covering one eye doesn't fully blind you!
+	return
+
+/obj/item/clothing/glasses/hud/thermal/jensen
+	name = "optical thermal implants"
+	desc = "A set of implantable lenses designed to augment your vision."
+	icon_state = "thermalimplants"
+	item_state = "syringe_kit"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)

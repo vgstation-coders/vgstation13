@@ -21,6 +21,10 @@ A datum that defines huds and how to implement them with respect to the mob type
 	var/my_dark_plane_alpha_override = null
 	var/my_dark_plane_alpha_override_value = 0
 
+	//Determines order of rendering. Equal numbers are rendered in order of application.
+	//Higher numbers are rendered later, so if you need your HUD on top at all costs, give it an ARBITARILY_HIGH_NUMBER
+	var/priority = 0
+
 
 /datum/visioneffect/proc/process_hud(var/mob/M)
 	if(!M)
@@ -49,11 +53,14 @@ A datum that defines huds and how to implement them with respect to the mob type
 /*
 Helper procs and procs used in mobs
 */
+//Inserts on False or last in list
+/proc/sort_visioneffect_priority(var/datum/visioneffect/new_item, var/datum/visioneffect/current_item)
+	return new_item.priority < current_item.priority
 
 //Handle specific on-apply effects. Useful mainly for scanners like Mesons
 /mob/proc/apply_hud(var/datum/visioneffect/V)
 	if(!(V in huds)) //Prevent basic dupes of HUD instances
-		huds += V
+		sorted_insert(huds, V, /proc/sort_visioneffect_priority)
 	V.on_apply(src)
 	regular_hud_updates()
 
@@ -63,7 +70,8 @@ Helper procs and procs used in mobs
 	V.on_remove(src)
 	regular_hud_updates()
 
-//General mob HUD processing proc
+//General mob HUD processing proc, call this for any mob that uses vision effects/huds
+//This is generally expected to be called on a mob's life.dm proc and when an effect is added/removed
 /mob/proc/regular_hud_updates()
 	clean_up_hud()
 	handle_hud_vision_updates()

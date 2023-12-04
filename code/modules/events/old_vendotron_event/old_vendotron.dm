@@ -115,7 +115,7 @@
 		/obj/item/clothing/suit/space/rig/syndicate_elite = 150,
 		/obj/item/clothing/shoes/clown_shoes/advanced = 150,
 		/obj/item/clothing/back/magiccape = 150,
-		/obj/item/clothing/glasses/thermal = 250,
+		/obj/item/clothing/glasses/hud/thermal = 250,
 		/obj/item/clothing/glasses/emitter = 250,
 		/obj/item/clothing/head/helmet/knight = 200,
 		/obj/item/clothing/head/helmet/knight/interrogator = 200,

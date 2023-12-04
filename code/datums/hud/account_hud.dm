@@ -1,6 +1,7 @@
 //Accounts DB-based HUDs
 
-#define ACCOUNT_DB_OFFLINE (!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER|FORCEDISABLE))
+//vscode complained about this sharing the name from cargo.dm but it wouldn't work unless it's here too
+#define HUD_ACCOUNT_DB_OFFLINE (!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER|FORCEDISABLE))
 
 /datum/visioneffect/accountdb
 	name = "accounts database hud"
@@ -67,7 +68,7 @@
 			var/cashdisplay = ""
 			if(!linked_db) // Catch a missing database before a runtime!
 				cashdisplay = html_encode(Gibberish("ERRO",100))
-			else if (ACCOUNT_DB_OFFLINE) // Have to call this after the first if because it will runtime if linked_db doesn't exist
+			else if (HUD_ACCOUNT_DB_OFFLINE) // Have to call this after the first if because it will runtime if linked_db doesn't exist
 				cashdisplay = html_encode(Gibberish("ERRO",100))
 			else if(account) //DB exists and is online, do they have an account
 				cashdisplay = "$[account.wage_gain]"
@@ -106,7 +107,7 @@
 			var/cash = 0
 			if(!linked_db) // Catch a missing database before a runtime!
 				cashdisplay = html_encode(Gibberish("ERRO",100))
-			else if (ACCOUNT_DB_OFFLINE) // Have to call this after the first if because it will runtime if linked_db doesn't exist
+			else if (HUD_ACCOUNT_DB_OFFLINE) // Have to call this after the first if because it will runtime if linked_db doesn't exist
 				cashdisplay = html_encode(Gibberish("ERRO",100))
 			else //not an error case
 				if(virtualacc)

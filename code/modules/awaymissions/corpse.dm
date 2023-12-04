@@ -982,7 +982,7 @@
 	name = "Major Creed"
 	corpseuniform = /obj/item/clothing/under/darkred
 	corpsesuit = /obj/item/clothing/suit/armor/hos/jensen
-	corpseglasses = /obj/item/clothing/glasses/thermal/eyepatch
+	corpseglasses = /obj/item/clothing/glasses/hud/thermal/eyepatch
 	corpsemask = /obj/item/clothing/mask/cigarette/cigar/cohiba
 	corpsehelmet = /obj/item/clothing/head/HoS/dermal
 	corpsegloves = /obj/item/clothing/gloves/combat
@@ -994,7 +994,7 @@
 	name = "Batman"
 	corpseuniform = /obj/item/clothing/under/batmansuit
 	corpsesuit = /obj/item/clothing/suit/armor/bulletproof
-	corpseglasses = /obj/item/clothing/glasses/thermal/jensen
+	corpseglasses = /obj/item/clothing/glasses/hud/thermal/jensen
 	corpsemask = /obj/item/clothing/mask/gas/swat
 	corpsehelmet = /obj/item/clothing/head/batman
 	corpsegloves = /obj/item/clothing/gloves/batmangloves
@@ -1005,7 +1005,7 @@
 	name = "Doomguy"
 	corpseuniform = /obj/item/clothing/under/doomguy
 	corpsesuit = /obj/item/clothing/suit/armor/doomguy
-	corpseglasses = /obj/item/clothing/glasses/thermal/jensen
+	corpseglasses = /obj/item/clothing/glasses/hud/thermal/jensen
 	corpsehelmet = /obj/item/clothing/head/helmet/doomguy
 	corpsegloves = /obj/item/clothing/gloves/doomguy
 	corpseshoes = /obj/item/clothing/shoes/combat

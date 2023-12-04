@@ -449,7 +449,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/device_tools/thermal
 	name = "Thermal Imaging Glasses"
 	desc = "A modified pair of Optical Meson Scanners frame fitted with thermal vision lenses, allowing you to spot organics through walls and in total darkness. Do note that they will not function as regular meson scanners in any way, shape or form."
-	item = /obj/item/clothing/glasses/thermal/syndi
+	item = /obj/item/clothing/glasses/hud/thermal/syndi
 	cost = 6
 
 /datum/uplink_item/device_tools/surveillance

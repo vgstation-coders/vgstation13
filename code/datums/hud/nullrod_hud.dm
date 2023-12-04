@@ -1,6 +1,7 @@
 /datum/visioneffect/nullrod
 	name = "nullrod sight"
-	var/list/cached_images = list()
+	priority = 1
+	var/list/image/cached_images = list()
 
 /datum/visioneffect/nullrod/process_hud(var/mob/V)
 	..()

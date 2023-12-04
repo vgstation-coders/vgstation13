@@ -1,3 +1,5 @@
+//These are glasses that can toggle their vision effects on and off in a binary way - all on or all off.
+
 /obj/item/clothing/glasses/scanner
 	item_state = "glasses"
 	species_fit = list(GREY_SHAPED)
@@ -30,20 +32,17 @@
 		if(iscarbon(M) && glasses == slot_glasses)
 			for(var/datum/visioneffect/H in stored_huds)
 				M.apply_hud(H)
-			//M.update_perception()
-			//M.update_darkness()
-
 	..()
 
 /obj/item/clothing/glasses/scanner/unequipped(mob/living/carbon/M, var/from_slot = null)
-	..()
 	if(from_slot == slot_glasses)
 		for(var/datum/visioneffect/H in stored_huds)
 			M.remove_hud(H)
+	//the parent calls for a full redraw of the hud
+	..()
 
 /obj/item/clothing/glasses/scanner/update_icon()
 	icon_state = initial(icon_state)
-
 	if (!on)
 		icon_state += "off"
 
@@ -72,6 +71,7 @@
 		for(var/datum/visioneffect/H in stored_huds)
 			C.apply_hud(H)
 	to_chat(C, "You turn \the [src] on.")
+	C.handle_regular_hud_updates()
 
 /obj/item/clothing/glasses/scanner/proc/disable(var/mob/living/carbon/C)
 	on = FALSE
@@ -79,6 +79,32 @@
 		for(var/datum/visioneffect/H in stored_huds)
 			C.remove_hud(H)
 	to_chat(C, "You turn \the [src] off.")
+	C.handle_regular_hud_updates()
+
+//This is for harm labels blocking your vision. It also will stop most huds...
+//Though, some are overridden for reality (labels won't stop your thermals, but you will be blind otherwise)
+/obj/item/clothing/glasses/scanner/harm_label_update()
+	..()
+	if(istype(src.loc, /mob/living/carbon/human))
+		var/mob/living/carbon/human/M = src.loc
+		if(M.glasses == src)
+			if(harm_labeled >= min_harm_label)
+				for(var/datum/visioneffect/H in stored_huds)
+					M.remove_hud(H)
+			else
+				if(!stored_huds.len)
+					for(var/H in hud_types)
+						if(ispath(H))
+							stored_huds += new H
+							if(on)
+								M.apply_hud(H)
+	if(harm_labeled >= min_harm_label)
+		stored_huds = list()
+	else
+		if(!stored_huds.len)
+			for(var/H in hud_types)
+				if(ispath(H))
+					stored_huds += new H
 
 /obj/item/clothing/glasses/scanner/night
 	name = "night vision goggles"
@@ -120,86 +146,11 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=3"
 	actions_types = list(/datum/action/item_action/toggle_goggles)
-	// vision_flags = SEE_OBJS
-
+	hud_types = list(/datum/visioneffect/material)
 	glasses_fit = TRUE
-
-	var/list/image/showing = list()
-	var/mob/viewing
-
-/obj/item/clothing/glasses/scanner/material/enable()
-	..()
-	update_mob(viewing)
-
-/obj/item/clothing/glasses/scanner/material/disable()
-	..()
-	update_mob(viewing)
 
 /obj/item/clothing/glasses/scanner/material/update_icon()
 	if (!on)
 		icon_state = "mesonoff"
-
 	else
 		icon_state = initial(icon_state)
-
-/obj/item/clothing/glasses/scanner/material/dropped(var/mob/living/carbon/M)
-	update_mob()
-	..()
-
-/obj/item/clothing/glasses/scanner/material/unequipped(var/mob/living/carbon/M)
-	update_mob()
-	..()
-
-/obj/item/clothing/glasses/scanner/material/equipped(var/mob/living/carbon/M)
-	update_mob(M)
-	..()
-
-/obj/item/clothing/glasses/scanner/material/OnMobLife(var/mob/living/carbon/human/M)
-	update_mob(M.glasses == src ? M : null)
-
-/obj/item/clothing/glasses/scanner/material/proc/clear()
-	if (!showing.len)
-		return
-
-	if (viewing && viewing.client)
-		viewing.client.images -= showing
-
-	showing.Cut()
-
-/obj/item/clothing/glasses/scanner/material/proc/apply()
-	if (!viewing || !viewing.client || !on)
-		return
-
-	showing = get_images(get_turf(viewing), viewing.client.view)
-	viewing.client.images += showing
-
-
-/obj/item/clothing/glasses/scanner/material/proc/update_mob(var/mob/living/carbon/new_mob)
-	if (new_mob == viewing)
-		clear()
-		apply()
-		return
-
-	clear()
-
-	if (viewing)
-		viewing.unregister_event(/event/logout, src, nameof(src::mob_logout()))
-		viewing = null
-
-	if (new_mob)
-		new_mob.register_event(/event/logout, src, nameof(src::mob_logout()))
-		viewing = new_mob
-
-/obj/item/clothing/glasses/scanner/material/proc/mob_logout(mob/living/carbon/user)
-	if (user != viewing)
-		return
-
-	clear()
-	viewing.unregister_event(/event/logout, src, nameof(src::mob_logout()))
-	viewing = null
-
-/obj/item/clothing/glasses/scanner/material/proc/get_images(var/turf/T, var/view)
-	. = list()
-	for (var/turf/TT in trange(view, T))
-		if (TT.holomap_data)
-			. += TT.holomap_data

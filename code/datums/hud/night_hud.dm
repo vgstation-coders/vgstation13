@@ -30,5 +30,3 @@
 	M.update_perception()
 	M.update_darkness()
 	M.check_dark_vision()
-	//M.update_darkness()
-	//M.update_perception()
