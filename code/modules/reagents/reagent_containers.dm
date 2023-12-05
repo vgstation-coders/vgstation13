@@ -17,7 +17,6 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	var/image/ice_overlay = null
 	var/ice_alpha = 64
 
-
 	var/thermal_variation_modifier = 1//if set to 0, no entropy will occur in that container. More than 1 means it reaches room temperature quicker.
 
 	var/controlled_splash = FALSE	//If true, splashing someone/something with the reagent container will only usr the current amount_per_transfer_from_this instead of all of it
