@@ -14,7 +14,7 @@
 		SHC = (for(components of recipe) total_SHC *= component SHC)
 
 
-*/
+*///NO DON'T DO THAT, IF YOU'RE NOT SURE JUST KEEP IT AT WATER'S. IF YOU GET SOMETHING ABOVE 10 LET ALONE IN THE HUNDREDS YOU'RE PROBABLY DOING SOMETHING VERY WRONG
 
 /datum/reagent
 	var/name = "Reagent"
@@ -2533,7 +2533,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FBFCFF" //rgb: 251, 252, 255
 	density = 6.84
-	specheatcap = 90.35
+	specheatcap = 3.5
 
 /datum/reagent/space_cleaner/bleach/reaction_turf(var/turf/simulated/T, var/volume)
 
