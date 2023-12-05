@@ -15,7 +15,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	var/thermal_entropy_delay = 2 SECONDS//we run thermal_entropy() every X ticks
 	var/thermal_variation_from_environment = 0.055//how much of the environmental temperature do we want to match per entropy procs
-	var/thermal_variation_modifier = 1//is set to 0, no entropy will occur in that container. More than 1 means it reaches room temperature quicker.
+	var/thermal_variation_modifier = 1//if set to 0, no entropy will occur in that container. More than 1 means it reaches room temperature quicker.
 
 /obj/item/weapon/reagent_containers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
