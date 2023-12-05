@@ -78,7 +78,7 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 			emission_factor = THERM_DISS_SCALING_FACTOR * (SS_WAIT_THERM_DISS / (1 SECONDS)) * STEFAN_BOLTZMANN_CONSTANT * (36 * PI) ** (1/3) * (CC_PER_U / 1000) ** (2/3) * R.total_volume ** (2/3)
 
 			//Here we reduce thermal transfer to account for insulation of the container.
-			//We iterate though each loc until the loc is the turf containing the_air, to account for things like nested containers, each time multiplying emission_factor by a factor than can range between [0 and 1], representing heat insulation.
+			//We iterate though each loc until the loc is the turf T, to account for things like nested containers, each time multiplying emission_factor by a factor than can range between [0 and 1], representing heat insulation.
 
 			this_potentially_insulative_layer = R.my_atom
 			i = ARBITRARILY_LARGE_NUMBER
@@ -143,7 +143,6 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 						if (!the_air)
 							goto tick_check
 						air_thermal_mass = the_air.heat_capacity()
-						air_thermal_mass_reciprocal = (1 / air_thermal_mass)
 						goto temperature_equalization_simmed_air
 					else //For unsimmed, air, the reagents temperature is set to the average of the two temperatures.
 						R.chem_temp = (1/2) * Tr + (1/2) * Ta
@@ -158,8 +157,7 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 
 				temperature_equalization_simmed_air:
 				//If the air is simulated we consider the thermal mass of the air.
-				R.chem_temp = (R.total_thermal_mass * R.chem_temp + air_thermal_mass * Ta) / (R.total_thermal_mass + air_thermal_mass) //Use the original values in case something went wrong.
-				the_air.temperature = R.chem_temp
+				the_air.temperature = (R.chem_temp := (R.total_thermal_mass * R.chem_temp + air_thermal_mass * Ta) / (R.total_thermal_mass + air_thermal_mass))
 
 				reactions_check:
 				if(!(R.skip_flags & SKIP_RXN_CHECK_ON_HEATING))
