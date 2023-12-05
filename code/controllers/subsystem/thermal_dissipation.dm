@@ -140,6 +140,8 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 
 				else //At extreme temperatures, we do a simpler calculation to avoid blowing out any values.
 					if (simulate_air && !istype(the_air := (turf_air_list[T] || (turf_air_list[T] := T.return_air())), /datum/gas_mixture/unsimulated)) //For simmed air, we equalize the temperatures.
+						if (!the_air)
+							goto tick_check
 						air_thermal_mass = the_air.heat_capacity()
 						air_thermal_mass_reciprocal = (1 / air_thermal_mass)
 						goto temperature_equalization_simmed_air
