@@ -531,7 +531,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 		if (C.reaction_temp_change)
 			chem_temp += C.reaction_temp_change
-			my_atom.process_temperature()
 
 		var/created_volume = C.result_amount*multiplier
 		if(C.result)

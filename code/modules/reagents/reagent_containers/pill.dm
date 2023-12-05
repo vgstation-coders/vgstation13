@@ -19,7 +19,6 @@
 	prearcane_name = name
 	if(!icon_state)
 		icon_state = "pill[rand(1,20)]"
-	process_temperature()
 
 /obj/item/weapon/reagent_containers/pill/attack_self(mob/user as mob)
 	return attack(user, user) //Dealt with in attack code

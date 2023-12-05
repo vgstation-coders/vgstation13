@@ -1396,7 +1396,6 @@
 	can_flip = TRUE
 	var/shaking = FALSE
 	var/obj/item/weapon/reagent_containers/food/drinks/shaker/reaction/reaction = null
-	thermal_variation_modifier = 0.2
 
 /obj/item/weapon/reagent_containers/food/drinks/shaker/New()
 	..()
@@ -1454,7 +1453,6 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
-	thermal_variation_modifier = 0
 	var/obj/item/weapon/reagent_containers/food/drinks/thermos_cap/cap
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos/New()
@@ -1499,10 +1497,6 @@
 			M.update_inv_hands()
 	else
 		..()
-
-/obj/item/weapon/reagent_containers/food/drinks/thermos/thermal_entropy()
-	thermal_entropy_containers.Remove(src)
-	update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos/update_temperature_overlays()
 	//we only care about the steam
