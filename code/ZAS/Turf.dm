@@ -246,6 +246,18 @@
 			sum += misc_gases[G]
 	return sum
 
+/turf/proc/air_temperature()
+	return temperature
+
+/turf/simulated/air_temperature()
+	if(zone)
+		if(!zone.invalid)
+			SSair.mark_zone_update(zone)
+		return zone.air.temperature
+
+	else
+		return temperature
+
 /turf/simulated/assume_air(datum/gas_mixture/giver)
 	var/datum/gas_mixture/my_air = return_air()
 	my_air.merge(giver)
@@ -256,12 +268,13 @@
 
 /turf/simulated/return_air()
 	if(zone)
-		if(!zone.invalid)
-			SSair.mark_zone_update(zone)
-			return zone.air
-		else
+		if(zone.invalid)
 			c_copy_air()
 			return air
+		else
+			SSair.mark_zone_update(zone)
+			return zone.air
+
 	else
 		if(!air)
 			make_air()
