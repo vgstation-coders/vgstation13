@@ -344,23 +344,30 @@ var/global/objects_thrown_when_explode = FALSE
 		daemon.examine(user)
 
 /obj/item/proc/held_examine_temperature_message(mob/living/examiner)
-	#define HEAT_LEVEL_SPAN 20
-	var/temperature_delta = (reagents.chem_temp - examiner.bodytemperature) * heat_conductivity ** (1/3) //Cubed root to skew it towards being perceptible.
+	#define HEAT_LEVEL_SPAN 10
+	#define COLD_LEVEL_SPAN 5
+	#define TEMP_PERCEPTION_ADJUST 20
+	var/temperature_delta = (reagents.chem_temp - examiner.get_skin_temperature()) * heat_conductivity ** (1/3) //Cubed root to skew it towards being perceptible.
+	temperature_delta += TEMP_PERCEPTION_ADJUST//We perceive things warmer than they are, gotta account for that.
 	if (ishuman(examiner))
 		var/mob/living/carbon/human/H = examiner
 		temperature_delta *= (H.gloves ? H.gloves.heat_conductivity ** (1/3) : 1)
-	var/safetemp_excursion = examiner.get_safe_temperature_excursion(examiner.bodytemperature + temperature_delta)
+	var/safetemp_excursion
+	if (temperature_delta < 0)
+		safetemp_excursion = examiner.get_safe_temperature_excursion(examiner.get_skin_temperature() + temperature_delta - TEMP_PERCEPTION_ADJUST)
+	else
+		safetemp_excursion = examiner.get_safe_temperature_excursion(examiner.get_skin_temperature() + temperature_delta)
 	if (!examiner.feels_pain() || examiner.has_painkillers())
 		safetemp_excursion = 0
 	else if(safetemp_excursion > 0)
 		safetemp_excursion = min(ceil(safetemp_excursion / HEAT_LEVEL_SPAN), 3)
 	else if (safetemp_excursion < 0)
-		safetemp_excursion = max(round(safetemp_excursion / HEAT_LEVEL_SPAN), -3)
+		safetemp_excursion = max(round(safetemp_excursion / COLD_LEVEL_SPAN), -3)
 	switch (safetemp_excursion)
 		if (0)
-			if (temperature_delta >= HEAT_LEVEL_SPAN)
+			if (temperature_delta >= (HEAT_LEVEL_SPAN*2))
 				to_chat(examiner, "<span class='notice'>It feels warm.</span>")
-			else if(abs(temperature_delta) >= HEAT_LEVEL_SPAN)
+			else if(temperature_delta <= 0)
 				to_chat(examiner, "<span class='notice'>It feels cool.</span>")
 		if (1)
 			to_chat(examiner, "<span class='warning'>It feels very hot.</span>")
@@ -375,6 +382,8 @@ var/global/objects_thrown_when_explode = FALSE
 		if (-3)
 			to_chat(examiner, "<span class='warning'>It feels piercingly cold.</span>")
 	#undef HEAT_LEVEL_SPAN
+	#undef COLD_LEVEL_SPAN
+	#undef TEMP_PERCEPTION_ADJUST
 
 /obj/item/attack_ai(mob/user as mob)
 	..()
@@ -1324,11 +1333,12 @@ var/global/list/image/blood_overlays = list()
 		return
 
 	var/icon/I = new /icon(icon, icon_state)
-	I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD) //fills the icon_state with white (except where it's transparent)
+	I.Blend(rgb(255,255,255),ICON_ADD) //fills the icon_state with white (except where it's transparent)
 	I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY) //adds blood and the remaining white areas become transparant
 
 	var/image/img = image(I)
 	img.name = "blood_overlay"
+	img.appearance_flags = RESET_COLOR|RESET_ALPHA
 	blood_overlays["[type][icon_state]"] = img
 	update_blood_overlay()
 

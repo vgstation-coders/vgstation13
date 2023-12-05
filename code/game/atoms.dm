@@ -1026,6 +1026,9 @@ its easier to just keep the beam vertical.
 /atom/proc/update_temperature_overlays()
 	return
 
+/atom/proc/on_vending_machine_spawn()
+	return
+
 /atom/proc/get_stain_text(colored_text = TRUE) //"blood-and-vomit-stained"
 	if (blood_DNA?.len)
 		var/stains[0]

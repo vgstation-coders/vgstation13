@@ -89,6 +89,12 @@
 	..()
 	name = prearcane_name
 
+/obj/item/weapon/reagent_containers/pill/update_icon()
+	..()
+	overlays.len = 0
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
+
 //OOP, HO!
 /obj/item/weapon/reagent_containers/pill/proc/ingest(mob/M as mob)
 	if(!reagents)

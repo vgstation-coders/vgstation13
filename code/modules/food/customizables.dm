@@ -167,7 +167,7 @@
 		if(prob(70))
 			playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 75, 1)
 			new/obj/effect/decal/cleanable/broken_plate(loc)
-			visible_message("<span class='warning'>\The [src.name] [(plates.len > 0)?"have":"has"] been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
+			visible_message("<span class='warning'>\The [name] [(plates.len > 0)?"have":"has"] been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
 			qdel(P)
 		else
 			P.forceMove(loc)
@@ -177,7 +177,7 @@
 	if(prob(70))
 		playsound(loc, 'sound/effects/hit_on_shattered_glass.ogg', 75, 1)
 		new/obj/effect/decal/cleanable/broken_plate(loc)
-		visible_message("<span class='warning'>\The [src.name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
+		visible_message("<span class='warning'>\The [name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
 		qdel(src)
 	else
 		update_icon()
@@ -284,6 +284,7 @@
 			F.item_state = snack.item_state
 		else
 			F.item_state = snack.icon_state
+		F.particles = snack.particles
 	if (plates.len > 0)
 		user.put_in_hands(F)
 		var/obj/item/trash/plate/plate = plates[plates.len]
@@ -344,11 +345,13 @@
 	var/addTop = 0
 	var/image/topping
 	var/image/filling
+	var/image/platefood_overlay
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/New(loc,var/obj/item/ingredient)
 	. = ..()
 	topping = image(icon,,"[initial(icon_state)]_top")
 	filling = image(icon,,"[initial(icon_state)]_filling")
+	platefood_overlay = image('icons/effects/32x32.dmi',null,"blank")
 	reagents.add_reagent(NUTRIMENT,3)
 	if (ingredient)
 		if (ingredient.virus2?.len)
@@ -360,14 +363,14 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/attackby(obj/item/I, mob/user, params)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if((src.contents.len >= src.ingMax) || (src.contents.len >= ingredientLimit))
+		if((contents.len >= ingMax) || (contents.len >= ingredientLimit))
 			to_chat(user, "<span class='warning'>That's already looking pretty stuffed.</span>")
 			return
 
 		var/obj/item/weapon/reagent_containers/food/snacks/S = I
 		if(istype(S,/obj/item/weapon/reagent_containers/food/snacks/customizable))
 			var/obj/item/weapon/reagent_containers/food/snacks/customizable/SC = S
-			if(src.fullyCustom && SC.fullyCustom)
+			if(fullyCustom && SC.fullyCustom)
 				to_chat(user, "<span class='warning'>You slap yourself on the back of the head for thinking that stacking plates is an interesting dish.</span>")
 				return
 		if(!recursiveFood && !fullyCustom && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
@@ -378,27 +381,36 @@
 			return
 
 		S.reagents.trans_to(src,S.reagents.total_volume)
-		src.ingredients += S
+		ingredients += S
 
-		if(src.addTop)
-			src.overlays -= src.topping //thank you Comic
-		if(!src.fullyCustom && !src.stackIngredients && src.overlays.len)
-			src.overlays -= src.filling //we can't directly modify the overlay, so we have to remove it and then add it again
+		if(addTop)
+			platefood_overlay.overlays -= topping //thank you Comic
+		if(!fullyCustom && !stackIngredients && overlays.len)
+			platefood_overlay.overlays -= filling //we can't directly modify the overlay, so we have to remove it and then add it again
 			var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
-			src.filling.color = BlendRGB(src.filling.color, newcolor, 1/src.ingredients.len)
-			src.overlays += src.filling
+			filling.color = BlendRGB(filling.color, newcolor, 1/ingredients.len)
+			platefood_overlay.overlays += image(filling)
 		else
-			src.overlays += generateFilling(S, params)
+			platefood_overlay.overlays += generateFilling(S, params)
 			if(fullyCustom)
 				icon_state = S.plate_icon
-		if(src.addTop)
-			src.drawTopping()
-
-		src.updateName()
-		to_chat(user, "<span class='notice'>You add the [I.name] to the [src.name].</span>")
+		if(addTop)
+			drawTopping()
+		update_icon()
+		updateName()
+		to_chat(user, "<span class='notice'>You add the [I.name] to the [name].</span>")
 	else
 		. = ..()
 	return
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/update_icon()
+	overlays.len = 0//no choice here but to redraw everything in the correct order so condiments don't appear below.
+	overlays += platefood_overlay
+	overlays += condiments_overlay_image
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
+	if (on_fire && fire_overlay)
+		overlays += fire_overlay
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/generateFilling(var/obj/item/weapon/reagent_containers/food/snacks/S, params)
 	var/image/I
@@ -409,15 +421,15 @@
 		I.layer = FLOAT_LAYER
 		I.pixel_y = 12 * PIXEL_MULTIPLIER - empty_Y_space(icon(S.icon,S.icon_state)) + S.plate_offset_y
 	else
-		I = src.filling
+		I = filling
 		if(istype(S) && S.filling_color != "#FFFFFF")
 			I.color = S.filling_color
 		else
 			I.color = AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
-		if(src.stackIngredients)
-			I.pixel_y = src.ingredients.len * 2 * PIXEL_MULTIPLIER
+		if(stackIngredients)
+			I.pixel_y = ingredients.len * 2 * PIXEL_MULTIPLIER
 		else
-			src.overlays.len = 0
+			overlays.len = 0
 	if(fullyCustom || stackIngredients)
 		var/clicked_x = text2num(params2list(params)["icon-x"])
 		if (isnull(clicked_x))
@@ -438,18 +450,18 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/updateName()
 	var/i = 1
 	var/new_name
-	for(var/obj/item/S in src.ingredients)
+	for(var/obj/item/S in ingredients)
 		if(i == 1)
 			new_name += "[S.name]"
 			if (fullyCustom)
 				desc = S.desc
-		else if(i == src.ingredients.len)
+		else if(i == ingredients.len)
 			new_name += " and [S.name]"
 		else
 			new_name += ", [S.name]"
 		i++
 	if (!fullyCustom)
-		new_name = "[new_name] [initial(src.name)]"
+		new_name = "[new_name] [initial(name)]"
 	if(length(new_name) >= 150)
 		name = "something yummy"
 	else
@@ -457,7 +469,7 @@
 	return new_name
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/Destroy()
-	for(. in src.ingredients) qdel(.)
+	for(. in ingredients) qdel(.)
 	return ..()
 
 // Sandwiches //////////////////////////////////////////////////
@@ -484,7 +496,7 @@
 		I.reagents.trans_to(src,I.reagents.total_volume)
 		qdel(I)
 		addTop = 1
-		src.drawTopping()
+		drawTopping()
 		if (I.virus2?.len)
 			for (var/ID in I.virus2)
 				var/datum/disease2/disease/D = I.virus2[ID]
@@ -493,9 +505,9 @@
 		..()
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/drawTopping()
-	var/image/I = src.topping
-	I.pixel_y = (src.ingredients.len+1)*2 * PIXEL_MULTIPLIER
-	src.overlays += I
+	var/image/I = topping
+	I.pixel_y = (ingredients.len+1)*2 * PIXEL_MULTIPLIER
+	platefood_overlay.overlays += I
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger
 	name = "burger"
@@ -677,11 +689,15 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/New()
 	. = ..()
-	src.reagents.add_reagent(src.initReagent,50)
+	reagents.add_reagent(initReagent,50)
 	var/icon/opaquefilling = new(icon,"[initial(icon_state)]_filling")
 	opaquefilling.ChangeOpacity(0.8)
 	filling = image(opaquefilling)
 	return
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/update_icon()
+	..()
+	overlays += filling
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/attackby(obj/item/I,mob/user)
 	if(istype(I,/obj/item/weapon/pen))
@@ -690,21 +706,21 @@
 			name = "[n_name]"
 		return
 	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(src.ingredients.len < src.ingMax)
+		if(ingredients.len < ingMax)
 			var/obj/item/weapon/reagent_containers/food/snacks/S = I
 
 			if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 				to_chat(user, "<span class='warning'>[pick("Sorry, no recursive food.","That would be a straining topological exercise.","This world just isn't ready for your cooking genius.","It's possible that you may have a problem.","It won't fit.","You don't think that would taste very good.","Quit goofin' around.")]</span>")
 				return
 			if(user.drop_item(I, src))
-				to_chat(user, "<span class='notice'>You add the [S.name] to the [src.name].</span>")
+				to_chat(user, "<span class='notice'>You add the [S.name] to the [name].</span>")
 				S.reagents.trans_to(src,S.reagents.total_volume)
-				src.ingredients += S
-				src.updateName()
-				src.overlays -= src.filling //we can't directly modify the overlay, so we have to remove it and then add it again
+				ingredients += S
+				updateName()
+				overlays -= filling //we can't directly modify the overlay, so we have to remove it and then add it again
 				var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
-				src.filling.color = BlendRGB(src.filling.color, newcolor, 1/src.ingredients.len)
-				src.overlays += src.filling
+				filling.color = BlendRGB(filling.color, newcolor, 1/ingredients.len)
+				overlays += filling
 		else
 			to_chat(user, "<span class='warning'>That won't fit.</span>")
 	else
@@ -714,23 +730,23 @@
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/proc/updateName() //copypaste of food's updateName()
 	var/i = 1
 	var/new_name
-	for(var/obj/item/weapon/reagent_containers/food/snacks/S in src.ingredients)
+	for(var/obj/item/weapon/reagent_containers/food/snacks/S in ingredients)
 		if(i == 1)
 			new_name += "[S.name]"
-		else if(i == src.ingredients.len)
+		else if(i == ingredients.len)
 			new_name += " and [S.name]"
 		else
 			new_name += ", [S.name]"
 		i++
-	new_name = "[new_name] [initial(src.name)]"
+	new_name = "[new_name] [initial(name)]"
 	if(length(new_name) >= 150)
-		src.name = "something yummy"
+		name = "something yummy"
 	else
-		src.name = new_name
+		name = new_name
 	return new_name
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/proc/generateFilling(var/obj/item/weapon/reagent_containers/food/snacks/S)
-	src.overlays.len = 0
+	overlays.len = 0
 	var/image/I = filling
 	if(S.filling_color != "#FFFFFF")
 		I.color = S.filling_color
@@ -739,7 +755,7 @@
 	return I
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/Destroy()
-	for(. in src.ingredients) qdel(.)
+	for(. in ingredients) qdel(.)
 	return ..()
 
 // Drink Subtypes //////////////////////////////////////////////
