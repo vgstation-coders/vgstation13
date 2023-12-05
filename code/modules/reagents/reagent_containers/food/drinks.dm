@@ -816,6 +816,7 @@
 	overlays.len = 0
 	if (flags & OPENCONTAINER)
 		overlays += image(icon = icon, icon_state = "soda_open")
+		update_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
 	if(!is_open_container())
@@ -1473,6 +1474,7 @@
 		mug_reagent_overlay()
 	else
 		overlays.len = 0
+	update_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup
 	name = "\improper cup"
@@ -2084,6 +2086,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/update_icon()
 	src.overlays.len = 0
+	update_blood_overlay()
 	var/image/Im
 	if(molotov == 1)
 		Im = image('icons/obj/grenade.dmi', icon_state = "molotov_rag")
