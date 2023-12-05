@@ -7,15 +7,12 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = null
 	w_class = W_CLASS_TINY
-	heat_conductivity = 0.90
 	var/amount_per_transfer_from_this = 5
 	var/possible_transfer_amounts = list(5,10,15,25,30)
 	var/volume = 30
 	var/amount_per_imbibe = 5
 	var/attack_mob_instead_of_feed //If true, the reagent container will be used as a melee weapon rather than as a vessel to feed another mob with (in attack()).
 
-	var/image/ice_overlay = null
-	var/ice_alpha = 64
 	var/thermal_entropy_delay = 2 SECONDS//we run thermal_entropy() every X ticks
 	var/thermal_variation_from_environment = 0.055//how much of the environmental temperature do we want to match per entropy procs
 	var/thermal_variation_modifier = 1//is set to 0, no entropy will occur in that container. More than 1 means it reaches room temperature quicker.
@@ -390,9 +387,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.reaction(user, INGEST, amount_override = min(reagents.total_volume,amount_per_imbibe)/(reagents.reagent_list.len))
 		spawn(5)
 			if(reagents)
-				reagents.adjust_consumed_reagents_temp()
 				reagents.trans_to(user, amount_per_imbibe)
-				reagents.reset_consumed_reagents_temp()
 
 	return 1
 
