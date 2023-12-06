@@ -8,6 +8,7 @@
 	icon_state = null
 	log_reagents = 1
 	fire_fuel = 2//may get ignited by emagged microwave
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 
 	var/food_flags	//Possible flags: FOOD_LIQUID, FOOD_MEAT, FOOD_ANIMAL, FOOD_SWEET
 					//FOOD_LIQUID	- for stuff like soups
