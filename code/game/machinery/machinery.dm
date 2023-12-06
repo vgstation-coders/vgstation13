@@ -161,7 +161,7 @@ Class Procs:
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
 	var/id_tag = null // Identify the machine
 
-/var/area/power_area_for_particular_machine  //since we repeatedly run get_area() on machines for their power usage, we store the area in a global variable instead of re-allocating memory every time
+/var/area/power_area_for_particular_machine  //since we repeatedly run get_area() on machines for their power usage, we store the area in a global variable instead of re-allocating a variable every time
 
 /obj/machinery/cultify()
 	var/list/random_structure = list(
