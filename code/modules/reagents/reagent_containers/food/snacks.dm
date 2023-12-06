@@ -48,7 +48,7 @@
 	var/timer = 0 //currently only used on skittering food
 	var/datum/reagents/dip
 
-	var/image/condiments_overlay_image
+	var/image/extra_food_overlay
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
 	var/turf/T = get_turf(src)
@@ -216,13 +216,13 @@
 	..()
 	dip = new/datum/reagents(1)
 	dip.my_atom = src
-	condiments_overlay_image = image('icons/effects/32x32.dmi',null,"blank")
+	extra_food_overlay = image('icons/effects/32x32.dmi',null,"blank")
 	if (random_filling_colors?.len > 0)
 		filling_color = pick(random_filling_colors)
 
 /obj/item/weapon/reagent_containers/food/snacks/update_icon()
-	overlays.len = 0//no choice here but to redraw everything in the correct order so condiments don't appear below.
-	overlays += condiments_overlay_image
+	overlays.len = 0//no choice here but to redraw everything in the correct order so condiments etc don't appear over ice and fire.
+	overlays += extra_food_overlay
 	update_temperature_overlays()
 	update_blood_overlay()//re-applying blood stains
 	if (on_fire && fire_overlay)
@@ -542,6 +542,7 @@
 					var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
 					S.name = "[C.name][S.name]"
 					S.filling.color = C.filling.color
+					S.extra_food_overlay.overlays += S.filling
 					S.overlays += S.filling
 				if(luckiness && isitem(slice))
 					var/obj/item/sliceItem = slice
@@ -2277,7 +2278,12 @@
 	trash = /obj/item/trash/dangles
 	filling_color = "#FF9933"
 	base_crumb_chance = 30
+	var/image/lid_overlay
 	var/popped
+
+/obj/item/weapon/reagent_containers/food/snacks/dangles/New()
+	..()
+	lid_overlay = image(icon, null, "dangles_lid")
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/can_consume(mob/user)
 	return popped
@@ -2294,9 +2300,10 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/update_icon()
-	..()
+	extra_food_overlay.overlays -= lid_overlay
 	if (!popped)
-		overlays += image(icon = icon, icon_state = "dangles_lid")
+		extra_food_overlay.overlays += lid_overlay
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/New()
 	..()
@@ -2459,12 +2466,12 @@
 		img.pixel_y = 2 * pancakes
 		img.plane = FLOAT_PLANE
 		img.layer = FLOAT_LAYER
+		extra_food_overlay.overlays += img
 		overlays += img
 		pancakes += I.pancakes
 		qdel(I)
 	else
 		..()
-
 
 /obj/item/weapon/reagent_containers/food/snacks/spaghetti
 	name = "Spaghetti"
@@ -4705,6 +4712,7 @@
 	icon_state = "icecream_cone"
 	food_flags = FOOD_SWEET
 	base_crumb_chance = 0
+	var/image/filling
 
 /obj/item/weapon/reagent_containers/food/snacks/icecream/New()
 	..()
@@ -4714,10 +4722,11 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/food/snacks/icecream/update_icon()
-	..()
-	var/image/filling = image('icons/obj/kitchen.dmi', src, "icecream_color")
+	extra_food_overlay.overlays -= filling
+	filling = image('icons/obj/kitchen.dmi', src, "icecream_color")
 	filling.icon += mix_color_from_reagents(reagents.reagent_list)
-	overlays += filling
+	extra_food_overlay.overlays += filling
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcone
 	name = "ice cream cone"
@@ -5863,7 +5872,8 @@
 	var/list/random_color_list = list("#00aedb","#a200ff","#f47835","#d41243","#d11141","#00b159","#00aedb","#f37735","#ffc425","#008744","#0057e7","#d62d20","#ffa700")
 	var/image/colorpop = image('icons/obj/candymachine.dmi', icon_state = "lollipop_head")
 	colorpop.color = pick(random_color_list)
-	src.overlays += colorpop
+	extra_food_overlay.overlays += colorpop
+	overlays += colorpop
 	filling_color = colorpop.color
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/consume()

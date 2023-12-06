@@ -483,7 +483,7 @@ var/global/list/image/ice_overlays = list()
 	ice_overlays["[type][icon_state]"] = img
 	update_ice_overlay()
 
-/obj/item/weapon/reagent_containers/proc/update_ice_overlay() /* See comment on set_blood_overlay() - this shouldn't be used outside of that proc! */
+/obj/item/weapon/reagent_containers/proc/update_ice_overlay()
 	if(ice_overlays["[type][icon_state]"])
 		if (ice_overlay)
 			overlays -= ice_overlay

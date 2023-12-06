@@ -112,7 +112,7 @@
 			I.pixel_y = clamp(text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2 - pixel_y,-WORLD_ICON_SIZE/2,WORLD_ICON_SIZE/2)
 			if (overlay_colored)
 				I.color = mix_color_from_reagents(reagents.reagent_list)
-			snack.condiments_overlay_image.overlays += I
+			snack.extra_food_overlay.overlays += I
 			snack.overlays += I
 	else if(isfloor(target))
 		if (amount_per_transfer_from_this > 1)
@@ -885,6 +885,6 @@
 		I.pixel_y = rand(-3,3)
 		if (overlay_colored)
 			I.color = mix_color_from_reagents(source_reagent.holder.reagent_list)
-		snack.condiments_overlay_image.overlays += I
+		snack.extra_food_overlay.overlays += I
 		snack.overlays += I
 	qdel(src)

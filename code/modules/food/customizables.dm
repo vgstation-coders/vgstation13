@@ -345,13 +345,11 @@
 	var/addTop = 0
 	var/image/topping
 	var/image/filling
-	var/image/platefood_overlay
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/New(loc,var/obj/item/ingredient)
 	. = ..()
 	topping = image(icon,,"[initial(icon_state)]_top")
 	filling = image(icon,,"[initial(icon_state)]_filling")
-	platefood_overlay = image('icons/effects/32x32.dmi',null,"blank")
 	reagents.add_reagent(NUTRIMENT,3)
 	if (ingredient)
 		if (ingredient.virus2?.len)
@@ -384,14 +382,14 @@
 		ingredients += S
 
 		if(addTop)
-			platefood_overlay.overlays -= topping //thank you Comic
+			extra_food_overlay.overlays -= topping //thank you Comic
 		if(!fullyCustom && !stackIngredients && overlays.len)
-			platefood_overlay.overlays -= filling //we can't directly modify the overlay, so we have to remove it and then add it again
+			extra_food_overlay.overlays -= filling //we can't directly modify the overlay, so we have to remove it and then add it again
 			var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
 			filling.color = BlendRGB(filling.color, newcolor, 1/ingredients.len)
-			platefood_overlay.overlays += image(filling)
+			extra_food_overlay.overlays += image(filling)
 		else
-			platefood_overlay.overlays += generateFilling(S, params)
+			extra_food_overlay.overlays += generateFilling(S, params)
 			if(fullyCustom)
 				icon_state = S.plate_icon
 		if(addTop)
@@ -402,15 +400,6 @@
 	else
 		. = ..()
 	return
-
-/obj/item/weapon/reagent_containers/food/snacks/customizable/update_icon()
-	overlays.len = 0//no choice here but to redraw everything in the correct order so condiments don't appear below.
-	overlays += platefood_overlay
-	overlays += condiments_overlay_image
-	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
-	if (on_fire && fire_overlay)
-		overlays += fire_overlay
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/generateFilling(var/obj/item/weapon/reagent_containers/food/snacks/S, params)
 	var/image/I
@@ -428,8 +417,6 @@
 			I.color = AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
 		if(stackIngredients)
 			I.pixel_y = ingredients.len * 2 * PIXEL_MULTIPLIER
-		else
-			overlays.len = 0
 	if(fullyCustom || stackIngredients)
 		var/clicked_x = text2num(params2list(params)["icon-x"])
 		if (isnull(clicked_x))
@@ -494,20 +481,21 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/attackby(obj/item/I,mob/user)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/breadslice) && !addTop)
 		I.reagents.trans_to(src,I.reagents.total_volume)
-		qdel(I)
 		addTop = 1
 		drawTopping()
 		if (I.virus2?.len)
 			for (var/ID in I.virus2)
 				var/datum/disease2/disease/D = I.virus2[ID]
 				infect_disease2(D,1, "added to a sandwhich",0)
+		qdel(I)
+		update_icon()
 	else
 		..()
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/drawTopping()
 	var/image/I = topping
 	I.pixel_y = (ingredients.len+1)*2 * PIXEL_MULTIPLIER
-	platefood_overlay.overlays += I
+	extra_food_overlay.overlays += I
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/burger
 	name = "burger"
@@ -695,10 +683,6 @@
 	filling = image(opaquefilling)
 	return
 
-/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/update_icon()
-	..()
-	overlays += filling
-
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/attackby(obj/item/I,mob/user)
 	if(istype(I,/obj/item/weapon/pen))
 		var/n_name = copytext(sanitize(input(user, "What would you like to name this drink?", "Booze Renaming", null) as text|null), 1, MAX_NAME_LEN*3)
@@ -717,15 +701,22 @@
 				S.reagents.trans_to(src,S.reagents.total_volume)
 				ingredients += S
 				updateName()
-				overlays -= filling //we can't directly modify the overlay, so we have to remove it and then add it again
 				var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
 				filling.color = BlendRGB(filling.color, newcolor, 1/ingredients.len)
-				overlays += filling
+				update_icon()
 		else
 			to_chat(user, "<span class='warning'>That won't fit.</span>")
 	else
 		. = ..()
 	return
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/update_icon()
+	overlays.len = 0//no choice here but to redraw everything in the correct order so filling doesn't appear over ice, blood and fire.
+	overlays += filling
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
+	if (on_fire && fire_overlay)
+		overlays += fire_overlay
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/proc/updateName() //copypaste of food's updateName()
 	var/i = 1
@@ -746,7 +737,6 @@
 	return new_name
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/proc/generateFilling(var/obj/item/weapon/reagent_containers/food/snacks/S)
-	overlays.len = 0
 	var/image/I = filling
 	if(S.filling_color != "#FFFFFF")
 		I.color = S.filling_color
