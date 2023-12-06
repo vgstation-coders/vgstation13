@@ -161,6 +161,8 @@ Class Procs:
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
 	var/id_tag = null // Identify the machine
 
+/var/area/power_area_for_particular_machine  //since we repeatedly run get_area() on machines for their power usage, we store the area in a global variable instead of re-allocating memory every time
+
 /obj/machinery/cultify()
 	var/list/random_structure = list(
 		/obj/structure/cult_legacy/talisman,
@@ -281,9 +283,8 @@ Class Procs:
 			connected_cell.use(amount*0.75)
 	else
 
-		var/area/power_area = get_area(src)
-		if(power_area && powered(chan, null, power_area)) //no point in trying if we don't have power
-			power_area.use_power(amount, chan)
+		if((power_area_for_particular_machine := get_area(src)) && powered(chan, null, TRUE)) //no point in trying if we don't have power
+			power_area_for_particular_machine.use_power(amount, chan)
 		else
 			return 0
 
@@ -309,7 +310,8 @@ Class Procs:
 
 // returns true if the machine is powered (or doesn't require power).
 // performs basic checks every machine should do, then
-/obj/machinery/proc/powered(chan = power_channel, power_check_anyways = FALSE, area/this_area)
+/obj/machinery/proc/powered(chan = power_channel, power_check_anyways = FALSE, using_area_power = FALSE)
+
 	if(!src.loc)
 		return FALSE
 
@@ -328,8 +330,8 @@ Class Procs:
 	if((machine_flags & FIXED2WORK) && !anchored)
 		return FALSE
 
-	if(this_area)
-		return this_area.powered(chan)
+	if(using_area_power)
+		return power_area_for_particular_machine.powered(chan)
 	else
 		return (get_area(src))?.powered(chan)
 

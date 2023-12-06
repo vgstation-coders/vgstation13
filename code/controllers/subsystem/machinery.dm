@@ -46,8 +46,7 @@ var/list/machines = list()
 			machines.Remove(M)
 			continue
 
-		if (M.use_power)
-			M.auto_use_power()
+		M.auto_use_power()
 
 		if (MC_TICK_CHECK)
 			break
