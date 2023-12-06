@@ -1124,8 +1124,6 @@ var/global/num_vending_terminals = 1
 			if(arcanetampered && prob(90))
 				path2use = /obj/item/weapon/bikehorn/rubberducky  // BONUS DUCKS! refunds
 			var/atom/A = new path2use(get_turf(src))
-			A.on_vending_machine_spawn()
-			A.update_temperature_overlays()
 			if(arcanetampered && path2use == R.product_path)
 				A.arcane_act(user)
 		else
@@ -1441,10 +1439,8 @@ var/global/num_vending_terminals = 1
 		"Coffee helps you work!",
 		"Try some tea.",
 		"We hope you like the best!",
-		"Try our new chocolate!",
-		"Count to ten for your drink to be at safe temperature... If you're unrobust that is!"
+		"Try our new chocolate!"
 	)
-	vend_reply = "Count to ten for your drink to be at safe temperature."
 	icon_state = COFFEE
 	icon_vend = "coffee-vend"
 	vend_delay = 34
