@@ -2422,6 +2422,7 @@
 #include "code\modules\reagents\randomized_reagent.dm"
 #include "code\modules\reagents\reagent_containers.dm"
 #include "code\modules\reagents\reagent_dispenser.dm"
+#include "code\modules\reagents\splashplosion.dm"
 #include "code\modules\reagents\syringe_gun.dm"
 #include "code\modules\reagents\machinery\centrifuge.dm"
 #include "code\modules\reagents\machinery\chem_dispenser.dm"

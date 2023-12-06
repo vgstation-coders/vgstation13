@@ -539,20 +539,38 @@
 		else
 			to_chat(mob, "<span class = 'notice'>Your pupils dilate further.</span>")
 
-/datum/disease2/effect/colorsmoke
+/datum/disease2/effect/colorsplash
 	name = "Colorful Syndrome"
-	desc = "Causes the infected to synthesize smoke & rainbow colourant."
+	desc = "Causes the infected to expulse bursts of paint from their pores."
+	encyclopedia = "The paint can be washed off items, and removed from floors and walls using bleach or acetone. The infected's own skin color will match the color of their last paint burst, but they can recover their original color with a shower, or exposure to space cleaner."
 	stage = 3
 	badness = EFFECT_DANGER_HINDRANCE
+	var/list/random_color_list = list("#00aedb","#a200ff","#f47835","#d41243","#d11141","#00b159","#00aedb","#f37735","#ffc425","#008744","#0057e7","#d62d20","#ffa700")
+	max_multiplier = 3
 
-/datum/disease2/effect/colorsmoke/activate(var/mob/living/mob)
-	if (ismouse(mob))//people don't like infected mice ruining maint
-		var/mob/living/simple_animal/mouse/M = mob
-		if (!initial(M.infectable))
-			return
+/datum/disease2/effect/colorsplash/activate(var/mob/living/mob)
+	var/obj/item/weapon/reagent_containers/R = new(get_turf(mob))
+	R.invisibility = 101
+	var/list/colors_to_use = random_color_list.Copy()
+	var/range = 2 + round(max(1,multiplier))
+	var/color_count = round(max(1,multiplier))
+
+	if (ismouse(mob))
+		range = 0
+		color_count = 1
+
+	var/color_to_use = ""
+
+	for(var/i = 1 to color_count)
+		color_to_use = pick(colors_to_use)
+		colors_to_use -= color_to_use
+		R.reagents.add_reagent(FLAXOIL, 10 * max(1,range), list("color" = color_to_use, "alpha" = 255))
+		R.reagents.splashplosion(range)
+		range--
+
+	qdel(R)
 	to_chat(mob, "<span class='notice'>You feel colorful!</span>")
-	mob.reagents.add_reagent(COLORFUL_REAGENT, 5)
-	mob.reagents.add_reagent(PAISMOKE, 5)
+	mob.color = color_to_use
 
 /datum/disease2/effect/cleansmoke
 	name = "Cleaning Syndrome"
