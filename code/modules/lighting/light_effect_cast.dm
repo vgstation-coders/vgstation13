@@ -37,6 +37,15 @@ var/light_post_processing = ALL_SHADOWS // Use writeglobal to change this
 
 var/list/ubiquitous_light_ranges = list(1, 4, 5, 6)
 
+// -- "shadow[num]_[light_range]_[grazing_angle]_[abs(y_offset)]_[abs(x_offset)]_[block_1]_[block_2]_[delta]" --
+var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_4_180_1_0_1_1_-1", "*shadow2_4_0_1_0_1_1_-1", "*shadow2_4_-90_1_0_1_1_-1",
+										"*shadow2_5_90_1_0_1_1_-1", "*shadow2_5_180_1_0_1_1_-1", "*shadow2_5_0_1_0_1_1_-1", "*shadow2_5_-90_1_0_1_1_-1",
+										"*shadow2_6_90_1_0_1_1_-1", "*shadow2_6_180_1_0_1_1_-1", "*shadow2_6_0_1_0_1_1_-1", "*shadow2_6_-90_1_0_1_1_-1",
+
+										"*shadow2_4_90_1_0_0_0_-1", "*shadow2_4_180_1_0_0_0_-1", "*shadow2_4_0_1_0_0_0_-1", "*shadow2_4_-90_1_0_0_0_-1",
+										"*shadow2_5_90_1_0_0_0_-1", "*shadow2_5_180_1_0_0_0_-1", "*shadow2_5_0_1_0_0_0_-1", "*shadow2_5_-90_1_0_0_0_-1",
+										"*shadow2_6_90_1_0_0_0_-1", "*shadow2_6_180_1_0_0_0_-1", "*shadow2_6_0_1_0_0_0_-1", "*shadow2_6_-90_1_0_0_0_-1")
+
 #define TURF_GROUP_LENGTH 7
 #define TURF_GROUP_MIDPOINT round(TURF_GROUP_LENGTH/2)
 
@@ -378,11 +387,15 @@ var/list/ubiquitous_light_ranges = list(1, 4, 5, 6)
 
 	// Using BYOND's render_target magick here
 
-	var/image/I = new()
-	var/shadow_image_identifier = "shadow[num]_[light_range]_[grazing_angle]_[abs(y_offset)]_[abs(x_offset)]_[block_1]_[block_2]_[delta]"
-	// We've done this before...
-
+	var/mutable_appearance/I = new()
 	var/found_shadow_identif = 0
+
+	var/shadow_image_identifier = "shadow[num]_[light_range]_[grazing_angle]_[abs(y_offset)]_[abs(x_offset)]_[block_1]_[block_2]_[delta]"
+
+	// We've done this before...
+	if (shadow_image_identifier in ubiquitous_shadow_renders)
+		I.render_source = "*[shadow_image_identifier]"
+		found_shadow_identif = TRUE
 
 	// Same tile has done it before.......
 	for (var/atom/movable/light/neighbour in get_turf(src)) // This light atom is rendered from point A to point B, so it's fine
