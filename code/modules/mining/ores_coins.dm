@@ -386,7 +386,7 @@
 /*****************************Coin********************************/
 
 /obj/item/weapon/coin
-	icon = 'icons/obj/items.dmi'
+	icon = 'icons/obj/coins.dmi'
 	name = "coin"
 	desc = "Long phased out in favor of galactic credits."
 	icon_state = "coin"
@@ -533,7 +533,7 @@
 			QDEL_NULL(CC)
 			return
 
-		overlays += image('icons/obj/items.dmi',"coin_string_overlay")
+		overlays += image('icons/obj/coins.dmi',"coin_string_overlay")
 		string_attached = 1
 		to_chat(user, "<span class='notice'>You attach a string to the coin.</span>")
 		CC.use(1)
@@ -581,3 +581,15 @@
 	throwforce = 4
 
 ///////////////////////////////////////////////////////////
+
+/obj/item/weapon/coin/nuka
+	material=MAT_IRON
+	name = "bottle cap"
+	desc = "Standard Nuka-Cola bottle cap featuring 21 crimps and ridges, and somehow more or less matching the shape of a coin."
+	icon_state = "bottle_cap"
+	credits = 1
+	siemens_coefficient = 1
+	melt_temperature=MELTPOINT_STEEL
+	force = 0
+	throwforce = 0
+	throw_range = 3
