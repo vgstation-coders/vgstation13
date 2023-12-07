@@ -1109,6 +1109,7 @@
 		/obj/item/seeds/wheatseed,
 		/obj/item/seeds/whitebeetseed,
 		/obj/item/seeds/cinnamomum,
+		/obj/item/seeds/flaxseed,
 		)
 
 // Gym ///////////////////////////////////////////////////////

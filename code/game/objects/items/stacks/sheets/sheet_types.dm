@@ -136,11 +136,163 @@
  */
 /obj/item/stack/sheet/cloth
 	name = "cloth"
-	desc = "This roll of cloth is made from only the finest chemicals and bunny rabbits."
-	singular_name = "cloth roll"
+	desc = "Some linen, made out of flax."
+	singular_name = "lengths of cloth"
 	icon_state = "sheet-cloth"
+	item_state = "sheet-cloth"
 	origin_tech = Tc_MATERIALS + "=2"
 	autoignition_temperature = AUTOIGNITION_FABRIC
+	fire_fuel = 1
+	siemens_coefficient = 0.2
+	w_type = RECYK_FABRIC
+	starting_materials = list(MAT_FABRIC = CC_PER_SHEET_FABRIC)
+	mat_type = MAT_FABRIC
+	perunit = CC_PER_SHEET_FABRIC
+	color = COLOR_LINEN
+
+/obj/item/stack/sheet/cloth/New(loc, amount, var/param_color = null)
+	..()
+	recipes = cloth_recipes_by_hand
+	if (param_color)
+		color = param_color
+
+/obj/item/stack/sheet/cloth/getFireFuel()
+	return (amount - 1 + fire_fuel) / 10 //Each piece essentially has 0.1 fire_fuel.
+
+/obj/item/stack/sheet/cloth/burnFireFuel(used_fuel_ratio, used_reactants_ratio)
+	var/expected_to_burn = used_fuel_ratio * used_reactants_ratio * amount //The expected number of planks to burn. Can be fractional.
+	var/actually_burned = round(expected_to_burn) //Definitely burn the floor of that many.
+	fire_fuel -= expected_to_burn - actually_burned //Subtract the remainder from fire_fuel.
+	if(fire_fuel <= 0) //If that brings it below zero, burn another plank and increase fire_fuel to track the next fractional plank burned.
+		++actually_burned
+		++fire_fuel
+	if(actually_burned)
+		var/ashtype = ashtype()
+		new ashtype(loc) //use() will delete src without calling ashify(), so here we spawn ashes if any planks burned, whether or not the object was destroyed.
+	use(actually_burned)
+
+/obj/item/stack/sheet/cloth/can_stack_with(obj/item/other_stack)
+	if(ispath(other_stack) && (src.type == other_stack))
+		return (uppertext(color) == COLOR_LINEN)
+
+	if (src.type == other_stack.type)
+		if (src.color == other_stack.color)
+			return TRUE
+		else
+			to_chat(usr, "<span class='warning'>You cannot stack cloth rolls of different colors.</span>")
+	return FALSE
+
+/obj/item/stack/sheet/cloth/dye_act(var/obj/structure/reagent_dispensers/cauldron/cauldron, var/mob/user)
+	to_chat(user, "<span class='notice'>You begin dyeing \the [src].</span>")
+	playsound(cauldron.loc, 'sound/effects/slosh.ogg', 25, 1)
+	if (do_after(user, cauldron, 30))
+		var/mixed_color = mix_color_from_reagents(cauldron.reagents.reagent_list, TRUE)
+		var/mixed_alpha = mix_alpha_from_reagents(cauldron.reagents.reagent_list)
+		color = BlendRGB(color, mixed_color, mixed_alpha/255)
+		user.update_inv_hands()
+	return TRUE
+
+/obj/item/stack/sheet/cloth/copy_evidences(var/obj/item/stack/from)
+	..(from)
+	color = from.color
+	update_icon()
+
+/obj/item/stack/sheet/cloth/use(var/amount)
+	. = ..()
+	update_icon()
+
+/obj/item/stack/sheet/cloth/add(var/amount)
+	. = ..()
+	update_icon()
+
+/obj/item/stack/sheet/cloth/extra_message()
+	if (!in_needles_or_machine())
+		return "<br><b>More recipes available when using knitting needles or a sewing machine</b>.<br>"
+	return null
+
+/obj/item/stack/sheet/cloth/proc/in_needles_or_machine()
+	if(istype(loc, /obj/item/knitting_needles) || istype(loc, /obj/machinery/sewing_machine))
+		return TRUE
+	return FALSE
+
+/obj/item/stack/sheet/cloth/time_modifier(var/_time)
+	if(istype(loc, /obj/machinery/sewing_machine))
+		var/obj/machinery/sewing_machine/SM = loc
+		var/time_modifier = 0.5
+		time_modifier = max(0.1, 0.5 - (0.1*SM.manipulator_rating))
+		playsound(get_turf(src), 'sound/machines/sewing_machine.ogg', 50, 1)
+		SM.operating = 1
+		SM.update_icon()
+		return _time * time_modifier
+	else if (istype(loc, /obj/item/knitting_needles))
+		var/obj/item/knitting_needles/KS = loc
+		KS.knitting = 1
+		KS.update_icon()
+		playsound(get_turf(src), 'sound/machines/dial_reset.ogg', 50, 1)
+		return _time * 0.75
+	return _time
+
+/obj/item/stack/sheet/cloth/stop_build(var/_last_crafting = FALSE)
+	if (_last_crafting)
+		if(istype(loc, /obj/machinery/sewing_machine))
+			var/obj/machinery/sewing_machine/SM = loc
+			SM.operating = 0
+			SM.update_icon()
+		else if (istype(loc, /obj/item/knitting_needles))
+			var/obj/item/knitting_needles/KS = loc
+			KS.knitting = 0
+			KS.update_icon()
+
+/obj/item/stack/sheet/cloth/on_empty()
+	if(istype(loc, /obj/machinery/sewing_machine))
+		var/obj/machinery/sewing_machine/SM = loc
+		SM.stored_cloth = null
+		SM.update_icon()
+	else if (istype(loc, /obj/item/knitting_needles))
+		var/obj/item/knitting_needles/KS = loc
+		KS.stored_cloth = null
+		KS.update_icon()
+	..()
+
+/obj/item/stack/sheet/cloth/loc_override()
+	if (istype(loc, /obj/machinery/sewing_machine))
+		var/obj/machinery/sewing_machine/SM = loc
+		return SM.get_output()
+	return null
+
+/obj/item/stack/sheet/cloth/allow_use(var/mob/living/user)
+	if (in_needles_or_machine())
+		return loc.Adjacent(user)
+	else
+		return (user.get_active_hand() == src)
+
+/obj/item/stack/sheet/cloth/list_recipes(var/mob/user, var/recipes_sublist)
+	if (in_needles_or_machine())
+		recipes = cloth_recipes_by_hand + cloth_recipes_with_tool
+	else
+		recipes = cloth_recipes_by_hand
+	..()
+
+/obj/item/stack/sheet/cloth/update_icon()
+	if(amount == 1)
+		icon_state = "sheet-cloth-single"
+		name = "piece of [initial(name)]"
+	else if(amount >= (MAX_SHEET_STACK_AMOUNT / 2))
+		icon_state = "sheet-cloth-large"
+		name = singular_name
+	else
+		icon_state = "sheet-cloth"
+		name = singular_name
+
+/obj/item/stack/sheet/cloth/examine()
+	..()
+	if(amount == 1)
+		to_chat(usr, "<span class='info'>Enough for a rag maybe...</span>")
+	else if(amount >= (MAX_SHEET_STACK_AMOUNT / 2))
+		to_chat(usr, "<span class='info'>Now all you need is a loom or some sewing implements.</span>")
+	else
+		to_chat(usr, "<span class='info'>Can be used on its own to produce some basic items and clothing, but more can be made using the proper tools.</span>")
+
 
 /*
  * Cardboard

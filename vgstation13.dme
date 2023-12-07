@@ -1497,6 +1497,7 @@
 #include "code\modules\clothes_making\sewing.dm"
 #include "code\modules\clothes_making\weaving.dm"
 #include "code\modules\clothing\clothing.dm"
+#include "code\modules\clothing\dyeable_part_to_name.dm"
 #include "code\modules\clothing\accessories\accessory.dm"
 #include "code\modules\clothing\accessories\armband.dm"
 #include "code\modules\clothing\accessories\armor_shards.dm"

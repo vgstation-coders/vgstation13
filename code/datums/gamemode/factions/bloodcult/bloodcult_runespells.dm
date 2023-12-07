@@ -2963,7 +2963,7 @@ var/list/bloodcult_exitportals = list()
 			newCultist.tattoos[TATTOO_HOLY] = new /datum/cult_tattoo/holy()
 			newCultist.tattoos[TATTOO_MANIFEST] = new /datum/cult_tattoo/manifest()
 
-			vessel.equip_or_collect(new /obj/item/clothing/under/rags(vessel), slot_w_uniform)
+			vessel.equip_or_collect(new /obj/item/clothing/under/leather_rags(vessel), slot_w_uniform)
 
 		M.regenerate_icons()
 

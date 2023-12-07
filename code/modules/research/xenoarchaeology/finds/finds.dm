@@ -165,6 +165,17 @@
 	"It's a mystery how anyone is supposed to eat with this",\
 	"You wonder what the creator's mouth was shaped like")]."
 
+/datum/find/sewing_needles
+	find_ID = ARCHAEO_SEWING_NEEDLES
+	responsive_reagent = IRON
+	apply_material_decorations = TRUE
+	apply_image_decorations = TRUE
+
+/datum/find/sewing_needles/spawn_item()
+	var/obj/item/knitting_needles/alien/new_item = new /obj/item/knitting_needles/alien
+	item_type = new_item.name
+	return new_item
+
 /datum/find/statuette
 	find_ID = ARCHAEO_STATUETTE
 	item_type = "statuette"

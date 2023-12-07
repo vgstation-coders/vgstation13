@@ -547,3 +547,22 @@
 		return BlendRGB("#000000", tone, gray/(tone_gray || 1))
 	else
 		return BlendRGB(tone, "#ffffff", (gray-tone_gray)/((255-tone_gray) || 1))
+
+/proc/replace_overlays_icon(var/image/I, var/icon/replacement)
+	if (!I || !replacement)
+		return
+	if(I.icon_state != "blank")
+		I.icon = replacement
+	var/list/new_overlays = list()
+
+	for (var/lay in I.overlays)
+		var/mutable_appearance/overlay_ref = lay
+		var/mutable_appearance/new_overlay = new (overlay_ref)
+		new_overlay.appearance_flags = overlay_ref.appearance_flags
+		new_overlay.color = overlay_ref.color
+		new_overlay = replace_overlays_icon(new_overlay,replacement)
+		new_overlays += new_overlay
+
+	I.overlays.len = 0
+	I.overlays += new_overlays
+	return I
