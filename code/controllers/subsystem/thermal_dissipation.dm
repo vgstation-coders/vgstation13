@@ -66,7 +66,7 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 			if (!(T = get_turf(R.my_atom)))
 				goto tick_check
 
-			if (!(abs((Ta := (turf_temp_list[T] || (turf_temp_list[T] := T.air_temperature()))) - R.chem_temp) >= MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER))  //Do it this way to catch NaNs.
+			if (!(abs((Ta := (turf_temp_list[T] ||= T.air_temperature())) - R.chem_temp) >= MINIMUM_TEMPERATURE_DELTA_TO_CONSIDER))  //Do it this way to catch NaNs.
 				goto tick_check
 
 			if (!R.total_volume || !R.total_thermal_mass || R.gcDestroyed || R.my_atom.gcDestroyed || R.my_atom.timestopped)
@@ -99,7 +99,7 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 
 					reagents_thermal_mass_reciprocal = (1 / R.total_thermal_mass)
 
-					if (simulate_air && !istype(the_air := (turf_air_list[T] || (turf_air_list[T] := T.return_air())), /datum/gas_mixture/unsimulated))
+					if (simulate_air && !istype(the_air := (turf_air_list[T] ||= T.return_air()), /datum/gas_mixture/unsimulated))
 						if(!the_air)
 							goto tick_check
 						air_thermal_mass = the_air.heat_capacity()
@@ -138,7 +138,7 @@ var/list/datum/reagents/thermal_dissipation_reagents = list()
 					R.chem_temp = Tr
 
 				else //At extreme temperatures, we do a simpler calculation to avoid blowing out any values.
-					if (simulate_air && !istype(the_air := (turf_air_list[T] || (turf_air_list[T] := T.return_air())), /datum/gas_mixture/unsimulated)) //For simmed air, we equalize the temperatures.
+					if (simulate_air && !istype(the_air := (turf_air_list[T] ||= T.return_air()), /datum/gas_mixture/unsimulated)) //For simmed air, we equalize the temperatures.
 						if (!the_air)
 							goto tick_check
 						air_thermal_mass = the_air.heat_capacity()
