@@ -587,7 +587,7 @@
 	name = "bottle cap"
 	desc = "Standard Nuka-Cola bottle cap featuring 21 crimps and ridges, and somehow more or less matching the shape of a coin."
 	icon_state = "bottle_cap"
-	credits = 1
+	credits = 0.01
 	siemens_coefficient = 1
 	melt_temperature=MELTPOINT_STEEL
 	force = 0
