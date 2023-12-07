@@ -6,16 +6,22 @@
 
 /datum/visioneffect/material/on_apply(var/mob/M)
 	..()
+	if(!M.client)
+		return
 	process_hud(M)
 
 /datum/visioneffect/material/process_hud(var/mob/M)
 	..()
+	if(!M.client)
+		return
 	M.client.images -= showing
 	showing = get_images(get_turf(M), M.client.view)
 	M.client.images += showing
 
 /datum/visioneffect/material/on_remove(var/mob/M)
 	..()
+	if(!M.client)
+		return
 	M.client.images -= showing
 	showing.Cut()
 

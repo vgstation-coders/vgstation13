@@ -7,6 +7,8 @@
 	..()
 	if(!(M in med_hud_users))
 		med_hud_users += M
+	if(!M.client)
+		return
 	var/client/C = M.client
 	var/image/holder
 	var/turf/T

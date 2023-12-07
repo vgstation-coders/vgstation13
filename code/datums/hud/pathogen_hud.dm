@@ -7,6 +7,8 @@ var/list/science_goggles_wearers = list()
 
 /datum/visioneffect/on_apply(var/mob/M)
 	..()
+	if(!M.client)
+		return
 	science_goggles_wearers.Add(M)
 	for (var/obj/item/I in infected_items)
 		if (I.pathogen)
@@ -27,6 +29,8 @@ var/list/science_goggles_wearers = list()
 
 /datum/visioneffect/on_remove(var/mob/M)
 	..()
+	if(!M.client)
+		return
 	science_goggles_wearers.Remove(M)
 	for (var/obj/item/I in infected_items)
 		M.client.images -= I.pathogen

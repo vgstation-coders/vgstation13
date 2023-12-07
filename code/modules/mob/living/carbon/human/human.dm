@@ -534,7 +534,7 @@
 			show_inv(machine)
 
 	else if (href_list["criminal"])
-		if(!usr.hasHUD(HUD_SECURITY) || isjustobserver(usr))
+		if(!usr.hasHUD(HUD_SECURITY) || !usr.hasHUD(HUD_ARRESTACCESS) || isjustobserver(usr))
 			return
 		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
@@ -2074,10 +2074,19 @@
 		if(HUD_SECURITY)
 			var/glasses = get_item_by_slot(slot_glasses)
 			if(glasses)
-				if(istype(glasses, /obj/item/clothing/glasses/sunglasses/sechud/syndishades))
-					var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/S = glasses
+				if(istype(glasses, /obj/item/clothing/glasses/hud/security/sunglasses/syndishades))
+					var/obj/item/clothing/glasses/hud/security/sunglasses/syndishades/S = glasses
 					return S.full_access
 			for(var/datum/visioneffect/security/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_ARRESTACCESS)
+			var/glasses = get_item_by_slot(slot_glasses)
+			if(glasses)
+				if(istype(glasses, /obj/item/clothing/glasses/hud/security/sunglasses/syndishades))
+					var/obj/item/clothing/glasses/hud/security/sunglasses/syndishades/S = glasses
+					return S.full_access
+			for(var/datum/visioneffect/security/arrest/H in huds)
 				return TRUE
 			return FALSE
 		if(HUD_WAGE)

@@ -367,7 +367,7 @@
 		/obj/item/clothing/mask/cigarette,
 		/obj/item/clothing/shoes/laceup,
 		/obj/item/clothing/glasses/welding/superior,
-		/obj/item/clothing/glasses/sunglasses/sechud,
+		/obj/item/clothing/glasses/hud/security/sunglasses,
 		/obj/item/clothing/glasses/scanner/meson,
 		/obj/item/clothing/gloves/yellow,
 		/obj/item/clothing/gloves/knuckles,

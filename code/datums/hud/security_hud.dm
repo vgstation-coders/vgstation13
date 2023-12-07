@@ -3,8 +3,14 @@
 /datum/visioneffect/security
 	name = "security hud"
 
+
+/datum/visioneffect/security/arrest
+	name = "arrest-setting security hud"
+
 /datum/visioneffect/security/process_hud(var/mob/M)
 	..()
+	if(!M.client)
+		return
 	if(!(M in sec_hud_users))
 		sec_hud_users += M
 	var/client/C = M.client

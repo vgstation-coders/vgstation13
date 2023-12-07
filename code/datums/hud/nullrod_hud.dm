@@ -5,6 +5,8 @@
 
 /datum/visioneffect/nullrod/process_hud(var/mob/V)
 	..()
+	if(!V.client)
+		return
 	var/i = 1
 	for (var/image/I in cached_images)
 		I.loc = null

@@ -136,7 +136,7 @@
 	name = "security HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
 	icon_state = "securityhud"
-	hud_types = list(/datum/visioneffect/security)
+	hud_types = list(/datum/visioneffect/security/arrest)
 
 /obj/item/clothing/glasses/hud/security/jensenshades
 	name = "augmented shades"
@@ -154,6 +154,96 @@
 		vision_flags |= BLIND
 	else
 		vision_flags &= ~BLIND
+
+/obj/item/clothing/glasses/hud/security/sunglasses
+	name = "\improper HUDSunglasses"
+	desc = "Sunglasses with a HUD."
+	icon_state = "sunhud"
+	item_state = "sunglasses"
+	origin_tech = Tc_COMBAT + "=2"
+	darkness_view = -1
+	eyeprot = 1
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	prescription_type = /obj/item/clothing/glasses/hud/security/sunglasses/prescription
+
+/obj/item/clothing/glasses/hud/security/sunglasses/become_defective()
+	if(!defective)
+		..()
+		if(prob(15))
+			new /obj/item/weapon/shard(loc)
+			playsound(src, "shatter", 50, 1)
+			qdel(src)
+			return
+		if(prob(15))
+			new/obj/item/clothing/glasses/sunglasses(get_turf(src))
+			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
+			qdel(src)
+			return
+		if(prob(55))
+			eyeprot = 0
+		if(prob(55))
+			if(istype(src.loc, /mob/living/carbon/human))
+				var/mob/living/carbon/human/M = src.loc
+				if(M.glasses == src)
+					for(var/datum/visioneffect/H in stored_huds)
+						M.remove_hud(H)
+			hud_types = null
+			stored_huds = null
+
+/obj/item/clothing/glasses/hud/security/sunglasses/syndishades
+	name = "sunglasses"
+	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
+	icon_state = "sun"
+	item_state = "sunglasses"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	darkness_view = 0 //Subtly better than normal shades
+	origin_tech = Tc_SYNDICATE + "=3"
+	actions_types = list(/datum/action/item_action/change_appearance_shades)
+	var/static/list/clothing_choices = null
+	var/full_access = FALSE
+
+/obj/item/clothing/glasses/hud/security/sunglasses/syndishades/New()
+	..()
+	if(!clothing_choices)
+		clothing_choices = list()
+		for(var/Type in existing_typesof(/obj/item/clothing/glasses) - /obj/item/clothing/glasses - typesof(/obj/item/clothing/glasses/hud/security/sunglasses/syndishades))
+			var/obj/glass = Type
+			clothing_choices[initial(glass.name)] = glass
+
+/obj/item/clothing/glasses/hud/security/sunglasses/syndishades/attackby(obj/item/I, mob/user)
+	..()
+	if(istype(I, /obj/item/clothing/glasses/hud/security/sunglasses) || istype(I, /obj/item/clothing/glasses/hud/security))
+		var/obj/item/clothing/glasses/hud/security/sunglasses/syndishades/S = I
+		if(istype(S) && !S.full_access)
+			return
+		if(full_access)
+			to_chat(user, "<span class='warning'>\The [src] already has those access codes.</span>")
+			return
+		else
+			to_chat(user, "<span class='notice'>You transfer the security access codes from \the [I] to \the [src].</span>")
+			full_access = TRUE
+
+/datum/action/item_action/change_appearance_shades
+	name = "Change Shades Appearance"
+
+/datum/action/item_action/change_appearance_shades/Trigger()
+	var/obj/item/clothing/glasses/hud/security/sunglasses/syndishades/T = target
+	if(!istype(T))
+		return
+	T.change()
+
+/obj/item/clothing/glasses/hud/security/sunglasses/syndishades/proc/change()
+	var/choice = input("Select style to change it to", "Style Selector") as null|anything in clothing_choices
+	if(src.gcDestroyed || !choice || usr.incapacitated() || !Adjacent(usr))
+		return
+	var/obj/item/clothing/glasses/glass_type = clothing_choices[choice]
+	desc = initial(glass_type.desc)
+	name = initial(glass_type.name)
+	icon_state = initial(glass_type.icon_state)
+	item_state = initial(glass_type.item_state)
+	_color = initial(glass_type._color)
+	usr.update_inv_glasses()
+
 
 /obj/item/clothing/glasses/hud/diagnostic
 	name = "diagnostic HUD"

@@ -1705,6 +1705,7 @@ var/proccalls = 1
 #define HUD_SECURITY 2
 #define HUD_WAGE 3
 #define HUD_MESON 4
+#define HUD_ARRESTACCESS 5
 
 //Cyborg components
 #define COMPONENT_BROKEN -1

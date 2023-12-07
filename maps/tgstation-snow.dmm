@@ -48220,7 +48220,7 @@
 /area/centcom/ert)
 "dkn" = (
 /obj/structure/table/reinforced,
-/obj/item/clothing/glasses/sunglasses/sechud{
+/obj/item/clothing/glasses/hud/security/sunglasses{
 	pixel_y = 8
 	},
 /obj/item/weapon/gun/energy/taser,

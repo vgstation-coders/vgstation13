@@ -10,6 +10,8 @@
 
 /datum/visioneffect/night/on_apply(var/mob/M)
 	..()
+	if(!M.client)
+		return
 	M.client.color = "#33FF33"
 	if (M.master_plane)
 		M.master_plane.blend_mode = BLEND_ADD
@@ -24,6 +26,8 @@
 
 /datum/visioneffect/night/on_remove(var/mob/M)
 	..()
+	if(!M.client)
+		return
 	M.client.color = null
 	if (M.master_plane)
 		M.master_plane.blend_mode = BLEND_MULTIPLY

@@ -119,7 +119,7 @@ BLIND     // can't see anything
 	nearsighted_modifier = -3
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
-/obj/item/clothing/glasses/sunglasses/sechud/prescription
+/obj/item/clothing/glasses/hud/security/sunglasses/prescription
 	name = "prescription security HUD"
 	desc = "A Security HUD with prescription lenses."
 	nearsighted_modifier = -3
@@ -371,92 +371,6 @@ BLIND     // can't see anything
 	item_state = "bigsunglasses"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	min_harm_label = 15
-
-/obj/item/clothing/glasses/sunglasses/sechud
-	name = "\improper HUDSunglasses"
-	desc = "Sunglasses with a HUD."
-	icon_state = "sunhud"
-	var/obj/item/clothing/glasses/hud/security/hud = null
-	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
-	prescription_type = /obj/item/clothing/glasses/sunglasses/sechud/prescription
-
-/obj/item/clothing/glasses/sunglasses/sechud/New()
-	..()
-	src.hud = new/obj/item/clothing/glasses/hud/security(src)
-	return
-
-/obj/item/clothing/glasses/sunglasses/sechud/become_defective()
-	if(!defective)
-		..()
-		if(prob(15))
-			new /obj/item/weapon/shard(loc)
-			playsound(src, "shatter", 50, 1)
-			qdel(src)
-			return
-		if(prob(15))
-			new/obj/item/clothing/glasses/sunglasses(get_turf(src))
-			playsound(src, 'sound/effects/glass_step.ogg', 50, 1)
-			qdel(src)
-			return
-		if(prob(55))
-			eyeprot = 0
-		if(prob(55))
-			hud = null
-			qdel(hud)
-
-/obj/item/clothing/glasses/sunglasses/sechud/syndishades
-	name = "sunglasses"
-	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
-	icon_state = "sun"
-	item_state = "sunglasses"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-	darkness_view = 0 //Subtly better than normal shades
-	origin_tech = Tc_SYNDICATE + "=3"
-	actions_types = list(/datum/action/item_action/change_appearance_shades)
-	var/static/list/clothing_choices = null
-	var/full_access = FALSE
-
-/obj/item/clothing/glasses/sunglasses/sechud/syndishades/New()
-	..()
-	if(!clothing_choices)
-		clothing_choices = list()
-		for(var/Type in existing_typesof(/obj/item/clothing/glasses) - /obj/item/clothing/glasses - typesof(/obj/item/clothing/glasses/sunglasses/sechud/syndishades))
-			var/obj/glass = Type
-			clothing_choices[initial(glass.name)] = glass
-
-/obj/item/clothing/glasses/sunglasses/sechud/syndishades/attackby(obj/item/I, mob/user)
-	..()
-	if(istype(I, /obj/item/clothing/glasses/sunglasses/sechud) || istype(I, /obj/item/clothing/glasses/hud/security))
-		var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/S = I
-		if(istype(S) && !S.full_access)
-			return
-		if(full_access)
-			to_chat(user, "<span class='warning'>\The [src] already has those access codes.</span>")
-			return
-		else
-			to_chat(user, "<span class='notice'>You transfer the security access codes from \the [I] to \the [src].</span>")
-			full_access = TRUE
-
-/datum/action/item_action/change_appearance_shades
-	name = "Change Shades Appearance"
-
-/datum/action/item_action/change_appearance_shades/Trigger()
-	var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/T = target
-	if(!istype(T))
-		return
-	T.change()
-
-/obj/item/clothing/glasses/sunglasses/sechud/syndishades/proc/change()
-	var/choice = input("Select style to change it to", "Style Selector") as null|anything in clothing_choices
-	if(src.gcDestroyed || !choice || usr.incapacitated() || !Adjacent(usr))
-		return
-	var/obj/item/clothing/glasses/glass_type = clothing_choices[choice]
-	desc = initial(glass_type.desc)
-	name = initial(glass_type.name)
-	icon_state = initial(glass_type.icon_state)
-	item_state = initial(glass_type.item_state)
-	_color = initial(glass_type._color)
-	usr.update_inv_glasses()
 
 /obj/item/clothing/glasses/simonglasses
 	name = "Simon's glasses"

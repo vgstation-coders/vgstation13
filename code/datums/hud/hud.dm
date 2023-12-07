@@ -55,6 +55,13 @@ To use, add an instance to mob/list/huds via mob/proc/apply_hud(/datum/visioneff
 	if(!M.client)
 		return
 
+//on_clean_up handles any special cleanup that has to happen with a hud
+/datum/visioneffect/proc/on_clean_up(var/mob/M)
+	if(!M)
+		return
+	if(!M.client)
+		return
+
 /*
 Helper procs and procs used in mobs
 */
@@ -102,6 +109,8 @@ Helper procs and procs used in mobs
 		for(var/image/hud in client.images)
 			if(findtext(hud.icon_state, "hud", 1, 4))
 				client.images -= hud
+	for(var/datum/visioneffect/V in huds)
+		V.on_clean_up()
 	//Maintain a list of security and medical HUD users for easy access to medbot/beepsky messages
 	//Move this to the glasses themselves, not a HUD feature?
 	if(src in med_hud_users)

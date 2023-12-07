@@ -12,6 +12,8 @@ var/list/meson_images = list()
 
 /datum/visioneffect/meson/on_apply(var/mob/M)
 	..()
+	if(!M.client)
+		return
 	meson_wearers += M
 	M.client.images += meson_images
 	M.seedarkness = FALSE

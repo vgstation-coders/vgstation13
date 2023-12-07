@@ -5,6 +5,8 @@
 
 /datum/visioneffect/diagnostic/process_hud(var/mob/M)
 	..()
+	if(!M.client)
+		return
 	diagnostic_hud_users |= M
 
 	var/client/C = M.client

@@ -292,7 +292,7 @@
 	name = "box (GT)"
 	items_to_spawn = list(
 		/obj/item/weapon/implanter/traitor = 2,
-		/obj/item/clothing/glasses/sunglasses/sechud/syndishades,
+		/obj/item/clothing/glasses/hud/security/sunglasses/syndishades,
 	)
 
 /obj/item/weapon/storage/box/syndie_kit/boolets
@@ -307,7 +307,7 @@
 	name = "box (CT)"
 	items_to_spawn = list(
 		/obj/item/weapon/implanter/traitor,
-		/obj/item/clothing/glasses/sunglasses/sechud/syndishades,
+		/obj/item/clothing/glasses/hud/security/sunglasses/syndishades,
 	)
 
 /obj/item/weapon/storage/box/syndie_kit/flaregun
@@ -418,7 +418,7 @@
 		/obj/item/clothing/under/chameleon,
 		/obj/item/clothing/shoes/syndigaloshes,
 		/obj/item/weapon/card/id/syndicate,
-		/obj/item/clothing/glasses/sunglasses/sechud/syndishades,
+		/obj/item/clothing/glasses/hud/security/sunglasses/syndishades,
 		/obj/item/device/reportintercom,
 	)
 

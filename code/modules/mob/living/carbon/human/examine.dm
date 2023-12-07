@@ -433,8 +433,11 @@
 			if(sec_record)
 				criminal = sec_record.fields["criminal"]
 
-				msg += {"<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>
-	<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]\n</a>"}
+				if(user.hasHUD(HUD_ARRESTACCESS))
+					msg += {"<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>\n"}
+				else
+					msg += {"<span class = 'deptradio'>Criminal status:</span> \[[criminal]\]\n"}
+				msg += {"<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]\n</a>"}
 				if(!isjustobserver(user))
 					msg += "<a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"
 				msg += {"[wpermit(src) ? "<span class = 'deptradio'>Has weapon permit.</span>\n" : ""]"}
