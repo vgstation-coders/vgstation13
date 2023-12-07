@@ -79,6 +79,11 @@
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	prescription_type = null
 	var/on = FALSE
+	var/datum/visioneffect/pathogen/stored_pathogen_hud = null
+
+/obj/item/clothing/glasses/hud/health/cmo/New()
+	..()
+	stored_pathogen_hud = new /datum/visioneffect/pathogen
 
 /obj/item/clothing/glasses/hud/health/cmo/attack_self(mob/user)
 	toggle(user)
@@ -86,6 +91,8 @@
 /obj/item/clothing/glasses/hud/health/cmo/proc/toggle(mob/user)
 	if (user.incapacitated())
 		return
+
+	playsound(user,'sound/misc/click.ogg',30,0,-5)
 	if (on)
 		on = FALSE
 		to_chat(user, "You turn the pathogen scanner off.")
@@ -97,19 +104,15 @@
 	user.handle_regular_hud_updates()
 
 /obj/item/clothing/glasses/hud/health/cmo/equipped(mob/M, slot)
-	..()
-	if (!M.client)
-		return
 	if(slot == slot_glasses)
 		if (on)
 			enable(M)
+	..()
 
 /obj/item/clothing/glasses/hud/health/cmo/unequipped(mob/M, from_slot)
-	..()
-	if (!M.client)
-		return
 	if(from_slot == slot_glasses)
 		disable(M)
+	..()
 
 /obj/item/clothing/glasses/hud/health/cmo/proc/enable(mob/M)
 	var/toggle = 0
@@ -122,32 +125,10 @@
 		if (H.glasses == src)
 			toggle = 1
 	if (toggle)
-		playsound(M,'sound/misc/click.ogg',30,0,-5)
-		science_goggles_wearers.Add(M)
-		for (var/obj/item/I in infected_items)
-			if (I.pathogen)
-				M.client.images |= I.pathogen
-		for (var/mob/living/L in infected_contact_mobs)
-			if (L.pathogen)
-				M.client.images |= L.pathogen
-		for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
-			if (C.pathogen)
-				M.client.images |= C.pathogen
-		for (var/obj/effect/decal/cleanable/C in infected_cleanables)
-			if (C.pathogen)
-				M.client.images |= C.pathogen
+		M.apply_hud(stored_pathogen_hud)
 
 /obj/item/clothing/glasses/hud/health/cmo/proc/disable(mob/M)
-	playsound(M,'sound/misc/click.ogg',30,0,-5)
-	science_goggles_wearers.Remove(M)
-	for (var/obj/item/I in infected_items)
-		M.client.images -= I.pathogen
-	for (var/mob/living/L in infected_contact_mobs)
-		M.client.images -= L.pathogen
-	for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
-		M.client.images -= C.pathogen
-	for (var/obj/effect/decal/cleanable/C in infected_cleanables)
-		M.client.images -= C.pathogen
+	M.remove_hud(stored_pathogen_hud)
 
 
 

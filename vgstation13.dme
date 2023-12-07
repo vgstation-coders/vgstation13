@@ -536,6 +536,7 @@
 #include "code\datums\hud\pathogen_hud.dm"
 #include "code\datums\hud\security_hud.dm"
 #include "code\datums\hud\thermal_hud.dm"
+#include "code\datums\hud\vampire_hud.dm"
 #include "code\datums\outfit\captain.dm"
 #include "code\datums\outfit\cargo.dm"
 #include "code\datums\outfit\civilian.dm"

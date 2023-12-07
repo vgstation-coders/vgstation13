@@ -4,7 +4,9 @@
 	if(!client)
 		return 0
 
-	change_sight(removing = BLIND)
+	//Reset mob vision, the flags will be readded after confirming they still have the abilities
+	change_sight(removing = BLIND|SEE_MOBS|SEE_TURFS|SEE_OBJS)
+	see_invisible = SEE_INVISIBLE_LIVING
 
 	regular_hud_updates()
 
@@ -20,43 +22,15 @@
 		if(healths)
 			healths.icon_state = "health7" //DEAD healthmeter
 		return
-	// Vampire bandaid. I'm sorry.
-	// Rewrite idea : divide life() into organs (Eyes...) and have flags in the roles if they overwrite the functions of those organs.
-	// Basically, the problem here is that abstract things (HUD icons) are handled as the same time as "organs" things (seeing in the dark.)
-	var/datum/role/vampire/V = isvampire(src)
-	if (V)
-		var/i = 1
-		for (var/image/I in V.cached_images)
-			I.loc = null
-			src.client.images -= I
-		for (var/mob/living/carbon/C in view(7,src))
-			var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(C)
-			if (N)
-				if (i > V.cached_images.len)
-					var/image/I = image('icons/mob/mob.dmi', loc = C, icon_state = "vampnullrod")
-					I.plane = ABOVE_LIGHTING_PLANE
-					V.cached_images += I
-					src.client.images += I
-				else
-					V.cached_images[i].loc = C
-					src.client.images += V.cached_images[i]
-				i++
 
-	if (!V || !V.is_mature_or_has_vision()) // Not a vampire, or a vampire but neither of the spells.
-		change_sight(removing = SEE_MOBS)
-	if (!V || !(locate(/datum/power/vampire/mature) in V.current_powers))
-		change_sight(removing = SEE_TURFS|SEE_OBJS)
-		var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
-		if(E)
-			see_in_dark = E.see_in_dark
-		see_invisible = see_in_dark > 2 ? SEE_INVISIBLE_LEVEL_ONE : SEE_INVISIBLE_LIVING
+	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
+	if(E)
+		see_in_dark = E.see_in_dark
+	see_invisible = see_in_dark > 2 ? SEE_INVISIBLE_LEVEL_ONE : SEE_INVISIBLE_LIVING
 
-	// Moiving this "see invisble" thing here so that it can be overriden by xrays, vampires...
 	//This proc no longer handles HUDs, but it will handle see_in_dark and other basic modifications done by glasses
 	if(glasses)
 		handle_glasses_vision_updates(glasses)
-	else if (!V)
-		see_invisible = SEE_INVISIBLE_LIVING
 
 	handle_vision_effect_updates()
 
@@ -226,15 +200,6 @@
 			throw_alert(SCREEN_ALARM_FOOD, /obj/abstract/screen/alert/carbon/food/starving, 5)
 
 	update_pull_icon()
-
-	if (istype(glasses, /obj/item/clothing/glasses/scanner/science))
-		var/obj/item/clothing/glasses/scanner/science/S = glasses
-		if (S.on)
-			overlay_fullscreen("science", /obj/abstract/screen/fullscreen/science)
-		else
-			clear_fullscreen("science",0)
-	else
-		clear_fullscreen("science",0)
 
 	if(machine)
 		if(!machine.check_eye(src))

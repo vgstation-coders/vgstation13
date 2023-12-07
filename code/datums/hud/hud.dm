@@ -1,7 +1,7 @@
 /*
 hud.dm
-A datum that defines huds and how to implement them with respect to the mob types and one another.
-
+A datum that defines hud-like in-character vision effects and how to implement them with respect each other.
+To use, add an instance to mob/list/huds via mob/proc/apply_hud(/datum/visioneffect/yourchoicehere)
 */
 
 /datum/visioneffect
@@ -23,27 +23,32 @@ A datum that defines huds and how to implement them with respect to the mob type
 
 	//Determines order of rendering. Equal numbers are rendered in order of application.
 	//Higher numbers are rendered later, so if you need your HUD on top at all costs, give it an ARBITARILY_HIGH_NUMBER
+	//Currently, almost all implemented datums use 0 and will simply draw in order of application
 	var/priority = 0
 
-
+//process_hud is what the effect should do each time life.dm updates vision
+//or vision is otherwise manually updated (such as equipping hudglasses)
 /datum/visioneffect/proc/process_hud(var/mob/M)
 	if(!M)
 		return
 	if(!M.client)
 		return
 
+//This handles the dark_plane and the related alpha overrides for it over in human.dm
 /datum/visioneffect/proc/process_update_perception(var/mob/M)
 	if(!M)
 		return
 	if(!M.client)
 		return
 
+//on_apply occurs whenever the visioneffect is first applied to the mob
 /datum/visioneffect/proc/on_apply(var/mob/M)
 	if(!M)
 		return
 	if(!M.client)
 		return
 
+//on_remove occurs whenever the visioneffect is removed from the mob
 /datum/visioneffect/proc/on_remove(var/mob/M)
 	if(!M)
 		return
@@ -53,7 +58,10 @@ A datum that defines huds and how to implement them with respect to the mob type
 /*
 Helper procs and procs used in mobs
 */
-//Inserts on False or last in list
+//Sorted by number, ascending
+//These visioneffects are drawn in order of the hud list on the mob, first to last.
+//They are drawn right on top of each other, so the last ones drawn will be on top.
+//So, use a higher priority number to have your effect show up on top.
 /proc/sort_visioneffect_priority(var/datum/visioneffect/new_item, var/datum/visioneffect/current_item)
 	return new_item.priority < current_item.priority
 
@@ -70,6 +78,15 @@ Helper procs and procs used in mobs
 	V.on_remove(src)
 	regular_hud_updates()
 
+//Helper proc to clear out a type of hud on a mob
+//Note: This will clear ALL instances, including equipment/organs that provide a visioneffect
+/mob/proc/remove_hud_by_type(type)
+	for(var/V in huds)
+		if(istype(V, type))
+			remove_hud(V)
+	regular_hud_updates()
+
+
 //General mob HUD processing proc, call this for any mob that uses vision effects/huds
 //This is generally expected to be called on a mob's life.dm proc and when an effect is added/removed
 /mob/proc/regular_hud_updates()
@@ -77,6 +94,8 @@ Helper procs and procs used in mobs
 	handle_hud_vision_updates()
 
 //Handles HUD Cleanup
+//Called every life.dm tick, or whenever visionupdates need to be updated.
+//The HUD is redrawn every tick for reasons
 /mob/proc/clean_up_hud()
 	//Reset the HUDs for all mobs before redrawing them.
 	if(client)
@@ -95,7 +114,7 @@ Helper procs and procs used in mobs
 	for(var/datum/visioneffect/V in huds)
 		V.process_hud(src)
 
-//Handles HUD special visual effects such as see_in_dark. Has to be handled after the vision updates above.
+//Handles HUD special vision effects such as see_in_dark. Has to be handled after the vision updates above.
 /mob/proc/handle_vision_effect_updates()
 	for(var/datum/visioneffect/V in huds)
 		if(V.see_in_dark)
@@ -103,8 +122,8 @@ Helper procs and procs used in mobs
 		see_in_dark += V.darkness_view
 		if(V.vision_flags) //MESONS
 			change_sight(adding = V.vision_flags)
-			if(!druggy)
-				see_invisible = SEE_INVISIBLE_MINIMUM
+			//if(!druggy)
+			//	see_invisible = SEE_INVISIBLE_MINIMUM
 		if(V.see_invisible)
 			see_invisible = V.see_invisible
 	update_darkness()

@@ -20,7 +20,11 @@ var/list/science_goggles_wearers = list()
 	for (var/obj/effect/decal/cleanable/C in infected_cleanables)
 		if (C.pathogen)
 			M.client.images |= C.pathogen
-			
+
+/datum/visioneffect/pathogen/process_hud(var/mob/M)
+	..()
+	M.overlay_fullscreen("science", /obj/abstract/screen/fullscreen/science)
+
 /datum/visioneffect/on_remove(var/mob/M)
 	..()
 	science_goggles_wearers.Remove(M)
@@ -32,3 +36,4 @@ var/list/science_goggles_wearers = list()
 		M.client.images -= C.pathogen
 	for (var/obj/effect/decal/cleanable/C in infected_cleanables)
 		M.client.images -= C.pathogen
+	M.clear_fullscreen("science",0)
