@@ -386,6 +386,7 @@
 					/obj/item/weapon/reagent_containers/glass/paint/white,
 					/obj/item/weapon/reagent_containers/glass/paint/remover,
 					/obj/item/weapon/painting_brush,
+					/obj/item/paint_roller,
 					/obj/item/mounted/frame/painting/custom,
 					/obj/item/mounted/frame/painting/custom,
 					/obj/item/mounted/frame/painting/custom/landscape,

@@ -117,6 +117,14 @@ var/const/INGEST = 2
 	handle_reactions()
 	return total_transfered
 
+/datum/reagents/proc/remove_from_all(var/amount=1)
+	for(var/datum/reagent/R in reagent_list)
+		remove_reagent(R.id, (R.volume/total_volume) * amount)
+		if (R.volume < 0.01)
+			del_reagent(R.id,update_totals=0)
+
+	return amount
+
 /datum/reagents/proc/get_master_reagent()
 	var/the_reagent = null
 	var/the_volume = 0
@@ -769,6 +777,8 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	return 1
 
+/datum/reagents/proc/handle_special_behaviours()
+
 /datum/reagents/proc/remove_reagent(var/reagent, var/amount, var/safety)//Added a safety check for the trans_id_to
 
 	if(!isnum(amount))
@@ -991,6 +1001,12 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 /datum/reagents/proc/is_full()
 	return total_volume >= maximum_volume
+
+/datum/reagents/proc/get_max_paint_light()
+	var/max_paint_light = PAINTLIGHT_NONE
+	for (var/datum/reagent/R in reagent_list)
+		max_paint_light = max(max_paint_light, R.paint_light)
+	return max_paint_light
 
 /datum/reagents/proc/get_overall_mass() //currently unused
 	//M = DV

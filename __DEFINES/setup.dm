@@ -1868,3 +1868,8 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 //Cooking-related temperatures
 #define COOKTEMP_DEFAULT (T0C + 316) //Default cooking temperature, around 600 F
 #define COOKTEMP_HUMANSAFE (BODYTEMP_HEAT_DAMAGE_LIMIT - 1) //Human-safe temperature for cooked food, 1 degree less than the threshold for burning a human.
+
+//Paint Luminosity
+#define PAINTLIGHT_NONE		0	//regular paint
+#define PAINTLIGHT_LIMITED	1	//radium, lights up on canvas, limited color mixing
+#define PAINTLIGHT_FULL		2	//nano paint, lights up floors as well

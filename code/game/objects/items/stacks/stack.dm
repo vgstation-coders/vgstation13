@@ -254,6 +254,9 @@
 		..()
 	return
 
+/obj/item/stack/proc/transfer_data_from(var/obj/item/stack/S, var/amount)
+	return
+
 /obj/item/stack/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
 		return 0
