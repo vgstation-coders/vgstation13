@@ -1142,7 +1142,7 @@
 
 /obj/effect/landmark/corpse/grey/researcher
 	name = "Grey Researcher"
-	corpseglasses = /obj/item/clothing/glasses/science
+	corpseglasses = /obj/item/clothing/glasses/scanner/science
 	corpsegloves = /obj/item/clothing/gloves/latex
 	corpsesuit = /obj/item/clothing/suit/storage/labcoat/mothership
 	corpseuniform = /obj/item/clothing/under/grey/grey_researcher
@@ -1291,7 +1291,7 @@
 	/obj/item/clothing/gloves/red, /obj/item/clothing/gloves/latex)
 
 	corpseglasses = list(/obj/item/clothing/glasses/gglasses, /obj/item/clothing/glasses/hud/health, /obj/item/clothing/glasses/monocle, /obj/item/clothing/glasses/regular, /obj/item/clothing/glasses/regular/hipster,\
-	/obj/item/clothing/glasses/science, /obj/item/clothing/glasses/sunglasses, /obj/item/clothing/glasses/sunglasses/big)
+	/obj/item/clothing/glasses/scanner/science, /obj/item/clothing/glasses/sunglasses, /obj/item/clothing/glasses/sunglasses/big)
 
 	corpseshoes = list(/obj/item/clothing/shoes/black, /obj/item/clothing/shoes/blue, /obj/item/clothing/shoes/brown, /obj/item/clothing/shoes/combat, /obj/item/clothing/shoes/galoshes, /obj/item/clothing/shoes/green,\
 	/obj/item/clothing/shoes/jackboots, /obj/item/clothing/shoes/laceup, /obj/item/clothing/shoes/leather, /obj/item/clothing/shoes/orange, /obj/item/clothing/shoes/purple, /obj/item/clothing/shoes/red, /obj/item/clothing/shoes/white)

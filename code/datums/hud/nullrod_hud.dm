@@ -13,7 +13,7 @@
 		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(C)
 		if (N)
 			if (i > cached_images.len)
-				var/image/I = image('icons/mob/hud.dmi', loc = C, icon_state = "hudnullrod")
+				var/image/I = image('icons/mob/mob.dmi', loc = C, icon_state = "vampnullrod")
 				I.plane = ABOVE_LIGHTING_PLANE
 				cached_images += I
 				V.client.images += I

@@ -56,6 +56,7 @@
 	if (C.incapacitated())
 		return
 
+	playsound(C,'sound/misc/click.ogg',30,0,-5)
 	if (on)
 		disable(C)
 	else
@@ -154,3 +155,28 @@
 		icon_state = "mesonoff"
 	else
 		icon_state = initial(icon_state)
+
+/*
+	PATHOGEN HUD
+*/
+
+/obj/item/clothing/glasses/scanner/science
+	name = "science goggles"
+	desc = "almost nothing."
+	icon_state = "purple"
+	item_state = "glasses"
+	origin_tech = Tc_MATERIALS + "=1"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	actions_types = list(/datum/action/item_action/toggle_goggles)
+	prescription_type = /obj/item/clothing/glasses/scanner/science/prescription
+	hud_types = list(/datum/visioneffect/pathogen)
+
+	glasses_fit = TRUE
+	on = FALSE
+
+/obj/item/clothing/glasses/scanner/science/prescription
+	name = "prescription science goggles"
+	nearsighted_modifier = -3
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////

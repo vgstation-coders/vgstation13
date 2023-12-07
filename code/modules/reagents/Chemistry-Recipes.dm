@@ -1554,7 +1554,7 @@
 				to_chat(O, "<span class='danger'>You hear a rumbling and terrifying noises!</span>")
 		else if(ishuman(O))
 			var/mob/living/carbon/human/H = O
-			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/science)))
+			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/scanner/science)))
 				H.flash_eyes(visual = 1)
 				to_chat(O, "<span class='danger'>A flash blinds you[O.is_deaf() ? "" : " while you start hearing terrifying noises"]!</span>")
 			else
@@ -1604,7 +1604,7 @@
 				to_chat(O, "<span class='rose'>You hear an eerie crackling!</span>")
 		else if(ishuman(O))
 			var/mob/living/carbon/human/H = O
-			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/science)))
+			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/scanner/science)))
 				H.flash_eyes(visual = 1)
 				to_chat(O, "<span class='rose'>A flash blinds and you can feel a new presence!</span>")
 			else
@@ -1692,7 +1692,7 @@
 			to_chat(O,"<span class='notice'>you think you can smell some food nearby!</span>")
 		else if(ishuman(O))
 			var/mob/living/carbon/human/H = O
-			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/science)))
+			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/scanner/science)))
 				H.flash_eyes(visual = 1)
 				to_chat(O, "<span class='caution'>A white light blinds you and you think you can smell some food nearby!</span>")
 			else
@@ -1747,7 +1747,7 @@
 			to_chat(O, "<span class='caution'>You think you can hear bottles rolling on the floor!</span>")
 		if(ishuman(O))
 			var/mob/living/carbon/human/H = O
-			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/science)))
+			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/scanner/science)))
 				H.flash_eyes(visual = 1)
 				to_chat(O, "<span class='caution'>A white light blinds you[O.is_deaf() ? "" : " and you think you can hear bottles rolling on the floor"]!</span>")
 			else
@@ -2156,7 +2156,7 @@
 
 		var/list/flashers = list()
 		for(var/mob/living/carbon/human/M in viewers(towards, null))
-			if((M.eyecheck() <= 0) && (!istype(M.glasses, /obj/item/clothing/glasses/science)))
+			if((M.eyecheck() <= 0) && (!istype(M.glasses, /obj/item/clothing/glasses/scanner/science)))
 				M.flash_eyes(visual = 1)
 				flashers += M
 

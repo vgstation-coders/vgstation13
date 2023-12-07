@@ -91,7 +91,7 @@
 /obj/item/weapon/pickaxe,
 /obj/item/weapon/pickaxe/hand,
 /obj/item/clothing/gloves/latex,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/unsimulated/floor/asteroid,
 /area/mining_surprise)
 "H" = (

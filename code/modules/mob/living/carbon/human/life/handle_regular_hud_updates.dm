@@ -227,8 +227,8 @@
 
 	update_pull_icon()
 
-	if (istype(glasses, /obj/item/clothing/glasses/science))
-		var/obj/item/clothing/glasses/science/S = glasses
+	if (istype(glasses, /obj/item/clothing/glasses/scanner/science))
+		var/obj/item/clothing/glasses/scanner/science/S = glasses
 		if (S.on)
 			overlay_fullscreen("science", /obj/abstract/screen/fullscreen/science)
 		else
