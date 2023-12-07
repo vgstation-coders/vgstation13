@@ -1178,7 +1178,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 			if(!victim.check_body_part_coverage(MOUTH)) //if not covered with mask or something
 				victim.visible_message("<span class='warning'>[A] swallows \the [src]!</span>",
 									"<span class='warning'>You swallow \the [src]!</span>")
-				reagents.trans_to(A, reagents.total_volume) //20% chance to get in mouth and in system, if mouth targeting was possible at all with projectiles this chance should be scrapped
+				reagents.trans_to(A, reagents.total_volume)
 				has_splashed = TRUE //guess we arent stacking with the splash
 				qdel(src)
 				return 1
