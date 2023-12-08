@@ -17,6 +17,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	var/thermal_variation_from_environment = 0.055//how much of the environmental temperature do we want to match per entropy procs
 	var/thermal_variation_modifier = 1//if set to 0, no entropy will occur in that container. More than 1 means it reaches room temperature quicker.
 
+	var/controlled_splash = FALSE	//If true, splashing someone/something with the reagent container will only usr the current amount_per_transfer_from_this instead of all of it
+									//Honestly we should try setting this to TRUE by default for all containers at some point, it's just convenient.
+
 /obj/item/weapon/reagent_containers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
 	set category = "Object"
@@ -129,13 +132,23 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return
 
 	if(!src.reagents.total_volume)
-		to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
-		return 0
+		if(user.a_intent == I_HELP)
+			to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
+			return 0
+		else
+			return ..()//empty bottle? hit them with it!
 
 	if(user.a_intent != I_HELP)
 		if(src.reagents)
-			transfer(M, user, splashable_units = -1)
-			playsound(M, 'sound/effects/slosh.ogg', 25, 1)
+			var/transfer_result
+			if (controlled_splash)
+				transfer_result = transfer(M, user, splashable_units = amount_per_transfer_from_this)
+			else
+				transfer_result = transfer(M, user, splashable_units = -1)
+			if (transfer_result)
+				splash_special()
+			if (transfer_result >= 10)
+				playsound(M, 'sound/effects/slosh.ogg', 25, 1)
 			return 1
 
 
@@ -160,6 +173,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			imbibe(M)
 
 			return 0
+
+/obj/item/weapon/reagent_containers/proc/splash_special()
+	return
 
 
 /**

@@ -162,9 +162,8 @@
 				playsound(loc,'sound/effects/slap2.ogg', 10, 1, -2)
 
 /obj/item/weapon/reagent_containers/food/drinks/attack(mob/living/M as mob, mob/user as mob, def_zone)
-
 	//Smashing on someone
-	if(user.a_intent == I_HURT && isGlass && molotov != 1)  //To smash a bottle on someone, the user must be harm intent, the bottle must be out of glass, and we don't want a rag in here
+	if(!controlled_splash && user.a_intent == I_HURT && isGlass && molotov != 1)  //To smash a bottle on someone, the user must be harm intent, the bottle must be out of glass, and we don't want a rag in here
 
 		if(!M) //This really shouldn't be checked here, but sure
 			return
@@ -263,7 +262,7 @@
 		imbibe(user)
 		return 0
 
-	else if(istype(M, /mob/living/carbon/human))
+	else if(istype(M, /mob/living/carbon/human) && (!controlled_splash || user.a_intent == I_HELP))
 
 		user.visible_message("<span class='danger'>[user] attempts to feed [M] \the [src].</span>", "<span class='danger'>You attempt to feed [M] \the [src].</span>")
 
@@ -318,8 +317,16 @@
 	if (transfer(target, user, can_send = FALSE, can_receive = TRUE))
 		return
 
-	// Attempt to transfer from our glass
-	transfer(target, user, can_send = TRUE, can_receive = FALSE)
+	if (!controlled_splash)
+		// Attempt to transfer from our glass
+		transfer(target, user, can_send = TRUE, can_receive = FALSE)
+		return
+
+	var/transfer_result = transfer(target, user, splashable_units = amount_per_transfer_from_this)
+	if (transfer_result)
+		splash_special()
+	if((transfer_result >= 10) && (isturf(target) || istype(target, /obj/machinery/portable_atmospherics/hydroponics)))	//if we're splashing a decent amount of reagent on the floor
+		playsound(target, 'sound/effects/slosh.ogg', 25, 1)
 
 /obj/item/weapon/reagent_containers/food/drinks/examine(mob/user)
 	..()

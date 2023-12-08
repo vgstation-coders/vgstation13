@@ -27,6 +27,8 @@
 	var/list/sound_species_whitelist
 	var/list/sound_genders_allowed //Checks for what gender it is allowed to play the sound for
 
+	var/list/dyed_parts = list()
+
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
 		accessories.Remove(A)
@@ -108,6 +110,15 @@
 			return ..()
 		return
 	return ..()
+
+/obj/item/clothing/clean_act(var/cleanliness)
+	..()
+	if (cleanliness >= CLEANLINESS_BLEACH)
+		dyed_parts.len = 0
+		update_icon()
+		if (ismob(loc))
+			var/mob/M = loc
+			M.update_inv_hands()
 
 /obj/item/clothing/proc/attach_accessory(obj/item/clothing/accessory/accessory, mob/user)
 	accessories += accessory

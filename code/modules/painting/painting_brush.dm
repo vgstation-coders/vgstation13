@@ -28,6 +28,7 @@
 	// Paint brush stuff
 	var/paint_color = null
 
+
 /obj/item/weapon/painting_brush/update_icon()
 	..()
 	overlays.len = 0
@@ -65,6 +66,12 @@
 			the_turf.advanced_graffiti = advanced_graffiti
 		the_turf.advanced_graffiti.interact(user, p)
 		return
+
+/obj/item/painting_brush/clean_act(var/cleanliness)
+	..()
+	paint_color = null
+	nano_paint = PAINTLIGHT_NONE
+	update_icon()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -212,6 +219,12 @@
 	var/new_mode = input("Choose a painting mode","[src]") in stroke_states
 	if (new_mode && !usr.incapacitated() && Adjacent(usr))
 		stroke_state = stroke_states[new_mode]
+
+/obj/item/paint_roller/clean_act(var/cleanliness)
+	..()
+	paint_color = null
+	nano_paint = PAINTLIGHT_NONE
+	update_icon()
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

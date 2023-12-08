@@ -595,6 +595,7 @@
 		/obj/item/clothing/accessory/wristwatch,
 		/obj/item/clothing/accessory/wristwatch/black,
 		/obj/item/high_roller,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
 		)
 
 /obj/abstract/map/spawner/maint/lowchance

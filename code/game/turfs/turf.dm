@@ -727,3 +727,8 @@
 	if (!PathNodes)
 		PathNodes = list()
 	PathNodes["[id]"] = PN
+
+/turf/clean_act(var/cleanliness)
+	..()
+	if (cleanliness >= CLEANLINESS_BLEACH)
+		remove_paint_overlay(TRUE)

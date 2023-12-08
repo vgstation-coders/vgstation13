@@ -418,3 +418,19 @@
 	progress_goal = 20
 	progress_time = 15 SECONDS
 	progress_fail_chance = 25
+
+/obj/item/weapon/storage/toolbox/nanopaint
+	name = "nano painter's toolbox"
+	desc = "Contains an assortment of luminous nano paints for the artistic trader."
+	icon_state = "toolbox_nanopaint"
+	item_state = "toolbox_nanopaint"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/arts_n_crafts.dmi', "right_hand" = 'icons/mob/in-hand/right/arts_n_crafts.dmi')
+	attack_verb = list("daubs", "decorates", "slathers")
+	max_combined_w_class = 42
+	items_to_spawn = list(
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/vantablack,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/red,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/green,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/blue,
+		/obj/item/clothing/glasses/sunglasses/polarized,
+	)

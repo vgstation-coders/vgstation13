@@ -46,6 +46,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/list/alphas_obj = list()
 	var/impactsound
 	var/current_glue_state = GLUE_STATE_NONE
+	var/last_glue_application = 0
 
 	//Does this item have a slime installed?
 	var/has_slime = 0
@@ -266,6 +267,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return 1
 	return
 
+/obj/clean_act(var/cleanliness)
+	..()
+	if (cleanliness >= CLEANLINESS_WATER)
+		unglue()
 
 /obj/proc/cultify()
 	qdel(src)

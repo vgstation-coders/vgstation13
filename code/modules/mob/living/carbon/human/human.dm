@@ -1021,6 +1021,18 @@
 		update_inv_shoes(1)
 		return 1
 
+/mob/living/carbon/human/clean_act(var/cleanliness)
+	..()
+	for(var/obj/item/I in held_items)
+		I.clean_act(cleanliness)
+
+	for(var/obj/item/clothing/C in get_equipped_items())
+		C.clean_act(cleanliness)
+
+	if (cleanliness >= CLEANLINESS_SPACECLEANER)
+		color = ""//color is a bit easier to remove on humans, for convenience's sake
+
+
 /mob/living/carbon/human/yank_out_object()
 	set category = "Object"
 	set name = "Yank out object"
