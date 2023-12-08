@@ -60,10 +60,6 @@
 	stop_automated_movement = TRUE //has custom light-related wander movement
 	wander = FALSE
 
-	// 515 teething issues
-	var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster
-	var/obj/abstract/screen/overdark_target/overdark_target
-
 /datum/grue_calc //used for light-related calculations
 	var/bright_limit_gain = 1											//maximum brightness on tile for health and power regen
 	var/bright_limit_drain = 3											//maximum brightness on tile to not drain health and power
@@ -315,16 +311,9 @@
 	init_language = default_language
 	lifestage_updates() //update the grue's sprite and stats according to the current lifestage
 
-	overdark_planemaster = new
-	overdark_planemaster.render_target = "night vision goggles (\ref[src])"
-	overdark_target = new
-	overdark_target.render_source = "night vision goggles (\ref[src])"
-
 /mob/living/simple_animal/hostile/grue/Login()
 	..()
 	client.images += light_source_images
-	client.screen |= overdark_planemaster
-	client.screen |= overdark_target
 
 /mob/living/simple_animal/hostile/grue/UnarmedAttack(atom/A)
 	if(isturf(A))

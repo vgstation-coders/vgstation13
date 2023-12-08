@@ -3,6 +3,10 @@
 	var/obj/abstract/screen/backdrop/backdrop
 	var/obj/abstract/screen/plane/self_vision/self_vision
 	var/obj/abstract/screen/plane/dark/dark_plane
+
+	var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster
+	var/obj/abstract/screen/overdark_target/overdark_target
+
 	var/seedarkness = 1
 
 /mob/proc/create_lighting_planes()
@@ -29,7 +33,16 @@
 	backdrop = new(client)
 	self_vision = new(client)
 
+	overdark_planemaster = new
+	overdark_planemaster.render_target = "night vision goggles (\ref[src])"
+	overdark_target = new
+	overdark_target.render_source = "night vision goggles (\ref[src])"
+
+	client.screen |= overdark_planemaster
+	client.screen |= overdark_target
+
 	give_light_prerenders()
+	change_sight(adding = SEE_PIXELS)
 
 	update_darkness()
 	register_event(/event/before_move, src, /mob/proc/check_dark_vision)
