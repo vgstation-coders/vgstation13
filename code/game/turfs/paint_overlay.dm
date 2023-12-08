@@ -154,6 +154,8 @@
 	copy.main_color = main_color
 	return copy
 
+#define PAINT_OPACITY_THRESHOLD_FOR_FOOTPRINTS_REMOVAL	200
+
 //the main proc that deals with actually adding paint on the floor
 /datum/paint_overlay/proc/apply(var/_color=COLOR_WHITE,var/_alpha=255,var/_mask=null,var/_mask_dir=SOUTH,var/list/_blood_DNA=list(),var/_nano_paint=FALSE)
 	my_turf.overlays -= overlay
@@ -177,7 +179,7 @@
 		new_paint_layer.alpha = _alpha
 		overlay.overlays += new_paint_layer
 		sub_overlays += new_paint_layer
-		if (_alpha >= 200)
+		if (_alpha >= PAINT_OPACITY_THRESHOLD_FOR_FOOTPRINTS_REMOVAL)
 			wet(_color, 10 SECONDS, 3)
 			for(var/obj/effect/decal/cleanable/blood/tracks/T in my_turf)
 				qdel(T)//and let's remove footprints too
@@ -195,6 +197,8 @@
 	if (blood_DNA.len <= 0)
 		blood_DNA["wet paint"] = "paint"
 	my_turf.overlays += overlay
+
+#undef PAINT_OPACITY_THRESHOLD_FOR_FOOTPRINTS_REMOVAL
 
 //Causes the floor to wet the feet of humans, causing them to leave paint footprints
 /datum/paint_overlay/proc/wet(var/_color=COLOR_WHITE,var/_duration=10 SECONDS, var/_amount=3)//amount means how far footprints can go
