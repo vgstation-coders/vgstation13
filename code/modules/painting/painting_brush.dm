@@ -228,6 +228,9 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/arts_n_crafts.dmi', "right_hand" = 'icons/mob/in-hand/right/arts_n_crafts.dmi')
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=2;"
 	w_class = W_CLASS_LARGE
+	starting_materials = list(MAT_IRON = 9375)//half of the materials used to print one
+	w_type = RECYK_METAL
+	melt_temperature = MELTPOINT_STEEL
 	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
 	slowdown = NO_SLOWDOWN//HIGHROLLER_SLOWDOWN when active
 
