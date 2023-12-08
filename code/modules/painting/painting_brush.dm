@@ -87,9 +87,6 @@
 			component_alt = component.Copy()
 			var/list/paint_color_rgb = rgb2num(paint_rgb)
 			paint_color = rgb(paint_color_rgb[1], paint_color_rgb[2], paint_color_rgb[3], mix_alpha_from_reagents(target.reagents.reagent_list))
-			nano_paint = target.reagents.get_max_paint_light()
-			if (nano_paint == PAINTLIGHT_LIMITED)//for now, only Radium
-				user.apply_radiation(4)//never4get the Radium Girls
 			to_chat(user, "<span class='notice'>You dip \the [name] in \the [target.name].</span>")
 			var/datum/reagent/B = get_blood(target.reagents)
 			if (B)
@@ -116,6 +113,11 @@
 			H.add_blood_to_feet(3, paint_color, list("wet paint" = "paint"))
 		else
 			H.bloody_body_from_data(copy_blood_data(paint_data),0,src)
+			if ((target == user) && (user.zone_sel.selecting == TARGET_MOUTH))
+				user.visible_message("[user] licks their brush to consolidate the bristles for detail work.","You lick your brush to consolidate the bristles for detail work.")
+				nano_paint = target.reagents.get_max_paint_light()
+				if (nano_paint == PAINTLIGHT_LIMITED)//Ingesting bits of Radium
+					user.apply_radiation(4)//never4get the Radium Girls
 		playsound(src, get_sfx("mop"), 5, 1)
 
 //presumably this will allow painting on the floor, credit to Anonymous user No.453861032
