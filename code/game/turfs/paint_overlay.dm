@@ -94,13 +94,13 @@
 //------------------------------------------------------
 
 //covers the whole turf with a new coat of paint, removing all paint decals in the process.
-/turf/proc/apply_paint_overlay(var/_color="#FFFFFF",var/_alpha=255,var/_DNA = list(),var/_nano_paint=FALSE)
+/turf/proc/apply_paint_overlay(var/_color=COLOR_WHITE,var/_alpha=255,var/_DNA = list(),var/_nano_paint=FALSE)
 	if (!paint_overlay)
 		paint_overlay=new(src)
 	paint_overlay.apply(_color,_alpha, null, SOUTH, _DNA, _nano_paint)
 
 //applies a paint decal
-/turf/proc/apply_paint_stroke(var/_color="#FFFFFF",var/_alpha=255,var/_dir=SOUTH,var/_stroke_icon = "border_splatter",var/_DNA = list(),var/_nano_paint=FALSE)
+/turf/proc/apply_paint_stroke(var/_color=COLOR_WHITE,var/_alpha=255,var/_dir=SOUTH,var/_stroke_icon = "border_splatter",var/_DNA = list(),var/_nano_paint=FALSE)
 	if (!paint_overlay)
 		paint_overlay=new(src)
 	paint_overlay.add_border_stroke(_color,_alpha,_dir, _stroke_icon, _DNA, _nano_paint)
@@ -122,7 +122,7 @@
 	var/turf/my_turf
 	var/image/overlay
 	var/list/sub_overlays = list()
-	var/wet_color = "#FFFFFF"
+	var/wet_color = COLOR_WHITE
 	var/wet_time = 0//world.time of the last time paint was applied that covers the whole tile AND is opaque enough (200+ alpha)
 	var/wet_duration = 10 SECONDS//relatively fast-drying
 	var/wet_amount = 3//how many steps with wet shoes
@@ -155,7 +155,7 @@
 	return copy
 
 //the main proc that deals with actually adding paint on the floor
-/datum/paint_overlay/proc/apply(var/_color="#FFFFFF",var/_alpha=255,var/_mask=null,var/_mask_dir=SOUTH,var/list/_blood_DNA=list(),var/_nano_paint=FALSE)
+/datum/paint_overlay/proc/apply(var/_color=COLOR_WHITE,var/_alpha=255,var/_mask=null,var/_mask_dir=SOUTH,var/list/_blood_DNA=list(),var/_nano_paint=FALSE)
 	my_turf.overlays -= overlay
 	if (!overlay)
 		overlay = image('icons/turf/paint_overlays_floors.dmi',my_turf,"no_paint")
@@ -197,7 +197,7 @@
 	my_turf.overlays += overlay
 
 //Causes the floor to wet the feet of humans, causing them to leave paint footprints
-/datum/paint_overlay/proc/wet(var/_color="#FFFFFF",var/_duration=10 SECONDS, var/_amount=3)//amount means how far footprints can go
+/datum/paint_overlay/proc/wet(var/_color=COLOR_WHITE,var/_duration=10 SECONDS, var/_amount=3)//amount means how far footprints can go
 	wet_time = world.time
 
 	wet_color = _color
@@ -205,7 +205,7 @@
 	wet_amount = _amount
 
 //Adding paint decals.
-/datum/paint_overlay/proc/add_border_stroke(var/_color="#FFFFFF",var/_alpha=255,var/_dir=SOUTH,var/stroke_icon = "border_splatter",var/list/_blood_DNA=list(),var/_nano_paint=FALSE)
+/datum/paint_overlay/proc/add_border_stroke(var/_color=COLOR_WHITE,var/_alpha=255,var/_dir=SOUTH,var/stroke_icon = "border_splatter",var/list/_blood_DNA=list(),var/_nano_paint=FALSE)
 	if (!overlay)
 		overlay = image('icons/turf/paint_overlays_floors.dmi',my_turf,"no_paint")
 		overlay.layer = PAINT_LAYER
@@ -305,7 +305,7 @@
 	layer = PAINT_LAYER
 	icon = 'icons/turf/paint_overlays_floors.dmi'
 	icon_state = "fullblack"
-	color = "#FFFFFF"
+	color = COLOR_WHITE
 	alpha = 255
 	var/coat_luminosity = FALSE
 
