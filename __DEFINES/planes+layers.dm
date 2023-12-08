@@ -346,9 +346,6 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
 	screen |= ghost_planemaster_dummy
 
-
-// 515 has teething issues that needs to be resolved
-/*
 // OVERDARKNESS PLANEMASTER
 // Used to move the BYOND darkness plane from SEE_BLACKNESS to a different plane so it covers things on desired planes above 0
 /obj/abstract/screen/plane_master/overdark_planemaster
@@ -362,7 +359,6 @@ var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster =
 	plane = ABOVE_LIGHTING_PLANE
 	mouse_opacity = 0
 	screen_loc = "CENTER,CENTER"
-*/
 
 /obj/abstract/screen/plane_master/fakecamera_planemaster
 	plane = FAKE_CAMERA_PLANE
