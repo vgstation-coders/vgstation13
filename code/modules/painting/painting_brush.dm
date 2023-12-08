@@ -271,6 +271,9 @@
 
 /obj/item/high_roller/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/reagent_containers))
+		if(!W.is_open_container())
+			to_chat(user, "<span class='warning'>The container must be open to get properly slotted onto the roller.</span>")
+			return
 		if(user.drop_item(W, src))
 			if (container)
 				user.put_in_hands(container)
