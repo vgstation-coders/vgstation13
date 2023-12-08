@@ -374,13 +374,13 @@
 			var/obj/item/weapon/lighter/lighter = deployed
 			lighter.lit = 0
 			processing_objects.Remove(deployed)
-			set_light(0)
+			kill_light()
 			light_color = initial(light_color)
 		if(istype(deployed, /obj/item/weapon/match/strike_anywhere))
 			var/obj/item/weapon/match/strike_anywhere/match = deployed
 			match.lit = 0
 			processing_objects.Remove(deployed)
-			set_light(0)
+			kill_light()
 			light_color = initial(light_color)
 
 /obj/item/weapon/switchtool/swiss_army_knife/preattack(atom/target, mob/user, proximity_flag, click_parameters)

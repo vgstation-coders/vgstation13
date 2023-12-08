@@ -272,7 +272,7 @@
 		set_light()
 	else
 		icon_state = initial(icon_state)
-		set_light(0)
+		kill_light()
 	if(playsound && has_sound)
 		if(get_turf(src))
 			playsound(src, on ? sound_on : sound_off, 50, 1)

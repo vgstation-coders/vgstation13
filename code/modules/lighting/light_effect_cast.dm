@@ -116,7 +116,6 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 					if (!(T2 in cached_view) && CHECK_OCCLUSION(T2))
 						affected_shadow_walls += T2
 
-
 	if(!isturf(loc))
 		for(var/turf/T in affecting_turfs)
 			T.lumcount = -1

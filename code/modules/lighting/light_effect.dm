@@ -20,7 +20,7 @@
 	pixel_y = -WORLD_ICON_SIZE/2
 	glide_size = WORLD_ICON_SIZE
 	blend_mode = BLEND_ADD
-	animate_movement = NO_STEPS
+	animate_movement = SLIDE_STEPS
 
 	alpha = 180
 	color = "#FFFFFF"
@@ -119,17 +119,19 @@
 
 // Moves the light overlay to the holder's turf and updates bleeding values accordingly.
 /atom/movable/light/proc/follow_holder()
+	var/gliding = get_glide(holder)
 	if(lighting_update_lights)
 		if(holder && holder.loc)
 			follow_holder_dir()
-
 			if(isturf(holder))
-				forceMove(holder, glide_size_override = get_glide(holder)) // Default glide.
+				forceMove(holder, glide_size_override = gliding) // Default glide.
 			else if(holder.loc.loc && ismob(holder.loc))
-				var/mob/M = holder.loc
-				forceMove(holder.loc.loc, glide_size_override = get_glide(M)) // Glide size from our mob.
+				gliding = get_glide(holder.loc)
+				forceMove(holder.loc.loc, glide_size_override = gliding) // Glide size from our mob.
 			else
-				forceMove(holder.loc, glide_size_override = get_glide()) // Hopefully whatever we're gliding with has smooth movement.
+				gliding = WORLD_ICON_SIZE
+				visible_message("case 3")
+				forceMove(holder.loc, glide_size_override = gliding) // Hopefully whatever we're gliding with has smooth movement.
 
 			if (world.tick_usage < LIGHT_CPU_THRESHOLD || !ticker || ticker.current_state < GAME_STATE_SETTING_UP)
 				cast_light() // We don't use the subsystem queue for this since it's too slow to prevent shadows not being updated quickly enough
@@ -142,8 +144,10 @@
 /atom/movable/light/secondary_shadow/follow_holder()
 	return
 
-/atom/movable/light/proc/get_glide(var/holder)
-	return WORLD_ICON_SIZE
+/atom/movable/light/proc/get_glide(var/atom/movable/the_holder)
+	if (!the_holder)
+		the_holder = holder
+	return holder.glide_size || WORLD_ICON_SIZE
 
 /atom/movable/light/proc/set_dir(new_dir)
 	if(dir != new_dir)

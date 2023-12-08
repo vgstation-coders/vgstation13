@@ -2061,7 +2061,7 @@ var/list/bloodstone_list = list()
 		visible_message("<span class='warning'>\The [src] breaks apart!</span>")
 		icon_state = "pylon-broken"
 		sound_damaged = 'sound/effects/stone_hit.ogg'
-		set_light(0)
+		kill_light()
 		setDensity(FALSE)
 		broken = 1
 

@@ -638,7 +638,7 @@
 			icon_state = "metalbarrel"
 		else
 			icon_state = "woodenbarrel"
-		set_light(0,0,LIGHT_COLOR_FIRE)
+		kill_light()
 	render_cookvessel()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/take_damage(incoming_damage, damage_type, skip_break, mute, var/sound_effect = 1) //Custom take_damage() proc because of sound_effect behavior.

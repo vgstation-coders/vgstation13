@@ -49,7 +49,11 @@
 	for(var/thing in (specific_contents + src))
 		var/atom/A = thing
 		if(A && !A.gcDestroyed)
-			A.update_all_lights()
+			spawn(1)
+				A.update_all_lights()
+
+/atom/movable/light/update_contained_lights(var/list/specific_contents)
+	return
 
 /atom/var/dynamic_lighting = 0
 

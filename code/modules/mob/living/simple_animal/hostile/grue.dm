@@ -712,7 +712,7 @@
 				to_chat(src, "<span class='notice'>You need to feed more first.</span>")
 	else
 		channeling_flags &= !GRUE_DRAINLIGHT
-		set_light(0)
+		kill_light()
 		if(nutrienergy)
 			if(!mute)
 				to_chat(src, "<span class='notice'>You stop draining light.</span>")

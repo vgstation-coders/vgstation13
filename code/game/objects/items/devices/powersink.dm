@@ -31,7 +31,7 @@
 	power_connection.power_priority = POWER_PRIORITY_BYPASS
 
 /obj/item/device/powersink/Destroy()
-	set_light(0)
+	kill_light()
 	processing_objects.Remove(src)
 	if(power_connection)
 		QDEL_NULL(power_connection)
