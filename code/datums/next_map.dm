@@ -109,7 +109,7 @@
 
 /datum/next_map/horizon
 	name = "NRV Horizon"
-	path = "NRV Horizon"
+	path = "horizon"
 	min_players = 5
 	max_players = 25
 
