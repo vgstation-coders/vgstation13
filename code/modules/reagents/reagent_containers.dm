@@ -442,7 +442,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 					set_ice_overlay()
 				else
 					update_ice_overlay()
-			if ((T0C+50) to INFINITY)
+			if (STEAMTEMP to INFINITY)
 				if (!particles)
 					particles = new/particles/steam
 				steam_spawn_adjust(reagents.chem_temp)
@@ -514,6 +514,6 @@ var/global/list/image/ice_overlays = list()
 
 /obj/item/weapon/reagent_containers/proc/steam_spawn_adjust(var/_temp)
 	if (particles)
-		particles.spawning = clamp(0.1 + 0.002 * (_temp - (T0C+50)),0.1,0.5)
+		particles.spawning = clamp(0.1 + 0.002 * (_temp - STEAMTEMP),0.1,0.5)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

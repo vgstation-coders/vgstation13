@@ -83,7 +83,7 @@
 		average_chem_temp /= chem_temps
 	if (!particles)
 		particles = new/particles/steam
-	if (average_chem_temp >= (T0C+50))
+	if (average_chem_temp >= STEAMTEMP)
 		steam_spawn_adjust(average_chem_temp)
 	else
 		particles.spawning = 0
@@ -436,7 +436,7 @@
 		average_chem_temp /= chem_temps
 	if (!particles)
 		particles = new/particles/steam
-	if (average_chem_temp >= (T0C+50))
+	if (average_chem_temp >= STEAMTEMP)
 		steam_spawn_adjust(average_chem_temp)
 
 	cookingprogress += (SS_WAIT_FAST_OBJECTS * speed_multiplier)

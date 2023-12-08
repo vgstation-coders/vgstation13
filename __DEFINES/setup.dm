@@ -1879,6 +1879,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define FRIDGETEMP_FREEZER	 (T0C - 40)
 #define FRIDGETEMP_FROZEN	 (T0C - 20)//because freezers at room temperature actually hold items at -20°C, so we can apply that to meatvend items
 #define FRIDGETEMP_DEFAULT	 (T0C + 4)
+#define STEAMTEMP	 (T0C + 50)
 #define COOKTEMP_READY	 (T0C + 100) //The minimal temperature at which items come out of a frying pan, enables food to visibly steam. After a few seconds it's fully safe to eat.
 #define COOKTEMP_DEFAULT (T0C + 316) //Default cooking temperature, around 600 F
 #define COOKTEMP_EMAGGED (T0C + 8000000)

@@ -208,7 +208,7 @@
 	particles.spawning = 0
 
 	if(reagents && reagents.total_volume)
-		if (reagents.chem_temp >= (T0C+50))
+		if (reagents.chem_temp >= STEAMTEMP)
 			steam_spawn_adjust(reagents.chem_temp)
 
 /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer
