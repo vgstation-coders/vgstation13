@@ -1020,6 +1020,9 @@ its easier to just keep the beam vertical.
 /atom/proc/attempt_heating(atom/A, mob/user)
 	return
 
+/atom/proc/process_temperature()
+	return
+
 /atom/proc/update_temperature_overlays()
 	return
 

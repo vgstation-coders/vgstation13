@@ -16,7 +16,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	var/image/ice_overlay = null
 	var/ice_alpha = 64
-
+	var/thermal_entropy_delay = 2 SECONDS//we run thermal_entropy() every X ticks
+	var/thermal_variation_from_environment = 0.055//how much of the environmental temperature do we want to match per entropy procs
 	var/thermal_variation_modifier = 1//if set to 0, no entropy will occur in that container. More than 1 means it reaches room temperature quicker.
 
 	var/controlled_splash = FALSE	//If true, splashing someone/something with the reagent container will only usr the current amount_per_transfer_from_this instead of all of it
@@ -78,9 +79,31 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return
 	return ..()
 
+/obj/item/weapon/reagent_containers/MiddleAltClick(var/mob/living/user)
+	if(!is_holder_of(user, src))
+		return
+	if(!reagents || !reagents.total_volume)
+		to_chat(user, "<span class='warning'>\The [src] is desperately empty.</span>")
+		return
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if (H.species && (H.species.flags & SPECIES_NO_MOUTH))
+			to_chat(user, "<span class='warning'>You stare at \the [src] intently. Wishing you had a mouth to interact with it.</span>")
+			return
+	thermal_entropy()
+	playsound(user, 'sound/effects/blow.ogg', 5, 1, -2)
+	var/can_it_burn = round(user.get_splash_burn_damage(amount_per_imbibe, reagents.chem_temp))
+	if (can_it_burn)
+		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='warning'>It feels quite hot still...</span>")
+	else if (reagents.chem_temp <= T0C)
+		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='warning'>It feels pretty cold still...</span>")
+	else
+		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='notice'>Temperature seems safe...</span>")
+
 /obj/item/weapon/reagent_containers/New()
 	..()
 	create_reagents(volume)
+	all_reagent_containers.Add(src)
 
 	if(!is_open_container(src))
 		src.verbs -= /obj/item/weapon/reagent_containers/verb/empty_contents
@@ -92,6 +115,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		var/obj/machinery/iv_drip/holder = loc
 		holder.remove_container()
 	thermal_dissipation_reagents -= reagents
+	all_reagent_containers.Remove(src)
 	. = ..()
 
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
@@ -406,10 +430,12 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /obj/item/weapon/reagent_containers/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	reagents.heating(1000, exposed_temperature)
 	..()
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/attackby(obj/item/I, mob/user, params)
 	..()
 	attempt_heating(I, user)
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/attempt_heating(atom/A, mob/user)
 	var/temperature = A.is_hot()
@@ -430,6 +456,60 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	. = ..()
 	//Reagent containers can exchange heat with the surrounding air.
 	heat_dissipation_updates() //Every reagent_containers that should be added to the heat dissipation subsystem should call this on_reagent_change(). If you add something that breaks the supercall chain, be sure to call this.
+	process_temperature()
+
+////////////THERMAL ENTROPY///////////////////////////////////////////////////////////////////////////////////////////////////
+
+//an overly simple thermal entropy proc that lets food match the temperature of their environnement over time
+//we don't send the temperature difference back to the environnement because frankly it's not gonna matter in 99.999% of the cases.
+//furthermore, we stop looping once the temperature is less than a degree away from the environment, until we get moved or picked up.
+//won't resume on passive temperature changes in a room, but we can always add a subsystem later that checks for additional temperature changes every minute or so I guess
+/obj/item/weapon/reagent_containers/process_temperature()
+	thermal_entropy_containers |= src
+
+/obj/item/weapon/reagent_containers/proc/thermal_entropy()
+	set waitfor = FALSE
+
+	if (!reagents || !reagents.total_volume)
+		thermal_entropy_containers.Remove(src)
+		update_temperature_overlays()
+		return
+
+	var/datum/gas_mixture/air = return_air()
+
+	if (!air)
+		thermal_entropy_containers.Remove(src)
+		return
+
+	var/diff = air.temperature - reagents.chem_temp
+
+	//we only bother if there's less than a 1 degree difference
+	if (abs(diff) < 2)
+		thermal_entropy_containers.Remove(src)
+
+	//based on newton's law of cooling
+	reagents.chem_temp = reagents.chem_temp + diff * thermal_variation_from_environment * thermal_variation_modifier
+
+	if(!(reagents.skip_flags & SKIP_RXN_CHECK_ON_HEATING))
+		reagents.handle_reactions()
+
+	update_icon()
+
+/obj/item/weapon/reagent_containers/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
+	..()
+	process_temperature()
+
+/obj/item/weapon/reagent_containers/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+	..()
+	process_temperature()
+
+/obj/item/weapon/reagent_containers/dropped(var/mob/user)
+	..()
+	process_temperature()
+
+/obj/item/weapon/reagent_containers/pickup(var/mob/user)
+	..()
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/update_temperature_overlays()
 	if (particles)

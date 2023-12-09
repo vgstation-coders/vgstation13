@@ -73,6 +73,7 @@
 				..()
 		set_tiny_label(user)
 	attempt_heating(W, user)
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/glass/fits_in_iv_drip()
 	return 1
@@ -276,7 +277,11 @@
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
 	opaque = TRUE
+	thermal_variation_modifier = 0
 	heat_conductivity = 0
+
+/obj/item/weapon/reagent_containers/glass/beaker/noreact/thermal_entropy()
+	thermal_entropy_containers.Remove(src)
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/get_heat_conductivity()
 	return 0
@@ -468,6 +473,7 @@
 		qdel(src)
 		return
 	attempt_heating(D, user)
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/glass/bucket/on_reagent_change()
 	..()

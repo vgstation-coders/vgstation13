@@ -13,6 +13,7 @@
 	..()
 	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER	//Randomizes position slightly.
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/food/fits_in_iv_drip()
 	return 1
