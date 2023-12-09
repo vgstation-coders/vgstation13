@@ -823,7 +823,7 @@
 		return pop_open(user)
 	if (reagents.total_volume > 0)
 		return ..()
-	else if (user.a_intent == I_HURT)
+	else if (!isGlass && (user.a_intent == I_HURT))
 		var/turf/T = get_turf(user)
 		user.drop_item(src, T, 1)
 		var/obj/item/trash/soda_cans/crushed_can = new (T, icon_state = icon_state)
@@ -935,22 +935,50 @@
 	desc = "Cool, refreshing, Nuka Cola."
 	icon_state = "nuka"
 	tabself = "You pop the cap off"
+	molotov = -1 //can become a molotov
+	isGlass = 1
+	can_flip = TRUE
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka/New()
 	..()
 	reagents.add_reagent(NUKA_COLA, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+	update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka/pop_open(var/mob/user)
+	..()
+	user.put_in_hands(new /obj/item/weapon/coin/nuka)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka/update_icon()
+	overlays.len = 0
+	if (!(flags & OPENCONTAINER))
+		overlays += image(icon = icon, icon_state = "bottle_cap")
+	update_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum
 	name = "Nuka Cola Quantum"
 	desc = "Take the leap... enjoy a Quantum!"
 	icon_state = "quantum"
+	molotov = -1 //can become a molotov
+	isGlass = 1
+	can_flip = TRUE
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum/New()
 	..()
 	reagents.add_reagent(QUANTUM, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum/pop_open(var/mob/user)
+	..()
+	user.put_in_hands(new /obj/item/weapon/coin/nuka)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum/update_icon()
+	overlays.len = 0
+	if (!(flags & OPENCONTAINER))
+		overlays += image(icon = icon, icon_state = "bottle_cap")
+	update_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink
 	name = "Brawndo"
