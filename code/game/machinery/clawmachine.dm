@@ -80,7 +80,7 @@
 
 	//These are only available with a pomf coin
 	var/list/prizes_pomf = list(
-		/obj/item/toy/plushie/sylveon
+		/obj/item/toy/plushie/chicken/pomf
 	)
 
 /obj/machinery/claw_machine/examine(mob/user)
