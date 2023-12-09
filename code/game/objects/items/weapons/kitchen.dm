@@ -578,7 +578,7 @@
 	name = "rolling pin"
 	desc = "Used to knock out the Bartender."
 	icon_state = "rolling_pin"
-	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
+	hitsound = "sound/weapons/smash.ogg"
 	force = 8
 	throwforce = 10
 	throw_speed = 2
