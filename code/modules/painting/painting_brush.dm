@@ -10,6 +10,10 @@
 *
 */
 
+/obj/item/painting_brush
+/obj/item/paint_roller
+/obj/item/high_roller
+
 /obj/item/weapon/painting_brush
 	// Graphics stuff
 	desc = "Horse hair on a stick, with a space age twist. Paint won't dry or run out on this"
