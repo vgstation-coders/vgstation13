@@ -27,10 +27,19 @@ LINEN BINS
 	starting_materials = list(MAT_FABRIC = 1250)
 
 //cutting the bedsheet into rags and other things
-/obj/item/weapon/bedsheet/attackby(var/obj/item/I, mob/user as mob)
+/obj/item/weapon/bedsheet/attackby(var/obj/item/I, var/mob/user)
 	if (istype(I, /obj/item/knitting_needles))
-		if (do_after(user, get_turf(src), 30) && loc)
-			plaid_convert()
+		playsound(get_turf(src), 'sound/machines/dial_reset.ogg', 50, 1)
+		to_chat(user, "You begin altering the patterns of the bedsheet.")
+		if (do_after(user, get_turf(src), 3 SECONDS) && loc)
+			var/result = plaid_convert()
+			switch (result)
+				if (PLAIDPATTERN_INCOMPATIBLE)
+					to_chat(user, "<span class='warning'>Try as you might, this bedsheet cannot be altered into having a plaid pattern.</span>")
+				if (PLAIDPATTERN_TO_PLAID)
+					to_chat(user, "<span class='notice'>You add a plaid pattern to the bedsheet.</span>")
+				if (PLAIDPATTERN_TO_NOT_PLAID)
+					to_chat(user, "<span class='notice'>You remove the bedsheet's plaid pattern.</span>")
 		return
 	var/cut_time=0
 	if(I.is_sharp())
@@ -211,11 +220,14 @@ LINEN BINS
 		icon_state = "plaid[icon_state]"
 		overlays.len = 0
 		update_blood_overlay()
+		return PLAIDPATTERN_TO_PLAID
 	else if  (copytext(icon_state, 1, 6) == "plaid")
 		icon_state = copytext(icon_state, 6)
 		var/image/I = image(icon, src, "sheet-overlay")
 		I.appearance_flags = RESET_COLOR
 		overlays += I
+		return PLAIDPATTERN_TO_NOT_PLAID
+	return PLAIDPATTERN_INCOMPATIBLE
 
 /obj/structure/bedsheetbin
 	name = "linen bin"

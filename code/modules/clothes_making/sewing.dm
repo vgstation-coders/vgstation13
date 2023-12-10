@@ -290,8 +290,17 @@
 			to_chat(user, "You have to fix the machine first.")
 			return
 		var/obj/item/weapon/bedsheet/B = W
-		if (do_after(user, get_turf(src), 30) && B)
-			B.plaid_convert()
+		to_chat(user, "You begin altering the patterns of the bedsheet.")
+		playsound(get_turf(src), 'sound/machines/sewing_machine.ogg', 50, 1)
+		if (do_after(user, get_turf(src), 3 SECONDS) && B)
+			var/result = B.plaid_convert()
+			switch (result)
+				if (PLAIDPATTERN_INCOMPATIBLE)
+					to_chat(user, "<span class='warning'>Try as you might, this bedsheet cannot be altered into having a plaid pattern.</span>")
+				if (PLAIDPATTERN_TO_PLAID)
+					to_chat(user, "<span class='notice'>You add a plaid pattern to the bedsheet.</span>")
+				if (PLAIDPATTERN_TO_NOT_PLAID)
+					to_chat(user, "<span class='notice'>You remove the bedsheet's plaid pattern.</span>")
 		return
 	..()
 

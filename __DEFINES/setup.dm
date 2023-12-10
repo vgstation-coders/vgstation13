@@ -1727,6 +1727,11 @@ var/proccalls = 1
 #define EMBEDDED_CONTROLLER "embedded controller"
 #define OTHER "other"
 
+// Bedsheet altering
+#define PLAIDPATTERN_INCOMPATIBLE	0
+#define PLAIDPATTERN_TO_PLAID		1
+#define PLAIDPATTERN_TO_NOT_PLAID	2
+
 // How many times to retry winset()ing window parameters before giving up
 #define WINSET_MAX_ATTEMPTS 10
 

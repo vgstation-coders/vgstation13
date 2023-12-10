@@ -588,7 +588,7 @@ var/list/datum/stack_recipe/cloth_recipes_with_tool = list (
 		)
 	choice = input(user, "What kind of top?","Composite Set",null) as null|anything in available_tops
 
-	if (choice != "None")
+	if (choice && (choice != "None"))
 		result = available_tops[choice]
 		extra_data += result[1]
 		req_amount += result[2]

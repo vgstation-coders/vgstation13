@@ -31,9 +31,9 @@
 /obj/structure/spinning_wheel/examine(mob/user)
 	..()
 	if(remaining_cloth_to_spin > 0)
-		to_chat(user, "<span class='info'>There is enough flax in it to produce [remaining_cloth_to_spin] more cloth sheets.</span>")
+		to_chat(user, "<span class='info'>There is enough flax in it to produce [remaining_cloth_to_spin] more length[remaining_cloth_to_spin > 1 ? "s" : ""] of cloth.</span>")
 	else
-		to_chat(user, "<span class='info'>Grow some flax then put it in there before you can use it.</span>")
+		to_chat(user, "<span class='info'>Grow flax and insert it to spin cloth.</span>")
 
 /obj/structure/spinning_wheel/attack_hand(var/mob/user)
 	if (spinner)
@@ -58,7 +58,7 @@
 		W.playtoolsound(src, 100)
 		user.visible_message("<span class='notice'>[user] starts disassembling \the [src].</span>", \
 		"<span class='notice'>You start disassembling \the [src].</span>")
-		if(do_after(user, src, 20))
+		if(do_after(user, src, 2 SECONDS))
 			user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
 			"<span class='notice'>You dissasemble \the [src].</span>")
 			var/turf/T = get_turf(src)
@@ -70,7 +70,7 @@
 		if(user.drop_item(W, loc))
 			remaining_cloth_to_spin += CLOTH_PER_FLAX
 			qdel(W)
-			to_chat(user, "<span class='notice'>You prepare the flax to be weaved by the wheel.</span>")
+			to_chat(user, "<span class='notice'>You mount the flax upon the loom..</span>")
 			playsound(src, 'sound/items/bonegel.ogg', 50, 0)
 			update_icon()
 	else if (istype(W, /obj/item/weapon/storage/bag/plants))
@@ -82,7 +82,7 @@
 		if (inserted)
 			playsound(src, 'sound/items/bonegel.ogg', 50, 0)
 			playsound(src, 'sound/effects/rustle3.ogg', 50, 0)
-			to_chat(user, "<span class='notice'>You remove the flax from the bag and prepare it be weaved by the wheel.</span>")
+			to_chat(user, "<span class='notice'>You remove the flax from the bag and mount it upon the loom..</span>")
 			update_icon()
 		else
 			to_chat(user, "<span class='warning'>There is no flax in the bag.</span>")
@@ -166,10 +166,10 @@
 	if(remaining_cloth_to_spin + current_production > 0)
 		to_chat(user, "<span class='info'>There is enough flax in it to produce [remaining_cloth_to_spin*matterbin_rating + current_production] more cloth sheets.</span>")
 	else
-		to_chat(user, "<span class='info'>Grow some flax then put it in there before you can use it. You can insert flax in it automatically using a conveyor belt.</span>")
+		to_chat(user, "<span class='info'>Grow flax and insert it to spin cloth. Flax can be loaded automatically by conveyor belt.</span>")
 
 	if(stored_cloth > 0)
-		to_chat(user, "<span class='info'>There's [stored_cloth] lengths of cloth on the roll currently being spun. The machine will automatically eject it when its full, or you can pick it up now.</span>")
+		to_chat(user, "<span class='info'>There [stored_cloth > 1 ? "are [stored_cloth] lengths" : "is 1 length"] of cloth on the roll being spun. The machine will eject when it is full, or you can eject the roll now.</span>")
 	if(output_dir)
 		to_chat(user, "<span class='info'>Ejected cloth will be dropped on the [dir2text(output_dir)]ern tile.</span>")
 	else
@@ -191,13 +191,13 @@
 
 	if (stat & (BROKEN))
 		to_chat(user, "You have to fix the machine first.")
-		return
+		return TRUE
 	if (stored_cloth > 0)
 		user.put_in_hands(drop_stack(/obj/item/stack/sheet/cloth, src, stored_cloth))
 		stored_cloth = 0
 		update_icon()
 		playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
-		to_chat(user, "<span class='notice'>You pick up the roll of cloth weaved by the machine.</span>")
+		to_chat(user, "<span class='notice'>You pick up the roll of cloth woven by the machine.</span>")
 	else
 		to_chat(user, "<span class='warning'>There is no cloth stored in it. Add some flax to the loom first.</span>")
 
@@ -222,7 +222,7 @@
 		if(user.drop_item(W, loc))
 			remaining_cloth_to_spin += CLOTH_PER_FLAX
 			qdel(W)
-			to_chat(user, "<span class='notice'>You prepare the flax to be weaved by the loom.</span>")
+			to_chat(user, "<span class='notice'>You prepare the flax to be woven by the loom.</span>")
 			playsound(src, 'sound/items/bonegel.ogg', 50, 0)
 			update_icon()
 		return
@@ -238,7 +238,7 @@
 		if (inserted)
 			playsound(src, 'sound/items/bonegel.ogg', 50, 0)
 			playsound(src, 'sound/effects/rustle3.ogg', 50, 0)
-			to_chat(user, "<span class='notice'>You remove the flax from the bag and prepare it be weaved by the loom.</span>")
+			to_chat(user, "<span class='notice'>You remove the flax from the bag and prepare it be woven by the loom.</span>")
 			update_icon()
 		else
 			to_chat(user, "<span class='warning'>There is no flax in the bag.</span>")
@@ -377,7 +377,7 @@
 		visible_message("<span class='warning'>\The [user] slashes at \the [src]!</span>")
 		playsound(src, 'sound/weapons/slash.ogg', 100, 1)
 		add_hiddenprint(user)
-	else if (!usr.dexterity_check())
-		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+	else if (!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 	else
 		attack_hand(user)

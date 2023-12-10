@@ -513,6 +513,8 @@
 	desc = "Double, double, toil and trouble. Fire burn, and cauldron bubble."
 	flags = OPENCONTAINER
 
+	var/allows_dyeing = TRUE
+
 /obj/structure/reagent_dispensers/cauldron/attempt_heating()
 	return // for now
 
@@ -536,7 +538,7 @@
 			to_chat(user, "<span class='notice'>You finish deconstructing \the [src].</span>")
 			new /obj/item/stack/sheet/metal/(loc, 20)
 			qdel(src)
-	if (icon_state == "cauldron")//meh, wish barrels etc weren't children of the cauldron
+	if (allows_dyeing)
 		if (W.dye_act(src,user))
 			return
 	..()
@@ -574,6 +576,7 @@
 	health = 50
 	var/burning = FALSE
 	is_cooktop = TRUE
+	allows_dyeing = FALSE
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood
 	name = "wooden barrel"
