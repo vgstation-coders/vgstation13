@@ -178,6 +178,6 @@
 /datum/trade_product/nanopaints
 	name = "Nano Painter's crate"
 	path = /obj/item/weapon/storage/toolbox/nanopaint
-	baseprice = 160
+	baseprice = 30
 	maxunits = 3
 	sales_category = TRADE_VARIETY
