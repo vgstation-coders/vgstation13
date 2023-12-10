@@ -46,7 +46,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 										"*shadow2_5_90_1_0_0_0_-1", "*shadow2_5_180_1_0_0_0_-1", "*shadow2_5_0_1_0_0_0_-1", "*shadow2_5_-90_1_0_0_0_-1",
 										"*shadow2_6_90_1_0_0_0_-1", "*shadow2_6_180_1_0_0_0_-1", "*shadow2_6_0_1_0_0_0_-1", "*shadow2_6_-90_1_0_0_0_-1")
 
-#define TURF_GROUP_LENGTH 3
+#define TURF_GROUP_LENGTH 6
 #define TURF_GROUP_MIDPOINT round(TURF_GROUP_LENGTH/2)
 
 /atom/movable/light
@@ -71,7 +71,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	filters = list()
 	temp_appearance = list()
 	temp_appearance_shadows = list()
-	affecting_turfs = list()
+	cull_light_turfs()
 	affected_shadow_walls = list()
 	pre_rendered_shadows = list()
 	found_prerendered_white_light_glob = FALSE
@@ -147,20 +147,26 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 
 	shadow_component_turfs += list(turf_group)
 
-// ------- Adding turf
+// ------- Adding turfs
 
 /atom/movable/light/proc/add_light_turf(var/turf/T)
 	// The luminosity cast over distant turfs thing is only going to be a problem for very, very big light sources
 	// These checks are here for optimisation and not do unnecessary works
-	if (light_range > 5 && get_dist(T, src) > 3)
+	if (light_range > 6 && get_dist(T, src) > 3)
 		T.lumcount = -1
 		T.luminosity = 1
-		T.light_sources |= src // TODO: rework this to avoid |= as it's pretty expensive.
-		register_event(/event/destroyed, T, /turf/proc/update_byond_luminosity)
+		T.light_sources += src
 		affecting_turfs += T
 
 /atom/movable/light/shadow/add_light_turf(var/turf/T)
 	return
+
+/atom/movable/light/proc/cull_light_turfs()
+	for (var/turf/T in affecting_turfs)
+		T.light_sources -= src
+		if (!(T.light_sources.len))
+			T.luminosity = 0
+	affecting_turfs = list()
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 // -- The procs related to the source of light

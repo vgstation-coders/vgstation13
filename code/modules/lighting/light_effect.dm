@@ -84,7 +84,7 @@
 		var/turf/T = thing
 		T.lumcount = -1
 
-	affecting_turfs = null
+	cull_light_turfs()
 	affected_shadow_walls = null
 
 	. = ..()
