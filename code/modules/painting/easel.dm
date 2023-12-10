@@ -4,6 +4,9 @@
 	icon = 'icons/obj/painting_items.dmi'
 	icon_state = "easel"
 	density = 1
+	plane = OBJ_PLANE
+	layer = EASEL_LAYER
+
 	var/obj/structure/painting/custom/painting = null
 
 	var/rest_overlay = "easel_rest" // Piece the canvas will rest upon
@@ -38,16 +41,17 @@
 
 	// Place painting
 	if (!painting && istype(I, /obj/item/mounted/frame/painting/custom))
-		var/obj/item/mounted/frame/painting/custom/frame = I
-		painting = frame.to_structure(null, user)
-		transfer_fingerprints(frame, painting)
-		painting.add_fingerprint(user)
-		qdel(frame)
-		lock_atom(painting)
-		to_chat(user, "<span class='notice'>You attach \the [painting] to \the [src]...</span>")
-		playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
-		update_icon()
-		return
+		if(user.drop_item(I, loc))
+			var/obj/item/mounted/frame/painting/custom/frame = I
+			painting = frame.to_structure(null, user)
+			transfer_fingerprints(frame, painting)
+			painting.add_fingerprint(user)
+			qdel(frame)
+			lock_atom(painting)
+			to_chat(user, "<span class='notice'>You attach \the [painting] to \the [src]...</span>")
+			playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
+			update_icon()
+			return
 
 	..()
 
@@ -59,17 +63,18 @@
 
 /obj/structure/easel/update_icon()
 	overlays.Cut()
-	var/image/holder = image(icon, holder_overlay, EASEL_OVERLAY_LAYER)
+	var/image/easel_holder = image(icon, null, holder_overlay, EASEL_OVERLAY_LAYER)
+	easel_holder.plane = relative_plane(ABOVE_HUMAN_PLANE)
 	var/image/rest = image(icon, rest_overlay)
 
 	if (painting)
 		rest.pixel_y = painting.pixel_y + painting.painting_data.offset_y
-		holder.pixel_y = painting.pixel_y + painting.painting_data.offset_y + painting.painting_data.bitmap_height
+		easel_holder.pixel_y = painting.pixel_y + painting.painting_data.offset_y + painting.painting_data.bitmap_height
 	else
 		rest.pixel_y = rest_default_y
-		holder.pixel_y = holder_default_y
+		easel_holder.pixel_y = holder_default_y
 
 	rest.pixel_y -= rest_sprite_height
 
-	overlays += holder
+	overlays += easel_holder
 	overlays += rest

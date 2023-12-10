@@ -1,7 +1,7 @@
 /*
 * Acts as a color picker:
-* Use it on a reagent container and it takes on the mix's color. Use it on a canvas and you can paint with said color.
-* Side note: canvas does not support alpha colors, meaning brush ignores reagent colors' alpha, which result in weird looking colors sometimes
+* Use it on a reagent container and if it contains some pigments, it takes on their color. Use it on a canvas and you can paint with said color, or on the floor to write messages.
+* If the mix has additional reagents with less alpha, the paint will be less opaque as well.
 *
 * Clean the brush by dipping it in water/space cleaner/paint cleaner
 * A minimum percent of cleaning reagent out of total is needed, stronger cleaners require lower percentage.
@@ -10,17 +10,21 @@
 *
 */
 
+/*
+
 /obj/item/painting_brush
 /obj/item/paint_roller
 /obj/item/high_roller
 
-/obj/item/weapon/painting_brush
+*/
+
+/obj/item/painting_brush
 	// Graphics stuff
-	desc = "Horse hair on a stick, with a space age twist. Paint won't dry or run out on this"
+	desc = "Horse hair on a stick, with a space age twist. Paint won't dry or run out on this."
 	name = "painting brush"
 	icon = 'icons/obj/painting_items.dmi'
 	icon_state = "painting_brush"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/arts_n_crafts.dmi', "right_hand" = 'icons/mob/in-hand/right/arts_n_crafts.dmi')
 
 	// Materials stuff
 	w_class = W_CLASS_TINY
@@ -31,18 +35,35 @@
 
 	// Paint brush stuff
 	var/paint_color = null
+	var/nano_paint = PAINTLIGHT_NONE
+	var/list/blood_data = list("wet paint" = "paint")
+	var/list/component = list()
+	var/list/component_alt = list()
 
-
-/obj/item/weapon/painting_brush/update_icon()
+/obj/item/painting_brush/update_icon()
 	..()
 	overlays.len = 0
 	if (paint_color)
-		var/image/covering = image(icon, "painting_brush_overlay")
+		var/image/covering = image(icon, src, "painting_brush_overlay")
 		covering.icon += paint_color
 		overlays += covering
+		overlays += image(icon, src, "painting_brush_glint")
+		//dynamic in-hand overlay
+		var/image/paintleft = image(inhand_states["left_hand"], src, "brush_pigments")
+		var/image/paintright = image(inhand_states["right_hand"], src, "brush_pigments")
+		paintleft.icon += paint_color
+		paintright.icon += paint_color
+		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = paintleft
+		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = paintright
+	else
+		dynamic_overlay = list()
+	update_blood_overlay()
+	if(ismob(loc))
+		var/mob/M = loc
+		M.update_inv_hands()
 
 
-/obj/item/weapon/painting_brush/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
+/obj/item/painting_brush/afterattack(obj/target, mob/living/user, proximity_flag, click_parameters)
 	if(proximity_flag == 0) // not adjacent
 		return
 
@@ -53,13 +74,51 @@
 		if (cleaner_percent >= PAINT_CLEANER_THRESHOLD)
 			// Clean up that brush
 			paint_color = null
+			nano_paint = PAINTLIGHT_NONE
+			component = list()
 			to_chat(user, "<span class='notice'>You clean \the [name] in \the [target.name].</span>")
 		else
-			// Take the reagent mix's color
-			var/list/paint_color_rgb = rgb2num(mix_color_from_reagents(target.reagents.reagent_list))
+			// Take the pigment mix's color
+			var/paint_rgb = mix_color_from_reagents(target.reagents.reagent_list, TRUE)
+			if (!paint_rgb)
+				to_chat(user, "<span class='notice'>Your [name] fails to grab any pigment from \the [target.name].</span>")
+				return
+			component = target.reagents.get_pigment_names()
+			component_alt = component.Copy()
+			var/list/paint_color_rgb = rgb2num(paint_rgb)
 			paint_color = rgb(paint_color_rgb[1], paint_color_rgb[2], paint_color_rgb[3], mix_alpha_from_reagents(target.reagents.reagent_list))
 			to_chat(user, "<span class='notice'>You dip \the [name] in \the [target.name].</span>")
+			var/datum/reagent/B = get_blood(target.reagents)
+			if (B)
+				add_blood_from_data(B.data)
+				blood_data = list(B.data["blood_DNA"] = B.data["blood_type"])
+			else
+				blood_data = list("wet paint" = "paint")
 		update_icon()
+	else if (ishuman(target) && paint_color)
+		var/mob/living/carbon/human/H = target
+		var/paint_data = list(
+			"viruses"		=null,
+			"blood_DNA"		="wet paint",
+			"blood_colour"	= paint_color,
+			"blood_type"	="paint",
+			"resistances"	=null,
+			"trace_chem"	=null,
+			"virus2" 		=list(),
+			"immunity" 		=null,
+			)
+		if (user.zone_sel.selecting == LIMB_LEFT_HAND || user.zone_sel.selecting == LIMB_RIGHT_HAND)
+			H.bloody_hands_from_data(copy_blood_data(paint_data),2,src)
+		else if (user.zone_sel.selecting == LIMB_LEFT_FOOT || user.zone_sel.selecting == LIMB_RIGHT_FOOT)
+			H.add_blood_to_feet(3, paint_color, list("wet paint" = "paint"))
+		else
+			H.bloody_body_from_data(copy_blood_data(paint_data),0,src)
+			if ((target == user) && (user.zone_sel.selecting == TARGET_MOUTH))
+				user.visible_message("[user] licks their brush to consolidate the bristles for detail work.","You lick your brush to consolidate the bristles for detail work.")
+				nano_paint = target.reagents.get_max_paint_light()
+				if (nano_paint == PAINTLIGHT_LIMITED)//Ingesting bits of Radium
+					user.apply_radiation(4)//never4get the Radium Girls
+		playsound(src, get_sfx("mop"), 5, 1)
 
 //presumably this will allow painting on the floor, credit to Anonymous user No.453861032
 	if(istype(target, /turf/simulated))
@@ -71,9 +130,68 @@
 		the_turf.advanced_graffiti.interact(user, p)
 		return
 
-/obj/item/painting_brush
-	var/paint_color = null
-	var/nano_paint = PAINTLIGHT_NONE
+/obj/item/painting_brush/AltFrom(var/atom/A,var/mob/user, var/proximity_flag, var/click_parameters)
+	if(proximity_flag == 0) // not adjacent
+		return
+	if (isfloor(A))
+		paint_doodle(user,A)
+		return TRUE
+	return FALSE
+
+/obj/item/painting_brush/proc/paint_doodle(var/mob/living/user, var/turf/T)
+	if (!paint_color)
+		to_chat(user, "<span class='warning'>There is no paint on your brush.</span>")
+		return
+
+	if (!isfloor(T))
+		to_chat(user, "<span class='warning'>You can only doodle over floors.</span>")
+		return
+
+	for (var/obj/effect/decal/cleanable/blood/writing/W in T)
+		to_chat(user, "<span class='warning'>This floor is already filled with writings.</span>")
+		return
+
+	var/max_length = 30//same as bloody doodles
+	var/message = stripped_input(user,"Write a message. You will be able to preview it.","Painted writings", "")
+
+	if (!message)
+		return
+
+	message = copytext(message, 1, max_length)
+
+	var/letter_amount = length(replacetext(message, " ", ""))
+	if(!letter_amount) //If there is no text
+		return
+
+	//Previewing our message
+	var/image/I = image(icon = null)
+	I.maptext = {"<span style="color:[paint_color];font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
+	I.maptext_height = 32
+	I.maptext_width = 64
+	I.maptext_x = -16
+	I.maptext_y = -2
+	I.loc = T
+	I.alpha = 180
+
+	user.client.images.Add(I)
+	var/continue_drawing = alert(user, "This is how your message will look. Continue?", "Painted writings", "Yes", "Cancel")
+
+	user.client.images.Remove(I)
+	animate(I)
+	I.loc = null
+	qdel(I)
+
+	if(continue_drawing != "Yes" || !user.Adjacent(T))
+		return
+
+	//Painting our message
+	var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
+	W.basecolor = paint_color
+	W.color = paint_color//so alpha gets applied as well
+	W.maptext = {"<span style="color:#FFFFFF;font-size:9pt;font-family:'Bloody';" align="center" valign="top">[message]</span>"}
+	var/invisible = user.invisibility || !user.alpha
+	W.visible_message("<span class='warning'>[invisible ? "An invisible brush" : "\The [user]"] paints something on \the [T]...</span>")
+	W.blood_DNA = blood_data.Copy()
 
 /obj/item/painting_brush/clean_act(var/cleanliness)
 	..()

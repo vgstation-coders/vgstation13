@@ -3,7 +3,7 @@
  * I apologise for the awful amount of copypaste with the existing library code ;_;
  */
 /obj/machinery/computer/library/checkout/remote_gallery
-	name = "Remote gallery Computer"
+	name = "remote gallery computer"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "artcomp"
 	anchored = 1
