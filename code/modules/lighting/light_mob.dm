@@ -42,7 +42,7 @@
 	client.screen |= overdark_target
 
 	give_light_prerenders()
-	change_sight(adding = SEE_PIXELS)
+	//change_sight(adding = SEE_PIXELS)
 
 	update_darkness()
 	register_event(/event/before_move, src, /mob/proc/check_dark_vision)

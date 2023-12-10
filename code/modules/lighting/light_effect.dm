@@ -130,9 +130,7 @@
 				forceMove(holder.loc.loc, glide_size_override = gliding) // Glide size from our mob.
 			else
 				gliding = WORLD_ICON_SIZE
-				visible_message("case 3")
 				forceMove(holder.loc, glide_size_override = gliding) // Hopefully whatever we're gliding with has smooth movement.
-
 			if (world.tick_usage < LIGHT_CPU_THRESHOLD || !ticker || ticker.current_state < GAME_STATE_SETTING_UP)
 				cast_light() // We don't use the subsystem queue for this since it's too slow to prevent shadows not being updated quickly enough
 			else

@@ -356,7 +356,7 @@ var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster =
 
 /obj/abstract/screen/overdark_target
 	appearance_flags = 0
-	plane = ABOVE_LIGHTING_PLANE
+	plane = LIGHTING_PLANE
 	mouse_opacity = 0
 	screen_loc = "CENTER,CENTER"
 

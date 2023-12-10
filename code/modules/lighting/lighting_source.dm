@@ -230,7 +230,7 @@
 
 /datum/light_source/proc/apply_lum_to_turf(var/turf/T,var/update_gen)
 	if (!T.lighting_corners_initialised)
-		T.generate_missing_corners()
+		T.generate_missing_corners()affecting_lights
 
 	for (var/datum/lighting_corner/C in T.get_corners())
 		if (C.update_gen == update_gen)

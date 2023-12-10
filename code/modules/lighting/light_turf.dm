@@ -1,5 +1,13 @@
 /turf/var/blocks_light = -1              // Whether or not this turf occludes light based on turf opacity and contents. See check_blocks_light().
 /turf/var/lumcount = -1
+/turf/var/list/light_sources = list()
+
+// Changes
+/turf/proc/update_byond_luminosity(var/datum/thing)
+	light_sources -= thing
+	if (light_sources.len == 0)
+		luminosity = 0
+
 // Flags the turf to recalc blocks_light next call since opacity has changed.
 /turf/set_opacity()
 	var/old_opacity = opacity

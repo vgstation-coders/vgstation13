@@ -46,7 +46,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 										"*shadow2_5_90_1_0_0_0_-1", "*shadow2_5_180_1_0_0_0_-1", "*shadow2_5_0_1_0_0_0_-1", "*shadow2_5_-90_1_0_0_0_-1",
 										"*shadow2_6_90_1_0_0_0_-1", "*shadow2_6_180_1_0_0_0_-1", "*shadow2_6_0_1_0_0_0_-1", "*shadow2_6_-90_1_0_0_0_-1")
 
-#define TURF_GROUP_LENGTH 7
+#define TURF_GROUP_LENGTH 3
 #define TURF_GROUP_MIDPOINT round(TURF_GROUP_LENGTH/2)
 
 /atom/movable/light
@@ -106,8 +106,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 			M.check_dark_vision()
 		if (isturf(thing))
 			var/turf/T = thing
-			T.lumcount = -1
-			affecting_turfs += T
+			add_light_turf(T)
 			if (CHECK_OCCLUSION(T))
 				affected_shadow_walls += T
 
@@ -119,6 +118,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	if(!isturf(loc))
 		for(var/turf/T in affecting_turfs)
 			T.lumcount = -1
+			T.luminosity = 0
 		affecting_turfs.Cut()
 		return
 
@@ -146,6 +146,21 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 		turf_group += last_turf_in_group
 
 	shadow_component_turfs += list(turf_group)
+
+// ------- Adding turf
+
+/atom/movable/light/proc/add_light_turf(var/turf/T)
+	// The luminosity cast over distant turfs thing is only going to be a problem for very, very big light sources
+	// These checks are here for optimisation and not do unnecessary works
+	if (light_range > 5 && get_dist(T, src) > 3)
+		T.lumcount = -1
+		T.luminosity = 1
+		T.light_sources |= src // TODO: rework this to avoid |= as it's pretty expensive.
+		register_event(/event/destroyed, T, /turf/proc/update_byond_luminosity)
+		affecting_turfs += T
+
+/atom/movable/light/shadow/add_light_turf(var/turf/T)
+	return
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 // -- The procs related to the source of light
@@ -250,7 +265,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 // On every turf that's affected, we cast a shadow.
 /atom/movable/light/proc/cast_shadows()
 	//no shadows
-	if(light_range < 2 || light_type == LIGHT_DIRECTIONAL)
+	if(light_range == 1 || light_type == LIGHT_DIRECTIONAL)
 		return
 
 	for(var/turf/T in affected_shadow_walls)
@@ -259,6 +274,9 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 
 // We take out our turf chunks and cast secondary sources on the middle ones.
 /atom/movable/light/shadow/cast_shadows()
+	if (holder.light_obj.found_prerendered_white_light_glob)
+		shadow_component_turfs = list()
+		return
 
 	for (var/list/L in shadow_component_turfs)
 		// Picking the 2nd element in the list
@@ -398,7 +416,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 
 	// Same tile has done it before.......
 	for (var/atom/movable/light/neighbour in get_turf(src)) // This light atom is rendered from point A to point B, so it's fine
-		if (shadow_image_identifier in neighbour.pre_rendered_shadows)
+		if ((shadow_image_identifier in neighbour.pre_rendered_shadows) && !(found_shadow_identif))
 			I.render_source = shadow_image_identifier
 			found_shadow_identif = TRUE
 
