@@ -67,6 +67,10 @@
 		the_turf.advanced_graffiti.interact(user, p)
 		return
 
+/obj/item/painting_brush
+	var/paint_color = null
+	var/nano_paint = PAINTLIGHT_NONE
+
 /obj/item/painting_brush/clean_act(var/cleanliness)
 	..()
 	paint_color = null
