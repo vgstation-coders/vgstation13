@@ -594,6 +594,7 @@
 		/obj/item/weapon/switchtool/swiss_army_knife,
 		/obj/item/clothing/accessory/wristwatch,
 		/obj/item/clothing/accessory/wristwatch/black,
+		/obj/item/high_roller,
 		)
 
 /obj/abstract/map/spawner/maint/lowchance

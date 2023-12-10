@@ -261,3 +261,11 @@ interactions:
 	resultRyb["y"] = round(alpha * c1Ryb["y"] + (1-alpha) * c2Ryb["y"])
 	resultRyb["b"] = round(alpha * c1Ryb["b"] + (1-alpha) * c2Ryb["b"])
 	return rybToRgb(resultRyb)
+
+/proc/BlendRYB(rgb1, rgb2, amount)
+	if (length(rgb1) < 8)
+		rgb1 += "FF"
+	if (length(rgb2) < 8)
+		rgb2 += "FF"
+	var/blend = colorRybBlend(rgb2num(rgb1), rgb2num(rgb2), amount)
+	return rgb(blend[1], blend[2], blend[3], blend[4], "COLORSPACE_RGB")

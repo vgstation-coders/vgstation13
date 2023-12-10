@@ -50,6 +50,7 @@
 	var/mug_desc = null
 	var/addictive = FALSE
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
+	var/paint_light = PAINTLIGHT_NONE
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	set waitfor = 0

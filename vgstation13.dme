@@ -1333,6 +1333,8 @@
 #include "code\game\striketeams\nanotrasen_deathsquad.dm"
 #include "code\game\striketeams\striketeam_datums.dm"
 #include "code\game\striketeams\syndicate_elite_squad.dm"
+#include "code\game\turfs\paint_overlay.dm"
+#include "code\game\turfs\paint_overlay_overrides.dm"
 #include "code\game\turfs\portal.dm"
 #include "code\game\turfs\simulated.dm"
 #include "code\game\turfs\turf.dm"

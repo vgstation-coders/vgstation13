@@ -948,8 +948,6 @@ var/global/list/damage_icon_parts = list()
 				if("Insectoid")
 					blood_icon_state = "shoeblood-vox"
 
-			//if bloody bare feet icons are added like with bloody hands, something should go here to avoid the blood showing where a missing foot would be
-
 			var/icon/shoebloodicon = icon('icons/effects/blood.dmi', blood_icon_state)
 
 			//only show blood on shoe on present foot
@@ -958,17 +956,46 @@ var/global/list/damage_icon_parts = list()
 
 			var/image/bloodsies = image(shoebloodicon)
 			bloodsies.color = shoes.blood_color
-			//standing.overlays	+= bloodsies
 			O.overlays += bloodsies
-		//overlays_standing[SHOES_LAYER]	= standing
 
 		shoes.generate_accessory_overlays(O)
 
 		O.pixel_x = species.inventory_offsets["[slot_shoes]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_shoes]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,SHOES_LAYER)
-	//else
-		//overlays_standing[SHOES_LAYER]		= null
+	else if (!shoes && !check_hidden_body_flags(HIDESHOES))//for bloody bare feet
+		if(feet_blood_DNA && feet_blood_DNA.len)
+			var/obj/abstract/Overlays/O = obj_overlays[SHOES_LAYER]
+			O.color = null
+			O.alpha = 1
+			var/blood_icon_state = "shoeblood"
+			var/onefootedmask
+			if(!has_organ(LIMB_LEFT_FOOT))
+				onefootedmask = "r"
+			else if(!has_organ(LIMB_RIGHT_FOOT))
+				onefootedmask = "l"
+			switch(get_species())
+				if("Vox")
+					blood_icon_state = "shoeblood-vox"
+				if("Insectoid")
+					blood_icon_state = "shoeblood-vox"
+
+			var/icon/feetbloodicon = icon('icons/effects/blood.dmi', blood_icon_state)
+
+			//only show blood on present foot
+			if(feetbloodicon)
+				feetbloodicon.Blend(icon('icons/effects/blood.dmi', "mask_[onefootedmask]"), ICON_ADD)
+
+			var/image/bloodsies = image(feetbloodicon)
+			bloodsies.color = feet_blood_color
+			bloodsies.appearance_flags = RESET_ALPHA
+
+			O.overlays += bloodsies
+
+			O.pixel_x = species.inventory_offsets["[slot_shoes]"]["pixel_x"] * PIXEL_MULTIPLIER
+			O.pixel_y = species.inventory_offsets["[slot_shoes]"]["pixel_y"] * PIXEL_MULTIPLIER
+			obj_to_plane_overlay(O,SHOES_LAYER)
+
 	if(update_icons)
 		update_icons()
 
