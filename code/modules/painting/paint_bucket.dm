@@ -3,7 +3,17 @@
 var/global/list/cached_icons = list()
 var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 
-/obj/item/weapon/reagent_containers/glass/paint //TODO REMOVE THAT, I'M JUST PUTTING IT SO THE MAPS COMPILE UNTIL ALL THE SPLINTERS ARE MERGED
+/obj/item/weapon/reagent_containers/glass/paint //TODO REMOVE THOSE, I'M JUST PUTTING IT SO THE MAPS COMPILE UNTIL ALL THE SPLINTERS ARE MERGED
+/obj/item/weapon/palette
+/obj/item/weapon/reagent_containers/glass/paint/red
+/obj/item/weapon/reagent_containers/glass/paint/green
+/obj/item/weapon/reagent_containers/glass/paint/blue
+/obj/item/weapon/reagent_containers/glass/paint/yellow
+/obj/item/weapon/reagent_containers/glass/paint/purple
+/obj/item/weapon/reagent_containers/glass/paint/cyan
+/obj/item/weapon/reagent_containers/glass/paint/black
+/obj/item/weapon/reagent_containers/glass/paint/white
+/obj/item/weapon/reagent_containers/glass/paint/remover
 
 /obj/item/weapon/reagent_containers/glass/metal_bucket
 	name = "metal bucket"
