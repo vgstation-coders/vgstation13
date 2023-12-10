@@ -15,7 +15,7 @@
 		if(reagentDatum)
 			var/reagentAmount = input(usr, "Amount", "Insert Amount", "") as num
 			var/reagentTemp = input(usr, "Temperature", "Insert Temperature (As Kelvin)", T0C+20) as num
-			if(A.reagents.add_reagent(reagentDatum, reagentAmount, reagtemp = reagentTemp))
+			if(A.reagents.add_reagent(reagentDatum, reagentAmount, reagtemp = reagentTemp, admin = usr))
 				to_chat(usr, "<span class='warning'>[reagentDatum] doesn't exist.</span>")
 				return
 			log_admin("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] at [reagentTemp]K temperature.")

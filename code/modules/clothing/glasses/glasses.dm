@@ -333,6 +333,12 @@ var/list/science_goggles_wearers = list()
 	qdel(src)
 	return SPECIAL_ATTACK_FAILED
 
+/obj/item/clothing/glasses/sunglasses/polarized
+	name = "polarized sunglasses"
+	desc = "These thin sunglasses filter light in a way that helps with distinguishing nano paint on a canvas."
+	icon_state = "sun_thin"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/glasses/sunglasses/purple
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes, and the colored lenses let you see the world in purple."
 	name = "purple sunglasses"

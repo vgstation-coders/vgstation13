@@ -507,20 +507,20 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			return NO_REACTION_UNMET_TEMP_COND
 
 		var/multiplier = min(multipliers) * multiplier_override
-		var/preserved_data = null
+		var/list/preserved_data = list()
 		for(var/B in C.required_reagents)
 			req_reag_amt = C.required_reagents[B]
 			if(islist(B))
 				var/list/L = B
 				for(var/D in L)
 					if(amount_cache[D] >= req_reag_amt)
-						if(!preserved_data)
-							preserved_data = get_data(D)
+						if(!(B in preserved_data))
+							preserved_data[B] = get_data(D)
 						remove_reagent(D, (multiplier * req_reag_amt), safety = 1)
 						break
 			else
-				if(!preserved_data)
-					preserved_data = get_data(B)
+				if(!(B in preserved_data))
+					preserved_data[B] = get_data(B)
 				remove_reagent(B, (multiplier * req_reag_amt), safety = 1)
 
 		if (C.reaction_temp_change)
@@ -531,9 +531,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if(C.result)
 			feedback_add_details("chemical_reaction","[C.result][created_volume]")
 			multiplier = max(multiplier, 1) //this shouldnt happen ...
-			add_reagent(C.result, created_volume, null, chem_temp)
-			if (preserved_data)
-				set_data(C.result, preserved_data)
+			add_reagent(C.result, created_volume, null, chem_temp, additional_data = preserved_data)
 
 			//add secondary products
 			for(var/S in C.secondary_results)
@@ -704,7 +702,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		warning("[usr] tried to equalize the temperature of a thermally-massless mixture.")
 		return T0C+20 //Sanity but this shouldn't happen.
 
-/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20)
+/datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20, var/mob/admin, var/list/additional_data=null)
 	if(!my_atom)
 		return 0
 	if(!amount)
@@ -720,21 +718,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 			//Equalize temperatures
 			chem_temp = get_equalized_temperature(chem_temp, get_thermal_mass(), reagtemp, amount * R.density * R.specheatcap * CC_PER_U)
 
+			R.handle_data_mix(data, amount, admin)
+			if (additional_data)
+				R.handle_additional_data(additional_data)
 			R.volume += amount
 			update_total()
+			handle_special_behaviours()
 			my_atom.on_reagent_change()
-
-			if(!isnull(data))
-				if (reagent == BLOOD)
-				//to do: add better ways for blood colors to interact with each other
-				//right now we don't support blood mixing or something similar at all.
-					if(R.data["virus2"] && data["virus2"])
-						R.data["virus2"] |= virus_copylist(data["virus2"])
-				else if (reagent == VACCINE)
-					R.data["antigen"] |= data["antigen"]
-				else
-					R.data = data //just in case someone adds a new reagent with a data var
-
 			handle_reactions()
 			return 0
 
@@ -748,25 +738,15 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 		reagent_list += R
 		R.holder = src
+		R.handle_data_copy(data, amount, admin)
+		if (additional_data)
+			R.handle_additional_data(additional_data)
 		R.volume = amount
-
-		if(!isnull(data))
-			if (reagent == BLOOD)
-				R.data = data.Copy()
-				if(data["virus2"])
-					R.data["virus2"] |= virus_copylist(data["virus2"])
-				if(data["blood_colour"])
-					R.color = data["blood_colour"]
-			else if (reagent == VACCINE)
-				R.data = data.Copy()
-			else
-				R.data = data
-		else if (reagent == VACCINE)
-			R.data = list("antigen" = list())
 
 		R.on_introduced()
 
 		update_total()
+		handle_special_behaviours()
 		my_atom.on_reagent_change()
 		handle_reactions()
 		return 0
@@ -778,6 +758,23 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return 1
 
 /datum/reagents/proc/handle_special_behaviours()
+	for (var/datum/reagent/R in reagent_list)
+		R.special_behaviour()
+
+/datum/reagents/proc/get_pigment_names()
+	var/list/names = list()
+	for (var/datum/reagent/R in reagent_list)
+		switch (R.id)
+			if (ACRYLIC)
+				names += "acrylic"
+			if (NANOPAINT)
+				names += "nano"
+			if (FLAXOIL)
+				names += "oil"
+			else
+				if (R.flags & CHEMFLAG_PIGMENT)
+					names += lowertext(R.name)
+	return names
 
 /datum/reagents/proc/remove_reagent(var/reagent, var/amount, var/safety)//Added a safety check for the trans_id_to
 
@@ -960,12 +957,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if(D.id == reagent_id)
 //						to_chat(world, "proffering a data-carrying reagent ([reagent_id])")
 			return D.data
-
-/datum/reagents/proc/set_data(var/reagent_id, var/new_data)
-	for(var/datum/reagent/D in reagent_list)
-		if(D.id == reagent_id)
-//						to_chat(world, "reagent data set ([reagent_id])")
-			D.data = new_data
 
 /datum/reagents/Destroy()
 	for(var/datum/reagent/reagent in reagent_list)

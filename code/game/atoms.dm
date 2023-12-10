@@ -535,6 +535,12 @@ its easier to just keep the beam vertical.
 /atom/proc/shuttle_act(var/datum/shuttle/S)
 	return
 
+/atom/proc/clean_act(var/cleanliness)//1 = contact with water (splashed with water, removes glue from objs), 2 = space cleaner or efficient cleaning (showers, sink, soap), 3 = bleach
+	if (cleanliness >= CLEANLINESS_SPACECLEANER)
+		clean_blood()
+	if (cleanliness >= CLEANLINESS_BLEACH)
+		color = ""
+
 //Called on every object in a shuttle which rotates
 /atom/proc/map_element_rotate(var/angle)
 	change_dir(turn(src.dir, -angle))
@@ -719,7 +725,7 @@ its easier to just keep the beam vertical.
 	if(!M)//if the blood is of non-human source
 		if(!blood_DNA || !istype(blood_DNA, /list))
 			blood_DNA = list()
-		blood_color = blood_DNA.len ? BlendRGB(blood_color, DEFAULT_BLOOD, 0.5) : DEFAULT_BLOOD //mix new color into existing blood_color if applicable
+		blood_color = blood_DNA.len ? BlendRYB(blood_color, DEFAULT_BLOOD, 0.5) : DEFAULT_BLOOD //mix new color into existing blood_color if applicable
 		had_blood = TRUE
 		return TRUE
 	if (!( istype(M, /mob/living/carbon/human) ))
@@ -733,9 +739,9 @@ its easier to just keep the beam vertical.
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
 	if (M.species)
-		blood_color = blood_DNA.len ? BlendRGB(blood_color, M.species.blood_color, 0.5) : M.species.blood_color
+		blood_color = blood_DNA.len ? BlendRYB(blood_color, M.species.blood_color, 0.5) : M.species.blood_color
 	else
-		blood_color = blood_DNA.len ? BlendRGB(blood_color, DEFAULT_BLOOD, 0.5) : DEFAULT_BLOOD
+		blood_color = blood_DNA.len ? BlendRYB(blood_color, DEFAULT_BLOOD, 0.5) : DEFAULT_BLOOD
 	return TRUE
 
 //this proc exists specifically for cases where the mob that originated the blood (aka the "donor") might not exist anymore, leading to bugs galore
@@ -749,7 +755,7 @@ its easier to just keep the beam vertical.
 	if(!istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
 
-	blood_color = blood_DNA.len ? BlendRGB(blood_color, blood_data["blood_colour"], 0.5) : blood_data["blood_colour"] //mix new color into existing blood_color if applicable
+	blood_color = blood_DNA.len ? BlendRYB(blood_color, blood_data["blood_colour"], 0.5) : blood_data["blood_colour"] //mix new color into existing blood_color if applicable
 	return TRUE
 
 /atom/proc/add_vomit_floor(mob/living/carbon/M, toxvomit = 0, active = 0, steal_reagents_from_mob = 1)

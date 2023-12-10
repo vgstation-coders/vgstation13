@@ -276,6 +276,12 @@
 /datum/biogen_recipe/misc
 	category="Misc."
 
+/datum/biogen_recipe/misc/bucket
+	cost=75
+	id="bucket"
+	name="Plastic Bucket"
+	result=/obj/item/weapon/reagent_containers/glass/bucket
+
 /datum/biogen_recipe/misc/insecticide
 	id = "insecticide"
 	name = "Insecticide"

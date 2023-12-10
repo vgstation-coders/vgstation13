@@ -186,6 +186,7 @@ var/list/datum/stack_recipe/plasma_recipes = list ( \
 
 var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic floor tile", /obj/item/stack/tile/mineral/plastic, 1, 4, 20), \
+	new/datum/stack_recipe("plastic bucket", /obj/item/weapon/reagent_containers/glass/bucket, 3, time = 3 SECONDS, one_per_turf = 0, on_floor = 0), \
 	new/datum/stack_recipe("plastic crate", /obj/structure/closet/pcrate, 10, one_per_turf = 1, on_floor = 1, one_per_turf = 1), \
 	new/datum/stack_recipe("plastic ashtray", /obj/item/ashtray/plastic, 1, on_floor = 1), \
 	new/datum/stack_recipe("lunch box", /obj/item/weapon/storage/lunchbox/plastic, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0), \

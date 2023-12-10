@@ -60,6 +60,12 @@
 	qdel(src)
 	return 2
 
+/obj/item/stack/tile/clean_act(var/cleanliness)
+	..()
+	if (cleanliness >= CLEANLINESS_BLEACH)
+		paint_overlay = null
+		stacked_paint.len = 0
+		update_icon()
 
 /obj/item/stack/tile/metal
 	name = "floor tile"
