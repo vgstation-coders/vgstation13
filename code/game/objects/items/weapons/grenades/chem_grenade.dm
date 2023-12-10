@@ -297,16 +297,8 @@
 
 	reservoir.reagents.trans_to(src, reservoir.reagents.total_volume)
 
-	if(src.reagents.total_volume) //The possible reactions didnt use up all reagents.
-		var/datum/effect/system/steam_spread/steam = new /datum/effect/system/steam_spread()
-		steam.set_up(10, 0, get_turf(src))
-		steam.attach(src)
-		steam.start()
-
-		for(var/atom/A in view(affected_area, get_turf(src)))
-			if( A == src )
-				continue
-			src.reagents.reaction(A, 1, 10)
+	if(reagents.total_volume) //The possible reactions didnt use up all reagents.
+		reagents.splashplosion(affected_area)
 
 	invisibility = INVISIBILITY_MAXIMUM //Why am i doing this?
 	spawn(50)		   //To make sure all reagents can work

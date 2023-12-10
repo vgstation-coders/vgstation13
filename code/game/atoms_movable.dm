@@ -451,6 +451,12 @@
 		return TRUE
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
 		return TRUE
+	if(istype(mover, /obj/item/projectile/beam))
+		var/obj/item/projectile/beam/B = mover
+		var/returns = bounds_dist(src, B.previous_turf) >= 0
+		if (returns && B.previous_turf)
+			B.final_turf = B.previous_turf
+		return returns
 	return bounds_dist(src, mover) >= 0
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
