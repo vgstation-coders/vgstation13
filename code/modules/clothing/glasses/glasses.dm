@@ -26,6 +26,8 @@
 
 	var/my_dark_plane_alpha_override
 	var/my_dark_plane_alpha_override_value
+	cloth_layer = GLASSES_LAYER
+	cloth_icon = 'icons/mob/eyes.dmi'
 
 /obj/item/clothing/glasses/proc/update_perception(var/mob/living/carbon/human/M)
 	return

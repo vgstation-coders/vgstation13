@@ -89,6 +89,25 @@
 	item_state = "green_scarf"
 	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 
+/obj/item/clothing/mask/scarf/linen
+	name = "scarf"
+	desc = "A warm scarf to endure the snow."
+	icon_state = "scarf"
+	item_state = "scarf"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("pattern","tip")
+	dye_base_iconstate_override = "scarf"
+
+/obj/item/clothing/mask/scarf/linen/update_icon()
+	if(is_flipped == 1)
+		dye_base_iconstate_override = "scarf"
+	else
+		dye_base_iconstate_override = "scarf_up"
+	..()
+
 /obj/item/clothing/mask/balaclava
 	name = "balaclava"
 	desc = "LOADSAMONEY"
@@ -104,6 +123,16 @@
 	heat_conductivity = INS_MASK_HEAT_CONDUCTIVITY
 	name = "ski mask"
 	desc = "This NT-brand skimask is sure to keep you warm."
+
+/obj/item/clothing/mask/balaclava/skimask/linen
+	name = "ski mask"
+	desc = "A warm skimask."
+	icon_state = "skimask"
+	item_state = "skimask"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
 
 /obj/item/clothing/mask/neorussian
 	name = "neo-Russian mask"

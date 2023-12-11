@@ -466,6 +466,11 @@
 	if(wear_suit)
 		dat += "<BR>[HTMLTAB]&#8627;<B>Suit Storage:</B> <A href='?src=\ref[src];item=[slot_s_store]'>[makeStrippingButton(s_store)]</A>"
 
+		if (istype(wear_suit, /obj/item/clothing))
+			var/obj/item/clothing/WS = wear_suit
+			if (WS.hood)
+				dat += "<BR>[HTMLTAB]&#8627;<B>Hood:</B> <A href='?src=\ref[src];toggle_suit_hood=1'>Toggle</A>"
+
 	if(slot_shoes in obscured)
 		dat += "<BR><font color=grey><B>Shoes:</B> Obscured by [wear_suit]</font>"
 	else
@@ -485,6 +490,11 @@
 
 		if(w_uniform)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Suit Sensors:</B> <A href='?src=\ref[src];sensors=1'>Set</A>"
+
+			if (istype(w_uniform, /obj/item/clothing))
+				var/obj/item/clothing/WU = w_uniform
+				if (WU.hood)
+					dat += "<BR>[HTMLTAB]&#8627;<B>Hood:</B> <A href='?src=\ref[src];toggle_uniform_hood=1'>Toggle</A>"
 
 		if(pickpocket)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
@@ -526,6 +536,24 @@
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
 		toggle_sensors(usr)
+
+	else if(href_list["toggle_uniform_hood"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr)|| !w_uniform)
+			return
+		usr.visible_message("[usr] begins to toggle [src]'s hood.","You begin to toggle [src]'s hood.")
+		if (do_mob(usr,src))
+			if (istype(w_uniform, /obj/item/clothing))
+				var/obj/item/clothing/C = w_uniform
+				C.toggle_hood(src,usr,20)
+
+	else if(href_list["toggle_suit_hood"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr)|| !wear_suit)
+			return
+		usr.visible_message("[usr] begins to toggle [src]'s hood.","You begin to toggle [src]'s hood.")
+		if (do_mob(usr,src))
+			if (istype(w_uniform, /obj/item/clothing))
+				var/obj/item/clothing/C = w_uniform
+				C.toggle_hood(src,usr,20)
 
 	else if (href_list["refresh"])
 		if((machine)&&(in_range(src, usr)))

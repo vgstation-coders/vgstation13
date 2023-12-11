@@ -10,6 +10,7 @@
 #define MAT_PLASTIC		"$plastic"
 #define MAT_CARDBOARD   "$cardboard"
 #define MAT_WOOD		"$wood"
+#define MAT_FABRIC		"$fabric"
 #define MAT_BRASS   	"$brass"
 #define MAT_RALLOY   	"$ralloy"
 #define MAT_ICE			"$ice"
@@ -63,6 +64,7 @@
 
 #define CC_PER_SHEET_CARDBOARD   CC_PER_SHEET_METAL
 #define CC_PER_SHEET_WOOD        CC_PER_SHEET_METAL
+#define CC_PER_SHEET_FABRIC      CC_PER_SHEET_METAL
 #define CC_PER_SHEET_BRASS       CC_PER_SHEET_METAL
 #define CC_PER_SHEET_RALLOY      CC_PER_SHEET_METAL
 

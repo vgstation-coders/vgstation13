@@ -213,6 +213,9 @@
 	..()
 	qdel(src)
 
+/obj/item/proc/dye_act(var/obj/structure/reagent_dispensers/cauldron/cauldron, var/mob/user)
+	return FALSE
+
 var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/throw_impact(atom/impacted_atom, speed, mob/user)
