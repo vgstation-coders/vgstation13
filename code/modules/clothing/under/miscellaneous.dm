@@ -1039,6 +1039,7 @@
 	species_fit = list(VOX_SHAPED)
 	clothing_flags = COLORS_OVERLAY
 	dye_base_iconstate_override = "linencrafts"
+	dye_base_itemstate_override = "linencrafts"
 	color = COLOR_LINEN
 	var/list/permanent_parts = list()
 
