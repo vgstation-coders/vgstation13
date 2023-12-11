@@ -243,7 +243,7 @@ var/global/datum/research/research_archive_datum
 		to_chat(user,"<span class='info'>In the slot you can see a disk that contains [diskslot.stored.id] [diskslot.stored.level].</span>")
 		diskslot.examine(user)
 
-obj/machinery/researcharchive/update_icon()
+/obj/machinery/researcharchive/update_icon()
 	if(stat & (BROKEN))
 		icon_state = "[initial(icon_state)]b"
 		return
