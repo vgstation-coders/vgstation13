@@ -268,6 +268,7 @@
 
 	if ((remaining_cloth_to_spin > 0) || (current_production > 0))
 		use_power = MACHINE_POWER_USE_ACTIVE
+		playsound(src, 'sound/machines/electric_loom.ogg', 20, 0)
 		spawn()
 			for (var/i = 1 to (manipulator_rating))
 				if (!process_cloth())
@@ -313,6 +314,8 @@
 	else if ((stat & (NOPOWER|FORCEDISABLE)) || !powered())
 		icon_state = "electric_loom_ready"
 	else
+		if (icon_state != "electric_loom_spin")
+			playsound(src, 'sound/machines/electric_loom_start.ogg', 10, 0)
 		icon_state = "electric_loom_spin"
 		luminosity = 2
 		var/image/led = image(icon,src,"electric_loom-lightready")
