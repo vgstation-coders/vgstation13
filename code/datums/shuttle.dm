@@ -731,6 +731,7 @@
 			new_turf.paint_overlay = old_turf.paint_overlay
 			if (new_turf.paint_overlay)
 				new_turf.paint_overlay.my_turf = new_turf
+				new_turf.update_paint_overlay()
 				old_turf.overlays.len = 0
 				old_turf.paint_overlay = null
 
