@@ -515,10 +515,10 @@ var/global/num_vending_terminals = 1
 		if (isnull(coin))
 			if(user.drop_item(W, src))
 				coin = W
-				to_chat(user, "<span class='notice'>You insert a coin into [src].</span>")
+				to_chat(user, "<span class='notice'>You insert \a [W] into [src].</span>")
 				src.updateUsrDialog()
 		else
-			to_chat(user, "<SPAN CLASS='notice'>There's already a coin in [src].</SPAN>")
+			to_chat(user, "<SPAN CLASS='notice'>There's already \a [coin] in [src].</SPAN>")
 		return
 
 	else if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin))
@@ -1090,10 +1090,10 @@ var/global/num_vending_terminals = 1
 			var/obj/item/weapon/coin/real_coin = coin
 			if(real_coin.string_attached)
 				if(prob(50))
-					to_chat(user, "<SPAN CLASS='notice'>You successfully pulled the coin out before \the [src] could swallow it.</SPAN>")
+					to_chat(user, "<SPAN CLASS='notice'>You successfully pulled \the [coin] out before \the [src] could swallow it.</SPAN>")
 					return_coin = 1
 				else
-					to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull the coin out fast enough, the machine ate it, string and all.</SPAN>")
+					to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull \the [coin] out fast enough, the machine ate it, string and all.</SPAN>")
 
 		if(return_coin)
 			user.put_in_hands(coin)
