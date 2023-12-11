@@ -322,6 +322,10 @@
 
 	connections = null
 
+	for (var/atom/movable/light/L in light_sources)
+		L.cast_light()
+		light_sources -= L
+
 	if(N == /turf/space)
 		for(var/obj/effect/decal/cleanable/C in src)
 			qdel(C)//enough with footprints floating in space

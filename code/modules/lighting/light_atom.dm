@@ -49,6 +49,15 @@
 	for(var/thing in (specific_contents + src))
 		var/atom/A = thing
 		if(A && !A.gcDestroyed)
+			A.update_all_lights()
+
+// -- Mobs need to be spawned() for smooth movement and for the case of lights coming out of the backpack.
+/mob/update_contained_lights(var/list/specific_contents)
+	if(!specific_contents)
+		specific_contents = contents
+	for(var/thing in (specific_contents + src))
+		var/atom/A = thing
+		if(A && !A.gcDestroyed)
 			spawn(1)
 				A.update_all_lights()
 

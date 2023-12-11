@@ -388,7 +388,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 
 		if (1 to 89)
 			block_1 = block_west || block_north
-			block_2 = block_east || block_south
+			block_2 = block_south || block_east
 
 		if (90)
 			block_1 = block_west
@@ -411,6 +411,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	// Using BYOND's render_target magick here
 
 	var/mutable_appearance/I = new()
+
 	var/found_shadow_identif = 0
 
 	var/shadow_image_identifier = "shadow[num]_[light_range]_[grazing_angle]_[abs(y_offset)]_[abs(x_offset)]_[block_1]_[block_2]_[delta]"
@@ -420,12 +421,13 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 		I.render_source = "*[shadow_image_identifier]"
 		found_shadow_identif = TRUE
 
+	/* HAAA! It doesn't work for some reason. It conflcits with the ubiquitous_rendering thing. ;_;
 	// Same tile has done it before.......
 	for (var/atom/movable/light/neighbour in get_turf(src)) // This light atom is rendered from point A to point B, so it's fine
-		if ((shadow_image_identifier in neighbour.pre_rendered_shadows) && !(found_shadow_identif))
+		if ((shadow_image_identifier in neighbour.pre_rendered_shadows) && !(shadow_image_identifier in ubiquitous_shadow_renders))
 			I.render_source = shadow_image_identifier
 			found_shadow_identif = TRUE
-
+	*/
 	// Or not!
 	if (!found_shadow_identif)
 		// An explicit call to file() is easily 1000 times as expensive than this construct, so... yeah.
@@ -465,9 +467,33 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 		if(delta == 0)
 			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
 		else if (delta > 0)
-			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
+			switch(grazing_angle)
+				if (-179 to -91)
+					I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
+
+				if (-89 to -1)
+					I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
+
+				if (1 to 89)
+					I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
+
+				if (91 to 179)
+					I.icon_state = "[abs(x_offset)]_[abs(y_offset)]_highangle"
+
 		else
-			I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
+			switch(grazing_angle)
+				if (-179 to -91)
+					I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
+
+				if (-89 to -1)
+					I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
+
+				if (1 to 89)
+					I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
+
+				if (91 to 179)
+					I.icon_state = "[abs(y_offset)]_[abs(x_offset)]_lowangle"
+
 	else
 		if (delta > 0)
 			I.icon_state = "[abs(x_offset)]_[abs(y_offset)]"
@@ -475,7 +501,11 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 			I.icon_state = "[abs(y_offset)]_[abs(x_offset)]"
 
 	I.transform = M
-	I.layer = LIGHTING_LAYER
+	switch(num)
+		if (CORNER_SHADOW)
+			I.layer = HIGHEST_LIGHTING_LAYER
+		if (FRONT_SHADOW)
+			I.layer = ABOVE_LIGHTING_LAYER
 
 	// Once that's done...
 	// We caclulate the offset
@@ -568,6 +598,9 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	*/
 	//and add it to the lights overlays
 	temp_appearance_shadows += I
+	// DEBUG SHIT
+	//var/obj/item/weapon/paper/P = new(target_turf)
+	//P.name = "icon = [I.icon], state = [I.icon_state] angle = [grazing_angle]"
 
 /atom/movable/light/shadow/cast_main_shadow(var/turf/target_turf, var/x_offset, var/y_offset)
 	return
@@ -634,17 +667,6 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	I.layer = HIGHEST_LIGHTING_LAYER
 	temp_appearance_shadows += I
 
-	/*
-	var/atom/movable/wall_light_source/WLS = new(get_turf(src))
-	target_turf.vis_contents += WLS
-
-	var/intensity = min(255,max(0,round(light_power*light_power_multiplier*25)))
-	var/fadeout = max(get_dist(src, target_turf)/FADEOUT_STEP, 1)
-	WLS.alpha =  round(intensity/fadeout)
-	WLS.color = light_color
-	WLS.layer = HIGHEST_LIGHTING_LAYER
-	*/
-
 /atom/movable/light/proc/update_appearance()
 	if (light_post_processing)
 		post_processing()
@@ -688,11 +710,13 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	else
 		temp_appearance += temp_appearance_shadows
 
-	if (light_range < 3)
+	if (light_range < 2)
 		return
 
 	// And then blacken out what's unvisible
 	// -- eliminating the underglow
+
+	var/list/cached_view = view(src, light_range)
 
 	for (var/turf/T in affected_shadow_walls)
 
@@ -707,6 +731,18 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 		black_turf.layer = ANTI_GLOW_PASS_LAYER
 		temp_appearance += black_turf
 
+		for (var/dir in cardinal)
+			var/turf/adj_turf = get_step(T, dir)
+			if (!(adj_turf in cached_view))
+				x_offset = T.x - x
+				y_offset = T.y - y
+				var/image/black_turf2 = new()
+				black_turf2.render_source = "*black_turf_prerender"
+				black_turf2.icon_state = "black"
+				black_turf2.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
+				black_turf2.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
+				black_turf2.layer = ANTI_GLOW_PASS_LAYER
+				temp_appearance += black_turf2
 
 // Smooth out shadows and then blacken out the wall glow
 /atom/movable/light/secondary_shadow/post_processing()
