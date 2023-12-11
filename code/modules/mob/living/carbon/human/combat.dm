@@ -55,7 +55,7 @@
 				if(prob(25))
 					playsound(loc, 'sound/effects/slap1.ogg', 50, 1, -1)
 					visible_message("<span class='danger'>[src] slaps [target]'s [glasses] off!</span>")
-					T.u_equip(glasses)
+					T.drop_item(glasses, T.loc)
 				else
 					playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 					visible_message("<span class='danger'>[src] tries to slap [target]'s [glasses] off, but fails!</span>")
