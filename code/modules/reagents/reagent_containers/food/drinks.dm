@@ -957,6 +957,12 @@
 	..()
 	user.put_in_hands(new /obj/item/weapon/coin/nuka)
 
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka/create_broken_bottle()
+	if (!(flags & OPENCONTAINER))
+		overlays.len = 0
+		new /obj/item/weapon/coin/nuka(get_turf(src))
+	..()
+
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka/update_icon()
 	overlays.len = 0
 	if (!(flags & OPENCONTAINER))
@@ -980,6 +986,12 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum/pop_open(var/mob/user)
 	..()
 	user.put_in_hands(new /obj/item/weapon/coin/nuka)
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum/create_broken_bottle()
+	if (!(flags & OPENCONTAINER))
+		overlays.len = 0
+		new /obj/item/weapon/coin/nuka(get_turf(src))
+	..()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum/update_icon()
 	overlays.len = 0

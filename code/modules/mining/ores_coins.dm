@@ -525,7 +525,7 @@
 	if(istype(W,/obj/item/stack/cable_coil) )
 		var/obj/item/stack/cable_coil/CC = W
 		if(string_attached)
-			to_chat(user, "<span class='notice'>There already is a string attached to this coin.</span>")
+			to_chat(user, "<span class='notice'>There already is a string attached to this [name].</span>")
 			return
 
 		if(CC.amount <= 0)
@@ -535,7 +535,7 @@
 
 		overlays += image('icons/obj/coins.dmi',"coin_string_overlay")
 		string_attached = 1
-		to_chat(user, "<span class='notice'>You attach a string to the coin.</span>")
+		to_chat(user, "<span class='notice'>You attach a string to \the [name].</span>")
 		CC.use(1)
 	else if(istype(W,/obj/item/tool/wirecutters) )
 		if(!string_attached)
@@ -547,7 +547,7 @@
 		CC.update_icon()
 		overlays = list()
 		string_attached = null
-		to_chat(user, "<span class='notice'>You detach the string from the coin.</span>")
+		to_chat(user, "<span class='notice'>You detach the string from \the [name].</span>")
 	else
 		..()
 
