@@ -204,7 +204,7 @@ var/global/list/battery_online =	list(
 	template["name"] = "SMES Unit" + (name_tag ? " ([name_tag])" : "")
 	template["demand"] = chargeload
 	template["isbattery"] = TRUE
-	template["charge"] = floor(100 * charge/capacity)
+	template["charge"] = round(100 * charge/capacity)
 
 	if (chargereceived > loaddemand)
 		template["charging"] = MONITOR_STATUS_BATTERY_CHARGING
@@ -224,7 +224,9 @@ var/global/list/battery_online =	list(
 	// this is the data which will be sent to the ui
 	var/data[0]
 	data["nameTag"] = name_tag
-	data["storedCapacity"] = floor(100 * charge/capacity)
+	data["storedCapacity"] = round(100 * charge/capacity)
+	data["charge"] = charge
+	data["capacity"] = capacity
 	data["charging"] = charging
 	data["chargeMode"] = chargemode
 	data["chargeLoad"] = round(chargereceived)
