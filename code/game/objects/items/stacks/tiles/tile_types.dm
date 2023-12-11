@@ -104,6 +104,12 @@
 	material = "fabric"
 	autoignition_temperature = AUTOIGNITION_FABRIC
 
+/obj/item/stack/tile/carpet/shag
+	name = "length of shag carpet"
+	singular_name = "length of shag carpet"
+	desc = "A shaggy piece of carpet."
+	icon_state = "tile-shag"
+
 /obj/item/stack/tile/arcade
 	name = "length of arcade carpet"
 	singular_name = "length of arcade carpet"

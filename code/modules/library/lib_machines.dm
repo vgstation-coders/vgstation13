@@ -129,7 +129,7 @@ var/global/datum/library_catalog/library_catalog = new()
 /obj/machinery/libraryscanner
 	name = "scanner"
 	icon = 'icons/obj/library.dmi'
-	icon_state = "bigscanner"
+	icon_state = "bookscanner"
 	anchored = 1
 	density = 1
 	var/obj/item/weapon/book/cache		// Last scanned book
@@ -221,7 +221,9 @@ var/global/datum/research/research_archive_datum
 	name = "research archive"
 	desc = "A high-powered data archive device that takes technology disks and persistently backs them up to specialized servers for the upcoming shift. Usually takes two disks per technology."
 	icon = 'icons/obj/library.dmi'
-	icon_state = "binder"
+	icon_state = "computer_disk1"
+	/*on_flick = "on_disk"
+	off_flick = "off_disk"*/
 	anchored = TRUE
 	density = TRUE
 	machine_flags =  WRENCHMOVE | FIXED2WORK | EJECTNOTDEL // | SCREWTOGGLE | CROWDESTROY
@@ -240,6 +242,12 @@ var/global/datum/research/research_archive_datum
 	if(diskslot)
 		to_chat(user,"<span class='info'>In the slot you can see a disk that contains [diskslot.stored.id] [diskslot.stored.level].</span>")
 		diskslot.examine(user)
+
+obj/machinery/researcharchive/update_icon()
+	if(stat & (BROKEN))
+		icon_state = "[initial(icon_state)]b"
+		return
+	icon_state = "[initial(icon_state)][!(stat & (NOPOWER|FORCEDISABLE))]"
 
 /obj/machinery/researcharchive/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(stat & (BROKEN))
@@ -288,6 +296,7 @@ var/global/datum/research/research_archive_datum
 		return
 
 	playsound(loc, "sound/machines/heps.ogg", 50, 1)
+	anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "computer_disk_ani")
 
 	busy = TRUE
 	use_power(200)
