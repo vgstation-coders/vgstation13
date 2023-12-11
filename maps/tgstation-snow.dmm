@@ -107626,7 +107626,14 @@
 /area/engineering/engineering_auxiliary)
 "uiL" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/machinery/vending/art,
+/obj/structure/table,
+/obj/item/weapon/storage/toolbox/paint{
+	pixel_y = 8
+	},
+/obj/item/weapon/reagent_containers/glass/bottle/acetone{
+	pixel_x = 6;
+	pixel_y = 2
+	},
 /turf/simulated/floor,
 /area/storage/art)
 "uiO" = (
@@ -109196,6 +109203,10 @@
 	dir = 1;
 	on = 1
 	},
+/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random{
+	pixel_x = -8;
+	pixel_y = -6
+	},
 /turf/simulated/floor,
 /area/storage/art)
 "uNX" = (
@@ -109227,6 +109238,10 @@
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1
+	},
+/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random{
+	pixel_x = -8;
+	pixel_y = 12
 	},
 /turf/simulated/floor,
 /area/storage/art)
