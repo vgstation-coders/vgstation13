@@ -35,6 +35,7 @@
 		var/mob/living/carbon/human/T = target
 		var/datum/organ/external/S = target.get_organ(src.zone_sel.selecting)
 		var/shushcooldown = 10 SECONDS
+		var/eyescooldown = 0.5 SECONDS
 		if(!istype(S))
 			return 0
 
@@ -43,6 +44,22 @@
 			T.forcesay("-")
 			visible_message("<span class='danger'>[src] places a hand over [target]'s mouth!</span>")
 			return 1
+
+		if(src.zone_sel.selecting == "eyes" && !(S.status & ORGAN_DESTROYED) && ishuman(target) && last_eyes_disarm + eyescooldown <= world.time)
+			// Check that there's glasses AND if there's a head or mask item then it doesn't cover the glasses. Can't slap glasses off if a hardsuit is on or something.
+			var/obj/item/glasses = T.get_item_by_flag(SLOT_EYES)
+			var/obj/item/head_item = T.get_item_by_flag(SLOT_HEAD)
+			var/obj/item/mask_item = T.get_item_by_flag(SLOT_MASK)
+			if(glasses && (!head_item || (head_item.body_parts_covered & EYES) != EYES) && (!mask_item || (mask_item.body_parts_covered & EYES) != EYES))
+				last_eyes_disarm = world.time
+				if(prob(25))
+					playsound(loc, 'sound/effects/slap1.ogg', 50, 1, -1)
+					visible_message("<span class='danger'>[src] slaps [target]'s [glasses] off!</span>")
+					T.u_equip(glasses)
+				else
+					playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+					visible_message("<span class='danger'>[src] tries to slap [target]'s [glasses] off, but fails!</span>")
+				return 1
 
 		if(src.zone_sel.selecting == "head" && !(S.status & ORGAN_DESTROYED) && ishuman(target))
 			playsound(loc, 'sound/effects/slap1.ogg', 50, 1, -1)

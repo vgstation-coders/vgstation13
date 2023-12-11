@@ -64,6 +64,7 @@
 	var/check_mutations=0 // Check mutations on next life tick
 
 	var/last_shush = 0 // disarm intent shushing cooldown
+	var/last_eyes_disarm = 0 // disarm intent glasses knocking cooldown
 	var/lastFart = 0 // Toxic fart cooldown.
 	var/lastDeathgasp = 0	// Deathgasp cooldown (only for clown trombones atm)
 	var/lastDab = 0 //Dab cooldown.
