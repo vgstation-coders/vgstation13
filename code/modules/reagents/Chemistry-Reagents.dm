@@ -282,10 +282,12 @@
 	return
 
 /datum/reagent/proc/handle_data_mix(var/list/added_data=null, var/added_volume, var/mob/admin)
-	data = added_data
+	if (added_data)
+		data = added_data
 
 /datum/reagent/proc/handle_data_copy(var/list/added_data=null, var/added_volume, var/mob/admin)
-	data = added_data
+	if (added_data)
+		data = added_data
 
 /datum/reagent/proc/handle_additional_data(var/list/additional_data=null)//used by xenoarch
 	return
