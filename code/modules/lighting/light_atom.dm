@@ -38,12 +38,12 @@
 /atom/movable/Move(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	var/old_loc = loc
 	. = ..()
-	update_contained_lights()
+	update_contained_lights(old_loc)
 
 /atom/movable/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
 	var/old_loc = loc
 	. = ..()
-	update_contained_lights()
+	update_contained_lights(old_loc)
 
 /atom/proc/update_contained_lights(var/old_loc, var/list/specific_contents)
 	if(!specific_contents)
@@ -51,7 +51,7 @@
 	for(var/thing in (specific_contents + src))
 		var/atom/A = thing
 		if(A && !A.gcDestroyed)
-			if (ismob(old_loc))
+			if (ismob(old_loc)) // BUGFIX: otherwise the flare does a weird animation when coming out of the backpack.
 				spawn(1)
 					A.update_all_lights()
 			else
