@@ -44,8 +44,6 @@ var/global/byond_hub_playercount = OPEN_TO_HUB_PLAYERCOUNT_DEFAULT
 	usr << browse(dat, "window=admin2;size=600x400")
 	return
 
-		src.status = s
-
 /world/proc/update_status()
 	if(!byond_hub_open)
 		hub_password = "SORRYNOPASSWORD"
