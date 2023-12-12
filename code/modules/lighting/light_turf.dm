@@ -18,8 +18,15 @@
 /turf/proc/get_lumcount()
 	if(lumcount == -1)
 		lumcount = 0
-		for(var/atom/movable/light/thing in view(src))
-			lumcount += max(thing.light_range + 2 - get_dist(thing, src),0)
+		for (var/atom/movable/light/thing in view(src))
+			// Only REAL light sources affecting this patriot
+			if (istype(thing, /atom/movable/light/moody))
+				continue
+			if (istype(thing, /atom/movable/light/shadow))
+				continue
+			if (istype(thing, /atom/movable/light/secondary_shadow))
+				continue
+			lumcount += max(thing.light_power/3*(thing.light_range + 2) - get_dist(thing, src),0)
 		lumcount = clamp(lumcount,0,10)
 	return lumcount
 

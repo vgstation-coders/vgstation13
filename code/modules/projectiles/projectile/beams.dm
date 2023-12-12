@@ -84,8 +84,8 @@ var/list/beam_master = list()
 	var/list/ray/past_rays = list() //full of rays
 
 	lighting_flags = IS_LIGHT_SOURCE
-	light_range = 0
-	light_power = 3
+	light_range = 1
+	light_power = 1
 	light_color = LIGHT_COLOR_RED
 
 /obj/item/projectile/beam/New(...)

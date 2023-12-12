@@ -55,7 +55,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	var/priority = -1 ; //Priority of the message being sent
 	var/announceSound = 'sound/vox/_bloop.wav'
 	luminosity = 0
-	light_range = 1
+	light_range = 0
 
 /obj/machinery/requests_console/power_change()
 	..()

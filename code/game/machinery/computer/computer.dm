@@ -105,12 +105,14 @@
 		if(icon_state != "[initial(icon_state)]0" && !(computer_flags & NO_ONOFF_ANIMS))
 			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "off")
 		icon_state = "[initial(icon_state)]0"
+		kill_light()
 
 	// Functional
 	else
 		if(icon_state == "[initial(icon_state)]0" && !(computer_flags & NO_ONOFF_ANIMS))
 			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "on")
 		icon_state = initial(icon_state)
+		set_light()
 
 
 /obj/machinery/computer/power_change(var/nodelay = 0)

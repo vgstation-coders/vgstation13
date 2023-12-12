@@ -73,7 +73,7 @@
 /datum/grue_calc/proc/ddl_update(var/mob/living/G)
 	if(isturf(G.loc))
 		var/turf/T = G.loc
-		current_brightness=10*T.get_lumcount()
+		current_brightness=1*T.get_lumcount()
 	else												//else, there's considered to be no light (vents, lockers, etc.)
 		current_brightness=0
 	if(current_brightness<=bright_limit_gain)
