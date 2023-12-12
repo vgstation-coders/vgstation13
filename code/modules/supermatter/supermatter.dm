@@ -224,19 +224,12 @@
 	if(isnull(L))		// We have a null turf...something is wrong, stop processing this entity.
 		return PROCESS_KILL
 
-	if(!istype(L)) 	//We are in a crate or somewhere that isn't turf, if we return to turf resume processing but for now.
-		return  //Yeah just stop.
-
-	if(istype(L, /turf/space))	// Stop processing this stuff if we've been ejected.
-		return
-
 	// Let's add beam energy first.
 	for(var/obj/effect/beam/emitter/B in beams)
 		power += B.get_damage() * config_bullet_energy
 
 	var/stability = stability()
 	if(damage > warning_point) // while the core is still damaged and it's still worth noting its status
-
 		var/list/audio_sounds = list('sound/AI/supermatter_integrity_before.ogg')
 		var/play_alert = 0
 		var/audio_offset = 0
@@ -289,7 +282,31 @@
 
 	broadcast_status()
 
-	//Ok, get the air from the turf
+	if(!istype(L)) 	// If we're in the large reinforced container, slowly delaminate if above a certain power threshold. Otherwise, weird case so we can just return.
+		if(istype(L, /obj/structure/closet/crate/secure/large) && damage > explosion_point / 10)
+			damage += max((power-1600)/10, 0)
+			power = min(power, 1600)
+			damage *= 1.007
+		else
+			return
+	else if(istype(L, /turf/space) && damage > explosion_point / 10) // If above 10% damage, it will exponentially delaminate in space.
+		damage += max((power-1600)/10, 0)
+		power = min(power, 1600)
+		damage *= 1.007
+		transfer_energy()
+		apply_mob_effects()
+	else // Otherwise do calculations to determine interactions with the local atmosphere. interact_with_local_atmosphere handles damage and power changes.
+		balance_with_atmosphere(L)
+		apply_mob_effects()
+		power -= (power/power_loss_modifier)**3
+
+	var/light_value = clamp(round(clamp(power / max_power, 0, 1) * max_luminosity), 0, max_luminosity)
+	// Lighting based on power output.
+	set_light(light_value, light_value / 2)
+
+	return 1
+
+/obj/machinery/power/supermatter/proc/balance_with_atmosphere(var/turf/L)
 	var/datum/gas_mixture/env = L.return_air()
 
 	//Remove gas from surrounding area
@@ -343,6 +360,7 @@
 
 	env.merge(removed)
 
+/obj/machinery/power/supermatter/proc/apply_mob_effects()
 	for(var/mob/living/carbon/human/l in view(src, min(7, round(power ** 0.25)))) // If they can see it without mesons on.  Bad on them.
 		if(!istype(l.glasses, /obj/item/clothing/glasses/scanner/meson))
 			l.hallucination = max(0, min(200, l.hallucination + power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)) ) ) )
@@ -350,15 +368,6 @@
 	for(var/mob/living/l in range(src, round((power / 100) ** 0.25)))
 		var/rads = (power / 50) * sqrt(1/(max(get_dist(l, src), 1)))
 		l.apply_radiation(rads, RAD_EXTERNAL)
-
-	power -= (power/power_loss_modifier)**3
-
-	var/light_value = clamp(round(clamp(power / max_power, 0, 1) * max_luminosity), 0, max_luminosity)
-
-	// Lighting based on power output.
-	set_light(light_value, light_value / 2)
-
-	return 1
 
 
 /obj/machinery/power/supermatter/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
@@ -453,7 +462,7 @@
 		Consume(W)
 		user.apply_radiation(250, RAD_EXTERNAL)
 		return
-	
+
 	user.visible_message("<span class='warning'>\The [user] touches \a [W] to \the [src] as a silence fills the room...</span>",\
 		"<span class='danger'>You touch \the [W] to \the [src] when everything suddenly goes silent.</span>\n<span class='notice'>\The [W] flashes into dust as you flinch away from \the [src].</span>",\
 		"<span class='warning'>Everything suddenly goes silent.</span>")
