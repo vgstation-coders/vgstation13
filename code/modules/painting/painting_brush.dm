@@ -378,11 +378,9 @@
 /obj/item/high_roller/attack_self(mob/user)
 	if(wielded)
 		unwield(user)
-		user.unregister_event(/event/after_move, src, /obj/item/high_roller/proc/swipe_turf)
 	else
 		wield(user)
 		if(wielded)
-			user.register_event(/event/after_move, src, /obj/item/high_roller/proc/swipe_turf)
 			if (!container)
 				to_chat(user, "<span class='warning'>You need to slot in a reagent container before you can use the roller.</span>")
 
@@ -401,8 +399,10 @@
 /obj/item/high_roller/update_wield(mob/user)
 	if(wielded)
 		slowdown = HIGHROLLER_SLOWDOWN
+		user.register_event(/event/after_move, src, /obj/item/high_roller/proc/swipe_turf)
 	else
 		slowdown = NO_SLOWDOWN
+		user.unregister_event(/event/after_move, src, /obj/item/high_roller/proc/swipe_turf)
 	update_icon()
 
 /obj/item/high_roller/attackby(obj/item/W, mob/user)
@@ -444,7 +444,6 @@
 		return
 	if(wielded)
 		unwield(user)
-		user.unregister_event(/event/after_move, src, /obj/item/high_roller/proc/swipe_turf)
 	user.put_in_hands(container)
 	container = null
 	playsound(user.loc, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -462,7 +461,6 @@
 		return
 	if(wielded)
 		unwield(user)
-		user.unregister_event(/event/after_move, src, /obj/item/high_roller/proc/swipe_turf)
 	user.put_in_hands(container)
 	container = null
 	playsound(user.loc, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -529,7 +527,6 @@
 /obj/item/high_roller/dropped(var/mob/user)
 	if(wielded)
 		unwield(user)
-		user.unregister_event(/event/after_move, src, /obj/item/high_roller/proc/swipe_turf)
 	..()
 
 /obj/item/high_roller/proc/swipe_turf(var/turf/T)
