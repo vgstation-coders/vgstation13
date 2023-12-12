@@ -414,6 +414,22 @@
 	floor_tile = new /obj/item/stack/tile/arcade(null)
 	..()
 
+/turf/simulated/floor/carpet/shag
+	name = "Shag Carpet"
+	icon_state = "shagcarpet-dark"
+	has_siding = FALSE
+
+/turf/simulated/floor/carpet/shag/update_icon()
+	if(broken || burnt)
+		icon_state = "carpet-broken"
+	else if(is_plating())
+		icon_state = icon_plating
+	else
+		icon_state = initial(icon_state)
+
+/turf/simulated/floor/carpet/shag/create_floor_tile()
+	floor_tile = new /obj/item/stack/tile/carpet/shag(null)
+
 /turf/simulated/floor/damaged
 	icon_state = "damaged1"
 
