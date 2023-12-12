@@ -143,8 +143,10 @@
 	return
 
 /atom/movable/light/proc/get_glide(var/atom/movable/the_holder)
-	if (!the_holder)
+	if (!istype(the_holder))
 		the_holder = holder
+	if (isturf(holder))
+		return WORLD_ICON_SIZE
 	return holder.glide_size || WORLD_ICON_SIZE
 
 /atom/movable/light/proc/set_dir(new_dir)

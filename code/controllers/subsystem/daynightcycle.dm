@@ -8,8 +8,8 @@ Afternoon - 16 Minutes
 Sunset    - 2 Minutes
 Nighttime - 36 Minutes
 */
-					
-#define TOD_MORNING 	"#4d6f86" 
+
+#define TOD_MORNING 	"#4d6f86"
 #define TOD_SUNRISE 	"#fdc5a0"
 #define TOD_DAYTIME 	"#FFFFFF"
 #define TOD_AFTERNOON 	"#ffeedf"
@@ -37,7 +37,7 @@ Basically, you are going to overwrite the flags.
 
 	var/current_timeOfDay = TOD_DAYTIME //This is more or less the color and duration since its in a switch.
 	var/next_light_power = 10 // As much as you would want to change these for cool factor.
-	var/next_light_range = 1 //	They basically are at the maximum values to not have overlapping light. 
+	var/next_light_range = 3 //	They basically are at the maximum values to not have overlapping light.
 							// Along with mesh evenly that is, the dir scan handles missed diagonals stylishly.
 
 	//The initial values don't matter, it just needs to fire initially, then set itself into the cycle.
@@ -71,14 +71,14 @@ Basically, you are going to overwrite the flags.
 				next_firetime = world.time + 3 MINUTES
 			if(TOD_SUNSET)
 				current_timeOfDay = TOD_NIGHTTIME
-				next_light_power = 3
+				next_light_power = 1
 				next_firetime = world.time + 36 MINUTES
 				play_globalsound()
 			if(TOD_NIGHTTIME)
 				current_timeOfDay = TOD_MORNING
-				next_light_power = 10
+				next_light_power = 3
 				next_firetime = world.time + 5 MINUTES
-			
+
 		if(!resumed)
 			currentrun = daynight_turfs.Copy()
 
@@ -89,7 +89,7 @@ Basically, you are going to overwrite the flags.
 		if(!T || T.gcDestroyed)
 			continue
 
-		T.set_light(next_light_range,next_light_power,current_timeOfDay)
+		T.set_light(next_light_range,next_light_power,current_timeOfDay, LIGHT_SOLID_TURF)
 
 		if(MC_TICK_CHECK)
 			return

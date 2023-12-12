@@ -91,6 +91,7 @@
 #define LIGHT_SOFT_FLICKER     "soft-flicker"
 #define LIGHT_DIRECTIONAL      "directional"
 #define LIGHT_REGULAR_FLICKER  "regular flicker"
+#define LIGHT_SOLID_TURF		"solid turf"
 
 // Lighting temperatures.
 #define COLOUR_LTEMP_CANDLE        rgb(255, 147, 41)

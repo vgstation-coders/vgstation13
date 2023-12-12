@@ -219,6 +219,12 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	// - the smooth white square (also TILE_BOUND)
 	icon_state = base_light_color_state
 
+	if (light_type == LIGHT_SOLID_TURF)
+		var/image/I = new(icon)
+		I.icon_state = "white"
+		temp_appearance += I
+		return
+
 	if (icon_state == "white") // This mask only makes sense if we are casting a white light
 		alpha = min(255,max(0,round(light_power*light_power_multiplier*25)))
 		var/image/I = new

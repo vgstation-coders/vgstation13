@@ -45,6 +45,7 @@
 		icon_state = "snow[rand(0, 6)]"
 	update_environment()
 	global_snowtiles += src
+
 	if(real_snow_tile && !ignore_blizzard_updates)
 		environment_snowtiles += src
 
