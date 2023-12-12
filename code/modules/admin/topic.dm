@@ -4330,6 +4330,12 @@
 				log_admin("[key_name(usr)] has spawned a customizable turret at [get_coordinates_string(usr)].")
 				message_admins("[key_name(usr)] has spawned a customizable turret at [get_coordinates_string(usr)].")
 
+			if("spawn_meat_blob")
+				var/datum/meat_blob/new_blob = new()
+				new_blob.instantiate(mob.loc)
+				log_admin("[key_name(usr)] has spawned a meat blob at [get_coordinates_string(usr)].")
+				message_admins("[key_name(usr)] has spawned a meat blob at [get_coordinates_string(usr)].")
+
 			if("vermin_infestation")
 				var/list/locations = list(
 					"RANDOM" = null,
