@@ -102,9 +102,10 @@
 			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir = dir
 			beam.emit(spawn_by=src)
-			set_light()
+			set_moody_light()
 		if (last_satisfaction != get_satisfaction()) // Beam power scales down is satisfaction is down too
 			beam.set_power(beam_power * get_satisfaction())
+		beam.moody_light_obj?.dir = dir
 	else
 		if(beam)
 			beam._re_emit = 0
@@ -358,7 +359,7 @@
 
 	moody_light_type = /atom/movable/light/moody/beam
 	light_color = LIGHT_COLOR_HALOGEN
-	light_power = 3
+	light_power = 2
 	light_range = 1
 	light_type = LIGHT_SOFT_FLICKER
 	lighting_flags = FOLLOW_PIXEL_OFFSET
@@ -377,6 +378,7 @@
 	if(!beam)
 		return null
 	beam.power = power
+	beam.set_light()
 	return beam
 
 /obj/effect/beam/emitter/update_icon()

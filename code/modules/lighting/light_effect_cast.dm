@@ -807,7 +807,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 
 	overlays = list()
 	light_color = (holder.light_color || light_color)
-	dir = holder.dir
+	follow_holder_dir()
 
 	temp_appearance = list()
 	if (holder.lighting_flags & NO_LUMINOSITY)
@@ -843,6 +843,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	var/image/I = image(icon)
 	I.layer = HIGHEST_LIGHTING_LAYER + 3
 	I.icon_state = "overlay[overlay_state]"
+	I.dir = dir
 	overlays += I
 
 // -- debug & shit

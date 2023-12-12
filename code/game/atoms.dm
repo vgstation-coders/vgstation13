@@ -201,12 +201,7 @@ var/global/list/ghdel_profiling = list()
 				B.master.target = null
 		beams.len = 0
 	*/
-	if(light_obj)
-		qdel(light_obj)
-		light_obj = null
-	if(shadow_obj)
-		qdel(shadow_obj)
-		shadow_obj = null
+	kill_light()
 	QDEL_NULL(firelightdummy)
 	..()
 

@@ -255,6 +255,20 @@
 		dark_plane.alphas["toggle_darkness"] = 255
 	check_dark_vision()
 
+/mob/dead/observer/var/see_opacity = 0
+
+/mob/dead/observer/verb/toggle_wallview()
+	set name = "Toggle Wall Opacity"
+	set category = "Ghost"
+
+	if (see_opacity)
+		see_opacity = 0
+		change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
+	else
+		see_opacity = 1
+		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
+	check_dark_vision()
+
 /mob/dead/observer/verb/analyze_air()
 	set name = "Analyze Air"
 	set category = "Ghost"
