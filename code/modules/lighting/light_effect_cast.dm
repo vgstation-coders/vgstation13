@@ -206,8 +206,11 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 					icon = 'icons/lighting/light_range_9.dmi'
 
 	if (light_type != LIGHT_DIRECTIONAL)
-		pixel_x = -(world.icon_size * light_range) + holder.pixel_x
-		pixel_y = -(world.icon_size * light_range) + holder.pixel_y
+		pixel_x = -(world.icon_size * light_range)
+		pixel_y = -(world.icon_size * light_range)
+	if (lighting_flags & FOLLOW_PIXEL_OFFSET)
+		pixel_x += holder.pixel_x
+		pixel_y += holder.pixel_y
 
 	// This to avoid TILE_BOUND corner light effects while keeping smooth movement for movable light sources
 	// There are THREE light atoms on an object
@@ -716,8 +719,6 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	// And then blacken out what's unvisible
 	// -- eliminating the underglow
 
-	var/list/cached_view = view(src, light_range)
-
 	for (var/turf/T in affected_shadow_walls)
 
 		var/image/black_turf = new()
@@ -730,19 +731,6 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 		black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 		black_turf.layer = ANTI_GLOW_PASS_LAYER
 		temp_appearance += black_turf
-
-		for (var/dir in cardinal)
-			var/turf/adj_turf = get_step(T, dir)
-			if (!(adj_turf in cached_view))
-				x_offset = T.x - x
-				y_offset = T.y - y
-				var/image/black_turf2 = new()
-				black_turf2.render_source = "*black_turf_prerender"
-				black_turf2.icon_state = "black"
-				black_turf2.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
-				black_turf2.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
-				black_turf2.layer = ANTI_GLOW_PASS_LAYER
-				temp_appearance += black_turf2
 
 // Smooth out shadows and then blacken out the wall glow
 /atom/movable/light/secondary_shadow/post_processing()
