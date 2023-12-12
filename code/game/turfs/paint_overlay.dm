@@ -114,7 +114,6 @@
 /turf/proc/update_paint_overlay()
 	if (paint_overlay)
 		paint_overlay.update()
-		lighting_overlay.update_overlay()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -173,7 +172,8 @@
 		if (_nano_paint || (nano_paint && !_nano_paint))
 			main_color = _color
 			nano_paint = _nano_paint
-			my_turf.lighting_overlay.update_overlay()
+			my_turf.moody_light_type = /atom/movable/light/moody/full_turf
+			my_turf.set_moody_light(1, 1,_color)
 		var/image/new_paint_layer = image(my_turf.get_paint_icon(),my_turf,my_turf.get_paint_state(), dir = my_turf.dir)
 		new_paint_layer.color = _color
 		new_paint_layer.alpha = _alpha
@@ -259,7 +259,8 @@
 	my_turf.overlays -= overlay
 	if (nano_paint)
 		nano_paint = FALSE
-		my_turf.lighting_overlay.update_overlay()
+		my_turf.moody_light_type = null
+		my_turf.kill_light()
 	if (erase)
 		overlay.overlays.len = 0
 		sub_overlays.len = 0

@@ -27,3 +27,6 @@
 
 /atom/movable/light/moody/bulb
 	overlay_state = "_light_bulb"
+
+/atom/movable/light/moody/full_turf
+	overlay_state = "_turf"
