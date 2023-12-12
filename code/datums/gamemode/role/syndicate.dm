@@ -148,7 +148,7 @@
 	var/datum/component/uplink/new_uplink
 
 	// Hide the uplink in a PDA if available, otherwise radio
-	var/obj/item/device/pda/found_pda = locate() in contents
+	var/obj/item/device/flashlight/pda/found_pda = locate() in contents
 	if(found_pda)
 		new_uplink = found_pda.add_component(/datum/component/uplink)
 		traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [new_uplink.unlock_code] ([found_pda.name]).")

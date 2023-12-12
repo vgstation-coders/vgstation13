@@ -80,7 +80,7 @@
 	icon = "pda_map"
 	var/obj/item/device/station_map/holomap = null
 
-/datum/pda_app/station_map/onInstall(var/obj/item/device/pda/device)
+/datum/pda_app/station_map/onInstall(var/obj/item/device/flashlight/pda/device)
 	..()
 	if (istype(device))
 		holomap = new(device)

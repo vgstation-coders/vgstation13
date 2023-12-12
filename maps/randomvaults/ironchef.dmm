@@ -171,7 +171,7 @@
 "az" = (
 /obj/item/clothing/accessory/armband/cargo,
 /obj/item/clothing/gloves/brown/cargo,
-/obj/item/device/pda/cargo,
+/obj/item/device/flashlight/pda/cargo,
 /obj/structure/table,
 /turf/simulated/floor{
 	icon_state = "showroomfloor"

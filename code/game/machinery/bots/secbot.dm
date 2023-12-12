@@ -184,7 +184,7 @@ Auto Patrol: []"},
 	return steps_per == initial_steps_per
 
 /obj/machinery/bot/secbot/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/flashlight/pda))
 		if(allowed(user) && !open && !emagged)
 			locked = !locked
 			to_chat(user, "Controls are now [locked ? "locked." : "unlocked."]")

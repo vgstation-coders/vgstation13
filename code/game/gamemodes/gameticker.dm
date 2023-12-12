@@ -335,8 +335,8 @@ var/datum/controller/gameticker/ticker
 	var/obj/item/I = get_item_by_slot(slot_wear_id)
 	if(istype(I,/obj/item/weapon/card/id))
 		ID = I
-	else if(istype(I,/obj/item/device/pda))
-		var/obj/item/device/pda/P = I
+	else if(istype(I,/obj/item/device/flashlight/pda))
+		var/obj/item/device/flashlight/pda/P = I
 		ID = P.id
 	if(!ID)
 		ID = new(T)

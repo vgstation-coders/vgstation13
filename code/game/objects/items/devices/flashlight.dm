@@ -37,7 +37,7 @@
 /obj/item/device/flashlight/initialize()
 	..()
 	if(on)
-		icon_state = "[initial(icon_state)]-on"
+		icon_state = get_on_icon_state()
 		set_light()
 	else
 		icon_state = initial(icon_state)
@@ -45,7 +45,7 @@
 
 /obj/item/device/flashlight/proc/update_brightness(var/mob/user = null, var/playsound = 1)
 	if(on)
-		icon_state = "[initial(icon_state)]-on"
+		icon_state = get_on_icon_state()
 		set_light()
 		if(playsound && has_sound)
 			if(get_turf(src))
@@ -125,6 +125,9 @@
 				to_chat(user, "<span class='notice'>[src] highlights [M.times_cloned] dot[M.times_cloned != 1 ? "s" : ""] on [M]'s sclerae!</span>")
 	else
 		return ..()
+
+/obj/item/device/flashlight/proc/get_on_icon_state()
+	return "[initial(icon_state)]-on"
 
 /obj/item/device/flashlight/proc/flicker()
 	if(flickering)
@@ -268,7 +271,7 @@
 
 /obj/item/device/flashlight/lamp/process(var/playsound = FALSE)
 	if(on && (!drawspower || pwrconn?.powered()))
-		icon_state = "[initial(icon_state)]-on"
+		icon_state = get_on_icon_state()
 		set_light()
 	else
 		icon_state = initial(icon_state)
@@ -411,7 +414,7 @@
 /obj/item/device/flashlight/lamp/slime/initialize()
 	..()
 	if(on)
-		icon_state = "[initial(icon_state)]-on"
+		icon_state = get_on_icon_state()
 		set_light(brightness_max)
 	else
 		icon_state = initial(icon_state)
@@ -419,7 +422,7 @@
 
 /obj/item/device/flashlight/lamp/slime/proc/slime_brightness(var/mob/user = null)
 	if(on)
-		icon_state = "[initial(icon_state)]-on"
+		icon_state = get_on_icon_state()
 		set_light(brightness_max)
 	else
 		icon_state = initial(icon_state)

@@ -187,7 +187,7 @@
 
 		return TRUE
 
-	if((istype(O,/obj/item/weapon/card/id)||istype(O,/obj/item/device/pda)) && brainmob)
+	if((istype(O,/obj/item/weapon/card/id)||istype(O,/obj/item/device/flashlight/pda)) && brainmob)
 		if(allowed(user))
 			locked = !locked
 			to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] \the [src].</span>")

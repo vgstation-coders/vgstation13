@@ -112,8 +112,8 @@
 						break
 
 					search_id = FALSE
-			else if (search_pda && istype(object, /obj/item/device/pda))
-				var/obj/item/device/pda/PDA = object
+			else if (search_pda && istype(object, /obj/item/device/flashlight/pda))
+				var/obj/item/device/flashlight/pda/PDA = object
 
 				if (PDA.owner == oldname)
 					PDA.owner = newname

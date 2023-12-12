@@ -181,6 +181,13 @@
 /datum/action/item_action/toggle_light
 	name = "Toggle Light"
 
+/datum/action/item_action/toggle_light/Trigger()
+	if (isPDA(target))
+		var/obj/item/device/flashlight/pda/P = target
+		P.update_brightness()
+	else
+		return ..()
+
 /datum/action/item_action/toggle_anon
 	name = "Toggle Anonymity"
 

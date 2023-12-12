@@ -865,7 +865,7 @@ var/global/objects_thrown_when_explode = FALSE
 					if(!disable_warning)
 						to_chat(usr, "The [name] is too big to attach.")
 					return CANNOT_EQUIP
-				if( istype(src, /obj/item/device/pda) || istype(src, /obj/item/weapon/pen) || is_type_in_list(src, H.wear_suit.allowed) )
+				if( istype(src, /obj/item/device/flashlight/pda) || istype(src, /obj/item/weapon/pen) || is_type_in_list(src, H.wear_suit.allowed) )
 					if(H.s_store)
 						if(automatic)
 							if(H.check_for_open_slot(src))

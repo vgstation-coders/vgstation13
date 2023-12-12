@@ -32,7 +32,7 @@ var/list/ai_list = list()
 	var/ioncheck[1]
 	var/icon/holo_icon//Default is assigned when AI is created.
 	var/holocolor = rgb(60,180,225) //default is blue
-	var/obj/item/device/pda/ai/aiPDA = null
+	var/obj/item/device/flashlight/pda/ai/aiPDA = null
 	var/obj/item/device/multitool/aiMulti = null
 	var/obj/item/device/station_map/station_holomap = null
 	var/obj/item/device/camera/silicon/aicamera = null
@@ -123,7 +123,7 @@ var/list/ai_list = list()
 
 	verbs += /mob/living/silicon/ai/proc/show_laws_verb
 
-	aiPDA = new/obj/item/device/pda/ai(src)
+	aiPDA = new/obj/item/device/flashlight/pda/ai(src)
 	aiPDA.owner = name
 	aiPDA.ownjob = "AI"
 	aiPDA.name = name + " (" + aiPDA.ownjob + ")"
@@ -296,7 +296,7 @@ var/static/list/ai_icon_states = list(
 		"Xerxes" = "ai-xerxes",
 		"Yes Man" = "yes-man",
 	)
-	
+
 /mob/living/silicon/ai/verb/pick_icon()
 	set category = "AI Commands"
 	set name = "Set AI Core Display"

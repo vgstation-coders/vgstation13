@@ -232,7 +232,7 @@
 
 #define isRoboID(A) (istype(A, /obj/item/weapon/card/robot))
 
-#define isPDA(A) (istype(A, /obj/item/device/pda))
+#define isPDA(A) (istype(A, /obj/item/device/flashlight/pda))
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/floor/shuttle) || istype(A, /turf/simulated/floor/shuttle/brig))
 

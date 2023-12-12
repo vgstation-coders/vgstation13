@@ -31,7 +31,7 @@
 	var/datum/recipe/currentrecipe //What recipe is currently being cooked?
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
 	var/global/list/acceptable_items = list( // List of the items you can put in
-							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
+							/obj/item/weapon/kitchen/utensil,/obj/item/device/flashlight/pda,/obj/item/device/paicard,
 							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard)
 	var/global/list/accepts_reagents_from = list(/obj/item/weapon/reagent_containers/glass, //Used to suppress message when transferring from these to the pan.
 												/obj/item/weapon/reagent_containers/food/drinks,

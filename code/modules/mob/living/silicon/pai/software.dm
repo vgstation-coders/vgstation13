@@ -672,7 +672,7 @@ Target Machine: "}
 	[(message_app.silent) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br><br>"}
 	dat += "<ul>"
 	if(!message_app.toff)
-		for (var/obj/item/device/pda/P in get_viewable_pdas())
+		for (var/obj/item/device/flashlight/pda/P in get_viewable_pdas())
 			dat += {"<li><a href='byond://?src=\ref[src];software=pdamessage;target=\ref[P]'>[P]</a>
 				</li>"}
 	dat += {"</ul>
