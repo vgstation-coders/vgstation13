@@ -223,7 +223,10 @@ var/list/one_way_windows
 		return TRUE
 	if(!density)
 		return TRUE
-	if(istype(mover))
+	if(istype(mover, /obj/item/projectile/beam))
+		var/obj/item/projectile/beam/B = mover
+		return bounds_dist(border_dummy, B.previous_turf) >= 0
+	else if(istype(mover))
 		return bounds_dist(border_dummy, mover) >= 0
 	else if(get_dir(loc, target) == dir)
 		return FALSE

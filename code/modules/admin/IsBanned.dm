@@ -114,19 +114,3 @@
 				what["desc"] = "[desc]"
 				what["reason"] = "PERMABAN"
 		return .	//default pager ban stuff
-var/clientdebugdiary = file("data/logs/runtime/[time2text(world.realtime,"YYYY-MM-DD")]-clients.log")
-#define log_client(text) clientdebugdiary << html_decode("\[[time_stamp()]]CLIENT DEBUG: [text]")
-
-/client/var/client_initialized = FALSE
-/client/New()
-    //clientdebugdiary << "/client/New(): [world.timeofday] [src] (\ref[src])"
-	client_initialized = TRUE
-	..()
-
-/client/Del()
-	if(!client_initialized)
-		log_client("[src] was deleted without being initialized first! Vars below")
-		for(var/V in vars)
-			log_client("[src] | [V]: [vars[V]] ref = \ref[vars[V]]")
-	..()
-#undef log_client

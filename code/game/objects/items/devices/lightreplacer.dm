@@ -444,7 +444,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		target.explode()
 
 /obj/item/device/lightreplacer/proc/get_best_light(var/obj/machinery/light/target)
-	if(!istype(supply))
+	if(!istype(supply) || !istype(target))
 		return 0
 	var/best_light
 	if(!target.fitting) //no idea how this happens

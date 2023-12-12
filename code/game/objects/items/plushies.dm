@@ -14,6 +14,7 @@
 	var/list/hug_sounds = list('sound/weapons/thudswoosh.ogg') //plays when the plushie hugs someone
 	var/death_sound //sound to play when the plushie is destroyed, e.g. in an explosion
 	autoignition_temperature = AUTOIGNITION_FABRIC
+	var/list/hug_reagents //= list(PARACETAMOL)
 
 /obj/item/toy/plushie/Destroy()
 	if(grenade)
@@ -67,6 +68,10 @@
 		playsound(src, hug_sound, 50, 1, -1)
 	if(stuffed || grenade)
 		src.visible_message("<span class='notice'>\The [src] gives \the [M] a [pick("hug", "warm embrace")].</span>")
+		if(hug_reagents.len && M.reagents)
+			for(var/R in hug_reagents)
+				if(!M.has_reagent_in_blood(R))
+					M.reagents.add_reagent(R, 1)
 	else
 		src.visible_message("<span class='notice'>\The [src] gives \the [M] a limp hug.</span>")
 	if(grenade && !grenade.active)
@@ -231,6 +236,12 @@
 	icon_state = "teddy"
 
 //This one is only available with a pomfcoin
+/obj/item/toy/plushie/chicken/pomf
+	name = "plush Pomf the Chicken"
+	desc = "An extremely soft and plushy chicken. Cluck!"
+	icon_state = "chicken_pomf"
+	hug_reagents = list(DOCTORSDELIGHT)
+
 /obj/item/toy/plushie/sylveon
 	name = "plush Sylveon"
 	desc = "This special edition Sylveon plushie was never officially released to the public."

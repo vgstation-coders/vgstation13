@@ -577,7 +577,7 @@
 			/obj/item/stack/sheet/wood/biggerstack = null,    //should spawn on the backpack
 			/obj/item/weapon/storage/fancy/crayons = null,
 			/obj/item/weapon/chisel = null,
-			/obj/item/weapon/palette = null,
+			/obj/item/palette = null,
 		)
 	)
 

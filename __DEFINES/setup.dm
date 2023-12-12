@@ -1111,6 +1111,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define RECYK_ELECTRONIC 5
 #define RECYK_WOOD       6
 #define RECYK_PLASTIC    7
+#define RECYK_FABRIC     8
 
 ////////////////
 // job.info_flags
@@ -1726,6 +1727,11 @@ var/proccalls = 1
 #define EMBEDDED_CONTROLLER "embedded controller"
 #define OTHER "other"
 
+// Bedsheet altering
+#define PLAIDPATTERN_INCOMPATIBLE	0
+#define PLAIDPATTERN_TO_PLAID		1
+#define PLAIDPATTERN_TO_NOT_PLAID	2
+
 // How many times to retry winset()ing window parameters before giving up
 #define WINSET_MAX_ATTEMPTS 10
 
@@ -1868,3 +1874,13 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 //Cooking-related temperatures
 #define COOKTEMP_DEFAULT (T0C + 316) //Default cooking temperature, around 600 F
 #define COOKTEMP_HUMANSAFE (BODYTEMP_HEAT_DAMAGE_LIMIT - 1) //Human-safe temperature for cooked food, 1 degree less than the threshold for burning a human.
+
+//Cleaning
+#define CLEANLINESS_WATER			1
+#define CLEANLINESS_SPACECLEANER	2
+#define CLEANLINESS_BLEACH			3
+
+//Paint Luminosity
+#define PAINTLIGHT_NONE		0	//regular paint
+#define PAINTLIGHT_LIMITED	1	//radium, lights up on canvas, limited color mixing
+#define PAINTLIGHT_FULL		2	//nano paint, lights up floors as well

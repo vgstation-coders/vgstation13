@@ -24,6 +24,29 @@
 	inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[_color || icon_state]")
 	if(color)
 		inv_overlay.color = color
+
+	overlays.len = 0
+	inv_overlay.overlays.len = 0
+	for (var/part in dyed_parts)
+		var/list/dye_data = dyed_parts[part]
+		var/dye_color = dye_data[1]
+		var/dye_alpha = dye_data[2]
+
+		var/_state = dye_base_iconstate_override
+		if (!_state)
+			_state = icon_state
+		var/image/object_overlay = image(icon, src, "[_state]-[part]")
+		object_overlay.appearance_flags = RESET_COLOR
+		object_overlay.color = dye_color
+		object_overlay.alpha = dye_alpha
+		overlays += object_overlay
+
+		var/image/worn_overlay = image(cloth_icon, src, "[_state]-[part]")
+		worn_overlay.appearance_flags = RESET_COLOR
+		worn_overlay.color = dye_color
+		worn_overlay.alpha = dye_alpha
+		inv_overlay.overlays += worn_overlay
+
 	if(attached_to)
 		attached_to.overlays += inv_overlay
 		if(ishuman(attached_to.loc))
@@ -71,7 +94,24 @@
 /obj/item/clothing/generate_accessory_overlays(var/obj/abstract/Overlays/O)
 	if(accessories.len)
 		for(var/obj/item/clothing/accessory/accessory in accessories)
-			O.overlays += image("icon" = 'icons/mob/clothing_accessories.dmi', "icon_state" = "[accessory._color || accessory.icon_state]")
+			var/image/I = image('icons/mob/clothing_accessories.dmi',null,"[accessory._color || accessory.icon_state]")
+			I.color = accessory.color
+
+			for (var/part in accessory.dyed_parts)
+				var/list/dye_data = accessory.dyed_parts[part]
+				var/dye_color = dye_data[1]
+				var/dye_alpha = dye_data[2]
+
+				var/_state = accessory.dye_base_iconstate_override
+				if (!_state)
+					_state = accessory.icon_state
+
+				var/image/worn_overlay = image('icons/mob/clothing_accessories.dmi', null, "[_state]-[part]")
+				worn_overlay.appearance_flags = RESET_COLOR
+				worn_overlay.color = dye_color
+				worn_overlay.alpha = dye_alpha
+				I.overlays += worn_overlay
+			O.overlays += I
 
 //Defining this at item level to prevent CASTING HELL
 /obj/item/proc/description_accessories()
@@ -125,6 +165,16 @@
 	icon_state = "bolotie"
 	_color = "bolotie"
 	accessory_exclusion = TIE
+
+/obj/item/clothing/accessory/tie/linen
+	name = "tie"
+	desc = "A woven tie."
+	icon_state = "tie"
+	accessory_exclusion = TIE
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("pattern","tip")
 
 /obj/item/clothing/accessory/stethoscope
 	name = "stethoscope"

@@ -365,15 +365,16 @@ function initCanvas(paintInitData, canvasInitData) {
 
 	var paletteButtonPanel = document.getElementById("palette_buttons");
 	var palette = canvasInitData.palette;
+	var nano_palette = canvasInitData.nano_palette;
 	while (paletteButtonPanel.childElementCount > 0) {
 		paletteButtonPanel.removeChild(paletteButtonPanel.firstChild);
 	}
 	
 	for (color in palette) {
 		paletteButtonPanel.innerHTML +=
-			'<div class="paletteColor" onclick="setColor(\'' + palette[color] + '\');" style="background-image:' +  generateColorPaletteBackgroundStyle(palette[color]) + '; background-image:' +  generateColorPaletteBackgroundStyle(palette[color], true) + '"></div>\n';
+			'<div class="paletteColor" onclick="setColor(\'' + palette[color] + '\',\'' + nano_palette[color] + '\');" style="background-image:' +  generateColorPaletteBackgroundStyle(palette[color]) + '; background-image:' +  generateColorPaletteBackgroundStyle(palette[color], true) + '; border:3px solid ' + nano_palette[color] + '"></div>\n';
 	}
-	setColor(palette[0]);
+	setColor(palette[0],nano_palette[0]);
 
 	//no errors initializing canvas stuff thus far, hide the error message
 	document.getElementById("canvas-error").style.display = "none";
@@ -397,9 +398,24 @@ function generateColorPaletteBackgroundStyle (color, ieMode) {
 	}
 }
 
-function setColor(color){
+function setColor(color,nano){
 	setPaintColor(color);
+	switch(nano) {
+		case "#161616":
+		setNanoPaint(0);
+		break;
+		case "#999999":
+		setNanoPaint(1);
+		break;
+		default:
+		setNanoPaint(2);
+	} 
 	updateSelectedColorDisplay(color, getOpacity())
+
+	//telling the game that we're changing color so that the player's painting brush actually changes its current color.
+	var content = "newcolor=" + encodeURIComponent(color) + ";";
+	content += "nanopaint=" + encodeURIComponent(nanopaint);
+	HREFmultipartHandler(src, content);
 }
 
 function updateSelectedColorDisplay (color, alpha) {
@@ -443,6 +459,7 @@ const MAX_DESCRIPTION_LENGTH = 1024;
 
 function submitData() {
 	var content = "bitmap=" + encodeURIComponent(bitmap) + ";";
+	content += "nanomap=" + encodeURIComponent(nanomap) + ";";
 	content += "author=" + encodeURIComponent(document.getElementById("author").value.slice(0, MAX_AUTHOR_LENGTH)) + ";";
 	content += "title=" + encodeURIComponent(document.getElementById("title").value.slice(0, MAX_TITLE_LENGTH)) + ";";
 	content += "description=" + encodeURIComponent(document.getElementById("description").value.slice(0, MAX_DESCRIPTION_LENGTH));

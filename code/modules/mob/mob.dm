@@ -301,6 +301,9 @@
 		if(stat != UNCONSCIOUS)
 			to_chat(src, msg)
 		return
+	if(stat == DEAD) //They can ghost and have the same benefit.
+		to_chat(src, msg)
+		return
 
 	var/awareness = 0
 	if(stat != UNCONSCIOUS)
@@ -2269,7 +2272,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/isBloodedAnimal()
 	return FALSE
 
-/mob/proc/OnMobAreaChanged()
+/mob/proc/OnMobAreaChanged(var/mob, var/newarea, var/oldarea)
 	if(src.client && src.client.media && !src.client.media.forced)
 		spawn()
 			src.update_music()

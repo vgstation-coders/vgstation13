@@ -24,6 +24,7 @@
 #define MINIGUN_SLOWDOWN_WIELDED 8
 
 #define FIREAXE_SLOWDOWN 1.4
+#define HIGHROLLER_SLOWDOWN 1.4
 
 #define COMMAND_POSITIONS list("Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer")
 #define ENGINEERING_POSITIONS list("Chief Engineer", "Station  Engineer", "Atmospheric Technician", "Mechanic")

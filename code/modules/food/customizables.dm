@@ -239,14 +239,11 @@
 	if(istype(I,/obj/item/weapon/soap)) // We can clean them all at once for convenience
 		if (plates.len > 0)
 			for (var/obj/item/trash/plate/plate in plates)
-				plate.clean = TRUE
-				plate.update_icon()
+				plate.clean_act(CLEANLINESS_SPACECLEANER)
 			visible_message("<span class='notice'>[user] cleans the stack of plates with \the [I]. </span>","<span class='notice'>You clean the stack of plates with \the [I]. </span>")
 		else
 			visible_message("<span class='notice'>[user] cleans the plate with \the [I]. </span>","<span class='notice'>You clean the plate with \the [I]. </span>")
-		clean = TRUE
-		clean_blood()// removes diseases and stuff as well
-		update_icon()
+		clean_act(CLEANLINESS_SPACECLEANER)
 		return TRUE
 
 	if(istype(I, /obj/item/weapon/reagent_containers/pan))
@@ -261,6 +258,12 @@
 		try_to_put_on_plate(user, I, params)
 	else
 		return ..()
+
+/obj/item/trash/plate/clean_act(var/cleanliness)
+	..()
+	if (cleanliness >= CLEANLINESS_SPACECLEANER)
+		clean = TRUE
+		update_icon()
 
 /obj/item/trash/plate/proc/try_to_put_on_plate(var/mob/user, var/obj/item/weapon/reagent_containers/food/snacks/snack, params)
 	if(istype(snack,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) //no platestacking even with recursive food, for now

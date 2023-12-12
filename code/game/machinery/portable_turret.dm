@@ -10,7 +10,7 @@
 
 
 /obj/machinery/turret/portable
-	req_access = list(access_security)
+	req_one_access = list(access_security, access_heads)
 	power_channel = EQUIP	// drains power from the EQUIPMENT channel
 
 	var/lasercolor = ""		// Something to do with lasertag turrets, blame Sieve for not adding a comment.
@@ -22,7 +22,7 @@
 	var/check_records = 1	// checks if it can use the security records
 	var/criminals = 1		// checks if it can shoot people on arrest
 	var/auth_weapons = 0	// checks if it can shoot people that have a weapon they aren't authorized to have
-	var/stun_all = 0		// if this is active, the turret shoots everything that isn't security or head of staff
+	var/stun_peasants = 0		// if this is active, the turret shoots everything that isn't security or head of staff
 	var/check_anomalies = 1	// checks if it can shoot at unidentified lifeforms (ie xenos)
 	var/ai		 = 0 		// if active, will shoot at anything not an AI or cyborg
 
@@ -60,7 +60,7 @@
 				check_records = 0
 				criminals = 0
 				auth_weapons = 1
-				stun_all = 0
+				stun_peasants = 0
 				check_anomalies = 0
 
 			if(/obj/item/weapon/gun/energy/tag/red)
@@ -69,7 +69,7 @@
 				check_records = 0
 				criminals = 0
 				auth_weapons = 1
-				stun_all = 0
+				stun_peasants = 0
 				check_anomalies = 0
 
 
@@ -103,7 +103,7 @@ Neutralize All Unidentified Life Signs: []<BR>"},
 "<A href='?src=\ref[src];operation=authweapon'>[src.auth_weapons ? "Yes" : "No"]</A>",
 "<A href='?src=\ref[src];operation=checkrecords'>[src.check_records ? "Yes" : "No"]</A>",
 "<A href='?src=\ref[src];operation=shootcrooks'>[src.criminals ? "Yes" : "No"]</A>",
-"<A href='?src=\ref[src];operation=shootall'>[stun_all ? "Yes" : "No"]</A>",
+"<A href='?src=\ref[src];operation=shootall'>[stun_peasants ? "Yes" : "No"]</A>",
 "<A href='?src=\ref[src];operation=checkxenos'>[check_anomalies ? "Yes" : "No"]</A>" )
 	else
 		if(istype(user,/mob/living/carbon/human))
@@ -150,7 +150,7 @@ Status: []<BR>"},
 		if ("shootcrooks")
 			src.criminals = !src.criminals
 		if("shootall")
-			stun_all = !stun_all
+			stun_peasants = !stun_peasants
 		if("checkxenos")
 			check_anomalies = !check_anomalies
 	updateUsrDialog()
@@ -295,7 +295,7 @@ Status: []<BR>"},
 		check_records=pick(0,1)
 		criminals=pick(0,1)
 		auth_weapons=pick(0,1)
-		stun_all=pick(0,0,0,0,1) // stun_all is a pretty big deal, so it's least likely to get turned on
+		stun_peasants=pick(0,0,0,0,1) // stun_peasants is a pretty big deal, so it's least likely to get turned on
 		if(prob(5))
 			emagged = 1
 		on=0
@@ -402,12 +402,12 @@ Status: []<BR>"},
 						targets += L
 						continue
 
-				if(L.lying) // if the perp is lying down, it's still a target but a less-important target
-					secondarytargets += L
-					continue
-
 				if(check_target(L))
-					targets += L // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
+					if(L.lying) // if the perp is lying down, it's still a target but a less-important target
+						secondarytargets += L
+						continue
+					else 
+						targets += L // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
 
 	if(check_anomalies || emagged)
 		for(var/obj/effect/blob/B in view(7+emagged*5, src))
@@ -452,7 +452,7 @@ Status: []<BR>"},
 	if(src.emagged)
 		return PERP_LEVEL_ARREST + rand(PERP_LEVEL_ARREST, PERP_LEVEL_ARREST*5) // if emagged, always return more than PERP_LEVEL_ARREST.
 
-	if((stun_all && !src.allowed(perp)) || attacked && !src.allowed(perp))
+	if((stun_peasants && !src.allowed(perp)) || attacked && !src.allowed(perp))
 		// if the turret has been attacked or is angry, target all non-sec people
 		if(!src.allowed(perp))
 			return PERP_LEVEL_ARREST + rand(PERP_LEVEL_ARREST, PERP_LEVEL_ARREST*5)

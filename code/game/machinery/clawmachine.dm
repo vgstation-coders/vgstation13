@@ -80,7 +80,7 @@
 
 	//These are only available with a pomf coin
 	var/list/prizes_pomf = list(
-		/obj/item/toy/plushie/sylveon
+		/obj/item/toy/plushie/chicken/pomf
 	)
 
 /obj/machinery/claw_machine/examine(mob/user)
@@ -247,14 +247,14 @@
 				var/obj/item/weapon/coin/C = O
 				if(C.string_attached)
 					if(prob(50))
-						to_chat(user, "<span class='notice'>You manage to yank the coin back out before the machine swallows it!</span>")
+						to_chat(user, "<span class='notice'>You manage to yank \the [C] back out before the machine swallows it!</span>")
 						user.put_in_hands(O)
 					else
-						to_chat(user, "<span class='notice'>You weren't able to pull the coin out in time and the machine swallows it, string and all.</span>")
+						to_chat(user, "<span class='notice'>You weren't able to pull \the [C] out in time and the machine swallows it, string and all.</span>")
 						qdel(O)
 			else
 				qdel(O)
-			to_chat(user, "<span class='notice'>You insert a coin into \the [src] and grab the joystick...</span>")
+			to_chat(user, "<span class='notice'>You insert \a [O] into \the [src] and grab the joystick...</span>")
 			if(istype(O, /obj/item/weapon/coin/pomf))
 				play_game(user, PRIZEPOOL_POMF)
 			else

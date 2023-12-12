@@ -166,7 +166,11 @@ var/auxtools_path
 
 		var/notekey = copytext(T, 7)
 		return list2params(exportnotes(notekey))
-
+	else if(T == "port" && master)
+		if(src.port == 7777 || src.port == "7777")
+			src.OpenPort(7778)
+		else
+			src.OpenPort(7777)
 
 /world/Reboot(reason)
 	if(reason == REBOOT_HOST)

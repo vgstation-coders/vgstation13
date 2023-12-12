@@ -482,8 +482,15 @@
 	},
 /area/vault/laundromat/drug_lab)
 "JD" = (
-/turf/space,
-/area)
+/obj/structure/table/reinforced,
+/obj/item/trash/plate/clean{
+	name = "drying plate";
+	desc = "Used to dry the recently manufactured methamphetamine into crystals, to then crack with the cracking hammer."
+	},
+/turf/simulated/floor/engine{
+	icon_state = "floor4"
+	},
+/area/vault/laundromat/drug_lab)
 "Kc" = (
 /obj/machinery/smartfridge/chemistry,
 /turf/simulated/floor/engine{
@@ -544,7 +551,9 @@
 	},
 /area/vault/laundromat/drug_lab)
 "Nr" = (
-/obj/machinery/chem_dispenser/brewer/mapping,
+/obj/machinery/chem_dispenser/brewer/mapping{
+	desc = "That's some good brew, why are we even making meth?"
+	},
 /obj/structure/table/reinforced,
 /turf/simulated/floor/engine{
 	icon_state = "floor4"
@@ -752,7 +761,9 @@
 /area/vault/laundromat/drug_lab)
 "Te" = (
 /obj/structure/table/reinforced,
-/obj/machinery/chem_dispenser/brewer/mapping,
+/obj/machinery/chem_dispenser/brewer/mapping{
+	desc = "That's some good brew, why are we even making meth?"
+	},
 /turf/simulated/floor/engine{
 	icon_state = "floor4"
 	},
@@ -788,29 +799,28 @@
 /area/vault/laundromat/drug_lab)
 
 (1,1,1) = {"
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
 "}
 (2,1,1) = {"
-JD
 MI
 MI
 MI
@@ -829,10 +839,11 @@ MI
 MI
 MI
 MI
-JD
+MI
+MI
 "}
 (3,1,1) = {"
-JD
+MI
 MI
 rT
 rT
@@ -851,10 +862,10 @@ NA
 nN
 NA
 Ox
-JD
+MI
 "}
 (4,1,1) = {"
-JD
+MI
 MI
 rT
 ql
@@ -873,10 +884,10 @@ DO
 mB
 DO
 MI
-JD
+MI
 "}
 (5,1,1) = {"
-JD
+MI
 MI
 Fn
 rT
@@ -895,10 +906,10 @@ mB
 mB
 mB
 MI
-JD
+MI
 "}
 (6,1,1) = {"
-JD
+MI
 MI
 rT
 rT
@@ -917,10 +928,10 @@ sT
 sT
 fH
 MI
-JD
+MI
 "}
 (7,1,1) = {"
-JD
+MI
 MI
 rT
 rT
@@ -939,10 +950,10 @@ Sj
 Sj
 of
 MI
-JD
+MI
 "}
 (8,1,1) = {"
-JD
+MI
 MI
 rT
 rT
@@ -961,10 +972,10 @@ mB
 mB
 RG
 MI
-JD
+MI
 "}
 (9,1,1) = {"
-JD
+MI
 MI
 Fn
 rT
@@ -983,10 +994,10 @@ SU
 mB
 wn
 MI
-JD
+MI
 "}
 (10,1,1) = {"
-JD
+MI
 MI
 rT
 rT
@@ -1005,10 +1016,10 @@ TY
 mB
 Nr
 MI
-JD
+MI
 "}
 (11,1,1) = {"
-JD
+MI
 MI
 rT
 rT
@@ -1027,10 +1038,10 @@ wx
 mB
 Te
 MI
-JD
+MI
 "}
 (12,1,1) = {"
-JD
+MI
 MI
 rT
 rT
@@ -1049,10 +1060,10 @@ eJ
 mB
 dl
 MI
-JD
+MI
 "}
 (13,1,1) = {"
-JD
+MI
 MI
 Fn
 rT
@@ -1071,10 +1082,10 @@ mB
 mB
 re
 MI
-JD
+MI
 "}
 (14,1,1) = {"
-JD
+MI
 MI
 rT
 rT
@@ -1093,10 +1104,10 @@ mB
 mB
 Lh
 MI
-JD
+MI
 "}
 (15,1,1) = {"
-JD
+MI
 MI
 rT
 rT
@@ -1115,10 +1126,10 @@ mB
 bR
 Lh
 MI
-JD
+MI
 "}
 (16,1,1) = {"
-JD
+MI
 MI
 rT
 rT
@@ -1128,19 +1139,19 @@ mB
 dP
 mB
 mB
-dP
+JD
 mB
 mB
-dP
+JD
 mB
 mB
-dP
+JD
 Lh
 MI
-JD
+MI
 "}
 (17,1,1) = {"
-JD
+MI
 MI
 Fn
 rT
@@ -1159,10 +1170,10 @@ mB
 ka
 PJ
 MI
-JD
+MI
 "}
 (18,1,1) = {"
-JD
+MI
 MI
 dD
 rT
@@ -1181,10 +1192,10 @@ mB
 nn
 Lh
 MI
-JD
+MI
 "}
 (19,1,1) = {"
-JD
+MI
 MI
 rT
 rT
@@ -1203,10 +1214,9 @@ Kc
 Gt
 fB
 MI
-JD
+MI
 "}
 (20,1,1) = {"
-JD
 MI
 MI
 MI
@@ -1225,27 +1235,28 @@ MI
 MI
 MI
 MI
-JD
+MI
+MI
 "}
 (21,1,1) = {"
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
-JD
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
+MI
 "}

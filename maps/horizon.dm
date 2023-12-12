@@ -38,11 +38,47 @@
 	center_x = 253
 	center_y = 142
 
+	default_tagger_locations = list(
+		null,
+		null,
+		null,
+		DISP_ENGINEERING,
+		null,
+		DISP_ATMOSPHERICS,
+		DISP_SECURITY,
+		null,
+		DISP_MEDBAY,
+		null,
+		null,
+		DISP_RESEARCH,
+		null,
+		DISP_ROBOTICS,
+		null,
+		null,
+		null,
+		null,
+		DISP_BAR,
+		DISP_KITCHEN,
+		DISP_HYDROPONICS,
+		null,
+		DISP_GENETICS,
+		null,
+		null,
+		null
+	)
+
 /datum/map/active/New()
 	.=..()
 
 	research_shuttle.name = "Asteroid Shuttle" //There is only one shuttle on packedstation - the asteroid shuttle
 	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
+
+/datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
+	if(ispath(DR.role_category,/datum/role/ninja))
+		return FALSE
+	if(ispath(DR.role_category,/datum/role/time_agent))
+		return FALSE
+	return ..()
 
 ////////////////////////////////////////////////////////////////
 #include "horizon.dmm"

@@ -190,7 +190,7 @@
 			continue
 		x.forceMove(loc)
 
-	if(!occupant.gcDestroyed)
+	if(occupant && !occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
 		if(istype(ejector) && ejector != occupant)

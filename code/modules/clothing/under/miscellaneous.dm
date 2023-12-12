@@ -989,8 +989,8 @@
 	item_state = icon_state
 	_color = icon_state
 
-/obj/item/clothing/under/rags
-	name ="rags"
+/obj/item/clothing/under/leather_rags
+	name ="leather rags"
 	desc = "Some leather scraps tied together."
 	icon_state = "rags"
 	item_state = "rags"
@@ -998,3 +998,97 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
+
+///////////////////////////////////////////////////////////////////////////
+
+/obj/item/clothing/under/toga
+	name ="toga"
+	desc = "Linen cloth wrapped in a wearable fashion."
+	icon_state = "toga"
+	item_state = "toga"
+	_color = "toga"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	clothing_flags = COLORS_OVERLAY
+	//TODO
+	//clothing_flags = ONESIZEFITSALL
+	species_fit = list(VOX_SHAPED)//, INSECT_SHAPED, GREY_SHAPED)
+	dyeable_parts = list("sash")
+	hood = new /obj/item/clothing/head/toga_cap()
+	color = COLOR_LINEN
+
+//cap is automatically deployed by the uniform
+/obj/item/clothing/head/toga_cap
+	name = "toga cap"
+	desc = "The wrappings of a toga allow for an improvised cap."
+	icon_state = "toga_cap"
+	item_state = "toga_cap"
+	species_fit = list(VOX_SHAPED)
+	clothing_flags = COLORS_OVERLAY
+	body_parts_covered = HEAD|EARS|HIDEHEADHAIR
+
+///////////////////////////////////////////////////////////////////////////
+
+
+/obj/item/clothing/under/composite
+	name = "uniform"
+	desc = "Comfy and stylish."
+	icon_state = "base_unset"
+	item_state = "base"
+	_color = "base"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	species_fit = list(VOX_SHAPED)
+	clothing_flags = COLORS_OVERLAY
+	dye_base_iconstate_override = "linencrafts"
+	dye_base_itemstate_override = "linencrafts"
+	color = COLOR_LINEN
+	var/list/permanent_parts = list()
+
+/obj/item/clothing/under/composite/proc/set_dyeable_parts()
+	icon_state = "base"
+	dyeable_parts = list()
+	for (var/part in permanent_parts)
+		dyeable_parts += part
+		dyed_parts[part] = list(color,255)
+		switch (part)
+			if ("shortpants")
+				dyeable_parts += list("shortpants-trim")
+			if ("pants")
+				dyeable_parts += list("pants-tip")
+			if ("polo")
+				dyeable_parts += list("polo-stripes","polo-sleeves")
+			if ("tshirt")
+				dyeable_parts += list("tshirt-stripes")
+	dyeable_parts += "belt"
+	if (permanent_parts.len > 1)
+		body_parts_covered = ARMS|LEGS|FULL_TORSO
+	else
+		body_parts_covered = LOWER_TORSO|LEGS
+
+/obj/item/clothing/under/composite/update_icon()
+	for (var/part in permanent_parts)//enabling actual clothing parts to persist through bleach or full dyeings.
+		if (!(part in dyed_parts))
+			dyed_parts[part] = list(color,255)
+	..()
+
+/obj/item/clothing/under/dress
+	name ="dress"
+	desc = "They make you feel like a woman."
+	icon_state = "dress"
+	item_state = "dress"
+	_color = "dress"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	species_fit = list(VOX_SHAPED)
+	clothing_flags = COLORS_OVERLAY
+	color = COLOR_LINEN
+
+/obj/item/clothing/under/villager_dress
+	name ="villager dress"
+	desc = "Greetin. Yea? Ready."
+	icon_state = "villager_dress"
+	item_state = "villager_dress"
+	_color = "villager_dress"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	species_fit = list(VOX_SHAPED)
+	dyeable_parts = list("drape","trim")
+	clothing_flags = COLORS_OVERLAY
+	color = COLOR_LINEN

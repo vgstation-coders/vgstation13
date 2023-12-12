@@ -372,34 +372,58 @@
 	group = "Supplies"
 	containsdesc = "Standard firefighting gear. Includes two full suits to protect upcoming firemen against the dangers of fire, plus two classic fire extinguishers. Fire axe not included."
 
-/datum/supply_packs/artscrafts
-	name = "Arts and Crafts supplies"
+/datum/supply_packs/paintgeneral
+	name = "Painter general supplies"
 	contains = list(/obj/item/weapon/storage/fancy/crayons,
-					/obj/item/stack/package_wrap,
-					/obj/item/weapon/reagent_containers/glass/paint/red,
-					/obj/item/weapon/reagent_containers/glass/paint/green,
-					/obj/item/weapon/reagent_containers/glass/paint/blue,
-					/obj/item/weapon/reagent_containers/glass/paint/yellow,
-					/obj/item/weapon/reagent_containers/glass/paint/purple,
-					/obj/item/weapon/reagent_containers/glass/paint/cyan,
-					/obj/item/weapon/reagent_containers/glass/paint/black,
-					/obj/item/weapon/reagent_containers/glass/paint/white,
-					/obj/item/weapon/reagent_containers/glass/paint/remover,
-					/obj/item/weapon/painting_brush,
+					/obj/item/weapon/storage/toolbox/paint,
+					/obj/item/painting_brush,
+					/obj/item/paint_roller,
+					/obj/item/palette,
+					/obj/structure/easel,
 					/obj/item/mounted/frame/painting/custom,
 					/obj/item/mounted/frame/painting/custom,
 					/obj/item/mounted/frame/painting/custom/landscape,
 					/obj/item/mounted/frame/painting/custom/portrait,
 					/obj/item/mounted/frame/painting/custom/large,
+					/obj/item/stack/sheet/wood/bigstack,
+					)
+	cost = 50
+	containertype = /obj/structure/closet/crate
+	containername = "\improper Painter supplies crate"
+	group = "Supplies"
+	containsicon = "painting"
+	containsdesc = "An all-in-one crate containing everything a painter needs to get started."
+
+/datum/supply_packs/paintsamples
+	name = "Random paint samples"
+	contains = list(/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
+					/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
+					/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
+					/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
+					/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
+					/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
+					/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
+					/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
+					)
+	cost = 30
+	containertype = /obj/structure/closet/crate
+	containername = "\improper Paints crate"
+	group = "Supplies"
+	containsicon = "paints"
+	containsdesc = "A collection of 8 paint buckets, containing various known and less known paints."
+
+/datum/supply_packs/posters
+	name = "Posters assortment"
+	contains = list(/obj/item/mounted/poster,
 					/obj/item/mounted/poster,
-					/obj/item/stack/package_wrap/gift,
-					/obj/item/stack/package_wrap/gift,
-					/obj/item/stack/package_wrap/gift)
+					/obj/item/mounted/poster,
+					/obj/item/mounted/poster)
 	cost = 10
 	containertype = /obj/structure/closet/crate
-	containername = "\improper Arts and Crafts crate"
+	containername = "\improper Posters crate"
 	group = "Supplies"
-	containsdesc = "An all-in-one crate containing anything an artist could ever desire."
+	containsicon = "posters"
+	containsdesc = "A pack of 4 random posters."
 
 /datum/supply_packs/photoset
 	name = "Photography equipment"

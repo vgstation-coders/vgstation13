@@ -28,19 +28,20 @@ cons:
 ****************/
 
 #define GFI_DX_ATOM		1	// This is either the icon's source atom, or in the case of an overlay the atom this icon is an overlay of
-#define GFI_DX_ICON		2	// Can be a dmi, or an icon object, depending on whether there is also a state. Can also be null in the case of overlays, so the parent's icon is used.
-#define GFI_DX_STATE	3	// The icon_state.
-#define GFI_DX_DIR		4	// The dir of the parent atom
-#define GFI_DX_PLANE	5	// The plane of the atom, or the parent atom's +0.1 in the case of overlays
-#define GFI_DX_LAYER	6
-#define GFI_DX_COLOR	7	// The parent's color always overrides
-#define GFI_DX_ALPHA	8	// The image's alpha, or that of its parent if said parent's alpha isn't 255
-#define GFI_DX_PIXEL_X	9	// The combined offset of the overlay image and every datum it's part of, including parent images and the base atom
-#define GFI_DX_PIXEL_Y	10	// The combined offset of the overlay image and every datum it's part of, including parent images and the base atom
-#define GFI_DX_COORD_X	11	// Because the proc can be slow and the atom might move, we memorize its location right when the picture is taken
-#define GFI_DX_COORD_Y	12	// Because the proc can be slow and the atom might move, we memorize its location right when the picture is taken
+#define GFI_DX_ACTUAL_ATOM		2	// Same as above but always the source atom
+#define GFI_DX_ICON		3	// Can be a dmi, or an icon object, depending on whether there is also a state. Can also be null in the case of overlays, so the parent's icon is used.
+#define GFI_DX_STATE	4	// The icon_state.
+#define GFI_DX_DIR		5	// The dir of the parent atom
+#define GFI_DX_PLANE	6	// The plane of the atom, or the parent atom's +0.1 in the case of overlays
+#define GFI_DX_LAYER	7
+#define GFI_DX_COLOR	8	// The parent's color always overrides
+#define GFI_DX_ALPHA	9	// The image's alpha, or that of its parent if said parent's alpha isn't 255
+#define GFI_DX_PIXEL_X	10	// The combined offset of the overlay image and every datum it's part of, including parent images and the base atom
+#define GFI_DX_PIXEL_Y	11	// The combined offset of the overlay image and every datum it's part of, including parent images and the base atom
+#define GFI_DX_COORD_X	12	// Because the proc can be slow and the atom might move, we memorize its location right when the picture is taken
+#define GFI_DX_COORD_Y	13	// Because the proc can be slow and the atom might move, we memorize its location right when the picture is taken
 
-#define GFI_DX_MAX		12	// Remember to keep this updated should you need to keep track of more variables
+#define GFI_DX_MAX		13	// Remember to keep this updated should you need to keep track of more variables
 
 
 /proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/override_dir = 0, var/ignore_spawn_items = FALSE)
@@ -50,6 +51,9 @@ cons:
 
 	for(var/data in image_datas)
 		if (!data[GFI_DX_ICON] && !data[GFI_DX_STATE]) // no icon nor icon_state? we're probably not meant to draw that. Possibly a blank icon while we're only interested in its overlays.
+			continue
+		var/atom/atom = data[GFI_DX_ACTUAL_ATOM]
+		if (atom.blend_mode == BLEND_ADD)//additive overlays don't show up properly, especially if they're partly transparent
 			continue
 
 		if (ignore_spawn_items)
@@ -107,7 +111,7 @@ cons:
 			add.Blend(rgba, ICON_MULTIPLY)
 
 		// Blend the overlay into the flattened icon
-		var/atom/atom = data[GFI_DX_ATOM]
+
 		if (center)
 			flat.Blend(add,blendMode2iconMode(atom.blend_mode),1+data[GFI_DX_PIXEL_X]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_X]-center.x+radius),1+data[GFI_DX_PIXEL_Y]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_Y]-center.y+radius))
 		else // if there is no center that means we're probably dealing with a single atom, so we only care about the pixel offset
@@ -121,6 +125,7 @@ cons:
 /proc/get_image_data(var/to_sort,var/list/parent, var/is_underlay = FALSE)
 	var/data[GFI_DX_MAX]
 	data[GFI_DX_ATOM] = to_sort
+	data[GFI_DX_ACTUAL_ATOM] = to_sort
 	data[GFI_DX_ICON] = to_sort:icon
 	data[GFI_DX_STATE] = to_sort:icon_state
 	data[GFI_DX_DIR] = to_sort:dir
@@ -245,6 +250,7 @@ cons:
 	return sorted
 
 #undef GFI_DX_ATOM
+#undef GFI_DX_ACTUAL_ATOM
 #undef GFI_DX_ICON
 #undef GFI_DX_STATE
 #undef GFI_DX_DIR

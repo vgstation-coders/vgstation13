@@ -1,3 +1,72 @@
+
+/obj/item/stack/tile
+	icon = 'icons/obj/tiles.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sheets_n_ores.dmi', "right_hand" = 'icons/mob/in-hand/right/sheets_n_ores.dmi')
+	var/material
+	var/datum/paint_overlay/paint_overlay = null
+	var/list/stacked_paint = list()
+
+/obj/item/stack/tile/transfer_data_from(var/obj/item/stack/tile/S, var/amount)
+	while(amount > 0)
+		if (!S.paint_overlay)
+			return
+		if (!paint_overlay)
+			paint_overlay = S.paint_overlay
+			S.paint_overlay = null
+			if (S.stacked_paint.len > 0)
+				var/datum/paint_overlay/paint = S.stacked_paint[1]
+				S.stacked_paint -= paint
+				S.paint_overlay = paint
+		else
+			stacked_paint += S.paint_overlay
+			S.paint_overlay = null
+			if (S.stacked_paint.len > 0)
+				var/datum/paint_overlay/paint = S.stacked_paint[1]
+				S.stacked_paint -= paint
+				S.paint_overlay = paint
+		amount--
+
+/obj/item/stack/tile/update_icon()
+	overlays.len = 0
+	if (paint_overlay && paint_overlay.sub_overlays.len > 0)
+		var/image/O = pick(paint_overlay.sub_overlays)
+		var/image/I = image('icons/obj/tiles.dmi',src,"tile-paint")
+		I.color = O.color
+		overlays += I
+
+/obj/item/stack/tile/proc/adjust_slowdown(mob/living/L, current_slowdown)
+	return current_slowdown
+
+/obj/item/stack/tile/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			qdel(src)
+			return
+		if(2.0)
+			if (prob(50))
+				qdel(src)
+				return
+		if(3.0)
+			if (prob(5))
+				qdel(src)
+				return
+		else
+	return
+
+/obj/item/stack/tile/blob_act()
+	qdel(src)
+
+/obj/item/stack/tile/singularity_act()
+	qdel(src)
+	return 2
+
+/obj/item/stack/tile/clean_act(var/cleanliness)
+	..()
+	if (cleanliness >= CLEANLINESS_BLEACH)
+		paint_overlay = null
+		stacked_paint.len = 0
+		update_icon()
+
 /obj/item/stack/tile/metal
 	name = "floor tile"
 	singular_name = "floor tile"

@@ -43,10 +43,19 @@
 /obj/machinery/bunsen_burner/splashable()
 	return FALSE
 
+/obj/machinery/bunsen_burner/table_shift()
+	pixel_y = 6
+
+/obj/machinery/bunsen_burner/table_unshift()
+	pixel_y = 0
+
 /obj/machinery/bunsen_burner/New()
 	..()
 	processing_objects.Remove(src)
 	create_reagents(250)
+
+	if(ticker)
+		initialize()
 
 /obj/machinery/bunsen_burner/mapping/New()
 	..()

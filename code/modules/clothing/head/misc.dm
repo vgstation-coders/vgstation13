@@ -224,6 +224,18 @@
 	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.9
 
+/obj/item/clothing/head/flatcap/linen
+	name = "flat cap"
+	desc = "A working man's cap."
+	icon_state = "flatcap"
+	item_state = "flatcap"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("trim")
+
 /obj/item/clothing/head/pirate
 	name = "pirate hat"
 	desc = "Yarr."
