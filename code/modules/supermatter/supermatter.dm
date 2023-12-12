@@ -293,7 +293,6 @@
 		damage += max((power-1600)/10, 0)
 		power = min(power, 1600)
 		damage *= 1.007
-		transfer_energy()
 		apply_mob_effects()
 	else // Otherwise do calculations to determine interactions with the local atmosphere. interact_with_local_atmosphere handles damage and power changes.
 		balance_with_atmosphere(L)
