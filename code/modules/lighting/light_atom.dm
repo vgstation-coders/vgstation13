@@ -36,29 +36,25 @@
 	update_contained_lights()
 
 /atom/movable/Move(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
+	var/old_loc = loc
 	. = ..()
 	update_contained_lights()
 
 /atom/movable/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
+	var/old_loc = loc
 	. = ..()
 	update_contained_lights()
 
-/atom/proc/update_contained_lights(var/list/specific_contents)
+/atom/proc/update_contained_lights(var/old_loc, var/list/specific_contents)
 	if(!specific_contents)
 		specific_contents = contents
 	for(var/thing in (specific_contents + src))
 		var/atom/A = thing
 		if(A && !A.gcDestroyed)
-			A.update_all_lights()
-
-// -- Mobs need to be spawned() for smooth movement and for the case of lights coming out of the backpack.
-/mob/update_contained_lights(var/list/specific_contents)
-	if(!specific_contents)
-		specific_contents = contents
-	for(var/thing in (specific_contents + src))
-		var/atom/A = thing
-		if(A && !A.gcDestroyed)
-			spawn(1)
+			if (ismob(old_loc))
+				spawn(1)
+					A.update_all_lights()
+			else
 				A.update_all_lights()
 
 /atom/movable/light/update_contained_lights(var/list/specific_contents)
