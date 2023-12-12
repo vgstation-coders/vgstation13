@@ -4332,7 +4332,7 @@
 
 			if("spawn_meat_blob")
 				var/datum/meat_blob/new_blob = new()
-				new_blob.instantiate(mob.loc)
+				new_blob.instantiate(get_turf(usr))
 				log_admin("[key_name(usr)] has spawned a meat blob at [get_coordinates_string(usr)].")
 				message_admins("[key_name(usr)] has spawned a meat blob at [get_coordinates_string(usr)].")
 
