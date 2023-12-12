@@ -321,7 +321,7 @@
 //gets assignment from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
 /mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job", var/give_rank = FALSE)
-	var/obj/item/device/pda/pda = wear_id
+	var/obj/item/device/flashlight/pda/pda = wear_id
 	var/obj/item/weapon/card/id/id = wear_id
 	var/obj/item/weapon/storage/wallet/wallet = wear_id
 	if (istype(pda))
@@ -356,7 +356,7 @@
 //gets name from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
 /mob/living/carbon/human/proc/get_identification_name(var/if_no_id = "Unknown")
-	var/obj/item/device/pda/pda = wear_id
+	var/obj/item/device/flashlight/pda/pda = wear_id
 	var/obj/item/weapon/card/id/id = wear_id
 	if (istype(pda))
 		if (pda.id)
@@ -1520,7 +1520,8 @@
 			dark_plane.alphas["override"] = dark_plane_alpha_override
 
 	if (istype(glasses))
-		glasses.update_perception(src)
+		// teething issues
+		//glasses.update_perception(src)
 		if (dark_plane && glasses.my_dark_plane_alpha_override && glasses.my_dark_plane_alpha_override_value)
 			dark_plane.alphas["[glasses.my_dark_plane_alpha_override]"] = glasses.my_dark_plane_alpha_override_value
 

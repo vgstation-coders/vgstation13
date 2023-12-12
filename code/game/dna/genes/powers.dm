@@ -311,13 +311,21 @@
 
 /datum/dna/gene/basic/xray
 	name = "X-Ray Vision"
-	activation_messages = list("The walls suddenly disappear.")
+	activation_messages = list("The walls suddenly disappear. <i>Note: can be toggled via verb in the IC tab.</i>")
 	deactivation_messages = list("The walls suddenly appear.")
 
 	drug_activation_messages = list("You see so much clearer now!")
 	drug_deactivation_messages = list("Your vision is obstructed again.")
 
 	mutation = M_XRAY
+
+/datum/dna/gene/basic/xray/activate(var/mob/M, var/connected, var/flags)
+	if (..())
+		M.verbs += /mob/living/proc/toggle_xrays
+
+/datum/dna/gene/basic/xray/deactivate(var/mob/M, var/connected, var/flags)
+	if (..())
+		M.verbs -= /mob/living/proc/toggle_xrays
 
 /datum/dna/gene/basic/xray/New()
 	block = XRAYBLOCK

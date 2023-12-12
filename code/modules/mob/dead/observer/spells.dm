@@ -100,7 +100,12 @@ var/global/list/boo_phrases_silicon=list(
 /spell/targeted/ghost/toggle_darkness/cast()
 	var/mob/dead/observer/ghost = holder
 	ASSERT(istype(ghost))
-	ghost.toggle_darkness()
+	var/choice = input(ghost, "What level of darkness do you want to see?") as null|anything in list("Full darkness", "See through walls")
+	switch (choice)
+		if ("Full darkness")
+			ghost.toggle_darkness()
+		if ("See through walls")
+			ghost.toggle_wallview()
 
 /spell/targeted/ghost/become_mouse
 	name = "Become a mouse"

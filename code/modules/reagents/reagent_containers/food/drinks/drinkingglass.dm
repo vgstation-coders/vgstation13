@@ -27,7 +27,7 @@
 	if(!molotov)
 		lit = 0
 	light_color = null
-	set_light(0)
+	kill_light()
 	origin_tech = ""
 	switching = FALSE
 	available_drinks.Cut()

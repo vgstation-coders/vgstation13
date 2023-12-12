@@ -43,32 +43,3 @@ var/global/byond_hub_playercount = OPEN_TO_HUB_PLAYERCOUNT_DEFAULT
 
 	usr << browse(dat, "window=admin2;size=600x400")
 	return
-
-/world/proc/update_status()
-	if(!byond_hub_open)
-		hub_password = "SORRYNOPASSWORD"
-		return
-
-	var/players = 0
-	for (var/mob/M in player_list)
-		if (M.client)
-			players++
-
-	if(players > byond_hub_playercount)
-		hub_password = "SORRYNOPASSWORD"
-		return
-
-	hub_password = "kMZy3U5jJHSiBQjr"  // Open the gates!
-
-	var/s= ""
-
-	s += "<b>[byond_server_name]</b>"
-	s += "[byond_server_desc]"
-
-	s = replacetext(s, "\[playercount\]", "[players]")
-	s = replacetext(s, "\[station_name\]", "[station_name()]")
-	s = replacetext(s, "\[map_name\]", "[map.nameLong]")
-
-	/* does this help? I do not know */ 	// neither do I!
-	if (src.status != s)
-		src.status = s

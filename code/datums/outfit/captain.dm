@@ -58,7 +58,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/pda/captain
+	pda_type = /obj/item/device/flashlight/pda/captain
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/gold
 

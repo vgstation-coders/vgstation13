@@ -111,8 +111,8 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 				adjusted_wage_gain = round((Acc.wage_gain)*payroll_modifier)
 				var/left_from_virtual_wallet = adjusted_wage_gain
 				var/decimal_wage_ratio = 0
-				var/list/obj/item/device/pda/matching_PDAs = list()
-				for(var/obj/item/device/pda/PDA in PDAs)
+				var/list/obj/item/device/flashlight/pda/matching_PDAs = list()
+				for(var/obj/item/device/flashlight/pda/PDA in PDAs)
 					// Only works and does this if ID is in PDA
 					if(PDA?.id?.virtual_wallet)
 						var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications
@@ -120,7 +120,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 							matching_PDAs.Add(PDA)
 				if(matching_PDAs.len)
 					decimal_wage_ratio = Acc.virtual_wallet_wage_ratio/100
-				for(var/obj/item/device/pda/PDA in matching_PDAs)
+				for(var/obj/item/device/flashlight/pda/PDA in matching_PDAs)
 					left_from_virtual_wallet -= round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len))
 					PDA.id.virtual_wallet.money += round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len))
 					if(round(adjusted_wage_gain*(decimal_wage_ratio/matching_PDAs.len)) > 0)

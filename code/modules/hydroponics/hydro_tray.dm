@@ -118,7 +118,7 @@
 	improper_light = 0
 	improper_kpa = 0
 	improper_heat = 0
-	set_light(0)
+	kill_light()
 	update_icon()
 
 //Harvests the product of a plant.

@@ -118,6 +118,8 @@ var/global/list/light_colors = list(
 
 var/global/list/obj/machinery/light/alllights = list()
 
+var/list/light_source_images = list()
+
 // the standard tube light fixture
 /obj/machinery/light
 	name = "light fixture"
@@ -129,20 +131,24 @@ var/global/list/obj/machinery/light/alllights = list()
 	layer = ABOVE_DOOR_LAYER
 	use_power = MACHINE_POWER_USE_ACTIVE
 	idle_power_usage = 2
-	active_power_usage = 20
+	active_power_usage = 10
 	power_channel = LIGHT //Lights are calc'd via area so they dont need to be in the machine list
 	var/on = 1					// 1 if on, 0 if off
-	var/on_gs = 0
+	var/on_gs = 1
 	var/static_power_used = 0
 	var/flickering = 0
 	var/obj/item/weapon/light/current_bulb = null
 	var/spawn_with_bulb = /obj/item/weapon/light/tube
 	var/fitting = "tube"
+	var/image/source_image = null
 	var/rgb_upgrade = FALSE //add plastic to enable RGB mode
 
 	// No ghost interaction.
 	ghost_read=0
 	ghost_write=0
+
+	lighting_flags = MOODY_AND_REGULAR_LIGHT_SOURCE | FOLLOW_PIXEL_OFFSET
+	moody_light_type = /atom/movable/light/moody/tube
 
 	var/idle = 0 // For process().
 
@@ -214,6 +220,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	fitting = "bulb"
 	desc = "A small lighting fixture."
 	spawn_with_bulb = /obj/item/weapon/light/bulb
+	moody_light_type = /atom/movable/light/moody/bulb
 
 /obj/machinery/light/small/broken
 	icon_state = "lbulb-broken" //for the mapper
@@ -242,7 +249,11 @@ var/global/list/obj/machinery/light/alllights = list()
 	alllights -= src
 
 /obj/machinery/light/update_icon()
-
+	if (source_image)
+		light_source_images -= source_image
+		for (var/mob/living/simple_animal/hostile/giant_spider/GS in player_list)
+			if (GS.client)
+				GS.client.images -= source_image
 	if(current_bulb)
 		switch(current_bulb.status)		// set icon_states
 			if(LIGHT_OK)
@@ -258,33 +269,37 @@ var/global/list/obj/machinery/light/alllights = list()
 	else
 		icon_state = "l[fitting]-empty"
 		on = 0
+	source_image = image(icon,src,icon_state)
+	source_image.plane = LIGHTING_PLANE
+	light_source_images += source_image
+	for (var/mob/living/simple_animal/hostile/giant_spider/GS in player_list)
+		if (GS.client)
+			GS.client.images += source_image
 
 // update the icon_state and luminosity of the light depending on its state
 /obj/machinery/light/proc/update(var/trigger = 1)
-
 	update_icon()
 	if(on)
-		if(light_range != current_bulb.brightness_range || light_power != current_bulb.brightness_power || light_color != current_bulb.brightness_color)
-			current_bulb.switchcount++
-			if(current_bulb.rigged)
-				if(current_bulb.status == LIGHT_OK && trigger)
+		current_bulb.switchcount++
+		if(current_bulb.rigged)
+			if(current_bulb.status == LIGHT_OK && trigger)
 
-					log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
-					message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
-
-					explode(get_mob_by_key(fingerprintslast))
-			else if( prob( min(60, current_bulb.switchcount*current_bulb.switchcount*0.01) ) )
-				if(current_bulb.status == LIGHT_OK && trigger)
-					current_bulb.status = LIGHT_BURNED
-					icon_state = "l[current_bulb.base_state]-burned"
-					on = 0
-					set_light(0)
-			else
-				use_power = MACHINE_POWER_USE_ACTIVE
-				set_light(current_bulb.brightness_range, current_bulb.brightness_power, current_bulb.brightness_color)
+				log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
+				message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
+				explode()
+		else if( prob( min(60, current_bulb.switchcount*current_bulb.switchcount*0.01) ) )
+			if(current_bulb.status == LIGHT_OK && trigger)
+				current_bulb.status = LIGHT_BURNED
+				icon_state = "l[current_bulb.base_state]-burned"
+				on = 0
+				kill_light()
+		else
+			use_power = 2
+			set_light(current_bulb.brightness_range, current_bulb.brightness_power, current_bulb.brightness_color)
+			set_moody_light()
 	else
-		use_power = MACHINE_POWER_USE_IDLE
-		set_light(0)
+		use_power = 1
+		kill_light()
 
 	if(current_bulb)
 		active_power_usage = (current_bulb.cost * 10)
@@ -348,7 +363,7 @@ var/global/list/obj/machinery/light/alllights = list()
 				current_bulb.brightness_range = clamp(new_range, 0, initial(current_bulb.brightness_range))
 		update()
 		return
-		
+
 	if (istype(W,/obj/item/stack/light_w))
 		if(rgb_upgrade)
 			to_chat(user, "This light is already customizable.")
@@ -358,8 +373,8 @@ var/global/list/obj/machinery/light/alllights = list()
 		rgb_upgrade = TRUE
 		to_chat(user, "You insert \the [W] into \the [src], allowing multitool customization.")
 		return
-	
-	
+
+
 	if(rgb_upgrade && iscrowbar(W))
 		W.playtoolsound(src, 75)
 		user.visible_message("[user.name] removes some plastic from \the [src].", \
@@ -369,7 +384,7 @@ var/global/list/obj/machinery/light/alllights = list()
 		drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
 		return
 	user.delayNextAttack(8)
-	
+
 	// attempt to insert light
 	if(istype(W, /obj/item/weapon/light))
 		if(current_bulb)
@@ -539,7 +554,6 @@ var/global/list/obj/machinery/light/alllights = list()
 				if (S)
 					S.broken_lights++
 		broken()
-	return
 // attack with hand - remove tube/bulb
 // if hands aren't protected and the light is on, burn the player
 
@@ -680,16 +694,16 @@ var/global/list/obj/machinery/light/alllights = list()
 	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 60)
 	w_type = RECYK_GLASS
 	brightness_range = 6
-	brightness_power = 1.5
+	brightness_power = 3
 	brightness_color = LIGHT_COLOR_TUNGSTEN
-	cost = 8
+	cost = 4
 
 /obj/item/weapon/light/tube/he
 	name = "high efficiency light tube"
 	desc = "An efficient light used to reduce strain on the station's power grid."
 	base_state = "hetube"
 	starting_materials = list(MAT_GLASS = 300, MAT_IRON = 60)
-	brightness_range = 8
+	brightness_range = 9
 	brightness_power = 4
 	brightness_color = LIGHT_COLOR_HALOGEN
 	cost = 2
@@ -719,10 +733,10 @@ var/global/list/obj/machinery/light/alllights = list()
 /obj/item/weapon/light/tube/large
 	w_class = W_CLASS_SMALL
 	name = "large light tube"
-	brightness_range = 15
+	brightness_range = 8
 	brightness_power = 4
 	starting_materials = list(MAT_GLASS = 200, MAT_IRON = 100)
-	cost = 15
+	cost = 8
 
 /obj/item/weapon/light/bulb
 	name = "light bulb"
@@ -731,11 +745,11 @@ var/global/list/obj/machinery/light/alllights = list()
 	base_state = "bulb"
 	item_state = "contvapour"
 	fitting = "bulb"
-	brightness_range = 3.5
-	brightness_power = 2
+	brightness_range = 5
+	brightness_power = 3
 	brightness_color = LIGHT_COLOR_TUNGSTEN
 	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 30)
-	cost = 5
+	cost = 2
 	w_type = RECYK_GLASS
 
 /obj/item/weapon/light/bulb/broken
