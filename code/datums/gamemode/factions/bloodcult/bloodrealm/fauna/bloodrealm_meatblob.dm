@@ -436,12 +436,12 @@
 			var/obj/meat_blob/merger = locate(/obj/meat_blob/) in get_step(blob.loc,merge)
 			//if the blob we're merging into is more healthy, than the one retracting, we set its health to the retracting blob's
 			if (merger.health > blob.health)
-				merger.take_damage(merger.health - blob.health,null,"merge")
+				merger.get_hit(merger.health - blob.health,null,"merge")
 			//otherwise, the blob takes damage corresponding to the health lost by the retracting blob
 			else if (merger.health < blob.health)
 				var/blob_health_percent = blob.health * 100 / blob.maxHealth
 				var/merger_new_health = max(merger.health * blob_health_percent / 100,1)
-				merger.take_damage(merger.health - merger_new_health,null,"merge")
+				merger.get_hit(merger.health - merger_new_health,null,"merge")
 		spawn(2)
 			qdel(animation)
 
@@ -610,7 +610,7 @@
 /obj/meat_blob/proc/die_out()
 	animate(src, color = list(0.6,0.2,0.2,0,0.2,0.6,0.2,0,0.2,0.2,0.6,0,0,0,0,1,0,0,0,0), time = 50)
 
-/obj/meat_blob/take_damage(var/damage = 0,var/mob/user,var/hitsound = get_sfx("machete_hit"))
+/obj/meat_blob/proc/get_hit(var/damage = 0,var/mob/user,var/hitsound = get_sfx("machete_hit"))
 	if (!damage)
 		return
 
@@ -709,18 +709,18 @@
 	if(dam)
 		user.do_attack_animation(src, W)
 		user.visible_message("<span class='danger'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
-	take_damage(dam,user)
+	get_hit(dam,user)
 	..()
 
 //explosions
 /obj/meat_blob/ex_act(severity)
 	switch(severity)
 		if(1)
-			take_damage(rand(200, 300),null, 0)
+			get_hit(rand(200, 300),null, 0)
 		if(2)
-			take_damage(rand(50, 150),null, 0)
+			get_hit(rand(50, 150),null, 0)
 		if(3)
-			take_damage(rand(5, 50),null, 0)
+			get_hit(rand(5, 50),null, 0)
 
 //singularity
 /obj/meat_blob/singularity_act()
@@ -731,7 +731,7 @@
 
 /obj/meat_blob/singularity_pull(var/obj/machinery/singularity/S, var/singulo_size, var/repels = FALSE)
 	if (!repels)
-		take_damage(singulo_size, null, 0)
+		get_hit(singulo_size, null, 0)
 		if(singulo_size >= STAGE_FIVE)
 			step_towards(src, S)
 
@@ -739,25 +739,25 @@
 /obj/meat_blob/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
 		return
-	take_damage(Proj.damage, Proj.firer)
+	get_hit(Proj.damage, Proj.firer)
 	return ..()
 
 //hit by .... blob?
 /obj/meat_blob/blob_act()
-	take_damage(30,40,null, 0)
+	get_hit(30,40,null, 0)
 	playsound(loc, 'sound/effects/blobattack.ogg',50,1)
 
 //hit by thrown items
 /obj/meat_blob/hitby(var/atom/movable/AM,var/speed = 5)
 	if(isitem(AM))
 		var/obj/item/I = AM
-		take_damage(I.throwforce*speed/5)
+		get_hit(I.throwforce*speed/5)
 
 //slashed by simple_animals
 /obj/meat_blob/attack_animal(var/mob/living/simple_animal/user)
 	user.delayNextAttack(8)
 	user.do_attack_animation(src, user)
-	take_damage(user.get_unarmed_damage(src),user, user.get_unarmed_hit_sound())
+	get_hit(user.get_unarmed_damage(src),user, user.get_unarmed_hit_sound())
 
 //slashed (touched?) by humans
 /obj/meat_blob/attack_hand(var/mob/living/carbon/human/user)
@@ -766,7 +766,7 @@
 		user.do_attack_animation(src, user)
 		var/datum/species/S = user.get_organ_species(user.get_active_hand_organ())
 		user.visible_message("<span class='danger'>\The [user] [S.attack_verb] \the [src].</span>")
-		take_damage(user.get_unarmed_damage(src),user, user.get_unarmed_hit_sound())
+		get_hit(user.get_unarmed_damage(src),user, user.get_unarmed_hit_sound())
 
 //slashed (touched?) by monkeys
 /obj/meat_blob/attack_paw(var/mob/living/carbon/monkey/user)
@@ -776,7 +776,7 @@
 			return
 		user.delayNextAttack(8)
 		user.do_attack_animation(src, user)
-		take_damage(user.get_unarmed_damage(src),user, user.get_unarmed_hit_sound())
+		get_hit(user.get_unarmed_damage(src),user, user.get_unarmed_hit_sound())
 
 //slashed by aliums
 /obj/meat_blob/attack_alien(var/mob/living/carbon/alien/humanoid/user)
@@ -788,7 +788,7 @@
 	user.visible_message("<span class='warning'>[user] [alienverb]s \the [src].</span>", \
 						 "<span class='warning'>You [alienverb] \the [src].</span>", \
 						 "You hear ripping flesh.")
-	take_damage(rand(15,30),user)
+	get_hit(rand(15,30),user)
 
 //beams (mostly copied from theblob.dm)
 /obj/meat_blob/beam_connect(var/obj/effect/beam/B)
@@ -811,7 +811,7 @@
 	var/damage = ((world.time - lastcheck)/10)  * (B.get_damage() / 2)
 
 	// Actually apply damage
-	take_damage(damage, null, "merge")
+	get_hit(damage, null, "merge")
 
 	// Update check time.
 	last_beamchecks["\ref[B]"]=world.time
