@@ -102,7 +102,8 @@
 			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir = dir
 			beam.emit(spawn_by=src)
-			set_moody_light()
+			if (moody_light_type)
+				set_moody_light()
 		if (last_satisfaction != get_satisfaction()) // Beam power scales down is satisfaction is down too
 			beam.set_power(beam_power * get_satisfaction())
 		beam.moody_light_obj?.dir = dir

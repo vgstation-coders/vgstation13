@@ -50,9 +50,3 @@ var/init_lights = list()
 /datum/subsystem/lighting/Recover()
 	initialized = SSlighting.initialized
 	..()
-
-/proc/initialise_lights()
-	to_chat(world, "<span class='userdanger'>Lights initialised...</span>")
-	world.log << "Lights initialised..."
-	if (!lighting_engine)
-		lighting_engine = new lighting_system_used

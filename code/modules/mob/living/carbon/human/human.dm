@@ -1520,8 +1520,7 @@
 			dark_plane.alphas["override"] = dark_plane_alpha_override
 
 	if (istype(glasses))
-		// teething issues
-		//glasses.update_perception(src)
+		glasses.update_perception(src)
 		if (dark_plane && glasses.my_dark_plane_alpha_override && glasses.my_dark_plane_alpha_override_value)
 			dark_plane.alphas["[glasses.my_dark_plane_alpha_override]"] = glasses.my_dark_plane_alpha_override_value
 

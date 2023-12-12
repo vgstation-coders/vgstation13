@@ -4,7 +4,6 @@
 	var/on = TRUE
 	var/list/color_matrix = null
 
-// Legacy code for 515 teething issues
 /obj/item/clothing/glasses/scanner/proc/apply_color(mob/living/carbon/user)	//for altering the color of the wearer's vision while active
 	if(color_matrix)
 		if(user.client)
@@ -101,6 +100,8 @@
 	see_in_dark = initial(see_in_dark)
 	eyeprot = initial(eyeprot)
 	my_dark_plane_alpha_override = "night_vision"
+	my_dark_plane_alpha_override_value = 255
+	C.client.color = "#33FF33"
 	if (ishuman(C))
 		var/mob/living/carbon/human/H = C
 		if (H.glasses == src)
@@ -113,77 +114,13 @@
 
 /obj/item/clothing/glasses/scanner/night/disable(var/mob/living/carbon/C)
 	. = ..()
-	see_invisible = 0
-	see_in_dark = 0
-	seedarkness = TRUE
-
-// 515 Teething issues
-/*
-/obj/item/clothing/glasses/scanner/night/disable(var/mob/living/carbon/C)
-	. = ..()
-	see_invisible = 0
-	see_in_dark = 0
-	seedarkness = TRUE
 	my_dark_plane_alpha_override = null
-	eyeprot = 0
-	if (ishuman(C))
-		var/mob/living/carbon/human/H = C
-		if (H.glasses == src)
-			if (C.client)
-				C.client.color = null
-			C.update_perception()
-	else if (ismonkey(C))
-		var/mob/living/carbon/monkey/M = C
-		if (M.glasses == src)
-			if (C.client)
-				C.client.color = null
-			C.update_perception()
+	my_dark_plane_alpha_override_value = 0
+	C.client.color = null
+	see_invisible = 0
+	see_in_dark = 0
+	seedarkness = TRUE
 
-/obj/item/clothing/glasses/scanner/night/update_perception(var/mob/living/carbon/human/M)
-	if (on)
-		if (M.master_plane)
-			M.master_plane.blend_mode = BLEND_ADD
-		if (M.client)
-			M.client.color = "#33FF33"
-	else
-		my_dark_plane_alpha_override = null
-		if (M.master_plane)
-			M.master_plane.blend_mode = BLEND_MULTIPLY
-
-/obj/item/clothing/glasses/scanner/night/equipped(var/mob/M, glasses)
-	if(istype(M, /mob/living/carbon/monkey))
-		var/mob/living/carbon/monkey/O = M
-		if(O.glasses != src)
-			return
-	else if(istype(M, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = M
-		if(H.glasses != src)
-			return
-	else
-		return
-	if(on)
-		if(iscarbon(M))
-			add_overdark(M)
-	..()
-
-/obj/item/clothing/glasses/scanner/night/unequipped(mob/user, var/from_slot = null)
-	if(from_slot == slot_glasses)
-		if(on)
-			if (user.client)
-				user.client.color = null
-				user.update_perception()
-	..()
-
-/obj/item/clothing/glasses/scanner/night/proc/add_overdark(var/mob/living/carbon/C)
-	if (istype(C) && C.client)
-		C.client.screen |= overdark_planemaster
-		C.client.screen |= overdark_target
-
-/obj/item/clothing/glasses/scanner/night/proc/remove_overdark(var/mob/living/carbon/C)
-	if (istype(C) && C.client)
-		C.client.screen -= overdark_planemaster
-		C.client.screen -= overdark_target
-*/
 var/list/meson_wearers = list()
 
 /obj/item/clothing/glasses/scanner/meson

@@ -30,8 +30,8 @@
 	cloth_icon = 'icons/mob/eyes.dmi'
 
 // 515 teething issues
-///obj/item/clothing/glasses/proc/update_perception(var/mob/living/carbon/human/M)
-//	return
+/obj/item/clothing/glasses/proc/update_perception(var/mob/living/carbon/human/M)
+	return
 
 /*
 SEE_SELF  // can see self, no matter what
