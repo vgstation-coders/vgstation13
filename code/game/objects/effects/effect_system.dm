@@ -170,7 +170,7 @@ steam.start() -- spawns the effect
 	..()
 	var/turf/T = loc
 	if(istype(T))
-		T.hotspot_expose(1000, 100, surfaces = surfaceburn)
+		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 	set_light(1, 1, LIGHT_COLOR_YELLOW)
 
 
