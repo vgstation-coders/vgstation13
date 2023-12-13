@@ -1939,6 +1939,14 @@ Thanks.
 	set name = "Toggle XRays"
 	set category = "IC"
 
+	if (!(M_XRAY in mutations))
+		to_chat(src, "<span class='warning'>You don't have the required mutation.</span>")
+		return
+
+	if (stat)
+		to_chat(src, "<span class='warning'>You can't do that while incapacitated.</span>")
+		return
+
 	if (see_xrays)
 		see_xrays = 0
 		change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
