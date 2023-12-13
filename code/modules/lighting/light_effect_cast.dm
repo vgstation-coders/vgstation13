@@ -512,9 +512,9 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	I.transform = M
 	switch(num)
 		if (CORNER_SHADOW)
-			I.layer = HIGHEST_LIGHTING_LAYER
+			I.layer = HIGHEST_LIGHTING_LAYER + temp_appearance_shadows.len
 		if (FRONT_SHADOW)
-			I.layer = ABOVE_LIGHTING_LAYER
+			I.layer = ABOVE_LIGHTING_LAYER + temp_appearance_shadows.len
 
 	// Once that's done...
 	// We caclulate the offset
@@ -645,7 +645,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 
 		img.pixel_x = 4*PIXEL_MULTIPLIER + (x_offset * world.icon_size)
 		img.pixel_y = 4*PIXEL_MULTIPLIER + (y_offset * world.icon_size)
-		img.layer = ROID_TURF_LIGHT_LAYER
+		img.layer = ROID_TURF_LIGHT_LAYER + temp_appearance.len
 		img.color = light_color
 		temp_appearance += img
 
@@ -673,7 +673,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	I.pixel_x = WORLD_ICON_SIZE/2 + (x_offset * world.icon_size)
 	I.pixel_y = WORLD_ICON_SIZE/2 + (y_offset * world.icon_size)
 	I.color = light_color
-	I.layer = HIGHEST_LIGHTING_LAYER
+	I.layer = HIGHEST_LIGHTING_LAYER + temp_appearance.len
 	temp_appearance_shadows += I
 
 /atom/movable/light/proc/update_appearance()
@@ -694,7 +694,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	I.alpha = 255
 	I.blend_mode = BLEND_MULTIPLY // acts a color map on top of us
 	I.color = light_color
-	I.layer = HIGHEST_LIGHTING_LAYER + 1
+	I.layer = LIGHTING_COLOUR_LAYER
 	overlays += I
 
 /atom/movable/light/shadow/update_appearance()
@@ -735,7 +735,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 		var/y_offset = T.y - y
 		black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 		black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
-		black_turf.layer = ANTI_GLOW_PASS_LAYER
+		black_turf.layer = ANTI_GLOW_PASS_LAYER + temp_appearance.len
 		temp_appearance += black_turf
 
 // Smooth out shadows and then blacken out the wall glow
@@ -764,7 +764,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 				var/y_offset = (neighbour.y - y)
 				black_turf.pixel_x = (WORLD_ICON_SIZE/2) + (x_offset * world.icon_size)
 				black_turf.pixel_y = (WORLD_ICON_SIZE/2) + (y_offset * world.icon_size)
-				black_turf.layer = ANTI_GLOW_PASS_LAYER
+				black_turf.layer = ANTI_GLOW_PASS_LAYER + temp_appearance.len
 				temp_appearance += black_turf
 
 /atom/movable/light/proc/update_light_dir()
@@ -835,7 +835,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 
 	icon_state = "white"
 	var/image/I = image(icon)
-	I.layer = HIGHEST_LIGHTING_LAYER + 3
+	I.layer = LIGHTING_COLOUR_LAYER
 	I.icon_state = "overlay[overlay_state]"
 	I.dir = dir
 	overlays += I

@@ -36,7 +36,7 @@ Basically, you are going to overwrite the flags.
 	var/daynight_z_lvl = FALSE
 
 	var/current_timeOfDay = TOD_DAYTIME //This is more or less the color and duration since its in a switch.
-	var/next_light_power = 10 // As much as you would want to change these for cool factor.
+	var/next_light_power = 3 // As much as you would want to change these for cool factor.
 	var/next_light_range = 3 //	They basically are at the maximum values to not have overlapping light.
 							// Along with mesh evenly that is, the dir scan handles missed diagonals stylishly.
 
@@ -89,7 +89,7 @@ Basically, you are going to overwrite the flags.
 		if(!T || T.gcDestroyed)
 			continue
 
-		T.set_light(next_light_range,next_light_power,current_timeOfDay, LIGHT_SOLID_TURF)
+		T.set_light(next_light_range,next_light_power,current_timeOfDay)
 
 		if(MC_TICK_CHECK)
 			return
