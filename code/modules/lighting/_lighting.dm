@@ -5,6 +5,8 @@
 // BordListian on Reddit for more advice and discussion, and whoever else was involved that I have forgotten.
 // Also thanks to Lummox for BYOND 510's awesome new features.
 
+// Credit to https://github.com/Yonaguni/EuropaStation/pull/379
+
 // Ported to /vg/station by Clusterfack and Unusual Crow.
 // Thanks a ton to Bilgecrank for his wonderful sprite work.
 
