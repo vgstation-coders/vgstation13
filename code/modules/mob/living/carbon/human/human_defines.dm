@@ -83,4 +83,4 @@
 	var/become_zombie = FALSE
 	var/calorie_burn_rate = HUNGER_FACTOR
 	var/time_last_speech = 0 //When was the last time we talked?
-	var/manual_emote_sound_override = 0 //If toggled on, allows humans to make audible emotes
+	var/manual_emote_sound_override = 1 //If toggled on, allows humans to make audible emotes
