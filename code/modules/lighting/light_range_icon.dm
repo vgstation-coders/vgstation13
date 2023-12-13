@@ -9,6 +9,16 @@
 	//	lighting_engine = new lighting_system_used
 	//	lighting_engine.choose_light_range_icon(two_bordering_walls, light_range, num)
 	*/
+
+	// Why the big switch? Why not use something like:
+	// shadowicon = 'icons/lighting/shadow[num]/light_range_[light_range]_shadows2_[some operator].dmi'?
+	// Well, this is because using simple quotes ('like this') allows us to reference the file in BYOND .rsc
+	// However, all references to file names must be explicit and not use vars.
+	// This speeds up the performance immensely.
+	// The alternative is to use shadowicon = flile("icons/lighting/shadow[num]/light_range_[light_range]_shadows2_[some operator].dmi")
+	// Which is 1000 to 10000 times worse for server performance.
+	// That's why we use the .rsc
+
 	var/shadowicon
 	switch (num)
 		if(FRONT_SHADOW)
