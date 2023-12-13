@@ -37,8 +37,8 @@
 /obj/structure/morgue/update_icon()
 	overlays.len = 0
 	var/image/I = image(icon, src, "morgue0")
-	I.plane = ABOVE_LIGHTING_PLANE
-	I.layer = ABOVE_LIGHTING_LAYER
+	I.plane = OBJ_PLANE
+	I.layer = OBJ_PLANE
 	if(connected)
 		I.icon_state = "morgue0"
 		overlays += I

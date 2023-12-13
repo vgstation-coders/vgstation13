@@ -696,6 +696,8 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	I.color = light_color
 	I.layer = LIGHTING_COLOUR_LAYER
 	overlays += I
+	if (lighting_flags & BLOOM)
+		filters += filter(type="bloom", size = 2, offset = 4, threshold = light_color, alpha = alpha)
 
 /atom/movable/light/shadow/update_appearance()
 	for (var/atom/movable/light/secondary_shadow/shadow_comp in shadow_component_atoms)

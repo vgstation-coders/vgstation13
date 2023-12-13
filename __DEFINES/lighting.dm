@@ -123,6 +123,7 @@
 #define IS_LIGHT_SOURCE 4
 #define MOVABLE_LIGHT 8
 #define MOODY_AND_REGULAR_LIGHT_SOURCE 16
+#define BLOOM 32
 
 #define LIGHTING_PLANEMASTER_COLOR list(null,null,null,"#0000","#000F")
 
