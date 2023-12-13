@@ -791,3 +791,19 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/lotto_winner
 	alert_title = "Grand Slam -Stellar- Lottery Winner!"
 	message = "Congratulations to John Nanotrasen for winning the Central Command Grand Slam -Stellar- Lottery Fund! He walks home with a million credits!"
+
+/datum/command_alert/tradeprobe
+	alert_title = "Vox Trade Probe Approaching"
+	message = "Although there are no Vox Shoal traders in your viscinity, a trade probe has docked with the station at the usual location. It will remain for 10 minutes."
+
+/datum/command_alert/tradeprobe_depart
+	alert_title = "Vox Trade Probe Departing"
+	message = "The Vox trade probe is departing in 1 minute. Crewmen are advise to exit the probe immediately."
+
+/datum/command_alert/tradeaversion_closedport
+	alert_title = "Irrational Port Closure"
+	message = "The Vox Shoal notes disappointment at an inability to send a trade probe. Your station port is closed."
+
+/datum/command_alert/tradeaversion_mismanagement
+	alert_title = "Trade Probe Rerouted"
+	message = "A Vox trade probe rerouted away from the station after determining that employee wages were too low to justify a visit."
