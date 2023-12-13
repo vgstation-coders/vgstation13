@@ -1,7 +1,7 @@
 /atom
 	var/atom/movable/light/light_obj
 	var/atom/movable/light/shadow/shadow_obj
-	var/atom/movable/light/moody_light_obj
+	var/atom/movable/light/moody/moody_light_obj
 	var/light_type = LIGHT_SOFT
 	var/light_power = 1
 	var/light_range = 1

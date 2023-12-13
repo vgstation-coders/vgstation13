@@ -30,3 +30,6 @@
 
 /atom/movable/light/moody/full_turf
 	overlay_state = "_turf"
+
+/atom/movable/light/moody/paint_mask
+	overlay_state = "_paintmask_"
