@@ -4,49 +4,18 @@
 	color = "#4D3714"
 	},
 /obj/structure/shuttle/diag_wall/smooth{
-	color = "#795720"
+	dir = 8;
+	icon = 'icons/turf/voxprobe.dmi';
+	icon_state = "voxcorner4"
 	},
 /turf/space,
 /area/shuttle/tradeprobe)
 "e" = (
 /obj/machinery/vending/sale/trader/probe,
-/turf/simulated/floor{
-	dir = 8;
-	icon_state = "dark-markings"
-	},
-/area/shuttle/tradeprobe)
-"f" = (
-/turf/simulated/floor{
-	dir = 9;
-	icon_state = "darkyellow";
-	tag = "icon-darkyellow (NORTHWEST)"
-	},
-/area/shuttle/tradeprobe)
-"g" = (
-/turf/simulated/floor{
-	dir = 4;
-	icon_state = "darkyellow";
-	tag = "icon-darkyellow (EAST)"
-	},
-/area/shuttle/tradeprobe)
-"p" = (
-/turf/simulated/floor{
-	dir = 5;
-	icon_state = "darkyellow";
-	tag = "icon-darkyellow (NORTHEAST)"
-	},
-/area/shuttle/tradeprobe)
-"q" = (
-/turf/simulated/floor{
-	dir = 1;
-	icon_state = "darkyellow";
-	tag = "icon-darkyellow (NORTH)"
-	},
+/turf/simulated/floor/shuttle/vox,
 /area/shuttle/tradeprobe)
 "u" = (
-/turf/simulated/wall/shuttle{
-	color = "#795720"
-	},
+/turf/simulated/wall/shuttle/unsmoothed/vox,
 /area/shuttle/tradeprobe)
 "v" = (
 /obj/structure/shuttle/engine/propulsion{
@@ -54,28 +23,16 @@
 	dir = 1
 	},
 /obj/structure/shuttle/diag_wall/smooth{
-	color = "#795720";
-	dir = 1
+	dir = 8;
+	icon = 'icons/turf/voxprobe.dmi';
+	icon_state = "voxcorner2"
 	},
 /turf/space,
 /area/shuttle/tradeprobe)
-"A" = (
-/turf/simulated/floor{
-	dir = 6;
-	icon_state = "darkyellow";
-	tag = "icon-darkyellow (SOUTHEAST)"
-	},
-/area/shuttle/tradeprobe)
-"K" = (
-/turf/simulated/floor{
-	dir = 10;
-	icon_state = "darkyellow";
-	tag = "icon-darkyellow (SOUTHWEST)"
-	},
-/area/shuttle/tradeprobe)
-"M" = (
-/turf/simulated/floor{
-	icon_state = "darkyellow"
+"F" = (
+/obj/structure/window/full/reinforced/plasma/vox,
+/turf/simulated/floor/light{
+	icon_state = "light_base"
 	},
 /area/shuttle/tradeprobe)
 "O" = (
@@ -84,65 +41,67 @@
 	dir = 1
 	},
 /obj/structure/shuttle/diag_wall/smooth{
-	color = "#795720";
-	dir = 8
+	color = null;
+	dir = 8;
+	icon = 'icons/turf/voxprobe.dmi';
+	icon_state = "voxcorner1"
 	},
 /turf/space,
 /area/shuttle/tradeprobe)
 "R" = (
-/turf/simulated/floor{
-	dir = 8;
-	icon_state = "darkyellow";
-	tag = "icon-darkyellow (WEST)"
-	},
+/turf/simulated/floor/shuttle/vox,
 /area/shuttle/tradeprobe)
 "U" = (
 /obj/structure/shuttle/engine/propulsion{
 	color = "#4D3714"
 	},
 /obj/structure/shuttle/diag_wall/smooth{
-	color = "#795720";
-	dir = 4
+	dir = 8;
+	icon = 'icons/turf/voxprobe.dmi';
+	icon_state = "voxcorner3"
 	},
 /turf/space,
 /area/shuttle/tradeprobe)
 "X" = (
 /obj/structure/airshield/voxprobe,
-/turf/simulated/floor/light,
+/obj/docking_port/shuttle,
+/turf/simulated/floor/light{
+	icon_state = "light_base"
+	},
 /area/shuttle/tradeprobe)
 
 (1,1,1) = {"
 O
 u
-X
+F
 u
 a
 "}
 (2,1,1) = {"
 u
-f
 R
-K
+R
+R
 u
 "}
 (3,1,1) = {"
 X
-q
+R
 e
-M
-X
+R
+F
 "}
 (4,1,1) = {"
 u
-p
-g
-A
+R
+R
+R
 u
 "}
 (5,1,1) = {"
 v
 u
-X
+F
 u
 U
 "}

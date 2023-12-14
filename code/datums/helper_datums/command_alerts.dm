@@ -798,7 +798,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/tradeprobe_depart
 	alert_title = "Vox Trade Probe Departing"
-	message = "The Vox trade probe is departing in 1 minute. Crewmen are advise to exit the probe immediately."
+	message = "The Vox trade probe is departing in 1 minute. Crewmen are advised to exit the probe immediately."
 
 /datum/command_alert/tradeaversion_closedport
 	alert_title = "Irrational Port Closure"
