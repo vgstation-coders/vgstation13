@@ -1,6 +1,6 @@
 /atom
 	var/atom/movable/light/light_obj
-	var/atom/movable/light/shadow/shadow_obj
+	var/atom/movable/light/wall_lighting/wall_lighting_obj
 	var/atom/movable/light/moody_light_obj
 	var/light_type = LIGHT_SOFT
 	var/light_power = 1
@@ -28,8 +28,8 @@
 /atom/proc/update_all_lights()
 	if(light_obj && !light_obj.gcDestroyed)
 		light_obj.follow_holder()
-	if (shadow_obj && !shadow_obj.gcDestroyed)
-		shadow_obj.follow_holder()
+	if (wall_lighting_obj && !wall_lighting_obj.gcDestroyed)
+		wall_lighting_obj.follow_holder()
 
 /atom/movable/change_dir()
 	. = ..()
@@ -60,14 +60,14 @@
 /atom/movable/light/update_contained_lights(var/list/specific_contents)
 	return
 
-/atom/var/dynamic_lighting = 0
+/atom/var/has_white_turf_lighting = 0
 
-/area/proc/set_dynamic_lighting(bool)
-	dynamic_lighting = bool
-	update_dynamic_lighting()
+/area/proc/set_white_turf_lighting(bool)
+	has_white_turf_lighting = bool
+	update_white_turf_lighting()
 
-/area/proc/update_dynamic_lighting()
-	if(dynamic_lighting)
+/area/proc/update_white_turf_lighting()
+	if(has_white_turf_lighting)
 		var/image/I = image(icon = 'icons/mob/screen1.dmi', icon_state = "white")
 		I.plane = relative_plane(LIGHTING_PLANE)
 		I.blend_mode = BLEND_ADD

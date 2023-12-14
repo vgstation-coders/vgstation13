@@ -10,7 +10,7 @@
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
 	heat_capacity = 700000
 	intact = 0 //No seriously, that's not a joke. Allows cable to be laid properLY on catwalks
-	dynamic_lighting = 0
+	has_white_turf_lighting = 0
 	luminosity = 1
 	can_border_transition = 1
 	var/static/list/parallax_appearances

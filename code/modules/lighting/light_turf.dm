@@ -22,7 +22,7 @@
 			// Only REAL light sources affecting this patriot
 			if (istype(thing, /atom/movable/light/moody))
 				continue
-			if (istype(thing, /atom/movable/light/shadow))
+			if (istype(thing, /atom/movable/light/wall_lighting))
 				continue
 			if (istype(thing, /atom/movable/light/secondary_shadow))
 				continue

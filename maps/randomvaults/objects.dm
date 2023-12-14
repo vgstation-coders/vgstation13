@@ -8,7 +8,7 @@
 	name = "mysterious structure"
 	requires_power = 0
 	icon_state = "firingrange"
-	dynamic_lighting = 1
+	has_white_turf_lighting = 1
 
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
@@ -340,7 +340,7 @@
 /area/vault/zathura
 
 /area/vault/zathura/surroundings
-	dynamic_lighting = FALSE
+	has_white_turf_lighting = FALSE
 	mysterious = TRUE
 
 /area/vault/ironchef

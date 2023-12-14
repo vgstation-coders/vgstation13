@@ -38,7 +38,7 @@
 
 	var/list/pre_rendered_shadows = list()
 
-/atom/movable/light/shadow
+/atom/movable/light/wall_lighting
 	base_light_color_state = "black"
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
 	animate_movement = NO_STEPS
@@ -53,7 +53,7 @@
 
 	var/dir_to_source
 	var/turf/source_turf
-	var/atom/movable/light/shadow/parent
+	var/atom/movable/light/wall_lighting/parent
 
 
 /atom/movable/light/New(..., var/atom/newholder)
@@ -77,8 +77,8 @@
 	if(holder)
 		if(holder.light_obj == src)
 			holder.light_obj = null
-		if (holder.shadow_obj == src)
-			holder.shadow_obj = null
+		if (holder.wall_lighting_obj == src)
+			holder.wall_lighting_obj = null
 		holder = null
 	for(var/thing in affecting_turfs)
 		var/turf/T = thing
@@ -94,7 +94,7 @@
 	source_turf = null
 	. = ..()
 
-/atom/movable/light/shadow/Destroy()
+/atom/movable/light/wall_lighting/Destroy()
 	for (var/shadow in shadow_component_atoms)
 		qdel(shadow)
 		shadow_component_atoms -= shadow
@@ -174,7 +174,7 @@
 /atom/movable/light/proc/get_wall_view()
 	return light_range
 
-/atom/movable/light/shadow/get_wall_view()
+/atom/movable/light/wall_lighting/get_wall_view()
 	return light_range
 
 // -- Does a basic cheap raycast from the light to the turf.
@@ -191,14 +191,14 @@
 			return
 
 /mob/proc/seeable_lights()
-	for (var/atom/movable/light/shadow/S in view(src))
+	for (var/atom/movable/light/wall_lighting/S in view(src))
 		to_chat(src, "The [S.holder] at [formatJumpTo(S.loc)]")
 
 /image/shadow_overlay
 	appearance_flags = KEEP_TOGETHER
 	var/list/temp_appearance = list()
 
-/atom/movable/light/shadow/proc/vis_check(var/mob/M)
+/atom/movable/light/wall_lighting/proc/vis_check(var/mob/M)
 	if (M in view(src))
 		return TRUE
 	return FALSE

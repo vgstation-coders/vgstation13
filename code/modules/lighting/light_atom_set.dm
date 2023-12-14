@@ -3,9 +3,9 @@
 	if(light_obj)
 		qdel(light_obj)
 		light_obj = null
-	if (shadow_obj)
-		qdel(shadow_obj)
-		shadow_obj = null
+	if (wall_lighting_obj)
+		qdel(wall_lighting_obj)
+		wall_lighting_obj = null
 	if (moody_light_obj)
 		qdel(moody_light_obj)
 		moody_light_obj = null
@@ -17,10 +17,10 @@
 	if(!loc)
 		if(light_obj)
 			qdel(light_obj)
-			qdel(shadow_obj)
+			qdel(wall_lighting_obj)
 			qdel(moody_light_obj)
 			light_obj = null
-			shadow_obj = null
+			wall_lighting_obj = null
 			moody_light_obj = null
 		return
 
@@ -36,16 +36,16 @@
 
 	// Apply data and update light casting/bleed masking.
 	var/update_cast_shadow
-	if(!shadow_obj)
+	if(!wall_lighting_obj)
 		update_cast_shadow = 1
-		shadow_obj = new(newholder = src)
+		wall_lighting_obj = new(newholder = src)
 
-	light_atom_update(shadow_obj, update_cast_shadow)
+	light_atom_update(wall_lighting_obj, update_cast_shadow)
 
 	// Rare enough that we can probably get away with calling animate().
 	if(fadeout)
 		animate(light_obj, alpha = 0, time = fadeout)
-		animate(shadow_obj, alpha = 0, time = fadeout)
+		animate(wall_lighting_obj, alpha = 0, time = fadeout)
 
 /atom/proc/light_value_inits(var/l_range, var/l_power, var/l_color, var/l_type)
 	// Update or retrieve our variable data.

@@ -73,10 +73,10 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				L.light_obj.color = LIGHT_COLOR_APC_RED
 				animate(L.light_obj, alpha = 180, time = 5, loop = -1, easing = CIRCULAR_EASING)
 				animate(alpha = 255, time = 5, loop = -1, easing = CIRCULAR_EASING)
-			if (L.shadow_obj)
-				L.shadow_obj.light_color = LIGHT_COLOR_APC_RED
-				L.shadow_obj.color = LIGHT_COLOR_APC_RED
-				animate(L.shadow_obj, alpha = 180, time = 5, loop = -1, easing = CIRCULAR_EASING)
+			if (L.wall_lighting_obj)
+				L.wall_lighting_obj.light_color = LIGHT_COLOR_APC_RED
+				L.wall_lighting_obj.color = LIGHT_COLOR_APC_RED
+				animate(L.wall_lighting_obj, alpha = 180, time = 5, loop = -1, easing = CIRCULAR_EASING)
 				animate(alpha = 255, time = 5, loop = -1, easing = CIRCULAR_EASING)
 
 /datum/emergency_shuttle/proc/shuttlealert(var/X)

@@ -514,7 +514,7 @@
 					return
 
 			var/light_available = 5
-			if(T.dynamic_lighting)
+			if(T.has_white_turf_lighting)
 				light_available = T.get_lumcount() * 10
 
 			to_chat(user, "The tray's sensor suite is reporting a light level of [round(light_available, 0.1)] lumens and a temperature of [environment.temperature]K.")
