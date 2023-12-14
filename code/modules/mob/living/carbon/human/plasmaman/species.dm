@@ -5,7 +5,7 @@
 	known_languages = list(LANGUAGE_HUMAN)
 	attack_verb = "punches"
 
-	flags = WHITELISTED | PLAYABLE | PLASMA_IMMUNE
+	flags = WHITELISTED | PLASMA_IMMUNE
 	anatomy_flags = NO_BLOOD
 	blood_color = "#743474"
 	flesh_color = "#898476"

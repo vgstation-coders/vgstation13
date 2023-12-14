@@ -14,6 +14,8 @@
 
 	outfit_datum = /datum/outfit/assistant
 
+	species_whitelist = list("Human")
+
 /datum/job/assistant/get_access()
 	if(config.assistant_maint)
 		return list(access_maint_tunnels)

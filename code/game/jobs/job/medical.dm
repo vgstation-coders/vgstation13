@@ -16,6 +16,8 @@
 	minimal_player_age = 20
 	outfit_datum = /datum/outfit/cmo
 
+	species_whitelist = list("Human")
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /datum/job/doctor
@@ -31,6 +33,8 @@
 	alt_titles = list("Emergency Physician", "Surgeon")
 	outfit_datum = /datum/outfit/doctor
 
+	species_whitelist = list("Human", "Skrell")
+
 //Chemist is a medical job damnit	//YEAH FUCK YOU SCIENCE	-Pete	//Guys, behave -Erro //No, fuck science
 /datum/job/chemist
 	title = "Chemist"
@@ -45,6 +49,8 @@
 	alt_titles = list("Pharmacist")
 	outfit_datum = /datum/outfit/chemist
 
+	species_whitelist = list("Human", "Skrell")
+
 /datum/job/geneticist
 	title = "Geneticist"
 	faction = "Station"
@@ -56,6 +62,8 @@
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_science, access_eva)
 	minimal_access = list(access_medical, access_morgue, access_genetics, access_science)
 	outfit_datum = /datum/outfit/geneticist
+
+	species_whitelist = list("Human", "Skrell")
 
 /datum/job/virologist
 	title = "Virologist"
@@ -70,6 +78,8 @@
 	alt_titles = list("Pathologist", "Microbiologist")
 	outfit_datum = /datum/outfit/virologist
 
+	species_whitelist = list("Human", "Skrell")
+
 /datum/job/paramedic
 	title = "Paramedic"
 	faction = "Station"
@@ -83,6 +93,8 @@
 	alt_titles = list("Brig Medic")
 	outfit_datum = /datum/outfit/paramedic
 
+	species_whitelist = list("Human", "Skrell")
+
 /datum/job/orderly
 	title = "Orderly"
 	faction = "Station"
@@ -95,3 +107,5 @@
 	minimal_access = list(access_medical, access_morgue, access_surgery)
 	alt_titles = list("Nurse")
 	outfit_datum = /datum/outfit/orderly
+
+	species_whitelist = list("Human", "Skrell")

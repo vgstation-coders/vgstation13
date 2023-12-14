@@ -1032,9 +1032,10 @@
 	H.client.changeView()
 
 	var/species = pickweight(list(
-		"Human" 	= 4,
+		"Human" 	= 1,
 		"Vox"		= 1,
-		"Plasmaman" = 1,
+		"Tajara" 	= 4,
+		"Unathi"	= 4,
 		"Grey"		= 1,
 		"Insectoid"	= 1,
 	))
