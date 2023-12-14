@@ -124,11 +124,12 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 			add_light_turf(T) // wall_lighting objects do not need to keep a list of turfs.
 			if (CHECK_OCCLUSION(T))
 				affected_shadow_walls += T
-
+				/*
 				for (var/dir in cardinal)
 					var/turf/T2 = get_step(T, dir)
 					if (!(T2 in cached_view) && CHECK_OCCLUSION(T2))
 						affected_shadow_walls += T2
+				*/
 
 	if(!isturf(loc))
 		for(var/turf/T in affecting_turfs)
