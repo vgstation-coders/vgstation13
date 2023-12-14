@@ -44,7 +44,9 @@
 	var/pdatype=/obj/item/device/pda
 	var/pdaslot=slot_belt
 
-	var/list/species_blacklist = list("Mushroom") //Job not available to species in this list - shrooms can only be traders
+	//var/list/species_blacklist = list("Mushroom") //Job not available to species in this list - shrooms can only be traders
+
+	var/list/species_blacklist = list("Skellington", "Skeletal Vox", "Ghoul", "Undead", "Plasmaman") //Jobs not available to species in this list
 	var/list/species_whitelist = list() //If this list isn't empty, job is only available to species in this list
 
 	var/must_be_map_enabled = 0	//If 1, this job only appears on maps on which it's enabled (its type must be in the map's "enabled_jobs" list)

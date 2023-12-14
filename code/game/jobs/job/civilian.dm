@@ -12,6 +12,8 @@
 	outfit_datum = /datum/outfit/bartender
 	additional_information = "You can juggle most bottles and empty glasses by picking them up while on GRAB intent, so long as you remain unusually sober."
 
+	species_blacklist = list("Tajaran", "Grey") //Who's fancy for a cuppa with some fur?
+
 /datum/job/bartender/post_init(var/mob/living/carbon/human/H)
 	genemutcheck(H, SOBERBLOCK)
 
@@ -28,6 +30,8 @@
 	alt_titles = list("Cook")
 	outfit_datum = /datum/outfit/chef
 
+	species_blacklist = list("Tajaran", "Grey")
+
 /datum/job/hydro
 	title = "Botanist"
 	faction = "Station"
@@ -40,7 +44,9 @@
 	minimal_access = list(access_hydroponics, access_morgue) // Removed tox and chem access because STOP PISSING OFF THE CHEMIST GUYS // //Removed medical access because WHAT THE FUCK YOU AREN'T A DOCTOR YOU GROW WHEAT //Given Morgue access because they have a viable means of cloning.
 	alt_titles = list("Hydroponicist", "Beekeeper", "Gardener")
 	outfit_datum = /datum/outfit/hydro
-	species_blacklist = list()
+
+	//species_blacklist = list()
+	species_whitelist = list()
 
 //Cargo
 /datum/job/qm
@@ -55,6 +61,8 @@
 	minimal_access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
 	outfit_datum = /datum/outfit/qm
 
+	species_whitelist = list("Human")
+
 /datum/job/cargo_tech
 	title = "Cargo Technician"
 	faction = "Station"
@@ -68,6 +76,8 @@
 	alt_titles = list("Mailman")
 	outfit_datum = /datum/outfit/cargo_tech
 
+	//species_whitelist = list("Human")
+
 /datum/job/mining
 	title = "Shaft Miner"
 	faction = "Station"
@@ -79,6 +89,9 @@
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_mining, access_mint, access_mining_station, access_mailsorting)
 	outfit_datum = /datum/outfit/mining
+
+	//species_whitelist = list()
+	//species_blacklist = list("Tajaran", "Unathi") //Rigs for races with claws and tails? Nah.
 
 /datum/job/clown
 	title = "Clown"
@@ -92,6 +105,8 @@
 	minimal_access = list(access_clown, access_theatre)
 	alt_titles = list("Jester")
 	outfit_datum = /datum/outfit/clown
+
+	//species_whitelist = list("Human")
 
 /datum/job/clown/reject_new_slots()
 	if(Holiday == APRIL_FOOLS_DAY)
@@ -121,6 +136,8 @@
 	access = list(access_mime, access_theatre, access_maint_tunnels)
 	minimal_access = list(access_mime, access_theatre)
 	outfit_datum = /datum/outfit/mime
+
+	//species_whitelist = list("Human")
 
 /datum/job/mime/reject_new_slots()
 	if(!xtra_positions)
@@ -173,7 +190,8 @@
 	access = list(access_janitor, access_maint_tunnels)
 	minimal_access = list(access_janitor, access_maint_tunnels)
 	outfit_datum = /datum/outfit/janitor
-	species_blacklist = list()//Mop it up, shroomie.
+
+	//species_blacklist = list()//Mop it up, shroomie.
 
 /datum/job/janitor/get_wage()
 	if(Holiday == APRIL_FOOLS_DAY)
@@ -194,6 +212,8 @@
 	alt_titles = list("Journalist", "Game Master", "Curator")
 	outfit_datum = /datum/outfit/librarian
 
+	species_whitelist = list("Human", "Skrell")
+
 /datum/job/iaa
 	title = "Internal Affairs Agent"
 	faction = "Station"
@@ -207,6 +227,8 @@
 	alt_titles = list("Lawyer", "Bridge Officer")
 	outfit_datum = /datum/outfit/iaa
 
+	species_whitelist = list("Human")
+
 /datum/job/chaplain
 	title = "Chaplain"
 	faction = "Station"
@@ -219,3 +241,5 @@
 	minimal_access = list(access_morgue, access_chapel_office, access_crematorium)
 	outfit_datum = /datum/outfit/chaplain
 	var/datum/religion/chap_religion
+
+	species_whitelist = list("Human")

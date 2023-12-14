@@ -18,6 +18,8 @@
 	minimal_player_age = 20
 	outfit_datum = /datum/outfit/chief_engineer
 
+	species_whitelist = list("Human")
+
 /datum/job/engineer
 	title = "Station Engineer"
 	faction = "Station"
@@ -31,6 +33,8 @@
 	alt_titles = list("Maintenance Technician","Engine Technician","Electrician")
 	outfit_datum = /datum/outfit/engineer
 
+	species_whitelist = list("Human")
+
 /datum/job/atmos
 	title = "Atmospheric Technician"
 	faction = "Station"
@@ -42,6 +46,8 @@
 	access = list(access_eva, access_engine_major, access_engine_minor, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
 	minimal_access = list(access_atmospherics, access_maint_tunnels, access_emergency_storage, access_construction, access_engine_minor, access_external_airlocks)
 	outfit_datum = /datum/outfit/atmos
+
+	species_whitelist = list("Human")
 
 /datum/job/mechanic
 	title = "Mechanic"
@@ -55,3 +61,5 @@
 	minimal_access = list(access_maint_tunnels, access_emergency_storage, access_construction, access_engine_minor, access_external_airlocks, access_mechanic, access_tcomsat, access_science)
 	alt_titles = list("Telecommunications Technician", "Spacepod Mechanic", "Greasemonkey")
 	outfit_datum = /datum/outfit/mechanic
+
+	species_whitelist = list("Human")

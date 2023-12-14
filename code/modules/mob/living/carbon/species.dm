@@ -399,7 +399,8 @@ var/global/list/playable_species = list("Human")
 	heat_level_2 = 480 //Default 400
 	heat_level_3 = 1100 //Default 1000
 
-	flags = WHITELISTED
+	flags = PLAYABLE | WHITELISTED
+
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL
 
 	default_mutations=list(M_CLAWS)
@@ -446,10 +447,12 @@ var/global/list/playable_species = list("Human")
 					You can not eat normally, as your necrotic state only permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe.<br>\
 					You are also incredibly weak to brute damage, but you're fast and don't need to breathe, so that's going for you."
 
+
+/*
 /datum/species/skellington/conditional_playable()
 	var/MM = text2num(time2text(world.timeofday, "MM"))
 	return MM == 10 //October
-
+*/
 
 /datum/species/skellington/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if (prob(25))
@@ -485,6 +488,8 @@ var/global/list/playable_species = list("Human")
 
 	warning_low_pressure = 50
 	hazard_low_pressure = 0
+
+	flags = WHITELISTED | NO_BREATHE
 
 	cold_level_1 = 80
 	cold_level_2 = 50
@@ -540,7 +545,8 @@ var/global/list/playable_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey/tajara
 
-	flags = WHITELISTED
+	flags = PLAYABLE | WHITELISTED
+
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL | HAS_SWEAT_GLANDS
 
 	default_mutations=list(M_CLAWS)
@@ -743,7 +749,8 @@ var/global/list/playable_species = list("Human")
 	known_languages = list(LANGUAGE_SKRELLIAN)
 	primitive = /mob/living/carbon/monkey/skrell
 
-	flags = WHITELISTED
+	flags = PLAYABLE | WHITELISTED
+
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_SWEAT_GLANDS
 
 	flesh_color = "#8CD7A3"
@@ -893,7 +900,7 @@ var/global/list/playable_species = list("Human")
 	heat_level_2 = T0C + 75
 	heat_level_3 = T0C + 100
 
-	flags = WHITELISTED | PLAYABLE | NO_BREATHE | REQUIRE_LIGHT | IS_PLANT | RAD_ABSORB | IS_SLOW | NO_PAIN | HYPOTHERMIA_IMMUNE
+	flags = PLAYABLE | WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | IS_PLANT | RAD_ABSORB | IS_SLOW | NO_PAIN | HYPOTHERMIA_IMMUNE
 	anatomy_flags = NO_BLOOD | HAS_SWEAT_GLANDS
 
 	blood_color = "#004400"
@@ -1102,7 +1109,7 @@ var/list/has_died_as_golem = list()
 	attack_verb = "glomps"
 	tacklePower = 35
 
-	flags = WHITELISTED | NO_BREATHE | ELECTRIC_HEAL
+	flags = NO_BREATHE | ELECTRIC_HEAL
 	anatomy_flags = NO_SKIN | NO_BLOOD | NO_BONES | NO_STRUCTURE | MULTICOLOR
 
 	spells = list(/spell/regen_limbs)
@@ -1249,7 +1256,7 @@ var/list/has_died_as_golem = list()
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/insectoid
 	primitive = /mob/living/carbon/monkey/roach
 
-	flags = WHITELISTED | PLAYABLE
+	flags = PLAYABLE | WHITELISTED
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD | RGBSKINTONE
 
 	burn_mod = 1.1
@@ -1310,7 +1317,8 @@ var/list/has_died_as_golem = list()
 	known_languages = list(LANGUAGE_VOX)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/mushroom_man
 
-	flags = WHITELISTED | PLAYABLE | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH
+	flags = PLAYABLE | WHITELISTED | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH
+
 	anatomy_flags = NO_BALD
 
 	gender = NEUTER

@@ -10,6 +10,7 @@
 	access = list() 			//See get_access()
 	minimal_access = list() 	//See get_access()
 	minimal_player_age = 30
+
 	species_whitelist = list("Human")
 
 	outfit_datum = /datum/outfit/captain

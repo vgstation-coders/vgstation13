@@ -19,6 +19,8 @@
 
 	outfit_datum = /datum/outfit/rd
 
+	species_whitelist = list("Human")
+
 /datum/job/scientist
 	title = "Scientist"
 	faction = "Station"
@@ -33,6 +35,8 @@
 	alt_titles = list("Plasma Researcher", "Research Botanist")
 
 	outfit_datum = /datum/outfit/scientist
+
+	species_whitelist = list("Human", "Skrell")
 
 /datum/job/xenoarchaeologist
 	title = "Xenoarchaeologist"
@@ -49,6 +53,8 @@
 
 	outfit_datum = /datum/outfit/xenoarchaeologist
 
+	species_whitelist = list("Human", "Skrell")
+
 /datum/job/xenobiologist
 	title = "Xenobiologist"
 	faction = "Station"
@@ -63,6 +69,8 @@
 
 	outfit_datum = /datum/outfit/xenobiologist
 
+	species_whitelist = list("Human", "Skrell")
+
 /datum/job/roboticist
 	title = "Roboticist"
 	faction = "Station"
@@ -76,3 +84,5 @@
 	alt_titles = list("Biomechanical Engineer","Mechatronic Engineer")
 
 	outfit_datum = /datum/outfit/roboticist
+
+	species_whitelist = list("Human", "Skrell")
