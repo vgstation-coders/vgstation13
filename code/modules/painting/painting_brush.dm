@@ -87,6 +87,7 @@
 			component_alt = component.Copy()
 			var/list/paint_color_rgb = rgb2num(paint_rgb)
 			paint_color = rgb(paint_color_rgb[1], paint_color_rgb[2], paint_color_rgb[3], mix_alpha_from_reagents(target.reagents.reagent_list))
+			nano_paint = target.reagents.get_max_paint_light()
 			to_chat(user, "<span class='notice'>You dip \the [name] in \the [target.name].</span>")
 			var/datum/reagent/B = get_blood(target.reagents)
 			if (B)
@@ -251,6 +252,7 @@
 			var/mix_alpha = mix_alpha_from_reagents(target.reagents.reagent_list)
 			paint_color = rgb(paint_color_rgb[1], paint_color_rgb[2], paint_color_rgb[3], mix_alpha)
 			paint_alpha = mix_alpha
+			nano_paint = target.reagents.get_max_paint_light()
 			to_chat(user, "<span class='notice'>You dip \the [name] in \the [target.name].</span>")
 			var/datum/reagent/B = get_blood(target.reagents)
 			if (B)

@@ -3,6 +3,7 @@
 	plane = TURF_PLANE
 	layer = TURF_LAYER
 	luminosity = 0
+	lighting_flags = FOLLOW_PIXEL_OFFSET | NO_LUMINOSITY
 
 	//for floors, use is_plating(), is_metal_floor() and is_light_floor()
 	var/intact = 1

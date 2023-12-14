@@ -87,12 +87,14 @@
 
 // -- A lightweight version of the proc for cosmetic light overlays only.
 // They are not added to the subsystem and must be properly updated by their parent atoms.
-/atom/proc/set_moody_light(var/l_range, var/l_power, var/l_color, var/l_type, var/fadeout)
+/atom/proc/set_moody_light(var/l_range, var/l_power, var/l_color, var/l_type, var/fadeout, var/l_state)
 	if (moody_light_obj?.type != moody_light_type)
 		qdel(moody_light_obj)
 		moody_light_obj = null
 	if (!moody_light_obj)
 		moody_light_obj = new moody_light_type(newholder = src)
+	if (l_state)
+		moody_light_obj.overlay_state = l_state
 	light_value_inits(l_range, l_power, l_color, l_type)
 	light_atom_update(moody_light_obj, 1)
 	moody_light_obj.cast_light()
