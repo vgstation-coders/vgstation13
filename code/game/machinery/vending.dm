@@ -1149,13 +1149,15 @@ var/global/num_vending_terminals = 1
 		return
 
 	if(src.seconds_electrified > 0)
-		src.seconds_electrified--
+		src.seconds_electrified -= 2 /* Machinery processing happens every 2 seconds. */
 
 	//Pitch to the people!  Really sell it!
-	if((last_slogan + slogan_delay <= world.time) && (product_slogans.len > 0) && !shut_up)
+	if(!shut_up && (last_slogan + slogan_delay <= world.time) && (product_slogans.len > 0))
 		var/mob/living/carbon/human/target
 		var/target_dist
 		for(var/mob/living/carbon/human/H in view(7, src)) //We are only going to look for customers that can probably pay
+			if(!H.client)
+				continue
 			var/H_dist = get_dist(H,src)
 			if(!target || (H_dist < target_dist))
 				target = H //pick the closest human
