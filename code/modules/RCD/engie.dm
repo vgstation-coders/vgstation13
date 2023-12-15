@@ -50,6 +50,7 @@
 	/datum/rcd_schematic/con_rwalls,
 	/datum/rcd_schematic/con_airlock,
 	/datum/rcd_schematic/con_window,
+	/datum/rcd_schematic/con_pwindow,
 	)
 	matter = 90
 	max_matter = 90
