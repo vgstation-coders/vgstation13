@@ -402,6 +402,7 @@
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_tattoos.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_use_blood.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_words.dm"
+#include "code\datums\gamemode\factions\bloodcult\bloodrealm\fauna\bloodrealm_meatblob.dm"
 #include "code\datums\gamemode\factions\legacy_cult\cult.dm"
 #include "code\datums\gamemode\factions\legacy_cult\cult_items.dm"
 #include "code\datums\gamemode\factions\legacy_cult\cult_structures.dm"
