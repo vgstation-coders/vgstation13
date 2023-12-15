@@ -133,6 +133,6 @@
 		src.icon_state = "emancipation_grill_on"
 	else
 		stat |= NOPOWER
-		set_light(0)
+		kill_light()
 		src.icon_state = "emancipation_grill"
 	update_nearby_tiles()

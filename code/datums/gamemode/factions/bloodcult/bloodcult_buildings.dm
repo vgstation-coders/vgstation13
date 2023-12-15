@@ -915,6 +915,9 @@ var/list/cult_spires = list()
 	light_color = "#FF0000"
 	var/stage = 1
 
+	lighting_flags = FOLLOW_PIXEL_OFFSET
+	light_range = 2
+
 /obj/structure/cult/spire/New()
 	..()
 	cult_spires += src
@@ -980,7 +983,7 @@ var/list/cult_spires = list()
 
 /obj/structure/cult/spire/conceal()
 	overlays.len = 0
-	set_light(0)
+	kill_light()
 	anim(location = loc,target = loc,a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "spire[stage]-conceal", lay = BELOW_PROJECTILE_LAYER, offX = pixel_x, offY = pixel_y, plane = EFFECTS_PLANE)
 	..()
 	var/obj/structure/cult/concealed/C = loc
@@ -1096,12 +1099,15 @@ var/list/cult_spires = list()
 	plane = EFFECTS_PLANE
 	layer = BELOW_PROJECTILE_LAYER
 	light_color = LIGHT_COLOR_ORANGE
+	light_range = 2
 	custom_process = 1
 	var/heating_power = 40000
 	var/set_temperature = 50
 	var/mob/forger = null
 	var/template = null
 	var/obj/effect/cult_ritual/forge/forging = null
+
+	lighting_flags = FOLLOW_PIXEL_OFFSET
 
 
 /obj/structure/cult/forge/New()
@@ -1216,7 +1222,7 @@ var/list/cult_spires = list()
 
 /obj/structure/cult/forge/conceal()
 	overlays.len = 0
-	set_light(0)
+	kill_light()
 	anim(location = loc,target = loc,a_icon = 'icons/obj/cult_64x64.dmi', flick_anim = "forge-conceal", lay = BELOW_PROJECTILE_LAYER, offX = pixel_x, offY = pixel_y, plane = EFFECTS_PLANE)
 	..()
 	var/obj/structure/cult/concealed/C = loc
@@ -2055,7 +2061,7 @@ var/list/bloodstone_list = list()
 		visible_message("<span class='warning'>\The [src] breaks apart!</span>")
 		icon_state = "pylon-broken"
 		sound_damaged = 'sound/effects/stone_hit.ogg'
-		set_light(0)
+		kill_light()
 		setDensity(FALSE)
 		broken = 1
 

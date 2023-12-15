@@ -29,7 +29,7 @@
 	var/screen				// Which screen our main window displays
 	var/subscreen			// Which specific function of the main screen is being displayed
 
-	var/obj/item/device/pda/ai/pai/pda = null
+	var/obj/item/device/flashlight/pda/ai/pai/pda = null
 
 	var/secHUD = FALSE			// Toggles whether the Security HUD is active or not
 	var/medHUD = FALSE			// Toggles whether the Medical  HUD is active or not

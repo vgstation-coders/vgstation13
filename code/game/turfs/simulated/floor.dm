@@ -142,7 +142,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			overlays += floor_overlay
 			light_color = floor_overlay.color
 		else
-			set_light(0)
+			kill_light()
 			icon_state = "light_off"
 	else if(is_grass_floor())
 		if(!broken && !burnt)
@@ -205,6 +205,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		if(istype(src,/turf/simulated/floor)) //Was throwing runtime errors due to a chance of it changing to space halfway through.
 			if(air)
 				update_visuals(air)*/
+	update_paint_overlay()
 
 /turf/simulated/floor/return_siding_icon_state()
 	..()
@@ -385,7 +386,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	if(floor_tile)
 		qdel(floor_tile)
 	icon_plating = "plating"
-	set_light(0)
+	kill_light()
 	floor_tile = null
 	intact = 0
 	broken = 0
@@ -600,7 +601,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 						L.apply_radiation(3,RAD_EXTERNAL)
 					flick("uranium_active",src)
 					spawn(20)
-						set_light(0)
+						kill_light()
 					spawn(200)
 						spam_flag = 0
 						update_icon()

@@ -70,7 +70,7 @@
 					see_invisible = SEE_INVISIBLE_LEVEL_ONE
 		if(M_THERMALS in mutations)
 			change_sight(adding = SEE_MOBS)
-		if(M_XRAY in mutations)
+		if((M_XRAY in mutations) && (see_xrays))
 			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = 8
 			if(!druggy)

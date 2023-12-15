@@ -16,7 +16,7 @@
 	var/paused = 0
 	var/labyrinth = 0
 
-/datum/pda_app/snake/onInstall(var/obj/item/device/pda/device)
+/datum/pda_app/snake/onInstall(var/obj/item/device/flashlight/pda/device)
 	..()
 	for(var/x=1;x<=PDA_APP_SNAKEII_MAXSPEED;x++)
 		highscores += x
@@ -224,8 +224,8 @@
 /datum/pda_app/snake/proc/game_update(var/mob/user)
 	if(istype(user,/mob/living/carbon))
 		var/mob/living/carbon/C = user
-		if(C.machine && istype(C.machine,/obj/item/device/pda))
-			var/obj/item/device/pda/pda_device = C.machine
+		if(C.machine && istype(C.machine,/obj/item/device/flashlight/pda))
+			var/obj/item/device/flashlight/pda/pda_device = C.machine
 			var/turf/user_loc = get_turf(user)
 			var/turf/pda_loc = get_turf(pda_device)
 			if(get_dist(user_loc,pda_loc) <= 1)

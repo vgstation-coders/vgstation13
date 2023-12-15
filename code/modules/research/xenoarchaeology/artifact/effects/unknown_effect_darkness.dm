@@ -16,12 +16,12 @@
 	if(holder)
 		if(istype(holder, /obj/item/weapon/anobattery))
 			var/obj/item/weapon/anobattery/B = holder
-			if(!activated) 
+			if(!activated)
 				B.inserted_device.set_light(effectrange, -dark_level)
 			else
-				B.inserted_device.set_light(0)
+				B.inserted_device.kill_light()
 		else
-			if(!activated) 
+			if(!activated)
 				holder.set_light(effectrange, -dark_level)
 			else
-				holder.set_light(0)
+				holder.kill_light()

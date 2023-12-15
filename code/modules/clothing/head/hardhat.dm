@@ -4,10 +4,13 @@
 	icon_state = "hardhat0_yellow"
 	flags = FPRINT
 	item_state = "hardhat0_yellow"
-	light_power = 1.5
-	autoignition_temperature = AUTOIGNITION_PLASTIC
-	var/brightness_on = 4 //luminosity when on
+
+	light_power = 2
+	light_range = 4
+	lighting_flags = MOVABLE_LIGHT
 	var/on = 0
+
+	autoignition_temperature = AUTOIGNITION_PLASTIC
 	_color = "yellow" //Determines used sprites: hardhat[on]_[_color] and hardhat[on]_[_color]2 (lying down sprite)
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
 	actions_types = list(/datum/action/item_action/toggle_light)
@@ -23,9 +26,9 @@
 	item_state = "hardhat[on]_[_color]"
 
 	if(on)
-		set_light(brightness_on)
+		set_light()
 	else
-		set_light(0)
+		kill_light()
 
 	user.update_inv_head()
 

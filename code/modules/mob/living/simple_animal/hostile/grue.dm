@@ -73,7 +73,7 @@
 /datum/grue_calc/proc/ddl_update(var/mob/living/G)
 	if(isturf(G.loc))
 		var/turf/T = G.loc
-		current_brightness=10*T.get_lumcount()
+		current_brightness=1*T.get_lumcount()
 	else												//else, there's considered to be no light (vents, lockers, etc.)
 		current_brightness=0
 	if(current_brightness<=bright_limit_gain)
@@ -313,7 +313,7 @@
 
 /mob/living/simple_animal/hostile/grue/Login()
 	..()
-	//client.images += light_source_images
+	client.images += light_source_images
 
 /mob/living/simple_animal/hostile/grue/UnarmedAttack(atom/A)
 	if(isturf(A))
@@ -701,7 +701,7 @@
 				to_chat(src, "<span class='notice'>You need to feed more first.</span>")
 	else
 		channeling_flags &= !GRUE_DRAINLIGHT
-		set_light(0)
+		kill_light()
 		if(nutrienergy)
 			if(!mute)
 				to_chat(src, "<span class='notice'>You stop draining light.</span>")

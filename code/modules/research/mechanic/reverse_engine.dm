@@ -75,8 +75,8 @@
 				to_chat(user, "Successfully transferred [i] design\s.")
 				return 1
 		return
-	if(istype(O, /obj/item/device/pda))
-		var/obj/item/device/pda/PDA = O
+	if(istype(O, /obj/item/device/flashlight/pda))
+		var/obj/item/device/flashlight/pda/PDA = O
 		if(PDA.cartridge.dev_analys)
 			var/obj/item/device/device_analyser/DA = PDA.cartridge.dev_analys
 			for(var/datum/design/loop_design in DA.loaded_designs)
