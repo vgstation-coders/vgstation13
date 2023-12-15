@@ -5,7 +5,7 @@
 #define CORNER_OFFSET_MULTIPLIER_SIZE 16
 #define BLUR_SIZE 4 // integer, please
 
-#define FADEOUT_STEP		2
+#define FADEOUT_STEP		1
 
 // Shadows over light_range 9 haven't been done yet.
 #define MAX_LIGHT_RANGE 10
@@ -702,9 +702,6 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	if(!istype(T))
 		return 0
 	return T.check_blocks_light()
-
-// ----------------------------------------------------------------------------------------------------------------------------------------------------------------
-// -- Wall lighting atom
 
 // -- "moody lights", small glow overlays for APCs, etc
 // They do not cast shadows nor have to do a colour averaging.
