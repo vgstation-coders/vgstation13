@@ -68,7 +68,7 @@
 			Jitter(10)
 
 	if(getBrainLoss() >= 60 && prob(3))
-		say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
+		/*say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
 		"without oxigen blob don't evoluate?", \
 		"CAPTAINS A COMDOM", \
 		"[pick("", "that traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
@@ -118,7 +118,7 @@
 		"I AM BASTE", \
 		"TEH TRAITOR THEY KILL PEEPLE BUT I RESPAWN!!!", \
 		"whats a keeper"))
-	else if(getBrainLoss() >= 60 && prob(3))
+	else if(getBrainLoss() >= 60 && prob(3))*/
 		emote("drool")
 	if(getBrainLoss() > 50 && prob(1.5))
 		if(canmove)
