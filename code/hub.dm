@@ -8,16 +8,16 @@ If not, let us know on the main tgstation IRC channel of irc.rizon.net #tgstatio
 */
 
 #define OPEN_TO_HUB_PLAYERCOUNT_DEFAULT 15
-#define DEFAULT_SERVER_NAME "/vg/station"
-#define DEFAULT_SERVER_DESC " - Not dead yet!"
+#define DEFAULT_SERVER_NAME "Kolobokia 13"
+#define DEFAULT_SERVER_DESC " - Russian HRP. Classic SS13 Experience based on /vg/ code. No furries."
 
 /world
 	hub = "Exadv1.spacestation13"
 	hub_password = "SORRYNOPASSWORD"
-	name = "/vg/station"
+	name = "Kolobokia 13"
 
 
-var/global/byond_hub_open = FALSE
+var/global/byond_hub_open = TRUE
 var/global/byond_server_name = DEFAULT_SERVER_NAME
 var/global/byond_server_desc = DEFAULT_SERVER_DESC
 var/global/byond_hub_playercount = OPEN_TO_HUB_PLAYERCOUNT_DEFAULT
