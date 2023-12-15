@@ -1953,6 +1953,7 @@ var/global/list/adminbusteleportlocs = list()
 /area/surface
 	forbid_apc = TRUE
 	construction_zone = TRUE
+	has_white_turf_lighting = TRUE
 
 /area/surface/snow
 	name = "\improper Planet Surface"
