@@ -130,11 +130,11 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	var/icon/alpha_mask = new('icons/effects/effects.dmi', "scanline")
 	colored_holo.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
 	holo.icon = colored_holo
-	
+
 	var/icon/colored_ray = getFlatIcon(ray)
 	colored_ray.ColorTone(A.holocolor)
 	ray.icon = colored_ray
-	
+
 	A.current = src
 	master = A//AI is the master.
 	use_power = MACHINE_POWER_USE_ACTIVE//Active power usage.
@@ -189,8 +189,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			if(ol.loc == src)
 				ol.icon_state = "holopad0"
 				break
-
-	set_light(0)			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
+	kill_light()			//pad lighting (hologram lighting will be handled automatically since its owner was deleted)
 	icon_state = "holopad0"
 	use_power = MACHINE_POWER_USE_IDLE//Passive power usage.
 	advancedholo = FALSE
@@ -365,7 +364,7 @@ Holographic project of everything else.
 	eye = eyeobj
 	parent = H
 	register_event(/event/after_move, src, /obj/effect/overlay/hologram/lifelike/proc/UpdateEye)
-	set_light(0)
+	kill_light()
 
 /obj/effect/overlay/hologram/lifelike/proc/steal_appearance(var/mob/living/M)
 	name = M.name

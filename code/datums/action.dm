@@ -139,6 +139,7 @@
 	if(target)
 		var/obj/item/I = target
 		I.attack_self(owner)
+		owner.delayNextAttack(1)
 	return TRUE
 
 /datum/action/item_action/ApplyIcon(obj/abstract/screen/movable/action_button/current_button)
@@ -179,6 +180,13 @@
 
 /datum/action/item_action/toggle_light
 	name = "Toggle Light"
+
+/datum/action/item_action/toggle_light/Trigger()
+	if (isPDA(target))
+		var/obj/item/device/flashlight/pda/P = target
+		P.update_brightness()
+	else
+		return ..()
 
 /datum/action/item_action/toggle_anon
 	name = "Toggle Anonymity"

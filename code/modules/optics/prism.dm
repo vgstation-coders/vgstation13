@@ -110,6 +110,7 @@ var/list/obj/machinery/prism/prism_list = list()
 		if(!beam)
 			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir=dir
+			beam.moody_light_obj?.dir = dir
 			newbeam=1
 		beam.power=0
 		var/list/spawners = list(src)
@@ -130,6 +131,7 @@ var/list/obj/machinery/prism/prism_list = list()
 
 			var/beamdir=get_dir(B.loc,src)
 			overlays += image(icon=icon,icon_state="beam_arrow",dir=beamdir)
+			B.moody_light_obj?.dir = beamdir
 		if(newbeam)
 			beam.emit(spawn_by=spawners)
 		else

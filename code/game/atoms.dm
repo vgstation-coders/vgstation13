@@ -55,7 +55,19 @@ var/global/list/ghdel_profiling = list()
 	/// The chat color var, without alpha.
 	var/chat_color_hover
 
+	// Lighting flags
+	var/lighting_flags
+	var/moody_light_type
+
 	var/arcanetampered = 0 //A looot of things can be
+
+/atom/New()
+	. = ..()
+	// Light effects
+	if (moody_light_type)
+		set_moody_light()
+	if (lighting_flags & IS_LIGHT_SOURCE)
+		set_light()
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
@@ -189,6 +201,7 @@ var/global/list/ghdel_profiling = list()
 				B.master.target = null
 		beams.len = 0
 	*/
+	kill_light()
 	QDEL_NULL(firelightdummy)
 	..()
 

@@ -330,14 +330,14 @@
 			to_chat(user, "<span class='warning'>You swipe [O] and crack the holobadge security checks.</span>")
 			return
 
-	else if(istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
+	else if(istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/flashlight/pda))
 
 		var/obj/item/weapon/card/id/id_card = null
 
 		if(istype(O, /obj/item/weapon/card/id))
 			id_card = O
 		else
-			var/obj/item/device/pda/pda = O
+			var/obj/item/device/flashlight/pda/pda = O
 			id_card = pda.id
 
 		if ((access_security in id_card.access) || emagged)
@@ -373,14 +373,14 @@
 
 /obj/item/clothing/accessory/assistantcard/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
-	if(istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
+	if(istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/flashlight/pda))
 
 		var/obj/item/weapon/card/id/id_card = null
 
 		if(istype(O, /obj/item/weapon/card/id))
 			id_card = O
 		else
-			var/obj/item/device/pda/pda = O
+			var/obj/item/device/flashlight/pda/pda = O
 			id_card = pda.id
 
 		to_chat(user, "You imprint your ID details onto the card.")

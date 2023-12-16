@@ -46,7 +46,7 @@ var/global/list/lightfloor_colors = list(
 
 /obj/item/stack/tile/light/update_icon(var/new_color)
 	.=..()
-	color_overlay = image('icons/obj/items.dmi', icon_state = "light_tile_overlay")
+	color_overlay = image('icons/obj/tiles.dmi', icon_state = "light_tile_overlay")
 	color_overlay.color = rgb(color_r,color_g,color_b)
 	overlays += color_overlay
 

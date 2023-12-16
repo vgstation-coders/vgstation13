@@ -1082,7 +1082,7 @@ var/global/list/air_alarms = list()
 				W.playtoolsound(src, 50)
 				new /obj/item/stack/cable_coil(get_turf(user), 5)
 				return
-			if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))// trying to unlock the interface with an ID card
+			if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/flashlight/pda))// trying to unlock the interface with an ID card
 				if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 					to_chat(user, "It does nothing")
 					return

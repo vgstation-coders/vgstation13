@@ -387,7 +387,7 @@
 
 	regular_hud_updates()
 
-	if (stat == DEAD || (M_XRAY in mutations))
+	if (stat == DEAD || ((M_XRAY in mutations)  && (see_xrays)) )
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_LEVEL_TWO

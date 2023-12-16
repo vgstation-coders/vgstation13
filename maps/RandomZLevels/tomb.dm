@@ -14,14 +14,14 @@
 /area/awaymission/tomb/outside
 	name = "desert"
 	base_turf_type = /turf/unsimulated/beach/sand
-	dynamic_lighting = 0
+	has_white_turf_lighting = 0
 
 /area/awaymission/tomb/outside/expedition_camp
 	name = "expedition camp"
 
 /area/awaymission/tomb/outside/pyramid_outside
 	name = "great pyramid"
-	dynamic_lighting = 1
+	has_white_turf_lighting = 1
 
 
 /area/awaymission/tomb

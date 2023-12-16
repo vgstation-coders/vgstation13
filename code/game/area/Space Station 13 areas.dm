@@ -156,7 +156,7 @@ var/global/list/adminbusteleportlocs = list()
 	power_light = 0
 	power_environ = 0
 	always_unpowered = 0
-	dynamic_lighting = 1
+	has_white_turf_lighting = 0
 	shuttle_can_crush = TRUE
 
 /area/arrival
@@ -179,7 +179,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Spider Clan Dojo"
 	icon_state = "dojo"
 	requires_power = 0
-	dynamic_lighting = FALSE
+	has_white_turf_lighting = FALSE
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 
@@ -187,7 +187,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Void Between Timelines"
 	icon_state = "time_void"
 	requires_power = 0
-	dynamic_lighting = FALSE
+	has_white_turf_lighting = FALSE
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 
@@ -197,7 +197,7 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/shuttle
 	requires_power = 0
-	dynamic_lighting = 1 //Lighting STILL disabled, even with the new bay engine, because lighting doesn't play nice with our shuttles, might just be our shuttle code, or the small changes in the lighting engine we have from bay.
+	has_white_turf_lighting = 0
 	//haha fuck you we dynamic lights now
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
@@ -373,7 +373,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Nuclear Operative Shuttle"
 	icon_state = "yellow"
 	requires_power = 0
-	dynamic_lighting = 1
+	has_white_turf_lighting = 0
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 
@@ -391,7 +391,7 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/shuttle/thunderdome
 	name = "honk"
-	dynamic_lighting = 0
+	has_white_turf_lighting = 0
 
 /area/shuttle/thunderdome/grnshuttle
 	name = "\improper Thunderdome GRN Shuttle"
@@ -492,14 +492,14 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Vox Skipjack"
 	icon_state = "yellow"
 	requires_power = 0
-	dynamic_lighting = 1
+	has_white_turf_lighting = 0
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/lightship
 	name = "\improper Lightspeed Ship"
 	requires_power = 1
 	icon_state = "firingrange"
-	dynamic_lighting = 1
+	has_white_turf_lighting = 0
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/lightship/start
@@ -509,7 +509,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Broken UFO"
 	requires_power = 1
 	icon_state = "firingrange"
-	dynamic_lighting = 1
+	has_white_turf_lighting = 1
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/brokeufo/start
@@ -581,7 +581,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "start area"
 	icon_state = "start"
 	requires_power = 0
-	dynamic_lighting = 0
+	has_white_turf_lighting = 0
 	gravity = 1
 	flags = NO_PERSISTENCE //hmmm I wonder if someone can fuck with this
 
@@ -598,7 +598,8 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Centcom"
 	icon_state = "centcom"
 	requires_power = 0
-	dynamic_lighting = 0
+	has_white_turf_lighting = 1
+	luminosity = 1
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE //Central Command is always squeaky clean yo
 
@@ -628,12 +629,12 @@ var/global/list/adminbusteleportlocs = list()
 /area/centcom/specops
 	name = "\improper Centcom Special Ops"
 	icon_state = "centcom-specops"
-	dynamic_lighting = 1
+	has_white_turf_lighting = 0
 
 /area/centcom/striketeam
 	name = "\improper Custom Strike Team"
 	icon_state = "centcom-specops"
-	dynamic_lighting = 1
+	has_white_turf_lighting = 0
 
 /area/centcom/creed
 	name = "Creed's Office"
@@ -645,7 +646,7 @@ var/global/list/adminbusteleportlocs = list()
 /area/centcom/ert
 	name = "\improper ERT Preparation Center"
 	icon_state = "centcom-ert"
-	dynamic_lighting = 1
+	has_white_turf_lighting = 1
 
 //SYNDICATES
 
@@ -653,7 +654,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Syndicate Mothership"
 	icon_state = "syndie-ship"
 	requires_power = 0
-	dynamic_lighting = 0
+	has_white_turf_lighting = 0
 	shuttle_can_crush = FALSE
 
 /area/syndicate_mothership/control
@@ -699,7 +700,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Thunderdome"
 	icon_state = "thunder"
 	requires_power = 0
-	dynamic_lighting = 0
+	has_white_turf_lighting = 1
 	shuttle_can_crush = FALSE
 
 /area/tdome/tdome1
@@ -726,7 +727,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Wizard's Den"
 	icon_state = "yellow"
 	requires_power = 0
-	dynamic_lighting = 0
+	has_white_turf_lighting = 1
 	shuttle_can_crush = FALSE
 
 /area/vox_station
@@ -736,24 +737,28 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper aft port solars"
 	icon_state = "southwest"
 	requires_power = 0
+	has_white_turf_lighting = 1
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/vox_station/northwest_solars
 	name = "\improper fore port solars"
 	icon_state = "northwest"
 	requires_power = 0
+	has_white_turf_lighting = 1
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/vox_station/northeast_solars
 	name = "\improper fore starboard solars"
 	icon_state = "northeast"
 	requires_power = 0
+	has_white_turf_lighting = 1
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/vox_station/southeast_solars
 	name = "\improper aft starboard solars"
 	icon_state = "southeast"
 	requires_power = 0
+	has_white_turf_lighting = 1
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/vox_station/mining
@@ -1199,16 +1204,11 @@ var/global/list/adminbusteleportlocs = list()
 	name = "Casino"
 	icon_state = "casino"
 
-
-
-
-
-
-
 /area/holodeck
 	name = "\improper Holodeck"
 	icon_state = "Holodeck"
-	dynamic_lighting = FALSE
+	has_white_turf_lighting = TRUE
+	luminosity = 1
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 	jammed = SUPER_JAMMED
@@ -1367,7 +1367,7 @@ var/global/list/adminbusteleportlocs = list()
 
 /area/solar
 	requires_power = 0
-	dynamic_lighting = 1
+	has_white_turf_lighting = 1
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 	shuttle_can_crush = FALSE
 
@@ -1948,6 +1948,7 @@ var/global/list/adminbusteleportlocs = list()
 /area/surface
 	forbid_apc = TRUE
 	construction_zone = TRUE
+	has_white_turf_lighting = TRUE
 
 /area/surface/snow
 	name = "\improper Planet Surface"
@@ -2258,22 +2259,22 @@ var/global/list/adminbusteleportlocs = list()
 /area/turret_protected/AIsatextFP
 	name = "\improper AI Sat Ext"
 	icon_state = "storage"
-	dynamic_lighting = 0
+	has_white_turf_lighting = 0
 
 /area/turret_protected/AIsatextFS
 	name = "\improper AI Sat Ext"
 	icon_state = "storage"
-	dynamic_lighting = 0
+	has_white_turf_lighting = 0
 
 /area/turret_protected/AIsatextAS
 	name = "\improper AI Sat Ext"
 	icon_state = "storage"
-	dynamic_lighting = 0
+	has_white_turf_lighting = 0
 
 /area/turret_protected/AIsatextAP
 	name = "\improper AI Sat Ext"
 	icon_state = "storage"
-	dynamic_lighting = 0
+	has_white_turf_lighting = 0
 
 /area/turret_protected/NewAIMain
 	name = "\improper AI Main New"
@@ -2388,7 +2389,7 @@ var/global/list/adminbusteleportlocs = list()
 	name = "\improper Vox Solar Array"
 	icon_state = "panelsS"
 	requires_power = 0
-	dynamic_lighting = 0
+	has_white_turf_lighting = 0
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/vox_trading_post/solars
@@ -2601,7 +2602,7 @@ var/global/list/adminbusteleportlocs = list()
 /area/awaymission/beach
 	name = "Beach"
 	icon_state = "null"
-	dynamic_lighting = 1
+	has_white_turf_lighting = 1
 	requires_power = 0
 
 /area/awaymission/leviathan
@@ -2704,7 +2705,7 @@ var/list/the_station_areas = list (
 /area/beach/
 	name = "The metaclub's private beach"
 	icon_state = "null"
-	dynamic_lighting = 0
+	has_white_turf_lighting = 1
 	requires_power = 0
 	var/sound/mysound = null
 	shuttle_can_crush = FALSE
@@ -2842,7 +2843,7 @@ var/list/shack_names = list("abandoned","deserted","forsaken","stranded","isolat
 	name = "shack"
 	requires_power = 0
 	icon_state = "firingrange"
-	dynamic_lighting = 1
+	has_white_turf_lighting = 0
 
 	holomap_draw_override = HOLOMAP_DRAW_FULL
 
@@ -3063,4 +3064,4 @@ var/list/shack_names = list("abandoned","deserted","forsaken","stranded","isolat
 /area/hell
 	name = "\improper HELL"
 	requires_power = 0
-	dynamic_lighting = 0
+	has_white_turf_lighting = 0

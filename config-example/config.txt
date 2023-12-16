@@ -92,7 +92,7 @@ LOG_RC
 # LOG_SQL_QUERIES
 
 ## sql switching
-# SQL_ENABLED 1
+# SQL_ENABLED 0
 
 ## disconnect players who did nothing during 10 minutes
 # KICK_INACTIVE

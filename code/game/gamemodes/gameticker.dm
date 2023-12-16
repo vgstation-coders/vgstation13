@@ -218,19 +218,14 @@ var/datum/controller/gameticker/ticker
 	if(roundstart_occupied_area_paths.len)
 		var/tick = get_game_time()
 		var/obj/machinery/light_switch/LS
-		var/obj/machinery/light/lightykun
 		var/obj/item/device/flashlight/lamp/lampychan
 		for(var/area/A in areas)
 			if(A.type in roundstart_occupied_area_paths)
 				for(var/obj/O in A)
 					LS = O
-					lightykun = O
 					lampychan = O
 					if(istype(LS))
 						LS.toggle_switch(1, playsound = FALSE)
-					else if(istype(lightykun))
-						lightykun.on = 1
-						lightykun.update()
 					else if(istype(lampychan))
 						lampychan.toggle_onoff(1)
 		//Force the lighting subsystem to update.
@@ -340,8 +335,8 @@ var/datum/controller/gameticker/ticker
 	var/obj/item/I = get_item_by_slot(slot_wear_id)
 	if(istype(I,/obj/item/weapon/card/id))
 		ID = I
-	else if(istype(I,/obj/item/device/pda))
-		var/obj/item/device/pda/P = I
+	else if(istype(I,/obj/item/device/flashlight/pda))
+		var/obj/item/device/flashlight/pda/P = I
 		ID = P.id
 	if(!ID)
 		ID = new(T)

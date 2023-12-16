@@ -23,6 +23,7 @@
 	gender = PLURAL
 	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
 	var/list/existing_prints = list()
+	luminosity = 1
 
 /turf/unsimulated/floor/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	global_snowtiles -= src
@@ -45,6 +46,7 @@
 		icon_state = "snow[rand(0, 6)]"
 	update_environment()
 	global_snowtiles += src
+
 	if(real_snow_tile && !ignore_blizzard_updates)
 		environment_snowtiles += src
 

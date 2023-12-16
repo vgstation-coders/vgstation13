@@ -413,7 +413,7 @@
 /obj/item/dictionary/dsquad/New()
 	name = "redacted nanodictionary"
 	desc += " Is it in some kind of code?"
-	icon_state = "booknuclear"
+	icon_state = "bookNuclear"
 	tongue = all_languages[LANGUAGE_DEATHSQUAD]
 	progress_goal = 20
 	progress_time = 15 SECONDS

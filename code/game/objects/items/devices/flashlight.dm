@@ -13,8 +13,10 @@
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL // Assuming big beefy fucking maglite.
 	actions_types = list(/datum/action/item_action/toggle_light)
+	light_type = LIGHT_SOFT
+	lighting_flags = MOVABLE_LIGHT
 	var/on = 0
-	var/brightness_on = 4 //luminosity when on
+	light_range = 4
 	var/has_sound = 1 //The CLICK sound when turning on/off
 	var/sound_on = 'sound/items/flashlight_on.ogg'
 	var/sound_off = 'sound/items/flashlight_off.ogg'
@@ -35,22 +37,22 @@
 /obj/item/device/flashlight/initialize()
 	..()
 	if(on)
-		icon_state = "[initial(icon_state)]-on"
-		set_light(brightness_on)
+		icon_state = get_on_icon_state()
+		set_light()
 	else
 		icon_state = initial(icon_state)
-		set_light(0)
+		kill_light()
 
 /obj/item/device/flashlight/proc/update_brightness(var/mob/user = null, var/playsound = 1)
 	if(on)
-		icon_state = "[initial(icon_state)]-on"
-		set_light(brightness_on)
+		icon_state = get_on_icon_state()
+		set_light()
 		if(playsound && has_sound)
 			if(get_turf(src))
 				playsound(src, sound_on, 50, 1)
 	else
 		icon_state = initial(icon_state)
-		set_light(0)
+		kill_light()
 		if(playsound && has_sound)
 			playsound(src, sound_off, 50, 1)
 
@@ -62,6 +64,21 @@
 	on = !on
 	update_brightness(user)
 	return 1
+
+/obj/item/device/flashlight/attack_animal(mob/living/simple_animal/M)
+	if(M.melee_damage_upper == 0)
+		return
+	else if (on && isspider(M))
+		on = FALSE
+		M.do_attack_animation(src, M)
+		update_brightness(M,1)
+
+/obj/item/device/flashlight/proc/toggle_onoff(var/onoff = null)
+	if(isnull(onoff))
+		on = !on
+	else
+		on = onoff
+	update_brightness()
 
 /obj/item/device/flashlight/attack(mob/living/M as mob, mob/living/user as mob)
 	add_fingerprint(user)
@@ -109,6 +126,9 @@
 	else
 		return ..()
 
+/obj/item/device/flashlight/proc/get_on_icon_state()
+	return "[initial(icon_state)]-on"
+
 /obj/item/device/flashlight/proc/flicker()
 	if(flickering)
 		return
@@ -136,7 +156,7 @@
 	damtype = "fire"
 	hitsound = 'sound/items/cautery.ogg'
 	flags = FPRINT
-	brightness_on = 5
+	light_power = 5
 	has_sound = 1
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
@@ -150,7 +170,7 @@
 	item_state = ""
 	flags = FPRINT
 	siemens_coefficient = 1
-	brightness_on = 2
+	light_range = 2
 	has_sound = 0
 
 	health = 10
@@ -191,7 +211,8 @@
 	desc = "A desk lamp with an adjustable mount."
 	icon_state = "lamp"
 	item_state = "lamp"
-	brightness_on = 5
+	light_range = 5
+	light_type = LIGHT_SOFT
 	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -214,7 +235,7 @@
 	desc = "A classic green-shaded desk lamp."
 	icon_state = "lampgreen"
 	item_state = "lampgreen"
-	brightness_on = 5
+	light_range = 5
 
 /obj/item/device/flashlight/lamp/verb/toggle_light()
 	set name = "Toggle light"
@@ -230,22 +251,12 @@
 	if(usr.has_hand_check())
 		attack_self(usr)
 		return TRUE
-
-/obj/item/device/flashlight/lamp/proc/toggle_onoff(var/onoff = null) //this is only called by gameticker.dm at roundstart, so we call update_brightness() with playsound = FALSE below.
-	if(on == onoff)
-		return
-	if(isnull(onoff))
-		on = !on
-	else
-		on = onoff
-	update_brightness(playsound = FALSE)
-
 //Lamps draw power from the area they're in, unlike flashlights.
 /obj/item/device/flashlight/lamp/New()
 	if(drawspower)
 		pwrconn = new(src)
 		pwrconn.channel = LIGHT
-		pwrconn.active_usage = 60 * brightness_on / 5 //power usage scales with brightness
+		pwrconn.active_usage = 60 * light_power / 5 //power usage scales with brightness
 	update_brightness(playsound = FALSE)
 
 /obj/item/device/flashlight/lamp/update_brightness(var/mob/user = null, var/playsound = TRUE)
@@ -260,11 +271,11 @@
 
 /obj/item/device/flashlight/lamp/process(var/playsound = FALSE)
 	if(on && (!drawspower || pwrconn?.powered()))
-		icon_state = "[initial(icon_state)]-on"
-		set_light(brightness_on)
+		icon_state = get_on_icon_state()
+		set_light()
 	else
 		icon_state = initial(icon_state)
-		set_light(0)
+		kill_light()
 	if(playsound && has_sound)
 		if(get_turf(src))
 			playsound(src, on ? sound_on : sound_off, 50, 1)
@@ -275,8 +286,9 @@
 	name = "flare"
 	desc = "A red Nanotrasen issued flare. There are instructions on the side, it reads 'pull cord, make light'."
 	w_class = W_CLASS_SMALL
-	brightness_on = 4 // Pretty bright.
-	light_power = 2.5
+	light_range = 4
+	light_power = 2.5 // Pretty bright.
+	light_type = LIGHT_SOFT_FLICKER
 	icon_state = "flare"
 	item_state = "flare"
 	actions_types = list(/datum/action/item_action/toggle_light)
@@ -288,6 +300,7 @@
 	source_temperature = TEMPERATURE_FLAME
 	var/H_color = ""
 
+	light_type = LIGHT_SOFT_FLICKER
 	light_color = LIGHT_COLOR_FLARE
 
 	breakable_flags = 0 //Not breakable for now.
@@ -340,6 +353,10 @@
 	// All good, turn it on.
 	user.visible_message("<span class='notice'>[user] activates the flare.</span>", "<span class='notice'>You pull the cord on the flare, activating it!</span>")
 	Light(user)
+
+
+/obj/item/device/flashlight/flare/attack_animal(mob/living/simple_animal/M)
+	return
 
 /obj/item/device/flashlight/flare/proc/Light(var/mob/user as mob)
 	on = 1
@@ -397,7 +414,7 @@
 /obj/item/device/flashlight/lamp/slime/initialize()
 	..()
 	if(on)
-		icon_state = "[initial(icon_state)]-on"
+		icon_state = get_on_icon_state()
 		set_light(brightness_max)
 	else
 		icon_state = initial(icon_state)
@@ -405,7 +422,7 @@
 
 /obj/item/device/flashlight/lamp/slime/proc/slime_brightness(var/mob/user = null)
 	if(on)
-		icon_state = "[initial(icon_state)]-on"
+		icon_state = get_on_icon_state()
 		set_light(brightness_max)
 	else
 		icon_state = initial(icon_state)

@@ -29,13 +29,13 @@
 			var/count = 0
 
 			if (!toff)
-				for (var/obj/item/device/pda/P in sortNames(get_viewable_pdas()))
+				for (var/obj/item/device/flashlight/pda/P in sortNames(get_viewable_pdas()))
 					if (P == src)
 						continue
 					if(P.hidden)
 						continue
 					dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
-					if (pda_device.id && !istype(P,/obj/item/device/pda/ai))
+					if (pda_device.id && !istype(P,/obj/item/device/flashlight/pda/ai))
 						dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><span class='pda_icon pda_money'></span>*Send Money*</a>)"
 
 					for(var/datum/pda_app/cart/virus/V in pda_device.applications)
@@ -89,7 +89,7 @@
                 U << browse(null, "window=pda")
                 return
         if("Message")
-            var/obj/item/device/pda/P = locate(href_list["target"])
+            var/obj/item/device/flashlight/pda/P = locate(href_list["target"])
             P.overlays.len = 0  // replying to a message from chat clears alert
             P.update_icon()
             src.create_message(U, P)
@@ -109,7 +109,7 @@
             if(!useMS)
                 to_chat(usr, "[bicon(pda_device)]<span class='warning'>The PDA's screen flashes, 'Error, Messaging server is not responding.'</span>")
                 return
-            var/obj/item/device/pda/P = locate(href_list["target"])
+            var/obj/item/device/flashlight/pda/P = locate(href_list["target"])
             var/datum/signal/signal = pda_device.telecomms_process()
 
             var/useTC = 0
@@ -204,7 +204,7 @@
 
 	incoming_transactions = list()
 
-/datum/pda_app/messenger/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P, var/multicast_message = null, obj/item/device/pda/reply_to, var/overridemessage)
+/datum/pda_app/messenger/proc/create_message(var/mob/living/U = usr, var/obj/item/device/flashlight/pda/P, var/multicast_message = null, obj/item/device/flashlight/pda/reply_to, var/overridemessage)
     if(!reply_to)
         reply_to = pda_device
     if (!istype(P))
