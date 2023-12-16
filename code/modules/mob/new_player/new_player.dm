@@ -6,6 +6,9 @@
 	var/totalPlayers = 0		 //Player counts for the Lobby tab
 	var/totalPlayersReady = 0
 	var/pinghop_cd = 0 //last pinged HOP
+	var/whitelistId = 0
+	var/whitelistVerified = 0
+
 
 	flags = NONE
 
@@ -29,6 +32,7 @@
 	if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
 		if(job_master)
 			output += "<a href='byond://?src=\ref[src];predict=1'>Manifest Prediction (Unreliable)</A><br>"
+		//check here whether the user is in whitelist (on clicking ready button)
 		if(!ready)
 			output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
 		else
@@ -119,7 +123,52 @@
 		return 1
 
 	if(href_list["ready"])
-		if(!client.prefs.saveloaded)
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, verified FROM player_whitelist WHERE ckey = :ckey", list("ckey" = "[usr.ckey]"))
+		if(query.Execute())
+			whitelistId = query.NextRow() //returns 1 if the row is found, otherwise 0
+			if(whitelistId == 1) //found the row, so the player has been invited
+				whitelistId = query.item[1]
+				whitelistVerified = query.item[2]
+				if(whitelistVerified == 1) //the player has been verified (1)
+					if(!client.prefs.saveloaded)
+						to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
+						return
+					switch(text2num(href_list["ready"]))
+						if(1)
+							ready = 1
+						if(2)
+							ready = 0
+					to_chat(usr, "<span class='recruit'>You [ready ? "have declared ready" : "have unreadied"].</span>")
+					new_player_panel_proc()
+					//testing("[usr] topic call took [(world.timeofday - timestart)/10] seconds")
+					return 1
+				else //the player has not been verified yet (0)
+					to_chat(usr, "<span class='warning'>You have not been verified yet despite being invited. Please wait till you get verified before you can join the game.</span")
+					message_admins("[ckey] were unable to join the game due to being unverified.")
+			else
+				to_chat(usr, "<span class='warning'>You are not invited to play on this server, though you can still apply via the form that just appeared. We strongly suggest joining us in <b>Discord</b>.</span>") //Perhaps Discord URL might be handy here?
+				var/whitelistAnswerAsk = copytext(sanitize(input(usr, "Please tell us how have you found the server?", "Whitelist", null)), 1)
+				var/datum/DBQuery/whitelistAnswerSent = SSdbcore.NewQuery("INSERT INTO player_whitelist (ckey, description) VALUES ('[usr.ckey]', '[whitelistAnswerAsk]')")
+				if(whitelistAnswerSent.Execute())
+					to_chat(usr, "<span class='warning'>You have successfully applied for the whitelist access. It may take a little while before you will get verified.</span")
+					message_admins("[ckey] have manually applied for the whitelist access. Please check the pending applications.")
+					return 0
+				else
+					to_chat(usr,"Error inserting [usr.ckey], [whitelistAnswerAsk] into player_whitelist: [whitelistAnswerSent.ErrorMsg()]")
+					qdel(whitelistAnswerSent)
+				message_admins("[ckey] were unable to join the game due not being invited.")
+				return 0
+		else
+			to_chat(usr,"Error fetching [ckey] id from player_whitelist: [query.ErrorMsg()]")
+			qdel(query)
+			return 0
+
+		/*if(!query.Execute())
+			to_chat(usr,"Error fetching [ckey] id from player_whitelist: [query.ErrorMsg()]")
+			qdel(query)
+			return*/
+
+		/*if(!client.prefs.saveloaded)
 			to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
 			return
 		switch(text2num(href_list["ready"]))
@@ -130,7 +179,7 @@
 		to_chat(usr, "<span class='recruit'>You [ready ? "have declared ready" : "have unreadied"].</span>")
 		new_player_panel_proc()
 		//testing("[usr] topic call took [(world.timeofday - timestart)/10] seconds")
-		return 1
+		return 1*/
 
 	if(href_list["refresh"])
 		src << browse(null, "window=playersetup") //closes the player setup window
@@ -153,7 +202,31 @@
 			to_chat(usr, "<span class='warning'>The round is either not ready, or has already finished...</span>")
 			return
 
-		LateChoices()
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, verified FROM player_whitelist WHERE ckey = :ckey", list("ckey" = "[usr.ckey]"))
+		if(query.Execute())
+			whitelistId = query.NextRow() //returns 1 if the row is found, otherwise 0
+			if(whitelistId == 1) //found the row, so the player has been invited
+				whitelistId = query.item[1]
+				whitelistVerified = query.item[2]
+				if(whitelistVerified == 1) //the player has been verified (1)
+					LateChoices()
+				else //the player has not been verified yet (0)
+					to_chat(usr, "<span class='warning'>You have not been verified yet despite being invited. Please wait till you get verified before you can join the game.</span")
+					message_admins("[ckey] were unable to join the game due to being unverified.")
+			else
+				to_chat(usr, "<span class='warning'>You are not invited to play on this server, though you can still apply via the form that just appeared. We strongly suggest joining us in <b>Discord</b>.</span>") //Perhaps Discord URL might be handy here?
+				var/whitelistAnswerAsk = copytext(sanitize(input(usr, "Please tell us how have you found the server?", "Whitelist", null)), 1)
+				var/datum/DBQuery/whitelistAnswerSent = SSdbcore.NewQuery("INSERT INTO player_whitelist (ckey, description) VALUES ('[usr.ckey]', '[whitelistAnswerAsk]')")
+				if(whitelistAnswerSent.Execute())
+					to_chat(usr, "<span class='warning'>You have successfully applied for the whitelist access. It may take a little while before you will get verified.</span")
+					message_admins("[ckey] have manually applied for the whitelist access. Please check the pending applications.")
+					return 0
+		else
+			to_chat(usr,"Error fetching [ckey] id from player_whitelist: [query.ErrorMsg()]")
+			qdel(query)
+			return 0
+		//LateChoices()
+
 	if(href_list["cluwnebanned"])
 		if(!iscluwnebanned(usr))
 			to_chat(usr, "<span class='warning'>honk</span>")

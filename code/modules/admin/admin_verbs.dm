@@ -89,7 +89,8 @@ var/list/admin_verbs_admin = list(
 	/client/proc/body_archive_panel,
 	/client/proc/climate_panel,
 	/datum/admins/proc/ashInvokedEmotions,	/*Ashes all paper from the invoke emotion spell. An emergency purge.*/
-	/client/proc/toggle_admin_examine
+	/client/proc/toggle_admin_examine,
+	/client/proc/whitelist_panel
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
