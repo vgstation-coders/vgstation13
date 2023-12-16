@@ -1961,6 +1961,7 @@ var/global/list/adminbusteleportlocs = list()
 	I.blend_mode = BLEND_ADD
 	I.color = color
 	I.alpha = intensity
+	I.layer = HIGHEST_LIGHTING_LAYER
 	overlays += I
 	luminosity = 1
 
