@@ -71,7 +71,7 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 /mob/virtualhearer/update_canmove()
 	return 1 // the default canmove value of virtualhearers
 
-/mob/proc/change_sight(adding, removing, copying)
+/mob/proc/change_sight(adding, removing, copying, forceupdate)
 	var/oldsight = sight
 	if(copying)
 		sight = copying
