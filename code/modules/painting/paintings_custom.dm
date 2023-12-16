@@ -443,6 +443,7 @@
 		if (render)
 			rendered_icon = painting_data.render_on(icon(base_icon, base_icon_state))
 			rendered_nanomap = painting_data.render_nanomap(icon(base_icon, "[base_icon_state]-nano"))
+			rendered_nanomap.blend_mode = BLEND_ADD
 	else
 		name = base_name
 		desc = base_desc
