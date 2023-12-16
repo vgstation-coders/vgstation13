@@ -20,7 +20,7 @@
 	pixel_y = -WORLD_ICON_SIZE/2
 	glide_size = WORLD_ICON_SIZE
 	blend_mode = BLEND_ADD
-	animate_movement = SLIDE_STEPS
+	animate_movement = NO_STEPS
 
 	alpha = 180
 	color = "#FFFFFF"
