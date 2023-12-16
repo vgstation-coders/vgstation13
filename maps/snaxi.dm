@@ -46,7 +46,7 @@
 **	See: daynightcycle.dm  **
 ****************************/
 /datum/subsystem/daynightcycle
-	//flags = SS_FIRE_IN_LOBBY
+	flags = SS_FIRE_IN_LOBBY
 
 /datum/map/active/New()
 	. = ..()
