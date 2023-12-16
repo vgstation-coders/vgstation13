@@ -588,9 +588,9 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	I.icon_state = "white"
 
 	var/intensity = min(255,max(0,round(light_power*light_power_multiplier*25)))
-	var/fadeout = max((get_dist(parent, target_turf) - FULL_BRIGHT_WIDTH)/FADEOUT_STEP, 1)
+	var/fadeout_distance = max(round((get_dist(parent, target_turf) - light_range/2)), 0)
 
-	I.alpha =  round(intensity/fadeout)
+	I.alpha =  round(intensity * 0.5**fadeout_distance) // dist = half light, 0.5**00 = 1 ; 1 tile more = 0.5 ; 2 tiles more = 0.25
 	I.pixel_x = WORLD_ICON_SIZE/2 + (x_offset * world.icon_size)
 	I.pixel_y = WORLD_ICON_SIZE/2 + (y_offset * world.icon_size)
 	I.color = light_color
@@ -841,6 +841,12 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 		return check_wall_occlusion(get_step(src, EAST)) && check_wall_occlusion(get_step(src, WEST))
 
 /atom/movable/light/proc/simulate_wall_illum()
+
+/atom/movable/light/wall_lighting/simulate_wall_illum()
+	for (var/atom/movable/light/secondary_shadow/shadow_comp in shadow_component_atoms)
+		shadow_comp.simulate_wall_illum()
+
+/atom/movable/light/secondary_shadow/simulate_wall_illum()
 	var/distance_to_wall_illum = get_wall_view()
 	for (var/thing in view(min(world.view, distance_to_wall_illum), src))
 		if (isturf(thing))
@@ -849,8 +855,8 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 			affecting_turfs += T
 			if (get_dist(T, get_turf(src)) <= distance_to_wall_illum && CHECK_OCCLUSION(T))
 				var/intensity = min(255,max(0,round(light_power*light_power_multiplier*25)))
-				var/fadeout = max(get_dist(src, T)/FADEOUT_STEP, 1)
-				var/x = round(intensity/fadeout)
+				var/fadeout_distance = max(round((get_dist(parent, thing) - light_range/2)), 0)
+				var/x =  round(intensity * 0.5**fadeout_distance) // dist = half light, 0.5**00 = 1 ; 1 tile more = 0.5 ; 2 tiles more = 0.25
 				var/obj/item/weapon/paper/P = new(T)
 				P.autoignition_temperature = 1e9
 				P.name = "[x]"
