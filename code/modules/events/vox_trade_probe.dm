@@ -4,6 +4,7 @@
  */
 
  #define TRADEPROBE_BONUS_TIMER 120 //how many seconds need to pass to increase weight by 1
+ #define TRADEPROBE_VARIETY_PACKS 6
 
 /datum/event/tradeprobe
 	endWhen	= 270 //How many 2-second ticks should we stay? 9 minutes = 540 / 2 = 270
@@ -13,7 +14,14 @@
 	//No probe if... there is a trader, the trade shuttle is at the station, or financial mismanagement
 	if(SStrade.loyal_customers.len)
 		return FALSE
-	if(!istype(trade_shuttle.current_port,/obj/docking_port/destination/trade/start))
+	//Check if dock clear
+	var/obj/docking_port/destination/trade/station/D = locate() in all_docking_ports
+	if(!D)
+		message_admins("Rejected trade probe event: no trader port.")
+		return FALSE
+	if(D.docked_with)
+		//Another shuttle is already docked here
+		message_admins("Rejected trade probe event: a shuttle occupying the trade port.")
 		return FALSE
 	if(!ports_open)
 		command_alert(/datum/command_alert/tradeaversion_closedport)
@@ -25,7 +33,7 @@
 	//Gain 1 weight per 3% above normal wages players received last cycle, up to 30 weight at 190%
 	var/wageboost = min((payroll_modifier-1)/0.03,30)
 	//Gain 5 weight per player beyond 10, up to 30 weight at 20 players
-	var/playerboost = min(max(0,active_with_role["Any"]-10) * 3, 30)
+	var/playerboost = clamp(0,(active_with_role["Any"]-10) * 3, 30)
 	//Gain 1 weight per 2 minutes after shieft start, up to 30 weight at 60 minutes
 	var/timeboost = min(((world.time / (1 SECONDS)) - ticker.gamestart_time)/(TRADEPROBE_BONUS_TIMER),30) //gamestart_time is in seconds
 	return wageboost + playerboost + timeboost
@@ -62,13 +70,13 @@
 /obj/machinery/vending/sale/trader/probe/New()
 	..()
 	//Grab some items from variety packs...
-	for(var/i = 1 to 6)
+	for(var/i = 1 to TRADEPROBE_VARIETY_PACKS)
 		var/datum/trade_product/TP = SStrade.stocked_variety_pack()
 		TP.totalsold++
 		var/pathtomake = TP.path
 		var/obj/O = new pathtomake(src)
 		for(var/obj/item/I in O.contents)
-			I.price = round((rand(4,6)/10)*TP.baseprice) //Each item valued at 40-60% of crate cost
+			I.price = round((rand(6,8)/10)*TP.baseprice) //Each item valued at 60-80% of crate cost
 			loadCustomItem(I)
 
 /obj/structure/airshield/voxprobe
