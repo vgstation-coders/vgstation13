@@ -35,6 +35,14 @@
 	icon_state = "light_base"
 	},
 /area/shuttle/tradeprobe)
+"N" = (
+/obj/structure/window/full/reinforced/plasma/vox{
+	dir = 4
+	},
+/turf/simulated/floor/light{
+	icon_state = "light_base"
+	},
+/area/shuttle/tradeprobe)
 "O" = (
 /obj/structure/shuttle/engine/propulsion{
 	color = "#4D3714";
@@ -50,6 +58,14 @@
 /area/shuttle/tradeprobe)
 "R" = (
 /turf/simulated/floor/shuttle/vox,
+/area/shuttle/tradeprobe)
+"S" = (
+/obj/structure/window/full/reinforced/plasma/vox{
+	dir = 8
+	},
+/turf/simulated/floor/light{
+	icon_state = "light_base"
+	},
 /area/shuttle/tradeprobe)
 "U" = (
 /obj/structure/shuttle/engine/propulsion{
@@ -73,7 +89,7 @@
 (1,1,1) = {"
 O
 u
-F
+N
 u
 a
 "}
@@ -101,7 +117,7 @@ u
 (5,1,1) = {"
 v
 u
-F
+S
 u
 U
 "}

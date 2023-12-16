@@ -57,6 +57,7 @@
 
 /obj/machinery/vending/sale/trader/probe
 	anchored = TRUE
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/machinery/vending/sale/trader/probe/New()
 	..()
