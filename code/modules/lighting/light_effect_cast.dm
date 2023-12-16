@@ -619,8 +619,8 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 		overlays = temp_appearance
 
 	final_appearance.overlays = final_appearance.temp_appearance
-	final_appearance.layer = HIGHEST_LIGHTING_LAYER
 	overlays += final_appearance
+	final_appearance = null
 
 	update_color()
 
