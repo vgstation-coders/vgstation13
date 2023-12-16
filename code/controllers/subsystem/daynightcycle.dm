@@ -104,29 +104,29 @@ Basically, you are going to overwrite the flags.
 			if(TOD_MORNING)
 				current_timeOfDay = TOD_SUNRISE
 				light_intensity = 100
-				next_firetime = world.time + 1 MINUTES
+				next_firetime = world.time + 3 MINUTES
 				play_globalsound()
 			if(TOD_SUNRISE)
 				current_timeOfDay = TOD_DAYTIME
 				light_intensity = 255
-				next_firetime = world.time + 1 MINUTES
+				next_firetime = world.time + 14 MINUTES
 			if(TOD_DAYTIME)
 				current_timeOfDay = TOD_AFTERNOON
-				next_firetime = world.time + 1 MINUTES
+				next_firetime = world.time + 15 MINUTES
 			if(TOD_AFTERNOON)
 				current_timeOfDay = TOD_SUNSET
-				next_firetime = world.time + 1 MINUTES
+				next_firetime = world.time + 3 MINUTES
 			if(TOD_SUNSET)
 				current_timeOfDay = TOD_NIGHTTIME
 				next_light_power = 1
 				light_intensity = 100
-				next_firetime = world.time + 1 MINUTES
+				next_firetime = world.time + 36 MINUTES
 				play_globalsound()
 			if(TOD_NIGHTTIME)
 				current_timeOfDay = TOD_MORNING
 				next_light_power = 3
 				light_intensity = 25
-				next_firetime = world.time + 1 MINUTES
+				next_firetime = world.time + 5 MINUTES
 
 	for (var/area/surface/A in areas)
 		A.change_colour(current_timeOfDay, light_intensity)
