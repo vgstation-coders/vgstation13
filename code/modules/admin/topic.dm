@@ -4839,6 +4839,27 @@
 				PlayerNotesPage(text2num(href_list["index"]))
 		return
 
+	if(href_list["verify"])
+		var/whitelistId = href_list["verify"]
+		var whitelistCkey
+
+		var/datum/DBQuery/queryVerify = SSdbcore.NewQuery("UPDATE player_whitelist SET verified = '1' WHERE id = '[whitelistId]'")
+		if(queryVerify.Execute())
+			var/datum/DBQuery/queryWhitelistedCkey = SSdbcore.NewQuery("SELECT ckey FROM player_whitelist WHERE id = '[whitelistId]'")
+			if(queryWhitelistedCkey.Execute())
+				whitelistCkey = queryWhitelistedCkey.NextRow()
+				whitelistCkey = queryWhitelistedCkey.item[1]
+				message_admins("[usr.ckey] just verified [whitelistCkey] (id: [whitelistId]).")
+			else
+				to_chat(usr,"Error fetching [whitelistCkey] id from player_whitelist: [queryWhitelistedCkey.ErrorMsg()]")
+				qdel(queryWhitelistedCkey)
+		else
+			to_chat(usr,"Error updating verified value in player_whitelist where id = `[whitelistId]`: [queryVerify.ErrorMsg()]")
+			qdel(queryVerify)
+
+		show_whitelist_panel()
+
+
 //-------------------------------------------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------Shuttle stuff-----------------------------------------------------------
 //-------------------------------------------------------------------------------------------------------------------------------------
