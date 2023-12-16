@@ -21,8 +21,12 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/update_icon()
+	..()
+	overlays.len = 0
 	can_flip = FALSE
-	overlays.Cut()
 	flammable = 0
 	if(!molotov)
 		lit = 0
