@@ -5,7 +5,8 @@
 #define CORNER_OFFSET_MULTIPLIER_SIZE 16
 #define BLUR_SIZE 4 // integer, please
 
-#define FADEOUT_STEP		1
+#define FADEOUT_STEP		3
+#define FULL_BRIGHT_WIDTH	3
 
 // Shadows over light_range 9 haven't been done yet.
 #define MAX_LIGHT_RANGE 10
@@ -587,7 +588,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	I.icon_state = "white"
 
 	var/intensity = min(255,max(0,round(light_power*light_power_multiplier*25)))
-	var/fadeout = max(get_dist(parent, target_turf)/FADEOUT_STEP, 1)
+	var/fadeout = max((get_dist(parent, target_turf) - FULL_BRIGHT_WIDTH)/FADEOUT_STEP, 1)
 
 	I.alpha =  round(intensity/fadeout)
 	I.pixel_x = WORLD_ICON_SIZE/2 + (x_offset * world.icon_size)
@@ -606,6 +607,20 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 		temp_appearance += temp_appearance_shadows
 	overlays = temp_appearance
 	temp_appearance = null
+
+	update_color()
+
+// We explicitly add new overlays to post_processing so we have to do this slightly modified wrappup
+/atom/movable/light/secondary_shadow/update_appearance()
+	if (light_post_processing)
+		post_processing()
+	else
+		temp_appearance += temp_appearance_shadows
+		overlays = temp_appearance
+
+	final_appearance.overlays = final_appearance.temp_appearance
+	final_appearance.layer = HIGHEST_LIGHTING_LAYER
+	overlays += final_appearance
 
 	update_color()
 
@@ -674,7 +689,11 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	combined_shadow_walls.overlays = combined_shadow_walls.temp_appearance
 	if (!parent.found_prerendered_white_light_glob)
 		combined_shadow_walls.filters = filter(type = "blur", size = BLUR_SIZE)
-	temp_appearance += combined_shadow_walls
+
+	temp_appearance_shadows = list()
+	final_appearance = new()
+
+	final_appearance.temp_appearance += combined_shadow_walls
 
 	// -- eliminating the underglow
 	// Due to the blur filter, some of the white pixels may extend below the turf they are supposed to be rendered on.
@@ -692,8 +711,8 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 				var/y_offset = (neighbour.y - y)
 				black_turf.pixel_x = (WORLD_ICON_SIZE/2) + (x_offset * world.icon_size)
 				black_turf.pixel_y = (WORLD_ICON_SIZE/2) + (y_offset * world.icon_size)
-				black_turf.layer = ANTI_GLOW_PASS_LAYER + temp_appearance.len
-				temp_appearance += black_turf
+				black_turf.layer = ANTI_GLOW_PASS_LAYER
+				final_appearance.temp_appearance += black_turf
 
 // --------- Misc utilitary procs.
 
@@ -858,6 +877,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 #undef CORNER_OFFSET_MULTIPLIER_SIZE
 #undef BLUR_SIZE
 
+#undef FULL_BRIGHT_WIDTH
 #undef FADEOUT_STEP
 #undef DIRECT_ILLUM_ANGLE
 

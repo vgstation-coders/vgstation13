@@ -55,6 +55,7 @@
 	var/turf/source_turf
 	var/atom/movable/light/wall_lighting/parent
 
+	var/image/shadow_overlay/final_appearance
 
 /atom/movable/light/New(..., var/atom/newholder)
 	holder = newholder
