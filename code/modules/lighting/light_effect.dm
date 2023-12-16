@@ -36,6 +36,7 @@
 
 	var/light_swallowed = 0
 
+	var/image/shadow_overlay/final_appearance
 	var/list/pre_rendered_shadows = list()
 
 /atom/movable/light/wall_lighting
@@ -54,7 +55,6 @@
 	var/dir_to_source
 	var/turf/source_turf
 	var/atom/movable/light/wall_lighting/parent
-
 
 /atom/movable/light/New(..., var/atom/newholder)
 	holder = newholder
