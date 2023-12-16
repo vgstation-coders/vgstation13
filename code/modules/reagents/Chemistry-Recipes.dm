@@ -2298,7 +2298,7 @@
 	required_reagents = list(PHAZON = 5)
 	required_container = /obj/item/slime_extract/pyrite
 
-/datum/chemical_reaction/slime_extract/slimepaint/on_reaction(var/datum/reagents/holder)
+/datum/chemical_reaction/slime_extract/slimenanopaint/on_reaction(var/datum/reagents/holder)
 	new /obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/vantablack(get_turf(holder.my_atom))
 	..()
 
