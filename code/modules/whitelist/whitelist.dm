@@ -36,8 +36,8 @@
 	var/whitelistId = 0
 	var/whitelistVerified = 0
 
-	/*var/difference = round(lastinvitetime-world.time)
-	to_chat(usr,"world.time = [world.time], invitetime = [lastinvitetime]")*/
+	//var/difference = round(lastinvitetime-world.time)
+	//to_chat(usr,"world.time = [world.time], invitetime = [lastinvitetime]")*/
 
 	if (world.time < lastinvitetime) //5 minutes
 		to_chat(usr, "<span class='warning'>You must wait before you can send another invite!</span>")
@@ -64,7 +64,7 @@
 							var/datum/DBQuery/queryInviteFriend = SSdbcore.NewQuery("INSERT INTO player_whitelist (ckey, invitedby) VALUES (TRIM(LOWER('[friendCkey]')), '[whitelistId]')")
 							if(queryInviteFriend.Execute())
 								to_chat(usr,"<span class='warning'>You have invited <b>[friendCkey]</b> to the server. It may take a little while before they get verified.</span>")
-								//lastinvitetime = world.time+3000
+								lastinvitetime = world.time + 1 MINUTES
 								message_admins("[ckey] have invited [friendCkey] to the server. Please verify them.")
 								return
 							else
