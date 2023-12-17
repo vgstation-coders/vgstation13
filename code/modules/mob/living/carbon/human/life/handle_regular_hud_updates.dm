@@ -36,37 +36,37 @@
 
 	handle_vision_effect_updates()
 
-		if(dna)
-			switch(dna.mutantrace)
-				if("slime")
-					see_in_dark = 3
-					see_invisible = SEE_INVISIBLE_LEVEL_ONE
-				if("shadow")
-					if(client)
-						client.darkness_planemaster.alpha = 100
-					see_in_dark = 8
-					see_invisible = SEE_INVISIBLE_LEVEL_ONE
-		if(M_THERMALS in mutations)
-			change_sight(adding = SEE_MOBS)
-		if((M_XRAY in mutations) && (see_xrays))
-			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
-			see_in_dark = 8
-			if(!druggy)
-				see_invisible = min(SEE_INVISIBLE_LEVEL_TWO, see_invisible)
+	if(dna)
+		switch(dna.mutantrace)
+			if("slime")
+				see_in_dark = 3
+				see_invisible = SEE_INVISIBLE_LEVEL_ONE
+			if("shadow")
+				if(client)
+					client.darkness_planemaster.alpha = 100
+				see_in_dark = 8
+				see_invisible = SEE_INVISIBLE_LEVEL_ONE
+	if(M_THERMALS in mutations)
+		change_sight(adding = SEE_MOBS)
+	if((M_XRAY in mutations) && (see_xrays))
+		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
+		see_in_dark = 8
+		if(!druggy)
+			see_invisible = min(SEE_INVISIBLE_LEVEL_TWO, see_invisible)
     // Legacy Cult
-		if(seer == 1)
-			var/obj/effect/rune_legacy/R = locate() in loc
-			var/datum/faction/cult/narsie/blood_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
-			var/cultwords
-			if (blood_cult)
-				cultwords = blood_cult.cult_words
-			else
-				cultwords = null
-			if(cultwords && R && R.word1 == cultwords["see"] && R.word2 == cultwords["hell"] && R.word3 == cultwords["join"])
-				see_invisible = SEE_INVISIBLE_OBSERVER
-			else
-				see_invisible = SEE_INVISIBLE_LIVING
-				seer = 0
+	if(seer == 1)
+		var/obj/effect/rune_legacy/R = locate() in loc
+		var/datum/faction/cult/narsie/blood_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
+		var/cultwords
+		if (blood_cult)
+			cultwords = blood_cult.cult_words
+		else
+			cultwords = null
+		if(cultwords && R && R.word1 == cultwords["see"] && R.word2 == cultwords["hell"] && R.word3 == cultwords["join"])
+			see_invisible = SEE_INVISIBLE_OBSERVER
+		else
+			see_invisible = SEE_INVISIBLE_LIVING
+			seer = 0
 
 	apply_vision_overrides()
 

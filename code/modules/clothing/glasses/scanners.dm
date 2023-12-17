@@ -172,11 +172,17 @@
 	hud_types = list(/datum/visioneffect/pathogen)
 
 	glasses_fit = TRUE
-	on = FALSE
+	on = TRUE
 
 /obj/item/clothing/glasses/scanner/science/prescription
 	name = "prescription science goggles"
 	nearsighted_modifier = -3
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/glasses/scanner/science/update_icon()
+	if (!on)
+		icon_state = "mesonoff"
+	else
+		icon_state = initial(icon_state)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
