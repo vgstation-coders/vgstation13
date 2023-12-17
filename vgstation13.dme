@@ -1659,6 +1659,7 @@
 #include "code\modules\events\spontaneous_appendicitis.dm"
 #include "code\modules\events\viral_infection.dm"
 #include "code\modules\events\viral_outbreak.dm"
+#include "code\modules\events\vox_trade_probe.dm"
 #include "code\modules\events\wallrot.dm"
 #include "code\modules\events\old_vendotron_event\old_vendotron.dm"
 #include "code\modules\events\old_vendotron_event\vendor_crash_event.dm"
