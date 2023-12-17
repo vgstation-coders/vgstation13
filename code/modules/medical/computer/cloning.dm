@@ -279,7 +279,7 @@
 
 		else if (src.menu == 4)
 			var/obj/item/weapon/card/id/C = usr.get_active_hand()
-			if (istype(C)||istype(C, /obj/item/device/pda))
+			if (istype(C)||istype(C, /obj/item/device/flashlight/pda))
 				if(src.check_access(C))
 					src.records.Remove(src.active_record)
 					QDEL_NULL(src.active_record)

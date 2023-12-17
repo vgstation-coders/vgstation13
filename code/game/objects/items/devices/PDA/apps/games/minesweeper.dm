@@ -15,7 +15,7 @@
 	var/datum/minesweeper_game/minesweeper_game = null
 
 
-/datum/pda_app/minesweeper/onInstall(var/obj/item/device/pda/device)
+/datum/pda_app/minesweeper/onInstall(var/obj/item/device/flashlight/pda/device)
 	..()
 	minesweeper_game = new()
 
@@ -170,8 +170,8 @@
 /datum/pda_app/minesweeper/proc/game_update(var/mob/user)
 	if(istype(user,/mob/living/carbon))
 		var/mob/living/carbon/C = user
-		if(C.machine && istype(C.machine,/obj/item/device/pda))
-			var/obj/item/device/pda/pda_device = C.machine
+		if(C.machine && istype(C.machine,/obj/item/device/flashlight/pda))
+			var/obj/item/device/flashlight/pda/pda_device = C.machine
 			var/turf/user_loc = get_turf(user)
 			var/turf/pda_loc = get_turf(pda_device)
 			if(get_dist(user_loc,pda_loc) <= 1)

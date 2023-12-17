@@ -76,6 +76,8 @@
 	if(modifiers["middle"])
 		if(modifiers["shift"])
 			MiddleShiftClickOn(A)
+		else if (modifiers["alt"])
+			MiddleAltClickOn(A)
 		else
 			MiddleClickOn(A)
 		return

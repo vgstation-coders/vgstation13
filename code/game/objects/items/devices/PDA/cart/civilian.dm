@@ -144,7 +144,7 @@
     desc = "HONK!"
     icon = "pda_honk"
 
-/datum/pda_app/cart/virus/honk/infect(var/obj/item/device/pda/P,var/mob/U)
+/datum/pda_app/cart/virus/honk/infect(var/obj/item/device/flashlight/pda/P,var/mob/U)
     charges--
     U.show_message("<span class='notice'>Virus sent!</span>", 1)
     P.honkamt = (rand(15,20))
@@ -157,7 +157,7 @@
 /datum/pda_app/cart/virus/silent
     desc = "..."
 
-/datum/pda_app/cart/virus/silent/infect(var/obj/item/device/pda/P,var/mob/U)
+/datum/pda_app/cart/virus/silent/infect(var/obj/item/device/flashlight/pda/P,var/mob/U)
     charges--
     U.show_message("<span class='notice'>Virus sent!</span>", 1)
     var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in P.applications

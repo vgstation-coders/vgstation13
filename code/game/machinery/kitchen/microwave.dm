@@ -21,7 +21,7 @@
 	var/auto_make_on_detect = 0 //Default no, scan level >=2 only
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
 	var/global/list/acceptable_items = list(
-							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
+							/obj/item/weapon/kitchen/utensil,/obj/item/device/flashlight/pda,/obj/item/device/paicard,
 							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard
 							)// List of the items you can put in
 	var/global/list/acceptable_reagents // List of the reagents you can put in
@@ -74,6 +74,9 @@
 			for (var/reagent in recipe.reagents)
 				acceptable_reagents |= reagent
 		sortTim(available_recipes, /proc/cmp_microwave_recipe_dsc)
+
+	if(ticker)
+		initialize()
 
 /*******************
 *   Part Upgrades
@@ -373,7 +376,7 @@
 				empty()
 				explosion(get_turf(src), -1,0,0)
 				return
-			if(istype(O,/obj/item/device/pda) || istype(O,/obj/item/device/paicard) || istype(O,/obj/item/device/aicard) || istype(O,/obj/item/weapon/circuitboard))
+			if(istype(O,/obj/item/device/flashlight/pda) || istype(O,/obj/item/device/paicard) || istype(O,/obj/item/device/aicard) || istype(O,/obj/item/weapon/circuitboard))
 				src.visible_message("<span class='warning'>[O] sparks in the microwave!</span>")
 				if (!running(4))
 					abort()
@@ -654,5 +657,15 @@
 
 	if(prob(50))
 		cook()
+
+
+/obj/machinery/microwave/table_shift()
+	pixel_x = -3
+	pixel_y = 6
+
+/obj/machinery/microwave/table_unshift()
+	pixel_x = 0
+	pixel_y = 0
+
 
 #undef CAN_AUTOMAKE_SOMETHING

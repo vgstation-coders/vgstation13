@@ -34,8 +34,14 @@
 	//Now uses a constant beam.
 	var/obj/effect/beam/emitter/beam = null
 
+	lighting_flags = IS_LIGHT_SOURCE
+	light_power = 1
+	light_range = 1
+	light_color = "#ffffff"
+
 /obj/machinery/power/emitter/New(var/turf/loc)
 	..()
+	kill_light() // Start off
 	previous_state = state
 
 	//Radio remote control
@@ -96,8 +102,11 @@
 			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir = dir
 			beam.emit(spawn_by=src)
+			if (moody_light_type)
+				set_moody_light()
 		if (last_satisfaction != get_satisfaction()) // Beam power scales down is satisfaction is down too
 			beam.set_power(beam_power * get_satisfaction())
+		beam.moody_light_obj?.dir = dir
 	else
 		if(beam)
 			beam._re_emit = 0
@@ -201,7 +210,7 @@
 		to_chat(user, "<span class='warning'>\The [src] needs to be firmly secured to the floor first.</span>")
 		return 1
 
-/obj/machinery/power/emitter/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+/obj/machinery/power/emitter/forceMove(atom/destination, no_tp=0, harderforce = FALSE, glide_size_override = 0, from_tp = 0)
 	if(active) // You just removed it from the power cable it was on, what did you think would happen?
 		visible_message("<span class='warning'>The [src] gets yanked off of its power source and turns off!</span>")
 		turn_off()
@@ -308,7 +317,7 @@
 	if(.)
 		return .
 
-	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
+	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/flashlight/pda))
 		if(emagged)
 			to_chat(user, "<span class='warning'>The lock appears to be broken.</span>")
 			return
@@ -349,6 +358,13 @@
 	var/base_state = "emitter"
 	var/power = 1
 
+	moody_light_type = /atom/movable/light/moody/beam
+	light_color = LIGHT_COLOR_HALOGEN
+	light_power = 2
+	light_range = 1
+	light_type = LIGHT_SOFT_FLICKER
+	lighting_flags = FOLLOW_PIXEL_OFFSET
+
 /obj/effect/beam/emitter/proc/set_power(var/newpower = 1)
 	power = newpower
 	if(next)
@@ -363,6 +379,7 @@
 	if(!beam)
 		return null
 	beam.power = power
+	beam.set_light()
 	return beam
 
 /obj/effect/beam/emitter/update_icon()

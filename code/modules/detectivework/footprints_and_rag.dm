@@ -23,6 +23,9 @@
 	body_parts_covered = MOUTH
 	goes_in_mouth = TRUE
 	is_muzzle = MUZZLE_SOFT
+	autoignition_temperature = AUTOIGNITION_FABRIC
+	w_type = RECYK_FABRIC
+	starting_materials = list(MAT_FABRIC = 50)
 	var/mob/current_target = null
 
 /obj/item/weapon/reagent_containers/glass/rag/robo

@@ -17,6 +17,23 @@
 	plane = LIGHTING_PLANE
 	mouse_opacity = 0
 
+//poor inheritance shitcode
+/obj/abstract/screen/backdrop
+	blend_mode = BLEND_OVERLAY
+	icon = 'icons/mob/screen1.dmi'
+	icon_state = "black"
+	layer = BACKGROUND_LAYER
+	screen_loc = "CENTER"
+	plane = LIGHTING_PLANE
+
+/obj/abstract/screen/backdrop/New(var/client/C)
+	..()
+	if(istype(C)) C.screen += src
+	var/matrix/M = matrix()
+	M.Scale(world.view*3)
+	transform = M
+	verbs.Cut()
+
 /obj/abstract/screen/plane/self_vision
 	blend_mode = BLEND_ADD
 	mouse_opacity = 0

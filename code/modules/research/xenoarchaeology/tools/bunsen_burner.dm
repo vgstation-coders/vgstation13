@@ -43,10 +43,19 @@
 /obj/machinery/bunsen_burner/splashable()
 	return FALSE
 
+/obj/machinery/bunsen_burner/table_shift()
+	pixel_y = 6
+
+/obj/machinery/bunsen_burner/table_unshift()
+	pixel_y = 0
+
 /obj/machinery/bunsen_burner/New()
 	..()
 	processing_objects.Remove(src)
 	create_reagents(250)
+
+	if(ticker)
+		initialize()
 
 /obj/machinery/bunsen_burner/mapping/New()
 	..()
@@ -57,7 +66,7 @@
 		held_container.forceMove(get_turf(src))
 		held_container = null
 	processing_objects.Remove(src)
-	set_light(0)
+	kill_light()
 	..()
 
 /obj/machinery/bunsen_burner/examine(mob/user)
@@ -153,7 +162,7 @@
 
 	if(!heating || heating == BUNSEN_OPEN)
 		processing_objects.Remove(src)
-		set_light(0)
+		kill_light()
 
 /obj/machinery/bunsen_burner/proc/get_max_temperature()
 	var/max_temperature

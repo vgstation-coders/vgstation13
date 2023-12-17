@@ -24,6 +24,9 @@
 	autoignition_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	on_armory_manifest = TRUE
 
+	autoignition_temperature = 0
+	fire_fuel = 0
+
 
 /obj/item/clothing/suit/armor/vest
 	name = "armor"

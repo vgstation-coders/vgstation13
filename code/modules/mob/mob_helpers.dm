@@ -67,7 +67,6 @@
 	. = ..()
 	if(.)
 		return .
-
 	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
 	if(eyes && eyes.colourmatrix.len && !(eyes.robotic))
 		return eyes.colourmatrix

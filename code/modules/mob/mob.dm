@@ -874,7 +874,7 @@ Use this proc preferably at the end of an equipment loadout
 					if(!disable_warning)
 						to_chat(usr, "The [name] is too big to attach.")
 					return 0
-				if( istype(src, /obj/item/device/pda) || istype(src, /obj/item/weapon/pen) || is_type_in_list(src, H.wear_suit.allowed) )
+				if( istype(src, /obj/item/device/flashlight/pda) || istype(src, /obj/item/weapon/pen) || is_type_in_list(src, H.wear_suit.allowed) )
 					if(H.s_store)
 						if(H.s_store.canremove)
 							return 2
@@ -2272,7 +2272,7 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/isBloodedAnimal()
 	return FALSE
 
-/mob/proc/OnMobAreaChanged()
+/mob/proc/OnMobAreaChanged(var/mob, var/newarea, var/oldarea)
 	if(src.client && src.client.media && !src.client.media.forced)
 		spawn()
 			src.update_music()

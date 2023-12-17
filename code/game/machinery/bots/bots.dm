@@ -82,6 +82,8 @@
 	var/list/destinations_queue = list()
 	var/MAX_QUEUE_LENGTH = 15 // Maximum length of our queue
 
+	lighting_flags = MOVABLE_LIGHT
+
 // Adding the bots to global lists; initialize if not.
 /obj/machinery/bot/New()
 	. = ..()
@@ -604,7 +606,7 @@
 
 /obj/machinery/bot/proc/turn_off()
 	on = 0
-	set_light(0)
+	kill_light()
 
 /obj/machinery/bot/proc/explode()
 	qdel(src)

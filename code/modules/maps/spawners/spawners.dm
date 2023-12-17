@@ -594,6 +594,8 @@
 		/obj/item/weapon/switchtool/swiss_army_knife,
 		/obj/item/clothing/accessory/wristwatch,
 		/obj/item/clothing/accessory/wristwatch/black,
+		/obj/item/high_roller,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
 		)
 
 /obj/abstract/map/spawner/maint/lowchance
@@ -1107,6 +1109,7 @@
 		/obj/item/seeds/wheatseed,
 		/obj/item/seeds/whitebeetseed,
 		/obj/item/seeds/cinnamomum,
+		/obj/item/seeds/flaxseed,
 		)
 
 // Gym ///////////////////////////////////////////////////////

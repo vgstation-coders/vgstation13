@@ -21,13 +21,17 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/update_icon()
+	..()
+	overlays.len = 0
 	can_flip = FALSE
-	overlays.Cut()
 	flammable = 0
 	if(!molotov)
 		lit = 0
 	light_color = null
-	set_light(0)
+	kill_light()
 	origin_tech = ""
 	switching = FALSE
 	available_drinks.Cut()
@@ -39,7 +43,7 @@
 			desc = "The identity of this drink has been concealed for its protection."
 		else
 			var/datum/reagent/R = reagents.get_master_reagent()
-			R.handle_special_behavior(src)
+			R.when_drinkingglass_master_reagent(src)
 
 			if(R.light_color)
 				light_color = R.light_color

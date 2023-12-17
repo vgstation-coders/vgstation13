@@ -47,7 +47,7 @@
 	var/component_extension = null
 
 	var/obj/item/device/mmi/mmi = null
-	var/obj/item/device/pda/ai/rbPDA = null
+	var/obj/item/device/flashlight/pda/ai/rbPDA = null
 	var/datum/wires/robot/wires = null
 	var/wiring_type = /datum/wires/robot
 
@@ -199,7 +199,7 @@
 // setup the PDA and its name
 /mob/living/silicon/robot/proc/setup_PDA()
 	if(!rbPDA)
-		rbPDA = new/obj/item/device/pda/ai(src)
+		rbPDA = new/obj/item/device/flashlight/pda/ai(src)
 	rbPDA.set_name_and_job(custom_name,braintype)
 
 /mob/living/silicon/robot/proc/upgrade_components()
@@ -805,7 +805,7 @@
 		else
 			to_chat(user, "Unable to locate a radio.")
 
-	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
+	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/flashlight/pda))			// trying to unlock the interface with an ID card
 		if(emagged)//still allow them to open the cover
 			to_chat(user, "The interface seems slightly damaged")
 		if(opened)

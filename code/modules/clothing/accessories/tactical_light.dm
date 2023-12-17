@@ -120,7 +120,7 @@
 
 /obj/item/clothing/accessory/taclight/proc/update_brightness(obj/item/clothing/C)
 	if(src.source_light && src.source_light.on)
-		C.set_light(src.source_light.brightness_on)
+		C.set_light(src.source_light.light_range, source_light.light_power, source_light.light_color, source_light.light_type)
 	else
-		C.set_light(0)
+		C.kill_light()
 	update_icon()

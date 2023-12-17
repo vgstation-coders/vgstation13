@@ -36,7 +36,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 /obj/machinery/holosign/update_icon()
 	overlays.len = 0
 	if(!lit || (stat & (NOPOWER|BROKEN|FORCEDISABLE)))
-		set_light(0)
+		kill_light()
 		return
 	if(!overlay)
 		overlay = image(icon, on_icon)

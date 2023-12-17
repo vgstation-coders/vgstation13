@@ -46794,33 +46794,33 @@
 /area/centcom/ert)
 "dhm" = (
 /obj/structure/rack,
-/obj/item/device/pda/security{
+/obj/item/device/flashlight/pda/security{
 	icon_state = "pda-ert";
 	name = "ERT PDA";
 	pixel_x = 6;
 	pixel_y = -3
 	},
-/obj/item/device/pda/security{
+/obj/item/device/flashlight/pda/security{
 	icon_state = "pda-ert";
 	name = "ERT PDA";
 	pixel_x = 3
 	},
-/obj/item/device/pda/security{
+/obj/item/device/flashlight/pda/security{
 	icon_state = "pda-ert";
 	name = "ERT PDA";
 	pixel_y = 3
 	},
-/obj/item/device/pda/security{
+/obj/item/device/flashlight/pda/security{
 	icon_state = "pda-ert";
 	name = "ERT PDA";
 	pixel_y = -3
 	},
-/obj/item/device/pda/security{
+/obj/item/device/flashlight/pda/security{
 	icon_state = "pda-ert";
 	name = "ERT PDA";
 	pixel_x = -3
 	},
-/obj/item/device/pda/security{
+/obj/item/device/flashlight/pda/security{
 	icon_state = "pda-ert";
 	name = "ERT PDA";
 	pixel_x = -6;
@@ -50827,33 +50827,33 @@
 /area/centcom/specops)
 "dqv" = (
 /obj/structure/rack,
-/obj/item/device/pda/security{
+/obj/item/device/flashlight/pda/security{
 	icon_state = "pda-deathsquad";
 	name = "Deathsquad PDA";
 	pixel_x = 6;
 	pixel_y = -3
 	},
-/obj/item/device/pda/security{
+/obj/item/device/flashlight/pda/security{
 	icon_state = "pda-deathsquad";
 	name = "Deathsquad PDA";
 	pixel_x = 3
 	},
-/obj/item/device/pda/security{
+/obj/item/device/flashlight/pda/security{
 	icon_state = "pda-deathsquad";
 	name = "Deathsquad PDA";
 	pixel_y = 3
 	},
-/obj/item/device/pda/security{
+/obj/item/device/flashlight/pda/security{
 	icon_state = "pda-deathsquad";
 	name = "Deathsquad PDA";
 	pixel_y = -3
 	},
-/obj/item/device/pda/security{
+/obj/item/device/flashlight/pda/security{
 	icon_state = "pda-deathsquad";
 	name = "Deathsquad PDA";
 	pixel_x = -3
 	},
-/obj/item/device/pda/security{
+/obj/item/device/flashlight/pda/security{
 	icon_state = "pda-deathsquad";
 	name = "Deathsquad PDA";
 	pixel_x = -6;
@@ -54225,7 +54225,7 @@
 /area/centcom/control)
 "dAO" = (
 /obj/structure/table/reinforced,
-/obj/item/device/pda/captain,
+/obj/item/device/flashlight/pda/captain,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -107519,13 +107519,23 @@
 /area/crew_quarters/locker)
 "ufU" = (
 /obj/structure/table,
-/obj/item/stack/cable_coil/random,
-/obj/item/stack/cable_coil/random,
-/obj/item/weapon/chisel,
-/obj/item/weapon/chisel,
+/obj/item/weapon/chisel{
+	pixel_x = -8;
+	pixel_y = 3
+	},
+/obj/item/weapon/chisel{
+	pixel_y = 6;
+	pixel_x = -3
+	},
 /obj/machinery/alarm{
 	dir = 4;
 	pixel_x = -22
+	},
+/obj/item/painting_brush{
+	pixel_y = -10
+	},
+/obj/item/paint_roller{
+	pixel_y = -16
 	},
 /turf/simulated/floor,
 /area/storage/art)
@@ -107589,7 +107599,7 @@
 /turf/simulated/floor,
 /area/maintenance/disposal)
 "uhp" = (
-/obj/structure/cable{
+/obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
@@ -107616,9 +107626,13 @@
 /area/engineering/engineering_auxiliary)
 "uiL" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
-/obj/machinery/firealarm{
-	dir = 4;
-	pixel_x = 24
+/obj/structure/table,
+/obj/item/weapon/storage/toolbox/paint{
+	pixel_y = 8
+	},
+/obj/item/weapon/reagent_containers/glass/bottle/acetone{
+	pixel_x = 6;
+	pixel_y = 2
 	},
 /turf/simulated/floor,
 /area/storage/art)
@@ -109077,8 +109091,22 @@
 /area/derelict/hallway/secondary)
 "uMo" = (
 /obj/structure/table,
+/obj/item/stack/cable_coil/random{
+	pixel_y = 3;
+	pixel_x = 3
+	},
+/obj/item/stack/cable_coil/random{
+	pixel_x = 3;
+	pixel_y = -1
+	},
 /obj/item/stack/cable_coil/random,
-/obj/item/stack/cable_coil/random,
+/obj/item/stack/cable_coil/random{
+	pixel_y = 4
+	},
+/obj/machinery/firealarm{
+	dir = 8;
+	pixel_x = -24
+	},
 /turf/simulated/floor,
 /area/storage/art)
 "uMp" = (
@@ -109166,7 +109194,7 @@
 /turf/simulated/floor,
 /area/engineering/engine)
 "uNL" = (
-/obj/structure/cable{
+/obj/structure/cable/yellow{
 	d1 = 1;
 	d2 = 4;
 	icon_state = "1-4"
@@ -109174,6 +109202,10 @@
 /obj/machinery/atmospherics/unary/vent_pump{
 	dir = 1;
 	on = 1
+	},
+/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random{
+	pixel_x = -8;
+	pixel_y = -6
 	},
 /turf/simulated/floor,
 /area/storage/art)
@@ -109196,7 +109228,7 @@
 /turf/simulated/floor/plating,
 /area/solar/aport)
 "uON" = (
-/obj/structure/cable{
+/obj/structure/cable/yellow{
 	d2 = 8;
 	icon_state = "0-8"
 	},
@@ -109206,6 +109238,10 @@
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1
+	},
+/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random{
+	pixel_x = -8;
+	pixel_y = 12
 	},
 /turf/simulated/floor,
 /area/storage/art)
@@ -110749,8 +110785,12 @@
 /area/medical/genetics)
 "vtN" = (
 /obj/structure/table,
-/obj/item/weapon/storage/box/labels,
-/obj/item/weapon/hand_labeler,
+/obj/item/weapon/storage/box/labels{
+	pixel_y = 8
+	},
+/obj/item/weapon/hand_labeler{
+	pixel_x = 4
+	},
 /turf/simulated/floor,
 /area/storage/art)
 "vtQ" = (
@@ -110772,7 +110812,10 @@
 /area/centcom/evac)
 "vum" = (
 /obj/structure/table,
-/obj/item/weapon/storage/fancy/crayons,
+/obj/item/weapon/storage/fancy/crayons{
+	pixel_x = -2;
+	pixel_y = 8
+	},
 /obj/item/weapon/storage/fancy/crayons,
 /obj/machinery/light/small,
 /turf/simulated/floor,
@@ -110833,8 +110876,14 @@
 /area/medical/chemistry)
 "vuQ" = (
 /obj/structure/table,
-/obj/item/device/camera_film,
-/obj/item/device/camera,
+/obj/item/device/camera_film{
+	pixel_x = 4;
+	pixel_y = 8
+	},
+/obj/item/device/camera{
+	pixel_y = 2;
+	pixel_x = -8
+	},
 /obj/machinery/light_switch{
 	pixel_y = -25
 	},

@@ -452,3 +452,15 @@
 
 /obj/item/clothing/gloves/mining/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "rockernaut")
+
+/obj/item/clothing/gloves/mittens
+	desc = "These mittens are quite comfortable, and will keep you warm!"
+	name = "mittens"
+	icon_state = "mittens"
+	item_state = "mittens"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY

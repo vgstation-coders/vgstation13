@@ -6,7 +6,7 @@
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
 	volume = 100
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT
 
 	var/draw_warnings = 1 // Set to 0 to stop it from drawing the alert lights.
 	var/tmp/update_icon_after_process = 0 // Will try to only call update_icon() when necessary.
@@ -118,7 +118,7 @@
 	improper_light = 0
 	improper_kpa = 0
 	improper_heat = 0
-	set_light(0)
+	kill_light()
 	update_icon()
 
 //Harvests the product of a plant.
@@ -142,7 +142,7 @@
 	if(!seed || !harvest || arcanetampered)
 		return
 
-	seed.autoharvest(get_turf(src))
+	seed.autoharvest(get_output())
 	after_harvest()
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/after_harvest()
@@ -514,7 +514,7 @@
 					return
 
 			var/light_available = 5
-			if(T.dynamic_lighting)
+			if(T.has_white_turf_lighting)
 				light_available = T.get_lumcount() * 10
 
 			to_chat(user, "The tray's sensor suite is reporting a light level of [round(light_available, 0.1)] lumens and a temperature of [environment.temperature]K.")

@@ -1,6 +1,8 @@
 /obj/machinery/computer
 	name = "computer"
 	icon = 'icons/obj/computer.dmi'
+	var/on_flick = "on"
+	var/off_flick = "off"
 	density = 1
 	anchored = 1.0
 	use_power = MACHINE_POWER_USE_IDLE
@@ -14,7 +16,7 @@
 	pass_flags_self = PASSMACHINE
 	use_auto_lights = 1
 	light_power_on = 1
-	light_range_on = 3
+	light_range_on = 1
 
 /obj/machinery/computer/cultify()
 	new /obj/structure/cult_legacy/tome(loc)
@@ -24,7 +26,7 @@
 	..()
 	if(world.has_round_started())
 		if(!(computer_flags & NO_ONOFF_ANIMS))
-			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "on")
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = on_flick)
 		initialize()
 
 /obj/machinery/computer/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
@@ -103,14 +105,16 @@
 	// Unpowered/Disabled
 	else if(stat & (FORCEDISABLE|NOPOWER))
 		if(icon_state != "[initial(icon_state)]0" && !(computer_flags & NO_ONOFF_ANIMS))
-			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "off")
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = off_flick)
 		icon_state = "[initial(icon_state)]0"
+		kill_light()
 
 	// Functional
 	else
 		if(icon_state == "[initial(icon_state)]0" && !(computer_flags & NO_ONOFF_ANIMS))
-			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "on")
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = on_flick)
 		icon_state = initial(icon_state)
+		set_light()
 
 
 /obj/machinery/computer/power_change(var/nodelay = 0)
@@ -155,7 +159,7 @@
 	if (do_after(user, src, 20) && (circuit || CC))
 		var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 		if(!(computer_flags & NO_ONOFF_ANIMS))
-			anim(target = A, a_icon = 'icons/obj/computer.dmi', flick_anim = "off")
+			anim(target = A, a_icon = 'icons/obj/computer.dmi', flick_anim = off_flick)
 		src.transfer_fingerprints_to(A)
 		if(!CC)
 			CC = new circuit( A )

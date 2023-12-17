@@ -7,7 +7,7 @@
 	var/obj/shotloc = null //Where the flare was shot from (stored to  be retrieved when the projectile dies)
 	flag = "bullet"
 	light_color = LIGHT_COLOR_FLARE
-	light_range = 5
+	light_range = 6
 
 
 /obj/item/projectile/flare/OnFired()

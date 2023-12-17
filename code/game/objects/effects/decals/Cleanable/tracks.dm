@@ -184,10 +184,19 @@
 		if(truedir>15) // Check if we're in the GOING block
 			state = state || going_state
 			truedir=truedir>>4
-		var/icon/add = icon('icons/effects/fluidtracks.dmi', state, truedir)
-		add.SwapColor("#FFFFFF",track.basecolor)
-		var/image/realadd = image(add,, state,, truedir)
-		overlays += realadd
+		if (isfloor(loc))
+			var/turf/T = loc
+			var/image/terrain = image(T.get_paint_icon(),src,T.get_paint_state(), dir = T.dir)
+			terrain.color = track.basecolor
+			terrain.blend_mode = BLEND_INSET_OVERLAY
+			var/image/tracks = image('icons/effects/fluidtracks.dmi',src, state, dir = truedir)
+			tracks.appearance_flags = KEEP_TOGETHER
+			tracks.overlays += terrain
+			overlays += tracks
+		else
+			var/image/add = image('icons/effects/fluidtracks.dmi',src, state, dir = truedir)
+			add.color = track.basecolor
+			overlays += add
 		if(track.basecolor == "#FF0000"||track.basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
 			plane = NOIR_BLOOD_PLANE
 		else

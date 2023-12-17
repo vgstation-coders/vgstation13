@@ -79,6 +79,7 @@
 			return
 
 	playsound(user, 'sound/weapons/flash.ogg', 100, 1)
+	set_light(l_range = 1, l_power = 2)
 
 	if(isrobot(user))
 		spawn(0)
@@ -128,6 +129,9 @@
 		return
 	if(!flashfail)
 		M.flash_eyes(affect_silicon = 1)
+
+	spawn (3)
+		kill_light()
 
 	return !flashfail
 

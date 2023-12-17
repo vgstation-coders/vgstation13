@@ -4323,6 +4323,19 @@
 								if(H.client)
 									to_chat(H, "<span class='warning'>The tranquility that once filled your soul has vanished. You are once again a slave to your worldly desires.</span>")
 
+			if("spawn_custom_turret")
+				if(alert("Are you sure you'd like to spawn a custom turret at your location?", "Confirmation", "Yes", "Cancel") == "Cancel")
+					return
+				new /obj/structure/turret/gun_turret/admin(get_turf(usr))
+				log_admin("[key_name(usr)] has spawned a customizable turret at [get_coordinates_string(usr)].")
+				message_admins("[key_name(usr)] has spawned a customizable turret at [get_coordinates_string(usr)].")
+
+			if("spawn_meat_blob")
+				var/datum/meat_blob/new_blob = new()
+				new_blob.instantiate(get_turf(usr))
+				log_admin("[key_name(usr)] has spawned a meat blob at [get_coordinates_string(usr)].")
+				message_admins("[key_name(usr)] has spawned a meat blob at [get_coordinates_string(usr)].")
+
 			if("vermin_infestation")
 				var/list/locations = list(
 					"RANDOM" = null,
@@ -4603,7 +4616,7 @@
 		for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 			NEWSCASTER.newsAlert(src.admincaster_feed_channel.channel_name)
 
-		for(var/obj/item/device/pda/PDA in PDAs)
+		for(var/obj/item/device/flashlight/pda/PDA in PDAs)
 			var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
 			if(reader)
 				reader.newsAlert(src.admincaster_feed_channel.channel_name)
@@ -4667,7 +4680,7 @@
 					for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 						NEWSCASTER.newsAlert()
 						NEWSCASTER.update_icon()
-					for(var/obj/item/device/pda/PDA in PDAs)
+					for(var/obj/item/device/flashlight/pda/PDA in PDAs)
 						var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
 						if(reader)
 							reader.newsAlert()

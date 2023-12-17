@@ -41,7 +41,7 @@
 		icon_state = "glowshroomf"
 
 	spawn(0)//make sure the potency from the shroom that made us has transferred first
-		set_light(round(potency/10))
+		set_light(min(round(potency/10),7),1.2)
 
 	/*spawn(delay)
 		Spread() - Methinks this is broken - N3X*/

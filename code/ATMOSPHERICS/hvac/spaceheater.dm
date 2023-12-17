@@ -12,7 +12,7 @@
 	var/base_state = "sheater"
 	var/nocell = 0
 	var/intake_rate = 0.25
-	light_power_on = 0.75
+	light_power_on = 2
 	light_range_on = 2
 	light_color = LIGHT_COLOR_ORANGE
 
@@ -55,9 +55,10 @@
 	icon_state = "campfire0"
 	base_state = "campfire"
 	desc = "Warning: May attract Space Bears."
-	light_power_on = 1.5
+	light_power_on = 2
 	light_range_on = 2
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 	set_temperature = 35
 	nocell = 1
 	anchored = 1
@@ -420,8 +421,10 @@
 	icon_state = "fireplace"
 	base_state = "fireplace"
 	desc = "The wood cracks and pops as the fire dances across its grainy surface. The sweet and smokey smell reminds you of smores and hot chocolate."
-	light_power_on = 0.8
-	light_range_on = 0
+	light_power_on = 3
+	light_range_on = 2
+	light_type = LIGHT_SOFT_FLICKER
+	light_color = LIGHT_COLOR_FIRE
 	nocell = 2
 	density = 0
 	pixel_x = -WORLD_ICON_SIZE/2

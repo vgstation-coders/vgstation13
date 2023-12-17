@@ -14,7 +14,7 @@
 		SHC = (for(components of recipe) total_SHC *= component SHC)
 
 
-*/
+*///NO DON'T DO THAT, IF YOU'RE NOT SURE JUST KEEP IT AT WATER'S. IF YOU GET SOMETHING ABOVE 10 LET ALONE IN THE HUNDREDS YOU'RE PROBABLY DOING SOMETHING VERY WRONG
 
 /datum/reagent
 	var/name = "Reagent"
@@ -50,8 +50,9 @@
 	var/mug_desc = null
 	var/addictive = FALSE
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
+	var/paint_light = PAINTLIGHT_NONE
 
-/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
+/datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS, var/allow_permeability = TRUE, var/list/splashplosion=list())
 	set waitfor = 0
 
 	if(!holder)
@@ -65,7 +66,7 @@
 	src = null
 
 	//If the chemicals are in a smoke cloud, do not let the chemicals "penetrate" into the mob's system (balance station 13) -- Doohl
-	if(self.holder && !istype(self.holder.my_atom, /obj/effect/smoke/chem))
+	if(self.holder && allow_permeability && !istype(self.holder.my_atom, /obj/effect/smoke/chem))
 		if(method == TOUCH)
 
 			var/chance = 1
@@ -120,7 +121,7 @@
 /datum/reagent/proc/reaction_dropper_obj(var/obj/O, var/volume)
 	reaction_obj(O, volume)
 
-/datum/reagent/proc/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
+/datum/reagent/proc/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume, var/list/splashplosion=list())
 	set waitfor = 0
 
 	if(!holder)
@@ -133,7 +134,7 @@
 
 	M.reagent_act(self.id, method, volume)
 
-/datum/reagent/proc/reaction_obj(var/obj/O, var/volume)
+/datum/reagent/proc/reaction_obj(var/obj/O, var/volume, var/list/splashplosion=list())
 	set waitfor = 0
 
 	if(!holder)
@@ -143,7 +144,7 @@
 
 	src = null
 
-/datum/reagent/proc/reaction_turf(var/turf/simulated/T, var/volume)
+/datum/reagent/proc/reaction_turf(var/turf/simulated/T, var/volume, var/list/splashplosion=list())
 	set waitfor = 0
 
 	if(!holder)
@@ -277,7 +278,21 @@
 		holder = null
 	..()
 
-/datum/reagent/proc/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D) //rip steve
+/datum/reagent/proc/when_drinkingglass_master_reagent(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D) //rip steve
+	return
+
+/datum/reagent/proc/handle_data_mix(var/list/added_data=null, var/added_volume, var/mob/admin)
+	if (added_data)
+		data = added_data
+
+/datum/reagent/proc/handle_data_copy(var/list/added_data=null, var/added_volume, var/mob/admin)
+	if (added_data)
+		data = added_data
+
+/datum/reagent/proc/handle_additional_data(var/list/additional_data=null)//used by xenoarch
+	return
+
+/datum/reagent/proc/special_behaviour()//used by nano-paints. called on all reagents in a container after another agent was added.
 	return
 
 /datum/reagent/piccolyn
@@ -479,6 +494,7 @@
 	glass_desc = "Are you sure this is tomato juice?"
 	mug_name = "mug of tomato juice"
 	mug_desc = "Are you sure this is tomato juice?"
+	flags = CHEMFLAG_PIGMENT
 
 	data = list(
 		"viruses" = null,
@@ -492,7 +508,51 @@
 		"occult" = null,
 		)
 
-/datum/reagent/blood/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+/datum/reagent/blood/handle_data_mix(var/list/added_data=null, var/added_volume, var/mob/admin)
+	//to do: add better ways for blood colors to interact with each other //moved from Chemistry-Holder.dm
+	//right now we don't support blood mixing or something similar at all.//update, we now at least support color mixing
+	if (admin)
+		var/list/species_list = list()
+		for(var/species_name in all_species)
+			var/datum/species/S = all_species[species_name]
+			if (!(S.anatomy_flags & NO_BLOOD))
+				species_list["[S.name] ([S.blood_color])"] = S.blood_color
+		var/chosen = input(admin,"Blood Color","Choose the Blood Color","#FFFFFF") as null|anything in species_list
+		if (chosen)
+			data["blood_colour"] = BlendRYB(species_list[chosen], data["blood_colour"], added_volume / (added_volume+volume))
+			color = data["blood_colour"]
+	else if(added_data)
+		if(added_data["virus2"])
+			if (!data["virus2"])
+				data["virus2"] = list()
+			data["virus2"] |= virus_copylist(added_data["virus2"])
+		if (added_data["blood_type"])
+			data["blood_type"] = combine_blood_types(data["blood_type"], added_data["blood_type"])
+		if (added_data["blood_colour"])
+			data["blood_colour"] = BlendRYB(added_data["blood_colour"], data["blood_colour"], added_volume / (added_volume+volume))
+			color = data["blood_colour"]
+
+/datum/reagent/blood/handle_data_copy(var/list/added_data=null, var/added_volume, var/mob/admin)
+	if (admin)
+		var/list/species_list = list()
+		for(var/species_name in all_species)
+			var/datum/species/S = all_species[species_name]
+			if (!(S.anatomy_flags & NO_BLOOD))
+				species_list["[S.name] ([S.blood_color])"] = S.blood_color
+		var/chosen = input(admin,"Blood Color","Choose the Blood Color","#FFFFFF") as null|anything in species_list
+		if (chosen)
+			data["blood_colour"] = species_list[chosen]
+			color = data["blood_colour"]
+	else if (added_data)
+		data = added_data.Copy()
+		if(added_data["virus2"])
+			data["virus2"] = virus_copylist(added_data["virus2"])
+		if(added_data["blood_colour"])
+			data["blood_colour"] = added_data["blood_colour"]
+			color = data["blood_colour"]
+
+
+/datum/reagent/blood/when_drinkingglass_master_reagent(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
 	var/totally_not_blood = "Tomato Juice"
 
 	switch(color)
@@ -733,6 +793,7 @@
 		else if(isslimeperson(H))
 
 			H.adjustToxLoss(rand(1,3))
+	M.clean_act(CLEANLINESS_WATER)
 
 /datum/reagent/water/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -741,6 +802,11 @@
 
 	if(volume >= 3) //Hardcoded
 		T.wet(800)
+
+	for (var/obj/effect/decal/cleanable/glue/G in T)
+		qdel(G)
+
+	T.clean_act(CLEANLINESS_WATER)
 
 	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
@@ -756,6 +822,8 @@
 
 	if(O.invisibility)
 		O.make_visible(INVISIBLESPRAY)
+
+	O.clean_act(CLEANLINESS_WATER)
 
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/monkeycube))
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
@@ -1970,9 +2038,11 @@
 	id = RADIUM
 	description = "Radium is an alkaline earth metal. It is extremely radioactive."
 	reagent_state = REAGENT_STATE_SOLID
-	color = "#669966" //rgb: 102, 153, 102
+	color = COLOR_RADIUM//"#61F09A" //rgb: 101, 242, 156
 	density = 5
 	specheatcap = 94
+	flags = CHEMFLAG_PIGMENT
+	paint_light = PAINTLIGHT_LIMITED
 
 /datum/reagent/radium/on_mob_life(var/mob/living/M)
 
@@ -2333,7 +2403,7 @@
 	id = DIAMONDDUST
 	description = "An allotrope of carbon, one of the hardest minerals known."
 	reagent_state = REAGENT_STATE_SOLID
-	color = "c4d4e0" //196 212 224
+	color = "#C4D4E0" //196 212 224
 	density = 3.51
 	specheatcap = 6.57
 
@@ -2469,6 +2539,7 @@
 	color = "#A5F0EE" //rgb: 165, 240, 238
 	density = 0.76
 	specheatcap = 60.17
+	var/clean_level = CLEANLINESS_SPACECLEANER
 
 /datum/reagent/space_cleaner/reaction_obj(var/obj/O, var/volume)
 
@@ -2476,15 +2547,8 @@
 		return 1
 
 	O.clean_blood()
-	if(istype(O, /obj/effect/rune))
-		var/obj/effect/rune/R = O
-		if (!R.activated)
-			qdel(O)
-	else if(istype(O, /obj/effect/decal/cleanable))
-		qdel(O)
-	else if(O.color)
-		O.color = ""
-	..()
+	O.clean_act(clean_level)
+
 
 /datum/reagent/space_cleaner/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -2492,6 +2556,8 @@
 		return 1
 
 	if(volume >= 1)
+		for (var/obj/effect/decal/cleanable/C in T)
+			qdel(C)
 
 		if (T.advanced_graffiti)
 			T.overlays -= T.advanced_graffiti_overlay
@@ -2507,7 +2573,7 @@
 			if(isslimeperson(H))
 				H.adjustToxLoss(rand(5, 10)/10)
 
-	T.color = ""
+		T.clean_act(clean_level)
 
 /datum/reagent/space_cleaner/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 
@@ -2517,14 +2583,13 @@
 	if(iscarbon(M))
 		var/mob/living/carbon/H = M
 		for(var/obj/item/I in H.held_items)
-			I.clean_blood()
+			I.clean_act(clean_level)
 
 		for(var/obj/item/clothing/C in M.get_equipped_items())
 			if(C.clean_blood())
 				H.update_inv_by_slot(C.slot_flags)
 
-		M.clean_blood()
-		M.color = ""
+	M.clean_act(clean_level)
 
 /datum/reagent/space_cleaner/bleach
 	name = "Bleach"
@@ -2533,7 +2598,8 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FBFCFF" //rgb: 251, 252, 255
 	density = 6.84
-	specheatcap = 90.35
+	specheatcap = 3.5
+	clean_level = CLEANLINESS_BLEACH
 
 /datum/reagent/space_cleaner/bleach/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -2542,16 +2608,11 @@
 
 	for(var/atom/A in T)
 		A.clean_blood()
+		A.clean_act(clean_level)
 
 	for(var/obj/item/I in T)
 		I.decontaminate()
 
-	T.color = ""
-
-/datum/reagent/space_cleaner/bleach/reaction_obj(obj/O, var/volume)
-	if(O)
-		O.color = ""
-	..()
 
 /datum/reagent/space_cleaner/bleach/on_mob_life(var/mob/living/M)
 
@@ -2582,8 +2643,6 @@
 
 	if(..())
 		return 1
-
-	M.color = ""
 
 	if(method == TOUCH && ((TARGET_EYES in zone_sels) || (LIMB_HEAD in zone_sels)))
 		if(ishuman(M))
@@ -4002,6 +4061,16 @@ var/procizine_tolerance = 0
 		"antigen" = list(),
 		)
 
+/datum/reagent/vaccine/handle_data_mix(var/list/added_data=null, var/added_volume, var/mob/admin)
+	if (added_data)
+		data["antigen"] |= added_data["antigen"]
+
+/datum/reagent/vaccine/handle_data_copy(var/list/added_data=null, var/added_volume, var/mob/admin)
+	if (added_data)
+		data = added_data.Copy()
+	else
+		data = list("antigen" = list())
+
 /datum/reagent/vaccine/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
@@ -4495,11 +4564,93 @@ var/procizine_tolerance = 0
 	T.add_nutrientlevel(10)
 	T.add_planthealth(1)
 
-/datum/reagent/ultraglue
-	name = "Ultra Glue"
+/datum/reagent/ethylcyanoacrylate
+	name = "Ethyl Cyanoacrylate"
+	id = ETHYLCYANOACRYLATE
+	description = "An esther of low viscosity used as an intermediate component of glue production."
+	color = "#DDDDDD"
+	alpha = 50
+
+/datum/reagent/glue
+	name = "Glue"
 	id = GLUE
-	description = "An extremely powerful bonding agent."
-	color = "#FFFFCC" //rgb: 255, 255, 204
+	description = "A powerful and fast-acting bonding agent. Also used as a medium to produce acrylic paint."
+	color = COLOR_GLUE //rgb: 255, 255, 204
+	var/glue_duration = 1 MINUTES
+	var/glue_state_to_set = GLUE_STATE_TEMP
+	var/turning_into_paint = FALSE
+
+/datum/reagent/glue/reaction_turf(var/turf/T, var/volume)
+	if(..())
+		return TRUE
+	if (isfloor(T))
+		if (!(locate(/obj/effect/decal/cleanable/glue) in T))
+			new /obj/effect/decal/cleanable/glue(T)
+
+/datum/reagent/glue/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return TRUE
+
+	var/glue_data = list(
+		"viruses"		=null,
+		"blood_DNA"		="glue",
+		"blood_colour"	= COLOR_GLUE,
+		"blood_type"	="glue",
+		"resistances"	=null,
+		"trace_chem"	=null,
+		"virus2" 		=list(),
+		"immunity" 		=null,
+		)
+
+	O.add_blood_from_data(glue_data)//visible glue
+	O.glue_act(glue_duration, glue_state_to_set)
+
+/datum/reagent/glue/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
+	if(..())
+		return TRUE
+
+	if(iscarbon(M))
+		var/glue_data = list(
+			"viruses"		=null,
+			"blood_DNA"		="glue",
+			"blood_colour"	= COLOR_GLUE,
+			"blood_type"	="glue",
+			"resistances"	=null,
+			"trace_chem"	=null,
+			"virus2" 		=list(),
+			"immunity" 		=null,
+			)
+
+		var/mob/living/carbon/H = M
+		for(var/obj/item/I in H.held_items)
+			I.add_blood_from_data(glue_data)
+			I.glue_act(glue_duration, glue_state_to_set)
+
+		for(var/obj/item/clothing/C in M.get_equipped_items())
+			C.add_blood_from_data(glue_data)
+			C.glue_act(glue_duration, glue_state_to_set)
+		H.regenerate_icons()
+
+/datum/reagent/glue/special_behaviour()
+	if (turning_into_paint)
+		return
+	var/datum/reagent/paint_exists = null
+	var/list/non_paint_pigments = list()
+	for (var/datum/reagent/R in holder.reagent_list)
+		if ((R.id == ACRYLIC) || (R.id == NANOPAINT))//we exclude flax oil so players can turn it into acrylic if they want to get rid of any alpha
+			paint_exists = R
+		else if (R.flags & CHEMFLAG_PIGMENT)
+			non_paint_pigments += R
+	var/mixed_pigment_color = mix_color_from_reagents(non_paint_pigments)
+
+	if (!mixed_pigment_color)//no pigments?
+		if (paint_exists)
+			paint_exists.volume += volume//if there's already acrylic or nano paint we just increase its volume
+			holder.del_reagent(id)
+	else
+		turning_into_paint = TRUE
+		holder.add_reagent(ACRYLIC, volume, list("color" = mixed_pigment_color))
+		holder.del_reagent(id)
 
 /datum/reagent/diethylamine
 	name = "Diethylamine"
@@ -4754,6 +4905,7 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#FAF0E6" //rgb: 51, 102, 0
+	flags = CHEMFLAG_PIGMENT
 
 /datum/reagent/zamspices
 	name = "Zam Spices"
@@ -7212,7 +7364,7 @@ var/procizine_tolerance = 0
 	custom_metabolism = 0.01
 	dupeable = FALSE
 
-/datum/reagent/ethanol/scientists_serendipity/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+/datum/reagent/ethanol/scientists_serendipity/when_drinkingglass_master_reagent(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
 	if(volume < 10)
 		glass_icon_state = "scientists_surprise"
 		glass_name = "\improper Scientist's Surprise"
@@ -7376,8 +7528,8 @@ var/procizine_tolerance = 0
 				new /obj/item/toy/spinningtoy(T)
 				M.gib()
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange((tick+30)/50, M))
-		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+	for(var/atom/X in orange((data+30)/50, M))
+		if(X.type == /atom/movable/light)//since there's one on every turf
 			continue
 		X.singularity_pull(M, tick/50, tick/50)
 
@@ -7416,8 +7568,8 @@ var/procizine_tolerance = 0
 				new /obj/item/toy/spinningtoy(T)
 				M.gib()
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange((tick+30)/50, M))
-		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+	for(var/atom/X in orange((data+30)/50, M))
+		if(X.type == /atom/movable/light)//since there's one on every turf
 			continue
 		X.singularity_pull(M, tick/50, tick/50)
 
@@ -8654,7 +8806,7 @@ var/procizine_tolerance = 0
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
-/datum/reagent/ethanol/drink/pintpointer/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+/datum/reagent/ethanol/drink/pintpointer/when_drinkingglass_master_reagent(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
 	var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/P = new (get_turf(D))
 	var/datum/reagents/glassreagents = D.reagents
 
@@ -9576,6 +9728,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	var/initial_color = null
 	density = 3.46
 	specheatcap = 512.3
+	flags = CHEMFLAG_PIGMENT
+	paint_light = PAINTLIGHT_LIMITED
 
 /datum/reagent/anthracene/on_mob_life(var/mob/living/M)
 	if(..())
@@ -9594,7 +9748,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return
 	var/atom/A =  holder.my_atom
 	A.light_color = initial_color
-	A.set_light(0)
+	A.kill_light()
 
 /datum/reagent/anthracene/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
@@ -9606,7 +9760,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		M.set_light(light_intensity)
 		spawn(volume * 10)
 			M.light_color = init_color
-			M.set_light(0)
+			M.kill_light()
 
 /datum/reagent/anthracene/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
@@ -9617,7 +9771,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	T.set_light(light_intensity)
 	spawn(volume * 10)
 		T.light_color = init_color
-		T.set_light(0)
+		T.kill_light()
 
 /datum/reagent/anthracene/reaction_obj(var/obj/O, var/volume)
 	if(..())
@@ -9628,7 +9782,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	O.set_light(light_intensity)
 	spawn(volume * 10)
 		O.light_color = init_color
-		O.set_light(0)
+		O.kill_light()
 
 /datum/reagent/mucus
 	name = "Mucus"
@@ -9784,8 +9938,13 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	id = COLORFUL_REAGENT
 	description = "Thoroughly sample the rainbow."
 	reagent_state = REAGENT_STATE_LIQUID
+	flags = CHEMFLAG_PIGMENT
 	color = "#C8A5DC"
 	var/list/random_color_list = list("#00aedb","#a200ff","#f47835","#d41243","#d11141","#00b159","#00aedb","#f37735","#ffc425","#008744","#0057e7","#d62d20","#ffa700")
+
+
+/datum/reagent/colorful_reagent/special_behaviour()
+	color = pick(random_color_list)
 
 
 /datum/reagent/colorful_reagent/on_mob_life(mob/living/M)
@@ -9803,10 +9962,35 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		O.color = pick(random_color_list)
 	..()
 
-/datum/reagent/colorful_reagent/reaction_turf(turf/T, reac_volume)
-	if(T)
-		T.color = pick(random_color_list)
-	..()
+/datum/reagent/colorful_reagent/reaction_turf(turf/T, reac_volume, var/list/splashplosion=list())
+	if(..())
+		return TRUE
+
+	var/picked_color = pick(random_color_list)
+
+	var/turf/U = get_turf(holder.my_atom)
+	if(isfloor(T))
+		T.apply_paint_overlay(picked_color, 255)
+		if (splashplosion.len > 0)
+			for (var/direction in cardinal)
+				var/turf/R = get_step(T,direction)
+				if (isfloor(R) && !(R in splashplosion) && T.Adjacent(R))
+					if (get_dir(R,U) & get_dir(R,T))
+						R.apply_paint_stroke(picked_color, 255, get_dir_cardinal(R,T), "border_splatter")
+				else if (iswall(R) && !(R in splashplosion))
+					if (get_dir(R,U) & get_dir(R,T))
+						R.apply_paint_stroke(picked_color, 255, get_dir_cardinal(R,T), "wall_splatter")
+	else if(iswall(T))
+		if (T == U)
+			T.apply_paint_overlay(picked_color, 255, list(), id == NANOPAINT)//if we're on top somehow, paint the whole tile
+		else if (splashplosion.len > 0)
+			for (var/direction in cardinal)
+				var/turf/R = get_step(T,direction)
+				if (isfloor(R) && (R in splashplosion))
+					if (get_dir(T,U) & direction)
+						T.apply_paint_stroke(picked_color, 255, get_dir_cardinal(T,R), "wall_splatter")
+		else
+			T.apply_paint_stroke(picked_color, 255, get_dir_cardinal(T,U), "wall_splatter")
 
 /datum/reagent/degeneratecalcium
 	name = "Degenerate Calcium"

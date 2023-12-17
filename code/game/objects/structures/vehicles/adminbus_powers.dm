@@ -196,7 +196,7 @@
 	bususer.UpdateUIElementIcon(/obj/abstract/mind_ui_element/adminbus_roadlights_high)
 	switch(lightpower)
 		if(0)
-			lightsource.set_light(0)
+			lightsource.kill_light()
 			if(roadlights == 1 || roadlights == 2)
 				overlays["roadlights"] = null
 		if(1)

@@ -213,6 +213,9 @@
 	..()
 	qdel(src)
 
+/obj/item/proc/dye_act(var/obj/structure/reagent_dispensers/cauldron/cauldron, var/mob/user)
+	return FALSE
+
 var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/throw_impact(atom/impacted_atom, speed, mob/user)
@@ -865,7 +868,7 @@ var/global/objects_thrown_when_explode = FALSE
 					if(!disable_warning)
 						to_chat(usr, "The [name] is too big to attach.")
 					return CANNOT_EQUIP
-				if( istype(src, /obj/item/device/pda) || istype(src, /obj/item/weapon/pen) || is_type_in_list(src, H.wear_suit.allowed) )
+				if( istype(src, /obj/item/device/flashlight/pda) || istype(src, /obj/item/weapon/pen) || is_type_in_list(src, H.wear_suit.allowed) )
 					if(H.s_store)
 						if(automatic)
 							if(H.check_for_open_slot(src))
@@ -1364,7 +1367,7 @@ var/global/list/image/blood_overlays = list()
 	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
 		var/obj/effect/decal/cleanable/blueglow/BG
 		BG = had_blood
-		BG.set_light(0)
+		BG.kill_light()
 
 /obj/item/proc/showoff(mob/user)
 	if(abstract)

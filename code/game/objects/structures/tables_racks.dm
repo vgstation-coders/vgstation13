@@ -42,15 +42,19 @@
 
 /obj/structure/table/New()
 	..()
-	for(var/obj/structure/table/T in src.loc)
+	for(var/obj/structure/table/T in loc)
 		if(T != src)
 			qdel(T)
+	for(var/obj/machinery/M in loc)
+		M.table_shift()
 	if(flipped)
 		flip(dir)
 	update_icon()
 	update_adjacent()
 
 /obj/structure/table/Destroy()
+	for(var/obj/machinery/M in loc)
+		M.table_unshift()
 	update_adjacent()
 	..()
 
@@ -546,6 +550,8 @@
 		var/obj/structure/table/T = locate() in get_step(src,D)
 		if(T && !T.flipped)
 			T.flip(direction)
+	for(var/obj/machinery/M in loc)
+		M.table_unshift()
 	update_icon()
 	update_adjacent()
 
@@ -563,6 +569,8 @@
 		var/obj/structure/table/T = locate() in get_step(src.loc,D)
 		if(T && T.flipped && T.dir == src.dir)
 			T.unflip()
+	for(var/obj/machinery/M in loc)
+		M.table_shift()
 	update_icon()
 	update_adjacent()
 

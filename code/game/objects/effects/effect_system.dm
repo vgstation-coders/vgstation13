@@ -110,12 +110,16 @@ steam.start() -- spawns the effect
 	icon_state = "extinguish"
 	density = 0
 
-/datum/effect/system/steam_spread/set_up(n = 3, c = 0, turf/loc)
+/datum/effect/system/steam_spread
+	var/color
+
+/datum/effect/system/steam_spread/set_up(n = 3, c = 0, turf/loc, var/_color = null)
 	if(n > 10)
 		n = 10
 	number = n
 	cardinals = c
 	location = loc
+	color = _color
 
 /datum/effect/system/steam_spread/start()
 	var/i = 0
@@ -124,6 +128,9 @@ steam.start() -- spawns the effect
 			if(holder)
 				src.location = get_turf(holder)
 			var/obj/effect/steam/steam = new /obj/effect/steam(src.location)
+			if (color)
+				steam.icon_state = "extinguish_gray"
+				steam.color = color
 			var/direction
 			if(src.cardinals)
 				direction = pick(cardinal)
@@ -150,6 +157,7 @@ steam.start() -- spawns the effect
 	desc = "it's a spark what do you need to know?"
 	icon_state = "sparks"
 	anchored = 1
+	light_type = LIGHT_SOFT_FLICKER
 
 	var/move_dir = 0
 	var/energy = 0
@@ -163,6 +171,8 @@ steam.start() -- spawns the effect
 	var/turf/T = loc
 	if(istype(T))
 		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
+	set_light(1, 1, LIGHT_COLOR_YELLOW)
+
 
 /obj/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
 	move_dir=travel_dir

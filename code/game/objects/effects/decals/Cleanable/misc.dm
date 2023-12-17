@@ -79,7 +79,7 @@
 
 /obj/effect/decal/cleanable/greenglow/New()
 	..()
-	set_light(1,2,LIGHT_COLOR_GREEN)
+	set_light(1,2,COLOR_RADIUM)
 
 /obj/effect/decal/cleanable/blueglow
 	name = "glowing luminol"
@@ -504,3 +504,17 @@ var/list/salts_particle_emitters = list(
 	anchored = 1
 	icon = 'icons/mob/alien.dmi'
 	icon_state = "weeds"
+
+/obj/effect/decal/cleanable/glue
+	name = "glue"
+	desc = "The floor is sticky!"
+	density = 0
+	anchored = 1
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "glue"
+	color = COLOR_GLUE
+	persistence_type = null//better not
+	slowdown_modifier = 4
+
+/obj/effect/decal/cleanable/glue/clean_act()
+	qdel(src)

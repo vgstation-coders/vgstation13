@@ -129,6 +129,11 @@
 					blood_DNA_found[R.blood2.data["blood_DNA"]] = R.blood2.data["blood_type"]
 				if (R.blood3)
 					blood_DNA_found[R.blood3.data["blood_DNA"]] = R.blood3.data["blood_type"]
+		if (istype(T,/turf/simulated/floor))
+			var/turf/simulated/floor/S = T
+			if (S.paint_overlay)
+				for (var/entry in S.paint_overlay.blood_DNA)
+					blood_DNA_found[entry] = S.paint_overlay.blood_DNA[entry]
 	//General
 	if (fingerprints_found.len == 0 && blood_DNA_found.len == 0 && fibers_found.len == 0)
 		user.visible_message("\The [user] scans \the [A] with \a [src], the air around [user.gender == MALE ? "him" : "her"] humming[prob(70) ? " gently." : "."]" ,\
