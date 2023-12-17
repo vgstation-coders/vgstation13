@@ -16,6 +16,7 @@
 	var/datum/language/trader_language
 	var/list/last_greeted = list()
 	var/closed = FALSE //closes if atmos fails
+	var/list/pending_messages = list() //Special messages to be given on next greeting
 
 /obj/structure/trade_window/initialize()
 	..()

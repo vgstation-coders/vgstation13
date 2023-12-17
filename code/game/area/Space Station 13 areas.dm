@@ -1948,7 +1948,17 @@ var/global/list/adminbusteleportlocs = list()
 /area/surface
 	forbid_apc = TRUE
 	construction_zone = TRUE
-	has_white_turf_lighting = TRUE
+
+/area/surface/proc/change_colour(var/color, var/intensity)
+	overlays.Cut()
+	var/image/I = image(icon = 'icons/mob/screen1.dmi', icon_state = "white")
+	I.plane = relative_plane(LIGHTING_PLANE)
+	I.blend_mode = BLEND_ADD
+	I.color = color
+	I.alpha = intensity
+	I.layer = HIGHEST_LIGHTING_LAYER
+	overlays += I
+	luminosity = 1
 
 /area/surface/snow
 	name = "\improper Planet Surface"
