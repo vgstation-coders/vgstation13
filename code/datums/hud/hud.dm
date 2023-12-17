@@ -54,6 +54,7 @@ To use, add an instance to mob/list/huds via mob/proc/apply_hud(/datum/visioneff
 		return
 	if(!M.client)
 		return
+	on_clean_up(M)
 
 //on_clean_up handles any special cleanup that has to happen with a hud
 /datum/visioneffect/proc/on_clean_up(var/mob/M)
@@ -85,6 +86,16 @@ Helper procs and procs used in mobs
 	V.on_remove(src)
 	regular_hud_updates()
 
+//Helper proc for in game admins throwing huds on people
+//And for when you want to add a new visioneffect but you don't care about the datum itself
+/mob/proc/apply_hud_by_type(type)
+	if(!ispath(type, /datum/visioneffect))
+		return
+	var/datum/visioneffect/V = new type
+	sorted_insert(huds, V, /proc/sort_visioneffect_priority)
+	V.on_apply(src)
+	regular_hud_updates()
+
 //Helper proc to clear out a type of hud on a mob
 //Note: This will clear ALL instances, including equipment/organs that provide a visioneffect
 /mob/proc/remove_hud_by_type(type)
@@ -110,7 +121,7 @@ Helper procs and procs used in mobs
 			if(findtext(hud.icon_state, "hud", 1, 4))
 				client.images -= hud
 	for(var/datum/visioneffect/V in huds)
-		V.on_clean_up()
+		V.on_clean_up(src)
 	//Maintain a list of security and medical HUD users for easy access to medbot/beepsky messages
 	//Move this to the glasses themselves, not a HUD feature?
 	if(src in med_hud_users)
@@ -134,7 +145,8 @@ Helper procs and procs used in mobs
 			//if(!druggy)
 			//	see_invisible = SEE_INVISIBLE_MINIMUM
 		if(V.see_invisible)
-			see_invisible = V.see_invisible
+			if(see_invisible < V.see_invisible)
+				see_invisible = V.see_invisible
 	update_darkness()
 
 //Helper proc to determine if someone is visible to the HUD systems

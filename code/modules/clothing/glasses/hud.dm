@@ -66,13 +66,17 @@
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status."
 	icon_state = "curseddoublehud"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
-	hud_types = list(/datum/visioneffect/medical, /datum/visioneffect/nullrod, /datum/visioneffect/security)
+	mech_flags = MECH_SCAN_ILLEGAL
+	hud_types = list(/datum/visioneffect/medical,
+					/datum/visioneffect/security,
+					/datum/visioneffect/job,
+					/datum/visioneffect/implant)
 
 /obj/item/clothing/glasses/hud/health/cmo
 	name = "advanced health scanner HUD"
 	nearsighted_modifier = -3
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status as well as reveals pathogens in sight. The tinted glass protects the wearer from bright flashes of light."
-	icon_state = "suncmo"
+	icon_state = "cmohud"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	eyeprot = 1
 	mech_flags = MECH_SCAN_ILLEGAL
@@ -136,7 +140,9 @@
 	name = "security HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
 	icon_state = "securityhud"
-	hud_types = list(/datum/visioneffect/security/arrest)
+	hud_types = list(/datum/visioneffect/security/arrest,
+					/datum/visioneffect/job,
+					/datum/visioneffect/implant)
 
 /obj/item/clothing/glasses/hud/security/jensenshades
 	name = "augmented shades"
@@ -263,6 +269,7 @@
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
 	icon_state = "wagemonocle"
 	species_fit = list(VOX_SHAPED)
+	mech_flags = MECH_SCAN_ILLEGAL
 	hud_types = list(/datum/visioneffect/accountdb/wage)
 
 /obj/item/clothing/glasses/hud/wage/attack_self(mob/user)
@@ -284,13 +291,13 @@
 	eyeprot = 0
 	hud_types = list(/datum/visioneffect/accountdb/balance)
 
-/obj/item/clothing/glasses/hud/omni
-	name = "omniHUD"
-	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
+/obj/item/clothing/glasses/hud/gold_aviators
+	name = "golden aviators"
+	desc = "A heads-up display that shows the job of the person you're looking at. Stylish."
 	icon_state = "aviators_gold"
 	darkness_view = -1
 	eyeprot = 1
-	hud_types = list(/datum/visioneffect/medical, /datum/visioneffect/security, /datum/visioneffect/accountdb/wage)
+	hud_types = list(/datum/visioneffect/job)
 
 /obj/item/clothing/glasses/hud/vampire
 	name = "vampireHUD"

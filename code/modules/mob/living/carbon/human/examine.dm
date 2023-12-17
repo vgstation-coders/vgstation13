@@ -431,6 +431,7 @@
 
 			var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
 			if(sec_record)
+				msg += {"<span class = 'deptradio'><b><u>Security Data</u></b></span>\n"}
 				criminal = sec_record.fields["criminal"]
 
 				if(user.hasHUD(HUD_ARRESTACCESS))
@@ -448,6 +449,7 @@
 
 			var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
 			if(gen_record)
+				msg += {"<span class = 'deptradio'><b><u>Employment Data</u></b></span>\n"}
 				employment = gen_record.fields["notes"]
 
 				msg += {"<span class = 'deptradio'>Employment Records:</span></a>\n"}
@@ -460,12 +462,13 @@
 
 			var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
 			if(gen_record)
+				msg += {"<span class = 'deptradio'><b><u>Medical Data</u></b></span>\n"}
 				medical = gen_record.fields["p_stat"]
 				medicalsanity = gen_record.fields["m_stat"]
 
 			msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>
-				<span class = 'deptradio'>Mental status:</span> <a href='?src=\ref[src];medicalsanity=1'>\[[medicalsanity]\]</a>\n
-				<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]\n</a>"}
+				<span class = 'deptradio'>Mental status:</span> <a href='?src=\ref[src];medicalsanity=1'>\[[medicalsanity]\]</a>
+				<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]</a>\n"}
 			for (var/ID in virus2)
 				if (ID in virusDB)
 					var/datum/data/record/v = virusDB[ID]

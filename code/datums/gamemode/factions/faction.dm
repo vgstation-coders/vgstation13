@@ -377,7 +377,7 @@ var/list/factions_with_hud_icons = list()
 						hud_icon = hud_icons[1]//if the faction doesn't recognize the role, it'll just give it a default one.
 					var/image/I = image('icons/role_HUD_icons.dmi', loc = imageloc, icon_state = hud_icon)
 					I.pixel_x = 20 * PIXEL_MULTIPLIER
-					//I.pixel_y = 20 * PIXEL_MULTIPLIER
+					I.pixel_y = 20 * PIXEL_MULTIPLIER
 					I.plane = ANTAG_HUD_PLANE
 					I.appearance_flags |= RESET_COLOR|RESET_ALPHA
 					if (factions_with_icons > 1)

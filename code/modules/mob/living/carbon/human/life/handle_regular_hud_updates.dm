@@ -26,6 +26,8 @@
 	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 	if(E)
 		see_in_dark = E.see_in_dark
+	else if (M_SKELETON in src.mutations) //Skeleton sight bugfix
+		see_in_dark = 1
 	see_invisible = see_in_dark > 2 ? SEE_INVISIBLE_LEVEL_ONE : SEE_INVISIBLE_LIVING
 
 	//This proc no longer handles HUDs, but it will handle see_in_dark and other basic modifications done by glasses
