@@ -154,7 +154,6 @@
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
 	hud_list[PHYSRECORD_HUD]  = image('icons/mob/hud.dmi', src, "hudactive")
-	hud_list[MENTRECORD_HUD]  = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
@@ -588,20 +587,6 @@
 		if(!setmedical|| (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
 			return
 		gen_record.fields["p_stat"] = setmedical
-		if(PDA_Manifest.len)
-			PDA_Manifest.len = 0
-	else if (href_list["medicalsanity"])
-		if(!usr.hasHUD(HUD_MEDICAL) || isjustobserver(usr))
-			return
-		var/perpname = get_identification_name(get_face_name())
-		var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
-		if(!gen_record)
-			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
-			return
-		var/setmedical = input(usr, "Specify a new mental medical status for this person.", "Medical HUD", gen_record.fields["m_stat"]) as null|anything in list("*Insane*", "*Unstable*", "*Watch*", "Stable")
-		if(!setmedical|| (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
-			return
-		gen_record.fields["m_stat"] = setmedical
 		if(PDA_Manifest.len)
 			PDA_Manifest.len = 0
 	else if (href_list["medrecord"])
