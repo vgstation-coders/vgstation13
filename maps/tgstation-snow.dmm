@@ -107634,6 +107634,7 @@
 	pixel_x = 6;
 	pixel_y = 2
 	},
+/obj/machinery/vending/art,
 /turf/simulated/floor,
 /area/storage/art)
 "uiO" = (
