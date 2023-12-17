@@ -331,9 +331,6 @@ var/global/list/playable_species = list("Human")
 
 	max_skin_tone = 220
 
-/datum/species/human/gib(mob/living/carbon/human/H)
-	..()
-
 /datum/species/manifested
 	name = "Manifested"
 	icobase = 'icons/mob/human_races/r_manifested.dmi'
@@ -415,9 +412,6 @@ var/global/list/playable_species = list("Human")
 /datum/species/unathi/New()
 	..()
 	speech_filter = new /datum/speech_filter/unathi
-
-/datum/species/unathi/gib(mob/living/carbon/human/H)
-	..()
 
 /datum/species/skellington // /vg/
 	name = "Skellington"
@@ -597,9 +591,6 @@ var/global/list/playable_species = list("Human")
 		speech.message += pick("KILL ME", "END MY SUFFERING", "I CAN'T DO THIS ANYMORE")
 	return ..()
 
-/datum/species/tajaran/gib(mob/living/carbon/human/H)
-	..()
-
 /datum/species/grey // /vg/
 	name = "Grey"
 	icobase = 'icons/mob/human_races/grey/r_grey.dmi'
@@ -692,9 +683,6 @@ var/global/list/playable_species = list("Human")
 			icobase = 'icons/mob/human_races/grey/r_grey.dmi'
 			deform = 'icons/mob/human_races/grey/r_def_grey.dmi'
 
-/datum/species/grey/gib(mob/living/carbon/human/H)
-	..()
-
 /datum/species/muton // /vg/
 	name = "Muton"
 	icobase = 'icons/mob/human_races/r_muton.dmi'
@@ -732,9 +720,6 @@ var/global/list/playable_species = list("Human")
 	H.u_equip(H.head,1)
 	move_speed_mod = 1
 
-/datum/species/muton/gib(mob/living/carbon/human/H)
-	..()
-
 /datum/species/skrell
 	name = "Skrell"
 	icobase = 'icons/mob/human_races/r_skrell.dmi'
@@ -750,9 +735,6 @@ var/global/list/playable_species = list("Human")
 
 	head_icons      = 'icons/mob/species/skrell/head.dmi'
 	wear_suit_icons = 'icons/mob/species/skrell/suit.dmi'
-
-/datum/species/skrell/gib(mob/living/carbon/human/H)
-	..()
 
 /datum/species/vox
 	name = "Vox"
@@ -862,9 +844,6 @@ var/global/list/playable_species = list("Human")
 			icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 
-/datum/species/vox/gib(mob/living/carbon/human/H)
-	..()
-
 /datum/species/diona
 	name = "Diona"
 	icobase = 'icons/mob/human_races/r_plant.dmi'
@@ -917,9 +896,6 @@ var/global/list/playable_species = list("Human")
 		"appendix" = /datum/organ/internal/appendix,
 		"eyes" =     /datum/organ/internal/eyes
 	)
-
-/datum/species/diona/gib(mob/living/carbon/human/H)
-	..()
 
 /datum/species/golem
 	name = "Golem"
@@ -992,13 +968,34 @@ var/list/has_died_as_golem = list()
 			A.real_name = H.real_name
 			A.desc = "The remains of what used to be [A.real_name]."
 		A.key = H.key
-	qdel(H)
 
 /datum/species/golem/can_artifact_revive()
-	return 0
+	return FALSE
 
-/datum/species/golem/gib(mob/living/carbon/human/H)
-	..()
+/datum/species/golem/gib(var/mob/living/carbon/human/H, animation, meat)
+	if(H.status_flags & BUDDHAMODE)
+		H.adjustBruteLoss(200)
+		return
+	if(!H.isUnconscious())
+		H.forcesay("-")
+	H.death(1)
+	H.handle_body_destroyed()
+	var/gib_radius = 0
+	if(H.reagents.has_reagent(LUBE))
+		gib_radius = 6
+	hgibs(H.loc, H.virus2, H.dna, flesh_color, blood_color, gib_radius)
+	spawn()
+		qdel(H)
+
+/datum/species/golem/dust(var/mob/living/carbon/human/H, drop_everything)
+	if(!H.isUnconscious())
+		H.forcesay("-")
+	H.death(1)
+	H.handle_body_destroyed()
+	if(drop_everything)
+		H.drop_all()
+	spawn()
+		qdel(H)
 
 /mob/living/adamantine_dust //serves as the corpse of adamantine golems
 	name = "adamantine dust"
@@ -1064,9 +1061,6 @@ var/list/has_died_as_golem = list()
 /datum/species/vampire/makeName()
 	return "vampire"
 
-/datum/species/vampire/gib(mob/living/carbon/human/H)
-	..()
-
 /datum/species/ghoul
 	name = "Ghoul"
 	icobase = 'icons/mob/human_races/r_ghoul.dmi'
@@ -1083,9 +1077,6 @@ var/list/has_died_as_golem = list()
 	blood_color = GHOUL_BLOOD
 
 	primitive = /mob/living/carbon/monkey //Just to keep them SoC friendly.
-
-/datum/species/ghoul/gib(mob/living/carbon/human/H)
-	..()
 
 /datum/species/slime
 	name = "Slime"
@@ -1293,9 +1284,6 @@ var/list/has_died_as_golem = list()
 		newname += pick(insectoid_name_syllables)
 	return capitalize(newname)
 
-/datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
-	..()
-
 /datum/species/mushroom
 	name = "Mushroom"
 	icobase = 'icons/mob/human_races/r_mushman.dmi'
@@ -1361,9 +1349,6 @@ var/list/has_died_as_golem = list()
 
 /datum/species/mushroom/makeName()
 	return capitalize(pick(mush_first)) + " " + capitalize(pick(mush_last))
-
-/datum/species/mushroom/gib(mob/living/carbon/human/H)
-	..()
 
 /datum/species/mushroom/silent_speech(mob/M, message)
 	if(!message)

@@ -5,11 +5,7 @@
 /* This will be called if the species datum has not overwritten /datum/species/gib() */
 /mob/living/carbon/human/proc/default_gib(animation, meat)
 	death(1)
-	monkeyizing = 1
-	canmove = 0
-	icon = null
-	invisibility = 101
-	dropBorers(1)
+	handle_body_destroyed()
 
 	for(var/datum/organ/external/E in src.organs)
 		if(istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin)) //Really bad stuff happens when either get removed
@@ -24,7 +20,8 @@
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
 	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
-	qdel(src)
+	spawn()
+		qdel(src)
 
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
 	ASSERT(species)
@@ -33,11 +30,7 @@
 /* This will be called if the species datum has not overwritten /datum/species/dust() */
 /mob/living/carbon/human/proc/default_dust(drop_everything)
 	death(1)
-	monkeyizing = TRUE
-	canmove = 0
-	icon = null
-	invisibility = 101
-	dropBorers(1)
+	handle_body_destroyed()
 
 	if(istype(src, /mob/living/carbon/human/manifested))
 		anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-hm", sleeptime = 15)
@@ -51,9 +44,15 @@
 		new /obj/effect/decal/remains/human(loc)
 	if(drop_everything)
 		drop_all()
-//	spawn(-1) /* Allow all death handlers, stat collection, etc. to finish before proceeding */
-//		death(1)
-	qdel(src)
+	spawn()
+		qdel(src)
+
+/mob/living/carbon/human/proc/handle_body_destroyed()
+	monkeyizing = TRUE
+	canmove = 0
+	icon = null
+	invisibility = 101
+	dropBorers(1)
 
 /mob/living/carbon/human/Destroy()
 	infected_contact_mobs -= src
