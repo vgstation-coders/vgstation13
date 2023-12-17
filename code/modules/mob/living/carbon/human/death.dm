@@ -1,22 +1,16 @@
 /mob/living/carbon/human/gib(animation = FALSE, meat = TRUE)
-	if(status_flags & BUDDHAMODE)
-		adjustBruteLoss(200)
-		return
-	if(!isUnconscious())
-		forcesay("-")
-	if(species)
-		species.gib(src)
-		return
+	ASSERT(species)
+		species.gib(src, animation, meat)
 
+/* This will be called if the species datum has not overwritten /datum/species/gib() */
+/mob/living/carbon/human/proc/default_gib(animation, meat)
 	death(1)
+	monkeyizing = 1
 	canmove = 0
 	icon = null
 	invisibility = 101
-	default_gib()
+	dropBorers(1)
 
-//This will get called often at first until custom gibbing events get made up for each species.
-/mob/living/carbon/human/proc/default_gib()
-	monkeyizing = TRUE
 	for(var/datum/organ/external/E in src.organs)
 		if(istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin)) //Really bad stuff happens when either get removed
 			continue
@@ -24,7 +18,6 @@
 		if(prob(100 - E.get_damage()))
 			//Override the current limb status and don't cause an explosion
 			E.droplimb(1, 1)
-	dropBorers()
 	var/gib_radius = 0
 	if(reagents.has_reagent(LUBE))
 		gib_radius = 6 //Your insides are all lubed, so gibs travel much further
@@ -34,11 +27,16 @@
 	qdel(src)
 
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
-	monkeyizing = 1
+	ASSERT(species)
+		species.dust(src, drop_everything)
+
+/* This will be called if the species datum has not overwritten /datum/species/dust() */
+/mob/living/carbon/human/proc/default_dust(drop_everything)
+	death(1)
+	monkeyizing = TRUE
 	canmove = 0
 	icon = null
 	invisibility = 101
-
 	dropBorers(1)
 
 	if(istype(src, /mob/living/carbon/human/manifested))
@@ -53,8 +51,8 @@
 		new /obj/effect/decal/remains/human(loc)
 	if(drop_everything)
 		drop_all()
-	spawn(-1) /* Allow all death handlers, stat collection, etc. to finish before proceeding */
-		death(1)
+//	spawn(-1) /* Allow all death handlers, stat collection, etc. to finish before proceeding */
+//		death(1)
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()

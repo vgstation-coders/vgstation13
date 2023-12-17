@@ -169,15 +169,18 @@ var/global/list/playable_species = list("Human")
 		myhuman = null
 	..()
 
-/datum/species/proc/gib(var/mob/living/carbon/human/H)
+/datum/species/proc/gib(var/mob/living/carbon/human/H, animation, meat)
 	if(H.status_flags & BUDDHAMODE)
 		H.adjustBruteLoss(200)
 		return
-	H.death(1)
-	H.monkeyizing = 1
-	H.canmove = 0
-	H.icon = null
-	H.invisibility = 101
+	if(!H.isUnconscious())
+		H.forcesay("-")
+	H.default_gib(H, animation, meat)
+
+/datum/species/proc/dust(var/mob/living/carbon/human/H, drop_everything)
+	if(!H.isUnconscious())
+		H.forcesay("-")
+	H.default_dust(H, drop_everything)
 
 /datum/species/proc/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if(speech_filter)
@@ -330,7 +333,6 @@ var/global/list/playable_species = list("Human")
 
 /datum/species/human/gib(mob/living/carbon/human/H)
 	..()
-	H.default_gib()
 
 /datum/species/manifested
 	name = "Manifested"
@@ -416,7 +418,6 @@ var/global/list/playable_species = list("Human")
 
 /datum/species/unathi/gib(mob/living/carbon/human/H)
 	..()
-	H.default_gib()
 
 /datum/species/skellington // /vg/
 	name = "Skellington"
@@ -598,7 +599,6 @@ var/global/list/playable_species = list("Human")
 
 /datum/species/tajaran/gib(mob/living/carbon/human/H)
 	..()
-	H.default_gib()
 
 /datum/species/grey // /vg/
 	name = "Grey"
@@ -691,9 +691,9 @@ var/global/list/playable_species = list("Human")
 		else
 			icobase = 'icons/mob/human_races/grey/r_grey.dmi'
 			deform = 'icons/mob/human_races/grey/r_def_grey.dmi'
+
 /datum/species/grey/gib(mob/living/carbon/human/H)
 	..()
-	H.default_gib()
 
 /datum/species/muton // /vg/
 	name = "Muton"
@@ -734,7 +734,6 @@ var/global/list/playable_species = list("Human")
 
 /datum/species/muton/gib(mob/living/carbon/human/H)
 	..()
-	H.default_gib()
 
 /datum/species/skrell
 	name = "Skrell"
@@ -754,7 +753,6 @@ var/global/list/playable_species = list("Human")
 
 /datum/species/skrell/gib(mob/living/carbon/human/H)
 	..()
-	H.default_gib()
 
 /datum/species/vox
 	name = "Vox"
@@ -866,7 +864,6 @@ var/global/list/playable_species = list("Human")
 
 /datum/species/vox/gib(mob/living/carbon/human/H)
 	..()
-	H.default_gib()
 
 /datum/species/diona
 	name = "Diona"
@@ -923,7 +920,6 @@ var/global/list/playable_species = list("Human")
 
 /datum/species/diona/gib(mob/living/carbon/human/H)
 	..()
-	H.default_gib()
 
 /datum/species/golem
 	name = "Golem"
@@ -1070,7 +1066,6 @@ var/list/has_died_as_golem = list()
 
 /datum/species/vampire/gib(mob/living/carbon/human/H)
 	..()
-	H.default_gib()
 
 /datum/species/ghoul
 	name = "Ghoul"
@@ -1091,7 +1086,6 @@ var/list/has_died_as_golem = list()
 
 /datum/species/ghoul/gib(mob/living/carbon/human/H)
 	..()
-	H.default_gib()
 
 /datum/species/slime
 	name = "Slime"
@@ -1300,7 +1294,7 @@ var/list/has_died_as_golem = list()
 	return capitalize(newname)
 
 /datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
-	H.default_gib()
+	..()
 
 /datum/species/mushroom
 	name = "Mushroom"
@@ -1370,7 +1364,6 @@ var/list/has_died_as_golem = list()
 
 /datum/species/mushroom/gib(mob/living/carbon/human/H)
 	..()
-	H.default_gib()
 
 /datum/species/mushroom/silent_speech(mob/M, message)
 	if(!message)
