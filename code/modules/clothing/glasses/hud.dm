@@ -69,7 +69,7 @@
 			if(!user.drop_item(W))
 				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
 				return
-			var/obj/item/clothing/glasses/hud/curseddoublehud/I = new /obj/item/clothing/glasses/hud/curseddoublehud(src,W)
+			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed(src,W)
 			W.transfer_fingerprints_to(I)
 			I.base_health = src
 			I.base_sec = W
@@ -161,7 +161,7 @@
 			if(!user.drop_item(W))
 				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
 				return
-			var/obj/item/clothing/glasses/hud/curseddoublehud/I = new /obj/item/clothing/glasses/hud/curseddoublehud
+			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed
 			W.transfer_fingerprints_to(I)
 			I.base_health = W
 			I.base_sec = src
@@ -290,10 +290,10 @@
 	name = "prescription diagnostic HUD"
 	nearsighted_modifier = -3
 
-/obj/item/clothing/glasses/hud/curseddoublehud
+/obj/item/clothing/glasses/hud/combinedsecmed
 	name = "combined health and security HUD"
 	desc = "Two scanners synced up and able to provide both health and security information at once."
-	icon_state = "curseddoublehud"
+	icon_state = "combinedsecmed"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	mech_flags = MECH_SCAN_ILLEGAL
 	hud_types = list(/datum/visioneffect/medical,
@@ -303,7 +303,7 @@
 	var/obj/item/clothing/glasses/hud/health/base_health = null
 	var/obj/item/clothing/glasses/hud/security/scouter/base_sec = null
 
-/obj/item/clothing/glasses/hud/curseddoublehud/New(var/obj/item/clothing/glasses/hud/health/hhud = null,
+/obj/item/clothing/glasses/hud/combinedsecmed/New(var/obj/item/clothing/glasses/hud/health/hhud = null,
 												var/obj/item/clothing/glasses/hud/security/scouter/shud = null)
 	..()
 	if(hhud)
@@ -315,7 +315,7 @@
 	else
 		base_sec = new /obj/item/clothing/glasses/hud/security/scouter
 
-/obj/item/clothing/glasses/hud/curseddoublehud/attack_self(mob/user)
+/obj/item/clothing/glasses/hud/combinedsecmed/attack_self(mob/user)
 	to_chat(user, "<span class='notice'>You de-sync \the [src], splitting apart the two scanners.</span>")
 	user.u_equip(src,0)
 	user.put_in_hands(src.base_health)
