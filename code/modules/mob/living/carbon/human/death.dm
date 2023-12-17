@@ -1,6 +1,6 @@
 /mob/living/carbon/human/gib(animation = FALSE, meat = TRUE)
 	ASSERT(species)
-		species.gib(src, animation, meat)
+	species.gib(src, animation, meat)
 
 /* This will be called if the species datum has not overwritten /datum/species/gib() */
 /mob/living/carbon/human/proc/default_gib(animation, meat)
@@ -25,7 +25,7 @@
 
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
 	ASSERT(species)
-		species.dust(src, drop_everything)
+	species.dust(src, drop_everything)
 
 /* This will be called if the species datum has not overwritten /datum/species/dust() */
 /mob/living/carbon/human/proc/default_dust(drop_everything)
