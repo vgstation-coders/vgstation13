@@ -49,7 +49,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/darkred,
 			slot_shoes_str = /obj/item/clothing/shoes/combat,
 			slot_head_str = /obj/item/clothing/head/helmet/dredd,
-			slot_glasses_str = /obj/item/clothing/glasses/hud/security,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/scouter,
 			slot_gloves_str = /obj/item/clothing/gloves/combat,
 			slot_belt_str = /obj/item/weapon/storage/belt/security,
 			slot_wear_suit_str = /obj/item/clothing/suit/armor/dredd,

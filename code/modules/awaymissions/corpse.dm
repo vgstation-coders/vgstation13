@@ -1015,7 +1015,7 @@
 	name = "Judge Dredd"
 	corpseuniform = /obj/item/clothing/under/darkred
 	corpsesuit = /obj/item/clothing/suit/armor/dredd
-	corpseglasses = /obj/item/clothing/glasses/hud/security
+	corpseglasses = /obj/item/clothing/glasses/hud/security/scouter
 	corpsemask = /obj/item/clothing/mask/gas/swat
 	corpsehelmet = /obj/item/clothing/head/helmet/dredd
 	corpsegloves = /obj/item/clothing/gloves/combat

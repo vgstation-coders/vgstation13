@@ -221,7 +221,7 @@
 						medicalActive2 = M
 		if("securitysupplement")
 			if(!secHUD)
-				apply_hud_by_type(/datum/visioneffect/security)
+				apply_hud_by_type(/datum/visioneffect/security/arrest)
 				apply_hud_by_type(/datum/visioneffect/job)
 			secHUD = TRUE
 			if(subscreen == 1)

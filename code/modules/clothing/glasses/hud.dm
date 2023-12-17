@@ -61,16 +61,22 @@
 	prescription_type = /obj/item/clothing/glasses/hud/health/prescription
 	hud_types = list(/datum/visioneffect/medical)
 
-/obj/item/clothing/glasses/hud/curseddoublehud
-	name = "cursed health scanner HUD"
-	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status."
-	icon_state = "curseddoublehud"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
-	mech_flags = MECH_SCAN_ILLEGAL
-	hud_types = list(/datum/visioneffect/medical,
-					/datum/visioneffect/security,
-					/datum/visioneffect/job,
-					/datum/visioneffect/implant)
+/obj/item/clothing/glasses/hud/health/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/clothing/glasses/hud/security/scouter))
+		if(do_after(user, src, 1 SECONDS))
+			user.drop_item(src)
+			if(!user.drop_item(W))
+				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
+				return
+			var/obj/item/clothing/glasses/hud/curseddoublehud/I = new /obj/item/clothing/glasses/hud/curseddoublehud(src,W)
+			W.transfer_fingerprints_to(I)
+			I.base_health = src
+			I.base_sec = W
+			W.forceMove(I)
+			src.forceMove(I)
+			user.put_in_hands(I)
+			to_chat(user, "<span class='notice'>You synchronize \the [W] with \the [src].</span>")
 
 /obj/item/clothing/glasses/hud/health/cmo
 	name = "advanced health scanner HUD"
@@ -138,11 +144,32 @@
 
 /obj/item/clothing/glasses/hud/security
 	name = "security HUD"
-	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
+	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records. Lacks modern arrest encryption."
 	icon_state = "securityhud"
-	hud_types = list(/datum/visioneffect/security/arrest,
+	hud_types = list(/datum/visioneffect/security,
 					/datum/visioneffect/job,
 					/datum/visioneffect/implant)
+
+//Special brig medic edition
+/obj/item/clothing/glasses/hud/security/scouter
+
+/obj/item/clothing/glasses/hud/security/scouter/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/clothing/glasses/hud/health))
+		if(do_after(user, src, 1 SECONDS))
+			user.drop_item(src)
+			if(!user.drop_item(W))
+				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
+				return
+			var/obj/item/clothing/glasses/hud/curseddoublehud/I = new /obj/item/clothing/glasses/hud/curseddoublehud
+			W.transfer_fingerprints_to(I)
+			I.base_health = W
+			I.base_sec = src
+			W.forceMove(I)
+			src.forceMove(I)
+			user.put_in_hands(I)
+			to_chat(user, "<span class='notice'>You synchronize \the [W] with \the [src].</span>")
+
 
 /obj/item/clothing/glasses/hud/security/jensenshades
 	name = "augmented shades"
@@ -263,6 +290,37 @@
 	name = "prescription diagnostic HUD"
 	nearsighted_modifier = -3
 
+/obj/item/clothing/glasses/hud/curseddoublehud
+	name = "combined health and security HUD"
+	desc = "Two scanners synced up and able to provide both health and security information at once."
+	icon_state = "curseddoublehud"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	mech_flags = MECH_SCAN_ILLEGAL
+	hud_types = list(/datum/visioneffect/medical,
+					/datum/visioneffect/security,
+					/datum/visioneffect/job,
+					/datum/visioneffect/implant)
+	var/obj/item/clothing/glasses/hud/health/base_health = null
+	var/obj/item/clothing/glasses/hud/security/scouter/base_sec = null
+
+/obj/item/clothing/glasses/hud/curseddoublehud/New(var/obj/item/clothing/glasses/hud/health/hhud = null,
+												var/obj/item/clothing/glasses/hud/security/scouter/shud = null)
+	..()
+	if(hhud)
+		base_health = hhud
+	else
+		base_health = new /obj/item/clothing/glasses/hud/health
+	if(shud)
+		base_sec = shud
+	else
+		base_sec = new /obj/item/clothing/glasses/hud/security/scouter
+
+/obj/item/clothing/glasses/hud/curseddoublehud/attack_self(mob/user)
+	to_chat(user, "<span class='notice'>You de-sync \the [src], splitting apart the two scanners.</span>")
+	user.u_equip(src,0)
+	user.put_in_hands(src.base_health)
+	user.put_in_hands(src.base_sec)
+	qdel(src)
 
 /obj/item/clothing/glasses/hud/wage
 	name = "wage HUD"
