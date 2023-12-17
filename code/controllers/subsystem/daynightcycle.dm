@@ -40,6 +40,8 @@ Basically, you are going to overwrite the flags.
 	var/next_light_range = 3 //	They basically are at the maximum values to not have overlapping light.
 							// Along with mesh evenly that is, the dir scan handles missed diagonals stylishly.
 
+	var/light_intensity = 255
+
 	//The initial values don't matter, it just needs to fire initially, then set itself into the cycle.
 	var/next_firetime = 0 //In essence this is world.time + the time you want. Ex: world.time + 3 MINUTES
 	var/list/currentrun
@@ -53,6 +55,7 @@ Basically, you are going to overwrite the flags.
 	get_turflist()
 	..()
 
+/*
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)
 	if(world.time >= next_firetime)
 		switch(current_timeOfDay) //Then set the next segment up.
@@ -93,6 +96,42 @@ Basically, you are going to overwrite the flags.
 
 		if(MC_TICK_CHECK)
 			return
+*/
+
+/datum/subsystem/daynightcycle/fire(resumed = FALSE)
+	if(world.time >= next_firetime)
+		switch(current_timeOfDay) //Then set the next segment up.
+			if(TOD_MORNING)
+				current_timeOfDay = TOD_SUNRISE
+				light_intensity = 100
+				next_firetime = world.time + 3 MINUTES
+				play_globalsound()
+			if(TOD_SUNRISE)
+				current_timeOfDay = TOD_DAYTIME
+				light_intensity = 255
+				next_firetime = world.time + 14 MINUTES
+			if(TOD_DAYTIME)
+				current_timeOfDay = TOD_AFTERNOON
+				next_firetime = world.time + 15 MINUTES
+			if(TOD_AFTERNOON)
+				current_timeOfDay = TOD_SUNSET
+				next_firetime = world.time + 3 MINUTES
+			if(TOD_SUNSET)
+				current_timeOfDay = TOD_NIGHTTIME
+				next_light_power = 1
+				light_intensity = 100
+				next_firetime = world.time + 36 MINUTES
+				play_globalsound()
+			if(TOD_NIGHTTIME)
+				current_timeOfDay = TOD_MORNING
+				next_light_power = 3
+				light_intensity = 25
+				next_firetime = world.time + 5 MINUTES
+
+	for (var/area/surface/A in areas)
+		A.change_colour(current_timeOfDay, light_intensity)
+
+
 
 /datum/subsystem/daynightcycle/proc/get_turflist()
 	for(var/turf/T in block(locate(1, 1, daynight_z_lvl), locate(world.maxx, world.maxy, daynight_z_lvl)))
