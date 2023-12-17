@@ -1,4 +1,6 @@
 //The infamous, legendary hud that lets you see who's valid... antag hud!
+//This will display over all other HUDs currently implemented
+//Very spoilery, use only as an admin or if someone is completely out of the round
 
 /datum/visioneffect/antag
 	name = "antag hud"

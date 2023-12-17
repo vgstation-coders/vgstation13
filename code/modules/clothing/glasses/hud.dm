@@ -1,11 +1,10 @@
 /obj/item/clothing/glasses/hud
 	name = "\improper HUD"
 	desc = "A heads-up display that provides important info in (almost) real time."
-	flags = 0 //doesn't protect eyes because it's a monocle, duh
+	flags = 0
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_BIOTECH + "=2"
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
-	var/list/icon/current = list() //the current hud icons
 	var/list/stored_huds = list() // Stores a hud datum instance to apply to a mob
 	var/list/hud_types = list() // What HUD the glasses provides, if any
 
@@ -52,6 +51,10 @@
 			for(var/H in hud_types)
 				if(ispath(H))
 					stored_huds += new H
+
+/*
+	MEDICAL HUDS
+*/
 
 /obj/item/clothing/glasses/hud/health
 	name = "health scanner HUD"
@@ -140,7 +143,9 @@
 /obj/item/clothing/glasses/hud/health/cmo/proc/disable(mob/M)
 	M.remove_hud(stored_pathogen_hud)
 
-
+/*
+	SECURITY HUDS
+*/
 
 /obj/item/clothing/glasses/hud/security
 	name = "security HUD"
@@ -277,6 +282,9 @@
 	_color = initial(glass_type._color)
 	usr.update_inv_glasses()
 
+/*
+	DIAGNOSTIC HUD
+*/
 
 /obj/item/clothing/glasses/hud/diagnostic
 	name = "diagnostic HUD"
@@ -290,6 +298,9 @@
 	name = "prescription diagnostic HUD"
 	nearsighted_modifier = -3
 
+/*
+	SPECIAL VISION HUDS
+*/
 /obj/item/clothing/glasses/hud/combinedsecmed
 	name = "combined health and security HUD"
 	desc = "Two scanners synced up and able to provide both health and security information at once."
@@ -324,11 +335,12 @@
 
 /obj/item/clothing/glasses/hud/wage
 	name = "wage HUD"
-	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
+	desc = "A heads-up display that scans IDs to determine what a person's wage and employment records are."
 	icon_state = "wagemonocle"
 	species_fit = list(VOX_SHAPED)
 	mech_flags = MECH_SCAN_ILLEGAL
-	hud_types = list(/datum/visioneffect/accountdb/wage)
+	hud_types = list(/datum/visioneffect/accountdb/wage,
+					/datum/visioneffect/job)
 
 /obj/item/clothing/glasses/hud/wage/attack_self(mob/user)
 	if(isemptylist(stored_huds))
@@ -336,17 +348,18 @@
 		return
 	for(var/datum/visioneffect/accountdb/W in stored_huds)
 		if(!W.linked_db)
-			to_chat(user, "No DB found. Trying reconnect.")
-			W.reconnect_db()
+			to_chat(user, "No DB found. Trying to reconnect!")
+			if(W.reconnect_db())
+				to_chat(user, "Successfully reconnected to the DB.")
+			else
+				to_chat(user, "Error: Unable to locate DB.")
 		else
-			to_chat(user, "DB looks OK!")
+			to_chat(user, "DB connection nominal.")
 
 /obj/item/clothing/glasses/hud/wage/cash
 	name = "money HUD"
-	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
-	icon_state = "securityhud"
-	darkness_view = 0
-	eyeprot = 0
+	desc = "A heads-up display that shows you how much dosh someone's got in their bank account."
+	icon_state = "wagemonocle"
 	hud_types = list(/datum/visioneffect/accountdb/balance)
 
 /obj/item/clothing/glasses/hud/gold_aviators

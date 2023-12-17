@@ -1,4 +1,5 @@
 //Cult Construct HUD
+//Shows a construct's current/max health, similar to medhuds
 
 /datum/visioneffect/construct
 	name = "cult construct hud"

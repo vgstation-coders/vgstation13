@@ -17,7 +17,8 @@
 		if(DB.z == map.zMainStation)
 			if((DB.stat == 0))//If the database if damaged or not powered, people won't be able to use the machines anymore.
 				linked_db = DB
-				break
+				return TRUE
+	return FALSE
 
 /datum/visioneffect/accountdb/wage
 	name = "wage hud"
@@ -29,40 +30,16 @@
 	var/client/C = M.client
 	var/image/holder
 	var/turf/T
-	var/offset = 0
-	if(M.hasHUD(HUD_MEDICAL))
-		//hardcoded offset so that security huds will move aside for medical huds
-		offset = 8
-	offset = offset * PIXEL_MULTIPLIER
 	T = get_turf(M)
-
-	for(var/mob/living/simple_animal/astral_projection/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
-		if(!check_HUD_visibility(perp, M))
-			continue
-		holder = perp.hud_list[ID_HUD]
-		if(!holder)
-			continue
-		holder.icon_state = "hud[ckey(perp.cardjob)]"
-		holder.pixel_y = -offset
-		C.images += holder
 
 	for(var/mob/living/carbon/human/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
 		if(!check_HUD_visibility(perp, M))
 			continue
 		holder = perp.hud_list[ID_HUD]
-		if(!holder)
-			continue
-		holder.icon_state = "hudno_id"
 		if(perp.head && istype(perp.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
-			holder.pixel_y = -offset
-			C.images += holder
 			continue
 		var/obj/item/weapon/card/id/card = perp.get_id_card()
 		if(card)
-			holder.icon_state = "hud[ckey(card.GetJobName())]"
-			holder.pixel_y = -offset
-			C.images += holder
-
 			holder = perp.hud_list[WAGE_HUD]
 			var/datum/money_account/account = get_money_account(card.associated_account_number)
 			var/cashdisplay = ""
@@ -76,8 +53,6 @@
 				cashdisplay = "ERR"
 			holder.maptext = "<span class='maptext very_small black_outline' style='text-align: left; vertical-align: bottom; color: white;'>[cashdisplay]</span>"
 			C.images += holder
-
-
 
 /datum/visioneffect/accountdb/balance
 	name = "account balance hud"
@@ -114,9 +89,9 @@
 					cash += virtualacc.money
 				if(bankacc)
 					cash += bankacc.money
-			cashdisplay = "$[cash]"
-			//if(cash < 150)
-			S = getStaticIcon(getFlatIcon(perp))
-			C.images += image(S, perp, "hudstatic")
+				cashdisplay = "$[cash]"
+			if(cash < 150)
+				S = getStaticIcon(getFlatIcon(perp))
+				C.images += image(S, perp, "hudstatic")
 			holder.maptext = "<span class='maptext yell black_outline' style='text-align: center; vertical-align: top; color: white;'>[cashdisplay]</span>"
 			C.images += holder

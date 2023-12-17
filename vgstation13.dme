@@ -603,7 +603,6 @@
 #include "code\game\atoms_movable.dm"
 #include "code\game\cargo_forwarding.dm"
 #include "code\game\communications.dm"
-#include "code\game\data_huds.dm"
 #include "code\game\mann_co.dm"
 #include "code\game\say.dm"
 #include "code\game\shuttle_engines.dm"
