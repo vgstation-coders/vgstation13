@@ -98,7 +98,7 @@
 	initialize_basic_NPC_components()
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
-	var/list/valid_species = (all_species - list("Krampus", "Horror"))
+	var/list/valid_species = (all_species - list("Krampus", "Horror", "Manifested"))
 
 	var/datum/species/new_species = all_species[pick(valid_species)]
 	..(new_loc, new_species.name)
@@ -182,6 +182,7 @@
 	obj_overlays[FACEMASK_LAYER]	= new /obj/abstract/Overlays/facemask_layer
 	obj_overlays[HEAD_LAYER]		= new /obj/abstract/Overlays/head_layer
 	obj_overlays[HANDCUFF_LAYER]	= new /obj/abstract/Overlays/handcuff_layer
+	obj_overlays[MUTUALCUFF_LAYER]	= new /obj/abstract/Overlays/mutualcuff_layer
 	obj_overlays[LEGCUFF_LAYER]		= new /obj/abstract/Overlays/legcuff_layer
 	//obj_overlays[HAND_LAYER]		= new /obj/abstract/Overlays/hand_layer
 	obj_overlays[TAIL_LAYER]		= new /obj/abstract/Overlays/tail_layer
@@ -210,12 +211,15 @@
 				to_chat(src, "<b>You must eat to survive. Starvation for extended periods of time will kill you!</b>")
 				to_chat(src, "<b>Keep an eye out on the hunger indicator on the right of your screen; it will start flashing red and black when you're close to starvation.</b>")
 
+	if(buddha_mode_everyone)
+		status_flags ^= BUDDHAMODE
+
 	update_colour(0)
 
 	update_mutantrace()
 
-	register_event(/event/equipped, src, src::update_name())
-	register_event(/event/unequipped, src, src::update_name())
+	register_event(/event/equipped, src, nameof(src::update_name()))
+	register_event(/event/unequipped, src, nameof(src::update_name()))
 
 /mob/living/carbon/human/proc/update_name()
 	name = get_visible_name()
@@ -280,11 +284,6 @@
 			if(R.activated)
 				stat("\The [R.name]", "Modules: [english_list(R.modules)]")
 
-		if (mind)
-			for (var/role in mind.antag_roles)
-				var/datum/role/R = mind.antag_roles[role]
-				stat(R.StatPanel())
-
 /mob/living/carbon/human/attack_slime(mob/living/carbon/slime/M as mob)
 	M.unarmed_attack_mob(src)
 
@@ -321,21 +320,30 @@
 
 //gets assignment from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
-/mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job")
-	var/obj/item/device/pda/pda = wear_id
+/mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job", var/give_rank = FALSE)
+	var/obj/item/device/flashlight/pda/pda = wear_id
 	var/obj/item/weapon/card/id/id = wear_id
 	var/obj/item/weapon/storage/wallet/wallet = wear_id
 	if (istype(pda))
 		if (pda.id && istype(pda.id, /obj/item/weapon/card/id))
-			. = pda.id.assignment
+			if (give_rank)
+				. = pda.id.rank
+			else
+				. = pda.id.assignment
 		else
 			. = pda.ownjob
 	else if (istype(wallet))
 		var/obj/item/weapon/card/id/wallet_id = wallet.GetID()
 		if(istype(wallet_id))
-			. = wallet_id.assignment
+			if (give_rank)
+				. = wallet_id.rank
+			else
+				. = wallet_id.assignment
 	else if (istype(id))
-		. = id.assignment
+		if (give_rank)
+			. = id.rank
+		else
+			. = id.assignment
 	else
 		return if_no_id
 	if (!.)
@@ -348,7 +356,7 @@
 //gets name from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
 /mob/living/carbon/human/proc/get_identification_name(var/if_no_id = "Unknown")
-	var/obj/item/device/pda/pda = wear_id
+	var/obj/item/device/flashlight/pda/pda = wear_id
 	var/obj/item/weapon/card/id/id = wear_id
 	if (istype(pda))
 		if (pda.id)
@@ -360,19 +368,27 @@
 	else
 		return if_no_id
 	return
+
 //repurposed proc. Now it combines get_worn_id_name() and get_face_name() to determine a mob's name variable. Made into a seperate proc as it'll be useful elsewhere
 /mob/living/carbon/human/proc/get_visible_name()
-	if( wear_mask && wear_mask.is_hidden_identity())	//Wearing a mask which hides our face, use id-name if possible
-		return get_worn_id_name("Unknown")
-	if( head && head.is_hidden_identity())
-		return get_worn_id_name("Unknown")	//Likewise for hats
-	if(istruevampire(src))
-		return get_worn_id_name("Unknown")
+	var/unknown_name = "Unknown"
+
+	if ((Holiday == APRIL_FOOLS_DAY || Holiday == HALLOWEEN) && istype(wear_suit, /obj/item/clothing/suit/bedsheet_ghost))
+		unknown_name = "a g-g-g-g-ghooooost"
+
+	if (wear_mask && wear_mask.is_hidden_identity())	//Wearing a mask which hides our face, use id-name if possible
+		return get_worn_id_name(unknown_name)
+	if (head && head.is_hidden_identity())
+		return get_worn_id_name(unknown_name)	//Likewise for hats
+	if (istruevampire(src))
+		return get_worn_id_name(unknown_name)
+
 	var/face_name = get_face_name()
 	var/id_name = get_worn_id_name("")
 	if(id_name && (id_name != face_name))
 		return "[face_name] (as [id_name])"
 	return face_name
+
 //Returns "Unknown" if facially disfigured and real_name if not. Useful for setting name when polyacided or when updating a human's name variable
 /mob/living/carbon/human/proc/get_face_name()
 	var/datum/organ/external/head/head_organ = get_organ(LIMB_HEAD)
@@ -417,58 +433,89 @@
 		var/obj/item/I = held_items[i]
 		dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];hands=[i]'>[makeStrippingButton(I)]</A><BR>"
 
-	dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[slot_back]'>[makeStrippingButton(back)]</A>"
+	if(slot_back in obscured)
+		dat += "<BR><font color=grey><B>Back:</B> Obscured by [wear_suit]</font>"
+	else
+		dat += "<BR><B>Back:</B> <A href='?src=\ref[src];item=[slot_back]'>[makeStrippingButton(back)]</A>"
+
 	dat += "<BR>"
+
 	dat += "<BR><B>Head:</B> <A href='?src=\ref[src];item=[slot_head]'>[makeStrippingButton(head)]</A>"
+
 	if(slot_wear_mask in obscured)
 		dat += "<BR><font color=grey><B>Mask:</B> Obscured by [head]</font>"
 	else
 		dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
+
 	if(has_breathing_mask())
 		dat += "<BR>[HTMLTAB]&#8627;<B>Internals:</B> [src.internal ? "On" : "Off"]  <A href='?src=\ref[src];internals=1'>(Toggle)</A>"
+
 	if(slot_glasses in obscured)
 		dat += "<BR><font color=grey><B>Eyes:</B> Obscured by [head]</font>"
 	else
 		dat += "<BR><B>Eyes:</B> <A href='?src=\ref[src];item=[slot_glasses]'>[makeStrippingButton(glasses)]</A>"
+
 	if(slot_ears in obscured)
 		dat += "<BR><font color=grey><B>Ears:</B> Obscured by [head]</font>"
 	else
 		dat += "<BR><B>Ears:</B> <A href='?src=\ref[src];item=[slot_ears]'>[makeStrippingButton(ears)]</A>"
+
 	dat += "<BR>"
 	dat += "<BR><B>Exosuit:</B> <A href='?src=\ref[src];item=[slot_wear_suit]'>[makeStrippingButton(wear_suit)]</A>"
+
 	if(wear_suit)
 		dat += "<BR>[HTMLTAB]&#8627;<B>Suit Storage:</B> <A href='?src=\ref[src];item=[slot_s_store]'>[makeStrippingButton(s_store)]</A>"
+
+		if (istype(wear_suit, /obj/item/clothing))
+			var/obj/item/clothing/WS = wear_suit
+			if (WS.hood)
+				dat += "<BR>[HTMLTAB]&#8627;<B>Hood:</B> <A href='?src=\ref[src];toggle_suit_hood=1'>Toggle</A>"
+
 	if(slot_shoes in obscured)
 		dat += "<BR><font color=grey><B>Shoes:</B> Obscured by [wear_suit]</font>"
 	else
 		dat += "<BR><B>Shoes:</B> <A href='?src=\ref[src];item=[slot_shoes]'>[makeStrippingButton(shoes)]</A>"
+
 	if(slot_gloves in obscured)
 		dat += "<BR><font color=grey><B>Gloves:</B> Obscured by [wear_suit]</font>"
 	else
 		dat += "<BR><B>Gloves:</B> <A href='?src=\ref[src];item=[slot_gloves]'>[makeStrippingButton(gloves)]</A>"
+
 	dat += "<BR><B>Belt:</B> <A href='?src=\ref[src];item=[slot_belt]'>[makeStrippingButton(belt)]</A>"
+
 	if(slot_w_uniform in obscured)
 		dat += "<BR><font color=grey><B>Uniform:</B> Obscured by [wear_suit]</font>"
 	else
 		dat += "<BR><B>Uniform:</B> <A href='?src=\ref[src];item=[slot_w_uniform]'>[makeStrippingButton(w_uniform)]</A>"
+
 		if(w_uniform)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Suit Sensors:</B> <A href='?src=\ref[src];sensors=1'>Set</A>"
+
+			if (istype(w_uniform, /obj/item/clothing))
+				var/obj/item/clothing/WU = w_uniform
+				if (WU.hood)
+					dat += "<BR>[HTMLTAB]&#8627;<B>Hood:</B> <A href='?src=\ref[src];toggle_uniform_hood=1'>Toggle</A>"
+
 		if(pickpocket)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
 			dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? r_store : "<font color=grey>Right (Empty)</font>"]</A>"
 		else
 			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? "Left (Full)" : "<font color=grey>Left (Empty)</font>"]</A>"
 			dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? "Right (Full)" : "<font color=grey>Right (Empty)</font>"]</A>"
+
 	dat += "<BR>[HTMLTAB]&#8627;<B>ID:</B> <A href='?src=\ref[src];id=1'>[makeStrippingButton(wear_id)]</A>"
 	dat += "<BR>"
+
 	if(handcuffed || mutual_handcuffs)
 		dat += "<BR><B>Handcuffed:</B> <A href='?src=\ref[src];item=[slot_handcuffed]'>Remove</A>"
+
 	if(legcuffed)
 		dat += "<BR><B>Legcuffed:</B> <A href='?src=\ref[src];item=[slot_legcuffed]'>Remove</A>"
 	dat += {"
 	<BR>
 	<BR><A href='?src=\ref[user];mach_close=mob\ref[src]'>Close</A>
 	"}
+
 	var/datum/browser/popup = new(user, "mob\ref[src]", "[src]", 340, 500)
 	popup.set_content(dat)
 	popup.open()
@@ -489,6 +536,24 @@
 		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
 		toggle_sensors(usr)
+
+	else if(href_list["toggle_uniform_hood"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr)|| !w_uniform)
+			return
+		usr.visible_message("[usr] begins to toggle [src]'s hood.","You begin to toggle [src]'s hood.")
+		if (do_mob(usr,src))
+			if (istype(w_uniform, /obj/item/clothing))
+				var/obj/item/clothing/C = w_uniform
+				C.toggle_hood(src,usr,20)
+
+	else if(href_list["toggle_suit_hood"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr)|| !wear_suit)
+			return
+		usr.visible_message("[usr] begins to toggle [src]'s hood.","You begin to toggle [src]'s hood.")
+		if (do_mob(usr,src))
+			if (istype(w_uniform, /obj/item/clothing))
+				var/obj/item/clothing/C = w_uniform
+				C.toggle_hood(src,usr,20)
 
 	else if (href_list["refresh"])
 		if((machine)&&(in_range(src, usr)))
@@ -937,13 +1002,64 @@
 	update_inv_gloves()	//handles bloody hands overlays and updating
 	return TRUE //we applied blood to the item
 
-/mob/living/carbon/human/clean_blood(var/clean_feet)
+/mob/living/carbon/human/proc/add_blood_to_feet(var/_amount, var/_color, var/list/_blood_DNA=list())
+	if(shoes)
+		var/obj/item/clothing/shoes/S = shoes
+		S.track_blood = max(0, _amount, S.track_blood)                //Adding blood to shoes
+
+		if(!blood_overlays["[S.type][S.icon_state]"]) //If there isn't a precreated blood overlay make one
+			S.set_blood_overlay()
+
+		if(S.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
+			S.overlays.Remove(S.blood_overlay)
+		else
+			S.blood_overlay = blood_overlays["[S.type][S.icon_state]"]
+
+		if(!S.blood_DNA)
+			S.blood_DNA = list()
+
+		var/newcolor = (S.blood_color && S.blood_DNA.len) ? BlendRYB(S.blood_color, _color, 0.5) : _color
+		S.blood_overlay.color = newcolor
+		S.overlays += S.blood_overlay
+		S.blood_color = newcolor
+
+		if(_blood_DNA)
+			S.blood_DNA |= _blood_DNA.Copy()
+		update_inv_shoes(1)
+
+	else
+		track_blood = max(_amount, 0, track_blood)                                //Or feet
+		if(!feet_blood_DNA)
+			feet_blood_DNA = list()
+
+		if(!istype(_blood_DNA, /list))
+			_blood_DNA = list()
+		else
+			feet_blood_DNA |= _blood_DNA.Copy()
+
+		feet_blood_color = (feet_blood_color && feet_blood_DNA.len) ? BlendRYB(feet_blood_color, _color, 0.5) : _color
+
+		update_inv_shoes(1)
+
+/mob/living/carbon/human/clean_blood()
 	.=..()
-	if(clean_feet && !shoes && istype(feet_blood_DNA, /list) && feet_blood_DNA.len)
+	if(!shoes && istype(feet_blood_DNA, /list) && feet_blood_DNA.len)
 		feet_blood_color = null
 		feet_blood_DNA.len = 0
 		update_inv_shoes(1)
 		return 1
+
+/mob/living/carbon/human/clean_act(var/cleanliness)
+	..()
+	for(var/obj/item/I in held_items)
+		I.clean_act(cleanliness)
+
+	for(var/obj/item/clothing/C in get_equipped_items())
+		C.clean_act(cleanliness)
+
+	if (cleanliness >= CLEANLINESS_SPACECLEANER)
+		color = ""//color is a bit easier to remove on humans, for convenience's sake
+
 
 /mob/living/carbon/human/yank_out_object()
 	set category = "Object"
@@ -1365,6 +1481,8 @@
 		ACL |= I.GetAccess()
 	if(wear_id)
 		ACL |= wear_id.GetAccess()
+	if(head)
+		ACL |= head.GetAccess()
 	return ACL
 
 /mob/living/carbon/human/get_visible_id()
@@ -1398,6 +1516,8 @@
 				if (catvision.count)
 					dark_plane.alphas["cattulism"] = clamp(15 + (catvision.count * 20),15,155) // The more it activates, the better we see, until we see as well as a tajaran would.
 					break
+		if(dark_plane_alpha_override)
+			dark_plane.alphas["override"] = dark_plane_alpha_override
 
 	if (istype(glasses))
 		glasses.update_perception(src)
@@ -1475,6 +1595,12 @@
 	if(internal_organs_by_name["brain"])
 		var/datum/organ/internal/brain = internal_organs_by_name["brain"]
 		if(brain && istype(brain))
+			return 1
+	return 0
+/mob/living/carbon/human/has_attached_brain()
+	if(internal_organs_by_name["brain"])
+		var/datum/organ/internal/brain = internal_organs_by_name["brain"]
+		if(brain && istype(brain) && !(brain.status & ORGAN_CUT_AWAY))
 			return 1
 	return 0
 /mob/living/carbon/human/has_eyes()
@@ -1866,6 +1992,7 @@
 	var/static/list/resettable_vars = list(
 		"lip_style",
 		"eye_style",
+		"face_style",
 		"wear_suit",
 		"w_uniform",
 		"shoes",
@@ -2035,7 +2162,7 @@
 		return FALSE
 	if(!isfloor(target) || !isfloor(get_turf(src)) || !Adjacent(target))
 		return FALSE
-	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked())
+	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || grabbed_by.len || locked_to || client.move_delayer.blocked())
 		return FALSE
 	var/crawldelay = 0.2 SECONDS
 	if (crawlcounter >= max_crawls_before_fatigue)

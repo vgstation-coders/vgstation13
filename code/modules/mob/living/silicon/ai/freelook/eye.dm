@@ -16,7 +16,7 @@
 // Use this when setting the aiEye's location.
 // It will also stream the chunk that the new loc is in.
 
-/mob/camera/aiEye/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = TRUE, glide_size_override = 0, var/holo_bump = FALSE)
+/mob/camera/aiEye/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0, var/holo_bump = FALSE)
 	if(ai)
 		var/obj/machinery/hologram/holopad/H
 		if(istype(ai.current, /obj/machinery/hologram/holopad))
@@ -26,19 +26,21 @@
 			T.malf_release_control()
 		if(!isturf(ai.loc))
 			return
+
 		if(istype(H))
-			if(harderforce && H.advancedholo && !holo_bump)  // If we double click while controlling an advanced hologram, remove the hologram.
+			if(H.advancedholo && !holo_bump)  // If we double click while controlling an advanced hologram, remove the hologram.
 				H.clear_holo()
 				return
-			else if(H.advancedholo && !holo_bump) // Otherwise, if we're controlling an advanced hologram, check to see if we can enter the tile normally
-				if(destination.density)
+			else if(H.advancedholo && !NewLoc) // Otherwise, if we're controlling an advanced hologram, check to see if we can enter the tile normally
+				if(NewLoc.density)
 					return
-				for(var/atom/movable/A in destination)
+				for(var/atom/movable/A in NewLoc)
 					if(A.density)
 						return
 
-		if(!isturf(destination) && destination)
-			for(destination = destination.loc; !isturf(destination); destination = destination.loc);
+		var/turf/destination = NewLoc
+		if(!isturf(NewLoc))
+			destination = get_turf(NewLoc)
 
 		forceEnter(destination)
 
@@ -50,13 +52,13 @@
 			ai.see_invisible = SEE_INVISIBLE_LEVEL_ONE
 
 		if(istype(H) && !holo_bump)  // move our hologram to our new location (unless our advanced hologram was bumped, in which case we're moving to the hologram)
-			H.move_hologram(harderforce)
+			H.move_hologram()
 
 		if(ai.camera_light_on)
 			ai.light_cameras()
 
 		if (ai.station_holomap)
-			ai.station_holomap.update_holomap()
+			ai.station_holomap.update_holomap(TRUE)
 
 /mob/camera/aiEye/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
@@ -142,9 +144,9 @@
 								return
 						else
 							return
-				user.eyeobj.forceMove(destination = step, harderforce = FALSE)
+				user.eyeobj.forceMove(NewLoc = step)
 			else
-				user.eyeobj.forceMove(destination = step, harderforce = FALSE)
+				user.eyeobj.forceMove(NewLoc = step)
 	user.last_movement=world.time
 
 	user.cooldown = world.timeofday + 5

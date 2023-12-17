@@ -156,11 +156,27 @@
 		return FALSE
 
 	if(ismob(target))
-		var/mob/M = target
-		if(!can_mind_interact(M.mind))
+		var/mob/target_mob = target
+		if(target_mob.digitalcamo)
 			return FALSE
-		if(istype(target.loc, /obj/effect/dummy))
+	if(ishuman(target))
+		var/mob/living/carbon/human/target_human = target
+		if(target_human.wear_id && istype(target_human.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 			return FALSE
+		if(target_human.is_wearing_item(/obj/item/clothing/mask/gas/voice))
+			return FALSE
+		if(target_human.is_wearing_item(/obj/item/clothing/gloves/ninja))
+			return FALSE
+		if(target_human.is_wearing_item(/obj/item/clothing/head/tinfoil))
+			return FALSE
+		if(target_human.is_holding_item(/obj/item/device/megaphone/madscientist))
+			return FALSE
+
+	if(isalien(target))
+		return FALSE
+
+	if(istype(target.loc, /obj/effect/dummy))
+		return FALSE
 
 	if(!near_camera(target))
 		return FALSE

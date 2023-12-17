@@ -50,7 +50,6 @@
 "ak" = (
 /obj/machinery/atmospherics/pipe/simple/general/hidden{
 	dir = 6;
-	icon_state = "intact";
 	tag = "icon-intact (SOUTHEAST)"
 	},
 /turf/simulated/wall/r_wall,
@@ -64,7 +63,6 @@
 "am" = (
 /obj/machinery/atmospherics/pipe/simple/general/hidden{
 	dir = 5;
-	icon_state = "intact";
 	tag = "icon-intact (NORTHEAST)"
 	},
 /turf/space,
@@ -90,7 +88,6 @@
 "aq" = (
 /obj/machinery/atmospherics/pipe/simple/general/hidden{
 	dir = 5;
-	icon_state = "intact";
 	tag = "icon-intact (NORTHEAST)"
 	},
 /turf/simulated/wall/r_wall,
@@ -718,7 +715,6 @@
 "bN" = (
 /obj/machinery/atmospherics/pipe/simple/general/hidden{
 	dir = 9;
-	icon_state = "intact";
 	tag = "icon-intact (NORTHWEST)"
 	},
 /turf/simulated/floor,
@@ -791,7 +787,6 @@
 "bY" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	dir = 4;
-	on = 0;
 	scrub_CO2 = 0;
 	scrub_Toxins = 0
 	},
@@ -843,7 +838,6 @@
 "cg" = (
 /obj/machinery/atmospherics/pipe/simple/general/hidden{
 	dir = 5;
-	icon_state = "intact";
 	tag = "icon-intact (NORTHEAST)"
 	},
 /turf/simulated/wall,
@@ -1626,7 +1620,7 @@
 /obj/machinery/computer/general_air_control{
 	frequency = 1553;
 	name = "Engine Monitoring Console";
-	sensors = list("engine_sensor" = "Engine Sensor")
+	sensors = list("engine_sensor"="Engine Sensor")
 	},
 /turf/simulated/floor,
 /area/vault/ejectedengine/monitoring)
@@ -2034,8 +2028,7 @@
 	},
 /obj/machinery/driver_button{
 	id_tag = "engine_gas";
-	pixel_x = -25;
-	pixel_y = 0
+	pixel_x = -25
 	},
 /obj/machinery/light/burnt{
 	dir = 1
@@ -2209,7 +2202,6 @@
 "fv" = (
 /obj/machinery/atmospherics/pipe/simple/general/hidden{
 	dir = 9;
-	icon_state = "intact";
 	tag = "icon-intact (NORTHWEST)"
 	},
 /turf/simulated/wall/r_wall,
@@ -2274,7 +2266,6 @@
 "fH" = (
 /obj/machinery/atmospherics/pipe/simple/general/hidden{
 	dir = 5;
-	icon_state = "intact";
 	tag = "icon-intact (NORTHEAST)"
 	},
 /turf/simulated/wall/r_wall,

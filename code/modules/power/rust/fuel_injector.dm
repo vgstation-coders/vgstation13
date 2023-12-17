@@ -111,7 +111,7 @@
 	if(..())
 		return 1
 
-	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
+	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/flashlight/pda))
 		if(emagged)
 			to_chat(user, "<span class='warning'>The lock seems to be broken.</span>")
 			return

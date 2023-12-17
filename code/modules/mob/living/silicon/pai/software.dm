@@ -2,9 +2,9 @@
 
 
 /mob/living/silicon/pai/var/list/available_software = list(
-															SOFT_FL = 15,
-															SOFT_RT = 15,
-															SOFT_RS = 15,
+															SOFT_FL = 10,
+															SOFT_RT = 10,
+															SOFT_RS = 10,
 
 															SOFT_WJ = 30,
 															SOFT_CS = 30,
@@ -273,7 +273,7 @@
 				if(lighted)
 					card.set_light(4) //Equal to flashlight
 				else
-					card.set_light(0)
+					card.kill_light()
 		if("pps")
 			if(!pps_device)
 				pps_device = new(src)
@@ -672,7 +672,7 @@ Target Machine: "}
 	[(message_app.silent) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br><br>"}
 	dat += "<ul>"
 	if(!message_app.toff)
-		for (var/obj/item/device/pda/P in get_viewable_pdas())
+		for (var/obj/item/device/flashlight/pda/P in get_viewable_pdas())
 			dat += {"<li><a href='byond://?src=\ref[src];software=pdamessage;target=\ref[P]'>[P]</a>
 				</li>"}
 	dat += {"</ul>

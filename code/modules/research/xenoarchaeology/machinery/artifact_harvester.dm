@@ -408,7 +408,7 @@
 /obj/machinery/artifact_harvester/update_icon()
 	overlays.len = 0
 	icon_state = "harvester"
-	set_light(0)
+	kill_light()
 
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
 		return

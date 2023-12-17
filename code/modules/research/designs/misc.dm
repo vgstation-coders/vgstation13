@@ -28,6 +28,16 @@
 	materials = list(MAT_GLASS = 8000, MAT_IRON=2000)
 	category = "Misc"
 
+/datum/design/high_roller
+	name = "High Roller"
+	desc = "A large two-handed paint roller that can cover floors and walls in paint much quicker than with a regular paint roller. Although you can use it to spread any reagent."
+	id = "high_roller"
+	build_type = PROTOLATHE
+	build_path = /obj/item/high_roller
+	req_tech = list(Tc_ENGINEERING = 2, Tc_MATERIALS = 3)
+	materials = list(MAT_IRON=18750)
+	category = "Misc"
+
 /datum/design/mannequin_frame
 	name = "Cyber Mannequin Frame"
 	desc = "So much effort just just display material goods."

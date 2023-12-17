@@ -92,7 +92,8 @@ var/global/list/juice_items = list (
 
 	RefreshParts()
 
-	return
+	if(ticker)
+		initialize()
 
 /obj/machinery/reagentgrinder/RefreshParts()
 	var/T = 0
@@ -123,6 +124,12 @@ var/global/list/juice_items = list (
 
 /obj/machinery/reagentgrinder/splashable()
 	return FALSE
+
+/obj/machinery/reagentgrinder/table_shift()
+	pixel_y = 8
+
+/obj/machinery/reagentgrinder/table_unshift()
+	pixel_y = 0
 
 /obj/machinery/reagentgrinder/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
@@ -347,7 +354,7 @@ var/global/list/juice_items = list (
 			list("Detach Beaker", "radial_detachbeaker")
 		)
 
-		var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, src::radial_check(), user))
+		var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, nameof(src::radial_check()), user))
 		if(!radial_check(user))
 			return
 

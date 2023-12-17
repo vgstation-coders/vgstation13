@@ -74,6 +74,8 @@ var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION,
 	flags = FPRINT
 	w_class = W_CLASS_MEDIUM
 	level = 2
+	var/frequency = 0
+	var/id_tag = null
 
 	var/piping_layer = PIPING_LAYER_DEFAULT
 
@@ -100,8 +102,12 @@ var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION,
 	qdel(src)
 	return 2
 var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
-/obj/item/pipe/New(var/loc, var/pipe_type as num, var/dir as num, var/obj/machinery/atmospherics/make_from = null)
+/obj/item/pipe/New(var/loc, var/pipe_type as num, var/dir as num, var/obj/machinery/atmospherics/make_from = null, freq, id)
 	..()
+	if (freq)
+		frequency = freq
+	if (id)
+		id_tag = id
 	if (make_from)
 		src.dir = make_from.dir
 		src.pipename = make_from.name
@@ -581,8 +587,17 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	item_state = "buildpipe"
 	flags = FPRINT
 	w_class = W_CLASS_LARGE
+	var/frequency = 1439
+	var/id_tag = null
 
 	var/layer_to_make = PIPING_LAYER_DEFAULT
+	
+/obj/item/pipe_meter/New(loc, freq, id)
+	..()
+	if(freq)
+		frequency = freq
+	if(id)
+		id_tag = id
 
 /obj/item/pipe_meter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	..()
@@ -597,7 +612,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	if(!pipe)
 		to_chat(user, "<span class='warning'>You need to fasten it to a pipe.</span>")
 		return 1
-	new/obj/machinery/meter(src.loc, pipe)
+	new/obj/machinery/meter(src.loc, pipe, frequency, id_tag)
 	W.playtoolsound(src, 50)
 	to_chat(user, "<span class='notice'>You have fastened the meter to the pipe.</span>")
 	qdel(src)
@@ -620,12 +635,21 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 	item_state = "buildpipe"
 	flags = FPRINT
 	w_class = W_CLASS_LARGE
+	var/frequency = 1439
+	var/id_tag = null
+	
+/obj/item/pipe_gsensor/New(loc, freq, id)
+	..()
+	if(freq)
+		frequency = freq
+	if(id)
+		id_tag = id
 
 /obj/item/pipe_gsensor/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	..()
 	if(!W.is_wrench(user))
 		return ..()
-	new/obj/machinery/air_sensor( src.loc )
+	new/obj/machinery/air_sensor( src.loc, frequency, id_tag )
 	W.playtoolsound(src, 50)
 	to_chat(user, "<span class='notice'>You have fastened the gas sensor.</span>")
 	qdel(src)

@@ -192,7 +192,7 @@
 			to_chat(src, "<span class='warning'>Slots for priority roles are already opened.</span>")
 			return
 		to_chat(src, "<span class='bnotice'>You have requested for heads of staff to open priority roles. Please stand by.</span>")
-		for(var/obj/item/device/pda/pingme in PDAs)
+		for(var/obj/item/device/flashlight/pda/pingme in PDAs)
 			if(pingme.cartridge && pingme.cartridge.fax_pings && (locate(/datum/pda_app/cart/status_display) in pingme.applications))
 				//This may seem like a strange check, but it's excluding the IAA for only HOP/Cap
 				playsound(pingme, "sound/effects/kirakrik.ogg", 50, 1)
@@ -263,7 +263,7 @@
 								return
 
 						vote_on_numval_poll(pollid, optionid, rating)
-			if("MULTICHOICE")
+			if("SELECT_ALL_THAT_APPLY")
 				var/id_min = text2num(href_list["minoptionid"])
 				var/id_max = text2num(href_list["maxoptionid"])
 
@@ -434,12 +434,15 @@
 		to_chat(character, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
 		to_chat(character, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
 
+	for(var/datum/faction/F in ticker.mode.factions) /* Ensure all existing factions receive notice of the latejoin to handle what they need to. */
+		register_event(/event/late_arrival, F, nameof(F::OnLateArrival())) //Wrapped in nameof() to ensure that the parent proc doesn't get called. Possibly a BYOND bug?
+
 	if(character.mind.assigned_role != "MODE")
 		if(character.mind.assigned_role != "Cyborg")
 			data_core.manifest_inject(character)
 			if(character.mind.assigned_role == "Trader")
 				//If we're a trader, instead send a message to PDAs with the trader cartridge
-				for (var/obj/item/device/pda/P in PDAs)
+				for (var/obj/item/device/flashlight/pda/P in PDAs)
 					if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
 						var/mob/living/L = get_holder_of_type(P,/mob/living)
 						if(L)
@@ -449,7 +452,7 @@
 						handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character.real_name] has arrived in the sector from space.</span></span>",character) //handle_render generates a Follow link
 			else
 				AnnounceArrival(character, rank)
-				CallHook("Arrival", list("character" = character, "rank" = rank))
+				INVOKE_EVENT(src, /event/late_arrival, "character" = character, "rank" = rank)
 			character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 		else
 			character.Robotize()

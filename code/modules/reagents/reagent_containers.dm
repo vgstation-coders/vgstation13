@@ -13,6 +13,13 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	var/amount_per_imbibe = 5
 	var/attack_mob_instead_of_feed //If true, the reagent container will be used as a melee weapon rather than as a vessel to feed another mob with (in attack()).
 
+	var/thermal_entropy_delay = 2 SECONDS//we run thermal_entropy() every X ticks
+	var/thermal_variation_from_environment = 0.055//how much of the environmental temperature do we want to match per entropy procs
+	var/thermal_variation_modifier = 1//if set to 0, no entropy will occur in that container. More than 1 means it reaches room temperature quicker.
+
+	var/controlled_splash = FALSE	//If true, splashing someone/something with the reagent container will only usr the current amount_per_transfer_from_this instead of all of it
+									//Honestly we should try setting this to TRUE by default for all containers at some point, it's just convenient.
+
 /obj/item/weapon/reagent_containers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
 	set category = "Object"
@@ -69,9 +76,31 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return
 	return ..()
 
+/obj/item/weapon/reagent_containers/MiddleAltClick(var/mob/living/user)
+	if(!is_holder_of(user, src))
+		return
+	if(!reagents || !reagents.total_volume)
+		to_chat(user, "<span class='warning'>\The [src] is desperately empty.</span>")
+		return
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if (H.species && (H.species.flags & SPECIES_NO_MOUTH))
+			to_chat(user, "<span class='warning'>You stare at \the [src] intently. Wishing you had a mouth to interact with it.</span>")
+			return
+	thermal_entropy()
+	playsound(user, 'sound/effects/blow.ogg', 5, 1, -2)
+	var/can_it_burn = round(user.get_splash_burn_damage(amount_per_imbibe, reagents.chem_temp))
+	if (can_it_burn)
+		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='warning'>It feels quite hot still...</span>")
+	else if (reagents.chem_temp <= T0C)
+		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='warning'>It feels pretty cold still...</span>")
+	else
+		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='notice'>Temperature seems safe...</span>")
+
 /obj/item/weapon/reagent_containers/New()
 	..()
 	create_reagents(volume)
+	all_reagent_containers.Add(src)
 
 	if(!is_open_container(src))
 		src.verbs -= /obj/item/weapon/reagent_containers/verb/empty_contents
@@ -82,7 +111,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(istype(loc, /obj/machinery/iv_drip))
 		var/obj/machinery/iv_drip/holder = loc
 		holder.remove_container()
- . = ..()
+	thermal_dissipation_reagents -= reagents
+	all_reagent_containers.Remove(src)
+	. = ..()
 
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
 	return
@@ -101,13 +132,23 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return
 
 	if(!src.reagents.total_volume)
-		to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
-		return 0
+		if(user.a_intent == I_HELP)
+			to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
+			return 0
+		else
+			return ..()//empty bottle? hit them with it!
 
 	if(user.a_intent != I_HELP)
 		if(src.reagents)
-			transfer(M, user, splashable_units = -1)
-			playsound(M, 'sound/effects/slosh.ogg', 25, 1)
+			var/transfer_result
+			if (controlled_splash)
+				transfer_result = transfer(M, user, splashable_units = amount_per_transfer_from_this)
+			else
+				transfer_result = transfer(M, user, splashable_units = -1)
+			if (transfer_result)
+				splash_special()
+			if (transfer_result >= 10)
+				playsound(M, 'sound/effects/slosh.ogg', 25, 1)
 			return 1
 
 
@@ -132,6 +173,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			imbibe(M)
 
 			return 0
+
+/obj/item/weapon/reagent_containers/proc/splash_special()
+	return
 
 
 /**
@@ -219,8 +263,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.clear_reagents()
 	if(user)
 		if(user.Adjacent(target))
-			user.visible_message("<span class='warning'>\The [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""] has been splashed with something by [user]!</span>",
-								"<span class='notice'>You splash [amount > 0 ? "some of " : ""]the solution onto \the [target][ishuman(target) ? "'s [parse_zone(affecting)]" : ""].</span>")
+			user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
+			                     "<span class='notice'>You splash the solution onto \the [target].</span>")
 
 //Define this wrapper as well to allow for proc overrides eg. for frying pan
 /obj/item/weapon/reagent_containers/proc/container_splash_sub(var/datum/reagents/reagents, var/atom/target, var/amount, var/mob/user = null)
@@ -258,6 +302,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			var/tx_amount = transfer_sub(target, src, reagents.maximum_volume, user)
 			if (tx_amount > 0)
 				to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [target].</span>")
+				var/obj/machinery/cooking/deepfryer/F = target
+				F.empty_icon()
 			return tx_amount
 	// Transfer to container
 	if (can_send /*&& target.reagents**/)
@@ -370,7 +416,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if(H.species.chem_flags & NO_DRINK)
 			reagents.reaction(get_turf(H), TOUCH)
 			H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
-			reagents.remove_any(amount_per_imbibe)
+			reagents.remove_any(amount_per_imbibe) //Should this really be here?
 			return 0
 
 
@@ -379,10 +425,12 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /obj/item/weapon/reagent_containers/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	reagents.heating(1000, exposed_temperature)
 	..()
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/attackby(obj/item/I, mob/user, params)
 	..()
 	attempt_heating(I, user)
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/attempt_heating(atom/A, mob/user)
 	var/temperature = A.is_hot()
@@ -398,3 +446,62 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	//We have to check for a /mob/virtualhearer/one_time here, and kill it ourselves. This is fairly bad OOP.
 	if(virtualhearer && istype(virtualhearer, /mob/virtualhearer/one_time))
 		removeHear()
+
+/obj/item/weapon/reagent_containers/on_reagent_change()
+	. = ..()
+	//Reagent containers can exchange heat with the surrounding air.
+	heat_dissipation_updates() //Every reagent_containers that should be added to the heat dissipation subsystem should call this on_reagent_change(). If you add something that breaks the supercall chain, be sure to call this.
+	process_temperature()
+
+////////////THERMAL ENTROPY///////////////////////////////////////////////////////////////////////////////////////////////////
+
+//an overly simple thermal entropy proc that lets food match the temperature of their environnement over time
+//we don't send the temperature difference back to the environnement because frankly it's not gonna matter in 99.999% of the cases.
+//furthermore, we stop looping once the temperature is less than a degree away from the environment, until we get moved or picked up.
+//won't resume on passive temperature changes in a room, but we can always add a subsystem later that checks for additional temperature changes every minute or so I guess
+/obj/item/weapon/reagent_containers/process_temperature()
+	thermal_entropy_containers |= src
+
+/obj/item/weapon/reagent_containers/proc/thermal_entropy()
+	set waitfor = FALSE
+
+	if (!reagents || !reagents.total_volume)
+		thermal_entropy_containers.Remove(src)
+		update_temperature_overlays()
+		return
+
+	var/datum/gas_mixture/air = return_air()
+
+	if (!air)
+		thermal_entropy_containers.Remove(src)
+		return
+
+	var/diff = air.temperature - reagents.chem_temp
+
+	//we only bother if there's less than a 1 degree difference
+	if (abs(diff) < 2)
+		thermal_entropy_containers.Remove(src)
+
+	//based on newton's law of cooling
+	reagents.chem_temp = reagents.chem_temp + diff * thermal_variation_from_environment * thermal_variation_modifier
+
+	if(!(reagents.skip_flags & SKIP_RXN_CHECK_ON_HEATING))
+		reagents.handle_reactions()
+
+	update_icon()
+
+/obj/item/weapon/reagent_containers/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
+	..()
+	process_temperature()
+
+/obj/item/weapon/reagent_containers/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+	..()
+	process_temperature()
+
+/obj/item/weapon/reagent_containers/dropped(var/mob/user)
+	..()
+	process_temperature()
+
+/obj/item/weapon/reagent_containers/pickup(var/mob/user)
+	..()
+	process_temperature()

@@ -55,7 +55,7 @@
 		),
 	)
 
-	pda_type = /obj/item/device/pda
+	pda_type = /obj/item/device/flashlight/pda
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
@@ -111,15 +111,14 @@
 		/obj/item/weapon/reagent_containers/food/drinks/shaker = slot_l_store_str,
 	)
 
-	pda_type = /obj/item/device/pda/bar
+	pda_type = /obj/item/device/flashlight/pda/bar
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
 /datum/outfit/bartender/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 	H.dna.SetSEState(SOBERBLOCK,1)
-	genemutcheck(H, SOBERBLOCK)
+	H.check_mutations = M_CHECK_JOB
 
 /datum/outfit/bartender/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/circuitboard/chem_dispenser/soda_dispenser] = SURVIVAL_BOX
@@ -185,7 +184,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/pda/chef
+	pda_type = /obj/item/device/flashlight/pda/chef
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
@@ -275,7 +274,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/pda/botanist
+	pda_type = /obj/item/device/flashlight/pda/botanist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
@@ -358,7 +357,7 @@
 		/obj/item/toy/waterflower = null,
 	)
 
-	pda_type = /obj/item/device/pda/clown
+	pda_type = /obj/item/device/flashlight/pda/clown
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/clown
 
@@ -438,7 +437,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/pda/mime
+	pda_type = /obj/item/device/flashlight/pda/mime
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/mime
 
@@ -508,7 +507,7 @@
 		),
 	)
 
-	pda_type = /obj/item/device/pda/janitor
+	pda_type = /obj/item/device/flashlight/pda/janitor
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
@@ -578,19 +577,17 @@
 			/obj/item/stack/sheet/wood/biggerstack = null,    //should spawn on the backpack
 			/obj/item/weapon/storage/fancy/crayons = null,
 			/obj/item/weapon/chisel = null,
-			/obj/item/weapon/palette = null,
+			/obj/item/palette = null,
 		)
 	)
-	
 
-	pda_type = /obj/item/device/pda/librarian
+
+	pda_type = /obj/item/device/flashlight/pda/librarian
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
 /datum/outfit/librarian/post_equip(var/mob/living/carbon/human/H)
 	..()
-	var/obj/item/weapon/storage/bag/plasticbag/P = new /obj/item/weapon/storage/bag/plasticbag(H)
-	H.put_in_hands(P)
 	var/list/new_languages = list()
 	for(var/L in all_languages)
 		var/datum/language/lang = all_languages[L]
@@ -712,18 +709,17 @@
 		)
 	)
 
-	pda_type = /obj/item/device/pda/lawyer
+	pda_type = /obj/item/device/flashlight/pda/lawyer
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/centcom
 
 /datum/outfit/iaa/post_equip(var/mob/living/carbon/human/H)
 	..()
 	H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
-	equip_accessory(H, /obj/item/clothing/accessory/glowstick/nanotrasen, /obj/item/clothing/under)
-	if(Holiday == APRIL_FOOLS_DAY)
-		if(H.mind.role_alt_title == "Lawyer" || H.mind.role_alt_title == "Bridge Officer") //Lawyers and bridge officers are exempt
-			return
-		H.set_light(1, 4, "#006400") //Dark green, RGB(0,100,0)
+	if(H.mind.role_alt_title == "Internal Affairs Agent") //Lawyers and bridge officers are exempt
+		equip_accessory(H, /obj/item/clothing/accessory/glowstick/nanotrasen, /obj/item/clothing/under)
+		if(Holiday == APRIL_FOOLS_DAY)
+			H.set_light(1, 4, "#006400") //Dark green, RGB(0,100,0)
 
 // -- Chaplain
 
@@ -765,7 +761,7 @@
 		),
 	)
 
-	pda_type = /obj/item/device/pda/chaplain
+	pda_type = /obj/item/device/flashlight/pda/chaplain
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 

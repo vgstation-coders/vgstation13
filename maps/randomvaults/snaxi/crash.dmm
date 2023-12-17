@@ -431,7 +431,7 @@
 /area)
 "X" = (
 /obj/machinery/vending/tool{
-	contraband = list(/obj/item/tool/weldingtool/hugetank = 2, /obj/item/clothing/gloves/yellow/vox = 2);
+	contraband = list(/obj/item/tool/weldingtool/hugetank=2,/obj/item/clothing/gloves/yellow/vox=2);
 	name = "Outpost YouTool"
 	},
 /obj/machinery/alarm/vox{

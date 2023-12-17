@@ -85,6 +85,8 @@
 	bumped = 1
 
 	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+	if(!hookshot) /* Can happen with hookshots if it doesn't have shot_from assigned for one reason or another. Probably something to do with hostage-taking? */
+		return
 	spawn()
 		if(!can_tether)
 			..(A)
@@ -307,7 +309,7 @@
 				K.Stun(3)
 				animate(K,alpha = 0, time =3) //Best solution I could find to no smooth animation with forceMove
 				spawn(5) //Knocks/stuns them then quickly fades them out, moves them, icon fuckery to make flick work, and fades them back in as a little re-appearing animation
-					K.forceMove(endLocation, no_tp=1, harderforce=0, glide_size_override=0)
+					K.forceMove(endLocation, glide_size_override=0)
 					var/oldIcon = K.icon
 					K.icon = 'icons/obj/wind_up.dmi'//flick is dumb, it works dumb
 					K.alpha = OPAQUE

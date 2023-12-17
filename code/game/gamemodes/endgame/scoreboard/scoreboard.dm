@@ -53,12 +53,16 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/richestjob			= null  //Kinda pointless if you dont have a money system i guess
 	var/richestcash			= 0
 	var/richestkey			= null
+	var/biggestshoalname	= null
+	var/biggestshoalcash	= 0
+	var/biggestshoalkey		= null
 	var/dmgestname			= null //Who had the most damage on the shuttle (but was still alive)
 	var/dmgestjob			= null
 	var/dmgestdamage		= 0
 	var/dmgestkey			= null
 	var/explosions			= 0 //How many explosions happened total
 	var/largeexplosions		= 0 // >1 devastation range
+	var/largest_TTV			= 0 //The largest Tank Transfer Valve explosion this round
 	var/deadpets			= 0 //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
 	var/buttbotfarts		= 0 //Messages mimicked by buttbots.
 	var/turfssingulod		= 0 //Amount of turfs eaten by singularities.
@@ -79,6 +83,7 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/bagelscooked		= 0
 	var/disease				= 0
 	var/list/money_leaderboard = list()
+	var/list/shoal_leaderboard = list()
 	var/list/implant_phrases = list()
 	var/list/global_paintings = list()
 
@@ -186,6 +191,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Number of Times Someone was Slipped: </B> [score.slips]<BR>"
 	if(score.explosions > 0)
 		dat += "<B>Number of Explosions This Shift:</B> [score.explosions]<BR>"
+	if(score.largest_TTV > 0)
+		dat += "<B>Largest Tank Transfer Valve Explosion:</B> [round(score.largest_TTV*0.25)] / [round(score.largest_TTV*0.5)] / [round(score.largest_TTV)][(score.largest_TTV >= MAX_EXPLOSION_RANGE) ? " (That's a maxcap right there. Not bad!)" : ""]<BR>"
 	if(score.arenafights > 0)
 		dat += "<B>Number of Arena Rounds:</B> [score.arenafights]<BR>"
 	if(score.totaltransfer > 0)
@@ -248,6 +255,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 			dat += "<B>Richest Escapee:</B> [score.richestname], [score.richestjob]: $[score.richestcash] ([score.richestkey])<BR>"
 	else
 		dat += "The station wasn't evacuated or there were no survivors!<BR>"
+	if(score.biggestshoalcash)
+		dat += "<B>Most Generous Shoal Funder:</B> [score.biggestshoalname]: $[score.biggestshoalcash] ([score.biggestshoalkey])<BR>"
 	dat += "<B>Department Leaderboard:</B><BR>"
 	var/list/dept_leaderboard = get_dept_leaderboard()
 	for (var/i = 1 to dept_leaderboard.len)
@@ -308,6 +317,18 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 			break
 		else
 			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
+	var/datum/persistence_task/highscores/trader/leaderboard2 = score.shoal_leaderboard
+	dat += "<br><b>MONTHLY TOP 5 RICHEST TRADERS:</b><br>"
+	i = 1
+	for(var/datum/record/money/entry in leaderboard2.data)
+		var/cash = num2text(entry.cash, 12)
+		var/list/split_date = splittext(entry.date, "-")
+		if(text2num(split_date[2]) != text2num(time2text(world.timeofday, "MM")))
+			leaderboard2.clear_records()
+			dat += "No rich traders yet!"
+			break
+		else
+			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b>. That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
 	return dat
 
 /mob/proc/display_round_end_scoreboard()

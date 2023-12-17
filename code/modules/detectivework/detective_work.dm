@@ -9,7 +9,7 @@
 			if(add_blood_from_data(G.bloody_hands_data)) //only reduces the bloodiness of our gloves if the item wasn't already bloody
 				G.transfer_blood--
 				M.update_inv_gloves()
-	else if(M.bloody_hands)
+	else if(M.bloody_hands > 1)
 		if(add_blood_from_data(M.bloody_hands_data))
 			M.bloody_hands--
 			M.update_inv_gloves()
@@ -446,8 +446,8 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 							scan_data += "- [data]<br>"
 
 					var/is_scanner = istype(scanning, /obj/item/device/detective_scanner)
-					/*if(istype(scanning, /obj/item/device/pda))
-						var/obj/item/device/pda/the_pda = scanning
+					/*if(istype(scanning, /obj/item/device/flashlight/pda))
+						var/obj/item/device/flashlight/pda/the_pda = scanning
 						if(istype(the_pda.scanning_app,/datum/pda_app/cart/scanner/detective))
 							is_scanner = TRUE*/
 
@@ -500,8 +500,8 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 				var/list/data = D.stored[atom]
 				add_data_master(atom,data[1],data[2],data[3],data[4])
 		D.stored = list()
-	/*else if(istype(W, /obj/item/device/pda))
-		var/obj/item/device/pda/the_pda = W
+	/*else if(istype(W, /obj/item/device/flashlight/pda))
+		var/obj/item/device/flashlight/pda/the_pda = W
 		istype(the_pda.scanning_app,/datum/pda_app/cart/scanner/detective)
 			var/datum/pda_app/cart/scanner/detective/D = the_pda.scanning_app
 			if(D.stored_data)

@@ -13,8 +13,9 @@
 /obj/machinery/gashapon/attackby(var/obj/O as obj, var/mob/user as mob)
 	if (is_type_in_list(O, list(/obj/item/weapon/coin/, /obj/item/weapon/reagent_containers/food/snacks/chococoin)))
 		if(user.drop_item(O, src))
-			user.visible_message("<span class='notice'>[user] puts a coin into [src] and turns the knob.</span>", "<span class='notice'>You put a coin into [src] and turn the knob.</span>")
+			user.visible_message("<span class='notice'>[user] puts \a [O] into [src] and turns the knob.</span>", "<span class='notice'>You put \a [O] into [src] and turn the knob.</span>")
 			src.visible_message("<span class='notice'>[src] clicks softly.</span>")
+			playsound(src, 'sound/machines/capsulebuy.ogg', 50, 1)
 			sleep(rand(10,15))
 			src.visible_message("<span class='notice'>[src] dispenses a capsule!</span>")
 			new /obj/item/weapon/capsule(src.loc)
@@ -22,10 +23,10 @@
 				var/obj/item/weapon/coin/real_coin = O
 				if(real_coin.string_attached)
 					if(prob(30))
-						to_chat(user, "<SPAN CLASS='notice'>You were able to force the knob around and successfully pulled the coin out before [src] could swallow it.</SPAN>")
+						to_chat(user, "<SPAN CLASS='notice'>You were able to force the knob around and successfully pulled \the [O] out before [src] could swallow it.</SPAN>")
 						user.put_in_hands(O)
 					else
-						to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull the coin out fast enough, the machine ate it, string and all.</SPAN>")
+						to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull \the [O] out fast enough, the machine ate it, string and all.</SPAN>")
 						qdel(O)
 			else
 				qdel(O)
@@ -57,7 +58,6 @@
 	var/capsule_prize = pick(
 		/obj/item/toy/gasha/greyshirt,
 		/obj/item/toy/gasha/greytide,
-		/obj/item/toy/gasha/corgitoy,
 		/obj/item/toy/gasha/borertoy,
 		/obj/item/toy/gasha/minislime,
 		/obj/item/toy/gasha/AI,
@@ -93,10 +93,6 @@
 		/obj/item/toy/gasha/harvester,
 		/obj/item/toy/gasha/skub,
 		/obj/item/toy/gasha/fingerbox,
-		/obj/item/toy/gasha/cattoy,
-		/obj/item/toy/gasha/parrottoy,
-		/obj/item/toy/gasha/beartoy,
-		/obj/item/toy/gasha/carptoy,
 		/obj/item/toy/gasha/monkeytoy,
 		/obj/item/toy/gasha/huggertoy,
 		/obj/item/toy/gasha/narnar,

@@ -55,6 +55,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	var/priority = -1 ; //Priority of the message being sent
 	var/announceSound = 'sound/vox/_bloop.wav'
 	luminosity = 0
+	light_range = 0
 
 /obj/machinery/requests_console/power_change()
 	..()
@@ -323,7 +324,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 									Console.icon_state = "req_comp3"
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request_urgent.ogg', 50, 1)
-									visible_message("The [src] beeps; <span class='bold'>PRIORITY Alert at [department]</span>")
+									Console.visible_message("The [Console] beeps; <span class='bold'>PRIORITY Alert at [department]</span>")
 									sleep(10)
 									playsound(Console.loc, 'sound/machines/request_urgent.ogg', 50, 1)
 									sleep(10)
@@ -346,12 +347,12 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 									Console.icon_state = "req_comp2"
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
-									visible_message("The [src] beeps; Message from [department]")
+									Console.visible_message("The [Console] beeps; Message from [department]")
 									sleep(10)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
 									sleep(10)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
-								Console.messages += "<B>Message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[message]"
+								Console.messages += "<B>Message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[sending]"
 						Console.set_light(2)
 				messages += "<B>Message sent to [dpt]</B><BR>[message]"
 			else
@@ -465,7 +466,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		new /obj/item/stack/sheet/metal (src.loc,2)
 		qdel(src)
 		return
-	if (istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
+	if (istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/flashlight/pda))
 		if(screen == 5)
 			var/obj/item/weapon/card/id/ID = O.GetID()
 			if (hackState || ID.access.Find(access_engine_minor))

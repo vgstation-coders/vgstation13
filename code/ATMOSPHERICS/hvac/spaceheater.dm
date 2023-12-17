@@ -12,7 +12,7 @@
 	var/base_state = "sheater"
 	var/nocell = 0
 	var/intake_rate = 0.25
-	light_power_on = 0.75
+	light_power_on = 2
 	light_range_on = 2
 	light_color = LIGHT_COLOR_ORANGE
 
@@ -55,9 +55,10 @@
 	icon_state = "campfire0"
 	base_state = "campfire"
 	desc = "Warning: May attract Space Bears."
-	light_power_on = 1.5
+	light_power_on = 2
 	light_range_on = 2
 	light_color = LIGHT_COLOR_FIRE
+	light_type = LIGHT_SOFT_FLICKER
 	set_temperature = 35
 	nocell = 1
 	anchored = 1
@@ -171,7 +172,16 @@
 		else
 			to_chat(user, "The hatch must be open to insert a power cell.")
 			return
-	return
+
+/obj/machinery/space_heater/campfire/proc/addWood(obj/item/stack/sheet/wood/woody, mob/living/user)
+	var/woodnumber = input(user, "You may add a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
+	if (woodnumber)
+		woodnumber = clamp(woodnumber, 0, min(woody.amount, 4))
+		woody.use(woodnumber)
+		user.visible_message("<span class='notice'>[user] adds some wood to \the [src].</span>", "<span class='notice'>You add some wood to \the [src].</span>")
+		cell.charge = min(cell.charge+woodnumber*250,cell.maxcharge)
+		update_icon()
+		return woodnumber
 
 /obj/machinery/space_heater/campfire/attackby(obj/item/I, mob/living/user)
 	..()
@@ -181,6 +191,9 @@
 	var/datum/gas_mixture/env = T.return_air()
 	if(env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME)
 		to_chat(user, "<span class='notice'>You try to light \the [name], but it won't catch on fire!")
+		return
+	if(istype(I, /obj/item/stack/sheet/wood))
+		addWood(I, user)
 		return
 	if(!on && cell.charge > 0)
 	//Items with special messages go first - yes, this is all stolen from cigarette code. sue me.
@@ -215,14 +228,6 @@
 		else if(I.is_hot())
 			light("<span class='notice'>[user] lights \the [name] with \the [I].</span>")
 		return
-	if(istype(I, /obj/item/stack/sheet/wood) && ((on)||(nocell == 2)))
-		var/woodnumber = input(user, "You may insert a maximum of four planks.", "How much wood would you like to add to \the [src]?", 0) as num
-		woodnumber = clamp(woodnumber,0,4)
-		var/obj/item/stack/sheet/wood/woody = I
-		woody.use(woodnumber)
-		user.visible_message("<span class='notice'>[user] adds some wood to \the [src].</span>", "<span class='notice'>You add some wood to \the [src].</span>")
-		cell.charge = min(cell.charge+woodnumber*250,cell.maxcharge)
-		update_icon()
 	if(on && istype(I,/obj/item/clothing/mask/cigarette))
 		var/obj/item/clothing/mask/cigarette/fag = I
 		fag.light("<span class='notice'>[user] lights \the [fag] using \the [src]'s flames.</span>")
@@ -234,10 +239,6 @@
 	T.visible_message(flavourtext)
 	on = 1
 	update_icon()
-
-/obj/machinery/space_heater/campfire/proc/snuff()
-	cell.charge = 0
-	process()
 
 /obj/machinery/space_heater/togglePanelOpen(var/obj/toggleitem, mob/user)
 	..()
@@ -385,7 +386,7 @@
 	var/datum/gas_mixture/env = T.return_air()
 	if(Floor(cell.charge/10) != lastcharge)
 		update_icon()
-	if((!(cell && cell.charge > 0) && nocell != 2) || !istype(T) || (env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME))
+	if((!(cell && cell.charge > 0) && (nocell != 2)) || !istype(T) || (env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME))
 		putOutFire()
 		return
 	lastcharge = Floor(cell.charge/10)
@@ -393,8 +394,12 @@
 		playsound(src, pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
 
 /obj/machinery/space_heater/campfire/proc/putOutFire()
-	new /obj/effect/decal/cleanable/campfire(get_turf(src))
-	qdel(src)
+	if (cell.charge)
+		on = 0
+		update_icon()
+	else
+		new /obj/effect/decal/cleanable/campfire(get_turf(src))
+		qdel(src)
 
 /obj/machinery/space_heater/campfire/stove/putOutFire()
 	if(on)
@@ -416,8 +421,10 @@
 	icon_state = "fireplace"
 	base_state = "fireplace"
 	desc = "The wood cracks and pops as the fire dances across its grainy surface. The sweet and smokey smell reminds you of smores and hot chocolate."
-	light_power_on = 0.8
-	light_range_on = 0
+	light_power_on = 3
+	light_range_on = 2
+	light_type = LIGHT_SOFT_FLICKER
+	light_color = LIGHT_COLOR_FIRE
 	nocell = 2
 	density = 0
 	pixel_x = -WORLD_ICON_SIZE/2

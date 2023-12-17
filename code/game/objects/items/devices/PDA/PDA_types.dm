@@ -1,87 +1,87 @@
-/obj/item/device/pda/ert
+/obj/item/device/flashlight/pda/ert
 	name = "ERT PDA"
 	default_cartridge = /obj/item/weapon/cartridge/security
 	icon_state = "pda-ert"
 
-/obj/item/device/pda/medical
+/obj/item/device/flashlight/pda/medical
 	name = "Medical PDA"
 	default_cartridge = /obj/item/weapon/cartridge/medical
 	icon_state = "pda-m"
 
-/obj/item/device/pda/medical/New()
+/obj/item/device/flashlight/pda/medical/New()
 	starting_apps += /datum/pda_app/ringer
 	..()
 	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
 	if(app)
 		app.frequency = deskbell_freq_medbay
 
-/obj/item/device/pda/viro
+/obj/item/device/flashlight/pda/viro
 	name = "Virology PDA"
 	default_cartridge = /obj/item/weapon/cartridge/medical
 	icon_state = "pda-v"
 
-/obj/item/device/pda/viro/New()
+/obj/item/device/flashlight/pda/viro/New()
 	starting_apps += /datum/pda_app/ringer
 	..()
 	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
 	if(app)
 		app.frequency = deskbell_freq_medbay
 
-/obj/item/device/pda/engineering
+/obj/item/device/flashlight/pda/engineering
 	name = "Engineering PDA"
 	default_cartridge = /obj/item/weapon/cartridge/engineering
 	icon_state = "pda-e"
 
-/obj/item/device/pda/security
+/obj/item/device/flashlight/pda/security
 	name = "Security PDA"
 	default_cartridge = /obj/item/weapon/cartridge/security
 	icon_state = "pda-s"
 
-/obj/item/device/pda/security/New()
+/obj/item/device/flashlight/pda/security/New()
 	starting_apps += /datum/pda_app/ringer
 	..()
 	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
 	if(app)
 		app.frequency = deskbell_freq_brig
 
-/obj/item/device/pda/detective
+/obj/item/device/flashlight/pda/detective
 	name = "Detective PDA"
 	default_cartridge = /obj/item/weapon/cartridge/detective
 	icon_state = "pda-det"
 
-/obj/item/device/pda/detective/New()
+/obj/item/device/flashlight/pda/detective/New()
 	starting_apps += /datum/pda_app/light_upgrade
 	..()
 
-/obj/item/device/pda/warden
+/obj/item/device/flashlight/pda/warden
 	name = "Warden PDA"
 	default_cartridge = /obj/item/weapon/cartridge/security
 	icon_state = "pda-warden"
 
-/obj/item/device/pda/warden/New()
+/obj/item/device/flashlight/pda/warden/New()
 	starting_apps += /datum/pda_app/ringer
 	..()
 	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
 	if(app)
 		app.frequency = deskbell_freq_brig
 
-/obj/item/device/pda/janitor
+/obj/item/device/flashlight/pda/janitor
 	name = "Janitor PDA"
 	default_cartridge = /obj/item/weapon/cartridge/janitor
 	icon_state = "pda-j"
 
-/obj/item/device/pda/janitor/New()
+/obj/item/device/flashlight/pda/janitor/New()
 	..()
 	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
 	if(app)
 		app.ttone = "slip"
 
-/obj/item/device/pda/toxins
+/obj/item/device/flashlight/pda/toxins
 	name = "Science PDA"
 	default_cartridge = /obj/item/weapon/cartridge/signal/toxins
 	icon_state = "pda-tox"
 
-/obj/item/device/pda/toxins/New()
+/obj/item/device/flashlight/pda/toxins/New()
 	starting_apps += /datum/pda_app/ringer
 	..()
 	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
@@ -91,83 +91,83 @@
 	if(app2)
 		app2.ttone = "boom"
 
-/obj/item/device/pda/clown
+/obj/item/device/flashlight/pda/clown
 	name = "Clown PDA"
 	default_cartridge = /obj/item/weapon/cartridge/clown
 	icon_state = "pda-clown"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. The surface is coated with polytetrafluoroethylene and banana drippings."
 
-/obj/item/device/pda/clown/New()
+/obj/item/device/flashlight/pda/clown/New()
 	..()
 	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
 	if(app)
 		app.ttone = "honk"
 
-/obj/item/device/pda/mime
+/obj/item/device/flashlight/pda/mime
 	name = "Mime PDA"
 	default_cartridge = /obj/item/weapon/cartridge/mime
 	icon_state = "pda-mime"
 
-/obj/item/device/pda/mime/New()
+/obj/item/device/flashlight/pda/mime/New()
 	..()
 	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
 	if(app)
 		app.silent = TRUE
 		app.ttone = "silence"
 
-/obj/item/device/pda/heads
+/obj/item/device/flashlight/pda/heads
 	name = "Head of department PDA"
 	default_cartridge = /obj/item/weapon/cartridge/head
 	icon_state = "pda-h"
 
-/obj/item/device/pda/heads/assassin
+/obj/item/device/flashlight/pda/heads/assassin
 	name = "Reaper PDA"
 	ownjob = "Reaper"
 
-/obj/item/device/pda/heads/nt_rep
+/obj/item/device/flashlight/pda/heads/nt_rep
 	name = "Nanotrasen Navy Representative PDA"
 	ownjob = "Nanotrasen Navy Representative"
 
-/obj/item/device/pda/heads/nt_officer
+/obj/item/device/flashlight/pda/heads/nt_officer
 	name = "Nanotrasen Navy Officer PDA"
 	ownjob = "Nanotrasen Navy Officer"
 
-/obj/item/device/pda/heads/nt_captain
+/obj/item/device/flashlight/pda/heads/nt_captain
 	name = "Nanotrasen Navy Captain PDA"
 	ownjob = "Nanotrasen Navy Captain"
 
-/obj/item/device/pda/heads/nt_captain/New()
+/obj/item/device/flashlight/pda/heads/nt_captain/New()
 	starting_apps.Cut()
 	starting_apps = get_all_installable_apps()
 	..()
 
-/obj/item/device/pda/heads/nt_supreme
+/obj/item/device/flashlight/pda/heads/nt_supreme
 	name = "Nanotrasen Supreme Commander PDA"
 	ownjob = "Nanotrasen Supreme Commander"
 
-/obj/item/device/pda/heads/nt_supreme/New()
+/obj/item/device/flashlight/pda/heads/nt_supreme/New()
 	starting_apps.Cut()
 	starting_apps = get_all_installable_apps()
 	..()
 
-/obj/item/device/pda/heads/hop
+/obj/item/device/flashlight/pda/heads/hop
 	name = "Head of Personnel PDA"
 	default_cartridge = /obj/item/weapon/cartridge/hop
 	icon_state = "pda-hop"
 
-/obj/item/device/pda/heads/hop/New()
+/obj/item/device/flashlight/pda/heads/hop/New()
 	starting_apps += /datum/pda_app/ringer
 	..()
 	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
 	if(app)
 		app.frequency = deskbell_freq_hop
 
-/obj/item/device/pda/heads/hos
+/obj/item/device/flashlight/pda/heads/hos
 	name = "Head of Security PDA"
 	default_cartridge = /obj/item/weapon/cartridge/hos
 	icon_state = "pda-hos"
 
-/obj/item/device/pda/heads/hos/New()
+/obj/item/device/flashlight/pda/heads/hos/New()
 	starting_apps += /datum/pda_app/ringer
 	starting_apps += /datum/pda_app/light_upgrade
 	..()
@@ -175,36 +175,36 @@
 	if(app)
 		app.frequency = deskbell_freq_brig
 
-/obj/item/device/pda/heads/ce
+/obj/item/device/flashlight/pda/heads/ce
 	name = "Chief Engineer PDA"
 	default_cartridge = /obj/item/weapon/cartridge/ce
 	icon_state = "pda-ce"
 
-/obj/item/device/pda/heads/cmo
+/obj/item/device/flashlight/pda/heads/cmo
 	name = "Chief Medical Officer PDA"
 	default_cartridge = /obj/item/weapon/cartridge/cmo
 	icon_state = "pda-cmo"
 
-/obj/item/device/pda/heads/cmo/New()
+/obj/item/device/flashlight/pda/heads/cmo/New()
 	starting_apps += /datum/pda_app/ringer
 	..()
 	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
 	if(app)
 		app.frequency = deskbell_freq_medbay
 
-/obj/item/device/pda/heads/rd
+/obj/item/device/flashlight/pda/heads/rd
 	name = "Research Director PDA"
 	default_cartridge = /obj/item/weapon/cartridge/rd
 	icon_state = "pda-rd"
 
-/obj/item/device/pda/heads/rd/New()
+/obj/item/device/flashlight/pda/heads/rd/New()
 	starting_apps += /datum/pda_app/ringer
 	..()
 	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
 	if(app)
 		app.frequency = deskbell_freq_rnd
 
-/obj/item/device/pda/captain
+/obj/item/device/flashlight/pda/captain
 	name = "Captain PDA"
 	default_cartridge = /obj/item/weapon/cartridge/captain
 	icon_state = "pda-c"
@@ -214,85 +214,92 @@
 		/datum/pda_app/cart/virus/fake_uplink,
 	)
 
-/obj/item/device/pda/captain/New()
+/obj/item/device/flashlight/pda/captain/New()
 	starting_apps.Cut()
 	starting_apps = get_all_installable_apps()
 	..()
 
-/obj/item/device/pda/cargo
+/obj/item/device/flashlight/pda/cargo
 	name = "Cargo PDA"
 	default_cartridge = /obj/item/weapon/cartridge/quartermaster
 	icon_state = "pda-cargo"
 
-/obj/item/device/pda/cargo/New()
+/obj/item/device/flashlight/pda/cargo/New()
 	starting_apps += /datum/pda_app/ringer
 	..()
 	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
 	if(app)
 		app.frequency = deskbell_freq_cargo
 
-/obj/item/device/pda/quartermaster
+/obj/item/device/flashlight/pda/quartermaster
 	name = "Quartermaster PDA"
 	default_cartridge = /obj/item/weapon/cartridge/quartermaster
 	icon_state = "pda-q"
 
-/obj/item/device/pda/quartermaster/New()
+/obj/item/device/flashlight/pda/quartermaster/New()
 	starting_apps += /datum/pda_app/ringer
 	..()
 	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
 	if(app)
 		app.frequency = deskbell_freq_cargo
 
-/obj/item/device/pda/shaftminer
+/obj/item/device/flashlight/pda/shaftminer
 	name = "Mining PDA"
 	icon_state = "pda-miner"
 
-/obj/item/device/pda/syndicate
+/obj/item/device/flashlight/pda/syndicate
 	default_cartridge = /obj/item/weapon/cartridge/syndicate
 	icon_state = "pda-syn"
 	name = "Military PDA"
 	hidden = 1
 
-/obj/item/device/pda/syndicate/door
+/obj/item/device/flashlight/pda/syndicate/door
 	default_cartridge = /obj/item/weapon/cartridge/syndicatedoor
 
-/obj/item/device/pda/chaplain
+/obj/item/device/flashlight/pda/chaplain
 	name = "Chaplain PDA"
 	icon_state = "pda-holy"
 
-/obj/item/device/pda/chaplain/New()
+/obj/item/device/flashlight/pda/chaplain/New()
 	..()
 	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
 	if(app)
 		app.ttone = "..."
 
-/obj/item/device/pda/lawyer
+/obj/item/device/flashlight/pda/lawyer
 	name = "Lawyer PDA"
 	default_cartridge = /obj/item/weapon/cartridge/lawyer
 	icon_state = "pda-lawyer"
 
-/obj/item/device/pda/lawyer/New()
+/obj/item/device/flashlight/pda/lawyer/New()
 	..()
 	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
 	if(app)
 		app.ttone = "..."
 
-/obj/item/device/pda/botanist
+/obj/item/device/flashlight/pda/botanist
 	name = "Botany PDA"
 	//default_cartridge = /obj/item/weapon/cartridge/botanist
 	icon_state = "pda-hydro"
 
-/obj/item/device/pda/roboticist
+/obj/item/device/flashlight/pda/roboticist
 	name = "Robotics PDA"
 	default_cartridge = /obj/item/weapon/cartridge/robotics
 	icon_state = "pda-robot"
 
-/obj/item/device/pda/librarian
+/obj/item/device/flashlight/pda/roboticist/New()
+	starting_apps += /datum/pda_app/ringer
+	..()
+	var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
+	if(app)
+		app.frequency = deskbell_freq_rnd
+
+/obj/item/device/flashlight/pda/librarian
 	name = "Librarian PDA"
 	icon_state = "pda-libb"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. This is model is a WGW-11 series e-reader."
 
-/obj/item/device/pda/librarian/New()
+/obj/item/device/flashlight/pda/librarian/New()
 	starting_apps += /datum/pda_app/newsreader
 	..()
 	var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in applications
@@ -302,61 +309,61 @@
 	if(app2)
 		app2.silent = TRUE //Quiet in the library!
 
-/obj/item/device/pda/clear
+/obj/item/device/flashlight/pda/clear
 	icon_state = "pda-transp"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. This is model is a special edition with a transparent case."
 
-/obj/item/device/pda/clear/New()
+/obj/item/device/flashlight/pda/clear/New()
 	..()
 	var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in applications
 	if(app)
 		app.note = "Congratulations, you have chosen the Thinktronic 5230 Personal Data Assistant Deluxe Special Max Turbo Limited Edition!"
 
-/obj/item/device/pda/trader
+/obj/item/device/flashlight/pda/trader
 	name = "Trader PDA"
 	desc = "Much good for trade."
 	icon_state = "pda-trader"
 	default_cartridge = /obj/item/weapon/cartridge/trader
 	show_overlays = FALSE
 
-/obj/item/device/pda/trader/New()
+/obj/item/device/flashlight/pda/trader/New()
 	..()
 	var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in applications
 	if(app)
 		app.note = "Congratulations, your statio RUNTIME FAULT AT 0x3ae46dc1"
 
-/obj/item/device/pda/chef
+/obj/item/device/flashlight/pda/chef
 	name = "Chef PDA"
 	default_cartridge = /obj/item/weapon/cartridge/chef
 	icon_state = "pda-chef"
 
-/obj/item/device/pda/bar
+/obj/item/device/flashlight/pda/bar
 	name = "Bartender PDA"
 	icon_state = "pda-bar"
 
-/obj/item/device/pda/atmos
+/obj/item/device/flashlight/pda/atmos
 	name = "Atmospherics PDA"
 	default_cartridge = /obj/item/weapon/cartridge/atmos
 	icon_state = "pda-atmo"
 
-/obj/item/device/pda/mechanic
+/obj/item/device/flashlight/pda/mechanic
 	name = "Mechanic PDA"
 	default_cartridge = /obj/item/weapon/cartridge/mechanic
 	icon_state = "pda-atmo"
 
-/obj/item/device/pda/chemist
+/obj/item/device/flashlight/pda/chemist
 	name = "Chemistry PDA"
 	default_cartridge = /obj/item/weapon/cartridge/chemistry
 	icon_state = "pda-chem"
 
-/obj/item/device/pda/geneticist
+/obj/item/device/flashlight/pda/geneticist
 	name = "Genetics PDA"
 	default_cartridge = /obj/item/weapon/cartridge/medical
 	icon_state = "pda-gene"
 
 
 // Special AI/pAI PDAs that cannot explode.
-/obj/item/device/pda/ai
+/obj/item/device/flashlight/pda/ai
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "pda_server-on"
 	accepted_viruses = list(
@@ -364,14 +371,14 @@
 		/datum/pda_app/cart/virus/silent,
 	)
 
-/obj/item/device/pda/ai/New()
+/obj/item/device/flashlight/pda/ai/New()
 	starting_apps += /datum/pda_app/spam_filter
 	..()
 	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
 	if(app)
 		app.ttone = "data"
 
-/obj/item/device/pda/ai/proc/set_name_and_job(newname as text, newjob as text)
+/obj/item/device/flashlight/pda/ai/proc/set_name_and_job(newname as text, newjob as text)
 	owner = newname
 	ownjob = newjob
 	name = newname + " (" + ownjob + ")"
@@ -395,7 +402,7 @@
 		to_chat(usr, "Turn on your receiver in order to send messages.")
 		return
 
-	for (var/obj/item/device/pda/P in get_viewable_pdas())
+	for (var/obj/item/device/flashlight/pda/P in get_viewable_pdas())
 		if (P == src)
 			continue
 		else if (P == src.aiPDA)
@@ -447,7 +454,7 @@
 	aiPDA.photo = null
 
 //AI verb and proc for sending PDA messages.
-/obj/item/device/pda/ai/verb/cmd_send_pdamesg()
+/obj/item/device/flashlight/pda/ai/verb/cmd_send_pdamesg()
 	set category = "AI Commands"
 	set name = "Send Message"
 	set src in usr
@@ -497,7 +504,7 @@
 		photo = null
 
 
-/obj/item/device/pda/ai/verb/cmd_toggle_pda_receiver()
+/obj/item/device/flashlight/pda/ai/verb/cmd_toggle_pda_receiver()
 	set category = "AI Commands"
 	set name = "Toggle Sender/Receiver"
 	set src in usr
@@ -512,7 +519,7 @@
 	to_chat(usr, "<span class='notice'>PDA sender/receiver toggled [(app.toff ? "Off" : "On")]!</span>")
 
 
-/obj/item/device/pda/ai/verb/cmd_toggle_pda_silent()
+/obj/item/device/flashlight/pda/ai/verb/cmd_toggle_pda_silent()
 	set category = "AI Commands"
 	set name = "Toggle Ringer"
 	set src in usr
@@ -527,7 +534,7 @@
 	to_chat(usr, "<span class='notice'>PDA ringer toggled [(app.silent ? "Off" : "On")]!</span>")
 
 
-/obj/item/device/pda/ai/verb/cmd_show_message_log()
+/obj/item/device/flashlight/pda/ai/verb/cmd_show_message_log()
 	set category = "AI Commands"
 	set name = "Show Message Log"
 	set src in usr
@@ -569,13 +576,13 @@
 	else
 		to_chat(usr, "You do not have a PDA. You should make an issue report about this.")
 
-/obj/item/device/pda/ai/attack_self(mob/user as mob)
+/obj/item/device/flashlight/pda/ai/attack_self(mob/user as mob)
 	if ((honkamt > 0) && (prob(60)))//For clown virus.
 		honkamt--
 		playsound(loc, 'sound/items/bikehorn.ogg', 30, 1)
 	return
 
-/obj/item/device/pda/ai/pai/New()
+/obj/item/device/flashlight/pda/ai/pai/New()
 	..()
 	var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in applications
 	if(app)

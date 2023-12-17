@@ -46,7 +46,8 @@ var/list/beam_master = list()
 
 	var/turf/T = vector2turf(info.point, z)
 	T.last_beam_damage = fired_beam.damage
-
+	fired_beam.final_turf = final_turf
+	fired_beam.previous_turf = previous_turf
 	if(!A.Cross(fired_beam, T) || (!isturf(fired_beam.original) && A == fired_beam.original))
 		var/ret = fired_beam.to_bump(A)
 		if(ret)
@@ -82,6 +83,18 @@ var/list/beam_master = list()
 	var/beam_color = null
 	var/beam_shift = null// the beam will animate() toward this color after being fired
 	var/list/ray/past_rays = list() //full of rays
+	var/turf/final_turf = null
+	var/turf/previous_turf = null
+
+	lighting_flags = IS_LIGHT_SOURCE
+	light_range = 1
+	light_power = 1
+	light_color = LIGHT_COLOR_RED
+
+/obj/item/projectile/beam/New(...)
+	if (!light_color)
+		light_color = beam_color
+	. = ..()
 
 /obj/item/projectile/beam/Destroy()
 	QDEL_LIST_NULL(past_rays)
@@ -100,7 +113,8 @@ var/list/beam_master = list()
 		hits = shot_ray.cast(travel_range)
 	else
 		hits = shot_ray.cast(MAX_BEAM_DISTANCE)
-
+	final_turf = shot_ray.final_turf
+	previous_turf = shot_ray.previous_turf
 	if(!gcDestroyed)
 		past_rays += shot_ray
 	else
@@ -108,9 +122,9 @@ var/list/beam_master = list()
 
 	if(isnull(hits) || hits.len == 0)
 		if(travel_range)
-			shot_ray.draw(travel_range, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+			shot_ray.draw(travel_range, icon, icon_state, color_override = beam_color, color_shift = beam_shift, emit_light = lighting_flags, _light_power = light_power, _light_color = light_color)
 		else
-			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state, color_override = beam_color, color_shift = beam_shift, emit_light = lighting_flags, _light_power = light_power, _light_color = light_color)
 
 	else
 		var/rayCastHit/last_hit = hits[hits.len]
@@ -118,11 +132,13 @@ var/list/beam_master = list()
 		shot_ray.draw(last_hit.distance, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
 
 		if(last_hit.hit_type == RAY_CAST_REBOUND)
+			final_turf=null
 			ASSERT(!gcDestroyed)
 			spawn()
 				rebound(last_hit.hit_atom)
 
 		if(last_hit.hit_type == RAY_CAST_PORTAL)
+			final_turf=null
 			ASSERT(!gcDestroyed)
 			spawn()
 				portal(last_hit.hit_atom)
@@ -188,6 +204,9 @@ var/list/beam_master = list()
 	damage = 40
 	linear_movement = 0
 
+	light_power = 4 // very bright
+
+
 /obj/item/projectile/beam/retro
 	icon_state = "laser_old"
 	linear_movement = 0
@@ -209,6 +228,9 @@ var/list/beam_master = list()
 	kill_count = 12
 	var/mob/firer_mob = null
 	var/yellow = 0
+
+	light_power = 3
+	light_color = LIGHT_COLOR_TUNGSTEN
 
 /obj/item/projectile/beam/lightning/proc/adjustAngle(angle)
 	angle = round(angle) + 45
@@ -639,6 +661,7 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/immolationray/upgraded // Exclusively used by the hoverdisc drone
 	damage = 55
+	destroy = 1
 
 /obj/item/projectile/beam/atomizationray
 	name = "atomization ray"
@@ -786,15 +809,20 @@ var/list/beam_master = list()
 	destroy = 1
 	fire_sound = 'sound/weapons/pulse.ogg'
 
+	light_color = LIGHT_COLOR_BLUE
+	light_power = 5
+
 /obj/item/projectile/beam/deathlaser
 	name = "death laser"
 	icon_state = "heavylaser"
 	damage = 60
+	light_power = 5
 
 /obj/item/projectile/beam/emitter
 	name = "emitter beam"
 	icon_state = "emitter"
 	damage = 30
+	lighting_flags = 0
 
 /obj/item/projectile/beam/emitter/singularity_pull()
 	return
@@ -811,6 +839,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	flag = "laser"
 	icon_state = "bluelaser"
 	var/list/enemy_vest_types = list(/obj/item/clothing/suit/tag/redtag)
+	light_power = 1
 
 /obj/item/projectile/beam/lasertag/on_hit(var/atom/target, var/blocked = 0)
 	if(ismob(target))
@@ -1155,50 +1184,62 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	penetration = 0
 	pass_flags = PASSTABLE
 	var/has_splashed = FALSE
+	var/atom/splashed_atom = null
 
-/obj/item/projectile/beam/liquid_stream/New(atom/A, var/t_range)
+/obj/item/projectile/beam/liquid_stream/New(atom/A, var/t_range=3, var/m_color, var/m_alpha=255)
 	..(A)
 	create_reagents(20)
-	if(t_range)
-		travel_range = t_range
-	else
-		travel_range = 0
-
-/obj/item/projectile/beam/liquid_stream/OnFired()
-	beam_color = mix_color_from_reagents(reagents.reagent_list)
-	alpha = mix_alpha_from_reagents(reagents.reagent_list)
-	..()
+	travel_range = t_range
+	beam_color = m_color
+	alpha = m_alpha
 
 /obj/item/projectile/beam/liquid_stream/on_hit(var/atom/A, var/blocked = 0)
-	if(reagents.total_volume)
-		for(var/datum/reagent/R in reagents.reagent_list)
-			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))//so here we're just doubling our quantity of reagents from 10 to 20
-		if(istype(A, /mob))
-			if(firer.zone_sel.selecting == TARGET_MOUTH && def_zone == LIMB_HEAD && ishuman(A)) //if aiming at head and is humanoid
-				var/mob/living/carbon/human/victim = A
-				if(!victim.check_body_part_coverage(MOUTH)) //if not covered with mask or something
-					victim.visible_message("<span class='warning'>[A] swallows \the [src]!</span>",
-										"<span class='warning'>You swallow \the [src]!</span>")
-					reagents.trans_to(A, reagents.total_volume) //20% chance to get in mouth and in system, if mouth targeting was possible at all with projectiles this chance should be scrapped
-					has_splashed = TRUE //guess we arent stacking with the splash
-					return 1
-				else
-					A.visible_message("<span class='warning'>\The [src] gets blocked from [A]'s mouth!</span>",
-									"<span class='warning'>\The [src] gets blocked from your mouth!</span>")//just block mouth, no turf splash
+	if(reagents.total_volume && istype(A, /mob))
+		if(firer.zone_sel.selecting == TARGET_MOUTH && def_zone == LIMB_HEAD && ishuman(A)) //if aiming at head and is humanoid
+			var/mob/living/carbon/human/victim = A
+			if(!victim.check_body_part_coverage(MOUTH)) //if not covered with mask or something
+				victim.visible_message("<span class='warning'>[A] swallows \the [src]!</span>",
+									"<span class='warning'>You swallow \the [src]!</span>")
+				reagents.trans_to(A, reagents.total_volume)
+				has_splashed = TRUE //guess we arent stacking with the splash
+				qdel(src)
+				return 1
 			else
-				var/splash_verb = pick("douses","completely soaks","drenches","splashes")
-				A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
-									"<span class='warning'>\The [src] [splash_verb] you!</span>")
-				splash_sub(reagents, get_turf(A), reagents.total_volume/2, firer)//then we splash 10 of those on the turf in front (or under in case of mobs) of the hit atom
+				A.visible_message("<span class='warning'>\The [src] gets blocked from [A]'s mouth!</span>",
+								"<span class='warning'>\The [src] gets blocked from your mouth!</span>")//just block mouth, no turf splash
 		else
-			splash_sub(reagents, get_turf(src), reagents.total_volume/2, firer)
-		splash_sub(reagents, A, reagents.total_volume, firer)//and 10 more on the atom itself
-		has_splashed = TRUE
-		return 1
+			var/splash_verb = pick("douses","completely soaks","drenches","splashes")
+			A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
+								"<span class='warning'>\The [src] [splash_verb] you!</span>")
 
-/obj/item/projectile/beam/liquid_stream/OnDeath()
-	if(!has_splashed && loc)
-		splash_sub(reagents, get_turf(src), reagents.total_volume)
+/obj/item/projectile/beam/liquid_stream/to_bump(var/atom/A)
+	splashed_atom = A//doesn't matter if it's actually the atom we end up splashing since we only use that var on bullet_die()
+	. = ..()
+
+/obj/item/projectile/beam/liquid_stream/bullet_die()//splashes reagents on the hit atom, or in front of it in case of turfs and border objects
+	if(reagents && reagents.total_volume && !has_splashed && ((bumped && splashed_atom) || final_turf))
+		if (splashed_atom && !isturf(splashed_atom) && (previous_turf && previous_turf.Adjacent(splashed_atom)))
+			if (splashed_atom.flow_flags & ON_BORDER)
+				loc = previous_turf
+			else
+				loc = get_turf(splashed_atom)
+		else if (isturf(splashed_atom))
+			loc = final_turf
+		else
+			loc = previous_turf
+		playsound(loc, 'sound/effects/slosh.ogg', 20, 1)
+		reagents.splashplosion(0)
+		has_splashed = TRUE
+	..()
+//I never want to deal wity ray casts ever again
+/obj/item/projectile/beam/liquid_stream/fireto(var/vector/origin, var/vector/direction)//splashes reagents on the turf if the projectile ran out
+	..()
+	if (reagents && reagents.total_volume && final_turf && !has_splashed)
+		loc = final_turf
+		reagents.splashplosion(0)
+		has_splashed = TRUE
+		qdel(src)
+
 
 /obj/item/projectile/beam/liquid_stream/proc/adjust_strength(var/t_range)
 	if(t_range)

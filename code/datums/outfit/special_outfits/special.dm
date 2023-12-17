@@ -117,7 +117,7 @@
 			slot_head_str = /obj/item/clothing/head/helmet/dredd,
 			slot_wear_mask_str = /obj/item/clothing/mask/gas/swat,
 			slot_belt_str = /obj/item/weapon/storage/belt/security,
-			slot_wear_suit_str = /obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+			slot_wear_suit_str = /obj/item/clothing/suit/armor/dredd,
 			slot_s_store_str = /obj/item/weapon/gun/lawgiver,
 		),
 	)
@@ -341,7 +341,7 @@
 	W.SetOwnerDNAInfo(H)
 	H.equip_to_slot_or_drop(W, slot_wear_id)
 	if (pda_type)
-		var/obj/item/device/pda/pda = new pda_type(H)
+		var/obj/item/device/flashlight/pda/pda = new pda_type(H)
 		pda.owner = H.real_name
 		pda.name = "PDA-[H.real_name]"
 		H.equip_or_collect(pda, pda_slot)
@@ -354,7 +354,6 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/clown,
 			slot_shoes_str = /obj/item/clothing/shoes/clown_shoes,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_head_str = /obj/item/clothing/head/chaplain_hood,
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
 			slot_wear_suit_str = /obj/item/clothing/suit/chaplain_hoodie,
@@ -382,7 +381,7 @@
 			slot_l_store_str = /obj/item/tool/scalpel,
 		),
 	)
-	pda_type = /obj/item/device/pda/heads/assassin
+	pda_type = /obj/item/device/flashlight/pda/heads/assassin
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/syndicate/assassin
 
@@ -397,7 +396,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses,
 		),
 	)
-	pda_type = /obj/item/device/pda/heads/nt_rep
+	pda_type = /obj/item/device/flashlight/pda/heads/nt_rep
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/nt_rep
 
@@ -423,7 +422,7 @@
 	items_to_collect = list(
 		/obj/item/weapon/gun/energy,
 	)
-	pda_type = /obj/item/device/pda/heads/nt_officer
+	pda_type = /obj/item/device/flashlight/pda/heads/nt_officer
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/centcom/nt_officer
 
@@ -446,7 +445,7 @@
 	items_to_collect = list(
 		/obj/item/weapon/gun/energy,
 	)
-	pda_type = /obj/item/device/pda/heads/nt_captain
+	pda_type = /obj/item/device/flashlight/pda/heads/nt_captain
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/centcom/nt_officer
 
@@ -469,7 +468,7 @@
 	items_to_collect = list(
 		/obj/item/weapon/gun/energy/laser/captain,
 	)
-	pda_type = /obj/item/device/pda/heads/nt_supreme
+	pda_type = /obj/item/device/flashlight/pda/heads/nt_supreme
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/centcom/nt_supreme
 

@@ -187,7 +187,7 @@
 
 		return TRUE
 
-	if((istype(O,/obj/item/weapon/card/id)||istype(O,/obj/item/device/pda)) && brainmob)
+	if((istype(O,/obj/item/weapon/card/id)||istype(O,/obj/item/device/flashlight/pda)) && brainmob)
 		if(allowed(user))
 			locked = !locked
 			to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] \the [src].</span>")
@@ -241,9 +241,12 @@
 	brainmob.dna = new()
 	brainmob.dna.ResetUI()
 	brainmob.dna.ResetSE()
+	if(P.be_random_name)
+		P.real_name = random_name(P.gender, P.species)
 	brainmob.name = P.real_name
 	brainmob.real_name = P.real_name
 	brainmob.container = src
+
 	name = "Man-Machine Interface: [brainmob.real_name]"
 	icon_state = "mmi_full"
 	locked = 1

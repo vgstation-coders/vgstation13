@@ -26,7 +26,7 @@
 	intact = 0 //No seriously, that's not a joke. Allows cable to be laid properLY on catwalks
 	plane = OPENSPACE_PLANE_START
 	//pathweight = 100000 //For lack of pathweights, mobdropping meta inc
-	dynamic_lighting = 0 // Someday lets do proper lighting z-transfer.  Until then we are leaving this off so it looks nicer.
+	has_white_turf_lighting = 0 // Someday lets do proper lighting z-transfer.  Until then we are leaving this off so it looks nicer.
 	var/turf/below
 
 /turf/simulated/open/post_change()

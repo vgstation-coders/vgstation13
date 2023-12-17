@@ -30,7 +30,7 @@ var/area/space_area
 	if(isspace(src))	// override defaults for space. TODO: make space areas of type /area/space rather than /area
 		requires_power = 1
 		always_unpowered = 1
-		dynamic_lighting = 0
+		has_white_turf_lighting = 1
 		power_light = 0
 		power_equip = 0
 		power_environ = 0
@@ -48,6 +48,8 @@ var/area/space_area
 		power_environ = 1
 
 	..()
+
+	update_white_turf_lighting()
 
 //	spawn(15)
 	power_change()		// all machines set to current power level, also updates lighting icon
@@ -447,12 +449,13 @@ var/area/space_area
 		thing.area_entered(src)
 
 	for(var/mob/mob_in_obj in Obj.contents)
-		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = src, "old" = oldArea))
+		if(istype(mob_in_obj))
+			INVOKE_EVENT(mob_in_obj, /event/mob_area_changed, "mob" = mob_in_obj, "newarea" = src, "oldarea" = oldArea)
 
 	INVOKE_EVENT(src, /event/area_entered, "enterer" = Obj)
 	var/mob/M = Obj
 	if(istype(M))
-		CallHook("MobAreaChange", list("mob" = M, "new" = src, "old" = oldArea)) // /vg/ - EVENTS!
+		INVOKE_EVENT(M, /event/mob_area_changed, "mob" = M, "newarea" = src, "oldarea" = oldArea)
 		if(narrator)
 			narrator.Crossed(M)
 
@@ -658,7 +661,7 @@ var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are move
 
 //					var/area/AR = X.loc
 
-//					if(AR.dynamic_lighting)							//TODO: rewrite this code so it's not messed by lighting ~Carn
+//					if(AR.has_white_turf_lighting)							//TODO: rewrite this code so it's not messed by lighting ~Carn
 //						X.opacity = !X.opacity
 //						X.SetOpacity(!X.opacity)
 

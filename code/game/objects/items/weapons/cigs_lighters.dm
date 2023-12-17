@@ -26,7 +26,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	item_state = "match"
 	var/lit = 0
 	var/smoketime = 10
-	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
 	heat_production = 1000
 	source_temperature = TEMPERATURE_FLAME
 	autoignition_temperature = AUTOIGNITION_PAPER
@@ -35,7 +34,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/list/unlit_attack_verb = list("prods", "pokes")
 	var/list/lit_attack_verb = list("burns", "singes")
 	attack_verb = list("prods", "pokes")
+
+	light_range = 1
 	light_color = LIGHT_COLOR_FIRE
+	lighting_flags = MOVABLE_LIGHT
+	light_type = LIGHT_SOFT_FLICKER
+
 	var/base_name = "match"
 	var/base_icon = "match"
 
@@ -100,10 +104,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/match/proc/update_brightness()
 	if(lit == 1) //I wish I didn't need the == 1 part, but Dreamkamer is a dumb puppy
 		processing_objects.Add(src)
-		set_light(brightness_on)
+		set_light()
 	else
 		processing_objects.Remove(src)
-		set_light(0)
+		kill_light()
 	update_icon()
 
 /obj/item/weapon/match/process()
@@ -192,7 +196,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/overlay_on = "ciglit" //Apparently not used
 	var/type_butt = /obj/item/trash/cigbutt
 	var/lastHolder = null
-	var/brightness_on = 1 //Barely enough to see where you're standing, it's a boring old cigarette
+
+	light_range = 1
+	light_color = LIGHT_COLOR_FIRE
+	lighting_flags = MOVABLE_LIGHT
+	light_type = LIGHT_SOFT_FLICKER
+
 	var/smoketime = 300
 	var/chem_volume = 20
 	var/inside_item = 0 //For whether the cigarette is contained inside another item.
@@ -203,9 +212,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	surgerysound = 'sound/items/cautery.ogg'
 
 /obj/item/clothing/mask/cigarette/New()
-	..()
 	base_name = name
 	base_icon = icon_state
+	..()
 	flags |= NOREACT // so it doesn't react until you light it
 	create_reagents(chem_volume) // making the cigarrete a chemical holder with a maximum volume of 15
 	if(Holiday == APRIL_FOOLS_DAY)
@@ -213,6 +222,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	else
 		reagents.add_reagent(TOBACCO, 5)
 	update_brightness()
+	update_icon()
 
 /obj/item/clothing/mask/cigarette/Destroy()
 	. = ..()
@@ -248,10 +258,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/clothing/mask/cigarette/proc/update_brightness()
 	if(lit)
 		processing_objects.Add(src)
-		set_light(brightness_on)
+		set_light()
 	else
 		processing_objects.Remove(src)
-		set_light(0)
+		kill_light()
 	update_icon()
 
 /obj/item/clothing/mask/cigarette/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
@@ -481,7 +491,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 //////////////
 
 /obj/item/clothing/mask/cigarette/bidi
-	name = "Bidi"
+	name = "\improper Bidi"
 	desc = "An acrid, loosely-rolled tobacco leaf, stuffed with herbs and spices and bound with twine."
 	icon_state = "bidi"
 	overlay_on = "bidilit"
@@ -490,7 +500,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	burn_on_end = TRUE
 
 /obj/item/clothing/mask/cigarette/goldencarp
-	name = "Golden Carp cigarette"
+	name = "\improper Golden Carp cigarette"
 	desc = "A cigarette made from light, fine paper, with a thin gold band above the filter."
 	icon_state = "goldencarp"
 	overlay_on = "goldencarplit"
@@ -498,7 +508,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/goldencarpbutt
 
 /obj/item/clothing/mask/cigarette/starlight
-	name = "Starlight cigarette"
+	name = "\improper Starlight cigarette"
 	desc = "A nicely-rolled smoke. Above the filter are a red and yellow band."
 	icon_state = "starlight"
 	overlay_on = "starlightlit"
@@ -506,7 +516,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/starlightbutt
 
 /obj/item/clothing/mask/cigarette/lucky
-	name = "Lucky Strike cigarette"
+	name = "\improper Lucky Strike cigarette"
 	desc = "Plain and unfiltered, just how great-great-grandad used to like them."
 	icon_state = "lucky"
 	overlay_on = "luckylit"
@@ -514,7 +524,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/luckybutt
 
 /obj/item/clothing/mask/cigarette/redsuit
-	name = "Redsuit cigarette"
+	name = "\improper Redsuit cigarette"
 	desc = "Slim and refined. A mild smoke for a serious smoker."
 	icon_state = "redsuit"
 	overlay_on = "redsuitlit"
@@ -522,7 +532,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/redsuitbutt
 
 /obj/item/clothing/mask/cigarette/ntstandard
-	name = "NT Standard cigarette"
+	name = "\improper NT Standard cigarette"
 	desc = "Matte grey with a blue band. Corporate loyalty with every puff."
 	icon_state = "ntstandard"
 	overlay_on = "ntstandardlit"
@@ -530,7 +540,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/ntstandardbutt
 
 /obj/item/clothing/mask/cigarette/spaceport
-	name = "Spaceport cigarette"
+	name = "\improper Spaceport cigarette"
 	desc = "The dull gold band wrapped around this cig does nothing to hide its cheap origins."
 	icon_state = "spaceport"
 	overlay_on = "spaceportlit"
@@ -566,7 +576,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 ////////////
 
 /obj/item/clothing/mask/cigarette/cigar
-	name = "Premium Cigar"
+	name = "\improper Premium Cigar"
 	desc = "A large roll of tobacco and... well, you're not quite sure. This thing's huge!"
 	icon_state = "cigar"
 	overlay_on = "cigarlit"
@@ -578,14 +588,14 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/cohiba
-	name = "Cohiba Robusto Cigar"
+	name = "\improper Cohiba Robusto Cigar"
 	desc = "There's little more you could want from a cigar."
 	icon_state = "cigar2"
 	overlay_on = "cigar2lit"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/havana
-	name = "Premium Havanian Cigar"
+	name = "\improper Premium Havanian Cigar"
 	desc = "A cigar fit for only the best for the best."
 	icon_state = "cigar2"
 	overlay_on = "cigar2lit"
@@ -831,7 +841,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	flags = null
 	siemens_coefficient = 1
 	var/color_suffix = "-g" // Determines the sprite used
-	var/brightness_on = 2 //Sensibly better than a match or a cigarette
 	var/lightersound = list('sound/items/lighter1.ogg','sound/items/lighter2.ogg')
 	var/fuel = 20
 	var/fueltime
@@ -841,7 +850,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/list/unlit_attack_verb = list("prods", "pokes")
 	var/list/lit_attack_verb = list("burns", "singes")
 	attack_verb = list("prods", "pokes")
+
+	light_range = 2
 	light_color = LIGHT_COLOR_FIRE
+	lighting_flags = MOVABLE_LIGHT
+	light_type = LIGHT_SOFT_FLICKER
+
 	var/lit = 0
 	var/base_icon = "lighter"
 	surgerysound = 'sound/items/cautery.ogg'
@@ -902,10 +916,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/lighter/proc/update_brightness()
 	if(lit)
 		processing_objects.Add(src)
-		set_light(brightness_on)
+		set_light()
 	else
 		processing_objects.Remove(src)
-		set_light(0)
+		kill_light()
 	update_icon()
 
 /obj/item/weapon/lighter/afterattack(obj/O, mob/user, proximity)

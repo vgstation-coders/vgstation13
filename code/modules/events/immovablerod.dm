@@ -10,12 +10,12 @@ var/list/all_rods = list()
 	announceWhen = 1
 
 /datum/event/immovable_rod/can_start(var/list/active_with_role)
-	if(active_with_role["Engineer"] > 1 && active_with_role.len > 6)
+	if(active_with_role["Engineer"] > 1 && active_with_role["Any"] > 6)
 		return 15
 	return 0
 
 /datum/event/immovable_rod/big/can_start(var/list/active_with_role)
-	if(active_with_role["Engineer"] > 2 && active_with_role.len > 6)
+	if(active_with_role["Engineer"] > 2 && active_with_role["Any"] > 6)
 		return 15
 	return 0
 
@@ -165,7 +165,7 @@ var/list/all_rods = list()
 		if(prob(50))
 			clong()
 
-/obj/item/projectile/immovablerod/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+/obj/item/projectile/immovablerod/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
 	..()
 	if(z != starting.z)
 		qdel(src)

@@ -168,12 +168,12 @@ This ladder stuff looks confusing, so here's an illustration!!!
 
 //Entrance vault
 /area/vault/sokoban
-	dynamic_lighting = TRUE
+	has_white_turf_lighting = TRUE
 	mysterious = TRUE
 
 //Other levels
 /area/vault/sokoban/level
-	dynamic_lighting = FALSE //No lighting + transparent walls to make it less confusing
+	has_white_turf_lighting = FALSE //No lighting + transparent walls to make it less confusing
 	mysterious = FALSE
 
 //Crate

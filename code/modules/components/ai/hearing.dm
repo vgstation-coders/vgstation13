@@ -9,11 +9,11 @@
 	var/response_delay = 10
 
 /datum/component/ai/hearing/initialize()
-	parent.register_event(/event/hear, src, src::on_hear())
+	parent.register_event(/event/hear, src, nameof(src::on_hear()))
 	return TRUE
 
 /datum/component/ai/hearing/Destroy()
-	parent.unregister_event(/event/hear, src, src::on_hear())
+	parent.unregister_event(/event/hear, src, nameof(src::on_hear()))
 	..()
 
 /datum/component/ai/hearing/proc/on_hear(datum/speech/speech)
@@ -72,7 +72,7 @@
 
 /datum/component/ai/hearing/order/initialize()
 	..()
-	parent.register_event(/event/comp_ai_cmd_order, src, src::on_order())
+	parent.register_event(/event/comp_ai_cmd_order, src, nameof(src::on_order()))
 	if(!notfoundmessages.len)
 		notfoundmessages = list("ERROR-[Gibberish(rand(1000,9999),50)]: Item not found. Please try again.")
 	if(!(src in active_components))
@@ -81,7 +81,7 @@
 	return TRUE
 
 /datum/component/ai/hearing/order/Destroy()
-	parent.unregister_event(/event/comp_ai_cmd_order, src, src::on_order())
+	parent.unregister_event(/event/comp_ai_cmd_order, src, nameof(src::on_order()))
 	active_components -= src
 	..()
 

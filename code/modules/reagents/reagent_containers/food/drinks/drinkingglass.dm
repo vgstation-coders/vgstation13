@@ -17,14 +17,21 @@
 	var/current_path = null
 	var/counter = 1
 
+	can_flip = TRUE
+
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
-	overlays.Cut()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/update_icon()
+	..()
+	overlays.len = 0
+	can_flip = FALSE
 	flammable = 0
 	if(!molotov)
 		lit = 0
 	light_color = null
-	set_light(0)
+	kill_light()
 	origin_tech = ""
 	switching = FALSE
 	available_drinks.Cut()
@@ -36,7 +43,7 @@
 			desc = "The identity of this drink has been concealed for its protection."
 		else
 			var/datum/reagent/R = reagents.get_master_reagent()
-			R.handle_special_behavior(src)
+			R.when_drinkingglass_master_reagent(src)
 
 			if(R.light_color)
 				light_color = R.light_color
@@ -68,6 +75,7 @@
 		item_state = "glass_empty"
 		name = "drinking glass"
 		desc = "Your standard drinking glass."
+		can_flip = TRUE
 
 	if(iscarbon(loc))
 		var/mob/living/carbon/M = loc
@@ -179,6 +187,7 @@
 	starting_materials = list(MAT_IRON = 500)
 
 /obj/item/weapon/reagent_containers/food/drinks/mug/on_reagent_change()
+	..()
 
 	if (reagents.reagent_list.len > 0)
 		item_state = "mug_empty"

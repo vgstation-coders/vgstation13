@@ -9,7 +9,7 @@ var/list/pda_multicasters = list()
 	anchored = 1
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 750
-	var/obj/item/device/pda/camo/CAMO
+	var/obj/item/device/flashlight/pda/camo/CAMO
 	var/on = TRUE
 
 /obj/machinery/pda_multicaster/New()
@@ -54,31 +54,31 @@ var/list/pda_multicasters = list()
 	return !(stat&(FORCEDISABLE|BROKEN|NOPOWER|EMPED))&&on
 
 /obj/machinery/pda_multicaster/proc/update_PDAs(var/turn_off)
-	for(var/obj/item/device/pda/pda in contents)
+	for(var/obj/item/device/flashlight/pda/pda in contents)
 		var/datum/pda_app/messenger/camo/app = locate(/datum/pda_app/messenger/camo) in pda.applications
 		if(app)
 			app.toff = turn_off
 
-/obj/machinery/pda_multicaster/proc/multicast(var/target,var/obj/item/device/pda/sender,var/mob/living/U,var/message)
+/obj/machinery/pda_multicaster/proc/multicast(var/target,var/obj/item/device/flashlight/pda/sender,var/mob/living/U,var/message)
 	var/list/redirection_list = list(
-		"security" = list(/obj/item/device/pda/warden,/obj/item/device/pda/detective,/obj/item/device/pda/security,/obj/item/device/pda/heads/hos),
-		"engineering" = list(/obj/item/device/pda/engineering,/obj/item/device/pda/atmos,/obj/item/device/pda/heads/ce),
-		"medical" = list(/obj/item/device/pda/medical,/obj/item/device/pda/viro,/obj/item/device/pda/chemist,/obj/item/device/pda/geneticist,/obj/item/device/pda/heads/cmo),
-		"research" = list(/obj/item/device/pda/toxins,/obj/item/device/pda/roboticist,/obj/item/device/pda/mechanic,/obj/item/device/pda/heads/rd),
-		"cargo" = list(/obj/item/device/pda/cargo,/obj/item/device/pda/shaftminer,/obj/item/device/pda/quartermaster),
-		"service" = list(/obj/item/device/pda/botanist,/obj/item/device/pda/chef,/obj/item/device/pda/bar)
+		"security" = list(/obj/item/device/flashlight/pda/warden,/obj/item/device/flashlight/pda/detective,/obj/item/device/flashlight/pda/security,/obj/item/device/flashlight/pda/heads/hos),
+		"engineering" = list(/obj/item/device/flashlight/pda/engineering,/obj/item/device/flashlight/pda/atmos,/obj/item/device/flashlight/pda/mechanic,/obj/item/device/flashlight/pda/heads/ce),
+		"medical" = list(/obj/item/device/flashlight/pda/medical,/obj/item/device/flashlight/pda/viro,/obj/item/device/flashlight/pda/chemist,/obj/item/device/flashlight/pda/geneticist,/obj/item/device/flashlight/pda/heads/cmo),
+		"research" = list(/obj/item/device/flashlight/pda/toxins,/obj/item/device/flashlight/pda/roboticist,/obj/item/device/flashlight/pda/mechanic,/obj/item/device/flashlight/pda/geneticist,/obj/item/device/flashlight/pda/heads/rd),
+		"cargo" = list(/obj/item/device/flashlight/pda/cargo,/obj/item/device/flashlight/pda/shaftminer,/obj/item/device/flashlight/pda/quartermaster),
+		"service" = list(/obj/item/device/flashlight/pda/botanist,/obj/item/device/flashlight/pda/chef,/obj/item/device/flashlight/pda/bar)
 	)
 
 	var/list/available_pdas = CAMO.available_pdas() //Let's not recalculate this every time.
 	for(var/element in available_pdas)
-		var/obj/item/device/pda/P = available_pdas[element]
+		var/obj/item/device/flashlight/pda/P = available_pdas[element]
 		if(is_type_in_list(P,redirection_list[target]))
 			CAMO.ownjob = "[sender.owner]"
 			var/datum/pda_app/messenger/camo/app = locate(/datum/pda_app/messenger/camo) in CAMO.applications
 			if(app)
 				app.create_message(U, P, message, sender)
 
-/obj/item/device/pda/camo
+/obj/item/device/flashlight/pda/camo
 	name = "Centralized Autonomous Messaging Operator"
 	owner = "CAMO"
 	ownjob = "CAMO"
@@ -92,6 +92,6 @@ var/list/pda_multicasters = list()
 /datum/pda_app/messenger/camo
 	can_purchase = FALSE
 
-/datum/pda_app/messenger/camo/create_message(var/mob/living/U,var/obj/item/device/pda/P,var/multicast_message = null)
+/datum/pda_app/messenger/camo/create_message(var/mob/living/U,var/obj/item/device/flashlight/pda/P,var/multicast_message = null)
 	..()
 	last_text = 0 //CAMO can text as much as it pleases

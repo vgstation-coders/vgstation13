@@ -32,7 +32,7 @@
 		var/datum/pda_app/app = new type()
 		applications += app
 		if(istype(app) && isPDA(loc))
-			var/obj/item/device/pda/P = loc
+			var/obj/item/device/flashlight/pda/P = loc
 			if(istype(app,/datum/pda_app/cart))
 				var/datum/pda_app/cart/cart_app = app
 				cart_app.onInstall(P,src)
@@ -41,7 +41,7 @@
 	if (radio_type)
 		radio = new radio_type(src)
 		if(isPDA(loc))
-			var/obj/item/device/pda/P = loc
+			var/obj/item/device/flashlight/pda/P = loc
 			radio.hostpda = P
 		if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 			radio.initialize()
@@ -73,7 +73,7 @@
 	price = 0
 	var/obj/item/weapon/cartridge/cart_device = null
 
-/datum/pda_app/cart/onInstall(var/obj/item/device/pda/device,var/obj/item/weapon/cartridge/device2)
+/datum/pda_app/cart/onInstall(var/obj/item/device/flashlight/pda/device,var/obj/item/weapon/cartridge/device2)
 	..(device)
 	if(device2)
 		cart_device = device2
@@ -87,7 +87,7 @@
 	var/base_name = "Scanner"
 	has_screen = FALSE
 
-/datum/pda_app/cart/scanner/onInstall(var/obj/item/device/pda/device,var/obj/item/weapon/cartridge/device2)
+/datum/pda_app/cart/scanner/onInstall(var/obj/item/device/flashlight/pda/device,var/obj/item/weapon/cartridge/device2)
 	..(device,device2)
 	update_name()
 

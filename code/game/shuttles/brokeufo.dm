@@ -45,6 +45,11 @@
 	var/global/datum/shuttle/brokeufo/brokeufo_shuttle = new(starting_area=/area/shuttle/brokeufo/start)
 	brokeufo_shuttle.initialize()
 	link_to(brokeufo_shuttle)
+
+	var/obj/item/weapon/paper/manual_ufo = new(get_turf(src))
+
+	manual_ufo.name = "GDR Scout Passcode"
+	manual_ufo.info = "Keep this document in a secure location. Your craft's passcode is: \"<b>[brokeufo_shuttle.password]</b>\"."
 	.=..()
 
 //code/game/objects/structures/docking_port.dm

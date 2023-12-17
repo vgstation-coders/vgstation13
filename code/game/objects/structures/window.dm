@@ -90,9 +90,12 @@ var/list/one_way_windows
 	examine_health(user)
 
 /obj/structure/window/AltClick(mob/user)
-	if(user.incapacitated() || !Adjacent(user))
-		return
-	rotate()
+	if(is_fulltile)
+		. = ..()
+	else
+		if(user.incapacitated() || !Adjacent(user))
+			return
+		rotate()
 
 /obj/structure/window/proc/examine_health(mob/user)
 	if(!anchored)
@@ -220,7 +223,10 @@ var/list/one_way_windows
 		return TRUE
 	if(!density)
 		return TRUE
-	if(istype(mover))
+	if(istype(mover, /obj/item/projectile/beam))
+		var/obj/item/projectile/beam/B = mover
+		return bounds_dist(border_dummy, B.previous_turf) >= 0
+	else if(istype(mover))
 		return bounds_dist(border_dummy, mover) >= 0
 	else if(get_dir(loc, target) == dir)
 		return FALSE
@@ -623,7 +629,20 @@ var/list/one_way_windows
 	. = ..()
 	update_nearby_tiles()
 
-/obj/structure/window/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+//This proc is used to update the icons of nearby windows. It should not be confused with update_nearby_tiles(), which is an atmos proc!
+/obj/structure/window/proc/update_nearby_icons(var/turf/T)
+	if(!loc)
+		return 0
+	if(!T)
+		T = get_turf(src)
+
+	update_icon()
+
+	for(var/direction in cardinal)
+		for(var/obj/structure/window/W in get_step(T,direction))
+			W.update_icon()
+
+/obj/structure/window/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
 	var/turf/T = loc
 	relativewall()
 	relativewall_neighbours()
@@ -726,7 +745,7 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/tinted
 
 	name = "tinted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall?"
 	icon_state = "twindow0"
 	base_state = "twindow"
 	opacity = 1
@@ -735,7 +754,7 @@ var/list/one_way_windows
 /obj/structure/window/reinforced/tinted/frosted
 
 	name = "frosted window"
-	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall ?"
+	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall?"
 	icon_state = "rwindow0"
 	base_state = "rwindow"
 	health = 30
@@ -751,6 +770,11 @@ var/list/one_way_windows
 	reinforcetype = /obj/item/stack/sheet/ralloy
 	sheetamount = 2
 	health = 80
+
+/obj/structure/window/reinforced/clockwork/relativewall()
+	// Ignores adjacent anchored window tiles for "merging", since there's only a single brass window sprite
+	// Remove this whenever someone sprites all the required icon states
+	return
 
 /obj/structure/window/reinforced/clockwork/cultify()
 	return

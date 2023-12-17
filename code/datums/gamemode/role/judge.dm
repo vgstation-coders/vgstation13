@@ -52,7 +52,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/security,
 			slot_gloves_str = /obj/item/clothing/gloves/combat,
 			slot_belt_str = /obj/item/weapon/storage/belt/security,
-			slot_wear_suit_str = /obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+			slot_wear_suit_str = /obj/item/clothing/suit/armor/dredd,
 			slot_l_store_str = /obj/item/weapon/storage/bag/ammo_pouch/judge
 		)
 	)
@@ -66,7 +66,7 @@
 		/obj/item/weapon/autocuffer,
 	)
 
-	pda_type = /obj/item/device/pda/ert
+	pda_type = /obj/item/device/flashlight/pda/ert
 	pda_slot = slot_r_store
 	id_type = /obj/item/weapon/card/id/judge
 

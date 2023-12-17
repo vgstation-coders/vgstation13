@@ -57,14 +57,12 @@
 /area/vault/powered/mini_station_botany)
 "al" = (
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_engineering)
@@ -72,8 +70,7 @@
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_engineering)
@@ -82,14 +79,12 @@
 /area/vault/powered/mini_station)
 "ao" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_engineering)
@@ -111,8 +106,7 @@
 /area/vault/powered/mini_station_engineering)
 "ar" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
-	dir = 8;
-	icon_state = "hoff"
+	dir = 8
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 8
@@ -121,8 +115,7 @@
 /area/vault/powered/mini_station)
 "au" = (
 /obj/machinery/atmospherics/pipe/layer_adapter/scrubbers/hidden{
-	dir = 1;
-	icon_state = "adapter_4"
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_engineering)
@@ -200,8 +193,7 @@
 /area/vault/powered/mini_station_construction)
 "aF" = (
 /obj/machinery/atmospherics/pipe/layer_adapter/supply/hidden{
-	dir = 1;
-	icon_state = "adapter_2"
+	dir = 1
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_engineering)
@@ -257,8 +249,7 @@
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
-	icon_state = "1-2";
-	pixel_y = 0
+	icon_state = "1-2"
 	},
 /turf/space,
 /area/vault/powered/mini_station_entrance)
@@ -295,8 +286,7 @@
 /area/vault/powered/mini_station_entrance)
 "aR" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
-	dir = 1;
-	icon_state = "hoff"
+	dir = 1
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 1
@@ -328,8 +318,7 @@
 /area/vault/powered/mini_station_entrance)
 "aU" = (
 /obj/structure/sign/directions/engineering{
-	dir = 1;
-	icon_state = "direction_eng"
+	dir = 1
 	},
 /turf/simulated/wall,
 /area/vault/powered/mini_station_engineering)
@@ -338,8 +327,7 @@
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
-	icon_state = "1-2";
-	pixel_y = 0
+	icon_state = "1-2"
 	},
 /obj/structure/cable{
 	d1 = 2;
@@ -487,12 +475,10 @@
 /area/vault/powered/mini_station_construction)
 "bk" = (
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /obj/structure/grille,
 /turf/simulated/floor/plating,
@@ -528,18 +514,15 @@
 /area/vault/powered/mini_station_medbay)
 "bu" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_medbay)
@@ -566,16 +549,13 @@
 /area/vault/powered/mini_station_engineering)
 "bx" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /obj/structure/grille,
 /obj/structure/window/reinforced,
@@ -645,8 +625,7 @@
 /area/vault/powered/mini_station_entrance)
 "bF" = (
 /obj/structure/bed/chair/wood/normal{
-	dir = 4;
-	icon_state = "wooden_chair"
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_kitchen)
@@ -727,7 +706,6 @@
 /obj/structure/closet/wardrobe/medic_white,
 /obj/item/stack/sheet/bone,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "blue"
 	},
 /area/vault/powered/mini_station_medbay)
@@ -764,8 +742,7 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
-	dir = 8;
-	icon_state = "hoff"
+	dir = 8
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 8
@@ -816,7 +793,6 @@
 /obj/machinery/atmospherics/unary/vent_pump/on/layered,
 /obj/machinery/atmospherics/unary/vent_scrubber/layered,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "blue"
 	},
 /area/vault/powered/mini_station_medbay)
@@ -824,7 +800,6 @@
 /obj/machinery/vending/tool,
 /obj/machinery/light,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "yellow"
 	},
 /area/vault/powered/mini_station_engineering)
@@ -837,8 +812,7 @@
 /area/vault/powered/mini_station_engineering)
 "ci" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
@@ -878,8 +852,7 @@
 /area/vault/powered/mini_station_engineering)
 "co" = (
 /obj/structure/bed/chair/wood/normal{
-	dir = 8;
-	icon_state = "wooden_chair"
+	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered,
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden/layered,
@@ -914,8 +887,7 @@
 /area/vault/powered/mini_station_botany)
 "ct" = (
 /obj/machinery/light{
-	dir = 8;
-	icon_state = "ltube1"
+	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden/layered,
@@ -954,10 +926,7 @@
 "cy" = (
 /obj/item/weapon/switchtool/engineering/mech,
 /obj/item/stack/sheet/mineral/plasma,
-/obj/structure/table{
-	pixel_x = 0;
-	pixel_y = 0
-	},
+/obj/structure/table,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -983,16 +952,13 @@
 /area/vault/powered/mini_station)
 "cA" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /obj/structure/grille,
 /turf/simulated/floor/plating,
@@ -1024,10 +990,7 @@
 	pixel_x = 6;
 	pixel_y = 6
 	},
-/obj/structure/table{
-	pixel_x = 0;
-	pixel_y = 0
-	},
+/obj/structure/table,
 /turf/simulated/floor,
 /area/vault/powered/mini_station_medbay)
 "cE" = (
@@ -1056,8 +1019,7 @@
 /area/vault/powered/mini_station_entrance)
 "cH" = (
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
@@ -1075,21 +1037,18 @@
 /area/vault/powered/mini_station_kitchen)
 "cJ" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_entrance)
 "cK" = (
 /obj/structure/bed/chair/wood/normal{
-	dir = 4;
-	icon_state = "wooden_chair"
+	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden/layered{
 	dir = 9;
@@ -1114,8 +1073,7 @@
 /area/vault/powered/mini_station_kitchen)
 "cM" = (
 /obj/machinery/door/airlock/multi_tile/glass{
-	dir = 2;
-	icon_state = "door_closed"
+	dir = 2
 	},
 /obj/machinery/door/firedoor/border_only{
 	dir = 8;
@@ -1133,31 +1091,26 @@
 /area/vault/powered/mini_station_entrance)
 "cO" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_entrance)
 "cP" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station)
@@ -1174,12 +1127,10 @@
 /area/vault/powered/mini_station)
 "cR" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
@@ -1238,10 +1189,7 @@
 /obj/item/stack/sheet/metal/bigstack,
 /obj/item/stack/sheet/plasteel/bigstack,
 /obj/item/stack/sheet/glass/glass/bigstack,
-/obj/structure/table{
-	pixel_x = 0;
-	pixel_y = 0
-	},
+/obj/structure/table,
 /obj/machinery/alarm{
 	dir = 4;
 	pixel_x = -22
@@ -1285,8 +1233,7 @@
 /area/vault/powered/mini_station_engineering)
 "cY" = (
 /obj/machinery/light/small{
-	dir = 8;
-	icon_state = "lbulb1"
+	dir = 8
 	},
 /obj/machinery/alarm{
 	dir = 4;
@@ -1329,8 +1276,7 @@
 "dc" = (
 /obj/machinery/door/airlock/external,
 /obj/docking_port/destination/vault/minisat{
-	dir = 4;
-	icon_state = "docking_station"
+	dir = 4
 	},
 /obj/machinery/door/firedoor/border_only{
 	dir = 4;
@@ -1357,15 +1303,13 @@
 /area/vault/powered/mini_station_botany)
 "dp" = (
 /obj/structure/sign/directions/evac{
-	dir = 4;
-	icon_state = "direction_evac"
+	dir = 4
 	},
 /turf/simulated/wall,
 /area/vault/powered/mini_station_engineering)
 "ee" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
-	dir = 8;
-	icon_state = "hoff"
+	dir = 8
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 8
@@ -1425,26 +1369,22 @@
 /area/vault/powered/mini_station_medbay)
 "fg" = (
 /obj/machinery/light{
-	dir = 8;
-	icon_state = "ltube1"
+	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/visible,
 /turf/simulated/floor,
 /area/vault/powered/mini_station_engineering)
 "fw" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_engineering)
@@ -1475,8 +1415,7 @@
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
-	icon_state = "1-2";
-	pixel_y = 0
+	icon_state = "1-2"
 	},
 /obj/structure/cable{
 	d1 = 1;
@@ -1524,12 +1463,10 @@
 /area/vault/powered/mini_station_botany)
 "iQ" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
@@ -1626,8 +1563,7 @@
 	pixel_y = -24
 	},
 /obj/machinery/bodyscanner{
-	dir = 4;
-	icon_state = "body_scanner_0"
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_kitchen)
@@ -1660,7 +1596,6 @@
 "ot" = (
 /obj/machinery/vending/engivend,
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "yellow"
 	},
 /area/vault/powered/mini_station_engineering)
@@ -1700,12 +1635,10 @@
 /area/vault/powered/mini_station_kitchen)
 "pY" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
@@ -1713,8 +1646,7 @@
 /area/vault/powered/mini_station_entrance)
 "qk" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
-	dir = 1;
-	icon_state = "hoff"
+	dir = 1
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 1
@@ -1728,8 +1660,7 @@
 /area/vault/powered/mini_station_kitchen)
 "qm" = (
 /obj/structure/bed/chair/wood/normal{
-	dir = 4;
-	icon_state = "wooden_chair"
+	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden/layered{
 	dir = 8;
@@ -1777,10 +1708,7 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station)
 "so" = (
-/obj/structure/table{
-	pixel_x = 0;
-	pixel_y = 0
-	},
+/obj/structure/table,
 /obj/item/weapon/switchtool/surgery,
 /obj/item/weapon/storage/firstaid/toxin,
 /obj/item/stack/sheet/charcoal,
@@ -1831,14 +1759,12 @@
 /area/vault/powered/mini_station_entrance)
 "sT" = (
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_medbay)
@@ -2016,10 +1942,7 @@
 "ye" = (
 /obj/item/weapon/storage/toolbox/electrical,
 /obj/item/blueprints/construction_permit,
-/obj/structure/table{
-	pixel_x = 0;
-	pixel_y = 0
-	},
+/obj/structure/table,
 /obj/structure/cable{
 	d1 = 1;
 	d2 = 2;
@@ -2082,10 +2005,7 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station_construction)
 "Am" = (
-/obj/structure/table{
-	pixel_x = 0;
-	pixel_y = 0
-	},
+/obj/structure/table,
 /obj/item/weapon/storage/firstaid,
 /obj/item/weapon/thermometer,
 /obj/item/weapon/storage/box/beakers,
@@ -2147,10 +2067,7 @@
 	},
 /area/vault/powered/mini_station_engineering)
 "Bi" = (
-/obj/structure/table{
-	pixel_x = 0;
-	pixel_y = 0
-	},
+/obj/structure/table,
 /obj/item/weapon/storage/firstaid/fire,
 /obj/item/weapon/reagent_containers/glass/beaker,
 /turf/simulated/floor{
@@ -2165,12 +2082,10 @@
 /area/vault/powered/mini_station_kitchen)
 "Bt" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/grille,
 /turf/simulated/floor/plating,
@@ -2234,24 +2149,20 @@
 	icon_state = "4-8"
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "blue"
 	},
 /area/vault/powered/mini_station_medbay)
 "ES" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_construction)
@@ -2297,18 +2208,15 @@
 /area/vault/powered/mini_station)
 "FM" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_medbay)
@@ -2322,12 +2230,10 @@
 /area/vault/powered/mini_station_botany)
 "GH" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
@@ -2335,8 +2241,7 @@
 /area/vault/powered/mini_station)
 "Hu" = (
 /obj/structure/bed/chair/wood/normal{
-	dir = 8;
-	icon_state = "wooden_chair"
+	dir = 8
 	},
 /obj/structure/cable{
 	d1 = 4;
@@ -2347,8 +2252,7 @@
 /area/vault/powered/mini_station_kitchen)
 "HX" = (
 /obj/machinery/door/airlock/multi_tile/glass{
-	dir = 8;
-	icon_state = "door_closed"
+	dir = 8
 	},
 /obj/machinery/door/firedoor/border_only{
 	dir = 1;
@@ -2486,8 +2390,7 @@
 /area/vault/powered/mini_station_engineering)
 "Nn" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/table/glass,
 /obj/item/tool/bonesetter/bone_mender{
@@ -2500,23 +2403,19 @@
 	pixel_z = 1
 	},
 /turf/simulated/floor{
-	dir = 2;
 	icon_state = "blue"
 	},
 /area/vault/powered/mini_station_medbay)
 "NL" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station)
@@ -2525,8 +2424,7 @@
 /area/vault/powered/mini_station_kitchen)
 "Oc" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_medbay)
@@ -2628,8 +2526,7 @@
 /area/vault/powered/mini_station_botany)
 "RR" = (
 /obj/structure/bed/chair/wood/normal{
-	dir = 8;
-	icon_state = "wooden_chair"
+	dir = 8
 	},
 /turf/simulated/floor,
 /area/vault/powered/mini_station_kitchen)
@@ -2681,12 +2578,10 @@
 /area/vault/powered/mini_station)
 "TE" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/grille,
 /turf/simulated/floor/plating,
@@ -2701,18 +2596,15 @@
 /area/vault/powered/mini_station_construction)
 "Uj" = (
 /obj/structure/window/reinforced{
-	dir = 4;
-	icon_state = "rwindow0"
+	dir = 4
 	},
 /obj/structure/window/reinforced{
-	dir = 8;
-	icon_state = "rwindow0"
+	dir = 8
 	},
 /obj/structure/window/reinforced,
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 1;
-	icon_state = "rwindow0"
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/vault/powered/mini_station_kitchen)
@@ -2867,8 +2759,7 @@
 /area/vault/powered/mini_station)
 "Zs" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/layered{
-	dir = 8;
-	icon_state = "hoff"
+	dir = 8
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on/layered{
 	dir = 8

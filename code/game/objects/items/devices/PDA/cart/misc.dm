@@ -17,7 +17,7 @@
 		return
 	var/mob/living/U = usr
 	if(href_list["target"])
-		var/obj/item/device/pda/P = locate(href_list["target"])//Leaving it alone in case it may do something useful, I guess.
+		var/obj/item/device/flashlight/pda/P = locate(href_list["target"])//Leaving it alone in case it may do something useful, I guess.
 		if(!isnull(P))
 			var/pass = FALSE
 			for (var/obj/machinery/message_server/MS in message_servers)
@@ -33,7 +33,7 @@
 			to_chat(U, "PDA not found.")
 	refresh_pda()
 
-/datum/pda_app/cart/virus/proc/infect(var/obj/item/device/pda/P,var/mob/U)
+/datum/pda_app/cart/virus/proc/infect(var/obj/item/device/flashlight/pda/P,var/mob/U)
 	return
 
 /datum/pda_app/cart/virus/detonate
@@ -42,7 +42,7 @@
 	icon = "pda_boom"
 	virus_type = "detonation charges"
 
-/datum/pda_app/cart/virus/detonate/infect(var/obj/item/device/pda/P,var/mob/U)
+/datum/pda_app/cart/virus/detonate/infect(var/obj/item/device/flashlight/pda/P,var/mob/U)
 	var/difficulty = 0
 
 	if(locate(/datum/pda_app/cart/medical_records) in P.cartridge.applications)
@@ -119,7 +119,7 @@
 	icon = "pda_boom"
 	virus_type = "fake uplinks"
 
-/datum/pda_app/cart/virus/fake_uplink/infect(var/obj/item/device/pda/P,var/mob/U)
+/datum/pda_app/cart/virus/fake_uplink/infect(var/obj/item/device/flashlight/pda/P,var/mob/U)
 	if(P.get_component(/datum/component/uplink))
 		U.show_message("<span class='warning'>An error flashes on your [src]; [pick(syndicate_code_response)]</span>", 1)
 		U << browse(null, "window=pda")

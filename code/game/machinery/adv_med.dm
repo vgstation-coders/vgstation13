@@ -51,7 +51,7 @@
 	if(!(stat & (BROKEN|NOPOWER|FORCEDISABLE)) && occupant)
 		set_light(light_range_on, light_power_on)
 	else
-		set_light(0)
+		kill_light()
 
 /obj/machinery/bodyscanner/MouseDropTo(var/atom/movable/O, var/mob/user)
 	if(!ismob(O)) //humans only
@@ -190,7 +190,7 @@
 			continue
 		x.forceMove(loc)
 
-	if(!occupant.gcDestroyed)
+	if(occupant && !occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
 		if(istype(ejector) && ejector != occupant)
@@ -200,7 +200,7 @@
 				ejector.start_pulling(B)
 	occupant = null
 	update_icon()
-	set_light(0)
+	kill_light()
 
 /obj/machinery/bodyscanner/emag_act(mob/user)
 	if(!emagged)

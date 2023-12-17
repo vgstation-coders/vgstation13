@@ -8,7 +8,7 @@
 	name = "mysterious structure"
 	requires_power = 0
 	icon_state = "firingrange"
-	dynamic_lighting = 1
+	has_white_turf_lighting = 1
 
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
@@ -45,6 +45,14 @@
 
 /area/vault/podstation
 	requires_power = 1
+
+/area/vault/podstation/interior
+	name = "\improper Pod Station"
+	icon_state = "kitchen"
+
+/area/vault/podstation/exterior
+	name = "\improper Pod Station Asteroid"
+	icon_state = "pod"
 
 /area/vault/fastfood
 
@@ -332,7 +340,7 @@
 /area/vault/zathura
 
 /area/vault/zathura/surroundings
-	dynamic_lighting = FALSE
+	has_white_turf_lighting = FALSE
 	mysterious = TRUE
 
 /area/vault/ironchef
@@ -485,7 +493,7 @@
 /obj/machinery/floodlight/on/New()
 	..()
 	on = 1
-	set_light(brightness_on)
+	set_light()
 	update_icon()
 
 /obj/machinery/floodlight/on/infinite
@@ -528,7 +536,7 @@
 	check_records = 1
 	criminals = 1
 	auth_weapons = 1
-	stun_all = 1
+	stun_peasants = 1
 	check_anomalies = 1
 	ai = 1
 
@@ -1001,12 +1009,12 @@
 	name = "NT Microstation Construction Room"
 	icon_state = "construction"
 
-/obj/item/device/pda/clown/broken
+/obj/item/device/flashlight/pda/clown/broken
 	name = "Antique Clown PDA"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. The surface is coated with polytetrafluoroethylene and banana drippings. This one has been stepped on for too many times, and appears to be completely unresponsive."
 	starting_apps = list()
 
-/obj/item/device/pda/clown/broken/attack_self(mob/user)
+/obj/item/device/flashlight/pda/clown/broken/attack_self(mob/user)
 	INVOKE_EVENT(src, /event/item_attack_self, "user" = user) // Minimalist version of original function
 
 /obj/structure/falserwall/doorobscurer
@@ -1056,13 +1064,13 @@
 	AT.id_tag = "vaultkitchen"
 	AT.enter_signal = /event/comp_ai_cmd_retaliate
 	AT.typefilter = /mob/living/carbon/human
-	register_event(/event/comp_ai_cmd_retaliate, src, src::Retaliate())
+	register_event(/event/comp_ai_cmd_retaliate, src, nameof(src::Retaliate()))
 	add_component(/datum/component/ai/conversation)
 	var/datum/component/ai/area_territorial/say/fastfood/intruder/AT2 = add_component(/datum/component/ai/area_territorial/say/fastfood/intruder)
 	AT2.SetArea(locate(/area/vault/fastfood/kitchen))
 
 /mob/living/simple_animal/hostile/retaliate/cookbot/Destroy()
-	unregister_event(/event/comp_ai_cmd_retaliate, src, src::Retaliate())
+	unregister_event(/event/comp_ai_cmd_retaliate, src, nameof(src::Retaliate()))
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/cookbot/death(var/gibbed = FALSE)

@@ -179,13 +179,13 @@ var/datum/nanomanager/nanomanager = new()
 
 var/sqladdress = "localhost"
 var/sqlport = 3306
-var/sqldb = "tgstation"
+var/sqldb = "feedback"
 var/sqllogin = "root"
 var/sqlpass = ""
 
 	// Feedback gathering sql connection
 
-var/sqlfdbkdb = "test"
+var/sqlfdbkdb = "feedback"
 var/sqlfdbklogin = "root"
 var/sqlfdbkpass = ""
 
@@ -274,6 +274,10 @@ var/datum/stat_collector/stat_collection = new
 //When enabled, starvation kills
 var/global/hardcore_mode = 0
 
+//Mass Buddha Mode
+//When enabled, all current mobs and all new carbon mobs will be in buddha mode (no crit/death)
+var/global/buddha_mode_everyone = 0
+
 //Global list of all unsimulated mineral turfs for xenoarch
 var/global/list/mineral_turfs = list()
 var/global/list/static_list = list('sound/effects/static/static1.ogg','sound/effects/static/static2.ogg','sound/effects/static/static3.ogg','sound/effects/static/static4.ogg','sound/effects/static/static5.ogg',)
@@ -292,6 +296,7 @@ var/list/centcommMiniMaps = list()
 var/list/extraMiniMaps = list()
 
 var/list/holomap_markers = list()
+var/list/workplace_markers = list()
 
 var/holomaps_initialized = 0
 
@@ -312,7 +317,8 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
 		/mob/living/simple_animal/hostile/bunnybot,						// See viscerator
 		/mob/living/carbon/human/NPC,									// Unfinished, with its own AI that conflicts with player movements.
-		/mob/living/simple_animal/hostile/pulse_demon/					// Your motherfucking life ends in 0 seconds.
+		/mob/living/simple_animal/hostile/pulse_demon/,					// Your motherfucking life ends in 0 seconds.
+		/mob/living/simple_animal/hostile/slime,						// Instantly kills player and destroys the MC.
 		)
 
 //Boss monster list
@@ -363,11 +369,6 @@ var/list/corrupt_mobs = list(
 
 // Set by traitor item, affects cargo supplies
 var/station_does_not_tip = FALSE
-
-// Whether Nuclear Operatives have declared war on station.
-var/war_declared = FALSE
-var/war_declared_time = 0
-var/can_war_be_declared = TRUE
 
 //Malf AI global variables
 var/malf_radio_blackout = FALSE

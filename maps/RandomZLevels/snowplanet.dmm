@@ -104,7 +104,6 @@
 "az" = (
 /obj/machinery/gateway/away,
 /obj/effect/decal/warning_stripes{
-	dir = 2;
 	icon_state = "loading_area";
 	tag = "icon-loading_area"
 	},

@@ -47,7 +47,7 @@
 	var/isvisiting = 0
 	var/list/visited = list()
 
-/datum/pda_app/spesspets/onInstall(var/obj/item/device/pda/device)
+/datum/pda_app/spesspets/onInstall(var/obj/item/device/flashlight/pda/device)
 	..()
 	petID = num2text(rand(000000,999999))
 	reconnect_database()
@@ -245,8 +245,8 @@
 /datum/pda_app/spesspets/proc/game_update(var/mob/user)
 	if(istype(user,/mob/living/carbon))
 		var/mob/living/carbon/C = user
-		if(C.machine && istype(C.machine,/obj/item/device/pda))
-			var/obj/item/device/pda/pda_device = C.machine
+		if(C.machine && istype(C.machine,/obj/item/device/flashlight/pda))
+			var/obj/item/device/flashlight/pda/pda_device = C.machine
 			var/turf/user_loc = get_turf(user)
 			var/turf/pda_loc = get_turf(pda_device)
 			if(get_dist(user_loc,pda_loc) <= 1)
@@ -447,7 +447,7 @@
 		chance_to_win -= 15
 	var/turf/T = get_turf(pda_device)
 	var/list/possible_challengers = list()
-	for(var/obj/item/device/pda/check_pda in PDAs)
+	for(var/obj/item/device/flashlight/pda/check_pda in PDAs)
 		var/datum/pda_app/spesspets/pet_app = locate(/datum/pda_app/spesspets) in check_pda.applications
 		if(pet_app && (pet_app.game_state == 2) && !pet_app.isfighting && (!challenged[pet_app.petID] || (world.time - challenged[pet_app.petID] >= 6000)))
 			var/turf/T2 = get_turf(check_pda)
@@ -504,7 +504,7 @@
 		chance_to_get_along += 15
 	var/turf/T = get_turf(pda_device)
 	var/list/possible_visitors = list()
-	for(var/obj/item/device/pda/check_pda in PDAs)
+	for(var/obj/item/device/flashlight/pda/check_pda in PDAs)
 		var/datum/pda_app/spesspets/pet_app = locate(/datum/pda_app/spesspets) in check_pda.applications
 		if(pet_app && (pet_app.game_state == 2) && !pet_app.isvisiting &&(!visited[pet_app.petID] || (world.time - visited[pet_app.petID] >= 6000)))
 			var/turf/T2 = get_turf(check_pda)

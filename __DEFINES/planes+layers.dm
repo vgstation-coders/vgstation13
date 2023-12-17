@@ -59,6 +59,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 /*
 	from stddef.dm, planes & layers built into byond.
+
 	FLOAT_LAYER = -1
 	AREA_LAYER = 1
 	TURF_LAYER = 2
@@ -72,6 +73,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 	TOPDOWN_LAYER = 10000
 	BACKGROUND_LAYER = 20000
 	------
+
 	FLOAT_PLANE = -32767
 */
 #define BELOW_PLATING_PLANE 			(-5 + FLOAT_PLANE)
@@ -95,6 +97,8 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define SIDE_LAYER					3
 
 #define TURF_PLANE				(-1 + FLOAT_PLANE)
+	#define PAINT_LAYER					(TURF_LAYER + 1)
+	#define ADVANCED_GRAFFITI_LAYER		(TURF_LAYER + 2)
 	#define MAPPING_TURF_LAYER			-999
 
 #define GLASSTILE_PLANE			-1						// Another one that won't behave, since it's an overlay
@@ -134,8 +138,6 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define BELOW_OBJ_LAYER				2
 	#define MACHINERY_LAYER				2.5
 	// OBJ_LAYER 	 					3
-	#define CANVAS_LAYER				3.1					// So that canvas always appear above easels
-	#define EASEL_OVERLAY_LAYER			3.2					// So that the easel bits that hold a canvas in place always appear above a canvas
 	#define ABOVE_OBJ_LAYER				4
 	#define SIDE_WINDOW_LAYER			5
 	#define FULL_WINDOW_LAYER			6
@@ -168,16 +170,18 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define VEHICLE_LAYER 				0
 	#define CHAIR_ARMREST_LAYER 		0
 	#define DISPOSALS_CHUTE_LAYER 		0
+	#define EASEL_LAYER					0
 	#define RAILING_BACK_LAYER 			0.1
 	#define RAILING_MID_LAYER 			0.2
+	#define CANVAS_LAYER				1					// So that canvas always appear above easels
+	#define EASEL_OVERLAY_LAYER			2					// So that the easel bits that hold a canvas in place always appear above a canvas
 	#define RAILING_FRONT_LAYER 		0.3
 	#define WINDOOR_LAYER 				1
 	#define OPEN_CURTAIN_LAYER			2
-	// BELOW_OBJ_LAYER					2
-	// OBJ_LAYER 	 					3
-	// ABOVE_OBJ_LAYER					4
-	#define CLOSED_CURTAIN_LAYER		5
-	#define CLOSED_FIREDOOR_LAYER		6
+	#define CLOSED_CURTAIN_LAYER		3
+	#define CLOSED_FIREDOOR_LAYER		4
+	#define POTTED_PLANT_LAYER			5
+	#define LIGHT_FIXTURE_LAYER			6
 	#define CHAT_LAYER					7
 
 #define BLOB_PLANE 				(11 + FLOAT_PLANE)			// For Blobs, which are above humans.
@@ -212,16 +216,20 @@ Why is FLOAT_PLANE added to a bunch of these?
 #define FAKE_CAMERA_PLANE		(14)
 
 #define LIGHTING_PLANE 			(15)	// Don't put anything other than lighting_overlays in there please
-	#define SELF_VISION_LAYER 		   -1
-	#define LIGHTING_LAYER 				0
+	#define SELF_VISION_LAYER 		   -100
+	#define LIGHTBULB_LAYER 			000
+	#define LIGHTING_LAYER 				200
+	#define ABOVE_LIGHTING_LAYER 		300
+	#define HIGHEST_LIGHTING_LAYER		400
+	#define LIGHTING_COLOUR_LAYER		500
+	#define ANTI_GLOW_PASS_LAYER		600
+	#define ROID_TURF_LIGHT_LAYER 		700
+
 
 #define ABOVE_LIGHTING_PLANE	(16)
-	#define ABOVE_LIGHTING_LAYER		0
 	#define SUPERMATTER_WALL_LAYER 		1
 	#define SUPER_PORTAL_LAYER			2
 	#define NARSIE_GLOW 				3
-
-
 	#define MAPPING_AREA_LAYER			999	// Why isn't this a plane exactly?
 
 #define OPEN_OVERLAY_PLANE	(17 + FLOAT_PLANE) // This one won't behave either
@@ -350,38 +358,11 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 
 var/obj/abstract/screen/plane_master/overdark_planemaster/overdark_planemaster = new()
 
-/obj/abstract/screen/plane_master/overdark_planemaster_target
+/obj/abstract/screen/overdark_target
 	appearance_flags = 0
-	plane = BASE_PLANE
+	plane = LIGHTING_PLANE
 	mouse_opacity = 0
 	screen_loc = "CENTER,CENTER"
-	render_source = "*overdark"
-
-var/obj/abstract/screen/plane_master/overdark_planemaster_target/overdark_planemaster_target = new()
-
-// DARKNESS PLANEMASTER
-// One planemaster for each client, which they gain during mob/login()
-/obj/abstract/screen/plane_master/darkness_planemaster
-	plane = LIGHTING_PLANE
-	blend_mode = BLEND_MULTIPLY
-
-/obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	alpha = 0
-	appearance_flags = 0
-	plane = LIGHTING_PLANE
-
-/client/proc/initialize_darkness_planemaster()
-	if(darkness_planemaster)
-		screen -= darkness_planemaster
-		qdel(darkness_planemaster)
-	if(darkness_planemaster_dummy)
-		screen -= darkness_planemaster_dummy
-		qdel(darkness_planemaster_dummy)
-	darkness_planemaster = new /obj/abstract/screen/plane_master/darkness_planemaster
-	screen |= darkness_planemaster
-	darkness_planemaster_dummy = new /obj/abstract/screen/plane_master/darkness_planemaster_dummy
-	screen |= darkness_planemaster_dummy
-
 
 /obj/abstract/screen/plane_master/fakecamera_planemaster
 	plane = FAKE_CAMERA_PLANE

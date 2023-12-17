@@ -10,14 +10,14 @@
 	var/price = 10
 	var/menu = TRUE //set it to false if your app doesn't need its own menu on the PDA
 	var/has_screen = TRUE
-	var/obj/item/device/pda/pda_device = null
+	var/obj/item/device/flashlight/pda/pda_device = null
 	var/icon = null	//name of the icon that appears in front of the app name on the PDA, example: "pda_game.png"
 	var/no_refresh = FALSE
 	var/can_purchase = TRUE //if this can be bought from a PDA terminal
 	var/assets_type = null //for asset sending
 	var/mode = 0 //for apps with multiple screens
 
-/datum/pda_app/proc/onInstall(var/obj/item/device/pda/device)
+/datum/pda_app/proc/onInstall(var/obj/item/device/flashlight/pda/device)
 	if(istype(device))
 		pda_device = device
 		pda_device.applications += src

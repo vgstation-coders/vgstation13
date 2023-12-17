@@ -559,11 +559,11 @@ var/global/list/all_jobs
 /proc/FindNameFromID(var/mob/living/carbon/human/H)
 	ASSERT(istype(H))
 	var/obj/item/weapon/card/id/C = H.get_active_hand()
-	if( istype(C) || istype(C, /obj/item/device/pda) )
+	if( istype(C) || istype(C, /obj/item/device/flashlight/pda) )
 		var/obj/item/weapon/card/id/ID = C
 
-		if( istype(C, /obj/item/device/pda) )
-			var/obj/item/device/pda/pda = C
+		if( istype(C, /obj/item/device/flashlight/pda) )
+			var/obj/item/device/flashlight/pda/pda = C
 			ID = pda.id
 		if(!istype(ID))
 			ID = null
@@ -573,11 +573,11 @@ var/global/list/all_jobs
 
 	C = H.wear_id
 
-	if( istype(C) || istype(C, /obj/item/device/pda) )
+	if( istype(C) || istype(C, /obj/item/device/flashlight/pda) )
 		var/obj/item/weapon/card/id/ID = C
 
-		if( istype(C, /obj/item/device/pda) )
-			var/obj/item/device/pda/pda = C
+		if( istype(C, /obj/item/device/flashlight/pda) )
+			var/obj/item/device/flashlight/pda/pda = C
 			ID = pda.id
 		if(!istype(ID))
 			ID = null
@@ -586,4 +586,4 @@ var/global/list/all_jobs
 			return ID.registered_name
 
 /proc/get_all_job_icons() //For all existing HUD icons
-	return get_all_jobs() + list("Prisoner", "visitor")
+	return get_all_jobs() + list("Prisoner", "visitor", "Nanotrasen")

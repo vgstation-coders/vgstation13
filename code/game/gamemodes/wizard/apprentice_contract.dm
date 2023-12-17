@@ -148,11 +148,11 @@ var/list/wizard_apprentice_setups_by_name = list()
 		recruiter.jobban_roles = list("Syndicate")
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
-	recruiter.player_volunteering = new /callback(src, src::recruiter_recruiting())
+	recruiter.player_volunteering = new /callback(src, nameof(src::recruiter_recruiting()))
 	// Role set to No or Never
-	recruiter.player_not_volunteering = new /callback(src, src::recruiter_not_recruiting())
+	recruiter.player_not_volunteering = new /callback(src, nameof(src::recruiter_not_recruiting()))
 
-	recruiter.recruited = new /callback(src, src::recruiter_recruited())
+	recruiter.recruited = new /callback(src, nameof(src::recruiter_recruited()))
 
 	recruiter.request_player()
 
@@ -166,7 +166,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 	if(!player)
 		chosen_setup = null
 		polling_ghosts = FALSE
-		set_light(0)
+		kill_light()
 		visible_message("<span class='notice'>\The [src] stops glowing.</span>")
 		nanomanager.update_uis(src)
 		return
@@ -193,7 +193,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 		name_wizard(apprentice, "Wizard's Apprentice")
 	update_faction_icons()
 	visible_message("<span class='notice'>\The [src] folds back on itself as the apprentice appears!</span>")
-	set_light(0)
+	kill_light()
 	consumed = TRUE
 	nanomanager.close_uis(src)
 	update_icon()

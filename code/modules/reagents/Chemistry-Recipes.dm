@@ -652,9 +652,11 @@
 	id = "occult_blood_test"
 	required_reagents = list(HOLYSALTS = 5)
 	required_catalysts = list(BLOOD = 5)
+	result = SODIUMCHLORIDE
+	result_amount = 5
 	quiet = TRUE
 
-/datum/chemical_reaction/cultcheck/on_reaction(var/datum/reagents/holder, var/created_volume)
+/datum/chemical_reaction/occult_blood_test/on_reaction(var/datum/reagents/holder, var/created_volume)
 	for(var/datum/reagent/blood/B in holder.reagent_list)
 		var/turf/T = get_turf(holder.my_atom)
 		if ("occult" in B.data)
@@ -683,6 +685,20 @@
 
 		T.visible_message("<span class='notice'>[bicon(holder.my_atom)] The salts dissolve into the blood without so much as a reaction.</span>")
 		return
+
+/datum/chemical_reaction/ethylcyanoacrylate
+	name = "Ethyl Cyanoacrylate"
+	id = ETHYLCYANOACRYLATE
+	result = ETHYLCYANOACRYLATE
+	required_reagents = list(ETHANOL = 1, NITROGEN = 1, CARBON = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/glue
+	name = "Glue"
+	id = GLUE
+	result = GLUE
+	required_reagents = list(ETHYLCYANOACRYLATE = 1, SILICON = 1)
+	result_amount = 1
 
 /datum/chemical_reaction/flash_powder
 	name = "Flash powder"
@@ -1255,6 +1271,13 @@
 	required_reagents = list(SODIUMCHLORIDE = 2, CLEANER = 2, OXYGEN = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/acetone
+	name = "Acetone"
+	id = ACETONE
+	result = ACETONE
+	required_reagents = list(CARBON = 1, WATER = 1, HYDROGEN = 1)
+	result_amount = 2
+
 //This one isn't even close the the real life reaction but will have to do to avoid conflicts with the above reactions.
 /datum/chemical_reaction/luminol
 	name = "Luminol"
@@ -1375,6 +1398,7 @@
 	if(istype(holder.my_atom, /obj/item/slime_extract))
 		var/obj/item/slime_extract/S = holder.my_atom
 		S.Uses--
+		S.update_icon()
 		if(S.Uses <= 0)
 			if(!istype(S.loc, /obj/item/weapon/grenade/chem_grenade) && !quiet)
 				S.visible_message("<span class='notice'>[bicon(holder.my_atom)] \The [holder.my_atom]'s power is consumed in the reaction.</span>")
@@ -2265,11 +2289,17 @@
 	required_container = /obj/item/slime_extract/pyrite
 
 /datum/chemical_reaction/slime_extract/slimepaint/on_reaction(var/datum/reagents/holder)
-	var/list/paints = subtypesof(/obj/item/weapon/reagent_containers/glass/paint)
-	var/chosen = pick(paints)
-	var/obj/P = new chosen
-	if(P)
-		P.forceMove(get_turf(holder.my_atom))
+	new /obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random(get_turf(holder.my_atom))
+	..()
+
+/datum/chemical_reaction/slime_extract/slimenanopaint
+	name = "Slime Nano Paint"
+	id = "s_nanopaint"
+	required_reagents = list(PHAZON = 5)
+	required_container = /obj/item/slime_extract/pyrite
+
+/datum/chemical_reaction/slime_extract/slimenanopaint/on_reaction(var/datum/reagents/holder)
+	new /obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/vantablack(get_turf(holder.my_atom))
 	..()
 
 /datum/chemical_reaction/slime_extract/slimecash
@@ -3012,6 +3042,20 @@
 	required_reagents = list(GIN = 3, CHERRYJELLY = 1)
 	result_amount = 4
 
+/datum/chemical_reaction/mimosa
+	name = "Mimosa"
+	id = MIMOSA
+	result = MIMOSA
+	required_reagents = list(CHAMPAGNE = 1, ORANGEJUICE = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/lemondrop
+	name = "Lemon Drop"
+	id = LEMONDROP
+	result = LEMONDROP
+	required_reagents = list(LEMONJUICE = 1, TRIPLESEC = 1, VODKA = 1)
+	result_amount = 3
+
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
 /datum/chemical_reaction/sbiten
@@ -3056,6 +3100,35 @@
 	result = GROG
 	required_reagents = list(RUM = 1, WATER = 1)
 	result_amount = 2
+
+/datum/chemical_reaction/evoluator
+	name = "Evoluator"
+	id = EVOLUATOR
+	result = EVOLUATOR
+	required_reagents = list(BLOBANINE = 1, OXYGEN = 2, APPLEJUICE = 1, VERMOUTH = 1)
+	result_amount = 5
+
+/datum/chemical_reaction/blob_beer
+	name = "Blob beer"
+	id = BLOBBEER
+	result = BLOBBEER
+	required_reagents = list(BLOBANINE = 1, SUGAR = 1)
+	required_temp = T0C + 60
+	result_amount = 10
+
+/datum/chemical_reaction/liberator
+	name = "Liberator"
+	id = LIBERATOR
+	result = LIBERATOR
+	required_reagents = list(BLOBANINE = 1, ORANGEJUICE = 1, TRIPLESEC = 1)
+	result_amount = 6
+
+/datum/chemical_reaction/spore
+	name = "Spore"
+	id = SPORE
+	result = SPORE
+	required_reagents = list(BLOBANINE = 1, KARMOTRINE = 1, OXYGEN = 1)
+	result_amount = 3
 
 /datum/chemical_reaction/soy_latte
 	name = "Soy Latte"
@@ -3489,7 +3562,7 @@
 	name = "NT Standard Battery Acid"
 	id = ENGICOFFEE
 	result = ENGICOFFEE
-	required_reagents = list(COFFEE = 5, FUEL = 1, SULFURIC = 5)
+	required_reagents = list(COFFEE = 5, FUEL = 1, SACID = 5)
 	result_amount = 10
 
 /datum/chemical_reaction/medcoffee
@@ -4098,7 +4171,7 @@
 	var/datum/reagent/bumcivilian/B = locate(/datum/reagent/bumcivilian) in holder.reagent_list
 	for(var/turf/T in view(get_turf(holder.my_atom)))
 		T.mute_time = world.time + B.mute_duration
-	
+
 /datum/chemical_reaction/random
 	name = "Random chemical"
 	id = "random"
@@ -4106,6 +4179,13 @@
 	required_reagents = list(NOTHING = 10, PHAZON = 10)
 	required_catalysts = list(MUTAGEN = 10, ENZYME = 10)
 	result_amount = 1
+
+/datum/chemical_reaction/fake_creep // Xenomorph weeds aka creep.
+	name = "Dan's Purple Drank"
+	id = FAKE_CREEP
+	result = FAKE_CREEP
+	required_reagents = list(MUTAGEN = 1, PLASMA = 1, DISCOUNT = 1)
+	result_amount = 3
 
 /datum/chemical_reaction/random/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()
@@ -4117,6 +4197,14 @@
 		var/list/blocked_chems = list(ADMINORDRAZINE, PROCIZINE, BLOCKIZINE, PAISMOKE) // Bad ideas to spawn
 		var/list/allowed_reagents = chemical_reagents_list - blocked_chems
 		holder.add_reagent(pick(allowed_reagents),created_volume)
+
+/datum/chemical_reaction/punctualite
+	name = "Punctualite"
+	id = PUNCTUALITE
+	result = PUNCTUALITE
+	required_reagents = list(HYPERZINE = 10, FUEL = 10)
+	required_catalysts = list(ZOMBIEPOWDER = 5)
+	result_amount = 5
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

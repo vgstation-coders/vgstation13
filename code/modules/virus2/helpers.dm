@@ -198,13 +198,9 @@ var/list/infected_contact_mobs = list()
 			if (O && !istype(src, /mob/living/simple_animal/mouse/plague))
 				O.total_infections++
 			plague.update_hud_icons()
-			for(var/datum/role/plague_mouse/M in plague.members)
-				var/datum/mind/mouse_mind = M.antag
-				mouse_mind.store_memory(D.get_info(TRUE), forced = 1)
-				mouse_mind.store_memory("<hr>")
 		//----------------
 
-		for (var/obj/item/device/pda/p in contents)
+		for (var/obj/item/device/flashlight/pda/p in contents)
 			if (istype(p.scanning_app,/datum/pda_app/cart/scanner/medical))
 				playsound(loc, 'sound/machines/twobeep.ogg', 50, 1)
 				if("[disease.uniqueID]-[disease.subID]" in virusDB)

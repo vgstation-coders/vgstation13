@@ -80,7 +80,7 @@ var/list/obj/machinery/prism/prism_list = list()
 		if(B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
-		B.register_event(/event/beam_power_change, src, src::on_power_change())
+		B.register_event(/event/beam_power_change, src, nameof(src::on_power_change()))
 		update_beams(B)
 
 /obj/machinery/prism/beam_disconnect(var/obj/effect/beam/emitter/B)
@@ -88,7 +88,7 @@ var/list/obj/machinery/prism/prism_list = list()
 		if(B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
-		B.unregister_event(/event/beam_power_change, src, src::on_power_change())
+		B.unregister_event(/event/beam_power_change, src, nameof(src::on_power_change()))
 		update_beams(B)
 
 // When beam power changes
@@ -110,6 +110,7 @@ var/list/obj/machinery/prism/prism_list = list()
 		if(!beam)
 			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir=dir
+			beam.moody_light_obj?.dir = dir
 			newbeam=1
 		beam.power=0
 		var/list/spawners = list(src)
@@ -130,6 +131,7 @@ var/list/obj/machinery/prism/prism_list = list()
 
 			var/beamdir=get_dir(B.loc,src)
 			overlays += image(icon=icon,icon_state="beam_arrow",dir=beamdir)
+			B.moody_light_obj?.dir = beamdir
 		if(newbeam)
 			beam.emit(spawn_by=spawners)
 		else

@@ -186,6 +186,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/test_movable_UI,
 	/client/proc/test_snap_UI,
 	/client/proc/configFood,
+	/client/proc/configThermDiss,
 	/client/proc/configHat,
 	/client/proc/cmd_dectalk,
 	/client/proc/debug_reagents,
@@ -208,6 +209,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/cmd_mass_modify_object_variables,
 	/client/proc/emergency_shuttle_panel,
 	/client/proc/bee_count,
+	/client/proc/see_lightmap,
 	/client/proc/set_procizine_call,
 	/client/proc/set_procizine_properties,
 #if UNIT_TESTS_ENABLED
@@ -381,7 +383,7 @@ var/list/admin_verbs_mod = list(
 		/client/proc/splash,
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
-		/proc/generateMiniMaps,
+		///proc/generateMiniMaps,
 		/client/proc/maprender,
 		/client/proc/cmd_admin_rejuvenate,
 		/datum/admins/proc/show_role_panel,
@@ -665,6 +667,16 @@ var/list/admin_verbs_mod = list(
 			var/heavy_impact_range = input("Heavy impact range (in tiles):") as num
 			var/light_impact_range = input("Light impact range (in tiles):") as num
 			var/flash_range = input("Flash range (in tiles):") as num
+			if(devastation_range > 299 || heavy_impact_range > 299 || light_impact_range > 299)
+				if(alert(usr, "THIS EXPLOSION MAY CRASH THE SERVER, ARE YOU REALLY SURE?", "DANGER ZONE", "Yes", "No") == "No")
+					return 0;
+				log_admin("[key_name_admin(src)] decided to set off a potentially server-crashing bomb despite the warning.")
+				message_admins("<span class='warning'>[key_name_admin(src)] decided to set off a potentially server-crashing bomb despite the warning.</span>")
+			else if (devastation_range > 149 || heavy_impact_range > 149 || light_impact_range > 149)
+				if(alert(usr, "This explosion is likely to cause significant server lag, continue anyway?", "Lag Warning", "Yes", "No") == "No")
+					return 0;
+				log_admin("[key_name_admin(src)] decided to set off a potentially server-lagging bomb despite the warning.")
+				message_admins("<span class='warning'>[key_name_admin(src)] decided to set off a potentially server-lagging bomb despite the warning.</span>")
 			explosion(epicenter, devastation_range, heavy_impact_range, light_impact_range, flash_range, whodunnit = usr)
 
 	log_admin("[key_name(usr)] creating an admin explosion at [epicenter.loc] ([epicenter.x],[epicenter.y],[epicenter.z]).")
@@ -1374,6 +1386,23 @@ var/list/admin_verbs_mod = list(
 		holder.ViewAllRods()
 	feedback_add_details("admin_verb","V-ROD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
+
+/client/proc/see_lightmap()
+	set name = "See lightmap"
+	set category = "Ghost"
+
+	if (!usr.check_rights(R_DEBUG))
+		to_chat(usr, "<span class='notice'>Only admins can use this command.</span>")
+		return
+
+	if (holder.see_lightmap)
+		usr.dark_plane.plane = LIGHTING_PLANE
+		usr.dark_plane.alphas["light_map"] = 0
+	else
+		usr.dark_plane.plane = initial(usr.dark_plane.plane)
+		usr.dark_plane.alphas -= "light_map"
+
+	holder.see_lightmap = !holder.see_lightmap
 
 /client/proc/toggle_admin_examine()
 	set name = "Toggle Admin-only Descriptions"

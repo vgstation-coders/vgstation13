@@ -102,7 +102,6 @@ var/global/global_cascade_portal
 			return
 		sleep(300)
 		log_game("Rebooting due to universal collapse")
-		CallHook("Reboot",list())
 		world.Reboot()
 		return
 
@@ -148,17 +147,6 @@ var/global/global_cascade_portal
 			if(T.z != map.zCentcomm)
 				T.underlays += "end01"
 		CHECK_TICK
-
-	// This ends up looking like shit.  - N3X
-	/*
-	for(var/datum/lighting_corner/C in global.all_lighting_corners)
-		if (!C.active)
-			continue
-
-		if(C.z != map.zCentcomm)
-			C.update_lumcount(LUMCOUNT_CASCADE[1], LUMCOUNT_CASCADE[2], LUMCOUNT_CASCADE[3])
-		CHECK_TICK
-	*/
 
 /datum/universal_state/supermatter_cascade/proc/convert_all_parallax()
 	for(var/client/C in clients)

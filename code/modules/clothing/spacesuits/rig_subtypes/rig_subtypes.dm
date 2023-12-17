@@ -332,6 +332,7 @@
 
 /obj/item/clothing/head/helmet/space/rig/security/stormtrooper
 	icon_state = "rig0-storm"
+	item_state = "rig0-storm"
 	_color = "storm"
 	name = "stormtrooper helmet"
 	desc = "Even with the finest vision enhancement tech, you still can't hit shit."
@@ -339,6 +340,7 @@
 
 /obj/item/clothing/suit/space/rig/security/stormtrooper
 	icon_state = "rig-storm"
+	item_state = "rig-storm"
 	name = "stormtrooper hardsuit"
 	desc = "Now even more vulnerable to teddy bears!"
 	head_type = /obj/item/clothing/head/helmet/space/rig/security/stormtrooper
@@ -598,7 +600,7 @@
 	icon_state = "ghettorig0"
 	item_state = "ghettorig0"
 	light_power = 1.5
-	var/brightness_on = 4 //luminosity when on
+	light_range = 4
 	var/on = 0
 	_color = "ghetto"
 	pressure_resistance = 4 * ONE_ATMOSPHERE
@@ -619,9 +621,9 @@
 	item_state = "ghettorig[on]"
 
 	if(on)
-		set_light(brightness_on)
+		set_light()
 	else
-		set_light(0)
+		kill_light()
 
 /obj/item/clothing/suit/space/ghettorig
 	name = "jury-rigged space-proof firesuit"

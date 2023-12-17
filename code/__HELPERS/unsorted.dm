@@ -112,8 +112,8 @@
 						break
 
 					search_id = FALSE
-			else if (search_pda && istype(object, /obj/item/device/pda))
-				var/obj/item/device/pda/PDA = object
+			else if (search_pda && istype(object, /obj/item/device/flashlight/pda))
+				var/obj/item/device/flashlight/pda/PDA = object
 
 				if (PDA.owner == oldname)
 					PDA.owner = newname
@@ -1191,7 +1191,7 @@ var/mob/dview/tview/tview_mob = new()
 	if(!contents.len)
 		return 0
 	for(var/atom/A in contents)
-		if(!istype(A, /atom/movable/lighting_overlay))
+		if(!istype(A, /atom/movable/light))
 			return 0
 	return 1
 
@@ -1199,7 +1199,7 @@ var/mob/dview/tview/tview_mob = new()
 //Includes an exception list if you don't want to delete some stuff
 /turf/proc/clear_contents(var/list/ignore = list())
 	for(var/atom/turf_contents in contents)
-		if(!istype(turf_contents, /atom/movable/lighting_overlay) && !is_type_in_list(turf_contents, ignore) && !(flags & INVULNERABLE))
+		if(!istype(turf_contents, /atom/movable/light) && !is_type_in_list(turf_contents, ignore) && !(flags & INVULNERABLE))
 			qdel(turf_contents)
 
 /proc/multinum_display(var/number,var/digits)//multinum_display(42,4) = "0042"; multinum_display(-137,6) = "-000137"; multinum_display(4572,3) = "999"
@@ -1385,7 +1385,7 @@ Game Mode config tags:
 		CRASH("Something called seedify() without anything to make seeds of.")
 
 	var/min_seeds = 1
-	var/max_seeds = 2
+	var/max_seeds = 4
 	var/seedloc = O.loc
 	var/datum/seed/new_seed_type
 
@@ -1626,12 +1626,14 @@ Game Mode config tags:
 		max(list_x),
 		max(list_y))
 
-/proc/spiral_block(turf/epicenter, range, draw_red=FALSE)
+/proc/spiral_block(turf/epicenter, range, draw_red=FALSE, only_view = FALSE)
 	if(!epicenter)
 		return list()
 
 	if(!range)
 		return list(epicenter)
+
+	var/epicenter_view = view(range, epicenter)
 
 	. = list()
 
@@ -1648,6 +1650,10 @@ Game Mode config tags:
 		for(x in x to epicenter.x+c_dist)
 			T = locate(x,y,epicenter.z)
 			if(T)
+				if (only_view && !(T in epicenter_view))
+					continue
+				if (T in .)
+					CRASH("spiral block doubles")
 				. += T
 				if(draw_red)
 					T.color = "red"
@@ -1658,6 +1664,10 @@ Game Mode config tags:
 		for(y in y to epicenter.y-c_dist step -1)
 			T = locate(x,y,epicenter.z)
 			if(T)
+				if (only_view && !(T in epicenter_view))
+					continue
+				if (T in .)
+					CRASH("spiral block doubles")
 				. += T
 				if(draw_red)
 					T.color = "red"
@@ -1668,6 +1678,10 @@ Game Mode config tags:
 		for(x in  x to epicenter.x-c_dist step -1)
 			T = locate(x,y,epicenter.z)
 			if(T)
+				if (only_view && !(T in epicenter_view))
+					continue
+				if (T in .)
+					CRASH("spiral block doubles")
 				. += T
 				if(draw_red)
 					T.color = "red"
@@ -1678,6 +1692,10 @@ Game Mode config tags:
 		for(y in y to epicenter.y+c_dist)
 			T = locate(x,y,epicenter.z)
 			if(T)
+				if (only_view && !(T in epicenter_view))
+					continue
+				if (T in .)
+					CRASH("spiral block doubles")
 				. += T
 				if(draw_red)
 					T.color = "red"

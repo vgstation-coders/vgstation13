@@ -4,7 +4,7 @@
 	frequency = 1666;
 	input_tag = "inc_in";
 	output_tag = "inc_out";
-	sensors = list("inc_sensor" = "Tank")
+	sensors = list("inc_sensor"="Tank")
 	},
 /turf/simulated/floor{
 	icon_state = "dark"

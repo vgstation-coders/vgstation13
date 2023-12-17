@@ -112,6 +112,8 @@
 	max_luminosity = 5
 	max_power=3000
 
+	light_type = LIGHT_SOFT_FLICKER
+	lighting_flags = IS_LIGHT_SOURCE
 
 /obj/machinery/power/supermatter/New()
 	. = ..()
@@ -444,6 +446,16 @@
 	if(issilicon(user))
 		return attack_hand(user)
 
+	if(istype(W,/obj/item/weapon/book/manual/engineering_supermatter_guide))
+		user.visible_message("<span class='warning'>\The [user] touches \a [W] to \the [src] as a silence fills the room...</span>",\
+		"<span class='danger'>You touch \the [W] to \the [src] when everything suddenly goes silent.</span>\n<span class='notice'>\The [W] resonates with \the [src]!</span>",\
+		"<span class='warning'>Everything suddenly goes silent.</span>")
+		playsound(src, 'sound/effects/supermatter.ogg', 55, 1)
+		user.drop_from_inventory(W)
+		Consume(W)
+		user.apply_radiation(250, RAD_EXTERNAL)
+		return
+	
 	user.visible_message("<span class='warning'>\The [user] touches \a [W] to \the [src] as a silence fills the room...</span>",\
 		"<span class='danger'>You touch \the [W] to \the [src] when everything suddenly goes silent.</span>\n<span class='notice'>\The [W] flashes into dust as you flinch away from \the [src].</span>",\
 		"<span class='warning'>Everything suddenly goes silent.</span>")
@@ -510,7 +522,10 @@
 	else
 		. = A.supermatter_act(src, SUPERMATTER_DELETE)
 
-	power += 200
+	if(istype(A, /obj/item/weapon/book/manual/engineering_supermatter_guide))
+		power += 1000
+	else
+		power += 200
 
 	for(var/mob/living/L in range(10,src)) //Some poor sod got eaten, go ahead and irradiate people nearby.
 		if(L == A) //It's the guy that just died.

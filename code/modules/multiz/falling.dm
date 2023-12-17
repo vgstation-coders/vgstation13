@@ -28,7 +28,7 @@
 
 	if(!check_below())
 		return
-
+	
 	var/gravity = get_gravity()
 	// No gravity in space, apparently.
 	if(!gravity) //Polaris uses a proc, has_gravity(), for this
@@ -122,11 +122,11 @@
 	return TRUE
 
 // These didn't fall anyways but better to nip this now just incase.
-/atom/movable/lighting_overlay/can_fall()
+/atom/movable/light/can_fall()
 	return FALSE
 
 // Function handling going over open spaces, pre-extension to normal throw hit checks
-/atom/movable/hit_check(var/speed, mob/user)
+/atom/movable/hit_check(speed, mob/user, hit_whitelist)
 	if(isopenspace(get_turf(src)))
 		src.fall()
 	. = ..()

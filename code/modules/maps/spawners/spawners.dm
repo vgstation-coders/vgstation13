@@ -594,6 +594,8 @@
 		/obj/item/weapon/switchtool/swiss_army_knife,
 		/obj/item/clothing/accessory/wristwatch,
 		/obj/item/clothing/accessory/wristwatch/black,
+		/obj/item/high_roller,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
 		)
 
 /obj/abstract/map/spawner/maint/lowchance
@@ -1107,6 +1109,7 @@
 		/obj/item/seeds/wheatseed,
 		/obj/item/seeds/whitebeetseed,
 		/obj/item/seeds/cinnamomum,
+		/obj/item/seeds/flaxseed,
 		)
 
 // Gym ///////////////////////////////////////////////////////
@@ -1238,7 +1241,8 @@
 	/obj/item/weapon/gun/mahoguny,
 	/obj/item/weapon/gun/stickybomb,
 	/obj/item/weapon/gun/siren,
-	/obj/item/weapon/gun/portalgun
+	/obj/item/weapon/gun/portalgun,
+	/obj/item/weapon/gun/energy/gatling/rusty
 )
 
 /obj/abstract/map/spawner/safe/clothing
@@ -1463,6 +1467,6 @@
 		/obj/item/clothing/head/helmet/dredd,
 		/obj/item/clothing/mask/gas/swat,
 		/obj/item/weapon/storage/belt/security,
-		/obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+		/obj/item/clothing/suit/armor/dredd,
 		/obj/item/weapon/gun/lawgiver,
 	)

@@ -266,8 +266,8 @@ var/list/pinpointerpinpointer_list = list()
 /obj/item/weapon/pinpointer/pdapinpointer/examine(mob/user)
 	..()
 	var/timeuntil = altFormatTimeDuration(max(0, nextuse-world.time))
-	to_chat(user, "<span class='notice'>[src] [timeuntil ? "can select a target again in [timeuntil]." : "is ready to select a new target!"]</span>") 
-	
+	to_chat(user, "<span class='notice'>[src] [timeuntil ? "can select a target again in [timeuntil]." : "is ready to select a new target!"]</span>")
+
 
 /obj/item/weapon/pinpointer/pdapinpointer/attack_self()
 	if(!active)
@@ -288,10 +288,10 @@ var/list/pinpointerpinpointer_list = list()
 	set category = "Object"
 	set name = "Select pinpointer target"
 	set src in view(1)
-	
+
 	if(usr.stat || !src.Adjacent(usr))
 		return
-	
+
 	if(!dna_profile)
 		dna_profile = usr.dna.unique_enzymes
 		to_chat(usr, "<span class='notice'>You submit a DNA sample to [src]</span>")
@@ -305,7 +305,7 @@ var/list/pinpointerpinpointer_list = list()
 	var/list/L = list()
 	L["Cancel"] = "Cancel"
 	var/length = 1
-	for (var/obj/item/device/pda/P in PDAs)
+	for (var/obj/item/device/flashlight/pda/P in PDAs)
 		var/turf/T = get_turf(P)
 		if(P.name != "\improper PDA" && T.z != map.zCentcomm)
 			L[text("([length]) [P.name]")] = P

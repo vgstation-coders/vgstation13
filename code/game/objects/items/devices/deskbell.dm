@@ -92,7 +92,7 @@
 	if(world.time - last_ring_time >= ring_delay)
 		last_ring_time = world.time
 		flick("[icon_state]-push", src)
-		playsound(src, 'sound/machines/ding2.ogg', 50, 1)
+		playsound(src, hitsound, 50, 1)
 		return 1
 	return 0
 
@@ -141,7 +141,7 @@
 
 /obj/item/device/deskbell/signaler/ring()
 	if(..())
-		for(var/obj/item/device/pda/ring_pda in PDAs)
+		for(var/obj/item/device/flashlight/pda/ring_pda in PDAs)
 			if(!ring_pda.owner || (ring_pda == src) || ring_pda.hidden)
 				continue
 			var/datum/pda_app/ringer/ringerdatum = locate(/datum/pda_app/ringer) in ring_pda.applications

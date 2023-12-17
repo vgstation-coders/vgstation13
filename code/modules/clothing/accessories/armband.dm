@@ -41,3 +41,13 @@
 	desc = "An armband, worn by the station's security forces to display which department they're assigned to. This one is white and green."
 	icon_state = "medgreen"
 	_color = "medgreen"
+
+/obj/item/clothing/accessory/armband/linen
+	name = "armband"
+	desc = "An armband!"
+	icon_state = "armband"
+	_color = "armband"
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("stripe")
+

@@ -166,7 +166,11 @@ var/auxtools_path
 
 		var/notekey = copytext(T, 7)
 		return list2params(exportnotes(notekey))
-
+	else if(T == "port" && master)
+		if(src.port == 7777 || src.port == "7777")
+			src.OpenPort(7778)
+		else
+			src.OpenPort(7777)
 
 /world/Reboot(reason)
 	if(reason == REBOOT_HOST)
@@ -199,12 +203,12 @@ var/auxtools_path
 	..()
 
 /world/proc/pre_shutdown()
+	stop_all_media()
+
 	for(var/datum/html_interface/D in html_interfaces)
 		D.closeAll()
 
 	Master.Shutdown()
-
-	stop_all_media()
 
 	end_credits.on_world_reboot_start()
 	sleep(max(10, end_credits.audio_post_delay))
@@ -278,4 +282,3 @@ var/auxtools_path
 				var/ckey = copytext(line, 1, length(line)+1)
 				var/datum/admins/D = new /datum/admins("Moderator", rights, ckey)
 				D.associate(directory[ckey])
-

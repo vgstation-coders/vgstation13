@@ -70,10 +70,6 @@
 			materials.addAmount(matID, starting_materials[matID])
 
 /atom/movable/Destroy()
-	var/turf/T
-	if (opacity && isturf(loc))
-		T = loc // recalc_atom_opacity() is called later on this
-		T.reconsider_lights()
 
 	if(materials)
 		QDEL_NULL(materials)
@@ -81,6 +77,10 @@
 	remove_border_dummy()
 
 	INVOKE_EVENT(src, /event/destroyed, "thing" = src)
+
+	var/turf/T = loc
+	if (opacity && isturf(loc))
+		T = loc // check_blocks_light() is called later on this
 
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
@@ -93,10 +93,10 @@
 
 	break_all_tethers()
 
-	forceMove(null, harderforce = TRUE)
+	forceMove(null)
 
-	if (T)
-		T.recalc_atom_opacity()
+	if (istype(T))
+		T.check_blocks_light()
 
 	if(virtualhearer)
 		QDEL_NULL(virtualhearer)
@@ -127,8 +127,8 @@
 	else
 		glide_size = max(min, glide_size_override)
 
-/atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
-	if(!loc || !NewLoc || locked_to)
+/atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	if(!loc || !NewLoc)
 		return 0
 	INVOKE_EVENT(src, /event/before_move)
 
@@ -451,10 +451,16 @@
 		return TRUE
 	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
 		return TRUE
+	if(istype(mover, /obj/item/projectile/beam))
+		var/obj/item/projectile/beam/B = mover
+		var/returns = bounds_dist(src, B.previous_turf) >= 0
+		if (returns && B.previous_turf)
+			B.final_turf = B.previous_turf
+		return returns
 	return bounds_dist(src, mover) >= 0
 
-// harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
-/atom/movable/proc/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+/atom/movable/proc/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
+
 	INVOKE_EVENT(src, /event/before_move)
 	if(glide_size_override)
 		glide_size = glide_size_override
@@ -467,7 +473,8 @@
 	else
 		uncrossing = loc?.contents //contents IS aliased on assignment but we're not changing it so it's fine
 
-	loc = destination
+	loc = NewLoc
+
 	src.step_x = step_x
 	src.step_y = step_y
 
@@ -487,8 +494,8 @@
 			var/area/A = loc.loc
 			A.Entered(src, old_loc)
 
-			for(var/atom/movable/AM in obounds(src))
-				AM.Crossed(src,no_tp)
+			for(var/atom/movable/AM in loc)
+				AM.Crossed(src, from_tp) // Says if we crossed it from a teleporter.
 
 
 	for(var/atom/movable/AM in locked_atoms)
@@ -500,7 +507,7 @@
 	INVOKE_EVENT(src, /event/moved, "mover" = src)
 
 	var/turf/from_turf = get_turf(old_loc)
-	var/turf/to_turf = get_turf(destination)
+	var/turf/to_turf = get_turf(NewLoc)
 	if(from_turf && to_turf && (from_turf.z != to_turf.z))
 		INVOKE_EVENT(src, /event/z_transition, "user" = src, "from_z" = from_turf.z, "to_z" = to_turf.z)
 
@@ -548,7 +555,7 @@
 /atom/proc/PreImpact(atom/movable/A, speed)
 	return TRUE
 
-/atom/movable/proc/hit_check(var/speed, mob/user)
+/atom/movable/proc/hit_check(var/speed, mob/user, var/list/hit_whitelist)
 	. = 1
 
 	if(throwing)
@@ -557,12 +564,12 @@
 				continue
 
 			if(!A.PreImpact(src,speed))
-				throw_impact(A,speed,user)
+				throw_impact(A,speed,user, hit_whitelist)
 				if(throwing==1)
 					throwing = 0
 					. = 0
 
-/atom/movable/proc/throw_at(atom/target, range, speed, override = TRUE, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
+/atom/movable/proc/throw_at(atom/target, range, speed, override = TRUE, var/fly_speed = 0, var/list/whitelist) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
 	set waitfor = FALSE
 	if(!target || !src)
 		return 0
@@ -586,6 +593,11 @@
 		var/obj/mecha/M = src
 		M.dash_dir = dir
 		src.throwing = 2// mechas will crash through windows, grilles, tables, people, you name it
+
+	if(istype(src,/mob/living/simple_animal/hostile/humanoid/nurseunit))
+		var/mob/living/simple_animal/hostile/humanoid/nurseunit/M = src
+		M.dash_dir = dir
+		src.throwing = 2
 
 	var/afterimage = 0
 	if(istype(src,/mob/living/simple_animal/construct/armoured/perfect))
@@ -641,7 +653,7 @@
 					break
 
 				src.Move(step, dy, glide_size_override = DELAY2GLIDESIZE(fly_speed))
-				. = hit_check(speed, user)
+				. = hit_check(speed, user, whitelist)
 				error += dist_x
 				dist_travelled++
 				dist_since_sleep++
@@ -655,7 +667,7 @@
 					break
 
 				src.Move(step, dx, glide_size_override = DELAY2GLIDESIZE(fly_speed))
-				. = hit_check(speed, user)
+				. = hit_check(speed, user, whitelist)
 				error -= dist_y
 				dist_travelled++
 				dist_since_sleep++
@@ -682,7 +694,7 @@
 					break
 
 				src.Move(step, dx, glide_size_override = DELAY2GLIDESIZE(fly_speed))
-				. = hit_check(speed, user)
+				. = hit_check(speed, user, whitelist)
 				error += dist_y
 				dist_travelled++
 				dist_since_sleep++
@@ -696,7 +708,7 @@
 					break
 
 				src.Move(step, dy, glide_size_override = DELAY2GLIDESIZE(fly_speed))
-				. = hit_check(speed, user)
+				. = hit_check(speed, user, whitelist)
 				error -= dist_x
 				dist_travelled++
 				dist_since_sleep++
@@ -710,7 +722,7 @@
 	src.throwing = 0
 	kinetic_acceleration = 0
 	if(isobj(src))
-		src.throw_impact(get_turf(src), speed, user)
+		src.throw_impact(get_turf(src), speed, user, whitelist)
 
 //Overlays
 
@@ -736,7 +748,7 @@
 		AM.lock_atom(src, /datum/locking_category/overlay)
 	if (istype(master, /atom/movable))
 		var/atom/movable/AM = master
-		AM.register_event(/event/destroyed, src, src::qdel_self())
+		AM.register_event(/event/destroyed, src, nameof(src::qdel_self()))
 	verbs.len = 0
 
 /atom/movable/overlay/proc/qdel_self(datum/thing)
@@ -746,7 +758,7 @@
 	if(istype(master, /atom/movable))
 		var/atom/movable/AM = master
 		AM.unlock_atom(src)
-		AM.unregister_event(/event/destroyed, src, src::qdel_self())
+		AM.unregister_event(/event/destroyed, src, nameof(src::qdel_self()))
 	master = null
 	return ..()
 

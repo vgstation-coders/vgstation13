@@ -285,7 +285,7 @@
 	mob.set_light(multiplier, multiplier/3, l_color = color)
 
 /datum/disease2/effect/lantern/deactivate(var/mob/living/mob)
-	mob.set_light(0, 0, rgb(0,0,0))
+	mob.kill_light(, 0, rgb(0,0,0))
 	to_chat(mob, "<span class = 'notice'>You don't feel as bright.</span>")
 	flavortext = 0
 

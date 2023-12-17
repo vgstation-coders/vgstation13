@@ -20,6 +20,7 @@
 	playsound(master, 'sound/effects/spray3.ogg', 15, 1)
 
 	A.ClearDecals()
+	A.remove_paint_overlay(TRUE)
 
 /datum/rcd_schematic/tile
 	name				= "Decals"
@@ -180,6 +181,7 @@
 		T.name = pname
 
 	T.ClearDecals()
+	T.remove_paint_overlay(TRUE)
 
 /datum/paint_info/decal
 	icon		= 'icons/effects/floor_decals.dmi'
@@ -611,7 +613,7 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info(DIR_ALL,		"chapel"),
 		new /datum/paint_info(DIR_ONE,		"chapeldark")
 	),
-	
+
 	"Tatami" = list(
 		new /datum/paint_info(DIR_ORTHO,	"tatami-green-halfmat"),
 		new /datum/paint_info(DIR_ONE,		"tatami-green-1mat-hori"),

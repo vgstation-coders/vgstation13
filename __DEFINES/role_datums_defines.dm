@@ -23,6 +23,7 @@
 #define XENOMORPH_HIVE "alien hivemind"
 #define JUSTICE_DEPARTMENT "justice department"
 #define NANOTRASEN "Nanotrasen"
+#define THE_APES "The Apes"
 
 //-------
 #define HIVEMIND "changeling hivemind"
@@ -48,7 +49,6 @@
 #define REV "revolutionary"
 #define WIZAPP_MASTER "wizard's master"
 #define WIZAPP "wizard's apprentice"
-#define WIZARD_CONVERT "wizard's faction convert"
 #define MADMONKEY "monkey fever infected"
 #define NINJA "Space Ninja"
 #define WISHGRANTERAVATAR "avatar of the Wish Granter"

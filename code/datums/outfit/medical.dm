@@ -55,7 +55,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/pda/heads/cmo
+	pda_type = /obj/item/device/flashlight/pda/heads/cmo
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/cmo
 
@@ -146,7 +146,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/pda/medical
+	pda_type = /obj/item/device/flashlight/pda/medical
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
@@ -221,7 +221,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/pda/chemist
+	pda_type = /obj/item/device/flashlight/pda/chemist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
@@ -319,16 +319,18 @@
 
 	race_items_to_collect = list(
 		/datum/species/vox/ = list(
-			/obj/item/clothing/suit/storage/paramedic,
+			"Paramedic" = list(/obj/item/clothing/suit/storage/paramedic),
+			"Brig Medic" = list(/obj/item/clothing/suit/armor/vest/security/medic),
 			/obj/item/clothing/head/soft/paramedic,
 		),
 		/datum/species/plasmaman/ = list(
-			/obj/item/clothing/suit/storage/paramedic,
+			"Paramedic" = list(/obj/item/clothing/suit/storage/paramedic),
+			"Brig Medic" = list(/obj/item/clothing/suit/armor/vest/security/medic),
 			/obj/item/clothing/head/soft/paramedic,
 		)
 	)
 
-	pda_type = /obj/item/device/pda/medical
+	pda_type = /obj/item/device/flashlight/pda/medical
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
@@ -392,7 +394,7 @@
 		),
 	)
 
-	pda_type = /obj/item/device/pda/medical
+	pda_type = /obj/item/device/flashlight/pda/medical
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
@@ -482,7 +484,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/pda/geneticist
+	pda_type = /obj/item/device/flashlight/pda/geneticist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
@@ -549,7 +551,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/pda/viro
+	pda_type = /obj/item/device/flashlight/pda/viro
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 

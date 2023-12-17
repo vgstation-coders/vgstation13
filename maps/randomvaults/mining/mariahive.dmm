@@ -1,55 +1,55 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
 /turf/unsimulated/floor/asteroid/hive,
-/area/asteroid)
+/area/mining_surprise)
 "i" = (
 /turf/unsimulated/mineral/random/hive/high_chance,
-/area/asteroid)
+/area/mining_surprise)
 "j" = (
 /turf/unsimulated/mineral/random,
-/area/asteroid)
+/area/mining_surprise)
 "s" = (
 /turf/unsimulated/mineral/random/hive/high_chance_clown,
-/area/asteroid)
+/area/mining_surprise)
 "v" = (
 /turf/unsimulated/mineral/random/hive,
-/area/asteroid)
+/area/mining_surprise)
 "A" = (
 /mob/living/simple_animal/hostile/asteroid/hivelord/boss,
 /turf/unsimulated/floor/asteroid/hive/living,
-/area/asteroid)
+/area/mining_surprise)
 "F" = (
 /mob/living/simple_animal/hostile/asteroid/hivelord/guardian,
 /turf/unsimulated/floor/asteroid/hive,
-/area/asteroid)
+/area/mining_surprise)
 "G" = (
 /turf/unsimulated/mineral/hyperdense,
-/area/asteroid)
+/area/mining_surprise)
 "H" = (
 /mob/living/simple_animal/hostile/asteroid/hivelord/guardian,
 /turf/unsimulated/floor/asteroid/hive/living,
-/area/asteroid)
+/area/mining_surprise)
 "L" = (
 /obj/item/asteroid/hivelord_core{
 	time_left = 288000
 	},
 /turf/unsimulated/floor/asteroid/hive/living,
-/area/asteroid)
+/area/mining_surprise)
 "N" = (
 /turf/unsimulated/mineral/hyperdense/hive,
-/area/asteroid)
+/area/mining_surprise)
 "S" = (
 /turf/unsimulated/mineral/telecrystal/hive,
-/area/asteroid)
+/area/mining_surprise)
 "U" = (
 /turf/unsimulated/floor/asteroid/hive/living,
-/area/asteroid)
+/area/mining_surprise)
 "Z" = (
 /obj/item/asteroid/hivelord_core{
 	time_left = 288000
 	},
 /turf/unsimulated/floor/asteroid/hive,
-/area/asteroid)
+/area/mining_surprise)
 
 (1,1,1) = {"
 G
