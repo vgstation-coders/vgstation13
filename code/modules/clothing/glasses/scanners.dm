@@ -14,6 +14,12 @@
 			if(ispath(H))
 				stored_huds += new H
 
+/obj/item/clothing/glasses/scanner/proc/add_new_hud_by_type(type)
+	if(!ispath(type, /datum/visioneffect))
+		return
+	hud_types += type
+	stored_huds += new type
+
 /obj/item/clothing/glasses/scanner/attack_self()
 	toggle()
 

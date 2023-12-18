@@ -15,6 +15,12 @@
 			if(ispath(H))
 				stored_huds += new H
 
+/obj/item/clothing/glasses/hud/proc/add_new_hud_by_type(type)
+	if(!ispath(type, /datum/visioneffect))
+		return
+	hud_types += type
+	stored_huds += new type
+
 /obj/item/clothing/glasses/hud/equipped(mob/M, slot)
 	if(slot == slot_glasses && stored_huds.len)
 		for(var/datum/visioneffect/H in stored_huds)
