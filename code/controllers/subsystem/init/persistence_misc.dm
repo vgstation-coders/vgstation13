@@ -401,3 +401,51 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 			continue
 		to_archive[T.id] = T.level
 	write_file(to_archive)
+
+// Traitor item of the day
+/datum/persistence_task/traitor_item_of_the_day
+	execute = TRUE
+	name = "Traitor Item of the day"
+	file_path = "data/persistence/traitordiscount.json"
+	var/list/item_list = list()
+
+/datum/persistence_task/traitor_item_of_the_day/on_init()
+	data = read_file()
+	if (data)
+		var/DD = data["date"]
+		var/DD_now = text2num(time2text(world.timeofday, "DD:MM:YYYY")) // get the current day
+		if (DD != DD_now)
+			data["date"] = DD_now
+			message_admins("This is a new day, so there are new discounted traitor items.")
+			pick_items()
+		else
+			item_list = json2list(data["list"])
+	else
+		data = list()
+		message_admins("File not found, writing a file for new traitor items.")
+		data["date"] = time2text(world.timeofday, "DD:MM:YYYY")
+		pick_items()
+
+/datum/persistence_task/traitor_item_of_the_day/proc/pick_items()
+	// Make sure to clear it.
+	item_list = list()
+
+	var/list/traitor_items = subtypesof(/datum/uplink_item)
+	var/list/possible_picks = list()
+	for (var/thing in traitor_items)
+		var/datum/uplink_item/u_item = thing
+		if (initial(u_item.item))
+			possible_picks += thing
+
+	for (var/i = 1 to 3)
+		var/picked = pick(possible_picks)
+		possible_picks =- picked
+		item_list += picked
+
+	for (var/x in item_list)
+		world.log << "[x] :: [item_list[x]]"
+
+	data["list"] = list2json(item_list)
+
+/datum/persistence_task/traitor_item_of_the_day/on_shutdown()
+	write_file(data)

@@ -7,6 +7,12 @@ var/list/uplink_items = list()
 		// Fill in the list	and order it like this:
 		// A keyed list, acting as categories, which are lists to the datum.
 
+		uplink_items["Discounted items of the day"] = list()
+
+		var/datum/persistence_task/traitor_item_of_the_day/task = SSpersistence_misc.tasks["/datum/persistence_task/traitor_item_of_the_day"]
+		for (var/thing in task.item_list)
+			uplink_items["Discounted items of the day"] += new thing
+
 		for(var/item in typesof(/datum/uplink_item))
 
 			var/datum/uplink_item/I = new item()
@@ -56,6 +62,10 @@ var/list/uplink_items = list()
 		. = discounted_cost
 	else
 		. = cost
+	var/datum/persistence_task/traitor_item_of_the_day/task = SSpersistence_misc.tasks["/datum/persistence_task/traitor_item_of_the_day"]
+	// 50% discount for items of the day
+	if (is_type_in_list(src, task.item_list))
+		. = cost*0.5
 	. = Ceiling(. * cost_modifier) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
 
 /datum/uplink_item/proc/gives_discount(var/user_job)
