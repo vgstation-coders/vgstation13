@@ -25,6 +25,8 @@
 
 /datum/visioneffect/accountdb/wage/process_hud(var/mob/M)
 	..()
+	if(!M.client)
+		return
 	if(!(M in wage_hud_users))
 		wage_hud_users += M
 	var/client/C = M.client
@@ -59,6 +61,8 @@
 
 /datum/visioneffect/accountdb/balance/process_hud(var/mob/M)
 	..()
+	if(!M.client)
+		return
 	var/client/C = M.client
 	var/image/holder
 	var/turf/T
