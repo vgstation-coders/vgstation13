@@ -18,7 +18,7 @@
 				if (world.tick_usage < TICK_LIMIT_RUNNING && ticker.current_state > GAME_STATE_PREGAME)
 					lighting_update_lights |= L
 				else
-					L.cast_light(get_turf(src))
+					L.cast_light(get_turf(src), newopacity)
 
 /atom/proc/copy_light(var/atom/other)
 	light_range = other.light_range

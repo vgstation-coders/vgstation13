@@ -68,21 +68,21 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 
 
 // Cast_light() is the "master proc". It does everything in order.
-/atom/movable/light/proc/cast_light(var/turf/updated_turf)
+/atom/movable/light/proc/cast_light(var/turf/updated_turf, var/new_opacity)
 	cast_light_init(updated_turf) // -- Clean up old vars, initialise stuff, in particular, selects the walls to draw shadows on.
 	cast_main_light() // -- Casts the main light source - a square - and the circular mask overlay.
 	update_light_dir() // -- Updates dir. Only useful for some cases.
 	cast_shadows() // -- Casts the masking shadows on the walls.
 	update_appearance() // -- Wrap up everything. Apply filters, apply colours, and voilà.
 
-/atom/movable/light/secondary_shadow/cast_light(var/turf/updated_turf)
+/atom/movable/light/secondary_shadow/cast_light(var/turf/updated_turf, var/new_opacity)
 	return // We don't cast light ourself!
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 // -- Main light atom
 
 // Initialisation of the cast_light proc.
-/atom/movable/light/proc/cast_light_init(var/turf/updated_turf)
+/atom/movable/light/proc/cast_light_init(var/turf/updated_turf, var/new_opacity)
 
 	filters = list()
 	temp_appearance = list()
@@ -116,7 +116,10 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 
 	// No need to do the rest of the calculation if we know which turf got updated!!!
 	if (updated_turf)
-		affected_shadow_walls -= updated_turf
+		if (!new_opacity)
+			affected_shadow_walls -= updated_turf
+		else
+			affected_shadow_walls += updated_turf
 		return
 
 	affected_shadow_walls = list()
@@ -162,7 +165,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	if (updated_turf)
 		for (var/list/L in shadow_component_atoms)
 			if (updated_turf in L)
-				L -= updated_turf
+				affected_shadow_walls -= updated_turf
 		return
 
 	shadow_component_turfs = list()
