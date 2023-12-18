@@ -68,27 +68,26 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 
 
 // Cast_light() is the "master proc". It does everything in order.
-/atom/movable/light/proc/cast_light()
-	cast_light_init() // -- Clean up old vars, initialise stuff, in particular, selects the walls to draw shadows on.
+/atom/movable/light/proc/cast_light(var/turf/updated_turf, var/new_opacity)
+	cast_light_init(updated_turf, new_opacity) // -- Clean up old vars, initialise stuff, in particular, selects the walls to draw shadows on.
 	cast_main_light() // -- Casts the main light source - a square - and the circular mask overlay.
 	update_light_dir() // -- Updates dir. Only useful for some cases.
 	cast_shadows() // -- Casts the masking shadows on the walls.
 	update_appearance() // -- Wrap up everything. Apply filters, apply colours, and voilà.
 
-/atom/movable/light/secondary_shadow/cast_light()
+/atom/movable/light/secondary_shadow/cast_light(var/turf/updated_turf, var/new_opacity)
 	return // We don't cast light ourself!
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 // -- Main light atom
 
 // Initialisation of the cast_light proc.
-/atom/movable/light/proc/cast_light_init()
+/atom/movable/light/proc/cast_light_init(var/turf/updated_turf, var/new_opacity)
 
 	filters = list()
 	temp_appearance = list()
 	temp_appearance_shadows = list()
 	cull_light_turfs()
-	affected_shadow_walls = list()
 	pre_rendered_shadows = list()
 	found_prerendered_white_light_glob = FALSE
 
@@ -114,6 +113,16 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 		if (LIGHT_REGULAR_FLICKER)
 			animate(src, alpha = 180, time = 5, loop = -1, easing = CIRCULAR_EASING)
 			animate(alpha = 255, time = 5, loop = -1, easing = CIRCULAR_EASING)
+
+	// No need to do the rest of the calculation if we know which turf got updated!!!
+	if (updated_turf)
+		if (!new_opacity)
+			affected_shadow_walls -= updated_turf
+		else
+			affected_shadow_walls += updated_turf
+		return
+
+	affected_shadow_walls = list()
 
 	var/list/cached_view = view(distance_to_wall_illum, src)
 	for (var/thing in cached_view)
@@ -141,16 +150,26 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 
 // -- DIFFERENCE: We look at turfs in a particular spiral order
 // We don't add turfs to `affecting_turfs`.
-/atom/movable/light/wall_lighting/cast_light_init()
+/atom/movable/light/wall_lighting/cast_light_init(var/turf/updated_turf)
 	. = ..()
 
-	shadow_component_turfs = list()
+	var/turf/last_turf_in_group = null
+	var/list/turf_group = list()
+
+	// Need to dynamically redraw atoms...
 	for (var/stuff in shadow_component_atoms)
 		qdel(stuff)
 		shadow_component_atoms -= stuff
 
-	var/turf/last_turf_in_group = null
-	var/list/turf_group = list()
+	// But turf can only be updated lazily.
+	if (updated_turf)
+		for (var/list/L in shadow_component_atoms)
+			if (updated_turf in L)
+				affected_shadow_walls -= updated_turf
+				return
+
+	shadow_component_turfs = list()
+
 	// Need to do it in a spiral to ensure our group_turfs are connex.
 	for (var/turf/T in spiral_block(get_turf(src), light_range, only_view = TRUE))
 
