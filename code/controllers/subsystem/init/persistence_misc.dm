@@ -439,11 +439,11 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 	for (var/i = 1 to 3)
 		var/picked = pick(possible_picks)
-		possible_picks =- picked
+		possible_picks -= picked
 		item_list += picked
 
 	for (var/x in item_list)
-		world.log << "[x] :: [item_list[x]]"
+		world.log << "Traitor discount item: [x]"
 
 	data["list"] = list2json(item_list)
 
