@@ -430,10 +430,18 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	// Make sure to clear it.
 	item_list = list()
 
+	var/list/static/forbidden_items = list(
+		/datum/uplink_item/badass/bundle,
+		/datum/uplink_item/badass/experimental_gear,
+		/datum/uplink_item/implants/uplink,
+	)
+
 	var/list/traitor_items = subtypesof(/datum/uplink_item)
 	var/list/possible_picks = list()
 	for (var/thing in traitor_items)
 		var/datum/uplink_item/u_item = thing
+		if (thing in forbidden_items)
+			continue
 		if (initial(u_item.item))
 			possible_picks += thing
 
