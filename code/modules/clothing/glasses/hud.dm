@@ -370,14 +370,6 @@
 	eyeprot = 1
 	hud_types = list(/datum/visioneffect/job)
 
-/obj/item/clothing/glasses/hud/vampire
-	name = "vampireHUD"
-	desc = "Ever wanted to see a null rod?"
-	icon_state = "aviators_gold"
-	darkness_view = -1
-	eyeprot = 1
-	hud_types = list(/datum/visioneffect/nullrod)
-
 /*
 	THERMAL GLASSES
 */
