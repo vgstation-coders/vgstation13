@@ -155,14 +155,18 @@
 
 /obj/item/clothing/glasses/hud/security
 	name = "security HUD"
-	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records. Lacks modern arrest encryption."
+	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
 	icon_state = "securityhud"
-	hud_types = list(/datum/visioneffect/security,
+	hud_types = list(/datum/visioneffect/security/arrest,
 					/datum/visioneffect/job,
 					/datum/visioneffect/implant)
 
 //Special brig medic edition
 /obj/item/clothing/glasses/hud/security/scouter
+	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records. Lacks modern arrest encryption."
+	hud_types = list(/datum/visioneffect/security,
+					/datum/visioneffect/job,
+					/datum/visioneffect/implant)
 
 /obj/item/clothing/glasses/hud/security/scouter/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -287,6 +291,25 @@
 	item_state = initial(glass_type.item_state)
 	_color = initial(glass_type._color)
 	usr.update_inv_glasses()
+
+/obj/item/clothing/glasses/hud/tracking
+	name = "eye tracking glasses"
+	desc = "Eye tracking glasses which allow the wearer to see what others are looking at."
+	icon_state = "tracking"
+	item_state = "tracking"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/glasses/hud/tracking/detective
+	name = "investigation glasses"
+	desc = "A SecurityHUD with built-in eye tracking glasses which allow the wearer to see what others are looking at."
+	icon_state = "investigation"
+	item_state = "investigation"
+	darkness_view = -1
+	eyeprot = 1
+	hud_types = list(/datum/visioneffect/security/arrest,
+					/datum/visioneffect/job,
+					/datum/visioneffect/implant)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /*
 	DIAGNOSTIC HUD

@@ -510,7 +510,7 @@
 	can_add_combinedwclass = TRUE
 	items_to_spawn = list(
 		/obj/item/device/radio/headset/headset_sec,
-			/obj/item/clothing/glasses/regular/tracking/detective,
+			/obj/item/clothing/glasses/hud/tracking/detective,
 		/obj/item/clothing/gloves/black,
 		/obj/item/weapon/storage/belt/detective,
 		/obj/item/weapon/switchtool/switchblade,

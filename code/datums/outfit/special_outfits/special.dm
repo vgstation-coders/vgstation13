@@ -111,7 +111,7 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_w_uniform_str = /obj/item/clothing/under/darkred,
-			slot_glasses_str = /obj/item/clothing/glasses/hud/security/scouter,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security,
 			slot_gloves_str = /obj/item/clothing/gloves/combat,
 			slot_shoes_str = /obj/item/clothing/shoes/combat,
 			slot_head_str = /obj/item/clothing/head/helmet/dredd,

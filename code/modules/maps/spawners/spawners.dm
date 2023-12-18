@@ -1461,7 +1461,7 @@
 /obj/abstract/spawn_all/dredd_gear
 	to_spawn = list(
 		/obj/item/clothing/under/darkred,
-		/obj/item/clothing/glasses/hud/security/scouter,
+		/obj/item/clothing/glasses/hud/security,
 		/obj/item/clothing/gloves/combat,
 		/obj/item/clothing/shoes/combat,
 		/obj/item/clothing/head/helmet/dredd,
