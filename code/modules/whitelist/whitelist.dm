@@ -39,7 +39,7 @@
 	//var/difference = round(lastinvitetime-world.time)
 	//to_chat(usr,"world.time = [world.time], invitetime = [lastinvitetime]")*/
 
-	if (world.time < lastinvitetime) //5 minutes
+	if (world.time < lastinvitetime)
 		to_chat(usr, "<span class='warning'>You must wait before you can send another invite!</span>")
 		return
 
