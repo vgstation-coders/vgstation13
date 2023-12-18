@@ -69,7 +69,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 
 // Cast_light() is the "master proc". It does everything in order.
 /atom/movable/light/proc/cast_light(var/turf/updated_turf, var/new_opacity)
-	cast_light_init(updated_turf) // -- Clean up old vars, initialise stuff, in particular, selects the walls to draw shadows on.
+	cast_light_init(updated_turf, new_opacity) // -- Clean up old vars, initialise stuff, in particular, selects the walls to draw shadows on.
 	cast_main_light() // -- Casts the main light source - a square - and the circular mask overlay.
 	update_light_dir() // -- Updates dir. Only useful for some cases.
 	cast_shadows() // -- Casts the masking shadows on the walls.
