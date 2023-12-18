@@ -166,7 +166,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 		for (var/list/L in shadow_component_atoms)
 			if (updated_turf in L)
 				affected_shadow_walls -= updated_turf
-		return
+				return
 
 	shadow_component_turfs = list()
 
