@@ -116,10 +116,12 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 
 	// No need to do the rest of the calculation if we know which turf got updated!!!
 	if (updated_turf)
-		if (!new_opacity)
-			affected_shadow_walls -= updated_turf
+		if (!new_opacity) // We are no longer opaque!!
+			if (updated_turf in affected_shadow_walls)
+				affected_shadow_walls -= updated_turf
 		else
-			affected_shadow_walls += updated_turf
+			if (updated_turf in view(light_range, src))
+				affected_shadow_walls += updated_turf
 		return
 
 	affected_shadow_walls = list()
