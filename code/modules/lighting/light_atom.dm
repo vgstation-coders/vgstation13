@@ -14,7 +14,7 @@
 	if(istype(T))
 		T.blocks_light = -1
 		for(var/atom/movable/light/L in range(9, T)) //view(world.view, dview_mob))
-			if (src in view(L, L.light_range))
+			if (get_dist(src, L) <= L.light_range)
 				if (world.tick_usage < TICK_LIMIT_RUNNING && ticker.current_state > GAME_STATE_PREGAME)
 					lighting_update_lights |= L
 				else
