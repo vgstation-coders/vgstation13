@@ -715,7 +715,7 @@ var/datum/controller/gameticker/ticker
 					qdel(obj)
 
 		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
-		ooc_allowed = 0 //OOC chat becomes unavailable on round start
+		//ooc_allowed = 0 //OOC chat becomes unavailable on round start
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
 
