@@ -135,10 +135,6 @@
 /obj/item/seeds/pitcher,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/hobo)
-"aY" = (
-/obj/effect/narration/mothership_lab/raidertunnel2,
-/turf/unsimulated/floor/lab_asteroid,
-/area/vault/mothership_lab/raidtunnel_lower)
 "bb" = (
 /obj/machinery/space_heater,
 /turf/unsimulated/floor/ayy/maint,
@@ -2329,6 +2325,10 @@
 /obj/item/weapon/barricade_kit,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
+"tE" = (
+/obj/effect/narration/mothership_lab/raidertunnel2,
+/turf/unsimulated/floor/lab_asteroid,
+/area/vault/mothership_lab/raidtunnel_lower)
 "tF" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
@@ -5311,9 +5311,7 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/habitation)
 "UL" = (
-/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe{
-	desc = "Produces guns, ammunition, and firearm accessories."sss
-	},
+/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe,
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_lower)
 "UM" = (
@@ -9263,7 +9261,7 @@ mz
 fd
 pe
 fS
-aY
+tE
 mz
 mz
 ek
