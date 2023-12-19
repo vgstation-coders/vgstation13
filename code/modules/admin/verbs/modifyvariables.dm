@@ -146,7 +146,7 @@ var/list/forbidden_varedit_object_types = list(
 
 		if(!new_variable_type)
 			new_variable_type = input("What kind of variable?","Variable Type") as null|anything in choices
-		var/selected_type = choices[new_variable_type]
+		var/selected_type = !new_variable_type ? V_CANCEL : choices[new_variable_type]
 		var/window_title = "Varedit [edited_datum]"
 
 		switch(selected_type)
