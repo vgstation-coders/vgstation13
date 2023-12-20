@@ -8,7 +8,7 @@
 	name = "mysterious structure"
 	requires_power = 0
 	icon_state = "firingrange"
-	has_white_turf_lighting = 1
+	has_white_turf_lighting = 0
 
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
