@@ -119,7 +119,7 @@
 		dat += "Ignore Empty Trays : <A href='?src=\ref[src];ignoreEmpty=1'>[src.setting_ignoreEmpty ? "Yes" : "No"]</A><BR>"
 		dat += "</TT>"
 
-	user << browse("<HEAD><TITLE>Farmbot v1.0 controls</TITLE></HEAD>[dat]", "window=autofarm")
+	user << browse("<HEAD><meta charset='UTF-8'><TITLE>Farmbot v1.0 controls</TITLE></HEAD>[dat]", "window=autofarm")
 	onclose(user, "autofarm")
 	return
 

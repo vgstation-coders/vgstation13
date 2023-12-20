@@ -346,7 +346,7 @@ var/list/camera_messages = list()
 	if(href_list["message_id"])
 		var/message_id = href_list["message_id"]
 		var/list/pictureinfo = camera_messages[message_id]
-		usr << browse("<HTML><HEAD><TITLE>[pictureinfo["title"]]</TITLE></HEAD><BODY><TT>[pictureinfo["text"]]</TT></BODY></HTML>", "window=[message_id]")
+		usr << browse("<HTML><HEAD><meta charset='UTF-8'><TITLE>[pictureinfo["title"]]</TITLE></HEAD><BODY><TT>[pictureinfo["text"]]</TT></BODY></HTML>", "window=[message_id]")
 
 /obj/machinery/camera/attack_pai(mob/user as mob)
 	wirejack(user)

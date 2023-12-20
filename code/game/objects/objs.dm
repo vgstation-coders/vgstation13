@@ -493,7 +493,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return
 
 	var/dat = {"<html>
-	<head>
+	<head><meta charset='UTF-8'>
 		<title>[name] Configuration</title>
 		<style type="text/css">
 html,body {

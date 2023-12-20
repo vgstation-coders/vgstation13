@@ -150,7 +150,7 @@ var/global/datum/library_catalog/library_catalog = new()
 		to_chat(user, "<span class='danger'>Nope.</span>")
 		return
 	usr.set_machine(src)
-	var/dat = "<HEAD><TITLE>Scanner Control Interface</TITLE></HEAD><BODY>\n" // <META HTTP-EQUIV='Refresh' CONTENT='10'>
+	var/dat = "<HEAD><meta charset='UTF-8'><TITLE>Scanner Control Interface</TITLE></HEAD><BODY>\n" // <META HTTP-EQUIV='Refresh' CONTENT='10'>
 	if(cache || cached_painting)
 		dat += "<FONT color=#005500>Data stored in memory.</FONT><BR>"
 	else

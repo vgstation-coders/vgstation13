@@ -249,7 +249,7 @@
 
 /obj/machinery/computer/mech_bay_power_console/interact(mob/user as mob)
 	user.set_machine(src)
-	var/output = "<html><head><title>[src.name]</title></head><body>"
+	var/output = "<html><head><meta charset='UTF-8'><title>[src.name]</title></head><body>"
 	if(!recharge_floor)
 		output += "<span class='rose'>Mech Bay Recharge Station not initialized.</span><br>"
 	else

@@ -20,7 +20,7 @@
 	interact(user)
 
 /obj/machinery/media/receiver/boombox/interact(var/mob/user)
-	var/dat = "<html><head><title>[src]</title></head><body><TT>"
+	var/dat = "<html><head><meta charset='UTF-8'><title>[src]</title></head><body><TT>"
 	dat += {"
 				Power: <a href="?src=\ref[src];power=1">[on ? "On" : "Off"]</a><BR>
 				Frequency: <A href='byond://?src=\ref[src];set_freq=-1'>[format_frequency(media_frequency)]</a><BR>

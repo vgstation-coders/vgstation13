@@ -54,7 +54,7 @@
 /obj/machinery/computer/station_alert/interact(mob/user)
 	usr.set_machine(src)
 
-	var/dat = {"<HEAD><TITLE>Current [general_area_name] Alerts</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n
+	var/dat = {"<HEAD><meta charset='UTF-8'><TITLE>Current [general_area_name] Alerts</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n
 	<A HREF='?src=\ref[user];mach_close=alerts'>Close</A><br><br>"}
 	for (var/cat in src.alarms)
 		dat += text("<B>[]</B><BR>\n", cat)

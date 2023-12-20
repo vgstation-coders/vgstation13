@@ -53,7 +53,7 @@
 		to_chat(usr,"<span class='danger'>The Xenoarch subsystem seems to not have spawned any large artifact in the map. Lack of valid asteroid turfs?</span>")
 
 	var/dat = {"<html>
-		<head>
+		<head><meta charset='UTF-8'>
 		<style>
 		table,h2 {
 		font-family: Arial, Helvetica, sans-serif;

@@ -80,7 +80,7 @@
 		counter++
 		dat += "Slot [counter]: [getProgress(E)]% grown. <A href='?src=\ref[src];slot=\ref[E]'>(Eject)</A><BR>"
 
-	user << browse("<HEAD><TITLE>[capitalize(name)]</TITLE></HEAD><TT>[dat]</TT>", "window=egg_incubator")
+	user << browse("<HEAD><meta charset='UTF-8'><TITLE>[capitalize(name)]</TITLE></HEAD><TT>[dat]</TT>", "window=egg_incubator")
 	onclose(user, "egg_incubator")
 
 /obj/machinery/egg_incubator/proc/getProgress(var/obj/item/weapon/reagent_containers/food/snacks/egg/E)

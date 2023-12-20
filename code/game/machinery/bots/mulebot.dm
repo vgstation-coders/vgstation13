@@ -277,7 +277,7 @@ var/global/mulebot_count = 0
 		else
 			dat += "The bot is in maintenance mode and cannot be controlled.<BR>"
 
-	user << browse("<HEAD><TITLE>Mulebot [suffix ? "([suffix])" : ""]</TITLE></HEAD>[dat]", "window=mulebot;size=350x500")
+	user << browse("<HEAD><meta charset='UTF-8'><TITLE>Mulebot [suffix ? "([suffix])" : ""]</TITLE></HEAD>[dat]", "window=mulebot;size=350x500")
 	onclose(user, "mulebot")
 	return
 

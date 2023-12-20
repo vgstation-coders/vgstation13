@@ -2,7 +2,7 @@
     if(!check_rights(R_FUN))
         return
 
-    var/dat= "<head><title>Economy Tools</title></head>"
+    var/dat= "<head><meta charset='UTF-8'><title>Economy Tools</title></head>"
     var/datum/money_account/detailed_account_view
     var/creating_new_account
 

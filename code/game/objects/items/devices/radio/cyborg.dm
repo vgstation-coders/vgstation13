@@ -93,7 +93,7 @@
 	if(!on)
 		return
 
-	var/dat = "<html><head><title>[src]</title></head><body><TT>"
+	var/dat = "<html><head><meta charset='UTF-8'><title>[src]</title></head><body><TT>"
 	dat += {"
 				Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
 				Frequency:

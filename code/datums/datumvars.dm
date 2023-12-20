@@ -189,7 +189,7 @@
 	body += "</ul>"
 	body = jointext(body,"")
 
-	var/html = "<html><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><head>"
+	var/html = "<html><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><head><meta charset='UTF-8'>"
 	if (title)
 		html += "<title>[title]</title>"
 	html += {"<style>

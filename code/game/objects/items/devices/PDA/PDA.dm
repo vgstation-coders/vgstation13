@@ -144,7 +144,7 @@ var/global/msg_id = 0
 	var/dat = list()
 	dat += {"
 	<html>
-	<head><title>Personal Data Assistant</title></head>
+	<head><meta charset='UTF-8'><title>Personal Data Assistant</title></head>
 	<body>
 	<link rel="stylesheet" type="text/css" href="pda.css"/> <!--This stylesheet contains all the PDA icons in base 64!-->
 	"}

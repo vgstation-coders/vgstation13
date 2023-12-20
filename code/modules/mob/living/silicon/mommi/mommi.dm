@@ -251,7 +251,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			set_module_sprites(module.sprites)
 		choose_icon()
 		return
-	var/dat = "<HEAD><TITLE>Modules</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n"
+	var/dat = "<HEAD><meta charset='UTF-8'><TITLE>Modules</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n"
 	dat += {"<BR>
 	<BR>
 	<B>Activated Modules</B>

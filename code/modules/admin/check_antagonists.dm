@@ -3,7 +3,7 @@
 		alert("The game hasn't started yet!")
 		return
 
-	var/dat = "<html><head><title>Round Status</title></head><body><h2>Round Status</h2>"
+	var/dat = "<html><head><meta charset='UTF-8'><title>Round Status</title></head><body><h2>Round Status</h2>"
 
 	dat += {"Current Game Mode: <B>[ticker.mode.name]</B><BR>
 		Round Duration: <B>[round(world.time / 36000)]:[add_zero("[world.time / 600 % 60]", 2)]:[world.time / 100 % 6][world.time / 100 % 10]</B><BR>

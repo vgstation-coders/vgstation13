@@ -1381,7 +1381,7 @@ FIRE ALARM
 	var/area/this_area = get_area(src)
 	var/second = round(src.time) % 60
 	var/minute = (round(src.time) - second) / 60
-	var/dat = {"<HTML><HEAD></HEAD><BODY><TT><B>Fire alarm</B>
+	var/dat = {"<HTML><HEAD><meta charset='UTF-8'></HEAD><BODY><TT><B>Fire alarm</B>
 	<A href='?src=\ref[src];alarm=1'>[this_area.fire ? "Reset" : "Alarm"] - Lockdown</A>\n
 	<HR>The current alert level is: [get_security_level()]</b><br><br>\n
 	Timer System: <A href='?src=\ref[src];time=1'>[timing ? "Stop Time Lock" : "Initiate Time Lock"]</A><BR>\n
@@ -1547,7 +1547,7 @@ var/global/list/firealarms = list() //shrug
 			d2 = text("<A href='?src=\ref[];time=1'>Initiate Time Lock</A>", src)
 		var/second = time % 60
 		var/minute = (time - second) / 60
-		var/dat = text("<HTML><HEAD></HEAD><BODY><TT><B>Party Button</B> []\n<HR>\nTimer System: []<BR>\nTime Left: [][] <A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT></BODY></HTML>", d1, d2, (minute ? text("[]:", minute) : null), second, src, src, src, src)
+		var/dat = text("<HTML><HEAD><meta charset='UTF-8'></HEAD><BODY><TT><B>Party Button</B> []\n<HR>\nTimer System: []<BR>\nTime Left: [][] <A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT></BODY></HTML>", d1, d2, (minute ? text("[]:", minute) : null), second, src, src, src, src)
 		user << browse(dat, "window=partyalarm")
 		onclose(user, "partyalarm")
 	else
@@ -1561,7 +1561,7 @@ var/global/list/firealarms = list() //shrug
 			d2 = text("<A href='?src=\ref[];time=1'>[]</A>", src, stars("Initiate Time Lock"))
 		var/second = time % 60
 		var/minute = (time - second) / 60
-		var/dat = text("<HTML><HEAD></HEAD><BODY><TT><B>[]</B> []\n<HR>\nTimer System: []<BR>\nTime Left: [][] <A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT></BODY></HTML>", stars("Party Button"), d1, d2, (minute ? text("[]:", minute) : null), second, src, src, src, src)
+		var/dat = text("<HTML><HEAD><meta charset='UTF-8'></HEAD><BODY><TT><B>[]</B> []\n<HR>\nTimer System: []<BR>\nTime Left: [][] <A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT></BODY></HTML>", stars("Party Button"), d1, d2, (minute ? text("[]:", minute) : null), second, src, src, src, src)
 		user << browse(dat, "window=partyalarm")
 		onclose(user, "partyalarm")
 	return

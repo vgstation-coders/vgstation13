@@ -158,7 +158,7 @@ Filter types:
 			[src.target_pressure]kPa | <a href='?src=\ref[src];set_press=1'>Change</a>
 			"}
 /*
-		user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD>[dat]","window=atmo_filter")
+		user << browse("<HEAD><meta charset='UTF-8'><TITLE>[src.name] control</TITLE></HEAD>[dat]","window=atmo_filter")
 		onclose(user, "atmo_filter")
 		return
 
@@ -167,7 +167,7 @@ Filter types:
 	//else
 	//	src.on != src.on
 */
-	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_filter")
+	user << browse("<HEAD><meta charset='UTF-8'><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_filter")
 	onclose(user, "atmo_filter")
 	return
 

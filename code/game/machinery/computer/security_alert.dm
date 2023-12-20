@@ -1,16 +1,16 @@
 var/list/security_alerts_computers = list()
-	
+
 /****************
 Security Alerts Computer
 This computer is supposed to be the comprehensive list
 of automated alarms that security should be made aware of.
-This includes SPS alarms, lockbox cracking alarms, camera alarms, 
+This includes SPS alarms, lockbox cracking alarms, camera alarms,
 door alarms, crate cracking alarms, turret engagement warnings,
 encoded proximity alarms, you name it.
 Alerts are listed as TYPE - TIME - AREA + CO,OR,DINATES.
 TODO: literally every alarm but SPS alarms.
-***************/	
-	
+***************/
+
 /obj/machinery/computer/security_alerts //copied mostly from the bhangometer, see it for comments
 	name = "Security Alerts Computer"
 	desc = "Lists security alerts from various sensors."
@@ -65,10 +65,10 @@ TODO: literally every alarm but SPS alarms.
 
 
 /obj/machinery/computer/security_alerts/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE)) 
+	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
 
-	if(!ui) 
+	if(!ui)
 		ui = nanomanager.get_open_ui(user, src, ui_key, force_open)
 
 	if(!ui)
@@ -83,7 +83,7 @@ TODO: literally every alarm but SPS alarms.
 /obj/machinery/computer/security_alerts/interact(mob/user as mob)
 	var/listing = {"
 <html>
-	<head>
+	<head><meta charset='UTF-8'>
 		<title>Nanotrasen Security Alerts Computer</title>
 	</head>
 	<body>
@@ -110,7 +110,7 @@ TODO: literally every alarm but SPS alarms.
 	if(muted)
 		return
 	if(saved_security_alerts.Find(newdata)) //no need for duplicate entries
-		return 
+		return
 	saved_security_alerts.Insert(1,newdata)
 	if(saved_security_alerts.len >= 50) //no need for infinite logs
 		pop(saved_security_alerts)

@@ -373,7 +373,7 @@ var/global/ZAS_Settings/zas_settings = new
 /ZAS_Settings/proc/ChangeSettingsDialog(mob/user)
 	var/dat = {"
 <html>
-	<head>
+	<head><meta charset='UTF-8'>
 		<title>ZAS Settings 2.0</title>
 		<style type="text/css">
 body,html {

@@ -101,7 +101,7 @@ Weird button pressed: []"},
 text("<A href='?src=\ref[src];operation=screw'>[src.screwloose ? "Yes" : "No"]</A>"),
 text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"]</A>"))
 
-	user << browse("<HEAD><TITLE>Cleaner v1.0 controls</TITLE></HEAD>[dat]", "window=autocleaner")
+	user << browse("<HEAD><meta charset='UTF-8'><TITLE>Cleaner v1.0 controls</TITLE></HEAD>[dat]", "window=autocleaner")
 	onclose(user, "autocleaner")
 	return
 

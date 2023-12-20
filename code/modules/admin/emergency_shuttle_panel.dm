@@ -3,7 +3,7 @@
 		alert("The emergency shuttle subsystem isn't ready yet!")
 		return
 
-	var/dat = "<html><head><title>Emergency Shuttle Fuckery Panel</title></head><body><h1>Emergency Shuttle Control</h1>"
+	var/dat = "<html><head><meta charset='UTF-8'><title>Emergency Shuttle Fuckery Panel</title></head><body><h1>Emergency Shuttle Control</h1>"
 
 	dat += "Current Status:"
 

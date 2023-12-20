@@ -576,7 +576,7 @@
 	var/list/civ = new()
 	var/list/misc = new()
 
-	var/dat = {"<html><head><style>
+	var/dat = {"<html><head><meta charset='UTF-8'><style>
 		.manifest {border-collapse:collapse;}
 		.manifest td, th {border:1px solid #DEF; background-color:white; color:black; padding:.25em}
 		.manifest th {height: 2em; background-color: #48C; color:white}

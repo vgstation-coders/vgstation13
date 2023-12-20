@@ -625,7 +625,7 @@
 		return
 	user.set_machine(src)
 	var/dat = {"<html>
-					<head><title>[src] control</title></head>
+					<head><meta charset='UTF-8'><title>[src] control</title></head>
 					<body>
 					<b>Power: </b><a href='?src=\ref[src];power=1'>[on?"on":"off"]</a><br>
 					<b>Scan Range: </b><a href='?src=\ref[src];scan_range=-1'>-</a> [scan_range] <a href='?src=\ref[src];scan_range=1'>+</a><br>
@@ -641,8 +641,8 @@
 				<b>Projectiles per burst:</b> <a href='?src=\ref[src];projectile_burst=1'>[projectiles_per_shot]</a><br>
 				<b>Firing delay:</b> <a href='?src=\ref[src];firing_delay=1'>[cooldown] deci-seconds</a><br>
 				<b>Set ammo #:</b> <a href='?src=\ref[src];force_ammo_amt=1'>[projectiles]</a><br>
-				
-			
+
+
 				</body>
 				</html>"}
 	user << browse(dat, "window=turret")

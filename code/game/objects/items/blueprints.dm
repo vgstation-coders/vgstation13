@@ -125,7 +125,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 
 /obj/item/blueprints/interact()
 	var/area/A = get_area(src)
-	var/text = {"<HTML><head><title>[src]</title></head><BODY>
+	var/text = {"<HTML><head><meta charset='UTF-8'><title>[src]</title></head><BODY>
 <h2>[station_name()] blueprints</h2>
 <hr>
 "}

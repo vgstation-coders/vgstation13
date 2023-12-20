@@ -78,12 +78,12 @@
 	if(!role)
 		return
 	var/list/purchased_powers = role.current_powers
-	var/dat = "<html><head><title>[menu_name]</title></head>"
+	var/dat = "<html><head><meta charset='UTF-8'><title>[menu_name]</title></head>"
 
 	//javascript, the part that does most of the work~
 	dat += {"
 
-		<head>
+		<head><meta charset='UTF-8'>
 			<script type='text/javascript'>
 
 				var locked_tabs = new Array();

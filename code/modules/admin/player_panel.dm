@@ -61,12 +61,12 @@
 /datum/admins/proc/player_panel_new()//The new one
 	if (!usr.client.holder)
 		return
-	var/dat = "<html><head><title>Admin Player Panel</title></head>"
+	var/dat = "<html><head><meta charset='UTF-8'><title>Admin Player Panel</title></head>"
 
 	//javascript, the part that does most of the work~
 	dat += {"
 
-		<head>
+		<head><meta charset='UTF-8'>
 			<script type='text/javascript'>
 
 				var locked_tabs = new Array();
@@ -347,7 +347,7 @@
 	if (!usr.client.holder)
 		return
 
-	var/dat = {"<html><head><title>Player Menu</title></head>
+	var/dat = {"<html><head><meta charset='UTF-8'><title>Player Menu</title></head>
 <body><table border=1 cellspacing=5><B><tr><th>Name</th><th>Real Name</th><th>Assigned Job</th><th>Key</th><th>Options</th><th>PM</th><th>Traitor?</th></tr></B>"}
 	//add <th>IP:</th> to this if wanting to add back in IP checking
 	//add <td>(IP: [M.lastKnownIP])</td> if you want to know their ip to the lists below

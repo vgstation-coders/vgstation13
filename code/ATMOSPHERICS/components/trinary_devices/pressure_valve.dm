@@ -69,7 +69,7 @@
 /obj/machinery/atmospherics/trinary/pressure_valve/proc/setup(mob/user)
 
 	var/dat = {"
-				<head>
+				<head><meta charset='UTF-8'>
 					<title>[name] control</title>
 				</head>
 				<body>

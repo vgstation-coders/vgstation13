@@ -25,7 +25,7 @@ var/global/current_pos_id = 1
 var/global/pos_sales = 0
 
 var/const/RECEIPT_HEADER = {"<html>
-	<head>
+	<head><meta charset='UTF-8'>
 		<style type="text/css">
 			html {
 				font-family: monospace;
@@ -72,7 +72,7 @@ var/const/RECEIPT_HEADER = {"<html>
 	<body>
 "}
 var/const/POS_HEADER = {"<html>
-	<head>
+	<head><meta charset='UTF-8'>
 		<style type="text/css">
 			* {
 				font-family: sans-serif;

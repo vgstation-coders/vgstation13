@@ -545,7 +545,7 @@
 	if(!app)
 		to_chat(usr, "You don't have a messenger to read!")
 		return
-	var/dat = "<html><head><title>AI PDA Message Log</title></head><body>"
+	var/dat = "<html><head><meta charset='UTF-8'><title>AI PDA Message Log</title></head><body>"
 	for(var/note in app.tnote)
 		dat += app.tnote[note]
 		var/icon/img = app.imglist[note]
@@ -564,7 +564,7 @@
 		to_chat(usr, "You don't have a messenger to read!")
 		return
 	if(!isnull(aiPDA))
-		var/dat = "<html><head><title>AI PDA Message Log</title></head><body>"
+		var/dat = "<html><head><meta charset='UTF-8'><title>AI PDA Message Log</title></head><body>"
 		for(var/note in app.tnote)
 			dat += app.tnote[note]
 			var/icon/img = app.imglist[note]

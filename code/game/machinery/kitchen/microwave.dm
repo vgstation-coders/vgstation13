@@ -305,7 +305,7 @@
 <A href='?src=\ref[src];action=reagenttoggle'>[reagent_disposal ? "Disable reagent disposal" : "Enable reagent disposal"]<BR>\
 "}
 
-	user << browse("<HEAD><TITLE>Microwave Controls</TITLE></HEAD><TT>[dat]</TT>", "window=microwave")
+	user << browse("<HEAD><meta charset='UTF-8'><TITLE>Microwave Controls</TITLE></HEAD><TT>[dat]</TT>", "window=microwave")
 	onclose(user, "microwave")
 	return
 

@@ -40,7 +40,7 @@ var/global/floorIsLava = 0
 	if (!istype(src,/datum/admins))
 		to_chat(usr, "Error: you are not an admin!")
 		return
-	var/body = {"<html><head><title>Options for [M.key]</title></head>
+	var/body = {"<html><head><meta charset='UTF-8'><title>Options for [M.key]</title></head>
 <body>Options panel for <b>[M]</b>"}
 	var/species_description
 	if(M.client)
@@ -376,7 +376,7 @@ var/global/floorIsLava = 0
 		to_chat(usr, "Error: you are not an admin!")
 		return
 
-	var/dat = {"<html><head><title>Info on [key]</title></head>
+	var/dat = {"<html><head><meta charset='UTF-8'><title>Info on [key]</title></head>
 <body>"}
 
 	var/savefile/info = new("data/player_saves/[copytext(key, 1, 2)]/[key]/info.sav")
@@ -419,7 +419,7 @@ var/global/floorIsLava = 0
 		to_chat(usr, "Error: you are not an admin!")
 		return
 	var/dat
-	dat = text("<HEAD><TITLE>Admin Newscaster</TITLE></HEAD><H3>Admin Newscaster Unit</H3>")
+	dat = text("<HEAD><meta charset='UTF-8'><TITLE>Admin Newscaster</TITLE></HEAD><H3>Admin Newscaster Unit</H3>")
 
 	switch(admincaster_screen)
 		if(0)

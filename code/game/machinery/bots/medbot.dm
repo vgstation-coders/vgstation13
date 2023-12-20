@@ -199,7 +199,7 @@ var/list/firstaid_exceptions = list(
 
 		dat += "Critical Patient Alerts: <a href='?src=\ref[src];critalerts=1'>[declare_crit ? "Yes" : "No"]</a><br>"
 
-	user << browse("<HEAD><TITLE>Medibot v1.0 controls</TITLE></HEAD>[dat]", "window=automed")
+	user << browse("<HEAD><meta charset='UTF-8'><TITLE>Medibot v1.0 controls</TITLE></HEAD>[dat]", "window=automed")
 	onclose(user, "automed")
 	return
 

@@ -57,7 +57,7 @@ var/list/megaphone_channels = list("DISABLE" = 0) + stationchannels
 	show_ui(user)
 
 /obj/item/device/megaphone/madscientist/proc/show_ui(mob/living/user as mob)
-	var/dat = "<html><head><title>[src]</title></head><body><TT>"
+	var/dat = "<html><head><meta charset='UTF-8'><title>[src]</title></head><body><TT>"
 	dat += {"
 		Voice Scrambler: <a href="?src=\ref[src];voicescramble=1">[mask_voice ? "On" : "Off"]</a><BR>
 		<BR>

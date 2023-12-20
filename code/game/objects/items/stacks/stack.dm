@@ -60,7 +60,7 @@
 	if(recipes_sublist && recipe_list[recipes_sublist] && istype(recipe_list[recipes_sublist], /datum/stack_recipe_list))
 		var/datum/stack_recipe_list/srl = recipe_list[recipes_sublist]
 		recipe_list = srl.recipes
-	var/t1 = "<HTML><HEAD><title>[name] recipes</title></HEAD><body><TT>Amount of [name] available: [src.amount]<br>"
+	var/t1 = "<HTML><HEAD><meta charset='UTF-8'><title>[name] recipes</title></HEAD><body><TT>Amount of [name] available: [src.amount]<br>"
 	for(var/i = 1;i <= recipe_list.len,i++)
 		var/E = recipe_list[i]
 		if(isnull(E))

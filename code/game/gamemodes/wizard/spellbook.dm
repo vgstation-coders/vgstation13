@@ -95,7 +95,7 @@
 	user.set_machine(src)
 
 	var/dat
-	dat += "<head><title>Spellbook ([uses] REMAINING)</title></head><body style=\"background-color:[book_background_color]\">"
+	dat += "<head><meta charset='UTF-8'><title>Spellbook ([uses] REMAINING)</title></head><body style=\"background-color:[book_background_color]\">"
 	dat += "<h1>A Wizard's Catalogue Of Spells And Artifacts</h1><br>"
 	dat += "<h2>[uses] point\s remaining (<a href='?src=\ref[src];refund=1'>Get a refund</a>)</h2><br>"
 	dat += "<em>This book contains a list of many useful things that you'll need in your journey.</em><br>"

@@ -96,7 +96,7 @@ var/global/list/floorbot_targets=list()
 		dat += "Finds tiles: <A href='?src=\ref[src];operation=tiles'>[eattiles ? "Yes" : "No"]</A><BR>"
 		dat += "Make single pieces of metal into tiles when empty: <A href='?src=\ref[src];operation=make'>[maketiles ? "Yes" : "No"]</A><BR>"
 
-	user << browse("<HEAD><TITLE>Repairbot v0.1 controls (alpha)</TITLE></HEAD>[dat]", "window=autorepair")
+	user << browse("<HEAD><meta charset='UTF-8'><TITLE>Repairbot v0.1 controls (alpha)</TITLE></HEAD>[dat]", "window=autorepair")
 	onclose(user, "autorepair")
 
 

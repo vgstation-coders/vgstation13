@@ -6,7 +6,7 @@
 	var/datum/climate/C = map.climate
 	var/datum/weather/W = C.current_weather
 	var/dat = {"<html>
-		<head>
+		<head><meta charset='UTF-8'>
 		<style>
 		table,h2 {
 		font-family: Arial, Helvetica, sans-serif;

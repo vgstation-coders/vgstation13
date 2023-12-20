@@ -108,7 +108,7 @@ Thus, the two variables affect pump operation are set in New():
 				[round(transfer_rate,1)]l/s | <a href='?src=\ref[src];set_transfer_rate=1'>Change</a>
 				"}
 
-	user << browse("<HEAD><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
+	user << browse("<HEAD><meta charset='UTF-8'><TITLE>[src.name] control</TITLE></HEAD><TT>[dat]</TT>", "window=atmo_pump")
 	onclose(user, "atmo_pump")
 
 /obj/machinery/atmospherics/binary/volume_pump/initialize()

@@ -25,7 +25,7 @@
 	id = 2
 
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
 				h2 {font-size: 15px; margin: 15px 0px 5px;}
@@ -76,7 +76,7 @@
 //big pile of shit below.
 	id = 4
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
 				h2 {font-size: 15px; margin: 15px 0px 5px;}
@@ -124,7 +124,7 @@
 	title = "Growing Dionae and YOU! A book on growing your new best friends!"
 	id = 5
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
 				h2 {font-size: 15px; margin: 15px 0px 5px;}
@@ -177,7 +177,7 @@
 //big pile of shit below.
 
 	/*dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
 				h2 {font-size: 15px; margin: 15px 0px 5px;}
@@ -252,7 +252,7 @@
 	title = "Research and Development 101"
 	id = 9
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
 				h2 {font-size: 15px; margin: 15px 0px 5px;}
@@ -303,7 +303,7 @@
 	title = "Cyborgs for Dummies"
 	id = 10
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 21px; margin: 15px 0px 5px;}
 				h2 {font-size: 18px; margin: 15px 0px 5px;}
@@ -522,7 +522,7 @@
 /obj/item/weapon/book/manual/security_antag_guide/New(turf/loc)
 	..()
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 32px; margin: 15px 0px 5px;color:#F7D61A;background-color: #990000;}
 				h2 {font-size: 24px; margin: 15px 0px 5px;color:#F7D61A;background-color: #990000;}
@@ -745,7 +745,7 @@
 	title = "Guide to disposal mailing system"
 	id = 20
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
 				h2 {font-size: 15px; margin: 15px 0px 5px;}
@@ -809,7 +809,7 @@
 	book_width = 819
 	book_height = 516
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {
 				  font-family: Arial, Helvetica, sans-serif;
@@ -1016,7 +1016,7 @@ var/virology_encyclopedia = ""
 	if (!virology_encyclopedia)
 
 		virology_encyclopedia = {"<html>
-					<head>
+					<head><meta charset='UTF-8'>
 					<style>
 					h1 {
 					  font-family: Arial, Helvetica, sans-serif;
@@ -1152,7 +1152,7 @@ var/virology_encyclopedia = ""
 	title = "Engine technician's notes"
 	id = 24
 	dat = {"<html>
-			<head>
+			<head><meta charset='UTF-8'>
 			<style>
 			h1 {font-size: 18px; margin: 15px 0px 5px;}
 			h2 {font-size: 15px; margin: 15px 0px 5px;}

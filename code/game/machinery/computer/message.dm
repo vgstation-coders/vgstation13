@@ -87,7 +87,7 @@
 	//If the computer is being hacked or is emagged, display the reboot message.
 	if(hacking || emagged)
 		message = rebootmsg
-	var/dat = "<head><title>Message Monitor Console</title></head><body>"
+	var/dat = "<head><meta charset='UTF-8'><title>Message Monitor Console</title></head><body>"
 
 	dat += {"<center><h2>Message Monitor Console</h2></center><hr>
 		<center><h4><font color='blue'[message]</h5></center>"}

@@ -167,7 +167,7 @@ var/runedec = 0 // Rune cap ?
 	var/list/cultwords = list()
 
 	tomedat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 25px; margin: 15px 0px 5px;}
 				h2 {font-size: 20px; margin: 15px 0px 5px;}

@@ -1064,7 +1064,7 @@
 		pick_module()
 		return
 	var/dat = {"
-	<HEAD>
+	<HEAD><meta charset='UTF-8'>
 		<TITLE>Modules</TITLE>
 		<META HTTP-EQUIV='Refresh' CONTENT='10'>
 	</HEAD>

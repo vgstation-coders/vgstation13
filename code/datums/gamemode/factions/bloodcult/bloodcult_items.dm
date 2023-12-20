@@ -391,7 +391,7 @@ var/list/arcane_tomes = list()
 	..()
 	if (blood_text)
 		user << browse_rsc(file("goon/browserassets/css/fonts/youmurdererbb_reg.otf"))
-		user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY text=#612014>[blood_text]</BODY></HTML>", "window=[name]")
+		user << browse("<HTML><HEAD><meta charset='UTF-8'><TITLE>[name]</TITLE></HEAD><BODY text=#612014>[blood_text]</BODY></HTML>", "window=[name]")
 		onclose(user, "[name]")
 		return
 
@@ -414,7 +414,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/talisman/attack_self(var/mob/living/user)
 	if (blood_text)
 		user << browse_rsc(file("goon/browserassets/css/fonts/youmurdererbb_reg.otf"))
-		user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY text=#612014>[blood_text]</BODY></HTML>", "window=[name]")
+		user << browse("<HTML><HEAD><meta charset='UTF-8'><TITLE>[name]</TITLE></HEAD><BODY text=#612014>[blood_text]</BODY></HTML>", "window=[name]")
 		onclose(user, "[name]")
 		onclose(user, "[name]")
 		return
@@ -437,7 +437,7 @@ var/list/arcane_tomes = list()
 
 	if (blood_text)
 		user << browse_rsc(file("goon/browserassets/css/fonts/youmurdererbb_reg.otf"))
-		user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY text=#612014>[blood_text]</BODY></HTML>", "window=[name]")
+		user << browse("<HTML><HEAD><meta charset='UTF-8'><TITLE>[name]</TITLE></HEAD><BODY text=#612014>[blood_text]</BODY></HTML>", "window=[name]")
 		onclose(user, "[name]")
 		return
 

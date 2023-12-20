@@ -132,7 +132,7 @@ var/list/list/sensed_explosions = list()
 		original_zLevel = z
 	var/datum/zLevel/thisZ = map.zLevels[original_zLevel]
 	var/dat = {"<html>
-		<head>
+		<head><meta charset='UTF-8'>
 		<style>
 		table,h2 {
 		font-family: Arial, Helvetica, sans-serif;

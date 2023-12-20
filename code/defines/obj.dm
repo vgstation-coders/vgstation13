@@ -86,7 +86,7 @@
 	var/list/misc = new()
 	var/list/isactive = new()
 	var/dat = {"
-	<head><style>
+	<head><meta charset='UTF-8'><style>
 		.manifest {border-collapse:collapse;}
 		.manifest td, th {border:1px solid [monochrome?"black":"#DEF; background-color:white; color:black"]; padding:.25em}
 		.manifest th {height: 2em; [monochrome?"border-top-width: 3px":"background-color: #48C; color:white"]}
@@ -235,7 +235,7 @@ We don't care about names, DNA, accounts, activity, any of that. We're just gonn
 	if(!crystal_ball.len)
 		return "No prediction has been made!" //This only gets shown the first time ever. If everyone unreadies it's blank.
 	var/dat = {"
-	<head><head><style>
+	<head><meta charset='UTF-8'><style>
 		.manifest {border-collapse:collapse;}
 		.manifest td, th {border:1px solid #DEF; background-color:white; color:black; padding:.25em}
 		.manifest th {height: 2em; background-color: #48C; color:white}

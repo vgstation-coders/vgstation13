@@ -6,7 +6,7 @@
 	author = "Professor Patrick Mason, Curator of the Antiquities Museum on Ichar VII"
 	title = "Out on the dig"
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
 				h1 {font-size: 15px; margin: 15px 0px 5px;}
@@ -102,7 +102,7 @@
 	author = "Professor Patrick Mason, Curator of the Antiquities Museum on Ichar VII"
 	title = "Out on the dig"
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
 				h1 {font-size: 15px; margin: 15px 0px 5px;}
@@ -215,7 +215,7 @@
 	author = "Winton Rice, Chief Mass Spectrometry Technician at the Institute of Applied Sciences on Arcadia"
 	title = "High powered mass spectrometry, a comprehensive guide"
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
 				h1 {font-size: 15px; margin: 15px 0px 5px;}
@@ -286,7 +286,7 @@
 	author = "Doctor Martin Boyle, Director Research at the Lower Hydrolian Sector Listening Array"
 	title = "Spectroscopy: Analysing the anomalies of the cosmos"
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
 				h1 {font-size: 15px; margin: 15px 0px 5px;}
@@ -310,7 +310,7 @@
 	author = "Jasper Pascal, Senior Lecturer in Materials Analysis at the University of Jol'Nar"
 	title = "Materials analysis and the chemical implications"
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
 				h1 {font-size: 15px; margin: 15px 0px 5px;}
@@ -337,7 +337,7 @@
 	author = "Norman York, formerly of the Tyrolion Institute on Titan"
 	title = "Anomalous materials and energies"
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
 				h1 {font-size: 15px; margin: 15px 0px 5px;}
@@ -415,7 +415,7 @@
 	author = "Elvin Schmidt"
 	title = "Cellular suspension, the new Cryogenics?"
 	dat = {"<html>
-				<head>
+				<head><meta charset='UTF-8'>
 				<style>
 				h1 {font-size: 18px; margin: 15px 0px 5px;}
 				h1 {font-size: 15px; margin: 15px 0px 5px;}

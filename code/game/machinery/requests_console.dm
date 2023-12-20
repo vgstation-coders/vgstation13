@@ -134,7 +134,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 
 /obj/machinery/requests_console/interact(user as mob)
 	var/dat
-	dat = text("<HEAD><TITLE>Requests Console</TITLE></HEAD><H3>[department] Requests Console</H3>")
+	dat = text("<HEAD><meta charset='UTF-8'><TITLE>Requests Console</TITLE></HEAD><H3>[department] Requests Console</H3>")
 	if(!open)
 		switch(screen)
 			if(1)	//req. assistance
