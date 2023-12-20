@@ -59,45 +59,6 @@ macro "macro"
 	elem "DELETE"
 		name = "Delete"
 		command = "delete-key-pressed"
-	elem "CTRL+NUMPAD8"
-		name = "CTRL+NUMPAD8"
-		command = "a-zone head"
-	elem "CTRL+NUMPAD5"
-		name = "CTRL+NUMPAD5"
-		command = "a-zone chest"
-	elem "CTRL+NUMPAD2"
-		name = "CTRL+NUMPAD2"
-		command = "a-zone groin"
-	elem "CTRL+NUMPAD7"
-		name = "CTRL+NUMPAD7"
-		command = "a-zone eyes"
-	elem "CTRL+NUMPAD9"
-		name = "CTRL+NUMPAD9"
-		command = "a-zone mouth"
-	elem "CTRL+NUMPAD4"
-		name = "CTRL+NUMPAD4"
-		command = "a-zone l_arm"
-	elem "CTRL+NUMPAD1"
-		name = "CTRL+NUMPAD1"
-		command = "a-zone l_leg"
-	elem "CTRL+NUMPAD6"
-		name = "CTRL+NUMPAD6"
-		command = "a-zone r_arm"
-	elem "CTRL+NUMPAD3"
-		name = "CTRL+NUMPAD3"
-		command = "a-zone r_leg"
-	elem "ALT+NUMPAD4"
-		name = "ALT+Numpad4"
-		command = "a-zone l_hand"
-	elem "ALT+NUMPAD1"
-		name = "ALT+Numpad1"
-		command = "a-zone l_foot"
-	elem "ALT+NUMPAD6"
-		name = "ALT+Numpad6"
-		command = "a-zone r_hand"
-	elem "ALT+NUMPAD3"
-		name = "ALT+Numpad3"
-		command = "a-zone r_foot"
 	elem "CTRL+1"
 		name = "CTRL+1"
 		command = "a-intent help"
@@ -116,66 +77,57 @@ macro "macro"
 	elem "CTRL+6"
 		name = "CTRL+6"
 		command = "a-bite"
-	elem "CTRL+A"
+	elem 
 		name = "CTRL+A"
-		command = "MoveKey 8 1"
-	elem "CTRL+A+UP"
-		name = "CTRL+A+UP"
-		command = "MoveKey 8 0"
-	elem "CTRL+D"
+		command = "westface"
+	elem 
 		name = "CTRL+D"
-		command = "MoveKey 4 1"
-	elem "CTRL+D+UP"
-		name = "CTRL+D+UP"
-		command = "MoveKey 4 0"
-	elem "CTRL+E"
-		name = "CTRL+E"
-		command = "quick-equip"
-	elem "CTRL+F"
-		name = "CTRL+F"
-		command = "a-intent left"
-	elem "CTRL+G"
-		name = "CTRL+G"
-		command = "a-intent right"
-	elem "CTRL+Q"
-		name = "CTRL+Q"
-		command = ".northwest"
-	elem "CTRL+R"
-		name = "CTRL+R"
-		command = ".southwest"
-	elem "CTRL+S"
+		command = "eastface"
+	elem 
 		name = "CTRL+S"
-		command = "MoveKey 2 1"
-	elem "CTRL+S+UP"
-		name = "CTRL+S+UP"
-		command = "MoveKey 2 0"
-	elem "CTRL+W"
+		command = "southface"
+	elem 
 		name = "CTRL+W"
-		command = "MoveKey 1 1"
-	elem "CTRL+W+UP"
-		name = "CTRL+W+UP"
-		command = "MoveKey 1 0"
-	elem "CTRL+X"
-		name = "CTRL+X"
-		command = ".northeast"
-	elem "CTRL+Y"
-		name = "CTRL+Y"
-		command = "Activate-Held-Object"
-	elem "CTRL+Z"
-		name = "CTRL+Z"
-		command = "Activate-Held-Object"
-	elem "CTRL+U"
-		name = "CTRL+U"
-		command = "a-zone up"
-	elem "CTRL+J"
-		name = "CTRL+J"
-		command = "a-zone down"
-	elem "CTRL+H"
-		name = "CTRL+H"
-		command = "a-zone left"
-	elem "CTRL+K"
-		name = "CTRL+K"
-		command = "a-zone right"
+		command = "northface"
+	elem "ALT+NUMPAD1"
+		name = "ALT+Numpad1"
+		command = "a-zone l_foot"
+	elem "CTRL+NUMPAD1"
+		name = "CTRL+Numpad1"
+		command = "a-zone l_leg"
+	elem "CTRL+NUMPAD2"
+		name = "CTRL+Numpad2"
+		command = "a-zone groin"
+	elem "ALT+NUMPAD3"
+		name = "ALT+Numpad3"
+		command = "a-zone r_foot"
+	elem "CTRL+NUMPAD3"
+		name = "CTRL+Numpad3"
+		command = "a-zone r_leg"
+	elem "ALT+NUMPAD4"
+		name = "ALT+Numpad4"
+		command = "a-zone l_hand"
+	elem "CTRL+NUMPAD4"
+		name = "CTRL+Numpad4"
+		command = "a-zone l_arm"
+	elem "CTRL+NUMPAD5"
+		name = "CTRL+Numpad5"
+		command = "a-zone chest"
+	elem "ALT+NUMPAD6"
+		name = "ALT+Numpad6"
+		command = "a-zone r_hand"
+	elem "CTRL+NUMPAD6"
+		name = "CTRL+Numpad6"
+		command = "a-zone r_arm"
+	elem "CTRL+NUMPAD7"
+		name = "CTRL+Numpad7"
+		command = "a-zone eyes"
+	elem "CTRL+NUMPAD8"
+		name = "CTRL+Numpad8"
+		command = "a-zone head"
+	elem "CTRL+NUMPAD9"
+		name = "CTRL+Numpad9"
+		command = "a-zone mouth"
 	elem "F1"
 		name = "F1"
 		command = "adminhelp"
@@ -865,22 +817,18 @@ window "mainwindow"
 		size = 640x440
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		is-default = true
 		saved-params = "pos;size;is-minimized;is-maximized"
 		is-maximized = true
 		icon = 'icons\\ss13_64.png'
 		macro = "macro"
 		menu = "menu"
-		outer-size = 2576x1416
-		inner-size = 2560x1357
 	elem "asset_cache_browser"
 		type = BROWSER
 		pos = 424,208
 		size = 1x1
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		is-visible = false
 		saved-params = ""
 	elem "oocbutton"
@@ -889,7 +837,6 @@ window "mainwindow"
 		size = 40x20
 		anchor1 = 100,100
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "is-checked"
 		text = "OOC"
 		command = ".winset \"oocbutton.is-checked=true?input.command=\"!ooc \\\"\" macrobutton.is-checked=false:input.command=\"\"oocbutton.is-checked=true?mebutton.is-checked=false\"\"oocbutton.is-checked=true?saybutton.is-checked=false\""
@@ -900,7 +847,6 @@ window "mainwindow"
 		size = 40x20
 		anchor1 = 100,100
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "is-checked"
 		text = "Me"
 		command = ".winset \"mebutton.is-checked=true?input.command=\"!me \\\"\" macrobutton.is-checked=false:input.command=\"\"mebutton.is-checked=true?saybutton.is-checked=false\"\"mebutton.is-checked=true?oocbutton.is-checked=false\""
@@ -911,7 +857,6 @@ window "mainwindow"
 		size = 80x20
 		anchor1 = 100,100
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = ""
 		text = "Hotkey Toggle"
 		command = ".winset \"mainwindow.macro!=macro ? mainwindow.macro=macro hotkey_toggle.is-checked=false input.focus=true : mainwindow.macro=hotkeymode hotkey_toggle.is-checked=true mapwindow.map.focus=true\""
@@ -922,7 +867,6 @@ window "mainwindow"
 		size = 634x416
 		anchor1 = 0,0
 		anchor2 = 100,100
-		background-color = none
 		saved-params = "splitter"
 		left = "mapwindow"
 		right = "rpane"
@@ -943,7 +887,6 @@ window "mainwindow"
 		size = 40x20
 		anchor1 = 100,100
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "is-checked"
 		text = "Chat"
 		command = ".winset \"saybutton.is-checked=true?input.command=\"!say \\\"\" macrobutton.is-checked=false:input.command=\"\"saybutton.is-checked=true?mebutton.is-checked=false\"\"saybutton.is-checked=true?oocbutton.is-checked=false\""
@@ -966,7 +909,6 @@ window "mapwindow"
 		size = 640x480
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "pos;size;is-minimized;is-maximized"
 		titlebar = false
 		statusbar = false
@@ -974,7 +916,6 @@ window "mapwindow"
 		can-minimize = false
 		can-resize = false
 		is-pane = true
-		outer-size = 654x494
 	elem "map"
 		type = MAP
 		pos = 0,0
@@ -1004,7 +945,6 @@ window "outputwindow"
 		size = 640x480
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "pos;size;is-minimized;is-maximized"
 		titlebar = false
 		statusbar = false
@@ -1012,7 +952,6 @@ window "outputwindow"
 		can-minimize = false
 		can-resize = false
 		is-pane = true
-		outer-size = 654x494
 	elem "browseroutput"
 		type = BROWSER
 		pos = 0,0
@@ -1030,13 +969,10 @@ window "popupwindow"
 		size = 120x120
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		is-visible = false
 		saved-params = "pos;size;is-minimized;is-maximized"
 		statusbar = false
 		can-resize = false
-		outer-size = 136x159
-		inner-size = 120x120
 
 window "rpane"
 	elem "rpane"
@@ -1045,7 +981,6 @@ window "rpane"
 		size = 640x480
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "pos;size;is-minimized;is-maximized"
 		titlebar = false
 		statusbar = false
@@ -1053,7 +988,6 @@ window "rpane"
 		can-minimize = false
 		can-resize = false
 		is-pane = true
-		outer-size = 654x494
 	elem "round_end"
 		type = BUTTON
 		pos = 640,0
@@ -1086,7 +1020,6 @@ window "rpane"
 		size = 640x480
 		anchor1 = 0,0
 		anchor2 = 100,100
-		background-color = none
 		saved-params = "splitter"
 		right = "outputwindow"
 		is-vert = false
@@ -1096,7 +1029,6 @@ window "rpane"
 		size = 60x16
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "is-checked"
 		text = "github"
 		command = "Github-Report"
@@ -1106,7 +1038,6 @@ window "rpane"
 		size = 60x16
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "is-checked"
 		text = "Special"
 		command = ".winset \"rpanewindow.left=window1\""
@@ -1118,7 +1049,6 @@ window "rpane"
 		size = 1x1
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		is-visible = false
 		saved-params = ""
 	elem "hosttracker2"
@@ -1127,7 +1057,6 @@ window "rpane"
 		size = 1x1
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		is-visible = false
 		saved-params = ""
 	elem "changelog"
@@ -1136,7 +1065,6 @@ window "rpane"
 		size = 67x16
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "is-checked"
 		text = "Changelog"
 		command = "Changelog"
@@ -1147,7 +1075,6 @@ window "rpane"
 		size = 60x16
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "is-checked"
 		text = "Discord"
 		command = "forum"
@@ -1158,7 +1085,6 @@ window "rpane"
 		size = 60x16
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		saved-params = "is-checked"
 		text = "Wiki"
 		command = "wiki"
@@ -1169,7 +1095,6 @@ window "rpane"
 		size = 60x16
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		is-visible = false
 		saved-params = "is-checked"
 		text = "Text"
@@ -1183,7 +1108,6 @@ window "rpane"
 		size = 60x16
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		is-visible = false
 		saved-params = "is-checked"
 		text = "Browser"
@@ -1196,7 +1120,6 @@ window "rpane"
 		size = 60x16
 		anchor1 = -1,-1
 		anchor2 = -1,-1
-		background-color = none
 		is-visible = false
 		saved-params = "is-checked"
 		text = "Info"
