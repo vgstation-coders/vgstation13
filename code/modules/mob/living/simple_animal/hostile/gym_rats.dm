@@ -250,7 +250,7 @@
 					scalerate -= (1/8)
 				else //roidrat
 					scalerate -= (1/10)
-				if(scalerate < 1) //to tame the float point inaccuracies 
+				if(scalerate < 1) //to tame the float point inaccuracies
 					scalerate = 1
 				var/matrix/M = matrix()
 				M.Scale(scalerate,scalerate)
@@ -271,7 +271,7 @@
 ///////////////////////////////////////////////////////////////////POMPADOUR RAT///////////
 // Who's that handsome rat? 911 emergency, there's a handsome rat in my house!
 /mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat
-	name = "pomdadour rat"
+	name = "pompadour rat"
 	desc = "Dang! That's a pretty hunky mouse, let me tell ya."
 	icon_state = "gymrat_pompadour"
 	icon_living = "gymrat_pompadour"
