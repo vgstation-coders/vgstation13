@@ -137,10 +137,10 @@
 		to_chat(M, "<span class='warning'> You cannot do this while on the ground!</span>")
 		return FALSE
 
-	if(H.check_body_part_coverage(MOUTH))
-		if(!locate(/datum/power/vampire/mature) in current_powers)
-			to_chat(M, "<span class='warning'>Remove their mask!</span>")
-			return FALSE
+	//if(H.check_body_part_coverage(MOUTH))
+	//	if(!locate(/datum/power/vampire/mature) in current_powers)
+	//		to_chat(M, "<span class='warning'>Remove their mask!</span>")
+	//		return FALSE
 
 	if(vampire_teeth?.amount == 0)
 		to_chat(M, "<span class='warning'>You cannot suck blood with no teeth!</span>")
