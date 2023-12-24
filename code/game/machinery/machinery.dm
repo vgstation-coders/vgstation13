@@ -917,3 +917,12 @@ Class Procs:
 //Called when a table underneath is removed, or flipped
 /obj/machinery/proc/table_unshift()
 	return
+
+/obj/machinery/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
+	. = ..()
+	if (.)
+		if (anchored)
+			if (locate(/obj/structure/table) in loc)
+				table_shift()
+		else
+			table_unshift()
