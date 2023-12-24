@@ -545,3 +545,14 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		desc = pick("Whichever nerves were keeping it wriggling have been ripped off by now.", "It's a lot more foul smelling once you bite into it.", "There's some slimy substance leaking out of it.", "Was this really a good idea?")
 	else
 		desc = pick("There's barely anything left of it.", "It could have lived happily in your brain, you know.", "It was only here to help.", "Poor thing.", "You monster.", "At least it's nutritious.")
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/bullmeat
+	name = "carne de lidia"
+	desc = "En algunos lugares, la tauromaquia es incruenta. Aqui no."
+	icon_state = "bearmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/bullmeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(BICARIDINE, 5)
+	bitesize = 3
