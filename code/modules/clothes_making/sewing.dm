@@ -259,7 +259,7 @@
 				if (W.color == stored_cloth.color)
 					to_chat(user, "You add some more cloth.")
 					var/obj/item/stack/sheet/cloth/C = W
-					C.forceMove(loc)//moves the new roll out so its on_empty() won't empty the needles
+					C.forceMove(loc)//moves the new roll out so its on_empty() won't empty the machine
 					C.merge(stored_cloth)
 					if (C.amount > 0)
 						user.put_in_hands(C)
