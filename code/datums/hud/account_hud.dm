@@ -58,6 +58,7 @@
 
 /datum/visioneffect/accountdb/balance
 	name = "account balance hud"
+	var/povertyline = 150 // can configure this on the fly, static overlay will update next process_hud call (usually on life.dm)
 
 /datum/visioneffect/accountdb/balance/process_hud(var/mob/M)
 	..()
@@ -94,7 +95,7 @@
 				if(bankacc)
 					cash += bankacc.money
 				cashdisplay = "$[cash]"
-			if(cash < 150)
+			if(cash < povertyline)
 				S = getStaticIcon(getFlatIcon(perp))
 				C.images += image(S, perp, "hudstatic")
 			holder.maptext = "<span class='maptext yell black_outline' style='text-align: center; vertical-align: top; color: white;'>[cashdisplay]</span>"
