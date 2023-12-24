@@ -50,6 +50,8 @@ var/auxtools_path
 /world/New()
 	world_startup_time = world.timeofday
 
+	TgsNew(null, TGS_SECURITY_TRUSTED)
+
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
 		WORLD_Y_OFFSET += rand(-50,50)
@@ -107,9 +109,13 @@ var/auxtools_path
 
 	Master.Setup()
 
+	TgsInitializationComplete()
+
 	return ..()
 
 /world/Topic(T, addr, master, key)
+	TGS_TOPIC
+
 	diary << "TOPIC: \"[T]\", from:[addr], master:[master], key:[key]"
 
 	if (T == "ping")
@@ -200,6 +206,8 @@ var/auxtools_path
 				fcopy(map_path, filename)
 
 	pre_shutdown()
+
+	TgsReboot()
 	..()
 
 /world/proc/pre_shutdown()
