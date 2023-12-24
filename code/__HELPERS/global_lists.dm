@@ -38,6 +38,7 @@ var/global/list/table_recipes = list() //list of all table craft recipes
 var/global/list/med_hud_users = list() //list of all entities using a medical HUD.
 var/global/list/sec_hud_users = list() //list of all entities using a security HUD.
 var/list/diagnostic_hud_users = list() // list of all entities using a diagnostic HUD.
+var/list/wage_hud_users = list() // list of all entities using a wage HUD.
 
 //Lists for things that make various sounds
 var/global/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg') //list of sounds a fire makes

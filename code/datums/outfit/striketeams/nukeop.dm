@@ -85,7 +85,7 @@
 
 		//WE STELT. Has an energy crossbow primary and a silenced pistol with magazines, along with a basic kit of infiltration items you could need to not nuke the Ops' credits
 		"Stealth" = list(
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/syndi,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/syndi,
 			slot_wear_mask_str = /obj/item/clothing/mask/gas/voice,
 			slot_belt_str = /obj/item/weapon/gun/projectile/silenced,
 			slot_in_backpack_str = list(
@@ -98,7 +98,7 @@
 
 		//The guy who stays on the shuttle and goes braindead. This kit is basically useless outside of giving you the coveted teleporter board, saving your team 40 points if you use it
 		"Ship and Cameras" = list(
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/syndi,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/syndi,
 			slot_in_backpack_str = list(
 				/obj/item/device/encryptionkey/binary = 1,
 				/obj/item/device/megaphone/madscientist = 1,

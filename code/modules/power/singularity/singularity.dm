@@ -674,7 +674,7 @@ var/list/obj/machinery/singularity/white_hole_candidates
 		if(M.stat == CONSCIOUS)
 			if(istype(M,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = M
-				if(istype(H.glasses,/obj/item/clothing/glasses/scanner/meson) && current_size < 11)
+				if(H.hasHUD(HUD_MESON) && current_size < 11)
 					to_chat(H, "<span class='notice'>You stare directly into \the [src], good thing you had your protective eyewear on!</span>")
 					return
 				else

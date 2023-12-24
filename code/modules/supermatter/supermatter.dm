@@ -346,7 +346,7 @@
 	env.merge(removed)
 
 	for(var/mob/living/carbon/human/l in view(src, min(7, round(power ** 0.25)))) // If they can see it without mesons on.  Bad on them.
-		if(!istype(l.glasses, /obj/item/clothing/glasses/scanner/meson))
+		if(!l.hasHUD(HUD_MESON))
 			l.hallucination = max(0, min(200, l.hallucination + power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)) ) ) )
 
 	for(var/mob/living/l in range(src, round((power / 100) ** 0.25)))
@@ -455,7 +455,7 @@
 		Consume(W)
 		user.apply_radiation(250, RAD_EXTERNAL)
 		return
-	
+
 	user.visible_message("<span class='warning'>\The [user] touches \a [W] to \the [src] as a silence fills the room...</span>",\
 		"<span class='danger'>You touch \the [W] to \the [src] when everything suddenly goes silent.</span>\n<span class='notice'>\The [W] flashes into dust as you flinch away from \the [src].</span>",\
 		"<span class='warning'>Everything suddenly goes silent.</span>")

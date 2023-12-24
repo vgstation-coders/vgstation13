@@ -12,7 +12,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/ert,
 			slot_l_store_str = /obj/item/device/flashlight/tactical,
 			slot_belt_str = /obj/item/weapon/gun/energy/gun/nuclear,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_shoes_str = /obj/item/clothing/shoes/swat,
 			slot_gloves_str = /obj/item/clothing/gloves/swat,
 		),

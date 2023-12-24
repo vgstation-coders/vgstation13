@@ -244,13 +244,21 @@
 
 	// Vision-related changes.
 	if (locate(/datum/power/vampire/vision) in current_powers)
-		H.change_sight(adding = SEE_MOBS)
-		H.update_perception()
+		if(!count_by_type(H.huds, /datum/visioneffect/vampire_improved))
+			H.apply_hud(new /datum/visioneffect/vampire_improved)
+	else
+		H.remove_hud_by_type(/datum/visioneffect/vampire_improved)
 
 	if (locate(/datum/power/vampire/mature) in current_powers)
-		H.change_sight(adding = SEE_TURFS|SEE_OBJS)
-		H.dark_plane.alphas["vampire_vision"] = 255
-		H.see_in_dark = 8
+		if(!count_by_type(H.huds, /datum/visioneffect/vampire_mature))
+			H.apply_hud(new /datum/visioneffect/vampire_mature)
+	else
+		H.remove_hud_by_type(/datum/visioneffect/vampire_mature)
+
+	H.handle_hud_vision_updates()
+
+/datum/role/vampire/update_perception()
+	return
 
 /datum/role/vampire/proc/is_mature_or_has_vision()
 	return (locate(/datum/power/vampire/vision) in current_powers) || (locate(/datum/power/vampire/mature) in current_powers)

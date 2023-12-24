@@ -1329,7 +1329,7 @@
 	dir = 4
 	},
 /obj/item/weapon/storage/lockbox/diskettebox/open/research,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/device/reagent_scanner/adv,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
@@ -4433,7 +4433,7 @@
 /obj/structure/window/reinforced,
 /obj/item/clothing/gloves/latex,
 /obj/item/clothing/gloves/latex,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Uk" = (

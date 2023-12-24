@@ -153,7 +153,7 @@
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
-	hud_list[RECORD_HUD]      = image('icons/mob/hud.dmi', src, "hudactive")
+	hud_list[PHYSRECORD_HUD]  = image('icons/mob/hud.dmi', src, "hudactive")
 	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
@@ -162,6 +162,7 @@
 	hud_list[IMPTRACK_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[WAGE_HUD]        = image('icons/mob/hud.dmi', src, "hudblank")
 
 	obj_overlays[FIRE_LAYER]		= new /obj/abstract/Overlays/fire_layer
 	obj_overlays[MUTANTRACE_LAYER]	= new /obj/abstract/Overlays/mutantrace_layer
@@ -560,7 +561,7 @@
 			show_inv(machine)
 
 	else if (href_list["criminal"])
-		if(!usr.hasHUD(HUD_SECURITY) || isjustobserver(usr))
+		if(!usr.hasHUD(HUD_SECURITY) || !usr.hasHUD(HUD_ARRESTACCESS) || isjustobserver(usr))
 			return
 		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
@@ -610,7 +611,7 @@
 		if(!gen_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
 			return
-		var/setmedical = input(usr, "Specify a new medical status for this person.", "Medical HUD", gen_record.fields["p_stat"]) as null|anything in list("*SSD*", "*Deceased*", "Physically Unfit", "Active", "Disabled")
+		var/setmedical = input(usr, "Specify a new physical medical status for this person.", "Medical HUD", gen_record.fields["p_stat"]) as null|anything in list("*SSD*", "*Deceased*", "Physically Unfit", "Active", "Disabled")
 		if(!setmedical|| (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
 			return
 		gen_record.fields["p_stat"] = setmedical
@@ -696,6 +697,9 @@
 
 	if (istype(eyewear))
 		. += eyewear.eyeprot
+
+	for(var/datum/visioneffect/V in huds)
+		. += V.eyeprot
 
 	if(E)
 		. += E.eyeprot
@@ -1519,6 +1523,11 @@
 		if(dark_plane_alpha_override)
 			dark_plane.alphas["override"] = dark_plane_alpha_override
 
+	for(var/datum/visioneffect/V in huds)
+		V.process_update_perception(src)
+		if (dark_plane && V.my_dark_plane_alpha_override && V.my_dark_plane_alpha_override_value)
+			dark_plane.alphas["[V.my_dark_plane_alpha_override]"] = V.my_dark_plane_alpha_override_value
+
 	if (istype(glasses))
 		glasses.update_perception(src)
 		if (dark_plane && glasses.my_dark_plane_alpha_override && glasses.my_dark_plane_alpha_override_value)
@@ -2121,15 +2130,37 @@
 			G.on_wearer_threw_item(src,target,item)
 
 /mob/living/carbon/human/hasHUD(var/hud_kind)
-	var/glasses = get_item_by_slot(slot_glasses)
 	switch(hud_kind)
 		if(HUD_MEDICAL)
-			return istype(glasses, /obj/item/clothing/glasses/hud/health)
+			for(var/datum/visioneffect/medical/H in huds)
+				return TRUE
+			return FALSE
 		if(HUD_SECURITY)
-			if(istype(glasses, /obj/item/clothing/glasses/sunglasses/sechud/syndishades))
-				var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/S = glasses
-				return S.full_access
-			return is_type_in_list(glasses, list(/obj/item/clothing/glasses/hud/security, /obj/item/clothing/glasses/sunglasses/sechud))
+			var/glasses = get_item_by_slot(slot_glasses)
+			if(glasses)
+				if(istype(glasses, /obj/item/clothing/glasses/hud/security/sunglasses/syndishades))
+					var/obj/item/clothing/glasses/hud/security/sunglasses/syndishades/S = glasses
+					return S.full_access
+			for(var/datum/visioneffect/security/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_ARRESTACCESS)
+			var/glasses = get_item_by_slot(slot_glasses)
+			if(glasses)
+				if(istype(glasses, /obj/item/clothing/glasses/hud/security/sunglasses/syndishades))
+					var/obj/item/clothing/glasses/hud/security/sunglasses/syndishades/S = glasses
+					return S.full_access
+			for(var/datum/visioneffect/security/arrest/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_WAGE)
+			for(var/datum/visioneffect/accountdb/wage/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_MESON)
+			for(var/datum/visioneffect/meson/H in huds)
+				return TRUE
+			return FALSE
 	return FALSE
 
 /mob/living/carbon/human/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
