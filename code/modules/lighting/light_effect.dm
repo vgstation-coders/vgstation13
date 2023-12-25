@@ -40,6 +40,7 @@
 
 /atom/movable/light/wall_lighting
 	base_light_color_state = "black"
+	appearance_flags = KEEP_TOGETHER | TILE_BOUND
 	animate_movement = NO_STEPS
 
 	var/list/shadow_component_turfs = list()
@@ -47,7 +48,7 @@
 
 /atom/movable/light/secondary_shadow
 	base_light_color_state = "black"
-	appearance_flags = TILE_BOUND
+	appearance_flags = KEEP_TOGETHER | TILE_BOUND
 	animate_movement = NO_STEPS
 	blend_mode = BLEND_ADD
 
