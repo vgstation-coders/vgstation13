@@ -50,7 +50,6 @@
 	base_light_color_state = "black"
 	appearance_flags = KEEP_TOGETHER | TILE_BOUND
 	animate_movement = NO_STEPS
-	blend_mode = BLEND_ADD
 
 	var/dir_to_source
 	var/turf/source_turf

@@ -289,7 +289,6 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 				I.render_target = white_light_identifier
 				pre_rendered_shadows += white_light_identifier
 
-		I.blend_mode = BLEND_INSET_OVERLAY
 		temp_appearance += I
 
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -640,7 +639,6 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 		// Apply a filter. Don't do that if there's already a stacked light on the tile (avoid lag machines)
 		if (!found_prerendered_white_light_glob)
 			image_result.filters = filter(type = "blur", size = BLUR_SIZE)
-		image_result.blend_mode = BLEND_INSET_OVERLAY
 		temp_appearance += image_result
 	else
 		temp_appearance += temp_appearance_shadows
@@ -662,7 +660,6 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 		black_turf.pixel_x = (world.icon_size * light_range) + (x_offset * world.icon_size)
 		black_turf.pixel_y = (world.icon_size * light_range) + (y_offset * world.icon_size)
 		black_turf.layer = ANTI_GLOW_PASS_LAYER + temp_appearance.len
-		black_turf.blend_mode = BLEND_INSET_OVERLAY
 		temp_appearance += black_turf
 
 // Smooth out shadows and then blacken out the wall glow
@@ -677,7 +674,7 @@ var/list/ubiquitous_shadow_renders = list("*shadow2_4_90_1_0_1_1_-1", "*shadow2_
 	temp_appearance += combined_shadow_walls
 
 	// -- eliminating the underglow
-	// Due to the blur filter, some of the white pixels may extend below the turf they are supposed to be rendered on.
+	// Due to the blur filter, some of the white pixels may extent below the turf they are supposed to be rendered on.
 	// This fixes that by drawing a black turf on top of it.
 	for (var/turf/T in affected_shadow_walls)
 		for (var/dir in cardinal)
