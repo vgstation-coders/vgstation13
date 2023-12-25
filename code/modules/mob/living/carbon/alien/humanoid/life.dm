@@ -381,7 +381,7 @@
 
 /mob/living/carbon/alien/humanoid/handle_regular_hud_updates()
 
-	if(isDead() || ((M_XRAY in mutations)  && (see_xrays)))
+	if(isDead() || (M_XRAY in mutations))
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_MINIMUM

@@ -101,8 +101,13 @@ In short:
 			if(!T.holy && prob(1) && T.z != map.zCentcomm)
 				new /obj/effect/gateway/active/cult(T)
 			T.underlays += "hell01"
-			T.moody_light_type = /atom/movable/light/moody/full_turf
-			T.set_moody_light()
+		CHECK_TICK
+
+	for(var/datum/lighting_corner/C in global.all_lighting_corners)
+		if (!C.active)
+			continue
+
+		C.update_lumcount(0.5, 0, 0)
 		CHECK_TICK
 
 /datum/universal_state/hell/proc/MiscSet()

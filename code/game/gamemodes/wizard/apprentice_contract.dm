@@ -166,7 +166,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 	if(!player)
 		chosen_setup = null
 		polling_ghosts = FALSE
-		kill_light()
+		set_light(0)
 		visible_message("<span class='notice'>\The [src] stops glowing.</span>")
 		nanomanager.update_uis(src)
 		return
@@ -193,7 +193,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 		name_wizard(apprentice, "Wizard's Apprentice")
 	update_faction_icons()
 	visible_message("<span class='notice'>\The [src] folds back on itself as the apprentice appears!</span>")
-	kill_light()
+	set_light(0)
 	consumed = TRUE
 	nanomanager.close_uis(src)
 	update_icon()

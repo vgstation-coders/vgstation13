@@ -2111,7 +2111,7 @@
 	if(lit)
 		set_light(src.brightness_lit)
 	else
-		kill_light()
+		set_light(0)
 
 //todo: can light cigarettes with
 //todo: is force = 15 overwriting the force? //Yes, of broken bottles, but that's been fixed now

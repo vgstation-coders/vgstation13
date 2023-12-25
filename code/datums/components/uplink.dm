@@ -17,7 +17,7 @@
 
 	parent.register_event(/event/attackby, src, nameof(src::on_attackby()))
 	parent.register_event(/event/item_attack_self, src, nameof(src::on_attack_self()))
-	if(istype(parent, /obj/item/device/flashlight/pda))
+	if(istype(parent, /obj/item/device/pda))
 		generate_unlock_code()
 		parent.register_event(/event/pda_change_ringtone, src, nameof(src::on_pda_change_ringtone()))
 

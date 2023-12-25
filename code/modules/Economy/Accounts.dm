@@ -165,7 +165,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 		account.transaction_log.Add(src)
 		// Automatically ignore sending any zero sum transactions, plus variable to skip the search.
 		if(account.account_number && send2PDAs && amount)
-			for(var/obj/item/device/flashlight/pda/PDA in PDAs)
+			for(var/obj/item/device/pda/PDA in PDAs)
 				// Only works and does this if ID is in PDA
 				if(PDA.id)
 					var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in PDA.applications

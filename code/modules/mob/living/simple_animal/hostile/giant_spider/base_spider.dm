@@ -87,10 +87,10 @@
 	var/a_53 = 0
 	var/a_54 = 0
 
-
 /mob/living/simple_animal/hostile/giant_spider/Login()
 	..()
-	client.images += light_source_images
+	//client.images += light_source_images
+
 
 /mob/living/simple_animal/hostile/giant_spider/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover, /obj/item/projectile/web))//Queen Spider webs pass through other spiders
@@ -186,11 +186,11 @@
 			master_plane.blend_mode = BLEND_ADD
 		dark_plane.alphas["spider"] = 15 // with the master_plane at BLEND_ADD, shadows appear well lit while actually well lit places appear blinding.
 		client.color = list(
-					1,0,0,0,
-					0,1,0,0,
-	 				0,0,1,0,
-		 			0,0,-0.1,1,
-		 			0,0,0,0)
+			1,0,0,0,
+			0,0.2,0,0,
+			0,0.2,0.2,0,
+			0,0,-0.1,1,
+			0,0,0,0)
 
 	check_dark_vision()
 

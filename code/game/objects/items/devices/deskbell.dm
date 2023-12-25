@@ -141,7 +141,7 @@
 
 /obj/item/device/deskbell/signaler/ring()
 	if(..())
-		for(var/obj/item/device/flashlight/pda/ring_pda in PDAs)
+		for(var/obj/item/device/pda/ring_pda in PDAs)
 			if(!ring_pda.owner || (ring_pda == src) || ring_pda.hidden)
 				continue
 			var/datum/pda_app/ringer/ringerdatum = locate(/datum/pda_app/ringer) in ring_pda.applications

@@ -7546,8 +7546,8 @@ var/procizine_tolerance = 0
 				new /obj/item/toy/spinningtoy(T)
 				M.gib()
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange((data+30)/50, M))
-		if(X.type == /atom/movable/light)//since there's one on every turf
+	for(var/atom/X in orange((tick+30)/50, M))
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
 		X.singularity_pull(M, tick/50, tick/50)
 
@@ -7586,8 +7586,8 @@ var/procizine_tolerance = 0
 				new /obj/item/toy/spinningtoy(T)
 				M.gib()
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange((data+30)/50, M))
-		if(X.type == /atom/movable/light)//since there's one on every turf
+	for(var/atom/X in orange((tick+30)/50, M))
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
 		X.singularity_pull(M, tick/50, tick/50)
 
@@ -9766,7 +9766,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return
 	var/atom/A =  holder.my_atom
 	A.light_color = initial_color
-	A.kill_light()
+	A.set_light(0)
 
 /datum/reagent/anthracene/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
@@ -9778,7 +9778,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		M.set_light(light_intensity)
 		spawn(volume * 10)
 			M.light_color = init_color
-			M.kill_light()
+			M.set_light(0)
 
 /datum/reagent/anthracene/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
@@ -9789,7 +9789,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	T.set_light(light_intensity)
 	spawn(volume * 10)
 		T.light_color = init_color
-		T.kill_light()
+		T.set_light(0)
 
 /datum/reagent/anthracene/reaction_obj(var/obj/O, var/volume)
 	if(..())
@@ -9800,7 +9800,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	O.set_light(light_intensity)
 	spawn(volume * 10)
 		O.light_color = init_color
-		O.kill_light()
+		O.set_light(0)
 
 /datum/reagent/mucus
 	name = "Mucus"

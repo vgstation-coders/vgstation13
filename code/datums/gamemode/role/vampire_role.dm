@@ -250,12 +250,17 @@
 		H.remove_hud_by_type(/datum/visioneffect/vampire_improved)
 
 	if (locate(/datum/power/vampire/mature) in current_powers)
+<<<<<<< HEAD
 		if(!count_by_type(H.huds, /datum/visioneffect/vampire_mature))
 			H.apply_hud(new /datum/visioneffect/vampire_mature)
 	else
 		H.remove_hud_by_type(/datum/visioneffect/vampire_mature)
 
 	H.handle_hud_vision_updates()
+=======
+		H.change_sight(adding = SEE_TURFS|SEE_OBJS)
+		H.update_perception()
+>>>>>>> parent of 8ff1e71883... Europa /vg/ Lights : overhaul of the lighting system!!! (#35571)
 
 /datum/role/vampire/update_perception()
 	return
@@ -298,12 +303,6 @@
 			O.status &= ~ORGAN_SPLINTED
 			O.status &= ~ORGAN_BLEEDING
 	nullified = max(0, nullified - 1)
-
-/datum/role/vampire/update_perception()
-	var/mob/living/carbon/human/H = antag.current
-	if (locate(/datum/power/vampire/mature) in current_powers)
-		H.dark_plane.alphas["vampire_vision"] = 255
-		H.see_in_dark = 8
 
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
 	var/turf/T = get_turf(H)

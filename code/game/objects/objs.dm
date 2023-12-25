@@ -952,17 +952,3 @@ a {
 
 /obj/get_heat_conductivity() //So keeping something in a closet can have an insulating effect.
 	return 0.5
-
-//This subtype is used by stuff that should generally not be disturbed by those procs
-/obj/abstract
-	anchored = TRUE
-/obj/abstract/cultify()
-	return
-/obj/abstract/ex_act()
-	return
-/obj/abstract/emp_act()
-	return
-/obj/abstract/blob_act()
-	return
-/obj/abstract/singularity_act()
-	return

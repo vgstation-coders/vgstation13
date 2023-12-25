@@ -21,7 +21,7 @@
 	var/auto_make_on_detect = 0 //Default no, scan level >=2 only
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
 	var/global/list/acceptable_items = list(
-							/obj/item/weapon/kitchen/utensil,/obj/item/device/flashlight/pda,/obj/item/device/paicard,
+							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
 							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard
 							)// List of the items you can put in
 	var/global/list/acceptable_reagents // List of the reagents you can put in
@@ -376,7 +376,7 @@
 				empty()
 				explosion(get_turf(src), -1,0,0)
 				return
-			if(istype(O,/obj/item/device/flashlight/pda) || istype(O,/obj/item/device/paicard) || istype(O,/obj/item/device/aicard) || istype(O,/obj/item/weapon/circuitboard))
+			if(istype(O,/obj/item/device/pda) || istype(O,/obj/item/device/paicard) || istype(O,/obj/item/device/aicard) || istype(O,/obj/item/weapon/circuitboard))
 				src.visible_message("<span class='warning'>[O] sparks in the microwave!</span>")
 				if (!running(4))
 					abort()

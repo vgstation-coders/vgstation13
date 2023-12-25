@@ -440,7 +440,7 @@
 	icon_state = "0"
 
 	plane = SPACE_BACKGROUND_PLANE
-	has_white_turf_lighting = 0
+	dynamic_lighting = 0
 	luminosity = 1
 	intact = 0
 

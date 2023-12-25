@@ -379,7 +379,7 @@
 	. = ..()
 	if(.)
 		return .
-	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/flashlight/pda))
+	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if (!check_access(W))
 			to_chat(user, "<span class='warning'>Access Denied.</span>")
 			return

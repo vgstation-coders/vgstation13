@@ -65,7 +65,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/heads/hos
+	pda_type = /obj/item/device/pda/heads/hos
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/hos
 
@@ -134,7 +134,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/warden
+	pda_type = /obj/item/device/pda/warden
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/security
 
@@ -260,7 +260,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/detective
+	pda_type = /obj/item/device/pda/detective
 	pda_slot = slot_r_store
 	id_type = /obj/item/weapon/card/id/security
 
@@ -345,7 +345,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/security
+	pda_type = /obj/item/device/pda/security
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/security
 

@@ -144,7 +144,7 @@
 		/obj/item/weapon/stock_parts/scanning_module/adv/phasic/bluespace=3,
 		/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace=3,
 //		/obj/item/weapon/stock_parts/console_screen/reinforced/plasma/rplasma=3,
-		/obj/item/device/flashlight/pda/clear=1
+		/obj/item/device/pda/clear=1
 	)
 
 /mining_surprise/human/speakeasy

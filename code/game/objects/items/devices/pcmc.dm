@@ -39,7 +39,7 @@
 /obj/item/device/pcmc/emp_act(severity)
 	emped = TRUE
 	transmitting = FALSE
-	kill_light()
+	set_light(0)
 	update_icon()
 	SStgui.update_uis(src)
 	spawn(120 SECONDS)
@@ -204,7 +204,7 @@
 			if(emped || !transmitting || !Adjacent(usr) || usr.incapacitated())
 				return FALSE
 			transmitting = FALSE
-			kill_light()
+			set_light(0)
 			update_icon()
 			return TRUE
 		if("toggle_refresh")

@@ -318,7 +318,7 @@
 		light_color = "#6496FA"
 
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
-		kill_light()
+		set_light(0)
 	else
 		if (on)
 			set_light(2,2)

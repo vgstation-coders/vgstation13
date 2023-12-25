@@ -3254,7 +3254,7 @@ var/global/num_vending_terminals = 1
 	icon_state = "voxoutfitter"
 	products = list (
 		/obj/item/clothing/suit/storage/trader = 3,
-		/obj/item/device/flashlight/pda/trader = 3,
+		/obj/item/device/pda/trader = 3,
 		/obj/item/weapon/card/id/vox/extra = 3,
 		/obj/item/weapon/stamp/trader = 3,
 		/obj/item/crackerbox = 1,
@@ -3267,7 +3267,7 @@ var/global/num_vending_terminals = 1
 
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
-		/obj/item/device/flashlight/pda/trader = 100,
+		/obj/item/device/pda/trader = 100,
 		/obj/item/weapon/card/id/vox/extra = 100,
 		/obj/item/weapon/stamp/trader = 20,
 		/obj/item/crackerbox = 200,
@@ -3936,7 +3936,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 					NEWSCASTER.newsAlert("Tau Ceti Daily")
 
-				for(var/obj/item/device/flashlight/pda/PDA in PDAs)
+				for(var/obj/item/device/pda/PDA in PDAs)
 					var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
 					if(reader)
 						reader.newsAlert("Tau Ceti Daily")

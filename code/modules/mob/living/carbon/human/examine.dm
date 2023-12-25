@@ -152,8 +152,8 @@
 	//ID
 	if(wear_id)
 		/*var/id
-		if(istype(wear_id, /obj/item/device/flashlight/pda))
-			var/obj/item/device/flashlight/pda/pda = wear_id
+		if(istype(wear_id, /obj/item/device/pda))
+			var/obj/item/device/pda/pda = wear_id
 			id = pda.owner
 		else if(istype(wear_id, /obj/item/weapon/card/id)) //just in case something other than a PDA/ID card somehow gets in the ID slot :[
 			var/obj/item/weapon/card/id/idcard = wear_id

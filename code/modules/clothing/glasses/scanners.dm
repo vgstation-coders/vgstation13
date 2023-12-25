@@ -4,6 +4,7 @@
 	item_state = "glasses"
 	species_fit = list(GREY_SHAPED)
 	var/on = TRUE
+<<<<<<< HEAD
 	var/list/stored_huds = list() // Stores a hud datum instance to apply to a mob
 	var/list/hud_types = list() // What HUD the glasses provides, if any
 
@@ -19,9 +20,12 @@
 		return
 	hud_types += type
 	stored_huds += new type
+=======
+>>>>>>> parent of 8ff1e71883... Europa /vg/ Lights : overhaul of the lighting system!!! (#35571)
 
 /obj/item/clothing/glasses/scanner/attack_self()
 	toggle()
+
 
 /obj/item/clothing/glasses/scanner/equipped(var/mob/living/carbon/M, glasses)
 	if(istype(M, /mob/living/carbon/monkey))
@@ -35,16 +39,27 @@
 	else
 		return
 	if(on)
+<<<<<<< HEAD
 		if(iscarbon(M) && glasses == slot_glasses)
 			for(var/datum/visioneffect/H in stored_huds)
 				M.apply_hud(H)
+=======
+		if(iscarbon(M))
+			M.update_perception()
+			M.update_darkness()
+>>>>>>> parent of 8ff1e71883... Europa /vg/ Lights : overhaul of the lighting system!!! (#35571)
 	..()
 
 /obj/item/clothing/glasses/scanner/unequipped(mob/living/carbon/M, var/from_slot = null)
 	if(from_slot == slot_glasses)
+<<<<<<< HEAD
 		for(var/datum/visioneffect/H in stored_huds)
 			M.remove_hud(H)
 	//the parent calls for a full redraw of the hud
+=======
+		if(on)
+			user.seedarkness = TRUE
+>>>>>>> parent of 8ff1e71883... Europa /vg/ Lights : overhaul of the lighting system!!! (#35571)
 	..()
 
 /obj/item/clothing/glasses/scanner/update_icon()
@@ -119,9 +134,71 @@
 	icon_state = "night"
 	item_state = "glasses"
 	origin_tech = Tc_MAGNETS + "=2"
+<<<<<<< HEAD
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	hud_types = list(/datum/visioneffect/night)
+=======
+	see_invisible = 0
+	seedarkness = TRUE
+	see_in_dark = 8
+	actions_types = list(/datum/action/item_action/toggle_goggles)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	eyeprot = -1
+
+/obj/item/clothing/glasses/scanner/night/enable(var/mob/living/carbon/C)
+	see_in_dark = initial(see_in_dark)
+	eyeprot = initial(eyeprot)
+	my_dark_plane_alpha_override = "night_vision"
+	if (ishuman(C))
+		var/mob/living/carbon/human/H = C
+		if (H.glasses == src)
+			C.update_perception()
+	else if (ismonkey(C))
+		var/mob/living/carbon/monkey/M = C
+		if (M.glasses == src)
+			C.update_perception()
+	return ..()
+
+/obj/item/clothing/glasses/scanner/night/disable(var/mob/living/carbon/C)
+	. = ..()
+	see_in_dark = 0
+	my_dark_plane_alpha_override = null
+	eyeprot = 0
+	if (ishuman(C))
+		var/mob/living/carbon/human/H = C
+		if (H.glasses == src)
+			if (C.client)
+				C.client.color = null
+			C.update_perception()
+	else if (ismonkey(C))
+		var/mob/living/carbon/monkey/M = C
+		if (M.glasses == src)
+			if (C.client)
+				C.client.color = null
+			C.update_perception()
+
+/obj/item/clothing/glasses/scanner/night/update_perception(var/mob/living/carbon/human/M)
+	if (on)
+		if (M.master_plane)
+			M.master_plane.blend_mode = BLEND_ADD
+		if (M.client)
+			M.client.color = "#33FF33"
+	else
+		my_dark_plane_alpha_override = null
+		if (M.master_plane)
+			M.master_plane.blend_mode = BLEND_MULTIPLY
+
+/obj/item/clothing/glasses/scanner/night/unequipped(mob/living/carbon/user, var/from_slot = null)
+	if(from_slot == slot_glasses)
+		if(on)
+			if (user.client)
+				user.client.color = null
+				user.update_perception()
+	..()
+
+var/list/meson_wearers = list()
+>>>>>>> parent of 8ff1e71883... Europa /vg/ Lights : overhaul of the lighting system!!! (#35571)
 
 /obj/item/clothing/glasses/scanner/meson
 	name = "optical meson scanner"

@@ -75,7 +75,7 @@
 			to_chat(user, "<span class='warning'>[O] is dead. Sticking it into the frame would sort of defeat the purpose.</span>")
 			return
 
-
+		
 		if(!user.drop_item(O, src))
 			user << "<span class='warning'>You can't let go of \the [O].</span>"
 
@@ -101,7 +101,7 @@
 		else
 			to_chat(user, "Need more welding fuel!")
 			return
-	else if(istype(O, /obj/item/weapon/card/id)||istype(O, /obj/item/device/flashlight/pda))
+	else if(istype(O, /obj/item/weapon/card/id)||istype(O, /obj/item/device/pda))
 		if (!mmi && !mouse)
 			to_chat(user, "<span class='warning'>There's no reason to swipe your ID - the spiderbot has nothing to remove.</span>")
 			return 0
@@ -111,7 +111,7 @@
 		if(istype(O, /obj/item/weapon/card/id))
 			id_card = O
 		else
-			var/obj/item/device/flashlight/pda/pda = O
+			var/obj/item/device/pda/pda = O
 			id_card = pda.id
 
 		if(access_robotics in id_card.access)

@@ -66,7 +66,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/heads/ce
+	pda_type = /obj/item/device/pda/heads/ce
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/ce
 
@@ -160,7 +160,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/engineering
+	pda_type = /obj/item/device/pda/engineering
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/engineering
 
@@ -227,7 +227,7 @@
 		/datum/species/grey = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/engineering
+	pda_type = /obj/item/device/pda/engineering
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/engineering
 
@@ -285,7 +285,7 @@
 		/datum/species/grey = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/mechanic
+	pda_type = /obj/item/device/pda/mechanic
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/engineering
 
