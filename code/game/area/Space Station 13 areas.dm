@@ -1204,11 +1204,16 @@ var/global/list/adminbusteleportlocs = list()
 	name = "Casino"
 	icon_state = "casino"
 
+
+
+
+
+
+
 /area/holodeck
 	name = "\improper Holodeck"
 	icon_state = "Holodeck"
-	has_white_turf_lighting = TRUE
-	luminosity = 1
+	has_white_turf_lighting = FALSE
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
 	jammed = SUPER_JAMMED
