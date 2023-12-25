@@ -23,7 +23,6 @@
 			healths.icon_state = "health7" //DEAD healthmeter
 		return
 
-<<<<<<< HEAD
 	var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 	if(E)
 		see_in_dark = E.see_in_dark
@@ -54,31 +53,6 @@
 		see_in_dark = 8
 		if(!druggy)
 			see_invisible = min(SEE_INVISIBLE_LEVEL_TWO, see_invisible)
-=======
-		// Moiving this "see invisble" thing here so that it can be overriden by xrays, vampires...
-		if(glasses)
-			handle_glasses_vision_updates(glasses)
-		else if (!V)
-			see_invisible = SEE_INVISIBLE_LIVING
-
-		if(dna)
-			switch(dna.mutantrace)
-				if("slime")
-					see_in_dark = 3
-					see_invisible = SEE_INVISIBLE_LEVEL_ONE
-				if("shadow")
-					if(client)
-						client.darkness_planemaster.alpha = 100
-					see_in_dark = 8
-					see_invisible = SEE_INVISIBLE_LEVEL_ONE
-		if(M_THERMALS in mutations)
-			change_sight(adding = SEE_MOBS)
-		if(M_XRAY in mutations)
-			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
-			see_in_dark = 8
-			if(!druggy)
-				see_invisible = min(SEE_INVISIBLE_LEVEL_TWO, see_invisible)
->>>>>>> parent of 8ff1e71883... Europa /vg/ Lights : overhaul of the lighting system!!! (#35571)
     // Legacy Cult
 	if(seer == 1)
 		var/obj/effect/rune_legacy/R = locate() in loc
