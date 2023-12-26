@@ -288,10 +288,11 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 // -----------------------------
 
 /obj/item/weapon/storage/bag/food
+	name = "Food Delivery Bag"
+	desc = "Keeps the hot food warm, and the cold drinks cool."
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "foodbag0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
-	name = "Food Delivery Bag"
 	storage_slots = 14; //the number of food items it can carry.
 	fits_max_w_class = 3
 	max_combined_w_class = 28 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
@@ -302,6 +303,9 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	if(contents.len < 1)
 		icon_state = "foodbag0"
 	else icon_state = "foodbag1"
+	.
+/obj/item/weapon/storage/bag/food/return_air()//prevents hot food from getting cold while in it.
+	return
 
 /obj/item/weapon/storage/bag/food/menu1/New()
 	..()
@@ -310,6 +314,9 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola(src)//-3 drowsy
 	new/obj/item/weapon/reagent_containers/food/condiment/small/ketchup(src)
 	new/obj/item/weapon/reagent_containers/food/condiment/small/mayo(src)
+	for (var/obj/O in contents)
+		O.on_vending_machine_spawn()
+		O.update_icon()
 	update_icon()
 
 /obj/item/weapon/storage/bag/food/menu2/New()
@@ -320,6 +327,9 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind(src)//-7 drowsy, -1 sleepy
 	new/obj/item/weapon/reagent_containers/food/condiment/small/ketchup(src)
 	new/obj/item/weapon/reagent_containers/food/condiment/small/mayo(src)
+	for (var/obj/O in contents)
+		O.on_vending_machine_spawn()
+		O.update_icon()
 	update_icon()
 
 /obj/item/weapon/storage/bag/zam_food

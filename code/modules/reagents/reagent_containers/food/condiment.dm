@@ -105,13 +105,15 @@
 		var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You transfer [trans] units of the condiment to \the [target].</span>")
 		if (condiment_overlay && istype (target, /obj/item/weapon/reagent_containers/food/snacks))
+			var/obj/item/weapon/reagent_containers/food/snacks/snack = target
 			var/list/params_list = params2list(params)
-			var/image/I = image('icons/obj/condiment_overlays.dmi',target,condiment_overlay)
+			var/image/I = image('icons/obj/condiment_overlays.dmi',snack,condiment_overlay)
 			I.pixel_x = clamp(text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2 - pixel_x,-WORLD_ICON_SIZE/2,WORLD_ICON_SIZE/2)
 			I.pixel_y = clamp(text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2 - pixel_y,-WORLD_ICON_SIZE/2,WORLD_ICON_SIZE/2)
 			if (overlay_colored)
 				I.color = mix_color_from_reagents(reagents.reagent_list)
-			target.overlays += I
+			snack.extra_food_overlay.overlays += I
+			snack.overlays += I
 	else if(isfloor(target))
 		if (amount_per_transfer_from_this > 1)
 			transfer(target, user, splashable_units = amount_per_transfer_from_this)
@@ -759,8 +761,8 @@
 			qdel(src)
 
 /obj/item/weapon/reagent_containers/food/condiment/small/update_icon(var/custom=FALSE)
+	..()
 	if(custom && reagents && reagents.total_volume)
-		overlays.len = 0
 		var/image/packetcolor = image('icons/obj/food_condiment.dmi', src, "packet_overlay")
 		packetcolor.icon += mix_color_from_reagents(reagents.reagent_list)
 		packetcolor.alpha = mix_alpha_from_reagents(reagents.reagent_list)
@@ -861,3 +863,28 @@
 /obj/item/weapon/reagent_containers/food/condiment/small/discount/New()
 	..()
 	reagents.add_reagent(DISCOUNT, 3)
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//I hate it but it works
+
+/obj/item/weapon/reagent_containers/food/condiment/fake_bottle
+	invisibility = 101
+
+/obj/item/weapon/reagent_containers/food/condiment/fake_bottle/proc/splash_that(var/obj/item/weapon/reagent_containers/food/snacks/snack, var/datum/reagent/source_reagent)
+	if (!istype(snack) || !source_reagent)
+		qdel(src)
+		return
+	if(snack.reagents.total_volume >= snack.reagents.maximum_volume)
+		qdel(src)
+		return
+	reagents.add_reagent(source_reagent.id, source_reagent.volume*2, source_reagent.data)
+	reagents.trans_to(snack.reagents, source_reagent.volume)
+	if (condiment_overlay)
+		var/image/I = image('icons/obj/condiment_overlays.dmi',snack,condiment_overlay)
+		I.pixel_x = rand(-3,3)
+		I.pixel_y = rand(-3,3)
+		if (overlay_colored)
+			I.color = mix_color_from_reagents(source_reagent.holder.reagent_list)
+		snack.extra_food_overlay.overlays += I
+		snack.overlays += I
+	qdel(src)

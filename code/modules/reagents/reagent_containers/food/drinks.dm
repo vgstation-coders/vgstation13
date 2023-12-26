@@ -440,7 +440,6 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
-
 /obj/item/weapon/reagent_containers/food/drinks/coffee
 	name = "Robust Coffee"
 	desc = "Careful, the beverage you're about to enjoy is extremely hot."
@@ -450,6 +449,9 @@
 	reagents.add_reagent(COFFEE, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/coffee/on_vending_machine_spawn()
+	reagents.chem_temp = COOKTEMP_READY
 
 /obj/item/weapon/reagent_containers/food/drinks/latte
 	name = "Smooth Latte"
@@ -461,6 +463,9 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/latte/on_vending_machine_spawn()
+	reagents.chem_temp = COOKTEMP_READY
+
 /obj/item/weapon/reagent_containers/food/drinks/soy_latte
 	name = "Soy Latte"
 	desc = "Soy version of a latte for soy people."
@@ -470,6 +475,9 @@
 	reagents.add_reagent(SOY_LATTE, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/soy_latte/on_vending_machine_spawn()
+	reagents.chem_temp = COOKTEMP_READY
 
 /obj/item/weapon/reagent_containers/food/drinks/cappuccino
 	name = "Cappuccino"
@@ -481,6 +489,9 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/cappuccino/on_vending_machine_spawn()
+	reagents.chem_temp = COOKTEMP_READY
+
 /obj/item/weapon/reagent_containers/food/drinks/espresso
 	name = "Zip Espresso"
 	desc = "When you need a small and quick kick."
@@ -491,6 +502,9 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/espresso/on_vending_machine_spawn()
+	reagents.chem_temp = COOKTEMP_READY
+
 /obj/item/weapon/reagent_containers/food/drinks/doppio
 	name = "Doppio x2"
 	desc = "Double espresso made only out of the finest twin coffee beans."
@@ -500,6 +514,9 @@
 	reagents.add_reagent(DOPPIO, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/doppio/on_vending_machine_spawn()
+	reagents.chem_temp = COOKTEMP_READY
 
 /obj/item/weapon/reagent_containers/food/drinks/tea
 	name = "Tea"
@@ -523,6 +540,9 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/tea/on_vending_machine_spawn()
+	reagents.chem_temp = COOKTEMP_READY
+
 /obj/item/weapon/reagent_containers/food/drinks/chifir
 	name = "Siberian Chifir"
 	desc = "Only a true siberian can appreciate its deep and rich flavor. Embrace siberian tradition!"
@@ -533,6 +553,9 @@
 	reagents.add_reagent(CHIFIR, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/chifir/on_vending_machine_spawn()
+	reagents.chem_temp = COOKTEMP_READY
 
 /obj/item/weapon/reagent_containers/food/drinks/ice
 	name = "\improper ice cup"
@@ -554,6 +577,9 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/tomatosoup/on_vending_machine_spawn()
+	reagents.chem_temp = COOKTEMP_READY
+
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate
 	name = "Dutch Hot Coco"
 	desc = "Made in Space South America."
@@ -564,6 +590,9 @@
 	reagents.add_reagent(HOT_COCO, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/h_chocolate/on_vending_machine_spawn()
+	reagents.chem_temp = COOKTEMP_READY
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen
 	name = "\improper cup ramen"
@@ -818,9 +847,8 @@
 	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
 	var/tabself = "You pull back the tab of"
 
-
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/update_icon()
-	overlays.len = 0
+	..()
 	if (flags & OPENCONTAINER)
 		overlays += image(icon = icon, icon_state = "soda_open")
 		update_blood_overlay()
@@ -1421,21 +1449,99 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos
 	name = "\improper Thermos"
-	desc = "A metal flask which insulates its contents from temperature - keeping hot beverages hot, and cold ones cold."
+	desc = "A metal flask which insulates its contents from temperature - keeping hot beverages hot, and cold ones cold. You can remove its cap to use as a cup."
 	icon_state = "vacuumflask"
 	origin_tech = Tc_MATERIALS + "=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
 	thermal_variation_modifier = 0
+	var/obj/item/weapon/reagent_containers/food/drinks/thermos_cap/cap
+
+/obj/item/weapon/reagent_containers/food/drinks/thermos/New()
+	..()
+	cap = new(src)
+
+/obj/item/weapon/reagent_containers/food/drinks/thermos/attack_self(var/mob/user)
+	if (cap)
+		to_chat(user, "<span class='warning'>Remove the cap with your other hand first.</span>")
+		return
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/drinks/thermos/attack_hand(var/mob/user)
+	if (cap && (loc == user) && (src == user.get_inactive_hand()))
+		user.put_in_hands(cap)
+		cap = null
+		to_chat(user, "<span class='notice'>You remove the Thermos' cap.</span>")
+		playsound(loc, 'sound/machines/click.ogg', 50, 1, -3)
+		icon_state = "vacuumflask_open"
+		update_temperature_overlays()
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/drinks/thermos/attackby(var/obj/item/I, var/mob/user, params)
+	..()
+	if (!cap && istype(I, /obj/item/weapon/reagent_containers/food/drinks/thermos_cap))
+		var/obj/item/weapon/reagent_containers/food/drinks/thermos_cap/C = I
+		if (C.reagents.total_volume)
+			return ..()
+		if(user.drop_item(C, src))
+			cap = C
+		playsound(loc, 'sound/effects/slap2.ogg', 50, 1, -3)
+		to_chat(user, "<span class='notice'>You place the Thermos' cap back on.</span>")
+		icon_state = "vacuumflask"
+		update_temperature_overlays()
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
+	else
+		..()
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos/thermal_entropy()
 	thermal_entropy_containers.Remove(src)
 	update_icon()
 
+/obj/item/weapon/reagent_containers/food/drinks/thermos/update_temperature_overlays()
+	//we only care about the steam
+
+	if (!particles)
+		particles = new/particles/steam
+
+	particles.spawning = 0
+
+	if(!cap && reagents && reagents.total_volume)
+		if (reagents.chem_temp >= STEAMTEMP)
+			steam_spawn_adjust(reagents.chem_temp)
+
 /obj/item/weapon/reagent_containers/food/drinks/thermos/full/New()
 	..()
 	var/new_reagent = pick(COFFEE, HOT_COCO, ICECOFFEE, TEA, ICETEA, WATER, ICE, ICED_BEER)
 	reagents.add_reagent(new_reagent, rand(50,100))
+	reagents.chem_temp = COOKTEMP_READY
+
+/obj/item/weapon/reagent_containers/food/drinks/thermos_cap
+	name = "\improper Thermos cap"
+	desc = "You can use the Thermos' cap as a small cup. The liquids in the cap will react to the environment's temperature."
+	amount_per_transfer_from_this = 30
+	volume = 30
+	icon_state = "vacuumflask_cap"
+
+/obj/item/weapon/reagent_containers/food/drinks/thermos_cap/on_reagent_change()
+	..()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/thermos_cap/update_icon()
+	..()
+	if (reagents.reagent_list.len > 0)
+		icon_state = base_icon_state
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "thermos_cap")
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		overlays += filling
+
 
 /obj/item/weapon/reagent_containers/food/drinks/plastic
 	name = "\improper plastic bottle"
@@ -1523,10 +1629,12 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/on_reagent_change()
 	..()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/flagmug/update_icon()
+	..()
 	if (reagents.reagent_list.len > 0)
 		mug_reagent_overlay()
-	else
-		overlays.len = 0
 	update_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup
@@ -2134,8 +2242,7 @@
 ////////
 
 /obj/item/weapon/reagent_containers/food/drinks/update_icon()
-	src.overlays.len = 0
-	update_blood_overlay()
+	..()
 	var/image/Im
 	if(molotov == 1)
 		Im = image('icons/obj/grenade.dmi', icon_state = "molotov_rag")

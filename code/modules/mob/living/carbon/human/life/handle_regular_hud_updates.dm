@@ -134,19 +134,15 @@
 		switch(bodytemperature) //310.055 optimal body temp
 			if(370 to INFINITY)
 				temperature_alert = TEMP_ALARM_HEAT_STRONG
-			if(350 to 370)
+			if(360 to 370)
 				temperature_alert = TEMP_ALARM_HEAT_MILD
-			if(335 to 350)
+			if(320 to 360)
 				temperature_alert = TEMP_ALARM_HEAT_WEAK
-			if(320 to 335)
+			if(309 to 320)
 				temperature_alert = TEMP_ALARM_SAFE
-			if(305 to 320)
-				temperature_alert = TEMP_ALARM_SAFE
-			if(303 to 305)
-				temperature_alert = TEMP_ALARM_SAFE
-			if(300 to 303)
+			if(306 to 309)
 				temperature_alert = TEMP_ALARM_COLD_WEAK
-			if(290 to 295)
+			if(290 to 306)
 				temperature_alert = TEMP_ALARM_COLD_MILD
 			if(0   to 290)
 				temperature_alert = TEMP_ALARM_COLD_STRONG
