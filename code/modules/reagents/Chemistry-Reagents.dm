@@ -14,7 +14,11 @@
 		SHC = (for(components of recipe) total_SHC *= component SHC)
 
 
-*///NO DON'T DO THAT, IF YOU'RE NOT SURE JUST KEEP IT AT WATER'S. IF YOU GET SOMETHING ABOVE 10 LET ALONE IN THE HUNDREDS YOU'RE PROBABLY DOING SOMETHING VERY WRONG
+	NO DON'T DO THAT, IF YOU'RE NOT SURE JUST KEEP IT AT WATER'S. IF YOU GET SOMETHING ABOVE 10 LET ALONE IN THE HUNDREDS YOU'RE PROBABLY DOING SOMETHING VERY WRONG
+
+	It is very common to use REAGENTS_METABOLISM (0.2) or REM / REGEANTS_EFFECT_MULTIPLIER (0.5) in this file.
+
+*/
 
 /datum/reagent
 	var/name = "Reagent"
@@ -51,6 +55,7 @@
 	var/addictive = FALSE
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
 	var/paint_light = PAINTLIGHT_NONE
+	var/adj_temp = 0//keep between -1.5,20 to prevent people from freezing/burning themselves
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS, var/allow_permeability = TRUE, var/list/splashplosion=list())
 	set waitfor = 0
@@ -203,6 +208,11 @@
 	M.nutrition += nutriment_factor	//Centralized nutritional values
 	if(M.nutrition < 0) //Prevent from going into negatives
 		M.nutrition = 0
+
+	if(adj_temp > 0 && M.bodytemperature <= 325) //310 is the normal bodytemp. 310.055, keeping possible temp adjust effect below a total of 350 will keep the screen alarm weak
+		M.bodytemperature = max(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
+	else if(adj_temp < 0 && M.bodytemperature >= 309.5)
+		M.bodytemperature = min(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/proc/is_overdosing() //Too much chems, or been in your system too long
 	return (overdose_am && volume >= overdose_am) || (overdose_tick && tick >= overdose_tick)
@@ -4873,6 +4883,14 @@ var/procizine_tolerance = 0
 	color = "#731008" //rgb: 115, 16, 8
 	flags = CHEMFLAG_PIGMENT
 
+/datum/reagent/ketchup/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks))
+		var/obj/item/weapon/reagent_containers/food/condiment/fake_bottle/FB = new(O.loc)
+		FB.splash_that(O,src)
+
 /datum/reagent/mustard
 	name = "Mustard"
 	id = MUSTARD
@@ -4881,6 +4899,14 @@ var/procizine_tolerance = 0
 	nutriment_factor = 3 * REAGENTS_METABOLISM
 	color = "#cccc33" //rgb: 204, 204, 51
 	flags = CHEMFLAG_PIGMENT
+
+/datum/reagent/mustard/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks))
+		var/obj/item/weapon/reagent_containers/food/condiment/fake_bottle/FB = new(O.loc)
+		FB.splash_that(O,src)
 
 /datum/reagent/relish
 	name = "Relish"
@@ -4906,6 +4932,14 @@ var/procizine_tolerance = 0
 	nutriment_factor = 4 * REAGENTS_METABOLISM
 	color = "#FAF0E6" //rgb: 51, 102, 0
 	flags = CHEMFLAG_PIGMENT
+
+/datum/reagent/mayo/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks))
+		var/obj/item/weapon/reagent_containers/food/condiment/fake_bottle/FB = new(O.loc)
+		FB.splash_that(O,src)
 
 /datum/reagent/zamspices
 	name = "Zam Spices"
@@ -6129,6 +6163,20 @@ var/procizine_tolerance = 0
 	color = "#D9C0E7" //rgb: 217, 192, 231
 	custom_metabolism = 0.1
 
+//Anticoagulant. Great for helping the body fight off viruses but makes one vulnerable to pain, bleeding, and brute damage.
+/datum/reagent/antipathogenic/feverfew
+	name = "Feverfew"
+	id = FEVERFEW
+	description = "Feverfew is a natural anticoagulant useful in fending off viruses, but it leaves one vulnerable to pain and bleeding."
+	color = "#b5651d"
+	pain_resistance = -25
+	data = list ("threshold" = 80)
+
+/datum/reagent/feverfew/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.adjustBruteLoss(5 * REM) //2.5 per tick, human healing is around 1.5~2 so this is just barely noticable
+
 /datum/reagent/caffeine
 	name = "Caffeine"
 	id = CAFFEINE
@@ -6214,7 +6262,6 @@ var/procizine_tolerance = 0
 	var/adj_dizzy = 0
 	var/adj_drowsy = 0
 	var/adj_sleepy = 0
-	var/adj_temp = 0
 
 /datum/reagent/drink/on_mob_life(var/mob/living/M)
 
@@ -6227,10 +6274,6 @@ var/procizine_tolerance = 0
 		M.drowsyness = max(0,M.drowsyness + adj_drowsy)
 	if(adj_sleepy)
 		M.sleeping = max(0,M.sleeping + adj_sleepy)
-	if(adj_temp > 0 && M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
-	else if(adj_temp < 0 && M.bodytemperature > 310)
-		M.bodytemperature = max(310, M.bodytemperature + (adj_temp * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/drink/orangejuice
 	name = "Orange Juice"
@@ -6499,7 +6542,7 @@ var/procizine_tolerance = 0
 	adj_dizzy = -5
 	adj_drowsy = -3
 	adj_sleepy = -2
-	adj_temp = 25
+	adj_temp = 20
 	custom_metabolism = 0.1
 	var/causes_jitteriness = 1
 	glass_desc = "Careful, it's hot!"
@@ -6520,7 +6563,7 @@ var/procizine_tolerance = 0
 	id = ICECOFFEE
 	description = "Coffee and ice. Refreshing and cool."
 	color = "#102838" //rgb: 16, 40, 56
-	adj_temp = -5
+	adj_temp = -1.5
 	glass_icon_state = "icedcoffeeglass"
 	glass_desc = "For when you need a coffee without the warmth."
 
@@ -6591,7 +6634,7 @@ var/procizine_tolerance = 0
 	id = ICETEA
 	description = "Like tea, but refreshes rather than relaxes."
 	color = "#104038" //rgb: 16, 64, 56
-	adj_temp = -5
+	adj_temp = -1.5
 	density = 1
 	specheatcap = 1
 	glass_icon_state = "icedteaglass"
@@ -6601,7 +6644,7 @@ var/procizine_tolerance = 0
 	id = ARNOLDPALMER
 	description = "Known as half and half to some. A mix of ice tea and lemonade."
 	color = "#104038" //rgb: 16, 64, 56
-	adj_temp = -5
+	adj_temp = -1.5
 	adj_sleepy = -3
 	adj_dizzy = -1
 	adj_drowsy = -3
@@ -6630,7 +6673,7 @@ var/procizine_tolerance = 0
 /datum/reagent/drink/cold
 	id = EXPLICITLY_INVALID_REAGENT_ID
 	name = "Cold Drink"
-	adj_temp = -5
+	adj_temp = -1.5
 
 /datum/reagent/drink/cold/tonic
 	name = "Tonic Water"
@@ -6666,6 +6709,7 @@ var/procizine_tolerance = 0
 	specheatcap = 4.18
 	glass_icon_state = "iceglass"
 	glass_desc = "Generally, you're supposed to put something else in there too..."
+	adj_temp = -5//drinking ice directly may give you some mild hypothermia
 
 /datum/reagent/drink/cold/space_cola
 	name = "Cola"
@@ -6729,7 +6773,7 @@ var/procizine_tolerance = 0
 	id = SPACE_UP
 	description = "Tastes like a hull breach in your mouth."
 	color = "#202800" //rgb: 32, 40, 0
-	adj_temp = -8
+	adj_temp = -1.5
 	glass_icon_state = "space-up_glass"
 	glass_desc = "Space-up. It helps keep your cool."
 
@@ -6738,7 +6782,7 @@ var/procizine_tolerance = 0
 	description = "A tangy substance made of 0.5% natural citrus!"
 	id = LEMON_LIME
 	color = "#878F00" //rgb: 135, 40, 0
-	adj_temp = -8
+	adj_temp = -1.5
 
 /datum/reagent/drink/cold/lemonade
 	name = "Lemonade"
@@ -6760,7 +6804,7 @@ var/procizine_tolerance = 0
 	description = "Its not what it sounds like..."
 	id = BROWNSTAR
 	color = "#9F3400" //rgb: 159, 052, 000
-	adj_temp = -2
+	adj_temp = -1.5
 	glass_icon_state = "brownstar"
 	glass_name = "\improper Brown Star"
 
@@ -6769,7 +6813,7 @@ var/procizine_tolerance = 0
 	description = "Glorious brainfreezing mixture."
 	id = MILKSHAKE
 	color = "#AEE5E4" //rgb" 174, 229, 228
-	adj_temp = -9
+	adj_temp = -1.5
 	custom_metabolism = FOOD_METABOLISM
 	glass_icon_state = "milkshake"
 	glass_desc = "Brings all the boys to the yard."
@@ -6827,7 +6871,7 @@ var/procizine_tolerance = 0
 	description = "Tastes like a science fair experiment."
 	id = DIY_SODA
 	color = "#7566FF" //rgb: 117, 102, 255
-	adj_temp = -2
+	adj_temp = -1.5
 	adj_drowsy = -6
 
 /datum/reagent/drink/cold/diy_soda/on_mob_life(var/mob/living/M)

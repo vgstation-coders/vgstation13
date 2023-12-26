@@ -74,6 +74,9 @@
 		return
 	..()
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/human/on_vending_machine_spawn()
+	reagents.chem_temp = FRIDGETEMP_FROZEN
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/diona
 	name = "leafy meat"
 	desc = "It's got an awful lot of protein for a vegetable."
@@ -165,6 +168,9 @@
 	name = "imitation carp fillet"
 	desc = "Almost just like the real thing, kinda."
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation/on_vending_machine_spawn()
+	reagents.chem_temp = FRIDGETEMP_FROZEN
+
 /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
 	name = "venomous spines"
 	desc = "The toxin-filled spines of a space carp."
@@ -226,6 +232,9 @@
 	reagents.add_reagent(NUTRIMENT, 0.5)
 	reagents.add_reagent(ROACHSHELL, rand(2,6))
 	bitesize = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach/on_vending_machine_spawn()
+	reagents.chem_temp = FRIDGETEMP_FROZEN
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
 	name = "mutated cockroach meat"
@@ -488,6 +497,9 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		reagents.add_reagent(ROACHSHELL,1) //Sometimes a roach gets in. No nutritional value
 	//Total ranging from 18 to 57 nutrition. Normal meat provides 45.
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/on_vending_machine_spawn()
+	reagents.chem_temp = FRIDGETEMP_FROZEN
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/blob
 	name = "blob meat"
 	desc = "A slab of glowing meat hacked off of a greater part. It has a spongy feel to it."
@@ -545,3 +557,14 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		desc = pick("Whichever nerves were keeping it wriggling have been ripped off by now.", "It's a lot more foul smelling once you bite into it.", "There's some slimy substance leaking out of it.", "Was this really a good idea?")
 	else
 		desc = pick("There's barely anything left of it.", "It could have lived happily in your brain, you know.", "It was only here to help.", "Poor thing.", "You monster.", "At least it's nutritious.")
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/bullmeat
+	name = "carne de lidia"
+	desc = "En algunos lugares, la tauromaquia es incruenta. Aqui no."
+	icon_state = "bearmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/bullmeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(BICARIDINE, 5)
+	bitesize = 3

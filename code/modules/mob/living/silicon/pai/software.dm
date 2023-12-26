@@ -203,7 +203,8 @@
 
 		// Accessing medical records
 		if("medicalsupplement")
-			secHUD = FALSE // Can't have both of them at the same time
+			if(!medHUD)
+				apply_hud_by_type(/datum/visioneffect/medical)
 			medHUD = TRUE
 			if(subscreen == 1)
 				var/datum/data/record/record = locate(href_list["med_rec"])
@@ -219,7 +220,9 @@
 						medicalActive1 = R
 						medicalActive2 = M
 		if("securitysupplement")
-			medHUD = FALSE // Can't have both of them at the same time
+			if(!secHUD)
+				apply_hud_by_type(/datum/visioneffect/security/arrest)
+				apply_hud_by_type(/datum/visioneffect/job)
 			secHUD = TRUE
 			if(subscreen == 1)
 				var/datum/data/record/record = locate(href_list["sec_rec"])

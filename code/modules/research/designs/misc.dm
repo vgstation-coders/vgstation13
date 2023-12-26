@@ -156,4 +156,4 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_DIAMOND = 500)
 	category = "Misc"
-	build_path = /obj/item/clothing/glasses/regular/tracking
+	build_path = /obj/item/clothing/glasses/hud/tracking

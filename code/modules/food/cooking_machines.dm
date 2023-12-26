@@ -85,6 +85,8 @@ var/global/ingredientLimit = 10
 	var/cooks_in_reagents = 0 //are we able to add stuff to the machine so that reagents are added to food?
 	var/cks_max_volume = 50
 
+	var/cooking_temperature = COOKTEMP_DEFAULT
+
 /obj/machinery/cooking/cultify()
 	new /obj/structure/cult_legacy/talisman(loc)
 	..()
@@ -334,6 +336,9 @@ var/global/ingredientLimit = 10
 		F.overlays += F.generateFilling(I)
 		F.luckiness += I.luckiness
 		I.luckiness = null
+	if (cooking_temperature && (new_food.reagents.chem_temp < cooking_temperature))
+		new_food.reagents.chem_temp = cooking_temperature
+		new_food.update_icon()
 	ingredient = null
 	return new_food
 
@@ -379,6 +384,7 @@ var/global/ingredientLimit = 10
 	icon_state = "still_off"
 	icon_state_on = "still_on"
 	cookSound = 'sound/machines/juicer.ogg'
+	cooking_temperature = 0
 
 /obj/machinery/cooking/still/validateIngredient(var/obj/item/I)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/grown))
@@ -513,11 +519,16 @@ var/global/ingredientLimit = 10
 	if(istype(ingredient,/obj/item/weapon/reagent_containers/food/snacks))
 		if(cooks_in_reagents)
 			transfer_reagents_to_food(ingredient)
-			if(!arcanetampered && (ingredient.reagents.chem_temp > COOKTEMP_HUMANSAFE)) //Make sure the food isn't scalding hot.
-				ingredient.reagents.chem_temp = COOKTEMP_HUMANSAFE
+			var/cook_temp = COOKTEMP_READY//100°C
+			if(emagged || arcanetampered)
+				cook_temp = COOKTEMP_EMAGGED
+			if (ingredient.reagents.chem_temp < cook_temp)
+				ingredient.reagents.chem_temp = cook_temp
+				ingredient.update_icon()
 		ingredient.name = "deep fried [ingredient.name]"
 		ingredient.color = "#FFAD33"
 		ingredient.forceMove(loc)
+
 		for(var/obj/item/embedded in ingredient.contents)
 			embedded.forceMove(ingredient)
 	else //some admin enabled funfood and we're frying the captain's ID or someshit
@@ -704,6 +715,12 @@ var/global/ingredientLimit = 10
 		var/obj/item/weapon/reagent_containers/food/F = ingredient
 		F.reagents.add_reagent(NUTRIMENT,10)
 		F.reagents.trans_to(ingredient,ingredient.reagents.total_volume)
+		var/cook_temp = COOKTEMP_READY//100°C
+		if(emagged || arcanetampered)
+			cook_temp = COOKTEMP_DEFAULT//300°C
+		if (F.reagents.chem_temp < cook_temp)
+			F.reagents.chem_temp = cook_temp
+			F.update_icon()
 	ingredient.mouse_opacity = 1
 	if(!(findtext(ingredient.name,"rotisserie")))
 		ingredient.name = "grilled [ingredient.name]"

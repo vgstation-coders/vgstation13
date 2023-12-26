@@ -1181,7 +1181,7 @@ Use this proc preferably at the end of an equipment loadout
 				for(var/mob/M in viewers(4, L))
 					if(M == L)
 						continue
-					if(istype(M.get_item_by_slot(slot_glasses),/obj/item/clothing/glasses/regular/tracking))
+					if(istype(M.get_item_by_slot(slot_glasses),/obj/item/clothing/glasses/hud/tracking))
 						if(M.is_blind())
 							continue
 						if(isobj(A.loc))
