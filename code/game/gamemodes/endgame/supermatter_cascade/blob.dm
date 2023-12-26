@@ -20,7 +20,7 @@
 	var/next_check=0
 	var/list/avail_dirs = list(NORTH,SOUTH,EAST,WEST)
 
-	has_white_turf_lighting = 0
+	dynamic_lighting = 0
 
 /turf/unsimulated/wall/supermatter/New()
 	processing_objects |= src

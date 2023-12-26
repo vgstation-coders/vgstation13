@@ -106,7 +106,7 @@
 /obj/machinery/shield_gen/attackby(var/obj/item/W, var/mob/user)
 	if(..())
 		return 1
-	else if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/flashlight/pda))
+	else if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
 		if(check_access(W))
 			toggle_lock(user)
 		else

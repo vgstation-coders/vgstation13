@@ -29,7 +29,6 @@
 	cloth_layer = GLASSES_LAYER
 	cloth_icon = 'icons/mob/eyes.dmi'
 
-// 515 teething issues
 /obj/item/clothing/glasses/proc/update_perception(var/mob/living/carbon/human/M)
 	return
 

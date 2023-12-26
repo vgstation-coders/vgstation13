@@ -31,7 +31,7 @@
 	power_connection.power_priority = POWER_PRIORITY_BYPASS
 
 /obj/item/device/powersink/Destroy()
-	kill_light()
+	set_light(0)
 	processing_objects.Remove(src)
 	if(power_connection)
 		QDEL_NULL(power_connection)
@@ -69,20 +69,12 @@
 				if(M == user)
 					continue
 				to_chat(M, "[user] detaches the power sink from the cable.")
-			kill_light()
+			set_light(0)
 			icon_state = "powersink0"
 
 			return
 	else
 		..()
-
-/obj/item/device/powersink/Destroy()
-	kill_light()
-	processing_objects.Remove(src)
-	if(power_connection)
-		qdel(power_connection)
-		power_connection = null
-	. = ..()
 
 /obj/item/device/powersink/attack_paw()
 	return
@@ -113,7 +105,7 @@
 					continue
 				to_chat(M, "[user] deactivates the power sink!")
 			mode = 1
-			kill_light()
+			set_light(0)
 			icon_state = "powersink0"
 			playsound(src, 'sound/effects/teleport.ogg', 50, 1)
 			processing_objects.Remove(src)

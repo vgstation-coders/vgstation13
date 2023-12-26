@@ -439,7 +439,7 @@
 	if(on)
 		set_light(brightness_on)
 	else
-		kill_light()
+		set_light(0)
 
 	user.update_inv_head()
 
@@ -476,7 +476,7 @@
 	if(on)
 		set_light(brightness_on)
 	else
-		kill_light()
+		set_light(0)
 
 	user.update_inv_head()
 

@@ -5,7 +5,7 @@
 	circuit = "/obj/item/weapon/circuitboard/pda_terminal"
 	light_color = LIGHT_COLOR_ORANGE
 
-	var/obj/item/device/flashlight/pda/pda_device = null
+	var/obj/item/device/pda/pda_device = null
 	var/machine_id = ""
 
 	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | PURCHASER
@@ -19,7 +19,7 @@
 	if(ticker)
 		initialize()
 
-/obj/machinery/computer/pda_terminal/proc/format_apps(var/obj/item/device/flashlight/pda/pda_hardware)//makes a list of all the apps that aren't yet installed on the PDA
+/obj/machinery/computer/pda_terminal/proc/format_apps(var/obj/item/device/pda/pda_hardware)//makes a list of all the apps that aren't yet installed on the PDA
 	if(!istype(pda_hardware))
 		return list()
 
@@ -51,7 +51,7 @@
 /obj/machinery/computer/pda_terminal/proc/get_display_desc(var/datum/pda_app/app)
 	return "[app.desc]"
 
-/obj/machinery/computer/pda_terminal/attackby(obj/item/device/flashlight/pda/user_pda, mob/user)
+/obj/machinery/computer/pda_terminal/attackby(obj/item/device/pda/user_pda, mob/user)
 	if(!istype(user_pda))
 		return ..()
 
@@ -119,7 +119,7 @@
 					pda_device = null
 			else
 				var/obj/item/I = usr.get_active_hand()
-				if (istype(I, /obj/item/device/flashlight/pda))
+				if (istype(I, /obj/item/device/pda))
 					if(usr.drop_item(I, src))
 						pda_device = I
 			update_icon()
@@ -170,9 +170,9 @@
 						to_chat(usr, "[bicon(src)]<span class='notice'>Enjoy your new PDA!</span>")
 						flick("pdaterm-purchase", src)
 						if(prob(10))
-							new /obj/item/device/flashlight/pda/clear(src.loc)//inserting mandatory hidden feature.
+							new /obj/item/device/pda/clear(src.loc)//inserting mandatory hidden feature.
 						else
-							new /obj/item/device/flashlight/pda(src.loc)
+							new /obj/item/device/pda(src.loc)
 					else
 						flick("pdaterm-problem", src)
 				else

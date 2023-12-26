@@ -45,7 +45,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/heads/hop
+	pda_type = /obj/item/device/pda/heads/hop
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/silver
 
@@ -90,7 +90,7 @@
 		),
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/quartermaster
+	pda_type = /obj/item/device/pda/quartermaster
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/supply
 
@@ -166,7 +166,7 @@
 		),
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/cargo
+	pda_type = /obj/item/device/pda/cargo
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/supply
 
@@ -225,7 +225,7 @@
 		/datum/species/grey = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/shaftminer
+	pda_type = /obj/item/device/pda/shaftminer
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/supply
 

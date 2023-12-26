@@ -138,8 +138,8 @@ var/list/tgui_religion_data
 			var/obj/item/weapon/card/id/ID = object
 			ID.assignment = new_alt_title
 			ID.name = "[user.mind.name]'s ID Card ([new_alt_title])"
-		if(istype(object, /obj/item/device/flashlight/pda))
-			var/obj/item/device/flashlight/pda/PDA = object
+		if(istype(object, /obj/item/device/pda))
+			var/obj/item/device/pda/PDA = object
 			if(PDA.owner == user.real_name)
 				PDA.ownjob = new_alt_title
 				PDA.name = "PDA-[PDA.owner] ([new_alt_title])"

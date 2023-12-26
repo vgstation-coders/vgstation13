@@ -280,8 +280,8 @@ var/global/list/atmos_controllers = list()
 			return 1
 		var/mob/M = usr
 		var/obj/item/weapon/card/id/I = M.get_active_hand()
-		if (istype(I, /obj/item/device/flashlight/pda))
-			var/obj/item/device/flashlight/pda/pda = I
+		if (istype(I, /obj/item/device/pda))
+			var/obj/item/device/pda/pda = I
 			I = pda.id
 		if (istype(I,/obj/item/weapon/card/emag))
 			emag_act(I, usr)

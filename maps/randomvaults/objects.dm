@@ -8,7 +8,7 @@
 	name = "mysterious structure"
 	requires_power = 0
 	icon_state = "firingrange"
-	has_white_turf_lighting = 0
+	dynamic_lighting = 1
 
 	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
@@ -340,7 +340,7 @@
 /area/vault/zathura
 
 /area/vault/zathura/surroundings
-	has_white_turf_lighting = FALSE
+	dynamic_lighting = FALSE
 	mysterious = TRUE
 
 /area/vault/ironchef
@@ -493,7 +493,7 @@
 /obj/machinery/floodlight/on/New()
 	..()
 	on = 1
-	set_light()
+	set_light(brightness_on)
 	update_icon()
 
 /obj/machinery/floodlight/on/infinite
@@ -1009,12 +1009,12 @@
 	name = "NT Microstation Construction Room"
 	icon_state = "construction"
 
-/obj/item/device/flashlight/pda/clown/broken
+/obj/item/device/pda/clown/broken
 	name = "Antique Clown PDA"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. The surface is coated with polytetrafluoroethylene and banana drippings. This one has been stepped on for too many times, and appears to be completely unresponsive."
 	starting_apps = list()
 
-/obj/item/device/flashlight/pda/clown/broken/attack_self(mob/user)
+/obj/item/device/pda/clown/broken/attack_self(mob/user)
 	INVOKE_EVENT(src, /event/item_attack_self, "user" = user) // Minimalist version of original function
 
 /obj/structure/falserwall/doorobscurer

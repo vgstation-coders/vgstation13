@@ -11,16 +11,11 @@
 	var/on = 0
 	var/image/overlay
 
-	moody_light_type = /atom/movable/light/moody/light_switch
-	light_range = 1
-	light_power = 1
-	light_color = LIGHT_COLOR_RED
-	lighting_flags = FOLLOW_PIXEL_OFFSET | NO_LUMINOSITY
-
 /obj/machinery/light_switch/supports_holomap()
 	return TRUE
 
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)
+	..()
 	var/area/this_area = get_area(src)
 	name = "[this_area.name] light switch"
 	buildstage = building
@@ -30,7 +25,6 @@
 		pixel_y = (ndir & 3)? (ndir ==1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
 		dir = ndir
 	updateicon()
-	..()
 	add_self_to_holomap()
 
 /obj/machinery/light_switch/proc/updateicon()
@@ -42,15 +36,15 @@
 	overlays.Cut()
 	if((stat & (FORCEDISABLE|NOPOWER)) || buildstage != 2)
 		icon_state = "light-p"
-		kill_light()
+		set_light(0)
 	else
 		icon_state = on ? "light1" : "light0"
 		overlay.icon_state = "[icon_state]-overlay"
 		overlays += overlay
-		// Now can be a nice and soft one-tile light again.
-		light_color = on  ? LIGHT_COLOR_GREEN : LIGHT_COLOR_RED
-		if (moody_light_obj)
-			moody_light_obj.cast_light(TRUE)
+		//If the lightswitch itself is in total darkness, even the overlay won't render, so we gotta light up the lightswitch just a tiny bit.
+		//...which, sadly, thanks to goonlights means "oops we have to softlight up the entire 3x3 around the lightswitch because we can't handle one-tile lights anymore"
+		//Maybe vis-contents will bring a more elegant solution when we support them?
+		set_light(1, 0.5, on ? "#82ff4c" : "#f86060")
 
 /obj/machinery/light_switch/examine(mob/user)
 	..()

@@ -4616,7 +4616,7 @@
 		for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 			NEWSCASTER.newsAlert(src.admincaster_feed_channel.channel_name)
 
-		for(var/obj/item/device/flashlight/pda/PDA in PDAs)
+		for(var/obj/item/device/pda/PDA in PDAs)
 			var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
 			if(reader)
 				reader.newsAlert(src.admincaster_feed_channel.channel_name)
@@ -4680,7 +4680,7 @@
 					for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 						NEWSCASTER.newsAlert()
 						NEWSCASTER.update_icon()
-					for(var/obj/item/device/flashlight/pda/PDA in PDAs)
+					for(var/obj/item/device/pda/PDA in PDAs)
 						var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
 						if(reader)
 							reader.newsAlert()

@@ -629,20 +629,7 @@ var/list/one_way_windows
 	. = ..()
 	update_nearby_tiles()
 
-//This proc is used to update the icons of nearby windows. It should not be confused with update_nearby_tiles(), which is an atmos proc!
-/obj/structure/window/proc/update_nearby_icons(var/turf/T)
-	if(!loc)
-		return 0
-	if(!T)
-		T = get_turf(src)
-
-	update_icon()
-
-	for(var/direction in cardinal)
-		for(var/obj/structure/window/W in get_step(T,direction))
-			W.update_icon()
-
-/obj/structure/window/forceMove(atom/NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0, from_tp = 0)
+/obj/structure/window/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	var/turf/T = loc
 	relativewall()
 	relativewall_neighbours()

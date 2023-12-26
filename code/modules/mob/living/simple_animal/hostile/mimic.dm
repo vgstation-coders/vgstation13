@@ -366,7 +366,7 @@ var/global/list/item_mimic_disguises = list(
 				/obj/item/weapon/lipstick, /obj/item/weapon/stamp/clown, /obj/item/weapon/storage/backpack/holding, /obj/item/clothing/gloves/yellow,\
 				/obj/item/device/aicard, /obj/item/device/analyzer, /obj/item/device/assembly/igniter, /obj/item/device/camera, /obj/item/device/codebreaker, /obj/item/device/device_analyser,\
 				/obj/item/device/flash, /obj/item/device/flashlight, /obj/item/device/hailer, /obj/item/device/material_synth, /obj/item/device/megaphone, /obj/item/device/paicard,\
-				/obj/item/device/flashlight/pda/clown, /obj/item/device/rcd/matter/engineering, /obj/item/device/radio, /obj/item/device/robotanalyzer, /obj/item/soulstone,\
+				/obj/item/device/pda/clown, /obj/item/device/rcd/matter/engineering, /obj/item/device/radio, /obj/item/device/robotanalyzer, /obj/item/soulstone,\
 				/obj/item/device/soundsynth, /obj/item/device/instrument/violin, /obj/item/device/wormhole_jaunter, /obj/item/weapon/gun/portalgun, /obj/item/target), //Common items
 
 	"medbay" = list(/obj/item/tool/circular_saw, /obj/item/weapon/melee/defibrillator, /obj/item/tool/surgicaldrill, /obj/item/tool/hemostat, /obj/item/weapon/dnainjector/nofail/hulkmut,\
@@ -400,7 +400,7 @@ var/global/list/item_mimic_disguises = list(
 	"vault" = list(/obj/machinery/nuclearbomb, /obj/item/weapon/disk/nuclear) + typesof(/obj/item/weapon/coin) + typesof(/obj/item/stack/sheet/mineral) - /obj/item/stack/sheet/mineral,
 
 	"chapel" = list(/obj/item/weapon/storage/bible, /obj/item/clothing/head/helmet/space/plasmaman/chaplain, /obj/item/clothing/suit/chaplain_hoodie, /obj/item/clothing/suit/space/plasmaman/chaplain,\
-				/obj/item/device/flashlight/pda/chaplain, /obj/item/weapon/nullrod, /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater, /obj/item/weapon/staff), //Chaplain garb, null rod, bible, holy water
+				/obj/item/device/pda/chaplain, /obj/item/weapon/nullrod, /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater, /obj/item/weapon/staff), //Chaplain garb, null rod, bible, holy water
 )
 
 /mob/living/simple_animal/hostile/mimic/crate/item

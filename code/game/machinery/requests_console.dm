@@ -55,7 +55,6 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	var/priority = -1 ; //Priority of the message being sent
 	var/announceSound = 'sound/vox/_bloop.wav'
 	luminosity = 0
-	light_range = 0
 
 /obj/machinery/requests_console/power_change()
 	..()
@@ -466,7 +465,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		new /obj/item/stack/sheet/metal (src.loc,2)
 		qdel(src)
 		return
-	if (istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/flashlight/pda))
+	if (istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
 		if(screen == 5)
 			var/obj/item/weapon/card/id/ID = O.GetID()
 			if (hackState || ID.access.Find(access_engine_minor))

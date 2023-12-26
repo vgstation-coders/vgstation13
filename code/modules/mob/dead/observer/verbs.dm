@@ -253,25 +253,14 @@
 	set name = "Toggle Darkness"
 	set category = "Ghost"
 
-	if (see_invisible == SEE_INVISIBLE_OBSERVER_NOLIGHTING)
-		see_invisible = SEE_INVISIBLE_OBSERVER
-		dark_plane.alphas -= "toggle_darkness"
-	else
-		see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
-		dark_plane.alphas["toggle_darkness"] = 255
+	switch(dark_plane.alphas["toggle_darkness"])
+		if(255)
+			dark_plane.alphas["toggle_darkness"] = 180
+		if(180)
+			dark_plane.alphas -= "toggle_darkness"
+		else
+			dark_plane.alphas["toggle_darkness"] = 255
 	check_dark_vision()
-
-/mob/dead/observer/var/see_opacity = 0
-
-/mob/dead/observer/verb/toggle_wallview()
-	set name = "Toggle Wall Opacity"
-	set category = "Ghost"
-	if (!see_opacity)
-		see_opacity = 1
-		change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
-	else
-		see_opacity = 0
-		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 
 /mob/dead/observer/verb/analyze_air()
 	set name = "Analyze Air"
@@ -577,8 +566,6 @@
 	var/response = alert(src, "Are you -sure- you want to become a space hobo?","Are you sure you want to ramble?","Yeah!","Nope!")
 	if(response != "Yeah!" || !src.key)
 		return  //Hit the wrong key...again.
-
-	//find a viable mouse candidate
 
 	var/mob/living/carbon/human/hobo = new(pick(hobostart))
 	hobo.key = src.key

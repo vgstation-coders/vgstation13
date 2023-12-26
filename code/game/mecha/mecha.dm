@@ -825,14 +825,14 @@
 			else
 				to_chat(user, "You were unable to attach [W] to [src]")
 		return
-	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/flashlight/pda))
+	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if(add_req_access || maint_access)
 			if(internals_access_allowed(usr))
 				var/obj/item/weapon/card/id/id_card
 				if(istype(W, /obj/item/weapon/card/id))
 					id_card = W
 				else
-					var/obj/item/device/flashlight/pda/pda = W
+					var/obj/item/device/pda/pda = W
 					id_card = pda.id
 				output_maintenance_dialog(id_card, user)
 				return
@@ -1451,7 +1451,7 @@
 		occupant = null
 		icon_state = initial_icon+"-open"
 		if(!lights) //if the lights are off, turn off the cabin lights
-			kill_light()
+			set_light(0)
 		dir = dir_in
 		if(G)
 			G.hud_off()
@@ -1505,8 +1505,8 @@
 		return 1
 	if(!access_list.len) //no requirements
 		return 1
-	if(istype(I, /obj/item/device/flashlight/pda))
-		var/obj/item/device/flashlight/pda/pda = I
+	if(istype(I, /obj/item/device/pda))
+		var/obj/item/device/pda/pda = I
 		I = pda.id
 	if(!istype(I) || !I.access) //not ID or no access
 		return 0

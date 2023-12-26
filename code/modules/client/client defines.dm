@@ -80,6 +80,8 @@
 	var/obj/abstract/screen/plane_master/ghost_planemaster_dummy/darkness_planemaster_dummy = null
 	var/obj/abstract/screen/plane_master/ghost_planemaster/fakecamera_planemaster = null
 	var/obj/abstract/screen/plane_master/ghost_planemaster_dummy/fakecamera_planemaster_dummy = null
+	
+
 
 	// This gets set by goonchat.
 	var/encoding = "1252"

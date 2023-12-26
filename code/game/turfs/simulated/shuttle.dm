@@ -82,7 +82,9 @@
 /obj/structure/shuttle/diag_wall/initialize()
 	var/turf/T = get_turf(src)
 	if(T)
-		T.has_white_turf_lighting = 1
+		T.dynamic_lighting = 1
+		if(SSlighting && SSlighting.initialized && !T.lighting_overlay)
+			new /atom/movable/lighting_overlay(T, TRUE)
 
 /obj/structure/shuttle/diag_wall/New()
 	..()
@@ -92,17 +94,21 @@
 /obj/structure/shuttle/diag_wall/Destroy()
 	var/turf/T = get_turf(src)
 	if(istype(T,/turf/space))
-		T.has_white_turf_lighting = 0
+		T.dynamic_lighting = 0
+		T.lighting_clear_overlay()
 	..()
 
 /obj/structure/shuttle/diag_wall/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	var/turf/T = get_turf(src)
 	if(istype(T,/turf/space))
-		T.has_white_turf_lighting = 0
+		T.dynamic_lighting = 0
+		T.lighting_clear_overlay()
 	..()
 	T = get_turf(destination)
 	if(T)
-		T.has_white_turf_lighting = 1
+		T.dynamic_lighting = 1
+		if(!T.lighting_overlay)
+			new /atom/movable/lighting_overlay(T, TRUE)
 
 /obj/structure/shuttle/diag_wall/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group)

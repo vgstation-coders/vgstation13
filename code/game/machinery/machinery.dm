@@ -307,7 +307,7 @@ Class Procs:
 
 		if(!use_auto_lights)
 			return
-		kill_light()
+		set_light(0)
 
 // returns true if the machine is powered (or doesn't require power).
 // performs basic checks every machine should do, then

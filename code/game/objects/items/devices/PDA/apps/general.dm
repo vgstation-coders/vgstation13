@@ -434,11 +434,15 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 /datum/pda_app/light/onUninstall()
 	fon = 0
 	if(pda_device)
-		pda_device.kill_light()
+		pda_device.set_light(0)
 	..()
 
 /datum/pda_app/light/on_select(var/mob/user)
 	if(pda_device)
-		pda_device.on = !pda_device.on
-		pda_device.update_brightness(user)
-	name = "[pda_device.on ? "Disable" : "Enable"] Flashlight"
+		if(fon)
+			fon = 0
+			pda_device.set_light(0)
+		else
+			fon = 1
+			pda_device.set_light(f_lum)
+	name = "[fon ? "Disable" : "Enable"] Flashlight"

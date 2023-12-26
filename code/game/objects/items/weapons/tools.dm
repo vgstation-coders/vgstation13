@@ -267,7 +267,6 @@
 	heat_production = 3800
 	source_temperature = TEMPERATURE_WELDER
 	light_color = LIGHT_COLOR_FIRE
-	light_type = LIGHT_SOFT_FLICKER
 
 	//Cost to make in the autolathe
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
@@ -498,7 +497,7 @@
 	else
 		to_chat(usr, "<span class='notice'>\The [src] switches off.</span>")
 		playsound(src,'sound/effects/zzzt.ogg',20,1)
-		kill_light()
+		set_light(0)
 		src.force = 3
 		src.damtype = "brute"
 		update_icon()
@@ -539,7 +538,7 @@
 		else
 			visible_message("<span class='notice'>\The [src] shuts off!</span>")
 		playsound(src,'sound/effects/zzzt.ogg',20,1)
-		kill_light()
+		set_light(0)
 		src.force = 3
 		src.damtype = "brute"
 		update_icon()

@@ -75,7 +75,7 @@
 		held_container.forceMove(get_turf(src))
 		held_container = null
 	processing_objects.Remove(src)
-	kill_light()
+	set_light(0)
 	..()
 
 /obj/machinery/bunsen_burner/examine(mob/user)
@@ -175,7 +175,7 @@
 
 	if(!heating || heating == BUNSEN_OPEN)
 		processing_objects.Remove(src)
-		kill_light()
+		set_light(0)
 
 /obj/machinery/bunsen_burner/proc/get_max_temperature()
 	var/max_temperature

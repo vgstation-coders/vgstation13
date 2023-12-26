@@ -285,7 +285,7 @@ var/global/list/dockinglights = list()
 		set_light(2)
 	else
 		icon_state = "docklight"
-		kill_light()
+		set_light(0)
 
 /obj/machinery/docklight/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return {"

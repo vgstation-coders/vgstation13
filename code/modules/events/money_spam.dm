@@ -26,7 +26,7 @@
 		time_failed = world.time
 		if(prob(2))
 			// /obj/machinery/message_server/proc/send_pda_message(var/recipient = "",var/sender = "",var/message = "")
-			var/obj/item/device/flashlight/pda/P
+			var/obj/item/device/pda/P
 			var/list/viables = get_viewable_pdas()
 			if(!viables.len)
 				return

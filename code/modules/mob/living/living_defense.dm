@@ -281,7 +281,7 @@
 /mob/living/proc/IgniteMob()
 	if(fire_stacks > 0 && !on_fire)
 		on_fire = 1
-		set_light(max(fire_stacks, 3), l_color = LIGHT_COLOR_FIRE)
+		set_light(src.light_range + 3)
 		update_fire()
 		return 1
 	else
@@ -291,7 +291,7 @@
 	if(on_fire)
 		on_fire = 0
 		fire_stacks = 0
-		kill_light()
+		set_light(src.light_range - 3)
 		update_fire()
 
 /mob/living/proc/update_fire()

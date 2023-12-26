@@ -510,7 +510,7 @@
 		var/light_amount = 0 //how much light there is in the place, affects receiving nutrition and healing
 		if(isturf(loc)) //else, there's considered to be no light
 			var/turf/T = loc
-			if(T.has_white_turf_lighting)
+			if(T.dynamic_lighting)
 				light_amount = (T.get_lumcount() * 10) - 5
 			else
 				light_amount = 5
@@ -644,7 +644,7 @@
 
 	regular_hud_updates()
 
-	if (stat == 2 || ((M_XRAY in mutations)  && (see_xrays)))
+	if (stat == 2 || (M_XRAY in mutations))
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_LEVEL_TWO

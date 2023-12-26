@@ -46794,33 +46794,33 @@
 /area/centcom/ert)
 "dhm" = (
 /obj/structure/rack,
-/obj/item/device/flashlight/pda/security{
+/obj/item/device/pda/security{
 	icon_state = "pda-ert";
 	name = "ERT PDA";
 	pixel_x = 6;
 	pixel_y = -3
 	},
-/obj/item/device/flashlight/pda/security{
+/obj/item/device/pda/security{
 	icon_state = "pda-ert";
 	name = "ERT PDA";
 	pixel_x = 3
 	},
-/obj/item/device/flashlight/pda/security{
+/obj/item/device/pda/security{
 	icon_state = "pda-ert";
 	name = "ERT PDA";
 	pixel_y = 3
 	},
-/obj/item/device/flashlight/pda/security{
+/obj/item/device/pda/security{
 	icon_state = "pda-ert";
 	name = "ERT PDA";
 	pixel_y = -3
 	},
-/obj/item/device/flashlight/pda/security{
+/obj/item/device/pda/security{
 	icon_state = "pda-ert";
 	name = "ERT PDA";
 	pixel_x = -3
 	},
-/obj/item/device/flashlight/pda/security{
+/obj/item/device/pda/security{
 	icon_state = "pda-ert";
 	name = "ERT PDA";
 	pixel_x = -6;
@@ -50827,33 +50827,33 @@
 /area/centcom/specops)
 "dqv" = (
 /obj/structure/rack,
-/obj/item/device/flashlight/pda/security{
+/obj/item/device/pda/security{
 	icon_state = "pda-deathsquad";
 	name = "Deathsquad PDA";
 	pixel_x = 6;
 	pixel_y = -3
 	},
-/obj/item/device/flashlight/pda/security{
+/obj/item/device/pda/security{
 	icon_state = "pda-deathsquad";
 	name = "Deathsquad PDA";
 	pixel_x = 3
 	},
-/obj/item/device/flashlight/pda/security{
+/obj/item/device/pda/security{
 	icon_state = "pda-deathsquad";
 	name = "Deathsquad PDA";
 	pixel_y = 3
 	},
-/obj/item/device/flashlight/pda/security{
+/obj/item/device/pda/security{
 	icon_state = "pda-deathsquad";
 	name = "Deathsquad PDA";
 	pixel_y = -3
 	},
-/obj/item/device/flashlight/pda/security{
+/obj/item/device/pda/security{
 	icon_state = "pda-deathsquad";
 	name = "Deathsquad PDA";
 	pixel_x = -3
 	},
-/obj/item/device/flashlight/pda/security{
+/obj/item/device/pda/security{
 	icon_state = "pda-deathsquad";
 	name = "Deathsquad PDA";
 	pixel_x = -6;
@@ -54225,7 +54225,7 @@
 /area/centcom/control)
 "dAO" = (
 /obj/structure/table/reinforced,
-/obj/item/device/flashlight/pda/captain,
+/obj/item/device/pda/captain,
 /turf/unsimulated/floor{
 	icon_state = "floor"
 	},
@@ -107634,7 +107634,6 @@
 	pixel_x = 6;
 	pixel_y = 2
 	},
-/obj/machinery/vending/art,
 /turf/simulated/floor,
 /area/storage/art)
 "uiO" = (

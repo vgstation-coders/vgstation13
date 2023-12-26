@@ -73,7 +73,7 @@ var/global/list/rad_collectors = list()
 		if(P && !src.locked)
 			eject()
 			return 1
-	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/flashlight/pda))
+	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if (src.allowed(user))
 			if(active)
 				src.locked = !src.locked

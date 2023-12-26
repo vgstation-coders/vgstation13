@@ -14,5 +14,5 @@
 	movetime = 5 SECONDS
 
 ////////////////////////////////////////////////////////////////
-#include "test_tiny_light.dmm"
+#include "test_tiny.dmm"
 #endif

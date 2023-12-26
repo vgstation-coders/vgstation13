@@ -121,7 +121,7 @@
 /turf/simulated/floor/light,
 /area/vault/clownbase)
 "D" = (
-/obj/item/device/flashlight/pda/clown/broken,
+/obj/item/device/pda/clown/broken,
 /turf/unsimulated/mineral/random,
 /area/vault/clownbase)
 "E" = (

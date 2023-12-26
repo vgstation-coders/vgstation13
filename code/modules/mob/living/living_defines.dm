@@ -84,5 +84,3 @@
 
 	var/blood_color2	//color of this creature's blood for gibbing purposes (humanoids have their own species-defined values)
 	var/flesh_color2	//color of this creature's flesh for meat purposes (humanoids have their own species-defined values)
-
-	var/see_xrays = FALSE // If the mob has toggled see_xrays or not.
