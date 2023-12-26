@@ -17,6 +17,7 @@
 		update_name()
 
 /obj/item/weapon/reagent_containers/food/snacks/snackbar/update_icon()
+	..()
 	var/icon/I = icon('icons/obj/food.dmi', "snackbar")
 	I += mix_color_from_reagents(reagents.reagent_list)
 	src.icon = I

@@ -7,13 +7,15 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = null
 	w_class = W_CLASS_TINY
+	heat_conductivity = 0.90
 	var/amount_per_transfer_from_this = 5
 	var/possible_transfer_amounts = list(5,10,15,25,30)
 	var/volume = 30
 	var/amount_per_imbibe = 5
 	var/attack_mob_instead_of_feed //If true, the reagent container will be used as a melee weapon rather than as a vessel to feed another mob with (in attack()).
 
-	var/thermal_entropy_delay = 2 SECONDS//we run thermal_entropy() every X ticks
+	var/image/ice_overlay = null
+	var/ice_alpha = 64
 	var/thermal_variation_from_environment = 0.055//how much of the environmental temperature do we want to match per entropy procs
 	var/thermal_variation_modifier = 1//if set to 0, no entropy will occur in that container. More than 1 means it reaches room temperature quicker.
 
@@ -403,7 +405,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.reaction(user, INGEST, amount_override = min(reagents.total_volume,amount_per_imbibe)/(reagents.reagent_list.len))
 		spawn(5)
 			if(reagents)
+				reagents.adjust_consumed_reagents_temp()
 				reagents.trans_to(user, amount_per_imbibe)
+				reagents.reset_consumed_reagents_temp()
 
 	return 1
 
@@ -505,3 +509,90 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /obj/item/weapon/reagent_containers/pickup(var/mob/user)
 	..()
 	process_temperature()
+
+/obj/item/weapon/reagent_containers/update_temperature_overlays()
+	if (particles)
+		particles.spawning = 0
+	if(reagents && reagents.total_volume)
+		switch(reagents.chem_temp)
+			if (-INFINITY to (T0C+2))
+				ice_alpha = 96 + clamp((-64*((reagents.chem_temp-T0C)/80)),0,64)
+				if(!ice_overlays["[type][icon_state]"])
+					set_ice_overlay()
+				else
+					update_ice_overlay()
+			if (STEAMTEMP to INFINITY)
+				if (!particles)
+					particles = new/particles/steam
+				steam_spawn_adjust(reagents.chem_temp)
+
+///////////ICE OVERLAY///////////////////////////////////////////////////////////////////////////////////////////////////////////
+//appears when the food item's reagents' temperature falls to 0°C or below
+//based on how blood overlays are generated
+
+var/global/list/image/ice_overlays = list()
+/obj/item/weapon/reagent_containers/proc/set_ice_overlay()
+	if(update_ice_overlay())
+		return
+
+	var/icon/I = new /icon(icon, icon_state)
+	//fills the icon_state with white (except where it's transparent)
+	I.Blend(rgb(255,255,255),ICON_ADD)
+	//inspired by urist's old cult rune drawing method, will let us add a 1px ice border around the object
+	var/list/border_pixels = list()
+	for(var/x = 1, x <= 32, x++)
+		for(var/y = 1, y <= 32, y++)
+			var/p = I.GetPixel(x, y)
+
+			if(p == null)
+				var/n = I.GetPixel(x, y + 1)
+				var/s = I.GetPixel(x, y - 1)
+				var/e = I.GetPixel(x + 1, y)
+				var/w = I.GetPixel(x - 1, y)
+
+				if(n == "#ffffff" || s == "#ffffff" || e == "#ffffff" || w == "#ffffff")
+					border_pixels += list(list(x,y))
+	for (var/list/L in border_pixels)
+		I.DrawBox(rgb(255, 255, 255), L[1], L[2])
+	//adds the ice texture
+	I.Blend(new /icon('icons/effects/effects.dmi', "ice"),ICON_MULTIPLY)
+
+	var/image/img = image(I)
+	img.name = "ice_overlay"
+	ice_overlays["[type][icon_state]"] = img
+	update_ice_overlay()
+
+/obj/item/weapon/reagent_containers/proc/update_ice_overlay()
+	if(ice_overlays["[type][icon_state]"])
+		if (ice_overlay)
+			overlays -= ice_overlay
+		ice_overlay = image(ice_overlays["[type][icon_state]"])
+		ice_overlay.appearance_flags = RESET_COLOR|RESET_ALPHA
+		ice_overlay.alpha = ice_alpha
+		overlays += ice_overlay
+		return 1
+
+///////////STEAM PARTICLES/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/particles/steam
+	width = 64
+	height = 64
+	count = 20
+	spawning = 0
+
+	lifespan = 1 SECONDS
+	fade = 1 SECONDS
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "steam"
+	color = "#FFFFFF99"
+	position = 0
+	velocity = 1
+	scale = list(0.6, 0.6)
+	grow = list(0.05, 0.05)
+	rotation = generator("num", 0,360)
+
+/obj/item/weapon/reagent_containers/proc/steam_spawn_adjust(var/_temp)
+	if (particles)
+		particles.spawning = clamp(0.1 + 0.002 * (_temp - STEAMTEMP),0.1,0.5)
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

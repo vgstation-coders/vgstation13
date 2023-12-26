@@ -196,6 +196,22 @@
 		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
 		overlays += lid
 
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
+
+
+/obj/item/weapon/reagent_containers/glass/beaker/update_temperature_overlays()
+	//we only care about the steam
+
+	if (!particles)
+		particles = new/particles/steam
+
+	particles.spawning = 0
+
+	if(reagents && reagents.total_volume)
+		if (reagents.chem_temp >= STEAMTEMP)
+			steam_spawn_adjust(reagents.chem_temp)
+
 /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer
 	name = "small erlenmeyer flask"
 	desc = "It's like a cute little snub-nosed beaker. Can hold up to 50 units."
