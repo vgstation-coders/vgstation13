@@ -210,7 +210,7 @@
 		if (ismob(loc))
 			var/mob/M = loc
 			M.update_inv_hands()
-			
+
 /obj/item/clothing/proc/togglehood()
 	set name = "Toggle Hood"
 	set category = "Object"
@@ -854,6 +854,8 @@ var/global/maxStackDepth = 10
 	cloth_icon = 'icons/mob/feet.dmi'
 	starting_materials = list(MAT_FABRIC = 1250)
 
+	var/luminous_paint = FALSE
+
 /obj/item/clothing/shoes/proc/step_action()
 	stepstaken++
 	if(step_sound != "" && ishuman(loc))
@@ -886,6 +888,7 @@ var/global/maxStackDepth = 10
 	. = ..()
 	track_blood = 0
 	blood_color = null
+	luminous_paint = FALSE
 
 /obj/item/clothing/shoes/proc/togglemagpulse(var/mob/user = usr, var/override = FALSE)
 	if(!override)

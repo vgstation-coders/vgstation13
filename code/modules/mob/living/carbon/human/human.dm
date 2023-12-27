@@ -1006,10 +1006,11 @@
 	update_inv_gloves()	//handles bloody hands overlays and updating
 	return TRUE //we applied blood to the item
 
-/mob/living/carbon/human/proc/add_blood_to_feet(var/_amount, var/_color, var/list/_blood_DNA=list())
+/mob/living/carbon/human/proc/add_blood_to_feet(var/_amount, var/_color, var/list/_blood_DNA=list(), var/luminous = FALSE)
 	if(shoes)
 		var/obj/item/clothing/shoes/S = shoes
 		S.track_blood = max(0, _amount, S.track_blood)                //Adding blood to shoes
+		S.luminous_paint = luminous
 
 		if(!blood_overlays["[S.type][S.icon_state]"]) //If there isn't a precreated blood overlay make one
 			S.set_blood_overlay()
@@ -1036,6 +1037,8 @@
 		if(!feet_blood_DNA)
 			feet_blood_DNA = list()
 
+		feet_blood_lum = luminous
+
 		if(!istype(_blood_DNA, /list))
 			_blood_DNA = list()
 		else
@@ -1044,6 +1047,13 @@
 		feet_blood_color = (feet_blood_color && feet_blood_DNA.len) ? BlendRYB(feet_blood_color, _color, 0.5) : _color
 
 		update_inv_shoes(1)
+
+/mob/living/carbon/human/proc/luminous_feet()
+	if(shoes)
+		var/obj/item/clothing/shoes/S = shoes
+		return S.luminous_paint
+	else
+		return feet_blood_lum
 
 /mob/living/carbon/human/clean_blood()
 	.=..()
