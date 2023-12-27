@@ -17,10 +17,10 @@ static_files:
   - name: data
 # String dictionary. The value is the location of the file in the repo to upload to TGS. The key is the name of the file to upload to "<instance_path>/Configuration/EventScripts/"
 # This one is for Linux hosted servers
-#linux_scripts:
-#  PreCompile.sh: tools/tgs_scripts/PreCompile.sh
-#  WatchdogLaunch.sh: tools/tgs_scripts/WatchdogLaunch.sh
-#  InstallDeps.sh: tools/tgs_scripts/InstallDeps.sh
+linux_scripts:
+  PreCompile.sh: tools/tgs_scripts/PreCompile.sh
+  WatchdogLaunch.sh: tools/tgs_scripts/WatchdogLaunch.sh
+  InstallDeps.sh: tools/tgs_scripts/InstallDeps.sh
 # Same as above for Windows hosted servers
 windows_scripts:
   PreCompile.bat: tools/tgs_scripts/PreCompile.bat
