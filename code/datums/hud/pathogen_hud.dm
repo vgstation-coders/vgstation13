@@ -5,7 +5,7 @@ var/list/science_goggles_wearers = list()
 /datum/visioneffect/pathogen
 	name = "pathogen hud"
 
-/datum/visioneffect/on_apply(var/mob/M)
+/datum/visioneffect/pathogen/on_apply(var/mob/M)
 	..()
 	if(!M.client)
 		return
@@ -27,7 +27,7 @@ var/list/science_goggles_wearers = list()
 	..()
 	M.overlay_fullscreen("science", /obj/abstract/screen/fullscreen/science)
 
-/datum/visioneffect/on_remove(var/mob/M)
+/datum/visioneffect/pathogen/on_remove(var/mob/M)
 	..()
 	if(!M.client)
 		return
