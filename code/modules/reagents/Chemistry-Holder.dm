@@ -1055,7 +1055,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				if (T0C to (T0C+10))
 					R.adj_temp = -1.5
 				if ((T0C + 30) to STEAMTEMP)
-					R.adj_temp = chem_temp-30
+					R.adj_temp = chem_temp - (T0C + 30)
 				if (STEAMTEMP to INFINITY)
 					R.adj_temp = 20
 
