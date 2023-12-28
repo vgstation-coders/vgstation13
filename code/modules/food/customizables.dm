@@ -273,6 +273,7 @@
 	var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/F = new(get_turf(src),snack)
 
 	F.valid_utensils = snack.valid_utensils
+	F.reagents.chem_temp = snack.reagents.chem_temp
 
 	if (virus2?.len)
 		for (var/ID in virus2)
