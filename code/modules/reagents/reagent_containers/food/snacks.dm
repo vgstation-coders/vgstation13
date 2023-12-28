@@ -548,6 +548,7 @@
 					var/obj/item/sliceItem = slice
 					sliceItem.luckiness += luckiness / slices_num
 				reagents.trans_to(slice, reagents_per_slice)
+				slice.update_icon() //So hot slices start steaming right away
 			qdel(src) //So long and thanks for all the fish
 			return 1
 		if(contents.len) //Food item is not sliceable but still has items hidden inside. Using a knife on it should be an easy way to get them out.
@@ -4182,6 +4183,9 @@
 	w_class = W_CLASS_MEDIUM
 	base_crumb_chance = 20
 
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/on_vending_machine_spawn()
+	reagents.chem_temp = COOKTEMP_READY
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/margherita
 	name = "Margherita"
 	desc = "The most cheesy pizza in galaxy!"
@@ -4337,6 +4341,14 @@
 	var/list/boxes = list() // If the boxes are stacked, they come here
 	var/boxtag = ""
 
+/obj/item/pizzabox/return_air()//keeping your pizza warms
+	return
+
+/obj/item/pizzabox/on_vending_machine_spawn()//well, it's from the supply shuttle rather but hey
+	if (pizza)
+		pizza.on_vending_machine_spawn()
+		pizza.update_icon()
+
 /obj/item/pizzabox/update_icon()
 
 	overlays.Cut()
@@ -4365,6 +4377,9 @@
 			icon_state = "pizzabox_open"
 
 		if(pizza)
+			if (!pizza.particles)
+				pizza.particles = new/particles/steam
+			particles = pizza.particles
 			var/image/pizzaimg = new()
 			pizzaimg.appearance = pizza.appearance
 			pizzaimg.pixel_y = -3 * PIXEL_MULTIPLIER
@@ -4399,6 +4414,7 @@
 
 		to_chat(user, "<span class='notice'>You take the [src.pizza] out of the [src].</span>")
 		src.pizza = null
+		particles = null
 		update_icon()
 		return
 
