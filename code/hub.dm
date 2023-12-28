@@ -8,13 +8,13 @@ If not, let us know on the main tgstation IRC channel of irc.rizon.net #tgstatio
 */
 
 #define OPEN_TO_HUB_PLAYERCOUNT_DEFAULT 15
-#define DEFAULT_SERVER_NAME "Kolobokia 13"
-#define DEFAULT_SERVER_DESC " - Russian HRP. Classic SS13 Experience based on /vg/ code. No furries."
+#define DEFAULT_SERVER_NAME "Spess Station 13"
+#define DEFAULT_SERVER_DESC " - Russian MRP/HRP. Classic SS13 Experience based on VGstation code. No furries."
 
 /world
 	hub = "Exadv1.spacestation13"
-	hub_password = "SORRYNOPASSWORD"
-	name = "Kolobokia 13"
+	hub_password = "kMZy3U5jJHSiBQjr"
+	name = "Spess Station 13"
 
 
 var/global/byond_hub_open = TRUE

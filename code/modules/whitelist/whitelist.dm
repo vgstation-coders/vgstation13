@@ -153,7 +153,7 @@
 	else to_chat(usr,"Error fetching id, ckeys from player_whitelist: [querySelectAllRows.ErrorMsg()]")*/
 
 	//Browser starts here
-	var/dat = "<HR><span class='warning'><b>(VERIFY)</b> = Add to the whitelist</span><HR><table border=1 rules=all frame=void cellspacing=0 cellpadding=3 >"
+	var/dat = "<head><meta charset='UTF-8'></head><HR><span class='warning'><b>(VERIFY)</b> = Add to the whitelist</span><HR><table border=1 rules=all frame=void cellspacing=0 cellpadding=3 >"
 
 	var/i = 0
 	while(i < rowsCount)
