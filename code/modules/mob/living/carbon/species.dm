@@ -398,7 +398,8 @@ var/global/list/playable_species = list("Human")
 	heat_level_2 = 480 //Default 400
 	heat_level_3 = 1100 //Default 1000
 
-	flags = PLAYABLE | WHITELISTED
+	//flags = PLAYABLE | WHITELISTED
+	flags = WHITELISTED
 
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL
 
@@ -419,7 +420,9 @@ var/global/list/playable_species = list("Human")
 	icobase = 'icons/mob/human_races/r_skeleton.dmi'
 	deform = 'icons/mob/human_races/r_skeleton.dmi'  // TODO: Need deform.
 	known_languages = list(LANGUAGE_CLATTER)
+
 	flags = WHITELISTED | NO_BREATHE
+
 	anatomy_flags = NO_SKIN | NO_BLOOD
 	meat_type = /obj/item/stack/sheet/bone
 	chem_flags = NO_EAT | NO_INJECT
@@ -540,7 +543,8 @@ var/global/list/playable_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey/tajara
 
-	flags = PLAYABLE | WHITELISTED
+	//flags = PLAYABLE | WHITELISTED
+	flags =  WHITELISTED
 
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL | HAS_SWEAT_GLANDS
 
@@ -615,7 +619,9 @@ var/global/list/playable_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey/grey
 
-	flags = PLAYABLE | WHITELISTED
+	//flags = PLAYABLE | WHITELISTED
+	flags = WHITELISTED
+
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | ACID4WATER
 
 	spells = list(/spell/targeted/telepathy)
@@ -733,7 +739,8 @@ var/global/list/playable_species = list("Human")
 	known_languages = list(LANGUAGE_SKRELLIAN)
 	primitive = /mob/living/carbon/monkey/skrell
 
-	flags = PLAYABLE | WHITELISTED
+	//flags = PLAYABLE | WHITELISTED
+	flags = WHITELISTED
 
 	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_SWEAT_GLANDS
 
@@ -764,7 +771,8 @@ var/global/list/playable_species = list("Human")
 	breath_type = GAS_NITROGEN
 
 	default_mutations = list(M_BEAK, M_TALONS)
-	flags = PLAYABLE | WHITELISTED
+	//flags = PLAYABLE | WHITELISTED
+	flags = WHITELISTED
 
 	blood_color = VOX_BLOOD
 	flesh_color = "#808D11"
@@ -876,7 +884,9 @@ var/global/list/playable_species = list("Human")
 	heat_level_2 = T0C + 75
 	heat_level_3 = T0C + 100
 
-	flags = PLAYABLE | WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | IS_PLANT | RAD_ABSORB | IS_SLOW | NO_PAIN | HYPOTHERMIA_IMMUNE
+	//flags = PLAYABLE | WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | IS_PLANT | RAD_ABSORB | IS_SLOW | NO_PAIN | HYPOTHERMIA_IMMUNE
+	flags = WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | IS_PLANT | RAD_ABSORB | IS_SLOW | NO_PAIN | HYPOTHERMIA_IMMUNE
+
 	anatomy_flags = NO_BLOOD | HAS_SWEAT_GLANDS
 
 	blood_color = "#004400"
@@ -1241,7 +1251,9 @@ var/list/has_died_as_golem = list()
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/insectoid
 	primitive = /mob/living/carbon/monkey/roach
 
-	flags = PLAYABLE | WHITELISTED
+	//flags = PLAYABLE | WHITELISTED
+	flags = WHITELISTED
+
 	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD | RGBSKINTONE
 
 	burn_mod = 1.1
@@ -1299,7 +1311,8 @@ var/list/has_died_as_golem = list()
 	known_languages = list(LANGUAGE_VOX)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/mushroom_man
 
-	flags = PLAYABLE | WHITELISTED | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH
+	//flags = PLAYABLE | WHITELISTED | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH
+	flags = WHITELISTED | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH
 
 	anatomy_flags = NO_BALD
 
