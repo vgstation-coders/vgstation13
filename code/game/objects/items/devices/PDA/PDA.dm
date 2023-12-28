@@ -6,10 +6,10 @@
 
 //The advanced pea-green monochrome lcd of tomorrow.
 
-var/global/list/obj/item/device/flashlight/pda/PDAs = list()
+var/global/list/obj/item/device/pda/PDAs = list()
 var/global/msg_id = 0
 
-/obj/item/device/flashlight/pda
+/obj/item/device/pda
 	name = "\improper PDA"
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. Functionality determined by applications on ROM cartridge. Can download additional applications from PDA terminals."
 	icon = 'icons/obj/pda.dmi'
@@ -18,9 +18,6 @@ var/global/msg_id = 0
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	slot_flags = SLOT_ID | SLOT_BELT
-
-	light_range = 2
-	light_power = 1
 
 	//Main variables
 	var/owner = null
@@ -70,7 +67,7 @@ var/global/msg_id = 0
 	var/datum/pda_app/cart/scanner/scanning_app = null
 	var/datum/asset/simple/assets_to_send = null
 
-/obj/item/device/flashlight/pda/New()
+/obj/item/device/pda/New()
 	..()
 	for(var/app_type in starting_apps)
 		var/datum/pda_app/app = new app_type()
@@ -86,12 +83,12 @@ var/global/msg_id = 0
 	MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	DD = text2num(time2text(world.timeofday, "DD")) 	// get the day
 
-/obj/item/device/flashlight/pda/initialize()
+/obj/item/device/pda/initialize()
 	. = ..()
 	if (cartridge)
 		cartridge.initialize()
 
-/obj/item/device/flashlight/pda/update_icon()
+/obj/item/device/pda/update_icon()
 	underlays.Cut()
 	underlays = list()
 	if (istype(cartridge,/obj/item/weapon/cartridge/camera))
@@ -103,7 +100,7 @@ var/global/msg_id = 0
 		cam_under.pixel_y = 8
 		underlays += cam_under
 
-/obj/item/device/flashlight/pda/proc/can_use(mob/user)
+/obj/item/device/pda/proc/can_use(mob/user)
 	if(user && ismob(user))
 		if(user.incapacitated())
 			return 0
@@ -111,31 +108,35 @@ var/global/msg_id = 0
 			return 1
 	return 0
 
-/obj/item/device/flashlight/pda/GetAccess()
+/obj/item/device/pda/GetAccess()
 	if(id)
 		return id.GetAccess()
 	else
 		return ..()
 
-/obj/item/device/flashlight/pda/GetID()
+/obj/item/device/pda/GetID()
 	return id
 
-/obj/item/device/flashlight/pda/get_owner_name_from_ID()
+/obj/item/device/pda/get_owner_name_from_ID()
 	return owner
 
-/obj/item/device/flashlight/pda/MouseDropFrom(obj/over_object as obj, src_location, over_location)
+/obj/item/device/pda/MouseDropFrom(obj/over_object as obj, src_location, over_location)
 	var/mob/M = usr
 	if((!istype(over_object, /obj/abstract/screen)) && can_use(M))
 		return attack_self(M)
 	return ..()
 
 //NOTE: graphic resources are loaded on client login
-/obj/item/device/flashlight/pda/attack_self(mob/user)
+/obj/item/device/pda/attack_self(mob/user as mob)
 	user.set_machine(src)
 
 	var/datum/pda_app/station_map/map_app = locate(/datum/pda_app/station_map) in applications
 	if (map_app && map_app.holomap)
 		map_app.holomap.stopWatching()
+
+	. = ..()
+	if(.)
+		return
 
 	if(user.client)
 		var/datum/asset/simple/C = new/datum/asset/simple/pda()
@@ -214,7 +215,7 @@ var/global/msg_id = 0
 	user << browse(dat, "window=pda;size=400x444;border=1;can_resize=1;can_minimize=0")
 	onclose(user, "pda", src)
 
-/obj/item/device/flashlight/pda/Topic(href, href_list)
+/obj/item/device/pda/Topic(href, href_list)
 	if(..())
 		return
 	var/mob/living/U = usr
@@ -316,7 +317,7 @@ var/global/msg_id = 0
 			U << browse(null, "window=pda")
 
 /// Returns TRUE on success.
-/obj/item/device/flashlight/pda/proc/remove_id(mob/user)
+/obj/item/device/pda/proc/remove_id(mob/user)
 	if(issilicon(user))
 		return FALSE
 
@@ -335,27 +336,41 @@ var/global/msg_id = 0
 	id = null
 	return TRUE
 
-/obj/item/device/flashlight/pda/verb/verb_flashlight()
+/obj/item/device/pda/proc/toggle_flashlight(mob/user)
+	if(user.incapacitated())
+		to_chat(user, "<span class='notice'>You cannot do this while restrained.</span>")
+		return FALSE
+
+	if(!in_range(src, user))
+		to_chat(user, "<span class='notice'>You are too far away.</span>")
+		return FALSE
+
+	for(var/app in applications)
+		if(istype(app,/datum/pda_app/light))
+			var/datum/pda_app/light/flash = app
+			flash.on_select()
+
+/obj/item/device/pda/verb/verb_flashlight()
 	set category = "Object"
 	set name = "Toggle Flashlight"
 	set src in usr
 
 	toggle_flashlight(usr)
 
-/obj/item/device/flashlight/pda/verb/verb_remove_id()
+/obj/item/device/pda/verb/verb_remove_id()
 	set category = "Object"
 	set name = "Remove ID"
 	set src in usr
 
 	remove_id(usr)
 
-/obj/item/device/flashlight/pda/AltClick()
+/obj/item/device/pda/AltClick()
 	if(remove_id(usr))
 		return
 	return ..()
 
 /// Returns TRUE on success.
-/obj/item/device/flashlight/pda/proc/remove_pen(mob/user)
+/obj/item/device/pda/proc/remove_pen(mob/user)
 	if(issilicon(user))
 		return FALSE
 
@@ -377,32 +392,19 @@ var/global/msg_id = 0
 	return TRUE
 
 
-/obj/item/device/flashlight/pda/verb/verb_remove_pen()
+/obj/item/device/pda/verb/verb_remove_pen()
 	set category = "Object"
 	set name = "Remove pen"
 	set src in usr
 
 	remove_pen(usr)
 
-/obj/item/device/flashlight/pda/CtrlClick()
+/obj/item/device/pda/CtrlClick()
 	if(remove_pen(usr))
 		return
 	return ..()
 
-/obj/item/device/flashlight/pda/proc/toggle_flashlight(mob/user)
-
-	if(user.incapacitated())
-		to_chat(user, "<span class='notice'>You cannot do this while restrained.</span>")
-		return FALSE
-
-	if(!in_range(src, user))
-		to_chat(user, "<span class='notice'>You are too far away.</span>")
-		return FALSE
-
-	on = !on
-	update_brightness(user)
-
-/obj/item/device/flashlight/pda/proc/id_check(mob/user as mob, choice as num)//To check for IDs; 1 for in-pda use, 2 for out of pda use.
+/obj/item/device/pda/proc/id_check(mob/user as mob, choice as num)//To check for IDs; 1 for in-pda use, 2 for out of pda use.
 	if(choice == 1)
 		if (id)
 			remove_id(user)
@@ -424,7 +426,7 @@ var/global/msg_id = 0
 	return
 
 // access to status display signals
-/obj/item/device/flashlight/pda/attackby(obj/item/C as obj, mob/user as mob)
+/obj/item/device/pda/attackby(obj/item/C as obj, mob/user as mob)
 	. = ..()
 	if(.)
 		return
@@ -487,7 +489,7 @@ var/global/msg_id = 0
 			qdel(dosh)
 		updateDialog()
 
-/obj/item/device/flashlight/pda/can_quick_store(var/obj/item/I)
+/obj/item/device/pda/can_quick_store(var/obj/item/I)
 	if(istype(I,/obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/idcard = I
 		return !id && idcard.registered_name
@@ -497,10 +499,10 @@ var/global/msg_id = 0
 			(istype(I,/obj/item/weapon/pen) && !pen) ||\
 			(istype(I,/obj/item/weapon/spacecash) && id && id.virtual_wallet)
 
-/obj/item/device/flashlight/pda/quick_store(var/obj/item/I,mob/user)
+/obj/item/device/pda/quick_store(var/obj/item/I,mob/user)
 	return !(attackby(I,user))
 
-/obj/item/device/flashlight/pda/proc/add_to_virtual_wallet(var/amount, var/mob/user, var/atom/giver)
+/obj/item/device/pda/proc/add_to_virtual_wallet(var/amount, var/mob/user, var/atom/giver)
 	if(!id)
 		return 0
 	if(id.add_to_virtual_wallet(amount, user, giver))
@@ -511,11 +513,11 @@ var/global/msg_id = 0
 		return 1
 	return 0
 
-/obj/item/device/flashlight/pda/attack(mob/living/carbon/C, mob/living/user as mob)
+/obj/item/device/pda/attack(mob/living/carbon/C, mob/living/user as mob)
 	if(istype(C) && scanning_app)
 		scanning_app.attack(C,user)
 
-/obj/item/device/flashlight/pda/afterattack(atom/A, mob/user, proximity_flag)
+/obj/item/device/pda/afterattack(atom/A, mob/user, proximity_flag)
 	if(scanning_app)
 		scanning_app.afterattack(A,user,proximity_flag)
 
@@ -525,11 +527,11 @@ var/global/msg_id = 0
 			app.note = A:info
 			to_chat(user, "<span class='notice'>Paper scanned.</span>")//concept of scanning paper copyright brainoblivion 2009
 
-/obj/item/device/flashlight/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
+/obj/item/device/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
 	if(scanning_app)
 		return scanning_app.preattack(A,user)
 
-/obj/item/device/flashlight/pda/proc/explode(var/mob/user) //This needs tuning.
+/obj/item/device/pda/proc/explode(var/mob/user) //This needs tuning.
 	var/turf/T = get_turf(src.loc)
 
 	if (ismob(loc))
@@ -544,7 +546,7 @@ var/global/msg_id = 0
 	qdel(src)
 	return
 
-/obj/item/device/flashlight/pda/Destroy()
+/obj/item/device/pda/Destroy()
 	PDAs -= src
 
 	if (src.id)
@@ -565,7 +567,7 @@ var/global/msg_id = 0
 
 	..()
 
-/obj/item/device/flashlight/pda/Del()
+/obj/item/device/pda/Del()
 	var/loop_count = 0
 	while(null in PDAs)
 		PDAs.Remove(null)
@@ -575,12 +577,12 @@ var/global/msg_id = 0
 	PDAs -= src
 	..()
 
-/obj/item/device/flashlight/pda/dropped(var/mob/user)
+/obj/item/device/pda/dropped(var/mob/user)
 	var/datum/pda_app/station_map/map_app = locate(/datum/pda_app/station_map) in applications
 	if (map_app && map_app.holomap)
 		map_app.holomap.stopWatching()
 
-/obj/item/device/flashlight/pda/clown/Crossed(AM as mob|obj) //Clown PDA is slippery.
+/obj/item/device/pda/clown/Crossed(AM as mob|obj) //Clown PDA is slippery.
 	if(..())
 		return 1
 	if (iscarbon(AM))
@@ -591,7 +593,7 @@ var/global/msg_id = 0
 				if(HV && HV.charges < 5)
 					HV.charges++
 
-/obj/item/device/flashlight/pda/proc/available_pdas()
+/obj/item/device/pda/proc/available_pdas()
 	var/list/names = list()
 	var/list/plist = list()
 	var/list/namecounts = list()
@@ -601,7 +603,7 @@ var/global/msg_id = 0
 		to_chat(usr, "Turn on your receiver in order to send messages.")
 		return
 
-	for (var/obj/item/device/flashlight/pda/P in PDAs)
+	for (var/obj/item/device/pda/P in PDAs)
 		if (!P.owner)
 			continue
 		else if(P.hidden)
@@ -625,9 +627,6 @@ var/global/msg_id = 0
 	return plist
 
 
-/obj/item/device/flashlight/pda/get_on_icon_state()
-	return icon_state
-
 //Some spare PDAs in a box
 /obj/item/weapon/storage/box/PDAs
 	name = "spare PDAs"
@@ -637,10 +636,10 @@ var/global/msg_id = 0
 
 /obj/item/weapon/storage/box/PDAs/New()
 	..()
-	new /obj/item/device/flashlight/pda(src)
-	new /obj/item/device/flashlight/pda(src)
-	new /obj/item/device/flashlight/pda(src)
-	new /obj/item/device/flashlight/pda(src)
+	new /obj/item/device/pda(src)
+	new /obj/item/device/pda(src)
+	new /obj/item/device/pda(src)
+	new /obj/item/device/pda(src)
 	new /obj/item/weapon/cartridge/head(src)
 
 	var/newcart = pick(	/obj/item/weapon/cartridge/engineering,
@@ -651,14 +650,14 @@ var/global/msg_id = 0
 	new newcart(src)
 
 // Pass along the pulse to atoms in contents, largely added so pAIs are vulnerable to EMP
-/obj/item/device/flashlight/pda/emp_act(severity)
+/obj/item/device/pda/emp_act(severity)
 	for(var/atom/A in src)
 		A.emp_act(severity)
 
 /proc/get_viewable_pdas()
 	. = list()
 	// Returns a list of PDAs which can be viewed from another PDA/message monitor.
-	for(var/obj/item/device/flashlight/pda/P in PDAs)
+	for(var/obj/item/device/pda/P in PDAs)
 		var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in P.applications
 		if(!P.owner || !app || app.toff || P.hidden)
 			continue

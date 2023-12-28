@@ -46,7 +46,7 @@
 	icon_state = "lantern"
 	item_state = "lantern"
 	desc = "A mining lantern."
-	light_range = 5			// luminosity when on
+	brightness_on = 6			// luminosity when on
 	light_power = 2
 	light_color = LIGHT_COLOR_TUNGSTEN
 

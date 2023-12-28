@@ -23,6 +23,7 @@
 /obj/item/clothing/glasses/scanner/attack_self()
 	toggle()
 
+
 /obj/item/clothing/glasses/scanner/equipped(var/mob/living/carbon/M, glasses)
 	if(istype(M, /mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/O = M

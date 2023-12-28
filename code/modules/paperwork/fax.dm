@@ -299,7 +299,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 
 				faxed = P //doesn't return here in case there's multiple faxes in the department
 	if(centcomm)
-		for(var/obj/item/device/flashlight/pda/pingme in PDAs)
+		for(var/obj/item/device/pda/pingme in PDAs)
 			if(pingme.cartridge && pingme.cartridge.fax_pings)
 				playsound(pingme, "sound/effects/kirakrik.ogg", 50, 1)
 				pingme.visible_message("[bicon(pingme)] *Fax Received*")

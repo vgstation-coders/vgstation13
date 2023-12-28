@@ -3,7 +3,6 @@
 	plane = TURF_PLANE
 	layer = TURF_LAYER
 	luminosity = 0
-	lighting_flags = FOLLOW_PIXEL_OFFSET | NO_LUMINOSITY
 
 	//for floors, use is_plating(), is_metal_floor() and is_light_floor()
 	var/intact = 1
@@ -74,7 +73,6 @@
 
 	var/mute_time = 0
 
-	var/lit = 0
 	var/datum/paint_overlay/paint_overlay = null
 
 /turf/examine(mob/user)
@@ -93,6 +91,8 @@
 		A.area_turfs += src
 	for(var/atom/movable/AM in src)
 		src.Entered(AM)
+	if(opacity)
+		has_opaque_atom = TRUE
 
 /turf/ex_act(severity)
 	return 0
@@ -245,6 +245,10 @@
 			for(var/atom/movable/AA in contents_brought)
 				INVOKE_EVENT(AA, /event/post_z_transition, "user" = AA, "from_z" = AA.z, "to_z" = move_to_z)
 
+	if(A && A.opacity)
+		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
+		reconsider_lights()
+
 /turf/proc/is_plating()
 	return 0
 /turf/proc/can_place_cables(var/override_space = FALSE)
@@ -310,6 +314,10 @@
 	var/datum/gas_mixture/env
 
 	var/old_opacity = opacity
+	var/old_dynamic_lighting = dynamic_lighting
+	var/old_affecting_lights = affecting_lights
+	var/old_lighting_overlay = lighting_overlay
+	var/old_corners = corners
 	var/old_density = density
 	var/old_holomap_draw_override = holomap_draw_override
 	var/old_registered_events = registered_events
@@ -325,10 +333,6 @@
 		connections[T].erase()
 
 	connections = null
-
-	for (var/atom/movable/light/L in light_sources)
-		L.cast_light()
-		light_sources -= L
 
 	if(N == /turf/space)
 		for(var/obj/effect/decal/cleanable/C in src)
@@ -374,19 +378,9 @@
 		if(SS_READY(SSair))
 			SSair.mark_for_update(src)
 
-		if(istype(W, /turf/space) && W.loc.has_white_turf_lighting == 0)
-			var/image/I = image(icon = 'icons/mob/screen1.dmi', icon_state = "white")
-			I.plane = LIGHTING_PLANE
-			I.blend_mode = BLEND_ADD
-			W.overlays += I
-
 		W.levelupdate()
 		W.post_change() //What to do after changing the turf. Handles stuff like zshadow updates.
 		. = W
-		if (SS_READY(SSlighting))
-			if(old_opacity != opacity)
-				for(var/atom/movable/light/L in range(5, src)) //view(world.view, dview_mob))
-					lighting_update_lights |= L
 
 	else
 		//if(zone)
@@ -398,12 +392,6 @@
 		if(world.has_round_started())
 			W.initialize()
 
-		if(istype(W, /turf/space) && W.loc.has_white_turf_lighting == 0)
-			var/image/I = image(icon = 'icons/mob/screen1.dmi', icon_state = "white")
-			I.plane = LIGHTING_PLANE
-			I.blend_mode = BLEND_ADD
-			W.overlays += I
-
 		if(tell_universe)
 			universe.OnTurfChange(W)
 
@@ -413,6 +401,19 @@
 		W.levelupdate()
 
 		. = W
+
+	recalc_atom_opacity()
+	if (SSlighting && SSlighting.initialized)
+		lighting_overlay = old_lighting_overlay
+		affecting_lights = old_affecting_lights
+		corners = old_corners
+		if((old_opacity != opacity) || (dynamic_lighting != old_dynamic_lighting) || force_lighting_update)
+			reconsider_lights()
+		if(dynamic_lighting != old_dynamic_lighting)
+			if(dynamic_lighting)
+				lighting_build_overlay()
+			else
+				lighting_clear_overlay()
 
 	if (!ticker)
 		holomap_draw_override = old_holomap_draw_override//we don't want roid/snowmap cave tunnels appearing on holomaps

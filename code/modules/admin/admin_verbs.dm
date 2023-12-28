@@ -210,7 +210,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/cmd_mass_modify_object_variables,
 	/client/proc/emergency_shuttle_panel,
 	/client/proc/bee_count,
-	/client/proc/see_lightmap,
 	/client/proc/set_procizine_call,
 	/client/proc/set_procizine_properties,
 #if UNIT_TESTS_ENABLED
@@ -1387,23 +1386,6 @@ var/list/admin_verbs_mod = list(
 		holder.ViewAllRods()
 	feedback_add_details("admin_verb","V-ROD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
-
-/client/proc/see_lightmap()
-	set name = "See lightmap"
-	set category = "Ghost"
-
-	if (!usr.check_rights(R_DEBUG))
-		to_chat(usr, "<span class='notice'>Only admins can use this command.</span>")
-		return
-
-	if (holder.see_lightmap)
-		usr.dark_plane.plane = LIGHTING_PLANE
-		usr.dark_plane.alphas["light_map"] = 0
-	else
-		usr.dark_plane.plane = initial(usr.dark_plane.plane)
-		usr.dark_plane.alphas -= "light_map"
-
-	holder.see_lightmap = !holder.see_lightmap
 
 /client/proc/toggle_admin_examine()
 	set name = "Toggle Admin-only Descriptions"

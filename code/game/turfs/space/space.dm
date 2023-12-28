@@ -10,7 +10,7 @@
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
 	heat_capacity = 700000
 	intact = 0 //No seriously, that's not a joke. Allows cable to be laid properLY on catwalks
-	has_white_turf_lighting = 0
+	dynamic_lighting = 0
 	luminosity = 1
 	can_border_transition = 1
 	var/static/list/parallax_appearances
@@ -180,6 +180,9 @@
 
 /turf/space/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	return ..(N, tell_universe, 1, allow)
+
+/turf/space/lighting_build_overlay()
+	return
 
 /turf/space/void
 	name = "\proper the void"

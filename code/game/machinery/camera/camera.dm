@@ -152,7 +152,7 @@ var/list/camera_names=list()
 		network = list()
 		cameranet.removeCamera(src)
 		stat |= EMPED
-		kill_light()
+		set_light(0)
 		triggerCameraAlarm()
 		update_icon()
 		spawn(900)
@@ -279,7 +279,7 @@ var/list/camera_messages = list()
 			return
 
 	// OTHER
-	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/flashlight/pda)) && isliving(user))
+	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
 		user.delayNextAttack(5)
 		var/mob/living/U = user
 		to_chat(U, "You hold [W] up to the camera ...")
@@ -289,7 +289,7 @@ var/list/camera_messages = list()
 			var/obj/item/weapon/paper/X = W
 			info = X.info
 		else
-			var/obj/item/device/flashlight/pda/P = W
+			var/obj/item/device/pda/P = W
 			var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in P.applications
 			if(app)
 				info = app.notehtml

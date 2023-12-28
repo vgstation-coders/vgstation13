@@ -265,7 +265,7 @@
 			to_chat(src, "<span class='warning'>Slots for priority roles are already opened.</span>")
 			return
 		to_chat(src, "<span class='bnotice'>You have requested for heads of staff to open priority roles. Please stand by.</span>")
-		for(var/obj/item/device/flashlight/pda/pingme in PDAs)
+		for(var/obj/item/device/pda/pingme in PDAs)
 			if(pingme.cartridge && pingme.cartridge.fax_pings && (locate(/datum/pda_app/cart/status_display) in pingme.applications))
 				//This may seem like a strange check, but it's excluding the IAA for only HOP/Cap
 				playsound(pingme, "sound/effects/kirakrik.ogg", 50, 1)
@@ -515,7 +515,7 @@
 			data_core.manifest_inject(character)
 			if(character.mind.assigned_role == "Trader")
 				//If we're a trader, instead send a message to PDAs with the trader cartridge
-				for (var/obj/item/device/flashlight/pda/P in PDAs)
+				for (var/obj/item/device/pda/P in PDAs)
 					if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
 						var/mob/living/L = get_holder_of_type(P,/mob/living)
 						if(L)

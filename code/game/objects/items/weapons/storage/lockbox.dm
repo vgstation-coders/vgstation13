@@ -43,7 +43,7 @@
 		var/obj/O = H.get_item_by_slot(slot_wear_id)
 		var/obj/item/weapon/card/id/I = null
 		if (isPDA(O))
-			var/obj/item/device/flashlight/pda/P = O
+			var/obj/item/device/pda/P = O
 			I = P.id
 		if (isID(O))
 			I = O
@@ -73,7 +73,7 @@
 			return
 		return toggle(user, I.registered_name)
 	if (isPDA(W))
-		var/obj/item/device/flashlight/pda/P = W
+		var/obj/item/device/pda/P = W
 		var/obj/item/weapon/card/id/I = P.id
 		if (!I)
 			return

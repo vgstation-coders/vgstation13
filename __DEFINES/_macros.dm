@@ -188,7 +188,7 @@
 
 #define iscamera(A) istype(A, /obj/machinery/camera)
 
-#define islightingoverlay(A) (istype(A, /atom/movable/light))
+#define islightingoverlay(A) (istype(A, /atom/movable/lighting_overlay))
 
 #define ischair(A) (istype(A, /obj/structure/bed/chair))
 
@@ -232,15 +232,13 @@
 
 #define isRoboID(A) (istype(A, /obj/item/weapon/card/robot))
 
-#define isPDA(A) (istype(A, /obj/item/device/flashlight/pda))
+#define isPDA(A) (istype(A, /obj/item/device/pda))
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/floor/shuttle) || istype(A, /turf/simulated/floor/shuttle/brig))
 
 #define iswall(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall))
 
 #define isshuttleturf(A) (istype(A, /turf/simulated/wall/shuttle) || istype(A, /turf/simulated/floor/shuttle))
-
-#define iswallturf(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall) || istype(A, /turf/simulated/shuttle/wall))
 
 #define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & SPECIES_NO_MOUTH))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 
@@ -341,9 +339,6 @@
 #define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))
 
 #define iscluwnebanned(H) (jobban_isbanned(H, "Cluwne"))
-
-// This might look silly. But it saves you up to 2 procs calls and a contents search. When you do thousands of it, it adds up.
-#define CHECK_OCCLUSION(T) ((T?.blocks_light > 0) || CheckOcclusion(T))
 
 //Macro for AREAS!
 

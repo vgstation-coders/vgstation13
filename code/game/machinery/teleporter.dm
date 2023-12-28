@@ -278,7 +278,7 @@
 /obj/machinery/teleport/hub/update_icon()
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE) || !engaged)
 		icon_state = "tele0"
-		kill_light()
+		set_light(0)
 	else
 		icon_state = "tele1"
 		set_light(3, l_color = "#FFAA00")

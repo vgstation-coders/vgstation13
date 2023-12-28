@@ -746,7 +746,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				log_game("[key_name(usr)] posted the message [newMsg.body] as [newMsg.author].")
 				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 					NEWSCASTER.newsAlert(channel_name, newMsg.headline)
-				for(var/obj/item/device/flashlight/pda/PDA in PDAs)
+				for(var/obj/item/device/pda/PDA in PDAs)
 					var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
 					if(reader)
 						reader.newsAlert(channel_name,newMsg.headline)
@@ -857,7 +857,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 							NEWSCASTER.newsAlert()
 							NEWSCASTER.update_icon()
-						for(var/obj/item/device/flashlight/pda/PDA in PDAs)
+						for(var/obj/item/device/pda/PDA in PDAs)
 							var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
 							if(reader)
 								reader.newsAlert()
@@ -1328,8 +1328,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	if(istype(user,/mob/living/carbon/human))                       //User is a human
 		var/mob/living/carbon/human/human_user = user
 		if(human_user.wear_id)                                      //Newscaster scans you
-			if(istype(human_user.wear_id, /obj/item/device/flashlight/pda) )	//autorecognition, woo!
-				var/obj/item/device/flashlight/pda/P = human_user.wear_id
+			if(istype(human_user.wear_id, /obj/item/device/pda) )	//autorecognition, woo!
+				var/obj/item/device/pda/P = human_user.wear_id
 				if(P.id)
 					scanned_user = "[P.id.registered_name] ([P.id.assignment])"
 				else

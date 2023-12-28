@@ -66,7 +66,7 @@
 		/obj/item/weapon/autocuffer,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/ert
+	pda_type = /obj/item/device/pda/ert
 	pda_slot = slot_r_store
 	id_type = /obj/item/weapon/card/id/judge
 

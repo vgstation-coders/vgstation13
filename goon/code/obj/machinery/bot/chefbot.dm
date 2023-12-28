@@ -70,8 +70,8 @@
 						break
 				if(M.wear_id)
 					var/obj/item/weapon/card/id/id = M.wear_id
-					if(istype(M.wear_id, /obj/item/device/flashlight/pda))
-						var/obj/item/device/flashlight/pda/pda = M.wear_id
+					if(istype(M.wear_id, /obj/item/device/pda))
+						var/obj/item/device/pda/pda = M.wear_id
 						id = pda.id
 					if(findtext(id.assignment, "chef") || findtext(id.assignment, "cook"))
 						thechef = M

@@ -3,7 +3,7 @@
 	desc = "An electronic radio system of nanotrasen origin."
 	icon = 'icons/obj/module.dmi'
 	icon_state = "power_mod"
-	var/obj/item/device/flashlight/pda/hostpda = null
+	var/obj/item/device/pda/hostpda = null
 
 	var/on = 0 //Are we currently active?
 	var/menu_message = ""
@@ -86,8 +86,8 @@
 		signal.data["command"] = href_list["command"]
 		radio_connection.post_signal(src, signal)
 
-		if (istype(loc.loc, /obj/item/device/flashlight/pda))
-			var/obj/item/device/flashlight/pda/P = loc.loc
+		if (istype(loc.loc, /obj/item/device/pda))
+			var/obj/item/device/pda/P = loc.loc
 			P.attack_self(usr) // refresh
 
 /obj/item/radio/integrated/signal/bot/beepsky

@@ -112,8 +112,6 @@
 	max_luminosity = 5
 	max_power=3000
 
-	light_type = LIGHT_SOFT_FLICKER
-	lighting_flags = IS_LIGHT_SOURCE
 
 /obj/machinery/power/supermatter/New()
 	. = ..()

@@ -123,7 +123,7 @@ var/list/navbeacons = list()
 	if(..())
 		return
 
-	else if (istype(I, /obj/item/weapon/card/id)||istype(I, /obj/item/device/flashlight/pda))
+	else if (istype(I, /obj/item/weapon/card/id)||istype(I, /obj/item/device/pda))
 		if(panel_open)
 			if (src.allowed(user))
 				src.locked = !src.locked

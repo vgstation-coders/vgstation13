@@ -51,7 +51,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/heads/rd
+	pda_type = /obj/item/device/pda/heads/rd
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/rd
 
@@ -112,7 +112,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/toxins
+	pda_type = /obj/item/device/pda/toxins
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/research
 
@@ -188,7 +188,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/toxins
+	pda_type = /obj/item/device/pda/toxins
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/research
 
@@ -277,7 +277,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/toxins
+	pda_type = /obj/item/device/pda/toxins
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/research
 
@@ -341,7 +341,7 @@
 		),
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/roboticist
+	pda_type = /obj/item/device/pda/roboticist
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/research
 

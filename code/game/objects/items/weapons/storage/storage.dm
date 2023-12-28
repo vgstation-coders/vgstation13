@@ -372,8 +372,7 @@
 		usr.u_equip(W,0)
 		W.dropped(usr) // we're skipping u_equip's forcemove to turf but we still need the item to unset itself
 		usr.update_icons()
-	if (W.light_obj)
-		W.kill_light()
+
 	W.forceMove(src)
 	W.on_enter_storage(src)
 	if(usr)
@@ -384,7 +383,7 @@
 		if(!prevent_warning && !istype(W, /obj/item/weapon/gun/energy/crossbow))
 			for(var/mob/M in viewers(usr, null))
 				if (M == usr)
-					to_chat(usr, "<span class='notice'> [W] into \the [src].</span>")
+					to_chat(usr, "<span class='notice'>You put \the [W] into \the [src].</span>")
 				else if (M in range(1) && !stealthy(usr)) //If someone is standing close enough, they can tell what it is...
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
 				else if (W.w_class >= W_CLASS_MEDIUM && !stealthy(usr)) //Otherwise they can only see large or normal items from a distance...
@@ -413,8 +412,6 @@
 		if(!A.can_be_inserted(W, 1))
 			return 0
 
-	var/light_update = 1
-
 	if(istype(src, /obj/item/weapon/storage/fancy))
 		var/obj/item/weapon/storage/fancy/F = src
 		F.update_icon(1)
@@ -432,19 +429,10 @@
 			if(istype(new_location, /obj/item/weapon/storage))
 				var/obj/item/weapon/storage/A = new_location
 				A.handle_item_insertion(W, 1)
-				light_update = 0
 			else
 				W.forceMove(new_location)
 	else
 		W.forceMove(get_turf(src))
-
-	if (light_update)
-		if (istype(W, /obj/item/device/flashlight))
-			var/obj/item/device/flashlight/F = W
-			if (F.on)
-				F.set_light()
-		if (W.lighting_flags & IS_LIGHT_SOURCE)
-			W.set_light()
 
 	if(W.maptext)
 		W.maptext = ""

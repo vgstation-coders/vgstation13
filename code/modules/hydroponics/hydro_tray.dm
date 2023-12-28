@@ -118,7 +118,7 @@
 	improper_light = 0
 	improper_kpa = 0
 	improper_heat = 0
-	kill_light()
+	set_light(0)
 	update_icon()
 
 //Harvests the product of a plant.
@@ -514,7 +514,7 @@
 					return
 
 			var/light_available = 5
-			if(T.has_white_turf_lighting)
+			if(T.dynamic_lighting)
 				light_available = T.get_lumcount() * 10
 
 			to_chat(user, "The tray's sensor suite is reporting a light level of [round(light_available, 0.1)] lumens and a temperature of [environment.temperature]K.")

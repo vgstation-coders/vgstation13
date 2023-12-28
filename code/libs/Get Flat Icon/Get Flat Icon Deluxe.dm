@@ -220,7 +220,7 @@ cons:
 	var/list/turf_image_datas = list()
 	turf_image_datas = get_content_image_datas(T)
 	for(var/atom/A in T.contents)
-		if (istype(A, /atom/movable/light))
+		if (istype(A, /atom/movable/lighting_overlay))
 			continue
 		if (camera)
 			A.photography_act(camera)
