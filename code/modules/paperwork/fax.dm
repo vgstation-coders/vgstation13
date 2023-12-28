@@ -55,6 +55,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 
 /obj/machinery/faxmachine/verb/remove_id()
 	set name = "Remove ID from the fax machine"
+	set category = "Object"
 	set src in view(1)
 	if(scan && ishuman(usr))
 		usr.put_in_hands(scan)
@@ -62,6 +63,7 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 
 /obj/machinery/faxmachine/verb/remove_paper()
 	set name = "Remove fax material from the fax machine"
+	set category = "Object"
 	set src in view(1)
 	if(tofax && ishuman(usr))
 		usr.put_in_hands(tofax)
