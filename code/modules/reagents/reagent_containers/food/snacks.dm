@@ -4391,6 +4391,7 @@
 		return
 	else
 		// Stupid code because byondcode sucks
+		particles = null
 		var/doimgtag = 0
 		if( boxes.len > 0 )
 			var/obj/item/pizzabox/topbox = boxes[boxes.len]
