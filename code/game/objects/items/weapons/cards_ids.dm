@@ -203,6 +203,7 @@ var/list/global/id_cards = list()
 	var/registered_name = "Unknown" // The name registered_name on the card
 	slot_flags = SLOT_ID
 
+	var/show_biometrics = TRUE //Necessary to display the below stats
 	var/blood_type = "\[UNSET\]"
 	var/dna_hash = "\[UNSET\]"
 	var/fingerprint_hash = "\[UNSET\]"
@@ -236,12 +237,13 @@ var/list/global/id_cards = list()
 			user.show_message(text("The current assignment on the card is [assignment]."),1)
 		else
 			user.show_message(text("No assignment has been set. Use an identification computer to edit."),1)
-		if (dna_hash == "\[UNSET\]")
-			user.show_message(text("No biometric data referenced. Use a body scanner at Medbay to imprint."),1)
-		else
-			user.show_message("Blood Type: [blood_type].",1)
-			user.show_message("DNA: [dna_hash].",1)
-			user.show_message("Fingerprint: [fingerprint_hash].",1)
+		if(show_biometrics)
+			if (dna_hash == "\[UNSET\]")
+				user.show_message(text("No biometric data referenced. Use a body scanner at Medbay to imprint."),1)
+			else
+				user.show_message("Blood Type: [blood_type].",1)
+				user.show_message("DNA: [dna_hash].",1)
+				user.show_message("Fingerprint: [fingerprint_hash].",1)
 		if(dchip && dchip.stamped.len)
 			to_chat(user,"<span class='bad'>It has a demotion modchip with the following stamps: [english_list(uniquenamelist(dchip.stamped))].</span>")
 

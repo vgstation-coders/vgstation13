@@ -1238,12 +1238,16 @@ var/global/blood_virus_spreading_disabled = 0
 		alert("Only observers can use this functionality")
 		return
 
-	if(adminmob.conversionHUD)
-		adminmob.conversionHUD = 0
-		to_chat(src, "<span class='notice'><B>conversionHUD Disabled</B></span>")
+	var/datum/visioneffect/cult_conversion/detected_hud = null
+	for(var/datum/visioneffect/cult_conversion/H in adminmob.huds)
+		detected_hud = H
+		break
+	if(detected_hud)
+		adminmob.remove_hud(detected_hud)
+		to_chat(src, "<span class='notice'><B>Conversion HUD disabled.</B></span>")
 	else
-		adminmob.conversionHUD = 1
-		to_chat(src, "<span class='notice'><B>conversionHUD Enabled</B></span>")
+		adminmob.apply_hud(new /datum/visioneffect/cult_conversion)
+		to_chat(src, "<span class='notice'><B>Conversion HUD enabled.</B></span>")
 
 /client/proc/spawn_datum(var/object as text)
 	set category = "Debug"

@@ -6,7 +6,7 @@
 	if(!SSdbcore.Connect())
 		src << "<span class='danger'>Failed to establish database connection.</span>"
 		return
-	var/polltype = input("Choose poll type.","Poll Type") in list("Single Option","Text Reply","Rating","Multiple Choice")
+	var/polltype = input("Choose poll type.","Poll Type") in list("Single Option","Text Reply","Rating","Select All That Apply")
 	var/choice_amount = 0
 	switch(polltype)
 		if("Single Option")

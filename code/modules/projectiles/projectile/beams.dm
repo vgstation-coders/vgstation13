@@ -1241,3 +1241,14 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	smoke.set_up(3, 0, T)
 	smoke.start()
 	return 1
+
+/obj/item/projectile/beam/armawhip
+	name = "bullwhip"
+	icon = 'icons/obj/projectiles.dmi'
+	icon_state = "whip"
+	fire_sound = 'sound/weapons/whip_crack.ogg'
+	travel_range = 5
+	damage = 10
+	damage_type = BRUTE
+	pass_flags = PASSTABLE
+	eyeblur = 0

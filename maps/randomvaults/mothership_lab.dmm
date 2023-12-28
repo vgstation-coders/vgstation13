@@ -569,8 +569,7 @@
 /area/vault/mothership_lab/entrance)
 "jH" = (
 /obj/structure/rack,
-/obj/item/weapon/pickaxe/shovel,
-/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/gun/energy/smalldisintegrator,
 /turf/unsimulated/floor/airless{
 	dir = 10;
 	icon_state = "asteroidwarning"
@@ -760,6 +759,19 @@
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
+"mr" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/closet/secure_closet/guncabinet{
+	anchored = 1;
+	name = "raider gun cabinet";
+	req_access = null
+	},
+/obj/item/ammo_storage/magazine/m380auto,
+/obj/item/ammo_storage/magazine/m380auto,
+/obj/item/weapon/gun/projectile/glock,
+/obj/item/weapon/gun/projectile/glock,
+/turf/unsimulated/floor/lab_asteroid,
+/area/vault/mothership_lab/raidtunnel_upper)
 "mu" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid/air,
@@ -769,6 +781,8 @@
 /area/vault/mothership_lab/asteroid)
 "my" = (
 /obj/structure/rack,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/pickaxe/shovel,
 /obj/item/weapon/pickaxe/drill,
 /obj/item/weapon/pickaxe/drill,
 /obj/item/weapon/pickaxe/drill,
@@ -1798,7 +1812,6 @@
 /obj/item/clothing/shoes/jackboots/mothership,
 /obj/item/clothing/under/grey/grey_scout,
 /obj/structure/closet/crate/ayy,
-/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "zX" = (
@@ -1943,7 +1956,9 @@
 /obj/structure/table,
 /obj/item/weapon/paper,
 /obj/item/weapon/pen/multi,
-/obj/item/weapon/gun/energy/smalldisintegrator,
+/obj/machinery/recharger{
+	pixel_x = 30
+	},
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/entrance)
 "BX" = (
@@ -3101,9 +3116,7 @@
 	},
 /obj/item/clothing/suit/armor/mothership/explorer,
 /obj/item/clothing/head/helmet/mothership_explorer,
-/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical,
-/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical,
-/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical,
+/obj/item/weapon/card/id/mothership_soldier,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "Ww" = (
@@ -5132,7 +5145,7 @@ GL
 GL
 MD
 Qz
-bq
+mr
 cn
 MQ
 Qz
@@ -5274,7 +5287,7 @@ Au
 Qz
 Qz
 Qz
-MQ
+nd
 Qz
 MD
 zr

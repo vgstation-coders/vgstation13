@@ -298,7 +298,7 @@
 	corpseshoes = list(/obj/item/clothing/shoes/magboots, /obj/item/clothing/shoes/magboots/atmos, /obj/item/clothing/shoes/magboots/captain, /obj/item/clothing/shoes/jackboots/knifeholster, /obj/item/clothing/shoes/galoshes)
 	corpsegloves = list(/obj/item/clothing/gloves/yellow, /obj/item/clothing/gloves/yellow, /obj/item/clothing/gloves/yellow, /obj/item/clothing/gloves/yellow, /obj/item/clothing/gloves/black, /obj/item/clothing/gloves/captain)
 	corpseradio = list(/obj/item/device/radio/headset/headset_sec, /obj/item/device/radio/headset/heads/captain, /obj/item/device/radio/headset/heads/hos, /obj/item/device/radio/headset/heads/hop)
-	corpseglasses = list(/obj/item/clothing/glasses/hud/health, /obj/item/clothing/glasses/sunglasses, /obj/item/clothing/glasses/sunglasses/sechud, /obj/item/clothing/glasses/welding)
+	corpseglasses = list(/obj/item/clothing/glasses/hud/health, /obj/item/clothing/glasses/sunglasses, /obj/item/clothing/glasses/hud/security/sunglasses, /obj/item/clothing/glasses/welding)
 	corpsemask = list(/obj/item/clothing/mask/cigarette/cigar, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas, /obj/item/clothing/mask/gas/swat, /obj/item/clothing/mask/balaclava)
 	corpsehelmet = list(/obj/item/clothing/head/helmet/space/ancient, /obj/item/clothing/head/cap, /obj/item/clothing/head/helmet/tactical, /obj/item/clothing/head/HoS/dermal, /obj/item/clothing/head/helmet/siren, /obj/item/clothing/head/collectable/petehat, /obj/item/clothing/head/hardhat/red, /obj/item/clothing/head/welding, /obj/item/clothing/head/collectable/welding)
 	corpsebelt = list(/obj/item/weapon/gun/energy/laser/retro/ancient, /obj/item/weapon/storage/belt/utility/full, /obj/item/weapon/storage/belt/utility/chief/full, /obj/item/weapon/storage/belt/slim, /obj/item/weapon/storage/belt/security, /obj/item/weapon/gun/energy/gun, /obj/item/weapon/sword, /obj/item/weapon/pickaxe, /obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton/loaded, /obj/item/weapon/melee/telebaton)
@@ -714,7 +714,7 @@
 	corpsesuit = /obj/item/clothing/suit/armor/vest/security
 	corpseback = /obj/item/weapon/storage/backpack/security
 	corpseradio = /obj/item/device/radio/headset/headset_sec
-	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+	corpseglasses = /obj/item/clothing/glasses/hud/security/sunglasses
 	corpsebelt = /obj/item/weapon/storage/belt/security
 	corpsegloves = /obj/item/clothing/gloves/black
 	corpseshoes = /obj/item/clothing/shoes/jackboots
@@ -751,7 +751,7 @@
 	corpsesuit = /obj/item/clothing/suit/armor/hos/jensen
 	corpseback = /obj/item/weapon/storage/backpack/security
 	corpseradio = /obj/item/device/radio/headset/heads/hos
-	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+	corpseglasses = /obj/item/clothing/glasses/hud/security/sunglasses
 	corpsebelt = /obj/item/weapon/gun/energy/gun
 	corpsegloves = /obj/item/clothing/gloves/black
 	corpseshoes = /obj/item/clothing/shoes/jackboots/knifeholster
@@ -819,7 +819,7 @@
 	corpsehelmet = /obj/item/clothing/head/beret/sec
 	corpseback = /obj/item/weapon/storage/backpack/security
 	corpseradio = /obj/item/device/radio/headset/headset_sec
-	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+	corpseglasses = /obj/item/clothing/glasses/hud/security/sunglasses
 	corpsebelt = /obj/item/weapon/storage/belt/security
 	corpsegloves = /obj/item/clothing/gloves/black
 	corpseshoes = /obj/item/clothing/shoes/jackboots
@@ -950,7 +950,7 @@
 	corpsehelmet = /obj/item/clothing/head/naziofficer
 	corpsesuit = /obj/item/clothing/suit/officercoat
 	corpsegloves = /obj/item/clothing/gloves/black
-	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+	corpseglasses = /obj/item/clothing/glasses/hud/security/sunglasses
 
 /obj/effect/landmark/corpse/nazi/spacetrooper
 	name = "Nazi Trooper"
@@ -962,7 +962,7 @@
 	name = "Emergency Response Organizer"
 	corpseuniform = /obj/item/clothing/under/rank/centcom/captain
 	corpsesuit = /obj/item/clothing/suit/armor/swat/officer
-	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+	corpseglasses = /obj/item/clothing/glasses/hud/security/sunglasses
 	corpsehelmet = /obj/item/clothing/head/beret/centcom/captain
 	corpseshoes = /obj/item/clothing/shoes/centcom
 	corpsebelt = /obj/item/weapon/storage/belt/security
@@ -970,7 +970,7 @@
 /obj/effect/landmark/corpse/centcom
 	name = "Central Commander Green"
 	corpseuniform = /obj/item/clothing/under/rank/centcom_commander
-	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+	corpseglasses = /obj/item/clothing/glasses/hud/security/sunglasses
 	corpsemask = /obj/item/clothing/mask/cigarette/cigar/cohiba
 	corpsehelmet = /obj/item/clothing/head/centhat
 	corpsegloves = /obj/item/clothing/gloves/combat
@@ -982,7 +982,7 @@
 	name = "Major Creed"
 	corpseuniform = /obj/item/clothing/under/darkred
 	corpsesuit = /obj/item/clothing/suit/armor/hos/jensen
-	corpseglasses = /obj/item/clothing/glasses/thermal/eyepatch
+	corpseglasses = /obj/item/clothing/glasses/hud/thermal/eyepatch
 	corpsemask = /obj/item/clothing/mask/cigarette/cigar/cohiba
 	corpsehelmet = /obj/item/clothing/head/HoS/dermal
 	corpsegloves = /obj/item/clothing/gloves/combat
@@ -994,7 +994,7 @@
 	name = "Batman"
 	corpseuniform = /obj/item/clothing/under/batmansuit
 	corpsesuit = /obj/item/clothing/suit/armor/bulletproof
-	corpseglasses = /obj/item/clothing/glasses/thermal/jensen
+	corpseglasses = /obj/item/clothing/glasses/hud/thermal/jensen
 	corpsemask = /obj/item/clothing/mask/gas/swat
 	corpsehelmet = /obj/item/clothing/head/batman
 	corpsegloves = /obj/item/clothing/gloves/batmangloves
@@ -1005,7 +1005,7 @@
 	name = "Doomguy"
 	corpseuniform = /obj/item/clothing/under/doomguy
 	corpsesuit = /obj/item/clothing/suit/armor/doomguy
-	corpseglasses = /obj/item/clothing/glasses/thermal/jensen
+	corpseglasses = /obj/item/clothing/glasses/hud/thermal/jensen
 	corpsehelmet = /obj/item/clothing/head/helmet/doomguy
 	corpsegloves = /obj/item/clothing/gloves/doomguy
 	corpseshoes = /obj/item/clothing/shoes/combat
@@ -1142,7 +1142,7 @@
 
 /obj/effect/landmark/corpse/grey/researcher
 	name = "Grey Researcher"
-	corpseglasses = /obj/item/clothing/glasses/science
+	corpseglasses = /obj/item/clothing/glasses/scanner/science
 	corpsegloves = /obj/item/clothing/gloves/latex
 	corpsesuit = /obj/item/clothing/suit/storage/labcoat/mothership
 	corpseuniform = /obj/item/clothing/under/grey/grey_researcher
@@ -1291,7 +1291,7 @@
 	/obj/item/clothing/gloves/red, /obj/item/clothing/gloves/latex)
 
 	corpseglasses = list(/obj/item/clothing/glasses/gglasses, /obj/item/clothing/glasses/hud/health, /obj/item/clothing/glasses/monocle, /obj/item/clothing/glasses/regular, /obj/item/clothing/glasses/regular/hipster,\
-	/obj/item/clothing/glasses/science, /obj/item/clothing/glasses/sunglasses, /obj/item/clothing/glasses/sunglasses/big)
+	/obj/item/clothing/glasses/scanner/science, /obj/item/clothing/glasses/sunglasses, /obj/item/clothing/glasses/sunglasses/big)
 
 	corpseshoes = list(/obj/item/clothing/shoes/black, /obj/item/clothing/shoes/blue, /obj/item/clothing/shoes/brown, /obj/item/clothing/shoes/combat, /obj/item/clothing/shoes/galoshes, /obj/item/clothing/shoes/green,\
 	/obj/item/clothing/shoes/jackboots, /obj/item/clothing/shoes/laceup, /obj/item/clothing/shoes/leather, /obj/item/clothing/shoes/orange, /obj/item/clothing/shoes/purple, /obj/item/clothing/shoes/red, /obj/item/clothing/shoes/white)
