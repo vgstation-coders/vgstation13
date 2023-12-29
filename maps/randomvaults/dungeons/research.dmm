@@ -2062,7 +2062,7 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "ve" = (
-/obj/machinery/door/airlock/glass_medical{
+/obj/machinery/door/airlock/glass_genetics{
 	name = "Genetics Research";
 	req_access_txt = "163";
 	req_one_access_txt = "163"

@@ -92,6 +92,13 @@
 	icon = 'icons/obj/doors/doormed.dmi'
 	assembly_type = /obj/structure/door_assembly/door_assembly_med
 
+/obj/machinery/door/airlock/genetics
+	icon = 'icons/obj/doors/doorgenetics.dmi'
+	assembly_type = /obj/structure/door_assembly/door_assembly_genetics
+
+/obj/machinery/door/airlock/genetics/voxgenetics
+	var/const/AIRLOCK_WIRE_IDSCAN = 0
+
 /obj/machinery/door/airlock/maintenance
 	name = "Maintenance Access"
 	icon = 'icons/obj/doors/Doormaint.dmi'
@@ -180,6 +187,16 @@
 	opacity = 0
 	assembly_type = /obj/structure/door_assembly/door_assembly_med
 	glass = 1
+
+/obj/machinery/door/airlock/glass_genetics
+	name = "Maintenance Hatch"
+	icon = 'icons/obj/doors/doorgeneticsglass.dmi'
+	opacity = 0
+	assembly_type = /obj/structure/door_assembly/door_assembly_genetics
+	glass = 1
+
+/obj/machinery/door/airlock/glass_genetics/voxgenetics
+	var/const/AIRLOCK_WIRE_IDSCAN = 0
 
 /obj/machinery/door/airlock/mining
 	name = "Mining Airlock"

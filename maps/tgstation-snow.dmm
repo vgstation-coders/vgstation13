@@ -28184,7 +28184,7 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/machinery/door/airlock/research{
+/obj/machinery/door/airlock/genetics{
 	name = "Genetics Research";
 	req_access_txt = "9"
 	},
@@ -31882,7 +31882,7 @@
 	dir = 8;
 	name = "Firelock West"
 	},
-/obj/machinery/door/airlock/glass_medical{
+/obj/machinery/door/airlock/glass_genetics{
 	id_tag = "GeneticsDoor";
 	name = "Genetics";
 	req_access_txt = "5"
@@ -64148,7 +64148,7 @@
 /obj/machinery/door/firedoor/border_only{
 	name = "Firelock South"
 	},
-/obj/machinery/door/airlock/glass_research{
+/obj/machinery/door/airlock/glass_genetics{
 	name = "Genetics Research";
 	req_access_txt = "5; 9"
 	},
@@ -80886,7 +80886,7 @@
 	name = "Biohazard Shutter";
 	opacity = 0
 	},
-/obj/machinery/door/airlock/research{
+/obj/machinery/door/airlock/genetics{
 	name = "Genetics Research Access";
 	req_access_txt = "47"
 	},

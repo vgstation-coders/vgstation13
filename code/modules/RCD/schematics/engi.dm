@@ -619,6 +619,11 @@
 	build_type	= /obj/machinery/door/airlock/medical
 	icon			= 'icons/obj/doors/Doormed.dmi'
 
+/datum/selection_schematic/airlock_schematic/genetics
+	name			= "Genetics Airlock"
+	build_type	= /obj/machinery/door/airlock/genetics
+	icon			= 'icons/obj/doors/doorgenetics.dmi'
+
 /datum/selection_schematic/airlock_schematic/sci
 	name			= "Research Airlock"
 	build_type	= /obj/machinery/door/airlock/research
@@ -673,6 +678,11 @@
 	name			= "Glass Medical Airlock"
 	build_type	= /obj/machinery/door/airlock/glass_medical
 	icon			= 'icons/obj/doors/doormedglass.dmi'
+
+/datum/selection_schematic/airlock_schematic/glass_genetics
+	name			= "Glass Genetics Airlock"
+	build_type	= /obj/machinery/door/airlock/glass_genetics
+	icon			= 'icons/obj/doors/doorgeneticsglass.dmi'
 
 /datum/selection_schematic/airlock_schematic/glass_sci
 	name			= "Glass Research Airlock"
