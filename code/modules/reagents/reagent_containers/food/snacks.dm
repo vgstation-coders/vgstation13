@@ -4184,7 +4184,7 @@
 	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/on_vending_machine_spawn()
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = FRIDGETEMP_FREEZER
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/margherita
 	name = "Margherita"
