@@ -43,30 +43,52 @@ var/list/department_radio_keys = list(
 	  //9 Used by LANGUAGE_MOUSE
 	  ":-" = "Response Team","#-" = "Response Team",".-" = "Response Team",
 	  ":a" = "alientalk",	"#a" = "alientalk",		".a" = "alientalk",
+	  ":ф" = "alientalk",	"#ф" = "alientalk",		".ф" = "alientalk",
 	  ":b" = "binary",		"#b" = "binary",		".b" = "binary",
+	  ":и" = "binary",		"#и" = "binary",		".и" = "binary",
 	  ":c" = "Command",		"#c" = "Command",		".c" = "Command",
+	  ":с" = "Command",		"#с" = "Command",		".с" = "Command",
 	  ":d" = "Service",     "#d" = "Service",       ".d" = "Service",
+	  ":в" = "Service",     "#в" = "Service",       ".в" = "Service",
 	  ":e" = "Engineering", "#e" = "Engineering",	".e" = "Engineering",
+	  ":у" = "Engineering", "#у" = "Engineering",	".у" = "Engineering",
 	  //f Used by LANGUAGE_SLIME
 	  ":g" = "changeling",	"#g" = "changeling",	".g" = "changeling",
+	  ":п" = "changeling",	"#п" = "changeling",	".п" = "changeling",
 	  ":h" = "department",	"#h" = "department",	".h" = "department",
+	  ":р" = "department",	"#р" = "department",	".р" = "department",
 	  ":i" = "intercom",	"#i" = "intercom",		".i" = "intercom",
+	  ":ы" = "intercom",	"#ы" = "intercom",		".ы" = "intercom",
+	  ":і" = "intercom",	"#і" = "intercom",		".і" = "intercom",
 	  //j Used by LANGUAGE_TAJARAN
 	  //k Used by LANGUAGE_SKRELLIAN and LANGUAGE_GREY
 	  ":l" = "left hand",	"#l" = "left hand",		".l" = "left hand",  "!l" = "fake left hand",
+	  ":д" = "left hand",	"#д" = "left hand",		".д" = "left hand",  "!д" = "fake left hand",
 	  ":m" = "Medical",		"#m" = "Medical",		".m" = "Medical",
+	  ":ь" = "Medical",		"#ь" = "Medical",		".ь" = "Medical",
 	  ":n" = "Science",		"#n" = "Science",		".n" = "Science",
+	  ":т" = "Science",		"#т" = "Science",		".т" = "Science",
 	  ":o" = "Common",		"#o" = "Common",		".o" = "Common",
+	  ":щ" = "Common",		"#щ" = "Common",		".щ" = "Common",
 	  ":p" = "AI Private",	"#p" = "AI Private",	".p" = "AI Private",
+	  ":з" = "AI Private",	"#з" = "AI Private",	".з" = "AI Private",
 	  //q Used by LANGUAGE_ROOTSPEAK
 	  ":r" = "right hand",	"#r" = "right hand",	".r" = "right hand", "!r" = "fake right hand",
+	  ":к" = "right hand",	"#к" = "right hand",	".к" = "right hand", "!к" = "fake right hand",
 	  ":s" = "Security",	"#s" = "Security",		".s" = "Security",
+	  ":ы" = "Security",	"#ы" = "Security",		".ы" = "Security",
+	  ":і" = "Security",	"#і" = "Security",		".і" = "Security",
 	  ":t" = "Syndicate",	"#t" = "Syndicate",		".t" = "Syndicate",
+	  ":е" = "Syndicate",	"#е" = "Syndicate",		".е" = "Syndicate",
 	  ":u" = "Supply",		"#u" = "Supply",		".u" = "Supply",
+	  ":г" = "Supply",		"#г" = "Supply",		".г" = "Supply",
 	  //v Used by LANGUAGE_VOX
 	  ":w" = "whisper",		"#w" = "whisper",		".w" = "whisper",
+	  ":ц" = "whisper",		"#ц" = "whisper",		".ц" = "whisper",
 	  ":x" = "cultchat",	"#x" = "cultchat",		".x" = "cultchat",
+	  ":ч" = "cultchat",	"#ч" = "cultchat",		".ч" = "cultchat",
 	  ":y" = "ancientchat",	"#y" = "ancientchat",	".y" = "ancientchat",
+	  ":н" = "ancientchat",	"#н" = "ancientchat",	".н" = "ancientchat",
 	  //z Used by LANGUAGE_CLATTER
 	  //@ Used by LANGUAGE_MARTIAN
 	  ":~" = "sporechat",	"#~" = "sporechat",	    ".~" = "sporechat",
@@ -146,7 +168,7 @@ var/list/headset_modes = list(
 	if (stat) // Unconcious.
 		if(message_mode == MODE_WHISPER) //Lets us say our last words.
 			say_testing(src, "message mode was whisper.")
-			whisper(copytext(message, 3))
+			whisper(copytext_char(message, 3))
 		return
 	if(!can_speak_basic(message))
 		say_testing(src, "we aren't able to talk")
@@ -154,11 +176,11 @@ var/list/headset_modes = list(
 
 	if(message_mode == MODE_HEADSET || message_mode == MODE_ROBOT)
 		say_testing(src, "Message mode was [message_mode == MODE_HEADSET ? "headset" : "robot"]")
-		message = copytext(message, 2)
+		message = copytext_char(message, 2)
 	else if(message_mode)
 		say_testing(src, "Message mode is [message_mode]")
 		if(message_mode != MODE_HOLOPAD)
-			message = copytext(message, 3)
+			message = copytext_char(message, 3)
 
 	// SAYCODE 90.0!
 	// We construct our speech object here.
@@ -172,7 +194,7 @@ var/list/headset_modes = list(
 #ifdef SAY_DEBUG
 		var/oldmsg = message
 #endif
-		speech.message = copytext(speech.message,2+length(speech.language.key))
+		speech.message = copytext_char(speech.message,2+length(speech.language.key))
 		say_testing(src, "Have a language, oldmsg = [oldmsg], newmsg = [message]")
 	else
 		if(!isnull(speech.language))
@@ -180,7 +202,7 @@ var/list/headset_modes = list(
 			var/oldmsg = message
 #endif
 			var/n = speech.language
-			message = copytext(message,1+length(n))
+			message = copytext_char(message,1+length(n))
 			say_testing(src, "We tried to speak a language we don't have; length = [length(n)], oldmsg = [oldmsg] parsed message = [message]")
 			speech.language = null
 		speech.language = get_default_language()
@@ -232,7 +254,7 @@ var/list/headset_modes = list(
 
 	if(radio_return & REDUCE_RANGE)
 		message_range = 1
-	if(copytext(text, length(text)) == "!")
+	if(copytext_char(text, length(text)) == "!")
 		message_range++
 	if(M_WHISPER in mutations)
 		message_range -= 2
@@ -373,7 +395,7 @@ var/list/headset_modes = list(
 	. = ..()
 
 /proc/say_test(var/text)
-	var/ending = copytext(text, length(text))
+	var/ending = copytext_char(text, length(text))
 	if (ending == "?")
 		return "1"
 	else if (ending == "!")
@@ -411,16 +433,16 @@ var/list/headset_modes = list(
 	return 1
 
 /mob/living/proc/check_emote(message)
-	if(copytext(message, 1, 2) == "*" && is_letter(text2ascii(message, 2)))
-		emote(copytext(message, 2))
+	if(copytext_char(message, 1, 2) == "*" && is_letter(text2ascii(message, 2)))
+		emote(copytext_char(message, 2))
 		return 1
 
 
 /mob/living/proc/get_message_mode(message)
-	if(copytext(message, 1, 2) == ";")
+	if(copytext_char(message, 1, 2) == ";")
 		return MODE_HEADSET
 	else if(length(message) > 2)
-		return department_radio_keys[lowertext(copytext(message, 1, 3))]
+		return department_radio_keys[lowertext(copytext_char(message, 1, 3))]
 
 #define SPEAK_OVER_GENERAL_CULT_CHAT 0
 #define SPEAK_OVER_CHANNEL_INTO_CULT_CHAT 1
@@ -509,7 +531,7 @@ var/list/headset_modes = list(
 #undef HEAR_CULT_CHAT
 
 /mob/living/proc/treat_speech(var/datum/speech/speech, genesay = 0)
-	if(!(copytext(speech.message, 1, 2) == "*"))
+	if(!(copytext_char(speech.message, 1, 2) == "*"))
 		for(var/obj/item/I in get_all_slots() + held_items)
 			I.affect_speech(speech, src)
 
@@ -702,11 +724,11 @@ var/list/headset_modes = list(
 	speech.message_classes.Add("whisper")
 
 	if(istype(speech.language))
-		speech.message = copytext(speech.message,2+length(speech.language.key))
+		speech.message = copytext_char(speech.message,2+length(speech.language.key))
 	else
 		if(!isnull(speech.language))
 			var/n = speech.language
-			speech.message = copytext(speech.message,1+length(n))
+			speech.message = copytext_char(speech.message,1+length(n))
 			say_testing(src, "We tried to speak a language we don't have length = [length(n)], oldmsg = [oldmsg] parsed message = [speech.message]")
 			speech.language = null
 		speech.language = get_default_language()
@@ -738,7 +760,7 @@ var/list/headset_modes = list(
 		var/health_diff = round(-config.health_threshold_dead + health)
 		// If we cut our message short, abruptly end it with a-..
 		var/message_len = length(speech.message)
-		speech.message = copytext(speech.message, 1, health_diff) + "[message_len > health_diff ? "-.." : "..."]"
+		speech.message = copytext_char(speech.message, 1, health_diff) + "[message_len > health_diff ? "-.." : "..."]"
 		speech.message = Ellipsis(speech.message, 10, 1)
 		speech.mode= SPEECH_MODE_FINAL
 		whispers = "whispers with their final breath"

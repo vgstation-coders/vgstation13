@@ -203,6 +203,8 @@
 			return
 
 		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, verified FROM player_whitelist WHERE ckey = :ckey", list("ckey" = "[usr.ckey]"))
+		if(usr.client.holder) //if client is admin
+			LateChoices()
 		if(query.Execute())
 			whitelistId = query.NextRow() //returns 1 if the row is found, otherwise 0
 			if(whitelistId == 1) //found the row, so the player has been invited

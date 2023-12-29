@@ -71,7 +71,6 @@
 								to_chat(usr,"Error inserting [friendCkey], [whitelistId] into player_whitelist: [queryInviteFriend.ErrorMsg()]")
 								qdel(queryInviteFriend)
 								return
-							return
 						else
 							to_chat(usr,"<span class='warning'><b>[friendCkey]</b> has already been invited!</span>")
 							//message_admins("[ckey] tried to invite [friendCkey] despite them already being invited.")
