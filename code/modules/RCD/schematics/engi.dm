@@ -619,6 +619,11 @@
 	build_type	= /obj/machinery/door/airlock/medical
 	icon			= 'icons/obj/doors/Doormed.dmi'
 
+/datum/selection_schematic/airlock_schematic/viro
+	name			= "Virology Airlock"
+	build_type	= /obj/machinery/door/airlock/virology
+	icon			= 'icons/obj/doors/doorviro.dmi'
+
 /datum/selection_schematic/airlock_schematic/sci
 	name			= "Research Airlock"
 	build_type	= /obj/machinery/door/airlock/research
