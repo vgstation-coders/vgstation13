@@ -16053,7 +16053,7 @@
 	dir = 1;
 	name = "Firelock North"
 	},
-/obj/machinery/door/airlock/medical{
+/obj/machinery/door/airlock/virology{
 	autoclose = 0;
 	frequency = 1449;
 	icon_state = "door_locked";
@@ -16380,7 +16380,7 @@
 /obj/machinery/door/firedoor/border_only{
 	name = "Firelock South"
 	},
-/obj/machinery/door/airlock/medical{
+/obj/machinery/door/airlock/virology{
 	autoclose = 0;
 	frequency = 1449;
 	icon_state = "door_locked";
@@ -35027,7 +35027,7 @@
 /obj/machinery/door/firedoor/border_only{
 	name = "Firelock South"
 	},
-/obj/machinery/door/airlock/medical{
+/obj/machinery/door/airlock/virology{
 	name = "Virology Access";
 	req_access_txt = "5"
 	},
