@@ -92,6 +92,10 @@
 	icon = 'icons/obj/doors/doormed.dmi'
 	assembly_type = /obj/structure/door_assembly/door_assembly_med
 
+/obj/machinery/door/airlock/virology
+	icon = 'icons/obj/doors/doorviro.dmi'
+	assembly_type = /obj/structure/door_assembly/door_assembly_viro
+
 /obj/machinery/door/airlock/maintenance
 	name = "Maintenance Access"
 	icon = 'icons/obj/doors/Doormaint.dmi'
