@@ -225,7 +225,7 @@
 		return
 	if(!C.is_wrench(user))
 		return
-	if(user.loc != src))
+	if(user.loc != src)
 		to_chat(user, "<span class='warning'>You must stand directly on the bolted floor to unbolt it.</span>")
 		return
 	C.playtoolsound(src, 80)

@@ -216,3 +216,17 @@ var/list/datum/stack_recipe/chain_recipes = list (
 		new /obj/item/clothing/head/franken_bolt(get_turf(src))
 	else
 		..()
+
+
+/obj/item/stack/bolts/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag)
+		return 1
+	if(istype(target, /obj/structure))
+		var/obj/structure/S = target
+		if(!S.anchored)
+			S.hasbolts = TRUE
+			S.anchored = TRUE
+			to_chat(user, "<span class='notice'>You bolt \the [target] into place.</span>")
+			use(1)
+			return 1
+	return..()

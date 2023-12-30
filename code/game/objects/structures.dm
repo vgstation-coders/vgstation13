@@ -13,18 +13,6 @@
 	if(destroy || (prob(50)))
 		qdel(src)
 
-/obj/structure/attackby(obj/item/I, mob/user)
-	if(!anchored && istype(I, /obj/item/stack/bolts))
-		hasbolts = TRUE
-		anchored = TRUE
-		to_chat(user, "<span class='notice'>You bolt \the [src] into place.</span>")
-	else if(hasbolts && iswrench(I))
-		hasbolts = FALSE
-		anchored = FALSE
-		to_chat(user, "<span class='notice'>You remove the bolts from \the [src].</span>")
-	else
-		..()
-
 /obj/structure/ex_act(severity)
 	switch(severity)
 		if(1.0)
