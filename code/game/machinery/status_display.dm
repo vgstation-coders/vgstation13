@@ -224,11 +224,13 @@ var/global/list/status_displays = list() //This list contains both normal status
 	picture_state = state
 	remove_display()
 	overlays += image('icons/obj/status_display.dmi', icon_state=picture_state)
+	update_moody_light('icons/lighting/special.dmi', "overlay_statusdisplay")
 
 /obj/machinery/status_display/proc/update_display(line1, line2)
 	var/new_text = {"<div style="font-size:[FONT_SIZE];color:[FONT_COLOR];font:'[FONT_STYLE]';text-align:center;" valign="top">[line1]<br>[line2]</div>"}
 	if(maptext != new_text)
 		maptext = new_text
+	update_moody_light('icons/lighting/special.dmi', "overlay_statusdisplay")
 
 /obj/machinery/status_display/proc/get_shuttle_timer()
 	var/timeleft = emergency_shuttle.timeleft()
@@ -249,6 +251,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 		overlays.len = 0
 	if(maptext)
 		maptext = ""
+	kill_moody_light()
 
 /obj/machinery/status_display/receive_signal(datum/signal/signal)
 	switch(signal.data["command"])
@@ -381,7 +384,7 @@ var/global/list/status_display_images = list(
 		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #[(stat & BROKEN) ? "120" : "408"])</span>")
 			return
-			
+
 		var/new_icon = input(A, "Load an image to be desplayed on [src].", "AI status display") in status_display_images
 
 		if(new_icon)
