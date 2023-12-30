@@ -211,9 +211,9 @@ var/list/datum/stack_recipe/chain_recipes = list (
 /obj/item/stack/bolts/attackby(var/obj/O, mob/user)
 	if(istype(O, /obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/C = O
+		new /obj/item/clothing/head/franken_bolt(get_turf(src))
 		C.use(1)
 		use(1)
-		new /obj/item/clothing/head/franken_bolt(get_turf(src))
 	else
 		..()
 
