@@ -3761,9 +3761,15 @@
 access_ai_upload,access_teleporter,access_heads,access_captain,access_all_personal_lockers,access_rd,access_cmo,
 access_heads_vault,access_ce,access_hop,access_hos,access_RC_announce,access_keycard_auth,access_tcomsat,access_gateway,
 access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_trade)
-				for(var/obj/machinery/door/airlock/W in all_doors)
+				var/list/filter = get_all_accesses() - no_eagle_access
+				for(var/obj/machinery/door/W in all_doors)
+					if(!W.req_access)
+						W.set_up_access()
 					if(W.z == map.zMainStation)
-						W.req_access -= no_eagle_access
+						if(W.req_access && W.req_access.len)
+							W.req_access = W.req_access - filter
+						if(W.req_one_access && W.req_one_access.len)
+							W.req_one_access = W.req_one_access - filter
 				message_admins("[key_name_admin(usr)] activated Egalitarian Station mode")
 				command_alert(/datum/command_alert/eagles)
 			if("dorf")
