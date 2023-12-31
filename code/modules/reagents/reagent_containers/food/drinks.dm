@@ -1401,7 +1401,6 @@
 	..()
 	if (flags & NOREACT)
 		reaction = new(src)
-		// reaction.volume = src.volume //changes the volume in varedit but doesnt fix the 100u mixing bug
 
 /obj/item/weapon/reagent_containers/food/drinks/shaker/Destroy()
 	if (reaction)
@@ -1437,7 +1436,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/shaker/reaction
 	flags = FPRINT  | OPENCONTAINER | SILENTCONTAINER
-	//volume = 300 //fixes the 100 u mixing bug but is a hacky fix
+	volume = 300
 
 //bluespace shaker
 
