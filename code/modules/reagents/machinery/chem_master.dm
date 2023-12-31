@@ -776,10 +776,14 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		container.update_icon() //Forcefully update the beaker
 		overlays += container //Set it as an overlay
 
-	if(reagents.total_volume && !(stat & (FORCEDISABLE|BROKEN|NOPOWER))) //If we have reagents in here, and the machine is powered and functional
-		var/image/overlay = image('icons/obj/chemical.dmi', src, "mixer_overlay")
-		overlay.icon += mix_color_from_reagents(reagents.reagent_list)
-		overlays += overlay
+	if(!(stat & (FORCEDISABLE|BROKEN|NOPOWER))) //If we have reagents in here, and the machine is powered and functional
+		if (reagents.total_volume)
+			var/image/overlay = image('icons/obj/chemical.dmi', src, "mixer_overlay")
+			overlay.icon += mix_color_from_reagents(reagents.reagent_list)
+			overlays += overlay
+		update_moody_light('icons/lighting/special.dmi', "overlay_chem_master")
+	else
+		kill_moody_light()
 
 	var/image/mixer_prongs = image('icons/obj/chemical.dmi', src, "mixer_prongs")
 	overlays += mixer_prongs //Add prongs on top of all of this
