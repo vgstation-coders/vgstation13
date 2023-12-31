@@ -205,6 +205,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		if(istype(src,/turf/simulated/floor)) //Was throwing runtime errors due to a chance of it changing to space halfway through.
 			if(air)
 				update_visuals(air)*/
+	update_paint_overlay()
 
 /turf/simulated/floor/return_siding_icon_state()
 	..()

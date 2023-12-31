@@ -57,6 +57,8 @@ var/global/list/ghdel_profiling = list()
 
 	var/arcanetampered = 0 //A looot of things can be
 
+	var/image/moody_light
+
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
 		last_beamchecks = list()
@@ -1063,3 +1065,19 @@ its easier to just keep the beam vertical.
 	if (blood_color && blood_DNA && blood_DNA.len)
 		return TRUE
 	return FALSE
+
+/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/special.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
+	overlays -= moody_light
+	moody_light = image(moody_icon, src, moody_state)
+	moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
+	moody_light.plane = LIGHTING_PLANE
+	moody_light.blend_mode = BLEND_ADD
+	moody_light.alpha = moody_alpha
+	moody_light.color = moody_color
+	overlays += moody_light
+	luminosity = 2
+
+/atom/proc/kill_moody_light()
+	overlays -= moody_light
+	luminosity = 0
+	moody_light = null

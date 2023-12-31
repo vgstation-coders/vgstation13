@@ -61,7 +61,7 @@
 		var/mob/living/carbon/human/H = M
 		H.bloody_body_from_data(copy_blood_data(blood_data),0,src)
 		H.bloody_hands_from_data(copy_blood_data(blood_data),2,src)
-		H.add_blood_to_feet(3, data["color"], list("wet paint" = "paint"))
+		H.add_blood_to_feet(3, data["color"], list("wet paint" = "paint"), paint_light == PAINTLIGHT_FULL)
 		for(var/i = 1 to H.held_items.len)
 			var/obj/item/I = H.held_items[i]
 			if(istype(I))
