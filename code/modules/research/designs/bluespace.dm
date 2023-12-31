@@ -93,7 +93,7 @@
 	materials = list(MAT_DIAMOND = 2500, MAT_IRON = 5000, MAT_GLASS = 5000, MAT_URANIUM = 2000)
 	reliability = 100
 	category = "Bluespace"
-	build_path = /obj/item/weapon/reagent_containers/food/drinks/bluespaceshaker
+	build_path = /obj/item/weapon/reagent_containers/food/drinks/shaker/bluespaceshaker
 
 /datum/design/gps
 	name = "Global Positioning System"
