@@ -1396,12 +1396,12 @@
 	can_flip = TRUE
 	var/shaking = FALSE
 	var/obj/item/weapon/reagent_containers/food/drinks/shaker/reaction/reaction = null
-	thermal_variation_modifier = 0.2
 
 /obj/item/weapon/reagent_containers/food/drinks/shaker/New()
 	..()
 	if (flags & NOREACT)
 		reaction = new(src)
+		// reaction.volume = src.volume //changes the volume in varedit but doesnt fix the 100u mixing bug
 
 /obj/item/weapon/reagent_containers/food/drinks/shaker/Destroy()
 	if (reaction)
@@ -1421,7 +1421,7 @@
 		shaking = TRUE
 		var/adjective = pick("furiously","passionately","with vigor","with determination","like a devil","with care and love","like there is no tomorrow")
 		user.visible_message("<span class='notice'>\The [user] shakes \the [src] [adjective]!</span>","<span class='notice'>You shake \the [src] [adjective]!</span>")
-		icon_state = "shaker-shake"
+		icon_state = icon_state + "-shake"
 		if(iscarbon(loc))
 			var/mob/living/carbon/M = loc
 			M.update_inv_hands()
@@ -1429,7 +1429,7 @@
 		if(do_after(user, src, 30))
 			reagents.trans_to(reaction,volume)
 			reaction.reagents.trans_to(reagents,volume)
-		icon_state = "shaker"
+		icon_state = initial(icon_state)
 		if(iscarbon(loc))
 			var/mob/living/carbon/M = loc
 			M.update_inv_hands()
@@ -1437,6 +1437,19 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/shaker/reaction
 	flags = FPRINT  | OPENCONTAINER | SILENTCONTAINER
+	//volume = 300 //fixes the 100 u mixing bug but is a hacky fix
+
+//bluespace shaker
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/bluespaceshaker
+	name = "\improper bluespace shaker"
+	desc = "A bluespace shaker to mix drinks in."
+	icon_state = "bluespaceshaker"
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=6"
+	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 5000)
+	w_type = RECYK_GLASS
+	w_class = W_CLASS_SMALL
+	volume = 300
 
 /obj/item/weapon/reagent_containers/food/drinks/discount_shaker
 	name = "\improper Discount Shaker"
