@@ -376,13 +376,12 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	if(!research_archive_datum)
 		research_archive_datum = new /datum/research()
 	var/list/techs = read_file()
-	log_debug("DEBUG ARCHIVE: [json_encode(techs)]")
+	//world.log << "DEBUG ARCHIVE: [json_encode(techs)]"
 	var/skip_reporting = TRUE
 	for(var/obj/machinery/computer/rdconsole/C in machines)
 		for(var/element in techs)
 			var/datum/tech/T = C.files.known_tech[element]
 			if(!T)
-				message_admins("DEBUG ARCHIVE: Aborted [element], [C.files.known_tech[element]] failed.")
 				continue
 			T.level = text2num(techs[element])
 			if(skip_reporting && (T.level>1))

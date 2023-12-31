@@ -111,12 +111,18 @@ var/global/list/hidden_tech = list(
 //Input: datum/tech; Output: Null
 /datum/research/proc/AddTech2Known(var/datum/tech/T)
 	var/datum/tech/known = GetKTechByID(T.id)
-	if(known)
-		if(T.level > known.level)
-			known.level = T.level
-		return 1
-	known_tech[T.id] = T
-	return 2
+	if(!known)
+		var/createtype = /datum/tech
+		for(var/type in subtypesof(/datum/tech))
+			var/datum/tech/attempt = type
+			if(initial(attempt.id) == T.id)
+				createtype = type
+				break
+		known = new createtype()
+		known_tech[T.id] = known
+	if(T.level > known.level)
+		known.level = T.level
+	return
 
 /datum/research/proc/AddDesign2Known(var/datum/design/D)
 	if(!(D in known_designs))
