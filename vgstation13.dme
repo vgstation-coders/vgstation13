@@ -2266,6 +2266,8 @@
 #include "code\modules\paperwork\paper_folded.dm"
 #include "code\modules\paperwork\paper_pack.dm"
 #include "code\modules\paperwork\paperbin.dm"
+#include "code\modules\paperwork\papers_dynamic.dm"
+#include "code\modules\paperwork\papers_preformatted.dm"
 #include "code\modules\paperwork\pen.dm"
 #include "code\modules\paperwork\photocopier.dm"
 #include "code\modules\paperwork\photography.dm"
