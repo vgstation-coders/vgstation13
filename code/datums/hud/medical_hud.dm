@@ -95,14 +95,20 @@
 						holder.icon_state = "hudhealthy"
 			C.images += holder
 
+		if(!ishuman(patient))
+			continue
+
+		var/mob/living/carbon/human/H = patient
+		var/targetname = H.get_identification_name(H.get_face_name())
+		var/physmedical = null
+		var/mentmedical = null
+		var/datum/data/record/gen_record = data_core.find_general_record_by_name(targetname)
+		if(gen_record)
+			physmedical = gen_record.fields["p_stat"]
+			mentmedical = gen_record.fields["m_stat"]
+
 		holder = patient.hud_list[PHYSRECORD_HUD]
-		if(holder && ishuman(patient))
-			var/mob/living/carbon/human/H = patient
-			var/targetname = H.get_identification_name(H.get_face_name())
-			var/physmedical = null
-			var/datum/data/record/gen_record = data_core.find_general_record_by_name(targetname)
-			if(gen_record)
-				physmedical = gen_record.fields["p_stat"]
+		if(holder)
 			switch(physmedical)
 				if("*SSD*")
 					holder.icon_state = "hudssd"
@@ -114,4 +120,18 @@
 					holder.icon_state = "hudactive"
 				if("Disabled")
 					holder.icon_state = "huddisabled"
+			C.images += holder
+
+		holder = patient.hud_list[MENTRECORD_HUD]
+		if(holder)
+			switch(mentmedical)
+				if("*Insane*")
+					holder.icon_state = "hudinsane"
+				if("*Unstable*")
+					holder.icon_state = "hudunstable"
+				if("*Watch*")
+					holder.icon_state = "hudwatch"
+				if("Stable")
+					holder.icon_state = "hudblank"
+			holder.pixel_y = 7 * PIXEL_MULTIPLIER
 			C.images += holder
