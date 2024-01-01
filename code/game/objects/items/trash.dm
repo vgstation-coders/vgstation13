@@ -291,6 +291,7 @@ var/list/crushed_cans_cache = list()
 			"Space-Up" = "space-up",
 			"Space Mountain Wind" = "space_mountain_wind",
 			"Dr. Gibb" = "dr_gibb",
+			)
 		name = pick(random_crushed_cans)
 		make_crushed_can(random_crushed_cans[name])
 		name = "crushed [name]"
