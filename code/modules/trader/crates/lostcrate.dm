@@ -7,7 +7,8 @@ var/global/list/lemuria_stuff = list(
 	//1 of a kind
 	/obj/item/weapon/quantumroutingcomputer,
 	/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard,
-	/obj/item/goliath_lure
+	/obj/item/goliath_lure,
+	/obj/item/cosmic_grill/preloaded
 )
 /obj/structure/closet/crate/lemuria
 	name = "Lost Crate of Lemuria"
@@ -15,7 +16,7 @@ var/global/list/lemuria_stuff = list(
 
 /obj/structure/closet/crate/lemuria/New()
 	..()
-	for(var/i = 1 to 6)
+	for(var/i = 1 to 5)
 		if(!shoal_stuff.len)
 			return
 		var/path = pick_n_take(lemuria_stuff)
@@ -311,3 +312,29 @@ var/global/list/lemuria_stuff = list(
 
 /mob/living/simple_animal/bait/can_be_pulled(mob/user)
 	return FALSE
+
+/obj/item/cosmic_grill
+	name = "cosmic grill"
+	desc = "A grilltop that uses stellar radiation to cook meals: just float it in space and the pan will heat up! This is the go-to for the miner that wants to cook some asteroid cuisine."
+	is_cooktop = TRUE
+	icon = 'icons/obj/items_weird.dmi'
+	icon_state = "cosmicgrill0"
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/cosmic_grill/update_icon()
+	icon_state = "cosmicgrill[cookvessel]"
+
+/obj/item/cosmic_grill/on_cook_start()
+	icon_state = "cosmicgrill1"
+
+/obj/item/cosmic_grill/on_cook_stop()
+	icon_state = "cosmicgrill0"
+
+/obj/item/cosmic_grill/can_cook()
+	if(istype(loc, /turf/space))
+		return TRUE
+	return FALSE
+
+/obj/item/cosmic_grill/preloaded/New()
+	..()
+	cookvessel = new /obj/item/weapon/reagent_containers/pan(src)
