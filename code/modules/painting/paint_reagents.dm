@@ -195,6 +195,9 @@
 
 /datum/reagent/flaxoil/special_behaviour()
 	var/list/other_reagents = holder.reagent_list - src
+	for (var/datum/reagent/R in other_reagents)
+		if (R.id == GLUE) //Adding glue lets us turn flax oil into acrylic which won't change color any longer, so we probably don't want to match the color of glue
+			other_reagents -= R
 	if (other_reagents.len <= 0)
 		return
 	var/target_color = mix_color_from_reagents(other_reagents)
