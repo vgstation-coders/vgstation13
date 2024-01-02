@@ -216,12 +216,13 @@ var/global/datum/library_catalog/library_catalog = new()
 		return ..()
 
 var/global/datum/research/research_archive_datum
+var/list/important_archivists = list()
 
 /obj/machinery/researcharchive
 	name = "research archive"
 	desc = "A high-powered data archive device that takes technology disks and persistently backs them up to specialized servers for the upcoming shift. Usually takes two disks per technology."
 	icon = 'icons/obj/library.dmi'
-	icon_state = "computer_disk1"
+	icon_state = "computer_disk"
 	/*on_flick = "on_disk"
 	off_flick = "off_disk"*/
 	anchored = TRUE
@@ -236,11 +237,13 @@ var/global/datum/research/research_archive_datum
 	..()
 	if(!research_archive_datum)
 		research_archive_datum = new /datum/research()
+	update_icon()
 
 /obj/machinery/researcharchive/examine(mob/user)
 	..()
 	if(diskslot)
-		to_chat(user,"<span class='info'>In the slot you can see a disk that contains [diskslot.stored.id] [diskslot.stored.level].</span>")
+		//This is now handled by the disk itself.
+		//to_chat(user,"<span class='info'>In the slot you can see a disk that contains [diskslot.stored.id] [diskslot.stored.level].</span>")
 		diskslot.examine(user)
 
 /obj/machinery/researcharchive/update_icon()
@@ -296,7 +299,7 @@ var/global/datum/research/research_archive_datum
 		return
 
 	playsound(loc, "sound/machines/heps.ogg", 50, 1)
-	anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = "computer_disk_ani")
+	anim(target = src, a_icon = 'icons/obj/library.dmi', flick_anim = "computer_disk_ani")
 
 	busy = TRUE
 	use_power(200)
@@ -305,7 +308,7 @@ var/global/datum/research/research_archive_datum
 		for(var/datum/tech/T in get_list_of_elements(research_archive_datum.known_tech))
 			if(T.id != diskslot.stored.id)
 				continue
-			if(T.level > diskslot.stored.level)
+			if(T.level < diskslot.stored.level)
 				if(T.level>=6)
 					visible_message("<span class='warning'>\The [src] rejects the data disk as [T.id] data has already reached its maximum.")
 					break
@@ -316,6 +319,11 @@ var/global/datum/research/research_archive_datum
 				diskslot = null
 				playsound(loc, "sound/machines/paistartup.ogg", 50, 1)
 				visible_message("<span class='good'>\The [src] accepts the data disk, increasing the [T.id] archive to [T.level].</span>")
+				if(!(user.real_name in important_archivists))
+					important_archivists += user.real_name
+				if(is_research_fully_archived())
+					command_alert(/datum/command_alert/archive_thanks)
+					station_bonus += 800 //one time payment
 			else
 				playsound(loc, "sound/machines/buzz-sigh.ogg", 50, 1)
 				visible_message("<span class='warning'>\The [src] rejects the data disk as it contains no new information.</span>")
@@ -329,3 +337,19 @@ var/global/datum/research/research_archive_datum
 	if(!busy)
 		diskslot.forceMove(loc)
 		diskslot = null
+
+/obj/machinery/researcharchive/proc/admin_research()
+	for(var/datum/tech/T in get_list_of_elements(research_archive_datum.known_tech))
+		if(T.id in list("syndicate", "Nanotrasen", "anomaly"))
+			continue
+		T.level = min(6,T.goal_level)
+
+/proc/is_research_fully_archived()
+	var/archived = TRUE
+	for(var/datum/tech/T in get_list_of_elements(research_archive_datum.known_tech))
+		if(T.id in list("syndicate", "Nanotrasen", "anomaly"))
+			continue
+		if(T.level < min(6,T.goal_level))
+			archived = FALSE
+			break
+	return archived
