@@ -28,6 +28,16 @@
 	category = "Data"
 	build_path = /obj/item/weapon/paper_bin/nano
 
+/datum/design/diskette_box
+	name = "Diskette Box"
+	desc = "A small box for storing additional disks."
+	id = "disk_box"
+	req_tech = list(Tc_MATERIALS = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_GLASS = 50, MAT_IRON = 200)
+	category = "Data"
+	build_path = /obj/item/weapon/storage/lockbox/diskettebox
+
 /datum/design/design_disk
 	name = "Design Storage Disk"
 	desc = "Produce additional disks for storing device designs."

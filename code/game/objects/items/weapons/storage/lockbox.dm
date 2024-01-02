@@ -399,6 +399,13 @@
 		new /obj/item/weapon/disk(src)
 	update_icon()
 
+/obj/item/weapon/storage/lockbox/diskettebox/large/full/New()
+	..()
+	for(var/i = 1 to storage_slots)
+		new /obj/item/weapon/disk(src)
+	update_icon()
+
+
 //---------------------------------PRESETS END-----------------------------
 
 /obj/item/weapon/storage/lockbox/diskettebox/update_icon()

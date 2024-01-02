@@ -807,3 +807,10 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/tradeaversion_mismanagement
 	alert_title = "Trade Probe Rerouted"
 	message = "A Vox trade probe rerouted away from the station after determining that employee wages were too low to justify a visit."
+
+/datum/command_alert/archive_thanks
+	alert_title = "Science Thanks You"
+
+/datum/command_alert/archive_thanks/announce()
+	message = "The Research Archive Project extends its profound thanks to [english_list(important_archivists)] for completing the research archival work this shift. There will be an extra stipend in the next pay cycle."
+	..()
