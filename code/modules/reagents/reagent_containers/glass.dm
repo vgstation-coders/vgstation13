@@ -575,6 +575,7 @@
 	w_type = RECYK_GLASS
 	amount_per_transfer_from_this = 10
 	flags = FPRINT  | OPENCONTAINER
+	thermal_variation_modifier = 0.01
 
 /obj/item/weapon/reagent_containers/glass/kettle/red
 	icon_state = "kettle_red"
