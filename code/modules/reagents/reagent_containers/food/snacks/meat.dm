@@ -260,6 +260,26 @@
 	reagents.add_reagent(FLOUR, rand(4,10))
 	bitesize = 5
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/big
+	name = "creatine cricket meat"
+	desc = "An oddly large slab of cricket meat. Tastes like nuts and protein. Very earthy and chewy."
+	icon_state = "bigroachmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/big/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 5)
+	reagents.add_reagent(FLOUR, 32)
+	
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/king
+	name = "cricket king meat"
+	desc = "A royal bloodline was felled to make this. Tastes like regicide."
+	icon_state = "bigroachmeat"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/king/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 25)
+	reagents.add_reagent(FLOUR, 75)
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
 	name = "mimic meat"
 	desc = "Woah! You were eating THIS all along?"
