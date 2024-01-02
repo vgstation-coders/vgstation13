@@ -16,7 +16,7 @@
 		/obj/item/clothing/under/syndicate,
 		/obj/item/clothing/suit/space/rig/syndi, //Helmet's in the rig.
 		/obj/item/weapon/cell/high,
-		/obj/item/device/flashlight/pda/syndicate/door,
+		/obj/item/device/pda/syndicate/door,
 		/obj/item/weapon/pinpointer/nukeop,
 		/obj/item/weapon/shield/energy,
 		/obj/item/clothing/shoes/magboots/syndie,
@@ -36,7 +36,7 @@
 		/obj/item/weapon/storage/box/flashbangs,
 		/obj/item/weapon/storage/box/emps,
 		/obj/item/weapon/gun/energy/gun = 5,
-		/obj/item/device/flashlight/pda/syndicate,
+		/obj/item/device/pda/syndicate,
 		/obj/item/device/radio/uplink/nukeops,
 	)
 

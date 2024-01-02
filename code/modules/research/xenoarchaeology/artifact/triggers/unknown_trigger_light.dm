@@ -12,7 +12,7 @@
 /datum/artifact_trigger/light/CheckTrigger()
 	var/turf/T = get_turf(my_artifact)
 	var/light_available = 5
-	if(T.has_white_turf_lighting)
+	if(T.dynamic_lighting)
 		light_available = T.get_lumcount() * 10
 		if(!my_effect.activated)
 			if(!dark_triggered && light_available >= lum_trigger)

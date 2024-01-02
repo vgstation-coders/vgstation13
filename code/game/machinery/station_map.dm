@@ -12,7 +12,7 @@ var/list/station_holomaps = list()
 	active_power_usage = 10
 	dir = NORTH
 
-	lighting_flags = FOLLOW_PIXEL_OFFSET
+	use_auto_lights = 1
 	light_color = "#64C864"
 	light_power_on = 1
 	light_range_on = 2
@@ -215,10 +215,13 @@ var/list/station_holomaps = list()
 	overlays.len = 0
 	if(stat & BROKEN)
 		icon_state = "station_mapb"
+		kill_moody_light()
 	else if((stat & (FORCEDISABLE|NOPOWER)) || !anchored)
 		icon_state = "station_map0"
+		kill_moody_light()
 	else
 		icon_state = "station_map"
+		update_moody_light('icons/lighting/special.dmi', "overlay_holomap")
 
 		if(bogus)
 			holomap_datum.station_map.overlays.len = 0

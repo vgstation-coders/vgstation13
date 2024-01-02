@@ -153,7 +153,8 @@
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
-	hud_list[RECORD_HUD]      = image('icons/mob/hud.dmi', src, "hudactive")
+	hud_list[PHYSRECORD_HUD]  = image('icons/mob/hud.dmi', src, "hudactive")
+	hud_list[MENTRECORD_HUD]  = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
@@ -162,6 +163,7 @@
 	hud_list[IMPTRACK_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[WAGE_HUD]        = image('icons/mob/hud.dmi', src, "hudblank")
 
 	obj_overlays[FIRE_LAYER]		= new /obj/abstract/Overlays/fire_layer
 	obj_overlays[MUTANTRACE_LAYER]	= new /obj/abstract/Overlays/mutantrace_layer
@@ -321,7 +323,7 @@
 //gets assignment from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
 /mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job", var/give_rank = FALSE)
-	var/obj/item/device/flashlight/pda/pda = wear_id
+	var/obj/item/device/pda/pda = wear_id
 	var/obj/item/weapon/card/id/id = wear_id
 	var/obj/item/weapon/storage/wallet/wallet = wear_id
 	if (istype(pda))
@@ -356,7 +358,7 @@
 //gets name from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
 /mob/living/carbon/human/proc/get_identification_name(var/if_no_id = "Unknown")
-	var/obj/item/device/flashlight/pda/pda = wear_id
+	var/obj/item/device/pda/pda = wear_id
 	var/obj/item/weapon/card/id/id = wear_id
 	if (istype(pda))
 		if (pda.id)
@@ -560,7 +562,7 @@
 			show_inv(machine)
 
 	else if (href_list["criminal"])
-		if(!usr.hasHUD(HUD_SECURITY) || isjustobserver(usr))
+		if(!usr.hasHUD(HUD_SECURITY) || !usr.hasHUD(HUD_ARRESTACCESS) || isjustobserver(usr))
 			return
 		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
@@ -610,10 +612,24 @@
 		if(!gen_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
 			return
-		var/setmedical = input(usr, "Specify a new medical status for this person.", "Medical HUD", gen_record.fields["p_stat"]) as null|anything in list("*SSD*", "*Deceased*", "Physically Unfit", "Active", "Disabled")
+		var/setmedical = input(usr, "Specify a new physical medical status for this person.", "Medical HUD", gen_record.fields["p_stat"]) as null|anything in list("*SSD*", "*Deceased*", "Physically Unfit", "Active", "Disabled")
 		if(!setmedical|| (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
 			return
 		gen_record.fields["p_stat"] = setmedical
+		if(PDA_Manifest.len)
+			PDA_Manifest.len = 0
+	else if (href_list["medicalsanity"])
+		if(!usr.hasHUD(HUD_MEDICAL) || isjustobserver(usr))
+			return
+		var/perpname = get_identification_name(get_face_name())
+		var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
+		if(!gen_record)
+			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
+			return
+		var/setmedical = input(usr, "Specify a new mental medical status for this person.", "Medical HUD", gen_record.fields["m_stat"]) as null|anything in list("*Insane*", "*Unstable*", "*Watch*", "Stable")
+		if(!setmedical|| (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
+			return
+		gen_record.fields["m_stat"] = setmedical
 		if(PDA_Manifest.len)
 			PDA_Manifest.len = 0
 	else if (href_list["medrecord"])
@@ -696,6 +712,9 @@
 
 	if (istype(eyewear))
 		. += eyewear.eyeprot
+
+	for(var/datum/visioneffect/V in huds)
+		. += V.eyeprot
 
 	if(E)
 		. += E.eyeprot
@@ -1002,10 +1021,11 @@
 	update_inv_gloves()	//handles bloody hands overlays and updating
 	return TRUE //we applied blood to the item
 
-/mob/living/carbon/human/proc/add_blood_to_feet(var/_amount, var/_color, var/list/_blood_DNA=list())
+/mob/living/carbon/human/proc/add_blood_to_feet(var/_amount, var/_color, var/list/_blood_DNA=list(), var/luminous = FALSE)
 	if(shoes)
 		var/obj/item/clothing/shoes/S = shoes
 		S.track_blood = max(0, _amount, S.track_blood)                //Adding blood to shoes
+		S.luminous_paint = luminous
 
 		if(!blood_overlays["[S.type][S.icon_state]"]) //If there isn't a precreated blood overlay make one
 			S.set_blood_overlay()
@@ -1032,6 +1052,8 @@
 		if(!feet_blood_DNA)
 			feet_blood_DNA = list()
 
+		feet_blood_lum = luminous
+
 		if(!istype(_blood_DNA, /list))
 			_blood_DNA = list()
 		else
@@ -1040,6 +1062,13 @@
 		feet_blood_color = (feet_blood_color && feet_blood_DNA.len) ? BlendRYB(feet_blood_color, _color, 0.5) : _color
 
 		update_inv_shoes(1)
+
+/mob/living/carbon/human/proc/luminous_feet()
+	if(shoes)
+		var/obj/item/clothing/shoes/S = shoes
+		return S.luminous_paint
+	else
+		return feet_blood_lum
 
 /mob/living/carbon/human/clean_blood()
 	.=..()
@@ -1518,6 +1547,11 @@
 					break
 		if(dark_plane_alpha_override)
 			dark_plane.alphas["override"] = dark_plane_alpha_override
+
+	for(var/datum/visioneffect/V in huds)
+		V.process_update_perception(src)
+		if (dark_plane && V.my_dark_plane_alpha_override && V.my_dark_plane_alpha_override_value)
+			dark_plane.alphas["[V.my_dark_plane_alpha_override]"] = V.my_dark_plane_alpha_override_value
 
 	if (istype(glasses))
 		glasses.update_perception(src)
@@ -2121,15 +2155,37 @@
 			G.on_wearer_threw_item(src,target,item)
 
 /mob/living/carbon/human/hasHUD(var/hud_kind)
-	var/glasses = get_item_by_slot(slot_glasses)
 	switch(hud_kind)
 		if(HUD_MEDICAL)
-			return istype(glasses, /obj/item/clothing/glasses/hud/health)
+			for(var/datum/visioneffect/medical/H in huds)
+				return TRUE
+			return FALSE
 		if(HUD_SECURITY)
-			if(istype(glasses, /obj/item/clothing/glasses/sunglasses/sechud/syndishades))
-				var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/S = glasses
-				return S.full_access
-			return is_type_in_list(glasses, list(/obj/item/clothing/glasses/hud/security, /obj/item/clothing/glasses/sunglasses/sechud))
+			var/glasses = get_item_by_slot(slot_glasses)
+			if(glasses)
+				if(istype(glasses, /obj/item/clothing/glasses/hud/security/sunglasses/syndishades))
+					var/obj/item/clothing/glasses/hud/security/sunglasses/syndishades/S = glasses
+					return S.full_access
+			for(var/datum/visioneffect/security/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_ARRESTACCESS)
+			var/glasses = get_item_by_slot(slot_glasses)
+			if(glasses)
+				if(istype(glasses, /obj/item/clothing/glasses/hud/security/sunglasses/syndishades))
+					var/obj/item/clothing/glasses/hud/security/sunglasses/syndishades/S = glasses
+					return S.full_access
+			for(var/datum/visioneffect/security/arrest/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_WAGE)
+			for(var/datum/visioneffect/accountdb/wage/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_MESON)
+			for(var/datum/visioneffect/meson/H in huds)
+				return TRUE
+			return FALSE
 	return FALSE
 
 /mob/living/carbon/human/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
@@ -2165,6 +2221,11 @@
 	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || grabbed_by.len || locked_to || client.move_delayer.blocked())
 		return FALSE
 	var/crawldelay = 0.2 SECONDS
+	if(istype(target, /turf/simulated/floor/engine/bolted))
+		adjustBruteLoss(5)
+		delayNextMove(crawldelay)
+		to_chat(src, "<span class='warning'>You injure yourself trying to crawl onto the bolted floor!</span>")
+		return FALSE
 	if (crawlcounter >= max_crawls_before_fatigue)
 		if (prob(10))
 			to_chat(src, "<span class='warning'>You get tired from all this crawling around.</span>")

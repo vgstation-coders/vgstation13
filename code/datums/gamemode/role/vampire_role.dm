@@ -137,10 +137,10 @@
 		to_chat(M, "<span class='warning'> You cannot do this while on the ground!</span>")
 		return FALSE
 
-	if(H.check_body_part_coverage(MOUTH))
-		if(!locate(/datum/power/vampire/mature) in current_powers)
-			to_chat(M, "<span class='warning'>Remove their mask!</span>")
-			return FALSE
+	//if(H.check_body_part_coverage(MOUTH))
+	//	if(!locate(/datum/power/vampire/mature) in current_powers)
+	//		to_chat(M, "<span class='warning'>Remove their mask!</span>")
+	//		return FALSE
 
 	if(vampire_teeth?.amount == 0)
 		to_chat(M, "<span class='warning'>You cannot suck blood with no teeth!</span>")
@@ -244,13 +244,21 @@
 
 	// Vision-related changes.
 	if (locate(/datum/power/vampire/vision) in current_powers)
-		H.change_sight(adding = SEE_MOBS)
-		H.update_perception()
+		if(!count_by_type(H.huds, /datum/visioneffect/vampire_improved))
+			H.apply_hud(new /datum/visioneffect/vampire_improved)
+	else
+		H.remove_hud_by_type(/datum/visioneffect/vampire_improved)
 
 	if (locate(/datum/power/vampire/mature) in current_powers)
-		H.change_sight(adding = SEE_TURFS|SEE_OBJS)
-		H.dark_plane.alphas["vampire_vision"] = 255
-		H.see_in_dark = 8
+		if(!count_by_type(H.huds, /datum/visioneffect/vampire_mature))
+			H.apply_hud(new /datum/visioneffect/vampire_mature)
+	else
+		H.remove_hud_by_type(/datum/visioneffect/vampire_mature)
+
+	H.handle_hud_vision_updates()
+
+/datum/role/vampire/update_perception()
+	return
 
 /datum/role/vampire/proc/is_mature_or_has_vision()
 	return (locate(/datum/power/vampire/vision) in current_powers) || (locate(/datum/power/vampire/mature) in current_powers)
@@ -290,12 +298,6 @@
 			O.status &= ~ORGAN_SPLINTED
 			O.status &= ~ORGAN_BLEEDING
 	nullified = max(0, nullified - 1)
-
-/datum/role/vampire/update_perception()
-	var/mob/living/carbon/human/H = antag.current
-	if (locate(/datum/power/vampire/mature) in current_powers)
-		H.dark_plane.alphas["vampire_vision"] = 255
-		H.see_in_dark = 8
 
 /datum/role/vampire/proc/handle_cloak(var/mob/living/carbon/human/H)
 	var/turf/T = get_turf(H)

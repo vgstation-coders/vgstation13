@@ -3,7 +3,7 @@
 #define REAGENT_STATE_GAS 3
 #define FOOD_METABOLISM 0.4
 #define REAGENTS_OVERDOSE 30
-#define REM REAGENTS_EFFECT_MULTIPLIER
+#define REM REAGENTS_EFFECT_MULTIPLIER //0.5
 
 // Use in chem.flags.
 #define CHEMFLAG_DISHONORABLE 1
@@ -524,6 +524,7 @@
 #define CAFFEINE		"caffeine"
 #define MIMOSA			"mimosa"
 #define LEMONDROP		"lemondrop"
+#define FEVERFEW		"feverfew"
 
 #define ACRYLIC			"acrylic"
 #define ACETONE			"acetone"

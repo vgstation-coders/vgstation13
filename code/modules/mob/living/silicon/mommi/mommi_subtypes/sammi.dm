@@ -173,7 +173,7 @@
 
 		return 0
 
-	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/flashlight/pda))
+	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if(emagged)//still allow them to open the cover
 			to_chat(user, "The interface seems slightly damaged")
 		if(opened)

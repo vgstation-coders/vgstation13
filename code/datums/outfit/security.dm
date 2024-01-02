@@ -19,7 +19,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/head_of_security,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots/knifeholster,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/armor/hos/jensen,
 			slot_s_store_str = /obj/item/weapon/gun/energy/gun,
 		),
@@ -28,7 +28,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/head_of_security,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots/knifeholster,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/security/hos,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/security/hos,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
@@ -39,7 +39,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/head_of_security,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots/knifeholster,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
@@ -65,7 +65,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/heads/hos
+	pda_type = /obj/item/device/pda/heads/hos
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/hos
 
@@ -98,7 +98,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/warden,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_l_store_str = /obj/item/device/flash,
 		),
 		/datum/species/plasmaman = list(
@@ -106,7 +106,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/warden,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/security,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
@@ -117,7 +117,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/warden,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
@@ -134,7 +134,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/warden
+	pda_type = /obj/item/device/pda/warden
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/security
 
@@ -183,7 +183,7 @@
 				"Detective" = /obj/item/clothing/head/det_hat,
 			),
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = list(
 				"Forensic Technician" = /obj/item/clothing/suit/storage/forensics/blue,
 				"Gumshoe" = /obj/item/clothing/suit/storage/det_suit/noir,
@@ -207,7 +207,7 @@
 				"Detective" = /obj/item/clothing/shoes/brown,
 			),
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/security/detective,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/security/detective,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
@@ -228,7 +228,7 @@
 				"Detective" = /obj/item/clothing/shoes/brown,
 			),
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
@@ -260,7 +260,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/detective
+	pda_type = /obj/item/device/pda/detective
 	pda_slot = slot_r_store
 	id_type = /obj/item/weapon/card/id/security
 
@@ -298,7 +298,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/security,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/armor/vest/security,
 			slot_s_store_str = /obj/item/weapon/gun/energy/taser,
 			slot_l_store_str = /obj/item/device/flash,
@@ -308,7 +308,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/security,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/security,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
@@ -319,7 +319,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/security,
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/security/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
@@ -345,7 +345,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/security
+	pda_type = /obj/item/device/pda/security
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/security
 

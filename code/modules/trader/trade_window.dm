@@ -70,6 +70,16 @@
 		var/obj/item/weapon/spacecash/C = W
 		pay_with_cash(C, user)
 
+	if(istype(W,/obj/item/weapon/pinpointer/outpost))
+		if(user.get_face_name() in SStrade.loyal_customers)
+			say(pick(tw_return_pinpointer))
+		else
+			say("Hope you got this honestly...")
+		qdel(W)
+		var/obj/item/weapon/reagent_containers/food/drinks/coffee/C = new(loc)
+		tableadjust(C)
+		C.on_vending_machine_spawn()
+
 	if(istype(W, /obj/item/weapon/card/id/vox/extra) && !(user.get_face_name() in SStrade.loyal_customers))
 		if(user.get_face_name() == "Unknown")
 			say("Show it to me again, but this time without your face covered.")

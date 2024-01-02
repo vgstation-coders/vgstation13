@@ -441,8 +441,8 @@ Pressure: [env.pressure]"}
 		var/mob/living/carbon/human/H = M
 		if (H.wear_id)
 			var/obj/item/weapon/card/id/id = H.wear_id
-			if(istype(H.wear_id, /obj/item/device/flashlight/pda))
-				var/obj/item/device/flashlight/pda/pda = H.wear_id
+			if(istype(H.wear_id, /obj/item/device/pda))
+				var/obj/item/device/pda/pda = H.wear_id
 				id = pda.id
 			id.icon_state = "gold"
 			id:access = get_all_accesses()+get_all_centcom_access()+get_all_syndicate_access()
@@ -1238,12 +1238,16 @@ var/global/blood_virus_spreading_disabled = 0
 		alert("Only observers can use this functionality")
 		return
 
-	if(adminmob.conversionHUD)
-		adminmob.conversionHUD = 0
-		to_chat(src, "<span class='notice'><B>conversionHUD Disabled</B></span>")
+	var/datum/visioneffect/cult_conversion/detected_hud = null
+	for(var/datum/visioneffect/cult_conversion/H in adminmob.huds)
+		detected_hud = H
+		break
+	if(detected_hud)
+		adminmob.remove_hud(detected_hud)
+		to_chat(src, "<span class='notice'><B>Conversion HUD disabled.</B></span>")
 	else
-		adminmob.conversionHUD = 1
-		to_chat(src, "<span class='notice'><B>conversionHUD Enabled</B></span>")
+		adminmob.apply_hud(new /datum/visioneffect/cult_conversion)
+		to_chat(src, "<span class='notice'><B>Conversion HUD enabled.</B></span>")
 
 /client/proc/spawn_datum(var/object as text)
 	set category = "Debug"

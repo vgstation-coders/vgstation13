@@ -55,7 +55,7 @@
 		/obj/item/weapon/implant/loyalty/,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/heads/cmo
+	pda_type = /obj/item/device/pda/heads/cmo
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/cmo
 
@@ -146,7 +146,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/medical
+	pda_type = /obj/item/device/pda/medical
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
@@ -183,7 +183,7 @@
 				"Pharmacist" = /obj/item/clothing/under/rank/pharma,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/white,
-			slot_glasses_str = /obj/item/clothing/glasses/science,
+			slot_glasses_str = /obj/item/clothing/glasses/scanner/science,
 			slot_wear_suit_str = /obj/item/clothing/suit/storage/labcoat/chemist,
 		),
 		/datum/species/plasmaman = list(
@@ -193,7 +193,7 @@
 				"Pharmacist" = /obj/item/clothing/under/rank/pharma,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/white,
-			slot_glasses_str = /obj/item/clothing/glasses/science,
+			slot_glasses_str = /obj/item/clothing/glasses/scanner/science,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical/chemist,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical/chemist,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
@@ -205,7 +205,7 @@
 				"Pharmacist" = /obj/item/clothing/under/rank/pharma,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/white,
-			slot_glasses_str = /obj/item/clothing/glasses/science,
+			slot_glasses_str = /obj/item/clothing/glasses/scanner/science,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/chemist,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/chemist,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath/vox,
@@ -221,7 +221,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/chemist
+	pda_type = /obj/item/device/pda/chemist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
@@ -330,7 +330,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/medical
+	pda_type = /obj/item/device/pda/medical
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
@@ -394,7 +394,7 @@
 		),
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/medical
+	pda_type = /obj/item/device/pda/medical
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
@@ -484,7 +484,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/geneticist
+	pda_type = /obj/item/device/pda/geneticist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
@@ -551,7 +551,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/viro
+	pda_type = /obj/item/device/pda/viro
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 

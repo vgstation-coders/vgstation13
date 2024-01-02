@@ -40,6 +40,7 @@ log transactions
 	..()
 	machine_id = "[station_name()] ATM #[multinum_display(num_financial_terminals,4)]"
 	num_financial_terminals++
+	update_icon()
 	if(ticker)
 		initialize()
 
@@ -47,6 +48,18 @@ log transactions
 	if(atm_card)
 		QDEL_NULL(atm_card)
 	..()
+
+/obj/machinery/atm/power_change()
+	..()
+	update_icon()
+
+/obj/machinery/atm/update_icon()
+	if(stat & (FORCEDISABLE|NOPOWER))
+		icon_state = "atm_off"
+		kill_moody_light()
+	else
+		icon_state = "atm"
+		update_moody_light('icons/lighting/special.dmi', "overlay_atm")
 
 /obj/machinery/atm/process()
 	if(stat & (FORCEDISABLE|NOPOWER))
@@ -490,8 +503,8 @@ log transactions
 			dispense_cash(arbitrary_sum,H.wear_id)
 			to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your physical wallet!</span>")
 			return
-		if(istype(H.wear_id, /obj/item/device/flashlight/pda))
-			var/obj/item/device/flashlight/pda/P = H.wear_id
+		if(istype(H.wear_id, /obj/item/device/pda))
+			var/obj/item/device/pda/P = H.wear_id
 			if(P.add_to_virtual_wallet(arbitrary_sum, user, src))
 				to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your virtual wallet!</span>")
 				return
@@ -511,8 +524,8 @@ log transactions
 			var/obj/item/weapon/card/id/I
 			if(istype(human_user.wear_id, /obj/item/weapon/card/id) )
 				I = human_user.wear_id
-			else if(istype(human_user.wear_id, /obj/item/device/flashlight/pda) )
-				var/obj/item/device/flashlight/pda/P = human_user.wear_id
+			else if(istype(human_user.wear_id, /obj/item/device/pda) )
+				var/obj/item/device/pda/P = human_user.wear_id
 				I = P.id
 			if(I)
 				authenticated_account = linked_db.attempt_account_access(I.associated_account_number)

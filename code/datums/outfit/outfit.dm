@@ -284,7 +284,7 @@
 		C.update_virtual_wallet(H.mind.initial_wallet_funds)
 
 	if (pda_type)
-		var/obj/item/device/flashlight/pda/pda = new pda_type(H)
+		var/obj/item/device/pda/pda = new pda_type(H)
 		pda.owner = H.real_name
 		pda.ownjob = C.assignment
 		pda.name = "PDA-[H.real_name] ([pda.ownjob])"

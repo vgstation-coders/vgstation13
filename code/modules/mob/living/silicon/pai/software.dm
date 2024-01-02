@@ -203,7 +203,8 @@
 
 		// Accessing medical records
 		if("medicalsupplement")
-			secHUD = FALSE // Can't have both of them at the same time
+			if(!medHUD)
+				apply_hud_by_type(/datum/visioneffect/medical)
 			medHUD = TRUE
 			if(subscreen == 1)
 				var/datum/data/record/record = locate(href_list["med_rec"])
@@ -219,7 +220,9 @@
 						medicalActive1 = R
 						medicalActive2 = M
 		if("securitysupplement")
-			medHUD = FALSE // Can't have both of them at the same time
+			if(!secHUD)
+				apply_hud_by_type(/datum/visioneffect/security/arrest)
+				apply_hud_by_type(/datum/visioneffect/job)
 			secHUD = TRUE
 			if(subscreen == 1)
 				var/datum/data/record/record = locate(href_list["sec_rec"])
@@ -273,7 +276,7 @@
 				if(lighted)
 					card.set_light(4) //Equal to flashlight
 				else
-					card.kill_light()
+					card.set_light(0)
 		if("pps")
 			if(!pps_device)
 				pps_device = new(src)
@@ -672,7 +675,7 @@ Target Machine: "}
 	[(message_app.silent) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br><br>"}
 	dat += "<ul>"
 	if(!message_app.toff)
-		for (var/obj/item/device/flashlight/pda/P in get_viewable_pdas())
+		for (var/obj/item/device/pda/P in get_viewable_pdas())
 			dat += {"<li><a href='byond://?src=\ref[src];software=pdamessage;target=\ref[P]'>[P]</a>
 				</li>"}
 	dat += {"</ul>

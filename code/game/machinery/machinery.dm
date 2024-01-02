@@ -307,7 +307,7 @@ Class Procs:
 
 		if(!use_auto_lights)
 			return
-		kill_light()
+		set_light(0)
 
 // returns true if the machine is powered (or doesn't require power).
 // performs basic checks every machine should do, then
@@ -917,3 +917,12 @@ Class Procs:
 //Called when a table underneath is removed, or flipped
 /obj/machinery/proc/table_unshift()
 	return
+
+/obj/machinery/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
+	. = ..()
+	if (.)
+		if (anchored)
+			if (locate(/obj/structure/table) in loc)
+				table_shift()
+		else
+			table_unshift()

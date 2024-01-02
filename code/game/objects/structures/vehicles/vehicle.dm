@@ -496,7 +496,7 @@
 		target.set_light(brightness)
 		playsound(target, sounds[1], 50, 1)
 	else
-		target.kill_light()
+		target.set_light(0)
 		playsound(target, sounds[2], 50, 1)
 	target.update_icon()
 

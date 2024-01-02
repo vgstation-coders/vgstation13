@@ -115,7 +115,7 @@ var/global/list/floorbot_targets=list()
 		to_chat(user, "<span class='notice'>You load [loaded] tiles into the floorbot. He now contains [amount] tiles.</span>")
 		update_icon()
 		updateUsrDialog()
-	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/flashlight/pda))
+	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if(allowed(usr) && !open && !emagged)
 			locked = !locked
 			to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] \the [src]'s behaviour controls.</span>")

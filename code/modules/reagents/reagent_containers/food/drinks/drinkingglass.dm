@@ -31,7 +31,7 @@
 	if(!molotov)
 		lit = 0
 	light_color = null
-	kill_light()
+	set_light(0)
 	origin_tech = ""
 	switching = FALSE
 	available_drinks.Cut()
@@ -81,6 +81,9 @@
 		var/mob/living/carbon/M = loc
 		M.update_inv_hands()
 
+	update_temperature_overlays()
+	update_blood_overlay()
+
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/attack_self(mob/user)
 	if(switching)
 		getnofruit(user)
@@ -92,6 +95,7 @@
 		getnofruit(user,W)
 	else
 		..()
+
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/proc/randomize()
 	if(!available_drinks.len || switching)
@@ -165,6 +169,9 @@
 	reagents.add_reagent(IRISHCOFFEE, 50)
 	on_reagent_change()
 
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/on_vending_machine_spawn()
+	reagents.chem_temp = COOKTEMP_READY
+
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake
 	name = "glass of sake"
 
@@ -203,16 +210,20 @@
 			//looks like there is none made yet so at least let's not hold an invisible mug
 
 		else
-			mug_reagent_overlay()
+			update_icon()
 	else
-		overlays.len = 0
+		update_icon()
 		icon_state = "mug_empty"
 		name = "mug"
 		desc = "A simple mug."
 		return
 
+/obj/item/weapon/reagent_containers/food/drinks/mug/update_icon()
+	..()
+	if (reagents.reagent_list.len > 0)
+		mug_reagent_overlay()
+
 /obj/item/weapon/reagent_containers/food/drinks/proc/mug_reagent_overlay()
-	overlays.len = 0
 	icon_state = base_icon_state
 	var/image/filling = image('icons/obj/reagentfillings.dmi', src, "mug")
 	filling.icon += mix_color_from_reagents(reagents.reagent_list)

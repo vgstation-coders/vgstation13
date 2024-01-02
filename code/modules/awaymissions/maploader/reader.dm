@@ -348,7 +348,7 @@ var/list/map_dimension_cache = list()
 
 	if(overwrite) //make this come first so lighting overlays don't die
 		var/turf/T_old = locate(xcrd,ycrd,zcrd)
-		var/static/list/blacklisted_types = list(/mob/dead/observer, /mob/dview, /atom/movable/light, /atom/movable/border_dummy)
+		var/static/list/blacklisted_types = list(/mob/dead/observer, /mob/dview, /atom/movable/lighting_overlay, /atom/movable/border_dummy)
 		for(var/atom/thing as anything in T_old.contents)
 			if(!is_type_in_list(thing.type,blacklisted_types))
 				qdel(thing)
@@ -506,6 +506,14 @@ var/list/map_dimension_cache = list()
 	placed.underlays += turfs_underlays
 
 /atom/New()
+	// Incase any lighting vars are on in the typepath we turn the light on in New().
+
+	if (light_power && light_range)
+		update_light()
+
+	if (opacity && isturf(loc))
+		var/turf/T = loc
+		T.has_opaque_atom = TRUE // No need to recalculate it in this case, it's guaranteed to be on afterwards anyways.
 
 	//atom creation method that preloads variables at creation
 	if(use_preloader && (src.type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()

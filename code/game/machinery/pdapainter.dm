@@ -12,18 +12,18 @@ Feel free to do whatever with this if you think it lacks.
 	icon_state = "pdapainter"
 	density = 1
 	anchored = 1
-	var/obj/item/device/flashlight/pda/storedpda = null
+	var/obj/item/device/pda/storedpda = null
 	var/list/colorlist = list()
 
 	var/busy = 0
 
 	var/last_print = 0 //No spamming PDA printing
 	var/build_time = 200 //could change in the future
-	var/blocked = list(/obj/item/device/flashlight/pda/ai/pai,
-						/obj/item/device/flashlight/pda/ai,
-						/obj/item/device/flashlight/pda/heads,
-						/obj/item/device/flashlight/pda/clear,
-						/obj/item/device/flashlight/pda/syndicate)
+	var/blocked = list(/obj/item/device/pda/ai/pai,
+						/obj/item/device/pda/ai,
+						/obj/item/device/pda/heads,
+						/obj/item/device/pda/clear,
+						/obj/item/device/pda/syndicate)
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
 
@@ -70,8 +70,8 @@ Feel free to do whatever with this if you think it lacks.
 							/obj/item/weapon/stock_parts/console_screen
 			)
 
-	for(var/P in typesof(/obj/item/device/flashlight/pda) - blocked)
-		var/obj/item/device/flashlight/pda/D = P
+	for(var/P in typesof(/obj/item/device/pda) - blocked)
+		var/obj/item/device/pda/D = P
 		src.colorlist[initial(D.name)] = D
 
 	RefreshParts()
@@ -84,12 +84,12 @@ Feel free to do whatever with this if you think it lacks.
 	if(..())
 		return 1
 
-	if(istype(O, /obj/item/device/flashlight/pda))
+	if(istype(O, /obj/item/device/pda))
 		if(storedpda)
 			to_chat(user, "There is already a PDA inside.")
 			return
 		else
-			var/obj/item/device/flashlight/pda/P = O
+			var/obj/item/device/pda/P = O
 			if(istype(P))
 				if(user.drop_item(P, src))
 					storedpda = P
@@ -121,12 +121,12 @@ Feel free to do whatever with this if you think it lacks.
 	else
 		to_chat(user, "<span class='notice'>\The [src] is empty.</span>")
 
-/obj/machinery/pdapainter/proc/paint_pda(new_color, obj/item/device/flashlight/pda/override_pda)
-	var/obj/item/device/flashlight/pda/modified = storedpda
+/obj/machinery/pdapainter/proc/paint_pda(new_color, obj/item/device/pda/override_pda)
+	var/obj/item/device/pda/modified = storedpda
 	if(override_pda)
 		modified = override_pda
 
-	var/obj/item/device/flashlight/pda/P = colorlist[new_color]
+	var/obj/item/device/pda/P = colorlist[new_color]
 
 	modified.icon_state = initial(P.icon_state)
 	modified.desc = initial(P.desc)
@@ -167,14 +167,14 @@ Feel free to do whatever with this if you think it lacks.
 		sleep(build_time)
 		src.visible_message("<span class='notice'>\The [src] rattles and shakes, spitting out a new PDA.</span>")
 		busy = 0
-		new /obj/item/device/flashlight/pda(get_turf(src))
+		new /obj/item/device/pda(get_turf(src))
 		last_print = world.timeofday
 	else
 		to_chat(usr, "\The [src] is not ready to print again.")
 
 /obj/machinery/pdapainter/npc_tamper_act(mob/living/L)
 	if(last_print + 300 < world.timeofday)
-		var/obj/item/device/flashlight/pda/P = new /obj/item/device/flashlight/pda(get_turf(src))
+		var/obj/item/device/pda/P = new /obj/item/device/pda(get_turf(src))
 		last_print = world.timeofday
 
 		//Paint the PDA into a random color

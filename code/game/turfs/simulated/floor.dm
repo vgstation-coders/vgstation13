@@ -136,13 +136,13 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		overlays -= advanced_graffiti_overlay
 		qdel(advanced_graffiti)
 		if(T.on)
-			light_color = rgb(T.color_r,T.color_g,T.color_b)
-			set_light(5, 2)
+			set_light(5)
 			floor_overlay = T.get_turf_image()
 			icon_state = "light_base"
 			overlays += floor_overlay
+			light_color = floor_overlay.color
 		else
-			kill_light()
+			set_light(0)
 			icon_state = "light_off"
 	else if(is_grass_floor())
 		if(!broken && !burnt)
@@ -232,10 +232,6 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		var/obj/item/stack/tile/light/T = floor_tile
 		T.on = !T.on
 		update_icon()
-		if (!T.on)
-			kill_light()
-		else
-			set_light(5, 2)
 
 	switch(material)
 		if("bananium")
@@ -390,7 +386,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	if(floor_tile)
 		qdel(floor_tile)
 	icon_plating = "plating"
-	kill_light()
+	set_light(0)
 	floor_tile = null
 	intact = 0
 	broken = 0
@@ -468,7 +464,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		if (paint_overlay)
 			floor_tile.overlays.len = 0
 			floor_tile.paint_overlay = paint_overlay.Copy()
-		floor_tile.update_icon()
+			floor_tile.update_icon()
 		floor_tile = null
 
 /turf/simulated/floor/singularity_pull(S, current_size)
@@ -605,7 +601,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 						L.apply_radiation(3,RAD_EXTERNAL)
 					flick("uranium_active",src)
 					spawn(20)
-						kill_light()
+						set_light(0)
 					spawn(200)
 						spam_flag = 0
 						update_icon()

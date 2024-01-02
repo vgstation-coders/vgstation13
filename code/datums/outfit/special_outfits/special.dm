@@ -182,7 +182,7 @@
 			slot_head_str = /obj/item/clothing/head/det_hat,
 			slot_s_store_str = /obj/item/weapon/gun/projectile,
 			slot_r_store_str = /obj/item/weapon/cloaking_device,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/monocle,
 		)
 	)
 
@@ -316,7 +316,7 @@
 			slot_gloves_str = /obj/item/clothing/gloves/latex,
 			slot_head_str = /obj/item/clothing/head/welding,
 			slot_ears_str = /obj/item/device/radio/headset,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/monocle,
 			slot_wear_suit_str = /obj/item/clothing/suit/apron,
 			slot_wear_mask_str = /obj/item/clothing/mask/surgical,
 			slot_l_store_str = /obj/item/tool/scalpel,
@@ -341,7 +341,7 @@
 	W.SetOwnerDNAInfo(H)
 	H.equip_to_slot_or_drop(W, slot_wear_id)
 	if (pda_type)
-		var/obj/item/device/flashlight/pda/pda = new pda_type(H)
+		var/obj/item/device/pda/pda = new pda_type(H)
 		pda.owner = H.real_name
 		pda.name = "PDA-[H.real_name]"
 		H.equip_or_collect(pda, pda_slot)
@@ -355,7 +355,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/clown_shoes,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
 			slot_ears_str = /obj/item/device/radio/headset,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/monocle,
 			slot_wear_suit_str = /obj/item/clothing/suit/chaplain_hoodie,
 			slot_r_store_str = /obj/item/weapon/bikehorn,
 		),
@@ -381,7 +381,7 @@
 			slot_l_store_str = /obj/item/tool/scalpel,
 		),
 	)
-	pda_type = /obj/item/device/flashlight/pda/heads/assassin
+	pda_type = /obj/item/device/pda/heads/assassin
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/syndicate/assassin
 
@@ -396,7 +396,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses,
 		),
 	)
-	pda_type = /obj/item/device/flashlight/pda/heads/nt_rep
+	pda_type = /obj/item/device/pda/heads/nt_rep
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/nt_rep
 
@@ -422,7 +422,7 @@
 	items_to_collect = list(
 		/obj/item/weapon/gun/energy,
 	)
-	pda_type = /obj/item/device/flashlight/pda/heads/nt_officer
+	pda_type = /obj/item/device/pda/heads/nt_officer
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/centcom/nt_officer
 
@@ -445,7 +445,7 @@
 	items_to_collect = list(
 		/obj/item/weapon/gun/energy,
 	)
-	pda_type = /obj/item/device/flashlight/pda/heads/nt_captain
+	pda_type = /obj/item/device/pda/heads/nt_captain
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/centcom/nt_officer
 
@@ -468,7 +468,7 @@
 	items_to_collect = list(
 		/obj/item/weapon/gun/energy/laser/captain,
 	)
-	pda_type = /obj/item/device/flashlight/pda/heads/nt_supreme
+	pda_type = /obj/item/device/pda/heads/nt_supreme
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/centcom/nt_supreme
 
@@ -483,7 +483,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/combat,
 			slot_gloves_str = /obj/item/clothing/gloves/combat,
 			slot_ears_str = /obj/item/device/radio/headset/heads/captain,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/eyepatch,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/eyepatch,
 			slot_head_str = /obj/item/clothing/head/beret/centcom, // the duality of man
 			slot_wear_suit_str = /obj/item/clothing/suit/armor/swat/officer,
 			slot_wear_mask_str = /obj/item/clothing/mask/cigarette/cigar/havana,
@@ -506,7 +506,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/combat,
 			slot_gloves_str = /obj/item/clothing/gloves/combat,
 			slot_ears_str = /obj/item/device/radio/headset/heads/captain,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/eyepatch,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/eyepatch,
 			slot_head_str = /obj/item/clothing/head/hgpiratecap,
 			slot_wear_suit_str = /obj/item/clothing/suit/hgpirate,
 			slot_wear_mask_str = /obj/item/clothing/mask/cigarette/cigar/havana,

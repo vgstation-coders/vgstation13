@@ -180,6 +180,10 @@
 		result = first ^ second
 	return result
 
+//Returns a new list of only elements in both lists.
+/proc/andlist(var/list/A, var/list/B)
+	return A & B
+
 //Picks an element based on its weight
 /proc/pickweight(list/L)
 	if(!L || !L.len)

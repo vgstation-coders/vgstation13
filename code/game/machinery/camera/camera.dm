@@ -52,6 +52,10 @@ var/list/camera_names=list()
 	damage_armor = CAMERA_MIN_WEAPON_DAMAGE
 	damage_resist = 0
 
+/obj/machinery/camera/New()
+	..()
+	update_icon()
+
 /obj/machinery/camera/flawless
 	failure_chance = 0
 
@@ -69,10 +73,13 @@ var/list/camera_names=list()
 
 	if (deactivated)
 		icon_state = "[camtype]1"
+		kill_moody_light()
 	else if (EMPd)
 		icon_state = "[camtype]emp"
+		update_moody_light('icons/lighting/special.dmi', "overlay_cameraemp")
 	else
 		icon_state = "[camtype]"
+		update_moody_light('icons/lighting/special.dmi', "overlay_camera")
 
 /obj/machinery/camera/proc/update_hear()//only cameras with voice analyzers can hear, to reduce the number of unecessary /mob/virtualhearer
 	if(!hear_voice && isHearing())
@@ -152,7 +159,7 @@ var/list/camera_names=list()
 		network = list()
 		cameranet.removeCamera(src)
 		stat |= EMPED
-		kill_light()
+		set_light(0)
 		triggerCameraAlarm()
 		update_icon()
 		spawn(900)
@@ -279,7 +286,7 @@ var/list/camera_messages = list()
 			return
 
 	// OTHER
-	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/flashlight/pda)) && isliving(user))
+	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
 		user.delayNextAttack(5)
 		var/mob/living/U = user
 		to_chat(U, "You hold [W] up to the camera ...")
@@ -289,7 +296,7 @@ var/list/camera_messages = list()
 			var/obj/item/weapon/paper/X = W
 			info = X.info
 		else
-			var/obj/item/device/flashlight/pda/P = W
+			var/obj/item/device/pda/P = W
 			var/datum/pda_app/notekeeper/app = locate(/datum/pda_app/notekeeper) in P.applications
 			if(app)
 				info = app.notehtml

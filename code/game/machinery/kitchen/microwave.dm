@@ -21,7 +21,7 @@
 	var/auto_make_on_detect = 0 //Default no, scan level >=2 only
 	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
 	var/global/list/acceptable_items = list(
-							/obj/item/weapon/kitchen/utensil,/obj/item/device/flashlight/pda,/obj/item/device/paicard,
+							/obj/item/weapon/kitchen/utensil,/obj/item/device/pda,/obj/item/device/paicard,
 							/obj/item/weapon/cell,/obj/item/weapon/circuitboard,/obj/item/device/aicard
 							)// List of the items you can put in
 	var/global/list/acceptable_reagents // List of the reagents you can put in
@@ -235,6 +235,13 @@
 		var/obj/item/weapon/grab/G = O
 		to_chat(user, "<span class='warning'>This is ridiculous. You can not fit [G.affecting] in this [src].</span>")
 		return 1
+	else if(istype(O,/obj/item/weapon/reagent_containers/food/snacks))//we always accept snacks so we can warm them up
+		if(user.drop_item(O, src))
+			user.visible_message( \
+				"<span class='notice'>[user] adds [O] to [src].</span>", \
+				"<span class='notice'>You add [O] to [src].</span>")
+			updateUsrDialog()
+			return 1
 	else
 		to_chat(user, "<span class='warning'>You have no idea what you can cook with [O].</span>")
 		return 1
@@ -376,7 +383,7 @@
 				empty()
 				explosion(get_turf(src), -1,0,0)
 				return
-			if(istype(O,/obj/item/device/flashlight/pda) || istype(O,/obj/item/device/paicard) || istype(O,/obj/item/device/aicard) || istype(O,/obj/item/weapon/circuitboard))
+			if(istype(O,/obj/item/device/pda) || istype(O,/obj/item/device/paicard) || istype(O,/obj/item/device/aicard) || istype(O,/obj/item/weapon/circuitboard))
 				src.visible_message("<span class='warning'>[O] sparks in the microwave!</span>")
 				if (!running(4))
 					abort()
@@ -412,7 +419,18 @@
 				abort()
 				return
 			stop()
-			cooked = fail()
+			if ((contents.len == 1) && !reagents.total_volume)
+				cooked = contents[1]//if there's just one item and no reagents, warm it up
+				var/cook_temp = COOKTEMP_READY//100°C
+				if(emagged || arcanetampered)
+					cook_temp = COOKTEMP_EMAGGED//8.000.000°C
+					playsound(src, "sound/items/flare_on.ogg", 100, 0)
+					cooked.ignite()
+				if (cooked.reagents.chem_temp < cook_temp)
+					cooked.reagents.chem_temp = cook_temp
+					cooked.update_icon()
+			else
+				cooked = fail()
 			cooked.forceMove(src.loc)
 			return
 	else
@@ -425,10 +443,7 @@
 			cooked = fail()
 			cooked.forceMove(src.loc)
 			return
-		if(!emagged && !arcanetampered)
-			cooked = recipe.make_food(src,user)
-		else
-			cooked = fail()
+		cooked = recipe.make_food(src,user)
 		stop()
 		if(cooked)
 			adjust_cooked_food_reagents_temperature(cooked, recipe)
@@ -452,6 +467,14 @@
 	if(emagged || arcanetampered)
 		max_temperature = INFINITY //If it's been messed with, let it heat more than that.
 	cooked.reagents.heating(thermal_energy_transfer, max_temperature)
+	var/cook_temp = COOKTEMP_READY//100°C
+	if(emagged || arcanetampered)
+		cook_temp = COOKTEMP_EMAGGED//8.000.000°C
+		playsound(src, "sound/items/flare_on.ogg", 100, 0)
+		cooked.ignite()
+	if (cooked.reagents.chem_temp < cook_temp)
+		cooked.reagents.chem_temp = cook_temp
+		cooked.update_icon()
 
 /obj/machinery/microwave/proc/running(var/seconds as num) // was called wzhzhzh, for some fucking reason
 	for (var/i=1 to seconds)
@@ -557,6 +580,14 @@
 		muck_start()
 		muck_finish()
 		broke()
+	var/cook_temp = COOKTEMP_READY//100°C
+	if(emagged || arcanetampered)
+		cook_temp = COOKTEMP_EMAGGED//8.000.000°C
+		playsound(src, "sound/items/flare_on.ogg", 100, 0)
+		ffuu.ignite()
+	if (ffuu.reagents.chem_temp < cook_temp)
+		ffuu.reagents.chem_temp = cook_temp
+		ffuu.update_icon()
 	return ffuu
 
 /obj/machinery/microwave/proc/empty()

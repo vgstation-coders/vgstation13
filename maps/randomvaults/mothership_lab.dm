@@ -486,6 +486,9 @@
 	msg = "As you climb the ladder you find yourself in a hastily dug tunnel. Dark crevices and collapsed piles of rock rubble make this a prime place for an ambush. You should be cautious."
 	play_sound = 'sound/ambience/ambigen3.ogg'
 
+/obj/effect/narration/mothership_lab/raidertunnel2 // This tunnel be for pirates, matey
+	msg = "There is a soft scratching sound, like claws scraping against rock. And you swear you hear low whispers in the dark. Something is waiting for you just ahead."
+
 /obj/effect/narration/mothership_lab/habitationdeck // This deck be a bad place
 	msg = "As you enter the habitation deck, you see a chaotic scene highlighted by the dim red light of emergency flares. Scorched plating, bullet impacts, blood, and makeshift barricades are scattered everywhere."
 	play_sound = 'sound/ambience/spookymaint2.ogg'

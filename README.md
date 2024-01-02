@@ -88,7 +88,7 @@ Included in the repo is an IRC bot capable of relaying adminhelps to a specified
 
 All code is licensed under the [GNU GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.html) unless specified otherwise.
 
-TGUI is licensed under the MIT license.
+TGUI and the tgstation-server DMAPI are licensed under the MIT license.
 
 Goonchat is licensed under [CC BY-NC-SA 3.0](http://creativecommons.org/licenses/by-nc-sa/3.0/us/).
 

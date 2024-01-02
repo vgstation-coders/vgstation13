@@ -257,7 +257,7 @@ Status: []<BR>"},
 				installed = null // Workaround for qdel() deleting references to the installed gun too in the process
 				qdel(src)
 
-	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/flashlight/pda))
+	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		// Behavior lock/unlock mangement
 		if (allowed(user))
 			locked = !src.locked

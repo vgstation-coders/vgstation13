@@ -221,6 +221,9 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if(reagents.has_reagent(CLOTTING_AGENT) || reagents.has_reagent(BIOFOAM)) //Clotting agent and biofoam stop bleeding entirely
 		blood_factor = 0
 
+	if(reagents.has_reagent(FEVERFEW)) //A powerful anticoagulant that overrides clotting agents
+		blood_factor = 1
+
 	if(bodytemperature < 170) //Cryo stops bleeding entirely
 		blood_factor = 0
 

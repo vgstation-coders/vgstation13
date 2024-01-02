@@ -418,7 +418,7 @@ var/global/list/alert_overlays_global = list()
 		var/obj/item/weapon/card/id/ID = C
 
 		if(isPDA(C))
-			var/obj/item/device/flashlight/pda/pda = C
+			var/obj/item/device/pda/pda = C
 			ID = pda.id
 		if(!istype(ID))
 			ID = null

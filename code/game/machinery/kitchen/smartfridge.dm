@@ -43,7 +43,7 @@
 		spawn(rand(0, 15))
 			stat |= NOPOWER
 			if(!(stat & BROKEN))
-				kill_light()
+				set_light(0)
 
 
 /datum/fridge_pile

@@ -237,7 +237,6 @@
 	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	armor = list(melee = 50, bullet = 50, laser = 15, energy = 5, bomb = 35, bio = 0, rad = 0)
-	slowdown = HARDSUIT_SLOWDOWN_LOW
 	siemens_coefficient = 0.5
 
 /obj/item/clothing/suit/armor/xcomsquaddie/verb/toggle_sleeves()
@@ -280,7 +279,6 @@
 	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|IGNORE_INV
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 20, bomb = 25, bio = 0, rad = 0)
-	slowdown = HARDSUIT_SLOWDOWN_LOW
 	siemens_coefficient = 0.5
 
 /obj/item/clothing/suit/armor/xcomarmor/equipped(mob/living/carbon/human/H, equipped_slot)

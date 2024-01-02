@@ -525,7 +525,7 @@
 		for(var/obj/item/weapon/card/id/card in current)
 			is_currently_brigged = 0
 			break // if they still have ID they're not brigged
-		for(var/obj/item/device/flashlight/pda/P in current)
+		for(var/obj/item/device/pda/P in current)
 			if(P.id)
 				is_currently_brigged = 0
 				break // if they still have ID they're not brigged

@@ -55,8 +55,6 @@
 #define SHORT_REAL_LIMIT 16777216
 
 #define manhattan_distance(a, b) (abs(a.x - b.x) + abs(a.y - b.y))
-#define bird_distance(a,b) (max(abs(a.x - b.x), abs(a.y - b.y)))
-#define orthogonal_project(a,b) (min(abs(a.x - b.x), abs(a.y - b.y)))
 
 #define IS_INT(x) (x == round(x))
 

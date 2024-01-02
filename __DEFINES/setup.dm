@@ -928,8 +928,10 @@ SEE_PIXELS	256
 // for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
 #define HEALTH_HUD          "health" // a simple line rounding the mob's number health
 #define STATUS_HUD          "status" // alive, dead, diseased, etc.
-#define RECORD_HUD			"record" // what medbay has set your records to
+#define PHYSRECORD_HUD			"p_record" // what medbay has set your records to
+#define MENTRECORD_HUD			"m_record" // what medbay has set your records to
 #define ID_HUD              "id" // the job asigned to your ID
+#define WAGE_HUD			"wage" // the wage assigned to your ID
 #define WANTED_HUD          "wanted" // wanted, released, parroled, security status
 #define IMPLOYAL_HUD		"imployal" // loyality implant
 #define IMPCHEM_HUD		    "impchem" // chemical implant
@@ -1702,6 +1704,9 @@ var/proccalls = 1
 #define HUD_NONE 0
 #define HUD_MEDICAL 1
 #define HUD_SECURITY 2
+#define HUD_WAGE 3
+#define HUD_MESON 4
+#define HUD_ARRESTACCESS 5
 
 //Cyborg components
 #define COMPONENT_BROKEN -1
@@ -1872,7 +1877,13 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define COOKVESSEL_CONTAINS_CONTENTS (1<<1)	//The cooking vessel contains non-reagent contents (eg. items)
 
 //Cooking-related temperatures
+#define FRIDGETEMP_FREEZER	 (T0C - 40)
+#define FRIDGETEMP_FROZEN	 (T0C - 20)//because freezers at room temperature actually hold items at -20°C, so we can apply that to meatvend items
+#define FRIDGETEMP_DEFAULT	 (T0C + 4)
+#define STEAMTEMP	 (T0C + 50)
+#define COOKTEMP_READY	 (T0C + 100) //The minimal temperature at which items come out of a frying pan, enables food to visibly steam. After a few seconds it's fully safe to eat.
 #define COOKTEMP_DEFAULT (T0C + 316) //Default cooking temperature, around 600 F
+#define COOKTEMP_EMAGGED (T0C + 8000000)
 #define COOKTEMP_HUMANSAFE (BODYTEMP_HEAT_DAMAGE_LIMIT - 1) //Human-safe temperature for cooked food, 1 degree less than the threshold for burning a human.
 
 //Cleaning

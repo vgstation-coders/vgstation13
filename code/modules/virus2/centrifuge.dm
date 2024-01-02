@@ -132,7 +132,7 @@
 		icon_state = "centrifugeb"
 
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
-		kill_light()
+		set_light(0)
 	else
 		if (on)
 			icon_state = "centrifuge_moving"

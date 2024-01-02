@@ -55,7 +55,7 @@
 		),
 	)
 
-	pda_type = /obj/item/device/flashlight/pda
+	pda_type = /obj/item/device/pda
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
@@ -109,9 +109,10 @@
 	items_to_collect = list(
 		/obj/abstract/spawn_all/bartender = SURVIVAL_BOX,
 		/obj/item/weapon/reagent_containers/food/drinks/shaker = slot_l_store_str,
+		/obj/item/weapon/storage/fancy/beer_box = GRASP_LEFT_HAND
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/bar
+	pda_type = /obj/item/device/pda/bar
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
@@ -184,7 +185,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/chef
+	pda_type = /obj/item/device/pda/chef
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
@@ -274,7 +275,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/botanist
+	pda_type = /obj/item/device/pda/botanist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
@@ -357,7 +358,7 @@
 		/obj/item/toy/waterflower = null,
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/clown
+	pda_type = /obj/item/device/pda/clown
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/clown
 
@@ -437,7 +438,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/mime
+	pda_type = /obj/item/device/pda/mime
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/mime
 
@@ -507,7 +508,7 @@
 		),
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/janitor
+	pda_type = /obj/item/device/pda/janitor
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
@@ -582,7 +583,7 @@
 	)
 
 
-	pda_type = /obj/item/device/flashlight/pda/librarian
+	pda_type = /obj/item/device/pda/librarian
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
@@ -709,7 +710,7 @@
 		)
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/lawyer
+	pda_type = /obj/item/device/pda/lawyer
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/centcom
 
@@ -761,7 +762,7 @@
 		),
 	)
 
-	pda_type = /obj/item/device/flashlight/pda/chaplain
+	pda_type = /obj/item/device/pda/chaplain
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 

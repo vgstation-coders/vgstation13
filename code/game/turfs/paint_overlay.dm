@@ -114,6 +114,7 @@
 /turf/proc/update_paint_overlay()
 	if (paint_overlay)
 		paint_overlay.update()
+		lighting_overlay.update_overlay()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -126,13 +127,12 @@
 	var/wet_duration = 10 SECONDS//relatively fast-drying
 	var/wet_amount = 3//how many steps with wet shoes
 	var/list/blood_DNA = list()
-
 	var/arbitrary_overlay_limit = 32//figured not having a limit might be silly.
-
 	var/nano_paint = FALSE//if true, main_color is added to the turf's light, enabling turfs to be lit up even without a proper light source (Might have to rework that when Europa Lights come back)
 	var/main_color = "#000000"
 
 	var/list/paintlights = list()//for paint masks made of nano paint
+
 
 /datum/paint_overlay/New(var/turf/_turf)
 	..()
@@ -172,21 +172,14 @@
 	if (!_mask && _alpha == 255)
 		overlay.overlays.len = 0//we're applying a full opaque coat of paint so let's get rid of the other overlays
 		for (var/obj/abstract/paint_light/PL in paintlights)
-			PL.kill_paintlight(TRUE)
+			PL.kill_paintlight()
 		remove_sub_overlays()
 		blood_DNA = list()
 	if (!_mask)
 		if (_nano_paint || (nano_paint && !_nano_paint))
 			main_color = _color
 			nano_paint = _nano_paint
-			if (nano_paint)
-				my_turf.moody_light_type = /atom/movable/light/moody/full_turf
-				my_turf.light_color = main_color
-				my_turf.set_moody_light(1, MOODYLIGHT_FULL_STRENGTH,main_color)
-				my_turf.moody_light_obj.cast_light(TRUE)//updating the light atom's color
-			else
-				my_turf.moody_light_type = null
-				my_turf.kill_light()
+			my_turf.lighting_overlay.update_overlay()
 		var/image/new_paint_layer = image(my_turf.get_paint_icon(),my_turf,my_turf.get_paint_state(), dir = my_turf.dir)
 		new_paint_layer.color = _color
 		new_paint_layer.alpha = _alpha
@@ -277,8 +270,8 @@
 	for (var/obj/abstract/paint_light/PL in paintlights)
 		PL.kill_paintlight(erase)
 	if (nano_paint)
-		my_turf.moody_light_type = null
-		my_turf.kill_light()
+		nano_paint = FALSE
+		my_turf.lighting_overlay.update_overlay()
 	if (erase)
 		nano_paint = FALSE
 		overlay.overlays.len = 0
@@ -287,11 +280,8 @@
 		blood_DNA = list()
 
 /datum/paint_overlay/proc/refresh_paintlights()
-	if (nano_paint && my_turf)
-		my_turf.moody_light_type = /atom/movable/light/moody/full_turf
-		my_turf.light_color = main_color
-		my_turf.set_moody_light(1, MOODYLIGHT_FULL_STRENGTH,main_color)
-		my_turf.moody_light_obj.cast_light(TRUE)
+	if (my_turf)
+		my_turf.lighting_overlay.update_overlay()
 
 	for (var/obj/abstract/paint_light/PL in paintlights)
 		PL.refresh_paintlight(my_turf)
@@ -306,7 +296,13 @@
 	if(H.shoes)
 		var/obj/item/clothing/shoes/S = H.shoes
 		S.track_blood = max(0, wet_amount, S.track_blood)
-
+		S.luminous_paint = FALSE
+		if (nano_paint)
+			S.luminous_paint = TRUE
+		else
+			for (var/obj/abstract/paint_light/PL in paintlights)
+				if (PL.light_color == wet_color)
+					S.luminous_paint = TRUE
 		if(!blood_overlays["[S.type][S.icon_state]"])
 			S.set_blood_overlay()
 
@@ -331,6 +327,13 @@
 		if(!H.feet_blood_DNA)
 			H.feet_blood_DNA = list()
 		H.feet_blood_DNA |= blood_DNA.Copy()
+		H.feet_blood_lum = FALSE
+		if (nano_paint)
+			H.feet_blood_lum = TRUE
+		else
+			for (var/obj/abstract/paint_light/PL in paintlights)
+				if (PL.light_color == wet_color)
+					H.feet_blood_lum = TRUE
 		H.feet_blood_color = (H.feet_blood_color && H.feet_blood_DNA.len) ? BlendRYB(H.feet_blood_color, wet_color, 0.5) : wet_color
 
 		H.update_inv_shoes(1)
@@ -343,34 +346,25 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /obj/abstract/paint_light
-	plane = TURF_PLANE
-	layer = PAINT_LAYER
-	invisibility = 101
-	lighting_flags = FOLLOW_PIXEL_OFFSET | NO_LUMINOSITY
-
-	moody_light_type = /atom/movable/light/moody/paint_mask
+	icon = 'icons/effects/32x32.dmi'
+	icon_state = "blank"
+	mouse_opacity = 0
 
 	var/paint_state
 	dir = SOUTH
 
 /obj/abstract/paint_light/proc/setup_paintlight(var/_color, var/_state, var/_dir)
 	light_color = _color
-	paint_state = "_paintmask_[_state]"
+	paint_state = _state
 	dir = _dir
 
 /obj/abstract/paint_light/proc/refresh_paintlight(var/turf/_my_turf)
 	if (_my_turf)
 		loc = _my_turf
-		moody_light_type = /atom/movable/light/moody/paint_mask
-		set_moody_light(1, MOODYLIGHT_FULL_STRENGTH,light_color, l_state = paint_state)
-		moody_light_obj.cast_light(TRUE)
+		update_moody_light('icons/turf/paint_masks.dmi',paint_state,255,light_color)
 
-/obj/abstract/paint_light/proc/kill_paintlight(var/erase=FALSE)
-	moody_light_type = null
-	kill_light()
-	if (erase)
-		qdel(src)
-
+/obj/abstract/paint_light/proc/kill_paintlight()
+	kill_moody_light()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //Lets mappers have some turfs pre-painted
