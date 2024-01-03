@@ -195,9 +195,12 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/mug/on_reagent_change()
 	..()
+	update_icon()
 
+/obj/item/weapon/reagent_containers/food/drinks/mug/update_icon()
+	..()
 	if (reagents.reagent_list.len > 0)
-		item_state = "mug_empty"
+		//item_state = "mug_empty"
 
 		var/datum/reagent/R = reagents.get_master_reagent()
 
@@ -208,20 +211,12 @@
 			icon_state = R.mug_icon_state
 			//item_state = R.mug_icon_state
 			//looks like there is none made yet so at least let's not hold an invisible mug
-
 		else
-			update_icon()
+			mug_reagent_overlay()
 	else
-		update_icon()
 		icon_state = "mug_empty"
 		name = "mug"
 		desc = "A simple mug."
-		return
-
-/obj/item/weapon/reagent_containers/food/drinks/mug/update_icon()
-	..()
-	if (reagents.reagent_list.len > 0)
-		mug_reagent_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/mug_reagent_overlay()
 	icon_state = base_icon_state
