@@ -6538,7 +6538,7 @@ var/procizine_tolerance = 0
 	name = "Coffee"
 	id = COFFEE
 	description = "Coffee is a brewed drink prepared from the roasted seeds, commonly called coffee beans, of the coffee plant."
-	color = "#482000" //rgb: 72, 32, 0
+	color = "#390600"
 	adj_dizzy = -5
 	adj_drowsy = -3
 	adj_sleepy = -2
@@ -6571,7 +6571,7 @@ var/procizine_tolerance = 0
 	name = "Soy Latte"
 	id = SOY_LATTE
 	description = "The hipster version of the classic cafe latte."
-	color = "#664300" //rgb: 102, 67, 0
+	color = "#B7AA8D"
 	adj_sleepy = 0
 	adj_temp = 5
 	glass_icon_state = "soy_latte"
@@ -6592,7 +6592,7 @@ var/procizine_tolerance = 0
 	name = "Latte"
 	id = CAFE_LATTE
 	description = "A true classic: steamed milk, some espresso, and foamed milk to top it all off."
-	color = "#664300" //rgb: 102, 67, 0
+	color = "#B7AA8D"
 	adj_sleepy = 0
 	adj_temp = 5
 	glass_icon_state = "cafe_latte"
@@ -6613,7 +6613,7 @@ var/procizine_tolerance = 0
 	name = "Tea"
 	id = TEA
 	description = "Tasty black tea. It has antioxidants and is good for you!"
-	color = "#101000" //rgb: 16, 16, 0
+	color = "#320438"
 	adj_dizzy = -2
 	adj_drowsy = -1
 	adj_sleepy = -3
@@ -9012,6 +9012,7 @@ var/procizine_tolerance = 0
 	description = "Delicious green tea."
 	mug_icon_state = "greentea"
 	mug_desc = "Green Tea served in a traditional Japanese tea cup, just like in your Chinese cartoons!"
+	color = "#719B00"
 
 /datum/reagent/drink/tea/redtea
 	name = "Red Tea"
@@ -9019,6 +9020,7 @@ var/procizine_tolerance = 0
 	description = "Tasty red tea."
 	mug_icon_state = "redtea"
 	mug_desc = "Red Tea served in a traditional Chinese tea cup, just like in your Malaysian movies!"
+	color = "#770000"
 
 /datum/reagent/drink/tea/singularitea
 	name = "Singularitea"
@@ -9027,6 +9029,7 @@ var/procizine_tolerance = 0
 	mug_icon_state = "singularitea"
 	mug_name = "\improper Singularitea"
 	mug_desc = "Brewed under intense radiation to be extra flavorful!"
+	color = "#5A0422"
 
 var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 
@@ -9036,6 +9039,7 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	description = "Strong Russian tea. It'll help you remember what you had for lunch!"
 	mug_icon_state = "chifir"
 	mug_desc = "A Russian kind of tea. Not for those with weak stomachs."
+	color = "#72452C"
 
 /datum/reagent/drink/tea/chifir/on_mob_life(var/mob/living/M)
 
@@ -9059,6 +9063,7 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	description = "Get in touch with your Roswellian side!"
 	mug_icon_state = "acidtea"
 	mug_desc = "A sizzling mug of tea made just for Greys."
+	color = "#8DE45E"
 
 /datum/reagent/drink/tea/yinyang
 	name = "Zen Tea"
@@ -9066,6 +9071,7 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	description = "Find inner peace."
 	mug_icon_state = "yinyang"
 	mug_desc = "Enjoy inner peace and ignore the watered down taste"
+	color = "#7D7F83"
 
 /datum/reagent/drink/tea/gyro
 	name = "Gyro"
@@ -9073,6 +9079,7 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	description = "Nyo ho ho~"
 	mug_icon_state = "gyro"
 	mug_name = "\improper Gyro"
+	color = "#1B1E24"
 
 /datum/reagent/drink/tea/gyro/on_mob_life(var/mob/living/M)
 
@@ -9093,6 +9100,7 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	mug_icon_state = "dantea"
 	mug_name = "\improper Discount Dan's Green Flavor Tea"
 	mug_desc = "Tea probably shouldn't be sizzling like that..."
+	color = "#3CFF00"
 
 /datum/reagent/drink/tea/mint
 	name = "Groans Tea: Minty Delight Flavor"
@@ -9101,6 +9109,7 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	mug_icon_state = "mint"
 	mug_name = "\improper Groans Tea: Minty Delight Flavor"
 	mug_desc = "Groans knows mint might not be the kind of flavor our fans expect from us, but we've made sure to give it that patented Groans zing."
+	color = "#99FF99"
 
 /datum/reagent/drink/tea/chamomile
 	name = "Groans Tea: Chamomile Flavor"
@@ -9109,6 +9118,7 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	mug_icon_state = "chamomile"
 	mug_name = "\improper Groans Tea: Chamomile Flavor"
 	mug_desc = "Groans presents the perfect cure for insomnia: Chamomile!"
+	color = "#BE9801"
 
 /datum/reagent/drink/tea/exchamomile
 	name = "Tea"
@@ -9117,6 +9127,7 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	mug_icon_state = "exchamomile"
 	mug_name = "\improper Groans Banned Tea: EXTREME Chamomile Flavor"
 	mug_desc = "Banned literally everywhere."
+	color = "#BE9801"
 
 /datum/reagent/drink/tea/fancydan
 	name = "Groans Banned Tea: Fancy Dan Flavor"
@@ -9125,6 +9136,7 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	mug_icon_state = "fancydan"
 	mug_name = "\improper Groans Banned Tea: Fancy Dan Flavor"
 	mug_desc = "Banned literally everywhere."
+	color = "#FF9900"
 
 /datum/reagent/drink/tea/plasmatea
 	name = "Plasma Pekoe"
@@ -9132,6 +9144,7 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	description = "Probably not the safest beverage."
 	mug_icon_state = "plasmatea"
 	mug_desc = "You can practically taste the science. Or maybe that's just the horrible plasma burns."
+	color = "#FF22D9"
 
 /datum/reagent/drink/tea/greytea
 	name = "Tide"
@@ -9139,12 +9152,14 @@ var/global/list/chifir_doesnt_remove = list("chifir", "blood")
 	description = "This probably shouldn't even be considered tea..."
 	mug_icon_state = "greytea"
 	mug_name = "\improper Tide"
+	color = "#8F836B"
 
 /datum/reagent/drink/coffee/espresso
 	name = "Espresso"
 	id = ESPRESSO
 	description = "A thick blend of coffee made by forcing near-boiling pressurized water through finely ground coffee beans."
 	mug_icon_state = "espresso"
+	color = "#803C00"
 
 //Let's hope this one works
 var/global/list/tonio_doesnt_remove=list("tonio", "blood")
@@ -9157,6 +9172,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	mug_icon_state = "tonio"
 	mug_name = "\improper Tonio"
 	mug_desc = "Delicious, and may help you get out of a Jam."
+	color = "#990F29"
 
 /datum/reagent/drink/coffee/tonio/on_mob_life(var/mob/living/M)
 
@@ -9183,6 +9199,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "Espresso with milk."
 	mug_icon_state = "cappuccino"
 	mug_desc = "The stronger big brother of the cafe latte, cappuccino contains more espresso in proportion to milk."
+	color = "#E6DDC3"
 
 /datum/reagent/drink/coffee/cappuccino/on_mob_life(var/mob/living/M)
 	..()
@@ -9196,6 +9213,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	mug_icon_state = "doppio"
 	mug_name = "\improper Doppio"
 	mug_desc = "Ring ring ring ring."
+	color = "#6E0024"
 
 /datum/reagent/drink/coffee/passione
 	name = "Passione"
@@ -9205,6 +9223,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	mug_icon_state = "passione"
 	mug_name = "\improper Passione"
 	mug_desc = "Sometimes referred to as a 'Vento Aureo'."
+	color = "#B28A17"
 
 /datum/reagent/drink/coffee/passione/on_mob_life(var/mob/living/M)
 	..()
@@ -9228,6 +9247,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	mug_icon_state = "seccoffee"
 	mug_name = "\improper Wake-Up Call"
 	mug_desc = "The perfect start for any Sec officer's day."
+	color = "#390600"
 
 /datum/reagent/drink/coffee/seccoffee/on_mob_life(var/mob/living/M)
 	..()
@@ -9241,7 +9261,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	name = "NT Standard Battery Acid"
 	id = ENGICOFFEE
 	description = "This Plasma Infused Brew, will fix what ails you."
-	mug_icon_state = "engicoffeee"
+	//mug_icon_state = "engicoffeee"	//Since it normally comes in cans, it doesn't have a custom mug icon. feel free to add one eventually
 	mug_name = "\improper Energizer"
 	mug_desc = "Taste that Triple A Goodness."
 
@@ -9258,6 +9278,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	mug_icon_state = "medcoffee"
 	mug_name = "\improper Lifeline"
 	mug_desc = "Some days, the only thing that keeps you going is cryo and caffeine."
+	color = "#390600"
 
 /datum/reagent/drink/coffee/medcoffee/on_mob_life(var/mob/living/M)
 
@@ -9288,6 +9309,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	mug_icon_state = "detcoffee"
 	mug_name = "\improper Joe"
 	mug_desc = "The lights, the smoke, the grime... the station itself felt alive that day when I stepped into my office, mug in hand. It had been one of those damn days. Some nurse got smoked in the tunnels, and it came down to me to catch the son of a bitch that did it. The dark, stale air of the tunnels sucks the soul out of a man -- sometimes literally -- and I was no closer to finding the killer than when the nurse was still alive. I hobbled over to my desk, reached for the flask in my pocket, and topped off my coffee with its contents. I had barely gotten settled in my chair when an officer burst through the door. Another body in the tunnels, an assistant this time. I grumbled and downed what was left of my joe. This stuff used to taste great when I was a rookie, but now it was like boiled dirt. I guess that's how the station changes you. I set the mug back down on my desk and lit my last cigar. My fingers instinctively sought out the comforting grip of the .44 snub in my coat as I stepped out into the bleak halls of the station. The case was not cold yet."
+	color = "#18150B"
 
 /datum/reagent/drink/coffee/detcoffee/on_mob_life(var/mob/living/M)
 	if(..())
@@ -9320,6 +9342,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	mug_icon_state = "etank"
 	mug_name = "\improper Recharger"
 	mug_desc = "Helps you get back on your feet after a long day of robot maintenance. Can also be used as a substitute for motor oil."
+	color = "#1A0705"
 
 /datum/reagent/drink/cold/quantum
 	name = "Nuka Cola Quantum"
