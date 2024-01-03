@@ -80,6 +80,7 @@
 					/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,
 					/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/big,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
 					)
