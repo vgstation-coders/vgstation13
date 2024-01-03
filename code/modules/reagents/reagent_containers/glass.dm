@@ -78,6 +78,21 @@
 /obj/item/weapon/reagent_containers/glass/fits_in_iv_drip()
 	return 1
 
+/obj/item/weapon/reagent_containers/glass/update_icon()
+	update_temperature_overlays()
+
+/obj/item/weapon/reagent_containers/glass/update_temperature_overlays()
+	//we only care about the steam
+
+	if (!particles)
+		particles = new/particles/steam
+
+	particles.spawning = 0
+
+	if(reagents && reagents.total_volume)
+		if (reagents.chem_temp >= STEAMTEMP)
+			steam_spawn_adjust(reagents.chem_temp)
+
 /obj/item/weapon/reagent_containers/glass/beaker
 	name = "beaker"
 	desc = "A beaker. Can hold up to 50 units."
@@ -198,19 +213,6 @@
 
 	update_temperature_overlays()
 	update_blood_overlay()//re-applying blood stains
-
-
-/obj/item/weapon/reagent_containers/glass/beaker/update_temperature_overlays()
-	//we only care about the steam
-
-	if (!particles)
-		particles = new/particles/steam
-
-	particles.spawning = 0
-
-	if(reagents && reagents.total_volume)
-		if (reagents.chem_temp >= STEAMTEMP)
-			steam_spawn_adjust(reagents.chem_temp)
 
 /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer
 	name = "small erlenmeyer flask"
@@ -490,6 +492,9 @@
 
 		overlays += filling
 
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
+
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
 	..()
 	reagents.add_reagent(WATER, 150)
@@ -521,6 +526,9 @@
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 
 		overlays += filling
+
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
 
 /*
 /obj/item/weapon/reagent_containers/glass/blender_jug
@@ -576,6 +584,12 @@
 	amount_per_transfer_from_this = 10
 	flags = FPRINT  | OPENCONTAINER
 	thermal_variation_modifier = 0.01
+
+/obj/item/weapon/reagent_containers/glass/kettle/steam_spawn_adjust(var/_temp)
+	if (particles)
+		particles.spawning = clamp(0.1 + 0.002 * (_temp - STEAMTEMP),0.1,0.5)
+		particles.position = list(12,5)
+		particles.scale = list(0.3, 0.3)
 
 /obj/item/weapon/reagent_containers/glass/kettle/red
 	icon_state = "kettle_red"

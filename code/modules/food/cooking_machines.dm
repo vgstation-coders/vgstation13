@@ -342,6 +342,18 @@ var/global/ingredientLimit = 10
 	ingredient = null
 	return new_food
 
+/obj/machinery/cooking/proc/apply_color(var/obj/item/weapon/reagent_containers/food/snacks/_snack, var/_color)
+	var/mutable_appearance/ma = new(_snack)
+	ma.appearance = _snack.appearance
+	ma.color = _color
+	ma.plane = FLOAT_PLANE
+	ma.layer = FLOAT_LAYER
+	ma.pixel_x = 0
+	ma.pixel_y = 0
+	_snack.extra_food_overlay.overlays.len = 0//no need to redraw all the layers that will get hidden by their colored variants
+	_snack.extra_food_overlay.overlays += ma
+	_snack.update_icon()
+
 // Candy Machine ///////////////////////////////////////////////
 
 /obj/machinery/cooking/candy
@@ -526,7 +538,7 @@ var/global/ingredientLimit = 10
 				ingredient.reagents.chem_temp = cook_temp
 				ingredient.update_icon()
 		ingredient.name = "deep fried [ingredient.name]"
-		ingredient.color = "#FFAD33"
+		apply_color(ingredient, "#FFAD33")
 		ingredient.forceMove(loc)
 
 		for(var/obj/item/embedded in ingredient.contents)
@@ -695,9 +707,9 @@ var/global/ingredientLimit = 10
 	ingredient.forceMove(loc)
 	ingredient.mouse_opacity = 0
 	if (cook_after(cookTime/3, 14))
-		ingredient.color = "#C28566"
+		apply_color(ingredient, "#C28566")
 		if (cook_after(cookTime/3, 14))
-			ingredient.color = "#A34719"
+			apply_color(ingredient, "#A34719")
 			if (cook_after(cookTime/3, 14))
 				makeFood()
 				if(use_power != MACHINE_POWER_USE_NONE)

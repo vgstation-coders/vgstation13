@@ -113,7 +113,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(istype(loc, /obj/machinery/iv_drip))
 		var/obj/machinery/iv_drip/holder = loc
 		holder.remove_container()
-	thermal_dissipation_reagents -= reagents
+	thermal_entropy_containers.Remove(src)
 	all_reagent_containers.Remove(src)
 	. = ..()
 
@@ -453,8 +453,6 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 /obj/item/weapon/reagent_containers/on_reagent_change()
 	. = ..()
-	//Reagent containers can exchange heat with the surrounding air.
-	heat_dissipation_updates() //Every reagent_containers that should be added to the heat dissipation subsystem should call this on_reagent_change(). If you add something that breaks the supercall chain, be sure to call this.
 	process_temperature()
 
 ////////////THERMAL ENTROPY///////////////////////////////////////////////////////////////////////////////////////////////////
