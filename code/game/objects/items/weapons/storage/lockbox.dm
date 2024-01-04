@@ -405,6 +405,12 @@
 		new /obj/item/weapon/disk(src)
 	update_icon()
 
+/obj/item/weapon/storage/lockbox/diskettebox/archive
+	name = "archival diskette box"
+	desc = "Please copy in library."
+	storage_slots = 9
+	mech_flags = MECH_SCAN_FAIL
+
 
 //---------------------------------PRESETS END-----------------------------
 
