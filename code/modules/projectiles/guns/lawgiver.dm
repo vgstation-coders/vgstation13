@@ -20,7 +20,7 @@
 
 /datum/lawgiver_mode/stun
 	name = "stun"
-	voice_triggers = list("stun", "taser", "detain")
+	voice_triggers = list("stun", "taser", "detain", "стан", "тазер", "обезвредить")
 	firing_mode = LAWGIVER_STUN
 	fire_sound = 'sound/weapons/Taser.ogg'
 	projectile_type = /obj/item/projectile/energy/electrode
@@ -29,7 +29,7 @@
 
 /datum/lawgiver_mode/laser
 	name = "laser"
-	voice_triggers = list("laser", "lethal", "beam")
+	voice_triggers = list("laser", "lethal", "beam", "лазер", "летал", "луч")
 	firing_mode = LAWGIVER_LASER
 	fire_sound = 'sound/weapons/lasercannonfire.ogg'
 	projectile_type = /obj/item/projectile/beam/heavylaser/lawgiver
@@ -40,7 +40,7 @@
 /datum/lawgiver_mode/rapid_fire
 	name = "rapid fire"
 	kind = LAWGIVER_MODE_KIND_BULLET
-	voice_triggers = list("rapid", "automatic")
+	voice_triggers = list("rapid", "automatic", "auto", "рапид", "авто", "автомат", "автоматический")
 	firing_mode = LAWGIVER_RAPID
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 	projectile_type = /obj/item/projectile/bullet/midbullet/lawgiver
@@ -52,7 +52,7 @@
 /datum/lawgiver_mode/flare
 	name = "flare"
 	kind = LAWGIVER_MODE_KIND_BULLET
-	voice_triggers = list("flare", "incendiary")
+	voice_triggers = list("flare", "incendiary", "флаер", "зажигательный", "осветительный")
 	firing_mode = LAWGIVER_FLARE
 	fire_sound = 'sound/weapons/shotgun.ogg'
 	projectile_type = /obj/item/projectile/flare
@@ -64,7 +64,7 @@
 /datum/lawgiver_mode/hi_ex
 	name = "hi-EX"
 	kind = LAWGIVER_MODE_KIND_BULLET
-	voice_triggers = list("hi ex", "hi-ex", "explosive", "rocket")
+	voice_triggers = list("hi ex", "hi-ex", "explosive", "rocket", "хай екс", "хай-екс", "взрывной", "подрывной", "ракета")
 	firing_mode = LAWGIVER_FLARE
 	fire_sound = 'sound/weapons/elecfire.ogg'
 	projectile_type = /obj/item/projectile/bullet/gyro
@@ -76,7 +76,7 @@
 /datum/lawgiver_mode/ricochet
 	name = "ricochet"
 	kind = LAWGIVER_MODE_KIND_BULLET
-	voice_triggers = list("ricochet", "bounce")
+	voice_triggers = list("ricochet", "bounce", "рикошет")
 	firing_mode = LAWGIVER_RICOCHET
 	fire_sound = 'sound/weapons/gatling_fire.ogg'
 	projectile_type = /obj/item/projectile/bullet/midbullet/bouncebullet/lawgiver
@@ -87,7 +87,7 @@
 
 /datum/lawgiver_mode/double_whammy
 	name = "double whammy"
-	voice_triggers = list("double whammy")
+	voice_triggers = list("double whammy", "двойной", "дабл вэмми")
 	firing_mode = LAWGIVER_DOUBLE_WHAMMY
 	fire_sound = 'sound/weapons/alien_laser1.ogg'
 	projectile_type = /obj/item/projectile/energy/whammy
