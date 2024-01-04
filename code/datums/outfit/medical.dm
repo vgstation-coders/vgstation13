@@ -259,7 +259,10 @@
 				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
+			slot_glasses_str = list(
+				"Paramedic" = /obj/item/clothing/glasses/hud/health,
+				"Brig Medic" = /obj/item/clothing/glasses/hud/combinedsecmed
+			),
 			slot_wear_suit_str = list(
 				"Paramedic" = /obj/item/clothing/suit/storage/paramedic,
 				"Brig Medic" = /obj/item/clothing/suit/armor/vest/security/medic
