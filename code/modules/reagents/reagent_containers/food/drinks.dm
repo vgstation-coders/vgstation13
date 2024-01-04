@@ -43,6 +43,9 @@
 		gulp_size = 5
 	else
 		gulp_size = max(round(reagents.total_volume / 5), 5)
+	
+	if(is_empty())
+		update_icon() //we just got emptied, so let's update our icon once, if only to remove the ice overlay.
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/try_consume(mob/user)
 	if(!is_open_container())
