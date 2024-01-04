@@ -107,6 +107,7 @@
 	var/mineral = "metal"
 	var/opening = 0
 	is_on_mesons = TRUE
+	plane = TURF_PLANE
 
 	// WHY DO WE SMOOTH WITH FALSE R-WALLS WHEN WE DON'T SMOOTH WITH REAL R-WALLS.
 /obj/structure/falsewall/canSmoothWith()
