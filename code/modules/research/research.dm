@@ -308,6 +308,10 @@ datum/tech/robotics
 	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/disk/tech_disk/examine(mob/user)
+	..()
+	to_chat(user,"<span class='info'>It contains [stored.id] [stored.level] research.</span>")
+
 /obj/item/weapon/disk/tech_disk/nanotrasen
 	name = "Technology Disk (Nanotrasen 1)"
 

@@ -43,6 +43,9 @@
 		gulp_size = 5
 	else
 		gulp_size = max(round(reagents.total_volume / 5), 5)
+	
+	if(is_empty())
+		update_icon() //we just got emptied, so let's update our icon once, if only to remove the ice overlay.
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/try_consume(mob/user)
 	if(!is_open_container())
@@ -520,8 +523,10 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/tea
 	name = "Tea"
-	icon_state = "tea"
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "mug_empty"
 	item_state = "mug_empty"
+
 /obj/item/weapon/reagent_containers/food/drinks/tea/New()
 	..()
 	switch(pick(1,2,3))
@@ -539,6 +544,15 @@
 			reagents.add_reagent(GREENTEA, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/tea/on_reagent_change()
+	..()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/tea/update_icon()
+	..()
+	if (reagents.reagent_list.len > 0)
+		mug_reagent_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/tea/on_vending_machine_spawn()
 	reagents.chem_temp = COOKTEMP_READY
@@ -583,13 +597,24 @@
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate
 	name = "Dutch Hot Coco"
 	desc = "Made in Space South America."
-	icon_state = "tea"
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "mug_empty"
 	item_state = "mug_empty"
+
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate/New()
 	..()
 	reagents.add_reagent(HOT_COCO, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/h_chocolate/on_reagent_change()
+	..()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/h_chocolate/update_icon()
+	..()
+	if (reagents.reagent_list.len > 0)
+		mug_reagent_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate/on_vending_machine_spawn()
 	reagents.chem_temp = COOKTEMP_READY
