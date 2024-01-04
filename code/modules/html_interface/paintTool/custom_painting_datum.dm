@@ -209,6 +209,7 @@
 	copy.bitmap = bitmap.Copy()
 	copy.nanomap = nanomap.Copy()
 	copy.components = components.Copy()
+	copy.has_nano_paint = has_nano_paint
 	return copy
 
 /datum/custom_painting/proc/set_parent(parent)
