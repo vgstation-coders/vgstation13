@@ -178,11 +178,14 @@ var/datum/controller/gameticker/ticker
 	//After antagonists have been removed from new_players in player_list, create crew
 	var/list/new_characters = list()	//list of created crew for transferring
 	var/list/new_players_ready = list() //unique list of people who have readied up, so we can delete mob/new_player later (ready is lost on mind transfer)
+	var/list/roundstart_occupied_area_paths = list() //List of typepaths of areas in departments that are occupied at roundstart, used to handle the lights being on or off.
+
 	for(var/mob/M in player_list)
 		if(!istype(M, /mob/new_player/))
 			var/mob/living/L = M
 			L.store_position()
 			M.close_spawn_windows()
+
 			continue
 		var/mob/new_player/np = M
 		if(!(np.ready && np.mind && np.mind.assigned_role))
@@ -199,6 +202,7 @@ var/datum/controller/gameticker/ticker
 				S.store_position()
 				log_admin("([key]) started the game as a [S.mind.assigned_role].")
 				new_characters[key] = S
+				roundstart_occupied_area_paths |= get_department_area_typepaths(S)
 			if("MODE")
 				//antags aren't new players
 			else
@@ -207,11 +211,35 @@ var/datum/controller/gameticker/ticker
 				EquipCustomItems(H)
 				H.update_icons()
 				new_characters[key] = H
+				roundstart_occupied_area_paths |= get_department_area_typepaths(H)
 		CHECK_TICK
 
+	//Now that we have all of the occupied areas, we handle the lights being on or off, before actually putting the players into their bodies.
+	if(roundstart_occupied_area_paths.len)
+		var/tick = get_game_time()
+		var/obj/machinery/light_switch/LS
+		var/obj/machinery/light/lightykun
+		var/obj/item/device/flashlight/lamp/lampychan
+		for(var/area/A in areas)
+			if(A.type in roundstart_occupied_area_paths)
+				for(var/obj/O in A)
+					LS = O
+					lightykun = O
+					lampychan = O
+					if(istype(LS))
+						LS.toggle_switch(1, playsound = FALSE)
+					else if(istype(lightykun))
+						lightykun.on = 1
+						lightykun.update()
+					else if(istype(lampychan))
+						lampychan.toggle_onoff(1)
+		//Force the lighting subsystem to update.
+		SSlighting.fire(FALSE, FALSE)
+		log_admin("Turned the lights on in [(get_game_time() - tick) / 10] seconds.")
 
 	var/list/clowns = list()
 	var/already_an_ai = FALSE
+
 	//Transfer characters to players
 	for(var/i = 1, i <= new_characters.len, i++)
 		var/mob/M = new_characters[new_characters[i]]
@@ -219,6 +247,10 @@ var/datum/controller/gameticker/ticker
 		M.key = key
 		if(istype(M, /mob/living/carbon/human/))
 			var/mob/living/carbon/human/H = M
+			if (H.client)
+				message_admins("[H.key]")
+				H.overlay_fullscreen("client_fadein", /obj/abstract/screen/fullscreen/client_fadein)
+				H.clear_fullscreen("client_fadein", 3 SECONDS)
 			job_master.PostJobSetup(H)
 		//minds are linked to accounts... And accounts are linked to jobs.
 		var/rank = M.mind.assigned_role
@@ -235,8 +267,6 @@ var/datum/controller/gameticker/ticker
 	//delete the new_player mob for those who readied
 	for(var/mob/np in new_players_ready)
 		qdel(np)
-
-	handle_lights()
 
 	if(!already_an_ai && clowns.len >= 2 && prob(1))
 		var/mob/living/carbon/human/H = pick(clowns)
@@ -510,7 +540,7 @@ var/datum/controller/gameticker/ticker
 				else
 					blackbox.save_all_data_to_sql()
 
-			//stat_collection.Process()
+			stat_collection.Process()
 
 			if (watchdog.waiting)
 				to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in [player_list.len ? "[(restart_timeout/10)] seconds." : "a few seconds."]</B></span>")
@@ -524,7 +554,6 @@ var/datum/controller/gameticker/ticker
 			else if(!delay_end)
 				sleep(restart_timeout)
 				if(!delay_end)
-					CallHook("Reboot",list())
 					world.Reboot()
 				else
 					to_chat(world, "<span class='notice'><B>An admin has delayed the round end</B></span>")
@@ -651,21 +680,6 @@ var/datum/controller/gameticker/ticker
 		if(player.mind && (player.mind.assigned_role in command_positions))
 			roles += player.mind.assigned_role
 	return roles
-
-/datum/controller/gameticker/proc/handle_lights() //This is used to turn on lights in occupied departments
-	var/list/discrete_areas = areas.Copy()
-	for(var/mob/living/player in player_list)
-		discrete_areas -= get_department_areas(player)
-
-	for(var/obj/machinery/light_switch/LS in all_machines)
-		if((get_area(LS) in discrete_areas))
-			LS.toggle_switch(0,playsound=FALSE)
-
-	spawn(0)
-		for(var/area/DA in discrete_areas)
-			for(var/obj/item/device/flashlight/lamp/L in DA)
-				sleep(0.1)
-				L.toggle_onoff(0)
 
 /datum/controller/gameticker/proc/post_roundstart()
 	//Handle all the cyborg syncing

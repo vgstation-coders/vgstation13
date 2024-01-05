@@ -367,7 +367,7 @@
 		/obj/item/clothing/mask/cigarette,
 		/obj/item/clothing/shoes/laceup,
 		/obj/item/clothing/glasses/welding/superior,
-		/obj/item/clothing/glasses/sunglasses/sechud,
+		/obj/item/clothing/glasses/hud/security/sunglasses,
 		/obj/item/clothing/glasses/scanner/meson,
 		/obj/item/clothing/gloves/yellow,
 		/obj/item/clothing/gloves/knuckles,
@@ -594,6 +594,8 @@
 		/obj/item/weapon/switchtool/swiss_army_knife,
 		/obj/item/clothing/accessory/wristwatch,
 		/obj/item/clothing/accessory/wristwatch/black,
+		/obj/item/high_roller,
+		/obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random,
 		)
 
 /obj/abstract/map/spawner/maint/lowchance
@@ -698,7 +700,7 @@
 		/obj/item/bluespace_crystal,
 		/obj/item/bodybag/cryobag,
 		/obj/item/borg/upgrade/syndicate,
-		/obj/item/clothing/glasses/thermal,
+		/obj/item/clothing/glasses/hud/thermal,
 		/obj/item/device/aicard,
 		/obj/item/device/ano_scanner,
 		/obj/item/device/flashlight/lantern,
@@ -1107,6 +1109,7 @@
 		/obj/item/seeds/wheatseed,
 		/obj/item/seeds/whitebeetseed,
 		/obj/item/seeds/cinnamomum,
+		/obj/item/seeds/flaxseed,
 		)
 
 // Gym ///////////////////////////////////////////////////////

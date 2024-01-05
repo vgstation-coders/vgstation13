@@ -475,6 +475,10 @@ var/list/rune_appearances_cache = list()
 			if(istype(V))
 				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
 
+/obj/effect/rune/clean_act(var/cleanliness)
+	if ((cleanliness >= CLEANLINESS_SPACECLEANER) && (!activated))
+		qdel(src)
+
 /proc/write_rune_word(var/turf/T, var/datum/rune_word/word = null, var/datum/reagent/blood/source, var/mob/caster = null)
 	if (!word)
 		return RUNE_WRITE_CANNOT

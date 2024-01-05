@@ -48,7 +48,7 @@
 
 	var/obj/item/weapon/gun/energy/temperature/T = shot_from
 	if(istype(T))
-		src.temperature = T.temperature
+		temperature = T.temperature
 	else
 		temperature = rand(100,600) //give it a random temp value if it's not fired from a temp gun
 
@@ -84,6 +84,12 @@
 			name = "temperature beam"//failsafe
 			icon_state = "temp_4"
 
+/obj/item/projectile/temp/to_bump(var/atom/A)
+	if (!ismob(A) && A.reagents && A.reagents.total_volume)
+		A.reagents.chem_temp = temperature
+		if(!(A.reagents.skip_flags & SKIP_RXN_CHECK_ON_HEATING))
+			A.reagents.handle_reactions()
+	..()
 
 /obj/item/projectile/temp/on_hit(var/atom/target, var/blocked = 0)//These two could likely check temp protection on the mob
 	if(istype(target, /mob/living))

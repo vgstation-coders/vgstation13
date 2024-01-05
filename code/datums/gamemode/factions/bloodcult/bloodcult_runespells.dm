@@ -1953,8 +1953,7 @@ var/list/seer_rituals = list()
 			source.abort(RITUALABORT_GONE)
 		qdel(src)
 		return
-	caster.see_invisible_override = SEE_INVISIBLE_OBSERVER
-	caster.apply_vision_overrides()
+	caster.apply_hud(new /datum/visioneffect/cult_conversion)
 	to_chat(caster, "<span class='notice'>You find yourself able to see through the gaps in the veil. You can see and interact with the other side, and also find out the crew's propensity to be successfully converted, whether they are <b><font color='green'>Willing</font></b>, <b><font color='orange'>Uncertain</font></b>, or <b><font color='red'>Unconvertible</font></b>.</span>")
 	if (talisman)
 		spawn(talisman_duration)
@@ -1964,12 +1963,8 @@ var/list/seer_rituals = list()
 /obj/effect/cult_ritual/seer/Destroy()
 	seer_rituals.Remove(src)
 	processing_objects.Remove(src)
-	if (caster && caster.client)
-		caster.client.images -= propension
-		if (!istype(caster.loc, /obj/effect/bloodcult_jaunt))
-			caster.see_invisible_override = 0
-			caster.apply_vision_overrides()
-		to_chat(caster, "<span class='notice'>You can no longer discern through the veil.</span>")
+	caster.remove_hud_by_type(/datum/visioneffect/cult_conversion)
+	to_chat(caster, "<span class='notice'>You can no longer discern through the veil.</span>")
 	caster = null
 	if (source)
 		source.abort()
@@ -1981,6 +1976,7 @@ var/list/seer_rituals = list()
 		if (!caster || caster.loc != loc)
 			qdel(src)
 
+/*
 /obj/effect/cult_ritual/seer/process()
 	if (caster && caster.client)
 		caster.client.images -= propension
@@ -1991,7 +1987,7 @@ var/list/seer_rituals = list()
 			propension += C.hud_list[CONVERSION_HUD]
 
 		caster.client.images += propension
-
+*/
 
 ////////////////////////////////////////////////////////////////////
 //																  //
@@ -2963,7 +2959,7 @@ var/list/bloodcult_exitportals = list()
 			newCultist.tattoos[TATTOO_HOLY] = new /datum/cult_tattoo/holy()
 			newCultist.tattoos[TATTOO_MANIFEST] = new /datum/cult_tattoo/manifest()
 
-			vessel.equip_or_collect(new /obj/item/clothing/under/rags(vessel), slot_w_uniform)
+			vessel.equip_or_collect(new /obj/item/clothing/under/leather_rags(vessel), slot_w_uniform)
 
 		M.regenerate_icons()
 

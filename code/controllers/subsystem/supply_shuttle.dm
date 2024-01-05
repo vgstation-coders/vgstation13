@@ -373,6 +373,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			var/atom/B2 = new typepath(A)
 			if(SP.amount && B2:amount)
 				B2:amount = SP.amount
+			B2.on_vending_machine_spawn()
 			slip.info += "<li>[B2.name]</li>" //add the item to the manifest
 
 		SP.post_creation(A)
@@ -537,10 +538,11 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	if (C.silent)
 		return
 	for(var/obj/machinery/computer/supplycomp/S in supply_consoles)
-		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(S.loc)
-		reqform.name = name
-		reqform.info = info
-		reqform.update_icon()
+		if(S.printccrequests)
+			var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(S.loc)
+			reqform.name = name
+			reqform.info = info
+			reqform.update_icon()
 		S.say("New Central Command request available!")
 		playsound(S, 'sound/machines/twobeep.ogg', 50, 1)
 

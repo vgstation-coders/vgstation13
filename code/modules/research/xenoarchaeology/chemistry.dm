@@ -33,6 +33,10 @@
 	density = 4.74
 	specheatcap = 3.99
 
+/datum/reagent/analysis_sample/handle_additional_data(var/list/additional_data=null)
+	if (GROUND_ROCK in additional_data)
+		data = additional_data[GROUND_ROCK]
+
 /datum/reagent/chemical_waste
 	name = "Chemical Waste"
 	id = CHEMICAL_WASTE

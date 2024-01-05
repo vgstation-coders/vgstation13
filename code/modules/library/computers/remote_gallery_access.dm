@@ -3,9 +3,10 @@
  * I apologise for the awful amount of copypaste with the existing library code ;_;
  */
 /obj/machinery/computer/library/checkout/remote_gallery
-	name = "Remote gallery Computer"
+	name = "remote gallery computer"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "artcomp"
+	moody_state = "overlay_artcomp"
 	anchored = 1
 	density = 1
 	req_access = list(access_library) //This access requirement is currently only used for the delete button showing

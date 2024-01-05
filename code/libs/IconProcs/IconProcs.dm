@@ -436,6 +436,10 @@
 	amount<0 or amount>1 are allowed
  */
 /proc/BlendRGB(rgb1, rgb2, amount)
+	if (!rgb1)
+		rgb1 = "#ffffff"
+	if (!rgb2)
+		rgb2 = "#ffffff"
 	var/list/RGB1 = ReadRGB(rgb1)
 	var/list/RGB2 = ReadRGB(rgb2)
 
@@ -452,6 +456,28 @@
 	var/alpha = usealpha ? round(RGB1[4] + (RGB2[4] - RGB1[4]) * amount, 1) : null
 
 	return isnull(alpha) ? rgb(r, g, b) : rgb(r, g, b, alpha)
+
+/proc/AddRGB(rgb1, rgb2, amount)
+	var/list/RGB1 = rgb2num(rgb1)
+	var/list/RGB2 = rgb2num(rgb2)
+
+	var/r
+	if (RGB2[1] <= RGB1[1])
+		r = RGB1[1]
+	else
+		r = RGB1[1] + (RGB2[1] - RGB1[1])*amount
+	var/g
+	if (RGB2[2] <= RGB1[2])
+		g = RGB1[2]
+	else
+		g = RGB1[2] + (RGB2[2] - RGB1[2])*amount
+	var/b
+	if (RGB2[3] <= RGB1[3])
+		b = RGB1[3]
+	else
+		b = RGB1[3] + (RGB2[3] - RGB1[3])*amount
+
+	return rgb(r, g, b)
 
 /proc/BlendRGBasHSV(rgb1, rgb2, amount)
 	return HSVtoRGB(RGBtoHSV(rgb1), RGBtoHSV(rgb2), amount)
@@ -521,3 +547,22 @@
 		return BlendRGB("#000000", tone, gray/(tone_gray || 1))
 	else
 		return BlendRGB(tone, "#ffffff", (gray-tone_gray)/((255-tone_gray) || 1))
+
+/proc/replace_overlays_icon(var/image/I, var/icon/replacement)
+	if (!I || !replacement)
+		return
+	if(I.icon_state != "blank")
+		I.icon = replacement
+	var/list/new_overlays = list()
+
+	for (var/lay in I.overlays)
+		var/mutable_appearance/overlay_ref = lay
+		var/mutable_appearance/new_overlay = new (overlay_ref)
+		new_overlay.appearance_flags = overlay_ref.appearance_flags
+		new_overlay.color = overlay_ref.color
+		new_overlay = replace_overlays_icon(new_overlay,replacement)
+		new_overlays += new_overlay
+
+	I.overlays.len = 0
+	I.overlays += new_overlays
+	return I

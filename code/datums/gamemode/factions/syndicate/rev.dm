@@ -1,5 +1,3 @@
-//________________________________________________
-
 /datum/faction/revolution
 	name = "Revolutionaries"
 	ID = REVOLUTION
@@ -166,21 +164,14 @@
 			if (istype(dynamic_mode))
 				dynamic_mode.update_stillborn_rulesets()
 
-// Called on arrivals and emergency shuttle departure.
-/hook_handler/revs
-
-/hook_handler/revs/proc/OnArrival(var/list/args)
+/datum/faction/revolution/OnLateArrival(mob/living/carbon/human/character, rank)
 	var/datum/faction/revolution/R = find_active_faction_by_type(/datum/faction/revolution)
-	if (!istype(R))
+	if(!istype(R))
 		return FALSE
-	ASSERT(args["character"])
-	ASSERT(args["rank"])
-	var/mob/living/L = args["character"]
-	if (args["rank"] in command_positions)
+	if(rank in command_positions)
 		var/datum/objective/target/assassinate/orexile/A = new(auto_target = FALSE)
-		if(A.set_target(L.mind))
-			R.AppendObjective(A, TRUE) // We will have more than one kill objective
-
+		if(A.set_target(character.mind))
+			R.AppendObjective(A, TRUE)
 
 /datum/faction/revolution/proc/end(var/result)
 	. = TRUE

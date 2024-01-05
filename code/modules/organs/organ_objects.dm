@@ -36,6 +36,7 @@
 		/obj/structure/closet/crate/freezer,
 		/obj/structure/closet/crate/medical,
 		/obj/structure/closet/crate/secure/medsec,
+		/obj/structure/closet/secure_closet/freezer,
 		)
 
 /obj/item/organ/internal/attack_self(mob/user as mob)

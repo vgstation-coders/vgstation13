@@ -469,7 +469,7 @@
 	can_add_combinedwclass = TRUE
 	can_only_hold = list(
 		"/obj/item/device/radio/headset/headset_sec",
-		"/obj/item/clothing/glasses/sunglasses/sechud",
+		"/obj/item/clothing/glasses/hud/security/sunglasses",
 		"/obj/item/clothing/gloves/black",
 		"/obj/item/weapon/storage/belt/security",
 		"/obj/item/device/flashlight/tactical",
@@ -486,7 +486,7 @@
 	)
 	items_to_spawn = list(
 		/obj/item/device/radio/headset/headset_sec,
-		list(/obj/item/clothing/glasses/sunglasses/sechud/prescription,/obj/item/clothing/glasses/sunglasses/sechud),
+		list(/obj/item/clothing/glasses/hud/security/sunglasses/prescription,/obj/item/clothing/glasses/hud/security/sunglasses),
 		/obj/item/clothing/gloves/black,
 		/obj/item/weapon/storage/belt/security,
 		/obj/item/device/flashlight/tactical,
@@ -510,7 +510,7 @@
 	can_add_combinedwclass = TRUE
 	items_to_spawn = list(
 		/obj/item/device/radio/headset/headset_sec,
-			/obj/item/clothing/glasses/regular/tracking/detective,
+			/obj/item/clothing/glasses/hud/tracking/detective,
 		/obj/item/clothing/gloves/black,
 		/obj/item/weapon/storage/belt/detective,
 		/obj/item/weapon/switchtool/switchblade,

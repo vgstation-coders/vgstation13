@@ -70,11 +70,12 @@ default behaviour is:
 	if (species)
 		if (the_temp > species.heat_level_1)
 			return the_temp - species.heat_level_1
-		else if (the_temp < species.cold_level_1)
-			return the_temp - species.cold_level_1
+		else if (the_temp < FRIDGETEMP_DEFAULT)//Something below freezing temperature should feel adequately freezing.
+			return the_temp - FRIDGETEMP_DEFAULT
+		//else if (the_temp < species.cold_level_1)
+		//	return the_temp - species.cold_level_1
 	else if (the_temp > BODYTEMP_HEAT_DAMAGE_LIMIT)
 		return the_temp - BODYTEMP_HEAT_DAMAGE_LIMIT
 	else if (the_temp < BODYTEMP_COLD_DAMAGE_LIMIT)
 		return the_temp - BODYTEMP_COLD_DAMAGE_LIMIT
 	return 0
-  

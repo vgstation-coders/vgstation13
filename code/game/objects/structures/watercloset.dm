@@ -233,6 +233,7 @@
 	var/ismist = 0 //Needs a var so we can make it linger~
 	var/watertemp = "cool" //Freezing, normal, or boiling
 	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
+	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen showers scrub you clean
 
 	machine_flags = SCREWTOGGLE
 
@@ -275,7 +276,7 @@
 	update_icon()
 	if(on)
 		for(var/atom/movable/G in get_turf(src))
-			G.clean_blood()
+			G.clean_act(clean_power)
 
 /obj/machinery/shower/attackby(obj/item/I as obj, mob/user as mob)
 
@@ -358,9 +359,12 @@
 
 	if(iscarbon(O))
 		var/mob/living/carbon/M = O
+		if(prob(CLEAN_PROB))
+			M.clean_blood()//cleaning feet for humans
 		for(var/obj/item/I in M.held_items)
 			if(prob(CLEAN_PROB))
 				I.clean_blood()
+				I.clean_act(clean_power)
 				M.update_inv_hand(M.is_holding_item(I))
 		if(M.back && prob(CLEAN_PROB))
 			if(M.back.clean_blood())
@@ -422,6 +426,7 @@
 	else
 		if(prob(CLEAN_PROB))
 			O.clean_blood()
+			O.clean_act(clean_power)
 
 	var/turf/turf = get_turf(src)
 	if(prob(CLEAN_PROB))
@@ -473,6 +478,7 @@
 	icon_state = "sink"
 	desc = "A sink used for washing one's hands and face."
 	anchored = 1
+	var/clean_power = CLEANLINESS_SPACECLEANER//Nanotrasen sinks are equipped with state of the art water propulsion for extra cleanliness
 	var/busy = 0 	//Something's being washed at the moment
 
 /obj/structure/sink/splashable()
@@ -574,12 +580,7 @@
 		user.visible_message("<span class='notice'>[user] fills \the [RG] using \the [src].</span>","<span class='notice'>You fill the [RG] using \the [src].</span>")
 		return
 
-	if(istype(O,/obj/item/trash/plate))
-		var/obj/item/trash/plate/the_plate = O
-		the_plate.clean = TRUE
-		O.update_icon()
-
-	else if (istype(O, /obj/item/weapon/melee/baton))
+	if (istype(O, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/B = O
 		if (B.bcell && B.bcell.charge > 0 && B.status == 1)
 			flick("baton_active", src)
@@ -612,9 +613,7 @@
 		busy = TRUE
 
 		if (do_after(user,src, 40))
-			O.clean_blood()
-			if(O.current_glue_state == GLUE_STATE_TEMP)
-				O.unglue()
+			O.clean_act(clean_power)//removes blood, unglues, etc
 			user.visible_message( \
 				"<span class='notice'>[user] washes \the [O] using \the [src].</span>", \
 				"<span class='notice'>You wash \the [O] using \the [src].</span>")

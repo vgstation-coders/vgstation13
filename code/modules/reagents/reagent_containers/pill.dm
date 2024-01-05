@@ -19,6 +19,7 @@
 	prearcane_name = name
 	if(!icon_state)
 		icon_state = "pill[rand(1,20)]"
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/pill/attack_self(mob/user as mob)
 	return attack(user, user) //Dealt with in attack code
@@ -87,6 +88,12 @@
 /obj/item/weapon/reagent_containers/pill/bless()
 	..()
 	name = prearcane_name
+
+/obj/item/weapon/reagent_containers/pill/update_icon()
+	..()
+	overlays.len = 0
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
 
 //OOP, HO!
 /obj/item/weapon/reagent_containers/pill/proc/ingest(mob/M as mob)
@@ -514,6 +521,14 @@
 	..()
 	reagents.add_reagent(ARITHRAZINE, 10)
 
+/obj/item/weapon/reagent_containers/pill/lithotorcrazine
+	name = "lithotorcrazine pill"
+	desc = "Shields the body against radiation buildup, but does not cure it. Lasts around 5 minutes."
+	icon_state = "pill38"
+
+/obj/item/weapon/reagent_containers/pill/lithotorcrazine/New()
+	..()
+	reagents.add_reagent(LITHOTORCRAZINE, 30)
 
 /obj/item/weapon/reagent_containers/pill/nanofloxacin
 	name = "nanofloxacin pill"

@@ -16,6 +16,7 @@
 		icon_state="[base_icon_state]_open"
 	else
 		icon_state="[base_icon_state]"
+	..()
 
 /obj/item/clothing/suit/storage/labcoat/verb/toggle()
 	set name = "Toggle Labcoat Buttons"
@@ -110,3 +111,22 @@
 	allowed = list(/obj/item/roller, /obj/item/device/analyzer,/obj/item/stack/medical,/obj/item/weapon/dnainjector,/obj/item/weapon/reagent_containers/dropper,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/reagent_containers/hypospray,/obj/item/device/healthanalyzer,/obj/item/device/antibody_scanner,/obj/item/device/flashlight/pen,/obj/item/weapon/minihoe,/obj/item/weapon/switchtool,/obj/item/weapon/autopsy_scanner/healthanalyzerpro,
 		/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)
 	armor = list(melee = 10, bullet = 10, laser = 15, energy = 10, bomb = 0, bio = 50, rad = 0)
+
+/obj/item/clothing/suit/storage/labcoat/linen
+	name = "labcoat"
+	desc = "A suit that protects against minor chemical spills."
+	icon_state = "labcoat"
+	item_state = "labcoat"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("shoulders","trim")
+	dye_base_iconstate_override = "labcoat"
+
+/obj/item/clothing/suit/storage/labcoat/linen/update_icon()
+	if(open)
+		dye_base_iconstate_override = "labcoat_open"
+	else
+		dye_base_iconstate_override = "labcoat"
+	..()

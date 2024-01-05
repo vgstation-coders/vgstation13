@@ -3,7 +3,7 @@
 #define REAGENT_STATE_GAS 3
 #define FOOD_METABOLISM 0.4
 #define REAGENTS_OVERDOSE 30
-#define REM REAGENTS_EFFECT_MULTIPLIER
+#define REM REAGENTS_EFFECT_MULTIPLIER //0.5
 
 // Use in chem.flags.
 #define CHEMFLAG_DISHONORABLE 1
@@ -145,7 +145,8 @@
 #define NICOTINE 			"nicotine"
 #define AMMONIA 			"ammonia"
 #define SALINE				"saline"
-#define GLUE 			"glue"
+#define ETHYLCYANOACRYLATE	"ethylcyanoacrylate"
+#define GLUE 				"glue"
 #define DIETHYLAMINE 			"diethylamine"
 #define AMMONIUMNITRATE         "ammoniumnitrate"
 #define ETHYLREDOXRAZINE 			"ethylredoxrazine"
@@ -476,6 +477,7 @@
 #define FAKE_CREEP		"fake_creep"
 #define BLOBANINE		"blobanine"
 #define BLOB_ESSENCE	"blob_essence"
+#define METHAMPHETAMINE "methamphetamine"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
@@ -486,6 +488,7 @@
 #define MIDAZOLINE		"midazoline"
 #define LOCUTOGEN		"locutogen"
 #define BUMCIVILIAN		"bumcivilian"
+#define PUNCTUALITE		"punctualite"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"
@@ -521,6 +524,12 @@
 #define CAFFEINE		"caffeine"
 #define MIMOSA			"mimosa"
 #define LEMONDROP		"lemondrop"
+#define FEVERFEW		"feverfew"
+
+#define ACRYLIC			"acrylic"
+#define ACETONE			"acetone"
+#define NANOPAINT		"nano_paint"
+#define FLAXOIL			"flax_oil"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -557,7 +566,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define BICARIDINES list(BICARIDINE, OPIUM)
 #define SPACE_DRUGGS list(SPACE_DRUGS, MESCALINE)
 #define SYNAPTIZINES list(SYNAPTIZINE, CYTISINE)
-#define HYPERZINES list(HYPERZINE, COCAINE)
+#define HYPERZINES list(HYPERZINE, COCAINE, METHAMPHETAMINE)
 #define IMIDAZOLINES list(IMIDAZOLINE, ZEAXANTHIN)
 #define STOXINS list(STOXIN, STOXIN2, VALERENIC_ACID)
 #define SACIDS list(SACID, FORMIC_ACID)

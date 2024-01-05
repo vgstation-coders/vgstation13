@@ -50,6 +50,8 @@ var/auxtools_path
 /world/New()
 	world_startup_time = world.timeofday
 
+	TgsNew(null, TGS_SECURITY_TRUSTED)
+
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
 		WORLD_Y_OFFSET += rand(-50,50)
@@ -107,9 +109,13 @@ var/auxtools_path
 
 	Master.Setup()
 
+	TgsInitializationComplete()
+
 	return ..()
 
 /world/Topic(T, addr, master, key)
+	TGS_TOPIC
+
 	diary << "TOPIC: \"[T]\", from:[addr], master:[master], key:[key]"
 
 	if (T == "ping")
@@ -166,7 +172,11 @@ var/auxtools_path
 
 		var/notekey = copytext(T, 7)
 		return list2params(exportnotes(notekey))
-
+	else if(T == "port" && master)
+		if(src.port == 7777 || src.port == "7777")
+			src.OpenPort(7778)
+		else
+			src.OpenPort(7777)
 
 /world/Reboot(reason)
 	if(reason == REBOOT_HOST)
@@ -196,15 +206,17 @@ var/auxtools_path
 				fcopy(map_path, filename)
 
 	pre_shutdown()
+
+	TgsReboot()
 	..()
 
 /world/proc/pre_shutdown()
+	stop_all_media()
+
 	for(var/datum/html_interface/D in html_interfaces)
 		D.closeAll()
 
 	Master.Shutdown()
-
-	stop_all_media()
 
 	end_credits.on_world_reboot_start()
 	sleep(max(10, end_credits.audio_post_delay))

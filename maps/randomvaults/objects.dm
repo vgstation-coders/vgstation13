@@ -536,7 +536,7 @@
 	check_records = 1
 	criminals = 1
 	auth_weapons = 1
-	stun_all = 1
+	stun_peasants = 1
 	check_anomalies = 1
 	ai = 1
 

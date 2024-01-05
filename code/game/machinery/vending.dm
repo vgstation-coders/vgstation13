@@ -515,10 +515,10 @@ var/global/num_vending_terminals = 1
 		if (isnull(coin))
 			if(user.drop_item(W, src))
 				coin = W
-				to_chat(user, "<span class='notice'>You insert a coin into [src].</span>")
+				to_chat(user, "<span class='notice'>You insert \a [W] into [src].</span>")
 				src.updateUsrDialog()
 		else
-			to_chat(user, "<SPAN CLASS='notice'>There's already a coin in [src].</SPAN>")
+			to_chat(user, "<SPAN CLASS='notice'>There's already \a [coin] in [src].</SPAN>")
 		return
 
 	else if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin))
@@ -1090,10 +1090,10 @@ var/global/num_vending_terminals = 1
 			var/obj/item/weapon/coin/real_coin = coin
 			if(real_coin.string_attached)
 				if(prob(50))
-					to_chat(user, "<SPAN CLASS='notice'>You successfully pulled the coin out before \the [src] could swallow it.</SPAN>")
+					to_chat(user, "<SPAN CLASS='notice'>You successfully pulled \the [coin] out before \the [src] could swallow it.</SPAN>")
 					return_coin = 1
 				else
-					to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull the coin out fast enough, the machine ate it, string and all.</SPAN>")
+					to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull \the [coin] out fast enough, the machine ate it, string and all.</SPAN>")
 
 		if(return_coin)
 			user.put_in_hands(coin)
@@ -1124,6 +1124,8 @@ var/global/num_vending_terminals = 1
 			if(arcanetampered && prob(90))
 				path2use = /obj/item/weapon/bikehorn/rubberducky  // BONUS DUCKS! refunds
 			var/atom/A = new path2use(get_turf(src))
+			A.on_vending_machine_spawn()
+			A.update_temperature_overlays()
 			if(arcanetampered && path2use == R.product_path)
 				A.arcane_act(user)
 		else
@@ -1149,13 +1151,15 @@ var/global/num_vending_terminals = 1
 		return
 
 	if(src.seconds_electrified > 0)
-		src.seconds_electrified--
+		src.seconds_electrified -= 2 /* Machinery processing happens every 2 seconds. */
 
 	//Pitch to the people!  Really sell it!
-	if((last_slogan + slogan_delay <= world.time) && (product_slogans.len > 0) && !shut_up)
+	if(!shut_up && (last_slogan + slogan_delay <= world.time) && (product_slogans.len > 0))
 		var/mob/living/carbon/human/target
 		var/target_dist
 		for(var/mob/living/carbon/human/H in view(7, src)) //We are only going to look for customers that can probably pay
+			if(!H.client)
+				continue
 			var/H_dist = get_dist(H,src)
 			if(!target || (H_dist < target_dist))
 				target = H //pick the closest human
@@ -1439,8 +1443,10 @@ var/global/num_vending_terminals = 1
 		"Coffee helps you work!",
 		"Try some tea.",
 		"We hope you like the best!",
-		"Try our new chocolate!"
+		"Try our new chocolate!",
+		"Count to ten for your drink to be at safe temperature... If you're unrobust that is!"
 	)
+	vend_reply = "Count to ten for your drink to be at safe temperature."
 	icon_state = COFFEE
 	icon_vend = "coffee-vend"
 	vend_delay = 34
@@ -2225,6 +2231,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/pearseed = 3,
 		/obj/item/seeds/peanutseed = 3,
 		/obj/item/seeds/mustardplantseed = 3,
+		/obj/item/seeds/flaxseed = 3,
 		)//,/obj/item/seeds/synthmeatseed = 3)
 	contraband = list(
 		/obj/item/seeds/amanitamycelium = 2,
@@ -3252,6 +3259,7 @@ var/global/num_vending_terminals = 1
 	products = list (
 		/obj/item/clothing/suit/storage/trader = 3,
 		/obj/item/device/pda/trader = 3,
+		/obj/item/device/megaphone = 3,
 		/obj/item/weapon/card/id/vox/extra = 3,
 		/obj/item/weapon/stamp/trader = 3,
 		/obj/item/crackerbox = 1,
@@ -3265,6 +3273,7 @@ var/global/num_vending_terminals = 1
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
 		/obj/item/device/pda/trader = 100,
+		/obj/item/device/megaphone = 100,
 		/obj/item/weapon/card/id/vox/extra = 100,
 		/obj/item/weapon/stamp/trader = 20,
 		/obj/item/crackerbox = 200,
@@ -4144,8 +4153,10 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		/obj/item/weapon/storage/toolbox/paint = 2,
 		/obj/item/weapon/storage/fancy/crayons = 2,
 		/obj/item/weapon/pen/multi = 3,
-		/obj/item/weapon/painting_brush = 2,
-		/obj/item/weapon/palette = 2,
+		/obj/item/painting_brush = 2,
+		/obj/item/paint_roller = 2,
+		/obj/item/palette = 2,
+		/obj/item/weapon/reagent_containers/glass/bottle/acetone = 3,
 		/obj/structure/painting/custom = 3,
 		/obj/structure/painting/custom/landscape = 3,
 		/obj/structure/painting/custom/portrait = 3,
@@ -4168,8 +4179,10 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		/obj/item/weapon/storage/toolbox/paint = 40,
 		/obj/item/weapon/storage/fancy/crayons = 10,
 		/obj/item/weapon/pen/multi = 20,
-		/obj/item/weapon/painting_brush = 10,
-		/obj/item/weapon/palette = 10,
+		/obj/item/painting_brush = 10,
+		/obj/item/paint_roller = 20,
+		/obj/item/palette = 10,
+		/obj/item/weapon/reagent_containers/glass/bottle/acetone = 30,
 		/obj/structure/painting/custom = 10,
 		/obj/structure/painting/custom/landscape = 10,
 		/obj/structure/painting/custom/portrait = 10,

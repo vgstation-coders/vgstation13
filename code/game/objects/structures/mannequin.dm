@@ -434,6 +434,26 @@
 				else
 					return
 
+	else if(href_list["toggle_uniform_hood"])
+		if(trapped_strip)
+			to_chat(user,"<span class='danger'>\The [src] starts moving.</span>")
+			Awaken()
+			return
+		if (clothing[SLOT_MANNEQUIN_ICLOTHING])
+			var/obj/item/clothing/I = clothing[SLOT_MANNEQUIN_ICLOTHING]
+			if (I.hood)
+				I.toggle_hood(src,usr)
+
+	else if(href_list["toggle_suit_hood"])
+		if(trapped_strip)
+			to_chat(user,"<span class='danger'>\The [src] starts moving.</span>")
+			Awaken()
+			return
+		if (clothing[SLOT_MANNEQUIN_OCLOTHING])
+			var/obj/item/clothing/I = clothing[SLOT_MANNEQUIN_OCLOTHING]
+			if (I.hood)
+				I.toggle_hood(src,usr)
+
 	update_icon()
 	show_inv(user)
 
@@ -579,9 +599,21 @@
 		dat += "<BR>"
 		if(!primitive)
 			dat += "<BR><B>Exosuit:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_OCLOTHING]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_OCLOTHING])]</A>"
+			if (clothing[SLOT_MANNEQUIN_OCLOTHING])
+				var/obj/item/I = clothing[SLOT_MANNEQUIN_OCLOTHING]
+				if (istype(I, /obj/item/clothing))
+					var/obj/item/clothing/C = I
+					if (C.hood)
+						dat += "<BR>[HTMLTAB]&#8627;<B>Hood:</B> <A href='?src=\ref[src];toggle_suit_hood=1'>Toggle</A>"
 			dat += "<BR><B>Shoes:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_FEET]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_FEET])]</A>"
 			dat += "<BR><B>Gloves:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_GLOVES]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_GLOVES])]</A>"
 		dat += "<BR><B>Uniform:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_ICLOTHING]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_ICLOTHING])]</A>"
+		if (clothing[SLOT_MANNEQUIN_ICLOTHING])
+			var/obj/item/I = clothing[SLOT_MANNEQUIN_ICLOTHING]
+			if (istype(I, /obj/item/clothing))
+				var/obj/item/clothing/C = I
+				if (C.hood)
+					dat += "<BR>[HTMLTAB]&#8627;<B>Hood:</B> <A href='?src=\ref[src];toggle_uniform_hood=1'>Toggle</A>"
 		if(!primitive)
 			dat += "<BR><B>Belt:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_BELT]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_BELT])]</A>"
 			dat += "<BR><B>ID:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_ID]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_ID])]</A>"
@@ -705,6 +737,7 @@
 
 /obj/structure/mannequin/proc/update_icon_slot(var/obj/abstract/Overlays/O, var/slot)
 	var/obj/item/clothing/clothToUpdate = clothing[slot]
+	O.color = null
 	if(clothToUpdate)
 		var/t_state = clothToUpdate.icon_state
 
@@ -736,19 +769,27 @@
 				else
 					I = image(slotIcon[MANNEQUIN_ICONS_SLOT], t_state)
 
+		var/icon/species_icon
 		if(species.name in clothToUpdate.species_fit)
-			var/icon/species_icon = slotIcon[MANNEQUIN_ICONS_SPECIES]
+			species_icon = slotIcon[MANNEQUIN_ICONS_SPECIES]
 			if(species_icon)
 				I.icon = species_icon
 
 		if(clothToUpdate.icon_override)
 			I.icon	= clothToUpdate.icon_override
 
+		if(clothToUpdate.clothing_flags & COLORS_OVERLAY)
+			I.color = clothToUpdate.color
+
 		O.overlays += I
 
 		if(clothToUpdate.dynamic_overlay)
 			if(clothToUpdate.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"])
 				var/image/dyn_overlay = clothToUpdate.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"]
+
+				if(species_icon)
+					dyn_overlay = replace_overlays_icon(dyn_overlay, species_icon)
+
 				O.overlays += dyn_overlay
 
 		if(clothToUpdate.blood_DNA && clothToUpdate.blood_DNA.len)
@@ -774,7 +815,6 @@
 					I = image(slotIcon[MANNEQUIN_ICONS_SLOT], above.icon_state)
 
 				if(species.name in above.species_fit)
-					var/icon/species_icon = slotIcon[MANNEQUIN_ICONS_SPECIES]
 					if(species_icon)
 						I.icon = species_icon
 
@@ -784,6 +824,8 @@
 				if(above.dynamic_overlay)
 					if(above.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"])
 						var/image/dyn_overlay = above.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"]
+						if(species_icon)
+							dyn_overlay = replace_overlays_icon(dyn_overlay, species_icon)
 						dyn_overlay.pixel_y = (2 * i) * PIXEL_MULTIPLIER
 						O.overlays += dyn_overlay
 

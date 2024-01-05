@@ -344,7 +344,7 @@
 	env.merge(removed)
 
 	for(var/mob/living/carbon/human/l in view(src, min(7, round(power ** 0.25)))) // If they can see it without mesons on.  Bad on them.
-		if(!istype(l.glasses, /obj/item/clothing/glasses/scanner/meson))
+		if(!l.hasHUD(HUD_MESON))
 			l.hallucination = max(0, min(200, l.hallucination + power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)) ) ) )
 
 	for(var/mob/living/l in range(src, round((power / 100) ** 0.25)))
@@ -444,6 +444,16 @@
 	if(issilicon(user))
 		return attack_hand(user)
 
+	if(istype(W,/obj/item/weapon/book/manual/engineering_supermatter_guide))
+		user.visible_message("<span class='warning'>\The [user] touches \a [W] to \the [src] as a silence fills the room...</span>",\
+		"<span class='danger'>You touch \the [W] to \the [src] when everything suddenly goes silent.</span>\n<span class='notice'>\The [W] resonates with \the [src]!</span>",\
+		"<span class='warning'>Everything suddenly goes silent.</span>")
+		playsound(src, 'sound/effects/supermatter.ogg', 55, 1)
+		user.drop_from_inventory(W)
+		Consume(W)
+		user.apply_radiation(250, RAD_EXTERNAL)
+		return
+
 	user.visible_message("<span class='warning'>\The [user] touches \a [W] to \the [src] as a silence fills the room...</span>",\
 		"<span class='danger'>You touch \the [W] to \the [src] when everything suddenly goes silent.</span>\n<span class='notice'>\The [W] flashes into dust as you flinch away from \the [src].</span>",\
 		"<span class='warning'>Everything suddenly goes silent.</span>")
@@ -510,7 +520,10 @@
 	else
 		. = A.supermatter_act(src, SUPERMATTER_DELETE)
 
-	power += 200
+	if(istype(A, /obj/item/weapon/book/manual/engineering_supermatter_guide))
+		power += 1000
+	else
+		power += 200
 
 	for(var/mob/living/L in range(10,src)) //Some poor sod got eaten, go ahead and irradiate people nearby.
 		if(L == A) //It's the guy that just died.

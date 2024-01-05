@@ -333,7 +333,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		for(var/ID in files.known_tech)
 			var/datum/tech/T = files.known_tech[ID]
 			if(href_list["copy_tech_ID"] == T.id)
-				t_disk.stored = T
+				t_disk.stored = create_tech(T.id)
+				t_disk.stored.level = T.level
 				break
 		screen = 1.2
 
@@ -735,8 +736,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "Current Research Levels:<BR><BR>"
 			for(var/ID in files.known_tech)
 				var/datum/tech/T = files.known_tech[ID]
-				dat += {"[T.name]<BR>
-					* Level: [T.level]<BR>
+				dat += {"[T.name]: level [T.level]<BR>
 					* Summary: [T.desc]<HR>"}
 
 		if(1.2) //Technology Disk Menu

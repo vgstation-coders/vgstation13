@@ -98,7 +98,7 @@
 	initialize_basic_NPC_components()
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
-	var/list/valid_species = (all_species - list("Krampus", "Horror"))
+	var/list/valid_species = (all_species - list("Krampus", "Horror", "Manifested"))
 
 	var/datum/species/new_species = all_species[pick(valid_species)]
 	..(new_loc, new_species.name)
@@ -153,7 +153,8 @@
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
-	hud_list[RECORD_HUD]      = image('icons/mob/hud.dmi', src, "hudactive")
+	hud_list[PHYSRECORD_HUD]  = image('icons/mob/hud.dmi', src, "hudactive")
+	hud_list[MENTRECORD_HUD]  = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
@@ -162,6 +163,7 @@
 	hud_list[IMPTRACK_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[WAGE_HUD]        = image('icons/mob/hud.dmi', src, "hudblank")
 
 	obj_overlays[FIRE_LAYER]		= new /obj/abstract/Overlays/fire_layer
 	obj_overlays[MUTANTRACE_LAYER]	= new /obj/abstract/Overlays/mutantrace_layer
@@ -466,6 +468,11 @@
 	if(wear_suit)
 		dat += "<BR>[HTMLTAB]&#8627;<B>Suit Storage:</B> <A href='?src=\ref[src];item=[slot_s_store]'>[makeStrippingButton(s_store)]</A>"
 
+		if (istype(wear_suit, /obj/item/clothing))
+			var/obj/item/clothing/WS = wear_suit
+			if (WS.hood)
+				dat += "<BR>[HTMLTAB]&#8627;<B>Hood:</B> <A href='?src=\ref[src];toggle_suit_hood=1'>Toggle</A>"
+
 	if(slot_shoes in obscured)
 		dat += "<BR><font color=grey><B>Shoes:</B> Obscured by [wear_suit]</font>"
 	else
@@ -485,6 +492,11 @@
 
 		if(w_uniform)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Suit Sensors:</B> <A href='?src=\ref[src];sensors=1'>Set</A>"
+
+			if (istype(w_uniform, /obj/item/clothing))
+				var/obj/item/clothing/WU = w_uniform
+				if (WU.hood)
+					dat += "<BR>[HTMLTAB]&#8627;<B>Hood:</B> <A href='?src=\ref[src];toggle_uniform_hood=1'>Toggle</A>"
 
 		if(pickpocket)
 			dat += "<BR>[HTMLTAB]&#8627;<B>Pockets:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
@@ -527,12 +539,30 @@
 			return
 		toggle_sensors(usr)
 
+	else if(href_list["toggle_uniform_hood"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr)|| !w_uniform)
+			return
+		usr.visible_message("[usr] begins to toggle [src]'s hood.","You begin to toggle [src]'s hood.")
+		if (do_mob(usr,src))
+			if (istype(w_uniform, /obj/item/clothing))
+				var/obj/item/clothing/C = w_uniform
+				C.toggle_hood(src,usr,20)
+
+	else if(href_list["toggle_suit_hood"])
+		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr)|| !wear_suit)
+			return
+		usr.visible_message("[usr] begins to toggle [src]'s hood.","You begin to toggle [src]'s hood.")
+		if (do_mob(usr,src))
+			if (istype(w_uniform, /obj/item/clothing))
+				var/obj/item/clothing/C = w_uniform
+				C.toggle_hood(src,usr,20)
+
 	else if (href_list["refresh"])
 		if((machine)&&(in_range(src, usr)))
 			show_inv(machine)
 
 	else if (href_list["criminal"])
-		if(!usr.hasHUD(HUD_SECURITY) || isjustobserver(usr))
+		if(!usr.hasHUD(HUD_SECURITY) || !usr.hasHUD(HUD_ARRESTACCESS) || isjustobserver(usr))
 			return
 		var/perpname = get_identification_name(get_face_name())
 		var/datum/data/record/sec_record = data_core.find_security_record_by_name(perpname)
@@ -582,10 +612,24 @@
 		if(!gen_record)
 			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
 			return
-		var/setmedical = input(usr, "Specify a new medical status for this person.", "Medical HUD", gen_record.fields["p_stat"]) as null|anything in list("*SSD*", "*Deceased*", "Physically Unfit", "Active", "Disabled")
+		var/setmedical = input(usr, "Specify a new physical medical status for this person.", "Medical HUD", gen_record.fields["p_stat"]) as null|anything in list("*SSD*", "*Deceased*", "Physically Unfit", "Active", "Disabled")
 		if(!setmedical|| (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
 			return
 		gen_record.fields["p_stat"] = setmedical
+		if(PDA_Manifest.len)
+			PDA_Manifest.len = 0
+	else if (href_list["medicalsanity"])
+		if(!usr.hasHUD(HUD_MEDICAL) || isjustobserver(usr))
+			return
+		var/perpname = get_identification_name(get_face_name())
+		var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
+		if(!gen_record)
+			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
+			return
+		var/setmedical = input(usr, "Specify a new mental medical status for this person.", "Medical HUD", gen_record.fields["m_stat"]) as null|anything in list("*Insane*", "*Unstable*", "*Watch*", "Stable")
+		if(!setmedical|| (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
+			return
+		gen_record.fields["m_stat"] = setmedical
 		if(PDA_Manifest.len)
 			PDA_Manifest.len = 0
 	else if (href_list["medrecord"])
@@ -668,6 +712,9 @@
 
 	if (istype(eyewear))
 		. += eyewear.eyeprot
+
+	for(var/datum/visioneffect/V in huds)
+		. += V.eyeprot
 
 	if(E)
 		. += E.eyeprot
@@ -974,13 +1021,74 @@
 	update_inv_gloves()	//handles bloody hands overlays and updating
 	return TRUE //we applied blood to the item
 
-/mob/living/carbon/human/clean_blood(var/clean_feet)
+/mob/living/carbon/human/proc/add_blood_to_feet(var/_amount, var/_color, var/list/_blood_DNA=list(), var/luminous = FALSE)
+	if(shoes)
+		var/obj/item/clothing/shoes/S = shoes
+		S.track_blood = max(0, _amount, S.track_blood)                //Adding blood to shoes
+		S.luminous_paint = luminous
+
+		if(!blood_overlays["[S.type][S.icon_state]"]) //If there isn't a precreated blood overlay make one
+			S.set_blood_overlay()
+
+		if(S.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
+			S.overlays.Remove(S.blood_overlay)
+		else
+			S.blood_overlay = blood_overlays["[S.type][S.icon_state]"]
+
+		if(!S.blood_DNA)
+			S.blood_DNA = list()
+
+		var/newcolor = (S.blood_color && S.blood_DNA.len) ? BlendRYB(S.blood_color, _color, 0.5) : _color
+		S.blood_overlay.color = newcolor
+		S.overlays += S.blood_overlay
+		S.blood_color = newcolor
+
+		if(_blood_DNA)
+			S.blood_DNA |= _blood_DNA.Copy()
+		update_inv_shoes(1)
+
+	else
+		track_blood = max(_amount, 0, track_blood)                                //Or feet
+		if(!feet_blood_DNA)
+			feet_blood_DNA = list()
+
+		feet_blood_lum = luminous
+
+		if(!istype(_blood_DNA, /list))
+			_blood_DNA = list()
+		else
+			feet_blood_DNA |= _blood_DNA.Copy()
+
+		feet_blood_color = (feet_blood_color && feet_blood_DNA.len) ? BlendRYB(feet_blood_color, _color, 0.5) : _color
+
+		update_inv_shoes(1)
+
+/mob/living/carbon/human/proc/luminous_feet()
+	if(shoes)
+		var/obj/item/clothing/shoes/S = shoes
+		return S.luminous_paint
+	else
+		return feet_blood_lum
+
+/mob/living/carbon/human/clean_blood()
 	.=..()
-	if(clean_feet && !shoes && istype(feet_blood_DNA, /list) && feet_blood_DNA.len)
+	if(!shoes && istype(feet_blood_DNA, /list) && feet_blood_DNA.len)
 		feet_blood_color = null
 		feet_blood_DNA.len = 0
 		update_inv_shoes(1)
 		return 1
+
+/mob/living/carbon/human/clean_act(var/cleanliness)
+	..()
+	for(var/obj/item/I in held_items)
+		I.clean_act(cleanliness)
+
+	for(var/obj/item/clothing/C in get_equipped_items())
+		C.clean_act(cleanliness)
+
+	if (cleanliness >= CLEANLINESS_SPACECLEANER)
+		color = ""//color is a bit easier to remove on humans, for convenience's sake
+
 
 /mob/living/carbon/human/yank_out_object()
 	set category = "Object"
@@ -1439,6 +1547,11 @@
 					break
 		if(dark_plane_alpha_override)
 			dark_plane.alphas["override"] = dark_plane_alpha_override
+
+	for(var/datum/visioneffect/V in huds)
+		V.process_update_perception(src)
+		if (dark_plane && V.my_dark_plane_alpha_override && V.my_dark_plane_alpha_override_value)
+			dark_plane.alphas["[V.my_dark_plane_alpha_override]"] = V.my_dark_plane_alpha_override_value
 
 	if (istype(glasses))
 		glasses.update_perception(src)
@@ -2042,15 +2155,37 @@
 			G.on_wearer_threw_item(src,target,item)
 
 /mob/living/carbon/human/hasHUD(var/hud_kind)
-	var/glasses = get_item_by_slot(slot_glasses)
 	switch(hud_kind)
 		if(HUD_MEDICAL)
-			return istype(glasses, /obj/item/clothing/glasses/hud/health)
+			for(var/datum/visioneffect/medical/H in huds)
+				return TRUE
+			return FALSE
 		if(HUD_SECURITY)
-			if(istype(glasses, /obj/item/clothing/glasses/sunglasses/sechud/syndishades))
-				var/obj/item/clothing/glasses/sunglasses/sechud/syndishades/S = glasses
-				return S.full_access
-			return is_type_in_list(glasses, list(/obj/item/clothing/glasses/hud/security, /obj/item/clothing/glasses/sunglasses/sechud))
+			var/glasses = get_item_by_slot(slot_glasses)
+			if(glasses)
+				if(istype(glasses, /obj/item/clothing/glasses/hud/security/sunglasses/syndishades))
+					var/obj/item/clothing/glasses/hud/security/sunglasses/syndishades/S = glasses
+					return S.full_access
+			for(var/datum/visioneffect/security/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_ARRESTACCESS)
+			var/glasses = get_item_by_slot(slot_glasses)
+			if(glasses)
+				if(istype(glasses, /obj/item/clothing/glasses/hud/security/sunglasses/syndishades))
+					var/obj/item/clothing/glasses/hud/security/sunglasses/syndishades/S = glasses
+					return S.full_access
+			for(var/datum/visioneffect/security/arrest/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_WAGE)
+			for(var/datum/visioneffect/accountdb/wage/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_MESON)
+			for(var/datum/visioneffect/meson/H in huds)
+				return TRUE
+			return FALSE
 	return FALSE
 
 /mob/living/carbon/human/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
@@ -2083,9 +2218,14 @@
 		return FALSE
 	if(!isfloor(target) || !isfloor(get_turf(src)) || !Adjacent(target))
 		return FALSE
-	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || locked_to || client.move_delayer.blocked())
+	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || grabbed_by.len || locked_to || client.move_delayer.blocked())
 		return FALSE
 	var/crawldelay = 0.2 SECONDS
+	if(istype(target, /turf/simulated/floor/engine/bolted))
+		adjustBruteLoss(5)
+		delayNextMove(crawldelay)
+		to_chat(src, "<span class='warning'>You injure yourself trying to crawl onto the bolted floor!</span>")
+		return FALSE
 	if (crawlcounter >= max_crawls_before_fatigue)
 		if (prob(10))
 			to_chat(src, "<span class='warning'>You get tired from all this crawling around.</span>")

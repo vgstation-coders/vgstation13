@@ -124,7 +124,7 @@
 				var/dirttype = pick(subtypesof(/obj/effect/decal/cleanable))
 				new dirttype(tile)
 			else
-				tile.clean_blood()
+				tile.clean_act(CLEANLINESS_SPACECLEANER)
 
 				if (istype(tile, /turf/simulated))
 					var/turf/simulated/F = tile
@@ -139,23 +139,23 @@
 							qdel(A)
 					else if(istype(A, /obj/item))
 						var/obj/item/cleaned_item = A
-						cleaned_item.clean_blood()
+						cleaned_item.clean_act(CLEANLINESS_SPACECLEANER)
 					else if(istype(A, /mob/living/carbon/human))
 						var/mob/living/carbon/human/cleaned_human = A
 						if(cleaned_human.lying)
 							if(cleaned_human.head)
-								cleaned_human.head.clean_blood()
+								cleaned_human.head.clean_act(CLEANLINESS_SPACECLEANER)
 								cleaned_human.update_inv_head(0)
 							if(cleaned_human.wear_suit)
-								cleaned_human.wear_suit.clean_blood()
+								cleaned_human.wear_suit.clean_act(CLEANLINESS_SPACECLEANER)
 								cleaned_human.update_inv_wear_suit(0)
 							else if(cleaned_human.w_uniform)
-								cleaned_human.w_uniform.clean_blood()
+								cleaned_human.w_uniform.clean_act(CLEANLINESS_SPACECLEANER)
 								cleaned_human.update_inv_w_uniform(0)
 							if(cleaned_human.shoes)
-								cleaned_human.shoes.clean_blood()
+								cleaned_human.shoes.clean_act(CLEANLINESS_SPACECLEANER)
 								cleaned_human.update_inv_shoes(0)
-							cleaned_human.clean_blood()
+							cleaned_human.clean_act(CLEANLINESS_SPACECLEANER)
 							to_chat(cleaned_human, "<span class='warning'>[src] cleans your face!</span>")
 
 /obj/effect/decal/mecha_wreckage/vehicle/janicart

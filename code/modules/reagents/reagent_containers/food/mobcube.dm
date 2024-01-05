@@ -148,3 +148,6 @@
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/cowcube
 	name = "cow cube"
 	contained_mob = /mob/living/simple_animal/cow
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cowcube/on_vending_machine_spawn()
+	reagents.chem_temp = FRIDGETEMP_FROZEN

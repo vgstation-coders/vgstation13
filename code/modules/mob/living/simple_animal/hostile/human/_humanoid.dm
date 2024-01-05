@@ -14,6 +14,7 @@
 	melee_damage_upper = 7
 	attacktext = "punches"
 	a_intent = I_HURT
+	treadmill_speed = 1	//Same as player humanoids
 
 	min_oxy = 5
 	max_oxy = 0

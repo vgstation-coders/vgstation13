@@ -169,15 +169,18 @@ var/global/list/playable_species = list("Human")
 		myhuman = null
 	..()
 
-/datum/species/proc/gib(var/mob/living/carbon/human/H)
+/datum/species/proc/gib(var/mob/living/carbon/human/H, animation, meat)
 	if(H.status_flags & BUDDHAMODE)
 		H.adjustBruteLoss(200)
 		return
-	H.death(1)
-	H.monkeyizing = 1
-	H.canmove = 0
-	H.icon = null
-	H.invisibility = 101
+	if(!H.isUnconscious())
+		H.forcesay("-")
+	H.default_gib(H, animation, meat)
+
+/datum/species/proc/dust(var/mob/living/carbon/human/H, drop_everything)
+	if(!H.isUnconscious())
+		H.forcesay("-")
+	H.default_dust(H, drop_everything)
 
 /datum/species/proc/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if(speech_filter)
@@ -328,10 +331,6 @@ var/global/list/playable_species = list("Human")
 
 	max_skin_tone = 220
 
-/datum/species/human/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
-
 /datum/species/manifested
 	name = "Manifested"
 	icobase = 'icons/mob/human_races/r_manifested.dmi'
@@ -413,10 +412,6 @@ var/global/list/playable_species = list("Human")
 /datum/species/unathi/New()
 	..()
 	speech_filter = new /datum/speech_filter/unathi
-
-/datum/species/unathi/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
 
 /datum/species/skellington // /vg/
 	name = "Skellington"
@@ -596,10 +591,6 @@ var/global/list/playable_species = list("Human")
 		speech.message += pick("KILL ME", "END MY SUFFERING", "I CAN'T DO THIS ANYMORE")
 	return ..()
 
-/datum/species/tajaran/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
-
 /datum/species/grey // /vg/
 	name = "Grey"
 	icobase = 'icons/mob/human_races/grey/r_grey.dmi'
@@ -691,9 +682,6 @@ var/global/list/playable_species = list("Human")
 		else
 			icobase = 'icons/mob/human_races/grey/r_grey.dmi'
 			deform = 'icons/mob/human_races/grey/r_def_grey.dmi'
-/datum/species/grey/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
 
 /datum/species/muton // /vg/
 	name = "Muton"
@@ -732,10 +720,6 @@ var/global/list/playable_species = list("Human")
 	H.u_equip(H.head,1)
 	move_speed_mod = 1
 
-/datum/species/muton/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
-
 /datum/species/skrell
 	name = "Skrell"
 	icobase = 'icons/mob/human_races/r_skrell.dmi'
@@ -751,10 +735,6 @@ var/global/list/playable_species = list("Human")
 
 	head_icons      = 'icons/mob/species/skrell/head.dmi'
 	wear_suit_icons = 'icons/mob/species/skrell/suit.dmi'
-
-/datum/species/skrell/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
 
 /datum/species/vox
 	name = "Vox"
@@ -864,10 +844,6 @@ var/global/list/playable_species = list("Human")
 			icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 
-/datum/species/vox/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
-
 /datum/species/diona
 	name = "Diona"
 	icobase = 'icons/mob/human_races/r_plant.dmi'
@@ -921,10 +897,6 @@ var/global/list/playable_species = list("Human")
 		"eyes" =     /datum/organ/internal/eyes
 	)
 
-/datum/species/diona/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
-
 /datum/species/golem
 	name = "Golem"
 	icobase = 'icons/mob/human_races/r_golem.dmi'
@@ -977,7 +949,7 @@ var/global/list/playable_species = list("Human")
 
 var/list/has_died_as_golem = list()
 
-/datum/species/golem/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
+/datum/species/golem/handle_death(var/mob/living/carbon/human/H, gibbed) //Handles any species-specific death events (such as dionaea nymph spawns).
 	if(!isgolem(H))
 		return
 	var/datum/mind/golemmind = H.mind
@@ -996,13 +968,34 @@ var/list/has_died_as_golem = list()
 			A.real_name = H.real_name
 			A.desc = "The remains of what used to be [A.real_name]."
 		A.key = H.key
-	qdel(H)
 
 /datum/species/golem/can_artifact_revive()
-	return 0
+	return FALSE
 
-/datum/species/golem/gib(mob/living/carbon/human/H)
-	handle_death()
+/datum/species/golem/gib(var/mob/living/carbon/human/H, animation, meat)
+	if(H.status_flags & BUDDHAMODE)
+		H.adjustBruteLoss(200)
+		return
+	if(!H.isUnconscious())
+		H.forcesay("-")
+	H.death(1)
+	H.handle_body_destroyed()
+	var/gib_radius = 0
+	if(H.reagents.has_reagent(LUBE))
+		gib_radius = 6
+	hgibs(H.loc, H.virus2, H.dna, flesh_color, blood_color, gib_radius)
+	spawn()
+		qdel(H)
+
+/datum/species/golem/dust(var/mob/living/carbon/human/H, drop_everything)
+	if(!H.isUnconscious())
+		H.forcesay("-")
+	H.death(1)
+	H.handle_body_destroyed()
+	if(drop_everything)
+		H.drop_all()
+	spawn()
+		qdel(H)
 
 /mob/living/adamantine_dust //serves as the corpse of adamantine golems
 	name = "adamantine dust"
@@ -1068,10 +1061,6 @@ var/list/has_died_as_golem = list()
 /datum/species/vampire/makeName()
 	return "vampire"
 
-/datum/species/vampire/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
-
 /datum/species/ghoul
 	name = "Ghoul"
 	icobase = 'icons/mob/human_races/r_ghoul.dmi'
@@ -1088,10 +1077,6 @@ var/list/has_died_as_golem = list()
 	blood_color = GHOUL_BLOOD
 
 	primitive = /mob/living/carbon/monkey //Just to keep them SoC friendly.
-
-/datum/species/ghoul/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
 
 /datum/species/slime
 	name = "Slime"
@@ -1299,9 +1284,6 @@ var/list/has_died_as_golem = list()
 		newname += pick(insectoid_name_syllables)
 	return capitalize(newname)
 
-/datum/species/insectoid/gib(mob/living/carbon/human/H) //changed from Skrell to Insectoid for testing
-	H.default_gib()
-
 /datum/species/mushroom
 	name = "Mushroom"
 	icobase = 'icons/mob/human_races/r_mushman.dmi'
@@ -1360,16 +1342,13 @@ var/list/has_died_as_golem = list()
 	species_intro = "You are a Mushroom Person.<br>\
 					You are an odd creature. Your lack of a mouth prevents you from eating, but you can stand or lay on food to absorb it.<br>\
 					You have a resistance to burn and toxin, but you are vulnerable to brute attacks.<br>\
-					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the target chosen with your Fungal Telepathy.<br>\
+					You are adept at seeing in the dark, moreso with your light inversion ability. When you speak, it will only go to the targets chosen with your Fungal Telepathy.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
 	var/mob/living/telepathic_target[] = list()
+	var/telepathy_type = LOCAL_TELEPATHY
 
 /datum/species/mushroom/makeName()
 	return capitalize(pick(mush_first)) + " " + capitalize(pick(mush_last))
-
-/datum/species/mushroom/gib(mob/living/carbon/human/H)
-	..()
-	H.default_gib()
 
 /datum/species/mushroom/silent_speech(mob/M, message)
 	if(!message)
@@ -1380,6 +1359,16 @@ var/list/has_died_as_golem = list()
 	if (M.stat == UNCONSCIOUS)
 		to_chat(M, "<span class='warning'>You must be conscious to do this!</span>")
 		return
+
+	if(telepathy_type & (LOCAL_TELEPATHY | GLOBAL_TELEPATHY))
+		telepathic_target.len = 0
+		var/list/possible_targets = M.mind.heard_before
+		var/datum/mind/temp_target
+		for(var/T in possible_targets)
+			temp_target = possible_targets[T]
+			if(!temp_target.current || ((telepathy_type & LOCAL_TELEPATHY) && !(get_dist(temp_target.current, M) <= SPEECH_RANGE)))
+				continue
+			telepathic_target += temp_target.current
 
 	if(!telepathic_target.len)
 		var/mob/living/L = M

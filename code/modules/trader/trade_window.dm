@@ -16,6 +16,7 @@
 	var/datum/language/trader_language
 	var/list/last_greeted = list()
 	var/closed = FALSE //closes if atmos fails
+	var/list/pending_messages = list() //Special messages to be given on next greeting
 
 /obj/structure/trade_window/initialize()
 	..()
@@ -68,6 +69,16 @@
 	if(istype(W, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/C = W
 		pay_with_cash(C, user)
+
+	if(istype(W,/obj/item/weapon/pinpointer/outpost))
+		if(user.get_face_name() in SStrade.loyal_customers)
+			say(pick(tw_return_pinpointer))
+		else
+			say("Hope you got this honestly...")
+		qdel(W)
+		var/obj/item/weapon/reagent_containers/food/drinks/coffee/C = new(loc)
+		tableadjust(C)
+		C.on_vending_machine_spawn()
 
 	if(istype(W, /obj/item/weapon/card/id/vox/extra) && !(user.get_face_name() in SStrade.loyal_customers))
 		if(user.get_face_name() == "Unknown")

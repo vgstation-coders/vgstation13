@@ -23,12 +23,14 @@
 /obj/structure/morgue/New()
 	..()
 	morgue_list += src
+	update_icon()
 
 /obj/structure/morgue/Destroy()
 	..()
 	morgue_list -= src
 
 /obj/structure/morgue/update_icon()
+	update_moody_light('icons/lighting/special.dmi', "overlay_morgue")
 	if(connected)
 		icon_state = "morgue0"
 		return

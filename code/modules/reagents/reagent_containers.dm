@@ -7,11 +7,20 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = null
 	w_class = W_CLASS_TINY
+	heat_conductivity = 0.90
 	var/amount_per_transfer_from_this = 5
 	var/possible_transfer_amounts = list(5,10,15,25,30)
 	var/volume = 30
 	var/amount_per_imbibe = 5
 	var/attack_mob_instead_of_feed //If true, the reagent container will be used as a melee weapon rather than as a vessel to feed another mob with (in attack()).
+
+	var/image/ice_overlay = null
+	var/ice_alpha = 64
+	var/thermal_variation_from_environment = 0.055//how much of the environmental temperature do we want to match per entropy procs
+	var/thermal_variation_modifier = 1//if set to 0, no entropy will occur in that container. More than 1 means it reaches room temperature quicker.
+
+	var/controlled_splash = FALSE	//If true, splashing someone/something with the reagent container will only usr the current amount_per_transfer_from_this instead of all of it
+									//Honestly we should try setting this to TRUE by default for all containers at some point, it's just convenient.
 
 /obj/item/weapon/reagent_containers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
@@ -69,9 +78,31 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return
 	return ..()
 
+/obj/item/weapon/reagent_containers/MiddleAltClick(var/mob/living/user)
+	if(!is_holder_of(user, src))
+		return
+	if(!reagents || !reagents.total_volume)
+		to_chat(user, "<span class='warning'>\The [src] is desperately empty.</span>")
+		return
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if (H.species && (H.species.flags & SPECIES_NO_MOUTH))
+			to_chat(user, "<span class='warning'>You stare at \the [src] intently. Wishing you had a mouth to interact with it.</span>")
+			return
+	thermal_entropy()
+	playsound(user, 'sound/effects/blow.ogg', 5, 1, -2)
+	var/can_it_burn = round(user.get_splash_burn_damage(amount_per_imbibe, reagents.chem_temp))
+	if (can_it_burn)
+		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='warning'>It feels quite hot still...</span>")
+	else if (reagents.chem_temp <= T0C)
+		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='warning'>It feels pretty cold still...</span>")
+	else
+		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='notice'>Temperature seems safe...</span>")
+
 /obj/item/weapon/reagent_containers/New()
 	..()
 	create_reagents(volume)
+	all_reagent_containers.Add(src)
 
 	if(!is_open_container(src))
 		src.verbs -= /obj/item/weapon/reagent_containers/verb/empty_contents
@@ -82,7 +113,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(istype(loc, /obj/machinery/iv_drip))
 		var/obj/machinery/iv_drip/holder = loc
 		holder.remove_container()
-	thermal_dissipation_reagents -= reagents
+	thermal_entropy_containers.Remove(src)
+	all_reagent_containers.Remove(src)
 	. = ..()
 
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
@@ -102,13 +134,23 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return
 
 	if(!src.reagents.total_volume)
-		to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
-		return 0
+		if(user.a_intent == I_HELP)
+			to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
+			return 0
+		else
+			return ..()//empty bottle? hit them with it!
 
 	if(user.a_intent != I_HELP)
 		if(src.reagents)
-			transfer(M, user, splashable_units = -1)
-			playsound(M, 'sound/effects/slosh.ogg', 25, 1)
+			var/transfer_result
+			if (controlled_splash)
+				transfer_result = transfer(M, user, splashable_units = amount_per_transfer_from_this)
+			else
+				transfer_result = transfer(M, user, splashable_units = -1)
+			if (transfer_result)
+				splash_special()
+			if (transfer_result >= 10)
+				playsound(M, 'sound/effects/slosh.ogg', 25, 1)
 			return 1
 
 
@@ -133,6 +175,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			imbibe(M)
 
 			return 0
+
+/obj/item/weapon/reagent_containers/proc/splash_special()
+	return
 
 
 /**
@@ -360,7 +405,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.reaction(user, INGEST, amount_override = min(reagents.total_volume,amount_per_imbibe)/(reagents.reagent_list.len))
 		spawn(5)
 			if(reagents)
+				reagents.adjust_consumed_reagents_temp()
 				reagents.trans_to(user, amount_per_imbibe)
+				reagents.reset_consumed_reagents_temp()
 
 	return 1
 
@@ -382,10 +429,12 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /obj/item/weapon/reagent_containers/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	reagents.heating(1000, exposed_temperature)
 	..()
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/attackby(obj/item/I, mob/user, params)
 	..()
 	attempt_heating(I, user)
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/attempt_heating(atom/A, mob/user)
 	var/temperature = A.is_hot()
@@ -404,5 +453,144 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 /obj/item/weapon/reagent_containers/on_reagent_change()
 	. = ..()
-	//Reagent containers can exchange heat with the surrounding air.
-	heat_dissipation_updates() //Every reagent_containers that should be added to the heat dissipation subsystem should call this on_reagent_change(). If you add something that breaks the supercall chain, be sure to call this.
+	process_temperature()
+
+////////////THERMAL ENTROPY///////////////////////////////////////////////////////////////////////////////////////////////////
+
+//an overly simple thermal entropy proc that lets food match the temperature of their environnement over time
+//we don't send the temperature difference back to the environnement because frankly it's not gonna matter in 99.999% of the cases.
+//furthermore, we stop looping once the temperature is less than a degree away from the environment, until we get moved or picked up.
+//won't resume on passive temperature changes in a room, but we can always add a subsystem later that checks for additional temperature changes every minute or so I guess
+/obj/item/weapon/reagent_containers/process_temperature()
+	thermal_entropy_containers |= src
+
+/obj/item/weapon/reagent_containers/proc/thermal_entropy()
+	set waitfor = FALSE
+
+	if (!reagents || !reagents.total_volume)
+		thermal_entropy_containers.Remove(src)
+		update_temperature_overlays()
+		return
+
+	var/datum/gas_mixture/air = return_air()
+
+	if (!air)
+		thermal_entropy_containers.Remove(src)
+		return
+
+	var/diff = air.temperature - reagents.chem_temp
+
+	//we only bother if there's less than a 1 degree difference
+	if (abs(diff) < 2)
+		thermal_entropy_containers.Remove(src)
+
+	//based on newton's law of cooling
+	reagents.chem_temp = reagents.chem_temp + diff * thermal_variation_from_environment * thermal_variation_modifier
+
+	if(!(reagents.skip_flags & SKIP_RXN_CHECK_ON_HEATING))
+		reagents.handle_reactions()
+
+	update_icon()
+
+/obj/item/weapon/reagent_containers/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
+	..()
+	process_temperature()
+
+/obj/item/weapon/reagent_containers/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
+	..()
+	process_temperature()
+
+/obj/item/weapon/reagent_containers/dropped(var/mob/user)
+	..()
+	process_temperature()
+
+/obj/item/weapon/reagent_containers/pickup(var/mob/user)
+	..()
+	process_temperature()
+
+/obj/item/weapon/reagent_containers/update_temperature_overlays()
+	if (particles)
+		particles.spawning = 0
+	if(reagents && reagents.total_volume)
+		switch(reagents.chem_temp)
+			if (-INFINITY to (T0C+2))
+				ice_alpha = 96 + clamp((-64*((reagents.chem_temp-T0C)/80)),0,64)
+				if(!ice_overlays["[type][icon_state]"])
+					set_ice_overlay()
+				else
+					update_ice_overlay()
+			if (STEAMTEMP to INFINITY)
+				if (!particles)
+					particles = new/particles/steam
+				steam_spawn_adjust(reagents.chem_temp)
+
+///////////ICE OVERLAY///////////////////////////////////////////////////////////////////////////////////////////////////////////
+//appears when the food item's reagents' temperature falls to 0°C or below
+//based on how blood overlays are generated
+
+var/global/list/image/ice_overlays = list()
+/obj/item/weapon/reagent_containers/proc/set_ice_overlay()
+	if(update_ice_overlay())
+		return
+
+	var/icon/I = new /icon(icon, icon_state)
+	//fills the icon_state with white (except where it's transparent)
+	I.Blend(rgb(255,255,255),ICON_ADD)
+	//inspired by urist's old cult rune drawing method, will let us add a 1px ice border around the object
+	var/list/border_pixels = list()
+	for(var/x = 1, x <= 32, x++)
+		for(var/y = 1, y <= 32, y++)
+			var/p = I.GetPixel(x, y)
+
+			if(p == null)
+				var/n = I.GetPixel(x, y + 1)
+				var/s = I.GetPixel(x, y - 1)
+				var/e = I.GetPixel(x + 1, y)
+				var/w = I.GetPixel(x - 1, y)
+
+				if(n == "#ffffff" || s == "#ffffff" || e == "#ffffff" || w == "#ffffff")
+					border_pixels += list(list(x,y))
+	for (var/list/L in border_pixels)
+		I.DrawBox(rgb(255, 255, 255), L[1], L[2])
+	//adds the ice texture
+	I.Blend(new /icon('icons/effects/effects.dmi', "ice"),ICON_MULTIPLY)
+
+	var/image/img = image(I)
+	img.name = "ice_overlay"
+	ice_overlays["[type][icon_state]"] = img
+	update_ice_overlay()
+
+/obj/item/weapon/reagent_containers/proc/update_ice_overlay()
+	if(ice_overlays["[type][icon_state]"])
+		if (ice_overlay)
+			overlays -= ice_overlay
+		ice_overlay = image(ice_overlays["[type][icon_state]"])
+		ice_overlay.appearance_flags = RESET_COLOR|RESET_ALPHA
+		ice_overlay.alpha = ice_alpha
+		overlays += ice_overlay
+		return 1
+
+///////////STEAM PARTICLES/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/particles/steam
+	width = 64
+	height = 64
+	count = 20
+	spawning = 0
+
+	lifespan = 1 SECONDS
+	fade = 1 SECONDS
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "steam"
+	color = "#FFFFFF99"
+	position = 0
+	velocity = 1
+	scale = list(0.6, 0.6)
+	grow = list(0.05, 0.05)
+	rotation = generator("num", 0,360)
+
+/obj/item/weapon/reagent_containers/proc/steam_spawn_adjust(var/_temp)
+	if (particles)
+		particles.spawning = clamp(0.1 + 0.002 * (_temp - STEAMTEMP),0.1,0.5)
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

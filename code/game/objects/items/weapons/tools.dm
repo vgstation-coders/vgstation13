@@ -75,6 +75,20 @@
 		qdel(src)
 		qdel(W)
 
+/obj/item/tool/wrench/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag)
+		return 1
+	if(istype(target, /obj/structure))
+		var/obj/structure/S = target
+		if(S.hasbolts)
+			S.hasbolts = FALSE
+			S.anchored = FALSE
+			new /obj/item/stack/bolts(S.loc)
+			to_chat(user, "<span class='notice'>You remove the bolts from \the [target].</span>")
+			return 1 //Cancel action, for example to prevent disassembling a chair
+	else
+		return ..()
+
 //we inherit a lot from wrench, so we change very little
 /obj/item/tool/wrench/socket
 	name = "socket wrench"
@@ -174,10 +188,8 @@
 			if(C.amount < 10)
 				to_chat(usr, "<span class='warning'>You need at least 10 lengths to make a bolas wire!</span>")
 				return
-			var/obj/item/weapon/legcuffs/bolas/cable/B = new /obj/item/weapon/legcuffs/bolas/cable(usr.loc)
+			var/obj/item/weapon/legcuffs/bolas/cable/B = new /obj/item/weapon/legcuffs/bolas/cable(usr.loc,C.color)
 			qdel(src)
-			B.icon_state = "cbolas_[C._color]"
-			B.cable_color = C._color
 			B.screw_state = item_state
 			B.screw_istate = icon_state
 			to_chat(M, "<span class='notice'>You wind some cable around the screwdriver handle to make a bolas wire.</span>")
@@ -382,7 +394,9 @@
 		if(can_operate(M, user, src))
 			if(do_surgery(M, user, src))
 				return
-		var/datum/organ/external/S = M:organs_by_name[user.zone_sel.selecting]
+		//hasorgans() literally just calls ishuman(), which is a typecheck for...
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/external/S = H.get_organ(user.zone_sel.selecting)
 		if (!S)
 			return
 		if(!(S.status & ORGAN_ROBOT) || user.a_intent != I_HELP)
