@@ -424,7 +424,7 @@
 	name = "soviet hardhelmet"
 	desc = "Crafted with the pride of the proletariat. The vengeful gaze of the visor roots out all fascists and capitalists."
 	item_state = "rig0-soviet"
-	icon_state = "rig0-soviet"
+	icon_state = "rig0-soviet"SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)//HET
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
