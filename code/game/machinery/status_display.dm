@@ -141,7 +141,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 		if(MODE_SHUTTLE_TIMER)				//emergency shuttle timer
 			if(emergency_shuttle.online)
 				var/line1
-				var/line2 = get_shuttle_timer()
+				var/line2 = emergency_shuttle.get_shuttle_timer()
 				if(emergency_shuttle.location == 1)
 					line1 = "-ETD-"
 				else
@@ -200,7 +200,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 				ETwut = "-ETD-"
 			else
 				ETwut = "-ETA-"
-			to_chat(user, "<span class='info'>The display says:<br>\t<xmp>[ETwut]</xmp><br>\t<xmp>[get_shuttle_timer()]</xmp></span>")
+			to_chat(user, "<span class='info'>The display says:<br>\t<xmp>[ETwut]</xmp><br>\t<xmp>[emergency_shuttle.get_shuttle_timer()]</xmp></span>")
 		if(MODE_MESSAGE)
 			to_chat(user, "<span class='info'>The display says:<br>\t<xmp>[message1]</xmp><br>\t<xmp>[message2]</xmp></span>")
 
@@ -231,12 +231,6 @@ var/global/list/status_displays = list() //This list contains both normal status
 	if(maptext != new_text)
 		maptext = new_text
 	update_moody_light('icons/lighting/special.dmi', "overlay_statusdisplay")
-
-/obj/machinery/status_display/proc/get_shuttle_timer()
-	var/timeleft = emergency_shuttle.timeleft()
-	if(timeleft)
-		return "[add_zero(num2text((timeleft / 60) % 60),2)]:[add_zero(num2text(timeleft % 60), 2)]"
-	return ""
 
 /obj/machinery/status_display/proc/get_supply_shuttle_timer()
 	if(SSsupply_shuttle.moving)
