@@ -624,6 +624,9 @@
 		src.explode()
 
 /obj/machinery/bot/emag_act(mob/user)
+	if(!isAI(user)
+		for(var/mob/living/silicon/ai/A in ai_list)
+			A.list_bot_control -= src
 	if(locked)
 		locked = 0
 		emagged = 1
@@ -739,7 +742,7 @@ obj/machinery/bot/attack_hand(mob/user as mob)
 	. = ..()
 	if (.)
 		return
-	if(isAI(user))
+	if(isAI(user) && !emagged)
 		var/mob/living/silicon/ai/S = user
 		S.list_bot_control |= src
 

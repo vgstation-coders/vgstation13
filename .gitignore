@@ -77,3 +77,4 @@ Thumbs.db
 
 # Bootstrapped node installation for the tgui build system
 .cache
+start.sh
