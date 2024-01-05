@@ -112,13 +112,7 @@ var/global/list/hidden_tech = list(
 /datum/research/proc/AddTech2Known(var/datum/tech/T)
 	var/datum/tech/known = GetKTechByID(T.id)
 	if(!known)
-		var/createtype = /datum/tech
-		for(var/type in subtypesof(/datum/tech))
-			var/datum/tech/attempt = type
-			if(initial(attempt.id) == T.id)
-				createtype = type
-				break
-		known = new createtype()
+		known = create_tech(T.id)
 		known_tech[T.id] = known
 	if(T.level > known.level)
 		known.level = T.level
@@ -187,6 +181,16 @@ var/global/list/hidden_tech = list(
 	if(goal_level==-1)
 		goal_level=max_level
 	..()
+
+//Creates a tech of the specific subtype you are looking for by id
+/proc/create_tech(var/Tid)
+	var/createtype = /datum/tech
+	for(var/type in subtypesof(/datum/tech))
+		var/datum/tech/attempt = type
+		if(initial(attempt.id) == Tid)
+			createtype = type
+			break
+	return new createtype()
 
 //Trunk Technologies (don't require any other techs and you start knowning them).
 
@@ -310,7 +314,10 @@ datum/tech/robotics
 
 /obj/item/weapon/disk/tech_disk/examine(mob/user)
 	..()
-	to_chat(user,"<span class='info'>It contains [stored.id] [stored.level] research.</span>")
+	if(stored)
+		to_chat(user,"<span class='info'>It contains [stored.id] [stored.level] research.</span>")
+	else
+		to_chat(user,"<span class='warning'>It has no data.</span>")
 
 /obj/item/weapon/disk/tech_disk/nanotrasen
 	name = "Technology Disk (Nanotrasen 1)"

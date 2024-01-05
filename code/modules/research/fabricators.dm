@@ -351,6 +351,7 @@
 			being_built.forceMove(L) //Put the thing in the lockbox
 			L.name += " ([being_built.name])"
 			being_built = L //Building the lockbox now, with the thing in it
+		part.after_craft(being_built,src)
 		var/turf/output = get_output()
 		being_built.forceMove(get_turf(output))
 		being_built.anchored = 0
