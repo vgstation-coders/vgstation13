@@ -21,20 +21,19 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
+	flammable = 0
+	if(!molotov)
+		lit = 0
+		light_color = null
+		set_light(0)
+	origin_tech = ""
+	available_drinks.Cut()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/update_icon()
 	..()
 	overlays.len = 0
 	can_flip = FALSE
-	flammable = 0
-	if(!molotov)
-		lit = 0
-	light_color = null
-	set_light(0)
-	origin_tech = ""
-	switching = FALSE
-	available_drinks.Cut()
 
 	if (reagents.reagent_list.len > 0)
 		if(reagents.has_reagent(BLACKCOLOR))
