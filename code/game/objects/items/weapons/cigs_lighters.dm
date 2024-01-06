@@ -314,7 +314,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/afterattack(obj/reagentholder, mob/user as mob)
 	..()
-	if(reagentholder.is_open_container() && !ismob(reagentholder) && reagentholder.reagents)
+	if(reagentholder.is_open_container() && reagentholder.reagents)
 		if(reagentholder.reagents.has_reagent(SACID) || reagentholder.reagents.has_reagent(PACID)) //Dumping into acid, a dumb idea
 			var/atom/new_butt = new type_butt(get_turf(reagentholder))
 			transfer_fingerprints_to(new_butt)
