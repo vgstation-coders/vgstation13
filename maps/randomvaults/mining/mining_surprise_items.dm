@@ -204,7 +204,7 @@
 					if(is_type_in_list(O,list(/obj/item/stack/sheet/glass/plasmaglass,
 											/obj/item/stack/sheet/glass/plasmarglass,
 											/obj/item/weapon/shard/plasma,
-											/obj/item/stack/glass_tile/rglass/plasma,
+											/obj/item/stack/tile/rglass/plasma,
 											/obj/item/weapon/stock_parts/console_screen/reinforced/plasma)))
 						// not bothered to write plasma glass tile lines
 						M.say(pick("Well, you gone and smelted some plasma alright, but you got too much of that there glass in it to be any use to me.",
