@@ -768,7 +768,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	if(container)
 		detach()
 
-/obj/machinery/disease2/power_change()
+/obj/machinery/chem_master/power_change()
 	..()
 	update_icon()
 
