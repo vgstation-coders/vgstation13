@@ -231,7 +231,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		icon_state += "b"
 		kill_moody_light()
 	else
-		update_moody_light('icons/lighting/special.dmi', "overlay_telescreen")
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_telescreen")
 
 /obj/machinery/computer/security/telescreen/entertainment
 	name = "entertainment monitor"
@@ -250,7 +250,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		icon_state += "b"
 		kill_moody_light()
 	else
-		update_moody_light('icons/lighting/special.dmi', "overlay_entertainment")
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_entertainment")
 
 /obj/machinery/computer/security/telescreen/entertainment/spesstv
 	name = "low-latency Spess.TV CRT monitor"
@@ -263,7 +263,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 /obj/machinery/computer/security/telescreen/entertainment/spesstv/New()
 	..()
-	update_moody_light('icons/lighting/special.dmi', "overlay_crt")
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_crt")
 
 /obj/machinery/computer/security/telescreen/entertainment/spesstv/ui_act(action, list/params)
 	. = ..()
@@ -301,7 +301,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen/New()
 	..()
 	overlays += "spesstv_overlay"
-	update_moody_light('icons/lighting/special.dmi', "overlay_telescreen")
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_telescreen")
 
 /obj/machinery/computer/security/telescreen/entertainment/wooden_tv
 	icon_state = "security_det"

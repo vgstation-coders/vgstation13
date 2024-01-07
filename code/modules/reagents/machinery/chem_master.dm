@@ -801,7 +801,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		var/image/overlay = image('icons/obj/chemical.dmi', src, "mixer_overlay")
 		overlay.icon += mix_color_from_reagents(reagents.reagent_list)
 		overlays += overlay
-	update_moody_light('icons/lighting/special.dmi', moody_state)
+	update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 
 /obj/machinery/chem_master/on_reagent_change()
 	update_icon()

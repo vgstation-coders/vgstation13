@@ -1059,7 +1059,7 @@ its easier to just keep the beam vertical.
 		return TRUE
 	return FALSE
 
-/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/special.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
+/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
 	overlays -= moody_light
 	moody_light = image(moody_icon, src, moody_state)
 	moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM

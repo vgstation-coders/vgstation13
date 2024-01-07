@@ -58,7 +58,7 @@ var/anomaly_report_num = 0
 
 /obj/machinery/artifact_analyser/update_icon()
 	icon_state = "[initial(icon_state)][scan_in_progress]"
-	update_moody_light('icons/lighting/special.dmi', "overlay_xenoarch_console")
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_xenoarch_console")
 	if(owned_scanner)
 		owned_scanner.update_icon()
 
