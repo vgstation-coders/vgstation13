@@ -414,6 +414,9 @@
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(..())
 		return 1
+	if(stat & BROKEN)
+		to_chat(user, "<span class='notice'>\The [src] cannot accept items while it remains broken.</span>")
+		return 1
 	if(stat & (FORCEDISABLE|NOPOWER))
 		to_chat(user, "<span class='notice'>\The [src] is unpowered and useless.</span>")
 		return 1
@@ -454,7 +457,7 @@
 ********************/
 
 /obj/machinery/smartfridge/interact(mob/user as mob)
-	if(stat & (FORCEDISABLE|NOPOWER))
+	if(stat & (BROKEN|FORCEDISABLE|NOPOWER))
 		return
 
 	var/dat = list()
@@ -528,7 +531,15 @@
 	popup.open()
 
 /obj/machinery/smartfridge/Topic(href, href_list)
-	if(..())
+	. = ..()
+	if(stat & BROKEN)
+		to_chat(usr, "<span class='warning'>The [src] has broken down and must be re-assembled.</span>")
+		return 1
+	if(stat & (NOPOWER|FORCEDISABLE))
+		to_chat(usr, "<span class='warning'>The [src] doesn't respond as it is unpowered.</span>")
+		return 1
+
+	if(.)
 		return 1
 
 	if(href_list["close"])
