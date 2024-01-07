@@ -81,6 +81,9 @@ var/global/num_vending_terminals = 1
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | PURCHASER | WIREJACK
 
+	light_power_on = 0.5
+	light_range_on = 1.4
+
 	var/account_first_linked = 1
 	var/is_custom_machine = FALSE // true if this vendor supports editing the prices
 	var/edit_mode = FALSE // Used for editing machine stock and information
@@ -92,9 +95,6 @@ var/global/num_vending_terminals = 1
 		/datum/malfhack_ability/oneuse/overload_quiet,
 		/datum/malfhack_ability/oneuse/emag
 	)
-
-	light_power_on = 0.5
-	light_range_on = 1.4
 
 /atom/movable/proc/product_name()
 	return name
