@@ -8,7 +8,7 @@
 
 #define MINIMUM_VAULT_AMOUNT 5 //Amount of guaranteed vault spawns
 #define MAXIMUM_VAULT_AMOUNT 15
-#define VAULT_POINT_MULTIPLIER 3.5
+#define VAULT_POINT_MULTIPLIER 3
 
 #define MAX_VAULT_WIDTH  80 //Vaults bigger than that have a slight chance of overlapping with other vaults
 #define MAX_VAULT_HEIGHT 80

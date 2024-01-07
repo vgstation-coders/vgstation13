@@ -123,7 +123,7 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/oldarmory
 	file_path = "maps/randomvaults/oldarmory.dmm"
 	can_rotate = TRUE
-	spawn_cost = 4
+	spawn_cost = 5
 
 /datum/map_element/vault/spacepond
 	file_path = "maps/randomvaults/spacepond.dmm"
@@ -220,7 +220,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/black_site_prism
 	file_path = "maps/randomvaults/black_site_prism.dmm"
-	spawn_cost = 4
+	spawn_cost = 5
 
 /datum/map_element/vault/skeleton_den
 	file_path = "maps/randomvaults/rattlemebones.dmm"
