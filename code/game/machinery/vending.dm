@@ -1624,6 +1624,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper Offworld Off-Licence"
 	desc = "A vendor containing all you need to drown your sorrows and your finances."
 	icon_state = "offlicence"
+	moody_state = "overlay_vending_offlicence"
 	product_slogans = list(
 		"Offworld Off-Licence: Think outcider the box!",
 		"People may abandon you, but alcohol will always be there for you.",
@@ -2293,6 +2294,7 @@ var/global/num_vending_terminals = 1
 		"Vox food being best."
 	)
 	icon_state = "voxseed"
+	moody_state = "overlay_vending_voxseed"
 	products = list(
 		/obj/item/seeds/breadfruit = 3,
 		/obj/item/seeds/woodapple = 3,
@@ -2528,6 +2530,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper Habitat Depot"
 	desc = "Habitat, sweet habitat. All you need for remodeling."
 	icon_state = "building"
+	moody_state = "overlay_vending_building"
 	products = list(
 		/obj/item/stack/sheet/metal/bigstack = 10,
 		/obj/item/stack/sheet/glass/glass/bigstack = 10,
@@ -3218,6 +3221,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "Enjoy a Nuka break!"
 	icon_state = "nuka"
+	moody_state = "overlay_vending_nuka"
 	products = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka = 15)
 	prices = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka = 20, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum = 50)
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum = 5)
@@ -3301,6 +3305,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "Time to shine!"
 	icon_state = "voxoutfitter"
+	moody_state = "overlay_vending_voxoutfitter"
 	products = list (
 		/obj/item/clothing/suit/storage/trader = 3,
 		/obj/item/device/pda/trader = 3,
@@ -3351,6 +3356,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "Enjoy your new look!"
 	icon_state = "barber"
+	moody_state = "overlay_vending_barber"
 	products = list(
 		/obj/item/weapon/hair_dye = 4,
 		/obj/item/weapon/razor = 4,
@@ -3380,6 +3386,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "The other girls will be so envious."
 	icon_state = "makeup"
+	moody_state = "overlay_vending_makeup"
 	products = list(
 		/obj/item/weapon/eyeshadow = 3,
 		/obj/item/weapon/eyeshadow/jade = 3,
@@ -3412,6 +3419,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "Tell your friends about the Circus of Values!"
 	icon_state = "circus"
+	moody_state = "overlay_vending_circus"
 	products = list(
 		/obj/item/toy/balloon = 20,
 		/obj/item/toy/waterballoon = 20,
@@ -3641,6 +3649,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper Team Security Merch"
 	desc = "A refurbished vending machine selling merch for Team Security."
 	icon_state = "teamsec"
+	moody_state = "overlay_vending_teamsec"
 	vend_reply = "Team Security is my Guideline."
 	product_slogans = list(
 		"Security helmet: on. Knuckles: cracked. Clown: brutalized. Yep...it's Team Security time.",
@@ -3686,6 +3695,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper Telecommunications Parts Vendor"
 	desc = "A vending machine containing telecommunications parts."
 	icon_state = "telecomms"
+	moody_state = "overlay_vending_telecomms"
 	products = list(
 		/obj/item/weapon/stock_parts/manipulator = 10,
 		/obj/item/weapon/stock_parts/micro_laser = 5,
@@ -3727,6 +3737,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper Snow Man's Land"
 	desc = "A vending machine for the intrepid snow-settler or pioneer."
 	icon_state = "snow"
+	moody_state = "overlay_vending_snow"
 	vend_reply = "To the Pole!"
 	product_ads = list(
 		"You wouldn't let a little snow stop you.",
@@ -3794,6 +3805,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "The mothership provides."
 	icon_state = "ZamSnax"
+	moody_state = "overlay_vending_zam"
 	products = list(
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_sulphuricsplash = 8,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/zam_formicfizz = 8,
@@ -3867,6 +3879,7 @@ var/global/num_vending_terminals = 1
 	)
 	vend_reply = "Good luck!"
 	icon_state = "Lotto"
+	moody_state = "overlay_vending_lotto"
 	icon_vend = "Lotto-vend"
 	products = list(
 		/obj/item/toy/lotto_ticket/gold_rush = 20,
@@ -4044,6 +4057,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		"NT drools, Syndicate Rules.",
 	)
 	icon_state = "syndicatesuits"
+	moody_state = "overlay_vending_syndicatesuits"
 	products = list(
 		/obj/item/clothing/under/syndicate/combat = 2,
 		/obj/item/clothing/under/syndicate/executive = 2,
