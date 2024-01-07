@@ -69,7 +69,7 @@ var/global/num_vending_terminals = 1
 	var/dont_render_OOS = FALSE
 	var/obj/item/weapon/coin
 	var/datum/wires/vending/wires = null
-	var/list/overlays_vending[2]//1 is the panel layer, 2 is the dangermode layer
+	var/image/panel_icon
 
 	var/list/vouchers
 	var/obj/item/weapon/storage/lockbox/coinbox/coinbox
@@ -135,7 +135,7 @@ var/global/num_vending_terminals = 1
 	machine_id = "[name] #[multinum_display(num_vending_machines,4)]"
 	num_vending_machines++
 
-	overlays_vending[1] = "[icon_state]-panel"
+	panel_icon = image(icon, src,"[icon_state]-panel")
 
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/vendomat,\
@@ -594,7 +594,7 @@ var/global/num_vending_terminals = 1
 			custom_stock += item
 			if(item.loc != src)
 				item.forceMove(src)
-			update_vicon()
+			update_icon()
 			return
 	//If this code block is reached, no existing vending_product exists, so we must create one
 	var/datum/data/vending_product/R = new()
@@ -609,7 +609,7 @@ var/global/num_vending_terminals = 1
 		item.forceMove(src)
 	product_records += R
 	custom_stock += item
-	update_vicon()
+	update_icon()
 
 /obj/machinery/vending/proc/connect_to_user_account(mob/user)
 	var/new_account = input(user,"Please enter the account to connect to.","New account link") as num
@@ -737,33 +737,18 @@ var/global/num_vending_terminals = 1
 		return
 
 	stat |= NOPOWER
-	src.update_vicon()
-	src.visible_message("<span class='warning'>[src] goes off!</span>")
+	update_icon()
+	visible_message("<span class='warning'>[src] goes off!</span>")
 
 	spawn(ticks)
 
 	power_change()
 
-/obj/machinery/vending/proc/update_vicon()
-	if(stat & (BROKEN))
-		icon_state = "[initial(icon_state)]-broken"
-		kill_moody_light()
-		set_light(0)
-	else if (stat & (NOPOWER|FORCEDISABLE))
-		icon_state = "[initial(icon_state)]-off"
-		kill_moody_light()
-		set_light(0)
-	else
-		icon_state = "[initial(icon_state)]"
-		if (moody_state)
-			update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
-		set_light(light_range_on, light_power_on)
-
 /obj/machinery/vending/proc/damaged(var/coef=1)
 	src.health -= 4*coef
 	if(src.health <= 0)
 		stat |= BROKEN
-		src.update_vicon()
+		update_icon()
 		return
 	if(prob(2*coef)) //Jackpot!
 		malfunction()
@@ -1076,7 +1061,7 @@ var/global/num_vending_terminals = 1
 				products -= I
 				break
 	product_records -= R
-	update_vicon()
+	update_icon()
 	qdel(R)
 
 /obj/machinery/vending/arcane_act(mob/user)
@@ -1150,7 +1135,7 @@ var/global/num_vending_terminals = 1
 					custom_stock.Remove(O)
 					break
 		src.vend_ready = 1
-		update_vicon()
+		update_icon()
 		src.updateUsrDialog()
 
 /obj/machinery/vending/proc/on_return_coin_detect(mob/user)
@@ -1217,11 +1202,11 @@ var/global/num_vending_terminals = 1
 	if(!(stat & BROKEN))
 		if( powered() )
 			stat &= ~NOPOWER
-			update_vicon()
+			update_icon()
 		else
 			spawn(rand(0, 15))
 				stat |= NOPOWER
-				update_vicon()
+				update_icon()
 
 
 //Oh no we're malfunctioning!  Dump out some product and break.
@@ -1231,7 +1216,7 @@ var/global/num_vending_terminals = 1
 		throw_item()
 		lost_inventory--
 	stat |= BROKEN
-	update_vicon()
+	update_icon()
 
 //Somebody cut an important wire and now we're following a new definition of "pitch."
 /obj/machinery/vending/proc/throw_item()
@@ -1284,14 +1269,24 @@ var/global/num_vending_terminals = 1
 	return 0
 
 /obj/machinery/vending/update_icon()
-	if(panel_open)
-		overlays += overlays_vending[1]
+	if(stat & (BROKEN))
+		icon_state = "[initial(icon_state)]-broken"
+		kill_moody_light()
+		set_light(0)
+	else if (stat & (NOPOWER|FORCEDISABLE))
+		icon_state = "[initial(icon_state)]-off"
+		kill_moody_light()
+		set_light(0)
 	else
-		overlays -= overlays_vending[1]
+		icon_state = "[initial(icon_state)]"
+		if (moody_state)
+			update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
+		set_light(light_range_on, light_power_on)
 
-	overlays -= overlays_vending[2]
-	if(emagged)
-		overlays += overlays_vending[2]
+	if(panel_open)
+		overlays += panel_icon
+	else
+		overlays -= panel_icon
 
 /obj/machinery/vending/wirejack(var/mob/living/silicon/pai/P)
 	if(..())
@@ -2955,6 +2950,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper Nazivend"
 	desc = "A vending machine containing Nazi German supplies. A label reads: \"Remember the gorrilions lost.\""
 	icon_state = "nazi"
+	moody_state = "overlay_vending_nazi"
 	vend_reply = "SIEG HEIL!"
 	product_ads = list(
 		"BESTRAFEN die Juden.",
@@ -2996,12 +2992,13 @@ var/global/num_vending_terminals = 1
 		contraband[/obj/item/weapon/gun/energy/plasma/MP40k] = 4
 		src.build_inventory(contraband, 1)
 		emagged = 1
-		overlays = 0
-		var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
-		dangerlay.plane = ABOVE_LIGHTING_PLANE
-		overlays_vending[2] = dangerlay
 		update_icon()
 		return 1
+
+/obj/machinery/vending/nazivend/update_icon()
+	..()
+	if(emagged && !(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
+		icon_state = "nazi-dangermode"
 
 //NaziVend++
 /obj/machinery/vending/nazivend/DANGERMODE
@@ -3029,9 +3026,6 @@ var/global/num_vending_terminals = 1
 	..()
 	emagged = 1
 	overlays = 0
-	var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
-	dangerlay.plane = ABOVE_LIGHTING_PLANE
-	overlays_vending[2] = dangerlay
 	update_icon()
 
 //MOTHERBUSLAND
@@ -3039,6 +3033,7 @@ var/global/num_vending_terminals = 1
 	name = "\improper KomradeVendtink"
 	desc = "Rodina-mat' zovyot!"
 	icon_state = "soviet"
+	moody_state = "overlay_vending_soviet"
 	vend_reply = "The fascist and capitalist svin'ya shall fall, komrade!"
 	product_ads = list(
 		"Quality worth waiting in line for!",
@@ -3079,13 +3074,14 @@ var/global/num_vending_terminals = 1
 		contraband[/obj/item/weapon/gun/energy/laser/LaserAK] = 4
 		src.build_inventory(contraband, 1)
 		emagged = 1
-		overlays = 0
-		var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
-		dangerlay.plane = ABOVE_LIGHTING_PLANE
-		overlays_vending[2] = dangerlay
 		update_icon()
 		return 1
 	return
+
+/obj/machinery/vending/sovietvend/update_icon()
+	..()
+	if(emagged && !(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
+		icon_state = "soviet-dangermode"
 
 //SovietVend++
 /obj/machinery/vending/sovietvend/DANGERMODE
@@ -3112,10 +3108,6 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/sovietvend/DANGERMODE/New()
 	..()
 	emagged = 1
-	overlays = 0
-	var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
-	dangerlay.plane = ABOVE_LIGHTING_PLANE
-	overlays_vending[2] = dangerlay
 	update_icon()
 
 /obj/machinery/vending/discount
@@ -3484,7 +3476,7 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/sale/New()
 	..()
-	update_vicon()
+	update_icon()
 
 /obj/machinery/vending/sale/link_to_account()
 	return
@@ -3499,20 +3491,13 @@ var/global/num_vending_terminals = 1
 	to_chat(user, "<span class='warning'>The machine requires an ID to unlock it.</span>")
 	return 0
 
-/obj/machinery/vending/sale/update_vicon()
-	if(stat & (BROKEN))
-		icon_state = "[initial(icon_state)]-broken"
-		kill_moody_light()
-		set_light(0)
-	else if (stat & (NOPOWER|FORCEDISABLE) || custom_stock.len == 0)
+/obj/machinery/vending/sale/update_icon()
+	if(!(stat & BROKEN) && custom_stock.len == 0)
 		icon_state = "[initial(icon_state)]-off"
 		kill_moody_light()
 		set_light(0)
 	else
-		icon_state = "[initial(icon_state)]"
-		if (moody_state)
-			update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
-		set_light(light_range_on, light_power_on)
+		..()
 
 /obj/machinery/vending/sale/trader
 	name = "TraderVend"
@@ -4152,7 +4137,7 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 		)
 	src.build_inventory(products)
 
-/obj/machinery/vending/meat/update_vicon()
+/obj/machinery/vending/meat/update_icon()
 	//Override the usual function so we can run special mouse codes
 	if(stat & (BROKEN))
 		icon_state = "[initial(icon_state)]-broken"
