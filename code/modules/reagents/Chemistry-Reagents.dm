@@ -10316,7 +10316,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(!data["stored_phrase"])
 		set_phrase(sanitize(speech.message))
 		var/atom/container = holder.my_atom
-		if(container.is_open_container())
+		if(container.is_open_container() || ismob(container))
 			container.visible_message("<span class='notice'>[bicon(container)] The solution fizzles for a moment.</span>", "You hear something fizzling for a moment.", "<span class='notice'>[bicon(container)] \The [container] replies something, but you can't hear them.</span>")
 			if(!(container.flags & SILENTCONTAINER))
 				playsound(container, 'sound/effects/bubbles.ogg', 20, -3)
