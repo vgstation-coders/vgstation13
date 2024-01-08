@@ -75,7 +75,6 @@
 	sharpness_flags = SHARP_BLADE | CHOPWOOD
 	force = 10
 	var/force_wielded = 40
-	var/breakchance = 50 //% chance tool will break after deconning a single floor
 	slot_flags = SLOT_BACK
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
 	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
