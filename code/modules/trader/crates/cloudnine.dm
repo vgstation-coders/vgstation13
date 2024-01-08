@@ -292,7 +292,6 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	item_state = "fireaxe-antimatter0"
 	flags = FPRINT | TWOHANDABLE
 	w_class = W_CLASS_TINY
-	breakchance = 0 //% chance tool will break after deconning a single floor
 	var/datum/gas_mixture/removed
 
 /obj/item/weapon/fireaxe/antimatter/update_wield(mob/living/carbon/user)
