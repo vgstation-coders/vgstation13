@@ -27,6 +27,7 @@
 	load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
 	merchant_name = capitalize("[pick(vox_name_syllables)][pick(vox_name_syllables)] the [capitalize(pick(adjectives))]")
 	processing_objects += src
+	update_icon()
 
 /obj/structure/trade_window/Destroy()
 	SStrade.all_twindows -= src
@@ -62,6 +63,10 @@
 
 /obj/structure/trade_window/update_icon()
 	icon_state = "trade_window[closed ? "-closed" : ""]"
+	if (closed)
+		kill_moody_light()
+	else
+		update_moody_light('icons/lighting/moody_lights.dmi', "trade_window")
 
 /obj/structure/trade_window/attackby(obj/item/W, mob/living/carbon/human/user)
 	if(!istype(user))
@@ -255,6 +260,9 @@
 				break
 		new TP.path(newloc)
 		product_selected = null
+		update_moody_light('icons/lighting/moody_lights.dmi', "trade_sold")
+		spawn(13)
+			update_icon()
 		flick("trade_sold",src)
 		nanomanager.update_uis(src)
 		return
@@ -274,6 +282,9 @@
 			AM.shake(1, 3) //Just a little movement to make it obvious it's here.
 
 		say(pick(saleslines))
+		update_moody_light('icons/lighting/moody_lights.dmi', "trade_sold")
+		spawn(13)
+			update_icon()
 		flick("trade_sold",src)
 	nanomanager.update_uis(src)
 

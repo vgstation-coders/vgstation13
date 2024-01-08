@@ -104,7 +104,7 @@
 	// Broken
 	if(stat & BROKEN)
 		icon_state = "[initial(icon_state)]b"
-		update_moody_light('icons/lighting/special.dmi', moody_state)
+		update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 
 	// Unpowered/Disabled
 	else if(stat & (FORCEDISABLE|NOPOWER))
@@ -118,7 +118,7 @@
 		if(icon_state == "[initial(icon_state)]0" && !(computer_flags & NO_ONOFF_ANIMS))
 			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = on_flick)
 		icon_state = initial(icon_state)
-		update_moody_light('icons/lighting/special.dmi', moody_state)
+		update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 
 
 /obj/machinery/computer/power_change(var/nodelay = 0)

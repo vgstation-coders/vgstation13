@@ -129,7 +129,7 @@
 /obj/machinery/media/receiver/boombox/wallmount/update_icon()
 	if(buildstage==SYSTEMISDONE && on)
 		icon_state="wallradio-p"
-		update_moody_light('icons/lighting/special.dmi', "overlay_wallradio")
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_wallradio")
 	else
 		icon_state="wallradio"
 		kill_moody_light()
