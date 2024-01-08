@@ -172,6 +172,7 @@
 	var/title = ""
 	var/description = ""
 	var/contributing_artists = list()
+	var/show_on_scoreboard = TRUE
 
 	var/copy = 0
 
@@ -493,6 +494,7 @@
 	painting.author = author
 	painting.description = description
 	painting.copy = 1
+	painting.show_on_scoreboard = FALSE //sorry, OC only
 	return painting
 
 #undef PENCIL_STRENGTH_MAX
