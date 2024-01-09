@@ -19,6 +19,8 @@
 	density = 1
 	var/obj/structure/m_tray/connected = null
 	anchored = 1.0
+	light_power = 0.5
+	light_range = 1
 
 /obj/structure/morgue/New()
 	..()

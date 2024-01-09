@@ -1068,9 +1068,9 @@ its easier to just keep the beam vertical.
 	moody_light.alpha = moody_alpha
 	moody_light.color = moody_color
 	overlays += moody_light
-	luminosity = 2
+	luminosity = max(luminosity, 2)
 
 /atom/proc/kill_moody_light()
 	overlays -= moody_light
-	luminosity = 0
+	luminosity = initial(luminosity)
 	moody_light = null
