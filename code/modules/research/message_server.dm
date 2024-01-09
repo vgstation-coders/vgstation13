@@ -111,12 +111,13 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 /obj/machinery/message_server/update_icon()
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		icon_state = "pda_server-nopower"
+		kill_moody_light()
 	else if (disabled)
 		icon_state = "pda_server-off"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_pda_server")
 	else
 		icon_state = "pda_server-on"
-
-	return
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_pda_server")
 
 /obj/machinery/blackbox_recorder
 	icon = 'icons/obj/machines/telecomms.dmi'
