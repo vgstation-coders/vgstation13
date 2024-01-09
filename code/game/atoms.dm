@@ -454,7 +454,7 @@ its easier to just keep the beam vertical.
 	if(desc)
 		to_chat(user, desc)
 
-	if(reagents && is_open_container() && !ismob(src) && !hide_own_reagents()) //is_open_container() isn't really the right proc for this, but w/e
+	if(reagents && is_open_container() && !hide_own_reagents()) //is_open_container() isn't really the right proc for this, but w/e
 		if(get_dist(user,src) > 3)
 			to_chat(user, "<span class='info'>You can't make out the contents.</span>")
 		else
@@ -1059,7 +1059,7 @@ its easier to just keep the beam vertical.
 		return TRUE
 	return FALSE
 
-/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/special.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
+/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
 	overlays -= moody_light
 	moody_light = image(moody_icon, src, moody_state)
 	moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM

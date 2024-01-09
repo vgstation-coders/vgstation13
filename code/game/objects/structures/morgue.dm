@@ -30,7 +30,7 @@
 	morgue_list -= src
 
 /obj/structure/morgue/update_icon()
-	update_moody_light('icons/lighting/special.dmi', "overlay_morgue")
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_morgue")
 	if(connected)
 		icon_state = "morgue0"
 		return

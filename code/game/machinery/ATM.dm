@@ -59,7 +59,7 @@ log transactions
 		kill_moody_light()
 	else
 		icon_state = "atm"
-		update_moody_light('icons/lighting/special.dmi', "overlay_atm")
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_atm")
 
 /obj/machinery/atm/process()
 	if(stat & (FORCEDISABLE|NOPOWER))

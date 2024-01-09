@@ -395,7 +395,25 @@
 				gunk.forceMove(src.loc)
 				return
 
-		// Everything else continued from here
+		// If there's just one item and no reagents, warm it up
+		if ((contents.len == 1) && !reagents.total_volume)
+			if(!running(10))
+				abort()
+				return
+			stop()
+			cooked = contents[1]//if there's just one item and no reagents, warm it up
+			var/cook_temp = COOKTEMP_READY//100°C
+			if(emagged || arcanetampered)
+				cook_temp = COOKTEMP_EMAGGED//8.000.000°C
+				playsound(src, "sound/items/flare_on.ogg", 100, 0)
+				cooked.ignite()
+			if (cooked.reagents.chem_temp < cook_temp)
+				cooked.reagents.chem_temp = cook_temp
+				cooked.update_icon()
+			cooked.forceMove(src.loc)
+			return
+
+		// Otherwise we fucked up
 		dirty += 1
 		if (prob(max(10,dirty*5)))
 			if (!running(4))
@@ -419,18 +437,7 @@
 				abort()
 				return
 			stop()
-			if ((contents.len == 1) && !reagents.total_volume)
-				cooked = contents[1]//if there's just one item and no reagents, warm it up
-				var/cook_temp = COOKTEMP_READY//100°C
-				if(emagged || arcanetampered)
-					cook_temp = COOKTEMP_EMAGGED//8.000.000°C
-					playsound(src, "sound/items/flare_on.ogg", 100, 0)
-					cooked.ignite()
-				if (cooked.reagents.chem_temp < cook_temp)
-					cooked.reagents.chem_temp = cook_temp
-					cooked.update_icon()
-			else
-				cooked = fail()
+			cooked = fail()
 			cooked.forceMove(src.loc)
 			return
 	else

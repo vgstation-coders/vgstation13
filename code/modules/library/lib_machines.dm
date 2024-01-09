@@ -241,10 +241,14 @@ var/list/important_archivists = list()
 
 /obj/machinery/researcharchive/examine(mob/user)
 	..()
-	if(diskslot)
-		//This is now handled by the disk itself.
-		//to_chat(user,"<span class='info'>In the slot you can see a disk that contains [diskslot.stored.id] [diskslot.stored.level].</span>")
-		diskslot.examine(user)
+	to_chat(user,"<span class='info'><b>The research archive contains the following research:</span></b>")
+	for(var/datum/tech/T in get_list_of_elements(research_archive_datum.known_tech))
+		if(T.id in list("syndicate", "Nanotrasen", "anomaly"))
+			continue
+		if(T.level < min(6,T.goal_level))
+			to_chat(user,"<span class='info'>The [T.id] research is level [T.level].")
+		else
+			to_chat(user,"<span class='good'>The [T.id] research is complete.</span>")
 
 /obj/machinery/researcharchive/update_icon()
 	if(stat & (BROKEN))
@@ -265,6 +269,14 @@ var/list/important_archivists = list()
 	if (!istype(W,/obj/item/weapon/disk/tech_disk))
 		to_chat(user, "<span class='warning'>\The [src] only accepts technology disks.</span>")
 		return
+	var/obj/item/weapon/disk/tech_disk/TD = W
+	if(!TD.stored)
+		to_chat(user, "<span class='notice'>\The [W] has no data!</span>")
+		return
+
+	if(TD.stored.id in list("syndicate", "Nanotrasen", "anomaly"))
+		to_chat(user, "<span class='notice'>\The [src] cannot process this technology data due to proprietary encoding.</span>")
+		return
 
 	if (!user.drop_item(W, src))
 		return
@@ -276,6 +288,7 @@ var/list/important_archivists = list()
 	diskslot = W
 	playsound(loc, 'sound/machines/click.ogg', 50, 1)
 	update_icon()
+	attack_hand(user) //Attempt to archive immediately.
 
 /obj/machinery/researcharchive/attack_hand(var/mob/user)
 	. = ..()
@@ -292,10 +305,6 @@ var/list/important_archivists = list()
 		return
 
 	if(busy)
-		return
-
-	if(diskslot.stored.id in list("syndicate", "Nanotrasen", "anomaly"))
-		to_chat(user, "<span class='notice'>\The [src] cannot process this technology data due to proprietary encoding.</span>")
 		return
 
 	playsound(loc, "sound/machines/heps.ogg", 50, 1)

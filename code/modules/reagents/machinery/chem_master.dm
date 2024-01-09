@@ -46,6 +46,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
+	var/moody_state = "overlay_chem_master"
+
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
@@ -766,6 +768,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	if(container)
 		detach()
 
+/obj/machinery/chem_master/power_change()
+	..()
+	update_icon()
+
 /obj/machinery/chem_master/update_icon()
 
 	overlays.len = 0
@@ -776,13 +782,26 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		container.update_icon() //Forcefully update the beaker
 		overlays += container //Set it as an overlay
 
-	if(reagents.total_volume && !(stat & (FORCEDISABLE|BROKEN|NOPOWER))) //If we have reagents in here, and the machine is powered and functional
+	var/image/mixer_prongs = image('icons/obj/chemical.dmi', src, "mixer_prongs")
+	overlays += mixer_prongs //Add prongs on top of the container
+
+	if (stat & BROKEN)
+		icon_state = "[initial(icon_state)]_b"
+		kill_moody_light()
+		return
+
+	if (stat & (FORCEDISABLE|NOPOWER))
+		icon_state = "[initial(icon_state)]_nopower"
+		kill_moody_light()
+		return
+
+	icon_state = initial(icon_state)
+	//If we have reagents in here, and the machine is powered and functional
+	if (reagents.total_volume)
 		var/image/overlay = image('icons/obj/chemical.dmi', src, "mixer_overlay")
 		overlay.icon += mix_color_from_reagents(reagents.reagent_list)
 		overlays += overlay
-
-	var/image/mixer_prongs = image('icons/obj/chemical.dmi', src, "mixer_prongs")
-	overlays += mixer_prongs //Add prongs on top of all of this
+	update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 
 /obj/machinery/chem_master/on_reagent_change()
 	update_icon()
@@ -793,6 +812,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	icon_state = "condimaster"
 	chem_board = /obj/item/weapon/circuitboard/condimaster
 	windowtype = "condi_master"
+	moody_state = "overlay_condimaster"
 
 /obj/machinery/chem_master/electrolytic
 	name = "\improper Electrolytic ChemMaster"

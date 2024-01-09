@@ -55,6 +55,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	var/priority = -1 ; //Priority of the message being sent
 	var/announceSound = 'sound/vox/_bloop.wav'
 	luminosity = 0
+	use_auto_lights = 1
 
 /obj/machinery/requests_console/power_change()
 	..()
@@ -75,13 +76,13 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			switch (newmessagepriority)
 				if (1)
 					icon_state = "req_comp2"
-					update_moody_light('icons/lighting/special.dmi', "overlay_req_comp2")
+					update_moody_light('icons/lighting/moody_lights.dmi', "overlay_req_comp2")
 				if (2)
 					icon_state = "req_comp3"
-					update_moody_light('icons/lighting/special.dmi', "overlay_req_comp3")
+					update_moody_light('icons/lighting/moody_lights.dmi', "overlay_req_comp3")
 				else
 					icon_state = "req_comp0"
-					update_moody_light('icons/lighting/special.dmi', "overlay_req_comp0")
+					update_moody_light('icons/lighting/moody_lights.dmi', "overlay_req_comp0")
 
 /obj/machinery/requests_console/New()
 	requests_consoles += src
