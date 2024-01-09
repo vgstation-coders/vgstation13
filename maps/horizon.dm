@@ -74,13 +74,6 @@
 	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
 	salvage_shuttle.can_rotate = 1
 
-/datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
-	if(ispath(DR.role_category,/datum/role/ninja))
-		return FALSE
-	if(ispath(DR.role_category,/datum/role/time_agent))
-		return FALSE
-	return ..()
-
 ////////////////////////////////////////////////////////////////
 #include "horizon.dmm"
 #endif
