@@ -320,8 +320,6 @@
 			else if(!(O.can_reenter_corpse))
 				to_chat(O,"<span class='notice'>While \the [src] may be mindless, you have recently ghosted and thus are not allowed to take over for now.</span>")
 
-
-
 /mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
 	if(!..())
 		return
