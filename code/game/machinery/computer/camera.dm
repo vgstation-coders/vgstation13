@@ -244,7 +244,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 	light_color = null
 
-/obj/machinery/computer/security/telescreen/update_icon()
+/obj/machinery/computer/security/telescreen/entertainment/update_icon()
 	icon_state = initial(icon_state)
 	if(stat & BROKEN)
 		icon_state += "b"
