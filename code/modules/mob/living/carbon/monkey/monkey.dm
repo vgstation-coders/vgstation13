@@ -238,6 +238,9 @@
 			armorscore = uniform.armor[type]
 	return armorscore
 
+/mob/living/carbon/monkey/getarmorabsorb(var/def_zone, var/type)
+	return getarmor(def_zone, type)
+
 /mob/living/carbon/monkey/attack_paw(mob/living/M)
 	..()
 
