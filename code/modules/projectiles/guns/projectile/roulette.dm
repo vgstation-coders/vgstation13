@@ -37,6 +37,7 @@
 		/obj/item/projectile/stickybomb,
 		/obj/item/projectile/beam/lightlaser,
 		/obj/item/projectile/portalgun,
+		/obj/item/projectile/soulbullet,
 		)
 
 	var/list/restrict_with_subtypes = list(
