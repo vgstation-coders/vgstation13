@@ -116,7 +116,7 @@
 				breaktime = 3 SECONDS
 		if(!do_after(user, T, breaktime, 3, custom_checks = new /callback(src, /obj/item/weapon/fireaxe/proc/on_do_after)))
 			return
-		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+		playsound(src, 'sound/effects/plate_drop.ogg', 50, 1)
 		to_chat(viewers(user), "<span class='danger'>[user] finishes removing the plating!</span>")
 		add_gamelogs(user, "deconstructed \the [T] with \the [src]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
 		T.investigation_log(I_RCD,"was deconstructed by [user]") //not RCD but still fits in this category
