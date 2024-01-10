@@ -61,11 +61,13 @@
 	for(var/datum/visioneffect/H in huds)
 		if(istype(H,/datum/visioneffect/security))
 			remove_hud(H)
+			detected_hud = TRUE
 		else if(istype(H,/datum/visioneffect/job))
 			remove_hud(H)
+			detected_hud = TRUE
 		else if(istype(H,/datum/visioneffect/implant))
 			remove_hud(H)
-		detected_hud = TRUE
+			detected_hud = TRUE
 	if(detected_hud)
 		to_chat(src, "<span class='notice'><B>Security HUD disabled.</B></span>")
 	else
