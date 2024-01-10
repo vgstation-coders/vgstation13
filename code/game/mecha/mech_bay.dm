@@ -239,9 +239,8 @@
 /obj/machinery/computer/mech_bay_power_console/set_broken()
 	. = ..()
 	if(.)
-		return
-	if(recharge_port)
-		recharge_port.stop_charge()
+		if(recharge_port)
+			recharge_port.stop_charge()
 
 /obj/machinery/computer/mech_bay_power_console/attack_hand(mob/user as mob)
 	if(..())
