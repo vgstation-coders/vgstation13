@@ -70,7 +70,7 @@ var/global/byond_hub_playercount = OPEN_TO_HUB_PLAYERCOUNT_DEFAULT
 	s = replacetext(s, "\[map_name\]", "[map.nameLong]")
 	if(!ticker || (ticker && !going))
 		s += "<br><b>STARTING</b>"
-	else if(ticker.current_state <= GAME_STATE_PREGAME && going)
+	else if(ticker.current_state <= GAME_STATE_PREGAME && going && ticker.pregame_timeleft)
 		s += "<br>Starting: <b>[round(ticker.pregame_timeleft - world.timeofday) / 10]</b>"
 	else if(ticker.current_state == GAME_STATE_PLAYING)
 		s += "<br>Time: <b>[game_start_elapsed_time()]</b>"
