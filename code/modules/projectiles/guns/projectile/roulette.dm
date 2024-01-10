@@ -27,15 +27,22 @@
 		/obj/item/projectile/beam/lightning,
 		/obj/item/projectile/beam/procjectile,
 		/obj/item/projectile/beam/lightning/spell,
+		/obj/item/projectile/rocket,
 		/obj/item/projectile/rocket/nikita,
+		/obj/item/projectile/rocket/lowyield/extreme,
 		/obj/item/projectile/test,
+		/obj/item/projectile/friendlyCheck,
 		/obj/item/projectile/beam/emitter,
-		/obj/item/projectile/meteor,
 		/obj/item/projectile/spell_projectile,
 		/obj/item/projectile/stickybomb,
 		/obj/item/projectile/beam/lightlaser,
 		/obj/item/projectile/portalgun,
 		)
+
+	var/list/restrict_with_subtypes = list(
+		/obj/item/projectile/meteor,
+		/obj/item/projectile/immovablerod
+	)
 
 /obj/item/weapon/gun/projectile/roulette_revolver/New()
 	..()
@@ -64,6 +71,10 @@
 	var/chosen_projectile = pick(available_projectiles)
 	for(var/I in restricted_projectiles)
 		if(chosen_projectile == I)
+			choose_projectile()
+			return
+	for(var/I in restrict_with_subtypes)
+		if(ispath(chosen_projectile, I))
 			choose_projectile()
 			return
 	var/P = new chosen_projectile()
