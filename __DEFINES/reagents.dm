@@ -600,3 +600,5 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define INCENSE_CRAVE		"vales"
 #define INCENSE_CORNOIL 	"cornoils"
 #define INCENSE_MUSTARDPLANT "mustardplant"
+
+#define PAINT_CLEANER_THRESHOLD 0.7 // How much of the reagent should be water or some cleaner to clean paint off a canvas or brush

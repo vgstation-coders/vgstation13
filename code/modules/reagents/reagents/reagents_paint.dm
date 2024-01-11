@@ -207,7 +207,6 @@
 	data["alpha"] = (data["alpha"] + target_alpha) / 2
 	alpha = data["alpha"]
 
-
 /datum/reagent/flaxoil/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
 		return 1
@@ -338,7 +337,6 @@
 
 //----------------------------------------------------------------------------------------------------
 
-#define PAINT_CLEANER_THRESHOLD 0.7 // How much of the reagent should be water or some cleaner to clean paint off a canvas or brush
 #define PAINT_CLEANER_AGENT_MULTIPLIER 2 // How effective cleaning products are, compared to water (aka they count as if there was n times water instead)
 
 /proc/get_reagent_paint_cleaning_percent(obj/container)
