@@ -26,7 +26,6 @@
 	var/base_icon_state = "blank"
 	var/frame_icon = 'icons/obj/painting_items.dmi'
 	var/frame_icon_state = "frame"
-	var/show_on_scoreboard = TRUE
 
 	var/image/nanomap
 

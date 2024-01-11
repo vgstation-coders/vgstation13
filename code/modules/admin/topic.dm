@@ -1377,6 +1377,12 @@
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Cluwne;jobban4=\ref[M]'><font color=red>Cluwne</font></a></td>"
 		else
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Cluwne;jobban4=\ref[M]'>Cluwne</a></td>"
+		
+		if(jobban_isbanned(M, "artist")) //so people can't make paintings
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=artist;jobban4=\ref[M]'><font color=red>Artist</font></a></td>"
+		else
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=artist;jobban4=\ref[M]'>Artist</a></td>"	
+		
 		jobs += "</tr></table>"
 
 		body = "<body>[jobs]</body>"
