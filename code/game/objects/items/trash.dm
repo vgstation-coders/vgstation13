@@ -128,14 +128,14 @@
 /obj/item/trash/danitos
 	name = "\improper Danitos bag"
 	icon_state = "danitos"
-	
+
 /obj/item/trash/dangles
 	name = "\improper Dangles can"
 	icon_state = "dangles"
 	autoignition_temperature = AUTOIGNITION_PLASTIC
 	fire_fuel = 0
-	
-/obj/item/trash/dangles/New() 
+
+/obj/item/trash/dangles/New()
 	playsound(loc, 'sound/items/poster_ripped.ogg', 50, 1)
 
 /obj/item/trash/waffles
@@ -281,15 +281,31 @@ var/list/crushed_cans_cache = list()
 	name = color
 	..(loc, age, icon_state, null, dir, pixel_x, pixel_y)
 	if(icon_state)
-		if (!(icon_state in crushed_cans_cache))
-			var/icon/I = icon('icons/obj/drinks.dmi',"crushed_can")
-			var/icon/J = icon('icons/obj/drinks.dmi',"crushed_can-overlay")
-			var/icon/K = icon('icons/obj/drinks.dmi',icon_state)
-			I.Blend(K,ICON_MULTIPLY)
-			I.Blend(J,ICON_OVERLAY)
-			crushed_cans_cache[icon_state] = I
-		icon = icon(crushed_cans_cache[icon_state])
-		item_state = icon_state
+		make_crushed_can(icon_state)
+
+	if (!name)//no color, therefore most likely pre-mapped
+		persistence_type = null
+		var/list/random_crushed_cans = list(
+			"Space Cola" = "cola",
+			"Lemon-Lime" = "lemon-lime",
+			"Space-Up" = "space-up",
+			"Space Mountain Wind" = "space_mountain_wind",
+			"Dr. Gibb" = "dr_gibb",
+			)
+		name = pick(random_crushed_cans)
+		make_crushed_can(random_crushed_cans[name])
+		name = "crushed [name]"
+
+/obj/item/trash/soda_cans/proc/make_crushed_can(var/can_icon)
+	if (!(can_icon in crushed_cans_cache))
+		var/icon/I = icon('icons/obj/drinks.dmi',"crushed_can")
+		var/icon/J = icon('icons/obj/drinks.dmi',"crushed_can-overlay")
+		var/icon/K = icon('icons/obj/drinks.dmi',can_icon)
+		I.Blend(K,ICON_MULTIPLY)
+		I.Blend(J,ICON_OVERLAY)
+		crushed_cans_cache[can_icon] = I
+	icon = icon(crushed_cans_cache[can_icon])
+	item_state = can_icon
 
 /obj/item/trash/soda_cans/atom2mapsave()
 	. = ..()
@@ -336,7 +352,7 @@ var/list/crushed_cans_cache = list()
 	name = "ketchup packet"
 	desc = "A used ketchup packet."
 	icon_state	= "ketchup_small"
-	
+
 /obj/item/trash/ketchup_packet
 	name = "hotsauce packet"
 	desc = "A used hotsauce packet."
@@ -356,7 +372,7 @@ var/list/crushed_cans_cache = list()
 	name = "malt vinegar packet"
 	desc = "A used vinegar packet."
 	icon_state	= "vinegar_small"
-	
+
 /obj/item/trash/hotsauce_packet
 	name = "hotsauce packet"
 	desc = "A used hotsauce packet."

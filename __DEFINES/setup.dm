@@ -929,6 +929,7 @@ SEE_PIXELS	256
 #define HEALTH_HUD          "health" // a simple line rounding the mob's number health
 #define STATUS_HUD          "status" // alive, dead, diseased, etc.
 #define PHYSRECORD_HUD			"p_record" // what medbay has set your records to
+#define MENTRECORD_HUD			"m_record" // what medbay has set your records to
 #define ID_HUD              "id" // the job asigned to your ID
 #define WAGE_HUD			"wage" // the wage assigned to your ID
 #define WANTED_HUD          "wanted" // wanted, released, parroled, security status

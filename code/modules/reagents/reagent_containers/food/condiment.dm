@@ -692,9 +692,6 @@
 					// Worst case scenario, the empty packet will appear on the ground.
 
 /obj/item/weapon/reagent_containers/food/condiment/small/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
-
-	heat_dissipation_updates() //since we don't supercall, call this directly
-
 	if(reagents.reagent_list.len > 0)
 		condiment_overlay = null
 		overlay_colored = FALSE

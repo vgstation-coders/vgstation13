@@ -805,7 +805,9 @@
 		return 1
 	return 0
 
-/obj/machinery/photobooth/Cross(atom/movable/mover, turf/target, height = 0)
+/obj/machinery/photobooth/Cross(atom/movable/mover, turf/target, height = 0, air_group = 0)
+	if(air_group)
+		return 0
 	if(get_dir(loc, target) == SOUTH || get_dir(loc, mover) == SOUTH)
 		return 1
 	return 0

@@ -206,6 +206,8 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 /obj/machinery/account_database/New(loc)
 	..(loc)
 
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_account")
+
 	if(!station_account)
 		create_station_account()
 

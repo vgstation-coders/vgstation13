@@ -111,7 +111,7 @@
 		if (user.zone_sel.selecting == LIMB_LEFT_HAND || user.zone_sel.selecting == LIMB_RIGHT_HAND)
 			H.bloody_hands_from_data(copy_blood_data(paint_data),2,src)
 		else if (user.zone_sel.selecting == LIMB_LEFT_FOOT || user.zone_sel.selecting == LIMB_RIGHT_FOOT)
-			H.add_blood_to_feet(3, paint_color, list("wet paint" = "paint"))
+			H.add_blood_to_feet(3, paint_color, list("wet paint" = "paint")	)
 		else
 			H.bloody_body_from_data(copy_blood_data(paint_data),0,src)
 			if ((target == user) && (user.zone_sel.selecting == TARGET_MOUTH))
@@ -298,7 +298,7 @@
 		if (user.zone_sel.selecting == LIMB_LEFT_HAND || user.zone_sel.selecting == LIMB_RIGHT_HAND)
 			H.bloody_hands_from_data(copy_blood_data(paint_data),2,src)
 		else if (user.zone_sel.selecting == LIMB_LEFT_FOOT || user.zone_sel.selecting == LIMB_RIGHT_FOOT)
-			H.add_blood_to_feet(3, paint_color, list("wet paint" = "paint"))
+			H.add_blood_to_feet(3, paint_color, list("wet paint" = "paint"), nano_paint == PAINTLIGHT_FULL)
 		else
 			H.bloody_body_from_data(copy_blood_data(paint_data),0,src)
 		playsound(src, get_sfx("mop"), 5, 1)

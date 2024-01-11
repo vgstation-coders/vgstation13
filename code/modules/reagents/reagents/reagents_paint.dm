@@ -61,7 +61,7 @@
 		var/mob/living/carbon/human/H = M
 		H.bloody_body_from_data(copy_blood_data(blood_data),0,src)
 		H.bloody_hands_from_data(copy_blood_data(blood_data),2,src)
-		H.add_blood_to_feet(3, data["color"], list("wet paint" = "paint"))
+		H.add_blood_to_feet(3, data["color"], list("wet paint" = "paint"), paint_light == PAINTLIGHT_FULL)
 		for(var/i = 1 to H.held_items.len)
 			var/obj/item/I = H.held_items[i]
 			if(istype(I))
@@ -195,6 +195,9 @@
 
 /datum/reagent/flaxoil/special_behaviour()
 	var/list/other_reagents = holder.reagent_list - src
+	for (var/datum/reagent/R in other_reagents)
+		if (R.id == GLUE) //Adding glue lets us turn flax oil into acrylic which won't change color any longer, so we probably don't want to match the color of glue
+			other_reagents -= R
 	if (other_reagents.len <= 0)
 		return
 	var/target_color = mix_color_from_reagents(other_reagents)
@@ -203,7 +206,6 @@
 	color = data["color"]
 	data["alpha"] = (data["alpha"] + target_alpha) / 2
 	alpha = data["alpha"]
-
 
 /datum/reagent/flaxoil/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
@@ -335,7 +337,6 @@
 
 //----------------------------------------------------------------------------------------------------
 
-#define PAINT_CLEANER_THRESHOLD 0.7 // How much of the reagent should be water or some cleaner to clean paint off a canvas or brush
 #define PAINT_CLEANER_AGENT_MULTIPLIER 2 // How effective cleaning products are, compared to water (aka they count as if there was n times water instead)
 
 /proc/get_reagent_paint_cleaning_percent(obj/container)

@@ -12,6 +12,7 @@
 
 	speak_chance = 1
 
+	treadmill_speed = 1.2	//They skitter real quick
 	move_to_delay = 4
 
 	maxHealth = 35
@@ -57,6 +58,7 @@
 	melee_damage_lower = 10
 	melee_damage_upper = 25
 
+	treadmill_speed = 2.5
 	move_to_delay = 10
 	turns_per_move = 3
 
@@ -118,7 +120,7 @@
 
 /mob/living/simple_animal/hostile/bigroach/nuke_act()
 	return //Survive nuclear blasts
-	
+
 /mob/living/simple_animal/hostile/bigroach/reagent_act(id, method, volume)
 	if(isDead())
 		return

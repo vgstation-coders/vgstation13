@@ -141,7 +141,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 		if(MODE_SHUTTLE_TIMER)				//emergency shuttle timer
 			if(emergency_shuttle.online)
 				var/line1
-				var/line2 = get_shuttle_timer()
+				var/line2 = emergency_shuttle.get_shuttle_timer()
 				if(emergency_shuttle.location == 1)
 					line1 = "-ETD-"
 				else
@@ -200,7 +200,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 				ETwut = "-ETD-"
 			else
 				ETwut = "-ETA-"
-			to_chat(user, "<span class='info'>The display says:<br>\t<xmp>[ETwut]</xmp><br>\t<xmp>[get_shuttle_timer()]</xmp></span>")
+			to_chat(user, "<span class='info'>The display says:<br>\t<xmp>[ETwut]</xmp><br>\t<xmp>[emergency_shuttle.get_shuttle_timer()]</xmp></span>")
 		if(MODE_MESSAGE)
 			to_chat(user, "<span class='info'>The display says:<br>\t<xmp>[message1]</xmp><br>\t<xmp>[message2]</xmp></span>")
 
@@ -224,17 +224,13 @@ var/global/list/status_displays = list() //This list contains both normal status
 	picture_state = state
 	remove_display()
 	overlays += image('icons/obj/status_display.dmi', icon_state=picture_state)
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_statusdisplay")
 
 /obj/machinery/status_display/proc/update_display(line1, line2)
 	var/new_text = {"<div style="font-size:[FONT_SIZE];color:[FONT_COLOR];font:'[FONT_STYLE]';text-align:center;" valign="top">[line1]<br>[line2]</div>"}
 	if(maptext != new_text)
 		maptext = new_text
-
-/obj/machinery/status_display/proc/get_shuttle_timer()
-	var/timeleft = emergency_shuttle.timeleft()
-	if(timeleft)
-		return "[add_zero(num2text((timeleft / 60) % 60),2)]:[add_zero(num2text(timeleft % 60), 2)]"
-	return ""
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_statusdisplay")
 
 /obj/machinery/status_display/proc/get_supply_shuttle_timer()
 	if(SSsupply_shuttle.moving)
@@ -249,6 +245,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 		overlays.len = 0
 	if(maptext)
 		maptext = ""
+	kill_moody_light()
 
 /obj/machinery/status_display/receive_signal(datum/signal/signal)
 	switch(signal.data["command"])
@@ -381,7 +378,7 @@ var/global/list/status_display_images = list(
 		if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #[(stat & BROKEN) ? "120" : "408"])</span>")
 			return
-			
+
 		var/new_icon = input(A, "Load an image to be desplayed on [src].", "AI status display") in status_display_images
 
 		if(new_icon)

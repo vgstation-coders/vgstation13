@@ -109,6 +109,7 @@
 	items_to_collect = list(
 		/obj/abstract/spawn_all/bartender = SURVIVAL_BOX,
 		/obj/item/weapon/reagent_containers/food/drinks/shaker = slot_l_store_str,
+		/obj/item/weapon/storage/fancy/beer_box = GRASP_LEFT_HAND
 	)
 
 	pda_type = /obj/item/device/pda/bar

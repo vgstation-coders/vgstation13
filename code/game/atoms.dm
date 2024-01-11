@@ -57,6 +57,8 @@ var/global/list/ghdel_profiling = list()
 
 	var/arcanetampered = 0 //A looot of things can be
 
+	var/image/moody_light
+
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
 		last_beamchecks = list()
@@ -452,7 +454,7 @@ its easier to just keep the beam vertical.
 	if(desc)
 		to_chat(user, desc)
 
-	if(reagents && is_open_container() && !ismob(src) && !hide_own_reagents()) //is_open_container() isn't really the right proc for this, but w/e
+	if(reagents && is_open_container() && !hide_own_reagents()) //is_open_container() isn't really the right proc for this, but w/e
 		if(get_dist(user,src) > 3)
 			to_chat(user, "<span class='info'>You can't make out the contents.</span>")
 		else
@@ -1049,13 +1051,6 @@ its easier to just keep the beam vertical.
 		stain_text = "<span style='color: [get_stain_text_color()]'>[stain_text]</span>"
 	return indef_art + " " + stain_text
 
-/atom/proc/heat_dissipation_updates()
-	if (reagents in thermal_dissipation_reagents)
-		if (!reagents.total_volume)
-			thermal_dissipation_reagents -= reagents
-	else if (reagents.total_volume)
-		thermal_dissipation_reagents += reagents
-
 /atom/proc/get_heat_conductivity()
 	return 1
 
@@ -1063,3 +1058,21 @@ its easier to just keep the beam vertical.
 	if (blood_color && blood_DNA && blood_DNA.len)
 		return TRUE
 	return FALSE
+
+/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
+	overlays -= moody_light
+	var/area/here = get_area(src)
+	if (here.dynamic_lighting)
+		moody_light = image(moody_icon, src, moody_state)
+		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
+		moody_light.plane = LIGHTING_PLANE
+		moody_light.blend_mode = BLEND_ADD
+		moody_light.alpha = moody_alpha
+		moody_light.color = moody_color
+		overlays += moody_light
+	luminosity = max(luminosity, 2)
+
+/atom/proc/kill_moody_light()
+	overlays -= moody_light
+	luminosity = initial(luminosity)
+	moody_light = null

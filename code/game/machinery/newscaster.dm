@@ -191,6 +191,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 /obj/machinery/newscaster/update_icon()
 	if(buildstage != 1)
 		icon_state = "newscaster_0"
+		kill_moody_light()
 		return
 
 	if((stat & (FORCEDISABLE|NOPOWER)) || (stat & BROKEN))
@@ -198,6 +199,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		if(stat & BROKEN) //If the thing is smashed, add crack overlay on top of the unpowered sprite.
 			overlays.Cut()
 			overlays += image(icon, "crack3")
+		kill_moody_light()
 		return
 
 	overlays.Cut() //reset overlays
@@ -213,7 +215,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		overlays += image(icon, "crack[hitstaken]")
 
 	icon_state = "newscaster_normal"
-	return
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_newscaster")
 
 /obj/machinery/newscaster/power_change()
 	if(stat & BROKEN || buildstage != 1) //Broken shit can't be powered.

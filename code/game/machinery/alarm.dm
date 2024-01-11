@@ -299,6 +299,7 @@ var/global/list/air_alarms = list()
 		return
 
 	first_run()
+	update_icon()
 
 /obj/machinery/alarm/Destroy()
 	if(wires)
@@ -493,18 +494,23 @@ var/global/list/air_alarms = list()
 /obj/machinery/alarm/update_icon()
 	if(wiresexposed)
 		icon_state = "alarmx"
+		kill_moody_light()
 		return
 	if((stat & (NOPOWER|BROKEN|FORCEDISABLE)) || shorted)
 		icon_state = "alarmp"
+		kill_moody_light()
 		return
 	var/area/this_area = get_area(src)
 	switch(max(local_danger_level, this_area.atmosalm-1))
 		if (0)
 			icon_state = "alarm0"
+			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_alarm0")
 		if (1)
 			icon_state = "alarm2" //yes, alarm2 is yellow alarm
+			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_alarm1")
 		if (2)
 			icon_state = "alarm1"
+			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_alarm1")
 
 /obj/machinery/alarm/receive_signal(datum/signal/signal)
 	var/area/this_area = get_area(src)
@@ -1205,14 +1211,18 @@ FIRE ALARM
 	overlays.len = 0
 	if(wiresexposed)
 		icon_state = "fire_b[buildstage]"
+		kill_moody_light()
 		return
 
 	if(stat & BROKEN)
 		icon_state = "firex"
+		kill_moody_light()
 	else if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "firep"
+		kill_moody_light()
 	else
 		icon_state = "fire[detecting ? "0" : "1"][shelter ? "s" : "e"]"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_firealarm")
 		if(z == 1 && security_level)
 			src.overlays += image('icons/obj/monitors.dmi', "overlay_[get_security_level()]")
 		else

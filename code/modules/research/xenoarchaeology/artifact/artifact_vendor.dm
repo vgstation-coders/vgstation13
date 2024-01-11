@@ -199,7 +199,7 @@ var/static/list/badstuff2putin = list(
 		throw_item()
 		lost_inventory--
 	stat |= BROKEN
-	update_vicon()
+	update_icon()
 
 /obj/machinery/vending/artifact/process()
 	..()
@@ -231,7 +231,7 @@ var/static/list/badstuff2putin = list(
 			path2use = /obj/item/weapon/bikehorn/rubberducky  // BONUS DUCKS! refunds
 		new path2use(get_turf(src))
 		src.vend_ready = 1
-		update_vicon()
+		update_icon()
 		src.updateUsrDialog()
 	return 1
 

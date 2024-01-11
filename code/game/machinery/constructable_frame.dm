@@ -810,11 +810,10 @@ to destroy them and players will be able to make replacements.
 
 /obj/item/weapon/circuitboard/smartfridge/solder_improve(mob/user)
 	var/list/static/smartfridge_choices = list(
-		"Food smartfridge" = /obj/item/weapon/circuitboard/smartfridge/,
-		"Secure chemistry smartfridge" = /obj/item/weapon/circuitboard/smartfridge/medbay,
-		"Chemistry smartfridge" = /obj/item/weapon/circuitboard/smartfridge/chemistry,
-		"Slime extract smartfridge" = /obj/item/weapon/circuitboard/smartfridge/extract,
-		"Seed smartfridge" = /obj/item/weapon/circuitboard/smartfridge/seeds,
+		"Foodstuff & Seeds Storage" = /obj/item/weapon/circuitboard/smartfridge,
+		"Secure Medicine Storage" = /obj/item/weapon/circuitboard/smartfridge/medbay,
+		"Smart Chemical Storage" = /obj/item/weapon/circuitboard/smartfridge/chemistry,
+		"Slime Extract Storage" = /obj/item/weapon/circuitboard/smartfridge/extract,
 		"Refrigerated Blood Bank" = /obj/item/weapon/circuitboard/smartfridge/bloodbank
 	)
 
@@ -834,24 +833,19 @@ to destroy them and players will be able to make replacements.
 		qdel(src)
 
 /obj/item/weapon/circuitboard/smartfridge/medbay
-	name = "Circuit Board (Medbay SmartFridge)"
+	name = "Circuit Board (Secure Medicine Storage)"
 	desc = "A circuit board used to run a machine that will hold beakers, pills and pill bottles."
 	build_path = /obj/machinery/smartfridge/secure/medbay
 
 /obj/item/weapon/circuitboard/smartfridge/chemistry
-	name = "Circuit Board (Chemical SmartFridge)"
+	name = "Circuit Board (Smart Chemical Storage)"
 	desc = "A circuit board used to run a machine that will hold beakers and pill bottles."
 	build_path = /obj/machinery/smartfridge/chemistry
 
 /obj/item/weapon/circuitboard/smartfridge/extract
-	name = "Circuit Board (Extract SmartFridge)"
+	name = "Circuit Board (Slime Extract Storage)"
 	desc = "A circuit board used to run a machine that will hold slime extracts."
 	build_path = /obj/machinery/smartfridge/extract
-
-/obj/item/weapon/circuitboard/smartfridge/seeds
-	name = "Circuit Board (Megaseed Servitor)"
-	desc = "A circuit board used to run a machine that will hold seed packets."
-	build_path = /obj/machinery/smartfridge/seeds
 
 /obj/item/weapon/circuitboard/smartfridge/bloodbank
 	name = "Circuit Board (Refrigerated Blood Bank)"

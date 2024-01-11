@@ -7,7 +7,7 @@
 	if(gallery.len) //the list of all artworks
 		var/list/artworks = list() //list of authors, for sorting later
 		for(var/obj/structure/painting/custom/painting in gallery)
-			if(painting.show_on_scoreboard && !painting.painting_data.is_blank())
+			if(painting.painting_data.show_on_scoreboard && !painting.painting_data.is_blank())
 				var/painting_author = painting.painting_data.author
 				if(!painting_author)
 					painting_author = "Anonymous"
@@ -126,6 +126,8 @@
 			score.deadpets++
 
 	score.time = round(world.time/10) //One point for every five seconds. One minute is 12 points, one hour 720 points
+	if(is_research_fully_archived())
+		score.crewscore += 1800
 	score.crewscore -= score.deadcrew * 250 //Human beans aren't free
 	score.crewscore += score.eventsendured * 200 //Events fine every 10 to 15 and are uncommon
 	score.crewscore += score.escapees * 100 //Two rescued human beans are worth a dead one

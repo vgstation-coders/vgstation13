@@ -75,6 +75,20 @@
 		qdel(src)
 		qdel(W)
 
+/obj/item/tool/wrench/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag)
+		return 1
+	if(istype(target, /obj/structure))
+		var/obj/structure/S = target
+		if(S.hasbolts)
+			S.hasbolts = FALSE
+			S.anchored = FALSE
+			new /obj/item/stack/bolts(S.loc)
+			to_chat(user, "<span class='notice'>You remove the bolts from \the [target].</span>")
+			return 1 //Cancel action, for example to prevent disassembling a chair
+	else
+		return ..()
+
 //we inherit a lot from wrench, so we change very little
 /obj/item/tool/wrench/socket
 	name = "socket wrench"

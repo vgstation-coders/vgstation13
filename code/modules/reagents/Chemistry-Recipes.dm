@@ -587,7 +587,7 @@
 	var/power = 0
 
 /datum/chemical_reaction/fuelbomb/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(holder.my_atom.is_open_container())
+	if(holder.my_atom.is_open_container() || ismob(holder.my_atom))
 		if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 			var/turf/location = get_turf(holder.my_atom.loc)
 

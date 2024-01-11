@@ -21,20 +21,19 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
+	flammable = 0
+	if(!molotov)
+		lit = 0
+		light_color = null
+		set_light(0)
+	origin_tech = ""
+	available_drinks.Cut()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/update_icon()
 	..()
 	overlays.len = 0
 	can_flip = FALSE
-	flammable = 0
-	if(!molotov)
-		lit = 0
-	light_color = null
-	set_light(0)
-	origin_tech = ""
-	switching = FALSE
-	available_drinks.Cut()
 
 	if (reagents.reagent_list.len > 0)
 		if(reagents.has_reagent(BLACKCOLOR))
@@ -195,9 +194,12 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/mug/on_reagent_change()
 	..()
+	update_icon()
 
+/obj/item/weapon/reagent_containers/food/drinks/mug/update_icon()
+	..()
 	if (reagents.reagent_list.len > 0)
-		item_state = "mug_empty"
+		//item_state = "mug_empty"
 
 		var/datum/reagent/R = reagents.get_master_reagent()
 
@@ -208,20 +210,12 @@
 			icon_state = R.mug_icon_state
 			//item_state = R.mug_icon_state
 			//looks like there is none made yet so at least let's not hold an invisible mug
-
 		else
-			update_icon()
+			mug_reagent_overlay()
 	else
-		update_icon()
 		icon_state = "mug_empty"
 		name = "mug"
 		desc = "A simple mug."
-		return
-
-/obj/item/weapon/reagent_containers/food/drinks/mug/update_icon()
-	..()
-	if (reagents.reagent_list.len > 0)
-		mug_reagent_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/mug_reagent_overlay()
 	icon_state = base_icon_state
