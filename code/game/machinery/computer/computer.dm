@@ -143,9 +143,10 @@
 
 /obj/machinery/computer/proc/set_broken()
 	if(empproof && prob(50)) // Halves chance if reinforced with plasma glass
-		return
+		return FALSE
 	stat |= BROKEN
 	update_icon()
+	return TRUE
 
 /obj/machinery/computer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head against \the [src] screen! It looks like \he's trying to commit suicide.</span>")
