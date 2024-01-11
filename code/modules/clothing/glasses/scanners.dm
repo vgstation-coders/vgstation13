@@ -179,7 +179,7 @@
 	hud_types = list(/datum/visioneffect/pathogen)
 
 	glasses_fit = TRUE
-	on = TRUE
+	on = FALSE
 
 /obj/item/clothing/glasses/scanner/science/prescription
 	name = "prescription science goggles"
@@ -187,9 +187,12 @@
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/scanner/science/update_icon()
+	return
+/*
 	if (!on)
 		icon_state = "mesonoff"
 	else
 		icon_state = initial(icon_state)
+*/
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
