@@ -1728,6 +1728,7 @@
 #include "code\modules\hydroponics\spreading\spreading.dm"
 #include "code\modules\hydroponics\spreading\spreading_growth.dm"
 #include "code\modules\hydroponics\spreading\spreading_response.dm"
+#include "code\modules\library\gamemaster_items.dm"
 #include "code\modules\library\lib_items.dm"
 #include "code\modules\library\lib_machines.dm"
 #include "code\modules\library\lib_readme.dm"
