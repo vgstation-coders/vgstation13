@@ -34,6 +34,7 @@
 		/obj/item/clothing/glasses/scanner/material,
 		/obj/item/weapon/card/debit/preferred/department/engineering,
 		/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger,
+		/obj/item/clothing/glasses/scanner/dual/chiefengineer
 	)
 
 /obj/structure/closet/secure_closet/engineering_electrical

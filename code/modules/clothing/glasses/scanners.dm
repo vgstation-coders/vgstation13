@@ -181,7 +181,6 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "contact"
 	mech_flags = MECH_SCAN_FAIL
-	eyeprot = 3
 	actions_types = list(/datum/action/item_action/toggle_meson_scanner, /datum/action/item_action/alt/toggle_material_scanner)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	glasses_fit = TRUE
