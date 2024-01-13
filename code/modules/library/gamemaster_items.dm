@@ -109,6 +109,9 @@
 	w_class = W_CLASS_MEDIUM
 	layer = BELOW_OBJ_LAYER
 
+/obj/item/battlemat/battlemat_exception(atom/neighbor)
+	return
+
 /obj/item/battlemat/attackby(obj/item/W, mob/user, params)
 	if(user.drop_item(W, src.loc))
 		if(bound_width > WORLD_ICON_SIZE && W.loc == loc && params)
