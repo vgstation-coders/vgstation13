@@ -144,9 +144,6 @@ var/list/existing_vaults = list()
 	file_path = "maps/randomvaults/biodome.dmm"
 	spawn_cost = 2
 
-///datum/map_element/vault/iou_vault
-//	file_path = "maps/randomvaults/iou_fort.dmm"	//Why was this in here twice?
-
 /datum/map_element/vault/asteroids
 	file_path = "maps/randomvaults/asteroids.dmm"
 	can_rotate = TRUE
