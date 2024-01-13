@@ -2,7 +2,7 @@
 	name = "red phone"
 	desc = "Should anything ever go wrong..."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "red_phone"
+	icon_state = "red_phone_base"
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 3.0
@@ -12,6 +12,49 @@
 	w_class = W_CLASS_SMALL
 	attack_verb = list("calls", "rings", "dials")
 	hitsound = 'sound/weapons/ring.ogg'
+	var/obj/landline/landline
+	
+/obj/item/weapon/phone/New()
+	landline = new /obj/landline/red (src,src)
+	var/list/a = list("alpha","bravo","charlie","delta","echo","foxtrot","golf","hotel","india")
+	var/list/b = list("anton","boris","vasilij","grigorij","dimitrij","elena","zhenja","ivan","nikolaj")
+	var/list/c = list("1","2","3","4","5","6","7","8","9")
+	name += " [pick(a)]-[pick(b)]-[pick(c)]"
+	
+/obj/item/weapon/phone/verb/pick_up_phone()
+	set category = "Object"
+	set name = "Pick up telephone"
+	set src in oview(1)
+	if(!landline)
+		to_chat(usr, "\the [src] model does not come with a telephone!")
+		return
+	//moved to landline
+	landline.pick_up_phone(usr)
+	
+/obj/item/weapon/phone/verb/dial()
+	set category = "Object"
+	set name = "Dial"
+	set src in oview(1)
+	if(!ishuman(usr))
+		to_chat(usr, "You are not capable of such fine manipulation.")
+		return
+	var/list/obj/item/weapon/phone/redphones = list()
+	for(var/obj/item/weapon/phone/P in world)
+		redphones += P
+	var/obj/item/weapon/phone/P = input("Where would you like to call?", "dialler") as null|anything in redphones
+	if(P)
+		landline.start_call(P.landline)
+	
+/obj/item/weapon/phone/MouseDropFrom(atom/over_object)
+	MouseDropPickUp(over_object)
+	return ..()
+
+/obj/item/weapon/phone/attack_hand(mob/user as mob)
+	src.pick_up_phone(user)
+	
+/obj/item/weapon/phone/attackby(var/obj/item/weapon/phone/P as obj, var/mob/user as mob)
+	landline.attackby(P, user)
+
 
 /obj/item/weapon/phone/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] wraps the cord of the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
