@@ -355,6 +355,10 @@
 		to_chat(user, "<span class='notice'>\The [S] is out of silicate!</span>")
 		return 1
 
+	if(stat & BROKEN)
+		to_chat(user, "<span class='warning'>\The solar panel is too damaged.</span>")
+		return 1
+
 	var/diff = initial(health) - health
 	if(!diff) // Not damaged.
 		to_chat(user, "<span class='notice'>\The [src] is already in perfect condition!</span>")
