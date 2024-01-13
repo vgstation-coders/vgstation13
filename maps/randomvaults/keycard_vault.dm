@@ -10,6 +10,7 @@
 /datum/map_element/vault/keycards
 	name = "Keycard-gate vault entrance"
 	file_path = "maps/randomvaults/keycard_entrance.dmm"
+	spawn_cost = 3
 	can_rotate = FALSE // It has dungeons, which don't rotate well for now
 	var/difficulty = 0 // 0 to generate randomly, see preset variants below
 	var/datum/map_element/dungeon/keycard_vault/thevault
