@@ -283,6 +283,39 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	add_fingerprint(usr)
 
+	if(href_list["sync"]) //Sync the research holder with all the R&D consoles in the game that aren't sync protected.
+		screen = 0.0
+		if(!sync)
+			to_chat(usr, "<span class='warning'>You must connect to the network first!</span>")
+		else
+			griefProtection() //Putting this here because I dont trust the sync process
+			spawn(30)
+				if(src)
+					for(var/obj/machinery/r_n_d/server/S in machines)
+						var/server_processed = 0
+						if(S.disabled)
+							continue
+						if((id in S.id_with_upload) || istype(S, /obj/machinery/r_n_d/server/centcom))
+							for(var/ID in files.known_tech)
+								var/datum/tech/T = files.known_tech[ID]
+								S.files.AddTech2Known(T)
+							for(var/datum/design/D in files.known_designs)
+								S.files.AddDesign2Known(D)
+							S.files.RefreshResearch()
+							server_processed = 1
+						if(((id in S.id_with_download) && !istype(S, /obj/machinery/r_n_d/server/centcom)) || S.hacked)
+							for(var/ID in S.files.known_tech)
+								var/datum/tech/T = S.files.known_tech[ID]
+								files.AddTech2Known(T)
+							for(var/datum/design/D in S.files.known_designs)
+								files.AddDesign2Known(D)
+							files.RefreshResearch()
+							server_processed = 1
+						if(!istype(S, /obj/machinery/r_n_d/server/centcom) && server_processed)
+							S.produce_heat(100)
+					screen = 1.6
+					updateUsrDialog()
+
 	if(isLocked() && !allowed(usr))
 		to_chat(usr, "Unauthorized Access.")
 		return
@@ -388,39 +421,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			screen = text2num(href_list["lock"])
 		else
 			to_chat(usr, "Unauthorized Access.")
-
-	else if(href_list["sync"]) //Sync the research holder with all the R&D consoles in the game that aren't sync protected.
-		screen = 0.0
-		if(!sync)
-			to_chat(usr, "<span class='warning'>You must connect to the network first!</span>")
-		else
-			griefProtection() //Putting this here because I dont trust the sync process
-			spawn(30)
-				if(src)
-					for(var/obj/machinery/r_n_d/server/S in machines)
-						var/server_processed = 0
-						if(S.disabled)
-							continue
-						if((id in S.id_with_upload) || istype(S, /obj/machinery/r_n_d/server/centcom))
-							for(var/ID in files.known_tech)
-								var/datum/tech/T = files.known_tech[ID]
-								S.files.AddTech2Known(T)
-							for(var/datum/design/D in files.known_designs)
-								S.files.AddDesign2Known(D)
-							S.files.RefreshResearch()
-							server_processed = 1
-						if(((id in S.id_with_download) && !istype(S, /obj/machinery/r_n_d/server/centcom)) || S.hacked)
-							for(var/ID in S.files.known_tech)
-								var/datum/tech/T = S.files.known_tech[ID]
-								files.AddTech2Known(T)
-							for(var/datum/design/D in S.files.known_designs)
-								files.AddDesign2Known(D)
-							files.RefreshResearch()
-							server_processed = 1
-						if(!istype(S, /obj/machinery/r_n_d/server/centcom) && server_processed)
-							S.produce_heat(100)
-					screen = 1.6
-					updateUsrDialog()
 
 	else if(href_list["togglesync"]) //Prevents the console from being synced by other consoles. Can still send data.
 		sync = !sync
