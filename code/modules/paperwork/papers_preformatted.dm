@@ -204,8 +204,14 @@
 *                           *
 ****************************/
 
+var/unlockable_fields = {"<i><b>Unlockables</b></i><br>
+    Unlocked: <span class=\"paper_field\"></span><br>
+    Unlocked: <span class=\"paper_field\"></span><br>
+    Unlocked: <span class=\"paper_field\"></span><br>
+    Unlocked: <span class=\"paper_field\"></span><br>"}
 
-/obj/item/weapon/paper/redcore/miner
+/obj/item/weapon/paper/redcore/miner/New()
+	..()
 	name = "Shaft Miner Character Sheet"
 	fields = 5
 	info = {"<center><img src="https://ss13.moe/wiki/images/0/02/MinerD.png"> <b>Shaft Miner</b></center> <br>
@@ -215,15 +221,71 @@
 	<hr> <br>
     <i><b>Basics</b></i>
     <i>You get two actions a turn. You can't do the same action twice in a turn.</i><br>
-    Dash: Move an extra 2. If you're the Anomalist, up to 4.<br>
-    Drag: Start dragging a friendly character. They will move along your path, directly behind you, until end of turn. You can't move into someone's space while dragging them.<br>
-    Pill: Take a pill, if you have one. When you take a pill, you get 6 blood.<br>
-    <i>Miners are extra tough. Whenever you would lose blood, reduce that by 3.</i><br>
-    Kinetic Accelerator: 1 action. Shoot an enemy in range 3. Deal 1d6 damage.<br>
-    Driller: 1 action. Move up to 3.following normal movement rules. If you would go up a z-level, the ground becomes level with where you started this action instead.<br>
-    <hr> <br>
-    <i><b>Unlockables</b></i><br>
-    Unlocked: <span class=\"paper_field\"></span><br>
-    Unlocked: <span class=\"paper_field\"></span><br>
-    Unlocked: <span class=\"paper_field\"></span><br>
-    Unlocked: <span class=\"paper_field\"></span><br>"}
+    [rc_basic_dash]<br>
+    [rc_basic_drag]<br>
+    [rc_basic_pill]<br>
+	[rc_miner_armor]<br>
+	[rc_miner_shoot]<br>
+	[rc_miner_drill]<br>
+	<hr> <br>
+    [unlockable_fields]"}
+
+/obj/item/weapon/paper/redcore/para/New()
+	..()
+	name = "Paramedic Character Sheet"
+	fields = 5
+	info = {"<center><img src="https://ss13.moe/wiki/images/4/42/Paramedic2.png" style="width:32px;height:32px;"> <b>Paramedic</b></center> <br>
+	<hr> <br>
+	<b>Employee Name:</b> <span class=\"paper_field\"></span> <br>
+	<b>Employee Job:</b> Paramedic
+	<hr> <br>
+    <i><b>Basics</b></i>
+    <i>You get two actions a turn. You can't do the same action twice in a turn.</i><br>
+    [rc_basic_dash]<br>
+    [rc_basic_drag]<br>
+    [rc_basic_pill]<br>
+	[rc_para_roller]<br>
+	[rc_para_grenade]<br>
+	[rc_para_hyperzine]<br>
+	<hr> <br>
+    [unlockable_fields]"}
+
+/obj/item/weapon/paper/redcore/anom/New()
+	..()
+	name = "Anomalist Character Sheet"
+	fields = 5
+	info = {"<center><img src="https://ss13.moe/wiki/images/b/b0/XenoarchD.png"> <b>Anomalist</b></center> <br>
+	<hr> <br>
+	<b>Employee Name:</b> <span class=\"paper_field\"></span> <br>
+	<b>Employee Job:</b> Anomalist
+	<hr> <br>
+    <i><b>Basics</b></i>
+    <i>You get two actions a turn. You can't do the same action twice in a turn.</i><br>
+    [rc_basic_dash]<br>
+    [rc_basic_drag]<br>
+    [rc_basic_pill]<br>
+	[rc_anom_touched]<br>
+	[rc_anom_roulette]<br>
+	[rc_anom_excav]<br>
+	<hr> <br>
+    [unlockable_fields]"}
+
+/obj/item/weapon/paper/redcore/eng/New()
+	..()
+	name = "Engineer Character Sheet"
+	fields = 5
+	info = {"<center><img src="https://ss13.moe/wiki/images/a/ab/Engie.png"> <b>Engineer</b></center> <br>
+	<hr> <br>
+	<b>Employee Name:</b> <span class=\"paper_field\"></span> <br>
+	<b>Employee Job:</b> Engineer
+	<hr> <br>
+    <i><b>Basics</b></i>
+    <i>You get two actions a turn. You can't do the same action twice in a turn.</i><br>
+    [rc_basic_dash]<br>
+    [rc_basic_drag]<br>
+    [rc_basic_pill]<br>
+	[rc_eng_gloves]<br>
+	[rc_eng_emitter]<br>
+	[rc_eng_flamethrower]<br>
+	<hr> <br>
+    [unlockable_fields]"}
