@@ -62,6 +62,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	var/list/datum/data_pda_msg/pda_msgs = list()
 	var/list/datum/data_rc_msg/rc_msgs = list()
 	var/disabled = FALSE
+	var/automatic_landlines = TRUE
 	var/decryptkey = "password"
 
 /obj/machinery/message_server/New()
@@ -87,6 +88,9 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 
 /obj/machinery/message_server/proc/is_functioning()
 	return !disabled && !(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+
+/obj/machinery/message_server/proc/landlines_functioning()
+	return automatic_landlines && !(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 
 /obj/machinery/message_server/proc/send_pda_message(var/recipient = "",var/sender = "",var/message = "", var/icon/img_sent = null)
 	pda_msgs += new/datum/data_pda_msg(recipient,sender,message,img_sent)
