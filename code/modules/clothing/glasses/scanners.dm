@@ -89,6 +89,18 @@
 	to_chat(C, "You turn \the [src] off.")
 	C.handle_regular_hud_updates()
 
+/obj/item/clothing/glasses/scanner/proc/toggle_slot(var/mob/living/carbon/C, slot)
+	var/datum/hud/H = stored_huds[slot]
+	if(!H)
+		return
+	if(H in C.huds) //Detect if it is currently on
+		C.remove_hud(H)
+		to_chat(C, "You turn \the [H] off.")
+	else
+		C.apply_hud(H)
+		to_chat(C, "You turn \the [H] off.")
+	C.handle_regular_hud_updates()
+
 //This is for harm labels blocking your vision. It also will stop most huds...
 //Though, some are overridden for reality (labels won't stop your thermals, but you will be blind otherwise)
 /obj/item/clothing/glasses/scanner/harm_label_update()
@@ -162,6 +174,64 @@
 		icon_state = "mesonoff"
 	else
 		icon_state = initial(icon_state)
+
+/obj/item/clothing/glasses/scanner/dual/chiefengineer
+	name = "chief engineer's advanced contacts"
+	desc = "Combines the power of mesons and material scanners. They even sport serious eye protection."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "contact"
+	mech_flags = MECH_SCAN_FAIL
+	actions_types = list(/datum/action/item_action/toggle_meson_scanner, /datum/action/item_action/alt/toggle_material_scanner)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	glasses_fit = TRUE
+	nearsighted_modifier = -3
+	hud_types = list(/datum/visioneffect/meson,/datum/visioneffect/material)
+
+/obj/item/clothing/glasses/scanner/dual/chiefengineer/examine(mob/user)
+	..()
+	to_chat(user,"<span class='info'>Alt-click to toggle material scanner.</span>")
+
+/obj/item/clothing/glasses/scanner/dual/update_icon()
+	return //contacts don't change
+
+/obj/item/clothing/glasses/scanner/dual/toggle()
+	var/mob/C = usr
+	if (!usr)
+		if (!ismob(loc))
+			return
+		C = loc
+	if (C.incapacitated())
+		return
+	if(loc != C)
+		return
+
+	toggle_slot(C,1)
+	playsound(C,'sound/misc/click.ogg',30,0,-5)
+	update_icon()
+	C.update_inv_glasses()
+
+/obj/item/clothing/glasses/scanner/dual/AltClick(mob/user)
+	if (user.incapacitated())
+		return
+	if(src.loc != user)
+		return
+	toggle_slot(user,2)
+	playsound(user,'sound/misc/click.ogg',30,0,-5)
+	update_icon()
+	user.handle_regular_hud_updates()
+
+/obj/item/clothing/glasses/scanner/dual/unequipped(mob/living/carbon/M, var/from_slot = null)
+	..()
+	on = 0
+
+/obj/item/clothing/glasses/scanner/dual/update_icon()
+	on = 0
+	if(iscarbon(loc))
+		var/mob/living/carbon/C = loc
+		for(var/datum/hud/H in stored_huds)
+			if(H in C.huds)
+				on = 1
+	..()
 
 /*
 	PATHOGEN HUD
