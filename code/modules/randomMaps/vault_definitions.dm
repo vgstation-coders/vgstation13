@@ -179,7 +179,7 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/ejectedengine
 	file_path = "maps/randomvaults/ejectedengine.dmm"
 	can_rotate = TRUE
-	spawn_cost = 4
+	spawn_cost = 3
 
 /datum/map_element/vault/droneship
 	file_path = "maps/randomvaults/droneship.dmm"
@@ -187,7 +187,6 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/amelab
 	file_path = "maps/randomvaults/amelab.dmm"
-	can_rotate = TRUE
 	spawn_cost = 3
 
 /datum/map_element/vault/meteorlogical_station
