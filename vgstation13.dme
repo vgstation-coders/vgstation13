@@ -742,6 +742,7 @@
 #include "code\game\machinery\iv_drip.dm"
 #include "code\game\machinery\keyfab.dm"
 #include "code\game\machinery\kinetic_accelerator.dm"
+#include "code\game\machinery\landline.dm"
 #include "code\game\machinery\lightswitch.dm"
 #include "code\game\machinery\machinery.dm"
 #include "code\game\machinery\magnet.dm"
