@@ -1,6 +1,6 @@
 //This file contains some basic rules so that changing them in one place changes them everywhere.
 
-var/rc_basic_dash = "<b>Dash</b>: Move an extra 2. If you're the Anomalist, up to 4."
+var/rc_basic_dash = "<b>Dash</b>: Move an extra 2."
 var/rc_basic_drag = "<b>Drag</b>: Start dragging a friendly character. They will move along your path, directly behind you, until end of turn. If you move back, you swap positions. You can only drag one person a time."
 var/rc_basic_pill = "<b>Pill</b>: Take a pill or feed a pill to an adjacent friendly, if you have one. When you take a pill, you get 6 blood. You start every battle with 0 pills and can hold no more than 3."
 
@@ -24,7 +24,7 @@ var/rc_para_wildride = "<b>Wild Ride</b>: 2 offturn. If a friendly ends their mo
 
 var/rc_anom_touched = "<b>Touched</b>: When you move, it can be diagonal. When you dash, move 4."
 var/rc_anom_roulette = "<b>Roulette Revolver</b>: 1 action. Shoot an enemy in range 3. Deal 1d12 damage, then place two small artifacts on the map anywhere."
-var/rc_anom_excav = "<b>Excavation</b>: Free. When you end any movement within 1 range of a small artifact, you can remove it from the map and deal 3 damage to an enemy within 3 range of the artifact."
+var/rc_anom_excav = "<b>Excavation</b>: Free. When you end any movement within 1 range of a small artifact, you can remove it from the map and deal 3 damage to a the nearest enemy (foe's choice if tied) within 3 range of the artifact."
 
 var/rc_anom_phase = "<b>Phase Out Anomaly</b>: 2 offturn. If you get attacked, roll any die. If the result is even, the attack is completely negated."
 var/rc_anom_parts = "<b>Suspicious Metal Parts</b>: Free. Your Roulette Revolver deals 2d12 instead."
