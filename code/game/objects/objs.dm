@@ -696,6 +696,14 @@ a {
 /obj/proc/npc_tamper_act(mob/living/L)
 	return NPC_TAMPER_ACT_FORGET
 
+//Cat likes to sit on this
+/obj/proc/cat_comfy()
+	return FALSE
+
+//What cats do to this when in a fell mood
+/obj/proc/cat_act(mob/M)
+	return
+
 /obj/actual_send_to_future(var/duration)
 	var/turf/current_turf = get_turf(src)
 	var/datum/current_loc = loc

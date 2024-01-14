@@ -188,6 +188,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			set_glide_size(DELAY2GLIDESIZE(0.5 SECONDS))
 		Move(dest)
 
+// Cancels wander if false
+/mob/living/simple_animal/proc/prewander(destination)
+	return TRUE
+
 /mob/living/simple_animal/proc/check_environment_susceptibility()
 	return TRUE
 
@@ -268,9 +272,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 					while(must_wander && destination == loc && attempts > 0)
 						destination = get_step(src, pick_n_take(our_options))
 						attempts--
-					wander_move(destination)
-					turns_since_move = 0
-					INVOKE_EVENT(src, /event/after_move)
+					if(prewander(destination))
+						wander_move(destination)
+						turns_since_move = 0
+						INVOKE_EVENT(src, /event/after_move)
 
 	handle_automated_speech()
 

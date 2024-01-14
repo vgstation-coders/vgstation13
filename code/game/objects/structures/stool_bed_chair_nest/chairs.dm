@@ -298,6 +298,9 @@
 	layer = OBJ_LAYER
 	plane = OBJ_PLANE
 
+/obj/structure/bed/chair/comfy/cat_comfy()
+	return TRUE
+
 /obj/structure/bed/chair/comfy/attackby(var/obj/item/W, var/mob/user)
 	if (W.is_wrench(user))
 		for (var/atom/movable/AM in src)

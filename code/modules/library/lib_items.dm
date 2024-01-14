@@ -139,6 +139,14 @@
 			I.forceMove(get_turf(src))
 	..()
 
+/obj/structure/bookcase/cat_act(mob/M)
+	visible_message("<span class='danger'>\The [M] sharpens [M.gender == FEMALE ? "her" : "his"] claws on \the [src].</span>")
+	playsound(src, "paper_tear.ogg", 50, 1, -5)
+	shake(1,3)
+	for(var/obj/item/I in contents)
+		if(is_type_in_list(I, valid_types))
+			I.forceMove(get_turf(src))
+
 /obj/structure/bookcase/update_icon()
 	if(contents.len < 5)
 		icon_state = "book-[contents.len]"
@@ -228,6 +236,12 @@
 /obj/item/weapon/book/cultify()
 	new /obj/item/weapon/tome_legacy(loc)
 	..()
+
+/obj/item/weapon/book/cat_act(mob/M)
+	visible_message("<span class='danger'>\The [M] shreds \the [src].</span>")
+	for(var/i = 1 to rand(3,4))
+		new /obj/item/weapon/paper/crumpled(loc)
+	qdel(src)
 
 /obj/item/weapon/book/proc/read_a_motherfucking_book(mob/user)
 	if(carved)

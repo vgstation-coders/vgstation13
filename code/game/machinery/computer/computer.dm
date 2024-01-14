@@ -96,7 +96,8 @@
 		set_broken()
 		setDensity(FALSE)
 
-
+/obj/machinery/computer/cat_comfy()
+	return TRUE
 
 /obj/machinery/computer/update_icon()
 	..()

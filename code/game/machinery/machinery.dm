@@ -540,6 +540,11 @@ Class Procs:
 			to_chat(user, "<span class='warning'>You momentarily forget how to use [src].</span>")
 			return 1
 
+	var/mob/cat = locate(/mob/living/simple_animal/cat) in loc
+	if(cat)
+		to_chat(user, "<span class='warning'>\The [cat] is in the way!</span>")
+		return 1
+
 	src.add_fingerprint(user)
 	return 0
 

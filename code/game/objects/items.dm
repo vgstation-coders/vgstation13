@@ -1606,6 +1606,10 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/on_restraint_apply(var/mob/living/carbon/C)
 	return
 
+/obj/item/cat_act(mob/M)
+	visible_message("<span class='danger'>\The [M] bats \the [src].</span>")
+	throw_at(get_step(src, pick(cardinal)),1,1)
+
 //Called when user clicks on an object while looking through a camera (passed to the proc as [eye])
 /obj/item/proc/remote_attack(atom/target, mob/user, atom/movable/eye)
 	return
