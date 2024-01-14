@@ -1381,6 +1381,7 @@ var/proccalls = 1
 #define CHANNEL_ADMINMUSIC			1024
 #define CHANNEL_STARMAN				1025
 #define CHANNEL_CRITSOUNDS			1026
+#define CHANNEL_TELEPHONES			1027
 
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0
