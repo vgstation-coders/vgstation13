@@ -1076,3 +1076,6 @@ its easier to just keep the beam vertical.
 	overlays -= moody_light
 	luminosity = initial(luminosity)
 	moody_light = null
+
+/atom/proc/silicate_act(var/atom/A, var/mob/user)
+	return FALSE
