@@ -400,3 +400,26 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 			continue
 		to_archive[T.id] = T.level
 	write_file(to_archive)
+
+/datum/persistence_task/saveblueprints/on_shutdown()
+	var/list/to_save = list()
+	var/saveable = 1
+	for(var/obj/structure/blueprintrack/BPR in blueprint_racks)
+		if(saveable >= 16)
+			break
+		for(var/obj/item/research_blueprint/BP in BPR)
+			to_save[saveable] = BP.build_type
+		saveable++
+	write_file(to_save)
+
+/datum/persistence_task/saveblueprints/on_init()
+	var/list/designs = read_file()
+	for(var/obj/structure/blueprintrack/BPR in blueprint_racks)
+		for(var/element in designs) //Counts 1 to 16
+			//1 = buildtype
+			if(!ispath(designs[element]))
+				continue
+			var/datum/design/D = FindTypeDesign(designs[element])
+			new /obj/item/research_blueprint(BPR, D) //creates a standard paper blueprint w/ design and inserts
+		BPR.update_icon()
+		break //only do this in one blueprint rack
