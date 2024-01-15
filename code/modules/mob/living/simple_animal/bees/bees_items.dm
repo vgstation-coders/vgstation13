@@ -280,6 +280,7 @@
 	item_state ="bookHydroponicsBees"
 	author = "Beekeeper Dave"
 	title = "The Ins and Outs of Apiculture - A Precise Art"
+	id = 33
 	dat = {"<html>
 				<head>
 				<style>
