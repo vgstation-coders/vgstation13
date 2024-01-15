@@ -58,6 +58,7 @@ var/global/list/ghdel_profiling = list()
 	var/arcanetampered = 0 //A looot of things can be
 
 	var/image/moody_light
+	var/list/moody_lights = list()
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
@@ -1059,6 +1060,7 @@ its easier to just keep the beam vertical.
 		return TRUE
 	return FALSE
 
+//Single overlay moody light
 /atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
 	overlays -= moody_light
 	var/area/here = get_area(src)
@@ -1076,6 +1078,38 @@ its easier to just keep the beam vertical.
 	overlays -= moody_light
 	luminosity = initial(luminosity)
 	moody_light = null
+
+//Multi-overlay moody lights. don't combine both procs on a single atom, use one or the other.
+/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
+	if (!index)
+		return
+	if (index in moody_lights)
+		overlays -= moody_lights[index]
+	var/area/here = get_area(src)
+	if (here.dynamic_lighting)
+		moody_light = image(moody_icon, src, moody_state)
+		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
+		moody_light.plane = LIGHTING_PLANE
+		moody_light.blend_mode = BLEND_ADD
+		moody_light.alpha = moody_alpha
+		moody_light.color = moody_color
+		moody_lights[index] = moody_light
+		overlays += moody_lights[index]
+	luminosity = max(luminosity, 2)
+
+/atom/proc/kill_moody_light_index(var/index)
+	if (!index || !(index in moody_lights))
+		return
+	overlays -= moody_lights[index]
+	moody_lights.Remove(index)
+	if (moody_lights.len <= 0)
+		luminosity = initial(luminosity)
+
+/atom/proc/kill_moody_light_all()
+	for (var/i in moody_lights)
+		overlays -= moody_lights[i]
+		moody_lights.Remove(i)
+	luminosity = initial(luminosity)
 
 /atom/proc/silicate_act(var/atom/A, var/mob/user)
 	return FALSE
