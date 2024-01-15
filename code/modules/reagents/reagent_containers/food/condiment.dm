@@ -18,6 +18,7 @@
 	volume = 50
 	var/condiment_overlay = null
 	var/overlay_colored = FALSE
+	var/image/extra_condiment_overlay
 
 /obj/item/weapon/reagent_containers/food/condiment/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -123,6 +124,8 @@
 /obj/item/weapon/reagent_containers/food/condiment/New(loc,altvol)
 	if(altvol)
 		volume = altvol
+
+	extra_condiment_overlay = image('icons/effects/32x32.dmi',null,"blank")
 	..(loc)
 
 /obj/item/weapon/reagent_containers/food/condiment/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
@@ -133,7 +136,7 @@
 		condiment_overlay = null
 		overlay_colored = FALSE
 		item_state = null
-		overlays.len = 0
+		extra_condiment_overlay.overlays.len = 0
 		switch(reagents.get_master_reagent_id())
 
 			if(KETCHUP)
@@ -232,10 +235,10 @@
 				condiment_overlay = HONEY
 				var/image/I = image(icon, src, "honey-color")
 				I.color = mix_color_from_reagents(reagents.reagent_list)
-				overlays += I
+				extra_condiment_overlay.overlays += I
 				var/image/L = image(icon, src, "honey-light") // makes the honey a bit more shiny
 				L.blend_mode = BLEND_ADD
-				overlays += L
+				extra_condiment_overlay.overlays += L
 				overlay_colored = TRUE
 			if(ROYALJELLY)
 				name = "royal jelly pot"
@@ -245,7 +248,7 @@
 				condiment_overlay = ROYALJELLY
 				var/image/I = image(icon, src, "royaljelly-color")
 				I.color = mix_color_from_reagents(reagents.reagent_list)
-				overlays += I
+				extra_condiment_overlay.overlays += I
 				overlay_colored = TRUE
 			if(CHILLWAX)
 				name = "chill wax pot"
@@ -254,10 +257,10 @@
 				condiment_overlay = HONEY
 				var/image/I = image(icon, src, "honey-color")
 				I.color = mix_color_from_reagents(reagents.reagent_list)
-				overlays += I
+				extra_condiment_overlay.overlays += I
 				var/image/L = image(icon, src, "honey-light") // makes the honey a bit more shiny
 				L.blend_mode = BLEND_ADD
-				overlays += L
+				extra_condiment_overlay.overlays += L
 				overlay_colored = TRUE
 			if(CINNAMON)
 				name = "cinnamon shaker"
@@ -335,9 +338,19 @@
 		name = "condiment bottle"
 		desc = "An empty condiment bottle."
 
+	update_icon()
+
 	if(iscarbon(loc))
 		var/mob/living/carbon/M = loc
 		M.update_inv_hands()
+
+/obj/item/weapon/reagent_containers/food/condiment/update_icon()
+	overlays.len = 0//no choice here but to redraw everything in the correct order so condiments etc don't appear over ice and fire.
+	overlays += extra_condiment_overlay
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
+	if (on_fire && fire_overlay)
+		overlays += fire_overlay
 
 //Specific condiment bottle entities for mapping and potentially spawning (these are NOT used for any above procs)
 
@@ -681,6 +694,7 @@
 	possible_transfer_amounts = list(1, 5)
 	amount_per_transfer_from_this = 1
 	var/trash_type = /obj/item/trash/misc_packet
+	var/custom = FALSE
 
 /obj/item/weapon/reagent_containers/food/condiment/small/afterattack(obj/target, mob/user , flag, params)
 	if(!istype(target, /obj/structure/reagent_dispensers/cauldron) && istype(target, /obj/structure/reagent_dispensers))
@@ -696,7 +710,7 @@
 		condiment_overlay = null
 		overlay_colored = FALSE
 		item_state = null
-		overlays.len = 0
+		extra_condiment_overlay.overlays.len = 0
 		switch(reagents.get_master_reagent_id())
 			if(KETCHUP)
 				name = KETCHUP
@@ -743,8 +757,12 @@
 				if(!has_icon(icon, "packet_"))
 					icon_state = "packet_misc"
 				overlay_colored = TRUE
-				update_icon(custom=TRUE)
+				var/image/packetcolor = image('icons/obj/food_condiment.dmi', src, "packet_overlay")
+				packetcolor.icon += mix_color_from_reagents(reagents.reagent_list)
+				packetcolor.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+				extra_condiment_overlay.overlays += packetcolor
 		icon_state = "[initial(icon_state)]" + condiment_overlay
+		update_icon()
 	else
 		if(is_empty() && trash_type)
 			var/obj/item/trash/trash = new trash_type(get_turf(src))
@@ -756,18 +774,8 @@
 					M.put_in_hand(hand_index, trash)
 					M.update_inv_hands()
 			qdel(src)
-
-/obj/item/weapon/reagent_containers/food/condiment/small/update_icon(var/custom=FALSE)
-	..()
-	if(custom && reagents && reagents.total_volume)
-		var/image/packetcolor = image('icons/obj/food_condiment.dmi', src, "packet_overlay")
-		packetcolor.icon += mix_color_from_reagents(reagents.reagent_list)
-		packetcolor.alpha = mix_alpha_from_reagents(reagents.reagent_list)
-		overlays += packetcolor
-
-	if(!is_open_container())
-		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
-		overlays += lid
+		else
+			update_icon()
 
 //-------------------------------------------------------------------------
 
