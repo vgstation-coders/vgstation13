@@ -61,6 +61,12 @@
 		return 0 //under effects of time magick
 	spinaroo(spin_emotes)
 	. = ..()
+	nutrition = max(nutrition-0.5, 0) //Passive hunger, takes less per tick than a human due to size
+	if(nutrition > 150 && health < maxHealth)
+		nutrition = nutrition-10 //Heal by spending nutrition
+		health++
+	if(nutrition < 150 && prob(20))
+		emote("me", 1, "whines hungrily.")
 	if(.)
 		regular_hud_updates()
 		standard_damage_overlay_updates()
@@ -384,11 +390,13 @@
 /mob/living/simple_animal/corgi/proc/get_target()
 	var/vision_range = 5
 	var/list/can_see = view(src, vision_range)
-	for(var/obj/item/weapon/reagent_containers/food/snacks/S in can_see)
-		if(isturf(S.loc) || ishuman(S.loc))
-			movement_target = S
-			corgi_status = BEGIN_FOOD_HUNTING
-			return
+	var/fullness = nutrition + (reagents.get_reagent_amount(NUTRIMENT) * 25)
+	if(fullness<550)
+		for(var/obj/item/weapon/reagent_containers/food/snacks/S in can_see)
+			if(isturf(S.loc) || ishuman(S.loc))
+				movement_target = S
+				corgi_status = BEGIN_FOOD_HUNTING
+				return
 	for(var/mob/living/carbon/M in can_see)
 		for(var/obj/item/H in M.held_items)
 			if(istype(H, /obj/item/weapon/reagent_containers/food/snacks))
