@@ -183,3 +183,10 @@
 		else
 			return 0
 	return 0
+
+/obj/machinery/r_n_d/fabricator/mechanic_fab/after_craft(datum/design/part)
+	if(!being_built || !being_built.reagents)
+		return
+	being_built.reagents?.clear_reagents()
+	for(var/obj/O in being_built.contents)
+		O.reagents?.clear_reagents()

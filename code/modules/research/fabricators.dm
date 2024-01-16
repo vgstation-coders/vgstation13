@@ -352,6 +352,7 @@
 			L.name += " ([being_built.name])"
 			being_built = L //Building the lockbox now, with the thing in it
 		part.after_craft(being_built,src)
+		after_craft(part)
 		var/turf/output = get_output()
 		being_built.forceMove(get_turf(output))
 		being_built.anchored = 0
@@ -372,6 +373,10 @@
 /obj/machinery/r_n_d/fabricator/arcane_act(mob/user)
 	..()
 	return "B'NUS D'CKS!"
+
+//The newly created object is still held as being_built
+/obj/machinery/r_n_d/fabricator/proc/after_craft(datum/design/part)
+	return
 
 //max_length is, from the top of the list, the parts you want to queue down to
 /obj/machinery/r_n_d/fabricator/proc/add_part_set_to_queue(set_name, max_length)
