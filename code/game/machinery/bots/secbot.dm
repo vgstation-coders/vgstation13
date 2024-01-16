@@ -13,6 +13,7 @@
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
 //	weight = 1.0E7
+	AI_link = 1
 	req_one_access = list(access_security, access_forensics_lockers)
 	control_filter = RADIO_SECBOT
 	var/check_records = 1

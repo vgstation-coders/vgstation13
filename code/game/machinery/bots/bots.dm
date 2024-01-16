@@ -40,7 +40,8 @@
 	var/declare_message = "" //What the bot will display to the HUD user.
 	var/bot_flags
 	var/list/AIradialChoices = list(list("summon","summon")) //list("hack","hack") taken out
-
+	var/AI_link = 0
+	machine_flags = MULTITOOL_MENU
 	var/frustration
 
 	var/new_destination		// pending new destination (waiting for beacon response)
@@ -98,9 +99,12 @@
 
 	if(!camera)
 		camera = new /obj/machinery/camera/flawless(src)
-		camera.c_tag = "[name][round(rand(111,999))]"
+		camera.c_tag = "[name]-[round(rand(100,999))]"
 		camera.setViewRange(3)
-		camera.network = list(CAMERANET_SS13)
+		camera.network = list(CAMERANET_BOTS)
+		camera.status = on && AI_link
+		spawn(100)
+			cameranet.updatePortableCamera(camera)
 
 /obj/machinery/bot/Destroy()
 	. = ..()
@@ -111,6 +115,8 @@
 			if (PM.owner == src)
 				qdel(PM)
 	bots_list -= src
+	camera.status = 0
+	cameranet.updatePortableCamera(camera)
 	for(var/mob/living/silicon/ai/A in ai_list)
 		A.list_bot_control -= src
 	nearest_beacon_loc = null
@@ -125,6 +131,7 @@
 
 // Reset the safety counter, look or move along a path, and then do bot things.
 /obj/machinery/bot/process()
+	camera.status = on && AI_link
 	current_pathing = 0
 	if(!src.on)
 		return
@@ -610,11 +617,13 @@
 	on = 1
 	set_light(initial(luminosity))
 	waiting_for_patrol = FALSE
+	camera.status = on && AI_link
 	return 1
 
 /obj/machinery/bot/proc/turn_off()
 	on = 0
 	set_light(0)
+	camera.status = on && AI_link
 
 /obj/machinery/bot/proc/explode()
 	qdel(src)
@@ -624,7 +633,7 @@
 		src.explode()
 
 /obj/machinery/bot/emag_act(mob/user)
-	if(!isAI(user)
+	if(!isAI(user))
 		for(var/mob/living/silicon/ai/A in ai_list)
 			A.list_bot_control -= src
 	if(locked)
@@ -839,7 +848,7 @@ obj/machinery/bot/attack_hand(mob/user as mob)
 	handleAIRadialCommand(user,choice)
 
 /obj/machinery/bot/AICtrlClick(var/mob/user)
-	handleAIRadialCommand(user,"summon")
+	handleAIRadialCommand(user,"default")
 
 /obj/machinery/bot/proc/handleAIRadialCommand(var/mob/user,var/choice)
 	var/mob/living/silicon/ai/AI = user
@@ -856,3 +865,35 @@ obj/machinery/bot/attack_hand(mob/user as mob)
 			path = list()
 			summoned = TRUE
 			process()
+
+/obj/machinery/bot/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
+	if(isAI(user))
+		return
+	if(!istype(user.get_active_hand(), /obj/item/device/multitool))
+		return
+
+	if(stat & (FORCEDISABLE|BROKEN|NOPOWER))
+		return
+
+	var/screen = {"
+	<h2>AI linkage</h2>
+	<ul>
+		<li><b>AI CONTROL LINK:</b> <a href="?src=\ref[src];ailink=1">[AI_link?"ENABLED":"DISABLED"]</a></li>
+	</ul>
+	"}
+	return screen
+
+/obj/machinery/bot/Topic(href,href_list)
+	if(..(href, href_list))
+		return
+
+	if("ailink" in href_list)
+		AI_link = !AI_link
+		camera.status = on && AI_link
+		update_multitool_menu(usr)
+
+/obj/machinery/bot/attackby(obj/item/weapon/W, mob/user)
+	if(W.is_multitool(user))
+		update_multitool_menu(user)
+		return
+	..()

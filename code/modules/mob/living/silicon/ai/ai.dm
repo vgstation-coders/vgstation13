@@ -169,7 +169,7 @@ var/list/ai_list = list()
 
 	for(var/obj/machinery/bot/Bot in bots_list)
 		var/turf/T = get_turf(Bot)
-		if(T.z == z) // when an AI is created, add every bot on its Z-level to its control.
+		if(Bot.AI_link && (T.z == map.zMainStation || T.z == map.zAsteroid))
 			list_bot_control |= Bot
 
 	ai_list += src

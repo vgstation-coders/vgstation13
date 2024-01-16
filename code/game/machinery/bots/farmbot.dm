@@ -37,6 +37,7 @@
 	maxHealth = 50
 	req_access =list(access_hydroponics)
 	bot_flags = BOT_DENSE|BOT_NOT_CHASING
+	AI_link = 1
 
 	var/Max_Fertilizers = 10
 
@@ -51,6 +52,7 @@
 
 /obj/machinery/bot/farmbot/vox_garden_farmbot
 	name = "Special Vox Trader Farmbot"
+	AI_link = 0
 	req_access = list()
 	req_one_access =  list(access_hydroponics, access_trade)
 

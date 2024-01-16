@@ -12,6 +12,7 @@
 	icon_state = "bloodbot00"
 	density = 0
 	on = 0
+	AI_link = 1
 	anchored = 0
 	health = 40
 	maxHealth = 20

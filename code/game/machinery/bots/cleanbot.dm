@@ -23,6 +23,7 @@
 	icon_initial = "cleanbot"
 	density = 0
 	anchored = 0
+	AI_link = 1
 	//weight = 1.0E7
 	health = 25
 	maxHealth = 25

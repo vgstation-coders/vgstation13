@@ -41,6 +41,7 @@ var/global/mulebot_count = 0
 	control_freq = 1447
 	control_filter = RADIO_MULEBOT
 	bot_flags = BOT_DENSE|BOT_NOT_CHASING|BOT_CONTROL|BOT_BEACON
+	AI_link = 1
 	suffix = ""
 
 	var/home_destination = "" 	// tag of home beacon
@@ -99,7 +100,7 @@ var/global/mulebot_count = 0
 	cell = new(src)
 	cell.charge = 2000
 	cell.maxcharge = 2000
-	AIradialChoices |= list(list("load","load"))
+	AIradialChoices = list(list("summon","summon"),list("load","load"))
 
 /obj/machinery/bot/mulebot/initialize()
 	. = ..()
@@ -108,7 +109,7 @@ var/global/mulebot_count = 0
 		suffix = "#[mulebot_count]"
 	name = "\improper Mulebot ([suffix])"
 	can_load = list(
-		/obj/structure/closet/crate,
+		/obj/structure/closet,
 		/obj/structure/vendomatpack,
 		/obj/structure/stackopacks,
 		/obj/item/weapon/gift,
@@ -519,9 +520,6 @@ var/global/mulebot_count = 0
 
 	lock_atom(C, /datum/locking_category/mulebot)
 
-	AIradialChoices |= list(list("unload","unload"))
-	AIradialChoices -= list("load","load")  //yep
-
 /obj/machinery/bot/mulebot/proc/can_load(var/atom/movable/C)
 	if (C.anchored)
 		return FALSE
@@ -564,15 +562,13 @@ var/global/mulebot_count = 0
 			step(load, dirn)
 		else
 			load.forceMove(src.loc)//Drops you right there, so you shouldn't be able to get yourself stuck
-	AIradialChoices -= list("unload","unload")
-	AIradialChoices |= list(list("load","load")) //yep
 
 	// in case non-load items end up in contents, dump every else too
 	// this seems to happen sometimes due to race conditions //There are no race conditions in BYOND. It's single-threaded.
 	// with items dropping as mobs are loaded
 
 	for(var/atom/movable/AM in src)
-		if(AM == cell || AM == botcard || AM == integratedpai)
+		if(AM == cell || AM == botcard || AM == integratedpai || AM == camera)
 			continue
 
 		AM.forceMove(src.loc)
@@ -899,6 +895,9 @@ var/global/mulebot_count = 0
 	playsound(loc, 'sound/machines/ping.ogg', 50, 0)
 	frustration = 0
 	current_order = null
+	if(istype(target, /atom/movable))
+		var/atom/movable/C = target
+		target = C
 
 // returns true if it's still below the frustration threshold
 /obj/machinery/bot/mulebot/on_path_step_fail(var/turf/next)
@@ -1037,6 +1036,7 @@ var/global/mulebot_count = 0
 			AI.handle_bot_click_command(src,choice)
 		if("unload")
 			unload()
+	updateRadialLoadUnloadMenuJesusChrist()
 
 /obj/machinery/bot/mulebot/handleAIMouseCommand(atom/A,command)
 	switch(command)
@@ -1046,9 +1046,22 @@ var/global/mulebot_count = 0
 			path = list()
 			summoned = TRUE
 			process()
-		if("load")
-			load(A)
+		if("load", "default")
+			if(istype(A, /atom/movable))
+				var/atom/movable/C = A
+				target = C
+				destination = C
+				path = list()
+				load(C)
+	updateRadialLoadUnloadMenuJesusChrist()
 
+
+/obj/machinery/bot/mulebot/proc/updateRadialLoadUnloadMenuJesusChrist()
+	//HARDCODED because FUCK lists
+	if(is_locking(/datum/locking_category/mulebot))
+		AIradialChoices = list(list("summon","summon"),list("unload","unload"))
+	else
+		AIradialChoices = list(list("summon","summon"),list("load","load"))
 
 
 #undef LOAD_OR_MOVE_HERE
