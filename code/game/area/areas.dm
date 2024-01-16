@@ -124,6 +124,9 @@ var/area/space_area
 						a.cancelAlarm("Power", src, source)
 					else
 						a.triggerAlarm("Power", src, cameras, source)
+			for (var/obj/item/device/pager/P in pager_list)
+				if(state != 1)
+					P.triggerAlarm("Power", src)
 	return
 
 /area/proc/send_poweralert(var/obj/machinery/computer/station_alert/a)//sending alerts to newly built Station Alert Computers.
@@ -164,6 +167,8 @@ var/area/space_area
 			for(var/obj/machinery/computer/station_alert/a in machines)
 				if(src in (a.covered_areas))
 					a.triggerAlarm("Atmosphere", src, cameras, src)
+			for (var/obj/item/device/pager/P in pager_list)
+				P.triggerAlarm("Atmosphere", src)
 			door_alerts |= DOORALERT_ATMOS
 			UpdateFirelocks()
 		// Dropping from danger level 2.
@@ -253,6 +258,8 @@ var/area/space_area
 		for (var/obj/machinery/computer/station_alert/a in machines)
 			if(src in (a.covered_areas))
 				a.triggerAlarm("Fire", src, cameras, src)
+		for (var/obj/item/device/pager/P in pager_list)
+			P.triggerAlarm("Fire", src)
 
 /area/proc/send_firealert(var/obj/machinery/computer/station_alert/a)//sending alerts to newly built Station Alert Computers.
 	if(fire)
