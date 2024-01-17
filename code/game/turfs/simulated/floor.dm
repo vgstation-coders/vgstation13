@@ -342,7 +342,8 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			return
 
 		src.icon_state = "[material]_broken"
-		update_icon()
+		if(is_twinkling())
+			end_twinkling()
 
 /turf/simulated/floor/proc/burn_tile()
 	if(istype(src,/turf/simulated/floor/engine))

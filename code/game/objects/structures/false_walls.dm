@@ -170,6 +170,8 @@
 		setDensity(FALSE)
 		set_opacity(0)
 		opening = 0
+		if(should_twinkle() && is_twinkling())
+			end_twinkling()
 	else
 		opening = 1
 		flick("[mineral]fwall_closing", src)
@@ -181,18 +183,16 @@
 		opening = 0
 		loc.mouse_opacity = 0
 		update_meson_image()
+		if(should_twinkle())//should twinkle only when closed
+			begin_twinkling()
 
 /obj/structure/falsewall/update_icon()//Calling icon_update will refresh the smoothwalls if it's closed, otherwise it will make sure the icon is correct if it's open
 	..()
 	if(density)
 		icon_state = "[mineral]0"
-		if(should_twinkle())
-			begin_twinkling()
 		src.relativewall()
 	else
 		icon_state = "[mineral]fwall_open"
-		if(should_twinkle() && is_twinkling())
-			end_twinkling()
 
 /obj/structure/falsewall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(opening)

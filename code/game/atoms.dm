@@ -1050,10 +1050,9 @@ its easier to just keep the beam vertical.
 		return TRUE
 	return FALSE
 
-//WIP twinkling code below
+///////////TWINKLE PARTICLES////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/atom/proc/begin_twinkling() //overwritten by turf and movable atoms
-
+/atom/proc/begin_twinkling()
 
 /atom/proc/end_twinkling()
 
@@ -1064,7 +1063,7 @@ its easier to just keep the beam vertical.
 /atom/proc/should_twinkle()
 	return FALSE
 
-//note to self, move to designated file once testing complete
+//Should I make this a constant instead of global?
 var/global/obj/twinkle_image_holder = null
 var/global/obj/twinkle_image_list = list()
 
@@ -1086,8 +1085,6 @@ var/global/obj/twinkle_image_list = list()
 	particles = new/particles/twinkle
 
 /obj/twinkle/New()
-
-// can I make some kind of populator datum? when created it populates the list with twinkles
 
 /obj/twinkle/proc/populate_image_list()
 	if(!length(twinkle_image_list))
