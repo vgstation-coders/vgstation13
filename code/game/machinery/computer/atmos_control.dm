@@ -585,7 +585,7 @@ var/global/list/atmos_controllers = list()
 			if(current.rcon_setting == RCON_NO)
 				return 1
 			var/area/this_area = get_area(current)
-			this_area.doors_overridden = 1
+			this_area.doors_overridden = TRUE
 			this_area.UpdateFirelocks()
 			current.update_icon()
 			return 1
