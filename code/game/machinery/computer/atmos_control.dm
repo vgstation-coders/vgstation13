@@ -159,6 +159,18 @@ var/global/list/atmos_controllers = list()
 		alarm.apply_preset(no_cycle_after, 1) //optionally cycle, propagate
 		done_areas += alarm_area
 
+//Emergency siphon shutdown
+/obj/machinery/computer/atmoscontrol/proc/emergency_shutdown()
+	var/list/done_areas = list() //a little optimization to avoid needlessly repeating apply_mode()
+	for(var/obj/machinery/alarm/alarm in machines)
+		if(alarm.rcon_setting == RCON_NO)
+			continue //no messing with alarms with no remote control
+		//No further access checks on this button, it's like a panic stop at the gas pump
+		var/area/alarm_area = get_area(alarm)
+		if(alarm_area in done_areas)
+			continue
+		alarm.stop_panic()
+
 /obj/machinery/computer/atmoscontrol/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	//if(user.client)
 	//	var/datum/asset/simple/nanoui_maps/asset_datum = new
@@ -301,6 +313,10 @@ var/global/list/atmos_controllers = list()
 
 	if(href_list["reset"])
 		current = null
+		return 1
+
+	if(href_list["shutdown"])
+		emergency_shutdown()
 		return 1
 
 	if(href_list["alarm"])

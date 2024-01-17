@@ -741,6 +741,11 @@ var/global/list/air_alarms = list()
 	var/area/this_area = get_area(src)
 	this_area.OpenFirelocks()
 
+/obj/machinery/alarm/proc/stop_panic()
+	var/area/this_area = get_area(src)
+	for(var/device_id in this_area.air_scrub_names)
+		send_signal(device_id, list("scrubbing" = 1)) //Ends siphon mode
+
 ///////////////
 //END HACKING//
 ///////////////
