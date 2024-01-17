@@ -1777,7 +1777,9 @@ var/global/list/image/blood_overlays = list()
 	if (is_open_container())
 		. = max(. , 0.5) //Even if it's perfectly insulating, if it's open then some heat can be exchanged.
 
-/obj/item/MiddleAltClick(var/mob/living/user)
+/obj/item/MiddleAltClick(var/mob/user)
+	if(!isliving(user))
+		return
 	if(src.on_fire)
 		extinguish()
 		var/prot = 0
@@ -1790,9 +1792,9 @@ var/global/list/image/blood_overlays = list()
 					prot = (G.max_heat_protection_temperature > 360)
 		else
 			prot = 1
-
 		if(prot > 0 || (M_RESIST_HEAT in user.mutations) || (user.get_active_hand_organ()).is_robotic())
 			user.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src].")
 			return
-		user.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
-		user.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src], burning your hand in the process.")
+		var/mob/living/L = user
+		L.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
+		L.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src], burning your hand in the process.")
