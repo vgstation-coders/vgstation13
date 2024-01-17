@@ -628,7 +628,6 @@ Assign your candidates in choose_candidates() instead.
 	role_category = null
 	restricted_from_jobs = list()
 	enemy_jobs = list()
-	required_pop = list(30,30,30,30,30,30,30,30,30,30)
 	required_candidates = 0
 	weight = BASE_RULESET_WEIGHT * 0.5
 	weight_category = "Extended"
@@ -637,8 +636,10 @@ Assign your candidates in choose_candidates() instead.
 	high_population_requirement = 101
 
 
-// 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance.
+// 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance. Requires 30 pop still.
 /datum/dynamic_ruleset/roundstart/extended/ready(var/forced=0)
+	if (mode.roundstart_pop_ready < 30)
+		return FALSE
 	var/probability = clamp(mode.threat_level, 30, 100)
 	return !prob(probability)
 
