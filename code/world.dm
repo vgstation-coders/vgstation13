@@ -193,10 +193,11 @@ var/auxtools_path
 		..()
 		return
 
-	if(vote.winner && vote.map_paths)
+	if((vote.winner || vote.forced_map) && vote.map_paths)
 		//get filename
 		var/filename = "vgstation13.dmb"
-		var/map_path = "maps/voting/" + vote.map_paths[vote.winner] + "/" + filename
+		var/map_to_choose = vote.forced_map ? vote.forced_map : vote.winner
+		var/map_path = "maps/voting/" + vote.map_paths[map_to_choose] + "/" + filename
 		if(fexists(map_path))
 			//copy file to main folder
 			if(!fcopy(map_path, filename))
