@@ -1792,7 +1792,8 @@ var/global/list/image/blood_overlays = list()
 					prot = (G.max_heat_protection_temperature > 360)
 		else
 			prot = 1
-		if(prot > 0 || (M_RESIST_HEAT in user.mutations) || (user.get_active_hand_organ()).is_robotic())
+		var/datum/organ/external/active_hand_organ = user.get_active_hand_organ()
+		if(prot > 0 || (M_RESIST_HEAT in user.mutations) || active_hand_organ?.is_robotic())
 			user.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src].")
 			return
 		var/mob/living/L = user
