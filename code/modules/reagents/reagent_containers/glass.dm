@@ -577,7 +577,7 @@
 /obj/item/weapon/reagent_containers/glass/kettle
 	name = "Kettle"
 	desc = "A pot made for holding hot drinks. Can hold up to 75 units."
-	icon_state = "kettle"
+	icon_state = "kettle_red"
 	starting_materials = list(MAT_IRON = 200)
 	volume = 75
 	w_type = RECYK_GLASS
@@ -602,3 +602,8 @@
 
 /obj/item/weapon/reagent_containers/glass/kettle/green
 	icon_state = "kettle_green"
+
+/obj/item/weapon/reagent_containers/glass/kettle/full/New()
+	..()
+	icon_state = "kettle[pick("_red","_blue","_purple","_green")]"
+	reagents.add_reagent(TEA,75)
