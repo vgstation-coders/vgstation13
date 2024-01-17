@@ -465,6 +465,7 @@ steam.start() -- spawns the effect
 
 /datum/effect/system/smoke_spread/fire/start()
 	transparency_rate = 25 // 25% chance that a smoke stack will be transparent
+	..()
 
 /datum/effect/system/smoke_spread/bad
 	smoke_type = /obj/effect/smoke/bad
