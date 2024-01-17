@@ -72,7 +72,8 @@ var/rc_eng_supermatter = "<b>Supermatter Chunk</b>: Free. Lose 6 blood. Your emi
 <h1><img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "nano-logo"))]' style='position: relative; top: 6;'>Red Core 1st Edition<img src='data:image/png;base64,[icon2base64(icon('icons/logos.dmi', "nano-logo"))]' style='position: relative; top: 6;'></h1>
 <h2>What is this?</h2>
 <p>Red Core is a tabletop tactical roleplaying game. One player takes on the role of game master to control enemies, and players take on the role of brave miners in search of precious phazon. There are four roles: the <b>Shaft Miner</b> who grapples up close, the <b>Paramedic</b> who keeps the squad alive, the <b>Anomalist</b> that searches for deadly artifacts, and the <b>Engineer</b> that supports from afar.
-<p>Red Core uses team-based turns. A team elects one piece to take a turn, then the other team does so. This continues until all pieces have taken a turn. Each round, the order can change.
+<p>Red Core uses team-based turns. A team elects one piece to take a turn, then the other team does so. This continues until all pieces have taken a turn. Each round, the order of pieces within a team can change.
+<p>Please <b>Bug Report</b> feedback for the 2nd Edition!
 <h2>Chapters</h2>
 
 <ol>
@@ -170,6 +171,7 @@ var/rc_eng_supermatter = "<b>Supermatter Chunk</b>: Free. Lose 6 blood. Your emi
 <p>Brood. Type: Swarm. Blood: 3. Range: Adjacent. Move: 6. Attacks: Once per turn, deal 1d6. If it's 6, cause Bleeding.
 <h2><img src='data:image/png;base64,[icon2base64(icon('icons/obj/mining.dmi', "Glass ore"))]' style='position: relative; top: 8;'><a id="Grid">Battle Mat</h2>
 <p>The battle mat should be used on a big table, at least two-by-two. Most libraries contain a good one.
+<p>Next edition is expected to include new game master tools and new monsters!
 </body>
 </html>"}
 

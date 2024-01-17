@@ -108,6 +108,7 @@
 	icon_state = "rolled_poster"
 	w_class = W_CLASS_MEDIUM
 	layer = BELOW_OBJ_LAYER
+	var/unfurl_icon = "gamemat"
 
 /obj/item/battlemat/battlemat_exception(atom/neighbor)
 	return
@@ -146,7 +147,7 @@
 	var/list/acceptable_angles = list(3,4,6) //Ensure we're on a large table
 	if(O && (O.tableform in acceptable_angles))
 		icon = 'icons/obj/objects_64x64.dmi'
-		icon_state = "gamemat"
+		icon_state = unfurl_icon
 		bound_width = 2*WORLD_ICON_SIZE
 		bound_height = 2*WORLD_ICON_SIZE
 		switch(O.dir)

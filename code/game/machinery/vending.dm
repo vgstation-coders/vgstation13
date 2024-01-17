@@ -3604,7 +3604,7 @@ var/global/num_vending_terminals = 1
 		"It's all fun and games at Al's Fun And Games!",
 		"Roll for initiative!",
 		"It's a full house of fun!",
-		"Caves and Wyverns 3rd edition available now!"
+		"Red Core 1st Edition available now!"
 	)
 	product_ads = list(
 		"Sponsored by Warlocks of the Shore.",
