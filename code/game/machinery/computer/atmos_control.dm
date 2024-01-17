@@ -498,7 +498,7 @@ var/global/list/atmos_controllers = list()
 		"FILL MODE" = AALARM_MODE_FILL,
 		"OFF MODE" = AALARM_MODE_OFF
 		)
-		var/choice = input("Select the scrubber-mode you wish to set all air alarms to\n\nAll air alarms will be set to this mode.", "Select mode", null) as null|anything in scrubmodes
+		var/choice = input("Select the scrubber-mode you wish to set all air alarms to.\n\nAll air alarms will be set to this mode.", "Select mode", null) as null|anything in scrubmodes
 		if(choice)
 			var/newmode = scrubmodes[choice]
 			var/areyouforreal = alert(usr, "Are you sure you wish to change the mode of every air alarm to [choice]?",,"Yes", "No") == "Yes" ? 1 : 0
