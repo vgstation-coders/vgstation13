@@ -472,10 +472,6 @@
 	if(L.stat == DEAD)
 		to_chat(user, "<span class='warning'>[O] is already dead!</span>")
 		return
-	user.visible_message("[user] starts stuffing \the [L] into \the [src].", "You start stuffing \the [L] into \the [src].")
-	var/locMob = L.loc
-	if(!do_after(user, src, 20))
-		return
-	if(locMob != L.loc)
-		return
-	mob_enter(O)
+	user.visible_message("[user] starts stuffing \the [O] into \the [src].", "You start stuffing \the [O] into \the [src].")
+	if(do_after_many(user,list(O,src), 20))
+		mob_enter(O)
