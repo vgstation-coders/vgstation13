@@ -424,6 +424,10 @@ steam.start() -- spawns the effect
 	var/time_to_live = 10 SECONDS
 	var/transparency_rate = 0 // Percent of smoke stacks spawned which will be transparent
 
+
+/datum/effect/system/smoke_spread/fire
+	transparency_rate = 25 // 25% chance that a smoke stack will be transparent
+
 /datum/effect/system/smoke_spread/set_up(n = 5, c = 0, loca, direct)
 	if(n > 10)
 		n = 10
@@ -462,10 +466,6 @@ steam.start() -- spawns the effect
 				if (smoke)
 					qdel(smoke)
 				src.total_smoke--
-
-/datum/effect/system/smoke_spread/fire/start()
-	transparency_rate = 25 // 25% chance that a smoke stack will be transparent
-	..()
 
 /datum/effect/system/smoke_spread/bad
 	smoke_type = /obj/effect/smoke/bad
