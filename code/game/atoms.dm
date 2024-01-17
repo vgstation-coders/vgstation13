@@ -1086,7 +1086,7 @@ its easier to just keep the beam vertical.
 	if (index in moody_lights)
 		overlays -= moody_lights[index]
 	var/area/here = get_area(src)
-	if (here.dynamic_lighting)
+	if (here && here.dynamic_lighting)
 		moody_light = image(moody_icon, src, moody_state)
 		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 		moody_light.plane = LIGHTING_PLANE
