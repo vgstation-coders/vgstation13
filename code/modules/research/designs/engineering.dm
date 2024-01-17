@@ -235,3 +235,13 @@
 	materials = list(MAT_IRON = 18750, MAT_GLASS = 9375)
 	build_path = /obj/item/tool/weldingtool/gatling/empty
 	category = "Engineering"
+
+/datum/design/pager
+	name = "Station Alerts Pager"
+	desc = "Alerts engineers of any triggered station alarms."
+	id = "pager"
+	req_tech = list(Tc_ENGINEERING = 3, Tc_BLUESPACE = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 500, MAT_GLASS = 200)
+	build_path = /obj/item/device/pager
+	category = "Engineering"

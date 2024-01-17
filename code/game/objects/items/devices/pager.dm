@@ -12,10 +12,10 @@ var/list/pager_list = list()
 	throwforce = 5.0
 	throw_range = 15
 	throw_speed = 3
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20)
+	starting_materials = list(MAT_IRON = 500, MAT_GLASS = 200)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_SILICON
-	origin_tech = Tc_ENGINEERING + "=3;" + Tc_MATERIALS + "=4"
+	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=2"
 	slot_flags = SLOT_BELT
 	var/muted = TRUE
 	var/list/prefs = list("Power","Fire","Atmosphere")
@@ -125,6 +125,8 @@ var/list/pager_list = list()
 	if(alarmtext == last_alert)
 		return
 	last_alert = alarmtext
+	var/sleeptime = rand(0,3)
+	sleep(sleeptime SECONDS) //provides some variety in when the pagers are triggered rather than all firing simultaneously
 	switch(alarmlevel)
 		if("silent")
 			icon_state = "pager_active"
