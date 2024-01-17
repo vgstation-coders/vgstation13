@@ -279,6 +279,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		var/response = alert(src, "It doesn't have to end here, the veil is thin and the dark energies in you soul cling to this plane. You may forsake this body and materialize as a Shade.","Sacrifice Body","Shade","Ghost","Stay in body")
 		switch (response)
 			if ("Shade")
+				if (!iscultist(src))
+					return
 				if (occult_muted())
 					to_chat(src, "<span class='danger'>Holy interference within your body prevents you from separating your shade from your body.</span>")
 				else

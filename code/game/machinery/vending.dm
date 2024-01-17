@@ -1282,11 +1282,10 @@ var/global/num_vending_terminals = 1
 		if (moody_state)
 			update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 		set_light(light_range_on, light_power_on)
-
+	
+	overlays -= panel_icon
 	if(panel_open)
 		overlays += panel_icon
-	else
-		overlays -= panel_icon
 
 /obj/machinery/vending/wirejack(var/mob/living/silicon/pai/P)
 	if(..())

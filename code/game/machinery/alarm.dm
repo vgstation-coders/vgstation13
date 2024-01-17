@@ -1211,22 +1211,28 @@ FIRE ALARM
 	overlays.len = 0
 	if(wiresexposed)
 		icon_state = "fire_b[buildstage]"
-		kill_moody_light()
+		kill_moody_light_all()
 		return
 
 	if(stat & BROKEN)
 		icon_state = "firex"
-		kill_moody_light()
+		kill_moody_light_all()
 	else if(stat & (FORCEDISABLE|NOPOWER))
 		icon_state = "firep"
-		kill_moody_light()
+		kill_moody_light_all()
 	else
 		icon_state = "fire[detecting ? "0" : "1"][shelter ? "s" : "e"]"
-		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_firealarm")
-		if(z == 1 && security_level)
-			src.overlays += image('icons/obj/monitors.dmi', "overlay_[get_security_level()]")
+		update_moody_light_index("detecting", 'icons/lighting/moody_lights.dmi', "overlay_firealarm_[detecting ? "" : "not"]detecting")
+		if (shelter)
+			update_moody_light_index("shelter", 'icons/lighting/moody_lights.dmi', "overlay_firealarm_shelter")
 		else
-			src.overlays += image('icons/obj/monitors.dmi', "overlay_green")
+			kill_moody_light_index("shelter")
+		if(z == map.zMainStation)
+			overlays += image('icons/obj/monitors.dmi', "overlay_[get_security_level()]")
+			update_moody_light_index("seclevel", 'icons/lighting/moody_lights.dmi', "overlay_firealarm_alert_[get_security_level()]")
+		else
+			overlays += image('icons/obj/monitors.dmi', "overlay_green")
+			update_moody_light_index("seclevel", 'icons/lighting/moody_lights.dmi', "overlay_firealarm_alert_green")
 
 /obj/machinery/firealarm/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(src.detecting)

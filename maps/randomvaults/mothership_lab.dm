@@ -1,6 +1,7 @@
 /datum/map_element/vault/mothership_lab
 	name = "Mothership Lab"
 	file_path = "maps/randomvaults/mothership_lab.dmm"
+	spawn_cost = 5
 
 	can_rotate = 0 // I doubt it would work
 

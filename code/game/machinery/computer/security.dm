@@ -584,5 +584,6 @@ What a mess.*/
 	icon_state = "messyfiles"
 	moody_state = "overlay_messyfiles"
 
+	light_range_on = 1
 	light_color = null
 	computer_flags = NO_ONOFF_ANIMS

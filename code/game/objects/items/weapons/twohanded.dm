@@ -106,6 +106,21 @@
 			W.shatter()
 		else
 			QDEL_NULL(A)
+	else if(A && wielded && (istype(A, /turf/simulated/floor))) //removes floor plating
+		var/turf/simulated/floor/T = A
+		to_chat(viewers(user), "<span class='danger'>[user] begins to remove the plating using \the [src]!</span>")
+		var/breaktime = 6 SECONDS
+		if(istype(user,/mob/living/carbon/human))
+			var/mob/living/carbon/human/H = user
+			if(H.get_strength() >= 2)
+				breaktime = 3 SECONDS
+		if(!do_after(user, T, breaktime, 3, custom_checks = new /callback(src, /obj/item/weapon/fireaxe/proc/on_do_after)))
+			return
+		playsound(src, 'sound/effects/plate_drop.ogg', 50, 1)
+		to_chat(viewers(user), "<span class='danger'>[user] finishes removing the plating!</span>")
+		add_gamelogs(user, "deconstructed \the [T] with \the [src]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
+		T.investigation_log(I_RCD,"was deconstructed by [user]") //not RCD but still fits in this category
+		T.ChangeTurf(T.get_underlying_turf())
 
 /obj/item/weapon/fireaxe/attackby(obj/item/I, mob/user)
 	if(istype(I,/obj/item/tool/crowbar/halligan))

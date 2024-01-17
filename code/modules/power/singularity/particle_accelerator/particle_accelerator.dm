@@ -227,20 +227,25 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 				if(O:use(1,user))
 					user.visible_message("[user.name] adds wires to the [src.name].", \
 						"You add some wires.")
+					playsound(loc, 'sound/items/zip.ogg', 20, 1)
 					temp_state++
 		if(2)
 			if(O.is_wirecutter(user))//TODO:Shock user if its on?
 				user.visible_message("[user.name] removes some wires from the [src.name].", \
 					"You remove some wires.")
+				O.playtoolsound(src, 25)
+				new /obj/item/stack/cable_coil(get_turf(user), 1)
 				temp_state--
 			else if(O.is_screwdriver(user))
 				user.visible_message("[user.name] closes the [src.name]'s access panel.", \
 					"You close the access panel.")
+				O.playtoolsound(src, 25)
 				temp_state++
 		if(3)
 			if(O.is_screwdriver(user))
 				user.visible_message("[user.name] opens the [src.name]'s access panel.", \
 					"You open the access panel.")
+				O.playtoolsound(src, 25)
 				temp_state--
 	if(temp_state == src.construction_state)//Nothing changed
 		return 0
@@ -374,11 +379,13 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 				if(O:use(1))
 					user.visible_message("[user.name] adds wires to the [src.name].", \
 						"You add some wires.")
+					playsound(loc, 'sound/items/zip.ogg', 20, 1)
 					temp_state++
 		if(2)
 			if(O.is_wirecutter(user))//TODO:Shock user if its on?
 				user.visible_message("[user.name] removes some wires from the [src.name].", \
 					"You remove some wires.")
+				O.playtoolsound(src, 25, extrarange = -6)
 				temp_state--
 			else if(O.is_screwdriver(user))
 				user.visible_message("[user.name] closes the [src.name]'s access panel.", \
