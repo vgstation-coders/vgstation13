@@ -1780,5 +1780,19 @@ var/global/list/image/blood_overlays = list()
 /obj/item/MiddleAltClick(var/mob/living/user)
 	if(src.on_fire)
 		extinguish()
-		user.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src], burning your hand in the process.")
+		var/prot = 0
+
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(H.gloves)
+				var/obj/item/clothing/gloves/G = H.gloves
+				if(G.max_heat_protection_temperature)
+					prot = (G.max_heat_protection_temperature > 360)
+		else
+			prot = 1
+
+		if(prot > 0 || (M_RESIST_HEAT in user.mutations) || (user.get_active_hand_organ()).is_robotic())
+			user.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src].")
+			return
 		user.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
+		user.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src], burning your hand in the process.")
