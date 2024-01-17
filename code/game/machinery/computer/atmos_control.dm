@@ -118,7 +118,7 @@ var/global/list/atmos_controllers = list()
 
 /obj/machinery/computer/atmoscontrol/proc/apply_preset(var/presetname)
 	var/list/done_areas = list() //a little optimization to avoid needlessly repeating apply_mode()
-	for(var/obj/machinery/alarm/alarm in machines)
+	for(var/obj/machinery/alarm/alarm in air_alarms)
 		if(alarm.preset != presetname)
 			continue
 		if(alarm.rcon_setting == RCON_NO)
@@ -164,7 +164,7 @@ var/global/list/atmos_controllers = list()
 		return
 
 	var/list/done_areas = list() //a little optimization to avoid needlessly repeating apply_mode()
-	for(var/obj/machinery/alarm/alarm in machines)
+	for(var/obj/machinery/alarm/alarm in air_alarms)
 		if(alarm.mode == mode)
 			continue
 		if(alarm.rcon_setting == RCON_NO)
@@ -205,7 +205,7 @@ var/global/list/atmos_controllers = list()
 		data["name"] = current.name
 	else
 		var/list/alarms=list()
-		for(var/obj/machinery/alarm/alarm in sortNames(machines)) // removing sortAtom because nano updates it just enough for the lag to happen
+		for(var/obj/machinery/alarm/alarm in sortNames(air_alarms)) // removing sortAtom because nano updates it just enough for the lag to happen
 			if(log_in_id)
 				if(!emagged && !user.hasFullAccess() && !alarm.check_access(log_in_id))
 					continue //The logged in ID has no access to this card, and the user isn't an all-access user (eg. admin ghost, AI, etc.)
