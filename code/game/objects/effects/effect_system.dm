@@ -422,6 +422,7 @@ steam.start() -- spawns the effect
 	var/direction
 	var/smoke_type = /obj/effect/smoke
 	var/time_to_live = 10 SECONDS
+	var/transparency_rate = 0 // Percent of smoke stacks spawned which will be transparent
 
 /datum/effect/system/smoke_spread/set_up(n = 5, c = 0, loca, direct)
 	if(n > 10)
@@ -444,6 +445,8 @@ steam.start() -- spawns the effect
 			if(holder)
 				src.location = get_turf(holder)
 			var/obj/effect/smoke/smoke = new smoke_type(src.location)
+			if(prob(transparency_rate))
+				smoke.opacity = FALSE
 			smoke.time_to_live = time_to_live
 			total_smoke++
 			var/direction = src.direction
@@ -460,6 +463,8 @@ steam.start() -- spawns the effect
 					qdel(smoke)
 				src.total_smoke--
 
+/datum/effect/system/smoke_spread/fire/start()
+	transparency_rate = 25 // 25% chance that a smoke stack will be transparent
 
 /datum/effect/system/smoke_spread/bad
 	smoke_type = /obj/effect/smoke/bad
