@@ -34,6 +34,10 @@ var/list/pda_multicasters = list()
 		QDEL_NULL(CAMO)
 	..()
 
+/obj/machinery/pda_multicaster/power_change()
+	..()
+	update_icon()
+
 /obj/machinery/pda_multicaster/update_icon()
 	if(stat & (FORCEDISABLE|BROKEN|NOPOWER|EMPED))
 		icon_state = "pda_server-nopower"
