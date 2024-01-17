@@ -25226,10 +25226,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/wood,
 /area/library)
-"bzm" = (
-/mob/living/simple_animal/cat/salem,
-/turf/simulated/floor/wood,
-/area/library)
 "bzn" = (
 /obj/machinery/photocopier,
 /turf/simulated/floor/wood,
@@ -25277,9 +25273,7 @@
 /turf/simulated/floor/wood,
 /area/library)
 "bzF" = (
-/obj/machinery/researcharchive{
-	icon_state = "computer_disk1"
-	},
+/obj/machinery/researcharchive,
 /turf/simulated/floor/wood,
 /area/library)
 "bzH" = (
@@ -264340,7 +264334,7 @@ btr
 bRs
 bRs
 rsx
-bzm
+bEA
 beV
 bEA
 bEA
