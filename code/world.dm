@@ -3,6 +3,7 @@
 
 var/world_startup_time
 var/date_string
+var/force_restart
 
 #if DM_VERSION < 515
 #error You need at least version 515 to compile
@@ -172,11 +173,8 @@ var/auxtools_path
 
 		var/notekey = copytext(T, 7)
 		return list2params(exportnotes(notekey))
-	else if(T == "port" && master)
-		if(src.port == 7777 || src.port == "7777")
-			src.OpenPort(7778)
-		else
-			src.OpenPort(7777)
+	else if(T == "force_restart")
+		return force_restart
 
 /world/Reboot(reason)
 	if(reason == REBOOT_HOST)
