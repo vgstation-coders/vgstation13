@@ -169,8 +169,8 @@ var/global/list/atmos_controllers = list()
 			continue
 		if(alarm.rcon_setting == RCON_NO)
 			continue //no messing with alarms with no remote control
-	//	if(! ( log_in_id && ( alarm.check_access (log_in_id ))) || emagged || usr.hasFullAccess( ))
-	//		continue
+		if(! ( emagged || usr.hasFullAccess() || (log_in_id&&(alarm.check_access(log_in_id)))))
+			continue
 		var/area/alarm_area = get_area(alarm)
 		if(alarm_area in done_areas)
 			continue
