@@ -7,8 +7,6 @@
 	plane = OBJ_PLANE
 	layer = EASEL_LAYER
 
-	var/obj/structure/painting/custom/painting = null
-
 	var/rest_overlay = "easel_rest" // Piece the canvas will rest upon
 	var/holder_overlay = "easel_holder" // Piece holding the canvas in place
 
@@ -42,14 +40,7 @@
 	// Place painting
 	if (!painting && istype(I, /obj/item/mounted/frame/painting/custom))
 		if(user.drop_item(I, loc))
-			var/obj/item/mounted/frame/painting/custom/frame = I
-			painting = frame.to_structure(null, user)
-			transfer_fingerprints(frame, painting)
-			painting.add_fingerprint(user)
-			qdel(frame)
-			lock_atom(painting)
-			to_chat(user, "<span class='notice'>You attach \the [painting] to \the [src]...</span>")
-			playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
+			place_painting(I,user)
 			update_icon()
 			return
 

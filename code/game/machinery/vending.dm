@@ -1282,7 +1282,7 @@ var/global/num_vending_terminals = 1
 		if (moody_state)
 			update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 		set_light(light_range_on, light_power_on)
-	
+
 	overlays -= panel_icon
 	if(panel_open)
 		overlays += panel_icon
@@ -3604,7 +3604,7 @@ var/global/num_vending_terminals = 1
 		"It's all fun and games at Al's Fun And Games!",
 		"Roll for initiative!",
 		"It's a full house of fun!",
-		"Caves and Wyverns 3rd edition available now!"
+		"Red Core 1st Edition available now!"
 	)
 	product_ads = list(
 		"Sponsored by Warlocks of the Shore.",
@@ -3618,7 +3618,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/pill_bottle/dice = 5,
 		/obj/item/weapon/storage/pill_bottle/dice/fudge = 5,
 		/obj/item/weapon/storage/pill_bottle/dice/d6 = 5,
-		/obj/item/weapon/storage/pill_bottle/dice/cup = 10
+		/obj/item/weapon/storage/pill_bottle/dice/cup = 10,
+		/obj/item/dicetower = 2,
+		/obj/item/battlemat = 2,
+		/obj/item/weapon/storage/box/redcore = 1
 		)
 	contraband = list(
 		/obj/item/weapon/dice/loaded = 3,
@@ -3638,7 +3641,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/dice/loaded = 15,
 		/obj/item/weapon/dice/loaded/d20 = 15,
 		/obj/item/weapon/skull = 20,
-		/obj/item/weapon/storage/bag/wiz_cards/frog = 20
+		/obj/item/weapon/storage/bag/wiz_cards/frog = 20,
+		/obj/item/dicetower = 50,
+		/obj/item/battlemat = 40,
+		/obj/item/weapon/storage/box/redcore = 60
 		)
 
 	pack = /obj/structure/vendomatpack/games

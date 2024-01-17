@@ -129,7 +129,7 @@ var/global/list/ghdel_profiling = list()
 		pixel_x = initialpixelx
 		pixel_y = initialpixely
 
-
+//xy: 1 if shakes horizontally, 2 if vertical, 3 if both
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
 	var/old_pixel_x = pixel_x
 	var/old_pixel_y = pixel_y
