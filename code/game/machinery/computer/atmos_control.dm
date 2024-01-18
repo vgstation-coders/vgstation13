@@ -503,7 +503,7 @@ var/global/list/atmos_controllers = list()
 			var/newmode = scrubmodes[choice]
 			var/areyouforreal = alert(usr, "Are you sure you wish to change the mode of every air alarm to [choice]?",,"Yes", "No") == "Yes" ? 1 : 0
 			if(areyouforreal && ((log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess())))
-				if(!usr.incapacitated() && (Adjacent(usr) || isAI(usr)) && !(stat & (FORCEDISABLE|NOPOWER) && usr.dexterity_check()))
+				if(!usr.incapacitated() && (Adjacent(usr) || issilicon(usr)) && !(stat & (FORCEDISABLE|NOPOWER) && usr.dexterity_check()))
 					mass_set_mode(newmode)
 
 
