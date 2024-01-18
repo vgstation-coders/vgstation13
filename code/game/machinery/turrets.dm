@@ -822,7 +822,7 @@
 			continue
 		playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
 		if(roulette_mode)
-			projectile_type = choose_projectile()
+			projectile_type = pick(available_projectiles - restricted_projectiles)
 		var/obj/item/projectile/A = new projectile_type(curloc)
 		src.projectiles--
 		A.original = target
@@ -836,12 +836,6 @@
 		sleep(2)
 	return
 
-/obj/structure/turret/gun_turret/proc/choose_projectile()
-	var/chosen_projectile = pick(available_projectiles)
-	for(var/I in restricted_projectiles)
-		if(chosen_projectile == I)
-			choose_projectile()
-	return(chosen_projectile)
 /obj/structure/turret/gun_turret/admin
 	admin_only = 1
 
