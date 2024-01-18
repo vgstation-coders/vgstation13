@@ -141,10 +141,6 @@ var/global/datum/library_catalog/library_catalog = new()
 	if(istype(O, /obj/item/weapon/book))
 		user.drop_item(O, src)
 	if(istype(O, /obj/item/mounted/frame/painting/custom))
-		var/obj/item/mounted/frame/painting/custom/PC = O
-		if(!PC.can_upload)
-			to_chat(user,"<span class='warning'>\The [PC] can't be scanned.</span>")
-			return
 		user.drop_item(O, src)
 	else
 		return ..()

@@ -2,18 +2,11 @@
 	icon = 'icons/obj/structures.dmi'
 	penetration_dampening = 5
 	var/hasbolts = FALSE
-	var/obj/structure/painting/custom/painting = null
 
 /obj/structure/examine(mob/user)
 	..()
 	if(hasbolts)
 		to_chat(user,"<span class='info'>This one is bolted into place.</span>")
-
-/obj/structure/unlock_atom(var/atom/movable/AM)
-	..()
-	if (painting == AM)
-		painting = null
-		update_icon()
 
 /obj/structure/blob_act(var/destroy = 0)
 	..()
@@ -72,14 +65,3 @@
 
 /obj/structure/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)
-
-/obj/structure/proc/place_painting(var/obj/item/mounted/frame/painting/custom/PC,mob/user)
-	var/obj/item/mounted/frame/painting/custom/frame = PC
-	painting = frame.to_structure(null, user)
-	transfer_fingerprints(frame, painting)
-	painting.add_fingerprint(user)
-	qdel(frame)
-	lock_atom(painting)
-	to_chat(user, "<span class='notice'>You attach \the [painting] to \the [src]...</span>")
-	playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
-	return painting

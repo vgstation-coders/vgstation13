@@ -443,27 +443,6 @@
 		C.synthesize()
 		return
 
-	/*if (istype(W, /obj/item/mounted/frame/painting/custom/gameboard))
-		if(!(dir in diagonal)) //Don't exit, let them place it on the table but not mount
-			to_chat(user, "<span class='notice'>\The [W] needs a corner to mount.</span>")
-		else
-			place_painting(W, user)
-			if(!painting)
-				return
-			switch(dir)
-				if(NORTHEAST)
-					painting.pixel_x = 02
-					painting.pixel_y = 0
-				if(SOUTHEAST)
-					painting.pixel_x = 0
-					painting.pixel_y = -32
-				if(SOUTHWEST)
-					painting.pixel_x = -32
-					painting.pixel_y = -32
-				if(NORTHWEST)
-					painting.pixel_x = -32
-					painting.pixel_y = 0*/
-
 	if (user.drop_item(W, src.loc))
 		if(W.loc == src.loc && params)
 			W.setPixelOffsetsFromParams(params, user, pixel_x, pixel_y)
