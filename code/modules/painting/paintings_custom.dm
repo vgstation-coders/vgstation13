@@ -278,7 +278,6 @@
 
 	var/framed = FALSE
 	var/protected_by_glass = FALSE
-	var/can_upload = TRUE
 
 	// Icon to render our painting data on
 	var/base_icon = 'icons/obj/paintings.dmi'
@@ -566,44 +565,3 @@
 	painting_offset_y = 4
 	// Material data
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 5)
-
-/* Game master's battle mat
-/obj/item/mounted/frame/painting/custom/gameboard
-	name = "battle mat"
-	base_name = "battle mat"
-	desc = "A sprawlingly huge mat that can be painted to provide a place for tabletop gaming."
-	base_desc = "A sprawlingly huge mat that can be painted to provide a place for tabletop gaming."
-	icon = 'icons/obj/posters.dmi'
-	icon_state = "rolled_poster"
-	base_icon = 'icons/obj/objects_64x64.dmi'
-	base_icon_state = "blank_gamemat"
-	frame_icon_state = null
-	painting_height = 24
-	painting_width = 24
-	painting_offset_x = 4
-	painting_offset_y = 4
-	// Material data
-	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 5)
-	can_upload = FALSE
-
-/obj/item/mounted/frame/painting/custom/gameboard/do_build(turf/on_wall, mob/user)
-	if(on_wall)
-		to_chat(user, "<span class='warning'>The gameboard needs to be placed on a large table.</span>")
-		return
-	..()
-
-/obj/structure/painting/custom/gameboard
-	name = "battle mat"
-	base_name = "battle mat"
-	desc = "A sprawlingly huge mat that can be painted to provide a place for tabletop gaming."
-	base_desc = "A sprawlingly huge mat that can be painted to provide a place for tabletop gaming."
-	//icon = 'icons/obj/posters.dmi'
-	//icon_state = "rolled_poster"
-	icon = 'icons/obj/objects_64x64.dmi'
-	icon_state = "blank_gamemat"
-	frame_icon_state = null //Cannot frame
-	painting_height = 48
-	painting_width = 48
-	painting_offset_x = 0
-	painting_offset_y = 0
-	starting_materials = list(MAT_WOOD = CC_PER_SHEET_PLASTIC * 10)*/
