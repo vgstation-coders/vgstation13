@@ -23,12 +23,8 @@ var/list/pager_list = list()
 	var/alert_delay = 10 SECONDS
 	var/last_alert = ""
 
-/obj/item/device/pager/proc/get_pager_list()
-	return pager_list
-
 /obj/item/device/pager/New()
 	..()
-	pager_list = get_pager_list()
 	pager_list += src
 	//default pager settings
 	prefs["Power"] = "quiet"
@@ -40,15 +36,12 @@ var/list/pager_list = list()
 	..()
 
 /obj/item/device/pager/update_icon()
-	if(muted)
-		icon_state = "pager_muted"
-		return
-	icon_state = "pager_inactive"
+	icon_state = muted ? "pager_muted" : "pager_inactive"
 
-/obj/item/device/pager/attack_self(mob/user as mob)
+/obj/item/device/pager/attack_self(mob/user)
 	interact(user)
 
-/obj/item/device/pager/interact(mob/user as mob)
+/obj/item/device/pager/interact(mob/user)
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
 	dat += {"
 		<ul>
