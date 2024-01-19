@@ -593,23 +593,7 @@
 	var/admin_only = 0 //Can non-admins interface with this turret's controls?
 	var/roulette_mode = FALSE
 	var/list/available_projectiles = list()
-	var/list/restricted_projectiles = list(
-		/obj/item/projectile,
-		/obj/item/projectile/energy,
-		/obj/item/projectile/hookshot,
-		/obj/item/projectile/bullet/blastwave,
-		/obj/item/projectile/beam/lightning,
-		/obj/item/projectile/beam/procjectile,
-		/obj/item/projectile/beam/lightning/spell,
-		/obj/item/projectile/rocket/nikita,
-		/obj/item/projectile/test,
-		/obj/item/projectile/beam/emitter,
-		/obj/item/projectile/meteor,
-		/obj/item/projectile/spell_projectile,
-		/obj/item/projectile/stickybomb,
-		/obj/item/projectile/beam/lightlaser,
-		/obj/item/projectile/portalgun,
-		)
+
 	health = 40
 	var/list/scan_for = list("human"=0,"cyborg"=0,"mecha"=0,"alien"=1)
 	var/on = 0
@@ -822,7 +806,7 @@
 			continue
 		playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
 		if(roulette_mode)
-			projectile_type = pick(available_projectiles - restricted_projectiles)
+			projectile_type = pick(available_projectiles - restricted_roulette_rojectiles)
 		var/obj/item/projectile/A = new projectile_type(curloc)
 		src.projectiles--
 		A.original = target
