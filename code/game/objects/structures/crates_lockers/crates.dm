@@ -16,12 +16,6 @@
 	var/sound_effect_open = 'sound/machines/click.ogg'
 	var/sound_effect_close = 'sound/machines/click.ogg'
 
-/obj/structure/closet/crate/open(mob/user)
-	for(var/obj/item/I in contents)
-		if(I.w_class <= W_CLASS_SMALL)
-			jiggle(I)
-	..()
-
 /obj/structure/closet/crate/proc/jiggle(var/obj/item/I)
 	var/jx = I.w_class == W_CLASS_TINY ? 7 : 3
 	var/jy = I.w_class == W_CLASS_TINY ? 3 : 1
@@ -452,6 +446,10 @@
 	if(!src.can_open())
 		return 0
 	playsound(src, sound_effect_open, 15, 1, -3)
+
+	for(var/obj/item/I in contents)
+		if(I.w_class <= W_CLASS_SMALL)
+			jiggle(I)
 
 	dump_contents()
 
