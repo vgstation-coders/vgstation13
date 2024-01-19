@@ -152,16 +152,14 @@
 		bound_height = 2*WORLD_ICON_SIZE
 		switch(O.dir)
 			if(NORTHEAST, NORTH, EAST)
-				pixel_x = 0
-				pixel_y = 0
+				//No action, this statement for clarity only
 			if(SOUTHEAST, SOUTH)
-				pixel_x = 0
-				pixel_y = -32
+				forceMove(get_step(loc,SOUTH))
 			if(SOUTHWEST)
-				pixel_x = -32
-				pixel_y = -32
+				forceMove(get_step(loc,SOUTHWEST))
 			if(NORTHWEST, WEST)
-				pixel_x = -32
-				pixel_y = 0
+				forceMove(get_step(loc,WEST))
+		pixel_x = 0
+		pixel_y = 0
 		return TRUE
 	return FALSE
