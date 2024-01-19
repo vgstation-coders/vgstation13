@@ -64,8 +64,10 @@ var/list/pager_list = list()
 	dat += "Loud will announce an alert and play a sound effect.<BR><BR>"
 	dat += "Pager status: [muted ? "<A href='byond://?src=\ref[src];toggle_mute'>Muted</A>" : "<A href='byond://?src=\ref[src];toggle_mute'>Active</A>"]<BR>"
 
-	user << browse(dat, "window=pager")
-	onclose(user, "pager")
+	dat = jointext(dat,"")
+	var/datum/browser/popup = new(user, "\ref[src]", name, 400, 500)
+	popup.set_content(dat)
+	popup.open()
 	return
 
 /obj/item/device/pager/Topic(href, href_list)
