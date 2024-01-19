@@ -496,6 +496,7 @@
 				target = get_turf(signal.source)
 			path = list()
 			patrol_path = list()
+			destinations_queue = list()
 			return 1
 		if ("switch_power")
 			if (on)
@@ -516,11 +517,14 @@
 /datum/bot/order/mule
 	var/atom/thing_to_load
 	var/unload_here = FALSE
+	var/unload_dir = 0
 
-/datum/bot/order/mule/New(var/turf/place_to_go, var/atom/thing, _unload_here = FALSE)
+/datum/bot/order/mule/New(var/turf/place_to_go, var/atom/thing, _unload_here = FALSE, var/unload_direction)
 	destination = place_to_go
 	thing_to_load = thing
 	unload_here = _unload_here
+	unload_dir = unload_direction
+	astar_debug_mulebots("Order up! [destination] [thing_to_load] [unload_here] [unload_dir]!")
 
 /datum/bot/order/mule/unload
 

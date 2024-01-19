@@ -225,12 +225,17 @@
 		if (mule.z != user.z)
 			continue
 		dat += {"<li>
-				<i>[mule]</i>: [mule.return_status()] in [get_area_name(mule)] <br/>
-				<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=summon;user=\ref[user]'>[mule.summoned ? "Halt" : "Summon"] <br/>
-				<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=switch_power;user=\ref[user]'>Turn [mule.on ? "off" : "on"] <br/>
-				<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=return_home;user=\ref[user]'>Send home</a> <br/>
-				<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=send_to;place=\ref[cart_device.saved_destination];user=\ref[user]'>Send to: [cart_device.saved_destination]</a> - <a href='?src=\ref[src];change_destination=1'>EDIT</a> <br/>
-				</li>"}
+				<i>[mule]</i> - Charge: [mule.cell ? mule.cell.percent() : 0]%<br/>
+				[mule.return_status()] in [get_area_name(mule)]<br/>"}
+		var/atom/load = mule.return_load()
+		if(load)
+			dat += {"Loaded: [load.name] <br/>"}
+		if(mule.on)
+			dat +=	{"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=summon;user=\ref[user]'>[mule.summoned ? "Halt" : "Summon"] </a><br/>"}
+		dat += {"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=switch_power;user=\ref[user]'>Turn [mule.on ? "off" : "on"]</a> <br/>"}
+		if(mule.on)
+			dat += {"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=return_home;user=\ref[user]'>Send home</a> <br/><a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=send_to;place=\ref[cart_device.saved_destination];user=\ref[user]'>Send to: [cart_device.saved_destination]</a> - <a href='?src=\ref[src];change_destination=1'>EDIT</a> <br/>
+			</li>"}
 	dat += "</ul>"
 	return dat
 
@@ -244,9 +249,7 @@
 				continue
 			if(found.freq == 1400)
 				foundbeacons.Add(found.location)
-				astar_debug("Frequency located: [found.location]")
 		var/new_dest = input(usr, "Set the new destination", "New mulebot destination") as null|anything in foundbeacons
 		if (new_dest)
-			astar_debug("Set saved_dest as: [new_dest]")
 			cart_device.saved_destination = new_dest
 	refresh_pda()
