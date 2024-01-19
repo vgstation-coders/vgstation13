@@ -140,3 +140,9 @@ var/list/pager_list = list()
 				last_alert_time = world.time
 			sleep(3 SECONDS)
 			update_icon()
+
+/obj/item/device/pager/emp_act(severity)
+	muted = TRUE
+	for(var/pref in prefs)
+		prefs[pref] = "silent"
+	update_icon()
