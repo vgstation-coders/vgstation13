@@ -310,7 +310,8 @@ var/global/mulebot_count = 0
 			return
 		else // It's a new destination !
 			astar_debug_mulebots("New destination started: [command]")
-			start()
+			set_destination(command)
+			//start()
 
 // returns the wire panel text
 /obj/machinery/bot/mulebot/proc/wires()
@@ -591,7 +592,9 @@ var/global/mulebot_count = 0
 			else if(newdir == (EAST + WEST))
 				newdir = EAST
 			goingdir = newdir
-		next.AddTracks(/obj/effect/decal/cleanable/blood/tracks/wheels,list(),0,goingdir,currentBloodColor)
+		if(bloodiness)
+			next.AddTracks(/obj/effect/decal/cleanable/blood/tracks/wheels,list(),0,goingdir,currentBloodColor)
+			bloodiness--
 
 // starts bot moving to current destination
 /obj/machinery/bot/mulebot/proc/start()
@@ -629,8 +632,8 @@ var/global/mulebot_count = 0
 		awaiting_beacon = 0
 		return 1
 	// -- Command signals --
-	if (signal.data["assigned_mulebot"])
-		var/obj/machinery/bot/mulebot/chosen_mulebot = locate(signal.data["assigned_mulebot"])
+	if (signal.data["target"])
+		var/obj/machinery/bot/mulebot/chosen_mulebot = locate(signal.data["target"])
 		if (chosen_mulebot != src)
 			return
 	var/command = signal.data["command"]
@@ -833,7 +836,7 @@ var/global/mulebot_count = 0
 	new /obj/effect/decal/cleanable/blood/oil(src.loc)
 	unload(0)
 	qdel(src)
-
+/*
 /obj/machinery/bot/mulebot/process_pathing()
 	astar_debug_mulebots("process_pathing mulebot")
 	if(path.len)
@@ -845,12 +848,8 @@ var/global/mulebot_count = 0
 				var/turf/obstacle = path[1]
 				var/stop_a_tile_before = current_order.thing_to_load != null
 				path = get_path_to(src, current_order.destination, 30, stop_a_tile_before, botcard, TRUE, obstacle)
-				if(path.len)
-					bots_list.Remove(src)
 				frustration = 0
 			else // end of path
-				if(!(src in bots_list))
-					bots_list.Add(src)
 				return
 		spawn(SS_WAIT_BOTS/steps_per)
 			process_pathing()
@@ -859,12 +858,11 @@ var/global/mulebot_count = 0
 			var/datum/bot/order/mule/new_order = new(get_turf(target), null, FALSE)
 			destinations_queue.Add(new_order)
 		if(destinations_queue.len)
-			astar_debug_mulebots("destination_queue non empty")
+			astar_debug_mulebots("destination_queue non empty, [destination]")
 			current_order = shift(destinations_queue)
 			var/stop_a_tile_before = current_order.thing_to_load != null
 			path = get_path_to(src, current_order.destination, 30, stop_a_tile_before, botcard)
 			if(path.len)
-				bots_list.Remove(src)
 				process_pathing()
 
 /obj/machinery/bot/mulebot/process_astar_path()
@@ -893,6 +891,12 @@ var/global/mulebot_count = 0
 	playsound(loc, 'sound/machines/ping.ogg', 50, 0)
 	frustration = 0
 	current_order = null
+	astar_debug_mulebots("dest arrived!")
+	icon_state = "[icon_initial]0"
+	if (summoned)
+		summoned  = FALSE
+		destination = ""
+		target = null
 
 // returns true if it's still below the frustration threshold
 /obj/machinery/bot/mulebot/on_path_step_fail(var/turf/next)
@@ -928,7 +932,7 @@ var/global/mulebot_count = 0
 		return FALSE
 	destinations_queue += order
 	return TRUE
-
+*/
 /obj/item/proc/is_pointer(var/mob/user)
 	return FALSE
 
@@ -1010,7 +1014,7 @@ var/global/mulebot_count = 0
 		point_effect(/obj/effect/decal/point/go_here, tile, atom)
 
 	if (my_mulebot)
-		signal.data["assigned_mulebot"] = "[\ref(my_mulebot)]"
+		signal.data["target"] = "[\ref(my_mulebot)]"
 
 	radio_connection.post_signal(src, signal, filter = RADIO_MULEBOT)
 

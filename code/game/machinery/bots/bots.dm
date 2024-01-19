@@ -12,7 +12,7 @@
 #if ASTAR_DEBUG == 1
 #define log_astar_bot(text) visible_message("[src] : [text]")
 #define log_astar_beacon(text) //to_chat(world, "[src] : [text]")
-#define log_astar_command(text) //to_chat(world, "[src] : [text]")
+#define log_astar_command(text) to_chat(world, "[src] : [text]")
 #else
 #define log_astar_bot(text)
 #define log_astar_beacon(text)
@@ -171,8 +171,8 @@
 
 /obj/machinery/bot/proc/decay_oldtargets()
 	for(var/i in old_targets)
-		log_astar_bot("[i] [old_targets[i]]")
-		if(--old_targets[i] == 0)
+		log_astar_bot("old target: [i] [old_targets[i]]")
+		if(--old_targets[i] <= 0)
 			remove_oldtarget(i)
 
 // Can we move to the next tile or not ?
