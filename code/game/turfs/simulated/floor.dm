@@ -561,9 +561,27 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 				if(T.type == floor_tile.type)
 					return
 				if(T.use(1))
-					floor_tile.forceMove(src)
-					floor_tile = null
-					make_tiled_floor(T)
+					if(is_wood_floor())
+						qdel(floor_tile)
+						make_tiled_floor(T)
+						return
+					else
+						floor_tile.forceMove(src)
+						floor_tile = null
+						make_tiled_floor(T)
+						return
+			return
+		else if(istype(user.get_inactive_hand(), /obj/item/tool/screwdriver))
+			if(is_wood_floor())
+				var/obj/item/stack/tile/T = C
+				if(istype(T))
+					if(T.type == floor_tile.type)
+						return
+					if(T.use(1))
+						floor_tile.forceMove(src)
+						floor_tile = null
+						make_tiled_floor(T)
+			return
 	else if(isshovel(C))
 		if(is_grass_floor())
 			playsound(src, 'sound/items/shovel.ogg', 50, 1)
