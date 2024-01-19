@@ -205,7 +205,7 @@
 	if(tolerance_increase)
 		M.tolerated_chems[src.id] += tolerance_increase
 
-	M.nutrition += nutriment_factor	//Centralized nutritional values
+	M.nutrition += nutriment_factor * (M.size <= SIZE_SMALL ? 2 : 1)	//More nourishing if small
 	if(M.nutrition < 0) //Prevent from going into negatives
 		M.nutrition = 0
 
