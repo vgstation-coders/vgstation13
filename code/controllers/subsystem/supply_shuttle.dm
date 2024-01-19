@@ -312,7 +312,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			continue
 		var/contcount
 		for(var/atom/A in T.contents)
-			if(islightingoverlay(A))
+			if(islightingoverlay(A) || istype(A, /obj/machinery/conveyor))
 				continue
 			contcount++
 		if(contcount)
