@@ -4,7 +4,7 @@ var/req_console_assistance = list()
 var/req_console_supplies = list()
 var/req_console_information = list()
 var/list/obj/machinery/requests_console/requests_consoles = list()
-var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" = list(),"Medical" = list(),"Research" = list(),"Service" = list(),"Security" = list(),"Cargo" = list(),"Civillian" = list(),"other" = list())
+var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" = list(),"Medical" = list(),"Research" = list(),"Service" = list(),"Security" = list(),"Cargo" = list(),"Civilian" = list(),"other" = list())
 
 /obj/machinery/requests_console
 	name = "requests console"
@@ -58,8 +58,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	var/priority = -1 ; //Priority of the message being sent
 	var/announceSound = 'sound/vox/_bloop.wav'
 	luminosity = 0
-	use_auto_lights = 1
-
+	
 	var/obj/landline/landline
 
 /obj/machinery/requests_console/power_change()
@@ -67,35 +66,19 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	update_icon()
 
 /obj/machinery/requests_console/update_icon()
-	if(open)
-		kill_moody_light()
-		if(!hackState)
-			icon_state="req_comp_open"
-		else
-			icon_state="req_comp_rewired"
-	else
-		if(stat & (FORCEDISABLE|NOPOWER))
-			kill_moody_light()
+	if(stat & (FORCEDISABLE|NOPOWER))
+		if(icon_state != "req_comp_off")
 			icon_state = "req_comp_off"
-		else
-			switch (newmessagepriority)
-				if (1)
-					icon_state = "req_comp2"
-					update_moody_light('icons/lighting/moody_lights.dmi', "overlay_req_comp2")
-				if (2)
-					icon_state = "req_comp3"
-					update_moody_light('icons/lighting/moody_lights.dmi', "overlay_req_comp3")
-				else
-					icon_state = "req_comp0"
-					update_moody_light('icons/lighting/moody_lights.dmi', "overlay_req_comp0")
+	else
+		if(icon_state == "req_comp_off")
+			icon_state = "req_comp0"
 
 /obj/machinery/requests_console/New()
 	requests_consoles += src
 	set_master_department(department)
 	set_department(department,departmentType)
 	landline = new /obj/landline (src, src)
-	. = ..()
-	update_icon()
+	return ..()
 
 /obj/machinery/requests_console/Destroy()
 	requests_consoles -= src
@@ -159,7 +142,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	var/list/security = list("Head of Security's Desk","Security")
 	var/list/service = list("Bar","Hydroponics","Kitchen","Head of Personnel's Desk")
 	var/list/cargo = list("Head of Personnel's Desk","Cargo Bay")
-	var/list/civillian = list("Pod Bay","Tool Storage","Chapel","EVA","Arrival shuttle","Locker Room","Janitorial","Head of Personnel's Desk")
+	var/list/civilian = list("Pod Bay","Tool Storage","Chapel","EVA","Arrival shuttle","Locker Room","Janitorial","Head of Personnel's Desk")
 	for(var/subdept in command)
 		if(name == subdept)
 			master_department += "Command"
@@ -188,15 +171,15 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 		if(name == subdept)
 			master_department += "Service"
 			master_department_short = "d"
-	for(var/subdept in civillian)
+	for(var/subdept in civilian)
 		if(name == subdept)
-			master_department += "Civillian"
+			master_department += "Civilian"
 			master_department_short = ";"
 	if(isemptylist(master_department))
 		master_department += "other" //stuff without a proper department, ie telecomms and AIcore
 		master_department_short = "?"
 	add_to_global_rc_list()
-
+	
 
 /obj/machinery/requests_console/attack_ghost(user as mob)
 	if(..())
@@ -289,7 +272,8 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 					for (var/obj/machinery/requests_console/Console in requests_consoles)
 						if (Console.department == department)
 							Console.newmessagepriority = 0
-							Console.update_icon()
+							Console.icon_state = "req_comp0"
+							Console.set_light(1)
 				for(var/msg in messages)
 					dat += text("[msg]<BR>")
 				dat += text("<A href='?src=\ref[src];setScreen=0'>Back to main menu</A><BR>")
@@ -313,7 +297,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 				if ((announceAuth || is_malf_owner(user)) && message)
 					dat += text("<A href='?src=\ref[src];sendAnnouncement=1'>Announce</A><BR>")
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
-
+				
 			if(11) //select console to dial from previously chosen department
 				dat += text("Available [landline.chosen_department] telephones:<BR>")
 				for(var/obj/machinery/requests_console/subdept in requests_consoles_categorised[landline.chosen_department])
@@ -324,7 +308,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 			if(12) //last call log
 				dat += landline.last_call_log
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back to main menu</A><BR>")
-
+			
 			else	//main menu
 				screen = 0
 				announceAuth = 0
@@ -337,9 +321,9 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 				dat += text("<A href='?src=\ref[src];setScreen=1'>Request Assistance</A><BR>")
 				dat += text("<A href='?src=\ref[src];setScreen=2'>Request Supplies</A><BR>")
 				dat += text("<A href='?src=\ref[src];setScreen=3'>Relay Anonymous Information</A><BR><BR>")
+				
 				dat += text("<A href='?src=\ref[src];setScreen=4'>Make a call</A><BR>")
 				dat += text("<A href='?src=\ref[src];setScreen=12'>Last call log</A><BR><BR>")
-
 				if(announcementConsole)
 					dat += text("<A href='?src=\ref[src];setScreen=10'>Send station-wide announcement</A><BR><BR>")
 				
@@ -423,7 +407,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 							if(2)		//High priority
 								if(Console.newmessagepriority < 2)
 									Console.newmessagepriority = 2
-									Console.update_icon()
+									Console.icon_state = "req_comp3"
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request_urgent.ogg', 50, 1)
 									Console.visible_message("The [Console] beeps; <span class='bold'>PRIORITY Alert at [department]</span>")
@@ -446,7 +430,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 							else		// Normal priority
 								if(Console.newmessagepriority < 1)
 									Console.newmessagepriority = 1
-									Console.update_icon()
+									Console.icon_state = "req_comp2"
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
 									Console.visible_message("The [Console] beeps; Message from [department]")
@@ -455,6 +439,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 									sleep(10)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
 								Console.messages += "<B>Message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[sending]"
+						Console.set_light(2)
 				messages += "<B>Message sent to [dpt]</B><BR>[message]"
 			else
 				say("NOTICE: No server detected!")
@@ -469,7 +454,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 			screen = 2
 		if(3)		//relay information
 			screen = 3
-		if(4)		//landline telephone
+		if(4)		//landline telephone 
 			screen = 4
 		if(5)		//configure
 			screen = 5
@@ -496,33 +481,23 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 			screen = 0
 
 	//Handle silencing the console
-	switch( href_list["toggleSilent"] )
-		if(null)	//skip
-		if("1")
-			silent = !silent
-	switch( href_list["toggleRinger"] )
-		if(null)
-		if("1")
-			landline.ringer = !landline.ringer
-	switch( href_list["setDepartment"] )
-		if(null)	//skip
-		else
-			var/name = reject_bad_text(input(usr,"Name:","Name this department.","Public") as null|text)
-			set_department(name,text2num(href_list["setDepartment"]))
-	switch( href_list["dialDepartment"] )
-		if(null)
-		else
-			landline.chosen_department = href_list["dialDepartment"]
-			screen = 11
-	switch( href_list["dialConsole"] )
-		if(null)
-		else
-			landline.last_call_log = text("<B>Last call log:</B><BR><BR>")
-			var/obj/machinery/requests_console/R = locate(href_list["dialConsole"])
-			var/a = landline.start_call(R.landline)
-			landline.last_call_log += text("[a]<BR>")
-			screen = 12
-
+	if(href_list["toggleSilent"] )
+		silent = !silent
+	if(href_list["toggleRinger"] )
+		landline.ringer = !landline.ringer
+	if(href_list["setDepartment"] )
+		var/name = reject_bad_text(input(usr,"Name:","Name this department.","Public") as null|text)
+		set_department(name,text2num(href_list["setDepartment"]))
+	if(href_list["dialDepartment"] )
+		landline.chosen_department = href_list["dialDepartment"]
+		screen = 11
+	if(href_list["dialConsole"] )
+		landline.last_call_log = text("<B>Last call log:</B><BR><BR>")
+		var/obj/machinery/requests_console/R = locate(href_list["dialConsole"])
+		var/a = landline.start_call(R.landline)
+		landline.last_call_log += text("[a]<BR>")
+		screen = 12
+		
 	updateUsrDialog()
 	return
 
@@ -558,14 +533,25 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 					//deconstruction and hacking
 /obj/machinery/requests_console/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
 	if (iscrowbar(O))
-		open = !open
-		update_icon()
+		if(open)
+			open = 0
+			icon_state="req_comp0"
+		else
+			open = 1
+			if(!hackState)
+				icon_state="req_comp_open"
+			else
+				icon_state="req_comp_rewired"
 	if (O.is_screwdriver(user))
 		if(open)
-			hackState = !hackState
-			update_icon()
+			if(!hackState)
+				hackState = 1
+				icon_state="req_comp_rewired"
+			else
+				hackState = 0
+				icon_state="req_comp_open"
 		else
-			to_chat(user, "You can't do much with that with its cover closed.")
+			to_chat(user, "You can't do much with that.")
 	if(O.is_wrench(user) && open && !departmentType)
 		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
 		O.playtoolsound(src, 100)
@@ -602,24 +588,22 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 			updateUsrDialog()
 	if (istype(O, /obj/item/telephone) && landline)
 		landline.attackby(O, user)
-	return
 
 /obj/machinery/requests_console/verb/pick_up_phone()
 	set category = "Object"
 	set name = "Pick up telephone"
-	set src in oview(1)
+	set src in view(1)
 	if(!landline)
-		to_chat(usr, "\the [src] model does not come with a telephone!")
+		to_chat(usr, "<span class='notice'>\the [src] model does not come with a telephone!</span>")
 		return
-	//moved to landline
 	landline.pick_up_phone(usr)
 
 /obj/machinery/requests_console/CtrlClick(mob/user)
 	if(!Adjacent(user))
 		to_chat(user, "<span class='notice'>You are too far away!</span>")
 		return
-	src.pick_up_phone(user)
-
+	pick_up_phone(user)
+	
 /obj/machinery/requests_console/mechanic
 	name = "\improper Mechanics requests console"
 	department = "Mechanics"

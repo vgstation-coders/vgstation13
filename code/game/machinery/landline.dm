@@ -1,4 +1,4 @@
-/obj/phone_cord
+/obj/effect/phone_cord
 	name = "telephone cord"
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "phone_cord"
@@ -18,10 +18,10 @@
 	var/overlay_icon = 'icons/obj/terminals.dmi'
 	var/overlay_iconstate = "phone_overlay"
 	var/tether_length = 4
-	var/list/obj/phone_cord/linked_cord = list()
+	var/list/obj/effect/phone_cord/linked_cord = list()
 	var/list/obj/item/telephone/switchboard/listening_operators = list()
 
-/obj/landline/New(var/obj/A)
+/obj/landline/New(var/obj/A=loc)
 	attached_to = A
 	linked_phone = new phone_type (src)
 	linked_phone.linked_landline = src
@@ -61,15 +61,15 @@
 	if(src.attached_to.pixel_y > 15)
 		first_offset = NORTH
 	if(first_offset)
-		cable1 = new /obj/phone_cord (T)
+		cable1 = new /obj/effect/phone_cord (T)
 		cable1.dir = first_offset
 		linked_cord += cable1
 	var/list/getstepto = get_steps_to(src.attached_to, linked_phone.loc)
 	for(var/D in getstepto)
-		cable2 = new /obj/phone_cord (T)
+		cable2 = new /obj/effect/phone_cord (T)
 		cable2.dir = D
 		T = get_step(T,D)
-		cable1 = new /obj/phone_cord (T)
+		cable1 = new /obj/effect/phone_cord (T)
 		cable1.dir = turn(D,180)
 		linked_cord += cable1
 		linked_cord += cable2
@@ -140,13 +140,13 @@
 
 /obj/landline/proc/pick_up_phone(mob/user)
 	if(!ishuman(user))
-		to_chat(user, "You are not capable of such fine manipulation.")
+		to_chat(user, "<span class='notice'>You are not capable of such fine manipulation.</span>")
 		return
 	if(user.incapacitated())
-		to_chat(user, "You cannot do this while incapacitated.")
+		to_chat(user, "<span class='notice'>You cannot do this while incapacitated.</span>")
 		return
 	if(!phone)
-		to_chat(user, "\the [src] has no telephone!")
+		to_chat(user, "<span class='notice'>\the [src] has no telephone!</span>")
 		return
 	
 	user.put_in_hands(src.phone)
