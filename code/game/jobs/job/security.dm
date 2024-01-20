@@ -17,7 +17,6 @@
 			            access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway)
 	minimal_player_age = 30
 
-	species_whitelist = list("Human")
 
 	outfit_datum = /datum/outfit/hos
 
