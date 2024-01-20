@@ -83,13 +83,6 @@
 /obj/machinery/bot/farmbot/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-
-/obj/machinery/bot/farmbot/proc/get_total_ferts()
-	var total_fert = 0
-	for(var/obj/item/weapon/reagent_containers/glass/fert in contents)
-		total_fert++
-	return total_fert
-
 /obj/machinery/bot/farmbot/attack_hand(mob/user)
 	if(..())
 		return
@@ -182,17 +175,14 @@
 		for(var/mob/O in hearers(src, null))
 			O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 	flick("[src.icon_initial]_broke", src)
-	src.emagged = 1
-	src.on = 1
-	src.icon_state = "[src.icon_initial][src.on]"
+	emagged = 1
+	on = 1
+	icon_state = "[icon_initial][on]"
 	target = null
-	mode = FARMBOT_MODE_WAITING //Give the emagger a chance to get away! 15 seconds should be good.
-	spawn(15 SECONDS)
-		mode = 0
-
+	mode = FARMBOT_MODE_WAITING //Give the emagger a chance to get away!
 
 /obj/machinery/bot/farmbot/explode()
-	src.on = 0
+	on = 0
 	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
@@ -221,7 +211,7 @@
 		return
 
 	if(emagged && prob(1) )
-		flick("[src.icon_initial]_broke", src)
+		flick("[icon_initial]_broke", src)
 
 	if(mode == FARMBOT_MODE_WAITING)
 		frustration++
@@ -299,9 +289,9 @@
 				target = source
 				mode = FARMBOT_MODE_REFILL
 				return 1
-		for ( var/obj/machinery/portable_atmospherics/hydroponics/tray in view(7,src) )
+		for(var/obj/machinery/portable_atmospherics/hydroponics/tray in view(7,src) )
 			var newMode = GetNeededMode(tray)
-			if ( newMode )
+			if(newMode)
 				mode = newMode
 				target = tray
 				return 1
@@ -319,8 +309,9 @@
 
 	if (setting_weed && tray.get_weedlevel() >= WEEDLEVEL_MAX/2)
 		return FARMBOT_MODE_WEED
-	if (setting_fertilize && tray.get_nutrientlevel() <= NUTRIENTLEVEL_MAX/5 && get_total_ferts() && (!tray.seed || !tray.seed.hematophage) )
-		if(!locate(/datum/reagent/fertilizer) in tray.reagents.reagent_list) //Skip if it has any fertilizer in it
+
+	if(setting_fertilize && tray.get_nutrientlevel() <= NUTRIENTLEVEL_MAX/5 && reagents.total_volume && (!tray.seed || !tray.seed.hematophage) )
+		if(!(locate(/datum/reagent/fertilizer) in tray.reagents.reagent_list)) //Skip if it has any fertilizer in it
 			return FARMBOT_MODE_FERTILIZE
 	return 0
 
@@ -330,6 +321,7 @@
 		target = null
 		mode = 0
 		return 0
+	mode = FARMBOT_MODE_WAITING
 
 	if(emagged) // Warning, hungry humans detected: throw fertilizer at them
 		var/obj/item/weapon/reagent_containers/glass/bottle/fert = new(loc)
@@ -337,37 +329,27 @@
 		spawn(0)
 			fert.throw_at(target, 16, 3)
 		visible_message("<span class='danger'>[src] launches \the [fert.name] at [target.name]!</span>")
-		flick("[src.icon_initial]_broke", src)
-		spawn(FARMBOT_EMAG_DELAY)
-			mode = 0
-			target = null
-		return 1
-
+		flick("[icon_initial]_broke", src)
 	else // feed them plants~
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
 		reagents.trans_to(tray, 10) //10 should be enough to fertilize most, and we'll stop looking at it until it uses this
-		icon_state = "[src.icon_initial]_fertile"
-		mode = FARMBOT_MODE_WAITING
-
-		spawn (FARMBOT_ACTION_DELAY)
-			mode = 0
-			target = null
+		icon_state = "[icon_initial]_fertile"
 		spawn (FARMBOT_ANIMATION_TIME)
 			icon_state = "[src.icon_initial][src.on]"
-		return 1
+	return 1
 
 /obj/machinery/bot/farmbot/proc/weed()
 	icon_state = "[src.icon_initial]_hoe"
 	spawn(FARMBOT_ANIMATION_TIME)
 		icon_state = "[src.icon_initial][src.on]"
 
-	if ( emagged ) // Warning, humans infested with weeds!
+	if (emagged) // Warning, humans infested with weeds!
 		mode = FARMBOT_MODE_WAITING
 		spawn(FARMBOT_EMAG_DELAY)
 			mode = 0
 
-		if ( prob(30) ) // better luck next time little guy
-			src.visible_message("<span class='danger'>[src] swings wildly at [target] with a minihoe, missing completely!</span>")
+		if(prob(30)) // better luck next time little guy
+			visible_message("<span class='danger'>[src] swings wildly at [target] with a minihoe, missing completely!</span>")
 
 		else // yayyy take that weeds~
 			var/attackVerb = pick("slashes", "slices", "cuts", "claws")
