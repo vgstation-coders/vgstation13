@@ -87,6 +87,8 @@
 
 	var/is_cookvessel //If true, the item is a cooking vessel.
 
+	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
+
 /obj/item/New()
 	..()
 	for(var/path in actions_types)

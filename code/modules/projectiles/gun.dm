@@ -74,6 +74,11 @@
 	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_NINJA
 	var/kick_fire_chance = 5
 
+/obj/item/weapon/gun/New()
+	..()
+	if(isHandgun())
+		quick_equip_priority |= list(slot_w_uniform) // for holsters
+
 /obj/item/weapon/gun/Destroy()
 	if(in_chamber)
 		QDEL_NULL(in_chamber)
