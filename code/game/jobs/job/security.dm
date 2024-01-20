@@ -40,6 +40,8 @@
 	outfit_datum = /datum/outfit/warden
 	minimal_player_age = 7
 
+	species_blacklist = list("Vox")
+
 /datum/job/detective
 	title = "Detective"
 	faction = "Station"
@@ -53,6 +55,8 @@
 	alt_titles = list("Forensic Technician","Gumshoe", "Private Eye")
 	outfit_datum = /datum/outfit/detective
 	minimal_player_age = 7
+
+	species_blacklist = list("Vox")
 
 /datum/job/detective/post_init(var/mob/living/carbon/human/H)
 	genemutcheck(H, SOBERBLOCK)
@@ -71,6 +75,8 @@
 	minimal_access = list(access_weapons, access_security, access_sec_doors, access_brig, access_court, access_maint_tunnels)
 	minimal_player_age = 7
 	outfit_datum = /datum/outfit/officer
+
+	species_blacklist = list("Vox")
 
 /datum/job/officer/get_total_positions()
 	. = ..()
