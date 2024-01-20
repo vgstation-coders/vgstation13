@@ -118,6 +118,8 @@
 	fire_sound = 'sound/weapons/ebow.ogg'
 	projectile_type = "/obj/item/projectile/energy/bolt"
 	cell_type = "/obj/item/weapon/cell/crap"
+	rechargeable = FALSE
+	non_rechargeable_reason = "<span class='notice'>Your gun's recharge port was removed to make room for a miniaturized reactor.</span>"
 	var/charge_tick = 0
 
 /obj/item/weapon/gun/energy/crossbow/isHandgun()

@@ -225,6 +225,8 @@ var/global/list/battery_online =	list(
 	var/data[0]
 	data["nameTag"] = name_tag
 	data["storedCapacity"] = round(100.0*charge/capacity, 0.1)
+	data["charge"] = charge
+	data["capacity"] = capacity
 	data["charging"] = charging
 	data["chargeMode"] = chargemode
 	data["chargeLoad"] = round(chargereceived)

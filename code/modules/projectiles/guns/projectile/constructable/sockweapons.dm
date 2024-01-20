@@ -29,12 +29,14 @@
 
 /obj/item/weapon/soap_sock/attack_self(mob/user)
 	to_chat(user, "<span class='notice'>You remove the soap from \the [src].</span>")
+	user.drop_item(src, force_drop = 1)
 	user.put_in_hands(src.base_sock)
 	user.put_in_hands(src.base_soap)
 	qdel(src)
 
 /obj/item/weapon/brick_sock/attack_self(mob/user)
 	to_chat(user, "<span class='notice'>You remove the brick from \the [src].</span>")
+	user.drop_item(src, force_drop = 1)
 	user.put_in_hands(new /obj/item/stack/sheet/mineral/brick(user))
 	user.put_in_hands(src.base_sock)
 	qdel(src)

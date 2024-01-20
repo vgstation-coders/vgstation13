@@ -6,7 +6,7 @@
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
 	volume = 100
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT
 
 	var/draw_warnings = 1 // Set to 0 to stop it from drawing the alert lights.
 	var/tmp/update_icon_after_process = 0 // Will try to only call update_icon() when necessary.
@@ -142,7 +142,7 @@
 	if(!seed || !harvest || arcanetampered)
 		return
 
-	seed.autoharvest(get_turf(src))
+	seed.autoharvest(get_output())
 	after_harvest()
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/after_harvest()

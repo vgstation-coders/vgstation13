@@ -9,6 +9,18 @@
 	var/max_fire_temperature_sustained = 0 //The max temperature of the fire which it was subjected to
 	var/can_exist_under_lattice = 0 //If 1, RemoveLattice() is not called when a turf is changed to this.
 
+	var/datum/custom_painting/advanced_graffiti
+	var/image/advanced_graffiti_overlay
+
+/turf/simulated/proc/render_advanced_graffiti(var/mob/user)
+	if (!advanced_graffiti)
+		return FALSE
+	overlays -= advanced_graffiti_overlay
+	advanced_graffiti_overlay = image(advanced_graffiti.render_on(icon(icon, icon_state)))
+	advanced_graffiti_overlay.layer = ADVANCED_GRAFFITI_LAYER
+	//advanced_graffiti_overlay.SwapColor("#aaaaaaff", "#ffffff00")
+	overlays += advanced_graffiti_overlay
+
 /turf/simulated/New()
 	..()
 
@@ -16,11 +28,11 @@
 		holy = 1
 	levelupdate()
 
-/turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD)
+/turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD,var/luminous=FALSE)
 	var/obj/effect/decal/cleanable/blood/tracks/tracks = locate(typepath) in src
 	if(!tracks)
 		tracks = new typepath(src)
-	tracks.AddTracks(bloodDNA,comingdir,goingdir,bloodcolor)
+	tracks.AddTracks(bloodDNA,comingdir,goingdir,bloodcolor,luminous)
 
 /turf/simulated/Entered(atom/A, atom/OL)
 	if(movement_disabled && usr.ckey != movement_disabled_exception)
@@ -53,10 +65,10 @@
 					H.track_blood = max(round(H.track_blood - 1, 1),0)
 
 			if (bloodDNA)
-				src.AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor) // Coming
+				AddTracks(H.get_footprint_type(),bloodDNA,H.dir,0,bloodcolor,H.luminous_feet()) // Coming
 				var/turf/simulated/from = get_step(H,opposite_dirs[H.dir])
 				if(istype(from) && from)
-					from.AddTracks(H.get_footprint_type(),bloodDNA,0,H.dir,bloodcolor) // Going
+					from.AddTracks(H.get_footprint_type(),bloodDNA,0,H.dir,bloodcolor,H.luminous_feet()) // Going
 
 			bloodDNA = null
 

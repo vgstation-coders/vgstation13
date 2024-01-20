@@ -469,7 +469,7 @@
 	can_add_combinedwclass = TRUE
 	can_only_hold = list(
 		"/obj/item/device/radio/headset/headset_sec",
-		"/obj/item/clothing/glasses/sunglasses/sechud",
+		"/obj/item/clothing/glasses/hud/security/sunglasses",
 		"/obj/item/clothing/gloves/black",
 		"/obj/item/weapon/storage/belt/security",
 		"/obj/item/device/flashlight/tactical",
@@ -486,7 +486,7 @@
 	)
 	items_to_spawn = list(
 		/obj/item/device/radio/headset/headset_sec,
-		list(/obj/item/clothing/glasses/sunglasses/sechud/prescription,/obj/item/clothing/glasses/sunglasses/sechud),
+		list(/obj/item/clothing/glasses/hud/security/sunglasses/prescription,/obj/item/clothing/glasses/hud/security/sunglasses),
 		/obj/item/clothing/gloves/black,
 		/obj/item/weapon/storage/belt/security,
 		/obj/item/device/flashlight/tactical,
@@ -510,7 +510,7 @@
 	can_add_combinedwclass = TRUE
 	items_to_spawn = list(
 		/obj/item/device/radio/headset/headset_sec,
-			/obj/item/clothing/glasses/regular/tracking/detective,
+			/obj/item/clothing/glasses/hud/tracking/detective,
 		/obj/item/clothing/gloves/black,
 		/obj/item/weapon/storage/belt/detective,
 		/obj/item/weapon/switchtool/switchblade,
@@ -1083,14 +1083,6 @@
 	new /obj/item/clothing/shoes/protoboots(src)
 	..()
 
-/obj/item/weapon/storage/box/smartbox/clothing_box/hastur
-	name = "Hastur outfit box"
-
-/obj/item/weapon/storage/box/smartbox/clothing_box/hastur/New()
-	new	/obj/item/clothing/head/hasturhood(src)
-	new /obj/item/clothing/suit/hastur(src)
-	..()
-
 /obj/item/weapon/storage/box/smartbox/clothing_box/owl
 	name = "Owl outfit box"
 
@@ -1224,14 +1216,6 @@
 	new /obj/item/clothing/head/that/magic(src)
 	new /obj/item/clothing/suit/wizrobe/magician(src)
 	new /obj/item/clothing/shoes/sandal/marisa/leather(src)
-	..()
-
-/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer
-	name = "Necromancer robe box"
-
-/obj/item/weapon/storage/box/smartbox/clothing_box/necromancer/New()
-	new /obj/item/clothing/head/wizard/necro(src)
-	new /obj/item/clothing/suit/wizrobe/necro(src)
 	..()
 
 /obj/item/weapon/storage/box/smartbox/clothing_box/pharaoh

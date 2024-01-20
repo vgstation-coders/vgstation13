@@ -2,11 +2,11 @@
 	var/walk_delay = 4
 
 /datum/component/controller/movement/initialize()
-	parent.register_event(/event/comp_ai_cmd_move, src, src::cmd_move())
+	parent.register_event(/event/comp_ai_cmd_move, src, nameof(src::cmd_move()))
 	return TRUE
 
 /datum/component/controller/movement/Destroy()
-	parent.unregister_event(/event/comp_ai_cmd_move, src, src::cmd_move())
+	parent.unregister_event(/event/comp_ai_cmd_move, src, nameof(src::cmd_move()))
 	..()
 
 /datum/component/controller/movement/proc/cmd_move(target)

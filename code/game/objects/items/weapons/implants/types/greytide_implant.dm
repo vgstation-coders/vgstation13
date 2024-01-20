@@ -57,11 +57,11 @@
 		if(istype(I, /obj/item/weapon/implant/traitor) || istype(I, /obj/item/weapon/implant/loyalty))
 			if(I.imp_in == imp_in)
 				imp_in.visible_message("<span class='big danger'>[imp_in] seems to resist the implant!</span>", "<span class='danger'>You feel a strange sensation in your head that quickly dissipates.</span>")
-				qdel(src)
+				remove(imp_in)
 				return
 	if(istraitor(imp_in) || ischallenger(imp_in))
 		imp_in.visible_message("<span class='big danger'>[imp_in] seems to resist the implant!</span>", "<span class='danger'>You feel a familiar sensation in your head that quickly dissipates.</span>")
-		qdel(src)
+		remove(imp_in)
 		return
 	to_chat(imp_in, "<span class='notice'>You feel a surge of loyalty towards [implanter.name].</span>")
 	to_chat(imp_in, "<B><span class='big warning'>You've been shown the Greytide by [implanter.name]!</B> You now must lay down your life to protect them and assist in their goals at any cost.</span>")

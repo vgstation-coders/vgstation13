@@ -168,6 +168,7 @@ var/list/shop_prices = list( //Cost in space credits
 /datum/map_element/vault/supermarket
 	name = "Spessmart"
 	file_path = "maps/randomvaults/spessmart.dmm"
+	spawn_cost = 5
 
 	var/customer_has_entered = FALSE
 
@@ -267,7 +268,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		for(var/atom/movable/AM in (src.contents + E.contents))
 
 			if(!is_type_in_list(AM, protected_objects)) continue
-			AM.register_event(/event/destroyed, src, src::item_destroyed())
+			AM.register_event(/event/destroyed, src, nameof(src::item_destroyed()))
 
 /area/vault/supermarket/shop/Exited(atom/movable/AM, atom/newloc)
 	..()

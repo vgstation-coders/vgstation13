@@ -384,10 +384,17 @@ About the new airlock wires panel:
 					user.delayNextMove(10)
 					spawn (10)
 						src.justzap = 0
-		else if(user.hallucination > 50 && prob(10) && src.operating == 0)
-			to_chat(user, "<span class='danger'>You feel a powerful shock course through your body!</span>")
-			user.adjustHalLoss(10)
-			user.AdjustStunned(10)
+		else if(user.client && user.hallucination > 50 && prob(10) && !operating)
+			//access denied
+			user << 'sound/machines/denied.ogg'
+			var/image/haldoor = image(icon,loc,"door_deny",ABOVE_DOOR_LAYER)
+			haldoor.plane = relative_plane(OBJ_PLANE)
+			user.client.images += haldoor
+			user.delayNextMove(3) //Stop for 3 frames, same as the hallucination
+			user.ear_deaf += 1 //Deafen them just for one tick so they don't hear the door open for real
+			spawn(6)
+				user.client.images -= haldoor
+				QDEL_NULL(haldoor)
 	..(user)
 
 /obj/machinery/door/airlock/proc/isElectrified()
@@ -646,11 +653,6 @@ About the new airlock wires panel:
 		else
 			// disable/6 is not in Topic; disable/5 disables both temporary and permenant shock
 			Topic("aiDisable=5", list("aiDisable"="5"), 1)
-
-/turf/AIAltClick()
-	for(var/obj/machinery/door/airlock/A in contents)
-		A.AIAltClick()
-		break
 
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
 	if(allowed(usr))
@@ -1176,7 +1178,10 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/togglePanelOpen(var/obj/item/toggleitem, mob/user)
 	if(!operating)
 		panel_open = !panel_open
-		toggleitem.playtoolsound(src, 50, TRUE, -6)
+		if (toggleitem)
+			toggleitem.playtoolsound(src, 50, TRUE, -6)
+		else
+			playsound(loc, pick(list('sound/items/Screwdriver.ogg', 'sound/items/Screwdriver2.ogg')), 50, TRUE, TRUE)//grinch
 		to_chat(user, "<span class='notice'>You [panel_open?"open":"close"] the panel.</span>")
 		update_icon()
 		return 1

@@ -301,6 +301,9 @@
 		if(stat != UNCONSCIOUS)
 			to_chat(src, msg)
 		return
+	if(stat == DEAD) //They can ghost and have the same benefit.
+		to_chat(src, msg)
+		return
 
 	var/awareness = 0
 	if(stat != UNCONSCIOUS)
@@ -1178,7 +1181,7 @@ Use this proc preferably at the end of an equipment loadout
 				for(var/mob/M in viewers(4, L))
 					if(M == L)
 						continue
-					if(istype(M.get_item_by_slot(slot_glasses),/obj/item/clothing/glasses/regular/tracking))
+					if(istype(M.get_item_by_slot(slot_glasses),/obj/item/clothing/glasses/hud/tracking))
 						if(M.is_blind())
 							continue
 						if(isobj(A.loc))
@@ -1486,7 +1489,15 @@ Use this proc preferably at the end of an equipment loadout
 
 	if(client && client.inactivity < (1200))
 		if(listed_turf)
-			if(get_dist(listed_turf,src) > 1)
+			var/inrange = TRUE
+			if(isAI(src))
+				var/mob/living/silicon/ai/ai = src
+				if(get_dist(listed_turf, ai.eyeobj) > 7)
+					inrange = FALSE
+			else if(get_dist(listed_turf,src) > 1)
+				inrange = FALSE
+
+			if(!inrange)
 				listed_turf = null
 			else if(statpanel(listed_turf.name))
 				statpanel(listed_turf.name, null, listed_turf)
@@ -2260,6 +2271,11 @@ Use this proc preferably at the end of an equipment loadout
 
 /mob/proc/isBloodedAnimal()
 	return FALSE
+
+/mob/proc/OnMobAreaChanged(var/mob, var/newarea, var/oldarea)
+	if(src.client && src.client.media && !src.client.media.forced)
+		spawn()
+			src.update_music()
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

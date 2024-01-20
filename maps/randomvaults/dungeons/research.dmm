@@ -50,6 +50,7 @@
 	dir = 8
 	},
 /obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "au" = (
@@ -93,6 +94,9 @@
 /area/vault/mothership_lab/research)
 "aL" = (
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/medic{
+	dir = 8
+	},
+/obj/structure/bed/chair/comfy/ayy1{
 	dir = 8
 	},
 /turf/unsimulated/floor/ayy/maint,
@@ -485,6 +489,16 @@
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
+"dN" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/item/clothing/shoes/jackboots/mothership,
+/obj/item/clothing/under/grey/grey_soldier,
+/obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/research)
 "dS" = (
 /obj/item/weapon/book/manual/engineering_construction,
 /obj/structure/closet/ayy3,
@@ -496,6 +510,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (EAST)"
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/maintenance)
 "dV" = (
@@ -984,6 +999,7 @@
 	name = "Researcher's locker";
 	anchored = 1
 	},
+/obj/item/dictionary/vox,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "jh" = (
@@ -1313,7 +1329,7 @@
 	dir = 4
 	},
 /obj/item/weapon/storage/lockbox/diskettebox/open/research,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/device/reagent_scanner/adv,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
@@ -2054,12 +2070,14 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/research)
 "vj" = (
-/obj/structure/curtain/open/shower,
 /obj/effect/decal/cleanable/blood/drip{
 	basecolor = "#CFAAAA";
 	blood_color = "#CFAAAA"
 	},
-/turf/unsimulated/floor/lab_sterile,
+/obj/item/device/flashlight/flare/ever_bright,
+/turf/unsimulated/floor{
+	icon_state = "panelscorched"
+	},
 /area/vault/mothership_lab/maintenance)
 "vm" = (
 /obj/machinery/light/he/broken{
@@ -2086,6 +2104,14 @@
 	},
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/maintenance)
+"vu" = (
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/research)
 "vy" = (
 /obj/machinery/smartfridge/bloodbank/filled,
 /obj/structure/window/reinforced{
@@ -2157,6 +2183,12 @@
 /obj/structure/vendomatpack/zamsnax,
 /obj/structure/vendomatpack/zamsnax,
 /turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/maintenance)
+"wp" = (
+/obj/structure/bed/chair/comfy/ayy1{
+	dir = 4
+	},
+/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "wt" = (
 /obj/effect/decal/warning_stripes{
@@ -2294,6 +2326,7 @@
 /obj/machinery/light/he,
 /obj/item/weapon/storage/belt/mothership,
 /obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "xI" = (
@@ -2361,6 +2394,17 @@
 	icon_state = "bcircuit"
 	},
 /area/vault/mothership_lab/research)
+"yw" = (
+/obj/structure/girder,
+/turf/unsimulated/floor,
+/area/vault/mothership_lab/maintenance)
+"yA" = (
+/obj/structure/girder,
+/obj/structure/window/barricade/full/block,
+/turf/unsimulated/floor{
+	icon_state = "platingdmg1"
+	},
+/area/vault/mothership_lab/maintenance)
 "yD" = (
 /obj/effect/decal/cleanable/blood{
 	basecolor = "#CFAAAA";
@@ -2383,6 +2427,7 @@
 /obj/machinery/light/he,
 /obj/item/weapon/storage/belt/mothership,
 /obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "yV" = (
@@ -2733,7 +2778,6 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "unloading"
 	},
-/obj/item/clothing/mask/gas,
 /obj/structure/window/reinforced/plasma{
 	dir = 8
 	},
@@ -2745,6 +2789,7 @@
 	req_access_txt = "162";
 	req_one_access_txt = "162"
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor{
 	icon_state = "engine";
 	name = "reinforced floor"
@@ -2891,6 +2936,7 @@
 	icon_state = "warning";
 	tag = "icon-warning (WEST)"
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/maintenance)
 "ET" = (
@@ -3033,6 +3079,7 @@
 	name = "Researcher's locker";
 	anchored = 1
 	},
+/obj/item/dictionary/insect,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Hd" = (
@@ -3464,7 +3511,9 @@
 /obj/machinery/acidshower{
 	dir = 8
 	},
-/turf/unsimulated/floor/lab_sterile,
+/turf/unsimulated/floor{
+	icon_state = "panelscorched"
+	},
 /area/vault/mothership_lab/maintenance)
 "LR" = (
 /obj/machinery/light/he{
@@ -3544,6 +3593,12 @@
 	},
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
+"MG" = (
+/obj/item/device/flashlight/flare/ever_bright,
+/turf/unsimulated/floor{
+	icon_state = "panelscorched"
+	},
+/area/vault/mothership_lab/maintenance)
 "MI" = (
 /obj/machinery/camera{
 	dir = 1;
@@ -3963,6 +4018,7 @@
 /obj/structure/window/reinforced/plasma{
 	dir = 4
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/armory)
 "Qk" = (
@@ -3981,10 +4037,10 @@
 /area/vault/mothership_lab/maintenance)
 "Qq" = (
 /obj/structure/rack,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
@@ -4265,6 +4321,7 @@
 /obj/structure/window/reinforced/plasma{
 	dir = 1
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/armory)
 "Tc" = (
@@ -4376,7 +4433,7 @@
 /obj/structure/window/reinforced,
 /obj/item/clothing/gloves/latex,
 /obj/item/clothing/gloves/latex,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Uk" = (
@@ -4413,6 +4470,7 @@
 /area/vault/mothership_lab/research)
 "Uv" = (
 /obj/structure/filingcabinet,
+/obj/item/dictionary/mouse,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Ux" = (
@@ -4423,6 +4481,7 @@
 	dir = 1
 	},
 /obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "UA" = (
@@ -4461,31 +4520,6 @@
 	},
 /obj/structure/window/reinforced/plasma,
 /turf/unsimulated/floor/ayy/fancy,
-/area/vault/mothership_lab/armory)
-"Vj" = (
-/obj/structure/rack,
-/obj/effect/decal/warning_stripes{
-	icon_state = "unloading"
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 8
-	},
-/obj/structure/window/reinforced/plasma{
-	dir = 4
-	},
-/obj/item/weapon/tank/oxygen/red,
-/obj/item/clothing/shoes/magboots,
-/obj/item/clothing/suit/space/rig/grey/soldier,
-/obj/item/clothing/mask/gas,
-/obj/machinery/door/window/plasma/secure{
-	dir = 2;
-	req_access_txt = "162";
-	req_one_access_txt = "162"
-	},
-/turf/unsimulated/floor{
-	icon_state = "engine";
-	name = "reinforced floor"
-	},
 /area/vault/mothership_lab/armory)
 "VB" = (
 /obj/structure/grille,
@@ -4684,9 +4718,9 @@
 /area/vault/mothership_lab/armory)
 "Xf" = (
 /obj/structure/rack,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
@@ -4874,7 +4908,7 @@
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/research)
 "YJ" = (
-/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader,
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader/named,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/maintenance)
 "YK" = (
@@ -5432,7 +5466,7 @@ rI
 cT
 ZO
 DG
-Vj
+bD
 nk
 hW
 Jk
@@ -5963,7 +5997,7 @@ ID
 ID
 ID
 Zn
-ID
+Is
 Xj
 MI
 Zn
@@ -6249,11 +6283,11 @@ Ka
 qs
 Yr
 Zn
-kN
+vu
 ID
 ID
 ID
-qc
+dN
 Zn
 ID
 Ul
@@ -6277,7 +6311,7 @@ Zn
 Zn
 ID
 ID
-qc
+dN
 Zn
 Ms
 xv
@@ -6763,7 +6797,7 @@ Zn
 JF
 ID
 ID
-Is
+ID
 ID
 fg
 Zn
@@ -7095,7 +7129,7 @@ Mt
 HO
 zk
 xz
-Br
+yA
 ZA
 rE
 kY
@@ -7130,7 +7164,7 @@ ID
 ID
 ID
 ID
-kN
+vu
 Br
 xI
 zk
@@ -7286,7 +7320,7 @@ fW
 dt
 LM
 eC
-Br
+yw
 kY
 Qk
 zk
@@ -7472,7 +7506,7 @@ zk
 tS
 pN
 zk
-qd
+MG
 zk
 Hh
 fW
@@ -7610,7 +7644,7 @@ NE
 Br
 tT
 Ib
-zk
+wp
 Br
 Gu
 YG

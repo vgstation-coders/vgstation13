@@ -52,6 +52,7 @@ var/global/disable_vents     = 0
 #define HAZARD_LOW_PRESSURE 20		//This is when the black ultra-low pressure icon is displayed. (This one is set as a constant)
 
 #define TEMPERATURE_DAMAGE_COEFFICIENT 1.5	//This is used in handle_temperature_damage() for humans, and in reagents that affect body temperature. Temperature damage is multiplied by this amount.
+#define SPLASH_SCALD_DAMAGE_COEFFICIENT (2/3) //Reagent scalding damage via splashing is multiplied by this.
 #define BODYTEMP_AUTORECOVERY_DIVISOR 0.5 //This is the divisor which handles how much of the temperature difference between the current body temperature and 310.15K (optimal temperature) humans auto-regenerate each tick. The higher the number, the slower the recovery. This is applied each tick, so long as the mob is alive.
 #define BODYTEMP_AUTORECOVERY_MAXIMUM 2.0 //Maximum amount of kelvin moved toward 310.15K per tick. So long as abs(310.15 - bodytemp) is more than 0.5 .
 
@@ -329,15 +330,15 @@ var/MAX_EXPLOSION_RANGE = 32
 
 // bitflags for clothing parts
 
-#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)
-#define FACE			(EYES|MOUTH|BEARD)	//38912
+#define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)	// 6
+#define FACE			(EYES|MOUTH|BEARD)			// 38912
 #define BEARD			32768
-#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)
+#define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)		// 14337
 #define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
-#define FEET			(FOOT_LEFT|FOOT_RIGHT) 	//96
-#define ARMS			(ARM_LEFT|ARM_RIGHT)		//384
-#define HANDS			(HAND_LEFT|HAND_RIGHT) //1536
-#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS)
+#define FEET			(FOOT_LEFT|FOOT_RIGHT) 		// 96
+#define ARMS			(ARM_LEFT|ARM_RIGHT)		// 384
+#define HANDS			(HAND_LEFT|HAND_RIGHT) 		// 1536
+#define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS) // 16383
 #define IGNORE_INV		16384 // Don't make stuff invisible
 
 
@@ -345,7 +346,7 @@ var/MAX_EXPLOSION_RANGE = 32
 // Used in body_parts_covered
 
 #define HIDEGLOVES			HANDS
-#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)
+#define HIDEJUMPSUIT		(ARMS|LEGS|FULL_TORSO)		// 414
 #define HIDESHOES			FEET
 #define HIDEMASK			FACE
 #define HIDEEARS			EARS
@@ -354,8 +355,9 @@ var/MAX_EXPLOSION_RANGE = 32
 #define HIDEHEADHAIR 		65536
 #define MASKHEADHAIR		131072
 #define HIDEBEARDHAIR		BEARD
-#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)//98304
+#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR) // 98304
 #define	HIDESUITSTORAGE		LOWER_TORSO
+#define	HIDEBACK			262144
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
 // Used with human/proc/get_heat_protection() and human/proc/get_cold_protection() as well as calculate_affecting_pressure() now
@@ -418,7 +420,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 // MUTATIONS
 ///////////////////////////////////////
 
-
+#define M_CHECK_ALL		1
+#define M_CHECK_JOB		2
 
 // Generic mutations:
 #define	M_TK			1
@@ -925,8 +928,10 @@ SEE_PIXELS	256
 // for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
 #define HEALTH_HUD          "health" // a simple line rounding the mob's number health
 #define STATUS_HUD          "status" // alive, dead, diseased, etc.
-#define RECORD_HUD			"record" // what medbay has set your records to
+#define PHYSRECORD_HUD			"p_record" // what medbay has set your records to
+#define MENTRECORD_HUD			"m_record" // what medbay has set your records to
 #define ID_HUD              "id" // the job asigned to your ID
+#define WAGE_HUD			"wage" // the wage assigned to your ID
 #define WANTED_HUD          "wanted" // wanted, released, parroled, security status
 #define IMPLOYAL_HUD		"imployal" // loyality implant
 #define IMPCHEM_HUD		    "impchem" // chemical implant
@@ -1108,6 +1113,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define RECYK_ELECTRONIC 5
 #define RECYK_WOOD       6
 #define RECYK_PLASTIC    7
+#define RECYK_FABRIC     8
 
 ////////////////
 // job.info_flags
@@ -1262,11 +1268,12 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define BACK_LAYER				17		//Back should be above head so that headgear doesn't hides backpack when facing north
 #define ID_LAYER				18		//IDs should be visible above suits and backpacks
 #define HANDCUFF_LAYER			19
-#define LEGCUFF_LAYER			20
-#define HAND_LAYER				21
-#define TAIL_LAYER				22		//bs12 specific. this hack is probably gonna come back to haunt me
-#define TARGETED_LAYER			23		//BS12: Layer for the target overlay from weapon targeting system
-#define TOTAL_LAYERS			23
+#define MUTUALCUFF_LAYER		20
+#define LEGCUFF_LAYER			21
+#define HAND_LAYER				22
+#define TAIL_LAYER				23		//bs12 specific. this hack is probably gonna come back to haunt me
+#define TARGETED_LAYER			24		//BS12: Layer for the target overlay from weapon targeting system
+#define TOTAL_LAYERS			24
 //////////////////////////////////
 
 //Snake stuff so leaderboard can see it too
@@ -1576,6 +1583,10 @@ var/proccalls = 1
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 
+//MERELY_HONORABLE means unable to use guns, VERY_HONORABLE means using a gun will blow up the hand
+#define MERELY_HONORABLE 1
+#define VERY_HONORABLE 2
+
 //Grasp indexes
 #define GRASP_RIGHT_HAND 1
 #define GRASP_LEFT_HAND 2
@@ -1614,6 +1625,8 @@ var/proccalls = 1
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_EAST		"stationmapsmalleast"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"
 #define HOLOMAP_EXTRA_CULTMAP					"cultmap"
+#define HOLOMAP_EXTRA_BHANGMAP					"bhangmap"
+#define HOLOMAP_EXTRA_BHANGBASEMAP				"bhangbasemap"
 
 #define HOLOMAP_MARKER_SMES				"smes"
 #define HOLOMAP_MARKER_DISK				"diskspawn"
@@ -1654,6 +1667,7 @@ var/proccalls = 1
 #define PALE_BLOOD		"#272727"//Seek Paleblood to transcend the hunt.
 #define GHOUL_BLOOD		"#7FFF00"
 #define GRUE_BLOOD		"#272728"
+#define BLOB_MEAT		"#81EB00"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
@@ -1690,6 +1704,9 @@ var/proccalls = 1
 #define HUD_NONE 0
 #define HUD_MEDICAL 1
 #define HUD_SECURITY 2
+#define HUD_WAGE 3
+#define HUD_MESON 4
+#define HUD_ARRESTACCESS 5
 
 //Cyborg components
 #define COMPONENT_BROKEN -1
@@ -1714,6 +1731,11 @@ var/proccalls = 1
 #define COMPUTER "computer"
 #define EMBEDDED_CONTROLLER "embedded controller"
 #define OTHER "other"
+
+// Bedsheet altering
+#define PLAIDPATTERN_INCOMPATIBLE	0
+#define PLAIDPATTERN_TO_PLAID		1
+#define PLAIDPATTERN_TO_NOT_PLAID	2
 
 // How many times to retry winset()ing window parameters before giving up
 #define WINSET_MAX_ATTEMPTS 10
@@ -1855,5 +1877,21 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define COOKVESSEL_CONTAINS_CONTENTS (1<<1)	//The cooking vessel contains non-reagent contents (eg. items)
 
 //Cooking-related temperatures
+#define FRIDGETEMP_FREEZER	 (T0C - 40)
+#define FRIDGETEMP_FROZEN	 (T0C - 20)//because freezers at room temperature actually hold items at -20°C, so we can apply that to meatvend items
+#define FRIDGETEMP_DEFAULT	 (T0C + 4)
+#define STEAMTEMP	 (T0C + 50)
+#define COOKTEMP_READY	 (T0C + 100) //The minimal temperature at which items come out of a frying pan, enables food to visibly steam. After a few seconds it's fully safe to eat.
 #define COOKTEMP_DEFAULT (T0C + 316) //Default cooking temperature, around 600 F
+#define COOKTEMP_EMAGGED (T0C + 8000000)
 #define COOKTEMP_HUMANSAFE (BODYTEMP_HEAT_DAMAGE_LIMIT - 1) //Human-safe temperature for cooked food, 1 degree less than the threshold for burning a human.
+
+//Cleaning
+#define CLEANLINESS_WATER			1
+#define CLEANLINESS_SPACECLEANER	2
+#define CLEANLINESS_BLEACH			3
+
+//Paint Luminosity
+#define PAINTLIGHT_NONE		0	//regular paint
+#define PAINTLIGHT_LIMITED	1	//radium, lights up on canvas, limited color mixing
+#define PAINTLIGHT_FULL		2	//nano paint, lights up floors as well

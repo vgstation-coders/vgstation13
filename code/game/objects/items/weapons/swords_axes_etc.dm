@@ -325,7 +325,8 @@
 	explosion(target, 0, 0, 1, whodunnit = user)
 
 /obj/item/weapon/damocles/throw_impact(atom/hit_atom, speed, mob/user)
-	if(..())
+	..()
+	if(!ismob(loc)) /* So long as someone didn't catch it, it'll explode. */
 		explosion(get_turf(src), 0, 2, 3, whodunnit = user)
 		qdel(src)
 

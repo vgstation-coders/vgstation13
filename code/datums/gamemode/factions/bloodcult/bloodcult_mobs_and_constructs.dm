@@ -149,7 +149,6 @@
 		heal_target.update_icons()
 		anim(target = heal_target, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 		move_ray()
-		process_construct_hud(src)
 
 /mob/living/simple_animal/construct/builder/perfect/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
 	. = ..()
@@ -410,6 +409,7 @@ var/list/astral_projections = list()
 	var/projection_destroyed = FALSE
 	var/direct_delete = FALSE
 
+	var/image/hudicon
 
 /mob/living/simple_animal/astral_projection/New()
 	..()
@@ -430,23 +430,6 @@ var/list/astral_projections = list()
 	if (!tangibility)
 		overlay_fullscreen("astralborder", /obj/abstract/screen/fullscreen/astral_border)
 		update_fullscreen_alpha("astralborder", 255, 5)
-
-	//astral projections can identify cultists
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	if (!cult)
-		return
-	for(var/datum/role/cultist in cult.members)
-		if(cultist.antag && cultist.antag.current)
-			var/imageloc = cultist.antag.current
-			if(istype(cultist.antag.current.loc,/obj/mecha))
-				imageloc = cultist.antag.current.loc
-			var/hud_icon = cultist.logo_state
-			var/image/I = image('icons/role_HUD_icons.dmi', loc = imageloc, icon_state = hud_icon)
-			I.pixel_x = 20 * PIXEL_MULTIPLIER
-			I.pixel_y = 20 * PIXEL_MULTIPLIER
-			I.plane = ANTAG_HUD_PLANE
-			client.images += I
-
 
 /mob/living/simple_animal/astral_projection/proc/destroy_projection()
 	if (projection_destroyed)
@@ -619,7 +602,15 @@ var/list/astral_projections = list()
 
 	//we don't transfer the mind but we keep a reference to it.
 	mind = body.mind
+	var/datum/role/cultist = iscultist(body)
+	if (cultist)
+		hudicon = image('icons/role_HUD_icons.dmi', loc = src, icon_state = cultist.logo_state)
+		hudicon.pixel_x = 20 * PIXEL_MULTIPLIER
+		hudicon.pixel_y = 20 * PIXEL_MULTIPLIER
+		hudicon.plane = ANTAG_HUD_PLANE
+		hudicon.alpha = 128
 
+	update_faction_icons()
 
 /mob/living/simple_animal/astral_projection/proc/toggle_tangibility()
 	if (tangibility)

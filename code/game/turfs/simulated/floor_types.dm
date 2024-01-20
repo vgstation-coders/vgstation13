@@ -133,6 +133,10 @@
 		var/obj/item/stack/tile/T = C
 		if(T.use(1))
 			make_tiled_floor(T)
+	if(istype(C, /obj/item/stack/bolts) && !floor_tile)
+		var/obj/item/stack/bolts/B = C
+		if(B.use(1))
+			ChangeTurf(/turf/simulated/floor/engine/bolted)
 	if(C.is_screwdriver(user) && floor_tile)
 		to_chat(user, "<span class='notice'>You start [secured ? "unsecuring" : "securing"] the [floor_tile.name].</span>")
 		C.playtoolsound(src, 80)
@@ -210,6 +214,24 @@
 			overlays.Add(image('icons/turf/floors.dmi', icon_state = "r_floor"))
 		else
 			overlays.Add(image('icons/turf/floors.dmi', icon_state = "r_floor_unsec"))
+
+/turf/simulated/floor/engine/bolted
+	name = "bolted floor"
+	desc = "This floor has jutting bolts that would make crawling across it impossible."
+	icon_state = "boltedfloor"
+
+/turf/simulated/floor/engine/bolted/attackby(obj/item/C as obj, mob/user as mob)
+	if(!user || !C)
+		return
+	if(!C.is_wrench(user))
+		return
+	if(user.loc != src)
+		to_chat(user, "<span class='warning'>You must stand directly on the bolted floor to unbolt it.</span>")
+		return
+	C.playtoolsound(src, 80)
+	if(do_after(user, src, 6 SECONDS))
+		new /obj/item/stack/bolts(src)
+		ChangeTurf(/turf/simulated/floor/engine)
 
 // For mappers
 /turf/simulated/floor/engine/plated
@@ -413,6 +435,22 @@
 /turf/simulated/floor/arcade/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/arcade(null)
 	..()
+
+/turf/simulated/floor/carpet/shag
+	name = "Shag Carpet"
+	icon_state = "shagcarpet-dark"
+	has_siding = FALSE
+
+/turf/simulated/floor/carpet/shag/update_icon()
+	if(broken || burnt)
+		icon_state = "carpet-broken"
+	else if(is_plating())
+		icon_state = icon_plating
+	else
+		icon_state = initial(icon_state)
+
+/turf/simulated/floor/carpet/shag/create_floor_tile()
+	floor_tile = new /obj/item/stack/tile/carpet/shag(null)
 
 /turf/simulated/floor/damaged
 	icon_state = "damaged1"

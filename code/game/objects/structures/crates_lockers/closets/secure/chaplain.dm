@@ -16,10 +16,8 @@
 		/obj/item/clothing/suit/nun,
 		/obj/item/clothing/head/nun_hood,
 		/obj/item/clothing/suit/chaplain_hoodie,
-		/obj/item/clothing/head/chaplain_hood,
 		/obj/item/clothing/suit/holidaypriest,
 		/obj/item/clothing/under/wedding/bride_white,
-		/obj/item/clothing/head/hasturhood,
 		/obj/item/clothing/suit/hastur,
 		/obj/item/clothing/suit/unathi/robe,
 		/obj/item/clothing/head/wizard/amp, //This will need to be removed when/if psychic wizards are properly implemented

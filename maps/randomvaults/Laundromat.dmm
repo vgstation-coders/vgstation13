@@ -1,0 +1,1763 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"aq" = (
+/obj/item/weapon/bikehorn/rubberducky,
+/turf/space,
+/area)
+"av" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"aR" = (
+/obj/structure/cable/yellow{
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/laundromat)
+"bu" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "whitecorner"
+	},
+/area/vault/laundromat)
+"bH" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk1"
+	},
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/space,
+/area)
+"bI" = (
+/obj/structure/bed/chair{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"bJ" = (
+/obj/structure/grille,
+/obj/structure/lattice,
+/turf/space,
+/area)
+"bP" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"cd" = (
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/laundromat)
+"co" = (
+/obj/effect/decal/cleanable/crumbs{
+	icon_state = "dribbles";
+	dir = 1;
+	name = "dribbles";
+	pixel_x = -5
+	},
+/obj/effect/decal/cleanable/crumbs{
+	icon_state = "dribbles";
+	name = "dribbles";
+	pixel_x = 10;
+	pixel_y = -4;
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "whitehall"
+	},
+/area/vault/laundromat)
+"cJ" = (
+/obj/machinery/power/port_gen/pacman,
+/obj/structure/cable/yellow,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"cQ" = (
+/turf/simulated/floor{
+	icon_state = "whitehall"
+	},
+/area/vault/laundromat)
+"cT" = (
+/obj/machinery/washing_machine{
+	anchored = 0
+	},
+/turf/simulated/floor{
+	icon_state = "whitehall"
+	},
+/area/vault/laundromat)
+"df" = (
+/obj/structure/window{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/mopbucket,
+/obj/item/weapon/mop,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"dC" = (
+/obj/structure/window{
+	dir = 1
+	},
+/obj/machinery/light/he,
+/obj/structure/cable/yellow{
+	icon_state = "4-8"
+	},
+/turf/simulated/floor,
+/area/vault/laundromat)
+"ed" = (
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whitecorner"
+	},
+/area/vault/laundromat)
+"eZ" = (
+/obj/structure/table/glass,
+/obj/item/weapon/storage/fancy/cigarettes/starlights{
+	pixel_x = 7;
+	pixel_y = 0
+	},
+/obj/item/ashtray/bronze{
+	pixel_x = -6;
+	pixel_y = 5
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"fx" = (
+/obj/structure/window{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"fX" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk1"
+	},
+/obj/structure/catwalk{
+	icon_state = "catwalk3"
+	},
+/turf/space,
+/area)
+"gu" = (
+/obj/effect/decal/cleanable/crumbs{
+	icon_state = "droplets"
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whitehall"
+	},
+/area/vault/laundromat)
+"gX" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"hT" = (
+/obj/structure/grille/broken,
+/obj/structure/lattice,
+/obj/item/stack/rods,
+/turf/space,
+/area)
+"ij" = (
+/turf/simulated/floor{
+	icon_state = "whitecorner";
+	dir = 4
+	},
+/area/vault/laundromat)
+"iF" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "whitehall"
+	},
+/area/vault/laundromat)
+"iV" = (
+/obj/structure/window{
+	dir = 1
+	},
+/obj/structure/cable/yellow{
+	icon_state = "2-4"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"ka" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk1"
+	},
+/obj/machinery/light/he{
+	dir = 4
+	},
+/turf/space,
+/area)
+"kc" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/space,
+/area)
+"kp" = (
+/obj/structure/window,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"kN" = (
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"lp" = (
+/obj/structure/window,
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"lO" = (
+/obj/spacepod/random,
+/obj/structure/lattice,
+/turf/space,
+/area)
+"lW" = (
+/obj/machinery/light/he,
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/space,
+/area)
+"mP" = (
+/obj/structure/bed/chair/comfy/couch/right/red{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"nt" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whitehall"
+	},
+/area/vault/laundromat)
+"nu" = (
+/obj/structure/window,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"nZ" = (
+/obj/structure/table/glass,
+/obj/item/toy/crayon/rainbow,
+/obj/item/toy/crayon/rainbow{
+	pixel_y = 8
+	},
+/obj/item/weapon/paper{
+	pixel_x = 8;
+	pixel_y = -3
+	},
+/obj/item/weapon/paper{
+	pixel_x = -11;
+	pixel_y = 13
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"oA" = (
+/obj/structure/table/glass,
+/obj/item/weapon/paper_bin/blue{
+	pixel_y = 7
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"oC" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 12
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"ps" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk10"
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/space,
+/area)
+"pA" = (
+/turf/simulated/wall,
+/area/vault/laundromat)
+"qD" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/laundromat)
+"qI" = (
+/obj/effect/landmark/corpse/commander,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"ri" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/obj/item/weapon/paper/crumpled/bloody{
+	info = "Well... I did it, honey. I finally started my own business. It's going great! I've had people from all walks of life come here, even wizards and syndicate agents. I don't mind, though. That fake TTV on the center pillar keeps everyone humble. Can't wait to for you to come check, it'll be awes- <B>The rest of the text is covered in blood...</B>";
+	name = "crumpled letter"
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"sV" = (
+/obj/structure/rack,
+/obj/item/weapon/tank/air,
+/obj/item/weapon/tank/air,
+/obj/item/weapon/tank/nitrogen,
+/obj/item/weapon/tank/plasma/plasmaman,
+/obj/item/weapon/tank/oxygen,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"sW" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "whitehall"
+	},
+/area/vault/laundromat)
+"tm" = (
+/obj/abstract/map/spawner/laundromat/clothing,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"tp" = (
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/laundromat)
+"tB" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"tG" = (
+/obj/item/weapon/stool,
+/turf/simulated/floor/glass,
+/area/vault/laundromat)
+"vh" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/laundromat)
+"vu" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/space,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"vP" = (
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whitehall"
+	},
+/area/vault/laundromat)
+"wr" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whitecorner"
+	},
+/area/vault/laundromat)
+"ws" = (
+/obj/structure/grille/broken,
+/obj/structure/lattice,
+/turf/space,
+/area)
+"wI" = (
+/obj/structure/window,
+/obj/machinery/portable_atmospherics/canister/plasma{
+	icon_state = "yellow";
+	name = "canister"
+	},
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"wM" = (
+/obj/machinery/portable_atmospherics/canister/plasma/broken,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"yo" = (
+/obj/effect/landmark/corpse/syndicateexec,
+/obj/item/weapon/stool,
+/turf/simulated/floor/glass,
+/area/vault/laundromat)
+"yR" = (
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/laundromat)
+"zr" = (
+/obj/machinery/washing_machine,
+/obj/abstract/map/spawner/laundromat/clothing,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/dark,
+/area/vault/laundromat)
+"zX" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"Az" = (
+/obj/structure/window{
+	dir = 4
+	},
+/turf/simulated/floor,
+/area/vault/laundromat)
+"AB" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"Bg" = (
+/obj/effect/landmark/corpse/vox,
+/obj/structure/lattice,
+/turf/space,
+/area)
+"By" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/obj/abstract/map/spawner/laundromat/clothing,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"BX" = (
+/obj/machinery/atmospherics/pipe/simple/general/hidden,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"Cd" = (
+/obj/abstract/map/spawner/laundromat/clothing,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "whitecorner";
+	dir = 4
+	},
+/area/vault/laundromat)
+"Cq" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/obj/structure/rack,
+/obj/item/weapon/reagent_containers/glass/bottle/bleach{
+	pixel_x = -4;
+	pixel_y = 5
+	},
+/obj/item/weapon/reagent_containers/glass/bottle/bleach,
+/obj/item/weapon/reagent_containers/glass/bottle/bleach{
+	pixel_y = -4;
+	pixel_x = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"Cs" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"Cw" = (
+/turf/simulated/floor{
+	dir = 4;
+	icon_state = "whitehall"
+	},
+/area/vault/laundromat)
+"CR" = (
+/obj/structure/table/glass,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"CW" = (
+/obj/structure/table/reinforced,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"Dl" = (
+/obj/machinery/door/airlock/external{
+	icon = 'icons/obj/doors/Doorglass.dmi';
+	name = "Laundromat";
+	opacity = 0
+	},
+/obj/structure/airshield{
+	alpha = 0;
+	invisibility = 60;
+	mouse_opacity = 0;
+	opacity = 0
+	},
+/turf/simulated/floor,
+/area/vault/laundromat)
+"Dv" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/obj/structure/catwalk{
+	icon_state = "catwalk3"
+	},
+/turf/space,
+/area)
+"DP" = (
+/obj/machinery/door/airlock/external{
+	icon = 'icons/obj/doors/Doorglass.dmi';
+	name = "Laundromat";
+	opacity = 0
+	},
+/turf/simulated/floor,
+/area/vault/laundromat)
+"Es" = (
+/obj/machinery/light/he{
+	dir = 4
+	},
+/obj/structure/cable/yellow{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/rack,
+/obj/item/weapon/reagent_containers/spray/cleaner,
+/obj/item/weapon/reagent_containers/spray/cleaner{
+	pixel_y = -4;
+	pixel_x = -7
+	},
+/obj/item/weapon/soap{
+	pixel_y = -7;
+	pixel_x = 1
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"EC" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/obj/machinery/portable_atmospherics/canister/oxygen,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"ED" = (
+/obj/machinery/light/he,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"EJ" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "whitecorner";
+	dir = 8
+	},
+/area/vault/laundromat)
+"EV" = (
+/obj/machinery/washing_machine,
+/obj/abstract/map/spawner/laundromat/clothing,
+/turf/simulated/floor/dark,
+/area/vault/laundromat)
+"Fc" = (
+/obj/item/toy/bomb{
+	name = "Peace Enforcer";
+	desc = "No fun allowed. Comes with a clock!"
+	},
+/turf/simulated/wall,
+/area/vault/laundromat)
+"Fr" = (
+/turf/simulated/floor{
+	icon_state = "whitecorner";
+	dir = 8
+	},
+/area/vault/laundromat)
+"FK" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/flora/pottedplant/random,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"Gj" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/laundromat)
+"Gu" = (
+/obj/effect/decal/cleanable/crumbs{
+	icon_state = "dribbles";
+	dir = 1;
+	name = "dribbles";
+	pixel_x = -5
+	},
+/obj/effect/decal/cleanable/crumbs{
+	icon_state = "dribbles";
+	name = "dribbles";
+	pixel_x = 10;
+	pixel_y = -4;
+	dir = 4
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "whitehall"
+	},
+/area/vault/laundromat)
+"GC" = (
+/obj/effect/landmark/corpse/captain,
+/obj/item/weapon/stool,
+/turf/simulated/floor/glass,
+/area/vault/laundromat)
+"Hb" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/obj/structure/catwalk{
+	icon_state = "catwalk3"
+	},
+/turf/space,
+/area)
+"He" = (
+/obj/structure/grille,
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/vault/laundromat)
+"Hu" = (
+/obj/structure/cable/yellow{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"HI" = (
+/obj/structure/table/glass,
+/obj/item/weapon/storage/fancy/crayons{
+	pixel_x = -4;
+	pixel_y = 7
+	},
+/obj/item/weapon/storage/fancy/crayons,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"Ix" = (
+/obj/structure/window,
+/obj/machinery/light/he{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/laundromat)
+"IA" = (
+/obj/spacepod/taxi,
+/obj/structure/lattice,
+/turf/space,
+/area)
+"Jd" = (
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/laundromat)
+"Jf" = (
+/obj/structure/window{
+	dir = 8
+	},
+/turf/simulated/floor,
+/area/vault/laundromat)
+"Jj" = (
+/obj/structure/window{
+	dir = 1
+	},
+/obj/machinery/light/he,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"JC" = (
+/obj/spacepod/random{
+	dir = 4
+	},
+/obj/structure/lattice,
+/turf/space,
+/area)
+"JS" = (
+/obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen,
+/turf/simulated/wall,
+/area/vault/laundromat)
+"JX" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"Kv" = (
+/obj/structure/ladder{
+	pixel_x = 1;
+	pixel_y = 1;
+	id = "laundromat_drug_lab";
+	height = 1
+	},
+/turf/simulated/floor/dark,
+/area/vault/laundromat)
+"KK" = (
+/turf/simulated/floor,
+/area/vault/laundromat)
+"Ld" = (
+/obj/item/stack/rods,
+/obj/item/stack/rods,
+/turf/space,
+/area)
+"Le" = (
+/obj/machinery/portable_atmospherics/scrubber/mech{
+	on = 1
+	},
+/obj/machinery/atmospherics/unary/portables_connector,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"Ly" = (
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/laundromat)
+"LH" = (
+/obj/effect/landmark/corpse/quartermaster,
+/obj/structure/bed/chair/comfy/couch/left/red,
+/obj/item/device/assembly/signaler,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"LT" = (
+/obj/effect/landmark/corpse/cargotechnician,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"NM" = (
+/obj/abstract/map/spawner/laundromat/clothing,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"NX" = (
+/obj/machinery/light/he{
+	dir = 8
+	},
+/obj/machinery/disposal/compactor,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"Oe" = (
+/obj/effect/landmark/corpse,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"OS" = (
+/obj/structure/table/glass,
+/obj/item/weapon/reagent_containers/glass/rag{
+	pixel_y = 9
+	},
+/obj/item/weapon/reagent_containers/glass/rag{
+	pixel_y = 5;
+	pixel_x = 7
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"Py" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk6"
+	},
+/obj/structure/railing{
+	dir = 1
+	},
+/turf/space,
+/area)
+"PG" = (
+/obj/structure/window{
+	dir = 1
+	},
+/turf/simulated/floor,
+/area/vault/laundromat)
+"PT" = (
+/turf/simulated/floor{
+	dir = 8;
+	icon_state = "whitehall"
+	},
+/area/vault/laundromat)
+"QW" = (
+/obj/structure/lattice,
+/obj/spacepod/random,
+/turf/space,
+/area)
+"Rp" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk2"
+	},
+/obj/structure/catwalk{
+	icon_state = "catwalk3"
+	},
+/turf/space,
+/area)
+"Rw" = (
+/obj/effect/landmark/corpse/pirate/ranged,
+/obj/structure/cable/yellow{
+	icon_state = "2-8"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"Sa" = (
+/obj/item/stack/rods,
+/turf/space,
+/area)
+"Sb" = (
+/obj/structure/grille,
+/obj/structure/grille,
+/turf/space,
+/area)
+"Sn" = (
+/obj/structure/bed/chair/comfy/couch/turn/inward/red{
+	dir = 4
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"SP" = (
+/obj/structure/window{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"TK" = (
+/obj/structure/table/glass,
+/obj/abstract/map/spawner/laundromat/clothing,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"TW" = (
+/obj/item/weapon/stool,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/glass,
+/area/vault/laundromat)
+"UH" = (
+/obj/structure/grille,
+/turf/space,
+/area)
+"UO" = (
+/obj/structure/window,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"Vb" = (
+/obj/effect/landmark/corpse,
+/obj/structure/cable/yellow{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/machinery/power/apc{
+	pixel_y = -24
+	},
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"VN" = (
+/turf/space,
+/area)
+"VR" = (
+/obj/machinery/washing_machine,
+/obj/abstract/map/spawner/laundromat/clothing,
+/obj/machinery/washing_machine,
+/turf/simulated/floor/dark,
+/area/vault/laundromat)
+"VU" = (
+/obj/machinery/light/he{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"VV" = (
+/obj/effect/landmark/corpse,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"Wb" = (
+/obj/structure/table/reinforced,
+/obj/structure/bedsheetbin,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"Wf" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk3"
+	},
+/turf/space,
+/area)
+"WQ" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"WT" = (
+/obj/abstract/map/spawner/laundromat/clothing,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"Xa" = (
+/obj/effect/landmark/corpse/wizard,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"Xb" = (
+/turf/simulated/floor{
+	icon_state = "whitecorner"
+	},
+/area/vault/laundromat)
+"Xo" = (
+/obj/abstract/map/spawner/laundromat/clothing,
+/obj/item/weapon/stool,
+/turf/simulated/floor/glass,
+/area/vault/laundromat)
+"Xx" = (
+/obj/effect/landmark/corpse/syndicatecommando,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"Ye" = (
+/obj/effect/landmark/corpse/assistant/robust,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "whitecorner";
+	dir = 4
+	},
+/area/vault/laundromat)
+"Yj" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	icon_state = "whitehall"
+	},
+/area/vault/laundromat)
+"Yv" = (
+/obj/item/stack/sheet/mineral/plasma{
+	amount = 30
+	},
+/obj/item/stack/sheet/mineral/plasma{
+	amount = 30
+	},
+/obj/structure/rack,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"YC" = (
+/obj/machinery/portable_atmospherics/canister/nitrogen,
+/turf/simulated/floor{
+	icon_state = "dark vault full"
+	},
+/area/vault/laundromat)
+"Zy" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor,
+/area/vault/laundromat)
+"ZU" = (
+/obj/structure/window/full/reinforced,
+/obj/structure/window/reinforced{
+	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/laundromat)
+
+(1,1,1) = {"
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+bJ
+bJ
+bJ
+ws
+bJ
+ws
+VN
+VN
+VN
+ws
+bJ
+bJ
+bJ
+bJ
+bJ
+VN
+VN
+"}
+(2,1,1) = {"
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+WQ
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+WQ
+VN
+VN
+VN
+VN
+"}
+(3,1,1) = {"
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+WQ
+Sa
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+WQ
+VN
+VN
+VN
+bJ
+"}
+(4,1,1) = {"
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+pA
+pA
+pA
+pA
+pA
+ZU
+Jd
+tp
+pA
+pA
+pA
+pA
+pA
+VN
+VN
+ws
+"}
+(5,1,1) = {"
+VN
+VN
+VN
+VN
+WQ
+WQ
+WQ
+VN
+pA
+Sn
+mP
+kN
+lp
+EV
+EV
+EV
+fx
+kN
+Wb
+bI
+pA
+WQ
+WQ
+bJ
+"}
+(6,1,1) = {"
+VN
+VN
+VN
+WQ
+WQ
+WQ
+WQ
+WQ
+pA
+LH
+eZ
+Zy
+EJ
+PT
+PT
+PT
+wr
+Xa
+CW
+Cs
+pA
+Ld
+VN
+bJ
+"}
+(7,1,1) = {"
+VN
+VN
+VN
+WQ
+JC
+WQ
+WQ
+WQ
+pA
+ri
+AB
+Az
+Ye
+KK
+KK
+Zy
+bu
+Az
+KK
+By
+pA
+VN
+VN
+ws
+"}
+(8,1,1) = {"
+VN
+VN
+VN
+WQ
+WQ
+WQ
+WQ
+lO
+pA
+JS
+kp
+zr
+nt
+tG
+oA
+tG
+cQ
+VR
+Jj
+JS
+pA
+VN
+VN
+VN
+"}
+(9,1,1) = {"
+VN
+VN
+VN
+WQ
+WQ
+WQ
+WQ
+WQ
+pA
+tB
+nu
+EV
+vP
+tG
+nZ
+tG
+cT
+Kv
+PG
+NX
+pA
+VN
+VN
+VN
+"}
+(10,1,1) = {"
+VN
+VN
+Py
+Dv
+Rp
+Wf
+fX
+ka
+pA
+qI
+nu
+EV
+vP
+tG
+HI
+GC
+cQ
+EV
+PG
+kN
+yR
+VN
+VN
+VN
+"}
+(11,1,1) = {"
+VN
+VN
+kc
+pA
+Gj
+qD
+He
+pA
+pA
+kN
+UO
+zr
+nt
+tG
+TK
+TW
+co
+zr
+PG
+kN
+cd
+VN
+VN
+VN
+"}
+(12,1,1) = {"
+VN
+VN
+lW
+pA
+VU
+LT
+KK
+vu
+vh
+kN
+NM
+SP
+wr
+KK
+bP
+Zy
+EJ
+SP
+tm
+kN
+Ly
+VN
+VN
+UH
+"}
+(13,1,1) = {"
+VN
+VN
+kc
+Dl
+KK
+KK
+Zy
+KK
+DP
+VV
+kN
+kN
+Cs
+ED
+Fc
+gX
+Cs
+Cs
+kN
+Vb
+pA
+WQ
+WQ
+UH
+"}
+(14,1,1) = {"
+VN
+VN
+lW
+pA
+zX
+Zy
+KK
+sV
+vh
+Cs
+Zy
+Az
+Cd
+KK
+JX
+KK
+bu
+Az
+Zy
+Hu
+yR
+VN
+VN
+Sb
+"}
+(15,1,1) = {"
+VN
+VN
+kc
+pA
+Gj
+qD
+He
+pA
+pA
+kN
+UO
+zr
+gu
+yo
+CR
+TW
+cQ
+EV
+PG
+Hu
+cd
+VN
+VN
+VN
+"}
+(16,1,1) = {"
+VN
+VN
+ps
+Hb
+Rp
+Wf
+fX
+bH
+pA
+kN
+UO
+EV
+vP
+tG
+TK
+Xo
+iF
+EV
+PG
+FK
+Ly
+VN
+VN
+VN
+"}
+(17,1,1) = {"
+VN
+VN
+VN
+WQ
+WQ
+WQ
+QW
+WQ
+pA
+av
+UO
+EV
+Gu
+tG
+CR
+tG
+Yj
+zr
+iV
+Es
+pA
+VN
+VN
+VN
+"}
+(18,1,1) = {"
+VN
+VN
+VN
+IA
+WQ
+WQ
+WQ
+WQ
+pA
+JS
+Ix
+EV
+vP
+tG
+OS
+TW
+iF
+EV
+dC
+JS
+pA
+VN
+VN
+VN
+"}
+(19,1,1) = {"
+VN
+VN
+VN
+WQ
+WQ
+Bg
+WQ
+WQ
+pA
+EC
+Zy
+Jf
+ed
+KK
+Zy
+Oe
+Fr
+SP
+aR
+Cq
+pA
+VN
+VN
+bJ
+"}
+(20,1,1) = {"
+VN
+VN
+VN
+WQ
+WQ
+WQ
+WQ
+WQ
+pA
+YC
+Xx
+NM
+Xb
+Cw
+sW
+Cw
+ij
+KK
+Rw
+cJ
+pA
+VN
+VN
+hT
+"}
+(21,1,1) = {"
+VN
+VN
+VN
+VN
+WQ
+WQ
+WQ
+VN
+pA
+wM
+Le
+BX
+wI
+EV
+EV
+EV
+df
+WT
+oC
+Yv
+pA
+WQ
+WQ
+bJ
+"}
+(22,1,1) = {"
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+pA
+pA
+pA
+pA
+pA
+ZU
+Jd
+tp
+pA
+pA
+pA
+pA
+pA
+VN
+VN
+bJ
+"}
+(23,1,1) = {"
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+WQ
+Sa
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+WQ
+VN
+VN
+VN
+bJ
+"}
+(24,1,1) = {"
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+WQ
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+WQ
+VN
+aq
+VN
+VN
+"}
+(25,1,1) = {"
+VN
+VN
+VN
+VN
+VN
+VN
+VN
+bJ
+bJ
+bJ
+ws
+bJ
+VN
+VN
+VN
+VN
+VN
+bJ
+bJ
+bJ
+bJ
+bJ
+VN
+VN
+"}

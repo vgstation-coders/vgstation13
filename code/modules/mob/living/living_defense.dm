@@ -22,7 +22,7 @@
 				show_message("[absorb_text]")
 			else
 				show_message("<span class='borange'>Your armor ABSORBS the blow!</span>")
-	else if(armor > 50)
+	else if(armor >= 50)
 		if(!quiet)
 			if(absorb_text)
 				show_message("[soften_text]",4)
@@ -45,7 +45,6 @@
 			final_damage *= damage_multiplier
 
 	return final_damage
-
 
 /mob/living/bullet_act(var/obj/item/projectile/P, var/def_zone)
 	var/obj/item/weapon/cloaking_device/C = locate(/obj/item/weapon/cloaking_device) in src
@@ -81,11 +80,13 @@
 /mob/living/proc/thrown_defense(var/obj/O)
 	return 1
 
-/mob/living/hitby(atom/movable/AM as mob|obj,var/speed = 5,var/dir)//Standardization and logging -Sieve
+/mob/living/hitby(atom/movable/AM as mob|obj,var/speed = 5,var/dir,var/list/hit_whitelist)//Standardization and logging -Sieve
 	. = ..()
 	if(.)
 		return
 	if(flags & INVULNERABLE)
+		return
+	if(hit_whitelist && (src in hit_whitelist))
 		return
 	if(istype(AM,/obj/) && !istype(AM,/obj/effect/))
 		var/obj/O = AM
@@ -141,7 +142,7 @@
 			return
 		if(!O.fingerprintslast)
 			return
-			
+
 		var/client/assailant = directory[ckey(O.fingerprintslast)]
 		if(assailant && assailant.ckey && assailant.mob)
 			msg_admin_attack("[src.name] ([src.ckey]) was hit by a thrown [O], last touched by [assailant.mob.name] ([assailant.ckey]) (speed: [speed]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")

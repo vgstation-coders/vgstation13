@@ -85,6 +85,8 @@
 	bumped = 1
 
 	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+	if(!hookshot) /* Can happen with hookshots if it doesn't have shot_from assigned for one reason or another. Probably something to do with hostage-taking? */
+		return
 	spawn()
 		if(!can_tether)
 			..(A)

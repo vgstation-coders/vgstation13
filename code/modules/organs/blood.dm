@@ -205,7 +205,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	var/blood_factor = 1
 	if(species && species.anatomy_flags & NO_BLOOD) //Things that do not bleed do not bleed
 		return 0
-		
+
 	if(lying) //Lying down slows blood loss
 		blood_factor -= 0.3
 
@@ -214,16 +214,19 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	if(reagents.has_reagent(INAPROVALINE)) //Inaprov and Bicard slow bleeding, and stack
 		blood_factor -= 0.3
-		
+
 	if(reagents.has_reagent(BICARIDINE))
 		blood_factor -= 0.3
-		
+
 	if(reagents.has_reagent(CLOTTING_AGENT) || reagents.has_reagent(BIOFOAM)) //Clotting agent and biofoam stop bleeding entirely
 		blood_factor = 0
-	
+
+	if(reagents.has_reagent(FEVERFEW)) //A powerful anticoagulant that overrides clotting agents
+		blood_factor = 1
+
 	if(bodytemperature < 170) //Cryo stops bleeding entirely
 		blood_factor = 0
-		
+
 	return max(0, blood_factor) //Do not return a negative percent, we don't want free blood healing!
 
 //Makes a blood drop, leaking amt units of blood from the mob
@@ -232,10 +235,10 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		return 0
 
 	amt = max(0, amt * calcbloodloss()) //determines how much blood to lose based on human's situation
-	
+
 	if(!amt)
 		return 0
-	
+
 	vessel.remove_reagent(BLOOD,amt)
 	blood_splatter(src,src)
 	stat_collection.blood_spilled += amt
@@ -436,7 +439,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if (istype(container,/obj/item/weapon/reagent_containers/food/drinks/cult))//drinking from this cup is always toxic to non cultists, and safe to cultists
 		if (!iscultist(src))
 			toxic = 2
-	else if (blood_incompatible(injected.data["blood_type"],our.data["blood_type"]))
+	else if (blood_incompatible(injected.data["blood_type"],our.data["blood_type"]) && !isvampire(src))
 		toxic = 1
 
 	switch (toxic)
@@ -559,3 +562,21 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		B.virus2 = virus_copylist(source.data["virus2"])
 
 	return B
+
+/proc/combine_blood_types(var/type_A="O-", var/type_B="O-")
+	var/combined_types = "[type_A][type_B]"
+	var/has_A = findtext(combined_types,"A")
+	var/has_B = findtext(combined_types,"B")
+	var/has_Rh = findtext(combined_types,"+")
+	var/result_type = ""
+	if (has_A)
+		result_type += "A"
+	if (has_B)
+		result_type += "B"
+	if (result_type == "")
+		result_type += "O"
+	if (has_Rh)
+		result_type += "+"
+	else
+		result_type += "-"
+	return result_type

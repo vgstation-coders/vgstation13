@@ -148,10 +148,13 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 	var/date = ""
 	var/time = ""
 	var/source_terminal = ""
+	var/source_name = ""
 
-/datum/transaction/New(var/datum/money_account/account=null, var/purpose="", var/amount = 0, var/source_terminal="", var/target_name="", var/date="", var/time = "", var/send2PDAs = TRUE)
+/datum/transaction/New(var/datum/money_account/account=null, var/purpose="", var/amount = 0, var/source_terminal="", var/target_name="", var/date="", var/time = "", var/send2PDAs = TRUE, var/source_name="")
 	// Default to account name if not specified
 	src.target_name = target_name == "" && account ? account.owner_name : target_name
+	// Default to source terminal if not specified
+	src.source_name = source_name == "" ? source_terminal : source_name
 	src.purpose = purpose
 	src.amount = amount
 	// Get current date and time if not specified
@@ -203,6 +206,8 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 /obj/machinery/account_database/New(loc)
 	..(loc)
 
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_account")
+
 	if(!station_account)
 		create_station_account()
 
@@ -210,7 +215,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 		for(var/department in station_departments)
 			create_department_account(department, receives_wage = 1)
 	if(!vendor_account)
-		vendor_account = create_account("Vendor", 0, null, 0, 1, TRUE, FALSE)
+		vendor_account = create_account("Vendor", 0, null, 0, 1, 0, TRUE, FALSE)
 
 	if(!current_date_string)
 		current_date_string = "[time2text(world.timeofday, "DD")] [time2text(world.timeofday, "Month")], [game_year]"
@@ -434,7 +439,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 
 	src.attack_hand(usr)
 
-/obj/machinery/account_database/proc/charge_to_account(var/attempt_account_number, var/source_name, var/purpose, var/terminal_id, var/amount)
+/obj/machinery/account_database/proc/charge_to_account(var/attempt_account_number, var/source_name, var/purpose, var/terminal_id, var/amount, var/target_name)
 	if(!activated || !attempt_account_number)
 		return 0
 	for(var/datum/money_account/D in all_money_accounts)
@@ -442,7 +447,7 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 			D.money += amount
 
 			//create a transaction log entry
-			new /datum/transaction(D, purpose, "[abs(amount)]", terminal_id, source_name)
+			new /datum/transaction(D, purpose, "[abs(amount)]", terminal_id, source_name, source_name = target_name)
 
 			return 1
 

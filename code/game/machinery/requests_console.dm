@@ -55,23 +55,40 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	var/priority = -1 ; //Priority of the message being sent
 	var/announceSound = 'sound/vox/_bloop.wav'
 	luminosity = 0
+	use_auto_lights = 1
 
 /obj/machinery/requests_console/power_change()
 	..()
 	update_icon()
 
 /obj/machinery/requests_console/update_icon()
-	if(stat & (FORCEDISABLE|NOPOWER))
-		if(icon_state != "req_comp_off")
-			icon_state = "req_comp_off"
+	if(open)
+		kill_moody_light()
+		if(!hackState)
+			icon_state="req_comp_open"
+		else
+			icon_state="req_comp_rewired"
 	else
-		if(icon_state == "req_comp_off")
-			icon_state = "req_comp0"
+		if(stat & (FORCEDISABLE|NOPOWER))
+			kill_moody_light()
+			icon_state = "req_comp_off"
+		else
+			switch (newmessagepriority)
+				if (1)
+					icon_state = "req_comp2"
+					update_moody_light('icons/lighting/moody_lights.dmi', "overlay_req_comp2")
+				if (2)
+					icon_state = "req_comp3"
+					update_moody_light('icons/lighting/moody_lights.dmi', "overlay_req_comp3")
+				else
+					icon_state = "req_comp0"
+					update_moody_light('icons/lighting/moody_lights.dmi', "overlay_req_comp0")
 
 /obj/machinery/requests_console/New()
 	requests_consoles += src
 	set_department(department,departmentType)
-	return ..()
+	. = ..()
+	update_icon()
 
 /obj/machinery/requests_console/Destroy()
 	requests_consoles -= src
@@ -198,8 +215,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 					for (var/obj/machinery/requests_console/Console in requests_consoles)
 						if (Console.department == department)
 							Console.newmessagepriority = 0
-							Console.icon_state = "req_comp0"
-							Console.set_light(1)
+							Console.update_icon()
 				for(var/msg in messages)
 					dat += text("[msg]<BR>")
 				dat += text("<A href='?src=\ref[src];setScreen=0'>Back to main menu</A><BR>")
@@ -320,10 +336,10 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 							if(2)		//High priority
 								if(Console.newmessagepriority < 2)
 									Console.newmessagepriority = 2
-									Console.icon_state = "req_comp3"
+									Console.update_icon()
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request_urgent.ogg', 50, 1)
-									visible_message("The [src] beeps; <span class='bold'>PRIORITY Alert at [department]</span>")
+									Console.visible_message("The [Console] beeps; <span class='bold'>PRIORITY Alert at [department]</span>")
 									sleep(10)
 									playsound(Console.loc, 'sound/machines/request_urgent.ogg', 50, 1)
 									sleep(10)
@@ -343,16 +359,15 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 							else		// Normal priority
 								if(Console.newmessagepriority < 1)
 									Console.newmessagepriority = 1
-									Console.icon_state = "req_comp2"
+									Console.update_icon()
 								if(!Console.silent)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
-									visible_message("The [src] beeps; Message from [department]")
+									Console.visible_message("The [Console] beeps; Message from [department]")
 									sleep(10)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
 									sleep(10)
 									playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
-								Console.messages += "<B>Message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[message]"
-						Console.set_light(2)
+								Console.messages += "<B>Message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[sending]"
 				messages += "<B>Message sent to [dpt]</B><BR>[message]"
 			else
 				say("NOTICE: No server detected!")
@@ -440,25 +455,14 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 					//deconstruction and hacking
 /obj/machinery/requests_console/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
 	if (iscrowbar(O))
-		if(open)
-			open = 0
-			icon_state="req_comp0"
-		else
-			open = 1
-			if(!hackState)
-				icon_state="req_comp_open"
-			else
-				icon_state="req_comp_rewired"
+		open = !open
+		update_icon()
 	if (O.is_screwdriver(user))
 		if(open)
-			if(!hackState)
-				hackState = 1
-				icon_state="req_comp_rewired"
-			else
-				hackState = 0
-				icon_state="req_comp_open"
+			hackState = !hackState
+			update_icon()
 		else
-			to_chat(user, "You can't do much with that.")
+			to_chat(user, "You can't do much with that with its cover closed.")
 	if(O.is_wrench(user) && open && !departmentType)
 		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
 		O.playtoolsound(src, 100)

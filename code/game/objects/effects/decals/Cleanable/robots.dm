@@ -7,6 +7,7 @@
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6", "gib7")
 
 	fake_DNA = "robot oil splatters"
+	stain_name = "oil"
 
 /obj/effect/decal/cleanable/blood/gibs/robot/update_icon()
 	color = "#FFFFFF"
@@ -43,6 +44,7 @@
 	basecolor=ROBOT_OIL
 
 	fake_DNA = "oil splatters"
+	stain_name = "oil"
 
 /obj/effect/decal/cleanable/blood/oil/dry()
 	return

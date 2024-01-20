@@ -27,10 +27,15 @@
 								/obj/item/weapon/tome, \
 								/obj/item/weapon/tome_legacy, \
 								/obj/item/weapon/spellbook, \
-								/obj/item/weapon/storage/bible)
+								/obj/item/weapon/storage/bible, \
+								/obj/item/dictionary)
 
 /obj/structure/bookcase/cultify()
 	return
+
+/obj/structure/bookcase/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>It contains [english_list(contents)].</span>")
 
 /obj/structure/bookcase/initialize()
 	for(var/obj/item/I in loc)
@@ -209,6 +214,8 @@
 	var/runestun = 0	//Does it have a stun talisman in it?
 	var/occult = 0 //Does this book contain forbidden and occult writings?
 
+	var/book_desc = ""
+
 	var/book_width = 600
 	var/book_height = 800
 
@@ -299,7 +306,7 @@
 		if(unique)
 			to_chat(user, "These pages don't seem to take the ink well. Looks like you can't modify it.")
 			return
-		var/choice = input("What would you like to change?") in list("Title", "Contents", "Author", "Cancel")
+		var/choice = input("What would you like to change?") in list("Title", "Contents", "Author", "Short Description", "Cancel")
 		switch(choice)
 			if("Title")
 				var/newtitle = reject_bad_text(stripped_input(usr, "Write a new title:"))
@@ -323,6 +330,13 @@
 					return
 				else
 					src.author = newauthor
+			if("Short Description")
+				var/newdesc = reject_bad_text(stripped_input(usr, "Write a new short description:"))
+				if(!newdesc)
+					to_chat(usr, "The description is invalid.")
+					return
+				else
+					src.book_desc = newdesc
 			else
 				return
 	else if(istype(W, /obj/item/weapon/barcodescanner))

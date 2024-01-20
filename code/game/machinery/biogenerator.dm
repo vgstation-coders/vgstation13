@@ -276,6 +276,12 @@
 /datum/biogen_recipe/misc
 	category="Misc."
 
+/datum/biogen_recipe/misc/bucket
+	cost=75
+	id="bucket"
+	name="Plastic Bucket"
+	result=/obj/item/weapon/reagent_containers/glass/bucket
+
 /datum/biogen_recipe/misc/insecticide
 	id = "insecticide"
 	name = "Insecticide"
@@ -380,21 +386,33 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 
 	light_color = LIGHT_COLOR_CYAN
-	light_range_on = 3
+	light_range_on = 2
 	light_power_on = 2
 	use_auto_lights = 1
 
 /obj/machinery/biogenerator/on_reagent_change()			//When the reagents change, change the icon as well.
 	update_icon()
 
+/obj/machinery/biogenerator/power_change()
+	..()
+	update_icon()
+
 /obj/machinery/biogenerator/update_icon()
-	if(!src.beaker)
+	if(stat & (FORCEDISABLE|NOPOWER))
+		kill_moody_light()
+		if(beaker)
+			icon_state = "biogen-off"
+		else
+			icon_state = "biogen-offempty"
+	else if(!beaker)
 		icon_state = "biogen-empty"
-	else if(!src.processing)
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_biogen_empty")
+	else if(!processing)
 		icon_state = "biogen-stand"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_biogen")
 	else
 		icon_state = "biogen-work"
-	return
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_biogen_work")
 
 /obj/machinery/biogenerator/New()
 	. = ..()
@@ -426,6 +444,7 @@
 			recipe_categories[recipe.category]=list()
 		recipe_categories[recipe.category] += recipe.id
 		recipes[recipe.id]=recipe
+	update_icon()
 
 /obj/machinery/biogenerator/RefreshParts()
 	var/manipcount = 0

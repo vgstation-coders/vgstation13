@@ -19,6 +19,7 @@
 	prearcane_name = name
 	if(!icon_state)
 		icon_state = "pill[rand(1,20)]"
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/pill/attack_self(mob/user as mob)
 	return attack(user, user) //Dealt with in attack code
@@ -87,6 +88,12 @@
 /obj/item/weapon/reagent_containers/pill/bless()
 	..()
 	name = prearcane_name
+
+/obj/item/weapon/reagent_containers/pill/update_icon()
+	..()
+	overlays.len = 0
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
 
 //OOP, HO!
 /obj/item/weapon/reagent_containers/pill/proc/ingest(mob/M as mob)
@@ -275,16 +282,16 @@
 	reagents.add_reagent(SYNAPTIZINE, 1)
 	reagents.add_reagent(HYPERZINE, 10)
 
-/obj/item/weapon/reagent_containers/pill/skeet
-	name = "Skeet pill"
-	desc = "Straight from the mothership drug labs; a party pill designed for ravers and addicts alike!"
+/obj/item/weapon/reagent_containers/pill/speedcrank
+	name = "Speedcrank pill"
+	desc = "Be up a hello!"
 	icon_state = "pill37" //darkblue tablet
 
-/obj/item/weapon/reagent_containers/pill/skeet/New()
+/obj/item/weapon/reagent_containers/pill/speedcrank/New()
 	..()
-	reagents.add_reagent(STOXIN, 1)
-	reagents.add_reagent(CRYPTOBIOLIN, 3)
-	reagents.add_reagent(HYPERZINE, 1)
+	reagents.add_reagent(VALERENIC_ACID, 1)
+	reagents.add_reagent(PHYSOSTIGMINE, 3)
+	reagents.add_reagent(COCAINE, 1)
 
 /obj/item/weapon/reagent_containers/pill/hyperzine
 	name = "Hyperzine pill"
@@ -514,6 +521,14 @@
 	..()
 	reagents.add_reagent(ARITHRAZINE, 10)
 
+/obj/item/weapon/reagent_containers/pill/lithotorcrazine
+	name = "lithotorcrazine pill"
+	desc = "Shields the body against radiation buildup, but does not cure it. Lasts around 5 minutes."
+	icon_state = "pill38"
+
+/obj/item/weapon/reagent_containers/pill/lithotorcrazine/New()
+	..()
+	reagents.add_reagent(LITHOTORCRAZINE, 30)
 
 /obj/item/weapon/reagent_containers/pill/nanofloxacin
 	name = "nanofloxacin pill"

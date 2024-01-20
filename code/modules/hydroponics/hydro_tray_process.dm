@@ -227,12 +227,17 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_gasses(var/datum/gas_mixture/environment)
 	// Handle gas consumption.
+	// If it has the absorbing trait, takes no damage from lack of gas
 	if(seed.consume_gasses && seed.consume_gasses.len && environment)
 		missing_gas = 0
 		for(var/gas in seed.consume_gasses)
 			if(environment[gas] < seed.consume_gasses[gas])
-				missing_gas++
+				if(!seed.gas_absorb)
+					missing_gas++
 				continue
+			if (seed.gas_absorb && seed.potency < 200)
+				seed = seed.diverge(1)
+				seed.potency += 0.2
 			environment.adjust_gas(gas, -(seed.consume_gasses[gas]), FALSE)
 		environment.update_values()
 

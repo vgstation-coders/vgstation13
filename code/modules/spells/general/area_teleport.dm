@@ -37,6 +37,9 @@
 		A = pick(teleportlocs)
 
 	var/area/thearea = teleportlocs[A]
+	if(!thearea) //Wizard didn't pick an area
+		to_chat(holder, "<span class='warning'>You cancel the teleportation.</span>")
+		return
 
 	return list(thearea)
 

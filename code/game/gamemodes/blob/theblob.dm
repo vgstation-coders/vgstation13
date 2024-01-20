@@ -49,6 +49,9 @@ var/list/blob_overminds = list()
 
 	var/asleep = FALSE
 
+	var/meat = /obj/item/weapon/reagent_containers/food/snacks/meat/blob
+	var/meat_drop_factor = 1	// A weapon of force 8 and sharpness 0.5 will hack off meat with a probability of 4% at drop factor 1
+
 /obj/effect/blob/blob_act()
 	return
 
@@ -196,6 +199,14 @@ var/list/blob_overminds = list()
 				playsound(src, 'sound/effects/blobweld.ogg', 100, 1)
 		if("brute")
 			damage = (W.force / max(src.brute_resist,1))
+			if(prob((W.sharpness * W.force) * meat_drop_factor))
+				var/obj/item/I = new meat()
+				I.forceMove(src.loc)
+				if (!(src.looks in blob_diseases))
+					CreateBlobDisease(src.looks)
+				var/datum/disease2/disease/D = blob_diseases[src.looks]
+				I.infect_disease2(D)
+				I.throw_at(user, 1, 1)
 
 	health -= damage
 	update_health()
@@ -332,6 +343,8 @@ var/list/blob_overminds = list()
 			icon = 'icons/mob/blob/blob_AME_64x64.dmi'
 		if("skelleton")
 			icon = 'icons/mob/blob/blob_skelleton_64x64.dmi'
+		if("secblob")
+			icon = 'icons/mob/blob/blob_sec.dmi'
 		//<----------------------------------------------------------------------------DEAR SPRITERS, THIS IS WHERE YOU ADD YOUR NEW BLOB DMIs
 		/*EXAMPLES
 		if("fleshy")
@@ -349,6 +362,7 @@ var/list/blob_looks_admin = list(//Options available to admins
 	"AME" = 32,
 	"AME_new" = 64,
 	"skelleton" = 64,
+	"secblob" = 32,
 	)
 
 var/list/blob_looks_player = list(//Options available to players
@@ -471,7 +485,7 @@ var/list/blob_looks_player = list(//Options available to players
 	if(!ispath(type))
 		error("[type] is an invalid type for the blob.")
 	if(special) //Send additional information to the New()
-		new type(src.loc, 200, null, 1, M, newlook = looks)
+		new type(src.loc, 200, null, 1, 1, newlook = looks)
 	else
 		var/obj/effect/blob/B = new type(src.loc, newlook = looks)
 		B.dir = dir

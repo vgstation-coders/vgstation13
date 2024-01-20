@@ -21,7 +21,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 			continue
 		task = new task_type()
 		task.on_init()
-		tasks[task.type] = task
+		tasks["[task.type]"] = task
 	..()
 
 /datum/subsystem/persistence_misc/Shutdown()
@@ -31,7 +31,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	..()
 
 /datum/subsystem/persistence_misc/proc/read_data(var/path)
-	var/datum/persistence_task/task_to_read = tasks[path]
+	var/datum/persistence_task/task_to_read = tasks["[path]"]
 	if (!task_to_read)
 		return null
 	return task_to_read.data
@@ -122,22 +122,23 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 
 /datum/persistence_task/forwards_fulfilled/on_init()
 	data = read_file()
-	var/list/previous_forwards_formatted = data["fulfilled_forwards"]
-	for(var/list/formatted_vars in previous_forwards_formatted)
-		var/ourtype = null
-		if(formatted_vars["type"])
-			ourtype = text2path(formatted_vars["type"])
-		var/ourname = null
-		if(formatted_vars["sender"])
-			ourname = formatted_vars["sender"]
-		var/ourstation = null
-		if(formatted_vars["station"])
-			ourstation = formatted_vars["station"]
-		var/oursubtype = null
-		if(formatted_vars["subtype"])
-			oursubtype = text2path(formatted_vars["subtype"])
-		if(ispath(ourtype,/datum/cargo_forwarding))
-			SSsupply_shuttle.previous_forwards += new ourtype(ourname, ourstation, oursubtype, TRUE)
+	if ("fulfilled_forwards" in data)
+		var/list/previous_forwards_formatted = data["fulfilled_forwards"]
+		for(var/list/formatted_vars in previous_forwards_formatted)
+			var/ourtype = null
+			if(formatted_vars["type"])
+				ourtype = text2path(formatted_vars["type"])
+			var/ourname = null
+			if(formatted_vars["sender"])
+				ourname = formatted_vars["sender"]
+			var/ourstation = null
+			if(formatted_vars["station"])
+				ourstation = formatted_vars["station"]
+			var/oursubtype = null
+			if(formatted_vars["subtype"])
+				oursubtype = text2path(formatted_vars["subtype"])
+			if(ispath(ourtype,/datum/cargo_forwarding))
+				SSsupply_shuttle.previous_forwards += new ourtype(ourname, ourstation, oursubtype, TRUE)
 
 /datum/persistence_task/forwards_fulfilled/on_shutdown()
 	var/list/all_forwards = SSsupply_shuttle.previous_forwards.Copy() + SSsupply_shuttle.fulfilled_forwards.Copy()
@@ -177,8 +178,9 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/latest_dynamic_rulesets/on_shutdown()
 	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
 	if (!istype(dynamic_mode))
+		stack_trace("we shut down the persistence - Misc subsystem and ticker.mode is not Dynamic.")
 		return
-	var/list/data = list(
+	data = list(
 		"one_round_ago" = list(),
 		"two_rounds_ago" = dynamic_mode.previously_executed_rules["one_round_ago"],
 		"three_rounds_ago" = dynamic_mode.previously_executed_rules["two_rounds_ago"]
@@ -189,6 +191,33 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 		if(some_ruleset.stillborn)//executed near the end of the round
 			continue
 		data["one_round_ago"] |= "[some_ruleset.type]"
+	write_file(data)
+
+/datum/persistence_task/dynamic_ruleset_weights
+	execute = TRUE
+	name = "Dynamic ruleset weights"
+	file_path = "data/persistence/dynamic_ruleset_weights.json"
+
+/datum/persistence_task/dynamic_ruleset_weights/on_init()
+	data = read_file()
+
+/datum/persistence_task/dynamic_ruleset_weights/on_shutdown()
+	var/datum/gamemode/dynamic/dynamic_mode = ticker.mode
+	if (!istype(dynamic_mode))
+		stack_trace("we shut down the persistence - Misc subsystem and ticker.mode is not Dynamic.")
+		return
+
+	data = list()
+
+	for (var/category in dynamic_mode.ruleset_category_weights)
+		data[category] = dynamic_mode.ruleset_category_weights[category]
+
+	if (dynamic_mode.executed_rules.len <= 0)
+		data["Extended"] = 0
+	else
+		for (var/datum/dynamic_ruleset/DR in dynamic_mode.executed_rules)
+			data[DR.weight_category] = 0
+
 	write_file(data)
 
 // This task has a unit test on code/modules/unit_tests/highscores.dm
@@ -215,7 +244,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/highscores/proc/insert_records(list/records)
 	data += records
 	cmp_field = "cash"
-	sortTim(data, /proc/cmp_list_by_element_asc)
+	sortTim(data, /proc/cmp_list_by_element_desc)
 	if (data.len > 5)
 		data.Cut(6) // we only store the top 5
 	for(var/datum/record/money/record in data)
@@ -238,6 +267,21 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/highscores/proc/clear_records()
 	data = list()
 	fdel(file(file_path))
+
+/datum/persistence_task/highscores/trader
+	execute = TRUE
+	name = "Trader shoal highscores"
+	file_path = "data/persistence/trader_highscores.json"
+
+/datum/persistence_task/highscores/trader/announce_new_highest_record(var/datum/record/money/record)
+	var/name = "Richest shoal haul ever"
+	var/desc = "You broke the record of the richest shoal haul! $[record.cash] chips accumulated."
+	give_award(record.ckey, /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
+
+/datum/persistence_task/highscores/trader/announce_new_record(var/datum/record/money/record)
+	var/name = "Good rich shoal haul"
+	var/desc = "You made it to the top 5! You accumulated $[record.cash]."
+	give_award(record.ckey, /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
 
 //stores map votes for code/modules/html_interface/voting/voting.dm
 /datum/persistence_task/vote
@@ -321,3 +365,38 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 	)
 	data = L
 	write_file(data)
+
+//Research Archive
+/datum/persistence_task/researcharchive
+	execute = TRUE
+	name = "Research Archive"
+	file_path = "data/persistence/researcharchive.json"
+
+/datum/persistence_task/researcharchive/on_init()
+	if(!research_archive_datum)
+		research_archive_datum = new /datum/research()
+	var/list/techs = read_file()
+	//world.log << "DEBUG ARCHIVE: [json_encode(techs)]"
+	var/skip_reporting = TRUE
+	for(var/obj/machinery/computer/rdconsole/C in machines)
+		for(var/element in techs)
+			var/datum/tech/T = C.files.known_tech[element]
+			if(!T)
+				continue
+			T.level = text2num(techs[element])
+			if(skip_reporting && (T.level>1))
+				skip_reporting = FALSE //If any level was increased, we want to report
+
+	if(!skip_reporting)
+		for(var/obj/machinery/computer/rdconsole/S in machines)
+			var/obj/item/weapon/paper/P = new (S.loc)
+			P.info = "Your station has benefitted from the research archive project."
+			P.update_icon()
+
+/datum/persistence_task/researcharchive/on_shutdown()
+	var/list/to_archive = list()
+	for(var/datum/tech/T in get_list_of_elements(research_archive_datum.known_tech))
+		if(T.id in list("syndicate", "Nanotrasen", "anomaly"))
+			continue
+		to_archive[T.id] = T.level
+	write_file(to_archive)

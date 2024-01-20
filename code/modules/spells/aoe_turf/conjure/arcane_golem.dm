@@ -33,7 +33,7 @@
 /spell/aoe_turf/conjure/arcane_golem/cast(list/targets, mob/user)
 	//Link the golem to its master
 	newVars = list("master_spell" = src)
-	user.register_event(/event/spellcast, src, src::copy_spellcast())
+	user.register_event(/event/spellcast, src, nameof(src::copy_spellcast()))
 
 	check_golems()
 
@@ -116,6 +116,8 @@
 /spell/aoe_turf/conjure/arcane_golem/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
 		if(Sp_AMOUNT)
+			if(spell_levels[Sp_AMOUNT] >= level_max[Sp_AMOUNT])
+				return "You can already sustain the maximum about of golems!"
 			return "Gain the ability to sustain [golem_limit + ADDITIONAL_GOLEMS_PER_UPGRADE_LEVEL] golems at once."
 
 	return ..()
