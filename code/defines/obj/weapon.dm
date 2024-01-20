@@ -247,6 +247,16 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 		var/mob/living/M = hit_atom
 		if(ishuman(M)) //if they're a human species
 			var/mob/living/carbon/human/H = M
+			if(!H.check_stand_ability()) //Target has no legs, how is this going to trip them up?
+				throw_failed()
+				return
+			var/leg_count //If one-legged, will halve the chance of getting caught by bolas
+			for(var/datum/organ/external/leg in H.get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
+				leg_count++
+			if(!prob(50*leg_count))
+				H.visible_message("<span class='borange'>The bolas miss [H]!</span>", "<span class='borange'>The bolas miss you!</span>")
+				throw_failed()
+				return
 			if(H.m_intent == "run") //if they're set to run (though not necessarily running at that moment)
 				if(prob(trip_prob)) //this probability is up for change and mostly a placeholder - Comic
 					step(H, H.dir)
@@ -288,7 +298,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 /obj/item/weapon/legcuffs/bolas/cable
 	name = "cable bolas"
 	desc = "A poorly made bolas, tied together with cable."
-	icon_state = ""
+	icon_state = "cbolas"
 	item_state = "cbolas"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	throw_speed = 1
@@ -296,27 +306,29 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	trip_prob = 20 //gets updated below in update_icon()
 	var/obj/item/weight1 = null //the two items that are attached to the cable
 	var/obj/item/weight2 = null
-	var/cable_color = ""
+	var/cable_color = "#FF0000"
 	var/desc_empty = "A poorly made bolas, tied together with cable. It has nothing on it."
 	var/screw_state = "" //used for storing info about the screwdriver
 	var/screw_istate = ""
 
-/obj/item/weapon/legcuffs/bolas/cable/New()
+/obj/item/weapon/legcuffs/bolas/cable/New(var/turf/loc, var/_cable_color = "#FF0000")
 	..()
 	desc = desc_empty
 	weight1 = null
 	weight2 = null
+	cable_color = _cable_color
 	update_icon()
 
 /obj/item/weapon/legcuffs/bolas/cable/update_icon()
+	overlays.len = 0
+	var/image/cable_overlay = image(icon,src,"cbolas_color")
+	cable_overlay.color = cable_color
+	overlays += cable_overlay
 	if (!weight1 && !weight2)
-		icon_state = "cbolas_[cable_color]"
-		overlays.len = 0
 		desc = desc_empty
 		trip_prob = 0
 		return
 	else
-		overlays.len = 0
 		if (weight1)
 			trip_prob = 20
 			overlays += icon("icons/obj/weapons.dmi", "cbolas_weight1")
@@ -324,6 +336,14 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 			trip_prob = 60
 			overlays += icon("icons/obj/weapons.dmi", "cbolas_weight2")
 		desc = "A poorly made bolas, made out of \a [weight1] and [weight2 ? "\a [weight2]": "missing a second weight"], tied together with cable."
+
+	//dynamic in-hand overlay
+	var/image/cableleft = image(inhand_states["left_hand"], src, "cbolas_color")
+	var/image/cableright = image(inhand_states["right_hand"], src, "cbolas_color")
+	cableleft.color = cable_color
+	cableright.color = cable_color
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = cableleft
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = cableright
 
 /obj/item/weapon/legcuffs/bolas/cable/throw_failed()
 	if(prob(20))
@@ -350,8 +370,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(user.loc) //we get back the wire lengths we put in
 				var /obj/item/stack/cable_coil/S = new /obj/item/tool/screwdriver(user.loc)
 				C.amount = 10
-				C._color = cable_color
-				C.icon_state = "coil_[C._color]"
+				C.color = cable_color
 				C.update_icon()
 				S.item_state = screw_state
 				S.icon_state = screw_istate
@@ -529,7 +548,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 					to_chat(trappeduser, "<span class='warning'>With your leg missing, you slip out of the bear trap.</span>")
 					trapped = 0
 					unlock_atom(trappeduser)
-					trappeduser.unregister_event(/event/moved, src, src::forcefully_remove())
+					trappeduser.unregister_event(/event/moved, src, nameof(src::forcefully_remove()))
 					trappeduser = null
 					anchored = FALSE
 					return
@@ -618,7 +637,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 				trapped = 0
 				anchored = FALSE
 				unlock_atom(trappeduser)
-				trappeduser.unregister_event(/event/moved, src, src::forcefully_remove())
+				trappeduser.unregister_event(/event/moved, src, nameof(src::forcefully_remove()))
 				trappeduser = null
 			else
 				to_chat(user, "<span class='notice'>You begin to pry the bear trap off of [trappeduser.name].</span>")
@@ -627,7 +646,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 					trapped = 0
 					anchored = FALSE
 					unlock_atom(trappeduser)
-					trappeduser.unregister_event(/event/moved, src, src::forcefully_remove())
+					trappeduser.unregister_event(/event/moved, src, nameof(src::forcefully_remove()))
 					trappeduser = null
 		else if (istype(trappedbear))
 			to_chat(user, "<span class='notice'>You begin to pry the bear trap off of [trappedbear.name].</span>")
@@ -696,7 +715,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 		playsound(src, 'sound/effects/snap.ogg', 60, 1)
 		H.audible_scream()
 		lock_atom(H, /datum/locking_category/beartrap)
-		H.register_event(/event/moved, src, src::forcefully_remove())
+		H.register_event(/event/moved, src, nameof(src::forcefully_remove()))
 
 		if(trappedorgan.take_damage(15, 0, 25, SERRATED_BLADE & SHARP_BLADE))
 			H.UpdateDamageIcon()
@@ -705,7 +724,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 		if(!H.pick_usable_organ(trappedorgan)) //check if they lost their leg, and get them out of the trap
 			to_chat(H, "<span class='warning'>With your leg missing, you slip out of the bear trap!</span>")
 			trapped = 0
-			trappeduser.unregister_event(/event/moved, src, src::forcefully_remove())
+			trappeduser.unregister_event(/event/moved, src, nameof(src::forcefully_remove()))
 			trappeduser = null
 			unlock_atom(H)
 			anchored = FALSE
@@ -747,7 +766,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 			to_chat(trappeduser, "<span class='warning'>With your leg missing, you slip out of the bear trap.</span>")
 			trapped = 0
 			unlock_atom(trappeduser)
-			trappeduser.unregister_event(/event/moved, src, src::forcefully_remove())
+			trappeduser.unregister_event(/event/moved, src, nameof(src::forcefully_remove()))
 			trappeduser = null
 			anchored = FALSE
 
