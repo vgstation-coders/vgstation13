@@ -39,7 +39,9 @@ var/list/message_monitors = list()
 
 	light_color = LIGHT_COLOR_GREEN
 
+
 /obj/machinery/computer/message_monitor/New()
+	..()
 	switchboard_headset = new /obj/item/telephone/switchboard (src)
 	message_monitors += src
 	
@@ -110,18 +112,17 @@ var/list/message_monitors = list()
 	if(auth)
 
 		dat += {"<h4><dd><A href='?src=\ref[src];auth=1'>&#09;<font color='green'>\[Authenticated\]</font></a>&#09;/
-						Server Power: <A href='?src=\ref[src];active=1'>[src.linkedServer && src.linkedServer.is_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</a>"}
+			Server Power: <A href='?src=\ref[src];active=1'>[src.linkedServer && src.linkedServer.is_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</a>"}
 		dat += {"  Landline auto-routing: <A href='?src=\ref[src];toggleLandlines=1'>[src.linkedServer && src.linkedServer.landlines_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</a></h4>"}
 	else
 		dat += {"<h4><dd><A href='?src=\ref[src];auth=1'>&#09;<font color='red'>\[Unauthenticated\]</font></a>&#09;/
-						Server Power: <u>[src.linkedServer && src.linkedServer.is_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</u>"}
+			Server Power: <u>[src.linkedServer && src.linkedServer.is_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</u>"}
 		dat += {"  Landline auto-routing: [src.linkedServer && src.linkedServer.landlines_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</h4>"}
-
+	
 	if(hacking || emagged)
 		screen = 2
 	if(!linkedServer || (linkedServer.stat & (NOPOWER|BROKEN|FORCEDISABLE)))
 		message = noserver
-
 
 	switch(screen)
 		//Main menu
@@ -150,7 +151,7 @@ var/list/message_monitors = list()
 				dat += "<br>"
 			dat += "<hr><A href='?src=\ref[src];switchboard=1'> Landline Switchboard</a><br>"
 			//TODO add exclamation marks here if someone's calling
-
+			
 			//Bottom message
 			if(!auth)
 				dat += "<br><hr><dd><span class='notice'>Please authenticate with the server in order to show additional options.</span>"
@@ -583,7 +584,6 @@ var/list/message_monitors = list()
 			linking = L
 			playsound(src, switchboard_sound, 100, 1)
 			updateUsrDialog()
-
 		if (href_list["back"])
 			src.screen = 0
 		if (href_list["clearCurrentLine"])
