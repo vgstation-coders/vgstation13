@@ -85,9 +85,9 @@
 	
 /obj/landline/proc/has_power()
 	var/obj/machinery/requests_console/RC = attached_to
-	if(RC && RC.stat)
+	if(istype(RC, /obj/machinery/requests_console) && RC.stat)
 		return FALSE
-	return TRUE
+	return TRUE //redphones stay powered regardless
 	
 /obj/landline/proc/end_call_loop()
 	spawn(0)
@@ -112,8 +112,9 @@
 	if(!destination)
 		return "critical error"
 	if(calling)
-		return "you are already calling [get_department()]"
+		return "you are already calling [calling.get_department()]"
 	if(destination.calling || !destination.phone)
+		end_call_loop()
 		return "line busy"
 	if(phone)
 		return "pick up the phone first"
@@ -187,7 +188,7 @@
 	
 /obj/landline/proc/get_department()
 	var/obj/machinery/requests_console/RC = attached_to
-	if(RC)
+	if(istype(RC, /obj/machinery/requests_console))
 		return RC.department
 	return "ERROR"	
 
@@ -205,7 +206,7 @@
 		if(calling.ringing)
 			calling.ringing = FALSE
 			var/obj/machinery/requests_console/RC = calling.attached_to
-			if(RC)
+			if(istype(RC,/obj/machinery/requests_console))
 				RC.messages += "missed call from <A href='?src=\ref[RC];dialConsole=\ref[src.attached_to]'>[get_department()]</A>."
 				if(RC.newmessagepriority < 1)
 					RC.newmessagepriority = 1
@@ -233,7 +234,6 @@
 /obj/landline/red
 	overlay_icon = 'icons/obj/items.dmi'
 	overlay_iconstate = "red_phone_handset"
-	
 	
 	
 /obj/item/telephone
@@ -335,17 +335,17 @@
 	var/msg = text("[speech.name]: [speech.message]<BR>")
 	linked_landline.last_call_log += msg
 	linked_landline.attached_to.updateUsrDialog()
-	lastmsg = speech
-	speech.name += " (Telephone)"
-	speech.wrapper_classes["spoken_into_telephone"] += 1
+	lastmsg = speech.clone()
+	lastmsg.name += " (Telephone)"
+	lastmsg.wrapper_classes["spoken_into_telephone"] += 1
 	if(linked_landline.calling && linked_landline.calling.linked_phone)
 		if(!linked_landline.calling.ringing && !linked_landline.calling.phone)
 			var/obj/item/telephone/P = linked_landline.calling.linked_phone
-			P.send_speech(speech, P.speaker_range, bubble_type = "")
+			P.send_speech(lastmsg, P.speaker_range, bubble_type = "")
 			linked_landline.calling.last_call_log += msg
 			linked_landline.calling.attached_to.updateUsrDialog()
 	for(var/obj/item/telephone/switchboard/ST in linked_landline.listening_operators)
-		ST.send_speech(speech, ST.speaker_range, bubble_type = "")
+		ST.send_speech(lastmsg, ST.speaker_range, bubble_type = "")
 	
 /obj/item/telephone/switchboard
 	name = "switchboard operator headset"
@@ -373,21 +373,21 @@
 	if(broken)
 		return
 	var/msg = text("[speech.name]: [speech.message]<BR>")
-	lastmsg = speech
-	speech.name += " (Telephone operator)"
-	speech.wrapper_classes["spoken_into_telephone"] += 1
+	lastmsg = speech.clone()
+	lastmsg.name += " (Telephone operator)"
+	lastmsg.wrapper_classes["spoken_into_telephone"] += 1
 	if(linked_landline.linked_phone)
 		var/obj/item/telephone/P = linked_landline.linked_phone
-		P.send_speech(speech, P.speaker_range, bubble_type = "")
+		P.send_speech(lastmsg, P.speaker_range, bubble_type = "")
 		linked_landline.last_call_log += msg
 		linked_landline.attached_to.updateUsrDialog()
 	if(linked_landline.calling && linked_landline.calling.linked_phone)
 		var/obj/item/telephone/P = linked_landline.calling.linked_phone
-		P.send_speech(speech, P.speaker_range, bubble_type = "")
+		P.send_speech(lastmsg, P.speaker_range, bubble_type = "")
 		linked_landline.calling.last_call_log += msg
 		linked_landline.calling.attached_to.updateUsrDialog()
 		
 	for(var/obj/item/telephone/switchboard/ST in linked_landline.listening_operators)
 		if(ST == src)
 			continue
-		ST.send_speech(speech, ST.speaker_range, bubble_type = "")
+		ST.send_speech(lastmsg, ST.speaker_range, bubble_type = "")
