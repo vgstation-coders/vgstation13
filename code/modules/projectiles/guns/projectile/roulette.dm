@@ -68,6 +68,23 @@
 	else
 		to_chat(user, "<span class='info'>\The [src] has [shots_left] shots left.</span>")
 
+/obj/item/weapon/gun/projectile/roulette_revolver/attackby(obj/item/A, mob/user)
+	if(istype(A, /obj/item/weapon/conversion_kit) && restrict_with_subtypes?.len)
+		var/obj/item/weapon/conversion_kit/CK = A
+		if(!CK.open)
+			to_chat(user, "<span class='notice'>\The [CK] needs to be open to use.</span>")
+			return 1
+		if(do_after(user, src, 3 SECONDS))
+			desc += "The barrel and chamber assembly seems to have been modified."
+			to_chat(user, "<span class='danger'>You finish modifying \the [src]!</span>")
+			restrict_with_subtypes.Cut()
+			restricted_projectiles -= /obj/item/projectile/rocket
+			restricted_projectiles -= /obj/item/projectile/rocket/nikita
+			restricted_projectiles -= /obj/item/projectile/rocket/lowyield/extreme
+		return 1
+	else
+		..()
+
 /obj/item/weapon/gun/projectile/roulette_revolver/proc/choose_projectile()
 	var/chosen_projectile = pick(available_projectiles)
 	for(var/I in restricted_projectiles)
