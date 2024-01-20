@@ -128,8 +128,8 @@
 				return 1
 
 		victim.reset_view()
-		victim.unregister_event(/event/heartbeat, src, src::beat())
-		victim.unregister_event(/event/death, src, src::flatline())
+		victim.unregister_event(/event/heartbeat, src, nameof(src::beat()))
+		victim.unregister_event(/event/death, src, nameof(src::flatline()))
 		victim = null
 		update()
 
@@ -179,8 +179,8 @@
 		victim = C
 		C.resting = 1 //This probably shouldn't be using this variable
 		C.update_canmove() //but for as long as it does we're adding sanity to it
-		C.register_event(/event/heartbeat, src, src::beat())
-		C.register_event(/event/death, src, src::flatline())
+		C.register_event(/event/heartbeat, src, nameof(src::beat()))
+		C.register_event(/event/death, src, nameof(src::flatline()))
 
 	if (C == user)
 		user.visible_message("[user] climbs on the operating table.","You climb on the operating table.")

@@ -184,42 +184,59 @@
 	origin_tech = Tc_BIOTECH + "=1"
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list("rustle")
+	var/mob/living/carbon/human/listening = null
+
+/obj/item/clothing/accessory/stethoscope/pickup(mob/user)
+	user.register_event(/event/moved, src, nameof(src::on_move()))
+
+/obj/item/clothing/accessory/stethoscope/dropped(mob/user)
+	user.unregister_event(/event/moved, src, nameof(src::on_move()))
+	if(listening)
+		listening.unregister_event(/event/moved, src, nameof(src::on_move()))
+		listening.unregister_event(/event/heartbeat, src, nameof(src::heartbeat()))
+		listening = null
+	. = ..()
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))
 		if(user.a_intent == I_HELP)
 			var/body_part = parse_zone(user.zone_sel.selecting)
 			if(body_part)
-				var/their = "their"
-				switch(M.gender)
-					if(MALE)
-						their = "his"
-					if(FEMALE)
-						their = "her"
-
 				var/sound = "pulse"
 				var/sound_strength
 
-				if(M.isDead())
+				if(M.isDead() || body_part == "eyes" || body_part == "mouth")
 					sound_strength = "cannot hear"
 					sound = "anything"
 				else
 					sound_strength = "hear a weak"
-					switch(body_part)
-						if(LIMB_CHEST)
-							if(M.oxyloss < 50)
-								sound_strength = "hear a healthy"
-							sound = "pulse and respiration"
-						if("eyes","mouth")
-							sound_strength = "cannot hear"
-							sound = "anything"
-						else
-							sound_strength = "hear a weak"
+					if(body_part == LIMB_CHEST)
+						if(M.oxyloss < 50)
+							sound_strength = "hear a healthy"
+						sound = "pulse and respiration"
 
-				user.visible_message("[user] places [src] against [M]'s [body_part] and listens attentively.", "You place [src] against [their] [body_part]. You [sound_strength] [sound].")
+					if(listening)
+						listening.unregister_event(/event/moved, src, nameof(src::on_move()))
+						listening.unregister_event(/event/heartbeat, src, nameof(src::heartbeat()))
+						listening = null
+					listening = M
+					listening.register_event(/event/moved, src, nameof(src::on_move()))
+					listening.register_event(/event/heartbeat, src, nameof(src::heartbeat()))
+				user.visible_message("[user] places [src] against [M]'s [body_part] and listens attentively.", "You place [src] against [M]'s [body_part]. You [sound_strength] [sound].")
 				return
 	return ..(M,user)
 
+/obj/item/clothing/accessory/stethoscope/proc/on_move(atom/movable/mover)
+	mover.unregister_event(/event/moved, src, nameof(src::on_move()))
+	if(listening)
+		listening.unregister_event(/event/heartbeat, src, nameof(src::heartbeat()))
+		listening.unregister_event(/event/moved, src, nameof(src::on_move()))
+		listening = null
+
+/obj/item/clothing/accessory/stethoscope/proc/heartbeat(mob/user)
+	var/mob/M = get_holder_of_type(src,/mob)
+	if(M)
+		to_chat(M,"*thump*")
 
 //Medals
 /obj/item/clothing/accessory/medal
