@@ -563,7 +563,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 						playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
 						trapped = 0
 						unlock_atom(trappeduser)
-						trappeduser.unregister_event(/event/moved, src, src::forcefully_remove())
+						trappeduser.unregister_event(/event/moved, src, nameof(src::forcefully_remove()))
 						trappeduser = null
 						anchored = FALSE
 						return
@@ -793,7 +793,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 		visible_message("<span class='warning'>The wound on [mover]'s leg worsens terribly as the trap let go of them.</span>")
 		trapped = 0
 		unlock_atom(trappeduser)
-		trappeduser.unregister_event(/event/moved, src, src::forcefully_remove())
+		trappeduser.unregister_event(/event/moved, src, nameof(src::forcefully_remove()))
 		anchored = FALSE
 		trappeduser.update_canmove()
 		trappeduser = null
