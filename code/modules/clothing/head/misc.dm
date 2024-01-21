@@ -587,7 +587,7 @@
 	icon_state = "cowboydimma"
 	wear_override = new/icon("icon" = 'icons/mob/dimma.dmi', "icon_state" = "cowboydimma")
 
-/obj/item/clothing/head/cowbow/dimma/magic
+/obj/item/clothing/head/cowboy/dimma/magic
 	name = "ten million spells hat"
 	desc = "Some claim that the magical power of its user is directly tied to how tall the hat is."
 	wizard_garb = TRUE
