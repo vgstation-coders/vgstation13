@@ -936,9 +936,13 @@ var/global/list/loopModeNames=list(
 		"echoes" = "Echoes"
 	)
 
+/obj/machinery/media/jukebox/superjuke/New()
+	..()
+	power_change() //enabling lights when admin spawned
+
 /obj/machinery/media/jukebox/superjuke/update_icon()
 	..()
-	if(!(stat & (FORCEDISABLE|NOPOWER|BROKEN)) && anchored || !any_power_cut())
+	if(!(stat & (FORCEDISABLE|NOPOWER|BROKEN)) && anchored && !any_power_cut())
 		update_moody_light_index("glow",'icons/lighting/moody_lights.dmi', "overlay_juke_glow")
 
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)

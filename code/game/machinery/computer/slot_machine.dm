@@ -27,6 +27,8 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	computer_flags = NO_ONOFF_ANIMS
 
+	light_range_on = 1.4
+
 	var/show_name
 
 	var/image/overlay_1
