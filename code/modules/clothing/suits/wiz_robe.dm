@@ -6,6 +6,41 @@
 	siemens_coefficient = 0.8
 	species_fit = list(INSECT_SHAPED)
 	wizard_garb = 1
+	vertical_offset = 2
+
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("trim","ribbon")
+	dye_base_iconstate_override = "wizardcolor"
+
+/obj/item/clothing/head/wizard/attack_self(var/mob/user)
+	var/tall_offset = initial(vertical_offset)
+	if (tall_offset)
+		if (!vertical_offset)
+			vertical_offset = tall_offset
+			to_chat(user, "<span class='notice'>You put your hand under your hat, propping it tall again.</span>")
+			playsound(src, "rustle", 50, 1, -5)
+		else
+			vertical_offset = 0
+			to_chat(user, "<span class='notice'>You bop the top of the hat, squashing it a bit.</span>")
+			playsound(src, 'sound/effects/slap2.ogg', 50, 1, -5)
+		update_icon()
+
+/obj/item/clothing/head/wizard/update_icon()
+	var/tall_offset = initial(vertical_offset)
+	if (tall_offset)
+		if (vertical_offset)
+			if ((clothing_flags & COLORS_OVERLAY) && color)
+				icon_state = "wizardcolor"
+			else
+				icon_state = initial(icon_state)
+			dye_base_iconstate_override = "wizardcolor"
+		else
+			if ((clothing_flags & COLORS_OVERLAY) && color)
+				icon_state = "wizardcolor-flat"
+			else
+				icon_state = "[icon_state]-flat"
+			dye_base_iconstate_override = "wizardcolor-flat"
+	..()
 
 /obj/item/clothing/head/wizard/red
 	name = "red wizard hat"
@@ -18,11 +53,18 @@
 	desc = "It has WIZZARD written across it in sequins. Comes with a cool beard."
 	icon_state = "wizard-fake"
 
+	clothing_flags = 0
+	vertical_offset = 0
+	dyeable_parts = list()
+
 /obj/item/clothing/head/wizard/marisa
 	name = "Witch Hat"
 	desc = "Strange-looking hat-wear, makes you want to cast fireballs."
 	icon_state = "marisa"
 	siemens_coefficient = 0.8
+
+	clothing_flags = 0
+	dyeable_parts = list()
 
 /obj/item/clothing/head/wizard/magus
 	name = "Magus Helm"
@@ -30,6 +72,10 @@
 	icon_state = "magus"
 	item_state = "magus"
 	siemens_coefficient = 0.8
+
+	clothing_flags = 0
+	vertical_offset = 0
+	dyeable_parts = list()
 
 /obj/item/clothing/head/wizard/magus/fake
 	desc = "A mysterious helmet."
@@ -52,6 +98,10 @@
 	icon_state = "amp"
 	siemens_coefficient = 0.8
 
+	clothing_flags = 0
+	vertical_offset = 0
+	dyeable_parts = list()
+
 /obj/item/clothing/head/wizard/necro
 	name = "Hood of Necromancy"
 	desc = "An elegant hood woven with the souls of the undying."
@@ -59,6 +109,10 @@
 	item_state = "necrohood"
 	siemens_coefficient = 0.8
 	body_parts_covered = HIDEHAIR
+
+	clothing_flags = 0
+	vertical_offset = 0
+	dyeable_parts = list()
 
 /obj/item/clothing/head/wizard/necro/fake
 	desc = "An elegant hood woven with child labor somewhere in Space China."
@@ -81,12 +135,20 @@
 	item_state = "lichcrown_fancy"
 	siemens_coefficient = 0.8
 
+	clothing_flags = 0
+	vertical_offset = 0
+	dyeable_parts = list()
+
 /obj/item/clothing/head/wizard/skelelich
 	name = "tarnished crown of the Lich"
 	desc = "Turns out you CAN take it with you."
 	icon_state = "lichcrown"
 	item_state = "lichcrown"
 	siemens_coefficient = 0.8
+
+	clothing_flags = 0
+	vertical_offset = 0
+	dyeable_parts = list()
 
 /obj/item/clothing/head/wizard/hallowiz
 	name = "orange wizard hat"
@@ -101,12 +163,19 @@
 	item_state = "mystichat"
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 
+	clothing_flags = 0
+	dyeable_parts = list()
+
 /obj/item/clothing/head/wizard/winter
 	name = "winter wizard hat"
 	desc = "A clever enchantment on this hat keeps your head warm in harsh winter weather."
 	icon_state = "wizard_snow"
 	item_state = "wizard_snow"
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
+
+	//there are ways to make this work, but I'm not spending an hour on this
+	clothing_flags = 0
+	dyeable_parts = list()
 
 /obj/item/clothing/suit/wizrobe
 	name = "wizard robe"

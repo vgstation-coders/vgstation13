@@ -657,6 +657,7 @@
 	var/gave_out_gifts = FALSE //for snowman animation
 	var/obj/item/clothing/head/on_top = null //for stacking
 	var/stack_depth = 0
+	var/vertical_offset = 0 //enables hats to go taller that the tile's boundaries
 	var/blood_overlay_type = "hat"
 	cloth_layer = HEAD_LAYER
 	cloth_icon = 'icons/mob/head.dmi'
