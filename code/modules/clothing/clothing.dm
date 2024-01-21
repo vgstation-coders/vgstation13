@@ -314,6 +314,8 @@
 		if (do_after(user, cauldron, 30))
 			var/mixed_color = mix_color_from_reagents(cauldron.reagents.reagent_list, TRUE)
 			var/mixed_alpha = mix_alpha_from_reagents(cauldron.reagents.reagent_list)
+			if (mixed_color == "#FFFFFF")
+				mixed_color = "#FEFEFE" //null color prevention
 			if (!mixed_color)
 				var/silent = FALSE
 				for(var/datum/reagent/R in cauldron.reagents.reagent_list)
