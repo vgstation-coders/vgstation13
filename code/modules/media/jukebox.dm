@@ -546,7 +546,7 @@ var/global/list/loopModeNames=list(
 		playlist_id = playlists[1] //Set to whatever our first is. Usually bar.
 	last_reload=world.time
 	playlist=null
-	update_icon()
+	power_change()
 	update_music()
 
 /obj/machinery/media/jukebox/wrenchAnchor(var/mob/user, var/obj/item/I)
