@@ -2367,6 +2367,7 @@ var/global/num_vending_terminals = 1
 		)	//No one can get to the machine to hack it anyways; for the lulz - Microwave
 	premium = list(
 		/obj/item/clothing/back/magiccape = 1,
+		/obj/item/clothing/head/cowboy/dimma/magic = 1,
 		)
 	specials = list(
 		/obj/item/weapon/storage/box/smartbox/clothing_box/hallowiz = "10", //throughout october
