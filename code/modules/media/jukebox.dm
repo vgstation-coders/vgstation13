@@ -1068,7 +1068,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/holyjuke/update_icon()
 	..()
-	if(!(stat & (FORCEDISABLE|NOPOWER|BROKEN)) && anchored || !any_power_cut())
+	if(!(stat & (FORCEDISABLE|NOPOWER|BROKEN)) && anchored && !any_power_cut())
 		update_moody_light_index("glow",'icons/lighting/moody_lights.dmi', "overlay_juke_glow")
 
 /obj/machinery/media/jukebox/holyjuke/attackby(obj/item/W, mob/user)
