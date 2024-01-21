@@ -191,7 +191,7 @@
 	wizard_garb = 1
 	species_fit = list(INSECT_SHAPED)
 
-/obj/item/clothing/head/wizard/update_icon()
+/obj/item/clothing/suit/wizrobe/update_icon()
 	if ((clothing_flags & COLORS_OVERLAY) && color)
 		icon_state = "wizardcolor"
 	else
