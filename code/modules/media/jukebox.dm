@@ -254,6 +254,10 @@ var/global/list/loopModeNames=list(
 		to_chat(user, "<span class='info'>It is currently silent.</span>")
 
 /obj/machinery/media/jukebox/power_change()
+	if (emagged)
+		light_color = "#AA0000"
+	else
+		light_color = initial(light_color)
 	..()
 	if(emagged && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)) && !any_power_cut())
 		playing = 1
