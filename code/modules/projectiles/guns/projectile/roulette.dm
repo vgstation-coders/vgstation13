@@ -79,9 +79,9 @@ var/list/restricted_roulette_projectiles = list(
 			desc += "The barrel and chamber assembly seems to have been modified."
 			to_chat(user, "<span class='danger'>You finish modifying \the [src]!</span>")
 			restrict_with_subtypes.Cut()
-			restricted_roulette_rojectiles -= /obj/item/projectile/rocket
-			restricted_roulette_rojectiles -= /obj/item/projectile/rocket/nikita
-			restricted_roulette_rojectiles -= /obj/item/projectile/rocket/lowyield/extreme
+			restricted_roulette_projectiles -= /obj/item/projectile/rocket
+			restricted_roulette_projectiles -= /obj/item/projectile/rocket/nikita
+			restricted_roulette_projectiles -= /obj/item/projectile/rocket/lowyield/extreme
 		return 1
 	else
 		..()
