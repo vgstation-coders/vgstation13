@@ -46,6 +46,7 @@
 
 #define rustg_dmi_strip_metadata(fname) call_ext(RUST_G, "dmi_strip_metadata")(fname)
 #define rustg_dmi_create_png(path, width, height, data) call_ext(RUST_G, "dmi_create_png")(path, width, height, data)
+#define rustg_dmi_icon_state_dirs(fname, icon_state_name) call_ext(RUST_G, "dmi_icon_state_dirs")("[fname]", icon_state_name)
 
 #define rustg_noise_get_at_coordinates(seed, x, y) call_ext(RUST_G, "noise_get_at_coordinates")(seed, x, y)
 

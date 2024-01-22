@@ -169,19 +169,33 @@
 	else
 		return FALSE
 
-//returns the number of direction a given icon_state has, or 0 if it's not 1, 4 or 8 (such as in the case of an animated state)
-//should be accurate most of the time, but no guarrantees
-/proc/get_icon_dir_count(icon, icon_state)
-	var/iconKey = "misc"
-	iconCache[iconKey] << icon(icon,icon_state)
-	var/haystack = "[iconCache.ExportText(iconKey)]"
-	if (findtextEx(haystack, "iVBORw0KGgoAAAANSUhEUgAAACAAAAAg"))//yeah I found those patterns by reading strings of icons converted to base64
-		return 1
-	if (findtextEx(haystack, "iVBORw0KGgoAAAANSUhEUgAAACAAAABA"))
-		return 4
-	if (findtextEx(haystack, "iVBORw0KGgoAAAANSUhEUgAAACAAAABg"))
-		return 8
-	return 0 //unknown pattern, most likely something animated, oh well. be sure to account for that in your proc call.
+/// Returns the number of directions a given icon_state has, or 0 if it's not 1, 4 or 8 (such as in the case of an animated state)
+/proc/get_icon_dir_count(what, icon_state)
+	#define TEMP_FILE "data/tmp/rustg_icon_states.dmi"
+	if(isfile(what))
+		var/into_path = "[what]"
+		if(length(into_path))
+			// compiled
+			. = rustg_dmi_icon_state_dirs(into_path, icon_state)
+		else
+			// runtime
+			if(!fcopy(what, TEMP_FILE))
+				CRASH("failed to fcopy")
+			. = rustg_dmi_icon_state_dirs(TEMP_FILE, icon_state)
+			if(!fdel(TEMP_FILE))
+				CRASH("failed to fdel")
+	else if(isicon(what))
+		// always runtime
+		if(!fcopy(what, TEMP_FILE))
+			CRASH("failed to fcopy")
+		. = rustg_dmi_icon_state_dirs(TEMP_FILE, icon_state)
+		if(!fdel(TEMP_FILE))
+			CRASH("failed to fdel")
+	else if(istext(what))
+		// assume path on server
+		. = rustg_dmi_icon_state_dirs(what, icon_state)
+	. = text2num(.)
+	#undef TEMP_FILE
 
 //clamps the HSV brightness of an RGB color to [lower, upper]
 /proc/ColorVClamp(var/rgb, var/lower = 0, var/upper = 255)
