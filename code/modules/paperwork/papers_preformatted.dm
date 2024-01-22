@@ -196,3 +196,96 @@
 	<b>HoP Name: </b><span class=\"paper_field\"></span> <br>
 	<b>HoP Signature: </b><span class=\"paper_field\"></span> <br>
 	<i><span style=\"font-size:15px\">The Head of Personnel must sign above and stamp this form to authorize this application before a weapon permit can be applied to the requesting employee's ID. The Warden or Head of Security must also approve the issuing of any firearms from the armory, where applicable. These guidelines must be followed or this form is void and illegal.</span></i>"}
+
+
+/****************************
+*                           *
+*     	  Game Master       *
+*                           *
+****************************/
+
+var/unlockable_fields = {"<i><b>Unlockables</b></i><br>
+    Unlocked: <span class=\"paper_field\"></span><br>
+    Unlocked: <span class=\"paper_field\"></span><br>
+    Unlocked: <span class=\"paper_field\"></span><br>
+    Unlocked: <span class=\"paper_field\"></span><br>"}
+
+/obj/item/weapon/paper/redcore/miner/New()
+	..()
+	name = "Shaft Miner Character Sheet"
+	fields = 5
+	info = {"<center><img src="https://ss13.moe/wiki/images/0/02/MinerD.png"> <b>Shaft Miner</b></center> <br>
+	<hr> <br>
+	<b>Employee Name:</b> <span class=\"paper_field\"></span> <br>
+	<b>Employee Job:</b> Shaft Miner
+	<hr> <br>
+    <i><b>Basics</b></i>
+    <i>You get two actions a turn. You can't do the same action twice in a turn.</i><br>
+    [rc_basic_dash]<br>
+    [rc_basic_drag]<br>
+    [rc_basic_pill]<br>
+	[rc_miner_armor]<br>
+	[rc_miner_shoot]<br>
+	[rc_miner_drill]<br>
+	<hr> <br>
+    [unlockable_fields]"}
+
+/obj/item/weapon/paper/redcore/para/New()
+	..()
+	name = "Paramedic Character Sheet"
+	fields = 5
+	info = {"<center><img src="https://ss13.moe/wiki/images/4/42/Paramedic2.png" style="width:32px;height:32px;"> <b>Paramedic</b></center> <br>
+	<hr> <br>
+	<b>Employee Name:</b> <span class=\"paper_field\"></span> <br>
+	<b>Employee Job:</b> Paramedic
+	<hr> <br>
+    <i><b>Basics</b></i>
+    <i>You get two actions a turn. You can't do the same action twice in a turn.</i><br>
+    [rc_basic_dash]<br>
+    [rc_basic_drag]<br>
+    [rc_basic_pill]<br>
+	[rc_para_roller]<br>
+	[rc_para_grenade]<br>
+	[rc_para_hyperzine]<br>
+	<hr> <br>
+    [unlockable_fields]"}
+
+/obj/item/weapon/paper/redcore/anom/New()
+	..()
+	name = "Anomalist Character Sheet"
+	fields = 5
+	info = {"<center><img src="https://ss13.moe/wiki/images/b/b0/XenoarchD.png"> <b>Anomalist</b></center> <br>
+	<hr> <br>
+	<b>Employee Name:</b> <span class=\"paper_field\"></span> <br>
+	<b>Employee Job:</b> Anomalist
+	<hr> <br>
+    <i><b>Basics</b></i>
+    <i>You get two actions a turn. You can't do the same action twice in a turn.</i><br>
+    [rc_basic_dash]<br>
+    [rc_basic_drag]<br>
+    [rc_basic_pill]<br>
+	[rc_anom_touched]<br>
+	[rc_anom_roulette]<br>
+	[rc_anom_excav]<br>
+	<hr> <br>
+    [unlockable_fields]"}
+
+/obj/item/weapon/paper/redcore/eng/New()
+	..()
+	name = "Engineer Character Sheet"
+	fields = 5
+	info = {"<center><img src="https://ss13.moe/wiki/images/a/ab/Engie.png"> <b>Engineer</b></center> <br>
+	<hr> <br>
+	<b>Employee Name:</b> <span class=\"paper_field\"></span> <br>
+	<b>Employee Job:</b> Engineer
+	<hr> <br>
+    <i><b>Basics</b></i>
+    <i>You get two actions a turn. You can't do the same action twice in a turn.</i><br>
+    [rc_basic_dash]<br>
+    [rc_basic_drag]<br>
+    [rc_basic_pill]<br>
+	[rc_eng_gloves]<br>
+	[rc_eng_emitter]<br>
+	[rc_eng_flamethrower]<br>
+	<hr> <br>
+    [unlockable_fields]"}

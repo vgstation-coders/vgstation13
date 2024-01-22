@@ -129,7 +129,7 @@ var/global/list/ghdel_profiling = list()
 		pixel_x = initialpixelx
 		pixel_y = initialpixely
 
-
+//xy: 1 if shakes horizontally, 2 if vertical, 3 if both
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
 	var/old_pixel_x = pixel_x
 	var/old_pixel_y = pixel_y
@@ -1064,7 +1064,7 @@ its easier to just keep the beam vertical.
 /atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
 	overlays -= moody_light
 	var/area/here = get_area(src)
-	if (here.dynamic_lighting)
+	if (here && here.dynamic_lighting)
 		moody_light = image(moody_icon, src, moody_state)
 		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 		moody_light.plane = LIGHTING_PLANE
@@ -1086,7 +1086,7 @@ its easier to just keep the beam vertical.
 	if (index in moody_lights)
 		overlays -= moody_lights[index]
 	var/area/here = get_area(src)
-	if (here.dynamic_lighting)
+	if (here && here.dynamic_lighting)
 		moody_light = image(moody_icon, src, moody_state)
 		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 		moody_light.plane = LIGHTING_PLANE

@@ -506,7 +506,10 @@
 	maxHealth = 150
 	icon_state = "duey0"
 	icon_initial = "duey"
-	Max_Fertilizers = 50
+
+/obj/machinery/bot/farmbot/duey/New()
+	..()
+	reagents.maximum_volume = 500
 
 /obj/structure/ladder/spacepond/ground
 	name = "wine cellar"

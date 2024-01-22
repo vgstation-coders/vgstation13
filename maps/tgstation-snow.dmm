@@ -24006,9 +24006,21 @@
 	pixel_y = 25
 	},
 /obj/structure/table/woodentable,
-/obj/item/weapon/dice/d20,
-/obj/item/weapon/dice,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/item/weapon/paper_bin{
+	pixel_x = 1;
+	pixel_y = 9
+	},
+/obj/item/stack/package_wrap,
+/obj/item/weapon/storage/pill_bottle/dice,
+/obj/item/weapon/dice{
+	pixel_x = 2;
+	pixel_y = -2
+	},
+/obj/item/weapon/dice/d20{
+	pixel_x = -5;
+	pixel_y = 1
+	},
 /turf/simulated/floor/wood,
 /area/library)
 "bte" = (
@@ -24066,13 +24078,13 @@
 	icon_state = "pipe-c"
 	},
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/carpet,
 /area/library)
 "btr" = (
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
-/turf/simulated/floor/wood,
+/turf/simulated/floor/carpet,
 /area/library)
 "bts" = (
 /obj/structure/disposalpipe/segment{
@@ -25067,7 +25079,7 @@
 /obj/structure/table/woodentable,
 /obj/structure/disposalpipe/segment,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/turf/simulated/floor/wood,
+/turf/simulated/floor/carpet,
 /area/library)
 "byd" = (
 /obj/structure/morgue{
@@ -25226,10 +25238,6 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /turf/simulated/floor/wood,
 /area/library)
-"bzm" = (
-/mob/living/simple_animal/cat/salem,
-/turf/simulated/floor/wood,
-/area/library)
 "bzn" = (
 /obj/machinery/photocopier,
 /turf/simulated/floor/wood,
@@ -25277,9 +25285,7 @@
 /turf/simulated/floor/wood,
 /area/library)
 "bzF" = (
-/obj/machinery/researcharchive{
-	icon_state = "computer_disk1"
-	},
+/obj/machinery/researcharchive,
 /turf/simulated/floor/wood,
 /area/library)
 "bzH" = (
@@ -29562,7 +29568,7 @@
 /obj/structure/bed/chair/office/dark{
 	dir = 8
 	},
-/turf/simulated/floor/wood,
+/turf/simulated/floor/carpet,
 /area/library)
 "bRt" = (
 /obj/structure/rack{
@@ -91945,13 +91951,7 @@
 /obj/machinery/status_display{
 	pixel_y = 32
 	},
-/obj/structure/table/woodentable,
-/obj/item/weapon/paper_bin{
-	pixel_x = 1;
-	pixel_y = 9
-	},
-/obj/item/stack/package_wrap,
-/obj/item/weapon/storage/pill_bottle/dice,
+/obj/machinery/vending/games,
 /turf/simulated/floor/wood,
 /area/library)
 "ovZ" = (
@@ -97058,7 +97058,6 @@
 	},
 /area/tdome)
 "qmt" = (
-/obj/structure/table/woodentable,
 /obj/item/weapon/stool/cushion{
 	pixel_y = 12
 	},
@@ -100063,13 +100062,7 @@
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
 	dir = 8
 	},
-/turf/simulated/floor/wood,
-/area/library)
-"rsx" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 4
-	},
-/turf/simulated/floor/wood,
+/turf/simulated/floor/carpet,
 /area/library)
 "rsA" = (
 /obj/structure/morgue,
@@ -264339,8 +264332,8 @@ ovK
 btr
 bRs
 bRs
-rsx
-bzm
+bGh
+bEA
 beV
 bEA
 bEA
@@ -264647,7 +264640,7 @@ scX
 oVo
 bBi
 xxd
-qmt
+qFs
 bEA
 bEO
 gYJ
@@ -264950,7 +264943,7 @@ tHo
 uAJ
 bEA
 jou
-bEA
+qmt
 xRz
 xNC
 iCk
