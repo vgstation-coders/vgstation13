@@ -1,4 +1,4 @@
-var/list/restricted_roulette_rojectiles = list(
+	var/list/restricted_roulette_projectiles = list(
 		/obj/item/projectile,
 		/obj/item/projectile/energy,
 		/obj/item/projectile/hookshot,
@@ -6,14 +6,17 @@ var/list/restricted_roulette_rojectiles = list(
 		/obj/item/projectile/beam/lightning,
 		/obj/item/projectile/beam/procjectile,
 		/obj/item/projectile/beam/lightning/spell,
+		/obj/item/projectile/rocket,
 		/obj/item/projectile/rocket/nikita,
+		/obj/item/projectile/rocket/lowyield/extreme,
 		/obj/item/projectile/test,
+		/obj/item/projectile/friendlyCheck,
 		/obj/item/projectile/beam/emitter,
-		/obj/item/projectile/meteor,
 		/obj/item/projectile/spell_projectile,
 		/obj/item/projectile/stickybomb,
 		/obj/item/projectile/beam/lightlaser,
 		/obj/item/projectile/portalgun,
+		/obj/item/projectile/soulbullet,
 		)
 
 /obj/item/weapon/gun/projectile/roulette_revolver
@@ -37,26 +40,6 @@ var/list/restricted_roulette_rojectiles = list(
 	var/infinite = 0
 	var/time_since_last_recharge = 0
 	var/list/available_projectiles = list()
-	var/list/restricted_projectiles = list(
-		/obj/item/projectile,
-		/obj/item/projectile/energy,
-		/obj/item/projectile/hookshot,
-		/obj/item/projectile/bullet/blastwave,
-		/obj/item/projectile/beam/lightning,
-		/obj/item/projectile/beam/procjectile,
-		/obj/item/projectile/beam/lightning/spell,
-		/obj/item/projectile/rocket,
-		/obj/item/projectile/rocket/nikita,
-		/obj/item/projectile/rocket/lowyield/extreme,
-		/obj/item/projectile/test,
-		/obj/item/projectile/friendlyCheck,
-		/obj/item/projectile/beam/emitter,
-		/obj/item/projectile/spell_projectile,
-		/obj/item/projectile/stickybomb,
-		/obj/item/projectile/beam/lightlaser,
-		/obj/item/projectile/portalgun,
-		/obj/item/projectile/soulbullet,
-		)
 
 	var/list/restrict_with_subtypes = list(
 		/obj/item/projectile/meteor,
@@ -96,9 +79,9 @@ var/list/restricted_roulette_rojectiles = list(
 			desc += "The barrel and chamber assembly seems to have been modified."
 			to_chat(user, "<span class='danger'>You finish modifying \the [src]!</span>")
 			restrict_with_subtypes.Cut()
-			restricted_projectiles -= /obj/item/projectile/rocket
-			restricted_projectiles -= /obj/item/projectile/rocket/nikita
-			restricted_projectiles -= /obj/item/projectile/rocket/lowyield/extreme
+			restricted_roulette_rojectiles -= /obj/item/projectile/rocket
+			restricted_roulette_rojectiles -= /obj/item/projectile/rocket/nikita
+			restricted_roulette_rojectiles -= /obj/item/projectile/rocket/lowyield/extreme
 		return 1
 	else
 		..()
