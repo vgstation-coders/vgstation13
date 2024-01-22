@@ -88,7 +88,7 @@ var/list/restricted_roulette_projectiles = list(
 
 /obj/item/weapon/gun/projectile/roulette_revolver/proc/choose_projectile()
 	var/chosen_projectile = pick(available_projectiles)
-	for(var/I in restricted_roulette_rojectiles)
+	for(var/I in restricted_roulette_projectiles)
 		if(chosen_projectile == I)
 			choose_projectile()
 			return
