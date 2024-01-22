@@ -806,7 +806,7 @@
 			continue
 		playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
 		if(roulette_mode)
-			projectile_type = pick(available_projectiles - restricted_roulette_rojectiles)
+			projectile_type = pick(available_projectiles - restricted_roulette_projectiles)
 		var/obj/item/projectile/A = new projectile_type(curloc)
 		src.projectiles--
 		A.original = target
