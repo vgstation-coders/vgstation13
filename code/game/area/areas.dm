@@ -125,8 +125,7 @@ var/area/space_area
 					else
 						a.triggerAlarm("Power", src, cameras, source)
 			for (var/obj/item/device/pager/P in pager_list)
-				if(state != 1)
-					P.triggerAlarm("Power", src)
+				P.triggerAlarm("Power", src)
 	return
 
 /area/proc/send_poweralert(var/obj/machinery/computer/station_alert/a)//sending alerts to newly built Station Alert Computers.

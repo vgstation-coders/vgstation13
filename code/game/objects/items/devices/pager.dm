@@ -36,7 +36,7 @@ var/list/pager_list = list()
 	..()
 
 /obj/item/device/pager/update_icon()
-	icon_state = muted ? "pager_muted" : "pager_inactive"
+	icon_state = "pager_[muted?"muted":"inactive"]"
 
 /obj/item/device/pager/attack_self(mob/user)
 	interact(user)
@@ -68,7 +68,6 @@ var/list/pager_list = list()
 	var/datum/browser/popup = new(user, "\ref[src]", name, 400, 500)
 	popup.set_content(dat)
 	popup.open()
-	return
 
 /obj/item/device/pager/Topic(href, href_list)
 	if(!in_range(src,usr) && !isAdminGhost(usr) && !issilicon(usr))
@@ -103,14 +102,9 @@ var/list/pager_list = list()
 	toggle_mute(user)
 
 /obj/item/device/pager/proc/toggle_mute(mob/user)
-	if(muted)
-		muted = FALSE
-		to_chat(usr, "<span class = 'caution'>You unmute \the [src].</span>")
-		update_icon()
-	else
-		muted = TRUE
-		to_chat(usr, "<span class = 'caution'>You mute \the [src].</span>")
-		update_icon()
+	muted = !muted
+	to_chat(user, "You [muted ? ""  : "un"]mute \the [src]")
+	update_icon()
 
 /obj/item/device/pager/proc/triggerAlarm(var/class, area/A)
 	if(muted)
@@ -122,24 +116,18 @@ var/list/pager_list = list()
 	last_alert = alarmtext
 	var/sleeptime = rand(0,3)
 	sleep(sleeptime SECONDS) //provides some variety in when the pagers are triggered rather than all firing simultaneously
+	icon_state = "pager_active"
 	switch(alarmlevel)
 		if("silent")
-			icon_state = "pager_active"
-			sleep(3 SECONDS)
-			update_icon()
 		if("quiet")
-			icon_state = "pager_active"
 			say(alarmtext)
-			sleep(3 SECONDS)
-			update_icon()
 		if("loud")
-			icon_state = "pager_active"
 			say(alarmtext)
 			if(world.time - last_alert_time >= alert_delay)
 				playsound(src, 'sound/effects/3beep.ogg', 100, 0, 1)
 				last_alert_time = world.time
-			sleep(3 SECONDS)
-			update_icon()
+	sleep(3 SECONDS)
+	update_icon()
 
 /obj/item/device/pager/emp_act(severity)
 	muted = TRUE
