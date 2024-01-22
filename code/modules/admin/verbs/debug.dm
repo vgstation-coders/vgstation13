@@ -1515,7 +1515,7 @@ var/obj/blend_test = null
 	message_admins("[key_name(usr)] has edited the message of the day. Check the game log for the full text.")
 
 /client/proc/force_next_map()
-	set category = "Server"
+	set category = "Debug"
 	set name = "Force Next Map"
 	set desc = "Sets the next map and skips the map vote."
 
