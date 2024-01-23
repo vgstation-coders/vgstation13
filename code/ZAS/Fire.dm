@@ -97,7 +97,7 @@ Attach to transfer valve and open. BOOM.
 	if(fire_dmi && fire_sprite)
 		fire_overlay = image(fire_dmi,fire_sprite)
 		overlays += fire_overlay
-
+	new /obj/effect/fire(src)
 	var/atom/movable/AM = src
 	if(istype(AM))
 		firelightdummy = new (src)
