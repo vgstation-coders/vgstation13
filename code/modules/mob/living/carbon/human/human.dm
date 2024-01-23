@@ -154,6 +154,7 @@
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
 	hud_list[PHYSRECORD_HUD]  = image('icons/mob/hud.dmi', src, "hudactive")
+	hud_list[MENTRECORD_HUD]  = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
@@ -617,6 +618,20 @@
 		gen_record.fields["p_stat"] = setmedical
 		if(PDA_Manifest.len)
 			PDA_Manifest.len = 0
+	else if (href_list["medicalsanity"])
+		if(!usr.hasHUD(HUD_MEDICAL) || isjustobserver(usr))
+			return
+		var/perpname = get_identification_name(get_face_name())
+		var/datum/data/record/gen_record = data_core.find_general_record_by_name(perpname)
+		if(!gen_record)
+			to_chat(usr, "<span class='warning'>Unable to locate a data core entry for this person.</span>")
+			return
+		var/setmedical = input(usr, "Specify a new mental medical status for this person.", "Medical HUD", gen_record.fields["m_stat"]) as null|anything in list("*Insane*", "*Unstable*", "*Watch*", "Stable")
+		if(!setmedical|| (usr.incapacitated() && !isAdminGhost(usr)) || !usr.hasHUD(HUD_MEDICAL))
+			return
+		gen_record.fields["m_stat"] = setmedical
+		if(PDA_Manifest.len)
+			PDA_Manifest.len = 0
 	else if (href_list["medrecord"])
 		if(!usr.hasHUD(HUD_MEDICAL))
 			return
@@ -1006,10 +1021,11 @@
 	update_inv_gloves()	//handles bloody hands overlays and updating
 	return TRUE //we applied blood to the item
 
-/mob/living/carbon/human/proc/add_blood_to_feet(var/_amount, var/_color, var/list/_blood_DNA=list())
+/mob/living/carbon/human/proc/add_blood_to_feet(var/_amount, var/_color, var/list/_blood_DNA=list(), var/luminous = FALSE)
 	if(shoes)
 		var/obj/item/clothing/shoes/S = shoes
 		S.track_blood = max(0, _amount, S.track_blood)                //Adding blood to shoes
+		S.luminous_paint = luminous
 
 		if(!blood_overlays["[S.type][S.icon_state]"]) //If there isn't a precreated blood overlay make one
 			S.set_blood_overlay()
@@ -1036,6 +1052,8 @@
 		if(!feet_blood_DNA)
 			feet_blood_DNA = list()
 
+		feet_blood_lum = luminous
+
 		if(!istype(_blood_DNA, /list))
 			_blood_DNA = list()
 		else
@@ -1044,6 +1062,13 @@
 		feet_blood_color = (feet_blood_color && feet_blood_DNA.len) ? BlendRYB(feet_blood_color, _color, 0.5) : _color
 
 		update_inv_shoes(1)
+
+/mob/living/carbon/human/proc/luminous_feet()
+	if(shoes)
+		var/obj/item/clothing/shoes/S = shoes
+		return S.luminous_paint
+	else
+		return feet_blood_lum
 
 /mob/living/carbon/human/clean_blood()
 	.=..()
@@ -2196,6 +2221,11 @@
 	if(isUnconscious() || stunned || paralysis || !check_crawl_ability() || pulledby || grabbed_by.len || locked_to || client.move_delayer.blocked())
 		return FALSE
 	var/crawldelay = 0.2 SECONDS
+	if(istype(target, /turf/simulated/floor/engine/bolted))
+		adjustBruteLoss(5)
+		delayNextMove(crawldelay)
+		to_chat(src, "<span class='warning'>You injure yourself trying to crawl onto the bolted floor!</span>")
+		return FALSE
 	if (crawlcounter >= max_crawls_before_fatigue)
 		if (prob(10))
 			to_chat(src, "<span class='warning'>You get tired from all this crawling around.</span>")

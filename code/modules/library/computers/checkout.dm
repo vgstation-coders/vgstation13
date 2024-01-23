@@ -555,7 +555,7 @@
 		var/datum/cachedbook/PVB = getItemByID(href_list["preview"], library_table)
 		if(!istype(PVB) || PVB.programmatic)
 			return
-		var/list/_http = world.Export("http://ss13.moe/index.php/book?id=[PVB.id]")
+		var/list/_http = world.Export("[config.library_url]?id=[PVB.id]")
 		if(!_http || !_http["CONTENT"])
 			return
 		var/http = file2text(_http["CONTENT"])
@@ -620,7 +620,7 @@
 	B.icon_state = "book[rand(1,9)]"
 	B.item_state = B.icon_state
 	if (!newbook.programmatic)
-		var/list/_http = world.Export("http://ss13.moe/index.php/book?id=[newbook.id]")
+		var/list/_http = world.Export("[config.library_url]?id=[newbook.id]")
 		if(!_http || !_http["CONTENT"])
 			return
 		var/http = file2text(_http["CONTENT"])

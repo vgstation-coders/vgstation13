@@ -12,7 +12,7 @@
 #if ASTAR_DEBUG == 1
 #define log_astar_bot(text) visible_message("[src] : [text]")
 #define log_astar_beacon(text) //to_chat(world, "[src] : [text]")
-#define log_astar_command(text) //to_chat(world, "[src] : [text]")
+#define log_astar_command(text) to_chat(world, "[src] : [text]")
 #else
 #define log_astar_bot(text)
 #define log_astar_beacon(text)
@@ -171,8 +171,8 @@
 
 /obj/machinery/bot/proc/decay_oldtargets()
 	for(var/i in old_targets)
-		log_astar_bot("[i] [old_targets[i]]")
-		if(--old_targets[i] == 0)
+		log_astar_bot("old target: [i] [old_targets[i]]")
+		if(--old_targets[i] <= 0)
 			remove_oldtarget(i)
 
 // Can we move to the next tile or not ?
@@ -496,6 +496,7 @@
 				target = get_turf(signal.source)
 			path = list()
 			patrol_path = list()
+			destinations_queue = list()
 			return 1
 		if ("switch_power")
 			if (on)
@@ -516,11 +517,14 @@
 /datum/bot/order/mule
 	var/atom/thing_to_load
 	var/unload_here = FALSE
+	var/unload_dir = 0
 
-/datum/bot/order/mule/New(var/turf/place_to_go, var/atom/thing, _unload_here = FALSE)
+/datum/bot/order/mule/New(var/turf/place_to_go, var/atom/thing, _unload_here = FALSE, var/unload_direction)
 	destination = place_to_go
 	thing_to_load = thing
 	unload_here = _unload_here
+	unload_dir = unload_direction
+	astar_debug_mulebots("Order up! [destination] [thing_to_load] [unload_here] [unload_dir]!")
 
 /datum/bot/order/mule/unload
 

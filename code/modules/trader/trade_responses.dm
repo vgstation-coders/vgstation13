@@ -52,6 +52,8 @@ var/static/tw_deposit_large = list("Keh, keh. Very good! Let's stash that away..
 var/static/tw_deposit_firsttime = list("Remember, you can still withdraw this later, if you need.", "This is everyone's money - it's shared. Don't forget the PIN.", "This money will be put to good use - don't worry, you can still take it out!")
 var/static/tw_probe_return = "Trade probe skimmed NT station - done now. Should be docked outside somewhere, eh? Look around."
 
+var/static/tw_return_pinpointer = list("Hope flight in went okay.","Ah, recycling. Here's your coffee.","Maybe a bit bumpy, but you made it, eh?", "Oh, old pinpointer. Thank, will save for next time.")
+
 /obj/structure/trade_window/proc/greet(mob/living/carbon/human/user)
 	var/buildgreet
 	var/username = user.get_face_name()

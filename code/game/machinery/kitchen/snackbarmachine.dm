@@ -4,6 +4,7 @@
 	condi = 1
 	icon_state = "snackbar"
 	chem_board = /obj/item/weapon/circuitboard/snackbar_machine
+	light_color = LIGHT_COLOR_GREEN
 	windowtype = "snackbar_machine"
 
 /obj/machinery/chem_master/snackbar_machine/Topic(href, href_list)

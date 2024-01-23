@@ -3,7 +3,7 @@
 #define MINIICONS_ON 1
 #define MINIICONS_UNCROPPED 2
 /obj/machinery/smartfridge
-	name = "\improper SmartFridge"
+	name = "\improper Foodstuff & Seeds Storage"
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "smartfridge"
 	density = 1
@@ -16,6 +16,9 @@
 	source_temperature = T0C + 4
 	var/icon_on = "smartfridge"
 	var/icon_off = "smartfridge-off"
+	var/icon_broken = "smartfridge-broken"
+	var/icon_deny = null
+	var/moody_state = "overlay_vending_smartfridge"
 	var/list/datum/fridge_pile/piles = list()
 	var/opened = 0.0
 	var/display_miniicons = MINIICONS_ON
@@ -34,17 +37,54 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 
 	light_color = LIGHT_COLOR_CYAN
+	light_power_on = 1
+	light_range_on = 2
 
 /obj/machinery/smartfridge/power_change()
-	if( powered() )
-		stat &= ~NOPOWER
-		set_light(2)
-	else
-		spawn(rand(0, 15))
-			stat |= NOPOWER
-			if(!(stat & BROKEN))
-				set_light(0)
+	..()
+	update_icon()
 
+/obj/machinery/smartfridge/update_icon()
+	if (stat & BROKEN)
+		icon_state = icon_broken
+		kill_moody_light()
+		set_light(0)
+	else if (stat & (NOPOWER|FORCEDISABLE))
+		icon_state = icon_off
+		kill_moody_light()
+		set_light(0)
+	else
+		icon_state = icon_on
+		update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
+		set_light(2)
+
+/obj/machinery/smartfridge/proc/breakdown()
+	stat |= BROKEN
+	update_icon()
+
+/obj/machinery/smartfridge/ex_act(var/severity)
+	switch(severity)
+		if(1)
+			qdel(src)
+		if(2)
+			if (prob(50))
+				qdel(src)
+			else
+				breakdown()
+		if(3)
+			if(prob(35))
+				breakdown()
+
+/obj/machinery/smartfridge/emp_act(var/severity)
+	if(stat & (BROKEN))
+		return
+	switch(severity)
+		if(1)
+			if(prob(75))
+				breakdown()
+		if(2)
+			if(prob(35))
+				breakdown()
 
 /datum/fridge_pile
 	var/name = ""
@@ -119,48 +159,22 @@
 	for(var/obj/item/I in contents)
 		I.attempt_heating(src)
 
-/obj/machinery/smartfridge/seeds
-	name = "\improper MegaSeed Servitor"
-	desc = "When you need seeds fast!"
-	icon = 'icons/obj/vending.dmi'
-	icon_state = "seeds"
-	icon_on = "seeds"
-	icon_off = "seeds-off"
-
-	accepted_types = list(/obj/item/seeds)
-
-	light_color = null
-
-/obj/machinery/smartfridge/seeds/New()
-	. = ..()
-
-	component_parts = newlist(
-		/obj/item/weapon/circuitboard/smartfridge/seeds,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
-	)
-
-	RefreshParts()
-
 /obj/machinery/smartfridge/secure/medbay
-	name = "\improper Refrigerated Medicine Storage"
-	desc = "A refrigerated storage unit for storing medicine and chemicals."
-	icon_state = "smartfridge" //To fix the icon in the map editor.
-	icon_on = "smartfridge_chem"
+	name = "\improper Secure Medicine Storage"
+	desc = "A refrigerated storage unit for storing medicine and chemicals. Only medical staff are permitted to access it."
+	icon_state = "medfridge"
+	icon_on = "medfridge"
+	icon_off = "medfridge-off"
+	icon_broken = "medfridge-broken"
+	icon_deny = "medfridge-deny"
+	moody_state = "overlay_vending_medfridge"
 	req_one_access = list(access_chemistry, access_medical)
 
 	accepted_types = list(	/obj/item/weapon/reagent_containers/glass,
 							/obj/item/weapon/storage/pill_bottle,
 							/obj/item/weapon/reagent_containers/pill)
 
-/obj/machinery/smartfridge/medbay/New()
+/obj/machinery/smartfridge/secure/medbay/New()
 	..()
 	if(map.nameShort == "deff")
 		icon = 'maps/defficiency/medbay.dmi'
@@ -183,6 +197,12 @@
 /obj/machinery/smartfridge/chemistry
 	name = "\improper Smart Chemical Storage"
 	desc = "A refrigerated storage unit for medicine and chemical storage."
+	icon_state = "smartfridge"
+	icon_on = "smartfridge"
+	icon_off = "smartfridge-off"
+	icon_broken = "smartfridge-broken"
+	icon_deny = null
+	moody_state = "overlay_vending_smartfridge"
 
 	accepted_types = list(	/obj/item/weapon/storage/pill_bottle,
 							/obj/item/weapon/reagent_containers)
@@ -225,6 +245,12 @@
 /obj/machinery/smartfridge/extract
 	name = "\improper Slime Extract Storage"
 	desc = "A refrigerated storage unit for slime extracts."
+	icon_state = "slimefridge"
+	icon_on = "slimefridge"
+	icon_off = "slimefridge-off"
+	icon_broken = "slimefridge-broken"
+	icon_deny = null
+	moody_state = "overlay_vending_slimefridge"
 
 	accepted_types = list(
 		/obj/item/slime_extract,
@@ -260,6 +286,10 @@
 	desc = "A refrigerated storage unit for blood packs."
 	icon_state = "bloodbank"
 	icon_on = "bloodbank"
+	icon_off = "bloodbank-off"
+	icon_broken = "bloodbank-broken"
+	icon_deny = null
+	moody_state = "overlay_vending_bloodbank"
 
 	accepted_types = list(/obj/item/weapon/reagent_containers/blood)
 
@@ -297,17 +327,6 @@
 	for(var/i = 0 to 5)
 		insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
 
-/obj/machinery/smartfridge/bloodbank/power_change()
-	if( powered() )
-		stat &= ~NOPOWER
-		if(!(stat & BROKEN))
-			icon_state = icon_on
-	else
-		spawn(rand(0, 15))
-			stat |= NOPOWER
-			if(!(stat & BROKEN))
-				icon_state = icon_off
-
 /*******************
 *   Item Adding
 ********************/
@@ -318,6 +337,7 @@
 /obj/machinery/smartfridge/proc/try_insert_item(var/obj/item/O, var/mob/user)
 	if(!allowed(user) && !emagged)
 		to_chat(user, "<span class='warning'>[bicon(src)] Access denied.</span>")
+		flick(icon_deny,src)
 		return FALSE
 	if(accept_check(O))
 		if(!user.drop_item(O, src))
@@ -344,6 +364,7 @@
 		return FALSE
 	if(!allowed(user) && !emagged)
 		to_chat(user, "<span class='warning'>[bicon(src)] Access denied.</span>")
+		flick(icon_deny,src)
 		return FALSE
 	var/objects_loaded = 0
 	for(var/obj/G in B.contents)
@@ -393,6 +414,9 @@
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(..())
 		return 1
+	if(stat & BROKEN)
+		to_chat(user, "<span class='notice'>\The [src] cannot accept items while it remains broken.</span>")
+		return 1
 	if(stat & (FORCEDISABLE|NOPOWER))
 		to_chat(user, "<span class='notice'>\The [src] is unpowered and useless.</span>")
 		return 1
@@ -433,7 +457,7 @@
 ********************/
 
 /obj/machinery/smartfridge/interact(mob/user as mob)
-	if(stat & (FORCEDISABLE|NOPOWER))
+	if(stat & (BROKEN|FORCEDISABLE|NOPOWER))
 		return
 
 	var/dat = list()
@@ -507,7 +531,15 @@
 	popup.open()
 
 /obj/machinery/smartfridge/Topic(href, href_list)
-	if(..())
+	. = ..()
+	if(stat & BROKEN)
+		to_chat(usr, "<span class='warning'>The [src] has broken down and must be re-assembled.</span>")
+		return 1
+	if(stat & (NOPOWER|FORCEDISABLE))
+		to_chat(usr, "<span class='warning'>The [src] doesn't respond as it is unpowered.</span>")
+		return 1
+
+	if(.)
 		return 1
 
 	if(href_list["close"])
@@ -517,6 +549,7 @@
 
 	if(!allowed(usr) && !emagged) //this explicitly means all topic() options below this line require access
 		to_chat(usr, "<span class='warning'>[bicon(src)] Access denied.</span>")
+		flick(icon_deny,src)
 		return
 
 	usr.set_machine(src)

@@ -40,6 +40,7 @@ log transactions
 	..()
 	machine_id = "[station_name()] ATM #[multinum_display(num_financial_terminals,4)]"
 	num_financial_terminals++
+	update_icon()
 	if(ticker)
 		initialize()
 
@@ -47,6 +48,18 @@ log transactions
 	if(atm_card)
 		QDEL_NULL(atm_card)
 	..()
+
+/obj/machinery/atm/power_change()
+	..()
+	update_icon()
+
+/obj/machinery/atm/update_icon()
+	if(stat & (FORCEDISABLE|NOPOWER))
+		icon_state = "atm_off"
+		kill_moody_light()
+	else
+		icon_state = "atm"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_atm")
 
 /obj/machinery/atm/process()
 	if(stat & (FORCEDISABLE|NOPOWER))

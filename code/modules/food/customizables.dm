@@ -69,6 +69,7 @@
 	var/list/plates = list() // If the plates are stacked, they come here
 	var/new_stack = 0 // allows mappers to create plate stacks
 	var/trash_color = null
+	autoignition_temperature = null
 
 /obj/item/trash/plate/clean
 	icon_state = "cleanplate"
@@ -273,6 +274,7 @@
 	var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/F = new(get_turf(src),snack)
 
 	F.valid_utensils = snack.valid_utensils
+	F.reagents.chem_temp = snack.reagents.chem_temp
 
 	if (virus2?.len)
 		for (var/ID in virus2)

@@ -434,6 +434,12 @@ var/global/objects_thrown_when_explode = FALSE
 	//transfers diseases between the mob and the item
 	disease_contact(user)
 
+	if(src.on_fire)
+		var/mob/living/L = user
+		L.visible_message("<span class='warning'>\The [src] burns [L]'s hands!</span>", "<span class='warning'>Your hands are burned by \the [src]!</span>")
+		L.drop_item(src, force_drop = 1)
+		L.apply_damage(10,BURN,L.get_active_hand_organ())
+
 /obj/item/requires_dexterity(mob/user)
 	return TRUE
 
@@ -1770,3 +1776,26 @@ var/global/list/image/blood_overlays = list()
 	. = heat_conductivity
 	if (is_open_container())
 		. = max(. , 0.5) //Even if it's perfectly insulating, if it's open then some heat can be exchanged.
+
+/obj/item/MiddleAltClick(var/mob/user)
+	if(!isliving(user))
+		return
+	if(src.on_fire)
+		extinguish()
+		var/prot = 0
+
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(H.gloves)
+				var/obj/item/clothing/gloves/G = H.gloves
+				if(G.max_heat_protection_temperature)
+					prot = (G.max_heat_protection_temperature > 360)
+		else
+			prot = 1
+		var/datum/organ/external/active_hand_organ = user.get_active_hand_organ()
+		if(prot > 0 || (M_RESIST_HEAT in user.mutations) || active_hand_organ?.is_robotic())
+			user.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src].")
+			return
+		var/mob/living/L = user
+		L.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
+		L.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src], burning your hand in the process.")

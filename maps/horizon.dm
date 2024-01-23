@@ -33,7 +33,7 @@
 	has_engines = TRUE
 
 	holomap_offset_x = list(0,0,0,86,0,0,0,)
-	holomap_offset_y = list(85,0,0,94,0,0,0,)
+	holomap_offset_y = list(0,0,0,94,0,0,0,)
 
 	center_x = 253
 	center_y = 142
@@ -73,13 +73,6 @@
 	research_shuttle.name = "Asteroid Shuttle" //There is only one shuttle on packedstation - the asteroid shuttle
 	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
 	salvage_shuttle.can_rotate = 1
-
-/datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
-	if(ispath(DR.role_category,/datum/role/ninja))
-		return FALSE
-	if(ispath(DR.role_category,/datum/role/time_agent))
-		return FALSE
-	return ..()
 
 ////////////////////////////////////////////////////////////////
 #include "horizon.dmm"

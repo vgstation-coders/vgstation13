@@ -43,6 +43,9 @@
 		gulp_size = 5
 	else
 		gulp_size = max(round(reagents.total_volume / 5), 5)
+	
+	if(is_empty())
+		update_icon() //we just got emptied, so let's update our icon once, if only to remove the ice overlay.
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/try_consume(mob/user)
 	if(!is_open_container())
@@ -520,8 +523,10 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/tea
 	name = "Tea"
-	icon_state = "tea"
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "mug_empty"
 	item_state = "mug_empty"
+
 /obj/item/weapon/reagent_containers/food/drinks/tea/New()
 	..()
 	switch(pick(1,2,3))
@@ -539,6 +544,15 @@
 			reagents.add_reagent(GREENTEA, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/tea/on_reagent_change()
+	..()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/tea/update_icon()
+	..()
+	if (reagents.reagent_list.len > 0)
+		mug_reagent_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/tea/on_vending_machine_spawn()
 	reagents.chem_temp = COOKTEMP_READY
@@ -583,13 +597,24 @@
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate
 	name = "Dutch Hot Coco"
 	desc = "Made in Space South America."
-	icon_state = "tea"
+	icon = 'icons/obj/cafe.dmi'
+	icon_state = "mug_empty"
 	item_state = "mug_empty"
+
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate/New()
 	..()
 	reagents.add_reagent(HOT_COCO, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/h_chocolate/on_reagent_change()
+	..()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/h_chocolate/update_icon()
+	..()
+	if (reagents.reagent_list.len > 0)
+		mug_reagent_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate/on_vending_machine_spawn()
 	reagents.chem_temp = COOKTEMP_READY
@@ -1396,7 +1421,6 @@
 	can_flip = TRUE
 	var/shaking = FALSE
 	var/obj/item/weapon/reagent_containers/food/drinks/shaker/reaction/reaction = null
-	thermal_variation_modifier = 0.2
 
 /obj/item/weapon/reagent_containers/food/drinks/shaker/New()
 	..()
@@ -1421,7 +1445,7 @@
 		shaking = TRUE
 		var/adjective = pick("furiously","passionately","with vigor","with determination","like a devil","with care and love","like there is no tomorrow")
 		user.visible_message("<span class='notice'>\The [user] shakes \the [src] [adjective]!</span>","<span class='notice'>You shake \the [src] [adjective]!</span>")
-		icon_state = "shaker-shake"
+		icon_state = icon_state + "-shake"
 		if(iscarbon(loc))
 			var/mob/living/carbon/M = loc
 			M.update_inv_hands()
@@ -1429,7 +1453,7 @@
 		if(do_after(user, src, 30))
 			reagents.trans_to(reaction,volume)
 			reaction.reagents.trans_to(reagents,volume)
-		icon_state = "shaker"
+		icon_state = initial(icon_state)
 		if(iscarbon(loc))
 			var/mob/living/carbon/M = loc
 			M.update_inv_hands()
@@ -1437,6 +1461,19 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/shaker/reaction
 	flags = FPRINT  | OPENCONTAINER | SILENTCONTAINER
+	volume = 300
+
+//bluespace shaker
+
+/obj/item/weapon/reagent_containers/food/drinks/shaker/bluespaceshaker
+	name = "\improper bluespace shaker"
+	desc = "A bluespace shaker to mix drinks in."
+	icon_state = "bluespaceshaker"
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=6"
+	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 5000)
+	w_type = RECYK_GLASS
+	w_class = W_CLASS_SMALL
+	volume = 300
 
 /obj/item/weapon/reagent_containers/food/drinks/discount_shaker
 	name = "\improper Discount Shaker"

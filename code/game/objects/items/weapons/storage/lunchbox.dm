@@ -362,6 +362,9 @@
 
 	var/has_lunch = FALSE
 
+/obj/item/weapon/storage/lunchbox/return_air()//prevents hot food from getting cold while in it.
+	return
+
 // -----------------------------
 //          CARDBOARD LUNCHBOXES
 // -----------------------------
