@@ -40,7 +40,7 @@ var/list/discounted_items_of_the_round = list()
 		for (var/thing in discounted_items_of_the_round)
 			concrete_items += new thing
 
-		uplink_items["Discounted items of the day"] = concrete_items
+		uplink_items["Discounted Surplus"] = concrete_items
 
 		for(var/item in typesof(/datum/uplink_item))
 
