@@ -19,7 +19,7 @@
 	var/associated_account_number = 0
 
 	var/list/files = list(  )
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	autoignition_temperature = 0 //ID cards and other cards don't melt in fire
 
 /obj/item/weapon/card/data
 	name = "data disk"
