@@ -16,6 +16,7 @@ var/datum/subsystem/more_init/SSmore_init
 	ticker.init_snake_leaderboard()
 	ticker.init_minesweeper_leaderboard()
 	setup_news()
+	pick_discounted_items()
 
 	var/watch=start_watch()
 	cachedamageicons()

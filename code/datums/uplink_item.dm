@@ -1,5 +1,34 @@
 var/list/uplink_items = list()
 
+var/list/discounted_items_of_the_round = list()
+
+/proc/pick_discounted_items()
+	// Make sure to clear it.
+	var/list/item_list = list()
+
+	var/list/static/forbidden_items = list(
+		/datum/uplink_item/badass/bundle,
+		/datum/uplink_item/badass/experimental_gear,
+		/datum/uplink_item/implants/uplink,
+	)
+
+	var/list/traitor_items = subtypesof(/datum/uplink_item)
+	var/list/possible_picks = list()
+	for (var/thing in traitor_items)
+		var/datum/uplink_item/u_item = thing
+		if (thing in forbidden_items)
+			continue
+		if (initial(u_item.item))
+			possible_picks += thing
+
+	for (var/i = 1 to 3)
+		var/picked = pick(possible_picks)
+		possible_picks -= picked
+		item_list += picked
+		world.log << "Picked: [picked]"
+
+	discounted_items_of_the_round = item_list
+
 /proc/get_uplink_items()
 	// If not already initialized..
 	if(!uplink_items.len)
@@ -7,11 +36,11 @@ var/list/uplink_items = list()
 		// Fill in the list	and order it like this:
 		// A keyed list, acting as categories, which are lists to the datum.
 
-		uplink_items["Discounted items of the day"] = list()
+		var/list/concrete_items = list()
+		for (var/thing in discounted_items_of_the_round)
+			concrete_items += new thing
 
-		var/datum/persistence_task/traitor_item_of_the_day/task = SSpersistence_misc.tasks["/datum/persistence_task/traitor_item_of_the_day"]
-		for (var/thing in task.item_list)
-			uplink_items["Discounted items of the day"] += new thing
+		uplink_items["Discounted items of the day"] = concrete_items
 
 		for(var/item in typesof(/datum/uplink_item))
 
@@ -62,9 +91,8 @@ var/list/uplink_items = list()
 		. = discounted_cost
 	else
 		. = cost
-	var/datum/persistence_task/traitor_item_of_the_day/task = SSpersistence_misc.tasks["/datum/persistence_task/traitor_item_of_the_day"]
 	// 50% discount for items of the day
-	if (is_type_in_list(src, task.item_list))
+	if (is_type_in_list(src, discounted_items_of_the_round))
 		. = cost*0.5
 	. = Ceiling(. * cost_modifier) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
 
