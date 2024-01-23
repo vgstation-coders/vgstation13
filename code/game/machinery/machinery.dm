@@ -298,7 +298,7 @@ Class Procs:
 
 		if(!use_auto_lights)
 			return
-		if(stat & BROKEN|FORCEDISABLE)
+		if(stat & (BROKEN|FORCEDISABLE))
 			set_light(0)
 		else
 			set_light(light_range_on, light_power_on)
