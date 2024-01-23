@@ -49,6 +49,7 @@
 		"/obj/item/airshield_projector",
 		"/obj/item/device/radio",
 		"/obj/item/device/gps",
+		"/obj/item/device/pager",
 		"/obj/item/blueprints/construction_permit"
 		)
 
