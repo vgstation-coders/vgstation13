@@ -1117,12 +1117,10 @@ var/global/list/damage_icon_parts = list()
 			O.color = I.color
 		O.pixel_x = species.inventory_offsets["[slot_head]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_head]"]["pixel_y"] * PIXEL_MULTIPLIER
-		//overlays_standing[HEAD_LAYER]	= standing
-	//else
-		//overlays_standing[HEAD_LAYER]	= null
 
 		if(istype(head,/obj/item/clothing/head))
 			var/obj/item/clothing/head/hat = head
+			O.pixel_y += hat.vertical_offset
 			var/i = 1
 			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
 				if(above.wear_override)
@@ -1143,13 +1141,13 @@ var/global/list/damage_icon_parts = list()
 					if(has_icon(standing.icon, "[above.icon_state]_f"))
 						standing.icon_state = "[above.icon_state]_f"
 
-				standing.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_y"] + (2 * i)) * PIXEL_MULTIPLIER
+				standing.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_y"] + (2 * i)) * PIXEL_MULTIPLIER + hat.vertical_offset
 				O.overlays += standing
 
 				if(above.dynamic_overlay)
 					if(above.dynamic_overlay["[HEAD_LAYER]"])
 						var/image/dyn_overlay = above.dynamic_overlay["[HEAD_LAYER]"]
-						dyn_overlay.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_y"] + (2 * i)) * PIXEL_MULTIPLIER
+						dyn_overlay.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_y"] + (2 * i)) * PIXEL_MULTIPLIER + hat.vertical_offset
 
 						if(S.name in above.species_fit)
 							dyn_overlay = replace_overlays_icon(dyn_overlay, S.head_icons)
@@ -1164,7 +1162,7 @@ var/global/list/damage_icon_parts = list()
 					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = blood_icon_state)
 					bloodsies.color = above.blood_color
 					//standing.overlays	+= bloodsies
-					bloodsies.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_y"] + (2 * i)) * PIXEL_MULTIPLIER
+					bloodsies.pixel_y = (species.inventory_offsets["[slot_head]"]["pixel_y"] + (2 * i)) * PIXEL_MULTIPLIER + hat.vertical_offset
 					O.overlays	+= bloodsies
 
 				//above.generate_accessory_overlays(O)

@@ -31,4 +31,5 @@ var/list/dyeable_part_to_name = list(
 	"pattern" = "Pattern",
 	"shoulders" = "Shoulders",
 	"stripe" = "Stripe",
+	"ribbon" = "Ribbon",
 	)
