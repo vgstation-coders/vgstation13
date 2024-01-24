@@ -1095,8 +1095,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	var/datum/browser/popup = new(user, "\ref[src]", name, 575, 400)
 	popup.set_content(dat)
 	popup.open()
-	//user << browse("<TITLE>Research and Development Console</TITLE><HR>[dat]", "window=rdconsole;size=575x400")
-	//onclose(user, "rdconsole")
 
 /obj/machinery/computer/rdconsole/proc/isLocked() //magic numbers ahoy!
 	return screen == 0.2
