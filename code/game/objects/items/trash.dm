@@ -260,7 +260,7 @@
 	name = "discarded BYOND support package"
 	icon_state = "byond"
 	starting_materials = list(MAT_CARDBOARD = 370)
-	autoignition_temperature = 522
+	autoignition_temperature = AUTOIGNITION_PAPER
 	w_type=RECYK_MISC
 
 var/list/crushed_cans_cache = list()
