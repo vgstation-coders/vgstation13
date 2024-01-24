@@ -515,16 +515,19 @@
 	destination = place_to_go
 
 /datum/bot/order/mule
-	var/atom/thing_to_load
+	var/atom/thing_to_load = null
 	var/unload_here = FALSE
 	var/unload_dir = 0
+	var/loc_description = ""
+	var/returning = FALSE
 
-/datum/bot/order/mule/New(var/turf/place_to_go, var/atom/thing, _unload_here = FALSE, var/unload_direction)
+/datum/bot/order/mule/New(var/turf/place_to_go, var/atom/thing = null, _unload_here = FALSE, var/unload_direction = 0, var/text_desc = "Unknown")
 	destination = place_to_go
 	thing_to_load = thing
 	unload_here = _unload_here
 	unload_dir = unload_direction
-	astar_debug_mulebots("Order up! [destination] [thing_to_load] [unload_here] [unload_dir]!")
+	loc_description = text_desc
+	astar_debug_mulebots("Order up! [destination] [loc_description] [thing_to_load] [unload_here] [unload_dir]!")
 
 /datum/bot/order/mule/unload
 

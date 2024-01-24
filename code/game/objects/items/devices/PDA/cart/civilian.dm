@@ -230,12 +230,32 @@
 		var/atom/load = mule.return_load()
 		if(load)
 			dat += {"Loaded: [load.name] <br/>"}
-		if(mule.on)
-			dat +=	{"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=summon;user=\ref[user]'>[mule.summoned ? "Halt" : "Summon"] </a><br/>"}
+		var/i = 1
+		if(mule.current_order)
+			dat += {"<b>Current</b>: [mule.destination] <br/>"}
+			i++
+		if(mule.destinations_queue.len)
+			for(var/datum/bot/order/mule/order in mule.destinations_queue)
+				dat += {"<b>&#35;[i]</b>: [order.loc_description] <br/>"}
+				i++
+		if(mule.destinations_queue.len || mule.current_order)
+			if(!mule.destinations_queue.len)
+				if(mule.current_order.returning)
+					dat += {"<b>Auto</b>: Return Home</br>"}
+			else
+				var/datum/bot/order/mule/order = mule.destinations_queue[mule.destinations_queue.len]
+				if(order?.returning)
+					dat += {"<b>Auto</b>: Return Home</br>"}
 		dat += {"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=switch_power;user=\ref[user]'>Turn [mule.on ? "off" : "on"]</a> <br/>"}
 		if(mule.on)
-			dat += {"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=return_home;user=\ref[user]'>Send home</a> <br/><a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=send_to;place=\ref[cart_device.saved_destination];user=\ref[user]'>Send to: [cart_device.saved_destination]</a> - <a href='?src=\ref[src];change_destination=1'>EDIT</a> <br/>
+			dat +=	{"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=summon;user=\ref[user]'>Summon Here </a><br/>"}
+			dat +=	{"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=pause;user=\ref[user]'>[mule.mode == 6 ? "Unpause" : "Pause"] </a><br/>"}
+			dat +=	{"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=clear_queue;user=\ref[user]'>Purge Queue </a><br/>"}
+			dat += {"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=return_home;user=\ref[user]'>Send home</a> <br/>"}
+			dat += {"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=honk;user=\ref[user]'>Honk</a> <br/>"}
+			dat += {"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=send_to;place=\ref[cart_device.saved_destination];user=\ref[user]'>Send to: [cart_device.saved_destination]</a> - <a href='?src=\ref[src];change_destination=1'>EDIT</a> <br/>
 			</li>"}
+		dat += {"<br/>"}
 	dat += "</ul>"
 	return dat
 
