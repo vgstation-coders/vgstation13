@@ -8,6 +8,8 @@
 
 	if(health < config.health_threshold_softcrit) //Going under the crit threshold makes you immediately collapse
 		pain_shock_stage = max(pain_shock_stage, 61)
+		if(!isUnconscious())
+			visible_message("<B>[src]</B> passes out!","Your vision goes dark due to the pain!")
 	else if(pain_level >= BASE_CARBON_PAIN_RESIST)//Remaining over the pain threshold causes shock to increase over time
 		pain_shock_stage += 1
 	else
@@ -43,6 +45,8 @@
 
 		if(pain_shock_stage >= 120 && pain_shock_stage < 150)
 			if(prob(2))
+				if(!isUnconscious())
+					visible_message("<B>[src]</B> passes out!")
 				to_chat(src, "<span class='danger'>[pick("You black out!", "You feel like you could die any moment now.", "You're about to lose consciousness.")]</span>")
 				Paralyse(5)
 
