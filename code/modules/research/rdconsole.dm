@@ -963,7 +963,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						success = "#00ff00"
 					else if(linked_lathe.check_mats_bluespace(I) >= required_materials[I])
 						success_amount = linked_lathe.check_mats_bluespace(I)
-						success = "blue"
+						success = "#00ffff"
 					dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
 			dat += "<br><A href='?src=\ref[src];clearQ=1;device=protolathe'>Remove All Queued Items</A><br />"
 			if(linked_lathe.stopped)
@@ -1079,7 +1079,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 								success = "#00ff00"
 							else if(linked_imprinter.check_mats_bluespace(I) >= required_materials[I])
 								success_amount = linked_imprinter.check_mats_bluespace(I)
-								success = "blue"
+								success = "#00ffff"
 							dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
 					else
 						var/success = linked_imprinter.check_mats(I)
