@@ -121,7 +121,8 @@
 		"/obj/item/airshield_projector",
 		"/obj/item/tool/irons",
 		"/obj/item/device/radio",
-		"/obj/item/device/gps"
+		"/obj/item/device/gps",
+		"/obj/item/device/pager"
 		)
 
 /obj/item/weapon/storage/belt/utility/chief/full/New() //This is mostly for testing I guess
