@@ -233,7 +233,7 @@
 	var/foldable = /obj/item/stack/sheet/cardboard
 	var/foldable_amount = 4
 
-	autoignition_temperature = 522 // Kelvin
+	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 2
 
 /obj/item/emptyvendomatpack/attack_self()

@@ -279,7 +279,7 @@
 	icon = 'icons/obj/doors/Doorplasma.dmi'
 	mineral = "plasma"
 
-	autoignition_temperature = 300
+	autoignition_temperature = AUTOIGNITION_WELDERFUEL
 	fire_fuel = 10
 
 /obj/machinery/door/airlock/plasma/ignite(temperature)
