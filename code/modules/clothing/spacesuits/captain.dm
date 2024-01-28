@@ -21,6 +21,27 @@
 	icon_state = "capspace_[on]"
 	return
 
+/obj/item/clothing/head/helmet/space/rig/centcommspace
+	name = "Centcomm space helmet"
+	icon_state = "centcommspace_0"
+	item_state = "centcommspacehelmet"
+	desc = "A specialty fortified rig helmet designed for topmost Centcomm personnel only. No it isn't just painted green and yes you will be fired out of the nearest airlock for asking."
+	body_parts_covered = HEAD|EARS|EYES
+	body_parts_visible_override = EYES
+	permeability_coefficient = 0.01
+	clothing_flags = PLASMAGUARD
+	armor = list(melee = 65, bullet = 55, laser = 50,energy = 25, bomb = 50, bio = 100, rad = 60)
+	allowed = list(/obj/item/device/flashlight)
+	light_power = 2
+	brightness_on = 6
+	on = 0
+	no_light = 0
+
+
+/obj/item/clothing/head/helmet/space/rig/centcommspace/update_icon()
+	icon_state = "centcommspace_[on]"
+	return
+
 /obj/item/clothing/suit/space/rig/captain
 	name = "Captain's rig armor"
 	desc = "A bulky, heavy-duty piece of exclusive Nanotrasen armor. YOU are in charge!"
@@ -48,7 +69,7 @@
 	name = "Centcomm rig armor"
 	desc = "This bulky armor is the property of Nanotrasen's supreme leader. Witness and behold!"
 	icon_state = "centcom"
-	item_state = "centcom"
+	item_state = "centcommspacesuit"
 	w_class = W_CLASS_LARGE
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.02
@@ -59,7 +80,7 @@
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	siemens_coefficient = 0
-	head_type = /obj/item/clothing/head/helmet/space/rig/capspace
+	head_type = /obj/item/clothing/head/helmet/space/rig/centcommspace
 
 /obj/item/clothing/suit/space/rig/centcomm/old
 	icon_state = "oldcentcom"
