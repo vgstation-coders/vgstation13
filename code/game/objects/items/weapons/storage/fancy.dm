@@ -132,24 +132,60 @@
 
 /obj/item/weapon/storage/fancy/candle_box
 	name = "Candle pack"
-	desc = "A pack of red candles."
+	desc = "A pack of candles."
 	icon = 'icons/obj/candle.dmi'
-	icon_state = "candlebox5"
-	icon_type = "candle"
-	item_state = "candlebox5"
+	icon_state = "candlebox"
+	item_state = "candlebox"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/candles.dmi', "right_hand" = 'icons/mob/in-hand/right/candles.dmi')
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type = RECYK_MISC
-	storage_slots = 5
+	storage_slots = 14
 	throwforce = 2
 	flags = null
 	slot_flags = SLOT_BELT
 	var/obj/item/candle/waxtype = /obj/item/candle
+	var/candlesprite = "candlebox_candle"
 
 /obj/item/weapon/storage/fancy/candle_box/empty
 	empty = TRUE
-	icon_state = "candlebox0"
-	item_state = "candlebox0" //i don't know what this does but it seems like this should go here
+	icon_state = "candlebox"
+	item_state = "candlebox" //i don't know what this does but it seems like this should go here
+
+/obj/item/weapon/storage/fancy/candle_box/update_icon()
+	overlays.len = 0
+
+	for (var/i=0,i<contents.len,i++)
+		var/obj/O = contents[i+1]
+		var/image/I = image(icon, src, "[icon_state]_candle")
+		I.color = O.color
+		I.pixel_x = (i%5)*3
+		overlays += I
+	overlays += "[icon_state]_cover"
+	update_blood_overlay()
+
+	//dynamic in-hands
+	var/inhand_candles = 0
+	switch (contents.len)
+		if (1 to 5)
+			inhand_candles = 1
+		if (6 to 10)
+			inhand_candles = 2
+		if (1 to 14)
+			inhand_candles = 3
+	if (inhand_candles)
+		var/obj/O = contents[1]
+		var/image/left_I = image(inhand_states["left_hand"], src, "[icon_state]_[inhand_candles]")
+		left_I.color = O.color
+		var/image/right_I = image(inhand_states["right_hand"], src, "[icon_state]_[inhand_candles]")
+		right_I.color = O.color
+		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
+		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
+
+	if(iscarbon(loc))
+		var/mob/living/carbon/M = loc
+		M.update_inv_hands()
+
 
 /obj/item/weapon/storage/fancy/candle_box/New()
 	..()
@@ -157,14 +193,15 @@
 		return
 	for(var/i=1; i <= storage_slots; i++)
 		new waxtype(src)
+	update_icon()
 
 /obj/item/weapon/storage/fancy/candle_box/holo
 	name = "Holo candle pack"
 	desc = "A pack of holo candles."
-	icon_state = "holocandlebox5"
-	icon_type = "holocandle"
-	//item_state = "candlebox5"
-	waxtype = /obj/item/candle/holo
+	icon_state = "holocandlebox"
+	item_state = "holocandlebox"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/candles.dmi', "right_hand" = 'icons/mob/in-hand/right/candles.dmi')
+	waxtype = /obj/item/holocandle
 
 /*
  * Crayon Box

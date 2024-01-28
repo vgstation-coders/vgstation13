@@ -212,6 +212,17 @@
 	name = "candle"
 	icon = 'icons/obj/candle.dmi'
 	icon_state = "candle4"
+	var/image/wick
+
+/obj/item/trash/candle/New(turf/loc, var/obj/item/candle/source)
+	..()
+	if (source)
+		color = source.color
+	else
+		color = COLOR_DEFAULT_CANDLE
+	wick = image(icon,src,"candle4-wick")
+	wick.appearance_flags = RESET_COLOR
+	overlays += wick
 
 /obj/item/trash/liquidfood
 	name = "\improper \"LiquidFood\" ration"

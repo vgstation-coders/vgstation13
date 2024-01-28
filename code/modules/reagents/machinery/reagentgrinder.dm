@@ -41,6 +41,7 @@ var/global/list/juice_items = list (
 		/obj/item/stack/sheet/mineral/gold    = list(GOLD = 20),
 		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = 20),
 		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON = 1),
+		/obj/item/stack/sheet/wax			  = list(WAX = 5),
 		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID = 0),
 		/obj/item/weapon/grown/deathnettle    = list(PHENOL = 0),
 		/obj/item/stack/sheet/charcoal        = list("charcoal" = 20),
@@ -520,7 +521,7 @@ var/global/list/juice_items = list (
 			for(var/r_id in allowed)
 				if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 					break
-				beaker.reagents.add_reagent(r_id, allowed[r_id])
+				beaker.reagents.add_reagent(r_id, allowed[r_id], additional_data = list("color" = O.color))
 		if(O.gcDestroyed)
 			holdingitems -= O
 
@@ -532,7 +533,7 @@ var/global/list/juice_items = list (
 		for (var/r_id in allowed)
 			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 			var/amount = allowed[r_id]
-			beaker.reagents.add_reagent(r_id,min(amount, space), O.geological_data)
+			beaker.reagents.add_reagent(r_id,min(amount, space), additional_data = list(GROUND_ROCK = O.geological_data))
 
 			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 				break

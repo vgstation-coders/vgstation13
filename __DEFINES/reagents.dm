@@ -530,6 +530,7 @@
 #define ACETONE			"acetone"
 #define NANOPAINT		"nano_paint"
 #define FLAXOIL			"flax_oil"
+#define WAX				"wax"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2

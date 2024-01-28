@@ -1922,19 +1922,25 @@ var/list/arcane_tomes = list()
 	desc = "A candle made out of blood moth wax, burns much longer than regular candles. Used for moody lighting and occult rituals."
 	icon = 'icons/obj/candle.dmi'
 	icon_state = "bloodcandle"
+	item_state = "bloodcandle"
+	color = null
 
-	wax = 1200 // 20 minutes
+	wax = 3600 // 60 minutes
 	trashtype = /obj/item/trash/blood_candle
 
 /obj/item/candle/blood/update_icon()
 	overlays.len = 0
-	var/i
-	if(wax > 800)
-		i = 1
-	else if(wax > 400)
-		i = 2
-	else i = 3
-	icon_state = "bloodcandle[i]"
+	if (wax == initial(wax))
+		icon_state = "bloodcandle"
+	else
+		var/i
+		if(wax > 2400)
+			i = 1
+		else if(wax > 1200)
+			i = 2
+		else i = 3
+		icon_state = "bloodcandle[i]"
+	update_blood_overlay()
 	if (lit)
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.blend_mode = BLEND_ADD
@@ -1943,6 +1949,16 @@ var/list/arcane_tomes = list()
 		else
 			I.plane = ABOVE_HUD_PLANE // inventory
 		overlays += I
+
+		//dynamic in-hands
+		var/image/left_I = image(inhand_states["left_hand"], src, "bloodcandle_lit")
+		var/image/right_I = image(inhand_states["right_hand"], src, "bloodcandle_lit")
+		left_I.blend_mode = BLEND_ADD
+		left_I.plane = ABOVE_LIGHTING_PLANE
+		right_I.blend_mode = BLEND_ADD
+		right_I.plane = ABOVE_LIGHTING_PLANE
+		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
+		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
 
 /obj/item/trash/blood_candle
 	name = "blood candle"

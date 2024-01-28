@@ -2742,6 +2742,26 @@
 		)
 	result = /obj/item/claypot
 
+//I hate this please for the love of god someone enable microwaves to batch produce items
+/datum/recipe/waxcake
+	reagents = list(WAX = 5)
+	result = /obj/item/stack/sheet/wax
+/datum/recipe/waxcake_times_two
+	reagents = list(WAX = 10)
+	result = /obj/item/stack/sheet/wax/times_two
+/datum/recipe/waxcake_times_three
+	reagents = list(WAX = 15)
+	result = /obj/item/stack/sheet/wax/times_three
+/datum/recipe/waxcake_times_four
+	reagents = list(WAX = 20)
+	result = /obj/item/stack/sheet/wax/times_four
+/datum/recipe/waxcake_times_ten
+	reagents = list(WAX = 50)
+	result = /obj/item/stack/sheet/wax/times_ten
+/datum/recipe/waxcake_times_twenty
+	reagents = list(WAX = 100)
+	result = /obj/item/stack/sheet/wax/bigstack
+
 /datum/recipe/cinnamonroll
 	reagents = list(MILK = 5, SUGARS = 10, FLOUR = 5, CINNAMON = 5)
 	items = list(

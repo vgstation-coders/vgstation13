@@ -43,7 +43,7 @@
 		gulp_size = 5
 	else
 		gulp_size = max(round(reagents.total_volume / 5), 5)
-	
+
 	if(is_empty())
 		update_icon() //we just got emptied, so let's update our icon once, if only to remove the ice overlay.
 
@@ -2250,6 +2250,14 @@
 		name = "Flaming [name]"
 		desc += " Damn that looks hot!"
 		icon_state += "-flamin"
+		update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/blow_act(var/mob/living/user)
+	if(molotov && lit)
+		lit = 0
+		visible_message("<span  class='rose'>The light on \the [name] goes out.</span>")
+		processing_objects.Remove(src)
+		set_light(0)
 		update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/update_brightness(var/mob/user = null)

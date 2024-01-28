@@ -79,7 +79,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return ..()
 
 /obj/item/weapon/reagent_containers/MiddleAltClick(var/mob/living/user)
-	if(!is_holder_of(user, src))
+	if(!Adjacent(user, src))
 		return
 	if(!reagents || !reagents.total_volume)
 		to_chat(user, "<span class='warning'>\The [src] is desperately empty.</span>")
@@ -90,6 +90,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			to_chat(user, "<span class='warning'>You stare at \the [src] intently. Wishing you had a mouth to interact with it.</span>")
 			return
 	thermal_entropy()
+	blow_act(user)
 	playsound(user, 'sound/effects/blow.ogg', 5, 1, -2)
 	var/can_it_burn = round(user.get_splash_burn_damage(amount_per_imbibe, reagents.chem_temp))
 	if (can_it_burn)
@@ -98,6 +99,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='warning'>It feels pretty cold still...</span>")
 	else
 		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='notice'>Temperature seems safe...</span>")
+
+/obj/item/weapon/reagent_containers/proc/blow_act(var/mob/living/user)
+	return
 
 /obj/item/weapon/reagent_containers/New()
 	..()
