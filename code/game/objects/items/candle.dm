@@ -26,6 +26,7 @@
 	wick.appearance_flags = RESET_COLOR
 	if(world.has_round_started())
 		initialize()
+	update_icon()
 
 /obj/item/candle/initialize()
 	..()

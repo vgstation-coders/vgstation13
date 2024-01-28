@@ -595,6 +595,8 @@
 					candle.pixel_y = 0
 					slice.candles += candle
 				slice.candles_state = candles_state
+				if (slice.candles_state == CANDLES_LIT)
+					slice.set_light(CANDLE_LUM,0.5,LIGHT_COLOR_FIRE)
 				slice.update_icon() //So hot slices start steaming right away
 			qdel(src) //So long and thanks for all the fish
 			return 1

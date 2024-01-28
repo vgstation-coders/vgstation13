@@ -143,7 +143,7 @@
 /datum/smelting_recipe/wax
 	name = "Wax"
 	ingredients=list(
-		MAT_FABRIC = CC_PER_SHEET_WAX
+		MAT_WAX = CC_PER_SHEET_WAX
 	)
 	yieldtype = /obj/item/stack/sheet/wax
 
