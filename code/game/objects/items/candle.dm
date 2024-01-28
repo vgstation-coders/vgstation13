@@ -11,7 +11,7 @@
 	light_color = LIGHT_COLOR_FIRE
 	w_type = RECYK_WAX
 	melt_temperature = MELTPOINT_WAX
-	starting_materials = list(MAT_FABRIC = CC_PER_SHEET_WAX)
+	starting_materials = list(MAT_WAX = CC_PER_SHEET_WAX)
 	color = COLOR_DEFAULT_CANDLE
 
 	var/wax = 1800 // 30 minutes
