@@ -212,6 +212,7 @@
 	name = "candle"
 	icon = 'icons/obj/candle.dmi'
 	icon_state = "candle4"
+	starting_materials = list(MAT_WAX = (4*CC_PER_SHEET_WAX/5))
 	var/image/wick
 
 /obj/item/trash/candle/New(turf/loc, var/obj/item/candle/source)

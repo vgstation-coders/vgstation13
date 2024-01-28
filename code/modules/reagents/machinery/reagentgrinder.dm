@@ -43,6 +43,7 @@ var/global/list/juice_items = list (
 		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON = 1),
 		/obj/item/stack/sheet/wax			  = list(WAX = 5),
 		/obj/item/candle					  = list(WAX = 1.25),
+		/obj/item/trash/candle				  = list(WAX = 1),
 		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID = 0),
 		/obj/item/weapon/grown/deathnettle    = list(PHENOL = 0),
 		/obj/item/stack/sheet/charcoal        = list("charcoal" = 20),
