@@ -358,13 +358,13 @@
 
 /obj/item/clothing/suit/storage/wintercoat/hoodie/red
 	name = "Red hoodie"
-	color = "#D91414"
+	color = "#D91414" //Red
 
 /obj/item/clothing/suit/storage/wintercoat/hoodie/darkred
 	name = "Dark red hoodie"
 	icon_state = "hoodiedark"
 	item_state = "hoodiedark"
-	color = "#D91414"
+	color = "#D91414" //Red
 
 /obj/item/clothing/suit/storage/wintercoat/hoodie/orange
 	name = "Orange hoodie"
@@ -400,21 +400,21 @@
 
 /obj/item/clothing/suit/storage/wintercoat/hoodie/cyan
 	name = "Cyan hoodie"
-	color = "#00ffff"
+	color = "#00ffff" //Cyan
 
 /obj/item/clothing/suit/storage/wintercoat/hoodie/teal
 	name = "Teal hoodie"
 	icon_state = "hoodiedark"
 	item_state = "hoodiedark"
-	color = "#00ffff"
+	color = "#00ffff" //Cyan
 
 /obj/item/clothing/suit/storage/wintercoat/hoodie/purple
 	name = "Purple hoodie"
-	color = "#9900CC"//"#9557C5" //purple
+	color = "#9900CC" //Purple
 
 /obj/item/clothing/suit/storage/wintercoat/hoodie/pink
 	name = "Pink Hoodie"
-	color = "#FFCCCC"
+	color = "#FFCCCC" //Light Pink
 
 /obj/item/clothing/suit/storage/wintercoat/fur // think one of those big vintage fur coats you find in your grandmothers closet
 	name = "A heavy fur coat"
