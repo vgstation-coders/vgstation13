@@ -259,13 +259,11 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return 1
 	return w_type
 
-/*
 /obj/melt()
 	var/obj/effect/decal/slag/slag=locate(/obj/effect/decal/slag) in get_turf(src)
 	if(!slag)
 		slag = new(get_turf(src))
 	slag.slaggify(src)
-*/
 
 /obj/proc/is_conductor(var/siemens_min = 0.5)
 	if(src.siemens_coefficient >= siemens_min)

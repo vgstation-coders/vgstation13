@@ -391,7 +391,7 @@
 				broke()
 				playsound(src, 'sound/machines/ding.ogg', 50, 1)
 				empty()
-				var/obj/item/trash/slag/gunk = new(src)
+				var/obj/effect/decal/slag/plastic/gunk = new(src)
 				gunk.forceMove(src.loc)
 				return
 

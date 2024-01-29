@@ -311,11 +311,6 @@ var/list/crushed_cans_cache = list()
 	. = ..()
 	.["color"] = name//a bit hacky but at least it works
 
-/obj/item/trash/slag
-	name = "slag"
-	desc = "Electronics burnt to a crisp."
-	icon_state = "slag"
-
 /obj/item/trash/used_tray
 	name = "dirty tray"
 	icon_state	= "tray_plastic_used"

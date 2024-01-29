@@ -46,7 +46,7 @@
 #define MELTPOINT_GOLD (T0C+1064)
 #define MELTPOINT_SILVER (T0C+961.8)
 #define MELTPOINT_URANIUM (T0C+1132)
-#define MELTPOINT_POTASSIUM (T0C+63.5)
+#define MELTPOINT_POTASSIUM (T0C+63.5) //Bananium meltpoint, lmao
 #define MELTPOINT_BRASS (T0C+940)
 #define MELTPOINT_MYTHRIL (T0C+893) //Using sterling silver (because silver steel) as base
 
