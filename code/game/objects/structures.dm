@@ -66,5 +66,5 @@
 /obj/structure/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)
 
-/obj/melt() //no melting for structures, yet
-	return 0
+/obj/structure/melt() //no melting for structures, yet
+	return

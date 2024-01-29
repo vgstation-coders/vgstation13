@@ -64,7 +64,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		breakable_init()
 	if(is_cooktop)
 		add_component(/datum/component/cooktop)
-	if(autoignition_temperature)
+	if(autoignition_temperature || melt_temperature)
 		burnableatoms+=src
 
 //More cooking stuff:
@@ -260,9 +260,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	return w_type
 
 /obj/melt()
+	message_admins("Melting [src].") //DEBUG
 	var/obj/effect/decal/slag/slag=locate(/obj/effect/decal/slag) in get_turf(src)
+	if(slag)
+		message_admins("Existing slag: [slag].") //DEBUG
 	if(!slag)
 		slag = new(get_turf(src))
+		message_admins("New slag [slag] at [get_turf(src)].") //DEBUG
 	slag.slaggify(src)
 
 /obj/proc/is_conductor(var/siemens_min = 0.5)

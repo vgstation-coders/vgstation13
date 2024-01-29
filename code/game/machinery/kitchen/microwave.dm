@@ -390,9 +390,10 @@
 					return
 				broke()
 				playsound(src, 'sound/machines/ding.ogg', 50, 1)
+				O.forceMove(src.loc)
 				empty()
-				var/obj/effect/decal/slag/plastic/gunk = new(src)
-				gunk.forceMove(src.loc)
+				O.melt()
+				src.visible_message("<span class='warning'>Molten plastic pours from the microwave!</span>")
 				return
 
 		// If there's just one item and no reagents, warm it up

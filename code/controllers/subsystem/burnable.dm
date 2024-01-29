@@ -38,12 +38,15 @@ var/list/atom/burnableatoms = list()
 
 #define MINOXY2BURN (1 / CELL_VOLUME)
 /atom/proc/checkburn()
+	var/datum/gas_mixture/G = return_air()
 	if(on_fire)
-		var/datum/gas_mixture/G = return_air()
 		if(!G || G.molar_density(GAS_OXYGEN) < MINOXY2BURN) //no oxygen so it goes out
 			extinguish()
 	else if(autoignition_temperature && isturf(loc))
-		var/datum/gas_mixture/G = return_air()
 		if(G && G.temperature >= autoignition_temperature && G.molar_density(GAS_OXYGEN) >= MINOXY2BURN)
 			ignite()
+	else if(melt_temperature && isturf(loc))
+		if(G && G.temperature >= melt_temperature)
+			message_admins("Melting [src] via burnable.dm.") //DEBUG
+			melt()
 #undef MINOXY2BURN

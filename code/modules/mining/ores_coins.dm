@@ -144,7 +144,7 @@
 	melt_temperature = MELTPOINT_GLASS
 	starting_materials = list(MAT_PHAZON = CC_PER_SHEET_PHAZON)
 
-/obj/item/stack/ore/slag // this slag item is used for blacksmithing only - for slag as a result of items melting, see /obj/effect/decal/slag
+/obj/item/stack/ore/slag
 	name = "\improper slag"
 	desc = "Completely useless unless recycled."
 	icon_state = "slag"
