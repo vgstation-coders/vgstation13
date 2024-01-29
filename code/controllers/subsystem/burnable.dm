@@ -47,6 +47,5 @@ var/list/atom/burnableatoms = list()
 			ignite()
 	else if(melt_temperature && isturf(loc))
 		if(G && G.temperature >= melt_temperature)
-			message_admins("Melting [src] via burnable.dm.") //DEBUG
 			melt()
 #undef MINOXY2BURN

@@ -11,12 +11,7 @@
 
 /obj/effect/decal/slag/proc/slaggify(var/obj/O)
 	// This is basically a crude recycler doohicky
-	message_admins("Slaggifying [src] with input object [O].") //DEBUG
 	if (O.recycle(materials))
-		message_admins("O: [O].") //DEBUG
-		message_admins("materials: [materials].") //DEBUG
-		message_admins("O.materials: [O.materials].") //DEBUG
-		message_admins("O.recycle(materials):[O.recycle(materials)].") //DEBUG
 		if(melt_temperature==0)
 			// Set up our solidification temperature.
 			melt_temperature=O.melt_temperature
@@ -29,8 +24,6 @@
 			icon_state="slaghot"
 			processing_objects.Add(src)
 			set_light(2)
-	else
-		message_admins("No materials found in [O].") //DEBUG
 
 /obj/effect/decal/slag/Destroy()
 	set_light(0)
