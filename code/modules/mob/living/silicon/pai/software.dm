@@ -43,6 +43,8 @@
 				left_part = pdamessage()
 			if("buy")
 				left_part = downloadSoftware()
+			if("uninstall")
+				left_part = uninstallSoftware()
 			if("manifest")
 				left_part = softwareManifest()
 			if("medicalsupplement")
@@ -137,7 +139,7 @@
 						ram -= cost
 						software.Add(target)
 					else
-						temp = "Insufficient RAM available."
+						temp = "Insufficient RAM available." //debug: insufficient ram availabe. uninstall unneeded software to make space.
 				else
 					temp = "Trunk <TT> \"[target]\"</TT> not found."
 
@@ -293,6 +295,19 @@
 					holomap_device.toggleHolomap(M)
 			if(href_list["show_map"])
 				holomap_device.toggleHolomap(src)
+
+
+		if("uninstall")
+			if(subscreen == 1)
+				var/target = href_list["uninstall"]
+				if(software.Find(target))
+					var/cost = available_software[target]
+					software.Remove(target)//debug: put a cooldown before buying or uninstalling other software
+					ram+=cost
+				else
+					temp = "Trunk <TT> \"[target]\"</TT> not found."
+
+
 	paiInterface()		 // So we'll just call the update directly rather than doing some default checks
 	return
 
@@ -354,6 +369,9 @@
 	dat += {"<br>
 		<br>
 		<a href='byond://?src=\ref[src];software=buy;sub=0'>Download additional software</a>"}
+	dat += {"<br>
+		<br>
+		<a href='byond://?src=\ref[src];software=uninstall;sub=0'>Uninstall software</a>"}
 	return dat
 
 
@@ -374,6 +392,23 @@
 			dat += "[displayName] (Download Complete) <br>"
 	dat += "</p>"
 	return dat
+
+
+/mob/living/silicon/pai/proc/uninstallSoftware()
+	var/dat = ""
+
+	dat += {"<h2>CentComm pAI Module Local Software</h2><br>
+		<pre>Remaining Available Memory: [ram]</pre><br>
+		<p style=\"text-align:center\"><b>Currently installed modules.</b><br>"}
+	for(var/s in software)
+		var/cost = available_software[s]
+		var/displayName = uppertext(s)
+		dat += "<a href='byond://?src=\ref[src];software=uninstall;sub=1;uninstall=[s]'>[displayName]</a> ([cost]) <br>"
+	dat += "</p>"
+	return dat
+
+
+//debug
 
 
 /mob/living/silicon/pai/proc/directives()
