@@ -36,6 +36,8 @@
 
 /obj/item/candle/update_icon()
 	overlays.len = 0
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = null
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = null
 	if (wax == initial(wax))
 		icon_state = "candle"
 	else
@@ -199,7 +201,7 @@
 			to_chat(user, "<span class='notice'>You place \the [name] on top of \the [target], lighting up the other candles in the process.</span>")
 			snack.candles_state = CANDLES_LIT
 		else if (!lit && snack.candles_state == CANDLES_LIT)
-			to_chat(user, "<span class='notice'>You light place \the [name] using the other lit candles and add it on top of \the [target].</span>")
+			to_chat(user, "<span class='notice'>You light \the [name] using the other lit candles and add it on top of \the [target].</span>")
 		else
 			to_chat(user, "<span class='notice'>You place \the [name] on top of \the [target].</span>")
 			if (snack.candles_state == CANDLES_NONE)
@@ -229,6 +231,11 @@
 
 /obj/item/holocandle/New()
 	..()
+	update_icon()
+
+/obj/item/holocandle/emp_act()
+	lit = 0
+	set_light(0)
 	update_icon()
 
 /obj/item/holocandle/update_icon()

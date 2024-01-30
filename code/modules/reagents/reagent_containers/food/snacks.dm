@@ -43,6 +43,8 @@
 
 	var/candles_state = CANDLES_NONE
 	var/list/candles = list()
+	var/always_candles = ""
+	var/offset_y = 0 //used for plates
 
 	var/valid_utensils = UTENSILE_FORK	//| UTENSILE_SPOON
 
@@ -237,6 +239,10 @@
 		set_light(0)
 		update_icon()
 
+/obj/item/weapon/reagent_containers/food/snacks/pickup(mob/user)
+	..()
+	update_icon()
+
 /obj/item/weapon/reagent_containers/food/snacks/update_icon()
 	overlays.len = 0//no choice here but to redraw everything in the correct order so condiments etc don't appear over ice and fire.
 	overlays += extra_food_overlay
@@ -257,6 +263,17 @@
 			else
 				M.plane = ABOVE_HUD_PLANE // inventory
 			overlays += M
+
+		if (always_candles)//birthday cake and its slices
+			var/image/I = image('icons/obj/food.dmi',src,"[always_candles]_lit")
+			I.appearance_flags = RESET_COLOR
+			I.blend_mode = BLEND_ADD
+			I.pixel_y = offset_y
+			if (isturf(loc))
+				I.plane = ABOVE_LIGHTING_PLANE
+			else
+				I.plane = ABOVE_HUD_PLANE // inventory
+			overlays += I
 
 	update_temperature_overlays()
 	update_blood_overlay()//re-applying blood stains
@@ -594,9 +611,13 @@
 					candle.pixel_x = 0
 					candle.pixel_y = 0
 					slice.candles += candle
-				slice.candles_state = candles_state
-				if (slice.candles_state == CANDLES_LIT)
-					slice.set_light(CANDLE_LUM,0.5,LIGHT_COLOR_FIRE)
+					slice.candles_state = candles_state
+					if (slice.candles_state == CANDLES_LIT)
+						slice.set_light(CANDLE_LUM,0.5,LIGHT_COLOR_FIRE)
+				else if (always_candles)
+					slice.candles_state = candles_state
+					if (slice.candles_state == CANDLES_LIT)
+						slice.set_light(CANDLE_LUM,0.5,LIGHT_COLOR_FIRE)
 				slice.update_icon() //So hot slices start steaming right away
 			qdel(src) //So long and thanks for all the fish
 			return 1
@@ -4070,24 +4091,13 @@
 	w_class = W_CLASS_MEDIUM
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	candles_state = CANDLES_UNLIT
+	always_candles = "birthdaycake"
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/birthdaycake/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 20)
 	reagents.add_reagent(SPRINKLES, 10)
 	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/birthdaycake/update_icon()
-	..()
-	if (candles_state == CANDLES_LIT)
-		var/image/I = image(icon,src,"[icon_state]_lit")
-		I.appearance_flags = RESET_COLOR
-		I.blend_mode = BLEND_ADD
-		if (isturf(loc))
-			I.plane = ABOVE_LIGHTING_PLANE
-		else
-			I.plane = ABOVE_HUD_PLANE // inventory
-		overlays += I
 
 /obj/item/weapon/reagent_containers/food/snacks/birthdaycakeslice
 	name = "Birthday Cake slice"
@@ -4097,18 +4107,7 @@
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_icon = "bluecustom"
 	candles_state = CANDLES_UNLIT
-
-/obj/item/weapon/reagent_containers/food/snacks/birthdaycakeslice/update_icon()
-	..()
-	if (candles_state == CANDLES_LIT)
-		var/image/I = image(icon,src,"[icon_state]_lit")
-		I.appearance_flags = RESET_COLOR
-		I.blend_mode = BLEND_ADD
-		if (isturf(loc))
-			I.plane = ABOVE_LIGHTING_PLANE
-		else
-			I.plane = ABOVE_HUD_PLANE // inventory
-		overlays += I
+	always_candles = "birthdaycakeslice"
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
 	name = "bread"

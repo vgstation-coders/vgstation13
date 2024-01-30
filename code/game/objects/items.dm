@@ -1331,7 +1331,21 @@ var/global/objects_thrown_when_explode = FALSE
 	had_blood = TRUE
 	return TRUE //we applied blood to the item
 
-
+/obj/item/proc/copy_blood_from_item(var/obj/item/other_item)
+	virus2 = virus_copylist(other_item.virus2)
+	if (!other_item.blood_overlay)
+		return
+	blood_color = other_item.blood_color
+	blood_DNA = other_item.blood_DNA.Copy()
+	had_blood = TRUE
+	if(!blood_overlays["[type][icon_state]"])
+		set_blood_overlay()
+	if(!blood_overlay)
+		blood_overlay = blood_overlays["[type][icon_state]"]
+	else
+		overlays.Remove(blood_overlay)
+	blood_overlay.color = blood_color
+	overlays += blood_overlay
 
 var/global/list/image/blood_overlays = list()
 /obj/item/proc/set_blood_overlay() /* If your item needs to update its blood overlay when its icon_state changes, use this one. update_blood_overlay() is simply a helper proc for this one. */
