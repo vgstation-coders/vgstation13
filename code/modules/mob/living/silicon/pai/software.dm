@@ -139,7 +139,7 @@
 						ram -= cost
 						software.Add(target)
 					else
-						temp = "Insufficient RAM available." //debug: insufficient ram availabe. uninstall unneeded software to make space.
+						temp = "Insufficient RAM available. Consider uninstalling unnecessary software."
 				else
 					temp = "Trunk <TT> \"[target]\"</TT> not found."
 
@@ -298,12 +298,15 @@
 
 
 		if("uninstall")
+			if(href_list["cancel"])
+				uninstall_lock = FALSE
 			if(subscreen == 1)
 				var/target = href_list["uninstall"]
 				if(software.Find(target))
 					var/cost = available_software[target]
-					software.Remove(target)//debug: put a cooldown before buying or uninstalling other software
-					ram+=cost
+					if(uninstall_loop(cost))//uninstall operation must finish before refunding RAM
+						ram+=cost
+						software.Remove(target)
 				else
 					temp = "Trunk <TT> \"[target]\"</TT> not found."
 
@@ -395,21 +398,43 @@
 
 
 /mob/living/silicon/pai/proc/uninstallSoftware()
-	var/dat = ""
+	if(!uninstall_lock) //currently not uninstalling software
+		var/dat = ""
+		dat += {"<h2>CentComm pAI Module Local Software</h2><br>
+			<pre>Remaining Available Memory: [ram]</pre><br>
+			<p style=\"text-align:center\"><b>Currently installed modules.</b><br>"}
+		for(var/s in software)
+			var/cost = available_software[s]
+			var/displayName = uppertext(s)
+			if(!cost)
+				continue
+			dat += "<a href='byond://?src=\ref[src];software=uninstall;sub=1;uninstall=[s]'>[displayName]</a> ([cost]) <br>"
+			dat += "<font color='blue'>Estimated Uninstall Time: ([cost*2]) seconds: </font><br>"
+		dat += "<font color='red'> WARNING: The uninstallation process must complete before allocated RAM can be released. During uninstallation no further sofware can be uninstalled. The duration is typically 2 seconds per unit RAM. </font>"
+		dat += "</p>"
+		return dat
+	//during an uninstall.
+	else
+		var/dat = {"<h3>Uninstalling</h3>: "}
+		dat += "... [uninstallprogress]% complete.<br>"
+		dat += "<a href='byond://?src=\ref[src];software=uninstall;cancel=1;sub=0'>Cancel</a> <br>"
+		return dat
 
-	dat += {"<h2>CentComm pAI Module Local Software</h2><br>
-		<pre>Remaining Available Memory: [ram]</pre><br>
-		<p style=\"text-align:center\"><b>Currently installed modules.</b><br>"}
-	for(var/s in software)
-		var/cost = available_software[s]
-		var/displayName = uppertext(s)
-		dat += "<a href='byond://?src=\ref[src];software=uninstall;sub=1;uninstall=[s]'>[displayName]</a> ([cost]) <br>"
-	dat += "</p>"
-	return dat
-
-
-//debug
-
+/mob/living/silicon/pai/proc/uninstall_loop(var/cost)
+	uninstall_lock = TRUE
+	var/duration = cost*2 //2 seconds per unit RAM
+	while(uninstallprogress < 100)
+		uninstallprogress += round((1/(duration))*100)  //store and calculate the value in percentages. easier to display.
+		uninstallprogress = min(100,uninstallprogress) //Never go above 100
+		if(!uninstall_lock) //if canceled by the PAI, this becomes FALSE and the loop returns false here
+			uninstallprogress =0
+			return 0
+		if(uninstallprogress >= 100)
+			uninstallprogress = 0
+			to_chat(src, "<span class='notice'>Software uninstallation complete!</span>")
+			uninstall_lock = FALSE
+			return 1
+		sleep(10)
 
 /mob/living/silicon/pai/proc/directives()
 	var/dat = ""
