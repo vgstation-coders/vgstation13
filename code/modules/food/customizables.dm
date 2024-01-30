@@ -423,6 +423,9 @@
 		//let's start by removing the overlays that aren't actually part of the food item (candles, ice, blood stains,....)
 		S.overlays.len = 0
 		S.overlays += S.extra_food_overlay
+		//but lets keep fire because permanently burning food is hilarious
+		if (S.on_fire && S.fire_overlay)
+			S.overlays += S.fire_overlay
 		//now we can copy the snack's appearance.
 		I = image(S.icon,src,S.icon_state)
 		I.appearance = S.appearance
