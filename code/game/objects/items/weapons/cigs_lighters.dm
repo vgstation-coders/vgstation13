@@ -576,6 +576,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "ntstandardlit"
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/ntstandardbutt
+	light_color = LIGHT_COLOR_CYAN
 
 /obj/item/clothing/mask/cigarette/spaceport
 	name = "\improper Spaceport cigarette"
