@@ -400,7 +400,8 @@
 				always_candles = S.always_candles
 				candles = S.candles.Copy()
 				for (var/image/C in candles)
-					C.pixel_y += offset_y
+					C.pixel_x += candle_offset_x
+					C.pixel_y += candle_offset_y
 				candles_state = S.candles_state
 				if(S.candles_state == CANDLES_LIT)
 					S.candles_state = CANDLES_NONE
@@ -431,8 +432,7 @@
 		I.appearance = S.appearance
 		I.plane = FLOAT_PLANE
 		I.layer = FLOAT_LAYER
-		offset_y = 12 * PIXEL_MULTIPLIER - empty_Y_space(icon(S.icon,S.icon_state)) + S.plate_offset_y
-		I.pixel_y = offset_y
+		I.pixel_y = 12 * PIXEL_MULTIPLIER - empty_Y_space(icon(S.icon,S.icon_state)) + S.plate_offset_y
 	else
 		I = filling
 		if(istype(S) && S.filling_color != "#FFFFFF")
@@ -456,6 +456,8 @@
 		else
 			I.pixel_x = 2 * PIXEL_MULTIPLIER
 
+	candle_offset_x = I.pixel_x
+	candle_offset_y = I.pixel_y
 	return I
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/updateName()

@@ -44,7 +44,8 @@
 	var/candles_state = CANDLES_NONE
 	var/list/candles = list()
 	var/always_candles = ""
-	var/offset_y = 0 //used for plates
+	var/candle_offset_x = 0
+	var/candle_offset_y = 0
 
 	var/valid_utensils = UTENSILE_FORK	//| UTENSILE_SPOON
 
@@ -268,7 +269,7 @@
 			var/image/I = image('icons/obj/food.dmi',src,"[always_candles]_lit")
 			I.appearance_flags = RESET_COLOR
 			I.blend_mode = BLEND_ADD
-			I.pixel_y = offset_y
+			I.pixel_y = candle_offset_y
 			if (isturf(loc))
 				I.plane = ABOVE_LIGHTING_PLANE
 			else
