@@ -49,12 +49,20 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	set category = "Object"
 	set name = "Dial"
 	set src in oview(1)
-	if(!ishuman(usr))
+	if(!iscarbon(usr))
 		to_chat(usr, "<span class='notice'>You are not capable of such fine manipulation.</span>")
 		return
-	var/obj/item/weapon/phone/P = input("Where would you like to call?", "destination picker") as null|anything in redphones
-	if(P)
-		landline.start_call(P.landline)
+	if(usr.dexterity_check())
+		var/obj/item/weapon/phone/P = input("Where would you like to call?", "destination picker") as null|anything in redphones
+		if(P)
+			landline.start_call(P.landline)
+	else
+		usr.visible_message("<span class='notice'>too clumsy to operate \the [src], [usr] bangs on it instead!</span>")
+		if(prob(50))
+			return
+		var/obj/item/weapon/phone/P = pick(redphones)
+		if(P)
+			landline.start_call(P.landline)
 	
 /obj/item/weapon/phone/MouseDropFrom(atom/over_object)
 	MouseDropPickUp(over_object)
