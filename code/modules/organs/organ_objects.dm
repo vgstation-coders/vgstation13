@@ -168,12 +168,7 @@
 /obj/item/organ/internal/heart/vox
 	name = "vox heart"
 	icon_state = "vox-heart-on"
-	prosthetic_name = "circulatory pump"
-	prosthetic_icon = "heart-prosthetic"
-	organ_tag = "heart"
-	fresh = 6
 	dead_icon = "vox-heart-off"
-	organ_type = /datum/organ/internal/heart
 
 /obj/item/organ/internal/heart/cell
 	name = "biocharger"
