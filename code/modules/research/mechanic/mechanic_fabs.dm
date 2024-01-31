@@ -81,12 +81,26 @@
 				return 0
 
 	if(..()) //we passed the tests for the parent, and took resources
+	//Possible to drain materials in parent then fail because no plastic
 		if(plastic_added)
 			if(!(MAT_PLASTIC in part.materials) && !(research_flags & IGNORE_MATS))
 				materials.removeAmount(MAT_PLASTIC, get_resource_cost_w_coeff(part, MAT_PLASTIC))
 		return 1
 	return 0
 ///END PLASTIC COST///
+
+//Because we have plastic costs that are not part of the normal material cost
+//It means that we need to have a special request for plastic
+/obj/machinery/r_n_d/fabricator/mechanic_fab/bluespace_materials(var/datum/design/part)
+	if(!has_bluespace_bin())
+		return 0
+	//Send a version of this design to the parent that includes the plastic
+	var/datum/design/plastic_part = new()
+	plastic_part.materials = part.materials
+	plastic_part.materials[MAT_PLASTIC] = get_resource_cost_w_coeff(part, MAT_PLASTIC)
+	. = ..(plastic_part) //Send the parent our new design and store result
+	qdel(plastic_part) //Delete design copy
+	return . //Send stored result
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/attackby(var/obj/O, var/mob/user)
 	if(..())

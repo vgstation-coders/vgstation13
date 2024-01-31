@@ -223,13 +223,17 @@ var/list/important_archivists = list()
 	desc = "A high-powered data archive device that takes technology disks and persistently backs them up to specialized servers for the upcoming shift. Usually takes two disks per technology."
 	icon = 'icons/obj/library.dmi'
 	icon_state = "computer_disk"
-	/*on_flick = "on_disk"
-	off_flick = "off_disk"*/
+	var/on_flick = "on_disk"
+	var/off_flick = "off_disk"
 	anchored = TRUE
 	density = TRUE
 	machine_flags =  WRENCHMOVE | FIXED2WORK | EJECTNOTDEL // | SCREWTOGGLE | CROWDESTROY
 	pass_flags = PASSTABLE
 	idle_power_usage = 4
+	use_auto_lights = 1
+	light_power_on = 1
+	light_range_on = 2
+	light_color = LIGHT_COLOR_GREEN
 	var/obj/item/weapon/disk/tech_disk/diskslot
 	var/busy = FALSE
 
@@ -250,11 +254,29 @@ var/list/important_archivists = list()
 		else
 			to_chat(user,"<span class='good'>The [T.id] research is complete.</span>")
 
+/obj/machinery/researcharchive/power_change()
+	..()
+	update_icon()
+
 /obj/machinery/researcharchive/update_icon()
-	if(stat & (BROKEN))
+	// Broken
+	if(stat & BROKEN)
 		icon_state = "[initial(icon_state)]b"
-		return
-	icon_state = "[initial(icon_state)][!(stat & (NOPOWER|FORCEDISABLE))]"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_computer_disk")
+
+	// Unpowered/Disabled
+	else if(stat & (FORCEDISABLE|NOPOWER))
+		if(icon_state != "[initial(icon_state)]0")
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = off_flick)
+		icon_state = "[initial(icon_state)]0"
+		kill_moody_light()
+
+	// Functional
+	else
+		if(icon_state == "[initial(icon_state)]0")
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = on_flick)
+		icon_state = initial(icon_state)
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_computer_disk")
 
 /obj/machinery/researcharchive/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(stat & (BROKEN))

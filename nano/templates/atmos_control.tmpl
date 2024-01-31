@@ -152,6 +152,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 			{{:helper.link('Show Tracker Map', 'pin-s', {'reset': 1, 'showMap' : 1})}}
 			{{if data.admin_access}}
 				{{:helper.link('Show Presets Panel', 'gear', {'set_screen': 2})}}
+                {{:helper.link("Mass Set Mode",'alert',{'set_mass_mode': 1},null,"floatRight")}}
 			{{/if}}
 		</div>
 		{{if !data.alarm}}
@@ -244,9 +245,9 @@ Used In File(s): /code/game/machinery/alarm.dm
 								{{:helper.link('Activate Alarm',null,{'atmos_alarm':1},null,'red')}}
 							{{/if}}
 							{{if data.firedoor_override}}
-								{{:helper.link('Manual override enabled', null, {'disable_override':1}, 'disabled', 'linkOn')}}
+								{{:helper.link('Manual override enabled', null, {'disable_override':1}, null, 'linkOn')}}
 							{{else}}
-								{{:helper.link('Manual override disabled', null, {'enable_override':1}, 'disabled', 'red')}}
+								{{:helper.link('Manual override disabled', null, {'enable_override':1}, null, 'red')}}
 							{{/if}}
 						{{/if}}
 					</div>

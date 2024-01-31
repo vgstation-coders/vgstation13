@@ -11,9 +11,10 @@
 
 /datum/storeitem/proc/deliver(var/mob/user,var/obj/machinery/computer/merch/merchcomp)
 	var/thing = new typepath(merchcomp.loc)
+	var/turf/T = get_turf(merchcomp)
+	T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = EFFECTS_PLANE)
 	if(istype(typepath,/obj/item/weapon/storage))
 		var/obj/item/weapon/storage/S = thing
-		user.put_in_hands(S)
 		if(station_does_not_tip)
 			var/list/additional_types = list(
 				IRRADIATEDBEANS,

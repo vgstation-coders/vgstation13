@@ -144,6 +144,8 @@
 			if("Security")
 				sensor_mode = SEC_HUD
 				apply_hud_by_type(/datum/visioneffect/security/arrest)
+				apply_hud_by_type(/datum/visioneffect/job)
+				apply_hud_by_type(/datum/visioneffect/implant)
 				to_chat(src, "<span class='notice'>Security records overlay enabled.</span>")
 			if("Medical")
 				sensor_mode = MED_HUD

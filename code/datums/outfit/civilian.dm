@@ -573,6 +573,10 @@
 	alt_title_items_to_collect = list(
 		"Game Master" = list(
 			/obj/item/weapon/storage/pill_bottle/dice/with_die = GRASP_LEFT_HAND,
+			/obj/item/dicetower = null,
+			/obj/item/battlemat = null,
+			//obj/item/mounted/frame/painting/custom/gameboard = null,
+			/obj/item/weapon/storage/box/redcore = null
 		),
 		"Curator" = list(
 			/obj/item/stack/sheet/wood/biggerstack = null,    //should spawn on the backpack

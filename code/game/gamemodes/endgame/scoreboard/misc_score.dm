@@ -7,7 +7,7 @@
 	if(gallery.len) //the list of all artworks
 		var/list/artworks = list() //list of authors, for sorting later
 		for(var/obj/structure/painting/custom/painting in gallery)
-			if(painting.show_on_scoreboard && !painting.painting_data.is_blank())
+			if(painting.painting_data.show_on_scoreboard && !painting.painting_data.is_blank())
 				var/painting_author = painting.painting_data.author
 				if(!painting_author)
 					painting_author = "Anonymous"

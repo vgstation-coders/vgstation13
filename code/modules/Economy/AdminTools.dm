@@ -13,9 +13,9 @@
             if("finalise_create_account")
                 var/account_name = hrefs["holder_name"]
                 var/starting_funds = max(text2num(hrefs["starting_funds"]), 0)
-                var/staring_payout = max(text2num(hrefs["staring_payout"]), 0)
+                var/starting_payout = max(text2num(hrefs["staring_payout"]), 0)
                 var/hidden = (hrefs["hidden"] == "hidden")
-                create_account(account_name, starting_funds, null, staring_payout, 0, hidden)
+                create_account(account_name, starting_funds, null, starting_payout, 0, 0, hidden)
                 creating_new_account = 0
             if("view_account_detail")
                 var/index = text2num(hrefs["account_index"])

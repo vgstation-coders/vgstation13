@@ -104,7 +104,7 @@
 	// Broken
 	if(stat & BROKEN)
 		icon_state = "[initial(icon_state)]b"
-		update_moody_light('icons/lighting/special.dmi', moody_state)
+		update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 
 	// Unpowered/Disabled
 	else if(stat & (FORCEDISABLE|NOPOWER))
@@ -118,7 +118,7 @@
 		if(icon_state == "[initial(icon_state)]0" && !(computer_flags & NO_ONOFF_ANIMS))
 			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = on_flick)
 		icon_state = initial(icon_state)
-		update_moody_light('icons/lighting/special.dmi', moody_state)
+		update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 
 
 /obj/machinery/computer/power_change(var/nodelay = 0)
@@ -143,9 +143,10 @@
 
 /obj/machinery/computer/proc/set_broken()
 	if(empproof && prob(50)) // Halves chance if reinforced with plasma glass
-		return
+		return FALSE
 	stat |= BROKEN
 	update_icon()
+	return TRUE
 
 /obj/machinery/computer/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head against \the [src] screen! It looks like \he's trying to commit suicide.</span>")

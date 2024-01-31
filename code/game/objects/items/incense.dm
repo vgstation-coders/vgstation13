@@ -130,7 +130,7 @@
 
 /obj/item/incense_stick/afterattack(var/obj/reagentholder, var/mob/user)
 	..()
-	if(reagentholder.is_open_container() && !ismob(reagentholder) && reagentholder.reagents)
+	if(reagentholder.is_open_container() && reagentholder.reagents)
 		if(reagentholder.reagents.has_reagent(WATER) && lit)
 			to_chat(user, "<span class='warning'>\The [src] fizzles as you dip it into \the [reagentholder].</span>")
 			exting()

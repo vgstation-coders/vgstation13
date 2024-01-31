@@ -26,7 +26,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 
 	var/icon/spots
 	var/last_pigments = ""
-	var/name_base = "paint bucket"
+	var/name_base = "metal bucket"
 	var/icon_lid = "paint_cover"
 //-------------------------------------------------------------------------------------------------
 

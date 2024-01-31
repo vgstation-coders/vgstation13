@@ -132,6 +132,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/view_all_rods,
 	/client/proc/add_centcomm_order,
 	/client/proc/apes,
+	/client/proc/force_next_map,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances

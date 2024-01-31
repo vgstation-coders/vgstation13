@@ -291,7 +291,7 @@
 	return
 
 //Bitesizemod to multiply how much of a bite should be taken out. 1 is default bitesize.
-/obj/item/weapon/reagent_containers/food/snacks/proc/consume(mob/living/carbon/eater, messages = 0, sounds = TRUE, bitesizemod = 1)
+/obj/item/weapon/reagent_containers/food/snacks/proc/consume(mob/living/eater, messages = 0, sounds = TRUE, bitesizemod = 1)
 	if(!istype(eater))
 		return
 	if(arcanetampered)
@@ -606,20 +606,20 @@
 /obj/item/weapon/reagent_containers/food/snacks/attack_animal(mob/M)
 	if(isanimal(M))
 		if(iscorgi(M)) //Feeding food to a corgi
+			var/bamount = min(reagents.total_volume,bitesize)/(reagents.reagent_list.len)
+			reagents.reaction(M, INGEST, amount_override = bamount)
+			reagents.trans_to(M, bamount)
+			bitecount++
+			after_consume(M, reagents)
+			playsound(M,'sound/items/eatfood.ogg', rand(10,50), 1)
 			M.delayNextAttack(10)
-			if(bitecount >= ANIMALBITECOUNT) //This really, really shouldn't be hardcoded like this, but sure I guess
+			if(!reagents || !reagents.total_volume)
 				M.visible_message("[M] [pick("burps from enjoyment", "yaps for more", "woofs twice", "looks at the area where \the [src] was")].", "<span class='notice'>You swallow up the last of \the [src].")
-				playsound(src.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
-				var/mob/living/simple_animal/corgi/C = M
-				if(C.health <= C.maxHealth + 5)
-					C.health += 5
-				else
-					C.health = C.maxHealth
 				qdel(src)
 			else
 				M.visible_message("[M] takes a bite of \the [src].", "<span class='notice'>You take a bite of \the [src].</span>")
-				playsound(src.loc,'sound/items/eatfood.ogg', rand(10, 50), 1)
-				bitecount++
+
+
 		else if(ismouse(M)) //Mouse eating shit
 			M.delayNextAttack(10)
 			var/mob/living/simple_animal/mouse/N = M

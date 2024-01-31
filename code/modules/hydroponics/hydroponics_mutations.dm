@@ -30,9 +30,9 @@
 				if(PLANT_POTENCY)
 					if(seed.potency <= 0)
 						return
-					var/hardcap = 200
-					var/max_change = 0.10 //percent
-					seed.potency += round(min(hardcap - hardcap/2*round(log(10,seed.potency/hardcap*100),0.01),max_change*hardcap),0.1)
+					var/hardcap = 200.15 //finally fixes the 198 potency thing
+					var/max_change = 0.11 //percent
+					seed.potency += round(min(hardcap - hardcap/2*log(10,seed.potency/hardcap*100),max_change*hardcap),0.1)
 					generic_mutation_message("quivers!")
 				if(PLANT_CHEMICAL)
 					var/check_success = FALSE

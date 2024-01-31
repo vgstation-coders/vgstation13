@@ -26,6 +26,14 @@
 
 	return wtime + (time_offset + wusage) * world.tick_lag
 
+/proc/game_start_elapsed_time(give_seconds = FALSE)
+	if(!ticker || ticker.current_state < GAME_STATE_PLAYING)
+		return
+	if(!give_seconds)
+		return time2text(world.time - (ticker.gamestart_time*10), "hh:mm", 0)
+	else
+		return time2text(world.time - (ticker.gamestart_time*10), "hh:mm:ss", 0)
+
 //Returns the world time in english
 /proc/worldtime2text(timestamp = world.time, give_seconds = FALSE)
 	if(timestamp == world.time)

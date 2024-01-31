@@ -19,6 +19,8 @@
 	density = 1
 	var/obj/structure/m_tray/connected = null
 	anchored = 1.0
+	light_power = 0.5
+	light_range = 1
 
 /obj/structure/morgue/New()
 	..()
@@ -30,7 +32,7 @@
 	morgue_list -= src
 
 /obj/structure/morgue/update_icon()
-	update_moody_light('icons/lighting/special.dmi', "overlay_morgue")
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_morgue")
 	if(connected)
 		icon_state = "morgue0"
 		return

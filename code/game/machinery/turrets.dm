@@ -591,11 +591,18 @@
 	var/projectile_type = /obj/item/projectile
 	var/firing_delay = 2
 	var/admin_only = 0 //Can non-admins interface with this turret's controls?
+	var/roulette_mode = FALSE
+	var/list/available_projectiles = list()
+
 	health = 40
 	var/list/scan_for = list("human"=0,"cyborg"=0,"mecha"=0,"alien"=1)
 	var/on = 0
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "gun_turret"
+
+/obj/structure/turret/gun_turret/New()
+	..()
+	available_projectiles = existing_typesof(/obj/item/projectile)
 
 /obj/structure/turret/gun_turret/examine(mob/user)
 	..()
@@ -637,12 +644,15 @@
 	if(check_rights(R_ADMIN))
 		dat += {"<br><b><font color="red">Admin Options:</font></b><br>
 				<b>Admin-only mode:</b> <a href='?src=\ref[src];admin_only=1'>[admin_only?"ON":"OFF"]</a><br>
-				<b>Projectile type:</b> <a href='?src=\ref[src];projectile_type=1'>[projectile_type]</a><br>
-				<b>Projectiles per burst:</b> <a href='?src=\ref[src];projectile_burst=1'>[projectiles_per_shot]</a><br>
+				<b>Roulette mode:</b> <a href='?src=\ref[src];roulette_mode=0'>[roulette_mode?"ON":"OFF"]</a><br>
+				"}
+		if(!roulette_mode)
+			dat += {"<b>Projectile type:</b> <a href='?src=\ref[src];projectile_type=1'>[projectile_type]</a><br>"}
+		dat += {"<b>Projectiles per burst:</b> <a href='?src=\ref[src];projectile_burst=1'>[projectiles_per_shot]</a><br>
 				<b>Firing delay:</b> <a href='?src=\ref[src];firing_delay=1'>[cooldown] deci-seconds</a><br>
 				<b>Set ammo #:</b> <a href='?src=\ref[src];force_ammo_amt=1'>[projectiles]</a><br>
-				
-			
+
+
 				</body>
 				</html>"}
 	user << browse(dat, "window=turret")
@@ -676,6 +686,10 @@
 		if(!check_rights(R_ADMIN))
 			return
 		src.admin_only = !src.admin_only
+	if(href_list["roulette_mode"])
+		if(!check_rights(R_ADMIN))
+			return
+		roulette_mode = !roulette_mode
 	if(href_list["projectile_type"])
 		if(!check_rights(R_ADMIN))
 			return
@@ -791,6 +805,8 @@
 		if (targloc == curloc)
 			continue
 		playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
+		if(roulette_mode)
+			projectile_type = pick(available_projectiles - restricted_roulette_projectiles)
 		var/obj/item/projectile/A = new projectile_type(curloc)
 		src.projectiles--
 		A.original = target

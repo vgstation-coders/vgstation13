@@ -1380,9 +1380,6 @@ Thanks.
 			return
 	return
 
-/mob/living/is_open_container()
-	return 1
-
 /mob/living/proc/scoop_up(mob/M) //M = mob who scoops us up!
 	if(!holder_type)
 		return 0
