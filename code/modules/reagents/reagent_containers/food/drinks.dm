@@ -2248,9 +2248,6 @@
 		lit = 1
 		visible_message(flavor_text)
 		flammable = 0
-		name = "Flaming [name]"
-		desc += " Damn that looks hot!"
-		icon_state += "-flamin"
 		update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/update_brightness(var/mob/user = null)

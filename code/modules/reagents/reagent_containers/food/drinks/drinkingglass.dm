@@ -75,6 +75,8 @@
 					else
 						I.plane = ABOVE_HUD_PLANE // inventory
 					overlays += I
+					name = "flaming [name]"
+					desc += " Damn that looks hot!"
 				else
 					flammable = 1
 	else
