@@ -2253,7 +2253,7 @@
 		update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/blow_act(var/mob/living/user)
-	if(molotov && lit)
+	if(lit)
 		lit = 0
 		visible_message("<span  class='rose'>The light on \the [name] goes out.</span>")
 		processing_objects.Remove(src)
