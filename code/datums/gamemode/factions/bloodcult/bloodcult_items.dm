@@ -1923,6 +1923,7 @@ var/list/arcane_tomes = list()
 	icon = 'icons/obj/candle.dmi'
 	icon_state = "bloodcandle"
 	item_state = "bloodcandle"
+	food_candle = "foodbloodcandle"
 	color = null
 
 	wax = 3600 // 60 minutes

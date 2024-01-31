@@ -4,6 +4,7 @@
 	icon = 'icons/obj/candle.dmi'
 	icon_state = "candle"
 	item_state = "candle"
+	var/food_candle = "foodcandle"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/candles.dmi', "right_hand" = 'icons/mob/in-hand/right/candles.dmi')
 	w_class = W_CLASS_TINY
 	heat_production = 1000
@@ -192,7 +193,7 @@
 	if(istype(target, /obj/item/weapon/reagent_containers/food/snacks))
 		var/obj/item/weapon/reagent_containers/food/snacks/snack = target
 		var/list/params_list = params2list(params)
-		var/image/I = image(icon,snack,"foodcandle")
+		var/image/I = image(icon,snack,food_candle)
 		I.color = color
 		I.pixel_x = clamp(text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2 - pixel_x,-WORLD_ICON_SIZE/2,WORLD_ICON_SIZE/2)
 		I.pixel_y = clamp(text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2 - pixel_y,-WORLD_ICON_SIZE/2,WORLD_ICON_SIZE/2)

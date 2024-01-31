@@ -256,7 +256,7 @@
 			var/image/M = image(I)
 			M.appearance = I.appearance
 			M.color = null
-			M.icon_state = "foodcandle_lit"
+			M.icon_state = "[M.icon_state]_lit"
 			M.appearance_flags = RESET_COLOR
 			M.blend_mode = BLEND_ADD
 			if (isturf(loc))
