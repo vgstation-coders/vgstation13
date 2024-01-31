@@ -140,7 +140,7 @@
 		shake_phone_overlay()
 
 /obj/landline/proc/pick_up_phone(mob/user)
-	if(!ishuman(user))
+	if(!iscarbon(user))
 		to_chat(user, "<span class='notice'>You are not capable of such fine manipulation.</span>")
 		return
 	if(user.incapacitated())
