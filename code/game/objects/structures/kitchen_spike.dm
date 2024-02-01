@@ -4,7 +4,7 @@
 	name = "meat spike"
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "spike"
-	desc = "A spike for collecting meat from animals."
+	desc = "A spike for collecting meat from animals. With a sharp object you can skin them as well."
 	density = 1
 	anchored = 1
 
@@ -30,6 +30,10 @@
 		M.amount = 2
 		qdel(src)
 		return
+	if(occupant && W.sharpness_flags)
+		for(var/datum/butchering_product/skin/S in occupant.butchering_drops)
+			user.visible_message("<span class = 'notice'>[user] skins the [occupant.name] with \the [W.name].</span>")
+			S.spawn_result(loc, S)
 
 	if(istype(W,/obj/item/weapon/grab))
 		return handleGrab(W,user)
