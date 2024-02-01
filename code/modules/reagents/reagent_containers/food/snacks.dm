@@ -7,6 +7,8 @@
 	desc = "yummy"
 	icon_state = null
 	log_reagents = 1
+	fire_fuel = 2//may get ignited by emagged microwave
+	autoignition_temperature = AUTOIGNITION_ORGANIC
 
 	var/food_flags	//Possible flags: FOOD_LIQUID, FOOD_MEAT, FOOD_ANIMAL, FOOD_SWEET
 					//FOOD_LIQUID	- for stuff like soups
@@ -45,6 +47,8 @@
 
 	var/timer = 0 //currently only used on skittering food
 	var/datum/reagents/dip
+
+	var/image/extra_food_overlay
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
 	var/turf/T = get_turf(src)
@@ -184,12 +188,45 @@
 	if(can_consume(user, user))
 		consume(user, 1)
 
+/obj/item/weapon/reagent_containers/food/snacks/ashtype()
+	return /obj/item/weapon/reagent_containers/food/snacks/badrecipe
+
+/obj/item/weapon/reagent_containers/food/snacks/ashify()
+	if(!on_fire)
+		return
+	var/ashtype = ashtype()
+	var/obj/item/weapon/reagent_containers/food/snacks/badrecipe/BR = new ashtype(src.loc)
+	BR.reagents.chem_temp = reagents.chem_temp
+	BR.update_icon()//so the burned mess remains steaming
+	extinguish()
+	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/badrecipe/ashtype()
+	return /obj/effect/decal/cleanable/ash
+
+/obj/item/weapon/reagent_containers/food/snacks/badrecipe/ashify()
+	if(!on_fire)
+		return
+	var/ashtype = ashtype()
+	new ashtype(src.loc)
+	extinguish()
+	qdel(src)
+
 /obj/item/weapon/reagent_containers/food/snacks/New()
 	..()
 	dip = new/datum/reagents(1)
 	dip.my_atom = src
+	extra_food_overlay = image('icons/effects/32x32.dmi',null,"blank")
 	if (random_filling_colors?.len > 0)
 		filling_color = pick(random_filling_colors)
+
+/obj/item/weapon/reagent_containers/food/snacks/update_icon()
+	overlays.len = 0//no choice here but to redraw everything in the correct order so condiments etc don't appear over ice and fire.
+	overlays += extra_food_overlay
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
+	if (on_fire && fire_overlay)
+		overlays += fire_overlay
 
 /obj/item/weapon/reagent_containers/food/snacks/attack(mob/living/M, mob/user, def_zone, eat_override = 0)	//M is target of attack action, user is the one initiating it
 	if(restraint_resist_time > 0)
@@ -254,7 +291,7 @@
 	return
 
 //Bitesizemod to multiply how much of a bite should be taken out. 1 is default bitesize.
-/obj/item/weapon/reagent_containers/food/snacks/proc/consume(mob/living/carbon/eater, messages = 0, sounds = TRUE, bitesizemod = 1)
+/obj/item/weapon/reagent_containers/food/snacks/proc/consume(mob/living/eater, messages = 0, sounds = TRUE, bitesizemod = 1)
 	if(!istype(eater))
 		return
 	if(arcanetampered)
@@ -335,7 +372,9 @@
 			spawn() //WHY IS THIS SPAWN() HERE
 				if(gcDestroyed)
 					return
+				reagentreference.adjust_consumed_reagents_temp()
 				reagentreference.trans_to(eater, min(reagentreference.total_volume,bitesize*bitesizemod))
+				reagentreference.reset_consumed_reagents_temp()
 				bitecount++
 				after_consume(eater, reagentreference)
 		return 1
@@ -503,11 +542,13 @@
 					var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
 					S.name = "[C.name][S.name]"
 					S.filling.color = C.filling.color
+					S.extra_food_overlay.overlays += S.filling
 					S.overlays += S.filling
 				if(luckiness && isitem(slice))
 					var/obj/item/sliceItem = slice
 					sliceItem.luckiness += luckiness / slices_num
 				reagents.trans_to(slice, reagents_per_slice)
+				slice.update_icon() //So hot slices start steaming right away
 			qdel(src) //So long and thanks for all the fish
 			return 1
 		if(contents.len) //Food item is not sliceable but still has items hidden inside. Using a knife on it should be an easy way to get them out.
@@ -565,20 +606,20 @@
 /obj/item/weapon/reagent_containers/food/snacks/attack_animal(mob/M)
 	if(isanimal(M))
 		if(iscorgi(M)) //Feeding food to a corgi
+			var/bamount = min(reagents.total_volume,bitesize)/(reagents.reagent_list.len)
+			reagents.reaction(M, INGEST, amount_override = bamount)
+			reagents.trans_to(M, bamount)
+			bitecount++
+			after_consume(M, reagents)
+			playsound(M,'sound/items/eatfood.ogg', rand(10,50), 1)
 			M.delayNextAttack(10)
-			if(bitecount >= ANIMALBITECOUNT) //This really, really shouldn't be hardcoded like this, but sure I guess
+			if(!reagents || !reagents.total_volume)
 				M.visible_message("[M] [pick("burps from enjoyment", "yaps for more", "woofs twice", "looks at the area where \the [src] was")].", "<span class='notice'>You swallow up the last of \the [src].")
-				playsound(src.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
-				var/mob/living/simple_animal/corgi/C = M
-				if(C.health <= C.maxHealth + 5)
-					C.health += 5
-				else
-					C.health = C.maxHealth
 				qdel(src)
 			else
 				M.visible_message("[M] takes a bite of \the [src].", "<span class='notice'>You take a bite of \the [src].</span>")
-				playsound(src.loc,'sound/items/eatfood.ogg', rand(10, 50), 1)
-				bitecount++
+
+
 		else if(ismouse(M)) //Mouse eating shit
 			M.delayNextAttack(10)
 			var/mob/living/simple_animal/mouse/N = M
@@ -1241,6 +1282,9 @@
 	//36 to 111 nutrition. 4noraisins has 90...
 	bitesize = 7 //Three bites on average to finish
 
+/obj/item/weapon/reagent_containers/food/snacks/sausage/dan/on_vending_machine_spawn()
+	reagents.chem_temp = FRIDGETEMP_FROZEN
+
 /obj/item/weapon/reagent_containers/food/snacks/donkpocket
 	name = "\improper Donk-pocket"
 	desc = "The food of choice for the seasoned traitor."
@@ -1350,6 +1394,9 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/on_vending_machine_spawn()//Fast-Food Menu
+	reagents.chem_temp = COOKTEMP_READY
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth
 	name = "synthetic burger"
@@ -2232,7 +2279,12 @@
 	trash = /obj/item/trash/dangles
 	filling_color = "#FF9933"
 	base_crumb_chance = 30
+	var/image/lid_overlay
 	var/popped
+
+/obj/item/weapon/reagent_containers/food/snacks/dangles/New()
+	..()
+	lid_overlay = image(icon, null, "dangles_lid")
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/can_consume(mob/user)
 	return popped
@@ -2245,13 +2297,18 @@
 /obj/item/weapon/reagent_containers/food/snacks/dangles/proc/pop_open(var/mob/user)
 	to_chat(user, "You pop the top off \the [src].")
 	playsound(user, 'sound/effects/opening_snack_tube.ogg', 50, 1)
-	overlays.len = 0
 	popped = TRUE
 	update_icon()
 
+/obj/item/weapon/reagent_containers/food/snacks/dangles/update_icon()
+	extra_food_overlay.overlays -= lid_overlay
+	if (!popped)
+		extra_food_overlay.overlays += lid_overlay
+	..()
+
 /obj/item/weapon/reagent_containers/food/snacks/dangles/New()
 	..()
-	overlays += image(icon = icon, icon_state = "dangles_lid")
+	update_icon()
 	switch(pick(1,2,3,4))
 		if(1)
 			name = "Dangles: Arguably A Potato Flavor"
@@ -2342,6 +2399,9 @@
 	icon_state = "fries_cone"
 	trash = /obj/item/trash/fries_cone
 
+/obj/item/weapon/reagent_containers/food/snacks/fries/cone/on_vending_machine_spawn()//Fast-Food Menu
+	reagents.chem_temp = COOKTEMP_READY
+
 /obj/item/weapon/reagent_containers/food/snacks/soydope
 	name = "Soy Dope"
 	desc = "Dope from a soy."
@@ -2407,12 +2467,12 @@
 		img.pixel_y = 2 * pancakes
 		img.plane = FLOAT_PLANE
 		img.layer = FLOAT_LAYER
+		extra_food_overlay.overlays += img
 		overlays += img
 		pancakes += I.pancakes
 		qdel(I)
 	else
 		..()
-
 
 /obj/item/weapon/reagent_containers/food/snacks/spaghetti
 	name = "Spaghetti"
@@ -2442,6 +2502,9 @@
 	name = "punnet of Cheesy Fries"
 	icon_state = "cheesyfries_punnet"
 	trash = /obj/item/trash/fries_punet
+
+/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet/on_vending_machine_spawn()//Fast-Food Menu XL
+	reagents.chem_temp = COOKTEMP_READY
 
 /obj/item/weapon/reagent_containers/food/snacks/fortunecookie
 	name = "Fortune cookie"
@@ -2853,6 +2916,9 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 14)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger/on_vending_machine_spawn()//Fast-Food Menu XL
+	reagents.chem_temp = COOKTEMP_READY
 
 /obj/item/weapon/reagent_containers/food/snacks/enchiladas
 	name = "Enchiladas"
@@ -4117,6 +4183,9 @@
 	w_class = W_CLASS_MEDIUM
 	base_crumb_chance = 20
 
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/on_vending_machine_spawn()
+	reagents.chem_temp = FRIDGETEMP_FREEZER
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/margherita
 	name = "Margherita"
 	desc = "The most cheesy pizza in galaxy!"
@@ -4272,6 +4341,14 @@
 	var/list/boxes = list() // If the boxes are stacked, they come here
 	var/boxtag = ""
 
+/obj/item/pizzabox/return_air()//keeping your pizza warms
+	return
+
+/obj/item/pizzabox/on_vending_machine_spawn()//well, it's from the supply shuttle rather but hey
+	if (pizza)
+		pizza.on_vending_machine_spawn()
+		pizza.update_icon()
+
 /obj/item/pizzabox/update_icon()
 
 	overlays.Cut()
@@ -4300,6 +4377,9 @@
 			icon_state = "pizzabox_open"
 
 		if(pizza)
+			if (!pizza.particles)
+				pizza.particles = new/particles/steam
+			particles = pizza.particles
 			var/image/pizzaimg = new()
 			pizzaimg.appearance = pizza.appearance
 			pizzaimg.pixel_y = -3 * PIXEL_MULTIPLIER
@@ -4311,6 +4391,7 @@
 		return
 	else
 		// Stupid code because byondcode sucks
+		particles = null
 		var/doimgtag = 0
 		if( boxes.len > 0 )
 			var/obj/item/pizzabox/topbox = boxes[boxes.len]
@@ -4334,6 +4415,7 @@
 
 		to_chat(user, "<span class='notice'>You take the [src.pizza] out of the [src].</span>")
 		src.pizza = null
+		particles = null
 		update_icon()
 		return
 
@@ -4647,6 +4729,7 @@
 	icon_state = "icecream_cone"
 	food_flags = FOOD_SWEET
 	base_crumb_chance = 0
+	var/image/filling
 
 /obj/item/weapon/reagent_containers/food/snacks/icecream/New()
 	..()
@@ -4656,10 +4739,11 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/food/snacks/icecream/update_icon()
-	overlays.len = 0
-	var/image/filling = image('icons/obj/kitchen.dmi', src, "icecream_color")
+	extra_food_overlay.overlays -= filling
+	filling = image('icons/obj/kitchen.dmi', src, "icecream_color")
 	filling.icon += mix_color_from_reagents(reagents.reagent_list)
-	overlays += filling
+	extra_food_overlay.overlays += filling
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcone
 	name = "ice cream cone"
@@ -5805,7 +5889,8 @@
 	var/list/random_color_list = list("#00aedb","#a200ff","#f47835","#d41243","#d11141","#00b159","#00aedb","#f37735","#ffc425","#008744","#0057e7","#d62d20","#ffa700")
 	var/image/colorpop = image('icons/obj/candymachine.dmi', icon_state = "lollipop_head")
 	colorpop.color = pick(random_color_list)
-	src.overlays += colorpop
+	extra_food_overlay.overlays += colorpop
+	overlays += colorpop
 	filling_color = colorpop.color
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/consume()

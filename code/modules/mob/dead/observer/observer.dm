@@ -234,152 +234,11 @@ Works together with spawning an observer, noted above.
 
 	regular_hud_updates()
 
-	//cleaning up antagHUD and conversionHUD icons
-	if(client)
-		for(var/image/hud in client.images)
-			if(findtext(hud.icon_state, "convertible") || findtext(hud.icon_state, "-logo"))
-				client.images -= hud
-
-	if(antagHUD)
-		var/list/target_list = list()
-		for(var/mob/living/target in oview(client.view+DATAHUD_RANGE_OVERHEAD, src))
-			if( target.mind&&(target.mind.antag_roles.len > 0 || issilicon(target) || target.hud_list[SPECIALROLE_HUD]) )
-				target_list += target
-		if(target_list.len)
-			assess_antagHUD(target_list, src)
-
-	if(conversionHUD)
-		var/list/target_list = list()
-		for(var/mob/living/carbon/target in oview(client.view+DATAHUD_RANGE_OVERHEAD, src))
-			if(target.mind && target.hud_list[CONVERSION_HUD])
-				target_list += target
-		if(target_list.len)
-			assess_conversionHUD(target_list, src)
-
-	if(selectedHUD == HUD_MEDICAL)
-		process_medHUD(src)
-	else if(selectedHUD == HUD_SECURITY)
-		process_sec_hud(src, TRUE)
-	if(diagHUD)
-		process_diagnostic_hud(src)
-
 	if(visible)
 		if(invisibility == 0)
 			visible.icon_state = "visible1"
 		else
 			visible.icon_state = "visible0"
-
-// Pretty much a direct copy of Medical HUD stuff, except will show ill if they are ill instead of also checking for known illnesses.
-/mob/dead/proc/process_medHUD(var/mob/M)
-	var/client/C = M.client
-	var/image/holder
-	for(var/mob/living/carbon/patient in oview(client.view+DATAHUD_RANGE_OVERHEAD, M))
-		if(!check_HUD_visibility(patient, M))
-			continue
-		if(!C)
-			return
-		holder = patient.hud_list[HEALTH_HUD]
-		if(holder)
-			if(patient.isDead())
-				holder.icon_state = "hudhealth-100"
-			else
-				holder.icon_state = "hud[RoundHealth(patient.health)]"
-			C.images += holder
-
-		holder = patient.hud_list[STATUS_HUD]
-		if(holder)
-			if(patient.isDead())
-				holder.icon_state = "huddead"
-			else if(patient.status_flags & XENO_HOST)
-				holder.icon_state = "hudxeno"
-			else if(has_recorded_disease(patient))
-				holder.icon_state = "hudill_old"
-			else
-				var/dangerosity = has_recorded_virus2(patient)
-				switch (dangerosity)
-					if (1)
-						holder.icon_state = "hudill"
-					if (2)
-						holder.icon_state = "hudill_safe"
-					if (3)
-						holder.icon_state = "hudill_danger"
-					else
-						holder.icon_state = "hudhealthy"
-			/*
-			else if(patient.has_brain_worms())
-				var/mob/living/simple_animal/borer/B = patient.has_brain_worms()
-				if(B.controlling)
-					holder.icon_state = "hudbrainworm"
-				else
-					holder.icon_state = "hudhealthy"
-			else
-				holder.icon_state = "hudhealthy"
-			*/
-
-			C.images += holder
-
-	for(var/mob/living/simple_animal/mouse/patient in oview(client.view+DATAHUD_RANGE_OVERHEAD, M))
-		if(!check_HUD_visibility(patient, M))
-			continue
-		if(!C)
-			continue
-		holder = patient.hud_list[STATUS_HUD]
-		if(holder)
-			if(patient.isDead())
-				holder.icon_state = "huddead"
-			else if(patient.status_flags & XENO_HOST)
-				holder.icon_state = "hudxeno"
-			else if(has_recorded_disease(patient))
-				holder.icon_state = "hudill_old"
-			else
-				var/dangerosity = has_recorded_virus2(patient)
-				switch (dangerosity)
-					if (1)
-						holder.icon_state = "hudill"
-					if (2)
-						holder.icon_state = "hudill_safe"
-					if (3)
-						holder.icon_state = "hudill_danger"
-					else
-						holder.icon_state = "hudhealthy"
-			C.images += holder
-
-/mob/dead/proc/assess_antagHUD(list/target_list, mob/dead/observer/U)
-	for(var/mob/living/target in target_list)
-		if(target.mind)
-			U.client.images -= target.hud_list[SPECIALROLE_HUD]
-			var/icon/I_base = new
-
-			var/F = 1
-			for(var/R in target.mind.antag_roles)
-				var/datum/role/role = target.mind.antag_roles[R]
-				var/icon/J = icon('icons/role_HUD_icons.dmi',role.logo_state)
-				I_base.Insert(J,null,frame = F, delay = 10/target.mind.antag_roles.len)
-				F++
-
-			var/image/I = image(I_base)
-			I.loc = target
-			I.appearance_flags |= RESET_COLOR|RESET_ALPHA
-			I.pixel_x = 20 * PIXEL_MULTIPLIER
-			I.pixel_y = 20 * PIXEL_MULTIPLIER
-			I.plane = ANTAG_HUD_PLANE
-			target.hud_list[SPECIALROLE_HUD] = I
-			U.client.images += I
-
-		if(issilicon(target))//If the silicon mob has no law datum, no inherent laws, or a law zero, add them to the hud.
-			var/mob/living/silicon/silicon_target = target
-			if(!silicon_target.laws||(silicon_target.laws&&(silicon_target.laws.zeroth||!silicon_target.laws.inherent.len))||silicon_target.mind.special_role=="traitor")
-				if(isrobot(silicon_target))//Different icons for robutts and AI.
-					U.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalborg")
-				else
-					U.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalai")
-
-/mob/dead/proc/assess_conversionHUD(list/target_list, mob/dead/observer/U)
-	for(var/mob/living/carbon/target in target_list)
-		if(target.mind)
-			U.client.images -= target.hud_list[CONVERSION_HUD]
-			target.update_convertibility()
-			U.client.images += target.hud_list[CONVERSION_HUD]
 
 /mob/proc/ghostize(var/flags = GHOST_CAN_REENTER,var/deafmute = 0)
 	if(key && !(copytext(key,1,2)=="@"))
@@ -420,6 +279,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		var/response = alert(src, "It doesn't have to end here, the veil is thin and the dark energies in you soul cling to this plane. You may forsake this body and materialize as a Shade.","Sacrifice Body","Shade","Ghost","Stay in body")
 		switch (response)
 			if ("Shade")
+				if (!iscultist(src))
+					return
 				if (occult_muted())
 					to_chat(src, "<span class='danger'>Holy interference within your body prevents you from separating your shade from your body.</span>")
 				else
@@ -665,10 +526,14 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/hasHUD(var/hud_kind)
 	switch(hud_kind)
 		if(HUD_MEDICAL)
-			return selectedHUD == HUD_MEDICAL
+			for(var/datum/visioneffect/medical/H in huds)
+				return TRUE
 		if(HUD_SECURITY)
-			return selectedHUD == HUD_SECURITY
-	return
+			for(var/datum/visioneffect/security/H in huds)
+				return TRUE
+		if(HUD_ARRESTACCESS)
+			return FALSE
+	return FALSE
 
 /mob/dead/observer/proc/can_reenter_corpse()
 	var/mob/M = get_top_transmogrification()

@@ -27,6 +27,9 @@
 	autoignition_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(VOX_SHAPED)
 
+	autoignition_temperature = 0
+	fire_fuel = 0
+
 /obj/item/clothing/suit/fire/firefighter
 	icon_state = "firesuit"
 	item_state = "firefighter"

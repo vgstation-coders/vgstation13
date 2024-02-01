@@ -17,7 +17,7 @@
 	actions_types = list(/datum/action/item_action/convert)
 	rustle_sound = "pageturn"
 
-	autoignition_temperature = 522 // Kelvin
+	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 2
 
 /obj/item/weapon/storage/bible/suicide_act(var/mob/living/user)
@@ -333,7 +333,7 @@
 		deconvertee.take_overall_damage(10)//it's a painful process no matter what.
 		var/turf/T = get_turf(deconvertee)
 		anim(target = deconvertee, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_land", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
-		
+
 		switch(success)
 			if (DECONVERSION_ACCEPT)
 				var/mob/living/simple_animal/hostile/shade/redshade_A = new(T)

@@ -14,6 +14,7 @@ var/list/special_fruits = list()
 	var/hydroflags = 0
 	var/datum/seed/seed
 	var/fragrance
+	autoignition_temperature = AUTOIGNITION_FABRIC
 
 	icon = 'icons/obj/hydroponics/apple.dmi'
 	icon_state = "produce"
@@ -55,7 +56,7 @@ var/list/special_fruits = list()
 			name = "stinging [name]"
 		if(seed.juicy == 2)
 			name = "slippery [name]"
-		
+
 		if(seed.gas_absorb)
 			processing_objects.Add(src)
 
@@ -263,7 +264,7 @@ var/list/special_fruits = list()
 		spawn()
 			spark(M) //Two set of sparks, one before the teleport and one after. //Sure then ?
 	return 1
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/process()
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/environment
@@ -271,7 +272,7 @@ var/list/special_fruits = list()
 		environment = T.return_air()
 	else
 		environment = space_gas
-		
+
 	for (var/gas in seed.consume_gasses)
 		if(environment[gas] > 0 && reagents.total_volume < reagents.maximum_volume)
 			var/amount_consumed = min(min(environment[gas],seed.consume_gasses[gas]/10),min(seed.consume_gasses[gas]/10,reagents.maximum_volume-reagents.total_volume))
@@ -287,7 +288,7 @@ var/list/special_fruits = list()
 					reagents.add_reagent(OXYGEN, seed.consume_gasses[gas]/150)
 			environment.adjust_gas(gas, -(amount_consumed), FALSE)
 	environment.update_values()
-		
+
 	if(reagents.total_volume >= reagents.maximum_volume)
 		processing_objects.Remove(src)
 
@@ -1206,3 +1207,12 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	if(isnull(leaves))
 		shift_leaves(seed?.potency, harvester)
 	update_leaves()
+
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/flax
+	name = "flax"
+	desc = "The grains can be ground to produce an oil whose pigment match the color of surrounding reagents, and the fibers can be weaved into cloth at a spinning wheel or electric loom."
+	gender = PLURAL
+	potency = 20
+	filling_color = "#7E80DE"
+	plantname = "flax"

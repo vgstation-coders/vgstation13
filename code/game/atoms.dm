@@ -57,6 +57,9 @@ var/global/list/ghdel_profiling = list()
 
 	var/arcanetampered = 0 //A looot of things can be
 
+	var/image/moody_light
+	var/list/moody_lights = list()
+
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
 		last_beamchecks = list()
@@ -126,7 +129,7 @@ var/global/list/ghdel_profiling = list()
 		pixel_x = initialpixelx
 		pixel_y = initialpixely
 
-
+//xy: 1 if shakes horizontally, 2 if vertical, 3 if both
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
 	var/old_pixel_x = pixel_x
 	var/old_pixel_y = pixel_y
@@ -148,11 +151,11 @@ var/global/list/ghdel_profiling = list()
 // throw_impact is called multiple times when an item is thrown: see /atom/movable/proc/hit_check at atoms_movable.dm
 // Do NOT delete an item as part of its throw_impact unless you've checked the hit_atom is a turf, as that's effectively the last time throw_impact is called in a single throw.
 // Otherwise, shit will runtime in the subsequent throw_impact calls.
-/atom/proc/throw_impact(atom/hit_atom, var/speed, mob/user)
+/atom/proc/throw_impact(atom/hit_atom, var/speed, mob/user, var/list/impact_whitelist)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
 		playsound(src, src.throw_impact_sound, 80, 1)
-		M.hitby(src,speed,src.dir)
+		M.hitby(src,speed,src.dir,impact_whitelist)
 		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by [user] ([user ? user.ckey : "what"])</font>")
 
 	else if(isobj(hit_atom))
@@ -173,8 +176,7 @@ var/global/list/ghdel_profiling = list()
 	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user)
 
 /atom/Destroy()
-	if(reagents)
-		QDEL_NULL(reagents)
+	QDEL_NULL(reagents)
 
 	if(density)
 		densityChanged()
@@ -190,6 +192,7 @@ var/global/list/ghdel_profiling = list()
 				B.master.target = null
 		beams.len = 0
 	*/
+	QDEL_NULL(firelightdummy)
 	..()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
@@ -452,7 +455,7 @@ its easier to just keep the beam vertical.
 	if(desc)
 		to_chat(user, desc)
 
-	if(reagents && is_open_container() && !ismob(src) && !hide_own_reagents()) //is_open_container() isn't really the right proc for this, but w/e
+	if(reagents && is_open_container() && !hide_own_reagents()) //is_open_container() isn't really the right proc for this, but w/e
 		if(get_dist(user,src) > 3)
 			to_chat(user, "<span class='info'>You can't make out the contents.</span>")
 		else
@@ -534,6 +537,12 @@ its easier to just keep the beam vertical.
 //Called when a shuttle collides with an atom
 /atom/proc/shuttle_act(var/datum/shuttle/S)
 	return
+
+/atom/proc/clean_act(var/cleanliness)//1 = contact with water (splashed with water, removes glue from objs), 2 = space cleaner or efficient cleaning (showers, sink, soap), 3 = bleach
+	if (cleanliness >= CLEANLINESS_SPACECLEANER)
+		clean_blood()
+	if (cleanliness >= CLEANLINESS_BLEACH)
+		color = ""
 
 //Called on every object in a shuttle which rotates
 /atom/proc/map_element_rotate(var/angle)
@@ -719,7 +728,7 @@ its easier to just keep the beam vertical.
 	if(!M)//if the blood is of non-human source
 		if(!blood_DNA || !istype(blood_DNA, /list))
 			blood_DNA = list()
-		blood_color = blood_DNA.len ? BlendRGB(blood_color, DEFAULT_BLOOD, 0.5) : DEFAULT_BLOOD //mix new color into existing blood_color if applicable
+		blood_color = blood_DNA.len ? BlendRYB(blood_color, DEFAULT_BLOOD, 0.5) : DEFAULT_BLOOD //mix new color into existing blood_color if applicable
 		had_blood = TRUE
 		return TRUE
 	if (!( istype(M, /mob/living/carbon/human) ))
@@ -733,9 +742,9 @@ its easier to just keep the beam vertical.
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
 	if (M.species)
-		blood_color = blood_DNA.len ? BlendRGB(blood_color, M.species.blood_color, 0.5) : M.species.blood_color
+		blood_color = blood_DNA.len ? BlendRYB(blood_color, M.species.blood_color, 0.5) : M.species.blood_color
 	else
-		blood_color = blood_DNA.len ? BlendRGB(blood_color, DEFAULT_BLOOD, 0.5) : DEFAULT_BLOOD
+		blood_color = blood_DNA.len ? BlendRYB(blood_color, DEFAULT_BLOOD, 0.5) : DEFAULT_BLOOD
 	return TRUE
 
 //this proc exists specifically for cases where the mob that originated the blood (aka the "donor") might not exist anymore, leading to bugs galore
@@ -749,7 +758,7 @@ its easier to just keep the beam vertical.
 	if(!istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
 
-	blood_color = blood_DNA.len ? BlendRGB(blood_color, blood_data["blood_colour"], 0.5) : blood_data["blood_colour"] //mix new color into existing blood_color if applicable
+	blood_color = blood_DNA.len ? BlendRYB(blood_color, blood_data["blood_colour"], 0.5) : blood_data["blood_colour"] //mix new color into existing blood_color if applicable
 	return TRUE
 
 /atom/proc/add_vomit_floor(mob/living/carbon/M, toxvomit = 0, active = 0, steal_reagents_from_mob = 1)
@@ -1001,6 +1010,15 @@ its easier to just keep the beam vertical.
 /atom/proc/attempt_heating(atom/A, mob/user)
 	return
 
+/atom/proc/process_temperature()
+	return
+
+/atom/proc/update_temperature_overlays()
+	return
+
+/atom/proc/on_vending_machine_spawn()
+	return
+
 /atom/proc/get_stain_text(colored_text = TRUE) //"blood-and-vomit-stained"
 	if (blood_DNA?.len)
 		var/stains[0]
@@ -1034,17 +1052,64 @@ its easier to just keep the beam vertical.
 		stain_text = "<span style='color: [get_stain_text_color()]'>[stain_text]</span>"
 	return indef_art + " " + stain_text
 
-/atom/proc/heat_dissipation_updates()
-	if (reagents in thermal_dissipation_reagents)
-		if (!reagents.total_volume)
-			thermal_dissipation_reagents -= reagents
-	else if (reagents.total_volume)
-		thermal_dissipation_reagents += reagents
-
 /atom/proc/get_heat_conductivity()
 	return 1
 
 /atom/proc/is_blood_stained()
 	if (blood_color && blood_DNA && blood_DNA.len)
 		return TRUE
+	return FALSE
+
+//Single overlay moody light
+/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
+	overlays -= moody_light
+	var/area/here = get_area(src)
+	if (here && here.dynamic_lighting)
+		moody_light = image(moody_icon, src, moody_state)
+		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
+		moody_light.plane = LIGHTING_PLANE
+		moody_light.blend_mode = BLEND_ADD
+		moody_light.alpha = moody_alpha
+		moody_light.color = moody_color
+		overlays += moody_light
+	luminosity = max(luminosity, 2)
+
+/atom/proc/kill_moody_light()
+	overlays -= moody_light
+	luminosity = initial(luminosity)
+	moody_light = null
+
+//Multi-overlay moody lights. don't combine both procs on a single atom, use one or the other.
+/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
+	if (!index)
+		return
+	if (index in moody_lights)
+		overlays -= moody_lights[index]
+	var/area/here = get_area(src)
+	if (here && here.dynamic_lighting)
+		moody_light = image(moody_icon, src, moody_state)
+		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
+		moody_light.plane = LIGHTING_PLANE
+		moody_light.blend_mode = BLEND_ADD
+		moody_light.alpha = moody_alpha
+		moody_light.color = moody_color
+		moody_lights[index] = moody_light
+		overlays += moody_lights[index]
+	luminosity = max(luminosity, 2)
+
+/atom/proc/kill_moody_light_index(var/index)
+	if (!index || !(index in moody_lights))
+		return
+	overlays -= moody_lights[index]
+	moody_lights.Remove(index)
+	if (moody_lights.len <= 0)
+		luminosity = initial(luminosity)
+
+/atom/proc/kill_moody_light_all()
+	for (var/i in moody_lights)
+		overlays -= moody_lights[i]
+		moody_lights.Remove(i)
+	luminosity = initial(luminosity)
+
+/atom/proc/silicate_act(var/atom/A, var/mob/user)
 	return FALSE

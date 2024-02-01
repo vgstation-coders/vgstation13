@@ -213,6 +213,9 @@
 	..()
 	qdel(src)
 
+/obj/item/proc/dye_act(var/obj/structure/reagent_dispensers/cauldron/cauldron, var/mob/user)
+	return FALSE
+
 var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/throw_impact(atom/impacted_atom, speed, mob/user)
@@ -341,23 +344,30 @@ var/global/objects_thrown_when_explode = FALSE
 		daemon.examine(user)
 
 /obj/item/proc/held_examine_temperature_message(mob/living/examiner)
-	#define HEAT_LEVEL_SPAN 20
-	var/temperature_delta = (reagents.chem_temp - examiner.bodytemperature) * heat_conductivity ** (1/3) //Cubed root to skew it towards being perceptible.
+	#define HEAT_LEVEL_SPAN 10
+	#define COLD_LEVEL_SPAN 5
+	#define TEMP_PERCEPTION_ADJUST 20
+	var/temperature_delta = (reagents.chem_temp - examiner.get_skin_temperature()) * heat_conductivity ** (1/3) //Cubed root to skew it towards being perceptible.
+	temperature_delta += TEMP_PERCEPTION_ADJUST//We perceive things warmer than they are, gotta account for that.
 	if (ishuman(examiner))
 		var/mob/living/carbon/human/H = examiner
 		temperature_delta *= (H.gloves ? H.gloves.heat_conductivity ** (1/3) : 1)
-	var/safetemp_excursion = examiner.get_safe_temperature_excursion(examiner.bodytemperature + temperature_delta)
+	var/safetemp_excursion
+	if (temperature_delta < 0)
+		safetemp_excursion = examiner.get_safe_temperature_excursion(examiner.get_skin_temperature() + temperature_delta - TEMP_PERCEPTION_ADJUST)
+	else
+		safetemp_excursion = examiner.get_safe_temperature_excursion(examiner.get_skin_temperature() + temperature_delta)
 	if (!examiner.feels_pain() || examiner.has_painkillers())
 		safetemp_excursion = 0
 	else if(safetemp_excursion > 0)
 		safetemp_excursion = min(ceil(safetemp_excursion / HEAT_LEVEL_SPAN), 3)
 	else if (safetemp_excursion < 0)
-		safetemp_excursion = max(round(safetemp_excursion / HEAT_LEVEL_SPAN), -3)
+		safetemp_excursion = max(round(safetemp_excursion / COLD_LEVEL_SPAN), -3)
 	switch (safetemp_excursion)
 		if (0)
-			if (temperature_delta >= HEAT_LEVEL_SPAN)
+			if (temperature_delta >= (HEAT_LEVEL_SPAN*2))
 				to_chat(examiner, "<span class='notice'>It feels warm.</span>")
-			else if(abs(temperature_delta) >= HEAT_LEVEL_SPAN)
+			else if(temperature_delta <= 0)
 				to_chat(examiner, "<span class='notice'>It feels cool.</span>")
 		if (1)
 			to_chat(examiner, "<span class='warning'>It feels very hot.</span>")
@@ -372,6 +382,8 @@ var/global/objects_thrown_when_explode = FALSE
 		if (-3)
 			to_chat(examiner, "<span class='warning'>It feels piercingly cold.</span>")
 	#undef HEAT_LEVEL_SPAN
+	#undef COLD_LEVEL_SPAN
+	#undef TEMP_PERCEPTION_ADJUST
 
 /obj/item/attack_ai(mob/user as mob)
 	..()
@@ -421,6 +433,12 @@ var/global/objects_thrown_when_explode = FALSE
 
 	//transfers diseases between the mob and the item
 	disease_contact(user)
+
+	if(src.on_fire)
+		var/mob/living/L = user
+		L.visible_message("<span class='warning'>\The [src] burns [L]'s hands!</span>", "<span class='warning'>Your hands are burned by \the [src]!</span>")
+		L.drop_item(src, force_drop = 1)
+		L.apply_damage(10,BURN,L.get_active_hand_organ())
 
 /obj/item/requires_dexterity(mob/user)
 	return TRUE
@@ -613,7 +631,7 @@ var/global/objects_thrown_when_explode = FALSE
 					else
 						return CANNOT_EQUIP
 
-				
+
 
 				return CAN_EQUIP
 			if(slot_back)
@@ -1321,11 +1339,12 @@ var/global/list/image/blood_overlays = list()
 		return
 
 	var/icon/I = new /icon(icon, icon_state)
-	I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD) //fills the icon_state with white (except where it's transparent)
+	I.Blend(rgb(255,255,255),ICON_ADD) //fills the icon_state with white (except where it's transparent)
 	I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY) //adds blood and the remaining white areas become transparant
 
 	var/image/img = image(I)
 	img.name = "blood_overlay"
+	img.appearance_flags = RESET_COLOR|RESET_ALPHA
 	blood_overlays["[type][icon_state]"] = img
 	update_blood_overlay()
 
@@ -1750,7 +1769,33 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
 	return FALSE
 
+/obj/item/proc/AltFrom(var/atom/A,var/mob/user)
+	return FALSE
+
 /obj/item/get_heat_conductivity()
 	. = heat_conductivity
 	if (is_open_container())
 		. = max(. , 0.5) //Even if it's perfectly insulating, if it's open then some heat can be exchanged.
+
+/obj/item/MiddleAltClick(var/mob/user)
+	if(!isliving(user))
+		return
+	if(src.on_fire)
+		extinguish()
+		var/prot = 0
+
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(H.gloves)
+				var/obj/item/clothing/gloves/G = H.gloves
+				if(G.max_heat_protection_temperature)
+					prot = (G.max_heat_protection_temperature > 360)
+		else
+			prot = 1
+		var/datum/organ/external/active_hand_organ = user.get_active_hand_organ()
+		if(prot > 0 || (M_RESIST_HEAT in user.mutations) || active_hand_organ?.is_robotic())
+			user.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src].")
+			return
+		var/mob/living/L = user
+		L.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
+		L.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src], burning your hand in the process.")

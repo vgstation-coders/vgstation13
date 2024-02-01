@@ -75,6 +75,9 @@
 				acceptable_reagents |= reagent
 		sortTim(available_recipes, /proc/cmp_microwave_recipe_dsc)
 
+	if(ticker)
+		initialize()
+
 /*******************
 *   Part Upgrades
 ********************/
@@ -232,6 +235,13 @@
 		var/obj/item/weapon/grab/G = O
 		to_chat(user, "<span class='warning'>This is ridiculous. You can not fit [G.affecting] in this [src].</span>")
 		return 1
+	else if(istype(O,/obj/item/weapon/reagent_containers/food/snacks))//we always accept snacks so we can warm them up
+		if(user.drop_item(O, src))
+			user.visible_message( \
+				"<span class='notice'>[user] adds [O] to [src].</span>", \
+				"<span class='notice'>You add [O] to [src].</span>")
+			updateUsrDialog()
+			return 1
 	else
 		to_chat(user, "<span class='warning'>You have no idea what you can cook with [O].</span>")
 		return 1
@@ -385,7 +395,25 @@
 				gunk.forceMove(src.loc)
 				return
 
-		// Everything else continued from here
+		// If there's just one item and no reagents, warm it up
+		if ((contents.len == 1) && !reagents.total_volume)
+			if(!running(10))
+				abort()
+				return
+			stop()
+			cooked = contents[1]//if there's just one item and no reagents, warm it up
+			var/cook_temp = COOKTEMP_READY//100°C
+			if(emagged || arcanetampered)
+				cook_temp = COOKTEMP_EMAGGED//8.000.000°C
+				playsound(src, "sound/items/flare_on.ogg", 100, 0)
+				cooked.ignite()
+			if (cooked.reagents.chem_temp < cook_temp)
+				cooked.reagents.chem_temp = cook_temp
+				cooked.update_icon()
+			cooked.forceMove(src.loc)
+			return
+
+		// Otherwise we fucked up
 		dirty += 1
 		if (prob(max(10,dirty*5)))
 			if (!running(4))
@@ -422,10 +450,7 @@
 			cooked = fail()
 			cooked.forceMove(src.loc)
 			return
-		if(!emagged && !arcanetampered)
-			cooked = recipe.make_food(src,user)
-		else
-			cooked = fail()
+		cooked = recipe.make_food(src,user)
 		stop()
 		if(cooked)
 			adjust_cooked_food_reagents_temperature(cooked, recipe)
@@ -449,6 +474,14 @@
 	if(emagged || arcanetampered)
 		max_temperature = INFINITY //If it's been messed with, let it heat more than that.
 	cooked.reagents.heating(thermal_energy_transfer, max_temperature)
+	var/cook_temp = COOKTEMP_READY//100°C
+	if(emagged || arcanetampered)
+		cook_temp = COOKTEMP_EMAGGED//8.000.000°C
+		playsound(src, "sound/items/flare_on.ogg", 100, 0)
+		cooked.ignite()
+	if (cooked.reagents.chem_temp < cook_temp)
+		cooked.reagents.chem_temp = cook_temp
+		cooked.update_icon()
 
 /obj/machinery/microwave/proc/running(var/seconds as num) // was called wzhzhzh, for some fucking reason
 	for (var/i=1 to seconds)
@@ -554,6 +587,14 @@
 		muck_start()
 		muck_finish()
 		broke()
+	var/cook_temp = COOKTEMP_READY//100°C
+	if(emagged || arcanetampered)
+		cook_temp = COOKTEMP_EMAGGED//8.000.000°C
+		playsound(src, "sound/items/flare_on.ogg", 100, 0)
+		ffuu.ignite()
+	if (ffuu.reagents.chem_temp < cook_temp)
+		ffuu.reagents.chem_temp = cook_temp
+		ffuu.update_icon()
 	return ffuu
 
 /obj/machinery/microwave/proc/empty()
@@ -654,5 +695,15 @@
 
 	if(prob(50))
 		cook()
+
+
+/obj/machinery/microwave/table_shift()
+	pixel_x = -3
+	pixel_y = 6
+
+/obj/machinery/microwave/table_unshift()
+	pixel_x = 0
+	pixel_y = 0
+
 
 #undef CAN_AUTOMAKE_SOMETHING

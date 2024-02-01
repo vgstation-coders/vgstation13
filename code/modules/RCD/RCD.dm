@@ -17,7 +17,7 @@
 	w_type              = RECYK_ELECTRONIC
 	melt_temperature    = MELTPOINT_STEEL // Lots of metal
 	origin_tech         = Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=2"
-	
+
 	var/frequency = 0
 	var/id = null
 
@@ -243,6 +243,8 @@
 	if (sparky && next_spark < world.time)
 		spark(src, 5, FALSE)
 		next_spark = world.time + 0.5 SECONDS
+	else
+		playsound(src, 'sound/machines/click.ogg', 20, 1)
 
 /obj/item/device/rcd/proc/get_energy(var/mob/user)
 	return INFINITY

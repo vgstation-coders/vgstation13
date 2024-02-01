@@ -363,7 +363,7 @@
 			C.facehugger = null
 			C.regenerate_icons()
 	else
-		target.visible_message("<span class='danger'>\The [src] violates [target]'s face !</span>")
+		target.visible_message("<span class='danger'>\The [src] violates [target]'s face!</span>")
 	return
 
 /obj/item/clothing/mask/facehugger/proc/GoActive()

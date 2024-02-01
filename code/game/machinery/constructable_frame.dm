@@ -185,7 +185,7 @@
 							var/type2build = src.circuit.build_path
 							if(arcanetampered || circuit.arcanetampered)
 								type2build = pick(typesof(/obj/machinery/cooking))
-							var/obj/machinery/new_machine = new type2build(src.loc)
+							var/obj/machinery/new_machine = new type2build(loc)
 							for(var/obj/O in new_machine.component_parts)
 								qdel(O)
 							new_machine.component_parts = list()
@@ -810,11 +810,10 @@ to destroy them and players will be able to make replacements.
 
 /obj/item/weapon/circuitboard/smartfridge/solder_improve(mob/user)
 	var/list/static/smartfridge_choices = list(
-		"Food smartfridge" = /obj/item/weapon/circuitboard/smartfridge/,
-		"Secure chemistry smartfridge" = /obj/item/weapon/circuitboard/smartfridge/medbay,
-		"Chemistry smartfridge" = /obj/item/weapon/circuitboard/smartfridge/chemistry,
-		"Slime extract smartfridge" = /obj/item/weapon/circuitboard/smartfridge/extract,
-		"Seed smartfridge" = /obj/item/weapon/circuitboard/smartfridge/seeds,
+		"Foodstuff & Seeds Storage" = /obj/item/weapon/circuitboard/smartfridge,
+		"Secure Medicine Storage" = /obj/item/weapon/circuitboard/smartfridge/medbay,
+		"Smart Chemical Storage" = /obj/item/weapon/circuitboard/smartfridge/chemistry,
+		"Slime Extract Storage" = /obj/item/weapon/circuitboard/smartfridge/extract,
 		"Refrigerated Blood Bank" = /obj/item/weapon/circuitboard/smartfridge/bloodbank
 	)
 
@@ -834,24 +833,19 @@ to destroy them and players will be able to make replacements.
 		qdel(src)
 
 /obj/item/weapon/circuitboard/smartfridge/medbay
-	name = "Circuit Board (Medbay SmartFridge)"
+	name = "Circuit Board (Secure Medicine Storage)"
 	desc = "A circuit board used to run a machine that will hold beakers, pills and pill bottles."
 	build_path = /obj/machinery/smartfridge/secure/medbay
 
 /obj/item/weapon/circuitboard/smartfridge/chemistry
-	name = "Circuit Board (Chemical SmartFridge)"
+	name = "Circuit Board (Smart Chemical Storage)"
 	desc = "A circuit board used to run a machine that will hold beakers and pill bottles."
 	build_path = /obj/machinery/smartfridge/chemistry
 
 /obj/item/weapon/circuitboard/smartfridge/extract
-	name = "Circuit Board (Extract SmartFridge)"
+	name = "Circuit Board (Slime Extract Storage)"
 	desc = "A circuit board used to run a machine that will hold slime extracts."
 	build_path = /obj/machinery/smartfridge/extract
-
-/obj/item/weapon/circuitboard/smartfridge/seeds
-	name = "Circuit Board (Megaseed Servitor)"
-	desc = "A circuit board used to run a machine that will hold seed packets."
-	build_path = /obj/machinery/smartfridge/seeds
 
 /obj/item/weapon/circuitboard/smartfridge/bloodbank
 	name = "Circuit Board (Refrigerated Blood Bank)"
@@ -1673,15 +1667,36 @@ to destroy them and players will be able to make replacements.
 
 /obj/item/weapon/circuitboard/suit_storage_unit
 	name = "Circuit board (Suit Storage Unit)"
-	desc = "A circuit board used to clean, charge, and store a hardsuit"
+	desc = "A circuit board used to clean, charge, and store a hardsuit."
 	build_path = /obj/machinery/suit_storage_unit
 	board_type = MACHINE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_POWERSTORAGE + "=2"
 	req_components = list(
 		/obj/item/weapon/stock_parts/micro_laser = 2,
 		/obj/item/weapon/stock_parts/manipulator = 1,
-		/obj/item/weapon/stock_parts/scanning_module = 1,	
-		/obj/item/weapon/stock_parts/capacitor = 1,	
+		/obj/item/weapon/stock_parts/scanning_module = 1,
+		/obj/item/weapon/stock_parts/capacitor = 1,
 		/obj/item/weapon/stock_parts/console_screen = 1
 	)
-	
+
+/obj/item/weapon/circuitboard/electric_loom
+	name = "Circuit board (Electric Loom)"
+	desc = "A circuit board used to build a machine that can turn flax into cloth."
+	build_path = /obj/machinery/electric_loom
+	board_type = MACHINE
+	origin_tech = Tc_ENGINEERING + "=3;" + Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=3"
+	req_components = list(
+		/obj/item/weapon/stock_parts/manipulator = 3,
+		/obj/item/weapon/stock_parts/matter_bin = 2,
+	)
+
+/obj/item/weapon/circuitboard/sewing_machine
+	name = "Circuit board (Sewing Machine)"
+	desc = "A circuit board used to build a machine that can turn cloth into various items."
+	build_path = /obj/machinery/sewing_machine
+	board_type = MACHINE
+	origin_tech = Tc_ENGINEERING + "=3;" + Tc_PROGRAMMING + "=3;"
+	req_components = list(
+		/obj/item/weapon/stock_parts/manipulator = 2,
+		/obj/item/weapon/stock_parts/matter_bin = 1,
+	)

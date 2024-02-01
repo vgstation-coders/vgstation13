@@ -132,18 +132,6 @@
 	else
 		to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 
-
-/obj/machinery/computer/telescience/update_icon()
-	if(stat & BROKEN)
-		icon_state = "teleportb"
-		return
-
-	if(stat & (NOPOWER|FORCEDISABLE))
-		src.icon_state = "teleport0"
-
-	else
-		icon_state = initial(icon_state)
-
 /obj/machinery/computer/telescience/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return

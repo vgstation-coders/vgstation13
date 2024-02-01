@@ -674,7 +674,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/eagles
 	name = "Airlock Access Removed"
-	message = "Centcomm airlock control override activated. Please take this time to get acquainted with your coworkers."
+	message = "Centcomm airlock control override activated. Access requirements lifted for all non-security and command airlocks."
 
 /datum/command_alert/bluespace_artillery
 	name = "Bluespace Artillery Strike Detected"
@@ -791,3 +791,26 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/lotto_winner
 	alert_title = "Grand Slam -Stellar- Lottery Winner!"
 	message = "Congratulations to John Nanotrasen for winning the Central Command Grand Slam -Stellar- Lottery Fund! He walks home with a million credits!"
+
+/datum/command_alert/tradeprobe
+	alert_title = "Vox Trade Probe Approaching"
+	message = "Although there are no Vox Shoal traders in your viscinity, a trade probe has docked with the station at the usual location. It will remain for 10 minutes."
+
+/datum/command_alert/tradeprobe_depart
+	alert_title = "Vox Trade Probe Departing"
+	message = "The Vox trade probe is departing in 1 minute. Crewmen are advised to exit the probe immediately."
+
+/datum/command_alert/tradeaversion_closedport
+	alert_title = "Irrational Port Closure"
+	message = "The Vox Shoal notes disappointment at an inability to send a trade probe. Your station port is closed."
+
+/datum/command_alert/tradeaversion_mismanagement
+	alert_title = "Trade Probe Rerouted"
+	message = "A Vox trade probe rerouted away from the station after determining that employee wages were too low to justify a visit."
+
+/datum/command_alert/archive_thanks
+	alert_title = "Science Thanks You"
+
+/datum/command_alert/archive_thanks/announce()
+	message = "The Research Archive Project extends its profound thanks to [english_list(important_archivists)] for completing the research archival work this shift. There will be an extra stipend in the next pay cycle."
+	..()

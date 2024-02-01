@@ -120,39 +120,43 @@
 
 			var/spell_name = spell.name
 			var/spell_cooldown = get_spell_cooldown_string(spell.charge_max, spell.charge_type)
+			var/spell_range = get_spell_range_string(spell.range)
 
-			dat += "<strong>[spell_name]</strong>[spell_cooldown]<br>"
+			dat += "<strong>[spell_name]</strong>[spell_cooldown]<br>Range: [spell_range]<br>"
 
 			//Get spell properties
 			var/list/properties = get_spell_properties(spell.spell_flags, user)
 			var/property_data
 			for(var/P in properties)
-				property_data += "[P] "
+				property_data += "[P]<br>"
 
 			if(property_data)
-				dat += "<span style=\"color:blue\">[property_data]</span><br>"
+				dat += "[property_data]"
 
 			//Get the upgrades
 			var/upgrade_data = ""
 
 			for(var/upgrade in spell.spell_levels)
+				var/upgrade_button = "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade ([spell.get_upgrade_price(upgrade)] points)</a>"
 				var/lvl = spell.spell_levels[upgrade]
 				var/max = spell.level_max[upgrade]
 
 				//If maximum upgrade level is 0, skip
 				if(!max)
 					continue
-
-				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] (<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade ([spell.get_upgrade_price(upgrade)] points)</a>)  "
+				if(lvl >= max)
+					upgrade_button = "<strong>MAXED</strong>"
+				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] ([upgrade_button])</a>  "
 
 			if(upgrade_data)
-				dat += "[upgrade_data]<br><br>"
+				dat += "[upgrade_data]<br>"
 			dat+= "<br>"
 
 //FORMATTING
 //<b>Fireball</b> - 10 seconds (buy for 1 spell point)
 //<i>(Description)</i>
 //Requires robes to cast
+//Lost on mind transfer
 
 	if(shown_offensive_spells.len)
 		dat += "<span style=\"color:red\"><strong>OFFENSIVE SPELLS:</strong></span><br><br>"
@@ -219,9 +223,9 @@
 	var/list/properties = get_spell_properties(flags, user)
 	var/property_data
 	for(var/P in properties)
-		property_data += "[P] "
+		property_data += "[P]<br>"
 	if(property_data)
-		dat += "<span style=\"color:blue\">[property_data]</span><br>"
+		dat += "[property_data]"
 	dat += "<br>"
 	return dat
 
@@ -229,7 +233,7 @@
 	var/list/properties = list()
 
 	if(flags & NEEDSCLOTHES)
-		var/new_prop = "Requires wizard robes to cast."
+		var/new_prop = "<span style=\"color:blue\">Requires wizard robes to cast.</span>"
 
 		//If user has the robeless spell, strike the text out
 		if(user)
@@ -239,8 +243,11 @@
 
 		properties.Add(new_prop)
 
+	if(flags & LOSE_IN_TRANSFER)
+		properties.Add("<span style=\"color:red\">Lost on mind transfer.</span>")
+
 	if(flags & STATALLOWED)
-		properties.Add("Can be cast while unconscious.")
+		properties.Add("<span style=\"color:green\">Can be cast while unconscious.</span>")
 
 	return properties
 
@@ -253,6 +260,13 @@
 			return " - [charges] charge\s"
 		if(Sp_RECHARGE)
 			return " - cooldown: [(charges/10)]s"
+
+/obj/item/weapon/spellbook/proc/get_spell_range_string(var/range)
+	if(range == 1)
+		return "Adjacent"
+	if((range == SELFCAST) || (range == 0))
+		return "Self"
+	return range
 
 /obj/item/weapon/spellbook/proc/get_spell_price(spell/spell_type)
 	if(ispath(spell_type, /spell))

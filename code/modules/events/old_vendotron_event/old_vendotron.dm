@@ -2,6 +2,7 @@
 	name = "old vendotron"
 	desc = "Covered in layers of gunk of varying ages and origins, it's obvious this old vendotron has a history, and wares to match."
 	icon_state = "Old_Vendotron"
+	moody_state = "overlay_vending_vendotron"
 	icon_vend = "Old_Vendotron-vend"
 	unhackable = TRUE
 	mech_flags = MECH_SCAN_FAIL
@@ -115,7 +116,7 @@
 		/obj/item/clothing/suit/space/rig/syndicate_elite = 150,
 		/obj/item/clothing/shoes/clown_shoes/advanced = 150,
 		/obj/item/clothing/back/magiccape = 150,
-		/obj/item/clothing/glasses/thermal = 250,
+		/obj/item/clothing/glasses/hud/thermal = 250,
 		/obj/item/clothing/glasses/emitter = 250,
 		/obj/item/clothing/head/helmet/knight = 200,
 		/obj/item/clothing/head/helmet/knight/interrogator = 200,

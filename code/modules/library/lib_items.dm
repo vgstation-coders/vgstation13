@@ -27,10 +27,15 @@
 								/obj/item/weapon/tome, \
 								/obj/item/weapon/tome_legacy, \
 								/obj/item/weapon/spellbook, \
-								/obj/item/weapon/storage/bible)
+								/obj/item/weapon/storage/bible, \
+								/obj/item/dictionary)
 
 /obj/structure/bookcase/cultify()
 	return
+
+/obj/structure/bookcase/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>It contains [english_list(contents)].</span>")
 
 /obj/structure/bookcase/initialize()
 	for(var/obj/item/I in loc)

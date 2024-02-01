@@ -7,6 +7,7 @@
  *		Library Computer
  *		Library Scanner
  *		Book Binder
+ *		Research Archive
  */
 
  #define LIBRARY_BOOKS_PER_PAGE 25
@@ -128,7 +129,7 @@ var/global/datum/library_catalog/library_catalog = new()
 /obj/machinery/libraryscanner
 	name = "scanner"
 	icon = 'icons/obj/library.dmi'
-	icon_state = "bigscanner"
+	icon_state = "bookscanner"
 	anchored = 1
 	density = 1
 	var/obj/item/weapon/book/cache		// Last scanned book
@@ -213,3 +214,173 @@ var/global/datum/library_catalog/library_catalog = new()
 			QDEL_NULL(O)
 	else
 		return ..()
+
+var/global/datum/research/research_archive_datum
+var/list/important_archivists = list()
+
+/obj/machinery/researcharchive
+	name = "research archive"
+	desc = "A high-powered data archive device that takes technology disks and persistently backs them up to specialized servers for the upcoming shift. Usually takes two disks per technology."
+	icon = 'icons/obj/library.dmi'
+	icon_state = "computer_disk"
+	var/on_flick = "on_disk"
+	var/off_flick = "off_disk"
+	anchored = TRUE
+	density = TRUE
+	machine_flags =  WRENCHMOVE | FIXED2WORK | EJECTNOTDEL // | SCREWTOGGLE | CROWDESTROY
+	pass_flags = PASSTABLE
+	idle_power_usage = 4
+	use_auto_lights = 1
+	light_power_on = 1
+	light_range_on = 2
+	light_color = LIGHT_COLOR_GREEN
+	var/obj/item/weapon/disk/tech_disk/diskslot
+	var/busy = FALSE
+
+/obj/machinery/researcharchive/New()
+	..()
+	if(!research_archive_datum)
+		research_archive_datum = new /datum/research()
+	update_icon()
+
+/obj/machinery/researcharchive/examine(mob/user)
+	..()
+	to_chat(user,"<span class='info'><b>The research archive contains the following research:</span></b>")
+	for(var/datum/tech/T in get_list_of_elements(research_archive_datum.known_tech))
+		if(T.id in list("syndicate", "Nanotrasen", "anomaly"))
+			continue
+		if(T.level < min(6,T.goal_level))
+			to_chat(user,"<span class='info'>The [T.id] research is level [T.level].")
+		else
+			to_chat(user,"<span class='good'>The [T.id] research is complete.</span>")
+
+/obj/machinery/researcharchive/power_change()
+	..()
+	update_icon()
+
+/obj/machinery/researcharchive/update_icon()
+	// Broken
+	if(stat & BROKEN)
+		icon_state = "[initial(icon_state)]b"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_computer_disk")
+
+	// Unpowered/Disabled
+	else if(stat & (FORCEDISABLE|NOPOWER))
+		if(icon_state != "[initial(icon_state)]0")
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = off_flick)
+		icon_state = "[initial(icon_state)]0"
+		kill_moody_light()
+
+	// Functional
+	else
+		if(icon_state == "[initial(icon_state)]0")
+			anim(target = src, a_icon = 'icons/obj/computer.dmi', flick_anim = on_flick)
+		icon_state = initial(icon_state)
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_computer_disk")
+
+/obj/machinery/researcharchive/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(stat & (BROKEN))
+		to_chat(user, "<span class='warning'>\The [src] is broken!</span>")
+		return
+	if(..())
+		return
+
+	if(busy)
+		return
+
+	if (!istype(W,/obj/item/weapon/disk/tech_disk))
+		to_chat(user, "<span class='warning'>\The [src] only accepts technology disks.</span>")
+		return
+	var/obj/item/weapon/disk/tech_disk/TD = W
+	if(!TD.stored)
+		to_chat(user, "<span class='notice'>\The [W] has no data!</span>")
+		return
+
+	if(TD.stored.id in list("syndicate", "Nanotrasen", "anomaly"))
+		to_chat(user, "<span class='notice'>\The [src] cannot process this technology data due to proprietary encoding.</span>")
+		return
+
+	if (!user.drop_item(W, src))
+		return
+	if(diskslot)
+		user.put_in_hands(diskslot)
+		visible_message("<span class='notice'>\The [user] swaps the disks in \the [src].</span>","<span class='notice'>You swap the disks in \the [src].</span>")
+	else
+		visible_message("<span class='notice'>\The [user] adds \the [W] to \the [src].</span>","<span class='notice'>You add \the [W] to \the [src].</span>")
+	diskslot = W
+	playsound(loc, 'sound/machines/click.ogg', 50, 1)
+	update_icon()
+	attack_hand(user) //Attempt to archive immediately.
+
+/obj/machinery/researcharchive/attack_hand(var/mob/user)
+	. = ..()
+	if(stat & (BROKEN))
+		to_chat(user, "<span class='notice'>\The [src] is broken.</span>")
+		return
+
+	if(stat & (NOPOWER))
+		to_chat(user, "<span class='notice'>\The [src] is unpowered.</span>")
+		return
+
+	if(!diskslot)
+		to_chat(user, "<span class='notice'>There is no inserted technology disk.</span>")
+		return
+
+	if(busy)
+		return
+
+	playsound(loc, "sound/machines/heps.ogg", 50, 1)
+	anim(target = src, a_icon = 'icons/obj/library.dmi', flick_anim = "computer_disk_ani")
+
+	busy = TRUE
+	use_power(200)
+	spawn(3 SECONDS)
+
+		for(var/datum/tech/T in get_list_of_elements(research_archive_datum.known_tech))
+			if(T.id != diskslot.stored.id)
+				continue
+			if(T.level < diskslot.stored.level)
+				if(T.level>=6)
+					visible_message("<span class='warning'>\The [src] rejects the data disk as [T.id] data has already reached its maximum.")
+					break
+				//Pick the lowest: +3 levels, level 6, maximum level of tech, or the maximum level on the disk
+				//Example: increase to level 4 in one pass, then increase to level 6 in second pass
+				T.level = min(T.level+3, 6, T.max_level, diskslot.stored.level)
+				qdel(diskslot)
+				diskslot = null
+				playsound(loc, "sound/machines/paistartup.ogg", 50, 1)
+				visible_message("<span class='good'>\The [src] accepts the data disk, increasing the [T.id] archive to [T.level].</span>")
+				if(!(user.real_name in important_archivists))
+					important_archivists += user.real_name
+				if(is_research_fully_archived())
+					command_alert(/datum/command_alert/archive_thanks)
+					station_bonus += 800 //one time payment
+			else
+				playsound(loc, "sound/machines/buzz-sigh.ogg", 50, 1)
+				visible_message("<span class='warning'>\The [src] rejects the data disk as it contains no new information.</span>")
+				diskslot.forceMove(loc)
+				diskslot = null
+			break
+		busy = FALSE
+
+/obj/machinery/researcharchive/kick_act(var/mob/user)
+	..()
+	if(!busy)
+		diskslot.forceMove(loc)
+		diskslot = null
+
+/obj/machinery/researcharchive/proc/admin_research()
+	for(var/datum/tech/T in get_list_of_elements(research_archive_datum.known_tech))
+		if(T.id in list("syndicate", "Nanotrasen", "anomaly"))
+			continue
+		T.level = min(6,T.goal_level)
+
+/proc/is_research_fully_archived()
+	var/archived = TRUE
+	for(var/datum/tech/T in get_list_of_elements(research_archive_datum.known_tech))
+		if(T.id in list("syndicate", "Nanotrasen", "anomaly"))
+			continue
+		if(T.level < min(6,T.goal_level))
+			archived = FALSE
+			break
+	return archived

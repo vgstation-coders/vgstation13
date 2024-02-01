@@ -137,10 +137,10 @@
 		to_chat(M, "<span class='warning'> You cannot do this while on the ground!</span>")
 		return FALSE
 
-	if(H.check_body_part_coverage(MOUTH))
-		if(!locate(/datum/power/vampire/mature) in current_powers)
-			to_chat(M, "<span class='warning'>Remove their mask!</span>")
-			return FALSE
+	//if(H.check_body_part_coverage(MOUTH))
+	//	if(!locate(/datum/power/vampire/mature) in current_powers)
+	//		to_chat(M, "<span class='warning'>Remove their mask!</span>")
+	//		return FALSE
 
 	if(vampire_teeth?.amount == 0)
 		to_chat(M, "<span class='warning'>You cannot suck blood with no teeth!</span>")
@@ -244,12 +244,18 @@
 
 	// Vision-related changes.
 	if (locate(/datum/power/vampire/vision) in current_powers)
-		H.change_sight(adding = SEE_MOBS)
-		H.update_perception()
+		if(!count_by_type(H.huds, /datum/visioneffect/vampire_improved))
+			H.apply_hud(new /datum/visioneffect/vampire_improved)
+	else
+		H.remove_hud_by_type(/datum/visioneffect/vampire_improved)
 
 	if (locate(/datum/power/vampire/mature) in current_powers)
-		H.change_sight(adding = SEE_TURFS|SEE_OBJS)
-		H.update_perception()
+		if(!count_by_type(H.huds, /datum/visioneffect/vampire_mature))
+			H.apply_hud(new /datum/visioneffect/vampire_mature)
+	else
+		H.remove_hud_by_type(/datum/visioneffect/vampire_mature)
+
+	H.handle_hud_vision_updates()
 
 /datum/role/vampire/update_perception()
 	return
@@ -652,7 +658,7 @@
 		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil!</span>")
 	return TRUE
 
-/mob/proc/vampire_affected(var/datum/mind/M) // M is the attacker, src is the target.
+/mob/proc/vampire_affected(var/datum/mind/M, var/send_message = TRUE) // M is the attacker, src is the target.
 	//Other vampires aren't affected
 	var/success = TRUE
 	if(mind && mind.GetRole(VAMPIRE))
@@ -662,17 +668,20 @@
 	if(M)
 		//Chaplains are ALWAYS resistant to vampire powers
 		if(isReligiousLeader(src))
-			to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
+			if(send_message)
+				to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
 			success = FALSE
 		// Null rod nullifies vampire powers, unless we're a young vamp.
 		var/datum/role/vampire/V = M.GetRole(VAMPIRE)
 		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
 		if (N)
 			if (locate(/datum/power/vampire/undying) in V.current_powers)
-				to_chat(M.current, "<span class='warning'>A holy artifact has turned our powers against us!</span>")
+				if(send_message)
+					to_chat(M.current, "<span class='warning'>A holy artifact has turned our powers against us!</span>")
 				success = VAMP_FAILURE
 			else if (locate(/datum/power/vampire/jaunt) in V.current_powers)
-				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
+				if(send_message)
+					to_chat(M.current, "<span class='warning'>A holy artifact protects [src]!</span>")
 				success = FALSE
 	return success
 

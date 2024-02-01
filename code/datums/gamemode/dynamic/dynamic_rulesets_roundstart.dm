@@ -271,7 +271,7 @@
 	required_pop = list(25,25,20,20,20,20,15,15,15,5)
 	required_candidates = 4
 	weight = BASE_RULESET_WEIGHT/2
-	weight_category = "Wizard"
+	weight_category = "CWC"
 	cost = 45
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -611,6 +611,8 @@ Assign your candidates in choose_candidates() instead.
 				blob_looks_player["AME_new"] = 64
 			if("Chaplain")
 				blob_looks_player["skelleton"] = 64
+			if("Security Officer","Detective","Head of Security","Warden")
+				blob_looks_player["secblob"] = 32
 		if (calledBy == "antag madness")//one core is plenty on antag madness
 			break
 	return 1
@@ -626,7 +628,6 @@ Assign your candidates in choose_candidates() instead.
 	role_category = null
 	restricted_from_jobs = list()
 	enemy_jobs = list()
-	required_pop = list(30,30,30,30,30,30,30,30,30,30)
 	required_candidates = 0
 	weight = BASE_RULESET_WEIGHT * 0.5
 	weight_category = "Extended"
@@ -635,8 +636,10 @@ Assign your candidates in choose_candidates() instead.
 	high_population_requirement = 101
 
 
-// 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance.
+// 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance. Requires 30 pop still.
 /datum/dynamic_ruleset/roundstart/extended/ready(var/forced=0)
+	if (mode.roundstart_pop_ready < 30)
+		return FALSE
 	var/probability = clamp(mode.threat_level, 30, 100)
 	return !prob(probability)
 

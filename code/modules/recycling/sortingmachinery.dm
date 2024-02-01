@@ -385,8 +385,8 @@
 /obj/machinery/sorting_machine/recycling
 	name = "Recycling Sorting Machine"
 
-	var/list/selected_types = list("Glasses", "Metals/Minerals", "Electronics", "Plastic")
-	var/list/types[7]
+	var/list/selected_types = list("Glasses", "Metals/Minerals", "Electronics", "Plastic", "Fabric")
+	var/list/types[8]
 
 /obj/machinery/sorting_machine/recycling/New()
 	. = ..()
@@ -407,6 +407,7 @@
 	types[RECYK_GLASS]      = "Glasses"
 	types[RECYK_METAL]      = "Metals/Minerals"
 	types[RECYK_PLASTIC]    = "Plastic"
+	types[RECYK_FABRIC]     = "Fabric"
 	types[RECYK_MISC]       = "Miscellaneous"
 
 /obj/machinery/sorting_machine/recycling/process()
@@ -828,9 +829,10 @@
 			continue
 
 		A.forceMove(get_turf(src))
-		process_affecting(A)
-
-		items_moved++
+		if(process_affecting(A))
+			items_moved++
+			return
+		A.forceMove(out_T)
 
 /obj/machinery/autoprocessor/proc/process_affecting(var/atom/movable/target)
 	return
@@ -901,57 +903,60 @@
 
 /obj/machinery/autoprocessor/wrapping/process_affecting(var/atom/movable/target)
 	if(is_type_in_list(target, cannot_wrap))
-		return
+		return 0
 	if(istype(target, /obj/item) && smallpath)
 		if (packagewrap >= 1)
 			var/obj/item/I = target
-			var/obj/item/P = new smallpath(get_turf(src.loc),target,round(I.w_class))
+			var/obj/item/P = new smallpath(get_step(src, output_dir),target,round(I.w_class))
 			target.forceMove(P)
 			packagewrap += -1
 			if(syndiewrap)
 				syndiewrap += -1
 			tag_item(P)
+			return 1
 		else
 			if(world.time > next_sound)
 				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
 				next_sound = world.time + sound_delay
 				for(var/mob/M in hearers(src))
 					M.show_message("<b>[src]</b> announces, \"Please insert additional sheets of package wrap into \the [src].\"")
-				return 0
+			return 0
 	else if(is_type_in_list(target,wrappable_big_stuff) && bigpath)
 		if(istype(target,/obj/structure/closet))
 			var/obj/structure/closet/C = target
 			if(C.opened)
-				return
+				return 0
 		if(istype(target, /mob/living/simple_animal/hostile/mimic/crate))
 			var/mob/living/simple_animal/hostile/mimic/crate/MC = target
 			if(MC.angry)
-				return
+				return 0
 		if(packagewrap >= 3)
-			var/obj/item/P = new bigpath(get_turf(src.loc),target)
+			var/obj/item/P = new bigpath(get_step(src, output_dir),target)
 			target.forceMove(P)
 			packagewrap += -3
 			if(syndiewrap)
 				syndiewrap += -3
 			tag_item(P)
+			return 1
 		else
 			if(world.time > next_sound)
 				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
 				next_sound = world.time + sound_delay
 				for(var/mob/M in hearers(src))
 					M.show_message("<b>[src]</b> announces, \"Please insert additional sheets of package wrap into \the [src].\"")
-				return 0
+			return 0
 	else if(istype(target,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = target
 		if(syndiewrap >= 2)
 			syndiewrap += -2
 			packagewrap += -2
-			var/obj/present = new /obj/item/delivery/large(get_turf(src),H)
+			var/obj/present = new /obj/item/delivery/large(get_step(src, output_dir),H)
 			if (H.client)
 				H.client.perspective = EYE_PERSPECTIVE
 				H.client.eye = present
 			H.visible_message("<span class='warning'>\The [src] wraps [H]!</span>")
 			H.forceMove(present)
+			return 1
 		else
 			if(world.time > next_sound)
 				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
@@ -963,6 +968,7 @@
 		if(world.time > next_sound)
 			playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 1)
 			next_sound = world.time + sound_delay
+		return 0
 
 /obj/machinery/autoprocessor/wrapping/proc/tag_item(var/atom/movable/target)
 	if(istype(target,/obj/item/delivery))

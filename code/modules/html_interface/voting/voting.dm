@@ -53,6 +53,8 @@ var/global/datum/controller/vote/vote = new()
 	var/lock = FALSE
 	name               = "datum"
 
+	var/forced_map	   = null
+
 /datum/controller/vote/New()
 	. = ..()
 	src.voters = list()
@@ -249,7 +251,8 @@ var/global/datum/controller/vote/vote = new()
 					init_shift_change(null, 1)
 			if("map")
 				//logging
-				watchdog.map_path = map_paths[winner]
+				var/map_choice = forced_map ? forced_map : winner
+				watchdog.map_path = map_paths[map_choice]
 				log_game("Players voted and chose.... [watchdog.map_path]!")
 
 	if(restart)
@@ -257,7 +260,6 @@ var/global/datum/controller/vote/vote = new()
 		feedback_set_details("end_error","restart vote")
 		if(blackbox)
 			blackbox.save_all_data_to_sql()
-		CallHook("Reboot",list())
 		sleep(50)
 		log_game("Rebooting due to restart vote")
 		world.Reboot()
@@ -372,7 +374,7 @@ var/global/datum/controller/vote/vote = new()
 				if(!choices.len)
 					to_chat(world, "<span class='danger'>Failed to initiate map vote, no maps found.</span>")
 					return 0
-				map_paths = maps
+				map_paths = get_all_maps()
 				var/msg = "A map vote was initiated with these options: [english_list(get_list_of_keys(maps))]."
 				send2maindiscord(msg)
 				send2mainirc(msg)
@@ -557,7 +559,13 @@ var/global/datum/controller/vote/vote = new()
 				to_chat(user, "<span class='notice'> You can't do that!")
 		if("map")
 			if(user.client.holder)
-				initiate_vote("map",user.client.key)
+				switch(alert("Notice: early map votes are not necessary to force the next map anymore","Map Vote?", "Continue","Cancel"))
+					if("Continue")
+						initiate_vote("map",user.client.key)
+					else
+						update()
+						user.vote()
+						return
 			else if(!length(admins) && !living_players)
 				initiate_vote("map",user.client.key)
 			else
@@ -604,6 +612,7 @@ var/global/datum/controller/vote/vote = new()
 			rigged_choice = input(usr,"Add a result.","Add a result","") as text|null
 		if(!rigged_choice)
 			return
+		if(!(rigged_choice in choices)) choices += rigged_choice
 		tally[rigged_choice]  = ARBITRARILY_LARGE_NUMBER
 	message_admins("Admin [key_name_admin(usr)] rigged the vote for [rigged_choice].")
 	log_admin("Admin [key_name(usr)] rigged the vote for [rigged_choice].")

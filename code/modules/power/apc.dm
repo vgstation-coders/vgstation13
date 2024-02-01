@@ -109,6 +109,12 @@
 
 	machine_flags = WIREJACK
 
+	plane = OBJ_PLANE
+
+	light_range = 1
+	light_power = 1
+	light_color = LIGHT_COLOR_APC_RED
+
 	power_priority = POWER_PRIORITY_APC
 	var/power_recharge_priority = POWER_PRIORITY_APC_RECHARGE // Should always be at least one level lower than power_priority
 	monitoring_enabled = TRUE
@@ -127,6 +133,8 @@
 // Frame only.
 /obj/machinery/power/apc/frame
 	icon_state = "apcmaint"
+	light_range = 0
+	light_power = 0
 
 /obj/machinery/power/apc/frame/New()
 	return ..(loc, dir, 1)
@@ -264,8 +272,12 @@
 	if(update & 1) // Updating the icon state
 		if(update_state & UPSTATE_ALLGOOD)
 			icon_state = "apc0"
+			light_range = 1
+			light_power = 1
 		else if(update_state & (UPSTATE_OPENED1|UPSTATE_OPENED2))
 			var/basestate = "apc[ cell ? "2" : "1" ]"
+			light_range = 0
+			light_power = 0
 			if(update_state & UPSTATE_OPENED1)
 				if(update_state & (UPSTATE_MAINT|UPSTATE_BROKE))
 					icon_state = "apcmaint" //disabled APC cannot hold cell
@@ -275,18 +287,40 @@
 				icon_state = "[basestate]-nocover"
 		else if(update_state & UPSTATE_BROKE)
 			icon_state = "apc-b"
+			light_range = 0
+			light_power = 0
 		else if(update_state & UPSTATE_SHUNT)
+			light_range = 1
+			light_power = 1
 			icon_state = "apcshunt"
 		else if(update_state & UPSTATE_BLUESCREEN)
 			icon_state = "apcemag"
+			light_range = 1
+			light_power = 1
 		else if(update_state & UPSTATE_WIREEXP)
 			icon_state = "apcewires"
+			light_range = 0
+			light_power = 0
 
-
+	if (!(stat & (BROKEN|MAINT)))
+		if(update_state & UPSTATE_SHUNT)
+			light_color = LIGHT_COLOR_APC_SHUNT
+		else if (update_state & UPSTATE_BLUESCREEN)
+			light_color = LIGHT_COLOR_APC_BLUE
+		else
+			switch (charging)
+				if (0)
+					light_color = LIGHT_COLOR_APC_RED
+				if (1)
+					light_color = LIGHT_COLOR_APC_YELLOW
+				if (2)
+					light_color = LIGHT_COLOR_APC_GREEN
 
 	if(!(update_state & UPSTATE_ALLGOOD))
 		if(overlays.len)
 			overlays = 0
+			if (!(stat & (BROKEN|MAINT)) && light_range)
+				update_moody_light('icons/lighting/moody_lights.dmi', "overlay_apc", 255, light_color)
 			return
 	if(update & 2)
 
@@ -300,6 +334,9 @@
 				overlays += status_overlays_equipment[equipment+1]
 				overlays += status_overlays_lighting[lighting+1]
 				overlays += status_overlays_environ[environ+1]
+
+	if (!(stat & (BROKEN|MAINT)) && light_range)
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_apc", 255, light_color)
 
 
 /obj/machinery/power/apc/proc/check_updates()
@@ -321,6 +358,8 @@
 			update_state |= UPSTATE_OPENED1
 		if(opened==2)
 			update_state |= UPSTATE_OPENED2
+	else if(malfai && occupant)
+		update_state |= UPSTATE_SHUNT
 	else if(emagged || malfai || spooky || pulsecompromising)
 		update_state |= UPSTATE_BLUESCREEN
 	else if(wiresexposed)
@@ -1050,6 +1089,7 @@
 					point.target = A //The pinpointer tracks the AI back into its core.
 		new /obj/effect/malf_jaunt(loc, occupant, occupant.parent, TRUE)
 		src.occupant = null
+		update_icon()
 	else
 		if(forced)
 			src.occupant.forceMove(src.loc)

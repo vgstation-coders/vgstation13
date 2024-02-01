@@ -465,7 +465,6 @@
 		after_flight() //Shake the shuttle, weaken unbuckled mobs, etc.
 
 		return 1
-
 	return
 
 /datum/shuttle/proc/close_all_doors()
@@ -727,6 +726,19 @@
 			new_turf.plane = old_turf.plane
 			new_turf.layer = old_turf.layer
 			new_turf.color = old_turf.color
+
+			//***Moving the paint overlay****
+			new_turf.paint_overlay = old_turf.paint_overlay
+			if (new_turf.paint_overlay)
+				new_turf.paint_overlay.my_turf = new_turf
+				new_turf.update_paint_overlay()
+				old_turf.overlays.len = 0
+				old_turf.paint_overlay = null
+
+			//***Moving decals****
+			if (old_turf.turfdecals && old_turf.turfdecals.len > 0)
+				for (var/image/decal in old_turf.turfdecals)
+					new_turf.AddDecal(decal)
 
 		// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
 		// Floor turfs create their `floor_tile` in New() if it's null.

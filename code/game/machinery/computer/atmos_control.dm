@@ -118,7 +118,7 @@ var/global/list/atmos_controllers = list()
 
 /obj/machinery/computer/atmoscontrol/proc/apply_preset(var/presetname)
 	var/list/done_areas = list() //a little optimization to avoid needlessly repeating apply_mode()
-	for(var/obj/machinery/alarm/alarm in machines)
+	for(var/obj/machinery/alarm/alarm in air_alarms)
 		if(alarm.preset != presetname)
 			continue
 		if(alarm.rcon_setting == RCON_NO)
@@ -159,6 +159,25 @@ var/global/list/atmos_controllers = list()
 		alarm.apply_preset(no_cycle_after, 1) //optionally cycle, propagate
 		done_areas += alarm_area
 
+/obj/machinery/computer/atmoscontrol/proc/mass_set_mode(var/mode)
+	if(!mode)
+		return
+
+	var/list/done_areas = list() //a little optimization to avoid needlessly repeating apply_mode()
+	for(var/obj/machinery/alarm/alarm in air_alarms)
+		if(alarm.mode == mode)
+			continue
+		if(alarm.rcon_setting == RCON_NO)
+			continue //no messing with alarms with no remote control
+		if(! ( emagged || usr.hasFullAccess() || (log_in_id&&(alarm.check_access(log_in_id)))))
+			continue
+		var/area/alarm_area = get_area(alarm)
+		if(alarm_area in done_areas)
+			continue
+		alarm.mode = mode
+		alarm.apply_mode()
+		done_areas += alarm_area
+
 /obj/machinery/computer/atmoscontrol/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	//if(user.client)
 	//	var/datum/asset/simple/nanoui_maps/asset_datum = new
@@ -186,7 +205,7 @@ var/global/list/atmos_controllers = list()
 		data["name"] = current.name
 	else
 		var/list/alarms=list()
-		for(var/obj/machinery/alarm/alarm in sortNames(machines)) // removing sortAtom because nano updates it just enough for the lag to happen
+		for(var/obj/machinery/alarm/alarm in sortNames(air_alarms)) // removing sortAtom because nano updates it just enough for the lag to happen
 			if(log_in_id)
 				if(!emagged && !user.hasFullAccess() && !alarm.check_access(log_in_id))
 					continue //The logged in ID has no access to this card, and the user isn't an all-access user (eg. admin ghost, AI, etc.)
@@ -467,6 +486,29 @@ var/global/list/atmos_controllers = list()
 					selected_preset.scrubbers_gases[gas] = !selected_preset.scrubbers_gases[gas] //toggle scrubbing for it
 				return 1
 
+	if(href_list["set_mass_mode"])
+		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
+			return 1
+
+		var/list/scrubmodes = list(
+		"SCRUBBING MODE" = AALARM_MODE_SCRUBBING,
+		"REPLACEMENT MODE" = AALARM_MODE_REPLACEMENT,
+		"PANIC SIPHON MODE" = AALARM_MODE_PANIC,
+		"AIR CYCLE MODE" = AALARM_MODE_CYCLE,
+		"FILL MODE" = AALARM_MODE_FILL,
+		"OFF MODE" = AALARM_MODE_OFF
+		)
+		var/choice = input("Select the scrubber-mode you wish to set all air alarms to.\n\nAll air alarms will be set to this mode.", "Select mode", null) as null|anything in scrubmodes
+		if(choice)
+			var/newmode = scrubmodes[choice]
+			var/areyouforreal = alert(usr, "Are you sure you wish to change the mode of every air alarm to [choice]?",,"Yes", "No") == "Yes" ? 1 : 0
+			if(areyouforreal && ((log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess())))
+				if(!usr.incapacitated() && (Adjacent(usr) || issilicon(usr)) && !(stat & (FORCEDISABLE|NOPOWER) && usr.dexterity_check()))
+					mass_set_mode(newmode)
+
+
+
+
 	if(current)
 		if(log_in_id)
 			if(!emagged && !usr.hasFullAccess() && !current.check_access(log_in_id) && !issilicon(usr))
@@ -480,6 +522,7 @@ var/global/list/atmos_controllers = list()
 			var/device_id = href_list["id_tag"]
 			switch(href_list["command"])
 				if( "power",
+					"direction",
 					"adjust_external_pressure",
 					"set_external_pressure",
 					"set_internal_pressure",
@@ -537,6 +580,24 @@ var/global/list/atmos_controllers = list()
 			if(current.rcon_setting == RCON_NO)
 				return 1
 			current.set_alarm(0)
+			return 1
+
+		if(href_list["enable_override"])
+			if(current.rcon_setting == RCON_NO)
+				return 1
+			var/area/this_area = get_area(current)
+			this_area.doors_overridden = TRUE
+			this_area.UpdateFirelocks()
+			current.update_icon()
+			return 1
+
+		if(href_list["disable_override"])
+			if(current.rcon_setting == RCON_NO)
+				return 1
+			var/area/this_area = get_area(current)
+			this_area.doors_overridden = FALSE
+			this_area.UpdateFirelocks()
+			current.update_icon()
 			return 1
 
 		if(href_list["mode"])

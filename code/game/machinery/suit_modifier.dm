@@ -232,7 +232,9 @@
 	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
 	R.deactivate_suit()
 	for(var/obj/item/rig_module/RM in modules_to_install)
-		if(!RM.can_install(R)) //more versatile check, allows for custom install conditions.
+		var/install_result=RM.can_install(R)
+		if(!install_result[1]) //more versatile check, allows for custom install conditions.
+			say(install_result[2], class = "binaryradio")
 			continue
 		if(do_after(H, src, 8 SECONDS / apply_multiplier, needhand = FALSE))
 			say("Installing [RM] into \the [R].", class = "binaryradio")

@@ -53,6 +53,7 @@
 		relativewall_neighbours() //Let's make sure the other walls know about this travesty
 		return //Now fuck off
 	icon_state = "r_wall-[d_state]"  //You can thank me later
+	update_paint_overlay()
 
 /turf/simulated/wall/r_wall/attackby(obj/item/W as obj, mob/user as mob)
 	user.delayNextAttack(W.attack_delay)

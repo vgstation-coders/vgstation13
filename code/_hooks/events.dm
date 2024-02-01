@@ -79,6 +79,12 @@
 // mob/user: The living mob that's logging in.
 /event/living_login
 
+// Called by new_player.dm when a character latejoins
+// Arguments:
+// mob/living/carbon/human/character: The character that has arrived on the station.
+// rank: The character's job. Should be something like "Chemist", NOT the job datum.
+/event/late_arrival
+
 // Called whenever a mob takes damage.
 // Truthy return values will prevent the damage.
 // Arguments:
@@ -218,12 +224,6 @@
 
 /event/ui_act
 
-// Called when living calls a life() tick
-// Arguments:
-// mob/living/L: thing that ticker
-// life_ticks: the amounts of lifetick processed
-/lazy_event/on_life
-
 // Called by attack_self
 // Arguments:
 // mob/living/user
@@ -261,6 +261,13 @@
 // Arguments:
 // atom/movable/exiter: the movable exiting the area
 /event/area_exited
+
+// Called by both area/Entered and area/Exited if the atom changing areas is a mob
+// Arguments:
+// mob: the mob changing areas
+// newarea: the new area being entered
+// oldarea: the old area being left
+/event/mob_area_changed
 
 // Note: the following are used by datum/component/ai subtypes to give instructions to each other.
 // AI components are expected to INVOKE_EVENT these to send commands to other components

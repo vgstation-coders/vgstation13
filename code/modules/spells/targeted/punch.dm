@@ -25,10 +25,9 @@
 
 /spell/targeted/punch/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
-			return "Reduce this spell's cooldown."
 		if(Sp_POWER)
-			return "Make the explosion more devastating."
+			return "Make the explosion more devastating, allowing it to cause more damage and even breach the ground."
+	return ..()
 
 /spell/targeted/punch/empower_spell()
 	..()
@@ -68,12 +67,13 @@
 			L.visible_message("<span class='danger'>[L] throws a mighty punch that launches \the [target] away!</span>")
 			var/turns = 0 //Fixes a bug where the transform could occasionally get messed up such as when the target is lying down
 			spawn(0) //Continue spell-code
+				target.SetStunned(2) //Make sure this kicks in ASAP
 				while(target.throwing)
+					sleep(1) //Moved it here so that it fixes a bug caused by throw_at() cancelling time stop for a split second
 					if(!target.timestopped)
 						target.transform = turn(target.transform, 45) //Spin the target
 						target.SetStunned(2) //We don't want the target to move during this time
 						turns += 45
-					sleep(1)
 				target.transform = turn(target.transform, -turns)
 				target.Knockdown(2)
 				target.unregister_event(/event/to_bump, src, nameof(src::handle_bump())) //Just in case
@@ -104,11 +104,14 @@
 	if(has_triggered)
 		return
 	var/list/explosion_whitelist = list()
+	var/list/projectile_whitelist = list()
 	explosion_whitelist += user //Wizard is immune to the ensuing explosion, because that's badass
+	projectile_whitelist += user //Wizard shouldn't have to worry too much about the shrapnel from explosions, fight on!
+	projectile_whitelist += T //Shrapnel causes the spell to be overkill on victims and way too unfair
 	if(empowered) //The unfortunate sod being thrown by it won't be that severely harmed compared to what they collide into
-		explosion(get_turf(bumped), 0, 1, 5, whodunnit = user, whitelist = explosion_whitelist)
+		explosion(get_turf(bumped), 0, 1, 5, whodunnit = user, whitelist = explosion_whitelist, shrapnel_whitelist = projectile_whitelist)
 	else
-		explosion(get_turf(bumped), 0, 0, 3, whodunnit = user, whitelist = explosion_whitelist)
+		explosion(get_turf(bumped), 0, 0, 3, whodunnit = user, whitelist = explosion_whitelist, shrapnel_whitelist = projectile_whitelist)
 	has_triggered = 1
 	spawn(1) //A 0.1 second delay, then we allow the spell to cause explosions again
 		has_triggered = 0
@@ -116,11 +119,14 @@
 //Explosion as a result of the target not flying away, significantly stronger than launching punches
 /spell/targeted/punch/proc/explosive_punch(atom/target)
 	var/list/explosion_whitelist = list()
+	var/list/projectile_whitelist = list()
 	explosion_whitelist += holder
+	projectile_whitelist += holder
+	projectile_whitelist += target
 	if(empowered)
-		explosion(get_turf(target), 0, 3, 7, whodunnit = holder, whitelist = explosion_whitelist)
+		explosion(get_turf(target), 0, 3, 7, whodunnit = holder, whitelist = explosion_whitelist, shrapnel_whitelist = projectile_whitelist)
 	else
-		explosion(get_turf(target), 0, 1, 5, whodunnit = holder, whitelist = explosion_whitelist)
+		explosion(get_turf(target), 0, 1, 5, whodunnit = holder, whitelist = explosion_whitelist, shrapnel_whitelist = projectile_whitelist)
 
 /spell/targeted/punch/proc/generate_punch_sprite()
 	return image(icon = 'icons/mob/screen_spells.dmi', icon_state = hud_state)

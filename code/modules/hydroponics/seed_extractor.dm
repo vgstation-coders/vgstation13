@@ -5,6 +5,8 @@
 	icon_state = "sextractor"
 	density = 1
 	anchored = 1
+	light_range_on = 2
+	light_color = LIGHT_COLOR_CYAN
 	var/piles = list()
 
 	var/min_seeds = 1 //better manipulators improve this
@@ -29,6 +31,11 @@
 	)
 
 	RefreshParts()
+	update_icon()
+
+/obj/machinery/seed_extractor/power_change()
+	..()
+	update_icon()
 
 /obj/machinery/seed_extractor/RefreshParts()
 	var/B=0
@@ -113,6 +120,14 @@
 		return
 
 	..()
+
+/obj/machinery/seed_extractor/update_icon()
+	if(stat & (FORCEDISABLE|NOPOWER))
+		icon_state = "sextractor-off"
+		kill_moody_light()
+	else
+		icon_state = "sextractor"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_sextractor")
 
 //Code shamelessly ported over and adapted from tgstation's github repo, PR #2973, credit to Kelenius for the original code
 /datum/seed_pile //Maybe there's a better way to do this.

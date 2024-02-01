@@ -416,6 +416,10 @@
 	// tactically deploy a wall under you and become immune to projectiles, I guess
 	spell_on_use_inhand = /spell/aoe_turf/conjure/wall
 
+/mob/living/simple_animal/construct/builder/New()
+	..()
+	huds += new /datum/visioneffect/construct
+
 
 /////////////////////////////Behemoth/////////////////////////
 
@@ -558,6 +562,7 @@
 
 
 /mob/living/simple_animal/construct/regular_hud_updates()
+	..()
 	if(fire_alert)
 		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/carbon/burn/fire/construct)
 	else
@@ -611,8 +616,6 @@
 
 /mob/living/simple_animal/construct/builder/regular_hud_updates()
 	..()
-
-	process_construct_hud(src)
 
 	if(healths)
 		switch(health)

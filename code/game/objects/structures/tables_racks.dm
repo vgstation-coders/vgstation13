@@ -23,6 +23,7 @@
 	pass_flags_self = PASSTABLE
 	var/parts = /obj/item/weapon/table_parts
 	var/flipped = 0
+	var/tableform = 0 //Stores last known configuration for this table
 	health = 100
 
 /obj/structure/table/splashable()
@@ -42,15 +43,19 @@
 
 /obj/structure/table/New()
 	..()
-	for(var/obj/structure/table/T in src.loc)
+	for(var/obj/structure/table/T in loc)
 		if(T != src)
 			qdel(T)
+	for(var/obj/machinery/M in loc)
+		M.table_shift()
 	if(flipped)
 		flip(dir)
 	update_icon()
 	update_adjacent()
 
 /obj/structure/table/Destroy()
+	for(var/obj/machinery/M in loc)
+		M.table_unshift()
 	update_adjacent()
 	..()
 
@@ -221,6 +226,7 @@
 						dir_sum = 2 //These translate the dir_sum to the correct dirs from the 'tabledir' icon_state.
 		if(dir_sum%16 == 15)
 			table_type = 4 //4-way intersection, the 'middle' table sprites will be used.
+		tableform = table_type
 		switch(table_type)
 			if(0)
 				icon_state = "[initial(icon_state)]"
@@ -546,6 +552,8 @@
 		var/obj/structure/table/T = locate() in get_step(src,D)
 		if(T && !T.flipped)
 			T.flip(direction)
+	for(var/obj/machinery/M in loc)
+		M.table_unshift()
 	update_icon()
 	update_adjacent()
 
@@ -563,6 +571,8 @@
 		var/obj/structure/table/T = locate() in get_step(src.loc,D)
 		if(T && T.flipped && T.dir == src.dir)
 			T.unflip()
+	for(var/obj/machinery/M in loc)
+		M.table_shift()
 	update_icon()
 	update_adjacent()
 

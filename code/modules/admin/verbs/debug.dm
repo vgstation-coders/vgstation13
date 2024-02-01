@@ -1238,12 +1238,16 @@ var/global/blood_virus_spreading_disabled = 0
 		alert("Only observers can use this functionality")
 		return
 
-	if(adminmob.conversionHUD)
-		adminmob.conversionHUD = 0
-		to_chat(src, "<span class='notice'><B>conversionHUD Disabled</B></span>")
+	var/datum/visioneffect/cult_conversion/detected_hud = null
+	for(var/datum/visioneffect/cult_conversion/H in adminmob.huds)
+		detected_hud = H
+		break
+	if(detected_hud)
+		adminmob.remove_hud(detected_hud)
+		to_chat(src, "<span class='notice'><B>Conversion HUD disabled.</B></span>")
 	else
-		adminmob.conversionHUD = 1
-		to_chat(src, "<span class='notice'><B>conversionHUD Enabled</B></span>")
+		adminmob.apply_hud(new /datum/visioneffect/cult_conversion)
+		to_chat(src, "<span class='notice'><B>Conversion HUD enabled.</B></span>")
 
 /client/proc/spawn_datum(var/object as text)
 	set category = "Debug"
@@ -1509,3 +1513,31 @@ var/obj/blend_test = null
 	log_admin("[key_name(usr)] has edited the message of the day. The new text is as follows: [newmotd].")
 	feedback_add_details("admin_verb", "Edit MotD")
 	message_admins("[key_name(usr)] has edited the message of the day. Check the game log for the full text.")
+
+/client/proc/force_next_map()
+	set category = "Debug"
+	set name = "Force Next Map"
+	set desc = "Sets the next map and skips the map vote."
+
+	if(!check_rights(R_FUN))
+		return
+
+	var/list/all_maps = get_all_maps()
+	all_maps += "RESET"
+	to_chat(usr,"<span class='warning'>This needs to be done BEFORE a map vote is called otherwise use the vote rigging option!</div>")
+	var/rigged_choice = input(usr, "Pick a map.") as null|anything in all_maps
+	if(!rigged_choice)
+		return
+	if(rigged_choice == "RESET")
+		log_admin("[key_name(usr)] has reset the forced map.")
+		feedback_add_details("admin_verb", "Force Next Map")
+		message_admins("[key_name(usr)] has reset the forced map.")
+		vote.forced_map = null
+		return
+	log_admin("[key_name(usr)] has forced the next map. The new map is: [rigged_choice].")
+	feedback_add_details("admin_verb", "Force Next Map")
+	message_admins("[key_name(usr)] has forced the next map. The new map is: [rigged_choice].")
+
+	vote.forced_map = rigged_choice
+
+

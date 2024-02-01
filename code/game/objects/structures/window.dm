@@ -163,6 +163,42 @@ var/list/one_way_windows
 	health -= amount
 	return TRUE
 
+/obj/structure/window/silicate_act(var/obj/item/device/silicate_sprayer/S, var/mob/user)
+	if(!S.get_amount())
+		to_chat(user, "<span class='notice'>\The [S] is out of silicate!</span>")
+		return 1
+	var/mode = MODE_REPAIR
+	if(istype(S,/obj/item/device/silicate_sprayer/advanced))
+		var/obj/item/device/silicate_sprayer/advanced/SA = S
+		mode = SA.mode
+
+	var/diff = initial(health) - health
+	if(!diff && (mode == MODE_REPAIR)) // Not damaged.
+		to_chat(user, "<span class='notice'>\The [src] is already in perfect condition!</span>")
+		return 1
+
+	if(diff > 0)
+		diff = min(diff, S.get_amount() / SILICATE_PER_DAMAGE)
+
+		health += diff
+		healthcheck(user, FALSE)
+
+		user.visible_message("<span class='notice'>[user] repairs \the [src] with their [S]!</span>", "<span class='notice'>You repair \the [src] with your [S].</span>")
+
+	else // No diff, but we didn't exit earlier, so mode must be reinforce
+		var/extra_health = health - initial(health)
+		if(health >= initial(health) * MAX_WINDOW_HEALTH_MULTIPLIER)
+			to_chat(user, "<span class='notice'>You can't reinforce \the [src] any further!</span>")
+			return 1
+		diff = min(S.get_amount() / SILICATE_PER_REINFORCE, (initial(health) * MAX_WINDOW_HEALTH_MULTIPLIER) - (initial(health) + extra_health))
+		health += diff
+		healthcheck(user)
+		user.visible_message("<span class='notice'>[user] reinforced \the [src] with their [S]!</span>", "<span class='notice'>You reinforce \the [src] with your [S].</span>")
+
+	playsound(src, 'sound/effects/refill.ogg', 10, 1, -6)
+	S.remove_silicate(diff * SILICATE_PER_DAMAGE)
+	return 1
+
 /obj/structure/window/bullet_act(var/obj/item/projectile/Proj)
 
 	adjustHealthLoss(Proj.damage,Proj)
@@ -223,7 +259,10 @@ var/list/one_way_windows
 		return TRUE
 	if(!density)
 		return TRUE
-	if(istype(mover))
+	if(istype(mover, /obj/item/projectile/beam))
+		var/obj/item/projectile/beam/B = mover
+		return bounds_dist(border_dummy, B.previous_turf) >= 0
+	else if(istype(mover))
 		return bounds_dist(border_dummy, mover) >= 0
 	else if(get_dir(loc, target) == dir)
 		return FALSE

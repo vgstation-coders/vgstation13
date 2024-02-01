@@ -544,6 +544,8 @@ Thanks.
 	stunned = 0
 	knockdown = 0
 	remove_jitter()
+	dizziness = 0
+	confused = 0
 	germ_level = 0
 	next_pain_time = 0
 	radiation = 0
@@ -1377,9 +1379,6 @@ Thanks.
 				now_pushing = 0
 			return
 	return
-
-/mob/living/is_open_container()
-	return 1
 
 /mob/living/proc/scoop_up(mob/M) //M = mob who scoops us up!
 	if(!holder_type)

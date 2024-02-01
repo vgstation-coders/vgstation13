@@ -587,7 +587,7 @@
 	var/power = 0
 
 /datum/chemical_reaction/fuelbomb/on_reaction(var/datum/reagents/holder, var/created_volume)
-	if(holder.my_atom.is_open_container())
+	if(holder.my_atom.is_open_container() || ismob(holder.my_atom))
 		if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
 			var/turf/location = get_turf(holder.my_atom.loc)
 
@@ -685,6 +685,20 @@
 
 		T.visible_message("<span class='notice'>[bicon(holder.my_atom)] The salts dissolve into the blood without so much as a reaction.</span>")
 		return
+
+/datum/chemical_reaction/ethylcyanoacrylate
+	name = "Ethyl Cyanoacrylate"
+	id = ETHYLCYANOACRYLATE
+	result = ETHYLCYANOACRYLATE
+	required_reagents = list(ETHANOL = 1, NITROGEN = 1, CARBON = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/glue
+	name = "Glue"
+	id = GLUE
+	result = GLUE
+	required_reagents = list(ETHYLCYANOACRYLATE = 1, SILICON = 1)
+	result_amount = 1
 
 /datum/chemical_reaction/flash_powder
 	name = "Flash powder"
@@ -1257,6 +1271,13 @@
 	required_reagents = list(SODIUMCHLORIDE = 2, CLEANER = 2, OXYGEN = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/acetone
+	name = "Acetone"
+	id = ACETONE
+	result = ACETONE
+	required_reagents = list(CARBON = 1, WATER = 1, HYDROGEN = 1)
+	result_amount = 2
+
 //This one isn't even close the the real life reaction but will have to do to avoid conflicts with the above reactions.
 /datum/chemical_reaction/luminol
 	name = "Luminol"
@@ -1554,7 +1575,7 @@
 				to_chat(O, "<span class='danger'>You hear a rumbling and terrifying noises!</span>")
 		else if(ishuman(O))
 			var/mob/living/carbon/human/H = O
-			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/science)))
+			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/scanner/science)))
 				H.flash_eyes(visual = 1)
 				to_chat(O, "<span class='danger'>A flash blinds you[O.is_deaf() ? "" : " while you start hearing terrifying noises"]!</span>")
 			else
@@ -1604,7 +1625,7 @@
 				to_chat(O, "<span class='rose'>You hear an eerie crackling!</span>")
 		else if(ishuman(O))
 			var/mob/living/carbon/human/H = O
-			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/science)))
+			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/scanner/science)))
 				H.flash_eyes(visual = 1)
 				to_chat(O, "<span class='rose'>A flash blinds and you can feel a new presence!</span>")
 			else
@@ -1692,7 +1713,7 @@
 			to_chat(O,"<span class='notice'>you think you can smell some food nearby!</span>")
 		else if(ishuman(O))
 			var/mob/living/carbon/human/H = O
-			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/science)))
+			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/scanner/science)))
 				H.flash_eyes(visual = 1)
 				to_chat(O, "<span class='caution'>A white light blinds you and you think you can smell some food nearby!</span>")
 			else
@@ -1747,7 +1768,7 @@
 			to_chat(O, "<span class='caution'>You think you can hear bottles rolling on the floor!</span>")
 		if(ishuman(O))
 			var/mob/living/carbon/human/H = O
-			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/science)))
+			if((H.eyecheck() <= 0) && (!istype(H.glasses, /obj/item/clothing/glasses/scanner/science)))
 				H.flash_eyes(visual = 1)
 				to_chat(O, "<span class='caution'>A white light blinds you[O.is_deaf() ? "" : " and you think you can hear bottles rolling on the floor"]!</span>")
 			else
@@ -2156,7 +2177,7 @@
 
 		var/list/flashers = list()
 		for(var/mob/living/carbon/human/M in viewers(towards, null))
-			if((M.eyecheck() <= 0) && (!istype(M.glasses, /obj/item/clothing/glasses/science)))
+			if((M.eyecheck() <= 0) && (!istype(M.glasses, /obj/item/clothing/glasses/scanner/science)))
 				M.flash_eyes(visual = 1)
 				flashers += M
 
@@ -2268,11 +2289,17 @@
 	required_container = /obj/item/slime_extract/pyrite
 
 /datum/chemical_reaction/slime_extract/slimepaint/on_reaction(var/datum/reagents/holder)
-	var/list/paints = subtypesof(/obj/item/weapon/reagent_containers/glass/paint)
-	var/chosen = pick(paints)
-	var/obj/P = new chosen
-	if(P)
-		P.forceMove(get_turf(holder.my_atom))
+	new /obj/item/weapon/reagent_containers/glass/metal_bucket/paint/filled/random(get_turf(holder.my_atom))
+	..()
+
+/datum/chemical_reaction/slime_extract/slimenanopaint
+	name = "Slime Nano Paint"
+	id = "s_nanopaint"
+	required_reagents = list(PHAZON = 5)
+	required_container = /obj/item/slime_extract/pyrite
+
+/datum/chemical_reaction/slime_extract/slimenanopaint/on_reaction(var/datum/reagents/holder)
+	new /obj/item/weapon/reagent_containers/glass/metal_bucket/nanopaint/filled/vantablack(get_turf(holder.my_atom))
 	..()
 
 /datum/chemical_reaction/slime_extract/slimecash
@@ -3535,7 +3562,7 @@
 	name = "NT Standard Battery Acid"
 	id = ENGICOFFEE
 	result = ENGICOFFEE
-	required_reagents = list(COFFEE = 5, FUEL = 1, SULFURIC = 5)
+	required_reagents = list(COFFEE = 5, FUEL = 1, SACID = 5)
 	result_amount = 10
 
 /datum/chemical_reaction/medcoffee
@@ -4170,6 +4197,14 @@
 		var/list/blocked_chems = list(ADMINORDRAZINE, PROCIZINE, BLOCKIZINE, PAISMOKE) // Bad ideas to spawn
 		var/list/allowed_reagents = chemical_reagents_list - blocked_chems
 		holder.add_reagent(pick(allowed_reagents),created_volume)
+
+/datum/chemical_reaction/punctualite
+	name = "Punctualite"
+	id = PUNCTUALITE
+	result = PUNCTUALITE
+	required_reagents = list(HYPERZINE = 10, FUEL = 10)
+	required_catalysts = list(ZOMBIEPOWDER = 5)
+	result_amount = 5
 
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

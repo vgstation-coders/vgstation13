@@ -109,6 +109,7 @@
 	items_to_collect = list(
 		/obj/abstract/spawn_all/bartender = SURVIVAL_BOX,
 		/obj/item/weapon/reagent_containers/food/drinks/shaker = slot_l_store_str,
+		/obj/item/weapon/storage/fancy/beer_box = GRASP_LEFT_HAND
 	)
 
 	pda_type = /obj/item/device/pda/bar
@@ -117,7 +118,6 @@
 
 /datum/outfit/bartender/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.check_mutations = M_CHECK_JOB
 
@@ -573,12 +573,16 @@
 	alt_title_items_to_collect = list(
 		"Game Master" = list(
 			/obj/item/weapon/storage/pill_bottle/dice/with_die = GRASP_LEFT_HAND,
+			/obj/item/dicetower = null,
+			/obj/item/battlemat = null,
+			//obj/item/mounted/frame/painting/custom/gameboard = null,
+			/obj/item/weapon/storage/box/redcore = null
 		),
 		"Curator" = list(
 			/obj/item/stack/sheet/wood/biggerstack = null,    //should spawn on the backpack
 			/obj/item/weapon/storage/fancy/crayons = null,
 			/obj/item/weapon/chisel = null,
-			/obj/item/weapon/palette = null,
+			/obj/item/palette = null,
 		)
 	)
 
@@ -589,8 +593,6 @@
 
 /datum/outfit/librarian/post_equip(var/mob/living/carbon/human/H)
 	..()
-	var/obj/item/weapon/storage/bag/plasticbag/P = new /obj/item/weapon/storage/bag/plasticbag(H)
-	H.put_in_hands(P)
 	var/list/new_languages = list()
 	for(var/L in all_languages)
 		var/datum/language/lang = all_languages[L]
@@ -719,11 +721,10 @@
 /datum/outfit/iaa/post_equip(var/mob/living/carbon/human/H)
 	..()
 	H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
-	equip_accessory(H, /obj/item/clothing/accessory/glowstick/nanotrasen, /obj/item/clothing/under)
-	if(Holiday == APRIL_FOOLS_DAY)
-		if(H.mind.role_alt_title == "Lawyer" || H.mind.role_alt_title == "Bridge Officer") //Lawyers and bridge officers are exempt
-			return
-		H.set_light(1, 4, "#006400") //Dark green, RGB(0,100,0)
+	if(H.mind.role_alt_title == "Internal Affairs Agent") //Lawyers and bridge officers are exempt
+		equip_accessory(H, /obj/item/clothing/accessory/glowstick/nanotrasen, /obj/item/clothing/under)
+		if(Holiday == APRIL_FOOLS_DAY)
+			H.set_light(1, 4, "#006400") //Dark green, RGB(0,100,0)
 
 // -- Chaplain
 

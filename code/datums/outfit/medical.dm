@@ -183,7 +183,7 @@
 				"Pharmacist" = /obj/item/clothing/under/rank/pharma,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/white,
-			slot_glasses_str = /obj/item/clothing/glasses/science,
+			slot_glasses_str = /obj/item/clothing/glasses/scanner/science,
 			slot_wear_suit_str = /obj/item/clothing/suit/storage/labcoat/chemist,
 		),
 		/datum/species/plasmaman = list(
@@ -193,7 +193,7 @@
 				"Pharmacist" = /obj/item/clothing/under/rank/pharma,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/white,
-			slot_glasses_str = /obj/item/clothing/glasses/science,
+			slot_glasses_str = /obj/item/clothing/glasses/scanner/science,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical/chemist,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical/chemist,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
@@ -205,7 +205,7 @@
 				"Pharmacist" = /obj/item/clothing/under/rank/pharma,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/white,
-			slot_glasses_str = /obj/item/clothing/glasses/science,
+			slot_glasses_str = /obj/item/clothing/glasses/scanner/science,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/chemist,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/chemist,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath/vox,
@@ -259,7 +259,10 @@
 				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
+			slot_glasses_str = list(
+				"Paramedic" = /obj/item/clothing/glasses/hud/health,
+				"Brig Medic" = /obj/item/clothing/glasses/hud/combinedsecmed
+			),
 			slot_wear_suit_str = list(
 				"Paramedic" = /obj/item/clothing/suit/storage/paramedic,
 				"Brig Medic" = /obj/item/clothing/suit/armor/vest/security/medic
@@ -279,7 +282,10 @@
 				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
+			slot_glasses_str = list(
+				"Paramedic" = /obj/item/clothing/glasses/hud/health,
+				"Brig Medic" = /obj/item/clothing/glasses/hud/combinedsecmed
+			),
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical/paramedic,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical/paramedic,
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
@@ -295,7 +301,10 @@
 				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
+			slot_glasses_str = list(
+				"Paramedic" = /obj/item/clothing/glasses/hud/health,
+				"Brig Medic" = /obj/item/clothing/glasses/hud/combinedsecmed
+			),
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/paramedic,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic,
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,

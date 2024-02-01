@@ -180,6 +180,10 @@
 		result = first ^ second
 	return result
 
+//Returns a new list of only elements in both lists.
+/proc/andlist(var/list/A, var/list/B)
+	return A & B
+
 //Picks an element based on its weight
 /proc/pickweight(list/L)
 	if(!L || !L.len)
@@ -364,6 +368,13 @@
 	for(var/key in L)
 		keys += key
 	return keys
+
+//In an associative list, return a sum of the elements.
+/proc/get_sum_of_elements(var/list/L)
+	var/elements = 0
+	for(var/key in L)
+		elements += L[key]
+	return elements
 
 /proc/count_by_type(var/list/L, type)
 	var/i = 0
