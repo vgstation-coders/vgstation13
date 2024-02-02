@@ -19,6 +19,7 @@
 
 	starting_materials = list(MAT_WOOD = 3*CC_PER_SHEET_WOOD)
 	autoignition_temperature = AUTOIGNITION_WOOD
+	fire_fuel = 5
 
 /obj/structure/easel/New()
 	..()

@@ -159,7 +159,6 @@ Attach to transfer valve and open. BOOM.
 				break
 	if(!igniting && exposed_temperature >= PLASMA_MINIMUM_BURN_TEMPERATURE && air_contents.check_combustability(src, surfaces))
 		igniting = 1
-		visible_message("IGNITING DUE TO: if(!igniting && exposed_temperature >= PLASMA_MINIMUM_BURN_TEMPERATURE && air_contents.check_combustability(src, surfaces))")
 	if(locate(/obj/effect/fire) in src)
 		igniting = 1
 	else if(igniting)

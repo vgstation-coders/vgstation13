@@ -279,8 +279,6 @@
 	icon = 'icons/obj/doors/Doorplasma.dmi'
 	mineral = "plasma"
 
-	autoignition_temperature = 0 //obj/machinery shouldn't burn
-
 /obj/machinery/door/airlock/plasma/ignite(temperature)
 	PlasmaBurn(temperature)
 
