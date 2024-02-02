@@ -19,7 +19,6 @@ var/list/arcane_tomes = list()
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	mech_flags = MECH_SCAN_FAIL
-	fire_fuel = 3
 	var/state = TOME_CLOSED
 	var/can_flick = 1
 	var/list/talismans = list()
@@ -356,7 +355,6 @@ var/list/arcane_tomes = list()
 	pressure_resistance = 1
 	attack_verb = list("slaps")
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
 	mech_flags = MECH_SCAN_FAIL
 	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/linked_ui
 	var/blood_text = ""
@@ -1587,7 +1585,6 @@ var/list/arcane_tomes = list()
 	pressure_resistance = 1
 	attack_verb = list("slaps")
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)

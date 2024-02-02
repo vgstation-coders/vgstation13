@@ -159,6 +159,7 @@ Attach to transfer valve and open. BOOM.
 				break
 	if(!igniting && exposed_temperature >= PLASMA_MINIMUM_BURN_TEMPERATURE && air_contents.check_combustability(src, surfaces))
 		igniting = 1
+		visible_message("IGNITING DUE TO: if(!igniting && exposed_temperature >= PLASMA_MINIMUM_BURN_TEMPERATURE && air_contents.check_combustability(src, surfaces))")
 	if(locate(/obj/effect/fire) in src)
 		igniting = 1
 	else if(igniting)
@@ -452,6 +453,8 @@ Attach to transfer valve and open. BOOM.
 
 	if(objects && istype(T))
 		for(var/atom/A in T)
+			if(!A.autoignition_temperature)
+				continue
 			if(!A || !gas[GAS_OXYGEN] || A.autoignition_temperature > temperature)
 				continue
 			if(QUANTIZE(A.getFireFuel() * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= A.volatility)

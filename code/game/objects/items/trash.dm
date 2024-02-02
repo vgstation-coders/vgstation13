@@ -9,7 +9,6 @@
 	desc = "This is rubbish."
 	w_type=NOT_RECYCLABLE
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
 	var/persistence_type = SS_TRASH
 	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	//var/global/list/trash_items = list()

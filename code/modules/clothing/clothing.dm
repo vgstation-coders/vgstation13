@@ -2,7 +2,6 @@
 	name = "clothing"
 	sterility = 5
 	autoignition_temperature = AUTOIGNITION_FABRIC
-	fire_fuel = 2
 	w_type = RECYK_FABRIC
 	starting_materials = list(MAT_FABRIC = CC_PER_SHEET_FABRIC)
 	var/list/species_restricted = null //Only these species can wear this kit.

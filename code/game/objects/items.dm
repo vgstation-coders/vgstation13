@@ -87,8 +87,10 @@
 
 	var/is_cookvessel //If true, the item is a cooking vessel.
 
+
 /obj/item/New()
 	..()
+	fire_fuel = w_class //size correlates to burn time
 	for(var/path in actions_types)
 		new path(src)
 
