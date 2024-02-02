@@ -1150,7 +1150,7 @@ var/global/list/adminbusteleportlocs = list()
 	icon_state = "fitness"
 
 /area/crew_quarters/barber
-	name = "\improper Barber"
+	name = "\improper Barber Shop"
 	icon_state = "purple"
 
 /area/crew_quarters/cafeteria
