@@ -174,6 +174,7 @@
 	hud_types = list(/datum/visioneffect/security,
 					/datum/visioneffect/job,
 					/datum/visioneffect/implant)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/glasses/hud/security/scouter/attackby(obj/item/weapon/W, mob/user)
 	..()
