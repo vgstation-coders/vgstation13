@@ -144,7 +144,7 @@
 /obj/item/trash/pietin
 	name = "pie tin"
 	icon_state = "pietin"
-	autoignition_temperature = 0
+	autoignition_temperature = 450 //snowflaked value low enough to catch on fire from sparks
 	siemens_coefficient = 2 //Do not touch live wires
 	melt_temperature = MELTPOINT_SILICON //Not as high as steel
 
