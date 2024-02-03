@@ -1749,13 +1749,21 @@
 		var/mob/M = hit_atom
 		src.visible_message("<span class='warning'>\The [src] splats in [M]'s face!</span>")
 
+		var/race_prefix = ""
+		if (isvox(M))
+			race_prefix = "vox"
+		else if (isgrey(M))
+			race_prefix = "grey"
+		else if (isinsectoid(M))
+			race_prefix = "insect"
+
 		M.eye_blind = 2
-		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied")
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
 		sleep(55)
-		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied")
-		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied-2")
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied-2")
 		sleep(120)
-		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied-2")
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied-2")
 
 		if(luckiness)
 			M.luck_adjust(luckiness, temporary = TRUE)
