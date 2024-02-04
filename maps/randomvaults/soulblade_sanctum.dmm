@@ -34,24 +34,24 @@
 "Z" = (/obj/abstract/map/paint_coat{color = "#000000"},/mob/living/simple_animal/hostile/faithless/cult,/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
 
 (1,1,1) = {"
+uuuuuuLLLLuuuuLLuuuu
+uuuLLLLLLLLLLLLLLuuu
+uuuLLAWWWYLLLAWWWYuu
+uuuLLaQCOaLLLaOCQaLu
+uLuLzaCKChWWWdCPCaLu
+LLzzzaOCCRCCCRssiaLu
+LzzAWEWYRAWWWYRAWdLu
+LzkeSCSeCaQrQaCaLLLu
+LzzRCGCRCaGlGaCaLLLL
+LzkpSCSpCaCCCaCaLLzz
+LzzhWcWEWEwRxdRhWYzz
+LLzzzayCCRCCCRCCZazu
+LLLzzaCjCfWWWTCBCaLL
+LLLzzaQCyaLLLaZCQaLL
+uLLzzhWWWdLLLhWWWdLL
+uuuzzzLLLLLLLLLLLLLL
+uuzzLLLLLLLLLLLLLLLu
+uuuzzzzzzLLLLLLzzzuu
+uuuuuuzzzuLLLuuuuuuu
 uuuuuuuuuuuuuuuuuuuu
-uuuuuLLLLuuuuLLuuuuu
-uuLLLLLLLLLLLLLLuuuu
-uuLLAWWWYLLLAWWWYuuu
-uuLLaQCOaLLLaOCQaLuu
-uuLzaCKChWWWdCPCaLuu
-uzzzaOCCRCCCRssiaLuu
-uzAWEWYRAWWWYRAWdLuu
-zkeSCSeCaQrQaCaLLLuu
-zzRCGCRCaGlGaCaLLLLu
-zkpSCSpCaCCCaCaLLzzu
-zzhWcWEWEwRxdRhWYzzu
-uzzzayCCRCCCRCCZazuu
-uzzzaCjCfWWWTCBCaLLu
-uuzzaQCyaLLLaZCQaLLu
-uuzzhWWWdLLLhWWWdLLL
-uuzzzLLLLLLLLLLLLLLL
-uzzLLLLLLLLLLLLLLLLu
-uuzzzzzzLLLLLLzzzuuu
-uuuuuzzzuLLLuuuuuuuu
 "}
