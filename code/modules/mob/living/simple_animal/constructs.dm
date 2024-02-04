@@ -40,7 +40,7 @@
 
 	var/list/healers = list()
 
-	var/construct_color = rgb(255,255,255)
+	var/construct_color = "#FFFFFF"
 
 	var/floating_amplitude = 4
 
