@@ -416,6 +416,9 @@
 	visible_message("<span class = 'warning'>\The [src] explodes!</span>")
 	gib()
 
+/mob/living/simple_animal/mouse/canMouseDrag()
+	return FALSE
+
 /*
  * Common mouse types
  */
