@@ -771,6 +771,11 @@
 /obj/item/weapon/storage/proc/is_full()
 	return (storage_slots && (contents.len >= storage_slots)) || (get_sum_w_class() >= max_combined_w_class)
 
+/obj/item/weapon/storage/ignite(var/temperature)
+	var/turf/T = get_turf(src)
+	mass_remove(T) //dump contents if it's burning
+	..()
+
 /obj/item/weapon/storage_key
 	name = "storage key"
 	desc = "Might open what you want opened, or lock what you want locked."
