@@ -452,8 +452,6 @@ Attach to transfer valve and open. BOOM.
 
 	if(objects && istype(T))
 		for(var/atom/A in T)
-			if(!A.autoignition_temperature)
-				continue
 			if(!A || !gas[GAS_OXYGEN] || A.autoignition_temperature > temperature)
 				continue
 			if(QUANTIZE(A.getFireFuel() * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= A.volatility)

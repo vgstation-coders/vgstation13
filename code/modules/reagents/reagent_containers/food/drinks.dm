@@ -2161,7 +2161,7 @@
 				new /obj/effect/decal/cleanable/ash(get_turf(src))
 				var/turf/loca = get_turf(src)
 				if(loca)
-					new /obj/effect/fire(loca)
+//					new /obj/effect/fire(loca)
 					loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
 			else
 				new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
