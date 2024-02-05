@@ -779,7 +779,7 @@ var/global/list/playable_species = list("Human")
 
 	has_mutant_race = 0
 	has_organ = list(
-		"heart" =    /datum/organ/internal/heart,
+		"heart" =    /datum/organ/internal/heart/vox,
 		"lungs" =    /datum/organ/internal/lungs/vox,
 		"liver" =    /datum/organ/internal/liver,
 		"kidneys" =  /datum/organ/internal/kidney,
