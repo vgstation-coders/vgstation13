@@ -813,6 +813,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	chem_board = /obj/item/weapon/circuitboard/condimaster
 	windowtype = "condi_master"
 	moody_state = "overlay_condimaster"
+	max_bottle_size = 50
 
 /obj/machinery/chem_master/electrolytic
 	name = "\improper Electrolytic ChemMaster"
