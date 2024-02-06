@@ -364,6 +364,7 @@
 		return "holomap"
 	return 0
 
+//MENUS
 /mob/living/silicon/pai/proc/softwareMenu()			// Populate the right menu
 	var/dat = ""
 
