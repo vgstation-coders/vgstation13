@@ -34,7 +34,6 @@
 	var/secHUD = FALSE			// Toggles whether the Security HUD is active or not
 	var/medHUD = FALSE			// Toggles whether the Medical  HUD is active or not
 	var/lighted = FALSE			// Toggles whether light is active or not
-	var/uninstall_lock = FALSE	// When true, the uninstaller is locked until current uninstal tasks completes.
 
 	var/datum/data/record/medicalActive1		// Datacore record declarations for record software
 	var/datum/data/record/medicalActive2
@@ -44,7 +43,7 @@
 
 	var/obj/machinery/hacktarget		// The machine being hacked
 	var/hackprogress = 0				// Possible values: 0 - 100, >= 100 means the hack is complete and will be reset upon next check
-	var/uninstallprogress = 0			// Same as above. 100 means the uninstall is complete and RAM is refunded
+	var/uninstallprogress = -1			// Same as above. 100 means the uninstall is complete and RAM is refunded. -1 means we're currently not uninstalling anything. 0 or more means an uninstall is in progress.
 	var/charge = 0						// 0 - 15, used for charging up the chem synth and food synth
 
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller

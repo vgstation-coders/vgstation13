@@ -119,7 +119,6 @@
 
 /mob/living/silicon/pai/Topic(href, href_list)
 	. = ..()
-
 	if(href_list["priv_msg"])	// Admin-PMs were triggering the interface popup. Hopefully this will stop it.
 		return
 	var/soft = href_list["software"]
@@ -299,22 +298,71 @@
 
 		if("uninstall")
 			if(href_list["cancel"])
-				uninstall_lock = FALSE
+				uninstallprogress = -1
 			if(subscreen == 1)
 				var/target = href_list["uninstall"]
 				if(software.Find(target))
 					var/cost = available_software[target]
+					uninstallprogress = 0 //when canceled or not uninstalling it sits at -1. needs to be 0 or more for the uninstall loop to proceed.
 					if(uninstall_loop(cost))//uninstall operation must finish before refunding RAM
 						ram+=cost
+						if(screen == software_to_screen_name(target)) //if current screen is our target, send them to the uninstall screen.
+							screen = "uninstall"
+						if(software_to_screen_name(target) == "flashlight")
+							lighted = FALSE
+							card.set_light(0)
+						if(software_to_screen_name(target)=="pps")
+							qdel(pps_device)
+							pps_device = null
+						if(software_to_screen_name(target)=="holomap")
+							qdel(holomap_device)
+							holomap_device = null
+						if(software_to_screen_name(target)=="medicalsupplement")//huds
+							remove_hud_by_type(/datum/visioneffect/medical)
+							medHUD = FALSE
+						if(software_to_screen_name(target)=="securitysupplement")//huds
+							remove_hud_by_type(/datum/visioneffect/security/arrest)
+							remove_hud_by_type(/datum/visioneffect/job)
+							secHUD = FALSE
 						software.Remove(target)
+					uninstallprogress = -1
 				else
 					temp = "Trunk <TT> \"[target]\"</TT> not found."
 
 
 	paiInterface()		 // So we'll just call the update directly rather than doing some default checks
 	return
-
-// MENUS
+//helper function
+/mob/living/silicon/pai/proc/software_to_screen_name(var/target)
+	if(target==SOFT_DM)
+		return "pdamessage"
+	if(target==SOFT_CM)
+		return "manifest"
+	if(target==SOFT_FL)
+		return "flashlight"
+	if(target==SOFT_RT)
+		return "shielding"
+	if(target==SOFT_RS)
+		return "signaller"
+	if(target==SOFT_WJ)
+		return "wirejack"
+	if(target==SOFT_CS)
+		return "chemsynth"
+	if(target==SOFT_FS)
+		return "foodsynth"
+	if(target==SOFT_UT)
+		return "translator"
+	if(target==SOFT_MS)
+		return "medicalsupplement"
+	if(target==SOFT_SS)
+		return "securitysupplement"
+	if(target==SOFT_AS)
+		return "atmosensor"
+	if(target==SOFT_PS)
+		return "pps"
+	if(target==SOFT_HM)
+		return "holomap"
+	return 0
 
 /mob/living/silicon/pai/proc/softwareMenu()			// Populate the right menu
 	var/dat = ""
@@ -398,7 +446,7 @@
 
 
 /mob/living/silicon/pai/proc/uninstallSoftware()
-	if(!uninstall_lock) //currently not uninstalling software
+	if(uninstallprogress<0) //currently not uninstalling software
 		var/dat = ""
 		dat += {"<h2>CentComm pAI Module Local Software</h2><br>
 			<pre>Remaining Available Memory: [ram]</pre><br>
@@ -418,23 +466,22 @@
 		var/dat = {"<h3>Uninstalling</h3>: "}
 		dat += "... [uninstallprogress]% complete.<br>"
 		dat += "<a href='byond://?src=\ref[src];software=uninstall;cancel=1;sub=0'>Cancel</a> <br>"
+		//paiInterface()
 		return dat
 
 /mob/living/silicon/pai/proc/uninstall_loop(var/cost)
-	uninstall_lock = TRUE
 	var/duration = cost*2 //2 seconds per unit RAM
 	while(uninstallprogress < 100)
-		uninstallprogress += round((1/(duration))*100)  //store and calculate the value in percentages. easier to display.
-		uninstallprogress = min(100,uninstallprogress) //Never go above 100
-		if(!uninstall_lock) //if canceled by the PAI, this becomes FALSE and the loop returns false here
-			uninstallprogress =0
+		if(uninstallprogress<0) //if canceled by the PAI, this becomes negative and the loop returns false here
 			return 0
+		uninstallprogress += round((1/duration)*100,1)  //store and calculate the value in percentages. easier to display.
+		uninstallprogress = min(100,uninstallprogress) //Never go above 100
 		if(uninstallprogress >= 100)
-			uninstallprogress = 0
 			to_chat(src, "<span class='notice'>Software uninstallation complete!</span>")
-			uninstall_lock = FALSE
 			return 1
-		sleep(10)
+		if(screen == "uninstall") // Update our view, if appropriate
+			paiInterface()
+		sleep(1 SECONDS)
 
 /mob/living/silicon/pai/proc/directives()
 	var/dat = ""
@@ -663,7 +710,7 @@ Target Machine: "}
 			hacktarget = null
 			playsound(loc, 'sound/machines/ding.ogg', 50, 1)
 			return 1
-		sleep(10)			// Update every 1 second
+		sleep(1 SECONDS)			// Update every 1 second
 
 /mob/living/silicon/pai/proc/softwareChem()
 	var/dat = "<h3>Chemical Synthesizer</h3>"
@@ -703,7 +750,7 @@ Target Machine: "}
 		else
 			charge = 0
 			return 0
-		sleep(10)
+		sleep(1 SECONDS)
 
 // EMP Shielding, just a description
 /mob/living/silicon/pai/proc/softwareShield()
