@@ -158,6 +158,7 @@
 	id = FEVERFEW
 	description = "Feverfew is a natural anticoagulant useful in fending off viruses, but it leaves one vulnerable to pain and bleeding."
 	color = "#b5651d"
+	custom_metabolism = 0.2
 	pain_resistance = -25
 	data = list ("threshold" = 80)
 
