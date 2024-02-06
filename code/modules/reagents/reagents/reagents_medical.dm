@@ -176,7 +176,7 @@
 	density = 0.63
 	specheatcap = 4.21
 	data = list(
-		"threshold" = 10,
+		"threshold" = 35,
 		)
 
 /datum/reagent/antipathogenic/tomato_soup/on_mob_life(var/mob/living/M)
