@@ -27,7 +27,7 @@
 		lit = 0
 		light("",TRUE)
 
-/obj/item/candle/clean_act(var/cleanliness)
+/obj/item/candle/extinguish()
 	..()
 	if(lit)
 		lit = 0

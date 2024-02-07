@@ -61,7 +61,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	lit = 1
 	update_brightness()
 
-/obj/item/weapon/match/clean_act(var/cleanliness)
+/obj/item/weapon/match/extinguish()
 	..()
 	if (lit)
 		lit = -1
@@ -267,7 +267,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return
 	light("<span class='danger'>The raging fire sets \the [src] alight.</span>")
 
-/obj/item/clothing/mask/cigarette/clean_act(var/cleanliness)
+/obj/item/clothing/mask/cigarette/extinguish()
 	..()
 	if(lit)
 		if (ismob(loc))

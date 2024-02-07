@@ -86,10 +86,11 @@ Attach to transfer valve and open. BOOM.
 	qdel(src)
 
 /atom/proc/extinguish()
-	on_fire=0
-	if(fire_overlay)
-		overlays -= fire_overlay
-	QDEL_NULL(firelightdummy)
+	if (on_fire)
+		on_fire=0
+		if(fire_overlay)
+			overlays -= fire_overlay
+		QDEL_NULL(firelightdummy)
 
 /atom/proc/ignite(var/temperature)
 	on_fire=1

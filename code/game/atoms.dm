@@ -543,6 +543,8 @@ its easier to just keep the beam vertical.
 		clean_blood()
 	if (cleanliness >= CLEANLINESS_BLEACH)
 		color = ""
+	if (cleanliness >= CLEANLINESS_WATER)//I mean, not sure why we'd ever add a rank below water but, futur-proofing and all that jazz
+		extinguish()//Fire.dm
 
 //Called on every object in a shuttle which rotates
 /atom/proc/map_element_rotate(var/angle)
