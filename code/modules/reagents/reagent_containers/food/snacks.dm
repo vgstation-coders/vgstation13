@@ -236,7 +236,15 @@
 /obj/item/weapon/reagent_containers/food/snacks/blow_act(var/mob/living/user)
 	if(candles_state == CANDLES_LIT)
 		candles_state = CANDLES_UNLIT
-		visible_message("<span  class='rose'>The light on \the [name] goes out.</span>")
+		visible_message("<span  class='rose'>The candle[(candles.len > 1) ? "s" : ""] on \the [name] go[(candles.len > 1) ? "" : "es"] out.</span>")
+		set_light(0)
+		update_icon()
+
+/obj/item/weapon/reagent_containers/food/snacks/clean_act(var/cleanliness)
+	..()
+	if(candles_state == CANDLES_LIT)
+		candles_state = CANDLES_UNLIT
+		visible_message("<span  class='rose'>The candle[(candles.len > 1) ? "s" : ""] on \the [name] go[(candles.len > 1) ? "" : "es"] out.</span>")
 		set_light(0)
 		update_icon()
 
