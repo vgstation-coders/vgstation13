@@ -175,6 +175,7 @@
 	color = "#731008" //rgb: 115, 16, 8
 	density = 0.63
 	specheatcap = 4.21
+	custom_metabolism = REAGENTS_METABOLISM
 	data = list(
 		"threshold" = 35,
 		)
