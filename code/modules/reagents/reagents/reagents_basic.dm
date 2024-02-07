@@ -167,7 +167,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = COLOR_RADIUM//"#61F09A" //rgb: 101, 242, 156
 	density = 5
-	specheatcap = 94
+	specheatcap = 0.094
 	flags = CHEMFLAG_PIGMENT
 	paint_light = PAINTLIGHT_LIMITED
 
