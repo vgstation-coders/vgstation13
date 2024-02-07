@@ -476,7 +476,6 @@
 	var/triggered = FALSE
 	var/event_key
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
 

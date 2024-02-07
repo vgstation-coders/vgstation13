@@ -200,7 +200,6 @@
 	attack_verb = list("bashes", "whacks", "educates")
 
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 3
 
 	var/dat			 // Actual page content
 	var/due_date = 0 // Game time in 1/10th seconds

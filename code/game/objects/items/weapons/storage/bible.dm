@@ -18,7 +18,6 @@
 	rustle_sound = "pageturn"
 
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 2
 
 /obj/item/weapon/storage/bible/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")

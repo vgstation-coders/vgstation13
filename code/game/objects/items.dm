@@ -87,8 +87,10 @@
 
 	var/is_cookvessel //If true, the item is a cooking vessel.
 
+
 /obj/item/New()
 	..()
+	fire_fuel = autoignition_temperature ? w_class : 0 //If the item has an autoignition temperature, use the size as the fuel amount. If not, provide no fuel amount.
 	for(var/path in actions_types)
 		new path(src)
 
