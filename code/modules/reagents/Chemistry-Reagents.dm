@@ -6,6 +6,8 @@
 
 	Are you adding a toxic reagent? Remember to update bees_apiary.dm 's lists of toxic reagents accordingly.
 
+	REGARDING SPECHEATCAP, IF YOU'RE NOT SURE JUST KEEP IT AT WATER'S OR AT 1. IF YOU GET SOMETHING IN THE HUNDREDS OR HIGHER YOU'RE PROBABLY DOING SOMETHING VERY WRONG
+
 	It is very common to use REAGENTS_METABOLISM (0.2) or REM / REGEANTS_EFFECT_MULTIPLIER (0.5) in the reagent files.
 
 */
