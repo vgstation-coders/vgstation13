@@ -61,6 +61,13 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	lit = 1
 	update_brightness()
 
+/obj/item/weapon/match/clean_act(var/cleanliness)
+	..()
+	if (lit)
+		lit = -1
+		update_brightness()
+		visible_message("<span class='notice'>\The [name] goes out.</span>")
+
 /obj/item/weapon/match/examine(mob/user)
 	..()
 	switch(lit)
@@ -259,6 +266,20 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(lit)
 		return
 	light("<span class='danger'>The raging fire sets \the [src] alight.</span>")
+
+/obj/item/clothing/mask/cigarette/clean_act(var/cleanliness)
+	..()
+	if(lit)
+		if (ismob(loc))
+			loc.visible_message("<span class='notice'>[loc]'s [name] goes out.</span>","<span class='notice'>Your [name] goes out.</span>")
+		else
+			visible_message("<span class='notice'>\The [name] goes out.</span>")
+		var/turf/T = get_turf(src)
+		var/atom/new_butt = new type_butt(T)
+		transfer_fingerprints_to(new_butt)
+		lit = 0 //Needed for proper update
+		update_brightness()
+		qdel(src)
 
 /obj/item/clothing/mask/cigarette/is_hot()
 	if(lit)

@@ -27,6 +27,13 @@
 		lit = 0
 		light("",TRUE)
 
+/obj/item/candle/clean_act(var/cleanliness)
+	..()
+	if(lit)
+		lit = 0
+		update_icon()
+		set_light(0)
+
 /obj/item/candle/update_icon()
 	overlays.len = 0
 	var/i
