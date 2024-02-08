@@ -160,6 +160,10 @@
 		return
 	if(stunned > 0)
 		stunned -= 1
+	if(say_mute)
+		say_mute = max(say_mute-1, 0)
+	if(ear_deaf)
+		ear_deaf = max(ear_deaf-1, 0)
 
 	if(ai_flags & COREFORTIFY)
 		brute_damage_modifier = 0.33
