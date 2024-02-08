@@ -968,6 +968,13 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		"<span class='notice'>You quietly shut off \the [src].</span>")
 		update_brightness()
 
+/obj/item/weapon/lighter/extinguish()
+	..()
+	if (lit)
+		fueltime = null
+		lit = 0
+		update_brightness()
+
 /obj/item/weapon/lighter/is_hot()
 	if(lit)
 		return source_temperature
