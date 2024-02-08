@@ -467,11 +467,14 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			for(var/typepath in CF.contains)
 				if(!typepath)
 					continue
+				var/this_amount = CF.amount
 				var/atom/B2 = new typepath(CF.associated_crate)
 				if(istype(B2,/obj/item/stack))
 					var/obj/item/stack/S = B2
-					if(CF.amount && S.amount)
-						S.amount = CF.amount < S.max_amount ? CF.amount : S.max_amount // Just cap it here
+					if(this_amount && S.amount)
+						S.amount = min(this_amount,S.max_amount)
+						if(this_amount > S.max_amount)
+							this_amount -= S.max_amount //leave the count over for the next pile until the last has the remainder under it
 			for(var/atom/thing in CF.associated_crate)
 				CF.associated_manifest.info += "<li>[thing.name]</li>" //add the item to the manifest
 				CF.initial_contents += thing
