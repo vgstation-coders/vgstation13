@@ -471,8 +471,7 @@
 		dat += text("<BR>\n<A href='?src=\ref[];software=medicalsupplement;sub=0'>Back</A><BR>", src)
 	if(subscreen == 2)
 		dat += {"<h3>Medical Analysis Suite</h3><br>
-				 <h4>Host Bioscan</h4><br>
-				"}
+				 <h4>Host Bioscan</h4>"}
 		var/mob/living/M = loc
 		if(!istype(M, /mob/living))
 			while (!istype(M, /mob/living))
@@ -482,6 +481,7 @@
 					dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Return to Records</a><br>"
 					subscreen = 0
 					return dat
+				dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=2'>Update Scan</a><br>"
 				dat += healthanalyze(M, src, TRUE)
 		dat += "<br/><a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Return to Records</a><br>"
 	return dat
