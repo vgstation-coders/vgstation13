@@ -2204,11 +2204,25 @@
 	if(wear_suit && wear_suit.get_cell())
 		return wear_suit.get_cell()
 
+/mob/living/carbon/human/proc/butt_blast()
+	var/mob/living/carbon/C = src
+	if(C.op_stage.butt != SURGERY_NO_BUTT)
+		if(remove_butt())
+			to_chat(src, "<span class='warning'>Your ass just blew up!</span>")
+	playsound(src, 'sound/effects/superfart.ogg', 50, 1)
+	C.apply_damage(40, BRUTE, LIMB_GROIN)
+	C.apply_damage(10, BURN, LIMB_GROIN)
+	score.assesblasted++
+
 // Returns null on failure, the butt on success.
 /mob/living/carbon/human/proc/remove_butt(var/where = loc)
 	if(op_stage.butt == SURGERY_NO_BUTT)
 		return
 	var/obj/item/clothing/head/butt/donkey = new(where)
+	if(mind.wizard_spells)
+		donkey.spells.Add(mind.wizard_spells)
+		for(var/spell/spell in mind.wizard_spells)
+			remove_spell(spell)
 	donkey.transfer_buttdentity(src)
 	op_stage.butt = SURGERY_NO_BUTT
 	return donkey
