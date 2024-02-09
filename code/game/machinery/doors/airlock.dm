@@ -1217,7 +1217,7 @@ About the new airlock wires panel:
 			bashed_in(user, TRUE)
 		return
 	if(istype(I, /obj/item/tool/crowbar/halligan))
-		var/breaktime = 10 SECONDS
+		var/breaktime = 8 SECONDS
 		if(!operating && density && src.arePowerSystemsOn() && !((stat) & NOPOWER) && !welded)
 			if(locked && !lifted)
 				to_chat(user, "<span class='notice'>You begin to lift \the [src] out of its track, exposing the bolts.</span>")
@@ -1259,9 +1259,9 @@ About the new airlock wires panel:
 			if(istype(I, /obj/item/weapon/fireaxe))
 				if(istype(user,/mob/living/carbon/human))
 					var/mob/living/carbon/human/H = user
-					var/breaktime = 30 SECONDS
+					var/breaktime = 20 SECONDS
 					if(H.get_strength() >= 2)
-						breaktime = 15 SECONDS
+						breaktime = 10 SECONDS
 					to_chat(user, "<span class='notice'>You begin chopping the bolts down.</span>")
 					if(!do_after(user, src, breaktime, 10, custom_checks = new /callback(I, /obj/item/weapon/fireaxe/proc/on_do_after)))
 						return
@@ -1336,9 +1336,9 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/proc/pry(mob/user as mob)
 	if(istype(user,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
-		var/breaktime = 10 SECONDS
+		var/breaktime = 8 SECONDS
 		if(H.get_strength() >= 2)
-			breaktime = 5 SECONDS
+			breaktime = 4 SECONDS
 		to_chat(user, "<span class='notice'>\The [src]'s motors grind as you pry it open.</span>")
 		if(do_after(user,src,breaktime))
 			if(!(stat & (NOPOWER)) || src.arePowerSystemsOn())
