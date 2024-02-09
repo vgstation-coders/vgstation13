@@ -1120,6 +1120,11 @@ var/list/converted_minds = list()
 				if (isalien(victim))
 					victim.Paralyse(8)
 
+				//let's start by removing any cuffs they might already have
+				if (victim.handcuffed)
+					var/obj/item/weapon/handcuffs/cuffs = victim.handcuffed
+					victim.u_equip(cuffs)
+
 				var/obj/item/weapon/handcuffs/cult/restraints = new(victim)
 				victim.handcuffed = restraints
 				restraints.on_restraint_apply(victim)//a jolt of pain to slow them down
