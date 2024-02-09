@@ -111,6 +111,8 @@
 		ear_damage = max(ear_damage-0.05, 0)
 	if((sdisabilities & DEAF))
 		ear_deaf = TRUE
+	if(say_mute)
+		say_mute = max(say_mute-1, 0)
 
 	if(eye_blurry)
 		eye_blurry = max(eye_blurry-1,0)
