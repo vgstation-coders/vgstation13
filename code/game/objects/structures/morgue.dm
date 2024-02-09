@@ -146,17 +146,19 @@
 		if(istype(A, /mob/living/simple_animal/scp_173)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
 			continue
 		if(!A.anchored)
-			A.forceMove(src)
-			if(ismob(A))
-				var/mob/M = A
-				if(M.mind && !M.client) //!M.client = mob has ghosted out of their body
-					var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
-					if(ghost)
-						var/mob/ghostmob = ghost.get_top_transmogrification()
-						if(ghostmob)
-							to_chat(ghostmob, "<span class='interface'><span class='big bold'>Your corpse has been placed into a morgue tray.</span> \
-								Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
+			A.forceMove(src)				
 	qdel(connected)
+	
+	var/list/inside = recursive_type_check(src, /mob)
+	for(var/mob/M in inside)
+		if(M.mind && !M.client) //!M.client = mob has ghosted out of their body
+			var/mob/dead/observer/ghost = mind_can_reenter(M.mind)
+			if(ghost)
+				var/mob/ghostmob = ghost.get_top_transmogrification()
+				if(ghostmob)
+					to_chat(ghostmob, "<span class='interface'><span class='big bold'>Your corpse has been placed into a morgue tray.</span> \
+						Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
+
 
 /obj/structure/morgue/attackby(obj/item/P, mob/user)
 	if(iscrowbar(P))
