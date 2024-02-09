@@ -654,6 +654,7 @@
 		)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/random_weapon/New()
+	..()
 	var/weapontype = pick(existing_typesof(/obj/item/mecha_parts/mecha_equipment/weapon) - blacklisted)
 	new weapontype (loc)
 	qdel(src)
