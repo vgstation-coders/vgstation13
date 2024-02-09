@@ -1114,6 +1114,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define RECYK_WOOD       6
 #define RECYK_PLASTIC    7
 #define RECYK_FABRIC     8
+#define RECYK_WAX	     9
 
 ////////////////
 // job.info_flags
@@ -1895,3 +1896,8 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define PAINTLIGHT_NONE		0	//regular paint
 #define PAINTLIGHT_LIMITED	1	//radium, lights up on canvas, limited color mixing
 #define PAINTLIGHT_FULL		2	//nano paint, lights up floors as well
+
+//Candles on snacks
+#define CANDLES_NONE 0
+#define CANDLES_UNLIT 1
+#define CANDLES_LIT 2

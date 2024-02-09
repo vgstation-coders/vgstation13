@@ -115,6 +115,7 @@
 				I.color = mix_color_from_reagents(reagents.reagent_list)
 			snack.extra_food_overlay.overlays += I
 			snack.overlays += I
+			snack.visible_condiments[condiment_overlay] = I.color
 	else if(isfloor(target))
 		if (amount_per_transfer_from_this > 1)
 			transfer(target, user, splashable_units = amount_per_transfer_from_this)

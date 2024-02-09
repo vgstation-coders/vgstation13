@@ -630,7 +630,7 @@
 	else
 		var/choices = list(
 			list("Talisman", "radial_paraphernalia_talisman", "Can absorb runes (or attune to them in some cases), allowing you to carry their power in your pocket. Has a few other miscellaneous uses."),
-			list("Blood Candle", "radial_paraphernalia_candle", "A candle that can burn up to 20 minutes. Offers moody lighting."),
+			list("Blood Candle", "radial_paraphernalia_candle", "A candle that can burn up to a full hour. Offers moody lighting."),
 			list("Tempting Goblet", "radial_paraphernalia_goblet", "A classy holder for your beverage of choice. Prank your enemies by hitting them with a goblet full of blood."),
 			list("Coffer", "radial_paraphernalia_coffer", "Keep your occult lab orderly by storing your cult paraphernalia in those coffers."),
 			list("Ritual Knife", "radial_paraphernalia_knife", "A long time ago a wizard enchanted one of those to infiltrate the realm of Nar-Sie and steal some soul stone shards. Now it's just a cool knife. Don't rely on it in a fight though."),
