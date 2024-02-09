@@ -326,7 +326,7 @@
 	if(O.invisibility)
 		O.make_visible(INVISIBLESPRAY)
 
-	O.clean_act(CLEANLINESS_WATER)
+	O.clean_act(CLEANLINESS_WATER)//removes glue and extinguishes fire
 
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/monkeycube))
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
@@ -338,8 +338,6 @@
 	else if(istype(O, /obj/item/weapon/book/manual/snow))
 		var/obj/item/weapon/book/manual/snow/S = O
 		S.trigger()
-	else if(O.on_fire) // For extinguishing objects on fire
-		O.extinguish()
 	else if(O.molten) // Molten shit.
 		O.molten=0
 		O.solidify()

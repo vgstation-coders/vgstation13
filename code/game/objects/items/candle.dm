@@ -35,6 +35,13 @@
 		lit = 0
 		light("",TRUE)
 
+/obj/item/candle/extinguish()
+	..()
+	if(lit)
+		lit = 0
+		update_icon()
+		set_light(0)
+
 /obj/item/candle/update_icon()
 	overlays.len = 0
 	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = null
