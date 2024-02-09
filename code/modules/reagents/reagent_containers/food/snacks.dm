@@ -2639,7 +2639,7 @@
 	name = "Tomato soup"
 	desc = "Smells like iron."
 	icon_state = "tomatosoup"
-	food_flags = FOOD_LIQUID
+	food_flags = FOOD_LIQUID | FOOD_ANIMAL //blood
 	crumb_icon = "dribbles"
 	filling_color = "#FF3300"
 	valid_utensils = UTENSILE_SPOON
@@ -2842,6 +2842,7 @@
 	trash = /obj/item/trash/snack_bowl
 	crumb_icon = "dribbles"
 	filling_color = "#E23D12"
+	food_flags = FOOD_LIQUID | FOOD_MEAT
 	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/hotchili/New()
@@ -2858,6 +2859,7 @@
 	trash = /obj/item/trash/snack_bowl
 	crumb_icon = "dribbles"
 	filling_color = "#4375E8"
+	food_flags = FOOD_LIQUID | FOOD_MEAT
 	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/coldchili/New()
@@ -2874,6 +2876,7 @@
 	trash = /obj/item/trash/snack_bowl
 	crumb_icon = "dribbles"
 	filling_color = "#CE37BA"
+	food_flags = FOOD_LIQUID | FOOD_MEAT
 	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/plasmastew/New()
@@ -6382,6 +6385,7 @@
 	desc = "From a soup just like this, a sentient race could one day emerge. Better eat it to be safe."
 	icon_state = "primordialsoup"
 	bitesize = 2
+	food_flags = FOOD_LIQUID | FOOD_ANIMAL //blood is animal sourced
 	crumb_icon = "dribbles"
 	filling_color = "#720D00"
 
@@ -6470,6 +6474,7 @@
 	desc = "The strong, tangy flavor of the orange and soy sauce highlights the smooth, thick taste of the honey. This fusion dish is one of the highlights of Terran cuisine."
 	icon_state = "honeycitruschicken"
 	bitesize = 4
+	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycitruschicken/New()
@@ -6506,6 +6511,7 @@
 	desc = "There may be more fish in the sea, but there's only one kind of fish in the stars."
 	icon_state = "fishtacosupreme"
 	bitesize = 3
+	food_flags = FOOD_MEAT
 	base_crumb_chance = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme/New()
@@ -6517,6 +6523,7 @@
 	desc = "This dish became exceedingly rare after Space Texas seceeded from our plane of reality."
 	icon_state = "chiliconcarne"
 	bitesize = 3
+	food_flags = FOOD_LIQUID | FOOD_MEAT
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/chiliconcarne/New()
