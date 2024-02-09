@@ -551,6 +551,9 @@ var/list/astral_projections = list()
 	if(tangibility)
 		death()
 
+/mob/living/simple_animal/astral_projection/vine_protected()
+	return !tangibility
+
 //called once when we are created, shapes our appearance in the image of our anchor
 /mob/living/simple_animal/astral_projection/proc/ascend(var/mob/living/body)
 	if (!body)
