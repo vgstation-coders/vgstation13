@@ -3885,7 +3885,7 @@
 	id = DEGENERATECALCIUM
 	result = DEGENERATECALCIUM
 	required_reagents = list(MILK = 1, MUTAGEN = 1)
-	required_temp = T0C + 88 //Mutagen is very hard to heat up, so I don't recommend making more than 10u of this at a time
+	required_temp = T0C + 88
 	result_amount = 1
 
 /datum/chemical_reaction/ironrot

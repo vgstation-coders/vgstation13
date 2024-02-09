@@ -140,7 +140,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#B8B8C0" //rgb: 184, 184, 192
 	density = 19.05
-	specheatcap = 124
+	specheatcap = 0.124
 
 /datum/reagent/uranium/on_mob_life(var/mob/living/M)
 	if(..())
