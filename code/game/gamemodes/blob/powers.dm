@@ -314,7 +314,7 @@
 	if(!can_buy(BLOBATTCOST))
 		return
 
-	delayNextAttack(2)
+	delayNextAttack(5)
 	OB.expand(T, 0, manual = TRUE) //Doesn't give source because we don't care about passive restraint
 
 
