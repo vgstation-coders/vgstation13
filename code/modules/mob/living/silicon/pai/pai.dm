@@ -380,10 +380,3 @@
 	if (holomap_device)
 		holomap_device.update_holomap()
 
-/mob/living/silicon/pai/hasHUD(var/hud_kind)
-	switch(hud_kind)
-		if(HUD_MEDICAL)
-			return medHUD
-		if(HUD_SECURITY)
-			return secHUD
-	return FALSE

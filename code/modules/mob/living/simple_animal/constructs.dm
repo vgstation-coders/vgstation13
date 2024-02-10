@@ -62,7 +62,7 @@
 	add_language(LANGUAGE_GALACTIC_COMMON)
 	default_language = all_languages[LANGUAGE_CULT]
 	init_language = default_language
-	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
+	hud_list[CONSTRUCT_HUD] = new/image/hud('icons/mob/hud.dmi', src, "consthealth100")
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 

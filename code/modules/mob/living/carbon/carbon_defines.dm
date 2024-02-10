@@ -32,7 +32,7 @@
 
 /mob/living/carbon/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
 	..()
-	hud_list[CONVERSION_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[CONVERSION_HUD] = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
 	register_event(/event/after_move, src, /mob/living/carbon/proc/update_holomaps)
 
 /mob/living/carbon/Destroy()
