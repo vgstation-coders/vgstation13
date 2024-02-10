@@ -41,6 +41,7 @@
 		<li>[SCI_FREQ] - Science Channel</li>\
 		<li>[SER_FREQ] - Service Channel</li>\
 		<li>[SUP_FREQ] - Supply Channel</li>"
+	update_icon()
 
 /obj/item/weapon/paper/manifest
 	name = "Supply Manifest"

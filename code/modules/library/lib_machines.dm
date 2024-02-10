@@ -35,6 +35,7 @@
 	var/programmatic=0                // Is the book programmatically added to the catalog?
 	var/forbidden=0
 	var/path = /obj/item/weapon/book // Type path of the book to generate
+	var/cover //icon_state of the book
 
 /datum/cachedbook/proc/LoadFromRow(var/list/row)
 	id = row["id"]
@@ -128,6 +129,7 @@ var/global/datum/library_catalog/library_catalog = new()
 /** Scanner **/
 /obj/machinery/libraryscanner
 	name = "scanner"
+	desc = "The scanner is used in the process of registering a book or painting for permanent archive in the external library and gallery."
 	icon = 'icons/obj/library.dmi'
 	icon_state = "bookscanner"
 	anchored = 1
