@@ -750,6 +750,10 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/humanelaser/to_bump(atom/A as mob|obj|turf|area)
 	if(ishuman(A))
 		damage = 10
+	if(istype(A,/obj/effect/blob)) //It will deal half of its damage to a nearby blob tile on hit.
+		for(var/obj/effect/blob/B in orange(1,A))
+			B.bullet_act(src, null, damage/2)
+			break
 	return ..()
 
 /obj/item/projectile/beam/heavylaser
