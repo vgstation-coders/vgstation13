@@ -751,8 +751,10 @@ var/list/beam_master = list()
 	if(ishuman(A))
 		damage = 10
 	if(istype(A,/obj/effect/blob)) //It will deal half of its damage to a nearby blob tile on hit.
-		for(var/obj/effect/blob/B in orange(1,A))
-			B.bullet_act(src, null, damage/2)
+		var/obj/effect/blob/B = A
+		var/actual_damage = damage/B.fire_resist //More resistant tiles such as strong blobs will cause less damage to be spread
+		for(var/obj/effect/blob/B2 in orange(1,B))
+			B2.bullet_act(src, null, actual_damage)
 			break
 	return ..()
 
