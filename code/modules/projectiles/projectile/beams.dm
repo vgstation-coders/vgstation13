@@ -750,14 +750,6 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/humanelaser/to_bump(atom/A as mob|obj|turf|area)
 	if(ishuman(A))
 		damage = 10
-	if(istype(A,/obj/effect/blob))
-		damage = 40
-		var/obj/effect/blob/B = A
-		var/splash_damage = damage/B.fire_resist - B.health
-		if(splash_damage > 0)
-			for(var/obj/effect/B2 in orange(1,B))
-				B2.bullet_act(src, null, splash_damage)
-				break
 	return ..()
 
 /obj/item/projectile/beam/heavylaser
