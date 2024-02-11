@@ -527,13 +527,13 @@
 		var/datum/cachedbook/PVB = getItemByID(href_list["preview"], library_table)
 		if(!istype(PVB) || PVB.programmatic)
 			return
-		var/list/_http = world.Export("[config.library_url]?id=[PVB.id]")
+		/*var/list/_http = world.Export("[config.library_url]?id=[PVB.id]")
 		if(!_http || !_http["CONTENT"])
 			return
 		var/http = file2text(_http["CONTENT"])
 		if(!http)
-			return
-		usr << browse("<TT><I>[PVB.title] by [PVB.author].</I></TT> <BR>" + "[http]", "window=[PVB.title];size=600x800")
+			return*/
+		usr << browse("<TT><I>[PVB.title] by [PVB.author].</I></TT> <BR>" + "[PVB.content]", "window=[PVB.title];size=600x800")
 
 	if(href_list["delqueue"])
 		var/slot = text2num(href_list["delqueue"])
@@ -561,22 +561,21 @@
 		if(!code || (!issilicon(usr) && !Adjacent(usr)))
 			return
 		var/list/full_template = splittext(code,",")
-		message_admins("Attempting to import library from code: [json_encode(full_template)]")
 		if(full_template.len>10)
 			var/confirm=alert("Are you sure you wish to queue this print job? It is [full_template.len] items long.","Large Order","Yes","No")
 			if(confirm == "No")
 				return
-			for(var/element in full_template)
-				var/getid = text2num(element)
-				if(!isnum(getid))
-					continue
-				var/datum/cachedbook/newbook = getItemByID(getid, library_table) // Sanitized in getItemByID
-				if(!newbook || !newbook.id)
-					continue
-				if((newbook.forbidden == 2 && !emagged) || newbook.forbidden == 1)
-					continue
-				make_external_book(newbook, TRUE)
-				screenstate = PRINT_QUEUE
+		for(var/element in full_template)
+			var/getid = text2num(element)
+			if(!isnum(getid))
+				continue
+			var/datum/cachedbook/newbook = getItemByID(getid, library_table) // Sanitized in getItemByID
+			if(!newbook || !newbook.id)
+				continue
+			if((newbook.forbidden == 2 && !emagged) || newbook.forbidden == 1)
+				continue
+			make_external_book(newbook, TRUE)
+			screenstate = PRINT_QUEUE
 	/*if(href_list["export_template"])
 		var/output_code = ""
 		var(for/obj/item/I in inventory)
@@ -632,7 +631,7 @@
 
 /obj/machinery/computer/library/checkout/proc/request_delete_item(var/datum/cachedbook/B, mob/requester)
 	log_admin("[src]: [requester.name]/[requester.key] requested [B.title] be deleted permanently.")
-	var/raw = "[src]: Request to permanently delete [B] from the library database. <A href='?src=\ref[src];preview=[B]'>\[Preview\]</A> <A style='color:red' href='?src=\ref[src];del=[B.id]'>\[Delete\]</A>"
+	var/raw = "[src]: Request to permanently delete [B] from the library database. <A href='?src=\ref[src];preview=[B.id]'>\[Preview\]</A> <A style='color:red' href='?src=\ref[src];del=[B.id]'>\[Delete\]</A>"
 	var/formal = "<span class='notice'><b>  [src]: [key_name(requester, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[requester]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[requester]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[requester]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[requester]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) (<a href='?_src_=holder;role_panel=\ref[requester]'>RP</a>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[requester]'>BSA</A>) (<A HREF='?_src_=holder;CentcommReply=\ref[requester]'>RPLY</A>):</b> [raw]</span>"
 	send_prayer_to_admins(formal, raw, 'sound/effects/msn.ogg', "Centcomm", key_name(requester), get_turf(requester))
 
@@ -664,16 +663,17 @@
 	var/obj/item/weapon/book/B = new newbook.path(src)
 
 	if (!newbook.programmatic)
-		var/list/_http = world.Export("[config.library_url]?id=[newbook.id]")
+		/*var/list/_http = world.Export("[config.library_url]?id=[newbook.id]")
 		if(!_http || !_http["CONTENT"])
 			return
 		var/http = file2text(_http["CONTENT"])
 		if(!http)
-			return
+			return*/
 		B.name = "Book: [newbook.title]"
 		B.title = newbook.title
 		B.author = newbook.author
-		B.dat = http
+		//B.dat = http
+		B.dat = newbook.content
 		if(newbook.cover)
 			B.icon_state = newbook.cover
 		else
