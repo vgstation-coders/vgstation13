@@ -203,7 +203,7 @@
 		if(UPLOAD_NEW_TITLE)
 			dat += "<h3>Upload a New Title</h3>"
 			if(!scanner)
-				for(var/obj/machinery/libraryscanner/S in range(9))
+				for(var/obj/machinery/libraryscanner/S in range(9, src))
 					scanner = S
 					break
 			if(!scanner)
@@ -473,7 +473,6 @@
 						if(!response)
 							to_chat(usr, query.ErrorMsg())
 						else
-							world.log << response
 							if (scanner.cache)
 								log_admin("[usr.name]/[usr.key] has uploaded the book titled [scanner.cache.name], [length(scanner.cache.dat)] characters in length")
 								message_admins("[key_name_admin(usr)] has uploaded the book titled [scanner.cache.name], [length(scanner.cache.dat)] characters in length")
@@ -502,7 +501,7 @@
 		if(busy && printing_queue.len>=max_queue_size)
 			to_chat(usr,"<span class='warning'>The printer queue is full!</span>")
 			return
-		make_external_book(newbook)
+		make_external_book(newbook, FALSE)
 
 	if(href_list["manual"])
 		if(!href_list["manual"])
@@ -562,6 +561,7 @@
 		if(!code || (!issilicon(usr) && !Adjacent(usr)))
 			return
 		var/list/full_template = splittext(code,",")
+		message_admins("Attempting to import library from code: [json_encode(full_template)]")
 		if(full_template.len>10)
 			var/confirm=alert("Are you sure you wish to queue this print job? It is [full_template.len] items long.","Large Order","Yes","No")
 			if(confirm == "No")
@@ -575,7 +575,7 @@
 					continue
 				if((newbook.forbidden == 2 && !emagged) || newbook.forbidden == 1)
 					continue
-				make_external_book(getid, TRUE)
+				make_external_book(newbook, TRUE)
 				screenstate = PRINT_QUEUE
 	/*if(href_list["export_template"])
 		var/output_code = ""
@@ -662,7 +662,7 @@
 	if(!newbook || !newbook.id)
 		return
 	var/obj/item/weapon/book/B = new newbook.path(src)
-	B.item_state = B.icon_state
+
 	if (!newbook.programmatic)
 		var/list/_http = world.Export("[config.library_url]?id=[newbook.id]")
 		if(!_http || !_http["CONTENT"])
@@ -678,7 +678,7 @@
 			B.icon_state = newbook.cover
 		else
 			B.icon_state = "book[rand(1,9)]"
-
+	B.item_state = B.icon_state
 	printbook(B, forceprint)
 
 #undef MAIN_MENU
