@@ -560,6 +560,14 @@ var/list/discounted_items_of_the_round = list()
 	discounted_cost = 6
 	jobs_with_discount = SCIENCE_POSITIONS
 
+/datum/uplink_item/sabotage_tools/radstorm_remote
+	name = "Dirty Bomb Artillery Remote"
+	desc = "This device can activate a remote syndicate bluespace artillery every 15 minutes, detonating a dirty bomb in direct intercept with the station, causing an artificial radstorm. The cannon will NOT fire if a radstom is already ongoing."
+	item = /obj/item/device/radstorm_remote
+	cost = 10
+	discounted_cost = 8
+	jobs_with_discount = ENGINEERING_POSITIONS
+ 
 /datum/uplink_item/sabotage_tools/reportintercom
 	name = "NT Central Command Report Falsifier"
 	desc = "A command report intercom stolen from Nanotrasen Command that allows for a single fake Command Update to be sent. Ensure tastefulness so that the crew actually falls for the message. Item is particular obvious and will have to be manually discarded after use."
