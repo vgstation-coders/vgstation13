@@ -562,7 +562,7 @@ var/list/discounted_items_of_the_round = list()
 
 /datum/uplink_item/sabotage_tools/radstorm_remote
 	name = "Dirty Bomb Artillery Remote"
-	desc = "This device can fire a remote syndicate bluespace artillery every 15 minutes, detonating a dirty bomb in direct intercept with the station, causing an artificial radstorm. The cannon will NOT fire if a radstom is already ongoing."
+	desc = "This device can fire a remote syndicate bluespace artillery every 15 minutes, detonating a dirty bomb on direct intercept with the station, causing an artificial radstorm. The cannon will NOT fire if a radstom is already ongoing."
 	item = /obj/item/device/radstorm_remote
 	cost = 12
 	discounted_cost = 10
