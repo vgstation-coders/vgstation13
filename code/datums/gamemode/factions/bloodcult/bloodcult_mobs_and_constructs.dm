@@ -419,7 +419,7 @@ var/list/astral_projections = list()
 	tangible_appearance = image('icons/mob/mob.dmi',"blank")
 	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
 	see_in_dark = 100
-	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
+	hud_list[ID_HUD]          = new/image/hud('icons/mob/hud.dmi', src, "hudunknown")
 	add_spell(new /spell/astral_return, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	add_spell(new /spell/astral_toggle, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 

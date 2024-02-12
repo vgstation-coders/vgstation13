@@ -945,7 +945,7 @@ var/list/arcane_tomes = list()
 		var/mob/living/carbon/C = loc
 		C.update_inv_hands()
 		if (areYouWorthy(C))
-			var/image/I = image('icons/mob/hud.dmi', src, "consthealth[10*round((blood/maxblood)*10)]")
+			var/image/I = new/image/hud('icons/mob/hud.dmi', src, "consthealth[10*round((blood/maxblood)*10)]")
 			I.pixel_x = 16
 			I.pixel_y = 16
 			overlays += I

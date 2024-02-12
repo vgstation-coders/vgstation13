@@ -151,19 +151,19 @@
 		dna.species=species.name
 		dna.b_type = random_blood_type()
 
-	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
-	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
-	hud_list[PHYSRECORD_HUD]  = image('icons/mob/hud.dmi', src, "hudactive")
-	hud_list[MENTRECORD_HUD]  = image('icons/mob/hud.dmi', src, "hudblank")
-	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
-	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
-	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
-	hud_list[IMPCHEM_HUD]     = image('icons/mob/hud.dmi', src, "hudblank")
-	hud_list[IMPHOLY_HUD]     = image('icons/mob/hud.dmi', src, "hudblank")
-	hud_list[IMPTRACK_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
-	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
-	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
-	hud_list[WAGE_HUD]        = image('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[HEALTH_HUD]      = new/image/hud('icons/mob/hud.dmi', src, "hudhealth100")
+	hud_list[STATUS_HUD]      = new/image/hud('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[PHYSRECORD_HUD]  = new/image/hud('icons/mob/hud.dmi', src, "hudactive")
+	hud_list[MENTRECORD_HUD]  = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[ID_HUD]          = new/image/hud('icons/mob/hud.dmi', src, "hudunknown")
+	hud_list[WANTED_HUD]      = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[IMPLOYAL_HUD]    = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[IMPCHEM_HUD]     = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[IMPHOLY_HUD]     = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[IMPTRACK_HUD]    = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[SPECIALROLE_HUD] = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[STATUS_HUD_OOC]  = new/image/hud('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[WAGE_HUD]        = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
 
 	obj_overlays[FIRE_LAYER]		= new /obj/abstract/Overlays/fire_layer
 	obj_overlays[MUTANTRACE_LAYER]	= new /obj/abstract/Overlays/mutantrace_layer
