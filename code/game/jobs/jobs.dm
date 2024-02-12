@@ -83,7 +83,6 @@ var/list/misc_positions = list(
 
 var/list/alternate_positions = list(
 	"Chiropractor",
-	"Ideas Man",
 	"Dog Walker",
 	"Psychologist",
 	"Scuba Diver",
@@ -95,8 +94,11 @@ var/list/alternate_positions = list(
 	"Insurance Salesman",
 	"Cable Guy",
 	"Wood Identifier",
-	"Project Manager",
 	"Interior Designer",
+	"Sommelier",
+	"Bathroom Attendant",
+	"Welding Fuel Tank Refiller",
+	"Historical Reenactor",
 )
 
 var/list/all_jobs_txt = list(

@@ -18,10 +18,6 @@ var/total_alt_positions
 	title = "Chiropractor"
 	outfit_datum = /datum/outfit/assistant
 
-/datum/job/alternate/ideasman
-	title = "Ideas Man"
-	outfit_datum = /datum/outfit/assistant
-
 /datum/job/alternate/dogwalker
 	title = "Dog Walker"
 	outfit_datum = /datum/outfit/assistant
@@ -46,37 +42,46 @@ var/total_alt_positions
 	title = "Management Consultant"
 	outfit_datum = /datum/outfit/assistant
 
-
 /datum/job/alternate/weddingplanner
 	title = "Wedding Planner"
 	outfit_datum = /datum/outfit/assistant
-
 
 /datum/job/alternate/lifeguard
 	title = "Lifeguard"
 	outfit_datum = /datum/outfit/assistant
 
-
 /datum/job/alternate/insurancesalesman
 	title = "Insurance Salesman"
 	outfit_datum = /datum/outfit/assistant
-
 
 /datum/job/alternate/cableguy
 	title = "Cable Guy"
 	outfit_datum = /datum/outfit/assistant
 
-
 /datum/job/alternate/woodidentifier
 	title = "Wood Identifier"
 	outfit_datum = /datum/outfit/assistant
 
-
-/datum/job/alternate/projectmanager
-	title = "Project Manager"
+/datum/job/alternate/interiordesigner
+	title = "Interior Designer"
 	outfit_datum = /datum/outfit/assistant
 
+/datum/job/alternate/sommelier
+	title = "Sommelier"
+	outfit_datum = /datum/outfit/assistant
 
 /datum/job/alternate/interiordesigner
 	title = "Interior Designer"
+	outfit_datum = /datum/outfit/assistant
+
+/datum/job/alternate/bathroomattendant
+	title = "Bathroom Attendant"
+	outfit_datum = /datum/outfit/assistant
+
+/datum/job/alternate/wftr
+	title = "Welding Fuel Tank Refiller"
+	outfit_datum = /datum/outfit/assistant
+
+/datum/job/alternate/historicalreenactor
+	title = "Historical Reenactor"
 	outfit_datum = /datum/outfit/assistant
