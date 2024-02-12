@@ -177,7 +177,7 @@
 
 /obj/item/clothing/glasses/scanner/dual/chiefengineer
 	name = "chief engineer's advanced contacts"
-	desc = "Combines the power of mesons and material scanners. They even sport serious eye protection."
+	desc = "Combines the power of mesons and material scanners."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "contact"
 	mech_flags = MECH_SCAN_FAIL
