@@ -423,6 +423,7 @@
 	requirements = list(90,90,80,40,40,40,30,20,20,10)
 	high_population_requirement = 70
 	logo = "blob-logo"
+	flags = HIGHLANDER_RULESET
 
 	makeBody = FALSE
 
