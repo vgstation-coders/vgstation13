@@ -16,7 +16,7 @@ var/total_alt_positions
 
 /datum/job/alternate/chiropractor
 	title = "Chiropractor"
-	outfit_datum = /datum/outfit/assistant
+	outfit_datum = /datum/outfit/chiropractor
 
 /datum/job/alternate/dogwalker
 	title = "Dog Walker"

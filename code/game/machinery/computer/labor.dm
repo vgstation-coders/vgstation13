@@ -154,11 +154,16 @@ var/list/labor_console_categories = list(
 			to_chat(user, "<span class='notice'>Alternate jobs  database successfully installed.</span>")
 			job_master.alt_database_active = TRUE
 			W.forceMove(loc)
+			update_icon()
 		else
 			W.forceMove(loc)
 
 /obj/machinery/computer/labor/kick_act(mob/user)
 	..()
+	if(job_master.alt_database_active)
+		to_chat(user,"<span class='warning'>Percussive maintenance was enough to clear the database bug!")
+		job_master.alt_database_active = FALSE
+		update_icon()
 	if(prob(5))
 		verified(user, FALSE)
 
@@ -224,5 +229,6 @@ var/list/labor_console_categories = list(
 	overlays -= awaiting_overlay
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		return
+	icon_state = job_master.alt_database_active ? "labor_alt" : "labor"
 	if(awaiting_swipe || verifying)
 		overlays += awaiting_overlay

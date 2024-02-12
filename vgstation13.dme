@@ -555,6 +555,7 @@
 #include "code\datums\outfit\science.dm"
 #include "code\datums\outfit\security.dm"
 #include "code\datums\outfit\trader.dm"
+#include "code\datums\outfit\special_outfits\alternate.dm"
 #include "code\datums\outfit\special_outfits\special.dm"
 #include "code\datums\outfit\striketeams\death_commando.dm"
 #include "code\datums\outfit\striketeams\ert.dm"

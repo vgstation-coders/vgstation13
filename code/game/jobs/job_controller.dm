@@ -93,10 +93,12 @@ var/global/datum/controller/occupations/job_master
 			position_limit = job.spawn_positions
 		if((job.current_positions < position_limit) || position_limit == -1)
 			if(alt_database_active && (total_alt_positions <= MAX_ALTERNATES) && latejoin) //Labor console database has been hacked; Centcomm is sending the wrong employees!
-				rank = pick(alternate_positions)
-				Debug("[player] is being assigned non-standard job as the alternate jobs database is installed.")
-				Debug("Player: [player] is now Rank: [rank], JCP:[total_alt_positions], JPL:[MAX_ALTERNATES]")
-				total_alt_positions++
+				var/altrank = pick(alternate_positions)
+				if(altjobprompt(altrank,rank,player))
+					rank = altrank
+					Debug("[player] is being assigned non-standard job as the alternate jobs database is installed.")
+					Debug("Player: [player] is now Rank: [rank], JCP:[total_alt_positions], JPL:[MAX_ALTERNATES]")
+					total_alt_positions++
 			else
 				Debug("Player: [player] is now Rank: [rank], JCP:[job.current_positions], JPL:[position_limit]")
 			player.mind.assigned_role = rank
@@ -598,3 +600,12 @@ var/global/datum/controller/occupations/job_master
 
 		tmp_str += "HIGH=[level1]|MEDIUM=[level2]|LOW=[level3]|NEVER=[level4]|BANNED=[level5]|YOUNG=[level6]|-"
 		feedback_add_details("job_preferences",tmp_str)
+
+/datum/controller/occupations/proc/altjobprompt(var/newrank,var/oldrank,var/mob/user)
+	var/turf/oldloc = get_turf(user)
+	user.forceMove(null)
+	if(alert(user,"Central Command had a mix-up and is attempting to send you to the station as \an [newrank]! Would you like to correct them?",,"Yes - play as [oldrank]","No - play as [newrank]") == "Yes")
+		return 1
+	user.forceMove(oldloc)
+	message_admins("[user.key] has opted out of playing as \an [newrank].")
+	return 0
