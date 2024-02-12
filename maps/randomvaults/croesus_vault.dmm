@@ -2,18 +2,17 @@
 "af" = (/obj/structure/flora/ausbushes/fullgrass,/obj/effect/plantsegment,/obj/effect/decal/remains/human,/turf/simulated/floor/grass,/area/vault)
 "aj" = (/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1; mouse_opacity = 0},/mob/living/simple_animal/hostile/humanoid/pirate/ranged{aggro_vision_range = 7; anchored = 0; canmove = 1; color = "#000000"; faction = "croesus"; health = 30; name = "Shadow Gunner"; projectiletype = /obj/item/projectile/beam/veryweaklaser; vision_range = 7},/obj/effect/forcefield/wizard,/turf/simulated/floor/carpet,/area/vault)
 "al" = (/obj/machinery/portable_atmospherics/hydroponics/soil,/obj/structure/railing/wood,/obj/effect/decal/remains/human,/obj/item/weapon/scythe,/turf/simulated/floor/grass,/area/vault)
-"as" = (/obj/effect/decal/remains/human,/obj/effect/overlay/palmtree_r,/turf/simulated/floor/mineral/gold,/area/vault)
 "aE" = (/obj/structure/flora/ausbushes/fullgrass,/obj/effect/plantsegment,/mob/living/simple_animal/hostile/viscerator/butterfly/magic{faction = "croesus"},/turf/simulated/floor/grass,/area/vault)
-"aH" = (/obj/machinery/door/poddoor/shutters/preopen{id_tag = trial3-2},/turf/simulated/floor/carpet,/area/vault)
+"aH" = (/obj/machinery/door/poddoor/shutters/preopen{id_tag = "trial3-2"},/turf/simulated/floor/carpet,/area/vault)
 "bb" = (/obj/machinery/conveyor/auto{dir = 8},/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/gold,/area/vault)
 "bm" = (/turf/space,/area)
 "bo" = (/obj/effect/decal/remains/human,/turf/simulated/floor/grass,/area/vault)
 "bs" = (/obj/item/weapon/caution,/turf/simulated/floor/dark,/area/vault)
 "bv" = (/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/silver,/area/vault)
+"bI" = (/obj/machinery/light/he,/obj/effect/overlay/palmtree_l,/turf/simulated/floor/mineral/gold,/area/vault)
 "bL" = (/obj/machinery/conveyor/auto{dir = 8},/turf/simulated/floor/carpet,/area/vault)
 "bR" = (/obj/machinery/power/emitter/energycannon{dir = 1},/turf/simulated/floor/mineral/silver,/area/vault)
 "bZ" = (/obj/machinery/light/he{dir = 1},/turf/simulated/floor/carpet,/area/vault)
-"cd" = (/obj/effect/overlay/palmtree_l,/turf/simulated/floor/mineral/gold,/area/vault)
 "cj" = (/obj/structure/flora/ausbushes/fullgrass,/obj/structure/falsewall/gold/closed{desc = "A wall with gold plating. Swag! Powerful magic prevents its destruction."; name = "invulnerable gold wall"},/turf/simulated/floor/grass,/area/vault)
 "cn" = (/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/carpet,/area/vault)
 "cs" = (/obj/structure/table/glass/plasma,/turf/simulated/floor/mineral/gold,/area/vault)
@@ -27,6 +26,7 @@
 "dO" = (/obj/effect/decal/remains/human,/turf/simulated/floor/carpet,/area/vault)
 "dP" = (/obj/machinery/conveyor/auto,/turf/simulated/floor/carpet,/area/vault)
 "dW" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
+"dX" = (/obj/effect/overlay/palmtree_l,/turf/simulated/floor/mineral/gold,/area/vault)
 "ea" = (/obj/machinery/conveyor/auto{dir = 1},/turf/simulated/floor/carpet,/area/vault)
 "ej" = (/obj/structure/reagent_dispensers/water_cooler,/turf/simulated/floor/mineral/gold,/area/vault)
 "ek" = (/obj/machinery/conveyor/auto{dir = 4},/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/snow,/obj/machinery/light/he{dir = 8},/obj/structure/cage/autoclose/no_cover{alpha = 0; mouse_opacity = 0},/turf/simulated/floor/mineral/gold,/area/vault)
@@ -39,7 +39,6 @@
 "fC" = (/obj/structure/window/full/reinforced/plasma,/obj/structure/catwalk/invulnerable,/turf/simulated/floor/mineral/gold,/area/vault)
 "fG" = (/obj/structure/table/glass/plasma,/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/wine,/obj/item/potion/fullness{pixel_x = 11},/obj/item/potion/fullness{pixel_x = -11},/obj/item/potion/fullness{pixel_x = 6; pixel_y = 11},/turf/simulated/floor/mineral/gold,/area/vault)
 "fP" = (/obj/structure/flora/ausbushes/fullgrass,/obj/effect/plantsegment,/obj/effect/plantsegment,/turf/simulated/floor/grass,/area/vault)
-"fS" = (/obj/structure/catwalk/invulnerable,/obj/effect/overlay/palmtree_l,/turf/space,/area/vault)
 "fY" = (/turf/simulated/wall/invulnerable/gold,/area/planet/clown)
 "gg" = (/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/railing/wood/pglass{dir = 4},/obj/structure/snow,/obj/machinery/conveyor/auto{dir = 1},/obj/structure/cage/autoclose/no_cover{alpha = 0; mouse_opacity = 0},/turf/simulated/floor/mineral/gold,/area/vault)
 "gl" = (/obj/machinery/light/he{dir = 1},/obj/structure/snow,/obj/machinery/conveyor/auto{dir = 4},/obj/item/weapon/beartrap/armed{color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/mineral/gold,/area/vault)
@@ -48,7 +47,6 @@
 "gF" = (/obj/item/weapon/reagent_containers/spray,/turf/simulated/floor/dark,/area/vault)
 "gI" = (/obj/machinery/bot/mulebot,/obj/machinery/light/he{dir = 4},/obj/machinery/ai_slipper{id_tag = "trial3-2"},/turf/simulated/floor/mineral/silver,/area/vault)
 "gN" = (/obj/effect/decal/arrow{dir = 8},/turf/simulated/floor/carpet,/area/vault)
-"gR" = (/obj/effect/overlay/palmtree_r,/turf/simulated/floor/carpet,/area/planet/clown)
 "gT" = (/mob/living/simple_animal/hostile/viscerator/butterfly{color = "#E1AD01"; faction = "croesus"; melee_damage_lower = 3; melee_damage_upper = 7},/turf/simulated/floor/mineral/silver,/area/vault)
 "gV" = (/obj/machinery/door/poddoor/shutters{dir = 8; id_tag = "trial3-2"},/turf/simulated/floor/mineral/silver,/area/vault)
 "hc" = (/obj/effect/decal/arrow{dir = 4},/obj/machinery/light/he,/turf/simulated/floor/mineral/gold,/area/vault)
@@ -58,6 +56,7 @@
 "hC" = (/obj/effect/artifact_field,/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/gold,/area/vault)
 "hG" = (/obj/item/device/assembly/mousetrap/armed,/obj/item/device/assembly/mousetrap/armed,/obj/item/device/assembly/mousetrap/armed,/obj/item/device/assembly/mousetrap/armed,/obj/item/device/assembly/mousetrap/armed,/turf/simulated/floor/carpet,/area/planet/clown)
 "hO" = (/obj/machinery/light/he{dir = 4},/obj/machinery/light/he{dir = 8},/obj/structure/curtain{color = "#AA0000"},/obj/machinery/airshield,/turf/simulated/floor/mineral/gold,/area/vault)
+"hY" = (/obj/effect/decal/remains/human,/obj/effect/overlay/palmtree_r,/turf/simulated/floor/mineral/gold,/area/vault)
 "hZ" = (/obj/structure/catwalk/invulnerable,/obj/effect/artifact_field,/turf/space,/area/vault)
 "io" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/effect/decal/remains/human,/obj/machinery/light/he{dir = 4},/turf/simulated/floor/carpet,/area/vault)
 "iv" = (/obj/effect/decal/arrow,/turf/simulated/floor/mineral/silver,/area/vault)
@@ -66,13 +65,11 @@
 "iF" = (/obj/machinery/light/he{dir = 1},/obj/item/clothing/suit/armor/riot,/obj/item/clothing/head/helmet/tactical/riot,/turf/simulated/floor/mineral/gold,/area/vault)
 "iK" = (/obj/effect/decal/arrow{dir = 4},/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gold,/area/vault)
 "iN" = (/obj/structure/table/glass/plasma,/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = 5},/obj/item/weapon/coin/gold{pixel_x = -3; pixel_y = -2},/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = 5},/obj/item/weapon/coin/gold{pixel_x = 3; pixel_y = 2},/obj/item/weapon/coin/gold{pixel_x = -4; pixel_y = 3},/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = -4},/obj/item/weapon/spacecash/c100{pixel_x = 4; pixel_y = -4},/obj/item/weapon/spacecash/c100{pixel_y = 2},/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100{pixel_x = -2; pixel_y = 4},/turf/simulated/floor/mineral/gold,/area/vault)
-"iR" = (/obj/structure/catwalk/invulnerable,/obj/effect/overlay/palmtree_r,/turf/space,/area/vault)
 "iU" = (/obj/structure/window/full/reinforced/plasma,/obj/item/device/flashlight/lantern/on/dim,/turf/simulated/floor/mineral/gold,/area/vault)
-"iW" = (/obj/effect/plantsegment,/obj/effect/plantsegment,/obj/effect/overlay/palmtree_l,/turf/simulated/floor/grass,/area/vault)
 "jp" = (/obj/structure/flora/pottedplant,/obj/machinery/light/he,/turf/simulated/floor/mineral/gold,/area/planet/clown)
 "js" = (/mob/living/simple_animal/hostile/humanoid/skellington{anchored = 1; faction = "croesus"},/turf/simulated/floor/dark,/area/vault)
-"jw" = (/obj/structure/window/full/reinforced/plasma,/obj/effect/overlay/palmtree_l,/turf/simulated/floor/mineral/gold,/area/vault)
 "jx" = (/obj/effect/decal/remains/human,/turf/simulated/floor/mineral/gold,/area/vault)
+"jJ" = (/obj/structure/catwalk/invulnerable,/obj/effect/overlay/palmtree_l,/turf/space,/area/vault)
 "jO" = (/obj/machinery/mass_driver{dir = 4; id_tag = "trial4"},/turf/simulated/floor/mineral/gold,/area/vault)
 "jY" = (/obj/structure/curtain/open/shower/security,/turf/simulated/floor/mineral/gold,/area/vault)
 "kl" = (/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/railing/wood/pglass{dir = 8},/obj/structure/snow,/obj/structure/snow,/obj/machinery/conveyor/auto{dir = 1},/obj/structure/cage/autoclose/no_cover{alpha = 0; mouse_opacity = 0},/turf/simulated/floor/mineral/gold,/area/vault)
@@ -93,9 +90,9 @@
 "mc" = (/obj/machinery/door_control/mapped{id_tag = "trial3-2"},/turf/simulated/wall/invulnerable/gold,/area/vault)
 "mj" = (/obj/machinery/bot/mulebot,/obj/machinery/ai_slipper{id_tag = "trial3-2"},/turf/simulated/floor/mineral/silver,/area/vault)
 "mk" = (/obj/item/device/assembly/mousetrap/armed,/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/device/assembly/mousetrap/armed,/obj/item/device/assembly/mousetrap/armed,/obj/item/device/assembly/mousetrap/armed,/obj/item/device/assembly/mousetrap/armed,/turf/simulated/floor/carpet,/area/planet/clown)
+"mn" = (/obj/effect/overlay/palmtree_l,/turf/simulated/wall/invulnerable/gold,/area/vault)
 "mv" = (/obj/machinery/conveyor/auto{dir = 1},/turf/simulated/floor/dark,/area/vault)
 "mx" = (/obj/structure/flora/pottedplant,/turf/simulated/floor/mineral/gold,/area/vault)
-"my" = (/obj/structure/table/glass/plasma,/obj/item/clothing/shoes/clown_shoes,/obj/item/weapon/bikehorn,/obj/item/weapon/coin/clown,/turf/simulated/floor/mineral/gold,/area/vault)
 "mE" = (/obj/item/weapon/coin/gold,/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = -4},/obj/item/weapon/coin/gold{pixel_x = -3; pixel_y = -2},/obj/item/weapon/coin/gold,/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = 5},/obj/item/weapon/spacecash/c100{pixel_y = 2},/obj/item/weapon/spacecash/c100{pixel_x = 4; pixel_y = -4},/obj/item/weapon/spacecash/c100{pixel_x = -2; pixel_y = 4},/obj/item/weapon/spacecash/c100,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gold,/area/vault)
 "mG" = (/obj/machinery/light/he{dir = 4},/turf/simulated/floor/carpet,/area/vault)
 "mL" = (/obj/machinery/crystal,/turf/simulated/floor/grass,/area/vault)
@@ -121,11 +118,9 @@
 "pv" = (/obj/structure/bed/chair/wood/throne,/mob/living/simple_animal/hostile/humanoid/skellington/lich{anchored = 1; canmove = 0; desc = "The old space-king Croesus, withering and weak. He sits now on his throne and keeps watch over his domain, amusing himself at any foolish outsider's attempt to breach his great fort."; faction = "croesus"; health = 100; icon_state = "croesus"; items_to_drop = list(/obj/structure/cash_closet,/obj/effect/smoke); maxHealth = 100; move_speed = 1; name = "Croesus"},/turf/simulated/floor/mineral/diamond,/area/vault)
 "pF" = (/obj/structure/flora/ausbushes/sparsegrass,/mob/living/simple_animal/hostile/viscerator/butterfly/magic{faction = "croesus"},/turf/simulated/floor/grass,/area/vault)
 "pG" = (/obj/structure/mirror,/obj/structure/sink{color = "#FFD700"; name = "golden sink"; pixel_y = -8},/turf/simulated/wall/invulnerable/gold,/area/vault)
-"pQ" = (/obj/machinery/portable_atmospherics/hydroponics/soil,/obj/structure/railing/wood,/obj/effect/overlay/palmtree_r,/turf/simulated/floor/grass,/area/vault)
 "pR" = (/obj/effect/decal/warning_stripes/oldstyle,/obj/machinery/driver_button{id_tag = "trial4"},/turf/simulated/wall/invulnerable/gold,/area/vault)
 "pW" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/box/inflatables{pixel_x = -4; pixel_y = 7},/obj/item/weapon/storage/toolbox/syndicate,/obj/item/weapon/extinguisher,/turf/simulated/floor/dark,/area/vault)
 "qk" = (/obj/effect/decal/remains/human,/turf/simulated/floor/carpet,/area/planet/clown)
-"qu" = (/obj/effect/plantsegment,/obj/effect/overlay/palmtree_r,/turf/simulated/floor/grass,/area/vault)
 "qE" = (/obj/structure/table/glass/plasma,/obj/item/potion/mutation/strength/major,/obj/item/potion/mutation/strength/major,/obj/item/potion/mutation/strength/major,/obj/item/potion/mutation/strength/major,/turf/simulated/floor/mineral/diamond,/area/vault)
 "rj" = (/obj/machinery/door_control/mapped{id_tag = "trial3-2"},/turf/simulated/floor/carpet,/area/vault)
 "rk" = (/obj/structure/sign/securearea,/turf/simulated/wall/invulnerable/gold,/area/vault)
@@ -134,7 +129,6 @@
 "rz" = (/obj/structure/urinal{color = "#FFD700"; name = "golden urinal"},/turf/simulated/wall/invulnerable/gold,/area/vault)
 "rB" = (/turf/simulated/floor/carpet,/area/planet/clown)
 "rU" = (/obj/structure/sign/securearea,/turf/simulated/wall/invulnerable/ice,/area/vault)
-"rW" = (/obj/effect/overlay/palmtree_r,/turf/simulated/floor/mineral/gold,/area/vault)
 "se" = (/obj/structure/kitchenspike,/mob/living/simple_animal/hostile/humanoid/skellington{anchored = 1; canmove = 0; faction = "croesus"},/obj/machinery/light/he{dir = 8},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1; mouse_opacity = 0},/turf/simulated/floor/mineral/gold,/area/vault)
 "st" = (/obj/machinery/conveyor/auto{dir = 8},/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gold,/area/vault)
 "su" = (/mob/living/simple_animal/hostile/viscerator/butterfly{color = "#E1AD01"; faction = "croesus"; melee_damage_lower = 3; melee_damage_upper = 7},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/silver,/area/vault)
@@ -146,6 +140,7 @@
 "ta" = (/obj/machinery/light/he,/obj/machinery/power/emitter/energycannon{dir = 4},/turf/simulated/floor/mineral/gold,/area/vault)
 "td" = (/obj/machinery/light/he{dir = 8},/obj/machinery/light/he{dir = 4},/obj/structure/curtain{color = "#AA0000"},/obj/machinery/airshield,/turf/simulated/floor/mineral/gold,/area/vault)
 "tH" = (/obj/structure/window/plasma/oneway{dir = 4},/obj/structure/window/plasma/oneway{dir = 8},/obj/effect/decal/remains/human,/obj/structure/curtain/open/shower/security,/turf/simulated/floor/mineral/gold,/area/vault)
+"tL" = (/obj/effect/overlay/palmtree_r,/turf/simulated/floor/carpet,/area/planet/clown)
 "tX" = (/obj/structure/table/glass/plasma,/obj/item/weapon/nullrod/sword/chaos{color = "#FFD700"; desc = "This mighty sword seems to be made of pure gold. It's quite the sight to behold. It's feels like its weighted for throwing."; force = 40; throwforce = 40},/turf/simulated/floor/mineral/diamond,/area/vault)
 "tY" = (/obj/machinery/light/he{dir = 1},/obj/structure/flora/pottedplant,/turf/simulated/floor/mineral/gold,/area/vault)
 "ub" = (/obj/machinery/light/he{dir = 1},/obj/machinery/power/emitter/energycannon{id_tag = trial1},/turf/simulated/floor/mineral/silver,/area/vault)
@@ -176,10 +171,12 @@
 "xF" = (/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/gold,/area/planet/clown)
 "xK" = (/obj/structure/falsewall/gold/closed{desc = "A wall with gold plating. Swag! Powerful magic prevents its destruction."; name = "invulnerable gold wall"},/turf/simulated/floor/grass,/area/vault)
 "xQ" = (/obj/effect/glowshroom,/turf/simulated/floor/grass,/area/vault)
+"yf" = (/obj/structure/table/glass/plasma,/obj/item/clothing/shoes/clown_shoes,/obj/item/weapon/bikehorn,/obj/item/weapon/coin/clown,/turf/simulated/floor/mineral/gold,/area/vault)
 "yo" = (/obj/structure/closet/l3closet/janitor,/turf/simulated/floor/dark,/area/vault)
 "yu" = (/obj/structure/flora/ausbushes/sparsegrass,/obj/effect/overlay/palmtree_l,/turf/simulated/floor/grass,/area/vault)
 "yw" = (/obj/machinery/conveyor/auto{dir = 8},/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/carpet{toxins = 3},/area/vault)
 "yL" = (/obj/structure/flora/pottedplant,/obj/effect/decal/remains/human,/obj/machinery/light/he,/turf/simulated/floor/mineral/gold,/area/vault)
+"yZ" = (/obj/machinery/portable_atmospherics/hydroponics/soil,/obj/structure/railing/wood,/obj/effect/overlay/palmtree_r,/turf/simulated/floor/grass,/area/vault)
 "ze" = (/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
 "zi" = (/obj/item/weapon/beartrap{color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/carpet,/area/planet/clown)
 "zp" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/conveyor/auto{dir = 1},/turf/simulated/floor/dark,/area/vault)
@@ -207,6 +204,7 @@
 "Ce" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/effect/decal/remains/human,/turf/simulated/floor/mineral/gold,/area/vault)
 "Ck" = (/obj/machinery/light/he{dir = 1},/obj/structure/flora/pottedplant,/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/mineral/gold,/area/vault)
 "CA" = (/turf/space,/area/vault)
+"CE" = (/obj/structure/table/glass/plasma,/obj/item/weapon/coin/pomf,/turf/simulated/floor/mineral/diamond,/area/vault)
 "CF" = (/obj/machinery/vending/coffee,/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100{pixel_x = -2; pixel_y = 4},/obj/item/weapon/spacecash/c100{pixel_y = 2},/obj/item/weapon/spacecash/c100{pixel_x = 4; pixel_y = -4},/turf/simulated/floor/mineral/gold,/area/vault)
 "CR" = (/obj/machinery/light/he{dir = 4},/turf/simulated/floor/mineral/gold,/area/vault)
 "CY" = (/obj/machinery/power/emitter/energycannon,/turf/simulated/floor/mineral/gold,/area/vault)
@@ -226,12 +224,15 @@
 "DP" = (/obj/item/weapon/reagent_containers/spray,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/dark,/area/vault)
 "Ea" = (/obj/structure/toilet{color = "#FFD700"; dir = 8; name = "golden toilet"},/turf/simulated/floor/mineral/gold,/area/vault)
 "Eb" = (/obj/machinery/door/window/plasma/smartglass{dir = 1},/obj/machinery/door/window/plasma/smartglass{dir = 2},/obj/structure/curtain{color = "#AA0000"},/turf/simulated/floor/mineral/gold,/area/vault)
+"Eq" = (/obj/structure/catwalk/invulnerable,/obj/effect/overlay/palmtree_r,/turf/space,/area/vault)
 "Ev" = (/obj/machinery/light/he{dir = 1},/obj/item/weapon/gun/hookshot/whip,/turf/simulated/floor/mineral/gold,/area/planet/clown)
 "EA" = (/turf/simulated/wall/invulnerable/ice,/area/vault)
 "EJ" = (/obj/machinery/driver_button{id_tag = "trial5"},/turf/simulated/wall/invulnerable/gold,/area/planet/clown)
 "EM" = (/obj/structure/catwalk/invulnerable,/obj/effect/decal/remains/human,/turf/space,/area/vault)
+"Fm" = (/obj/effect/plantsegment,/obj/effect/plantsegment,/obj/effect/overlay/palmtree_l,/turf/simulated/floor/grass,/area/vault)
 "Fx" = (/obj/structure/table/glass/plasma,/obj/machinery/door_control/mapped{id_tag = "trial3-2"},/turf/simulated/floor/carpet,/area/vault)
 "Fz" = (/obj/machinery/light/he{dir = 1},/obj/item/potion/stoneskin,/turf/simulated/floor/mineral/gold,/area/vault)
+"FB" = (/obj/effect/plantsegment,/obj/effect/overlay/palmtree_l,/turf/simulated/floor/grass,/area/vault)
 "FF" = (/obj/machinery/door/window/plasma/smartglass{dir = 2},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/carpet,/area/planet/clown)
 "FG" = (/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/silver,/area/vault)
 "FQ" = (/obj/machinery/conveyor/auto{dir = 8},/obj/machinery/light/he,/turf/simulated/floor/mineral/gold,/area/vault)
@@ -251,7 +252,6 @@
 "HU" = (/mob/living/simple_animal/hostile/viscerator/butterfly{color = "#E1AD01"; faction = "croesus"; melee_damage_lower = 3; melee_damage_upper = 7},/obj/machinery/light/he{dir = 4},/turf/simulated/floor/mineral/silver,/area/vault)
 "HY" = (/obj/item/weapon/beartrap{color = "#FFDA00"; name = "golden bear trap"},/obj/structure/headpole/with_head,/turf/simulated/floor/carpet,/area/vault)
 "Ia" = (/obj/item/device/flashlight/lantern/on/dim,/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/gold,/area/vault)
-"Id" = (/obj/structure/window/full/reinforced/plasma,/obj/effect/overlay/palmtree_r,/turf/simulated/floor/mineral/gold,/area/vault)
 "Io" = (/obj/structure/curtain{color = "#AA0000"},/turf/simulated/floor/carpet,/area/planet/clown)
 "Iy" = (/obj/machinery/conveyor/auto,/obj/effect/decal/remains/human,/turf/simulated/floor/dark,/area/vault)
 "IO" = (/obj/structure/toilet{color = "#FFD700"; dir = 4; name = "golden toilet"},/turf/simulated/floor/mineral/gold,/area/vault)
@@ -267,7 +267,6 @@
 "JK" = (/obj/structure/flora/ausbushes/fullgrass,/turf/simulated/floor/grass,/area/vault)
 "JM" = (/obj/machinery/portable_atmospherics/hydroponics/soil,/obj/machinery/light/he{dir = 1},/obj/structure/railing/wood,/turf/simulated/floor/grass,/area/vault)
 "JP" = (/turf/simulated/floor/grass,/area/vault)
-"JT" = (/obj/effect/plantsegment,/obj/effect/overlay/palmtree_l,/turf/simulated/floor/grass,/area/vault)
 "JW" = (/obj/effect/decal/remains/human,/turf/simulated/floor/mineral/diamond,/area/vault)
 "JY" = (/obj/effect/plantsegment,/obj/effect/plantsegment,/turf/simulated/floor/grass,/area/vault)
 "Kt" = (/mob/living/simple_animal/hostile/asteroid/pillow{faction = "croesus"},/obj/structure/curtain/open/shower/security,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gold,/area/planet/clown)
@@ -291,7 +290,7 @@
 "MX" = (/obj/effect/forcefield/wizard,/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/gold,/area/vault)
 "MZ" = (/obj/effect/plantsegment,/obj/structure/railing/wood,/obj/machinery/portable_atmospherics/hydroponics/soil,/turf/simulated/floor/grass,/area/vault)
 "Nn" = (/obj/effect/decal/cleanable/bee/hornet,/obj/item/weapon/extinguisher/empty,/turf/simulated/floor/carpet,/area/vault)
-"Ns" = (/obj/structure/table/glass/plasma,/obj/item/weapon/coin/pomf,/turf/simulated/floor/mineral/diamond,/area/vault)
+"Ns" = (/obj/effect/overlay/palmtree_l,/obj/machinery/portable_atmospherics/hydroponics/soil,/obj/structure/railing/wood,/turf/simulated/floor/grass,/area/vault)
 "Nx" = (/obj/structure/curtain{color = "#AA0000"},/obj/machinery/door/window/plasma/smartglass{dir = 1},/obj/machinery/door/window/plasma/smartglass{dir = 2},/obj/structure/window/plasma/oneway{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
 "NH" = (/obj/structure/table/glass/plasma,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/turf/simulated/floor/mineral/gold,/area/vault)
 "NJ" = (/obj/machinery/power/emitter/energycannon{dir = 1},/turf/simulated/floor/mineral/gold,/area/vault)
@@ -303,6 +302,7 @@
 "Oh" = (/turf/unsimulated/wall/supermatter/no_spread/lake{name = "Supermatter Moat"},/area/vault)
 "On" = (/obj/machinery/conveyor/auto{dir = 8},/turf/simulated/floor/carpet{toxins = 3},/area/vault)
 "Oz" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/effect/decal/remains/human,/turf/simulated/floor/carpet,/area/vault)
+"OF" = (/obj/effect/plantsegment,/obj/effect/overlay/palmtree_r,/turf/simulated/floor/grass,/area/vault)
 "OJ" = (/obj/structure/flora/pottedplant,/obj/item/weapon/beartrap{color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he,/turf/simulated/floor/mineral/gold,/area/planet/clown)
 "Pa" = (/obj/machinery/recharge_station,/obj/machinery/light/he,/turf/simulated/floor/carpet,/area/planet/clown)
 "Pg" = (/obj/machinery/portable_atmospherics/hydroponics/soil,/obj/structure/railing/wood,/obj/item/weapon/scythe,/turf/simulated/floor/grass,/area/vault)
@@ -322,9 +322,9 @@
 "RE" = (/obj/machinery/door/airlock/highsecurity,/obj/structure/window/barricade/full/block,/turf/simulated/floor/carpet,/area/vault)
 "RT" = (/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/gold,/area/vault)
 "RX" = (/obj/structure/falsewall/gold/closed{desc = "A wall with gold plating. Swag! Powerful magic prevents its destruction."; name = "invulnerable gold wall"},/turf/simulated/floor/mineral/gold,/area/vault)
+"Sa" = (/obj/structure/window/full/reinforced/plasma,/obj/effect/overlay/palmtree_r,/turf/simulated/floor/mineral/gold,/area/vault)
 "Sc" = (/obj/machinery/light/he{dir = 1; id_tag = "trial2"},/obj/machinery/power/emitter/energycannon{id_tag = "trial2"},/turf/simulated/floor/mineral/silver,/area/vault)
 "Sw" = (/obj/machinery/door/airlock/highsecurity,/turf/simulated/floor/dark,/area/vault)
-"SS" = (/obj/effect/overlay/palmtree_l,/turf/simulated/wall/invulnerable/gold,/area/vault)
 "SU" = (/obj/structure/table/glass/plasma,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/machinery/light/he,/turf/simulated/floor/mineral/gold,/area/vault)
 "SX" = (/obj/structure/table/glass/plasma,/obj/machinery/light/he{dir = 1},/obj/item/tool/crowbar,/obj/item/tool/crowbar,/obj/item/tool/crowbar,/obj/item/tool/crowbar,/obj/item/tool/crowbar,/turf/simulated/floor/mineral/gold,/area/vault)
 "SY" = (/obj/structure/window/full/reinforced/plasma,/obj/structure/window/plasma/oneway{dir = 8},/obj/structure/window/plasma/oneway{dir = 4},/turf/simulated/floor/mineral/gold,/area/planet/clown)
@@ -340,7 +340,6 @@
 "Uc" = (/obj/structure/falsewall/gold/closed{desc = "A wall with gold plating. Swag! Powerful magic prevents its destruction."; name = "invulnerable gold wall"},/turf/simulated/floor/mineral/gold,/area/planet/clown)
 "Um" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/carpet,/area/planet/clown)
 "Un" = (/obj/machinery/vending/magivend,/turf/simulated/floor/mineral/gold,/area/vault)
-"Uu" = (/obj/effect/overlay/palmtree_r,/turf/simulated/floor/mineral/gold,/area/planet/clown)
 "Ux" = (/obj/structure/table/glass/plasma,/obj/item/potion/healing,/obj/item/potion/healing,/obj/item/potion/healing,/turf/simulated/floor/mineral/diamond,/area/vault)
 "Uy" = (/obj/machinery/door/poddoor/shutters/preopen{dir = 2; id_tag = "trial3-1"},/obj/structure/window/barricade/full/block,/turf/simulated/floor/carpet,/area/vault)
 "UE" = (/obj/machinery/light/he{dir = 1},/obj/machinery/power/emitter/energycannon{id_tag = "trial2"},/turf/simulated/floor/mineral/silver,/area/vault)
@@ -353,8 +352,10 @@
 "Vo" = (/turf/simulated/floor/mineral/gold,/area/vault)
 "Vq" = (/obj/structure/falsewall/gold/closed{desc = "A wall with gold plating. Swag! Powerful magic prevents its destruction."; name = "invulnerable gold wall"},/obj/effect/decal/arrow{dir = 1},/turf/simulated/floor/mineral/gold,/area/vault)
 "Vv" = (/mob/living/simple_animal/hostile/creature{faction = "croesus"},/turf/simulated/floor/mineral/gold,/area/vault)
+"Vx" = (/obj/effect/overlay/palmtree_r,/turf/simulated/floor/mineral/gold,/area/planet/clown)
 "VN" = (/obj/item/weapon/coin/gold,/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = -4},/obj/item/weapon/coin/gold{pixel_x = -3; pixel_y = -2},/obj/item/weapon/coin/gold,/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = 5},/obj/item/weapon/spacecash/c100{pixel_y = 2},/obj/item/weapon/spacecash/c100{pixel_x = 4; pixel_y = -4},/obj/item/weapon/spacecash/c100{pixel_x = -2; pixel_y = 4},/obj/item/weapon/spacecash/c100,/turf/simulated/floor/mineral/gold,/area/vault)
 "VR" = (/obj/structure/snow,/obj/structure/grille,/turf/simulated/floor/mineral/gold,/area/vault)
+"Wi" = (/obj/effect/overlay/palmtree_r,/turf/simulated/floor/mineral/gold,/area/vault)
 "Ws" = (/obj/structure/flora/ausbushes/ppflowers,/turf/simulated/floor/grass,/area/vault)
 "Wz" = (/obj/machinery/door/poddoor/shutters/preopen{dir = 2; id_tag = "trial2"},/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/silver,/area/vault)
 "WA" = (/obj/effect/decal/cleanable/bee/hornet,/obj/effect/decal/remains/human,/turf/simulated/floor/mineral/gold,/area/vault)
@@ -362,8 +363,7 @@
 "WL" = (/mob/living/simple_animal/hostile/hivebot/range,/obj/structure/cage/autoclose/no_cover{anchored = 1},/turf/simulated/floor/mineral/silver,/area/vault)
 "WP" = (/obj/machinery/light/he,/obj/machinery/power/emitter/energycannon{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
 "WR" = (/mob/living/simple_animal/hostile/asteroid/basilisk{faction = "croesus"},/obj/structure/cage/autoclose/no_cover{anchored = 1},/turf/simulated/floor/dark,/area/vault)
-"WS" = (/obj/effect/overlay/palmtree_l,/obj/machinery/portable_atmospherics/hydroponics/soil,/obj/structure/railing/wood,/turf/simulated/floor/grass,/area/vault)
-"Xi" = (/obj/machinery/light/he,/obj/effect/overlay/palmtree_l,/turf/simulated/floor/mineral/gold,/area/vault)
+"Xs" = (/obj/structure/window/full/reinforced/plasma,/obj/effect/overlay/palmtree_l,/turf/simulated/floor/mineral/gold,/area/vault)
 "Xu" = (/mob/living/simple_animal/hostile/mantini,/turf/simulated/floor/mineral/gold,/area/vault)
 "Xy" = (/obj/machinery/space_heater,/turf/simulated/floor/mineral/gold,/area/vault)
 "XB" = (/obj/machinery/airshield,/turf/simulated/floor/mineral/silver,/area/vault)
@@ -390,68 +390,68 @@
 (1,1,1) = {"
 bmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbm
 bmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbm
-bmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmfyRTJqLPRTJqLPRTSSbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbm
+bmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmfyRTJqLPRTJqLPRTmnbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbm
 bmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbbwmObWJLyObdOwGVjbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbm
 bmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbbCeoXdONTGdoXwmVjbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbm
 bmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbbwGWJObVoObWJCeVjbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbm
 bmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbbdWTRoXNTGdWJBIVjbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbm
 bmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbbCeObGdwGWJTRwGVjbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbm
-bmbmfSprprprprprprprprprEMprprprprprprprprprprprprprEMprprbbwGGdObNTObGdwGVjprprprprprprprprprEMprprprprprprprprprprprprprEMprpriRbm
+bmbmjJprprprprprprprprprEMprprprprprprprprprprprprprEMprprbbwGGdObNTObGdwGVjprprprprprprprprprEMprprprprprprprprprprprprprEMprprEqbm
 bmbmprRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRThCcIBtwGdOBqwmerHYwGBtcIhCRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTprbm
 bmbmprRTOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhcIBtYNGdWJTBWJGdYNBtcIOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhfCprbm
 bmbmprRTOhprprprprprprprprprprprprprprprprprprprprprprhZcINJYNoXGdZeoXGdYNNJcIhZprprprprprprprprprprprprprprprprprprprprprprOhfCprbm
 bmbmprRTOhprYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNtaRTererwRGderRTWPYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNprOhRTprbm
-bmbmprRTOhprYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNfyJqLPYNJqLPSSYNYNcdcdDomymyDomymyDorWrWYNwCwCwCwCwCwCwCwCwCYNprOhRTADbm
+bmbmprRTOhprYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNfyJqLPYNJqLPmnYNYNdXdXDoyfyfDoyfyfDoWiWiYNwCwCwCwCwCwCwCwCwCYNprOhRTADbm
 bmbmprRTOhprYNiFiFYNYBYBYNYNYNelelYNYNYNelYNYNYNYNYNYNYNYNYNXQObObtYObObLygCYNVoVomxVoVoVoVoVomxVoVoYNwCRTRTRTiURTRTRTwCYNprOhRTprbm
-bmbmprRTOhprYNVNxvYNLnYNYNYNYNLnYNYNYNYNLnYNYNYNYNYNYNYNYNrkNKObObVoObObVogCYNVoVoObObObObdOcUNnWAGsYNwCRTMGrrNsrrMGRTwCYNprOhRTADbm
-bmbmprRTOhprYNRXRXYNzpYNUEScYNzpYNZNubYNzpYNYNYNYNYNtYObObREObObObObObObVogCYNVoVoObObObObcUcUunZPWAYNwCjwlEGGGGGGlEIdwCYNprOhRTprbm
+bmbmprRTOhprYNVNxvYNLnYNYNYNYNLnYNYNYNYNLnYNYNYNYNYNYNYNYNrkNKObObVoObObVogCYNVoVoObObObObdOcUNnWAGsYNwCRTMGrrCErrMGRTwCYNprOhRTADbm
+bmbmprRTOhprYNRXRXYNzpYNUEScYNzpYNZNubYNzpYNYNYNYNYNtYObObREObObObObObObVogCYNVoVoObObObObcUcUunZPWAYNwCXslEGGGGGGlESawCYNprOhRTprbm
 bmbmprRTOhprYNCkCkYNmvYuWzWzrkmvKSwzwzrkmvrkYNYNtYObObObObREObObObObObObVogCYNzemxOblJVoGsKYyLcUIWfcYNwCIaUxGGGGGGUxIawCYNprOhRTprbm
 bmbmprRTOhprYNObObREeaVeObObREeaVeObdOREeaMFObObObObObYoYNrkNKVoVoVoVoVoVoiNYNYNYNObYNYNYNYNrkcUrkYNYNwCRTRTIaGGIaRTRTwCYNprOhRTADbm
 bmbmprRTOhprYNObObREdPVedOObREdPVeObObREdPMFObdOObYoYNYNYNYNSUVoVoVoVoaeVoZAYNEAEAhOEAEAYNzemxdOcUuoYNwCRTncGGGGGGlBRTwCYNprOhRTEMbm
-bmbmprRTOhprYNObObYNHJYuWzWzrkHJKSwzwzrkHJrkYNYNYNYNYNYNYNYNpGpGEbEbpGpGYNYNEAzyTyYPglwiEArwrwrwrwioYNwCjwCZGGGGGGnEIdwCYNprOhRTADbm
+bmbmprRTOhprYNObObYNHJYuWzWzrkHJKSwzwzrkHJrkYNYNYNYNYNYNYNYNpGpGEbEbpGpGYNYNEAzyTyYPglwiEArwrwrwrwioYNwCXsCZGGGGGGnESawCYNprOhRTADbm
 bmbmprRTOhprYNObObYNZfYNlLlLYNZfYNHpHpYNZfYNYNvlyoyoyoyoYNXyVoVoVoVoVoVoXyYNEAdzMRVRuVdzEAuoObcUObuoYNwCIaqEGGGGGGtXIawCYNprOhRTprbm
 bmbmprRTOhprYNeBObYNIyYNYNYNYNdgYNYNYNYNdgYNXUURURURURURRXVoVoVoVoVoVoVoVoYNWRDuklVRggAzEAsMzFzFzFDIYNwCRTRTIaTSIaRTRTwCYNprOhRTADbm
 bmbmprRTOhprYNObObYNYBYBYNYNYNelelYNYNYNelYNPEURpWpWURURYNYoVoVoVoVoVoVoYoYNWRzyHjKJuVzyEAOzObObObuoYNwCTzTzTzjYTzTzTzwCYNprOhRTADbm
 bmbmprRTOhprYNObObYNYNYNYNYNYNYNYNYNYNYNYNYNPEURURQfURURYNYNACDkDkDkDkNxYNYNEAAzHjVRuVAzEADIzFzFzFGEYNwCTzTzTzjYTzTzTzwCYNprOhRTprbm
 bmbmprRTOhprYNObObYNYNYNYNYNYNYNYNYNYNYNYNYNYNBlTprkSwSwYNIOzBBZBZBZtHGhEaYNEAdzozVRuVdzEAuoObdOObuoYNwCRTRTRTTSRTRTRTwCYNprOhRTADbm
-bmbmprRTOhprYNObmGYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNbsbsYNYNYNrzrzrzrzYNYNYNWRzyGQYPggzyEAuOzFzFzFzFYNwCRTcdjxjxjxrWRTwCYNprOhRTADbm
+bmbmprRTOhprYNObmGYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNbsbsYNYNYNrzrzrzrzYNYNYNWRzyGQYPggzyEAuOzFzFzFzFYNwCRTdXjxjxjxWiRTwCYNprOhRTADbm
 bmbmEMRTOhprYNMFMFYNYNYNYNYNYNYNLWMuWLviYNMAxvxvYNYNsUPRYNPRURURYNPRURURYNYNWRAzHjYPuVAzEAuounObObVoYNwCRTjxJWJWJWjxRTwCYNprOhRTADbm
-bmbmprRTOhprYNObOboDrkYNYNrWYNrkXBXBXBXBYNYNRXRXYNYNQfURQfURYNPRQfsUYNQfURYNEADuMRIQuVAzEAYNzeObObCRYNwCRTjxJWJWJWjxRTwCYNprOhRTADbm
+bmbmprRTOhprYNObOboDrkYNYNWiYNrkXBXBXBXBYNYNRXRXYNYNQfURQfURYNPRQfsUYNQfURYNEADuMRIQuVAzEAYNzeObObCRYNwCRTjxJWJWJWjxRTwCYNprOhRTADbm
 bmbmprRTOhprYNObObVoczuGstuGuGMSnHnHnHnHBODBtYtYYNYNYNYNYNYNYNYNYNYNYNYNURYNEAekHFYPHFRvEAYNVorkrkVoYNwCRTjxJWpvAujxRTwCYNprOhRTADbm
 bmbmprRTOhprYNeBObdOhpbLOnOnOnywywywywywITMFObObYNyoyogFDPkmdedeRxURURAsURYNYNEArUtdrUEAYNYNVocUObVoYNwCRTjxGGGGGGjxRTwCYNprOhRTADbm
 bmbmprRTOhprYNdOObObhpbLOnOnOnywywywywywITMFObObYNyoyogFgFwQdedeURjssUURsGYNCFRXmxObObbZYNYNVoObObVoYNwCRTjxGGGGGGjxRTwCYNprOhRTADbm
 bmbmprRTOhprYNVoVoVoczuGFQuGuGBCPrPrPrPrJIDBObObYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNObYNYNYNeBmGYNYNwCRTVoGGGGGGVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNJsJsnPrkYNYNrWYNrkXBXBXBXBYNYNObObYNYNFzKQVvLyVoLyjxLyUcRsRsAlIoAlRsRsfYzSfYfYnSObeanSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNRXRXYNYNYNYNYNYNYNYjbRWLVhYNSXObObSXYNBHswVoVojxVoVoVoUcrBrBPaIoParBrBfYrBgRfYnSObObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNJsJsnPrkYNYNWiYNrkXBXBXBXBYNYNObObYNYNFzKQVvLyVoLyjxLyUcRsRsAlIoAlRsRsfYzSfYfYnSObeanSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNRXRXYNYNYNYNYNYNYNYjbRWLVhYNSXObObSXYNBHswVoVojxVoVoVoUcrBrBPaIoParBrBfYrBtLfYnSObObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
 bmbmprRTOhprYNewmLYNYNYNYNYNYNYNYNYNYNYNYNNHObObNKYNBHswaejxVoaeVoYNfYDFUmfYfYfYrBrBfYrBrBfYnSeaObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNJPJPYNWSpQWSpQYNYNYNYNYNYNYNSUKIKIgpYNYNYNYNYNYNjxjxYNfYXTajxFxhxFUmnRSYhGOeYNDmObObpeYNwCRTcdjxObVorWRTwCYNprOhRTADbm
+bmbmprRTOhprYNJPJPYNNsyZNsyZYNYNYNYNYNYNYNSUKIKIgpYNYNYNYNYNYNjxjxYNfYXTajxFxhxFUmnRSYhGOeYNDmObObpeYNwCRTdXjxObVoWiRTwCYNprOhRTADbm
 bmbmprRTOhprYNYGJKJPPgJPYGJPewRXJCJMQRkGYNrkoxoxrkYNVoVorkmEYNRXRXYNfYDFDFfYfYfYzizifYhGxCYNnSObeanSYNwCRTVoVoObVojxRTwCYNprOhRTADbm
 bmbmprRTOhprYNPgxQJKAaZoalWsmLRXVoVoVoVoRXniKIKIniRXaeaeRXVNrkiDDHrkfYwFwFxFxhxFUmUmSYhGxCYNnSeaObnSYNwCRTmxVoObVomxRTwCYNprOhRTADbm
 bmbmprRTOhprYNYNYNYNrkxKcjYNYNYNPQPyYNYNYNYNUyUyYNYNYNYNYNVNYNRXRXYNfYwFwFfYfYfYzizifYmkxCYNDxObObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNYNquYGJKboJKYNYNYNRXRXrkbvdqFGObObhfdqgIrkYNRXYNkODHYNfYwFwFxFxhxFziziSYhGxCYNnSeaObnSYNwCRTcdVoObjxrWRTwCYNprOhRTprbm
+bmbmprRTOhprYNYNOFYGJKboJKYNYNYNRXRXrkbvdqFGObObhfdqgIrkYNRXYNkODHYNfYwFwFxFxhxFziziSYhGxCYNnSeaObnSYNwCRTdXVoObjxWiRTwCYNprOhRTprbm
 bmbmprRTOhprYNYNJKJPJPJKJPYNYNYNgTgTlzdqdqmjObObmjdqdqgVgTgTYNRXRXYNfYwFwFfYfYfYzizifYhGxCYNnSObObDxYNwCRTjxVoObVoVoRTwCYNprOhRTADbm
 bmbmprRTOhprYNYNxQJKJPpFJKYNYNYNsugTlzdqmjgNdOOblsdqmjgVgTHUYNiDkQYNfYwFwFxFxhxFUmziSYhGxCYNnSObeaDxYNwCRTmxVoObVomxRTwCYNprOhRTprbm
 bmbmprRTOhprYNYNJPAaJKJKJPYNYNYNgTgTlzdqmjObFxFxGfdqdqgVgTgTYNRXRXYNfYFFwFfYfYfYzinRfYhGOeYNseObObpeYNwCiUVoVoObVoVoiUwCYNprOhRTADbm
-bmbmprRTOhprYNYNuLJKxQhvJPYNYNYNgTgTlzivmjcnrkrkcndqivgVgTgTYNiDDHYNfYrBrBxFxhxFUmziSYmkxCYNnSeaObDxYNwCRTcdjxObVorWRTwCYNprOhRTADbm
+bmbmprRTOhprYNYNuLJKxQhvJPYNYNYNgTgTlzivmjcnrkrkcndqivgVgTgTYNiDDHYNfYrBrBxFxhxFUmziSYmkxCYNnSeaObDxYNwCRTdXjxObVoWiRTwCYNprOhRTADbm
 bmbmprRTOhprYNYNJKJPJPJPxQYNYNYNRXYNrkbvdqgVrjrjlzmjmNrkYNYNYNRXRXYNfYajrBfYfYfYzizifYhGxCYNnSObObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
 bmbmprRTOhprYNYNJPyuZoJPJPYNYNYNXuYNYBmjiygVDMDMlzlodqYBYNYNYNiDDHYNfYrBrBxFxhxFUmUmSYhGxCYNnSObeaDxYNwCRTmxVoObVomxRTwCYNprOhRTprbm
 bmbmprRTOhprYNYNMZuLuLuLwXYNVNYNRXYNYNYNYNmcaHaHmcYNYNYNYNYNYNRXRXYNfYrBrBfYfYfYajzifYhGYUYNDxeaObnSYNwCiUVoVoObjxVoiUwCYNprOhRTmWbm
-bmbmprRTOhprYNYNuLaEuLwAquYNVNRXRnBkKDKDKDniObObniejejrWlpkyfGvnvnmxfYTXwFxFxhxFUmwNSYhGOeYNseObObRpYNwCRTcdVoObVorWRTwCYNprOhRTADbm
+bmbmprRTOhprYNYNuLaEuLwAOFYNVNRXRnBkKDKDKDniObObniejejWilpkyfGvnvnmxfYTXwFxFxhxFUmwNSYhGOeYNseObObRpYNwCRTdXVoObVoWiRTwCYNprOhRTADbm
 bmbmprRTOhprYNYNuLJYfPJYJYYNVNYNVoVoVoVoVoVoObObVoVoVoVoTocsToVoVoCRfYwFwFfYfYfYziUmfYhGxCYNDxeaeaDxYNwCRTVoVoObjxVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNYNafwXKwnBJKYNYNYNzerWTWTWTWcdObObObObObObObObObObObObfYwFwFxFxhxFziziSYhGxCYNVoObObVoYNwCRTmxjxObVomxRTwCYNprOhRTADbm
+bmbmprRTOhprYNYNafwXKwnBJKYNYNYNzeWiTWTWTWdXObObObObObObObObObObObObfYwFwFxFxhxFziziSYhGxCYNVoObObVoYNwCRTmxjxObVomxRTwCYNprOhRTADbm
 bmbmprRTOhprYNYNuLwXwXuLuLYNYNYNVoVoVoVoVoVoObObObObObObObObObObObObfYwFwFfYfYfYUmUmfYhGxCYNVocncnVoYNwCiUVoVoObVoVoiUwCYNprOhRTADbm
-bmbmprRTOhprYNYNiWJKMZuLJKYNXuRXJrUnmYmYmYXiVoVoaeVoVoVoVoaeVoDDrBrBfYwFwFxFxhxFziziSYhGxCYNVocncnVoYNwCRTcdVoObVoasRTwCYNprOhRTprbm
+bmbmprRTOhprYNYNFmJKMZuLJKYNXuRXJrUnmYmYmYbIVoVoaeVoVoVoVoaeVoDDrBrBfYwFwFxFxhxFziziSYhGxCYNVocncnVoYNwCRTdXVoObVohYRTwCYNprOhRTprbm
 bmbmprRTOhprYNYNJKnBJYafJYYNYNYNRXYNYNYNYNYNYNYNYNYNYNYNYNRXRXfYrBrBfYwFwFfYfYfYUmajfYhGxCYNVoObObVoYNwCRTVoVoObVoVoRTwCYNprOhRTprbm
 bmbmprRTOhprYNYNuLwXJPuLfPYNVNVNVNYNCYCYHSCYCYCYCYHSCYCYYNVqVqfYrBrBfYwFwFxFxhxFziziSYrBrBfYzeObObCRrkYNYNmxVodOVomxRTwCYNprOhRTprbm
-bmbmprRTOhprYNYNUNuLJTaEuLYNYNYNYNYNCACACACACACACACACACAYNVqVqfYrBrBAJFFwFfYfYfYzinREJYHsvfYVoObObVoVoMXVoVojxObVoVoiUwCYNprOhRTprbm
+bmbmprRTOhprYNYNUNuLFBaEuLYNYNYNYNYNCACACACACACACACACACAYNVqVqfYrBrBAJFFwFfYfYfYzinREJYHsvfYVoObObVoVoMXVoVojxObVoVoiUwCYNprOhRTprbm
 bmbmprRTOhprYNYNusQEfPJYNNRXiKjOJxnTCACACACACACACACACAplnTUWUWfYrBrBzSrBrBxFKtxFziUmrBrBrBfYVoObObObObYLObObObObVoVoRTwCYNprOhRTprbm
-bmbmprRTOhprYNYNuLMZaEUNNNRXhcjODrnTCACACACACACACACACAplnTVoVofYrBqkzSrBrBfYfYfYUmzirBrBrBfYYNRTRTYNVoMXVoVoVoVojxrWRTwCYNprOhRTprbm
-bmbmprRTOhprYNYNuLwXuLwXquYNYNpRYNYNCACACACACACACACACACAYNYoYofYjpjpAJjpjpfYEvUcHuOJUujpjpfYYNkWkWYNrkYNYNYNYNYNYNYNYNYNYNprOhRTprbm
+bmbmprRTOhprYNYNuLMZaEUNNNRXhcjODrnTCACACACACACACACACAplnTVoVofYrBqkzSrBrBfYfYfYUmzirBrBrBfYYNRTRTYNVoMXVoVoVoVojxWiRTwCYNprOhRTprbm
+bmbmprRTOhprYNYNuLwXuLwXOFYNYNpRYNYNCACACACACACACACACACAYNYoYofYjpjpAJjpjpfYEvUcHuOJVxjpjpfYYNkWkWYNrkYNYNYNYNYNYNYNYNYNYNprOhRTprbm
 bmbmprRTOhprYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNfYfYfYfYfYfYfYfYfYfYfYfYfYfYfYYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNprOhRTprbm
 bmbmEMRTOhprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprOhRTprbm
 bmbmprRTOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhOhRTprbm
 bmbmprRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTRTprbm
-bmbmiRprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprEMprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprfSbm
+bmbmEqprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprEMprprprprprprprprprprprprprprprprprprprprprprprprprprprprprprjJbm
 bmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbm
 bmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbmbm
 "}
