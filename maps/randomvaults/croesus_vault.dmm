@@ -1,6 +1,6 @@
 "ae" = (/obj/machinery/light/he,/turf/simulated/floor/mineral/gold,/area/vault)
 "af" = (/obj/structure/flora/ausbushes/fullgrass,/obj/effect/plantsegment,/obj/effect/decal/remains/human,/turf/simulated/floor/grass,/area/vault)
-"aj" = (/mob/living/simple_animal/hostile/viscerator/butterfly{color = "#E1AD01"; faction = "croesus"; melee_damage_lower = 3; melee_damage_upper = 7},/obj/structure/grille,/turf/simulated/floor/mineral/silver,/area/vault)
+"aj" = (/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1; mouse_opacity = 0},/mob/living/simple_animal/hostile/humanoid/pirate/ranged{aggro_vision_range = 7; anchored = 0; canmove = 1; color = "#000000"; faction = "croesus"; health = 30; name = "Shadow Gunner"; projectiletype = /obj/item/projectile/beam/veryweaklaser; vision_range = 7},/obj/effect/forcefield/wizard,/turf/simulated/floor/carpet,/area/vault)
 "al" = (/obj/machinery/portable_atmospherics/hydroponics/soil,/obj/structure/railing/wood,/obj/effect/decal/remains/human,/obj/item/weapon/scythe,/turf/simulated/floor/grass,/area/vault)
 "aE" = (/obj/structure/flora/ausbushes/fullgrass,/obj/effect/plantsegment,/mob/living/simple_animal/hostile/viscerator/butterfly/magic{faction = "croesus"},/turf/simulated/floor/grass,/area/vault)
 "aH" = (/obj/machinery/door/poddoor/shutters/preopen{id_tag = trial3-2},/turf/simulated/floor/carpet,/area/vault)
@@ -58,7 +58,7 @@
 "io" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/effect/decal/remains/human,/obj/machinery/light/he{dir = 4},/turf/simulated/floor/carpet,/area/vault)
 "iv" = (/obj/effect/decal/arrow,/turf/simulated/floor/mineral/silver,/area/vault)
 "iy" = (/obj/machinery/light/he,/obj/effect/decal/arrow{dir = 4},/turf/simulated/floor/mineral/silver,/area/vault)
-"iD" = (/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1; mouse_opacity = 0},/mob/living/simple_animal/hostile/humanoid/pirate/ranged{aggro_vision_range = 7; anchored = 1; canmove = 0; color = "#000000"; faction = "croesus"; health = 30; name = "Shadow Gunner"; projectiletype = /obj/item/projectile/beam/veryweaklaser; vision_range = 7},/obj/effect/forcefield/wizard,/turf/simulated/floor/carpet,/area/vault)
+"iD" = (/obj/structure/flora/pottedplant,/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
 "iF" = (/obj/machinery/light/he{dir = 1},/obj/item/clothing/suit/armor/riot,/obj/item/clothing/head/helmet/tactical/riot,/turf/simulated/floor/mineral/gold,/area/vault)
 "iK" = (/obj/effect/decal/arrow{dir = 4},/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gold,/area/vault)
 "iN" = (/obj/structure/table/glass/plasma,/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = 5},/obj/item/weapon/coin/gold{pixel_x = -3; pixel_y = -2},/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = 5},/obj/item/weapon/coin/gold{pixel_x = 3; pixel_y = 2},/obj/item/weapon/coin/gold{pixel_x = -4; pixel_y = 3},/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = -4},/obj/item/weapon/spacecash/c100{pixel_x = 4; pixel_y = -4},/obj/item/weapon/spacecash/c100{pixel_y = 2},/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100{pixel_x = -2; pixel_y = 4},/turf/simulated/floor/mineral/gold,/area/vault)
@@ -72,8 +72,8 @@
 "km" = (/obj/item/key/janicart,/turf/simulated/floor/dark,/area/vault)
 "ky" = (/mob/living/simple_animal/robot/food_samples,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gold,/area/vault)
 "kG" = (/obj/machinery/chem_dispenser,/turf/simulated/floor/mineral/gold,/area/vault)
-"kO" = (/obj/structure/flora/pottedplant,/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
-"kQ" = (/obj/structure/flora/pottedplant,/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
+"kO" = (/obj/structure/flora/pottedplant,/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
+"kQ" = (/obj/structure/flora/pottedplant,/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 4},/turf/simulated/floor/mineral/gold,/area/vault)
 "kW" = (/obj/machinery/light/he,/obj/machinery/power/emitter/energycannon{dir = 1},/turf/simulated/floor/mineral/gold,/area/vault)
 "lo" = (/obj/machinery/light/he,/obj/effect/decal/arrow{dir = 8},/turf/simulated/floor/mineral/silver,/area/vault)
 "lp" = (/obj/structure/table/glass/plasma,/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/wine,/obj/item/potion/fullness{pixel_x = 6; pixel_y = 11},/obj/item/potion/fullness{pixel_x = 11},/obj/item/potion/fullness{pixel_x = -11},/turf/simulated/floor/mineral/gold,/area/vault)
@@ -83,7 +83,7 @@
 "lE" = (/obj/structure/table/glass/plasma,/turf/simulated/floor/mineral/diamond,/area/vault)
 "lJ" = (/obj/structure/flora/pottedplant,/obj/machinery/light/he,/turf/simulated/floor/mineral/gold,/area/vault)
 "lL" = (/obj/machinery/light/he,/obj/machinery/power/emitter/energycannon{dir = 1; id_tag = "trial2"},/turf/simulated/floor/mineral/silver,/area/vault)
-"mc" = (/obj/structure/flora/pottedplant,/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 4},/turf/simulated/floor/mineral/gold,/area/vault)
+"mc" = (/obj/machinery/door_control/mapped{id_tag = "trial3-2"},/turf/simulated/wall/invulnerable/gold,/area/vault)
 "mj" = (/obj/machinery/bot/mulebot,/obj/machinery/ai_slipper{id_tag = "trial3-2"},/turf/simulated/floor/mineral/silver,/area/vault)
 "mk" = (/obj/item/device/assembly/mousetrap/armed,/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/device/assembly/mousetrap/armed,/obj/item/device/assembly/mousetrap/armed,/obj/item/device/assembly/mousetrap/armed,/obj/item/device/assembly/mousetrap/armed,/turf/simulated/floor/carpet,/area/planet/clown)
 "mv" = (/obj/machinery/conveyor/auto{dir = 1},/turf/simulated/floor/dark,/area/vault)
@@ -103,7 +103,6 @@
 "nR" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 4},/turf/simulated/floor/carpet,/area/planet/clown)
 "nS" = (/obj/structure/kitchenspike,/obj/structure/skele_stand{anchored = 1; pixel_x = -3},/turf/simulated/floor/mineral/gold,/area/vault)
 "nT" = (/obj/machinery/airshield,/obj/structure/plasticflaps/mining,/turf/simulated/floor/mineral/gold,/area/vault)
-"oa" = (/obj/machinery/door_control/mapped{id_tag = "trial3-2"},/turf/simulated/wall/invulnerable/gold,/area/vault)
 "ox" = (/obj/machinery/door/poddoor/shutters{dir = 2; id_tag = "trial3-1"},/obj/structure/window/barricade/full/block,/turf/simulated/floor/carpet,/area/vault)
 "oz" = (/obj/machinery/conveyor/auto{dir = 1},/obj/structure/railing/wood/pglass{dir = 8},/obj/structure/snow,/obj/structure/snow,/obj/item/weapon/beartrap/armed{color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/mineral/gold,/area/vault)
 "oD" = (/obj/structure/table/glass/plasma,/obj/item/clothing/glasses/scanner/science/prescription,/obj/item/clothing/glasses/scanner/science/prescription,/obj/item/clothing/glasses/scanner/science/prescription,/obj/item/clothing/glasses/scanner/science/prescription,/obj/item/clothing/glasses/scanner/science/prescription,/obj/item/clothing/glasses/scanner/science/prescription,/obj/item/clothing/mask/gas,/obj/item/clothing/mask/gas,/obj/item/clothing/mask/gas,/obj/item/clothing/mask/gas,/obj/item/clothing/mask/gas,/obj/item/clothing/mask/gas,/obj/item/clothing/mask/gas,/obj/item/weapon/tank/emergency_oxygen/engi,/obj/item/weapon/tank/emergency_oxygen/engi,/obj/item/weapon/tank/emergency_oxygen/engi,/obj/item/weapon/tank/emergency_oxygen/engi,/obj/item/weapon/tank/emergency_oxygen/engi,/obj/item/weapon/tank/emergency_oxygen/engi,/turf/simulated/floor/mineral/gold,/area/vault)
@@ -344,6 +343,7 @@
 "Wz" = (/obj/machinery/door/poddoor/shutters/preopen{dir = 2; id_tag = "trial2"},/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/silver,/area/vault)
 "WA" = (/obj/effect/decal/cleanable/bee/hornet,/obj/effect/decal/remains/human,/turf/simulated/floor/mineral/gold,/area/vault)
 "WJ" = (/obj/item/weapon/beartrap{color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/carpet,/area/vault)
+"WL" = (/mob/living/simple_animal/hostile/hivebot/range,/obj/structure/cage/autoclose/no_cover{anchored = 1},/turf/simulated/floor/mineral/silver,/area/vault)
 "WP" = (/obj/machinery/light/he,/obj/machinery/power/emitter/energycannon{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
 "WR" = (/mob/living/simple_animal/hostile/asteroid/basilisk{faction = "croesus"},/obj/structure/cage/autoclose/no_cover{anchored = 1},/turf/simulated/floor/dark,/area/vault)
 "Xu" = (/mob/living/simple_animal/hostile/mantini,/turf/simulated/floor/mineral/gold,/area/vault)
@@ -397,33 +397,33 @@ bmbmprRTOhprYNObObYNYBYBYNYNYNelelYNYNYNelYNPEURpWpWURURYNYoVoVoVoVoVoVoYoYNWRzy
 bmbmprRTOhprYNObObYNYNYNYNYNYNYNYNYNYNYNYNYNPEURURQfURURYNYNACDkDkDkDkNxYNYNEAAzHjVRuVAzEADIzFzFzFGEYNwCTzTzTzjYTzTzTzwCYNprOhRTprbm
 bmbmprRTOhprYNObObYNYNYNYNYNYNYNYNYNYNYNYNYNYNBlTprkSwSwYNIOzBBZBZBZtHGhEaYNEAdzozVRuVdzEAuoObdOObuoYNwCRTRTRTTSRTRTRTwCYNprOhRTADbm
 bmbmprRTOhprYNObmGYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNbsbsYNYNYNrzrzrzrzYNYNYNWRzyGQYPggzyEAuOzFzFzFzFYNwCRTmxjxjxjxmxRTwCYNprOhRTADbm
-bmbmEMRTOhprYNMFMFYNYNYNYNYNYNYNLWMuLWviYNMAxvxvYNYNsUPRYNPRURURYNPRURURYNYNWRAzHjYPuVAzEAuounObObVoYNwCRTjxJWJWJWjxRTwCYNprOhRTADbm
+bmbmEMRTOhprYNMFMFYNYNYNYNYNYNYNLWMuWLviYNMAxvxvYNYNsUPRYNPRURURYNPRURURYNYNWRAzHjYPuVAzEAuounObObVoYNwCRTjxJWJWJWjxRTwCYNprOhRTADbm
 bmbmprRTOhprYNObOboDrkYNYNYNYNrkXBXBXBXBYNYNRXRXYNYNQfURQfURYNPRQfsUYNQfURYNEADuMRIQuVAzEAYNzeObObCRYNwCRTjxJWJWJWjxRTwCYNprOhRTADbm
 bmbmprRTOhprYNObObVoczuGstuGuGMSnHnHnHnHBODBtYtYYNYNYNYNYNYNYNYNYNYNYNYNURYNEAekHFYPHFRvEAYNVorkrkVoYNwCRTjxJWpvAujxRTwCYNprOhRTADbm
 bmbmprRTOhprYNeBObdOhpbLOnOnOnywywywywywITMFObObYNyoyogFDPkmdedeRxURURAsURYNYNEArUtdrUEAYNYNVocUObVoYNwCRTjxGGGGGGjxRTwCYNprOhRTADbm
 bmbmprRTOhprYNdOObObhpbLOnOnOnywywywywywITMFObObYNyoyogFgFwQdedeURjssUURsGYNCFRXmxObObbZYNYNVoObObVoYNwCRTjxGGGGGGjxRTwCYNprOhRTADbm
 bmbmprRTOhprYNVoVoVoczuGFQuGuGBCPrPrPrPrJIDBObObYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNObYNYNYNeBmGYNYNwCRTVoGGGGGGVoRTwCYNprOhRTADbm
 bmbmprRTOhprYNJsJsnPrkYNYNYNYNrkXBXBXBXBYNYNObObYNYNFzKQVvLyVoLyjxLyUcRsRsAlIoAlRsRsfYzSfYfYnSObeanSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNRXRXYNYNYNYNYNYNYNYjbRYjVhYNSXObObSXYNBHswVoVojxVoVoVoUcrBrBPaIoParBrBfYrBrBfYnSObObnSYNwCRTmxVoObVomxRTwCYNprOhRTADbm
-bmbmprRTOhprYNewmLYNYNYNYNYNYNYNYNYNYNYNYNNHObObNKYNBHswaejxVoaeVoYNfYDFUmfYxFfYrBrBfYrBrBfYnSeaObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNJPJPYNYNYNYNYNYNYNYNYNYNYNYNSUKIKIgpYNYNYNYNYNYNjxjxYNfYXTiDxFxhxFUmnRSYhGOeYNDmObObpeYNwCRTVojxObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNRXRXYNYNYNYNYNYNYNYjbRWLVhYNSXObObSXYNBHswVoVojxVoVoVoUcrBrBPaIoParBrBfYrBrBfYnSObObnSYNwCRTmxVoObVomxRTwCYNprOhRTADbm
+bmbmprRTOhprYNewmLYNYNYNYNYNYNYNYNYNYNYNYNNHObObNKYNBHswaejxVoaeVoYNfYDFUmfYfYfYrBrBfYrBrBfYnSeaObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNJPJPYNYNYNYNYNYNYNYNYNYNYNYNSUKIKIgpYNYNYNYNYNYNjxjxYNfYXTajxFxhxFUmnRSYhGOeYNDmObObpeYNwCRTVojxObVoVoRTwCYNprOhRTADbm
 bmbmprRTOhprYNYGJKJPPgJPYGJPewRXJCJMQRkGYNrkoxoxrkYNVoVorkmEYNRXRXYNfYDFDFfYfYfYzizifYhGxCYNnSObeanSYNwCRTVoVoObVojxRTwCYNprOhRTADbm
-bmbmprRTOhprYNPgxQJKAaZoalWsmLRXVoVoVoVoRXniKIKIniRXaeaeRXVNrkkODHrkfYwFwFxFxhxFUmUmSYhGxCYNnSeaObnSYNwCRTmxVoObVomxRTwCYNprOhRTADbm
+bmbmprRTOhprYNPgxQJKAaZoalWsmLRXVoVoVoVoRXniKIKIniRXaeaeRXVNrkiDDHrkfYwFwFxFxhxFUmUmSYhGxCYNnSeaObnSYNwCRTmxVoObVomxRTwCYNprOhRTADbm
 bmbmprRTOhprYNYNYNYNrkxKcjYNYNYNPQPyYNYNYNYNUyUyYNYNYNYNYNVNYNRXRXYNfYwFwFfYfYfYzizifYmkxCYNDxObObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNYNuLYGJKboJKYNYNYNRXRXrkbvdqFGObObhfdqgIrkYNRXYNkQDHYNfYwFwFxFxhxFziziSYhGxCYNnSeaObnSYNwCRTVoVoObjxVoRTwCYNprOhRTprbm
+bmbmprRTOhprYNYNuLYGJKboJKYNYNYNRXRXrkbvdqFGObObhfdqgIrkYNRXYNkODHYNfYwFwFxFxhxFziziSYhGxCYNnSeaObnSYNwCRTVoVoObjxVoRTwCYNprOhRTprbm
 bmbmprRTOhprYNYNJKJPJPJKJPYNYNYNgTgTlzdqdqmjObObmjdqdqgVgTgTYNRXRXYNfYwFwFfYfYfYzizifYhGxCYNnSObObDxYNwCRTjxVoObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNYNxQJKJPpFJKYNYNYNsugTlzdqmjgNdOOblsdqmjgVgTHUYNkOmcYNfYwFwFxFxhxFUmziSYhGxCYNnSObeaDxYNwCRTmxVoObVomxRTwCYNprOhRTprbm
-bmbmprRTOhprYNYNJPAaJKJKJPYNYNYNgTajlzdqmjObFxFxGfdqdqgVgTgTYNRXRXYNfYFFwFfYfYfYzinRfYhGOeYNseObObpeYNwCiUVoVoObVoVoiUwCYNprOhRTADbm
-bmbmprRTOhprYNYNuLJKxQhvJPYNYNYNgTgTlzivmjcnrkrkcndqivgVgTgTYNkODHYNfYrBrBxFxhxFUmziSYmkxCYNnSeaObDxYNwCRTVojxObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNYNJKJPJPJPxQYNYNYNRXYNrkbvdqgVrjrjlzmjmNrkYNYNYNRXRXYNfYiDrBfYfYfYzizifYhGxCYNnSObObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNYNJPyuZoJPJPYNYNYNXuYNYBmjiygVDMDMlzlodqYBYNYNYNkODHYNfYrBrBxFxhxFUmUmSYhGxCYNnSObeaDxYNwCRTmxVoObVomxRTwCYNprOhRTprbm
-bmbmprRTOhprYNYNMZuLuLuLwXYNVNYNRXYNYNYNYNoaaHaHoaYNYNYNYNYNYNRXRXYNfYrBrBfYfYfYiDzifYhGYUYNDxeaObnSYNwCiUVoVoObjxVoiUwCYNprOhRTmWbm
+bmbmprRTOhprYNYNxQJKJPpFJKYNYNYNsugTlzdqmjgNdOOblsdqmjgVgTHUYNiDkQYNfYwFwFxFxhxFUmziSYhGxCYNnSObeaDxYNwCRTmxVoObVomxRTwCYNprOhRTprbm
+bmbmprRTOhprYNYNJPAaJKJKJPYNYNYNgTgTlzdqmjObFxFxGfdqdqgVgTgTYNRXRXYNfYFFwFfYfYfYzinRfYhGOeYNseObObpeYNwCiUVoVoObVoVoiUwCYNprOhRTADbm
+bmbmprRTOhprYNYNuLJKxQhvJPYNYNYNgTgTlzivmjcnrkrkcndqivgVgTgTYNiDDHYNfYrBrBxFxhxFUmziSYmkxCYNnSeaObDxYNwCRTVojxObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNYNJKJPJPJPxQYNYNYNRXYNrkbvdqgVrjrjlzmjmNrkYNYNYNRXRXYNfYajrBfYfYfYzizifYhGxCYNnSObObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNYNJPyuZoJPJPYNYNYNXuYNYBmjiygVDMDMlzlodqYBYNYNYNiDDHYNfYrBrBxFxhxFUmUmSYhGxCYNnSObeaDxYNwCRTmxVoObVomxRTwCYNprOhRTprbm
+bmbmprRTOhprYNYNMZuLuLuLwXYNVNYNRXYNYNYNYNmcaHaHmcYNYNYNYNYNYNRXRXYNfYrBrBfYfYfYajzifYhGYUYNDxeaObnSYNwCiUVoVoObjxVoiUwCYNprOhRTmWbm
 bmbmprRTOhprYNYNuLaEuLwAuLYNVNRXRnBkKDKDKDniObObniejejmxlpkyfGvnvnmxfYTXwFxFxhxFUmwNSYhGOeYNseObObRpYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
 bmbmprRTOhprYNYNuLJYfPJYJYYNVNYNVoVoVoVoVoVoObObVoVoVoVoTocsToVoVoCRfYwFwFfYfYfYziUmfYhGxCYNDxeaeaDxYNwCRTVoVoObjxVoRTwCYNprOhRTADbm
 bmbmprRTOhprYNYNafwXKwnBJKYNYNYNzeVoTWTWTWVoObObObObObObObObObObObObfYwFwFxFxhxFziziSYhGxCYNVoObObVoYNwCRTmxjxObVomxRTwCYNprOhRTADbm
 bmbmprRTOhprYNYNuLwXwXuLuLYNYNYNVoVoVoVoVoVoObObObObObObObObObObObObfYwFwFfYfYfYUmUmfYhGxCYNVocncnVoYNwCiUVoVoObVoVoiUwCYNprOhRTADbm
 bmbmprRTOhprYNYNJYJKMZuLJKYNXuRXJrUnmYmYmYaeVoVoaeVoVoVoVoaeVoDDrBrBfYwFwFxFxhxFziziSYhGxCYNVocncnVoYNwCRTVoVoObVojxRTwCYNprOhRTprbm
-bmbmprRTOhprYNYNJKnBJYafJYYNYNYNRXYNYNYNYNYNYNYNYNYNYNYNYNRXRXfYrBrBfYwFwFfYfYfYUmiDfYhGxCYNVoObObVoYNwCRTVoVoObVoVoRTwCYNprOhRTprbm
+bmbmprRTOhprYNYNJKnBJYafJYYNYNYNRXYNYNYNYNYNYNYNYNYNYNYNYNRXRXfYrBrBfYwFwFfYfYfYUmajfYhGxCYNVoObObVoYNwCRTVoVoObVoVoRTwCYNprOhRTprbm
 bmbmprRTOhprYNYNuLwXJPuLfPYNVNVNVNYNCYCYHSCYCYCYCYHSCYCYYNVqVqfYrBrBfYwFwFxFxhxFziziSYrBrBfYzeObObCRrkYNYNmxVodOVomxRTwCYNprOhRTprbm
 bmbmprRTOhprYNYNUNuLuLaEuLYNYNYNYNYNCACACACACACACACACACAYNVqVqfYrBrBAJFFwFfYfYfYzinREJYHsvfYVoObObVoVoMXVoVojxObVoVoiUwCYNprOhRTprbm
 bmbmprRTOhprYNYNusQEfPJYNNRXiKjOJxnTCACACACACACACACACAplnTUWUWfYrBrBzSrBrBxFKtxFziUmrBrBrBfYVoObObObObYLObObObObVoVoRTwCYNprOhRTprbm
