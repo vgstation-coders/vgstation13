@@ -139,7 +139,7 @@
 "ta" = (/obj/machinery/light/he,/obj/machinery/power/emitter/energycannon{dir = 4},/turf/simulated/floor/mineral/gold,/area/vault)
 "td" = (/obj/machinery/light/he{dir = 8},/obj/machinery/light/he{dir = 4},/obj/structure/curtain{color = "#AA0000"},/obj/machinery/airshield,/turf/simulated/floor/mineral/gold,/area/vault)
 "tH" = (/obj/structure/window/plasma/oneway{dir = 4},/obj/structure/window/plasma/oneway{dir = 8},/obj/effect/decal/remains/human,/obj/structure/curtain/open/shower/security,/turf/simulated/floor/mineral/gold,/area/vault)
-"tX" = (/obj/structure/table/glass/plasma,/obj/item/weapon/sord{color = "#00FF00"; desc = "No... this shit... this shit's legit."; force = 30; name = "\improper SUPERSORD"},/turf/simulated/floor/mineral/diamond,/area/vault)
+"tX" = (/obj/structure/table/glass/plasma,/obj/item/weapon/nullrod/sword/chaos{color = "#FFD700"; desc = "This mighty sword seems to be made of pure gold. It's quite the sight to behold. It's feels like its weighted for throwing."; force = 40; name = "Goldenreaver"; throwforce = 40},/turf/simulated/floor/mineral/diamond,/area/vault)
 "tY" = (/obj/machinery/light/he{dir = 1},/obj/structure/flora/pottedplant,/turf/simulated/floor/mineral/gold,/area/vault)
 "ub" = (/obj/machinery/light/he{dir = 1},/obj/machinery/power/emitter/energycannon{id_tag = trial1},/turf/simulated/floor/mineral/silver,/area/vault)
 "un" = (/obj/effect/decal/cleanable/bee/hornet,/obj/effect/decal/remains/human,/turf/simulated/floor/carpet,/area/vault)
@@ -330,6 +330,7 @@
 "Uc" = (/obj/structure/falsewall/gold/closed{desc = "A wall with gold plating. Swag! Powerful magic prevents its destruction."; name = "invulnerable gold wall"},/turf/simulated/floor/mineral/gold,/area/planet/clown)
 "Um" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/carpet,/area/planet/clown)
 "Un" = (/obj/machinery/vending/magivend,/turf/simulated/floor/mineral/gold,/area/vault)
+"Ux" = (/obj/structure/table/glass/plasma,/obj/item/potion/healing,/obj/item/potion/healing,/obj/item/potion/healing,/turf/simulated/floor/mineral/diamond,/area/vault)
 "Uy" = (/obj/machinery/door/poddoor/shutters/preopen{dir = 2; id_tag = "trial3-1"},/obj/structure/window/barricade/full/block,/turf/simulated/floor/carpet,/area/vault)
 "UE" = (/obj/machinery/light/he{dir = 1},/obj/machinery/power/emitter/energycannon{id_tag = "trial2"},/turf/simulated/floor/mineral/silver,/area/vault)
 "UN" = (/obj/effect/plantsegment,/obj/effect/glowshroom,/turf/simulated/floor/grass,/area/vault)
@@ -391,7 +392,7 @@ bmbmprRTOhprYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNJqLPYNJqLPYNYNYNVo
 bmbmprRTOhprYNiFiFYNYBYBYNYNYNelelYNYNYNelYNYNYNYNYNYNYNYNYNXQObObtYObObLygCYNVoVomxVoVoVoVoVomxVoVoYNwCRTRTRTiURTRTRTwCYNprOhRTprbm
 bmbmprRTOhprYNVNxvYNLnYNYNYNYNLnYNYNYNYNLnYNYNYNYNYNYNYNYNrkNKObObVoObObVogCYNVoVoObObObObdOcUNnWAGsYNwCRTMGrrrrrrMGRTwCYNprOhRTADbm
 bmbmprRTOhprYNRXRXYNzpYNUEScYNzpYNZNubYNzpYNYNYNYNYNtYObObREObObObObObObVogCYNVoVoObObObObcUcUunZPWAYNwCRTlEGGGGGGlERTwCYNprOhRTprbm
-bmbmprRTOhprYNCkCkYNmvYuWzWzrkmvKSwzwzrkmvrkYNYNtYObObObObREObObObObObObVogCYNzemxOblJVoGsKYyLcUIWfcYNwCIalEGGGGGGlEIawCYNprOhRTprbm
+bmbmprRTOhprYNCkCkYNmvYuWzWzrkmvKSwzwzrkmvrkYNYNtYObObObObREObObObObObObVogCYNzemxOblJVoGsKYyLcUIWfcYNwCIaUxGGGGGGUxIawCYNprOhRTprbm
 bmbmprRTOhprYNObObREeaVeObObREeaVeObdOREeaMFObObObObObYoYNrkNKVoVoVoVoVoVoiNYNYNYNObYNYNYNYNrkcUrkYNYNwCRTRTIaGGIaRTRTwCYNprOhRTADbm
 bmbmprRTOhprYNObObREdPVedOObREdPVeObObREdPMFObdOObYoYNYNYNYNSUVoVoVoVoaeVoZAYNEAEAhOEAEAYNzemxdOcUuoYNwCRTncGGGGGGlBRTwCYNprOhRTEMbm
 bmbmprRTOhprYNObObYNHJYuWzWzrkHJKSwzwzrkHJrkYNYNYNYNYNYNYNYNpGpGEbEbpGpGYNYNEAzyTyYPglwiEArwrwrwrwioYNwCRTCZGGGGGGnERTwCYNprOhRTADbm
