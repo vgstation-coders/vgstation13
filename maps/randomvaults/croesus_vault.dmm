@@ -21,13 +21,13 @@
 "de" = (/obj/item/clothing/shoes/galoshes,/turf/simulated/floor/dark,/area/vault)
 "dg" = (/obj/machinery/conveyor/auto,/obj/machinery/light/he{dir = 8},/turf/simulated/floor/dark,/area/vault)
 "dq" = (/turf/simulated/floor/mineral/silver,/area/vault)
-"dz" = (/obj/machinery/conveyor/auto,/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/snow,/obj/structure/cage/autoclose/no_cover{alpha = 0},/turf/simulated/floor/mineral/gold,/area/vault)
+"dz" = (/obj/machinery/conveyor/auto,/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/snow,/obj/structure/cage/autoclose/no_cover{alpha = 0; mouse_opacity = 0},/turf/simulated/floor/mineral/gold,/area/vault)
 "dO" = (/obj/effect/decal/remains/human,/turf/simulated/floor/carpet,/area/vault)
 "dP" = (/obj/machinery/conveyor/auto,/turf/simulated/floor/carpet,/area/vault)
 "dW" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
 "ea" = (/obj/machinery/conveyor/auto{dir = 1},/turf/simulated/floor/carpet,/area/vault)
 "ej" = (/obj/structure/reagent_dispensers/water_cooler,/turf/simulated/floor/mineral/gold,/area/vault)
-"ek" = (/obj/machinery/conveyor/auto{dir = 4},/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/snow,/obj/machinery/light/he{dir = 8},/obj/structure/cage/autoclose/no_cover{alpha = 0},/turf/simulated/floor/mineral/gold,/area/vault)
+"ek" = (/obj/machinery/conveyor/auto{dir = 4},/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/snow,/obj/machinery/light/he{dir = 8},/obj/structure/cage/autoclose/no_cover{alpha = 0; mouse_opacity = 0},/turf/simulated/floor/mineral/gold,/area/vault)
 "el" = (/mob/living/simple_animal/hostile/asteroid/basilisk,/obj/structure/cage/autoclose/no_cover{anchored = 1},/turf/simulated/floor/dark,/area/vault)
 "er" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/effect/decal/remains/human,/turf/simulated/floor/carpet,/area/vault)
 "ew" = (/obj/machinery/crystal,/obj/effect/glowshroom,/turf/simulated/floor/grass,/area/vault)
@@ -38,7 +38,7 @@
 "fG" = (/obj/structure/table/glass/plasma,/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/wine,/obj/item/potion/fullness{pixel_x = 11},/obj/item/potion/fullness{pixel_x = -11},/obj/item/potion/fullness{pixel_x = 6; pixel_y = 11},/turf/simulated/floor/mineral/gold,/area/vault)
 "fP" = (/obj/structure/flora/ausbushes/fullgrass,/obj/effect/plantsegment,/obj/effect/plantsegment,/turf/simulated/floor/grass,/area/vault)
 "fY" = (/turf/simulated/wall/invulnerable/gold,/area/planet/clown)
-"gg" = (/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/railing/wood/pglass{dir = 4},/obj/structure/snow,/obj/machinery/conveyor/auto{dir = 1},/obj/structure/cage/autoclose/no_cover{alpha = 0},/turf/simulated/floor/mineral/gold,/area/vault)
+"gg" = (/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/railing/wood/pglass{dir = 4},/obj/structure/snow,/obj/machinery/conveyor/auto{dir = 1},/obj/structure/cage/autoclose/no_cover{alpha = 0; mouse_opacity = 0},/turf/simulated/floor/mineral/gold,/area/vault)
 "gl" = (/obj/machinery/light/he{dir = 1},/obj/structure/snow,/obj/machinery/conveyor/auto{dir = 4},/obj/item/weapon/beartrap/armed{color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/mineral/gold,/area/vault)
 "gp" = (/obj/item/stack/medical/advanced/ointment,/obj/item/stack/medical/advanced/ointment,/obj/item/stack/medical/advanced/ointment,/obj/item/stack/medical/advanced/ointment,/obj/item/stack/medical/advanced/ointment,/obj/item/stack/medical/advanced/ointment,/obj/item/stack/medical/advanced/ointment,/obj/structure/table/glass/plasma,/obj/item/weapon/storage/firstaid/fire{pixel_x = -8; pixel_y = 7},/obj/item/weapon/storage/firstaid/fire{pixel_x = -8; pixel_y = 7},/obj/item/weapon/storage/firstaid/fire{pixel_x = -8; pixel_y = 7},/obj/item/weapon/storage/firstaid/fire{pixel_x = -8; pixel_y = 7},/obj/item/weapon/storage/firstaid/fire{pixel_x = -8; pixel_y = 7},/obj/item/weapon/storage/firstaid/fire{pixel_x = -8; pixel_y = 7},/obj/item/weapon/storage/firstaid/fire{pixel_x = -8; pixel_y = 7},/obj/item/weapon/storage/firstaid/fire{pixel_x = -8; pixel_y = 7},/obj/machinery/light/he,/turf/simulated/floor/mineral/gold,/area/vault)
 "gC" = (/obj/structure/table/glass/plasma,/obj/item/weapon/paper{info = "You have stumbled into the grand vault of space king Croessus. Nothing but peril and danger await before you. Turn back now and be spared the wrath of my opulent vault. But lest you not heed my warning... then ad aerarium, foolish seeker of riches."; name = "Welcome Traveller - Paper"},/obj/item/weapon/paper{info = "You have stumbled into the grand vault of space king Croessus. Nothing but peril and danger await before you. Turn back now and be spared the wrath of my opulent vault. But lest you not heed my warning... then ad aerarium, foolish seeker of riches."; name = "Welcome Traveller - Paper"},/obj/item/weapon/paper{info = "You have stumbled into the grand vault of space king Croessus. Nothing but peril and danger await before you. Turn back now and be spared the wrath of my opulent vault. But lest you not heed my warning... then ad aerarium, foolish seeker of riches."; name = "Welcome Traveller - Paper"},/obj/item/weapon/paper{info = "You have stumbled into the grand vault of space king Croessus. Nothing but peril and danger await before you. Turn back now and be spared the wrath of my opulent vault. But lest you not heed my warning... then ad aerarium, foolish seeker of riches."; name = "Welcome Traveller - Paper"},/obj/item/weapon/paper{info = "You have stumbled into the grand vault of space king Croesus. Nothing but peril and doom awaits you here. Turn back now and be spared from the cruel machinations that defend my vault. But lest you deem not heed this warning then... ad aerarium!"; name = "Welcome Traveller - Paper"},/turf/simulated/floor/mineral/gold,/area/vault)
@@ -58,7 +58,7 @@
 "io" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/effect/decal/remains/human,/obj/machinery/light/he{dir = 4},/turf/simulated/floor/carpet,/area/vault)
 "iv" = (/obj/effect/decal/arrow,/turf/simulated/floor/mineral/silver,/area/vault)
 "iy" = (/obj/machinery/light/he,/obj/effect/decal/arrow{dir = 4},/turf/simulated/floor/mineral/silver,/area/vault)
-"iD" = (/obj/structure/flora/pottedplant,/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 4},/turf/simulated/floor/mineral/gold,/area/vault)
+"iD" = (/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1; mouse_opacity = 0},/mob/living/simple_animal/hostile/humanoid/pirate/ranged{aggro_vision_range = 7; anchored = 1; canmove = 0; color = "#000000"; faction = "croesus"; health = 30; name = "Shadow Gunner"; projectiletype = /obj/item/projectile/beam/veryweaklaser; vision_range = 7},/obj/effect/forcefield/wizard,/turf/simulated/floor/carpet,/area/vault)
 "iF" = (/obj/machinery/light/he{dir = 1},/obj/item/clothing/suit/armor/riot,/obj/item/clothing/head/helmet/tactical/riot,/turf/simulated/floor/mineral/gold,/area/vault)
 "iK" = (/obj/effect/decal/arrow{dir = 4},/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gold,/area/vault)
 "iN" = (/obj/structure/table/glass/plasma,/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = 5},/obj/item/weapon/coin/gold{pixel_x = -3; pixel_y = -2},/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = 5},/obj/item/weapon/coin/gold{pixel_x = 3; pixel_y = 2},/obj/item/weapon/coin/gold{pixel_x = -4; pixel_y = 3},/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = -4},/obj/item/weapon/spacecash/c100{pixel_x = 4; pixel_y = -4},/obj/item/weapon/spacecash/c100{pixel_y = 2},/obj/item/weapon/spacecash/c100,/obj/item/weapon/spacecash/c100{pixel_x = -2; pixel_y = 4},/turf/simulated/floor/mineral/gold,/area/vault)
@@ -68,14 +68,13 @@
 "jx" = (/obj/effect/decal/remains/human,/turf/simulated/floor/mineral/gold,/area/vault)
 "jO" = (/obj/machinery/mass_driver{dir = 4; id_tag = "trial4"},/turf/simulated/floor/mineral/gold,/area/vault)
 "jY" = (/obj/structure/curtain/open/shower/security,/turf/simulated/floor/mineral/gold,/area/vault)
-"kl" = (/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/railing/wood/pglass{dir = 8},/obj/structure/snow,/obj/structure/snow,/obj/machinery/conveyor/auto{dir = 1},/obj/structure/cage/autoclose/no_cover{alpha = 0},/turf/simulated/floor/mineral/gold,/area/vault)
+"kl" = (/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/railing/wood/pglass{dir = 8},/obj/structure/snow,/obj/structure/snow,/obj/machinery/conveyor/auto{dir = 1},/obj/structure/cage/autoclose/no_cover{alpha = 0; mouse_opacity = 0},/turf/simulated/floor/mineral/gold,/area/vault)
 "km" = (/obj/item/key/janicart,/turf/simulated/floor/dark,/area/vault)
 "ky" = (/mob/living/simple_animal/robot/food_samples,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gold,/area/vault)
 "kG" = (/obj/machinery/chem_dispenser,/turf/simulated/floor/mineral/gold,/area/vault)
-"kO" = (/mob/living/simple_animal/hostile/creature{faction = "croesus"},/obj/machinery/light/he,/turf/simulated/floor/mineral/gold,/area/vault)
-"kQ" = (/obj/item/weapon/beartrap{color = "#FFDA00"; name = "golden bear trap"},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1},/mob/living/simple_animal/hostile/humanoid/pirate/ranged{anchored = 1; canmove = 0; faction = "croesus"; health = 30; projectiletype = /obj/item/projectile/beam/weakerlaser},/turf/simulated/floor/carpet,/area/planet/clown)
+"kO" = (/obj/structure/flora/pottedplant,/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
+"kQ" = (/obj/structure/flora/pottedplant,/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
 "kW" = (/obj/machinery/light/he,/obj/machinery/power/emitter/energycannon{dir = 1},/turf/simulated/floor/mineral/gold,/area/vault)
-"lc" = (/obj/structure/flora/pottedplant,/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
 "lo" = (/obj/machinery/light/he,/obj/effect/decal/arrow{dir = 8},/turf/simulated/floor/mineral/silver,/area/vault)
 "lp" = (/obj/structure/table/glass/plasma,/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/wine,/obj/item/potion/fullness{pixel_x = 6; pixel_y = 11},/obj/item/potion/fullness{pixel_x = 11},/obj/item/potion/fullness{pixel_x = -11},/turf/simulated/floor/mineral/gold,/area/vault)
 "ls" = (/obj/effect/decal/arrow{dir = 4},/turf/simulated/floor/carpet,/area/vault)
@@ -84,7 +83,7 @@
 "lE" = (/obj/structure/table/glass/plasma,/turf/simulated/floor/mineral/diamond,/area/vault)
 "lJ" = (/obj/structure/flora/pottedplant,/obj/machinery/light/he,/turf/simulated/floor/mineral/gold,/area/vault)
 "lL" = (/obj/machinery/light/he,/obj/machinery/power/emitter/energycannon{dir = 1; id_tag = "trial2"},/turf/simulated/floor/mineral/silver,/area/vault)
-"mc" = (/obj/machinery/door/window/plasma/smartglass{dir = 2},/obj/item/weapon/beartrap/armed{color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/carpet,/area/planet/clown)
+"mc" = (/obj/structure/flora/pottedplant,/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 4},/turf/simulated/floor/mineral/gold,/area/vault)
 "mj" = (/obj/machinery/bot/mulebot,/obj/machinery/ai_slipper{id_tag = "trial3-2"},/turf/simulated/floor/mineral/silver,/area/vault)
 "mk" = (/obj/item/device/assembly/mousetrap/armed,/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/device/assembly/mousetrap/armed,/obj/item/device/assembly/mousetrap/armed,/obj/item/device/assembly/mousetrap/armed,/obj/item/device/assembly/mousetrap/armed,/turf/simulated/floor/carpet,/area/planet/clown)
 "mv" = (/obj/machinery/conveyor/auto{dir = 1},/turf/simulated/floor/dark,/area/vault)
@@ -104,7 +103,7 @@
 "nR" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 4},/turf/simulated/floor/carpet,/area/planet/clown)
 "nS" = (/obj/structure/kitchenspike,/obj/structure/skele_stand{anchored = 1; pixel_x = -3},/turf/simulated/floor/mineral/gold,/area/vault)
 "nT" = (/obj/machinery/airshield,/obj/structure/plasticflaps/mining,/turf/simulated/floor/mineral/gold,/area/vault)
-"oa" = (/obj/structure/reagent_dispensers/water_cooler,/obj/structure/grille,/turf/simulated/floor/mineral/gold,/area/vault)
+"oa" = (/obj/machinery/door_control/mapped{id_tag = "trial3-2"},/turf/simulated/wall/invulnerable/gold,/area/vault)
 "ox" = (/obj/machinery/door/poddoor/shutters{dir = 2; id_tag = "trial3-1"},/obj/structure/window/barricade/full/block,/turf/simulated/floor/carpet,/area/vault)
 "oz" = (/obj/machinery/conveyor/auto{dir = 1},/obj/structure/railing/wood/pglass{dir = 8},/obj/structure/snow,/obj/structure/snow,/obj/item/weapon/beartrap/armed{color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/mineral/gold,/area/vault)
 "oD" = (/obj/structure/table/glass/plasma,/obj/item/clothing/glasses/scanner/science/prescription,/obj/item/clothing/glasses/scanner/science/prescription,/obj/item/clothing/glasses/scanner/science/prescription,/obj/item/clothing/glasses/scanner/science/prescription,/obj/item/clothing/glasses/scanner/science/prescription,/obj/item/clothing/glasses/scanner/science/prescription,/obj/item/clothing/mask/gas,/obj/item/clothing/mask/gas,/obj/item/clothing/mask/gas,/obj/item/clothing/mask/gas,/obj/item/clothing/mask/gas,/obj/item/clothing/mask/gas,/obj/item/clothing/mask/gas,/obj/item/weapon/tank/emergency_oxygen/engi,/obj/item/weapon/tank/emergency_oxygen/engi,/obj/item/weapon/tank/emergency_oxygen/engi,/obj/item/weapon/tank/emergency_oxygen/engi,/obj/item/weapon/tank/emergency_oxygen/engi,/obj/item/weapon/tank/emergency_oxygen/engi,/turf/simulated/floor/mineral/gold,/area/vault)
@@ -112,7 +111,7 @@
 "pe" = (/obj/structure/kitchenspike,/obj/structure/skele_stand{anchored = 1; pixel_x = -3},/obj/machinery/light/he{dir = 4},/turf/simulated/floor/mineral/gold,/area/vault)
 "pl" = (/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/turf/space,/area/vault)
 "pr" = (/obj/structure/catwalk/invulnerable,/turf/space,/area/vault)
-"pv" = (/obj/structure/bed/chair/wood/throne,/mob/living/simple_animal/hostile/humanoid/skellington/lich{anchored = 1; desc = "The old space-king Croesus, withering and weak. He sits now on his throne and keeps watch over his domain, amusing himself at any foolish outsider's attempt to breach his great fort.; canmove = 0; health = 100; icon_state = "croesus"; items_to_drop = list(/obj/structure/cash_closet,/obj/effect/smoke); maxHealth = 100; name = "Croesus"},/turf/simulated/floor/mineral/diamond,/area/vault)
+"pv" = (/obj/structure/bed/chair/wood/throne,/mob/living/simple_animal/hostile/humanoid/skellington/lich{anchored = 1; canmove = 0; desc = "The old space-king Croesus, withering and weak. He sits now on his throne and keeps watch over his domain, amusing himself at any foolish outsider's attempt to breach his great fort."; faction = "croesus"; health = 100; icon_state = "croesus"; items_to_drop = list(/obj/structure/cash_closet,/obj/effect/smoke); maxHealth = 100; move_speed = 1; name = "Croesus"},/turf/simulated/floor/mineral/diamond,/area/vault)
 "pF" = (/obj/structure/flora/ausbushes/sparsegrass,/mob/living/simple_animal/hostile/viscerator/butterfly/magic{faction = "croesus"},/turf/simulated/floor/grass,/area/vault)
 "pG" = (/obj/structure/mirror,/obj/structure/sink{color = "#FFD700"; name = "golden sink"; pixel_y = -8},/turf/simulated/wall/invulnerable/gold,/area/vault)
 "pR" = (/obj/effect/decal/warning_stripes/oldstyle,/obj/machinery/driver_button{id_tag = "trial4"},/turf/simulated/wall/invulnerable/gold,/area/vault)
@@ -122,12 +121,11 @@
 "rj" = (/obj/machinery/door_control/mapped{id_tag = "trial3-2"},/turf/simulated/floor/carpet,/area/vault)
 "rk" = (/obj/structure/sign/securearea,/turf/simulated/wall/invulnerable/gold,/area/vault)
 "rr" = (/obj/item/weapon/teleportation_scroll/apprentice,/obj/structure/table/glass/plasma,/turf/simulated/floor/mineral/diamond,/area/vault)
-"ru" = (/mob/living/simple_animal/hostile/humanoid/pirate/ranged{anchored = 1; canmove = 0; faction = "croesus"; health = 30; projectiletype = /obj/item/projectile/beam/weakerlaser},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1},/obj/item/weapon/beartrap{color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/carpet,/area/planet/clown)
 "rw" = (/obj/structure/window/plasma/oneway{dir = 1},/obj/structure/window/plasma/oneway,/obj/structure/table/glass/plasma,/turf/simulated/floor/mineral/gold,/area/vault)
 "rz" = (/obj/structure/urinal{color = "#FFD700"; name = "golden urinal"},/turf/simulated/wall/invulnerable/gold,/area/vault)
 "rB" = (/turf/simulated/floor/carpet,/area/planet/clown)
 "rU" = (/obj/structure/sign/securearea,/turf/simulated/wall/invulnerable/ice,/area/vault)
-"se" = (/obj/structure/kitchenspike,/mob/living/simple_animal/hostile/humanoid/skellington{anchored = 1; canmove = 0; faction = "croesus"},/obj/machinery/light/he{dir = 8},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1},/turf/simulated/floor/mineral/gold,/area/vault)
+"se" = (/obj/structure/kitchenspike,/mob/living/simple_animal/hostile/humanoid/skellington{anchored = 1; canmove = 0; faction = "croesus"},/obj/machinery/light/he{dir = 8},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1; mouse_opacity = 0},/turf/simulated/floor/mineral/gold,/area/vault)
 "st" = (/obj/machinery/conveyor/auto{dir = 8},/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gold,/area/vault)
 "su" = (/mob/living/simple_animal/hostile/viscerator/butterfly{color = "#E1AD01"; faction = "croesus"; melee_damage_lower = 3; melee_damage_upper = 7},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/silver,/area/vault)
 "sv" = (/obj/machinery/light/he{dir = 4},/turf/simulated/floor/carpet,/area/planet/clown)
@@ -135,11 +133,10 @@
 "sG" = (/mob/living/simple_animal/hostile/humanoid/janitor{anchored = 1; canmove = 0; faction = "croesus"},/turf/simulated/floor/dark,/area/vault)
 "sM" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/carpet,/area/vault)
 "sU" = (/obj/effect/decal/remains/human,/turf/simulated/floor/dark,/area/vault)
-"sV" = (/obj/item/weapon/beartrap{color = "#FFDA00"; name = "golden bear trap"},/mob/living/simple_animal/hostile/humanoid/pirate/ranged{anchored = 1; canmove = 0; faction = "croesus"; health = 30; projectiletype = /obj/item/projectile/beam/weakerlaser},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1},/turf/simulated/floor/carpet,/area/planet/clown)
 "ta" = (/obj/machinery/light/he,/obj/machinery/power/emitter/energycannon{dir = 4},/turf/simulated/floor/mineral/gold,/area/vault)
 "td" = (/obj/machinery/light/he{dir = 8},/obj/machinery/light/he{dir = 4},/obj/structure/curtain{color = "#AA0000"},/obj/machinery/airshield,/turf/simulated/floor/mineral/gold,/area/vault)
 "tH" = (/obj/structure/window/plasma/oneway{dir = 4},/obj/structure/window/plasma/oneway{dir = 8},/obj/effect/decal/remains/human,/obj/structure/curtain/open/shower/security,/turf/simulated/floor/mineral/gold,/area/vault)
-"tX" = (/obj/structure/table/glass/plasma,/obj/item/weapon/nullrod/sword/chaos{color = "#FFD700"; desc = "This mighty sword seems to be made of pure gold. It's quite the sight to behold. It's feels like its weighted for throwing."; force = 40; name = "Goldenreaver"; throwforce = 40},/turf/simulated/floor/mineral/diamond,/area/vault)
+"tX" = (/obj/structure/table/glass/plasma,/obj/item/weapon/nullrod/sword/chaos{color = "#FFD700"; desc = "This mighty sword seems to be made of pure gold. It's quite the sight to behold. It's feels like its weighted for throwing."; force = 40; throwforce = 40},/turf/simulated/floor/mineral/diamond,/area/vault)
 "tY" = (/obj/machinery/light/he{dir = 1},/obj/structure/flora/pottedplant,/turf/simulated/floor/mineral/gold,/area/vault)
 "ub" = (/obj/machinery/light/he{dir = 1},/obj/machinery/power/emitter/energycannon{id_tag = trial1},/turf/simulated/floor/mineral/silver,/area/vault)
 "un" = (/obj/effect/decal/cleanable/bee/hornet,/obj/effect/decal/remains/human,/turf/simulated/floor/carpet,/area/vault)
@@ -165,7 +162,7 @@
 "wX" = (/obj/structure/flora/ausbushes/fullgrass,/obj/effect/plantsegment,/turf/simulated/floor/grass,/area/vault)
 "xh" = (/mob/living/simple_animal/hostile/asteroid/pillow{faction = "croesus"},/obj/machinery/light/he{dir = 1},/obj/structure/curtain{color = "#AA0000"},/turf/simulated/floor/mineral/gold,/area/planet/clown)
 "xv" = (/obj/item/weapon/coin/gold,/obj/item/weapon/coin/gold{pixel_x = -2; pixel_y = -4},/obj/item/weapon/coin/gold{pixel_x = -3; pixel_y = -2},/obj/item/weapon/coin/gold{pixel_x = 3; pixel_y = 2},/obj/item/weapon/coin/gold{pixel_x = -4; pixel_y = 3},/obj/item/weapon/spacecash/c100{pixel_y = 2},/obj/item/weapon/spacecash/c100{pixel_x = 4; pixel_y = -4},/obj/item/weapon/spacecash/c100{pixel_x = -2; pixel_y = 4},/obj/item/weapon/spacecash/c100,/turf/simulated/floor/mineral/gold,/area/vault)
-"xC" = (/obj/effect/decal/remains/human,/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1},/mob/living/simple_animal/hostile/viscerator/flying_skull{anchored = 1; canmove = 0; faction = "croesus"; pixel_y = -5},/turf/simulated/floor/carpet,/area/vault)
+"xC" = (/obj/effect/decal/remains/human,/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1; mouse_opacity = 0},/mob/living/simple_animal/hostile/viscerator/flying_skull{anchored = 1; canmove = 0; faction = "croesus"; pixel_y = -5},/turf/simulated/floor/carpet,/area/vault)
 "xF" = (/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/gold,/area/planet/clown)
 "xK" = (/obj/structure/falsewall/gold/closed{desc = "A wall with gold plating. Swag! Powerful magic prevents its destruction."; name = "invulnerable gold wall"},/turf/simulated/floor/grass,/area/vault)
 "xQ" = (/obj/effect/glowshroom,/turf/simulated/floor/grass,/area/vault)
@@ -209,11 +206,11 @@
 "Do" = (/obj/machinery/light/he{dir = 1},/obj/structure/table/glass/plasma,/turf/simulated/floor/mineral/gold,/area/vault)
 "Dr" = (/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/machinery/light/he,/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/turf/simulated/floor/mineral/gold,/area/vault)
 "Du" = (/obj/structure/snow,/obj/machinery/conveyor/auto,/obj/item/weapon/beartrap/armed{color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/mineral/gold,/area/vault)
-"Dx" = (/obj/structure/kitchenspike,/mob/living/simple_animal/hostile/humanoid/skellington{anchored = 1; canmove = 0; faction = "croesus"},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1},/turf/simulated/floor/mineral/gold,/area/vault)
+"Dx" = (/obj/structure/kitchenspike,/mob/living/simple_animal/hostile/humanoid/skellington{anchored = 1; canmove = 0; faction = "croesus"},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1; mouse_opacity = 0},/turf/simulated/floor/mineral/gold,/area/vault)
 "DB" = (/obj/structure/curtain{color = "#AA0000"},/turf/simulated/floor/mineral/gold,/area/vault)
 "DD" = (/turf/simulated/floor/mineral/gold,/area/planet/clown)
 "DF" = (/obj/item/weapon/beartrap/armed{color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/carpet,/area/planet/clown)
-"DH" = (/obj/structure/flora/pottedplant,/obj/machinery/light/he{dir = 8},/turf/simulated/floor/mineral/gold,/area/vault)
+"DH" = (/obj/structure/flora/pottedplant,/obj/machinery/light/he{dir = 4},/turf/simulated/floor/mineral/gold,/area/vault)
 "DI" = (/obj/structure/window/plasma/oneway,/obj/structure/window/plasma/oneway{dir = 1},/obj/structure/table/glass/plasma,/obj/machinery/apiary/wild/angry/hornet/deployable{faction = "croesus"},/turf/simulated/floor/mineral/gold,/area/vault)
 "DM" = (/obj/effect/decal/arrow,/turf/simulated/floor/carpet,/area/vault)
 "DP" = (/obj/item/weapon/reagent_containers/spray,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/dark,/area/vault)
@@ -234,7 +231,7 @@
 "Gs" = (/obj/effect/decal/cleanable/bee/hornet,/turf/simulated/floor/mineral/gold,/area/vault)
 "GE" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/machinery/light/he{dir = 4},/turf/simulated/floor/carpet,/area/vault)
 "GG" = (/turf/simulated/floor/mineral/diamond,/area/vault)
-"GQ" = (/mob/living/simple_animal/hostile/humanoid/frostgolem,/obj/structure/railing/wood/pglass{dir = 8},/obj/structure/snow,/obj/structure/snow,/obj/machinery/conveyor/auto{dir = 1},/mob/living/simple_animal/hostile/humanoid/frostgolem,/mob/living/simple_animal/hostile/humanoid/frostgolem,/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/cage/autoclose/no_cover{alpha = 0},/turf/simulated/floor/mineral/gold,/area/vault)
+"GQ" = (/mob/living/simple_animal/hostile/humanoid/frostgolem,/obj/structure/railing/wood/pglass{dir = 8},/obj/structure/snow,/obj/structure/snow,/obj/machinery/conveyor/auto{dir = 1},/mob/living/simple_animal/hostile/humanoid/frostgolem,/mob/living/simple_animal/hostile/humanoid/frostgolem,/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/cage/autoclose/no_cover{alpha = 0; mouse_opacity = 0},/turf/simulated/floor/mineral/gold,/area/vault)
 "Hj" = (/obj/structure/railing/wood/pglass{dir = 8},/obj/structure/snow,/obj/structure/snow,/obj/machinery/conveyor/auto{dir = 1},/obj/item/weapon/beartrap/armed{color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/mineral/gold,/area/vault)
 "Hp" = (/obj/machinery/light/he,/obj/machinery/power/emitter/energycannon{dir = 1; id_tag = "trial1"},/turf/simulated/floor/mineral/silver,/area/vault)
 "Hu" = (/obj/structure/flora/pottedplant,/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he,/turf/simulated/floor/mineral/gold,/area/planet/clown)
@@ -244,7 +241,6 @@
 "HU" = (/mob/living/simple_animal/hostile/viscerator/butterfly{color = "#E1AD01"; faction = "croesus"; melee_damage_lower = 3; melee_damage_upper = 7},/obj/machinery/light/he{dir = 4},/turf/simulated/floor/mineral/silver,/area/vault)
 "HY" = (/obj/item/weapon/beartrap{color = "#FFDA00"; name = "golden bear trap"},/obj/structure/headpole/with_head,/turf/simulated/floor/carpet,/area/vault)
 "Ia" = (/obj/item/device/flashlight/lantern/on/dim,/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/gold,/area/vault)
-"Ib" = (/obj/structure/flora/pottedplant,/obj/machinery/light/he{dir = 4},/turf/simulated/floor/mineral/gold,/area/vault)
 "Io" = (/obj/structure/curtain{color = "#AA0000"},/turf/simulated/floor/carpet,/area/planet/clown)
 "Iy" = (/obj/machinery/conveyor/auto,/obj/effect/decal/remains/human,/turf/simulated/floor/dark,/area/vault)
 "IO" = (/obj/structure/toilet{color = "#FFD700"; dir = 4; name = "golden toilet"},/turf/simulated/floor/mineral/gold,/area/vault)
@@ -290,7 +286,7 @@
 "NN" = (/obj/effect/plantsegment,/obj/effect/decal/arrow{dir = 4},/turf/simulated/floor/grass,/area/vault)
 "NT" = (/mob/living/simple_animal/hostile/humanoid/skellington,/obj/structure/cage/autoclose/no_cover{anchored = 1},/turf/simulated/floor/mineral/gold,/area/vault)
 "Ob" = (/turf/simulated/floor/carpet,/area/vault)
-"Oe" = (/obj/effect/decal/remains/human,/obj/machinery/light/he{dir = 4},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1},/mob/living/simple_animal/hostile/viscerator/flying_skull{anchored = 1; canmove = 0; faction = "croesus"; pixel_y = -5},/turf/simulated/floor/carpet,/area/vault)
+"Oe" = (/obj/effect/decal/remains/human,/obj/machinery/light/he{dir = 4},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1; mouse_opacity = 0},/mob/living/simple_animal/hostile/viscerator/flying_skull{anchored = 1; canmove = 0; faction = "croesus"; pixel_y = -5},/turf/simulated/floor/carpet,/area/vault)
 "Oh" = (/turf/unsimulated/wall/supermatter/no_spread/lake{name = "Supermatter Moat"},/area/vault)
 "On" = (/obj/machinery/conveyor/auto{dir = 8},/turf/simulated/floor/carpet{toxins = 3},/area/vault)
 "Oz" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/item/weapon/bananapeel{anchored = 1; canremove = 0},/obj/effect/decal/remains/human,/turf/simulated/floor/carpet,/area/vault)
@@ -306,9 +302,9 @@
 "QE" = (/obj/effect/plantsegment,/obj/effect/decal/remains/human,/turf/simulated/floor/grass,/area/vault)
 "QR" = (/obj/machinery/vending/hydroseeds,/turf/simulated/floor/mineral/gold,/area/vault)
 "Rn" = (/obj/structure/flora/pottedplant,/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 1},/turf/simulated/floor/mineral/gold,/area/vault)
-"Rp" = (/obj/structure/kitchenspike,/mob/living/simple_animal/hostile/humanoid/skellington{anchored = 1; canmove = 0; faction = "croesus"},/obj/machinery/light/he{dir = 4},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1},/turf/simulated/floor/mineral/gold,/area/vault)
+"Rp" = (/obj/structure/kitchenspike,/mob/living/simple_animal/hostile/humanoid/skellington{anchored = 1; canmove = 0; faction = "croesus"},/obj/machinery/light/he{dir = 4},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1; mouse_opacity = 0},/turf/simulated/floor/mineral/gold,/area/vault)
 "Rs" = (/obj/machinery/light/he{dir = 1},/turf/simulated/floor/carpet,/area/planet/clown)
-"Rv" = (/obj/machinery/conveyor/auto{dir = 8},/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/snow,/obj/item/weapon/beartrap/armed{color = "#FFDA00"; name = "golden bear trap"},/obj/structure/cage/autoclose/no_cover{alpha = 0},/turf/simulated/floor/mineral/gold,/area/vault)
+"Rv" = (/obj/machinery/conveyor/auto{dir = 8},/mob/living/simple_animal/hostile/humanoid/frostgolem{faction = "croesus"},/obj/structure/snow,/obj/item/weapon/beartrap/armed{color = "#FFDA00"; name = "golden bear trap"},/obj/structure/cage/autoclose/no_cover{alpha = 0; mouse_opacity = 0},/turf/simulated/floor/mineral/gold,/area/vault)
 "Rx" = (/obj/effect/decal/remains/human,/obj/machinery/light/he{dir = 1},/turf/simulated/floor/dark,/area/vault)
 "RE" = (/obj/machinery/door/airlock/highsecurity,/obj/structure/window/barricade/full/block,/turf/simulated/floor/carpet,/area/vault)
 "RT" = (/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/gold,/area/vault)
@@ -326,7 +322,7 @@
 "TR" = (/obj/item/weapon/beartrap{color = "#FFDA00"; name = "golden bear trap"},/obj/effect/decal/remains/human,/turf/simulated/floor/carpet,/area/vault)
 "TS" = (/obj/machinery/door/airlock/highsecurity,/turf/simulated/floor/mineral/gold,/area/vault)
 "TW" = (/obj/structure/table/glass/plasma,/obj/item/weapon/shield/riot/tower,/obj/item/weapon/shield/riot/tower,/obj/item/weapon/shield/riot/tower,/obj/item/weapon/shield/riot/tower,/turf/simulated/floor/mineral/gold,/area/vault)
-"TX" = (/obj/machinery/light/he{dir = 8},/turf/simulated/floor/carpet,/area/planet/clown)
+"TX" = (/obj/machinery/light/he{dir = 8},/obj/machinery/door/window/plasma/smartglass{dir = 2},/turf/simulated/floor/carpet,/area/planet/clown)
 "Uc" = (/obj/structure/falsewall/gold/closed{desc = "A wall with gold plating. Swag! Powerful magic prevents its destruction."; name = "invulnerable gold wall"},/turf/simulated/floor/mineral/gold,/area/planet/clown)
 "Um" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/carpet,/area/planet/clown)
 "Un" = (/obj/machinery/vending/magivend,/turf/simulated/floor/mineral/gold,/area/vault)
@@ -353,7 +349,6 @@
 "Xu" = (/mob/living/simple_animal/hostile/mantini,/turf/simulated/floor/mineral/gold,/area/vault)
 "Xy" = (/obj/machinery/space_heater,/turf/simulated/floor/mineral/gold,/area/vault)
 "XB" = (/obj/machinery/airshield,/turf/simulated/floor/mineral/silver,/area/vault)
-"XE" = (/obj/machinery/light/he{dir = 1},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1},/obj/item/weapon/beartrap{color = "#FFDA00"; name = "golden bear trap"},/mob/living/simple_animal/hostile/humanoid/pirate/ranged{anchored = 1; canmove = 0; faction = "croesus"; health = 30; projectiletype = /obj/item/projectile/beam/weakerlaser},/turf/simulated/floor/carpet,/area/planet/clown)
 "XQ" = (/obj/machinery/light/he{dir = 1},/obj/structure/table/glass/plasma,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack,/turf/simulated/floor/mineral/gold,/area/vault)
 "XT" = (/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/obj/machinery/light/he{dir = 8},/turf/simulated/floor/carpet,/area/planet/clown)
 "XU" = (/obj/machinery/vending/tool,/turf/simulated/floor/dark,/area/vault)
@@ -366,7 +361,7 @@
 "YL" = (/obj/machinery/door/airlock/highsecurity,/turf/simulated/floor/carpet,/area/vault)
 "YN" = (/turf/simulated/wall/invulnerable/gold,/area/vault)
 "YP" = (/obj/structure/snow,/turf/simulated/floor/mineral/gold,/area/vault)
-"YU" = (/obj/effect/decal/remains/human,/mob/living/simple_animal/hostile/viscerator/flying_skull{anchored = 1; canmove = 0; faction = "croesus"; pixel_y = -5},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1},/turf/simulated/floor/carpet,/area/vault)
+"YU" = (/obj/effect/decal/remains/human,/mob/living/simple_animal/hostile/viscerator/flying_skull{anchored = 1; canmove = 0; faction = "croesus"; pixel_y = -5},/obj/structure/cage/autoclose/no_cover{alpha = 0; anchored = 1; mouse_opacity = 0},/turf/simulated/floor/carpet,/area/vault)
 "Ze" = (/obj/item/weapon/beartrap{color = "#FFDA00"; name = "golden bear trap"},/obj/effect/decal/remains/human,/turf/simulated/floor/mineral/gold,/area/vault)
 "Zf" = (/obj/machinery/conveyor/auto,/obj/item/weapon/beartrap/armed{anchored = 1; color = "#FFDA00"; name = "golden bear trap"},/turf/simulated/floor/dark,/area/vault)
 "Zo" = (/obj/structure/flora/ausbushes/fullgrass,/obj/effect/decal/remains/human,/turf/simulated/floor/grass,/area/vault)
@@ -408,27 +403,27 @@ bmbmprRTOhprYNObObVoczuGstuGuGMSnHnHnHnHBODBtYtYYNYNYNYNYNYNYNYNYNYNYNYNURYNEAek
 bmbmprRTOhprYNeBObdOhpbLOnOnOnywywywywywITMFObObYNyoyogFDPkmdedeRxURURAsURYNYNEArUtdrUEAYNYNVocUObVoYNwCRTjxGGGGGGjxRTwCYNprOhRTADbm
 bmbmprRTOhprYNdOObObhpbLOnOnOnywywywywywITMFObObYNyoyogFgFwQdedeURjssUURsGYNCFRXmxObObbZYNYNVoObObVoYNwCRTjxGGGGGGjxRTwCYNprOhRTADbm
 bmbmprRTOhprYNVoVoVoczuGFQuGuGBCPrPrPrPrJIDBObObYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNYNObYNYNYNeBmGYNYNwCRTVoGGGGGGVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNJsJsnPrkYNYNYNYNrkXBXBXBXBYNYNObObYNYNFzKQVvLyVoLyjxLyUcXERsAlIoAlRsRsfYzSfYfYnSObeanSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNJsJsnPrkYNYNYNYNrkXBXBXBXBYNYNObObYNYNFzKQVvLyVoLyjxLyUcRsRsAlIoAlRsRsfYzSfYfYnSObeanSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
 bmbmprRTOhprYNRXRXYNYNYNYNYNYNYNYjbRYjVhYNSXObObSXYNBHswVoVojxVoVoVoUcrBrBPaIoParBrBfYrBrBfYnSObObnSYNwCRTmxVoObVomxRTwCYNprOhRTADbm
-bmbmprRTOhprYNewmLYNYNYNYNYNYNYNYNYNYNYNYNNHObObNKYNBHswaejxVokOVoVofYDFUmfYxFfYrBrBfYrBrBfYnSeaObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNJPJPYNYNYNYNYNYNYNYNYNYNYNYNSUKIKIgpYNYNYNYNYNYNYNjxjxfYXTUmxFxhxFUmnRSYhGOeYNDmObObpeYNwCRTVojxObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNYGJKJPPgJPYGJPewRXJCJMQRkGYNrkoxoxrkYNVoVorkmEmEYNRXRXfYmcmcfYfYfYzizifYhGxCYNnSObeanSYNwCRTVoVoObVojxRTwCYNprOhRTADbm
-bmbmprRTOhprYNPgxQJKAaZoalWsmLRXVoVoVoVoRXniKIKIniRXaeaeRXVNVNrkDHIbAJwFwFxFxhxFUmUmSYhGxCYNnSeaObnSYNwCRTmxVoObVomxRTwCYNprOhRTADbm
-bmbmprRTOhprYNYNYNYNrkxKcjYNYNYNPQPyYNYNYNYNUyUyYNYNYNYNYNVNVNYNRXRXfYwFwFfYfYfYzizifYmkxCYNDxObObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNYNuLYGJKboJKYNYNYNRXRXrkbvdqFGObObhfdqgIrkYNRXYNYNlcIbfYwFwFxFxhxFziziSYhGxCYNnSeaObnSYNwCRTVoVoObjxVoRTwCYNprOhRTprbm
-bmbmprRTOhprYNYNJKJPJPJKJPYNYNYNgTgTlzdqdqmjObObmjdqdqgVgTgTYNYNRXRXfYwFwFfYfYfYzizifYhGxCYNnSObObDxYNwCRTjxVoObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNYNxQJKJPpFJKYNYNYNsugTlzdqmjgNdOOblsdqmjgVgTHUYNYNDHiDfYwFwFxFxhxFUmziSYhGxCYNnSObeaDxYNwCRTmxVoObVomxRTwCYNprOhRTprbm
-bmbmprRTOhprYNYNJPAaJKJKJPYNYNYNgTajlzdqmjObFxFxGfdqdqgVgTgTYNYNRXRXfYFFwFfYfYfYzinRfYhGOeYNseObObpeYNwCiUVoVoObVoVoiUwCYNprOhRTADbm
-bmbmprRTOhprYNYNuLJKxQhvJPYNYNYNgTgTlzivmjcnrkrkcndqivgVgTgTYNYNDHIbfYwFwFxFxhxFUmziSYmkxCYNnSeaObDxYNwCRTVojxObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNYNJKJPJPJPxQYNYNYNRXYNrkbvdqgVrjrjlzmjmNrkYNYNYNYNRXRXfYrBrBfYfYfYzikQfYhGxCYNnSObObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
-bmbmprRTOhprYNYNJPyuZoJPJPYNYNYNXuYNYBmjiygVDMDMlzlodqYBYNYNYNYNDHIbfYrBrBxFxhxFUmUmSYhGxCYNnSObeaDxYNwCRTmxVoObVomxRTwCYNprOhRTprbm
-bmbmprRTOhprYNYNMZuLuLuLwXYNVNYNRXYNYNYNYNYNaHaHYNYNYNYNYNYNYNYNRXRXfYrurBfYfYfYzizifYhGYUYNDxeaObnSYNwCiUVoVoObjxVoiUwCYNprOhRTmWbm
-bmbmprRTOhprYNYNuLaEuLwAuLYNVNRXRnBkKDKDKDniObObniejoamxlpkyfGmxvnvnfYTXrBxFxhxFUmwNSYhGOeYNseObObRpYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNewmLYNYNYNYNYNYNYNYNYNYNYNYNNHObObNKYNBHswaejxVoaeVoYNfYDFUmfYxFfYrBrBfYrBrBfYnSeaObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNJPJPYNYNYNYNYNYNYNYNYNYNYNYNSUKIKIgpYNYNYNYNYNYNjxjxYNfYXTiDxFxhxFUmnRSYhGOeYNDmObObpeYNwCRTVojxObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNYGJKJPPgJPYGJPewRXJCJMQRkGYNrkoxoxrkYNVoVorkmEYNRXRXYNfYDFDFfYfYfYzizifYhGxCYNnSObeanSYNwCRTVoVoObVojxRTwCYNprOhRTADbm
+bmbmprRTOhprYNPgxQJKAaZoalWsmLRXVoVoVoVoRXniKIKIniRXaeaeRXVNrkkODHrkfYwFwFxFxhxFUmUmSYhGxCYNnSeaObnSYNwCRTmxVoObVomxRTwCYNprOhRTADbm
+bmbmprRTOhprYNYNYNYNrkxKcjYNYNYNPQPyYNYNYNYNUyUyYNYNYNYNYNVNYNRXRXYNfYwFwFfYfYfYzizifYmkxCYNDxObObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNYNuLYGJKboJKYNYNYNRXRXrkbvdqFGObObhfdqgIrkYNRXYNkQDHYNfYwFwFxFxhxFziziSYhGxCYNnSeaObnSYNwCRTVoVoObjxVoRTwCYNprOhRTprbm
+bmbmprRTOhprYNYNJKJPJPJKJPYNYNYNgTgTlzdqdqmjObObmjdqdqgVgTgTYNRXRXYNfYwFwFfYfYfYzizifYhGxCYNnSObObDxYNwCRTjxVoObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNYNxQJKJPpFJKYNYNYNsugTlzdqmjgNdOOblsdqmjgVgTHUYNkOmcYNfYwFwFxFxhxFUmziSYhGxCYNnSObeaDxYNwCRTmxVoObVomxRTwCYNprOhRTprbm
+bmbmprRTOhprYNYNJPAaJKJKJPYNYNYNgTajlzdqmjObFxFxGfdqdqgVgTgTYNRXRXYNfYFFwFfYfYfYzinRfYhGOeYNseObObpeYNwCiUVoVoObVoVoiUwCYNprOhRTADbm
+bmbmprRTOhprYNYNuLJKxQhvJPYNYNYNgTgTlzivmjcnrkrkcndqivgVgTgTYNkODHYNfYrBrBxFxhxFUmziSYmkxCYNnSeaObDxYNwCRTVojxObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNYNJKJPJPJPxQYNYNYNRXYNrkbvdqgVrjrjlzmjmNrkYNYNYNRXRXYNfYiDrBfYfYfYzizifYhGxCYNnSObObnSYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
+bmbmprRTOhprYNYNJPyuZoJPJPYNYNYNXuYNYBmjiygVDMDMlzlodqYBYNYNYNkODHYNfYrBrBxFxhxFUmUmSYhGxCYNnSObeaDxYNwCRTmxVoObVomxRTwCYNprOhRTprbm
+bmbmprRTOhprYNYNMZuLuLuLwXYNVNYNRXYNYNYNYNoaaHaHoaYNYNYNYNYNYNRXRXYNfYrBrBfYfYfYiDzifYhGYUYNDxeaObnSYNwCiUVoVoObjxVoiUwCYNprOhRTmWbm
+bmbmprRTOhprYNYNuLaEuLwAuLYNVNRXRnBkKDKDKDniObObniejejmxlpkyfGvnvnmxfYTXwFxFxhxFUmwNSYhGOeYNseObObRpYNwCRTVoVoObVoVoRTwCYNprOhRTADbm
 bmbmprRTOhprYNYNuLJYfPJYJYYNVNYNVoVoVoVoVoVoObObVoVoVoVoTocsToVoVoCRfYwFwFfYfYfYziUmfYhGxCYNDxeaeaDxYNwCRTVoVoObjxVoRTwCYNprOhRTADbm
 bmbmprRTOhprYNYNafwXKwnBJKYNYNYNzeVoTWTWTWVoObObObObObObObObObObObObfYwFwFxFxhxFziziSYhGxCYNVoObObVoYNwCRTmxjxObVomxRTwCYNprOhRTADbm
 bmbmprRTOhprYNYNuLwXwXuLuLYNYNYNVoVoVoVoVoVoObObObObObObObObObObObObfYwFwFfYfYfYUmUmfYhGxCYNVocncnVoYNwCiUVoVoObVoVoiUwCYNprOhRTADbm
-bmbmprRTOhprYNYNJYJKMZuLJKYNXuRXJrUnmYmYmYaeVoVoaeVoVoVoVoaeVoDDrBrBfYwFwFxFxhxFsVziSYhGxCYNVocncnVoYNwCRTVoVoObVojxRTwCYNprOhRTprbm
-bmbmprRTOhprYNYNJKnBJYafJYYNYNYNRXYNYNYNYNYNYNYNYNYNYNYNYNRXRXfYrBrBfYwFwFfYfYfYUmzifYhGxCYNVoObObVoYNwCRTVoVoObVoVoRTwCYNprOhRTprbm
+bmbmprRTOhprYNYNJYJKMZuLJKYNXuRXJrUnmYmYmYaeVoVoaeVoVoVoVoaeVoDDrBrBfYwFwFxFxhxFziziSYhGxCYNVocncnVoYNwCRTVoVoObVojxRTwCYNprOhRTprbm
+bmbmprRTOhprYNYNJKnBJYafJYYNYNYNRXYNYNYNYNYNYNYNYNYNYNYNYNRXRXfYrBrBfYwFwFfYfYfYUmiDfYhGxCYNVoObObVoYNwCRTVoVoObVoVoRTwCYNprOhRTprbm
 bmbmprRTOhprYNYNuLwXJPuLfPYNVNVNVNYNCYCYHSCYCYCYCYHSCYCYYNVqVqfYrBrBfYwFwFxFxhxFziziSYrBrBfYzeObObCRrkYNYNmxVodOVomxRTwCYNprOhRTprbm
 bmbmprRTOhprYNYNUNuLuLaEuLYNYNYNYNYNCACACACACACACACACACAYNVqVqfYrBrBAJFFwFfYfYfYzinREJYHsvfYVoObObVoVoMXVoVojxObVoVoiUwCYNprOhRTprbm
 bmbmprRTOhprYNYNusQEfPJYNNRXiKjOJxnTCACACACACACACACACAplnTUWUWfYrBrBzSrBrBxFKtxFziUmrBrBrBfYVoObObObObYLObObObObVoVoRTwCYNprOhRTprbm
