@@ -143,6 +143,19 @@ var/list/labor_console_categories = list(
 		if(isEmag(W))
 			playsound(src, get_sfx("card_swipe"), 60, 1, -5)
 			verified(user)
+	if(istype(W,/obj/item/weapon/disk/jobdisk))
+		to_chat(user, "<span class='notice'>You begin installing the alternate database.</span>")
+		if(!user.drop_item(W))
+			to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
+			return
+		W.forceMove(src)
+		if(do_after(user,src,30))
+			playsound(src, 'sound/machines/ping.ogg', 35, 0, -2)
+			to_chat(user, "<span class='notice'>Alternate jobs  database successfully installed.</span>")
+			job_master.alt_database_active = TRUE
+			W.forceMove(loc)
+		else
+			W.forceMove(loc)
 
 /obj/machinery/computer/labor/kick_act(mob/user)
 	..()

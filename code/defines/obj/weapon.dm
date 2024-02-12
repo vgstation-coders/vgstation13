@@ -95,6 +95,10 @@
 	w_type = RECYK_ELECTRONIC
 	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 20)
 
+/obj/item/weapon/disk/jobdisk
+	name = "Alternate Jobs Database"
+	desc = "A disk which scrambles the jobs database when installed in the Labor Management Console."
+
 //TODO: Figure out wtf this is and possibly remove it -Nodrak
 /obj/item/weapon/dummy
 	name = "dummy"

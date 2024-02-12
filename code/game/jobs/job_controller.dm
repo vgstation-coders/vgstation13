@@ -5,6 +5,8 @@ var/global/datum/controller/occupations/job_master
 // The logic requires a shift of 1. The technical reason is that the way it is written, it boils to if (0 > 0) {"reject the assistants"}. Unfortunately, 0 is not > 0.
 #define FREE_ASSISTANTS_BRUT (FREE_ASSISTANTS-1)
 
+#define MAX_ALTERNATES 3
+
 /datum/controller/occupations
 		//List of all jobs
 	var/list/occupations = list()
@@ -19,6 +21,9 @@ var/global/datum/controller/occupations/job_master
 	var/list/labor_consoles = list()
 	var/list/assistant_second_chance = list()
 
+	var/alt_database_active
+	var/list/alternates = list()
+
 /datum/controller/occupations/proc/SetupOccupations(var/faction = "Station")
 	occupations = list()
 	var/list/all_jobs = typesof(/datum/job)
@@ -31,7 +36,9 @@ var/global/datum/controller/occupations/job_master
 			continue
 		if(job.faction != faction)
 			continue
-
+		if(istype(job,/datum/job/alternate))
+			alternates += job
+			continue
 		if(job.must_be_map_enabled)
 			if(!map)
 				continue
@@ -55,9 +62,13 @@ var/global/datum/controller/occupations/job_master
 
 /datum/controller/occupations/proc/GetJob(var/rank)
 	RETURN_TYPE(/datum/job)
+	var/list/combined_occupations = list()
+	combined_occupations.Add(occupations)
+	if(alt_database_active)
+		combined_occupations.Add(alternates)
 	if(!rank)
 		return null
-	for(var/datum/job/J in occupations)
+	for(var/datum/job/J in combined_occupations)
 		if(!J)
 			continue
 		if(J.title == rank)
@@ -81,7 +92,13 @@ var/global/datum/controller/occupations/job_master
 		if(!latejoin)
 			position_limit = job.spawn_positions
 		if((job.current_positions < position_limit) || position_limit == -1)
-			Debug("Player: [player] is now Rank: [rank], JCP:[job.current_positions], JPL:[position_limit]")
+			if(alt_database_active && (total_alt_positions <= MAX_ALTERNATES) && latejoin) //Labor console database has been hacked; Centcomm is sending the wrong employees!
+				rank = pick(alternate_positions)
+				Debug("[player] is being assigned non-standard job as the alternate jobs database is installed.")
+				Debug("Player: [player] is now Rank: [rank], JCP:[total_alt_positions], JPL:[MAX_ALTERNATES]")
+				total_alt_positions++
+			else
+				Debug("Player: [player] is now Rank: [rank], JCP:[job.current_positions], JPL:[position_limit]")
 			player.mind.assigned_role = rank
 			player.mind.job_priority = pref_level
 			player.mind.role_alt_title = GetPlayerAltTitle(player, rank)
