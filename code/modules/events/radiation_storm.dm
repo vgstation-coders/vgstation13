@@ -41,8 +41,14 @@
 	spawn()
 		if(syndiestorm)
 			endWhen	= 69 //138 seconds
-			world << sound('sound/effects/explosionfar.ogg') //yes I know the fact that hearing the explosion makes no sense but it makes me smile
-			sleep(10 SECONDS) //extra 10 seconds to those paying attention
+			if(Holiday == APRIL_FOOLS_DAY)
+				world << sound('sound/effects/nuclearlaunchdetected.ogg')
+				sleep(5 SECONDS)
+				world << sound('sound/effects/explosionfar.ogg')
+				sleep(5 SECONDS)
+			else
+				world << sound('sound/effects/explosionfar.ogg') //yes I know the fact that hearing the explosion makes no sense but it makes me smile
+				sleep(10 SECONDS) //extra 10 seconds to those paying attention
 			command_alert(/datum/command_alert/radiation_storm_malicious)
 		else
 			command_alert(/datum/command_alert/radiation_storm)
