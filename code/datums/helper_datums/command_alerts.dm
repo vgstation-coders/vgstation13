@@ -814,3 +814,10 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/archive_thanks/announce()
 	message = "The Research Archive Project extends its profound thanks to [english_list(important_archivists)] for completing the research archival work this shift. There will be an extra stipend in the next pay cycle."
 	..()
+
+/datum/command_alert/suspicious_wages
+	alert_title = "Financial Audit Required"
+
+/datum/command_alert/suspicious_wages/announce(login, account)
+	message = "Central Command has noticed a suspicious increase in wages. A database action logged in as [login] has assigned a new wage to [account] with a payroll greater than the entire station's budget. Please conduct an emergency audit."
+	..()
