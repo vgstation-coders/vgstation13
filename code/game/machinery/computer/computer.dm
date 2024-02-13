@@ -6,8 +6,8 @@
 	density = 1
 	anchored = 1.0
 	use_power = MACHINE_POWER_USE_IDLE
-	idle_power_usage = 300
-	active_power_usage = 300
+	idle_power_usage = 100
+	active_power_usage = 100
 	var/obj/item/weapon/circuitboard/circuit = null //if circuit==null, computer can't disassembly
 	var/processing = 0
 	var/empproof = FALSE // For plasma glass builds
