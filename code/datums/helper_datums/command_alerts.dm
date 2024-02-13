@@ -819,5 +819,5 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Financial Audit Required"
 
 /datum/command_alert/suspicious_wages/announce(login, account)
-	message = "Central Command has noticed a suspicious increase in wages. User [login] has assigned a new wage to [account] with a payroll greater than the entire station's budget. Please conduct an emergency audit."
+	message = "Central Command has noticed a suspicious increase in wages. A database action logged in as [login] has assigned a new wage to [account] with a payroll greater than the entire station's budget. Please conduct an emergency audit."
 	..()
