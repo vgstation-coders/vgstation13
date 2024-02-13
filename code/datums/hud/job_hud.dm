@@ -41,7 +41,7 @@
 		else
 			holder = perp.hud_list[ID_HUD + "_shifted"]
 			if(!istype(holder, /image/hud))
-				perp.hud_list[ID_HUD + "_shifted"] = new/image/hud('icons/mob/hud.dmi', M, "hudblank")
+				perp.hud_list[ID_HUD + "_shifted"] = new/image/hud('icons/mob/hud.dmi', perp, "hudblank")
 				holder = perp.hud_list[ID_HUD + "_shifted"]
 				holder.pixel_y = offset
 		if(!holder)

@@ -600,7 +600,7 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()
-	reagents.add_reagent(pickweight(possible_exotic_condiments), 30)
+	reagents.add_reagent(pickweight(possible_exotic_condiments), 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/coco
 	name = "cocoa powder"

@@ -1495,7 +1495,7 @@ var/obj/blend_test = null
 	set name = "Edit MotD"
 	set desc = "Appears to players upon lobby entry."
 
-	if(!check_rights(R_PERMISSIONS))
+	if(!check_rights(R_SERVER))
 		return
 	if(alert("You are about to edit the MotD, which is displayed to anyone who enters the lobby. All changes persist across rounds. Continue?", "Warning", "Yes", "Cancel") == "Cancel")
 		return
