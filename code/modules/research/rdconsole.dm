@@ -675,7 +675,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		return
 
 	user.set_machine(src)
-	var/dat = list("<style>a:link {color: #0066CC} a:visited {color: #0066CC}</style>")
+	var/dat = list("<style>a:link {color: #ffffff} a:visited {color: #808080}</style>")
 	files.RefreshResearch()
 	switch(screen) //A quick check to make sure you get the right screen when a device is disconnected.
 		if(2 to 2.9)
@@ -889,10 +889,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "Filter: "
 			for(var/name_set in linked_lathe.part_sets)
 				if (name_set in filtered["protolathe"])
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' style='color: #A66300'>[name_set]</a> / "
+					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' style='color: #808080'>[name_set]</a> / "
 				else
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' style='color: #0066CC'>[name_set]</a> / "
-			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["protolathe"]' style='color: #0066CC'>Filter All</a><HR>"
+					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' style='color: #ffffff'>[name_set]</a> / "
+			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["protolathe"]' style='color: #ffffff'>Filter All</a><HR>"
 
 			for(var/name_set in linked_lathe.part_sets)
 				if(name_set in filtered["protolathe"])
@@ -960,14 +960,14 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					var/success = "red"
 					var/success_amount = linked_lathe.check_mats(I)
 					if(linked_lathe.check_mats(I) >= required_materials[I])
-						success = "green"
+						success = "#00ff00"
 					else if(linked_lathe.check_mats_bluespace(I) >= required_materials[I])
 						success_amount = linked_lathe.check_mats_bluespace(I)
-						success = "blue"
+						success = "#00ffff"
 					dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
 			dat += "<br><A href='?src=\ref[src];clearQ=1;device=protolathe'>Remove All Queued Items</A><br />"
 			if(linked_lathe.stopped)
-				dat += "<A href='?src=\ref[src];setProtolatheStopped=0' style='color:green'>Start Production</A>"
+				dat += "<A href='?src=\ref[src];setProtolatheStopped=0' style='color:#00ff00'>Start Production</A>"
 			else
 				dat += "<A href='?src=\ref[src];setProtolatheStopped=1' style='color:red'>Stop Production</A>"
 
@@ -985,10 +985,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "Filter: "
 			for(var/name_set in linked_imprinter.part_sets)
 				if (name_set in filtered["imprinter"])
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' style='color: #A66300'>[name_set]</a> / "
+					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' style='color: #808080'>[name_set]</a> / "
 				else
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' style='color: #0066CC'>[name_set]</a> / "
-			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["imprinter"]' style='color: #0066CC'>Filter All</a><HR>"
+					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' style='color: #ffffff'>[name_set]</a> / "
+			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["imprinter"]' style='color: #ffffff'>Filter All</a><HR>"
 
 			for(var/name_set in linked_imprinter.part_sets)
 				if(name_set in filtered["imprinter"])
@@ -1076,24 +1076,25 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 							var/success = "red"
 							var/success_amount = linked_imprinter.check_mats(I)
 							if(linked_imprinter.check_mats(I) >= required_materials[I])
-								success = "green"
+								success = "#00ff00"
 							else if(linked_imprinter.check_mats_bluespace(I) >= required_materials[I])
 								success_amount = linked_imprinter.check_mats_bluespace(I)
-								success = "blue"
+								success = "#00ffff"
 							dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
 					else
 						var/success = linked_imprinter.check_mats(I)
-						dat += "<span style='color:[success?"green":"red"]'>[required_materials[I]] ([success]) [reagent_name(I)]. </span>"
+						dat += "<span style='color:[success?"#00ff00":"red"]'>[required_materials[I]] ([success]) [reagent_name(I)]. </span>"
 
 			dat += "<br><A href='?src=\ref[src];clearQ=1;device=imprinter'>Remove All Queued Items</A><br />"
 			if(linked_imprinter.stopped)
-				dat += "<A href='?src=\ref[src];setImprinterStopped=0' style='color:green'>Start Production</A>"
+				dat += "<A href='?src=\ref[src];setImprinterStopped=0' style='color:#00ff00'>Start Production</A>"
 			else
 				dat += "<A href='?src=\ref[src];setImprinterStopped=1' style='color:red'>Stop Production</A>"
 
 	dat = jointext(dat,"")
-	user << browse("<TITLE>Research and Development Console</TITLE><HR>[dat]", "window=rdconsole;size=575x400")
-	onclose(user, "rdconsole")
+	var/datum/browser/popup = new(user, "\ref[src]", name, 575, 400)
+	popup.set_content(dat)
+	popup.open()
 
 /obj/machinery/computer/rdconsole/proc/isLocked() //magic numbers ahoy!
 	return screen == 0.2
