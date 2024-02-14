@@ -6,12 +6,13 @@
 	density = 1
 	anchored = 1.0
 	use_power = MACHINE_POWER_USE_IDLE
-	idle_power_usage = 300
+	idle_power_usage = 50
 	active_power_usage = 300
 	var/obj/item/weapon/circuitboard/circuit = null //if circuit==null, computer can't disassembly
 	var/processing = 0
 	var/empproof = FALSE // For plasma glass builds
 	var/computer_flags = 0
+	var/activity_duration = 0 //Computers will enter idle mode if they haven't been used in a while, consuming less power.
 	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | SHUTTLEWRENCH
 	pass_flags_self = PASSMACHINE
 	use_auto_lights = 1
@@ -43,8 +44,19 @@
 
 /obj/machinery/computer/process()
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
+		activity_duration = 0
 		return 0
+	if(activity_duration > 0 && !in_use)
+		activity_duration--
+		use_power = MACHINE_POWER_USE_ACTIVE
+	else
+		use_power = MACHINE_POWER_USE_IDLE
 	return 1
+
+//When a computer is used it will trigger this proc which sets a period of time where the computer uses extra power
+/obj/machinery/computer/proc/set_active(var/ticks)
+	activity_duration = max(activity_duration, ticks)
+	use_power = MACHINE_POWER_USE_ACTIVE
 
 /obj/machinery/computer/emp_act(severity)
 	if(prob(20/severity) && !empproof) // Don't EMP if proofed
@@ -199,3 +211,13 @@
 		return
 	else
 		src.attack_hand(user)
+
+/obj/machinery/computer/Topic(href, href_list)
+	. = ..()
+	if(!.)
+		set_active(5)
+
+/obj/machinery/computer/attack_hand(mob/user, ignore_brain_damage)
+	. = ..()
+	if(!.)
+		set_active(5)

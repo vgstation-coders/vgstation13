@@ -118,6 +118,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 		// Open UI
 		ui = new(user, src, tgui_interface)
 		ui.open()
+	set_active(5) //the proc is repeatedly called for as long as the cameras are watched
 
 /obj/machinery/computer/security/ui_data()
 	var/list/data = list()

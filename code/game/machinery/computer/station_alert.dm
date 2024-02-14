@@ -44,12 +44,9 @@
 		A.send_poweralert(src)
 
 /obj/machinery/computer/station_alert/attack_hand(mob/user)
-	add_fingerprint(user)
-	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	if(..())
 		return
-	interact(user)
-	return
-
+	return interact(user)
 
 /obj/machinery/computer/station_alert/interact(mob/user)
 	usr.set_machine(src)
