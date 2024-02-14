@@ -1129,16 +1129,48 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define MT_UPDATE 1
 #define MT_REINIT 2
 
+//////////////////
+// FIRE
+//////////////////
+
+// specific heats for burning objects, assuming perfect combustion (it's just a game)
+// values in MJ/kg
+#define SPECIFIC_HEAT_WOOD 18.0
+#define SPECIFIC_HEAT_PLASTIC 46.4 // Polypropylene
+#define SPECIFIC_HEAT_FABRIC 19.4 // Cotton (https://www.researchgate.net/publication/363517205_Analysis_of_the_Flammability_and_the_Mechanical_and_Electrostatic_Discharge_Properties_of_Selected_Personal_Protective_Equipment_Used_in_Oxygen-Enriched_Atmosphere_in_a_State_of_Epidemic_Emergency)
+#define SPECIFIC_HEAT_WAX 42.0 // Paraffin wax
+#define SPECIFIC_HEAT_BIOLOGICAL 38.0 // Body fat
+
+// combustion requires about 16% oxygen concentration
+#define MINOXY2BURN 0.16
+
+// stoichiometric combustion ratios in oxygen
+#define FUEL_OX_RATIO_WOOD (1/6) // simplified to C6H10O5 (cellulose)
+#define FUEL_OX_RATIO_PLASTIC (2/9) // C3H6 ((poly)propylene)
+#define FUEL_OX_RATIO_FABRIC (1/6) // simplified to C6H10O5 (cellulose)
+#define FUEL_OX_RATIO_WAX (1/38) // C25H52 (paraffin wax)
+#define FUEL_OX_RATIO_BIOLOGICAL (1/78) // simplified to C55H104O6 ("average" triglyceride)
+
+// molecular weight
+// values in kg/mol
+#define MOLECULAR_WEIGHT_WOOD 0.16 // simplified to C6H10O5 (cellulose)
+#define MOLECULAR_WEIGHT_PLASTIC 0.042 // C3H6 ((poly)propylene)
+#define MOLECULAR_WEIGHT_FABRIC 0.16 // simplified to C6H10O5 (cellulose)
+#define MOLECULAR_WEIGHT_WAX 0.35 // C25H52 (paraffin wax)
+#define MOLECULAR_WEIGHT_BIOLOGICAL .86 // simplified to C55H104O6 ("average" triglyceride)
+
+// Autoignition temperatures
 #define AUTOIGNITION_WOOD  573.15
-#define AUTOIGNITION_PAPER 519.15
-#define AUTOIGNITION_PLASTIC 689.15 //autoignition temperature of ABS plastic
+#define AUTOIGNITION_PLASTIC 661.15 //autoignition temperature of polypropylene
 #define AUTOIGNITION_FABRIC 523.15
-#define AUTOIGNITION_PROTECTIVE 573.15 //autoignition temperature of protective clothing like firesuits or kevlar vests
-#define AUTOIGNITION_ORGANIC 633.15 //autoignition temperature of animal fats
+#define AUTOIGNITION_WAX 518.15
+#define AUTOIGNITION_BIOLOGICAL 633.15 //autoignition temperature of animal fats
 // Assuming this is http://en.wikipedia.org/wiki/Butane
 // (Autoignition temp 288°C, or 561.15°K)
 // Used in fueltanks exploding.
 #define AUTOIGNITION_WELDERFUEL 561.15
+
+//////////////////
 
 // snow business
 #define SNOWBALL_MINIMALTEMP 265	//about -10°C, the minimal temperature at which a thrown snowball can cool you down.

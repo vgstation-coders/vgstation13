@@ -36,7 +36,6 @@ var/list/atom/burnableatoms = list()
 			break
 	currentrun_index = c
 
-#define MINOXY2BURN (1 / CELL_VOLUME)
 /atom/proc/checkburn()
 	if(on_fire)
 		var/datum/gas_mixture/G = return_air()
@@ -46,4 +45,3 @@ var/list/atom/burnableatoms = list()
 		var/datum/gas_mixture/G = return_air()
 		if(G && G.temperature >= autoignition_temperature && G.molar_density(GAS_OXYGEN) >= MINOXY2BURN)
 			ignite()
-#undef MINOXY2BURN
