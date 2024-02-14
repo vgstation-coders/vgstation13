@@ -122,7 +122,7 @@
 	rebuild_favs()
 
 /obj/item/device/rcd/proc/rebuild_favs()
-	var/dat = "<b>Favorites:</b> <span title='You can cycle through these with ctrl+mousewheel outside of the UI.'>(?)</span><ul style='list-style-type:disc'>"
+	var/dat = "<b>Favorites:</b> <span style='color:#fff;' title='You can cycle through these with ctrl+mousewheel outside of the UI.'>(?)</span><ul style='list-style-type:disc'>"
 	for (var/datum/rcd_schematic/C in favorites)
 		dat += C.schematic_list_line(interface, TRUE,src.selected==C)
 
