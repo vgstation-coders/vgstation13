@@ -1,17 +1,13 @@
 /*Made by N3X15*/
+/*updated by crazyamphibian*/
 
 html {
 	font-family:sans-serif;
 	font-size:small;
 }
-a{
-	color:#0066cc;
-	text-decoration:none;
-}
-
-a img {
-	border:1px solid #0066cc;
-	background:#dfdfdf;
+body{
+	color:#e9c183;
+	background-color:#272727;
 }
 
 a.color {
@@ -21,91 +17,122 @@ a.color {
 	border:1px solid white;
 }
 
-a.schematic_selected {
-	color: #199130;
-}
-a.schematic_selected:hover {
-	background-color: #199130;
+a{
+	color:inherit;
+	text-decoration:inherit;
 }
 
-a.selected img,
-a:hover {
-	background: #0066cc;
-	color: #ffffff;
+a img {
+	border:2px solid #161616;
+	background:#40628a;
 }
 
-a.no_dec
-{
-	display: inline-block;
+a.selected img {
+	background: #2f943c;
+	border-color:24722e;
 }
 
-a.no_dec:hover
-{
-	background: #FFFFFF;
-	color: #ffffff;
+.schem{
+	border-spacing:0px;
+	background-color:#40628a;
+	color:#fff;
+	border:#161616 2px solid;
+	margin-bottom:.3em;
 }
 
-#dir_holder
-{
-	display: inline-block;
-	margin-right: 10px;
+.schem > * > * > .shcem_sub, /*i know this looks really dumb, but it's how to access them from in a table. table looks better than a span or div.*/
+.schem_selected > * > * > .shcem_sub{
+	border:0px;
+	border-right:2px;
+	padding-right:2px;
+	padding-left:2px;
+	border-style:solid;
 }
 
-/* RPD layers, YES I SUCK AT CSS */
-
-.layer_holder
-{
-	height: 32px;
-	width: 40px;
-	display: inline-block;
+.schem > * > * > .shcem_sub{
+	border-color:#161616;
+}
+.schem_selected > * > * > .shcem_sub{
+	border-color:#24722e;
 }
 
-.layer.horizontal
-{
-	left: 0px;
-	background-image: url(RPD_0_4.png);
-	height: 5px;
-	width: 32px;
-	background-position: 0px 19px;
+.schem:hover{
+	background-color:#fff;
+	color:#40628a;
+}
+.schem_selected{
+	border-spacing:0px;
+	background-color:#2f943c;
+	border:#24722e 2px solid;
+	color:#fff;
+	margin-bottom:.3em;
+}
+.shcem_sub{
+	font-family:monospace;
+	font-weight:bold;
 }
 
-.layer.vertical
-{
-	/*top: 0px;*/
-	background-image: url(RPD_0_1.png);
-	width: 5px;
-	height: 32px;
-	/*right: 0px;*/
-	background-position: 19px 0px;
-	display: inline-block;
-	position: relative;
+.layer{
+	border-spacing:2px;
+	border:0px;
+	white-space:nowrap;
+	display:inline-block;
+	padding:0px;
+	font-size:0px; /*the IE CSS forces the line height to be at least the font size. why?*/
 }
 
-.layer.horizontal.selected
-{
-	background-image: url(RPD-layer-blended-4.png);
+.layer_h{
+	height:5px;
+	width:32px;
+	display:inline-block;
+}
+.layer_v{
+	display:inline-block;
+	height:32px;
+	width:5px;
 }
 
-.layer.vertical.selected
-{
-	background-image: url(RPD-layer-blended-1.png);
+#layer_selected{
+	border-radius:2px;
+	padding:0px;
+	border:0px;
+	margin:0px;
+	background-color:#f00;
+}
+#layer{
+	border-radius:2px;
+	padding:0px;
+	border:0px;
+	background-color:#777;
+}
+#layer_center{
+	border-radius:2px;
+	padding:0px;
+	border:0px;
+	background-color:#555;
+}
+#layer_center_selected{
+	border-radius:2px;
+	padding:0px;
+	border:0px;
+	background-color:#c00;
 }
 
-.layer.horizontal.one		{top: 0px;}
-.layer.horizontal.two		{top: 2px;}
-.layer.horizontal.three		{top: 2px;}
-.layer.horizontal.four		{top: 2px;}
-.layer.horizontal.five		{top: 2px;}
-
-/* IT WERKS DON'T TOUCH IT */
-
-.layer.vertical.one			{left: 0px;}
-.layer.vertical.two			{left: -1px;}
-.layer.vertical.three		{left: -3px;}
-.layer.vertical.four		{left: -5px;}
-.layer.vertical.five		{left: -7px;}
-
-.fav
-{
-	font-family: Consolas, monospace;
+#layer:hover{
+	background-color:#eee;
 }
+#layer_center:hover{
+	background-color:#eee;
+}
+#layer_selected:hover{
+	background-color:#f22;
+}
+#layer_center_selected:hover{
+	background-color:#f22;
+}
+
+
+
+
+
+

@@ -105,7 +105,7 @@
 	var/mass_colour_on = mass_colour ? "On" : "Off"
 	. += {" <br>
 			<h4>Mass Colour:</h4>
-			Mass Colouration: <b><A href='?src=\ref[master.interface];set_mass_colour=1'>[mass_colour_on]</a></b>"}
+			Mass Colouration: <b><A class='[mass_colour? "schem_selected" : "schem"]' href='?src=\ref[master.interface];set_mass_colour=1'>[mass_colour_on]</a></b>"}
 
 /datum/rcd_schematic/paint_pipes/attack(var/atom/A, var/mob/user)
 	if(!istype(A, /obj/machinery/atmospherics))
@@ -270,7 +270,7 @@
 
 /datum/rcd_schematic/pipe/get_HTML()
 	. += "<h4>Directions & layers</h4>"
-	. += "<div id='dir_holder'>"
+	. += "<span id='dir_holder'>"
 
 	switch(pipe_type)
 		if(PIPE_BINARY)
@@ -324,31 +324,39 @@
 			. += render_dir_image(SOUTH, "South to Down")
 			. += render_dir_image(WEST, "West to Down")
 
-	. += "</div>"
+	. += "</span>"
 
 	if(layer)
-		. += {"
-		<div class="layer_holder">
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=1"><div class="layer vertical one   [layer == 1 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=2"><div class="layer vertical two   [layer == 2 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=3"><div class="layer vertical three [layer == 3 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=4"><div class="layer vertical four  [layer == 4 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=5"><div class="layer vertical five  [layer == 5 ? "selected" : ""]"></div></a>
-		</div>
+	
+		. += {"<span>
+		<table class="layer">
+			<tr>
+			<td id="[layer==1 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=1"> </a></td>
+			<td id="[layer==2 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=2"> </a></td>
+			<td id="[layer==3 ? "layer_center_selected" : "layer_center" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=3"> </a></td> 
+			<td id="[layer==4 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=4"> </a></td> 
+			<td id="[layer==5 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=5"> </a></td>
+			</tr>
+		</table></span>
 
-		<div class="layer_holder" style="left: 200px;">
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=1"><div class="layer horizontal one   [layer == 1 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=2"><div class="layer horizontal two   [layer == 2 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=3"><div class="layer horizontal three [layer == 3 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=4"><div class="layer horizontal four  [layer == 4 ? "selected" : ""]"></div></a>
-			<a class="no_dec" href="?src=\ref[master.interface];set_layer=5"><div class="layer horizontal five  [layer == 5 ? "selected" : ""]"></div></a>
-		</div>
+		<span><table class="layer">
+		
+			<tr><td id="[layer==1 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=1">  </a></td></tr>
+			<tr><td id="[layer==2 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=2">  </a></td></tr>
+			<tr><td id="[layer==3 ? "layer_center_selected" : "layer_center" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=3">  </a></td></tr>
+			<tr><td id="[layer==4 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=4">  </a></td></tr>
+			<tr><td id="[layer==5 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=5">  </a></td></tr>
+		
+	
+		</table></span>
 	"}
 	
+	
+
 	. += {"
 		<div>
-			<b>Frequency:</b> <a href="?src=\ref[master.interface];set_freq=-1">[format_frequency(master.frequency)] GHz</a> <a href="?src=\ref[master.interface];set_freq=[1439]">Reset</a>
-			<b>ID:</b> <a href="?src=\ref[master.interface];set_id=-1">[master.id ? master.id : "-----"] </a> <a href="?src=\ref[master.interface];set_id=null">Reset</a>
+			<b>Frequency:</b> <a class='schem' href="?src=\ref[master.interface];set_freq=-1">[format_frequency(master.frequency)] GHz</a> <a class='schem'href="?src=\ref[master.interface];set_freq=[1439]">Reset</a>
+			<b>ID:</b> <a class='schem' href="?src=\ref[master.interface];set_id=-1">[master.id ? master.id : "-----"] </a> <a class='schem' href="?src=\ref[master.interface];set_id=null">Reset</a>
 		</div>
 	"}
 
