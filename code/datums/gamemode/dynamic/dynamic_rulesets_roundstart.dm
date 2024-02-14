@@ -327,8 +327,8 @@
 	weight = BASE_RULESET_WEIGHT
 	weight_category = "Cult"
 	cost = 30
-	requirements = list(90,80,60,30,20,10,10,10,10,10)
-	high_population_requirement = 40
+	requirements = list(101,101,101,101,101,101,101,101,101,101)
+	high_population_requirement = 101
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
 	//Readd this once proper round ending rituals are added
 	//flags = HIGHLANDER_RULESET
