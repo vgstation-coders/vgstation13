@@ -2,7 +2,7 @@
 /*updated by crazyamphibian*/
 
 html {
-	font-family:sans-serif;
+	font-family: verdana,Geneva,sans-serif;
 	font-size:small;
 }
 body{
@@ -91,6 +91,12 @@ a.selected img {
 	height:32px;
 	width:5px;
 }
+
+#layersholder{
+position:absolute;
+left:160px;
+}
+
 
 #layer_selected{
 	border-radius:2px;
