@@ -602,7 +602,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 		return
 	landline.pick_up_phone(usr)
 
-/obj/machinery/requests_console/CtrlClick(mob/user)
+/obj/machinery/requests_console/AltClick(mob/user)
 	if(!Adjacent(user))
 		to_chat(user, "<span class='notice'>You are too far away!</span>")
 		return
