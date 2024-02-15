@@ -16,6 +16,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	var/fuel_ox_ratio
 	var/autoignition_temperature = 0
 	var/flammable = FALSE
+	var/flame_temp = 0
 	var/thermal_mass = 0 //VERY loose estimate of mass in kg
 	var/burntime = 0 //time the object has been burning
 	var/fire_protection //duration that something stays extinguished
@@ -35,26 +36,31 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 				specific_heat = SPECIFIC_HEAT_WOOD
 				molecular_weight = MOLECULAR_WEIGHT_WOOD
 				fuel_ox_ratio = FUEL_OX_RATIO_WOOD
+				flame_temp = FLAME_TEMPERATURE_WOOD
 			if(RECYK_PLASTIC, RECYK_ELECTRONIC)
 				autoignition_temperature = AUTOIGNITION_PLASTIC
 				specific_heat = SPECIFIC_HEAT_PLASTIC
 				molecular_weight = MOLECULAR_WEIGHT_PLASTIC
 				fuel_ox_ratio = FUEL_OX_RATIO_PLASTIC
+				flame_temp = FLAME_TEMPERATURE_PLASTIC
 			if(RECYK_FABRIC)
 				autoignition_temperature = AUTOIGNITION_FABRIC
 				specific_heat = SPECIFIC_HEAT_FABRIC
 				molecular_weight = MOLECULAR_WEIGHT_FABRIC
 				fuel_ox_ratio = FUEL_OX_RATIO_FABRIC
+				flame_temp = FLAME_TEMPERATURE_FABRIC
 			if(RECYK_WAX)
 				autoignition_temperature = AUTOIGNITION_WAX
 				specific_heat = SPECIFIC_HEAT_WAX
 				molecular_weight = MOLECULAR_WEIGHT_WAX
 				fuel_ox_ratio = FUEL_OX_RATIO_WAX
+				flame_temp = FLAME_TEMPERATURE_WAX
 			if(RECYK_BIOLOGICAL)
 				autoignition_temperature = AUTOIGNITION_BIOLOGICAL
 				specific_heat = SPECIFIC_HEAT_BIOLOGICAL
 				molecular_weight = MOLECULAR_WEIGHT_BIOLOGICAL
 				fuel_ox_ratio = FUEL_OX_RATIO_BIOLOGICAL
+				flame_temp = FLAME_TEMPERATURE_BIOLOGICAL
 	else // just in case these were overwritten elsewhere accidentally
 		autoignition_temperature = 0
 		specific_combustion_heat = 0
@@ -105,8 +111,9 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		break
 
 	//rate at which energy is consumed from the atom and delivered to the fire
-	//burnrate = 1 at standard pressure with standard oxy concentration
-	var/burnrate = oxy_ratio >= MINOXY2BURN ? (pressure/ONE_ATMOSPHERE) * (oxy_ratio/(MINOXY2BURN + rand(-.02,.02))) : 0
+	//burnrate = 1 at 20C with standard oxy concentration
+	//provides the "heat" and "oxygen" portions of the fire triangle
+	var/burnrate = oxy_ratio >= MINOXY2BURN ? (oxy_ratio/(MINOXY2BURN + rand(-0.02,0.02))) * (temperature/T20C) : 0
 
 	if(burnrate < .1)
 		extinguish()
@@ -125,7 +132,6 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	thermal_mass -= delta_m
 
 	//change in internal energy = energy produced by combustion (assuming perfect combustion)
-	//delta_U = E = specific_heat * delta_m
 	heat_out = specific_heat * delta_m
 
 	//n_oxy = (m_fuel / (m_fuel/n_fuel)) / (n_fuel/n_oxy)
@@ -136,7 +142,6 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		//delta_t = delta_Q/(m*c) = heat_out/(delta_m * specific_heat)
 		delta_t = heat_out/(delta_m * specific_heat)
 		T.hotspot_expose(temperature + delta_t, CELL_VOLUME, surfaces=1)
-
 	return burn_products
 
 /atom/proc/burnLiquidFuel()
