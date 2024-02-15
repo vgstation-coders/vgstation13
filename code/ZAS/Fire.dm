@@ -151,7 +151,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	if(!reagents)
 		return burn_products
-	for(reagent in src.reagents)
+	for(var/datum/reagent/A in reagents.reagent_list)
 		//TODO: burn reagents
 
 /atom/proc/ashify()
