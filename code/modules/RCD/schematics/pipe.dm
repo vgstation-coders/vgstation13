@@ -331,21 +331,21 @@
 		. += {"<span id="layersholder">
 		<table class="layer">
 			<tr>
-			<td id="[layer==1 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=1"> </a></td>
-			<td id="[layer==2 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=2"> </a></td>
-			<td id="[layer==3 ? "layer_center_selected" : "layer_center" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=3"> </a></td> 
-			<td id="[layer==4 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=4"> </a></td> 
-			<td id="[layer==5 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=5"> </a></td>
+			<td class="layergradv" id="[layer==1 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=1"> </a></td>
+			<td class="layergradv" id="[layer==2 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=2"> </a></td>
+			<td class="layergradv" id="[layer==3 ? "layer_center_selected" : "layer_center" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=3"> </a></td> 
+			<td class="layergradv" id="[layer==4 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=4"> </a></td> 
+			<td class="layergradv" id="[layer==5 ? "layer_selected" : "layer" ]"> <a class="layer_v" href="?src=\ref[master.interface];set_layer=5"> </a></td>
 			</tr>
 		</table>
 		
 		<table class="layer">
 		
-			<tr><td id="[layer==1 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=1">  </a></td></tr>
-			<tr><td id="[layer==2 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=2">  </a></td></tr>
-			<tr><td id="[layer==3 ? "layer_center_selected" : "layer_center" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=3">  </a></td></tr>
-			<tr><td id="[layer==4 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=4">  </a></td></tr>
-			<tr><td id="[layer==5 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=5">  </a></td></tr>
+			<tr><td class="layergradh" id="[layer==1 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=1">  </a></td></tr>
+			<tr><td class="layergradh" id="[layer==2 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=2">  </a></td></tr>
+			<tr><td class="layergradh" id="[layer==3 ? "layer_center_selected" : "layer_center" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=3">  </a></td></tr>
+			<tr><td class="layergradh" id="[layer==4 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=4">  </a></td></tr>
+			<tr><td class="layergradh" id="[layer==5 ? "layer_selected" : "layer" ]"><a class="layer_h" href="?src=\ref[master.interface];set_layer=5">  </a></td></tr>
 		
 	
 		</table></span>
