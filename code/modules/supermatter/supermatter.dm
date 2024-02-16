@@ -343,8 +343,8 @@
 
 	env.merge(removed)
 
-	for(var/mob/living/carbon/human/l in view(src, min(7, round(power ** 0.25)))) // If they can see it without mesons on.  Bad on them.
-		if(l.hasHUD(HUD_MESON) || istype(l.glasses, /obj/item/clothing/glasses/scanner/meson))
+	for(var/mob/living/carbon/human/l in view(src, min(7, round(power ** 0.25)))) // If they can see it without s on.  Bad on them.
+		if(l.hasHUD(HUD_MESON) || istype(l.glasses, /obj/item/clothing/glasses/scanner/meson) || istype(l.glasses, /obj/item/clothing/glasses/scanner/dual/chiefengineer))
 			continue
 		l.hallucination = max(0, min(200, l.hallucination + power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)) ) ) )
 
