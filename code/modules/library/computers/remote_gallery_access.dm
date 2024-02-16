@@ -90,6 +90,9 @@
 			if(C) last_id_processed = C.id
 			var/author = C.author
 			var/datum/custom_painting/the_painting = json2painting(C.content)
+			if(!the_painting)
+				message_admins("The remote gallery tried to render a painting with blank content, which it can't display. <A style='color:red' href='?src=\ref[src];del=[C.id]'>\[Delete\]</A>")
+				continue
 			var/controls =  "<A href='?src=\ref[src];id=[C.id]'>\[Order\]</A>"
 			if(isAdminGhost(user))
 				author += " (<A style='color:red' href='?src=\ref[src];delbyckey=[ckey(C.ckey)]'>[ckey(C.ckey)])</A>)"
