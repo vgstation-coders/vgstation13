@@ -135,6 +135,7 @@ var/global/list/news_types = list()
 	var/is_update = FALSE // skip if for an update?
 	var/update_delay_min
 	var/update_delay_max // amount of time later it comes
+	var/datum/trade_destination/affected_dest
 
 // i think the below are a remnant of when revs were a game mode, pretty pointless to have now but keeping this flufftext in comments if anyone wants to reuse it
 /*/datum/feed_message/news/revolution_inciting_event/paycuts_suspicion
@@ -216,7 +217,6 @@ var/global/list/news_types = list()
 	is_admin_message = 1
 	var/list/cheaper_goods = list()
 	var/list/dearer_goods = list()
-	var/datum/trade_destination/affected_dest
 
 /datum/feed_message/news/event/New(var/datum/trade_destination/dest)
 	..()
@@ -322,7 +322,6 @@ var/global/list/news_types = list()
 /datum/feed_message/news/mundane
 	channel_name = "Tau Ceti Daily"
 	is_admin_message = 1
-	var/datum/trade_destination/affected_dest
 
 /datum/feed_message/news/mundane/New(var/datum/trade_destination/dest)
 	..()
