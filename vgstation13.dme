@@ -2945,7 +2945,6 @@
 #include "maps\randomvaults\objects.dm"
 #include "maps\randomvaults\sokoban.dm"
 #include "maps\randomvaults\spessmart.dm"
-#include "maps\randomvaults\thestranger.dmm"
 #include "maps\randomvaults\mining\mining_surprise_items.dm"
 #include "maps\randomvaults\snaxi\snaxivault_defines.dm"
 #include "maps\RandomZLevels\Academy.dm"
