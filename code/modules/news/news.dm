@@ -15,6 +15,9 @@
 //Destroyers are medium sized vessels, often used for escorting larger ships but able to go toe-to-toe with them if need be.
 //Frigates are medium sized vessels, often used for escorting larger ships. They will rapidly find themselves outclassed if forced to face heavy warships head on.
 
+var/global/list/non_update_news_types = list(/datum/feed_message/news/misc/food_riots/more)
+var/global/list/news_types = list()
+
 var/setup_news = 0
 /proc/setup_news()
 	if(setup_news)
@@ -27,16 +30,13 @@ var/setup_news = 0
 		weighted_randomevent_locations[D] = D.viable_random_events.len
 		weighted_mundaneevent_locations[D] = D.viable_mundane_events.len
 
-	news_types = subtypesof(/datum/feed_message/news/misc) - non_event_news_types
+	news_types = subtypesof(/datum/feed_message/news/misc) - non_update_news_types
 	setup_news = 1
 
-	//news_cycle()
-
-var/global/list/non_update_news_types = list(/datum/feed_message/news/misc/food_riots/more)
-var/global/list/news_types = list()
+	news_cycle()
 
 /proc/news_cycle()
-	while(true)
+	while(TRUE)
 		sleep(rand(eventTimeLower, eventTimeUpper) MINUTES)
 		var/datum/trade_destination/affected_dest = prob(90) || !news_types.len ? pickweight(weighted_mundaneevent_locations) : null
 		var/datum/feed_message/news/newspost
@@ -45,7 +45,7 @@ var/global/list/news_types = list()
 			type = pick(affected_dest.viable_mundane_events)
 			newspost = new type(affected_dest)
 			if(newspost.affected_dest.get_custom_eventstring(type))
-				newspost.body = news.affected_dest.get_custom_eventstring(type)
+				newspost.body = newspost.affected_dest.get_custom_eventstring(type)
 		else
 			type = pick(news_types)
 			newspost = new type()
@@ -77,5 +77,5 @@ var/global/list/news_types = list()
 		NEWSCASTER.newsAlert(news.channel_name)
 
 	if(news.update_type)
-		spawn(rand(update_delay_min,update_delay_max))
+		spawn(rand(news.update_delay_min,news.update_delay_max))
 			announce_newscaster_news(new news.update_type)
