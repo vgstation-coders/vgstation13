@@ -36,26 +36,29 @@
 	..()
 	affected_dest = dest || pickweight(weighted_mundaneevent_locations)
 
-// i think the below are a remnant of when revs were a game mode, pretty pointless to have now but keeping this flufftext in comments if anyone wants to reuse it
-/*/datum/feed_message/news/revolution_inciting_event/paycuts_suspicion
-	//round_time = 60*10 // time of the round at which this should be announced, in seconds
+// the below three were originally from revs game mode, if anyone wants to work them back into it
+/datum/feed_message/news/misc/paycuts_suspicion
 	headline = "Nanotrasen - Paycuts rumoured on all stations due to lack of profit"
 	body = {"Reports have leaked that Nanotrasen Inc. is planning to put paycuts into
 				effect on many of its Research Stations in Tau Ceti. Apparently these research
 				stations haven't been able to yield the expected revenue, and thus adjustments
 				have to be made."}
 	author = "Unauthorized"
+	update_type = /datum/feed_message/news/misc/paycuts_confirmation
+	update_delay_min = 20 MINUTES
+	update_delay_max = 40 MINUTES
 
-/datum/feed_message/news/revolution_inciting_event/paycuts_confirmation
-	//round_time = 60*40
+/datum/feed_message/news/misc/paycuts_confirmation
 	headline = "Nanotrasen - Paycuts confirmed, head of staff exempt"
 	body = {"Earlier rumours about paycuts on Research Stations in the Tau Ceti system have
 				been confirmed. Shockingly, however, the cuts will only affect lower tier
 				personnel. Heads of Staff will, according to our sources, not be affected."}
 	author = "Unauthorized"
+	update_type = /datum/feed_message/news/misc/human_experiments
+	update_delay_min = 40 MINUTES
+	update_delay_max = 60 MINUTES
 
-/datum/feed_message/news/revolution_inciting_event/human_experiments
-	//round_time = 60*90
+/datum/feed_message/news/misc/human_experiments
 	headline = "Nanotrasen suspected to be experimenting on humans!"
 	body = {"Unbelievable reports about human experimentation have reached our ears. According
 				to a refugee from one of the Tau Ceti Research Stations, their station, in order
@@ -64,7 +67,7 @@
 				to the slimes to see what happens\". Allegedly, these test subjects were neither
 				humanified monkeys nor volunteers, but rather unqualified staff that were forced into
 				the experiments, and reported to have died in a \"work accident\" by Nanotrasen Inc."}
-	author = "Unauthorized"*/
+	author = "Unauthorized"
 
 /datum/feed_message/news/misc/bluespace_research
 	headline = "Bluespace transportation research in full drive"
@@ -108,7 +111,7 @@
 	update_delay_min = 40 MINUTES
 	update_delay_max = 60 MINUTES
 
-/datum/feed_message/news/misc/food_riots/more
+/datum/feed_message/news/misc/more_food_riots
 	channel_name = "Tau Ceti Daily"
 	author = "Reporter Ro'kii Ar-Raqis"
 	headline = "Food riots on Tenebrae intensify"
@@ -240,30 +243,37 @@
 
 /datum/feed_message/news/mundane/research/New(var/datum/trade_destination/dest)
 	..()
+	headline = "Major [pick("science","research")] [pick("breakthrough","find","discovery")] on [affected_dest,name]"
 	body = "A major breakthough in the field of [pick("plasma research","super-compressed materials","nano-augmentation","bluespace research","volatile power manipulation")] \
 				was announced [pick("yesterday","a few days ago","last week","earlier this month")] by a private firm on [affected_dest.name]. \
 				Nanotrasen declined to comment as to whether this could impinge on profits."
 
 /datum/feed_message/news/mundane/bargains/New(var/datum/trade_destination/dest)
 	..()
+	headline = "[pick("BIG SALE NOW ON","BARGAINS DOWN","PRICES GALORE")] at [affected_dest.name]!"
 	body = "BARGAINS! BARGAINS! BARGAINS! Commerce Control on [affected_dest.name] wants you to know that everything must go! Across all retail centres, \
 				all goods are being slashed, and all retailors are onboard - so come on over for the \[shopping\] time of your life."
 
 /datum/feed_message/news/mundane/song/New(var/datum/trade_destination/dest)
 	..()
-	body = "[pick("Singer","Singer/songwriter","Saxophonist","Pianist","Guitarist","TV personality","Star")] [random_name(pick(MALE,FEMALE))] \
-				announced the debut of their new [pick("single","album","EP","label")] '[pick("Everyone's","Look at the","Baby don't eye those","All of those","Dirty nasty")] \
+	var/name = random_name(pick(MALE,FEMALE))
+	var/title = "[pick("single","album","EP","label")] '[pick("Everyone's","Look at the","Baby don't eye those","All of those","Dirty nasty")] \
 				[pick("roses","three stars","starships","nanobots","cyborgs","Skrell","Sren'darr")] \
-				[pick("on Venus","on Reade","on Moghes","in my hand","slip through my fingers","die for you","sing your heart out","fly away")]' \
+				[pick("on Venus","on Reade","on Moghes","in my hand","slip through my fingers","die for you","sing your heart out","fly away")]'"
+	headline = "Musician [name] to release new [title] in [rand(5,20)] days"
+	body = "[pick("Singer","Singer/songwriter","Saxophonist","Pianist","Guitarist","TV personality","Star")] [name] \
+				announced the debut of their new [title] \
 				with [pick("pre-puchases available","a release tour","cover signings","a launch concert")] on [affected_dest.name]."
 
 /datum/feed_message/news/mundane/movie/New(var/datum/trade_destination/dest)
 	..()
-	body = "From the [pick("desk","home town","homeworld","mind")] of [pick("acclaimed","award-winning","popular","stellar")] \
-				[pick("playwright","author","director","actor","TV star")] [random_name(pick(MALE,FEMALE))] comes the latest sensation: '\
-				[pick("Deadly","The last","Lost","Dead")] [pick("Starships","Warriors","outcasts","Tajarans","Unathi","Skrell")] \
+	var/name = random_name(pick(MALE,FEMALE))
+	var/title = "[pick("Deadly","The last","Lost","Dead")] [pick("Starships","Warriors","outcasts","Tajarans","Unathi","Skrell")] \
 				[pick("of","from","raid","go hunting on","visit","ravage","pillage","destroy")] \
-				[pick("Moghes","Earth","Biesel","Ahdomai","S'randarr","the Void","the Edge of Space")]'.\
+				[pick("Moghes","Earth","Biesel","Ahdomai","S'randarr","the Void","the Edge of Space")]"
+	headline = "[name] to be involved in new movie `[title]` soon"
+	body = "From the [pick("desk","home town","homeworld","mind")] of [pick("acclaimed","award-winning","popular","stellar")] \
+				[pick("playwright","author","director","actor","TV star")] [name] comes the latest sensation: '[title]'.\
 				. Own it on webcast today, or visit the galactic premier on [affected_dest.name]!"
 
 /datum/feed_message/news/mundane/hunt/New(var/datum/trade_destination/dest)
@@ -310,6 +320,7 @@
 
 /datum/feed_message/news/mundane/tourism/New(var/datum/trade_destination/dest)
 	..()
+	headline = "[pick("Come see","A trip to","Tours now available for new event on","Why to visit")] [affected_dest.name]"
 	body = "Tourists are flocking to [affected_dest.name] after the surprise announcement of [pick("major shopping bargains by a wily retailer",\
 				"a huge new ARG by a popular entertainment company","a secret tour by popular artiste [random_name(pick(MALE,FEMALE))]")]. \
 				Tau Ceti Daily is offering discount tickets for two to see [random_name(pick(MALE,FEMALE))] live in return for eyewitness reports and up to the minute coverage."
