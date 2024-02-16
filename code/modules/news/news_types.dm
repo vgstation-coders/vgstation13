@@ -24,7 +24,7 @@
 
 /datum/feed_message/news
 	author = "Unknown"
-	message = "HOLY PINGAS WHAT A SCOOP" // filler
+	body = "HOLY PINGAS WHAT A SCOOP" // filler
 	var/channel_name = "Tau Ceti Daily"
 	var/update_type // message to come after this
 	var/update_delay_min

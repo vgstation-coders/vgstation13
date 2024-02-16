@@ -33,11 +33,14 @@ var/setup_news = 0
 	news_types = subtypesof(/datum/feed_message/news/misc) - non_update_news_types
 	setup_news = 1
 
-	news_cycle()
+	spawn()
+		news_cycle()
 
 /proc/news_cycle()
 	while(TRUE)
-		sleep(rand(eventTimeLower, eventTimeUpper) MINUTES)
+		var/delay = rand(eventTimeLower, eventTimeUpper)
+		log_debug("News cycle refreshed. Next post in [delay] minutes.")
+		sleep(delay MINUTES)
 		var/datum/trade_destination/affected_dest = prob(90) || !news_types.len ? pickweight(weighted_mundaneevent_locations) : null
 		var/datum/feed_message/news/newspost
 		var/type
@@ -54,8 +57,8 @@ var/setup_news = 0
 
 /proc/announce_newscaster_news(datum/feed_message/news/news)
 
-	if(news.affected_dest?.get_custom_eventstring(type))
-		news.body = news.affected_dest.get_custom_eventstring(type)
+	if(news.affected_dest?.get_custom_eventstring(news.type))
+		news.body = news.affected_dest.get_custom_eventstring(news.type)
 
 	var/datum/feed_channel/sendto
 	for(var/datum/feed_channel/FC in news_network.network_channels)

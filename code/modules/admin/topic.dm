@@ -4017,7 +4017,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				var/type = input("Select a news message to broadcast!") in subtypesof(/datum/feed_message/news)
 				var/datum/feed_message/news/newspost = new type()
 				var/dest = input("Where will it happen, if applicable?") in subtypesof(/datum/trade_destination)
-				/datum/trade_destination/newsdest = new dest()
+				var/datum/trade_destination/newsdest = new dest()
 				newspost.affected_dest = newsdest
 				announce_newscaster_news(newspost)
 			if("togglerunescapepvp")
