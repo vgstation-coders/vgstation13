@@ -25,6 +25,7 @@
 /datum/feed_message/news
 	author = "CentComm Minister of Information"
 	body = "HOLY PINGAS WHAT A SCOOP" // filler
+	headline = "THIS JUST IN"
 	var/channel_name = "Tau Ceti Daily"
 	var/update_type // message to come after this
 	var/update_delay_min
@@ -38,6 +39,7 @@
 // i think the below are a remnant of when revs were a game mode, pretty pointless to have now but keeping this flufftext in comments if anyone wants to reuse it
 /*/datum/feed_message/news/revolution_inciting_event/paycuts_suspicion
 	//round_time = 60*10 // time of the round at which this should be announced, in seconds
+	headline = "Nanotrasen - Paycuts rumoured on all stations due to lack of profit"
 	body = {"Reports have leaked that Nanotrasen Inc. is planning to put paycuts into
 				effect on many of its Research Stations in Tau Ceti. Apparently these research
 				stations haven't been able to yield the expected revenue, and thus adjustments
@@ -46,6 +48,7 @@
 
 /datum/feed_message/news/revolution_inciting_event/paycuts_confirmation
 	//round_time = 60*40
+	headline = "Nanotrasen - Paycuts confirmed, head of staff exempt"
 	body = {"Earlier rumours about paycuts on Research Stations in the Tau Ceti system have
 				been confirmed. Shockingly, however, the cuts will only affect lower tier
 				personnel. Heads of Staff will, according to our sources, not be affected."}
@@ -53,6 +56,7 @@
 
 /datum/feed_message/news/revolution_inciting_event/human_experiments
 	//round_time = 60*90
+	headline = "Nanotrasen suspected to be experimenting on humans!"
 	body = {"Unbelievable reports about human experimentation have reached our ears. According
 				to a refugee from one of the Tau Ceti Research Stations, their station, in order
 				to increase revenue, has refactored several of their facilities to perform experiments
@@ -63,6 +67,7 @@
 	author = "Unauthorized"*/
 
 /datum/feed_message/news/misc/bluespace_research
+	headline = "Bluespace transportation research in full drive"
 	body = {"The new field of research trying to explain several interesting spacetime oddities,
 				also known as \"Bluespace Research\", has reached new heights. Of the several
 				hundred space stations now orbiting in Tau Ceti, fifteen are now specially equipped
@@ -73,6 +78,7 @@
 /datum/feed_message/news/misc/found_ssd
 	channel_name = "Tau Ceti Daily"
 	author = "Doctor Eric Hanfield"
+	headline = "Crew consciousness issues - A root cause?"
 	body = {"Several people have been found unconscious at their terminals. It is thought that it was due
 				to a lack of sleep or of simply migraines from staring at the screen too long. Camera footage
 				reveals that many of them were playing games instead of working and their pay has been docked
@@ -81,6 +87,7 @@
 /datum/feed_message/news/misc/explosions
 	channel_name = "Tau Ceti Daily"
 	author = "Reporter Leland H. Howards"
+	headline = "Explosions on Lotus Tree - 50 dead at least"
 	body = {"The newly-christened civillian transport Lotus Tree suffered two very large explosions near the
 				bridge today, and there are unconfirmed reports that the death toll has passed 50. The cause of
 				the explosions remain unknown, but there is speculation that it might have something to do with
@@ -91,6 +98,7 @@
 /datum/feed_message/news/misc/food_riots
 	channel_name = "Tau Ceti Daily"
 	author = "Reporter Ro'kii Ar-Raqis"
+	headline = "Food riots engulf Tenebrae"
 	body = {"Breaking news: Food riots have broken out throughout the Refuge asteroid colony in the Tenebrae
 				Lupus system. This comes only hours after Nanotrasen officials announced they will no longer trade with the
 				colony, citing the increased presence of \"hostile factions\" on the colony has made trade too dangerous to
@@ -103,6 +111,7 @@
 /datum/feed_message/news/misc/food_riots/more
 	channel_name = "Tau Ceti Daily"
 	author = "Reporter Ro'kii Ar-Raqis"
+	headline = "Food riots on Tenebrae intensify"
 	body = {"More on the Refuge food riots: The Refuge Council has condemned Nanotrasen's withdrawal from
 	the colony, claiming \"there has been no increase in anti-Nanotrasen activity\", and \"\[the only] reason
 	Nanotrasen withdrew was because the \[Tenebrae Lupus] system's Plasma deposits have been completely mined out.
@@ -121,6 +130,7 @@
 
 /datum/feed_message/news/event/riots/New(var/datum/trade_destination/dest)
 	..()
+	headline = "[pick("Unrest","Riots")] on [affected_dest.name] affect stock supply"
 	body = "[pick("Riots have","Unrest has")] broken out on planet [affected_dest.name]. Authorities call for calm, as [pick("various parties","rebellious elements","peacekeeping forces","\'REDACTED\'")] begin stockpiling weaponry and armour. Meanwhile, food and mineral prices are dropping as local industries attempt empty their stocks in expectation of looting."
 
 /datum/feed_message/news/event/animal_attack
@@ -129,6 +139,7 @@
 
 /datum/feed_message/news/event/animal_attack/New(var/datum/trade_destination/dest)
 	..()
+	headline = "Feral wildlife on [affected_dest.name] attacks food stockpiles"
 	body = "Local [pick("wildlife","animal life","fauna")] on planet [affected_dest.name] has been increasing in agression and raiding outlying settlements for food. Big game hunters have been called in to help alleviate the problem, but numerous injuries have already occurred."
 
 /datum/feed_message/news/event/accident
@@ -136,6 +147,7 @@
 
 /datum/feed_message/news/event/accident/New(var/datum/trade_destination/dest)
 	..()
+	body = "[pick("Industrial accident","Malfunction")] at [affected_dest.name] site causes [pick("large disaster","mass damage","mass destruction")]"
 	body = "[pick("An industrial accident","A smelting accident","A malfunction","A malfunctioning piece of machinery","Negligent maintenance","A cooleant leak","A ruptured conduit")] at a [pick("factory","installation","power plant","dockyards")] on [affected_dest.name] resulted in severe structural damage and numerous injuries. Repairs are ongoing."
 
 /datum/feed_message/news/event/biohazard
@@ -143,6 +155,7 @@
 
 /datum/feed_message/news/event/biohazard/New(var/datum/trade_destination/dest)
 	..()
+	headline = "Viral outbreak on [affected_dest.name] infects many"
 	body = "[pick("A \'REDACTED\'","A biohazard","An outbreak","A virus")] on [affected_dest.name] has resulted in quarantine, stopping much shipping in the area. Although the quarantine is now lifted, authorities are calling for deliveries of medical supplies to treat the infected, and gas to replace contaminated stocks."
 
 /datum/feed_message/news/event/pirates
@@ -150,6 +163,7 @@
 
 /datum/feed_message/news/event/pirates/New(var/datum/trade_destination/dest)
 	..()
+	headline = "[affected_dest.name] [pick("raided","ambushed","attacked")] by criminal elements"
 	body = "[pick("Pirates","Criminal elements","A [pick("Syndicate","Donk Co.","Waffle Co.","\'REDACTED\'")] strike force")] have [pick("raided","blockaded","attempted to blackmail","attacked")] [affected_dest.name] today. Security has been tightened, but many valuable minerals were taken."
 
 /datum/feed_message/news/event/corporate
@@ -157,6 +171,7 @@
 
 /datum/feed_message/news/event/corporate/New(var/datum/trade_destination/dest)
 	..()
+	headline = "[affected_dest.name] [pick("raided","sieged","attacked")] by large scale rogue entities"
 	body = "A small [pick("pirate","Cybersun Industries","Gorlex Marauders","Syndicate")] fleet has precise-jumped into proximity with [affected_dest.name], [pick("for a smash-and-grab operation","in a hit and run attack","in an overt display of hostilities")]. Much damage was done, and security has been tightened since the incident."
 
 /datum/feed_message/news/event/alien_raiders
@@ -165,6 +180,7 @@
 
 /datum/feed_message/news/event/alien_raiders/New(var/datum/trade_destination/dest)
 	..()
+	headline = "Alien raid, theft and kidnappings on [affected_dest.name]"
 	if(prob(20))
 		body = "The Tiger Co-operative have raided [affected_dest.name] today, no doubt on orders from their enigmatic masters. Stealing wildlife, farm animals, medical research materials and kidnapping civilians. Nanotrasen authorities are standing by to counter attempts at bio-terrorism."
 	else
@@ -175,6 +191,7 @@
 
 /datum/feed_message/news/event/ai_liberation/New(var/datum/trade_destination/dest)
 	..()
+	headline = "[pick("Slicer","Hacker")] [pick("infests","infiltrates","compromises")] [pick("on-board A.I","defence systems")] on [affected_dest.name] causing mass death"
 	body = "A [pick("\'REDACTED\' was detected on","S.E.L.F operative infiltrated","malignant computer virus was detected on","rogue [pick("slicer","hacker")] was apprehended on")] [affected_dest.name] today, and managed to infect [pick("\'REDACTED\'","a sentient sub-system","a class one AI","a sentient defence installation")] before it could be stopped. Many lives were lost as it systematically begin murdering civilians, and considerable work must be done to repair the affected areas."
 
 /datum/feed_message/news/event/mourning
@@ -182,13 +199,16 @@
 
 /datum/feed_message/news/event/mourning/New(var/datum/trade_destination/dest)
 	..()
-	body = "[pick("The popular","The well-liked","The eminent","The well-known")] [pick("professor","entertainer","singer","researcher","public servant","administrator","ship captain","\'REDACTED\'")], [pick( random_name(pick(MALE,FEMALE)), 40; "\'REDACTED\'" )] has [pick("passed away","committed suicide","been murdered","died in a freakish accident")] on [affected_dest.name] today. The entire planet is in mourning, and prices have dropped for industrial goods as worker morale drops."
+	var/name = capitalize(pick(random_name(pick(MALE,FEMALE)), 40; "\'REDACTED\'"))
+	headline = "Famous figure [name] dead at [rand(25,100)]"
+	body = "[pick("The popular","The well-liked","The eminent","The well-known")] [pick("professor","entertainer","singer","researcher","public servant","administrator","ship captain","\'REDACTED\'")], [name] has [pick("passed away","committed suicide","been murdered","died in a freakish accident")] on [affected_dest.name] today. The entire planet is in mourning, and prices have dropped for industrial goods as worker morale drops."
 
 /datum/feed_message/news/event/cult_cell
 	dearer_goods = list(SECURITY, BIOMEDICAL, MAINTENANCE)
 
 /datum/feed_message/news/event/cult_cell/New(var/datum/trade_destination/dest)
 	..()
+	headline = "[pick("Blood c","C","Apocalyptic c")]ult cell [pick("discovered","revealed","exposed")] on [affected_dest.name]"
 	body = "A [pick("dastardly","blood-thirsty","villanous","crazed")] cult of [pick("The Elder Gods","Nar'sie","an apocalyptic sect","\'REDACTED\'")] has [pick("been discovered","been revealed","revealed themselves","gone public")] on [affected_dest.name] earlier today. Public morale has been shaken due to [pick("certain","several","one or two")] [pick("high-profile","well known","popular")] individuals [pick("performing \'REDACTED\' acts","claiming allegiance to the cult","swearing loyalty to the cult leader","promising to aid to the cult")] before those involved could be brought to justice. The editor reminds all personnel that supernatural myths will not be tolerated on Nanotrasen facilities."
 
 /datum/feed_message/news/event/breach
@@ -196,6 +216,7 @@
 
 /datum/feed_message/news/event/breach/New(var/datum/trade_destination/dest)
 	..()
+	headline = "[pick("Security breach","Prison break")] on [affected_dest.name] [pick("restricted","sensitive")] [pick("zone","area")]"
 	body = "There was [pick("a security breach in","an unauthorised access in","an attempted theft in","an anarchist attack in","violent sabotage of")] a [pick("high-security","restricted access","classified","\'REDACTED\'")] [pick("\'REDACTED\'","section","zone","area")] this morning. Security was tightened on [affected_dest.name] after the incident, and the editor reassures all Nanotrasen personnel that such lapses are rare."
 
 /datum/feed_message/news/event/animal_rights
@@ -203,6 +224,7 @@
 
 /datum/feed_message/news/event/animal_rights/New(var/datum/trade_destination/dest)
 	..()
+	headline = "[pick("Animal","Animal rights")] breakout on [affected_dest.name]"
 	body = "[pick("Militant animal rights activists","Members of the terrorist group Animal Rights Consortium","Members of the terrorist group \'REDACTED\'")] have [pick("launched a campaign of terror","unleashed a swathe of destruction","raided farms and pastures","forced entry to \'REDACTED\'")] on [affected_dest.name] earlier today, freeing numerous [pick("farm animals","animals","\'REDACTED\'")]. Prices for tame and breeding animals have spiked as a result."
 
 /datum/feed_message/news/event/festival
@@ -210,6 +232,7 @@
 
 /datum/feed_message/news/event/festival/New(var/datum/trade_destination/dest)
 	..()
+	headline = "Festivities begin on [affected_dest.name]"
 	body = "A [pick("festival","week long celebration","day of revelry","planet-wide holiday")] has been declared on [affected_dest.name] by [pick("Governor","Commissioner","General","Commandant","Administrator")] [random_name(pick(MALE,FEMALE))] to celebrate [pick("the birth of their [pick("son","daughter")]","coming of age of their [pick("son","daughter")]","the pacification of rogue military cell","the apprehension of a violent criminal who had been terrorising the planet")]. Massive stocks of food and meat have been bought driving up prices across the planet."
 
 /datum/feed_message/news/mundane
@@ -337,5 +360,9 @@
 /datum/feed_message/news/trivial/New(var/datum/trade_destination/dest)
 	..()
 	author = pick("Editor Mike Hammers","Assistant Editor Carl Ritz")
-	body = pick(file2list("config/news/trivial.txt"))
+	headline = "[pick("The [pick("daily","weekly")] round-up","The latest run-down","The current events","BREAKING NEWS PLEASE SELECT THIS STORY ON ALL CASTERS...","The update","Stories you can't read anywhere else...","The news they didn't want you to know","This [pick("day","week")] in [pick("science","information","the news","the happenings","the headlines","the story","stupid","insanity","boredom","shame","confusion","hilarity","the vast nothingness of space")]")] on [affected_dest.name]!"
+	body = ""
+	var/list/thenews = file2list("config/news/trivial.txt")
+	for(var/i in 1 to rand(3,5))
+		body += "-[pick_n_take(thenews)]\n"
 	body = replacetext(body,"{{AFFECTED}}",affected_dest.name)
