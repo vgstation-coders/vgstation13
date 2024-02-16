@@ -1377,12 +1377,12 @@
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Cluwne;jobban4=\ref[M]'><font color=red>Cluwne</font></a></td>"
 		else
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Cluwne;jobban4=\ref[M]'>Cluwne</a></td>"
-		
+
 		if(jobban_isbanned(M, "artist")) //so people can't make paintings
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=artist;jobban4=\ref[M]'><font color=red>Artist</font></a></td>"
 		else
-			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=artist;jobban4=\ref[M]'>Artist</a></td>"	
-		
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=artist;jobban4=\ref[M]'>Artist</a></td>"
+
 		jobs += "</tr></table>"
 
 		body = "<body>[jobs]</body>"
@@ -4013,6 +4013,13 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					else
 						world << sound('sound/effects/explosionfar.ogg')
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second
+			if("fakenews")
+				var/type = input("Select a news message to broadcast!") in subtypesof(/datum/feed_message/news)
+				var/datum/feed_message/news/newspost = new type()
+				var/dest = input("Where will it happen, if applicable?") in subtypesof(/datum/trade_destination)
+				/datum/trade_destination/newsdest = new dest()
+				newspost.affected_dest = newsdest
+				announce_newscaster_news(newspost)
 			if("togglerunescapepvp")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RSPVP")

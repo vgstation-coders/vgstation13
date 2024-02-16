@@ -23,7 +23,9 @@
 // Uses BYOND's type system to put everything into a nice format
 
 /datum/feed_message/news
-	var/channel_name
+	author = "Unknown"
+	message = "HOLY PINGAS WHAT A SCOOP" // filler
+	var/channel_name = "Tau Ceti Daily"
 	var/update_type // message to come after this
 	var/update_delay_min
 	var/update_delay_max // amount of time later it comes
@@ -109,8 +111,6 @@
 	the riots. More on this at 6."}
 
 /datum/feed_message/news/event
-	channel_name = "Tau Ceti Daily"
-	author = "CentComm Minister of Information"
 	is_admin_message = 1
 	var/list/cheaper_goods = list()
 	var/list/dearer_goods = list()
@@ -213,8 +213,6 @@
 	body = "A [pick("festival","week long celebration","day of revelry","planet-wide holiday")] has been declared on [affected_dest.name] by [pick("Governor","Commissioner","General","Commandant","Administrator")] [random_name(pick(MALE,FEMALE))] to celebrate [pick("the birth of their [pick("son","daughter")]","coming of age of their [pick("son","daughter")]","the pacification of rogue military cell","the apprehension of a violent criminal who had been terrorising the planet")]. Massive stocks of food and meat have been bought driving up prices across the planet."
 
 /datum/feed_message/news/mundane
-	channel_name = "Tau Ceti Daily"
-	author = "CentComm Minister of Information"
 	is_admin_message = 1
 
 /datum/feed_message/news/mundane/research/New(var/datum/trade_destination/dest)
