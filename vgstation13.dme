@@ -297,7 +297,6 @@
 #include "code\datums\mixed.dm"
 #include "code\datums\modules.dm"
 #include "code\datums\next_map.dm"
-#include "code\datums\periodic_news.dm"
 #include "code\datums\profiling.dm"
 #include "code\datums\recipe.dm"
 #include "code\datums\recruiter.dm"
