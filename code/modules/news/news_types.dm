@@ -110,6 +110,7 @@
 
 /datum/feed_message/news/event
 	channel_name = "Tau Ceti Daily"
+	author = "CentComm Minister of Information"
 	is_admin_message = 1
 	var/list/cheaper_goods = list()
 	var/list/dearer_goods = list()
@@ -213,6 +214,7 @@
 
 /datum/feed_message/news/mundane
 	channel_name = "Tau Ceti Daily"
+	author = "CentComm Minister of Information"
 	is_admin_message = 1
 
 /datum/feed_message/news/mundane/research/New(var/datum/trade_destination/dest)

@@ -19,21 +19,10 @@ var/setup_news = 0
 /proc/setup_news()
 	if(setup_news)
 		return
-	var/datum/feed_channel/newChannel = new /datum/feed_channel
-	newChannel.channel_name = "Tau Ceti Daily"
-	newChannel.author = "CentComm Minister of Information"
-	newChannel.locked = 1
-	newChannel.is_admin_channel = 1
-	news_network.network_channels += newChannel
+	news_network.network_channels += new /datum/feed_channel/preset/tauceti
+	news_network.network_channels += new /datum/feed_channel/preset/gibsongazette
 
-	newChannel = new /datum/feed_channel
-	newChannel.channel_name = "The Gibson Gazette"
-	newChannel.author = "Editor Mike Hammers"
-	newChannel.locked = 1
-	newChannel.is_admin_channel = 1
-	news_network.network_channels += newChannel
-
-	for(var/loc_type in typesof(/datum/trade_destination) - /datum/trade_destination)
+	for(var/loc_type in subtypesof(/datum/trade_destination))
 		var/datum/trade_destination/D = new loc_type
 		weighted_randomevent_locations[D] = D.viable_random_events.len
 		weighted_mundaneevent_locations[D] = D.viable_mundane_events.len
