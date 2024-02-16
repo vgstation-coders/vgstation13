@@ -2227,7 +2227,6 @@
 #include "code\modules\nano\nanoui.dm"
 #include "code\modules\news\news.dm"
 #include "code\modules\news\news_events.dm"
-#include "code\modules\news\news_events_mundane.dm"
 #include "code\modules\news\news_trade_destinations.dm"
 #include "code\modules\optics\photocollector.dm"
 #include "code\modules\optics\prism.dm"

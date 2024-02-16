@@ -85,26 +85,34 @@ var/setup_news = 0
 		weighted_randomevent_locations[D] = D.viable_random_events.len
 		weighted_mundaneevent_locations[D] = D.viable_mundane_events.len
 
-	news_types = subtypesof(/datum/feed_message/news) - non_event_news_types
+	news_types = subtypesof(/datum/feed_message/news/misc) - non_event_news_types
 	setup_news = 1
 
 	//news_cycle()
 
-var/global/list/non_update_news_types = list(/datum/feed_message/news/food_riots/more,/datum/feed_message/news/event,/datum/feed_message/news/mundane)
+var/global/list/non_update_news_types = list(/datum/feed_message/news/misc/food_riots/more)
 var/global/list/news_types = list()
 
 /proc/news_cycle()
 	while(true)
 		sleep(rand(eventTimeLower, eventTimeUpper) MINUTES)
-		var/datum/trade_destination/affected_dest = pickweight(weighted_mundaneevent_locations)
-		var/type = pick(news_types)
-		var/datum/feed_message/news/newspost = new type(affected_dest)
-		news_types -= newspost
+		var/datum/trade_destination/affected_dest = prob(90) || !news_types.len ? pickweight(weighted_mundaneevent_locations) : null
+		var/datum/feed_message/news/newspost
+		var/type
+		if(affected_dest?.viable_mundane_events.len)
+			type = pick(affected_dest.viable_mundane_events)
+			newspost = new type(affected_dest)
+			if(newspost.affected_dest.get_custom_eventstring(type))
+				newspost.body = news.affected_dest.get_custom_eventstring(type)
+		else
+			type = pick(news_types)
+			newspost = new type()
+			news_types -= newspost
 		announce_newscaster_news(newspost)
 
 /proc/announce_newscaster_news(datum/feed_message/news/news)
 
-	if(news.affected_dest.get_custom_eventstring(type))
+	if(news.affected_dest?.get_custom_eventstring(type))
 		news.body = news.affected_dest.get_custom_eventstring(type)
 
 	var/datum/feed_channel/sendto
@@ -126,16 +134,23 @@ var/global/list/news_types = list()
 	for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 		NEWSCASTER.newsAlert(news.channel_name)
 
+	if(news.update_type)
+		spawn(rand(update_delay_min,update_delay_max))
+			announce_newscaster_news(new news.update_type)
+
 // This system defines news that will be displayed in the course of a round.
 // Uses BYOND's type system to put everything into a nice format
 
 /datum/feed_message/news
 	var/channel_name
 	var/update_type // message to come after this
-	var/is_update = FALSE // skip if for an update?
 	var/update_delay_min
 	var/update_delay_max // amount of time later it comes
 	var/datum/trade_destination/affected_dest
+
+/datum/feed_message/news/New(var/datum/trade_destination/dest)
+	..()
+	affected_dest = dest || pickweight(weighted_mundaneevent_locations)
 
 // i think the below are a remnant of when revs were a game mode, pretty pointless to have now but keeping this flufftext in comments if anyone wants to reuse it
 /*/datum/feed_message/news/revolution_inciting_event/paycuts_suspicion
@@ -164,7 +179,7 @@ var/global/list/news_types = list()
 				the experiments, and reported to have died in a \"work accident\" by Nanotrasen Inc."}
 	author = "Unauthorized"*/
 
-/datum/feed_message/news/bluespace_research
+/datum/feed_message/news/misc/bluespace_research
 	body = {"The new field of research trying to explain several interesting spacetime oddities,
 				also known as \"Bluespace Research\", has reached new heights. Of the several
 				hundred space stations now orbiting in Tau Ceti, fifteen are now specially equipped
@@ -172,7 +187,7 @@ var/global/list/news_types = list()
 				stations even sport functional \"travel gates\" that can instantly move a whole research
 				team to an alternate reality."}
 
-/datum/feed_message/news/found_ssd
+/datum/feed_message/news/misc/found_ssd
 	channel_name = "Tau Ceti Daily"
 	author = "Doctor Eric Hanfield"
 	body = {"Several people have been found unconscious at their terminals. It is thought that it was due
@@ -180,7 +195,7 @@ var/global/list/news_types = list()
 				reveals that many of them were playing games instead of working and their pay has been docked
 				accordingly."}
 
-/datum/feed_message/news/explosions
+/datum/feed_message/news/misc/explosions
 	channel_name = "Tau Ceti Daily"
 	author = "Reporter Leland H. Howards"
 	body = {"The newly-christened civillian transport Lotus Tree suffered two very large explosions near the
@@ -190,7 +205,7 @@ var/global/list/news_types = list()
 				announced that they were officially acknowledging inter-species marriage and providing couples
 				with marriage tax-benefits."}
 
-/datum/feed_message/news/food_riots
+/datum/feed_message/news/misc/food_riots
 	channel_name = "Tau Ceti Daily"
 	author = "Reporter Ro'kii Ar-Raqis"
 	body = {"Breaking news: Food riots have broken out throughout the Refuge asteroid colony in the Tenebrae
@@ -198,11 +213,11 @@ var/global/list/news_types = list()
 				colony, citing the increased presence of \"hostile factions\" on the colony has made trade too dangerous to
 				continue. Nanotrasen officials have not given any details about said factions. More on that at the top of
 				the hour."}
-	update_type = /datum/feed_message/news/food_riots/more
+	update_type = /datum/feed_message/news/misc/food_riots/more
 	update_delay_min = 40 MINUTES
 	update_delay_max = 60 MINUTES
 
-/datum/feed_message/news/food_riots/more
+/datum/feed_message/news/misc/food_riots/more
 	channel_name = "Tau Ceti Daily"
 	author = "Reporter Ro'kii Ar-Raqis"
 	body = {"More on the Refuge food riots: The Refuge Council has condemned Nanotrasen's withdrawal from
@@ -217,10 +232,6 @@ var/global/list/news_types = list()
 	is_admin_message = 1
 	var/list/cheaper_goods = list()
 	var/list/dearer_goods = list()
-
-/datum/feed_message/news/event/New(var/datum/trade_destination/dest)
-	..()
-	affected_dest = dest
 
 /datum/feed_message/news/event/riots
 	dearer_goods = list(SECURITY)
@@ -322,10 +333,6 @@ var/global/list/news_types = list()
 /datum/feed_message/news/mundane
 	channel_name = "Tau Ceti Daily"
 	is_admin_message = 1
-
-/datum/feed_message/news/mundane/New(var/datum/trade_destination/dest)
-	..()
-	affected_dest = dest
 
 /datum/feed_message/news/mundane/research/New(var/datum/trade_destination/dest)
 	..()
