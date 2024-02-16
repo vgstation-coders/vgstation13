@@ -2228,6 +2228,7 @@
 #include "code\modules\news\news.dm"
 #include "code\modules\news\news_events.dm"
 #include "code\modules\news\news_trade_destinations.dm"
+#include "code\modules\news\news_types.dm"
 #include "code\modules\optics\photocollector.dm"
 #include "code\modules\optics\prism.dm"
 #include "code\modules\optics\mirrors\frame.dm"
