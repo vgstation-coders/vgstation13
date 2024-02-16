@@ -1,3 +1,27 @@
+#define RIOTS "/datum/feed_message/news/event/riots"
+#define WILD_ANIMAL_ATTACK "/datum/feed_message/news/event/animal_attack"
+#define INDUSTRIAL_ACCIDENT "/datum/feed_message/news/event/accident"
+#define BIOHAZARD_OUTBREAK "/datum/feed_message/news/event/biohazard"
+#define PIRATES "/datum/feed_message/news/event/pirates"
+#define CORPORATE_ATTACK "/datum/feed_message/news/event/corporate"
+#define ALIEN_RAIDERS "/datum/feed_message/news/event/alien_raiders"
+#define AI_LIBERATION "/datum/feed_message/news/event/ai_liberation"
+#define MOURNING "/datum/feed_message/news/event/mourning"
+#define CULT_CELL_REVEALED "/datum/feed_message/news/event/cult_cell"
+#define SECURITY_BREACH "/datum/feed_message/news/event/breach"
+#define ANIMAL_RIGHTS_RAID "/datum/feed_message/news/event/animal_rights"
+#define FESTIVAL "/datum/feed_message/news/event/festival"
+
+#define RESEARCH_BREAKTHROUGH "/datum/feed_message/news/mundane/research"
+#define BARGAINS "/datum/feed_message/news/mundane/bargains"
+#define SONG_DEBUT "/datum/feed_message/news/mundane/song"
+#define MOVIE_RELEASE "/datum/feed_message/news/mundane/movie"
+#define BIG_GAME_HUNTERS "/datum/feed_message/news/mundane/hunt"
+#define ELECTION "/datum/feed_message/news/mundane/election"
+#define GOSSIP "/datum/feed_message/news/mundane/gossip"
+#define TOURISM "/datum/feed_message/news/mundane/tourism"
+#define CELEBRITY_DEATH "/datum/feed_message/news/mundane/celeb_death"
+#define RESIGNATION "/datum/feed_message/news/mundane/resignation"
 
 var/list/weighted_randomevent_locations = list()
 var/list/weighted_mundaneevent_locations = list()

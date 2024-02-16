@@ -1,3 +1,23 @@
+#define DEFAULT 1
+
+#define ADMINISTRATIVE 2
+#define CLOTHING 3
+#define SECURITY 4
+#define SPECIAL_SECURITY 5
+
+#define FOOD 6
+#define ANIMALS 7
+
+#define MINERALS 8
+
+#define EMERGENCY 9
+#define GAS 10
+#define MAINTENANCE 11
+#define ELECTRICAL 12
+#define ROBOTICS 13
+#define BIOMEDICAL 14
+
+#define GEAR_EVA 15
 
 // This system defines news that will be displayed in the course of a round.
 // Uses BYOND's type system to put everything into a nice format
