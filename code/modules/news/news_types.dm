@@ -23,7 +23,7 @@
 // Uses BYOND's type system to put everything into a nice format
 
 /datum/feed_message/news
-	author = "Unknown"
+	author = "CentComm Minister of Information"
 	body = "HOLY PINGAS WHAT A SCOOP" // filler
 	var/channel_name = "Tau Ceti Daily"
 	var/update_type // message to come after this
