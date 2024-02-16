@@ -4014,6 +4014,8 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 						world << sound('sound/effects/explosionfar.ogg')
 					sleep(rand(2, 10)) //Sleep 0.2 to 1 second
 			if("fakenews")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","FAKEN")
 				var/type
 				var/datum/feed_message/news/newspost
 				var/dest
