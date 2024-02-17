@@ -1881,7 +1881,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if (!O || !O.disfigured)
 			name = "[H.real_name]'s head"
 		else
-			name = "disfigured head "
+			name = "disfigured head"
 
 		H.regenerate_icons()
 
