@@ -41,7 +41,7 @@
 	spawn()
 		if(syndiestorm)
 			endWhen	= 69 //138 seconds
-			if(Holiday == APRIL_FOOLS_DAY)
+			if(prob(5) || Holiday == APRIL_FOOLS_DAY)
 				world << sound('sound/effects/nuclearlaunchdetected.ogg')
 				sleep(5 SECONDS)
 				world << sound('sound/effects/explosionfar.ogg')
