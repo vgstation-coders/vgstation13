@@ -24,7 +24,6 @@ var/global/list/ghdel_profiling = list()
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
 	var/throw_impact_sound = 'sound/weapons/genhit2.ogg'
 	var/admin_desc //Allows admins to see admin-exclusive examines, such as notifications for custom variables
-	var/click_held_down_time //Used by MouseDown in _onclick/click.dm
 
 	///Chemistry.
 	var/datum/reagents/reagents = null

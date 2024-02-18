@@ -461,5 +461,5 @@
 		W.MouseWheeled(src, delta_x, delta_y, params)
 
 //Currently used to allow a little bit of freedom in click-dragging for melee combat in _onclick/drag_drop.dm
-/atom/MouseDown(location, control, params, var/past_time)
+/client/MouseDown(location, control, params, var/past_time)
 	click_held_down_time = world.timeofday

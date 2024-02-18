@@ -14,11 +14,12 @@
 		return Click(src, over_control, params)
 	if(istype(over_object, /turf))
 		var/current_time = world.timeofday
-		//This compares an atom variable, click_held_down_time, that gets set by MouseDown() equal to the world.timeofday back then
+		var/client/C = usr.client
+		//This compares a client variable, click_held_down_time, that gets set by MouseDown() equal to the world.timeofday back then
 		//to MouseDrop's current world.timeofday. If click_held_down_time plus the delay is smaller than
 		//the present world.timeofday then the player is allowed to click-drag their target into the
 		//floor to click them, which allows better hitting during twitchy combat scenarios
-		if((current_time < click_held_down_time + CLICKDRAG_DELAY_WINDOW))
+		if((current_time < C.click_held_down_time + CLICKDRAG_DELAY_WINDOW))
 			if(Adjacent(over_object)) //A turf near it.
 				return Click(src, over_control, params)
 	var/list/params_list = params2list(params)
