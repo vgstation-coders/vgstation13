@@ -327,6 +327,12 @@
 	alert = null
 	message = "The station has passed the radiation belt. Please report to medbay if you experience any unusual symptoms. Maintenance will lose all access again shortly."
 
+/datum/command_alert/radiation_storm_malicious //they send a dirty bomb to explode in direct intercept
+	name = "Sudden Radiation Storm - Warning"
+	alert_title = "Anomaly Alert"
+	alert = 'sound/AI/radiation.ogg'
+	message = "A large explosion has been detected on direct intercept with the station. High levels of radiation detected, ETA in 30 seconds. Please evacuate into one of the shielded maintenance tunnels. Additional data has been downloaded and printed out at all communications consoles."
+
 /datum/command_alert/radiation
 	name = "High Levels Of Radiation"
 	alert_title = "Anomaly Alert"
