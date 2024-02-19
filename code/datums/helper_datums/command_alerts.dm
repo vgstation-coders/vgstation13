@@ -827,3 +827,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/suspicious_wages/announce(login, account)
 	message = "Central Command has noticed a suspicious increase in wages. A database action logged in as [login] has assigned a new wage to [account] with a payroll greater than the entire station's budget. Please conduct an emergency audit."
 	..()
+
+/datum/command_alert/nirvana
+	alert_title = "Profound Peace Detected"
+	message = "Your station's fourth spatial axis has been intersected by a non-Euclidean moksha void. Given that Nanotrasen is a business, total detachment from the material world is not endorsed per company policy. Crewman are advised to wait for the sensation to pass and avoid contemplating the inescapable cycle of samsara."
