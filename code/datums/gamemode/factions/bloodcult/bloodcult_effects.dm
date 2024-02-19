@@ -631,11 +631,13 @@ var/bloodstone_backup = 0
 /obj/effect/stun_indicator/singularity_act()
 	return
 
+/*
 ///////////////////////////////////OFFERINGS EFFECT////////////////////////////
 /obj/effect/cult_offerings
 	anchored = 1
 	mouse_opacity = 0
 	icon_state = "offerings"
+*/
 
 ///////////////////////////////////THROWN DAGGER TRAP////////////////////////////
 
@@ -750,3 +752,8 @@ var/bloodstone_backup = 0
 					sleep(0.75)
 					M.dir = SOUTH
 					INVOKE_EVENT(M, /event/face)
+
+
+///////////////////////////////////TEAR IN THE VEIL////////////////////////////////////
+//used by the Tear Reality rune
+/obj/effect/cult_ritual/tear

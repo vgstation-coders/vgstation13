@@ -61,6 +61,8 @@
 		/obj/machinery/gateway,									//the gateway
 		/obj/structure/catwalk,									//catwalks
 		/obj/effect/blob,                                       //blobs
+		/obj/effect/rune,										//cult runes
+		/obj/effect/cult_ritual,								//cult rituals
 		)
 
 /obj/item/weapon/subspacetunneler/Destroy()

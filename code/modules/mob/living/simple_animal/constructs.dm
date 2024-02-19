@@ -49,6 +49,8 @@
 
 	blooded = FALSE
 
+	var/construct_type = "Unknown"
+
 
 /mob/living/simple_animal/construct/New()
 	..()
@@ -295,6 +297,7 @@
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
 	floating_amplitude = 2
 	var/damageblock = 10
+	construct_type = "Juggernaut"
 
 /mob/living/simple_animal/construct/armoured/proc/juggerblock(var/damage, var/atom/A)//juggernauts ignore damage of 10 and bellow if they aren't showing cracks yet (which happens when they are at 66% hp)
 	var/hurt = maxHealth - health
@@ -378,6 +381,7 @@
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
 	attack_sound = 'sound/weapons/rapidslice.ogg'
 	construct_spells = list(/spell/targeted/ethereal_jaunt/shift)
+	construct_type = "Wraith"
 
 /mob/living/simple_animal/construct/wraith/get_unarmed_sharpness(mob/living/victim)
 	return 1.5
@@ -415,6 +419,7 @@
 
 	// tactically deploy a wall under you and become immune to projectiles, I guess
 	spell_on_use_inhand = /spell/aoe_turf/conjure/wall
+	construct_type = "Juggernaut"
 
 /mob/living/simple_animal/construct/builder/New()
 	..()
@@ -470,6 +475,7 @@
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
 	see_in_dark = 7
 	attack_sound = 'sound/weapons/pierce.ogg'
+	construct_type = "Harvester"
 
 	construct_spells = list(
 			/spell/targeted/harvest,

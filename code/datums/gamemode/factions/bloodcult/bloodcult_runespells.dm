@@ -555,7 +555,7 @@
 
 ////////////////////////////////////////////////////////////////////
 //																  //
-//							Paraphernalia						  //
+//							PARAPHERNALIA						  //
 //																  //
 ////////////////////////////////////////////////////////////////////
 
@@ -755,7 +755,7 @@ var/list/converted_minds = list()
 
 /datum/rune_spell/conversion
 	name = "Conversion"
-	desc = "The unenlightened will be made humble before Nar-Sie, or their lives will come to a fantastic end."
+	desc = "The unenlightened will bask before Nar-Sie's glory and given the chance to join the cult, or they will be made your prisoner."
 	desc_talisman = "Use to remotely trigger the rune and incapacitate someone on top."
 	invocation = "Mah'weyh pleggh at e'ntrath!"
 	word1 = /datum/rune_word/join
@@ -2970,7 +2970,7 @@ var/list/bloodcult_exitportals = list()
 
 	else
 		for(var/mob/living/L in contributors)
-			to_chat(activator, "<span class='warning'>Something went wrong with the ritual, the shade appears to have vanished.</span>")
+			to_chat(L, "<span class='warning'>Something went wrong with the ritual, the shade appears to have vanished.</span>")
 
 
 	for(var/mob/living/L in contributors)

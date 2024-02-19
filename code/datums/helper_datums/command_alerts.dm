@@ -620,6 +620,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 //////////////BLOOD CULT
 
+/*
 /datum/command_alert/eclipse_start
 	name = "Blood Cult Eclipse Start"
 	alert_title = "Anomalous Solar Eclipse"
@@ -675,6 +676,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/cult_eclipse_end/announce()
 	message = "Sensors indicate that the fabric of space-time around [station_name()] has stabilized. Continue to monitor the station for persistent occult activity. Directive 7-10 is hereby lifted."
 	..()
+*/
 
 ////////MISC STUFF
 
