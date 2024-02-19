@@ -1233,11 +1233,9 @@ About the new airlock wires panel:
 					if(do_after(user,src,breaktime))
 						to_chat(user, "<span class='notice'>You lift the airlock out of its track, exposing the bolts.</span>")
 						playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-						animate(src, pixel_y = pixel_y + 5, time = 1)
+						animate(src, pixel_y += 5 , time = 1)
 						lifted = TRUE
-						src.busy=0
-					else
-						src.busy=0
+					src.busy=0
 				else
 					src.busy=1
 					to_chat(user, "<span class='notice'>You begin to lower \the [src] back into of its track..</span>")
@@ -1248,9 +1246,7 @@ About the new airlock wires panel:
 						pixel_y = initial(pixel_y)
 						lifted = FALSE
 						update_icon()
-						src.busy=0
-					else
-						src.busy=0
+					src.busy=0
 			else
 				pry(user)
 			return
@@ -1277,7 +1273,6 @@ About the new airlock wires panel:
 	else if (iscrowbar(I) || istype(I, /obj/item/weapon/fireaxe))
 		if(src.busy)
 			return
-		//src.busy = 1
 		var/beingcrowbarred = null
 		if(lifted)
 			if(istype(I, /obj/item/weapon/fireaxe))
@@ -1335,7 +1330,6 @@ About the new airlock wires panel:
 						to_chat(user, "<span class='warning'>You need to be wielding \the [F] to do that.</span>")
 				else
 					spawn(0)	close(1)
-		//src.busy = 0
 	else if (istype(I, /obj/item/weapon/card/emag))
 		emag_act(src)
 	else if(istype(I, /obj/item/stack/rods) && boltsDestroyed)
