@@ -7,7 +7,7 @@ var/list/forms_of_nirvana = list("buddha","chill")
 	var/mode
 
 /datum/event/profound_peace/can_start(var/list/active_with_role)
-	return 40 * forms_of_nirvana.len
+	return 20 * forms_of_nirvana.len
 
 /datum/event/profound_peace/announce()
 	command_alert(/datum/command_alert/nirvana)
