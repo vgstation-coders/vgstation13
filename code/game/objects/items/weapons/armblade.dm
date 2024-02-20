@@ -55,24 +55,63 @@
 		to_chat(user, "<span class='warning'>Your arm is too exhausted to perform the spin attack! It will be available in [((spin_last_used + spin_cooldown) - world.timeofday)/10] seconds.</span>")
 
 /obj/item/weapon/armblade/proc/spin_attack(var/mob/user)
-	var/initial_direction = user.dir //Move in this direction, spinning also constantly resets the user's direction
-	var/targeted_area = ran_zone(LIMB_CHEST) //Primarily focuses the attacks around the torso
+	//A whole lot of variables to avoid having too many magic numbers, just change stuff here!
+	var/spin_duration = 1.5 SECONDS //How many seconds the spin lasts
+	var/attack_modulo = 0.5 SECONDS //How often everyone nearby is attacked, every X seconds
+	var/step_modulo = 0.2 SECONDS //How often the changeling moves one step, every X seconds
+	var/sound_modulo = 0.8 SECONDS //How often the sound effect plays, every X seconds
+	var/initial_direction = user.dir //Direction in which the changeling will move
+	var/targeted_area = ran_zone(LIMB_CHEST) //Primarily focuses the attacks around the torso rather than where the user is aiming
+	var/spin_direction = (user.get_active_hand() == GRASP_RIGHT_HAND) ? "Left" : "Right" //Different spinning directions depending on arm
+	var/spin_facing = initial_direction //For the purpose of where to spin next
+	var/delay_track = spin_duration //If the action ends prematurely for some reason it will free the changeling of the remaining duration
+
 	visible_message("<span class='sinister'>[user] starts wildly spinning their armblade around!</span>")
-	user.delayNextMove(15) //Can't move during the spin
-	user.emote("spin")
-	for(var/i=0, i<15, i++) //1.5 seconds duration
+	user.delayNextMove(spin_duration, 1) //Can't move during the spin
+	user.delayNextAttack(spin_duration, 1) //Can't attack extra times during the spin
+	for(var/i = 0, i < spin_duration, i++)
 		if(user.incapacitated() || user.locked_to || !isturf(user.loc)) //Double-checking to see if the changeling is allowed to do this
+			user.delayNextMove(-delay_track, 1) //So that the changeling doesn't get magically stuck if it ends early
+			user.delayNextAttack(-delay_track, 1)
 			break
-		if(i % 2 == 0) //Moves in the set direction every 0.2 seconds, slower than default movement speed
+		if(i % step_modulo == 0)
 			step(user, initial_direction)
-		if(i % 5 == 0) //Attacks everyone nearby every 0.5 seconds
+		if(i % attack_modulo == 0)
 			for(var/mob/living/L in range(1))
 				if(L == user) //No self-hitting with the spin attack
 					continue
 				if(L.lying) //Armblade swings over them!
 					continue
 				attack(L, user, targeted_area)
-		if(i % 8 == 0) //Roughly the duration of the sound file
+		if(i % sound_modulo == 0) //Roughly the duration of the sound file
 			playsound(src, 'sound/weapons/blade_whirlwind.ogg', 75)
+		spin_facing = spin_turn(spin_facing, spin_direction)
+		user.change_dir(spin_facing)
+		delay_track--
 		sleep(1)
+	user.change_dir(initial_direction)
 	spin_last_used = world.timeofday
+
+//Spins in a certain direction
+/obj/item/weapon/armblade/proc/spin_turn(var/facing, var/direction)
+	switch(direction)
+		if("Left")
+			switch(facing)
+				if(NORTH)
+					return WEST
+				if(WEST)
+					return SOUTH
+				if(SOUTH)
+					return EAST
+				if(EAST)
+					return NORTH
+		if("Right")
+			switch(facing)
+				if(NORTH)
+					return EAST
+				if(EAST)
+					return SOUTH
+				if(SOUTH)
+					return WEST
+				if(WEST)
+					return NORTH
