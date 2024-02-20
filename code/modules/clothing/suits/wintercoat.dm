@@ -384,6 +384,12 @@
 	name = "Green hoodie"
 	color = "#009933" //Green
 
+/obj/item/clothing/suit/storage/wintercoat/hoodie/darkgreen
+	name = "Dark green hoodie"
+	color = "#5C9E54"
+	icon_state = "hoodiedark"
+	item_state = "hoodiedark"
+
 /obj/item/clothing/suit/storage/wintercoat/hoodie/lime
 	name = "Lime hoodie"
 	color = "#99ff33" //Lime
@@ -411,6 +417,12 @@
 /obj/item/clothing/suit/storage/wintercoat/hoodie/purple
 	name = "Purple hoodie"
 	color = "#9900CC" //Purple
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/darkpurple
+	name = "Dark purple hoodie"
+	color = "#9557C5"
+	icon_state = "hoodiedark"
+	item_state = "hoodiedark"
 
 /obj/item/clothing/suit/storage/wintercoat/hoodie/pink
 	name = "Pink Hoodie"
