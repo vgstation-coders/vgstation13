@@ -145,21 +145,36 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		//delta_t = delta_Q/(m*c) = heat_out/(delta_m * heating_value)
 		delta_t = heat_out/(delta_m * heating_value)
 		T.hotspot_expose(temperature + delta_t, CELL_VOLUME, surfaces=1)
-	return list(heat_out,oxy_used)
+	return list(heat_out,oxy_used,flame_temp)
 
+//Outputs the heat produced (MJ), oxygen consumed (mol), co2 consumed (mol), and maximum flame temperature (K)
 /atom/proc/burnLiquidFuel()
 	var/heat_out = 0 //MJ
 	var/oxy_used = 0 //mols
+	var/co2_used = 0 //mols (some reagents consume co2 when they burn)
+	var/max_temperature = 0 //K
+	var/thermal_energy_transfer = 0 //J
+	var/consumption_rate = 1.0 //units per tick
 
 	if(!reagents)
-		return list(heat_out,oxy_used)
+		return list(heat_out,oxy_used,co2_used,max_temperature)
 	for(var/datum/reagent/A in reagents.reagent_list)
-		if(A.id in possible_fuels)
-		else
+		if(A.id in possible_fuels) //burn flammable
+			var/list/fuel_stats = possible_fuels[A.id]
+			max_temperature = fuel_stats["max_temperature"]
+			thermal_energy_transfer = fuel_stats["thermal_energy_transfer"]
+			consumption_rate = fuel_stats["consumption_rate"]
+			oxy_used = fuel_stats["o2_cons"]
+			co2_used = fuel_stats["co2_cons"]
 
+			reagents.remove_reagent(A.id, consumption_rate)
+			heat_out = thermal_energy_transfer / 1000000 // J to MJ
+		else //evaporate inflammable
+			reagents.remove_reagent(A.id, consumption_rate)
+		return list(heat_out,oxy_used,co2_used,max_temperature)
 
 /atom/proc/ashify()
-	if(!on_fire || burntime < 10) //all items will burn for at least 10 seconds
+	if(!on_fire)
 		return
 	var/ashtype = ashtype()
 	new ashtype(src.loc)
@@ -202,14 +217,19 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		return 1
 	return 0
 
-
 ///////////////////////////////////////////////
 // TURF COMBUSTION
 ///////////////////////////////////////////////
 /turf
 	var/soot_type = /obj/effect/decal/cleanable/soot
 
-/turf/proc/apply_fire_protection()
+/turf/proc/ashify()
+	if(!on_fire)
+		return
+	var/ashtype = ashtype()
+	new ashtype(src.loc)
+	extinguish()
+	ChangeTurf(src.get_underlying_turf())
 
 /turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume, var/soh = 0, var/surfaces=0)
 
@@ -258,12 +278,28 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		new /obj/effect/fire(src)
 	return igniting
 
-/turf/simulated/apply_fire_protection()
-	fire_protection = world.time
+// Burning puddles of fuel. Can be improved if reagent puddles are ever a thing.
+/turf/simulated/proc/burnLiquidFuel(var/obj/effect/decal/cleanable/liquid_fuel/puddle)
+	var/heat_out = 0 //MJ
+	var/oxy_used = 0 //mols
+	var/co2_used = 0 //mols (some reagents consume co2 when they burn)
+	var/max_temperature = 0 //K
+	var/thermal_energy_transfer = 0 //J
+	var/consumption_rate = 1.0 //units per tick
 
-/turf/simulated/proc/burnLiquidFuel()
-	return
+	var/list/fuel_stats = possible_fuels[puddle.reagent]
+	max_temperature = fuel_stats["max_temperature"]
+	thermal_energy_transfer = fuel_stats["thermal_energy_transfer"]
+	consumption_rate = fuel_stats["consumption_rate"]
+	oxy_used = fuel_stats["o2_cons"]
+	co2_used = fuel_stats["co2_cons"]
 
+	puddle.amount -= consumption_rate
+	heat_out = thermal_energy_transfer / 1000000 // J to MJ
+
+	if(puddle.amount < 0.1)
+		qdel(puddle)
+	return list(heat_out,oxy_used,co2_used,max_temperature)
 
 ///////////////////////////////////////////////
 // FIRE OBJECT
@@ -284,20 +320,9 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	light_color = LIGHT_COLOR_FIRE
 
 /obj/effect/fire/proc/Extinguish()
-	var/turf/simulated/S=loc
-
-	if(istype(S))
-		S.extinguish()
-
 	for(var/atom/A in loc)
 		A.extinguish()
-
 	qdel(src)
-
-/obj/effect/fire/proc/burnFuel()
-	///atom/proc/burnSolidFuel()
-	///atom/proc/burnLiquidFuel()
-	return
 
 /obj/effect/fire/process()
 	if(timestopped)
@@ -330,7 +355,6 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	// Check if there is something to combust.
 	if (!air_contents.check_recombustability(S))
-		//testing("Not recombustible.")
 		Extinguish()
 		return
 
@@ -425,13 +449,6 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		set_light(3, 1 * heatlight, color)
 
 
-
-/turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
-/turf/proc/apply_fire_protection()
-/turf/simulated/apply_fire_protection()
-	fire_protection = world.time
-
-
 /datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	// NOTE: zburn is also called from canisters and in tanks/pipes (via react()).  Do NOT assume T is always a turf.
 	//  In the aforementioned cases, it's null. - N3X.
@@ -517,15 +534,12 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	for(var/atom/A in T)
 		if(!A)
 			continue
-		if(!gas[GAS_OXYGEN]/* || A.autoignition_temperature > temperature*/)
+		if(!gas[GAS_OXYGEN])
 			A.extinguish()
 			continue
-//		if(!A.autoignition_temperature)
-//			continue // Don't fuck with things that don't burn.
 		if(QUANTIZE(A.getFireFuel() * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= A.volatility)
 			still_burning=1
 		else if(A.on_fire)
-			//A.extinguish()
 			A.ashify()
 
 	return still_burning
