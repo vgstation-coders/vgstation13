@@ -38,6 +38,8 @@
 
 /obj/item/weapon/armblade/attack_self(mob/user)
 	..()
+	if(!ischangeling(user))
+		return
 	if((spin_last_used + spin_cooldown) <= world.timeofday)
 		if(user.incapacitated()) //Sanity
 			to_chat(user, "<span class='warning'>You cannot move your armblade around!</span>")
@@ -54,21 +56,23 @@
 
 /obj/item/weapon/armblade/proc/spin_attack(var/mob/user)
 	var/initial_direction = user.dir //Move in this direction, spinning also constantly resets the user's direction
-	visible_message("<span class='danger'>[user] starts wildly spinning \his armblade around!</span>")
+	var/targeted_area = ran_zone(LIMB_CHEST) //Primarily focuses the attacks around the torso
+	visible_message("<span class='sinister'>[user] starts wildly spinning their armblade around!</span>")
 	user.delayNextMove(15) //Can't move during the spin
 	user.emote("spin")
-	for(var/i=0, i<15, i++) //Assault everyone in range every 0.5 seconds for 1.5 seconds
-		if(user.incapacitated()) //Double-checking to see if the changeling is allowed to do this
-			spin_last_used = world.timeofday
-			return
-		if(i % 2)
+	for(var/i=0, i<15, i++) //1.5 seconds duration
+		if(user.incapacitated() || user.locked_to || !isturf(user.loc)) //Double-checking to see if the changeling is allowed to do this
+			break
+		if(i % 2 == 0) //Moves in the set direction every 0.2 seconds, slower than default movement speed
 			step(user, initial_direction)
-		if(i % 5)
+		if(i % 5 == 0) //Attacks everyone nearby every 0.5 seconds
 			for(var/mob/living/L in range(1))
 				if(L == user) //No self-hitting with the spin attack
 					continue
 				if(L.lying) //Armblade swings over them!
 					continue
-				attack(L, user)
+				attack(L, user, targeted_area)
+		if(i % 8 == 0) //Roughly the duration of the sound file
+			playsound(src, 'sound/weapons/blade_whirlwind.ogg', 75)
 		sleep(1)
 	spin_last_used = world.timeofday
