@@ -12,9 +12,10 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 */
 /atom
 	var/on_fire = 0
-	var/specific_heat = 0
+	var/heating_value = 0
 	var/fuel_ox_ratio
 	var/autoignition_temperature = 0
+	var/molecular_weight
 	var/flammable = FALSE
 	var/flame_temp = 0
 	var/thermal_mass = 0 //VERY loose estimate of mass in kg
@@ -33,37 +34,36 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		switch(w_type)
 			if(RECYK_WOOD)
 				autoignition_temperature = AUTOIGNITION_WOOD
-				specific_heat = SPECIFIC_HEAT_WOOD
+				heating_value = HHV_WOOD
 				molecular_weight = MOLECULAR_WEIGHT_WOOD
 				fuel_ox_ratio = FUEL_OX_RATIO_WOOD
 				flame_temp = FLAME_TEMPERATURE_WOOD
 			if(RECYK_PLASTIC, RECYK_ELECTRONIC)
 				autoignition_temperature = AUTOIGNITION_PLASTIC
-				specific_heat = SPECIFIC_HEAT_PLASTIC
+				heating_value = HHV_PLASTIC
 				molecular_weight = MOLECULAR_WEIGHT_PLASTIC
 				fuel_ox_ratio = FUEL_OX_RATIO_PLASTIC
 				flame_temp = FLAME_TEMPERATURE_PLASTIC
 			if(RECYK_FABRIC)
 				autoignition_temperature = AUTOIGNITION_FABRIC
-				specific_heat = SPECIFIC_HEAT_FABRIC
+				heating_value = HHV_FABRIC
 				molecular_weight = MOLECULAR_WEIGHT_FABRIC
 				fuel_ox_ratio = FUEL_OX_RATIO_FABRIC
 				flame_temp = FLAME_TEMPERATURE_FABRIC
 			if(RECYK_WAX)
 				autoignition_temperature = AUTOIGNITION_WAX
-				specific_heat = SPECIFIC_HEAT_WAX
+				heating_value = HHV_WAX
 				molecular_weight = MOLECULAR_WEIGHT_WAX
 				fuel_ox_ratio = FUEL_OX_RATIO_WAX
 				flame_temp = FLAME_TEMPERATURE_WAX
 			if(RECYK_BIOLOGICAL)
 				autoignition_temperature = AUTOIGNITION_BIOLOGICAL
-				specific_heat = SPECIFIC_HEAT_BIOLOGICAL
+				heating_value = HHV_BIOLOGICAL
 				molecular_weight = MOLECULAR_WEIGHT_BIOLOGICAL
 				fuel_ox_ratio = FUEL_OX_RATIO_BIOLOGICAL
 				flame_temp = FLAME_TEMPERATURE_BIOLOGICAL
-	else // just in case these were overwritten elsewhere accidentally
+	else // just in case this was overwritten elsewhere accidentally
 		autoignition_temperature = 0
-		specific_combustion_heat = 0
 
 /atom/movable/firelightdummy
 	//this is a dummy that gets added to the vis_contents of a burning atom that can be a light source when its on fire so that it doesnt overwrite the light the atom might already be making
@@ -97,12 +97,15 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	var/heat_out = 0 //MJ
 	var/oxy_used = 0 //mols
-	var/list/burn_products = list(heat_out,oxy_used)
 
 	//if all energy has been extracted from the atom, ash it
 	if(thermal_mass <= 0)
 		ashify()
-		return burn_products
+		return list(heat_out,oxy_used)
+
+	//don't burn the container until all reagents have been depleted
+	if(reagents)
+		return list(heat_out,oxy_used)
 
 	// ignite the tile if there isn't a fire present already
 	var/in_fire = FALSE //is the atom in a tile with a fire
@@ -115,12 +118,12 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	//provides the "heat" and "oxygen" portions of the fire triangle
 	var/burnrate = oxy_ratio >= MINOXY2BURN ? (oxy_ratio/(MINOXY2BURN + rand(-0.02,0.02))) * (temperature/T20C) : 0
 
-	if(burnrate < .1)
+	if(burnrate < 0.1)
 		extinguish()
-		return burn_products
+		return list(heat_out,oxy_used)
 
-	//smoke density increases with burnrate and temperature
-	var/smoke_density = clamp(4 * burnrate * (temperature/AUTOIGNITION_WOOD),1,5)
+	//smoke density increases with burnrate and decreases with temperature
+	var/smoke_density = clamp(4 * burnrate * (1-temperature/FLAME_TEMPERATURE_PLASTIC),1,5)
 	if(prob(smoke_density)) //1-5% chance of smoke creation per tick
 		smoke.set_up(smoke_density,0,T)
 		smoke.time_to_live = 30 SECONDS
@@ -132,27 +135,28 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	thermal_mass -= delta_m
 
 	//change in internal energy = energy produced by combustion (assuming perfect combustion)
-	heat_out = specific_heat * delta_m
+	heat_out = heating_value * delta_m
 
 	//n_oxy = (m_fuel / (m_fuel/n_fuel)) / (n_fuel/n_oxy)
 	oxy_used = (delta_m / molecular_weight) / fuel_ox_ratio //mols
 
 	if(!in_fire && T)
 		//change in internal energy (delta_U) = change in energy due to heat transfer (delta_Q) due to isochoric reaction
-		//delta_t = delta_Q/(m*c) = heat_out/(delta_m * specific_heat)
-		delta_t = heat_out/(delta_m * specific_heat)
+		//delta_t = delta_Q/(m*c) = heat_out/(delta_m * heating_value)
+		delta_t = heat_out/(delta_m * heating_value)
 		T.hotspot_expose(temperature + delta_t, CELL_VOLUME, surfaces=1)
-	return burn_products
+	return list(heat_out,oxy_used)
 
 /atom/proc/burnLiquidFuel()
 	var/heat_out = 0 //MJ
 	var/oxy_used = 0 //mols
-	var/list/burn_products = list(heat_out,oxy_used)
 
 	if(!reagents)
-		return burn_products
+		return list(heat_out,oxy_used)
 	for(var/datum/reagent/A in reagents.reagent_list)
-		//TODO: burn reagents
+		if(A.id in possible_fuels)
+		else
+
 
 /atom/proc/ashify()
 	if(!on_fire || burntime < 10) //all items will burn for at least 10 seconds

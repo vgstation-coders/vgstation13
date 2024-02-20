@@ -1133,12 +1133,12 @@ var/default_colour_matrix = list(1,0,0,0,\
 // FIRE
 //////////////////
 
-// specific heats for burning objects, assuming perfect combustion (MJ/kg)
-#define SPECIFIC_HEAT_WOOD 18.0
-#define SPECIFIC_HEAT_PLASTIC 46.4 // Polypropylene
-#define SPECIFIC_HEAT_FABRIC 19.4 // Cotton (https://www.researchgate.net/publication/363517205_Analysis_of_the_Flammability_and_the_Mechanical_and_Electrostatic_Discharge_Properties_of_Selected_Personal_Protective_Equipment_Used_in_Oxygen-Enriched_Atmosphere_in_a_State_of_Epidemic_Emergency)
-#define SPECIFIC_HEAT_WAX 42.0 // Paraffin wax
-#define SPECIFIC_HEAT_BIOLOGICAL 38.0 // Body fat
+// high heating value for burning objects, assuming perfect combustion (MJ/kg)
+#define HHV_WOOD 18.0
+#define HHV_PLASTIC 46.4 // Polypropylene
+#define HHV_FABRIC 19.4 // Cotton (https://www.researchgate.net/publication/363517205_Analysis_of_the_Flammability_and_the_Mechanical_and_Electrostatic_Discharge_Properties_of_Selected_Personal_Protective_Equipment_Used_in_Oxygen-Enriched_Atmosphere_in_a_State_of_Epidemic_Emergency)
+#define HHV_WAX 42.0 // Paraffin wax
+#define HHV_BIOLOGICAL 38.0 // Body fat
 
 // combustion requires about 16% oxygen concentration
 #define MINOXY2BURN 0.16
