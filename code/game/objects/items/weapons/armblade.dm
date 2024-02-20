@@ -17,6 +17,12 @@
 	cant_drop = 1
 	var/spin_last_used
 	var/spin_cooldown = 30 SECONDS
+	//Spin attack variables
+	var/spin_duration = 1.5 SECONDS //How many seconds the spin lasts
+	var/attack_modulo = 0.5 SECONDS //How often everyone nearby is attacked, every X seconds
+	var/step_modulo = 0.2 SECONDS //How often the changeling moves one step, every X seconds
+	var/sound_modulo = 0.8 SECONDS //How often the sound effect plays, every X seconds, current audio file lasts ~0.8 seconds
+
 
 /obj/item/weapon/armblade/New()
 	..()
@@ -55,14 +61,8 @@
 		to_chat(user, "<span class='warning'>Your arm is too exhausted to perform the spin attack! It will be available in [((spin_last_used + spin_cooldown) - world.timeofday)/10] seconds.</span>")
 
 /obj/item/weapon/armblade/proc/spin_attack(var/mob/user)
-	//A whole lot of variables to avoid having too many magic numbers, just change stuff here!
-	var/spin_duration = 1.5 SECONDS //How many seconds the spin lasts
-	var/attack_modulo = 0.5 SECONDS //How often everyone nearby is attacked, every X seconds
-	var/step_modulo = 0.2 SECONDS //How often the changeling moves one step, every X seconds
-	var/sound_modulo = 0.8 SECONDS //How often the sound effect plays, every X seconds, current audio file lasts ~0.8 seconds
 	var/initial_direction = user.dir //Direction in which the changeling will move
-	var/targeted_area = ran_zone(LIMB_CHEST) //Primarily focuses the attacks around the torso rather than where the user is aiming
-	var/spin_direction = (user.get_active_hand() == GRASP_RIGHT_HAND) ? "Left" : "Right" //Different spinning directions depending on arm
+	var/spin_direction = (user.active_hand == GRASP_RIGHT_HAND) ? "Left" : "Right" //Different spinning directions depending on arm
 	var/spin_facing = initial_direction //For the purpose of where to spin next
 	var/delay_track = spin_duration //If the action ends prematurely for some reason it will free the changeling of the remaining duration
 
@@ -82,6 +82,7 @@
 					continue
 				if(L.lying) //Armblade swings over them!
 					continue
+				var/targeted_area = ran_zone(LIMB_CHEST) //Primarily focuses the attacks around the torso rather than where the user is aiming
 				attack(L, user, targeted_area)
 		if(i % sound_modulo == 0)
 			playsound(src, 'sound/weapons/blade_whirlwind.ogg', 75)
