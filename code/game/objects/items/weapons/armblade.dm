@@ -53,15 +53,22 @@
 		to_chat(user, "<span class='warning'>Your arm is too exhausted to perform the spin attack! It will be available in [((spin_last_used + spin_cooldown) - world.timeofday)/10] seconds.</span>")
 
 /obj/item/weapon/armblade/proc/spin_attack(var/mob/user)
+	var/initial_direction = user.dir //Move in this direction, spinning also constantly resets the user's direction
 	visible_message("<span class='danger'>[user] starts wildly spinning \his armblade around!</span>")
-	for(var/i=0, i<3, i++) //Assault everyone in range every 0.5 seconds for 1.5 seconds
+	user.delayNextMove(15) //Can't move during the spin
+	user.emote("spin")
+	for(var/i=0, i<15, i++) //Assault everyone in range every 0.5 seconds for 1.5 seconds
 		if(user.incapacitated()) //Double-checking to see if the changeling is allowed to do this
 			spin_last_used = world.timeofday
 			return
-		for(var/mob/living/L in range(1))
-			if(L == user) //No self-hitting with the spin attack
-				continue
-			attack(L, user)
-		user.emote("spin")
-		sleep(5)
+		if(i % 2)
+			step(user, initial_direction)
+		if(i % 5)
+			for(var/mob/living/L in range(1))
+				if(L == user) //No self-hitting with the spin attack
+					continue
+				if(L.lying) //Armblade swings over them!
+					continue
+				attack(L, user)
+		sleep(1)
 	spin_last_used = world.timeofday
