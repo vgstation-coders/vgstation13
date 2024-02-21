@@ -348,7 +348,7 @@
 
 /datum/emote/living/carbon/human/wag
 	key = "wag"
-	message = "wagging their tail."
+	message = "wags their tail."
 
 /datum/emote/living/carbon/human/wag/can_run_emote(mob/living/carbon/human/wagger, status_check)
 	if(!ishuman(wagger))
@@ -366,4 +366,4 @@
 	return TRUE
 
 /datum/emote/living/carbon/human/wag/select_message_type(mob/living/carbon/human/wagger)
-	return "[!wagger.is_wagging_tail ? "starts" : "stops"] [message]"
+	return !wagger.is_wagging_tail ? message : ""

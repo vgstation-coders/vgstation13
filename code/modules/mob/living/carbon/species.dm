@@ -42,7 +42,8 @@ var/global/list/playable_species = list("Human")
 	var/eyes = "eyes_s"										// Icon for eyes.
 
 	var/primitive												// Lesser form, if any (ie. monkey for humans)
-	var/tail													// Name of tail image in species effects icon file.
+	var/tail													// Name of tail icon state
+	var/tail_icon = 'icons/effects/species.dmi'
 	var/list/known_languages = list(LANGUAGE_GALACTIC_COMMON)	// Languages that this species innately knows.
 	var/default_language = LANGUAGE_GALACTIC_COMMON				// Default language is used when 'say' is used without modifiers.
 	var/attack_verb = "punches"									// Empty hand hurt intent verb.

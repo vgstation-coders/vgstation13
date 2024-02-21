@@ -311,36 +311,36 @@ var/MAX_EXPLOSION_RANGE = 32
 
 // bitflags for mob parts
 
-#define HEAD			(1<<0)		//specifically the top of the head- imagine it as the scalp.
-#define EYES			(1<<11)
-#define MOUTH			(1<<12)
-#define EARS			(1<<13)
+#define HEAD			1		//specifically the top of the head- imagine it as the scalp.
+#define EYES			2048
+#define MOUTH			4096
+#define EARS			8192
 
-#define UPPER_TORSO		(1<<1)
-#define LOWER_TORSO		(1<<2)
-#define LEG_LEFT		(1<<3)
-#define LEG_RIGHT		(1<<4)
-#define FOOT_LEFT		(1<<5)
-#define FOOT_RIGHT		(1<<6)
-#define ARM_LEFT		(1<<7)
-#define ARM_RIGHT		(1<<8)
-#define HAND_LEFT		(1<<9)
-#define HAND_RIGHT		(1<<10)
-#define TAIL			(1<<19)
+#define UPPER_TORSO		2
+#define LOWER_TORSO		4
+#define LEG_LEFT		8
+#define LEG_RIGHT		16
+#define FOOT_LEFT		32
+#define FOOT_RIGHT		64
+#define ARM_LEFT		128
+#define ARM_RIGHT		256
+#define HAND_LEFT		512
+#define HAND_RIGHT		1024
+#define TAIL			524288
 
 
 // bitflags for clothing parts
 
 #define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)	// 6
 #define FACE			(EYES|MOUTH|BEARD)			// 38912
-#define BEARD			(1<<15)
+#define BEARD			32768
 #define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)		// 14337
 #define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
 #define FEET			(FOOT_LEFT|FOOT_RIGHT) 		// 96
 #define ARMS			(ARM_LEFT|ARM_RIGHT)		// 384
 #define HANDS			(HAND_LEFT|HAND_RIGHT) 		// 1536
 #define FULL_BODY		(FULL_HEAD|HANDS|FULL_TORSO|ARMS|FEET|LEGS) // 16383
-#define IGNORE_INV		(1<<14) // Don't make stuff invisible
+#define IGNORE_INV		16384 // Don't make stuff invisible
 
 
 // bitflags for invisibility
@@ -354,12 +354,12 @@ var/MAX_EXPLOSION_RANGE = 32
 #define HIDEEYES			EYES
 #define HIDEFACE			FACE
 #define HIDETAIL			TAIL
-#define HIDEHEADHAIR 		(1<<16)
-#define MASKHEADHAIR		(1<<17)
+#define HIDEHEADHAIR 		65536
+#define MASKHEADHAIR		131072
 #define HIDEBEARDHAIR		BEARD
 #define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR) // 98304
 #define	HIDESUITSTORAGE		LOWER_TORSO
-#define	HIDEBACK			(1<<18)
+#define	HIDEBACK			262144
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
 // Used with human/proc/get_heat_protection() and human/proc/get_cold_protection() as well as calculate_affecting_pressure() now
@@ -993,24 +993,24 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define RAD_IMMUNE (1<<15)
 
 //Species anatomical flags.
-#define HAS_SKIN_TONE (1<<0)
-#define HAS_LIPS (1<<1)
-#define HAS_UNDERWEAR (1<<2)
-#define HAS_TAIL (1<<3)
-#define CAN_BE_FAT (1<<4)
-#define IS_BULKY (1<<5) //can't wear exosuits, gloves, masks, or hardsuits
-#define NO_SKIN (1<<6)
-#define NO_BLOOD (1<<7)
-#define HAS_SWEAT_GLANDS (1<<8)
-#define NO_BONES (1<<9)
-#define NO_STRUCTURE (1<<10)	//no vessels, muscles, or any sort of internal structure, uniform throughout
-#define MULTICOLOR (1<<11)	//skin color is unique rather than tone variation
-#define ACID4WATER (1<<12) //Acid now acts like water, and vice versa.
-#define NO_BALD (1<<13) //cannot lose hair through being shaved/radiation/etc
-#define RGBSKINTONE (1<<14)
-#define TAIL_WAGGING (1<<15)
-#define HAS_ICON_SKIN_TONE (1<<16)
-#define TAIL_OVERLAPPED (1<<17)
+#define HAS_SKIN_TONE 1
+#define HAS_LIPS 2
+#define HAS_UNDERWEAR 4
+#define HAS_TAIL 8
+#define CAN_BE_FAT 16
+#define IS_BULKY 32 //can't wear exosuits, gloves, masks, or hardsuits
+#define NO_SKIN 64
+#define NO_BLOOD 128
+#define HAS_SWEAT_GLANDS 256
+#define NO_BONES 512
+#define NO_STRUCTURE 1024	//no vessels, muscles, or any sort of internal structure, uniform throughout
+#define MULTICOLOR 2048	//skin color is unique rather than tone variation
+#define ACID4WATER 4096 //Acid now acts like water, and vice versa.
+#define NO_BALD 8192 //cannot lose hair through being shaved/radiation/etc
+#define RGBSKINTONE 16384
+#define TAIL_WAGGING 32768
+#define HAS_ICON_SKIN_TONE 65536
+#define TAIL_OVERLAPPED 131072
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
