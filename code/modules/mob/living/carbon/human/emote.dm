@@ -345,3 +345,25 @@
 				A.fracture()
 			emote_type = EMOTE_VISIBLE
 			. = ..()
+
+/datum/emote/living/carbon/human/wag
+	key = "wag"
+	message = "wagging their tail."
+
+/datum/emote/living/carbon/human/wag/can_run_emote(mob/living/carbon/human/wagger, status_check)
+	if(!ishuman(wagger))
+		return FALSE
+	if(!(wagger.species.anatomy_flags & TAIL_WAGGING))
+		return FALSE
+	if(wagger.check_hidden_body_flags(HIDETAIL))
+		return FALSE
+	return ..()
+
+/datum/emote/living/carbon/human/wag/run_emote(mob/living/carbon/human/wagger, params, type_override, ignore_status = FALSE, var/arguments)
+	..()
+	wagger.is_wagging_tail = !wagger.is_wagging_tail
+	wagger.update_tail_layer()
+	return TRUE
+
+/datum/emote/living/carbon/human/wag/select_message_type(mob/living/carbon/human/wagger)
+	return "[!wagger.is_wagging_tail ? "starts" : "stops"] [message]"

@@ -169,33 +169,18 @@
 
 	var/icon/icobase
 	var/datum/species/current_species = all_species[species]
+	var/tail
 
 	//icon based species color
 	if(current_species)
-		if(current_species.name == "Vox")
-			switch(s_tone)
-				if(6)
-					icobase = 'icons/mob/human_races/vox/r_voxemrl.dmi'
-				if(5)
-					icobase = 'icons/mob/human_races/vox/r_voxazu.dmi'
-				if(4)
-					icobase = 'icons/mob/human_races/vox/r_voxlgrn.dmi'
-				if(3)
-					icobase = 'icons/mob/human_races/vox/r_voxgry.dmi'
-				if(2)
-					icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
-				else
-					icobase = 'icons/mob/human_races/vox/r_vox.dmi'
-		else if(current_species.name == "Grey")
-			switch(s_tone)
-				if(4)
-					icobase = 'icons/mob/human_races/grey/r_greyblue.dmi'
-				if(3)
-					icobase = 'icons/mob/human_races/grey/r_greygreen.dmi'
-				if(2)
-					icobase = 'icons/mob/human_races/grey/r_greylight.dmi'
-				else
-					icobase = 'icons/mob/human_races/grey/r_grey.dmi'
+		if(current_species.anatomy_flags & HAS_ICON_SKIN_TONE)
+			var/mob/living/carbon/human/temp_human = new
+			temp_human.species = current_species
+			temp_human.my_appearance.s_tone = s_tone
+			temp_human.species.updatespeciescolor(temp_human) //The mob's species wasn't set, so it's almost certainly different than the character's species at the moment. Thus, we need to be owner-insensitive.
+			icobase = temp_human.species.icobase
+			tail = temp_human.tail
+			qdel(temp_human)
 		else
 			icobase = current_species.icobase
 	else
@@ -230,7 +215,10 @@
 		var/icon/temp = new /icon(o_icobase, "[name]")
 
 		preview_icon.Blend(temp, ICON_OVERLAY)
-
+	//Tail
+		if(current_species && (current_species.anatomy_flags & HAS_TAIL))
+			var/icon/temp_tail = icon('icons/effects/species.dmi', "[tail || current_species.tail]_s")
+			preview_icon.Blend(temp_tail, ICON_OVERLAY)
 	// Skin tone
 	if(current_species && (current_species.anatomy_flags & HAS_SKIN_TONE))
 		if (s_tone >= 0)
