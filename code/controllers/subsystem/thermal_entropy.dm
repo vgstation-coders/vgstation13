@@ -4,7 +4,9 @@ var/list/obj/item/weapon/reagent_containers/thermal_entropy_containers = list()
 /datum/subsystem/thermal_entropy
 	name          = "Thermal Entropy"
 	wait          = SS_WAIT_THERM_ENTROPY
-	flags         = SS_KEEP_TIMING
+	//flags       = SS_KEEP_TIMING
+	flags 	      = SS_NO_FIRE
+	can_fire      = FALSE
 	priority      = SS_PRIORITY_THERM_ENTROPY
 	display_order = SS_DISPLAY_THERM_ENTROPY
 
@@ -39,7 +41,9 @@ var/list/obj/item/weapon/reagent_containers/all_reagent_containers = list()
 /datum/subsystem/thermal_entropy_rechecker
 	name          = "Thermal Entropy Rechecker"
 	wait          = SS_WAIT_THERM_ENTROPY_RECHECK
-	flags         = SS_KEEP_TIMING
+	//flags       = SS_KEEP_TIMING
+	flags 	      = SS_NO_FIRE
+	can_fire      = FALSE
 	priority      = SS_PRIORITY_THERM_ENTROPY_RECHECK
 	display_order = SS_DISPLAY_THERM_ENTROPY_RECHECK
 
