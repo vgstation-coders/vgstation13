@@ -1452,10 +1452,8 @@ var/global/num_vending_terminals = 1
 		"Coffee helps you work!",
 		"Try some tea.",
 		"We hope you like the best!",
-		"Try our new chocolate!",
-		"Count to ten for your drink to be at safe temperature... If you're unrobust that is!"
+		"Try our new chocolate!"
 	)
-	vend_reply = "Count to ten for your drink to be at safe temperature."
 	icon_state = COFFEE
 	icon_vend = "coffee-vend"
 	moody_state = "overlay_vending_coffee"
