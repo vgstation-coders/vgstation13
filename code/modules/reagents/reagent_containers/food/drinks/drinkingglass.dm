@@ -179,7 +179,7 @@
 	on_reagent_change()
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/on_vending_machine_spawn()
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake
 	name = "glass of sake"
