@@ -97,15 +97,16 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	var/heat_out = 0 //MJ
 	var/oxy_used = 0 //mols
+	var/co2_used = 0 //mols
 
 	//if all energy has been extracted from the atom, ash it
 	if(thermal_mass <= 0)
 		ashify()
-		return list(heat_out,oxy_used)
+		return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=flame_temp)
 
 	//don't burn the container until all reagents have been depleted
 	if(reagents)
-		return list(heat_out,oxy_used)
+		return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=flame_temp)
 
 	// ignite the tile if there isn't a fire present already
 	var/in_fire = FALSE //is the atom in a tile with a fire
@@ -120,7 +121,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	if(burnrate < 0.1)
 		extinguish()
-		return list(heat_out,oxy_used)
+		return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=flame_temp)
 
 	//smoke density increases with burnrate and decreases with temperature
 	var/smoke_density = clamp(4 * burnrate * (1-temperature/FLAME_TEMPERATURE_PLASTIC),1,5)
@@ -145,7 +146,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		//delta_t = delta_Q/(m*c) = heat_out/(delta_m * heating_value)
 		delta_t = heat_out/(delta_m * heating_value)
 		T.hotspot_expose(temperature + delta_t, CELL_VOLUME, surfaces=1)
-	return list(heat_out,oxy_used,flame_temp)
+	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=flame_temp)
 
 //Outputs the heat produced (MJ), oxygen consumed (mol), co2 consumed (mol), and maximum flame temperature (K)
 /atom/proc/burnLiquidFuel()
@@ -171,7 +172,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 			heat_out = thermal_energy_transfer / 1000000 // J to MJ
 		else //evaporate inflammable
 			reagents.remove_reagent(A.id, consumption_rate)
-		return list(heat_out,oxy_used,co2_used,max_temperature)
+		return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=max_temperature)
 
 /atom/proc/ashify()
 	if(!on_fire)
@@ -278,14 +279,19 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		new /obj/effect/fire(src)
 	return igniting
 
+/turf/unsimulated/burnLiquidFuel()
+	return
+
 // Burning puddles of fuel. Can be improved if reagent puddles are ever a thing.
-/turf/simulated/proc/burnLiquidFuel(var/obj/effect/decal/cleanable/liquid_fuel/puddle)
+/turf/simulated/burnLiquidFuel()
 	var/heat_out = 0 //MJ
 	var/oxy_used = 0 //mols
 	var/co2_used = 0 //mols (some reagents consume co2 when they burn)
 	var/max_temperature = 0 //K
 	var/thermal_energy_transfer = 0 //J
 	var/consumption_rate = 1.0 //units per tick
+
+	if(!(locate(var/obj/effect/decal/cleanable/liquid_fuel) in src))
 
 	var/list/fuel_stats = possible_fuels[puddle.reagent]
 	max_temperature = fuel_stats["max_temperature"]
@@ -299,7 +305,8 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	if(puddle.amount < 0.1)
 		qdel(puddle)
-	return list(heat_out,oxy_used,co2_used,max_temperature)
+	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=max_temperature)
+
 
 ///////////////////////////////////////////////
 // FIRE OBJECT
@@ -448,7 +455,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		icon_state = "key1"
 		set_light(3, 1 * heatlight, color)
 
-
+// where the magic happens
 /datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	// NOTE: zburn is also called from canisters and in tanks/pipes (via react()).  Do NOT assume T is always a turf.
 	//  In the aforementioned cases, it's null. - N3X.
@@ -456,64 +463,77 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	if((temperature > PLASMA_MINIMUM_BURN_TEMPERATURE || force_burn) && check_recombustability(T))
 		var/total_fuel = 0
+		var/starting_energy = 0
+		var/total_oxygen = 0
+		var/total_carbon = 0
+		var/used_fuel_ratio = 0
+		var/total_reactants = 0
+		var/used_reactants_ratio = 0
 
 		total_fuel += src[GAS_PLASMA]
 		total_fuel += src[GAS_VOLATILE]
 
-		var/can_use_turf=(T && istype(T))
-		if(can_use_turf)
-			for(var/atom/A in T)
-				if(!A)
-					continue
-				total_fuel += A.getFireFuel()
+		if(total_fuel)
+			//Calculate the firelevel.
+			var/firelevel = calculate_firelevel(T)
 
-		if (0 == total_fuel) // Fix zburn /0 runtime
-			//testing("zburn: No fuel left.")
-			return 0
+			//get the current inner energy of the gas mix
+			//this must be taken here to prevent the addition or deletion of energy by a changing heat capacity
+			starting_energy = temperature * heat_capacity()
 
-		//Calculate the firelevel.
-		var/firelevel = calculate_firelevel(T)
+			//determine the amount of oxygen used
+			total_oxygen = min(src[GAS_OXYGEN], 2 * total_fuel)
 
-		//get the current inner energy of the gas mix
-		//this must be taken here to prevent the addition or deletion of energy by a changing heat capacity
-		var/starting_energy = temperature * heat_capacity()
+			//determine the amount of fuel actually used
+			var/used_fuel_ratio = min(src[GAS_OXYGEN] / 2 , total_fuel) / total_fuel
+			total_fuel = total_fuel * used_fuel_ratio
 
-		//determine the amount of oxygen used
-		var/total_oxygen = min(src[GAS_OXYGEN], 2 * total_fuel)
+			var/total_reactants = total_fuel + total_oxygen
 
-		//determine the amount of fuel actually used
-		var/used_fuel_ratio = min(src[GAS_OXYGEN] / 2 , total_fuel) / total_fuel
-		total_fuel = total_fuel * used_fuel_ratio
+			//determine the amount of reactants actually reacting
+			var/used_reactants_ratio = clamp(firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), clamp(0.2 / total_reactants, 0, 1), 1)
 
-		var/total_reactants = total_fuel + total_oxygen
+		//burn solids and liquids
+		var/SL_energy = 0
+		var/SL_oxy_used = 0
+		var/SL_co2_used = 0
+		var/max_temperature = 0
+		if(T && istype(T))
+			for(var/atom/A in T) //this absolutely needs a refactor
+				var/burn_products = burnSolidFuel()
+				SL_energy += burn_products["heat_out"]
+				SL_oxy_used += burn_products["oxy_used"]
+				SL_co2_used += burn_products["co2_used"]
+				max_temperature = max(max_temperature, burn_products["max_temperature"])
 
-		//determine the amount of reactants actually reacting
-		var/used_reactants_ratio = clamp(firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), clamp(0.2 / total_reactants, 0, 1), 1)
+				burn_products = burnLiquidFuel()
+				SL_energy += burn_products["heat_out"]
+				SL_oxy_used += burn_products["oxy_used"]
+				SL_co2_used += burn_products["co2_used"]
+				max_temperature = max(max_temperature, burn_products["max_temperature"])
+
+		//sanity checks
+		SL_oxy_used = clamp(SL_oxy_used, 0, src[GAS_OXYGEN])
+		SL_co2_used = clamp(SL_co2_used, 0, src[GAS_CARBON])
+		if(total_fuel)
+			max_temperature = 0 //no temperature limit if plasma or volatile agent is present
 
 		//remove and add gasses as calculated
 		adjust_multi(
-			GAS_OXYGEN, -min(src[GAS_OXYGEN], total_oxygen * used_reactants_ratio),
+			GAS_OXYGEN, -min(src[GAS_OXYGEN], total_oxygen * used_reactants_ratio + SL_oxy_used),
 			GAS_PLASMA, -min(src[GAS_PLASMA], (src[GAS_PLASMA] * used_fuel_ratio * used_reactants_ratio) * 3),
-			GAS_CARBON, max(2 * total_fuel * used_reactants_ratio, 0),
+			GAS_CARBON, max(2 * total_fuel * used_reactants_ratio - SL_co2_used, 0),
 			GAS_VOLATILE, -(src[GAS_VOLATILE] * used_fuel_ratio * used_reactants_ratio) * 5) //Fuel burns 5 times as quick
 
-		if(can_use_turf)
-			if(T.getFireFuel()>0)
-				T.burnFireFuel(used_fuel_ratio, used_reactants_ratio)
-			for(var/atom/A in T)
-				if(A.getFireFuel()>0)
-					A.burnFireFuel(used_fuel_ratio, used_reactants_ratio)
-
 		//calculate the energy produced by the reaction and then set the new temperature of the mix
-		temperature = (starting_energy + zas_settings.Get(/datum/ZAS_Setting/fire_fuel_energy_release) * total_fuel * used_reactants_ratio) / heat_capacity()
+		temperature = (starting_energy + SL_energy + zas_settings.Get(/datum/ZAS_Setting/fire_fuel_energy_release) * total_fuel * used_reactants_ratio) / heat_capacity()
 
 		update_values()
-		value = total_reactants * used_reactants_ratio
+		value = total_reactants * used_reactants_ratio //0 if solids and liquids only
 	return value
 
+// checks if the GAS REACTANTS in a given turf can continue combusting.
 /datum/gas_mixture/proc/check_recombustability(var/turf/T)
-	//this is a copy proc to continue a fire after its been started.
-
 	if(gas[GAS_OXYGEN] && (gas[GAS_PLASMA] || gas[GAS_VOLATILE]))
 		if(QUANTIZE(molar_density(GAS_PLASMA) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
 			return 1
@@ -529,82 +549,42 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		warning("check_recombustability being asked to check a [T.type] instead of /turf.")
 		return 0
 
-	// We have to check all objects in order to extinguish object fires.
-	var/still_burning=0
-	for(var/atom/A in T)
-		if(!A)
-			continue
-		if(!gas[GAS_OXYGEN])
-			A.extinguish()
-			continue
-		if(QUANTIZE(A.getFireFuel() * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= A.volatility)
-			still_burning=1
-		else if(A.on_fire)
-			A.ashify()
-
-	return still_burning
-
-/datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
-	//this check comes up very often and is thus centralized here to ease adding stuff
-	// zburn is used in tank fires, as well. This check, among others, broke tankbombs. - N3X
-	/*
-	if(!istype(T))
-		warning("check_combustability being asked to check a [T.type] instead of /turf.")
-		return 0
-	*/
-
+// checks if the GAS REACTANTS in a given turf can combust.
+/datum/gas_mixture/proc/check_combustability()
 	if(gas[GAS_OXYGEN] && (gas[GAS_PLASMA] || gas[GAS_VOLATILE]))
 		if(QUANTIZE(molar_density(GAS_PLASMA) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
 			return 1
 		if(QUANTIZE(molar_density(GAS_VOLATILE) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ / CELL_VOLUME)
 			return 1
-
-	if(objects && istype(T))
-		for(var/atom/A in T)
-			if(!A || !gas[GAS_OXYGEN] || A.autoignition_temperature > temperature)
-				continue
-			if(QUANTIZE(A.getFireFuel() * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= A.volatility)
-				return 1
-
 	return 0
 
+// firelevel represents the intensity of the fire according to GAS REACTANTS only. Solids and liquids burning use an internal burnrate calculation.
 /datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
-	//Calculates the firelevel based on one equation instead of having to do this multiple times in different areas.
-
 	var/total_fuel = 0
 	var/firelevel = 0
 
 	if(check_recombustability(T))
-
 		total_fuel += src[GAS_PLASMA]
-
-		if(T && istype(T))
-			total_fuel += T.getFireFuel()
-
-			for(var/atom/A in T)
-				if(A)
-					total_fuel += A.getFireFuel()
-
 		total_fuel += src[GAS_VOLATILE]
 
 		var/total_combustables = (total_fuel + src[GAS_OXYGEN])
 
 		if(total_fuel > 0 && src[GAS_OXYGEN] > 0)
-
 			//slows down the burning when the concentration of the reactants is low
 			var/dampening_multiplier = total_combustables / (total_combustables + src[GAS_NITROGEN] + src[GAS_CARBON])
 			//calculates how close the mixture of the reactants is to the optimum
 			var/mix_multiplier = 1 / (1 + (5 * ((src[GAS_OXYGEN] / total_combustables) ** 2))) // Thanks, Mloc
 			//toss everything together
 			firelevel = zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier) * mix_multiplier * dampening_multiplier
-
 	return max(0, firelevel)
 
 
+///////////////////////////////////////////////
+// MOB HEALTH
+///////////////////////////////////////////////
 /mob/living/proc/FireBurn(var/firelevel, var/last_temperature, var/pressure)
 	var/mx = 5 * firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier) * min(pressure / ONE_ATMOSPHERE, 1)
 	apply_damage(2.5*mx, BURN)
-
 
 /mob/living/carbon/human/FireBurn(var/firelevel, var/last_temperature, var/pressure)
 	//Burns mobs due to fire. Respects heat transfer coefficients on various body parts.
