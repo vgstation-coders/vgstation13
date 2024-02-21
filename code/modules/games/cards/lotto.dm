@@ -155,7 +155,7 @@
 	name = "unprinted lottery ticket"
 	desc = "A worthless, unprinted lotto ticket."
 	icon_state = "lotto_5"
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/toy/lotto_ticket/unprinted/attackby(obj/item/weapon/S, mob/user)
 	return 0

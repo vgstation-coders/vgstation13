@@ -8,7 +8,7 @@
 	var/hp = 1800
 	var/icon/virtualIcon
 	var/list/bulletholes = list()
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/target/Destroy()
 	// if a target is deleted and associated with a stake, force stake to forget

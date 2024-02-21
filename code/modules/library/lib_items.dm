@@ -19,7 +19,7 @@
 	density = 1
 	opacity = 1
 	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 10
+
 
 	health = 50
 	var/tmp/busy = 0
@@ -205,7 +205,7 @@
 	flags = FPRINT
 	attack_verb = list("bashes", "whacks", "educates")
 
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 	var/dat			 // Actual page content
 	var/due_date = 0 // Game time in 1/10th seconds

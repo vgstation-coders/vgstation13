@@ -5,7 +5,7 @@
 	origin_tech = Tc_COMBAT + "=2"
 	var/obj/item/holstered = null
 	accessory_exclusion = HOLSTER
-	autoignition_temperature = AUTOIGNITION_ORGANIC //leather
+
 	on_armory_manifest = TRUE
 	var/holster_verb_name = "Holster"
 

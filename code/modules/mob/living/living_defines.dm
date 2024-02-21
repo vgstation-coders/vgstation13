@@ -55,7 +55,7 @@
 
 	// Fix ashifying in hot fires.
 	//autoignition_temperature=0
-	//fire_fuel=0
+	//
 
 	var/list/icon/pipes_shown = list()
 	var/last_played_vent

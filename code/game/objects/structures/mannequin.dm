@@ -1047,7 +1047,7 @@
 	maxHealth = 30
 	trueForm = /mob/living/simple_animal/hostile/mannequin/wood
 	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 2.5
+
 
 /obj/structure/mannequin/wood/New(turf/loc, var/f_style, var/h_style, var/list/items_to_wear, var/list/items_to_hold, var/mob_to_capture)
 	..()
@@ -1232,7 +1232,7 @@
 		"corgi"		=	/obj/structure/mannequin/wood/corgi,
 		)
 	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 5
+
 
 
 

@@ -6,7 +6,7 @@
 	w_class = W_CLASS_TINY
 	force = 0
 	throwforce = 0
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 	var/shred_on_use = 1
 

@@ -83,7 +83,7 @@ var/global/list/invoked_emotions = list()
 /obj/item/weapon/paper/emotion_invoker
 	name = "emotion invoker"
 	desc = "A cursed sheet of paper designed to transfer or create powerful emotions. Seeks out its target after being thrown."
-	fire_fuel = 0	//Covering my bases on potential infinite fire bugs
+
 	throw_range = 6
 	var/mob/living/curseTarget = null
 	var/isActive = FALSE

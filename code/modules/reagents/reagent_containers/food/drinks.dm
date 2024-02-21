@@ -27,7 +27,7 @@
 	var/bottleheight = 23 //To offset the molotov rag and fire - beer and ale are 23
 	var/smashtext = "bottle of " //To handle drinking glasses and the flask of holy water
 	var/smashname = "broken bottle" //As above
-	var/flammable = 0
+	var/can_be_lit = 0
 	var/flammin = 0
 	var/flammin_color = null
 	var/base_icon_state = "glassbottle"
@@ -2245,10 +2245,10 @@
 		visible_message(flavor_text)
 		processing_objects.Add(src)
 		update_icon()
-	if(!lit && flammable)
+	if(!lit && can_be_lit)
 		lit = 1
 		visible_message(flavor_text)
-		flammable = 0
+		can_be_lit = 0
 		update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/blow_act(var/mob/living/user)

@@ -281,7 +281,7 @@
 	icon = 'icons/obj/barricade.dmi'
 	icon_state = "barricade_kit"
 	w_class = W_CLASS_MEDIUM
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/weapon/fakeposter_kit/preattack(atom/target, mob/user , proximity)
 	if(!proximity)
@@ -301,7 +301,7 @@
 	icon = 'icons/obj/posters.dmi'
 	var/obj/item/weapon/storage/cargocache/cash
 	var/turf/access_loc
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/structure/fakecargoposter/New()
 	..()
@@ -346,7 +346,7 @@
 	fits_max_w_class = W_CLASS_LARGE
 	max_combined_w_class = 28
 	slot_flags = 0
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/weapon/storage/cargocache/distance_interact(mob/user)
 	if(istype(loc,/obj/structure/fakecargoposter) && user.Adjacent(loc))

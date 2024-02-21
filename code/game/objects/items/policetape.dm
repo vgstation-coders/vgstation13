@@ -11,7 +11,7 @@
 	var/turf/end
 	var/tape_type = /obj/item/tape
 	var/icon_base
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/tape
 	name = "tape"
@@ -22,7 +22,7 @@
 	pass_flags_self = PASSGLASS
 	var/icon_base
 	var/robot_compatibility
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/taperoll/police
 	name = "police tape"

@@ -1014,7 +1014,7 @@ var/global/maxStackDepth = 10
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
 	autoignition_temperature = 0
-	fire_fuel = 0
+
 
 /obj/item/clothing/suit/space
 	name = "Space suit"
@@ -1039,7 +1039,7 @@ var/global/maxStackDepth = 10
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
 	autoignition_temperature = 0
-	fire_fuel = 0
+
 
 
 /* ========================================================================

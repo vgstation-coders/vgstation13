@@ -381,7 +381,7 @@
 	light_color = LIGHT_COLOR_SLIME_LAMP
 	luminosity = 2
 	has_sound = 0
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 	var/brightness_max = 6
 	var/brightness_min = 2
 	drawspower = FALSE //slime lamps don't draw power from the area apc

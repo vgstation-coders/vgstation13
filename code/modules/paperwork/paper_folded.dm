@@ -11,7 +11,7 @@
 	pressure_resistance = 1
 	attack_verb = list("slaps")
 
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 	var/obj/item/weapon/paper/unfolded
 	var/nano = 0
 

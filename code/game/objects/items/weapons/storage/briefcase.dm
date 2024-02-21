@@ -11,7 +11,7 @@
 	w_class = W_CLASS_LARGE
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 16
-	autoignition_temperature = AUTOIGNITION_ORGANIC //fancy leather briefcases
+
 	hitsound = "swing_hit"
 	var/obj/item/weapon/handcuffs/casecuff = null
 
@@ -75,7 +75,7 @@
 				else
 					H.eye_blurry += 3
 			if(H.stat < UNCONSCIOUS)
-				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")	
+				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")
 	return ..()
 
 /obj/item/weapon/storage/briefcase/MouseDropFrom(atom/over_object)

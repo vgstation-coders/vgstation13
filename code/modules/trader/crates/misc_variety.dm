@@ -70,7 +70,7 @@
 	icon_state = "pbag"	//Supposed to look kind of shitty, cubes aren't even wrapped
 	foldable = /obj/item/weapon/paper
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube")
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/weapon/storage/box/mysterycubes/New()
 	..()

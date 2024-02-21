@@ -6,7 +6,7 @@
 	icon_opened = "coffin_open"
 
 	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 2
+
 
 	starting_materials = list(MAT_WOOD = 5*CC_PER_SHEET_MISC)
 	var/mob_lock_type = /datum/locking_category/buckle/closet/coffin

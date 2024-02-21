@@ -239,7 +239,7 @@ var/list/omnitoolable = list(/obj/machinery/alarm,/obj/machinery/power/apc)
 	icon = 'icons/obj/items_weird.dmi'
 	icon_state = "toxiccereal"
 	flags = FPRINT | OPENCONTAINER
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/wasteos/New()
 	..()

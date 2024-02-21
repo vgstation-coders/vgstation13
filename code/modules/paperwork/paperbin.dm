@@ -82,9 +82,6 @@
 	extinguish()
 	update_icon()
 
-/obj/item/weapon/paper_bin/getFireFuel()
-	return amount + papers.len
-
 /obj/item/weapon/paper_bin/Exited(atom/movable/Obj, atom/newloc)
 	papers -= Obj
 	..()

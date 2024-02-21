@@ -16,7 +16,7 @@
 	var/size = 3.0
 	var/obj/item/gift = null
 	w_class = W_CLASS_MEDIUM
-	autoignition_temperature=AUTOIGNITION_PAPER
+
 
 /obj/item/weapon/gift/New(turf/loc, var/obj/item/target, var/W)
 	..()
@@ -74,7 +74,7 @@
 	icon_state = "gift"
 	item_state = "gift"
 	w_class = W_CLASS_LARGE
-	autoignition_temperature=AUTOIGNITION_PAPER
+
 
 /obj/item/weapon/winter_gift/New()
 	..()

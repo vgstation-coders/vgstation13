@@ -6,7 +6,7 @@
 	var/build_time = 2 SECONDS
 	var/datum/poster/design
 	w_type=RECYK_MISC
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 
 /obj/item/mounted/poster/New(turf/loc, var/datum/poster/predesign=null)

@@ -265,7 +265,7 @@ var/global/list/alcatraz_stuff = list(
 	siemens_coefficient = 0.9
 	species_fit = list(GREY_SHAPED, VOX_SHAPED)
 	body_parts_covered = FULL_TORSO|ARMS
-	autoignition_temperature = AUTOIGNITION_PROTECTIVE
+
 
 /obj/item/clothing/under/securityskirt/elite/equipped(var/mob/user, var/slot)
 	..()
@@ -622,7 +622,7 @@ var/global/list/alcatraz_stuff = list(
 	plane = ABOVE_HUMAN_PLANE
 	var/state = AT_SEED
 	var/pity_timer = 0
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/structure/ammotree/attackby(obj/item/I, mob/user)
 	if(state == AT_SEED && istype(I, /obj/item/weapon/batteringram))
@@ -674,7 +674,7 @@ var/global/list/alcatraz_stuff = list(
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "ammofruit"
 	w_class = W_CLASS_SMALL
-	autoignition_temperature = 	AUTOIGNITION_PAPER
+
 
 /obj/item/ammofruit/New()
 	..()

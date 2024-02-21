@@ -29,7 +29,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
 	heat_production = 1000
 	source_temperature = TEMPERATURE_FLAME
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1"
 	var/list/unlit_attack_verb = list("prods", "pokes")

@@ -11,7 +11,7 @@
 	throw_speed = 4
 	throw_range = 20
 	flags = FPRINT | NO_ATTACK_MSG
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 /obj/item/weapon/soap/nanotrasen
 	desc = "A Nanotrasen brand bar of soap. Smells of plasma."

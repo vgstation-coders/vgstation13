@@ -36,7 +36,7 @@ var/global/list/shoal_stuff = list(
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/weapon/boxofsnow/attack_self(mob/user)
 	var/turf/center = get_turf(loc)

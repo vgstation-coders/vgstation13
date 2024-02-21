@@ -22,6 +22,9 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	var/burntime = 0 //time the object has been burning
 	var/fire_protection //duration that something stays extinguished
 
+	var/melt_temperature = 0 //unused, to be removed
+	var/molten = 0 //unused, to be removed
+
 	var/fire_dmi = 'icons/effects/fire.dmi'
 	var/fire_sprite = "fire"
 	var/fire_overlay = null
@@ -79,6 +82,12 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 /atom/movable/firelightdummy/New()
 	.=..()
 	set_light(2,2)
+
+/atom/proc/melt() //unused, to be removed
+	return
+
+/atom/proc/solidify() //unused, to be removed
+	return
 
 /atom/proc/ashtype()
 	return /obj/effect/decal/cleanable/ash

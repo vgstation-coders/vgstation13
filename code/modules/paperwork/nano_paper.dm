@@ -10,7 +10,7 @@
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "nano_paper"
 
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/weapon/paper/nano/New()
 	..()

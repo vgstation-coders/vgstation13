@@ -25,7 +25,7 @@
 	on_armory_manifest = TRUE
 
 	autoignition_temperature = 0
-	fire_fuel = 0
+
 
 
 /obj/item/clothing/suit/armor/vest

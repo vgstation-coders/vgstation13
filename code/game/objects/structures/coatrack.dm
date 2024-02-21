@@ -8,7 +8,7 @@
 	pressure_resistance = ONE_ATMOSPHERE*5
 	flags = FPRINT
 	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 3
+
 	var/obj/item/clothing/suit/suit = null
 	var/obj/item/clothing/head/hat = null
 

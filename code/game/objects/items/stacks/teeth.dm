@@ -9,7 +9,7 @@
 	w_class = W_CLASS_TINY
 	throw_speed = 4
 	throw_range = 10
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 	var/animal_type
 

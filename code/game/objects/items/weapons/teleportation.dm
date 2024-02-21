@@ -127,7 +127,7 @@ Frequency:
 	icon = 'icons/obj/hydroponics/bluespacebanana.dmi'
 	icon_state = "peel"
 	item_state = "bluespacebanana_peel"
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 /obj/item/weapon/bananapeel/bluespace/handle_slip(atom/movable/AM)
 	if(..() && ishuman(AM))

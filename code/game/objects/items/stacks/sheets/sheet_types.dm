@@ -90,28 +90,13 @@
 	icon_state = "sheet-wood"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 1 //Not used here the same way as elsewhere; see burnFireFuel() below.
+
 	sheettype = "wood"
 	siemens_coefficient = 0 //no conduct
 	w_type = RECYK_WOOD
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD)
 	mat_type = MAT_WOOD
 	perunit = CC_PER_SHEET_WOOD
-
-/obj/item/stack/sheet/wood/getFireFuel()
-	return (amount - 1 + fire_fuel) / 5 //Each plank essentially has 0.2 fire_fuel.
-
-/obj/item/stack/sheet/wood/burnFireFuel(used_fuel_ratio, used_reactants_ratio)
-	var/expected_to_burn = used_fuel_ratio * used_reactants_ratio * amount //The expected number of planks to burn. Can be fractional.
-	var/actually_burned = round(expected_to_burn) //Definitely burn the floor of that many.
-	fire_fuel -= expected_to_burn - actually_burned //Subtract the remainder from fire_fuel.
-	if(fire_fuel <= 0) //If that brings it below zero, burn another plank and increase fire_fuel to track the next fractional plank burned.
-		++actually_burned
-		++fire_fuel
-	if(actually_burned)
-		var/ashtype = ashtype()
-		new ashtype(loc) //use() will delete src without calling ashify(), so here we spawn ashes if any planks burned, whether or not the object was destroyed.
-	use(actually_burned)
 
 /obj/item/stack/sheet/wood/afterattack(atom/Target, mob/user, adjacent, params)
 	..()
@@ -142,7 +127,7 @@
 	item_state = "sheet-cloth"
 	origin_tech = Tc_MATERIALS + "=2"
 	autoignition_temperature = AUTOIGNITION_FABRIC
-	fire_fuel = 1
+
 	siemens_coefficient = 0.2
 	w_type = RECYK_FABRIC
 	starting_materials = list(MAT_FABRIC = CC_PER_SHEET_FABRIC)
@@ -155,21 +140,6 @@
 	recipes = cloth_recipes_by_hand
 	if (param_color)
 		color = param_color
-
-/obj/item/stack/sheet/cloth/getFireFuel()
-	return (amount - 1 + fire_fuel) / 10 //Each piece essentially has 0.1 fire_fuel.
-
-/obj/item/stack/sheet/cloth/burnFireFuel(used_fuel_ratio, used_reactants_ratio)
-	var/expected_to_burn = used_fuel_ratio * used_reactants_ratio * amount //The expected number of planks to burn. Can be fractional.
-	var/actually_burned = round(expected_to_burn) //Definitely burn the floor of that many.
-	fire_fuel -= expected_to_burn - actually_burned //Subtract the remainder from fire_fuel.
-	if(fire_fuel <= 0) //If that brings it below zero, burn another plank and increase fire_fuel to track the next fractional plank burned.
-		++actually_burned
-		++fire_fuel
-	if(actually_burned)
-		var/ashtype = ashtype()
-		new ashtype(loc) //use() will delete src without calling ashify(), so here we spawn ashes if any planks burned, whether or not the object was destroyed.
-	use(actually_burned)
 
 /obj/item/stack/sheet/cloth/can_stack_with(obj/item/other_stack)
 	if(ispath(other_stack) && (src.type == other_stack))
@@ -364,7 +334,7 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	starting_materials = list(MAT_CARDBOARD = CC_PER_SHEET_CARDBOARD)
 	w_type=RECYK_MISC
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/stack/sheet/cardboard/New(var/loc, var/amount=null)
 		recipes = cardboard_recipes
@@ -400,7 +370,7 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 	origin_tech = Tc_BIOTECH + "=1"
 	icon_state = "sheet-bone"
 	//item_state = "bone"
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 /obj/item/stack/sheet/brass
 	name = "brass"

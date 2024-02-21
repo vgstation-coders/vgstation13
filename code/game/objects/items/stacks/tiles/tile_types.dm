@@ -24,7 +24,7 @@
 	origin_tech = Tc_BIOTECH + "=1"
 
 	material = "grass"
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 /*
  * Wood
@@ -139,7 +139,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	max_amount = 60
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 /obj/item/stack/tile/slime/adjust_slowdown(mob/living/L, current_slowdown)
 	if(isslimeperson(L) || isslime(L))

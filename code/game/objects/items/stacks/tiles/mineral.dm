@@ -210,6 +210,6 @@
 	max_amount = 60
 
 	material  = "gingerbread"
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 

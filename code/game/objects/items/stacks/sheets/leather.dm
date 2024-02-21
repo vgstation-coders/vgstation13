@@ -18,7 +18,7 @@
 	source_string = "human"
 	origin_tech = ""
 	var/skin_color = DEFAULT_FLESH
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 /obj/item/stack/sheet/animalhide/human/New()
 	..()
@@ -227,11 +227,11 @@
 		else
 			//visible message on mobs is defined as visible_message(var/message, var/self_message, var/blind_message)
 			user.visible_message("<span class='notice'>\the [usr] starts cutting hair off \the [src]</span>", "<span class='notice'>You start cutting the hair off \the [src]</span>", "You hear the sound of a knife rubbing against flesh")
-	
+
 			spawn()
 				if(do_after(user, src, 5 SECONDS))
 					to_chat(user, "<span class='notice'>You cut the hair from this [src.singular_name]</span>")
-	
+
 					if(src.use(1))
 						var/obj/item/stack/sheet/hairlesshide/H = drop_stack(/obj/item/stack/sheet/hairlesshide, user.loc, 1, user)
 						H.source_string = source_string
