@@ -217,7 +217,7 @@
 		preview_icon.Blend(temp, ICON_OVERLAY)
 	//Tail
 		if(current_species && (current_species.anatomy_flags & HAS_TAIL))
-			var/icon/temp_tail = icon('icons/effects/species.dmi', "[tail || current_species.tail]_s")
+			var/icon/temp_tail = icon(current_species.tail_icon, "[tail || current_species.tail]_BEHIND")
 			preview_icon.Blend(temp_tail, ICON_OVERLAY)
 	// Skin tone
 	if(current_species && (current_species.anatomy_flags & HAS_SKIN_TONE))

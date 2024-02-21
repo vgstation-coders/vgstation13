@@ -1560,30 +1560,20 @@ var/global/list/damage_icon_parts = list()
 		return
 	if(wear_suit || check_hidden_body_flags(HIDETAIL))
 		return
-	var/tail_file = 'icons/effects/species.dmi'
-	var/icon/tail_icon = icon(tail_file, "[tail][is_wagging_tail ? "w" : ""]_s")
-	var/final_tail_icon = tail_icon
+	var/tail_file = species.tail_icon
+	var/tail_icon_state = "[tail][is_wagging_tail ? "_wagging" : ""]"
+	var/mutable_appearance/tail_image = mutable_appearance(tail_file, tail_icon_state, layer = -TAIL_LAYER)
 	if(species.anatomy_flags & MULTICOLOR)
-		tail_icon.Blend(rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b), ICON_ADD)
+		tail_image.color = COLOR_MATRIX_ADD(rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b))
 	if(tail && species.anatomy_flags & TAIL_OVERLAPPED) // Tail is overlapped by limbs, so we need special tail icon generation
-		// Gives the underlimbs layer SEW direction icons since it's overlayed by limbs and just about everything else anyway.
-		var/special_icon_state = "blank"
-		if(is_wagging_tail)
-			special_icon_state = "[species.name]_tail_delay"
-		var/icon/tail_underlimbs_icon = icon(tail_file, special_icon_state)
-		tail_underlimbs_icon.Insert(icon(tail_icon, dir=SOUTH), dir=SOUTH)
-		tail_underlimbs_icon.Insert(icon(tail_icon, dir=EAST), dir=EAST)
-		tail_underlimbs_icon.Insert(icon(tail_icon, dir=WEST), dir=WEST)
-		var/mutable_appearance/underlimbs = mutable_appearance(tail_underlimbs_icon, layer = -TAIL_UNDERLIMBS_LAYER)
+		// Gives the underlimbs layer SEW directions since it's overlayed by limbs and just about everything else anyway.
+		var/mutable_appearance/tail_underlimbs = mutable_appearance(tail_file, "[tail_icon_state]_BEHIND", -TAIL_UNDERLIMBS_LAYER)
 		var/obj/abstract/Overlays/underlimbs_overlay = obj_overlays[TAIL_UNDERLIMBS_LAYER]
-		underlimbs_overlay.icon = underlimbs.icon
-		underlimbs_overlay.icon_state = underlimbs.icon_state
+		underlimbs_overlay.icon = tail_underlimbs.icon
+		underlimbs_overlay.icon_state = tail_underlimbs.icon_state
 		obj_to_plane_overlay(underlimbs_overlay, TAIL_UNDERLIMBS_LAYER)
-		// Creates a blank icon, and copies north direction sprite into it before passing that to the tail layer that overlays uniforms and such.
-		var/icon/tail_overlimbs_icon = icon(tail_file, special_icon_state)
-		tail_overlimbs_icon.Insert(icon(tail_icon, dir=NORTH), dir=NORTH)
-		final_tail_icon = tail_overlimbs_icon
-	var/mutable_appearance/tail_image = mutable_appearance(final_tail_icon, layer = -TAIL_LAYER)
+		// North direction sprite before passing that to the tail layer that overlays uniforms and such.
+		tail_image.icon_state = "[tail_icon_state]_FRONT"
 	var/obj/abstract/Overlays/tail_overlay = obj_overlays[TAIL_LAYER]
 	tail_overlay.icon = tail_image.icon
 	tail_overlay.icon_state = tail_image.icon_state
