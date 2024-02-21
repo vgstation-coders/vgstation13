@@ -54,7 +54,7 @@
 	permeability_coefficient = 0.02
 	clothing_flags = ONESIZEFITSALL
 	pressure_resistance = 200 * ONE_ATMOSPHERE
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|TAIL
 	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/tank/emergency_oxygen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy, /obj/item/weapon/gun/projectile, /obj/item/ammo_storage, /obj/item/ammo_casing, /obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_nitrogen)
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	armor = list(melee = 65, bullet = 50, laser = 50, energy = 25, bomb = 50, bio = 100, rad = 50)

@@ -194,7 +194,8 @@ var/global/list/damage_icon_parts = list()
 	var/g = "m"
 	if(gender == FEMALE)
 		g = "f"
-
+	if(species && species.anatomy_flags & HAS_ICON_SKIN_TONE)
+		species.updatespeciescolor(src)
 	var/datum/organ/external/chest = get_organ(LIMB_CHEST)
 	stand_icon = chest.get_icon(g,fat)
 	if(!skeleton)
@@ -269,7 +270,14 @@ var/global/list/damage_icon_parts = list()
 		mask.MapColors(0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,0)
 		husk_over.Blend(mask, ICON_ADD)
 		stand_icon.Blend(husk_over, ICON_OVERLAY)
-
+	if(tail && (species.anatomy_flags & TAIL_OVERLAPPED))
+		var/obj/abstract/Overlays/limbs_overlay = obj_overlays[LIMBS_LAYER]
+		var/mutable_appearance/stand_icon_image = mutable_appearance(stand_icon)
+		limbs_overlay.icon = stand_icon_image.icon
+		limbs_overlay.icon_state = stand_icon_image.icon_state
+		obj_to_plane_overlay(limbs_overlay, LIMBS_LAYER)
+	else
+		overlays -= obj_overlays[LIMBS_LAYER]
 	if(has_head)
 		//Eyes
 		if(!skeleton)
@@ -307,7 +315,7 @@ var/global/list/damage_icon_parts = list()
 		stand_icon -= rgb(0,0,0,lowest_alpha)
 
 	//tail
-	update_tail_showing(0)
+	update_tail_layer(FALSE)
 
 
 //HAIR OVERLAY
@@ -523,6 +531,7 @@ var/global/list/damage_icon_parts = list()
 	update_inv_mutual_handcuffed(0)
 	update_inv_legcuffed(0)
 	update_inv_pockets(0)
+	update_tail_layer()
 	QueueUpdateDamageIcon(1)
 	update_icons()
 	//Hud Stuff
@@ -1298,10 +1307,7 @@ var/global/list/damage_icon_parts = list()
 		O.pixel_y = species.inventory_offsets["[slot_wear_suit]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,SUIT_LAYER)
 		//overlays_standing[SUIT_LAYER]	= standing
-		update_tail_showing(0)
-	else
-		//overlays_standing[SUIT_LAYER]	= null
-		update_tail_showing(0)
+	update_tail_layer()
 
 	if(update_icons)
 		update_icons()
@@ -1547,22 +1553,41 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human/update_inv_l_hand(var/update_icons=1)
 	return update_inv_hand(GRASP_LEFT_HAND, update_icons)
 
-/mob/living/carbon/human/proc/update_tail_showing(var/update_icons=1)
-	//overlays_standing[TAIL_LAYER] = null
+/mob/living/carbon/human/proc/update_tail_layer(update_icons = TRUE)
+	overlays -= obj_overlays[TAIL_UNDERLIMBS_LAYER]
 	overlays -= obj_overlays[TAIL_LAYER]
-	if(species && species.tail && species.anatomy_flags & HAS_TAIL)
-		if(!wear_suit || !is_slot_hidden(wear_suit.body_parts_covered, HIDEJUMPSUIT, 0, wear_suit.body_parts_visible_override))
-			var/obj/abstract/Overlays/O = obj_overlays[TAIL_LAYER]
-			O.icon = 'icons/effects/species.dmi'
-			O.icon_state = "[species.tail]_s"
-			obj_to_plane_overlay(O,TAIL_LAYER)
-			//if(!old_tail_state) //only update if we didnt show our tail already
-
-				//overlays_standing[TAIL_LAYER] = image("icon" = 'icons/effects/species.dmi', "icon_state" = "[species.tail]_s")
-//				to_chat(src, "update: tail is different")
-		//else
-			//overlays_standing[TAIL_LAYER] = null
-
+	if(!(tail && species.anatomy_flags & HAS_TAIL))
+		return
+	if(wear_suit || check_hidden_body_flags(HIDETAIL))
+		return
+	var/tail_file = 'icons/effects/species.dmi'
+	var/icon/tail_icon = icon(tail_file, "[tail][is_wagging_tail ? "w" : ""]_s")
+	var/final_tail_icon = tail_icon
+	if(species.anatomy_flags & MULTICOLOR)
+		tail_icon.Blend(rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b), ICON_ADD)
+	if(tail && species.anatomy_flags & TAIL_OVERLAPPED) // Tail is overlapped by limbs, so we need special tail icon generation
+		// Gives the underlimbs layer SEW direction icons since it's overlayed by limbs and just about everything else anyway.
+		var/special_icon_state = "blank"
+		if(is_wagging_tail)
+			special_icon_state = "[species.name]_tail_delay"
+		var/icon/tail_underlimbs_icon = icon(tail_file, special_icon_state)
+		tail_underlimbs_icon.Insert(icon(tail_icon, dir=SOUTH), dir=SOUTH)
+		tail_underlimbs_icon.Insert(icon(tail_icon, dir=EAST), dir=EAST)
+		tail_underlimbs_icon.Insert(icon(tail_icon, dir=WEST), dir=WEST)
+		var/mutable_appearance/underlimbs = mutable_appearance(tail_underlimbs_icon, layer = -TAIL_UNDERLIMBS_LAYER)
+		var/obj/abstract/Overlays/underlimbs_overlay = obj_overlays[TAIL_UNDERLIMBS_LAYER]
+		underlimbs_overlay.icon = underlimbs.icon
+		underlimbs_overlay.icon_state = underlimbs.icon_state
+		obj_to_plane_overlay(underlimbs_overlay, TAIL_UNDERLIMBS_LAYER)
+		// Creates a blank icon, and copies north direction sprite into it before passing that to the tail layer that overlays uniforms and such.
+		var/icon/tail_overlimbs_icon = icon(tail_file, special_icon_state)
+		tail_overlimbs_icon.Insert(icon(tail_icon, dir=NORTH), dir=NORTH)
+		final_tail_icon = tail_overlimbs_icon
+	var/mutable_appearance/tail_image = mutable_appearance(final_tail_icon, layer = -TAIL_LAYER)
+	var/obj/abstract/Overlays/tail_overlay = obj_overlays[TAIL_LAYER]
+	tail_overlay.icon = tail_image.icon
+	tail_overlay.icon_state = tail_image.icon_state
+	obj_to_plane_overlay(tail_overlay, TAIL_LAYER)
 	if(update_icons)
 		update_icons()
 

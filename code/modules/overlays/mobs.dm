@@ -9,6 +9,12 @@
 /obj/abstract/Overlays/mutantrace_layer
 	layer = FLOAT_LAYER - (TOTAL_LAYERS - MUTANTRACE_LAYER)
 
+/obj/abstract/Overlays/tail_underlimbs_layer
+	layer = FLOAT_LAYER - (TOTAL_LAYERS - TAIL_UNDERLIMBS_LAYER)
+
+/obj/abstract/Overlays/limbs_layer
+	layer = FLOAT_LAYER - (TOTAL_LAYERS - LIMBS_LAYER)
+
 /obj/abstract/Overlays/mutations_layer
 	layer = FLOAT_LAYER - (TOTAL_LAYERS - MUTATIONS_LAYER)
 
@@ -45,6 +51,9 @@
 /obj/abstract/Overlays/glasses_over_hair_layer
 	layer = FLOAT_LAYER - (TOTAL_LAYERS - GLASSES_OVER_HAIR_LAYER)
 
+/obj/abstract/Overlays/tail_layer
+	layer = FLOAT_LAYER - (TOTAL_LAYERS - TAIL_LAYER)
+
 /obj/abstract/Overlays/facemask_layer
 	layer = FLOAT_LAYER - (TOTAL_LAYERS - FACEMASK_LAYER)
 
@@ -69,9 +78,6 @@
 /obj/abstract/Overlays/hand_layer
 	layer = FLOAT_LAYER - (TOTAL_LAYERS - HAND_LAYER)
 
-/obj/abstract/Overlays/tail_layer
-	layer = FLOAT_LAYER - (TOTAL_LAYERS - TAIL_LAYER)
-
 /obj/abstract/Overlays/targeted_layer
 	layer = FLOAT_LAYER - (TOTAL_LAYERS - TARGETED_LAYER)
 
@@ -84,6 +90,8 @@
 	/*
 	var/obj/abstract/Overlays/fire_layer/fire_layer = new
 	var/obj/abstract/Overlays/mutantrace_layer/mutantrace_layer = new
+	var/obj/abstract/Overlays/tail_underlimbs_layer/tail_underlimbs_layer = new
+	var/obj/abstract/Overlays/limbs_layer/limbs_layer = new
 	var/obj/abstract/Overlays/mutations_layer/mutations_layer = new
 	var/obj/abstract/Overlays/damage_layer/damage_layer = new
 	var/obj/abstract/Overlays/uniform_layer/uniform_layer = new
@@ -98,12 +106,12 @@
 	var/obj/abstract/Overlays/back_layer/back_layer = new
 	var/obj/abstract/Overlays/hair_layer/hair_layer = new
 	var/obj/abstract/Overlays/glasses_over_hair_layer/glasses_over_hair_layer = new
+	var/obj/abstract/Overlays/tail_layer/tail_layer = new
 	var/obj/abstract/Overlays/facemask_layer/facemask_layer = new
 	var/obj/abstract/Overlays/head_layer/head_layer = new
 	var/obj/abstract/Overlays/handcuff_layer/handcuff_layer = new
 	var/obj/abstract/Overlays/legcuff_layer/legcuff_layer = new
 	var/obj/abstract/Overlays/l_hand_layer/l_hand_layer = new
 	var/obj/abstract/Overlays/r_hand_layer/r_hand_layer = new
-	var/obj/abstract/Overlays/tail_layer/tail_layer = new
 	var/obj/abstract/Overlays/targeted_layer/targeted_layer = new
 	*/

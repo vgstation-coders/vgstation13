@@ -487,7 +487,7 @@ var/list/tag_suits_list = list()
 	icon_state = "strait_jacket"
 	item_state = "strait_jacket"
 	origin_tech = Tc_BIOTECH + "=2"
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|TAIL
 	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/ianshirt
