@@ -23,18 +23,24 @@ var/list/atom/burnableatoms = list()
 /datum/subsystem/burnable/stat_entry()
 	..("P:[burnableatoms.len]")
 
-/datum/subsystem/burnable/fire(var/resumed = FALSE)
+//Disabled because autoignition would too often turn rooms into firestorms due to a chain reaction
+//where one item would burn up, increase the room temperature (in code/ZAS/Fire.dm, proc/burnFireFuel()) and cause
+//other items to burn up.
 
-	if(!resumed)
-		currentrun_index = burnableatoms.len
-		currentrun = burnableatoms.Copy()
-	var/c = currentrun_index
-	while(c)
-		currentrun[c]?.checkburn()
-		c--
-		if (MC_TICK_CHECK)
-			break
-	currentrun_index = c
+//To re-enable, remove the "return" and un-comment the lines of code.
+
+/datum/subsystem/burnable/fire(var/resumed = FALSE)
+	return
+	// if(!resumed)
+	// 	currentrun_index = burnableatoms.len
+	// 	currentrun = burnableatoms.Copy()
+	// var/c = currentrun_index
+	// while(c)
+	// 	currentrun[c]?.checkburn()
+	// 	c--
+	// 	if (MC_TICK_CHECK)
+	// 		break
+	// currentrun_index = c
 
 #define MINOXY2BURN (1 / CELL_VOLUME)
 /atom/proc/checkburn()
