@@ -75,7 +75,7 @@
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/human/on_vending_machine_spawn()
-	reagents.chem_temp = FRIDGETEMP_FROZEN
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/diona
 	name = "leafy meat"
@@ -169,7 +169,7 @@
 	desc = "Almost just like the real thing, kinda."
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation/on_vending_machine_spawn()
-	reagents.chem_temp = FRIDGETEMP_FROZEN
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
 	name = "venomous spines"
@@ -234,7 +234,7 @@
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/on_vending_machine_spawn()
-	reagents.chem_temp = FRIDGETEMP_FROZEN
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
 	name = "mutated cockroach meat"
@@ -518,7 +518,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	//Total ranging from 18 to 57 nutrition. Normal meat provides 45.
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/on_vending_machine_spawn()
-	reagents.chem_temp = FRIDGETEMP_FROZEN
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/blob
 	name = "blob meat"
