@@ -336,8 +336,6 @@ var/global/ingredientLimit = 10
 		F.overlays += F.generateFilling(I)
 		F.luckiness += I.luckiness
 		I.luckiness = null
-	if (cooking_temperature && (new_food.reagents.chem_temp < cooking_temperature))
-		new_food.reagents.chem_temp = cooking_temperature
 	new_food.update_icon()
 	ingredient = null
 	return new_food
@@ -532,12 +530,8 @@ var/global/ingredientLimit = 10
 	if(istype(ingredient,/obj/item/weapon/reagent_containers/food/snacks))
 		if(cooks_in_reagents)
 			transfer_reagents_to_food(ingredient)
-			var/cook_temp = COOKTEMP_READY//100°C
-			if(emagged || arcanetampered)
-				cook_temp = COOKTEMP_EMAGGED
-			if (ingredient.reagents.chem_temp < cook_temp)
-				ingredient.reagents.chem_temp = cook_temp
-				ingredient.update_icon()
+			if(!arcanetampered && (ingredient.reagents.chem_temp > COOKTEMP_HUMANSAFE)) //Make sure the food isn't scalding hot.
+				ingredient.reagents.chem_temp = COOKTEMP_HUMANSAFE
 		ingredient.name = "deep fried [ingredient.name]"
 		apply_color(ingredient, "#FFAD33")
 		ingredient.forceMove(loc)
@@ -728,12 +722,6 @@ var/global/ingredientLimit = 10
 		var/obj/item/weapon/reagent_containers/food/F = ingredient
 		F.reagents.add_reagent(NUTRIMENT,10)
 		F.reagents.trans_to(ingredient,ingredient.reagents.total_volume)
-		var/cook_temp = COOKTEMP_READY//100°C
-		if(emagged || arcanetampered)
-			cook_temp = COOKTEMP_DEFAULT//300°C
-		if (F.reagents.chem_temp < cook_temp)
-			F.reagents.chem_temp = cook_temp
-			F.update_icon()
 	ingredient.mouse_opacity = 1
 	if(!(findtext(ingredient.name,"rotisserie")))
 		ingredient.name = "grilled [ingredient.name]"
