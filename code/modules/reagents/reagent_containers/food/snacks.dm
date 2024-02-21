@@ -1368,7 +1368,7 @@
 	bitesize = 7 //Three bites on average to finish
 
 /obj/item/weapon/reagent_containers/food/snacks/sausage/dan/on_vending_machine_spawn()
-	reagents.chem_temp = FRIDGETEMP_FROZEN
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/snacks/donkpocket
 	name = "\improper Donk-pocket"
@@ -1481,7 +1481,7 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/on_vending_machine_spawn()//Fast-Food Menu
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth
 	name = "synthetic burger"
@@ -2493,7 +2493,7 @@
 	trash = /obj/item/trash/fries_cone
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/cone/on_vending_machine_spawn()//Fast-Food Menu
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/snacks/soydope
 	name = "Soy Dope"
@@ -2597,7 +2597,7 @@
 	trash = /obj/item/trash/fries_punet
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet/on_vending_machine_spawn()//Fast-Food Menu XL
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/snacks/fortunecookie
 	name = "Fortune cookie"
@@ -3014,7 +3014,7 @@
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/bigbiteburger/on_vending_machine_spawn()//Fast-Food Menu XL
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/snacks/enchiladas
 	name = "Enchiladas"
@@ -4284,7 +4284,7 @@
 	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/on_vending_machine_spawn()
-	reagents.chem_temp = FRIDGETEMP_FREEZER
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/margherita
 	name = "Margherita"
