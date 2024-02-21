@@ -1000,6 +1000,7 @@
 #include "code\game\objects\items\devices\pcmc.dm"
 #include "code\game\objects\items\devices\pipe_painter.dm"
 #include "code\game\objects\items\devices\powersink.dm"
+#include "code\game\objects\items\devices\radstorm_remote.dm"
 #include "code\game\objects\items\devices\reportintercom.dm"
 #include "code\game\objects\items\devices\rigbuilding.dm"
 #include "code\game\objects\items\devices\roganbot.dm"
