@@ -45,7 +45,7 @@
 			if(DEAD)
 				if(isobserver(C.mob))
 					var/mob/dead/observer/O = C.mob
-					if(O.started_as_observer)
+					if(O.client.started_as_observer)
 						entry += " - <span style='color:gray'>Observing</span>"
 						observers++
 					else

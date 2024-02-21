@@ -143,6 +143,7 @@
 		if(alert(src,"Are you sure you wish to observe? You will not be able to play this round!","Player Setup","Yes","No") == "Yes")
 			if(!client)
 				return 1
+			client.started_as_observer = flags & GHOST_IS_OBSERVER
 			sleep(1)
 			create_observer()
 
@@ -298,8 +299,6 @@
 	spawning = 1
 	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY) // MAD JAMS cant last forever yo
 
-
-	observer.started_as_observer = 1
 	close_spawn_windows()
 	var/obj/O = locate("landmark*Observer-Start")
 	to_chat(src, "<span class='notice'>Now teleporting.</span>")

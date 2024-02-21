@@ -284,7 +284,7 @@
 				continue
 			else if(isobserver(M)) // Ghosts are fine if they were playing once (didn't start as observers)
 				var/mob/dead/observer/O = M
-				if(O.started_as_observer) // Exclude people who started as observers
+				if(O.client.started_as_observer) // Exclude people who started as observers
 					continue
 			active_players++
 	return active_players

@@ -103,6 +103,11 @@
 
 	// Voting & civic duty
 	var/ivoted = FALSE
+	
+	var/started_as_observer = FALSE //This variable is set to 1 when you enter the game as an observer.
+									//If you died in the game and are a ghsot - this will remain as null.
+									//Note that this is not a reliable way to determine if admins started as observers, since they change mobs a lot.
+	var/eligible_to_vote = TRUE		//Set to 0 when suiciding/ghosting before roundstart admin logout report.
 
 	// Last Round Scoreboard images have been sent
 	var/received_last_round_images = FALSE

@@ -115,6 +115,8 @@
 
 	if(suicide_set && mind)
 		mind.suiciding = 1
+		if(client && (ticker.gamestart_time*10) + ROUNDSTART_LOGOUT_REPORT_TIME >= world.time)	//If 5 minutes since the start of the round haven't passed yet...
+			client.eligible_to_vote = FALSE 													//You won't be eligible to participate in the map vote.
 
 	var/obj/item/held_item = get_active_hand() //First, attempt to perform an object in-hand suicide
 	if(!held_item)
@@ -172,6 +174,8 @@
 
 	if(suicide_set && mind)
 		mind.suiciding = 1
+		if(client && (ticker.gamestart_time*10) + ROUNDSTART_LOGOUT_REPORT_TIME >= world.time)	//If 5 minutes since the start of the round haven't passed yet...
+			client.eligible_to_vote = FALSE 													//You won't be eligible to participate in the map vote.
 
 	if(!container)
 		visible_message("<span class='danger'>[src]'s brain is growing dull and lifeless. It looks like \he's trying to commit suicide.</span>")
@@ -196,6 +200,8 @@
 
 	if(suicide_set && mind)
 		mind.suiciding = 1
+		if(client && (ticker.gamestart_time*10) + ROUNDSTART_LOGOUT_REPORT_TIME >= world.time)	//If 5 minutes since the start of the round haven't passed yet...
+			client.eligible_to_vote = FALSE 													//You won't be eligible to participate in the map vote.
 
 	adjustBruteLoss(-(maxHealth - health) + 2*maxHealth) // kill it dead; set our health to -100 instantly
 	updatehealth()

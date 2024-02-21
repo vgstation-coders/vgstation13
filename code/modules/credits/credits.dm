@@ -229,7 +229,7 @@ var/global/datum/credits/end_credits = new
 			var/observername = ""
 			if(C.mob && istype(C.mob,/mob/dead/observer))
 				var/mob/dead/observer/O = C.mob
-				if(O.started_as_observer)
+				if(O.client.started_as_observer)
 					observername = "[O.real_name] a.k.a. "
 			staff += "<h2>[uppertext(pick(staffjobs))] - [observername]'[C.key]'</h2><br>"
 

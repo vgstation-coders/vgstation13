@@ -655,7 +655,7 @@ var/stacking_limit = 90
 		else
 			if (istype(M,/mob/dead/observer))
 				var/mob/dead/observer/O = M
-				if (O.started_as_observer)//Observers
+				if (O.client.started_as_observer)//Observers
 					list_observers.Add(M)
 					continue
 				if (O.mind && O.mind.current && O.mind.current.ajourn)//Cultists

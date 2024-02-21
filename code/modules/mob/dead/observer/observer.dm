@@ -34,9 +34,6 @@ var/creating_arena = FALSE
 	var/datum/hud/living/carbon/hud = null // hud
 	var/bootime = 0
 	var/next_poltergeist = 0
-	var/started_as_observer //This variable is set to 1 when you enter the game as an observer.
-							//If you died in the game and are a ghsot - this will remain as null.
-							//Note that this is not a reliable way to determine if admins started as observers, since they change mobs a lot.
 	var/has_enabled_antagHUD = 0
 	var/selectedHUD = HUD_NONE // HUD_NONE, HUD_MEDICAL or HUD_SECURITY
 	var/diagHUD = FALSE
@@ -65,7 +62,6 @@ var/creating_arena = FALSE
 	//add_spell(new /spell/ghost_show_map, "grey_spell_ready")
 
 	can_reenter_corpse = flags & GHOST_CAN_REENTER
-	started_as_observer = flags & GHOST_IS_OBSERVER
 
 	stat = DEAD
 
@@ -312,6 +308,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if(client && key)
 			var/mob/dead/observer/ghost = ghostize(0)						//0 parameter is so we can never re-enter our body, "Charlie, you can never come baaaack~" :3
 			ghost.timeofdeath = world.time // Because the living mob won't have a time of death and we want the respawn timer to work properly.
+			if((ticker.gamestart_time*10) + ROUNDSTART_LOGOUT_REPORT_TIME >= world.time) 	//If 5 minutes since the start of the round haven't passed yet...
+				ghost.client.eligible_to_vote = FALSE 										//You won't be eligible to participate in the map vote.
 			if(ghost.client)
 				ghost.client.time_died_as_mouse = world.time //We don't want people spawning infinite mice on the station
 
