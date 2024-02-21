@@ -24,7 +24,8 @@
 	blood_color = VOX_BLOOD
 	flesh_color = "#808D11"
 	max_skin_tone = 6
-	tail = "voxtail"
+	tail = "green"
+	tail_icon = 'icons/mob/human_races/vox/tails.dmi'
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //Bird claws
 
 	uniform_icons = 'icons/mob/species/vox/uniform.dmi'
@@ -94,27 +95,27 @@
 		if(VOXEMERALD)
 			icobase = 'icons/mob/human_races/vox/r_voxemrl.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxemrl.dmi'
-			vox.tail = "voxtail_emrl"
+			vox.tail = "emerald"
 		if(VOXAZURE)
 			icobase = 'icons/mob/human_races/vox/r_voxazu.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxazu.dmi'
-			vox.tail = "voxtail_azu"
+			vox.tail = "azure"
 		if(VOXLGREEN)
 			icobase = 'icons/mob/human_races/vox/r_voxlgrn.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxlgrn.dmi'
-			vox.tail = "voxtail_lgrn"
+			vox.tail = "lightgreen"
 		if(VOXGRAY)
 			icobase = 'icons/mob/human_races/vox/r_voxgry.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxgry.dmi'
-			vox.tail = "voxtail_gry"
+			vox.tail = "grey"
 		if(VOXBROWN)
 			icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxbrn.dmi'
-			vox.tail = "voxtail_brn"
+			vox.tail = "brown"
 		else
 			icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
-			vox.tail = "voxtail"
+			vox.tail = "green"
 
 /datum/species/skellington/skelevox // Science never goes too far, it's the public that's too conservative
 	name = "Skeletal Vox"
