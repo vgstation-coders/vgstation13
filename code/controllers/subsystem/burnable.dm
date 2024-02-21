@@ -4,7 +4,9 @@ var/list/atom/burnableatoms = list()
 /datum/subsystem/burnable
 	name          = "Burnable"
 	wait          = SS_WAIT_BURNABLE
-	flags         = SS_KEEP_TIMING
+	//flags       = SS_KEEP_TIMING
+	flags 	      = SS_NO_FIRE
+	can_fire      = FALSE
 	priority      = SS_PRIORITY_BURNABLE
 	display_order = SS_DISPLAY_BURNABLE
 
