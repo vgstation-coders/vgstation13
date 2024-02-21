@@ -455,7 +455,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/coffee/on_vending_machine_spawn()
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/drinks/latte
 	name = "Smooth Latte"
@@ -468,7 +468,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/latte/on_vending_machine_spawn()
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/drinks/soy_latte
 	name = "Soy Latte"
@@ -481,7 +481,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soy_latte/on_vending_machine_spawn()
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/drinks/cappuccino
 	name = "Cappuccino"
@@ -494,7 +494,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/cappuccino/on_vending_machine_spawn()
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/drinks/espresso
 	name = "Zip Espresso"
@@ -507,7 +507,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/espresso/on_vending_machine_spawn()
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/drinks/doppio
 	name = "Doppio x2"
@@ -520,7 +520,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/doppio/on_vending_machine_spawn()
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/drinks/tea
 	name = "Tea"
@@ -556,7 +556,7 @@
 		mug_reagent_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/tea/on_vending_machine_spawn()
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/drinks/chifir
 	name = "Siberian Chifir"
@@ -570,7 +570,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/chifir/on_vending_machine_spawn()
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/drinks/ice
 	name = "\improper ice cup"
@@ -593,7 +593,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/tomatosoup/on_vending_machine_spawn()
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate
 	name = "Dutch Hot Coco"
@@ -618,7 +618,7 @@
 		mug_reagent_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate/on_vending_machine_spawn()
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen
 	name = "\improper cup ramen"
@@ -1558,7 +1558,7 @@
 	..()
 	var/new_reagent = pick(COFFEE, HOT_COCO, ICECOFFEE, TEA, ICETEA, WATER, ICE, ICED_BEER)
 	reagents.add_reagent(new_reagent, rand(50,100))
-	reagents.chem_temp = COOKTEMP_READY
+	reagents.chem_temp = COOKTEMP_HUMANSAFE
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos_cap
 	name = "\improper Thermos cap"
