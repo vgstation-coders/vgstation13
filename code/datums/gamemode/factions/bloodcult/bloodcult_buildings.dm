@@ -266,8 +266,6 @@
 	flick("[icon_state]-break", src)
 
 	holomap_markers -= HOLOMAP_MARKER_CULT_ALTAR+"_\ref[src]"
-	if(offerings_effect)
-		qdel(offerings_effect)
 
 	cult_altars -= src
 

@@ -63,9 +63,8 @@
 	var/eclipse_progress = 0
 	var/eclipse_total_timer = 3600 //60minutes (although in practice cult activity may drive this number down, while chaplain activity may drive it up)
 	var/eclipse_window = 600 //10 minutes
-	var/eclipse_base_increments = 1
-	var/eclipse_bonus_increments = 0
-	var/eclipse_bonus_contributors = list()//associative list: /mind = score
+	var/eclipse_increments = 0
+	var/eclipse_contributors = list()//associative list: /mind = score
 	var/eclipse_countermeasures = 0//mostly chaplain's efforts to indirectly impede the cult with his own conversions and rituals
 
 	var/obj/effect/cult_ritual/tear/tear_in_reality = null	//only one Tear Reality rune can be active at a time
@@ -104,7 +103,7 @@
 				var/mob/M = R.antag.current
 				if (isliving(M) && !M.isDead())
 					//chaplain's countersmeasures can slow down it down, but not completely halt it.
-					eclipse_progress += max(0.5, eclipse_base_increments + eclipse_bonus_increments - eclipse_countermeasures)
+					eclipse_progress += max(0.5, eclipse_increments - eclipse_countermeasures)
 					if (eclipse_progress >= eclipse_total_timer)
 						stage(BLOODCULT_STAGE_READY)
 					break
@@ -288,3 +287,47 @@
 	else
 		sacrifice_target = pick(possible_targets)
 	return sacrifice_target
+
+/proc/eclipse_bonus(var/mob/user, var/bonus = 0, var/method = "unknown")
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!istype(cult))
+		return
+	if (cult.stage != BLOODCULT_STAGE_NORMAL)
+		return//we only track bonus points if they're added when it matters
+
+	cult.eclipse_increments += bonus
+
+	if (user.mind)//minds are unique and never deleted unlike roles or mobs, so they're great for tracking.
+		if (user.mind in cult.eclipse_contributors)
+			cult.eclipse_contributors[user.mind] += bonus
+		else
+			cult.eclipse_contributors[user.mind] = bonus
+
+
+/*
+	large bonuses:
+		* conversion attempts (once per target mind)			(+12) a successful conversion
+
+	small bonuses:
+		* aoe stuns on non-cultists								(+0.6) per affected victims, on a 5 minutes cooldown per victim
+		* touch stuns on non-cultists							(+1.8) per use, on a 5 minutes cooldown per victim
+		* deaf-mutes on non-cultists							(+1.2) per affected victims, on a 5 minutes cooldown per victim
+		* confusions on non-cultists							(+1.2) per affected victims, on a 5 minutes cooldown per victim
+		* hitting living non-cultists with a blood filled gobblet(+0.3) per hit
+		* hitting living non-cultists with a ritual knife		(+0.3) per hit
+		* hitting living non-cultists with an arcane tome		(+0.3) per hit
+		* hitting living non-cultists with a cult blade/soul blade	(+0.6) per hit
+		* artificer placing a cult floor						(+0.06)
+		* artificer placing a cult wall							(+0.12)
+
+	conditional repeating bonuses (repeats every second):
+		* living cultists										(+0.25) doesn't count on leaderboard
+		* living construct types								(+0.10) doesn't count on leaderboard
+		* having a spire up and not concealed on the station	(+0.20) counts for whoever placed the spire. If multiple players placed a spire on Z:1, they all get the bonus
+		* having a spire up and not concealed on the asteroid	(+0.10)
+		* having a spire up and not concealed on the derelict	(+0.10)
+		* having altars up and not concealed on the station		(+0.05 per altar)
+			* burning cult candles adjacent to an altar			(+0.01 per candle) altar can be concealed
+			* open tome on an altar								(+0.05 per candle) altar can be concealed
+		* cult doors											(+0.005)
+*/

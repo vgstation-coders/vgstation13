@@ -57,7 +57,7 @@
 
 /obj/abstract/mind_ui_element/hoverable/draw_runes_manual
 	name = "Trace Runes Manually"
-	desc = "(1 BLOOD) Use available blood to write down words. Three words form a rune."
+	desc = "(1 BLOOD PER WORD) Use available blood to write down words. Three words form a rune."
 	icon = 'icons/ui/bloodcult/32x32.dmi'
 	icon_state = "rune_manual"
 	layer = MIND_UI_BUTTON
@@ -78,7 +78,7 @@
 
 /obj/abstract/mind_ui_element/hoverable/draw_runes_guided
 	name = "Trace Rune with a Guide"
-	desc = "(1 BLOOD) Use available blood to write down words. Three words form a rune."
+	desc = "(1 BLOOD PER WORD) Use available blood to write down words. Three words form a rune. Access a list of the well known runes."
 	icon = 'icons/ui/bloodcult/32x32.dmi'
 	icon_state = "rune_guide"
 	layer = MIND_UI_BUTTON
@@ -203,7 +203,7 @@
 		if (spell_overlay)
 			animate(spell_overlay, alpha = 0, time = 2)
 			overlays += spell_overlay
-		icon_state = "blank"	
+		icon_state = "blank"
 		flick("rune_hide",src)
 	spawn(10)
 		invisibility = 101
@@ -243,13 +243,13 @@
 	if (hovering)
 		overlays += "select"
 
-	if(talisman)  
+	if(talisman)
 		spell_overlay = image(talisman.icon,src,"dagger")
 		spell_overlay.appearance = talisman.appearance
 		overlays += spell_overlay
-	else	
+	else
 		spell_overlay = image('icons/ui/bloodcult/32x32.dmi',src,"talisman_empty")
-		
+
 	if (appear && spell_overlay)
 		spell_overlay.alpha = 0
 		animate(spell_overlay, alpha = 255, time = 5)
@@ -281,7 +281,7 @@
 	required_tattoo = TATTOO_DAGGER
 
 	allow_alien = TRUE
-	var/obj/item/weapon/melee/blood_dagger/dagger 
+	var/obj/item/weapon/melee/blood_dagger/dagger
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger/UpdateIcon(var/appear = FALSE)
 	icon_state = "rune_back"
@@ -328,12 +328,12 @@
 		var/datum/reagent/blood/source = data["blood"]
 		if (source.data["blood_colour"])
 			dagger_color = source.data["blood_colour"]
-		
+
 		var/good_hand
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
-		
-			
+
+
 			if(H.can_use_hand(H.active_hand))
 				good_hand = H.active_hand
 			else
@@ -370,7 +370,7 @@
 				H.vessel.update_total()
 			else
 				to_chat(user, "<span class='notice'>You sheath \the [dagger] inside your body, but the blood fails to find vessels to occupy.</span>")
-		else 
+		else
 			to_chat(user, "<span class='notice'>You sheath \the [dagger] inside your body.</span>")
 		dagger.absorbed = 1
 		playsound(user, 'sound/weapons/bloodyslice.ogg', 30, 0, -2)
@@ -600,6 +600,22 @@
 			overlays += "mentor"
 		else
 			overlays += "none"
+
+	var/message = "Hello this is a test message da ba di da ba da"
+	var/image/I_shadow = image(icon = null)
+	I_shadow.maptext = {"<span style="color:#000000;font-smooth: never;font-size:8pt;font-family:'Consolas';" align="left" valign="top">[message]</span>"}
+	I_shadow.maptext_height = 128
+	I_shadow.maptext_width = 512
+	I_shadow.maptext_x = 1
+	I_shadow.maptext_y = -1
+	var/image/I = image(icon = null)
+	I.maptext = {"<span style="color:#FFFFFF;font-smooth: never;font-size:8pt;font-family:'Consolas';" align="left" valign="top">[message]</span>"}
+	I.maptext_height = 128
+	I.maptext_width = 512
+	I.maptext_x = 0
+	I.maptext_y = 0
+	overlays += I_shadow
+	overlays += I
 
 /obj/abstract/mind_ui_element/bloodcult_role_background/Click()
 	parent.Hide()

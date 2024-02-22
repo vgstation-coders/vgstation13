@@ -2770,7 +2770,9 @@ var/list/bloodcult_exitportals = list()
 	word1 = /datum/rune_word/hell
 	word2 = /datum/rune_word/travel
 	word3 = /datum/rune_word/self
-	page = "Upon use, your soul will float above your body, allowing you to freely move invisibly around the Z-Level. Words you speak while in this state will be heard by everyone in the cult. You can also become tangible which lets you converse with people, but taking any damage while in this state will end the ritual. Your body being moved away from the rune will also end the ritual. Should your body die while you were still using the rune, a shade will form wherever your astral projection stands."
+	page = "Upon use, your soul will float above your body, allowing you to freely move invisibly around the Z-Level. Words you speak while in this state will be heard by everyone in the cult. You can also become tangible which lets you converse with people, but taking any damage while in this state will end the ritual. Your body being moved away from the rune will also end the ritual.\
+		<br><br>Should your body die while you were still using the rune, a shade will form wherever your astral projection stands.\
+		<br><br>This rune persists upon use, allowing repeated usage."
 	rune_flags = RUNE_STAND
 	var/mob/living/simple_animal/astral_projection/astral = null
 	var/cultist_key = ""
