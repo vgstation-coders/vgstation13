@@ -287,16 +287,36 @@ var/list/mind_ui_ID2type = list()
 /obj/abstract/mind_ui_element/proc/UpdateIcon(var/appear = FALSE)
 	return
 
-/obj/abstract/mind_ui_element/proc/String2Image(var/string) // only supports numbers right now
+/obj/abstract/mind_ui_element/proc/String2Image(var/string,var/spacing=6,var/image_font='icons/ui/font_8x8.dmi',var/_color="#FFFFFF") // only supports numbers right now
 	if (!string)
-		return image('icons/ui/16x16.dmi',"")
+		return image(image_font,"")
 
-	var/image/result = image('icons/ui/16x16.dmi',"")
+	var/image/result = image(image_font,"")
 	for (var/i = 1 to length(string))
-		var/image/I = image('icons/ui/16x16.dmi',copytext(string,i,i+1))
-		I.pixel_x = (i - 1) * 6
+		var/image/I = image(image_font,copytext(string,i,i+1))
+		I.pixel_x = (i - 1) * spacing
 		result.overlays += I
+	result.color = _color
 	return result
+
+/obj/abstract/mind_ui_element/proc/String2Maptext(var/string,var/font="Consolas",var/font_size="8pt",var/align="left",var/valign="top",var/_color="#FFFFFF")
+	if (!string)
+		return image(icon = null)
+
+	var/image/I_shadow = image(icon = null)
+	I_shadow.maptext = {"<span style="color:#000000;font-size:[font_size];font-family:'[font]';" align="[align]" valign="[valign]">[string]</span>"}
+	I_shadow.maptext_height = 512
+	I_shadow.maptext_width = 512
+	I_shadow.maptext_x = 1
+	I_shadow.maptext_y = -1
+	var/image/I = image(icon = null)
+	I.maptext = {"<span style="color:[_color];font-size:[font_size];font-family:'[font]';" align="[align]" valign="[valign]">[string]</span>"}
+	I.maptext_height = 512
+	I.maptext_width = 512
+	I.maptext_x = 0
+	I.maptext_y = 0
+	overlays += I_shadow
+	overlays += I
 
 /obj/abstract/mind_ui_element/proc/SlideUIElement(var/new_x = 0, var/new_y = 0, var/duration, var/layer = MIND_UI_BACK, var/hide_after = FALSE)
 	invisibility = 101

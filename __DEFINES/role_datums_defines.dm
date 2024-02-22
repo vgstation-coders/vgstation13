@@ -123,6 +123,13 @@
 
 #define MALF_CHOOSING_NUKE	4
 
+#define BLOODCULT_STAGE_NORMAL		1	//default
+#define BLOODCULT_STAGE_READY		2	//eclipse timer has reached zero
+#define BLOODCULT_STAGE_ECLIPSE		FACTION_ENDGAME		//3 - narsie summoning ritual undergoing
+#define BLOODCULT_STAGE_MISSED		4	//eclipse window has ended
+#define BLOODCULT_STAGE_DEFEATED	FACTION_DEFEATED	//5 - narsie summoning ritual failed
+#define BLOODCULT_STAGE_NARSIE		6	//endgame
+
 //////////////////////////////////CULT STUFF////////////////////////////////////
 
 #define BLOODCOST_TARGET_BLEEDER	"bleeder"

@@ -17,13 +17,6 @@
 	Based on TGstation's cult mode originally developped in 2010 by Uporotiy
 */
 
-#define BLOODCULT_STAGE_NORMAL		1	//default
-#define BLOODCULT_STAGE_READY		2	//eclipse timer has reached zero
-#define BLOODCULT_STAGE_ECLIPSE		FACTION_ENDGAME		//3 - narsie summoning ritual undergoing
-#define BLOODCULT_STAGE_MISSED		4	//eclipse window has ended
-#define BLOODCULT_STAGE_DEFEATED	FACTION_DEFEATED	//5 - narsie summoning ritual failed
-#define BLOODCULT_STAGE_NARSIE		6	//endgame
-
 /datum/faction/bloodcult
 	name = "Cult of Nar-Sie"
 	ID = BLOODCULT
@@ -59,10 +52,12 @@
 	var/target_sacrificed = FALSE
 
 	var/cult_founding_time = 0
+	var/last_process_time = 0
+	var/delta = 1
 
 	var/eclipse_progress = 0
-	var/eclipse_total_timer = 3600 //60minutes (although in practice cult activity may drive this number down, while chaplain activity may drive it up)
-	var/eclipse_window = 600 //10 minutes
+	var/eclipse_target = 1800
+	var/eclipse_window = 300 //10 minutes
 	var/eclipse_increments = 0
 	var/eclipse_contributors = list()//associative list: /mind = score
 	var/eclipse_countermeasures = 0//mostly chaplain's efforts to indirectly impede the cult with his own conversions and rituals
@@ -91,6 +86,13 @@
 	. = ..()
 	. += "<BR>Total Veil Weakness:[veil_weakness]<BR>"
 
+/datum/faction/bloodcult/proc/calculate_eclipse_rate()
+	eclipse_increments = 0
+	for (var/datum/role/R in members)
+		var/mob/M = R.antag.current
+		if (isliving(M) && !M.isDead())
+			eclipse_increments += 0.25
+
 /datum/faction/bloodcult/process()
 	..()
 	if (cultist_cap > 1) //The first call occurs in OnPostSetup()
@@ -101,14 +103,30 @@
 			//if there is at least one cultist alive, the eclipse comes forward
 			for (var/datum/role/R in members)
 				var/mob/M = R.antag.current
+				calculate_eclipse_rate()
 				if (isliving(M) && !M.isDead())
 					//chaplain's countersmeasures can slow down it down, but not completely halt it.
-					eclipse_progress += max(0.5, eclipse_increments - eclipse_countermeasures)
-					if (eclipse_progress >= eclipse_total_timer)
+					//we calculate the progress relative to the time since the last process so the overall time is independant from server lag and shit
+					delta = 1
+					if (last_process_time && (last_process_time < world.time))//carefully dealing with midnight rollover
+						delta = (world.time - last_process_time)
+						if(SSticker.initialized)
+							delta /= SSticker.wait
+					last_process_time = world.time
+
+					eclipse_progress += max(0.1, eclipse_increments - eclipse_countermeasures) * delta
+					if (eclipse_progress >= eclipse_target)
 						stage(BLOODCULT_STAGE_READY)
 					break
 		if (BLOODCULT_STAGE_READY)
-			eclipse_window--
+			delta = 1
+			if (last_process_time && (last_process_time < world.time))//carefully dealing with midnight rollover
+				delta = (world.time - last_process_time)
+				if(SSticker.initialized)
+					delta /= SSticker.wait
+			last_process_time = world.time
+
+			eclipse_window -= 1 * delta
 			if (eclipse_window <= 0)
 				stage(BLOODCULT_STAGE_MISSED)
 		if (BLOODCULT_STAGE_ECLIPSE)

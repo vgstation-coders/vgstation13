@@ -387,12 +387,11 @@
 /datum/mind_ui/bloodcult_left_panel
 	uniqueID = "Cultist Left Panel"
 	element_types_to_spawn = list(
-	//	/obj/abstract/mind_ui_element/bloodcult_veil_weakness,
-		/obj/abstract/mind_ui_element/hoverable/bloodcult_role,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_panel,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_help,
 		)
 	sub_uis_to_spawn = list(
-		/datum/mind_ui/bloodcult_role,
+		/datum/mind_ui/bloodcult_panel,
 		/datum/mind_ui/bloodcult_help,
 		)
 	display_with_parent = TRUE
@@ -408,8 +407,8 @@
 
 //------------------------------------------------------------
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role
-	name = "Choose a Role"
+/obj/abstract/mind_ui_element/hoverable/bloodcult_panel
+	name = "Cult Panel"
 	icon = 'icons/ui/bloodcult/32x32.dmi'
 	icon_state = "role"
 	offset_x = 6
@@ -417,49 +416,21 @@
 
 	var/image/click_me
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role/New()
+/obj/abstract/mind_ui_element/hoverable/bloodcult_panel/New()
 	..()
 	click_me = image(icon, src, "click")
+	click_me.layer = MIND_UI_FRONT
 	animate(click_me, pixel_y = 16 , time = 7, loop = -1, easing = SINE_EASING)
 	animate(pixel_y = 8, time = 7, loop = -1, easing = SINE_EASING)
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role/Click()
+/obj/abstract/mind_ui_element/hoverable/bloodcult_panel/Click()
 	flick("role-click",src)
 
-	var/mob/M = GetUser()
-	if (M)
-		if (M.client)
-			M.client.images -= click_me
-		var/datum/role/cultist/C = iscultist(M)
-		if (C)
-			if (C.cultist_role != CULTIST_ROLE_NONE)
-				if (C.mentor)
-					to_chat(M,"<span class='notice'>You are currently in a mentorship under [C.mentor.antag.name].</span>")
-				if (C.acolytes.len > 0)
-					var/dat = ""
-					for (var/datum/role/cultist/U in C.acolytes)
-						dat += "[U.antag.name], "
-					to_chat(M,"<span class='notice'>You are currently mentoring [dat].</span>")
-				if ((world.time - C.time_role_changed_last) < 5 MINUTES)
-					if ((world.time - C.time_role_changed_last) > 4 MINUTES)
-						to_chat(M,"<span class='warning'>You must wait [round((5 MINUTES - (world.time - C.time_role_changed_last))/10) + 1] seconds before you can switch role.</span>")
-					else
-						to_chat(M,"<span class='warning'>You must wait around [round((5 MINUTES - (world.time - C.time_role_changed_last))/600) + 1] minutes before you can switch role.</span>")
-					return
-				else
-					if (C.mentor)
-						if(alert(M, "Switching roles will put an end to your mentorship by [C.mentor.antag.name]. Do you wish to proceed?", "Confirmation", "Yes", "No") == "No")
-							return
-					if (C.acolytes.len > 0)
-						if(alert(M, "Switching roles will put an end to your mentorship. Do you wish to proceed?", "Confirmation", "Yes", "No") == "No")
-							return
+	var/datum/mind_ui/bloodcult_panel/cult_panel = locate() in parent.subUIs
+	if(cult_panel)
+		cult_panel.Display()
 
-	var/datum/mind_ui/bloodcult_role/role_popup = locate() in parent.subUIs
-	if(role_popup)
-		role_popup.Display()
-
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_role/UpdateIcon()
+/obj/abstract/mind_ui_element/hoverable/bloodcult_panel/UpdateIcon()
 	var/mob/M = GetUser()
 	if (M)
 		if (M.client)
@@ -522,30 +493,280 @@
 	if(tooltip)
 		tooltip.Display()
 
+
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//					BLOODCULT - MAIN PANEL						  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind_ui/bloodcult_panel
+	uniqueID = "Cult Panel"
+	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/bloodcult_panel_background,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_panel_close,
+		/obj/abstract/mind_ui_element/hoverable/movable/bloodcult_panel_move,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role,
+		/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count,
+		/obj/abstract/mind_ui_element/bloodcult_eclipse_gauge,
+		/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_front,
+		)
+	sub_uis_to_spawn = list(
+		/datum/mind_ui/bloodcult_role,
+		)
+	display_with_parent = FALSE
+
+
+
+/datum/mind_ui/bloodcult_panel/Valid()
+	var/mob/M = mind.current
+	if (!M)
+		return FALSE
+	if(iscultist(M))
+		return TRUE
+	return FALSE
+
 //------------------------------------------------------------
 
-/obj/abstract/mind_ui_element/bloodcult_veil_weakness
-	name = "Veil Weakness"
-	icon = 'icons/ui/bloodcult/32x32.dmi'
-	icon_state = "veil_gauge"
-	offset_x = 6
-	offset_y = 16
+/obj/abstract/mind_ui_element/bloodcult_panel_background
+	name = "Cult Panel"
+	icon = 'icons/ui/bloodcult/362x229.dmi'
+	icon_state = "background2"
+	offset_x = -165
+	offset_y = -83
+	alpha = 240
+	layer = MIND_UI_BACK
 
-/obj/abstract/mind_ui_element/bloodcult_veil_weakness/UpdateIcon()
-	var/mob/M = GetUser()
-	var/datum/role/cultist/C = iscultist(M)
-	if(!istype(C))
-		return
+/obj/abstract/mind_ui_element/bloodcult_panel_background/Click()
+	parent.Hide()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_panel_close
+	name = "Close"
+	icon = 'icons/ui/bloodcult/16x16.dmi'
+	icon_state = "close"
+	offset_x = 181
+	offset_y = 130
+	layer = MIND_UI_BUTTON
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_panel_close/Click()
+	parent.Hide()
+
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/movable/bloodcult_panel_move
+	name = "Move Interface (Click and Drag)"
+	icon = 'icons/ui/bloodcult/16x16.dmi'
+	icon_state = "move"
+	layer = MIND_UI_BUTTON
+	offset_x = -165
+	offset_y = 130
+	mouse_opacity = 1
+
+	move_whole_ui = TRUE
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count
+	name = "Eclipse Timer"
+	icon = 'icons/ui/bloodcult/16x16.dmi'
+	icon_state = "blank"
+	offset_x = -13
+	offset_y = 98
+	layer = MIND_UI_FRONT
+
+/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count/process()
+	UpdateIcon()
+
+/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count/UpdateIcon()
 	overlays.len = 0
-	overlays += String2Image("[veil_weakness]")
-	if(veil_weakness >= 100)
-		offset_x = 0
-	else if(veil_weakness >= 10)
-		offset_x = 3
-	else
-		offset_x = 6
-	UpdateUIScreenLoc()
 
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (istype(cult))
+		switch(cult.stage)
+			if (BLOODCULT_STAGE_NORMAL)
+				name = "Time before the Eclipse"
+				var/eclipse_remaining = cult.eclipse_target - cult.eclipse_progress
+				var/eclipse_ticks_to_go_at_current_rate = 999999
+				if (cult.eclipse_increments > 0)
+					eclipse_ticks_to_go_at_current_rate = eclipse_remaining / max(0.1, cult.eclipse_increments - cult.eclipse_countermeasures)
+					if(SSticker.initialized)
+						eclipse_ticks_to_go_at_current_rate *= (SSticker.wait/10)
+
+				var/hours_to_go = round(eclipse_ticks_to_go_at_current_rate/3600)
+				var/minutes_to_go = add_zero(num2text(round(eclipse_ticks_to_go_at_current_rate/60) % 60), 2)
+				var/seconds_to_go = add_zero(num2text(round(eclipse_ticks_to_go_at_current_rate) % 60), 2)
+				overlays += String2Image("[hours_to_go]:[minutes_to_go]:[seconds_to_go]",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
+
+			if (BLOODCULT_STAGE_READY)
+				name = "Time until the Eclipse ends"
+				var/eclipse_ticks_before_end_at_current_rate = cult.eclipse_window
+				if(SSticker.initialized)
+					eclipse_ticks_before_end_at_current_rate *= (SSticker.wait/10)
+				var/hours_to_go = round(eclipse_ticks_before_end_at_current_rate/3600)
+				var/minutes_to_go = add_zero(num2text(round(eclipse_ticks_before_end_at_current_rate/60) % 60), 2)
+				var/seconds_to_go = add_zero(num2text(round(eclipse_ticks_before_end_at_current_rate) % 60), 2)
+				overlays += String2Image("[hours_to_go]:[minutes_to_go]:[seconds_to_go]",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
+
+			if (BLOODCULT_STAGE_ECLIPSE)
+				name = "Time until the Eclipse ends"
+				overlays += String2Image("0:00:00",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
+			else
+				overlays += String2Image("0:00:00",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/bloodcult_eclipse_gauge
+	name = "Blood"
+	icon = 'icons/ui/bloodcult/288x16.dmi'
+	icon_state = "eclipse_gauge"
+	layer = MIND_UI_BUTTON
+	offset_x = -128
+	offset_y = 96
+
+	var/image/mask
+
+/obj/abstract/mind_ui_element/bloodcult_eclipse_gauge/New()
+	..()
+	appearance_flags |= KEEP_TOGETHER
+	mask = image(icon, src, "eclipse_gauge_bg")
+	mask.blend_mode = BLEND_INSET_OVERLAY
+
+/obj/abstract/mind_ui_element/bloodcult_eclipse_gauge/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/abstract/mind_ui_element/bloodcult_eclipse_gauge/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+/obj/abstract/mind_ui_element/bloodcult_eclipse_gauge/process()
+	UpdateIcon()
+
+/obj/abstract/mind_ui_element/bloodcult_eclipse_gauge/UpdateIcon()
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (istype(cult))
+		switch(cult.stage)
+			if (BLOODCULT_STAGE_NORMAL)
+				name = "Time before the Eclipse"
+				mask.pixel_x = 288*(cult.eclipse_progress/cult.eclipse_target)
+				overlays.len = 0
+				overlays += mask
+
+			if (BLOODCULT_STAGE_READY)
+				name = "Time until the Eclipse ends"
+				mask.pixel_x = 288*(cult.eclipse_progress/cult.eclipse_target)
+				overlays.len = 0
+				overlays += mask
+
+			if (BLOODCULT_STAGE_ECLIPSE)
+				name = "Time until the Eclipse ends"
+				mask.pixel_x = 288*(cult.eclipse_progress/cult.eclipse_target)
+				overlays.len = 0
+				overlays += mask
+			else
+				mask.pixel_x = 288*(cult.eclipse_progress/cult.eclipse_target)
+				overlays.len = 0
+				overlays += mask
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_front
+	name = "Eclipse Timer"
+	icon = 'icons/ui/bloodcult/362x229.dmi'
+	icon_state = "foreground"
+	offset_x = -165
+	offset_y = -83
+	alpha = 255
+	layer = MIND_UI_FRONT
+
+/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_front/Click()
+	parent.Hide()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role
+	name = "Choose a Role"
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "role"
+	offset_x = -128
+	offset_y = -64
+	layer = MIND_UI_BUTTON
+
+	var/image/click_me
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/New()
+	..()
+	click_me = image(icon, src, "click")
+	click_me.layer = MIND_UI_FRONT
+	animate(click_me, pixel_y = 16 , time = 7, loop = -1, easing = SINE_EASING)
+	animate(pixel_y = 8, time = 7, loop = -1, easing = SINE_EASING)
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/Click()
+	flick("role-click",src)
+
+	var/mob/M = GetUser()
+	if (M)
+		if (M.client)
+			M.client.images -= click_me
+		var/datum/role/cultist/C = iscultist(M)
+		if (C)
+			if (C.cultist_role != CULTIST_ROLE_NONE)
+				if (C.mentor)
+					to_chat(M,"<span class='notice'>You are currently in a mentorship under [C.mentor.antag.name].</span>")
+				if (C.acolytes.len > 0)
+					var/dat = ""
+					for (var/datum/role/cultist/U in C.acolytes)
+						dat += "[U.antag.name], "
+					to_chat(M,"<span class='notice'>You are currently mentoring [dat].</span>")
+				if ((world.time - C.time_role_changed_last) < 5 MINUTES)
+					if ((world.time - C.time_role_changed_last) > 4 MINUTES)
+						to_chat(M,"<span class='warning'>You must wait [round((5 MINUTES - (world.time - C.time_role_changed_last))/10) + 1] seconds before you can switch role.</span>")
+					else
+						to_chat(M,"<span class='warning'>You must wait around [round((5 MINUTES - (world.time - C.time_role_changed_last))/600) + 1] minutes before you can switch role.</span>")
+					return
+				else
+					if (C.mentor)
+						if(alert(M, "Switching roles will put an end to your mentorship by [C.mentor.antag.name]. Do you wish to proceed?", "Confirmation", "Yes", "No") == "No")
+							return
+					if (C.acolytes.len > 0)
+						if(alert(M, "Switching roles will put an end to your mentorship. Do you wish to proceed?", "Confirmation", "Yes", "No") == "No")
+							return
+
+	var/datum/mind_ui/bloodcult_role/role_popup = locate() in parent.subUIs
+	if(role_popup)
+		role_popup.Display()
+
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_role/UpdateIcon()
+	var/mob/M = GetUser()
+	if (M)
+		if (M.client)
+			M.client.images -= click_me
+		var/datum/role/cultist/C = iscultist(M)
+		if (C)
+			overlays.len = 0
+			switch(C.cultist_role)
+				if (CULTIST_ROLE_NONE)
+					if (M.client)
+						M.client.images += click_me
+				if (CULTIST_ROLE_ACOLYTE)
+					overlays += "role_acolyte"
+				if (CULTIST_ROLE_HERALD)
+					overlays += "role_herald"
+				if (CULTIST_ROLE_MENTOR)
+					overlays += "role_mentor"
 
 
 ////////////////////////////////////////////////////////////////////
@@ -565,7 +786,7 @@
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_role_confirm,
 		/obj/abstract/mind_ui_element/hoverable/movable/bloodcult_role_move,
 		)
-	display_with_parent = FALSE
+	display_with_parent = TRUE//displays instantly when the cult panel is opened for the first time
 
 	var/selected_role = CULTIST_ROLE_NONE
 
@@ -577,6 +798,11 @@
 		return TRUE
 	return FALSE
 
+/datum/mind_ui/bloodcult_role/Display()
+	..()
+	if (active)
+		display_with_parent = FALSE
+
 //------------------------------------------------------------
 
 /obj/abstract/mind_ui_element/bloodcult_role_background
@@ -585,8 +811,8 @@
 	icon_state = "background"
 	offset_x = -165
 	offset_y = -83
-	alpha = 200
-	layer = MIND_UI_BACK
+	alpha = 240
+	layer = MIND_UI_BACK + 3
 
 /obj/abstract/mind_ui_element/bloodcult_role_background/UpdateIcon()
 	overlays.len = 0
@@ -601,22 +827,6 @@
 		else
 			overlays += "none"
 
-	var/message = "Hello this is a test message da ba di da ba da"
-	var/image/I_shadow = image(icon = null)
-	I_shadow.maptext = {"<span style="color:#000000;font-smooth: never;font-size:8pt;font-family:'Consolas';" align="left" valign="top">[message]</span>"}
-	I_shadow.maptext_height = 128
-	I_shadow.maptext_width = 512
-	I_shadow.maptext_x = 1
-	I_shadow.maptext_y = -1
-	var/image/I = image(icon = null)
-	I.maptext = {"<span style="color:#FFFFFF;font-smooth: never;font-size:8pt;font-family:'Consolas';" align="left" valign="top">[message]</span>"}
-	I.maptext_height = 128
-	I.maptext_width = 512
-	I.maptext_x = 0
-	I.maptext_y = 0
-	overlays += I_shadow
-	overlays += I
-
 /obj/abstract/mind_ui_element/bloodcult_role_background/Click()
 	parent.Hide()
 
@@ -628,7 +838,7 @@
 	icon_state = "close"
 	offset_x = 181
 	offset_y = 130
-	layer = MIND_UI_BUTTON
+	layer = MIND_UI_BUTTON + 3
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_role_close/Click()
 	parent.Hide()
@@ -638,7 +848,7 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_role_select
 	icon = 'icons/ui/bloodcult/40x40.dmi'
 	icon_state = "button"
-	layer = MIND_UI_BUTTON
+	layer = MIND_UI_BUTTON + 3
 	var/role_small = ""
 	var/role = null
 
@@ -707,7 +917,7 @@
 	icon_state = "confirm"
 	offset_x = -36
 	offset_y = -68
-	layer = MIND_UI_BUTTON
+	layer = MIND_UI_BUTTON + 3
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_role_confirm/UpdateIcon()
 	var/datum/mind_ui/bloodcult_role/P = parent
@@ -746,7 +956,7 @@
 	name = "Move Interface (Click and Drag)"
 	icon = 'icons/ui/bloodcult/16x16.dmi'
 	icon_state = "move"
-	layer = MIND_UI_BUTTON
+	layer = MIND_UI_BUTTON + 3
 	offset_x = -165
 	offset_y = 130
 	mouse_opacity = 1
