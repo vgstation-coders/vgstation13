@@ -86,7 +86,7 @@
 
 /datum/disease2/effect/limedisease
 	name = "Chronic Lime Disease"
-	desc = "Unrelated to its Lyme cousin, causes the infected to vomit limes. Goes well with some salt and tequila."
+	desc = "Unrelated to its Lyme counterpart, causes the infected to vomit limes. Goes well with some salt and tequila."
 	stage = 3
 	badness = EFFECT_DANGER_ANNOYING
 
