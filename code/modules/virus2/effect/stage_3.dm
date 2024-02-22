@@ -84,6 +84,20 @@
 		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
 		new eggspawn(get_turf(mob))
 
+/datum/disease2/effect/limedisease
+	name = "Chronic Lime Disease"
+	desc = "Unrelated to its Lyme cousin, causes the infected to vomit limes. Goes well with some salt and tequila."
+	stage = 3
+	badness = EFFECT_DANGER_ANNOYING
+
+/datum/disease2/effect/limedisease/activate(var/mob/living/mob)
+	if (prob(30))
+		mob.say(pick("I could go for some tequila right now.", "Mmm... Tequila...", "Could go for something sour."))
+	if (prob(15))
+		mob.emote("me",1,"vomits up a... lime?")
+		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
+		new /obj/item/weapon/reagent_containers/food/snacks/grown/lime(get_turf(mob))
+
 /datum/disease2/effect/confusion
 	name = "Topographical Cretinism"
 	desc = "Attacks the infected's ability to differentiate left and right."
