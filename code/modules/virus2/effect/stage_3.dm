@@ -92,7 +92,7 @@
 
 /datum/disease2/effect/limedisease/activate(var/mob/living/mob)
 	if (prob(30))
-		mob.say(pick("I could go for some tequila right now.", "Mmm... Tequila...", "Could go for something sour."))
+		mob.say(pick("I could go for some tequila right now.", "Could go for something sour."))
 	if (prob(15))
 		mob.emote("me",1,"vomits up a... lime?")
 		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
