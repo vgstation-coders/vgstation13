@@ -126,7 +126,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	//rate at which energy is consumed from the atom and delivered to the fire
 	//burnrate = 1 at 20C with standard oxy concentration
 	//provides the "heat" and "oxygen" portions of the fire triangle
-	var/burnrate = oxy_ratio >= MINOXY2BURN ? (oxy_ratio/(MINOXY2BURN + rand(-0.02,0.02))) * (temperature/T20C) : 0
+	var/burnrate = oxy_ratio >= MINOXY2BURN ? (oxy_ratio/(MINOXY2BURN + rand(-0.02,0.02))) * (temperature/T20C) * (pressure/ONE_ATMOSPHERE): 0
 
 	if(burnrate < 0.1)
 		extinguish()
@@ -135,6 +135,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	//smoke density increases with burnrate and decreases with temperature
 	var/smoke_density = clamp(4 * burnrate * (1-temperature/FLAME_TEMPERATURE_PLASTIC),1,5)
 	if(prob(smoke_density)) //1-5% chance of smoke creation per tick
+		var/datum/effect/system/smoke_spread/fire/smoke = new /datum/effect/system/smoke_spread()
 		smoke.set_up(smoke_density,0,T)
 		smoke.time_to_live = 30 SECONDS
 		smoke.start()
@@ -233,7 +234,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 /turf
 	var/soot_type = /obj/effect/decal/cleanable/soot
 
-/turf/proc/ashify()
+/turf/ashify()
 	if(!on_fire)
 		return
 	var/ashtype = ashtype()
@@ -242,8 +243,6 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	ChangeTurf(src.get_underlying_turf())
 
 /turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume, var/soh = 0, var/surfaces=0)
-
-/turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
 
 /turf/simulated/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	var/obj/effect/E = null
@@ -300,8 +299,10 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	var/thermal_energy_transfer = 0 //J
 	var/consumption_rate = 1.0 //units per tick
 
-	if(!(locate(var/obj/effect/decal/cleanable/liquid_fuel) in src))
+	if(!(locate(/obj/effect/decal/cleanable/liquid_fuel) in src))
+		return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=max_temperature)
 
+	var/obj/effect/decal/cleanable/liquid_fuel/puddle = locate(/obj/effect/decal/cleanable/liquid_fuel) in src
 	var/list/fuel_stats = possible_fuels[puddle.reagent]
 	max_temperature = fuel_stats["max_temperature"]
 	thermal_energy_transfer = fuel_stats["thermal_energy_transfer"]
@@ -471,10 +472,10 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	var/value = 0
 
 	if((temperature > PLASMA_MINIMUM_BURN_TEMPERATURE || force_burn) && check_recombustability(T))
+		var/firelevel = 0
 		var/total_fuel = 0
 		var/starting_energy = 0
 		var/total_oxygen = 0
-		var/total_carbon = 0
 		var/used_fuel_ratio = 0
 		var/total_reactants = 0
 		var/used_reactants_ratio = 0
@@ -484,7 +485,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 		if(total_fuel)
 			//Calculate the firelevel.
-			var/firelevel = calculate_firelevel(T)
+			firelevel = calculate_firelevel(T)
 
 			//get the current inner energy of the gas mix
 			//this must be taken here to prevent the addition or deletion of energy by a changing heat capacity
@@ -494,13 +495,13 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 			total_oxygen = min(src[GAS_OXYGEN], 2 * total_fuel)
 
 			//determine the amount of fuel actually used
-			var/used_fuel_ratio = min(src[GAS_OXYGEN] / 2 , total_fuel) / total_fuel
+			used_fuel_ratio = min(src[GAS_OXYGEN] / 2 , total_fuel) / total_fuel
 			total_fuel = total_fuel * used_fuel_ratio
 
-			var/total_reactants = total_fuel + total_oxygen
+			total_reactants = total_fuel + total_oxygen
 
 			//determine the amount of reactants actually reacting
-			var/used_reactants_ratio = clamp(firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), clamp(0.2 / total_reactants, 0, 1), 1)
+			used_reactants_ratio = clamp(firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), clamp(0.2 / total_reactants, 0, 1), 1)
 
 		//burn solids and liquids
 		var/SL_energy = 0
@@ -509,13 +510,13 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		var/max_temperature = 0
 		if(T && istype(T))
 			for(var/atom/A in T) //this absolutely needs a refactor
-				var/burn_products = burnSolidFuel()
+				var/burn_products = A.burnSolidFuel()
 				SL_energy += burn_products["heat_out"]
 				SL_oxy_used += burn_products["oxy_used"]
 				SL_co2_used += burn_products["co2_used"]
 				max_temperature = max(max_temperature, burn_products["max_temperature"])
 
-				burn_products = burnLiquidFuel()
+				burn_products = A.burnLiquidFuel()
 				SL_energy += burn_products["heat_out"]
 				SL_oxy_used += burn_products["oxy_used"]
 				SL_co2_used += burn_products["co2_used"]
