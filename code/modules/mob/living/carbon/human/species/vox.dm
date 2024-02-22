@@ -5,7 +5,7 @@
 	known_languages = list(LANGUAGE_VOX)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
 	tacklePower = 40
-	anatomy_flags = HAS_SWEAT_GLANDS | TAIL_WAGGING | HAS_ICON_SKIN_TONE | HAS_TAIL | TAIL_OVERLAPPED
+	anatomy_flags = HAS_SWEAT_GLANDS | HAS_ICON_SKIN_TONE | HAS_TAIL | TAIL_OVERLAPPED
 
 	survival_gear = /obj/item/weapon/storage/box/survival/vox
 
@@ -87,7 +87,6 @@
 	H.update_icon()
 
 /datum/species/vox/handle_death(mob/living/carbon/human/vox, gibbed = FALSE)
-	vox.is_wagging_tail = FALSE
 	vox.update_tail_layer()
 
 /datum/species/vox/updatespeciescolor(mob/living/carbon/human/vox)
