@@ -348,7 +348,9 @@
 
 /datum/emote/living/carbon/human/wag
 	key = "wag"
+	key_third_person = "wags"
 	message = "wags their tail."
+	emote_type = EMOTE_VISIBLE|EMOTE_NO_RUNECHAT
 
 /datum/emote/living/carbon/human/wag/can_run_emote(mob/living/carbon/human/wagger, status_check)
 	if(!ishuman(wagger))
