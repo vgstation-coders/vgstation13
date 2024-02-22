@@ -284,6 +284,7 @@
 					mob:hallucination += max(50, min(300, DETONATION_HALLUCINATION * sqrt(1 / (get_dist(mob, src) + 1)) ) )
 				var/rads = DETONATION_RADS * sqrt( 1 / (get_dist(mob, src) + 1) )
 				mob.apply_radiation(rads, RAD_EXTERNAL)
+				world << sound('sound/effects/delamination.ogg')
 
 			explode()
 
