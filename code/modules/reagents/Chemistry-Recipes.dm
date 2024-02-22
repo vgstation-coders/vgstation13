@@ -4176,9 +4176,9 @@
 	name = "Random chemical"
 	id = "random"
 	result = null
-	required_reagents = list(NOTHING = 10, PHAZON = 10)
+	required_reagents = list(NOTHING = 1, PHAZON = 1)
 	required_catalysts = list(MUTAGEN = 10, ENZYME = 10)
-	result_amount = 1
+	result_amount = 5
 
 /datum/chemical_reaction/fake_creep // Xenomorph weeds aka creep.
 	name = "Dan's Purple Drank"
