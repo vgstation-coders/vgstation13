@@ -484,6 +484,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	var/diff = air.temperature - reagents.chem_temp
 
+	if (!isturf(loc) && (air.pressure < 100))//low pressure environments slow down entropy, unless the item is laid directly onto the floor so space meat remains frozen until brought in
+		diff *= air.pressure
+
 	//we only bother if there's less than a 1 degree difference
 	if (abs(diff) < 2)
 		thermal_entropy_containers.Remove(src)
