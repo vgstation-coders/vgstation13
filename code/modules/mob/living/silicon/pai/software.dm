@@ -332,6 +332,7 @@
 	paiInterface()		 // So we'll just call the update directly rather than doing some default checks
 	return
 
+//MENUS
 /mob/living/silicon/pai/proc/softwareMenu()			// Populate the right menu
 	var/dat = ""
 
