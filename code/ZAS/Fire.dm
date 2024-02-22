@@ -100,7 +100,6 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	var/datum/gas_mixture/air = T.return_air()
 	var/oxy_ratio  = air.molar_density(GAS_OXYGEN)
-	var/pressure = air.return_pressure()
 	var/temperature = air.return_temperature()
 	var/delta_t
 
@@ -126,7 +125,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	//rate at which energy is consumed from the atom and delivered to the fire
 	//burnrate = 1 at 20C with standard oxy concentration
 	//provides the "heat" and "oxygen" portions of the fire triangle
-	var/burnrate = oxy_ratio >= MINOXY2BURN ? (oxy_ratio/(MINOXY2BURN + rand(-0.02,0.02))) * (temperature/T20C) * (pressure/ONE_ATMOSPHERE): 0
+	var/burnrate = oxy_ratio >= MINOXY2BURN ? (oxy_ratio/(MINOXY2BURN + rand(-0.02,0.02))) * (temperature/T20C): 0
 
 	if(burnrate < 0.1)
 		extinguish()
