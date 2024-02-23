@@ -169,7 +169,6 @@
 
 	var/icon/icobase
 	var/datum/species/current_species = all_species[species]
-	var/tail
 
 	//icon based species color
 	if(current_species)
@@ -179,7 +178,6 @@
 			temp_human.my_appearance.s_tone = s_tone
 			temp_human.species.updatespeciescolor(temp_human) //The mob's species wasn't set, so it's almost certainly different than the character's species at the moment. Thus, we need to be owner-insensitive.
 			icobase = temp_human.species.icobase
-			tail = temp_human.tail
 			qdel(temp_human)
 		else
 			icobase = current_species.icobase
@@ -216,9 +214,30 @@
 
 		preview_icon.Blend(temp, ICON_OVERLAY)
 	//Tail
-		if(current_species && (current_species.anatomy_flags & HAS_TAIL))
-			var/icon/temp_tail = icon(current_species.tail_icon, "[tail || current_species.tail]_BEHIND")
-			preview_icon.Blend(temp_tail, ICON_OVERLAY)
+	if(current_species?.anatomy_flags & HAS_TAIL)
+		var/tail_icon_state = current_species.tail
+		if(species == "Vox")
+			switch(s_tone)
+				if(VOXEMERALD)
+					tail_icon_state = "emerald"
+				if(VOXAZURE)
+					tail_icon_state = "azure"
+				if(VOXLGREEN)
+					tail_icon_state = "lightgreen"
+				if(VOXGRAY)
+					tail_icon_state = "grey"
+				if(VOXBROWN)
+					tail_icon_state = "brown"
+				else
+					tail_icon_state = "green"
+		if(species == "Tajaran")
+			switch(s_tone)
+				if(CATBEASTBLACK)
+					tail_icon_state = "tajaran_black"
+				else
+					tail_icon_state = "tajaran_brown"
+		var/icon/temp_tail_icon = icon(current_species.tail_icon, "[tail_icon_state]_BEHIND")
+		preview_icon.Blend(temp_tail_icon, ICON_UNDERLAY)
 	// Skin tone
 	if(current_species && (current_species.anatomy_flags & HAS_SKIN_TONE))
 		if (s_tone >= 0)

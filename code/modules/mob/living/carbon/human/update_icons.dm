@@ -270,7 +270,8 @@ var/global/list/damage_icon_parts = list()
 		mask.MapColors(0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,0)
 		husk_over.Blend(mask, ICON_ADD)
 		stand_icon.Blend(husk_over, ICON_OVERLAY)
-	if(tail && (species.anatomy_flags & TAIL_OVERLAPPED))
+	var/datum/organ/external/tail/tail = get_cosmetic_organ(LIMB_TAIL)
+	if((!(tail.status & ORGAN_DESTROYED)) && tail.overlap_overlays)
 		var/obj/abstract/Overlays/limbs_overlay = obj_overlays[LIMBS_LAYER]
 		var/mutable_appearance/stand_icon_image = mutable_appearance(stand_icon)
 		limbs_overlay.icon = stand_icon_image.icon
@@ -1556,16 +1557,17 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human/proc/update_tail_layer(update_icons = TRUE)
 	overlays -= obj_overlays[TAIL_UNDERLIMBS_LAYER]
 	overlays -= obj_overlays[TAIL_LAYER]
-	if(!(tail && species.anatomy_flags & HAS_TAIL))
+	var/datum/organ/external/tail/tail_organ = get_cosmetic_organ(LIMB_TAIL)
+	if(!tail_organ || (tail_organ.status & ORGAN_DESTROYED))
 		return
 	if(wear_suit || check_hidden_body_flags(HIDETAIL))
 		return
-	var/tail_file = species.tail_icon
-	var/tail_icon_state = "[tail][is_wagging_tail ? "_wagging" : ""]"
+	var/tail_file = tail_organ.tail_icon_file
+	var/tail_icon_state = "[tail_organ.icon_name][is_wagging_tail ? "_wagging" : ""]"
 	var/mutable_appearance/tail_image = mutable_appearance(tail_file, tail_icon_state, layer = -TAIL_LAYER)
 	if(species.anatomy_flags & MULTICOLOR)
 		tail_image.color = COLOR_MATRIX_ADD(rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b))
-	if(tail && species.anatomy_flags & TAIL_OVERLAPPED) // Tail is overlapped by limbs, so we need special tail icon generation
+	if(tail_organ.overlap_overlays) // Tail is overlapped by limbs, so we need special tail icon generation
 		// Gives the underlimbs layer SEW directions since it's overlayed by limbs and just about everything else anyway.
 		var/mutable_appearance/tail_underlimbs = mutable_appearance(tail_file, "[tail_icon_state]_BEHIND", -TAIL_UNDERLIMBS_LAYER)
 		var/obj/abstract/Overlays/underlimbs_overlay = obj_overlays[TAIL_UNDERLIMBS_LAYER]

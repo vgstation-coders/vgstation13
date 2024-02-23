@@ -355,7 +355,8 @@
 /datum/emote/living/carbon/human/wag/can_run_emote(mob/living/carbon/human/wagger, status_check)
 	if(!ishuman(wagger))
 		return FALSE
-	if(!(wagger.species.anatomy_flags & TAIL_WAGGING))
+	var/datum/organ/external/tail/tail = wagger.get_cosmetic_organ(LIMB_TAIL)
+	if((tail.status & ORGAN_DESTROYED) || !tail.tail_waggable)
 		return FALSE
 	if(wagger.check_hidden_body_flags(HIDETAIL))
 		return FALSE

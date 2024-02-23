@@ -1268,8 +1268,6 @@
 	src.species = new S.type
 	src.species.myhuman = src
 
-	tail = S.tail
-
 	if(S.gender)
 		gender = S.gender
 	else if (gender == "neuter") // when going back from an non-gendered species to a gendered one, you'll get assigned randomly
