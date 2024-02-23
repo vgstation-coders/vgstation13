@@ -50,7 +50,7 @@
 	var/wound_update_accuracy = 1
 
 	var/has_fat = 0 //Has a _fat variant
-
+	var/cosmetic_only = FALSE
 	var/grasp_id = 0 //Does this organ affect other grasping organs?
 	var/can_grasp = 0 //Can this organ actually grasp something?
 
@@ -85,6 +85,9 @@
 
 	organ_item = null //I honestly cannot tell if anything else should be done with this
 	..()
+
+/datum/organ/external/proc/post_human_addition()
+	return
 
 /****************************************************
 			   DAMAGE PROCS
@@ -154,6 +157,8 @@
 	droplimb(1, spawn_limb = 0, display_message = FALSE)
 
 /datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
+	if(cosmetic_only)
+		return
 	if(owner?.status_flags & GODMODE)
 		return 0	//godmode
 	if((brute <= 0) && (burn <= 0))
@@ -277,6 +282,8 @@
 	return result
 
 /datum/organ/external/proc/heal_damage(brute, burn, internal = 0, robo_repair = 0)
+	if(cosmetic_only)
+		return
 	if(is_robotic() && !robo_repair) //This item can't fix robotic limbs
 		return
 
@@ -330,6 +337,8 @@
 	owner.updatehealth()
 
 /datum/organ/external/proc/createwound(var/type = CUT, var/damage)
+	if(cosmetic_only)
+		return
 	if(!damage || damage < 0) //We weren't passed a damage value, or it's negative for some reason
 		return
 
@@ -409,7 +418,6 @@
 	return 0
 
 /datum/organ/external/process()
-
 	//Process wounds, doing healing etc. Only do this every few ticks to save processing power
 	if(owner.life_tick % wound_update_accuracy == 0)
 		update_wounds()
@@ -448,7 +456,6 @@
 //Cancer growth for external organs is simple, it grows, hurts, damages, and suddenly grows out of control
 //Limb cancer is relatively benign until it grows large, then it cripples you and metastases
 /datum/organ/external/handle_cancer()
-
 	if(..())
 		return 1
 
@@ -500,6 +507,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 */
 
 /datum/organ/external/proc/update_germs()
+	if(cosmetic_only)
+		return
 	if(!is_existing() || !is_organic()) //Needs to be organic and existing
 		germ_level = 0
 		return
@@ -590,7 +599,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 //Updating wounds. Handles wound natural healing, internal bleedings and infections
 /datum/organ/external/proc/update_wounds()
-
+	if(cosmetic_only)
+		return
 	if(!is_organic()) //Non-organic limbs don't heal or get worse
 		return
 
@@ -748,7 +758,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(body_part == (UPPER_TORSO || LOWER_TORSO)) //We can't lose either, those cannot be amputated and will cause extremely serious problems
 		return
 
-	var/datum/species/species = src.species || owner.species
+	var/datum/species/species = src.species || owner?.species
 	var/obj/item/organ/external/organ //Dropped limb object
 
 	if(override)
@@ -837,7 +847,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 			//Throw organs around
 			var/randomdir = pick(cardinal)
 			step(organ, randomdir)
-
+		if(!owner)
+			return organ
 		owner.update_body(1)
 		owner.handle_organs(1)
 
@@ -873,7 +884,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 					O.removed(owner,owner)
 					O.loc = headloc
 				QDEL_NULL(organ)
-
+	organ?.update_icon()
 	return organ
 
 /datum/organ/external/proc/get_organ_item()
@@ -941,6 +952,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return rval
 
 /datum/organ/external/proc/clamp_wounds() //Inconsistent with the other names but clamp is a reserved word now
+	if(cosmetic_only)
+		return
 	var/rval = 0
 	src.status &= ~ORGAN_BLEEDING
 	for(var/datum/wound/W in wounds)
@@ -958,6 +971,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return rval
 
 /datum/organ/external/proc/fracture()
+	if(cosmetic_only)
+		return
 	if(owner?.status_flags & GODMODE)
 		return 0	//godmode
 	var/datum/species/species = src.species || owner.species
@@ -1053,7 +1068,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.status = organ.status
 		src.brute_dam = organ.brute_dam
 		src.burn_dam = organ.burn_dam
-
+		on_attach(organ)
 		owner.butchering_drops += organ.butchering_drops
 
 		//Transfer any internal_organs from the organ item to the body
@@ -1102,6 +1117,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 	owner.update_body()
 	owner.updatehealth()
 	owner.UpdateDamageIcon()
+
+/datum/organ/external/proc/on_attach()
+	return
 
 /datum/organ/external/proc/mutate()
 	src.status |= ORGAN_MUTATED
@@ -1246,6 +1264,69 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 70
 	body_part = LOWER_TORSO
 	vital = 1
+
+/datum/organ/external/tail
+	name = LIMB_TAIL
+	display_name = "tail"
+	icon_name = "tail"
+	max_damage = 75
+	min_broken_damage = 30
+	body_part = TAIL
+	cosmetic_only = TRUE
+	var/tail_icon_file = 'icons/effects/species.dmi'
+	var/tail_type
+	var/overlap_overlays = TRUE
+	var/tail_waggable = FALSE
+
+/datum/organ/external/tail/New(datum/organ/external/parent, datum/species/passed_species)
+	if(!(passed_species?.anatomy_flags & HAS_TAIL))
+		droplimb(TRUE, spawn_limb = FALSE)
+		return
+	create_tail_info(passed_species)
+	return ..()
+
+/datum/organ/external/tail/proc/create_tail_info(datum/species/passed_species, obj/item/organ/external/tail/tail_item)
+	icon_name = passed_species?.tail || tail_item?.tail_state_name
+	tail_icon_file = passed_species?.tail_icon || tail_item?.tail_icon_file
+	tail_type = passed_species?.tail_type || tail_item?.tail_type
+	overlap_overlays = passed_species?.tail_overlapping || tail_item?.tail_overlapping
+	tail_waggable = passed_species?.tail_waggable || tail_item?.tail_waggable
+
+/datum/organ/external/tail/generate_dropped_organ(current_organ)
+	if(!current_organ)
+		current_organ = new /obj/item/organ/external/tail(owner.loc, owner, src)
+	return current_organ
+
+/datum/organ/external/tail/on_attach(obj/item/organ/external/tail/tail_item)
+	create_tail_info(tail_item = tail_item)
+
+/datum/organ/external/tail/proc/update_tail(mob/living/carbon/human/tail_owner)
+	var/skin_tone = tail_owner?.my_appearance.s_tone || owner?.my_appearance.s_tone
+	switch(tail_type)
+		if("vox")
+			switch(skin_tone)
+				if(VOXEMERALD)
+					icon_name = "emerald"
+				if(VOXAZURE)
+					icon_name = "azure"
+				if(VOXLGREEN)
+					icon_name = "lightgreen"
+				if(VOXGRAY)
+					icon_name = "grey"
+				if(VOXBROWN)
+					icon_name = "brown"
+				else
+					icon_name = "green"
+		if("tajaran")
+			switch(skin_tone)
+				if(CATBEASTBLACK)
+					icon_name = "tajaran_black"
+				else
+					icon_name = "tajaran_brown"
+
+
+	var/mob/living/carbon/human/tail_haver = tail_owner || owner
+	tail_haver?.update_tail_layer()
 
 //=====Legs======
 
@@ -1607,6 +1688,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	..(loc)
 	if(!istype(H))
 		return
+	post_creation(source)
 	if(H.dna)
 		owner_dna = H.dna.Clone()
 		if(!blood_DNA)
@@ -1640,6 +1722,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 			//The reason why B isn't just transferred from H.butchering_drops to src.butchering_drops is:
 			//on examine(), each butchering drop's "desc_modifier()" is added to the description. This adds stuff like "he HAS NO TEETH AT ALL!!!" to the resulting description.
+
+/obj/item/organ/external/proc/post_creation(datum/organ/external/organ_datum)
+	return
 
 /obj/item/organ/external/examine(mob/user)
 	..()
@@ -1675,8 +1760,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 		to_chat(user, "<span class='warning'>[butchery]</span>")
 
 /obj/item/organ/external/update_icon(mob/living/carbon/human/H)
-	..()
-
 	if(!H && !species)
 		return
 
@@ -1803,6 +1886,39 @@ Note that amputating the affected organ does in fact remove the infection from t
 		var/mob/living/simple_animal/borer/B = H.has_brain_worms(LIMB_RIGHT_LEG)
 		if(B)
 			B.infest_limb(src)
+
+/obj/item/organ/external/tail
+	name = "tail"
+	icon_state = LIMB_TAIL
+	part = LIMB_TAIL
+	w_class = W_CLASS_SMALL
+	var/tail_icon_file
+	var/tail_type
+	var/tail_icon_key
+	var/tail_state_name
+	var/tail_overlapping = TRUE
+	var/tail_waggable = FALSE
+	var/static/list/tail_organ_icons = list()
+
+/obj/item/organ/external/tail/post_creation(datum/organ/external/tail/organ_datum)
+	if(!istype(organ_datum))
+		return
+	tail_icon_file = organ_datum.tail_icon_file
+	icon_state = organ_datum.icon_name
+	tail_state_name = organ_datum.icon_name
+	tail_type = organ_datum.tail_type
+	tail_overlapping = organ_datum.overlap_overlays
+	tail_waggable = organ_datum.tail_waggable
+	update_icon()
+
+/obj/item/organ/external/tail/update_icon()
+	tail_icon_key = "[tail_state_name]_[tail_type]"
+	var/returned_tail_icon = tail_organ_icons[tail_icon_key]
+	if(!returned_tail_icon)
+		var/icon/new_tail_icon = icon(tail_icon_file, "[tail_state_name]_BEHIND")
+		new_tail_icon.Insert(icon(tail_icon_file, "[tail_state_name]_FRONT", NORTH))
+		tail_organ_icons[tail_icon_key] = new_tail_icon
+	icon = returned_tail_icon
 
 /obj/item/organ/external/head
 	dir = NORTH
@@ -2030,6 +2146,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return FALSE
 
 /datum/organ/external/send_to_past(var/duration)
+	if(cosmetic_only)
+		return
 	..()
 	var/static/list/resettable_vars = list(
 		"damage_state",

@@ -5,7 +5,7 @@
 	known_languages = list(LANGUAGE_VOX)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
 	tacklePower = 40
-	anatomy_flags = HAS_SWEAT_GLANDS | TAIL_WAGGING | HAS_ICON_SKIN_TONE | HAS_TAIL | TAIL_OVERLAPPED
+	anatomy_flags = HAS_SWEAT_GLANDS | HAS_ICON_SKIN_TONE | HAS_TAIL
 
 	survival_gear = /obj/item/weapon/storage/box/survival/vox
 
@@ -20,12 +20,12 @@
 
 	default_mutations = list(M_BEAK, M_TALONS)
 	flags = PLAYABLE | WHITELISTED
-
 	blood_color = VOX_BLOOD
 	flesh_color = "#808D11"
 	max_skin_tone = 6
 	tail = "green"
 	tail_icon = 'icons/mob/human_races/vox/tails.dmi'
+	tail_type = "vox"
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/vox //Bird claws
 
 	uniform_icons = 'icons/mob/species/vox/uniform.dmi'
@@ -91,31 +91,27 @@
 	vox.update_tail_layer()
 
 /datum/species/vox/updatespeciescolor(mob/living/carbon/human/vox)
+	var/datum/organ/external/tail/vox_tail = vox.get_cosmetic_organ(LIMB_TAIL)
 	switch(vox.my_appearance.s_tone)
 		if(VOXEMERALD)
 			icobase = 'icons/mob/human_races/vox/r_voxemrl.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxemrl.dmi'
-			vox.tail = "emerald"
 		if(VOXAZURE)
 			icobase = 'icons/mob/human_races/vox/r_voxazu.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxazu.dmi'
-			vox.tail = "azure"
 		if(VOXLGREEN)
 			icobase = 'icons/mob/human_races/vox/r_voxlgrn.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxlgrn.dmi'
-			vox.tail = "lightgreen"
 		if(VOXGRAY)
 			icobase = 'icons/mob/human_races/vox/r_voxgry.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxgry.dmi'
-			vox.tail = "grey"
 		if(VOXBROWN)
 			icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxbrn.dmi'
-			vox.tail = "brown"
 		else
 			icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
-			vox.tail = "green"
+	vox_tail.update_tail(vox)
 
 /datum/species/skellington/skelevox // Science never goes too far, it's the public that's too conservative
 	name = "Skeletal Vox"

@@ -44,6 +44,9 @@ var/global/list/playable_species = list("Human")
 	var/primitive												// Lesser form, if any (ie. monkey for humans)
 	var/tail													// Name of tail icon state
 	var/tail_icon = 'icons/effects/species.dmi'
+	var/tail_type
+	var/tail_overlapping = TRUE
+	var/tail_waggable = TRUE
 	var/list/known_languages = list(LANGUAGE_GALACTIC_COMMON)	// Languages that this species innately knows.
 	var/default_language = LANGUAGE_GALACTIC_COMMON				// Default language is used when 'say' is used without modifiers.
 	var/attack_verb = "punches"									// Empty hand hurt intent verb.
@@ -205,9 +208,14 @@ var/global/list/playable_species = list("Human")
 		for(var/datum/organ/I in H.internal_organs)
 			qdel(I)
 		H.internal_organs.len=0
+	if(H.cosmetic_organs)
+		for(var/organ in H.cosmetic_organs)
+			qdel(organ)
 	//The rest SHOULD only refer to organs that were already deleted by the above loops, so we can just clear the lists.
 	if(H.organs_by_name)
 		H.organs_by_name.len=0
+	if(H.cosmetic_organs_by_name)
+		H.cosmetic_organs_by_name.len = 0
 	if(H.internal_organs_by_name)
 		H.internal_organs_by_name.len=0
 	if(H.grasp_organs)
@@ -232,6 +240,8 @@ var/global/list/playable_species = list("Human")
 	H.organs_by_name[LIMB_LEFT_FOOT] = new/datum/organ/external/l_foot(H.organs_by_name[LIMB_LEFT_LEG])
 	H.organs_by_name[LIMB_RIGHT_FOOT] = new/datum/organ/external/r_foot(H.organs_by_name[LIMB_RIGHT_LEG])
 
+	H.cosmetic_organs_by_name[LIMB_TAIL] = new/datum/organ/external/tail(H.organs_by_name[LIMB_GROIN], src)
+
 	H.internal_organs = list()
 	for(var/organ in has_organ)
 		var/organ_type = has_organ[organ]
@@ -246,9 +256,15 @@ var/global/list/playable_species = list("Human")
 		H.organs += OE
 		if(OE.grasp_id)
 			H.grasp_organs += OE
+	for(var/organ as anything in H.cosmetic_organs_by_name)
+		var/datum/organ/external/cosmetic_organ = H.cosmetic_organs_by_name[organ]
+		H.cosmetic_organs += cosmetic_organ
+	for(var/datum/organ/external/external_organ in H.organs)
+		external_organ.owner = H
+	for(var/datum/organ/external/cosmetic_organ as anything in H.cosmetic_organs)
+		cosmetic_organ.owner = H
+		cosmetic_organ.post_human_addition()
 
-	for(var/datum/organ/external/O in H.organs)
-		O.owner = H
 
 /datum/species/proc/handle_post_spawn(var/mob/living/carbon/human/H) //Handles anything not already covered by basic species assignment.
 	return
@@ -386,7 +402,9 @@ var/global/list/playable_species = list("Human")
 	icobase = 'icons/mob/human_races/r_lizard.dmi'
 	deform = 'icons/mob/human_races/r_def_lizard.dmi'
 	known_languages = list(LANGUAGE_UNATHI)
-	tail = "sogtail"
+	tail = "unathi"
+	tail_type = "unathi"
+	tail_waggable = FALSE
 	attack_verb = "scratches"
 	punch_damage = 2
 	primitive = /mob/living/carbon/monkey/unathi
@@ -473,7 +491,9 @@ var/global/list/playable_species = list("Human")
 	icobase = 'icons/mob/human_races/r_tajaran.dmi'
 	deform = 'icons/mob/human_races/r_def_tajaran.dmi'
 	known_languages = list(LANGUAGE_CATBEAST, LANGUAGE_MOUSE)
-	tail = "tajtail"
+	tail = "tajaran_brown"
+	tail_type = "tajaran"
+	tail_waggable = FALSE
 	attack_verb = "scratches"
 	punch_damage = 2 //Claws add 3 damage without gloves, so the total is 5
 
@@ -488,7 +508,7 @@ var/global/list/playable_species = list("Human")
 	primitive = /mob/living/carbon/monkey/tajara
 
 	flags = WHITELISTED
-	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL | HAS_SWEAT_GLANDS
+	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL | HAS_SWEAT_GLANDS | HAS_ICON_SKIN_TONE
 
 	default_mutations=list(M_CLAWS)
 
@@ -520,18 +540,18 @@ var/global/list/playable_species = list("Human")
 	updatespeciescolor(H)
 	H.update_icon()
 
-/datum/species/tajaran/updatespeciescolor(var/mob/living/carbon/human/H)
-	switch(H.my_appearance.s_tone)
+/datum/species/tajaran/updatespeciescolor(mob/living/carbon/human/tajaran)
+	var/datum/organ/external/tail/tajaran_tail = tajaran.get_cosmetic_organ(LIMB_TAIL)
+	switch(tajaran.my_appearance.s_tone)
 		if(CATBEASTBLACK)
 			icobase = 'icons/mob/human_races/r_tajaranblack.dmi'
 			deform = 'icons/mob/human_races/r_def_tajaranblack.dmi'
-			tail = "tajtailb"
-			H.my_appearance.h_style = "Black Tajaran Ears"
+			tajaran.my_appearance.h_style = "Black Tajaran Ears"
 		else
 			icobase = 'icons/mob/human_races/r_tajaran.dmi'
 			deform = 'icons/mob/human_races/r_def_tajaran.dmi'
-			tail = "tajtail"
-			H.my_appearance.h_style = "Tajaran Ears"
+			tajaran.my_appearance.h_style = "Tajaran Ears"
+	tajaran_tail.update_tail(tajaran)
 
 /datum/species/tajaran/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if (prob(15))

@@ -71,6 +71,7 @@
 #include "__DEFINES\simple_animal_defines.dm"
 #include "__DEFINES\snow.dm"
 #include "__DEFINES\sort.dm"
+#include "__DEFINES\span.dm"
 #include "__DEFINES\spell_defines.dm"
 #include "__DEFINES\striketeam_defines.dm"
 #include "__DEFINES\stylesheet.dm"
