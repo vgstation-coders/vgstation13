@@ -16,4 +16,4 @@
 
 // Surgery delay
 
-#define SURGERY_DELAY_TIME 0.2 SECONDS
+#define SURGERY_DELAY_TIME 0.1 SECONDS
