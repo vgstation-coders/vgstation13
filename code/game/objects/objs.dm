@@ -64,7 +64,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		breakable_init()
 	if(is_cooktop)
 		add_component(/datum/component/cooktop)
-	if(autoignition_temperature)
+	if(flammable)
 		burnableatoms+=src
 	if(!thermal_mass)
 		switch(w_class)

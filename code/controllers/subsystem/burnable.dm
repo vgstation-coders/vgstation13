@@ -41,7 +41,7 @@ var/list/atom/burnableatoms = list()
 		var/datum/gas_mixture/G = return_air()
 		if(!G || G.molar_density(GAS_OXYGEN) < MINOXY2BURN) //no oxygen so it goes out
 			extinguish()
-	else if(autoignition_temperature && isturf(loc))
+	else if(flammable && isturf(loc))
 		var/datum/gas_mixture/G = return_air()
 		if(G && G.temperature >= autoignition_temperature && G.molar_density(GAS_OXYGEN) >= MINOXY2BURN)
 			ignite()

@@ -1,4 +1,46 @@
 ///////////////////////////////////////////////
+// THERMAL MATERIAL DATUMS
+///////////////////////////////////////////////
+/datum/thermal_material
+	var/autoignition_temperature
+	var/heating_value
+	var/molecular_weight
+	var/fuel_ox_ratio
+	var/flame_temp
+
+/datum/thermal_material/wood
+	autoignition_temperature = AUTOIGNITION_WOOD
+	heating_value = HHV_WOOD
+	molecular_weight = MOLECULAR_WEIGHT_WOOD
+	fuel_ox_ratio = FUEL_OX_RATIO_WOOD
+	flame_temp = FLAME_TEMPERATURE_WOOD
+/datum/thermal_material/plastic
+	autoignition_temperature = AUTOIGNITION_PLASTIC
+	heating_value = HHV_PLASTIC
+	molecular_weight = MOLECULAR_WEIGHT_PLASTIC
+	fuel_ox_ratio = FUEL_OX_RATIO_PLASTIC
+	flame_temp = FLAME_TEMPERATURE_PLASTIC
+/datum/thermal_material/fabric
+	autoignition_temperature = AUTOIGNITION_FABRIC
+	heating_value = HHV_FABRIC
+	molecular_weight = MOLECULAR_WEIGHT_FABRIC
+	fuel_ox_ratio = FUEL_OX_RATIO_FABRIC
+	flame_temp = FLAME_TEMPERATURE_FABRIC
+/datum/thermal_material/wax
+	autoignition_temperature = AUTOIGNITION_WAX
+	heating_value = HHV_WAX
+	molecular_weight = MOLECULAR_WEIGHT_WAX
+	fuel_ox_ratio = FUEL_OX_RATIO_WAX
+	flame_temp = FLAME_TEMPERATURE_WAX
+/datum/thermal_material/biological
+	autoignition_temperature = AUTOIGNITION_BIOLOGICAL
+	heating_value = HHV_BIOLOGICAL
+	molecular_weight = MOLECULAR_WEIGHT_BIOLOGICAL
+	fuel_ox_ratio = FUEL_OX_RATIO_BIOLOGICAL
+	flame_temp = FLAME_TEMPERATURE_BIOLOGICAL
+
+
+///////////////////////////////////////////////
 // ATOM COMBUSTION
 ///////////////////////////////////////////////
 /*
@@ -10,16 +52,14 @@
 6. Once the burning atom's mass is equal to or less than 0, it will turn to ash.
 Note: this process will be halted if the oxygen concentration or pressure drops too low.
 */
+
+
 /atom
 	var/on_fire = 0
-	var/heating_value = 0
-	var/fuel_ox_ratio
-	var/autoignition_temperature = 0
-	var/molecular_weight
 	var/flammable = FALSE
-	var/flame_temp = 0
+	var/autoignition_temperature //inherited from thermal_material unless defined otherwise
 	var/thermal_mass = 0 //VERY loose estimate of mass in kg
-	var/burntime = 0 //time the object has been burning
+	var/datum/thermal_material/thermal_material //contains the material properties of the item for burning, if applicable
 	var/fire_protection //duration that something stays extinguished
 
 	var/melt_temperature = 0 //unused, to be removed
@@ -36,50 +76,22 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	if(flammable)
 		switch(w_type)
 			if(RECYK_WOOD)
-				autoignition_temperature = AUTOIGNITION_WOOD
-				heating_value = HHV_WOOD
-				molecular_weight = MOLECULAR_WEIGHT_WOOD
-				fuel_ox_ratio = FUEL_OX_RATIO_WOOD
-				flame_temp = FLAME_TEMPERATURE_WOOD
+				thermal_material = new/datum/thermal_material/wood()
 			if(RECYK_PLASTIC, RECYK_ELECTRONIC, RECYK_MISC)
-				autoignition_temperature = AUTOIGNITION_PLASTIC
-				heating_value = HHV_PLASTIC
-				molecular_weight = MOLECULAR_WEIGHT_PLASTIC
-				fuel_ox_ratio = FUEL_OX_RATIO_PLASTIC
-				flame_temp = FLAME_TEMPERATURE_PLASTIC
+				thermal_material = new/datum/thermal_material/plastic()
 			if(RECYK_FABRIC)
-				autoignition_temperature = AUTOIGNITION_FABRIC
-				heating_value = HHV_FABRIC
-				molecular_weight = MOLECULAR_WEIGHT_FABRIC
-				fuel_ox_ratio = FUEL_OX_RATIO_FABRIC
-				flame_temp = FLAME_TEMPERATURE_FABRIC
+				thermal_material = new/datum/thermal_material/fabric()
 			if(RECYK_WAX)
-				autoignition_temperature = AUTOIGNITION_WAX
-				heating_value = HHV_WAX
-				molecular_weight = MOLECULAR_WEIGHT_WAX
-				fuel_ox_ratio = FUEL_OX_RATIO_WAX
-				flame_temp = FLAME_TEMPERATURE_WAX
+				thermal_material = new/datum/thermal_material/wax()
 			if(RECYK_BIOLOGICAL)
-				autoignition_temperature = AUTOIGNITION_BIOLOGICAL
-				heating_value = HHV_BIOLOGICAL
-				molecular_weight = MOLECULAR_WEIGHT_BIOLOGICAL
-				fuel_ox_ratio = FUEL_OX_RATIO_BIOLOGICAL
-				flame_temp = FLAME_TEMPERATURE_BIOLOGICAL
-			else
-				autoignition_temperature = autoignition_temperature ? autoignition_temperature:0
-				heating_value = heating_value ? heating_value:0
-				molecular_weight = molecular_weight ? molecular_weight:0
-				fuel_ox_ratio = fuel_ox_ratio ? fuel_ox_ratio:0
-				flame_temp = flame_temp ? flame_temp:0
-				if(!(autoignition_temperature && heating_value && molecular_weight && fuel_ox_ratio && flame_temp))
-					flammable = FALSE
-	else // just in case this was overwritten elsewhere accidentally
-		autoignition_temperature = 0
+				thermal_material = new/datum/thermal_material/biological()
+		if(!autoignition_temperature)
+			autoignition_temperature = thermal_material.autoignition_temperature
 
 /atom/movable/firelightdummy
 	//this is a dummy that gets added to the vis_contents of a burning atom that can be a light source when its on fire so that it doesnt overwrite the light the atom might already be making
-		//ideally instead of this you could directly add multiple light source datums to a single atom that would all be processed by the lighting system nicely
-		//however, thats not how the lighting system currently works
+	//ideally instead of this you could directly add multiple light source datums to a single atom that would all be processed by the lighting system nicely
+	//however, thats not how the lighting system currently works
 	//are you up to the challenge?
 	gender = PLURAL
 	name = "fire"
@@ -106,6 +118,8 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 /atom/proc/burnSolidFuel()
 	var/turf/T = get_turf(loc)
 
+	var/datum/thermal_material/material = src.thermal_material
+
 	var/datum/gas_mixture/air = T.return_air()
 	var/oxy_ratio  = air.molar_density(GAS_OXYGEN)
 	var/temperature = air.return_temperature()
@@ -118,11 +132,11 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	//if all energy has been extracted from the atom, ash it
 	if(thermal_mass <= 0)
 		ashify()
-		return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=flame_temp)
+		return
 
 	//don't burn the container until all reagents have been depleted
 	if(reagents)
-		return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=flame_temp)
+		return
 
 	// ignite the tile if there isn't a fire present already
 	var/in_fire = FALSE //is the atom in a tile with a fire
@@ -137,7 +151,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	if(burnrate < 0.1)
 		extinguish()
-		return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=flame_temp)
+		return
 
 	//smoke density increases with burnrate and decreases with temperature
 	var/smoke_density = clamp(4 * burnrate * (1-temperature/FLAME_TEMPERATURE_PLASTIC),1,5)
@@ -153,17 +167,17 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	thermal_mass -= delta_m
 
 	//change in internal energy = energy produced by combustion (assuming perfect combustion)
-	heat_out = heating_value * delta_m
+	heat_out = material.heating_value * delta_m
 
 	//n_oxy = (m_fuel / (m_fuel/n_fuel)) / (n_fuel/n_oxy)
-	oxy_used = (delta_m / molecular_weight) / fuel_ox_ratio //mols
+	oxy_used = (delta_m / material.molecular_weight) / material.fuel_ox_ratio //mols
 
 	if(!in_fire && T)
 		//change in internal energy (delta_U) = change in energy due to heat transfer (delta_Q) due to isochoric reaction
 		//delta_t = delta_Q/(m*c) = heat_out/(delta_m * heating_value)
-		delta_t = heat_out/(delta_m * heating_value)
+		delta_t = heat_out/(delta_m * material.heating_value)
 		T.hotspot_expose(temperature + delta_t, CELL_VOLUME, surfaces=1)
-	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=flame_temp)
+	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=material.flame_temp)
 
 //Outputs the heat produced (MJ), oxygen consumed (mol), co2 consumed (mol), and maximum flame temperature (K)
 /atom/proc/burnLiquidFuel()
@@ -230,10 +244,17 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	return TRUE
 
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(autoignition_temperature && !on_fire && exposed_temperature > autoignition_temperature)
+	if(flammable && !on_fire && exposed_temperature > autoignition_temperature)
 		ignite()
 		return 1
 	return 0
+
+
+/area/fire_act()
+	return
+
+/mob/fire_act()
+	return
 
 ///////////////////////////////////////////////
 // TURF COMBUSTION
@@ -284,7 +305,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	if(surfaces && air_contents.molar_density(GAS_OXYGEN) >= MINOXY2BURN)
 		for(var/obj/O in contents)
-			if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && flammable && !O.on_fire && O.autoignition_temperature && exposed_temperature >= O.autoignition_temperature)
+			if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && O.flammable && !O.on_fire && exposed_temperature >= O.autoignition_temperature)
 				O.ignite()
 				igniting = 1
 				break
@@ -307,7 +328,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	var/consumption_rate = 1.0 //units per tick
 
 	if(!(locate(/obj/effect/decal/cleanable/liquid_fuel) in src))
-		return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=max_temperature)
+		return
 
 	var/obj/effect/decal/cleanable/liquid_fuel/puddle = locate(/obj/effect/decal/cleanable/liquid_fuel) in src
 	var/list/fuel_stats = possible_fuels[puddle.reagent]
@@ -516,18 +537,20 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		var/SL_co2_used = 0
 		var/max_temperature = 0
 		if(T && istype(T))
-			for(var/atom/A in T) //this absolutely needs a refactor
-				var/burn_products = A.burnSolidFuel()
-				SL_energy += burn_products["heat_out"]
-				SL_oxy_used += burn_products["oxy_used"]
-				SL_co2_used += burn_products["co2_used"]
-				max_temperature = max(max_temperature, burn_products["max_temperature"])
+			for(var/atom/A in T)
+				var/solid_burn_products = A.burnSolidFuel()
+				if(solid_burn_products)
+					SL_energy += solid_burn_products["heat_out"]
+					SL_oxy_used += solid_burn_products["oxy_used"]
+					SL_co2_used += solid_burn_products["co2_used"]
+					max_temperature = max(max_temperature, solid_burn_products["max_temperature"])
 
-				burn_products = A.burnLiquidFuel()
-				SL_energy += burn_products["heat_out"]
-				SL_oxy_used += burn_products["oxy_used"]
-				SL_co2_used += burn_products["co2_used"]
-				max_temperature = max(max_temperature, burn_products["max_temperature"])
+				var/liquid_burn_products = A.burnLiquidFuel()
+				if(liquid_burn_products)
+					SL_energy += liquid_burn_products["heat_out"]
+					SL_oxy_used += liquid_burn_products["oxy_used"]
+					SL_co2_used += liquid_burn_products["co2_used"]
+					max_temperature = max(max_temperature, liquid_burn_products["max_temperature"])
 
 		//sanity checks
 		SL_oxy_used = clamp(SL_oxy_used, 0, src[GAS_OXYGEN])
@@ -539,7 +562,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		adjust_multi(
 			GAS_OXYGEN, -min(src[GAS_OXYGEN], total_oxygen * used_reactants_ratio + SL_oxy_used),
 			GAS_PLASMA, -min(src[GAS_PLASMA], (src[GAS_PLASMA] * used_fuel_ratio * used_reactants_ratio) * 3),
-			GAS_CARBON, max(2 * total_fuel * used_reactants_ratio - SL_co2_used, 0),
+			GAS_CARBON, max(2 * total_fuel * used_reactants_ratio + SL_co2_used, 0),
 			GAS_VOLATILE, -(src[GAS_VOLATILE] * used_fuel_ratio * used_reactants_ratio) * 5) //Fuel burns 5 times as quick
 
 		//calculate the energy produced by the reaction and then set the new temperature of the mix

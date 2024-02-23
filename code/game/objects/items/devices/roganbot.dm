@@ -6,7 +6,7 @@
 	w_class = W_CLASS_TINY
 	w_type = RECYK_ELECTRONIC
 	flags = HEAR | FPRINT
-	flammable = true
+	flammable = TRUE
 	var/speak_cooldown = 0.6 SECONDS
 	var/tmp/last_speak
 	var/mobsonly = TRUE //Fuck off speaker assemblies
