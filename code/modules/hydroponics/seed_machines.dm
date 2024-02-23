@@ -393,12 +393,19 @@
 	if(..())
 		return 1
 
-	if( href_list["increase_splice_amount"])
-		if(times_to_splice<10)
+	if( href_list["change_splice_amount"])
+		var/new_amount = input(usr, "Enter the number of times to perform the SPLICE command: (Between 1 and 10)","Enter Multsplice Coefficient") as num
+		if(new_amount>10)
+			new_amount = 10
+		else if(new_amount<1)
+			new_amount = 1
+		times_to_splice = new_amount
+
+		/*if(times_to_splice<10)
 			times_to_splice++
 		else
 			times_to_splice = 1
-
+*/
 	if(href_list["apply_gene"])
 		if(!loaded_disk || !loaded_seed)
 			return

@@ -52,19 +52,22 @@ Used In File(s): \code\modules\hydroponics\seed_machines.dm
 			<div class = "itemContentSmall">
 				{{if data.mode == 1}}
 					{{:helper.link('SPLICE', 'shuffle', {'toggle_mode' : 1}, null)}}
-					<br>
-					<div class = "itemLabel">
-						MULTISPLICE:
-					</div>
-					<div class = "itemContent">
-						{{:data.times_to_splice}}
-					</div>
-					{{:helper.link('CHANGE', null, {'increase_splice_amount' : 1}, null)}}
 				{{else}}
 					{{:helper.link('PURGE', 'arrowstop-1-s', {'toggle_mode' : 1}, null)}}
 				{{/if}}
 			</div>
 		</div>
+		{{if data.mode == 1}}
+			<br>
+			<div class = "item">
+				<div class = "itemLabel">
+					Multi-Splice:
+				</div>
+				<div class = "itemContent">
+				{{:helper.link(data.times_to_splice, null, {'change_splice_amount' : 1}, null)}}
+				</div>
+			</div>
+		{{/if}}
 	{{else}}
 		<div class="notice">No target seed packet loaded</div>
 	{{/if}}
