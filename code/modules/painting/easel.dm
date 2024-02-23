@@ -19,6 +19,8 @@
 
 	starting_materials = list(MAT_WOOD = 3*CC_PER_SHEET_WOOD)
 	autoignition_temperature = AUTOIGNITION_WOOD
+	thermal_mass = 10 //W_CLASS_LARGE
+	flammable = TRUE
 
 
 /obj/structure/easel/New()

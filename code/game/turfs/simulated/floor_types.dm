@@ -299,7 +299,7 @@
 	desc = "Children love to play on this deck."
 	flammable = TRUE
 	autoignition_temperature = AUTOIGNITION_WOOD
-	thermal_mass = 5
+	thermal_mass = 1
 
 /turf/simulated/floor/plating/deck/New()
 	..()
@@ -390,7 +390,7 @@
 	icon_state = "grass1"
 	flammable = TRUE
 	autoignition_temperature = AUTOIGNITION_WOOD
-	thermal_mass = 5
+	thermal_mass = 1
 
 /turf/simulated/floor/grass/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/grass(null)
@@ -412,7 +412,7 @@
 	var/has_siding=1
 	flammable = TRUE
 	autoignition_temperature = AUTOIGNITION_FABRIC
-	thermal_mass = 5
+	thermal_mass = 1
 
 /turf/simulated/floor/carpet/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/carpet(null)
@@ -438,7 +438,7 @@
 	icon_state = "arcade"
 	flammable = TRUE
 	autoignition_temperature = AUTOIGNITION_FABRIC
-	thermal_mass = 5
+	thermal_mass = 1
 
 /turf/simulated/floor/arcade/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/arcade(null)

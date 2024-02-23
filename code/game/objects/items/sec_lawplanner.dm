@@ -10,6 +10,8 @@
 	name = "law planning frame"
 	desc = "A large data pad with buttons for crimes. Used for planning a brig sentence."
 	w_class = W_CLASS_SMALL
+	w_type = RECYK_ELECTRONIC
+	flammable = TRUE
 	origin_tech = Tc_PROGRAMMING + "=6"
 	icon = 'icons/obj/device.dmi'
 	icon_state = "lawplanner"
@@ -22,7 +24,6 @@
 	var/datum/data/record/upload_crimes = null //Will look for an associated datacore file and upload crimes
 	var/list/rapsheet = list()
 	var/total_time = 0
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/device/law_planner/attack_self(mob/user)
 	ui_interact(user)

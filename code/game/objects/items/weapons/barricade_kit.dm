@@ -6,11 +6,12 @@
 	icon_state = "barricade_kit"
 	flags = FPRINT
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	force = 3
 	throwforce = 3
 	throw_speed = 1
 	throw_range = 3
-	autoignition_temperature = AUTOIGNITION_WOOD
 	var/kit_uses = 3 //Three use of directional or blocking barricades, and one use for full-tile
 
 /obj/item/weapon/barricade_kit/examine(mob/user)

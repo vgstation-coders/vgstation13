@@ -203,6 +203,8 @@
 	desc = "gingerbread architecture is more complicated than just baking some cookies and sticking them together. There are other processes involved."
 	icon_state = "tile-gingerbread"
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 	force = 1.0
 	throwforce = 1.0
 	throw_speed = 3

@@ -321,6 +321,8 @@
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 
 	surgerysound = 'sound/items/bonegel.ogg'
 
@@ -340,6 +342,8 @@
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=3"
 	var/usage_amount = 10

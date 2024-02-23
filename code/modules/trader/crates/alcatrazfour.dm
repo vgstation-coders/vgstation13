@@ -108,8 +108,9 @@ var/global/list/alcatraz_stuff = list(
 	desc = "The beloved sequel to the Banger Boy Color. Tap it or the clothing item it is attached to with grenades to trigger them for early detonation. Straps nicely onto security armor."
 	icon_state = "bangerboy"
 	mech_flags = MECH_SCAN_FAIL
+	w_type = RECYK_ELECTRONIC
+	flammable = TRUE
 	var/obj/item/tool/screwdriver/S
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/clothing/accessory/bangerboy/New()
 	..()
@@ -537,7 +538,8 @@ var/global/list/alcatraz_stuff = list(
 	restraint_resist_time = TRUE //This doesn't actually matter as long as it is nonzero
 	req_access = list(access_brig) //Brig timers
 	var/obj/item/weapon/handcuffs/cyborg/stored
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = RECYK_ELECTRONIC
+	flammable = TRUE
 
 /obj/item/weapon/autocuffer/Destroy()
 	if(stored)
@@ -567,7 +569,8 @@ var/global/list/alcatraz_stuff = list(
 	icon_state = "pedometer"
 	w_class = W_CLASS_SMALL
 	slot_flags = SLOT_BELT
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = RECYK_ELECTRONIC
+	flammable = TRUE
 	var/count = 0
 	var/list/approved_areas = list(/area/maintenance,/area/hallway)
 	var/list/special_rewards = list(/obj/item/weapon/pen/tactical)

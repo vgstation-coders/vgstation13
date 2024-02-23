@@ -6,6 +6,8 @@
 	icon_opened = "cabinet_open"
 	is_wooden = TRUE
 	autoignition_temperature = AUTOIGNITION_WOOD
+	flammable = TRUE
+	thermal_mass = 25 //W_CLASS_HUGE
 
 	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
 	w_type = RECYK_WOOD

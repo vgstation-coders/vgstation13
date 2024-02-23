@@ -27,6 +27,8 @@
 	desc = "Apply butt. Become Mozart."
 	icon_state = "stool_piano"
 	autoignition_temperature = AUTOIGNITION_WOOD
+	flammable = TRUE
+	thermal_mass = 10 //W_CLASS_LARGE
 	sheet_type = /obj/item/stack/sheet/wood
 
 /obj/item/weapon/stool/piano/initialize()

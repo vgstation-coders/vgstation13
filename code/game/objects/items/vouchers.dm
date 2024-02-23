@@ -4,6 +4,8 @@
 	icon = 'icons/obj/vouchers.dmi'
 	icon_state = "voucher"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	force = 0
 	throwforce = 0
 

@@ -2,6 +2,7 @@
 	var/preattached = FALSE
 	body_parts_covered = HEAD|EARS|EYES|MASKHEADHAIR
 	species_fit = list()
+	flammable = FALSE
 
 	on_armory_manifest = TRUE
 

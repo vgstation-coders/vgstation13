@@ -14,7 +14,8 @@
 	slot_flags = SLOT_BACK	//ERROOOOO
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 21
-	autoignition_temperature = AUTOIGNITION_FABRIC
+	w_type = RECYK_FABRIC
+	flammable = TRUE
 	species_fit = list(VOX_SHAPED)
 
 /obj/item/weapon/storage/backpack/attackby(obj/item/weapon/W as obj, mob/user as mob)

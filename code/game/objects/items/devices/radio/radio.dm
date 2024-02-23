@@ -4,7 +4,6 @@
 	suffix = "\[3\]"
 	icon_state = "walkietalkie"
 	item_state = "walkietalkie"
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/on = 1 // 0 for off
 	var/last_transmission
 	var/frequency = 1459
@@ -32,6 +31,7 @@
 	starting_materials = list(MAT_IRON = 75, MAT_GLASS = 25)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
+	flammable = TRUE
 
 	var/const/TRANSMISSION_DELAY = 5 // only 2/second/radio
 	var/const/FREQ_LISTENING = 1
@@ -715,7 +715,7 @@
 	icon_state = "cigbutt"
 	w_class = W_CLASS_TINY
 	throwforce = 1
-	autoignition_temperature = 0 //The filter doesn't burn
+	flammable = FALSE
 	broadcasting = 1
 	listening = 0
 	always_talk = 1

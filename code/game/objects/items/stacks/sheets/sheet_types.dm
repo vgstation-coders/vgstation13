@@ -89,7 +89,7 @@
 	irregular_plural = "wooden plank"
 	icon_state = "sheet-wood"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
-	autoignition_temperature = AUTOIGNITION_WOOD
+	flammable = TRUE
 
 	sheettype = "wood"
 	siemens_coefficient = 0 //no conduct
@@ -126,7 +126,7 @@
 	icon_state = "sheet-cloth"
 	item_state = "sheet-cloth"
 	origin_tech = Tc_MATERIALS + "=2"
-	autoignition_temperature = AUTOIGNITION_FABRIC
+	flammable = TRUE
 
 	siemens_coefficient = 0.2
 	w_type = RECYK_FABRIC
@@ -356,7 +356,8 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 	icon_state = "sheet-charcoal"
 	flags = FPRINT
 	origin_tech = Tc_MATERIALS + "=1"
-	autoignition_temperature=AUTOIGNITION_WOOD
+	w_type = RECYK_WOOD
+	flammable = TRUE
 
 /obj/item/stack/sheet/charcoal/New(var/loc, var/amount=null)
 		recipes = charcoal_recipes
@@ -370,7 +371,8 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 	origin_tech = Tc_BIOTECH + "=1"
 	icon_state = "sheet-bone"
 	//item_state = "bone"
-
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 
 /obj/item/stack/sheet/brass
 	name = "brass"

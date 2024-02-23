@@ -286,7 +286,7 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = 0
+	flammable = FALSE
 
 	//R&D tech level
 	origin_tech = Tc_ENGINEERING + "=1"

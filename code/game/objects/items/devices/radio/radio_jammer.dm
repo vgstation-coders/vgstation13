@@ -14,7 +14,7 @@ var/global/list/obj/item/device/radio_jammer/radio_jammer_list = list()
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;" + Tc_PROGRAMMING + "=3;" + Tc_SYNDICATE + "=3;" + Tc_BLUESPACE + "=3"
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	var/on = 0
 	var/cover_open = 0
 	var/base_state = "radio_jammer"

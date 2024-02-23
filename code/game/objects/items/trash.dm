@@ -8,7 +8,8 @@
 	w_class = W_CLASS_TINY
 	desc = "This is rubbish."
 	w_type=NOT_RECYCLABLE
-
+	thermal_mass = 1
+	flammable = TRUE
 	var/persistence_type = SS_TRASH
 	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	//var/global/list/trash_items = list()
@@ -131,7 +132,7 @@
 /obj/item/trash/dangles
 	name = "\improper Dangles can"
 	icon_state = "dangles"
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = RECYK_PLASTIC
 
 
 /obj/item/trash/dangles/New()
@@ -174,7 +175,7 @@
 /obj/item/trash/wired_pietin_assembly
 	name = "wired pie tin assembly"
 	icon_state = "pietin_assembly"
-	autoignition_temperature = 0
+	flammable = FALSE
 	siemens_coefficient = 2
 	melt_temperature = MELTPOINT_SILICON
 
@@ -212,6 +213,7 @@
 	icon = 'icons/obj/candle.dmi'
 	icon_state = "candle4"
 	starting_materials = list(MAT_WAX = (4*CC_PER_SHEET_WAX/5))
+	w_type = RECYK_WAX
 	var/image/wick
 
 /obj/item/trash/candle/New(turf/loc, var/obj/item/candle/source)

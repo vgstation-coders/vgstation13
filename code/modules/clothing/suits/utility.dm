@@ -24,10 +24,8 @@
 	clothing_flags = ONESIZEFITSALL
 	pressure_resistance = 3 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	autoignition_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(VOX_SHAPED)
-
-	autoignition_temperature = 0
+	flammable = FALSE
 
 
 /obj/item/clothing/suit/fire/firefighter
@@ -58,7 +56,6 @@
 	item_state = "ro_suit"
 	w_class = W_CLASS_LARGE//bulky item
 	slowdown = HARDSUIT_SLOWDOWN_MED
-	autoignition_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE * 2
 
 /*
  * Bomb protection
@@ -90,7 +87,6 @@
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
-	autoignition_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	on_armory_manifest = TRUE
 
 /obj/item/clothing/head/bomb_hood/security
@@ -133,7 +129,6 @@
 	species_fit = list(INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	siemens_coefficient = 0
-	autoignition_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /*
  * Radiation protection

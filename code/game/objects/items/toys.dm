@@ -21,7 +21,6 @@
 	throw_speed = 4
 	throw_range = 20
 	force = 0
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 
 /*

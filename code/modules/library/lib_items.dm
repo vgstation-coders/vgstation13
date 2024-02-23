@@ -19,7 +19,8 @@
 	density = 1
 	opacity = 1
 	autoignition_temperature = AUTOIGNITION_WOOD
-
+	thermal_mass = 25 //W_CLASS_HUGE
+	flammable = TRUE
 
 	health = 50
 	var/tmp/busy = 0
@@ -202,6 +203,8 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_MEDIUM		 //upped to three because books are, y'know, pretty big. (and you could hide them inside eachother recursively forever)
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	flags = FPRINT
 	attack_verb = list("bashes", "whacks", "educates")
 
@@ -470,6 +473,7 @@
 	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
 	w_type = RECYK_WOOD
 	autoignition_temperature = AUTOIGNITION_WOOD
+	thermal_mass = 10
 
 
 /obj/structure/closet/secure_closet/library/atoms_to_spawn()

@@ -4,13 +4,14 @@
 	icon = 'icons/obj/dice.dmi'
 	icon_state = "d6"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	var/sides = 6
 	var/minsides = 1
 	var/result = null
 	var/multiplier = 0 //For modifying the result (d00 etc)
 	var/activated = 0 //Eventually the dice runs out of power, if cursed
 	var/infinite = 0 //dice with 1 will not run out
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/weapon/dice/New()
 	..()

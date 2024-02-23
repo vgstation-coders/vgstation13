@@ -8,7 +8,8 @@
 	pressure_resistance = ONE_ATMOSPHERE*5
 	flags = FPRINT
 	autoignition_temperature = AUTOIGNITION_WOOD
-
+	flammable = TRUE
+	thermal_mass = 25 //W_CLASS_HUGE
 	var/obj/item/clothing/suit/suit = null
 	var/obj/item/clothing/head/hat = null
 

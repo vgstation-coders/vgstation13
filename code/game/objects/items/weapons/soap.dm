@@ -6,6 +6,8 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "soap"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 	siemens_coefficient = 0 //no conduct
 	throwforce = 0
 	throw_speed = 4

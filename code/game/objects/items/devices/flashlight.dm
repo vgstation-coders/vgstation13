@@ -13,6 +13,7 @@
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL // Assuming big beefy fucking maglite.
 	actions_types = list(/datum/action/item_action/toggle_light)
+	flammable = TRUE
 	var/on = 0
 	var/brightness_on = 4 //luminosity when on
 	var/has_sound = 1 //The CLICK sound when turning on/off
@@ -286,6 +287,7 @@
 	var/on_damage = 7
 	heat_production = 1500
 	source_temperature = TEMPERATURE_FLAME
+	flammable = FALSE //lol
 	var/H_color = ""
 
 	light_color = LIGHT_COLOR_FLARE
@@ -381,7 +383,7 @@
 	light_color = LIGHT_COLOR_SLIME_LAMP
 	luminosity = 2
 	has_sound = 0
-
+	w_type = RECYK_BIOLOGICAL
 	var/brightness_max = 6
 	var/brightness_min = 2
 	drawspower = FALSE //slime lamps don't draw power from the area apc

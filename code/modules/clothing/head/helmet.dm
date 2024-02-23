@@ -12,8 +12,7 @@
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 	blood_overlay_type = "helmet"
-
-	autoignition_temperature = 0
+	flammable = FALSE
 
 
 /obj/item/clothing/head/helmet/NoiseDampening()	// checked on headwear by flashbangs

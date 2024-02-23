@@ -41,7 +41,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 				molecular_weight = MOLECULAR_WEIGHT_WOOD
 				fuel_ox_ratio = FUEL_OX_RATIO_WOOD
 				flame_temp = FLAME_TEMPERATURE_WOOD
-			if(RECYK_PLASTIC, RECYK_ELECTRONIC)
+			if(RECYK_PLASTIC, RECYK_ELECTRONIC, RECYK_MISC)
 				autoignition_temperature = AUTOIGNITION_PLASTIC
 				heating_value = HHV_PLASTIC
 				molecular_weight = MOLECULAR_WEIGHT_PLASTIC
@@ -65,6 +65,14 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 				molecular_weight = MOLECULAR_WEIGHT_BIOLOGICAL
 				fuel_ox_ratio = FUEL_OX_RATIO_BIOLOGICAL
 				flame_temp = FLAME_TEMPERATURE_BIOLOGICAL
+			else
+				autoignition_temperature = autoignition_temperature ? autoignition_temperature:0
+				heating_value = heating_value ? heating_value:0
+				molecular_weight = molecular_weight ? molecular_weight:0
+				fuel_ox_ratio = fuel_ox_ratio ? fuel_ox_ratio:0
+				flame_temp = flame_temp ? flame_temp:0
+				if(!(autoignition_temperature && heating_value && molecular_weight && fuel_ox_ratio && flame_temp))
+					flammable = FALSE
 	else // just in case this was overwritten elsewhere accidentally
 		autoignition_temperature = 0
 

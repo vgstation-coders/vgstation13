@@ -228,11 +228,12 @@
 	icon_state = "generic"
 	item_state = "syringe_kit"
 	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
 	flags = FPRINT
+	flammable = TRUE
 
 	var/foldable = /obj/item/stack/sheet/cardboard
 	var/foldable_amount = 4
-
 
 
 /obj/item/emptyvendomatpack/attack_self()

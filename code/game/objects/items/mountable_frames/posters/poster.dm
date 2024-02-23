@@ -5,7 +5,9 @@
 	icon_state = "rolled_poster"
 	var/build_time = 2 SECONDS
 	var/datum/poster/design
-	w_type=RECYK_MISC
+	w_type=RECYK_WOOD
+	w_class = W_CLASS_SMALL
+	flammable = TRUE
 
 
 

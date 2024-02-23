@@ -14,8 +14,6 @@
 	var/crayon = null
 	var/image/paper = null
 
-	autoignition_temperature = 519.15 // Kelvin
-
 /obj/item/weapon/paper_bin/New()
 	..()
 	update_icon()

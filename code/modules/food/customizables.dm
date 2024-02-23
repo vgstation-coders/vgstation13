@@ -69,7 +69,7 @@
 	var/list/plates = list() // If the plates are stacked, they come here
 	var/new_stack = 0 // allows mappers to create plate stacks
 	var/trash_color = null
-	autoignition_temperature = 0
+	flammable = FALSE
 
 /obj/item/trash/plate/clean
 	icon_state = "cleanplate"

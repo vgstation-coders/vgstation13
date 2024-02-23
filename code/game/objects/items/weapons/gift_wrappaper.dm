@@ -16,6 +16,8 @@
 	var/size = 3.0
 	var/obj/item/gift = null
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_WOOD
+	flammable = TRUE
 
 
 /obj/item/weapon/gift/New(turf/loc, var/obj/item/target, var/W)
@@ -74,6 +76,8 @@
 	icon_state = "gift"
 	item_state = "gift"
 	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
 
 
 /obj/item/weapon/winter_gift/New()

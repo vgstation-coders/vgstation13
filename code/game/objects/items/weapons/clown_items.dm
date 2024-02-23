@@ -249,7 +249,8 @@
 	icon_state = "glue0"
 
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	var/uses = 1 //How many uses the glue has.
 	var/glue_duration = -1 //-1 For infinite.
 	var/glue_state_to_set = GLUE_STATE_PERMA //This is the glue state we set to the item the user puts glue on.

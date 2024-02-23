@@ -11,12 +11,13 @@
 	gender = NEUTER
 	throwforce = 2
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_WOOD
 	throw_range = 5
 	throw_speed = 1
 	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 1
 	attack_verb = list("slaps", "baps", "whaps")
-
+	flammable = TRUE
 
 	var/amount = 0
 	var/maxamount = 20

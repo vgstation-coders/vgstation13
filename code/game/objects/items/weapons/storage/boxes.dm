@@ -29,8 +29,8 @@
 	item_state = "box"
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
 	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type=RECYK_MISC
-
+	w_type=RECYK_WOOD
+	flammable = TRUE
 
 	on_armory_manifest = TRUE
 
@@ -45,8 +45,6 @@
 	starting_materials = list(MAT_CARDBOARD = 15000)
 	storage_slots = 21
 	max_combined_w_class = 42 // 21*2
-
-
 
 /obj/item/weapon/storage/box/surveillance
 	name = "\improper DromedaryCo packet"

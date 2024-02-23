@@ -531,7 +531,6 @@
 	icon_state = "baseball_bat"
 	item_state = "baseball_bat0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	autoignition_temperature = AUTOIGNITION_WOOD
 	flags = TWOHANDABLE
 	force = 14
 	throwforce = 10
@@ -539,6 +538,7 @@
 	throw_range = 7
 	w_class = W_CLASS_LARGE
 	w_type = RECYK_WOOD
+	flammable = TRUE
 	var/spiked = 0
 	var/twohandforce = 16
 

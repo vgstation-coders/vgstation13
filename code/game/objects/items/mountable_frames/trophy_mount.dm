@@ -8,7 +8,7 @@
 	w_type = RECYK_WOOD
 	frame_material = /obj/item/stack/sheet/wood
 	sheets_refunded = 2
-	autoignition_temperature = AUTOIGNITION_WOOD
+	flammable = TRUE
 	var/obj/item/held_item
 	var/list/params_list
 	var/icon/clicked

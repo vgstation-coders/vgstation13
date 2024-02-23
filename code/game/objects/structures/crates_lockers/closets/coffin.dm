@@ -6,6 +6,8 @@
 	icon_opened = "coffin_open"
 
 	autoignition_temperature = AUTOIGNITION_WOOD
+	flammable = TRUE
+	thermal_mass = 25 //W_CLASS_HUGE
 
 
 	starting_materials = list(MAT_WOOD = 5*CC_PER_SHEET_MISC)

@@ -354,7 +354,7 @@ var/list/arcane_tomes = list()
 	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 1
 	attack_verb = list("slaps")
-
+	flammable = TRUE
 	mech_flags = MECH_SCAN_FAIL
 	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/linked_ui
 	var/blood_text = ""
@@ -1584,7 +1584,7 @@ var/list/arcane_tomes = list()
 	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 1
 	attack_verb = list("slaps")
-
+	flammable = TRUE
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)

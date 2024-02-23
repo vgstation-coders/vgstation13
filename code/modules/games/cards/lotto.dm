@@ -3,6 +3,8 @@
 	desc = "A scratch-off lotto ticket."
 	icon = 'icons/obj/toy.dmi'
 	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	var/revealed = FALSE
 	var/iswinner = FALSE
 	var/prize_multiplier

@@ -6,7 +6,6 @@ THAT STUPID GAME KIT
 /obj/item/weapon/game_kit/New()
 	src.board_stat = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
 	src.selected = "CR"
-	autoignition_temperature = AUTOIGNITION_WOOD
 
 /obj/item/weapon/game_kit/attack_paw(mob/user as mob)
 	return src.attack_hand(user)

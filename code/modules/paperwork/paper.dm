@@ -13,6 +13,7 @@
 	throwforce = 0
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
+	flammable = TRUE
 	throw_range = 1
 	throw_speed = 1
 	layer = ABOVE_DOOR_LAYER

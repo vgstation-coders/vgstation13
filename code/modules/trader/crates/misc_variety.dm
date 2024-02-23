@@ -18,8 +18,9 @@
 	icon_off = "cabinetdetective_broken"
 	is_wooden = TRUE
 	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
+	thermal_mass = 25
 	w_type = RECYK_WOOD
-	autoignition_temperature = AUTOIGNITION_WOOD
+	flammable = TRUE
 	var/wonder_whitelist = list(
 	/obj/item/clothing/mask/morphing/corgi,
 	/obj/item/clothing/under/rank/vice,

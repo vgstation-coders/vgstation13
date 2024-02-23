@@ -185,7 +185,8 @@ var/list/decelerators = list()
 	force = 6
 	req_access = list(access_engine_minor)
 	var/mode = OMNIMODE_TOOL
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = RECYK_ELECTRONIC
+	flammable = TRUE
 
 /obj/item/device/multitool/omnitool/attack_self(mob/user)
 	mode = !mode

@@ -5,7 +5,6 @@
 	flags = FPRINT
 	item_state = "hardhat0_yellow"
 	light_power = 1.5
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/brightness_on = 4 //luminosity when on
 	var/on = 0
 	_color = "yellow" //Determines used sprites: hardhat[on]_[_color] and hardhat[on]_[_color]2 (lying down sprite)
@@ -13,8 +12,7 @@
 	actions_types = list(/datum/action/item_action/toggle_light)
 	siemens_coefficient = 0.9
 	species_fit = list (VOX_SHAPED, INSECT_SHAPED)
-
-	autoignition_temperature = 0
+	flammable = FALSE
 
 
 /obj/item/clothing/head/hardhat/attack_self(mob/user)
