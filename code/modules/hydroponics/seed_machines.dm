@@ -401,11 +401,6 @@
 			new_amount = 1
 		times_to_splice = new_amount
 
-		/*if(times_to_splice<10)
-			times_to_splice++
-		else
-			times_to_splice = 1
-*/
 	if(href_list["apply_gene"])
 		if(!loaded_disk || !loaded_seed)
 			return
@@ -441,7 +436,6 @@
 	return 1
 
 /obj/machinery/botany/editor/process()
-//current bug: longer delay time is affecting both splice and merge modes.
 	if(!active)
 		return
 	if(mode == GENEGUN_MODE_SPLICE)
