@@ -147,7 +147,9 @@
 			var/resolved = held_item.preattack(A, src, 1, params)
 			if(!resolved)
 				resolved = A.attackby(held_item, src, params)
-				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
+				if(ismob(A) && a_intent == I_HELP && can_operate(A, src, held_item) && !A.gcDestroyed)
+					delayNextAttack(SURGERY_DELAY_TIME) //Surgery steps use the click delay (0.1 second)
+				else if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
 					delayNextAttack(item_attack_delay)
 				if(!resolved && A && !A.gcDestroyed && held_item && !held_item.gcDestroyed)
 					held_item.afterattack(A,src,1,params) // 1 indicates adjacency
