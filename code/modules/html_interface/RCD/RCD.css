@@ -3,11 +3,45 @@
 
 html {
 	font-family: verdana,Geneva,sans-serif;
-	font-size:small;
+	font-size: 12px;
 }
+
+
+h1, h2, h3, h4, h5, h6
+{
+	margin: 0;
+	padding: 16px 0 8px 0;
+	color: #517087;
+}
+
+h1
+{
+	font-size: 15px;
+}
+
+h2
+{
+	font-size: 14px;
+}
+
+h3
+{
+	font-size: 13px;
+}
+
+h4
+{
+	font-size: 12px;
+}
+/*imprted from nanotrassen.css*/
+
+
+
 body{
-	color:#e9c183;
+	/*color:#e9c183;*/
+	color: #FFFFFF;
 	background-color:#272727;
+	background-color: #1F1F1F\9 !important;
 }
 
 a.color {
@@ -36,6 +70,8 @@ a.selected img {
 	border-spacing:0px;
 	background-color:#40628a;
 	color:#fff;
+	padding-right:3px;
+	padding-left:2px;
 	border:#161616 2px solid;
 	margin-bottom:.3em;
 }
