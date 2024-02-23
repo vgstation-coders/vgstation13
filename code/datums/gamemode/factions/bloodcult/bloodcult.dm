@@ -40,7 +40,9 @@
 
 	var/list/bindings = list()
 
-	var/list/cultist_cap = 1	//clamped between 5 and 9 depending on crew size. once the cap goes up it cannot go down.
+	var/cultist_cap = 1	//clamped between 5 and 9 depending on crew size. once the cap goes up it cannot go down.
+	var/min_cultist_cap = 5
+	var/max_cultist_cap = 9
 
 	var/mentor_count = 0 	//so we don't loop through the member list if we already know there are no mentors in there
 
@@ -183,7 +185,7 @@
 			continue
 		if (M.stat != DEAD)
 			living_players++
-	new_cap =  clamp(round(living_players / 3),5,9)
+	new_cap =  clamp(round(living_players / 3),min_cultist_cap,max_cultist_cap)
 	if (new_cap > cultist_cap)
 		cultist_cap = new_cap
 		for (var/datum/role/R in members)
@@ -201,11 +203,9 @@
 			if (!(C.construct_type in free_construct_slots))
 				free_construct_slots += C.construct_type
 				continue
-		//Humans and shades all count.  The dead count for half a member (unless they have no body left).
+		//Living Humans, Shades and extra Constructs all count.
 		if (isliving(M))
-			if (M.isDead())
-				cultist_count += 0.5
-			else
+			if (!M.isDead())
 				cultist_count += 1
 
 	return (cultist_count < cultist_cap)

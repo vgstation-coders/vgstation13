@@ -511,13 +511,18 @@
 		/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count,
 		/obj/abstract/mind_ui_element/bloodcult_eclipse_gauge,
 		/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_front,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_cap,
+		/obj/abstract/mind_ui_element/bloodcult_cultist_slot_manager,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/artificer,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/wraith,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/juggernaut,
 		)
 	sub_uis_to_spawn = list(
 		/datum/mind_ui/bloodcult_role,
 		)
 	display_with_parent = FALSE
 
-
+	var/list/cultist_slots = list()
 
 /datum/mind_ui/bloodcult_panel/Valid()
 	var/mob/M = mind.current
@@ -526,6 +531,15 @@
 	if(iscultist(M))
 		return TRUE
 	return FALSE
+
+/datum/mind_ui/bloodcult_panel/SpawnElements()
+	..()
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (istype(cult))
+		for (var/i = 1 to cult.max_cultist_cap)
+			var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/new_slot = new(null, src)
+			elements += new_slot
+			cultist_slots += new_slot
 
 //------------------------------------------------------------
 
@@ -577,16 +591,11 @@
 	offset_x = -13
 	offset_y = 98
 	layer = MIND_UI_FRONT
-
-/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count/New()
-	..()
-	processing_objects.Add(src)
-
-/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count/Destroy()
-	processing_objects.Remove(src)
-	..()
+	element_flags = MINDUI_FLAG_PROCESSING
 
 /obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count/process()
+	if (invisibility == 101)
+		return
 	UpdateIcon()
 
 /obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count/UpdateIcon()
@@ -634,6 +643,7 @@
 	layer = MIND_UI_BUTTON
 	offset_x = -128
 	offset_y = 96
+	element_flags = MINDUI_FLAG_PROCESSING
 
 	var/image/mask
 
@@ -643,15 +653,9 @@
 	mask = image(icon, src, "eclipse_gauge_bg")
 	mask.blend_mode = BLEND_INSET_OVERLAY
 
-/obj/abstract/mind_ui_element/bloodcult_eclipse_gauge/New()
-	..()
-	processing_objects.Add(src)
-
-/obj/abstract/mind_ui_element/bloodcult_eclipse_gauge/Destroy()
-	processing_objects.Remove(src)
-	..()
-
 /obj/abstract/mind_ui_element/bloodcult_eclipse_gauge/process()
+	if (invisibility == 101)
+		return
 	UpdateIcon()
 
 /obj/abstract/mind_ui_element/bloodcult_eclipse_gauge/UpdateIcon()
@@ -693,6 +697,174 @@
 
 /obj/abstract/mind_ui_element/bloodcult_eclipse_timer_front/Click()
 	parent.Hide()
+
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/bloodcult_cultist_slot_manager
+	name = "Cultist Slots"
+	icon = 'icons/ui/bloodcult/16x16.dmi'
+	icon_state = "blank"
+	element_flags = MINDUI_FLAG_PROCESSING
+
+/obj/abstract/mind_ui_element/bloodcult_cultist_slot_manager/process()
+	if (invisibility == 101)
+		return
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (istype(cult))
+		var/mob/M = GetUser()
+		if (M)
+			var/datum/role/cultist/C = iscultist(M)
+			if(C)
+				var/i = 1
+				var/accumulated_offset = 0
+				var/list/free_construct_slots = list()
+				var/list/construct_types = list("Artificer","Wraith","Juggernaut")
+				var/datum/mind_ui/bloodcult_panel/BP = parent
+				for (var/datum/role/cultist/R in cult.members)
+					var/mob/O = R.antag.current
+					if (O.isDead())
+						continue
+					if (istype(O, /mob/living/simple_animal/construct))
+						var/mob/living/simple_animal/construct/cons = O
+						if (!(cons.construct_type in free_construct_slots))
+							free_construct_slots += cons.construct_type
+							var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/S
+							switch(cons.construct_type)
+								if ("Artificer")
+									var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/artificer/artificer_slot = locate() in BP.elements
+									artificer_slot.associated_role = R
+									artificer_slot.icon_state = "slot_artificer[artificer_slot.hovering ? "-hover" : ""]"
+									artificer_slot.base_icon_state = "slot_artificer"
+									S = artificer_slot
+								if ("Wraith")
+									var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/wraith/wraith_slot = locate() in BP.elements
+									wraith_slot.associated_role = R
+									wraith_slot.icon_state = "slot_wraith[slot_wraith.hovering ? "-hover" : ""]"
+									wraith_slot.base_icon_state = "slot_wraith"
+									S = wraith_slot
+								if ("Juggernaut")
+									var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/juggernaut/juggernaut_slot = locate() in BP.elements
+									juggernaut_slot.associated_role = R
+									juggernaut_slot.icon_state = "slot_juggernaut[slot_juggernaut.hovering ? "-hover" : ""]"
+									juggernaut_slot.base_icon_state = "slot_juggernaut"
+									S = juggernaut_slot
+							S.overlays.len = 0
+							if (C == R)
+								S.overlays += "you"
+							if (cons.occult_muted())
+								S.overlays += "holy"
+							continue
+					var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/slot = BP.cultist_slots[i]
+					slot.associated_role = R
+					switch(R.cultist_role)
+						if (CULTIST_ROLE_ACOLYTE)
+							slot.icon_state = "slot_acolyte[slot.hovering ? "-hover" : ""]"
+							slot.base_icon_state = "slot_acolyte"
+						if (CULTIST_ROLE_NONE|CULTIST_ROLE_HERALD)
+							slot.icon_state = "slot_herald[slot.hovering ? "-hover" : ""]"
+							slot.base_icon_state = "slot_herald"
+						if (CULTIST_ROLE_MENTOR)
+							slot.icon_state = "slot_mentor[slot.hovering ? "-hover" : ""]"
+							slot.base_icon_state = "slot_mentor"
+					slot.overlays.len = 0
+					if (C == R)
+						slot.overlays += "you"
+					if (O.occult_muted())
+						slot.overlays += "holy"
+					slot.offset_x = -98 + accumulated_offset
+					accumulated_offset += 17
+					slot.UpdateUIScreenLoc()
+					i++
+					if (i > cult.max_cultist_cap)
+						break
+				while (i <= cult.cultist_cap)
+					var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/slot = BP.cultist_slots[i]
+					slot.overlays.len = 0
+					slot.offset_x = -98 + accumulated_offset
+					accumulated_offset += 17
+					slot.UpdateUIScreenLoc()
+					slot.icon_state = "slot_empty[slot.hovering ? "-hover" : ""]"
+					slot.base_icon_state = "slot_empty"
+					i++
+				var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_cap/cultist_cap = locate() in BP.elements
+				accumulated_offset -= 4
+				cultist_cap.offset_x = -98 + accumulated_offset
+				cultist_cap.UpdateUIScreenLoc()
+				accumulated_offset += 7
+				while (i <= cult.max_cultist_cap)
+					var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/slot = BP.cultist_slots[i]
+					slot.offset_x = -98 + accumulated_offset
+					slot.UpdateUIScreenLoc()
+					accumulated_offset += 17
+					slot.overlays.len = 0
+					slot.icon_state = "slot_empty[slot.hovering ? "-hover" : ""]"
+					slot.base_icon_state = "slot_empty"
+					i++
+				for (var/cons_type in construct_types)
+					if (!(cons_type in free_construct_slots))
+						switch(cons_type)
+							if ("Artificer")
+								var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/artificer/artificer_slot = locate() in BP.elements
+								artificer_slot.icon_state = "slot_artificer_empty[artificer_slot.hovering ? "-hover" : ""]"
+								artificer_slot.base_icon_state = "slot_artificer_empty"
+								artificer_slot.overlays.len = 0
+							if ("Wraith")
+								var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/wraith/wraith_slot = locate() in BP.elements
+								wraith_slot.icon_state = "slot_wraith_empty[wraith_slot.hovering ? "-hover" : ""]"
+								wraith_slot.base_icon_state = "slot_wraith_empty"
+								wraith_slot.overlays.len = 0
+							if ("Juggernaut")
+								var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/juggernaut/juggernaut_slot = locate() in BP.elements
+								juggernaut_slot.icon_state = "slot_juggernaut_empty[juggernaut_slot.hovering ? "-hover" : ""]"
+								juggernaut_slot.base_icon_state = "slot_juggernaut_empty"
+								juggernaut_slot.overlays.len = 0
+
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot
+	name = "Cultist Slot"
+	icon = 'icons/ui/bloodcult/16x32.dmi'
+	icon_state = "slot_empty"
+	base_icon_state = "slot_empty"
+	layer = MIND_UI_BUTTON
+	offset_x = -98
+
+	var/datum/role/cultist/associated_role
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/StartHovering()
+	icon_state = "[base_icon_state]-hover"
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/StopHovering()
+	icon_state = "[base_icon_state]"
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/artificer
+	name = "Artificer Slot"
+	icon_state = "slot_artificer_empty"
+	base_icon_state = "slot_artificer_empty"
+	offset_x = 84
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/wraith
+	name = "Wraith Slot"
+	icon_state = "slot_wraith_empty"
+	base_icon_state = "slot_wraith_empty"
+	offset_x = 101
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/juggernaut
+	name = "Juggernaut Slot"
+	icon_state = "slot_juggernaut_empty"
+	base_icon_state = "slot_juggernaut_empty"
+	offset_x = 118
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_cap
+	name = "Cultist Cap"
+	icon = 'icons/ui/bloodcult/16x32.dmi'
+	icon_state = "cultist_cap"
+	base_icon_state = "cultist_cap"
+	layer = MIND_UI_BUTTON
+	offset_x = 67
+	offset_y = -4
 
 //------------------------------------------------------------
 

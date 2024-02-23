@@ -247,7 +247,8 @@ var/list/mind_ui_ID2type = list()
 	var/base_icon_state
 
 	var/datum/mind_ui/parent = null
-	var/element_flags = 0	// PROCESSING
+	var/element_flags = 0
+	//MINDUI_FLAG_PROCESSING - Adds the element to processing_objects and calls process()
 
 	var/offset_x = 0
 	var/offset_y = 0
@@ -260,6 +261,14 @@ var/list/mind_ui_ID2type = list()
 	base_icon_state = icon_state
 	parent = P
 	UpdateUIScreenLoc()
+
+	if (element_flags & MINDUI_FLAG_PROCESSING)
+		processing_objects.Add(src)
+
+/obj/abstract/mind_ui_element/Destroy()
+	if (element_flags & MINDUI_FLAG_PROCESSING)
+		processing_objects.Remove(src)
+	..()
 
 /obj/abstract/mind_ui_element/proc/Appear()
 	if (invisibility)
@@ -341,12 +350,23 @@ var/list/mind_ui_ID2type = list()
 // Make use of MouseEntered/MouseExited to allow for effects and behaviours related to simply hovering above the element
 
 /obj/abstract/mind_ui_element/hoverable
+	var/hovering = 0
 
 /obj/abstract/mind_ui_element/hoverable/MouseEntered(location,control,params)
 	StartHovering()
+	hovering = 1
 
 /obj/abstract/mind_ui_element/hoverable/MouseExited()
 	StopHovering()
+	hovering = 0
+
+/obj/abstract/mind_ui_element/proc/Hide()
+	..()
+	hovering = 0
+
+/obj/abstract/mind_ui_element/proc/Disappear()
+	..()
+	hovering = 0
 
 /obj/abstract/mind_ui_element/hoverable/proc/StartHovering()
 	icon_state = "[base_icon_state]-hover"
