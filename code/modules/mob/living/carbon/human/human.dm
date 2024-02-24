@@ -97,7 +97,7 @@
 	..(new_loc)
 	initialize_basic_NPC_components()
 
-/mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
+/mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0, no_tail = FALSE) //Just fuck my shit up: the mob
 	var/list/valid_species = (all_species - list("Krampus", "Horror", "Manifested"))
 
 	var/datum/species/new_species = all_species[pick(valid_species)]
@@ -109,7 +109,20 @@
 
 	for(var/datum/organ/external/E in organs)
 		E.species = all_species[pick(valid_species)]
-
+	var/datum/organ/external/tail/tail_datum = get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
+	if(no_tail)
+		tail_datum.droplimb(TRUE, spawn_limb = FALSE)
+	else
+		var/list/tailed_species = list()
+		for(var/species_name in all_species)
+			var/datum/species/picked_species = all_species[species_name]
+			if(picked_species.anatomy_flags & HAS_TAIL)
+				tailed_species += picked_species
+		var/datum/species/species_with_tail = pick(tailed_species)
+		tail_datum.fleshify()
+		tail_datum.create_tail_info(species_with_tail)
+		tail_datum.species = species_with_tail
+		tail_datum.update_tail(src, random = TRUE)
 	update_body()
 
 /mob/living/carbon/human/mushroom/New(var/new_loc, delay_ready_dna = 0)

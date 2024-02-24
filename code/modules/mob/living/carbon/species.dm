@@ -43,7 +43,7 @@ var/global/list/playable_species = list("Human")
 
 	var/primitive												// Lesser form, if any (ie. monkey for humans)
 	var/tail													// Name of tail icon state
-	var/tail_icon = 'icons/effects/species.dmi'
+	var/tail_icon = 'icons/mob/tails.dmi'
 	var/tail_type
 	var/tail_overlapping = TRUE
 	var/list/known_languages = list(LANGUAGE_GALACTIC_COMMON)	// Languages that this species innately knows.
@@ -264,8 +264,6 @@ var/global/list/playable_species = list("Human")
 		external_organ.owner = H
 	for(var/datum/organ/external/cosmetic_organ as anything in H.cosmetic_organs)
 		cosmetic_organ.owner = H
-		cosmetic_organ.post_human_addition()
-
 
 /datum/species/proc/handle_post_spawn(var/mob/living/carbon/human/H) //Handles anything not already covered by basic species assignment.
 	return
@@ -550,6 +548,8 @@ var/global/list/playable_species = list("Human")
 			icobase = 'icons/mob/human_races/r_tajaran.dmi'
 			deform = 'icons/mob/human_races/r_def_tajaran.dmi'
 			tajaran.my_appearance.h_style = "Tajaran Ears"
+	if(tajaran_tail && (tajaran_tail.status & ORGAN_DESTROYED))
+		return
 	tajaran_tail.update_tail(tajaran)
 
 /datum/species/tajaran/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)

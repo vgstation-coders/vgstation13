@@ -172,13 +172,30 @@
 
 	//icon based species color
 	if(current_species)
-		if(current_species.anatomy_flags & HAS_ICON_SKIN_TONE)
-			var/mob/living/carbon/human/temp_human = new
-			temp_human.species = current_species
-			temp_human.my_appearance.s_tone = s_tone
-			temp_human.species.updatespeciescolor(temp_human) //The mob's species wasn't set, so it's almost certainly different than the character's species at the moment. Thus, we need to be owner-insensitive.
-			icobase = temp_human.species.icobase
-			qdel(temp_human)
+		if(current_species.name == "Vox")
+			switch(s_tone)
+				if(VOXEMERALD)
+					icobase = 'icons/mob/human_races/vox/r_voxemrl.dmi'
+				if(VOXAZURE)
+					icobase = 'icons/mob/human_races/vox/r_voxazu.dmi'
+				if(VOXLGREEN)
+					icobase = 'icons/mob/human_races/vox/r_voxlgrn.dmi'
+				if(VOXGRAY)
+					icobase = 'icons/mob/human_races/vox/r_voxgry.dmi'
+				if(VOXBROWN)
+					icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
+				else
+					icobase = 'icons/mob/human_races/vox/r_vox.dmi'
+		else if(current_species.name == "Grey")
+			switch(s_tone)
+				if(GREYBLUE)
+					icobase = 'icons/mob/human_races/grey/r_greyblue.dmi'
+				if(GREYGREEN)
+					icobase = 'icons/mob/human_races/grey/r_greygreen.dmi'
+				if(GREYLIGHT)
+					icobase = 'icons/mob/human_races/grey/r_greylight.dmi'
+				else
+					icobase = 'icons/mob/human_races/grey/r_grey.dmi'
 		else
 			icobase = current_species.icobase
 	else
@@ -214,9 +231,9 @@
 
 		preview_icon.Blend(temp, ICON_OVERLAY)
 	//Tail
-	if(current_species?.anatomy_flags & HAS_TAIL)
+	if(current_species && (current_species.anatomy_flags & HAS_TAIL))
 		var/tail_icon_state = current_species.tail
-		if(species == "Vox")
+		if(current_species.name == "Vox")
 			switch(s_tone)
 				if(VOXEMERALD)
 					tail_icon_state = "emerald"
@@ -230,7 +247,7 @@
 					tail_icon_state = "brown"
 				else
 					tail_icon_state = "green"
-		if(species == "Tajaran")
+		if(current_species.name == "Tajaran")
 			switch(s_tone)
 				if(CATBEASTBLACK)
 					tail_icon_state = "tajaran_black"

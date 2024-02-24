@@ -107,6 +107,8 @@
 		else
 			icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
+	if(vox_tail && (vox_tail.status & ORGAN_DESTROYED))
+		return
 	vox_tail.update_tail(vox)
 
 /datum/species/skellington/skelevox // Science never goes too far, it's the public that's too conservative

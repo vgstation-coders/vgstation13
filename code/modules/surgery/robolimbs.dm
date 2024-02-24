@@ -149,15 +149,13 @@
 	allowed_tools = list(
 		/obj/item/robot_parts = 100,
 		)
-
 	can_infect = 0
-	supports_cosmetic_organs = FALSE
 	duration = 8 SECONDS
 
 /datum/surgery_step/limb/attach/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
 	var/obj/item/robot_parts/p = tool
-	var/datum/organ/external/affected = target.get_organ(target_zone)
+	var/datum/organ/external/affected = target.get_organ(target_zone, cosmetic = TRUE)
 	if(!(affected.status & ORGAN_ATTACHABLE) || !istype(p))
 		return 0 //not even ready for this and we're assuming they're using a fucking robot part!
 	if (p.part)
@@ -169,19 +167,19 @@
 	return ..()
 
 /datum/surgery_step/limb/attach/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone)
+	var/datum/organ/external/affected = target.get_organ(target_zone, cosmetic = TRUE)
 	user.visible_message("[user] starts attaching [tool] where [target]'s [affected.display_name] used to be.", \
 	"You start attaching [tool] where [target]'s [affected.display_name] used to be.")
 
 /datum/surgery_step/limb/attach/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone)
+	var/datum/organ/external/affected = target.get_organ(target_zone, cosmetic = TRUE)
 	user.visible_message("<span class='notice'>[user] has attached [tool] where [target]'s [affected.display_name] used to be.</span>",	\
 	"<span class='notice'>You have attached [tool] where [target]'s [affected.display_name] used to be.</span>")
 
 	affected.attach(tool)
 
 /datum/surgery_step/limb/attach/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone)
+	var/datum/organ/external/affected = target.get_organ(target_zone, cosmetic = TRUE)
 	user.visible_message("<span class='warning'>[user]'s hand slips, damaging connectors on [target]'s [affected.display_name]!</span>", \
 	"<span class='warning'>Your hand slips, damaging connectors on [target]'s [affected.display_name]!</span>")
 	target.apply_damage(10, BRUTE, affected)

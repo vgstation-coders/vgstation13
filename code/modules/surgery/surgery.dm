@@ -65,7 +65,7 @@
 	if (can_infect && affected)
 		spread_germs_to_organ(affected, user)
 
-	if(!(affected.status & (ORGAN_ROBOT|ORGAN_PEG)))//robot organs and pegs can't spread diseases or splatter blood
+	if((!(affected.status & (ORGAN_ROBOT|ORGAN_PEG))) && !affected.cosmetic_only)//robot organs and pegs can't spread diseases or splatter blood
 		var/block = user.check_contact_sterility(HANDS)
 		var/bleeding = user.check_bodypart_bleeding(HANDS)
 		target.oneway_contact_diseases(user,block,bleeding)//potentially spreads diseases from us to them, wear latex gloves!
@@ -108,7 +108,7 @@
 	return null
 
 /proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
-	if(!istype(user) || !istype(E))
+	if(!istype(user) || !istype(E) || E.cosmetic_only)
 		return
 
 	var/germ_level = user.germ_level

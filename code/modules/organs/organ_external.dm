@@ -86,9 +86,6 @@
 	organ_item = null //I honestly cannot tell if anything else should be done with this
 	..()
 
-/datum/organ/external/proc/post_human_addition()
-	return
-
 /****************************************************
 			   DAMAGE PROCS
 ****************************************************/
@@ -1101,7 +1098,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	else if(istype(I, /obj/item/robot_parts)) //Robotic limb
 		var/obj/item/robot_parts/R = I
-
+		R.on_attach(src)
 		src.robotize()
 
 		src.sabotaged = R.sabotaged
@@ -1273,12 +1270,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 30
 	body_part = TAIL
 	cosmetic_only = TRUE
-	var/tail_icon_file = 'icons/effects/species.dmi'
+	var/tail_icon_file = 'icons/mob/tails.dmi'
 	var/tail_type
 	var/overlap_overlays = TRUE
 
 /datum/organ/external/tail/New(datum/organ/external/parent, datum/species/passed_species)
-	if(!(passed_species?.anatomy_flags & HAS_TAIL))
+	if(passed_species && (!(passed_species.anatomy_flags & HAS_TAIL)))
 		droplimb(TRUE, spawn_limb = FALSE)
 		return
 	create_tail_info(passed_species)
@@ -1292,39 +1289,57 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/tail/generate_dropped_organ(current_organ)
 	if(!current_organ)
-		current_organ = new /obj/item/organ/external/tail(owner.loc, owner, src)
+		if(is_robotic())
+			current_organ = new /obj/item/robot_parts/tail(owner.loc, tail_type)
+		else
+			current_organ = new /obj/item/organ/external/tail(owner.loc, owner, src)
 	return current_organ
 
 /datum/organ/external/tail/on_attach(obj/item/organ/external/tail/tail_item)
 	create_tail_info(tail_item = tail_item)
 
-/datum/organ/external/tail/proc/update_tail(mob/living/carbon/human/tail_owner)
-	var/skin_tone = tail_owner?.my_appearance.s_tone || owner?.my_appearance.s_tone
-	switch(tail_type)
-		if("vox")
-			switch(skin_tone)
-				if(VOXEMERALD)
-					icon_name = "emerald"
-				if(VOXAZURE)
-					icon_name = "azure"
-				if(VOXLGREEN)
-					icon_name = "lightgreen"
-				if(VOXGRAY)
-					icon_name = "grey"
-				if(VOXBROWN)
-					icon_name = "brown"
-				else
-					icon_name = "green"
-		if("tajaran")
-			switch(skin_tone)
-				if(CATBEASTBLACK)
-					icon_name = "tajaran_black"
-				else
-					icon_name = "tajaran_brown"
-
-
+/datum/organ/external/tail/proc/update_tail(mob/living/carbon/human/tail_owner, skin_tone, random = FALSE)
+	if(!skin_tone)
+		skin_tone = tail_owner?.my_appearance.s_tone || owner?.my_appearance.s_tone
+	if(is_robotic(src))
+		icon_name = "[tail_type]_robotic"
+	else
+		switch(tail_type)
+			if("vox")
+				if(random)
+					skin_tone = rand(1, 6)
+				switch(skin_tone)
+					if(VOXEMERALD)
+						icon_name = "emerald"
+					if(VOXAZURE)
+						icon_name = "azure"
+					if(VOXLGREEN)
+						icon_name = "lightgreen"
+					if(VOXGRAY)
+						icon_name = "grey"
+					if(VOXBROWN)
+						icon_name = "brown"
+					else
+						icon_name = "green"
+			if("tajaran")
+				if(random)
+					skin_tone = rand(1, 2)
+				switch(skin_tone)
+					if(CATBEASTBLACK)
+						icon_name = "tajaran_black"
+					else
+						icon_name = "tajaran_brown"
 	var/mob/living/carbon/human/tail_haver = tail_owner || owner
 	tail_haver?.update_tail_layer()
+
+/datum/organ/external/tail/robotize()
+	tail_icon_file = initial(tail_icon_file)
+	..()
+	if(owner)
+		update_tail(owner)
+
+/datum/organ/external/tail/peggify()
+	return
 
 //=====Legs======
 
@@ -1910,7 +1925,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		var/icon/new_tail_icon = icon(tail_icon_file, "[tail_state_name]_BEHIND", EAST)
 		new_tail_icon.Shift(EAST, 6)
 		new_tail_icon.Shift(NORTH, 3)
-		tail_organ_icons[tail_icon_key] = new_tail_icon
+		returned_tail_icon = tail_organ_icons[tail_icon_key] = new_tail_icon
 	icon = returned_tail_icon
 
 /obj/item/organ/external/head

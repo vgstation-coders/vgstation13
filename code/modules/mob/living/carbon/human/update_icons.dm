@@ -271,7 +271,7 @@ var/global/list/damage_icon_parts = list()
 		husk_over.Blend(mask, ICON_ADD)
 		stand_icon.Blend(husk_over, ICON_OVERLAY)
 	var/datum/organ/external/tail/tail = get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
-	if((!(tail.status & ORGAN_DESTROYED)) && tail.overlap_overlays)
+	if(tail && (!(tail.status & ORGAN_DESTROYED) && tail.overlap_overlays))
 		var/obj/abstract/Overlays/limbs_overlay = obj_overlays[LIMBS_LAYER]
 		var/mutable_appearance/stand_icon_image = mutable_appearance(stand_icon)
 		limbs_overlay.icon = stand_icon_image.icon
@@ -1564,6 +1564,8 @@ var/global/list/damage_icon_parts = list()
 		return
 	var/tail_file = tail_organ.tail_icon_file
 	var/tail_icon_state = tail_organ.icon_name
+	if(!tail_file || !tail_icon_state)
+		return
 	var/mutable_appearance/tail_image = mutable_appearance(tail_file, tail_icon_state, layer = -TAIL_LAYER)
 	if(species.anatomy_flags & MULTICOLOR)
 		tail_image.color = COLOR_MATRIX_ADD(rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b))
