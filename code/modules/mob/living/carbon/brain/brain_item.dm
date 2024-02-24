@@ -53,7 +53,7 @@
 				to_chat(user, "<span class='deadsay'>It seems particularly lifeless, but not yet gone. Perhaps it will regain some of its luster later...</span>")
 				return
 		to_chat(user, "<span class='deadsay'>This one seems unresponsive.</span>")// Should probably make this more realistic, but this message ties it in with MMI errors.
-		if(!brainmob.mind)  
+		if(!brainmob.mind)
 			to_chat(user, "<span class='deadsay'>It shows no signs of sentience.</span>") //monkeyman or NPC
 		return
 
@@ -62,6 +62,8 @@
 	..()
 
 	var/mob/living/carbon/human/H = target
+	for(var/spell/spell in H.mind.wizard_spells)
+		H.remove_spell(spell)
 	H.dropBorers()
 	var/obj/item/organ/internal/brain/B = src
 	if(istype(B) && istype(H))
