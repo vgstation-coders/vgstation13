@@ -439,7 +439,7 @@
 	if(!active)
 		return
 	if(mode == GENEGUN_MODE_SPLICE)
-		if(world.time > last_action + (action_time*times_to_splice)/time_coeff)
+		if(world.time > last_action + ((action_time-times_to_splice)*times_to_splice)/time_coeff) //this formula slightly decreases splice time as values get higher.
 			finished_task()
 	else
 		if(world.time > last_action + action_time/time_coeff)
