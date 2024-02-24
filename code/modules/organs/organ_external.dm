@@ -1889,7 +1889,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /obj/item/organ/external/tail
 	name = "tail"
-	icon_state = LIMB_TAIL
 	part = LIMB_TAIL
 	w_class = W_CLASS_SMALL
 	var/tail_icon_file
@@ -1901,10 +1900,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/static/list/tail_organ_icons = list()
 
 /obj/item/organ/external/tail/post_creation(datum/organ/external/tail/organ_datum)
-	if(!istype(organ_datum))
-		return
 	tail_icon_file = organ_datum.tail_icon_file
-	icon_state = organ_datum.icon_name
 	tail_state_name = organ_datum.icon_name
 	tail_type = organ_datum.tail_type
 	tail_overlapping = organ_datum.overlap_overlays
@@ -1915,8 +1911,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 	tail_icon_key = "[tail_state_name]_[tail_type]"
 	var/returned_tail_icon = tail_organ_icons[tail_icon_key]
 	if(!returned_tail_icon)
-		var/icon/new_tail_icon = icon(tail_icon_file, "[tail_state_name]_BEHIND")
-		new_tail_icon.Insert(icon(tail_icon_file, "[tail_state_name]_FRONT", NORTH))
+		var/icon/new_tail_icon = icon(tail_icon_file, "[tail_state_name]_BEHIND", EAST)
+		new_tail_icon.Shift(EAST, 6)
+		new_tail_icon.Shift(NORTH, 3)
 		tail_organ_icons[tail_icon_key] = new_tail_icon
 	icon = returned_tail_icon
 

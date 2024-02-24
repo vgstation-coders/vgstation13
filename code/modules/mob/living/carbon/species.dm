@@ -228,6 +228,7 @@ var/global/list/playable_species = list("Human")
 
 	//This is a basic humanoid limb setup.
 	H.organs = list()
+	H.cosmetic_organs = list()
 	H.organs_by_name[LIMB_CHEST] = new/datum/organ/external/chest()
 	H.organs_by_name[LIMB_GROIN] = new/datum/organ/external/groin(H.organs_by_name[LIMB_CHEST])
 	H.organs_by_name[LIMB_HEAD] = new/datum/organ/external/head(H.organs_by_name[LIMB_CHEST])
