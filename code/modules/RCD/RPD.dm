@@ -104,6 +104,48 @@
 
 	modifiers -= list("alt", "shift", "ctrl")
 
+
+/obj/item/device/rcd/rpd/rebuild_ui()
+	var/dat = ""
+	var/multitext=""
+	var/autotext=""
+	
+	if (has_metal_slime)//build_all
+		multitext=" <div style='margin-top:1em;'>Multilayer Mode: <a href='?src=\ref[interface];toggle_multi=1'><span class='[build_all? "schem_selected" : "schem"]'>[build_all ? "On" : "Off"]</span></a></div> "
+	if (has_yellow_slime)//build_all
+		autotext=" <div style='margin-top:1em;'>Autowrench: <a href='?src=\ref[interface];toggle_auto=1'><span class='[autowrench? "schem_selected" : "schem"]'>[autowrench ? "On" : "Off"]</span></a></div> "
+
+	dat += {"
+		<b>Selected:</b> <span id="selectedname"></span>
+		<h2>Options</h2>
+		<div id="schematic_options">
+		</div>
+		[multitext]
+		[autotext]
+		<h2>Available schematics</h2>
+		<div id='fav_list'></div>
+	"}
+	for(var/cat in schematics)
+		dat += "<b>[cat]:</b><ul style='list-style-type:disc'>"
+		var/list/L = schematics[cat]
+		for(var/datum/rcd_schematic/C in L)
+			var/turf/T = get_turf(src)
+			if(!T || ((C.flags & RCD_Z_DOWN) && !HasBelow(T.z)) || ((C.flags & RCD_Z_UP) && !HasAbove(T.z)))
+				continue
+			dat += C.schematic_list_line(interface,FALSE,src.selected==C)
+
+		dat += "</ul>"
+
+	interface.updateLayout(dat)
+
+	if(selected)
+		update_options_menu()
+		interface.updateContent("selectedname", selected.name)
+
+	rebuild_favs()
+
+
+
 /obj/item/device/rcd/rpd/mech/Topic(var/href, var/list/href_list)
 	..()
 	if(href_list["close"])
@@ -144,7 +186,16 @@
 					favorites.Swap(index, index - 1)
 
 				rebuild_favs()
-
+			if("toggle_multi")
+				if (has_metal_slime)
+					build_all = !build_all
+					rebuild_ui()
+					return 1
+			if("toggle_auto")
+				if (has_yellow_slime)
+					autowrench = !autowrench
+					rebuild_ui()
+					return 1
 		return 1
 
 	// The href didn't get handled by us so we pass it down to the selected schematic.
