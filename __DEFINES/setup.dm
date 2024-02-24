@@ -326,7 +326,6 @@ var/MAX_EXPLOSION_RANGE = 32
 #define ARM_RIGHT		256
 #define HAND_LEFT		512
 #define HAND_RIGHT		1024
-#define TAIL			524288
 
 
 // bitflags for clothing parts
@@ -353,7 +352,6 @@ var/MAX_EXPLOSION_RANGE = 32
 #define HIDEEARS			EARS
 #define HIDEEYES			EYES
 #define HIDEFACE			FACE
-#define HIDETAIL			TAIL
 #define HIDEHEADHAIR 		65536
 #define MASKHEADHAIR		131072
 #define HIDEBEARDHAIR		BEARD
@@ -1008,8 +1006,6 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define ACID4WATER 4096 //Acid now acts like water, and vice versa.
 #define NO_BALD 8192 //cannot lose hair through being shaved/radiation/etc
 #define RGBSKINTONE 16384
-#define HAS_ICON_SKIN_TONE 32768
-#define TAIL_OVERLAPPED 65536
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1256,31 +1252,29 @@ var/default_colour_matrix = list(1,0,0,0,\
 //Human Overlays Indexes/////////THIS DEFINES WHAT LAYERS APPEARS ON TOP OF OTHERS
 #define FIRE_LAYER				1		//If you're on fire (/tg/ shit)
 #define MUTANTRACE_LAYER		2		//TODO: make part of body?
-#define TAIL_UNDERLIMBS_LAYER	3
-#define LIMBS_LAYER				4
-#define MUTATIONS_LAYER			5
-#define DAMAGE_LAYER			6
-#define UNIFORM_LAYER			7
-#define SHOES_LAYER				8
-#define GLOVES_LAYER			9
-#define EARS_LAYER				10
-#define SUIT_LAYER				11
-#define GLASSES_LAYER			12
-#define BELT_LAYER				13		//Possible make this an overlay of somethign required to wear a belt?
-#define SUIT_STORE_LAYER		14
-#define HAIR_LAYER				15		//TODO: make part of head layer?
-#define GLASSES_OVER_HAIR_LAYER	16
-#define TAIL_LAYER				17
-#define FACEMASK_LAYER			18
-#define HEAD_LAYER				19
-#define BACK_LAYER				20		//Back should be above head so that headgear doesn't hides backpack when facing north
-#define ID_LAYER				21		//IDs should be visible above suits and backpacks
-#define HANDCUFF_LAYER			22
-#define MUTUALCUFF_LAYER		23
-#define LEGCUFF_LAYER			24
-#define HAND_LAYER				25
-#define TARGETED_LAYER			26		//BS12: Layer for the target overlay from weapon targeting system
-#define TOTAL_LAYERS			26
+#define MUTATIONS_LAYER			3
+#define DAMAGE_LAYER			4
+#define UNIFORM_LAYER			5
+#define SHOES_LAYER				6
+#define GLOVES_LAYER			7
+#define EARS_LAYER				8
+#define SUIT_LAYER				9
+#define GLASSES_LAYER			10
+#define BELT_LAYER				11		//Possible make this an overlay of somethign required to wear a belt?
+#define SUIT_STORE_LAYER		12
+#define HAIR_LAYER				13		//TODO: make part of head layer?
+#define GLASSES_OVER_HAIR_LAYER	14
+#define FACEMASK_LAYER			15
+#define HEAD_LAYER				16
+#define BACK_LAYER				17		//Back should be above head so that headgear doesn't hides backpack when facing north
+#define ID_LAYER				18		//IDs should be visible above suits and backpacks
+#define HANDCUFF_LAYER			19
+#define MUTUALCUFF_LAYER		20
+#define LEGCUFF_LAYER			21
+#define HAND_LAYER				22
+#define TAIL_LAYER				23		//bs12 specific. this hack is probably gonna come back to haunt me
+#define TARGETED_LAYER			24		//BS12: Layer for the target overlay from weapon targeting system
+#define TOTAL_LAYERS			24
 //////////////////////////////////
 
 //Snake stuff so leaderboard can see it too
