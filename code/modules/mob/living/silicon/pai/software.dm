@@ -719,7 +719,7 @@ Target Machine: "}
 		else
 			charge = 0
 			return 0
-		sleep(10)
+		sleep(1 SECONDS)
 
 // EMP Shielding, just a description
 /mob/living/silicon/pai/proc/softwareShield()
