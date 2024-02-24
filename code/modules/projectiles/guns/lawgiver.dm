@@ -122,11 +122,11 @@
 
 /datum/lawgiver_mode/ball
 	name = "ball"
-	kind = HONKGIVER_BALL
+	kind = LAWGIVER_MODE_KIND_BULLET
 	voice_triggers = list("beach","ball","bounce", "bouncy")
-	firing_mode = LAWGIVER_BALL
+	firing_mode = HONKGIVER_BALL
 	fire_sound = 'sound/effects/awooga.ogg'
-	projectile_type = /obj/item/projectile/energy/osipr
+	projectile_type = /obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball
 	activation_message = "BOUNCY."
 
 
@@ -147,11 +147,11 @@ var/list/lawgiver_modes = list(
 		/datum/lawgiver_mode/double_whammy,
 	),
 	/obj/item/weapon/gun/lawgiver/honkgiver = newlist(
-		/datum/lawgiver_mode/scream,
+//		/datum/lawgiver_mode/scream,
 		/datum/lawgiver_mode/practice_laser,
-		/datum/lawgiver_mode/pie,
-		/datum/lawgiver_mode/peel,
-		/datum/lawgiver_mode/ball,
+//		/datum/lawgiver_mode/pie,
+//		/datum/lawgiver_mode/peel,
+		/datum/lawgiver_mode/ball
 	)
 )
 
@@ -520,17 +520,31 @@ var/list/lawgiver_modes = list(
 	return 1
 
 //HONKGIVER
+/*
+	TODO:
+		HONKSPLOSION WHEN NON CLOWN USES
+		RECHARGE THE MAGAZINE BY HONKING? IT?
+		ALL THE DIFFERENT HONK SHOTS.
+		Scale the amount of shots to be much higher. I need at least 30 pie shots before this thing is empty!
+		BOUNCY BALL CUSTOM MESSAGE ON HIT. CUSTOM EFFECT?
+
+
+*/
+
+
 /obj/item/weapon/gun/lawgiver/honkgiver
 	name = "honkgiver"
+	desc = "The Honkgiver, for all your head of clowning needs."
 	clumsy_check = 0
-	firing_mode = LAWGIVER_SCREAM
+	firing_mode = HONKGIVER_SCREAM
+	magazine_type = /obj/item/ammo_storage/magazine/lawgiver/honkgiver
 //	icon_state = "honkgiver"
 //	item_state = "honkgiver"
 //	inhand_states = list
 //	origin tech??? recipe should require bananium but mechanic should be able to mass produce this.
 //	no DNA profile.
 
-	desc = "The Honkgiver, for all your head of clowning needs."
+
 	//magazine_type = /obj/item/ammo_storage/magazine/lawgiver/honkgiver
 
 
