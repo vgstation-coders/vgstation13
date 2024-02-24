@@ -23,10 +23,7 @@ a img {
 	background:#40628a;
 }
 
-a.selected img {
-	background: #2f943c;
-	border-color:24722e;
-}
+
 
 .schem{
 	border-spacing:0px;
@@ -52,6 +49,11 @@ a.selected img {
 margin:1px;
 font-size:0px;
 line-height:0%;
+}
+
+a.selected img {
+	background: #2f943c;
+	border-color:#24722e;
 }
 
 .schem > * > * > .shcem_sub, /*i know this looks really dumb, but it's how to access them from in a table. table looks better than a span or div.*/
