@@ -192,6 +192,7 @@
 	if(build_all && istype(selected, /datum/rcd_schematic/pipe))
 		var/datum/rcd_schematic/pipe/our_schematic = selected //typecast
 		if(our_schematic.layer) // this is needed because disposal pipe schematic datums are retarded
+			var/oldlayer=layer
 			for(var/layer in 1 to 5)
 				busy  = TRUE // Busy to prevent switching schematic while it's in use.
 				our_schematic.set_layer(layer)
@@ -210,6 +211,8 @@
 							to_chat(user, "<span class='warning'>\the [src]'s error light flickers.</span>")
 
 				busy = FALSE
+			layer=oldlayer
+			our_schematic.set_layer(layer)
 			return 1
 
 	busy  = TRUE // Busy to prevent switching schematic while it's in use.
