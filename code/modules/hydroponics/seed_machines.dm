@@ -394,7 +394,7 @@
 		return 1
 
 	if( href_list["change_splice_amount"])
-		var/new_amount = input(usr, "Enter the number of times to perform the SPLICE command: (Between 1 and 10)","Enter Multsplice Coefficient") as num
+		var/new_amount = input(usr, "Enter the number of times to perform the SPLICE command: (Between 1 and 10)","Enter Multsplice Coefficient",times_to_splice) as num
 		if(new_amount>10)
 			new_amount = 10
 		else if(new_amount<1)
