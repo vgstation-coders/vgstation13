@@ -1,10 +1,17 @@
 var/datum/subsystem/burnable/SSburnable
 var/list/atom/burnableatoms = list()
 
+//Currently disabled in:
+//code/controllers/subsystem/burnable.dm (this file)
+//code/game/objects/objs.dm, in /obj/New()
+//code/ZAS/Fire.dm, in burnFireFuel()
+
+//To re-enable it here, change "SS_NO_FIRE" to "SS_KEEP_TIMING"
+
 /datum/subsystem/burnable
 	name          = "Burnable"
 	wait          = SS_WAIT_BURNABLE
-	flags         = SS_KEEP_TIMING
+	flags         = SS_NO_FIRE
 	priority      = SS_PRIORITY_BURNABLE
 	display_order = SS_DISPLAY_BURNABLE
 
@@ -23,24 +30,18 @@ var/list/atom/burnableatoms = list()
 /datum/subsystem/burnable/stat_entry()
 	..("P:[burnableatoms.len]")
 
-//Disabled because autoignition would too often turn rooms into firestorms due to a chain reaction
-//where one item would burn up, increase the room temperature (in code/ZAS/Fire.dm, proc/burnFireFuel()) and cause
-//other items to burn up.
-
-//To re-enable, remove the "return" and un-comment the lines of code.
-
 /datum/subsystem/burnable/fire(var/resumed = FALSE)
 	return
-	// if(!resumed)
-	// 	currentrun_index = burnableatoms.len
-	// 	currentrun = burnableatoms.Copy()
-	// var/c = currentrun_index
-	// while(c)
-	// 	currentrun[c]?.checkburn()
-	// 	c--
-	// 	if (MC_TICK_CHECK)
-	// 		break
-	// currentrun_index = c
+	if(!resumed)
+		currentrun_index = burnableatoms.len
+		currentrun = burnableatoms.Copy()
+	var/c = currentrun_index
+	while(c)
+		currentrun[c]?.checkburn()
+		c--
+		if (MC_TICK_CHECK)
+			break
+	currentrun_index = c
 
 #define MINOXY2BURN (1 / CELL_VOLUME)
 /atom/proc/checkburn()
