@@ -46,7 +46,6 @@ var/global/list/playable_species = list("Human")
 	var/tail_icon = 'icons/effects/species.dmi'
 	var/tail_type
 	var/tail_overlapping = TRUE
-	var/tail_waggable = TRUE
 	var/list/known_languages = list(LANGUAGE_GALACTIC_COMMON)	// Languages that this species innately knows.
 	var/default_language = LANGUAGE_GALACTIC_COMMON				// Default language is used when 'say' is used without modifiers.
 	var/attack_verb = "punches"									// Empty hand hurt intent verb.
@@ -405,7 +404,6 @@ var/global/list/playable_species = list("Human")
 	known_languages = list(LANGUAGE_UNATHI)
 	tail = "unathi"
 	tail_type = "unathi"
-	tail_waggable = FALSE
 	attack_verb = "scratches"
 	punch_damage = 2
 	primitive = /mob/living/carbon/monkey/unathi
@@ -494,7 +492,6 @@ var/global/list/playable_species = list("Human")
 	known_languages = list(LANGUAGE_CATBEAST, LANGUAGE_MOUSE)
 	tail = "tajaran_brown"
 	tail_type = "tajaran"
-	tail_waggable = FALSE
 	attack_verb = "scratches"
 	punch_damage = 2 //Claws add 3 damage without gloves, so the total is 5
 

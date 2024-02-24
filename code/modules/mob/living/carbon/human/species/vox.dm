@@ -86,10 +86,6 @@
 	updatespeciescolor(H)
 	H.update_icon()
 
-/datum/species/vox/handle_death(mob/living/carbon/human/vox, gibbed = FALSE)
-	vox.is_wagging_tail = FALSE
-	vox.update_tail_layer()
-
 /datum/species/vox/updatespeciescolor(mob/living/carbon/human/vox)
 	var/datum/organ/external/tail/vox_tail = vox.get_cosmetic_organ(LIMB_TAIL)
 	switch(vox.my_appearance.s_tone)

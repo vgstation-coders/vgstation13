@@ -1276,7 +1276,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/tail_icon_file = 'icons/effects/species.dmi'
 	var/tail_type
 	var/overlap_overlays = TRUE
-	var/tail_waggable = FALSE
 
 /datum/organ/external/tail/New(datum/organ/external/parent, datum/species/passed_species)
 	if(!(passed_species?.anatomy_flags & HAS_TAIL))
@@ -1290,7 +1289,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	tail_icon_file = passed_species?.tail_icon || tail_item?.tail_icon_file
 	tail_type = passed_species?.tail_type || tail_item?.tail_type
 	overlap_overlays = passed_species?.tail_overlapping || tail_item?.tail_overlapping
-	tail_waggable = passed_species?.tail_waggable || tail_item?.tail_waggable
 
 /datum/organ/external/tail/generate_dropped_organ(current_organ)
 	if(!current_organ)
@@ -1896,7 +1894,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/tail_icon_key
 	var/tail_state_name
 	var/tail_overlapping = TRUE
-	var/tail_waggable = FALSE
 	var/static/list/tail_organ_icons = list()
 
 /obj/item/organ/external/tail/post_creation(datum/organ/external/tail/organ_datum)
@@ -1904,7 +1901,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	tail_state_name = organ_datum.icon_name
 	tail_type = organ_datum.tail_type
 	tail_overlapping = organ_datum.overlap_overlays
-	tail_waggable = organ_datum.tail_waggable
 	update_icon()
 
 /obj/item/organ/external/tail/update_icon()

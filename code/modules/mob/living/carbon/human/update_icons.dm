@@ -1563,7 +1563,7 @@ var/global/list/damage_icon_parts = list()
 	if(wear_suit || check_hidden_body_flags(HIDETAIL))
 		return
 	var/tail_file = tail_organ.tail_icon_file
-	var/tail_icon_state = "[tail_organ.icon_name][is_wagging_tail ? "_wagging" : ""]"
+	var/tail_icon_state = tail_organ.icon_name
 	var/mutable_appearance/tail_image = mutable_appearance(tail_file, tail_icon_state, layer = -TAIL_LAYER)
 	if(species.anatomy_flags & MULTICOLOR)
 		tail_image.color = COLOR_MATRIX_ADD(rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b))

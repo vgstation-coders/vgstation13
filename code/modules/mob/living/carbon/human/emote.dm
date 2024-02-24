@@ -345,28 +345,3 @@
 				A.fracture()
 			emote_type = EMOTE_VISIBLE
 			. = ..()
-
-/datum/emote/living/carbon/human/wag
-	key = "wag"
-	key_third_person = "wags"
-	message = "wags their tail."
-	emote_type = EMOTE_VISIBLE|EMOTE_NO_RUNECHAT
-
-/datum/emote/living/carbon/human/wag/can_run_emote(mob/living/carbon/human/wagger, status_check)
-	if(!ishuman(wagger))
-		return FALSE
-	var/datum/organ/external/tail/tail = wagger.get_cosmetic_organ(LIMB_TAIL)
-	if((tail.status & ORGAN_DESTROYED) || !tail.tail_waggable)
-		return FALSE
-	if(wagger.check_hidden_body_flags(HIDETAIL))
-		return FALSE
-	return ..()
-
-/datum/emote/living/carbon/human/wag/run_emote(mob/living/carbon/human/wagger, params, type_override, ignore_status = FALSE, var/arguments)
-	..()
-	wagger.is_wagging_tail = !wagger.is_wagging_tail
-	wagger.update_tail_layer()
-	return TRUE
-
-/datum/emote/living/carbon/human/wag/select_message_type(mob/living/carbon/human/wagger)
-	return !wagger.is_wagging_tail ? message : ""
