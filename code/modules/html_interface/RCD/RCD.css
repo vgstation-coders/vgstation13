@@ -1,60 +1,22 @@
 /*Made by N3X15*/
 /*updated by crazyamphibian*/
 
-html {
-	font-family: verdana,Geneva,sans-serif;
-	font-size: 12px;
-}
-
-
-h1, h2, h3, h4, h5, h6
-{
-	margin: 0;
-	padding: 16px 0 8px 0;
-	color: #517087;
-}
-
-h1
-{
-	font-size: 15px;
-}
-
-h2
-{
-	font-size: 14px;
-}
-
-h3
-{
-	font-size: 13px;
-}
-
-h4
-{
-	font-size: 12px;
-}
-/*imprted from nanotrassen.css*/
-
-
-
 body{
-	/*color:#e9c183;*/
-	color: #FFFFFF;
-	background-color:#272727;
-	background-color: #1F1F1F\9 !important;
+line-height:100%
 }
 
-a.color {
+
+a.color, a:link.color  {
 	padding: 5px 10px;
 	font-size: large;
 	font-weight: bold;
 	border:1px solid white;
+	position:relative;
+	top:5px;
 }
 
-a{
-	color:inherit;
-	text-decoration:inherit;
-}
+a{ color:inherit;background:inherit;border:none;text-decoration:inherit;padding:0px;margin:0px;}
+a:link{ color:inherit;background:inherit;border:none;text-decoration:inherit;padding:0px;margin:0px;} /*dumb override conflicts with nanotrasen.css*/
 
 a img {
 	border:2px solid #161616;
@@ -69,11 +31,27 @@ a.selected img {
 .schem{
 	border-spacing:0px;
 	background-color:#40628a;
-	color:#fff;
 	padding-right:3px;
 	padding-left:2px;
+
 	border:#161616 2px solid;
 	margin-bottom:.3em;
+}
+
+.schem_selected{
+	border-spacing:0px;
+	background-color:#2f943c;
+	padding-right:3px;
+	padding-left:2px;
+
+	border:#24722e 2px solid;
+	margin-bottom:.3em;
+}
+
+#dir_holder > a{
+margin:1px;
+font-size:0px;
+line-height:0%;
 }
 
 .schem > * > * > .shcem_sub, /*i know this looks really dumb, but it's how to access them from in a table. table looks better than a span or div.*/
@@ -93,19 +71,14 @@ a.selected img {
 }
 
 .schem:hover{
-	background-color:#fff;
-	color:#40628a;
+	background:#507aac;
 }
-.schem_selected{
-	border-spacing:0px;
-	background-color:#2f943c;
-	border:#24722e 2px solid;
-	color:#fff;
-	margin-bottom:.3em;
-}
+
 .shcem_sub{
 	font-family:monospace;
 	font-weight:bold;
+	padding-top:2px;
+	padding-bottom:2px;
 }
 
 .layer{
@@ -115,7 +88,15 @@ a.selected img {
 	display:inline-block;
 	padding:0px;
 	font-size:0px; /*the IE CSS forces the line height to be at least the font size. why?*/
+	line-height:100%;
+	position:relative; /*since #layersholder uses absolute, we have to nudge the children using relative. not idea, but it werks.*/
+	top:-5px;
 }
+
+.layer a:link{
+	border-radius:inherit;
+}
+
 
 .layer_h{
 	height:5px;
@@ -132,6 +113,7 @@ a.selected img {
 position:absolute;
 left:160px;
 }
+
 
 .layergradh{
 	background-image: linear-gradient(rgba(0,0,0,.5) ,rgba(0,0,0,.2),rgba(0,0,0,0),rgba(0,0,0,.2) ,rgba(0,0,0,.5) );

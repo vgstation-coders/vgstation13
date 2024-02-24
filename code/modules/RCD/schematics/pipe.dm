@@ -105,7 +105,7 @@
 	var/mass_colour_on = mass_colour ? "On" : "Off"
 	. += {" <br>
 			<h4>Mass Colour:</h4>
-			Mass Colouration: <b><A class='[mass_colour? "schem_selected" : "schem"]' href='?src=\ref[master.interface];set_mass_colour=1'>[mass_colour_on]</a></b>"}
+			Mass Colouration: <b><A  href='?src=\ref[master.interface];set_mass_colour=1'><span class='[mass_colour? "schem_selected" : "schem"]'>[mass_colour_on]</span></a></b>"}
 
 /datum/rcd_schematic/paint_pipes/attack(var/atom/A, var/mob/user)
 	if(!istype(A, /obj/machinery/atmospherics))
@@ -355,8 +355,8 @@
 
 	. += {"
 		<div>
-			<b>Frequency:</b> <a class='schem' href="?src=\ref[master.interface];set_freq=-1">[format_frequency(master.frequency)] GHz</a> <a class='schem'href="?src=\ref[master.interface];set_freq=[1439]">Reset</a>
-			<b>ID:</b> <a class='schem' href="?src=\ref[master.interface];set_id=-1">[master.id ? master.id : "-----"] </a> <a class='schem' href="?src=\ref[master.interface];set_id=null">Reset</a>
+			<b>Frequency:</b> <a  href="?src=\ref[master.interface];set_freq=-1"><span class='schem'>[format_frequency(master.frequency)] GHz</span></a> <a href="?src=\ref[master.interface];set_freq=[1439]"><span class='schem'>Reset</span></a>
+			<b>ID:</b> <a href="?src=\ref[master.interface];set_id=-1"><span class='schem'>[master.id ? master.id : "-----"]</span></a> <a href="?src=\ref[master.interface];set_id=null"><span class='schem'>Reset</span></a>
 		</div>
 	"}
 
