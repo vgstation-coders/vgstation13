@@ -31,7 +31,6 @@ var/list/atom/burnableatoms = list()
 	..("P:[burnableatoms.len]")
 
 /datum/subsystem/burnable/fire(var/resumed = FALSE)
-	return
 	if(!resumed)
 		currentrun_index = burnableatoms.len
 		currentrun = burnableatoms.Copy()
