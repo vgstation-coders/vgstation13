@@ -4,6 +4,13 @@
 #define LAWGIVER_STUN "stun"
 #define LAWGIVER_LASER "laser"
 #define LAWGIVER_DOUBLE_WHAMMY "double whammy"
+//HONKGIVER
+#define HONKGIVER_SCREAM "scream"
+#define HONKGIVER_PRACTICE_LASER "practice laser"
+#define HONKGIVER_PIE "pie"
+#define HONKGIVER_BALL "ball"
+#define HONKGIVER_PEEL "peel"
+#define HONKGIVER_WATERSQUIRT "water squirt"
 
 /datum/lawgiver_mode
 	var/name
@@ -94,6 +101,35 @@
 	fire_delay = 0
 	activation_message = "DOUBLE WHAMMY."
 
+//HONKGIVER===========================================================
+/datum/lawgiver_mode/double_whammy
+	name = "scream"
+	voice_triggers = list("scream")
+	firing_mode = HONKGIVER_SCREAM
+	//fire_sound = 'sound/weapons/alien_laser1.ogg'
+	//projectile_type = /obj/item/projectile/energy/whammy
+	fire_delay = 0
+	activation_message = "DOUBLE WHAMMY."
+
+/datum/lawgiver_mode/practice_laser
+	name = "Practice Laser"
+	voice_triggers = list("practice", "nonlethal")
+	firing_mode = HONKGIVER_PRACTICE_LASER
+	fire_sound = 'sound/weapons/Laser.ogg'
+	projectile_type = /obj/item/projectile/beam/practice
+	fire_delay = 5
+	activation_message = "PRACTICE."
+
+/datum/lawgiver_mode/ball
+	name = "ball"
+	kind = HONKGIVER_BALL
+	voice_triggers = list("beach","ball","bounce", "bouncy")
+	firing_mode = LAWGIVER_BALL
+	fire_sound = 'sound/effects/awooga.ogg'
+	projectile_type = /obj/item/projectile/energy/osipr
+	activation_message = "BOUNCY."
+
+
 var/list/lawgiver_modes = list(
 	/obj/item/weapon/gun/lawgiver = newlist(
 		/datum/lawgiver_mode/stun,
@@ -110,6 +146,13 @@ var/list/lawgiver_modes = list(
 		/datum/lawgiver_mode/ricochet,
 		/datum/lawgiver_mode/double_whammy,
 	),
+	/obj/item/weapon/gun/lawgiver/honkgiver = newlist(
+		/datum/lawgiver_mode/scream,
+		/datum/lawgiver_mode/practice_laser,
+		/datum/lawgiver_mode/pie,
+		/datum/lawgiver_mode/peel,
+		/datum/lawgiver_mode/ball,
+	)
 )
 
 /obj/item/weapon/gun/lawgiver
@@ -476,9 +519,31 @@ var/list/lawgiver_modes = list(
 		return 0
 	return 1
 
+//HONKGIVER
+/obj/item/weapon/gun/lawgiver/honkgiver
+	name = "honkgiver"
+	clumsy_check = 0
+	firing_mode = LAWGIVER_SCREAM
+//	icon_state = "honkgiver"
+//	item_state = "honkgiver"
+//	inhand_states = list
+//	origin tech??? recipe should require bananium but mechanic should be able to mass produce this.
+//	no DNA profile.
+
+	desc = "The Honkgiver, for all your head of clowning needs."
+	//magazine_type = /obj/item/ammo_storage/magazine/lawgiver/honkgiver
+
+
+
 #undef LAWGIVER_DOUBLE_WHAMMY
 #undef LAWGIVER_RICOCHET
 #undef LAWGIVER_RAPID
 #undef LAWGIVER_FLARE
 #undef LAWGIVER_STUN
 #undef LAWGIVER_LASER
+#undef HONKGIVER_SCREAM
+#undef HONKGIVER_PRACTICE_LASER
+#undef HONKGIVER_PIE
+#undef HONKGIVER_BALL
+#undef HONKGIVER_PEEL
+#undef HONKGIVER_WATERSQUIRT
