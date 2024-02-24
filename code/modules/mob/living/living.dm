@@ -739,7 +739,7 @@ Thanks.
 		stop_pulling()
 		. = ..()
 
-	if ((s_active && !is_holder_of(src, s_active)))
+	if (s_active && !is_holder_of(src, s_active) && (!locate(s_active) in view(1)))
 		s_active.close(src)
 
 	if(update_slimes)
