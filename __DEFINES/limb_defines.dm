@@ -1,7 +1,6 @@
 #define LIMB_HEAD			"head"
 #define LIMB_CHEST			"chest"
 #define LIMB_GROIN			"groin"
-#define LIMB_TAIL			"tail"
 #define LIMB_LEFT_ARM		"l_arm"
 #define LIMB_RIGHT_ARM		"r_arm"
 #define LIMB_LEFT_HAND		"l_hand"
@@ -16,3 +15,5 @@
 #define UNCUFF_LEGS			-1
 #define UNCUFF_BOTH			0
 #define UNCUFF_HANDS		1
+
+#define COSMETIC_ORGAN_TAIL			"tail"

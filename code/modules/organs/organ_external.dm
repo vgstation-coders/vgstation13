@@ -1266,7 +1266,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	vital = 1
 
 /datum/organ/external/tail
-	name = LIMB_TAIL
+	name = COSMETIC_ORGAN_TAIL
 	display_name = "tail"
 	icon_name = "tail"
 	max_damage = 75
@@ -1887,7 +1887,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /obj/item/organ/external/tail
 	name = "tail"
-	part = LIMB_TAIL
+	part = COSMETIC_ORGAN_TAIL
 	w_class = W_CLASS_SMALL
 	var/tail_icon_file
 	var/tail_type

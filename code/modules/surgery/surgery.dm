@@ -137,7 +137,7 @@
 			if("Groin")
 				target_area = LIMB_GROIN
 			if("Tail")
-				target_area = LIMB_TAIL
+				target_area = COSMETIC_ORGAN_TAIL
 
 	for(var/datum/surgery_step/S in surgery_steps)
 		if(ishuman(M))

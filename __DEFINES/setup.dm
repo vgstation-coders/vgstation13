@@ -1008,7 +1008,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define ACID4WATER 4096 //Acid now acts like water, and vice versa.
 #define NO_BALD 8192 //cannot lose hair through being shaved/radiation/etc
 #define RGBSKINTONE 16384
-#define HAS_ICON_SKIN_TONE 65536
+#define HAS_ICON_SKIN_TONE 32768
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\

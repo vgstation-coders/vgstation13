@@ -270,7 +270,7 @@ var/global/list/damage_icon_parts = list()
 		mask.MapColors(0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,0)
 		husk_over.Blend(mask, ICON_ADD)
 		stand_icon.Blend(husk_over, ICON_OVERLAY)
-	var/datum/organ/external/tail/tail = get_cosmetic_organ(LIMB_TAIL)
+	var/datum/organ/external/tail/tail = get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
 	if((!(tail.status & ORGAN_DESTROYED)) && tail.overlap_overlays)
 		var/obj/abstract/Overlays/limbs_overlay = obj_overlays[LIMBS_LAYER]
 		var/mutable_appearance/stand_icon_image = mutable_appearance(stand_icon)
@@ -1557,7 +1557,7 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human/proc/update_tail_layer(update_icons = TRUE)
 	overlays -= obj_overlays[TAIL_UNDERLIMBS_LAYER]
 	overlays -= obj_overlays[TAIL_LAYER]
-	var/datum/organ/external/tail/tail_organ = get_cosmetic_organ(LIMB_TAIL)
+	var/datum/organ/external/tail/tail_organ = get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
 	if(!tail_organ || (tail_organ.status & ORGAN_DESTROYED))
 		return
 	if(wear_suit || check_hidden_body_flags(HIDETAIL))

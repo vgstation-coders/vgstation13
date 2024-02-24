@@ -87,7 +87,7 @@
 	H.update_icon()
 
 /datum/species/vox/updatespeciescolor(mob/living/carbon/human/vox)
-	var/datum/organ/external/tail/vox_tail = vox.get_cosmetic_organ(LIMB_TAIL)
+	var/datum/organ/external/tail/vox_tail = vox.get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
 	switch(vox.my_appearance.s_tone)
 		if(VOXEMERALD)
 			icobase = 'icons/mob/human_races/vox/r_voxemrl.dmi'
