@@ -50,10 +50,13 @@
 	//we're still gonna trim the obvious (mobs without clients, jobbanned players, etc)
 	living_players = trim_list(candidates[CURRENT_LIVING_PLAYERS])
 	living_antags = trim_list(candidates[CURRENT_LIVING_ANTAGS])
-	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS], trim_prefs_set_to_no = FALSE)
-	list_observers = trim_list(candidates[CURRENT_OBSERVERS], trim_prefs_set_to_no = FALSE)
+	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS], observer_override = TRUE)
+	list_observers = trim_list(candidates[CURRENT_OBSERVERS], observer_override = TRUE)
 
-/datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list(), trim_prefs_set_to_no = TRUE)
+//Added observer_override for when we want to count dead players and observers without
+//caring too much about their preferences nor their assigned roles.
+//To be used for trimming dead_players and list_observers.
+/datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list(), observer_override = FALSE)
 	var/list/trimmed_list = L.Copy()
 	var/role_id = initial(role_category.id)
 	var/role_pref = initial(role_category.required_pref)
@@ -62,13 +65,15 @@
 			trimmed_list.Remove(M)
 			continue
 		var/preference = get_role_desire_str(M.client.prefs.roles[role_pref])
-		if(preference == "Never" || (preference == "No" && trim_prefs_set_to_no)) // are they willing or at least not unwilling?
+		if(((preference == "Never") || (preference == "No")) && !observer_override) // are they willing or at least not unwilling?
 			trimmed_list.Remove(M)
 			continue
 		if (jobban_isbanned(M, role_id) || isantagbanned(M))//are they not antag-banned?
 			trimmed_list.Remove(M)
 			continue
 		if (M.mind)
+			if((observer_override && (M.stat == DEAD))) //We don't care about their role because they aren't alive
+				continue
 			if ((M.mind.assigned_role && (M.mind.assigned_role in restricted_from_jobs)) || (M.mind.role_alt_title && (M.mind.role_alt_title in restricted_from_jobs)))//does their job allow for it?
 				trimmed_list.Remove(M)
 				continue
