@@ -98,6 +98,7 @@
 		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
 		new eggspawn(get_turf(mob))
 
+
 /datum/disease2/effect/confusion
 	name = "Topographical Cretinism"
 	desc = "Attacks the infected's ability to differentiate left and right."
