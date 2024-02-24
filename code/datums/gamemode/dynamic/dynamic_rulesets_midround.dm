@@ -102,7 +102,7 @@
 	return TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/ready(var/forced = 0)
-	if (required_candidates > (dead_players.len + list_observers.len) && !forced)
+	if ((required_candidates > (dead_players.len + list_observers.len)) && !forced)
 		return 0
 	return ..()
 
