@@ -1905,3 +1905,4 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define CANDLES_LIT 2
 
 #define MINDUI_FLAG_PROCESSING	1
+#define MINDUI_FLAG_TOOLTIP		2

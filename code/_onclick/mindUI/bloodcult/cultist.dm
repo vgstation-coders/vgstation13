@@ -172,7 +172,6 @@
 	invisibility = 101 	// Invisible by default
 
 	var/allow_alien = FALSE
-	var/hovering = FALSE
 	var/required_tattoo
 	var/image/spell_overlay
 
@@ -740,13 +739,13 @@
 								if ("Wraith")
 									var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/wraith/wraith_slot = locate() in BP.elements
 									wraith_slot.associated_role = R
-									wraith_slot.icon_state = "slot_wraith[slot_wraith.hovering ? "-hover" : ""]"
+									wraith_slot.icon_state = "slot_wraith[wraith_slot.hovering ? "-hover" : ""]"
 									wraith_slot.base_icon_state = "slot_wraith"
 									S = wraith_slot
 								if ("Juggernaut")
 									var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/juggernaut/juggernaut_slot = locate() in BP.elements
 									juggernaut_slot.associated_role = R
-									juggernaut_slot.icon_state = "slot_juggernaut[slot_juggernaut.hovering ? "-hover" : ""]"
+									juggernaut_slot.icon_state = "slot_juggernaut[juggernaut_slot.hovering ? "-hover" : ""]"
 									juggernaut_slot.base_icon_state = "slot_juggernaut"
 									S = juggernaut_slot
 							S.overlays.len = 0
@@ -775,6 +774,7 @@
 					slot.offset_x = -98 + accumulated_offset
 					accumulated_offset += 17
 					slot.UpdateUIScreenLoc()
+					slot.locked = FALSE
 					i++
 					if (i > cult.max_cultist_cap)
 						break
@@ -784,8 +784,10 @@
 					slot.offset_x = -98 + accumulated_offset
 					accumulated_offset += 17
 					slot.UpdateUIScreenLoc()
+					slot.associated_role = null
 					slot.icon_state = "slot_empty[slot.hovering ? "-hover" : ""]"
 					slot.base_icon_state = "slot_empty"
+					slot.locked = FALSE
 					i++
 				var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_cap/cultist_cap = locate() in BP.elements
 				accumulated_offset -= 4
@@ -798,8 +800,10 @@
 					slot.UpdateUIScreenLoc()
 					accumulated_offset += 17
 					slot.overlays.len = 0
+					slot.associated_role = null
 					slot.icon_state = "slot_empty[slot.hovering ? "-hover" : ""]"
 					slot.base_icon_state = "slot_empty"
+					slot.locked = TRUE
 					i++
 				for (var/cons_type in construct_types)
 					if (!(cons_type in free_construct_slots))
@@ -807,16 +811,19 @@
 							if ("Artificer")
 								var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/artificer/artificer_slot = locate() in BP.elements
 								artificer_slot.icon_state = "slot_artificer_empty[artificer_slot.hovering ? "-hover" : ""]"
+								artificer_slot.associated_role = null
 								artificer_slot.base_icon_state = "slot_artificer_empty"
 								artificer_slot.overlays.len = 0
 							if ("Wraith")
 								var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/wraith/wraith_slot = locate() in BP.elements
 								wraith_slot.icon_state = "slot_wraith_empty[wraith_slot.hovering ? "-hover" : ""]"
+								wraith_slot.associated_role = null
 								wraith_slot.base_icon_state = "slot_wraith_empty"
 								wraith_slot.overlays.len = 0
 							if ("Juggernaut")
 								var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/juggernaut/juggernaut_slot = locate() in BP.elements
 								juggernaut_slot.icon_state = "slot_juggernaut_empty[juggernaut_slot.hovering ? "-hover" : ""]"
+								juggernaut_slot.associated_role = null
 								juggernaut_slot.base_icon_state = "slot_juggernaut_empty"
 								juggernaut_slot.overlays.len = 0
 
@@ -830,14 +837,41 @@
 	base_icon_state = "slot_empty"
 	layer = MIND_UI_BUTTON
 	offset_x = -98
+	offset_y = -18
+	tooltip_title = "Cultist Slot"
+	tooltip_content = ""
+	tooltip_theme = "radial-cult"
+	element_flags = MINDUI_FLAG_TOOLTIP
 
 	var/datum/role/cultist/associated_role
+	var/locked = FALSE
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/StartHovering()
-	icon_state = "[base_icon_state]-hover"
+/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/StartHovering(var/location,var/control,var/params)
+	set_tooltip()
+	..()
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/StopHovering()
-	icon_state = "[base_icon_state]"
+/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/proc/set_tooltip()
+	if (associated_role)
+		var/datum/mind/M = associated_role.antag
+		tooltip_title = M.name
+		var/icon/flat = getFlatIcon(M.current, SOUTH, 0, 1)
+		tooltip_content = "<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]' style='position:relative; top:10px;'>"
+		switch(associated_role.cultist_role)
+			if (CULTIST_ROLE_ACOLYTE)
+				tooltip_content += "Cultist Acolyte"
+				if (associated_role.mentor)
+					var/datum/mind/I = associated_role.mentor.antag
+					tooltip_content += "<br>Mentored by [I.name]."
+			if (CULTIST_ROLE_NONE|CULTIST_ROLE_HERALD)
+				tooltip_content += "Cultist Herald"
+			if (CULTIST_ROLE_MENTOR)
+				tooltip_content += "Cultist Mentor"
+	else if (!locked)
+		tooltip_title = "Cultist Slot"
+		tooltip_content = "If you find a suitable candidate, use the Conversion rune to invite them."
+	else
+		tooltip_title = "Locked Slot"
+		tooltip_content = "This slot will become available once the living population aboard the station has increased further."
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/artificer
 	name = "Artificer Slot"
@@ -845,17 +879,43 @@
 	base_icon_state = "slot_artificer_empty"
 	offset_x = 84
 
+/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/artificer/set_tooltip()
+	if (associated_role)
+		..()
+		tooltip_content = "<br>As the first Artificer in the cult, they don't count toward the cultist cap."
+	else
+		tooltip_title = "Artificer Slot"
+		tooltip_content = "The first Artificer in a cult won't count toward the cultist cap."
+
 /obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/wraith
 	name = "Wraith Slot"
 	icon_state = "slot_wraith_empty"
 	base_icon_state = "slot_wraith_empty"
 	offset_x = 101
 
+/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/wraith/set_tooltip()
+	if (associated_role)
+		..()
+		tooltip_content = "<br>As the first Wraith in the cult, they don't count toward the cultist cap."
+	else
+		tooltip_title = "Wraith Slot"
+		tooltip_content = "The first Wraith in a cult won't count toward the cultist cap."
+
 /obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/juggernaut
 	name = "Juggernaut Slot"
 	icon_state = "slot_juggernaut_empty"
 	base_icon_state = "slot_juggernaut_empty"
 	offset_x = 118
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/juggernaut/set_tooltip()
+	if (associated_role)
+		..()
+		tooltip_content = "<br>As the first Juggernaut in the cult, they don't count toward the cultist cap."
+	else
+		tooltip_title = "Juggernaut Slot"
+		tooltip_content = "The first Juggernaut in a cult won't count toward the cultist cap."
+
+//------------------------------------------------------------
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_cap
 	name = "Cultist Cap"
@@ -864,7 +924,7 @@
 	base_icon_state = "cultist_cap"
 	layer = MIND_UI_BUTTON
 	offset_x = 67
-	offset_y = -4
+	offset_y = -22
 
 //------------------------------------------------------------
 

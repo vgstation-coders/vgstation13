@@ -249,6 +249,7 @@ var/list/mind_ui_ID2type = list()
 	var/datum/mind_ui/parent = null
 	var/element_flags = 0
 	//MINDUI_FLAG_PROCESSING - Adds the element to processing_objects and calls process()
+	//MINDUI_FLAG_TOOLTIP	 - Displays a tooltip upon mouse hovering (only for /obj/abstract/mind_ui_element/hoverable !)
 
 	var/offset_x = 0
 	var/offset_y = 0
@@ -350,29 +351,42 @@ var/list/mind_ui_ID2type = list()
 // Make use of MouseEntered/MouseExited to allow for effects and behaviours related to simply hovering above the element
 
 /obj/abstract/mind_ui_element/hoverable
-	var/hovering = 0
+	var/hovering = FALSE
+	var/tooltip_title = "Undefined UI Element"
+	var/tooltip_content = ""
+	var/tooltip_theme = "default"
 
 /obj/abstract/mind_ui_element/hoverable/MouseEntered(location,control,params)
-	StartHovering()
+	StartHovering(location,control,params)
 	hovering = 1
 
 /obj/abstract/mind_ui_element/hoverable/MouseExited()
 	StopHovering()
 	hovering = 0
 
-/obj/abstract/mind_ui_element/proc/Hide()
+/obj/abstract/mind_ui_element/hoverable/Hide()
 	..()
+	StopHovering()
 	hovering = 0
 
-/obj/abstract/mind_ui_element/proc/Disappear()
+/obj/abstract/mind_ui_element/hoverable/Disappear()
 	..()
+	StopHovering()
 	hovering = 0
 
-/obj/abstract/mind_ui_element/hoverable/proc/StartHovering()
+/obj/abstract/mind_ui_element/hoverable/proc/StartHovering(var/location,var/control,var/params)
 	icon_state = "[base_icon_state]-hover"
+	if (element_flags & MINDUI_FLAG_TOOLTIP)
+		var/mob/M = GetUser()
+		if (M)
+			openToolTip(M,src,params,title = tooltip_title,content = tooltip_content,theme = tooltip_theme)
 
 /obj/abstract/mind_ui_element/hoverable/proc/StopHovering()
 	icon_state = "[base_icon_state]"
+	if (element_flags & MINDUI_FLAG_TOOLTIP)
+		var/mob/M = GetUser()
+		if (M)
+			closeToolTip(M)
 
 
 ////////////////// MOVABLE ////////////////////////
