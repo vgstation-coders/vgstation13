@@ -85,6 +85,9 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 				thermal_material = new/datum/thermal_material/wax()
 			if(RECYK_BIOLOGICAL)
 				thermal_material = new/datum/thermal_material/biological()
+			else
+				flammable = FALSE
+				log_debug("[src] was defined as flammable but was missing a 'w_type' definition. [src] marked as inflammable for this round.")
 		if(!autoignition_temperature)
 			autoignition_temperature = thermal_material.autoignition_temperature
 
