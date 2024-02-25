@@ -151,6 +151,22 @@ left:160px;
 	border:0px;
 	background-color:#D00;
 }
+#layer_selectedauto{
+	border-radius:2px;
+	padding:0px;
+	border:0px;
+	margin:0px;
+	background-color:#15C;
+}
+#layer_center_selectedauto{
+	border-radius:2px;
+	padding:0px;
+	border:0px;
+	margin:0px;
+	background-color:#14B;
+}
+
+
 
 #layer:hover{
 	background-color:#e7e7e7;
@@ -164,6 +180,13 @@ left:160px;
 #layer_center_selected:hover{
 	background-color:#f33;
 }
+#layer_selectedauto:hover{
+	background-color:#38F;
+}
+#layer_center_selectedauto:hover{
+	background-color:#37E;
+}
+
 
 #selectedname{
 	color:#fff;

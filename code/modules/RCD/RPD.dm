@@ -111,9 +111,9 @@
 	var/autotext=""
 	
 	if (has_metal_slime)//build_all
-		multitext=" <div style='margin-top:1em;'>Multilayer Mode: <a href='?src=\ref[interface];toggle_multi=1'><span class='[build_all? "schem_selected" : "schem"]'>[build_all ? "On" : "Off"]</span></a></div> "
+		multitext=" <div style='margin-top:1em;'><b>Multilayer Mode: </b><a href='?src=\ref[interface];toggle_multi=1'><span class='[build_all? "schem_selected" : "schem"]'>[build_all ? "On" : "Off"]</span></a></div> "
 	if (has_yellow_slime)//build_all
-		autotext=" <div style='margin-top:1em;'>Autowrench: <a href='?src=\ref[interface];toggle_auto=1'><span class='[autowrench? "schem_selected" : "schem"]'>[autowrench ? "On" : "Off"]</span></a></div> "
+		autotext=" <div style='margin-top:1em;'><b>Autowrench: </b><a href='?src=\ref[interface];toggle_auto=1'><span class='[autowrench? "schem_selected" : "schem"]'>[autowrench ? "On" : "Off"]</span></a></div> "
 
 	dat += {"
 		<b>Selected:</b> <span id="selectedname"></span>
@@ -143,6 +143,32 @@
 		interface.updateContent("selectedname", selected.name)
 
 	rebuild_favs()
+
+/obj/item/device/rcd/rpd/update_options_menu()
+	if(selected)
+		for(var/client/client in interface.clients)
+			selected.send_assets(client)
+		var/schematichtml=selected.get_HTML(args)
+		if (build_all)
+			schematichtml=replacetext(replacetext(schematichtml,"id=\"layer\"","id=\"layer_selected\""),"id=\"layer_center\"","id=\"layer_center_selected\"")
+		if (autowrench)
+			schematichtml=replacetext(replacetext(schematichtml,"id=\"layer_selected\"","id=\"layer_selectedauto\""),"id=\"layer_center_selected\"","id=\"layer_center_selectedauto\"")
+		interface.updateContent("schematic_options", schematichtml )
+	else
+		interface.updateContent("schematic_options", " ")
+
+
+/obj/item/device/rcd/rpd/Topic(var/href, var/list/href_list)
+	..()
+	if (href_list["toggle_auto"])
+		autowrench=has_yellow_slime ? !autowrench : 0
+		rebuild_ui()
+		return TRUE
+	if (href_list["toggle_multi"])
+		build_all=has_metal_slime ? !build_all : 0
+		rebuild_ui()
+		return TRUE
+	
 
 
 
@@ -186,16 +212,6 @@
 					favorites.Swap(index, index - 1)
 
 				rebuild_favs()
-			if("toggle_multi")
-				if (has_metal_slime)
-					build_all = !build_all
-					rebuild_ui()
-					return 1
-			if("toggle_auto")
-				if (has_yellow_slime)
-					autowrench = !autowrench
-					rebuild_ui()
-					return 1
 		return 1
 
 	// The href didn't get handled by us so we pass it down to the selected schematic.
