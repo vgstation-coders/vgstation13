@@ -66,11 +66,11 @@
 	var/spin_facing = initial_direction //For the purpose of where to spin next
 	var/delay_track = spin_duration //If the action ends prematurely for some reason it will free the changeling of the remaining duration
 
-	visible_message("<span class='sinister'>[user] starts wildly spinning their armblade around!</span>")
+	visible_message("<span class='sinister'>\The [user] starts wildly spinning their armblade around!</span>")
 	user.delayNextMove(spin_duration, 1) //Can't move during the spin
 	user.delayNextAttack(spin_duration, 1) //Can't attack extra times during the spin
-	for(var/i = 0, i < spin_duration, i++)
-		if(user.incapacitated() || user.locked_to || !isturf(user.loc)) //Double-checking to see if the changeling is allowed to do this
+	for(var/i = 0 to spin_duration)
+		if(user.incapacitated() || user.locked_to || !isturf(user.loc) || gcDestroyed) //Double-checking to see if the changeling is allowed to do this
 			user.delayNextMove(-delay_track, 1) //So that the changeling doesn't get magically stuck if it ends early
 			user.delayNextAttack(-delay_track, 1)
 			break
@@ -97,22 +97,6 @@
 /obj/item/weapon/armblade/proc/spin_turn(var/facing, var/direction)
 	switch(direction)
 		if("Left")
-			switch(facing)
-				if(NORTH)
-					return WEST
-				if(WEST)
-					return SOUTH
-				if(SOUTH)
-					return EAST
-				if(EAST)
-					return NORTH
+			return turn(facing, 90)
 		if("Right")
-			switch(facing)
-				if(NORTH)
-					return EAST
-				if(EAST)
-					return SOUTH
-				if(SOUTH)
-					return WEST
-				if(WEST)
-					return NORTH
+			return turn(facing, -90)
