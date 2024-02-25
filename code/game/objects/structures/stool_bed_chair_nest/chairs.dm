@@ -205,9 +205,9 @@
 
 // Chair types
 /obj/structure/bed/chair/wood
-	autoignition_temperature = AUTOIGNITION_WOOD
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
 	flammable = TRUE
-	thermal_mass = 10 //W_CLASS_LARGE
 
 	// TODO:  Special ash subtype that looks like charred chair legs
 

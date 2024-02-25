@@ -673,7 +673,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	icon_state = "cigbutt"
 	w_class = W_CLASS_TINY
 	throwforce = 1
-	autoignition_temperature = 0 //The filter doesn't burn
+	flammable = FALSE
 
 /obj/item/trash/cigbutt/bidibutt
 	name = "bidi butt"

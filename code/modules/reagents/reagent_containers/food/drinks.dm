@@ -2161,9 +2161,10 @@
 			if(lit)
 				new /obj/effect/decal/cleanable/ash(get_turf(src))
 				var/turf/loca = get_turf(src)
+				var/fueltemp = possible_fuels[FUEL]
 				if(loca)
 					new /obj/effect/fire(loca)
-					loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
+					loca.hotspot_expose(fueltemp["max_temperature"], 1000,surfaces=istype(loc,/turf))
 			else
 				new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
 

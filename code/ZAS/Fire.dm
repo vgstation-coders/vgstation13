@@ -77,7 +77,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		switch(w_type)
 			if(RECYK_WOOD)
 				thermal_material = new/datum/thermal_material/wood()
-			if(RECYK_PLASTIC, RECYK_ELECTRONIC, RECYK_MISC)
+			if(RECYK_PLASTIC, RECYK_ELECTRONIC, RECYK_MISC, NOT_RECYCLABLE)
 				thermal_material = new/datum/thermal_material/plastic()
 			if(RECYK_FABRIC)
 				thermal_material = new/datum/thermal_material/fabric()
@@ -88,6 +88,11 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 			else
 				flammable = FALSE
 				log_debug("[src] was defined as flammable but was missing a 'w_type' definition. [src] marked as inflammable for this round.")
+				return
+		if(!thermal_material)
+			flammable = FALSE
+			log_debug("[src] was defined as flammable but was missing a 'w_type' definition. [src] marked as inflammable for this round.")
+			return
 		if(!autoignition_temperature)
 			autoignition_temperature = thermal_material.autoignition_temperature
 

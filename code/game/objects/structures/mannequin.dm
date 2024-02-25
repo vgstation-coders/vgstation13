@@ -1046,9 +1046,9 @@
 	health = 30
 	maxHealth = 30
 	trueForm = /mob/living/simple_animal/hostile/mannequin/wood
-	autoignition_temperature = AUTOIGNITION_WOOD
+	w_class = W_CLASS_HUGE
+	w_type = RECYK_WOOD
 	flammable = TRUE
-	thermal_mass = 25 //W_CLASS_HUGE
 
 
 /obj/structure/mannequin/wood/New(turf/loc, var/f_style, var/h_style, var/list/items_to_wear, var/list/items_to_hold, var/mob_to_capture)
@@ -1233,9 +1233,9 @@
 		"vox"		=	/obj/structure/mannequin/wood/vox,
 		"corgi"		=	/obj/structure/mannequin/wood/corgi,
 		)
-	autoignition_temperature = AUTOIGNITION_WOOD
+	w_class = W_CLASS_HUGE
+	w_type = RECYK_WOOD
 	flammable = TRUE
-	thermal_mass = 25 //W_CLASS_HUGE
 
 
 

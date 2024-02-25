@@ -18,8 +18,8 @@
 	anchored = 1
 	density = 1
 	opacity = 1
-	autoignition_temperature = AUTOIGNITION_WOOD
-	thermal_mass = 25 //W_CLASS_HUGE
+	w_class = W_CLASS_HUGE
+	w_type = RECYK_WOOD
 	flammable = TRUE
 
 	health = 50
@@ -471,9 +471,9 @@
 	icon_off = "cabinetdetective_broken"
 	is_wooden = TRUE
 	starting_materials = list(MAT_WOOD = 2*CC_PER_SHEET_WOOD)
+	w_class = W_CLASS_LARGE
 	w_type = RECYK_WOOD
-	autoignition_temperature = AUTOIGNITION_WOOD
-	thermal_mass = 10
+	flammable = TRUE
 
 
 /obj/structure/closet/secure_closet/library/atoms_to_spawn()
