@@ -305,6 +305,8 @@
 		return
 
 	src.build_all = !src.build_all
+	if (interface)
+		rebuild_ui() 
 	to_chat(usr, "You [build_all ? "enable" : "disable"] the multilayer mode.")
 
 /obj/item/device/rcd/rpd/proc/autowrench()
@@ -315,6 +317,8 @@
 		return
 
 	src.autowrench = !src.autowrench
+	if (interface)
+		rebuild_ui() 
 	to_chat(usr, "You [autowrench ? "enable" : "disable"] the automatic wrenching mode.")
 
 /obj/item/device/rcd/rpd/admin
