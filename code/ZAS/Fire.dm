@@ -252,7 +252,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	return TRUE
 
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(flammable && !on_fire && exposed_temperature > autoignition_temperature)
+	if(flammable && !on_fire)
 		ignite()
 		return 1
 	return 0
