@@ -808,7 +808,7 @@
 		add_avail(power)
 		return
 	for(var/mob/living/carbon/human/H in loc)
-		if(iswizard(H) && !H.stat)
+		if(iswizard(H) && !H.stat && H.op_stage.butt != SURGERY_NO_BUTT)
 			power += FIRE_CARBON_ENERGY_RELEASED*H.health/H.maxHealth
 			H.adjustFireLoss(3)
 			if(prob(10))
