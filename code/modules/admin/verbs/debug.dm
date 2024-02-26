@@ -1574,4 +1574,4 @@ var/obj/blend_test = null
 	if(!output)
 		output = "No unconnected vents/scrubbers found."
 
-	usr << browse (output, "windowmunconnected-atmos-search")
+	usr << browse (output, "window=unconnected-atmos-search")
