@@ -830,7 +830,7 @@
 	icon = 'icons/obj/module.dmi'
 	icon_state = "gooncode"
 	w_class = W_CLASS_TINY
-	origin_tech = Tc_MATERIALS + "=10;" + Tc_PLASMATECH + "=5;" + Tc_SYNDICATE + "=3;" + Tc_PROGRAMMING + "=10;" + Tc_BLUESPACE + "=5;" + Tc_POWERSTORAGE + "=5"
+	origin_tech = Tc_MATERIALS + "=10;" + Tc_PLASMATECH + "=5;" + Tc_SYNDICATE + "=3;" + Tc_PROGRAMMING + "=10;" + Tc_BLUESPACE + "=5;" + Tc_POWERSTORAGE + "=5" + Tc_BIOTECH + "=6"
 
 /obj/item/toy/gooncode/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's trying to re-add poo!</span>")
