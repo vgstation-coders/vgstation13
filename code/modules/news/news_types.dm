@@ -107,7 +107,7 @@
 				colony, citing the increased presence of \"hostile factions\" on the colony has made trade too dangerous to
 				continue. Nanotrasen officials have not given any details about said factions. More on that at the top of
 				the hour."}
-	update_type = /datum/feed_message/news/misc/food_riots/more
+	update_type = /datum/feed_message/news/misc/more_food_riots
 	update_delay_min = 40 MINUTES
 	update_delay_max = 60 MINUTES
 
@@ -243,7 +243,7 @@
 
 /datum/feed_message/news/mundane/research/New(var/datum/trade_destination/dest)
 	..()
-	headline = "Major [pick("science","research")] [pick("breakthrough","find","discovery")] on [affected_dest,name]"
+	headline = "Major [pick("science","research")] [pick("breakthrough","find","discovery")] on [affected_dest.name]"
 	body = "A major breakthough in the field of [pick("plasma research","super-compressed materials","nano-augmentation","bluespace research","volatile power manipulation")] \
 				was announced [pick("yesterday","a few days ago","last week","earlier this month")] by a private firm on [affected_dest.name]. \
 				Nanotrasen declined to comment as to whether this could impinge on profits."
@@ -280,18 +280,23 @@
 	..()
 	body = "Game hunters on [affected_dest.name] "
 	if(prob(33))
+		headline = "[pick("Animal","Game",affected_dest.name)] hunters [pick("make big discovery","bag trophy prize","win big")]"
 		body += "were surprised when an unusual species experts have since identified as \
 		[pick("a subclass of mammal","a divergent abhuman species","an intelligent species of lemur","organic/cyborg hybrids")] turned up. Believed to have been brought in by \
 		[pick("alien smugglers","early colonists","syndicate raiders","unwitting tourists")], this is the first such specimen discovered in the wild."
 	else if(prob(50))
-		body += "were attacked by a vicious [pick("nas'r","diyaab","samak","predator which has not yet been identified")]\
+		var/adversary = pick("nas'r","diyaab","samak","predator which has not yet been identified")
+		headline = "[pick("Brave","Game",affected_dest.name)] hunters [pick("attacked","mauled","ambushed")] by [adversary]"
+		body += "were attacked by a vicious [adversary]\
 		. Officials urge caution, and locals are advised to stock up on armaments."
 	else
+		headline = "[pick("Animal","Game",affected_dest.name)] hunters [pick("break new record","find large specimen","get their big break")]"
 		body += "brought in an unusually [pick("valuable","rare","large","vicious","intelligent")] [pick("mammal","predator","farwa","samak")] for inspection \
 		[pick("today","yesterday","last week")]. Speculators suggest they may be tipped to break several records."
 
 /datum/feed_message/news/mundane/election/New(var/datum/trade_destination/dest)
 	..()
+	headline = "[pick("Election night","Fear and loathing","Locals go to the polls","Big vote")] on the [affected_dest.name] campaign trail"
 	body = "The pre-selection of an additional candidates was announced for the upcoming [pick("supervisors council","advisory board","governership","board of inquisitors")] \
 				election on [affected_dest.name] was announced earlier today, \
 				[pick("media mogul","web celebrity", "industry titan", "superstar", "famed chef", "popular gardener", "ex-army officer", "multi-billionaire")] \
@@ -300,7 +305,9 @@
 
 /datum/feed_message/news/mundane/gossip/New(var/datum/trade_destination/dest)
 	..()
-	body = "[pick("TV host","Webcast personality","Superstar","Model","Actor","Singer")] [random_name(pick(MALE,FEMALE))] "
+	var/name = random_name(pick(MALE,FEMALE))
+	headline = "[pick("The latest scoop on [name]!","[name]'s dirty little [pick("secret","affair")]","Quasi-legal intel on [name]'s private life","We wiretapped [name]'s PDA message and found this. What you gonna do about it?","New very super seriously important news on [name]")]"
+	body = "[pick("TV host","Webcast personality","Superstar","Model","Actor","Singer")] [name] "
 	if(prob(33))
 		body += "and their partner announced the birth of their [pick("first","second","third")] child on [affected_dest.name] early this morning. \
 		Doctors say the child is well, and the parents are considering "
@@ -327,6 +334,8 @@
 
 /datum/feed_message/news/mundane/celeb_death/New(var/datum/trade_destination/dest)
 	..()
+	var/name = "[random_name(pick(MALE,FEMALE))]"
+	headline = "[name] has [pick("passed","died","been found dead")]"
 	body = "It is with regret today that we announce the sudden passing of the "
 	if(prob(33))
 		body += "[pick("distinguished","decorated","veteran","highly respected")] \
@@ -338,7 +347,7 @@
 		body += "[pick("successful","highly respected","ingenious","esteemed")] \
 		[pick("academic","Professor","Doctor","Scientist")] "
 
-	body += "[random_name(pick(MALE,FEMALE))] on [affected_dest.name] [pick("last week","yesterday","this morning","two days ago","three days ago")]\
+	body += "[name] on [affected_dest.name] [pick("last week","yesterday","this morning","two days ago","three days ago")]\
 	[pick(". Assassination is suspected, but the perpetrators have not yet been brought to justice",\
 	" due to Syndicate infiltrators (since captured)",\
 	" during an industrial accident",\
@@ -346,7 +355,9 @@
 
 /datum/feed_message/news/mundane/resignation/New(var/datum/trade_destination/dest)
 	..()
-	body = "Nanotrasen regretfully announces the resignation of [pick("Sector Admiral","Division Admiral","Ship Admiral","Vice Admiral")] [random_name(pick(MALE,FEMALE))]."
+	var/name = "[random_name(pick(MALE,FEMALE))]"
+	headline = "Nanotrasen Admiral [name] [pick("resigns","calls it quits","retires")]"
+	body = "Nanotrasen regretfully announces the resignation of [pick("Sector","Division","Ship","Vice")] Admiral [name]."
 	if(prob(25))
 		var/locstring = pick("Segunda","Salusa","Cepheus","Andromeda","Gruis","Corona","Aquila","Asellus") + " " + pick("I","II","III","IV","V","VI","VII","VIII")
 		body += " In a ceremony on [affected_dest.name] this afternoon, they will be awarded the \
