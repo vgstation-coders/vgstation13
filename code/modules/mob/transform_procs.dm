@@ -292,6 +292,7 @@
 	if(!new_species || !(new_species in all_species))
 		new_species = pick(whitelisted_species)
 	new_human.set_species(new_species)
+	new_human.regenerate_icons()
 	if(isliving(src))
 		var/mob/living/L = src
 		new_human.languages |= L.languages
