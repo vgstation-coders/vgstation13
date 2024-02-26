@@ -1,5 +1,3 @@
-//This spell is checked in code/modules/mob/mob_helpers.dm, no_gun_allowed_spellcheck()
-
 /spell/passive/nogunallowed
 	name = "No Gun Allowed"
 	abbreviation = "NG"
@@ -7,6 +5,7 @@
 	hud_state = "wiz_noclothes"
 	user_type = USER_TYPE_WIZARD
 	spell_flags = NO_BUTTON|NO_SPELLBOOK //Already exists in the artifact section
+	range = SELFCAST
 
 /spell/passive/nogunallowed/on_added(mob/user)
 	user.flags |= HONORABLE_NOGUNALLOWED
