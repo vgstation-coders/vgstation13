@@ -19,7 +19,7 @@
 	var/list/misc_spells = list()
 
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
-	var/static/list/available_artifacts = list()
+	var/list/available_artifacts = list()
 
 	var/static/list/available_potions = list(
 		/obj/item/potion/healing = Sp_BASE_PRICE,
