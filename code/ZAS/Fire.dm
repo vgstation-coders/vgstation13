@@ -85,10 +85,6 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 				thermal_material = new/datum/thermal_material/wax()
 			if(RECYK_BIOLOGICAL)
 				thermal_material = new/datum/thermal_material/biological()
-			else
-				flammable = FALSE
-				log_debug("[src] was defined as flammable but was missing a 'w_type' definition. [src] marked as inflammable for this round.")
-				return
 		if(!thermal_material)
 			flammable = FALSE
 			log_debug("[src] was defined as flammable but was missing a 'w_type' definition. [src] marked as inflammable for this round.")
@@ -231,8 +227,10 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 //ignite() lights objects on fire; hotspot_expose() lights turfs and spawns fire effects
 /atom/proc/ignite()
+	message_admins("ignite() attempt started on [src]")
 	var/in_fire = FALSE
 	if(!flammable || fire_protection - world.time > 0)
+		message_admins("[src] failed to ignite if !flammable = [!flammable] = 1 or fire_protection - world.time = [fire_protection - world.time] > 0")
 		return FALSE
 	on_fire=1
 	if(fire_dmi && fire_sprite && !isturf(src))
@@ -378,6 +376,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	qdel(src)
 
 /obj/effect/fire/process()
+	message_admins("Starting fire process()")
 	if(timestopped)
 		return 0
 	. = 1
@@ -387,10 +386,12 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	if (!istype(S))
 		Extinguish()
+		message_admins("Extinguished because !istype(turf/simulated)")
 		return
 
 	if (isnull(S.zone))
 		Extinguish()
+		message_admins("Extinguished because isnull(turf/simulated/zone)")
 		return
 
 	var/datum/gas_mixture/air_contents = S.return_air()
@@ -409,6 +410,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	// Check if there is something to combust.
 	if (!air_contents.check_recombustability(S))
 		Extinguish()
+		message_admins("Extinguished because recombustability check failed")
 		return
 
 	var/firelevel = air_contents.calculate_firelevel(S)
@@ -463,6 +465,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 ///////////////////////////////// FLOW HAS BEEN CREATED /// DONT DELETE THE FIRE UNTIL IT IS MERGED BACK OR YOU WILL DELETE AIR ///////////////////////////////////////////////
 
 	if(flow)
+		message_admins("zburn started")
 		flow.zburn(S, 1)
 
 		//merge the air back
@@ -580,7 +583,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		value = total_reactants * used_reactants_ratio //0 if solids and liquids only
 	return value
 
-// checks if the GAS REACTANTS in a given turf can continue combusting.
+// checks if anything in a given turf can continue combusting.
 /datum/gas_mixture/proc/check_recombustability(var/turf/T)
 	if(gas[GAS_OXYGEN] && (gas[GAS_PLASMA] || gas[GAS_VOLATILE]))
 		if(QUANTIZE(molar_density(GAS_PLASMA) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
@@ -597,8 +600,15 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		warning("check_recombustability being asked to check a [T.type] instead of /turf.")
 		return 0
 
-// checks if the GAS REACTANTS in a given turf can combust.
-/datum/gas_mixture/proc/check_combustability()
+	for(var/atom/A in T)
+		if(A.flammable)
+			return 1
+
+// checks if anything in a given turf can combust.
+/datum/gas_mixture/proc/check_combustability(var/turf/T)
+	for(var/atom/A in T)
+		if(A.flammable)
+			return 1
 	if(gas[GAS_OXYGEN] && (gas[GAS_PLASMA] || gas[GAS_VOLATILE]))
 		if(QUANTIZE(molar_density(GAS_PLASMA) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
 			return 1
