@@ -30,7 +30,7 @@ var/list/message_monitors = list()
 	var/obj/item/device/pda/customrecepient = null
 	var/customjob		= "Admin"
 	var/custommessage 	= "This is a test, please ignore."
-	var/switchboard_rows = 4
+	var/switchboard_columns = 5
 	var/switchboard_namelength = 5
 	var/obj/landline/linking = null
 	var/obj/item/telephone/switchboard/switchboard_headset = null
@@ -267,11 +267,13 @@ var/list/message_monitors = list()
 				<td width='15%'>[rc.rec_dpt]</td><td width='300px'>[rc.message]</td><td width='15%'>[rc.stamp]</td><td width='15%'>[rc.id_auth]</td><td width='15%'>[rc.priority]</td></tr>"}
 			dat += "</table>"
 		if(5) //manual switchboard
-			var/a = 0
+			var/current_button_num = 1
 			for(var/obj/machinery/requests_console/RC in requests_consoles)
-				var/shortname = RC.master_department_short + "-" + copytext(RC.department,1,switchboard_namelength-1)
+				var/shortname_end = RC.department_short ? RC.department_short : RC.department
+				shortname_end = copytext(shortname_end,1,switchboard_namelength-1)
+				var/shortname = RC.master_department_short + "-" + shortname_end
 				while(length(shortname) < switchboard_namelength)
-					shortname += " "
+					shortname += " " //TODO figure out a way to have multiple spaces in a row without them being auto-deleted
 				var/callconnector
 				if(RC.landline.calling)
 					callconnector = "<A href='?src=\ref[src];stopCall=\ref[RC.landline]'>x</A>"
@@ -285,10 +287,10 @@ var/list/message_monitors = list()
 				if(b)
 					shortname = "<A href='?src=\ref[src];setCurrentLine=\ref[RC.landline]'><font color=[b]>[shortname]</font></A>"
 				dat += "<tt>[shortname]\[[callconnector]\] </tt>" //thanks no. 455311247
-				a += 1
-				if(a > switchboard_rows)
+				current_button_num += 1
+				if(current_button_num > switchboard_columns)
 					dat += "<br>"
-					a = 0
+					current_button_num = 1
 			var/currentline = "null"
 			if(switchboard_headset && switchboard_headset.linked_landline)
 				var/obj/machinery/requests_console/RC = switchboard_headset.linked_landline.attached_to
@@ -588,11 +590,12 @@ var/list/message_monitors = list()
 			src.screen = 0
 		if (href_list["clearCurrentLine"])
 			if(switchboard_headset && switchboard_headset.linked_landline)
-				if(switchboard_headset.linked_landline.linked_phone)
-					playsound(switchboard_headset.linked_landline.linked_phone, switchboard_sound2, 100, 1) //i feel like a javascript pajeet writing these 5 layer deep object chains
-				if(switchboard_headset.linked_landline.calling && switchboard_headset.linked_landline.calling.linked_phone)
-					playsound(switchboard_headset.linked_landline.calling.linked_phone, switchboard_sound2, 100, 1)
-				switchboard_headset.linked_landline.listening_operators -= src.switchboard_headset
+				var/obj/landline/LL = switchboard_headset.linked_landline
+				if(LL.linked_phone)
+					playsound(LL.linked_phone, switchboard_sound2, 100, 1)
+				if(LL.calling && LL.calling.linked_phone)
+					playsound(LL.calling.linked_phone, switchboard_sound2, 100, 1)
+				LL.listening_operators -= src.switchboard_headset
 				switchboard_headset.linked_landline = null
 				playsound(src, switchboard_sound2, 100, 1)
 			updateUsrDialog()

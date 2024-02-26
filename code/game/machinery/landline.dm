@@ -162,10 +162,8 @@
 		if(calling.linked_phone)
 			playsound(source=calling.linked_phone, soundin=linked_phone.pickup_sound, vol=100, vary=TRUE, channel=CHANNEL_TELEPHONES, wait=0)
 	ringing = FALSE
-	/* for(var/obj/machinery/computer/message_monitor/MM in message_monitors)
+	for(var/obj/machinery/computer/message_monitor/MM in message_monitors)
 		MM.updateUsrDialog()
-		message_admins("[MM] updated") */
-	//TODO make this actually update the switchboard window
 
 /obj/landline/proc/get_status()
 	//orange - operator should plug in and talk to user
@@ -219,10 +217,8 @@
 				calling.calling = null
 				calling = null
 				break
-	/* for(var/obj/machinery/computer/message_monitor/MM in message_monitors)
+	for(var/obj/machinery/computer/message_monitor/MM in message_monitors)
 		MM.updateUsrDialog()
-		message_admins("[MM] updated") */
-	//TODO make this actually update the switchboard window
 	
 	user.visible_message("<span class='notice'>[user] puts \the [O] onto \the [src.attached_to].</span>")
 	var/obj/item/telephone/P = O
