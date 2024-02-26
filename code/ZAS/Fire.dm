@@ -120,18 +120,18 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 //energy is taken from burning atoms and delivered to the fire at its current location
 //proc returns energy in MJ and oxygen consumed in mols
 /atom/proc/burnSolidFuel()
-	var/turf/T = get_turf(loc)
+	var/turf/T = isturf(src) ? src : get_turf(loc)
 
 	var/datum/thermal_material/material = src.thermal_material
 
 	var/datum/gas_mixture/air = T.return_air()
-	var/oxy_ratio  = air.molar_density(GAS_OXYGEN)
+	var/oxy_ratio  = air.partial_pressure(GAS_OXYGEN) / 100
 	var/temperature = air.return_temperature()
 	var/delta_t
 
 	var/heat_out = 0 //MJ
 	var/oxy_used = 0 //mols
-	var/co2_used = 0 //mols
+	var/co2_prod = 0 //mols
 
 	//if all energy has been extracted from the atom, ash it
 	if(thermal_mass <= 0)
@@ -151,23 +151,23 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	//rate at which energy is consumed from the atom and delivered to the fire
 	//burnrate = 1 at 20C with standard oxy concentration
 	//provides the "heat" and "oxygen" portions of the fire triangle
-	var/burnrate = oxy_ratio >= MINOXY2BURN ? (oxy_ratio/(MINOXY2BURN + rand(-0.02,0.02))) * (temperature/T20C): 0
+	var/burnrate = (oxy_ratio/(MINOXY2BURN + rand(-0.02,0.02))) * (temperature/T20C)
 
 	if(burnrate < 0.1)
 		extinguish()
 		return
 
 	//smoke density increases with burnrate and decreases with temperature
-	var/smoke_density = clamp(4 * burnrate * (1-temperature/FLAME_TEMPERATURE_PLASTIC),1,5)
-	if(prob(smoke_density)) //1-5% chance of smoke creation per tick
-		var/datum/effect/system/smoke_spread/fire/smoke = new /datum/effect/system/smoke_spread()
-		smoke.set_up(smoke_density,0,T)
-		smoke.time_to_live = 30 SECONDS
-		smoke.start()
+	// var/smoke_density = clamp(4 * burnrate * (1-temperature/FLAME_TEMPERATURE_PLASTIC),1,5)
+	// if(prob(smoke_density)) //1-5% chance of smoke creation per tick
+	// 	var/datum/effect/system/smoke_spread/fire/smoke = new /datum/effect/system/smoke_spread()
+	// 	smoke.set_up(smoke_density,0,T)
+	// 	smoke.time_to_live = 30 SECONDS
+	// 	smoke.start()
 
 	//a tiny object will burn for 10 seconds under standard pressure and oxygen concentration
 	//a large object will burn for 250 seconds under standard pressure and oxygen concentration
-	var/delta_m = 0.1 * burnrate //mass change this tick
+	var/delta_m = 0.1 * burnrate * zas_settings.Get(/datum/ZAS_Setting/fire_heat_generation) //mass change this tick
 	thermal_mass -= delta_m
 
 	//change in internal energy = energy produced by combustion (assuming perfect combustion)
@@ -175,25 +175,26 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	//n_oxy = (m_fuel / (m_fuel/n_fuel)) / (n_fuel/n_oxy)
 	oxy_used = (delta_m / material.molecular_weight) / material.fuel_ox_ratio //mols
+	co2_prod = oxy_used //simplification
 
 	if(!in_fire && T)
 		//change in internal energy (delta_U) = change in energy due to heat transfer (delta_Q) due to isochoric reaction
 		//delta_t = delta_Q/(m*c) = heat_out/(delta_m * heating_value)
 		delta_t = heat_out/(delta_m * material.heating_value)
 		T.hotspot_expose(temperature + delta_t, CELL_VOLUME, surfaces=1)
-	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=material.flame_temp)
+	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=material.flame_temp)
 
 //Outputs the heat produced (MJ), oxygen consumed (mol), co2 consumed (mol), and maximum flame temperature (K)
 /atom/proc/burnLiquidFuel()
 	var/heat_out = 0 //MJ
 	var/oxy_used = 0 //mols
-	var/co2_used = 0 //mols (some reagents consume co2 when they burn)
+	var/co2_prod = 0 //mols (some reagents consume co2 when they burn)
 	var/max_temperature = 0 //K
 	var/thermal_energy_transfer = 0 //J
 	var/consumption_rate = 1.0 //units per tick
 
 	if(!reagents)
-		return list(heat_out,oxy_used,co2_used,max_temperature)
+		return list(heat_out,oxy_used,co2_prod,max_temperature)
 	for(var/datum/reagent/A in reagents.reagent_list)
 		if(A.id in possible_fuels) //burn flammable
 			var/list/fuel_stats = possible_fuels[A.id]
@@ -201,13 +202,13 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 			thermal_energy_transfer = fuel_stats["thermal_energy_transfer"]
 			consumption_rate = fuel_stats["consumption_rate"]
 			oxy_used = fuel_stats["o2_cons"]
-			co2_used = fuel_stats["co2_cons"]
+			co2_prod = fuel_stats["co2_cons"]
 
 			reagents.remove_reagent(A.id, consumption_rate)
 			heat_out = thermal_energy_transfer / 1000000 // J to MJ
 		else //evaporate inflammable
 			reagents.remove_reagent(A.id, consumption_rate)
-		return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=max_temperature)
+		return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=max_temperature)
 
 /atom/proc/ashify()
 	if(!on_fire)
@@ -215,6 +216,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	var/ashtype = ashtype()
 	new ashtype(src.loc)
 	extinguish()
+	message_admins("Extinguished because ashify() called")
 	qdel(src)
 
 /atom/proc/extinguish(var/duration = 30 SECONDS)
@@ -227,10 +229,8 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 //ignite() lights objects on fire; hotspot_expose() lights turfs and spawns fire effects
 /atom/proc/ignite()
-	message_admins("ignite() attempt started on [src]")
 	var/in_fire = FALSE
 	if(!flammable || fire_protection - world.time > 0)
-		message_admins("[src] failed to ignite if !flammable = [!flammable] = 1 or fire_protection - world.time = [fire_protection - world.time] > 0")
 		return FALSE
 	on_fire=1
 	if(fire_dmi && fire_sprite && !isturf(src))
@@ -274,6 +274,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	var/ashtype = ashtype()
 	new ashtype(src.loc)
 	extinguish()
+	message_admins("Extinguished because turf ashify() called")
 	ChangeTurf(src.get_underlying_turf())
 
 /turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume, var/soh = 0, var/surfaces=0)
@@ -309,7 +310,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	var/igniting = 0
 
-	if(surfaces && air_contents.molar_density(GAS_OXYGEN) >= MINOXY2BURN)
+	if(surfaces && air_contents.partial_pressure(GAS_OXYGEN) / 100 >= MINOXY2BURN)
 		for(var/obj/O in contents)
 			if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && O.flammable && !O.on_fire && exposed_temperature >= O.autoignition_temperature)
 				O.ignite()
@@ -328,7 +329,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 /turf/simulated/burnLiquidFuel()
 	var/heat_out = 0 //MJ
 	var/oxy_used = 0 //mols
-	var/co2_used = 0 //mols (some reagents consume co2 when they burn)
+	var/co2_prod = 0 //mols (some reagents consume co2 when they burn)
 	var/max_temperature = 0 //K
 	var/thermal_energy_transfer = 0 //J
 	var/consumption_rate = 1.0 //units per tick
@@ -342,14 +343,14 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	thermal_energy_transfer = fuel_stats["thermal_energy_transfer"]
 	consumption_rate = fuel_stats["consumption_rate"]
 	oxy_used = fuel_stats["o2_cons"]
-	co2_used = fuel_stats["co2_cons"]
+	co2_prod = fuel_stats["co2_cons"]
 
 	puddle.amount -= consumption_rate
 	heat_out = thermal_energy_transfer / 1000000 // J to MJ
 
 	if(puddle.amount < 0.1)
 		qdel(puddle)
-	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_used"=co2_used,"max_temperature"=max_temperature)
+	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=max_temperature)
 
 
 ///////////////////////////////////////////////
@@ -376,7 +377,6 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	qdel(src)
 
 /obj/effect/fire/process()
-	message_admins("Starting fire process()")
 	if(timestopped)
 		return 0
 	. = 1
@@ -386,12 +386,12 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	if (!istype(S))
 		Extinguish()
-		message_admins("Extinguished because !istype(turf/simulated)")
+		message_admins("Extinguished because not a simmed turf")
 		return
 
 	if (isnull(S.zone))
 		Extinguish()
-		message_admins("Extinguished because isnull(turf/simulated/zone)")
+		message_admins("Extinguished because null zone")
 		return
 
 	var/datum/gas_mixture/air_contents = S.return_air()
@@ -410,7 +410,10 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	// Check if there is something to combust.
 	if (!air_contents.check_recombustability(S))
 		Extinguish()
-		message_admins("Extinguished because recombustability check failed")
+		return
+
+	if(air_contents.partial_pressure(GAS_OXYGEN)/100 < MINOXY2BURN)
+		Extinguish()
 		return
 
 	var/firelevel = air_contents.calculate_firelevel(S)
@@ -441,7 +444,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 				if(!acs)
 					continue
-				if(!acs.check_recombustability(enemy_tile))
+				if(!acs.check_combustability(enemy_tile))
 					continue
 				//If extinguisher mist passed over the turf it's trying to spread to, don't spread and
 				//reduce firelevel.
@@ -455,7 +458,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 				//Spread the fire.
 				if(!(locate(/obj/effect/fire) in enemy_tile))
-					if( prob( 50 + 50 * (firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier)) ) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
+					if( prob(10 + 50 * zas_settings.Get(/datum/ZAS_Setting/fire_spread_rate) * (firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier)) ) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
 						new/obj/effect/fire(enemy_tile)
 
 	//seperate part of the present gas
@@ -465,7 +468,6 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 ///////////////////////////////// FLOW HAS BEEN CREATED /// DONT DELETE THE FIRE UNTIL IT IS MERGED BACK OR YOU WILL DELETE AIR ///////////////////////////////////////////////
 
 	if(flow)
-		message_admins("zburn started")
 		flow.zburn(S, 1)
 
 		//merge the air back
@@ -545,40 +547,55 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		//burn solids and liquids
 		var/SL_energy = 0
 		var/SL_oxy_used = 0
-		var/SL_co2_used = 0
+		var/SL_co2_prod = 0
 		var/max_temperature = 0
 		if(T && istype(T))
+			if(T.flammable)
+				var/solid_burn_products = T.burnSolidFuel()
+				if(solid_burn_products)
+					SL_energy += solid_burn_products["heat_out"]
+					SL_oxy_used += solid_burn_products["oxy_used"]
+					SL_co2_prod += solid_burn_products["co2_prod"]
+					max_temperature = max(max_temperature, solid_burn_products["max_temperature"])
+
+				var/liquid_burn_products = T.burnLiquidFuel()
+				if(liquid_burn_products)
+					SL_energy += liquid_burn_products["heat_out"]
+					SL_oxy_used += liquid_burn_products["oxy_used"]
+					SL_co2_prod += -liquid_burn_products["co2_prod"]
+					max_temperature = max(max_temperature, liquid_burn_products["max_temperature"])
 			for(var/atom/A in T)
+				if(!A.flammable)
+					continue
 				var/solid_burn_products = A.burnSolidFuel()
 				if(solid_burn_products)
 					SL_energy += solid_burn_products["heat_out"]
 					SL_oxy_used += solid_burn_products["oxy_used"]
-					SL_co2_used += solid_burn_products["co2_used"]
+					SL_co2_prod += solid_burn_products["co2_prod"]
 					max_temperature = max(max_temperature, solid_burn_products["max_temperature"])
 
 				var/liquid_burn_products = A.burnLiquidFuel()
 				if(liquid_burn_products)
 					SL_energy += liquid_burn_products["heat_out"]
 					SL_oxy_used += liquid_burn_products["oxy_used"]
-					SL_co2_used += liquid_burn_products["co2_used"]
+					SL_co2_prod += -liquid_burn_products["co2_prod"]
 					max_temperature = max(max_temperature, liquid_burn_products["max_temperature"])
 
-		//sanity checks
+		//sanity check
 		SL_oxy_used = clamp(SL_oxy_used, 0, src[GAS_OXYGEN])
-		SL_co2_used = clamp(SL_co2_used, 0, src[GAS_CARBON])
-		if(total_fuel)
-			max_temperature = 0 //no temperature limit if plasma or volatile agent is present
 
 		//remove and add gasses as calculated
 		adjust_multi(
-			GAS_OXYGEN, -min(src[GAS_OXYGEN], total_oxygen * used_reactants_ratio + SL_oxy_used),
+			GAS_OXYGEN, -min(src[GAS_OXYGEN], total_oxygen * used_reactants_ratio + SL_oxy_used * zas_settings.Get(/datum/ZAS_Setting/fire_oxygen_consumption)),
 			GAS_PLASMA, -min(src[GAS_PLASMA], (src[GAS_PLASMA] * used_fuel_ratio * used_reactants_ratio) * 3),
-			GAS_CARBON, max(2 * total_fuel * used_reactants_ratio + SL_co2_used, 0),
+			GAS_CARBON, max(2 * total_fuel * used_reactants_ratio + SL_co2_prod * zas_settings.Get(/datum/ZAS_Setting/fire_oxygen_consumption), 0),
 			GAS_VOLATILE, -(src[GAS_VOLATILE] * used_fuel_ratio * used_reactants_ratio) * 5) //Fuel burns 5 times as quick
 
 		//calculate the energy produced by the reaction and then set the new temperature of the mix
-		temperature = (starting_energy + SL_energy + zas_settings.Get(/datum/ZAS_Setting/fire_fuel_energy_release) * total_fuel * used_reactants_ratio) / heat_capacity()
-
+		if(total_fuel) //gas burning = limitless temperature
+			temperature = (starting_energy + SL_energy * 100000 + zas_settings.Get(/datum/ZAS_Setting/fire_fuel_energy_release) * total_fuel * used_reactants_ratio) / heat_capacity()
+		else
+			temperature += max(((starting_energy + SL_energy * 100000 * zas_settings.Get(/datum/ZAS_Setting/fire_heat_generation)) / heat_capacity()) * (1 - temperature/max_temperature),0)
 		update_values()
 		value = total_reactants * used_reactants_ratio //0 if solids and liquids only
 	return value
@@ -601,7 +618,12 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		return 0
 
 	for(var/atom/A in T)
-		if(A.flammable)
+		if(A.flammable && A.fire_protection - world.time <= 0)
+			if(A.thermal_mass > 0)
+				return 1
+
+	if(T.flammable && T.fire_protection - world.time <= 0)
+		if(T.thermal_mass > 0)
 			return 1
 
 // checks if anything in a given turf can combust.
@@ -609,6 +631,10 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	for(var/atom/A in T)
 		if(A.flammable)
 			return 1
+	if(T.flammable)
+		return 1
+	if(locate(/obj/effect/decal/cleanable/liquid_fuel) in T)
+		return 1
 	if(gas[GAS_OXYGEN] && (gas[GAS_PLASMA] || gas[GAS_VOLATILE]))
 		if(QUANTIZE(molar_density(GAS_PLASMA) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
 			return 1

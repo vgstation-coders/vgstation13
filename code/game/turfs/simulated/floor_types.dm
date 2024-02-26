@@ -60,7 +60,8 @@
 /turf/simulated/floor/wood
 	name = "floor"
 	icon_state = "wood"
-
+	flammable = TRUE
+	thermal_material = new/datum/thermal_material/wood()
 	soot_type = null
 	melt_temperature = 0 // Doesn't melt.
 
@@ -411,8 +412,7 @@
 	icon_state = "carpet"
 	var/has_siding=1
 	flammable = TRUE
-	autoignition_temperature = AUTOIGNITION_FABRIC
-	thermal_mass = 1
+	thermal_material = new/datum/thermal_material/fabric()
 
 /turf/simulated/floor/carpet/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/carpet(null)

@@ -1140,8 +1140,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define HHV_WAX 42.0 // Paraffin wax
 #define HHV_BIOLOGICAL 38.0 // Body fat
 
-// combustion requires about 16% oxygen concentration
-#define MINOXY2BURN 0.16
+// combustion requires about 14% oxygen concentration
+#define MINOXY2BURN 0.14
 
 // stoichiometric combustion ratios in oxygen
 #define FUEL_OX_RATIO_WOOD (1/6) // simplified to C6H10O5 (cellulose)

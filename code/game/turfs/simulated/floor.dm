@@ -44,6 +44,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	var/image/floor_overlay
 
 	melt_temperature = 1643.15 // Melting point of steel
+	thermal_mass = 1
 
 	plane = TURF_PLANE
 

@@ -39,9 +39,10 @@ var/list/atom/burnableatoms = list()
 /atom/proc/checkburn()
 	if(on_fire)
 		var/datum/gas_mixture/G = return_air()
-		if(!G || G.molar_density(GAS_OXYGEN) < MINOXY2BURN) //no oxygen so it goes out
+		if(!G || G.partial_pressure(GAS_OXYGEN) / 100  < MINOXY2BURN) //no oxygen so it goes out
 			extinguish()
+			message_admins("extinguished via checkburn")
 	else if(flammable && isturf(loc))
 		var/datum/gas_mixture/G = return_air()
-		if(G && G.temperature >= autoignition_temperature && G.molar_density(GAS_OXYGEN) >= MINOXY2BURN)
+		if(G && G.temperature >= autoignition_temperature && G.partial_pressure(GAS_OXYGEN) / 100  >= MINOXY2BURN)
 			ignite()
