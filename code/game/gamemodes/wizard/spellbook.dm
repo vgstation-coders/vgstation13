@@ -63,6 +63,8 @@
 
 	for(var/wizard_spell in getAllWizSpells())
 		var/spell/S = new wizard_spell
+		if(S.spell_flags & NO_SPELLBOOK)
+			continue
 		all_spells += wizard_spell
 		if(!S.holiday_required.len || (Holiday in S.holiday_required))
 			switch(S.specialization)

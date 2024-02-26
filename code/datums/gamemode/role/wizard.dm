@@ -71,7 +71,7 @@
 /datum/role/wizard/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	. = ..()
 	for (var/spell/S in old_character.spell_list)
-		if (S.user_type == USER_TYPE_WIZARD && !(S.spell_flags & LOSE_IN_TRANSFER))
+		if ((S.user_type == (USER_TYPE_WIZARD || USER_TYPE_SPELLBOOK)) && !(S.spell_flags & LOSE_IN_TRANSFER))
 			new_character.add_spell(S)
 
 /datum/role/wizard/GetScoreboard()
