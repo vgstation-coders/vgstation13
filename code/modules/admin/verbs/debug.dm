@@ -1563,7 +1563,7 @@ var/obj/blend_test = null
 
 	var/output = ""
 	for(var/atom/found in unconnected_atmos)
-		output += "<a href='?_src_=vars;Vars=\ref[found]'›\ref[found]</a>"
+		output += "<a href='?_src_=vars;Vars=\ref[found]'>\ref[found]</a>"
 		if(found.loc && found.loc.x)
 			output += ": [found] in [found.loc] at ([found.loc.x], [found.loc.y], [found.loc.z])<br>"
 		else if (found.x)
