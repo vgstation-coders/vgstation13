@@ -191,28 +191,21 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	if(isemptylist(master_department))
 		master_department =			list("other") //stuff without a proper department, ie telecomms and AIcore
 
-	var/d = master_department[1]
-	switch (d)
-		if("Command")
-			master_department_short = "c"
-		if("Engineering")
-			master_department_short = "e"
-		if("Medical")
-			master_department_short = "m"
-		if("Research")
-			master_department_short = "n"
-		if("Security")
-			master_department_short = "s"
-		if("Service")
-			master_department_short = "d"
-		if("Cargo")
-			master_department_short = "u"
-		if("Civilian")
-			master_department_short = ";"
-		if("other")
-			master_department_short = "?"
-		else
-			master_department_short = "ERROR"
+	var/department2key = list(
+		"Command" = "c",
+		"Service" = "d",
+		"Cargo" = "u",
+		"Engineering" = "e",
+		"Research" = "n",
+		"Medical" = "m",
+		"Security" = "s",
+		"Civilian" = ";",
+		"other" = "?"
+		)
+		
+	master_department_short = department2key[master_department[1]]
+	if(!master_department_short)
+		master_department_short = "ERROR"
 	add_to_global_rc_list()
 	
 
