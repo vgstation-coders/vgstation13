@@ -800,7 +800,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/tradeprobe
 	alert_title = "Vox Trade Probe Approaching"
-	message = "Although there are no Vox Shoal traders in your viscinity, a trade probe has docked with the station at the usual location. It will remain for 10 minutes."
+	message = "Although there are no Vox Shoal traders in your vicinity, a trade probe has docked with the station at the usual location. It will remain for 10 minutes."
 
 /datum/command_alert/tradeprobe_depart
 	alert_title = "Vox Trade Probe Departing"
