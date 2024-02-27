@@ -453,7 +453,7 @@
 	desc = "This book has several completely blank pages."
 
 /obj/item/weapon/spellbook/oneuse/firebreath
-	spell = /spell/targeted/projectile/dumbfire/fireball/firebreath
+	spell = /spell/targeted/projectile/dumbfire/firebreath
 	spellname = "fire breath"
 	icon_state = "bookfirebreath"
 	desc = "This book's pages are singed."
