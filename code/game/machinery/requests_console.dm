@@ -153,49 +153,66 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 	if(!isemptylist(master_department))
 		add_to_global_rc_list()
 		return "already setup"
-	var/list/command = list("Bridge","Captain's Desk","Chief Engineer's Desk","Chief Medical Officer's Desk","Head of Personnel's Desk","Head of Security's Desk","Research Director's Desk")
-	var/list/engineering = list("Atmospherics","Chief Engineer's Desk","Engineering","Mechanics")
-	var/list/medical = list("Chief Medical Officer's Desk","Genetics","Medbay","Chemistry","Virology")
-	var/list/research = list("Genetics","Research Director's Desk","Robotics","Science","Xenoarchaeology","Xenobiology","Mechanics")
-	var/list/security = list("Head of Security's Desk","Security")
-	var/list/service = list("Bar","Hydroponics","Kitchen","Head of Personnel's Desk")
-	var/list/cargo = list("Head of Personnel's Desk","Cargo Bay")
-	var/list/civilian = list("Pod Bay","Tool Storage","Chapel","EVA","Arrival shuttle","Locker Room","Janitorial","Head of Personnel's Desk")
-	for(var/subdept in command)
-		if(name == subdept)
-			master_department += "Command"
-			master_department_short = "c"
-	for(var/subdept in engineering)
-		if(name == subdept)
-			master_department += "Engineering"
-			master_department_short = "e"
-	for(var/subdept in medical)
-		if(name == subdept)
-			master_department += "Medical"
-			master_department_short = "m"
-	for(var/subdept in research)
-		if(name == subdept)
-			master_department += "Research"
-			master_department_short = "n"
-	for(var/subdept in security)
-		if(name == subdept)
-			master_department += "Security"
-			master_department_short = "s"
-	for(var/subdept in cargo)
-		if(name == subdept)
-			master_department += "Cargo"
-			master_department_short = "u"
-	for(var/subdept in service)
-		if(name == subdept)
-			master_department += "Service"
-			master_department_short = "d"
-	for(var/subdept in civilian)
-		if(name == subdept)
-			master_department += "Civilian"
-			master_department_short = ";"
+	var/list/master_departments = list(
+	"Bridge" = 						list("Command"),
+	"Captain's Desk" =				list("Command"),
+	"Chief Engineer's Desk" =		list("Command","Engineering"),
+	"Atmospherics" = 				list("Engineering"),	
+	"Engineering" =					list("Engineering"),
+	"Mechanics" =					list("Engineering","Research"),
+	"Chief Medical Officer's Desk"= list("Command","Medical"),
+	"Genetics" =					list("Medical","Research"),
+	"Medbay" =						list("Medical"),
+	"Chemistry" =					list("Medical"),
+	"Virology" =					list("Medical"),
+	"Research Director's Desk" =	list("Command","Research"),
+	"Robotics" = 					list("Research"),
+	"Science" = 					list("Research"),
+	"Xenoarchaeology" =				list("Research"),
+	"Xenobiology" = 				list("Research"),
+	"Head of Security's Desk" = 	list("Command","Security"),
+	"Security" =					list("Security"),
+	"Head of Personnel's Desk" = 	list("Command","Civilian","Service","Cargo"),
+	"Bar" =							list("Service"),
+	"Hydroponics" = 				list("Service"),
+	"Kitchen" = 					list("Service"),
+	"Cargo Bay" = 					list("Cargo"),
+	"Pod Bay" = 					list("Civilian"),
+	"Tool Storage" =				list("Civilian"),
+	"Chapel" =						list("Civilian"),
+	"EVA" = 						list("Civilian"),
+	"Arrival shuttle" = 			list("Civilian"),
+	"Locker Room" = 				list("Civilian"),
+	"Janitorial" = 					list("Civilian")
+	)
+	master_department = master_departments[name]
+	if(!islist(master_department))
+		master_department = list()
 	if(isemptylist(master_department))
-		master_department += "other" //stuff without a proper department, ie telecomms and AIcore
-		master_department_short = "?"
+		master_department =			list("other") //stuff without a proper department, ie telecomms and AIcore
+
+	var/d = master_department[1]
+	switch (d)
+		if("Command")
+			master_department_short = "c"
+		if("Engineering")
+			master_department_short = "e"
+		if("Medical")
+			master_department_short = "m"
+		if("Research")
+			master_department_short = "n"
+		if("Security")
+			master_department_short = "s"
+		if("Service")
+			master_department_short = "d"
+		if("Cargo")
+			master_department_short = "u"
+		if("Civilian")
+			master_department_short = ";"
+		if("other")
+			master_department_short = "?"
+		else
+			master_department_short = "ERROR"
 	add_to_global_rc_list()
 	
 
