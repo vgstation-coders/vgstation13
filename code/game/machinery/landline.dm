@@ -74,6 +74,20 @@
 		linked_cord += cable1
 		linked_cord += cable2
 		
+/obj/landline/proc/reattach_cord(mob/user)
+	if(!phone)
+		to_chat(user, "<span class='warning'>There's no phone to fix!</span>")
+		return 	
+	if(phone.linked_landline)
+		to_chat(user, "<span class='warning'>\the [phone] is already connected!</span>")
+		return
+	if(linked_phone)
+		to_chat(user, "<span class='warning'>\the [phone] is connected elsewhere!</span>")
+		return
+	phone.linked_landline = src
+	linked_phone = phone
+	return TRUE
+		
 /obj/landline/proc/shake_phone_overlay(amplitude = 2)
 	if(!phone)
 		return
@@ -199,7 +213,8 @@
 	if(!user.drop_item(O))
 		to_chat(user, "<span class='warning'>It's stuck to your hand!</span>")
 		return
-	delete_cord()
+	if(linked_phone == O)
+		delete_cord()
 	if(calling)
 		if(calling.ringing)
 			calling.ringing = FALSE
