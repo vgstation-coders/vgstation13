@@ -1199,6 +1199,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define MECH_SCAN_FAIL		1 // Cannot be scanned at all.
 #define MECH_SCAN_ILLEGAL	2 // Can only be scanned by the antag scanner.
 #define MECH_SCAN_ACCESS	4 // Can only be scanned with the access required for the machine
+#define MECH_SCAN_GOONECODE 8 // Cannot be scanned and gives a "this is closed source!" message on scan attempt.
 
 
 // EMOTES!
