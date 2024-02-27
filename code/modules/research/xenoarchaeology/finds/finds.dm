@@ -956,8 +956,7 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/spacesuit/spawn_item()
-	var/result = pick(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/head/helmet/space/ancient)
-	return new result
+	return new /obj/item/weapon/storage/box/large/nasasuit
 
 /datum/find/excasuit
 	find_ID = ARCHAEO_EXCASUIT
@@ -966,8 +965,7 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/excasuit/spawn_item()
-	var/result = pick(/obj/item/clothing/suit/space/anomaly, /obj/item/clothing/head/helmet/space/anomaly)
-	return new result
+	return new /obj/item/weapon/storage/box/large/xa_excasuit
 
 /datum/find/anomsuit
 	find_ID = ARCHAEO_ANOMSUIT
@@ -976,8 +974,7 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/anomsuit/spawn_item()
-	var/result = pick(/obj/item/clothing/suit/bio_suit/anomaly/old, /obj/item/clothing/head/bio_hood/anomaly/old)
-	return new result
+	return new /obj/item/weapon/storage/box/large/xa_anomsuit
 
 /datum/find/lance
 	find_ID = ARCHAEO_LANCE

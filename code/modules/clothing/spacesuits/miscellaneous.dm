@@ -58,6 +58,7 @@
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.9
 
+//NASA spacesuit
 /obj/item/clothing/suit/space/ancient //slightly better then an anomalist's space suit
 	name = "ancient space suit"
 	icon_state = "nasa"
@@ -76,6 +77,12 @@
 	armor = list(melee = 10, bullet = 10, laser = 10,energy = 10, bomb = 50, bio = 100, rad = 100)
 	species_restricted =list("Human", "Insectoid")
 	body_parts_visible_override = 0
+
+//used for the xenoarch NASA suit find
+/obj/item/weapon/storage/box/large/nasasuit
+	desc = "There's a label on the box: 'Retired Space Suit'. The box is warped beyond use, but it could be used in research or broken down and remade."
+	can_only_hold = null
+	items_to_spawn = list(/obj/item/clothing/head/helmet/space/ancient, /obj/item/clothing/suit/space/ancient)
 
 //Clown Space Suit
 /obj/item/clothing/head/helmet/space/clown
