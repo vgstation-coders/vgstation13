@@ -334,7 +334,12 @@
 		var/buy_type = text2path(href_list["spell"])
 
 		if(ispath(buy_type, /spell)) //Passed a spell typepath
-			if(locate(buy_type) in usr.spell_list)
+			var/found_same_spell = FALSE
+			for(var/spell/spell_path_to_check in usr.spell_list)
+				if(buy_type == spell_path_to_check.type)
+					found_same_spell = TRUE
+					break
+			if(found_same_spell)
 				to_chat(usr, "<span class='notice'>You already know that spell. Perhaps you'd like to upgrade it instead?</span>")
 
 			else if(buy_type in all_spells)
