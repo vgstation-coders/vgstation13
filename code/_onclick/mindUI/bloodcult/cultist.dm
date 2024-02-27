@@ -709,6 +709,9 @@
 /obj/abstract/mind_ui_element/bloodcult_cultist_slot_manager/process()
 	if (invisibility == 101)
 		return
+	UpdateIcon()
+
+/obj/abstract/mind_ui_element/bloodcult_cultist_slot_manager/UpdateIcon()
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (istype(cult))
 		var/mob/M = GetUser()
@@ -804,6 +807,7 @@
 					slot.icon_state = "slot_empty[slot.hovering ? "-hover" : ""]"
 					slot.base_icon_state = "slot_empty"
 					slot.locked = TRUE
+					slot.overlays += "locked"
 					i++
 				for (var/cons_type in construct_types)
 					if (!(cons_type in free_construct_slots))
