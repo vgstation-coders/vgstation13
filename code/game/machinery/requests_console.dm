@@ -334,7 +334,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 				
 			if(12) //last call log
 				dat += landline.last_call_log
-				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back to main menu</A><BR>")
+				dat += text("<BR><A href='?src=\ref[src];setScreen=11'>Back</A><BR>")
 			
 			else	//main menu
 				screen = 0
@@ -496,6 +496,8 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 			if(!announcementConsole)
 				return
 			screen = 10
+		if(11)		//return to dialer
+			screen = 11
 		if(12)		//last call log
 			screen = 12
 		else		//main menu
@@ -603,6 +605,14 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 			updateUsrDialog()
 	if (istype(O, /obj/item/telephone) && landline)
 		landline.attackby(O, user)
+	if (istype(O, /obj/item/stack/cable_coil))
+		if(!open)
+			to_chat(user, "<span class='warning'>You need to remove the cover before you can fix the phone's wiring!</span>")
+			return
+		if(landline.reattach_cord(user))
+			user.visible_message("<span class='notice'>[user] re-attaches the [src]'s phone cord.</span>")
+			var/obj/item/stack/cable_coil/C = O
+			C.use(1)
 
 /obj/machinery/requests_console/verb/pick_up_phone()
 	set category = "Object"

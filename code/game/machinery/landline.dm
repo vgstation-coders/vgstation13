@@ -20,6 +20,8 @@
 	var/tether_length = 4
 	var/list/obj/effect/phone_cord/linked_cord = list()
 	var/list/obj/item/telephone/switchboard/listening_operators = list()
+	var/is_dialtone_looping = FALSE
+	var/is_endcall_looping = FALSE
 
 /obj/landline/New(var/obj/A=loc)
 	attached_to = A
@@ -74,6 +76,20 @@
 		linked_cord += cable1
 		linked_cord += cable2
 		
+/obj/landline/proc/reattach_cord(mob/user)
+	if(!phone)
+		to_chat(user, "<span class='warning'>There's no phone to fix!</span>")
+		return 	
+	if(phone.linked_landline)
+		to_chat(user, "<span class='warning'>\the [phone] is already connected!</span>")
+		return
+	if(linked_phone)
+		to_chat(user, "<span class='warning'>\the [phone] is connected elsewhere!</span>")
+		return
+	phone.linked_landline = src
+	linked_phone = phone
+	return TRUE
+		
 /obj/landline/proc/shake_phone_overlay(amplitude = 2)
 	if(!phone)
 		return
@@ -90,12 +106,19 @@
 	return TRUE //redphones stay powered regardless
 	
 /obj/landline/proc/end_call_loop()
+	if(is_endcall_looping)
+		return
+	if(is_dialtone_looping)
+		return
+	is_endcall_looping = TRUE
 	spawn(0)
-		while(linked_phone && !phone && has_power())
+		while(linked_phone && !phone && has_power() && is_endcall_looping)
 			playsound(source=linked_phone, soundin=linked_phone.end_call_sound, vol=100, vary=FALSE, channel=0)
 			sleep(1 SECONDS)
 	
 /obj/landline/proc/ring_loop()
+	is_endcall_looping = FALSE
+	is_dialtone_looping = TRUE
 	if(calling && calling.phone)
 		calling.ringing = TRUE
 	spawn(0)
@@ -155,6 +178,7 @@
 	phone = null //do not delete phone
 	attached_to.overlays.Remove(phone_overlay)
 	if(ringing && calling)
+		calling.is_dialtone_looping = FALSE
 		//TODO don't override the "rerouted by operator" line if we got rerouted
 		last_call_log = text("<B>Last call log:</B><BR><BR>")
 		last_call_log += text("picked up call from [calling.get_department()]<BR>")
@@ -199,7 +223,10 @@
 	if(!user.drop_item(O))
 		to_chat(user, "<span class='warning'>It's stuck to your hand!</span>")
 		return
-	delete_cord()
+	if(linked_phone == O)
+		delete_cord()
+	is_dialtone_looping = FALSE
+	is_endcall_looping = FALSE
 	if(calling)
 		if(calling.ringing)
 			calling.ringing = FALSE
@@ -211,6 +238,8 @@
 					RC.icon_state = "req_comp1"
 		last_call_log += text("you hung up<BR>")
 		calling.last_call_log += text("[get_department()] hung up<BR>")
+		calling.attached_to.updateUsrDialog()
+		attached_to.updateUsrDialog()
 		calling.end_call_loop()
 		for (var/obj/machinery/message_server/MS in message_servers)
 			if(MS.landlines_functioning())
