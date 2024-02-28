@@ -10,7 +10,7 @@
 	var/list/disallowed_species = null
 
 	var/duration = 0
-
+	var/supports_cosmetic_organs = FALSE
 	var/list/mob/doing_surgery = list() //who's doing this RIGHT NOW
 
 	// evil infection stuff that will make everyone hate me
@@ -65,7 +65,7 @@
 	if (can_infect && affected)
 		spread_germs_to_organ(affected, user)
 
-	if(!(affected.status & (ORGAN_ROBOT|ORGAN_PEG)))//robot organs and pegs can't spread diseases or splatter blood
+	if((!(affected.status & (ORGAN_ROBOT|ORGAN_PEG))) && !affected.cosmetic_only)//robot organs and pegs can't spread diseases or splatter blood
 		var/block = user.check_contact_sterility(HANDS)
 		var/bleeding = user.check_bodypart_bleeding(HANDS)
 		target.oneway_contact_diseases(user,block,bleeding)//potentially spreads diseases from us to them, wear latex gloves!
@@ -108,7 +108,7 @@
 	return null
 
 /proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
-	if(!istype(user) || !istype(E))
+	if(!istype(user) || !istype(E) || E.cosmetic_only)
 		return
 
 	var/germ_level = user.germ_level
@@ -131,8 +131,19 @@
 		clumsy = 1
 
 	var/target_area = user.zone_sel ? user.zone_sel.selecting : get_random_zone_sel()
+	if(target_area == LIMB_GROIN)
+		var/groin_or_tail = input(user, "Groin or tail?", "Choose Target Zone", "Groin") as null|anything in list("Groin", "Tail")
+		switch(groin_or_tail)
+			if("Groin")
+				target_area = LIMB_GROIN
+			if("Tail")
+				target_area = COSMETIC_ORGAN_TAIL
 
 	for(var/datum/surgery_step/S in surgery_steps)
+		if(ishuman(M))
+			var/mob/living/carbon/human/human_target = M
+			if((target_area in human_target.cosmetic_organs_by_name) && !S.supports_cosmetic_organs)
+				continue
 		//check if tool is right or close enough and if this step is possible
 		sleep_fail = 0
 		if(S.tool_quality(tool))
