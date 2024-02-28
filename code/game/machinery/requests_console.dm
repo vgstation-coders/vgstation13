@@ -334,7 +334,7 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 				
 			if(12) //last call log
 				dat += landline.last_call_log
-				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back to main menu</A><BR>")
+				dat += text("<BR><A href='?src=\ref[src];setScreen=11'>Back</A><BR>")
 			
 			else	//main menu
 				screen = 0

@@ -20,6 +20,8 @@
 	var/tether_length = 4
 	var/list/obj/effect/phone_cord/linked_cord = list()
 	var/list/obj/item/telephone/switchboard/listening_operators = list()
+	var/is_dialtone_looping = FALSE
+	var/is_endcall_looping = FALSE
 
 /obj/landline/New(var/obj/A=loc)
 	attached_to = A
@@ -104,12 +106,19 @@
 	return TRUE //redphones stay powered regardless
 	
 /obj/landline/proc/end_call_loop()
+	if(is_endcall_looping)
+		return
+	if(is_dialtone_looping)
+		return
+	is_endcall_looping = TRUE
 	spawn(0)
-		while(linked_phone && !phone && has_power())
+		while(linked_phone && !phone && has_power() && is_endcall_looping)
 			playsound(source=linked_phone, soundin=linked_phone.end_call_sound, vol=100, vary=FALSE, channel=0)
 			sleep(1 SECONDS)
 	
 /obj/landline/proc/ring_loop()
+	is_endcall_looping = FALSE
+	is_dialtone_looping = TRUE
 	if(calling && calling.phone)
 		calling.ringing = TRUE
 	spawn(0)
@@ -169,6 +178,7 @@
 	phone = null //do not delete phone
 	attached_to.overlays.Remove(phone_overlay)
 	if(ringing && calling)
+		calling.is_dialtone_looping = FALSE
 		//TODO don't override the "rerouted by operator" line if we got rerouted
 		last_call_log = text("<B>Last call log:</B><BR><BR>")
 		last_call_log += text("picked up call from [calling.get_department()]<BR>")
@@ -215,6 +225,8 @@
 		return
 	if(linked_phone == O)
 		delete_cord()
+	is_dialtone_looping = FALSE
+	is_endcall_looping = FALSE
 	if(calling)
 		if(calling.ringing)
 			calling.ringing = FALSE
@@ -226,6 +238,8 @@
 					RC.icon_state = "req_comp1"
 		last_call_log += text("you hung up<BR>")
 		calling.last_call_log += text("[get_department()] hung up<BR>")
+		calling.attached_to.updateUsrDialog()
+		attached_to.updateUsrDialog()
 		calling.end_call_loop()
 		for (var/obj/machinery/message_server/MS in message_servers)
 			if(MS.landlines_functioning())
