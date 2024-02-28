@@ -419,7 +419,7 @@
 
 	// tactically deploy a wall under you and become immune to projectiles, I guess
 	spell_on_use_inhand = /spell/aoe_turf/conjure/wall
-	construct_type = "Juggernaut"
+	construct_type = "Artificer"
 
 /mob/living/simple_animal/construct/builder/New()
 	..()

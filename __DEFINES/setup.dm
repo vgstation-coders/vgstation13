@@ -1906,3 +1906,5 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 
 #define MINDUI_FLAG_PROCESSING	1
 #define MINDUI_FLAG_TOOLTIP		2
+
+#define MINDUI_MAX_CULT_SLOTS	14

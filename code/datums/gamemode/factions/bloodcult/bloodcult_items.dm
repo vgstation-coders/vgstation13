@@ -697,6 +697,7 @@ var/list/arcane_tomes = list()
 	if (shade)
 		shade.remove_blade_powers()
 		if (T)
+			shade.soulblade_ritual = FALSE
 			shade.forceMove(T)
 			shade.status_flags &= ~GODMODE
 			shade.canmove = 1
@@ -797,6 +798,7 @@ var/list/arcane_tomes = list()
 				shade.forceMove(SG)
 				SG.shade = shade
 				shade.remove_blade_powers()
+				shade.soulblade_ritual = FALSE
 				SG.icon_state = "soulstone2"
 				SG.item_state = "shard-soulstone2"
 				SG.name = "Soul Gem: [shade.real_name]"

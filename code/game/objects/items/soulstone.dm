@@ -459,6 +459,8 @@
 		shadeMob = new /mob/living/simple_animal/shade/noncult(receptacle)
 	shadeMob.status_flags |= GODMODE //So they won't die inside the stone somehow
 	shadeMob.canmove = 0//Can't move out of the soul stone
+	if (suicide)
+		shadeMob.soulblade_ritual = TRUE
 	shadeMob.name = "[true_name] the Shade"
 	shadeMob.real_name = "[true_name]"
 	mind.transfer_to(shadeMob)

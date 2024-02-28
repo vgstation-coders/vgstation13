@@ -885,6 +885,7 @@
 
 				new_shade.status_flags |= GODMODE
 				new_shade.canmove = 0
+				new_shade.soulblade_ritual = TRUE
 				new_shade.name = "[M.real_name] the Shade"
 				new_shade.real_name = "[M.real_name]"
 				new_shade.give_blade_powers()

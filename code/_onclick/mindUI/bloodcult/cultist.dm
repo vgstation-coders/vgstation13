@@ -515,6 +515,8 @@
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/artificer,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/wraith,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/juggernaut,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_soulblades,
+		/obj/abstract/mind_ui_element/bloodcult_soulblades_count,
 		)
 	sub_uis_to_spawn = list(
 		/datum/mind_ui/bloodcult_role,
@@ -535,10 +537,16 @@
 	..()
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (istype(cult))
-		for (var/i = 1 to cult.max_cultist_cap)
+		for (var/i = 1 to MINDUI_MAX_CULT_SLOTS)
 			var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/new_slot = new(null, src)
 			elements += new_slot
 			cultist_slots += new_slot
+
+/datum/mind_ui/bloodcult_panel/Display()
+	..()
+	if (active)
+		var/obj/abstract/mind_ui_element/bloodcult_cultist_slot_manager/slot_manager = locate() in elements
+		slot_manager.UpdateIcon()
 
 //------------------------------------------------------------
 
@@ -719,7 +727,9 @@
 			var/datum/role/cultist/C = iscultist(M)
 			if(C)
 				var/i = 1
-				var/accumulated_offset = 0
+				var/cap_placed = 0
+				var/list/ritualized_soulblades = list()//lists minds that undertook a soulblade ritual, saving their cult slot for others
+				var/accumulated_offset = -12 * max(0,cult.members.len - cult.max_cultist_cap) //in case of suspiciously large overflow, we shift the slots to the left so they remain centered
 				var/list/free_construct_slots = list()
 				var/list/construct_types = list("Artificer","Wraith","Juggernaut")
 				var/datum/mind_ui/bloodcult_panel/BP = parent
@@ -727,6 +737,11 @@
 					var/mob/O = R.antag.current
 					if (O.isDead())
 						continue
+					if (isshade(O))
+						var/mob/living/simple_animal/shade/S = O
+						if (S.soulblade_ritual)//we track soulbladed shades elsewhere
+							ritualized_soulblades += R.antag
+							continue
 					if (istype(O, /mob/living/simple_animal/construct))
 						var/mob/living/simple_animal/construct/cons = O
 						if (!(cons.construct_type in free_construct_slots))
@@ -752,34 +767,51 @@
 									juggernaut_slot.base_icon_state = "slot_juggernaut"
 									S = juggernaut_slot
 							S.overlays.len = 0
-							if (C == R)
-								S.overlays += "you"
 							if (cons.occult_muted())
 								S.overlays += "holy"
+							if (C == R)
+								S.overlays += "you"
 							continue
 					var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/slot = BP.cultist_slots[i]
 					slot.associated_role = R
 					switch(R.cultist_role)
+						if (CULTIST_ROLE_NONE)
+							slot.icon_state = "slot_herald[slot.hovering ? "-hover" : ""]"
+							slot.base_icon_state = "slot_herald"
 						if (CULTIST_ROLE_ACOLYTE)
 							slot.icon_state = "slot_acolyte[slot.hovering ? "-hover" : ""]"
 							slot.base_icon_state = "slot_acolyte"
-						if (CULTIST_ROLE_NONE|CULTIST_ROLE_HERALD)
+						if (CULTIST_ROLE_HERALD)
 							slot.icon_state = "slot_herald[slot.hovering ? "-hover" : ""]"
 							slot.base_icon_state = "slot_herald"
 						if (CULTIST_ROLE_MENTOR)
 							slot.icon_state = "slot_mentor[slot.hovering ? "-hover" : ""]"
 							slot.base_icon_state = "slot_mentor"
 					slot.overlays.len = 0
-					if (C == R)
-						slot.overlays += "you"
+					if (i > cult.cultist_cap)
+						slot.overlays += "overflow"
 					if (O.occult_muted())
 						slot.overlays += "holy"
+					if (C == R)
+						slot.overlays += "you"
+					if (isshade(O))
+						if (!istype(O.loc, /obj/item/soulstone) && !istype(O.loc, /obj/item/weapon/melee/soulblade))
+							slot.overlays += "shade"
 					slot.offset_x = -98 + accumulated_offset
 					accumulated_offset += 17
 					slot.UpdateUIScreenLoc()
 					slot.locked = FALSE
+					slot.invisibility = 0
+					slot.overflow = (i > cult.cultist_cap)
+					if (i == cult.cultist_cap)
+						var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_cap/cultist_cap = locate() in BP.elements
+						accumulated_offset -= 4
+						cultist_cap.offset_x = -98 + accumulated_offset
+						cultist_cap.UpdateUIScreenLoc()
+						accumulated_offset += 7
+						cap_placed = 1
 					i++
-					if (i > cult.max_cultist_cap)
+					if (i > MINDUI_MAX_CULT_SLOTS)//If the cult manages to overflow to over 5 cultists over the cap, we don't bother tracking them anymore.
 						break
 				while (i <= cult.cultist_cap)
 					var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/slot = BP.cultist_slots[i]
@@ -792,11 +824,12 @@
 					slot.base_icon_state = "slot_empty"
 					slot.locked = FALSE
 					i++
-				var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_cap/cultist_cap = locate() in BP.elements
-				accumulated_offset -= 4
-				cultist_cap.offset_x = -98 + accumulated_offset
-				cultist_cap.UpdateUIScreenLoc()
-				accumulated_offset += 7
+				if (!cap_placed)
+					var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_cap/cultist_cap = locate() in BP.elements
+					accumulated_offset -= 4
+					cultist_cap.offset_x = -98 + accumulated_offset
+					cultist_cap.UpdateUIScreenLoc()
+					accumulated_offset += 7
 				while (i <= cult.max_cultist_cap)
 					var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/slot = BP.cultist_slots[i]
 					slot.offset_x = -98 + accumulated_offset
@@ -808,6 +841,10 @@
 					slot.base_icon_state = "slot_empty"
 					slot.locked = TRUE
 					slot.overlays += "locked"
+					i++
+				while (i <= MINDUI_MAX_CULT_SLOTS)
+					var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/slot = BP.cultist_slots[i]
+					slot.invisibility = 101
 					i++
 				for (var/cons_type in construct_types)
 					if (!(cons_type in free_construct_slots))
@@ -831,6 +868,18 @@
 								juggernaut_slot.base_icon_state = "slot_juggernaut_empty"
 								juggernaut_slot.overlays.len = 0
 
+				var/obj/abstract/mind_ui_element/bloodcult_soulblades_count/soulblades_count = locate() in BP.elements
+				soulblades_count.overlays.len = 0
+				var/obj/abstract/mind_ui_element/hoverable/bloodcult_soulblades/soulblades = locate() in BP.elements
+				soulblades.tooltip_content = ""
+				if (ritualized_soulblades.len > 0)
+					soulblades.invisibility = 0
+					for (var/datum/mind/blade_mind in ritualized_soulblades)
+						soulblades.tooltip_content += "[blade_mind.name]<br>"
+					soulblades_count.overlays += String2Image("[ritualized_soulblades.len]")
+				else
+					soulblades.invisibility = 101
+
 
 //------------------------------------------------------------
 
@@ -849,6 +898,7 @@
 
 	var/datum/role/cultist/associated_role
 	var/locked = FALSE
+	var/overflow = FALSE
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/StartHovering(var/location,var/control,var/params)
 	set_tooltip()
@@ -861,15 +911,20 @@
 		var/icon/flat = getFlatIcon(M.current, SOUTH, 0, 1)
 		tooltip_content = "<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]' style='position:relative; top:10px;'>"
 		switch(associated_role.cultist_role)
+			if (CULTIST_ROLE_NONE)
+				tooltip_content += "Cultist Herald"
 			if (CULTIST_ROLE_ACOLYTE)
 				tooltip_content += "Cultist Acolyte"
 				if (associated_role.mentor)
 					var/datum/mind/I = associated_role.mentor.antag
 					tooltip_content += "<br>Mentored by [I.name]."
-			if (CULTIST_ROLE_NONE|CULTIST_ROLE_HERALD)
+			if (CULTIST_ROLE_HERALD)
 				tooltip_content += "Cultist Herald"
 			if (CULTIST_ROLE_MENTOR)
 				tooltip_content += "Cultist Mentor"
+		if (overflow)
+			tooltip_content += "<br><b>overcap!</b>"//with some know-how, cultists may attempt to bypass the cap.
+		tooltip_content += "<br>"
 	else if (!locked)
 		tooltip_title = "Cultist Slot"
 		tooltip_content = "If you find a suitable candidate, use the Conversion rune to invite them."
@@ -918,6 +973,28 @@
 	else
 		tooltip_title = "Juggernaut Slot"
 		tooltip_content = "The first Juggernaut in a cult won't count toward the cultist cap."
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_soulblades
+	name = "Soulblades"
+	icon = 'icons/ui/bloodcult/16x32.dmi'
+	icon_state = "blade"
+	layer = MIND_UI_BUTTON
+	offset_x = 140
+	offset_y = -22
+	tooltip_title = "Ritualized Soulblades"
+	tooltip_content = ""
+	tooltip_theme = "radial-cult"
+	element_flags = MINDUI_FLAG_TOOLTIP
+
+/obj/abstract/mind_ui_element/bloodcult_soulblades_count
+	name = "Soulblades"
+	icon = 'icons/ui/bloodcult/16x16.dmi'
+	icon_state = "blank"
+	layer = MIND_UI_FRONT
+	mouse_opacity = 0
+	offset_x = 150
 
 //------------------------------------------------------------
 

@@ -34,6 +34,8 @@
 	var/blade_harm = TRUE
 	var/mob/master = null
 
+	var/soulblade_ritual = FALSE
+
 	blooded = FALSE
 
 /mob/living/simple_animal/shade/New()
