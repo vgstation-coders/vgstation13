@@ -268,12 +268,12 @@ var/list/message_monitors = list()
 			dat += "</table>"
 		if(5) //manual switchboard
 			var/current_button_num = 1
+			dat += "<table>"
+			dat += "<tr>"
 			for(var/obj/machinery/requests_console/RC in requests_consoles)
 				var/shortname_end = RC.department_short ? RC.department_short : RC.department
 				shortname_end = copytext(shortname_end,1,switchboard_namelength-1)
 				var/shortname = RC.master_department_short + "-" + shortname_end
-				while(length(shortname) < switchboard_namelength)
-					shortname += " " //TODO figure out a way to have multiple spaces in a row without them being auto-deleted
 				var/callconnector
 				if(RC.landline.calling)
 					callconnector = "<A href='?src=\ref[src];stopCall=\ref[RC.landline]'>x</A>"
@@ -286,11 +286,13 @@ var/list/message_monitors = list()
 				var/b = RC.landline.get_status()
 				if(b)
 					shortname = "<A href='?src=\ref[src];setCurrentLine=\ref[RC.landline]'><font color=[b]>[shortname]</font></A>"
-				dat += "<tt>[shortname]\[[callconnector]\] </tt>" //thanks no. 455311247
+				dat += "<td align=\"right\"><tt>[shortname]\[[callconnector]\]</tt></td>" //thanks no. 455311247
 				current_button_num += 1
 				if(current_button_num > switchboard_columns)
-					dat += "<br>"
+					dat += "</tr><tr>"
 					current_button_num = 1
+			dat += "</tr>"
+			dat += "</table>"
 			var/currentline = "null"
 			if(switchboard_headset && switchboard_headset.linked_landline)
 				var/obj/machinery/requests_console/RC = switchboard_headset.linked_landline.attached_to
