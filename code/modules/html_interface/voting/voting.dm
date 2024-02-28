@@ -254,6 +254,8 @@ var/global/datum/controller/vote/vote = new()
 				var/map_choice = forced_map ? forced_map : winner
 				watchdog.map_path = map_paths[map_choice]
 				log_game("Players voted and chose.... [watchdog.map_path]!")
+	for(var/ckey in voters)
+		log_vote("[ckey] voted for [get_vote(ckey)].")
 
 	if(restart)
 		to_chat(world, "World restarting due to vote...")
