@@ -78,12 +78,6 @@
 	species_restricted =list("Human", "Insectoid")
 	body_parts_visible_override = 0
 
-//used for the xenoarch NASA suit find
-/obj/item/weapon/storage/box/large/nasasuit
-	desc = "There's a label on the box: 'Retired Space Suit'. The box is warped beyond use, but it could be used in research or broken down and remade."
-	can_only_hold = null
-	items_to_spawn = list(/obj/item/clothing/head/helmet/space/ancient, /obj/item/clothing/suit/space/ancient)
-
 //Clown Space Suit
 /obj/item/clothing/head/helmet/space/clown
 	name = "clown helmet"

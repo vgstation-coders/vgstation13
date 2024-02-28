@@ -34,16 +34,8 @@
 	item_state = "engspace_helmet"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/spacesuits.dmi', "right_hand" = 'icons/mob/in-hand/right/spacesuits.dmi')
 
-//used for the xenoarch old anomally suit find
-/obj/item/weapon/storage/box/large/xa_anomsuit
-	desc = "There's a label on the box: 'Retired Anomaly Suit. Dispose ASAP'. The box is warped beyond use, but it could be used in research or broken down and remade."
-	can_only_hold = null
-	items_to_spawn = list(/obj/item/clothing/head/bio_hood/anomaly/old, /obj/item/clothing/suit/bio_suit/anomaly/old)
-
-
 //Xenoarch space suit.
 //For the current standard suit see /obj/item/clothing/suit/space/rig/arch in "code\modules\clothing\spacesuits\rig.dm".
-
 /obj/item/clothing/suit/space/anomaly
 	name = "Excavation suit"
 	desc = "A pressure resistant excavation suit partially capable of insulating against exotic alien energies. There is a small tag on it that reads: 'Property of <s>Engineering</s> Research'."
@@ -59,9 +51,3 @@
 	item_state = "cespace_helmet"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 100)
 	body_parts_visible_override = EYES|BEARD
-
-//used for the xenoarch old excavation suit find
-/obj/item/weapon/storage/box/large/xa_excasuit
-	desc = "There's a label on the box: 'Retired Excavation Suit. Dispose ASAP'. The box is warped beyond use, but it could be used in research or broken down and remade."
-	can_only_hold = null
-	items_to_spawn = list(/obj/item/clothing/head/helmet/space/anomaly, /obj/item/clothing/suit/space/anomaly)
