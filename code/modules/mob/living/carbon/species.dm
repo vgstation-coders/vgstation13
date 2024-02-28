@@ -257,7 +257,7 @@ var/global/list/playable_species = list("Human")
 		H.organs += OE
 		if(OE.grasp_id)
 			H.grasp_organs += OE
-	for(var/organ as anything in H.cosmetic_organs_by_name)
+	for(var/organ in H.cosmetic_organs_by_name)
 		var/datum/organ/external/cosmetic_organ = H.cosmetic_organs_by_name[organ]
 		H.cosmetic_organs += cosmetic_organ
 	for(var/datum/organ/external/external_organ in H.organs)
