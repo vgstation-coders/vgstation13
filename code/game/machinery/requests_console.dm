@@ -496,6 +496,8 @@ var/list/requests_consoles_categorised = list("Command" = list(),"Engineering" =
 			if(!announcementConsole)
 				return
 			screen = 10
+		if(11)		//return to dialer
+			screen = 11
 		if(12)		//last call log
 			screen = 12
 		else		//main menu
