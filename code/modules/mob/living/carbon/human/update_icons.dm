@@ -270,15 +270,6 @@ var/global/list/damage_icon_parts = list()
 		mask.MapColors(0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,0)
 		husk_over.Blend(mask, ICON_ADD)
 		stand_icon.Blend(husk_over, ICON_OVERLAY)
-	var/datum/organ/external/tail/tail = get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
-	if(tail && (!(tail.status & ORGAN_DESTROYED) && tail.overlap_overlays))
-		var/obj/abstract/Overlays/limbs_overlay = obj_overlays[LIMBS_LAYER]
-		var/mutable_appearance/stand_icon_image = mutable_appearance(stand_icon)
-		limbs_overlay.icon = stand_icon_image.icon
-		limbs_overlay.icon_state = stand_icon_image.icon_state
-		obj_to_plane_overlay(limbs_overlay, LIMBS_LAYER)
-	else
-		overlays -= obj_overlays[LIMBS_LAYER]
 	if(has_head)
 		//Eyes
 		if(!skeleton)
@@ -314,7 +305,15 @@ var/global/list/damage_icon_parts = list()
 	if(body_alphas.len)
 		var/lowest_alpha = get_lowest_body_alpha()
 		stand_icon -= rgb(0,0,0,lowest_alpha)
-
+	var/datum/organ/external/tail/tail = get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
+	if(tail && (!(tail.status & ORGAN_DESTROYED) && tail.overlap_overlays))
+		var/obj/abstract/Overlays/limbs_overlay = obj_overlays[LIMBS_LAYER]
+		var/mutable_appearance/stand_icon_image = mutable_appearance(stand_icon)
+		limbs_overlay.icon = stand_icon_image.icon
+		limbs_overlay.icon_state = stand_icon_image.icon_state
+		obj_to_plane_overlay(limbs_overlay, LIMBS_LAYER)
+	else
+		overlays -= obj_overlays[LIMBS_LAYER]
 	//tail
 	update_tail_layer(FALSE)
 
