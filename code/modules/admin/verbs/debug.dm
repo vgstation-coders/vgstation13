@@ -1554,10 +1554,10 @@ var/obj/blend_test = null
 
 /* If search_entire_world is set, search all pumps and scrubbers. Otherwise, only search pumps and scrubbers on the map's designated main station z-level. */
 	var/list/unconnected_atmos = list()
-	for(var/obj/machinery/atmospherics/unary/vent_pump/V in world)
+	for(var/obj/machinery/atmospherics/unary/vent_pump/V in atmos_machines)
 		if(istype(V) && (search_entire_world ? search_entire_world : V.z == map.zMainStation) && !V.node1)
 			unconnected_atmos.Add(V)
-	for(var/obj/machinery/atmospherics/unary/vent_scrubber/S in world)
+	for(var/obj/machinery/atmospherics/unary/vent_scrubber/S in atmos_machines)
 		if(istype(S) && (search_entire_world ? search_entire_world : S.z == map.zMainStation) && !S.node1)
 			unconnected_atmos.Add(S)
 
