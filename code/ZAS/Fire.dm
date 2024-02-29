@@ -122,6 +122,16 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 /atom/proc/useThermalMass(var/used_mass)
 	thermal_mass -= used_mass
 
+/atom/proc/burnItselfUp() //starts fires on tiles every few seconds if the burning object isn't already in a burning tile
+	while(on_fire)
+		var/in_fire = FALSE
+		for(var/obj/effect/fire/F in loc)
+			in_fire = TRUE
+			break
+		if(!in_fire)
+			burnSolidFuel()
+		sleep(3 SECONDS)
+
 //this proc is called on every fire/process()
 //energy is taken from burning atoms and delivered to the fire at its current location
 //proc returns energy in MJ and oxygen consumed in mols
@@ -188,6 +198,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		//delta_t = delta_Q/(m*c) = heat_out/(delta_m * heating_value)
 		delta_t = heat_out/(delta_m * material.heating_value)
 		T.hotspot_expose(temperature + delta_t, CELL_VOLUME, surfaces=1)
+		new /obj/effect/fire(loc)
 	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=material.flame_temp)
 
 //Outputs the heat produced (MJ), oxygen consumed (mol), co2 consumed (mol), and maximum flame temperature (K)
@@ -253,6 +264,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		break
 	if(!in_fire)
 		new /obj/effect/fire(loc)
+	burnItselfUp()
 	return TRUE
 
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
