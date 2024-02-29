@@ -155,7 +155,7 @@
 	if(target.mind.wizard_spells)
 		B.spells.Add(target.mind.wizard_spells)
 		for(var/spell/spell in target.mind.wizard_spells)
-			remove_spell(spell)
+			target.remove_spell(spell)
 	B.transfer_buttdentity(target)
 	target.op_stage.butt = 4
 
