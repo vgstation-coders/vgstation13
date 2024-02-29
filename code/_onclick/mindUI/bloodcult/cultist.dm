@@ -506,17 +506,22 @@
 		/obj/abstract/mind_ui_element/bloodcult_panel_background,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_panel_close,
 		/obj/abstract/mind_ui_element/hoverable/movable/bloodcult_panel_move,
-		/obj/abstract/mind_ui_element/hoverable/bloodcult_role,
+
 		/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count,
 		/obj/abstract/mind_ui_element/bloodcult_eclipse_gauge,
 		/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_front,
-		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_cap,
+
 		/obj/abstract/mind_ui_element/bloodcult_cultist_slot_manager,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_cap,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/artificer,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/wraith,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/juggernaut,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_soulblades,
 		/obj/abstract/mind_ui_element/bloodcult_soulblades_count,
+
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_role,
+		/obj/abstract/mind_ui_element/bloodcult_your_role,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_help_other,
 		)
 	sub_uis_to_spawn = list(
 		/datum/mind_ui/bloodcult_role,
@@ -735,7 +740,7 @@
 				var/datum/mind_ui/bloodcult_panel/BP = parent
 				for (var/datum/role/cultist/R in cult.members)
 					var/mob/O = R.antag.current
-					if (O.isDead())
+					if (!O || O.isDead())
 						continue
 					if (isshade(O))
 						var/mob/living/simple_animal/shade/S = O
@@ -1013,8 +1018,8 @@
 	name = "Choose a Role"
 	icon = 'icons/ui/bloodcult/32x32.dmi'
 	icon_state = "role"
-	offset_x = -128
-	offset_y = -64
+	offset_x = -147
+	offset_y = -66
 	layer = MIND_UI_BUTTON
 
 	var/image/click_me
@@ -1038,11 +1043,12 @@
 			if (C.cultist_role != CULTIST_ROLE_NONE)
 				if (C.mentor)
 					to_chat(M,"<span class='notice'>You are currently in a mentorship under [C.mentor.antag.name].</span>")
+				var/dat = ""
 				if (C.acolytes.len > 0)
-					var/dat = ""
 					for (var/datum/role/cultist/U in C.acolytes)
 						dat += "[U.antag.name], "
-					to_chat(M,"<span class='notice'>You are currently mentoring [dat].</span>")
+					to_chat(M,"<span class='notice'>You are currently mentoring [dat]</span>")
+				/* Don't think that cooldown was necessary, keeping this here in case I'm wrong in the future
 				if ((world.time - C.time_role_changed_last) < 5 MINUTES)
 					if ((world.time - C.time_role_changed_last) > 4 MINUTES)
 						to_chat(M,"<span class='warning'>You must wait [round((5 MINUTES - (world.time - C.time_role_changed_last))/10) + 1] seconds before you can switch role.</span>")
@@ -1050,12 +1056,13 @@
 						to_chat(M,"<span class='warning'>You must wait around [round((5 MINUTES - (world.time - C.time_role_changed_last))/600) + 1] minutes before you can switch role.</span>")
 					return
 				else
-					if (C.mentor)
-						if(alert(M, "Switching roles will put an end to your mentorship by [C.mentor.antag.name]. Do you wish to proceed?", "Confirmation", "Yes", "No") == "No")
-							return
-					if (C.acolytes.len > 0)
-						if(alert(M, "Switching roles will put an end to your mentorship. Do you wish to proceed?", "Confirmation", "Yes", "No") == "No")
-							return
+				*/
+				if (C.mentor)
+					if(alert(M, "Switching roles will put an end to your mentorship by [C.mentor.antag.name]. Do you wish to proceed?", "Confirmation", "Yes", "No") == "No")
+						return
+				if (C.acolytes.len > 0)
+					if(alert(M, "Switching roles will put an end to your mentoring of [dat] do you wish to proceed?", "Confirmation", "Yes", "No") == "No")
+						return
 
 	var/datum/mind_ui/bloodcult_role/role_popup = locate() in parent.subUIs
 	if(role_popup)
@@ -1080,6 +1087,72 @@
 					overlays += "role_herald"
 				if (CULTIST_ROLE_MENTOR)
 					overlays += "role_mentor"
+
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/bloodcult_your_role
+	name = "your current role"
+	icon = 'icons/ui/bloodcult/288x16.dmi'
+	icon_state = "cultist_herald"
+	offset_x = -128
+	offset_y = -59
+	layer = MIND_UI_FRONT
+
+/obj/abstract/mind_ui_element/bloodcult_your_role/UpdateIcon()
+	var/mob/M = GetUser()
+	if (M)
+		var/datum/role/cultist/C = iscultist(M)
+		if (C)
+			overlays.len = 0
+			switch(C.cultist_role)
+				if (CULTIST_ROLE_NONE)
+					icon_state = "cultist_herald"
+					offset_y = -59
+				if (CULTIST_ROLE_ACOLYTE)
+					icon_state = "cultist_acolyte"
+					if (C.mentor)
+						offset_y = -45
+						var/image/I = image('icons/ui/bloodcult/288x16.dmi',src,"mentored_by")
+						I.pixel_x = 18
+						I.pixel_y = -15
+						overlays += I
+						String2Maptext(C.mentor.antag.name, _pixel_x = 90, _pixel_y = -11)
+					else
+						offset_y = -59
+				if (CULTIST_ROLE_HERALD)
+					icon_state = "cultist_herald"
+					offset_y = -59
+				if (CULTIST_ROLE_MENTOR)
+					icon_state = "cultist_mentor"
+					if (C.acolytes.len > 0)
+						offset_y = -45
+						var/image/I = image('icons/ui/bloodcult/288x16.dmi',src,"mentoring")
+						I.pixel_x = 18
+						I.pixel_y = -15
+						overlays += I
+						var/ac = 0
+						while (ac < C.acolytes.len)
+							var/datum/role/cultist/U = C.acolytes[ac+1]
+							String2Maptext(U.antag.name, _pixel_x = 80, _pixel_y = -11 + (-13 * ac))
+							ac++
+					else
+						offset_y = -59
+			UpdateUIScreenLoc()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help_other
+	name = "Newbie Tips"
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "help"
+	offset_x = 147
+	offset_y = -66
+	layer = MIND_UI_BUTTON
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_help_other/Click()
+	flick("help-click",src)
+	parent.mind.DisplayUI("Cultist Help")
 
 
 ////////////////////////////////////////////////////////////////////
@@ -1311,7 +1384,7 @@
 	icon_state = "cult_help"
 	offset_x = -80
 	offset_y = -150
-	layer = MIND_UI_BACK
+	layer = MIND_UI_BACK + 6
 	var/current_page = 1
 	var/max_page = 13
 
@@ -1330,7 +1403,7 @@
 	icon_state = "close"
 	offset_x = 96
 	offset_y = -38
-	layer = MIND_UI_BUTTON
+	layer = MIND_UI_BUTTON + 6
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_help_close/Click()
 	parent.Hide()
@@ -1343,7 +1416,7 @@
 	icon_state = "button_prev"
 	offset_x = -80
 	offset_y = -150
-	layer = MIND_UI_BUTTON
+	layer = MIND_UI_BUTTON + 6
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_help_previous/Appear()
 	var/obj/abstract/mind_ui_element/bloodcult_help_background/help = locate() in parent.elements
@@ -1368,7 +1441,7 @@
 	icon_state = "button_next"
 	offset_x = 88
 	offset_y = -150
-	layer = MIND_UI_BUTTON
+	layer = MIND_UI_BUTTON + 6
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_help_next/Appear()
 	var/obj/abstract/mind_ui_element/bloodcult_help_background/help = locate() in parent.elements
@@ -1391,7 +1464,7 @@
 	name = "Move Interface (Click and Drag)"
 	icon = 'icons/ui/bloodcult/16x16.dmi'
 	icon_state = "move"
-	layer = MIND_UI_BUTTON
+	layer = MIND_UI_BUTTON + 6
 	offset_x = -80
 	offset_y = -38
 	mouse_opacity = 1

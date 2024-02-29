@@ -191,12 +191,15 @@
 		to_chat(mentor.antag.current,"<span class='warning'>[antag.name] has ended their mentorship under you.</span>")
 		message_admins("[antag.key]/([antag.name]) has ended their mentorship under [mentor.antag.name]")
 		log_admin("[antag.key]/([antag.name]) has ended their mentorship under [mentor.antag.name]")
+		mentor = null
 	if (acolytes.len > 0)
 		for (var/datum/role/cultist/acolyte in acolytes)
 			to_chat(antag.current,"<span class='warning'>You have ended your mentorship of [acolyte.antag.name].</span>")
 			to_chat(acolyte.antag.current,"<span class='warning'>[antag.name] has ended their mentorship.</span>")
 			message_admins("[antag.key]/([antag.name]) has ended their mentorship of [acolyte.antag.name]")
 			log_admin("[antag.key]/([antag.name]) has ended their mentorship of [acolyte.antag.name]")
+			acolyte.mentor = null
+		acolytes = list()
 
 /datum/role/cultist/proc/ChangeCultistRole(var/new_role)
 	if (!new_role)
@@ -233,8 +236,9 @@
 			cultist_role = CULTIST_ROLE_NONE
 	if (cult)
 		cult.update_hud_icons()
-	if (antag.current)
+	if (antag.current)//refreshing the UI so the current role icon appears on the cult panel button and role change button.
 		antag.current.DisplayUI("Cultist Left Panel")
+		antag.current.DisplayUI("Cult Panel")
 	time_role_changed_last = world.time
 
 /datum/role/cultist/proc/FindMentor()

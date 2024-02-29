@@ -309,24 +309,26 @@ var/list/mind_ui_ID2type = list()
 	result.color = _color
 	return result
 
-/obj/abstract/mind_ui_element/proc/String2Maptext(var/string,var/font="Consolas",var/font_size="8pt",var/align="left",var/valign="top",var/_color="#FFFFFF")
+/obj/abstract/mind_ui_element/proc/String2Maptext(var/string,var/font="Consolas",var/font_size="8pt",var/_color="#FFFFFF",var/_pixel_x = 0,var/_pixel_y = 0)
 	if (!string)
 		return image(icon = null)
 
 	var/image/I_shadow = image(icon = null)
-	I_shadow.maptext = {"<span style="color:#000000;font-size:[font_size];font-family:'[font]';" align="[align]" valign="[valign]">[string]</span>"}
+	I_shadow.maptext = {"<span style="color:#000000;font-size:[font_size];font-family:'[font]';">[string]</span>"}
 	I_shadow.maptext_height = 512
 	I_shadow.maptext_width = 512
-	I_shadow.maptext_x = 1
-	I_shadow.maptext_y = -1
+	I_shadow.maptext_x = 1 + _pixel_x
+	I_shadow.maptext_y = -1 + _pixel_y
 	var/image/I = image(icon = null)
-	I.maptext = {"<span style="color:[_color];font-size:[font_size];font-family:'[font]';" align="[align]" valign="[valign]">[string]</span>"}
+	I.maptext = {"<span style="color:[_color];font-size:[font_size];font-family:'[font]';">[string]</span>"}
 	I.maptext_height = 512
 	I.maptext_width = 512
-	I.maptext_x = 0
-	I.maptext_y = 0
+	I.maptext_x = _pixel_x
+	I.maptext_y = _pixel_y
+
 	overlays += I_shadow
 	overlays += I
+
 
 /obj/abstract/mind_ui_element/proc/SlideUIElement(var/new_x = 0, var/new_y = 0, var/duration, var/layer = MIND_UI_BACK, var/hide_after = FALSE)
 	invisibility = 101
