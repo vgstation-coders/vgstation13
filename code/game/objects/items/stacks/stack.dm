@@ -162,6 +162,13 @@
 /obj/item/stack/proc/stop_build(var/_last_crafting = FALSE)
 	return
 
+/obj/item/stack/getThermalMass()
+	. = ..()
+	return thermal_mass * amount
+
+/obj/item/stack/useThermalMass(var/used_mass)
+	thermal_mass -= used_mass / amount
+
 /obj/item/stack/Topic(href, href_list)
 	..()
 	if ((usr.restrained() || usr.stat || !allow_use(usr)))
@@ -268,6 +275,7 @@
 
 /obj/item/stack/attack_hand(mob/user as mob)
 	if (user.get_inactive_hand() == src)
+		var/thermal_mass_used = thermal_mass/amount
 		var/obj/item/stack/F = new src.type( user, amount=1)
 		F.copy_evidences(src)
 		F.material_type = material_type
@@ -275,7 +283,9 @@
 		src.add_fingerprint(user)
 		F.add_fingerprint(user)
 		F.transfer_data_from(src,1)
+		F.thermal_mass = thermal_mass_used
 		use(1)
+		thermal_mass -= thermal_mass_used
 		update_icon()
 		F.update_icon()
 		if (src && usr.machine==src)

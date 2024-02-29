@@ -116,6 +116,12 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 /atom/proc/ashtype()
 	return /obj/effect/decal/cleanable/ash
 
+/atom/proc/getThermalMass()
+	return thermal_mass
+
+/atom/proc/useThermalMass(var/used_mass)
+	thermal_mass -= used_mass
+
 //this proc is called on every fire/process()
 //energy is taken from burning atoms and delivered to the fire at its current location
 //proc returns energy in MJ and oxygen consumed in mols
@@ -134,7 +140,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	var/co2_prod = 0 //mols
 
 	//if all energy has been extracted from the atom, ash it
-	if(thermal_mass <= 0)
+	if(getThermalMass() <= 0)
 		ashify()
 		return
 
@@ -168,7 +174,7 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 	//a tiny object will burn for 10 seconds under standard pressure and oxygen concentration
 	//a large object will burn for 250 seconds under standard pressure and oxygen concentration
 	var/delta_m = 0.1 * burnrate * zas_settings.Get(/datum/ZAS_Setting/fire_heat_generation) //mass change this tick
-	thermal_mass -= delta_m
+	useThermalMass(delta_m)
 
 	//change in internal energy = energy produced by combustion (assuming perfect combustion)
 	heat_out = material.heating_value * delta_m
@@ -621,10 +627,14 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		if(A.flammable && A.fire_protection - world.time <= 0)
 			if(A.thermal_mass > 0)
 				return 1
+			else
+				T.ashify()
 
 	if(T.flammable && T.fire_protection - world.time <= 0)
 		if(T.thermal_mass > 0)
 			return 1
+		else
+			T.ashify()
 
 // checks if anything in a given turf can combust.
 /datum/gas_mixture/proc/check_combustability(var/turf/T)

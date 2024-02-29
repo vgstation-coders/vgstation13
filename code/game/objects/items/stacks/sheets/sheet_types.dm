@@ -90,7 +90,6 @@
 	icon_state = "sheet-wood"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	flammable = TRUE
-
 	sheettype = "wood"
 	siemens_coefficient = 0 //no conduct
 	w_type = RECYK_WOOD
