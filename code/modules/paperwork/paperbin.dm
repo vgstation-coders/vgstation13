@@ -67,6 +67,12 @@
 	crayon = "sterile"
 	update_icon()
 
+/obj/item/weapon/paper_bin/getThermalMass()
+	var/total_thermal_mass = thermal_mass
+	for(var/obj/item/weapon/paper/p in papers)
+		total_thermal_mass += p.thermal_mass
+	return total_thermal_mass
+
 /obj/item/weapon/paper_bin/ashify()
 	if(!on_fire)
 		return
