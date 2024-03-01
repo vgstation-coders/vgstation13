@@ -462,6 +462,4 @@
 
 //Currently used to allow a little bit of freedom in click-dragging for melee combat in _onclick/drag_drop.dm
 /mob/living/MouseDown(location, control, params, var/past_time)
-	var/client/C = client
-	if(C)
-		C.click_held_down_time = world.timeofday
+	usr.client.click_held_down_time = world.timeofday
