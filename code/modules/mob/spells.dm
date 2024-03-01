@@ -18,14 +18,17 @@
 					mind.wizard_spells += spell_to_add
 				return 1
 
-	var/obj/abstract/screen/movable/spell_master/new_spell_master = new master_type //we're here because either we didn't find our type(or we have no spell masters to attach t)
-	if(client)
-		src.client.screen += new_spell_master
-	new_spell_master.spell_holder = src
-	new_spell_master.add_spell(spell_to_add)
-	if(spell_base)
-		new_spell_master.icon_state = spell_base
-	spell_masters.Add(new_spell_master)
+	//Don't do the spellmaster menu stuff if there's not supposed to be a button for the spell
+	var/create_spellmaster = !(spell_to_add.spell_flags & NO_BUTTON)
+	if(create_spellmaster)
+		var/obj/abstract/screen/movable/spell_master/new_spell_master = new master_type //we're here because either we didn't find our type(or we have no spell masters to attach t)
+		if(client)
+			src.client.screen += new_spell_master
+		new_spell_master.spell_holder = src
+		new_spell_master.add_spell(spell_to_add)
+		if(spell_base)
+			new_spell_master.icon_state = spell_base
+		spell_masters.Add(new_spell_master)
 	spell_list.Add(spell_to_add)
 	spell_to_add.on_added(src)
 	if(mind && iswizard)
