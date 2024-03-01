@@ -65,7 +65,7 @@
 	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/tail
-	category = "Robot"
+	category = "Misc"
 	materials = list(MAT_IRON=15000)
 
 /datum/design/robot/head
