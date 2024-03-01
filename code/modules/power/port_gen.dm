@@ -321,7 +321,7 @@
 	name = "B.A.B.Y.P.A.C.M.A.N.-type Portable Generator"
 	desc = "Clown planet's official source of power."
 	icon_state = "portgen3"
-	sheet_path = /obj/item/stack/sheet/mineral/bananium //can still be made semi-reliably stationside, assuming you got some phazon to breed the thing
+	sheet_path = /obj/item/stack/sheet/mineral/clown //can still be made semi-reliably stationside, assuming you got some phazon and bananas to make more
 	power_gen = 100000
 	time_per_sheet = 100
 	board_path = "/obj/item/weapon/circuitboard/pacman/baby"
