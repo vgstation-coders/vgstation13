@@ -1091,10 +1091,10 @@
 	corgi = 1
 
 /obj/structure/mannequin/animationBolt(var/mob/firer)
-	Awaken(firer)
 	if(captured && ismob(captured))
 		var/mob/M = captured
 		M.sdisabilities &= ~MUTE
+	Awaken(firer)
 
 /obj/structure/mannequin/proc/Awaken(var/mob/firer)
 	if(awakening)
