@@ -64,8 +64,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		breakable_init()
 	if(is_cooktop)
 		add_component(/datum/component/cooktop)
-	if(flammable)
-		burnableatoms+=src
 	if(!thermal_mass)
 		switch(w_class)
 			if(W_CLASS_TINY)
@@ -80,6 +78,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 				thermal_mass = 25.0 //combo breaker but 100kg is way too heavy
 			if(W_CLASS_GIANT)
 				thermal_mass = 100
+	if(flammable)
+		burnableatoms+=src
 
 //More cooking stuff:
 /obj/proc/can_cook() //Returns true if object is currently in a state that would allow for food to be cooked on it (eg. the grill is currently powered on). Can (and generally should) be overriden to check for more specific conditions.

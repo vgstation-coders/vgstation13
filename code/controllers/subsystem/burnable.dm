@@ -24,7 +24,6 @@ var/list/atom/burnableatoms = list()
 	..("P:[burnableatoms.len]")
 
 /datum/subsystem/burnable/fire(var/resumed = FALSE)
-
 	if(!resumed)
 		currentrun_index = burnableatoms.len
 		currentrun = burnableatoms.Copy()
@@ -37,12 +36,8 @@ var/list/atom/burnableatoms = list()
 	currentrun_index = c
 
 /atom/proc/checkburn()
-	if(on_fire)
+	if(flammable)
 		var/datum/gas_mixture/G = return_air()
-		if(!G || G.partial_pressure(GAS_OXYGEN) / 100  < MINOXY2BURN) //no oxygen so it goes out
-			extinguish()
-			message_admins("extinguished via checkburn")
-	else if(flammable && isturf(loc))
-		var/datum/gas_mixture/G = return_air()
-		if(G && G.temperature >= autoignition_temperature && G.partial_pressure(GAS_OXYGEN) / 100  >= MINOXY2BURN)
+		if(G && (G.temperature >= autoignition_temperature) && ((G.partial_pressure(GAS_OXYGEN) / 100)  >= MINOXY2BURN))
+			message_admins("ignited [src] in burnable.dm")
 			ignite()

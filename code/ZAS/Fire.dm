@@ -136,6 +136,9 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 //energy is taken from burning atoms and delivered to the fire at its current location
 //proc returns energy in MJ and oxygen consumed in mols
 /atom/proc/burnSolidFuel()
+	if(!flammable)
+		return
+
 	var/turf/T = isturf(src) ? src : get_turf(loc)
 
 	var/datum/thermal_material/material = src.thermal_material
@@ -273,7 +276,6 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		return 1
 	return 0
 
-
 /area/fire_act()
 	return
 
@@ -285,6 +287,14 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 ///////////////////////////////////////////////
 /turf
 	var/soot_type = /obj/effect/decal/cleanable/soot
+
+/turf/New()
+	if(!thermal_material)
+		flammable = FALSE
+		log_debug("[src] was defined as flammable but was missing a 'thermal_material' definition. [src] marked as inflammable for this round.")
+		return
+	if(!autoignition_temperature)
+		autoignition_temperature = thermal_material.autoignition_temperature
 
 /turf/ashify()
 	if(!on_fire)
@@ -340,20 +350,38 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		new /obj/effect/fire(src)
 	return igniting
 
+/turf/ignite()
+	var/in_fire = FALSE
+	if(!flammable || fire_protection - world.time > 0)
+		return FALSE
+	on_fire=1
+
+	var/atom/movable/AM = src
+	if(istype(AM))
+		firelightdummy = new (src)
+		AM.vis_contents += firelightdummy
+
+	for(var/obj/effect/fire/F in src)
+		in_fire = TRUE
+		break
+	if(!in_fire)
+		new /obj/effect/fire(get_turf(src))
+	return TRUE
+
 /turf/unsimulated/burnLiquidFuel()
 	return
 
 // Burning puddles of fuel. Can be improved if reagent puddles are ever a thing.
 /turf/simulated/burnLiquidFuel()
+	if(!(locate(/obj/effect/decal/cleanable/liquid_fuel) in src))
+		return
+
 	var/heat_out = 0 //MJ
 	var/oxy_used = 0 //mols
 	var/co2_prod = 0 //mols (some reagents consume co2 when they burn)
 	var/max_temperature = 0 //K
 	var/thermal_energy_transfer = 0 //J
 	var/consumption_rate = 1.0 //units per tick
-
-	if(!(locate(/obj/effect/decal/cleanable/liquid_fuel) in src))
-		return
 
 	var/obj/effect/decal/cleanable/liquid_fuel/puddle = locate(/obj/effect/decal/cleanable/liquid_fuel) in src
 	var/list/fuel_stats = possible_fuels[puddle.reagent]
@@ -427,11 +455,17 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 
 	// Check if there is something to combust.
 	if (!air_contents.check_recombustability(S))
-		Extinguish()
+		if(thermal_mass <= 0)
+			ashify()
+			message_admins("Ashified because recombustability check failed")
+		else
+			Extinguish()
+			message_admins("Extinguished because recombustability check failed")
 		return
 
 	if(air_contents.partial_pressure(GAS_OXYGEN)/100 < MINOXY2BURN)
 		Extinguish()
+		message_admins("Extinguished because oxygen partial pressure too low")
 		return
 
 	var/firelevel = air_contents.calculate_firelevel(S)
@@ -568,31 +602,30 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 		var/SL_co2_prod = 0
 		var/max_temperature = 0
 		if(T && istype(T))
-			if(T.flammable)
-				var/solid_burn_products = T.burnSolidFuel()
-				if(solid_burn_products)
-					SL_energy += solid_burn_products["heat_out"]
-					SL_oxy_used += solid_burn_products["oxy_used"]
-					SL_co2_prod += solid_burn_products["co2_prod"]
-					max_temperature = max(max_temperature, solid_burn_products["max_temperature"])
+			var/solid_burn_products = T.burnSolidFuel()
+			if(solid_burn_products)
+				SL_energy += solid_burn_products["heat_out"]
+				SL_oxy_used += solid_burn_products["oxy_used"]
+				SL_co2_prod += solid_burn_products["co2_prod"]
+				max_temperature = max(max_temperature, solid_burn_products["max_temperature"])
 
-				var/liquid_burn_products = T.burnLiquidFuel()
-				if(liquid_burn_products)
-					SL_energy += liquid_burn_products["heat_out"]
-					SL_oxy_used += liquid_burn_products["oxy_used"]
-					SL_co2_prod += -liquid_burn_products["co2_prod"]
-					max_temperature = max(max_temperature, liquid_burn_products["max_temperature"])
+			var/liquid_burn_products = T.burnLiquidFuel()
+			if(liquid_burn_products)
+				SL_energy += liquid_burn_products["heat_out"]
+				SL_oxy_used += liquid_burn_products["oxy_used"]
+				SL_co2_prod += -liquid_burn_products["co2_prod"]
+				max_temperature = max(max_temperature, liquid_burn_products["max_temperature"])
 			for(var/atom/A in T)
 				if(!A.flammable)
 					continue
-				var/solid_burn_products = A.burnSolidFuel()
+				solid_burn_products = A.burnSolidFuel()
 				if(solid_burn_products)
 					SL_energy += solid_burn_products["heat_out"]
 					SL_oxy_used += solid_burn_products["oxy_used"]
 					SL_co2_prod += solid_burn_products["co2_prod"]
 					max_temperature = max(max_temperature, solid_burn_products["max_temperature"])
 
-				var/liquid_burn_products = A.burnLiquidFuel()
+				liquid_burn_products = A.burnLiquidFuel()
 				if(liquid_burn_products)
 					SL_energy += liquid_burn_products["heat_out"]
 					SL_oxy_used += liquid_burn_products["oxy_used"]
@@ -647,6 +680,9 @@ Note: this process will be halted if the oxygen concentration or pressure drops 
 			return 1
 		else
 			T.ashify()
+
+	if(locate(/obj/effect/decal/cleanable/liquid_fuel) in T)
+		return 1
 
 // checks if anything in a given turf can combust.
 /datum/gas_mixture/proc/check_combustability(var/turf/T)
