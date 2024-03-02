@@ -80,6 +80,10 @@
 	// Objects that cannot be scanned
 	if((O.mech_flags & MECH_SCAN_FAIL)==MECH_SCAN_FAIL)
 		return 0
+	
+	if((O.mech_flags & MECH_SCAN_GOONECODE)==MECH_SCAN_GOONECODE)
+		to_chat(user, "<span class='notice'>Your device blinks red and a message appears: <span class='warning'>\"ERROR: CLOSED SOURCE SOFTWARE; INCOMPATIBLE WITH GPLv3.\"</span></span>")
+		return 0
 
 	var/list/techlist = O.give_tech_list() //Some items may have a specific techlist. Currently only used for solar assemblies, since they don't hold a circuitboard.
 	if(techlist)
