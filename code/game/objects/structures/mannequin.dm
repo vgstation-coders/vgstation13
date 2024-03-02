@@ -1092,6 +1092,9 @@
 
 /obj/structure/mannequin/animationBolt(var/mob/firer)
 	Awaken(firer)
+	if(captured && ismob(captured))
+		var/mob/M = captured
+		M.sdisabilities &= ~MUTE
 
 /obj/structure/mannequin/proc/Awaken(var/mob/firer)
 	if(awakening)
