@@ -38,7 +38,10 @@
 	var/area/prospective = pick(areas)
 	while(!thearea)
 		if(prospective.type != /area)
-			var/turf/T = pick(get_area_turfs(prospective.type))
+			var/list/prospective_turfs = get_area_turfs(prospective.type)
+			if(!prospective_turfs.len) //An in-game area somehow lost its turfs, search for another one
+				continue
+			var/turf/T = pick(prospective_turfs)
 			if(T.z == holder.z)
 				thearea = prospective
 				break

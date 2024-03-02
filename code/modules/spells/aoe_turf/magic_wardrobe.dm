@@ -140,7 +140,7 @@
 /spell/targeted/magical_wardrobe_recall/before_cast(list/targets, user, bypass_range)
 	if(!mCloset)
 		to_chat(user, "<span class='warning'>You don't have a wardrobe to recall to!</span>")
-		return 0
+		return list()
 	return ..()
 
 /spell/targeted/magical_wardrobe_recall/cast(list/targets, mob/user)
@@ -162,7 +162,7 @@
 /spell/magical_wardrobe_summon/before_cast(list/targets, user, bypass_range)
 	if(!mCloset)
 		to_chat(user, "<span class='warning'>You don't have a wardrobe to recall to!</span>")
-		return 0
+		return list()
 	return ..()
 
 /spell/magical_wardrobe_summon/cast(list/targets, mob/user)

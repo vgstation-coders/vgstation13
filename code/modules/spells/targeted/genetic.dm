@@ -79,6 +79,21 @@ code\game\\dna\genes\goon_powers.dm
 	hud_state = "wiz_hulk"
 	user_type = USER_TYPE_WIZARD
 
+/spell/targeted/genetic/mutate/before_cast(list/targets, user, bypass_range)
+	var/mob/living/carbon/human/H = user
+	if(istype(H) && (M_HULK in H.mutations))
+		if(H.hulk_time || H.hulk_gene_active)
+			to_chat(user, "<span class='warning'>You are already a hulk!</span>")
+			return list()
+	return ..()
+
+/spell/targeted/genetic/mutate/cast(list/targets)
+	..()
+	var/mob/living/carbon/human/H = targets[1]
+	H.hulk_time = world.time + duration
+	H.update_mutations()		//update our mutation overlays
+	H.update_body()
+
 /spell/targeted/genetic/mutate/highlander
 	name = "Become Highlander"
 	desc = "Temporarily turn into a mighty highlander who cannot be stunned."

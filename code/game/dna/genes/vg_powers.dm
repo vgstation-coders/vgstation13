@@ -6,6 +6,7 @@ Obviously, requires DNA2.
 
 // When hulk was first applied (world.time).
 /mob/living/carbon/human/var/hulk_time = 0
+/mob/living/carbon/human/var/hulk_gene_active = FALSE //To avoid bugging out with the wizard's Mutate spell, differentiates them
 
 // In decaseconds.
 #define HULK_DURATION 300 // How long the effects last
@@ -39,7 +40,7 @@ Obviously, requires DNA2.
 /datum/dna/gene/basic/grant_spell/hulk/OnMobLife(var/mob/living/carbon/human/M)
 	if(!istype(M))
 		return
-	if(M_HULK in M.mutations)
+	if(M_HULK in M.mutations && !M.hulk_gene_active)
 		var/timeleft = M.hulk_time - world.time
 		if(M.health <= 25 || timeleft <= 0)
 			M.hulk_time=0 // Just to be sure.
@@ -73,6 +74,14 @@ Obviously, requires DNA2.
 	desc = "Get mad!  For [duration/10] seconds, anyway."
 	..()
 
+/spell/targeted/genetic/hulk/before_cast(list/targets, user, bypass_range)
+	var/mob/living/carbon/human/H = user
+	if(istype(H) && (M_HULK in H.mutations))
+		if(H.hulk_time || H.hulk_gene_active)
+			to_chat(user, "<span class='warning'>You are already hulking out!</span>")
+			return 0
+	return ..()
+
 /spell/targeted/genetic/hulk/cast(list/targets, mob/user)
 	if (istype(user.loc,/mob))
 		to_chat(usr, "<span class='warning'>You can't hulk out right now!</span>")
@@ -82,9 +91,13 @@ Obviously, requires DNA2.
 		M.mutations.Add(M_HULK)
 		M.update_mutations()		//update our mutation overlays
 		M.update_body()
+		M.hulk_gene_active = TRUE
 		//M.say(pick("",";")+pick("HULK MAD","YOU MADE HULK ANGRY")) // Just a note to security.
 		log_admin("[key_name(M)] has hulked out! ([formatJumpTo(M)])")
 		message_admins("[key_name(M)] has hulked out! ([formatJumpTo(M)])")
+		spawn(duration)
+			if(M)
+				M.hulk_gene_active = FALSE
 	return
 
 /datum/dna/gene/basic/grant_spell/farsight
