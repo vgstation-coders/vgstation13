@@ -48,6 +48,10 @@
 
 	var/datum/tgs_version/api_version = ApiVersion()
 	version = null // we want this to be the TGS version, not the interop version
+
+	// sleep once to prevent an issue where world.Export on the first tick can hang indefinitely
+	sleep(world.tick_lag)
+
 	var/list/bridge_response = Bridge(DMAPI5_BRIDGE_COMMAND_STARTUP, list(DMAPI5_BRIDGE_PARAMETER_MINIMUM_SECURITY_LEVEL = minimum_required_security_level, DMAPI5_BRIDGE_PARAMETER_VERSION = api_version.raw_parameter, DMAPI5_PARAMETER_CUSTOM_COMMANDS = ListCustomCommands(), DMAPI5_PARAMETER_TOPIC_PORT = GetTopicPort()))
 	if(!istype(bridge_response))
 		TGS_ERROR_LOG("Failed initial bridge request!")
