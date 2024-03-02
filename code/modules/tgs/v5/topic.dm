@@ -177,7 +177,8 @@
 			reattach_response[DMAPI5_PARAMETER_CUSTOM_COMMANDS] = ListCustomCommands()
 			reattach_response[DMAPI5_PARAMETER_TOPIC_PORT] = GetTopicPort()
 
-			pending_events.Cut()
+			for(var/eventId in pending_events)
+				pending_events[eventId] = TRUE
 
 			return reattach_response
 
