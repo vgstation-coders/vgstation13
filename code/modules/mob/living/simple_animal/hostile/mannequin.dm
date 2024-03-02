@@ -327,6 +327,9 @@
 /mob/living/simple_animal/hostile/mannequin/proc/ChangeOwner(var/mob/owner)
 	LoseTarget()
 	faction = "\ref[owner]"
+	if(captured_mob)
+		var/mob/M = captured_mob
+		M.sdisabilities &= ~MUTE
 
 /mob/living/simple_animal/hostile/mannequin/wood
 	name = "human wooden mannequin"
