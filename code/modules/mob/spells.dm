@@ -11,12 +11,12 @@
 			if(spell_master.type == master_type)
 				spell_list.Add(spell_to_add)
 				spell_master.add_spell(spell_to_add)
-				if(on_added) //If we want to call this spell proc
-					spell_to_add.on_added(src)
 				if(mind && iswizard)
 					if(!mind.wizard_spells)
 						mind.wizard_spells = list()
 					mind.wizard_spells += spell_to_add
+				if(on_added) //If we want to call this spell proc
+					spell_to_add.on_added(src)
 				return 1
 
 	//Don't do the spellmaster menu stuff if there's not supposed to be a button for the spell
@@ -31,12 +31,12 @@
 			new_spell_master.icon_state = spell_base
 		spell_masters.Add(new_spell_master)
 	spell_list.Add(spell_to_add)
-	if(on_added)
-		spell_to_add.on_added(src)
 	if(mind && iswizard)
 		if(!mind.wizard_spells)
 			mind.wizard_spells = list()
 		mind.wizard_spells += spell_to_add
+	if(on_added)
+		spell_to_add.on_added(src)
 	return 1
 
 /mob/proc/cast_spell(spell/spell_to_cast, list/targets)
@@ -63,10 +63,10 @@
 		return
 	master.remove_spell(spell_to_remove)
 
-	if(on_removed)
-		spell_to_remove.on_removed(src)
 	if(mind && mind.wizard_spells)
 		mind.wizard_spells.Remove(spell_to_remove)
+	if(on_removed)
+		spell_to_remove.on_removed(src)
 	spell_list.Remove(spell_to_remove)
 	return 1
 

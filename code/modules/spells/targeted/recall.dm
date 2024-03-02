@@ -47,7 +47,6 @@
 		/obj/machinery/light,									//light bulbs and tubes
 		/obj/machinery/media/receiver/boombox/wallmount,		//sound systems
 		/obj/machinery/keycard_auth,							//keycard authentication devices
-		/obj/structure/closet/magical_wardrobe,					//a magical wardrobe closet
 		/obj/landline,											//telephone landlines
 		/obj/effect/phone_cord,									//the telephone cord effect
 		/obj/item/telephone,									//telephones
@@ -168,14 +167,13 @@
 	bound_icon = null
 
 /spell/targeted/bound_object/on_added(mob/user)
-	spawn() //So that the spell gets added after the main spell in wizard_spells
-		if(alert(user, "You can unbind the chosen object by middle-clicking the spell icon. You can also have a dedicated spell for unbinding. Do you want this?",,"Yes","No") == "Yes")
-			var/spell/unbind/unbind = new /spell/unbind
-			if(user.mind)
-				if(!user.mind.wizard_spells)
-					user.mind.wizard_spells = list()
-				user.mind.wizard_spells += unbind
-			user.add_spell(unbind)
+	if(alert(user, "You can unbind the chosen object by middle-clicking the spell icon. You can also have a dedicated spell for unbinding. Do you want this?",,"Yes","No") == "Yes")
+		var/spell/unbind/unbind = new /spell/unbind
+		if(user.mind)
+			if(!user.mind.wizard_spells)
+				user.mind.wizard_spells = list()
+			user.mind.wizard_spells += unbind
+		user.add_spell(unbind)
 
 /spell/targeted/bound_object/on_removed(mob/user)
 	clear_bound()

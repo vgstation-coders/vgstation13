@@ -40,11 +40,12 @@ Obviously, requires DNA2.
 /datum/dna/gene/basic/grant_spell/hulk/OnMobLife(var/mob/living/carbon/human/M)
 	if(!istype(M))
 		return
-	if(M_HULK in M.mutations && !M.hulk_gene_active)
+	if((M_HULK in M.mutations) && M.hulk_gene_active)
 		var/timeleft = M.hulk_time - world.time
 		if(M.health <= 25 || timeleft <= 0)
-			M.hulk_time=0 // Just to be sure.
+			M.hulk_time = 0
 			M.mutations.Remove(M_HULK)
+			M.hulk_gene_active = FALSE
 			M.update_mutations()		//update our mutation overlays
 			M.update_body()
 			to_chat(M, "<span class='warning'>You suddenly feel very weak.</span>")
@@ -77,9 +78,8 @@ Obviously, requires DNA2.
 /spell/targeted/genetic/hulk/before_cast(list/targets, user, bypass_range)
 	var/mob/living/carbon/human/H = user
 	if(istype(H) && (M_HULK in H.mutations))
-		if(H.hulk_time || H.hulk_gene_active)
-			to_chat(user, "<span class='warning'>You are already hulking out!</span>")
-			return 0
+		to_chat(user, "<span class='warning'>You are already hulking out!</span>")
+		return list()
 	return ..()
 
 /spell/targeted/genetic/hulk/cast(list/targets, mob/user)
@@ -95,9 +95,6 @@ Obviously, requires DNA2.
 		//M.say(pick("",";")+pick("HULK MAD","YOU MADE HULK ANGRY")) // Just a note to security.
 		log_admin("[key_name(M)] has hulked out! ([formatJumpTo(M)])")
 		message_admins("[key_name(M)] has hulked out! ([formatJumpTo(M)])")
-		spawn(duration)
-			if(M)
-				M.hulk_gene_active = FALSE
 	return
 
 /datum/dna/gene/basic/grant_spell/farsight

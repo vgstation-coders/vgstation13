@@ -21,14 +21,13 @@
 	var/wardrobeHealth = 100
 
 /spell/aoe_turf/conjure/magical_wardrobe/on_added(mob/user)
-	spawn() //Makes the other spell appear after the main spell in wizard_spells
-		mWRecall = new /spell/targeted/magical_wardrobe_recall
-		mWRecall.mCloset = magicCloset
-		if(user.mind)
-			if(!user.mind.wizard_spells)
-				user.mind.wizard_spells = list()
-			user.mind.wizard_spells += mWRecall
-		user.add_spell(mWRecall)
+	mWRecall = new /spell/targeted/magical_wardrobe_recall
+	mWRecall.mCloset = magicCloset
+	if(user.mind)
+		if(!user.mind.wizard_spells)
+			user.mind.wizard_spells = list()
+		user.mind.wizard_spells += mWRecall
+	user.add_spell(mWRecall)
 
 /spell/aoe_turf/conjure/magical_wardrobe/on_removed(mob/user)
 	for(var/spell/targeted/magical_wardrobe_recall/mgr in user.spell_list)
