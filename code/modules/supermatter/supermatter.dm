@@ -145,6 +145,7 @@
 			SetUniversalState(/datum/universal_state/supermatter_cascade)
 			explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1, whodunnit = user)
 			empulse(turff, 100, 200, 1)
+
 	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
 		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 		message_admins("[name] at [T.loc]([x], [y], [z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
@@ -162,6 +163,9 @@
 			empulse(get_turf(src), 100, 200, 1)
 			qdel(src)
 			return
+		for(var/mob/M in player_list)
+			M.playsound_local(src, 'sound/effects/delamination.ogg', 50, 1)
+			shake_camera(M, 1, 1)
 		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1, whodunnit = user)
 		empulse(get_turf(src), 100, 200, 1)
 	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
