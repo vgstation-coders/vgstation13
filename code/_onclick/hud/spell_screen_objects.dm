@@ -16,6 +16,7 @@
 
 /obj/abstract/screen/movable/spell_master/Destroy()
 	..()
+	to_chat(world, "destroyed the spell_master!")
 	for(var/obj/abstract/screen/spell/spells in spell_objects)
 		spells.spellmaster = null
 	spell_objects = null
@@ -281,6 +282,7 @@
 
 /obj/abstract/screen/spell/Destroy()
 	..()
+	to_chat(world, "destroyed the screen/spell!")
 	spell = null
 	last_charged_icon = null
 	if(spellmaster)

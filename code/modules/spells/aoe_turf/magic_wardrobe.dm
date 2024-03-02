@@ -21,13 +21,14 @@
 	var/wardrobeHealth = 100
 
 /spell/aoe_turf/conjure/magical_wardrobe/on_added(mob/user)
-	mWRecall = new /spell/targeted/magical_wardrobe_recall
-	mWRecall.mCloset = magicCloset
-	if(user.mind)
-		if(!user.mind.wizard_spells)
-			user.mind.wizard_spells = list()
-		user.mind.wizard_spells += mWRecall
-	user.add_spell(mWRecall)
+	spawn() //Makes the other spell appear after the main spell in wizard_spells
+		mWRecall = new /spell/targeted/magical_wardrobe_recall
+		mWRecall.mCloset = magicCloset
+		if(user.mind)
+			if(!user.mind.wizard_spells)
+				user.mind.wizard_spells = list()
+			user.mind.wizard_spells += mWRecall
+		user.add_spell(mWRecall)
 
 /spell/aoe_turf/conjure/magical_wardrobe/on_removed(mob/user)
 	for(var/spell/targeted/magical_wardrobe_recall/mgr in user.spell_list)
@@ -113,6 +114,11 @@
 	if(mWSummon)
 		mWSummon.mCloset = magicCloset
 
+//Set the new player as the user
+/spell/aoe_turf/conjure/magical_wardrobe/on_transfer(mob/user)
+	if(magicCloset)
+		magicCloset.theWiz = user
+
 /spell/aoe_turf/conjure/magical_wardrobe/proc/clearClosets()
 	magicCloset = null
 	if(mWRecall)
@@ -131,12 +137,15 @@
 	range = SELFCAST
 	var/obj/structure/closet/magical_wardrobe/mCloset = null
 
-/spell/targeted/magical_wardrobe_recall/cast(list/targets, mob/user)
+/spell/targeted/magical_wardrobe_recall/before_cast(list/targets, user, bypass_range)
 	if(!mCloset)
 		to_chat(user, "<span class='warning'>You don't have a wardrobe to recall to!</span>")
-	else
-		do_teleport(user, mCloset, 0)
-		mCloset.wardrobeToggle()
+		return 0
+	return ..()
+
+/spell/targeted/magical_wardrobe_recall/cast(list/targets, mob/user)
+	do_teleport(user, mCloset, 0)
+	mCloset.wardrobeToggle()
 
 /spell/magical_wardrobe_summon
 	name = "Wardrobe Summon"
@@ -150,12 +159,15 @@
 /spell/magical_wardrobe_summon/choose_targets(mob/user = usr)
 	return list(user)
 
+/spell/magical_wardrobe_summon/before_cast(list/targets, user, bypass_range)
+	if(!mCloset)
+		to_chat(user, "<span class='warning'>You don't have a wardrobe to recall to!</span>")
+		return 0
+	return ..()
+
 /spell/magical_wardrobe_summon/cast(list/targets, mob/user)
-	if(mCloset)
-		do_teleport(mCloset, user, 0)
-		mCloset.wardrobeToggle()
-	else
-		to_chat(user, "<span class='warning'>You don't have a wardrobe to summon!</span>")
+	do_teleport(mCloset, user, 0)
+	mCloset.wardrobeToggle()
 
 
 /obj/structure/closet/magical_wardrobe
