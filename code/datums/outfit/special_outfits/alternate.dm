@@ -1,5 +1,4 @@
 /datum/outfit/chiropractor
-
 	outfit_name = "Chiropractor"
 	associated_job = /datum/job/alternate/chiropractor
 
@@ -25,11 +24,11 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/
+			slot_wear_mask_str = /obj/item/clothing/mask/breath/
 		),
 		/datum/species/vox = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_med,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/medical
+			slot_w_uniform_str = /obj/item/clothing/under/rank/medical,
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical,
@@ -95,7 +94,6 @@
 
 
 /datum/outfit/psychologist
-
 	outfit_name = "Psychologist"
 	associated_job = /datum/job/alternate/psychologist
 
@@ -121,11 +119,11 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath
 		),
 		/datum/species/vox = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_med,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/medical
+			slot_w_uniform_str = /obj/item/clothing/under/rank/medical,
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical,
@@ -259,11 +257,11 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath
 		),
 		/datum/species/vox = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_med,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/medical
+			slot_w_uniform_str = /obj/item/clothing/under/rank/medical,
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical,
@@ -292,7 +290,7 @@
 	outfit_name = "Management Consultant"
 	associated_job = /datum/job/alternate/managementconsultant
 
-backpack_types = list(
+	backpack_types = list(
 		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
 		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
 		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
@@ -302,7 +300,7 @@ backpack_types = list(
 	items_to_spawn = list(
 		"Default" = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_iaa,
-			slot_w_uniform_str = /obj/item/clothing/under/lawyer/bluesuit,,
+			slot_w_uniform_str = /obj/item/clothing/under/lawyer/bluesuit,
 			slot_shoes_str = /obj/item/clothing/shoes/leather,
 			slot_wear_suit_str = /obj/item/clothing/suit/storage/lawyer/bluejacket,
 			slot_gloves_str = /obj/item/clothing/gloves/white,
@@ -315,7 +313,7 @@ backpack_types = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/lawyer,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/lawyer,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_gloves_str = = /obj/item/clothing/gloves/white,
+			slot_gloves_str = /obj/item/clothing/gloves/white,
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses,
 		),
 		/datum/species/vox/ = list(

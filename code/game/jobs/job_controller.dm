@@ -604,7 +604,7 @@ var/global/datum/controller/occupations/job_master
 /datum/controller/occupations/proc/altjobprompt(var/newrank,var/oldrank,var/mob/user)
 	var/turf/oldloc = get_turf(user)
 	user.forceMove(null)
-	if(alert(user,"Central Command had a mix-up and is attempting to send you to the station as \an [newrank]! Would you like to correct them?",,"Yes - play as [oldrank]","No - play as [newrank]") == "Yes")
+	if(alert(user,"Central Command had a mix-up and is attempting to send you to the station as \an [newrank]! Would you like to correct them?",,"Yes - play as [oldrank]","No - play as [newrank]") == "Yes - play as [oldrank]")
 		return 1
 	user.forceMove(oldloc)
 	message_admins("[user.key] has opted out of playing as \an [newrank].")
