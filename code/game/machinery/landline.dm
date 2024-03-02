@@ -43,9 +43,9 @@
 	if(!linked_phone)
 		return
 	if(get_dist(src, linked_phone) > tether_length-1)
-		linked_phone.visible_message("\the [src] cord stretches dangerously")
+		linked_phone.visible_message("\The [src] cord stretches dangerously...")
 		if(get_dist(src, linked_phone) > tether_length)
-			linked_phone.visible_message("<span class='warning'>the cord snaps!</span>")
+			linked_phone.visible_message("<span class='warning'>The cord snaps!</span>")
 			linked_phone.linked_landline = null
 			linked_phone = null		
 			return
