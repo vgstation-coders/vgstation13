@@ -179,7 +179,9 @@
 	affected.attach(tool)
 
 /datum/surgery_step/limb/attach/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone, cosmetic = TRUE)
+	if(target_zone == COSMETIC_ORGAN_TAIL)
+		target_zone = LIMB_GROIN
+	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='warning'>[user]'s hand slips, damaging connectors on [target]'s [affected.display_name]!</span>", \
 	"<span class='warning'>Your hand slips, damaging connectors on [target]'s [affected.display_name]!</span>")
 	target.apply_damage(10, BRUTE, affected)
@@ -261,7 +263,9 @@
 	affected.attach(tool)
 
 /datum/surgery_step/limb/attach_flesh/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone, cosmetic = TRUE)
+	if(target_zone == COSMETIC_ORGAN_TAIL)
+		target_zone = LIMB_GROIN
+	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='warning'>[user]'s hand slips, damaging connectors on [target]'s [affected.display_name]!</span>", \
 	"<span class='warning'>Your hand slips, damaging connectors on [target]'s [affected.display_name]!</span>")
 	target.apply_damage(10, BRUTE, affected)

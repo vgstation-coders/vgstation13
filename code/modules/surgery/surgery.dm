@@ -131,14 +131,8 @@
 		clumsy = 1
 
 	var/target_area = user.zone_sel ? user.zone_sel.selecting : get_random_zone_sel()
-	if(target_area == LIMB_GROIN)
-		var/groin_or_tail = input(user, "Groin or tail?", "Choose Target Zone", "Groin") as null|anything in list("Groin", "Tail")
-		switch(groin_or_tail)
-			if("Groin")
-				target_area = LIMB_GROIN
-			if("Tail")
-				target_area = COSMETIC_ORGAN_TAIL
-
+	if(target_area == LIMB_GROIN && user.a_intent == I_GRAB)
+		target_area = COSMETIC_ORGAN_TAIL
 	for(var/datum/surgery_step/S in surgery_steps)
 		if(ishuman(M))
 			var/mob/living/carbon/human/human_target = M
