@@ -185,12 +185,17 @@
 		dat += "<br>"
 	return dat
 
+/datum/role/cultist/Drop()
+	DropMentorship()
+	..()
+
 /datum/role/cultist/proc/DropMentorship()
 	if (mentor)
 		to_chat(antag.current,"<span class='warning'>You have ended your mentorship under [mentor.antag.name].</span>")
 		to_chat(mentor.antag.current,"<span class='warning'>[antag.name] has ended their mentorship under you.</span>")
 		message_admins("[antag.key]/([antag.name]) has ended their mentorship under [mentor.antag.name]")
 		log_admin("[antag.key]/([antag.name]) has ended their mentorship under [mentor.antag.name]")
+		mentor.acolytes -= src
 		mentor = null
 	if (acolytes.len > 0)
 		for (var/datum/role/cultist/acolyte in acolytes)

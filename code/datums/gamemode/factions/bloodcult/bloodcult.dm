@@ -12,7 +12,7 @@
 
 	Rune sprites inspired by the designs originally drawn by Urist McDorf
 
-	Nar-Sie sprite based on Ausops' original re-sprite
+	Nar-Sie sprite based on Ausops' original re-sprite, higher-res version by Deity Link
 
 	Based on TGstation's cult mode originally developped in 2010 by Uporotiy
 */
@@ -86,7 +86,7 @@
 
 /datum/faction/bloodcult/GetScoreboard()
 	. = ..()
-	. += "<BR>Total Veil Weakness:[veil_weakness]<BR>"
+	//TODO
 
 /datum/faction/bloodcult/proc/calculate_eclipse_rate()
 	eclipse_increments = 0
@@ -232,11 +232,7 @@
 	if(!usr.check_rights(R_ADMIN))
 		message_admins("[usr] tried to access bloodcult faction Topic() without permissions.")
 		return
-
-	if(href_list["unlockRitual"])
-		var/datum/bloodcult_ritual/R = input(usr,"Select a ritual to unlock.", "Unlock", null) as null|anything in locked_rituals
-		if(R)
-			R.Unlock(TRUE)
+	//TODO: let admins change and lock cultist cap
 
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
@@ -247,7 +243,6 @@
 	cult_founding_time = world.time
 	initialize_rune_words()
 	AppendObjective(/datum/objective/bloodcult)
-	initialize_rituals()
 	for (var/datum/role/R in members)
 		var/mob/M = R.antag.current
 		to_chat(M, "<span class='sinister'>Our communion must remain small and secretive.</span>")
@@ -268,7 +263,6 @@
 			bloody_floors[T] = T
 			for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
 				B.update_icon()
-			TriggerCultRitual(/datum/bloodcult_ritual/spill_blood)
 
 
 /datum/faction/bloodcult/proc/remove_bloody_floor(var/turf/T)

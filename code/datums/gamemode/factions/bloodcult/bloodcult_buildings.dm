@@ -242,7 +242,6 @@
 	if(ticker && holomaps_initialized)
 		initialize()
 
-	cult_altars += src
 
 /obj/structure/cult/altar/initialize()
 	holomap_datum.initialize_holomap(get_turf(src), cursor_icon = "altar-here")
@@ -267,7 +266,6 @@
 
 	holomap_markers -= HOLOMAP_MARKER_CULT_ALTAR+"_\ref[src]"
 
-	cult_altars -= src
 
 	..()
 
@@ -648,30 +646,6 @@
 					user.client.images |= watcher_maps["\ref[user]"]
 					user.register_event(/event/face, src, /obj/structure/cult/altar/proc/checkPosition)
 			if ("Commune with Nar-Sie")
-				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-				var/datum/bloodcult_ritual/human_sacrifice/R = locate(/datum/bloodcult_ritual/human_sacrifice) in unlocked_rituals
-				if (cult && R && !R.accept_anyone) // Cult exists, ritual is unlocked and requires a specific target
-					if (!cult.sacrifice_target || !cult.sacrifice_target.loc ) //if there's no target or its body was destroyed, immediate reroll
-						if(!cult.FindSacrificeTarget()) // We couldn't find a new target. Just have the ritual accept anyone
-							R.accept_anyone = TRUE
-						for(var/datum/role/cultist/C in cult.members)
-							to_chat(C.antag.current, "<span class='sinister'>Our previous sacrifice target has been lost... [R.accept_anyone ? "Any soul will work now." : "Our new target is [cult.sacrifice_target][cult.sacrifice_target?.mind?.assigned_role ? ", the [cult.sacrifice_target.mind.assigned_role]." : "."]"]")
-						return
-					else
-						var/turf/T = get_turf(cult.sacrifice_target)
-						var/datum/shuttle/S = is_on_shuttle(T)
-						if ((T.z == map.zCentcomm) && (emergency_shuttle.shuttle == S || emergency_shuttle.escape_pods.Find(S)))
-							to_chat(user,"<b>\The [cult.sacrifice_target] has fled the station along with the rest of the crew. Unless we can bring them back in time with a Path rune or sacrifice him where he stands, it's over.</b>")
-							return
-						else if (T.z != map.zMainStation)//if the target fled the station, offer to reroll the target. May or not add penalties for that later.
-							var/choice = alert(user,"Our sacrifice target has fled the station, do you wish for another sacrifice target to be selected?","[name]","Yes","No")
-							if (choice == "Yes")
-								if(!cult.FindSacrificeTarget()) // We couldn't find a new target. Just have the ritual accept anyone
-									R.accept_anyone = TRUE
-								for(var/datum/role/cultist/C in cult.members)
-									to_chat(C.antag.current, "<span class='sinister'>Our previous sacrifice target has been lost... [R.accept_anyone ? "Any soul will work now." : "Our new target is [cult.sacrifice_target][cult.sacrifice_target?.mind?.assigned_role ? ", the [cult.sacrifice_target.mind.assigned_role]." : "."]"]")
-								return
-
 				if(narsie_message_cooldown)
 					to_chat(user, "<span class='warning'>This altar has already sent a message in the past 30 seconds, wait a moment.</span>")
 					return
@@ -719,10 +693,6 @@
 			min_contributors = 2
 			to_chat(user, "<span class='warning'>You must wait for another cultist to join you in order to finish the ritual.</span>")
 		if(ALTARTASK_SACRIFICE_ANIMAL)
-			if(!locate(/datum/bloodcult_ritual/animal_sacrifice) in unlocked_rituals)
-				to_chat(user, "<span class='warning'>Nar'sie has no interest in such a meager sacrifice at the moment.</span>")
-				altar_task = ALTARTASK_NONE
-				return
 			timeleft = 15
 			timetotal = timeleft
 			min_contributors = 1
@@ -856,8 +826,6 @@
 			altar_task = ALTARTASK_NONE
 			update_icon()
 			var/mob/M = get_locked(lock_type)[1]
-			if(M.mind)
-				TriggerCultRitual(/datum/bloodcult_ritual/human_sacrifice, sacrificer, list("victim" = M))
 			if (istype(blade) && !blade.shade && (cult && cult.CanConvert()))//If an empty soul blade was the tool used for the ritual, let's make them its shade.
 				var/mob/living/simple_animal/shade/new_shade = M.change_mob_type( /mob/living/simple_animal/shade , null, null, 1 )
 				blade.forceMove(loc)
@@ -913,7 +881,6 @@
 						else
 							M.take_blood(R, min(remaining, 60))
 						R.on_reagent_change()
-				TriggerCultRitual(/datum/bloodcult_ritual/animal_sacrifice, sacrificer, list("mobtype" = M.type))
 				qdel(M)
 				bloodmess_splatter(TU)
 				playsound(src, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)

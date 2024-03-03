@@ -16,7 +16,7 @@
 				return TRUE
 	return FALSE
 
-
+/*
 /datum/objective/bloodcult_ritual
 	name = "Blood Cult: Ritual"
 	explanation_text = ""
@@ -27,7 +27,7 @@
 	if(..())
 		return TRUE
 	return complete ? TRUE : FALSE
-	
+
 /datum/objective/bloodcult_ritual/New(var/datum/bloodcult_ritual/ritual)
 	if(ritual)
 		assigned_ritual = ritual
@@ -36,7 +36,7 @@
 
 /datum/objective/bloodcult_ritual/extraInfo()
 	explanation_text += assigned_ritual.extraInfo()
-	
+*/
 
 /* there might be useful bits of code here to use later so I'm leaving this commented out for convenience for now.
 /datum/objective/bloodcult_reunion

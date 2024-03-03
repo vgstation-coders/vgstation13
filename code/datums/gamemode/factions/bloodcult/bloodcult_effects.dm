@@ -232,8 +232,6 @@
 					M.see_invisible_override = SEE_INVISIBLE_LEVEL_TWO
 					M.apply_vision_overrides()
 					M.flags |= INVULNERABLE
-		if(noncult_victims.len > 0 && activator)
-			TriggerCultRitual(/datum/bloodcult_ritual/spirited_away, activator, list("victims" = noncult_victims))
 	starting = loc
 	target = destination
 	initial_pixel_x = pixel_x

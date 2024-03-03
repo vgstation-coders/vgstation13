@@ -1,7 +1,8 @@
+/*
 ///////////////////////////////////
 //            CULT RITUALS
-// 
-// 	Flow Overview: 
+//
+// 	Flow Overview:
 //      TriggerCultRitual Global Proc =>
 //			Trigger() Ritual Proc => Check For Completion
 //				Reward() Ritual Proc =>
@@ -13,7 +14,7 @@
 //		Trigger()  -  Called every time a ritual should be checked for completion
 //		extraInfo() - Returns text to be added to objective description on roundend screen
 //
-// 
+//
 ///////////////////////////////////
 
 var/global/veil_weakness = 0	            // how weak the veil of reality is. as cultists perform rituals, this increases
@@ -29,12 +30,12 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 /proc/ChangeVeilWeakness(var/add, var/set_to)
 	if(set_to)
 		veil_weakness = set_to
-	else 
+	else
 		veil_weakness += add
 	var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
 	if(B)
 		B.update_cultist_uis()
-	if(veil_weakness >= SPIRE_STAGE_3)	
+	if(veil_weakness >= SPIRE_STAGE_3)
 		for(var/obj/structure/cult/spire/S in cult_spires)
 			S.upgrade(3)
 	else if(veil_weakness >= SPIRE_STAGE_2)
@@ -69,7 +70,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 		var/datum/bloodcult_ritual/R = pick(locked_rituals)
 		R.Unlock(announce)
 		return R
-	else 
+	else
 		for(var/datum/role/cultist/C in members)
 			to_chat(C.antag.current, "<span class='sinister'>The veil of reality is close to shattering... there are no more rituals to complete.</span>")
 		return null
@@ -84,7 +85,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 
 
 /datum/bloodcult_ritual
-	var/name = "Cult Ritual"        
+	var/name = "Cult Ritual"
 	var/desc = ""
 	var/point_limit = 0       // The ritual will stop working after this many points. 0 = infinite
 	var/only_once = 0		  // Can only be completed once.
@@ -213,12 +214,12 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	var/people = extrainfo["victimcount"]
 	if(people > 1)
 		Reward(people * 10)
-	
+
 
 /datum/bloodcult_ritual/animal_sacrifice
 	name = "Sacrifice Animal"
 	desc = "The Geometer demands blood. Sacrifice an animal at an altar."
-	
+
 /datum/bloodcult_ritual/animal_sacrifice/Trigger(var/mob/cultist, var/list/extrainfo)
 	var/mobtype = extrainfo["mobtype"]
 	var/points = GetMobValue(mobtype,4)
@@ -273,7 +274,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 		anim(target = cultist, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_fervor", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE, direction = cultist.dir)
 		C.MakeArchCultist()
 
-/datum/bloodcult_ritual/reveal_truth 
+/datum/bloodcult_ritual/reveal_truth
 	name = "Reveal the Truth"
 	desc = "Reveal the truth to the nonbelievers. Reveal hidden runes to nonbelievers and ensnare them in occult energy."
 
@@ -296,7 +297,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	if(people > 1)
 		Reward(people * 10)
 		GrantTattoo(cultist, /datum/cult_tattoo/silent)
-	
+
 /datum/bloodcult_ritual/curse_blood
 	name = "Spread the Gift"
 	desc = "Spread our gift amongst the crew. Create cursed blood by pouring it into a goblet, then have at least 3 nonbelievers ingest that blood."
@@ -319,7 +320,7 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	desc = "Spread our message amongst the crew. Convert a crewmember and have them join our cause."
 	var/list/converted = list()
 
-// Only succeeds if the conversion was successful! 
+// Only succeeds if the conversion was successful!
 // Be careful about reaching the cult capacity before unlocking this ritual.
 // Only works on people who haven't been converted before.
 // (Might make it so the ritual is completed if conversion fails ONLY due to cult capacity)
@@ -364,8 +365,9 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 	return " (Highest bloody floor count reached: [max_bloodspill])"
 
 /datum/bloodcult_ritual/spill_blood/Trigger()
-	var/count = cult.bloody_floors.len 
+	var/count = cult.bloody_floors.len
 	if(count > max_bloodspill)
 		max_bloodspill = count
 	if(max_bloodspill >= target_bloodspill)
 		Reward(500)
+*/

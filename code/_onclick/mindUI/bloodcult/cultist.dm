@@ -560,7 +560,7 @@
 	icon = 'icons/ui/bloodcult/362x229.dmi'
 	icon_state = "background2"
 	offset_x = -165
-	offset_y = -83
+	offset_y = -93
 	alpha = 240
 	layer = MIND_UI_BACK
 
@@ -574,7 +574,7 @@
 	icon = 'icons/ui/bloodcult/16x16.dmi'
 	icon_state = "close"
 	offset_x = 181
-	offset_y = 130
+	offset_y = 120
 	layer = MIND_UI_BUTTON
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_panel_close/Click()
@@ -589,7 +589,7 @@
 	icon_state = "move"
 	layer = MIND_UI_BUTTON
 	offset_x = -165
-	offset_y = 130
+	offset_y = 120
 	mouse_opacity = 1
 
 	move_whole_ui = TRUE
@@ -601,7 +601,7 @@
 	icon = 'icons/ui/bloodcult/16x16.dmi'
 	icon_state = "blank"
 	offset_x = -13
-	offset_y = 98
+	offset_y = 88
 	layer = MIND_UI_FRONT
 	element_flags = MINDUI_FLAG_PROCESSING
 
@@ -654,7 +654,7 @@
 	icon_state = "eclipse_gauge"
 	layer = MIND_UI_BUTTON
 	offset_x = -128
-	offset_y = 96
+	offset_y = 86
 	element_flags = MINDUI_FLAG_PROCESSING
 
 	var/image/mask
@@ -703,7 +703,7 @@
 	icon = 'icons/ui/bloodcult/362x229.dmi'
 	icon_state = "foreground"
 	offset_x = -165
-	offset_y = -83
+	offset_y = -93
 	alpha = 255
 	layer = MIND_UI_FRONT
 
@@ -878,12 +878,11 @@
 				var/obj/abstract/mind_ui_element/hoverable/bloodcult_soulblades/soulblades = locate() in BP.elements
 				soulblades.tooltip_content = ""
 				if (ritualized_soulblades.len > 0)
-					soulblades.invisibility = 0
 					for (var/datum/mind/blade_mind in ritualized_soulblades)
 						soulblades.tooltip_content += "[blade_mind.name]<br>"
 					soulblades_count.overlays += String2Image("[ritualized_soulblades.len]")
 				else
-					soulblades.invisibility = 101
+					soulblades.tooltip_content = "People (both cultists and otherwise) sacrificed with an empty soul blade won't take up a slot until the blade and its shade get separated."
 
 
 //------------------------------------------------------------
@@ -895,7 +894,7 @@
 	base_icon_state = "slot_empty"
 	layer = MIND_UI_BUTTON
 	offset_x = -98
-	offset_y = -18
+	offset_y = -28
 	tooltip_title = "Cultist Slot"
 	tooltip_content = ""
 	tooltip_theme = "radial-cult"
@@ -987,7 +986,7 @@
 	icon_state = "blade"
 	layer = MIND_UI_BUTTON
 	offset_x = 140
-	offset_y = -22
+	offset_y = -32
 	tooltip_title = "Ritualized Soulblades"
 	tooltip_content = ""
 	tooltip_theme = "radial-cult"
@@ -1000,6 +999,7 @@
 	layer = MIND_UI_FRONT
 	mouse_opacity = 0
 	offset_x = 150
+	offset_y = -10
 
 //------------------------------------------------------------
 
@@ -1010,7 +1010,7 @@
 	base_icon_state = "cultist_cap"
 	layer = MIND_UI_BUTTON
 	offset_x = 67
-	offset_y = -22
+	offset_y = -32
 
 //------------------------------------------------------------
 
@@ -1019,7 +1019,7 @@
 	icon = 'icons/ui/bloodcult/32x32.dmi'
 	icon_state = "role"
 	offset_x = -147
-	offset_y = -66
+	offset_y = -76
 	layer = MIND_UI_BUTTON
 
 	var/image/click_me
@@ -1096,7 +1096,7 @@
 	icon = 'icons/ui/bloodcult/288x16.dmi'
 	icon_state = "cultist_herald"
 	offset_x = -128
-	offset_y = -59
+	offset_y = -69
 	layer = MIND_UI_FRONT
 
 /obj/abstract/mind_ui_element/bloodcult_your_role/UpdateIcon()
@@ -1108,11 +1108,11 @@
 			switch(C.cultist_role)
 				if (CULTIST_ROLE_NONE)
 					icon_state = "cultist_herald"
-					offset_y = -59
+					offset_y = -69
 				if (CULTIST_ROLE_ACOLYTE)
 					icon_state = "cultist_acolyte"
 					if (C.mentor)
-						offset_y = -45
+						offset_y = -55
 						var/image/I = image('icons/ui/bloodcult/288x16.dmi',src,"mentored_by")
 						I.pixel_x = 18
 						I.pixel_y = -15
@@ -1122,11 +1122,11 @@
 						offset_y = -59
 				if (CULTIST_ROLE_HERALD)
 					icon_state = "cultist_herald"
-					offset_y = -59
+					offset_y = -69
 				if (CULTIST_ROLE_MENTOR)
 					icon_state = "cultist_mentor"
 					if (C.acolytes.len > 0)
-						offset_y = -45
+						offset_y = -55
 						var/image/I = image('icons/ui/bloodcult/288x16.dmi',src,"mentoring")
 						I.pixel_x = 18
 						I.pixel_y = -15
@@ -1137,7 +1137,7 @@
 							String2Maptext(U.antag.name, _pixel_x = 80, _pixel_y = -11 + (-13 * ac))
 							ac++
 					else
-						offset_y = -59
+						offset_y = -69
 			UpdateUIScreenLoc()
 
 //------------------------------------------------------------
@@ -1147,7 +1147,7 @@
 	icon = 'icons/ui/bloodcult/32x32.dmi'
 	icon_state = "help"
 	offset_x = 147
-	offset_y = -66
+	offset_y = -76
 	layer = MIND_UI_BUTTON
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_help_other/Click()
@@ -1196,7 +1196,7 @@
 	icon = 'icons/ui/bloodcult/362x229.dmi'
 	icon_state = "background"
 	offset_x = -165
-	offset_y = -83
+	offset_y = -93
 	alpha = 240
 	layer = MIND_UI_BACK + 3
 
@@ -1223,7 +1223,7 @@
 	icon = 'icons/ui/bloodcult/16x16.dmi'
 	icon_state = "close"
 	offset_x = 181
-	offset_y = 130
+	offset_y = 120
 	layer = MIND_UI_BUTTON + 3
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_role_close/Click()
@@ -1273,7 +1273,7 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/acolyte
 	name = "Acolyte"
 	offset_x = -99
-	offset_y = 90
+	offset_y = 80
 	role_small = "acolyte"
 	role = CULTIST_ROLE_ACOLYTE
 
@@ -1282,7 +1282,7 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/herald
 	name = "Herald"
 	offset_x = -3
-	offset_y = 90
+	offset_y = 80
 	role_small = "herald"
 	role = CULTIST_ROLE_HERALD
 
@@ -1291,7 +1291,7 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_role_select/mentor
 	name = "Mentor"
 	offset_x = 93
-	offset_y = 90
+	offset_y = 80
 	role_small = "mentor"
 	role = CULTIST_ROLE_MENTOR
 
@@ -1302,7 +1302,7 @@
 	icon = 'icons/ui/bloodcult/104x40.dmi'
 	icon_state = "confirm"
 	offset_x = -36
-	offset_y = -68
+	offset_y = -78
 	layer = MIND_UI_BUTTON + 3
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_role_confirm/UpdateIcon()
@@ -1344,7 +1344,7 @@
 	icon_state = "move"
 	layer = MIND_UI_BUTTON + 3
 	offset_x = -165
-	offset_y = 130
+	offset_y = 120
 	mouse_opacity = 1
 
 	move_whole_ui = TRUE

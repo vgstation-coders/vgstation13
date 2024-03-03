@@ -6,7 +6,7 @@ var/list/global_diseases = list()
 		var/datum/disease2/disease/predefined/D = new disease_type
 		global_diseases[D.category] = D
 		D.update_global_log()
-	
+
 
 /datum/disease2/disease/predefined
 	var/category = ""
@@ -165,5 +165,4 @@ var/list/global_diseases = list()
 /datum/disease2/disease/predefined/cult/CanInfect(var/mob/living/mob)
 	if(iscultist(mob))
 		return FALSE
-	TriggerCultRitual(/datum/bloodcult_ritual/curse_blood, list("victim" = mob))
 	return TRUE

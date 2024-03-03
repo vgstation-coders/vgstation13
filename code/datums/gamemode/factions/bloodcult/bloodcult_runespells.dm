@@ -1086,7 +1086,7 @@ var/list/converted_minds = list()
 					qdel(H)
 				convert(convertee, converter)
 				conversion.icon_state = ""
-				TriggerCultRitual(/datum/bloodcult_ritual/conversion, converter, list("victim" = convertee))
+
 				flick("rune_convert_success",conversion)
 				message_admins("BLOODCULT: [key_name(convertee)] has been converted by [key_name(converter)].")
 				log_admin("BLOODCULT: [key_name(convertee)] has been converted by [key_name(converter)].")
@@ -1436,16 +1436,12 @@ var/list/confusion_victims = list()
 		for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
 			potential_victims.Add(M)
 
-	var/ritual_victim_count = 0
 	for(var/mob/living/M in potential_victims)
 
 		if (iscarbon(M))
 			var/mob/living/carbon/C = M
 			if (iscultist(C))
 				continue
-
-			if(C.stat == CONSCIOUS)
-				ritual_victim_count++
 
 			var/datum/confusion_manager/CM
 			if (M in confusion_victims)
@@ -1464,10 +1460,6 @@ var/list/confusion_victims = list()
 			spawn(5)
 				M.clear_fullscreen("blindblack", animate = 0)
 				M.flash_eyes(visual = 1)
-
-	//temp ritual stuff
-	if(culprit && ritual_victim_count > 0)
-		TriggerCultRitual(/datum/bloodcult_ritual/sow_confusion, culprit, list("victimcount" = ritual_victim_count))
 
 	//now to blind cameras, the effects on cameras do not time out, but they can be fixed
 	if (!specific_victim)
@@ -1597,11 +1589,9 @@ var/list/confusion_victims = list()
 	var/effect_range=7
 
 /datum/rune_spell/deafmute/cast(var/deaf_duration = deaf_rune_duration, var/mute_duration = mute_rune_duration)
-	var/ritual_victim_count = 0
 	for(var/mob/living/M in range(effect_range,get_turf(spell_holder)))
 		if (iscultist(M))
 			continue
-		ritual_victim_count += 1
 		M.overlay_fullscreen("deafborder", /obj/abstract/screen/fullscreen/deafmute_border)//victims see a red overlay fade in-out for a second
 		M.update_fullscreen_alpha("deafborder", 100, 5)
 		M.Deafen(deaf_duration)
@@ -1617,8 +1607,6 @@ var/list/confusion_victims = list()
 			M.update_fullscreen_alpha("deafborder", 0, 5)
 			sleep(8)
 			M.clear_fullscreen("deafborder", animate = 0)
-	if(activator && ritual_victim_count > 0)
-		TriggerCultRitual(/datum/bloodcult_ritual/silence_lambs, activator, list("victimcount" = ritual_victim_count))
 	qdel(spell_holder)
 
 /datum/rune_spell/deafmute/cast_talisman()
@@ -1755,7 +1743,6 @@ var/list/confusion_victims = list()
 
 	for(var/mob/living/L in shocked)
 		new /obj/effect/cult_ritual/reveal(L.loc, L, shocked[L])
-		TriggerCultRitual(/datum/bloodcult_ritual/reveal_truth, activator, list("shocked" = shocked))
 		to_chat(L, "<span class='danger'>You feel a terrifying shock resonate within your body as the hidden runes are revealed!</span>")
 		L.update_fullscreen_alpha("shockborder", 100, 5)
 		spawn(8)
