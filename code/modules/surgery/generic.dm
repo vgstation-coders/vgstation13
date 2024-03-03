@@ -340,14 +340,13 @@
 		/obj/item/weapon/hatchet = 75,
 		)
 	duration = 11 SECONDS
-	supports_cosmetic_organs = TRUE
 
 /datum/surgery_step/generic/cut_limb/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (target_zone == "eyes")	//there are specific steps for eye surgery
 		return 0
 	if (!hasorgans(target))
 		return 0
-	var/datum/organ/external/affected = target.get_organ(target_zone, cosmetic = TRUE)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
 	if (affected == null)
 		return 0
 	if (affected.status & ORGAN_DESTROYED)
@@ -357,22 +356,20 @@
 	return target_zone != LIMB_CHEST && target_zone != LIMB_GROIN && target_zone != LIMB_HEAD
 
 /datum/surgery_step/generic/cut_limb/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone, cosmetic = TRUE)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] is beginning to cut off [target]'s [affected.display_name] with \the [tool]." , \
 	"You are beginning to cut off [target]'s [affected.display_name] with \the [tool].")
 	target.custom_pain("Your [affected.display_name] is being ripped apart!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/generic/cut_limb/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone, cosmetic = TRUE)
+	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] cuts off [target]'s [affected.display_name] with \the [tool].</span>", \
 	"<span class='notice'>You cut off [target]'s [affected.display_name] with \the [tool].</span>")
 	affected.open = 0 //Resets surgery status on limb, should prevent conflicting/phantom surgery
 	affected.droplimb(1,0)
 
 /datum/surgery_step/generic/cut_limb/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(target_zone == COSMETIC_ORGAN_TAIL)
-		target_zone = LIMB_GROIN
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='warning'>[user]'s hand slips, sawing through the bone in [target]'s [affected.display_name] with \the [tool]!</span>", \
 	"<span class='warning'>Your hand slips, sawing through the bone in [target]'s [affected.display_name] with \the [tool]!</span>")
