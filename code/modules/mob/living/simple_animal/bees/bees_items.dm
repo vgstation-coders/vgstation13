@@ -224,6 +224,7 @@
 	name = "honeycomb"
 	icon_state = "honeycomb"
 	desc = "Dripping with sugary sweetness. Grind it to separate the honey."
+	starting_materials = list(MAT_WAX = 4*CC_PER_SHEET_WAX)
 	var/list/authentic = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb/New()

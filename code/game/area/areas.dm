@@ -37,8 +37,7 @@ var/area/space_area
 		space_area = src
 		for(var/datum/d in ambient_sounds)//can't think of a better way to do this.
 			qdel(d)
-		//ambient_sounds = list(/datum/ambience/spaced1,/datum/ambience/spaced2,/datum/ambience/spaced3,/datum/ambience/spacemusic,/datum/ambience/mainmusic,/datum/ambience/traitormusic)
-		ambient_sounds = list()
+		ambient_sounds = list(/datum/ambience/spaced1,/datum/ambience/spaced2,/datum/ambience/spaced3,/datum/ambience/spacemusic,/datum/ambience/mainmusic,/datum/ambience/traitormusic)
 		//lighting_state = 4
 		//gravity = 0    // Space has gravity.  Because.. because.
 

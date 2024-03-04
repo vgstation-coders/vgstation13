@@ -101,6 +101,28 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/pacman/mrs
 
+/datum/design/babypacman
+	name = "BABYPACMAN-type Generator Board"
+	desc = "The circuit board that for a BABYPACMAN-type portable generator."
+	id = "babypacman"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_POWERSTORAGE = 6, Tc_ENGINEERING = 5)
+	build_type = IMPRINTER
+	reliability_base = 74
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/pacman/baby
+
+/datum/design/professorpacman
+	name = "PROFESSORPACMAN-type Generator Board"
+	desc = "The circuit board that for a PROFESSORPACMAN-type portable generator."
+	id = "professorpacman"
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_POWERSTORAGE = 7, Tc_ENGINEERING = 5)
+	build_type = IMPRINTER
+	reliability_base = 74
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/pacman/professor
+
 //
 //ATMOSPHERIC MACHINERY.
 //

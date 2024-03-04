@@ -14,6 +14,8 @@
 		if(prob(100 - E.get_damage()))
 			//Override the current limb status and don't cause an explosion
 			E.droplimb(1, 1)
+	for(var/datum/organ/external/cosmetic_organ in cosmetic_organs)
+		cosmetic_organ.droplimb(TRUE, TRUE)
 	var/gib_radius = 0
 	if(reagents.has_reagent(LUBE))
 		gib_radius = 6 //Your insides are all lubed, so gibs travel much further

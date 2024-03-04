@@ -69,7 +69,7 @@
 	var/list/plates = list() // If the plates are stacked, they come here
 	var/new_stack = 0 // allows mappers to create plate stacks
 	var/trash_color = null
-	autoignition_temperature = null
+	autoignition_temperature = 0
 
 /obj/item/trash/plate/clean
 	icon_state = "cleanplate"
@@ -287,6 +287,7 @@
 		else
 			F.item_state = snack.icon_state
 		F.particles = snack.particles
+		F.update_icon()
 	if (plates.len > 0)
 		user.put_in_hands(F)
 		var/obj/item/trash/plate/plate = plates[plates.len]
@@ -394,6 +395,18 @@
 			extra_food_overlay.overlays += generateFilling(S, params)
 			if(fullyCustom)
 				icon_state = S.plate_icon
+				copy_blood_from_item(S)
+				//candles
+				always_candles = S.always_candles
+				candles = S.candles.Copy()
+				for (var/image/C in candles)
+					C.pixel_x += candle_offset_x
+					C.pixel_y += candle_offset_y
+				candles_state = S.candles_state
+				if(S.candles_state == CANDLES_LIT)
+					S.candles_state = CANDLES_NONE
+					S.set_light(0)
+					set_light(CANDLE_LUM,1,LIGHT_COLOR_FIRE)
 		if(addTop)
 			drawTopping()
 		update_icon()
@@ -406,6 +419,15 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/generateFilling(var/obj/item/weapon/reagent_containers/food/snacks/S, params)
 	var/image/I
 	if(fullyCustom)
+		//putting a snack on a plate?
+		fingerprints = S.fingerprints.Copy()
+		//let's start by removing the overlays that aren't actually part of the food item (candles, ice, blood stains,....)
+		S.overlays.len = 0
+		S.overlays += S.extra_food_overlay
+		//but lets keep fire because permanently burning food is hilarious
+		if (S.on_fire && S.fire_overlay)
+			S.overlays += S.fire_overlay
+		//now we can copy the snack's appearance.
 		I = image(S.icon,src,S.icon_state)
 		I.appearance = S.appearance
 		I.plane = FLOAT_PLANE
@@ -434,6 +456,8 @@
 		else
 			I.pixel_x = 2 * PIXEL_MULTIPLIER
 
+	candle_offset_x = I.pixel_x
+	candle_offset_y = I.pixel_y
 	return I
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/updateName()

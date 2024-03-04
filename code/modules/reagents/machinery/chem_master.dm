@@ -83,7 +83,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			manipcount += SP.rating-1
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
-	max_bottle_size = initial(max_bottle_size) + lasercount*5
+	if(!condi) //everything except the condimaster
+		max_bottle_size = initial(max_bottle_size) + lasercount*5
+	else
+		max_bottle_size = initial(max_bottle_size) + lasercount*12.5
 	max_pill_count = initial(max_pill_count) + manipcount*5
 	max_pill_size = initial(max_pill_size) + manipcount*25
 
@@ -813,6 +816,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	chem_board = /obj/item/weapon/circuitboard/condimaster
 	windowtype = "condi_master"
 	moody_state = "overlay_condimaster"
+	max_bottle_size = 50
 
 /obj/machinery/chem_master/electrolytic
 	name = "\improper Electrolytic ChemMaster"

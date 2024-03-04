@@ -7,7 +7,6 @@
 	desc = "yummy"
 	icon_state = null
 	log_reagents = 1
-	fire_fuel = 2//may get ignited by emagged microwave
 	autoignition_temperature = AUTOIGNITION_ORGANIC
 
 	var/food_flags	//Possible flags: FOOD_LIQUID, FOOD_MEAT, FOOD_ANIMAL, FOOD_SWEET
@@ -40,6 +39,12 @@
 	var/crumb_icon = "crumbs"
 	var/base_crumb_chance = 10
 	var/time_last_eaten
+
+	var/candles_state = CANDLES_NONE
+	var/list/candles = list()
+	var/always_candles = ""
+	var/candle_offset_x = 0
+	var/candle_offset_y = 0
 
 	var/valid_utensils = UTENSILE_FORK	//| UTENSILE_SPOON
 
@@ -220,9 +225,64 @@
 	if (random_filling_colors?.len > 0)
 		filling_color = pick(random_filling_colors)
 
+/obj/item/weapon/reagent_containers/food/snacks/proc/light(var/flavor_text = "<span class='notice'>[usr] lights [src].</span>", var/quiet = 0)
+	if(candles_state == CANDLES_UNLIT)
+		candles_state = CANDLES_LIT
+		visible_message(flavor_text)
+		set_light(CANDLE_LUM,1,LIGHT_COLOR_FIRE)
+		update_icon()
+
+/obj/item/weapon/reagent_containers/food/snacks/blow_act(var/mob/living/user)
+	if(candles_state == CANDLES_LIT)
+		candles_state = CANDLES_UNLIT
+		visible_message("<span  class='rose'>The candle[(candles.len > 1) ? "s" : ""] on \the [name] go[(candles.len > 1) ? "" : "es"] out.</span>")
+		set_light(0)
+		update_icon()
+
+/obj/item/weapon/reagent_containers/food/snacks/clean_act(var/cleanliness)
+	..()
+	if(candles_state == CANDLES_LIT)
+		candles_state = CANDLES_UNLIT
+		visible_message("<span  class='rose'>The candle[(candles.len > 1) ? "s" : ""] on \the [name] go[(candles.len > 1) ? "" : "es"] out.</span>")
+		set_light(0)
+		update_icon()
+
+/obj/item/weapon/reagent_containers/food/snacks/pickup(mob/user)
+	..()
+	update_icon()
+
 /obj/item/weapon/reagent_containers/food/snacks/update_icon()
 	overlays.len = 0//no choice here but to redraw everything in the correct order so condiments etc don't appear over ice and fire.
 	overlays += extra_food_overlay
+
+	if (candles_state != CANDLES_NONE)
+		for (var/image/I in candles)
+			overlays += I
+	if (candles_state == CANDLES_LIT)
+		for (var/image/I in candles)
+			var/image/M = image(I)
+			M.appearance = I.appearance
+			M.color = null
+			M.icon_state = "[M.icon_state]_lit"
+			M.appearance_flags = RESET_COLOR
+			M.blend_mode = BLEND_ADD
+			if (isturf(loc))
+				M.plane = ABOVE_LIGHTING_PLANE
+			else
+				M.plane = ABOVE_HUD_PLANE // inventory
+			overlays += M
+
+		if (always_candles)//birthday cake and its slices
+			var/image/I = image('icons/obj/food.dmi',src,"[always_candles]_lit")
+			I.appearance_flags = RESET_COLOR
+			I.blend_mode = BLEND_ADD
+			I.pixel_y = candle_offset_y
+			if (isturf(loc))
+				I.plane = ABOVE_LIGHTING_PLANE
+			else
+				I.plane = ABOVE_HUD_PLANE // inventory
+			overlays += I
+
 	update_temperature_overlays()
 	update_blood_overlay()//re-applying blood stains
 	if (on_fire && fire_overlay)
@@ -536,7 +596,7 @@
 				slices_lost = rand(1, min(1, round(slices_num/2))) //Randomly lose a few slices along the way, but at least one and up to half
 			var/reagents_per_slice = reagents.total_volume/slices_num //Figure out how much reagents each slice inherits (losing slices loses reagents)
 			for(var/i = 1 to (slices_num - slices_lost)) //Transfer those reagents
-				var/obj/slice = new slice_path(src.loc)
+				var/obj/item/weapon/reagent_containers/food/snacks/slice = new slice_path(src.loc)
 				if(istype(src, /obj/item/weapon/reagent_containers/food/snacks/customizable)) //custom sliceable foods have overlays we need to apply
 					var/obj/item/weapon/reagent_containers/food/snacks/customizable/C = src
 					var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
@@ -548,6 +608,24 @@
 					var/obj/item/sliceItem = slice
 					sliceItem.luckiness += luckiness / slices_num
 				reagents.trans_to(slice, reagents_per_slice)
+				for (var/C in visible_condiments)
+					var/image/I = image('icons/obj/condiment_overlays.dmi',slice,C)
+					I.color = visible_condiments[C]
+					slice.extra_food_overlay.overlays += I
+					slice.overlays += I
+				if (candles.len > 0)
+					var/image/candle = pick(candles)
+					candles.Remove(candle)
+					candle.pixel_x = 0
+					candle.pixel_y = 0
+					slice.candles += candle
+					slice.candles_state = candles_state
+					if (slice.candles_state == CANDLES_LIT)
+						slice.set_light(CANDLE_LUM,0.5,LIGHT_COLOR_FIRE)
+				else if (always_candles)
+					slice.candles_state = candles_state
+					if (slice.candles_state == CANDLES_LIT)
+						slice.set_light(CANDLE_LUM,0.5,LIGHT_COLOR_FIRE)
 				slice.update_icon() //So hot slices start steaming right away
 			qdel(src) //So long and thanks for all the fish
 			return 1
@@ -556,6 +634,13 @@
 				A.forceMove(get_turf(src))
 			visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
 			return 1
+
+	if (istype(W, /obj/item/candle)) //candles added on afterattack
+		return 0
+
+	if((candles_state == CANDLES_UNLIT) && (W.is_hot() || W.sharpness_flags & (HOT_EDGE)))
+		light("<span class='notice'>[user] lights \the [src] with \the [W].</span>")
+		return 1
 
 	//Slipping items into food. Because this is below slicing, sharp items can't go into food. No knife-bread, sorry.
 	if(can_hold(W))
@@ -1749,13 +1834,21 @@
 		var/mob/M = hit_atom
 		src.visible_message("<span class='warning'>\The [src] splats in [M]'s face!</span>")
 
+		var/race_prefix = ""
+		if (isvox(M))
+			race_prefix = "vox"
+		else if (isgrey(M))
+			race_prefix = "grey"
+		else if (isinsectoid(M))
+			race_prefix = "insect"
+
 		M.eye_blind = 2
-		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied")
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
 		sleep(55)
-		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied")
-		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied-2")
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied-2")
 		sleep(120)
-		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied-2")
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied-2")
 
 		if(luckiness)
 			M.luck_adjust(luckiness, temporary = TRUE)
@@ -2632,7 +2725,7 @@
 	name = "Tomato soup"
 	desc = "Smells like iron."
 	icon_state = "tomatosoup"
-	food_flags = FOOD_LIQUID
+	food_flags = FOOD_LIQUID | FOOD_ANIMAL //blood
 	crumb_icon = "dribbles"
 	filling_color = "#FF3300"
 	valid_utensils = UTENSILE_SPOON
@@ -2835,6 +2928,7 @@
 	trash = /obj/item/trash/snack_bowl
 	crumb_icon = "dribbles"
 	filling_color = "#E23D12"
+	food_flags = FOOD_LIQUID | FOOD_MEAT
 	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/hotchili/New()
@@ -2851,6 +2945,7 @@
 	trash = /obj/item/trash/snack_bowl
 	crumb_icon = "dribbles"
 	filling_color = "#4375E8"
+	food_flags = FOOD_LIQUID | FOOD_MEAT
 	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/coldchili/New()
@@ -2867,6 +2962,7 @@
 	trash = /obj/item/trash/snack_bowl
 	crumb_icon = "dribbles"
 	filling_color = "#CE37BA"
+	food_flags = FOOD_LIQUID | FOOD_MEAT
 	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/plasmastew/New()
@@ -4013,6 +4109,8 @@
 	storage_slots = 3
 	w_class = W_CLASS_MEDIUM
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	candles_state = CANDLES_UNLIT
+	always_candles = "birthdaycake"
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/birthdaycake/New()
 	..()
@@ -4027,6 +4125,8 @@
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_icon = "bluecustom"
+	candles_state = CANDLES_UNLIT
+	always_candles = "birthdaycakeslice"
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
 	name = "bread"
@@ -6375,6 +6475,7 @@
 	desc = "From a soup just like this, a sentient race could one day emerge. Better eat it to be safe."
 	icon_state = "primordialsoup"
 	bitesize = 2
+	food_flags = FOOD_LIQUID | FOOD_ANIMAL //blood is animal sourced
 	crumb_icon = "dribbles"
 	filling_color = "#720D00"
 
@@ -6463,6 +6564,7 @@
 	desc = "The strong, tangy flavor of the orange and soy sauce highlights the smooth, thick taste of the honey. This fusion dish is one of the highlights of Terran cuisine."
 	icon_state = "honeycitruschicken"
 	bitesize = 4
+	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycitruschicken/New()
@@ -6499,6 +6601,7 @@
 	desc = "There may be more fish in the sea, but there's only one kind of fish in the stars."
 	icon_state = "fishtacosupreme"
 	bitesize = 3
+	food_flags = FOOD_MEAT
 	base_crumb_chance = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme/New()
@@ -6510,6 +6613,7 @@
 	desc = "This dish became exceedingly rare after Space Texas seceeded from our plane of reality."
 	icon_state = "chiliconcarne"
 	bitesize = 3
+	food_flags = FOOD_LIQUID | FOOD_MEAT
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/chiliconcarne/New()

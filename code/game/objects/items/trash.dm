@@ -9,7 +9,6 @@
 	desc = "This is rubbish."
 	w_type=NOT_RECYCLABLE
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
 	var/persistence_type = SS_TRASH
 	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	//var/global/list/trash_items = list()
@@ -145,7 +144,7 @@
 /obj/item/trash/pietin
 	name = "pie tin"
 	icon_state = "pietin"
-	autoignition_temperature = 0
+	autoignition_temperature = 450 //snowflaked value low enough to catch on fire from sparks
 	siemens_coefficient = 2 //Do not touch live wires
 	melt_temperature = MELTPOINT_SILICON //Not as high as steel
 
@@ -212,6 +211,18 @@
 	name = "candle"
 	icon = 'icons/obj/candle.dmi'
 	icon_state = "candle4"
+	starting_materials = list(MAT_WAX = (4*CC_PER_SHEET_WAX/5))
+	var/image/wick
+
+/obj/item/trash/candle/New(turf/loc, var/obj/item/candle/source)
+	..()
+	if (source)
+		color = source.color
+	else
+		color = COLOR_DEFAULT_CANDLE
+	wick = image(icon,src,"candle4-wick")
+	wick.appearance_flags = RESET_COLOR
+	overlays += wick
 
 /obj/item/trash/liquidfood
 	name = "\improper \"LiquidFood\" ration"

@@ -624,3 +624,4 @@
 	desc = "Black shoes for formal occasions."
 	icon_state = "secshoes"
 	item_state = "secshoes"
+	species_fit = list(VOX_SHAPED)

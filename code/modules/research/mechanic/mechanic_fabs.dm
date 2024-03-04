@@ -96,7 +96,7 @@
 		return 0
 	//Send a version of this design to the parent that includes the plastic
 	var/datum/design/plastic_part = new()
-	plastic_part.materials = part.materials
+	plastic_part.materials = part.materials.Copy()
 	plastic_part.materials[MAT_PLASTIC] = get_resource_cost_w_coeff(part, MAT_PLASTIC)
 	. = ..(plastic_part) //Send the parent our new design and store result
 	qdel(plastic_part) //Delete design copy

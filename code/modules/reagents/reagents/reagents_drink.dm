@@ -535,7 +535,7 @@
 	color = "#100800" //rgb: 16, 8, 0
 	adj_sleepy = -2
 	density = 4.17
-	specheatcap = 124
+	specheatcap = 1.24
 	glass_icon_state = "nuka_colaglass"
 	glass_name = "\improper Nuka Cola"
 	glass_desc = "Don't cry. Don't raise your eye. It's only nuclear wasteland."

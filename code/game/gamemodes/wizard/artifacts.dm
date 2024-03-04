@@ -370,11 +370,13 @@
 /datum/spellbook_artifact/nogunallowed
 	name = "No Gun Allowed"
 	abbreviation = "NGA"
-	desc = "Forgo the use of guns in exchange for magical power. Some within the Wizard Federation have lobbied to make this spell a legal obligation."
+	desc = "Forgo the use of guns in exchange for magical power. Some within the Wizard Federation have lobbied to make this spell a legal obligation. Non-refundable."
 	price = -1 * Sp_BASE_PRICE
 	one_use = TRUE
 
 /datum/spellbook_artifact/nogunallowed/can_buy(var/mob/user)
+	for(var/spell/passive/nogunallowed/NG in user.spell_list) //In case the user gets hold of a second spellbook
+		return FALSE
 	return iswizard(user) || isapprentice(user) || ismagician(user)
 
 /datum/spellbook_artifact/nogunallowed/purchased(mob/living/carbon/human/H)

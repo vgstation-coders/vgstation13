@@ -1377,12 +1377,12 @@
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Cluwne;jobban4=\ref[M]'><font color=red>Cluwne</font></a></td>"
 		else
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Cluwne;jobban4=\ref[M]'>Cluwne</a></td>"
-		
+
 		if(jobban_isbanned(M, "artist")) //so people can't make paintings
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=artist;jobban4=\ref[M]'><font color=red>Artist</font></a></td>"
 		else
-			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=artist;jobban4=\ref[M]'>Artist</a></td>"	
-		
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=artist;jobban4=\ref[M]'>Artist</a></td>"
+
 		jobs += "</tr></table>"
 
 		body = "<body>[jobs]</body>"
@@ -2926,15 +2926,10 @@
 			return
 
 		if(H.op_stage.butt != 4) // does the target have an ass
-			var/obj/item/clothing/head/butt/B = new(H.loc)
-			B.transfer_buttdentity(H)
-			H.op_stage.butt = 4 //No having two butts.
+			H.butt_blast()
 			to_chat(H, "<span class='warning'>Your ass was just blown off by an unknown force!</span>")
 			log_admin("[key_name(H)] was buttblasted by [src.owner]")
 			message_admins("[key_name(H)] was buttblasted by [src.owner]")
-			playsound(H, 'sound/effects/superfart.ogg', 50, 1)
-			H.apply_damage(40, BRUTE, LIMB_GROIN)
-			H.apply_damage(10, BURN, LIMB_GROIN)
 			H.Knockdown(8)
 			H.Stun(8)
 		else

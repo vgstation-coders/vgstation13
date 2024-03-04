@@ -569,7 +569,7 @@
 /datum/role/thrall/Greet(var/you_are = TRUE)
 	var/dat
 	if (you_are)
-		dat = "<span class='danger'>You are a Thrall!</br> You are slaved to <b>[master.antag.current]</b> [faction?"under the [faction.name].":"."]</span>"
+		dat = "<span class='danger'>You are a Thrall!</br> You are slaved to <b>[master.antag.current]</b> [faction?"under [faction.name].":"."]</span>"
 	dat += {""}
 	to_chat(antag.current, dat)
 	to_chat(antag.current, "<B>You must complete the following tasks:</B>")
@@ -586,7 +586,8 @@
 	log_admin("[key_name(M)] was dethralled, his master was [key_name(master.antag)]. [formatJumpTo(get_turf(antag.current))]")
 	if (deconverted)
 		M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
-		"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+		"<span class='warning'><b>Your blood cools down and you are inhabited by a sensation of untold calmness.</b></span>")
+		to_chat(M, "<span class='big warning'>You are no longer a slave to [master.antag.current]'s whims, having <b>escaped your thralldom.<b></span>")
 	update_faction_icons()
 	return ..()
 

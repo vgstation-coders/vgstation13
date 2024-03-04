@@ -293,6 +293,13 @@
 /obj/docking_port/destination/vault/amelab
 	areaname = "Nanotrasen Experimental AME Lab"
 
+/area/vault/soulblade_sanctum
+	jammed = 2
+	color = "red"
+	ambient_sounds = list(
+		/datum/ambience/spaced2,
+		/datum/ambience/spaced3,
+		)
 
 /area/vault/meteorlogical
 	name = "\improper Meteorlogical Station"

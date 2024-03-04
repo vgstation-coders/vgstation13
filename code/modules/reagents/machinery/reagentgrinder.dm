@@ -41,6 +41,9 @@ var/global/list/juice_items = list (
 		/obj/item/stack/sheet/mineral/gold    = list(GOLD = 20),
 		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = 20),
 		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON = 1),
+		/obj/item/stack/sheet/wax			  = list(WAX = 5),
+		/obj/item/candle					  = list(WAX = 1.25),
+		/obj/item/trash/candle				  = list(WAX = 1),
 		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID = 0),
 		/obj/item/weapon/grown/deathnettle    = list(PHENOL = 0),
 		/obj/item/stack/sheet/charcoal        = list("charcoal" = 20),
@@ -520,7 +523,7 @@ var/global/list/juice_items = list (
 			for(var/r_id in allowed)
 				if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 					break
-				beaker.reagents.add_reagent(r_id, allowed[r_id])
+				beaker.reagents.add_reagent(r_id, allowed[r_id], additional_data = list("color" = O.color))
 		if(O.gcDestroyed)
 			holdingitems -= O
 

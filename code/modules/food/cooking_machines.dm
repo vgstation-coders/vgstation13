@@ -326,7 +326,7 @@ var/global/ingredientLimit = 10
 		var/obj/item/weapon/reagent_containers/food/snacks/customizable/F = new_food
 		F.ingredients += I
 		F.updateName()
-		F.overlays += F.generateFilling(I)
+		F.extra_food_overlay.overlays += F.generateFilling(I)
 		F.luckiness += I.luckiness
 		I.luckiness = null
 	else if (istype(new_food, /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable))
@@ -338,7 +338,7 @@ var/global/ingredientLimit = 10
 		I.luckiness = null
 	if (cooking_temperature && (new_food.reagents.chem_temp < cooking_temperature))
 		new_food.reagents.chem_temp = cooking_temperature
-		new_food.update_icon()
+	new_food.update_icon()
 	ingredient = null
 	return new_food
 
@@ -445,7 +445,8 @@ var/global/ingredientLimit = 10
 	C.name = "[ingredient.name] cereal"
 	var/image/I = image(getFlatIcon(ingredient, ingredient.dir, 0))
 	I.transform *= 0.7
-	C.overlays += I
+	C.extra_food_overlay.overlays += I
+	C.update_icon()
 
 	if(istype(ingredient, /obj/item/weapon/holder))
 		var/obj/item/weapon/holder/H = ingredient

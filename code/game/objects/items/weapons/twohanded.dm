@@ -80,6 +80,14 @@
 	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
 	slowdown = FIREAXE_SLOWDOWN
 
+	var/list/forbidden_floors = list(
+		/turf/simulated/floor/vault,
+		/turf/simulated/floor/engine,
+		/turf/simulated/floor/beach,
+		/turf/simulated/floor/shuttle,
+		/turf/simulated/floor/plating/snow
+	)
+
 /obj/item/weapon/fireaxe/update_wield(mob/user)
 	..()
 	item_state = "fireaxe[wielded ? 1 : 0]"
@@ -106,7 +114,10 @@
 			W.shatter()
 		else
 			QDEL_NULL(A)
-	else if(A && wielded && (istype(A, /turf/simulated/floor))) //removes floor plating
+	else if(A && wielded && istype(A, /turf/simulated/floor) && user.a_intent == I_HELP) //removes floor plating
+		if(is_type_in_list(A,forbidden_floors))
+			to_chat(user, "<span class='notice'>\The [src] isn't strong enough to break \the [A].</span>")
+			return
 		var/turf/simulated/floor/T = A
 		to_chat(viewers(user), "<span class='danger'>[user] begins to remove the plating using \the [src]!</span>")
 		var/breaktime = 6 SECONDS
