@@ -618,6 +618,20 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	message = "Due to timespace anomalies of unknown origin, [station_name] is now host to several [mob_name]\s more than there were a moment ago."
 
 
+////////ECLIPSE
+
+/datum/command_alert/eclipse_start
+	name = "Eclipse Starts"
+	alert_title = "Solar Eclipse Alert"
+
+/datum/command_alert/eclipse_start/New()
+	message = "A previously undetected celestial object has shifted in-between the star and [station_name()]. On top of shorted solars power, disruptions of the electromagnetic field have been detected which may result in light not travelling as far for the duration of the eclipse. We expect the object to shift away along its orbit in a dozen minutes at most."
+
+/datum/command_alert/eclipse_end
+	name = "Eclipse Ends"
+	alert_title = "Solar Eclipse Ends"
+	message = "The alignment between the star, station, and orbital object has come to an end. Anomalous electromagnetic behaviour should come to an end."
+
 //////////////BLOOD CULT
 
 /*

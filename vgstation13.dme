@@ -1658,6 +1658,7 @@
 #include "code\modules\events\carp_migration.dm"
 #include "code\modules\events\communications_blackout.dm"
 #include "code\modules\events\crickets.dm"
+#include "code\modules\events\eclipse.dm"
 #include "code\modules\events\electrical_storm.dm"
 #include "code\modules\events\event.dm"
 #include "code\modules\events\event_dynamic.dm"

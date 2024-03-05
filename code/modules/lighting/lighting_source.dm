@@ -1,6 +1,8 @@
 // This is where the fun begins.
 // These are the main datums that emit light.
 
+var/list/all_light_sources = list()
+
 /datum/light_source
 	var/atom/top_atom        // The atom we're emitting light from (for example a mob if we're from a flashlight that's being held).
 	var/atom/source_atom     // The atom that we belong to.
@@ -31,6 +33,7 @@
 	var/force_update
 
 /datum/light_source/New(var/atom/owner, var/atom/top)
+	all_light_sources += src
 	source_atom = owner // Set our new owner.
 	if (!source_atom.light_sources)
 		source_atom.light_sources = list()
@@ -63,6 +66,7 @@
 		log_debug("[src] had destroy() called after already being destroyed! coords: [get_coordinates_string(src)], area: [get_area(src)]")
 		return
 	destroyed = TRUE
+	all_light_sources -= src
 	force_update()
 	if(source_atom)
 		if(!source_atom.light_sources)
@@ -232,18 +236,38 @@
 	if (!T.lighting_corners_initialised)
 		T.generate_missing_corners()
 
-	for (var/datum/lighting_corner/C in T.get_corners())
-		if (C.update_gen == update_gen)
-			continue
+	if (sun && (sun.eclipse == ECLIPSE_ONGOING) && (top_atom.z == map.zMainStation))
+		for (var/datum/lighting_corner/C in T.get_corners())
+			if (C.update_gen == update_gen)
+				continue
 
-		C.update_gen = update_gen
-		C.affecting += src
+			C.update_gen = update_gen
+			C.affecting += src
 
-		if (!C.active)
-			effect_str[C] = 0
-			continue
+			if (!C.active)
+				effect_str[C] = 0
+				continue
 
-		APPLY_CORNER(C)
+			var/old_range = light_range
+			var/old_power = light_power
+			light_range *= sun.eclipse_rate
+			light_power *= sun.eclipse_rate
+			APPLY_CORNER(C)
+			light_range = old_range
+			light_power = old_power
+	else
+		for (var/datum/lighting_corner/C in T.get_corners())
+			if (C.update_gen == update_gen)
+				continue
+
+			C.update_gen = update_gen
+			C.affecting += src
+
+			if (!C.active)
+				effect_str[C] = 0
+				continue
+
+			APPLY_CORNER(C)
 
 	if (!T.affecting_lights)
 		T.affecting_lights = list()
@@ -264,7 +288,6 @@
 
 	for (var/datum/lighting_corner/C in effect_str)
 		REMOVE_CORNER(C)
-
 		C.affecting -= src
 
 	effect_str.Cut()
