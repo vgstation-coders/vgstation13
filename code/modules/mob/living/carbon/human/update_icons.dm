@@ -336,7 +336,7 @@ var/global/list/damage_icon_parts = list()
 	//to_chat(world, "Maskheadhair? [check_hidden_head_flags(MASKHEADHAIR)]")
 	var/hair_suffix = check_hidden_head_flags(MASKHEADHAIR) ? "s2" : "s" // s2 = cropped icon
 
-	if(my_appearance.f_style && !(check_hidden_flags(get_clothing_items(),HIDEBEARDHAIR))) //If the beard is hidden, don't draw it
+	if(my_appearance.f_style && !(check_hidden_flags(get_clothing_items(), HIDEBEARDHAIR, force_check = TRUE))) //If the beard is hidden, don't draw it
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[my_appearance.f_style]
 		if((facial_hair_style) && (src.species.name in facial_hair_style.species_allowed))
 			var/icon/facial_s = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
@@ -347,7 +347,7 @@ var/global/list/damage_icon_parts = list()
 			//warning("Invalid my_appearance.f_style for [species.name]: [my_appearance.f_style]")
 
 	//to_chat(world, "Hideheadhair? [check_hidden_flags(get_clothing_items(),HIDEHEADHAIR)]")
-	if(my_appearance.h_style && !(check_hidden_flags(get_clothing_items(),HIDEHEADHAIR))) //If the hair is hidden, don't draw it
+	if(my_appearance.h_style && !(check_hidden_flags(get_clothing_items(), HIDEHEADHAIR, force_check = TRUE))) //If the hair is hidden, don't draw it
 		var/datum/sprite_accessory/hair_style = hair_styles_list[my_appearance.h_style]
 		if((hair_style) && (src.species.name in hair_style.species_allowed))
 			var/icon/hair_s
@@ -626,6 +626,7 @@ var/global/list/damage_icon_parts = list()
 		obj_to_plane_overlay(O,UNIFORM_LAYER)
 		//overlays_standing[UNIFORM_LAYER]	= standing
 		//overlays_standing[UNIFORM_LAYER]	= null
+	update_tail_layer(FALSE)
 	if(update_icons)
 		update_icons()
 
@@ -1559,7 +1560,7 @@ var/global/list/damage_icon_parts = list()
 	var/datum/organ/external/tail/tail_organ = get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
 	if(!tail_organ || (tail_organ.status & ORGAN_DESTROYED))
 		return
-	if(wear_suit || check_hidden_body_flags(HIDETAIL))
+	if(check_hidden_body_flags(HIDETAIL, force_check = TRUE))
 		return
 	var/tail_file = tail_organ.tail_icon_file
 	var/tail_icon_state = tail_organ.icon_name
