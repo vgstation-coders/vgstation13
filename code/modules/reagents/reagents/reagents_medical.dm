@@ -824,7 +824,7 @@ var/global/list/charcoal_doesnt_remove=list(
 			var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
 			if(eyes_covered)
 				return
-			else //eyedrops, why not
+			if(TARGET_EYES in zone_sels) /* If you're targeting eyes specifically, splashing the reagent into them will also work. */
 				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 				if(istype(E) && !E.robotic)
 					M.eye_blurry = 0
@@ -849,6 +849,8 @@ var/global/list/charcoal_doesnt_remove=list(
 				M.eye_blind = 0
 				if(E.damage > 0)
 					E.damage = 0 //cosmic technologies
+				if(M.sdisabilities & BLIND)
+					M.sdisabilities ^= BLIND
 				to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
 
 /datum/reagent/inacusiate
