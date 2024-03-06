@@ -112,15 +112,15 @@ params:
 	// Important distinction: being favorited vs being rendered for the favorited list.
 	// The fav parameter means the latter.
 	if (master.favorites.Find(src))
-		fav_html = "<td class='shcem_sub'><a style='color:#de252f;' href='?src=\ref[interface];schematic=\ref[src];act=defav' title='Unfavorite'>X</a><td>"
+		fav_html = "<td class='shcem_sub'><a href='?src=\ref[interface];schematic=\ref[src];act=defav' title='Unfavorite'>&#x2605;</a><td>"
 
 		if (fav)
 			var/index = master.favorites.Find(src)
-			fav_html += index != 1 ? "<td class='shcem_sub'><a href='?src=\ref[interface];schematic=\ref[src];act=favorder;order=down'>&#8743;</a></td>" : "<td class='shcem_sub'><a>&nbsp;</a></td>"
-			fav_html += index != master.favorites.len                    ? "<td class='shcem_sub' ><a href='?src=\ref[interface];schematic=\ref[src];act=favorder;order=up'>&#8744;</a></td>" : "<td class='shcem_sub'><a>&nbsp;</a></td>"
+			fav_html += index != 1 ? "<td class='shcem_sub'><a href='?src=\ref[interface];schematic=\ref[src];act=favorder;order=down'>&#x2BC5;</a></td>" : "<td class='shcem_sub'><a>&nbsp;</a></td>"
+			fav_html += index != master.favorites.len                    ? "<td class='shcem_sub' ><a href='?src=\ref[interface];schematic=\ref[src];act=favorder;order=up'>&#X2BC6;</a></td>" : "<td class='shcem_sub'><a>&nbsp;</a></td>"
 
 	else
-		fav_html = "<td class='shcem_sub'><a style='color:#e4af00;' href='?src=\ref[interface];schematic=\ref[src];act=fav'  title='Favorite'>F</a></td>"
+		fav_html = "<td class='shcem_sub'><a href='?src=\ref[interface];schematic=\ref[src];act=fav'  title='Favorite'>&#x2606;</a></td>"
 
 	if (selected)
 		class="'schem_selected'"
