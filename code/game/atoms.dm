@@ -479,6 +479,11 @@ its easier to just keep the beam vertical.
 			to_chat(user, "<a href='?src=\ref[src];bug=\ref[bug]'>There's something hidden in there.</a>")
 		else if(isobserver(user) || prob(100 / (distance + 2)))
 			to_chat(user, "There's something hidden in there.")
+	if(isliving(user))
+		for(var/datum/role/R in get_list_of_elements(user.mind.antag_roles))
+			var/antag_text = R.role_examine_text_addition(src)
+			if(antag_text)
+				to_chat(user, "[antag_text]\n")
 	INVOKE_EVENT(src, /event/examined, "user" = user)
 
 /atom/Topic(href, href_list)
