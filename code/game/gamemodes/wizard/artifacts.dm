@@ -307,10 +307,10 @@
 	H.nutrition += 1000
 	H.update_mutations()
 
-	H.add_spell(new/spell/passive/noclothes)
-	H.add_spell(new/spell/aoe_turf/conjure/snowmobile)
-	H.add_spell(new/spell/targeted/wrapping_paper)
-	H.add_spell(new/spell/aoe_turf/conjure/gingerbreadman)
+	H.add_spell(new/spell/passive/noclothes, iswizard = TRUE)
+	H.add_spell(new/spell/aoe_turf/conjure/snowmobile, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/wrapping_paper, iswizard = TRUE)
+	H.add_spell(new/spell/aoe_turf/conjure/gingerbreadman, iswizard = TRUE)
 //	H.add_spell(new/spell/targeted/flesh_to_coal)
 
 	to_chat(world,'sound/misc/santa.ogg')
@@ -351,14 +351,14 @@
 
 /datum/spellbook_artifact/prestidigitation/purchased(mob/living/carbon/human/H)
 	..()
-	H.add_spell(new/spell/targeted/spark)
-	H.add_spell(new/spell/targeted/extinguish)
-	H.add_spell(new/spell/targeted/clean)
-	H.add_spell(new/spell/targeted/unclean)
-	H.add_spell(new/spell/targeted/create_trinket)
-	H.add_spell(new/spell/targeted/cool_object)
-	H.add_spell(new/spell/targeted/warm_object)
-	H.add_spell(new/spell/targeted/color_change)
+	H.add_spell(new/spell/targeted/spark, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/extinguish, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/clean, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/unclean, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/create_trinket, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/cool_object, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/warm_object, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/color_change, iswizard = TRUE)
 
 /datum/spellbook_artifact/blindingspeed
 	name = "Boots of Blinding Speed"
@@ -381,4 +381,4 @@
 
 /datum/spellbook_artifact/nogunallowed/purchased(mob/living/carbon/human/H)
 	..()
-	H.add_spell (new/spell/passive/nogunallowed)
+	H.add_spell (new/spell/passive/nogunallowed, iswizard = TRUE)
