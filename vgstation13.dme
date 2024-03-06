@@ -1959,7 +1959,6 @@
 #include "code\modules\mob\living\carbon\human\examine.dm"
 #include "code\modules\mob\living\carbon\human\human.dm"
 #include "code\modules\mob\living\carbon\human\human_attackalien.dm"
-#include "code\modules\mob\living\carbon\human\human_attackanimal.dm"
 #include "code\modules\mob\living\carbon\human\human_attackhand.dm"
 #include "code\modules\mob\living\carbon\human\human_attackpaw.dm"
 #include "code\modules\mob\living\carbon\human\human_damage.dm"
