@@ -2847,6 +2847,7 @@
 #include "code\modules\surgery\slimes.dm"
 #include "code\modules\surgery\surgery.dm"
 #include "code\modules\surgery\suturing.dm"
+#include "code\modules\surgery\tail.dm"
 #include "code\modules\surgery\tooth.dm"
 #include "code\modules\telesci\bscrystal.dm"
 #include "code\modules\telesci\dses.dm"
