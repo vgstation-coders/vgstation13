@@ -8755,3 +8755,33 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(ROACHSHELL, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube
+	name = "salt cubes"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/saltcube
+	child_volume = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube/New()
+	..()
+	reagents.add_reagent(SODIUMCHLORIDE, 15) //spawns 5
+
+/obj/item/weapon/reagent_containers/food/snacks/saltcube
+	name = "salt cubes"
+	desc = "You wish you had a salt rhombicosidodecahedron, but a cube will do."
+	icon_state = "sugarsaltcube"
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube
+	name = "sugar cube"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sugarcube
+	child_volume = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube/New()	
+	..()
+	reagents.add_reagent(SUGAR, 15) //spawns 5
+
+/obj/item/weapon/reagent_containers/food/snacks/sugarcube
+	name = "sugar cube"
+	desc = "The superior sugar delivery method. How will sugar sphere babies ever compare?"
+	icon_state = "sugarsaltcube"
+	bitesize = 3

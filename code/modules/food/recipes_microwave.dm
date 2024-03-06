@@ -3803,3 +3803,13 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/roachesonstick
+
+/datum/recipe/sugarcube
+	reagents = list(SODIUMCHLORIDE = 10)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube
+	cookable_with = COOKABLE_WITH_MIXING
+	
+/datum/recipe/saltcube
+	reagents = list(SUGARS = 10)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube
+	cookable_with = COOKABLE_WITH_MIXING
