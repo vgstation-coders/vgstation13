@@ -76,8 +76,6 @@ a.selected img {
 
 .shcem_sub{
 	font-family:monospace;
-	font-weight:bold;
-	/*padding:1px;*/
 	padding-bottom:2px;
 	font-size:14px;
 	width:1em; /*some of the symbols are bigger than others... in a monospace font...*/
