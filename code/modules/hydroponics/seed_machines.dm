@@ -395,10 +395,7 @@
 
 	if( href_list["change_splice_amount"])
 		var/new_amount = input(usr, "Enter the number of times to perform the SPLICE command: (Between 1 and 10)","Enter Multsplice Coefficient",times_to_splice) as num
-		if(new_amount>10)
-			new_amount = 10
-		else if(new_amount<1)
-			new_amount = 1
+		new_amount = clamp(1,new_amount,10)
 		times_to_splice = new_amount
 
 	if(href_list["apply_gene"])
