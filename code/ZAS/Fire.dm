@@ -389,6 +389,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	layer = TURF_FIRE_LAYER
 	plane = ABOVE_TURF_PLANE
 	light_color = LIGHT_COLOR_FIRE
+	var/last_vis_refresh = 0
 
 /obj/effect/fire/New()
 	. = ..()
@@ -486,19 +487,29 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 ///////////////////////////////// FLOW HAS BEEN REMERGED /// feel free to delete the fire again from here on //////////////////////////////////////////////////////////////////
 
 /obj/effect/fire/proc/setfirelight(firelevel, firetemp)
-	var/heatlight = max(1, firetemp / FLAME_TEMPERATURE_PLASTIC)
 	// Update fire color.
-	color = heat2color(firetemp)
+	if(last_vis_refresh + ((10 + rand(-2,2)) SECONDS) > world.time)
+		return
+
+	var/range
+	var/power
 
 	if(firelevel > 6)
 		icon_state = "key3"
-		set_light(7, 3 * heatlight, color)
+		range = 7
+		power = 3
 	else if(firelevel > 2.5)
 		icon_state = "key2"
-		set_light(5, 2 * heatlight, color)
+		range = 5
+		power = 2
 	else
 		icon_state = "key1"
-		set_light(3, 1 * heatlight, color)
+		range = 3
+		power = 1
+
+	color = heat2color(air_contents.temperature)
+	set_light(range, power, color)
+	last_vis_refresh = world.time
 
 /datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	//NOTE: zburn is also called from canisters and in tanks/pipes (via react()).
@@ -639,7 +650,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 				if(R.id in possible_fuels)
 					return 1
 
-// firelevel represents the intensity of the fire according to GAS REACTANTS only. Solids and liquids burning use an internal burnrate calculation.
+//firelevel represents the intensity of the fire according to GAS REACTANTS only. Solids and liquids burning use an internal burnrate calculation.
 /datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 	var/total_fuel = 0
 	var/firelevel = 0
