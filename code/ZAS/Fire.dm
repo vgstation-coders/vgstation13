@@ -84,7 +84,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 				thermal_material = new/datum/thermal_material/biological()
 		if(!thermal_material)
 			flammable = FALSE
-			warning("[src] was defined as flammable but was missing a 'w_type' definition. [src] marked as inflammable for this round.")
+			warning("[src] was defined as flammable but was missing a 'w_type' definition; [src] marked as inflammable for this round.")
 			return
 		if(!autoignition_temperature)
 			autoignition_temperature = thermal_material.autoignition_temperature
@@ -268,7 +268,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 /turf/New()
 	if(!thermal_material)
 		flammable = FALSE
-		warning("[src] was defined as flammable but was missing a 'thermal_material' definition. [src] marked as inflammable for this round.")
+		warning("[src] was defined as flammable but was missing a 'thermal_material' definition; [src] marked as inflammable for this round.")
 		return
 	if(!autoignition_temperature)
 		autoignition_temperature = thermal_material.autoignition_temperature
@@ -569,25 +569,25 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 					combustion_co2_prod += liquid_burn_products["co2_prod"]
 					max_temperature = max(max_temperature, liquid_burn_products["max_temperature"])
 
-	//sanity checks
+	//Sanity checks.
 	combustion_oxy_used = clamp(combustion_oxy_used, 0, src[GAS_OXYGEN])
 
-	//remove and add gasses as calculated
+	//Remove and add gasses as calculated.
 	adjust_multi(
 		GAS_OXYGEN, -min(src[GAS_OXYGEN], total_oxygen * used_reactants_ratio + combustion_oxy_used * ZAS_oxygen_consumption_multiplier),
 		GAS_PLASMA, -min(src[GAS_PLASMA], (src[GAS_PLASMA] * used_fuel_ratio * used_reactants_ratio) * 3),
 		GAS_CARBON, max(2 * total_fuel * used_reactants_ratio + combustion_co2_prod * ZAS_oxygen_consumption_multiplier, 0),
 		GAS_VOLATILE, -min(src[GAS_VOLATILE], (src[GAS_VOLATILE] * used_fuel_ratio * used_reactants_ratio) * 5)) //Fuel burns 5 times as quick
 
-	//calculate the energy produced by the reaction and then set the new temperature of the mix
+	//Calculate the energy produced by the reaction and then set the new temperature of the mix.
 	var/combustion_efficiency = max((1 - temperature/max_temperature),0)
 	temperature = (starting_energy + combustion_energy * ZAS_heat_multiplier * combustion_efficiency + ZAS_fuel_energy_release_rate * total_fuel * used_reactants_ratio) / heat_capacity()
 	update_values()
 
-	value = total_reactants * used_reactants_ratio //0 if solids and liquids only
+	value = total_reactants * used_reactants_ratio
 	return value
 
-// checks if anything in a given turf can continue combusting.
+//Checks if anything in a given turf can continue burning.
 /datum/gas_mixture/proc/check_recombustability(var/turf/T)
 	if(gas[GAS_OXYGEN] && (gas[GAS_PLASMA] || gas[GAS_VOLATILE]))
 		if(QUANTIZE(molar_density(GAS_PLASMA) * ZAS_air_consumption_rate) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
@@ -595,7 +595,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		if(QUANTIZE(molar_density(GAS_VOLATILE) * ZAS_air_consumption_rate) >= BASE_ZAS_FUEL_REQ / CELL_VOLUME)
 			return 1
 
-	// Check if we're actually in a turf or not before trying to check object fires
+	//Check if we're actually in a turf or not before trying to check object fires
 	if(!T)
 		return 0
 	if(!istype(T))
@@ -617,7 +617,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 					if(R.id in possible_fuels)
 						return 1
 
-// checks if anything in a given turf can combust.
+//Checks if anything in a given turf can burn.
 /datum/gas_mixture/proc/check_combustability(var/turf/T)
 	if(T.flammable)
 		return 1
