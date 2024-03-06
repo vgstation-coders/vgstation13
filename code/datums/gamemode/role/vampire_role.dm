@@ -25,8 +25,6 @@
 
 	var/list/feeders = list()
 
-	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate,  /datum/power/vampire/silentbite)
-
 	var/list/image/cached_images = list()
 
 	stat_datum_type = /datum/stat/role/vampire
@@ -66,9 +64,7 @@
 	. = ..()
 	update_vamp_hud()
 	ForgeObjectives()
-	for(var/type_VP in roundstart_powers)
-		var/datum/power/vampire/VP = new type_VP
-		VP.add_power(src)
+	check_vampire_upgrade()
 
 	if(faction && istype(faction, /datum/faction/vampire) && faction.leader == src)
 		var/datum/faction/vampire/V = faction
@@ -243,6 +239,8 @@
 		return
 
 	// Vision-related changes.
+	if(!count_by_type(H.huds, /datum/visioneffect/nullrod))
+		H.apply_hud(new /datum/visioneffect/nullrod)
 	if (locate(/datum/power/vampire/vision) in current_powers)
 		if(!count_by_type(H.huds, /datum/visioneffect/vampire_improved))
 			H.apply_hud(new /datum/visioneffect/vampire_improved)
