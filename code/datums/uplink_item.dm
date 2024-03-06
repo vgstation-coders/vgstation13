@@ -8,6 +8,7 @@ var/list/discounted_items_of_the_round = list()
 
 	var/list/static/forbidden_items = list(
 		/datum/uplink_item/badass/bundle,
+		/datum/uplink_item/badass/random,
 		/datum/uplink_item/badass/experimental_gear,
 		/datum/uplink_item/implants/uplink,
 	)
@@ -567,7 +568,7 @@ var/list/discounted_items_of_the_round = list()
 	cost = 12
 	discounted_cost = 10
 	jobs_with_discount = ENGINEERING_POSITIONS
- 
+
 /datum/uplink_item/sabotage_tools/reportintercom
 	name = "NT Central Command Report Falsifier"
 	desc = "A command report intercom stolen from Nanotrasen Command that allows for a single fake Command Update to be sent. Ensure tastefulness so that the crew actually falls for the message. Item is particular obvious and will have to be manually discarded after use."
