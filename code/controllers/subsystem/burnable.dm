@@ -41,3 +41,10 @@ var/list/atom/burnableatoms = list()
 		if(G && (G.temperature >= autoignition_temperature) && ((G.partial_pressure(GAS_OXYGEN) / 100)  >= MINOXY2BURN))
 			message_admins("ignited [src] in burnable.dm")
 			ignite()
+	if(on_fire)
+		var/in_fire = FALSE
+		for(var/obj/effect/fire/F in loc)
+			in_fire = TRUE
+			break
+		if(!in_fire)
+			burnSolidFuel()

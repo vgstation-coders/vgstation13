@@ -55,7 +55,7 @@ var/global/ZAS_Settings/zas_settings = new
 	name = "Fire - Spread Rate"
 	desc = "Subjective multiplier for the rate at which fires spread from tile to tile."
 	valtype=ZAS_TYPE_NUMERIC
-	value = 2.00
+	value = 0.50
 
 /datum/ZAS_Setting/fire_consumption_rate
 	name = "Fire - Air Consumption Ratio"
