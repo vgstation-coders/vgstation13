@@ -713,9 +713,9 @@
 			text += "<span class='warning'><br>This vessel's blood has no energy left for you...</span>"
 		if(H.check_body_part_coverage(MOUTH)) //Target is masked
 			if(!locate(/datum/power/vampire/mature) in current_powers) //Vampire is not mature enough to deal with that
-				text += "<span class='warning'><br>This vessel is masked! This will impede you from sucking their blood.</span>"
+				text += "<span class='warning'><br>This vessel wears a mask! This will impede you from sucking their blood.</span>"
 			else
-				text += "<span class='notice'><br>This vessel is masked, but this will not impede you because you are a <span class='bnotice'>mature</span> vampire!</span>"
+				text += "<span class='notice'><br>This vessel wears a mask, but this will not impede you because you are a <span class='bnotice'>mature</span> vampire!</span>"
 	else
 		return "<span class='warning'>[logo_image] This vessel is completely drained of all blood!</span>"
 	return "[logo_image] [text]"
