@@ -96,6 +96,27 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<ul class="changes bgimages16">
 				<li class="rscadd">Bioballistic Delivery System now has a multi-splice option which allows for multiple splices in one go. The time to complete the splice will scale proportionally with the number of splices so a large amount of splices will take longer to complete.</li>
 			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The Magic Closet&#39;s other spells that bring the wizard to it or bring the closet to the wizard will no longer go on cooldown if the closet does not exist.</li>
+				<li class="tweak">Wizards will no longer die if their snake form during &#34;Become Snakes&#34; dies.</li>
+				<li class="tweak">&#34;Bind Object&#34; will now maintain the bound item after a mind transference.</li>
+				<li class="tweak">Wizards will now store Absorbed spells in their list of wizard spells.</li>
+				<li class="bugfix">Apprentices are now considered as belonging properly to the wizard faction, meaning that they will no longer be attacked by wizardly constructs such as pitbulls (most of the time). In addition, their flavor text will now be properly removed.</li>
+				<li class="bugfix">The Prestidigitation, Santa bundle and No Gun Allowed spells will now be properly considered wizard-specific spells when purchased from the spellbook.</li>
+				<li class="bugfix">If wizard apprentices somehow manage to learn forbidden spellbook spells they will now be properly transferred during mind transference.</li>
+				<li class="bugfix">Forbidden spellbook spells will now be properly blocked by gentling.</li>
+				<li class="bugfix">Fixed a rare bug where the &#34;Push&#34; spell would fail to push a target if the area it selected did not have any tiles, which would only happen if the area existed at some point during the game but then stopped existing.</li>
+				<li class="bugfix">Fixed the Mutate spell immediately ending early if the wizard had the Hulk gene.</li>
+				<li class="bugfix">Hulk Out, Mutate and Become Highlander can no longer be stacked. Not that it did anything useful but it breaks things. Also added different messages for each ability when attempting to do so.</li>
+				<li class="bugfix">Wizards and Apprentices will now display their current wizardly spells at the round-end scoreboard rather than every single spell and spell-like ability they know.</li>
+				<li class="bugfix">Attempting to use Mind Transfer on a target that is already preparing to cast a spell (AKA in the state where they have to click something to cast the spell) should no longer break Mind Transfer so hard that it creates a living dummy being.</li>
+				<li class="bugfix">Fixed a runtime in regards to wizard spells from wizard antagonists being transferred to a new character, such as through Mind Transfer or the Staff of Change.</li>
+				<li class="bugfix">The Request Console&#39;s phone and cords can no longer be bound by Bind Object.</li>
+				<li class="bugfix">The &#34;Mutate&#34; and &#34;Become Highlander&#34; spells will now properly make their recipients green and mean.</li>
+				<li class="bugfix">Fixed a bug where a wizard&#39;s message about dissolving in a burst of light after being Absorbed (the magic-stealing spell) was centered on the absorber rather than the absorbed.</li>
+				<li class="spellcheck">Fixed a small typo in the wizard&#39;s &#34;Absorb&#34; spell (during Civil War of Casters) when absorbing another wizard&#39;s spells.</li>
+			</ul>
 			<h2 class="date">2024.03.05</h2>
 			<h3 class="author">13spacemen updated:</h3>
 			<ul class="changes bgimages16">
