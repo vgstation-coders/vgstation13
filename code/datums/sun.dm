@@ -15,10 +15,12 @@ var/global/datum/sun/sun
 	var/lastAngle = 0
 	var/rotationRate = 1 //A pretty average way of setting up station rotation direction AND absolute speed
 	var/eclipse = ECLIPSE_NOT_YET
-	var/eclipse_rate = 0.5
+	var/eclipse_rate = 1
+	var/datum/eclipse_manager/eclipse_manager
 
 /datum/sun/New()
 
+	eclipse_manager = new
 	solars = solars_list
 	nextTime = updatePer
 

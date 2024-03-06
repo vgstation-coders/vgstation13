@@ -392,6 +392,7 @@
 #include "code\datums\gamemode\factions\bloodcult\bloodcult.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_buildings.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_cultify_exceptions.dm"
+#include "code\datums\gamemode\factions\bloodcult\bloodcult_eclipse.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_effects.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_flavourlines.dm"
 #include "code\datums\gamemode\factions\bloodcult\bloodcult_items.dm"

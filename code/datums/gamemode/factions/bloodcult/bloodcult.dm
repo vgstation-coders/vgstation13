@@ -59,7 +59,7 @@
 
 	var/eclipse_progress = 0
 	var/eclipse_target = 1800
-	var/eclipse_window = 300 //10 minutes
+	var/eclipse_window = 10 MINUTES
 	var/eclipse_increments = 0
 	var/eclipse_contributors = list()//associative list: /mind = score
 	var/eclipse_countermeasures = 0//mostly chaplain's efforts to indirectly impede the cult with his own conversions and rituals
