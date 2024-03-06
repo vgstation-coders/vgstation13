@@ -702,9 +702,10 @@
 	if(H.species.anatomy_flags & NO_BLOOD) //Target cannot carry blood
 		return "<span class='warning'>[logo_image] This vessel is incapable of having any blood!</span>"
 	var/amount_of_blood = round(H.vessel.get_reagent_amount(BLOOD), 1)
+	var/blood_type = H.dna ? H.dna.b_type : null
 	if(amount_of_blood)
 		var/targetref = "\ref[H]"
-		text += "<span class='notice'>This vessel has <span class='danger'>[amount_of_blood]</span> units of blood left.</span>"
+		text += "<span class='notice'>This vessel has <span class='danger'>[amount_of_blood]</span> units of [blood_type ? "[blood_type] " : ""]blood left.</span>"
 		if(!H.mind) //Target has no mind
 			text += "<span class='warning'><br>This vessel only carries lifeless blood!</span>"
 		else if(!(targetref in feeders) || (feeders[targetref] < MAX_BLOOD_PER_TARGET)) //Target has not been fed upon or is below the empowering blood limit they can give
