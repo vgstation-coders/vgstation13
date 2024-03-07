@@ -119,6 +119,18 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 /atom/proc/useThermalMass(var/used_mass)
 	thermal_mass -= used_mass
 
+/atom/proc/genSmoke(var/oxy,var/temp,var/turf/where)
+	var/area/A = get_area(src)
+	if(A.smoke_in_area >= SMOKE_CAP) //limit number of smoke effects in any given area for performance
+		return FALSE
+	if(prob(clamp(lerp(temp,T20C,T0C + 1000,95,100),95,100))) //5% chance of smoke at 20C, 0% at 1000C
+		return FALSE
+	var/smoke_density = clamp(10 * ((MINOXY2BURN/oxy) ** 2),1,10)
+	var/datum/effect/system/smoke_spread/fire/smoke = new /datum/effect/system/smoke_spread/fire()
+	smoke.set_up(smoke_density,0,where)
+	smoke.time_to_live = 30 SECONDS
+	smoke.start()
+
 //Energy is taken from burning atoms and delivered to the obj/effect/fire at the atom's location.
 //Called on every obj/effect/fire/process()
 /atom/proc/burnSolidFuel()
@@ -156,16 +168,9 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		message_admins("Extinguished because [src] burnrate < 0.1") //DEBUG
 		return
 
-	//Smoke density increases with burnrate and decreases with temperature
-	// var/smoke_density = clamp(4 * burnrate * (1-temperature/FLAME_TEMPERATURE_PLASTIC),1,5)
-	// if(prob(smoke_density)) //1-5% chance of smoke creation per tick
-	// 	var/datum/effect/system/smoke_spread/fire/smoke = new /datum/effect/system/smoke_spread()
-	// 	smoke.set_up(smoke_density,0,T)
-	// 	smoke.time_to_live = 30 SECONDS
-	// 	smoke.start()
-
 	var/delta_m = 0.1 * burnrate
 	useThermalMass(delta_m)
+	genSmoke(oxy_ratio,temperature,T)
 
 	//Change in internal energy = energy produced by combustion (assuming perfect combustion).
 	heat_out = material.heating_value * delta_m * ZAS_heat_multiplier * 1000000 //MJ to J

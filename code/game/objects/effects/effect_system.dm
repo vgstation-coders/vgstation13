@@ -405,7 +405,7 @@ steam.start() -- spawns the effect
 	if (R.coughedtime != 1)
 		R.coughedtime = 1
 		R.emote("gasp", null, null, TRUE)
-		spawn (20)
+		spawn(20)
 			R.coughedtime = 0
 	R.updatehealth()
 	return
@@ -436,9 +436,12 @@ steam.start() -- spawns the effect
 		direction = direct
 
 /datum/effect/system/smoke_spread/start()
+	var/area/A = get_area(location)
 	var/i = 0
 	for(i=0, i<src.number, i++)
 		if(src.total_smoke > 20)
+			return
+		if(A.smoke_in_area >= SMOKE_CAP)
 			return
 		spawn(0)
 			if(holder)
@@ -446,6 +449,7 @@ steam.start() -- spawns the effect
 			var/obj/effect/smoke/smoke = new smoke_type(src.location)
 			smoke.time_to_live = time_to_live
 			total_smoke++
+			A.smoke_in_area++
 			var/direction = src.direction
 			if(!direction)
 				if(src.cardinals)
@@ -459,6 +463,7 @@ steam.start() -- spawns the effect
 				if (smoke)
 					qdel(smoke)
 				src.total_smoke--
+				A.smoke_in_area--
 
 
 /datum/effect/system/smoke_spread/bad
