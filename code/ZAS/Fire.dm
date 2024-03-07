@@ -507,7 +507,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		range = 3
 		power = 1
 
-	color = heat2color(air_contents.temperature)
+	color = heat2color(firetemp)
 	set_light(range, power, color)
 	last_vis_refresh = world.time
 
