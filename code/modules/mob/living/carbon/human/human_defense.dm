@@ -307,11 +307,10 @@ emp_act
 				if(prob(final_force))
 					if(apply_effect(20, PARALYZE, armor))
 						visible_message("<span class='danger'>[src] has been knocked unconscious!</span>")
-						if(isrevnothead(src) && stat != DEAD && src != user && I.damtype == BRUTE)
-							var/datum/role/revolutionary/R = mind.GetRole(REV)
-							if(istype(R))
-								R.Drop()
-								add_attacklogs(user, src, "de-converted from Revolutionary!")
+						var/datum/role/revolutionary/R = mind.GetRole(REV)
+						if(R && istype(R) && stat != DEAD && src != user && I.damtype == BRUTE)
+							R.Drop()
+							add_attacklogs(user, src, "de-converted from Revolutionary!")
 
 				if(bloody)//Apply blood
 					if(wear_mask)
