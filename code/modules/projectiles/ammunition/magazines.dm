@@ -386,9 +386,11 @@
 	desc = "State-of-the-art bluespace technology allows this magazine to generate new rounds from energy, requiring only a power source to refill the full suite of ammunition types. This model is outfitted with high-explosive rounds."
 	compatible_gun_type = /obj/item/weapon/gun/lawgiver/demolition
 
+//HONKGIVER //TODO overlay states for all the different shots. make them green.
 /obj/item/ammo_storage/magazine/lawgiver/honkgiver
-	desc = "State-of-the=HONK clownspace technology allows this magazine to generate new rounds by honking it with a simple bike horn."
+	desc = "State-of-the-HONK clownspace technology allows this magazine to generate new rounds by honking it with a simple bike horn."
 	compatible_gun_type = /obj/item/weapon/gun/lawgiver/honkgiver
+	icon_state = "honkgiver"
 
 /obj/item/ammo_storage/magazine/invisible
 	desc = "Reading how many shots you had left just got a lot more difficult."

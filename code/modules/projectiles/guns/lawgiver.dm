@@ -6,7 +6,7 @@
 #define LAWGIVER_DOUBLE_WHAMMY "double whammy"
 //HONKGIVER
 #define HONKGIVER_SCREAM "scream"
-#define HONKGIVER_PRACTICE_LASER "practice laser"
+#define HONKGIVER_DOOMLAZOR "DOOMLAZOR"
 #define HONKGIVER_PIE "pie"
 #define HONKGIVER_BALL "ball"
 #define HONKGIVER_PEEL "peel"
@@ -24,6 +24,7 @@
 	var/activation_message // spoken by the gun when the mode is activated
 	var/ammo_casing_type // if specified, it will be spawned at the user's location
 	var/ammo_per_shot = 1
+	var/rapid_fire_spread = FALSE //if TRUE, rapid fire projectiles will spread during a burst
 
 /datum/lawgiver_mode/stun
 	name = "stun"
@@ -102,23 +103,27 @@
 	activation_message = "DOUBLE WHAMMY."
 
 //HONKGIVER===========================================================
-/datum/lawgiver_mode/double_whammy
+/datum/lawgiver_mode/scream
 	name = "scream"
 	voice_triggers = list("scream")
 	firing_mode = HONKGIVER_SCREAM
-	//fire_sound = 'sound/weapons/alien_laser1.ogg'
-	//projectile_type = /obj/item/projectile/energy/whammy
+	fire_sound = 'sound/weapons/Taser.ogg'
+	projectile_type = /obj/item/projectile/energy/electrode/scream_shot
+	fire_sound =  'sound/weapons/Taser.ogg'
+	//fire_sound = 'sound/effects/awooga.ogg'
 	fire_delay = 0
-	activation_message = "DOUBLE WHAMMY."
+	activation_message = "SCREAM SHOT."
+	ammo_per_shot = 200
 
-/datum/lawgiver_mode/practice_laser
-	name = "Practice Laser"
-	voice_triggers = list("practice", "nonlethal")
-	firing_mode = HONKGIVER_PRACTICE_LASER
-	fire_sound = 'sound/weapons/Laser.ogg'
-	projectile_type = /obj/item/projectile/beam/practice
-	fire_delay = 5
-	activation_message = "PRACTICE."
+/datum/lawgiver_mode/doomlazor
+	name = "DOOMLAZOR"
+	voice_triggers = list("death", "doom","lazor","doomlazor","doomlazors","lazors","lazorz","doomlazorz")
+	firing_mode = HONKGIVER_DOOMLAZOR
+	fire_sound = 'sound/effects/doomlazor.ogg'
+	projectile_type = /obj/item/projectile/beam/doomlazorz
+	fire_delay = 10
+	activation_message = "ULTRA-LETHAL-DEATH-LAZOR OF DOOM!"
+	ammo_per_shot = 200
 
 /datum/lawgiver_mode/ball
 	name = "ball"
@@ -127,8 +132,40 @@
 	firing_mode = HONKGIVER_BALL
 	fire_sound = 'sound/effects/awooga.ogg'
 	projectile_type = /obj/item/projectile/bullet/midbullet/bouncebullet/bouncy_ball
-	activation_message = "BOUNCY."
+	activation_message = "BOUNCY BALL!"
+	ammo_per_shot = 200
 
+/datum/lawgiver_mode/watergun
+	name = "watergun"
+	voice_triggers = list("water", "squirt", "watergun", "splash","soak","soaker","stream","liquid")
+	firing_mode = HONKGIVER_WATERSQUIRT
+	kind = LAWGIVER_MODE_KIND_BULLET
+	fire_sound = 'sound/items/egg_squash.ogg'//this is what the supersoaker uses.
+	projectile_type = /obj/item/projectile/beam/liquid_stream/honkgiver_stream
+	activation_message = "WATER GUN!"
+	ammo_per_shot = 200
+
+/datum/lawgiver_mode/pie
+	name = "pie"
+	voice_triggers = list("pie","creampie")
+	firing_mode = HONKGIVER_PIE
+	kind = LAWGIVER_MODE_KIND_BULLET
+	//fire_sound = 'sound/items/egg_squash.ogg'//this is what the supersoaker uses.
+	projectile_type = /obj/item/projectile/bullet/pie_shot
+	activation_message = "RAPID PIE-ER!"
+	fire_delay = 0
+	ammo_per_shot = 200
+	rapid_fire_spread = TRUE
+
+/datum/lawgiver_mode/peel
+	name = "peel"
+	voice_triggers = list("peel","banana","bananapeel")
+	firing_mode = HONKGIVER_PEEL
+	kind = LAWGIVER_MODE_KIND_BULLET
+	//fire_sound = 'sound/items/egg_squash.ogg'//this is what the supersoaker uses.
+	projectile_type = /obj/item/projectile/bullet/peel_shot
+	activation_message = "BANANA PEEL!"
+	ammo_per_shot = 200
 
 var/list/lawgiver_modes = list(
 	/obj/item/weapon/gun/lawgiver = newlist(
@@ -147,11 +184,12 @@ var/list/lawgiver_modes = list(
 		/datum/lawgiver_mode/double_whammy,
 	),
 	/obj/item/weapon/gun/lawgiver/honkgiver = newlist(
-//		/datum/lawgiver_mode/scream,
-		/datum/lawgiver_mode/practice_laser,
-//		/datum/lawgiver_mode/pie,
-//		/datum/lawgiver_mode/peel,
-		/datum/lawgiver_mode/ball
+		/datum/lawgiver_mode/scream,
+		/datum/lawgiver_mode/doomlazor,
+		/datum/lawgiver_mode/watergun,
+		/datum/lawgiver_mode/pie,
+		/datum/lawgiver_mode/peel,
+		/datum/lawgiver_mode/ball,
 	)
 )
 
@@ -178,6 +216,7 @@ var/list/lawgiver_modes = list(
 	var/rapidFirecheck = 0
 	var/damage_multiplier = 1
 	var/has_played_alert = 0
+	var/voiceclass = "siliconsay"
 
 /obj/item/weapon/gun/lawgiver/proc/available_modes()
 	return lawgiver_modes[type]
@@ -190,6 +229,7 @@ var/list/lawgiver_modes = list(
 	magazine = new magazine_type(src)
 	verbs -= /obj/item/weapon/gun/lawgiver/verb/erase_DNA_sample
 	firing_mode_datum = available_modes()[1]
+	activate_mode(firing_mode_datum,TRUE)
 	update_icon()
 
 /obj/item/weapon/gun/lawgiver/Destroy()
@@ -305,7 +345,7 @@ var/list/lawgiver_modes = list(
 		return 1
 	return 0
 
-/obj/item/weapon/gun/lawgiver/proc/activate_mode(var/datum/lawgiver_mode/mode)
+/obj/item/weapon/gun/lawgiver/proc/activate_mode(var/datum/lawgiver_mode/mode,var/silent = FALSE)
 	set waitfor = FALSE
 
 	firing_mode_datum = mode
@@ -317,7 +357,8 @@ var/list/lawgiver_modes = list(
 
 	update_icon()
 	sleep(0.3 SECONDS)
-	say(mode.activation_message)
+	if(!silent)
+		say(mode.activation_message)
 
 /obj/item/weapon/gun/lawgiver/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(speech.speaker != loc || speech.frequency || !dna_profile)
@@ -340,9 +381,17 @@ var/list/lawgiver_modes = list(
 /obj/item/weapon/gun/lawgiver/proc/rapidFire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, struggle = 0) //Burst fires don't work well except by calling Fire() multiple times
 	rapidFirecheck = 1
 	recoil = 1
+	var/shot_number = 0
 	for (var/i = 1; i <= 3; i++)
 		if(i>1 && !in_chamber)
 			in_chamber = new projectile_type(src)
+		if(firing_mode_datum.rapid_fire_spread)//if rapid fire shot has some spread to it ala gatling gun
+			if(shot_number>0)// first shot won't spread
+				var/list/turf/possible_turfs = list()
+				for (var/turf/T in orange(target, 1))
+					possible_turfs += T
+				target = pick(possible_turfs)
+			shot_number ++
 		Fire(target, user, params, struggle)
 		recoil = 0
 		silenced = 1
@@ -420,6 +469,9 @@ var/list/lawgiver_modes = list(
 	if(istype(I, /obj/item/ammo_storage/magazine/lawgiver/demolition))
 		to_chat(user, "<span class='warning'>You can't load a demolition-model magazine into this [src.name]!</span>")
 		return 0
+	if(istype(I, /obj/item/ammo_storage/magazine/lawgiver/honkgiver))
+		to_chat(user, "<span class='warning'>You can't load a HONK-model magazine into this [src.name]!</span>")
+		return 0
 	return 1
 
 /obj/item/weapon/gun/lawgiver/attack_self(mob/user as mob)
@@ -474,7 +526,7 @@ var/list/lawgiver_modes = list(
 
 	in_chamber.damage *= damage_multiplier
 
-	if(firing_mode == LAWGIVER_RAPID && !rapidFirecheck)
+	if(firing_mode == LAWGIVER_RAPID || firing_mode == HONKGIVER_PIE && !rapidFirecheck)
 		rapidFire(A, user, params, struggle)
 		return
 
@@ -504,7 +556,7 @@ var/list/lawgiver_modes = list(
 	to_chat(user, magazine.generate_description())
 
 /obj/item/weapon/gun/lawgiver/say(var/message)
-	..(message, class = "siliconsay")
+	..(message, class = voiceclass)
 
 /obj/item/weapon/gun/lawgiver/say_quote(var/message)
 	return "reports, [message]"
@@ -521,16 +573,23 @@ var/list/lawgiver_modes = list(
 
 //HONKGIVER
 /*
+	DONE:
+		[X] HONKSPLOSION WHEN NON CLOWN USES
+		[X] replace DNA checks with clumsy checks.
+
 	TODO:
-		HONKSPLOSION WHEN NON CLOWN USES
+		troubleshoot watergun so it shoots water + honkserum
 		RECHARGE THE MAGAZINE BY HONKING? IT?
 		ALL THE DIFFERENT HONK SHOTS.
 		Scale the amount of shots to be much higher. I need at least 30 pie shots before this thing is empty!
 		BOUNCY BALL CUSTOM MESSAGE ON HIT. CUSTOM EFFECT?
+		SHOOTS WATER AND HONKSERUM
 
+		ICONS:
+			soup up the look a little with clown things
+			sprite and properly designate honkgiver magazine overlays
 
 */
-
 
 /obj/item/weapon/gun/lawgiver/honkgiver
 	name = "honkgiver"
@@ -538,16 +597,54 @@ var/list/lawgiver_modes = list(
 	clumsy_check = 0
 	firing_mode = HONKGIVER_SCREAM
 	magazine_type = /obj/item/ammo_storage/magazine/lawgiver/honkgiver
-//	icon_state = "honkgiver"
-//	item_state = "honkgiver"
-//	inhand_states = list
+	icon_state = "honkgiver"
+	item_state = "honkgiver"
+	voiceclass = "clown"
 //	origin tech??? recipe should require bananium but mechanic should be able to mass produce this.
 //	no DNA profile.
+/obj/item/weapon/gun/lawgiver/honkgiver/New()
+	..()
+	verbs -= /obj/item/weapon/gun/lawgiver/verb/submit_DNA_sample //we only check for clumsy, not DNA
 
+/obj/item/weapon/gun/lawgiver/honkgiver/dna_check(var/mob/user) //this is now a glorified clumsy check
+	if(!user)
+		if(ismob(loc))
+			user = loc
+		else
+			return 0
+	if(!clumsy_check(user))
+		self_destruct(user)
+		return 0
+	return 1
 
-	//magazine_type = /obj/item/ammo_storage/magazine/lawgiver/honkgiver
+/obj/item/weapon/gun/lawgiver/honkgiver/self_destruct(mob/user) //this is now a big HONK followed by regret if the user isn't clumsy
+	say("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOONK!")
+	playsound(src, 'sound/items/AirHorn.ogg', 100, 1)//LOUD HONK, followed by a lessened HONKBLAST effect
+	user.stuttering += 10
+	user.ear_deaf += 4
+	user.knockdown += 4
+	user.Stun(4)
+	user.Jitter(100)
+	return
 
+/obj/item/weapon/gun/lawgiver/honkgiver/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(speech.speaker != loc || speech.frequency)
+		return
+	var/mob/living/carbon/human/H = loc
+	if(!clumsy_check(H))
+		return
+	var/speech_message = speech.message
+	for(var/datum/lawgiver_mode/mode in available_modes())
+		for(var/trigger in mode.voice_triggers)
+			if(findtext(speech_message, trigger))
+				activate_mode(mode)
+				return
 
+/obj/item/weapon/gun/lawgiver/honkgiver/check_mag_type(obj/item/I, mob/user)
+	if(!istype(I, /obj/item/ammo_storage/magazine/lawgiver/honkgiver))
+		to_chat(user, "<span class='warning'>This HONK-model [src.name] can only take honkgiver magazines!</span>")
+		return 0
+	return 1
 
 #undef LAWGIVER_DOUBLE_WHAMMY
 #undef LAWGIVER_RICOCHET
@@ -556,7 +653,7 @@ var/list/lawgiver_modes = list(
 #undef LAWGIVER_STUN
 #undef LAWGIVER_LASER
 #undef HONKGIVER_SCREAM
-#undef HONKGIVER_PRACTICE_LASER
+#undef HONKGIVER_DOOMLAZOR
 #undef HONKGIVER_PIE
 #undef HONKGIVER_BALL
 #undef HONKGIVER_PEEL
