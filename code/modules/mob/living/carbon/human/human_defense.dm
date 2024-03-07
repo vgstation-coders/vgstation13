@@ -307,7 +307,7 @@ emp_act
 				if(prob(final_force))
 					if(apply_effect(20, PARALYZE, armor))
 						visible_message("<span class='danger'>[src] has been knocked unconscious!</span>")
-						if(mind && src != user && I.damtype == BRUTE && isrev(src))
+						if(mind && isrev(src) && stat != DEAD && src != user && I.damtype == BRUTE)
 							var/datum/role/revolutionary/R = mind.GetRole(REV)
 							if(istype(R))
 								R.Drop()
