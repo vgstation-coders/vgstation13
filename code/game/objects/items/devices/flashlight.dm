@@ -194,6 +194,7 @@
 	item_state = "lamp"
 	brightness_on = 5
 	w_class = W_CLASS_LARGE
+	flammable = FALSE
 	flags = FPRINT
 	siemens_coefficient = 1
 	starting_materials = null

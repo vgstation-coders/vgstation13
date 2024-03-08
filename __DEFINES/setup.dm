@@ -1136,7 +1136,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 // high heating value for burning objects, assuming perfect combustion (MJ/kg)
 #define HHV_WOOD 18.0
 #define HHV_PLASTIC 46.4 // Polypropylene
-#define HHV_FABRIC 19.4 // Cotton (https://www.researchgate.net/publication/363517205_Analysis_of_the_Flammability_and_the_Mechanical_and_Electrostatic_Discharge_Properties_of_Selected_Personal_Protective_Equipment_Used_in_Oxygen-Enriched_Atmosphere_in_a_State_of_Epidemic_Emergency)
+#define HHV_FABRIC 19.4 // Cotton
 #define HHV_WAX 42.0 // Paraffin wax
 #define HHV_BIOLOGICAL 38.0 // Body fat
 
@@ -1144,11 +1144,11 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define MINOXY2BURN 0.14
 
 // stoichiometric combustion ratios in oxygen
-#define FUEL_OX_RATIO_WOOD (1/6) // simplified to C6H10O5 (cellulose)
+#define FUEL_OX_RATIO_WOOD (1/6) // C6H10O5 (cellulose)
 #define FUEL_OX_RATIO_PLASTIC (2/9) // C3H6 ((poly)propylene)
-#define FUEL_OX_RATIO_FABRIC (1/6) // simplified to C6H10O5 (cellulose)
+#define FUEL_OX_RATIO_FABRIC (1/6) // C6H10O5 (cellulose)
 #define FUEL_OX_RATIO_WAX (1/38) // C25H52 (paraffin wax)
-#define FUEL_OX_RATIO_BIOLOGICAL (1/78) // simplified to C55H104O6 ("average" triglyceride)
+#define FUEL_OX_RATIO_BIOLOGICAL (1/78) // C55H104O6 ("average" triglyceride)
 
 // maximum flame temperature (K)
 #define FLAME_TEMPERATURE_WOOD 1300.15

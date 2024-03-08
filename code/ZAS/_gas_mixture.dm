@@ -124,6 +124,8 @@
 /datum/gas_mixture/proc/thermal_energy()
 	return temperature * heat_capacity()
 
+/datum/gas_mixture/proc/molar_ratio(g)
+	return src[g]/ total_moles
 
 /datum/gas_mixture/proc/molar_density(g) //Per liter. You should probably be using pressure instead, but considering this had to be made, you wouldn't be the first not to.
 	return (g ? src[g] : total_moles) / volume

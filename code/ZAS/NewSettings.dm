@@ -49,13 +49,13 @@ var/global/ZAS_Settings/zas_settings = new
 	name = "Fire - Oxygen Consumption Ratio"
 	desc = "Subjective multiplier for the amount of oxygen consumed by objects burning per tick."
 	valtype=ZAS_TYPE_NUMERIC
-	value = 0.25
+	value = 0.10
 
 /datum/ZAS_Setting/fire_spread_rate
 	name = "Fire - Spread Rate"
 	desc = "Subjective multiplier for the rate at which fires spread from tile to tile."
 	valtype=ZAS_TYPE_NUMERIC
-	value = 0.50
+	value = 0.10
 
 /datum/ZAS_Setting/fire_consumption_rate
 	name = "Fire - Air Consumption Ratio"

@@ -10,7 +10,6 @@
 	w_class = W_CLASS_LARGE
 	w_type = RECYK_WOOD
 	flammable = TRUE
-	thermal_mass = 25 //W_CLASS_HUGE
 	var/obj/item/clothing/suit/suit = null
 	var/obj/item/clothing/head/hat = null
 

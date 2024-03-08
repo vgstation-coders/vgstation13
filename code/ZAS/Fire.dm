@@ -134,25 +134,25 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 //Energy is taken from burning atoms and delivered to the obj/effect/fire at the atom's location.
 //Called on every obj/effect/fire/process()
 /atom/proc/burnSolidFuel()
+	//Don't burn the container until all reagents have been depleted via burnLiquidFuel().
+	if(reagents)
+		return
+
 	if(!flammable)
 		extinguish()
-		message_admins("Extinguished because [src] is inflammable.") //DEBUG
 		return
 
 	//Setup
 	var/turf/T = isturf(src) ? src : get_turf(loc)
 	var/datum/thermal_material/material = src.thermal_material
 	var/datum/gas_mixture/air = T.return_air()
-	var/oxy_ratio  = air.partial_pressure(GAS_OXYGEN) / 100
+	var/oxy_ratio  = air.molar_ratio(GAS_OXYGEN)
 	var/temperature = air.return_temperature()
 	var/delta_t
 	var/heat_out = 0 //J
 	var/oxy_used = 0 //mols
 	var/co2_prod = 0 //mols
 
-	//Don't burn the container until all reagents have been depleted via burnLiquidFuel().
-	if(reagents)
-		return
 
 	//Check if a fire is present at the current location.
 	var/in_fire = FALSE
@@ -162,10 +162,9 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 
 	//Rate at which energy is consumed from the burning atom and delivered to the fire.
 	//Provides the "heat" and "oxygen" portions of the fire triangle.
-	var/burnrate = (oxy_ratio/(MINOXY2BURN + rand(-0.02,0.02))) * (temperature/T20C) //burnrate ~ 1 for standard air
+	var/burnrate = (oxy_ratio/(MINOXY2BURN + rand(-2,2)*0.01)) * (temperature/T20C) //burnrate ~ 1 for standard air
 	if(burnrate < 0.1)
 		extinguish()
-		message_admins("Extinguished because [src] burnrate < 0.1") //DEBUG
 		return
 
 	var/delta_m = 0.1 * burnrate
@@ -173,7 +172,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	genSmoke(oxy_ratio,temperature,T)
 
 	//Change in internal energy = energy produced by combustion (assuming perfect combustion).
-	heat_out = material.heating_value * delta_m * ZAS_heat_multiplier * 1000000 //MJ to J
+	heat_out = material.heating_value * delta_m * ZAS_heat_multiplier * 100000
 
 	//Moles of Oxygen consumed and CO2 produced.
 	oxy_used = (delta_m / material.molecular_weight) / material.fuel_ox_ratio
@@ -189,7 +188,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	//Ash the object if all of its mass has been consumed.
 	if(thermal_mass <= 0)
 		ashify()
-		message_admins("Extinguished because [src] thermal_mass <= 0") //DEBUG
 
 	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=material.flame_temp)
 
@@ -203,18 +201,22 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/co2_prod = 0 //mols (some reagents consume co2 when they burn)
 	var/max_temperature = 0 //K
 	var/consumption_rate = 1.0 //units per tick
+	var/has_fuel = FALSE
 
-	for(var/datum/reagent/A in reagents.reagent_list)
-		if(A.id in possible_fuels) //burn flammable
-			var/list/fuel_stats = possible_fuels[A.id]
+	for(var/possible_fuel in possible_fuels)
+		if(reagents.has_reagent(possible_fuel))
+			has_fuel = TRUE
+			var/list/fuel_stats = possible_fuels[possible_fuel]
 			max_temperature = max(max_temperature,fuel_stats["max_temperature"])
 			heat_out += fuel_stats["thermal_energy_transfer"]
 			consumption_rate += fuel_stats["consumption_rate"]
 			oxy_used += fuel_stats["o2_cons"]
 			co2_prod += -fuel_stats["co2_cons"]
-			reagents.remove_reagent(A.id, consumption_rate)
-		else //evaporate inflammable
-			reagents.remove_reagent(A.id, consumption_rate)
+			reagents.remove_reagent(possible_fuel, consumption_rate)
+
+	if(!has_fuel)
+		for(var/liquid in reagents.reagent_list)
+			reagents.remove_reagent(liquid,1) //evaporate non-flammable reagents
 
 	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=max_temperature)
 
@@ -229,14 +231,25 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 /atom/proc/extinguish(var/duration = 30 SECONDS)
 	if(on_fire)
 		on_fire=0
-		fire_protection = world.time + duration
-		if(fire_overlay)
-			overlays -= fire_overlay
-		QDEL_NULL(firelightdummy)
+	fire_protection = world.time + duration
+	if(fire_overlay)
+		overlays -= fire_overlay
+	QDEL_NULL(firelightdummy)
 
 /atom/proc/ignite()
-	if(!flammable || fire_protection - world.time > 0)
+	if(fire_protection - world.time > 0)
 		return 0
+
+	if(!flammable)
+		if(!reagents)
+			return 0
+		var/flammable_contents = FALSE
+		for(var/possible_fuel in possible_fuels)
+			if(reagents.has_reagent(possible_fuel))
+				flammable_contents = TRUE
+				break
+		if(!flammable_contents)
+			return 0
 
 	on_fire=1
 
@@ -250,6 +263,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		AM.vis_contents += firelightdummy
 
 	burnSolidFuel()
+	burnLiquidFuel()
 	return 1
 
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
@@ -273,7 +287,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 /turf/New()
 	if(!thermal_material)
 		flammable = FALSE
-		warning("[src] was defined as flammable but was missing a 'thermal_material' definition; [src] marked as inflammable for this round.")
 		return
 	if(!autoignition_temperature)
 		autoignition_temperature = thermal_material.autoignition_temperature
@@ -318,7 +331,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 
 	var/igniting = 0
 
-	if(surfaces && air_contents.partial_pressure(GAS_OXYGEN) / 100 >= MINOXY2BURN)
+	if(surfaces && air_contents.molar_ratio(GAS_OXYGEN) >= MINOXY2BURN)
 		for(var/obj/O in contents)
 			if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && O.flammable && !O.on_fire && exposed_temperature >= O.autoignition_temperature)
 				O.ignite()
@@ -399,7 +412,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 /obj/effect/fire/New()
 	. = ..()
 	dir = pick(cardinal)
-	var/datum/gas_mixture/air_contents=return_air()
+	var/turf/T = get_turf(loc)
+	var/datum/gas_mixture/air_contents=T.return_air()
 	if(air_contents)
 		setfirelight(air_contents.calculate_firelevel(get_turf(src)), air_contents.temperature)
 	SSair.add_hotspot(src)
@@ -423,24 +437,25 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/turf/simulated/S = get_turf(loc)
 	if(!istype(S) || isnull(S.zone))
 		Extinguish()
-		message_admins("Extinguished because not a simmed turf or in a null zone") //DEBUG
 		return
 
 	//since the air is processed in fractions, we need to make sure not to have any minuscle residue or
 	//the amount of moles might get to low for some functions to catch them and thus result in wonky behaviour
 	var/datum/gas_mixture/air_contents = S.return_air()
-	if(air_contents.molar_density(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
+	if((air_contents.molar_ratio(GAS_OXYGEN)) < (MINOXY2BURN + rand(-2,2)*0.01))
+		Extinguish()
+		return
+	if(air_contents.molar_ratio(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
 		air_contents[GAS_OXYGEN] = 0
-	if(air_contents.molar_density(GAS_PLASMA) < 0.1 / CELL_VOLUME)
+	if(air_contents.molar_ratio(GAS_PLASMA) < 0.1 / CELL_VOLUME)
 		air_contents[GAS_PLASMA] = 0
-	if(air_contents.molar_density(GAS_VOLATILE) < 0.1 / CELL_VOLUME)
+	if(air_contents.molar_ratio(GAS_VOLATILE) < 0.1 / CELL_VOLUME)
 		air_contents[GAS_VOLATILE] = 0
 	air_contents.update_values()
 
 	//Check if there is something to combust.
 	if(!air_contents.check_recombustability(S))
 		Extinguish()
-		message_admins("Extinguished because recombustability check failed") //DEBUG
 
 	//Set firelevel and fire light.
 	var/firelevel = air_contents.calculate_firelevel(S)
@@ -553,7 +568,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/max_temperature = 0
 	var/solid_burn_products
 	var/liquid_burn_products
-	if(T && istype(T))
+	if(T)
 		if(T.flammable) //burn the turf
 			solid_burn_products = T.burnSolidFuel()
 			if(solid_burn_products)
@@ -568,7 +583,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 				combustion_oxy_used += liquid_burn_products["oxy_used"]
 				combustion_co2_prod += liquid_burn_products["co2_prod"]
 				max_temperature = max(max_temperature, liquid_burn_products["max_temperature"])
-
 		for(var/atom/A in T)
 			if(A.flammable) //burn items on the turf
 				solid_burn_products = A.burnSolidFuel()
@@ -587,6 +601,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 
 	//Sanity checks.
 	combustion_oxy_used = clamp(combustion_oxy_used, 0, src[GAS_OXYGEN])
+	if(!max_temperature)
+		max_temperature = FLAME_TEMPERATURE_PLASTIC
 
 	//Remove and add gasses as calculated.
 	adjust_multi(
@@ -629,8 +645,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 			if(A.flammable && A.thermal_mass)
 				return 1
 			if(A.reagents)
-				for(var/datum/reagent/R in A.reagents.reagent_list)
-					if(R.id in possible_fuels)
+				for(var/possible_fuel in possible_fuels)
+					if(A.reagents.has_reagent(possible_fuel))
 						return 1
 
 //Checks if anything in a given turf can burn.
@@ -651,8 +667,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		if(A.flammable)
 			return 1
 		if(A.reagents)
-			for(var/datum/reagent/R in A.reagents.reagent_list)
-				if(R.id in possible_fuels)
+			for(var/possible_fuel in possible_fuels)
+				if(A.reagents.has_reagent(possible_fuel))
 					return 1
 
 //firelevel represents the intensity of the fire according to GAS REACTANTS only. Solids and liquids burning use an internal burnrate calculation.
