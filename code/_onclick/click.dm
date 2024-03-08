@@ -105,7 +105,6 @@
 
 	/* Picking items up and/or storing them/retrieving them from storage will not be affected by the attack delay. */
 	/* Requires that in_throw_mode is not set to avoid bypassing the attack delayer using this system. */
-
 	var/ignore_attack_delay
 	if(!in_throw_mode && (isshelf(A) || istype(A, /obj/abstract/screen/storage) || (isitem(A) && !held_item)))
 		ignore_attack_delay = 1
