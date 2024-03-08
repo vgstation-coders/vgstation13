@@ -209,8 +209,6 @@
 		share_contact_diseases(M,block,bleeding)
 
 /mob/living/carbon/human/attack_hand(var/mob/living/carbon/human/M)
-	if(attack_delayer.blocked())
-		return
 	if (istype(loc, /turf) && istype(loc.loc, /area/start))
 		to_chat(M, "No attacking people at spawn, you jackass.")
 		return
