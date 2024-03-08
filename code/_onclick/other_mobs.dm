@@ -33,8 +33,6 @@
 			O.material_type.on_use(O, src, null)
 
 /mob/living/carbon/human/proc/handleSpecialAttack(var/atom/A)
-	if(attack_delayer.blocked())
-		return
 	var/special_attack_result = SPECIAL_ATTACK_SUCCESS
 	switch(attack_type) //Special attacks - kicks, bites
 		if(ATTACK_KICK)

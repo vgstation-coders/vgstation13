@@ -104,9 +104,10 @@
 	face_atom(A) // change direction to face what you clicked on
 
 	/* Picking items up and/or storing them/retrieving them from storage will not be affected by the attack delay. */
-	/* Requires that attack_type (indicates if bite or kick is active) is not set. */
+	/* Requires that attack_type (indicates if bite or kick is active) is not set, and that in_throw_mode is not set. */
+	/* These restrictions are measures to ensure the attack delay bypass cannot be abused. */
 	var/ignore_attack_delay
-	if(isshelf(A) || istype(A, /obj/abstract/screen/storage) || (isitem(A) && !held_item))
+	if(!in_throw_mode && (isshelf(A) || istype(A, /obj/abstract/screen/storage) || (isitem(A) && !held_item)))
 		var/mob/living/carbon/human/H = src
 		if(!istype(H) || !H.attack_type) /* Allow for ignoring attack delay if the mob that passed the above check either isn't a humanoid mob, or if it is, isn't biting/kicking. */
 			ignore_attack_delay = 1
