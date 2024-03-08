@@ -278,15 +278,15 @@
 	environment_smash_flags = 0
 	var/mob/living/simple_animal/construct/builder/perfect/master = null
 	var/no_master = TRUE
-
+	var/glow_color = "#FFFFFF"
 
 /mob/living/simple_animal/hostile/hex/New()
 	..()
-	setupglow(rgb(255,255,255))
+	setupglow(glow_color)
 	animate(src, pixel_y = 4 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
 	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
 
-/mob/living/simple_animal/hostile/hex/proc/setupglow(glowcolor)
+/mob/living/simple_animal/hostile/hex/proc/setupglow(var/_glowcolor = "#FFFFFF")
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = ABOVE_LIGHTING_PLANE
@@ -295,7 +295,7 @@
 		overlay_plane = FLOAT_PLANE
 
 	var/icon/glowicon = icon(icon,"glow-[icon_state]")
-	glowicon.Blend(glowcolor, ICON_ADD)
+	glowicon.Blend(_glowcolor, ICON_ADD)
 	var/image/glow = image(icon = glowicon, layer = overlay_layer)
 	glow.plane = relative_plane(overlay_plane)
 	overlays += glow

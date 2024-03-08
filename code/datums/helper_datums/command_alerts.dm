@@ -327,6 +327,12 @@
 	alert = null
 	message = "The station has passed the radiation belt. Please report to medbay if you experience any unusual symptoms. Maintenance will lose all access again shortly."
 
+/datum/command_alert/radiation_storm_malicious //they send a dirty bomb to explode in direct intercept
+	name = "Sudden Radiation Storm - Warning"
+	alert_title = "Anomaly Alert"
+	alert = 'sound/AI/radiation.ogg'
+	message = "A large explosion has been detected on direct intercept with the station. High levels of radiation detected, ETA in 30 seconds. Please evacuate into one of the shielded maintenance tunnels. Additional data has been downloaded and printed out at all communications consoles."
+
 /datum/command_alert/radiation
 	name = "High Levels Of Radiation"
 	alert_title = "Anomaly Alert"
@@ -794,7 +800,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/tradeprobe
 	alert_title = "Vox Trade Probe Approaching"
-	message = "Although there are no Vox Shoal traders in your viscinity, a trade probe has docked with the station at the usual location. It will remain for 10 minutes."
+	message = "Although there are no Vox Shoal traders in your vicinity, a trade probe has docked with the station at the usual location. It will remain for 10 minutes."
 
 /datum/command_alert/tradeprobe_depart
 	alert_title = "Vox Trade Probe Departing"

@@ -17502,14 +17502,6 @@
 	icon_state = "whitegreen"
 	},
 /area/medical/virology)
-"aOo" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 8;
-	external_pressure_bound = 100;
-	on = 1
-	},
-/turf/simulated/floor/engine,
-/area/science/xenobiology/specimen_1)
 "aOp" = (
 /obj/machinery/alarm/xenobio{
 	dir = 1;
@@ -17871,13 +17863,13 @@
 	},
 /area/science/xenobiology)
 "aOW" = (
-/obj/machinery/atmospherics/unary/vent_pump{
-	dir = 8;
-	external_pressure_bound = 100;
-	on = 1
+/obj/structure/window/reinforced{
+	dir = 1
 	},
-/turf/simulated/floor/engine,
-/area/science/xenobiology/specimen_2)
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/manifold/supply,
+/turf/unsimulated/floor/asteroid/cave/permafrost,
+/area/mine/living_quarters)
 "aOX" = (
 /obj/machinery/alarm/xenobio{
 	dir = 1;
@@ -24995,7 +24987,6 @@
 /obj/item/weapon/folder/white,
 /obj/item/weapon/pen,
 /obj/item/device/flashlight/lamp/green{
-	on = 0;
 	pixel_x = -3;
 	pixel_y = 8
 	},
@@ -27825,9 +27816,7 @@
 	},
 /area/science/hallway)
 "bKR" = (
-/obj/machinery/atmospherics/pipe/simple/supply/hidden{
-	dir = 5
-	},
+/obj/machinery/atmospherics/pipe/manifold/supply/hidden,
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "whiteredcorner"
@@ -56031,7 +56020,6 @@
 "eae" = (
 /obj/structure/table/woodentable,
 /obj/item/device/flashlight/lamp/green{
-	on = 0;
 	pixel_x = -3;
 	pixel_y = 8
 	},
@@ -108962,6 +108950,10 @@
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
+/obj/item/weapon/circuitboard/circuit_imprinter{
+	pixel_y = -3;
+	pixel_x = 3
+	},
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
@@ -142653,7 +142645,7 @@ edy
 edy
 apg
 atI
-arC
+aOW
 edy
 edy
 edy
@@ -175018,11 +175010,11 @@ dYP
 oeI
 aHG
 aOe
-aOo
+aOg
 rrb
 aOC
 aON
-aOW
+aOO
 aPh
 aPr
 aPM

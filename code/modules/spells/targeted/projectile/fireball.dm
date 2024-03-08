@@ -15,7 +15,6 @@
 	range = 20
 	cooldown_min = 20 //10 deciseconds reduction per rank
 
-	spell_flags = 0
 	spell_aspect_flags = SPELL_FIRE
 	duration = 20
 	projectile_speed = 1

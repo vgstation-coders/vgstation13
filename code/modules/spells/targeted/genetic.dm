@@ -22,11 +22,16 @@ code\game\\dna\genes\goon_powers.dm
 			target.mutations.Add(x)
 		target.disabilities |= disabilities
 		target.update_mutations()	//update target's mutation overlays
+		var/mob/living/carbon/human/H = target
+		if(istype(H))
+			H.update_body()
 		spawn(duration)
 			for(var/x in mutations)
 				target.mutations.Remove(x)
 			target.disabilities &= ~disabilities
 			target.update_mutations()
+			if(istype(H))
+				H.update_body()
 	return
 
 /spell/targeted/genetic/blind
@@ -79,6 +84,13 @@ code\game\\dna\genes\goon_powers.dm
 	hud_state = "wiz_hulk"
 	user_type = USER_TYPE_WIZARD
 
+/spell/targeted/genetic/mutate/before_cast(list/targets, user, bypass_range)
+	var/mob/living/carbon/human/H = user
+	if(istype(H) && (M_HULK in H.mutations))
+		to_chat(user, "<span class='warning'>You are already a hulk!</span>")
+		return list()
+	return ..()
+
 /spell/targeted/genetic/mutate/highlander
 	name = "Become Highlander"
 	desc = "Temporarily turn into a mighty highlander who cannot be stunned."
@@ -86,6 +98,15 @@ code\game\\dna\genes\goon_powers.dm
 	mutations = list(M_HULK)
 	message = "<span class='notice'>You feel powerful! Nobody can take you down! It's time to take some heads!</span>"
 	user_type = USER_TYPE_OTHER
+
+//The same check as the parent except with a different message
+/spell/targeted/genetic/mutate/highlander/before_cast(list/targets, user, bypass_range)
+	var/mob/living/carbon/human/H = user
+	if(istype(H) && (M_HULK in H.mutations))
+		to_chat(user, "<span class='warning'>You already cannot be stunned!</span>")
+		return list()
+	return ..()
+
 
 /spell/targeted/genetic/eat_weed
 	name = "Eat Weeds"

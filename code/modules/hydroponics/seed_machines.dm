@@ -331,6 +331,7 @@
 	icon_state = "traitgun"
 	disk_needs_genes = 1
 	var/mode = GENEGUN_MODE_SPLICE
+	var/times_to_splice = 1
 
 /obj/machinery/botany/editor/New()
 	..()
@@ -356,6 +357,7 @@
 
 	data["activity"] = active
 	data["mode"] = mode
+	data["times_to_splice"] = times_to_splice
 
 	if(loaded_disk && loaded_disk.genes.len)
 		data["disk"] = 1
@@ -391,6 +393,11 @@
 	if(..())
 		return 1
 
+	if( href_list["change_splice_amount"])
+		var/new_amount = input(usr, "Enter the number of times to perform the SPLICE command: (Between 1 and 10)","Enter Multsplice Coefficient",times_to_splice) as num
+		new_amount = clamp(1,new_amount,10)
+		times_to_splice = new_amount
+
 	if(href_list["apply_gene"])
 		if(!loaded_disk || !loaded_seed)
 			return
@@ -408,7 +415,11 @@
 			loaded_seed.modified = 101
 
 		for(var/datum/plantgene/gene in loaded_disk.genes)
-			loaded_seed.seed.apply_gene(gene, mode, usr)
+			if(mode == GENEGUN_MODE_SPLICE)
+				for(var/i = 0, i < times_to_splice, i++) //multisplice
+					loaded_seed.seed.apply_gene(gene, mode, usr)
+			else
+				loaded_seed.seed.apply_gene(gene, mode, usr)
 
 	else if(href_list["toggle_mode"])
 		switch(mode)
@@ -420,3 +431,13 @@
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
 	return 1
+
+/obj/machinery/botany/editor/process()
+	if(!active)
+		return
+	if(mode == GENEGUN_MODE_SPLICE)
+		if(world.time > last_action + ((action_time-times_to_splice-(times_to_splice/2))*times_to_splice)/time_coeff) //this formula slightly decreases splice time as values get higher.
+			finished_task()
+	else
+		if(world.time > last_action + action_time/time_coeff)
+			finished_task()
