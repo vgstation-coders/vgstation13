@@ -102,12 +102,16 @@
 		return
 
 	face_atom(A) // change direction to face what you clicked on
-	
-	var/storage
-	if(isshelf(A) || istype(A, /obj/abstract/screen/storage) || (isitem(A) && !get_active_hand())) // Picking items up and/or storing them/retrieving them from storage will not be affected by the attack delay.
-		storage = 1
-	
-	if(attack_delayer.blocked() && !storage) // This was next_move.  next_attack makes more sense.
+
+	/* Picking items up and/or storing them/retrieving them from storage will not be affected by the attack delay. */
+	/* Requires that attack_type (indicates if bite or kick is active) is not set. */
+	var/ignore_attack_delay
+	if(isshelf(A) || istype(A, /obj/abstract/screen/storage) || (isitem(A) && !held_item))
+		var/mob/living/carbon/human/H = src
+		if(!istype(H) || !H.attack_type)
+			ignore_attack_delay = 1
+
+	if(attack_delayer.blocked() && !ignore_attack_delay) // This was next_move.  next_attack makes more sense.
 		return
 //	to_chat(world, "next_attack is [next_attack] and world.time is [world.time]")
 	if(istype(loc,/obj/mecha))
@@ -192,9 +196,10 @@
 			RangedClickOn(A, params, held_item)
 
 /mob/proc/RangedClickOn(atom/A, params, obj/item/held_item)
+	if(attack_delayer.blocked())
+		return
 	if(held_item)
-		if(ismob(A))
-			delayNextAttack(held_item.attack_delay)
+		delayNextAttack(held_item.attack_delay)
 
 		if(!held_item.preattack(A, src, 0,  params))
 			held_item.afterattack(A,src,0,params) // 0: not Adjacent
