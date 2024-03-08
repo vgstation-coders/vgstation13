@@ -1093,6 +1093,9 @@
 	corgi = 1
 
 /obj/structure/mannequin/animationBolt(var/mob/firer)
+	if(captured && ismob(captured))
+		var/mob/M = captured
+		M.sdisabilities &= ~MUTE
 	Awaken(firer)
 
 /obj/structure/mannequin/proc/Awaken(var/mob/firer)
@@ -1642,6 +1645,23 @@
 
 	trapped_strip = 1
 	chaintrap_range = 3
+
+	var/monsters_to_spawn = 2
+
+/obj/structure/mannequin/cult/Awaken(var/mob/firer)
+	if(awakening)
+		return
+	var/list/possible_floors = list()
+	for (var/turf/simulated/floor/F in orange(1,get_turf(src)))
+		possible_floors.Add(F)
+	for (var/i = 1 to monsters_to_spawn)
+		if (possible_floors.len <= 0)
+			break
+		var/turf/T = pick(possible_floors)
+		if (T)
+			possible_floors.Remove(T)
+			new /obj/effect/cult_ritual/backup_spawn(T)
+	..()
 
 /obj/structure/mannequin/cult/cultify()
 	return

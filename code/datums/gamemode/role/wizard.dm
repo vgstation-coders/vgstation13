@@ -70,9 +70,10 @@
 
 /datum/role/wizard/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	. = ..()
-	for (var/spell/S in old_character.spell_list)
-		if (S.user_type == USER_TYPE_WIZARD && !(S.spell_flags & LOSE_IN_TRANSFER))
-			new_character.add_spell(S)
+	for (var/spell/S in antag.wizard_spells) //Bring back all their wizard spells
+		if (!(S.spell_flags & LOSE_IN_TRANSFER))
+			//Transfer the spell without doing on_added() or on_removed(), instead doing on_transfer()
+			transfer_spell(new_character, old_character, S)
 
 /datum/role/wizard/GetScoreboard()
 	. = ..()
@@ -82,7 +83,7 @@
 		if(H.spell_list)
 			bought_nothing = FALSE
 			. += "<BR>The wizard knew:<BR>"
-			for(var/spell/S in H.spell_list)
+			for(var/spell/S in antag.wizard_spells)
 				var/icon/tempimage
 				if(S.override_icon != "")
 					tempimage = icon(S.override_icon, S.hud_state)

@@ -186,6 +186,10 @@ var/list/existing_vaults = list()
 	file_path = "maps/randomvaults/amelab.dmm"
 	spawn_cost = 3
 
+/datum/map_element/vault/soulblade_sanctum
+	file_path = "maps/randomvaults/soulblade_sanctum.dmm"
+	spawn_cost = 3
+
 /datum/map_element/vault/meteorlogical_station
 	file_path = "maps/randomvaults/meteorlogical_station.dmm"
 	spawn_cost = 4

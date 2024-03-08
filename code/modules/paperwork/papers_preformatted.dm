@@ -50,7 +50,7 @@
 
 /obj/item/weapon/paper/diy_soda
 	name = "paper- 'Instructions'"
-	info = "Thank you for purchasing Dr. Pecker's DIY Soda Kit!<br>nIt has been scientifically proven to bring your tastebuds into the delicious state and turn your teeth into a molar solution!<br>nNow as you may have guessed, you will have to mix this delicious beverage yourself.<br>nDon't worry, it's pretty basic stuff. Just remember to never lick the spoon!<br>nFirst, mix the contents of all three <b>small vials</b> into the <b>large flask</b>.<br>nThen, mix the contents of the <b>small flasks</b> into the <b>large flask</b>.<br>nAnd finally, get ready for our secret trademarked ingredient: <br>n<b>The element of surprise!</b>"
+	info = "Thank you for purchasing Dr. Pecker's DIY Soda Kit!<br>It has been scientifically proven to bring your tastebuds into the delicious state and turn your teeth into a molar solution!<br>Now as you may have guessed, you will have to mix this delicious beverage yourself.<br>Don't worry, it's pretty basic stuff. Just remember to never lick the spoon!<br>First, mix the contents of all three <b>small vials</b> into the <b>large flask</b>.<br>Then, mix the contents of the <b>small flasks</b> into the <b>large flask</b>.<br>And finally, get ready for our secret trademarked ingredient: <br><b>The element of surprise!</b>"
 
 /obj/item/weapon/paper/spectrometry_decommission
 	name = "paper- 'Re:Spectrometry Decommission'"

@@ -170,7 +170,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/delta_m = 0.1 * burnrate
 	useThermalMass(delta_m)
 	genSmoke(oxy_ratio,temperature,T)
-
+  
 	//Change in internal energy = energy produced by combustion (assuming perfect combustion).
 	heat_out = material.heating_value * delta_m * ZAS_heat_multiplier * 100000
 

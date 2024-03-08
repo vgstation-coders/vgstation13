@@ -8,6 +8,7 @@ var/list/discounted_items_of_the_round = list()
 
 	var/list/static/forbidden_items = list(
 		/datum/uplink_item/badass/bundle,
+		/datum/uplink_item/badass/random,
 		/datum/uplink_item/badass/experimental_gear,
 		/datum/uplink_item/implants/uplink,
 	)
@@ -559,6 +560,14 @@ var/list/discounted_items_of_the_round = list()
 	cost = 8
 	discounted_cost = 6
 	jobs_with_discount = SCIENCE_POSITIONS
+
+/datum/uplink_item/sabotage_tools/radstorm_remote
+	name = "Dirty Bomb Artillery Remote"
+	desc = "This device can fire a remote syndicate bluespace artillery every 15 minutes, detonating a dirty bomb on direct intercept with the station, causing an artificial radstorm. The cannon will NOT fire if a radstom is already ongoing."
+	item = /obj/item/device/radstorm_remote
+	cost = 12
+	discounted_cost = 10
+	jobs_with_discount = ENGINEERING_POSITIONS
 
 /datum/uplink_item/sabotage_tools/reportintercom
 	name = "NT Central Command Report Falsifier"

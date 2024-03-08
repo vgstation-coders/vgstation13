@@ -78,7 +78,9 @@
 	W.time_inflicted = world.time
 
 /mob/living/carbon/human/var/list/organs = list()
+/mob/living/carbon/human/var/list/cosmetic_organs = list()
 /mob/living/carbon/human/var/list/datum/organ/external/organs_by_name = list() //Map organ names to organs
+/mob/living/carbon/human/var/list/datum/organ/external/cosmetic_organs_by_name = list()
 /mob/living/carbon/human/var/list/datum/organ/internal/internal_organs_by_name = list() //So internal organs have less ickiness too
 /mob/living/carbon/human/var/list/grasp_organs = list()
 

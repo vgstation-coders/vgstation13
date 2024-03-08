@@ -43,6 +43,7 @@
 
 	var/obj/machinery/hacktarget		// The machine being hacked
 	var/hackprogress = 0				// Possible values: 0 - 100, >= 100 means the hack is complete and will be reset upon next check
+	var/uninstallprogress = -1			// Same as above. 100 means the uninstall is complete and RAM is refunded. -1 means we're currently not uninstalling anything. 0 or more means an uninstall is in progress.
 	var/charge = 0						// 0 - 15, used for charging up the chem synth and food synth
 
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller

@@ -307,14 +307,20 @@ This function restores all organs.
 	return
 
 
-/mob/living/carbon/human/get_organ(var/zone)
+/mob/living/carbon/human/get_organ(var/zone, cosmetic = FALSE)
 	RETURN_TYPE(/datum/organ/external)
 	if(!zone)
 		zone = LIMB_CHEST
 	if (zone in list( "eyes", "mouth" ))
 		zone = LIMB_HEAD
-	return organs_by_name[zone]
+	var/list/organ_list = organs_by_name.Copy()
+	if(cosmetic)
+		organ_list |= cosmetic_organs_by_name
+	return organ_list[zone]
 
+/mob/living/carbon/human/proc/get_cosmetic_organ(zone)
+	RETURN_TYPE(/datum/organ/external)
+	return cosmetic_organs_by_name[zone]
 
 //Picks a random usable organ from the organs passed to the arguments
 //You can feed organ references, or organ strings into this obj

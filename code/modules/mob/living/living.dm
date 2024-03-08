@@ -739,7 +739,7 @@ Thanks.
 		stop_pulling()
 		. = ..()
 
-	if ((s_active && !is_holder_of(src, s_active)))
+	if (s_active && !is_holder_of(src, s_active) && !s_active.Adjacent(src))
 		s_active.close(src)
 
 	if(update_slimes)

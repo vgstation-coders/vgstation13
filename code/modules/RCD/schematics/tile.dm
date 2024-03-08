@@ -97,6 +97,7 @@
 			return 1
 
 		selected_dir = dir
+		master.update_options_menu()
 
 /datum/rcd_schematic/tile/attack(var/atom/A, var/mob/user)
 	if (!selection)
