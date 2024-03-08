@@ -108,7 +108,7 @@
 	var/ignore_attack_delay
 	if(isshelf(A) || istype(A, /obj/abstract/screen/storage) || (isitem(A) && !held_item))
 		var/mob/living/carbon/human/H = src
-		if(!istype(H) || !H.attack_type)
+		if(!istype(H) || !H.attack_type) /* Allow for ignoring attack delay if the mob that passed the above check either isn't a humanoid mob, or if it is, isn't biting/kicking. */
 			ignore_attack_delay = 1
 
 	if(attack_delayer.blocked() && !ignore_attack_delay) // This was next_move.  next_attack makes more sense.
