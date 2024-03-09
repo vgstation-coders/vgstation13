@@ -34,7 +34,7 @@
 
 /mob/living/carbon/human/proc/handleSpecialAttack(var/atom/A)
 	if(attack_delayer.blocked())
-		return TRUE /* We don't want a failed bite/kick to turn into something else, like picking up an item. */
+		return FALSE
 	var/special_attack_result = SPECIAL_ATTACK_SUCCESS
 	switch(attack_type) //Special attacks - kicks, bites
 		if(ATTACK_KICK)
