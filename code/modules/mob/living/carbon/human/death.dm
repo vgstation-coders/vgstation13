@@ -21,6 +21,7 @@
 		gib_radius = 6 //Your insides are all lubed, so gibs travel much further
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
+	drop_all()
 	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
 	spawn()
 		qdel(src)
