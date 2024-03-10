@@ -420,7 +420,8 @@
 	var/image/I
 	if(fullyCustom)
 		//putting a snack on a plate?
-		fingerprints = S.fingerprints.Copy()
+		if (S.fingerprints)//stuff cooked in a pan might not have fingerprints
+			fingerprints = S.fingerprints.Copy()
 		//let's start by removing the overlays that aren't actually part of the food item (candles, ice, blood stains,....)
 		S.overlays.len = 0
 		S.overlays += S.extra_food_overlay
