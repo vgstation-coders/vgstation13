@@ -222,6 +222,12 @@ var/list/all_light_sources = list()
 	applied_lum_g = lum_g
 	applied_lum_b = lum_b
 
+
+	if (sun && (sun.eclipse == ECLIPSE_ONGOING) && (top_atom.z == map.zMainStation))
+		applied_lum_r *= sun.eclipse_color_red
+		applied_lum_g *= sun.eclipse_color_green
+		applied_lum_b *= sun.eclipse_color_blue
+
 	FOR_DVIEW(var/turf/T, light_range, source_turf, INVISIBILITY_LIGHTING)
 		apply_lum_to_turf(T,update_gen)
 
@@ -250,7 +256,8 @@ var/list/all_light_sources = list()
 
 			var/old_range = light_range
 			var/old_power = light_power
-			light_range *= sun.eclipse_rate
+			if (light_range > 0)
+				light_range = max(1.4, light_range * sun.eclipse_rate)
 			light_power *= sun.eclipse_rate
 			APPLY_CORNER(C)
 			light_range = old_range

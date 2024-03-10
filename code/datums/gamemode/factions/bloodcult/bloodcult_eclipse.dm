@@ -4,13 +4,18 @@
 	var/eclipse_start_time = 0
 	var/eclipse_end_time = 0
 	var/eclipse_duration = 0
+	var/eclipse_problem_announcement //set on eclipse_start()
 
 	//light dimming
-	var/min_rate = 0.5
-	var/max_rate = 0.9
-	var/update = 0
+	var/light_reduction = 0.5
 
-	var/timestopped
+	var/timestopped	//sigh
+
+	var/delay_first_announcement = 10 SECONDS	//time after the eclipse starts before it gets announced
+	var/delay_end_announcement = 5 SECONDS		//time after the eclipse end before an announcement confirms it has ended
+	var/delay_problem_announcement = 3 MINUTES	//how long after the eclipse's supposed end will the crew be warned (in case the cult is extending the eclipse's duration)
+
+	var/stage = 0
 
 /proc/eclipse_trigger_cult()
 	if (!sun || !sun.eclipse_manager)
@@ -29,32 +34,29 @@
 	eclipse_start_time = world.time
 	eclipse_duration = duration
 	eclipse_end_time = eclipse_start_time + eclipse_duration
+	eclipse_problem_announcement = eclipse_end_time + delay_problem_announcement
 
 	processing_objects += src
-	world << sound('sound/effects/wind/wind_5_1.ogg')
 	sun.eclipse = ECLIPSE_ONGOING
+	sun.eclipse_rate = light_reduction
 	update_station_lights()
 
-	spawn (5 SECONDS)
+	world << sound('sound/effects/wind/wind_5_1.ogg')
+
+	spawn (delay_first_announcement)
 		command_alert(/datum/command_alert/eclipse_start)
 
 /datum/eclipse_manager/proc/process()
-	update--
-	if (update<=0)
-		update = 5
-
-		sun.eclipse_rate = min_rate + (max_rate - min_rate)/2 + ((max_rate - min_rate)/2 * cos((180 * (world.time - eclipse_start_time)) / eclipse_duration))
-		//TODONEXT: Fix that, it's fading out over the entire eclipse duration
-
-		update_station_lights()
-
+	if (world.time >= eclipse_end_time)
+		eclipse_end()
 
 /datum/eclipse_manager/proc/eclipse_end()
 	processing_objects -= src
 	sun.eclipse = ECLIPSE_OVER
+	sun.eclipse_rate = 1
 	update_station_lights()
 
-	spawn(5 SECONDS)
+	spawn(delay_end_announcement)
 		command_alert(/datum/command_alert/eclipse_end)
 
 /datum/eclipse_manager/proc/update_station_lights()

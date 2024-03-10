@@ -71,7 +71,7 @@
 	stage = value
 	switch(stage)
 		if (BLOODCULT_STAGE_READY)
-			//TODO: warn cultists that the Eclipse window is now ticking down, announce the eclipse to the crew as well
+			eclipse_trigger_cult()
 		if (BLOODCULT_STAGE_MISSED)
 			//TODO: warn cultists that the Eclipse window has passed, announce the end of the eclipse to the crew as well
 		if (BLOODCULT_STAGE_ECLIPSE)
@@ -128,8 +128,7 @@
 					delta /= SSticker.wait
 			last_process_time = world.time
 
-			eclipse_window -= 1 * delta
-			if (eclipse_window <= 0)
+			if (sun.eclipse == ECLIPSE_OVER)
 				stage(BLOODCULT_STAGE_MISSED)
 		if (BLOODCULT_STAGE_ECLIPSE)
 			..()

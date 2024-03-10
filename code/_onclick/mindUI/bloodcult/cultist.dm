@@ -632,9 +632,7 @@
 
 			if (BLOODCULT_STAGE_READY)
 				name = "Time until the Eclipse ends"
-				var/eclipse_ticks_before_end_at_current_rate = cult.eclipse_window
-				if(SSticker.initialized)
-					eclipse_ticks_before_end_at_current_rate *= (SSticker.wait/10)
+				var/eclipse_ticks_before_end_at_current_rate = (sun.eclipse_manager.eclipse_end_time - world.time)/10
 				var/hours_to_go = round(eclipse_ticks_before_end_at_current_rate/3600)
 				var/minutes_to_go = add_zero(num2text(round(eclipse_ticks_before_end_at_current_rate/60) % 60), 2)
 				var/seconds_to_go = add_zero(num2text(round(eclipse_ticks_before_end_at_current_rate) % 60), 2)
