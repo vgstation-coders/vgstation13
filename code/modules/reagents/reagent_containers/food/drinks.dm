@@ -1545,14 +1545,10 @@
 /obj/item/weapon/reagent_containers/food/drinks/thermos/update_temperature_overlays()
 	//we only care about the steam
 
-	if (!particles)
-		particles = new/particles/steam
-
-	particles.spawning = 0
-
 	if(!cap && reagents && reagents.total_volume)
-		if (reagents.chem_temp >= STEAMTEMP)
-			steam_spawn_adjust(reagents.chem_temp)
+		steam_spawn_adjust(reagents.chem_temp)
+	else
+		steam_spawn_adjust(0)
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos/full/New()
 	..()

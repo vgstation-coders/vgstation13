@@ -4477,9 +4477,7 @@
 			icon_state = "pizzabox_open"
 
 		if(pizza)
-			if (!pizza.particles)
-				pizza.particles = new/particles/steam
-			particles = pizza.particles
+			pizza.link_particles(src)
 			var/image/pizzaimg = new()
 			pizzaimg.appearance = pizza.appearance
 			pizzaimg.pixel_y = -3 * PIXEL_MULTIPLIER
@@ -4491,7 +4489,7 @@
 		return
 	else
 		// Stupid code because byondcode sucks
-		particles = null
+		remove_particles()
 		var/doimgtag = 0
 		if( boxes.len > 0 )
 			var/obj/item/pizzabox/topbox = boxes[boxes.len]
@@ -4515,7 +4513,7 @@
 
 		to_chat(user, "<span class='notice'>You take the [src.pizza] out of the [src].</span>")
 		src.pizza = null
-		particles = null
+		remove_particles()
 		update_icon()
 		return
 
