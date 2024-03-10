@@ -10,8 +10,8 @@
 	for(var/datum/organ/external/E in src.organs)
 		if(istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin)) //Really bad stuff happens when either get removed
 			continue
-		//Only make the limb drop if it's not too damaged
-		if(prob(100 - E.get_damage()))
+		//Only make the limb drop if it's not too damaged, or if it's the head
+		if(prob(100 - E.get_damage()) || istype(E, /datum/organ/external/head))
 			//Override the current limb status and don't cause an explosion
 			E.droplimb(1, 1)
 	for(var/datum/organ/external/cosmetic_organ in cosmetic_organs)
