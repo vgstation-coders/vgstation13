@@ -192,6 +192,7 @@ var/global/list/ghdel_profiling = list()
 				B.master.target = null
 		beams.len = 0
 	*/
+	remove_particles()
 	QDEL_NULL(firelightdummy)
 	..()
 
