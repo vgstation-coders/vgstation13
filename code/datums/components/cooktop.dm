@@ -34,7 +34,6 @@
 		P.cookvessel.cook_start()
 		P.on_cook_start()
 		item.link_particles(P)
-		P.particles = item.particles
 		P.render_cookvessel()
 
 /datum/component/cooktop/proc/on_examine(mob/user)
