@@ -433,7 +433,7 @@
 	signal.transmission_method = 1
 	signal.data = keyval
 	if(signal.data["findbeacon"])
-		log_astar_beacon("singal sent via navbeacons")
+		log_astar_beacon("signal sent via navbeacons")
 		frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
 	else
 		frequency.post_signal(src, signal)
