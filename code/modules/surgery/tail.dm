@@ -90,6 +90,13 @@
 		)
 	duration = 8 SECONDS
 
+/datum/surgery_step/tail/prepare_attach/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	..()
+	var/datum/organ/external/groin/groin = target.get_organ(LIMB_GROIN)
+	if(!(groin.open == 0))
+		return FALSE
+	return TRUE
+
 /datum/surgery_step/tail/prepare_attach/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
 	user.visible_message("[user] is beginning to reposition flesh and nerve endings where [target]'s [affected.display_name] used to be with [tool].", \
