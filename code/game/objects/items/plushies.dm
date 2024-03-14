@@ -351,8 +351,8 @@
 //Touhous
 /obj/item/toy/plushie/fumo/touhou
 	death_sound = 'sound/effects/pichuun.ogg'
-	var/fumosound = 'sound/effects/fumo/fumo.ogg'
-	list/hug_sounds = list('sound/effects/fumo/fumo.ogg')
+	var/fumosound = 'sound/effects/fumo.ogg'
+	list/hug_sounds = list('sound/effects/fumo.ogg')
 	var/fumo_delay = 20
 	var/last_fumo_time = 0
 	canpitchshift = 0
