@@ -15,6 +15,7 @@
 	var/death_sound //sound to play when the plushie is destroyed, e.g. in an explosion
 	autoignition_temperature = AUTOIGNITION_FABRIC
 	var/list/hug_reagents //= list(PARACETAMOL)
+	var/canpitchshift = 1
 
 /obj/item/toy/plushie/Destroy()
 	if(grenade)
@@ -52,7 +53,7 @@
 	if(stuffed || grenade)
 		if(interact_sounds.len)
 			var/interact_sound = pick(interact_sounds)
-			playsound(src, interact_sound, 50, 1, -1)
+			playsound(src, interact_sound, 50, canpitchshift, -1)
 		user.visible_message("<span class='notice'>\The [user] plays with \the [src].</span>", "<span class='notice'>You play with \the [src].</span>")
 		if(grenade && !grenade.active)
 			log_game("[user] activated a hidden grenade ([grenade]) inside [src].")
@@ -65,7 +66,7 @@
 		return ..()
 	if(hug_sounds.len)
 		var/hug_sound = pick(hug_sounds)
-		playsound(src, hug_sound, 50, 1, -1)
+		playsound(src, hug_sound, 50, canpitchshift, -1)
 	if(stuffed || grenade)
 		src.visible_message("<span class='notice'>\The [src] gives \the [M] a [pick("hug", "warm embrace")].</span>")
 		if(hug_reagents.len && M.reagents)
@@ -350,6 +351,48 @@
 //Touhous
 /obj/item/toy/plushie/fumo/touhou
 	death_sound = 'sound/effects/pichuun.ogg'
+	var/fumosound = 'sound/effects/fumo/fumo.ogg'
+	list/hug_sounds = list('sound/effects/fumo/fumo.ogg')
+	var/fumo_delay = 20
+	var/last_fumo_time = 0
+	canpitchshift = 0
+
+/obj/item/toy/plushie/fumo/touhou/proc/fumo(var/mob/user)
+	var/is_schizo = (user.reagents.has_any_reagents(HALLUCINOGENS)) || (M_HALLUCINATE in user.mutations)
+	if(world.time - last_fumo_time >= fumo_delay - (is_schizo ? fumo_delay*0.75 : 0)) //schizophrenics and those on hallucinogenics can FUMO 4x faster
+		last_fumo_time = world.time
+		playsound(src, fumosound, 50, 0)
+		return 1
+	return 0
+
+/obj/item/toy/plushie/fumo/touhou/kick_act(mob/living/H)
+	if(..())
+		return 1
+
+	fumo(H)
+
+/obj/item/toy/plushie/fumo/touhou/bite_act(mob/living/H)
+	H.visible_message("<span class='danger'>[H] bites \the [src]!</span>", "<span class='danger'>You bite \the [src].</span>")
+
+	fumo(H)
+
+/obj/item/toy/plushie/fumo/touhou/attack_self(mob/living/user)
+	..()
+	fumo(user)
+
+/obj/item/toy/plushie/fumo/touhou/attack(mob/living/M as mob, mob/living/user as mob)
+	..()
+	fumo(user)
+
+/obj/item/toy/plushie/fumo/touhou/attackby(var/obj/O, mob/living/user)
+	..()
+	fumo(user)
+
+/obj/item/toy/plushie/fumo/touhou/afterattack(atom/target, mob/user as mob, proximity_flag)
+	if(!proximity_flag && istype(target, /mob) && fumo(user))
+		target.visible_message(\
+			"<span class='notice'>[user] waves \the [src] at \the [target].</span>",\
+			"[user] waves \the [src] at you.")
 
 /obj/item/toy/plushie/fumo/touhou/alice
 	name = "\improper fumo Alice"
