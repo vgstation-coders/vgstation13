@@ -296,3 +296,10 @@ var/list/existing_vaults = list()
 
 /datum/map_element/dungeon/laundromat_drug_lab
 	file_path = "maps/randomvaults/dungeons/laundromat_drug_lab.dmm"
+
+/datum/map_element/vault/thestranger
+	file_path = "maps/randomvaults/thestranger.dmm"
+	spawn_cost = 2
+
+/area/vault/thestranger
+	name = "The Stranger"
