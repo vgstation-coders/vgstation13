@@ -303,3 +303,22 @@ var/list/existing_vaults = list()
 
 /area/vault/thestranger
 	name = "The Stranger"
+
+/datum/map_element/vault/poddock_crash
+	file_path = "maps/randomvaults/pod_dock_crash.dmm"
+	spawn_cost = 1
+
+/area/vault/dockruins
+	name = "Ruined Pod Dock"
+
+/datum/map_element/vault/radioactivedust
+	file_path = "maps/randomvaults/ButtonPusher.dmm"
+	spawn_cost = 2
+
+/area/vault/radioactivelab
+	name = "Material Synthesis Research"
+	requires_power = 1
+
+/area/vault/radioactivecatwalk
+	name = "Research Laboratory Catwalk"
+	dynamic_lighting = 0
