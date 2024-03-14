@@ -286,7 +286,7 @@
 			F.item_state = snack.item_state
 		else
 			F.item_state = snack.icon_state
-		F.particles = snack.particles
+		snack.transfer_particles(F)
 		F.update_icon()
 	if (plates.len > 0)
 		user.put_in_hands(F)
