@@ -687,3 +687,34 @@
 // If the target is weakened, the spells take less time to complete.
 /mob/living/carbon/proc/get_vamp_enhancements()
 	return ((knockdown ? 2 : 0) + (stunned ? 1 : 0) + (sleeping || paralysis ? 3 : 0))
+
+/datum/role/vampire/role_examine_text_addition(target)
+	if((!ishuman(antag.current)) || (target == antag.current)) //Vampire is not a human that can suck blood, or trying to examine themselves.
+		return
+	var/mob/living/carbon/human/H = target
+	if(!istype(H)) //Examined target is not a human.
+		return
+	var/text = ""
+	if(isReligiousLeader(H) || (locate(/obj/item/weapon/nullrod) in get_contents_in_object(H))) //Chaplains and protected targets can't be examined
+		return "<span class='danger'>[logo_image] This vessel is protected by a holy aura!</span>"
+	if(H.species.anatomy_flags & NO_BLOOD) //Target cannot carry blood
+		return "<span class='warning'>[logo_image] This vessel is incapable of having any blood!</span>"
+	var/amount_of_blood = round(H.vessel.get_reagent_amount(BLOOD), 1)
+	var/blood_type = H.dna ? H.dna.b_type : null
+	if(amount_of_blood)
+		var/targetref = "\ref[H]"
+		text += "<span class='notice'>This vessel has <span class='danger'>[amount_of_blood]</span> units of [blood_type ? "[blood_type] " : ""]blood left.</span>"
+		if(!H.mind) //Target has no mind
+			text += "<span class='warning'><br>This vessel only carries lifeless blood!</span>"
+		else if(!(targetref in feeders) || (feeders[targetref] < MAX_BLOOD_PER_TARGET)) //Target has not been fed upon or is below the empowering blood limit they can give
+			text += "<span class='good'><br>This vessel's blood can empower you!</span>"
+		else
+			text += "<span class='warning'><br>This vessel's blood has no energy left for you...</span>"
+		if(H.check_body_part_coverage(MOUTH)) //Target is masked
+			if(!locate(/datum/power/vampire/mature) in current_powers) //Vampire is not mature enough to deal with that
+				text += "<span class='warning'><br>This vessel wears a mask! This will impede you from sucking their blood.</span>"
+			else
+				text += "<span class='notice'><br>This vessel wears a mask, but this will not impede you because you are a <span class='bnotice'>mature</span> vampire!</span>"
+	else
+		return "<span class='warning'>[logo_image] This vessel is completely drained of all blood!</span>"
+	return "[logo_image] [text]"
