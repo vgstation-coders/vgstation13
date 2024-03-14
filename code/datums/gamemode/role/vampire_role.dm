@@ -159,22 +159,26 @@
 
 	var/mob/assailant = antag.current
 	var/targetref = "\ref[target]"
-	var/blood = 0
+	var/blood = 0 //How much blood will be sucked
 	var/blood_total_before = blood_total
 	var/blood_usable_before = blood_usable
 	assailant.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [key_name(target)] in the neck and draining their blood.</font>")
 	target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [key_name(assailant)].</font>")
 	log_attack("[key_name(assailant)] bit [key_name(target)] in the neck")
 
-	to_chat(antag.current, "<span class='danger'>You latch on firmly to \the [target]'s neck.</span>")
-	target.show_message("<span class='userdanger'>\The [assailant] latches on to your neck!</span>")
+	if(!silentbite)
+		to_chat(antag.current, "<span class='danger'>You latch on firmly to \the [target]'s neck.</span>")
+		target.show_message("<span class='userdanger'>\The [assailant] latches on to your neck!</span>")
+	else
+		to_chat(antag.current, "<span class='warning'>You quietly latch on to \the [target]'s neck...")
 
 	if(!iscarbon(assailant))
 		target.LAssailant = null
 	else
 		target.LAssailant = assailant
 		target.assaulted_by(assailant)
-	while(do_mob(assailant, target, (5 SECONDS) * (silentbite + 1)))
+	var/initial_silentbite = silentbite //No switching bite types after latching onto someone
+	while(do_mob(assailant, target, (5 SECONDS) * (initial_silentbite + 1)))
 		if(!isvampire(assailant))
 			to_chat(assailant, "<span class='warning'>Your fangs have disappeared!</span>")
 			draining = null
@@ -200,7 +204,8 @@
 			else
 				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
 			blood_usable += blood
-			target.adjustBruteLoss(1)
+			if(!initial_silentbite) //If the bite is silent, do not tip the target that something is wrong.
+				target.adjustBruteLoss(1)
 			var/datum/organ/external/head/head_organ = target.get_organ(LIMB_HEAD)
 			head_organ.add_autopsy_data("sharp teeth", 1)
 		else
