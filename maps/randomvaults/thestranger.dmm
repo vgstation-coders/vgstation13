@@ -299,7 +299,6 @@
 /turf/unsimulated/floor/ayy,
 /area/vault/thestranger)
 "FA" = (
-/obj/item/weapon/gun/energy/heavydisintegrator,
 /obj/structure/table/reinforced/clockwork,
 /obj/structure/table/reinforced/clockwork,
 /turf/unsimulated/floor/ayy/fancy,
