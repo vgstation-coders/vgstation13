@@ -502,6 +502,10 @@
 		for(var/atom/A in T)
 			if (A == src)
 				continue
+			if(iscarbon(A))
+				var/mob/living/carbon/C = A
+				if(C.check_shields(throwforce, src))
+					continue
 			var/list/hit_zone = user && user.zone_sel ? list(user.zone_sel.selecting) : ALL_LIMBS
 			reagents.reaction(A, zone_sels = hit_zone)
 		return 1
@@ -8776,7 +8780,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sugarcube
 	child_volume = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube/New()	
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube/New()
 	..()
 	reagents.add_reagent(SUGAR, 15) //spawns 5
 
