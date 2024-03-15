@@ -60,8 +60,6 @@ a.selected img {
 .schem_selected > * > * > .shcem_sub{
 	border:0px;
 	border-right:2px;
-	padding-right:2px;
-	padding-left:2px;
 	border-style:solid;
 }
 
@@ -78,9 +76,17 @@ a.selected img {
 
 .shcem_sub{
 	font-family:monospace;
-	font-weight:bold;
-	padding-top:2px;
 	padding-bottom:2px;
+	font-size:14px;
+	width:1em; /*some of the symbols are bigger than others... in a monospace font...*/
+}
+
+.shcem_sub >a:hover{ /*cleaning up all the stuff nanotrasen.css does.*/
+background-color:inherit;
+}
+.shcem_sub >a:active{
+border:none;
+padding:0px;
 }
 
 .layer{

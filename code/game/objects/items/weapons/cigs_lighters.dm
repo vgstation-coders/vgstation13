@@ -758,7 +758,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "bluntlit"
 	type_butt = /obj/item/trash/cigbutt/bluntbutt
 	slot_flags = SLOT_MASK
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 	lit_attack_verb = list("burns", "singes", "blunts")
 	smoketime = 420

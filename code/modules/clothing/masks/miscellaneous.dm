@@ -292,6 +292,7 @@
 	icon_state = "holopipe_off"
 	item_state = "holopipe_off"
 	var/activated = 0
+	species_fit = list(VOX_SHAPED)
 
 
 /obj/item/clothing/mask/holopipe/proc/activate(var/mob/user as mob)

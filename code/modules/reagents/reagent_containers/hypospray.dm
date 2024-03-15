@@ -39,7 +39,10 @@
 		if(H.species && (H.species.chem_flags & NO_INJECT))
 			to_chat(user, "<span classs='notice'>\The [src]'s needle fails to pierce [H]")
 			return
-
+	if(iscarbon(M))
+		var/mob/living/carbon/C = M
+		if(C.check_shields(0, src))
+			return
 	var/inject_message = "<span class='notice'>You inject [M] with [src].</span>"
 	if(M == user)
 		inject_message = "<span class='notice'>You inject yourself with [src].</span>"

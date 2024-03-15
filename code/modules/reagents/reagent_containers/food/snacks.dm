@@ -503,6 +503,10 @@
 		for(var/atom/A in T)
 			if (A == src)
 				continue
+			if(iscarbon(A))
+				var/mob/living/carbon/C = A
+				if(C.check_shields(throwforce, src))
+					continue
 			var/list/hit_zone = user && user.zone_sel ? list(user.zone_sel.selecting) : ALL_LIMBS
 			reagents.reaction(A, zone_sels = hit_zone)
 		return 1
@@ -4478,9 +4482,7 @@
 			icon_state = "pizzabox_open"
 
 		if(pizza)
-			if (!pizza.particles)
-				pizza.particles = new/particles/steam
-			particles = pizza.particles
+			pizza.link_particles(src)
 			var/image/pizzaimg = new()
 			pizzaimg.appearance = pizza.appearance
 			pizzaimg.pixel_y = -3 * PIXEL_MULTIPLIER
@@ -4492,7 +4494,7 @@
 		return
 	else
 		// Stupid code because byondcode sucks
-		particles = null
+		remove_particles()
 		var/doimgtag = 0
 		if( boxes.len > 0 )
 			var/obj/item/pizzabox/topbox = boxes[boxes.len]
@@ -4516,7 +4518,7 @@
 
 		to_chat(user, "<span class='notice'>You take the [src.pizza] out of the [src].</span>")
 		src.pizza = null
-		particles = null
+		remove_particles()
 		update_icon()
 		return
 
@@ -8776,7 +8778,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sugarcube
 	child_volume = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube/New()	
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube/New()
 	..()
 	reagents.add_reagent(SUGAR, 15) //spawns 5
 
