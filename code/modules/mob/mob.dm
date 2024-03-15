@@ -907,7 +907,7 @@ Use this proc preferably at the end of an equipment loadout
 		//END HUMAN
 /mob/proc/reset_view(atom/A)
 	if (client)
-		if (istype(A, /atom/movable))
+		if (istype(A))
 			client.perspective = EYE_PERSPECTIVE
 			client.eye = A
 		else
@@ -1839,11 +1839,9 @@ Use this proc preferably at the end of an equipment loadout
 	return FALSE
 
 /mob/proc/isTeleViewing(var/client_eye)
-	if(istype(client_eye,/obj/machinery/camera))
-		return 1
-	if(istype(client_eye,/obj/item/projectile/rocket/nikita))
-		return 1
-	return 0
+	return istype(client_eye,/obj/machinery/camera) ||\
+			istype(client_eye,/obj/item/projectile/rocket/nikita) ||\
+			(istype(client_eye,/turf/simulated/wall) && Adjacent(client_eye))
 
 /mob/proc/html_mob_check()
 	return 0
