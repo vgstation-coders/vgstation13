@@ -185,6 +185,7 @@
 	if(peeper)
 		peeper.reset_view()
 		unregister_event(/event/moved, peeper, /turf/simulated/wall/proc/reset_view)
+		peeper = null
 
 /turf/simulated/wall/proc/attack_rotting(mob/user as mob)
 	if(istype(src, /turf/simulated/wall/r_wall)) //I wish I didn't have to do typechecks
