@@ -1,3 +1,17 @@
+/*
+~~~~~~~~~~~~~~~~~~ CREATING FLAMMABLE OBJECTS ~~~~~~~~~~~~~~~~~~
+To make your /obj flammable:
+- Set "flammable = TRUE".
+- Ensure "w_class" and "w_type" are defined for the object or its parent.
+- Note: defining "w_type" does NOT automatically make it recyclable, it just adjusts the sorting logic.
+
+To make your /turf flammable:
+- Set "flammable = TRUE"
+- Assign a thermal_material as defined in the THERMAL MATERIALS section:
+	ie. thermal_material = new/datum/thermal_material/wood()
+- Define a thermal_mass (thermal_mass = 5 is used for wood floors)
+*/
+
 //ZAS settings shortcuts
 var/ZAS_heat_multiplier = zas_settings.Get(/datum/ZAS_Setting/fire_heat_generation)
 var/ZAS_oxygen_consumption_multiplier = zas_settings.Get(/datum/ZAS_Setting/fire_oxygen_consumption)
@@ -55,6 +69,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/on_fire = 0
 	var/flammable = FALSE
 	var/autoignition_temperature //inherited from thermal_material unless defined otherwise
+	var/initial_thermal_mass
 	var/thermal_mass = 0 //VERY loose estimate of mass in kg
 	var/datum/thermal_material/thermal_material //contains the material properties of the item for burning, if applicable
 	var/fire_protection //duration that something stays extinguished
@@ -65,6 +80,10 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/fire_dmi = 'icons/effects/fire.dmi'
 	var/fire_sprite = "fire"
 	var/fire_overlay = null
+
+	var/image/charred_overlay = null
+	var/char_alpha = 64
+	var/last_char = 0
 
 	var/atom/movable/firelightdummy/firelightdummy
 
@@ -88,6 +107,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 			return
 		if(!autoignition_temperature)
 			autoignition_temperature = thermal_material.autoignition_temperature
+		fire_protection = world.time
 
 /atom/movable/firelightdummy
 	//this is a dummy that gets added to the vis_contents of a burning atom that can be a light source when its on fire so that it doesnt overwrite the light the atom might already be making
@@ -125,11 +145,45 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		return FALSE
 	if(prob(clamp(lerp(temp,T20C,T0C + 1000,95,100),95,100))) //5% chance of smoke at 20C, 0% at 1000C
 		return FALSE
-	var/smoke_density = clamp(10 * ((MINOXY2BURN/oxy) ** 2),1,10)
-	var/datum/effect/system/smoke_spread/fire/smoke = new /datum/effect/system/smoke_spread/fire()
+	var/smoke_density = clamp(5 * ((MINOXY2BURN/oxy) ** 2),1,5)
+	var/datum/effect/system/smoke_spread/bad/smoke = new /datum/effect/system/smoke_spread/bad()
 	smoke.set_up(smoke_density,0,where)
-	smoke.time_to_live = 30 SECONDS
+	smoke.time_to_live = 10 SECONDS
 	smoke.start()
+
+//charred overlay procs taken from Deity's food temperature overlays system (see food.dm)
+/atom/proc/process_charred_overlay()
+	if(thermal_mass)
+		char_alpha = 96 + clamp((64*(1-(thermal_mass/initial_thermal_mass))),0,64)
+		if(!charred_overlays["[type][icon_state]"])
+			set_charred_overlay()
+		else
+			update_charred_overlay()
+		last_char = world.time
+
+var/global/list/image/charred_overlays = list()
+/atom/proc/set_charred_overlay()
+	if(update_charred_overlay())
+		return
+
+	var/icon/I = new /icon(icon, icon_state)
+	I.Blend(rgb(255,255,255),ICON_ADD)
+	I.Blend(new /icon('icons/effects/effects.dmi', "char"),ICON_MULTIPLY)
+
+	var/image/img = image(I)
+	img.name = "charred_overlay"
+	charred_overlays["[type][icon_state]"] = img
+	update_charred_overlay()
+
+/atom/proc/update_charred_overlay()
+	if(charred_overlays["[type][icon_state]"])
+		if (charred_overlay)
+			overlays -= charred_overlay
+		charred_overlay = image(charred_overlays["[type][icon_state]"])
+		charred_overlay.appearance_flags = RESET_COLOR|RESET_ALPHA
+		charred_overlay.alpha = char_alpha
+		overlays += charred_overlay
+		return 1
 
 //Energy is taken from burning atoms and delivered to the obj/effect/fire at the atom's location.
 //Called on every obj/effect/fire/process()
@@ -149,7 +203,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/oxy_ratio  = air.molar_ratio(GAS_OXYGEN)
 	var/temperature = air.return_temperature()
 	var/delta_t
-	var/heat_out = 0 //J
+	var/heat_out = 0 //MJ
 	var/oxy_used = 0 //mols
 	var/co2_prod = 0 //mols
 
@@ -170,9 +224,12 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/delta_m = 0.1 * burnrate
 	useThermalMass(delta_m)
 	genSmoke(oxy_ratio,temperature,T)
-  
+
+	if(world.time - last_char >= 10 SECONDS)
+		process_charred_overlay()
+
 	//Change in internal energy = energy produced by combustion (assuming perfect combustion).
-	heat_out = material.heating_value * delta_m * ZAS_heat_multiplier * 100000
+	heat_out = material.heating_value * delta_m * ZAS_heat_multiplier
 
 	//Moles of Oxygen consumed and CO2 produced.
 	oxy_used = (delta_m / material.molecular_weight) / material.fuel_ox_ratio
@@ -186,7 +243,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		new /obj/effect/fire(loc)
 
 	//Ash the object if all of its mass has been consumed.
-	if(thermal_mass <= 0)
+	if(thermal_mass <= 0.05)
+		thermal_mass = 0
 		ashify()
 
 	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=material.flame_temp)
@@ -196,7 +254,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(!reagents)
 		return
 
-	var/heat_out = 0 //J
+	var/heat_out = 0 //MJ
 	var/oxy_used = 0 //mols
 	var/co2_prod = 0 //mols (some reagents consume co2 when they burn)
 	var/max_temperature = 0 //K
@@ -218,6 +276,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		for(var/liquid in reagents.reagent_list)
 			reagents.remove_reagent(liquid,1) //evaporate non-flammable reagents
 
+	heat_out = heat_out * 0.000001 //J to MJ
 	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=max_temperature)
 
 /atom/proc/ashify()
@@ -253,7 +312,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 
 	on_fire=1
 
-	if(fire_dmi && fire_sprite && !isturf(src))
+	if(fire_dmi && fire_sprite && !isturf(src) && !fire_overlay)
 		fire_overlay = image(fire_dmi,fire_sprite)
 		overlays += fire_overlay
 
@@ -290,6 +349,9 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		return
 	if(!autoignition_temperature)
 		autoignition_temperature = thermal_material.autoignition_temperature
+	if(thermal_mass)
+		initial_thermal_mass = thermal_mass
+	fire_protection = world.time
 
 /turf/ashify()
 	if(!on_fire)
@@ -297,6 +359,15 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/ashtype = ashtype()
 	new ashtype(src.loc)
 	extinguish()
+
+/turf/process_charred_overlay()
+	if(thermal_mass)
+		char_alpha = clamp((160*(1-(thermal_mass/initial_thermal_mass))),0,160) //turf char overlays aren't as harsh as objects
+		if(!charred_overlays["[type][icon_state]"])
+			set_charred_overlay()
+		else
+			update_charred_overlay()
+		last_char = world.time
 
 /turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume, var/soh = 0, var/surfaces=0)
 
@@ -494,7 +565,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 					continue
 				//Spread the fire.
 				if(!(locate(/obj/effect/fire) in enemy_tile))
-					if(prob(50 + 50 * ZAS_fire_spread_multiplier*(firelevel/ZAS_firelevel_multiplier)) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
+					if(prob(25 + 50 * ZAS_fire_spread_multiplier*(firelevel/ZAS_firelevel_multiplier)) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
 						new/obj/effect/fire(enemy_tile)
 	//seperate part of the present gas
 	//this is done to prevent the fire burning all gases in a single pass
@@ -613,7 +684,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 
 	//Calculate the energy produced by the reaction and then set the new temperature of the mix.
 	var/combustion_efficiency = max((1 - temperature/max_temperature),0)
-	temperature = (starting_energy + combustion_energy * ZAS_heat_multiplier * combustion_efficiency + ZAS_fuel_energy_release_rate * total_fuel * used_reactants_ratio) / heat_capacity()
+	temperature = (starting_energy + (combustion_energy ** ZAS_heat_multiplier) * combustion_efficiency + ZAS_fuel_energy_release_rate * total_fuel * used_reactants_ratio) / heat_capacity()
 	update_values()
 
 	value = total_reactants * used_reactants_ratio

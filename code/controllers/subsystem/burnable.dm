@@ -1,17 +1,10 @@
 var/datum/subsystem/burnable/SSburnable
 var/list/atom/burnableatoms = list()
 
-//Currently disabled in:
-//code/controllers/subsystem/burnable.dm (this file)
-//code/game/objects/objs.dm, in /obj/New()
-//code/ZAS/Fire.dm, in burnFireFuel()
-
-//To re-enable it here, change "SS_NO_FIRE" to "SS_KEEP_TIMING"
-
 /datum/subsystem/burnable
 	name          = "Burnable"
 	wait          = SS_WAIT_BURNABLE
-	flags         = SS_NO_FIRE
+	flags         = SS_KEEP_TIMING
 	priority      = SS_PRIORITY_BURNABLE
 	display_order = SS_DISPLAY_BURNABLE
 
@@ -54,3 +47,11 @@ var/list/atom/burnableatoms = list()
 			break
 		if(!in_fire)
 			burnSolidFuel()
+
+/obj/item/checkburn()
+	if(flammable && !on_fire)
+		var/datum/gas_mixture/G = return_air()
+		if(smoke_holder)
+			if(G && (G.temperature >= (autoignition_temperature * 0.75)))
+				smoke_holder.particles.spawning = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+	..()
