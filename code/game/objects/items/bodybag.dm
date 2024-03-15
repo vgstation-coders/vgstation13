@@ -10,7 +10,7 @@
 	var/obj/structure/closet/body_bag/R = new /obj/structure/closet/body_bag(user.loc)
 	R.add_fingerprint(user)
 	qdel(src)
-
+	
 
 /obj/item/weapon/storage/box/bodybags
 	name = "body bag kit"
@@ -41,6 +41,7 @@
 	density = 0
 	sound_file = 'sound/items/zip.ogg'
 	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = NOT_RECYCLABLE
 
 /obj/structure/closet/body_bag/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/stack/sheet/metal))

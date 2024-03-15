@@ -712,11 +712,13 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "bookbag"
 	name = "book bag"
-	desc = "A bag designed to hold books."
+	desc = "A bag designed to hold books, dictionaries, bibles, papers, and all matters of text. It's very bulky, but can store a whole library."
 	item_state = "satchel"
 	storage_slots = 25
 	fits_max_w_class = 3
-	max_combined_w_class = 200
-	w_class = W_CLASS_TINY
-	can_only_hold = list("/obj/item/weapon/book","/obj/item/weapon/tome","/obj/item/weapon/tome_legacy","/obj/item/weapon/spellbook","/obj/item/weapon/paper","/obj/item/weapon/paper/nano","/obj/item/weapon/barcodescanner","obj/item/weapon/pen","obj/item/weapon/folder")
+	max_combined_w_class = 75
+	w_class = W_CLASS_LARGE //allows it to hold bibles
+	can_only_hold = list("/obj/item/weapon/book","/obj/item/weapon/tome","/obj/item/weapon/tome_legacy",
+	"/obj/item/weapon/spellbook","/obj/item/weapon/paper","/obj/item/weapon/paper/nano","/obj/item/weapon/barcodescanner",
+	"obj/item/weapon/pen","obj/item/weapon/folder", "/obj/item/dictionary", "/obj/item/weapon/storage/bible")
 

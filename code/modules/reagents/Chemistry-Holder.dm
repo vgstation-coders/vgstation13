@@ -695,7 +695,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				custom_pain_msg = "Pain sears [which_organ ? " your " + which_organ.display_name : ""]!"
 			H.custom_pain(custom_pain_msg, post_mod_predicted_dmg >= SCALD_AGONIZING, post_mod_predicted_dmg >= SCALD_PAINFUL)
 		L.apply_effect(burn_dmg, AGONY) //pain
-		L.apply_damage(burn_dmg, BURN, which_organ)
 
 #undef SCALD_PAINFUL
 #undef SCALD_AGONIZING

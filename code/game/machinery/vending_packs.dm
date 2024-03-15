@@ -234,7 +234,6 @@
 	var/foldable_amount = 4
 
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 2
 
 /obj/item/emptyvendomatpack/attack_self()
 	to_chat(usr, "<span class='notice'>You fold [src] flat.</span>")

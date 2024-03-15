@@ -24,6 +24,8 @@
 	speak_chance = 1
 	turns_per_move = 10
 
+	var/hunger_rate = 0.5 //Passive hunger, takes less per tick than a human due to size
+
 	speak_override = TRUE
 
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
@@ -61,12 +63,15 @@
 		return 0 //under effects of time magick
 	spinaroo(spin_emotes)
 	. = ..()
-	nutrition = max(nutrition-0.5, 0) //Passive hunger, takes less per tick than a human due to size
+	nutrition = max(nutrition-hunger_rate, 0)
 	if(nutrition > 150 && health < maxHealth)
 		nutrition = nutrition-10 //Heal by spending nutrition
 		health++
-	if(nutrition < 150 && prob(20))
-		emote("me", 1, "whines hungrily.")
+	if(nutrition < 150 && prob(15))
+		for(var/mob/living/carbon/human/H in view(7, src))
+			if(H.client)
+				emote("me", 1, "whines hungrily.") //Only whine if we see a human with a client in our view
+				break
 	if(.)
 		regular_hud_updates()
 		standard_damage_overlay_updates()
@@ -573,6 +578,7 @@
 	icon_dead = "doby_dead"
 	spin_emotes = list("prances around.","chases her nub of a tail.")
 	is_pet = TRUE
+	hunger_rate = 0.05 //Sasha is extremely resilient against hunger
 	holder_type = /obj/item/weapon/holder/animal/mutt
 	species_type = /mob/living/simple_animal/corgi/sasha
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal

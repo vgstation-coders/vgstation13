@@ -158,6 +158,7 @@
 	id = FEVERFEW
 	description = "Feverfew is a natural anticoagulant useful in fending off viruses, but it leaves one vulnerable to pain and bleeding."
 	color = "#b5651d"
+	custom_metabolism = 0.2
 	pain_resistance = -25
 	data = list ("threshold" = 80)
 
@@ -175,8 +176,9 @@
 	color = "#731008" //rgb: 115, 16, 8
 	density = 0.63
 	specheatcap = 4.21
+	custom_metabolism = REAGENTS_METABOLISM
 	data = list(
-		"threshold" = 10,
+		"threshold" = 35,
 		)
 
 /datum/reagent/antipathogenic/tomato_soup/on_mob_life(var/mob/living/M)
@@ -338,7 +340,7 @@
 	custom_metabolism = 0.05
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.67
-	specheatcap = 721.98
+	specheatcap = 0.72198
 
 /datum/reagent/arithrazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -512,7 +514,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	var/has_been_armstrong = 0
 	var/armstronged_at = 0 //world.time
 	density = 134.21
-	specheatcap = 5143.18
+	specheatcap = 5.14318
 
 /datum/reagent/comnanobots/reagent_deleted()
 	if(..())
@@ -617,7 +619,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#ccffb3" //rgb: 204, 255, 179
 	density = 3.9
-	specheatcap = 128.12
+	specheatcap = 0.12812
 	custom_metabolism = 0.1
 
 /datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
@@ -782,7 +784,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.05
 	overdose_am = REAGENTS_OVERDOSE
 	density = 3.25
-	specheatcap = 52.20
+	specheatcap = 0.5220
 
 /datum/reagent/hyronalin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -822,13 +824,15 @@ var/global/list/charcoal_doesnt_remove=list(
 			var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
 			if(eyes_covered)
 				return
-			else //eyedrops, why not
+			if(TARGET_EYES in zone_sels) /* If you're targeting eyes specifically, splashing the reagent into them will also work. */
 				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 				if(istype(E) && !E.robotic)
 					M.eye_blurry = 0
 					M.eye_blind = 0
 					if(E.damage > 0)
 						E.damage = 0 //cosmic technologies
+					if(M.sdisabilities & BLIND)
+						M.sdisabilities ^= BLIND
 					to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
 
 /datum/reagent/imidazoline/reaction_dropper_mob(var/mob/living/M)
@@ -845,6 +849,8 @@ var/global/list/charcoal_doesnt_remove=list(
 				M.eye_blind = 0
 				if(E.damage > 0)
 					E.damage = 0 //cosmic technologies
+				if(M.sdisabilities & BLIND)
+					M.sdisabilities ^= BLIND
 				to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
 
 /datum/reagent/inacusiate
@@ -863,6 +869,8 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	M.ear_damage = 0
 	M.ear_deaf = 0
+	if(M.sdisabilities & DEAF)
+		M.sdisabilities ^= DEAF
 
 /datum/reagent/inaprovaline
 	name = "Inaprovaline"
@@ -962,7 +970,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C0C0C0"
 	custom_metabolism = 0.2
 	density = 4.92
-	specheatcap = 150.53
+	specheatcap = 0.15053
 
 //The anti-nutriment
 /datum/reagent/lipozine
@@ -973,7 +981,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	nutriment_factor = -10 * REAGENTS_METABOLISM
 	color = "#BBEDA4" //rgb: 187, 237, 164
 	density = 2.63
-	specheatcap = 381.13
+	specheatcap = 0.38113
 
 /datum/reagent/lipozine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -994,7 +1002,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	var/spawning_horror = 0
 	var/percent_machine = 0
 	density = 96.64
-	specheatcap = 199.99
+	specheatcap = 0.19999
 
 /datum/reagent/mednanobots/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1081,7 +1089,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.03
 	overdose_am = REAGENTS_OVERDOSE/2
 	density = 4.09
-	specheatcap = 45.59
+	specheatcap = 4.559
 
 /datum/reagent/methylin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1102,7 +1110,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	dupeable = FALSE
 	color = "#3E3959" //rgb: 62, 57, 89
 	density = 236.6
-	specheatcap = 199.99
+	specheatcap = 0.19999
 
 /datum/reagent/oxycodone
 	name = "Oxycodone"
@@ -1240,7 +1248,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#1A1A1A" //rgb: 26, 26, 26
 	density = 2.46
-	specheatcap = 12439.3 //Good fucking luck
+	specheatcap = 0.124393
 
 /datum/reagent/phalanximine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1382,7 +1390,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.97
-	specheatcap = 512.61
+	specheatcap = 0.51261
 
 /datum/reagent/ryetalyn/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1412,7 +1420,8 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	M.alpha = 255
 	M.disabilities = 0
-	M.sdisabilities = 0
+	if(M.sdisabilities & MUTE) /* We don't want other sdisabilities (damage-induced blindness & deafness) to be cured since they're not genetic, but muteness gets a pass. */
+		M.sdisabilities ^= MUTE
 
 	//Makes it more obvious that it worked.
 	M.remove_jitter()

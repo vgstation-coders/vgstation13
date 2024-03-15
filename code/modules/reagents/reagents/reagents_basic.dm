@@ -167,7 +167,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = COLOR_RADIUM//"#61F09A" //rgb: 101, 242, 156
 	density = 5
-	specheatcap = 94
+	specheatcap = 0.094
 	flags = CHEMFLAG_PIGMENT
 	paint_light = PAINTLIGHT_LIMITED
 
@@ -326,7 +326,7 @@
 	if(O.invisibility)
 		O.make_visible(INVISIBLESPRAY)
 
-	O.clean_act(CLEANLINESS_WATER)
+	O.clean_act(CLEANLINESS_WATER)//removes glue and extinguishes fire
 
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/monkeycube))
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
@@ -338,8 +338,6 @@
 	else if(istype(O, /obj/item/weapon/book/manual/snow))
 		var/obj/item/weapon/book/manual/snow/S = O
 		S.trigger()
-	else if(O.on_fire) // For extinguishing objects on fire
-		O.extinguish()
 	else if(O.molten) // Molten shit.
 		O.molten=0
 		O.solidify()

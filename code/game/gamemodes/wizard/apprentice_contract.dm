@@ -56,7 +56,6 @@ var/list/wizard_apprentice_setups_by_name = list()
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "contract0"
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
 	throwforce = 0
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD

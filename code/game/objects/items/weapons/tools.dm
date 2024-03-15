@@ -286,7 +286,7 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	autoignition_temperature = 0
 
 	//R&D tech level
 	origin_tech = Tc_ENGINEERING + "=1"
@@ -551,12 +551,20 @@
 			to_chat(usr, "<span class='notice'>You switch the [src] off.</span>")
 		else
 			visible_message("<span class='notice'>\The [src] shuts off!</span>")
-		playsound(src,'sound/effects/zzzt.ogg',20,1)
-		set_light(0)
-		src.force = 3
-		src.damtype = "brute"
-		update_icon()
-		src.welding = 0
+		shut_off()
+
+/obj/item/tool/weldingtool/extinguish()
+	..()
+	if (welding)
+		shut_off()
+
+/obj/item/tool/weldingtool/proc/shut_off()
+	playsound(src,'sound/effects/zzzt.ogg',20,1)
+	set_light(0)
+	force = 3
+	damtype = "brute"
+	update_icon()
+	welding = 0
 
 //Decides whether or not to damage a player's eyes based on what they're wearing as protection
 //Note: This should probably be moved to mob

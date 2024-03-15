@@ -134,8 +134,8 @@
 
 	updateicon()
 
-	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
-	hud_list[DIAG_CELL_HUD] = image('icons/mob/hud.dmi', src, "hudbattmax")
+	hud_list[DIAG_HEALTH_HUD] = new/image/hud('icons/mob/hud.dmi', src, "huddiagmax")
+	hud_list[DIAG_CELL_HUD] = new/image/hud('icons/mob/hud.dmi', src, "hudbattmax")
 
 	..()
 

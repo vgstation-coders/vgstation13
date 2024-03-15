@@ -458,6 +458,8 @@
 		return
 
 /obj/machinery/microwave/proc/adjust_cooked_food_reagents_temperature(atom/cooked, datum/recipe/cookedrecipe)
+	if (!cooked.reagents)
+		return
 	//Put the energy used during the cooking into heating the reagents of the food.
 
 	var/cooktime = 10 SECONDS //Use a default to account for burned messes, etc.

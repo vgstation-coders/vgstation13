@@ -6,17 +6,9 @@
 
 	Are you adding a toxic reagent? Remember to update bees_apiary.dm 's lists of toxic reagents accordingly.
 
-	Not sure what to have your density and SHC as? No IRL equivalent you can google? Use the components of the reagent
-		density = (for(components of recipe) total_mass += component density* component volume)/volume of result. E.G
-			6 SALINE = 3 SODIUMCHLORIDE, 5 WATER, 1 AMMONIA
-				density = ((1 + (2.09*3) + (1*5) + (0.51*1))/6) = 2.22 (rounded to 2dp)
+	REGARDING SPECHEATCAP, IF YOU'RE NOT SURE JUST KEEP IT AT WATER'S OR AT 1. IF YOU GET SOMETHING IN THE HUNDREDS OR HIGHER YOU'RE PROBABLY DOING SOMETHING VERY WRONG
 
-		SHC = (for(components of recipe) total_SHC *= component SHC)
-
-
-	NO DON'T DO THAT, IF YOU'RE NOT SURE JUST KEEP IT AT WATER'S. IF YOU GET SOMETHING ABOVE 10 LET ALONE IN THE HUNDREDS YOU'RE PROBABLY DOING SOMETHING VERY WRONG
-
-	It is very common to use REAGENTS_METABOLISM (0.2) or REM / REGEANTS_EFFECT_MULTIPLIER (0.5) in this file.
+	It is very common to use REAGENTS_METABOLISM (0.2) or REM / REGEANTS_EFFECT_MULTIPLIER (0.5) in the reagent files.
 
 */
 

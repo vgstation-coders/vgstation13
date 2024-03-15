@@ -212,6 +212,8 @@ var/list/admin_verbs_debug = list(
 	/client/proc/bee_count,
 	/client/proc/set_procizine_call,
 	/client/proc/set_procizine_properties,
+	/client/proc/check_for_unconnected_atmos,
+
 #if UNIT_TESTS_ENABLED
 	/client/proc/unit_test_panel,
 #endif

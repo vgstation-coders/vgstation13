@@ -336,6 +336,7 @@
 
 /obj/machinery/door/mineral/cult
 	name = "cult door"
+	desc = "It opens and closes...for those in the know."
 	icon = 'icons/obj/doors/doorcult.dmi'
 	icon_state = "cultdoor_closed0"
 

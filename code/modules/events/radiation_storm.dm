@@ -1,5 +1,7 @@
 /datum/event/radiation_storm
 	announceWhen	= 1
+	endWhen			= 64 //128 seconds
+	var/syndiestorm = FALSE
 	var/safe_zones = list(
 		/area/engineering/engineering_auxiliary,
 		/area/maintenance,
@@ -37,7 +39,19 @@
 
 /datum/event/radiation_storm/start()
 	spawn()
-		command_alert(/datum/command_alert/radiation_storm)
+		if(syndiestorm)
+			endWhen	= 69 //138 seconds
+			if(prob(5) || Holiday == APRIL_FOOLS_DAY)
+				world << sound('sound/effects/nuclearlaunchdetected.ogg')
+				sleep(5 SECONDS)
+				world << sound('sound/effects/explosionfar.ogg')
+				sleep(5 SECONDS)
+			else
+				world << sound('sound/effects/explosionfar.ogg') //yes I know the fact that hearing the explosion makes no sense but it makes me smile
+				sleep(10 SECONDS) //extra 10 seconds to those paying attention
+			command_alert(/datum/command_alert/radiation_storm_malicious)
+		else
+			command_alert(/datum/command_alert/radiation_storm)
 
 		for(var/area/A in areas)
 			if(A.z != map.zMainStation || is_safe_zone(A))
@@ -47,9 +61,7 @@
 
 		make_doors_all_access(list(access_maint_tunnels))
 
-
 		sleep(30 SECONDS)
-
 
 		command_alert(/datum/command_alert/radiation_storm/start)
 
@@ -95,7 +107,6 @@
 
 			sleep(25)
 
-
 		command_alert(/datum/command_alert/radiation_storm/end)
 
 		for(var/area/A in areas)
@@ -104,8 +115,6 @@
 			var/area/ma = get_area(A)
 			ma.reset_radiation_alert()
 
-
 		sleep(600) // Want to give them time to get out of maintenance.
-
 
 		revoke_doors_all_access(list(access_maint_tunnels))

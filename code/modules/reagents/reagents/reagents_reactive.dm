@@ -7,7 +7,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#634848" //rgb: 99, 72, 72
 	density = 13.49 //our ingredients are pretty dense
-	specheatcap = 208.4
+	specheatcap = 0.2084
 	custom_metabolism = 0.01 //oh shit what are you doin
 
 /datum/reagent/aminomician
@@ -17,7 +17,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#634848" //rgb: 99, 72, 72
 	density = 13.49 //our ingredients are pretty dense
-	specheatcap = 208.4
+	specheatcap = 0.2084
 	custom_metabolism = 0.01 //oh shit what are you doin
 
 /datum/reagent/aminocyprinidol
@@ -26,7 +26,7 @@
 	description = "An extremely dangerous, flesh-replicating material, mutated by exposure to God-knows-what. Do not mix with nutriment under any circumstances."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#cb42f4" //rgb: 203, 66, 244
-	density = 111.75 //our ingredients are extremely dense, especially carppheromones
+	density = 0.11175 //our ingredients are extremely dense, especially carppheromones
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Is partly made out of leporazine, so you're not heating this up.
 	custom_metabolism = 0.01 //oh shit what are you doin
 
@@ -37,7 +37,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#634848" //rgb: 99, 72, 72
 	density = 15.49 //our ingredients are pretty dense
-	specheatcap = 208.4
+	specheatcap = 0.2084
 	custom_metabolism = 0.01 //oh shit what are you doin
 
 //Foam precursor

@@ -11,6 +11,7 @@
 #define MAT_CARDBOARD   "$cardboard"
 #define MAT_WOOD		"$wood"
 #define MAT_FABRIC		"$fabric"
+#define MAT_WAX			"$wax"
 #define MAT_BRASS   	"$brass"
 #define MAT_RALLOY   	"$ralloy"
 #define MAT_ICE			"$ice"
@@ -44,6 +45,9 @@
 #define VALUE_MYTHRIL 1
 #define VALUE_TELECRYSTAL 1
 
+//wax sheets
+#define WAX_PER_HONEYCOMB 4
+#define WAX_SHEETS_PER_POWDER 0.2
 
 #define CC_PER_SHEET_MISC        2000
 
@@ -65,6 +69,7 @@
 #define CC_PER_SHEET_CARDBOARD   CC_PER_SHEET_METAL
 #define CC_PER_SHEET_WOOD        CC_PER_SHEET_METAL
 #define CC_PER_SHEET_FABRIC      CC_PER_SHEET_METAL
+#define CC_PER_SHEET_WAX         CC_PER_SHEET_METAL
 #define CC_PER_SHEET_BRASS       CC_PER_SHEET_METAL
 #define CC_PER_SHEET_RALLOY      CC_PER_SHEET_METAL
 

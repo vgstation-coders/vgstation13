@@ -47,6 +47,8 @@
 		displayed_holomap.update_holomap()
 
 /mob/living/carbon/attack_animal(mob/living/simple_animal/M as mob)//humans and slimes have their own
+	if(check_shields(0, M))
+		return 0
 	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/relaymove(var/mob/user, direction)

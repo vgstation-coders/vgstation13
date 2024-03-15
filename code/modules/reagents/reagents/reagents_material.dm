@@ -140,7 +140,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#B8B8C0" //rgb: 184, 184, 192
 	density = 19.05
-	specheatcap = 124
+	specheatcap = 0.124
 
 /datum/reagent/uranium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -170,3 +170,54 @@
 			T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
+
+//----------------------------------------------------------------------------------------------------
+
+/datum/reagent/wax
+	name = "Wax Powder"
+	id = WAX
+	description = "Wax that has been grinded into a powder form. Its colour may change from the surrounding pigments."
+	color = "#FFB700"
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 2 * REAGENTS_METABOLISM
+	density = 0.84
+	specheatcap = 2.1
+	data = list(
+		"color" = "#FFB700",
+		)
+
+/datum/reagent/wax/handle_data_mix(var/list/added_data=null, var/added_volume, var/mob/admin)
+	var/base_color = data["color"]
+	var/added_color = base_color
+	if (added_data)
+		added_color = added_data["color"]
+	data["color"] = BlendRYB(added_color, base_color, added_volume / (added_volume+volume))
+	color = data["color"]
+
+/datum/reagent/wax/handle_data_copy(var/list/added_data=null, var/added_volume, var/mob/admin)
+	if (added_data)
+		data["color"] = added_data["color"]
+		color = data["color"]
+
+/datum/reagent/wax/special_behaviour()
+	var/list/pigments = list()
+	for (var/datum/reagent/R in holder.reagent_list)
+		if (R.id == BLEACH)
+			data["color"] = "#FFFFFF"
+			color = data["color"]
+			return
+		else if (R.flags & CHEMFLAG_PIGMENT)
+			pigments += R
+	if (pigments.len <= 0)
+		return
+	var/target_color = mix_color_from_reagents(pigments)
+	if (data["color"] == "#FFFFFF")//if you bleach the wax first, it's easier to dye
+		data["color"] = target_color
+	else
+		data["color"] = BlendRYB(data["color"], target_color, 0.5)
+	color = data["color"]
+
+/datum/reagent/wax/handle_additional_data(var/list/additional_data=null)
+	if ("color" in additional_data)
+		data["color"] = additional_data["color"]
+		color = data["color"]

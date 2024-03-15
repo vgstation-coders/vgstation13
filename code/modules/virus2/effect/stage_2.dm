@@ -170,22 +170,6 @@
 	if (prob(30))
 		mob.jitteriness += 10
 
-
-/datum/disease2/effect/drunk
-	name = "Glasgow Syndrome"
-	desc = "Causes the infected to synthesize pure ethanol."
-	encyclopedia = "Without a cure, the infected's liver is sure to die, also effect strength increases the rate at which ethanol is synthesized."
-	stage = 2
-	badness = EFFECT_DANGER_HARMFUL
-	multiplier = 3
-	max_multiplier = 7
-
-/datum/disease2/effect/drunk/activate(var/mob/living/mob)
-	to_chat(mob, "<span class='notice'>You feel like you had one hell of a party!</span>")
-	if (mob.reagents.get_reagent_amount(GLASGOW) < multiplier*5)
-		mob.reagents.add_reagent(GLASGOW, multiplier*5)
-
-
 /datum/disease2/effect/gaben
 	name = "Gaben Syndrome"
 	desc = "Makes the infected incredibly fat."
@@ -798,3 +782,17 @@
 	mob.Stun(5)
 	mob.vessel.remove_reagent(BLOOD,8)
 	active = 0
+
+/datum/disease2/effect/limedisease
+	name = "Chronic Lime Disease"
+	desc = "Unrelated to its Lyme counterpart, causes the infected to vomit limes. Goes well with some salt and tequila."
+	stage = 2
+	badness = EFFECT_DANGER_ANNOYING
+
+/datum/disease2/effect/limedisease/activate(var/mob/living/mob)
+	if (prob(30))
+		mob.say(pick("I could go for some tequila right now.", "Could go for something sour."))
+	if (prob(15))
+		mob.emote("me",1,"vomits up a... lime?")
+		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
+		new /obj/item/weapon/reagent_containers/food/snacks/grown/lime(get_turf(mob))
