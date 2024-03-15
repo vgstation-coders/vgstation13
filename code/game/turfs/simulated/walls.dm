@@ -167,12 +167,17 @@
 			return
 
 	if(bullet_marks)
-		peeper = user
-		peeper.reset_view(src)
-		peeper.visible_message("<span class='notice'>[peeper] leans in and looks through \the [src].</span>", \
-		"<span class='notice'>You lean in and look through \the [src].</span>")
-		register_event(/event/moved, peeper, /turf/simulated/wall/proc/reset_view)
-		src.add_fingerprint(peeper)
+		if(!peeper)
+			peeper = user
+			peeper.reset_view(src)
+			peeper.visible_message("<span class='notice'>[peeper] leans in and looks through \the [src].</span>", \
+			"<span class='notice'>You lean in and look through \the [src].</span>")
+			peeper.register_event(/event/moved, src, nameof(src::reset_view()))
+		else if(peeper == user)
+			reset_view()
+		else
+			to_chat(user,"<span class='warning'>Someone is already looking through \the [src], wait your turn.</span>")
+		src.add_fingerprint(user)
 		return ..()
 
 	user.visible_message("<span class='notice'>[user] pushes \the [src].</span>", \
@@ -184,7 +189,9 @@
 /turf/simulated/wall/proc/reset_view(atom/movable/mover)
 	if(peeper)
 		peeper.reset_view()
-		unregister_event(/event/moved, peeper, /turf/simulated/wall/proc/reset_view)
+		peeper.visible_message("<span class='notice'>[peeper] stops looking through \the [src].</span>", \
+		"<span class='notice'>You stop looking through \the [src].</span>")
+		peeper.unregister_event(/event/moved, src, nameof(src::reset_view()))
 		peeper = null
 
 /turf/simulated/wall/proc/attack_rotting(mob/user as mob)

@@ -907,7 +907,7 @@ Use this proc preferably at the end of an equipment loadout
 		//END HUMAN
 /mob/proc/reset_view(atom/A)
 	if (client)
-		if (istype(A))
+		if (A)
 			client.perspective = EYE_PERSPECTIVE
 			client.eye = A
 		else
