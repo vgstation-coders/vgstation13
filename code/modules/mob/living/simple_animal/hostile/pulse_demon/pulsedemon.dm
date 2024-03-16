@@ -322,7 +322,7 @@
 	if(!is_under_tile())
 		if(istype(Proj,/obj/item/projectile/ion))
 			return ..()
-		visible_message("<span class ='warning'>The [Proj] goes right through \the [src]!</span>")
+		visible_message("<span class ='warning'>\the [Proj] goes right through \the [src]!</span>")
 
 // Dumb moves
 /mob/living/simple_animal/hostile/pulse_demon/kick_act(mob/living/carbon/human/user)
