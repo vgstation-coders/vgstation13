@@ -161,7 +161,7 @@
 	data["scan_name"] = scan ? scan.name : "-----"
 	data["authenticated"] = is_authenticated()
 	data["has_modify"] = !!modify
-	data["age"] = modify && modify.age_id ? modify.age_id : "-----"
+	data["age"] = modify ? modify.age_id : "-----"
 	data["account_number"] = modify ? modify.associated_account_number : null
 	data["centcom_access"] = is_centcom()
 	data["all_centcom_access"] = null
