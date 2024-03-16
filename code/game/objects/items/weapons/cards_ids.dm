@@ -20,6 +20,7 @@
 
 	var/list/files = list(  )
 	autoignition_temperature = AUTOIGNITION_PLASTIC
+	quick_equip_priority = list(slot_wear_id)
 
 /obj/item/weapon/card/data
 	name = "data disk"
