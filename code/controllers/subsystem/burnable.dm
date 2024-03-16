@@ -37,9 +37,12 @@ var/list/atom/burnableatoms = list()
 
 /atom/proc/checkburn()
 	if(flammable)
+		if(thermal_mass <= 0)
+			return
 		var/datum/gas_mixture/G = return_air()
 		if(G && (G.temperature >= autoignition_temperature) && ((G.molar_ratio(GAS_OXYGEN)) >= MINOXY2BURN))
-			ignite()
+			if(prob(50))
+				ignite()
 	if(on_fire)
 		var/in_fire = FALSE
 		for(var/obj/effect/fire/F in loc)

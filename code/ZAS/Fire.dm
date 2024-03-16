@@ -203,7 +203,7 @@ var/global/list/image/charred_overlays = list()
 	var/oxy_ratio  = air.molar_ratio(GAS_OXYGEN)
 	var/temperature = air.return_temperature()
 	var/delta_t
-	var/heat_out = 0 //MJ
+	var/heat_out = 0 //J
 	var/oxy_used = 0 //mols
 	var/co2_prod = 0 //mols
 
@@ -221,7 +221,7 @@ var/global/list/image/charred_overlays = list()
 		extinguish()
 		return
 
-	var/delta_m = 0.1 * burnrate
+	var/delta_m = 0.20 * burnrate
 	useThermalMass(delta_m)
 	genSmoke(oxy_ratio,temperature,T)
 
@@ -229,7 +229,7 @@ var/global/list/image/charred_overlays = list()
 		process_charred_overlay()
 
 	//Change in internal energy = energy produced by combustion (assuming perfect combustion).
-	heat_out = material.heating_value * delta_m * ZAS_heat_multiplier
+	heat_out = material.heating_value * delta_m
 
 	//Moles of Oxygen consumed and CO2 produced.
 	oxy_used = (delta_m / material.molecular_weight) / material.fuel_ox_ratio
@@ -246,6 +246,8 @@ var/global/list/image/charred_overlays = list()
 	if(thermal_mass <= 0.05)
 		thermal_mass = 0
 		ashify()
+
+	heat_out *= 1000
 
 	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=material.flame_temp)
 
@@ -276,7 +278,6 @@ var/global/list/image/charred_overlays = list()
 		for(var/liquid in reagents.reagent_list)
 			reagents.remove_reagent(liquid,1) //evaporate non-flammable reagents
 
-	heat_out = heat_out * 0.000001 //J to MJ
 	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=max_temperature)
 
 /atom/proc/ashify()
@@ -362,7 +363,7 @@ var/global/list/image/charred_overlays = list()
 
 /turf/process_charred_overlay()
 	if(thermal_mass)
-		char_alpha = clamp((160*(1-(thermal_mass/initial_thermal_mass))),0,160) //turf char overlays aren't as harsh as objects
+		char_alpha = clamp((80*(1-(thermal_mass/initial_thermal_mass))),0,80) //turf char overlays aren't as harsh as objects
 		if(!charred_overlays["[type][icon_state]"])
 			set_charred_overlay()
 		else
