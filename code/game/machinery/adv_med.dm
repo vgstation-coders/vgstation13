@@ -239,6 +239,7 @@
 		else
 			if (alert("Do you want to imprint the occupant's biometric data on this ID card?",,"Yes","No") == "Yes")
 				if (user && !user.incapacitated() && Adjacent(user) && (occupant == H) && ID_card && (ID_card == user.get_active_hand()) && !(stat & (BROKEN|NOPOWER|FORCEDISABLE)))
+					ID_card.age_id = H.age
 					ID_card.blood_type = H.dna.b_type
 					ID_card.dna_hash = H.dna.unique_enzymes
 					ID_card.fingerprint_hash = md5(H.dna.uni_identity)
