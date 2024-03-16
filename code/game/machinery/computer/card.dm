@@ -161,6 +161,7 @@
 	data["scan_name"] = scan ? scan.name : "-----"
 	data["authenticated"] = is_authenticated()
 	data["has_modify"] = !!modify
+	data["age"] = modify && modify.age_id ? modify.age_id : "-----"
 	data["account_number"] = modify ? modify.associated_account_number : null
 	data["centcom_access"] = is_centcom()
 	data["all_centcom_access"] = null
@@ -334,6 +335,18 @@
 					modify.update_virtual_wallet()
 			nanomanager.update_uis(src)
 
+		if ("age")
+			if (is_authenticated())
+				var/t2 = modify
+				if ((modify == t2 && (in_range(src, usr) || (istype(usr, /mob/living/silicon))) && istype(loc, /turf)))
+					var/temp_age = text2num(href_list["age"])
+					if(temp_age)
+						modify.age_id = trunc(abs((temp_age)))
+					else
+						src.visible_message("<span class='notice'>[src] buzzes rudely.</span>")
+					modify.update_virtual_wallet()
+			nanomanager.update_uis(src)
+
 		if ("account")
 			if (is_authenticated())
 				var/t2 = modify
@@ -372,6 +385,7 @@
 							<u>Prepared By:</u> [scan.registered_name ? scan.registered_name : "Unknown"]<br>
 							<u>For:</u> [modify.registered_name ? modify.registered_name : "Unregistered"]<br>
 							<hr>
+							<u>Age:</u> [modify.age_id]<br>
 							<u>Assignment:</u> [modify.assignment]<br>
 							<u>Account Number:</u> #[modify.associated_account_number]<br>
 							<u>Blood Type:</u> [modify.blood_type]<br><br>
