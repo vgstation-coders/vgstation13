@@ -30,8 +30,7 @@
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
-	autoignition_temperature = 522 // Kelvin
-	fire_fuel = 2
+	autoignition_temperature = AUTOIGNITION_PAPER
 	autoignition_temperature = AUTOIGNITION_PAPER
 	on_armory_manifest = TRUE
 
@@ -47,8 +46,7 @@
 	storage_slots = 21
 	max_combined_w_class = 42 // 21*2
 
-	autoignition_temperature = 530 // Kelvin
-	fire_fuel = 3
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/storage/box/surveillance
 	name = "\improper DromedaryCo packet"

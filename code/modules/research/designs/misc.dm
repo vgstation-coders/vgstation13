@@ -78,6 +78,16 @@
 	materials = list(MAT_GLASS = 500, MAT_IRON = 1000)
 	category = "Misc"
 
+/datum/design/library_scanner
+	name = "Barcode Scanner"
+	desc = "Used in registering books for checkin/checkout and longterm archive."
+	id = "libscanner"
+	build_type = PROTOLATHE
+	build_path = /obj/item/weapon/barcodescanner
+	req_tech = list(Tc_PROGRAMMING = 1)
+	materials = list(MAT_GLASS = 300, MAT_IRON = 500)
+	category = "Misc"
+
 /datum/design/dses
 	name = "Deep Space Exploration System"
 	desc = "A GPS with a high-gain radio antenna and broadcaster for locating proximity objects in space, the explorers friend."

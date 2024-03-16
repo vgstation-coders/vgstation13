@@ -75,6 +75,7 @@ h1.alert, h2.alert		{color: #000000;}
 .cult					{color: #800080; font-weight: bold; font-style: italic;}
 .interface				{color: #330033;}
 .big					{font-size: 150%;}
+.verybig				{font-size: 200%;}
 .bold					{font-weight: bold;}
 .center					{text-align: center;}
 .red					{color: #FF0000;}
@@ -89,6 +90,7 @@ h1.alert, h2.alert		{color: #000000;}
 .borer					{color: #800080; font-weight: bold;}
 .grue					{color: #272728; font-weight: bold;}
 .valentines				{color: #db5b8c; font-weight: bold; font-family: Comic Sans MS, Comic Sans, cursive;}
+.spoken_into_telephone	{color: #330088;}
 
 /* If you're adding a new class here, add it to browserOutput.css too! */
 

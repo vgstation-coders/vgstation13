@@ -1,10 +1,17 @@
 var/datum/subsystem/burnable/SSburnable
 var/list/atom/burnableatoms = list()
 
+//Currently disabled in:
+//code/controllers/subsystem/burnable.dm (this file)
+//code/game/objects/objs.dm, in /obj/New()
+//code/ZAS/Fire.dm, in burnFireFuel()
+
+//To re-enable it here, change "SS_NO_FIRE" to "SS_KEEP_TIMING"
+
 /datum/subsystem/burnable
 	name          = "Burnable"
 	wait          = SS_WAIT_BURNABLE
-	flags         = SS_KEEP_TIMING
+	flags         = SS_NO_FIRE
 	priority      = SS_PRIORITY_BURNABLE
 	display_order = SS_DISPLAY_BURNABLE
 
@@ -24,7 +31,6 @@ var/list/atom/burnableatoms = list()
 	..("P:[burnableatoms.len]")
 
 /datum/subsystem/burnable/fire(var/resumed = FALSE)
-
 	if(!resumed)
 		currentrun_index = burnableatoms.len
 		currentrun = burnableatoms.Copy()

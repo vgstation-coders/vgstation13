@@ -282,7 +282,10 @@
 				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
+			slot_glasses_str = list(
+				"Paramedic" = /obj/item/clothing/glasses/hud/health,
+				"Brig Medic" = /obj/item/clothing/glasses/hud/combinedsecmed
+			),
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical/paramedic,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical/paramedic,
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
@@ -298,7 +301,10 @@
 				 "Brig Medic" = /obj/item/clothing/under/rank/medical/brigmedic,
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
+			slot_glasses_str = list(
+				"Paramedic" = /obj/item/clothing/glasses/hud/health,
+				"Brig Medic" = /obj/item/clothing/glasses/hud/combinedsecmed
+			),
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/paramedic,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic,
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
@@ -381,7 +387,6 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
-			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector,
 			slot_r_store_str = /obj/item/weapon/soap,
 		),
 		/datum/species/vox = list(
@@ -392,7 +397,6 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
-			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector,
 			slot_r_store_str = /obj/item/weapon/soap,
 		),
 	)

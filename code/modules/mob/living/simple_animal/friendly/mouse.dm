@@ -57,7 +57,7 @@
 	add_language(LANGUAGE_MOUSE)
 	default_language = all_languages[LANGUAGE_MOUSE]
 	init_language = default_language
-	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[STATUS_HUD]      = new/image/hud('icons/mob/hud.dmi', src, "hudhealthy")
 
 	var/turf/T = get_turf(src)
 	if (!client && (T ? istype(T.loc,/area/maintenance) : FALSE) && prob(20))
@@ -415,6 +415,9 @@
 /mob/living/simple_animal/mouse/proc/mouse_overeat()
 	visible_message("<span class = 'warning'>\The [src] explodes!</span>")
 	gib()
+
+/mob/living/simple_animal/mouse/canMouseDrag()
+	return FALSE
 
 /*
  * Common mouse types

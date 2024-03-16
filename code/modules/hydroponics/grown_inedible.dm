@@ -106,7 +106,7 @@
 	name = "sunflower"
 	desc = "It's beautiful! A certain person might beat you to death if you trample these."
 	icon = 'icons/obj/hydroponics/sunflower.dmi'
-	icon_state = "produce"
+	icon_state = "sunflower"
 	damtype = "fire"
 	force = 0
 	flags = 0
@@ -115,6 +115,7 @@
 	throw_speed = 1
 	throw_range = 3
 	fragrance = INCENSE_SUNFLOWERS
+	slot_flags = SLOT_HEAD
 
 /obj/item/weapon/grown/sunflower/attack(mob/M as mob, mob/user as mob)
 	to_chat(M, "<font color='green'><b> [user] smacks you with a sunflower! </font><font color='yellow'><b>FLOWER POWER<b></font>")
@@ -126,7 +127,7 @@
 	name = "novaflower"
 	desc = "These beautiful flowers have a crisp smokey scent, like a summer bonfire."
 	icon = 'icons/obj/hydroponics/novaflower.dmi'
-	icon_state = "produce"
+	icon_state = "novaflower"
 	damtype = "fire"
 	force = 0
 	flags = 0

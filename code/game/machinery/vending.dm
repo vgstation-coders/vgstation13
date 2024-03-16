@@ -1474,6 +1474,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/drinks/tomatosoup = 3,
+		/obj/item/weapon/reagent_containers/food/drinks/thermos = 3,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/ice = 10,
@@ -2883,14 +2884,23 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/storage/greaserjacket/snakes = 10,
 		/obj/item/clothing/under/sl_suit = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/grey = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/black = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/brown = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/red = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkred = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/orange = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/yellow = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/green = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkgreen = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/lime = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/blue = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkblue = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/purple = 10,
-		/obj/item/clothing/suit/storage/wintercoat/hoodie/yellow = 10,
-		/obj/item/clothing/suit/storage/wintercoat/hoodie/orange = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkpurple = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/pink = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/cyan = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/teal =10
 		)
 	contraband = list(
 		/obj/item/clothing/under/syndicate/tacticool = 5,

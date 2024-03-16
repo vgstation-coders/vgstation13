@@ -233,8 +233,7 @@
 	var/foldable = /obj/item/stack/sheet/cardboard
 	var/foldable_amount = 4
 
-	autoignition_temperature = 522 // Kelvin
-	fire_fuel = 2
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/emptyvendomatpack/attack_self()
 	to_chat(usr, "<span class='notice'>You fold [src] flat.</span>")

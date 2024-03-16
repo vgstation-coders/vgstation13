@@ -481,6 +481,13 @@
 			if(O.antagHUD && mind && mind.antag_roles.len)
 				msg += "<a href='?src=\ref[src];purchaselog=`'>\[Show antag purchase log\]</a>\n"
 
+	//It's also here because the examine text is written from scratch for humans.
+	if(isliving(user) && user.mind)
+		for(var/datum/role/R in get_list_of_elements(user.mind.antag_roles))
+			var/antag_text = R.role_examine_text_addition(src)
+			if(antag_text)
+				msg += "[antag_text]\n"
+
 	if(flavor_text && can_show_flavor_text())
 		msg += "[print_flavor_text()]\n"
 

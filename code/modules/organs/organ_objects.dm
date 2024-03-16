@@ -165,6 +165,11 @@
 	dead_icon = "insectoid-heart-off"
 	organ_type = /datum/organ/internal/heart
 
+/obj/item/organ/internal/heart/vox
+	name = "vox heart"
+	icon_state = "vox-heart-on"
+	dead_icon = "vox-heart-off"
+
 /obj/item/organ/internal/heart/cell
 	name = "biocharger"
 	icon_state = "heart-cell"

@@ -35,6 +35,7 @@
 	var/programmatic=0                // Is the book programmatically added to the catalog?
 	var/forbidden=0
 	var/path = /obj/item/weapon/book // Type path of the book to generate
+	var/cover //icon_state of the book
 
 /datum/cachedbook/proc/LoadFromRow(var/list/row)
 	id = row["id"]
@@ -128,6 +129,7 @@ var/global/datum/library_catalog/library_catalog = new()
 /** Scanner **/
 /obj/machinery/libraryscanner
 	name = "scanner"
+	desc = "The scanner is used in the process of registering a book or painting for permanent archive in the external library and gallery."
 	icon = 'icons/obj/library.dmi'
 	icon_state = "bookscanner"
 	anchored = 1
@@ -138,18 +140,24 @@ var/global/datum/library_catalog/library_catalog = new()
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/libraryscanner/attackby(var/obj/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/book))
-		user.drop_item(O, src)
-	if(istype(O, /obj/item/mounted/frame/painting/custom))
+	if(istype(O, /obj/item/weapon/book) || istype(O, /obj/item/mounted/frame/painting/custom))
+		if(contents.len)
+			to_chat(user, "<span class='warning'>Something is already inserted!</span>")
+			return
 		user.drop_item(O, src)
 	else
 		return ..()
 
 /obj/machinery/libraryscanner/attack_hand(var/mob/user as mob)
-	if(istype(user,/mob/dead))
-		to_chat(user, "<span class='danger'>Nope.</span>")
+	if(..())
 		return
-	usr.set_machine(src)
+	interact(user)
+
+/obj/machinery/libraryscanner/interact(var/mob/user)
+	if(istype(user,/mob/dead) && !isAdminGhost(user))
+		to_chat(user, "<span class='danger'>You are too ghostly to use the scanner!</span>")
+		return
+	user.set_machine(src)
 	var/dat = "<HEAD><TITLE>Scanner Control Interface</TITLE></HEAD><BODY>\n" // <META HTTP-EQUIV='Refresh' CONTENT='10'>
 	if(cache || cached_painting)
 		dat += "<FONT color=#005500>Data stored in memory.</FONT><BR>"
@@ -157,9 +165,10 @@ var/global/datum/library_catalog/library_catalog = new()
 		dat += "No data stored in memory.<BR>"
 	dat += "<A href='?src=\ref[src];scan=1'>\[Scan\]</A>"
 	if(cache || cached_painting)
-		dat += "       <A href='?src=\ref[src];clear=1'>\[Clear Memory\]</A><BR><BR><A href='?src=\ref[src];eject=1'>\[Remove Book\]</A>"
+		dat += "       <A href='?src=\ref[src];clear=1'>\[Clear Memory\]</A><BR>"
 	else
 		dat += "<BR>"
+	dat+= "<BR><A href='?src=\ref[src];eject=1'>\[Remove Book\]</A>"
 	user << browse(dat, "window=scanner")
 	onclose(user, "scanner")
 
@@ -184,15 +193,17 @@ var/global/datum/library_catalog/library_catalog = new()
 			B.forceMove(src.loc)
 		for (var/obj/item/mounted/frame/painting/custom/C in contents)
 			C.forceMove(src.loc)
-	src.add_fingerprint(usr)
-	src.updateUsrDialog()
-	return
+	add_fingerprint(usr)
+	updateUsrDialog()
+	for(var/obj/machinery/computer/library/L in range(9,src))
+		L.updateUsrDialog()
 
 /*
  * Book binder
  */
 /obj/machinery/bookbinder
 	name = "Book Binder"
+	desc = "Used in binding ordinary paper into a book that could be archived."
 	icon = 'icons/obj/library.dmi'
 	icon_state = "binder"
 	anchored = 1
@@ -203,10 +214,14 @@ var/global/datum/library_catalog/library_catalog = new()
 	if(istype(O, /obj/item/weapon/paper) || istype(O, /obj/item/weapon/paper/nano))
 		if(user.drop_item(O, src))
 			user.visible_message("[user] loads some paper into [src].", "You load some paper into [src].")
-			src.visible_message("[src] begins to hum as it warms up its printing drums.")
-			sleep(rand(200,400))
-			src.visible_message("[src] whirs as it prints and binds a new book.")
-			var/obj/item/weapon/book/b = new(src.loc)
+			visible_message("[src] begins to hum as it warms up its printing drums.")
+			playsound(loc, 'sound/machines/electric_loom.ogg', 50, 1)
+			spawn(3 SECONDS)
+				playsound(loc, 'sound/machines/electric_loom.ogg', 50, 1)
+			anim(target = src, a_icon = 'icons/obj/library.dmi', flick_anim = "binder_ani", sleeptime = 6 SECONDS)
+			sleep(6 SECONDS)
+			visible_message("[src] whirs as it prints and binds a new book.")
+			var/obj/item/weapon/book/b = new(loc)
 			b.dat = O:info
 			b.name = "Print Job #[rand(100, 999)]"
 			b.icon_state = "book[rand(1,9)]"

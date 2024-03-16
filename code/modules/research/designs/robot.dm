@@ -58,6 +58,16 @@
 	category = "Robot"
 	materials = list(MAT_IRON=15000)
 
+/datum/design/robot/tail
+	name = "Cyborg Component (Robot tail)"
+	desc = "Used to build a Robot tail."
+	id = "robot_tail"
+	req_tech = list(Tc_ENGINEERING = 1)
+	build_type = MECHFAB
+	build_path = /obj/item/robot_parts/tail
+	category = "Misc"
+	materials = list(MAT_IRON=15000)
+
 /datum/design/robot/head
 	name = "Cyborg Component (Robot head)"
 	desc = "Used to build a Robot head."

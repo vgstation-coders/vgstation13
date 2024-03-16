@@ -34,7 +34,8 @@
 		/obj/item/clothing/glasses/scanner/material,
 		/obj/item/weapon/card/debit/preferred/department/engineering,
 		/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger,
-		/obj/item/clothing/glasses/scanner/dual/chiefengineer
+		/obj/item/clothing/glasses/scanner/dual/chiefengineer,
+		/obj/item/device/pager,
 	)
 
 /obj/structure/closet/secure_closet/engineering_electrical
@@ -103,6 +104,7 @@
 		/obj/item/taperoll/engineering,
 		/obj/item/device/gps/engineering,
 		/obj/item/clothing/glasses/scanner/material,
+		/obj/item/device/pager,
 	)
 
 /obj/structure/closet/secure_closet/engineering_atmos
@@ -140,6 +142,7 @@
 		/obj/item/clothing/glasses/scanner/material,
 		/obj/item/device/gps/engineering,
 		/obj/item/tool/crowbar/halligan,
+		/obj/item/device/pager,
 	)
 
 /obj/structure/closet/secure_closet/engineering_mechanic

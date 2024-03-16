@@ -17,8 +17,7 @@
 	actions_types = list(/datum/action/item_action/convert)
 	rustle_sound = "pageturn"
 
-	autoignition_temperature = 522 // Kelvin
-	fire_fuel = 2
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/storage/bible/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")
@@ -333,7 +332,7 @@
 		deconvertee.take_overall_damage(10)//it's a painful process no matter what.
 		var/turf/T = get_turf(deconvertee)
 		anim(target = deconvertee, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_land", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
-		
+
 		switch(success)
 			if (DECONVERSION_ACCEPT)
 				var/mob/living/simple_animal/hostile/shade/redshade_A = new(T)

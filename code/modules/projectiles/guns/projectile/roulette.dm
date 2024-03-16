@@ -1,3 +1,24 @@
+var/list/restricted_roulette_projectiles = list(
+	/obj/item/projectile,
+	/obj/item/projectile/energy,
+	/obj/item/projectile/hookshot,
+	/obj/item/projectile/bullet/blastwave,
+	/obj/item/projectile/beam/lightning,
+	/obj/item/projectile/beam/procjectile,
+	/obj/item/projectile/beam/lightning/spell,
+	/obj/item/projectile/rocket,
+	/obj/item/projectile/rocket/nikita,
+	/obj/item/projectile/rocket/lowyield/extreme,
+	/obj/item/projectile/test,
+	/obj/item/projectile/friendlyCheck,
+	/obj/item/projectile/beam/emitter,
+	/obj/item/projectile/spell_projectile,
+	/obj/item/projectile/stickybomb,
+	/obj/item/projectile/beam/lightlaser,
+	/obj/item/projectile/portalgun,
+	/obj/item/projectile/soulbullet,
+	)
+
 /obj/item/weapon/gun/projectile/roulette_revolver
 	name = "\improper Roulette Revolver"
 	desc = "A strange-looking revolver. Its construction appears somewhat slapdash."
@@ -19,23 +40,11 @@
 	var/infinite = 0
 	var/time_since_last_recharge = 0
 	var/list/available_projectiles = list()
-	var/list/restricted_projectiles = list(
-		/obj/item/projectile,
-		/obj/item/projectile/energy,
-		/obj/item/projectile/hookshot,
-		/obj/item/projectile/bullet/blastwave,
-		/obj/item/projectile/beam/lightning,
-		/obj/item/projectile/beam/procjectile,
-		/obj/item/projectile/beam/lightning/spell,
-		/obj/item/projectile/rocket/nikita,
-		/obj/item/projectile/test,
-		/obj/item/projectile/beam/emitter,
+
+	var/list/restrict_with_subtypes = list(
 		/obj/item/projectile/meteor,
-		/obj/item/projectile/spell_projectile,
-		/obj/item/projectile/stickybomb,
-		/obj/item/projectile/beam/lightlaser,
-		/obj/item/projectile/portalgun,
-		)
+		/obj/item/projectile/immovablerod
+	)
 
 /obj/item/weapon/gun/projectile/roulette_revolver/New()
 	..()
@@ -60,10 +69,31 @@
 	else
 		to_chat(user, "<span class='info'>\The [src] has [shots_left] shots left.</span>")
 
+/obj/item/weapon/gun/projectile/roulette_revolver/attackby(obj/item/A, mob/user)
+	if(istype(A, /obj/item/weapon/conversion_kit) && restrict_with_subtypes?.len)
+		var/obj/item/weapon/conversion_kit/CK = A
+		if(!CK.open)
+			to_chat(user, "<span class='notice'>\The [CK] needs to be open to use.</span>")
+			return 1
+		if(do_after(user, src, 3 SECONDS))
+			desc += "The barrel and chamber assembly seems to have been modified."
+			to_chat(user, "<span class='danger'>You finish modifying \the [src]!</span>")
+			restrict_with_subtypes.Cut()
+			restricted_roulette_projectiles -= /obj/item/projectile/rocket
+			restricted_roulette_projectiles -= /obj/item/projectile/rocket/nikita
+			restricted_roulette_projectiles -= /obj/item/projectile/rocket/lowyield/extreme
+		return 1
+	else
+		..()
+
 /obj/item/weapon/gun/projectile/roulette_revolver/proc/choose_projectile()
 	var/chosen_projectile = pick(available_projectiles)
-	for(var/I in restricted_projectiles)
+	for(var/I in restricted_roulette_projectiles)
 		if(chosen_projectile == I)
+			choose_projectile()
+			return
+	for(var/I in restrict_with_subtypes)
+		if(ispath(chosen_projectile, I))
 			choose_projectile()
 			return
 	var/P = new chosen_projectile()

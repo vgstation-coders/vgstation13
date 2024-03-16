@@ -295,6 +295,64 @@
 
 
 /*
+ * Wax
+ */
+/obj/item/stack/sheet/wax
+	name = "wax"
+	desc = "Some wax cake, made out of beeswax."
+	singular_name = "wax cake"
+	icon_state = "sheet-wax"
+	item_state = "sheet-wax"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_BIOTECH + "=2"
+	melt_temperature = MELTPOINT_WAX
+	siemens_coefficient = 0.1
+	w_type = RECYK_WAX
+	starting_materials = list(MAT_FABRIC = CC_PER_SHEET_WAX)
+	mat_type = MAT_WAX
+	perunit = CC_PER_SHEET_WAX
+	color = COLOR_BEESWAX
+	var/image/glint
+
+/obj/item/stack/sheet/wax/New(loc, amount, var/param_color = null)
+	..()
+	if (param_color)
+		color = param_color
+	if (isobj(loc))
+		var/obj/O = loc
+		if (O.reagents)//most likely a microwave
+			var/datum/reagent/wax/W = O.reagents.get_reagent(WAX)
+			if (W)
+				amount = max(1,round(W.volume * WAX_SHEETS_PER_POWDER))
+				color = W.data["color"]
+	recipes = wax_recipes
+	//adding a glint to both the object
+	glint = image('icons/obj/stacks_sheets.dmi',src,"sheet-wax-glint")
+	glint.blend_mode = BLEND_ADD
+	overlays += glint
+	//and the dynamic in-hand overlay
+	var/image/glintleft = image(inhand_states["left_hand"], src, "sheet-wax-glint")
+	var/image/glintright = image(inhand_states["right_hand"], src, "sheet-wax-glint")
+	glintleft.blend_mode = BLEND_ADD
+	glintright.blend_mode = BLEND_ADD
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = glintleft
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = glintright
+
+/obj/item/stack/sheet/wax/can_stack_with(obj/item/other_stack)
+	if(ispath(other_stack) && (src.type == other_stack))
+		return (uppertext(color) == COLOR_BEESWAX)
+
+	if (src.type == other_stack.type)
+		if (src.color == other_stack.color)
+			return TRUE
+		else
+			to_chat(usr, "<span class='warning'>You cannot stack wax cakes of different colors.</span>")
+	return FALSE
+
+/obj/item/stack/sheet/wax/copy_evidences(var/obj/item/stack/from)
+	..(from)
+	color = from.color
+
+/*
  * Cardboard
  */
 /obj/item/stack/sheet/cardboard	//BubbleWrap //what???

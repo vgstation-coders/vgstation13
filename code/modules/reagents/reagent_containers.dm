@@ -79,7 +79,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return ..()
 
 /obj/item/weapon/reagent_containers/MiddleAltClick(var/mob/living/user)
-	if(!is_holder_of(user, src))
+	if(!Adjacent(user, src))
 		return
 	if(!reagents || !reagents.total_volume)
 		to_chat(user, "<span class='warning'>\The [src] is desperately empty.</span>")
@@ -90,6 +90,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			to_chat(user, "<span class='warning'>You stare at \the [src] intently. Wishing you had a mouth to interact with it.</span>")
 			return
 	thermal_entropy()
+	blow_act(user)
 	playsound(user, 'sound/effects/blow.ogg', 5, 1, -2)
 	var/can_it_burn = round(user.get_splash_burn_damage(amount_per_imbibe, reagents.chem_temp))
 	if (can_it_burn)
@@ -98,6 +99,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='warning'>It feels pretty cold still...</span>")
 	else
 		user.visible_message("[user] blows on \the [src].","You blow on \the [src], helping it reach room temperature faster. <span class='notice'>Temperature seems safe...</span>")
+
+/obj/item/weapon/reagent_containers/proc/blow_act(var/mob/living/user)
+	return
 
 /obj/item/weapon/reagent_containers/New()
 	..()
@@ -480,6 +484,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	var/diff = air.temperature - reagents.chem_temp
 
+	if (!isturf(loc) && (air.pressure < 100))//low pressure environments slow down entropy, unless the item is laid directly onto the floor so space meat remains frozen until brought in
+		diff *= air.pressure/100
+
 	//we only bother if there's less than a 1 degree difference
 	if (abs(diff) < 2)
 		thermal_entropy_containers.Remove(src)
@@ -509,20 +516,16 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	process_temperature()
 
 /obj/item/weapon/reagent_containers/update_temperature_overlays()
-	if (particles)
-		particles.spawning = 0
 	if(reagents && reagents.total_volume)
-		switch(reagents.chem_temp)
-			if (-INFINITY to (T0C+2))
-				ice_alpha = 96 + clamp((-64*((reagents.chem_temp-T0C)/80)),0,64)
-				if(!ice_overlays["[type][icon_state]"])
-					set_ice_overlay()
-				else
-					update_ice_overlay()
-			if (STEAMTEMP to INFINITY)
-				if (!particles)
-					particles = new/particles/steam
-				steam_spawn_adjust(reagents.chem_temp)
+		if (reagents.chem_temp <= (T0C+2))
+			ice_alpha = 96 + clamp((-64*((reagents.chem_temp-T0C)/80)),0,64)
+			if(!ice_overlays["[type][icon_state]"])
+				set_ice_overlay()
+			else
+				update_ice_overlay()
+		steam_spawn_adjust(reagents.chem_temp)
+	else
+		remove_particles("Steam")
 
 ///////////ICE OVERLAY///////////////////////////////////////////////////////////////////////////////////////////////////////////
 //appears when the food item's reagents' temperature falls to 0°C or below
@@ -572,25 +575,13 @@ var/global/list/image/ice_overlays = list()
 
 ///////////STEAM PARTICLES/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/particles/steam
-	width = 64
-	height = 64
-	count = 20
-	spawning = 0
-
-	lifespan = 1 SECONDS
-	fade = 1 SECONDS
-	icon = 'icons/effects/effects.dmi'
-	icon_state = "steam"
-	color = "#FFFFFF99"
-	position = 0
-	velocity = 1
-	scale = list(0.6, 0.6)
-	grow = list(0.05, 0.05)
-	rotation = generator("num", 0,360)
-
 /obj/item/weapon/reagent_containers/proc/steam_spawn_adjust(var/_temp)
-	if (particles)
-		particles.spawning = clamp(0.1 + 0.002 * (_temp - STEAMTEMP),0.1,0.5)
+	if (!("Steam" in particle_systems))
+		add_particles("Steam")
+	var/obj/abstract/particles_holder/steam_holder = particle_systems["Steam"]
+	if (_temp < STEAMTEMP)
+		steam_holder.particles.spawning = 0
+	else
+		steam_holder.particles.spawning = clamp(0.1 + 0.002 * (_temp - STEAMTEMP),0.1,0.5)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

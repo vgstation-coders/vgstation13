@@ -293,6 +293,13 @@
 /obj/docking_port/destination/vault/amelab
 	areaname = "Nanotrasen Experimental AME Lab"
 
+/area/vault/soulblade_sanctum
+	jammed = 2
+	color = "red"
+	ambient_sounds = list(
+		/datum/ambience/spaced2,
+		/datum/ambience/spaced3,
+		)
 
 /area/vault/meteorlogical
 	name = "\improper Meteorlogical Station"
@@ -506,7 +513,10 @@
 	maxHealth = 150
 	icon_state = "duey0"
 	icon_initial = "duey"
-	Max_Fertilizers = 50
+
+/obj/machinery/bot/farmbot/duey/New()
+	..()
+	reagents.maximum_volume = 500
 
 /obj/structure/ladder/spacepond/ground
 	name = "wine cellar"

@@ -39,6 +39,7 @@
 		if(iscarbon(M) && glasses == slot_glasses)
 			for(var/datum/visioneffect/H in stored_huds)
 				M.apply_hud(H)
+				M.update_perception()
 	..()
 
 /obj/item/clothing/glasses/scanner/unequipped(mob/living/carbon/M, var/from_slot = null)
@@ -46,6 +47,7 @@
 		for(var/datum/visioneffect/H in stored_huds)
 			M.remove_hud(H)
 	//the parent calls for a full redraw of the hud
+	M.update_perception()
 	..()
 
 /obj/item/clothing/glasses/scanner/update_icon()
@@ -71,6 +73,7 @@
 
 	update_icon()
 	C.update_inv_glasses()
+	C.update_perception()
 
 /obj/item/clothing/glasses/scanner/proc/enable(var/mob/living/carbon/C)
 	on = TRUE
@@ -177,7 +180,7 @@
 
 /obj/item/clothing/glasses/scanner/dual/chiefengineer
 	name = "chief engineer's advanced contacts"
-	desc = "Combines the power of mesons and material scanners. They even sport serious eye protection."
+	desc = "Combines the power of mesons and material scanners."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "contact"
 	mech_flags = MECH_SCAN_FAIL

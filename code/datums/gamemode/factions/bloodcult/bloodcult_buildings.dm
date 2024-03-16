@@ -212,6 +212,14 @@
 	var/list/watcher_maps = list()
 	var/datum/station_holomap/cult/holomap_datum
 
+	var/list/can_plant = list(
+		/obj/item/weapon/kitchen/utensil/knife/large/ritual,
+		/obj/item/weapon/melee/soulblade,
+		/obj/item/weapon/melee/cultblade,
+		/obj/item/weapon/melee/cultblade/nocult,
+		)
+
+	var/trapped = FALSE
 
 /obj/structure/cult/altar/New()
 	..()
@@ -231,9 +239,20 @@
 	holomap_markers[HOLOMAP_MARKER_CULT_ALTAR+"_\ref[src]"] = holomarker
 
 	holomap_datum = new
-	holomap_datum.initialize_holomap(get_turf(src), cursor_icon = "altar-here")
+	if(ticker && holomaps_initialized)
+		initialize()
 
 	cult_altars += src
+
+/obj/structure/cult/altar/initialize()
+	holomap_datum.initialize_holomap(get_turf(src), cursor_icon = "altar-here")
+
+	//mostly for mappers
+	for (var/obj/item/I in loc)
+		if (is_type_in_list(I, can_plant))
+			I.forceMove(src)
+			blade = I
+			update_icon()
 
 /obj/structure/cult/altar/Destroy()
 
@@ -257,7 +276,7 @@
 /obj/structure/cult/altar/attackby(var/obj/item/I, var/mob/user, params)
 	if (altar_task)
 		return ..()
-	if(istype(I, /obj/item/weapon/kitchen/utensil/knife/large/ritual) || istype(I,/obj/item/weapon/melee/soulblade) || (istype(I,/obj/item/weapon/melee/cultblade) && !istype(I,/obj/item/weapon/melee/cultblade/nocult)))
+	if(is_type_in_list(I, can_plant))
 		if (blade)
 			to_chat(user,"<span class='warning'>You must remove \the [blade] planted into \the [src] first.</span>")
 			return 1
@@ -752,6 +771,21 @@
 		blade = null
 		playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 		update_icon()
+		if (trapped) //soulblade sanctum trapped altar
+			trapped = FALSE
+			var/list/possible_floors = list()
+			for (var/turf/simulated/floor/F in orange(1,get_turf(src)))
+				possible_floors.Add(F)
+			for (var/i = 1 to 4)
+				if (possible_floors.len <= 0)
+					break
+				var/turf/T = pick(possible_floors)
+				if (T)
+					possible_floors.Remove(T)
+					new /obj/effect/cult_ritual/backup_spawn(T)
+			spawn(1)
+				for (var/obj/structure/mannequin/cult/MC in range(loc, 7))
+					MC.Awaken()
 		return
 	else
 		to_chat(user,"<span class='sinister'>You feel madness taking its toll, trying to figure out \the [name]'s purpose.</span>")

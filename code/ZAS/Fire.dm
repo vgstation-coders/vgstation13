@@ -49,12 +49,18 @@ Attach to transfer valve and open. BOOM.
 /atom/proc/burnFireFuel(used_fuel_ratio, used_reactants_ratio)
 	fire_fuel -= (fire_fuel * used_fuel_ratio * used_reactants_ratio) //* 5
 
-	var/turf/T = get_turf(loc)
-	if(T)
-		T.hotspot_expose(autoignition_temperature, CELL_VOLUME, surfaces=1)
-	if(prob(10)) //10% chance of smoke creation per tick
+//Disabled burning items heating up the area.
+//Made fires disproportionately more dangerous, and in combination with autoignition led to a domino effect
+//where one item would heat up an area and cause other items to ignite and heat up the area until
+//the entire room was a firestorm.
+
+//To re-enable, un-comment the lines of code, and preferably replace get_turf(loc) below with T
+	// var/turf/T = get_turf(loc)
+	// if(T)
+	// 	T.hotspot_expose(autoignition_temperature, CELL_VOLUME, surfaces=1)
+	if(prob(8)) //8% chance of smoke creation per tick
 		var/datum/effect/system/smoke_spread/fire/smoke = new /datum/effect/system/smoke_spread()
-		smoke.set_up(4,0,T)
+		smoke.set_up(4,0,get_turf(loc))
 		smoke.time_to_live = 60 SECONDS
 		smoke.start()
 
@@ -86,10 +92,11 @@ Attach to transfer valve and open. BOOM.
 	qdel(src)
 
 /atom/proc/extinguish()
-	on_fire=0
-	if(fire_overlay)
-		overlays -= fire_overlay
-	QDEL_NULL(firelightdummy)
+	if (on_fire)
+		on_fire=0
+		if(fire_overlay)
+			overlays -= fire_overlay
+		QDEL_NULL(firelightdummy)
 
 /atom/proc/ignite(var/temperature)
 	on_fire=1
