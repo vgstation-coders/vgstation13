@@ -31,6 +31,7 @@
 		"/obj/item/blueprints/construction_permit",
 		"/obj/item/weapon/stamp")
 	slot_flags = SLOT_ID|SLOT_BELT
+	quick_equip_priority = list(slot_wear_id)
 
 	var/obj/item/weapon/card/id/front_id = null
 
