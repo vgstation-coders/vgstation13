@@ -14,7 +14,6 @@
 	throwforce = 10.0
 	throw_speed = 1
 	throw_range = 4
-	quick_equip_priority = list(slot_wear_suit_str)
 
 	var/datum/gas_mixture/air_contents = null
 	var/distribute_pressure = ONE_ATMOSPHERE
