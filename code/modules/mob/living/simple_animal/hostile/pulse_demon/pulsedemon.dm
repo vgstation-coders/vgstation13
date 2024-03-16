@@ -319,10 +319,10 @@
 
 // We aren't tangible
 /mob/living/simple_animal/hostile/pulse_demon/bullet_act(var/obj/item/projectile/Proj)
-	if(istype(Proj,/obj/item/projectile/ion) && !is_under_tile())
-		return ..()
-	visible_message("<span class ='warning'>The [Proj] goes right through \the [src]!</span>")
-	return
+	if(!is_under_tile())
+		if(istype(Proj,/obj/item/projectile/ion))
+			return ..()
+		visible_message("<span class ='warning'>The [Proj] goes right through \the [src]!</span>")
 
 // Dumb moves
 /mob/living/simple_animal/hostile/pulse_demon/kick_act(mob/living/carbon/human/user)
