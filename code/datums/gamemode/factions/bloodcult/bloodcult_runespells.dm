@@ -2468,7 +2468,7 @@ var/list/seer_rituals = list()
 	..()
 
 /obj/effect/cult_ritual/feet_portal/HasProximity(var/atom/movable/AM)
-	if (!caster || caster.loc != loc)
+	if (caster && caster.loc != loc)
 		forceMove(get_turf(caster))
 
 ////////////////////////////////////////////////////////////////////

@@ -101,6 +101,8 @@
 	word2 = /datum/rune_word/join
 	word3 = /datum/rune_word/self
 	page = ""
+	var/atom/blocker
+	var/list/dance_platforms = list()
 
 /datum/rune_spell/tearreality/cast()
 	var/obj/effect/rune/R = spell_holder
@@ -120,6 +122,11 @@
 				to_chat(activator, "<span class='sinister'>When it does, you should try again <font color='red'>aboard the station</font>.</span>")
 			else if (isspace(R.loc) || is_on_shuttle(R) || (get_dist(locate(map.center_x,map.center_y,map.zMainStation),R) > 100))
 				to_chat(activator, "<span class='sinister'>When it does, you should try again <font color='red'>closer from the station's center</font>.</span>")
+			var/obj/structure/dance_check/checker = new(get_turf(R), src)
+			var/list/moves_to_do = list(SOUTH, WEST, NORTH, NORTH, EAST, EAST, SOUTH, SOUTH, WEST)
+			for (var/direction in moves_to_do)
+				if (!checker.Move(get_step(checker, direction)))//The checker passes through mobs and non-dense objects, but bumps against dense objects and turfs
+					to_chat(activator, "<span class='sinister'>and <font color='red'>in a more open area</font>.</span>")
 			abort()
 			return
 
@@ -168,7 +175,22 @@
 		abort()
 		return
 
+	var/obj/structure/dance_check/checker = new(get_turf(R), src)
+	var/list/moves_to_do = list(SOUTH, WEST, NORTH, NORTH, EAST, EAST, SOUTH, SOUTH, WEST)
+	for (var/direction in moves_to_do)
+		if (!checker.Move(get_step(checker, direction)))//The checker passes through mobs and non-dense objects, but bumps against dense objects and turfs
+			if (blocker)
+				to_chat(activator, "<span class='sinister'>The nearby [blocker] will impede the ritual.</span>")
+			to_chat(activator, "<span class='sinister'>You should try again <font color='red'>in a more open area</font>.</span>")
+			abort()
+			return
+
 	//Alright now we can get down to business
+
+	var/list/platforms_to_spawn = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
+	for (var/direction in platforms_to_spawn)
+		var/obj/effect/cult_ritual/dance_platform/platform = new(get_step(R, direction), src)
+		dance_platforms += platform
 
 /datum/rune_spell/tearreality/cast_talisman() //Tear Reality talismans create an invisible summoning rune beneath the caster's feet.
 	var/obj/effect/rune/R = new(get_turf(activator))
@@ -180,8 +202,94 @@
 	//TODO
 
 /datum/rune_spell/tearreality/abort(var/cause)
-	//TODO
+	for(var/obj/effect/cult_ritual/dance_platform/platform in dance_platforms)
+		qdel(platform)
 	..()
+
+/datum/rune_spell/tearreality/proc/dancer_check()
+	if (dance_platforms.len <= 0)
+		return
+	for(var/obj/effect/cult_ritual/dance_platform/platform in dance_platforms)
+		if (!platform.dancer)
+			return
+
+	//full dancers!
+
+/obj/effect/cult_ritual/dance_platform
+	anchored = 1
+	icon = 'icons/obj/cult.dmi'
+	icon_state = "dance_platform0"
+	layer = ABOVE_OBJ_LAYER
+	plane = OBJ_PLANE
+	var/mob/living/carbon/dancer = null
+	var/datum/rune_spell/tearreality/source = null
+	var/prisoner = FALSE
+
+/obj/effect/cult_ritual/dance_platform/New(var/turf/loc, var/datum/rune_spell/tearreality/runespell)
+	..()
+	if (!runespell)
+		qdel(src)
+		return
+	source = runespell
+	processing_objects += src
+
+/obj/effect/cult_ritual/dance_platform/Destroy()
+	if (dancer && prisoner)
+		dancer.AdjustStunned(-4)
+	dancer = null
+	source = null
+	processing_objects -= src
+	..()
+
+/obj/effect/cult_ritual/dance_platform/process()
+	if (dancer && prisoner)
+		dancer.AdjustStunned(4)
+
+/obj/effect/cult_ritual/dance_platform/Crossed(var/atom/movable/mover)
+	if (!dancer)
+		if (iscarbon(mover))
+			var/mob/living/carbon/C = mover
+			if (iscultist(C))
+				dancer = C
+				icon_state = "dance_platform1"
+				source.dancer_check()
+			else
+				if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
+					dancer = C
+					prisoner = TRUE
+					dancer.AdjustStunned(4)
+					icon_state = "dance_platform1"
+					var/image/I = image('icons/effects/effects.dmi', src, "rune_reveal")
+					I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
+					I.layer = NARSIE_GLOW
+					overlays += I
+
+/obj/effect/cult_ritual/dance_platform/Uncrossed(var/atom/movable/mover)
+	if (dancer && mover == dancer)
+		icon_state = "dance_platform0"
+		overlays.len = 0
+		if (prisoner)
+			dancer.AdjustStunned(-4)
+			prisoner = FALSE
+		dancer = null
+
+/obj/structure/dance_check
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "blank"
+	density = 0
+	mouse_opacity = 0
+	invisibility = 101
+	var/datum/rune_spell/tearreality/source
+
+/obj/structure/dance_check/New(turf/loc, var/_source)
+	..()
+	if (_source)
+		source = _source
+	else
+		qdel(src)
+
+/obj/structure/dance_check/to_bump(var/atom/A)
+	source.blocker = A//So we can tell the rune's activator exactly what is blocking the dance path
 
 /*
 Hall of fame of previous deprecated runes, might redesign later, noting their old word combinations there so I can easily retrieve them later.
