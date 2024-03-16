@@ -319,6 +319,8 @@
 
 // We aren't tangible
 /mob/living/simple_animal/hostile/pulse_demon/bullet_act(var/obj/item/projectile/Proj)
+	if(istype(Proj,/obj/item/projectile/ion))
+		return ..()
 	visible_message("<span class ='warning'>The [Proj] goes right through \the [src]!</span>")
 	return
 
