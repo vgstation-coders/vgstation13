@@ -87,15 +87,14 @@
 		force_update = 1
 		process()
 
-	if(harvest && seed.harvest_repeat == 2)
-		autoharvest()
-
 	// If enough time (in cycles, not ticks) has passed since the plant was harvested, we're ready to harvest again.
 	if(!dead && seed.products && seed.products.len)
 		if (age > seed.production)
 			if ((age - lastproduce) > seed.production && !harvest)
 				harvest = 1
 				lastproduce = age
+				if(seed.harvest_repeat == 2)
+					autoharvest()
 		else
 			if(harvest) //It's a baby plant ready to harvest... must have aged backwards!
 				harvest = 0
