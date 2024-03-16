@@ -299,15 +299,10 @@ var/list/global/id_cards = list()
 	if(!H || !H.dna)
 		return
 
+	age_id = H.age
 	blood_type = H.dna.b_type
 	dna_hash = H.dna.unique_enzymes
 	fingerprint_hash = md5(H.dna.uni_identity)
-
-/obj/item/weapon/card/id/proc/SetOwnerAgeInfo(var/mob/living/carbon/human/H)
-	if(!H || !H.age)
-		return
-
-	age_id = H.age
 
 /obj/item/weapon/card/id/proc/GetBalance(var/format=0)
 	var/amt = 0
@@ -576,7 +571,7 @@ var/list/global/id_cards = list()
 
 					if("Age")
 						var/default = "\[UNSET\]"
-							if(ishuman(user))
+						if(ishuman(user))
 							var/mob/living/carbon/human/H = user
 
 							if(H.age)
@@ -636,7 +631,7 @@ var/list/global/id_cards = list()
 						icon_state = initial(icon_state)
 						assignment = initial(assignment)
 						associated_account_number = initial(associated_account_number)
-						age_id = initial()
+						age_id = initial(age_id)
 						blood_type = initial(blood_type)
 						dna_hash = initial(dna_hash)
 						fingerprint_hash = initial(fingerprint_hash)
