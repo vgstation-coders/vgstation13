@@ -1540,4 +1540,38 @@ var/obj/blend_test = null
 
 	vote.forced_map = rigged_choice
 
+/client/proc/check_for_unconnected_atmos()
+	set category = "Debug"
+	set name = "Check Vent/Scrubber Connections"
+	set desc = "Outputs a list of all vents and scrubbers that aren't connected to the main station's pipe network."
 
+	if(!check_rights(R_DEBUG))
+		return
+
+	var/search_entire_world = 0
+	if(alert(usr, "Search the entire world, or just the station z-level?", "Specify scope of search", "Entire world!", "Just the station.") == "Entire world!")
+		search_entire_world = 1
+
+/* If search_entire_world is set, search all pumps and scrubbers. Otherwise, only search pumps and scrubbers on the map's designated main station z-level. */
+	var/list/unconnected_atmos = list()
+	for(var/obj/machinery/atmospherics/unary/vent_pump/V in atmos_machines)
+		if(istype(V) && (search_entire_world ? search_entire_world : V.z == map.zMainStation) && !V.node1)
+			unconnected_atmos.Add(V)
+	for(var/obj/machinery/atmospherics/unary/vent_scrubber/S in atmos_machines)
+		if(istype(S) && (search_entire_world ? search_entire_world : S.z == map.zMainStation) && !S.node1)
+			unconnected_atmos.Add(S)
+
+	var/output = ""
+	for(var/atom/found in unconnected_atmos)
+		output += "<a href='?_src_=vars;Vars=\ref[found]'>\ref[found]</a>"
+		if(found.loc && found.loc.x)
+			output += ": [found] in [found.loc] at ([found.loc.x], [found.loc.y], [found.loc.z])<br>"
+		else if (found.x)
+			output += ": [found] at ([found.x], [found.y], [found.z])<br>"
+		else
+			output += ": [found] at (no loc found (nullspace?))<br>"
+
+	if(!output)
+		output = "No unconnected vents/scrubbers found."
+
+	usr << browse (output, "window=unconnected-atmos-search")

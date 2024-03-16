@@ -348,6 +348,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#E6E6FA"
 	plantname = "moonflowers"
 	fragrance = INCENSE_MOONFLOWERS
+	slot_flags = SLOT_HEAD
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato
 	name = "potato"

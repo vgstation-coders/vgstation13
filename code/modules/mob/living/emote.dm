@@ -352,6 +352,9 @@ var/list/animals_with_wings = list(
 				else
 					alert("Unable to use this emote, must be either hearable or visible.")
 					return
+			var/display_runechat = input("Display Runechat?") as null|anything in list("Yes", "No")
+			if(display_runechat == "No")
+				emote_type |= EMOTE_NO_RUNECHAT
 			message = custom_emote
 	else
 		message = params

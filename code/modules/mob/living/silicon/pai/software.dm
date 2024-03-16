@@ -557,7 +557,7 @@
 					dat += "<a href='byond://?src=\ref[src];software=[SOFT_MS];sub=0'>Return to Records</a><br>"
 					subscreen = 0
 					return dat
-				dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=2'>Update Scan</a><br>"
+				dat += "<a href='byond://?src=\ref[src];software=[SOFT_MS];sub=2'>Update Scan</a><br>"
 				dat += healthanalyze(M, src, TRUE)
 		dat += "<br/><a href='byond://?src=\ref[src];software=[SOFT_MS];sub=0'>Return to Records</a><br>"
 	return dat

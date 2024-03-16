@@ -1,6 +1,6 @@
 // tgstation-server DMAPI
 
-#define TGS_DMAPI_VERSION "7.1.0"
+#define TGS_DMAPI_VERSION "7.1.1"
 
 // All functions and datums outside this document are subject to change with any version and should not be relied on.
 
@@ -496,7 +496,7 @@
 /// Returns a list of connected [/datum/tgs_chat_channel]s if TGS is present, null otherwise. This function may sleep if the call to [/world/proc/TgsNew] is sleeping!
 /world/proc/TgsChatChannelInfo()
 	return
-	
+
 /**
  * Trigger an event in TGS. Requires TGS version >= 6.3.0. Returns [TRUE] if the event was triggered successfully, [FALSE] otherwise. This function may sleep!
  *
