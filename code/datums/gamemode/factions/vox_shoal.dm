@@ -229,7 +229,8 @@ var/list/potential_bonus_items = list(
 		for (var/datum/role/R in members)
 			to_chat(R.antag.current, "<span class='notice'>The raid is over. You'll go back to the shoal in a few minutes...</span>")
 			spawn (1 MINUTES)
-				qdel(R.antag.current)
+				if(get_area(R.antag.current) == end_area)
+					qdel(R.antag.current)
 
 /datum/faction/vox_shoal/proc/count_score(var/atom/O)
 	if (ishuman(O))
