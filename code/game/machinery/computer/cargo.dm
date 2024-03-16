@@ -412,6 +412,7 @@ For vending packs, see vending_packs.dm*/
 
 			SSsupply_shuttle.moving = -1
 			SSsupply_shuttle.sell()
+			SSsupply_shuttle.scrub()
 			SSsupply_shuttle.send()
 		else
 			SSsupply_shuttle.moving = 1
