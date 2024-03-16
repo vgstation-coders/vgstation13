@@ -298,25 +298,18 @@ var/global/list/damage_icon_parts = list()
 	if(underwear >0 && underwear <= undielist.len && species.anatomy_flags & HAS_UNDERWEAR)
 		if(!fat && !skeleton)
 			stand_icon.Blend(new /icon('icons/mob/human.dmi', "underwear[underwear]_[g]_s"), ICON_OVERLAY)
-
-	if(update_icons)
-		update_icons()
-
 	if(body_alphas.len)
 		var/lowest_alpha = get_lowest_body_alpha()
 		stand_icon -= rgb(0,0,0,lowest_alpha)
+	overlays -= obj_overlays[LIMBS_LAYER]
 	var/datum/organ/external/tail/tail = get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
 	if(tail && (!(tail.status & ORGAN_DESTROYED) && tail.overlap_overlays))
 		var/obj/abstract/Overlays/limbs_overlay = obj_overlays[LIMBS_LAYER]
-		var/mutable_appearance/stand_icon_image = mutable_appearance(stand_icon)
-		limbs_overlay.icon = stand_icon_image.icon
-		limbs_overlay.icon_state = stand_icon_image.icon_state
+		limbs_overlay.icon = stand_icon
 		obj_to_plane_overlay(limbs_overlay, LIMBS_LAYER)
-	else
-		overlays -= obj_overlays[LIMBS_LAYER]
-	//tail
 	update_tail_layer(FALSE)
-
+	if(update_icons)
+		update_icons()
 
 //HAIR OVERLAY
 /mob/living/carbon/human/update_hair(var/update_icons=1)
@@ -531,7 +524,6 @@ var/global/list/damage_icon_parts = list()
 	update_inv_mutual_handcuffed(0)
 	update_inv_legcuffed(0)
 	update_inv_pockets(0)
-	update_tail_layer()
 	QueueUpdateDamageIcon(1)
 	update_icons()
 	//Hud Stuff
@@ -1308,7 +1300,7 @@ var/global/list/damage_icon_parts = list()
 		O.pixel_y = species.inventory_offsets["[slot_wear_suit]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,SUIT_LAYER)
 		//overlays_standing[SUIT_LAYER]	= standing
-	update_tail_layer()
+	update_tail_layer(FALSE)
 
 	if(update_icons)
 		update_icons()
@@ -1575,12 +1567,18 @@ var/global/list/damage_icon_parts = list()
 		var/obj/abstract/Overlays/underlimbs_overlay = obj_overlays[TAIL_UNDERLIMBS_LAYER]
 		underlimbs_overlay.icon = tail_underlimbs.icon
 		underlimbs_overlay.icon_state = tail_underlimbs.icon_state
+		if(body_alphas.len)
+			var/lowest_alpha = get_lowest_body_alpha()
+			underlimbs_overlay.icon -= rgb(0,0,0,lowest_alpha)
 		obj_to_plane_overlay(underlimbs_overlay, TAIL_UNDERLIMBS_LAYER)
 		// North direction sprite before passing that to the tail layer that overlays uniforms and such.
 		tail_image.icon_state = "[tail_icon_state]_FRONT"
 	var/obj/abstract/Overlays/tail_overlay = obj_overlays[TAIL_LAYER]
 	tail_overlay.icon = tail_image.icon
 	tail_overlay.icon_state = tail_image.icon_state
+	if(body_alphas.len)
+		var/lowest_alpha = get_lowest_body_alpha()
+		tail_overlay.icon -= rgb(0,0,0,lowest_alpha)
 	obj_to_plane_overlay(tail_overlay, TAIL_LAYER)
 	if(update_icons)
 		update_icons()
