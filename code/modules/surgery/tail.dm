@@ -55,7 +55,8 @@
 	priority = 2
 
 /datum/surgery_step/tail/amputate/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	..()
+	if(!..())
+		return FALSE
 	var/datum/organ/external/tail/tail = target.get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
 	if(!(tail.open == 1))
 		return FALSE
@@ -91,7 +92,8 @@
 	duration = 8 SECONDS
 
 /datum/surgery_step/tail/prepare_attach/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	..()
+	if(!..())
+		return FALSE
 	var/datum/organ/external/groin/groin = target.get_organ(LIMB_GROIN)
 	if(!(groin.open == 0))
 		return FALSE
@@ -125,7 +127,8 @@
 	tail_present = FALSE
 
 /datum/surgery_step/tail/attach/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	..()
+	if(!..())
+		return FALSE
 	var/datum/organ/external/tail/tail = target.get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
 	if(!(tail.status & ORGAN_ATTACHABLE))
 		return FALSE
