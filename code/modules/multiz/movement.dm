@@ -23,14 +23,14 @@
 		else if(T && isvisiblespace(T))
 			reset_view(GetAbove(src))
 			to_chat(src, "<span class='notice'>You look upwards.</span>")
-			register_event(/event/moved, src, /mob/proc/lookup_reset_view)
+			register_event(/event/moved, src, nameof(src::lookup_reset_view()))
 		else
 			to_chat(src, "<span class='warning'>You see nothing but the ceiling.</span>")
 	else
 		to_chat(src, "<span class='warning'>You don't feel like doing that.</span>")
 
 /mob/proc/lookup_reset_view(atom/movable/mover)
-	unregister_event(/event/moved, src, /mob/proc/lookup_reset_view)
+	unregister_event(/event/moved, src, nameof(src::lookup_reset_view()))
 	reset_view()
 	to_chat(src, "<span class='notice'>You stop looking up.</span>")
 
