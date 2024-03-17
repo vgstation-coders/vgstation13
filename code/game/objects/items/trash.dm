@@ -94,7 +94,7 @@
 /obj/item/trash/chips
 	name = "chips bag"
 	icon_state = "chips"
-	starting_materials = list(MAT_PLASTIC = 50, MAT_IRON = 25, MAT_WOOD = 25) // chip bags are usually plastic, aluminum and paper
+	starting_materials = list(MAT_PLASTIC = 50, MAT_IRON = 25, MAT_CARDBOARD = 25) // chip bags are usually plastic, aluminum and paper
 	w_type=RECYK_PLASTIC
 
 /obj/item/trash/chips/cheesie
@@ -384,7 +384,7 @@ var/list/crushed_cans_cache = list()
 	name = "condiment packet"
 	desc= ""
 	icon_state	= "misc_small"
-	starting_materials = list(MAT_PLASTIC = 50, MAT_IRON = 25, MAT_WOOD = 25)
+	starting_materials = list(MAT_PLASTIC = 50, MAT_IRON = 25, MAT_CARDBOARD = 25)
 	w_type=RECYK_PLASTIC
 
 /obj/item/trash/packet/New()

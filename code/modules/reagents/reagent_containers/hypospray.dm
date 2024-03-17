@@ -91,6 +91,8 @@
 	amount_per_transfer_from_this = 5
 	volume = 5
 	flags = FPRINT
+	starting_materials = list(MAT_PLASTIC = 200)
+	w_type = RECYK_PLASTIC
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/attack(mob/M as mob, mob/user as mob)
 	..()
@@ -119,6 +121,8 @@
 	volume = 15
 	flags = FPRINT
 	refill_reagent_list = list(BIOFOAM = 15)
+	starting_materials = list(MAT_METAL = 200)
+	w_type = RECYK_ELECTRONIC
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector/update_icon()
 	if(reagents.total_volume > 0)
