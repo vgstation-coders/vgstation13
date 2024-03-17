@@ -354,6 +354,15 @@
 		/obj/item/weapon/card/emag = 3,
 	)
 
+/obj/item/weapon/storage/box/syndie_kit/mech_killdozer	//mech not included
+	name = "box (KD)"
+	items_to_spawn = list(
+		/obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit,
+		/obj/item/mecha_parts/mecha_equipment/weapon/random_weapon,
+		/obj/item/mecha_parts/mecha_equipment/weapon/random_weapon,
+		/obj/item/mecha_parts/mecha_equipment/weapon/random_weapon,
+	)
+
 //Syndicate Ayy Lmao Gear
 //The mothership sends its warmest regards
 /obj/item/weapon/storage/box/syndie_kit/ayylmao_harmor
