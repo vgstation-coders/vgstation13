@@ -327,6 +327,12 @@
 /mob/living/simple_animal/hostile/pulse_demon/vine_protected()
 	return 1
 
+// Unless...
+/mob/living/simple_animal/hostile/pulse_demon/Crossed(atom/movable/AM)
+	. = ..()
+	if(!is_under_tile() && istype(AM,/obj/item/projectile/ion))
+		AM.to_bump(src)
+
 // Dumb moves
 /mob/living/simple_animal/hostile/pulse_demon/kick_act(mob/living/carbon/human/user)
 	if(!is_under_tile())
