@@ -168,7 +168,7 @@
 
 	if(bullet_marks)
 		if(user in peepers)
-			reset_view(user)
+			reset_view(user, FALSE)
 		else
 			if(!peepers)
 				peepers = list()
