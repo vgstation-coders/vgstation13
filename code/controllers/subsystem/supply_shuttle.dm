@@ -470,10 +470,10 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			if(CF.one_access && istype(CF.associated_crate, /obj/structure/closet))
 				CF.associated_crate:req_one_access = CF.one_access
 
+			var/this_amount = CF.amount
 			for(var/typepath in CF.contains)
 				if(!typepath)
 					continue
-				var/this_amount = CF.amount
 				var/atom/B2 = new typepath(CF.associated_crate)
 				if(istype(B2,/obj/item/stack))
 					var/obj/item/stack/S = B2
