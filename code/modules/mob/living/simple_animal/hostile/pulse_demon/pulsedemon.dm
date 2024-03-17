@@ -324,6 +324,9 @@
 			return ..()
 		visible_message("<span class ='warning'>\the [Proj] goes right through \the [src]!</span>")
 
+/mob/living/simple_animal/hostile/pulse_demon/vine_protected()
+	return 1
+
 // Dumb moves
 /mob/living/simple_animal/hostile/pulse_demon/kick_act(mob/living/carbon/human/user)
 	if(!is_under_tile())
