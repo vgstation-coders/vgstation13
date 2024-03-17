@@ -186,9 +186,11 @@
 	src.add_fingerprint(user)
 	return ..()
 
-/turf/simulated/wall/proc/reset_view(atom/movable/mover)
+/turf/simulated/wall/proc/reset_view(atom/movable/mover, var/adjacency_check = TRUE)
 	var/list/mob/living/mobs2reset
 	if(isliving(mover) && (mover in peepers))
+		if(adjacency_check && Adjacent(mover))
+			return
 		mobs2reset = list(mover)
 	else if(!mover)
 		mobs2reset = peepers.Copy()
