@@ -12,7 +12,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/deathsquad,
 			slot_shoes_str = /obj/item/clothing/shoes/magboots/deathsquad,
 			slot_gloves_str = /obj/item/clothing/gloves/combat,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal,
 			slot_wear_mask_str = /obj/item/clothing/mask/gas/swat,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/deathsquad,
 			slot_s_store_str = /obj/item/weapon/tank/emergency_oxygen/double,

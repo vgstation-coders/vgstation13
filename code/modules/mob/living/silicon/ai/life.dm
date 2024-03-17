@@ -38,7 +38,7 @@
 	if(client && client.eye == eyeobj) // We are viewing the world through our "eye" mob.
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
-		see_invisible = SEE_INVISIBLE_LEVEL_TWO
+		see_invisible = SEE_INVISIBLE_LEVEL_ONE
 
 	var/area/home = get_area(src)
 	if(home && home.powered(EQUIP))
@@ -158,6 +158,12 @@
 		handle_regular_hud_updates()
 	if(life_handle_health())
 		return
+	if(stunned > 0)
+		stunned -= 1
+	if(say_mute)
+		say_mute = max(say_mute-1, 0)
+	if(ear_deaf)
+		ear_deaf = max(ear_deaf-1, 0)
 
 	if(ai_flags & COREFORTIFY)
 		brute_damage_modifier = 0.33

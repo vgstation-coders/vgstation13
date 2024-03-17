@@ -66,7 +66,6 @@
 		/obj/item/clothing/suit/nun,
 		/obj/item/clothing/head/nun_hood,
 		/obj/item/clothing/suit/chaplain_hoodie,
-		/obj/item/clothing/head/chaplain_hood,
 		/obj/item/clothing/suit/holidaypriest,
 		/obj/item/clothing/under/wedding/bride_white,
 		/obj/item/weapon/storage/backpack/cultpack,
@@ -95,8 +94,9 @@
 		/obj/item/clothing/suit/unathi/mantle,
 		/obj/item/clothing/suit/unathi/robe,
 		/obj/item/clothing/shoes/sandal = 3,
-		/obj/item/clothing/under/rags = 2,
+		/obj/item/clothing/under/leather_rags = 2,
 		/obj/item/clothing/under/shorts/black,
+		/obj/item/clothing/under/vox/vox_casual = 3,
 	)
 
 
@@ -166,7 +166,7 @@
 
 
 /obj/structure/closet/wardrobe/pjs
-	name = "Pajama wardrobe"
+	name = "pajama wardrobe"
 	icon_state = "white"
 	icon_closed = "white"
 

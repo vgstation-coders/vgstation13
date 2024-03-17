@@ -92,6 +92,7 @@
  */
 /turf/simulated/wall/relativewall()
 	icon_state = "[walltype][..()]" // WHY ISN'T THIS IN UPDATE_ICON OR SIMILAR
+	update_paint_overlay()
 
 // AND NOW WE HAVE TO YELL AT THE NEIGHBORS FOR BEING LOUD AND NOT PAINTING WITH HOA-APPROVED COLORS
 /atom/proc/relativewall_neighbours(var/at=null)
@@ -150,8 +151,8 @@
 
 var/list/smoothable_unsims = list(
 	"riveted",
-	"r_wall",
-	"rock_rf0",
+	"alloy",
+	"rock_rf",
 	)
 
 /turf/unsimulated/wall/initialize()
@@ -161,3 +162,4 @@ var/list/smoothable_unsims = list(
 /turf/unsimulated/wall/relativewall()
 	if(icon_state in smoothable_unsims)
 		icon_state = "[walltype][..()]"
+		update_paint_overlay()

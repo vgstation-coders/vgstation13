@@ -7,7 +7,7 @@ Used In File(s): \code\modules\painting\palette.dm
 	{{for data.paint_colours}}
 	<!-- Paint Tool Controls -->
 		<div class="item">
-			<span style="border:1px solid #161616; background-color: {{>value.base_color}};">&nbsp;&nbsp;&nbsp;</span>
+			<span style="border:2px solid {{>value.nano_paint}}; background-color: {{>value.base_color}};">&nbsp;&nbsp;&nbsp;</span>
 			{{:helper.link('Apply', null, {'colour':value.tag, 'act': "apply"} ) }}
 			{{:helper.link('Duplicate', null, {'colour':value.tag, 'act': "duplicate"}) }}
 			{{:helper.link('Delete', null, {'colour':value.tag, 'act': "delete"} ) }} <br/>

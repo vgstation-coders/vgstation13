@@ -317,11 +317,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		detach()
 	return ..()
 
-/obj/machinery/atmospherics/unary/cryo_cell/attackby(var/obj/item/weapon/G as obj, var/mob/user as mob)
+/obj/machinery/atmospherics/unary/cryo_cell/attackby(var/obj/item/weapon/G, var/mob/user)
 	if(istype(G, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
-			to_chat(user, "<span class='warning'>A beaker is already loaded into the machine.</span>")
-			return
+			user.put_in_hands(beaker)
 		if(G.w_class > W_CLASS_SMALL)
 			to_chat(user, "<span class='warning'>\The [G] is too big to fit.</span>")
 			return
@@ -475,8 +474,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(!occupant)
 		return
 	if(!ejecting)
-		occupant.bodytemperature += 20*(air_contents.temperature - occupant.bodytemperature)*current_heat_capacity/(current_heat_capacity + air_contents.heat_capacity())
-		occupant.bodytemperature = max(occupant.bodytemperature, air_contents.temperature) // this is so ugly i'm sorry for doing it i'll fix it later i promise
+		occupant.bodytemperature += (air_contents.temperature - occupant.bodytemperature) * (1 - current_heat_capacity / (current_heat_capacity + air_contents.heat_capacity()))
 	else
 		occupant.bodytemperature = mix(occupant.bodytemperature, T0C + 37, 0.6)
 
@@ -499,6 +497,15 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	// Just have the gas disappear to nowhere.
 	//expel_gas.temperature = T20C // Lets expel hot gas and see if that helps people not die as they are removed
 	//loc.assume_air(expel_gas)
+
+/obj/machinery/atmospherics/unary/cryo_cell/Exited(var/atom/movable/O) // Used for teleportation from within the tube.
+	if (O == occupant)
+		occupant.reset_view()
+		occupant.clear_alert(SCREEN_ALARM_CRYO)
+		occupant = null
+		update_icon()
+		nanomanager.update_uis(src)
+	..()
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit, var/ejector)
 	if(!occupant || ejecting)

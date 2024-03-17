@@ -1367,7 +1367,6 @@
 	req_access_txt = "35"
 	},
 /obj/machinery/pos{
-	department = null;
 	name = "Hydroponics Point of Sale"
 	},
 /obj/machinery/door/firedoor/border_only{

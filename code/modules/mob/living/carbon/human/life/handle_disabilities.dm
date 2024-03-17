@@ -2,7 +2,7 @@
 /mob/living/carbon/human/proc/handle_disabilities()
 	if(stat == DEAD)
 		return
-	if(disabilities & ELECTROSENSE && !dna.GetSEState(JAMSIGNALSBLOCK))
+	if(disabilities & ELECTROSENSE)
 		var/affect_chance = 30
 		var/affected = FALSE
 		if(head && istype(head,/obj/item/clothing/head/tinfoil))
@@ -71,7 +71,7 @@
 		say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
 		"without oxigen blob don't evoluate?", \
 		"CAPTAINS A COMDOM", \
-		"[pick("", "that faggot traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
+		"[pick("", "that traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
 		"can u give me [pick("telikesis","halk","eppilapse")]?", \
 		"THe saiyans screwed", \
 		"Bi is THE BEST OF BOTH WORLDS>", \
@@ -116,7 +116,8 @@
 		"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
 		"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!", \
 		"I AM BASTE", \
-		"TEH TRAITOR THEY KILL PEEPLE BUT I RESPAWN!!!"))
+		"TEH TRAITOR THEY KILL PEEPLE BUT I RESPAWN!!!", \
+		"whats a keeper"))
 	else if(getBrainLoss() >= 60 && prob(3))
 		emote("drool")
 	if(getBrainLoss() > 50 && prob(1.5))

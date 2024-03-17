@@ -63,7 +63,7 @@
 		return 0
 	return 1
 
-/spell/wraith_warp/is_valid_target(var/target, mob/user, options)
+/spell/wraith_warp/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	return (target in view_or_range(range, user, selection_type))
 
 /spell/wraith_warp/cast(list/targets, mob/user)

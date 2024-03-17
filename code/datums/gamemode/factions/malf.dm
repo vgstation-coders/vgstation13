@@ -28,7 +28,6 @@
 /datum/faction/malf/stage(var/value)
 	if(value == FACTION_ENDGAME)
 		stage = FACTION_ENDGAME
-		command_alert(/datum/command_alert/malf_announce)
 		set_security_level("delta")
 		ticker.StartThematic(playlist)
 	else
@@ -38,7 +37,7 @@
 	..()
 	if (stage >= FACTION_ENDGAME)
 		var/living_ais = 0
-		var/datum/role/malfAI/M 
+		var/datum/role/malfAI/M
 		for (var/datum/role/R in members)
 			if(!R.antag.current)
 				continue
@@ -84,7 +83,7 @@
 You may now choose to detonate the nuclear device!</span>"})
 		M.takeover = TRUE
 		M.antag.DisplayUI("Malf")
-
+	ticker.malfunctioning_AI_victory = 1
 
 	return
 

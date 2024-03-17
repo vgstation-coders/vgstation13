@@ -8,10 +8,8 @@
 
 	var/datum/emote/E
 	E = E.emote_list[lowertext(act)]
-	if(!E)
+	if(!E || !E.run_emote(src, param, m_type, ignore_status, arguments))
 		to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
-		return
-	E.run_emote(src, param, m_type, ignore_status, arguments)
 
 /datum/emote/flip
 	key = "flip"
@@ -48,7 +46,7 @@
 	restraint_check = FALSE
 
 /datum/emote/me/run_emote(mob/user, params, m_type)
-
+	. = TRUE
 	if (user.stat)
 		return
 
@@ -77,16 +75,18 @@
 		if(isobserver(M) && M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(user)))
 			M.show_message("<a href='?src=\ref[M];follow=\ref[user]'>(Follow)</a> " + msg)
 
-	if (emote_type == EMOTE_VISIBLE)
+	if(emote_type & EMOTE_VISIBLE)
 		user.visible_message(msg)
-		for(var/mob/O in viewers(world.view, user))
-			if (O.client && O?.client?.prefs.mob_chat_on_map && get_dist(O, user) < O?.client.view)
-				O.create_chat_message(user, null, message, "", list("italics"))
-	else
+		if(!(emote_type & EMOTE_NO_RUNECHAT))
+			for(var/mob/O in viewers(world.view, user))
+				if(O.client && O?.client?.prefs.mob_chat_on_map && get_dist(O, user) < O?.client.view)
+					O.create_chat_message(user, null, message, "", list("italics"))
+	else if(emote_type & EMOTE_AUDIBLE)
 		for(var/mob/O in get_hearers_in_view(world.view, user))
 			O.show_message(msg)
-			if (O.client && O?.client?.prefs.mob_chat_on_map && get_dist(O, user) < O?.client.view)
-				O.create_chat_message(user, null, message, "", list("italics"))
+			if(!(emote_type & EMOTE_NO_RUNECHAT))
+				if(O.client && O?.client?.prefs.mob_chat_on_map && get_dist(O, user) < O?.client.view)
+					O.create_chat_message(user, null, message, "", list("italics"))
 
 	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
 	log_emote("[user.name]/[user.key] (@[location]): [message]")

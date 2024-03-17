@@ -18,7 +18,7 @@
 
 	hud_state = "wiz_push"
 
-/spell/targeted/push/before_cast(list/targets, user)
+/spell/targeted/push/before_cast(list/targets, user, bypass_range = 0)
 	var/list/valid_targets = list()
 	var/list/options = ..()
 	for(var/atom/movable/target in options)
@@ -38,7 +38,10 @@
 	var/area/prospective = pick(areas)
 	while(!thearea)
 		if(prospective.type != /area)
-			var/turf/T = pick(get_area_turfs(prospective.type))
+			var/list/prospective_turfs = get_area_turfs(prospective.type)
+			if(!prospective_turfs.len) //An in-game area somehow lost its turfs, search for another one
+				continue
+			var/turf/T = pick(prospective_turfs)
 			if(T.z == holder.z)
 				thearea = prospective
 				break

@@ -131,7 +131,7 @@
 
 /obj/item/projectile/bullet/midbullet/bouncebullet
 	bounce_type = PROJREACT_WALLS|PROJREACT_WINDOWS
-	bounces = 200
+	bounces = -1
 
 /obj/item/projectile/bullet/midbullet/bouncebullet/lawgiver
 	damage = 30
@@ -450,7 +450,7 @@
 	var/angery = 1
 
 /obj/item/projectile/bullet/beegun/chillbug
-	name = "hornet"
+	name = "chillbug"
 	icon_state = "chillgun"
 	projectile_speed = 0.5
 	bee_type = /mob/living/simple_animal/bee/chillgun
@@ -462,9 +462,16 @@
 	projectile_speed = 0.5
 	bee_type = /mob/living/simple_animal/bee/hornetgun
 
+/obj/item/projectile/bullet/beegun/ss_viscerator
+	name = "viscerator"
+	icon_state = "ss_visceratorgun"
+	projectile_speed = 0.75
+	bee_type = /mob/living/simple_animal/hostile/viscerator/syndiesquad
+
 /obj/item/projectile/bullet/beegun/OnFired()
 	..()
-	playsound(starting, 'sound/effects/bees.ogg', 75, 1)
+	if(isbee(bee_type)	)
+		playsound(starting, 'sound/effects/bees.ogg', 75, 1)
 
 /obj/item/projectile/bullet/beegun/to_bump(atom/A as mob|obj|turf|area)
 	if (!A)
@@ -485,13 +492,15 @@
 		admin_warn(M)
 		BEE.forceMove(M.loc)
 		BEE.target = M
-		BEE.target_turf = M.loc
+		if(isbee(BEE))
+			BEE.target_turf = M.loc
 		BEE.AttackTarget(TRUE)//let's sting them once
-		if (angery)
+		if (isbee(BEE) && BEE.bee_species.angery)
 			BEE.MoveToTarget()//then let's immediately start running after them
 		else
 			BEE.target = null
-			BEE.target_turf = null
+			if(isbee(BEE))
+				BEE.target_turf = null
 
 	bullet_die()
 
@@ -616,54 +625,105 @@
 	var/heavy_damage_range = 0
 	var/medium_damage_range = 0
 	var/light_damage_range = 0
-	fire_sound = 'sound/effects/Explosion1.ogg'
-
-/obj/item/projectile/bullet/blastwave/New()
-	..()
-	var/sound = rand(1,6)
-	switch(sound)
-		if(1)
-			fire_sound = 'sound/effects/Explosion1.ogg'
-		if(2)
-			fire_sound = 'sound/effects/Explosion2.ogg'
-		if(3)
-			fire_sound = 'sound/effects/Explosion3.ogg'
-		if(4)
-			fire_sound = 'sound/effects/Explosion4.ogg'
-		if(5)
-			fire_sound = 'sound/effects/Explosion5.ogg'
-		if(6)
-			fire_sound = 'sound/effects/Explosion6.ogg'
+	var/true_range = 0
+	fire_sound = null//no need, we'll call explosion_effect() instead
+	var/list/affected_turfs = list()
+	var/list/cached_ex_act = list()
+	var/list/heavy_turfs = list()
+	var/list/medium_turfs = list()
+	var/list/light_turfs = list()
+	var/widening_rate = 5
+	var/distance_traveled = 0
+	var/radius = 0
+	projectile_speed = 0//we try to quickly and immediately scan all the turfs, then add some delay when it comes to actually loop through them
+	var/datum/sensed_explosion/explosion_datum
+	var/time_spent = 0
 
 /obj/item/projectile/bullet/blastwave/OnFired()
 	..()
 	if(!heavy_damage_range || !medium_damage_range || !light_damage_range)
 		bullet_die()
 		return
+	explosion_datum = new(starting.x, starting.y, starting.z, heavy_damage_range, medium_damage_range, light_damage_range, true_range)
+	time_spent = start_watch()
+	explosion_effect(starting, heavy_damage_range, medium_damage_range, light_damage_range)
+
+/obj/item/projectile/bullet/blastwave/to_bump(var/atom/A)
+	forceMove(get_step(loc,dir))//The projectile passes freely through everything. The actual explosion dampening is calculated later.
 
 /obj/item/projectile/bullet/blastwave/process_step()
 	..()
-	var/turf/T = get_turf(src)
-	if(light_damage_range)
-		if(medium_damage_range)
-			if(heavy_damage_range)
-				for(var/atom/movable/A in T.contents)
-					if(!istype(A, /obj/item/organ/external/head))
-						A.ex_act(1)
-				T.ex_act(1)
-				heavy_damage_range -= 1
-			else
-				for(var/atom/movable/A in T.contents)
-					A.ex_act(2)
-				T.ex_act(2)
-				medium_damage_range -= 1
-		else
-			for(var/atom/movable/A in T.contents)
-				A.ex_act(3)
-			T.ex_act(3)
-			light_damage_range -= 1
-	else
+	if (!loc)
+		return
+
+	distance_traveled++
+
+	if (distance_traveled > light_damage_range)
 		bullet_die()
+		return
+
+	radius = round(distance_traveled/widening_rate)
+
+	var/max_steps = distance_traveled + radius + 1
+
+	var/turf/relative_epicenter = locate(override_starting_X,override_starting_Y,z)
+
+	var/turf/T = loc
+	for (var/turf/U in range(radius,T))
+		if (!(U in affected_turfs))
+			affected_turfs |= U
+			var/steps = 0
+			var/turf/Trajectory = U
+			var/dist = cheap_pythag(U.x - override_starting_X, U.y - override_starting_Y)
+			while((Trajectory != starting) && (steps <= max_steps))
+				Trajectory = get_step_towards(Trajectory,relative_epicenter)
+				dist += CalculateExplosionSingleBlock(Trajectory)
+				steps++//failsafe in case of fuckery such as the projectile finding itself on a different Z level
+			if (dist <= heavy_damage_range)
+				heavy_turfs += U
+			else if (dist <= medium_damage_range)
+				medium_turfs += U
+			else if (dist <= light_damage_range)
+				light_turfs += U
+
+/obj/item/projectile/bullet/blastwave/teleport_act()
+	override_starting_X = clamp(override_starting_X,1,world.maxx)
+	override_starting_Y = clamp(override_starting_Y,1,world.maxy)
+
+/obj/item/projectile/bullet/blastwave/bullet_die()
+	//the bullet moved all the way, now to explode dem turfs
+	spawn()
+		for (var/turf/T in heavy_turfs)
+			blast_turf(T,1)
+		for (var/turf/T in medium_turfs)
+			blast_turf(T,2)
+		for (var/turf/T in light_turfs)
+			blast_turf(T,3)
+
+		time_spent = stop_watch(time_spent)
+		if (explosion_datum)
+			explosion_datum.ready(time_spent)
+	..()
+
+/obj/item/projectile/bullet/blastwave/proc/blast_turf(var/turf/T,var/severity)
+	explosion_datum.paint(T,severity)
+	for(var/atom/movable/A in T.contents)
+		if(!istype(A, /obj/item/organ/external/head))
+			A.ex_act(severity)
+	for (var/direction in cardinal)
+		var/turf/U = get_step(T,direction)
+		if (istype(U, /turf/simulated/floor) && !(U in affected_turfs))
+			var/turf/simulated/floor/F = U
+			switch (severity)
+				if (1)
+					F.break_tile()
+				if (2)
+					if (prob(50))
+						F.break_tile()
+				if (3)
+					if (prob(25))
+						F.break_tile()
+	T.ex_act(severity)
 
 /obj/item/projectile/bullet/blastwave/ex_act()
 	return
@@ -844,8 +904,10 @@
 	custom_impact = 1
 	rotate = 0
 	var/hard = 0
+	var/radius = 1//big glob of liquid, splashes a bit on surroundings
+	var/atom/splashed_atom = null
 
-/obj/item/projectile/bullet/liquid_blob/New(atom/T, var/hardness = null)
+/obj/item/projectile/bullet/liquid_blob/New(atom/T, var/hardness = null, var/mixed_color=null, var/mixed_alpha=255, var/_rad=1)
 	..(T)
 	hard = hardness
 	if(hard)
@@ -853,37 +915,34 @@
 		create_reagents(10)
 	else
 		create_reagents(50)
+	icon += mixed_color
+	alpha = mixed_alpha
+	radius = _rad
 
-/obj/item/projectile/bullet/liquid_blob/OnFired()
-	src.icon += mix_color_from_reagents(reagents.reagent_list)
-	src.alpha = mix_alpha_from_reagents(reagents.reagent_list)
-	..()
+/obj/item/projectile/bullet/liquid_blob/to_bump(var/atom/A)
+	splashed_atom = A//doesn't matter if it's actually the atom we end up splashing since we only use that var on bullet_die()
+	. = ..()
+	if (. && A)
+		if ((special_collision == PROJECTILE_COLLISION_DEFAULT) || (special_collision == PROJECTILE_COLLISION_BLOCKED))
+			if(istype(A, /mob))
+				if(hard)
+					var/splash_verb = pick("dousing","completely soaking","drenching","splashing")
+					A.visible_message("<span class='warning'>\The [src] smashes into [A], [splash_verb] \him!</span>",
+											"<span class='warning'>\The [src] smashes into you, [splash_verb] you!</span>")
+				else
+					var/splash_verb = pick("douses","completely soaks","drenches","splashes")
+					A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
+											"<span class='warning'>\The [src] [splash_verb] you!</span>")
 
-/obj/item/projectile/bullet/liquid_blob/on_hit(atom/A as mob|obj|turf|area)
-	if(!A)
-		return
-	..()
+
+/obj/item/projectile/bullet/liquid_blob/bullet_die()
 	if(reagents.total_volume)
-		for(var/datum/reagent/R in reagents.reagent_list)
-			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))
-		if(istype(A, /mob))
-			if(hard)
-				var/splash_verb = pick("dousing","completely soaking","drenching","splashing")
-				A.visible_message("<span class='warning'>\The [src] smashes into [A], [splash_verb] \him!</span>",
-										"<span class='warning'>\The [src] smashes into you, [splash_verb] you!</span>")
-			else
-				var/splash_verb = pick("douses","completely soaks","drenches","splashes")
-				A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
-										"<span class='warning'>\The [src] [splash_verb] you!</span>")
-			splash_sub(reagents, get_turf(A), reagents.total_volume/2)
-		else
-			splash_sub(reagents, get_turf(src), reagents.total_volume/2)
-		splash_sub(reagents, A, reagents.total_volume)
-		return 1
-
-/obj/item/projectile/bullet/liquid_blob/OnDeath()
-	if(get_turf(src))
-		playsound(src, 'sound/effects/slosh.ogg', 20, 1)
+		var/turf/T = get_turf(splashed_atom)
+		if (!T.density && T.Adjacent(src))
+			loc = T
+		playsound(loc, 'sound/effects/slosh.ogg', 20, 1)
+		reagents.splashplosion(radius)
+	..()
 
 /obj/item/projectile/bullet/pellet
 	name = "buckshot pellet"

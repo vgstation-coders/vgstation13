@@ -307,7 +307,6 @@
 	plane = ABOVE_HUMAN_PLANE
 
 	autoignition_temperature = AUTOIGNITION_WOOD // TODO:  Special ash subtype that looks like charred table legs.
-	fire_fuel = 5
 
 /obj/structure/wooden_support/fire_act()
 	visible_message("<span class='danger'>\The [src] catches fire and collapses!</span>")

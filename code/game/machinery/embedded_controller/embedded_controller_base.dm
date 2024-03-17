@@ -28,7 +28,7 @@
 
 		build=0
 		stat |= MAINT
-		src.update_icon()
+	update_icon()
 
 /obj/machinery/embedded_controller/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	. = ..()
@@ -196,10 +196,13 @@
 	if(on && program)
 		if(program.memory["processing"])
 			icon_state = "airlock_control_process"
+			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_control_process")
 		else
 			icon_state = "airlock_control_standby"
+			update_moody_light('icons/lighting/moody_lights.dmi', "overlay_control_standby")
 	else
 		icon_state = "airlock_control_off"
+		kill_moody_light()
 
 /obj/machinery/embedded_controller/radio/post_signal(datum/signal/signal)
 	signal.transmission_method = TRANSMISSION_RADIO

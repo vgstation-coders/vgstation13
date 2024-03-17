@@ -74,7 +74,11 @@
 	var/maxdam = 0
 	var/datum/organ/external/damaged_organ = null
 	for(var/datum/organ/external/E in organs)
-		if(E.status & ORGAN_DEAD || E.status & ORGAN_PEG)
+		//dead limbs don't cause or feel pain
+		if(E.status & ORGAN_DEAD)
+			continue
+		//peg limbs and metal limbs don't cause pain
+		if(!E.is_organic())
 			continue
 		// CLEANLY amputated limbs don't cause pain
 		else if(E.amputated)

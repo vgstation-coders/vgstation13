@@ -59,6 +59,7 @@
 		/obj/item/device/gps/secure/command,
 		/obj/item/weapon/card/debit/preferred/department/civilian,
 		/obj/item/mulebot_laser,
+		/obj/item/clothing/glasses/hud/wage,
 	)
 
 /obj/structure/closet/secure_closet/hop2
@@ -256,6 +257,7 @@
 		/obj/item/clothing/accessory/holster/handgun/wornout,
 		/obj/item/weapon/gun/projectile/detective,
 		/obj/item/weapon/storage/box/large/detectivegear,
+		/obj/item/weapon/storage/box/nt_disguise_kit,
 	)
 
 /obj/structure/closet/secure_closet/detective/update_icon()

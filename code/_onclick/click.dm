@@ -3,12 +3,16 @@
 	~Sayu
 */
 
-//A workaround for a BYOND bug (or at least weird behavior). It's classified.
-/client/Click(object, location, control, params)
-	var/list/p = params2list(params)
-	if(p["drag"])
-		return
-	..()
+//BYOND has a quirk (maybe bug?) where, if you initiate a clickdrag with one mouse button, any clicks with another button during the drag hit the object being dragged.
+//This allowed you to, for example, start a middle-click drag on someone and then have an aimbot that allows you to effortlessly hit them in melee or ranged combat as long as you held MMB.
+//This code discards clicks performed during a drag to prevent this.
+
+//As of 2024 this code has been commented out because the bug/exploit is no longer active.
+// /client/Click(object, location, control, params)
+// 	var/list/p = params2list(params)
+// 	if(p["drag"])
+// 		return
+// 	..()
 
 /*
 	Before anything else, defer these calls to a per-mobtype handler.  This allows us to
@@ -53,12 +57,11 @@
 
 #define MAX_ITEM_DEPTH	3 //how far we can recurse before we can't get an item
 
-/mob/proc/ClickOn( var/atom/A, var/params )
+/mob/proc/ClickOn(var/atom/A, var/params)
 	if(!click_delayer)
 		click_delayer = new
 	if(timestopped)
 		return 0 //under effects of time magick
-
 	if(click_delayer.blocked())
 		return
 	click_delayer.setDelay(1)
@@ -67,11 +70,15 @@
 		build_click(src, client.buildmode, params, A)
 		return
 
+	var/obj/item/held_item = get_active_hand()
+
 	var/list/modifiers = params2list(params)
 	INVOKE_EVENT(src, /event/clickon, "user" = src,	"modifiers" = modifiers, "target" = A)
 	if(modifiers["middle"])
 		if(modifiers["shift"])
 			MiddleShiftClickOn(A)
+		else if (modifiers["alt"])
+			MiddleAltClickOn(A)
 		else
 			MiddleClickOn(A)
 		return
@@ -79,6 +86,8 @@
 		ShiftClickOn(A)
 		return
 	if(modifiers["alt"]) // alt and alt-gr (rightalt)
+		if (held_item && held_item.AltFrom(A,src,A.Adjacent(src, MAX_ITEM_DEPTH),params))
+			return
 		AltClickOn(A)
 		return
 	if(modifiers["ctrl"])
@@ -95,8 +104,12 @@
 		return
 
 	face_atom(A) // change direction to face what you clicked on
-
-	if(attack_delayer.blocked()) // This was next_move.  next_attack makes more sense.
+	
+	var/storage
+	if(isshelf(A) || istype(A, /obj/abstract/screen/storage) || (isitem(A) && !get_active_hand())) // Picking items up and/or storing them/retrieving them from storage will not be affected by the attack delay.
+		storage = 1
+	
+	if(attack_delayer.blocked() && !storage) // This was next_move.  next_attack makes more sense.
 		return
 //	to_chat(world, "next_attack is [next_attack] and world.time is [world.time]")
 	if(istype(loc,/obj/mecha))
@@ -116,7 +129,6 @@
 			throw_item(A)
 		return
 
-	var/obj/item/held_item = get_active_hand()
 	var/item_attack_delay = 0
 
 	if(held_item == A)
@@ -140,7 +152,9 @@
 			var/resolved = held_item.preattack(A, src, 1, params)
 			if(!resolved)
 				resolved = A.attackby(held_item, src, params)
-				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
+				if(ismob(A) && a_intent == I_HELP && can_operate(A, src, held_item) && !A.gcDestroyed)
+					delayNextAttack(SURGERY_DELAY_TIME) //Surgery steps use the click delay (0.1 second)
+				else if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
 					delayNextAttack(item_attack_delay)
 				if(!resolved && A && !A.gcDestroyed && held_item && !held_item.gcDestroyed)
 					held_item.afterattack(A,src,1,params) // 1 indicates adjacency
@@ -165,6 +179,17 @@
 			else
 				//Clicked on a non-adjacent atom that is not in view
 				RemoteClickOn(A, params, held_item, client.eye)
+		else if(mind && mind.assigned_role == "AI") // clown AI stuff
+			if(spell_channeling)
+				spell_channeling.channeled_spell(A, bypassrange = TRUE)
+			else if(istype(A,/obj/machinery/door/airlock))
+				var/obj/machinery/door/airlock/D = A
+				if(D.density)
+					D.Topic("aiEnable=7", list("aiEnable"="7"), 1)
+				else
+					D.Topic("aiDisable=7", list("aiDisable"="7"), 1)
+			else
+				RangedClickOn(A, params, held_item)
 		else
 			RangedClickOn(A, params, held_item)
 
@@ -320,7 +345,14 @@
 
 /atom/proc/AltClick(var/mob/user)
 	var/turf/T = get_turf(src)
-	if(T && (T in range(1, user.loc)) && (T in view(1, user.virtualhearer))) //If next to user's location (to allow locker and mech alt-clicks) and if the user can actually view it
+	var/valid = FALSE
+	if(isAI(user))
+		var/mob/living/silicon/ai/ai = user
+		if(T && (T in range(7, ai.eyeobj.loc)))
+			valid = TRUE
+	else if(T && (T in range(1, user.loc)) && (T in view(1, user.virtualhearer))) //If next to user's location (to allow locker and mech alt-clicks) and if the user can actually view it
+		valid = TRUE
+	if(valid)
 		if(user.listed_turf == T)
 			user.listed_turf = null
 		else
@@ -432,3 +464,7 @@
 	var/obj/item/W = get_active_hand()
 	if (W)
 		W.MouseWheeled(src, delta_x, delta_y, params)
+
+//Currently used to allow a little bit of freedom in click-dragging for melee combat in _onclick/drag_drop.dm
+/mob/living/MouseDown(location, control, params, var/past_time)
+	usr.client.click_held_down_time = world.timeofday

@@ -422,12 +422,12 @@
 		if(H.organ_has_mutation(LIMB_HEAD, M_BEAK))
 			var/obj/item/mask = H.get_item_by_slot(slot_wear_mask)
 			if(!mask || !(mask.body_parts_covered & MOUTH)) //If our mask doesn't cover mouth, we can use our beak to help us while butchering
-				butchSpeed += 0.25
+				butchSpeed += 0.5
 				if(!toolName)
 					toolName = "beak"
 		if(H.organ_has_mutation(H.get_active_hand_organ(), M_CLAWS))
 			if(!istype(H.gloves))
-				butchSpeed += 0.25
+				butchSpeed += 0.5
 				if(!toolName)
 					toolName = "claws"
 	else
@@ -451,7 +451,7 @@
 
 
 /mob/living/proc/butcherChooseStep(mob/user, var/list/butcherOptions, butcherTool)
-	var/choice = show_radial_menu(user,loc,butcherOptions,custom_check = new /callback(src, src::radial_check(), user))
+	var/choice = show_radial_menu(user,loc,butcherOptions,custom_check = new /callback(src, nameof(src::radial_check()), user))
 	if(!radial_check(user))
 		return
 	if(!butcherCheck(user, butcherTool))

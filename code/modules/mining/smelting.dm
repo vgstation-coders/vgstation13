@@ -133,6 +133,20 @@
 	)
 	yieldtype = /obj/item/stack/sheet/cardboard
 
+/datum/smelting_recipe/cloth
+	name = "Cloth"
+	ingredients=list(
+		MAT_FABRIC = CC_PER_SHEET_FABRIC
+	)
+	yieldtype = /obj/item/stack/sheet/cloth
+
+/datum/smelting_recipe/wax
+	name = "Wax"
+	ingredients=list(
+		MAT_WAX = CC_PER_SHEET_WAX
+	)
+	yieldtype = /obj/item/stack/sheet/wax
+
 /datum/smelting_recipe/mythril
 	name = "Mythril"
 	ingredients=list(

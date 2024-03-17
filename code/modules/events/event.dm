@@ -5,6 +5,7 @@
 	var/oneShot			= 0	//If true, then the event removes itself from the list of potential events on creation.
 
 	var/activeFor		= 0	//How long the event has existed. You don't need to change this.
+	var/last_fired		= 0 //When was the last time an event of this exact type fired?
 
 //Called by event dynamic, returns the percent chance to fire if successful, 0 otherwise.
 // Args: list: active_with_role. The number of jobs that have active members. Used as active_with_role["AI"] = number of active.
@@ -86,3 +87,14 @@
 		setup()
 		events.Add(src)
 	..()
+
+//Check the time since last fired, if at all.
+//Find the percentage of an hour that has passed since then in deciseconds.
+//For example, if 55 minutes have passed, 36000-33000 = 3000
+//Weight is lowered by this value over 300 deciseconds. As in the above example, 3000/300=10. Reduce weight by 10.
+//Almost no event can fire within 25 minutes of its last firing (~50 weight reduction)
+/datum/event/proc/recency_weight()
+	if(!last_fired)
+		return 0
+	var/time_until_recharge = (1 HOURS) - (world.time - last_fired)
+	return max(0,time_until_recharge / (30 SECONDS))

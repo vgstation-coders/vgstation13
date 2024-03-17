@@ -108,17 +108,33 @@
 			sleep(3)
 
 		qdel(D)
-
+	update_icon()
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
 //space cleaner
 /obj/item/weapon/reagent_containers/spray/cleaner
 	name = "space cleaner"
 	desc = "BLAM!-brand non-foaming space cleaner!"
+	var/image/content_reagent
 
 /obj/item/weapon/reagent_containers/spray/cleaner/New()
 	..()
 	reagents.add_reagent(CLEANER, 250)
+	content_reagent = image(icon,src,"cleaner-content3")
+	update_icon()
+
+/obj/item/weapon/reagent_containers/spray/cleaner/on_reagent_change()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/spray/cleaner/update_icon()
+	overlays.len = 0
+	if (!is_empty())
+		if (!content_reagent)
+			content_reagent = image(icon,src,"cleaner-content3")
+		content_reagent.icon_state = "cleaner-content[clamp(round(3*reagents.total_volume/reagents.maximum_volume)+1,1,3)]"
+		content_reagent.color = mix_color_from_reagents(reagents.reagent_list)
+		content_reagent.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		overlays += content_reagent
 
 //pepperspray
 /obj/item/weapon/reagent_containers/spray/pepper
@@ -180,6 +196,16 @@
 /obj/item/weapon/reagent_containers/spray/bugzapper/New()
 	..()
 	reagents.add_reagent(INSECTICIDE, 250)
+
+//Fake Xeno Creep Sprayer
+/obj/item/weapon/reagent_containers/spray/creepspray
+	name = "Alien Weed Spray"
+	desc = "You're unsure if this is meant to cull or create weeds. The Discount Dan logo is haphazardly slapped on top of a faded yellow 'W' and gray 'Y'"
+	volume = 250
+
+/obj/item/weapon/reagent_containers/spray/creepspray/New()
+	..()
+	reagents.add_reagent(FAKE_CREEP, 250)
 
 //chemsprayer
 /obj/item/weapon/reagent_containers/spray/chemsprayer

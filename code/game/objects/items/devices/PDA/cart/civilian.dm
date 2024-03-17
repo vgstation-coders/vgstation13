@@ -25,8 +25,7 @@
     if (!cl)
         menu += "ERROR: Unable to determine current location."
     else
-        menu += "Current Orbital Location: <b>\[[cl.x-WORLD_X_OFFSET[cl.z]],[cl.y-WORLD_Y_OFFSET[cl.z]]\]</b>"
-        menu += "<br><A href='byond://?src=\ref[src];choice=49'>(Refresh Coordinates)</a><br>"
+        menu += "Current Orbital Location: <b>\[[cl.x-WORLD_X_OFFSET[cl.z]], [cl.y-WORLD_Y_OFFSET[cl.z]]\]</b>"
         menu += "<h4>Located Mops:</h4>"
         var/ldat
         for (var/obj/item/weapon/mop/M in mop_list)
@@ -34,8 +33,8 @@
             if(ml)
                 if (ml.z != cl.z)
                     continue
-                var/direction = get_dir(src, M)
-                ldat += "Mop - <b>\[[ml.x-WORLD_X_OFFSET[ml.z]],[ml.y-WORLD_Y_OFFSET[ml.z]] ([uppertext(dir2text(direction))])\]</b> - [M.reagents.total_volume ? "Wet" : "Dry"]<br>"
+                var/direction = get_dir(cl, M)
+                ldat += "Mop - <b>\[[ml.x-WORLD_X_OFFSET[ml.z]], [ml.y-WORLD_Y_OFFSET[ml.z]] ([uppertext(dir2text_short(direction))])\]</b> - [M.reagents.total_volume ? "Wet" : "Dry"]<br>"
         if (!ldat)
             menu += "None"
         else
@@ -47,8 +46,8 @@
             if(bl)
                 if (bl.z != cl.z)
                     continue
-                var/direction = get_dir(src, B)
-                ldat += "Bucket - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b> - Water level: [B.reagents.total_volume]/100<br>"
+                var/direction = get_dir(cl, B)
+                ldat += "Bucket - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]], [bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text_short(direction))])\]</b> - Water level: [B.reagents.total_volume]/100<br>"
         if (!ldat)
             menu += "None"
         else
@@ -60,8 +59,8 @@
             if(bl)
                 if (bl.z != cl.z)
                     continue
-                var/direction = get_dir(src, B)
-                ldat += "Cleanbot - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b> - [B.on ? "Online" : "Offline"]<br>"
+                var/direction = get_dir(cl, B)
+                ldat += "Cleanbot - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]], [bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text_short(direction))])\]</b> - [B.on ? "Online" : "Offline"]<br>"
         if (!ldat)
             menu += "None"
         else
@@ -73,8 +72,8 @@
             if(bl)
                 if (bl.z != cl.z)
                     continue
-                var/direction = get_dir(src, J)
-                ldat += "Jani-Cart - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b> - [J.upgraded ? "Upgraded" : "Unupgraded"]<br>"
+                var/direction = get_dir(cl, J)
+                ldat += "Jani-Cart - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]], [bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text_short(direction))])\]</b> - [J.upgraded ? "Upgraded" : "Unupgraded"]<br>"
         if (!ldat)
             menu += "None"
         else
@@ -85,8 +84,8 @@
             if(bl)
                 if (bl.z != cl.z)
                     continue
-                var/direction = get_dir(src, K)
-                ldat += "Keys - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]],[bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text(direction))])\]</b><br>"
+                var/direction = get_dir(cl, K)
+                ldat += "Keys - <b>\[[bl.x-WORLD_X_OFFSET[bl.z]], [bl.y-WORLD_Y_OFFSET[bl.z]] ([uppertext(dir2text_short(direction))])\]</b><br>"
         if (!ldat)
             menu += "None"
         else
@@ -226,20 +225,51 @@
 		if (mule.z != user.z)
 			continue
 		dat += {"<li>
-				<i>[mule]</i>: [mule.return_status()] in [get_area_name(mule)] <br/>
-				<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=summon;user=\ref[user]'>[mule.summoned ? "Halt" : "Summon"] <br/>
-				<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=switch_power;user=\ref[user]'>Turn [mule.on ? "off" : "on"] <br/>
-				<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=return_home;user=\ref[user]'>Send home</a> <br/>
-				<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=[cart_device.saved_destination];user=\ref[user]'>Send to:</a> <a href='?src=\ref[src];change_destination=1'>[cart_device.saved_destination] - EDIT</a> <br/>
-				</li>"}
+				<i>[mule]</i> - Charge: [mule.cell ? mule.cell.percent() : 0]%<br/>
+				[mule.return_status()] in [get_area_name(mule)]<br/>"}
+		var/atom/load = mule.return_load()
+		if(load)
+			dat += {"Loaded: [load.name] <br/>"}
+		var/i = 1
+		if(mule.current_order)
+			dat += {"<b>Current</b>: [mule.destination] <br/>"}
+			i++
+		if(mule.destinations_queue.len)
+			for(var/datum/bot/order/mule/order in mule.destinations_queue)
+				dat += {"<b>&#35;[i]</b>: [order.loc_description] <br/>"}
+				i++
+		if(mule.destinations_queue.len || mule.current_order)
+			if(!mule.destinations_queue.len)
+				if(mule.current_order.returning)
+					dat += {"<b>Auto</b>: Return Home</br>"}
+			else
+				var/datum/bot/order/mule/order = mule.destinations_queue[mule.destinations_queue.len]
+				if(order?.returning)
+					dat += {"<b>Auto</b>: Return Home</br>"}
+		dat += {"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=switch_power;user=\ref[user]'>Turn [mule.on ? "off" : "on"]</a> <br/>"}
+		if(mule.on)
+			dat +=	{"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=summon;user=\ref[user]'>Summon Here </a><br/>"}
+			dat +=	{"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=pause;user=\ref[user]'>[mule.mode == 6 ? "Unpause" : "Pause"] </a><br/>"}
+			dat +=	{"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=clear_queue;user=\ref[user]'>Purge Queue </a><br/>"}
+			dat += {"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=return_home;user=\ref[user]'>Send home</a> <br/>"}
+			dat += {"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=honk;user=\ref[user]'>Honk</a> <br/>"}
+			dat += {"<a href='?src=\ref[cart_device.radio];bot=\ref[mule];command=send_to;place=\ref[cart_device.saved_destination];user=\ref[user]'>Send to: [cart_device.saved_destination]</a> - <a href='?src=\ref[src];change_destination=1'>EDIT</a> <br/>
+			</li>"}
+		dat += {"<br/>"}
 	dat += "</ul>"
 	return dat
 
 /datum/pda_app/cart/mulebot/Topic(href, href_list)
-    if(..())
-        return
-    if(href_list["change_destination"])
-        var/new_dest = stripped_input(usr, "Set the new destination", "New mulebot destination")
-        if (new_dest)
-            cart_device.saved_destination = new_dest
-    refresh_pda()
+	if (..())
+		return
+	if (href_list["change_destination"])
+		var/list/foundbeacons = list()
+		for (var/obj/machinery/navbeacon/found in navbeacons)
+			if(!found.location || !isturf(found.loc))
+				continue
+			if(found.freq == 1400)
+				foundbeacons.Add(found.location)
+		var/new_dest = input(usr, "Set the new destination", "New mulebot destination") as null|anything in foundbeacons
+		if (new_dest)
+			cart_device.saved_destination = new_dest
+	refresh_pda()

@@ -145,7 +145,7 @@
 	if(!istype(M))
 		return
 
-	M.register_event(/event/resist, src, src::manual_unbuckle())
+	M.register_event(/event/resist, src, nameof(src::manual_unbuckle()))
 
 	last_special = world.time
 
@@ -157,7 +157,7 @@
 	if(!istype(M))
 		return
 
-	M.unregister_event(/event/resist, src, src::manual_unbuckle())
+	M.unregister_event(/event/resist, src, nameof(src::manual_unbuckle()))
 
 /obj/effect/plantsegment/proc/entangle_mob(var/mob/living/victim)
 	if(!victim || victim.locked_to || !seed || seed.spread != 2 || is_locking(/datum/locking_category/plantsegment)) //How much of this is actually necessary, I wonder

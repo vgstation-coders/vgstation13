@@ -119,6 +119,13 @@
 	file_path = "maps/randomvaults/mining/angie_lair.dmm"
 	can_rotate = TRUE
 
+/datum/map_element/mining_surprise/maria
+	name = "Maria's hive"
+	desc = "Writhing ground, twisted veins, the feeling of utter helplessness is normal. Do not look away."
+
+	file_path = "maps/randomvaults/mining/mariahive.dmm"
+	can_rotate = TRUE
+
 /datum/map_element/mining_surprise/mine_bar
 	name = "The Buried Bar"
 	desc = "A miner walks into a bar, Dusky says \"Sorry, you're too young to be served\"."

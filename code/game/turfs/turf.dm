@@ -73,6 +73,8 @@
 
 	var/mute_time = 0
 
+	var/datum/paint_overlay/paint_overlay = null
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -141,6 +143,8 @@
 			if(Obj.flags & PROXMOVE)
 				spawn( 0 )
 					Obj.HasProximity(A, 1)
+	if (ishuman(A) && paint_overlay)
+		paint_overlay.add_paint_to_feet(A)
 	// THIS IS NOW TRANSIT STUFF
 	if ((!(A) || src != A.loc))
 		return
@@ -247,7 +251,7 @@
 
 /turf/proc/is_plating()
 	return 0
-/turf/proc/can_place_cables()
+/turf/proc/can_place_cables(var/override_space = FALSE)
 	return is_plating()
 /turf/proc/is_asteroid_floor()
 	return 0
@@ -488,7 +492,7 @@
 	for(var/dir in cardinal)
 		T = get_step(src, dir)
 		if(istype(T) && !T.density)
-			if(!LinkBlockedWithAccess(src, T, ID))
+			if(!LinkBlockedWithAccess(T, src, ID))
 				L.Add(T)
 	return L
 
@@ -723,3 +727,8 @@
 	if (!PathNodes)
 		PathNodes = list()
 	PathNodes["[id]"] = PN
+
+/turf/clean_act(var/cleanliness)
+	..()
+	if (cleanliness >= CLEANLINESS_BLEACH)
+		remove_paint_overlay(TRUE)

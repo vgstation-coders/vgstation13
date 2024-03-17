@@ -373,7 +373,7 @@
 
 			if(istype(holding, /obj/item/weapon/tank))
 				holding.manipulated_by = usr.real_name
-			holding.forceMove(loc)
+			usr.put_in_hands(holding)
 			holding = null
 
 	if (href_list["pressure_adj"])

@@ -44,15 +44,23 @@
 	if (!adjacency_flag)
 		return
 
-	if (!target.splashable())
+	if (!target.splashable() ||  isshelf(target))
 		return
 
 	if(ishuman(target) || iscorgi(target)) //Splashing handled in attack now
 		return
 
-	var/transfer_result = transfer(target, user, splashable_units = -1) // Potentially splash with everything inside
+	var/transfer_result
 
-	if((transfer_result > 10) && (isturf(target) || istype(target, /obj/machinery/portable_atmospherics/hydroponics)))	//if we're splashing a decent amount of reagent on the floor
+	if (controlled_splash)
+		transfer_result = transfer(target, user, splashable_units = amount_per_transfer_from_this)
+	else
+		transfer_result = transfer(target, user, splashable_units = -1)// Potentially splash with everything inside
+
+	if (transfer_result)
+		splash_special()
+
+	if((transfer_result >= 10) && (isturf(target) || istype(target, /obj/machinery/portable_atmospherics/hydroponics)))	//if we're splashing a decent amount of reagent on the floor
 		playsound(target, 'sound/effects/slosh.ogg', 25, 1)													//or in an hydro tray, then we make some noise.
 
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -65,9 +73,21 @@
 				..()
 		set_tiny_label(user)
 	attempt_heating(W, user)
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/glass/fits_in_iv_drip()
 	return 1
+
+/obj/item/weapon/reagent_containers/glass/update_icon()
+	update_temperature_overlays()
+
+/obj/item/weapon/reagent_containers/glass/update_temperature_overlays()
+	//we only care about the steam
+
+	if(reagents && reagents.total_volume)
+		steam_spawn_adjust(reagents.chem_temp)
+	else
+		steam_spawn_adjust(0)
 
 /obj/item/weapon/reagent_containers/glass/beaker
 	name = "beaker"
@@ -140,6 +160,7 @@
 		return 1
 
 /obj/item/weapon/reagent_containers/glass/beaker/on_reagent_change()
+	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/beaker/pickup(mob/user)
@@ -185,6 +206,9 @@
 	if(!is_open_container())
 		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
 		overlays += lid
+
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
 
 /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer
 	name = "small erlenmeyer flask"
@@ -251,6 +275,14 @@
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
 	opaque = TRUE
+	thermal_variation_modifier = 0
+	heat_conductivity = 0
+
+/obj/item/weapon/reagent_containers/glass/beaker/noreact/thermal_entropy()
+	thermal_entropy_containers.Remove(src)
+
+/obj/item/weapon/reagent_containers/glass/beaker/noreact/get_heat_conductivity()
+	return 0
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/arcane_act(mob/user, recursive)
 	flags &= ~NOREACT
@@ -368,14 +400,15 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bucket
-	desc = "It's a bucket."
-	name = "bucket"
+	name = "plastic bucket"
+	desc = "Can be used to store, carry, and pour reagents."
 	icon = 'icons/obj/janitor.dmi'
 	icon_state = "bucket"
 	item_state = "bucket"
 	species_fit = list(INSECT_SHAPED)
-	starting_materials = list(MAT_IRON = 200)
-	w_type = RECYK_METAL
+	starting_materials = list(MAT_PLASTIC = 200)
+	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = RECYK_PLASTIC
 	w_class = W_CLASS_MEDIUM
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = list(10,20,25,30,50,100,150)
@@ -388,11 +421,8 @@
 	..()
 	if(slot == slot_head)
 		if(reagents.total_volume)
-			for(var/atom/movable/O in M.loc)
-				reagents.reaction(O, TOUCH)
-			reagents.reaction(M.loc, TOUCH)
-			visible_message("<span class='warning'>The bucket's content spills on [src]</span>")
-			reagents.clear_reagents()
+			reagents.splashplosion(0)//splashing ourselves and everything on our tile with
+			visible_message("<span class='warning'>The bucket's content spills on \the [M].</span>")
 
 /obj/item/weapon/reagent_containers/glass/bucket/dissolvable()
 	var/mob/living/carbon/human/H = get_holder_of_type(src,/mob/living/carbon/human)
@@ -441,8 +471,10 @@
 		qdel(src)
 		return
 	attempt_heating(D, user)
+	process_temperature()
 
 /obj/item/weapon/reagent_containers/glass/bucket/on_reagent_change()
+	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bucket/update_icon()
@@ -455,6 +487,9 @@
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 
 		overlays += filling
+
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
 
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
 	..()
@@ -474,6 +509,7 @@
 		to_chat(usr, "<span class = 'notice'>You can't reseal the can's lid.")
 
 /obj/item/weapon/reagent_containers/glass/soupcan/on_reagent_change()
+	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/soupcan/update_icon()
@@ -486,6 +522,9 @@
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 
 		overlays += filling
+
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
 
 /*
 /obj/item/weapon/reagent_containers/glass/blender_jug
@@ -534,12 +573,24 @@
 /obj/item/weapon/reagent_containers/glass/kettle
 	name = "Kettle"
 	desc = "A pot made for holding hot drinks. Can hold up to 75 units."
-	icon_state = "kettle"
+	icon_state = "kettle_red"
 	starting_materials = list(MAT_IRON = 200)
 	volume = 75
 	w_type = RECYK_GLASS
 	amount_per_transfer_from_this = 10
 	flags = FPRINT  | OPENCONTAINER
+	thermal_variation_modifier = 0.01
+
+/obj/item/weapon/reagent_containers/glass/kettle/steam_spawn_adjust(var/_temp)
+	if (!("Steam" in particle_systems))
+		add_particles("Steam")
+	var/obj/abstract/particles_holder/steam_holder = particle_systems["Steam"]
+	if (_temp < STEAMTEMP)
+		steam_holder.particles.spawning = 0
+	else
+		steam_holder.particles.spawning = clamp(0.1 + 0.002 * (_temp - STEAMTEMP),0.1,0.5)
+		steam_holder.particles.position = list(12,5)
+		steam_holder.particles.scale = list(0.3, 0.3)
 
 /obj/item/weapon/reagent_containers/glass/kettle/red
 	icon_state = "kettle_red"
@@ -552,3 +603,8 @@
 
 /obj/item/weapon/reagent_containers/glass/kettle/green
 	icon_state = "kettle_green"
+
+/obj/item/weapon/reagent_containers/glass/kettle/full/New()
+	..()
+	icon_state = "kettle[pick("_red","_blue","_purple","_green")]"
+	reagents.add_reagent(TEA,75)

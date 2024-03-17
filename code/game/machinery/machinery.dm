@@ -161,6 +161,8 @@ Class Procs:
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
 	var/id_tag = null // Identify the machine
 
+	autoignition_temperature = 0 //machinery shouldn't burn
+
 /obj/machinery/cultify()
 	var/list/random_structure = list(
 		/obj/structure/cult_legacy/talisman,
@@ -179,6 +181,9 @@ Class Procs:
 	return ..()
 
 /obj/machinery/initialize()
+	..()
+	if (locate(/obj/structure/table) in loc)
+		table_shift()
 	if(machine_flags & PURCHASER)
 		reconnect_database()
 		linked_account = vendor_account
@@ -273,19 +278,18 @@ Class Procs:
 // increment the power usage stats for an area
 // defaults to power_channel
 /obj/machinery/proc/use_power(amount, chan = power_channel)
-	var/area/this_area = get_area(src)
 	if(connected_cell && connected_cell.charge > 0)   //If theres a cell directly providing power use it, only for cargo carts at the moment
 		if(connected_cell.charge < amount*0.75)	//Let them squeeze the last bit of power out.
 			connected_cell.charge = 0
 		else
 			connected_cell.use(amount*0.75)
 	else
-		if(!this_area)
-			return 0						// if not, then not powered.
-		if(!powered(chan)) //no point in trying if we don't have power
-			return 0
 
-		this_area.use_power(amount, chan)
+		var/area/power_area = get_area(src)
+		if(power_area && powered(chan, null, power_area)) //no point in trying if we don't have power
+			power_area.use_power(amount, chan)
+		else
+			return 0
 
 // called whenever the power settings of the containing area change
 // by default, check equipment channel & set flag
@@ -296,9 +300,10 @@ Class Procs:
 
 		if(!use_auto_lights)
 			return
-		if(stat & FORCEDISABLE)
-			return
-		set_light(light_range_on, light_power_on)
+		if(stat & (BROKEN|FORCEDISABLE))
+			set_light(0)
+		else
+			set_light(light_range_on, light_power_on)
 
 	else
 		stat |= NOPOWER
@@ -309,7 +314,7 @@ Class Procs:
 
 // returns true if the machine is powered (or doesn't require power).
 // performs basic checks every machine should do, then
-/obj/machinery/proc/powered(chan = power_channel, power_check_anyways = FALSE)
+/obj/machinery/proc/powered(chan = power_channel, power_check_anyways = FALSE, area/this_area)
 	if(!src.loc)
 		return FALSE
 
@@ -328,11 +333,10 @@ Class Procs:
 	if((machine_flags & FIXED2WORK) && !anchored)
 		return FALSE
 
-	var/area/this_area = get_area(src)
-	if(!this_area)
-		return FALSE
-
-	return this_area.powered(chan)
+	if(this_area)
+		return this_area.powered(chan)
+	else
+		return (get_area(src))?.powered(chan)
 
 /obj/machinery/proc/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
 	if("set_id" in href_list)
@@ -908,3 +912,20 @@ Class Procs:
 		if("Machine Location")
 			output_dir = 0
 			to_chat(user, "<span class='notice'>Output set.</span>")
+
+//Called when either built over a table, or when placing a table underneath, or said table gets unflipped
+/obj/machinery/proc/table_shift()
+	return
+
+//Called when a table underneath is removed, or flipped
+/obj/machinery/proc/table_unshift()
+	return
+
+/obj/machinery/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
+	. = ..()
+	if (.)
+		if (anchored)
+			if (locate(/obj/structure/table) in loc)
+				table_shift()
+		else
+			table_unshift()

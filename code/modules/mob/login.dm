@@ -17,15 +17,17 @@
 	computer_id	= client.computer_id
 	log_access("Login: [key_name(src)] from [lastKnownIP ? lastKnownIP : "localhost"]-[computer_id] || BYOND v[client.byond_version]")
 	if(config.log_access)
+		if(lastKnownIP == "127.0.0.1") //localhost
+			return
 		for(var/mob/M in player_list)
 			if(M == src)
 				continue
-			if( M.key && (M.key != key) )
+			if(M.key && (M.key != key))
 				var/matches
 				var/matches_both = FALSE
-				if( (M.lastKnownIP == client.address) )
+				if((M.lastKnownIP == client.address))
 					matches += "IP ([client.address])"
-				if( (M.computer_id == client.computer_id) )
+				if((M.computer_id == client.computer_id))
 					if(matches)
 						matches += " and "
 						matches_both = TRUE
@@ -107,7 +109,13 @@
 
 		if(M_FARSIGHT in mutations)
 			client.changeView(max(client.view, world.view+1))
-	CallHook("Login", list("client" = src.client, "mob" = src))
+
+	/* Handle media initialization */
+	client.media = new /datum/media_manager(src)
+	client.media.open()
+	client.media.update_music()
+
+	register_event(/event/mob_area_changed, src, nameof(src::OnMobAreaChanged()))
 
 	if(spell_masters)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)

@@ -18,7 +18,6 @@
 	attack_verb = list("slaps", "baps", "whaps")
 
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
 	var/amount = 0
 	var/maxamount = 20
 	var/papertype = /obj/item/weapon/paper

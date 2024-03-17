@@ -61,6 +61,13 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	lit = 1
 	update_brightness()
 
+/obj/item/weapon/match/extinguish()
+	..()
+	if (lit)
+		lit = -1
+		update_brightness()
+		visible_message("<span class='notice'>\The [name] goes out.</span>")
+
 /obj/item/weapon/match/examine(mob/user)
 	..()
 	switch(lit)
@@ -73,6 +80,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 //Also updates the name, the damage and item_state for good measure
 /obj/item/weapon/match/update_icon()
+	overlays.len = 0
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = null
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = null
+	update_blood_overlay()
+
 	switch(lit)
 		if(1)
 			name = "lit [base_name]"
@@ -80,6 +92,22 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			item_state = icon_state
 			damtype = BURN
 			attack_verb = lit_attack_verb
+
+			var/image/I = image(icon,src,"match-light")
+			I.appearance_flags = RESET_COLOR
+			I.blend_mode = BLEND_ADD
+			I.plane = LIGHTING_PLANE
+			overlays += I
+
+			//dynamic in-hands
+			var/image/left_I = image(inhand_states["left_hand"], src, "match-light")
+			var/image/right_I = image(inhand_states["right_hand"], src, "match-light")
+			left_I.blend_mode = BLEND_ADD
+			left_I.plane = LIGHTING_PLANE
+			right_I.blend_mode = BLEND_ADD
+			right_I.plane = LIGHTING_PLANE
+			dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
+			dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
 		if(0)
 			name = "[base_name]"
 			icon_state = "[base_icon]_unlit"
@@ -201,11 +229,12 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/base_icon = "cig"
 	var/burn_on_end = FALSE
 	surgerysound = 'sound/items/cautery.ogg'
+	var/light_icon = "cig-light"
 
 /obj/item/clothing/mask/cigarette/New()
-	..()
 	base_name = name
 	base_icon = icon_state
+	..()
 	flags |= NOREACT // so it doesn't react until you light it
 	create_reagents(chem_volume) // making the cigarrete a chemical holder with a maximum volume of 15
 	if(Holiday == APRIL_FOOLS_DAY)
@@ -213,6 +242,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	else
 		reagents.add_reagent(TOBACCO, 5)
 	update_brightness()
+	update_icon()
 
 /obj/item/clothing/mask/cigarette/Destroy()
 	. = ..()
@@ -226,6 +256,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 //Also updates the name, the damage and item_state for good measure
 /obj/item/clothing/mask/cigarette/update_icon()
+	overlays.len = 0
+	dynamic_overlay["[FACEMASK_LAYER]"] = null
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = null
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = null
+	update_blood_overlay()
 
 	switch(lit)
 		if(1)
@@ -234,6 +269,26 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			icon_state = "[base_icon]on"
 			damtype = BURN
 			attack_verb = lit_attack_verb
+
+			var/image/I = image(icon,src,light_icon)
+			I.appearance_flags = RESET_COLOR
+			I.blend_mode = BLEND_ADD
+			I.plane = LIGHTING_PLANE
+			overlays += I
+
+			//dynamic in-hands
+			var/image/face_I = image('icons/mob/mask.dmi', src, light_icon)
+			var/image/left_I = image(inhand_states["left_hand"], src, light_icon)
+			var/image/right_I = image(inhand_states["right_hand"], src, light_icon)
+			face_I.blend_mode = BLEND_ADD
+			face_I.plane = LIGHTING_PLANE
+			left_I.blend_mode = BLEND_ADD
+			left_I.plane = LIGHTING_PLANE
+			right_I.blend_mode = BLEND_ADD
+			right_I.plane = LIGHTING_PLANE
+			dynamic_overlay["[FACEMASK_LAYER]"] = face_I
+			dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
+			dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
 		if(0)
 			name = filling ? "[filling] [base_name]" : "[base_name]"
 			item_state = "[base_icon]off"
@@ -258,6 +313,20 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	if(lit)
 		return
 	light("<span class='danger'>The raging fire sets \the [src] alight.</span>")
+
+/obj/item/clothing/mask/cigarette/extinguish()
+	..()
+	if(lit)
+		if (ismob(loc))
+			loc.visible_message("<span class='notice'>[loc]'s [name] goes out.</span>","<span class='notice'>Your [name] goes out.</span>")
+		else
+			visible_message("<span class='notice'>\The [name] goes out.</span>")
+		var/turf/T = get_turf(src)
+		var/atom/new_butt = new type_butt(T)
+		transfer_fingerprints_to(new_butt)
+		lit = 0 //Needed for proper update
+		update_brightness()
+		qdel(src)
 
 /obj/item/clothing/mask/cigarette/is_hot()
 	if(lit)
@@ -313,7 +382,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/afterattack(obj/reagentholder, mob/user as mob)
 	..()
-	if(reagentholder.is_open_container() && !ismob(reagentholder) && reagentholder.reagents)
+	if(reagentholder.is_open_container() && reagentholder.reagents)
 		if(reagentholder.reagents.has_reagent(SACID) || reagentholder.reagents.has_reagent(PACID)) //Dumping into acid, a dumb idea
 			var/atom/new_butt = new type_butt(get_turf(reagentholder))
 			transfer_fingerprints_to(new_butt)
@@ -481,7 +550,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 //////////////
 
 /obj/item/clothing/mask/cigarette/bidi
-	name = "Bidi"
+	name = "\improper Bidi"
 	desc = "An acrid, loosely-rolled tobacco leaf, stuffed with herbs and spices and bound with twine."
 	icon_state = "bidi"
 	overlay_on = "bidilit"
@@ -490,7 +559,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	burn_on_end = TRUE
 
 /obj/item/clothing/mask/cigarette/goldencarp
-	name = "Golden Carp cigarette"
+	name = "\improper Golden Carp cigarette"
 	desc = "A cigarette made from light, fine paper, with a thin gold band above the filter."
 	icon_state = "goldencarp"
 	overlay_on = "goldencarplit"
@@ -498,7 +567,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/goldencarpbutt
 
 /obj/item/clothing/mask/cigarette/starlight
-	name = "Starlight cigarette"
+	name = "\improper Starlight cigarette"
 	desc = "A nicely-rolled smoke. Above the filter are a red and yellow band."
 	icon_state = "starlight"
 	overlay_on = "starlightlit"
@@ -506,7 +575,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/starlightbutt
 
 /obj/item/clothing/mask/cigarette/lucky
-	name = "Lucky Strike cigarette"
+	name = "\improper Lucky Strike cigarette"
 	desc = "Plain and unfiltered, just how great-great-grandad used to like them."
 	icon_state = "lucky"
 	overlay_on = "luckylit"
@@ -514,7 +583,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/luckybutt
 
 /obj/item/clothing/mask/cigarette/redsuit
-	name = "Redsuit cigarette"
+	name = "\improper Redsuit cigarette"
 	desc = "Slim and refined. A mild smoke for a serious smoker."
 	icon_state = "redsuit"
 	overlay_on = "redsuitlit"
@@ -522,15 +591,16 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/redsuitbutt
 
 /obj/item/clothing/mask/cigarette/ntstandard
-	name = "NT Standard cigarette"
+	name = "\improper NT Standard cigarette"
 	desc = "Matte grey with a blue band. Corporate loyalty with every puff."
 	icon_state = "ntstandard"
 	overlay_on = "ntstandardlit"
 	slot_flags = SLOT_MASK
 	type_butt = /obj/item/trash/cigbutt/ntstandardbutt
+	light_color = LIGHT_COLOR_CYAN
 
 /obj/item/clothing/mask/cigarette/spaceport
-	name = "Spaceport cigarette"
+	name = "\improper Spaceport cigarette"
 	desc = "The dull gold band wrapped around this cig does nothing to hide its cheap origins."
 	icon_state = "spaceport"
 	overlay_on = "spaceportlit"
@@ -566,7 +636,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 ////////////
 
 /obj/item/clothing/mask/cigarette/cigar
-	name = "Premium Cigar"
+	name = "\improper Premium Cigar"
 	desc = "A large roll of tobacco and... well, you're not quite sure. This thing's huge!"
 	icon_state = "cigar"
 	overlay_on = "cigarlit"
@@ -578,16 +648,18 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/cohiba
-	name = "Cohiba Robusto Cigar"
+	name = "\improper Cohiba Robusto Cigar"
 	desc = "There's little more you could want from a cigar."
 	icon_state = "cigar2"
 	overlay_on = "cigar2lit"
+	light_icon = "cig2-light"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/havana
-	name = "Premium Havanian Cigar"
+	name = "\improper Premium Havanian Cigar"
 	desc = "A cigar fit for only the best for the best."
 	icon_state = "cigar2"
+	light_icon = "cig2-light"
 	overlay_on = "cigar2lit"
 	smoketime = 7200
 	chem_volume = 30
@@ -681,10 +753,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	name = "blunt"
 	desc = "A special homemade cigar. Light it up and pass it around."
 	icon_state = "blunt"
+	light_icon = "blunt-light"
 	overlay_on = "bluntlit"
 	type_butt = /obj/item/trash/cigbutt/bluntbutt
 	slot_flags = SLOT_MASK
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 	lit_attack_verb = list("burns", "singes", "blunts")
 	smoketime = 420
@@ -845,6 +918,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/lit = 0
 	var/base_icon = "lighter"
 	surgerysound = 'sound/items/cautery.ogg'
+	var/light_icon = "lighter-light"
 
 /obj/item/weapon/lighter/New()
 	..()
@@ -878,6 +952,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 //Also updates the name, the damage and item_state for good measure
 /obj/item/weapon/lighter/update_icon()
+	overlays.len = 0
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = null
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = null
+	update_blood_overlay()
+
 	switch(lit)
 		if(1)
 			initial_name = name
@@ -886,6 +965,22 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			item_state = icon_state
 			damtype = BURN
 			attack_verb = lit_attack_verb
+
+			var/image/I = image(icon,src,light_icon)
+			I.appearance_flags = RESET_COLOR
+			I.blend_mode = BLEND_ADD
+			I.plane = LIGHTING_PLANE
+			overlays += I
+
+			//dynamic in-hands
+			var/image/left_I = image(inhand_states["left_hand"], src, light_icon)
+			var/image/right_I = image(inhand_states["right_hand"], src, light_icon)
+			left_I.blend_mode = BLEND_ADD
+			left_I.plane = LIGHTING_PLANE
+			right_I.blend_mode = BLEND_ADD
+			right_I.plane = LIGHTING_PLANE
+			dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
+			dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
 		if(0)
 			if(!initial_name)
 				initial_name = name
@@ -946,6 +1041,13 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		"<span class='notice'>You quietly shut off \the [src].</span>")
 		update_brightness()
 
+/obj/item/weapon/lighter/extinguish()
+	..()
+	if (lit)
+		fueltime = null
+		lit = 0
+		update_brightness()
+
 /obj/item/weapon/lighter/is_hot()
 	if(lit)
 		return source_temperature
@@ -996,6 +1098,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/open_sound = list('sound/items/zippo_open.ogg')
 	var/close_sound = list('sound/items/zippo_close.ogg')
 	fuel = 100 //Zippos da bes
+	light_icon = "zippo-light"
 
 /obj/item/weapon/lighter/zippo/attack_self(mob/living/user)
 	var/turf/T = get_turf(src)

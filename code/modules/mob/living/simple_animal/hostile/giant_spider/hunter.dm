@@ -22,4 +22,5 @@
 	speed = 2
 
 /mob/living/simple_animal/hostile/giant_spider/hunter/dead
+	iscorpse = 1
 	health = 0

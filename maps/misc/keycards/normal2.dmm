@@ -1,0 +1,110 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/simulated/wall,
+/area)
+"f" = (
+/turf/space,
+/area)
+"g" = (
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area)
+"r" = (
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless/damaged,
+/area)
+"t" = (
+/turf/simulated/floor/plating/airless/damaged,
+/area)
+"x" = (
+/obj/structure/grille,
+/obj/structure/lattice,
+/turf/space,
+/area)
+"C" = (
+/obj/structure/grille,
+/turf/simulated/floor/plating/airless,
+/area)
+"E" = (
+/turf/simulated/floor/engine/acoustic,
+/area)
+"H" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"N" = (
+/obj/effect/landmark/keycard,
+/turf/simulated/floor/engine/acoustic,
+/area)
+"T" = (
+/turf/simulated/floor/plating/airless,
+/area)
+"Y" = (
+/obj/item/trash/popcorn,
+/turf/simulated/floor/plating/airless,
+/area)
+
+(1,1,1) = {"
+a
+a
+a
+T
+a
+r
+x
+"}
+(2,1,1) = {"
+a
+E
+H
+T
+T
+E
+a
+"}
+(3,1,1) = {"
+C
+Y
+g
+g
+g
+t
+C
+"}
+(4,1,1) = {"
+T
+T
+g
+N
+g
+t
+f
+"}
+(5,1,1) = {"
+C
+T
+H
+g
+g
+T
+a
+"}
+(6,1,1) = {"
+a
+H
+T
+T
+H
+E
+a
+"}
+(7,1,1) = {"
+x
+C
+a
+t
+a
+C
+a
+"}

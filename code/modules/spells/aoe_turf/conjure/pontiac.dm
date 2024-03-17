@@ -13,6 +13,7 @@
 	spell_flags = Z2NOCAST
 	invocation = "NO F'AT C'HX"
 	invocation_type = SpI_SHOUT
+	level_max = list(Sp_TOTAL = 0)
 	range = 0
 
 	summon_type = list(/obj/structure/bed/chair/vehicle/firebird)

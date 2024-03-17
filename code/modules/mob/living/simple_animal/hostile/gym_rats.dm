@@ -6,9 +6,9 @@
 	icon_state = "gymrat"
 	icon_living = "gymrat"
 	icon_dead = "gymrat-dead"
-	response_help  = "pets the"
-	response_disarm = "gently pushes aside the"
-	response_harm   = "stamps on the"
+	response_help  = "pets"
+	response_disarm = "gently pushes aside"
+	response_harm   = "stomps on the"
 	treadmill_speed = 6
 	health = 30
 	maxHealth = 30
@@ -250,7 +250,7 @@
 					scalerate -= (1/8)
 				else //roidrat
 					scalerate -= (1/10)
-				if(scalerate < 1) //to tame the float point inaccuracies 
+				if(scalerate < 1) //to tame the float point inaccuracies
 					scalerate = 1
 				var/matrix/M = matrix()
 				M.Scale(scalerate,scalerate)
@@ -271,7 +271,7 @@
 ///////////////////////////////////////////////////////////////////POMPADOUR RAT///////////
 // Who's that handsome rat? 911 emergency, there's a handsome rat in my house!
 /mob/living/simple_animal/hostile/retaliate/gym_rat/pompadour_rat
-	name = "pomdadour rat"
+	name = "pompadour rat"
 	desc = "Dang! That's a pretty hunky mouse, let me tell ya."
 	icon_state = "gymrat_pompadour"
 	icon_living = "gymrat_pompadour"
@@ -334,8 +334,8 @@
 	desc = "It's yoked! Holy shit!"
 	icon_state = "roidrat"
 	icon_living = "roidrat"
-	response_help  = "massages the"
-	response_disarm = "stares jealously at the"
+	response_help  = "massages"
+	response_disarm = "stares jealously at"
 	response_harm   = "angrily kicks the"
 	treadmill_speed = 3 // CARDIO IS FOR DWEEBS
 	health = 150 // Damn, brother

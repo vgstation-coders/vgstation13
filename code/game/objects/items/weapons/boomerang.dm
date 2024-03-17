@@ -12,7 +12,6 @@
 	force = 7
 
 	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 3
 	starting_materials = list(MAT_WOOD = CC_PER_SHEET_WOOD * 6)
 	w_type = RECYK_WOOD
 

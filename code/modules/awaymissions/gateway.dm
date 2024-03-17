@@ -165,7 +165,10 @@ var/list/gateway_centers_away = list() //List containing the gateways on away mi
 		var/obj/effect/landmark/L_dest = pick(good_landmarks)
 		M.forceMove(get_turf(L_dest))
 		M.dir = SOUTH
-		use_power(5000)
+	use_power(5000)
+	if(ismob(M))
+		var/datum/map_element/away_mission/AM = get_mission_by_z(dest.z)
+		AM.onArrive(M)
 
 
 /obj/machinery/gateway/center/attackby(obj/item/device/W as obj, mob/user as mob)

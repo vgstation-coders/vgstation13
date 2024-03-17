@@ -14,6 +14,7 @@
 	persistence_type = null //Yikes!
 
 	fake_DNA = "fuel splatters"
+	stain_name = "fuel"
 
 /obj/effect/decal/cleanable/liquid_fuel/New(newLoc,amt=1)
 	src.amount = amt

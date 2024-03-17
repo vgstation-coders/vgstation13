@@ -1,3 +1,26 @@
+
+/*
+	* Syndicate Sleeper Agent
+	* Malfunctioning AI
+	* Ragin' Mages
+	* Nuclear Assault
+	* Blob Overmind Storm
+	* Revolutionary Squad
+	* Space Ninja Attack
+	* Soul Rambler Migration
+	* Time Agent Anomaly
+	* The Grinch
+	* Loose Catbeast
+	* Vox Heist
+	* Plague Mice Invasion
+	* Spider Infestation
+	* Alien Infestation
+	* Pulse Demon Infiltration
+	* Grue Infestation
+	* Prisoner
+	* Judge
+*/
+
 //////////////////////////////////////////////
 //                                          //
 //            MIDROUND RULESETS             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,10 +50,13 @@
 	//we're still gonna trim the obvious (mobs without clients, jobbanned players, etc)
 	living_players = trim_list(candidates[CURRENT_LIVING_PLAYERS])
 	living_antags = trim_list(candidates[CURRENT_LIVING_ANTAGS])
-	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS], trim_prefs_set_to_no = FALSE)
-	list_observers = trim_list(candidates[CURRENT_OBSERVERS], trim_prefs_set_to_no = FALSE)
+	dead_players = trim_list(candidates[CURRENT_DEAD_PLAYERS], observer_override = TRUE)
+	list_observers = trim_list(candidates[CURRENT_OBSERVERS], observer_override = TRUE)
 
-/datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list(), trim_prefs_set_to_no = TRUE)
+//Added observer_override for when we want to count dead players and observers without
+//caring too much about their preferences nor their assigned roles.
+//To be used for trimming dead_players and list_observers.
+/datum/dynamic_ruleset/midround/proc/trim_list(var/list/L = list(), observer_override = FALSE)
 	var/list/trimmed_list = L.Copy()
 	var/role_id = initial(role_category.id)
 	var/role_pref = initial(role_category.required_pref)
@@ -39,13 +65,15 @@
 			trimmed_list.Remove(M)
 			continue
 		var/preference = get_role_desire_str(M.client.prefs.roles[role_pref])
-		if(preference == "Never" || (preference == "No" && trim_prefs_set_to_no)) // are they willing or at least not unwilling?
+		if(((preference == "Never") || (preference == "No")) && !observer_override) // are they willing or at least not unwilling?
 			trimmed_list.Remove(M)
 			continue
 		if (jobban_isbanned(M, role_id) || isantagbanned(M))//are they not antag-banned?
 			trimmed_list.Remove(M)
 			continue
 		if (M.mind)
+			if((observer_override && (M.stat == DEAD))) //We don't care about their role because they aren't alive
+				continue
 			if ((M.mind.assigned_role && (M.mind.assigned_role in restricted_from_jobs)) || (M.mind.role_alt_title && (M.mind.role_alt_title in restricted_from_jobs)))//does their job allow for it?
 				trimmed_list.Remove(M)
 				continue
@@ -74,7 +102,7 @@
 	return TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/ready(var/forced = 0)
-	if (required_candidates > (dead_players.len + list_observers.len) && !forced)
+	if ((required_candidates > (dead_players.len + list_observers.len)) && !forced)
 		return 0
 	return ..()
 
@@ -176,6 +204,7 @@
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Traitor"
 	cost = 10
 	requirements = list(50,40,30,20,10,10,10,10,10,10)
 	repeatable = TRUE
@@ -201,6 +230,8 @@
 			living_players -= player//we don't autotator people with roles already
 
 /datum/dynamic_ruleset/midround/autotraitor/ready(var/forced = 0)
+	if (forced)
+		return ..()
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
@@ -243,6 +274,7 @@
 	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Malf"
 	cost = 35
 	requirements = list(90,80,70,60,50,40,40,30,30,20)
 	high_population_requirement = 65
@@ -291,13 +323,16 @@
 	required_pop = list(20,20,15,15,15,15,15,10,10,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT/2
-	cost = 20
+	weight_category = "Wizard"
+	cost = 25
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 50
 	logo = "raginmages-logo"
 	repeatable = TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced=0)
+	if (forced)
+		return ..()
 	if(locate(/datum/dynamic_ruleset/roundstart/cwc) in mode.executed_rules)
 		message_admins("Rejected Ragin' Mages as there was a Civil War.")
 		return 0 //This is elegantly skipped by specific ruleset.
@@ -330,6 +365,7 @@
 	required_candidates = 5 // Placeholder, see op. cap
 	max_candidates = 5
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Nuke"
 	cost = 35
 	requirements = list(90, 90, 80, 40, 40, 40, 30, 20, 20, 10)
 	high_population_requirement = 60
@@ -340,9 +376,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
 	if (forced)
 		required_candidates = 1
-	return ..()
-
-/datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear/ready(var/forced = 0)
+		return ..()
 	if(locate(/datum/dynamic_ruleset/roundstart/nuclear) in mode.executed_rules)
 		return 0 //Unavailable if nuke ops were already sent at roundstart
 	var/indice_pop = min(10,round(living_players.len/5) + 1)
@@ -388,6 +422,7 @@
 	required_enemies = list(4,4,4,4,4,4,4,3,2,1)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Blob"
 	weekday_rule_boost = list("Tue")
 	cost = 45
 	requirements = list(90,90,80,40,40,40,30,20,20,10)
@@ -425,10 +460,11 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad
 	name = "Revolutionary Squad"
 	role_category = /datum/role/revolutionary/leader
-	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
+	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_pop = list(25,25,25,25,25,20,15,15,10,10)
 	required_candidates = 3
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Revolution"
 	cost = 30
 	requirements = list(90, 90, 90, 90, 40, 40, 30, 20, 10, 10)
 	high_population_requirement = 50
@@ -441,6 +477,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/revsquad/ready(var/forced = 0)
 	if(forced)
 		required_heads = 1
+		required_candidates = 1
 	if (find_active_faction_by_type(/datum/faction/revolution))
 		return FALSE //Never send 2 rev types
 	if(!..())
@@ -451,7 +488,11 @@
 			continue
 		if(player.mind.assigned_role in command_positions)
 			head_check++
-	return (head_check >= required_heads)
+	if (head_check < required_heads)
+		log_admin("Cannot accept Revolutionary Squad ruleset, not enough heads of staff.")
+		message_admins("Cannot accept Revolutionary Squad ruleset, not enough heads of staff.")
+		return FALSE
+	return TRUE
 
 
 //////////////////////////////////////////////
@@ -467,6 +508,7 @@
 	required_pop = list(15,15,15,15,15,10,10,10,5,5)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Ninja"
 	cost = 20
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	high_population_requirement = 20
@@ -474,6 +516,8 @@
 	repeatable = TRUE
 
 /datum/dynamic_ruleset/midround/from_ghosts/ninja/ready(var/forced=0)
+	if (forced)
+		return ..()
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
@@ -505,6 +549,7 @@
 	required_pop = list(0,0,10,10,15,15,20,20,20,25)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Rambler"
 	timeslot_rule_boost = list(SLEEPTIME)
 	cost = 5
 	requirements = list(5,5,15,15,25,25,55,55,55,75)
@@ -513,16 +558,18 @@
 	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/ready(var/forced=0)
-	if(!mode.executed_rules)
+	if (forced)
+		return ..()
+	if(mode.executed_rules.len <= 0)
 		return FALSE
 		//We have nothing to investigate!
-	if(living_players.len)
-		weight = clamp(300/(living_players.len^2),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
+	if(living_players.len > 0)
+		weight = clamp(300/(living_players.len * living_players.len),1,10) //1-5: 10; 8.3, 6.1, 4.6, 3.7, 3, ... , 1.2 (15)
 	//We don't cotton to freaks in highpop
 	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/rambler/generate_ruleset_body(mob/applicant)
-	var/mob/living/carbon/human/frankenstein/new_frank = new(pick(latejoin))
+	var/mob/living/carbon/human/frankenstein/new_frank = new(pick(latejoin), no_tail = TRUE)
 	var/gender = pick(MALE, FEMALE)
 	new_frank.randomise_appearance_for(gender)
 	new_frank.key = applicant.key
@@ -541,11 +588,14 @@
 	role_category = /datum/role/time_agent
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT * 0.4
+	weight_category = "Time"
 	cost = 10
 	requirements = list(70, 60, 50, 40, 30, 20, 10, 10, 10, 10)
 	logo = "time-logo"
 
 /datum/dynamic_ruleset/midround/from_ghosts/time_agent/ready(var/forced=0)
+	if (forced)
+		return ..()
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
@@ -579,8 +629,10 @@
 	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Special"
 	cost = 10
-	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
+	logo = "grinch-logo"
+	requirements = list(40,20,10,10,10,10,10,10,10,10)
 	high_population_requirement = 10
 	flags = MINOR_RULESET
 
@@ -594,7 +646,7 @@
 	var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	var/DD = text2num(time2text(world.timeofday, "DD")) 	// get the current day
 	var/accepted = (MM == 12 && DD > 15) || (MM == 1 && DD < 9) 	// Between the 15th of December and the 9th of January
-	return accepted
+	return (accepted || forced)
 
 
 /datum/dynamic_ruleset/midround/from_ghosts/grinch/generate_ruleset_body(var/mob/applicant)
@@ -618,6 +670,7 @@
 	role_category = /datum/role/catbeast
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Catbeast"
 	cost = 0
 	requirements = list(0,0,0,0,0,0,0,0,0,0)
 	high_population_requirement = 0
@@ -625,6 +678,8 @@
 	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/midround/from_ghosts/catbeast/ready(var/forced=0)
+	if (forced)
+		return ..()
 	if(mode.midround_threat>50) //We're threatening enough!
 		message_admins("Rejected catbeast ruleset, [mode.midround_threat] threat was over 50.")
 		return FALSE
@@ -647,6 +702,7 @@
 	required_pop = list(20,20,20,15,15,15,15,15,10,10)
 	required_candidates = 5
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Vox"
 	cost = 25
 	requirements = list(50,50,50,30,30,30,30,20,10,10)
 	high_population_requirement = 35
@@ -658,6 +714,7 @@
 	required_candidates = vox_cap[indice_pop]
 	if (forced)
 		required_candidates = 1
+		return ..()
 	if (required_candidates > (dead_players.len + list_observers.len))
 		return 0
 	. = ..()
@@ -699,6 +756,7 @@
 	required_candidates = 1
 	max_candidates = 5
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Plague"
 	cost = 25
 	requirements = list(90,70,50,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -731,6 +789,7 @@
 	required_candidates = 1
 	max_candidates = 12 // max amount of spiderlings spawned by a spider infestation random event
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Spider"
 	cost = 25
 	requirements = list(90,80,60,40,30,20,10,10,10,10)
 	high_population_requirement = 50
@@ -764,7 +823,8 @@
 	required_pop = list(25,20,20,15,15,15,10,10,10,10)
 	required_candidates = 1
 	max_candidates = 3
-	weight = 1
+	weight = BASE_RULESET_WEIGHT
+	weight_category = "Alien"
 	cost = 30
 	requirements = list(90,90,70,60,50,40,20,10,10,10)
 	high_population_requirement = 35
@@ -773,7 +833,6 @@
 	var/list/vents = list()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs/ready()
-	..()
 	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
 		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network)
 			if(temp_vent.network.normal_members.len > 50)	//Stops Aliens getting stuck in small networks. See: Security, Virology
@@ -781,9 +840,11 @@
 
 
 	if (vents.len == 0)
+		log_admin("A suitable vent couldn't be found for alien larva. That's bad.")
 		message_admins("A suitable vent couldn't be found for alien larva. That's bad.")
-		return
-	return 1
+		return FALSE
+
+	return ..()
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs/generate_ruleset_body(var/mob/applicant)
 	var/obj/vent = pick(vents)
@@ -812,6 +873,7 @@
 	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Pulse"
 	cost = 20
 	requirements = list(70,40,20,20,20,20,15,15,5,5)
 	high_population_requirement = 10
@@ -851,6 +913,7 @@
 	enemy_jobs = list()
 	required_candidates = 1
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Grue"
 	cost = 20
 	requirements = list(70,60,50,40,30,20,10,10,10,10)
 	high_population_requirement = 10
@@ -906,7 +969,8 @@
 	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
 	required_pop = list(25,20,20,20,15,15,10,10,0,0)
 	required_candidates = 1
-	weight = 1
+	weight = BASE_RULESET_WEIGHT
+	weight_category = "Prisoner"
 	cost = 0
 	requirements = list(70,40,20,20,20,20,15,15,5,5)
 	high_population_requirement = 10
@@ -1026,6 +1090,7 @@
 	required_candidates = 1
 	max_candidates = 5
 	weight = BASE_RULESET_WEIGHT
+	weight_category = "Special"//Admin only
 	cost = 20
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	logo = "gun-logo"

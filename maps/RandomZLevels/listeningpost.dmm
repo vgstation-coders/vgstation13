@@ -236,7 +236,6 @@
 "aK" = (
 /obj/machinery/shower{
 	dir = 8;
-	icon_state = "shower";
 	tag = "icon-shower (WEST)"
 	},
 /turf/simulated/floor{
@@ -246,7 +245,6 @@
 "aL" = (
 /obj/structure/toilet{
 	dir = 8;
-	icon_state = "toilet00";
 	tag = "icon-toilet00 (WEST)"
 	},
 /turf/simulated/floor{

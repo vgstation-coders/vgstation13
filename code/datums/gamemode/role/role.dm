@@ -90,6 +90,7 @@
 	var/datum/objective_holder/objectives=new
 	var/logo_icon = 'icons/logos.dmi'
 	var/logo_state = "synd-logo"
+	var/logo_image //Where the image itself gets stored
 
 	var/default_admin_voice = "Supreme Leader"
 	var/admin_voice_style = "radio" // check stylesheet.dm for a list of all possible styles
@@ -134,6 +135,8 @@
 	objectives.owner = M
 	stat_datum = new stat_datum_type()
 
+	//In case we want a simpler copy of the icon without creating the image over and over again, such as in examine text
+	logo_image = "<img src='data:image/png;base64,[icon2base64(icon(logo_icon, logo_state))]'>"
 	return 1
 
 /datum/role/proc/AssignToRole(var/datum/mind/M, var/override = 0, var/msg_admins = TRUE)
@@ -145,9 +148,6 @@
 		return 0
 
 	antag = M
-	if(M.current.client)
-		antag.key = M.current.client.ckey
-		antag.active = TRUE
 	M.antag_roles.Add(id)
 	M.antag_roles[id] = src
 	objectives.owner = M
@@ -271,8 +271,8 @@
 
 /datum/role/proc/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/icon/logo = icon(logo_icon, logo_state)
-	if(!antag || !antag.current)
-		return
+	if(!antag)
+		return {"Mind destroyed. That shouldn't ever happen."}
 	if (!ismob(usr))
 		return
 	var/mob/user = usr
@@ -281,7 +281,7 @@
 	var/mob/M = antag.current
 	if (M)
 		return {"[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> " : "" ]
-	[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[M.key]</a>[M.client ? "" : " <i> - (logged out)</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
+	[name] <a href='?_src_=holder;adminplayeropts=\ref[M]'>[M.real_name]/[antag.key]</a>[M.client ? "" : " <i> - ([loggedOutHow()])</i>"][M.stat == DEAD ? " <b><font color=red> - (DEAD)</font></b>" : ""]
 	 - <a href='?src=\ref[usr];priv_msg=\ref[M]'>(admin PM)</a>
 	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>
 	 - <a href='?src=\ref[src]&mind=\ref[antag]&role_speak=\ref[M]'>(Message as:</a><a href='?src=\ref[src]&mind=\ref[antag]&role_set_speaker=\ref[M]'>\[[voice_per_admin[user.ckey]]\])</a>"}
@@ -292,6 +292,9 @@
 	 - <a href='?_src_=holder;traitor=\ref[M]'>(role panel)</a>
 	 - <a href='?src=\ref[src]&mind=\ref[antag]&role_speak=\ref[M]'>(Message as:</a><a href='?src=\ref[src]&mind=\ref[antag]&role_set_speaker=\ref[M]'>\[[voice_per_admin[user.ckey]]\])</a>"}
 
+
+/datum/role/proc/loggedOutHow()
+	return "logged out"
 
 /datum/role/proc/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -583,6 +586,10 @@
 	D.spend_midround_threat(amount)
 	D.threat_log += "[worldtime2text()]: [name] has decreased the threat amount by [amount]."
 
+//Additional text that appears when examining something.
+/datum/role/proc/role_examine_text_addition(var/target)
+	return
+
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
 //________________________________________________
@@ -595,29 +602,11 @@
 
 //________________________________________________
 
-/datum/role/death_commando
-	name = DEATHSQUADIE
-	id = DEATHSQUADIE
-	special_role = DEATHSQUADIE
-	logo_state = "death-logo"
-
-//________________________________________________
-
 /datum/role/syndicate_elite_commando
 	name = SYNDIESQUADIE
 	id = SYNDIESQUADIE
 	special_role = SYNDIESQUADIE
 	logo_state = "elite-logo"
-
-//________________________________________________
-
-
-/datum/role/emergency_responder
-	name = RESPONDER
-	id = RESPONDER
-	special_role = RESPONDER
-	logo_state = "ERT_empty-logo"
-	is_antag = FALSE
 
 //________________________________________________
 

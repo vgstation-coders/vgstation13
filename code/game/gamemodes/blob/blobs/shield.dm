@@ -2,8 +2,8 @@
 	name = "strong blob"
 	icon_state = "strong"
 	desc = "A dense part of a blob."
-	health = 75
-	maxHealth = 75
+	health = 50
+	maxHealth = 50
 	fire_resist = 2
 	layer = BLOB_SHIELD_LAYER
 	spawning = 0
@@ -28,14 +28,9 @@
 	if(health >= 50)
 		return 0
 
-	health += 10
+	health += min(maxHealth - health, 10)
 	return 1
-/*
-/obj/effect/blob/shield/Pulse(var/pulse = 0, var/origin_dir = 0)
-	..()
-	if(blob_looks[looks] == 64)
-		anim(target = loc, a_icon = 'icons/mob/blob_64x64.dmi', flick_anim = "strongpulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 51)
-*/
+
 /obj/effect/blob/shield/update_icon(var/spawnend = 0)
 	if(icon_size == 64)
 		spawn(1)

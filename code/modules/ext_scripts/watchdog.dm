@@ -4,7 +4,6 @@ var/global/datum/watchdog/watchdog = new
 	var/waiting=0 // Waiting for the server to end round or empty.
 	var/const/update_signal_file="data/UPDATE_READY.txt"
 	var/const/server_signal_file="data/SERVER_READY.txt"
-	var/const/restart_signal_file="data/FORCE_RESTART.txt"
 	var/map_path
 
 /datum/watchdog/proc/check_for_update()
@@ -28,7 +27,6 @@ var/global/datum/watchdog/watchdog = new
 	set name = "Panic Restart"
 	set category = "Watchdog"
 
-	var/signal = file(watchdog.restart_signal_file)
-	log_admin("[key] restarted the server using the watchdog function")
-	message_admins("[key] restarted the server using the watchdog function")
-	signal << "1"
+	log_admin("[key] has restarted the server using the watchdog function")
+	message_admins("[key] has restarted the server using the watchdog function")
+	force_restart = 1

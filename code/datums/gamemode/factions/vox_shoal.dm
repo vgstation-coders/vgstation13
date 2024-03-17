@@ -179,7 +179,7 @@ var/list/potential_bonus_items = list(
 
 	/*
 	spawn()
-		var/chosen_loadout = input(vox, "The raid is about to begin. What kind of operations would you like to specialize into ?") in list("Raider", "Engineer", "Saboteur", "Medic")
+		var/chosen_loadout = input(vox, "The raid is about to begin. What kind of operations would you like to specialize into?") in list("Raider", "Engineer", "Saboteur", "Medic")
 		concrete_outfit.chosen_spec = chosen_loadout
 		concrete_outfit.equip_special_items(vox)
 	*/
@@ -322,7 +322,7 @@ var/list/potential_bonus_items = list(
 	new /obj/item/clothing/suit/space/vox/carapace(src)
 	new /obj/item/clothing/head/helmet/space/vox/carapace(src)
 	new /obj/item/weapon/melee/telebaton(src)
-	new /obj/item/clothing/glasses/thermal/monocle(src)
+	new /obj/item/clothing/glasses/hud/thermal/monocle(src)
 	new /obj/item/device/chameleon(src)
 	var/obj/item/weapon/crossbow/W = new(src)
 	W.cell = new /obj/item/weapon/cell/crap(W)
@@ -352,7 +352,7 @@ var/list/potential_bonus_items = list(
 	new /obj/item/clothing/suit/space/vox/carapace(src)
 	new /obj/item/clothing/head/helmet/space/vox/carapace(src)
 	new /obj/item/weapon/storage/belt/utility/full(src)
-	new /obj/item/clothing/glasses/thermal/monocle(src)
+	new /obj/item/clothing/glasses/hud/thermal/monocle(src)
 	new /obj/item/weapon/card/emag(src)
 	new /obj/item/weapon/gun/dartgun/vox/raider(src)
 	new /obj/item/device/multitool(src)

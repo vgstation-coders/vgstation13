@@ -10,7 +10,6 @@
 	var/list/disallowed_species = null
 
 	var/duration = 0
-
 	var/list/mob/doing_surgery = list() //who's doing this RIGHT NOW
 
 	// evil infection stuff that will make everyone hate me
@@ -65,7 +64,7 @@
 	if (can_infect && affected)
 		spread_germs_to_organ(affected, user)
 
-	if(!(affected.status & (ORGAN_ROBOT|ORGAN_PEG)))//robot organs and pegs can't spread diseases or splatter blood
+	if((!(affected.status & (ORGAN_ROBOT|ORGAN_PEG))) && !affected.cosmetic_only)//robot organs and pegs can't spread diseases or splatter blood
 		var/block = user.check_contact_sterility(HANDS)
 		var/bleeding = user.check_bodypart_bleeding(HANDS)
 		target.oneway_contact_diseases(user,block,bleeding)//potentially spreads diseases from us to them, wear latex gloves!
@@ -73,9 +72,9 @@
 		if (ishuman(user) && prob(60))
 			var/mob/living/carbon/human/H = user
 			if (blood_level)
-				H.bloody_hands(target,1)//potentially spreads diseases from them to us, wear latex gloves!
+				H.bloody_hands(target, 2)//potentially spreads diseases from them to us, wear latex gloves!
 			if (blood_level > 1)
-				H.bloody_body(target,0)//potentially spreads diseases from them to us, wear a bio suit, or at least a labcoat!
+				H.bloody_body(target, 0)//potentially spreads diseases from them to us, wear a bio suit, or at least a labcoat!
 
 	if(istype(tool,/obj/item/tool/scalpel/laser) || istype(tool,/obj/item/tool/retractor/manager))
 		tool.icon_state = "[initial(tool.icon_state)]_on"
@@ -108,7 +107,7 @@
 	return null
 
 /proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
-	if(!istype(user) || !istype(E))
+	if(!istype(user) || !istype(E) || E.cosmetic_only)
 		return
 
 	var/germ_level = user.germ_level
@@ -131,7 +130,6 @@
 		clumsy = 1
 
 	var/target_area = user.zone_sel ? user.zone_sel.selecting : get_random_zone_sel()
-
 	for(var/datum/surgery_step/S in surgery_steps)
 		//check if tool is right or close enough and if this step is possible
 		sleep_fail = 0

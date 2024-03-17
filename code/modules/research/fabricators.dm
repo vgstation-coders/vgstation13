@@ -234,7 +234,7 @@
 	return 1
 
 /obj/machinery/r_n_d/fabricator/proc/has_bluespace_bin()
-	var/I = /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace/
+	var/I = /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace
 	//return (I in component_parts)
 	return locate(I,component_parts)
 
@@ -351,6 +351,7 @@
 			being_built.forceMove(L) //Put the thing in the lockbox
 			L.name += " ([being_built.name])"
 			being_built = L //Building the lockbox now, with the thing in it
+		part.after_craft(being_built,src)
 		var/turf/output = get_output()
 		being_built.forceMove(get_turf(output))
 		being_built.anchored = 0

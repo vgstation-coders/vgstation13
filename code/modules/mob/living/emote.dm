@@ -333,12 +333,13 @@ var/list/animals_with_wings = list(
 		. = FALSE
 
 /datum/emote/living/custom/run_emote(mob/user, params, type_override = null)
+	. = TRUE
 	if(jobban_isbanned(user, "emote"))
 		to_chat(user, "You cannot send custom emotes (banned).")
-		return FALSE
+		return
 	else if(user.client && user.client.prefs.muted & MUTE_IC)
 		to_chat(user, "You cannot send IC messages (muted).")
-		return FALSE
+		return
 	else if(!params)
 		var/custom_emote = copytext(sanitize(input("Choose an emote to display.") as text|null), 1, MAX_MESSAGE_LEN)
 		if(custom_emote && !check_invalid(user, custom_emote))
@@ -351,6 +352,9 @@ var/list/animals_with_wings = list(
 				else
 					alert("Unable to use this emote, must be either hearable or visible.")
 					return
+			var/display_runechat = input("Display Runechat?") as null|anything in list("Yes", "No")
+			if(display_runechat == "No")
+				emote_type |= EMOTE_NO_RUNECHAT
 			message = custom_emote
 	else
 		message = params
@@ -392,3 +396,4 @@ var/list/animals_with_wings = list(
 	message = jointext(message, "")
 
 	to_chat(user, message)
+	return TRUE

@@ -216,7 +216,7 @@
 			M.assaulted_by(user)
 
 /obj/item/weapon/melee/baton/throw_impact(atom/hit_atom)
-	if(prob(50))
+	if(prob(50)) //Landed handle-first into the target
 		return ..()
 	if(!isliving(hit_atom) || !status)
 		return

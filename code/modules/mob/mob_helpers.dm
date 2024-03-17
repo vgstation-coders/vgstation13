@@ -564,18 +564,31 @@ var/list/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT
 	if(istype(user))
 		if(user.mind)
 			if(isbomberman(user) && (honorable & HONORABLE_BOMBERMAN))
-				return TRUE
+				return VERY_HONORABLE
 			if(ishighlander(user) && (honorable & HONORABLE_HIGHLANDER))
-				return TRUE
+				return VERY_HONORABLE
 			if(iscarbon(user) && isninja(user) && (honorable & HONORABLE_NINJA))
-				return TRUE
+				return MERELY_HONORABLE
 			if((iswizard(user) || isapprentice(user) || ismagician(user)) && (user.flags & HONORABLE_NOGUNALLOWED))
-				return TRUE
+				return MERELY_HONORABLE
 	return FALSE
 
 // Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic()
 // Returns whether the mob can see the specified HUD
 /mob/proc/hasHUD(var/hud_kind)
+	switch(hud_kind)
+		if(HUD_MEDICAL)
+			for(var/datum/visioneffect/medical/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_SECURITY)
+			for(var/datum/visioneffect/security/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_ARRESTACCESS)
+			for(var/datum/visioneffect/security/arrest/H in huds)
+				return TRUE
+			return FALSE
 	return FALSE
 
 // Returns a string that provides identification data for this mob

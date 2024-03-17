@@ -327,6 +327,12 @@
 	alert = null
 	message = "The station has passed the radiation belt. Please report to medbay if you experience any unusual symptoms. Maintenance will lose all access again shortly."
 
+/datum/command_alert/radiation_storm_malicious //they send a dirty bomb to explode in direct intercept
+	name = "Sudden Radiation Storm - Warning"
+	alert_title = "Anomaly Alert"
+	alert = 'sound/AI/radiation.ogg'
+	message = "A large explosion has been detected on direct intercept with the station. High levels of radiation detected, ETA in 30 seconds. Please evacuate into one of the shielded maintenance tunnels. Additional data has been downloaded and printed out at all communications consoles."
+
 /datum/command_alert/radiation
 	name = "High Levels Of Radiation"
 	alert_title = "Anomaly Alert"
@@ -432,6 +438,12 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	message = "Hostile runtimes detected in all station systems, please deactivate your AI to prevent possible damage to its morality core."
 	theme = "malfdelta"
 	alertlevel = "delta"
+
+/datum/command_alert/malf_announce/shodan
+	alert = 'sound/AI/aimalf_shodan.ogg'
+
+/datum/command_alert/malf_announce/xerxes
+	alert = 'sound/AI/aimalf_xerxes.ogg'
 
 /datum/command_alert/malf_win
 	name = "AI Malfunctioning Win"
@@ -668,7 +680,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/eagles
 	name = "Airlock Access Removed"
-	message = "Centcomm airlock control override activated. Please take this time to get acquainted with your coworkers."
+	message = "Centcomm airlock control override activated. Access requirements lifted for all non-security and command airlocks."
 
 /datum/command_alert/bluespace_artillery
 	name = "Bluespace Artillery Strike Detected"
@@ -785,3 +797,33 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/lotto_winner
 	alert_title = "Grand Slam -Stellar- Lottery Winner!"
 	message = "Congratulations to John Nanotrasen for winning the Central Command Grand Slam -Stellar- Lottery Fund! He walks home with a million credits!"
+
+/datum/command_alert/tradeprobe
+	alert_title = "Vox Trade Probe Approaching"
+	message = "Although there are no Vox Shoal traders in your vicinity, a trade probe has docked with the station at the usual location. It will remain for 10 minutes."
+
+/datum/command_alert/tradeprobe_depart
+	alert_title = "Vox Trade Probe Departing"
+	message = "The Vox trade probe is departing in 1 minute. Crewmen are advised to exit the probe immediately."
+
+/datum/command_alert/tradeaversion_closedport
+	alert_title = "Irrational Port Closure"
+	message = "The Vox Shoal notes disappointment at an inability to send a trade probe. Your station port is closed."
+
+/datum/command_alert/tradeaversion_mismanagement
+	alert_title = "Trade Probe Rerouted"
+	message = "A Vox trade probe rerouted away from the station after determining that employee wages were too low to justify a visit."
+
+/datum/command_alert/archive_thanks
+	alert_title = "Science Thanks You"
+
+/datum/command_alert/archive_thanks/announce()
+	message = "The Research Archive Project extends its profound thanks to [english_list(important_archivists)] for completing the research archival work this shift. There will be an extra stipend in the next pay cycle."
+	..()
+
+/datum/command_alert/suspicious_wages
+	alert_title = "Financial Audit Required"
+
+/datum/command_alert/suspicious_wages/announce(login, account)
+	message = "Central Command has noticed a suspicious increase in wages. A database action logged in as [login] has assigned a new wage to [account] with a payroll greater than the entire station's budget. Please conduct an emergency audit."
+	..()

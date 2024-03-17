@@ -71,6 +71,10 @@ var ctx;
 var width;
 var height;
 var bitmap;
+var nanomap;
+
+var nanopaint = 0;
+var polarized = false;
 
 //Keep track of how scaled up the canvas is vs the actual bitmap
 var scaleX = 20;
@@ -108,6 +112,9 @@ function initPaint(initData) {
 	canvas.width = width * scaleX;
 	canvas.height = height * scaleY;
 	bitmap = initData.bitmap;
+	nanomap = initData.nanomap;
+	nanopaint = initData.nanopaint;
+	polarized = initData.polarized;
 
 	minPaintStrength = initData.minPaintStrength;
 	maxPaintStrength = initData.maxPaintStrength;
@@ -117,6 +124,7 @@ function initPaint(initData) {
 	if (bitmap.length != width * height) {
 		while (bitmap.length < width * height) {
 			bitmap.push("#ffffff");
+			nanomap.push("#000000");
 		}
 	}
 
@@ -134,6 +142,10 @@ function initPaint(initData) {
  */
 function setPaintColor(color) {
 	paint_color = color;
+}
+
+function setNanoPaint(nano) {
+	nanopaint = nano;
 }
 
 function getPaintColor() {
@@ -180,7 +192,15 @@ function hexToRgba(hex) {
  * hex string (eg: #AA88FFAA).
  * If the alpha component is FF, it will be omitted on the hex
  */
-function rgbaToHex(rgba) {
+function rgbaToHex(rgba_raw) {
+	
+	let rgba = {
+	r: rgba_raw.r, 
+	g: rgba_raw.g,
+	b: rgba_raw.b,
+	a: rgba_raw.a,
+	}
+
 	for (k in rgba) {
 		//Convert to hex value
 		rgba[k] = Math.round(rgba[k]).toString(16);
@@ -208,16 +228,36 @@ var blendFunction = colorRybBlend;
 function pixelDraw(x, y, rgba, alpha) {
 	//Figure out the pixel index off the x and y
 	let pixel = y * width + x;
+	let painthex = rgba
 
 	//Convert to numeric values
 	rgba = hexToRgba(rgba);
 	let orgba = hexToRgba(bitmap[pixel]);
 
+	//In case we're using nano paint, let's keep track of the colour we're using
+	let paint = rgba;
+	let nanorba = hexToRgba(nanomap[pixel]);
+
 	//Mix both color values
-	rgba = blendFunction(rgba, orgba, alpha);
+	if (nanopaint > 1)//nano paint is additive. radium blends normally.
+		rgba = colorAdditiveBlend(rgba, orgba, alpha);
+	else
+		rgba = blendFunction(rgba, orgba, alpha);
 
 	//Save result into bitmap
 	bitmap[pixel] = rgbaToHex(rgba);
+
+	//If we're painting with nano paint, we draw on the nanomap as well
+	if (nanopaint > 0) {
+		paint = colorAdditiveBlend(paint, nanorba, alpha);//Nano-Paint is additive
+		if ((painthex == "#FFFFFF") || (painthex == "#ffffff"))
+			nanomap[pixel] = "#FEFEFE";//workaround because Byond
+		else
+			nanomap[pixel] = rgbaToHex(paint);
+	} else {
+	//Otherwise, we erase the nanomap (by drawing on it in black)
+		nanomap[pixel] = rgbaToHex(blendFunction(hexToRgba("#000000"), hexToRgba(nanomap[pixel]), alpha));
+	}
 }
 
 
@@ -238,6 +278,17 @@ function colorMultiplyBlend(c1, c2, alpha) {
 	for (k in c1)
 		result[k] = Math.round(c1[k]*c2[k]/255);
 	return colorAlphaBlend(result, c2, alpha);
+}
+
+//c1 is the new color, c2 is the canvas
+function colorAdditiveBlend(c1, c2, alpha) {
+	var result = {};
+	for (k in c1)
+		if (c2[k] >= c1[k])
+			result[k] = c2[k]
+		else
+			result[k] = Math.round(c2[k] + (c1[k] - c2[k]) * alpha);
+	return result;
 }
 
 function colorScreenBlend(c1, c2, alpha) {
@@ -267,7 +318,7 @@ function colorOverlayBlend(c1, c2, alpha) {
 function colorRybBlend(c1, c2, alpha) {
 	var c1Ryb = rgbToRyb(c1);
 	var c2Ryb = rgbToRyb(c2);
-	var resultRyb = {r:0, y:0, b:0, a:c2Ryb.a};
+	var resultRyb = {r:0, y:0, b:0, a:Math.min(255.0, c1Ryb.a*alpha + c2Ryb.a)};
 
 	alpha *= c1Ryb.a / 255.0;
 
@@ -462,6 +513,8 @@ function lineDraw(x1, y1, x2, y2, rgb, a) {
  * Draws the bitmap's contents on screen, scaled up for visibility
  */
 function display_bitmap() {
+	ctx.clearRect(0, 0, width*scaleX, height*scaleY);
+
 	//Go through our pixel data and draw scaled up squares with the corresponding color
 	for (var x = 0; x < width; x++) {
 		for(var y = 0; y < height; y++) {
@@ -469,13 +522,21 @@ function display_bitmap() {
 			var pixel = (y * width + x);
 
 			//Grab the pixel's color
-			ctx.fillStyle = bitmap[pixel];
+			var color;
+			if (polarized)
+				color = hexToRgba(nanomap[pixel]);
+			else
+				color = hexToRgba(bitmap[pixel]);
+			var alpha = color.a/255.0;
+			ctx.globalAlpha = alpha;
+			color.a = 255;
+			ctx.fillStyle = rgbaToHex(color);
 
 			//Draw a square, scaled up as needed
 			ctx.fillRect(x*scaleX, y*scaleY, scaleX, scaleY);
 		}
 	}
-	
+
 	if (grid_enabled) {
 		ctx.beginPath();
 		ctx.lineWidth = 1;
