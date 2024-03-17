@@ -1839,9 +1839,13 @@ Use this proc preferably at the end of an equipment loadout
 	return FALSE
 
 /mob/proc/isTeleViewing(var/client_eye)
-	return istype(client_eye,/obj/machinery/camera) ||\
-			istype(client_eye,/obj/item/projectile/rocket/nikita) ||\
-			(istype(client_eye,/turf/simulated/wall) && Adjacent(client_eye))
+	if(istype(client_eye,/obj/machinery/camera))
+		return 1
+	if(istype(client_eye,/obj/item/projectile/rocket/nikita))
+		return 1
+	if(istype(client_eye,/turf/simulated/wall) && Adjacent(client_eye))
+		return 1
+	return 0
 
 /mob/proc/html_mob_check()
 	return 0
