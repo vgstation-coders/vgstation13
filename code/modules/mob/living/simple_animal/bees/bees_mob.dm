@@ -639,6 +639,9 @@ var/bee_mobs_count = 0
 		return
 	if (!Adjacent(target))
 		return
+	var/mob/living/L = target
+	if(istype(L) && !L.tangibility)
+		return
 	var/mob/living/carbon/human/M = target
 	var/sting_prob = 100
 	if(istype(M))
