@@ -494,7 +494,7 @@
 		/obj/item/clothing/mask/facehugger/toy,
 		/obj/item/trash/candle,
 		/obj/item/trash/candy,
-		/obj/item/trash/cheesie,
+		/obj/item/trash/chips/cheesie,
 		/obj/item/trash/chips,
 		/obj/item/trash/plate,
 		/obj/item/trash/popcorn,

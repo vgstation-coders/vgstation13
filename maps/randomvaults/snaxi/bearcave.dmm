@@ -7,7 +7,7 @@
 /turf/unsimulated/floor/snow/cave,
 /area/vault/bearcave)
 "e" = (
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /turf/unsimulated/floor/snow/cave,
 /area/vault/bearcave)
 "g" = (

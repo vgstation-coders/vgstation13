@@ -273,7 +273,7 @@
 	},
 /area/vault/radioactivelab)
 "gA" = (
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /obj/item/trash/oldempirebar{
 	pixel_x = -6;
 	pixel_y = 7
@@ -2251,7 +2251,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/obj/item/trash/donitos_coolranch,
+/obj/item/trash/chips/donitos_coolranch,
 /turf/simulated/floor/plating,
 /area/vault/radioactivelab)
 "VZ" = (

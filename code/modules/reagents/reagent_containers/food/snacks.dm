@@ -2265,7 +2265,7 @@
 	name = "Cheesie Honkers"
 	icon_state = "cheesie_honkers"
 	desc = "Bite sized cheesie snacks that will honk all over your mouth."
-	trash = /obj/item/trash/cheesie
+	trash = /obj/item/trash/chips/cheesie
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
 	filling_color = "#FFCC33"
 	base_crumb_chance = 30
@@ -2333,7 +2333,7 @@
 	name = "Donitos"
 	desc = "Ranch or cool ranch?"
 	icon_state = "donitos"
-	trash = /obj/item/trash/donitos
+	trash = /obj/item/trash/chips/donitos
 	filling_color = "#C06800"
 	base_crumb_chance = 30
 
@@ -2346,7 +2346,7 @@
 	name = "Donitos Cool Ranch"
 	desc = "Cool ranch."
 	icon_state = "donitos_coolranch"
-	trash = /obj/item/trash/donitos_coolranch
+	trash = /obj/item/trash/chips/donitos_coolranch
 
 /obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch/New()
 	..()
@@ -2356,7 +2356,7 @@
 	name = "Danitos"
 	desc = "For only the most MLG hardcore robust spessmen."
 	icon_state = "danitos"
-	trash = /obj/item/trash/danitos
+	trash = /obj/item/trash/chips/danitos
 	filling_color = "#FF9933"
 	base_crumb_chance = 30
 
@@ -5291,7 +5291,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/zamitos
 	name = "Zamitos: Original Flavor"
 	desc = "An overly processed taste that reminds you of days past when you snacked on these as a small greyling."
-	trash = /obj/item/trash/zamitos_o
+	trash = /obj/item/trash/chips/zamitos_o
 	icon_state = "zamitos_original"
 	filling_color = "#F7CE7B"
 
@@ -5300,7 +5300,7 @@
 	if(prob(30))
 		name = "Zamitos: Blue Goo Flavor"
 		desc = "Not as filling as the original flavor, and the texture is strange."
-		trash = /obj/item/trash/zamitos_bg
+		trash = /obj/item/trash/chips/zamitos_bg
 		icon_state = "zamitos_bluegoo"
 		filling_color = "#5BC9DD"
 		reagents.add_reagent(NUTRIMENT, 1)
@@ -5314,7 +5314,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky
 	name = "Zamitos: Spicy Stok Jerky Flavor"
 	desc = "Meat-flavored crisps with three different seasonings! Almost as good as real meat."
-	trash = /obj/item/trash/zamitos_sj
+	trash = /obj/item/trash/chips/zamitos_sj
 	icon_state = "zamitos_stokjerky"
 	filling_color = "#A66626"
 
@@ -8152,7 +8152,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/greygreens
 	name = "Grey Greens"
 	desc = "A dish beloved by greys since first contact, acidic vegetables seasoned with soy sauce."
-	trash = /obj/item/trash/used_tray2
+	trash = /obj/item/trash/used_tray/type2
 	icon_state = "greygreens"
 	base_crumb_chance = 0
 
@@ -8165,7 +8165,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher
 	name = "Stuffed Pitcher"
 	desc = "A delicious grey alternative to a stuffed pepper. Very acidic."
-	trash = /obj/item/trash/used_tray2
+	trash = /obj/item/trash/used_tray/type2
 	icon_state = "stuffedpitcher"
 	food_flags = FOOD_ANIMAL
 	base_crumb_chance = 0
@@ -8178,7 +8178,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/nymphsperil
 	name = "Nymph's Peril"
 	desc = "A diona nymph steamed in sulphuric acid then stuffed with fried rice. Ruthlessly delicious!"
-	trash = /obj/item/trash/used_tray2
+	trash = /obj/item/trash/used_tray/type2
 	icon_state = "yahireatsbugs"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
