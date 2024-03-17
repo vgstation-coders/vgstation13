@@ -479,8 +479,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 					var/obj/item/stack/S = B2
 					if(this_amount && S.amount)
 						S.amount = min(this_amount,S.max_amount)
-						if(this_amount > S.max_amount)
-							this_amount -= S.max_amount //leave the count over for the next pile until the last has the remainder under it
+						this_amount -= S.amount //leave the count over for the next pile until the last has the remainder under it
 			for(var/atom/thing in CF.associated_crate)
 				CF.associated_manifest.info += "<li>[thing.name]</li>" //add the item to the manifest
 				CF.initial_contents += thing
