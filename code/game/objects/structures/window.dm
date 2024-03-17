@@ -624,7 +624,7 @@ var/list/one_way_windows
 
 	rotate(270)
 
-/obj/structure/window/proc/rotate(var/angle)
+/obj/structure/window/proc/rotate(var/angle = 90)
 	if(anchored)
 		var/turf/T = loc
 		if(T)

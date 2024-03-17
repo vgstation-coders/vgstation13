@@ -202,7 +202,7 @@
 
 	rotate(90)
 
-/obj/structure/railing/proc/rotate(var/angle)
+/obj/structure/railing/proc/rotate(var/angle = 90)
 	if(anchored)
 		var/turf/T = loc
 		if(T)
