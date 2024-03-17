@@ -196,6 +196,7 @@
 	starting_materials = list(MAT_IRON = 10)
 	w_type = RECYK_MISC
 	pressure_resistance = 2
+	quick_equip_priority = list(slot_wear_id)
 
 	var/colour = "black"	//what colour the ink is!
 	var/colour_rgb = "#000000"
