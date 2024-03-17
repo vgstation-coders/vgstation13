@@ -101,7 +101,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/gradual_casting = FALSE //equals TRUE while a Sp_GRADUAL spell is actively being cast
 
 	var/list/holiday_required = list() // The holiday this spell is restricted to ! Leave empty if none.
-	var/civil_war_only = FALSE // Set true to only allow this spell during civil war
 	var/block = 0//prevents some spells from being spamed
 	var/obj/delay_animation = null
 	var/user_dir //Used by NO_TURNING to memorize the user's direction and turn them around
@@ -141,6 +140,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 					charge_counter--
 			else
 				charge_counter++
+		if(charge_counter >= charge_max)
+			return
 		sleep(1)
 	return
 
@@ -225,17 +226,17 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!cast_check(skipcharge, user))
 			return 0
 		user.remove_spell_channeling() //In case we're swapping from an older spell to this new one
-		user.register_event(/event/uattack, src, src::channeled_spell())
+		user.register_event(/event/uattack, src, nameof(src::channeled_spell()))
 		user.spell_channeling = src
 		if(spell_flags & CAN_CHANNEL_RESTRAINED)
-			user.register_event(/event/ruattack, src, src::channeled_spell())
+			user.register_event(/event/ruattack, src, nameof(src::channeled_spell()))
 			user.spell_channeling = src
 		connected_button.name = "(Ready) [name]"
 		currently_channeled = 1
 		connected_button.add_channeling()
 	else
-		user.unregister_event(/event/uattack, src, src::channeled_spell())
-		user.unregister_event(/event/ruattack, src, src::channeled_spell())
+		user.unregister_event(/event/uattack, src, nameof(src::channeled_spell()))
+		user.unregister_event(/event/ruattack, src, nameof(src::channeled_spell()))
 		user.spell_channeling = null
 		currently_channeled = 0
 		connected_button.remove_channeling()
@@ -426,7 +427,17 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!user.wearing_wiz_garb())
 			return 0
 
+	//gentling check
+	if((is_wizard_spell()) && (holder == user))
+		if(user.is_gentled())
+			return 0
+
 	return 1
+
+/spell/proc/is_wizard_spell()
+	if(user_type == USER_TYPE_WIZARD || USER_TYPE_SPELLBOOK)
+		return TRUE
+	return FALSE
 
 /spell/proc/check_charge(var/skipcharge, mob/user)
 	//Arcane golems have no cooldowns on their spells
@@ -626,8 +637,17 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
 		if(Sp_SPEED)
-			return "Reduce this spell's cooldown."
+			if(spell_levels[Sp_SPEED] >= level_max[Sp_SPEED])
+				return "The spell can't be made any quicker than this!"
+			var/formula
+			if(cooldown_reduc)
+				formula = min(charge_max - cooldown_min, cooldown_reduc)
+			else
+				formula = round((initial_charge_max - cooldown_min)/level_max[Sp_SPEED], 1)
+			return "Reduce this spell's cooldown by [formula/10] seconds."
 		if(Sp_POWER)
+			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+				return "The spell can't be made any more powerful than this!"
 			return "Increase this spell's power."
 
 //Return a string that gets appended to the spell on the scoreboard
@@ -641,6 +661,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return
 
 /spell/proc/on_holder_death(mob/user)
+	return
+
+/spell/proc/on_transfer(mob/user)
 	return
 
 //To batch-remove wizard spells. Linked to mind.dm.
@@ -685,6 +708,15 @@ Made a proc so this is not repeated 14 (or more) times.*/
 		return 0
 	return 1
 */
+
+/mob/proc/is_gentled()
+	for(var/V in get_equipped_items())
+		if(isclothing(V))
+			var/obj/item/clothing/C = V
+			if(C.gentling)
+				to_chat(src, "<span class='warning'>You feel too humble to do that.</span>")
+				return TRUE
+	return FALSE
 
 //Atomizes what data the spell shows, that way different spells such as pulse demon and vampire spells can have their own descriptions.
 /spell/proc/generate_tooltip(var/previous_data = "")

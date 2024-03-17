@@ -1,0 +1,3403 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"ak" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk3"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/space,
+/area/vault/radioactivecatwalk)
+"as" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "radiation";
+	pixel_y = -32;
+	name = "RADIATION SHELTER"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"ax" = (
+/obj/machinery/atmospherics/unary/tank/oxygen,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"aQ" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/space,
+/area/vault/radioactivecatwalk)
+"aR" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"bu" = (
+/obj/item/weapon/paper{
+	name = "personal log 4";
+	info = "I used to think they had the safer job working in the lab, and we had the better view. We still have the better view... It brings... peace. Kind of."
+	},
+/turf/space,
+/area/vault/radioactivecatwalk)
+"bw" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/foamedmetal,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"bJ" = (
+/obj/structure/lattice,
+/turf/space,
+/area/vault/radioactivecatwalk)
+"bQ" = (
+/obj/machinery/door/poddoor/shutters{
+	dir = 2;
+	id_tag = "mat_store1";
+	name = "Material Storage"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"bY" = (
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"ct" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8";
+	tag = ""
+	},
+/turf/space,
+/area/vault/radioactivecatwalk)
+"cR" = (
+/obj/structure/lattice,
+/turf/space,
+/area)
+"dk" = (
+/obj/machinery/door/firedoor,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"dM" = (
+/obj/structure/AIcore{
+	name = "Logic Engine";
+	anchored = 1
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "acoustic";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"ee" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"el" = (
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/black,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"eM" = (
+/obj/machinery/door/airlock/glass_research{
+	name = "Secure Area"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"eX" = (
+/obj/structure/lattice,
+/obj/structure/grille/broken,
+/turf/space,
+/area/vault/radioactivecatwalk)
+"fp" = (
+/obj/item/toy/plushie/teddy{
+	name = "old teddy bear"
+	},
+/obj/item/clothing/glasses/regular{
+	desc = "The initials H.K. are engraved on the inside of the temple."
+	},
+/obj/item/weapon/reagent_containers/food/snacks/candy{
+	name = "perfectly preserved candy bar"
+	},
+/obj/structure/closet{
+	icon_closed = "syndicate1";
+	icon_opened = "syndicate1open";
+	icon_state = "syndicate1"
+	},
+/obj/item/weapon/storage/firstaid/regular,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"ft" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/obj/structure/bed,
+/obj/effect/decal/cleanable/ash{
+	pixel_y = 12;
+	pixel_x = -6
+	},
+/obj/effect/decal/cleanable/vomit/pre_dry,
+/obj/effect/landmark/corpse/skellington,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"fy" = (
+/obj/machinery/r_n_d/blueprinter{
+	name = "Blueprint Sequencer";
+	desc = "An older generation nanopaper blueprinting setup."
+	},
+/obj/machinery/light/broken{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "acoustic";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"fA" = (
+/obj/structure/rack,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stack/sheet/mineral/gold{
+	amount = 25
+	},
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"fD" = (
+/obj/structure/rack,
+/obj/item/clothing/head/radiation{
+	pixel_x = 5;
+	pixel_y = -4
+	},
+/obj/item/clothing/suit/radiation,
+/obj/item/weapon/tank/oxygen,
+/obj/item/clothing/mask/breath,
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"fQ" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"gn" = (
+/obj/machinery/suit_storage_unit{
+	isopen = 1;
+	icon_state = "suitstorage-open-00"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/sign/poster{
+	icon_state = "poster9";
+	pixel_x = -32
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"gA" = (
+/obj/item/trash/danitos,
+/obj/item/trash/oldempirebar{
+	pixel_x = -6;
+	pixel_y = 7
+	},
+/obj/item/weapon/shard,
+/obj/item/trash/liquidfood,
+/obj/structure/closet/crate/trashcart,
+/turf/simulated/floor/plating{
+	icon_state = "platingdmg3";
+	tag = "icon-platingdmg3"
+	},
+/area/vault/radioactivelab)
+"gJ" = (
+/obj/structure/rack,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/extinguisher/foam{
+	pixel_y = 3;
+	pixel_x = -1
+	},
+/obj/item/weapon/grenade/chem_grenade/ironfoam{
+	pixel_x = 2;
+	pixel_y = 5
+	},
+/obj/item/weapon/grenade/chem_grenade/ironfoam{
+	pixel_x = 4;
+	pixel_y = -3
+	},
+/obj/item/weapon/grenade/chem_grenade/ironfoam,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"gK" = (
+/obj/structure/bed/chair/office/dark{
+	dir = 4
+	},
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"gQ" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 4
+	},
+/obj/structure/rack,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/tool/wirecutters,
+/obj/item/tool/weldingtool/largetank,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/item/device/geiger_counter,
+/obj/item/tool/wrench,
+/obj/item/tool/screwdriver{
+	pixel_y = 6
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 5
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"hc" = (
+/obj/machinery/docklight/alwayson{
+	pixel_x = 10;
+	desc = "It is active. Caked in rust, it still flashes and transmits an all-frequencies distress message. The emergency shuttle ETA is blank.";
+	name = "Emergency Distress transmitter"
+	},
+/turf/space,
+/area/vault/radioactivecatwalk)
+"hu" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small{
+	dir = 1;
+	invisibility = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"hw" = (
+/obj/effect/decal/cleanable/soot,
+/obj/machinery/light/broken{
+	dir = 8
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "boltedfloor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"ib" = (
+/obj/machinery/vending/cigarette,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"io" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"ip" = (
+/obj/structure/table,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/device/assembly/signaler,
+/obj/machinery/light/broken,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"jh" = (
+/obj/machinery/artifact_scanpad{
+	name = "Material Synthesizer";
+	desc = "Just looking at it gives you the taste of copper in your mouth."
+	},
+/obj/item/weapon/implanter/compressed{
+	name = "Compressed Matter implanter"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "gcircuit";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"jv" = (
+/obj/structure/bed/chair/office/dark,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"jx" = (
+/obj/machinery/power/solar/panel{
+	id_tag = "auxsolareast";
+	name = "Port Auxiliary Solar Array"
+	},
+/obj/structure/cable,
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area/vault/radioactivecatwalk)
+"jE" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/table,
+/obj/item/weapon/reagent_containers/food/drinks/thermos,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"jH" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8";
+	tag = ""
+	},
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/obj/effect/decal/cleanable/soot,
+/turf/space,
+/area/vault/radioactivecatwalk)
+"kh" = (
+/obj/machinery/door/firedoor,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"kr" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4";
+	tag = ""
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"ku" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk15"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8";
+	tag = ""
+	},
+/turf/space,
+/area/vault/radioactivecatwalk)
+"kx" = (
+/obj/structure/plasticflaps/mining,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "all-asteroid"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"kR" = (
+/obj/machinery/door/airlock/gold{
+	name = "Dormitory";
+	icon = 'icons/obj/doors/Dooruranium.dmi';
+	desc = "The nameplate reads 'N.A., Director'"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"lB" = (
+/obj/structure/lattice,
+/obj/item/toy/gasha/jani,
+/turf/space,
+/area)
+"lR" = (
+/obj/item/trash/cigbutt{
+	pixel_x = 4;
+	pixel_y = 17
+	},
+/obj/structure/bed/chair/office/dark{
+	dir = 4
+	},
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"lX" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/obj/machinery/light/small/broken,
+/obj/structure/sign/nosmoking_2{
+	pixel_x = 32
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"mn" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/shower{
+	name = "chemical shower";
+	desc = "The HS-400. Installed in the 2400s by the Nanotrasen Hygiene Division.";
+	pixel_y = 10
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/structure/curtain/open/shower/left,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"mw" = (
+/obj/structure/table/woodentable,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"mx" = (
+/obj/structure/lattice,
+/turf/simulated/floor/foamedmetal,
+/area/vault/radioactivecatwalk)
+"mH" = (
+/obj/structure/rack,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stack/sheet/mineral/diamond{
+	amount = 10
+	},
+/turf/simulated/floor/plating{
+	icon_state = "platingdmg1";
+	tag = "icon-platingdmg1"
+	},
+/area/vault/radioactivelab)
+"mN" = (
+/obj/effect/landmark/corpse/skellington{
+	corpseuniform = /obj/item/clothing/under/rank/medical;
+	corpseshoes = /obj/item/clothing/shoes/white
+	},
+/obj/effect/decal/cleanable/vomit/pre_dry,
+/obj/effect/decal/cleanable/greenglow,
+/obj/item/weapon/reagent_containers/syringe{
+	pixel_x = -4;
+	pixel_y = 17
+	},
+/obj/item/weapon/reagent_containers/syringe{
+	pixel_x = 5;
+	pixel_y = 10
+	},
+/obj/item/weapon/reagent_containers/syringe{
+	pixel_x = -6;
+	pixel_y = -7
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"nl" = (
+/obj/structure/catwalk,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/foamedmetal,
+/area/vault/radioactivecatwalk)
+"nJ" = (
+/obj/item/trash/cigbutt{
+	pixel_x = 5;
+	pixel_y = -3
+	},
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"oc" = (
+/obj/structure/particle_accelerator/particle_emitter/center{
+	name = "Equipment";
+	desc = "It radiates an uncomfortable heat that makes your teeth hurt.";
+	anchored = 1;
+	dir = 8;
+	desc_holder = "."
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "acoustic";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"oe" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/obj/machinery/light/small/broken{
+	dir = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"oh" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"ot" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8";
+	tag = ""
+	},
+/turf/simulated/floor/plating{
+	icon_state = "platingdmg3";
+	tag = "icon-platingdmg3"
+	},
+/area/vault/radioactivecatwalk)
+"oN" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4";
+	tag = ""
+	},
+/turf/space,
+/area/vault/radioactivecatwalk)
+"pa" = (
+/mob/living/simple_animal/hostile/necro/zombie/ghoul/glowing_one{
+	name = "Research Director";
+	health = 250
+	},
+/obj/structure/bed/chair/office/dark{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/item/trash/cigbutt/cigarbutt,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"pp" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/device/multitool,
+/obj/item/weapon/tank/oxygen/yellow{
+	name = "antique oxygen tank"
+	},
+/obj/item/tool/solder/pre_fueled,
+/obj/item/weapon/reagent_containers/glass/beaker/sulphuric,
+/obj/structure/closet{
+	icon_closed = "syndicate1";
+	icon_opened = "syndicate1open";
+	icon_state = "syndicate1"
+	},
+/obj/item/device/instrument/saxophone{
+	name = "old saxophone"
+	},
+/obj/item/clothing/mask/gas/ert,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"pq" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"ps" = (
+/obj/machinery/power/battery/smes{
+	charge = 200000;
+	outputlevel = 0
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/plating,
+/area/vault/radioactivecatwalk)
+"pO" = (
+/obj/structure/rack,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stack/sheet/mineral/uranium{
+	amount = 22
+	},
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"qp" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/window{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"qq" = (
+/obj/structure/table,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/clothing/head/hardhat/orange{
+	pixel_x = 5;
+	pixel_y = 11;
+	name = "old hard hat"
+	},
+/obj/item/weapon/spacecash,
+/obj/structure/hanging_lantern,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"qF" = (
+/obj/structure/lattice,
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4";
+	tag = ""
+	},
+/obj/structure/grille/broken,
+/turf/space,
+/area/vault/radioactivecatwalk)
+"qR" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/rack,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stack/cable_coil/yellow,
+/obj/item/stack/cable_coil{
+	pixel_x = 2;
+	pixel_y = -1
+	},
+/obj/item/weapon/rcl/pre_loaded,
+/obj/effect/decal/warning_stripes{
+	icon_state = "bot"
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 1;
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"rc" = (
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"rt" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small{
+	dir = 1;
+	invisibility = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"rT" = (
+/obj/machinery/power/terminal{
+	dir = 4
+	},
+/obj/structure/cable,
+/turf/simulated/floor/plating{
+	icon_state = "platingdmg2"
+	},
+/area/vault/radioactivecatwalk)
+"rY" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/paper{
+	info = "Small site and a short contract, with high pay. What more to ask for? These remote gigs are not all that bad. Still a bit spooky climbing out onto the catwalks to do the EVA work, but Bob had a pretty damn good solution for this. We can just spray metal foam around the main catwalks to protect us from the space dust. Cant really spray it around the solar panels, so we just have to be really damn careful out on the array. Seems daft to me to set up in a sector with such heavy dust storms, but Bob reckons they set up this far out to keep a low profile.";
+	name = "personal log 1"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"sA" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/airbag,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"sB" = (
+/obj/machinery/message_server{
+	name = "Material Processor";
+	desc = "Quite possibly the first device to ever store physical, exotic materials as energy for a fabricator. A priceless relic."
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "acoustic";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"sR" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/railing{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/door_control{
+	id_tag = "vendo";
+	name = "Vendors";
+	req_access_txt = "2";
+	pixel_x = 24
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)";
+	dir = 9
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"tf" = (
+/obj/effect/decal/cleanable/cobweb,
+/obj/structure/sign/poster{
+	icon_state = "poster4";
+	pixel_x = -32
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"tp" = (
+/obj/structure/rack,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stack/sheet/mineral/silver{
+	amount = 25
+	},
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"tq" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"uc" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/black,
+/obj/structure/sign/poster{
+	icon_state = "poster10";
+	pixel_x = -32
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"uf" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"uD" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/obj/item/device/geiger_counter,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"uK" = (
+/obj/structure/rack,
+/obj/item/robot_parts/robot_component/radio/reinforced,
+/obj/item/device/crank_charger,
+/obj/item/weapon/circuitboard/blank,
+/obj/item/weapon/circuitboard/solar_control,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"uO" = (
+/obj/structure/table,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/device/flashlight/lamp/green,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"uQ" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8";
+	tag = ""
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"uV" = (
+/obj/machinery/door/poddoor{
+	desc = "A thick, lead-lined shutter.";
+	name = "Radiation Shutters";
+	id_tag = "rad_shutter"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"vp" = (
+/obj/machinery/door/airlock/glass_research{
+	name = "Secure Area"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"wd" = (
+/obj/machinery/door/airlock/uranium{
+	name = "E.M.S. Research Lab";
+	desc = "Disturbingly warm to the touch.";
+	icon = 'icons/obj/doors/Doorplasma.dmi'
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"wf" = (
+/obj/structure/lattice,
+/turf/simulated/wall,
+/area/vault/radioactivelab)
+"wp" = (
+/obj/machinery/artifact_scanpad{
+	name = "Material Synthesizer";
+	desc = "Just looking at it gives you the taste of copper in your mouth."
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/uraninitecrystal{
+	name = "coagulated supermatter"
+	},
+/obj/effect/decal/cleanable/greenglow,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "gcircuit";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"wq" = (
+/obj/effect/decal/warning_stripes{
+	icon_state = "warning-asteroid";
+	tag = "icon-warning (NORTH)"
+	},
+/obj/machinery/atmospherics/unary/portables_connector{
+	dir = 1
+	},
+/obj/machinery/portable_atmospherics/pump,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"wv" = (
+/obj/machinery/light/small{
+	dir = 1;
+	invisibility = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"wA" = (
+/turf/space,
+/area)
+"wH" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/clothing/glasses/sunglasses/blindfold,
+/obj/item/weapon/reagent_containers/food/drinks/bottle/wine{
+	name = "old wine bottle";
+	desc = "The label is faded and illegible but the bottle is in great condition."
+	},
+/obj/item/stack/medical/ointment,
+/obj/structure/closet{
+	icon_closed = "syndicate1";
+	icon_opened = "syndicate1open";
+	icon_state = "syndicate1"
+	},
+/obj/item/trash/syndi_cakes,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"xs" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"xy" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8";
+	tag = ""
+	},
+/turf/space,
+/area/vault/radioactivecatwalk)
+"yb" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/railing{
+	dir = 4;
+	pixel_x = 3
+	},
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "ramptop"
+	},
+/area/vault/radioactivelab)
+"yg" = (
+/obj/machinery/power/solar/panel{
+	id_tag = "auxsolareast";
+	name = "Port Auxiliary Solar Array"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area/vault/radioactivecatwalk)
+"yi" = (
+/obj/structure/catwalk{
+	dir = 4;
+	icon_state = "catwalk4"
+	},
+/obj/effect/decal/cleanable/soot,
+/turf/space,
+/area/vault/radioactivecatwalk)
+"ym" = (
+/obj/structure/catwalk,
+/obj/effect/landmark/corpse/engineer/rig{
+	corpsesuit = /obj/item/clothing/suit/space/ancient;
+	corpsehelmet = /obj/item/clothing/head/helmet/space/ancient;
+	corpsebelt = null;
+	corpseradio = null
+	},
+/turf/simulated/floor/foamedmetal,
+/area/vault/radioactivecatwalk)
+"yz" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/bed,
+/obj/item/weapon/bedsheet/black,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"yC" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8";
+	tag = ""
+	},
+/obj/item/trash/bustanuts,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"yM" = (
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched"
+	},
+/area/vault/radioactivecatwalk)
+"yN" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk8"
+	},
+/obj/item/stack/cable_coil{
+	amount = 2
+	},
+/turf/space,
+/area/vault/radioactivecatwalk)
+"zt" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/cobweb2,
+/obj/structure/toilet{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"zv" = (
+/obj/structure/rack,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/liquid_fuel,
+/obj/item/tool/weldingtool/gatling,
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"zM" = (
+/obj/structure/rack,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stack/sheet/mineral/plasma{
+	name = "solid phoron";
+	singular_name = "phoron sheet"
+	},
+/obj/effect/decal/cleanable/cobweb2,
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"zZ" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/closet/walllocker/emerglocker/north,
+/obj/machinery/light/small/broken{
+	dir = 8
+	},
+/obj/item/device/flashlight/flare{
+	pixel_x = 4;
+	pixel_y = 9;
+	name = "expired flare"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Aa" = (
+/obj/machinery/door/poddoor/shutters{
+	dir = 2;
+	id_tag = "mat_store1";
+	name = "Material Storage"
+	},
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"Ab" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/space,
+/area/vault/radioactivecatwalk)
+"Ax" = (
+/obj/structure/table,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/device/assembly_frame,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"AV" = (
+/obj/machinery/door/airlock/external,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"Bk" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/paper{
+	name = "personal log 2";
+	info = "The eggheads are having us build a bloody radiation shelter. We got a bunch of construction materials in the last delivery alongside the foam shipment. Work is work, I guess... but I have to wonder what they are working on in the lab."
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Bv" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/taperoll/engineering,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Bw" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/ash,
+/obj/item/stack/ore/slag,
+/obj/structure/closet{
+	icon_closed = "syndicate1";
+	icon_opened = "syndicate1open";
+	icon_state = "syndicate1"
+	},
+/obj/item/device/measuring_tape,
+/obj/item/weapon/switchtool/swiss_army_knife,
+/obj/item/weapon/coin/silver,
+/obj/item/clothing/head/welding,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"BE" = (
+/obj/structure/rack,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/sheet/metal{
+	amount = 50;
+	pixel_x = 2;
+	pixel_y = -2
+	},
+/obj/item/stack/sheet/metal{
+	amount = 50;
+	pixel_x = 4;
+	pixel_y = -4
+	},
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"BL" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/lattice,
+/obj/structure/grille/broken,
+/turf/space,
+/area/vault/radioactivecatwalk)
+"BP" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small{
+	dir = 4
+	},
+/obj/item/weapon/paper{
+	name = "personal log 2";
+	info = "The eggheads are having us build a bloody radiation shelter. We got a bunch of construction materials in the last delivery alongside the foam shipment. Work is work, I guess... but I have to wonder what they are working on in the lab. Bob intends to make it his new smoking room."
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"BY" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk12"
+	},
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8";
+	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8";
+	tag = ""
+	},
+/turf/space,
+/area/vault/radioactivecatwalk)
+"Cl" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/ash{
+	pixel_x = 18
+	},
+/obj/effect/decal/cleanable/ash{
+	pixel_x = 16;
+	pixel_y = 6
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"CB" = (
+/obj/structure/lattice,
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4";
+	tag = ""
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4";
+	tag = ""
+	},
+/obj/structure/grille/broken,
+/turf/space,
+/area/vault/radioactivecatwalk)
+"CC" = (
+/obj/structure/rack,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/clothing/glasses/welding/superior,
+/obj/item/stack/sheet/metal{
+	amount = 50
+	},
+/obj/item/stack/rods{
+	amount = 50
+	},
+/obj/item/stack/sheet/glass/glass{
+	amount = 50;
+	pixel_x = -3;
+	pixel_y = 4
+	},
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"CK" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/window{
+	dir = 1
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"Dn" = (
+/obj/structure/table/woodentable,
+/obj/item/weapon/storage/fancy/cigarettes{
+	pixel_x = -4;
+	pixel_y = 4;
+	name = "stale cigarette packet"
+	},
+/obj/item/weapon/lighter/zippo,
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"DD" = (
+/obj/machinery/suit_storage_unit{
+	helmet_type = /obj/item/clothing/head/helmet/space/ancient;
+	suit_type = /obj/item/clothing/suit/space/ancient
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"DE" = (
+/obj/machinery/door_control{
+	id_tag = "mat_store1";
+	name = "Material Storage";
+	pixel_x = -24;
+	req_access_txt = "2"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/greenglow,
+/obj/item/weapon/glowstick,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"DP" = (
+/obj/item/trash/cigbutt{
+	pixel_y = -6;
+	pixel_x = -6
+	},
+/obj/machinery/light/broken{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"Ej" = (
+/obj/machinery/newscaster{
+	name = "Communications Console";
+	desc = "An old, but still functional communication relay is contained within. It still works, sort of.";
+	pixel_x = 30
+	},
+/obj/item/clothing/accessory/medal/nobel_science{
+	name = "esteemed researcher award";
+	desc = "An old relic of Nanotrasen award schemes, given to the brave scientists willing to do what no one else will. Engraved 2401.";
+	pixel_x = 20
+	},
+/obj/item/weapon/paper{
+	name = "Congratulations!";
+	info = "<center><img src="http:/pixel_x=12;
+	pixel_y = -10
+	},
+/obj/item/weapon/stool/piano{
+	dir = 4;
+	desc = "It is rusty."
+	},
+/obj/item/device/radio/headset/headset_earmuffs{
+	name = "operator headset"
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Eo" = (
+/obj/machinery/door_control{
+	id_tag = "rad_shutter";
+	name = "Radiation Shelter";
+	req_access_txt = "2";
+	pixel_y = 24
+	},
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"EH" = (
+/obj/item/weapon/newspaper{
+	pixel_x = -8;
+	desc = "It is dated February 13th, 2401."
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/vomit/pre_dry,
+/obj/structure/sink{
+	dir = 4;
+	pixel_x = 13;
+	pixel_y = -1
+	},
+/obj/structure/mirror{
+	pixel_x = 28
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"EM" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"EN" = (
+/obj/effect/decal/cleanable/soot,
+/obj/effect/decal/cleanable/blood/oil,
+/obj/effect/decal/cleanable/blood/gibs/robot/down,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "boltedfloor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"Fe" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small{
+	dir = 1;
+	invisibility = 1
+	},
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"FC" = (
+/obj/structure/catwalk,
+/obj/structure/catwalk,
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/foamedmetal,
+/area/vault/radioactivecatwalk)
+"FH" = (
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"FN" = (
+/obj/structure/rack,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/storage/fancy/flares,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"FT" = (
+/obj/structure/reagent_dispensers/water_cooler,
+/obj/effect/decal/cleanable/cobweb2,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"Gw" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/reagent_containers/syringe/broken,
+/obj/item/weapon/storage/firstaid/toxin/empty{
+	pixel_x = -3;
+	pixel_y = 10
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"GL" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/effect/decal/warning_stripes{
+	icon_state = "radiation";
+	pixel_y = -32;
+	name = "RADIATION SHELTER"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"He" = (
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area/vault/radioactivecatwalk)
+"Hf" = (
+/turf/space,
+/area/vault/radioactivecatwalk)
+"HR" = (
+/obj/structure/catwalk,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/effect/decal/cleanable/soot,
+/turf/space,
+/area/vault/radioactivecatwalk)
+"Id" = (
+/obj/structure/cable,
+/obj/machinery/power/solar/panel{
+	id_tag = "auxsolareast";
+	name = "Port Auxiliary Solar Array"
+	},
+/turf/simulated/floor/airless{
+	icon_state = "solarpanel"
+	},
+/area/vault/radioactivecatwalk)
+"Ik" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"IO" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/obj/item/weapon/lighter/red,
+/obj/effect/decal/cleanable/ash{
+	pixel_y = 6;
+	pixel_x = 10
+	},
+/obj/machinery/light/small/broken{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"IY" = (
+/obj/structure/rack,
+/obj/effect/decal/cleanable/dirt,
+/obj/item/weapon/storage/box/foam{
+	pixel_x = 3;
+	pixel_y = -2
+	},
+/obj/item/weapon/storage/box/foam,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"JO" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"JQ" = (
+/obj/structure/window/full/reinforced,
+/obj/structure/grille,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"JY" = (
+/obj/item/trash/cigbutt,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"Kd" = (
+/obj/machinery/artifact_analyser{
+	name = "Research Terminal";
+	desc = "This terminal has encountered a catastrophic error after handling several zettabits of data at once."
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"Kk" = (
+/obj/structure/grille/broken,
+/turf/space,
+/area/vault/radioactivecatwalk)
+"KH" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/table,
+/obj/item/trash/lollipopstick,
+/obj/item/clothing/accessory/stethoscope,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Lj" = (
+/turf/simulated/floor/plating{
+	icon_state = "platingdmg3";
+	tag = "icon-platingdmg3"
+	},
+/area/vault/radioactivelab)
+"Ln" = (
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "boltedfloor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"Lr" = (
+/obj/machinery/door/airlock/gold{
+	name = "Dormitory";
+	icon = 'icons/obj/doors/Dooruranium.dmi';
+	desc = "The nameplate reads 'T.J.'"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"LK" = (
+/obj/structure/catwalk,
+/turf/simulated/floor/foamedmetal,
+/area/vault/radioactivecatwalk)
+"LN" = (
+/obj/structure/catwalk{
+	icon_state = "catwalk8"
+	},
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8";
+	tag = ""
+	},
+/turf/space,
+/area/vault/radioactivecatwalk)
+"LQ" = (
+/obj/machinery/door/firedoor,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Mc" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/tool/crowbar{
+	name = "old crowbar"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Mg" = (
+/obj/structure/closet/acloset{
+	name = "component closet";
+	desc = "Surprisingly light and vibrant."
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/item/device/assembly/addition,
+/obj/item/device/assembly/comparison,
+/obj/item/device/assembly/igniter,
+/obj/item/device/assembly/math,
+/obj/item/device/assembly/prox_sensor,
+/obj/item/device/assembly/randomizer,
+/obj/item/device/assembly/timer,
+/obj/item/device/assembly/signaler,
+/obj/item/robot_parts/robot_component/diagnosis_unit/reinforced,
+/obj/item/weapon/stock_parts/matter_bin/adv,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"Mz" = (
+/obj/machinery/anomaly/fourier_transform{
+	name = "Data Processor";
+	active_power_usage = 100;
+	desc = "A specialised server for handling encrypted research instructions. It has finished operations."
+	},
+/obj/machinery/light/broken{
+	dir = 8
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "acoustic";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"MA" = (
+/obj/structure/lattice,
+/turf/simulated/wall/r_wall,
+/area/vault/radioactivelab)
+"MB" = (
+/obj/structure/catwalk,
+/turf/space,
+/area/vault/radioactivecatwalk)
+"MG" = (
+/obj/structure/table/woodentable,
+/obj/item/device/geiger_counter,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"MI" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"MJ" = (
+/obj/structure/table,
+/obj/item/device/radio/phone{
+	frequency = 1111
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"MW" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/trash/used_tray,
+/obj/item/weapon/shard{
+	icon_state = "small"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"NH" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/light/small/broken{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"NT" = (
+/obj/machinery/door/airlock/gold{
+	name = "Restroom"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"NW" = (
+/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth{
+	pixel_x = 1;
+	pixel_y = 1
+	},
+/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth{
+	pixel_x = 2;
+	pixel_y = 5
+	},
+/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth{
+	pixel_x = 5;
+	pixel_y = 7
+	},
+/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth{
+	pixel_x = -4;
+	pixel_y = -6
+	},
+/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth{
+	pixel_x = 7;
+	pixel_y = -2
+	},
+/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth,
+/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth{
+	pixel_y = 5;
+	pixel_x = -5
+	},
+/obj/structure/closet/crate/freezer,
+/turf/space,
+/area/vault/radioactivecatwalk)
+"NY" = (
+/obj/effect/decal/cleanable/ash,
+/turf/simulated/floor/plating{
+	icon_state = "platingdmg1";
+	tag = "icon-platingdmg1"
+	},
+/area/vault/radioactivelab)
+"Ov" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8";
+	tag = ""
+	},
+/obj/item/weapon/paper{
+	info = "They screwed us all! We are as good as fucking dead. Whatever bullshit was going on in the lab, they did it without warning us. Bob did some scans and he reckons we were exposed to over thirty times the lethal dose of radiation. Doctor K. barricaded himself in communications, not that we even need to open the radiation shelter anymore. We were already cooked. Bob sealed the lab off with foam, I hope that scientific ASSHOLE director in there rots in hell.";
+	name = "personal log 3"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"OC" = (
+/obj/structure/sign/poster{
+	icon_state = "bsposter10";
+	pixel_x = -32
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"OI" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"Pw" = (
+/obj/structure/particle_accelerator/particle_emitter/center{
+	name = "Equipment";
+	desc = "It radiates an uncomfortable heat that makes your teeth hurt.";
+	anchored = 1;
+	desc_holder = "."
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "acoustic";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"PS" = (
+/obj/machinery/artifact_scanpad{
+	name = "Material Synthesizer";
+	desc = "Just looking at it gives you the taste of copper in your mouth."
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "gcircuit";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"Qf" = (
+/obj/structure/rack,
+/obj/item/clothing/suit/radiation,
+/obj/item/clothing/head/radiation{
+	pixel_x = 5;
+	pixel_y = -4
+	},
+/obj/item/weapon/tank/oxygen,
+/obj/item/clothing/mask/breath,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"Qo" = (
+/obj/structure/cable{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivecatwalk)
+"Qu" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4";
+	tag = ""
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Qw" = (
+/obj/machinery/door/airlock/gold{
+	name = "Dormitory";
+	icon = 'icons/obj/doors/Dooruranium.dmi';
+	desc = "The nameplate reads 'H.K.'"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"QR" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Rn" = (
+/obj/machinery/door/airlock/sandstone{
+	name = "Communications"
+	},
+/obj/structure/window/barricade/full/block,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"Rs" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/table,
+/obj/item/weapon/storage/belt,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"RT" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/suit_storage_unit{
+	helmet_type = /obj/item/clothing/head/helmet/space/ancient;
+	suit_type = /obj/item/clothing/suit/space/ancient
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"RY" = (
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/light/small{
+	dir = 4
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Sn" = (
+/obj/machinery/power/solar/panel/tracker,
+/obj/structure/catwalk{
+	icon_state = "catwalk2"
+	},
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/turf/space,
+/area/vault/radioactivecatwalk)
+"Sy" = (
+/obj/machinery/door_control{
+	id_tag = "rad_shutter";
+	name = "Radiation Shelter";
+	req_access_txt = "2";
+	pixel_y = -8;
+	pixel_x = 28
+	},
+/obj/structure/table/flipped{
+	dir = 1
+	},
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"SA" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Tb" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable{
+	d2 = 2;
+	icon_state = "0-2";
+	pixel_y = 1
+	},
+/obj/machinery/power/apc{
+	dir = 1;
+	name = "_North APC";
+	pixel_y = 24;
+	start_charge = 0;
+	coverlocked = 0;
+	locked = 0
+	},
+/obj/effect/decal/cleanable/greenglow,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"TB" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/door/poddoor{
+	desc = "A thick shutter.";
+	name = "Vendor Shutters";
+	id_tag = "vendo"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"TN" = (
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor{
+	dir = 1;
+	icon_state = "ramptop"
+	},
+/area/vault/radioactivelab)
+"TT" = (
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"TU" = (
+/obj/item/trash/cigbutt{
+	pixel_x = -14;
+	pixel_y = -6
+	},
+/obj/structure/bed/chair/office/dark{
+	dir = 8
+	},
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"Ua" = (
+/turf/simulated/wall/r_wall,
+/area/vault/radioactivelab)
+"Uc" = (
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/plating{
+	icon_state = "platingdmg1";
+	tag = "icon-platingdmg1"
+	},
+/area/vault/radioactivecatwalk)
+"Ux" = (
+/obj/machinery/portable_atmospherics/scrubber,
+/obj/machinery/light/small{
+	dir = 1;
+	invisibility = 1
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"UH" = (
+/obj/machinery/door/airlock/uranium{
+	name = "E.M.S. Research Lab";
+	desc = "Disturbingly warm to the touch.";
+	icon = 'icons/obj/doors/Doorplasma.dmi'
+	},
+/obj/effect/decal/cleanable/soot,
+/turf/simulated/floor/plating{
+	icon_state = "platingdmg3";
+	tag = "icon-platingdmg3"
+	},
+/area/vault/radioactivelab)
+"UM" = (
+/obj/structure/table,
+/obj/item/tool/crowbar/red{
+	name = "old crowbar"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/item/tool/screwdriver{
+	pixel_y = 6
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"UN" = (
+/obj/item/toy/gasha/skub,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"Vk" = (
+/obj/machinery/door/airlock/gold{
+	name = "Dormitory";
+	icon = 'icons/obj/doors/Dooruranium.dmi';
+	desc = "The nameplate reads 'B.B.'"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidplating"
+	},
+/area/vault/radioactivelab)
+"Vp" = (
+/obj/machinery/blackbox_recorder{
+	desc = "The storages are full. The emergency distress indicator is faintly lit."
+	},
+/obj/machinery/light/broken{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "acoustic";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"VR" = (
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"VT" = (
+/obj/machinery/vending/building,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"VX" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/obj/item/trash/donitos_coolranch,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"VZ" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/reagent_dispensers/fueltank,
+/obj/effect/decal/cleanable/liquid_fuel,
+/turf/simulated/floor/plating{
+	icon_state = "panelscorched";
+	tag = "icon-panelscorched"
+	},
+/area/vault/radioactivelab)
+"Wa" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/suspension_gen{
+	dir = 4
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"Wn" = (
+/obj/structure/table/woodentable,
+/obj/item/device/flashlight/lamp/green,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"Xc" = (
+/obj/machinery/door/firedoor,
+/obj/structure/cable{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Xn" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/greenglow,
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"Xr" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/obj/structure/foamedmetal,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"XC" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/decal/cleanable/soot,
+/obj/structure/table,
+/obj/item/trash/slag,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Yb" = (
+/obj/machinery/vending/assist,
+/obj/effect/decal/cleanable/dirt,
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Zi" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/item/clothing/glasses/welding/superior,
+/turf/simulated/floor/plating,
+/area/vault/radioactivelab)
+"Zk" = (
+/obj/machinery/door/firedoor,
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/cable{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating{
+	icon_state = "asteroidfloor"
+	},
+/area/vault/radioactivelab)
+"Zt" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/window{
+	dir = 8
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+"Zz" = (
+/turf/simulated/wall,
+/area/vault/radioactivelab)
+"ZD" = (
+/obj/structure/catwalk,
+/obj/effect/decal/cleanable/soot,
+/turf/space,
+/area/vault/radioactivecatwalk)
+"ZH" = (
+/obj/structure/foamedmetal,
+/turf/space,
+/area/vault/radioactivecatwalk)
+"ZW" = (
+/obj/structure/cable{
+	d2 = 4;
+	icon_state = "0-4"
+	},
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/egg_incubator{
+	name = "Prototype Subspace Tunneler";
+	desc = "The device no longer functions correctly. It is awaiting eggs."
+	},
+/obj/effect/decal/warning_stripes{
+	dir = 4;
+	icon_state = "warning_corner";
+	tag = "icon-warning_corner (EAST)"
+	},
+/turf/simulated/floor/mineral/uranium{
+	icon_state = "floor";
+	name = "irradiated floor"
+	},
+/area/vault/radioactivelab)
+
+(1,1,1) = {"
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+ZH
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+ZH
+ZH
+ZH
+ZH
+wA
+wA
+ZH
+ZH
+ZH
+"}
+(2,1,1) = {"
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+ZH
+ZH
+wA
+wA
+wA
+wA
+ZH
+ZH
+ZH
+ZH
+wA
+wA
+ZH
+ZH
+ZH
+ZH
+wA
+wA
+ZH
+ZH
+ZH
+ZH
+"}
+(3,1,1) = {"
+wA
+wA
+yi
+He
+wA
+wA
+wA
+He
+wA
+wA
+ZH
+FC
+MB
+MB
+MB
+ZD
+nl
+LK
+nl
+nl
+ZD
+MB
+LK
+nl
+ZD
+MB
+MB
+MB
+nl
+nl
+ZH
+wA
+"}
+(4,1,1) = {"
+wA
+wA
+BL
+jx
+wA
+yg
+CB
+Id
+wA
+wA
+ZH
+LK
+Hf
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+mx
+bJ
+bJ
+Hf
+MB
+Hf
+Hf
+nl
+ZH
+wA
+"}
+(5,1,1) = {"
+wA
+wA
+qF
+Id
+wA
+yg
+oN
+Id
+wA
+wA
+wA
+eX
+Hf
+Zz
+pp
+uc
+Rs
+Zz
+fp
+el
+KH
+Zz
+Hf
+Hf
+bJ
+Hf
+MB
+hc
+Hf
+ZD
+wA
+wA
+"}
+(6,1,1) = {"
+wA
+Uc
+aQ
+Id
+wA
+yg
+oN
+Id
+wA
+ZH
+ZH
+MB
+bu
+Zz
+VR
+BP
+SA
+Zz
+SA
+MI
+Bk
+Zz
+Hf
+Hf
+Zz
+Zz
+AV
+Zz
+Hf
+eX
+wA
+ZH
+"}
+(7,1,1) = {"
+wA
+bJ
+Ab
+bJ
+wA
+bJ
+Ab
+bJ
+wA
+ZH
+nl
+nl
+ym
+Zz
+Zz
+Zz
+Lr
+Zz
+Zz
+Zz
+Qw
+Zz
+Zz
+Zz
+Zz
+zZ
+SA
+Zz
+Hf
+eX
+wA
+wA
+"}
+(8,1,1) = {"
+Sn
+ak
+ku
+ak
+ak
+ak
+ku
+ak
+ak
+ak
+HR
+rT
+Qo
+kx
+kr
+SA
+SA
+SA
+SA
+SA
+SA
+LQ
+SA
+SA
+Zz
+Mc
+SA
+Zz
+Hf
+bJ
+wA
+wA
+"}
+(9,1,1) = {"
+wA
+wA
+Ab
+bJ
+wA
+bJ
+Ab
+bJ
+wA
+wA
+MB
+ps
+ot
+JQ
+uQ
+QR
+aR
+aR
+aR
+QR
+aR
+Xc
+aR
+Qu
+Zz
+Zz
+AV
+Zz
+Zz
+mx
+ZH
+wA
+"}
+(10,1,1) = {"
+wA
+wA
+BY
+Id
+wA
+yg
+ct
+Id
+wA
+wA
+MB
+MB
+ZD
+Zz
+Zz
+Zz
+kR
+Zz
+Zz
+Zz
+Vk
+Zz
+SA
+xs
+qR
+rY
+SA
+gn
+Zz
+ZD
+wA
+wA
+"}
+(11,1,1) = {"
+wA
+yg
+BY
+Id
+wA
+yg
+ct
+Id
+wA
+wA
+wA
+wA
+wA
+Zz
+tf
+JO
+SA
+Zz
+pq
+IO
+Cl
+Zz
+Tb
+EM
+gQ
+SA
+Bv
+DD
+Zz
+MB
+wA
+wA
+"}
+(12,1,1) = {"
+wA
+yM
+jH
+Id
+wA
+yg
+xy
+Id
+wA
+wA
+wA
+wA
+wA
+Zz
+wH
+yz
+jE
+Zz
+Bw
+ft
+XC
+Zz
+SA
+xs
+TN
+SA
+SA
+qq
+Zz
+LK
+ZH
+wA
+"}
+(13,1,1) = {"
+wA
+wA
+yN
+wA
+wA
+yg
+LN
+Id
+wA
+wA
+Ua
+Ua
+Ua
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+SA
+xs
+TN
+SA
+SA
+RT
+Zz
+LK
+ZH
+wA
+"}
+(14,1,1) = {"
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+Ua
+MA
+cR
+cR
+cR
+wA
+wA
+Ua
+Ua
+Ua
+Ua
+Ua
+Zz
+SA
+xs
+sR
+sA
+SA
+RT
+Zz
+MB
+ZH
+ZH
+"}
+(15,1,1) = {"
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+Ua
+Ua
+Ua
+Ua
+Ua
+Ua
+wA
+Ua
+FN
+gJ
+IY
+Ua
+Zz
+dk
+Zk
+Zz
+TB
+TB
+Zz
+Zz
+MB
+LK
+ZH
+"}
+(16,1,1) = {"
+wA
+wA
+Ua
+Ua
+Ua
+Ua
+Ua
+Ua
+Ua
+Ua
+Ik
+qp
+DE
+Ik
+Ua
+wA
+Ua
+Fe
+Zi
+tq
+bQ
+FH
+SA
+xs
+Zz
+Yb
+VT
+Zz
+NW
+bJ
+ZH
+ZH
+"}
+(17,1,1) = {"
+wA
+wA
+Ua
+wA
+wA
+wA
+cR
+cR
+cR
+Ua
+Kd
+pa
+CK
+uO
+Ua
+wA
+Ua
+CC
+zv
+VZ
+Ua
+Zz
+hu
+xs
+Ua
+Ua
+Ua
+Ua
+Ua
+Ua
+ZH
+wA
+"}
+(18,1,1) = {"
+wA
+wA
+Ua
+cR
+Ua
+Ua
+Ua
+Ua
+Ua
+Ua
+ZW
+Zt
+Ik
+Ik
+Ua
+wA
+Ua
+Ua
+Ua
+Ua
+Ua
+Zz
+SA
+GL
+Ua
+UN
+nJ
+DP
+NY
+Ua
+LK
+wA
+"}
+(19,1,1) = {"
+wA
+wA
+Ua
+cR
+Ua
+Mz
+Ln
+Ln
+Ln
+hw
+io
+Xn
+Ik
+Wa
+Ua
+lB
+wf
+mn
+NH
+NT
+yb
+uf
+SA
+xs
+Ua
+Eo
+JY
+lR
+gK
+Ua
+MB
+wA
+"}
+(20,1,1) = {"
+wA
+wA
+Ua
+wA
+Ua
+Pw
+Ln
+PS
+wp
+Ln
+oh
+Ik
+Ik
+Mg
+Ua
+cR
+wf
+zt
+EH
+Zz
+Ux
+uf
+SA
+xs
+uV
+rc
+rc
+Wn
+MG
+Ua
+MB
+wA
+"}
+(21,1,1) = {"
+wA
+wA
+Ua
+wA
+Ua
+Pw
+Ln
+jh
+PS
+Ln
+oh
+Ik
+Ik
+UM
+Ua
+wA
+wf
+wf
+wf
+Zz
+ax
+wq
+VR
+xs
+Ua
+Lj
+JY
+Dn
+mw
+Ua
+eX
+wA
+"}
+(22,1,1) = {"
+wA
+wA
+Ua
+wA
+Ua
+dM
+EN
+Ln
+Ln
+Ln
+io
+Ik
+jv
+ip
+Ua
+wA
+Ua
+Ua
+Ua
+Ua
+Ua
+Zz
+SA
+as
+Ua
+Qf
+bY
+TU
+rc
+Ua
+bJ
+wA
+"}
+(23,1,1) = {"
+wA
+wA
+Ua
+cR
+Ua
+fy
+sB
+oc
+oc
+Vp
+io
+Ik
+Ik
+Ax
+Ua
+wA
+Ua
+mH
+BE
+pO
+Ua
+Zz
+hu
+xs
+Ua
+fD
+bY
+JY
+JY
+Ua
+Kk
+wA
+"}
+(24,1,1) = {"
+wA
+wA
+Ua
+cR
+Ua
+Ua
+Ua
+Ua
+Ua
+Ua
+wd
+UH
+Ua
+Ua
+Ua
+wA
+Ua
+rt
+tq
+OI
+Aa
+FH
+SA
+TT
+Ua
+FT
+bY
+VX
+gA
+Ua
+MB
+ZH
+"}
+(25,1,1) = {"
+wA
+wA
+Ua
+wA
+wA
+wA
+cR
+cR
+Ua
+Xr
+bw
+Xr
+Xr
+Zz
+cR
+wA
+Ua
+zM
+fA
+tp
+Ua
+Zz
+SA
+TT
+Ua
+Ua
+Ua
+Ua
+Ua
+Ua
+LK
+ZH
+"}
+(26,1,1) = {"
+wA
+wA
+Ua
+Ua
+Ua
+Ua
+Ua
+Ua
+Ua
+oe
+ee
+uD
+lX
+Zz
+cR
+cR
+Ua
+Ua
+Ua
+Ua
+Ua
+ib
+SA
+xs
+Zz
+uK
+MJ
+Gw
+Zz
+wA
+wA
+wA
+"}
+(27,1,1) = {"
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+Zz
+Zz
+eM
+vp
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+VR
+xs
+Zz
+wv
+SA
+mN
+Zz
+bJ
+MB
+wA
+"}
+(28,1,1) = {"
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+Zz
+xs
+SA
+VR
+SA
+SA
+SA
+OC
+SA
+SA
+SA
+MW
+dk
+SA
+xs
+Rn
+Sy
+Ej
+SA
+Zz
+bJ
+MB
+wA
+"}
+(29,1,1) = {"
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+Zz
+yC
+aR
+QR
+fQ
+fQ
+aR
+aR
+QR
+aR
+aR
+aR
+kh
+RY
+Ov
+Zz
+Zz
+Zz
+Zz
+Zz
+wA
+wA
+wA
+"}
+(30,1,1) = {"
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+Zz
+wA
+wA
+wA
+wA
+wA
+wA
+wA
+"}

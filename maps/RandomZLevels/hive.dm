@@ -60,7 +60,7 @@
 	/obj/item/weapon/cloakingcloak/hive,
 	/obj/item/weapon/invisible_spray,
 	/obj/item/clothing/gloves/powerfist,
-	/obj/item/clothing/glasses/thermal/eyepatch
+	/obj/item/clothing/glasses/hud/thermal/eyepatch
 	)
 
 /datum/map_element/away_mission/hive/pre_load()

@@ -108,17 +108,6 @@ Crew Monitor by Paul, based on the holomaps by Deity
 		return
 	initializeUser(user)
 
-/obj/machinery/computer/crew/update_icon()
-	if(stat & BROKEN)
-		icon_state = "[initial(icon_state)]b"
-	else
-		if(stat & (FORCEDISABLE|NOPOWER))
-			src.icon_state = "c_unpowered"
-			stat |= NOPOWER
-		else
-			icon_state = initial(icon_state)
-			stat &= ~NOPOWER
-
 /*
 GENERAL PROCS
 */

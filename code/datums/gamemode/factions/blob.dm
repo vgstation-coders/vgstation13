@@ -292,8 +292,8 @@ Message ends."}
 	dat += "<b>Total blobs: [blobs.len]</b><br/>"
 	dat += "<b>Station Integrity: [round(end.score(start)*100)]%</b><br/>"
 	dat += "<br/>"
-	dat += "<b>Quarantaine status:</b><br/>"
-	var/list/result = check_quarantaine()
+	dat += "<b>Quarantine status:</b><br/>"
+	var/list/result = check_quarantine()
 	dat += "Dead humans: <b>[result["numDead"]]</b><br/>"
 	dat += "Alive humans still on board: <b>[result["numAlive"]]</b><br/>"
 	dat += "Humans in space: <b>[result["numSpace"]]</b><br/>"
@@ -311,7 +311,7 @@ Message ends."}
 			return TRUE
 	return FALSE
 
-/datum/faction/blob_conglomerate/proc/check_quarantaine()
+/datum/faction/blob_conglomerate/proc/check_quarantine()
 	var/list/result = list()
 	result["numDead"] = 0
 	result["numSpace"] = 0

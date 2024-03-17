@@ -28,6 +28,7 @@ var/global/list/blood_list = list()
 	persistence_type = SS_BLOOD
 
 	fake_DNA = "old blood splatters"
+	stain_name = "blood"
 
 /obj/effect/decal/cleanable/blood/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/basecolor)
 	if(basecolor)

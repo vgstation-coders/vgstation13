@@ -76,14 +76,9 @@ var/list/global_deadchat_listeners = list()
 	var/list/hearers = get_deadchat_hearers()
 	if(hearers)
 		for(var/mob/M in hearers)
-			if(isvampire(M))
-				var/rendered = "<span class='game deadsay'><span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
-				to_chat(M, rendered)
-				continue
-			else
-				var/rendered = "<span class='game deadsay'><a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a>"
-				rendered += "<span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
-				to_chat(M, rendered)
+			var/rendered = "<span class='game deadsay'><a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a>"
+			rendered += "<span class='name'> [name]</span>[alt_name] <span class='message'>[message]</span></span>"
+			to_chat(M, rendered)
 
 /mob/proc/get_ear()
 	// returns an atom representing a location on the map from which this

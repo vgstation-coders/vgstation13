@@ -78,8 +78,6 @@
 
 #define isgrue(A) (istype(A, /mob/living/simple_animal/hostile/grue))
 
-#define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
-
 #define isrobot(A) istype(A, /mob/living/silicon/robot)
 
 #define isanimal(A) istype(A, /mob/living/simple_animal)
@@ -103,6 +101,8 @@
 #define iscluwne(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne)
 
 #define isclowngoblin(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne/goblin)
+
+#define isbee(A) istype(A, /mob/living/simple_animal/bee)
 
 #define isAI(A) istype(A, /mob/living/silicon/ai)
 
@@ -196,6 +196,8 @@
 
 #define istable(A) (istype(A, /obj/structure/table))
 
+#define isshelf(A) (istype(A, /obj/structure/table) || istype(A, /obj/structure/rack) || istype(A, /obj/structure/closet) || istype(A, /obj/item/weapon/storage))
+
 #define issilicatesprayer(A) (istype(A, /obj/item/device/silicate_sprayer))
 
 #define iswindow(A) (istype(A, /obj/structure/window))
@@ -233,6 +235,8 @@
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/floor/shuttle) || istype(A, /turf/simulated/floor/shuttle/brig))
+
+#define iswall(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall))
 
 #define isshuttleturf(A) (istype(A, /turf/simulated/wall/shuttle) || istype(A, /turf/simulated/floor/shuttle))
 
@@ -407,6 +411,8 @@ var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floo
 #define is_area_in_map(A) (A.x)
 
 #define SNOW_THEME (map.snow_theme || Holiday == XMAS || Holiday == XMAS_EVE)
+
+#define SOCIALISM_WON (map.nameShort == "castle" || Holiday == LABOR_DAY)
 
 #define get_conductivity(A) (A ? A.siemens_coefficient : 1)
 

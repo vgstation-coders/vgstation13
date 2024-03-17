@@ -7,6 +7,7 @@
 	var/atom/target // /vg/ edit:  Removed type specification so spiders can target doors.
 	var/attack_same = 0 //Set us to 1 to allow us to attack our own faction, or 2, to only ever attack our own faction
 	var/ranged = 0
+	var/doubleshot = 0
 	var/rapid = 0
 	var/projectiletype
 	var/projectilesound
@@ -366,13 +367,12 @@
 	var/mob/living/simple_animal/hostile/H = from
 	if(istype(H))
 		for (var/datum/weakref/ref in H.friends)
-			var/not_a_friend_yet = TRUE
+			var/already_friend = FALSE
 			var/mob/M = ref.get()
-			for (var/datum/weakref/reff in H.friends)
+			for (var/datum/weakref/reff in friends)
 				if (M == reff.get())
-					not_a_friend_yet = FALSE
-					break
-			if (not_a_friend_yet)
+					already_friend = TRUE
+			if (!already_friend)
 				friends += makeweakref(M)
 
 /mob/living/simple_animal/hostile/proc/OpenFire(var/atom/ttarget)
@@ -383,6 +383,11 @@
 		spawn()
 			TryToShoot(target_turf, ttarget)
 			sleep(1)
+			TryToShoot(target_turf, ttarget)
+			sleep(1)
+			TryToShoot(target_turf, ttarget)
+	if(doubleshot)
+		spawn()
 			TryToShoot(target_turf, ttarget)
 			sleep(1)
 			TryToShoot(target_turf, ttarget)

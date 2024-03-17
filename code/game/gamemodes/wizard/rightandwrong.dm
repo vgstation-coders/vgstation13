@@ -26,10 +26,11 @@
 			H.equip_survivor(survivor_type)
 			continue
 
-		var/datum/role/R = new survivor_type()
-		H.equip_survivor(R)
+		var/datum/role/R = survivor_type
 
-		if (!(isrole(R.id, H)))
+		if (!(isrole(initial(R.id), H)))
+			R = new survivor_type()
+			H.equip_survivor(R)
 			R.AssignToRole(H.mind)
 			R.Greet(GREET_RIGHTANDWRONG)
 			R.OnPostSetup()
@@ -352,7 +353,6 @@
 			new /obj/item/clothing/suit/wizrobe/red(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
 		if("necromancer")
-			new /obj/item/clothing/head/wizard/necro(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/necro(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
 		if("clown")
@@ -475,7 +475,6 @@
 			new /obj/item/clothing/suit/wizrobe/red(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
 		if("necromancer")
-			new /obj/item/clothing/head/wizard/necro(get_turf(src))
 			new /obj/item/clothing/suit/wizrobe/necro(get_turf(src))
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
 		if("clown")

@@ -1,6 +1,13 @@
 /obj/structure
 	icon = 'icons/obj/structures.dmi'
 	penetration_dampening = 5
+	var/hasbolts = FALSE
+	fire_fuel = 0 //exceptions defined as needed
+
+/obj/structure/examine(mob/user)
+	..()
+	if(hasbolts)
+		to_chat(user,"<span class='info'>This one is bolted into place.</span>")
 
 /obj/structure/blob_act(var/destroy = 0)
 	..()

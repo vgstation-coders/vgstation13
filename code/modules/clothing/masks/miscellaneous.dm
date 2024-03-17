@@ -71,7 +71,7 @@
 	desc = "A blue neck scarf."
 	icon_state = "blue_scarf"
 	item_state = "blue_scarf"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 
 
 /obj/item/clothing/mask/scarf/red
@@ -79,7 +79,7 @@
 	desc = "A red neck scarf."
 	icon_state = "red_scarf"
 	item_state = "red_scarf"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 
 
 /obj/item/clothing/mask/scarf/green
@@ -87,7 +87,26 @@
 	desc = "A green and red line patterned scarf."
 	icon_state = "green_scarf"
 	item_state = "green_scarf"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
+
+/obj/item/clothing/mask/scarf/linen
+	name = "scarf"
+	desc = "A warm scarf to endure the snow."
+	icon_state = "scarf"
+	item_state = "scarf"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("pattern","tip")
+	dye_base_iconstate_override = "scarf"
+
+/obj/item/clothing/mask/scarf/linen/update_icon()
+	if(is_flipped == 1)
+		dye_base_iconstate_override = "scarf"
+	else
+		dye_base_iconstate_override = "scarf_up"
+	..()
 
 /obj/item/clothing/mask/balaclava
 	name = "balaclava"
@@ -105,12 +124,22 @@
 	name = "ski mask"
 	desc = "This NT-brand skimask is sure to keep you warm."
 
+/obj/item/clothing/mask/balaclava/skimask/linen
+	name = "ski mask"
+	desc = "A warm skimask."
+	icon_state = "skimask"
+	item_state = "skimask"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+
 /obj/item/clothing/mask/neorussian
 	name = "neo-Russian mask"
 	desc = "Somehow, it makes you act and look way more polite than usual."
 	icon_state = "nr_mask"
 	item_state = "nr_mask"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 	body_parts_covered = FACE
 	heat_conductivity = INS_MASK_HEAT_CONDUCTIVITY
 
@@ -243,7 +272,7 @@
 	icon_state = "goldenmask"
 	item_state = "goldenmask"
 	species_fit = list(INSECT_SHAPED)
-	autoignition_temperature = null
+	autoignition_temperature = 0
 
 /obj/item/clothing/mask/goldface/equipped()
 	..()
@@ -263,6 +292,7 @@
 	icon_state = "holopipe_off"
 	item_state = "holopipe_off"
 	var/activated = 0
+	species_fit = list(VOX_SHAPED)
 
 
 /obj/item/clothing/mask/holopipe/proc/activate(var/mob/user as mob)
@@ -288,3 +318,15 @@
 	set src in usr
 	if(!usr.incapacitated())
 		activate(usr)
+
+/obj/item/clothing/mask/gentling
+	name = "gentling mask"
+	desc = "In wool paper and acrylic the pain of experience is smoothed away into the aspect of a child. Neuronal clamps peek out from the concave interior surface. The mask is fastened by a brass chain, adorned by beads of glass, and branded on the forehead with the Holy Rhombus, a sign of the price of innocence."
+	icon_state = "gentlingmask"
+	item_state = "gentlingmask"
+	gentling = TRUE
+	canremove = FALSE
+	cant_remove_msg = " is clamped on!"
+	clothing_flags = MASKINTERNALS
+	origin_tech = Tc_BIOTECH + "=5"
+

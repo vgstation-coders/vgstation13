@@ -3,6 +3,7 @@
 	voice_name = "synthesized voice"
 	can_butcher = 0
 	mob_property_flags = MOB_ROBOTIC
+	meat_type = null
 
 	var/flashed = 0
 	var/syndicate = 0

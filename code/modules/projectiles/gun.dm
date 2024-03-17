@@ -132,7 +132,7 @@
 			playsound(user, in_chamber.fire_sound, fire_volume/A.volume_mult, 1)
 		if(A.volume_mult <= 1)
 			user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
-			"<span class='warning'>You [fire_action] [src][reflex ? "by reflex":""]!</span>", \
+			"<span class='warning'>You [fire_action] [src][reflex ? " by reflex":""]!</span>", \
 			"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 	else
 		if(fire_sound)
@@ -192,9 +192,13 @@
 	var/dehand = FALSE
 	if(istype(user, /mob/living))
 		var/mob/living/M = user
+		var/honor = is_honorable(M, honorable)
+		if(honor_check && honor == MERELY_HONORABLE) //Merely honorable people simply cannot use guns
+			to_chat(M, "<span class='notice'>You are too honorable to use such weapons!</span>")
+			return
 		if(clumsy_check && clumsy_check(M) && prob(50))
 			explode = TRUE
-		if(honor_check && is_honorable(M, honorable))
+		if(honor_check && honor == VERY_HONORABLE)
 			explode = TRUE
 			dehand = TRUE
 		if(explode)

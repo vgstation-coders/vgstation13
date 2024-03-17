@@ -101,7 +101,7 @@
 //This is separate because the mob will have to make a decision as to what it wants as a loadout. Once this is chosen, the gear will be slapped onto them to not waste time
 /datum/faction/syndicate/nuke_op/proc/equip_nuke_loadout(mob/living/carbon/human/synd_mob)
 
-	var/chosen_loadout = input(synd_mob, "Your operation is about to begin. What kind of operations would you like to specialize into ?") in list("Ballistics", "Energy", "Demolition", "Melee", "Medical", "Engineering", "Stealth", "Ship and Cameras")
+	var/chosen_loadout = input(synd_mob, "Your operation is about to begin. What kind of operations would you like to specialize into?") in list("Ballistics", "Energy", "Demolition", "Melee", "Medical", "Engineering", "Stealth", "Ship and Cameras")
 
 	return chosen_loadout
 

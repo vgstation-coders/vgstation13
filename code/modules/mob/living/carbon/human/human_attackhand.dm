@@ -25,11 +25,7 @@
 			if(!V.silentbite)
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
-			else
-				to_chat(M, "<span class='danger'>You start to slowly reach for [src]'s neck to bite it!.</span>")
-			var/mature = (locate(/datum/power/vampire/mature) in V.current_powers) ? 2 : 1
-			if(!V.silentbite || do_mob(M, src, (30 SECONDS) / mature))
-				V.handle_bloodsucking(src)
+			V.handle_bloodsucking(src)
 			return
 	//end vampire code
 
@@ -291,7 +287,7 @@
 					punch_zone = LIMB_HEAD
 				var/datum/organ/external/limb = organs_by_name[punch_zone]
 				if(limb.status & ORGAN_BLEEDING && istype(M))
-					M.bloody_hands(src,1)
+					M.bloody_hands(src, 2)
 				return punch_damage
 			else // dodged
 				return 0

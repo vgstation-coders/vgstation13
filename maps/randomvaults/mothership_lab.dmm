@@ -36,6 +36,10 @@
 	},
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/asteroid)
+"ar" = (
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/commando,
+/turf/unsimulated/floor/ayy,
+/area/vault/mothership_lab/control_room)
 "aI" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/lab_underplating,
@@ -319,6 +323,8 @@
 "gd" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/remains/human,
+/obj/item/clothing/suit/armor/xcomarmor,
+/obj/item/clothing/head/helmet/xcom,
 /obj/item/clothing/glasses/scanner/night,
 /turf/unsimulated/floor/lab_underplating,
 /area/vault/mothership_lab/entrance)
@@ -356,13 +362,16 @@
 /obj/item/clothing/accessory/holster/handgun,
 /obj/item/clothing/shoes/jackboots/mothership,
 /obj/item/weapon/storage/belt/mothership,
-/obj/structure/closet/ayy2{
-	anchored = 1
-	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 8
 	},
+/obj/structure/closet/ayy{
+	name = "explorer locker";
+	anchored = 1
+	},
+/obj/item/clothing/suit/armor/mothership/explorer,
+/obj/item/clothing/head/helmet/mothership_explorer,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "gD" = (
@@ -560,8 +569,7 @@
 /area/vault/mothership_lab/entrance)
 "jH" = (
 /obj/structure/rack,
-/obj/item/weapon/pickaxe/shovel,
-/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/gun/energy/smalldisintegrator,
 /turf/unsimulated/floor/airless{
 	dir = 10;
 	icon_state = "asteroidwarning"
@@ -633,6 +641,16 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
+/turf/unsimulated/floor/ayy/fancy,
+/area/vault/mothership_lab/entrance)
+"kE" = (
+/obj/item/clothing/shoes/jackboots/mothership,
+/obj/item/clothing/under/grey/grey_soldier,
+/obj/structure/window/reinforced{
+	dir = 8
+	},
+/obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "kN" = (
@@ -741,6 +759,19 @@
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
+"mr" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/closet/secure_closet/guncabinet{
+	anchored = 1;
+	name = "raider gun cabinet";
+	req_access = null
+	},
+/obj/item/ammo_storage/magazine/m380auto,
+/obj/item/ammo_storage/magazine/m380auto,
+/obj/item/weapon/gun/projectile/glock,
+/obj/item/weapon/gun/projectile/glock,
+/turf/unsimulated/floor/lab_asteroid,
+/area/vault/mothership_lab/raidtunnel_upper)
 "mu" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/unsimulated/floor/asteroid/air,
@@ -750,6 +781,8 @@
 /area/vault/mothership_lab/asteroid)
 "my" = (
 /obj/structure/rack,
+/obj/item/weapon/pickaxe/shovel,
+/obj/item/weapon/pickaxe/shovel,
 /obj/item/weapon/pickaxe/drill,
 /obj/item/weapon/pickaxe/drill,
 /obj/item/weapon/pickaxe/drill,
@@ -856,7 +889,8 @@
 	},
 /obj/item/clothing/under/grey/grey_scout,
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit,
-/obj/structure/closet/crate/ayy2,
+/obj/structure/closet/crate/ayy,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "nq" = (
@@ -884,6 +918,7 @@
 /obj/item/weapon/storage/box/inflatables,
 /obj/item/device/radio,
 /obj/item/device/radio,
+/obj/item/stack/sheet/wood/bigstack,
 /obj/item/device/radio,
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/entrance)
@@ -1178,7 +1213,8 @@
 	},
 /obj/item/clothing/under/grey/grey_scout,
 /obj/item/clothing/accessory/holster/handgun,
-/obj/structure/closet/crate/ayy2,
+/obj/structure/closet/crate/ayy,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "sc" = (
@@ -1277,10 +1313,10 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/structure/closet/crate/secure/ayy_mdf{
+/obj/structure/closet/crate/secure/ayy_general{
 	req_access_txt = "162";
 	req_one_access_txt = "162";
-	name = "MDF disintegrator crate"
+	name = "GDR disintegrator crate"
 	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
@@ -1498,7 +1534,7 @@
 	},
 /obj/item/clothing/shoes/jackboots/mothership,
 /obj/item/clothing/accessory/holster/handgun,
-/obj/structure/closet/crate/ayy2,
+/obj/structure/closet/crate/ayy,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "wY" = (
@@ -1661,6 +1697,10 @@
 	},
 /turf/unsimulated/wall/ayy,
 /area/vault/mothership_lab/entrance)
+"yL" = (
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/pacifier/explorer,
+/turf/unsimulated/floor/ayy,
+/area/vault/mothership_lab/entrance)
 "yN" = (
 /obj/structure/cage/autoclose/cover,
 /obj/effect/landmark/corpse/grey/worker,
@@ -1771,7 +1811,7 @@
 	},
 /obj/item/clothing/shoes/jackboots/mothership,
 /obj/item/clothing/under/grey/grey_scout,
-/obj/structure/closet/crate/ayy2,
+/obj/structure/closet/crate/ayy,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "zX" = (
@@ -1781,10 +1821,10 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/obj/structure/closet/crate/secure/ayy_mdf{
+/obj/structure/closet/crate/secure/ayy_general{
 	req_access_txt = "162";
 	req_one_access_txt = "162";
-	name = "MDF disintegrator crate"
+	name = "GDR disintegrator crate"
 	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
@@ -1830,6 +1870,7 @@
 	network = list("MOTHERSHIPLAB")
 	},
 /obj/structure/closet/crate/ayy2,
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "At" = (
@@ -1839,6 +1880,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "Au" = (
@@ -1914,6 +1956,9 @@
 /obj/structure/table,
 /obj/item/weapon/paper,
 /obj/item/weapon/pen/multi,
+/obj/machinery/recharger{
+	pixel_x = 30
+	},
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/entrance)
 "BX" = (
@@ -1996,7 +2041,8 @@
 /obj/machinery/door/airlock/silver{
 	name = "Lab Entry Deck";
 	req_access_txt = "160";
-	req_one_access_txt = "160"
+	req_one_access_txt = "160";
+	locked = 1
 	},
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
@@ -2190,10 +2236,13 @@
 /obj/machinery/light/small,
 /obj/item/weapon/storage/belt/mothership,
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/closet/ayy2{
+/obj/structure/window/reinforced,
+/obj/structure/closet/ayy{
+	name = "explorer locker";
 	anchored = 1
 	},
-/obj/structure/window/reinforced,
+/obj/item/clothing/suit/armor/mothership/explorer,
+/obj/item/clothing/head/helmet/mothership_explorer,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "GE" = (
@@ -2247,6 +2296,10 @@
 	dir = 4;
 	icon_state = "stage_stairs"
 	},
+/area/vault/mothership_lab/control_room)
+"He" = (
+/mob/living/simple_animal/hostile/humanoid/grey/soldier/space/ranged,
+/turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/control_room)
 "Hx" = (
 /obj/structure/railing{
@@ -2329,6 +2382,7 @@
 /obj/structure/bed/chair/comfy/ayy2{
 	dir = 1
 	},
+/mob/living/simple_animal/hostile/humanoid/grey/leader/zorb,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/control_room)
 "IN" = (
@@ -2398,6 +2452,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "KD" = (
@@ -2456,7 +2511,8 @@
 /obj/machinery/door/airlock/security{
 	name = "Explorer Barracks";
 	req_access_txt = "162";
-	req_one_access_txt = "162"
+	req_one_access_txt = "162";
+	locked = 1
 	},
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/entrance)
@@ -2628,6 +2684,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
+/obj/item/clothing/mask/gas/mothership,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "OJ" = (
@@ -2671,10 +2728,6 @@
 /turf/unsimulated/floor/lab_underplating{
 	icon_state = "panelscorched"
 	},
-/area/vault/mothership_lab/control_room)
-"PB" = (
-/mob/living/simple_animal/hostile/humanoid/grey/leader,
-/turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/control_room)
 "PC" = (
 /obj/structure/acidtoilet{
@@ -2723,7 +2776,7 @@
 	dir = 8
 	},
 /obj/item/weapon/card/id/mothership_soldier,
-/obj/structure/closet/crate/ayy2,
+/obj/structure/closet/crate/ayy,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "Qz" = (
@@ -2866,6 +2919,7 @@
 /area/vault/mothership_lab/entrance)
 "SS" = (
 /obj/structure/table,
+/obj/item/stack/sheet/metal/bigstack,
 /obj/item/weapon/storage/toolbox/mechanical,
 /obj/item/weapon/storage/toolbox/mechanical,
 /turf/unsimulated/floor/ayy/maint,
@@ -2951,13 +3005,14 @@
 /area/vault/mothership_lab/control_room)
 "UU" = (
 /obj/structure/rack,
-/obj/item/device/analyzer,
 /obj/structure/window/reinforced{
 	dir = 1
 	},
 /obj/structure/window/reinforced{
 	dir = 8
 	},
+/obj/item/device/analyzer,
+/obj/item/device/analyzer,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "UV" = (
@@ -3051,13 +3106,17 @@
 /obj/item/clothing/shoes/jackboots/mothership,
 /obj/item/weapon/storage/belt/mothership,
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/closet/ayy2{
-	anchored = 1
-	},
 /obj/structure/window/reinforced,
 /obj/structure/window/reinforced{
 	dir = 4
 	},
+/obj/structure/closet/ayy{
+	name = "explorer locker";
+	anchored = 1
+	},
+/obj/item/clothing/suit/armor/mothership/explorer,
+/obj/item/clothing/head/helmet/mothership_explorer,
+/obj/item/weapon/card/id/mothership_soldier,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/entrance)
 "Ww" = (
@@ -3789,7 +3848,7 @@ YF
 oo
 lo
 PH
-vp
+He
 Ea
 PJ
 QR
@@ -3887,7 +3946,7 @@ EM
 uG
 PJ
 QR
-PB
+QR
 QR
 QR
 QR
@@ -3977,7 +4036,7 @@ YF
 oo
 sN
 PH
-vp
+ar
 Ea
 PJ
 QR
@@ -4534,7 +4593,7 @@ MD
 MD
 YF
 BB
-Rj
+HQ
 Rj
 Rj
 Rj
@@ -4582,7 +4641,7 @@ MD
 YF
 BB
 la
-Rj
+yL
 Rj
 Rj
 nl
@@ -4628,7 +4687,7 @@ MD
 MD
 YF
 BB
-Rj
+ab
 Rj
 QF
 Rj
@@ -5004,7 +5063,7 @@ YF
 BB
 AP
 EG
-zj
+kE
 BB
 nL
 Ff
@@ -5086,7 +5145,7 @@ GL
 GL
 MD
 Qz
-bq
+mr
 cn
 MQ
 Qz
@@ -5096,7 +5155,7 @@ MD
 MD
 YF
 BB
-zj
+kE
 Rj
 vZ
 BB
@@ -5228,7 +5287,7 @@ Au
 Qz
 Qz
 Qz
-MQ
+nd
 Qz
 MD
 zr

@@ -26,7 +26,7 @@ var/list/body_archives = list()
 	name = source.mind.name
 	key = source.mind.key
 	rank = source.mind.assigned_role
-	log_debug("[key_name(source)] has has had their body ([mob_type]) archived.")
+	log_debug("[key_name(source)] has had their body ([mob_type]) archived.")
 	source.archive_body(src)
 
 //Admin toys
@@ -115,7 +115,33 @@ var/list/body_archives = list()
 	archive.data["dna_records"] = R
 	archive.data["underwear"] = underwear
 
-	//I gave a shot at preserving limb status (destroyed, peg, mechanized) then decided I was too tired and it's too much trouble, so TODO for anyone with the determination
+	var/list/limb_data = list(
+		LIMB_LEFT_ARM,LIMB_RIGHT_ARM,
+		LIMB_LEFT_LEG,LIMB_RIGHT_LEG,
+		LIMB_LEFT_FOOT,LIMB_RIGHT_FOOT,
+		LIMB_LEFT_HAND,LIMB_RIGHT_HAND,
+		)
+	var/list/internal_organ_data = list("heart", "eyes", "lungs", "kidneys", "liver")
+	var/list/organ_data = list()
+
+	for(var/name in limb_data)
+		var/datum/organ/external/O = organs_by_name[name]
+		if (O.status & ORGAN_DESTROYED)
+			organ_data[name] = "amputated"
+		else if (O.status & ORGAN_ROBOT)
+			organ_data[name] = "cyborg"
+		else if (O.status & ORGAN_PEG)
+			organ_data[name] = "peg"
+
+	for(var/name in internal_organ_data)
+		var/datum/organ/internal/I = internal_organs_by_name[name]
+		if (I)
+			if(I.robotic == 1)
+				organ_data[name] = "assisted"
+			else if(I.robotic == 2)
+				organ_data[name] = "mechanical"
+
+	archive.data["organ_data"] = organ_data
 
 /mob/living/carbon/human/actually_reset_body(var/datum/body_archive/archive, var/keep_inventory = FALSE, var/job_outfit = FALSE, var/mob/old_mob, var/datum/mind/our_mind)
 
@@ -131,7 +157,7 @@ var/list/body_archives = list()
 	H.dna.species = R.dna.species
 	if(H.dna.species != "Human")
 		H.set_species(H.dna.species, TRUE)
-	H.check_mutations = TRUE
+	H.check_mutations = M_CHECK_ALL
 	H.updatehealth()
 	if (our_mind)
 		has_been_shade -= our_mind
@@ -206,6 +232,33 @@ var/list/body_archives = list()
 			if (transfered_held_item)
 				old_mob.drop_item(transfered_held_item,loc,TRUE)
 				H.put_in_hands(transfered_held_item)
+
+	if ("organ_data" in archive.data)
+		var/list/organ_data = archive.data["organ_data"]
+		//reproducing the way limb preferences are applied in /datum/preferences/proc/copy_to()
+		for(var/name in organ_data)
+			var/datum/organ/external/O = H.organs_by_name[name]
+			var/datum/organ/internal/I = H.internal_organs_by_name[name]
+			var/status = organ_data[name]
+
+			if(status == "amputated")
+				O.status &= ~ORGAN_ROBOT
+				O.status &= ~ORGAN_PEG
+				O.amputated = 1
+				O.status |= ORGAN_DESTROYED
+				O.destspawn = 1
+			else if(status == "cyborg")
+				O.status &= ~ORGAN_PEG
+				O.status |= ORGAN_ROBOT
+			else if(status == "peg")
+				O.status &= ~ORGAN_ROBOT
+				O.status |= ORGAN_PEG
+			else if(status == "assisted")
+				I?.mechassist()
+			else if(status == "mechanical")
+				I?.mechanize()
+			else
+				continue
 
 	if (job_outfit)
 		var/datum/job/J = job_master.GetJob(archive.rank)

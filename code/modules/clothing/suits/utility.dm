@@ -18,7 +18,7 @@
 	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.50
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|HIDETAIL
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/extinguisher,/obj/item/tool/irons,/obj/item/tool/crowbar/halligan)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	clothing_flags = ONESIZEFITSALL
@@ -26,6 +26,9 @@
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	autoignition_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(VOX_SHAPED)
+
+	autoignition_temperature = 0
+	fire_fuel = 0
 
 /obj/item/clothing/suit/fire/firefighter
 	icon_state = "firesuit"
@@ -82,6 +85,7 @@
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	flags = FPRINT
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|HIDETAIL
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
@@ -154,7 +158,7 @@
 	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.50
-	body_parts_covered = FULL_BODY
+	body_parts_covered = FULL_BODY|HIDETAIL
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
 	slowdown = 1.5
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 100)

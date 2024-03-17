@@ -283,6 +283,39 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 	add_fingerprint(usr)
 
+	if(href_list["sync"]) //Sync the research holder with all the R&D consoles in the game that aren't sync protected.
+		screen = 0.0
+		if(!sync)
+			to_chat(usr, "<span class='warning'>You must connect to the network first!</span>")
+		else
+			griefProtection() //Putting this here because I dont trust the sync process
+			spawn(30)
+				if(src)
+					for(var/obj/machinery/r_n_d/server/S in machines)
+						var/server_processed = 0
+						if(S.disabled)
+							continue
+						if((id in S.id_with_upload) || istype(S, /obj/machinery/r_n_d/server/centcom))
+							for(var/ID in files.known_tech)
+								var/datum/tech/T = files.known_tech[ID]
+								S.files.AddTech2Known(T)
+							for(var/datum/design/D in files.known_designs)
+								S.files.AddDesign2Known(D)
+							S.files.RefreshResearch()
+							server_processed = 1
+						if(((id in S.id_with_download) && !istype(S, /obj/machinery/r_n_d/server/centcom)) || S.hacked)
+							for(var/ID in S.files.known_tech)
+								var/datum/tech/T = S.files.known_tech[ID]
+								files.AddTech2Known(T)
+							for(var/datum/design/D in S.files.known_designs)
+								files.AddDesign2Known(D)
+							files.RefreshResearch()
+							server_processed = 1
+						if(!istype(S, /obj/machinery/r_n_d/server/centcom) && server_processed)
+							S.produce_heat(100)
+					screen = 1.6
+					updateUsrDialog()
+
 	if(isLocked() && !allowed(usr))
 		to_chat(usr, "Unauthorized Access.")
 		return
@@ -333,7 +366,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		for(var/ID in files.known_tech)
 			var/datum/tech/T = files.known_tech[ID]
 			if(href_list["copy_tech_ID"] == T.id)
-				t_disk.stored = T
+				t_disk.stored = create_tech(T.id)
+				t_disk.stored.level = T.level
 				break
 		screen = 1.2
 
@@ -387,39 +421,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			screen = text2num(href_list["lock"])
 		else
 			to_chat(usr, "Unauthorized Access.")
-
-	else if(href_list["sync"]) //Sync the research holder with all the R&D consoles in the game that aren't sync protected.
-		screen = 0.0
-		if(!sync)
-			to_chat(usr, "<span class='warning'>You must connect to the network first!</span>")
-		else
-			griefProtection() //Putting this here because I dont trust the sync process
-			spawn(30)
-				if(src)
-					for(var/obj/machinery/r_n_d/server/S in machines)
-						var/server_processed = 0
-						if(S.disabled)
-							continue
-						if((id in S.id_with_upload) || istype(S, /obj/machinery/r_n_d/server/centcom))
-							for(var/ID in files.known_tech)
-								var/datum/tech/T = files.known_tech[ID]
-								S.files.AddTech2Known(T)
-							for(var/datum/design/D in files.known_designs)
-								S.files.AddDesign2Known(D)
-							S.files.RefreshResearch()
-							server_processed = 1
-						if(((id in S.id_with_download) && !istype(S, /obj/machinery/r_n_d/server/centcom)) || S.hacked)
-							for(var/ID in S.files.known_tech)
-								var/datum/tech/T = S.files.known_tech[ID]
-								files.AddTech2Known(T)
-							for(var/datum/design/D in S.files.known_designs)
-								files.AddDesign2Known(D)
-							files.RefreshResearch()
-							server_processed = 1
-						if(!istype(S, /obj/machinery/r_n_d/server/centcom) && server_processed)
-							S.produce_heat(100)
-					screen = 1.6
-					updateUsrDialog()
 
 	else if(href_list["togglesync"]) //Prevents the console from being synced by other consoles. Can still send data.
 		sync = !sync
@@ -674,7 +675,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		return
 
 	user.set_machine(src)
-	var/dat = list("<style>a:link {color: #0066CC} a:visited {color: #0066CC}</style>")
+	var/dat = list()
 	files.RefreshResearch()
 	switch(screen) //A quick check to make sure you get the right screen when a device is disconnected.
 		if(2 to 2.9)
@@ -735,8 +736,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "Current Research Levels:<BR><BR>"
 			for(var/ID in files.known_tech)
 				var/datum/tech/T = files.known_tech[ID]
-				dat += {"[T.name]<BR>
-					* Level: [T.level]<BR>
+				dat += {"[T.name]: level [T.level]<BR>
 					* Summary: [T.desc]<HR>"}
 
 		if(1.2) //Technology Disk Menu
@@ -889,10 +889,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "Filter: "
 			for(var/name_set in linked_lathe.part_sets)
 				if (name_set in filtered["protolathe"])
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' style='color: #A66300'>[name_set]</a> / "
+					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' style='color: #808080'>[name_set]</a> / "
 				else
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' style='color: #0066CC'>[name_set]</a> / "
-			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["protolathe"]' style='color: #0066CC'>Filter All</a><HR>"
+					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' style='color: #ffffff'>[name_set]</a> / "
+			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["protolathe"]' style='color: #ffffff'>Filter All</a><HR>"
 
 			for(var/name_set in linked_lathe.part_sets)
 				if(name_set in filtered["protolathe"])
@@ -960,14 +960,14 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					var/success = "red"
 					var/success_amount = linked_lathe.check_mats(I)
 					if(linked_lathe.check_mats(I) >= required_materials[I])
-						success = "green"
+						success = "#00ff00"
 					else if(linked_lathe.check_mats_bluespace(I) >= required_materials[I])
 						success_amount = linked_lathe.check_mats_bluespace(I)
-						success = "blue"
+						success = "#00ffff"
 					dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
 			dat += "<br><A href='?src=\ref[src];clearQ=1;device=protolathe'>Remove All Queued Items</A><br />"
 			if(linked_lathe.stopped)
-				dat += "<A href='?src=\ref[src];setProtolatheStopped=0' style='color:green'>Start Production</A>"
+				dat += "<A href='?src=\ref[src];setProtolatheStopped=0' style='color:#00ff00'>Start Production</A>"
 			else
 				dat += "<A href='?src=\ref[src];setProtolatheStopped=1' style='color:red'>Stop Production</A>"
 
@@ -985,10 +985,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "Filter: "
 			for(var/name_set in linked_imprinter.part_sets)
 				if (name_set in filtered["imprinter"])
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' style='color: #A66300'>[name_set]</a> / "
+					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' style='color: #808080'>[name_set]</a> / "
 				else
-					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' style='color: #0066CC'>[name_set]</a> / "
-			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["imprinter"]' style='color: #0066CC'>Filter All</a><HR>"
+					dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' style='color: #ffffff'>[name_set]</a> / "
+			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["imprinter"]' style='color: #ffffff'>Filter All</a><HR>"
 
 			for(var/name_set in linked_imprinter.part_sets)
 				if(name_set in filtered["imprinter"])
@@ -1076,24 +1076,25 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 							var/success = "red"
 							var/success_amount = linked_imprinter.check_mats(I)
 							if(linked_imprinter.check_mats(I) >= required_materials[I])
-								success = "green"
+								success = "#00ff00"
 							else if(linked_imprinter.check_mats_bluespace(I) >= required_materials[I])
 								success_amount = linked_imprinter.check_mats_bluespace(I)
-								success = "blue"
+								success = "#00ffff"
 							dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
 					else
 						var/success = linked_imprinter.check_mats(I)
-						dat += "<span style='color:[success?"green":"red"]'>[required_materials[I]] ([success]) [reagent_name(I)]. </span>"
+						dat += "<span style='color:[success?"#00ff00":"red"]'>[required_materials[I]] ([success]) [reagent_name(I)]. </span>"
 
 			dat += "<br><A href='?src=\ref[src];clearQ=1;device=imprinter'>Remove All Queued Items</A><br />"
 			if(linked_imprinter.stopped)
-				dat += "<A href='?src=\ref[src];setImprinterStopped=0' style='color:green'>Start Production</A>"
+				dat += "<A href='?src=\ref[src];setImprinterStopped=0' style='color:#00ff00'>Start Production</A>"
 			else
 				dat += "<A href='?src=\ref[src];setImprinterStopped=1' style='color:red'>Stop Production</A>"
 
 	dat = jointext(dat,"")
-	user << browse("<TITLE>Research and Development Console</TITLE><HR>[dat]", "window=rdconsole;size=575x400")
-	onclose(user, "rdconsole")
+	var/datum/browser/popup = new(user, "\ref[src]", name, 575, 400)
+	popup.set_content(dat)
+	popup.open()
 
 /obj/machinery/computer/rdconsole/proc/isLocked() //magic numbers ahoy!
 	return screen == 0.2

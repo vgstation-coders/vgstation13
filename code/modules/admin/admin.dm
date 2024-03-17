@@ -737,9 +737,6 @@ var/global/floorIsLava = 0
 		<h3>Common options</h3>
 		<i>All these options can be changed midround.</i> <br/>
 		<br/>
-		<b>Force extended:</b> - Option is <a href='?src=\ref[src];force_extended=1'> <b>[dynamic_forced_extended ? "ON" : "OFF"]</a></b>.
-		<br/>This will force the round to be extended. No rulesets will be drafted. <br/>
-		<br/>
 		<b>No stacking:</b> - Option is <a href='?src=\ref[src];no_stacking=1'> <b>[dynamic_no_stacking ? "ON" : "OFF"]</b></a>.
 		<br/>Unless the threat goes above [stacking_limit], only one "round-ender" ruleset will be drafted. <br/>
 		<br/>
@@ -824,45 +821,29 @@ var/global/floorIsLava = 0
 			<BR>
 			"}
 
-
+	/*Anything on this list should have a justifcation to be its own button instead of just the pickevent
+	Parenthesis usually specify the feature that makes this different than just spawning the event
+	Bus Only are events that don't trigger on their own, or were never actually made into event datums
+	*/
 	if(check_rights(R_FUN,0))
 		dat += {"
-			<B>'Random' Events</B><BR>
+			<B>Dynamic Events</B><BR>
+			<a href='?src=\ref[src];secretsfun=pick_event'>Pick a specific Dynamic Event</A><BR>
+			<a href='?src=\ref[src];secretsfun=roll_event'>Roll a random Dynamic Event</A><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=wave'>Spawn a wave of meteors (aka lagocolyptic shower)</A><BR>
-			<A href='?src=\ref[src];secretsfun=silent_meteors'>Spawn a wave of meteors with no warning</A><BR>
+			<A href='?src=\ref[src];secretsfun=vermin_infestation'>Vermin infestation (specify type and location)</A><BR>
+			<A href='?src=\ref[src];secretsfun=hostile_infestation'>Monster infestation (specify type and location)</A><BR>
+			<A href='?src=\ref[src];secretsfun=virus'>Virus Outbreak (lesser, greater, or custom)</A><BR>
+			<A href='?src=\ref[src];secretsfun=comms_blackout'>Communications blackout (silent or announced)</A><BR>
+			<A href='?src=\ref[src];secretsfun=breaklink'>Break the station's link with Central Command (indefinitely)</A><BR>
+			<A href='?src=\ref[src];secretsfun=makelink'>Fix the station's link with Central Command</A><BR>
+			<BR>
+			<B>Bus-Only Events</B>
+			<BR>
 			<A href='?src=\ref[src];secretsfun=gravity'>Toggle station artificial gravity</A><BR>
 			<A href='?src=\ref[src];secretsfun=gravanomalies'>Spawn a gravitational anomaly (aka lagitational anomolag)</A><BR>
 			<A href='?src=\ref[src];secretsfun=timeanomalies'>Spawn wormholes</A><BR>
-			<A href='?src=\ref[src];secretsfun=immovable'>Spawn an Immovable Rod</A><BR>
-			<A href='?src=\ref[src];secretsfun=immovablebig'>Spawn an Immovable Pillar</A><BR>
-			<A href='?src=\ref[src];secretsfun=immovablehyper'>Spawn an Immovable Monolith (highly destructive!)</A><BR>
-			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
-			<A href='?src=\ref[src];secretsfun=fireworks'>Send some fireworks at the station</A><BR>
-			<A href='?src=\ref[src];secretsfun=old_vendotron_crash'>Launch an old vendotron at the station</A><BR>
-			<A href='?src=\ref[src];secretsfun=old_vendotron_teleport'>Teleport an old vendotron onto the station</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=blobwave'>Spawn a blob cluster</A><BR>
-			<A href='?src=\ref[src];secretsfun=aliens'>Trigger an Alien infestation</A><BR>
-			<A href='?src=\ref[src];secretsfun=alien_silent'>Spawn an Alien silently</A><BR>
-			<A href='?src=\ref[src];secretsfun=spiders'>Trigger a Spider infestation</A><BR>
-			<A href='?src=\ref[src];secretsfun=vermin_infestation'>Spawn a vermin infestation</A><BR>
-			<A href='?src=\ref[src];secretsfun=hostile_infestation'>Spawn a hostile creature infestation</A><BR>
-			<A href='?src=\ref[src];secretsfun=carp'>Trigger a Carp migration</A><BR>
-			<A href='?src=\ref[src];secretsfun=mobswarm'>Trigger mobs of your choice appearing out of thin air</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=spacevines'>Spawn Space-Vines</A><BR>
-			<A href='?src=\ref[src];secretsfun=radiation'>Irradiate the station</A><BR>
-			<A href='?src=\ref[src];secretsfun=virus'>Trigger a Virus Outbreak</A><BR>
-			<A href='?src=\ref[src];secretsfun=mass_hallucination'>Cause the crew to hallucinate</A><BR>
-			<BR>
-			<A href='?src=\ref[src];secretsfun=lightsout'>Trigger an Electrical Storm (breaks some lights)</A><BR>
-			<A href='?src=\ref[src];secretsfun=prison_break'>Trigger a Prison Break</A><BR>
-			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
-			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
-			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
-			<A href='?src=\ref[src];secretsfun=money_lotto'>Start a lotto draw</A><BR>
-			<a href='?src=\ref[src];secretsfun=pick_event'>Pick a random event from all possible random events (WARNING, NOT ALL ARE GUARANTEED TO WORK).</A><BR>
+			<A href='?src=\ref[src];secretsfun=mobswarm'>Any mob infestation (specify type only)</A><BR>
 			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>
@@ -871,6 +852,8 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode (removes access on doors except for Command and Security)</A><BR>
 			<A href='?src=\ref[src];secretsfun=RandomizedLawset'>Give the AIs a randomly generated Lawset.</A><BR>
 			<A href='?src=\ref[src];secretsfun=buddha_mode_everyone'>Toggle Buddha Mode on/off for everyone</A><BR>
+			<A href='?src=\ref[src];secretsfun=spawn_custom_turret'>Spawn a customizable turret</A><BR>
+			<A href='?src=\ref[src];secretsfun=spawn_meat_blob'>Spawn a Meat Blob</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=power'>Make all areas powered</A><BR>
 			<A href='?src=\ref[src];secretsfun=unpower'>Make all areas unpowered</A><BR>
@@ -1022,8 +1005,6 @@ var/global/floorIsLava = 0
 
 		if(blackbox)
 			blackbox.save_all_data_to_sql()
-
-		CallHook("Reboot",list())
 
 		if (watchdog.waiting)
 			to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in a few seconds.</B></span>")
@@ -1258,8 +1239,6 @@ var/global/floorIsLava = 0
 
 	if(blackbox)
 		blackbox.save_all_data_to_sql()
-
-	CallHook("Reboot",list())
 
 	if (watchdog.waiting)
 		to_chat(world, "<span class='notice'><B>Server will shut down for an automatic update in a few seconds.</B></span>")

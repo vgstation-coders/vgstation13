@@ -280,8 +280,7 @@ var/global/global_cricket_population = 0
 		P = new(src)
 	else
 		return
-	P.clean = TRUE
-	P.update_icon()
+	P.clean_act(CLEANLINESS_SPACECLEANER)
 	if(potential_stack)
 		P.forceMove(potential_stack)
 		potential_stack.plates += P
@@ -324,10 +323,10 @@ var/global/global_cricket_population = 0
 
 /obj/item/clothing/glasses/hud/hydro
 	name = "hydroHUD"
-	desc = "A heads-up display that displays information on plants and farm animals."
+	desc = "A heads-up display that displays information on plants and farm animals. It appears to feature corrective lenses too."
 	icon_state = "hydrohud"
 	item_state = "rwelding-g"
-	prescription = TRUE
+	nearsighted_modifier = -3
 	var/obj/item/device/analyzer/plant_analyzer/my_analyzer
 
 /obj/item/clothing/glasses/hud/hydro/New()
@@ -399,7 +398,8 @@ var/global/global_cricket_population = 0
 		visible_message("<span class='notice'>\The [src] stands up!</span>")
 		new /mob/living/simple_animal/hostile/mantini(T)
 		qdel(src)
-	..()
+	else
+		..()
 
 /mob/living/simple_animal/hostile/mantini
 	name = "mantini"

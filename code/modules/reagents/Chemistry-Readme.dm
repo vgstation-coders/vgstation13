@@ -28,6 +28,10 @@ About the Holder:
 			This proc removes reagents from the holder until the passed amount
 			is matched. It'll try to remove some of ALL reagents contained.
 
+		remove_from_all(var/amount)
+			This proc removes reagents from the holder. Unlike remove_any which removes 1u at a time from each reagent,
+			this one removes a fraction of EACH reagent's volume based on their part of the total volume.
+
 		trans_to(var/obj/target, var/amount)
 			This proc equally transfers the contents of the holder to another
 			objects holder. You need to pass it the object (not the holder) you want

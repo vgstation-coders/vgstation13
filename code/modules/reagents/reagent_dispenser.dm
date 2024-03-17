@@ -36,7 +36,7 @@
 */
 
 /obj/structure/reagent_dispensers/attack_hand()
-	if (rig)
+	if (!cookvessel && rig)
 		usr.visible_message("[usr] begins to detach [rig] from \the [src].", "You begin to detach [rig] from \the [src].")
 		if(do_after(usr, src, 20))
 			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src].</span>")
@@ -45,6 +45,8 @@
 				rig.master = null
 				rig = null
 			overlays = new/list()
+	else
+		. = ..()
 
 /obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(W.is_wrench(user))
@@ -511,6 +513,8 @@
 	desc = "Double, double, toil and trouble. Fire burn, and cauldron bubble."
 	flags = OPENCONTAINER
 
+	var/allows_dyeing = TRUE
+
 /obj/structure/reagent_dispensers/cauldron/attempt_heating()
 	return // for now
 
@@ -534,6 +538,9 @@
 			to_chat(user, "<span class='notice'>You finish deconstructing \the [src].</span>")
 			new /obj/item/stack/sheet/metal/(loc, 20)
 			qdel(src)
+	if (allows_dyeing)
+		if (W.dye_act(src,user))
+			return
 	..()
 
 /obj/structure/reagent_dispensers/cauldron/on_reagent_change()
@@ -564,11 +571,12 @@
 	icon_state = "metalbarrel"
 	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of metal."
 	layer = TABLE_LAYER
-	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
-	var/list/exiting = list() // Manages people leaving the barrel
+	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND | OPENCONTAINER // If I end up being coherent enough to make it holdable in-hand
+	var/list/exiting = list() // Manages people leaving the barrel //Turns out the flags here overwrote the new OPENCONTAINER flag so the barrels were fucked
 	health = 50
 	var/burning = FALSE
 	is_cooktop = TRUE
+	allows_dyeing = FALSE
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood
 	name = "wooden barrel"
@@ -632,7 +640,10 @@
 		icon_state = "flamingmetalbarrel"
 		set_light(3,4,LIGHT_COLOR_FIRE)
 	else
-		icon_state = "metalbarrel"
+		if(is_cooktop) //only metal barrels are cooktops
+			icon_state = "metalbarrel"
+		else
+			icon_state = "woodenbarrel"
 		set_light(0,0,LIGHT_COLOR_FIRE)
 	render_cookvessel()
 

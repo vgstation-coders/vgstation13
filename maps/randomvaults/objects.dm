@@ -46,6 +46,14 @@
 /area/vault/podstation
 	requires_power = 1
 
+/area/vault/podstation/interior
+	name = "\improper Pod Station"
+	icon_state = "kitchen"
+
+/area/vault/podstation/exterior
+	name = "\improper Pod Station Asteroid"
+	icon_state = "pod"
+
 /area/vault/fastfood
 
 /area/vault/fastfood/dining
@@ -285,6 +293,13 @@
 /obj/docking_port/destination/vault/amelab
 	areaname = "Nanotrasen Experimental AME Lab"
 
+/area/vault/soulblade_sanctum
+	jammed = 2
+	color = "red"
+	ambient_sounds = list(
+		/datum/ambience/spaced2,
+		/datum/ambience/spaced3,
+		)
 
 /area/vault/meteorlogical
 	name = "\improper Meteorlogical Station"
@@ -498,7 +513,10 @@
 	maxHealth = 150
 	icon_state = "duey0"
 	icon_initial = "duey"
-	Max_Fertilizers = 50
+
+/obj/machinery/bot/farmbot/duey/New()
+	..()
+	reagents.maximum_volume = 500
 
 /obj/structure/ladder/spacepond/ground
 	name = "wine cellar"
@@ -528,7 +546,7 @@
 	check_records = 1
 	criminals = 1
 	auth_weapons = 1
-	stun_all = 1
+	stun_peasants = 1
 	check_anomalies = 1
 	ai = 1
 
@@ -1056,13 +1074,13 @@
 	AT.id_tag = "vaultkitchen"
 	AT.enter_signal = /event/comp_ai_cmd_retaliate
 	AT.typefilter = /mob/living/carbon/human
-	register_event(/event/comp_ai_cmd_retaliate, src, src::Retaliate())
+	register_event(/event/comp_ai_cmd_retaliate, src, nameof(src::Retaliate()))
 	add_component(/datum/component/ai/conversation)
 	var/datum/component/ai/area_territorial/say/fastfood/intruder/AT2 = add_component(/datum/component/ai/area_territorial/say/fastfood/intruder)
 	AT2.SetArea(locate(/area/vault/fastfood/kitchen))
 
 /mob/living/simple_animal/hostile/retaliate/cookbot/Destroy()
-	unregister_event(/event/comp_ai_cmd_retaliate, src, src::Retaliate())
+	unregister_event(/event/comp_ai_cmd_retaliate, src, nameof(src::Retaliate()))
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/cookbot/death(var/gibbed = FALSE)

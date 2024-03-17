@@ -47,6 +47,8 @@
 		displayed_holomap.update_holomap()
 
 /mob/living/carbon/attack_animal(mob/living/simple_animal/M as mob)//humans and slimes have their own
+	if(check_shields(0, M))
+		return 0
 	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/relaymove(var/mob/user, direction)
@@ -402,17 +404,17 @@
 		src << browse(null, t1)
 
 	if(href_list["hands"])
-		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+		if(usr.incapacitated() || !Adjacent(usr)|| (isanimal(usr) && !isgrinch(usr)))
 			return
 		handle_strip_hand(usr, text2num(href_list["hands"])) //href_list "hands" is the hand index, not the item itself. example, GRASP_LEFT_HAND
 
 	else if(href_list["item"])
-		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+		if(usr.incapacitated() || !Adjacent(usr)|| (isanimal(usr) && !isgrinch(usr)))
 			return
 		handle_strip_slot(usr, text2num(href_list["item"])) //href_list "item" would actually be the item slot, not the item itself. example: slot_head
 
 	else if(href_list["internals"])
-		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+		if(usr.incapacitated() || !Adjacent(usr)|| (isanimal(usr) && !isgrinch(usr)))
 			return
 		set_internals(usr)
 

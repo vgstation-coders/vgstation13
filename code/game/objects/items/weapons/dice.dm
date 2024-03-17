@@ -94,7 +94,7 @@
 	diceroll(user, 0)
 
 /obj/item/weapon/dice/throw_impact(atom/hit_atom, speed, user)
-	if(!..())
+	if(!..() && !istype(loc,/obj/item/dicetower))
 		diceroll(user, 1)
 
 /obj/item/weapon/dice/proc/show_roll(mob/user as mob, thrown, result)
@@ -122,8 +122,16 @@
 		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result_names[result]].</span>")
 
 
-/obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown, silent = FALSE)
+/obj/item/weapon/dice/proc/diceroll(mob/user, thrown, silent = FALSE)
+	playsound(src, 'sound/weapons/diceroll.ogg', 50, 1)
 	result = rand(minsides, sides)
+	//An implementation of luck if luck is ever repaired
+	/*for(var/i = 1 to round(sides/6)) //+3 on a d20, +2 on d12, +1 on d6 or 8, +0 on d4
+		if(user.lucky_prob(1,1,60-(10*i))) //Max luck skew chance 50 on first attempt, then 40, then 30
+			result = min(result+1, sides)
+			if(result==sides)
+				break*/
+
 	update_icon()
 	if(!silent)
 		show_roll(user, thrown, result)
@@ -367,22 +375,16 @@
 		triggered = 1
 		visible_message("<span class='notice'>You hear a quiet click.</span>")
 		spawn(40)
-			var/cap = 0
-			var/uncapped = result
 			if(result > 19) //Roll a nat 20
 				result = 24
 				sleep(40)
 			else
-				cap = 1
 				if(result > 14)
 					sleep(20)
 
 			var/turf/epicenter = get_turf(src)
-			explosion(epicenter, round(result*0.25), round(result*0.5), round(result), round(result*1.5), 1, cap, whodunnit = user)
-			if(cap)
-				for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
-					if(bhangmeter)
-						bhangmeter.sense_explosion(epicenter.x,epicenter.y,epicenter.z,round(uncapped*0.25), round(uncapped*0.5), round(uncapped),"???", cap)
+			explosion(epicenter, round(result*0.25), round(result*0.5), round(result), round(result*1.5), 1, 0, whodunnit = user)
+
 	return result
 
 

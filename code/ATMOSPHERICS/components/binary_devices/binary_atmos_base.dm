@@ -3,6 +3,8 @@
 	initialize_directions = SOUTH|NORTH
 	use_power = MACHINE_POWER_USE_IDLE
 
+	var/frequency = -1
+
 	var/datum/gas_mixture/air1
 	var/datum/gas_mixture/air2
 
@@ -92,6 +94,8 @@
 	if(!toggle_status(user)) // Subtypes returning FALSE do not allow alt-clicking to toggle power
 		..()
 
+/obj/machinery/atmospherics/binary/proc/set_frequency(new_frequency)
+
 /obj/machinery/atmospherics/binary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
@@ -108,6 +112,10 @@
 	if (node2)
 		node2.initialize()
 		node2.build_network()
+	if(pipe.frequency)
+		set_frequency(pipe.frequency)
+	if(pipe.id_tag)
+		id_tag = pipe.id_tag
 	return 1
 
 //this is used when a machine_flags = WRENCHMOVE machine gets anchored down

@@ -33,6 +33,8 @@ var/list/station_holomaps = list()
 
 	var/datum/station_holomap/holomap_datum
 
+	var/obj/abstract/screen/interface/button_workplace = null
+
 /obj/machinery/station_map/New()
 	..()
 	holomap_datum = new()
@@ -103,9 +105,13 @@ var/list/station_holomaps = list()
 	update_icon()
 
 /obj/machinery/station_map/attack_hand(var/mob/user)
-	if(watching_mob && (watching_mob != user))
-		to_chat(user, "<span class='warning'>Someone else is currently watching the holomap.</span>")
-		return
+	if(watching_mob)
+		if(watching_mob != user)
+			to_chat(user, "<span class='warning'>Someone else is currently watching the holomap.</span>")
+			return
+		else
+			stopWatching()
+			return
 
 	if(user.loc != loc)
 		to_chat(user, "<span class='warning'>You need to stand in front of \the [src].</span>")
@@ -125,11 +131,43 @@ var/list/station_holomaps = list()
 			else
 				to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
+			if (ishuman(user))
+				var/mob/living/carbon/human/H = user
+				var/get_rank = H.get_assignment(null,null,TRUE)
+				if (!get_rank)
+					return
+				if ("[get_rank]_[original_zLevel]" in workplace_markers)
+					button_workplace = new (user.hud_used.holomap_obj,user,src,"Find Workplace",'icons/effects/64x32.dmi',"workplace",l="CENTER+3,CENTER-4")
+					button_workplace.name = "Find Workplace"
+					button_workplace.alpha = 0
+					animate(button_workplace, alpha = 255, time = 5, easing = LINEAR_EASING)
+					user.client.screen += button_workplace
+
+/obj/machinery/station_map/interface_act(var/mob/i_user,var/action)
+	switch(action)
+		if("Find Workplace")
+			holomap_datum.station_map.overlays -= holomap_datum.workplaceMarker
+			QDEL_NULL(holomap_datum.workplaceMarker)
+			i_user.playsound_local(src, 'sound/misc/click.ogg', 50, 0, 0, 0, 0)
+			if (ishuman(i_user))
+				var/mob/living/carbon/human/H = i_user
+				var/get_rank = H.get_assignment(null,null,TRUE)
+				var/datum/holomap_marker/workplaceMarker = pick(workplace_markers["[get_rank]_[original_zLevel]"])
+				holomap_datum.workplaceMarker = new('icons/holomap_markers_32x32.dmi',src,"workplace")
+				if(map.holomap_offset_x.len >= workplaceMarker.z)
+					holomap_datum.workplaceMarker.pixel_x = workplaceMarker.x - 6 + map.holomap_offset_x[workplaceMarker.z]
+					holomap_datum.workplaceMarker.pixel_y = workplaceMarker.y - 4 + map.holomap_offset_y[workplaceMarker.z]
+				else
+					holomap_datum.workplaceMarker.pixel_x = workplaceMarker.x - 6
+					holomap_datum.workplaceMarker.pixel_y = workplaceMarker.y - 4
+				i_user.playsound_local(src, 'sound/effects/ping_warning.ogg', 25, 0, 0, 0, 0)
+				holomap_datum.station_map.overlays += holomap_datum.workplaceMarker
+
 /obj/machinery/station_map/attack_paw(var/mob/user)
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/machinery/station_map/attack_animal(var/mob/user)
-	src.attack_hand(user)
+	attack_hand(user)
 
 /obj/machinery/station_map/attack_ghost(var/mob/user)
 	if(!can_spook())
@@ -153,11 +191,16 @@ var/list/station_holomaps = list()
 /obj/machinery/station_map/proc/stopWatching()
 	if(watching_mob)
 		if(watching_mob.client)
+			watching_mob.client.screen -= button_workplace
 			var/mob/M = watching_mob
 			spawn(5)//we give it time to fade out
-				M.client.images -= holomap_datum.station_map
+				if (watching_mob != M)//in case they immediately start watching it again
+					M.client.images -= holomap_datum.station_map
 		watching_mob.unregister_event(/event/face, src, /obj/machinery/station_map/proc/checkPosition)
 	watching_mob = null
+	QDEL_NULL(button_workplace)
+	holomap_datum.station_map.overlays -= holomap_datum.workplaceMarker
+	QDEL_NULL(holomap_datum.workplaceMarker)
 	animate(holomap_datum.station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
 
 /obj/machinery/station_map/power_change()
@@ -172,10 +215,13 @@ var/list/station_holomaps = list()
 	overlays.len = 0
 	if(stat & BROKEN)
 		icon_state = "station_mapb"
+		kill_moody_light()
 	else if((stat & (FORCEDISABLE|NOPOWER)) || !anchored)
 		icon_state = "station_map0"
+		kill_moody_light()
 	else
 		icon_state = "station_map"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_holomap")
 
 		if(bogus)
 			holomap_datum.station_map.overlays.len = 0
@@ -286,6 +332,8 @@ var/list/station_holomaps = list()
 	if(user.hud_used && user.hud_used.holomap_obj)
 		watching_mob = user
 		var/turf/T = get_turf(user)
+		if (isAI)
+			T = get_turf(watching_mob.client.eye)
 		bogus = 0
 		if(!((HOLOMAP_EXTRA_STATIONMAP+"_[T.z]") in extraMiniMaps))
 			bogus = 1
@@ -307,12 +355,14 @@ var/list/station_holomaps = list()
 		else
 			to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
-/obj/item/device/station_map/proc/update_holomap()
+/obj/item/device/station_map/proc/update_holomap(var/isAI = FALSE)
 	if (!watching_mob || !watching_mob.client || !watching_mob.hud_used)
 		return
 	watching_mob.client.images -= holomap_datum.station_map
 	holomap_datum.station_map.overlays.len = 0
 	var/turf/T = get_turf(src)
+	if (isAI)
+		T = get_turf(watching_mob.client.eye)
 	if (lastZ != T.z)
 		lastZ = T.z
 		bogus = 0
@@ -363,6 +413,8 @@ var/list/station_holomaps = list()
 	var/image/station_map
 	var/image/cursor
 	var/image/legend
+	var/image/workplaceMarker
+	var/z
 
 /datum/station_holomap/proc/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null)
 	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[T.z]"])
@@ -411,7 +463,7 @@ var/list/station_holomaps = list()
 		initialize()
 
 /obj/machinery/station_map/strategic/initialize()
-	holomap_datum.initialize_holomap()
+	holomap_datum.initialize_holomap(get_turf(src))
 
 	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"])
 	small_station_map.plane = ABOVE_LIGHTING_PLANE

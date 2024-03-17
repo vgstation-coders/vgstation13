@@ -171,10 +171,10 @@
 ////////////////////////////////////////////
 
 //Returns a list of damaged organs
-/mob/living/carbon/human/proc/get_damaged_organs(var/brute, var/burn)
+/mob/living/carbon/human/proc/get_damaged_organs(var/brute, var/burn, var/ignore_inorganic = FALSE)
 	var/list/datum/organ/external/parts = list()
 	for(var/datum/organ/external/O in organs)
-		if((brute && O.brute_dam) || (burn && O.burn_dam))
+		if(((brute && O.brute_dam) || (burn && O.burn_dam)) && !(ignore_inorganic && !O.is_organic()))
 			parts += O
 	return parts
 
@@ -194,7 +194,7 @@
 //It automatically updates damage overlays if necesary
 //It automatically updates health status
 /mob/living/carbon/human/heal_organ_damage(var/brute, var/burn)
-	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn)
+	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn,TRUE)
 	if(!parts.len)
 		return
 	var/datum/organ/external/picked = pick(parts)
@@ -224,7 +224,7 @@ In most cases it makes more sense to use apply_damage() instead! And make sure t
 
 //Heal MANY external organs, in random order
 /mob/living/carbon/human/heal_overall_damage(var/brute, var/burn)
-	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn)
+	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn,TRUE)
 	var/datum/organ/internal/heart/hivelord/H = get_heart()
 	if(istype(H)) // hivelord hearts just heal better
 		brute *= 2
@@ -307,14 +307,20 @@ This function restores all organs.
 	return
 
 
-/mob/living/carbon/human/get_organ(var/zone)
+/mob/living/carbon/human/get_organ(var/zone, cosmetic = FALSE)
 	RETURN_TYPE(/datum/organ/external)
 	if(!zone)
 		zone = LIMB_CHEST
 	if (zone in list( "eyes", "mouth" ))
 		zone = LIMB_HEAD
-	return organs_by_name[zone]
+	var/list/organ_list = organs_by_name.Copy()
+	if(cosmetic)
+		organ_list |= cosmetic_organs_by_name
+	return organ_list[zone]
 
+/mob/living/carbon/human/proc/get_cosmetic_organ(zone)
+	RETURN_TYPE(/datum/organ/external)
+	return cosmetic_organs_by_name[zone]
 
 //Picks a random usable organ from the organs passed to the arguments
 //You can feed organ references, or organ strings into this obj
@@ -379,7 +385,7 @@ This function restores all organs.
 		damage = (damage/100)*(100-blocked)
 
 	if(!ignore_events && INVOKE_EVENT(src, /event/damaged, "kind" = damagetype, "amount" = damage))
-		return 0
+		return 0 //This event code is also in the mob/living parent which this proc mostly overrides.
 
 	switch(damagetype)
 		if(BRUTE)

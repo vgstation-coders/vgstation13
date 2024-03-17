@@ -15,17 +15,20 @@
 	var/core_warning_delay = 0
 	var/previous_health = 200
 	var/no_ghosts_allowed = FALSE
+	var/has_been_created
 
 	icon_new = "core"
 	icon_classic = "blob_core"
 
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/blob/core
 
-/obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, var/mob/camera/blob/C = null,newlook = "new",no_morph = 0)
+
+/obj/effect/blob/core/New(loc, var/h = 200, var/client/new_overmind = null, var/new_rate = 2, created = null,newlook = "new",no_morph = 0)
 	if (looks == "new")
 		looks = newlook
 	blob_cores += src
 	processing_objects.Add(src)
-	creator = C
+	has_been_created = created
 	if (!asleep && icon_size == 64)
 		if(new_overmind)
 			if (!no_morph)
@@ -152,7 +155,8 @@
 
 /obj/effect/blob/core/attack_ghost(var/mob/user)
 	if (no_ghosts_allowed)
-		to_chat(user, "<span class='warning'>This [src] cannot be controlled by ghosts.</span>")
+		var/formatted_name = "\proper [src]"
+		to_chat(user, "<span class='warning'>This [formatted_name] cannot be controlled by ghosts.</span>")
 		return
 	if (!overmind)
 		var/confirm = alert("Take control of this blob core?", "Take Control", "Yes", "No")
@@ -205,7 +209,7 @@
 	B.special_blobs += src
 	B.DisplayUI("Blob")
 
-	if(!B.blob_core.creator)//If this core is the first of its lineage (created by game mode/event/admins, instead of another overmind) it gets to choose its looks.
+	if(!B.blob_core.has_been_created)//If this core is the first of its lineage (created by game mode/event/admins, instead of another overmind) it gets to choose its looks.
 		var/new_name = "Blob Overmind ([rand(1, 999)])"
 		B.name = new_name
 		B.real_name = new_name
@@ -231,7 +235,7 @@
 		for(var/mob/camera/blob/O in blob_overminds)
 			if(O != B)
 				to_chat(O,"<span class='notice'>A new blob cerebrate has started thinking inside a blob core! [B] joins the blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
-
+	B.UpdateAllElementIcons()
 	return 1
 
 /obj/effect/blob/core/update_icon(var/spawnend = 0)

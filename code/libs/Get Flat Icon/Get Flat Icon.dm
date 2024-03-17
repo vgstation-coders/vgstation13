@@ -133,7 +133,8 @@ var/list/exception = list(
 	for(var/I in layers)
 		if (!I:icon && !I:icon_state) // no icon nor icon_state? we're probably not meant to draw that. Possibly a blank icon while we're only interested in its overlays.
 			continue
-
+		if (I:blend_mode == BLEND_ADD)//additive overlays don't show up properly, especially if they're partly transparent
+			continue
 		var/layerdir = I:dir //We want overlays/underlays to use their correct directional icon state
 		if(I == A || !layerdir)
 			layerdir = dir

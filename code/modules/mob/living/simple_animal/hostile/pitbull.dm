@@ -47,10 +47,10 @@
 	return L
 
 /mob/living/simple_animal/hostile/pitbull/Life()
-	if(prob(treachery_chance))
-		Treachery() //empties the friend list and faction allignment
-
-	if(treacherous && prob(calmdown_chance))
+	if(!treacherous)
+		if(prob(treachery_chance))
+			Treachery() //empties the friend list and faction allignment
+	else if(treacherous && prob(calmdown_chance))
 		Calmdown() //repopulates the friend list and realligns our faction
 	..()
 

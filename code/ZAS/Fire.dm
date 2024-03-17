@@ -22,6 +22,24 @@ Attach to transfer valve and open. BOOM.
 
 	var/volatility = BASE_ZAS_FUEL_REQ //the lower this is, the easier it burns with low fuel in it. Starts at the define value
 
+	var/atom/movable/firelightdummy/firelightdummy
+
+
+/atom/movable/firelightdummy
+	//this is a dummy that gets added to the vis_contents of a burning atom that can be a light source when its on fire so that it doesnt overwrite the light the atom might already be making
+		//ideally instead of this you could directly add multiple light source datums to a single atom that would all be processed by the lighting system nicely
+		//however, thats not how the lighting system currently works
+	//are you up to the challenge?
+	gender = PLURAL
+	name = "fire"
+	mouse_opacity = 0
+	vis_flags = VIS_INHERIT_ID
+	light_color = LIGHT_COLOR_FIRE
+
+/atom/movable/firelightdummy/New()
+	.=..()
+	set_light(2,2)
+
 /atom/proc/ashtype()
 	return /obj/effect/decal/cleanable/ash
 
@@ -31,7 +49,16 @@ Attach to transfer valve and open. BOOM.
 /atom/proc/burnFireFuel(used_fuel_ratio, used_reactants_ratio)
 	fire_fuel -= (fire_fuel * used_fuel_ratio * used_reactants_ratio) //* 5
 
-	if(prob(10)) //10% chance of smoke creation per tick
+//Disabled burning items heating up the area.
+//Made fires disproportionately more dangerous, and in combination with autoignition led to a domino effect
+//where one item would heat up an area and cause other items to ignite and heat up the area until
+//the entire room was a firestorm.
+
+//To re-enable, un-comment the lines of code, and preferably replace get_turf(loc) below with T
+	// var/turf/T = get_turf(loc)
+	// if(T)
+	// 	T.hotspot_expose(autoignition_temperature, CELL_VOLUME, surfaces=1)
+	if(prob(8)) //8% chance of smoke creation per tick
 		var/datum/effect/system/smoke_spread/fire/smoke = new /datum/effect/system/smoke_spread()
 		smoke.set_up(4,0,get_turf(loc))
 		smoke.time_to_live = 60 SECONDS
@@ -65,9 +92,11 @@ Attach to transfer valve and open. BOOM.
 	qdel(src)
 
 /atom/proc/extinguish()
-	on_fire=0
-	if(fire_overlay)
-		overlays -= fire_overlay
+	if (on_fire)
+		on_fire=0
+		if(fire_overlay)
+			overlays -= fire_overlay
+		QDEL_NULL(firelightdummy)
 
 /atom/proc/ignite(var/temperature)
 	on_fire=1
@@ -75,6 +104,11 @@ Attach to transfer valve and open. BOOM.
 	if(fire_dmi && fire_sprite)
 		fire_overlay = image(fire_dmi,fire_sprite)
 		overlays += fire_overlay
+
+	var/atom/movable/AM = src
+	if(istype(AM))
+		firelightdummy = new (src)
+		AM.vis_contents += firelightdummy
 	spawn()
 		burnItselfUp()
 
@@ -116,19 +150,26 @@ Attach to transfer valve and open. BOOM.
 		return 0
 	if(fire_protection > world.time-300)
 		return 0
-	if(locate(/obj/effect/fire) in src)
-		return 1
+
 	var/datum/gas_mixture/air_contents = return_air()
-	if(!air_contents || exposed_temperature < PLASMA_MINIMUM_BURN_TEMPERATURE)
+
+	if(!air_contents)
 		return 0
 
 	var/igniting = 0
 
-	if(air_contents.check_combustability(src, surfaces))
+	if(surfaces && air_contents.molar_density(GAS_OXYGEN) >= (1 / CELL_VOLUME))
+		for(var/obj/O in contents)
+			if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && !O.on_fire && O.autoignition_temperature && exposed_temperature >= O.autoignition_temperature)
+				O.ignite()
+				igniting = 1
+				break
+	if(!igniting && exposed_temperature >= PLASMA_MINIMUM_BURN_TEMPERATURE && air_contents.check_combustability(src, surfaces))
 		igniting = 1
-		if(! (locate(/obj/effect/fire) in src))
-			new /obj/effect/fire(src)
-
+	if(locate(/obj/effect/fire) in src)
+		igniting = 1
+	else if(igniting)
+		new /obj/effect/fire(src)
 	return igniting
 
 // ignite_temp: 0 = Don't check, just get fuel.
@@ -153,7 +194,7 @@ Attach to transfer valve and open. BOOM.
 	blend_mode = BLEND_ADD
 
 	icon = 'icons/effects/fire.dmi'
-	icon_state = "1"
+	icon_state = "key1"
 	layer = TURF_FIRE_LAYER
 	plane = ABOVE_TURF_PLANE
 
@@ -169,7 +210,6 @@ Attach to transfer valve and open. BOOM.
 		A.extinguish()
 
 	qdel(src)
-
 
 /obj/effect/fire/process()
 	if(timestopped)
@@ -206,18 +246,8 @@ Attach to transfer valve and open. BOOM.
 		Extinguish()
 		return
 
-	//get a firelevel and set the icon
 	var/firelevel = air_contents.calculate_firelevel(S)
-
-	if(firelevel > 6)
-		icon_state = "3"
-		set_light(7, 3)
-	else if(firelevel > 2.5)
-		icon_state = "2"
-		set_light(5, 2)
-	else
-		icon_state = "1"
-		set_light(3, 1)
+	setfirelight(firelevel, air_contents.temperature)
 
 	//im not sure how to implement a version that works for every creature so for now monkeys are firesafe
 	for(var/mob/living/carbon/human/M in loc)
@@ -264,6 +294,7 @@ Attach to transfer valve and open. BOOM.
 	//seperate part of the present gas
 	//this is done to prevent the fire burning all gases in a single pass
 	var/datum/gas_mixture/flow = air_contents.remove_volume(zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate) * CELL_VOLUME)
+
 ///////////////////////////////// FLOW HAS BEEN CREATED /// DONT DELETE THE FIRE UNTIL IT IS MERGED BACK OR YOU WILL DELETE AIR ///////////////////////////////////////////////
 
 	if(flow)
@@ -274,11 +305,12 @@ Attach to transfer valve and open. BOOM.
 
 ///////////////////////////////// FLOW HAS BEEN REMERGED /// feel free to delete the fire again from here on //////////////////////////////////////////////////////////////////
 
-
 /obj/effect/fire/New()
 	. = ..()
 	dir = pick(cardinal)
-	set_light(3)
+	var/datum/gas_mixture/air_contents=return_air()
+	if(air_contents)
+		setfirelight(air_contents.calculate_firelevel(get_turf(src)), air_contents.temperature)
 	SSair.add_hotspot(src)
 
 /obj/effect/fire/Destroy()
@@ -286,6 +318,25 @@ Attach to transfer valve and open. BOOM.
 
 	set_light(0)
 	..()
+
+/obj/effect/fire/proc/setfirelight(firelevel, firetemp)
+
+	var/heatlight = max(1, firetemp / 2000)
+
+	// Update fire color.
+	color = heat2color(firetemp)
+
+	if(firelevel > 6)
+		icon_state = "key3"
+		set_light(7, 3 * heatlight, color)
+	else if(firelevel > 2.5)
+		icon_state = "key2"
+		set_light(5, 2 * heatlight, color)
+	else
+		icon_state = "key1"
+		set_light(3, 1 * heatlight, color)
+
+
 
 /turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
 /turf/proc/apply_fire_protection()

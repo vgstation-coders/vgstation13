@@ -94,7 +94,7 @@
 /obj/abstract/screen/interface
 	name = "Button"
 	mouse_opacity = 1
-	layer = HUD_ABOVE_ITEM_LAYER
+	layer = ABOVE_HUD_LAYER+1
 	var/mob/user = null
 	var/obj/machine = null
 	var/action = ""
@@ -150,8 +150,6 @@
 	globalscreen = 1
 
 /obj/abstract/screen/storage/Click(location, control, params)
-	if(usr.attack_delayer.blocked())
-		return
 	if(usr.incapacitated())
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
