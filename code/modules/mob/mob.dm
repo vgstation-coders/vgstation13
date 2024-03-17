@@ -907,7 +907,7 @@ Use this proc preferably at the end of an equipment loadout
 		//END HUMAN
 /mob/proc/reset_view(atom/A)
 	if (client)
-		if (istype(A, /atom/movable))
+		if (A)
 			client.perspective = EYE_PERSPECTIVE
 			client.eye = A
 		else
@@ -1842,6 +1842,8 @@ Use this proc preferably at the end of an equipment loadout
 	if(istype(client_eye,/obj/machinery/camera))
 		return 1
 	if(istype(client_eye,/obj/item/projectile/rocket/nikita))
+		return 1
+	if(istype(client_eye,/turf/simulated/wall) && Adjacent(client_eye))
 		return 1
 	return 0
 

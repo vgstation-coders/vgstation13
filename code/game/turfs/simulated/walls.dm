@@ -25,7 +25,7 @@
 	explosion_block = 1
 
 	holomap_draw_override = HOLOMAP_DRAW_FULL
-	var/mob/living/peeper = null
+	var/list/mob/living/peepers
 
 /turf/simulated/wall/initialize()
 	..()
@@ -167,12 +167,17 @@
 			return
 
 	if(bullet_marks)
-		peeper = user
-		peeper.client.perspective = EYE_PERSPECTIVE
-		peeper.client.eye = src
-		peeper.visible_message("<span class='notice'>[peeper] leans in and looks through \the [src].</span>", \
-		"<span class='notice'>You lean in and look through \the [src].</span>")
-		src.add_fingerprint(peeper)
+		if(user in peepers)
+			reset_view(user, FALSE)
+		else
+			if(!peepers)
+				peepers = list()
+			peepers += user
+			user.reset_view(src)
+			user.visible_message("<span class='notice'>[user] leans in and looks through \the [src].</span>", \
+			"<span class='notice'>You lean in and look through \the [src].</span>")
+			user.register_event(/event/moved, src, nameof(src::reset_view()))
+		src.add_fingerprint(user)
 		return ..()
 
 	user.visible_message("<span class='notice'>[user] pushes \the [src].</span>", \
@@ -181,11 +186,20 @@
 	src.add_fingerprint(user)
 	return ..()
 
-/turf/simulated/wall/proc/reset_view()
-	if(!peeper)
-		return
-	peeper.client.eye = peeper.client.mob
-	peeper.client.perspective = MOB_PERSPECTIVE
+/turf/simulated/wall/proc/reset_view(atom/movable/mover, var/adjacency_check = TRUE)
+	var/list/mob/living/mobs2reset
+	if(isliving(mover) && (mover in peepers))
+		if(adjacency_check && Adjacent(mover))
+			return
+		mobs2reset = list(mover)
+	else if(!mover)
+		mobs2reset = peepers.Copy()
+	for(var/mob/living/L in mobs2reset)
+		L.reset_view()
+		L.visible_message("<span class='notice'>[L] stops looking through \the [src].</span>", \
+		"<span class='notice'>You stop looking through \the [src].</span>")
+		L.unregister_event(/event/moved, src, nameof(src::reset_view()))
+		peepers -= L
 
 /turf/simulated/wall/proc/attack_rotting(mob/user as mob)
 	if(istype(src, /turf/simulated/wall/r_wall)) //I wish I didn't have to do typechecks
