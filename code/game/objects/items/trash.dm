@@ -153,6 +153,8 @@
 /obj/item/trash/waffles
 	name = "waffle tray"
 	icon_state = "waffles"
+	starting_materials = list(MAT_IRON = 100)
+	w_type = RECYK_METAL
 
 /obj/item/trash/pietin
 	name = "pie tin"
@@ -160,6 +162,7 @@
 	autoignition_temperature = 450 //snowflaked value low enough to catch on fire from sparks
 	siemens_coefficient = 2 //Do not touch live wires
 	starting_materials = list(MAT_IRON = 100)
+	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_SILICON //Not as high as steel
 
 /obj/item/trash/pietin/attackby(obj/item/W, mob/user)
@@ -226,6 +229,7 @@
 	icon = 'icons/obj/candle.dmi'
 	icon_state = "candle4"
 	starting_materials = list(MAT_WAX = (4*CC_PER_SHEET_WAX/5))
+	w_type=RECYK_WAX
 	var/image/wick
 
 /obj/item/trash/candle/New(turf/loc, var/obj/item/candle/source)
@@ -358,10 +362,14 @@ var/list/crushed_cans_cache = list()
 /obj/item/trash/zam_notraisins
 	name = "zam notraisins"
 	icon_state	= "zam_notraisins_rubbish"
+	starting_materials = list(MAT_CARDBOARD = 370)
+	w_type=RECYK_MISC
 
 /obj/item/trash/zam_sliderwrapper
 	name = "zam slider wrapper"
 	icon_state	= "zam_spiderslider_wrapper"
+	starting_materials = list(MAT_CARDBOARD = 370)
+	w_type=RECYK_MISC
 
 /obj/item/trash/egg
 	name = "egg shell"
