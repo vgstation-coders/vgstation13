@@ -12,6 +12,7 @@
 	playlist = "nukesquad"
 	default_admin_voice = "Union Boss"
 	admin_voice_style = "secradio"
+	role_peak_member_typefilter = /datum/role/revolutionary/leader
 	var/discovered = 0
 
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
@@ -210,7 +211,7 @@
 			loycount++
 	//if(score.scores["traitorswon"])
 		//score.scores["crewscore"] -= 10000
-	if(initial_member_amount == revarrested) // That way only head revs count
+	if(peak_member_amount == revarrested) // That way only head revs count
 		allrevarrested = 1
 		score.crewscore += revarrested * 2000
 	score.crewscore += revarrested * 1000

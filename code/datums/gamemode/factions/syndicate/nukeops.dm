@@ -42,7 +42,7 @@
 			oparrested++
 		else if(M.current.stat == DEAD)
 			opkilled++
-	if(initial_member_amount == oparrested)
+	if(peak_member_amount == oparrested)
 		alloparrested = 1
 		score.crewscore += oparrested * 2000
 	score.crewscore += opkilled * 250
@@ -89,7 +89,7 @@
 				nukedpenalty = 100000
 			else
 				nukedpenalty = 5000*/
-			break
+			//break
 	if(!diskdat)
 		diskdat = "Uh oh. Something has fucked up! Report this."
 	if(!bombdat)
@@ -219,3 +219,5 @@
 					livingmembers++
 		if(!livingmembers && ticker.IsThematic(playlist))
 			ticker.StopThematic()
+	if(livingmembers > peak_member_amount)
+		peak_member_amount = livingmembers
