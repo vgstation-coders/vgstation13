@@ -616,7 +616,7 @@
 	button_icon_state = "pd_toggle"
 
 /datum/action/pd_toggle_drain/Trigger()
-	if(istype(owner,/mob/living/simple_animal/hostile/pulse_demon))
+	if(ispulsedemon(owner))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = owner
 		PD.draining = !PD.draining
 		to_chat(PD,"<span class='notice'>Draining power is [PD.draining ? "on" : "off"].</span>")
