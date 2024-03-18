@@ -30,6 +30,9 @@
 	icon_state = ""
 	anchored = 1
 
+/obj/effect/cult_ritual/get_cult_power()
+	return 1
+
 /obj/effect/cult_ritual/cultify()
 	return
 
@@ -663,39 +666,62 @@ var/bloodstone_backup = 0
 //used by the cultdance emote. other cult dances have their own procs
 /obj/effect/cult_ritual/dance
 	var/list/dancers = list()
+	var/list/extras = list()
+	var/datum/rune_spell/tearreality/tear
 
 /obj/effect/cult_ritual/dance/New(var/turf/loc, var/mob/first_dancer)
 	..()
-	if (!first_dancer)
-		qdel(src)
-		return
 
-	dancers += first_dancer
-	//processing_objects.Add(src)
-
-	we_can_dance()
+	if (first_dancer)
+		dancers += first_dancer
+		we_can_dance()
 
 
 /obj/effect/cult_ritual/dance/Destroy()
-	//processing_objects.Remove(src)
 	dancers = list()
+	for (var/obj/effect/cult_ritual/dance_platform/P in extras)
+		P.dance_manager = null
+	extras = list()
 	..()
 
 /obj/effect/cult_ritual/dance/proc/we_can_dance()
-	while(TRUE)
-		for (var/mob/M in dancers)
-			if (get_dist(src,M) > 1 || M.incapacitated() || M.occult_muted())
-				dancers -= M
-				continue
-		if (dancers.len <= 0)
-			qdel(src)
-			return
-		dance_step()
-		sleep(3)
-		dance_step()
-		sleep(3)
-		dance_step()
-		sleep(6)
+	set waitfor = 0
+
+	if (dancers.len <= 0)
+		qdel(src)
+		return
+
+	if (tear)
+		while(TRUE)
+			for (var/mob/M in dancers)
+				if (get_dist(src,M) > 1 || M.incapacitated() || M.occult_muted())
+					dancers -= M
+					continue
+			if (dancers.len <= 0)
+				qdel(src)
+				return
+			dance_move()
+			sleep(3)
+			dance_move()
+			sleep(3)
+			dance_move()
+			tear.update_crystals()
+			sleep(6)
+	else
+		while(TRUE)
+			for (var/mob/M in dancers)
+				if (get_dist(src,M) > 1 || M.incapacitated() || M.occult_muted())
+					dancers -= M
+					continue
+			if (dancers.len <= 0)
+				qdel(src)
+				return
+			dance_step()
+			sleep(3)
+			dance_step()
+			sleep(3)
+			dance_step()
+			sleep(6)
 
 /obj/effect/cult_ritual/dance/proc/add_dancer(var/mob/dancer)
 	if(dancer in dancers)
@@ -752,6 +778,87 @@ var/bloodstone_backup = 0
 					INVOKE_EVENT(M, /event/face)
 
 
-///////////////////////////////////TEAR IN THE VEIL////////////////////////////////////
-//used by the Tear Reality rune
-/obj/effect/cult_ritual/tear
+
+/obj/effect/cult_ritual/dance/proc/dance_move()
+	var/dance_move = pick("clock","counter","spin")
+	switch(dance_move)
+		if ("clock")
+			for (var/obj/effect/cult_ritual/dance_platform/P in extras)
+				P.moving = TRUE
+			for (var/mob/M in dancers)
+				INVOKE_EVENT(M, /event/before_move)
+				switch (get_dir(src,M))
+					if (NORTHWEST,NORTH)
+						M.forceMove(get_step(M,EAST))
+						M.dir = EAST
+					if (NORTHEAST,EAST)
+						M.forceMove(get_step(M,SOUTH))
+						M.dir = SOUTH
+					if (SOUTHEAST,SOUTH)
+						M.forceMove(get_step(M,WEST))
+						M.dir = WEST
+					if (SOUTHWEST,WEST)
+						M.forceMove(get_step(M,NORTH))
+						M.dir = NORTH
+				INVOKE_EVENT(M, /event/after_move)
+				INVOKE_EVENT(M, /event/moved, "mover" = M)
+			for (var/obj/effect/cult_ritual/dance_platform/P in extras)
+				switch (get_dir(src,P))
+					if (NORTHWEST,NORTH)
+						step_to(P, get_step(P,EAST))
+					if (NORTHEAST,EAST)
+						step_to(P, get_step(P,SOUTH))
+					if (SOUTHEAST,SOUTH)
+						step_to(P, get_step(P,WEST))
+					if (SOUTHWEST,WEST)
+						step_to(P, get_step(P,NORTH))
+				P.moving = FALSE
+		if ("counter")
+			for (var/obj/effect/cult_ritual/dance_platform/P in extras)
+				P.moving = TRUE
+			for (var/mob/M in dancers)
+				INVOKE_EVENT(M, /event/before_move)
+				switch (get_dir(src,M))
+					if (NORTHEAST,NORTH)
+						M.forceMove(get_step(M,WEST))
+						M.dir = WEST
+					if (SOUTHEAST,EAST)
+						M.forceMove(get_step(M,NORTH))
+						M.dir = NORTH
+					if (SOUTHWEST,SOUTH)
+						M.forceMove(get_step(M,EAST))
+						M.dir = EAST
+					if (NORTHWEST,WEST)
+						M.forceMove(get_step(M,SOUTH))
+						M.dir = SOUTH
+				INVOKE_EVENT(M, /event/after_move)
+				INVOKE_EVENT(M, /event/moved, "mover" = M)
+			for (var/obj/effect/cult_ritual/dance_platform/P in extras)
+				switch (get_dir(src,P))
+					if (NORTHEAST,NORTH)
+						step_to(P, get_step(P,WEST))
+					if (SOUTHEAST,EAST)
+						step_to(P, get_step(P,NORTH))
+					if (SOUTHWEST,SOUTH)
+						step_to(P, get_step(P,EAST))
+					if (NORTHWEST,WEST)
+						step_to(P, get_step(P,SOUTH))
+				P.moving = FALSE
+		if ("spin")
+			for (var/mob/M in dancers)
+				spawn()
+					M.dir = SOUTH
+					INVOKE_EVENT(M, /event/face)
+					sleep(0.75)
+					M.dir = EAST
+					INVOKE_EVENT(M, /event/face)
+					sleep(0.75)
+					M.dir = NORTH
+					INVOKE_EVENT(M, /event/face)
+					sleep(0.75)
+					M.dir = WEST
+					INVOKE_EVENT(M, /event/face)
+					sleep(0.75)
+					M.dir = SOUTH
+					INVOKE_EVENT(M, /event/face)
+

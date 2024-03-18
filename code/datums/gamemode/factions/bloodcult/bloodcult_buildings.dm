@@ -2048,6 +2048,9 @@ var/list/bloodstone_list = list()
 	layer = BELOW_PROJECTILE_LAYER
 	var/broken
 
+/obj/structure/cult/pylon/get_cult_power()
+	return 1
+
 /obj/structure/cult/pylon/takeDamage()
 	..()
 	if(health <= 20 && !broken)

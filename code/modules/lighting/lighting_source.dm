@@ -242,7 +242,7 @@ var/list/all_light_sources = list()
 	if (!T.lighting_corners_initialised)
 		T.generate_missing_corners()
 
-	if (sun && (sun.eclipse == ECLIPSE_ONGOING) && (top_atom.z == map.zMainStation))
+	if (sun && (sun.eclipse == ECLIPSE_ONGOING) && (top_atom.z == map.zMainStation) && !source_atom.get_cult_power())
 		for (var/datum/lighting_corner/C in T.get_corners())
 			if (C.update_gen == update_gen)
 				continue

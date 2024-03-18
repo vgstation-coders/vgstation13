@@ -103,10 +103,14 @@
 	page = ""
 	var/atom/blocker
 	var/list/dance_platforms = list()
+	var/dance_count = 0
+	var/obj/effect/cult_ritual/dance/dance_manager
+	var/image/crystals
 
 /datum/rune_spell/tearreality/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
+	var/turf/T = get_turf(R)
 
 	//The most fickle rune there ever was
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -122,7 +126,7 @@
 				to_chat(activator, "<span class='sinister'>When it does, you should try again <font color='red'>aboard the station</font>.</span>")
 			else if (isspace(R.loc) || is_on_shuttle(R) || (get_dist(locate(map.center_x,map.center_y,map.zMainStation),R) > 100))
 				to_chat(activator, "<span class='sinister'>When it does, you should try again <font color='red'>closer from the station's center</font>.</span>")
-			var/obj/structure/dance_check/checker = new(get_turf(R), src)
+			var/obj/structure/dance_check/checker = new(T, src)
 			var/list/moves_to_do = list(SOUTH, WEST, NORTH, NORTH, EAST, EAST, SOUTH, SOUTH, WEST)
 			for (var/direction in moves_to_do)
 				if (!checker.Move(get_step(checker, direction)))//The checker passes through mobs and non-dense objects, but bumps against dense objects and turfs
@@ -163,9 +167,10 @@
 		abort()
 		return
 
-	if (cult.tear_in_reality)
+	if (cult.tear_ritual)
+		var/obj/effect/rune/U = cult.tear_ritual.spell_holder
 		to_chat(activator, "<span class='sinister'>The rune pulses but no energies respond to its signal.</span>")
-		to_chat(activator, "<span class='sinister'>It appears that another tear is currently being opened. Somewhere...<font color='red'>to the [dir2text(get_dir(R, cult.tear_in_reality))]</font>.</span>")
+		to_chat(activator, "<span class='sinister'>It appears that another tear is currently being opened. Somewhere...<font color='red'>to the [dir2text(get_dir(R, U))]</font>.</span>")
 		abort()
 		return
 
@@ -175,7 +180,7 @@
 		abort()
 		return
 
-	var/obj/structure/dance_check/checker = new(get_turf(R), src)
+	var/obj/structure/dance_check/checker = new(T, src)
 	var/list/moves_to_do = list(SOUTH, WEST, NORTH, NORTH, EAST, EAST, SOUTH, SOUTH, WEST)
 	for (var/direction in moves_to_do)
 		if (!checker.Move(get_step(checker, direction)))//The checker passes through mobs and non-dense objects, but bumps against dense objects and turfs
@@ -186,11 +191,49 @@
 			return
 
 	//Alright now we can get down to business
+	cult.tear_ritual = src
+	R.overlays.len = 0
+	R.icon = 'icons/obj/cult_96x96.dmi'
+	R.pixel_x = -32
+	R.pixel_y = -32
+	R.layer = BELOW_TABLE_LAYER
+	R.plane = OBJ_PLANE
+	R.set_light(1, 2, LIGHT_COLOR_RED)
 
-	var/list/platforms_to_spawn = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
+	anim(target = R.loc, a_icon = 'icons/obj/cult_96x96.dmi', flick_anim = "rune_tearreality_activate", lay = BELOW_TABLE_LAYER, offX = -32, offY = -32, plane = OBJ_PLANE)
+
+	var/list/platforms_to_spawn = list(NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST)
 	for (var/direction in platforms_to_spawn)
-		var/obj/effect/cult_ritual/dance_platform/platform = new(get_step(R, direction), src)
-		dance_platforms += platform
+		if (!destroying_self)
+			var/turf/U = get_step(R, direction)
+			shadow(U,R.loc)
+			var/obj/effect/cult_ritual/dance_platform/platform = new(U, src)
+			dance_platforms += platform
+			sleep(1)
+
+	if (!destroying_self)
+		message_admins("[key_name(activator)] is preparing the Tear Reality ritual at [T.loc] ([T.x],[T.y],[T.z]).")
+		for (var/datum/role/cultist in cult.members)
+			var/mob/M = cultist.antag.current
+			to_chat(M, "<span class='sinister'>The ritual to tear reality apart and pull the station into the realm of Nar-Sie is now taking place in <font color='red'>[T.loc]</font>.</span>")
+			to_chat(M, "<span class='sinister'>A total of 8 persons, either cultists or prisoners, is required for the ritual to start. Go there to help start and then protect the ritual.</span>")
+
+		var/image/I_circle = image('icons/obj/cult_96x96.dmi',"rune_tearreality")
+		I_circle.plane = relative_plane_to_plane(ABOVE_TURF_PLANE,spell_holder.plane)
+		I_circle.layer = ABOVE_TILE_LAYER
+		I_circle.appearance_flags |= RESET_COLOR
+		var/image/I_crystals = image('icons/obj/cult_96x96.dmi',"tear_stones")
+		I_crystals.plane = relative_plane_to_plane(OBJ_PLANE,spell_holder.plane)
+		I_crystals.layer = BELOW_TABLE_LAYER
+		I_crystals.appearance_flags |= RESET_COLOR
+		R.overlays += I_circle
+		R.overlays += I_crystals
+		custom_rune = TRUE
+
+		crystals = image('icons/obj/cult_96x96.dmi',"tear_stones_[min(8,1+(dance_count/30))]")
+		crystals.plane = relative_plane_to_plane(OBJ_PLANE,spell_holder.plane)
+		crystals.layer = TABLE_LAYER
+
 
 /datum/rune_spell/tearreality/cast_talisman() //Tear Reality talismans create an invisible summoning rune beneath the caster's feet.
 	var/obj/effect/rune/R = new(get_turf(activator))
@@ -199,79 +242,185 @@
 	qdel(src)
 
 /datum/rune_spell/tearreality/midcast(var/mob/add_cultist)
-	//TODO
+	to_chat(add_cultist, "<span class='sinister'>Stand in the surrounding circles with fellow cultists and captured prisoners until every spot is filled.</span>")
 
 /datum/rune_spell/tearreality/abort(var/cause)
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult && (cult.tear_ritual == src))
+		cult.tear_ritual = null
+
+	var/obj/effect/rune/R = spell_holder
+	R.set_light(0)
+	R.icon = 'icons/effects/deityrunes.dmi'
+	R.pixel_x = 0
+	R.pixel_y = 0
+	R.layer = RUNE_LAYER
+	R.plane = ABOVE_TURF_PLANE
+
 	for(var/obj/effect/cult_ritual/dance_platform/platform in dance_platforms)
 		qdel(platform)
+
 	..()
 
 /datum/rune_spell/tearreality/proc/dancer_check()
 	if (dance_platforms.len <= 0)
+		return
+	if (dance_manager)
 		return
 	for(var/obj/effect/cult_ritual/dance_platform/platform in dance_platforms)
 		if (!platform.dancer)
 			return
 
 	//full dancers!
+	var/obj/effect/rune/R = spell_holder
+	var/turf/T = get_turf(R)
+	dance_manager = new(T)
 
+	for(var/obj/effect/cult_ritual/dance_platform/platform in dance_platforms)
+		dance_manager.extras += platform
+		platform.dance_manager = dance_manager
+		if (platform.dancer)
+			dance_manager.dancers += platform.dancer
+
+	dance_manager.tear = src
+	dance_manager.we_can_dance()
+
+/datum/rune_spell/tearreality/proc/update_crystals()
+	var/obj/effect/rune/R = spell_holder
+	R.overlays -= crystals
+	crystals.icon_state = "tear_stones_[min(8,1+(dance_count/30))]"
+	R.overlays += crystals
+
+/datum/rune_spell/tearreality/proc/lost_dancer()
+	for(var/obj/effect/cult_ritual/dance_platform/platform in dance_platforms)
+		if (platform.dancer)
+			return
+	dance_count = 0
+	QDEL_NULL(dance_manager)
+//---------------------------------------------------------------------------------------------------------------------
 /obj/effect/cult_ritual/dance_platform
 	anchored = 1
 	icon = 'icons/obj/cult.dmi'
-	icon_state = "dance_platform0"
+	icon_state = "blank"
 	layer = ABOVE_OBJ_LAYER
 	plane = OBJ_PLANE
+	alpha = 0
+	var/moving = FALSE
 	var/mob/living/carbon/dancer = null
 	var/datum/rune_spell/tearreality/source = null
 	var/prisoner = FALSE
+	var/obj/effect/cult_ritual/dance/dance_manager
 
 /obj/effect/cult_ritual/dance_platform/New(var/turf/loc, var/datum/rune_spell/tearreality/runespell)
 	..()
 	if (!runespell)
 		qdel(src)
 		return
+
+	var/image/I_circle = image(icon, src, "dance_platform_empty")
+	I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+	I_circle.layer = ABOVE_TILE_LAYER
+	I_circle.appearance_flags |= RESET_COLOR
+	overlays += I_circle
+	transform *= 0.3
 	source = runespell
 	processing_objects += src
+	idle_pulse()
+
+	spawn(5)
+		animate(src, alpha = 255, transform = matrix(), time = 4)
 
 /obj/effect/cult_ritual/dance_platform/Destroy()
 	if (dancer && prisoner)
-		dancer.AdjustStunned(-4)
+		dancer.SetStunned(-4)
 	dancer = null
 	source = null
+	dance_manager = null
 	processing_objects -= src
 	..()
 
 /obj/effect/cult_ritual/dance_platform/process()
 	if (dancer && prisoner)
-		dancer.AdjustStunned(4)
+		dancer.SetStunned(4)
+
+	if (dancer)
+		if (dancer.loc != loc)
+			dancer = null
+			source.lost_dancer()
+			prisoner = FALSE
+			overlays.len = 0
+			var/image/I_circle = image(icon, src, "dance_platform_empty")
+			I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+			I_circle.layer = ABOVE_TILE_LAYER
+			I_circle.appearance_flags |= RESET_COLOR
+			overlays += I_circle
+		else
+			source.dance_count++
+	else
+		for (var/mob/living/carbon/C in loc)
+			if (valid_dancer(C))
+				break
 
 /obj/effect/cult_ritual/dance_platform/Crossed(var/atom/movable/mover)
-	if (!dancer)
+	valid_dancer(mover)
+
+/obj/effect/cult_ritual/dance_platform/proc/valid_dancer(var/atom/movable/mover)
+	if (!dancer && !moving)
 		if (iscarbon(mover))
 			var/mob/living/carbon/C = mover
 			if (iscultist(C))
 				dancer = C
-				icon_state = "dance_platform1"
+				overlays.len = 0
+				var/image/I_circle = image(icon, src, "dance_platform_full")
+				I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+				I_circle.layer = ABOVE_TILE_LAYER
+				I_circle.appearance_flags |= RESET_COLOR
+				var/image/I_markings = image(icon, src,"dance_platform_markings")
+				I_markings.plane = relative_plane(OBJ_PLANE)
+				I_markings.layer = BELOW_TABLE_LAYER
+				overlays += I_circle
+				overlays += I_markings
 				source.dancer_check()
+				return TRUE
 			else
 				if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
 					dancer = C
 					prisoner = TRUE
-					dancer.AdjustStunned(4)
-					icon_state = "dance_platform1"
-					var/image/I = image('icons/effects/effects.dmi', src, "rune_reveal")
+					dancer.SetStunned(4)
+					overlays.len = 0
+					var/image/I_circle = image(icon, src, "dance_platform_full")
+					I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+					I_circle.layer = ABOVE_TILE_LAYER
+					I_circle.appearance_flags |= RESET_COLOR
+					var/image/I_markings = image(icon, src,"dance_platform_markings")
+					I_markings.plane = relative_plane(OBJ_PLANE)
+					I_markings.layer = BELOW_TABLE_LAYER
+					overlays += I_circle
+					overlays += I_markings
+					var/image/I = image('icons/obj/cult.dmi', src, "dance_prisoner")
 					I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
 					I.layer = NARSIE_GLOW
 					overlays += I
+					source.dancer_check()
+					return TRUE
+	return FALSE
 
 /obj/effect/cult_ritual/dance_platform/Uncrossed(var/atom/movable/mover)
-	if (dancer && mover == dancer)
-		icon_state = "dance_platform0"
+	if (!moving && dancer && mover == dancer)
 		overlays.len = 0
+		var/image/I_circle = image(icon, src, "dance_platform_empty")
+		I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+		I_circle.layer = ABOVE_TILE_LAYER
+		I_circle.appearance_flags |= RESET_COLOR
+		overlays += I_circle
 		if (prisoner)
-			dancer.AdjustStunned(-4)
+			dancer.SetStunned(0)
 			prisoner = FALSE
+			anim(target = loc, a_icon = 'icons/obj/cult.dmi', flick_anim = "dancer_prisoner-stop", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+		if (dance_manager)
+			dance_manager.dancers -= dancer
 		dancer = null
+		source.lost_dancer()
 
 /obj/structure/dance_check
 	icon = 'icons/effects/effects.dmi'

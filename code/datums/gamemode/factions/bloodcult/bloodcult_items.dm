@@ -1924,6 +1924,9 @@ var/list/arcane_tomes = list()
 	wax = 3600 // 60 minutes
 	trashtype = /obj/item/trash/blood_candle
 
+/obj/item/candle/blood/get_cult_power()
+	return 1
+
 /obj/item/candle/blood/update_icon()
 	overlays.len = 0
 	if (wax == initial(wax))

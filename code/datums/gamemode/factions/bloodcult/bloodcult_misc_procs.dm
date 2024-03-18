@@ -3,7 +3,7 @@
 
 * /proc/prepare_cult_holomap
 * /datum/station_holomap/cult/initialize_holomap
-* /obj/item/proc/get_cult_power
+* /atom/proc/get_cult_power
 * /mob/proc/get_cult_power
 * /mob/proc/occult_muted
 * /mob/proc/get_convertibility
@@ -37,7 +37,7 @@
 	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_CULTMAP])
 	cursor = image('icons/holomap_markers.dmi', cursor_icon)
 
-/obj/item/proc/get_cult_power()
+/atom/proc/get_cult_power()
 	return 0
 
 var/static/list/valid_cultpower_slots = list(
@@ -50,7 +50,7 @@ var/static/list/valid_cultpower_slots = list(
 	returns: the combined cult power of every item worn by src.
 
 */
-/mob/proc/get_cult_power()
+/mob/get_cult_power()
 	var/power = 0
 	for (var/slot in valid_cultpower_slots)
 		var/obj/item/I = get_item_by_slot(slot)

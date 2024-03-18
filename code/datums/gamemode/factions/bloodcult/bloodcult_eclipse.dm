@@ -48,10 +48,17 @@
 
 /datum/eclipse_manager/proc/process()
 	if (world.time >= eclipse_end_time)
-		eclipse_end()
+
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (!cult || !cult.tear_ritual || !cult.bloodstone)
+			eclipse_end()
 
 /datum/eclipse_manager/proc/eclipse_end()
 	processing_objects -= src
+
+	if(universe.name == "Hell Rising")
+		return
+
 	sun.eclipse = ECLIPSE_OVER
 	sun.eclipse_rate = 1
 	update_station_lights()

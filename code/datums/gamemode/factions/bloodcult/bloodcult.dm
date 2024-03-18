@@ -64,7 +64,7 @@
 	var/eclipse_contributors = list()//associative list: /mind = score
 	var/eclipse_countermeasures = 0//mostly chaplain's efforts to indirectly impede the cult with his own conversions and rituals
 
-	var/obj/effect/cult_ritual/tear/tear_in_reality = null	//only one Tear Reality rune can be active at a time
+	var/datum/rune_spell/tearreality/tear_ritual = null
 	var/obj/structure/cult/bloodstone/bloodstone = null		//we track the one spawned by the Tear Reality rune
 
 /datum/faction/bloodcult/stage(var/value)
