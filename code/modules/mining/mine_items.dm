@@ -702,10 +702,8 @@
 
 /obj/item/weapon/lazarus_injector/update_icon()
 	..()
-	if(loaded)
-		icon_state = "lazarus_hypo"
-	else
-		icon_state = "lazarus_empty"
+	icon_state = loaded ? "lazarus_hypo" : "lazarus_empty"
+	w_type = loaded ? RECYK_ELECTRONIC : RECYK_METAL
 
 /obj/item/weapon/lazarus_injector/afterattack(atom/target, mob/user, proximity_flag)
 	if(!loaded)
