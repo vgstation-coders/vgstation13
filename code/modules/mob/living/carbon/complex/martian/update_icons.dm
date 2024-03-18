@@ -1,73 +1,39 @@
-//MOB ICONS
-
-/mob/living/carbon/complex/martian/update_icons()
-	..()
-	overlays.len = 0
-	for(var/image/I in item_overlays)
-		overlays += I
-//INVENTORY ICONS
-
-#define HAT_LAYER 1
-//2-7 are used for hands
-#define MAX_LAYERS 7
-
-/mob/living/carbon/complex/martian
-	var/list/item_overlays[MAX_LAYERS] //6 hands + hat
-
-/mob/living/carbon/complex/martian/update_inv_hand(index, var/update_icons=1)
-	var/obj/item/I = get_held_item_by_index(index)
+/mob/living/carbon/complex/martian/update_inv_hand(index, update_icons = TRUE)
+	var/obj/item/held_item = get_held_item_by_index(index)
 	var/list/offsets = get_item_offset_by_index(index)
 	var/pixelx = 0
 	var/pixely = 0
+	remove_overlay("[HAND_LAYER]-[index]")
 	if(offsets["x"])
 		pixelx = offsets["x"]
 	if(offsets["y"])
 		pixely = offsets["y"]
-
-	if(I)
-		var/t_state = I.item_state
-		var/t_inhand_states = I.inhand_states[get_direction_by_index(index)]
-		if(!t_state)
-			t_state = I.icon_state
-
-		var/image/hand_image = image("icon" = src.icon, "icon_state" = "hand_[index]")
-		hand_image.overlays += image("icon" = t_inhand_states, "icon_state" = t_state, "pixel_x" = pixelx, "pixel_y" = pixely)
-
-		item_overlays[HAT_LAYER + index] = hand_image
-
-		I.screen_loc = get_held_item_ui_location(index)
-		if (handcuffed)
-			drop_item(I)
-	else
-		item_overlays[HAT_LAYER + index]	= null
-
+	if(held_item)
+		var/t_state = held_item.item_state || held_item.icon_state
+		var/t_inhand_states = held_item.inhand_states[get_direction_by_index(index)]
+		var/mutable_appearance/hand_overlay = mutable_appearance(icon, "hand_[index]", -HAND_LAYER)
+		var/mutable_appearance/extra_hand_overlay = mutable_appearance(t_inhand_states, t_state)
+		extra_hand_overlay.pixel_x = pixelx
+		extra_hand_overlay.pixel_y = pixely
+		hand_overlay.overlays += extra_hand_overlay
+		overlays += overlays_standing["[HAND_LAYER]-[index]"] = hand_overlay
+		held_item.screen_loc = get_held_item_ui_location(index)
+		if(handcuffed)
+			drop_item(held_item)
 	if(update_icons)
 		update_icons()
 
-
-/mob/living/carbon/complex/martian/update_inv_head(var/update_icons=1)
+/mob/living/carbon/complex/martian/update_inv_head(update_icons = TRUE)
+	remove_overlay(HEAD_LAYER)
 	if(!head)
-		item_overlays[HAT_LAYER] = null
-
 		if(update_icons)
 			update_icons()
 		return
-	else
-		item_overlays[HAT_LAYER] = image("icon" = ((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[head.icon_state]", "pixel_y" = 5)
-
-		if(update_icons)
-			update_icons()
-
-		if(client)
-			client.screen |= head
-			head.screen_loc = ui_monkey_hat
-
-
-
-/mob/living/carbon/complex/martian/update_hud()
+	var/mutable_appearance/hat_overlay = mutable_appearance(((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "[head.icon_state]", -HEAD_LAYER)
+	hat_overlay.pixel_y = 5
+	overlays += overlays_standing[HEAD_LAYER] = hat_overlay
+	if(update_icons)
+		update_icons()
 	if(client)
-		update_internals()
-		client.screen |= contents
-
-#undef HAT_LAYER
-#undef MAX_LAYERS
+		client.screen |= head
+		head.screen_loc = ui_monkey_hat

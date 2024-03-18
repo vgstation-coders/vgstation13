@@ -85,11 +85,6 @@
 
 	..()
 
-	for(var/obj/abstract/Overlays/O in obj_overlays)
-		qdel(O)
-
-	obj_overlays = null
-
 /mob/living/carbon/human/death(gibbed)
 	if((status_flags & BUDDHAMODE) || stat == DEAD)
 		return

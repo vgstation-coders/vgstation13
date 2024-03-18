@@ -86,148 +86,105 @@
 	popup.set_content(dat)
 	popup.open()
 
-/mob/living/simple_animal/hologram/advanced/update_inv_hand(index, var/update_icons = 1)
-	if(!obj_overlays)
+/mob/living/simple_animal/hologram/advanced/update_inv_hand(index)
+	overlays -= overlays_standing["[HAND_LAYER]-[index]"]
+	overlays_standing["[HAND_LAYER]-[index]"] = null
+	var/obj/item/held_item = get_held_item_by_index(index)
+	if(!(held_item && held_item.is_visible()))
 		return
-	var/obj/abstract/Overlays/hand_layer/O = obj_overlays["[HAND_LAYER]-[index]"]
-	if(!O)
-		O = new /obj/abstract/Overlays/hand_layer
-		obj_overlays["[HAND_LAYER]-[index]"] = O
-	else
-		overlays.Remove(O)
-		O.overlays.len = 0
-	var/obj/item/I = get_held_item_by_index(index)
-	if(I && I.is_visible())
-		var/t_state = I.item_state
-		var/t_inhand_state = I.inhand_states[get_direction_by_index(index)]
-		var/icon/check_dimensions = new(t_inhand_state)
-		if(!t_state)
-			t_state = I.icon_state
-		O.name = "[index]"
-		O.icon = t_inhand_state
-		O.icon_state = t_state
-		O.color = I.color
-		O.pixel_x = -1*(check_dimensions.Width() - WORLD_ICON_SIZE)/2
-		O.pixel_y = -1*(check_dimensions.Height() - WORLD_ICON_SIZE)/2
-		O.layer = O.layer
-		if(I.dynamic_overlay && I.dynamic_overlay["[HAND_LAYER]-[index]"])
-			var/image/dyn_overlay = I.dynamic_overlay["[HAND_LAYER]-[index]"]
-			O.overlays.Add(dyn_overlay)
-		I.screen_loc = get_held_item_ui_location(index)
-		overlays.Add(O)
-	if(update_icons)
-		update_icons()
+	var/t_state = held_item.item_state || held_item.icon_state
+	var/t_inhand_state = held_item.inhand_states[get_direction_by_index(index)]
+	var/icon/check_dimensions = new(t_inhand_state)
+	var/mutable_appearance/hand_overlay = mutable_appearance(t_inhand_state, t_state, -HAND_LAYER)
+	hand_overlay.color = held_item.color
+	hand_overlay.pixel_x = -1*(check_dimensions.Width() - WORLD_ICON_SIZE)/2
+	hand_overlay.pixel_y = -1*(check_dimensions.Height() - WORLD_ICON_SIZE)/2
+	if(held_item.dynamic_overlay && held_item.dynamic_overlay["[HAND_LAYER]-[index]"])
+		var/mutable_appearance/dyn_overlay = held_item.dynamic_overlay["[HAND_LAYER]-[index]"]
+		hand_overlay.overlays += dyn_overlay
+	held_item.screen_loc = get_held_item_ui_location(index)
+	overlays += overlays_standing["[HAND_LAYER]-[index]"] = hand_overlay
 
-/mob/living/simple_animal/hologram/advanced/update_inv_head(var/update_icons=1)
-	overlays -= obj_overlays[HEAD_LAYER]
-	if(head && head.is_visible())
-		var/obj/abstract/Overlays/O = obj_overlays[HEAD_LAYER]
-		O.overlays.len = 0
-		head.screen_loc = ui_id
-		var/image/standing = image("icon" = ((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[head.icon_state]")
-		if(head.dynamic_overlay)
-			if(head.dynamic_overlay["[HEAD_LAYER]"])
-				var/image/dyn_overlay = head.dynamic_overlay["[HEAD_LAYER]"]
-				O.overlays += dyn_overlay
-		if(head.blood_DNA && head.blood_DNA.len)
-			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
-			bloodsies.color = head.blood_color
-			O.overlays	+= bloodsies
-		head.generate_accessory_overlays(O)
-		O.icon = standing
-		O.icon_state = standing.icon_state
+/mob/living/simple_animal/hologram/advanced/update_inv_head()
+	overlays -= overlays_standing[HEAD_LAYER]
+	overlays_standing[HEAD_LAYER] = null
+	if(!(head && head.is_visible()))
+		return
+	head.screen_loc = ui_id
+	var/mutable_appearance/head_overlay = mutable_appearance(((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "[head.icon_state]", -HEAD_LAYER)
+	if(head.dynamic_overlay)
+		if(head.dynamic_overlay["[HEAD_LAYER]"])
+			var/mutable_appearance/dyn_overlay = head.dynamic_overlay["[HEAD_LAYER]"]
+			head_overlay.overlays += dyn_overlay
+	if(head.blood_DNA && head.blood_DNA.len)
+		var/mutable_appearance/bloodsies = mutable_appearance('icons/effects/blood.dmi', "helmetblood")
+		bloodsies.color = head.blood_color
+		head_overlay.overlays += bloodsies
+	head.generate_accessory_overlays(head_overlay)
+	if(istype(head, /obj/item/clothing/head))
+		var/obj/item/clothing/head/hat = head
+		var/i = 1
+		var/mutable_appearance/abovehats
+		for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
+			abovehats = mutable_appearance(((above.icon_override) ? above.icon_override : 'icons/mob/head.dmi'), "[above.icon_state]")
+			abovehats.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+			head_overlay.overlays += abovehats
+			if(above.dynamic_overlay)
+				if(above.dynamic_overlay["[HEAD_LAYER]"])
+					var/mutable_appearance/dyn_overlay = above.dynamic_overlay["[HEAD_LAYER]"]
+					head_overlay.overlays += dyn_overlay
+			if(above.blood_DNA && above.blood_DNA.len)
+				var/mutable_appearance/bloodsies = mutable_appearance('icons/effects/blood.dmi', "helmetblood")
+				bloodsies.color = above.blood_color
+				bloodsies.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+				head_overlay.overlays += bloodsies
+			i++
+	overlays += overlays_standing[HEAD_LAYER] = head_overlay
 
-		if(istype(head,/obj/item/clothing/head))
-			var/obj/item/clothing/head/hat = head
-			var/i = 1
-			var/image/abovehats
-			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
-				abovehats = image("icon" = ((above.icon_override) ? above.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[above.icon_state]")
-				abovehats.pixel_y = (2 * i) * PIXEL_MULTIPLIER
-				O.overlays += abovehats
-				if(above.dynamic_overlay)
-					if(above.dynamic_overlay["[HEAD_LAYER]"])
-						var/image/dyn_overlay = above.dynamic_overlay["[HEAD_LAYER]"]
-						O.overlays += dyn_overlay
-				if(above.blood_DNA && above.blood_DNA.len)
-					var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
-					bloodsies.color = above.blood_color
-					bloodsies.pixel_y = (2 * i) * PIXEL_MULTIPLIER
-					O.overlays	+= bloodsies
+/mob/living/simple_animal/hologram/advanced/update_inv_w_uniform()
+	overlays -= overlays_standing[UNIFORM_LAYER]
+	overlays_standing[UNIFORM_LAYER] = null
+	if(!(istype(w_uniform, /obj/item/clothing/under) && w_uniform.is_visible()))
+		return
+	var/obj/item/clothing/under/worn_uniform = w_uniform
+	worn_uniform.screen_loc = ui_belt
+	var/t_color = worn_uniform._color
+	if(!t_color)
+		t_color = icon_state
+	var/mutable_appearance/uniform_overlay = mutable_appearance('icons/mob/uniform.dmi', "[t_color]_s", -UNIFORM_LAYER)
+	if(worn_uniform.icon_override)
+		uniform_overlay.icon = worn_uniform.icon_override
+	if(worn_uniform.dynamic_overlay)
+		if(worn_uniform.dynamic_overlay["[UNIFORM_LAYER]"])
+			var/mutable_appearance/dyn_overlay = worn_uniform.dynamic_overlay["[UNIFORM_LAYER]"]
+			uniform_overlay.overlays += dyn_overlay
+	if(worn_uniform.blood_DNA && worn_uniform.blood_DNA.len)
+		var/mutable_appearance/bloodsies = mutable_appearance('icons/effects/blood.dmi', "uniformblood")
+		bloodsies.color	= worn_uniform.blood_color
+		uniform_overlay.overlays += bloodsies
+	worn_uniform.generate_accessory_overlays(uniform_overlay)
+	overlays += overlays_standing[UNIFORM_LAYER] = uniform_overlay
 
-				i++
-
-		var/image/I = new()
-		I.appearance = O.appearance
-		I.plane = FLOAT_PLANE
-		obj_overlays[HEAD_LAYER] = I
-		overlays += I
-	if(update_icons)
-		update_icons()
-
-/mob/living/simple_animal/hologram/advanced/update_inv_w_uniform(var/update_icons=1)
-	overlays -= obj_overlays[UNIFORM_LAYER]
-	if(w_uniform && istype(w_uniform, /obj/item/clothing/under) && w_uniform.is_visible())
-		w_uniform.screen_loc = ui_belt
-		var/obj/abstract/Overlays/O = obj_overlays[UNIFORM_LAYER]
-		O.overlays.len = 0
-		var/t_color = w_uniform._color
-		if(!t_color)
-			t_color = icon_state
-		var/image/standing	= image("icon_state" = "[t_color]_s")
-		standing.icon	= 'icons/mob/uniform.dmi'
-		var/obj/item/clothing/under/under_uniform = w_uniform
-		if(w_uniform.icon_override)
-			standing.icon	= w_uniform.icon_override
-		if(w_uniform.dynamic_overlay)
-			if(w_uniform.dynamic_overlay["[UNIFORM_LAYER]"])
-				var/image/dyn_overlay = w_uniform.dynamic_overlay["[UNIFORM_LAYER]"]
-				O.overlays += dyn_overlay
-		if(w_uniform.blood_DNA && w_uniform.blood_DNA.len)
-			var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "uniformblood")
-			bloodsies.color		= w_uniform.blood_color
-			O.overlays += bloodsies
-		under_uniform.generate_accessory_overlays(O)
-		O.icon = standing
-		O.icon_state = standing.icon_state
-		var/image/I = new()
-		I.appearance = O.appearance
-		I.plane = FLOAT_PLANE
-		obj_overlays[UNIFORM_LAYER] = I
-		overlays += I
-	if(update_icons)
-		update_icons()
-
-/mob/living/simple_animal/hologram/advanced/update_inv_wear_suit(var/update_icons=1)
-	overlays -= obj_overlays[SUIT_LAYER]
-	if( wear_suit && istype(wear_suit, /obj/item/clothing/suit) && wear_suit.is_visible())	//TODO check this
-		wear_suit.screen_loc = ui_back
-		var/obj/abstract/Overlays/O = obj_overlays[SUIT_LAYER]
-		O.overlays.len = 0
-		var/image/standing	= image("icon" = ((wear_suit.icon_override) ? wear_suit.icon_override : 'icons/mob/suit.dmi'), "icon_state" = "[wear_suit.icon_state]")
-		if( istype(wear_suit, /obj/item/clothing/suit/strait_jacket) )
-			drop_hands()
-		if(wear_suit.dynamic_overlay)
-			if(wear_suit.dynamic_overlay["[SUIT_LAYER]"])
-				var/image/dyn_overlay = wear_suit.dynamic_overlay["[SUIT_LAYER]"]
-				O.overlays += dyn_overlay
-		if(istype(wear_suit, /obj/item/clothing/suit))
-			var/obj/item/clothing/suit/C = wear_suit
-			if(C.blood_DNA && C.blood_DNA.len)
-				var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "[C.blood_overlay_type]blood")
-				bloodsies.color = wear_suit.blood_color
-				O.overlays	+= bloodsies
-		wear_suit.generate_accessory_overlays(O)
-		O.icon = standing
-		O.icon_state = standing.icon_state
-		var/image/I = new()
-		I.appearance = O.appearance
-		I.plane = FLOAT_PLANE
-		obj_overlays[SUIT_LAYER] = I
-		overlays += I
-	if(update_icons)
-		update_icons()
-		
+/mob/living/simple_animal/hologram/advanced/update_inv_wear_suit()
+	overlays -= overlays_standing[SUIT_LAYER]
+	overlays_standing[SUIT_LAYER] = null
+	if(!(istype(wear_suit, /obj/item/clothing/suit) && wear_suit.is_visible()))	//TODO check this
+		return
+	var/obj/item/clothing/suit/worn_suit = wear_suit
+	worn_suit.screen_loc = ui_back
+	var/mutable_appearance/suit_overlay = mutable_appearance(((worn_suit.icon_override) ? worn_suit.icon_override : 'icons/mob/suit.dmi'), "[worn_suit.icon_state]", -SUIT_LAYER)
+	if(istype(worn_suit, /obj/item/clothing/suit/strait_jacket))
+		drop_hands()
+	if(worn_suit.dynamic_overlay)
+		if(worn_suit.dynamic_overlay["[SUIT_LAYER]"])
+			var/mutable_appearance/dyn_overlay = worn_suit.dynamic_overlay["[SUIT_LAYER]"]
+			suit_overlay.overlays += dyn_overlay
+	if(worn_suit.blood_DNA && worn_suit.blood_DNA.len)
+		var/mutable_appearance/bloodsies = mutable_appearance('icons/effects/blood.dmi', "[worn_suit.blood_overlay_type]blood")
+		bloodsies.color = worn_suit.blood_color
+		suit_overlay.overlays += bloodsies
+	worn_suit.generate_accessory_overlays(suit_overlay)
+	overlays += overlays_standing[SUIT_LAYER] = suit_overlay
 
 /mob/living/simple_animal/hologram/advanced/put_in_hand_check(var/obj/item/W, index)
 	if(lying && !W.laying_pickup) //&& !(W.flags & ABSTRACT))
