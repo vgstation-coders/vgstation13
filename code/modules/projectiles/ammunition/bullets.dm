@@ -149,6 +149,23 @@
 	projectile_type = /obj/item/projectile/bullet/weakbullet/booze
 	starting_materials = list(MAT_IRON = 250)
 
+/obj/item/ammo_casing/shotgun/fanshot
+	name = "FaNshot shell"
+	desc = "A shell capable of knockback force."
+	icon_state = "stunshell"
+	projectile_type = /obj/item/projectile/bullet/weakbullet/fanshot
+	starting_materials = list(MAT_IRON = 250)
+
+/obj/item/ammo_casing/shotgun/fanshot/super
+	name = "high force FaNshot shell"
+	desc = "A shell capable of more powerful knockback force."
+	projectile_type = /obj/item/projectile/bullet/weakbullet/fanshot/super
+
+/obj/item/ammo_casing/shotgun/fanshot/super/syndie
+	name = "beanbag shell"
+	desc = "A weak beanbag shell."
+	icon_state = "bshell"
+
 /obj/item/ammo_casing/shotgun/stunshell
 	name = "stun shell"
 	desc = "A stunning shell."

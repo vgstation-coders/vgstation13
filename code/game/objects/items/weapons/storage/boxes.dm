@@ -565,6 +565,16 @@
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/buckshot = 16)
 
+/obj/item/weapon/storage/box/fanshotshells
+	name = "12-gauge FaNshot shells"
+	icon_state = "stun_shells"
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/fanshot = 16)
+
+/obj/item/weapon/storage/box/fanshotshells/super
+	name = "12-gauge high force FaNshot shells"
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/fanshot/super = 16)
+
 /obj/item/weapon/storage/box/dragonsbreathshells
 	name = "12-gauge dragon's breath shells"
 	icon_state = "dragonsbreath_shells"
