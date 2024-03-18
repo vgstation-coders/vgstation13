@@ -79,7 +79,8 @@
 			var/obj/structure/sign/poster/P = O
 			P.roll_and_drop(src)
 
-	reset_view()
+	if(peepers)
+		reset_view()
 	ChangeTurf(dismantle_type)
 	update_near_walls()
 
@@ -187,6 +188,8 @@
 	return ..()
 
 /turf/simulated/wall/proc/reset_view(atom/movable/mover, var/adjacency_check = TRUE)
+	if(!peepers)
+		return
 	var/list/mob/living/mobs2reset
 	if(isliving(mover) && (mover in peepers))
 		if(adjacency_check && Adjacent(mover))
@@ -226,7 +229,8 @@
 		to_chat(user, "<span class='notice'>You remove the hole[bullet_marks > 1 ? "s" : ""] with \the [W].</span>")
 		bullet_marks = 0
 		icon = initial(icon)
-		reset_view()
+		if(peepers)
+			reset_view()
 		return
 
 	//Get the user's location
