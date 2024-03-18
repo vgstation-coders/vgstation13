@@ -314,3 +314,19 @@
 		user.change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
 	else
 		attack_ai(user)
+
+// TEST PROCS
+/mob/living/silicon/robot/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
+	if(user.check_rights(R_ADMIN))
+		to_chat(user,"<span class='notice'>You are now inside \the [src], in control of its targeting.</span>")
+		user.forceMove(src)
+		user.current_robot = src
+		pulsecompromised = 1
+		user.PLI.Grant(user)
+
+/obj/item/weapon/gun/attack_pulsedemon(mob/living/simple_animal/hostile/pulse_demon/user)
+	if(user.check_rights(R_ADMIN))
+		to_chat(user,"<span class='notice'>You are now inside \the [src], in control of its targeting.</span>")
+		user.forceMove(src)
+		user.current_weapon = src
+		user.PLI.Grant(user)
