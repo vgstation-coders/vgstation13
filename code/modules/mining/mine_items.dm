@@ -706,39 +706,44 @@
 		icon_state = "lazarus_empty"
 
 /obj/item/weapon/lazarus_injector/afterattack(atom/target, mob/user, proximity_flag)
-	if(!loaded)
+	if(!loaded || !proximity_flag)
 		return
-	if(istype(target, /mob/living) && proximity_flag)
-		if(istype(target, /mob/living/simple_animal))
-			var/mob/living/simple_animal/M = target
-			if(M.mob_property_flags & MOB_NO_LAZ)
-				to_chat(user, "<span class='warning'>\The [src] is incapable of reviving \the [M].</span>")
-				return
-			if(M.stat == DEAD)
-
-				M.faction = "lazarus \ref[user]"
-				M.revive(refreshbutcher = refreshes_drops)
-				if(istype(target, /mob/living/simple_animal/hostile))
-					var/mob/living/simple_animal/hostile/H = M
-					H.friends += makeweakref(user)
-
-					log_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector.")
-					H.attack_log += "\[[time_stamp()]\] Revived by <b>[key_name(user)]</b> with a lazarus injector."
-					user.attack_log += "\[[time_stamp()]\] Revived hostile mob <b>[H]</b> with a lazarus injector."
-					msg_admin_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-
-				loaded = 0
-				user.visible_message("<span class='warning'>[user] injects [M] with \the [src], reviving it.</span>", \
-				"<span class='notice'>You inject [M] with \the [src], reviving it.</span>")
-				playsound(src,'sound/effects/refill.ogg',50,1)
-				update_icon()
-				return
-			else
-				to_chat(user, "<span class='warning'>\The [src] is only effective on the dead.</span>")
-				return
-		else
-			to_chat(user, "<span class='warning'>\The [src] is only effective on lesser beings.</span>")
+	var/mob/living/L
+	if(isliving(target))
+		L = target
+	else if(istype(target,/obj/item/weapon/holder))
+		var/obj/item/weapon/holder/hol = target
+		L = hol.stored_mob
+	else
+		to_chat(user, "<span class='warning'>\The [src] is only effective on living things.</span>")
+		return
+	if(istype(L, /mob/living/simple_animal))
+		var/mob/living/simple_animal/M = L
+		if(M.mob_property_flags & MOB_NO_LAZ)
+			to_chat(user, "<span class='warning'>\The [src] is incapable of reviving \the [M].</span>")
 			return
+		if(M.stat == DEAD)
+
+			M.faction = "lazarus \ref[user]"
+			M.revive(refreshbutcher = refreshes_drops)
+			if(istype(M, /mob/living/simple_animal/hostile))
+				var/mob/living/simple_animal/hostile/H = M
+				H.friends += makeweakref(user)
+
+				log_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector.")
+				H.attack_log += "\[[time_stamp()]\] Revived by <b>[key_name(user)]</b> with a lazarus injector."
+				user.attack_log += "\[[time_stamp()]\] Revived hostile mob <b>[H]</b> with a lazarus injector."
+				msg_admin_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+
+			loaded = 0
+			user.visible_message("<span class='warning'>[user] injects [M] with \the [src], reviving it.</span>", \
+			"<span class='notice'>You inject [M] with \the [src], reviving it.</span>")
+			playsound(src,'sound/effects/refill.ogg',50,1)
+			update_icon()
+		else
+			to_chat(user, "<span class='warning'>\The [src] is only effective on the dead.</span>")
+	else
+		to_chat(user, "<span class='warning'>\The [src] is only effective on lesser beings.</span>")
 
 /obj/item/weapon/lazarus_injector/examine(mob/user)
 	..()
