@@ -1249,32 +1249,32 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define STAGE_SSGSS	13
 
 //Human Overlays Indexes/////////THIS DEFINES WHAT LAYERS APPEARS ON TOP OF OTHERS
-#define FIRE_LAYER				1		//If you're on fire (/tg/ shit)
-#define MUTANTRACE_LAYER		2		//TODO: make part of body?
-#define TAIL_UNDERLIMBS_LAYER	3
-#define LIMBS_LAYER				4
-#define MUTATIONS_LAYER			5
-#define DAMAGE_LAYER			6
-#define UNIFORM_LAYER			7
-#define SHOES_LAYER				8
-#define GLOVES_LAYER			9
-#define EARS_LAYER				10
-#define SUIT_LAYER				11
-#define GLASSES_LAYER			12
-#define BELT_LAYER				13		//Possible make this an overlay of somethign required to wear a belt?
-#define SUIT_STORE_LAYER		14
-#define HAIR_LAYER				15		//TODO: make part of head layer?
-#define GLASSES_OVER_HAIR_LAYER	16
-#define TAIL_LAYER				17
-#define FACEMASK_LAYER			18
-#define HEAD_LAYER				19
-#define BACK_LAYER				20		//Back should be above head so that headgear doesn't hides backpack when facing north
-#define ID_LAYER				21		//IDs should be visible above suits and backpacks
-#define HANDCUFF_LAYER			22
-#define MUTUALCUFF_LAYER		23
-#define LEGCUFF_LAYER			24
-#define HAND_LAYER				25
-#define TARGETED_LAYER			26		//BS12: Layer for the target overlay from weapon targeting system
+#define FIRE_LAYER				26		//If you're on fire (/tg/ shit)
+#define MUTANTRACE_LAYER		25		//TODO: make part of body?
+#define TAIL_UNDERLIMBS_LAYER	24
+#define LIMBS_LAYER				23
+#define MUTATIONS_LAYER			22
+#define DAMAGE_LAYER			21
+#define UNIFORM_LAYER			20
+#define SHOES_LAYER				19
+#define GLOVES_LAYER			18
+#define EARS_LAYER				17
+#define SUIT_LAYER				16
+#define GLASSES_LAYER			15
+#define BELT_LAYER				14		//Possible make this an overlay of somethign required to wear a belt?
+#define SUIT_STORE_LAYER		13
+#define HAIR_LAYER				12		//TODO: make part of head layer?
+#define GLASSES_OVER_HAIR_LAYER	11
+#define TAIL_LAYER				10
+#define FACEMASK_LAYER			9
+#define HEAD_LAYER				8
+#define BACK_LAYER				7		//Back should be above head so that headgear doesn't hides backpack when facing north
+#define ID_LAYER				6		//IDs should be visible above suits and backpacks
+#define HANDCUFF_LAYER			5
+#define MUTUALCUFF_LAYER		4
+#define LEGCUFF_LAYER			3
+#define HAND_LAYER				2
+#define TARGETED_LAYER			1		//BS12: Layer for the target overlay from weapon targeting system
 #define TOTAL_LAYERS			26
 //////////////////////////////////
 

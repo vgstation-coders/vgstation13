@@ -422,13 +422,13 @@
 		return 1
 
 	if(iscarbon(M))
-		var/mob/living/carbon/H = M
-		for(var/obj/item/I in H.held_items)
+		var/mob/living/carbon/carbon = M
+		for(var/obj/item/I in carbon.held_items)
 			I.clean_act(clean_level)
 
 		for(var/obj/item/clothing/C in M.get_equipped_items())
 			if(C.clean_blood())
-				H.update_inv_by_slot(C.slot_flags)
+				carbon.update_inv_by_slot(C.slot_flags)
 
 	M.clean_act(clean_level)
 

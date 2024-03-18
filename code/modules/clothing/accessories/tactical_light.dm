@@ -49,9 +49,9 @@
 	else
 		attached_to.actions_types += list(/datum/action/item_action/toggle_taclight)
 		//attached_to.actions += makelight
-	if(ishuman(attached_to.loc))
-		var/mob/living/carbon/human/H = attached_to.loc
-		H.update_inv_by_slot(attached_to.slot_flags)
+	if(iscarbon(attached_to.loc))
+		var/mob/living/carbon/carbon_attached_to = attached_to.loc
+		carbon_attached_to.update_inv_by_slot(attached_to.slot_flags)
 
 /obj/item/clothing/accessory/taclight/update_icon()
 	if(!attached_to)
@@ -64,9 +64,9 @@
 		if (attached_to.overlays.len)
 			attached_to.overlays -= inv_overlay
 		attached_to.overlays += inv_overlay
-	if(ishuman(attached_to.loc))
-		var/mob/living/carbon/human/H = attached_to.loc
-		H.update_inv_by_slot(attached_to.slot_flags)
+	if(iscarbon(attached_to.loc))
+		var/mob/living/carbon/carbon_attached_to = attached_to.loc
+		carbon_attached_to.update_inv_by_slot(attached_to.slot_flags)
 
 	attached_to.update_icon()
 
