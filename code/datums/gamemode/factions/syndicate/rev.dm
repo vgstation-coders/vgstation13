@@ -184,16 +184,12 @@
 
 /datum/faction/revolution/GetScoreboard()
 	. = ..()
-	var/foecount = 0
 	var/loycount = 0
 	var/revarrested = 0
 	var/revkilled = 0
 	var/allrevarrested = 1
 	var/deadcommand = 0
 	for(var/datum/role/R in members)
-		if(R.antag.current && R.antag.current.stat != 2)
-			if(istype(R,/datum/role/revolutionary/leader))
-				foecount++
 		var/datum/mind/M = R.antag
 		if(!M || !M.current)
 			revkilled++
@@ -214,7 +210,7 @@
 			loycount++
 	//if(score.scores["traitorswon"])
 		//score.scores["crewscore"] -= 10000
-	if(foecount == revarrested)
+	if(initial_member_amount == revarrested) // That way only head revs count
 		allrevarrested = 1
 		score.crewscore += revarrested * 2000
 	score.crewscore += revarrested * 1000

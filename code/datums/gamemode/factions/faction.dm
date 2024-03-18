@@ -33,6 +33,7 @@ var/list/factions_with_hud_icons = list()
 	var/required_pref = ""
 	var/list/restricted_species = list()
 	var/list/members = list()
+	var/initial_member_amount = 0
 	var/max_roles = 0
 	var/accept_latejoiners = FALSE
 	var/datum/objective_holder/objective_holder
@@ -75,6 +76,7 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/OnPostSetup()
 	for(var/datum/role/R in members)
 		R.OnPostSetup()
+	initial_member_amount = members.len
 
 /datum/faction/proc/Dismantle()
 	for(var/datum/role/R in members)

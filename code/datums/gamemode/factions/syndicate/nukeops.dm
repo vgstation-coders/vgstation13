@@ -26,7 +26,6 @@
 		. += "<BR>The operatives bought:<BR>"
 		for(var/entry in faction_scoreboard_data)
 			. += "[entry]<BR>"
-	var/foecount = 0
 	var/diskdat = null
 	var/bombdat = null
 	var/opkilled = 0
@@ -34,7 +33,6 @@
 	var/alloparrested = 0
 	//var/nukedpenalty = 1000
 	for(var/datum/role/R in members)
-		foecount++
 		var/datum/mind/M = R.antag
 		if(!M || !M.current)
 			opkilled++
@@ -44,7 +42,7 @@
 			oparrested++
 		else if(M.current.stat == DEAD)
 			opkilled++
-	if(foecount == oparrested)
+	if(initial_member_amount == oparrested)
 		alloparrested = 1
 		score.crewscore += oparrested * 2000
 	score.crewscore += opkilled * 250
