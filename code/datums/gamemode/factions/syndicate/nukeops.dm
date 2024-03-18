@@ -50,40 +50,7 @@
 	score.crewscore += opkilled * 250
 	score.crewscore += oparrested * 1000
 	//if(score.scores["nuked"])
-		//score.scores["crewscore"] -= nukedpenalty
-
-	/*score.scores["disc"] = 1
-	if(nukedisk)
-		if(nukedisk.loc != /mob/living/carbon)
-			continue
-		var/turf/location = get_turf(nukedisk.loc)
-		var/area/bad_zone1 = locate(/area)
-		var/area/bad_zone2 = locate(/area/syndicate_mothership)
-		var/area/bad_zone3 = locate(/area/wizard_station)
-		if(location in bad_zone1)
-			score.scores["disc"] = 0
-		if(location in bad_zone2)
-			score.scores["disc"] = 0
-		if(location in bad_zone3)
-			score.scores["disc"] = 0
-		if(nukedisk.loc.z != map.zMainStation)
-			score.scores["disc"] = 0*/
-
-	/*if(score.scores["nuked"])
-		nukedpenalty = 50000 //Congratulations, your score was nuked
-
-		for(var/obj/machinery/nuclearbomb/nuke in nuclear_bombs)
-			if(nuke.r_code == "Nope")
-				continue
-			var/turf/T = get_turf(nuke)
-			if(istype(T, /area/syndicate_mothership) || istype(T, /area/wizard_station) || istype(T, /area/solar))
-				nukedpenalty = 1000
-			else if(istype(T, /area/security/main) || istype(T, /area/security/brig) || istype(T, /area/security/armory) || istype(T, /area/security/checkpoint2))
-				nukedpenalty = 50000
-			else if(istype(T, /area/engine))
-				nukedpenalty = 100000
-			else
-				nukedpenalty = 10000*/
+		//score.crewscore -= nukedpenalty
 
 	if(nukedisk)
 		var/atom/disk_loc = nukedisk.loc
@@ -96,12 +63,25 @@
 				diskdat += "in \a [O.name] "
 			disk_loc = disk_loc.loc
 		diskdat += "in [disk_loc.loc]"
+		/*score.scores["disc"] = 1
+		if(istype(disk_loc,/mob/living/carbon))
+			var/area/bad_zone1 = locate(/area) in areas
+			if(location in bad_zone1)
+				score.scores["disc"] = 0
+			if(istype(get_area(nukedisc),/area/syndicate_mothership))
+				score.scores["disc"] = 0
+			if(istype(get_area(nukedisc),/area/wizard_station))
+				score.scores["disc"] = 0
+			if(nukedisk.loc.z != map.zMainStation)
+				score.scores["disc"] = 0*/
 
 	for(var/obj/machinery/nuclearbomb/nuke in nuclear_bombs)
 		if(nuke.r_code == "LOLNO")
 			continue
 		bombdat = get_area(nuke)
-		/*if(istype(T,/area/syndicate_mothership) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
+		/*nukedpenalty = 50000 //Congratulations, your score was nuked
+		var/turf/T = get_turf(nuke)
+		if(istype(T,/area/syndicate_mothership) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
 			nukedpenalty = 1000
 		else if (istype(T,/area/security/main) || istype(T,/area/security/brig) || istype(T,/area/security/armory) || istype(T,/area/security/checkpoint2))
 			nukedpenalty = 50000
