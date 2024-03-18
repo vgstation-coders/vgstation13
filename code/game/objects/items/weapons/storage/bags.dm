@@ -297,7 +297,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	fits_max_w_class = 3
 	max_combined_w_class = 28 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_MEDIUM
-	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil","/obj/item/trash/soda_cans")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil","/obj/item/trash/soda_cans","/obj/item/trash/packet")
 	var/vending_update = FALSE
 
 /obj/item/weapon/storage/bag/food/New()
@@ -305,9 +305,6 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	for (var/obj/item/weapon/reagent_containers/food/snacks/F in contents)
 		if(F.trash)
 			can_only_hold |= "[F.trash]"
-	for (var/obj/item/weapon/reagent_containers/food/condiment/small/C in contents)
-		if(C.trash_type)
-			can_only_hold |= "[C.trash_type]"
 	if(vending_update)
 		for (var/obj/O in contents)
 			O.on_vending_machine_spawn()
