@@ -285,6 +285,7 @@ var/list/nuclear_bombs = list()
 	return
 
 #define NUKERANGE 120
+var/area/nuked_area
 /obj/machinery/nuclearbomb/proc/explode(var/sound = TRUE)
 	if (src.safety)
 		src.timing = 0
@@ -302,6 +303,7 @@ var/list/nuclear_bombs = list()
 
 	var/off_station = 0
 	var/turf/bomb_location = get_turf(src)
+	nuked_area = bomb_location.loc
 	explosion(bomb_location, 30, 60, 120, 120, 10)
 	if( bomb_location && (bomb_location.z == map.zMainStation) )
 		var/map_center_x = world.maxx * 0.5

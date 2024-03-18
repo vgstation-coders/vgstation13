@@ -75,21 +75,23 @@
 			if(nukedisk.loc.z != map.zMainStation)
 				score.scores["disc"] = 0*/
 
-	for(var/obj/machinery/nuclearbomb/nuke in nuclear_bombs)
-		if(nuke.r_code == "LOLNO")
-			continue
-		bombdat = get_area(nuke)
-		/*nukedpenalty = 50000 //Congratulations, your score was nuked
-		var/turf/T = get_turf(nuke)
-		if(istype(T,/area/syndicate_mothership) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
-			nukedpenalty = 1000
-		else if (istype(T,/area/security/main) || istype(T,/area/security/brig) || istype(T,/area/security/armory) || istype(T,/area/security/checkpoint2))
-			nukedpenalty = 50000
-		else if (istype(T,/area/engine))
-			nukedpenalty = 100000
-		else
-			nukedpenalty = 5000
-		break*/
+	bombdat = nuked_area
+	if(!nuked_area)
+		for(var/obj/machinery/nuclearbomb/nuke in nuclear_bombs)
+			if(nuke.r_code == "LOLNO")
+				continue
+			bombdat = get_area(nuke)
+			/*nukedpenalty = 50000 //Congratulations, your score was nuked
+			var/turf/T = get_turf(nuke)
+			if(istype(T,/area/syndicate_mothership) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
+				nukedpenalty = 1000
+			else if (istype(T,/area/security/main) || istype(T,/area/security/brig) || istype(T,/area/security/armory) || istype(T,/area/security/checkpoint2))
+				nukedpenalty = 50000
+			else if (istype(T,/area/engine))
+				nukedpenalty = 100000
+			else
+				nukedpenalty = 5000*/
+			break
 	if(!diskdat)
 		diskdat = "Uh oh. Something has fucked up! Report this."
 	if(!bombdat)
