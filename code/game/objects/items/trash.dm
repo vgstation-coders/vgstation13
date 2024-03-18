@@ -71,19 +71,19 @@
 	name = "\improper Busta-Nuts box"
 	icon_state = "busta_nut"
 	starting_materials = list(MAT_CARDBOARD = 370)
-	w_type=RECYK_MISC
+	w_type=RECYK_CARDBOARD
 
 /obj/item/trash/oldempirebar
 	name = "\improper Old Empire Bar wrapper"
 	icon_state = "old_empire_bar"
 	starting_materials = list(MAT_CARDBOARD = 370)
-	w_type=RECYK_MISC
+	w_type=RECYK_CARDBOARD
 
 /obj/item/trash/raisins
 	name = "\improper 4no raisins box"
 	icon_state= "4no_raisins"
 	starting_materials = list(MAT_CARDBOARD = 370)
-	w_type=RECYK_MISC
+	w_type=RECYK_CARDBOARD
 
 /obj/item/trash/candy
 	name = "candy wrapper"
@@ -105,7 +105,7 @@
 	name = "popcorn box"
 	icon_state = "popcorn"
 	starting_materials = list(MAT_CARDBOARD = 370)
-	w_type=RECYK_MISC
+	w_type=RECYK_CARDBOARD
 
 /obj/item/trash/popcorn/hoppers
 	name = "hoppers box"
@@ -115,17 +115,19 @@
 	name = "\improper Scaredy's Private Reserve Beef Jerky bag"
 	icon_state = "sosjerky"
 	starting_materials = list(MAT_CARDBOARD = 370)
-	w_type=RECYK_MISC
+	w_type=RECYK_CARDBOARD
 
 /obj/item/trash/syndi_cakes
 	name = "\improper Syndi cakes box"
 	icon_state = "syndi_cakes"
 	starting_materials = list(MAT_CARDBOARD = 370)
-	w_type=RECYK_MISC
+	w_type=RECYK_CARDBOARD
 
 /obj/item/trash/discountchocolate
 	name = "\improper Discount Dan's Chocolate Bar wrapper"
 	icon_state = "danbar"
+	starting_materials = list(MAT_CARDBOARD = 50)
+	w_type=RECYK_CARDBOARD
 
 /obj/item/trash/chips/donitos
 	name = "\improper Donitos bag"
@@ -193,6 +195,8 @@
 	icon_state = "pietin_assembly"
 	autoignition_temperature = 0
 	siemens_coefficient = 2
+	starting_materials = list(MAT_IRON = 100)
+	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_SILICON
 
 /obj/item/trash/wired_pietin_assembly/attackby(obj/item/W, mob/user)
@@ -215,14 +219,20 @@
 /obj/item/trash/pistachios
 	name = "pistachios pack"
 	icon_state = "pistachios_pack"
+	starting_materials = list(MAT_PLASTIC = 25, MAT_IRON = 25, MAT_CARDBOARD = 25)
+	w_type=RECYK_PLASTIC
 
 /obj/item/trash/semki
 	name = "pemki pack"
 	icon_state = "semki_pack"
+	starting_materials = list(MAT_PLASTIC = 25, MAT_IRON = 25, MAT_CARDBOARD = 25)
+	w_type=RECYK_PLASTIC
 
 /obj/item/trash/tray
 	name = "tray"
 	icon_state = "tray"
+	starting_materials = list(MAT_PLASTIC = 100)
+	w_type=RECYK_PLASTIC
 
 /obj/item/trash/candle
 	name = "candle"
@@ -251,7 +261,7 @@
 	icon_state = "kfc_bucket"
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type=RECYK_MISC
+	w_type=RECYK_CARDBOARD
 	armor = list(melee = 1, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_HEAD
 
@@ -259,13 +269,13 @@
 	name = "fries cone"
 	icon_state = "used_cone"
 	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type=RECYK_MISC
+	w_type=RECYK_CARDBOARD
 
 /obj/item/trash/fries_punet
 	name = "fries punnet"
 	icon_state = "used_punnet"
 	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type=RECYK_MISC
+	w_type=RECYK_CARDBOARD
 
 /obj/item/trash/mannequin/cultify()
 	if(icon_state != "mannequin_cult_empty")
@@ -290,7 +300,7 @@
 	icon_state = "byond"
 	starting_materials = list(MAT_CARDBOARD = 370)
 	autoignition_temperature = AUTOIGNITION_PAPER
-	w_type=RECYK_MISC
+	w_type=RECYK_CARDBOARD
 
 var/list/crushed_cans_cache = list()
 
@@ -345,7 +355,7 @@ var/list/crushed_cans_cache = list()
 	desc = "Electronics burnt to a crisp."
 	icon_state = "slag"
 	starting_materials = list(MAT_IRON = 100)
-	w_type=RECYK_MISC
+	w_type=RECYK_METAL
 
 /obj/item/trash/used_tray
 	name = "dirty tray"
@@ -363,13 +373,13 @@ var/list/crushed_cans_cache = list()
 	name = "zam notraisins"
 	icon_state	= "zam_notraisins_rubbish"
 	starting_materials = list(MAT_CARDBOARD = 370)
-	w_type=RECYK_MISC
+	w_type=RECYK_CARDBOARD
 
 /obj/item/trash/zam_sliderwrapper
 	name = "zam slider wrapper"
 	icon_state	= "zam_spiderslider_wrapper"
 	starting_materials = list(MAT_CARDBOARD = 370)
-	w_type=RECYK_MISC
+	w_type=RECYK_CARDBOARD
 
 /obj/item/trash/egg
 	name = "egg shell"

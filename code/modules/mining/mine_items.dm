@@ -695,6 +695,8 @@
 	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 5
+	starting_materials = list(MAT_IRON = 200)
+	w_type = RECYK_ELECTRONIC
 	var/loaded = 1
 	var/refreshes_drops = FALSE
 

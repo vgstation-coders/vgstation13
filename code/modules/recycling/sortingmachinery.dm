@@ -385,7 +385,7 @@
 /obj/machinery/sorting_machine/recycling
 	name = "Recycling Sorting Machine"
 
-	var/list/selected_types = list("Glasses", "Metals/Minerals", "Electronics", "Plastic", "Fabric", "Wax")
+	var/list/selected_types = list("Glasses", "Metals/Minerals", "Electronics", "Plastic", "Fabric", "Wax", "Cardboard")
 	var/list/types[9]
 
 /obj/machinery/sorting_machine/recycling/New()
@@ -409,6 +409,7 @@
 	types[RECYK_PLASTIC]    = "Plastic"
 	types[RECYK_FABRIC]     = "Fabric"
 	types[RECYK_WAX]        = "Wax"
+	types[RECYK_CARDBOARD]  = "Cardboard"
 	types[RECYK_MISC]       = "Miscellaneous"
 
 /obj/machinery/sorting_machine/recycling/process()

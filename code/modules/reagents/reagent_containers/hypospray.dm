@@ -121,7 +121,7 @@
 	volume = 15
 	flags = FPRINT
 	refill_reagent_list = list(BIOFOAM = 15)
-	starting_materials = list(MAT_METAL = 200)
+	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_ELECTRONIC
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector/update_icon()
