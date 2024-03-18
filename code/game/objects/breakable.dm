@@ -232,7 +232,7 @@
 		var/glanced=!take_damage(W.force, damage_type = W.damtype == BURN ? "energy" : "melee", skip_break = TRUE)
 		if(W.hitsound)
 			playsound(src, W.hitsound, 50, 1)
-		user.visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [shift_verb_tense(pick(W.attack_verb))] \the [src] with \the [W][generate_break_text(glanced)]<span>")
+		user.visible_message("<span class='warning'>\The [user] [W.attack_verb?.len ? pick(W.attack_verb) : "attacks"] \the [src] with \the [W][generate_break_text(glanced,TRUE)]</span>","<span class='notice'>You [W.attack_verb?.len ? shift_verb_tense(pick(W.attack_verb)) : "attack"] \the [src] with \the [W][generate_break_text(glanced)]<span>")
 		try_break()
 		//Break the weapon as well, if applicable, based on its own force.
 		if(W.breakable_flags & BREAKABLE_AS_MELEE && W.damtype == BRUTE)
