@@ -26,6 +26,103 @@
 		. += "<BR>The operatives bought:<BR>"
 		for(var/entry in faction_scoreboard_data)
 			. += "[entry]<BR>"
+	var/foecount = 0
+	var/diskdat = null
+	var/bombdat = null
+	var/opkilled = 0
+	var/oparrested = 0
+	var/alloparrested = 0
+	//var/nukedpenalty = 1000
+	for(var/datum/role/R in members)
+		foecount++
+		var/datum/mind/M = R.antag
+		if(!M || !M.current)
+			opkilled++
+			continue
+		var/turf/T = M.current.loc
+		if(T && istype(T.loc, /area/security/brig))
+			oparrested++
+		else if(M.current.stat == DEAD)
+			opkilled++
+	if(foecount == oparrested)
+		alloparrested = 1
+		score.crewscore += oparrested * 2000
+	score.crewscore += opkilled * 250
+	score.crewscore += oparrested * 1000
+	//if(score.scores["nuked"])
+		//score.scores["crewscore"] -= nukedpenalty
+
+	/*score.scores["disc"] = 1
+	if(nukedisk)
+		if(nukedisk.loc != /mob/living/carbon)
+			continue
+		var/turf/location = get_turf(nukedisk.loc)
+		var/area/bad_zone1 = locate(/area)
+		var/area/bad_zone2 = locate(/area/syndicate_mothership)
+		var/area/bad_zone3 = locate(/area/wizard_station)
+		if(location in bad_zone1)
+			score.scores["disc"] = 0
+		if(location in bad_zone2)
+			score.scores["disc"] = 0
+		if(location in bad_zone3)
+			score.scores["disc"] = 0
+		if(nukedisk.loc.z != map.zMainStation)
+			score.scores["disc"] = 0*/
+
+	/*if(score.scores["nuked"])
+		nukedpenalty = 50000 //Congratulations, your score was nuked
+
+		for(var/obj/machinery/nuclearbomb/nuke in nuclear_bombs)
+			if(nuke.r_code == "Nope")
+				continue
+			var/turf/T = get_turf(nuke)
+			if(istype(T, /area/syndicate_mothership) || istype(T, /area/wizard_station) || istype(T, /area/solar))
+				nukedpenalty = 1000
+			else if(istype(T, /area/security/main) || istype(T, /area/security/brig) || istype(T, /area/security/armory) || istype(T, /area/security/checkpoint2))
+				nukedpenalty = 50000
+			else if(istype(T, /area/engine))
+				nukedpenalty = 100000
+			else
+				nukedpenalty = 10000*/
+
+	if(nukedisk)
+		var/atom/disk_loc = nukedisk.loc
+		while(!istype(disk_loc, /turf))
+			if(istype(disk_loc, /mob))
+				var/mob/M = disk_loc
+				diskdat += "Carried by [M.real_name] "
+			if(istype(disk_loc, /obj))
+				var/obj/O = disk_loc
+				diskdat += "in \a [O.name] "
+			disk_loc = disk_loc.loc
+		diskdat += "in [disk_loc.loc]"
+
+	for(var/obj/machinery/nuclearbomb/nuke in nuclear_bombs)
+		if(nuke.r_code == "LOLNO")
+			continue
+		bombdat = get_area(nuke)
+		/*if(istype(T,/area/syndicate_mothership) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
+			nukedpenalty = 1000
+		else if (istype(T,/area/security/main) || istype(T,/area/security/brig) || istype(T,/area/security/armory) || istype(T,/area/security/checkpoint2))
+			nukedpenalty = 50000
+		else if (istype(T,/area/engine))
+			nukedpenalty = 100000
+		else
+			nukedpenalty = 5000
+		break*/
+	if(!diskdat)
+		diskdat = "Uh oh. Something has fucked up! Report this."
+	if(!bombdat)
+		bombdat = "Uh oh. Something has fucked up! Report this."
+
+	. += {"<BR>
+	<B>Final Location of Nuke:</B> [bombdat]<BR>
+	<B>Final Location of Disk:</B> [diskdat]<BR>
+	<B>Operatives Arrested:</B> [oparrested] ([oparrested * 1000] Points)<BR>
+	<B>Operatives Killed:</B> [opkilled] ([opkilled * 250] Points)<BR>
+	<B>All Operatives Arrested:</B> [alloparrested ? "Yes" : "No"] ([oparrested * 2000] Points)<BR>"}
+//		<B>Station Destroyed:</B> [score.scores["nuked"] ? "Yes" : "No"] (-[nukedpenalty] Points)<BR>
+//		<B>Nuclear Disk Secure:</B> [score.scores["disc"] ? "Yes" : "No"] ([score.scores["disc"] * 500] Points)<BR>
 
 /datum/faction/syndicate/nuke_op/AdminPanelEntry()
 	var/list/dat = ..()
