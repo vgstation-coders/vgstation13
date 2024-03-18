@@ -255,6 +255,8 @@
 /obj/item/trash/liquidfood
 	name = "\improper \"LiquidFood\" ration"
 	icon_state = "liquidfood"
+	starting_materials = list(MAT_PLASTIC = 100)
+	w_type=RECYK_PLASTIC
 
 /obj/item/trash/chicken_bucket
 	name = "chicken bucket"
