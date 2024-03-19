@@ -39,7 +39,7 @@
 	var/mob/living/carbon/human/user = usr
 	if(istype(user))
 		var/obj/item/clothing/under/lawyer/L = user.w_uniform
-		if(istype(L) && istype(target,/obj/structure/table))
+		if(istype(L) && istype(target,/obj/structure/table) && user.Adjacent(target))
 			user.say("Take that!")
 
 /obj/item/weapon/storage/box/evidence
