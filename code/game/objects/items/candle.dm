@@ -41,6 +41,7 @@
 		lit = 0
 		update_icon()
 		set_light(0)
+		remove_particles("Candle")
 
 /obj/item/candle/update_icon()
 	overlays.len = 0
@@ -106,6 +107,7 @@
 		if(!quiet)
 			visible_message(flavor_text)
 		set_light(CANDLE_LUM)
+		add_particles("Candle")
 		processing_objects.Add(src)
 		update_icon()
 
@@ -117,7 +119,7 @@
 		for(var/i = 0; i < amount; i++)
 			if(prob(95))
 				if(prob(30))
-					lit = 0
+					extinguish()
 				else
 					var/candleflick = pick(0.5, 0.7, 0.9, 1, 1.3, 1.5, 2)
 					set_light(candleflick * CANDLE_LUM)
@@ -151,8 +153,7 @@
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
-		src.lit = 0
-		set_light(0)
+		extinguish()
 		processing_objects.Remove(src)
 		update_icon()
 		return
@@ -168,9 +169,7 @@
 
 /obj/item/candle/attack_self(mob/user as mob)
 	if(lit)
-		lit = 0
-		update_icon()
-		set_light(0)
+		extinguish()
 		to_chat(user, "<span class='warning'>You pinch \the [src]'s wick.</span>")
 		if(iscarbon(loc))
 			var/mob/living/carbon/M = loc

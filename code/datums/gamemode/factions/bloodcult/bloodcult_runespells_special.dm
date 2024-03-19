@@ -262,10 +262,11 @@
 
 	..()
 
-/datum/rune_spell/tearreality/proc/dancer_check()
+/datum/rune_spell/tearreality/proc/dancer_check(var/mob/living/carbon/C)
 	if (dance_platforms.len <= 0)
 		return
 	if (dance_manager)
+		dance_manager.dancers |= C
 		return
 	for(var/obj/effect/cult_ritual/dance_platform/platform in dance_platforms)
 		if (!platform.dancer)
@@ -288,8 +289,9 @@
 /datum/rune_spell/tearreality/proc/update_crystals()
 	var/obj/effect/rune/R = spell_holder
 	R.overlays -= crystals
-	crystals.icon_state = "tear_stones_[min(8,1+(dance_count/30))]"
+	crystals.icon_state = "tear_stones_[min(8,1+round(dance_count/30))]"
 	R.overlays += crystals
+	R.update_moody_light('icons/lighting/moody_lights_96x96.dmi', crystals.icon_state)
 
 /datum/rune_spell/tearreality/proc/lost_dancer()
 	for(var/obj/effect/cult_ritual/dance_platform/platform in dance_platforms)
@@ -297,6 +299,26 @@
 			return
 	dance_count = 0
 	QDEL_NULL(dance_manager)
+	var/obj/effect/rune/R = spell_holder
+	R.overlays -= crystals
+	R.kill_moody_light()
+
+/datum/rune_spell/tearreality/proc/dance_increment(var/mob/living/carbon/C)
+	if (dance_manager)
+		var/increment = 0.5
+		if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
+			increment += 0.5
+		increment += (C.get_cult_power()) / 100
+
+		var/obj/item/candle/blood/candle
+		if (istype(C.get_active_hand(), /obj/item/candle/blood))
+			candle = C.get_active_hand()
+		else if (istype(C.get_inactive_hand(), /obj/item/candle/blood))
+			candle = C.get_inactive_hand()
+		if (candle && candle.lit)
+			increment += 0.5
+		dance_count += increment
+
 //---------------------------------------------------------------------------------------------------------------------
 /obj/effect/cult_ritual/dance_platform
 	anchored = 1
@@ -355,7 +377,7 @@
 			I_circle.appearance_flags |= RESET_COLOR
 			overlays += I_circle
 		else
-			source.dance_count++
+			source.dance_increment(dancer)
 	else
 		for (var/mob/living/carbon/C in loc)
 			if (valid_dancer(C))
@@ -368,25 +390,9 @@
 	if (!dancer && !moving)
 		if (iscarbon(mover))
 			var/mob/living/carbon/C = mover
-			if (iscultist(C))
-				dancer = C
-				overlays.len = 0
-				var/image/I_circle = image(icon, src, "dance_platform_full")
-				I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
-				I_circle.layer = ABOVE_TILE_LAYER
-				I_circle.appearance_flags |= RESET_COLOR
-				var/image/I_markings = image(icon, src,"dance_platform_markings")
-				I_markings.plane = relative_plane(OBJ_PLANE)
-				I_markings.layer = BELOW_TABLE_LAYER
-				overlays += I_circle
-				overlays += I_markings
-				source.dancer_check()
-				return TRUE
-			else
-				if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
+			if (C.mind && !C.isDead())
+				if (iscultist(C))
 					dancer = C
-					prisoner = TRUE
-					dancer.SetStunned(4)
 					overlays.len = 0
 					var/image/I_circle = image(icon, src, "dance_platform_full")
 					I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
@@ -397,12 +403,29 @@
 					I_markings.layer = BELOW_TABLE_LAYER
 					overlays += I_circle
 					overlays += I_markings
-					var/image/I = image('icons/obj/cult.dmi', src, "dance_prisoner")
-					I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
-					I.layer = NARSIE_GLOW
-					overlays += I
-					source.dancer_check()
+					source.dancer_check(C)
 					return TRUE
+				else
+					if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
+						dancer = C
+						prisoner = TRUE
+						dancer.SetStunned(4)
+						overlays.len = 0
+						var/image/I_circle = image(icon, src, "dance_platform_full")
+						I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+						I_circle.layer = ABOVE_TILE_LAYER
+						I_circle.appearance_flags |= RESET_COLOR
+						var/image/I_markings = image(icon, src,"dance_platform_markings")
+						I_markings.plane = relative_plane(OBJ_PLANE)
+						I_markings.layer = BELOW_TABLE_LAYER
+						overlays += I_circle
+						overlays += I_markings
+						var/image/I = image('icons/obj/cult.dmi', src, "dance_prisoner")
+						I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
+						I.layer = NARSIE_GLOW
+						overlays += I
+						source.dancer_check(C)
+						return TRUE
 	return FALSE
 
 /obj/effect/cult_ritual/dance_platform/Uncrossed(var/atom/movable/mover)

@@ -50,7 +50,7 @@
 	if (world.time >= eclipse_end_time)
 
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (!cult || !cult.tear_ritual || !cult.bloodstone)
+		if (!cult || (!cult.tear_ritual && !cult.bloodstone))
 			eclipse_end()
 
 /datum/eclipse_manager/proc/eclipse_end()

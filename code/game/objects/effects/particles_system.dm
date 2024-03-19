@@ -32,6 +32,7 @@
 
 	var/particle_type = particle_string_to_type[particle_string]
 	var/obj/abstract/particles_holder/new_holder = new
+	new_holder.special_setup(particle_string)
 	new_holder.main_holder = src
 	new_holder.particles = new particle_type
 	particle_systems[particle_string] = new_holder
@@ -111,10 +112,19 @@
 	icon_state = "blank"
 	var/atom/main_holder
 
+/obj/abstract/particles_holder/proc/special_setup(var/particle_string)
+	switch(particle_string)
+		if ("Candle")
+			appearance_flags = RESET_COLOR
+			blend_mode = BLEND_ADD
+			plane = ABOVE_LIGHTING_PLANE
+
 //////////////////////////////////////PARTICLES///////////////////////////////////
 
 var/list/particle_string_to_type = list(
 	"Steam" = /particles/steam,
+	"Tear Reality" = /particles/tear_reality,
+	"Candle" = /particles/candle,
 	)
 
 //STEAM
@@ -126,7 +136,7 @@ var/list/particle_string_to_type = list(
 
 	lifespan = 1 SECONDS
 	fade = 1 SECONDS
-	icon = 'icons/effects/effects.dmi'
+	icon = 'icons/effects/effects_particles.dmi'
 	icon_state = "steam"
 	color = "#FFFFFF99"
 	position = 0
@@ -134,3 +144,40 @@ var/list/particle_string_to_type = list(
 	scale = list(0.6, 0.6)
 	grow = list(0.05, 0.05)
 	rotation = generator("num", 0,360)
+
+
+//TEAR REALITY DARKNESS
+/particles/tear_reality
+	width = 64
+	height = 64
+	count = 30
+	spawning = 0.1
+
+	lifespan = 1 SECONDS
+	fade = 1 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "darkness"
+	color = "#FFFFFF99"
+	position = 0
+	velocity = 0
+	scale = list(1, 1)
+	grow = list(0.05, 0.05)
+	rotation = generator("num", 0,360)
+
+
+//STEAM
+/particles/candle
+	width = 32
+	height = 64
+	count = 5
+	spawning = 0.1
+	//spawning = generator("num", 0.03, 0.2)
+
+	lifespan = 1.3 SECONDS
+	fade = 1 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "candle"
+	position = list(0, 12)
+	velocity = list(0,3)
+	friction = 0.3
+	drift = generator("sphere", 0, 2)
