@@ -293,9 +293,8 @@ var/list/list/sensed_explosions = list()
 	cap = overcap
 
 	explosion_icon = icon('icons/480x480.dmi', "blank")
-	sensed_explosions["z[z]"] += list(src)
-	var/list/z_sensed = sensed_explosions["z[z]"]
-	ID = "[z]-[add_zero(z_sensed.len,3)]"
+	sensed_explosions["z[z]"] += src
+	ID = "[z]-[add_zero(sensed_explosions["z[z]"].len,3)]"
 
 /datum/sensed_explosion/Destroy()
 	sensed_explosions["z[z]"] -= src
