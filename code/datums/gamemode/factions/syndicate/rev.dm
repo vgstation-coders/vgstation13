@@ -196,8 +196,15 @@
 			revkilled++
 			continue
 		var/turf/T = M.current.loc
-		if(istype(T.loc, /area/security/brig))
-			revarrested++
+		if(T && (istype(T.loc, /area/security/prison) || istype(T.loc, /area/security/perma) || istype(T, /turf/simulated/floor/shuttle/brig)))
+			if(istype(M.current, /mob/living/carbon/human))
+				var/mob/living/carbon/human/H = M.current
+				if(!H.restrained())
+					continue
+			else if(istype(M.current, /mob/living/carbon))
+				var/mob/living/carbon/C = M.current
+				if (!C.handcuffed)
+					continue
 		else if (M.current.stat == DEAD)
 			revkilled++
 	for(var/mob/living/player in player_list)
