@@ -34,6 +34,17 @@
 		w_class = initial(w_class)
 		overlays.Cut()
 
+/obj/item/weapon/storage/evidencebag/throw_at(atom/target, range, speed)
+	. = ..()
+	var/mob/living/carbon/human/user = usr
+	if(istype(user))
+		var/turf/T = get_turf(target)
+		var/obj/item/clothing/under/lawyer/L = user.w_uniform
+		if(istype(L) && T && istype(T.loc,/area/crew_quarters/courtroom) && (locate(/obj/structure/table) in T))
+			user.say("Take that!")
+			playsound(user.loc,L.lawyersounds[user.gender]["takethat!"],50)
+			user.emote("points dramatically!")
+
 /obj/item/weapon/storage/box/evidence
 	name = "evidence bag box"
 	desc = "A box containing evidence bags."
