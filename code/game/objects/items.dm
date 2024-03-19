@@ -222,6 +222,10 @@ var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/throw_impact(atom/impacted_atom, speed, mob/user)
 	..()
+	if(isliving(impacted_atom))
+		var/mob/living/L = impacted_atom
+		if(!L.tangibility)
+			return 1
 	if(isturf(impacted_atom))
 		var/turf/T = impacted_atom
 		if(objects_thrown_when_explode || (T.arcanetampered && T.arcanetampered != user))
@@ -430,12 +434,12 @@ var/global/objects_thrown_when_explode = FALSE
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
-	
+
 	if(on_fire)
 		if(user.a_intent && user.a_intent == I_DISARM)
 			extinguish_with_hands(user)
 			return //don't pick it up immediately, you have to click it again after it's extinguished
-	
+
 	if(can_pickup(user) && !user.put_in_active_hand(src))
 		forceMove(get_turf(user))
 
