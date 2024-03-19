@@ -83,6 +83,8 @@
 			return "red"
 		if(SEC_LEVEL_DELTA)
 			return "delta"
+		if(SEC_LEVEL_RAINBOW)
+			return "rainbow"
 
 /proc/num2seclevel(var/num)
 	switch(num)
@@ -94,6 +96,8 @@
 			return "red"
 		if(SEC_LEVEL_DELTA)
 			return "delta"
+		if(SEC_LEVEL_RAINBOW)
+			return "rainbow"
 
 /proc/seclevel2num(var/seclevel)
 	switch( lowertext(seclevel) )
@@ -105,6 +109,8 @@
 			return SEC_LEVEL_RED
 		if("delta")
 			return SEC_LEVEL_DELTA
+		if("rainbow")
+			return SEC_LEVEL_RAINBOW
 
 
 /*DEBUG

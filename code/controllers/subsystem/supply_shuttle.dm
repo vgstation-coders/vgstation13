@@ -124,7 +124,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 		if(!destination)
 			message_admins("WARNING: Cargo shuttle unable to find the station!")
-			warning("Cargo shuttle can't find centcomm")
+			warning("Cargo shuttle can't find station")
 	else //at station
 		for(var/obj/structure/shuttle/engine/propulsion/P in cargo_shuttle.linked_area)
 			spawn()
@@ -168,6 +168,12 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	for(var/datum/centcomm_order/O in deferred_orders)
 		if(O.CheckShuttleObject(A,in_crate,preserve))
 			return
+
+/datum/subsystem/supply_shuttle/proc/scrub()
+	for (var/obj/effect/decal/cleanable/C in cargo_shuttle.linked_area)
+		qdel(C)
+	for (var/obj/effect/rune/R in cargo_shuttle.linked_area)
+		qdel(R)
 
 /datum/subsystem/supply_shuttle/proc/sell()
 
@@ -312,7 +318,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			continue
 		var/contcount
 		for(var/atom/A in T.contents)
-			if(islightingoverlay(A))
+			if(islightingoverlay(A) || istype(A, /obj/machinery/conveyor))
 				continue
 			contcount++
 		if(contcount)
@@ -373,6 +379,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			var/atom/B2 = new typepath(A)
 			if(SP.amount && B2:amount)
 				B2:amount = SP.amount
+			B2.on_vending_machine_spawn()
 			slip.info += "<li>[B2.name]</li>" //add the item to the manifest
 
 		SP.post_creation(A)
@@ -526,7 +533,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 /datum/subsystem/supply_shuttle/proc/add_centcomm_order(var/datum/centcomm_order/C)
 	centcomm_orders.Add(C)
 	var/name = "External order form - [C.name] order number [C.id]"
-	var/info = {"<h3>Central Command supply requisition form</h3<><hr>
+	var/info = {"<h3>Central Command supply requisition form</h3><hr>
 	 			INDEX: #[C.id]<br>
 	 			REQUESTED BY: [C.name]<br>
 	 			MUST BE IN CRATE(S): [C.must_be_in_crate ? "YES" : "NO"]<br>
@@ -537,10 +544,11 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	if (C.silent)
 		return
 	for(var/obj/machinery/computer/supplycomp/S in supply_consoles)
-		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(S.loc)
-		reqform.name = name
-		reqform.info = info
-		reqform.update_icon()
+		if(S.printccrequests)
+			var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(S.loc)
+			reqform.name = name
+			reqform.info = info
+			reqform.update_icon()
 		S.say("New Central Command request available!")
 		playsound(S, 'sound/machines/twobeep.ogg', 50, 1)
 
@@ -548,7 +556,6 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		if(MS.is_functioning())
 			for (var/obj/machinery/requests_console/Console in requests_consoles)
 				if (Console.department in C.request_consoles_to_notify)
-					Console.screen = 8
 					if(Console.newmessagepriority < 1)
 						Console.newmessagepriority = 1
 						Console.icon_state = "req_comp2"

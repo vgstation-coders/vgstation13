@@ -315,8 +315,6 @@ var/list/impact_master = list()
 
 	if (special_collision != PROJECTILE_COLLISION_MISS)
 		special_collision = A.bullet_act(src, def_zone) // searches for return value
-		if (A.gcDestroyed) // We killed the poor thing
-			A = A_turf
 	if(special_collision != PROJECTILE_COLLISION_DEFAULT && special_collision != PROJECTILE_COLLISION_BLOCKED) // the bullet is still flying, either from missing its target, bouncing off it, or going through a portal
 		bumped = 0 // reset bumped variable!
 
@@ -856,4 +854,7 @@ var/list/impact_master = list()
 	color = proj_color
 
 /obj/item/projectile/proc/apply_projectile_color_shift(var/proj_color_shift)
+	return
+
+/obj/item/projectile/proc/teleport_act()
 	return

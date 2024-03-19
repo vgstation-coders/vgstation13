@@ -23,6 +23,7 @@
 #define XENOMORPH_HIVE "alien hivemind"
 #define JUSTICE_DEPARTMENT "justice department"
 #define NANOTRASEN "Nanotrasen"
+#define THE_APES "The Apes"
 
 //-------
 #define HIVEMIND "changeling hivemind"
@@ -262,8 +263,8 @@
 #define LATEJOIN_DELAY_MIN (5 MINUTES)/20
 #define LATEJOIN_DELAY_MAX (30 MINUTES)/20
 
-#define MIDROUND_DELAY_MIN (15 MINUTES)/20
-#define MIDROUND_DELAY_MAX (50 MINUTES)/20
+#define MIDROUND_DELAY_MIN (5 MINUTES)/20
+#define MIDROUND_DELAY_MAX (30 MINUTES)/20
 
 // -- Rulesets flags
 

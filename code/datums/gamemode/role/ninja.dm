@@ -921,6 +921,7 @@ Suit and assorted
 		spaceninja.internals.icon_state = "internal1"
 
 	spaceninja.see_in_dark_override = 8
+	spaceninja.dark_plane_alpha_override = 155
 
 /proc/equip_weeaboo(var/mob/living/carbon/human/H)
 	if(!istype(H))
@@ -945,6 +946,7 @@ Suit and assorted
 	H.equip_to_slot_or_del(new /obj/item/stack/shuriken/pizza(H,10), slot_l_store)
 
 	H.see_in_dark_override = 8
+	H.dark_plane_alpha_override = 155
 
 	var/datum/role/R = H.mind.GetRole(NINJA)
 	if(R)

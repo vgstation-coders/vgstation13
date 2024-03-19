@@ -63,7 +63,7 @@ var/bee_mobs_count = 0
 
 	var/single_direction = TRUE
 
-/mob/living/simple_animal/bee/Move()
+/mob/living/simple_animal/bee/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if (single_direction)
 		dir = SOUTH
@@ -668,9 +668,9 @@ var/bee_mobs_count = 0
 			bee_species.after_sting(sting_quality)
 			return
 		if (BEE_STING_PIERCE)
-			M.visible_message("<span class='warning'>\The [src] are stinging \the [M] through their protection!</span>", "<span class='warning'>You have been stung by \the [src] through your protection!</span>")
+			M.visible_message("<span class='warning'>\The [src] [gender == PLURAL ? "are" : "is"] stinging \the [M] through their protection!</span>", "<span class='warning'>You have been stung by \the [src] through your protection!</span>")
 		if (BEE_STING_NORMAL)
-			M.visible_message("<span class='warning'>\The [src] are stinging \the [M]!</span>", "<span class='warning'>You have been stung by \the [src]!</span>")
+			M.visible_message("<span class='warning'>\The [src] [gender == PLURAL ? "are" : "is"] stinging \the [M]!</span>", "<span class='warning'>You have been stung by \the [src]!</span>")
 	M.apply_damage(current_physical_damage, BRUTE)
 	M.apply_damage(current_poison_damage, TOX)
 	M.flash_pain()

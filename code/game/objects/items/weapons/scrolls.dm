@@ -52,6 +52,9 @@
 	var/A
 	A = input(user, "Area to jump to", "BOOYEA", A) as null|anything in teleportlocs
 
+	if(isnull(A))
+		return
+
 	var/area/thearea = teleportlocs[A]
 
 	if (!user || user.stat || user.restrained())

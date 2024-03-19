@@ -2,8 +2,11 @@
 	name = "clothing"
 	sterility = 5
 	autoignition_temperature = AUTOIGNITION_FABRIC
+	w_type = RECYK_FABRIC
+	starting_materials = list(MAT_FABRIC = CC_PER_SHEET_FABRIC)
 	var/list/species_restricted = null //Only these species can wear this kit.
-	var/wizard_garb = 0 // Wearing this empowers a wizard.
+	var/wizard_garb = 0 //Wearing this empowers a wizard.
+	var/gentling //If TRUE, prevents the wearer from casting wizard spells.
 	var/eyeprot = 0 //for head and eyewear
 	var/nearsighted_modifier = 0 //positive values impair vision(welding goggles), negative values improve vision(prescription glasses)
 
@@ -26,11 +29,101 @@
 	var/list/sound_species_whitelist
 	var/list/sound_genders_allowed //Checks for what gender it is allowed to play the sound for
 
+
+	//used for dyeing
+	var/list/dyeable_parts = list()
+	var/list/dyed_parts = list()
+	var/cloth_layer
+	var/cloth_icon
+	var/dye_base_iconstate_override
+	var/dye_base_itemstate_override
+
+	// Hood stuff. Moved to base clothing so it can be used by both uniforms and suits
+	var/obj/item/clothing/head/hood // Headgear to be used as hood, if any.
+									// Doesn't actually need a 'icons/mob/head.dmi' sprite if the hood_up_icon_state
+									//  already provides the visuals for that (eg: most wintercoats in wintercoat.dm)
+	var/is_hood_up = FALSE
+	var/hood_suit_name = "coat" 	// What to call these garments when talking hood stuff. eg: coat, robes, hoodie...
+	var/hood_down_icon_state = null // Defaults to the initial icon_state if not set
+	var/hood_up_icon_state = null   // Defaults to the initial icon_state if not set
+	var/force_hood = FALSE			// Automatically equips the hood when equipping the suit. Removing the hood will remove the suit.
+	var/auto_hood = FALSE			// Automatically equips the hood when equipping the suit.
+
+/obj/item/clothing/New()
+	if (hood)
+		hood.hood_suit = src
+		if (!force_hood)
+			actions_types |= list(/datum/action/item_action/toggle_hood)
+		if (wizard_garb)
+			hood.wizard_garb = TRUE
+		if (!hood_down_icon_state)
+			hood_down_icon_state = icon_state
+		if (!hood_up_icon_state)
+			hood_up_icon_state = icon_state
+		icon_state = hood_down_icon_state
+	..()
+	update_icon()
+
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
 		accessories.Remove(A)
 		qdel(A)
+	if (hood)
+		QDEL_NULL(hood)
 	..()
+
+/obj/item/clothing/update_icon()
+	..()
+
+	overlays.len = 0
+	dynamic_overlay.len = 0
+	if (dyed_parts.len > 0)
+		if (!cloth_layer || !cloth_icon)
+			return
+		var/image/dyn_overlay_worn = image('icons/effects/32x32.dmi', src, "blank")
+		var/image/dyn_overlay_left = image('icons/effects/32x32.dmi', src, "blank")
+		var/image/dyn_overlay_right = image('icons/effects/32x32.dmi', src, "blank")
+		for (var/part in dyed_parts)
+			var/list/dye_data = dyed_parts[part]
+			var/dye_color = dye_data[1]
+			var/dye_alpha = dye_data[2]
+
+			var/_state = dye_base_iconstate_override
+			if (!_state)
+				_state = icon_state
+			var/image/object_overlay = image(icon, src, "[_state]-[part]")
+			object_overlay.appearance_flags = RESET_COLOR
+			object_overlay.color = dye_color
+			object_overlay.alpha = dye_alpha
+			overlays += object_overlay
+
+			var/image/worn_overlay = image(cloth_icon, src, "[_state]-[part]")
+			worn_overlay.appearance_flags = RESET_COLOR
+			worn_overlay.color = dye_color
+			worn_overlay.alpha = dye_alpha
+			dyn_overlay_worn.overlays += worn_overlay
+
+			_state = dye_base_itemstate_override
+			if (!_state)
+				_state = item_state
+			if (!_state)
+				_state = icon_state
+			var/image/left_overlay = image(inhand_states["left_hand"], src, "[_state]-[part]")
+			left_overlay.appearance_flags = RESET_COLOR
+			left_overlay.color = dye_color
+			left_overlay.alpha = dye_alpha
+			dyn_overlay_left.overlays += left_overlay
+
+			var/image/right_overlay = image(inhand_states["right_hand"], src, "[_state]-[part]")
+			right_overlay.appearance_flags = RESET_COLOR
+			right_overlay.color = dye_color
+			right_overlay.alpha = dye_alpha
+			dyn_overlay_right.overlays += right_overlay
+
+		dynamic_overlay["[cloth_layer]"] = dyn_overlay_worn
+		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = dyn_overlay_left
+		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = dyn_overlay_right
+
 
 /obj/item/clothing/can_quick_store(var/obj/item/I)
 	for(var/obj/item/clothing/accessory/storage/A in accessories)
@@ -107,6 +200,147 @@
 			return ..()
 		return
 	return ..()
+
+/obj/item/clothing/clean_act(var/cleanliness)
+	..()
+	if (cleanliness >= CLEANLINESS_BLEACH)
+		dyed_parts.len = 0
+		update_icon()
+		if (ismob(loc))
+			var/mob/M = loc
+			M.update_inv_hands()
+
+/obj/item/clothing/proc/togglehood()
+	set name = "Toggle Hood"
+	set category = "Object"
+	set src in usr
+
+	if (!hood)
+		return
+
+	if(usr.incapacitated())
+		return
+
+	toggle_hood(usr)
+
+/obj/item/clothing/proc/toggle_hood(var/mob/wearer, var/mob/user)
+	if(ismob(wearer))
+		if (user && (user!=wearer))
+			if(!is_hood_up && !wearer.get_item_by_slot(slot_head) && hood.mob_can_equip(wearer,slot_head))
+				to_chat(user, "You put their hood up.")
+				to_chat(wearer, "[user] puts your hood up.")
+				hoodup(wearer)
+			else if(wearer.get_item_by_slot(slot_head) == hood)
+				hooddown(wearer)
+				to_chat(user, "You put their hood down.")
+				to_chat(wearer, "[user] puts your hood down.")
+			else
+				to_chat(user, "You try to put their hood up, but there is something in the way.")
+				to_chat(wearer, "[user] tries in vain to put your hood up, but there is something in the way.")
+				return
+		else
+			if(!is_hood_up && !wearer.get_item_by_slot(slot_head) && hood.mob_can_equip(wearer,slot_head))
+				to_chat(wearer, "You put the hood up.")
+				hoodup(wearer)
+			else if(wearer.get_item_by_slot(slot_head) == hood)
+				hooddown(wearer)
+				to_chat(wearer, "You put the hood down.")
+			else
+				to_chat(wearer, "You try to put your hood up, but there is something in the way.")
+				return
+		wearer.update_inv_w_uniform()
+	else if (istype(wearer, /obj/structure/mannequin))
+		var/obj/structure/mannequin/mannequin = wearer
+		if(!is_hood_up && !mannequin.clothing[SLOT_MANNEQUIN_HEAD])
+			to_chat(user, "You put the hood up.")
+			hoodup(wearer)
+		else if(mannequin.clothing[SLOT_MANNEQUIN_HEAD] == hood)
+			hooddown(wearer)
+			to_chat(user, "You put the hood down.")
+		else
+			to_chat(user, "You try to put the hood up, but there is something in the way.")
+			return
+
+/obj/item/clothing/proc/hoodup(var/atom/movable/AM)
+	if(istype(AM, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = AM
+		hood.dyed_parts = dyed_parts.Copy()
+		hood.color = color
+		hood.update_icon()
+		H.equip_to_slot(hood, slot_head)
+		icon_state = hood_up_icon_state
+		is_hood_up = TRUE
+		H.update_inv_w_uniform()
+		H.update_inv_wear_suit()
+	else if (istype(AM, /obj/structure/mannequin))
+		var/obj/structure/mannequin/M = AM
+		M.clothing[SLOT_MANNEQUIN_HEAD] = hood
+		hood.mannequin_equip(M,SLOT_MANNEQUIN_HEAD)
+
+/obj/item/clothing/proc/hooddown(var/atom/movable/AM, var/unequip = 1)
+	if(istype(AM, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = AM
+		icon_state = hood_down_icon_state
+		if(unequip)
+			H.u_equip(H.head,0)
+		is_hood_up = FALSE
+		H.update_inv_w_uniform()
+		H.update_inv_wear_suit()
+	else if (istype(AM, /obj/structure/mannequin))
+		var/obj/structure/mannequin/M = AM
+		M.clothing[SLOT_MANNEQUIN_HEAD] = null
+		hood.mannequin_unequip(M)
+
+/obj/item/clothing/mannequin_unequip(var/obj/structure/mannequin/mannequin)
+	if (hood && (mannequin.clothing[SLOT_MANNEQUIN_HEAD] == hood))
+		hooddown(mannequin)
+
+/obj/item/clothing/dye_act(var/obj/structure/reagent_dispensers/cauldron/cauldron, var/mob/user)
+	if (clothing_flags & COLORS_OVERLAY)
+		var/dye_target = "full"
+		var/list/actual_parts = list()
+		var/list/choices = list("Full")
+		if (dyeable_parts.len > 0)
+			for (var/part in dyeable_parts)//doing some swapping so we get an easier list to read in-game
+				var/part_proper_name = dyeable_part_to_name[part]
+				choices += part_proper_name
+				actual_parts[part_proper_name] = part
+			dye_target = input("Which part do you want to dye?","Clothing Dyeing",1) as null|anything in choices
+		if (!dye_target)
+			return
+		to_chat(user, "<span class='notice'>You begin dyeing \the [src][(dye_target != "Full") ? "'s [dye_target]" : ""].</span>")
+		playsound(cauldron.loc, 'sound/effects/slosh.ogg', 25, 1)
+		if (do_after(user, cauldron, 30))
+			var/mixed_color = mix_color_from_reagents(cauldron.reagents.reagent_list, TRUE)
+			var/mixed_alpha = mix_alpha_from_reagents(cauldron.reagents.reagent_list)
+			if (mixed_color == "#FFFFFF")
+				mixed_color = "#FEFEFE" //null color prevention
+			if (!mixed_color)
+				var/silent = FALSE
+				for(var/datum/reagent/R in cauldron.reagents.reagent_list)
+					if (R.id == BLEACH || R.id == ACETONE)
+						silent = TRUE
+						to_chat(user, "<span class='notice'>You wash off \the [src]'s colors.</span>")
+					if (R.id == CLEANER)
+						silent = TRUE
+						to_chat(user, "<span class='notice'>You wash \the [src] clean.</span>")
+					R.reaction_obj(src, R.volume)
+				if (!silent)
+					to_chat(user, "<span class='warning'>It seems that there are no pigments among the reagents in the cauldron.</span>")
+				update_icon()
+				user.update_inv_hands()
+				return
+			if (dye_target == "Full" || choices.len <= 1)
+				dyed_parts.len = 0
+				color = BlendRGB(color, mixed_color, mixed_alpha/255)
+			else
+				dyed_parts -= dye_target//moving the new layer on top
+				dyed_parts[actual_parts[dye_target]] = list(mixed_color,mixed_alpha)//getting back the actual overlay name
+			update_icon()
+			user.update_inv_hands()
+	else
+		to_chat(user, "<span class='warning'>Can't dye that.</span>")
+	return TRUE
 
 /obj/item/clothing/proc/attach_accessory(obj/item/clothing/accessory/accessory, mob/user)
 	accessories += accessory
@@ -299,12 +533,18 @@
 /obj/item/clothing/proc/rangeTackleBonus()
 	return
 
+/* ========================================================================
+								EARS
+======================================================================== */
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
 	name = "ears"
 	w_class = W_CLASS_TINY
 	throwforce = 2
 	slot_flags = SLOT_EARS
+	cloth_layer = EARS_LAYER
+	cloth_icon = 'icons/mob/ears.dmi'
+	starting_materials = list(MAT_FABRIC = 750)
 
 /obj/item/clothing/ears/attack_hand(mob/user as mob)
 	if (!user)
@@ -337,7 +577,9 @@
 	item_state = "earmuffs"
 	slot_flags = SLOT_EARS
 
-//Gloves
+/* ========================================================================
+								GLOVES
+======================================================================== */
 /obj/item/clothing/gloves
 	name = "gloves"
 	gender = PLURAL //Carn: for grammarically correct text-parsing
@@ -365,6 +607,9 @@
 
 	var/transfer_blood = 0
 	var/list/bloody_hands_data = list()
+	cloth_layer = GLOVES_LAYER
+	cloth_icon = 'icons/mob/hands.dmi'
+	starting_materials = list(MAT_FABRIC = 938)
 
 /obj/item/clothing/gloves/get_cell()
 	return cell
@@ -400,7 +645,10 @@
 /obj/item/clothing/gloves/proc/on_wearer_threw_item(mob/user, atom/target, atom/movable/thrown)	//Called when the mob wearing the gloves successfully throws either something or nothing.
 	return
 
-//Head
+
+/* ========================================================================
+								HEAD
+======================================================================== */
 /obj/item/clothing/head
 	name = "head"
 	icon = 'icons/obj/clothing/hats.dmi'
@@ -410,7 +658,30 @@
 	var/gave_out_gifts = FALSE //for snowman animation
 	var/obj/item/clothing/head/on_top = null //for stacking
 	var/stack_depth = 0
+	var/vertical_offset = 0 //enables hats to go taller that the tile's boundaries
 	var/blood_overlay_type = "hat"
+	cloth_layer = HEAD_LAYER
+	cloth_icon = 'icons/mob/head.dmi'
+	starting_materials = list(MAT_FABRIC = 1875)
+
+	var/obj/item/clothing/hood_suit = null // the suit this hood belongs to
+
+/obj/item/clothing/head/Destroy()
+	if(hood_suit)
+		hood_suit.hood = null
+		hood_suit = null
+	..()
+
+/obj/item/clothing/head/pickup(var/mob/living/carbon/human/user)
+	if(hood_suit && istype(hood_suit) && (istype(hood_suit.loc, /obj/structure/mannequin)||(user.get_item_by_slot(slot_wear_suit) == hood_suit)||(user.get_item_by_slot(slot_w_uniform) == hood_suit)))
+		hood_suit.hooddown(user, unequip = 0)
+		user.drop_from_inventory(src)
+		forceMove(hood_suit)
+		if (hood_suit.force_hood)
+			user.u_equip(hood_suit)
+			user.put_in_hands(hood_suit)
+		else
+			to_chat(user, "You put the hood down.")
 
 var/global/hatStacking = 0
 var/global/maxStackDepth = 10
@@ -487,7 +758,10 @@ var/global/maxStackDepth = 10
 /obj/item/proc/islightshielded() // So as to avoid unneeded casts.
 	return FALSE
 
-//Mask
+
+/* ========================================================================
+								MASK
+======================================================================== */
 /obj/item/clothing/mask
 	name = "mask"
 	icon = 'icons/obj/clothing/masks.dmi'
@@ -499,6 +773,9 @@ var/global/maxStackDepth = 10
 	var/ignore_flip = 0
 	actions_types = list(/datum/action/item_action/toggle_mask)
 	heat_conductivity = MASK_HEAT_CONDUCTIVITY
+	cloth_layer = FACEMASK_LAYER
+	cloth_icon = 'icons/mob/mask.dmi'
+	starting_materials = list(MAT_FABRIC = 938)
 
 /datum/action/item_action/toggle_mask
 	name = "Toggle Mask"
@@ -536,6 +813,7 @@ var/global/maxStackDepth = 10
 			flags = 0
 			src.is_flipped = 2
 			body_parts_covered &= ~(MOUTH|HEAD|BEARD|FACE)
+		update_icon()
 		usr.update_inv_wear_mask()
 		usr.update_hair()
 		usr.update_inv_glasses()
@@ -548,7 +826,10 @@ var/global/maxStackDepth = 10
 /obj/item/clothing/mask/attack_self()
 	togglemask()
 
-//Shoes
+
+/* ========================================================================
+								SHOES
+======================================================================== */
 /obj/item/clothing/shoes
 	name = "shoes"
 	icon = 'icons/obj/clothing/shoes.dmi'
@@ -571,6 +852,11 @@ var/global/maxStackDepth = 10
 	var/step_sound = ""
 	var/stepstaken = 1
 	var/modulo_steps = 2 //if stepstaken is a multiplier of modulo_steps, play the sound. Does not work if modulo_steps < 1
+	cloth_layer = SHOES_LAYER
+	cloth_icon = 'icons/mob/feet.dmi'
+	starting_materials = list(MAT_FABRIC = 1250)
+
+	var/luminous_paint = FALSE
 
 /obj/item/clothing/shoes/proc/step_action()
 	stepstaken++
@@ -603,6 +889,8 @@ var/global/maxStackDepth = 10
 /obj/item/clothing/shoes/clean_blood()
 	. = ..()
 	track_blood = 0
+	blood_color = null
+	luminous_paint = FALSE
 
 /obj/item/clothing/shoes/proc/togglemagpulse(var/mob/user = usr, var/override = FALSE)
 	if(!override)
@@ -617,7 +905,10 @@ var/global/maxStackDepth = 10
 		slowdown = mag_slow
 		return 1
 
-//Suit
+
+/* ========================================================================
+								SUIT
+======================================================================== */
 /obj/item/clothing/suit
 	icon = 'icons/obj/clothing/suits.dmi'
 	name = "suit"
@@ -633,6 +924,63 @@ var/global/maxStackDepth = 10
 	siemens_coefficient = 0.9
 	clothing_flags = CANEXTINGUISH
 	sterility = 30
+	cloth_layer = SUIT_LAYER
+	cloth_icon = 'icons/mob/suit.dmi'
+	starting_materials = list(MAT_FABRIC = CC_PER_SHEET_FABRIC)
+
+/obj/item/clothing/suit/togglehood()
+	set name = "Toggle Hood"
+	set category = "Object"
+	set src in usr
+
+	if (!hood)
+		return
+
+	if(usr.incapacitated())
+		return
+
+	var/mob/living/carbon/human/user = usr
+	if(!istype(user))
+		return
+	if(user.get_item_by_slot(slot_wear_suit) != src)
+		to_chat(user, "You have to put the [hood_suit_name] on first.")
+		return
+	if(!is_hood_up && !user.get_item_by_slot(slot_head) && hood.mob_can_equip(user,slot_head))
+		to_chat(user, "You put the hood up.")
+		hoodup(user)
+	else if(user.get_item_by_slot(slot_head) == hood)
+		hooddown(user)
+		to_chat(user, "You put the hood down.")
+	else
+		to_chat(user, "You try to put your hood up, but there is something in the way.")
+		return
+	user.update_inv_wear_suit()
+
+/obj/item/clothing/suit/attack_self()
+	if (hood && !force_hood)
+		togglehood()
+
+/obj/item/clothing/equipped(var/mob/user, var/slot, hand_index = 0)
+	..()
+	if (hood && (force_hood || auto_hood) && !hand_index)
+		if (auto_hood && (user.get_item_by_slot(slot_head) && user.get_item_by_slot(slot_head) != hood))
+			return//we want to still be able to equip the suit even if the hood is blocked
+		hoodup(user)
+
+/obj/item/clothing/unequipped(var/mob/living/carbon/human/user)
+	..()
+	if(hood && istype(user) && user.get_item_by_slot(slot_head) == hood)
+		hooddown(user)
+
+/obj/item/clothing/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	. = ..()
+
+	if (hood && force_hood && slot == slot_wear_suit)
+		if (M.get_item_by_slot(slot_head) && M.get_item_by_slot(slot_head) != hood)
+			to_chat(M, "You try to put the [hood_suit_name] on, but there is something in the way of its hood.")
+			return FALSE
+		else if (!hood.mob_can_equip(M, slot_head))
+			return FALSE
 
 /obj/item/clothing/suit/proc/vine_protected()
 	return FALSE
@@ -665,6 +1013,9 @@ var/global/maxStackDepth = 10
 	sterility = 100
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
+	autoignition_temperature = 0
+	fire_fuel = 0
+
 /obj/item/clothing/suit/space
 	name = "Space suit"
 	desc = "A suit that protects against low pressure environments. Has a big \"13\" on the back."
@@ -676,7 +1027,7 @@ var/global/maxStackDepth = 10
 	permeability_coefficient = 0.02
 	flags = FPRINT
 	pressure_resistance = 5 * ONE_ATMOSPHERE
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|HIDETAIL
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/)
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
@@ -687,7 +1038,13 @@ var/global/maxStackDepth = 10
 	sterility = 100
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
-//Under clothing
+	autoignition_temperature = 0
+	fire_fuel = 0
+
+
+/* ========================================================================
+								UNIFORMS
+======================================================================== */
 /obj/item/clothing/under
 	icon = 'icons/obj/clothing/uniforms.dmi'
 	name = "under"
@@ -708,11 +1065,46 @@ var/global/maxStackDepth = 10
 	var/displays_id = 1
 	clothing_flags = CANEXTINGUISH
 	var/icon/jersey_overlays
+	cloth_layer = UNIFORM_LAYER
+	cloth_icon = 'icons/mob/uniform.dmi'
+	starting_materials = list(MAT_FABRIC = CC_PER_SHEET_FABRIC)
 
 // Associative list of exact type -> number
 var/list/jersey_numbers = list()
 
-/obj/item/clothing/under/New()
+/obj/item/clothing/under/togglehood()
+	set name = "Toggle Hood"
+	set category = "Object"
+	set src in usr
+
+	if (!hood)
+		return
+
+	if(usr.incapacitated())
+		return
+
+	var/mob/living/carbon/human/user = usr
+	if(!istype(user))
+		return
+	if(user.get_item_by_slot(slot_w_uniform) != src)
+		to_chat(user, "You have to put the [hood_suit_name] on first.")
+		return
+	if(!is_hood_up && !user.get_item_by_slot(slot_head) && hood.mob_can_equip(user,slot_head))
+		to_chat(user, "You put the hood up.")
+		hoodup(user)
+	else if(user.get_item_by_slot(slot_head) == hood)
+		hooddown(user)
+		to_chat(user, "You put the hood down.")
+	else
+		to_chat(user, "You try to put your hood up, but there is something in the way.")
+		return
+	user.update_inv_w_uniform()
+
+/obj/item/clothing/under/attack_self()
+	if (hood && !force_hood)
+		togglehood()
+
+/obj/item/clothing/under/update_icon()
 	..()
 	if(jersey_overlays)
 		var/number = jersey_numbers[type]++ % 99
@@ -817,9 +1209,12 @@ var/list/jersey_numbers = list()
 	sensor_mode = pick(0, 1, 2, 3)
 
 
-//Capes?
+/* ========================================================================
+								BACK
+======================================================================== */
 /obj/item/clothing/back
 	name = "cape"
 	w_class = W_CLASS_SMALL
 	throwforce = 2
 	slot_flags = SLOT_BACK
+	starting_materials = list(MAT_FABRIC = CC_PER_SHEET_FABRIC)

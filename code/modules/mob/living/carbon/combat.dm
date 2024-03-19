@@ -62,20 +62,31 @@
 
 	user.do_attack_animation(src, I)
 
-	var/datum/organ/external/affecting = get_organ(target_zone)
-	var/armor
-	if(affecting)
-		var/hit_area = affecting.display_name
-		armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].", armor_penetration = I.armor_penetration)
-		if(armor >= 100)
-			add_logs(user, src, "armor bounced", admin=1, object=I, addition="weapon force vs armor: [power] - [armor]")
-			return TRUE //We still connected
-		if(!power)
-			add_logs(user, src, "ineffectively attacked", admin=1, object=I, addition="weapon force: [power]")
-			return TRUE
+	var/armor = 0
+	var/datum/organ/external/affecting
+
+	if (ishuman(src))
+		affecting = get_organ(target_zone)
+		if(affecting)
+			var/hit_area = affecting.display_name
+			armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].", armor_penetration = I.armor_penetration)
+	else
+		armor = run_armor_check(target_zone, "melee", "Your armor protects your [target_zone].", "Your armor softens the hit to your [target_zone].", armor_penetration = I.armor_penetration)
+
+	if(armor >= 100)
+		add_logs(user, src, "armor bounced", admin=1, object=I, addition="weapon force vs armor: [power] - [armor]")
+		return TRUE //We still connected
+	if(!power)
+		add_logs(user, src, "ineffectively attacked", admin=1, object=I, addition="weapon force: [power]")
+		return TRUE
+
 	var/damage = run_armor_absorb(target_zone, I.damtype, power)
 
-	var/actual_damage_done = apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+	var/actual_damage_done
+	if (affecting)
+		actual_damage_done = apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+	else
+		actual_damage_done = apply_damage(damage, I.damtype, target_zone, armor , I.is_sharp(), used_weapon = I)
 
 	if(originator)
 		add_logs(originator, src, "damaged", admin=1, object=I, addition="DMG: [actual_damage_done]")

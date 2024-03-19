@@ -11,6 +11,7 @@
 	var/mob/living/silicon/ai/ai = list()
 	var/last_tick //used to delay the powercheck
 	var/buildstage = 0
+	autoignition_temperature = 0
 
 /obj/item/device/radio/intercom/supports_holomap()
 	return TRUE
@@ -149,6 +150,10 @@
 		icon_state="intercom-frame"
 		return
 	icon_state = "intercom[!on?"-p":""][b_stat ? "-open":""]"
+	if (on)
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_intercom")
+	else
+		kill_moody_light()
 
 /obj/item/device/radio/intercom/process()
 	if(((world.timeofday - last_tick) > 30) || ((world.timeofday - last_tick) < 0))

@@ -62,6 +62,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	var/list/datum/data_pda_msg/pda_msgs = list()
 	var/list/datum/data_rc_msg/rc_msgs = list()
 	var/disabled = FALSE
+	var/automatic_landlines = TRUE
 	var/decryptkey = "password"
 
 /obj/machinery/message_server/New()
@@ -88,6 +89,9 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 /obj/machinery/message_server/proc/is_functioning()
 	return !disabled && !(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 
+/obj/machinery/message_server/proc/landlines_functioning()
+	return automatic_landlines && !(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+
 /obj/machinery/message_server/proc/send_pda_message(var/recipient = "",var/sender = "",var/message = "", var/icon/img_sent = null)
 	pda_msgs += new/datum/data_pda_msg(recipient,sender,message,img_sent)
 
@@ -111,12 +115,13 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 /obj/machinery/message_server/update_icon()
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
 		icon_state = "pda_server-nopower"
+		kill_moody_light()
 	else if (disabled)
 		icon_state = "pda_server-off"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_pda_server")
 	else
 		icon_state = "pda_server-on"
-
-	return
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_pda_server")
 
 /obj/machinery/blackbox_recorder
 	icon = 'icons/obj/machines/telecomms.dmi'

@@ -34,11 +34,17 @@ var/list/pda_multicasters = list()
 		QDEL_NULL(CAMO)
 	..()
 
+/obj/machinery/pda_multicaster/power_change()
+	..()
+	update_icon()
+
 /obj/machinery/pda_multicaster/update_icon()
 	if(stat & (FORCEDISABLE|BROKEN|NOPOWER|EMPED))
 		icon_state = "pda_server-nopower"
+		kill_moody_light()
 	else
 		icon_state = "pda_server-[on ? "on" : "off"]"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_pda_server")
 
 /obj/machinery/pda_multicaster/attack_hand(mob/user)
 	if(user.incapacitated() && !isAdminGhost(user))
@@ -62,9 +68,9 @@ var/list/pda_multicasters = list()
 /obj/machinery/pda_multicaster/proc/multicast(var/target,var/obj/item/device/pda/sender,var/mob/living/U,var/message)
 	var/list/redirection_list = list(
 		"security" = list(/obj/item/device/pda/warden,/obj/item/device/pda/detective,/obj/item/device/pda/security,/obj/item/device/pda/heads/hos),
-		"engineering" = list(/obj/item/device/pda/engineering,/obj/item/device/pda/atmos,/obj/item/device/pda/heads/ce),
+		"engineering" = list(/obj/item/device/pda/engineering,/obj/item/device/pda/atmos,/obj/item/device/pda/mechanic,/obj/item/device/pda/heads/ce),
 		"medical" = list(/obj/item/device/pda/medical,/obj/item/device/pda/viro,/obj/item/device/pda/chemist,/obj/item/device/pda/geneticist,/obj/item/device/pda/heads/cmo),
-		"research" = list(/obj/item/device/pda/toxins,/obj/item/device/pda/roboticist,/obj/item/device/pda/mechanic,/obj/item/device/pda/heads/rd),
+		"research" = list(/obj/item/device/pda/toxins,/obj/item/device/pda/roboticist,/obj/item/device/pda/mechanic,/obj/item/device/pda/geneticist,/obj/item/device/pda/heads/rd),
 		"cargo" = list(/obj/item/device/pda/cargo,/obj/item/device/pda/shaftminer,/obj/item/device/pda/quartermaster),
 		"service" = list(/obj/item/device/pda/botanist,/obj/item/device/pda/chef,/obj/item/device/pda/bar)
 	)

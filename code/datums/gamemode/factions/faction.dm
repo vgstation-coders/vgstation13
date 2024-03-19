@@ -159,6 +159,9 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/CheckObjectives()
 	return objective_holder.GetObjectiveString(check_success = TRUE)
 
+/datum/faction/proc/OnLateArrival(mob/living/carbon/human/character, rank)
+	return
+
 /datum/faction/proc/GetScoreboard()
 	var/count = 1
 	var/score_results = ""

@@ -165,7 +165,12 @@ var/global/list/loopModeNames=list(
 	density = 1
 
 	anchored = 1
-	luminosity = 4 // Why was this 16
+	luminosity = 3
+
+	use_auto_lights = 1
+	light_power_on = 1
+	light_range_on = 1
+	light_color = "#FFEE77"
 
 	custom_aghost_alerts=1 // We handle our own logging.
 
@@ -225,6 +230,7 @@ var/global/list/loopModeNames=list(
 		playlists["halloween"] = "Halloween"
 	if(MM == 12 && !("christmas" in playlists)) //Checking for jukeboxes with it already
 		playlists["christmas"] = "Christmas Jingles"
+	update_icon()
 
 /obj/machinery/media/jukebox/Destroy()
 	if(wires)
@@ -248,6 +254,10 @@ var/global/list/loopModeNames=list(
 		to_chat(user, "<span class='info'>It is currently silent.</span>")
 
 /obj/machinery/media/jukebox/power_change()
+	if (emagged)
+		light_color = "#AA0000"
+	else
+		light_color = initial(light_color)
 	..()
 	if(emagged && !(stat & (FORCEDISABLE|NOPOWER|BROKEN)) && !any_power_cut())
 		playing = 1
@@ -267,7 +277,9 @@ var/global/list/loopModeNames=list(
 		else
 			icon_state = "[state_base]-nopower"
 		stop_playing()
+		kill_moody_light_all()
 		return
+	update_moody_light_index("main",'icons/lighting/moody_lights.dmi', "overlay_juke")
 	icon_state = state_base
 	if(playing)
 		if(emagged)
@@ -534,7 +546,7 @@ var/global/list/loopModeNames=list(
 		playlist_id = playlists[1] //Set to whatever our first is. Usually bar.
 	last_reload=world.time
 	playlist=null
-	update_icon()
+	power_change()
 	update_music()
 
 /obj/machinery/media/jukebox/wrenchAnchor(var/mob/user, var/obj/item/I)
@@ -886,6 +898,9 @@ var/global/list/loopModeNames=list(
 
 	change_cost = 0
 
+	light_power_on = 2
+	light_color = "#3366FF"
+
 	playlist_id="bar"
 	// Must be defined on your server.
 	playlists=list(
@@ -920,6 +935,15 @@ var/global/list/loopModeNames=list(
 		"SCOTLANDFOREVER"= "Highlander",
 		"echoes" = "Echoes"
 	)
+
+/obj/machinery/media/jukebox/superjuke/New()
+	..()
+	power_change() //enabling lights when admin spawned
+
+/obj/machinery/media/jukebox/superjuke/update_icon()
+	..()
+	if(!(stat & (FORCEDISABLE|NOPOWER|BROKEN)) && anchored && !any_power_cut())
+		update_moody_light_index("glow",'icons/lighting/moody_lights.dmi', "overlay_juke_glow")
 
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
 	// NO FUN ALLOWED.  Emag list is included, anyway.
@@ -1008,11 +1032,9 @@ var/global/list/loopModeNames=list(
 	update_icon()
 
 /obj/machinery/media/jukebox/superjuke/adminbus/update_icon()
+	overlays.len = 0
 	if(playing)
 		overlays += image(icon = icon, icon_state = "beats")
-	else
-		overlays = 0
-	return
 
 /obj/machinery/media/jukebox/superjuke/adminbus/ex_act(severity)
 	return
@@ -1033,6 +1055,9 @@ var/global/list/loopModeNames=list(
 	state_base = "holyjuke"
 	icon_state = "holyjuke"
 
+	light_power_on = 2
+	light_color = "#EFEFAA"
+
 	change_cost = 0
 
 	playlist_id="holy"
@@ -1040,6 +1065,11 @@ var/global/list/loopModeNames=list(
 	playlists=list(
 		"holy" = "Pastor's Paradise"
 	)
+
+/obj/machinery/media/jukebox/holyjuke/update_icon()
+	..()
+	if(!(stat & (FORCEDISABLE|NOPOWER|BROKEN)) && anchored && !any_power_cut())
+		update_moody_light_index("glow",'icons/lighting/moody_lights.dmi', "overlay_juke_glow")
 
 /obj/machinery/media/jukebox/holyjuke/attackby(obj/item/W, mob/user)
 	// EMAG DOES NOTHING

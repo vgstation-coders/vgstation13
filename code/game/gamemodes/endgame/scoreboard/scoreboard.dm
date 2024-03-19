@@ -128,6 +128,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += "<U>THE GOOD:</U><BR>"
 	dat += "<B>Length of Shift:</B> [round(world.time/600)] Minutes ([round(score.time * 0.2)] Points)<BR>"
 	dat += "<B>Shuttle Escapees:</B> [score.escapees] ([score.escapees * 100] Points)<BR>"
+	if(is_research_fully_archived())
+		dat += "<B>Research was <span class='good'>fully completed</span> due to the work of:</B> [english_list(important_archivists)] (1800 Points)<BR>"
 	if(score.eventsendured > 0)
 		dat += "<B>Random Events Endured:</B> [score.eventsendured] ([score.eventsendured * 200] Points)<BR>"
 	if(score.meals > 0)

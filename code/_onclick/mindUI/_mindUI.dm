@@ -160,7 +160,7 @@ var/list/mind_ui_ID2type = list()
 		var/mob/M = mind.current
 		if (!M.client)
 			return
-		
+
 		mind.current.client.screen -= elements
 
 // Makes every element visible
@@ -272,6 +272,10 @@ var/list/mind_ui_ID2type = list()
 /obj/abstract/mind_ui_element/proc/Hide()
 	if (!parent.active) // we check again for it due to potential spawn() use, and inconsistencies caused by quick UI toggling
 		invisibility = 101
+
+//In case we want to make a specific element disappear, and not because the mind UI is inactive.
+/obj/abstract/mind_ui_element/proc/Disappear()
+	invisibility = 101
 
 /obj/abstract/mind_ui_element/proc/GetUser()
 	ASSERT(parent && parent.mind && parent.mind.current)

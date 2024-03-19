@@ -21,13 +21,15 @@
 	hud_state = "wiz_pacify"
 
 /spell/targeted/pacify/cast(list/targets, mob/user)
-	..()
+	if(!isturf(targets[1])) //If something or someone that wasn't a turf gets directly clicked, we get the target's turf instead
+		var/list/turf_target = list()
+		turf_target.Add(get_turf(targets[1]))
+		targets = turf_target
 	if(targets)
 		if(user.reagents)
 			user.reagents.add_reagent(CHILLWAX, 4 + (spell_levels[Sp_POWER]/2))
 		var/turf/target = targets[1]
-		if(isturf(target))
-			target.vis_contents += new /obj/effect/overlay/pacify_aoe(target, spell_levels[Sp_POWER], spell_levels[Sp_RANGE])
+		target.vis_contents += new /obj/effect/overlay/pacify_aoe(target, spell_levels[Sp_POWER], spell_levels[Sp_RANGE])
 
 /spell/targeted/pacify/apply_upgrade(upgrade_type)
 	switch(upgrade_type)
@@ -40,17 +42,21 @@
 
 /spell/targeted/pacify/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
-			return "Reduce this spell's cooldown."
 		if(Sp_POWER)
-			return "Increases how long targets are pacified for."
+			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+				return "The spell can't be made any more powerful than this!"
+			var/duration = 2/REAGENTS_METABOLISM*2 //2 extra units of Chillwax per rank, multiplied by 2 due to Life() happening every 2 seconds
+			return "Increases how long targets are pacified for by around [duration] seconds."
 		if(Sp_RANGE)
-			return "Increases the area of the spell's impact."
+			if(spell_levels[Sp_RANGE] >= level_max[Sp_RANGE])
+				return "This spell's area of effect is at its maximum!"
+			return "Increases the area of the spell's impact by 1 tile."
+	return ..()
 
 /spell/targeted/pacify/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
 	if(!istype(target))
 		return 0
-	return (isturf(target))
+	return (get_turf(target) in view(range, user))
 
 /obj/effect/overlay/pacify_aoe
 	name = "energy field"

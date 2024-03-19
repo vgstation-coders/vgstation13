@@ -90,6 +90,7 @@
 	var/datum/objective_holder/objectives=new
 	var/logo_icon = 'icons/logos.dmi'
 	var/logo_state = "synd-logo"
+	var/logo_image //Where the image itself gets stored
 
 	var/default_admin_voice = "Supreme Leader"
 	var/admin_voice_style = "radio" // check stylesheet.dm for a list of all possible styles
@@ -134,6 +135,8 @@
 	objectives.owner = M
 	stat_datum = new stat_datum_type()
 
+	//In case we want a simpler copy of the icon without creating the image over and over again, such as in examine text
+	logo_image = "<img src='data:image/png;base64,[icon2base64(icon(logo_icon, logo_state))]'>"
 	return 1
 
 /datum/role/proc/AssignToRole(var/datum/mind/M, var/override = 0, var/msg_admins = TRUE)
@@ -582,6 +585,10 @@
 		return
 	D.spend_midround_threat(amount)
 	D.threat_log += "[worldtime2text()]: [name] has decreased the threat amount by [amount]."
+
+//Additional text that appears when examining something.
+/datum/role/proc/role_examine_text_addition(var/target)
+	return
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

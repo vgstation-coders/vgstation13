@@ -1284,7 +1284,6 @@ var/list/all_bible_styles = list(
 	bookstyle = "Slab"
 
 /datum/religion/clockworkcult/equip_chaplain(var/mob/living/carbon/human/H)
-	H.equip_or_collect(new /obj/item/clothing/head/clockwork_hood(H), slot_head)
 	H.equip_or_collect(new /obj/item/clothing/suit/clockwork_robes(H), slot_wear_suit)
 	H.equip_or_collect(new /obj/item/clothing/shoes/clockwork_boots(H), slot_shoes)
 

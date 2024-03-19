@@ -22,11 +22,10 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/detach()
-	..()
 	if(istype(chassis, /obj/mecha/working))
 		var/obj/mecha/working/W = chassis
 		W.hydraulic_clamp = null
-	return
+	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/action(atom/target)
 	if(!action_checks(target))
@@ -437,9 +436,8 @@
 		return ..()
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/detach()
-	..()
 	chassis.proc_res["dyndomove"] = null
-	return
+	..()
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/attach(obj/mecha/M as obj)
 	..()

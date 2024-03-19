@@ -24,6 +24,8 @@
 	speak_chance = 1
 	turns_per_move = 10
 
+	var/hunger_rate = 0.5 //Passive hunger, takes less per tick than a human due to size
+
 	speak_override = TRUE
 
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
@@ -48,6 +50,8 @@
 	var/mob/pointer_caller
 	var/mob/master //Obtained randomly when petting him. Can be overriden.
 
+	var/growl_sound = 'sound/voice/corgigrowl.ogg' // Sound played when hurt
+
 	held_items = list()
 	var/time_between_directed_steps = 6
 
@@ -59,6 +63,15 @@
 		return 0 //under effects of time magick
 	spinaroo(spin_emotes)
 	. = ..()
+	nutrition = max(nutrition-hunger_rate, 0)
+	if(nutrition > 150 && health < maxHealth)
+		nutrition = nutrition-10 //Heal by spending nutrition
+		health++
+	if(nutrition < 150 && prob(15))
+		for(var/mob/living/carbon/human/H in view(7, src))
+			if(H.client)
+				emote("me", 1, "whines hungrily.") //Only whine if we see a human with a client in our view
+				break
 	if(.)
 		regular_hud_updates()
 		standard_damage_overlay_updates()
@@ -107,7 +120,7 @@
 						corg_her = "his"
 					if(movement_target)
 						step_towards(src,movement_target,1)
-						playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
+						playsound(loc, "[pick(emote_sound)]", 80, 1)
 						if(istype(movement_target,/obj/item/weapon/reagent_containers/food/snacks))
 							emote("me", 1, "barks at [movement_target], as if begging it to go into [corg_her] mouth.")
 							corgi_status = BEGIN_FOOD_HUNTING
@@ -382,11 +395,13 @@
 /mob/living/simple_animal/corgi/proc/get_target()
 	var/vision_range = 5
 	var/list/can_see = view(src, vision_range)
-	for(var/obj/item/weapon/reagent_containers/food/snacks/S in can_see)
-		if(isturf(S.loc) || ishuman(S.loc))
-			movement_target = S
-			corgi_status = BEGIN_FOOD_HUNTING
-			return
+	var/fullness = nutrition + (reagents.get_reagent_amount(NUTRIMENT) * 25)
+	if(fullness<550)
+		for(var/obj/item/weapon/reagent_containers/food/snacks/S in can_see)
+			if(isturf(S.loc) || ishuman(S.loc))
+				movement_target = S
+				corgi_status = BEGIN_FOOD_HUNTING
+				return
 	for(var/mob/living/carbon/M in can_see)
 		for(var/obj/item/H in M.held_items)
 			if(istype(H, /obj/item/weapon/reagent_containers/food/snacks))
@@ -549,7 +564,7 @@
 					master = M
 					to_chat(M, "[src] seems closer to you now. At least until somebody else gives \him attention, anyway.")
 			if(I_HURT)
-				playsound(loc, 'sound/voice/corgigrowl.ogg', 80, 1)
+				playsound(loc, growl_sound, 80, 1)
 				emote("me", EMOTE_AUDIBLE, "growls.")
 
 //Sasha isn't even a corgi you dummy!
@@ -563,6 +578,7 @@
 	icon_dead = "doby_dead"
 	spin_emotes = list("prances around.","chases her nub of a tail.")
 	is_pet = TRUE
+	hunger_rate = 0.05 //Sasha is extremely resilient against hunger
 	holder_type = /obj/item/weapon/holder/animal/mutt
 	species_type = /mob/living/simple_animal/corgi/sasha
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal

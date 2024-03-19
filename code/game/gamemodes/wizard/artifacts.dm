@@ -303,24 +303,29 @@
 	H.equip_to_slot(santasuit,slot_wear_suit)
 
 	H.real_name = pick("Santa Claus","Jolly St. Nick","Sandy Claws","Sinterklaas","Father Christmas","Kris Kringle")
+	H.mutations += M_FAT
 	H.nutrition += 1000
+	H.update_mutations()
 
-	H.add_spell(new/spell/passive/noclothes)
-	H.add_spell(new/spell/aoe_turf/conjure/snowmobile)
-	H.add_spell(new/spell/targeted/wrapping_paper)
-	H.add_spell(new/spell/aoe_turf/conjure/gingerbreadman)
+	H.add_spell(new/spell/passive/noclothes, iswizard = TRUE)
+	H.add_spell(new/spell/aoe_turf/conjure/snowmobile, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/wrapping_paper, iswizard = TRUE)
+	H.add_spell(new/spell/aoe_turf/conjure/gingerbreadman, iswizard = TRUE)
 //	H.add_spell(new/spell/targeted/flesh_to_coal)
 
 	to_chat(world,'sound/misc/santa.ogg')
 	SetUniversalState(/datum/universal_state/christmas)
 
 /datum/spellbook_artifact/santa_bundle/can_buy(var/mob/user)
-	return (Holiday == XMAS && !istype(universe, /datum/universal_state/christmas))
+	var/month = text2num(time2text(world.timeofday, "MM"))
+	if(month == 12) //December!!
+		return !istype(universe, /datum/universal_state/christmas) //There already is Christmas!
+	return FALSE
 
 /datum/spellbook_artifact/phylactery
 	name = "phylactery"
 	desc = "Creates a soulbinding artifact that, upon the death of the user, resurrects them as best it can. You must bind yourself to this through making an incision on your palm, holding the phylactery in that hand, and squeezing it."
-	spawned_items = list(/obj/item/phylactery, /obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich)
+	spawned_items = list(/obj/item/phylactery, /obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich, /obj/item/soulstone)
 
 
 /datum/spellbook_artifact/darkness
@@ -346,13 +351,14 @@
 
 /datum/spellbook_artifact/prestidigitation/purchased(mob/living/carbon/human/H)
 	..()
-	H.add_spell(new/spell/targeted/spark)
-	H.add_spell(new/spell/targeted/extinguish)
-	H.add_spell(new/spell/targeted/clean)
-	H.add_spell(new/spell/targeted/unclean)
-	H.add_spell(new/spell/targeted/create_trinket)
-	H.add_spell(new/spell/targeted/cool_object)
-	H.add_spell(new/spell/targeted/warm_object)
+	H.add_spell(new/spell/targeted/spark, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/extinguish, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/clean, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/unclean, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/create_trinket, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/cool_object, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/warm_object, iswizard = TRUE)
+	H.add_spell(new/spell/targeted/color_change, iswizard = TRUE)
 
 /datum/spellbook_artifact/blindingspeed
 	name = "Boots of Blinding Speed"
@@ -364,13 +370,15 @@
 /datum/spellbook_artifact/nogunallowed
 	name = "No Gun Allowed"
 	abbreviation = "NGA"
-	desc = "Forgo the use of guns in exchange for magical power. Some within the Wizard Federation have lobbied to make this spell a legal obligation."
-	price = -0.5 * Sp_BASE_PRICE
+	desc = "Forgo the use of guns in exchange for magical power. Some within the Wizard Federation have lobbied to make this spell a legal obligation. Non-refundable."
+	price = -1 * Sp_BASE_PRICE
 	one_use = TRUE
 
 /datum/spellbook_artifact/nogunallowed/can_buy(var/mob/user)
+	for(var/spell/passive/nogunallowed/NG in user.spell_list) //In case the user gets hold of a second spellbook
+		return FALSE
 	return iswizard(user) || isapprentice(user) || ismagician(user)
 
 /datum/spellbook_artifact/nogunallowed/purchased(mob/living/carbon/human/H)
 	..()
-	H.add_spell (new/spell/passive/nogunallowed)
+	H.add_spell (new/spell/passive/nogunallowed, iswizard = TRUE)

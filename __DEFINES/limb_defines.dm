@@ -15,3 +15,5 @@
 #define UNCUFF_LEGS			-1
 #define UNCUFF_BOTH			0
 #define UNCUFF_HANDS		1
+
+#define COSMETIC_ORGAN_TAIL			"tail"

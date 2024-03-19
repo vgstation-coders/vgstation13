@@ -37,7 +37,6 @@
 	var/info 			//Info on the camera about mobs or some shit
 	var/photo_size = 3 //Used to scale up bigger images, 3 is default
 	autoignition_temperature = 530 // Kelvin
-	fire_fuel = TRUE
 
 	var/list/double_agent_completion_ids = list()
 
@@ -805,7 +804,9 @@
 		return 1
 	return 0
 
-/obj/machinery/photobooth/Cross(atom/movable/mover, turf/target, height = 0)
+/obj/machinery/photobooth/Cross(atom/movable/mover, turf/target, height = 0, air_group = 0)
+	if(air_group)
+		return 0
 	if(get_dir(loc, target) == SOUTH || get_dir(loc, mover) == SOUTH)
 		return 1
 	return 0

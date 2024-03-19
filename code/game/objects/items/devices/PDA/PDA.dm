@@ -336,6 +336,27 @@ var/global/msg_id = 0
 	id = null
 	return TRUE
 
+/obj/item/device/pda/proc/toggle_flashlight(mob/user)
+	if(user.incapacitated())
+		to_chat(user, "<span class='notice'>You cannot do this while restrained.</span>")
+		return FALSE
+
+	if(!in_range(src, user))
+		to_chat(user, "<span class='notice'>You are too far away.</span>")
+		return FALSE
+
+	for(var/app in applications)
+		if(istype(app,/datum/pda_app/light))
+			var/datum/pda_app/light/flash = app
+			flash.on_select()
+
+/obj/item/device/pda/verb/verb_flashlight()
+	set category = "Object"
+	set name = "Toggle Flashlight"
+	set src in usr
+
+	toggle_flashlight(usr)
+
 /obj/item/device/pda/verb/verb_remove_id()
 	set category = "Object"
 	set name = "Remove ID"

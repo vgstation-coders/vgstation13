@@ -32,7 +32,7 @@
 		D.threat_log += "[worldtime2text()]: Loose catbeast created."
 		D.threat_log += src //The actual reporting on threat it made comes from this entry
 	spawn(1.5 MINUTES)
-		if(antag.current.stat!=DEAD && OnStation())
+		if(antag.current.stat!=DEAD)
 			command_alert("An escaped disease-ridden catbeast has been detected aboard your station. Crew should cooperate with security staff in its extermination or removal from the main station. Remember to get a medical checkup afterward in case of infection.", "Catbeast Detected",1)
 	return TRUE
 
@@ -136,11 +136,12 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 	..()
 	if(!iscatbeast(antag.current) || antag.current.gcDestroyed || antag.current.stat == DEAD)
 		return // dead or destroyed
-	var/area/A = OnStation()
-	if(!A)
-		return // offstation
+	var/on_station = OnStation()
+	if(!on_station || on_station == -1)
+		return // offstation or hiding
+	var/area/A = on_station
 	ticks_survived++
-	if(!(ticks_survived % 10) && ticks_survived < 150) //every 20 seconds, for 5 minutes
+	if(!(ticks_survived % 10) && !(ticks_survived > 150)) //every 20 seconds, for 5 minutes
 		increment_threat(SURVIVAL_THREAT)
 	if(!(A in areas_defiled))
 		increment_threat(DEFILE_THREAT)
@@ -158,10 +159,16 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 				to_chat(antag.current, "<span class='danger'>You feel sick!</span>")
 				current_disease_tier = 2
 
+/datum/role/catbeast/StatPanel()
+	stat(null, text("Threat generated: [threat_generated]"))
+
 
 /datum/role/catbeast/proc/OnStation()
-	if(antag.current.z != map.zMainStation)
+	var/turf/T = get_turf(antag.current)
+	if(T.z != map.zMainStation) //Antag not on station's z-level
 		return FALSE
+	if(antag.current.z != map.zMainStation) //Antag is hiding in an object, but do not count them out of the station
+		return -1
 	var/area/A = get_area(antag.current)
 	if (isspace(A))
 		return FALSE

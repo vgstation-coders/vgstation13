@@ -70,6 +70,10 @@
 	//var/electro = 1
 	//var/shocked = null
 
+/turf/simulated/wall/mineral/gold/gold_old
+	icon_state = "gold_old0"
+	walltype = "gold_old"
+
 /turf/simulated/wall/mineral/silver
 	name = "silver wall"
 	desc = "A wall with silver plating. Shiny!"
@@ -78,6 +82,10 @@
 	mineral = "silver"
 	//var/electro = 0.75
 	//var/shocked = null
+
+/turf/simulated/wall/mineral/silver/silver_old
+	icon_state = "silver_old0"
+	walltype = "silver_old"
 
 /turf/simulated/wall/mineral/diamond
 	name = "diamond wall"

@@ -280,8 +280,7 @@ var/global/global_cricket_population = 0
 		P = new(src)
 	else
 		return
-	P.clean = TRUE
-	P.update_icon()
+	P.clean_act(CLEANLINESS_SPACECLEANER)
 	if(potential_stack)
 		P.forceMove(potential_stack)
 		potential_stack.plates += P
@@ -399,7 +398,8 @@ var/global/global_cricket_population = 0
 		visible_message("<span class='notice'>\The [src] stands up!</span>")
 		new /mob/living/simple_animal/hostile/mantini(T)
 		qdel(src)
-	..()
+	else
+		..()
 
 /mob/living/simple_animal/hostile/mantini
 	name = "mantini"

@@ -62,6 +62,7 @@
 			pollendtime = select_query.item[2]
 			pollquestion = select_query.item[3]
 			polltype = select_query.item[4]
+			multiplechoiceoptions = select_query.item[5]
 			found = 1
 			break
 		qdel(select_query)
@@ -264,7 +265,7 @@
 						</form>"}
 					qdel(option_query)
 				src << browse(output,"window=playerpoll;size=500x500")
-			if("MULTICHOICE")
+			if("SELECT_ALL_THAT_APPLY")
 				var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT optionid FROM erro_poll_vote WHERE pollid = :id AND ckey = :ckey", list("id" = pollid, "ckey" = "[usr.ckey]"))
 				if(!voted_query.Execute())
 					message_admins("Error: [voted_query.ErrorMsg()]")
@@ -299,10 +300,6 @@
 						minoptionid = PO.optionid
 					options += PO
 
-
-				if(select_query.item[5])
-					multiplechoiceoptions = text2num(select_query.item[5])
-
 				var/output = "<div align='center'><B>Player poll</B>"
 
 				output += {"<hr>
@@ -314,7 +311,7 @@
 					output += {"<form name='cardcomp' action='?src=\ref[src]' method='get'>
 						<input type='hidden' name='src' value='\ref[src]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
-						<input type='hidden' name='votetype' value='MULTICHOICE'>
+						<input type='hidden' name='votetype' value='SELECT_ALL_THAT_APPLY'>
 						<input type='hidden' name='maxoptionid' value='[maxoptionid]'>
 						<input type='hidden' name='minoptionid' value='[minoptionid]'>"}
 
@@ -340,7 +337,7 @@
 				src << browse(output,"window=playerpoll;size=500x250")
 		return
 
-/mob/new_player/proc/vote_on_poll(var/pollid = -1, var/optionid = -1, var/multichoice = 0)
+/mob/new_player/proc/vote_on_poll(var/pollid = -1, var/optionid = -1, var/select_all_that_apply = 0)
 	if(pollid == -1 || optionid == -1)
 		return
 
@@ -359,7 +356,7 @@
 		var/multiplechoiceoptions = 0
 
 		while(select_query.NextRow())
-			if(select_query.item[4] != "OPTION" && select_query.item[4] != "MULTICHOICE")
+			if(select_query.item[4] != "OPTION" && select_query.item[4] != "SELECT_ALL_THAT_APPLY")
 				return
 			validpoll = 1
 			if(select_query.item[5])
@@ -399,14 +396,14 @@
 
 		while(voted_query.NextRow())
 			alreadyvoted += 1
-			if(!multichoice)
+			if(!select_all_that_apply)
 				break
 
-		if(!multichoice && alreadyvoted)
+		if(!select_all_that_apply && alreadyvoted)
 			to_chat(usr, "<span class='warning'>You already voted in this poll.</span>")
 			return
 
-		if(multichoice && (alreadyvoted >= multiplechoiceoptions))
+		if(select_all_that_apply && (alreadyvoted >= multiplechoiceoptions))
 			to_chat(usr, "<span class='warning'>You already have more than [multiplechoiceoptions] logged votes on this poll. Enough is enough. Contact the database admin if this is an error.</span>")
 			return
 

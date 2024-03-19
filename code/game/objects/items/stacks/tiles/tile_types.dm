@@ -5,36 +5,6 @@
  *		Carpet
  */
 
-/obj/item/stack/tile
-	var/material
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sheets_n_ores.dmi', "right_hand" = 'icons/mob/in-hand/right/sheets_n_ores.dmi')
-
-/obj/item/stack/tile/proc/adjust_slowdown(mob/living/L, current_slowdown)
-	return current_slowdown
-
-/obj/item/stack/tile/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
-		if(3.0)
-			if (prob(5))
-				qdel(src)
-				return
-		else
-	return
-
-/obj/item/stack/tile/blob_act()
-	qdel(src)
-
-/obj/item/stack/tile/singularity_act()
-	qdel(src)
-	return 2
-
 /*
  * Grass
  */
@@ -133,6 +103,12 @@
 
 	material = "fabric"
 	autoignition_temperature = AUTOIGNITION_FABRIC
+
+/obj/item/stack/tile/carpet/shag
+	name = "length of shag carpet"
+	singular_name = "length of shag carpet"
+	desc = "A shaggy piece of carpet."
+	icon_state = "tile-shag"
 
 /obj/item/stack/tile/arcade
 	name = "length of arcade carpet"

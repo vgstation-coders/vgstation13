@@ -86,6 +86,8 @@
 	var/obj/item/mecha_parts/mecha_equipment/selected
 	var/max_equip = 3 //The maximum amount of equipment this mecha an hold at one time.
 
+	var/obj/item/weapon/mecha_fist/fist = null
+
 	var/turf/crashing = null
 	var/list/mech_parts = list()
 
@@ -104,8 +106,8 @@
 	return cell
 
 /obj/mecha/New()
-	hud_list[DIAG_HEALTH_HUD] = image('icons/mob/hud.dmi', src, "huddiagmax")
-	hud_list[DIAG_CELL_HUD] = image('icons/mob/hud.dmi', src, "hudbattmax")
+	hud_list[DIAG_HEALTH_HUD] = new/image/hud('icons/mob/hud.dmi', src, "huddiagmax")
+	hud_list[DIAG_CELL_HUD] = new/image/hud('icons/mob/hud.dmi', src, "hudbattmax")
 	..()
 	add_radio()
 	add_cabin()
@@ -113,6 +115,7 @@
 		removeVerb(/obj/mecha/verb/connect_to_port)
 		removeVerb(/obj/mecha/verb/toggle_internal_tank)
 	add_cell()
+	add_fist()
 	if(starts_with_tracking_beacon)
 		add_tracking_beacon()
 	add_iterators()
@@ -174,6 +177,8 @@
 	connected_port = null
 	if(radio)
 		QDEL_NULL(radio)
+	if(fist)
+		QDEL_NULL(fist)
 	if(electropack)
 		QDEL_NULL(electropack)
 	if(tracking)
@@ -224,6 +229,11 @@
 		GAS_NITROGEN, N2STANDARD*cabin_air.volume/(R_IDEAL_GAS_EQUATION*cabin_air.temperature))
 	mech_parts.Add(cabin_air)
 	return cabin_air
+
+/obj/mecha/proc/add_fist()
+	fist = new
+	fist.name = "[src]'s fist"
+	fist.force = src.force
 
 /obj/mecha/proc/add_radio()
 	radio = new(src)
@@ -1237,9 +1247,13 @@
 	else if(occupant)
 		to_chat(user, "Occupant detected.")
 		return 0
-	else if(dna && dna!=mmi_as_oc.brainmob.dna.unique_enzymes)
-		to_chat(user, "Stop it!")
-		return 0
+	else if(dna)
+		if(!mmi_as_oc.brainmob.dna)
+			to_chat(user, "Remove the DNA-lock before proceeding.") //Avoids a posibrain runtime since posibrains don't have DNA
+			return 0
+		if(mmi_as_oc.brainmob.dna && dna!=mmi_as_oc.brainmob.dna.unique_enzymes)
+			to_chat(user, "The DNA-lock rejects \the [mmi_as_oc], the DNAs do not match.") //Gives a clue that the MMI could be inserted if it was the original DNA lock holder.
+			return 0
 	//Added a message here since people assume their first click failed or something./N
 //	to_chat(user, "Installing MMI, please stand by.")
 
@@ -1247,8 +1261,6 @@
 
 	if(do_after(user, src, 40))
 		if(!occupant)
-			log_admin("[key_name(usr)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src] at X=[src.x];Y=[src.y];Z=[src.z]")
-			message_admins("[key_name(usr)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
 			return mmi_moved_inside(mmi_as_oc,user)
 		else
 			to_chat(user, "Occupant detected.")
@@ -1277,7 +1289,10 @@
 		src.Entered(mmi_as_oc)
 		src.Move(src.loc)
 		src.silicon_pilot = TRUE
-		src.icon_state = src.silicon_icon_state
+		if(src.silicon_icon_state)
+			src.icon_state = src.silicon_icon_state
+		else
+			icon_state = initial_icon
 		if(!lights) //if the main lights are off, turn on cabin lights
 			light_power = light_brightness_off
 			set_light(light_range_off)
@@ -1285,11 +1300,14 @@
 		src.log_message("[mmi_as_oc] moved in as pilot.")
 		if(!hasInternalDamage())
 			src.occupant << sound('sound/mecha/nominalsyndi.ogg',volume=50)
+		refresh_spells()
 
 		//change the cursor
 		if(occupant.client && cursor_enabled)
 			occupant.client.mouse_pointer_icon = file("icons/mouse/mecha_mouse.dmi")
 
+		log_admin("[key_name(user)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src] at X=[src.x];Y=[src.y];Z=[src.z]")
+		message_admins("[key_name(user)] has inserted [mmi_as_oc] (played by: [mmi_as_oc.brainmob.ckey]) into the [src]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)")
 		return 1
 	else
 		return 0
@@ -1414,7 +1432,6 @@
 		occupant.reset_view()
 		empty_bad_contents()
 		occupant << browse(null, "window=exosuit")
-		remove_mech_spells()
 
 		//change the cursor
 		if(occupant && occupant.client)
@@ -2190,18 +2207,22 @@
 		return 1
 
 	var/icontype = input("Select the paint-job!")in M.mech_sprites
-
+//Sanity checks because icontype can be selected at an arbitrary amount of time.
+	if(!user.Adjacent(M) || user.incapacitated() || user.lying)
+		return 1
+	if(M.occupant)
+		to_chat(user, "<span class='warning'>This mech has an occupant. It must be empty before you can paint it.</span>")
+		return 1
 	if(icontype == M.initial_icon)
 		to_chat(user, "<span class='warning'>This mech is already painted in that style.</span>")
 		return 1
 	if(icontype)
-		to_chat(user, "<span class='info'>You begin repainting the mech.</span>")
-		if (do_after(user, M , 30))
-			M.initial_icon = icontype
-			M.icon_state = icontype +"-open"
-			for(var/spell/mech/MS in M.intrinsic_spells)
-				MS.update_spell_icon()
-			M.refresh_spells() //I think this does something important
+		to_chat(user, "<span class='info'>You paint the mech.</span>")
+		M.initial_icon = icontype
+		M.icon_state = icontype +"-open"
+		for(var/spell/mech/MS in M.intrinsic_spells)
+			MS.update_spell_icon()
+		M.refresh_spells() //I think this does something important
 	return 1
 
 
@@ -2294,6 +2315,11 @@
 			mecha.cell.charge -= min(20,mecha.cell.charge)
 			mecha.cell.maxcharge -= min(20,mecha.cell.maxcharge)
 
+/////////////
+/obj/item/weapon/mecha_fist/ // An invisible weapon representing the mech's punching force. Used for melee attacks.
+	name = "mecha fist"
+	desc = "The fist of a powerful mech. You probably shouldn't be seeing this."
+	abstract = TRUE
 
 /////////////
 

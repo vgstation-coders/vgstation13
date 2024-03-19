@@ -149,7 +149,6 @@
 		heal_target.update_icons()
 		anim(target = heal_target, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 		move_ray()
-		process_construct_hud(src)
 
 /mob/living/simple_animal/construct/builder/perfect/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
 	. = ..()
@@ -279,15 +278,15 @@
 	environment_smash_flags = 0
 	var/mob/living/simple_animal/construct/builder/perfect/master = null
 	var/no_master = TRUE
-
+	var/glow_color = "#FFFFFF"
 
 /mob/living/simple_animal/hostile/hex/New()
 	..()
-	setupglow(rgb(255,255,255))
+	setupglow(glow_color)
 	animate(src, pixel_y = 4 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
 	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
 
-/mob/living/simple_animal/hostile/hex/proc/setupglow(glowcolor)
+/mob/living/simple_animal/hostile/hex/proc/setupglow(var/_glowcolor = "#FFFFFF")
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = ABOVE_LIGHTING_PLANE
@@ -296,7 +295,7 @@
 		overlay_plane = FLOAT_PLANE
 
 	var/icon/glowicon = icon(icon,"glow-[icon_state]")
-	glowicon.Blend(glowcolor, ICON_ADD)
+	glowicon.Blend(_glowcolor, ICON_ADD)
 	var/image/glow = image(icon = glowicon, layer = overlay_layer)
 	glow.plane = relative_plane(overlay_plane)
 	overlays += glow
@@ -420,7 +419,7 @@ var/list/astral_projections = list()
 	tangible_appearance = image('icons/mob/mob.dmi',"blank")
 	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
 	see_in_dark = 100
-	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
+	hud_list[ID_HUD]          = new/image/hud('icons/mob/hud.dmi', src, "hudunknown")
 	add_spell(new /spell/astral_return, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	add_spell(new /spell/astral_toggle, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
@@ -551,6 +550,9 @@ var/list/astral_projections = list()
 /mob/living/simple_animal/astral_projection/shuttle_act()
 	if(tangibility)
 		death()
+
+/mob/living/simple_animal/astral_projection/vine_protected()
+	return !tangibility
 
 //called once when we are created, shapes our appearance in the image of our anchor
 /mob/living/simple_animal/astral_projection/proc/ascend(var/mob/living/body)

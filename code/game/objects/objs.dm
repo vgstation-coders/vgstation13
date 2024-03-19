@@ -46,6 +46,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/list/alphas_obj = list()
 	var/impactsound
 	var/current_glue_state = GLUE_STATE_NONE
+	var/last_glue_application = 0
 
 	//Does this item have a slime installed?
 	var/has_slime = 0
@@ -63,6 +64,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		breakable_init()
 	if(is_cooktop)
 		add_component(/datum/component/cooktop)
+//Disabled because autoignition would too often turn rooms into firestorms due to a chain reaction
+//where one item would burn up, increase the room temperature (in code/ZAS/Fire.dm, proc/burnFireFuel()) and cause
+//other items to burn up.
+
+//To re-enable, un-comment the lines of code.
+	// if(autoignition_temperature)
+	// 	burnableatoms+=src
 
 //More cooking stuff:
 /obj/proc/can_cook() //Returns true if object is currently in a state that would allow for food to be cooked on it (eg. the grill is currently powered on). Can (and generally should) be overriden to check for more specific conditions.
@@ -86,6 +94,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		cookvesselimage.pixel_x = offset_x
 		cookvesselimage.pixel_y = offset_y
 		overlays += cookvesselimage
+		shift_particles(list(offset_x,offset_y))
+	else
+		shift_particles(0)
 
 /obj/proc/cook_temperature() //Returns the temperature the object cooks at.
 	return COOKTEMP_DEFAULT
@@ -264,6 +275,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return 1
 	return
 
+/obj/clean_act(var/cleanliness)
+	..()
+	if (cleanliness >= CLEANLINESS_WATER)
+		unglue()
 
 /obj/proc/cultify()
 	qdel(src)
@@ -942,3 +957,20 @@ a {
 			display_name = "Coldsauce"
 		dat += {"<B>[display_name]:</B> [R.volume] unit\s<BR>"}
 	return dat
+
+/obj/get_heat_conductivity() //So keeping something in a closet can have an insulating effect.
+	return 0.5
+
+//This subtype is used by stuff that should generally not be disturbed by those procs
+/obj/abstract
+	anchored = TRUE
+/obj/abstract/cultify()
+	return
+/obj/abstract/ex_act()
+	return
+/obj/abstract/emp_act()
+	return
+/obj/abstract/blob_act()
+	return
+/obj/abstract/singularity_act()
+	return

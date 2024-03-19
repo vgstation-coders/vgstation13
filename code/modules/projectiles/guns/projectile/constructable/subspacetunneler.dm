@@ -60,6 +60,7 @@
 		/obj/machinery/am_shielding,							//the AME
 		/obj/machinery/gateway,									//the gateway
 		/obj/structure/catwalk,									//catwalks
+		/obj/effect/blob,                                       //blobs
 		)
 
 /obj/item/weapon/subspacetunneler/Destroy()

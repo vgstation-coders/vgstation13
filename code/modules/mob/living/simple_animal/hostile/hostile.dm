@@ -7,6 +7,7 @@
 	var/atom/target // /vg/ edit:  Removed type specification so spiders can target doors.
 	var/attack_same = 0 //Set us to 1 to allow us to attack our own faction, or 2, to only ever attack our own faction
 	var/ranged = 0
+	var/doubleshot = 0
 	var/rapid = 0
 	var/projectiletype
 	var/projectilesound
@@ -382,6 +383,11 @@
 		spawn()
 			TryToShoot(target_turf, ttarget)
 			sleep(1)
+			TryToShoot(target_turf, ttarget)
+			sleep(1)
+			TryToShoot(target_turf, ttarget)
+	if(doubleshot)
+		spawn()
 			TryToShoot(target_turf, ttarget)
 			sleep(1)
 			TryToShoot(target_turf, ttarget)

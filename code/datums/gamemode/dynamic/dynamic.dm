@@ -503,6 +503,10 @@ var/stacking_limit = 90
 			if (latejoin_rule.persistent)
 				current_rules += latejoin_rule
 			. = TRUE
+		else //Actually it can fail here because latejoin prompts are optional and often called in the execute(), returns 0 if candidate refused
+			threat_log += "[worldtime2text()]: Rule [latejoin_rule.name] refunded [latejoin_rule.cost] (selected applicant refused)"
+			message_admins("DYNAMIC MODE: [latejoin_rule.name] failed to start due to the candidate refusing to play the role.")
+			refund_midround_threat(latejoin_rule.cost)
 	for (var/datum/dynamic_ruleset/latejoin/non_executed in drafted_rules)
 		non_executed.assigned.Cut()
 

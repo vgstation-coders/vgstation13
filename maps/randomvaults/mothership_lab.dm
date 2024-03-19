@@ -1,6 +1,7 @@
 /datum/map_element/vault/mothership_lab
 	name = "Mothership Lab"
 	file_path = "maps/randomvaults/mothership_lab.dmm"
+	spawn_cost = 5
 
 	can_rotate = 0 // I doubt it would work
 
@@ -486,6 +487,9 @@
 	msg = "As you climb the ladder you find yourself in a hastily dug tunnel. Dark crevices and collapsed piles of rock rubble make this a prime place for an ambush. You should be cautious."
 	play_sound = 'sound/ambience/ambigen3.ogg'
 
+/obj/effect/narration/mothership_lab/raidertunnel2 // This tunnel be for pirates, matey
+	msg = "There is a soft scratching sound, like claws scraping against rock. And you swear you hear low whispers in the dark. Something is waiting for you just ahead."
+
 /obj/effect/narration/mothership_lab/habitationdeck // This deck be a bad place
 	msg = "As you enter the habitation deck, you see a chaotic scene highlighted by the dim red light of emergency flares. Scorched plating, bullet impacts, blood, and makeshift barricades are scattered everywhere."
 	play_sound = 'sound/ambience/spookymaint2.ogg'
@@ -528,7 +532,7 @@
 			<body>
 			<center><img src="https://ss13.moe/wiki/images/e/ec/Mothership_logo.png"> <h1>GDR-43X: Space Polyp Care Instructions</h1></center>
 			Caring for space polyps is a crucial task to maintain mothership food production. The following simple instructions have been written for you by an experienced Head Laborer. Adhere to them or risk consequences to life, limb, and continuation of cloning cycles.<BR><BR>
-			<b>Gelatin Harvesting</b>: Polyps secrete gelatin naturally that helps insulate them from vacuum. After some time has passed, collect excess gelatin from the tendrils below the bell using a bucket. Place a lid on the bucket first, or product will be wasted.<BR>
+			<b>Gelatin Harvesting</b>: Polyps secrete gelatin naturally that helps insulate them from vacuum. After some time has passed, collect excess gelatin from the tendrils below the bell using a bucket.<BR>
 			<b>Slaughtering</b>: Pull the polyp you are slaughtering away from its herd to a private room. Use a disintegrator in 40 watt range or a similar substitute. Make it quick.<BR>
 			<b>Injuries</b>: If one of your polyps is injured and remains so at the end of your shift, you will be held accountable. To quickly fix minor injuries, feed the polyp fresh meat. Polyps have a rapid metabolism, and proteins assist with natural healing processes.<BR>
 			<b>Calming</b>: If you abuse a polyp, or it is attacked, it will become defensive and sting any nearby lifeforms. A defensive polyp will not recognize you as its herder. Feed the agitated polyp fresh meat to calm it. If an entire herd has become agitated, isolate and call for assistance from mothership soldiers.<BR><BR>
@@ -571,6 +575,32 @@
 // AYY MILITARY CLOTHES
 //////////////////////////////
 
+//Ayy lmao gas mask
+/obj/item/clothing/mask/gas/mothership
+	name = "GDR half mask"
+	desc = "A close-fitting half mask that can be connected to an air supply. Acid resistant, water soluble."
+	icon_state = "ayy_mask"
+	item_state = "ayy_mask"
+	siemens_coefficient = 0.7
+	species_fit = list(GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED)
+	body_parts_visible_override = EYES
+	can_flip = 0
+	canstage = 0
+
+/obj/item/clothing/mask/gas/mothership/dissolvable()
+	return WATER
+
+//Superior ayy lmao gas mask
+/obj/item/clothing/mask/gas/mothership/advanced
+	name = "GDR Half Mask MKII"
+	desc = "A close-fitting half mask that can be connected to an air supply. This one is rated for both acid and water exposure."
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 75, rad = 0)
+	sterility = 100
+
+/obj/item/clothing/mask/gas/mothership/advanced/dissolvable()
+	return FALSE
+
 //Ayy lmao helmets
 /obj/item/clothing/head/helmet/mothership
 	name = "MDF Helmet"
@@ -583,6 +613,19 @@
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0) // Identical to default sec helmet, but a lot more stylish!
 
 /obj/item/clothing/head/helmet/mothership/dissolvable()
+	return WATER
+
+/obj/item/clothing/head/helmet/mothership_explorer
+	name = "Explorer Helmet"
+	icon_state = "explorer_helmet"
+	item_state = "explorer_helmet"
+	desc = "A segmented helmet of alien alloy, perfect for protecting an explorer's cranium from hostile fauna."
+	body_parts_covered = FULL_HEAD|MASKHEADHAIR
+	species_fit = list(GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED) // Can fit humans and ayys, but not other exotic species
+	armor = list(melee = 50, bullet = 50, laser = 15, energy = 5, bomb = 30, bio = 0, rad = 0)
+
+/obj/item/clothing/head/helmet/mothership_explorer/dissolvable()
 	return WATER
 
 /obj/item/clothing/head/helmet/mothership_visor
@@ -610,7 +653,7 @@
 /obj/item/clothing/head/helmet/mothership_visor_heavy/dissolvable()
 	return FALSE
 
-//Ayy lmao armor vest
+//Ayy lmao armor vests
 /obj/item/clothing/suit/armor/mothership
 	name = "MDF Armor"
 	desc = "An armored vest perfectly fitted for the thinnest of abdomens. Praise the mothership."
@@ -623,6 +666,13 @@
 
 /obj/item/clothing/suit/armor/mothership/dissolvable()
 	return WATER
+
+/obj/item/clothing/suit/armor/mothership/explorer
+	name = "Explorer Chestplate"
+	desc = "A segmented armored vest of alien alloy, favored by mothership explorers. Protects the vitals from blunt force and ballistic weapons."
+	icon_state = "explorer_chestplate"
+	item_state = "explorer_chestplate"
+	armor = list(melee = 50, bullet = 50, laser = 15, energy = 5, bomb = 30, bio = 0, rad = 0)
 
 //Ayy lmao heavy armor
 /obj/item/clothing/suit/armor/mothership_heavy
@@ -657,7 +707,7 @@
 		"/obj/item/weapon/grenade",
 		"/obj/item/weapon/handcuffs",
 		"/obj/item/weapon/reagent_containers/food/snacks/zambiscuit",
-		"/obj/item/weapon/storage/pill_bottle/zambiscuits",
+		"/obj/item/weapon/zambiscuit_package",
 		"/obj/item/weapon/storage/pill_bottle/hyperzine",
 		"/obj/item/weapon/reagent_containers/hypospray/autoinjector",
 		"/obj/item/stack/medical",
@@ -667,7 +717,7 @@
 		"/obj/item/weapon/storage/fancy/cigarettes",
 		"/obj/item/weapon/lighter",
 		"/obj/item/clothing/glasses",
-		"/obj/item/clothing/mask/gas",
+		"/obj/item/clothing/mask/gas/mothership",
 		"/obj/item/weapon/tank/emergency_oxygen",
 		)
 
@@ -684,7 +734,7 @@
 	new /obj/item/weapon/reagent_containers/food/snacks/zambiscuit(src)
 	new /obj/item/weapon/storage/fancy/cigarettes/redsuits(src)
 	new /obj/item/weapon/lighter/zippo(src)
-	new /obj/item/clothing/mask/gas(src)
+	new /obj/item/clothing/mask/gas/mothership(src)
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 
 //////////////////////////////

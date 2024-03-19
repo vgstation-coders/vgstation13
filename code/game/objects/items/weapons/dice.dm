@@ -94,7 +94,7 @@
 	diceroll(user, 0)
 
 /obj/item/weapon/dice/throw_impact(atom/hit_atom, speed, user)
-	if(!..())
+	if(!..() && !istype(loc,/obj/item/dicetower))
 		diceroll(user, 1)
 
 /obj/item/weapon/dice/proc/show_roll(mob/user as mob, thrown, result)
@@ -122,8 +122,16 @@
 		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result_names[result]].</span>")
 
 
-/obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown, silent = FALSE)
+/obj/item/weapon/dice/proc/diceroll(mob/user, thrown, silent = FALSE)
+	playsound(src, 'sound/weapons/diceroll.ogg', 50, 1)
 	result = rand(minsides, sides)
+	//An implementation of luck if luck is ever repaired
+	/*for(var/i = 1 to round(sides/6)) //+3 on a d20, +2 on d12, +1 on d6 or 8, +0 on d4
+		if(user.lucky_prob(1,1,60-(10*i))) //Max luck skew chance 50 on first attempt, then 40, then 30
+			result = min(result+1, sides)
+			if(result==sides)
+				break*/
+
 	update_icon()
 	if(!silent)
 		show_roll(user, thrown, result)

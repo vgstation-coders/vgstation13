@@ -25,8 +25,6 @@
 
 	var/list/feeders = list()
 
-	var/static/list/roundstart_powers = list(/datum/power/vampire/hypnotise, /datum/power/vampire/glare, /datum/power/vampire/rejuvenate,  /datum/power/vampire/silentbite)
-
 	var/list/image/cached_images = list()
 
 	stat_datum_type = /datum/stat/role/vampire
@@ -66,9 +64,7 @@
 	. = ..()
 	update_vamp_hud()
 	ForgeObjectives()
-	for(var/type_VP in roundstart_powers)
-		var/datum/power/vampire/VP = new type_VP
-		VP.add_power(src)
+	check_vampire_upgrade()
 
 	if(faction && istype(faction, /datum/faction/vampire) && faction.leader == src)
 		var/datum/faction/vampire/V = faction
@@ -137,10 +133,10 @@
 		to_chat(M, "<span class='warning'> You cannot do this while on the ground!</span>")
 		return FALSE
 
-	if(H.check_body_part_coverage(MOUTH))
-		if(!locate(/datum/power/vampire/mature) in current_powers)
-			to_chat(M, "<span class='warning'>Remove their mask!</span>")
-			return FALSE
+	//if(H.check_body_part_coverage(MOUTH))
+	//	if(!locate(/datum/power/vampire/mature) in current_powers)
+	//		to_chat(M, "<span class='warning'>Remove their mask!</span>")
+	//		return FALSE
 
 	if(vampire_teeth?.amount == 0)
 		to_chat(M, "<span class='warning'>You cannot suck blood with no teeth!</span>")
@@ -163,22 +159,26 @@
 
 	var/mob/assailant = antag.current
 	var/targetref = "\ref[target]"
-	var/blood = 0
+	var/blood = 0 //How much blood will be sucked
 	var/blood_total_before = blood_total
 	var/blood_usable_before = blood_usable
 	assailant.attack_log += text("\[[time_stamp()]\] <font color='red'>Bit [key_name(target)] in the neck and draining their blood.</font>")
 	target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been bit in the neck by [key_name(assailant)].</font>")
 	log_attack("[key_name(assailant)] bit [key_name(target)] in the neck")
 
-	to_chat(antag.current, "<span class='danger'>You latch on firmly to \the [target]'s neck.</span>")
-	target.show_message("<span class='userdanger'>\The [assailant] latches on to your neck!</span>")
+	if(!silentbite)
+		to_chat(antag.current, "<span class='danger'>You latch on firmly to \the [target]'s neck.</span>")
+		target.show_message("<span class='userdanger'>\The [assailant] latches on to your neck!</span>")
+	else
+		to_chat(antag.current, "<span class='warning'>You quietly latch on to \the [target]'s neck...")
 
 	if(!iscarbon(assailant))
 		target.LAssailant = null
 	else
 		target.LAssailant = assailant
 		target.assaulted_by(assailant)
-	while(do_mob(assailant, target, (5 SECONDS) * (silentbite + 1)))
+	var/initial_silentbite = silentbite //No switching bite types after latching onto someone
+	while(do_mob(assailant, target, (5 SECONDS) * (initial_silentbite + 1)))
 		if(!isvampire(assailant))
 			to_chat(assailant, "<span class='warning'>Your fangs have disappeared!</span>")
 			draining = null
@@ -204,7 +204,8 @@
 			else
 				to_chat(assailant, "<span class='warning'>Their blood quenches your thirst but won't let you become any stronger. You need to find new prey.</span>")
 			blood_usable += blood
-			target.adjustBruteLoss(1)
+			if(!initial_silentbite) //If the bite is silent, do not tip the target that something is wrong.
+				target.adjustBruteLoss(1)
 			var/datum/organ/external/head/head_organ = target.get_organ(LIMB_HEAD)
 			head_organ.add_autopsy_data("sharp teeth", 1)
 		else
@@ -243,13 +244,21 @@
 		return
 
 	// Vision-related changes.
+	if(!count_by_type(H.huds, /datum/visioneffect/nullrod))
+		H.apply_hud(new /datum/visioneffect/nullrod)
 	if (locate(/datum/power/vampire/vision) in current_powers)
-		H.change_sight(adding = SEE_MOBS)
-		H.update_perception()
+		if(!count_by_type(H.huds, /datum/visioneffect/vampire_improved))
+			H.apply_hud(new /datum/visioneffect/vampire_improved)
+	else
+		H.remove_hud_by_type(/datum/visioneffect/vampire_improved)
 
 	if (locate(/datum/power/vampire/mature) in current_powers)
-		H.change_sight(adding = SEE_TURFS|SEE_OBJS)
-		H.update_perception()
+		if(!count_by_type(H.huds, /datum/visioneffect/vampire_mature))
+			H.apply_hud(new /datum/visioneffect/vampire_mature)
+	else
+		H.remove_hud_by_type(/datum/visioneffect/vampire_mature)
+
+	H.handle_hud_vision_updates()
 
 /datum/role/vampire/update_perception()
 	return
@@ -333,7 +342,7 @@
 			continue // We don't terrify our underlings
 		if (C.vampire_affected(antag) <= 0)
 			continue
-		C.stuttering += 20
+		C.stuttering = max(C.stuttering, 20)
 		C.Jitter(20)
 		C.Dizzy(20)
 		to_chat(C, "<span class='sinister'>Your heart is filled with dread, and you shake uncontrollably.</span>")
@@ -563,7 +572,7 @@
 /datum/role/thrall/Greet(var/you_are = TRUE)
 	var/dat
 	if (you_are)
-		dat = "<span class='danger'>You are a Thrall!</br> You are slaved to <b>[master.antag.current]</b> [faction?"under the [faction.name].":"."]</span>"
+		dat = "<span class='danger'>You are a Thrall!</br> You are slaved to <b>[master.antag.current]</b> [faction?"under [faction.name].":"."]</span>"
 	dat += {""}
 	to_chat(antag.current, dat)
 	to_chat(antag.current, "<B>You must complete the following tasks:</B>")
@@ -580,7 +589,8 @@
 	log_admin("[key_name(M)] was dethralled, his master was [key_name(master.antag)]. [formatJumpTo(get_turf(antag.current))]")
 	if (deconverted)
 		M.visible_message("<span class='big danger'>[M] suddenly becomes calm and collected again, \his eyes clear up.</span>",
-		"<span class='big notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
+		"<span class='warning'><b>Your blood cools down and you are inhabited by a sensation of untold calmness.</b></span>")
+		to_chat(M, "<span class='big warning'>You are no longer a slave to [master.antag.current]'s whims, having <b>escaped your thralldom.<b></span>")
 	update_faction_icons()
 	return ..()
 
@@ -652,7 +662,7 @@
 		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil!</span>")
 	return TRUE
 
-/mob/proc/vampire_affected(var/datum/mind/M) // M is the attacker, src is the target.
+/mob/proc/vampire_affected(var/datum/mind/M, var/send_message = TRUE) // M is the attacker, src is the target.
 	//Other vampires aren't affected
 	var/success = TRUE
 	if(mind && mind.GetRole(VAMPIRE))
@@ -662,20 +672,54 @@
 	if(M)
 		//Chaplains are ALWAYS resistant to vampire powers
 		if(isReligiousLeader(src))
-			to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
+			if(send_message)
+				to_chat(M.current, "<span class='warning'>[src] resists our powers!</span>")
 			success = FALSE
 		// Null rod nullifies vampire powers, unless we're a young vamp.
 		var/datum/role/vampire/V = M.GetRole(VAMPIRE)
 		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
 		if (N)
 			if (locate(/datum/power/vampire/undying) in V.current_powers)
-				to_chat(M.current, "<span class='warning'>A holy artifact has turned our powers against us!</span>")
+				if(send_message)
+					to_chat(M.current, "<span class='warning'>A holy artifact has turned our powers against us!</span>")
 				success = VAMP_FAILURE
 			else if (locate(/datum/power/vampire/jaunt) in V.current_powers)
-				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
+				if(send_message)
+					to_chat(M.current, "<span class='warning'>A holy artifact protects [src]!</span>")
 				success = FALSE
 	return success
 
 // If the target is weakened, the spells take less time to complete.
 /mob/living/carbon/proc/get_vamp_enhancements()
 	return ((knockdown ? 2 : 0) + (stunned ? 1 : 0) + (sleeping || paralysis ? 3 : 0))
+
+/datum/role/vampire/role_examine_text_addition(target)
+	if((!ishuman(antag.current)) || (target == antag.current)) //Vampire is not a human that can suck blood, or trying to examine themselves.
+		return
+	var/mob/living/carbon/human/H = target
+	if(!istype(H)) //Examined target is not a human.
+		return
+	var/text = ""
+	if(isReligiousLeader(H) || (locate(/obj/item/weapon/nullrod) in get_contents_in_object(H))) //Chaplains and protected targets can't be examined
+		return "<span class='danger'>[logo_image] This vessel is protected by a holy aura!</span>"
+	if(H.species.anatomy_flags & NO_BLOOD) //Target cannot carry blood
+		return "<span class='warning'>[logo_image] This vessel is incapable of having any blood!</span>"
+	var/amount_of_blood = round(H.vessel.get_reagent_amount(BLOOD), 1)
+	var/blood_type = H.dna ? H.dna.b_type : null
+	if(amount_of_blood)
+		var/targetref = "\ref[H]"
+		text += "<span class='notice'>This vessel has <span class='danger'>[amount_of_blood]</span> units of [blood_type ? "[blood_type] " : ""]blood left.</span>"
+		if(!H.mind) //Target has no mind
+			text += "<span class='warning'><br>This vessel only carries lifeless blood!</span>"
+		else if(!(targetref in feeders) || (feeders[targetref] < MAX_BLOOD_PER_TARGET)) //Target has not been fed upon or is below the empowering blood limit they can give
+			text += "<span class='good'><br>This vessel's blood can empower you!</span>"
+		else
+			text += "<span class='warning'><br>This vessel's blood has no energy left for you...</span>"
+		if(H.check_body_part_coverage(MOUTH)) //Target is masked
+			if(!locate(/datum/power/vampire/mature) in current_powers) //Vampire is not mature enough to deal with that
+				text += "<span class='warning'><br>This vessel wears a mask! This will impede you from sucking their blood.</span>"
+			else
+				text += "<span class='notice'><br>This vessel wears a mask, but this will not impede you because you are a <span class='bnotice'>mature</span> vampire!</span>"
+	else
+		return "<span class='warning'>[logo_image] This vessel is completely drained of all blood!</span>"
+	return "[logo_image] [text]"

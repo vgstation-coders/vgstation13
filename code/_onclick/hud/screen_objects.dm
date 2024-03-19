@@ -150,8 +150,6 @@
 	globalscreen = 1
 
 /obj/abstract/screen/storage/Click(location, control, params)
-	if(usr.attack_delayer.blocked())
-		return
 	if(usr.incapacitated())
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech

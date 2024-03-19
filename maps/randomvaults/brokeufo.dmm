@@ -144,10 +144,9 @@
 	},
 /area/shuttle/brokeufo/start)
 "aH" = (
-/obj/structure/closet/crate,
-/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped,
-/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky,
-/obj/item/weapon/reagent_containers/food/condiment/zamspices,
+/obj/structure/bed/ayy1,
+/obj/item/trash/zam_sliderwrapper,
+/obj/structure/curtain/open/bed,
 /turf/simulated/floor/carpet,
 /area/shuttle/brokeufo/start)
 "aI" = (
@@ -161,16 +160,9 @@
 "aJ" = (
 /turf/simulated/floor/engine,
 /area/shuttle/brokeufo/start)
-"aN" = (
-/obj/structure/bed,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/trash/zam_sliderwrapper,
-/obj/item/weapon/bedsheet/green,
-/turf/simulated/floor/carpet,
-/area/shuttle/brokeufo/start)
 "aO" = (
-/obj/structure/bed,
-/obj/item/weapon/bedsheet/green,
+/obj/structure/bed/ayy1,
+/obj/structure/curtain/open/bed,
 /turf/simulated/floor/carpet,
 /area/shuttle/brokeufo/start)
 "aP" = (
@@ -236,17 +228,6 @@
 	icon_state = "yellowfull"
 	},
 /area/shuttle/brokeufo/start)
-"aY" = (
-/obj/structure/table/reinforced,
-/obj/machinery/microwave/upgraded{
-	pixel_y = 5
-	},
-/obj/item/trash/used_tray,
-/obj/item/weapon/kitchen/utensil/fork/teflon{
-	pixel_x = 6
-	},
-/turf/simulated/floor/carpet,
-/area/shuttle/brokeufo/start)
 "aZ" = (
 /turf/simulated/wall/shuttle,
 /area/shuttle/brokeufo/start)
@@ -290,22 +271,28 @@
 /turf/simulated/floor/carpet,
 /area/shuttle/brokeufo/start)
 "bg" = (
+/obj/effect/decal/cleanable/dirt,
 /obj/item/trash/zam_notraisins,
 /turf/simulated/floor/carpet,
 /area/shuttle/brokeufo/start)
 "bh" = (
-/obj/structure/bed,
-/obj/effect/decal/cleanable/dirt,
-/obj/item/weapon/soap,
-/obj/item/weapon/bedsheet/green,
-/turf/simulated/floor/carpet,
-/area/shuttle/brokeufo/start)
-"bi" = (
-/obj/structure/bed,
+/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped,
+/obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky,
+/obj/item/weapon/reagent_containers/food/condiment/zamspices,
 /obj/machinery/light{
 	dir = 4
 	},
-/obj/item/weapon/bedsheet/green,
+/obj/structure/table/reinforced,
+/turf/simulated/floor/carpet,
+/area/shuttle/brokeufo/start)
+"bi" = (
+/obj/structure/table/reinforced,
+/obj/machinery/microwave/upgraded{
+	pixel_y = 5
+	},
+/obj/item/weapon/kitchen/utensil/fork/teflon{
+	pixel_x = 6
+	},
 /turf/simulated/floor/carpet,
 /area/shuttle/brokeufo/start)
 "bj" = (
@@ -321,7 +308,7 @@
 /turf/simulated/floor/carpet,
 /area/shuttle/brokeufo/start)
 "by" = (
-/obj/structure/bed/chair{
+/obj/structure/bed/chair/comfy/ayy1{
 	dir = 4
 	},
 /turf/simulated/floor/carpet,
@@ -505,6 +492,7 @@
 /obj/structure/table/reinforced,
 /obj/item/tool/bonesetter,
 /obj/item/tool/bonegel,
+/obj/item/tool/FixOVein,
 /turf/simulated/floor{
 	icon_state = "white";
 	tag = "icon-white"
@@ -581,6 +569,7 @@
 	},
 /obj/item/weapon/storage/firstaid,
 /obj/item/weapon/storage/box/masks,
+/obj/item/tool/cautery,
 /turf/simulated/floor{
 	icon_state = "white";
 	tag = "icon-white"
@@ -801,7 +790,7 @@
 /area/shuttle/brokeufo/start)
 "WO" = (
 /obj/structure/table/reinforced,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
+/obj/item/weapon/zambiscuit_package,
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter,
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit,
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit,
@@ -835,6 +824,13 @@
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
+/area/shuttle/brokeufo/start)
+"YX" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/structure/acidsink{
+	pixel_y = 28
+	},
+/turf/simulated/floor/carpet,
 /area/shuttle/brokeufo/start)
 "Zo" = (
 /obj/structure/table/reinforced,
@@ -1075,7 +1071,7 @@ ar
 aZ
 aH
 aO
-aY
+aO
 bf
 aZ
 hl
@@ -1091,9 +1087,9 @@ aa
 (13,1,1) = {"
 aa
 aZ
-aN
+YX
 as
-bf
+bg
 as
 aZ
 aC
@@ -1111,7 +1107,7 @@ aa
 ar
 aZ
 bi
-bg
+by
 by
 aZ
 aC

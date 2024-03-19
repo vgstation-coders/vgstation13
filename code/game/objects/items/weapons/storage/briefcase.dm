@@ -49,33 +49,34 @@
 		user.Paralyse(2)
 		playsound(src, "swing_hit", 50, 1, -1)
 		return
-	..()
 
-/obj/item/weapon/storage/briefcase/afterattack(var/atom/target, var/mob/user, var/proximity_flag, var/click_parameters)
-	if(!proximity_flag)
-		return
+	if(!iscarbon(user))
+		M.LAssailant = null
+	else
+		M.LAssailant = user
+		M.assaulted_by(user)
 
-	if (!isliving(target))
-		return
-
-	var/mob/living/M = target
-
-	if (M.stat == CONSCIOUS && M.health < 50)
-		if(prob(90))
-			if ((istype(M, /mob/living/carbon/human) && istype(M, /obj/item/clothing/head) && M.flags & 8 && prob(80)))
-				to_chat(M, "<span class='warning'>The helmet protects you from being hit hard in the head!</span>")
-				return
-			var/time = rand(2, 6)
-			if (prob(75))
-				M.Paralyse(time)
-			else
-				M.Stun(time)
-			if(!(M.status_flags & BUDDHAMODE))
-				M.stat = UNCONSCIOUS
-				M.visible_message("<span class='danger'>\The [M] has been knocked unconscious by \the [user]!</span>", "<span class='danger'>You have been knocked unconscious!</span>", "<span class='warning'>You hear someone fall.</span>")
-		else
-			M.visible_message("<span class='warning'>\The [user] tried to knock \the [M] unconcious!</span>", "<span class='warning'>\The [user] tried to knock you unconcious!</span>")
-			M.eye_blurry += 3
+	var/t = user.zone_sel.selecting
+	if (t == LIMB_HEAD)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H.stat < DEAD && H.health < 50 && prob(90))
+				if ((H.head && istype(H.head, /obj/item/clothing/head/helmet)) && prob(80))
+					to_chat(H, "<span class='warning'>The helmet protects you from being hit hard in the head!</span>")
+					return
+				var/time = rand(2, 6)
+				if (prob(75) && !H.stat && !(M.status_flags & BUDDHAMODE))
+					user.do_attack_animation(H, src)
+					playsound(H, hitsound, 50, 1, -1)
+					user.visible_message("<span class='danger'><B>[H] has been knocked unconscious!</B>", "<span class='warning'>You knock [H] unconscious!</span></span>")
+					H.Paralyse(time)
+					H.stat = UNCONSCIOUS
+					return
+				else
+					H.eye_blurry += 3
+			if(H.stat < UNCONSCIOUS)
+				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")	
+	return ..()
 
 /obj/item/weapon/storage/briefcase/MouseDropFrom(atom/over_object)
 	if(istype(over_object,/mob/living/carbon/human))

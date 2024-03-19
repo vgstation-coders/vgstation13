@@ -23,6 +23,7 @@
 	maxHealth = 150
 	speed = 1
 	stat_attack = DEAD //Gotta chow down somehow
+	treadmill_speed = 2
 	size = SIZE_BIG
 	vision_range = 12 //Slightly larger vision range
 	harm_intent_damage = 8
@@ -131,10 +132,12 @@
 	icon_living = "wendigo_med"
 	icon_dead = "wendigo_med_dead"
 	pixel_x = -8 * PIXEL_MULTIPLIER
+	treadmill_speed = 7
 	health = 250
 	maxHealth = 250
 	melee_damage_lower = 20
 	melee_damage_upper = 35
+
 
 /mob/living/simple_animal/hostile/wendigo/evolved/check_evolve()
 	if(consumes > EVOLEVOLV && (!animal_count.Find(/mob/living/simple_animal/hostile/wendigo/alpha) || animal_count[/mob/living/simple_animal/hostile/wendigo/alpha] <= 0))
@@ -151,6 +154,7 @@
 	icon_dead = "wendigo_dead"
 	var/icon_enraged = "wendigo"
 	pixel_x = -16 * PIXEL_MULTIPLIER
+	treadmill_speed = 16 //Worth the risk, surely
 	health = 600
 	maxHealth = 600
 	speed = 5
@@ -217,6 +221,7 @@
 	icon_living = "yeti"
 	speed = -1
 	move_to_delay = 1 //RUN
+	treadmill_speed = 30 //This is here as a joke. Do not use this as a point of comparison in the future.
 	health = 150
 	maxHealth = 150
 	melee_damage_lower = 20

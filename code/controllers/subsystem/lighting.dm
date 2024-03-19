@@ -22,7 +22,7 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 	create_all_lighting_overlays()
 	..()
 
-/datum/subsystem/lighting/fire(resumed=FALSE)
+/datum/subsystem/lighting/fire(resumed=FALSE, allow_breaks=TRUE)
 	var/real_tick_limit = CURRENT_TICKLIMIT
 	CURRENT_TICKLIMIT = (real_tick_limit - world.tick_usage)/3
 	var/i = 0
@@ -41,7 +41,7 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 		L.force_update = FALSE
 		L.needs_update = FALSE
 
-		if (TICK_CHECK)
+		if (TICK_CHECK && allow_breaks)
 			break
 	if (i)
 		lighting_update_lights.Cut(1, i+1)
@@ -54,7 +54,7 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 
 		C.update_overlays()
 		C.needs_update = FALSE
-		if (TICK_CHECK)
+		if (TICK_CHECK && allow_breaks)
 			break
 	if (i)
 		lighting_update_corners.Cut(1, i+1)
@@ -70,7 +70,7 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 
 		O.update_overlay()
 		O.needs_update = FALSE
-		if (TICK_CHECK)
+		if (TICK_CHECK && allow_breaks)
 			break
 	if (i)
 		lighting_update_overlays.Cut(1, i+1)

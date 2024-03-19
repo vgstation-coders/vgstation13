@@ -110,12 +110,16 @@ steam.start() -- spawns the effect
 	icon_state = "extinguish"
 	density = 0
 
-/datum/effect/system/steam_spread/set_up(n = 3, c = 0, turf/loc)
+/datum/effect/system/steam_spread
+	var/color
+
+/datum/effect/system/steam_spread/set_up(n = 3, c = 0, turf/loc, var/_color = null)
 	if(n > 10)
 		n = 10
 	number = n
 	cardinals = c
 	location = loc
+	color = _color
 
 /datum/effect/system/steam_spread/start()
 	var/i = 0
@@ -124,6 +128,9 @@ steam.start() -- spawns the effect
 			if(holder)
 				src.location = get_turf(holder)
 			var/obj/effect/steam/steam = new /obj/effect/steam(src.location)
+			if (color)
+				steam.icon_state = "extinguish_gray"
+				steam.color = color
 			var/direction
 			if(src.cardinals)
 				direction = pick(cardinal)
@@ -143,6 +150,8 @@ steam.start() -- spawns the effect
 // will always spawn at the items location.
 /////////////////////////////////////////////
 
+#define SPARK_TEMP 500
+
 /obj/effect/sparks
 	name = "sparks"
 	desc = "it's a spark what do you need to know?"
@@ -151,12 +160,16 @@ steam.start() -- spawns the effect
 
 	var/move_dir = 0
 	var/energy = 0
+	var/surfaceburn = 1
+
+/obj/effect/sparks/nosurfaceburn
+	surfaceburn = 0
 
 /obj/effect/sparks/New(var/travel_dir)
 	..()
 	var/turf/T = loc
 	if(istype(T))
-		T.hotspot_expose(1000, 100, surfaces = 1)
+		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 
 /obj/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
 	move_dir=travel_dir
@@ -164,14 +177,14 @@ steam.start() -- spawns the effect
 	processing_objects.Add(src)
 	var/turf/T = loc
 	if (istype(T, /turf))
-		T.hotspot_expose(1000, 100, surfaces = 1)
+		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 
 /obj/effect/sparks/Destroy()
 	processing_objects.Remove(src)
 	var/turf/T = src.loc
 
 	if (istype(T, /turf))
-		T.hotspot_expose(1000, 100, surfaces = 1)
+		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 
 	..()
 
@@ -179,7 +192,7 @@ steam.start() -- spawns the effect
 	..()
 	var/turf/T = src.loc
 	if (istype(T, /turf))
-		T.hotspot_expose(1000,100, surfaces = 1)
+		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 	return
 
 /obj/effect/sparks/process()
@@ -200,7 +213,7 @@ steam.start() -- spawns the effect
 	else
 		location = get_turf(loca)
 
-/datum/effect/system/spark_spread/start()
+/datum/effect/system/spark_spread/start(surfaceburn = TRUE)
 	if (holder)
 		location = get_turf(holder)
 	if(!location)
@@ -215,15 +228,20 @@ steam.start() -- spawns the effect
 	for (var/i = 1 to number)
 		var/nextdir=pick_n_take(directions)
 		if(nextdir)
-			var/obj/effect/sparks/sparks = new /obj/effect/sparks(location)
-			sparks.start(nextdir)
-
+			if(surfaceburn)
+				var/obj/effect/sparks/sparks = new /obj/effect/sparks(location)
+				sparks.start(nextdir)
+			else
+				var/obj/effect/sparks/nosurfaceburn/sparks = new /obj/effect/sparks/nosurfaceburn(location)
+				sparks.start(nextdir)
 // This sparks.
-/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE)
+/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = TRUE) //surfaceburn means the sparks can ignite things on the ground. set it to false to keep eg. portals like in the time agent event from burning down the station
 	loc = get_turf(loc)
 	var/datum/effect/system/spark_spread/S = new
 	S.set_up(amount, cardinals, loc)
-	S.start()
+	S.start(surfaceburn)
+
+#undef SPARK_TEMP
 
 /////////////////////////////////////////////
 //// SMOKE SYSTEMS

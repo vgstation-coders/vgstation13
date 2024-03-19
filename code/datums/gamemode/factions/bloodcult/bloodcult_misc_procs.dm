@@ -103,7 +103,7 @@ var/static/list/valid_cultpower_slots = list(
 
 /mob/living/carbon/proc/update_convertibility()
 	var/convertibility = get_convertibility()
-	var/image/I =  image('icons/mob/hud.dmi', src, "hudblank")
+	var/image/I =  new/image/hud('icons/mob/hud.dmi', src, "hudblank")
 	switch(convertibility)
 		if (CONVERTIBLE_ALWAYS)
 			I.icon_state = "convertible"
