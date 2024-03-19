@@ -196,7 +196,7 @@
 			revkilled++
 			continue
 		var/turf/T = M.current.loc
-		if(T && (istype(T.loc, /area/security/prison) || istype(T.loc, /area/security/perma) || istype(T, /turf/simulated/floor/shuttle/brig)))
+		if(T && (istype(T.loc, /area/security/brig) || istype(T.loc, /area/security/perma) || istype(T, /turf/simulated/floor/shuttle/brig)))
 			if(istype(M.current, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = M.current
 				if(!H.restrained())
