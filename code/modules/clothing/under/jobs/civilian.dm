@@ -178,7 +178,7 @@
 		var/message= replacetext(lowertext(speech.message), " ", "")
 		if((message in lawyersounds[L.gender]) && lawyersounds[L.gender][message])
 			playsound(L.loc,lawyersounds[L.gender][message],50)
-			L.emote("points dramatically!")
+			L.emote("me",1,"points dramatically!")
 
 /obj/item/clothing/under/lawyer/black
 	icon_state = "lawyer_black"

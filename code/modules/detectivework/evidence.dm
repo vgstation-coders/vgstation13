@@ -38,12 +38,9 @@
 	. = ..()
 	var/mob/living/carbon/human/user = usr
 	if(istype(user))
-		var/turf/T = get_turf(target)
 		var/obj/item/clothing/under/lawyer/L = user.w_uniform
-		if(istype(L) && T && istype(T.loc,/area/crew_quarters/courtroom) && (locate(/obj/structure/table) in T))
+		if(istype(L) && istype(get_area(target),/area/crew_quarters/courtroom) && istype(target,/obj/structure/table))
 			user.say("Take that!")
-			playsound(user.loc,L.lawyersounds[user.gender]["takethat!"],50)
-			user.emote("points dramatically!")
 
 /obj/item/weapon/storage/box/evidence
 	name = "evidence bag box"
