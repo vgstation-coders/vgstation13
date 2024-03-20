@@ -171,7 +171,7 @@
 		if(1)
 			dat += "It is omnivorous and will eat tray pests and weeds for sustenance.<br>"
 		if(2)
-			dat	+= "It is voracious and poses a significant threat to living things around it.<br>"
+			dat	+= "It is carnivorous and poses a significant threat to living things around it.<br>"
 
 	if(grown_seed.alter_temp)
 		dat += "It will gradually alter the local room temperature to match its ideal habitat.<br>"
