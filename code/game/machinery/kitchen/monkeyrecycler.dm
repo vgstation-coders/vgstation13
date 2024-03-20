@@ -39,7 +39,7 @@
 	minimum_animals = max(1,4 - (manipcount/2)) //Tier 1 = 3, Tier 2 = 2, Tier 3 = 1
 	if(lasercount >= 3)
 		can_recycle_live = TRUE
-		desc = "A machine used for recycling simple animals into animal cubes."
+		desc = "A machine used for recycling animals into animal cubes."
 
 /obj/machinery/monkey_recycler/attackby(var/obj/item/O, var/mob/user)
 	if(..())
