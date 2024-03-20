@@ -5,7 +5,7 @@
 	// Oldspace for people who don't have parallax.
 	icon = 'icons/turf/space.dmi'
 	icon_state = "0"
-	plane = TURF_PLANE
+	plane = SPACE_BACKGROUND_PLANE
 	intact = 0 // make pipes appear above space
 
 	var/health=80 // 2x that of an rwindow
