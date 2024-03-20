@@ -49,6 +49,10 @@
 /obj/machinery/monkey_recycler/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	return process_monkey(AM)
 
+/obj/machinery/monkey_recycler/emag_act(mob/user)
+	. = ..()
+	emagged = 1
+
 /obj/machinery/monkey_recycler/proc/process_monkey(var/obj/item/O, var/mob/user)
 	var/mob/living/target = O
 	var/failmsg
@@ -63,7 +67,7 @@
 			failmsg = "\the [target] is too sapient for \the [src]."
 		else if(target.stat == CONSCIOUS && !can_recycle_live)
 			failmsg = "\the [target] is struggling far too much to put it in \the [src]."
-		else if(target.abiotic())
+		else if(target.abiotic(1))
 			failmsg = "\the [target] may not have abiotic items on in \the [src]."
 		else
 			if(user) // necessary line, or else the holder or grab could be spammed to abuse this for more monkey cubes
