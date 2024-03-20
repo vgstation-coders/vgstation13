@@ -7,6 +7,7 @@
 
 /obj/structure/bed/chair/vehicle/gigadrill
 	name = "gigadrill"
+	desc = "An old and dusty vehicle with a mining drill - structure composed of titanium-carbide alloy, with tip and drill lines edged in an alloy of diamond and plasma"
 	icon_state = "gigadrill"
 	keytype = /obj/item/key/gigadrill
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/gigadrill
