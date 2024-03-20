@@ -1,5 +1,5 @@
 /obj/machinery/monkey_recycler
-	name = "Animal Recycler"
+	name = "\improper Animal Recycler"
 	desc = "A machine used for recycling dead animals into animal cubes."
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "grinder"
@@ -59,11 +59,11 @@
 		target = H.stored_mob*/
 	if(istype(target))
 		if((target.key || target.ckey) && !emagged)
-			failmsg = "\the [target] is too sapient for the recycler."
+			failmsg = "\the [target] is too sapient for \the [src]."
 		else if(target.stat == CONSCIOUS && !can_recycle_live)
-			failmsg = "\the [target] is struggling far too much to put it in the recycler."
+			failmsg = "\the [target] is struggling far too much to put it in \the [src]."
 		else if(target.abiotic())
-			failmsg = "\the [target] may not have abiotic items on."
+			failmsg = "\the [target] may not have abiotic items on in \the [src]."
 		else
 			if(user) // necessary line, or else the holder or grab could be spammed to abuse this for more monkey cubes
 				user.drop_item(O,force_drop = 1)
@@ -79,12 +79,12 @@
 			use_power(500)
 			src.grinded[ourtype]++
 			if(user)
-				to_chat(user, "<span class='notice'>The machine now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
+				to_chat(user, "<span class='notice'>\the [src] now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
 			else
-				visible_message("<span class='notice'>The machine now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
+				visible_message("<span class='notice'>\the [src] now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
 			return TRUE
 	else
-		failmsg = "The machine only accepts animals!"
+		failmsg = "\the [src] only accepts animals!"
 	if(failmsg)
 		failmsg = "<span class='warning'>[failmsg]</span>"
 		if(user)
