@@ -117,7 +117,7 @@
 	else if(grown_seed.toxin_affinity > 7)
 		dat += "It requires [grown_seed.fluid_consumption] units of toxins per cycle.<br>"
 	else if(grown_seed.toxin_affinity >= 5 && grown_seed.toxin_affinity <= 7)
-		dat += "it requires [grown_seed.fluid_consumption * 0.5] of both water and toxins per cycle.<br>"
+		dat += "It requires [grown_seed.fluid_consumption * 0.5] of both water and toxins per cycle.<br>"
 
 	dat += "It thrives in a temperature of [grown_seed.ideal_heat] Kelvin and can tolerate deviations of up to [grown_seed.heat_tolerance] Kelvin.<br>"
 
