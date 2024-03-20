@@ -54,9 +54,9 @@
 	if(istype(O, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = O
 		target = G.affecting
-	else if(istype(O, /obj/item/weapon/holder))
+	/*else if(istype(O, /obj/item/weapon/holder))
 		var/obj/item/weapon/holder/H = O
-		target = H.stored_mob
+		target = H.stored_mob*/
 	if(istype(target))
 		if((target.key || target.ckey) && !emagged)
 			failmsg = "\the [target] is too sapient for the recycler."
