@@ -47,56 +47,72 @@
 	process_monkey(O, user)
 
 /obj/machinery/monkey_recycler/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
-	return process_monkey(AM)
-
-/obj/machinery/monkey_recycler/emag_act(mob/user)
-	. = ..()
-	emagged = 1
-
-/obj/machinery/monkey_recycler/proc/process_monkey(var/obj/item/O, var/mob/user)
-	var/mob/living/target = O
-	var/failmsg
-	if(istype(O, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = O
-		target = G.affecting
-	/*else if(istype(O, /obj/item/weapon/holder))
-		var/obj/item/weapon/holder/H = O
-		target = H.stored_mob*/
-	if(istype(target))
+	if(isliving(AM))
+		var/mob/living/target = AM
+		if(target.stat == CONSCIOUS && !can_recycle_live)
+			return FALSE
 		if((target.key || target.ckey) && !emagged)
-			failmsg = "\the [target] is too sapient for \the [src]."
-		else if(target.stat == CONSCIOUS && !can_recycle_live)
-			failmsg = "\the [target] is struggling far too much to put it in \the [src]."
-		else if(target.abiotic(1))
-			failmsg = "\the [target] may not have abiotic items on in \the [src]."
+			return FALSE
+		if(target.abiotic())
+			return FALSE
 		else
-			if(user) // necessary line, or else the holder or grab could be spammed to abuse this for more monkey cubes
-				user.drop_item(O,force_drop = 1)
 			var/ourtype = target.type
-			if(emagged)
-				for(var/datum/body_archive/archive in body_archives)
-					if(archive && archive.key == target.key)
-						ref_body_archives.Add(archive)
+			for(var/datum/body_archive/archive in body_archives)
+				if(archive.key == target.key)
+					ref_body_archives.Add(archive)
 			qdel(target)
-			if(user)
-				to_chat(user, "<span class='notice'>You stuff \the [target] in the machine.</span>")
 			playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 			use_power(500)
 			src.grinded[ourtype]++
-			if(user)
-				to_chat(user, "<span class='notice'>\the [src] now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
-			else
-				visible_message("<span class='notice'>\the [src] now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
+			visible_message("<span class='notice'>The machine now has [grinded[ourtype]] worth of material stored for this animal.</span>")
 			return TRUE
-	else
-		failmsg = "\the [src] only accepts animals!"
-	if(failmsg)
-		failmsg = "<span class='warning'>[failmsg]</span>"
-		if(user)
-			to_chat(user, failmsg)
-		else
-			visible_message(failmsg)
 	return FALSE
+
+/obj/machinery/monkey_recycler/proc/process_monkey(var/obj/item/O, var/mob/user)
+	if(istype(O, /obj/item/weapon/grab))
+		var/obj/item/weapon/grab/G = O
+		var/grabbed = G.affecting
+		if(isliving(grabbed))
+			var/mob/living/target = grabbed
+			if((target.key || target.ckey) && !emagged)
+				to_chat(user, "<span class='warning'>\the [target] is too sapient for the recycler.</span>")
+				return
+			if(target.stat == CONSCIOUS && !can_recycle_live)
+				to_chat(user, "<span class='warning'>\the [target] is struggling far too much to put it in the recycler.</span>")
+				return
+			if(target.abiotic())
+				to_chat(user, "<span class='warning'>\the [target] may not have abiotic items on.</span>")
+				return
+			else
+				user.drop_item(G, force_drop = 1)
+				var/ourtype = target.type
+				QDEL_NULL(target)
+				to_chat(user, "<span class='notice'>You stuff \the [target] in the machine.")
+				playsound(src, 'sound/machines/juicer.ogg', 50, 1)
+				use_power(500)
+				src.grinded[ourtype]++
+				to_chat(user, "<span class='notice'>The machine now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
+		else
+			to_chat(user, "<span class='warning'>The machine only accepts animals!</span>")
+	else if(isliving(O))
+		var/mob/living/target = O
+		if((target.key || target.ckey) && !emagged)
+			to_chat(user, "<span class='warning'>\the [target] is too sapient for the recycler.</span>")
+			return
+		if(target.stat == CONSCIOUS && !can_recycle_live)
+			to_chat(user, "<span class='warning'>\the [target] is struggling far too much to put it in the recycler.</span>")
+			return
+		if(target.abiotic())
+			to_chat(user, "<span class='warning'>\the [target] may not have abiotic items on.</span>")
+			return
+		else
+			var/ourtype = target.type
+			QDEL_NULL(target)
+			to_chat(user, "<span class='notice'>You stuff \the [target] in the machine.</span>")
+			playsound(src, 'sound/machines/juicer.ogg', 50, 1)
+			use_power(500)
+			src.grinded[ourtype]++
+			to_chat(user, "<span class='notice'>The machine now has [grinded[ourtype]] animals worth of material of this type stored.</span>")
 
 /obj/machinery/monkey_recycler/attack_hand(var/mob/user as mob)
 	if(..())
@@ -114,19 +130,19 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/MW = new(src.loc)
 		if(ref_body_archives.len)
 			for(var/datum/body_archive/BA in ref_body_archives)
-				if(BA && BA.mob_type == pickedtype)
+				if(BA.mob_type == pickedtype)
 					var/mob/living/temp_M = new pickedtype
 					var/mob/living/M = temp_M.actually_reset_body(archive = BA, our_mind = get_mind_by_key(BA.key))
 					M.forceMove(MW)
 					MW.contained_mob = M
-					MW.name = "[M] cube"
+					MW.name = "[MW] cube"
 					ref_body_archives.Remove(BA)
 					qdel(temp_M)
 					break
 		else
-			var/mob/living/MW_mob = pickedtype
-			MW.contained_mob = pickedtype
-			MW.name = "[initial(MW_mob.name)] cube"
+			var/mob/living/MW_mob = new pickedtype(MW)
+			MW.contained_mob = MW_mob
+			MW.name = "[MW_mob] cube"
 		to_chat(user, "<span class='notice'>The machine's display flashes that it has [grinded[pickedtype]] animals worth of material of this type left.</span>")
 	else
 		to_chat(user, "<span class='warning'>The machine needs at least [minimum_animals] same type animal\s worth of material to produce an animal cube.</span>")

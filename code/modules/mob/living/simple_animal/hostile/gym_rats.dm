@@ -88,7 +88,7 @@
 				to_chat(src, text("<span class='warning'>You find something!</span>"))
 				new /obj/item/weapon/reagent_containers/food/snacks/meat/scraps(src.loc)
 
-	if(is_type_in_list(A, edibles) && A != loc) // If we click on something edible, it's time to chow down! // dumb hotfix so they don't eat themselves inside an animal cube
+	if(is_type_in_list(A, edibles)) // If we click on something edible, it's time to chow down!
 		delayNextAttack(10)
 		chowdown(A)
 	if(is_type_in_list(A, gym_equipments)) // If we click on gym equipment, it's time to work out!
