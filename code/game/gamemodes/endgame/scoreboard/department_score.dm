@@ -77,7 +77,7 @@
 /datum/controller/gameticker/scoreboard/proc/service_score()
 	//Janitor
 	//Check how many uncleaned mess are on the station.
-	var/list/valid_areas = the_station_areas.Copy() - typesof(/area/holodeck) //excluding these for now because subtypes are on z2 normally
+	var/list/valid_areas = (the_station_areas.Copy() - typesof(/area/holodeck)) + /area/holodeck/alphadeck
 	for(var/obj/effect/decal/cleanable/M in decals)
 		var/area/A = get_area(M)
 		if(is_type_in_list(A,valid_areas))
