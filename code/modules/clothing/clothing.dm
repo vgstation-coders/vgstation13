@@ -164,9 +164,9 @@
 			to_chat(user, "<span class='notice'>You attach [A] to [src].</span>")
 			attach_accessory(A)
 			A.add_fingerprint(user)
-		if(ishuman(loc))
-			var/mob/living/carbon/human/H = loc
-			H.update_inv_by_slot(slot_flags)
+		if(iscarbon(loc))
+			var/mob/living/carbon/carbon = loc
+			carbon.update_inv_by_slot(slot_flags)
 		return 1
 	if(I.is_screwdriver(user))
 		for(var/obj/item/clothing/accessory/accessory in priority_accessories())
@@ -376,9 +376,9 @@
 
 	accessory.on_removed(user)
 	accessories.Remove(accessory)
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		H.update_inv_by_slot(slot_flags)
+	if(iscarbon(user))
+		var/mob/living/carbon/carbon_user = user
+		carbon_user.update_inv_by_slot(slot_flags)
 	update_verbs()
 
 /obj/item/clothing/proc/get_accessory_by_exclusion(var/exclusion)

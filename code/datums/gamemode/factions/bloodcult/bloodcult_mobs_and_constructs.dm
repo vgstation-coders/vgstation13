@@ -568,14 +568,14 @@ var/list/astral_projections = list()
 		var/mob/living/carbon/human/H = body
 		//instead of just adding an overlay of the body's uniform and suit, we'll first process them a bit so the leg part is mostly erased, for a ghostly look.
 		overlays += crop_human_suit_and_uniform(body)
-		overlays += H.obj_overlays[ID_LAYER]
-		overlays += H.obj_overlays[EARS_LAYER]
-		overlays += H.obj_overlays[GLASSES_LAYER]
-		overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-		overlays += H.obj_overlays[BELT_LAYER]
-		overlays += H.obj_overlays[BACK_LAYER]
-		overlays += H.obj_overlays[HEAD_LAYER]
-		overlays += H.obj_overlays[HANDCUFF_LAYER]
+		overlays += H.overlays_standing[ID_LAYER]
+		overlays += H.overlays_standing[EARS_LAYER]
+		overlays += H.overlays_standing[GLASSES_LAYER]
+		overlays += H.overlays_standing[GLASSES_OVER_HAIR_LAYER]
+		overlays += H.overlays_standing[BELT_LAYER]
+		overlays += H.overlays_standing[BACK_LAYER]
+		overlays += H.overlays_standing[HEAD_LAYER]
+		overlays += H.overlays_standing[HANDCUFF_LAYER]
 
 	//giving control to the player
 	key = body.key

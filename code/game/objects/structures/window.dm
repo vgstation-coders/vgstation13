@@ -28,7 +28,7 @@ var/list/one_way_windows
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
 	pass_flags_self = PASSGLASS
-	var/obj/abstract/Overlays/damage_overlay
+	var/mutable_appearance/damage_overlay
 	var/image/oneway_overlay
 	var/cracked_base = "crack"
 
