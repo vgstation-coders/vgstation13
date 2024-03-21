@@ -1,18 +1,18 @@
-/mob/verb/up()
+/mob/proc/up()
 	set name = "Move Upwards"
 	set category = "IC"
 
 	if(zMove(UP))
 		to_chat(src, "<span class='notice'>You move upwards.</span>")
 
-/mob/verb/down()
+/mob/proc/down()
 	set name = "Move Down"
 	set category = "IC"
 
 	if(zMove(DOWN))
 		to_chat(src, "<span class='notice'>You move down.</span>")
 
-/mob/verb/lookup()
+/mob/proc/lookup()
 	set name = "Look Up"
 	set category = "IC"
 
@@ -28,6 +28,18 @@
 			to_chat(src, "<span class='warning'>You see nothing but the ceiling.</span>")
 	else
 		to_chat(src, "<span class='warning'>You don't feel like doing that.</span>")
+
+/mob/proc/update_multi_z_verbs(mob/user, to_z, from_z)
+	if(HasAbove(src.z))
+		verbs += /mob/proc/up
+		verbs += /mob/proc/lookup
+	else
+		verbs -= /mob/proc/up
+		verbs -= /mob/proc/lookup
+	if(HasBelow(src.z))
+		verbs += /mob/proc/down
+	else
+		verbs -= /mob/proc/down
 
 /mob/proc/lookup_reset_view(atom/movable/mover)
 	unregister_event(/event/moved, src, nameof(src::lookup_reset_view()))

@@ -239,6 +239,9 @@
 
 	update_colour(0)
 
+	register_event(/event/z_transition, src, nameof(src::update_multi_z_verbs()))
+	update_multi_z_verbs()
+
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
 		if(virtualhearer)
