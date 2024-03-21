@@ -76,14 +76,15 @@
 
 /datum/controller/gameticker/scoreboard/proc/service_score()
 	//Janitor
-	//Check how many uncleaned mess are on the station. We can't run through cleanable for reasons, so yeah, long
+	//Check how many uncleaned mess are on the station.
+	var/list/valid_areas = the_station_areas.Copy() - typesof(/area/holodeck)
 	for(var/obj/effect/decal/cleanable/M in decals)
 		var/area/A = get_area(M)
-		if(is_type_in_list(A,the_station_areas))
+		if(is_type_in_list(A,valid_areas))
 			score.mess++
 	for(var/obj/item/trash/T in trash_items)
 		var/area/A = get_area(T)
-		if(is_type_in_list(A,the_station_areas))
+		if(is_type_in_list(A,valid_areas))
 			score.litter++
 	if(score.mess < 5 && score.litter < 5) //Not a single mess or litter on station
 		score.messbonus = 5000
