@@ -165,8 +165,10 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Destroyed Silicons:</B> [score.deadsilicon] ([find_active_faction_by_type(/datum/faction/malf) ? score.deadsilicon * 500 : score.deadsilicon * -500] Points)<BR>"
 	if (score.deadaipenalty > 0)
 		dat += "<B>AIs Destroyed:</B> [score.deadaipenalty] ([find_active_faction_by_type(/datum/faction/malf) ? score.deadaipenalty * 1000 : score.deadaipenalty * -1000] Points)<BR>"
-	dat += "<B>Uncleaned Messes:</B> [score.mess] (-[score.mess] Points)<BR>"
-	dat += "<B>Trash on Station:</B> [score.litter] (-[score.litter] Points)<BR>"
+	if(score.mess > 0)
+		dat += "<B>Uncleaned Messes:</B> [score.mess] (-[score.mess] Points)<BR>"
+	if(score.litter > 0)
+		dat += "<B>Trash on Station:</B> [score.litter] (-[score.litter] Points)<BR>"
 	if(score.stuffnotforwarded > 0)
 		dat += "<B>Cargo Crates Not Forwarded:</B> [score.stuffnotforwarded] (-[score.stuffnotforwarded * 25] Points)<BR>"
 	if (score.powerloss > 0)
