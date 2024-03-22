@@ -16,9 +16,6 @@
 <b>Integrity:</b> Implant will last so long as the nanobots are inside the bloodstream."}
 
 /obj/item/weapon/implant/traitor/insert(mob/living/target, target_limb, mob/implanter)
-	. = ..()
-	if (!.)
-		return FALSE
 	if(!iscarbon(target))
 		to_chat(implanter, "<span class='danger'>The implant doesn't seem to be compatible with [target]!</span>")
 		return FALSE
@@ -36,9 +33,10 @@
 		F = ticker.mode.CreateFaction(/datum/faction/syndicate/greytide, 0, 1)
 		F.HandleNewMind(implanter.mind)
 	for(var/datum/role/grey in F.members)
-		if(grey.antag == imp_in.mind)
-			to_chat(implanter, "<span class='warning'>[imp_in] is already on our side!</span>")
+		if(grey.antag == target.mind)
+			to_chat(implanter, "<span class='warning'>[target] is already on our side!</span>")
 			return FALSE
+	. = ..()
 
 /obj/item/weapon/implant/traitor/implanted(mob/implanter)
 	for(var/obj/item/weapon/implant/I in imp_in)
@@ -47,11 +45,13 @@
 		if(istype(I, /obj/item/weapon/implant/traitor) || istype(I, /obj/item/weapon/implant/loyalty))
 			if(I.imp_in == imp_in)
 				imp_in.visible_message("<span class='big danger'>[imp_in] seems to resist the implant!</span>", "<span class='danger'>You feel a strange sensation in your head that quickly dissipates.</span>")
+				imp_in.visible_message("<span class='danger'>The implant drops to the floor.</span>", "<span class='danger'>Your body rejects the implant, which unceremoniously drops to the floor.</span>")
 				remove(imp_in)
 				return
 
 	if(istraitor(imp_in) || ischallenger(imp_in))
 		imp_in.visible_message("<span class='big danger'>[imp_in] seems to resist the implant!</span>", "<span class='danger'>You feel a familiar sensation in your head that quickly dissipates.</span>")
+		imp_in.visible_message("<span class='danger'>The implant drops to the floor.</span>", "<span class='danger'>Your body rejects the implant, which unceremoniously drops to the floor.</span>")
 		remove(imp_in)
 		return
 
