@@ -63,8 +63,11 @@
 	var/success = F.HandleRecruitedMind(imp_in.mind)
 	if(success)
 		F.forgeObjectives()
-		F.AnnounceObjectives()
 		update_faction_icons()
+		var/datum/role/R = imp_in.mind.GetRole(IMPLANTSLAVE)
+		if(R)
+			R.AnnounceObjectives()
+
 	else /* This will never actually happen at present. I don't know why it's here, but it's worth keeping around in case anyone has a funny idea for it. */
 		visible_message("<span class = 'warning'>The head of [imp_in] begins to glow a deep red. It is going to explode!</span>")
 		spawn(3 SECONDS)
