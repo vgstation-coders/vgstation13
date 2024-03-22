@@ -77,7 +77,7 @@
 		return
 
 	to_chat(imp_in, "<span class='notice'>You feel a surge of loyalty towards [implanter.name].</span>")
-	to_chat(imp_in, "<B><span class='big warning'>You've been shown the Greytide by [implanter.name]!</B> You now must lay down your life to protect them and assist in their goals at any cost.</span>")
+	to_chat(imp_in, "<span class='big warning'><b>You've been brainwashed into the Greytide by [implanter.name]!</b><br>You now must lay down your life to protect them and assist in his/her goals at any cost.</span>")
 	log_admin("[ckey(implanter.key)] has mind-slaved [ckey(imp_in.key)].")
 
 /obj/item/weapon/implant/traitor/handle_removal(mob/remover)
