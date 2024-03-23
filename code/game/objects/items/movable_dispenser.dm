@@ -14,6 +14,7 @@
 /obj/item/movable_machinery/proc/deploy()
 	if(!machine)
 		visible_message("\the [src] vanishes into thin air. contact an administrator.")
+		message_admins("\the [src] somehow didn't have the machine var set. this should never happen.")
 		qdel(src)
 		return
 	machine.forceMove(get_turf(src))
@@ -40,6 +41,7 @@
 	..()
 	if(!machine)
 		visible_message("\the [src] vanishes into thin air. contact an administrator.")
+		message_admins("\the [src] somehow didn't have the machine var set. this should never happen.")
 		qdel(src)
 		return
 	machine.forceMove(get_turf(src))
