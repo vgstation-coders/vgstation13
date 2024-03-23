@@ -108,16 +108,16 @@
 	if(grown_seed.nutrient_consumption == 0)
 		dat += "It does not require nutrients to subsist.<br>"
 	else
-		dat += "It consumes [grown_seed.nutrient_consumption] units of nutrient per cycle.<br>"
+		dat += "It consumes [grown_seed.nutrient_consumption] unit[grown_seed.nutrient_consumption == 1 ? "" : "s"] of nutrient per cycle.<br>"
 
 	if(grown_seed.fluid_consumption == 0)
 		dat += "It does not require any fluids to subsist.<br>"
 	else if(grown_seed.toxin_affinity < 5)
-		dat += "It requires [grown_seed.fluid_consumption] units of water per cycle.<br>"
+		dat += "It requires [grown_seed.fluid_consumption] unit[grown_seed.fluid_consumption == 1 ? "" : "s"] of water per cycle.<br>"
 	else if(grown_seed.toxin_affinity > 7)
-		dat += "It requires [grown_seed.fluid_consumption] units of toxins per cycle.<br>"
+		dat += "It requires [grown_seed.fluid_consumption] unit[grown_seed.fluid_consumption == 1 ? "" : "s"] of toxins per cycle.<br>"
 	else if(grown_seed.toxin_affinity >= 5 && grown_seed.toxin_affinity <= 7)
-		dat += "It requires [grown_seed.fluid_consumption * 0.5] of both water and toxins per cycle.<br>"
+		dat += "It requires [grown_seed.fluid_consumption * 0.5] unit[grown_seed.fluid_consumption == 1 ? "" : "s"] of both water and toxins per cycle.<br>"
 
 	dat += "It thrives in a temperature of [grown_seed.ideal_heat] Kelvin and can tolerate deviations of up to [grown_seed.heat_tolerance] Kelvin.<br>"
 
