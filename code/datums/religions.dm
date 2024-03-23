@@ -1567,7 +1567,7 @@ var/list/all_bible_styles = list(
 
 /datum/religion/viron
 	name = "The Vironese Faith"
-	diety_names = list("Pas", "Echidna", "Scylla", "Molpe", "Tartarus", "Heirax", "Thelxiepeia", "Phaea", "Sphigx", "Outsider")
+	deity_names = list("Pas", "Echidna", "Scylla", "Molpe", "Tartarus", "Heirax", "Thelxiepeia", "Phaea", "Sphigx", "Outsider")
 	bible_name = "The Chrasmologic Writings"
 	male_adept = "Augur"
 	female_adept = "Sibyl"
