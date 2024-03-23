@@ -42,7 +42,7 @@ var/global/Holiday = null
 					current_holidays += ST_PATRICKS_DAY
 
 		if(4) // Apr
-			if((DD != 1) && (time2text(world.timeofday, "DDD") == "Sat" || time2text(world.timeofday, "DDD") == "Sun")) //no idea what would happen if april fools gets set twice so we check just in case
+			if(DD != 1 && time2text(world.timeofday, "DDD") == "Sun") //no idea what would happen if april fools gets set twice so we check just in case
 				current_holidays += APRIL_FOOLS_DAY
 			switch(DD)
 				if(1)
