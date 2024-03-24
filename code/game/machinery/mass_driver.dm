@@ -183,6 +183,7 @@ var/list/mass_drivers = list()
 					Co_BACKSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 						Co_START_MSG = "{USER} begin{s} to un-weld {HOLDER} from the floor.",
 						Co_VIS_MSG = "{USER} un-weld{s} {HOLDER} from the floor.",
+						Co_AMOUNT = 1,
 						Co_DELAY = 40),
 					),
 				//2
@@ -190,6 +191,7 @@ var/list/mass_drivers = list()
 					Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
 						Co_START_MSG = "{USER} begin{s} to weld {HOLDER} to the floor.",
 						Co_VIS_MSG = "{USER} weld{s} {HOLDER} to the floor.",
+						Co_AMOUNT = 1,
 						Co_DELAY = 40),
 					Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
 						Co_START_MSG = "{USER} begin{s} to de-anchor {HOLDER} from the floor.",
@@ -203,8 +205,9 @@ var/list/mass_drivers = list()
 						Co_VIS_MSG = "{USER} anchor{s} {HOLDER} to the floor.",
 						Co_DELAY = 50),
 					Co_BACKSTEP = list(Co_KEY=/obj/item/tool/weldingtool,
-						Co_START_MSG = "{USER} begin{s} to cut the {HOLDER} apart...",
+						Co_START_MSG = "{USER} begin{s} to cut {HOLDER} apart...",
 						Co_VIS_MSG = "{USER} detach{es} the plasteel sheets from each other.",
+						Co_AMOUNT = 1,
 						Co_DELAY = 30),
 					),
 				)
