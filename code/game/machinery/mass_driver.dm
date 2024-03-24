@@ -215,7 +215,7 @@ var/list/mass_drivers = list()
 /datum/construction/reversible/mass_driver/action(atom/used_atom,mob/user)
 	return check_step(used_atom,user)
 
-/datum/construction/reversible/mass_driver/custom_action(index, diff, obj/item/used_atom, mob/user)
+/datum/construction/reversible/mass_driver/update_index(diff, mob/user)
 	. = ..()
 	if(ismovable(holder))
 		var/atom/movable/M = holder
