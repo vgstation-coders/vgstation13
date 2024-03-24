@@ -134,15 +134,7 @@ In short:
 		CHECK_TICK
 
 /datum/universal_state/hell/proc/convert_all_parallax()
-	for(var/client/C in clients)
-		var/obj/abstract/screen/plane_master/parallax_spacemaster/PS = locate() in C.screen
-		if(PS)
-			convert_parallax(PS)
-		CHECK_TICK
-
-/datum/universal_state/hell/convert_parallax(obj/abstract/screen/plane_master/parallax_spacemaster/PS)
-	PS.color = list(
-	0,0,0,0,
-	0,0,0,0,
-	0,0,0,0,
-	1,0,0,1)
+	for(var/mob/living/player in living_players)
+		if (player.hud_used)
+			player.hud_used.update_parallax()
+			CHECK_TICK

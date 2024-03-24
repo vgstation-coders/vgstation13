@@ -634,7 +634,7 @@
 			list("Tempting Goblet", "radial_paraphernalia_goblet", "A classy holder for your beverage of choice. Prank your enemies by hitting them with a goblet full of blood."),
 			list("Coffer", "radial_paraphernalia_coffer", "Keep your occult lab orderly by storing your cult paraphernalia in those coffers."),
 			list("Ritual Knife", "radial_paraphernalia_knife", "A long time ago a wizard enchanted one of those to infiltrate the realm of Nar-Sie and steal some soul stone shards. Now it's just a cool knife. Don't rely on it in a fight though."),
-			list("Arcane Tome", "radial_paraphernalia_tome", "Bring forth an arcane tome filled with Nar-Sie's knowledge. Harmful to the uninitiated in more ways than one. Ghosts can flick their pages."),
+			list("Arcane Tome", "radial_paraphernalia_tome", "Bring forth an arcane tome filled with Nar-Sie's knowledge. Contains a wealth of information regarding each runes, along with many other aspects of the cult."),
 			)
 		var/task = show_radial_menu(activator,get_turf(spell_holder),choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
 		if (!spell_holder.Adjacent(activator) || !task || gcDestroyed)

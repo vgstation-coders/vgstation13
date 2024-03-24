@@ -9,6 +9,7 @@ var/list/parallax_on_clients = list()
 var/parallax_initialized = 0
 var/space_color = "#050505"
 var/list/parallax_icon[(GRID_WIDTH**2)*3]
+var/list/cult_parallax[(GRID_WIDTH**2)]
 
 /obj/abstract/screen/parallax
 	var/base_offset_x = 0
@@ -87,20 +88,60 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 
 	C.screen |= C.parallax_dustmaster
 
+/datum/hud/proc/initialize_cult_parallax()
+	var/client/C = mymob.client
+	for(var/obj/abstract/screen/parallax/bgobj in cult_parallax)
+		var/obj/abstract/screen/parallax/parallax_layer = new /obj/abstract/screen/parallax
+		parallax_layer.appearance = bgobj.appearance
+		parallax_layer.base_offset_x = bgobj.base_offset_x
+		parallax_layer.base_offset_y = bgobj.base_offset_y
+		parallax_layer.parallax_speed = bgobj.parallax_speed
+		parallax_layer.screen_loc = bgobj.screen_loc
+		C.parallax_cult += parallax_layer
+		if(bgobj.parallax_speed)
+			C.parallax_movable += parallax_layer
+
 /datum/hud/proc/update_parallax()
 	var/client/C = mymob.client
 	if(C.prefs.space_parallax)
 		parallax_on_clients |= C
 		for(var/obj/abstract/screen/parallax/bgobj in C.parallax)
 			C.screen |= bgobj
+		if (universe.name == "Hell Rising")
+			C.parallax_master.color = list(
+				0.2,0,0,0,
+				0,0,0,0,
+				0,0,0,0,
+				0,0,0,0,
+				0,0,0,1)
+			if(!C.parallax_cult.len)
+				initialize_cult_parallax()
+			for(var/obj/abstract/screen/parallax/bgobj in C.parallax_cult)
+				C.screen |= bgobj
+		else
+			C.parallax_master.color = list(
+				1,0,0,0,
+				0,1,0,0,
+				0,0,1,0,
+				0,0,0,0,
+				0,0,0,1)
+			for(var/obj/abstract/screen/parallax/bgobj in C.parallax_cult)
+				C.screen -= bgobj
 		C.screen |= C.parallax_master
 		C.screen |= C.parallax_spacemaster
 		if(C.prefs.space_dust)
-			C.parallax_dustmaster.color = list(
-			1,0,0,0,
-			0,1,0,0,
-			0,0,1,0,
-			0,0,0,1)
+			if (universe.name == "Hell Rising")
+				C.parallax_dustmaster.color = list(
+				0.5,0,0,0,
+				0,0.5,0,0,
+				0,0,0.5,0,
+				0,0,0,1)
+			else
+				C.parallax_dustmaster.color = list(
+				1,0,0,0,
+				0,1,0,0,
+				0,0,1,0,
+				0,0,0,1)
 		else
 			C.parallax_dustmaster.color = list(0,0,0,0)
 	else
@@ -221,7 +262,34 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 		parallax_icon[index] = parallax_layer
 		index++
 
+	create_cult_parallax_icons()
+
 	parallax_initialized = 1
+
+/proc/create_cult_parallax_icons()
+	var/list/pixel_x = list()
+	var/list/pixel_y = list()
+	var/index = 1
+	for(var/i = 0 to (PARALLAX_IMAGE_TILES-1))
+		pixel_x += WORLD_ICON_SIZE * (i%PARALLAX_IMAGE_WIDTH)
+		pixel_y += WORLD_ICON_SIZE * round(i/PARALLAX_IMAGE_WIDTH)
+
+	for(var/i in 0 to ((GRID_WIDTH**2)-1))
+		var/obj/abstract/screen/parallax/parallax_layer = new /obj/abstract/screen/parallax
+
+		var/list/L = list()
+		for(var/j in 1 to PARALLAX_IMAGE_TILES)
+			var/image/I = image('icons/turf/space.dmi',"hell01")
+			I.pixel_x = pixel_x[j]
+			I.pixel_y = pixel_y[j]
+			L += I
+
+		parallax_layer.overlays = L
+		parallax_layer.parallax_speed = 0.5
+		parallax_layer.calibrate_parallax(i+1)
+		cult_parallax[index] = parallax_layer
+		index++
+
 
 /obj/abstract/screen/parallax/proc/calibrate_parallax(var/i)
 	if(!i)

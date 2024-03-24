@@ -4157,7 +4157,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				if (!choice)
 					return
 				var/turf/T = get_turf(usr)
-				var/obj/structure/cult/bloodstone/blood_stone = new(T)
+				var/obj/structure/cult/bloodstone/admin/blood_stone = new(T)
 				if(choice == "Yes")
 					blood_stone.flashy_entrance()
 				if(choice == "No")

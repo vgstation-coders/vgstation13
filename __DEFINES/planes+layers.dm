@@ -195,6 +195,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define EFFECTS_PLANE 			(12 + FLOAT_PLANE)			// For special effects.
 
+	#define BLOODSTONE_BASE		 		2
 	#define BELOW_PROJECTILE_LAYER 		3
 	#define PROJECTILE_LAYER 			4
 	#define ABOVE_PROJECTILE_LAYER 		5

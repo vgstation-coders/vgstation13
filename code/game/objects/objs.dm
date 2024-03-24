@@ -94,9 +94,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		cookvesselimage.pixel_x = offset_x
 		cookvesselimage.pixel_y = offset_y
 		overlays += cookvesselimage
-		shift_particles(list(offset_x,offset_y))
+		adjust_particles("position", list(offset_x,offset_y))
 	else
-		shift_particles(0)
+		adjust_particles("position", 0)
 
 /obj/proc/cook_temperature() //Returns the temperature the object cooks at.
 	return COOKTEMP_DEFAULT

@@ -604,6 +604,7 @@
 	offset_y = 88
 	layer = MIND_UI_FRONT
 	element_flags = MINDUI_FLAG_PROCESSING
+	var/red_blink = FALSE
 
 /obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count/process()
 	if (invisibility == 101)
@@ -628,15 +629,39 @@
 				var/hours_to_go = round(eclipse_ticks_to_go_at_current_rate/3600)
 				var/minutes_to_go = add_zero(num2text(round(eclipse_ticks_to_go_at_current_rate/60) % 60), 2)
 				var/seconds_to_go = add_zero(num2text(round(eclipse_ticks_to_go_at_current_rate) % 60), 2)
-				overlays += String2Image("[hours_to_go]:[minutes_to_go]:[seconds_to_go]",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
+				if (eclipse_ticks_to_go_at_current_rate <= 60)
+					if (!cult.soon_announcement)
+						cult.soon_announcement = TRUE
+						for (var/datum/role/R in cult.members)
+							var/mob/M = R.antag.current
+							to_chat(M, "<span class='sinister'>The Eclipse is almost upon us...</span>")
+
+					red_blink = !red_blink
+					var/image/I = String2Image("[hours_to_go]:[minutes_to_go]:[seconds_to_go]",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
+					if (red_blink)
+						I.color = "red"
+					else
+						I.color = null
+					overlays += I
+				else
+					overlays += String2Image("[hours_to_go]:[minutes_to_go]:[seconds_to_go]",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
 
 			if (BLOODCULT_STAGE_READY)
 				name = "Time until the Eclipse ends"
-				var/eclipse_ticks_before_end_at_current_rate = (sun.eclipse_manager.eclipse_end_time - world.time)/10
+				var/eclipse_ticks_before_end_at_current_rate = max(0, (sun.eclipse_manager.eclipse_end_time - world.time)/10)
 				var/hours_to_go = round(eclipse_ticks_before_end_at_current_rate/3600)
 				var/minutes_to_go = add_zero(num2text(round(eclipse_ticks_before_end_at_current_rate/60) % 60), 2)
 				var/seconds_to_go = add_zero(num2text(round(eclipse_ticks_before_end_at_current_rate) % 60), 2)
-				overlays += String2Image("[hours_to_go]:[minutes_to_go]:[seconds_to_go]",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
+				if (eclipse_ticks_before_end_at_current_rate == 0)
+					red_blink = !red_blink
+					var/image/I = String2Image("0:00:00",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
+					if (red_blink)
+						I.color = "red"
+					else
+						I.color = null
+					overlays += I
+				else
+					overlays += String2Image("[hours_to_go]:[minutes_to_go]:[seconds_to_go]",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
 
 			if (BLOODCULT_STAGE_ECLIPSE)
 				name = "Time until the Eclipse ends"
@@ -662,6 +687,7 @@
 	appearance_flags |= KEEP_TOGETHER
 	mask = image(icon, src, "eclipse_gauge_bg")
 	mask.blend_mode = BLEND_INSET_OVERLAY
+	add_particles("Cult Gauge")
 
 /obj/abstract/mind_ui_element/bloodcult_eclipse_gauge/process()
 	if (invisibility == 101)
@@ -675,22 +701,31 @@
 			if (BLOODCULT_STAGE_NORMAL)
 				name = "Time before the Eclipse"
 				mask.pixel_x = 288*(cult.eclipse_progress/cult.eclipse_target)
+				adjust_particles("position", generator("box", list(mask.pixel_x-16,-1), list(mask.pixel_x-16,-14)))
+				adjust_particles("velocity", list(-1*(mask.pixel_x)/40, 0))
 				overlays.len = 0
 				overlays += mask
 
 			if (BLOODCULT_STAGE_READY)
 				name = "Time until the Eclipse ends"
-				mask.pixel_x = 288*(cult.eclipse_progress/cult.eclipse_target)
+				mask.pixel_x = max(0, 288 - 288*((world.time - sun.eclipse_manager.eclipse_start_time)/(sun.eclipse_manager.eclipse_end_time - sun.eclipse_manager.eclipse_start_time)))
+				if (sun.eclipse_manager.eclipse_end_time <= world.time)
+					adjust_particles("spawning", 0)
+				else
+					adjust_particles("position", generator("box", list(mask.pixel_x-16,-1), list(mask.pixel_x-16,-14)))
+					adjust_particles("velocity", list((288-mask.pixel_x)/40, 0))
 				overlays.len = 0
 				overlays += mask
 
 			if (BLOODCULT_STAGE_ECLIPSE)
+				adjust_particles("spawning", 0)
 				name = "Time until the Eclipse ends"
 				mask.pixel_x = 288*(cult.eclipse_progress/cult.eclipse_target)
 				overlays.len = 0
 				overlays += mask
 			else
-				mask.pixel_x = 288*(cult.eclipse_progress/cult.eclipse_target)
+				adjust_particles("spawning", 0)
+				mask.pixel_x = 0
 				overlays.len = 0
 				overlays += mask
 

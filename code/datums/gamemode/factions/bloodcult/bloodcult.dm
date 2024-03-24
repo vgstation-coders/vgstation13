@@ -64,6 +64,13 @@
 	var/eclipse_contributors = list()//associative list: /mind = score
 	var/eclipse_countermeasures = 0//mostly chaplain's efforts to indirectly impede the cult with his own conversions and rituals
 
+	var/soon_announcement = FALSE
+	var/overtime_announcement = FALSE
+
+	var/bloodstone_rising_time = 0
+	var/bloodstone_duration = 430 SECONDS
+	var/bloodstone_target_time = 0
+
 	var/datum/rune_spell/tearreality/tear_ritual = null
 	var/obj/structure/cult/bloodstone/bloodstone = null		//we track the one spawned by the Tear Reality rune
 
@@ -73,11 +80,26 @@
 		if (BLOODCULT_STAGE_READY)
 			eclipse_trigger_cult()
 		if (BLOODCULT_STAGE_MISSED)
-			//TODO: warn cultists that the Eclipse window has passed, announce the end of the eclipse to the crew as well
+			for (var/datum/role/cultist in members)
+				var/mob/M = cultist.antag.current
+				to_chat(M, "<span class='sinister'>The Eclipse has passed. You won't be able to tear reality aboard this station anymore. Escape the station alive with your fellow cultists so you may try again another day.</span>")
 		if (BLOODCULT_STAGE_ECLIPSE)
-			..()
+			bloodstone_rising_time = world.time
+			bloodstone_target_time = world.time + bloodstone_duration
+			spawn (3 SECONDS)//leaving just a moment for the blood stone to rise.
+				last_security_level_change = SEC_LEVEL_RED
+				var/sec_change = TRUE
+				for(var/datum/faction/F in ticker.mode.factions)
+					if (F.last_security_level_change == SEC_LEVEL_DELTA)
+						sec_change = FALSE
+				command_alert(/datum/command_alert/eclipse_bloodstone)
+				if (sec_change)
+					ticker.StartThematic("endgame")
+					sleep(2 SECONDS)
+					set_security_level("red")
 		if (BLOODCULT_STAGE_DEFEATED)
 			..()
+			command_alert(/datum/command_alert/eclipse_bloodstone_broken)
 		if (BLOODCULT_STAGE_NARSIE)
 			call_shuttle_proc(null, "")
 
@@ -121,17 +143,10 @@
 						stage(BLOODCULT_STAGE_READY)
 					break
 		if (BLOODCULT_STAGE_READY)
-			delta = 1
-			if (last_process_time && (last_process_time < world.time))//carefully dealing with midnight rollover
-				delta = (world.time - last_process_time)
-				if(SSticker.initialized)
-					delta /= SSticker.wait
-			last_process_time = world.time
-
 			if (sun.eclipse == ECLIPSE_OVER)
 				stage(BLOODCULT_STAGE_MISSED)
 		if (BLOODCULT_STAGE_ECLIPSE)
-			..()
+			bloodstone.update_icon()
 		if (BLOODCULT_STAGE_DEFEATED)
 			..()
 		if (BLOODCULT_STAGE_NARSIE)
@@ -260,15 +275,11 @@
 	if(T && (T.z == map.zMainStation))//F I V E   T I L E S
 		if(!(locate("\ref[T]") in bloody_floors))
 			bloody_floors[T] = T
-			for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
-				B.update_icon()
 
 
 /datum/faction/bloodcult/proc/remove_bloody_floor(var/turf/T)
 	if (!istype(T))
 		return
-	for (var/obj/structure/cult/bloodstone/B in bloodstone_list)
-		B.update_icon()
 	bloody_floors -= T
 
 

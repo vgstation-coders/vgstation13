@@ -700,12 +700,14 @@ var/bloodstone_backup = 0
 
 	if (tear)
 		add_particles("Tear Reality")
+		icon = 'icons/obj/cult.dmi'
+		icon_state = "tear"
 		while(TRUE)
 			for (var/mob/M in dancers)
 				if (get_dist(src,M) > 1 || !i_can_dance(M) || M.occult_muted())
 					dancers -= M
 					continue
-			if (dancers.len <= 0)
+			if ((dancers.len <= 0) && (tear.dance_count < tear.dance_target))
 				qdel(src)
 				return
 			dance_move()
@@ -714,10 +716,13 @@ var/bloodstone_backup = 0
 			sleep(3)
 			dance_move()
 			tear.update_crystals()
-			var/obj/abstract/particles_holder/darkness_holder = particle_systems["Tear Reality"]
-			darkness_holder.particles.spawning = clamp(0.1 + 0.00375 * tear.dance_count,0.1,1)
-			var/scale = clamp(1 + 0.00416 * tear.dance_count,1,1.9)
-			darkness_holder.particles.scale = list(scale, scale)
+			if (tear.dance_count < tear.dance_target+10)
+				var/obj/abstract/particles_holder/darkness_holder = particle_systems["Tear Reality"]
+				darkness_holder.particles.spawning = clamp(0.1 + 0.00375 * tear.dance_count,0.1,1)
+				var/scale = clamp(1 + 0.00416 * tear.dance_count,1,1.9)
+				darkness_holder.particles.scale = list(scale, scale)
+			else
+				remove_particles("Tear Reality")
 			sleep(6)
 	else
 		while(TRUE)

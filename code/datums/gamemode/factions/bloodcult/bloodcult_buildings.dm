@@ -16,6 +16,9 @@
 	var/cancelling = 3//check to abort the ritual if interrupted
 	var/custom_process = 0
 
+/obj/structure/cult/get_cult_power()
+	return 1//light emitted by those won't be reduced during the eclipse
+
 /obj/structure/cult/proc/conceal()
 	var/obj/structure/cult/concealed/C = new(loc)
 	C.pixel_x = pixel_x
@@ -1003,7 +1006,7 @@ var/list/cult_spires = list()
 	if (!.)
 		return
 
-	// For now spires work as cult telecomms relay. Might give them another role later, maybe soul gem production instead of altars
+	// For now spires work as cult telecomms relay. Eventually they'll serve as a link between the station and the blood realm.
 
 	/*
 	if (!ishuman(user))
@@ -1361,53 +1364,6 @@ var/list/cult_spires = list()
 	I.blend_mode = BLEND_ADD
 	overlays += I
 
-
-/*
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                       //
-//      VEIL DRILL       //	// better name pending
-//                       //
-///////////////////////////
-/obj/structure/cult/drill
-	name = "veil drilld"
-	desc = "A veil drill."
-	icon = 'icons/obj/cult_64x64.dmi'
-	icon_state = "spire1"
-	health = 100
-	maxHealth = 100
-	pixel_x = -16 * PIXEL_MULTIPLIER
-	pixel_y = -4 * PIXEL_MULTIPLIER
-	sound_damaged = 'sound/effects/stone_hit.ogg'
-	sound_destroyed = 'sound/effects/stone_crumble.ogg'
-	plane = EFFECTS_PLANE
-	layer = BELOW_PROJECTILE_LAYER
-	light_color = "#FF0000"
-	custom_process = 1
-
-	var/range
-
-/obj/structure/cult/drill/New()
-	..()
-	processing_objects.Add(src)
-	set_light(1)
-	var/datum/holomap_marker/holomarker = new()
-	holomarker.id = HOLOMAP_MARKER_CULT_SPIRE
-	holomarker.filter = HOLOMAP_FILTER_CULT
-	holomarker.x = src.x
-	holomarker.y = src.y
-	holomarker.z = src.z
-	holomap_markers[HOLOMAP_MARKER_CULT_SPIRE+"_\ref[src]"] = holomarker
-
-
-/obj/structure/cult/drill/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-/obj/structure/cult/drill/process()
-	..()
-
-*/
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                       //Spawns next to blood stones
 //    OBSIDIAN PILLAR    //
@@ -1477,8 +1433,6 @@ var/list/cult_spires = list()
 //                       //
 ///////////////////////////
 
-var/list/bloodstone_list = list()
-
 /obj/structure/cult/bloodstone
 	name = "blood stone"
 	icon_state = "bloodstone-enter1"
@@ -1492,16 +1446,62 @@ var/list/bloodstone_list = list()
 	layer = BELOW_PROJECTILE_LAYER
 	light_color = "#FF0000"
 
+	var/ready = FALSE
+	var/image/image_base
+	var/image/image_circle
+	var/image/image_stones
+	var/image/image_lights
+	var/image/image_damage
+	var/datum/faction/bloodcult/cult
+
 /obj/structure/cult/bloodstone/New()
 	..()
 	set_light(3)
-	bloodstone_list.Add(src)
+	cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	image_base = image('icons/obj/cult_64x64.dmi',"bloodstone-base-old")
+	image_base.appearance_flags |= RESET_COLOR
+	image_base.layer = BLOODSTONE_BASE
+	image_damage = image('icons/obj/cult_64x64.dmi',"bloodstone_damage0")
+
+	image_circle = image('icons/obj/cult_64x64.dmi',"large_circle")
+	image_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+	image_circle.layer = ABOVE_TILE_LAYER
+	image_circle.appearance_flags |= RESET_COLOR
+	image_circle.pixel_y = -16
+	image_stones = image('icons/obj/cult_64x64.dmi',"tear_stones")
+	image_stones.plane = relative_plane(OBJ_PLANE)
+	image_stones.layer = BELOW_TABLE_LAYER
+	image_stones.appearance_flags |= RESET_COLOR
+	image_stones.pixel_y = -16
+	image_lights = image('icons/obj/cult_64x64.dmi',"tear_stones_light")
+	image_lights.plane = relative_plane(ABOVE_OBJ_PLANE)
+	image_lights.layer = TABLE_LAYER
+	image_lights.pixel_y = -16
+
+/obj/structure/cult/bloodstone/proc/overlays_pre()
+	overlays += image_base
+	overlays += image_circle
+	overlays += image_stones
+	overlays += image_lights
+	update_moody_light_index("tear_stones",'icons/lighting/moody_lights_64x64.dmi', "tear_stones", offY = -16)
+
+/obj/structure/cult/bloodstone/admin/overlays_pre()
+	overlays += image_base
+
+/obj/structure/cult/bloodstone/proc/overlays_post()
+	overlays -= image_base
+	image_base.icon_state = "bloodstone-base"
+	overlays += image_base
+
+/obj/structure/cult/bloodstone/admin/overlays_post()
+	return
 
 /obj/structure/cult/bloodstone/proc/flashy_entrance()
 	for (var/obj/O in loc)
 		if (O != src && !istype(O,/obj/item/weapon/melee/soulblade))
 			O.ex_act(2)
 	safe_space()
+	overlays_pre()
 	for(var/mob/M in player_list)
 		if (M.z == z && M.client)
 			if (get_dist(M,src)<=20)
@@ -1542,12 +1542,17 @@ var/list/bloodstone_list = list()
 		for (var/obj/structure/cult/pillar/P in pillars)
 			P.update_icon()
 		sleep(10)
-		update_icon()
+		ready = TRUE
+		overlays_post()
+		set_animate()
 
 /obj/structure/cult/bloodstone/Destroy()
 	new /obj/effect/decal/cleanable/ash(loc)
 	new /obj/item/weapon/ectoplasm(loc)
-	bloodstone_list.Remove(src)
+	if (cult && (cult.bloodstone == src))
+		cult.bloodstone = null
+		spawn()
+			cult.stage(BLOODCULT_STAGE_DEFEATED)
 	..()
 
 /obj/structure/cult/bloodstone/attack_construct(var/mob/user)
@@ -1576,6 +1581,8 @@ var/list/bloodstone_list = list()
 	return
 
 /obj/structure/cult/bloodstone/takeDamage(var/damage)
+	if (cult && (cult.stage == BLOODCULT_STAGE_NARSIE))
+		return
 	health -= damage
 	if (health <= 0)
 		if (sound_destroyed)
@@ -1594,15 +1601,39 @@ var/list/bloodstone_list = list()
 			takeDamage(10)
 
 /obj/structure/cult/bloodstone/update_icon()
-	icon_state = "bloodstone-9"
-	overlays.len = 0
-	var/image/I_base = image('icons/obj/cult_64x64.dmi',"bloodstone-base")
-	I_base.appearance_flags |= RESET_COLOR//we don't want the stone to pulse
-	overlays += I_base
+	if (!ready)
+		return
+	icon_state = "bloodstone-0"
+	if (cult)
+		icon_state = "bloodstone-[clamp(round(9*(world.time - cult.bloodstone_rising_time) / (cult.bloodstone_target_time - cult.bloodstone_rising_time)), 0, 9)]"
+	overlays -= image_damage
+	update_moody_light_index("crystal",'icons/lighting/moody_lights_64x64.dmi', icon_state)
 	if (health < maxHealth/3)
-		overlays.Add("bloodstone_damage2")
+		image_damage.icon_state = "bloodstone_damage2"
+		update_moody_light_index("damage",'icons/lighting/moody_lights_64x64.dmi', "bloodstone_damage2")
 	else if (health < 2*maxHealth/3)
-		overlays.Add("bloodstone_damage1")
+		image_damage.icon_state = "bloodstone_damage1"
+		update_moody_light_index("damage",'icons/lighting/moody_lights_64x64.dmi', "bloodstone_damage1")
+	else
+		image_damage.icon_state = "bloodstone_damage0"
+		kill_moody_light_index("damage")
+	overlays += image_damage
+
+/obj/structure/cult/bloodstone/admin/update_icon()
+	icon_state = "bloodstone-9-old"
+	overlays -= image_damage
+	update_moody_light_index("crystal",'icons/lighting/moody_lights_64x64.dmi', icon_state)
+	if (health < maxHealth/3)
+		image_damage.icon_state = "bloodstone_damage2"
+		update_moody_light_index("damage",'icons/lighting/moody_lights_64x64.dmi', "bloodstone_damage2")
+	else if (health < 2*maxHealth/3)
+		image_damage.icon_state = "bloodstone_damage1"
+		update_moody_light_index("damage",'icons/lighting/moody_lights_64x64.dmi', "bloodstone_damage1")
+	else
+		image_damage.icon_state = "bloodstone_damage0"
+		kill_moody_light_index("damage")
+	overlays += image_damage
+
 
 /obj/structure/cult/bloodstone/proc/set_animate()
 	animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)
@@ -2047,9 +2078,6 @@ var/list/bloodstone_list = list()
 	plane = EFFECTS_PLANE
 	layer = BELOW_PROJECTILE_LAYER
 	var/broken
-
-/obj/structure/cult/pylon/get_cult_power()
-	return 1
 
 /obj/structure/cult/pylon/takeDamage()
 	..()

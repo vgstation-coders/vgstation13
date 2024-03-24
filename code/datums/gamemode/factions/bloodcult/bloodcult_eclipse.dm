@@ -15,7 +15,7 @@
 	var/delay_end_announcement = 5 SECONDS		//time after the eclipse end before an announcement confirms it has ended
 	var/delay_problem_announcement = 3 MINUTES	//how long after the eclipse's supposed end will the crew be warned (in case the cult is extending the eclipse's duration)
 
-	var/stage = 0
+	var/problem_announcement = FALSE
 
 /proc/eclipse_trigger_cult()
 	if (!sun || !sun.eclipse_manager)
@@ -52,6 +52,14 @@
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		if (!cult || (!cult.tear_ritual && !cult.bloodstone))
 			eclipse_end()
+		else if (!cult.overtime_announcement)
+			cult.overtime_announcement = TRUE
+			for (var/datum/role/cultist in cult.members)
+				var/mob/M = cultist.antag.current
+				to_chat(M, "<span class='sinister'>The Eclipse is entering overtime. Even though its time as run out, Nar-Sie won't let it end as long as the Tear Reality rune is still active, or the Blood Stone is still standing.</span>")
+		else if (!problem_announcement && (world.time >= eclipse_problem_announcement))
+			problem_announcement = TRUE
+			command_alert(/datum/command_alert/eclipse_too_long)
 
 /datum/eclipse_manager/proc/eclipse_end()
 	processing_objects -= src

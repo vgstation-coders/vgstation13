@@ -42,6 +42,7 @@
 		update_icon()
 		set_light(0)
 		remove_particles("Candle")
+		remove_particles("Candle2")
 
 /obj/item/candle/update_icon()
 	overlays.len = 0
@@ -108,8 +109,12 @@
 			visible_message(flavor_text)
 		set_light(CANDLE_LUM)
 		add_particles("Candle")
+		add_particles("Candle2")
 		processing_objects.Add(src)
 		update_icon()
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
 
 /obj/item/candle/proc/flicker(var/amount = rand(5, 15))
 	if(flickering)

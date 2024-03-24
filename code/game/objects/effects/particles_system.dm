@@ -93,16 +93,23 @@
 	target.add_to_vis(holder)
 
 //-----------------------------------------------
-/atom/proc/shift_particles(var/shifting, var/particle_string)
+/atom/proc/adjust_particles(var/adjustment, var/new_value, var/particle_string)
 	if (!particle_string) //If we don't specify which particle we want to shift, just shift all of them
 		for (var/string in particle_systems)
-			shift_particles(shifting, string)
+			adjust_particles(adjustment ,new_value, string)
 		return
 	if (!(particle_string in particle_systems))
 		return
 
 	var/obj/abstract/particles_holder/holder = particle_systems[particle_string]
-	holder.particles.position = shifting
+
+	switch(adjustment)
+		if ("spawning")
+			holder.particles.spawning = new_value
+		if ("position")
+			holder.particles.position = new_value
+		if ("velocity")
+			holder.particles.velocity = new_value
 
 
 //HOLDER
@@ -118,6 +125,13 @@
 			appearance_flags = RESET_COLOR
 			blend_mode = BLEND_ADD
 			plane = ABOVE_LIGHTING_PLANE
+		if ("Candle2")
+			appearance_flags = RESET_COLOR
+			blend_mode = BLEND_ADD
+			plane = ABOVE_LIGHTING_PLANE
+		if ("Cult Gauge")
+			plane = HUD_PLANE
+			layer = MIND_UI_BUTTON+0.5
 
 //////////////////////////////////////PARTICLES///////////////////////////////////
 
@@ -125,6 +139,8 @@ var/list/particle_string_to_type = list(
 	"Steam" = /particles/steam,
 	"Tear Reality" = /particles/tear_reality,
 	"Candle" = /particles/candle,
+	"Candle2" = /particles/candle_alt,
+	"Cult Gauge" = /particles/cult_gauge,
 	)
 
 //STEAM
@@ -165,19 +181,48 @@ var/list/particle_string_to_type = list(
 	rotation = generator("num", 0,360)
 
 
-//STEAM
+//CANDLE
 /particles/candle
 	width = 32
 	height = 64
 	count = 5
-	spawning = 0.1
-	//spawning = generator("num", 0.03, 0.2)
+	spawning = 0.02
 
-	lifespan = 1.3 SECONDS
-	fade = 1 SECONDS
+	lifespan = 1.5 SECONDS
+	fade = 0.7 SECONDS
 	icon = 'icons/effects/effects_particles.dmi'
 	icon_state = "candle"
-	position = list(0, 12)
+	position = generator("box", list(-1,12), list(1,12))
 	velocity = list(0,3)
 	friction = 0.3
-	drift = generator("sphere", 0, 2)
+	drift = generator("sphere", 0, 1)
+
+/particles/candle_alt
+	width = 32
+	height = 64
+	count = 5
+	spawning = 0.05
+
+	lifespan = 1 SECONDS
+	fade = 0.3 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "candle"
+	position = generator("box", list(-1,12), list(1,12))
+	velocity = list(0,3)
+	friction = 0.3
+	drift = generator("sphere", 0, 1)
+
+
+//CULT GAUGE
+/particles/cult_gauge
+	width = 600
+	height = 64
+	count = 20
+	spawning = 1
+
+	lifespan = 1 SECONDS
+	fade = 0.5 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "blood_gauge"
+	position = generator("box", list(-16,-1), list(-16,-14))
+	velocity = list(0,0)

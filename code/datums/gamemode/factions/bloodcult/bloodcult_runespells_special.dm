@@ -104,8 +104,11 @@
 	var/atom/blocker
 	var/list/dance_platforms = list()
 	var/dance_count = 0
+	var/dance_target = 240
 	var/obj/effect/cult_ritual/dance/dance_manager
 	var/image/crystals
+	var/image/top_crystal
+	var/image/narsie_glint
 
 /datum/rune_spell/tearreality/cast()
 	var/obj/effect/rune/R = spell_holder
@@ -200,6 +203,14 @@
 	R.plane = OBJ_PLANE
 	R.set_light(1, 2, LIGHT_COLOR_RED)
 
+	var/datum/holomap_marker/newMarker = new()
+	newMarker.id = HOLOMAP_MARKER_TEARREALITY
+	newMarker.filter = HOLOMAP_FILTER_CULT
+	newMarker.x = R.x
+	newMarker.y = R.y
+	newMarker.z = R.z
+	holomap_markers[HOLOMAP_MARKER_TEARREALITY] = newMarker
+
 	anim(target = R.loc, a_icon = 'icons/obj/cult_96x96.dmi', flick_anim = "rune_tearreality_activate", lay = BELOW_TABLE_LAYER, offX = -32, offY = -32, plane = OBJ_PLANE)
 
 	var/list/platforms_to_spawn = list(NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST)
@@ -231,8 +242,21 @@
 		custom_rune = TRUE
 
 		crystals = image('icons/obj/cult_96x96.dmi',"tear_stones_[min(8,1+(dance_count/30))]")
-		crystals.plane = relative_plane_to_plane(OBJ_PLANE,spell_holder.plane)
-		crystals.layer = TABLE_LAYER
+		crystals.plane = relative_plane_to_plane(ABOVE_OBJ_PLANE,spell_holder.plane)
+
+		top_crystal = image('icons/obj/cult_96x96.dmi',"tear_stones_top")
+		top_crystal.plane = relative_plane_to_plane(ABOVE_HUMAN_PLANE,spell_holder.plane)
+		top_crystal.layer = RAILING_FRONT_LAYER
+		top_crystal.appearance_flags |= RESET_COLOR
+		R.overlays += top_crystal
+
+		narsie_glint = image('icons/obj/cult.dmi',"narsie_glint")
+		narsie_glint.plane = relative_plane_to_plane(ABOVE_LIGHTING_PLANE,spell_holder.plane)
+		narsie_glint.layer = NARSIE_GLOW
+		narsie_glint.alpha = 0
+		narsie_glint.pixel_x = 32
+		narsie_glint.pixel_y = 32
+		R.overlays += narsie_glint
 
 
 /datum/rune_spell/tearreality/cast_talisman() //Tear Reality talismans create an invisible summoning rune beneath the caster's feet.
@@ -248,6 +272,8 @@
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (cult && (cult.tear_ritual == src))
 		cult.tear_ritual = null
+	if (dance_manager)
+		QDEL_NULL(dance_manager)
 
 	var/obj/effect/rune/R = spell_holder
 	R.set_light(0)
@@ -265,8 +291,12 @@
 /datum/rune_spell/tearreality/proc/dancer_check(var/mob/living/carbon/C)
 	if (dance_platforms.len <= 0)
 		return
-	if (dance_manager)
+	if (dance_manager && C)
 		dance_manager.dancers |= C
+		if(iscultist(C))
+			C.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
+		else
+			to_chat(C, "<span class='sinister'>The tentacles shift and force your body to move alongside them, performing some kind of dance.</span>")
 		return
 	for(var/obj/effect/cult_ritual/dance_platform/platform in dance_platforms)
 		if (!platform.dancer)
@@ -282,6 +312,10 @@
 		platform.dance_manager = dance_manager
 		if (platform.dancer)
 			dance_manager.dancers += platform.dancer
+			if(iscultist(platform.dancer))
+				C.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
+			else
+				to_chat(C, "<span class='sinister'>The tentacles shift and force your body to move alongside them, performing some kind of dance.</span>")
 
 	dance_manager.tear = src
 	dance_manager.we_can_dance()
@@ -289,8 +323,33 @@
 /datum/rune_spell/tearreality/proc/update_crystals()
 	var/obj/effect/rune/R = spell_holder
 	R.overlays -= crystals
+	R.overlays -= top_crystal
+	R.overlays -= narsie_glint
 	crystals.icon_state = "tear_stones_[min(8,1+round(dance_count/30))]"
+	top_crystal.icon_state = "tear_stones_1"
+	narsie_glint.alpha = max(0, (dance_count-105)*2)//Nar-Sie's eyes become about visible half-way through the dance
+	top_crystal.appearance_flags &= ~RESET_COLOR
 	R.overlays += crystals
+	R.overlays += top_crystal
+	if (isturf(R.loc))
+		if (dance_count >= dance_target)
+			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+			if (cult && !cult.bloodstone)
+				var/obj/structure/cult/bloodstone/blood_stone = new(R.loc)
+				cult.bloodstone = blood_stone
+				holomap_markers -= HOLOMAP_MARKER_TEARREALITY
+				var/datum/holomap_marker/newMarker = new()
+				newMarker.id = HOLOMAP_MARKER_BLOODSTONE
+				newMarker.filter = HOLOMAP_FILTER_CULT
+				newMarker.x = blood_stone.x
+				newMarker.y = blood_stone.y
+				newMarker.z = blood_stone.z
+				holomap_markers[HOLOMAP_MARKER_BLOODSTONE] = newMarker
+				cult.stage(BLOODCULT_STAGE_ECLIPSE)
+				R.forceMove(blood_stone)//keeping the rune safe inside the bloodstone
+				blood_stone.flashy_entrance()
+		else
+			R.overlays += narsie_glint
 	R.update_moody_light('icons/lighting/moody_lights_96x96.dmi', crystals.icon_state)
 
 /datum/rune_spell/tearreality/proc/lost_dancer()
@@ -301,6 +360,10 @@
 	QDEL_NULL(dance_manager)
 	var/obj/effect/rune/R = spell_holder
 	R.overlays -= crystals
+	R.overlays -= top_crystal
+	top_crystal.icon_state = "tear_stones_top"
+	top_crystal.appearance_flags |= RESET_COLOR
+	R.overlays += top_crystal
 	R.kill_moody_light()
 
 /datum/rune_spell/tearreality/proc/dance_increment(var/mob/living/carbon/C)
@@ -424,6 +487,7 @@
 						I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
 						I.layer = NARSIE_GLOW
 						overlays += I
+						to_chat(C, "<span class='danger'>Dark tentacles emerge from the rune and trap your legs in place. You'll need to remove those cuffs or get some help if you are to escape this circle.</span>")
 						source.dancer_check(C)
 						return TRUE
 	return FALSE
