@@ -34,11 +34,17 @@ var/list/pda_multicasters = list()
 		QDEL_NULL(CAMO)
 	..()
 
+/obj/machinery/pda_multicaster/power_change()
+	..()
+	update_icon()
+
 /obj/machinery/pda_multicaster/update_icon()
 	if(stat & (FORCEDISABLE|BROKEN|NOPOWER|EMPED))
 		icon_state = "pda_server-nopower"
+		kill_moody_light()
 	else
 		icon_state = "pda_server-[on ? "on" : "off"]"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_pda_server")
 
 /obj/machinery/pda_multicaster/attack_hand(mob/user)
 	if(user.incapacitated() && !isAdminGhost(user))

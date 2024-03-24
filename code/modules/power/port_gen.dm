@@ -302,6 +302,7 @@
 	power_gen = 15000
 	time_per_sheet = 65
 	board_path = "/obj/item/weapon/circuitboard/pacman/super"
+
 /obj/machinery/power/port_gen/pacman/super/overheat()
 	explosion(src.loc, 3, 3, 3, -1)
 
@@ -312,5 +313,30 @@
 	power_gen = 40000
 	time_per_sheet = 80
 	board_path = "/obj/item/weapon/circuitboard/pacman/mrs"
+
 /obj/machinery/power/port_gen/pacman/mrs/overheat()
 	explosion(src.loc, 4, 4, 4, -1)
+
+/obj/machinery/power/port_gen/pacman/baby
+	name = "B.A.B.Y.P.A.C.M.A.N.-type Portable Generator"
+	desc = "Clown planet's official source of power."
+	icon_state = "portgen3"
+	sheet_path = /obj/item/stack/sheet/mineral/clown //can still be made semi-reliably stationside, assuming you got some phazon and bananas to make more
+	power_gen = 100000
+	time_per_sheet = 100
+	board_path = "/obj/item/weapon/circuitboard/pacman/baby"
+
+/obj/machinery/power/port_gen/pacman/baby/overheat()
+	explosion(src.loc, 5, 5, 5, -1)
+	
+/obj/machinery/power/port_gen/pacman/professor
+	name = "P.R.O.F.E.S.S.O.R.P.A.C.M.A.N.-type Portable Generator"
+	desc = "The most expensive-to-run portable engine ever devised."
+	icon_state = "portgen4"
+	sheet_path = /obj/item/stack/sheet/mineral/phazon //if you somehow manage to get enough phazon fuel this shit you deserve whatever unholy engineering bullshit you're making here.
+	power_gen = 250000 //you're burning phazon here, you madman
+	time_per_sheet = 250
+	board_path = "/obj/item/weapon/circuitboard/pacman/professor"
+
+/obj/machinery/power/port_gen/pacman/professor/overheat()
+	explosion(src.loc, 6, 6, 6, -1)

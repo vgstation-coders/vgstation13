@@ -40,11 +40,15 @@
 	set desc = "Toggles Medical HUD allowing you to see how everyone is doing"
 	if(!client)
 		return
-	if(selectedHUD == HUD_MEDICAL)
-		selectedHUD = HUD_NONE
+	var/datum/visioneffect/medical/detected_hud = null
+	for(var/datum/visioneffect/medical/H in huds)
+		detected_hud = H
+		break
+	if(detected_hud)
+		remove_hud(detected_hud)
 		to_chat(src, "<span class='notice'><B>Medical HUD disabled.</B></span>")
 	else
-		selectedHUD = HUD_MEDICAL
+		apply_hud(new /datum/visioneffect/medical)
 		to_chat(src, "<span class='notice'><B>Medical HUD enabled.</B></span>")
 
 /mob/dead/observer/verb/toggle_secHUD()
@@ -53,12 +57,24 @@
 
 	if(!client)
 		return
-	if(selectedHUD == HUD_SECURITY)
-		selectedHUD = HUD_NONE
-		to_chat(src, "<span class='notice'><B>Security HUD disabled.</b></span>")
+	var/detected_hud = FALSE
+	for(var/datum/visioneffect/H in huds)
+		if(istype(H,/datum/visioneffect/security))
+			remove_hud(H)
+			detected_hud = TRUE
+		else if(istype(H,/datum/visioneffect/job))
+			remove_hud(H)
+			detected_hud = TRUE
+		else if(istype(H,/datum/visioneffect/implant))
+			remove_hud(H)
+			detected_hud = TRUE
+	if(detected_hud)
+		to_chat(src, "<span class='notice'><B>Security HUD disabled.</B></span>")
 	else
-		selectedHUD = HUD_SECURITY
-		to_chat(src, "<span class='notice'><B>Security HUD enabled.</b></span>")
+		apply_hud_by_type(/datum/visioneffect/security)
+		apply_hud_by_type(/datum/visioneffect/job)
+		apply_hud_by_type(/datum/visioneffect/implant)
+		to_chat(src, "<span class='notice'><B>Security HUD enabled.</B></span>")
 
 /mob/dead/observer/verb/toggle_diagHUD()
 	set category = "Ghost"
@@ -66,8 +82,16 @@
 
 	if(!client)
 		return
-	diagHUD = !diagHUD
-	to_chat(src, "<span class='notice'><B>Diagnostic HUD [diagHUD ? "enabled" : "disabled"].")
+	var/datum/visioneffect/diagnostic/detected_hud = null
+	for(var/datum/visioneffect/diagnostic/H in huds)
+		detected_hud = H
+		break
+	if(detected_hud)
+		remove_hud(detected_hud)
+		to_chat(src, "<span class='notice'><B>Diagnostic HUD disabled.</B></span>")
+	else
+		apply_hud(new /datum/visioneffect/diagnostic)
+		to_chat(src, "<span class='notice'><B>Diagnostic HUD enabled.</B></span>")
 
 /mob/dead/observer/verb/toggle_antagHUD()
 	set category = "Ghost"
@@ -82,18 +106,22 @@
 	if(jobban_isbanned(M, "AntagHUD"))
 		to_chat(src, "<span class='danger'>You have been banned from using this feature.</span>")
 		return
-	if(config.antag_hud_restricted && !M.has_enabled_antagHUD &&!client.holder)
+	if(config.antag_hud_restricted && !M.has_enabled_antagHUD && !client.holder)
 		var/response = alert(src, "If you turn this on, you will not be able to take any part in the round.","Are you sure you want to turn this feature on?","Yes","No")
 		if(response == "No")
 			return
 		M.can_reenter_corpse = 0
 	if(!M.has_enabled_antagHUD && !client.holder)
 		M.has_enabled_antagHUD = 1
-	if(M.antagHUD)
-		M.antagHUD = 0
+	var/datum/visioneffect/antag/detected_hud = null
+	for(var/datum/visioneffect/antag/H in huds)
+		detected_hud = H
+		break
+	if(detected_hud)
+		remove_hud(detected_hud)
 		to_chat(src, "<span class='notice'><B>AntagHUD Disabled</B></span>")
 	else
-		M.antagHUD = 1
+		apply_hud(new /datum/visioneffect/antag)
 		to_chat(src, "<span class='notice'><B>AntagHUD Enabled</B></span>")
 
 
@@ -103,36 +131,16 @@
 	set desc = "Toggles Pathogen HUD allowing you to see airborne pathogenic clouds, and infected items and splatters"
 	if(!client)
 		return
-	if(pathogenHUD)
-		pathogenHUD = FALSE
+	var/datum/visioneffect/pathogen/detected_hud = null
+	for(var/datum/visioneffect/pathogen/H in huds)
+		detected_hud = H
+		break
+	if(detected_hud)
+		remove_hud(detected_hud)
 		to_chat(src, "<span class='notice'><B>Pathogen HUD disabled.</B></span>")
-		science_goggles_wearers.Remove(src)
-		if (client)
-			for (var/obj/item/I in infected_items)
-				client.images -= I.pathogen
-			for (var/mob/living/L in infected_contact_mobs)
-				client.images -= L.pathogen
-			for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
-				client.images -= C.pathogen
-			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
-				client.images -= C.pathogen
 	else
-		pathogenHUD = TRUE
+		apply_hud(new /datum/visioneffect/pathogen)
 		to_chat(src, "<span class='notice'><B>Pathogen HUD enabled.</B></span>")
-		science_goggles_wearers.Add(src)
-		if (client)
-			for (var/obj/item/I in infected_items)
-				if (I.pathogen)
-					client.images |= I.pathogen
-			for (var/mob/living/L in infected_contact_mobs)
-				if (L.pathogen)
-					client.images |= L.pathogen
-			for (var/obj/effect/pathogen_cloud/C in pathogen_clouds)
-				if (C.pathogen)
-					client.images |= C.pathogen
-			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
-				if (C.pathogen)
-					client.images |= C.pathogen
 
 /mob/dead/observer/verb/become_mouse()
 	set name = "Become mouse"

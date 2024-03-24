@@ -340,6 +340,17 @@ var/list/whitelist_name_diacritics_min = list(
 /proc/capitalize(var/t as text)
 	return uppertext(copytext_char(t, 1, 2)) + copytext_char(t, 2)
 
+//Returns only the uppercase letters of a string
+/proc/get_only_uppercase_letters(text)
+	var/result = ""
+	var/start = text2ascii("A")
+	var/stop = 	text2ascii("Z")
+	for(var/i=1 to length(text))
+		var/current_ascii = text2ascii(text, i)
+		if(current_ascii >= start && current_ascii <= stop)
+			result += ascii2text(current_ascii)
+	return result
+
 //Centers text by adding spaces to either side of the string.
 /proc/dd_centertext(message, length)
 	var/new_message = message

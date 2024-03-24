@@ -206,6 +206,8 @@
 	var/thermal_dissipation = 1 //Whether or not thermal dissipation occurs.
 	var/reagents_heat_air = 0 //Whether or not reagents exchanging heat with the surrounding air actually heat or the cool air. If off, the energy change only applies to the reagents.
 
+	var/library_url = ""
+
 /datum/configuration/New()
 	. = ..()
 	var/list/L = subtypesof(/datum/gamemode)-/datum/gamemode/cult
@@ -634,6 +636,8 @@
 					discord_url = value
 				if("discord_password")
 					discord_password = value
+				if("library_url")
+					library_url = value
 
 				else
 					diary << "Unknown setting in configuration: '[name]'"

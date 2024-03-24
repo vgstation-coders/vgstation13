@@ -14,6 +14,9 @@
 	siemens_coefficient = 0.9
 	species_fit = list (VOX_SHAPED, INSECT_SHAPED)
 
+	autoignition_temperature = 0
+	fire_fuel = 0
+
 /obj/item/clothing/head/hardhat/attack_self(mob/user)
 	on = !on
 	icon_state = "hardhat[on]_[_color]"

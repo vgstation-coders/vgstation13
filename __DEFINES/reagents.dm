@@ -3,7 +3,7 @@
 #define REAGENT_STATE_GAS 3
 #define FOOD_METABOLISM 0.4
 #define REAGENTS_OVERDOSE 30
-#define REM REAGENTS_EFFECT_MULTIPLIER
+#define REM REAGENTS_EFFECT_MULTIPLIER //0.5
 
 // Use in chem.flags.
 #define CHEMFLAG_DISHONORABLE 1
@@ -145,7 +145,8 @@
 #define NICOTINE 			"nicotine"
 #define AMMONIA 			"ammonia"
 #define SALINE				"saline"
-#define GLUE 			"glue"
+#define ETHYLCYANOACRYLATE	"ethylcyanoacrylate"
+#define GLUE 				"glue"
 #define DIETHYLAMINE 			"diethylamine"
 #define AMMONIUMNITRATE         "ammoniumnitrate"
 #define ETHYLREDOXRAZINE 			"ethylredoxrazine"
@@ -523,6 +524,13 @@
 #define CAFFEINE		"caffeine"
 #define MIMOSA			"mimosa"
 #define LEMONDROP		"lemondrop"
+#define FEVERFEW		"feverfew"
+
+#define ACRYLIC			"acrylic"
+#define ACETONE			"acetone"
+#define NANOPAINT		"nano_paint"
+#define FLAXOIL			"flax_oil"
+#define WAX				"wax"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -593,3 +601,5 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define INCENSE_CRAVE		"vales"
 #define INCENSE_CORNOIL 	"cornoils"
 #define INCENSE_MUSTARDPLANT "mustardplant"
+
+#define PAINT_CLEANER_THRESHOLD 0.7 // How much of the reagent should be water or some cleaner to clean paint off a canvas or brush

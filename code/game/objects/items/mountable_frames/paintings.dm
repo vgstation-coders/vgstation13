@@ -210,6 +210,8 @@ var/global/list/available_paintings = list(
 	icon_state = "blank_old"
 	autoignition_temperature = AUTOIGNITION_WOOD
 	anchored = 1
+	plane = ABOVE_HUMAN_PLANE
+	layer = CANVAS_LAYER
 
 /obj/structure/painting/New()
 	..()

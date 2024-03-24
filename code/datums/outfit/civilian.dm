@@ -109,6 +109,7 @@
 	items_to_collect = list(
 		/obj/abstract/spawn_all/bartender = SURVIVAL_BOX,
 		/obj/item/weapon/reagent_containers/food/drinks/shaker = slot_l_store_str,
+		/obj/item/weapon/storage/fancy/beer_box = GRASP_LEFT_HAND
 	)
 
 	pda_type = /obj/item/device/pda/bar
@@ -540,7 +541,7 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/red,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-			slot_l_store_str = /obj/item/weapon/storage/bag/bookbag,
+			slot_belt_str = /obj/item/weapon/storage/bag/bookbag,
 			slot_head_str = list(
 				"Curator" = /obj/item/clothing/head/beret,
 			),
@@ -551,7 +552,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/librarian,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/librarian,
-			slot_l_store_str = /obj/item/weapon/storage/bag/bookbag,
+			slot_belt_str = /obj/item/weapon/storage/bag/bookbag,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 		),
 		/datum/species/vox/ = list(
@@ -560,7 +561,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/librarian,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/librarian,
-			slot_l_store_str = /obj/item/weapon/storage/bag/bookbag,
+			slot_belt_str = /obj/item/weapon/storage/bag/bookbag,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath/vox,
 		),
 	)
@@ -572,12 +573,16 @@
 	alt_title_items_to_collect = list(
 		"Game Master" = list(
 			/obj/item/weapon/storage/pill_bottle/dice/with_die = GRASP_LEFT_HAND,
+			/obj/item/dicetower = null,
+			/obj/item/battlemat = null,
+			//obj/item/mounted/frame/painting/custom/gameboard = null,
+			/obj/item/weapon/storage/box/redcore = null
 		),
 		"Curator" = list(
 			/obj/item/stack/sheet/wood/biggerstack = null,    //should spawn on the backpack
 			/obj/item/weapon/storage/fancy/crayons = null,
 			/obj/item/weapon/chisel = null,
-			/obj/item/weapon/palette = null,
+			/obj/item/palette = null,
 		)
 	)
 

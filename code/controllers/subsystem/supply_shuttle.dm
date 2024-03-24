@@ -124,7 +124,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 		if(!destination)
 			message_admins("WARNING: Cargo shuttle unable to find the station!")
-			warning("Cargo shuttle can't find centcomm")
+			warning("Cargo shuttle can't find station")
 	else //at station
 		for(var/obj/structure/shuttle/engine/propulsion/P in cargo_shuttle.linked_area)
 			spawn()
@@ -168,6 +168,12 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	for(var/datum/centcomm_order/O in deferred_orders)
 		if(O.CheckShuttleObject(A,in_crate,preserve))
 			return
+
+/datum/subsystem/supply_shuttle/proc/scrub()
+	for (var/obj/effect/decal/cleanable/C in cargo_shuttle.linked_area)
+		qdel(C)
+	for (var/obj/effect/rune/R in cargo_shuttle.linked_area)
+		qdel(R)
 
 /datum/subsystem/supply_shuttle/proc/sell()
 
@@ -312,7 +318,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			continue
 		var/contcount
 		for(var/atom/A in T.contents)
-			if(islightingoverlay(A))
+			if(islightingoverlay(A) || istype(A, /obj/machinery/conveyor))
 				continue
 			contcount++
 		if(contcount)
@@ -373,6 +379,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			var/atom/B2 = new typepath(A)
 			if(SP.amount && B2:amount)
 				B2:amount = SP.amount
+			B2.on_vending_machine_spawn()
 			slip.info += "<li>[B2.name]</li>" //add the item to the manifest
 
 		SP.post_creation(A)

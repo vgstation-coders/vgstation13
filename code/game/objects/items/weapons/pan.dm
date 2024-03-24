@@ -67,6 +67,21 @@
 	cook_reboot()
 	update_icon()
 
+/obj/item/weapon/reagent_containers/pan/update_temperature_overlays()
+	//we only care about the steam
+
+	var/average_chem_temp = 0
+	var/chem_temps = 0
+	if(reagents && reagents.total_volume)
+		average_chem_temp = reagents.chem_temp
+		chem_temps = 1
+	for(var/atom/content in contents)
+		average_chem_temp += content.reagents.chem_temp
+		chem_temps++
+	if (chem_temps)
+		average_chem_temp /= chem_temps
+	steam_spawn_adjust(average_chem_temp)
+
 /obj/item/weapon/reagent_containers/pan/update_icon()
 
 	overlays.len = 0
@@ -122,6 +137,9 @@
 			frontblood.color = blood_color
 
 			overlays += frontblood
+		update_temperature_overlays()
+	else
+		remove_particles("Steam")
 
 		//Note: an alternative to the above might be to overlay all of the non-reagent ingredients onto a single icon, then mask it with the "pan_mask" icon_state.
 		//This would obviate the need to regenerate the blood overlay, and help avoid anomalies with large ingredient sprites.
@@ -373,6 +391,7 @@
 	return ffuu
 
 /obj/item/weapon/reagent_containers/pan/process()
+	steam_spawn_adjust(0)
 
 	var/obj/O
 	if(isobj(loc))
@@ -388,16 +407,26 @@
 		return
 
 	var/contains_anything = contains_anything()
+	var/average_chem_temp = 0
+	var/chem_temps = 0
+	var/cook_energy = O.cook_energy()
+	var/cook_temperature = O.cook_temperature()
 
-	//If there are any reagents in the pan, heat them.
+	//If there are any reagents in the pan (salt, butter, etc), heat them.
 	if(contains_anything & COOKVESSEL_CONTAINS_REAGENTS)
-		reagents.heating(O.cook_energy(), O.cook_temperature())
-	//Otherwise if there are non-reagent contents, heat the reagents in those contents if possible.
-	else
-		var/cook_energy = O.cook_energy()
-		var/cook_temperature = O.cook_temperature()
-		for(var/atom/content in contents)
-			content.reagents.heating(cook_energy / contents.len, cook_temperature)
+		reagents.heating(cook_energy, cook_temperature)
+		average_chem_temp = reagents.chem_temp
+		chem_temps = 1
+	//If there are non-reagent contents (meat etc), heat them as well
+	for(var/atom/content in contents)
+		content.reagents.heating(cook_energy / contents.len, cook_temperature)
+		average_chem_temp += content.reagents.chem_temp
+		chem_temps++
+
+	//making the pan steam when its content is hot enough
+	if (chem_temps)
+		average_chem_temp /= chem_temps
+	steam_spawn_adjust(average_chem_temp)
 
 	cookingprogress += (SS_WAIT_FAST_OBJECTS * speed_multiplier)
 
@@ -408,18 +437,24 @@
 		var/obj/cooked
 		if(currentrecipe)
 			cooked = currentrecipe.make_food(src, chef)
+			//shouldn't be needed anymore thanks to thermal entropy and visible steam
+			/*
 			//If we cooked successfully, don't make the reagents in the food too hot.
 			if(!arcanetampered)
 				if(cooked.reagents.total_volume)
 					if(cooked.reagents.chem_temp > COOKTEMP_HUMANSAFE)
 						cooked.reagents.chem_temp = COOKTEMP_HUMANSAFE
+			*/
 			visible_message("<span class='notice'>[cooked] looks done.</span>")
 			playsound(src, 'sound/effects/frying.ogg', 50, 1)
 		else if(contains_anything & COOKVESSEL_CONTAINS_CONTENTS) //Don't make a burned mess out of just reagents, even though recipes can call for only reagents (spaghetti). This allows using the pan to heat reagents.
 			cooked = cook_fail()
 
 		if(cooked)
-			cooked.forceMove(src, harderforce = TRUE)
+			if (cooked.reagents.chem_temp < COOKTEMP_READY)
+				cooked.reagents.chem_temp = COOKTEMP_READY//so cooking with frozen meat doesn't produce frozen steaks
+				cooked.update_icon()
+			cooked.forceMove(src)
 			update_icon()
 			O?.render_cookvessel()
 

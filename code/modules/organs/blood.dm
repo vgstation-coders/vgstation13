@@ -221,6 +221,9 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if(reagents.has_reagent(CLOTTING_AGENT) || reagents.has_reagent(BIOFOAM)) //Clotting agent and biofoam stop bleeding entirely
 		blood_factor = 0
 
+	if(reagents.has_reagent(FEVERFEW)) //A powerful anticoagulant that overrides clotting agents
+		blood_factor = 1
+
 	if(bodytemperature < 170) //Cryo stops bleeding entirely
 		blood_factor = 0
 
@@ -559,3 +562,21 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		B.virus2 = virus_copylist(source.data["virus2"])
 
 	return B
+
+/proc/combine_blood_types(var/type_A="O-", var/type_B="O-")
+	var/combined_types = "[type_A][type_B]"
+	var/has_A = findtext(combined_types,"A")
+	var/has_B = findtext(combined_types,"B")
+	var/has_Rh = findtext(combined_types,"+")
+	var/result_type = ""
+	if (has_A)
+		result_type += "A"
+	if (has_B)
+		result_type += "B"
+	if (result_type == "")
+		result_type += "O"
+	if (has_Rh)
+		result_type += "+"
+	else
+		result_type += "-"
+	return result_type

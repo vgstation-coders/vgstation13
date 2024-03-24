@@ -1,46 +1,38 @@
 /mob/living/carbon/human/gib(animation = FALSE, meat = TRUE)
-	if(status_flags & BUDDHAMODE)
-		adjustBruteLoss(200)
-		return
-	if(!isUnconscious())
-		forcesay("-")
-	if(species)
-		species.gib(src)
-		return
+	ASSERT(species)
+	species.gib(src, animation, meat)
 
+/* This will be called if the species datum has not overwritten /datum/species/gib() */
+/mob/living/carbon/human/proc/default_gib(animation, meat)
 	death(1)
-	canmove = 0
-	icon = null
-	invisibility = 101
-	default_gib()
+	handle_body_destroyed()
 
-//This will get called often at first until custom gibbing events get made up for each species.
-/mob/living/carbon/human/proc/default_gib()
-	monkeyizing = TRUE
 	for(var/datum/organ/external/E in src.organs)
 		if(istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin)) //Really bad stuff happens when either get removed
 			continue
-		//Only make the limb drop if it's not too damaged
-		if(prob(100 - E.get_damage()))
+		//Only make the limb drop if it's not too damaged, or if it's the head
+		if(prob(100 - E.get_damage()) || istype(E, /datum/organ/external/head))
 			//Override the current limb status and don't cause an explosion
 			E.droplimb(1, 1)
-	dropBorers()
+	for(var/datum/organ/external/cosmetic_organ in cosmetic_organs)
+		cosmetic_organ.droplimb(TRUE, TRUE)
 	var/gib_radius = 0
 	if(reagents.has_reagent(LUBE))
 		gib_radius = 6 //Your insides are all lubed, so gibs travel much further
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
 	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
-	qdel(src)
+	spawn()
+		qdel(src)
 
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
-	death(1)
-	monkeyizing = 1
-	canmove = 0
-	icon = null
-	invisibility = 101
+	ASSERT(species)
+	species.dust(src, drop_everything)
 
-	dropBorers(1)
+/* This will be called if the species datum has not overwritten /datum/species/dust() */
+/mob/living/carbon/human/proc/default_dust(drop_everything)
+	death(1)
+	handle_body_destroyed()
 
 	if(istype(src, /mob/living/carbon/human/manifested))
 		anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-hm", sleeptime = 15)
@@ -54,7 +46,15 @@
 		new /obj/effect/decal/remains/human(loc)
 	if(drop_everything)
 		drop_all()
-	qdel(src)
+	spawn()
+		qdel(src)
+
+/mob/living/carbon/human/proc/handle_body_destroyed()
+	monkeyizing = TRUE
+	canmove = 0
+	icon = null
+	invisibility = 101
+	dropBorers(1)
 
 /mob/living/carbon/human/Destroy()
 	infected_contact_mobs -= src

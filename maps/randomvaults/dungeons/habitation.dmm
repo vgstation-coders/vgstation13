@@ -586,7 +586,14 @@
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/hobo)
 "fd" = (
-/obj/structure/ore_box,
+/obj/effect/decal/cleanable/dirt,
+/obj/effect/landmark/corpse/grey/soldier_unarmed,
+/obj/item/device/flashlight/flare/ever_bright,
+/obj/effect/decal/cleanable/blood{
+	basecolor = "#CFAAAA";
+	blood_color = "#CFAAAA";
+	icon_state = "floor5"
+	},
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_lower)
 "fh" = (
@@ -697,6 +704,11 @@
 /obj/item/stack/cable_coil,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/cave)
+"fS" = (
+/obj/structure/window/barricade,
+/obj/item/weapon/beartrap/ied/armed,
+/turf/unsimulated/floor/lab_asteroid,
+/area/vault/mothership_lab/raidtunnel_lower)
 "fW" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/window/barricade/full/block,
@@ -790,7 +802,6 @@
 /area/vault/mothership_lab/habitation)
 "gG" = (
 /obj/structure/cage/autoclose/cover,
-/obj/effect/landmark/corpse/grey/soldier_unarmed,
 /obj/effect/decal/cleanable/blood{
 	basecolor = "#CFAAAA";
 	blood_color = "#CFAAAA"
@@ -1058,6 +1069,10 @@
 /obj/structure/bed/ayy1,
 /turf/unsimulated/floor/ayy/fancy,
 /area/vault/mothership_lab/habitation)
+"jo" = (
+/obj/item/stack/medical/bruise_pack,
+/turf/unsimulated/floor/lab_sterile,
+/area/vault/mothership_lab/cave)
 "jr" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
 	dir = 4
@@ -1651,6 +1666,7 @@
 	blood_color = "#CFAAAA";
 	icon_state = "floor2"
 	},
+/obj/effect/decal/cleanable/cobweb,
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_lower)
 "nY" = (
@@ -1698,6 +1714,13 @@
 /obj/machinery/vending/hydroseeds,
 /turf/unsimulated/floor/ayy/maint,
 /area/vault/mothership_lab/habitation)
+"oy" = (
+/obj/machinery/recharger/self_powered{
+	pixel_y = 30
+	},
+/obj/item/device/flashlight/flare/ever_bright,
+/turf/unsimulated/floor/lab_asteroid,
+/area/vault/mothership_lab/raidtunnel_lower)
 "oE" = (
 /obj/structure/window/reinforced{
 	dir = 8
@@ -1779,7 +1802,6 @@
 "pe" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/trap/frog_trap/raider,
-/obj/item/device/flashlight/flare/ever_bright,
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_lower)
 "pf" = (
@@ -2199,6 +2221,12 @@
 /obj/item/weapon/pickaxe/drill,
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_lower)
+"sF" = (
+/obj/effect/decal/cleanable/dirt,
+/obj/machinery/recharger,
+/obj/item/weapon/gun/energy/smalldisintegrator,
+/turf/unsimulated/floor,
+/area/vault/mothership_lab/cave)
 "sI" = (
 /obj/structure/ladder{
 	height = 1;
@@ -2297,6 +2325,10 @@
 /obj/item/weapon/barricade_kit,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
+"tE" = (
+/obj/effect/narration/mothership_lab/raidertunnel2,
+/turf/unsimulated/floor/lab_asteroid,
+/area/vault/mothership_lab/raidtunnel_lower)
 "tF" = (
 /obj/structure/table/reinforced,
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass,
@@ -3933,8 +3965,8 @@
 "HO" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/effect/decal/cleanable/blood/drip{
-	basecolor = "#2299FC";
-	blood_color = "#2299FC"
+	basecolor = "#CFAAAA";
+	blood_color = "#CFAAAA"
 	},
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_lower)
@@ -4637,9 +4669,8 @@
 /turf/unsimulated/floor,
 /area/vault/mothership_lab/cave)
 "Pr" = (
-/obj/effect/decal/cleanable/cobweb2,
-/obj/effect/decal/cleanable/dirt,
 /obj/structure/boulder,
+/obj/effect/decal/cleanable/cobweb2,
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_lower)
 "Pu" = (
@@ -5280,8 +5311,7 @@
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/habitation)
 "UL" = (
-/obj/effect/decal/cleanable/dirt,
-/obj/effect/decal/cleanable/cobweb,
+/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe,
 /turf/unsimulated/floor/lab_asteroid,
 /area/vault/mothership_lab/raidtunnel_lower)
 "UM" = (
@@ -5710,6 +5740,11 @@
 /obj/machinery/chem_dispenser/booze_dispenser,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/habitation)
+"Yq" = (
+/obj/structure/ore_box,
+/obj/item/weapon/pickaxe/drill,
+/turf/unsimulated/floor/lab_asteroid,
+/area/vault/mothership_lab/raidtunnel_lower)
 "Ys" = (
 /obj/structure/window/barricade{
 	dir = 1
@@ -7383,8 +7418,8 @@ Xb
 Vy
 uh
 WJ
-WJ
-Vy
+jo
+sF
 kF
 uh
 gd
@@ -8504,7 +8539,7 @@ ib
 ib
 ub
 ek
-gz
+UL
 mz
 sN
 mz
@@ -8645,7 +8680,7 @@ ib
 ib
 ub
 ek
-zk
+oy
 Gs
 kt
 sN
@@ -8910,7 +8945,7 @@ RF
 fz
 Aw
 mz
-vY
+Gy
 ek
 ub
 ib
@@ -9128,9 +9163,9 @@ gz
 eq
 sN
 bC
-UL
+mz
 sN
-sN
+Yq
 ek
 ek
 ek
@@ -9178,8 +9213,8 @@ GB
 sN
 sN
 sN
-qI
-mz
+bC
+au
 qI
 ek
 Td
@@ -9189,7 +9224,7 @@ Aw
 lt
 ek
 sN
-sN
+Gy
 mz
 ek
 ub
@@ -9223,12 +9258,12 @@ yY
 yY
 bC
 mz
-mz
-pe
-sN
-mz
-sN
 fd
+pe
+fS
+tE
+mz
+mz
 ek
 ek
 ek
@@ -9269,18 +9304,18 @@ ub
 ek
 ek
 ek
-ek
-au
+Pr
 sN
-sN
-sN
-sN
-sN
-fj
 mz
+bC
+au
+Gy
 sN
 sN
+mz
+qI
 sN
+mz
 sN
 sN
 ek
@@ -9316,16 +9351,16 @@ ib
 ub
 ub
 ub
-ub
 ek
-Pr
-mz
+ek
+ek
+ek
+qI
 mz
 sN
-mz
 sN
 sN
-vY
+Gy
 mz
 sN
 qI
@@ -9363,10 +9398,10 @@ ib
 ib
 ib
 ib
-ib
 ub
-ek
-ek
+ub
+ub
+ub
 ek
 ek
 ek
@@ -9412,7 +9447,7 @@ ib
 ib
 ib
 ib
-ub
+ib
 ub
 ub
 ub

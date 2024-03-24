@@ -110,12 +110,16 @@ steam.start() -- spawns the effect
 	icon_state = "extinguish"
 	density = 0
 
-/datum/effect/system/steam_spread/set_up(n = 3, c = 0, turf/loc)
+/datum/effect/system/steam_spread
+	var/color
+
+/datum/effect/system/steam_spread/set_up(n = 3, c = 0, turf/loc, var/_color = null)
 	if(n > 10)
 		n = 10
 	number = n
 	cardinals = c
 	location = loc
+	color = _color
 
 /datum/effect/system/steam_spread/start()
 	var/i = 0
@@ -124,6 +128,9 @@ steam.start() -- spawns the effect
 			if(holder)
 				src.location = get_turf(holder)
 			var/obj/effect/steam/steam = new /obj/effect/steam(src.location)
+			if (color)
+				steam.icon_state = "extinguish_gray"
+				steam.color = color
 			var/direction
 			if(src.cardinals)
 				direction = pick(cardinal)

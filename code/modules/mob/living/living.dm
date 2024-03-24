@@ -544,6 +544,8 @@ Thanks.
 	stunned = 0
 	knockdown = 0
 	remove_jitter()
+	dizziness = 0
+	confused = 0
 	germ_level = 0
 	next_pain_time = 0
 	radiation = 0
@@ -737,7 +739,7 @@ Thanks.
 		stop_pulling()
 		. = ..()
 
-	if ((s_active && !is_holder_of(src, s_active)))
+	if (s_active && !is_holder_of(src, s_active) && !s_active.Adjacent(src))
 		s_active.close(src)
 
 	if(update_slimes)
@@ -746,13 +748,6 @@ Thanks.
 
 	if(T != loc)
 		handle_hookchain(Dir)
-
-	if(client && client.eye && istype(client.eye,/turf/simulated/wall))
-		var/turf/simulated/wall/W = client.eye
-		if (!Adjacent(W))
-			client.eye = src
-			client.perspective = MOB_PERSPECTIVE
-			W.peeper = null
 
 	if(.)
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
@@ -1377,9 +1372,6 @@ Thanks.
 				now_pushing = 0
 			return
 	return
-
-/mob/living/is_open_container()
-	return 1
 
 /mob/living/proc/scoop_up(mob/M) //M = mob who scoops us up!
 	if(!holder_type)

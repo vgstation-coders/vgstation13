@@ -49,6 +49,7 @@
 		"/obj/item/airshield_projector",
 		"/obj/item/device/radio",
 		"/obj/item/device/gps",
+		"/obj/item/device/pager",
 		"/obj/item/blueprints/construction_permit"
 		)
 
@@ -120,25 +121,24 @@
 		"/obj/item/airshield_projector",
 		"/obj/item/tool/irons",
 		"/obj/item/device/radio",
-		"/obj/item/device/gps"
+		"/obj/item/device/gps",
+		"/obj/item/device/pager"
 		)
 
 /obj/item/weapon/storage/belt/utility/chief/full/New() //This is mostly for testing I guess
 	..()
-	new /obj/item/tool/crowbar(src)
-	new /obj/item/tool/screwdriver(src)
+	new /obj/item/tool/crowbar/halligan(src)
 	new /obj/item/tool/weldingtool/hugetank(src)
 	new /obj/item/tool/wirecutters(src)
 	new /obj/item/tool/wrench(src)
+	new /obj/item/tool/solder/screw(src)
 	new /obj/item/device/multitool(src)
-	new /obj/item/stack/cable_coil(src)
-	new /obj/item/stack/cable_coil(src)
-	new /obj/item/device/t_scanner(src)
-	new /obj/item/device/analyzer(src)
-	new /obj/item/tool/solder/pre_fueled(src)
 	new /obj/item/device/silicate_sprayer(src)
-	new /obj/item/device/rcd/rpd(src)
-	new /obj/item/device/rcd/matter/engineering/pre_loaded(src)
+	new /obj/item/device/t_scanner/advanced(src)
+	new /obj/item/device/analyzer(src)
+	new /obj/item/weapon/inflatable_dispenser(src)
+	new /obj/item/stack/cable_coil(src)
+
 
 
 /obj/item/weapon/storage/belt/medical

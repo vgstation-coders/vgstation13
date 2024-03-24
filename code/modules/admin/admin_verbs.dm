@@ -132,6 +132,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/view_all_rods,
 	/client/proc/add_centcomm_order,
 	/client/proc/apes,
+	/client/proc/force_next_map,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
@@ -186,7 +187,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/test_movable_UI,
 	/client/proc/test_snap_UI,
 	/client/proc/configFood,
-	/client/proc/configThermDiss,
+	///client/proc/configThermDiss,
 	/client/proc/configHat,
 	/client/proc/cmd_dectalk,
 	/client/proc/debug_reagents,
@@ -211,6 +212,8 @@ var/list/admin_verbs_debug = list(
 	/client/proc/bee_count,
 	/client/proc/set_procizine_call,
 	/client/proc/set_procizine_properties,
+	/client/proc/check_for_unconnected_atmos,
+
 #if UNIT_TESTS_ENABLED
 	/client/proc/unit_test_panel,
 #endif

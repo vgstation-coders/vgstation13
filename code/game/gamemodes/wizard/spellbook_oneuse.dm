@@ -18,6 +18,11 @@
 	name += spellname
 
 /obj/item/weapon/spellbook/oneuse/attack_self(mob/user)
+	if(istype(user,/mob/living/carbon))
+		var/mob/living/carbon/C = user
+		if(C.op_stage.butt == SURGERY_NO_BUTT)
+			to_chat(user, "<span class='info'>You are missing your ass! It would be pointless to attempt to learn magic without an ass to store it in.</span>")
+			return
 	var/spell/S = new spell(user)
 	for(var/spell/knownspell in user.spell_list)
 		if(knownspell.type == S.type)
@@ -31,7 +36,7 @@
 		recoil(user)
 	else
 		S.refund_price = 0 // So that they can't be refunded
-		user.add_spell(S)
+		user.add_spell(S, iswizard = TRUE)
 		to_chat(user, "<span class='notice'>you rapidly read through the arcane book. Suddenly you realize you understand [spellname]!</span>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.real_name] ([user.ckey]) learned the spell [spellname] ([S]).</font>")
 		onlearned(user)
@@ -360,15 +365,8 @@
 
 /obj/item/weapon/spellbook/oneuse/buttbot/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
-		var/mob/living/carbon/C = user
-		if(C.op_stage.butt != 4)
-			var/obj/item/clothing/head/butt/B = new(C.loc)
-			B.transfer_buttdentity(C)
-			C.op_stage.butt = 4
-			to_chat(user, "<span class='warning'>Your ass just blew up!</span>")
-		playsound(src, 'sound/effects/superfart.ogg', 50, 1)
-		C.apply_damage(40, BRUTE, LIMB_GROIN)
-		C.apply_damage(10, BURN, LIMB_GROIN)
+		var/mob/living/carbon/human/H = user
+		H.butt_blast()
 		qdel(src)
 
 /obj/item/weapon/spellbook/oneuse/lightning
@@ -455,7 +453,7 @@
 	desc = "This book has several completely blank pages."
 
 /obj/item/weapon/spellbook/oneuse/firebreath
-	spell = /spell/targeted/projectile/dumbfire/fireball/firebreath
+	spell = /spell/targeted/projectile/dumbfire/firebreath
 	spellname = "fire breath"
 	icon_state = "bookfirebreath"
 	desc = "This book's pages are singed."

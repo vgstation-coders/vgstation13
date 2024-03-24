@@ -30,8 +30,7 @@
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
-	autoignition_temperature = 522 // Kelvin
-	fire_fuel = 2
+	autoignition_temperature = AUTOIGNITION_PAPER
 	autoignition_temperature = AUTOIGNITION_PAPER
 	on_armory_manifest = TRUE
 
@@ -47,8 +46,7 @@
 	storage_slots = 21
 	max_combined_w_class = 42 // 21*2
 
-	autoignition_temperature = 530 // Kelvin
-	fire_fuel = 3
+	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/storage/box/surveillance
 	name = "\improper DromedaryCo packet"
@@ -469,7 +467,7 @@
 	can_add_combinedwclass = TRUE
 	can_only_hold = list(
 		"/obj/item/device/radio/headset/headset_sec",
-		"/obj/item/clothing/glasses/sunglasses/sechud",
+		"/obj/item/clothing/glasses/hud/security/sunglasses",
 		"/obj/item/clothing/gloves/black",
 		"/obj/item/weapon/storage/belt/security",
 		"/obj/item/device/flashlight/tactical",
@@ -486,7 +484,7 @@
 	)
 	items_to_spawn = list(
 		/obj/item/device/radio/headset/headset_sec,
-		list(/obj/item/clothing/glasses/sunglasses/sechud/prescription,/obj/item/clothing/glasses/sunglasses/sechud),
+		list(/obj/item/clothing/glasses/hud/security/sunglasses/prescription,/obj/item/clothing/glasses/hud/security/sunglasses),
 		/obj/item/clothing/gloves/black,
 		/obj/item/weapon/storage/belt/security,
 		/obj/item/device/flashlight/tactical,
@@ -510,7 +508,7 @@
 	can_add_combinedwclass = TRUE
 	items_to_spawn = list(
 		/obj/item/device/radio/headset/headset_sec,
-			/obj/item/clothing/glasses/regular/tracking/detective,
+			/obj/item/clothing/glasses/hud/tracking/detective,
 		/obj/item/clothing/gloves/black,
 		/obj/item/weapon/storage/belt/detective,
 		/obj/item/weapon/switchtool/switchblade,

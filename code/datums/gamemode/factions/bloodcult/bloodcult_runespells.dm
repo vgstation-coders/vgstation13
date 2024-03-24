@@ -630,7 +630,7 @@
 	else
 		var/choices = list(
 			list("Talisman", "radial_paraphernalia_talisman", "Can absorb runes (or attune to them in some cases), allowing you to carry their power in your pocket. Has a few other miscellaneous uses."),
-			list("Blood Candle", "radial_paraphernalia_candle", "A candle that can burn up to 20 minutes. Offers moody lighting."),
+			list("Blood Candle", "radial_paraphernalia_candle", "A candle that can burn up to a full hour. Offers moody lighting."),
 			list("Tempting Goblet", "radial_paraphernalia_goblet", "A classy holder for your beverage of choice. Prank your enemies by hitting them with a goblet full of blood."),
 			list("Coffer", "radial_paraphernalia_coffer", "Keep your occult lab orderly by storing your cult paraphernalia in those coffers."),
 			list("Ritual Knife", "radial_paraphernalia_knife", "A long time ago a wizard enchanted one of those to infiltrate the realm of Nar-Sie and steal some soul stone shards. Now it's just a cool knife. Don't rely on it in a fight though."),
@@ -1119,6 +1119,11 @@ var/list/converted_minds = list()
 				victim.Jitter(5)
 				if (isalien(victim))
 					victim.Paralyse(8)
+
+				//let's start by removing any cuffs they might already have
+				if (victim.handcuffed)
+					var/obj/item/weapon/handcuffs/cuffs = victim.handcuffed
+					victim.u_equip(cuffs)
 
 				var/obj/item/weapon/handcuffs/cult/restraints = new(victim)
 				victim.handcuffed = restraints
@@ -1953,8 +1958,7 @@ var/list/seer_rituals = list()
 			source.abort(RITUALABORT_GONE)
 		qdel(src)
 		return
-	caster.see_invisible_override = SEE_INVISIBLE_OBSERVER
-	caster.apply_vision_overrides()
+	caster.apply_hud(new /datum/visioneffect/cult_conversion)
 	to_chat(caster, "<span class='notice'>You find yourself able to see through the gaps in the veil. You can see and interact with the other side, and also find out the crew's propensity to be successfully converted, whether they are <b><font color='green'>Willing</font></b>, <b><font color='orange'>Uncertain</font></b>, or <b><font color='red'>Unconvertible</font></b>.</span>")
 	if (talisman)
 		spawn(talisman_duration)
@@ -1964,12 +1968,8 @@ var/list/seer_rituals = list()
 /obj/effect/cult_ritual/seer/Destroy()
 	seer_rituals.Remove(src)
 	processing_objects.Remove(src)
-	if (caster && caster.client)
-		caster.client.images -= propension
-		if (!istype(caster.loc, /obj/effect/bloodcult_jaunt))
-			caster.see_invisible_override = 0
-			caster.apply_vision_overrides()
-		to_chat(caster, "<span class='notice'>You can no longer discern through the veil.</span>")
+	caster.remove_hud_by_type(/datum/visioneffect/cult_conversion)
+	to_chat(caster, "<span class='notice'>You can no longer discern through the veil.</span>")
 	caster = null
 	if (source)
 		source.abort()
@@ -1981,6 +1981,7 @@ var/list/seer_rituals = list()
 		if (!caster || caster.loc != loc)
 			qdel(src)
 
+/*
 /obj/effect/cult_ritual/seer/process()
 	if (caster && caster.client)
 		caster.client.images -= propension
@@ -1991,7 +1992,7 @@ var/list/seer_rituals = list()
 			propension += C.hud_list[CONVERSION_HUD]
 
 		caster.client.images += propension
-
+*/
 
 ////////////////////////////////////////////////////////////////////
 //																  //
@@ -2963,7 +2964,7 @@ var/list/bloodcult_exitportals = list()
 			newCultist.tattoos[TATTOO_HOLY] = new /datum/cult_tattoo/holy()
 			newCultist.tattoos[TATTOO_MANIFEST] = new /datum/cult_tattoo/manifest()
 
-			vessel.equip_or_collect(new /obj/item/clothing/under/rags(vessel), slot_w_uniform)
+			vessel.equip_or_collect(new /obj/item/clothing/under/leather_rags(vessel), slot_w_uniform)
 
 		M.regenerate_icons()
 

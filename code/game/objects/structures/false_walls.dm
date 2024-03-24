@@ -426,6 +426,10 @@
 	icon_state = ""
 	mineral = "gold"
 
+/obj/structure/falsewall/gold/closed
+	density = 1
+	opacity = 1
+
 /obj/structure/falsewall/gold/gold_old
 	mineral = "gold_old"
 

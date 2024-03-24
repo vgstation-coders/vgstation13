@@ -1,11 +1,47 @@
 var/list/uplink_items = list()
 
+var/list/discounted_items_of_the_round = list()
+
+/proc/pick_discounted_items()
+	// Make sure to clear it.
+	var/list/item_list = list()
+
+	var/list/static/forbidden_items = list(
+		/datum/uplink_item/badass/bundle,
+		/datum/uplink_item/badass/random,
+		/datum/uplink_item/badass/experimental_gear,
+		/datum/uplink_item/implants/uplink,
+	)
+
+	var/list/traitor_items = subtypesof(/datum/uplink_item)
+	var/list/possible_picks = list()
+	for (var/thing in traitor_items)
+		var/datum/uplink_item/u_item = thing
+		if (thing in forbidden_items)
+			continue
+		if (initial(u_item.item))
+			possible_picks += thing
+
+	for (var/i = 1 to 3)
+		var/picked = pick(possible_picks)
+		possible_picks -= picked
+		item_list += picked
+		world.log << "Picked: [picked]"
+
+	discounted_items_of_the_round = item_list
+
 /proc/get_uplink_items()
 	// If not already initialized..
 	if(!uplink_items.len)
 
 		// Fill in the list	and order it like this:
 		// A keyed list, acting as categories, which are lists to the datum.
+
+		var/list/concrete_items = list()
+		for (var/thing in discounted_items_of_the_round)
+			concrete_items += new thing
+
+		uplink_items["Discounted Surplus"] = concrete_items
 
 		for(var/item in typesof(/datum/uplink_item))
 
@@ -56,6 +92,9 @@ var/list/uplink_items = list()
 		. = discounted_cost
 	else
 		. = cost
+	// 50% discount for items of the day
+	if (is_type_in_list(src, discounted_items_of_the_round))
+		. = cost*0.5
 	. = Ceiling(. * cost_modifier) //"." is our return variable, effectively the same as doing "var/X", working on X, then returning X
 
 /datum/uplink_item/proc/gives_discount(var/user_job)
@@ -449,7 +488,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/device_tools/thermal
 	name = "Thermal Imaging Glasses"
 	desc = "A modified pair of Optical Meson Scanners frame fitted with thermal vision lenses, allowing you to spot organics through walls and in total darkness. Do note that they will not function as regular meson scanners in any way, shape or form."
-	item = /obj/item/clothing/glasses/thermal/syndi
+	item = /obj/item/clothing/glasses/hud/thermal/syndi
 	cost = 6
 
 /datum/uplink_item/device_tools/surveillance
@@ -521,6 +560,14 @@ var/list/uplink_items = list()
 	cost = 8
 	discounted_cost = 6
 	jobs_with_discount = SCIENCE_POSITIONS
+
+/datum/uplink_item/sabotage_tools/radstorm_remote
+	name = "Dirty Bomb Artillery Remote"
+	desc = "This device can fire a remote syndicate bluespace artillery every 15 minutes, detonating a dirty bomb on direct intercept with the station, causing an artificial radstorm. The cannon will NOT fire if a radstom is already ongoing."
+	item = /obj/item/device/radstorm_remote
+	cost = 12
+	discounted_cost = 10
+	jobs_with_discount = ENGINEERING_POSITIONS
 
 /datum/uplink_item/sabotage_tools/reportintercom
 	name = "NT Central Command Report Falsifier"

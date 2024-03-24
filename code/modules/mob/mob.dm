@@ -907,7 +907,7 @@ Use this proc preferably at the end of an equipment loadout
 		//END HUMAN
 /mob/proc/reset_view(atom/A)
 	if (client)
-		if (istype(A, /atom/movable))
+		if (A)
 			client.perspective = EYE_PERSPECTIVE
 			client.eye = A
 		else
@@ -1181,7 +1181,7 @@ Use this proc preferably at the end of an equipment loadout
 				for(var/mob/M in viewers(4, L))
 					if(M == L)
 						continue
-					if(istype(M.get_item_by_slot(slot_glasses),/obj/item/clothing/glasses/regular/tracking))
+					if(istype(M.get_item_by_slot(slot_glasses),/obj/item/clothing/glasses/hud/tracking))
 						if(M.is_blind())
 							continue
 						if(isobj(A.loc))
@@ -1630,17 +1630,17 @@ Use this proc preferably at the end of an equipment loadout
 		var/max_alpha = 0
 		for (var/key in dark_plane.alphas)
 			max_alpha = max(dark_plane.alphas[key], max_alpha)
-		animate(dark_plane, alpha = max_alpha, color = dark_plane.colours, time = 10)
+		animate(dark_plane, alpha = max_alpha, color = dark_plane.colours, time = 0)
 	else if (dark_plane)
-		animate(dark_plane, alpha = initial(dark_plane.alpha), color = dark_plane.colours, time = 10)
+		animate(dark_plane, alpha = initial(dark_plane.alpha), color = dark_plane.colours, time = 0)
 
 	if (self_vision)
 		if (isturf(loc))
 			var/turf/T = loc
 			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (master_plane.blend_mode == BLEND_MULTIPLY))
-				animate(self_vision, alpha = self_vision.target_alpha, time = 10)
+				animate(self_vision, alpha = self_vision.target_alpha, time = 0)
 			else
-				animate(self_vision, alpha = 0, time = 10)
+				animate(self_vision, alpha = 0, time = 0)
 
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
@@ -1842,6 +1842,8 @@ Use this proc preferably at the end of an equipment loadout
 	if(istype(client_eye,/obj/machinery/camera))
 		return 1
 	if(istype(client_eye,/obj/item/projectile/rocket/nikita))
+		return 1
+	if(istype(client_eye,/turf/simulated/wall) && Adjacent(client_eye))
 		return 1
 	return 0
 

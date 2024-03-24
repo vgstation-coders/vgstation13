@@ -130,6 +130,9 @@
 	colour_overlay = image('icons/obj/chemical.dmi',"bottle_colour")
 	overlays += colour_overlay
 
+/obj/item/weapon/storage/pill_bottle/return_air()//keeping your pills at room temperature while in space
+	return
+
 /obj/item/weapon/storage/pill_bottle/CtrlClick()
 	if(isturf(loc))
 		return ..()

@@ -576,6 +576,19 @@ var/list/list/zones = list(list(LIMB_HEAD,LIMB_LEFT_ARM,LIMB_LEFT_HAND,LIMB_LEFT
 // Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic()
 // Returns whether the mob can see the specified HUD
 /mob/proc/hasHUD(var/hud_kind)
+	switch(hud_kind)
+		if(HUD_MEDICAL)
+			for(var/datum/visioneffect/medical/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_SECURITY)
+			for(var/datum/visioneffect/security/H in huds)
+				return TRUE
+			return FALSE
+		if(HUD_ARRESTACCESS)
+			for(var/datum/visioneffect/security/arrest/H in huds)
+				return TRUE
+			return FALSE
 	return FALSE
 
 // Returns a string that provides identification data for this mob

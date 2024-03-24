@@ -216,6 +216,8 @@
 						var/turf/Tsrc = get_turf(src)
 						if(!istype(Tsrc))
 							return 0
+						for (var/obj/effect/decal/cleanable/blood/tracks/footprints in Tsrc)
+							qdel(footprints)//so footprints don't suddenly move on top of the new wall
 						var/turf/simulated/wall/X = Tsrc.ChangeTurf(/turf/simulated/wall)
 						if(X)
 							X.add_hiddenprint(user)
@@ -256,6 +258,8 @@
 					user.visible_message("<span class='warning'>[user] finishes installing reinforced plating to \the [src].</span>", \
 					"<span class='notice'>You finish installing reinforced plating to \the [src].</span>")
 					var/turf/Tsrc = get_turf(src)
+					for (var/obj/effect/decal/cleanable/blood/tracks/footprints in Tsrc)
+						qdel(footprints)//so footprints don't suddenly move on top of the new wall
 					var/turf/simulated/wall/r_wall/X = Tsrc.ChangeTurf(/turf/simulated/wall/r_wall)
 					if(X)
 						X.add_hiddenprint(user)
@@ -323,6 +327,8 @@
 						user.visible_message("<span class='notice'>[user] finishes reinforcing \the [src] with the [S.name].</span>", \
 						"<span class='notice'>You finish reinforcing \the [src] with the [S.name].</span>")
 					var/turf/Tsrc = get_turf(src)
+					for (var/obj/effect/decal/cleanable/blood/tracks/footprints in Tsrc)
+						qdel(footprints)//so footprints don't suddenly move on top of the new wall
 					var/turf/simulated/wall/mineral/X = Tsrc.ChangeTurf(wallpath)
 					if(X)
 						X.add_hiddenprint(user)

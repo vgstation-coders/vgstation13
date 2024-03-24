@@ -22,7 +22,7 @@
 				show_message("[absorb_text]")
 			else
 				show_message("<span class='borange'>Your armor ABSORBS the blow!</span>")
-	else if(armor > 50)
+	else if(armor >= 50)
 		if(!quiet)
 			if(absorb_text)
 				show_message("[soften_text]",4)

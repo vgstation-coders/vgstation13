@@ -14,6 +14,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	name = "telecommunications subspace broadcaster"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "broadcaster"
+	moody_state = "overlay_broadcaster"
 	desc = "A dish-shaped machine used to broadcast processed subspace signals."
 	density = 1
 	anchored = 1
@@ -121,6 +122,9 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 				recentmessages = list()
 
 		/* --- Do a snazzy animation! --- */
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_broadcaster_send")
+		spawn(22)
+			update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 		flick("broadcaster_send", src)
 
 /obj/machinery/telecomms/broadcaster/Destroy()
@@ -341,7 +345,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	for (var/atom/movable/listener in listeners)
 		if (listener)
 			listener.Hear(speech, rendered)
-	
+
 	// Note that a mob can hear both fine and fucked up version of the same message - this is intentional
 	for (var/J in gibberish_listeners)
 		var/datum/jammed_mob_dst/dst = gibberish_listeners[J]
@@ -350,7 +354,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 			var/datum/speech/nu_speech = speech.clone()
 			nu_speech.message = Gibberish(nu_speech.message, dst.severity)
 			dst.attached.Hear(nu_speech, virt.render_speech(nu_speech))
-	
+
 	if (length(gibberish_listeners))
 		gibberish_listeners = null
 

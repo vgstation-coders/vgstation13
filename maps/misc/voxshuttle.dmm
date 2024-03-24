@@ -548,7 +548,7 @@
 "bv" = (
 /obj/structure/closet/vox_raiders,
 /obj/item/weapon/storage/backpack,
-/obj/item/clothing/glasses/thermal/monocle,
+/obj/item/clothing/glasses/hud/thermal/monocle,
 /obj/item/device/radio/headset/raider/pretuned,
 /turf/simulated/floor/shuttle/vox{
 	icon_state = "floor4"

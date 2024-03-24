@@ -52,8 +52,14 @@
 
 /datum/power/vampire/heal
 	cost = 200
-	granttext = "Your rejuvenation abilities have improved and will now heal you over time when used."
+	granttext = "Your rejuvenation abilities have improved and will now heal you over time when used, as well as stop all bleeding, including internal ones."
 	store_in_memory = TRUE
+
+/datum/power/vampire/heal/post_upgrade()
+	var/mob/M = role.antag.current
+	for(var/spell/rejuvenate/R in M.spell_list)
+		R.desc = "Flush your system with spare blood to remove any incapacitating effects. Now also provides a mild healing effect, and closes any bleeding wounds."
+		break
 
 /datum/power/vampire/jaunt
 	cost = 250

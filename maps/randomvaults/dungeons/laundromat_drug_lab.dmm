@@ -420,7 +420,7 @@
 /area/vault/laundromat/drug_lab)
 "wx" = (
 /obj/structure/table/reinforced,
-/obj/item/clothing/glasses/science{
+/obj/item/clothing/glasses/scanner/science{
 	pixel_y = 4
 	},
 /turf/simulated/floor/engine{

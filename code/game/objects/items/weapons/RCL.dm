@@ -136,7 +136,8 @@
 		set_move_event(user)
 		update_icon()
 
-/obj/item/weapon/rcl/AltFrom(var/turf/target_floor,var/mob/user, var/proximity_flag, var/click_parameters)//Returning null so we can also check tile content
+/obj/item/weapon/rcl/AltFrom(var/atom/A,var/mob/user, var/proximity_flag, var/click_parameters)//Returning null so we can also check tile content
+	var/target_floor = get_turf(A)
 	if(proximity_flag == 0) // not adjacent
 		return
 	for (var/obj/item/stack/cable_coil/cable in target_floor)

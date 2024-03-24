@@ -118,7 +118,9 @@ var/list/infected_cleanables = list()
 			blood_data["blood_colour"] = basecolor
 			H.bloody_body_from_data(copy_blood_data(blood_data),0,src)
 			H.bloody_hands_from_data(copy_blood_data(blood_data),2,src)
-			add_blood_to(H, amount)//this one adds blood to the shoes and feet
+			if (amount > 1)
+				H.add_blood_to_feet(amount, basecolor, blood_DNA)
+				amount--
 		for(var/i = 1 to L.held_items.len)
 			var/obj/item/I = L.held_items[i]
 			if(istype(I))
@@ -177,55 +179,13 @@ var/list/infected_cleanables = list()
 /obj/effect/decal/cleanable/Crossed(atom/movable/A)
 	if(ishuman(A))
 		var/mob/living/carbon/human/perp = A
-		if(amount > 0 && perp.on_foot())
-			add_blood_to(perp, amount)
+		if(amount > 1 && perp.on_foot())
+			perp.add_blood_to_feet(amount, basecolor, blood_DNA)
+			amount--
 
 /obj/effect/decal/cleanable/proc/messcheck(var/obj/effect/decal/cleanable/M)
 	return 1
 
-
-/obj/effect/decal/cleanable/proc/add_blood_to(var/mob/living/carbon/human/perp, var/amount)
-	if (!istype(perp))
-		return
-	if(amount < 1)
-		return
-	if(perp.shoes)
-		var/obj/item/clothing/shoes/S = perp.shoes
-		S.track_blood = max(0, amount, S.track_blood)                //Adding blood to shoes
-
-		if(!blood_overlays["[S.type][S.icon_state]"]) //If there isn't a precreated blood overlay make one
-			S.set_blood_overlay()
-
-		if(S.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
-			S.overlays.Remove(S.blood_overlay)
-		else
-			S.blood_overlay = blood_overlays["[S.type][S.icon_state]"]
-
-		if(!S.blood_DNA)
-			S.blood_DNA = list()
-
-		var/newcolor = (S.blood_color && S.blood_DNA.len) ? BlendRGB(S.blood_color, basecolor, 0.5) : basecolor
-		S.blood_overlay.color = newcolor
-		S.overlays += S.blood_overlay
-		S.blood_color = newcolor
-
-		if(blood_DNA)
-			S.blood_DNA |= blood_DNA.Copy()
-		perp.update_inv_shoes(1)
-
-	else
-		perp.track_blood = max(amount, 0, perp.track_blood)                                //Or feet
-		if(!perp.feet_blood_DNA)
-			perp.feet_blood_DNA = list()
-
-		if(!istype(blood_DNA, /list))
-			blood_DNA = list()
-		else
-			perp.feet_blood_DNA |= blood_DNA.Copy()
-
-		perp.feet_blood_color = (perp.feet_blood_color && perp.feet_blood_DNA.len) ? BlendRGB(perp.feet_blood_color, basecolor, 0.5) : basecolor
-
-	amount--
 
 
 
@@ -260,3 +220,7 @@ var/list/infected_cleanables = list()
 		var/turf/T = get_turf(src)
 		if(T && (T.z == map.zMainStation))
 			legacy_cult.bloody_floors -= T
+
+/obj/effect/decal/cleanable/clean_act(var/cleanliness)
+	if (cleanliness >= CLEANLINESS_SPACECLEANER)
+		qdel(src)

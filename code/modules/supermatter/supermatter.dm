@@ -68,7 +68,7 @@
 	var/datum/radio_frequency/radio_connection
 
 	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
-	var/list/message_exclusions = list(/obj/effect/sparks,/obj/effect/overlay/hologram)
+	var/list/message_exclusions = list(/obj/effect/sparks,/obj/effect/overlay/hologram,/obj/abstract)
 	machine_flags = MULTITOOL_MENU
 
 	var/has_exploded = 0 // increments each times it tries to explode so we may track how it may occur more than once
@@ -145,6 +145,7 @@
 			SetUniversalState(/datum/universal_state/supermatter_cascade)
 			explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1, whodunnit = user)
 			empulse(turff, 100, 200, 1)
+
 	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
 		log_admin("[name] at [T.loc] has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
 		message_admins("[name] at [T.loc]([x], [y], [z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) has tried exploding despite having already exploded once. Looks like it wasn't properly deleted (gcDestroyed = [gcDestroyed]).")
@@ -162,6 +163,9 @@
 			empulse(get_turf(src), 100, 200, 1)
 			qdel(src)
 			return
+		for(var/mob/M in player_list)
+			M.playsound_local(src, 'sound/effects/delamination.ogg', 50, 1)
+			shake_camera(M, 1, 1)
 		explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1, whodunnit = user)
 		empulse(get_turf(src), 100, 200, 1)
 	else if (has_exploded == 2)// yeah not gonna report it more than once to not flood the logs if it glitches badly
@@ -343,9 +347,10 @@
 
 	env.merge(removed)
 
-	for(var/mob/living/carbon/human/l in view(src, min(7, round(power ** 0.25)))) // If they can see it without mesons on.  Bad on them.
-		if(!istype(l.glasses, /obj/item/clothing/glasses/scanner/meson))
-			l.hallucination = max(0, min(200, l.hallucination + power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)) ) ) )
+	for(var/mob/living/carbon/human/l in view(src, min(7, round(power ** 0.25)))) // If they can see it without s on.  Bad on them.
+		if(l.hasHUD(HUD_MESON) || istype(l.glasses, /obj/item/clothing/glasses/scanner/meson) || istype(l.glasses, /obj/item/clothing/glasses/scanner/dual/chiefengineer))
+			continue
+		l.hallucination = max(0, min(200, l.hallucination + power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)) ) ) )
 
 	for(var/mob/living/l in range(src, round((power / 100) ** 0.25)))
 		var/rads = (power / 50) * sqrt(1/(max(get_dist(l, src), 1)))
@@ -453,7 +458,7 @@
 		Consume(W)
 		user.apply_radiation(250, RAD_EXTERNAL)
 		return
-	
+
 	user.visible_message("<span class='warning'>\The [user] touches \a [W] to \the [src] as a silence fills the room...</span>",\
 		"<span class='danger'>You touch \the [W] to \the [src] when everything suddenly goes silent.</span>\n<span class='notice'>\The [W] flashes into dust as you flinch away from \the [src].</span>",\
 		"<span class='warning'>Everything suddenly goes silent.</span>")

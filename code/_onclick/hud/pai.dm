@@ -1,13 +1,3 @@
-#define SCANNER 1
-
-/mob/living/silicon/pai/regular_hud_updates()
-	if(client)
-		for(var/image/hud in client.images)
-			if(findtext(hud.icon_state, "hud", 1, 4))
-				client.images -= hud
-
-#undef SCANNER
-
 /datum/hud/proc/pai_hud()
 
 	mymob.zone_sel = new /obj/abstract/screen/zone_sel

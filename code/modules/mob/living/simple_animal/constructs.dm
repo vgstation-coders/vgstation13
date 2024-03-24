@@ -40,7 +40,7 @@
 
 	var/list/healers = list()
 
-	var/construct_color = rgb(255,255,255)
+	var/construct_color = "#FFFFFF"
 
 	var/floating_amplitude = 4
 
@@ -62,7 +62,7 @@
 	add_language(LANGUAGE_GALACTIC_COMMON)
 	default_language = all_languages[LANGUAGE_CULT]
 	init_language = default_language
-	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
+	hud_list[CONSTRUCT_HUD] = new/image/hud('icons/mob/hud.dmi', src, "consthealth100")
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
@@ -416,6 +416,10 @@
 	// tactically deploy a wall under you and become immune to projectiles, I guess
 	spell_on_use_inhand = /spell/aoe_turf/conjure/wall
 
+/mob/living/simple_animal/construct/builder/New()
+	..()
+	huds += new /datum/visioneffect/construct
+
 
 /////////////////////////////Behemoth/////////////////////////
 
@@ -558,6 +562,7 @@
 
 
 /mob/living/simple_animal/construct/regular_hud_updates()
+	..()
 	if(fire_alert)
 		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/carbon/burn/fire/construct)
 	else
@@ -611,8 +616,6 @@
 
 /mob/living/simple_animal/construct/builder/regular_hud_updates()
 	..()
-
-	process_construct_hud(src)
 
 	if(healths)
 		switch(health)

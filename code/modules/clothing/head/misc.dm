@@ -30,6 +30,7 @@
 	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	siemens_coefficient = 0.9
+	vertical_offset = 1
 	wizard_garb = 5 //Treat this as a % chance to be a magic hat to start. It becomes TRUE/FALSE later.
 	var/timer
 
@@ -223,6 +224,18 @@
 	item_state = "detective"
 	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.9
+
+/obj/item/clothing/head/flatcap/linen
+	name = "flat cap"
+	desc = "A working man's cap."
+	icon_state = "flatcap"
+	item_state = "flatcap"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("trim")
 
 /obj/item/clothing/head/pirate
 	name = "pirate hat"
@@ -551,6 +564,7 @@
 	icon_state = "clownpiece"
 	item_state = "clownpiece"
 	species_fit = list(INSECT_SHAPED)
+	vertical_offset = 4
 
 /obj/item/clothing/head/headband
 	name = "head band"

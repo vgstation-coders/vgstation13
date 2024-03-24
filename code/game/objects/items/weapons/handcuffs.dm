@@ -155,7 +155,7 @@
 	if(proximity_flag == 0) // not adjacent
 		return
 
-	if(target.is_open_container() && target.reagents && !target.reagents.is_empty())
+	if(istype(target, /obj/item/weapon/reagent_containers) && target.is_open_container() && target.reagents && !target.reagents.is_empty())
 		// Figure out how much water or cleaner there is
 		var/cleaner_percent = get_reagent_paint_cleaning_percent(target)
 

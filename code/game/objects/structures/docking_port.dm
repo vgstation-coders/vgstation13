@@ -272,7 +272,8 @@ var/global/list/dockinglights = list()
 
 /obj/machinery/docklight/New()
 	..()
-	dockinglights += src
+	if(!triggered) //don't add the permanently-on lights
+		dockinglights += src
 
 /obj/machinery/docklight/Destroy()
 	dockinglights -= src
@@ -292,3 +293,10 @@ var/global/list/dockinglights = list()
 	<ul>
 		<li>[format_tag("ID Tag","id_tag")]</li>
 	</ul>"}
+
+/obj/machinery/docklight/alwayson
+	triggered = 1
+
+/obj/machinery/docklight/alwayson/New()
+	..()
+	update_icon()

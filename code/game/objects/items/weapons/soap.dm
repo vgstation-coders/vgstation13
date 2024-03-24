@@ -105,19 +105,15 @@
 				"<span class='notice'>There is nothing for you to vandalize.</span>")
 			return
 		cleanables = shuffle(cleanables)
-		var/obj/effect/decal/cleanable/C
-		for(var/obj/effect/decal/cleanable/d in cleanables)
-			if(d && istype(d))
-				C = d
-				break
-		user.simple_message("<span class='notice'>You scrub \the [C.name] out.</span>",
+		var/obj/effect/decal/cleanable/C = pick(cleanables)
+		user.simple_message("<span class='notice'>You scrub \the [isatom(C) ? "[C.name]" : "decal"] out.</span>",
 			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
 		qdel(C)
 		on_successful_use(user)
 	else
 		user.simple_message("<span class='notice'>You clean \the [target.name].</span>",
 			"<span class='warning'>You [pick("deface","ruin","stain")] \the [target.name].</span>")
-		target.clean_blood()
+		target.clean_act(CLEANLINESS_SPACECLEANER)
 		on_successful_use(user)
 
 /obj/item/weapon/soap/attack(var/mob/target, var/mob/user)

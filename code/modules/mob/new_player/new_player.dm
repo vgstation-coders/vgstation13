@@ -469,7 +469,13 @@
 		//Error! We have no targetable spawn!
 		return
 	var/turf/start_point = locate(TRANSITIONEDGE + 2, rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2)), endpoint.z)
-	target.forceMove(start_point)
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+		var/obj/item/airbag/A = new(start_point, TRUE)
+		A.deploy(H)
+		target = A
+	else
+		target.forceMove(start_point)
 	target.throw_at(endpoint)
 
 

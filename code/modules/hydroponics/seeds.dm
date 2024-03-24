@@ -509,6 +509,10 @@
 	seed_type = "clover"
 	vending_cat = "weeds"
 
+/obj/item/seeds/flaxseed
+	name = "packet of flax seeds"
+	seed_type = "flax"
+
 // Chili plants/variants.
 /datum/seed/chili
 
@@ -1891,7 +1895,7 @@
 	potency = 30
 	growth_stages = 3
 
-/datum/seed/clover/
+/datum/seed/clover
 	name = "clover"
 	seed_name = "clover"
 	display_name = "clover"
@@ -1908,3 +1912,17 @@
 	fluid_consumption = 0.5
 	nutrient_consumption = 0.15
 
+/datum/seed/flax
+	name = "flax"
+	seed_name = "flax"
+	display_name = "flax stalks"
+	plant_dmi = 'icons/obj/hydroponics/flax.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/flax)
+	chems = list(FLAXOIL = list(6,5))
+	lifespan = 25
+	maturation = 6
+	production = 1
+	yield = 4
+	potency = 5
+	ideal_light = 8
+	nutrient_consumption = 2
