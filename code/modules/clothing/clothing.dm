@@ -595,7 +595,7 @@
 	body_parts_covered = HANDS
 	slot_flags = SLOT_GLOVES
 	attack_verb = list("challenges")
-	species_restricted = list("exclude","Unathi","Tajaran","Muton")
+	species_restricted = list("exclude","Unathi","Tajaran","Muton", "Crab")
 	var/pickpocket = 0 //Master pickpocket?
 
 	var/bonus_knockout = 0 //Knockout chance is multiplied by (1 + bonus_knockout) and is capped at 1/2. 0 = 1/12 chance, 1 = 1/6 chance, 2 = 1/4 chance, 3 = 1/3 chance, etc.

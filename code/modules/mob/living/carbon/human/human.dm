@@ -24,6 +24,14 @@
 	underwear = 0
 	..(new_loc, "Manifested")
 
+/mob/living/carbon/human/crab/New(var/new_loc, delay_ready_dna = 0)
+	..(new_loc, "Crab")
+	my_appearance.h_style = "Bald"
+	regenerate_icons()
+
+/mob/living/carbon/human/crab/dexterity_check()
+	return FALSE
+
 /mob/living/carbon/human/skrell/New(var/new_loc, delay_ready_dna = 0)
 	..(new_loc, "Skrell")
 	my_appearance.h_style = "Skrell Male Tentacles"
@@ -98,7 +106,7 @@
 	initialize_basic_NPC_components()
 
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0, no_tail = FALSE) //Just fuck my shit up: the mob
-	var/list/valid_species = (all_species - list("Krampus", "Horror", "Manifested"))
+	var/list/valid_species = (all_species - list("Krampus", "Horror", "Manifested", "Crab"))
 
 	var/datum/species/new_species = all_species[pick(valid_species)]
 	..(new_loc, new_species.name)
