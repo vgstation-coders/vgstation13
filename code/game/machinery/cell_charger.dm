@@ -161,6 +161,7 @@
 //craftable by combining an APC frame, metal rod, cables, and wirecutter
 /datum/construction/reversible/crank_charger
 	result = /obj/item/device/crank_charger
+	decon = list(/obj/item/stack/sheet/metal = 2)
 	steps = list(
 					//1
 					list(Co_DESC="The cabling is messily strewn throughout.",
@@ -186,20 +187,16 @@
 					list(Co_DESC="The frame is ready to use.",
 						Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/rods,
 							Co_VIS_MSG = "{USER} add{s} the rod onto {HOLDER}.",
-							Co_AMOUNT = 1)
+							Co_AMOUNT = 1),
+						Co_BACKSTEP = list(Co_KEY=/obj/item/tool/wrench,
+							Co_VIS_MSG = "{USER} wrench{es} {HOLDER} back into sheets.")
 						)
 					)
 /datum/construction/reversible/crank_charger/action(atom/used_atom,mob/user)
 	return check_step(used_atom,user)
 
 /datum/construction/reversible/crank_charger/spawn_result(mob/user as mob)
-	if(result)
-//		testing("[user] finished a [result]!")
-
-		new result(get_turf(holder))
-
-		QDEL_NULL (holder)
-
+	..()
 	feedback_inc("crank_charger_created",1)
 
 /obj/item/device/crank_charger

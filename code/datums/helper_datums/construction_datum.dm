@@ -237,10 +237,15 @@
 		spawn_decon(user)
 
 /datum/construction/reversible/proc/spawn_decon(mob/user as mob)
-	if(decon)
+	var/list/tospawn = islist(decon) ? decon : list(decon)
+	if(tospawn && tospawn.len)
 //		testing("[user] fully deconstructed a [result]!")
-
-		new decon(get_turf(holder))
+		for(var/thing in tospawn)
+			var/atom/A = new thing(get_turf(holder))
+			if(istype(A,/obj/item/stack))
+				var/obj/item/stack/S = A
+				if(tospawn[thing] > 1)
+					S.amount = decon[thing]
 		spawn()
 			QDEL_NULL (holder)
 

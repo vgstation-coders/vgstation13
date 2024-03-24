@@ -47,7 +47,7 @@ var/list/mass_drivers = list()
 		return .
 
 	if(W.is_screwdriver(user))
-		to_chat(user, "You begin to unscrew the bolts off the [src]...")
+		to_chat(user, "You begin to unscrew the bolts off \the [src]...")
 		W.playtoolsound(src, 50)
 		if(do_after(user, src, 30))
 			var/obj/machinery/mass_driver_frame/F = new(get_turf(src))
@@ -149,7 +149,7 @@ var/list/mass_drivers = list()
 
 /datum/construction/reversible/mass_driver
 	result = /obj/machinery/mass_driver
-	decon = /obj/item/stack/sheet/plasteel
+	decon = list(/obj/item/stack/sheet/plasteel = 3)
 	steps = list(
 				//5
 				list(
@@ -237,20 +237,9 @@ var/list/mass_drivers = list()
 /datum/construction/reversible/mass_driver/spawn_result(mob/user as mob)
 	if(result)
 //		testing("[user] finished a [result]!")
-
 		var/atom/R = new result(get_turf(holder))
 		R.dir = holder.dir
-
-		QDEL_NULL (holder)
+		spawn()
+			QDEL_NULL (holder)
 
 	feedback_inc("mass_driver_created",1)
-
-/datum/construction/reversible/mass_driver/spawn_decon(mob/user as mob)
-	if(decon)
-//		testing("[user] finished a [result]!")
-
-		new decon(get_turf(holder),3)
-
-		QDEL_NULL (holder)
-
-	//feedback_inc("mass_driver_created",1)
