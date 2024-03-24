@@ -10,6 +10,9 @@
 #define Co_KEEP			"keep" //if permanence is set to 0, we can still store specific step items by including this in the step
 #define Co_TAKE			"take" //if we want to actually have a stack or weldingtool in construction, rather than weld or add a stack, we can use this override
 #define Co_DESC			"desc"
+#define Co_ICON_STATE	"icon_state"
+#define Co_START_SOUND	"start_sound"
+#define Co_SOUND		"sound"
 
 #define Co_NEXTSTEP		"nextstep"
 #define Co_BACKSTEP		"backstep"
@@ -34,6 +37,7 @@
 		spawn
 			qdel (src)
 	set_desc(steps.len)
+	update_icon(steps.len)
 	add_max_amounts()
 	return
 
@@ -47,6 +51,7 @@
 		spawn_result(user)
 	else
 		set_desc(steps.len)
+		update_icon(steps.len)
 	return
 
 /datum/construction/proc/action(atom/used_atom,mob/user as mob)
@@ -76,34 +81,48 @@
 	return 0
 
 /datum/construction/proc/custom_action(step, obj/item/used_atom, mob/user)
-	if(istype(used_atom,/obj/item/weapon/circuitboard))
-		playsound(holder, 'sound/items/Deconstruct.ogg', 50, 1)
-	else
-		if(iscablecoil(used_atom))
-			playsound(holder, 'sound/items/zip.ogg', 50, 1)
-		else
-			used_atom.playtoolsound(holder, 50)
-	construct_message(step, user)
+	construct_message(step, user, used_atom)
 	return 1
 
 
 /datum/construction/proc/fixText(text,user,self=0)
 	if(self)
 		text = replacetext(text, "{s}", "")
+		text = replacetext(text, "{es}", "")
+		text = replacetext(text, "{ies}", "y")
 		text = replacetext(text, "{USER}", "You")
 	else
 		text = replacetext(text, "{s}", "s")
+		text = replacetext(text, "{es}", "es")
+		text = replacetext(text, "{ies}", "ies")
 		text = replacetext(text,"{USER}","[user]")
 	text = replacetext(text,"{HOLDER}","[holder]")
 	return text
 
-/datum/construction/proc/construct_message(step, mob/user)
+/datum/construction/proc/construct_message(step, mob/user, atom/movable/used_atom)
 	if(Co_VIS_MSG in step)
 		user.visible_message(fixText(step[Co_VIS_MSG],user), fixText(step[Co_VIS_MSG],user,1))
+	construct_sound(step,user,used_atom)
 
 /datum/construction/proc/start_construct_message(step, mob/user, atom/movable/used_atom)
 	if(Co_START_MSG in step)
 		user.visible_message(fixText(step[Co_START_MSG],user), fixText(step[Co_START_MSG],user,1))
+	construct_sound(step,user,used_atom,TRUE)
+
+/datum/construction/proc/construct_sound(step, mob/user, atom/movable/used_atom, start = FALSE)
+	if(start && (Co_START_SOUND in step))
+		playsound(holder, step[Co_START_SOUND], 50, 1)
+	else if(!start && (Co_SOUND in step))
+		playsound(holder, step[Co_SOUND], 50, 1)
+	else if(!(Co_DELAY in step) || start)
+		if(istype(used_atom,/obj/item/weapon/circuitboard))
+			playsound(holder, 'sound/items/Deconstruct.ogg', 50, 1)
+		else
+			if(iscablecoil(used_atom))
+				playsound(holder, 'sound/items/zip.ogg', 50, 1)
+			else if(isitem(used_atom))
+				var/obj/item/I = used_atom
+				I.playtoolsound(holder, 50)
 
 /datum/construction/proc/check_all_steps(atom/used_atom,mob/user as mob) //check all steps, remove matching one.
 	for(var/i=1;i<=steps.len;i++)
@@ -125,12 +144,15 @@
 		new result(get_turf(holder))
 		spawn()
 			QDEL_NULL (holder)
-	return
 
 /datum/construction/proc/set_desc(index as num)
 	var/list/step = steps[index]
 	holder.desc = step[Co_DESC]
-	return
+
+/datum/construction/proc/update_icon(index as num)
+	var/list/step = steps[index]
+	if(Co_ICON_STATE in step)
+		holder.icon_state = step[Co_ICON_STATE]
 
 /datum/construction/proc/try_consume(mob/user as mob, atom/movable/used_atom, given_step)
 	if(used_atom.construction_delay_mult && !used_atom.construction_delay_mult[Co_CON_SPEED])
@@ -197,6 +219,7 @@
 
 /datum/construction/reversible
 	var/index
+	var/decon
 
 /datum/construction/reversible/New(atom)
 	..()
@@ -205,11 +228,21 @@
 
 /datum/construction/reversible/proc/update_index(diff as num, mob/user as mob)
 	index+=diff
-	if(index==0)
+	if(index <= 0)
 		spawn_result(user)
-	else
+	else if(index <= steps.len)
 		set_desc(index)
-	return
+		update_icon(index)
+	else
+		spawn_decon(user)
+
+/datum/construction/reversible/proc/spawn_decon(mob/user as mob)
+	if(decon)
+//		testing("[user] fully deconstructed a [result]!")
+
+		new decon(get_turf(holder))
+		spawn()
+			QDEL_NULL (holder)
 
 /datum/construction/reversible/is_right_key(mob/user as mob,atom/used_atom) // returns index step
 	if(assembling)
@@ -247,9 +280,9 @@
 	. = ..(index,used_atom,user)
 
 	if(.)
-		construct_message(steps[index], user, diff, 1)
+		construct_message(steps[index], user, used_atom, diff, 1)
 
-/datum/construction/reversible/construct_message(step, mob/user, diff, override)
+/datum/construction/reversible/construct_message(step, mob/user, atom/movable/used_atom, diff, override)
 	if(!override)
 		return
 	var/message_step
@@ -258,10 +291,7 @@
 	else if (Co_BACKSTEP in step)
 		message_step = step[Co_BACKSTEP]
 	if(message_step)
-		user.visible_message(fixText(message_step[Co_VIS_MSG],user), fixText(message_step[Co_VIS_MSG],user,1))
-
-/datum/construction/reversible/start_construct_message(step, mob/user, atom/movable/used_atom)
-	user.visible_message(fixText(step[Co_START_MSG],user), fixText(step[Co_START_MSG],user,1))
+		..(message_step,user,used_atom)
 
 /datum/construction/reversible/add_max_amounts()
 	for(var/i = 1; i <= steps.len; i++)
