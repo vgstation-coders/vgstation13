@@ -209,8 +209,7 @@
 //	//return R_IDEAL_GAS_EQUATION * ( log (1 + IDEAL_GAS_ENTROPY_CONSTANT/partial_pressure) + 20 )
 
 
-//Updates the calculated vars (total_moles, pressure, etc.) (actually currently only those two), culls empty gases from the mix,
-//and caches reactions if allow_reactions is true. Does not actually perform the reactions - just prepares them to be used.
+//Updates the calculated vars (total_moles, pressure, etc.) (actually currently only those two) and culls empty gases from the mix.
 //Called by default by all methods that alter a gas_mixture, and should be called if you manually alter it.
 /datum/gas_mixture/proc/update_values()
 	total_moles = 0
@@ -526,10 +525,9 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 	allow_reactions = FALSE
 
 
-// This currently only gets called in reaction_tick(), but in the future an optimization could be made to only call this on
-// certain events, like when a room's quantity of a certain gas type goes above or below 0, then add flags to reactions that only care about
-// such events (most reactions probably only care about whether a gas exists, so this would be a big improvement). This function would still need
-// to exist for reactions that DO care about something more strange, though.
+// This currently gets called in reaction_tick(). In the future, however, many reactions should be moved to an alternative event-based system
+// so that the reaction_is_possible is only checked on certain events (i.e. a certain gas type goes above or below 0, which are most reactions as
+// most reactions only care whether a gas exists or not).
 /datum/gas_mixture/proc/cache_reactions()
 	if(allow_reactions)
 		possible_reactions.Cut()
@@ -548,6 +546,9 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 		// Calculate the sum of all requested reagents and see if that's more gas than the environment has (i.e. two reactions are both requesting 80%
 		// of the oxygen, which sums up to 160%). Then we divide all reaction amounts by the worst offender so that at most 100% of a gas is used.
 		// Only need to do this if there's more than one reaction though (since a reaction SHOULDN'T be trying to use 150% of oxygen in a room)
+
+		// TODO: reactions should be grouped into interfering sections, i.e. if we have two oxygen reactions requesting 200% of oxygen it will reduce ALL
+		// reactions in half, even if the other reactions don't touch oxygen at all.
 		if(possible_reactions.len > 1)
 			var/list/total_requested = list()
 			for(var/datum/gas_reaction/reaction in reaction_to_requested)
@@ -557,7 +558,7 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 
 			var/worst_ratio = 1.0
 			for(var/gas_ID in total_requested)
-				var/environment_amount = gas[gas_ID] != null ? gas[gas_ID] : 0
+				var/environment_amount = gas[gas_ID]
 				worst_ratio = max(worst_ratio, total_requested[gas_ID] / environment_amount)
 
 			if(worst_ratio > 1.0)

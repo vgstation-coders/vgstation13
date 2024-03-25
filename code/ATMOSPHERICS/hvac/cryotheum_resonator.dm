@@ -34,9 +34,7 @@
 			overlays += image(icon = icon, icon_state = "pulse")
 
 /obj/machinery/cryotheum_resonator/emp_act(severity)
-	if(stat & ( NOPOWER | FORCEDISABLE | BROKEN ))
-		..(severity)
-		return
+	..(severity)
 
 /obj/machinery/cryotheum_resonator/emag_act(mob/user)
 	if(!emagged)
@@ -75,7 +73,7 @@
 					if(x_offset == 0 && y_offset == 0)
 						x_offset = 1
 					A_location = locate(loc.x+x_offset, loc.y+y_offset, loc.z)
-					if(istype(A_location, /turf) || !istype(A_location, /turf/simulated/wall))
+					if(istype(A_location, /turf) && !istype(A_location, /turf/simulated/wall))
 						break
 					else if(i == 5)
 						return
@@ -85,7 +83,7 @@
 					if(x_offset == 0 && y_offset == 0)
 						x_offset = 1
 					B_location = locate(loc.x+x_offset, loc.y+y_offset, loc.z)
-					if(istype(B_location, /turf) || !istype(B_location, /turf/simulated/wall))
+					if(istype(B_location, /turf) && !istype(B_location, /turf/simulated/wall))
 						break
 					else if(i == 5)
 						return
@@ -115,8 +113,9 @@
 					var/datum/gas_mixture/tile_above_gas = environment.remove_volume( CELL_VOLUME )
 					if(tile_above_gas)
 						var/oxygen_mols_to_convert = min( get_conversion_amount(), tile_above_gas[GAS_OXYGEN])
-						tile_above_gas[GAS_OXYGEN] -= oxygen_mols_to_convert
-						tile_above_gas[GAS_CRYOTHEUM] += oxygen_mols_to_convert
+						tile_above_gas.adjust_gas(GAS_OXYGEN, -oxygen_mols_to_convert, FALSE);
+						tile_above_gas.adjust_gas(GAS_CRYOTHEUM, oxygen_mols_to_convert, FALSE);
+						// Arbitary numbers to make the environment a cooler, down to a minimum.
 						tile_above_gas.add_thermal_energy(oxygen_mols_to_convert * -20000, 232.8952)
 					environment.merge( tile_above_gas )
 	else if( icon_state == "machine_unpowered" && !(stat & ( NOPOWER | FORCEDISABLE | BROKEN )))
@@ -144,10 +143,10 @@
 			if(user.drop_item(new_crystal, src))
 				crystal = new_crystal
 				crystal.add_fingerprint(user)
-				user.visible_message("<span class='notice'>[user] inserts \the [new_crystal.name] into \the [src.name].</span>", "<span class='notice'>You carefully insert \the [new_crystal.name] into the containment field of \the [src.name].</span>")
+				user.visible_message("<span class='notice'>[user] inserts \the [new_crystal] into \the [src].</span>", "<span class='notice'>You carefully insert \the [new_crystal] into the containment field of \the [src.name].</span>")
 				update_icon()
 		else
-			to_chat(user, "A bluespace crystal is already installed into \the [src.name].")
+			to_chat(user, "A bluespace crystal is already installed into \the [src].")
 	else if(istype(I, /obj/item/device/multitool))
 		if(activated)
 			to_chat(user, "You can't remove the bluespace crystal while \the [src] is running!")
@@ -160,17 +159,16 @@
 /obj/machinery/cryotheum_resonator/attack_hand(mob/user as mob)
 	src.add_fingerprint(user)
 	if(!anchored)
-		to_chat(user, "\The [src.name] needs to be anchored first!")
+		to_chat(user, "\The [src] needs to be anchored first!")
 		return
 	if(crystal == null)
-		to_chat(user, "\The [src.name] is unresponsive, as it has no bluespace crystal!")
+		to_chat(user, "\The [src] is unresponsive, as it has no bluespace crystal!")
 		return
 	if(stat & (NOPOWER | FORCEDISABLE | BROKEN | EMPED))
-		to_chat(user, "\The [src.name] is unresponsive.")
+		to_chat(user, "\The [src] is unresponsive.")
 		return
 	else
 		activated = !activated
 		user.visible_message("<span class='notice'>[user] [activated ? "activates" : "deactivates"] [src].</span>","<span class='notice'>You [activated ? "activate" : "deactivate"] [src].</span>")
 		log_game("Cryotheum Resonator turned [activated ? "on" : "off"] by [user.ckey]([user]) at ([x],[y],[z]).")
 		update_icon()
-		return

@@ -34,9 +34,7 @@
 	metrics_monitored -= input
 
 /obj/machinery/air_sensor/proc/toggle_monitoring(var/input)
-	if(metrics_monitored.Find(input))
-		metrics_monitored -= input
-	else
+	if(!metrics_monitored.Remove(input))
 		metrics_monitored += input
 
 /obj/machinery/air_sensor/proc/is_monitoring(var/input)

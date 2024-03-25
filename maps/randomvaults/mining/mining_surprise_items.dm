@@ -234,13 +234,13 @@
 						return
 					if(istype(O,/obj/item/weapon/tank))
 						var/obj/item/weapon/tank/T = O
-						if(T.air_contents["plasma"])
+						if(T.air_contents[GAS_PLASMA])
 							M.say(pick("Plasma ain't much good to me as a gas. Besides, I don't got much equipment on me for safely gettin' it outta that tank.",
 									"That ain't the kind of way I like to be offered plasma, so don't you even think about openin' that in here or there'll be trouble.",
 									"Plasma ain't a very stable or safe substance as a gas and definitely not if it were let outta that tank, so I ain't touchin that."))
 							return
 				var/datum/gas_mixture/current_air = checkloc.return_air()
-				if(current_air["plasma"])
+				if(current_air[GAS_PLASMA])
 					M.say(pick("Dangit when I said get some plasma, I meant in solid form! Now how's this place gonna get customers that ain't purple boney men!",
 							"Did you let GASEOUS plasma get all over my bar? I asked ya for solid plasma and you let it get dispersin' everywhere like this!",
 							"Aw heck no, you didn't just let that plasma out as gas right? Solid stuff I can work with, but when you're gettin' it in the air like this it's no good for nobody."))

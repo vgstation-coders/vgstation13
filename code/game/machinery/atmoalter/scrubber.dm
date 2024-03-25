@@ -16,8 +16,8 @@
 
 /obj/machinery/portable_atmospherics/scrubber/New()
 	..()
-	for(var/gas_id in XGM.gases)
-		scrubbed_gases[gas_id] = default_scrubbed_gases.Find(gas_id) ? TRUE : FALSE
+	for(var/gas_id in default_scrubbed_gases)
+		scrubbed_gases[gas_id] = TRUE
 
 
 /obj/machinery/portable_atmospherics/scrubber/emp_act(severity)
@@ -135,11 +135,9 @@
 		if (removed)
 			var/datum/gas_mixture/total_to_filter = new
 			total_to_filter.temperature = removed.temperature
-			#define FILTER(g) total_to_filter.adjust_gas((g), removed[g], FALSE)
 			for(var/gas_type in scrubbed_gases)
 				if(scrubbed_gases[gas_type])
-					FILTER(gas_type)
-			#undef FILTER
+					total_to_filter.adjust_gas((gas_type), removed[gas_type], FALSE)
 			total_to_filter.update_values() //since the FILTER macro doesn't update to save perf, we need to update here
 			//calculate the amount of moles in scrubbing_rate litres of gas in removed and apply the scrubbing rate limit
 			var/filter_moles = min(1, scrubbing_rate / removed_volume) * removed.total_moles()
@@ -174,7 +172,7 @@
 	var/list/scrub_toggles = list()
 	for(var/gas_id in XGM.gases)
 		var/datum/gas/gas_datum = XGM.gases[gas_id]
-		var/list/gas_info = list(list("name" = gas_datum.short_name != null ? gas_datum.short_name : gas_datum.name, "id" = gas_datum.id, "active" = scrubbed_gases[gas_datum.id]))
+		var/list/gas_info = list(list("name" = gas_datum.short_name || gas_datum.name, "id" = gas_id, "active" = scrubbed_gases[gas_datum.id]))
 		scrub_toggles += gas_info
 	data["scrub_toggles"] = scrub_toggles
 	data["hasHoldingTank"] = holding ? 1 : 0

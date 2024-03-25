@@ -223,7 +223,7 @@ var/global/list/atmos_controllers = list()
 		var/list/datum_data = list()
 		datum_data["id"] = gas_id
 		datum_data["name"] = gas_datum.name
-		datum_data["short_name"] = gas_datum.short_name != null ? gas_datum.short_name : gas_datum.name
+		datum_data["short_name"] = gas_datum.short_name || gas_datum.name
 		gas_datums += list(datum_data)
 	data["gas_datums"]=gas_datums
 
@@ -424,9 +424,7 @@ var/global/list/atmos_controllers = list()
 			var/gas = href_list["gas"]
 			if(gas)
 				// This "toggle" isn't greatest for performance... but it should only occur once per user input.
-				if(selected_preset.scrubbed_gases.Find(gas))
-					selected_preset.scrubbed_gases -= gas
-				else
+				if(!selected_preset.scrubbed_gases.Remove(gas))
 					selected_preset.scrubbed_gases += gas
 			return 1
 		else
@@ -509,10 +507,7 @@ var/global/list/atmos_controllers = list()
 							if(isnull(newval))
 								return 1
 							if(href_list["command"]=="set_external_pressure")
-								if(newval>1000+ONE_ATMOSPHERE)
-									newval = 1000+ONE_ATMOSPHERE
-								if(newval<0)
-									newval = 0
+								newval = clamp(newval, 0, 1000+ONE_ATMOSPHERE)
 							val = newval
 
 						current.send_signal(device_id, list(href_list["command"] = val ) )

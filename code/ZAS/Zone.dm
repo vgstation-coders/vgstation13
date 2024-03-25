@@ -57,7 +57,7 @@ Class Procs:
 	#endif
 
 	// Hardcoded-event specific variables.
-	var/ice_puddle_list = list()
+	var/ice_puddle_list
 
 /zone/New()
 	SSair.add_zone(src)
@@ -227,24 +227,21 @@ Class Procs:
 				if(!found)
 					var/obj/effect/overlay/puddle/ice/new_ice = new /obj/effect/overlay/puddle/ice(T, T.zone)
 					new_ice.wet = TURF_WET_ICE
+		else if(air.temperature >= T0C+5 && isemptylist(ice_puddle_list))
+			ice_puddle_list = null
 	else if ( air.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME )
 		ice_puddle_list = list()
 
 /zone/proc/handle_events_add(turf/simulated/T)
-	var/list/ice_puddles = T.search_contents_for(/obj/effect/overlay/puddle/ice)
-	if( !isemptylist(ice_puddles))
+	for(var/obj/effect/overlay/puddle/ice/ice_puddle in T)
 		if( ice_puddle_list == null )
 			ice_puddle_list = list()
-		for( var/obj/effect/overlay/puddle/ice/ice in ice_puddles)
-			ice_puddle_list |= ice
+		ice_puddle_list |= ice_puddle
 
 /zone/proc/handle_events_remove(turf/simulated/T)
-	var/list/ice_puddles = T.search_contents_for(/obj/effect/overlay/puddle/ice)
-	if( !isemptylist(ice_puddles))
-		if( ice_puddle_list == null )
-			ice_puddle_list = list()
-		for( var/obj/effect/overlay/puddle/ice/ice in ice_puddles)
-			ice_puddle_list -= ice
+	if( ice_puddle_list != null )
+		for(var/obj/effect/overlay/puddle/ice/ice_puddle in T)
+			ice_puddle_list -= ice_puddle
 
 #ifdef ZAS_COLOR
 #undef ZAS_COLOR

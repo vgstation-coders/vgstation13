@@ -682,7 +682,7 @@ var/global/list/air_alarms = list()
 
 				var/list/signal_data = list("power"= 1, "scrubbing"= 1, "panic_siphon"= 0)
 				for(var/gas_id in XGM.gases)
-					signal_data[gas_id + "_scrub"] = presetdata.scrubbed_gases.Find(gas_id) ? 1 : 0
+					signal_data[gas_id + "_scrub"] = (gas_id in presetdata.scrubbed_gases)
 				send_signal(device_id,  signal_data)
 			for(var/device_id in this_area.air_vent_names)
 				send_signal(device_id, list("power"= 1, "checks"= 1, "set_external_pressure"= target_pressure) )
@@ -820,7 +820,6 @@ var/global/list/air_alarms = list()
 	data["air"]=ui_air_status()
 	data["alarmActivated"]=alarmActivated //|| local_danger_level==2
 	data["thresholds"]=config.nanoui_config_data()
-	data["test"] = list(1,2,3,4)
 	// Locked when:
 	//   Not sent from atmos console AND
 	//   Not silicon AND locked AND
@@ -994,10 +993,7 @@ var/global/list/air_alarms = list()
 						if(isnull(newval))
 							return 1
 						if(href_list["command"]=="set_external_pressure")
-							if(newval>1000+ONE_ATMOSPHERE)
-								newval = 1000+ONE_ATMOSPHERE
-							if(newval<0)
-								newval = 0
+							newval = clamp(newval, 0, 1000+ONE_ATMOSPHERE)
 						val = newval
 
 					send_signal(device_id, list(href_list["command"] = val ) )

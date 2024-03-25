@@ -747,10 +747,9 @@
 						step(src, slide_dir)
 						sleep(ceil(slide_speed))
 						slide_speed *= 1.1
-						var/list/next_puddles = next_turf.search_contents_for(/obj/effect/overlay/puddle/ice)
-						if( isemptylist(next_puddles) )
+						var/obj/effect/overlay/puddle/ice/next = locate(/obj/effect/overlay/puddle/ice) in next_turf
+						if(!next)
 							break
-						var/obj/effect/overlay/puddle/ice/next = next_puddles[1];
 						if(	next.wet != TURF_WET_ICE)
 							break
 					ice_sliding = 0

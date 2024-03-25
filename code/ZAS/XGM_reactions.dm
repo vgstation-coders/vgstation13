@@ -27,7 +27,7 @@
 	name = "Cryotheum-Oxygen Reaction"
 
 /datum/gas_reaction/cryotheum_oxygen_reaction/reaction_is_possible(datum/gas_mixture/mixture)
-	return mixture[GAS_CRYOTHEUM] > 0 && mixture[GAS_OXYGEN] > 0 && mixture.temperature > 232.8952
+	return mixture[GAS_CRYOTHEUM] > 0 && mixture[GAS_OXYGEN] > 0
 
 /datum/gas_reaction/cryotheum_oxygen_reaction/reaction_amounts_requested(datum/gas_mixture/mixture)
 	var/to_return[] = list()
@@ -62,18 +62,19 @@
 	// Cryotheum can only cool things down to 0.1K. As we approach that temperature, it cools less and less. Conversely, at higher temperatures it cools more.
 	var/distance_to_min_temp = max(0, mixture.temperature - 0.1)
 	var/logarithmic_modifier = max(0, log(40, distance_to_min_temp+1))
+	// Arbitrary number to reduce temperature by a significant amount, hardcapped at the minimum temperature.
 	mixture.add_thermal_energy( logarithmic_modifier * reaction_coefficient * -700000, 0.1)
 
 
 
 // Cryotheum dissapates when above 0C. Goes faster the hotter it is.
-/datum/gas_reaction/cryotheum_dissapation
-	name = "Cryotheum Dissapation"
+/datum/gas_reaction/cryotheum_dissipation
+	name = "Cryotheum Dissipation"
 
-/datum/gas_reaction/cryotheum_dissapation/reaction_is_possible(datum/gas_mixture/mixture)
+/datum/gas_reaction/cryotheum_dissipation/reaction_is_possible(datum/gas_mixture/mixture)
 	return mixture[GAS_CRYOTHEUM] > 0 && mixture.temperature > T0C
 
-/datum/gas_reaction/cryotheum_dissapation/reaction_amounts_requested(datum/gas_mixture/mixture)
+/datum/gas_reaction/cryotheum_dissipation/reaction_amounts_requested(datum/gas_mixture/mixture)
 	var/to_return[] = list()
 	// Determine what percentage of the gas we will be dissapating based on the temperature. At 2200K, 100% of the gas will dissapate. At 273.15K, 0% of the gas will dissapate.
 	// Scales linearly between those values.
@@ -82,7 +83,7 @@
 	to_return[GAS_CRYOTHEUM] = max(0.01, to_return[GAS_CRYOTHEUM])
 	return to_return
 
-/datum/gas_reaction/cryotheum_dissapation/perform_reaction(datum/gas_mixture/mixture, reactant_amounts)
+/datum/gas_reaction/cryotheum_dissipation/perform_reaction(datum/gas_mixture/mixture, reactant_amounts)
 	mixture[GAS_CRYOTHEUM] = max(0, mixture[GAS_CRYOTHEUM] - reactant_amounts[GAS_CRYOTHEUM])
 
 
