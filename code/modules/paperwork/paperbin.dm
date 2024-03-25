@@ -89,6 +89,9 @@
 	papers -= Obj
 	..()
 
+/obj/item/weapon/paper_bin/cat_comfy()
+	return TRUE
+
 /obj/item/weapon/paper_bin/MouseDropFrom(atom/over_object)
 	MouseDropPickUp(over_object)
 	return ..()

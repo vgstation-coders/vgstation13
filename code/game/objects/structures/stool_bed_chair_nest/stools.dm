@@ -19,6 +19,9 @@
 	desc = "Apply butt. Get comfy."
 	icon_state = "cushion"
 
+/obj/item/weapon/stool/cushion/cat_comfy()
+	return TRUE
+
 /obj/item/weapon/stool/hologram
 	sheet_type = null
 
