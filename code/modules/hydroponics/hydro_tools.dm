@@ -81,9 +81,17 @@
 	dat += "</table>"
 
 	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
-		dat += "<h2>Reagent Data</h2>"
+	dat += "<h2>Reagent Data</h2>"
+		
+	if(!grown_reagents) //checking if the thing is produce or seed
+		dat += "This plant will produce: "
+		var/datum/reagent/N
+		for (var/rid in grown_seed.chems)
+			N = chemical_reagents_list[rid]
+			dat += "<br>- [N.id]"
 
-		dat += "<br>This sample contains: "
+	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
+		dat += "This sample contains: "
 		for(var/datum/reagent/R in grown_reagents.reagent_list)
 			dat += "<br>- [R.id], [grown_reagents.get_reagent_amount(R.id)] unit(s)"
 
@@ -151,12 +159,13 @@
 		
 	if(grown_seed.consume_gasses)
 		for(var/gas in grown_seed.consume_gasses)
-			dat += "It will consume [gas] from the environment.<br>"
+			dat += "It will consume [grown_seed.consume_gasses[gas]] moles of [gas] from the environment per cycle.<br>"
 	if(grown_seed.gas_absorb)
-		dat += "It will turn absorbed gasses into reagents.<br>"
+		dat += "It will absorb the consumed gases, slowly gaining potency as it does.<br> Its produce will absorb the consumed gases and slowly turn them into reagents.<br>"
 	if(grown_seed.exude_gasses)
 		for(var/gas in grown_seed.exude_gasses)
-			dat += "It will exude [gas] into the environment.<br>"
+			var/amount = max(1,round((grown_seed.exude_gasses[gas]*round(grown_seed.potency))/grown_seed.exude_gasses.len))
+			dat += "It will exude [amount] moles of [gas] into the environment per cycle.<br>"
 
 	switch(grown_seed.spread)
 		if(1)
