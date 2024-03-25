@@ -161,7 +161,7 @@
 		for(var/gas in grown_seed.consume_gasses)
 			dat += "It will consume [grown_seed.consume_gasses[gas]] moles of [gas] from the environment per cycle.<br>"
 	if(grown_seed.gas_absorb)
-		dat += "It will absorb the consumed gases, slowly gaining potency as it does.<br> Its produce will absorb the consumed gases and slowly turn them into reagents.<br>"
+		dat += "It will absorb the consumed gases, slowly gaining potency as it does.<br>Its produce can also absorb the consumed gases and will slowly turn them into reagents.<br>"
 	if(grown_seed.exude_gasses)
 		for(var/gas in grown_seed.exude_gasses)
 			var/amount = max(1,round((grown_seed.exude_gasses[gas]*round(grown_seed.potency))/grown_seed.exude_gasses.len))
