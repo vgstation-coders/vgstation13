@@ -93,7 +93,7 @@
 	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
 		dat += "This sample contains: "
 		for(var/datum/reagent/R in grown_reagents.reagent_list)
-			dat += "<br>- [R.id], [grown_reagents.get_reagent_amount(R.id)] unit(s)"
+			dat += "<br>- [R.id], [grown_reagents.get_reagent_amount(R.id)] unit[grown_reagents.get_reagent_amount(R.id) == 1 ? "" : "s"]"
 
 	dat += "<h2>Other Data</h2>"
 
