@@ -4,7 +4,7 @@
 //The mob's butchering_drops list is made from get_butchering_products() when it dies. Humans however get it when they're created.
 
 /datum/butchering_product
-	var/obj/item/result
+	var/obj/item/result //can also be a list of items
 	//What item this is for
 
 	var/verb_name
@@ -33,7 +33,12 @@
 /datum/butchering_product/proc/spawn_result(location, mob/parent)
 	if(amount > 0)
 		amount--
-		return new result(location)
+		if(!islist(result))
+			return new result(location)
+		var/list/returned_results = list()
+		for(var/result_item in result)
+			returned_results += new result_item(location)
+		return returned_results
 
 //This is added to the description of dead mobs! It's important to add a space at the end (like this: "It has been skinned. ").
 /datum/butchering_product/proc/desc_modifier(mob/parent, mob/user) //User - the guy who is looking at Parent
@@ -242,7 +247,7 @@
 	if(amount < 8)
 		return "It only has [amount] [amount==1 ? "leg" : "legs"]. "
 
-//=============Alien claws========
+//=============Claws========
 
 /datum/butchering_product/xeno_claw
 	result = /obj/item/xenos_claw
@@ -253,6 +258,9 @@
 /datum/butchering_product/xeno_claw/desc_modifier()
 	if(!amount)
 		return "Its claws have been cut off. "
+
+/datum/butchering_product/xeno_claw/crab_claw
+	result = list(/obj/item/organ/external/r_hand/crab, /obj/item/organ/external/l_hand/crab)
 
 //======frog legs
 

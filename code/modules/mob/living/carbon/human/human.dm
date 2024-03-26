@@ -1698,6 +1698,11 @@
 /mob/living/carbon/human/dexterity_check()
 	if (stat != CONSCIOUS)
 		return FALSE
+	var/datum/organ/external/hand_organ_datum = get_active_hand_organ()
+	if(hand_organ_datum:hand_type)
+		var/obj/item/organ/external/hand_obj = new hand_organ_datum:hand_type
+		if(!(hand_obj:is_dexterous))
+			return FALSE
 	if(gloves && istype(gloves, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = gloves
 		if(!G.dexterity_check())//some gloves might make it harder to interact with complex technologies, or fit your index in a gun's trigger
