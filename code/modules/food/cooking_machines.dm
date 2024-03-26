@@ -339,6 +339,9 @@ var/global/ingredientLimit = 10
 	if (cooking_temperature && (new_food.reagents.chem_temp < cooking_temperature))
 		new_food.reagents.chem_temp = cooking_temperature
 	new_food.update_icon()
+	if(istype(ingredient,/obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube))
+		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube/H = ingredient
+		qdel(H.containted_mob)
 	ingredient = null
 	return new_food
 
