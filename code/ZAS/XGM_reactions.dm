@@ -64,26 +64,3 @@
 	var/logarithmic_modifier = max(0, log(40, distance_to_min_temp+1))
 	// Arbitrary number to reduce temperature by a significant amount, hardcapped at the minimum temperature.
 	mixture.add_thermal_energy( logarithmic_modifier * reaction_coefficient * -700000, 0.1)
-
-
-
-// Cryotheum dissapates when above 0C. Goes faster the hotter it is.
-/datum/gas_reaction/cryotheum_dissipation
-	name = "Cryotheum Dissipation"
-
-/datum/gas_reaction/cryotheum_dissipation/reaction_is_possible(datum/gas_mixture/mixture)
-	return mixture[GAS_CRYOTHEUM] > 0 && mixture.temperature > T0C
-
-/datum/gas_reaction/cryotheum_dissipation/reaction_amounts_requested(datum/gas_mixture/mixture)
-	var/to_return[] = list()
-	// Determine what percentage of the gas we will be dissapating based on the temperature. At 2200K, 100% of the gas will dissapate. At 273.15K, 0% of the gas will dissapate.
-	// Scales linearly between those values.
-	to_return[GAS_CRYOTHEUM] = (mixture[GAS_CRYOTHEUM] * min(1, (mixture.temperature-T0C)/1926.85))
-	// To prevent infinitely small numbers, if it's below 0.01 moles we can just delete the rest.
-	to_return[GAS_CRYOTHEUM] = max(0.01, to_return[GAS_CRYOTHEUM])
-	return to_return
-
-/datum/gas_reaction/cryotheum_dissipation/perform_reaction(datum/gas_mixture/mixture, reactant_amounts)
-	mixture[GAS_CRYOTHEUM] = max(0, mixture[GAS_CRYOTHEUM] - reactant_amounts[GAS_CRYOTHEUM])
-
-
