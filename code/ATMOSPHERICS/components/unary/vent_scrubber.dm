@@ -68,7 +68,9 @@
 		//src.initialize()
 		src.broadcast_status()
 	for(var/gas_id in XGM.gases)
-		scrubbed_gases[gas_id] = gas_id in default_scrubbed_gases;
+		scrubbed_gases[gas_id] = FALSE
+	for(var/gas_id in default_scrubbed_gases)
+		scrubbed_gases[gas_id] = TRUE
 
 /obj/machinery/atmospherics/unary/vent_scrubber/update_icon()
 	overlays = null

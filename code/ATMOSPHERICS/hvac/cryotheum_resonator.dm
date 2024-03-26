@@ -45,8 +45,7 @@
 		return 1
 	else
 		spark(src)
-		to_chat(user, "<span class='warning'>You re-enable the safety features on \the [src].</span>")
-		emagged = FALSE
+		to_chat(user, "<span class='warning'>The safety features are already disabled! But you zap it again anyways.</span>")
 		return 1
 
 /obj/machinery/cryotheum_resonator/process()
@@ -137,7 +136,12 @@
 
 /obj/machinery/cryotheum_resonator/attackby(obj/item/I, mob/user)
 	..()
-	if(istype(I, /obj/item/bluespace_crystal))
+	if(issolder(I) && emagged)
+		var/obj/item/tool/solder/S = I
+		if(S.remove_fuel(2,user))
+			to_chat(user, "<span class='warning'>You re-solder the safety features on \the [src].</span>")
+			emagged = FALSE
+	else if(istype(I, /obj/item/bluespace_crystal))
 		if(crystal == null)
 			var/obj/item/bluespace_crystal/new_crystal = I
 			if(user.drop_item(new_crystal, src))

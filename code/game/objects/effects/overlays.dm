@@ -115,7 +115,7 @@
 
 /obj/effect/overlay/puddle/ice/New(var/turf/T, var/zone/zone)
 	..()
-	current_temp = T.temperature
+	current_temp = T.air.temperature
 	if( zone != null )
 		// Refactor suggestion: zone SHOULD be managing ice_puddle_list, puddle should not have to worry about this at all.
 		zone.ice_puddle_list += src
