@@ -184,8 +184,8 @@
 		if(!status) // Help intent + no charge = nothing
 			if(istype(user,/mob/living/carbon))
 				var/mob/living/carbon/C = user
-			if(C.check_shields(0,src))
-				return
+				if(C.check_shields(0,src))
+					return
 			L.visible_message("<span class='attack'>\The [L] has been prodded with \the [src] by \the [user]. Luckily it was off.</span>",
 				self_drugged_message="<span class='warning'>\The [name] decides to spare this one.</span>")
 			return
