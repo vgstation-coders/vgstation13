@@ -341,7 +341,7 @@ var/global/ingredientLimit = 10
 	new_food.update_icon()
 	if(istype(ingredient,/obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube))
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube/H = ingredient
-		qdel(H.containted_mob)
+		qdel(H.contained_mob)
 	ingredient = null
 	return new_food
 
