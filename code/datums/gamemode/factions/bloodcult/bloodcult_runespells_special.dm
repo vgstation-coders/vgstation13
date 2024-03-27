@@ -291,6 +291,8 @@
 /datum/rune_spell/tearreality/proc/dancer_check(var/mob/living/carbon/C)
 	if (dance_platforms.len <= 0)
 		return
+	if (!isturf(loc))//moved inside the blood stone
+		return
 	if (dance_manager && C)
 		dance_manager.dancers |= C
 		if(iscultist(C))
@@ -346,7 +348,9 @@
 				newMarker.z = blood_stone.z
 				holomap_markers[HOLOMAP_MARKER_BLOODSTONE] = newMarker
 				cult.stage(BLOODCULT_STAGE_ECLIPSE)
+				R.mouse_opacity = 0
 				R.forceMove(blood_stone)//keeping the rune safe inside the bloodstone
+				QDEL_NULL(dance_manager)
 				blood_stone.flashy_entrance()
 		else
 			R.overlays += narsie_glint

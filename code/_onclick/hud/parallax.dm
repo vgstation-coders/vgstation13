@@ -25,6 +25,9 @@ var/list/cult_parallax[(GRID_WIDTH**2)]
 	globalscreen = 1
 	var/parallax_speed = 0
 
+/obj/abstract/screen/parallax/cult
+	plane = ABOVE_PARALLAX_PLANE
+
 /obj/abstract/screen/plane_master/parallax_master
 	plane = SPACE_PARALLAX_PLANE
 	blend_mode = BLEND_MULTIPLY
@@ -101,32 +104,68 @@ var/list/cult_parallax[(GRID_WIDTH**2)]
 		if(bgobj.parallax_speed)
 			C.parallax_movable += parallax_layer
 
+#define STARLIGHT_DEFAULT	0
+#define STARLIGHT_DIM		1	//dimmed stars
+#define STARLIGHT_REDSHIFT	2	//stars dimmed and red only
+#define STARLIGHT_CULT		3	//no more stars, only runes and pulsating red background
+
 /datum/hud/proc/update_parallax()
 	var/client/C = mymob.client
 	if(C.prefs.space_parallax)
 		parallax_on_clients |= C
 		for(var/obj/abstract/screen/parallax/bgobj in C.parallax)
 			C.screen |= bgobj
-		if (universe.name == "Hell Rising")
-			C.parallax_master.color = list(
-				0.2,0,0,0,
-				0,0,0,0,
-				0,0,0,0,
-				0,0,0,0,
-				0,0,0,1)
-			if(!C.parallax_cult.len)
-				initialize_cult_parallax()
-			for(var/obj/abstract/screen/parallax/bgobj in C.parallax_cult)
-				C.screen |= bgobj
-		else
-			C.parallax_master.color = list(
-				1,0,0,0,
-				0,1,0,0,
-				0,0,1,0,
-				0,0,0,0,
-				0,0,0,1)
-			for(var/obj/abstract/screen/parallax/bgobj in C.parallax_cult)
-				C.screen -= bgobj
+		var/starlight = STARLIGHT_DEFAULT
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (cult)
+			switch(cult.stage)
+				if (BLOODCULT_STAGE_READY)
+					starlight = STARLIGHT_DIM
+				if (BLOODCULT_STAGE_ECLIPSE)
+					starlight = STARLIGHT_REDSHIFT
+				if (BLOODCULT_STAGE_NARSIE)
+					starlight = STARLIGHT_CULT
+		else if (sun.eclipse == ECLIPSE_ONGOING)//random eclipse event
+			starlight = STARLIGHT_DIM
+		else if (universe.name == "Hell Rising")//in case some admin summons narsie without there being a cult around
+			starlight = STARLIGHT_CULT
+
+		switch(starlight)
+			if (STARLIGHT_DIM)
+				animate(C.parallax_master, color = list(
+					0.2,0,0,0,
+					0,0.2,0,0,
+					0,0,0.2,0,
+					0,0,0,0,
+					0,0,0,1), time = 10 SECONDS)
+			if (STARLIGHT_REDSHIFT)
+				animate(C.parallax_master, color = list(
+					0.2,0,0,0,
+					0,0,0,0,
+					0,0,0,0,
+					0,0,0,0,
+					0,0,0,1), time = 10 SECONDS)
+			if (STARLIGHT_CULT)
+				animate(C.parallax_master, color = list(
+					0,0,0,0,
+					0,0,0,0,
+					0,0,0,0,
+					0,0,0,0,
+					0,0,0,1), time = 10 SECONDS)
+				if(!C.parallax_cult.len)
+					initialize_cult_parallax()
+				for(var/obj/abstract/screen/parallax/bgobj in C.parallax_cult)
+					C.screen |= bgobj
+			else
+				animate(C.parallax_master, color = list(
+					1,0,0,0,
+					0,1,0,0,
+					0,0,1,0,
+					0,0,0,0,
+					0,0,0,1), time = 10 SECONDS)
+				for(var/obj/abstract/screen/parallax/bgobj in C.parallax_cult)
+					C.screen -= bgobj
+
 		C.screen |= C.parallax_master
 		C.screen |= C.parallax_spacemaster
 		if(C.prefs.space_dust)
@@ -151,6 +190,11 @@ var/list/cult_parallax[(GRID_WIDTH**2)]
 		C.screen -= C.parallax_master
 		C.screen -= C.parallax_spacemaster
 		C.parallax_dustmaster.color = list(0,0,0,0)
+
+#undef STARLIGHT_DEFAULT
+#undef STARLIGHT_DIM
+#undef STARLIGHT_REDSHIFT
+#undef STARLIGHT_CULT
 
 /datum/hud/proc/update_parallax_values()
 	var/client/C = mymob.client
@@ -290,6 +334,11 @@ var/list/cult_parallax[(GRID_WIDTH**2)]
 		cult_parallax[index] = parallax_layer
 		index++
 
+/proc/update_all_parallax()
+	for(var/mob/player in player_list)
+		if (player.hud_used)
+			player.hud_used.update_parallax()
+			CHECK_TICK
 
 /obj/abstract/screen/parallax/proc/calibrate_parallax(var/i)
 	if(!i)

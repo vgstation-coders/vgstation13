@@ -47,7 +47,7 @@ In short:
 	CHECK_TICK
 	suspend_alert = 1
 
-	convert_all_parallax()
+	update_all_parallax()
 	//separated into separate procs for profiling
 	AreaSet()
 	MiscSet()
@@ -133,8 +133,3 @@ In short:
 			M.death()
 		CHECK_TICK
 
-/datum/universal_state/hell/proc/convert_all_parallax()
-	for(var/mob/living/player in living_players)
-		if (player.hud_used)
-			player.hud_used.update_parallax()
-			CHECK_TICK

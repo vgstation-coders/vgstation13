@@ -84,6 +84,11 @@
 				var/mob/M = cultist.antag.current
 				to_chat(M, "<span class='sinister'>The Eclipse has passed. You won't be able to tear reality aboard this station anymore. Escape the station alive with your fellow cultists so you may try again another day.</span>")
 		if (BLOODCULT_STAGE_ECLIPSE)
+			update_all_parallax()
+			spawn()
+				for (var/mob/dead/observer/O in player_list)
+					O.cultify()
+					sleep(rand(1,5))
 			bloodstone_rising_time = world.time
 			bloodstone_target_time = world.time + bloodstone_duration
 			spawn (3 SECONDS)//leaving just a moment for the blood stone to rise.
@@ -100,6 +105,12 @@
 		if (BLOODCULT_STAGE_DEFEATED)
 			..()
 			command_alert(/datum/command_alert/eclipse_bloodstone_broken)
+			if (sun.eclipse == ECLIPSE_ONGOING)//destruction of the blood stone instantly ends the Eclipse
+				sun.eclipse_manager.eclipse_end()
+			spawn()
+				for (var/mob/dead/observer/O in player_list)
+					O.decultify()
+					sleep(rand(1,5))
 		if (BLOODCULT_STAGE_NARSIE)
 			call_shuttle_proc(null, "")
 

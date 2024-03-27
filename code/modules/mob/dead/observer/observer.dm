@@ -47,6 +47,7 @@ var/creating_arena = FALSE
 	var/lastchairspin
 	var/pathogenHUD = FALSE
 	var/manual_poltergeist_cooldown //var-edit this to manually modify a ghost's poltergeist cooldown, set it to null to reset to global
+	var/appearance_backup //so they recover their original appearance when de-cultified
 
 /mob/dead/observer/New(var/mob/body=null, var/flags=1)
 	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
@@ -203,9 +204,8 @@ var/creating_arena = FALSE
 						W.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 
 	if(istype(W,/obj/item/weapon/storage/bible) || isholyweapon(W))
-		var/mob/dead/M = src
-		if(src.invisibility == 0)
-			M.invisibility = 60
+		if(invisibility == 0)
+			decultify()
 			user.visible_message(
 				"<span class='warning'>[user] banishes the ghost from our plane of reality!</span>",
 				"<span class='warning'>You banish the ghost from our plane of reality!</span>"

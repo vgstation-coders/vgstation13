@@ -39,6 +39,7 @@
 	processing_objects += src
 	sun.eclipse = ECLIPSE_ONGOING
 	sun.eclipse_rate = light_reduction
+	update_all_parallax()
 	update_station_lights()
 
 	world << sound('sound/effects/wind/wind_5_1.ogg')
@@ -69,6 +70,7 @@
 
 	sun.eclipse = ECLIPSE_OVER
 	sun.eclipse_rate = 1
+	update_all_parallax()
 	update_station_lights()
 
 	spawn(delay_end_announcement)

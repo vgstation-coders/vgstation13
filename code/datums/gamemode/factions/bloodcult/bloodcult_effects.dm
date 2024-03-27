@@ -679,6 +679,7 @@ var/bloodstone_backup = 0
 
 /obj/effect/cult_ritual/dance/Destroy()
 	dancers = list()
+	tear = null
 	for (var/obj/effect/cult_ritual/dance_platform/P in extras)
 		P.dance_manager = null
 	extras = list()
