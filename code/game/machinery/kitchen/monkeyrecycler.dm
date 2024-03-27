@@ -73,7 +73,7 @@
 			if(user) // necessary line, or else the holder or grab could be spammed to abuse this for more monkey cubes
 				user.drop_item(O,force_drop = 1)
 			var/ourtype = target.type
-			if(emagged)
+			if(target.key && emagged)
 				for(var/datum/body_archive/archive in body_archives)
 					if(archive && archive.key == target.key)
 						ref_body_archives.Add(archive)
@@ -94,8 +94,6 @@
 		failmsg = "<span class='warning'>[failmsg]</span>"
 		if(user)
 			to_chat(user, failmsg)
-		else
-			visible_message(failmsg)
 	return FALSE
 
 /obj/machinery/monkey_recycler/attack_hand(var/mob/user as mob)
