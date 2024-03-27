@@ -609,7 +609,6 @@
 
 //The list of slots by priority. equip_to_appropriate_slot() uses this list. Doesn't matter if a mob type doesn't have a slot.
 var/static/list/slot_equipment_priority = list( \
-		slot_wear_id,\
 		slot_wear_mask,\
 		slot_head,\
 		slot_shoes,\
@@ -617,6 +616,7 @@ var/static/list/slot_equipment_priority = list( \
 		slot_ears,\
 		slot_glasses,\
 		slot_belt,\
+		slot_wear_id,\
 		slot_s_store,\
 		slot_l_store,\
 		slot_r_store,\
@@ -648,7 +648,8 @@ Use this proc preferably at the end of an equipment loadout
 		return 0
 
 	var/list/backup_slots = list()
-	for(var/slot in slot_equipment_priority)
+	var/list/slots_to_use = W.quick_equip_priority | slot_equipment_priority
+	for(var/slot in slots_to_use)
 		if(!is_holding_item(W) && !override)
 			return 0
 		var/obj/item/S = get_item_by_slot(slot)
@@ -671,7 +672,8 @@ Use this proc preferably at the end of an equipment loadout
 	if(!istype(W))
 		return 0
 	var/openslot = 0
-	for(var/slot in slot_equipment_priority)
+	var/list/slots_to_use = W.quick_equip_priority | slot_equipment_priority
+	for(var/slot in slots_to_use)
 		if(W.mob_check_equip(src, slot, 1) == 1)
 			openslot = 1
 			break
