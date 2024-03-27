@@ -695,15 +695,15 @@
 	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 5
+	starting_materials = list(MAT_IRON = 200)
+	w_type = RECYK_ELECTRONIC
 	var/loaded = 1
 	var/refreshes_drops = FALSE
 
 /obj/item/weapon/lazarus_injector/update_icon()
 	..()
-	if(loaded)
-		icon_state = "lazarus_hypo"
-	else
-		icon_state = "lazarus_empty"
+	icon_state = loaded ? "lazarus_hypo" : "lazarus_empty"
+	w_type = loaded ? RECYK_ELECTRONIC : RECYK_METAL
 
 /obj/item/weapon/lazarus_injector/afterattack(atom/target, mob/user, proximity_flag)
 	if(!loaded || !proximity_flag)
