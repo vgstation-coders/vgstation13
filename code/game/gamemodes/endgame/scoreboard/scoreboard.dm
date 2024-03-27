@@ -89,9 +89,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/list/global_paintings = list()
 
 /datum/controller/gameticker/scoreboard/proc/main(var/dat)
-	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
-	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
-
 	ticker.mode.declare_completion()
 	dat += "[ticker.mode.dat]<HR>"
 
@@ -101,10 +98,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += service_score()
 	dat += supply_score()
 	dat += science_score()
-	if(NO)
-		dat += nuke_op_score(NO)
-	if(RV)
-		dat += revolution_score(RV)
 	dat += syndicate_score()
 	dat += silicon_score()
 	dat += misc_score()
