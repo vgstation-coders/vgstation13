@@ -12,7 +12,7 @@
 	plane = ABOVE_HUMAN_PLANE
 	layer = RAILING_BACK_LAYER
 	flow_flags = ON_BORDER
-	pass_flags_self = PASSTABLE|PASSGLASS
+	pass_flags_self = PASSRAILING|PASSGLASS
 	var/railingtype = "metal"
 	var/wrenchtime = 10
 	var/weldtime = 25
