@@ -1647,10 +1647,12 @@
 	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slime_extract/slimecritweak/on_reaction(var/datum/reagents/holder)
+	var/atom/location = holder.my_atom.loc
 	if(!istype(holder.my_atom.loc, /obj/item/weapon/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to slowly vibrate!</span>")
+	else
+		location = location.loc
 
-	var/atom/location = holder.my_atom.loc
 	spawn(5 SECONDS)
 		if(isturf(location))
 			var/list/disguise_candidates = list()
