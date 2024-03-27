@@ -2119,6 +2119,9 @@
 	// Or being a husk...
 	if(M_HUSK in mutations)
 		return FALSE
+	// Or being appearance banned...
+	if(appearance_isbanned(src))
+		return FALSE
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 

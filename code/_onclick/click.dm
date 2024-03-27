@@ -57,11 +57,12 @@
 
 #define MAX_ITEM_DEPTH	3 //how far we can recurse before we can't get an item
 
-/mob/proc/ClickOn(var/atom/A, var/params)
+/mob/proc/ClickOn( var/atom/A, var/params )
 	if(!click_delayer)
 		click_delayer = new
 	if(timestopped)
 		return 0 //under effects of time magick
+
 	if(click_delayer.blocked())
 		return
 	click_delayer.setDelay(1)
@@ -104,12 +105,8 @@
 		return
 
 	face_atom(A) // change direction to face what you clicked on
-	
-	var/storage
-	if(isshelf(A) || istype(A, /obj/abstract/screen/storage) || (isitem(A) && !get_active_hand())) // Picking items up and/or storing them/retrieving them from storage will not be affected by the attack delay.
-		storage = 1
-	
-	if(attack_delayer.blocked() && !storage) // This was next_move.  next_attack makes more sense.
+
+	if(attack_delayer.blocked()) // This was next_move.  next_attack makes more sense.
 		return
 //	to_chat(world, "next_attack is [next_attack] and world.time is [world.time]")
 	if(istype(loc,/obj/mecha))

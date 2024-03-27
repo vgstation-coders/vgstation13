@@ -91,6 +91,8 @@
 	amount_per_transfer_from_this = 5
 	volume = 5
 	flags = FPRINT
+	starting_materials = list(MAT_PLASTIC = 200)
+	w_type = RECYK_ELECTRONIC
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/attack(mob/M as mob, mob/user as mob)
 	..()
@@ -99,10 +101,8 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/update_icon()
-	if(reagents.total_volume > 0)
-		icon_state = "autoinjector1"
-	else
-		icon_state = "autoinjector0"
+	icon_state = "autoinjector[reagents.total_volume > 0 ? 1 : 0]"
+	w_type = reagents.total_volume > 0 ? RECYK_ELECTRONIC : RECYK_PLASTIC
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/examine(mob/user)
 	..()
@@ -119,12 +119,11 @@
 	volume = 15
 	flags = FPRINT
 	refill_reagent_list = list(BIOFOAM = 15)
+	starting_materials = list(MAT_IRON = 200)
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector/update_icon()
-	if(reagents.total_volume > 0)
-		icon_state = "biofoam1"
-	else
-		icon_state = "biofoam0"
+	icon_state = "biofoam[reagents.total_volume > 0 ? 1 : 0]"
+	w_type = reagents.total_volume > 0 ? RECYK_ELECTRONIC : RECYK_METAL
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector
 	name = "paralytic injector"

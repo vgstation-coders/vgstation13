@@ -1564,3 +1564,15 @@ var/list/all_bible_styles = list(
 /datum/religion/loop/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/timefake(H), slot_wear_suit)
 	H.equip_or_collect(new /obj/item/clothing/head/timefake(H), slot_head)
+
+/datum/religion/viron
+	name = "The Vironese Faith"
+	deity_names = list("Pas", "Echidna", "Scylla", "Molpe", "Tartarus", "Heirax", "Thelxiepeia", "Phaea", "Sphigx", "Outsider")
+	bible_name = "The Chrasmologic Writings"
+	male_adept = "Augur"
+	female_adept = "Sibyl"
+	keys = list("viron", "vironese", "silk", "augury", "book of the long sun", "aureate path")
+	bookstyle = "White"
+
+/datum/religion/viron/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/chaplain_hoodie(H), slot_wear_suit)
