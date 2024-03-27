@@ -239,6 +239,9 @@
 
 	update_colour(0)
 
+	register_event(/event/z_transition, src, nameof(src::update_multi_z_verbs()))
+	update_multi_z_verbs()
+
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
 		if(virtualhearer)
@@ -1840,12 +1843,14 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/dexterity_check()//can the mob use computers, guns, and other fine technologies
 	return FALSE
 
-/mob/proc/isTeleViewing(var/client_eye)
+/mob/proc/isTeleViewing(var/atom/client_eye)
 	if(istype(client_eye,/obj/machinery/camera))
 		return 1
 	if(istype(client_eye,/obj/item/projectile/rocket/nikita))
 		return 1
 	if(istype(client_eye,/turf/simulated/wall) && Adjacent(client_eye))
+		return 1
+	if(isvisiblespace(client_eye) && client_eye.x == src.x && client_eye.y == src.y)
 		return 1
 	return 0
 
