@@ -267,7 +267,16 @@
 			current_step = steps[rand(1, steps.len)] //misprints ahoy
 			misprinted = 1
 
-		var/obj/item/current_tool = current_step[Co_KEY]
+		var/obj/item/current_tool
+		switch(current_step[Co_KEY])
+			if("is_screwdriver")
+				current_tool = /obj/item/tool/screwdriver
+			if("is_wrench")
+				current_tool = /obj/item/tool/wrench
+			if("is_wirecutter")
+				current_tool = /obj/item/tool/wirecutters
+			else
+				current_tool = current_step[Co_KEY]
 
 		instructions += "<b>You see a small pictogram of \a [initial(current_tool.name)].</b><br> The minute script says: \"Be sure to [current_step[Fl_ACTION]] [pick("on a clear carpet", "with an adult", "with your friends", "under the captain's watchful gaze")].\"<br>"
 	return list("instructions" = instructions, "misprint" = misprinted)
