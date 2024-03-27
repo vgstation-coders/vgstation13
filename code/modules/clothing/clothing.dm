@@ -129,10 +129,25 @@
 	for(var/obj/item/clothing/accessory/storage/A in accessories)
 		if(A.hold && A.hold.can_be_inserted(I,1))
 			return 1
+	for(var/obj/item/clothing/accessory/holster/A2 in accessories)
+		if(!A2.holstered && A2.can_holster(I))
+			return 1
+	if(istype(I,/obj/item/clothing/accessory))
+		var/obj/item/clothing/accessory/A3 = I
+		if(!check_accessory_overlap(A3) && A3.can_attach_to(src))
+			return 1
 
 /obj/item/clothing/quick_store(var/obj/item/I,mob/user)
 	for(var/obj/item/clothing/accessory/storage/A in accessories)
 		if(A.hold && A.hold.handle_item_insertion(I,0))
+			return 1
+	for(var/obj/item/clothing/accessory/holster/A2 in accessories)
+		if(A2.holster(I,user))
+			return 1
+	if(istype(I,/obj/item/clothing/accessory))
+		var/obj/item/clothing/accessory/A3 = I
+		if(user.drop_item(I, src))
+			attach_accessory(A3,user)
 			return 1
 
 /obj/item/clothing/CtrlClick(var/mob/user)
@@ -161,9 +176,7 @@
 			to_chat(user, "<span class='notice'>\The [A] cannot be attached to [src].</span>")
 			return
 		if(user.drop_item(I, src))
-			to_chat(user, "<span class='notice'>You attach [A] to [src].</span>")
-			attach_accessory(A)
-			A.add_fingerprint(user)
+			attach_accessory(A, user)
 		if(ishuman(loc))
 			var/mob/living/carbon/human/H = loc
 			H.update_inv_by_slot(slot_flags)
@@ -347,6 +360,9 @@
 	accessory.forceMove(src)
 	accessory.on_attached(src)
 	update_verbs()
+	if(user)
+		to_chat(user, "<span class='notice'>You attach [accessory] to [src].</span>")
+		accessory.add_fingerprint(user)
 
 /obj/item/clothing/proc/priority_accessories()
 	if(!accessories.len)

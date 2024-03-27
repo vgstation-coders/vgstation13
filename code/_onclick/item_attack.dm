@@ -168,11 +168,11 @@
 										step_away(slime, user)
 								slime.canmove = 1
 
-		var/showname = "."
+		var/showname = ""
 		if(user)
 			showname = "[user]"
-		if(!(user in viewers(M, null)))
-			showname = "."
+		if(!(user in viewers(M, null)) && !istype(M.loc,/obj/item/weapon/holder) && !(user in viewers(M.loc, null)))
+			showname = "Someone" // was previously a dot, why???
 
 		if(originator)
 			if(istype(originator, /mob/living/simple_animal/borer))

@@ -10,8 +10,8 @@
 	command_alert(/datum/command_alert/wall_fungi)
 
 /datum/event/wallrot/can_start()
-	for(var/area/A in the_station_areas)
-		if(locate(/turf/simulated/wall) in A)
+	for(var/A in the_station_areas)
+		if(locate(/turf/simulated/wall) in get_area_turfs(A))
 			return 30
 	return 0
 

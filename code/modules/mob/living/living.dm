@@ -749,13 +749,6 @@ Thanks.
 	if(T != loc)
 		handle_hookchain(Dir)
 
-	if(client && client.eye && istype(client.eye,/turf/simulated/wall))
-		var/turf/simulated/wall/W = client.eye
-		if (!Adjacent(W))
-			client.eye = src
-			client.perspective = MOB_PERSPECTIVE
-			W.peeper = null
-
 	if(.)
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
 			var/mob/living/M = G.loc

@@ -12,6 +12,7 @@
 	playlist = "nukesquad"
 	default_admin_voice = "Union Boss"
 	admin_voice_style = "secradio"
+	role_peak_member_typefilter = /datum/role/revolutionary/leader
 	var/discovered = 0
 
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
@@ -181,3 +182,46 @@
 			ticker.revolutionary_victory = 1
 		if (ALL_REVS_DEAD)
 			to_chat(world, "<font size = 3><b>The crew has won!</b></h1><br/><font size = 2>All revolutionaries are either dead or have fled the station!</font>")
+
+/datum/faction/revolution/GetScoreboard()
+	. = ..()
+	var/loycount = 0
+	var/revarrested = 0
+	var/revkilled = 0
+	var/allrevarrested = 1
+	var/deadcommand = 0
+	for(var/datum/role/R in members)
+		var/datum/mind/M = R.antag
+		if(!M || !M.current)
+			revkilled++
+			continue
+		var/turf/T = M.current.loc
+		if(T && (istype(T.loc, /area/security/brig) || istype(T.loc, /area/security/perma) || istype(T, /turf/simulated/floor/shuttle/brig)))
+			revarrested++
+		else if (M.current.stat == DEAD)
+			revkilled++
+	for(var/mob/living/player in player_list)
+		if (istype(player, /mob/living/carbon/human))
+			var/role = player.mind.assigned_role
+			if((role in command_positions) && player.stat == DEAD)
+				deadcommand++
+			else if(!(locate(/datum/role/revolutionary) in player.mind.antag_roles))
+				loycount++
+		else if(istype(player, /mob/living/silicon) && player.stat != DEAD)
+			loycount++
+	//if(score.scores["traitorswon"])
+		//score.scores["crewscore"] -= 10000
+	if(peak_member_amount == revarrested) // That way only head revs count
+		allrevarrested = 1
+		score.crewscore += revarrested * 2000
+	score.crewscore += revarrested * 1000
+	score.crewscore += revkilled * 500
+	score.crewscore -= deadcommand * 500
+
+	. += {"<BR>
+	<B>Number of Surviving Loyal Crew:</B> [loycount]<BR>
+	<B>Revolution Heads Arrested:</B> [revarrested] ([revarrested * 1000] Points)<BR>
+	<B>Revolution Heads Slain:</B> [revkilled] ([revkilled * 500] Points)<BR>
+	<B>Command Staff Slain:</B> [deadcommand] (-[deadcommand * 500] Points)<BR>
+	<B>All Revolution Heads Arrested:</B> [allrevarrested ? "Yes" : "No"] ([revarrested * 2000]  Points)<BR>"}
+//		<B>Revolution Successful:</B> [score.scores["traitorswon"] ? "Yes" : "No"] (-[score.scores["traitorswon"] * revpenalty] Points)<BR>

@@ -143,10 +143,10 @@
 	if (!.)
 		return FALSE
 	if(!user || !istype(user))
-		return
+		return FALSE
 	if(user.mind.miming)
 		to_chat(user, "<span class = 'warning'>You find yourself unable to convey your thoughts outside of gestures.</span>")
-		return
+		return FALSE
 
 /spell/targeted/telepathy/cast(var/list/targets, mob/living/carbon/human/user)
 	var/datum/species/mushroom/M = user.species //Mushmen will set their target for regular speech instead
