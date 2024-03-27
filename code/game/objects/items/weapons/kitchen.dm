@@ -589,7 +589,7 @@
 
 /obj/item/weapon/kitchen/rollingpin/attack(mob/living/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
-		to_chat(user, "<span class='warning'>The [src] slips out of your hand and hits your head.</span>")
+		to_chat(user, "<span class='warning'>\The [src] slips out of your hand and hits your head.</span>")
 		user.take_organ_damage(10)
 		user.Paralyse(2)
 		return
@@ -620,7 +620,7 @@
 				else
 					H.eye_blurry += 3
 			if(H.stat < UNCONSCIOUS)
-				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")	
+				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")
 	return ..()
 
 /*

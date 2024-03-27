@@ -61,7 +61,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	on = !on
 	if(!get_powernet())
 		on = FALSE
-		visible_message("<span class='warning'>The [src] buzzes and shuts off.</span>")
+		visible_message("<span class='warning'>\The [src] buzzes and shuts off.</span>")
 	update_icon()
 
 /obj/machinery/power/antiquesynth/get_monitor_status()
