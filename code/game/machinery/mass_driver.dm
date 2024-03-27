@@ -153,7 +153,7 @@ var/list/mass_drivers = list()
 	steps = list(
 				//5
 				list(
-					Co_NEXTSTEP = list(Co_KEY=/obj/item/tool/screwdriver,
+					Co_NEXTSTEP = list(Co_KEY="is_screwdriver",
 						Co_VIS_MSG = "<span class = 'notice'>{USER} finalize{s} {HOLDER}.</span>"),
 					Co_BACKSTEP = list(Co_KEY=/obj/item/tool/crowbar,
 						Co_START_MSG = "{USER} begin{s} to pry off the grille from {HOLDER}.",

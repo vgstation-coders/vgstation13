@@ -68,11 +68,14 @@
 		assembling = 0
 	return 0
 
+/datum/construction/proc/is_valid_key(mob/user, atom/used_atom, list/L)
+	return (istype(L[Co_KEY], /list) && is_type_in_list(used_atom, L[Co_KEY])) || istype(used_atom, L[Co_KEY]) || (hascall(used_atom,L[Co_KEY]) && call(used_atom,L[Co_KEY])(arglist(user)) == TRUE)
+
 /datum/construction/proc/is_right_key(mob/user as mob, atom/used_atom) // returns current step num if used_atom is of the right type.
 	if(assembling)
 		return 0
 	var/list/L = steps[steps.len]
-	if((istype(L[Co_KEY], /list) && is_type_in_list(used_atom, L[Co_KEY])) || istype(used_atom, L[Co_KEY]))
+	if(is_valid_key(user,used_atom,L))
 	//if our keys are in a list, we want to check them all
 	//otherwise, sanity permits setting it as a single type and checking that
 		if(!try_consume(user, used_atom, L))
@@ -127,7 +130,7 @@
 /datum/construction/proc/check_all_steps(atom/used_atom,mob/user as mob) //check all steps, remove matching one.
 	for(var/i=1;i<=steps.len;i++)
 		var/list/L = steps[i];
-		if((islist(L[Co_KEY]) && is_type_in_list(used_atom, L[Co_KEY])) ||istype(used_atom, L[Co_KEY]))
+		if(is_valid_key(user,used_atom,L))
 			if(custom_action(L, used_atom, user))
 				steps[i]=null;//stupid byond list from list removal...
 				listclearnulls(steps);
@@ -255,14 +258,14 @@
 	assembling = 1
 	var/list/step_next = get_forward_step(index)
 	var/list/step_back = get_backward_step(index)
-	if(step_next && ((islist(step_next[Co_KEY]) && is_type_in_list(used_atom, step_next[Co_KEY])) || istype(used_atom, step_next[Co_KEY])))
+	if(step_next && is_valid_key(user,used_atom,step_next))
 	//if our keys are in a list, we want to check them all
 	//otherwise, sanity permits setting it as a single type and checking that
 		if(!try_consume(user, used_atom, step_next, index, FORWARD))
 			assembling = 0
 			return 0
 		return FORWARD //to the first step -> forward
-	if(step_back && ((islist(step_back[Co_KEY]) && is_type_in_list(used_atom, step_back[Co_KEY])) || istype(used_atom, step_back[Co_KEY])))
+	if(step_back && is_valid_key(user,used_atom,step_back))
 		if(!try_consume(user, used_atom, step_back, index, BACKWARD))
 			assembling = 0
 			return 0
@@ -340,15 +343,16 @@
 				A.forceMove(holder.loc)
 			used_atoms.Remove("[index][diff == FORWARD ? "+" : "-"]")
 		else
-			var/working_type = (islist(current_step[Co_KEY]) ? pick(current_step[Co_KEY]) : current_step[Co_KEY])
-			S = new working_type(holder.loc)
-			if(istype(S) && !(Co_KEEP in current_step))
-				S.amount = current_step[Co_MAX_AMOUNT] - current_step[Co_AMOUNT]
-				S.update_icon()
-			else
-				for(var/i = 2; i <= current_step[Co_MAX_AMOUNT] - current_step[Co_AMOUNT]; i++)
-					new working_type(holder.loc)
-		current_step[Co_AMOUNT] = current_step[Co_MAX_AMOUNT]
+			var/working_type = (islist(current_step[Co_KEY]) ? pick(current_step[Co_KEY]) : (ispath(current_step[Co_KEY]) ? current_step[Co_KEY] : null))
+			if(working_type)
+				S = new working_type(holder.loc)
+				if(istype(S) && !(Co_KEEP in current_step))
+					S.amount = current_step[Co_MAX_AMOUNT] - current_step[Co_AMOUNT]
+					S.update_icon()
+				else
+					for(var/i = 2; i <= current_step[Co_MAX_AMOUNT] - current_step[Co_AMOUNT]; i++)
+						new working_type(holder.loc)
+			current_step[Co_AMOUNT] = current_step[Co_MAX_AMOUNT]
 
 	var/delay = 0
 	if(Co_DELAY in given_step)
@@ -413,18 +417,19 @@
 			used_atoms.Remove("[new_index][diff == FORWARD ? "-" : "+"]")
 
 		else if(Co_AMOUNT in spawn_step)
-			var/to_create = (islist(spawn_step[Co_KEY]) ? pick(spawn_step[Co_KEY]) : spawn_step[Co_KEY])
-			var/test = new to_create
-			if(iswelder(test) && !(Co_TAKE in spawn_step))
-				qdel(test)
-			else if(istype(test, /obj/item/stack) && !(Co_TAKE in spawn_step))
-				var/obj/item/stack/S = test
-				S.amount = spawn_step[Co_AMOUNT]
-				to_drop.Add(S)
-			else
-				to_drop.Add(test)
-				for(var/i = 1; i <= spawn_step[Co_AMOUNT] - 1; i++)
-					to_drop.Add(new to_create)
+			var/to_create = (islist(spawn_step[Co_KEY]) ? pick(spawn_step[Co_KEY]) : (ispath(spawn_step[Co_KEY]) ? spawn_step[Co_KEY] : null))
+			if(to_create)
+				var/test = new to_create
+				if(iswelder(test) && !(Co_TAKE in spawn_step))
+					qdel(test)
+				else if(istype(test, /obj/item/stack) && !(Co_TAKE in spawn_step))
+					var/obj/item/stack/S = test
+					S.amount = spawn_step[Co_AMOUNT]
+					to_drop.Add(S)
+				else
+					to_drop.Add(test)
+					for(var/i = 1; i <= spawn_step[Co_AMOUNT] - 1; i++)
+						to_drop.Add(new to_create)
 
 		for(var/atom/movable/this_drop in to_drop)
 			this_drop.forceMove(holder.loc)
