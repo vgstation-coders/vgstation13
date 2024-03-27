@@ -178,6 +178,24 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	overlays -= colour_overlay
 	colour_overlay.color = "[bottle_colour]"
 	overlays += colour_overlay
+	
+/obj/item/weapon/storage/pill_bottle/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+	if(!istype(M, /mob))
+		return
+	if (user.zone_sel.selecting != "mouth")
+		return ..()
+	var/list/pills = list()
+	for(var/obj/item/weapon/pill in contents)
+		pills.Add(pill)
+	if(!pills.len)
+		to_chat(user, "<span class='notice'>There are no pills left in \the [src].</span>")
+		return
+	var/obj/item/weapon/reagent_containers/pill/mypill = pick(pills)
+	to_chat(user, "<span class='notice'>You rattle \the [src] and [M == user ? "feed yourself" : "try to feed [M]"] with it.</span>")
+	playsound(src, 'sound/items/pillrattle.ogg', 10, 1, 1)
+	if(do_after(user, src, 1 SECONDS))
+		mypill.try_feed(M, user)
+	return
 
 
 /obj/item/weapon/storage/pill_bottle/kelotane
