@@ -223,6 +223,10 @@ var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/throw_impact(atom/impacted_atom, speed, mob/user)
 	..()
+	if(isliving(impacted_atom))
+		var/mob/living/L = impacted_atom
+		if(!L.tangibility)
+			return 1
 	if(isturf(impacted_atom))
 		var/turf/T = impacted_atom
 		if(objects_thrown_when_explode || (T.arcanetampered && T.arcanetampered != user))

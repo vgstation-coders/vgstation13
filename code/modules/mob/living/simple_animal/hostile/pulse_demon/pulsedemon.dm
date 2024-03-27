@@ -27,6 +27,7 @@
 	flying = 1
 	size = SIZE_TINY
 	density = 0 //people walk over you isntead of bumping
+	tangibility = 0
 
 	attacktext = "electrocutes"
 	attack_sound = "sparks"
@@ -326,6 +327,10 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/vine_protected()
 	return 1
+
+/mob/living/simple_animal/hostile/pulse_demon/hitby(atom/movable/AM, speed, dir, list/hit_whitelist)
+	if(!is_under_tile())
+		visible_message("<span class ='notice'>\the [AM] goes right through \the [src]!</span>")
 
 // Unless...
 /mob/living/simple_animal/hostile/pulse_demon/Crossed(atom/movable/AM)
