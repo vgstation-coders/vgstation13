@@ -321,28 +321,6 @@
 	var/dat = "<BR>[desc]"
 	return dat
 
-/spell/pulse_demon/toggle_drain
-	name = "Toggle power drain"
-	desc = "Toggles the draining of power while in an APC, battery or cable"
-	abbreviation = "TD"
-	hud_state = "pd_toggle"
-	charge_max = 0
-	level_max = list()
-	invisible = 1
-
-/spell/pulse_demon/toggle_drain/choose_targets(var/mob/user = usr)
-	return list(user) // Self-cast
-
-/spell/pulse_demon/toggle_drain/cast(var/list/targets, var/mob/living/carbon/human/user)
-	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
-		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-		PD.draining = !PD.draining
-		to_chat(user,"<span class='notice'>Draining power is [PD.draining ? "on" : "off"].</span>")
-
-/spell/pulse_demon/toggle_drain/generate_tooltip()
-	var/dat = "<BR>[desc]"
-	return dat
-
 /spell/pulse_demon/remote_drain
 	name = "Remote Drain"
 	abbreviation = "RD"
@@ -630,3 +608,35 @@
 		explosion(get_turf(M), -1, 1, 2, 3, whodunnit = user) //C4 Radius + 1 Dest for the machine
 		qdel(M)
 	..()
+
+/datum/action/pd_toggle_drain
+	name = "Toggle power drain"
+	desc = "Toggles the draining of power while in an APC, battery or cable"
+	icon_icon = 'icons/mob/screen_spells.dmi'
+	button_icon_state = "pd_toggle"
+
+/datum/action/pd_toggle_drain/Trigger()
+	if(ispulsedemon(owner))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = owner
+		PD.draining = !PD.draining
+		to_chat(PD,"<span class='notice'>Draining power is [PD.draining ? "on" : "off"].</span>")
+
+/datum/action/pd_leave_item
+	name = "Leave posessed item"
+	desc = "Exit the item you are currently in."
+	icon_icon = 'icons/mob/screen_spells.dmi'
+	button_icon_state = "pd_hijack"
+
+/datum/action/pd_leave_item/Trigger()
+	if(ispulsedemon(owner))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = owner
+		if(PD.current_power)
+			PD.forceMove(PD.current_power.loc)
+		else
+			PD.forceMove(get_turf(PD))
+		PD.current_robot = null
+		PD.current_bot = null
+		PD.current_weapon = null
+	else
+		owner.forceMove(get_turf(owner))
+	Remove(owner)
