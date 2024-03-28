@@ -173,12 +173,12 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define EASEL_OVERLAY_LAYER			2					// So that the easel bits that hold a canvas in place always appear above a canvas
 	#define WINDOOR_LAYER 				1
 	#define OPEN_CURTAIN_LAYER			2
-	#define RAILING_BACK_LAYER 			2.1
-	#define RAILING_MID_LAYER 			2.2
-	#define RAILING_FRONT_LAYER 		2.3
-	#define CLOSED_CURTAIN_LAYER		3
-	#define CLOSED_FIREDOOR_LAYER		4
-	#define POTTED_PLANT_LAYER			5
+	#define POTTED_PLANT_LAYER			3
+	#define RAILING_BACK_LAYER 			3.1
+	#define RAILING_MID_LAYER 			3.2
+	#define RAILING_FRONT_LAYER 		3.3
+	#define CLOSED_CURTAIN_LAYER		4
+	#define CLOSED_FIREDOOR_LAYER		5
 	#define LIGHT_FIXTURE_LAYER			6
 	#define CHAT_LAYER					7
 
