@@ -1273,6 +1273,14 @@ var/list/discounted_items_of_the_round = list()
 	discounted_cost = 2
 	jobs_with_discount = list("Internal Affairs Agent")
 
+/datum/uplink_item/jobspecific/command/jobdisk
+	name = "Alternate Jobs Database"
+	desc = "A disk which scrambles the jobs database when installed in the Labor Management Console."
+	item = /obj/item/weapon/disk/jobdisk
+	cost = 6
+	discounted_cost = 3
+	jobs_with_discount = list("Captain", "Head of Personnel")
+
 /datum/uplink_item/jobspecific/trader
 	category = "Trader Specials"
 
