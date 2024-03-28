@@ -199,7 +199,10 @@ var/global/list/image/charred_overlays = list()
 		return
 
 	//Setup
-	var/turf/T = isturf(src) ? src : get_turf(loc)
+	var/turf/T = isturf(src) ? src : get_turf(src)
+	if(!T)
+		extinguish()
+		return
 	var/datum/thermal_material/material = src.thermal_material
 	var/datum/gas_mixture/air = T.return_air()
 	var/oxy_ratio  = air.molar_ratio(GAS_OXYGEN)
