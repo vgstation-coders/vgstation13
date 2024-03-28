@@ -58,19 +58,32 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/is_cooktop //If true, the object can be used in conjunction with a cooking vessel, eg. a frying pan, to cook food.
 	var/obj/item/weapon/reagent_containers/pan/cookvessel //The vessel being used to cook food in. If generalized out to other types of vessels, make sure to also generalize the frying pan's cook_start(), etc. as well.
 
+	var/obj/abstract/particles_holder/smoke_holder
+
 /obj/New()
 	..()
 	if(breakable_flags)
 		breakable_init()
 	if(is_cooktop)
 		add_component(/datum/component/cooktop)
-//Disabled because autoignition would too often turn rooms into firestorms due to a chain reaction
-//where one item would burn up, increase the room temperature (in code/ZAS/Fire.dm, proc/burnFireFuel()) and cause
-//other items to burn up.
-
-//To re-enable, un-comment the lines of code.
-	// if(autoignition_temperature)
-	// 	burnableatoms+=src
+	if(!thermal_mass)
+		switch(w_class)
+			if(W_CLASS_TINY, W_CLASS_SMALL)
+				thermal_mass = 0.1
+			if(W_CLASS_MEDIUM)
+				thermal_mass = 1.0
+			if(W_CLASS_LARGE)
+				thermal_mass = 10.0
+			if(W_CLASS_HUGE)
+				thermal_mass = 25.0 //combo breaker but 100kg is way too heavy
+			if(W_CLASS_GIANT)
+				thermal_mass = 100
+	if(thermal_mass)
+		initial_thermal_mass = thermal_mass //can't just use initial() here as some thermal masses are defined in New()
+	if(flammable)
+		burnableatoms+=src
+		add_particles("Smoke")
+		smoke_holder = particle_systems["Smoke"]
 
 //More cooking stuff:
 /obj/proc/can_cook() //Returns true if object is currently in a state that would allow for food to be cooked on it (eg. the grill is currently powered on). Can (and generally should) be overriden to check for more specific conditions.
@@ -407,6 +420,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			playsound(user, 'sound/items/trayhit2.ogg', 50, 1)
 		user.visible_message("<span class='danger'>[user] strikes his head on \the [src]! It looks like \he's trying to commit suicide.</span>")
 		return SUICIDE_ACT_BRUTELOSS
+
+/obj/ignite()
+	..()
+	smoke_holder.particles.spawning = 0
 
 /obj/singularity_act()
 	if(flags & INVULNERABLE)

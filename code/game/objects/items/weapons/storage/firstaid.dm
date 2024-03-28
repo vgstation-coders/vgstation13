@@ -15,8 +15,8 @@
 	icon_state = "firstaid"
 	throw_speed = 2
 	throw_range = 8
-	autoignition_temperature = AUTOIGNITION_PAPER
-
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 
 /obj/item/weapon/storage/firstaid/fire
 	name = "fire first-aid kit"

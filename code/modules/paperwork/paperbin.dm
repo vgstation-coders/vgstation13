@@ -14,8 +14,6 @@
 	var/crayon = null
 	var/image/paper = null
 
-	autoignition_temperature = 519.15 // Kelvin
-
 /obj/item/weapon/paper_bin/New()
 	..()
 	update_icon()
@@ -69,6 +67,12 @@
 	crayon = "sterile"
 	update_icon()
 
+/obj/item/weapon/paper_bin/getThermalMass()
+	var/total_thermal_mass = thermal_mass
+	for(var/obj/item/weapon/paper/p in papers)
+		total_thermal_mass += p.thermal_mass
+	return total_thermal_mass
+
 /obj/item/weapon/paper_bin/ashify()
 	if(!on_fire)
 		return
@@ -81,9 +85,6 @@
 		papers = list() //In case somehow there's still something in it
 	extinguish()
 	update_icon()
-
-/obj/item/weapon/paper_bin/getFireFuel()
-	return amount + papers.len
 
 /obj/item/weapon/paper_bin/Exited(atom/movable/Obj, atom/newloc)
 	papers -= Obj

@@ -14,7 +14,7 @@
 	w_class = W_CLASS_MEDIUM
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_MATERIALS + "=4"
 
 	var/max_amount = 90

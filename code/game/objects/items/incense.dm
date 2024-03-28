@@ -26,7 +26,7 @@
 	var/combustible = 1200
 	var/maxCombustible = 1200
 	var/lit = FALSE
-	var/flammable = TRUE
+	var/can_be_lit = TRUE
 
 	var/fragrance = null
 	var/adjective = null
@@ -121,7 +121,7 @@
 	if(lit)
 		to_chat(user, "<span class='warning'>\The [src] is already lit.</span>")
 		return
-	else if (!flammable)
+	else if (!can_be_lit)
 		to_chat(user,"<span class='warning'>The incense was recently put out, you must wait a few seconds before lighting it up again.</span>")
 		return
 	else if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
@@ -152,9 +152,9 @@
 		T.update_icon()
 
 /obj/item/incense_stick/proc/burn()
-	if (!flammable)
+	if (!can_be_lit)
 		return
-	flammable = FALSE
+	can_be_lit = FALSE
 	lit = TRUE
 	damtype = BURN
 	attack_verb = lit_attack_verb
@@ -220,7 +220,7 @@
 			qdel(src)
 			return
 		sleep(50)
-	flammable = TRUE
+	can_be_lit = TRUE
 
 /obj/item/incense_stick/update_icon()
 	var/length = round((maxCombustible - combustible) / 260)
@@ -510,7 +510,7 @@
 			user.visible_message("<span class='notice'>[user] carefully puts out the ember on \the [incense] after removing it from \the [src].</span>")
 			user.put_in_hands(incense)
 			incense = null
-		else if (!incense.flammable)
+		else if (!incense.can_be_lit)
 			to_chat(user,"<span class='warning'>The incense was recently put out, you must wait a few seconds before lighting it up again.</span>")
 			return
 		else

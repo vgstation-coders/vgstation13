@@ -10,11 +10,10 @@
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.7
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
-	autoignition_temperature = AUTOIGNITION_PROTECTIVE
-	blood_overlay_type = "helmet"
 
-	autoignition_temperature = 0
-	fire_fuel = 0
+	blood_overlay_type = "helmet"
+	flammable = FALSE
+
 
 /obj/item/clothing/head/helmet/NoiseDampening()	// checked on headwear by flashbangs
 	return TRUE

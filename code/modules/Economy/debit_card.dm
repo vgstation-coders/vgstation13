@@ -71,6 +71,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	starting_materials = list(MAT_IRON = 10)
 	w_type = RECYK_METAL
+	flammable = FALSE
 	to_cut = 1
 	var/examine_held = "<span class='notice'>You feel more important just by holding it.</span>"
 

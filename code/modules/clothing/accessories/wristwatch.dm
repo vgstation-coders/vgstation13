@@ -19,7 +19,7 @@
 	_color = "wristwatch"
 	accessory_exclusion = WRISTWATCH
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = FALSE
 	var/last_hour = 12
 	var/last_minute = 12
 	var/luminescent = TRUE

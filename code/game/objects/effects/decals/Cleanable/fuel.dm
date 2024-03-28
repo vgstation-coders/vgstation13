@@ -7,8 +7,6 @@
 
 	reagent = FUEL
 
-	volatility = 0.02
-
 	basecolor = "#6D5757"
 
 	persistence_type = null //Yikes!
@@ -29,14 +27,6 @@
 
 	Spread()
 	. = ..()
-
-/obj/effect/decal/cleanable/liquid_fuel/getFireFuel()
-	return amount
-
-/obj/effect/decal/cleanable/liquid_fuel/burnFireFuel(var/used_fuel_ratio, var/used_reactants_ratio)
-	amount -= (amount * used_fuel_ratio * used_reactants_ratio) * 5 // liquid fuel burns 5 times as quick
-	if(amount < 0.1)
-		qdel(src)
 
 /obj/effect/decal/cleanable/liquid_fuel/proc/Spread()
 	//Allows liquid fuels to sometimes flow into other tiles.
@@ -61,7 +51,6 @@
 /obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel
 		icon_state = "mustard"
 		anchored = 1 //Why the fuck was this set to 0
-		volatility = 0.01
 
 /obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel/New(newLoc, amt = 1, d = 0)
 	dir = d //Setting this direction means you won't get torched by your own flamethrower.

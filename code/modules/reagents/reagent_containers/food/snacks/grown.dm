@@ -14,7 +14,8 @@ var/list/special_fruits = list()
 	var/hydroflags = 0
 	var/datum/seed/seed
 	var/fragrance
-	autoignition_temperature = AUTOIGNITION_FABRIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 
 	icon = 'icons/obj/hydroponics/apple.dmi'
 	icon_state = "produce"

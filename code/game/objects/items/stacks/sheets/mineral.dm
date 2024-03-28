@@ -177,11 +177,11 @@ var/list/datum/stack_recipe/plasma_recipes = list ( \
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=3"
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	sheettype = "plastic"
 	perunit = CC_PER_SHEET_PLASTIC
 	mat_type = MAT_PLASTIC
 	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	starting_materials = list(MAT_PLASTIC = CC_PER_SHEET_PLASTIC)
 
 var/list/datum/stack_recipe/plastic_recipes = list ( \

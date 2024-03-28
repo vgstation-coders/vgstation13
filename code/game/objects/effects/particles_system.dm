@@ -115,6 +115,7 @@
 
 var/list/particle_string_to_type = list(
 	"Steam" = /particles/steam,
+	"Smoke" = /particles/smoke,
 	)
 
 //STEAM
@@ -129,6 +130,24 @@ var/list/particle_string_to_type = list(
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "steam"
 	color = "#FFFFFF99"
+	position = 0
+	velocity = 1
+	scale = list(0.6, 0.6)
+	grow = list(0.05, 0.05)
+	rotation = generator("num", 0,360)
+
+//SMOKE
+/particles/smoke
+	width = 64
+	height = 64
+	count = 20
+	spawning = 0
+
+	lifespan = 1 SECONDS
+	fade = 1 SECONDS
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "steam"
+	color = "#4d473e99"
 	position = 0
 	velocity = 1
 	scale = list(0.6, 0.6)

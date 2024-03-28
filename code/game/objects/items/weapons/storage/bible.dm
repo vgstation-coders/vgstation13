@@ -8,16 +8,15 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	force = 2.5 //A big book, solely used for non-Chaplains trying to use it on people
 	flags = FPRINT
 	attack_verb = list("whacks", "slaps", "slams", "forcefully blesses")
-	autoignition_temperature = AUTOIGNITION_PAPER //bible-burning heathen
 	var/mob/affecting = null
 	var/datum/religion/my_rel = new /datum/religion
 	actions_types = list(/datum/action/item_action/convert)
 	rustle_sound = "pageturn"
-
-	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/storage/bible/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")
@@ -57,8 +56,8 @@
 //"Special" Bible with a little gift on introduction
 /obj/item/weapon/storage/bible/booze
 
-	autoignition_temperature = 0 //Not actually paper
-	fire_fuel = 0
+	flammable = FALSE //Not actually paper
+
 	items_to_spawn = list(
 		/obj/item/weapon/reagent_containers/food/drinks/beer = 2,
 		/obj/item/weapon/spacecash = 3,
@@ -67,8 +66,8 @@
 //Even more "Special" Bible with a nicer gift on introduction
 /obj/item/weapon/storage/bible/traitor_gun
 
-	autoignition_temperature = 0 //Not actually paper
-	fire_fuel = 0
+	flammable = FALSE //Not actually paper
+
 	items_to_spawn = list(
 		/obj/item/weapon/gun/projectile/luger/small,
 		/obj/item/ammo_storage/magazine/mc9mm,

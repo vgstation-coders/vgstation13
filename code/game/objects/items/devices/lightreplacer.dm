@@ -15,7 +15,8 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_MATERIALS + "=2"
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = RECYK_ELECTRONIC
+	flammable = TRUE
 	var/emagged = 0
 	var/upgraded
 	var/device_mode = LIGHTREPLACER_BASIC

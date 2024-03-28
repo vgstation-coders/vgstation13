@@ -22,8 +22,8 @@ LINEN BINS
 	restraint_resist_time = 20 SECONDS
 	toolsounds = list("rustle")
 	species_fit = list(VOX_SHAPED)
-	autoignition_temperature = AUTOIGNITION_FABRIC
 	w_type = RECYK_FABRIC
+	flammable = TRUE
 	starting_materials = list(MAT_FABRIC = 1250)
 
 //cutting the bedsheet into rags and other things

@@ -32,7 +32,6 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL
 	flags =  FPRINT
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	siemens_coefficient = 1.5 //Extra conducting
 	slot_flags = SLOT_BELT
 	attack_verb = list("whips", "lashes", "disciplines", "flogs")

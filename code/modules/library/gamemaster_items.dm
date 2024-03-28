@@ -4,7 +4,8 @@
 	icon = 'icons/obj/library.dmi'
 	icon_state = "dicetower"
 	w_class = W_CLASS_MEDIUM
-	autoignition_temperature = AUTOIGNITION_WOOD
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	layer = MACHINERY_LAYER
 
 /obj/item/dicetower/attack_hand(mob/user)

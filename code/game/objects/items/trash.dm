@@ -8,7 +8,8 @@
 	w_class = W_CLASS_TINY
 	desc = "This is rubbish."
 	w_type=NOT_RECYCLABLE
-	autoignition_temperature = AUTOIGNITION_PAPER
+	thermal_mass = 1
+	flammable = TRUE
 	var/persistence_type = SS_TRASH
 	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	//var/global/list/trash_items = list()
@@ -146,8 +147,6 @@
 	icon_state = "dangles"
 	starting_materials = list(MAT_PLASTIC = 150, MAT_CARDBOARD = 100)
 	w_type=RECYK_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
-	fire_fuel = 0
 
 /obj/item/trash/dangles/New()
 	playsound(loc, 'sound/items/poster_ripped.ogg', 50, 1)
@@ -193,7 +192,7 @@
 /obj/item/trash/wired_pietin_assembly
 	name = "wired pie tin assembly"
 	icon_state = "pietin_assembly"
-	autoignition_temperature = 0
+	flammable = FALSE
 	siemens_coefficient = 2
 	starting_materials = list(MAT_IRON = 100)
 	w_type = RECYK_METAL
@@ -301,7 +300,6 @@
 	name = "discarded BYOND support package"
 	icon_state = "byond"
 	starting_materials = list(MAT_CARDBOARD = 370)
-	autoignition_temperature = AUTOIGNITION_PAPER
 	w_type=RECYK_CARDBOARD
 
 var/list/crushed_cans_cache = list()

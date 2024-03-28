@@ -117,6 +117,7 @@ Class Procs:
 
 	w_type = NOT_RECYCLABLE
 	layer = MACHINERY_LAYER
+	flammable = FALSE
 
 	penetration_dampening = 5
 
@@ -160,8 +161,6 @@ Class Procs:
 	var/inMachineList = 1 // For debugging.
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
 	var/id_tag = null // Identify the machine
-
-	autoignition_temperature = 0 //machinery shouldn't burn
 
 /obj/machinery/cultify()
 	var/list/random_structure = list(

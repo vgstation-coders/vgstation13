@@ -39,7 +39,7 @@
 	var/glass_desc = null //for reagents with a different desc in a glass
 	var/glass_name = null //defaults to "glass of [reagent name]"
 	var/light_color = null
-	var/flammable = 0
+	var/can_be_lit = 0
 	var/glass_isGlass = 1
 	var/mug_icon_state = null
 	var/mug_name = null

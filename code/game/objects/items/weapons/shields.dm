@@ -214,10 +214,12 @@
 	throwforce = 0
 	throw_speed = 1
 	throw_range = 1
-	w_class = 5
+	w_class = W_CLASS_HUGE
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 	mech_flags = MECH_SCAN_ILLEGAL
 	cant_drop = 1
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 	var/mob/living/simple_animal/borer/parent_borer = null
 
 /obj/item/weapon/shield/riot/bone/New(atom/A, var/p_borer = null)

@@ -12,7 +12,6 @@
 	var/cooldown = 0
 	var/delay = 15 SECONDS
 	w_class = W_CLASS_MEDIUM
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 /obj/item/weapon/cookiesynth/emag_act(mob/user)
 	emagged = !emagged
