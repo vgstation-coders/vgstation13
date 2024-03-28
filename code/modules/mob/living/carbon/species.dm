@@ -1285,3 +1285,22 @@ var/list/has_died_as_golem = list()
 
 	H.drop_all()
 	qdel(src)
+
+/datum/species/crab ///for crab claws
+	name = "Crab" //its just a human with crab claws
+	icobase = 'icons/mob/human_races/r_crab.dmi'
+	deform = 'icons/mob/human_races/r_def_human.dmi'
+	punch_damage = 7
+	attack_verb = "pinches"
+	known_languages = list(LANGUAGE_HUMAN)
+	primitive = /mob/living/carbon/monkey
+
+	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
+
+	default_mutations=list(M_CLAWS)
+
+	max_skin_tone = 220
+
+/datum/species/human/gib(mob/living/carbon/human/H)
+	..()
+	H.default_gib()
