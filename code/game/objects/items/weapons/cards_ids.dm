@@ -205,6 +205,7 @@ var/list/global/id_cards = list()
 	slot_flags = SLOT_ID
 
 	var/show_biometrics = TRUE //Necessary to display the below stats
+	var/age_id = "\[UNSET\]"
 	var/blood_type = "\[UNSET\]"
 	var/dna_hash = "\[UNSET\]"
 	var/fingerprint_hash = "\[UNSET\]"
@@ -242,6 +243,7 @@ var/list/global/id_cards = list()
 			if (dna_hash == "\[UNSET\]")
 				user.show_message(text("No biometric data referenced. Use a body scanner at Medbay to imprint."),1)
 			else
+				user.show_message("Age: [age_id].",1)
 				user.show_message("Blood Type: [blood_type].",1)
 				user.show_message("DNA: [dna_hash].",1)
 				user.show_message("Fingerprint: [fingerprint_hash].",1)
@@ -298,6 +300,7 @@ var/list/global/id_cards = list()
 	if(!H || !H.dna)
 		return
 
+	age_id = H.age
 	blood_type = H.dna.b_type
 	dna_hash = H.dna.unique_enzymes
 	fingerprint_hash = md5(H.dna.uni_identity)
@@ -472,6 +475,7 @@ var/list/global/id_cards = list()
 			icon_state = I.icon_state
 			assignment = I.assignment
 			associated_account_number = I.associated_account_number
+			age_id = I.age_id
 			blood_type = I.blood_type
 			dna_hash = I.dna_hash
 			fingerprint_hash = I.fingerprint_hash
@@ -504,7 +508,7 @@ var/list/global/id_cards = list()
 			if("Show")
 				return ..()
 			if("Edit")
-				switch(input(user,"What would you like to edit on \the [src]?") in list("Name","Appearance","Occupation","Money account","Blood type","DNA hash","Fingerprint hash","Reset card"))
+				switch(input(user,"What would you like to edit on \the [src]?") in list("Name","Appearance","Occupation","Money account","Age","Blood type","DNA hash","Fingerprint hash","Reset card"))
 					if("Name")
 						var/new_name = reject_bad_name(input(user,"What name would you like to put on this card?","Agent card name", ishuman(user) ? user.real_name : user.name))
 						if(!Adjacent(user))
@@ -566,6 +570,20 @@ var/list/global/id_cards = list()
 						associated_account_number = new_account
 						to_chat(user, "Linked money account changed to [new_account].")
 
+					if("Age")
+						var/default = "\[UNSET\]"
+						if(ishuman(user))
+							var/mob/living/carbon/human/H = user
+
+							if(H.age)
+								default = H.age
+
+						var/new_age = input(user, "What age would you like to be written on this card?","Agent card age",default) as num
+						if(!Adjacent(user))
+							return
+						src.age_id = new_age
+						to_chat(user, "Age changed to [new_age].")
+
 					if("Blood type")
 						var/default = "\[UNSET\]"
 						if(ishuman(user))
@@ -614,6 +632,7 @@ var/list/global/id_cards = list()
 						icon_state = initial(icon_state)
 						assignment = initial(assignment)
 						associated_account_number = initial(associated_account_number)
+						age_id = initial(age_id)
 						blood_type = initial(blood_type)
 						dna_hash = initial(dna_hash)
 						fingerprint_hash = initial(fingerprint_hash)
