@@ -12,7 +12,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	mouse_opacity = 0
 	flags = 0
 	w_type = NOT_RECYCLABLE
-	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE
+	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE|PASSRAILING
 
 /obj/effect/dissolvable()
 	return 0

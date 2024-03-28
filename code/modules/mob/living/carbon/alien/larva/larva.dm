@@ -3,7 +3,7 @@
 	real_name = "alien larva"
 	icon_state = "larva0"
 	status_flags = CANSTUN|UNPACIFIABLE
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 
 	maxHealth = 25
 	health = 25

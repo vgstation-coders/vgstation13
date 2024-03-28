@@ -393,7 +393,7 @@
 	do_teleport(firer, T)
 
 /obj/item/projectile/swap/advanced
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
+	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE | PASSRAILING
 
 /obj/item/projectile/energy/microwaveray
 	name = "microwave ray"

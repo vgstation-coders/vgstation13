@@ -11,7 +11,7 @@
 
 	emote_hear = list("hisses")
 
-	pass_flags = PASSTABLE | PASSGRILLE | PASSMACHINE
+	pass_flags = PASSTABLE | PASSGRILLE | PASSMACHINE | PASSRAILING
 
 	speak_chance = 1
 
@@ -56,7 +56,7 @@
 
 	var/const/max_unhatchable_eggs_in_world = 30
 	held_items = list()
-	
+
 	var/flyicon = "cockroach_fly" //here so the turk roach uses the proper fly icon
 
 /mob/living/simple_animal/cockroach/New()
@@ -340,7 +340,7 @@
 	emote_hear = list("seethes")
 	flyicon = "turkroach_fly" //so they use the proper flying icon
 	egg_type = /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/turk
-	
+
 /mob/living/simple_animal/cockroach/turkish/death(var/gore = 1)
 	new /obj/item/clothing/head/fez(get_turf(src))
 	..()

@@ -283,7 +283,7 @@ var/list/meteor_warnings = list()
 	name = "small meteor"
 	desc = "The mineral version of armed C4, coming right for your walls."
 	icon_state = "small"
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 
 /obj/item/projectile/meteor/small/to_bump(atom/A)
 	if(loc == null)

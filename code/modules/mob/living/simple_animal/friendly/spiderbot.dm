@@ -41,7 +41,7 @@
 	var/emagged = 0               //IS WE EXPLODEN?
 	var/syndie = 0                //IS WE SYNDICAT? (currently unused)
 	speed = 1                    //Spiderbots gotta go fast.
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	speak_emote = list("beeps","clicks","chirps")
 	size = SIZE_SMALL
 	meat_type = null
@@ -75,7 +75,7 @@
 			to_chat(user, "<span class='warning'>[O] is dead. Sticking it into the frame would sort of defeat the purpose.</span>")
 			return
 
-		
+
 		if(!user.drop_item(O, src))
 			user << "<span class='warning'>You can't let go of \the [O].</span>"
 

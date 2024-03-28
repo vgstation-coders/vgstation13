@@ -8,7 +8,7 @@
 
 	emote_hear = list("hisses")
 
-	pass_flags = PASSTABLE | PASSGRILLE | PASSMACHINE
+	pass_flags = PASSTABLE | PASSGRILLE | PASSMACHINE | PASSRAILING
 
 	speak_chance = 1
 

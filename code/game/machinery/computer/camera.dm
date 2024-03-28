@@ -213,7 +213,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	density = 0
 	circuit = null
 	layer = ABOVE_WINDOW_LAYER
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	light_color = null
 
 /obj/machinery/computer/security/telescreen/New()
@@ -315,7 +315,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	moody_state = "overlay_security_det"
 	circuit = /obj/item/weapon/circuitboard/security/wooden_tv
 	light_color = null
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 
 /obj/machinery/computer/security/mining
 	name = "Outpost Cameras"
