@@ -301,6 +301,9 @@ var/global/list/image/charred_overlays = list()
 	if(fire_protection - world.time > 0)
 		return 0
 
+	if(istype(loc, /mob)) //worn or held items don't ignite (for now >:^) )
+		return 0
+
 	if(!flammable)
 		if(!reagents)
 			return 0
