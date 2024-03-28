@@ -1,5 +1,5 @@
 /obj/item/weapon/paper_bin/nano
-	name = "Nano paper dispenser"
+	name = "\improper nano paper dispenser"
 	icon = 'icons/obj/bureaucracy.dmi'
 	desc = "This machine dispenses nano paper."
 	icon_state = "np_dispenser"
@@ -31,9 +31,9 @@
 		user.put_in_hands(p)
 		to_chat(user, "<span class='notice'>\The [src] spits out a piece of nano paper.</span>")
 		if(ressources == 0)
-			to_chat(user, "<span class=notice> The dispenser is now empty!")
+			to_chat(user, "<span class=notice>The dispenser is now empty!")
 	else
-		to_chat(user, "<span class='notice'>The [src] is empty!</span>")
+		to_chat(user, "<span class='notice'>\The [src] is empty!</span>")
 		update_icon()
 	add_fingerprint(user)
 	return
@@ -46,7 +46,7 @@
 		to_chat(user, "<span class=notice> The dispenser needs to be empty before it can be reloaded!")
 		return
 
-	to_chat(user, "<span class='notice'>you load the [i] in the dispenser</span>")
+	to_chat(user, "<span class='notice'>You load the [i] in the dispenser</span>")
 	i:amount--
 	if(i:amount < 1)
 		QDEL_NULL(i)

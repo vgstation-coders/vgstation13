@@ -108,7 +108,7 @@ var/list/valid_ninja_suits = list(
 	)
 
 /obj/item/stack/shuriken
-	name = "EM shuriken"
+	name = "\improper EM shuriken"
 	desc = "A specially designed shuriken that can only be used to its full potential by one trained in Spider Clan techniques. Highly effective against unarmored targets."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "shuriken"
@@ -169,11 +169,11 @@ var/list/valid_ninja_suits = list(
 	if(!..() && isliving(impacted_atom))
 		var/mob/living/L = impacted_atom
 		forceMove(L)
-		visible_message("<span class='warning'>The [src] sticks to \the [L]!</span>")
+		visible_message("<span class='warning'>\The [src] sticks to \the [L]!</span>")
 		sleep(5 SECONDS)
 		if(!gcDestroyed)
 			forceMove(L.loc)
-			visible_message("<span class='warning'>The [src] falls off \the [L].", "<span class='warning'>You hear something clattering on the floor.</span>")
+			visible_message("<span class='warning'>\The [src] falls off \the [L].", "<span class='warning'>You hear something clattering on the floor.</span>")
 
 /obj/item/stack/shuriken/pickup(mob/user)
 	var/datum/role/ninja/weeb = isninja(user)
@@ -665,7 +665,7 @@ Helpers For Both Variants
 /obj/item/weapon/melee/energy/sword/ninja/equipped(mob/user)
 	if(!isninja(user) && active)
 		toggleActive(user,togglestate = "off")
-		to_chat(user,"<span class='warning'>The [src] shuts off.</span>")
+		to_chat(user,"<span class='warning'>\The [src] shuts off.</span>")
 	..()
 
 /*=======

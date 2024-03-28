@@ -386,7 +386,7 @@
 			C.use(charge_absorb_amount)
 			to_chat(user, "<span class='warning'>You touch \the [src] with \the [W] and \the [src] drains it!</span>")
 			to_chat(src, "<span class='notice'>[user] touches you with \the [W] and you drain its power!</span>")
-		visible_message("<span class ='notice'>The [W] goes right through \the [src].</span>")
+		visible_message("<span class ='notice'>\The [W] goes right through \the [src].</span>")
 		shockMob(user,W.siemens_coefficient)
 
 // In our way
