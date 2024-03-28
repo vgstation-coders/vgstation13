@@ -103,7 +103,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 				thermal_material = new/datum/thermal_material/biological()
 		if(!thermal_material)
 			flammable = FALSE
-			warning("[src] was defined as flammable but was missing a 'w_type' definition; [src] marked as inflammable for this round.")
+			//uncomment the following line if you want to identify any improperly-configured flammable items (may spam the logs).
+			//warning("[src] was defined as flammable but was missing a 'w_type' definition; [src] marked as non-flammable for this round.")
 			return
 		if(!autoignition_temperature)
 			autoignition_temperature = thermal_material.autoignition_temperature
