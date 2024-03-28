@@ -73,6 +73,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/thermal_mass = 0 //VERY loose estimate of mass in kg
 	var/datum/thermal_material/thermal_material //contains the material properties of the item for burning, if applicable
 	var/fire_protection //duration that something stays extinguished
+	var/burntime = 0
 
 	var/melt_temperature = 0 //unused
 	var/molten = 0 //unused
@@ -231,6 +232,7 @@ var/global/list/image/charred_overlays = list()
 
 	//Change in internal energy = energy produced by combustion (assuming perfect combustion).
 	heat_out = material.heating_value * delta_m
+	burntime += 1 SECONDS
 
 	//Moles of Oxygen consumed and CO2 produced.
 	oxy_used = (delta_m / material.molecular_weight) / material.fuel_ox_ratio
@@ -245,8 +247,11 @@ var/global/list/image/charred_overlays = list()
 
 	//Ash the object if all of its mass has been consumed.
 	if(thermal_mass <= 0.05)
-		thermal_mass = 0
-		ashify()
+		if(burntime < MIN_BURN_TIME) //preventing things from burning up in an instant
+			thermal_mass = 0.1
+		else
+			thermal_mass = 0
+			ashify()
 
 	heat_out *= 1000
 
@@ -286,6 +291,7 @@ var/global/list/image/charred_overlays = list()
 		return
 	var/ashtype = ashtype()
 	new ashtype(src.loc)
+	visible_message("<span class='danger'>\The [src] burns into a pile of dust!</span>")
 	extinguish()
 	qdel(src)
 

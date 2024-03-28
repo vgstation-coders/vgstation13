@@ -1146,6 +1146,9 @@ var/default_colour_matrix = list(1,0,0,0,\
 // combustion requires about 14% oxygen concentration
 #define MINOXY2BURN 0.14
 
+// minimum burn time
+#define MIN_BURN_TIME 3 SECONDS
+
 // stoichiometric combustion ratios in oxygen
 #define FUEL_OX_RATIO_WOOD (1/6) // C6H10O5 (cellulose)
 #define FUEL_OX_RATIO_PLASTIC (2/9) // C3H6 ((poly)propylene)
