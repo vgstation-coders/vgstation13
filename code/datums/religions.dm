@@ -1571,8 +1571,7 @@ var/list/all_bible_styles = list(
 	bible_name = "The Chrasmologic Writings"
 	male_adept = "Augur"
 	female_adept = "Sibyl"
-	keys = list("viron", "vironese", "silk", "augury", "book of the long sun", "aureate path")
-	bookstyle = "White"
+	keys = list("viron", "vironese", "silk", "augury", "book of the long sun", "aureate path", "plan of pas")
 
 /datum/religion/viron/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/chaplain_hoodie(H), slot_wear_suit)
