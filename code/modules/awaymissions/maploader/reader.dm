@@ -382,6 +382,8 @@ var/list/map_dimension_cache = list()
 		var/atom/new_atom = instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd,rotate)
 		spawned_atoms.Add(new_atom)
 
+	if(!spawned_atoms.len)
+		WARNING("No atoms spawned in grid parse! (Model key: [model])")
 	return spawned_atoms
 
 ////////////////
