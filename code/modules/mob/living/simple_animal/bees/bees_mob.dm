@@ -639,6 +639,10 @@ var/bee_mobs_count = 0
 		return
 	if (!Adjacent(target))
 		return
+	if(isliving(target))
+		var/mob/living/L = target
+		if(!L.tangibility)
+			return
 	var/mob/living/carbon/human/M = target
 	var/sting_prob = 100
 	if(istype(M))
@@ -668,9 +672,9 @@ var/bee_mobs_count = 0
 			bee_species.after_sting(sting_quality)
 			return
 		if (BEE_STING_PIERCE)
-			M.visible_message("<span class='warning'>\The [src] are stinging \the [M] through their protection!</span>", "<span class='warning'>You have been stung by \the [src] through your protection!</span>")
+			M.visible_message("<span class='warning'>\The [src] [gender == PLURAL ? "are" : "is"] stinging \the [M] through their protection!</span>", "<span class='warning'>You have been stung by \the [src] through your protection!</span>")
 		if (BEE_STING_NORMAL)
-			M.visible_message("<span class='warning'>\The [src] are stinging \the [M]!</span>", "<span class='warning'>You have been stung by \the [src]!</span>")
+			M.visible_message("<span class='warning'>\The [src] [gender == PLURAL ? "are" : "is"] stinging \the [M]!</span>", "<span class='warning'>You have been stung by \the [src]!</span>")
 	M.apply_damage(current_physical_damage, BRUTE)
 	M.apply_damage(current_poison_damage, TOX)
 	M.flash_pain()

@@ -117,7 +117,7 @@
 		to_chat(user, "<span class='notice'>You drop \the [W] into \the [src]'s gaping maw.</span>")
 		return TRUE
 
-	to_chat(user, "<span class='notice'>The [src]'s maw closes shut as you approach it with \the [W].</span>")
+	to_chat(user, "<span class='notice'>\The [src]'s maw closes shut as you approach it with \the [W].</span>")
 	return TRUE
 
 /obj/structure/blob_volcano/proc/process_internal_storage()

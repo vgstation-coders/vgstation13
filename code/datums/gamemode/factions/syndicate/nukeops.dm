@@ -26,6 +26,87 @@
 		. += "<BR>The operatives bought:<BR>"
 		for(var/entry in faction_scoreboard_data)
 			. += "[entry]<BR>"
+	var/diskdat = null
+	var/bombdat = null
+	var/opkilled = 0
+	var/oparrested = 0
+	var/alloparrested = 0
+	//var/nukedpenalty = 1000
+	for(var/datum/role/R in members)
+		var/datum/mind/M = R.antag
+		if(!M || !M.current)
+			opkilled++
+			continue
+		var/turf/T = M.current.loc
+		if(T && (istype(T.loc, /area/security/brig) || istype(T.loc, /area/security/perma) || istype(T, /turf/simulated/floor/shuttle/brig)))
+			oparrested++
+		else if(M.current.stat == DEAD)
+			opkilled++
+	if(peak_member_amount == oparrested)
+		alloparrested = 1
+		score.crewscore += oparrested * 2000
+	score.crewscore += opkilled * 250
+	score.crewscore += oparrested * 1000
+	//if(score.scores["nuked"])
+		//score.crewscore -= nukedpenalty
+
+	if(nukedisk)
+		var/atom/disk_loc = nukedisk.loc
+		while(!istype(disk_loc, /turf))
+			if(istype(disk_loc, /mob))
+				var/mob/M = disk_loc
+				diskdat += "Carried by [M.real_name] "
+			if(istype(disk_loc, /obj))
+				var/obj/O = disk_loc
+				diskdat += "in \a [O.name] "
+			disk_loc = disk_loc.loc
+		diskdat += "in [disk_loc.loc]"
+		/*score.scores["disc"] = 1
+		if(istype(disk_loc,/mob/living/carbon))
+			var/area/bad_zone1 = locate(/area) in areas
+			if(location in bad_zone1)
+				score.scores["disc"] = 0
+			if(istype(get_area(nukedisc),/area/syndicate_mothership))
+				score.scores["disc"] = 0
+			if(istype(get_area(nukedisc),/area/wizard_station))
+				score.scores["disc"] = 0
+			if(nukedisk.loc.z != map.zMainStation)
+				score.scores["disc"] = 0*/
+
+	bombdat = nuked_area
+	if(!nuked_area)
+		for(var/obj/machinery/nuclearbomb/nuke in nuclear_bombs)
+			if(nuke.r_code == "LOLNO")
+				continue
+			bombdat = get_area(nuke)
+			/*nukedpenalty = 50000 //Congratulations, your score was nuked
+			var/turf/T = get_turf(nuke)
+			if(istype(T,/area/syndicate_mothership) || istype(T,/area/wizard_station) || istype(T,/area/solar/) || istype(T,/area))
+				nukedpenalty = 1000
+			else if (istype(T,/area/security/main) || istype(T,/area/security/brig) || istype(T,/area/security/armory) || istype(T,/area/security/checkpoint2))
+				nukedpenalty = 50000
+			else if (istype(T,/area/engine))
+				nukedpenalty = 100000
+			else
+				nukedpenalty = 5000*/
+			//break
+	if(!diskdat)
+		diskdat = "Unknown"
+		log_admin("The disk could not be found for the nuke ops scoreboard! Report this")
+		message_admins("The disk could not be found for the nuke ops scoreboard! Report this")
+	if(!bombdat)
+		bombdat = "Unknown"
+		log_admin("The nuke could not be found for the nuke ops scoreboard! Report this")
+		message_admins("The nuke could not be found for the nuke ops scoreboard! Report this")
+
+	. += {"<BR>
+	<B>Final Location of Nuke:</B> [bombdat]<BR>
+	<B>Final Location of Disk:</B> [diskdat]<BR>
+	<B>Operatives Arrested:</B> [oparrested] ([oparrested * 1000] Points)<BR>
+	<B>Operatives Killed:</B> [opkilled] ([opkilled * 250] Points)<BR>
+	<B>All Operatives Arrested:</B> [alloparrested ? "Yes" : "No"] ([oparrested * 2000] Points)<BR>"}
+//		<B>Station Destroyed:</B> [score.scores["nuked"] ? "Yes" : "No"] (-[nukedpenalty] Points)<BR>
+//		<B>Nuclear Disk Secure:</B> [score.scores["disc"] ? "Yes" : "No"] ([score.scores["disc"] * 500] Points)<BR>
 
 /datum/faction/syndicate/nuke_op/AdminPanelEntry()
 	var/list/dat = ..()
@@ -142,3 +223,5 @@
 					livingmembers++
 		if(!livingmembers && ticker.IsThematic(playlist))
 			ticker.StopThematic()
+	if(livingmembers > peak_member_amount)
+		peak_member_amount = livingmembers

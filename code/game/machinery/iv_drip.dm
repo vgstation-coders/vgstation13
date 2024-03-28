@@ -193,7 +193,7 @@
 		return
 
 	mode = !mode
-	to_chat(usr, "<span class='info'>The [src] is now [mode ? "injecting" : "taking blood"].</span>")
+	to_chat(usr, "<span class='info'>\The [src] is now [mode ? "injecting" : "taking blood"].</span>")
 	update_icon()
 
 /obj/machinery/iv_drip/AltClick()

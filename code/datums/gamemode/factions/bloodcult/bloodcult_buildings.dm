@@ -530,7 +530,7 @@
 					// Of course this means that walls and objects placed AFTER the start of the dance can be crossed by dancing but that's good enough.
 					for (var/turf/T in orange(1,src))
 						if (T.density)
-							to_chat(user, "<span class='warning'>The [T] would hinder the ritual. Either dismantle it or use an altar located in a more spacious area.</span>")
+							to_chat(user, "<span class='warning'>\The [T] would hinder the ritual. Either dismantle it or use an altar located in a more spacious area.</span>")
 							return
 						var/atom/A = T.has_dense_content()
 						if (A && (A != src) && !ismob(A)) // mobs get a free pass

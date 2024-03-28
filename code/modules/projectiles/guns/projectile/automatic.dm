@@ -260,7 +260,7 @@
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/force_removeMag() //special because of its cover
 	if(!cover_open)
-		to_chat(usr, "<span class='rose'>The [src]'s cover has to be open to do that!</span>")
+		to_chat(usr, "<span class='rose'>\The [src]'s cover has to be open to do that!</span>")
 		return
 	..()
 

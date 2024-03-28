@@ -292,7 +292,7 @@
 	containername = "atmospheric circulator crate"
 	group = "Engineering"
 	access = list(access_engine_minor)
-	containsdesc = "Two circulators for a thermoelectric generator. Requires the generator itself to function (not included)."
+	containsdesc = "One circulator for a thermoelectric generator. Requires the generator and a second circulator to function (not included)."
 
 /datum/supply_packs/supermatter_shard
 	contains = list(/obj/machinery/power/supermatter/shard)

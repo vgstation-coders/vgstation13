@@ -672,6 +672,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	icon = 'icons/obj/clothing/masks.dmi'
 	icon_state = "cigbutt"
 	w_class = W_CLASS_TINY
+	starting_materials = list(MAT_CARDBOARD = 50)
+	w_type = RECYK_MISC
 	throwforce = 1
 	flammable = FALSE
 
@@ -687,6 +689,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "Leftovers of a fancy smoke."
 	icon = 'icons/obj/clothing/masks.dmi'
 	icon_state = "goldencarpbutt"
+	starting_materials = list(MAT_CARDBOARD = 49, MAT_GOLD = 1)
 
 /obj/item/trash/cigbutt/starlightbutt
 	name = "cigarette butt"
