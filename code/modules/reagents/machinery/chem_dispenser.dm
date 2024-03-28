@@ -74,6 +74,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/console_screen
 	)
+	if(Holiday != APRIL_FOOLS_DAY)
+		verbs -= /obj/machinery/chem_dispenser/verb/undeploy_dispenser
 
 	RefreshParts()
 	if(dispensable_reagents)
@@ -640,3 +642,16 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	message_admins("[key_name(L)] has dispensed [reagent] ([amount]u)! [formatJumpTo(src)]")
 
 	dispense_reagent(reagent, amount)
+
+/obj/machinery/chem_dispenser/verb/undeploy_dispenser()
+	set category = "Object"
+	set name = "Undeploy dispenser"
+	set src in view(1)
+	if(usr.incapacitated())
+		to_chat(usr, "<span class='notice'>You cannot do this while incapacitated.</span>")
+		return
+	if(!usr.dexterity_check())
+		to_chat(usr, "<span class='notice'>You are not capable of such fine manipulation.</span>")
+		return
+	move_that_gear_up()
+	

@@ -961,6 +961,7 @@
 #include "code\game\objects\items\gum.dm"
 #include "code\game\objects\items\incense.dm"
 #include "code\game\objects\items\misc_items.dm"
+#include "code\game\objects\items\movable_dispenser.dm"
 #include "code\game\objects\items\ornaments.dm"
 #include "code\game\objects\items\plushies.dm"
 #include "code\game\objects\items\policetape.dm"
