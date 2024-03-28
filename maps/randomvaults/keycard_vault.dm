@@ -44,7 +44,8 @@
 		qdel(LM)
 
 /datum/map_element/vault/keycards/load()
-	var/list/turfs = ..()
+	. = ..()
+	var/list/turfs = .
 	ASSERT(thevault)
 	ASSERT(turfs.len)
 	var/offset = -1
@@ -75,7 +76,8 @@
 	var/datum/map_element/vault/keycards/parent
 
 /datum/map_element/dungeon/keycard_vault/load()
-	var/list/turfs = ..()
+	. = ..()
+	var/list/turfs = .
 	ASSERT(parent)
 	ASSERT(turfs.len)
 	var/offset = -1
