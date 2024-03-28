@@ -92,7 +92,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	. = ..()
 	if(flammable)
 		switch(w_type)
-			if(RECYK_WOOD)
+			if(RECYK_WOOD, RECYK_CARDBOARD)
 				thermal_material = new/datum/thermal_material/wood()
 			if(RECYK_PLASTIC, RECYK_ELECTRONIC, RECYK_MISC, NOT_RECYCLABLE)
 				thermal_material = new/datum/thermal_material/plastic()
