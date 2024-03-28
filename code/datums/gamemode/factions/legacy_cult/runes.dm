@@ -1109,7 +1109,7 @@
 			(istype(cultist.loc, /obj/structure/closet/secure_closet)&&cultist.loc:locked) || \
 			(istype(cultist.loc, /obj/machinery/dna_scannernew)&&cultist.loc:locked) \
 		))
-			to_chat(user, "<span class='warning'>The [cultist] is already free.</span>")
+			to_chat(user, "<span class='warning'>\The [cultist] is already free.</span>")
 			return
 		cultist.unlock_from()
 		if (cultist.handcuffed)

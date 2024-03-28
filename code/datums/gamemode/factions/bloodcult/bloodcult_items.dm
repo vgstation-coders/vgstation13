@@ -660,7 +660,7 @@ var/list/arcane_tomes = list()
 	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper))
 		return 1
 	if(istype(I,/obj/item/soulstone/gem))
-		to_chat(user,"<span class='warning'>The [src]'s damage doesn't allow it to hold \a [I] any longer.</span>")
+		to_chat(user,"<span class='warning'>\The [src]'s damage doesn't allow it to hold \a [I] any longer.</span>")
 		return 1
 	..()
 

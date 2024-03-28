@@ -714,7 +714,7 @@
 		host = new /mob/living/carbon/human(get_turf(src))
 		host.get_organ(LIMB_HEAD).explode()
 		host = null
-		visible_message("<span class='danger'>The [src] collapses weakly!</span>")  //There was not a host.
+		visible_message("<span class='danger'>\The [src] collapses weakly!</span>")  //There was not a host.
 	qdel(src)
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/say(message, bubble_type)

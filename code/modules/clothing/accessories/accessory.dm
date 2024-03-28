@@ -9,6 +9,7 @@
 	flags = FPRINT
 	slot_flags = 0
 	w_class = W_CLASS_SMALL
+	quick_equip_priority = list(slot_w_uniform)
 	var/accessory_exclusion = DECORATION
 	var/obj/item/clothing/attached_to = null
 	var/image/inv_overlay

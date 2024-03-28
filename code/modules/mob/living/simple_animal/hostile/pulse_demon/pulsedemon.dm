@@ -27,6 +27,7 @@
 	flying = 1
 	size = SIZE_TINY
 	density = 0 //people walk over you isntead of bumping
+	tangibility = 0
 
 	attacktext = "electrocutes"
 	attack_sound = "sparks"
@@ -319,8 +320,23 @@
 
 // We aren't tangible
 /mob/living/simple_animal/hostile/pulse_demon/bullet_act(var/obj/item/projectile/Proj)
-	visible_message("<span class ='warning'>The [Proj] goes right through \the [src]!</span>")
-	return
+	if(!is_under_tile())
+		if(istype(Proj,/obj/item/projectile/ion))
+			return ..()
+		visible_message("<span class ='warning'>\the [Proj] goes right through \the [src]!</span>")
+
+/mob/living/simple_animal/hostile/pulse_demon/vine_protected()
+	return 1
+
+/mob/living/simple_animal/hostile/pulse_demon/hitby(atom/movable/AM, speed, dir, list/hit_whitelist)
+	if(!is_under_tile())
+		visible_message("<span class ='notice'>\the [AM] goes right through \the [src]!</span>")
+
+// Unless...
+/mob/living/simple_animal/hostile/pulse_demon/Crossed(atom/movable/AM)
+	. = ..()
+	if(!is_under_tile() && istype(AM,/obj/item/projectile/ion))
+		AM.to_bump(src)
 
 // Dumb moves
 /mob/living/simple_animal/hostile/pulse_demon/kick_act(mob/living/carbon/human/user)
@@ -370,7 +386,7 @@
 			C.use(charge_absorb_amount)
 			to_chat(user, "<span class='warning'>You touch \the [src] with \the [W] and \the [src] drains it!</span>")
 			to_chat(src, "<span class='notice'>[user] touches you with \the [W] and you drain its power!</span>")
-		visible_message("<span class ='notice'>The [W] goes right through \the [src].</span>")
+		visible_message("<span class ='notice'>\The [W] goes right through \the [src].</span>")
 		shockMob(user,W.siemens_coefficient)
 
 // In our way

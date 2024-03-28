@@ -41,7 +41,7 @@
 /area/vault/assistantlair)
 "aj" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "ak" = (
@@ -1176,7 +1176,7 @@
 /area/vault/assistantlair)
 "dM" = (
 /obj/structure/table,
-/obj/item/trash/cheesie,
+/obj/item/trash/chips/cheesie,
 /obj/item/clothing/gloves/yellow,
 /turf/simulated/floor/plating{
 	icon_state = "panelscorched"

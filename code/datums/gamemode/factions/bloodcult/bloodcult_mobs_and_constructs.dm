@@ -390,7 +390,7 @@ var/list/astral_projections = list()
 	now_pushing = 1 //prevents pushing atoms
 
 	//keeps track of whether we're in "ghost" form or "slightly less ghost" form
-	var/tangibility = FALSE
+	tangibility = FALSE
 
 	//the cultist's original body
 	var/mob/living/anchor

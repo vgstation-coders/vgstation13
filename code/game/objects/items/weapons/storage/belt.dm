@@ -411,7 +411,8 @@
 		"/obj/item/device/wormhole_jaunter",
 		"/obj/item/weapon/lazarus_injector",
 		"/obj/item/weapon/anobattery",
-		"/obj/item/weapon/mining_drone_cube")
+		"/obj/item/weapon/mining_drone_cube",
+		"/obj/item/voucher/warp/kinetic_accelerator")
 
 /obj/item/weapon/storage/belt/lazarus
 	name = "trainer's belt"
