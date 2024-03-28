@@ -308,7 +308,7 @@
 		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_iaa,
-			uniform_str = /obj/item/clothing/under/lawyer/bluesuit,
+			slot_w_uniform_str = /obj/item/clothing/under/lawyer/bluesuit,
 			slot_shoes_str = /obj/item/clothing/shoes/leather,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/lawyer,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/lawyer,
