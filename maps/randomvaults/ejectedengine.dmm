@@ -787,8 +787,8 @@
 "bY" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	dir = 4;
-	scrub_CO2 = 0;
-	scrub_Toxins = 0
+	default_scrubbed_gases = list("plasma");
+	default_scrubbed_gases = list("carbon_dioxide")
 	},
 /turf/simulated/floor/engine/old,
 /area/vault/ejectedengine/burnroom)
@@ -1065,7 +1065,7 @@
 /obj/machinery/air_sensor{
 	frequency = 1553;
 	id_tag = "engine_sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /turf/simulated/floor/engine/old,
 /area/vault/ejectedengine/burnroom)

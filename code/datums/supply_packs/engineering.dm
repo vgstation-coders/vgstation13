@@ -399,3 +399,24 @@
 	access = list(access_engine_minor)
 	group = "Engineering"
 	containsdesc = "A fearsome monster, dehydrated into portable form. Can possibly be used to generate a large amount of power, but is more likely just going to eat through your walls."
+
+/datum/supply_packs/cryotheum
+	name = "Small cryotheum tank"
+	contains = list(/obj/item/weapon/tank/cryotheum)
+	cost = 60
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "small cryotheum tank crate"
+	access = list(access_engine_minor)
+	group = "Engineering"
+	containsdesc = "Contains a small amount of cryotheum, the anomalous gas with cooling properties. This tank is more than enough to kick-start a Cryotheum Resonator."
+
+/datum/supply_packs/cryotheum_resonator
+	name = "Cryotheum resonator"
+	contains = list(/obj/machinery/cryotheum_resonator,
+					/obj/item/bluespace_crystal/artificial)
+	cost = 140
+	containertype = /obj/structure/closet/crate/secure/large/reinforced
+	containername = "cryotheum resonator crate"
+	access = list(access_engine_minor)
+	group = "Engineering"
+	containsdesc = "A cutting edge machine that tears into a universe orthogonal to ours and applies alternative laws of physics to gaseous oxygen in its immediate vicinity. Requires a bluespace crystal to work (an artificial crystal comes with this crate!)."

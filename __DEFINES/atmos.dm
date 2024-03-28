@@ -9,7 +9,9 @@
 #define CO2MARS 0.96
 #define N2MARS  0.04 //Mars atmosphere is actually 1.9% nitrogen, 1.9% argon with traces of other gases. Simplified to 4% nitrogen
 
+
 #define MOLES_PLASMA_VISIBLE	0.7 //Moles in a standard cell after which plasma is visible
+#define MOLES_CRYOTHEUM_VISIBLE	0.7 //Moles in a standard cell after which cryotheum is visible
 #define MOLES_O2STANDARD (MOLES_CELLSTANDARD*O2STANDARD)	// O2 standard value (21%)
 #define MOLES_N2STANDARD (MOLES_CELLSTANDARD*N2STANDARD)	// N2 standard value (79%)
 
@@ -74,10 +76,11 @@
 #define PLASMA_OXYGEN_FULLBURN				10
 
 // XGM gas flags.
-#define XGM_GAS_FUEL        1
-#define XGM_GAS_OXIDIZER    2
-#define XGM_GAS_CONTAMINANT 4
-#define XGM_GAS_LOGGED      8
+// Whether this gas is "relevant", used for various things like whether to display it on an air alarm v.s. lump it in with "other gases".
+#define XGM_GAS_NOTEWORTHY	1
+// Some events will only be logged with this flag, i.e. opening a canister is only logged if it contains a logged gas.
+#define XGM_GAS_LOGGED      2
+
 
 #define TANK_LEAK_PRESSURE		(30.*ONE_ATMOSPHERE)	// Tank starts leaking
 #define TANK_RUPTURE_PRESSURE	(40.*ONE_ATMOSPHERE) // Tank spills all contents into atmosphere

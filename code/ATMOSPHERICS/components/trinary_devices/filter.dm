@@ -10,16 +10,8 @@
 
 	var/target_pressure = ONE_ATMOSPHERE
 
-	var/filter_type = 0
-/*
-Filter types:
--1: Nothing
- 0: Plasma: Plasma Toxin, Oxygen Agent B
- 1: Oxygen: Oxygen ONLY
- 2: Nitrogen: Nitrogen ONLY
- 3: Carbon Dioxide: Carbon Dioxide ONLY
- 4: Sleeping Agent (N2O)
-*/
+	// What gas is being filtered. Null indicates nothing.
+	var/filtered_gas = GAS_PLASMA
 
 	frequency = 0
 	var/datum/radio_frequency/radio_connection
@@ -79,22 +71,8 @@ Filter types:
 		filtered_out.temperature = removed.temperature
 
 		#define FILTER(g) filtered_out.adjust_gas((g), removed[g])
-		switch(filter_type)
-			if(0) //removing hydrocarbons
-				FILTER(GAS_PLASMA)
-				FILTER(GAS_OXAGENT)
-
-			if(1) //removing O2
-				FILTER(GAS_OXYGEN)
-
-			if(2) //removing N2
-				FILTER(GAS_NITROGEN)
-
-			if(3) //removing CO2
-				FILTER(GAS_CARBON)
-
-			if(4)//removing N2O
-				FILTER(GAS_SLEEPING)
+		if(filtered_gas != null)
+			FILTER(filtered_gas)
 
 		removed.subtract(filtered_out)
 		#undef FILTER
@@ -127,34 +105,24 @@ Filter types:
 		return
 
 	var/dat
-	var/current_filter_type
-	switch(filter_type)
-		if(0)
-			current_filter_type = "Plasma"
-		if(1)
-			current_filter_type = "Oxygen"
-		if(2)
-			current_filter_type = "Nitrogen"
-		if(3)
-			current_filter_type = "Carbon Dioxide"
-		if(4)
-			current_filter_type = "Nitrous Oxide"
-		if(-1)
-			current_filter_type = "Nothing"
-		else
-			current_filter_type = "ERROR - Report this bug to the admin, please!"
+	var/current_filter_name
+	if(filtered_gas == null)
+		current_filter_name = "Nothing"
+	else
+		var/datum/gas/gas_datum = XGM.gases[filtered_gas]
+		current_filter_name = gas_datum.name
 
-	dat += {"
-			<b>Power: </b><a href='?src=\ref[src];power=1'>[on?"On":"Off"]</a><br>
-			<b>Filtering: </b>[current_filter_type]<br><HR>
-			<h4>Set Filter Type:</h4>
-			<A href='?src=\ref[src];filterset=0'>Plasma</A><BR>
-			<A href='?src=\ref[src];filterset=1'>Oxygen</A><BR>
-			<A href='?src=\ref[src];filterset=2'>Nitrogen</A><BR>
-			<A href='?src=\ref[src];filterset=3'>Carbon Dioxide</A><BR>
-			<A href='?src=\ref[src];filterset=4'>Nitrous Oxide</A><BR>
-			<A href='?src=\ref[src];filterset=-1'>Nothing</A><BR>
-			<HR><B>Desirable output pressure:</B>
+	dat += {"<b>Power: </b><a href='?src=\ref[src];power=1'>[on?"On":"Off"]</a><br>
+			<b>Filtering: </b>[current_filter_name]<br><HR>
+			<h4>Set Filter Type:</h4>"}
+
+	for(var/gas_ID in XGM.gases)
+		var/datum/gas/gas_datum = XGM.gases[gas_ID]
+		dat += "<A href='?src=\ref[src];filterset=" + gas_ID + "'>" + gas_datum.name + "</A><BR>"
+
+	dat += "<A href='?src=\ref[src];filterset=nothing'>Nothing</A><BR>"
+
+	dat += {"<HR><B>Desirable output pressure:</B>
 			[src.target_pressure]kPa | <a href='?src=\ref[src];set_press=1'>Change</a>
 			"}
 /*
@@ -177,7 +145,10 @@ Filter types:
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
 	if(href_list["filterset"])
-		src.filter_type = text2num(href_list["filterset"])
+		if(href_list["filterset"] == "nothing")
+			filtered_gas = null
+		else
+			filtered_gas = href_list["filterset"]
 	if (href_list["temp"])
 		src.temp = null
 	if(href_list["set_press"])

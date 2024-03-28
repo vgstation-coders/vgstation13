@@ -56,6 +56,9 @@ Class Procs:
 	var/turf_color
 	#endif
 
+	// Hardcoded-event specific variables.
+	var/ice_puddle_list
+
 /zone/New()
 	SSair.add_zone(src)
 	air.temperature = TCMB
@@ -80,6 +83,7 @@ Class Procs:
 	#ifdef ZAS_COLOR
 	T.color = turf_color
 	#endif
+	handle_events_add(T)
 
 /zone/proc/remove(turf/simulated/T)
 #ifdef ZASDBG
@@ -102,6 +106,7 @@ Class Procs:
 	#endif
 	if(!contents.len)
 		c_invalidate()
+	handle_events_remove(T)
 
 /zone/proc/c_merge(zone/into)
 #ifdef ZASDBG
@@ -131,6 +136,7 @@ Class Procs:
 	#ifdef ZASDBG
 	for(var/turf/simulated/T in contents)
 		T.dbg(invalid_zone)
+		handle_events_remove(T)
 	#endif
 
 /zone/proc/rebuild()
@@ -145,6 +151,7 @@ Class Procs:
 		//T.dbg(invalid_zone)
 		T.needs_air_update = 0 //Reset the marker so that it will be added to the list.
 		SSair.mark_for_update(T)
+		handle_events_add(T)
 
 //Gets a list of the gas_mixtures of all zones connected to this one through arbitrarily many sleeping edges.
 //This is to cut down somewhat on differentials across open doors.
@@ -162,6 +169,8 @@ Class Procs:
 				Z.get_equalized_zone_air(found)
 
 /zone/proc/tick()
+	check_for_events()
+	air.reaction_tick()
 	if(air.check_tile_graphic(graphic_add, graphic_remove))
 		for(var/turf/simulated/T in contents)
 			T.update_graphic(graphic_add, graphic_remove)
@@ -198,6 +207,41 @@ Class Procs:
 
 	//for(var/turf/T in unsimulated_contents)
 //		to_chat(M, "[T] at ([T.x],[T.y])")
+
+// There are some behaviors that we want to happen upon certain thresholds. For instance, if slippery ice is spread across many turfs that melts upon a certain temperature,
+// we want to know when the zone's temperature is raised above that threshold.
+// In an ideal non-BYOND environment we could use something like events to hookup each ice tile to. However, our in-house implementation of events suck for performance. So you
+// can just hardcode the check here.
+/zone/proc/check_for_events()
+	// Only initialize ice_puddle_list and do these checks after cryotheum has been introduced to the zone.
+	if( ice_puddle_list != null )
+		for(var/obj/effect/overlay/puddle/ice/existing_ice in ice_puddle_list)
+			existing_ice.current_temp = air.temperature
+		// Below freezing and cryotheum in the air, create ice.
+		if( air.temperature <= T0C && air.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME )
+			for(var/turf/simulated/T in contents)
+				var/found = FALSE
+				for(var/obj/effect/overlay/puddle/ice/puddle in T)
+					found = TRUE
+					break
+				if(!found)
+					var/obj/effect/overlay/puddle/ice/new_ice = new /obj/effect/overlay/puddle/ice(T, T.zone)
+					new_ice.wet = TURF_WET_ICE
+		else if(air.temperature >= T0C+5 && isemptylist(ice_puddle_list))
+			ice_puddle_list = null
+	else if ( air.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME )
+		ice_puddle_list = list()
+
+/zone/proc/handle_events_add(turf/simulated/T)
+	for(var/obj/effect/overlay/puddle/ice/ice_puddle in T)
+		if( ice_puddle_list == null )
+			ice_puddle_list = list()
+		ice_puddle_list |= ice_puddle
+
+/zone/proc/handle_events_remove(turf/simulated/T)
+	if( ice_puddle_list != null )
+		for(var/obj/effect/overlay/puddle/ice/ice_puddle in T)
+			ice_puddle_list -= ice_puddle
 
 #ifdef ZAS_COLOR
 #undef ZAS_COLOR

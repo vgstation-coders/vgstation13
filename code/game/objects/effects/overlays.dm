@@ -75,9 +75,21 @@
 	icon = 'icons/effects/water.dmi'
 	icon_state = "wet_floor"
 	anchored = 1
+	plane = ABOVE_TURF_PLANE
 	var/wet = TURF_WET_LUBE
 	var/lifespan
 	mouse_opacity = 0
+
+/obj/effect/overlay/puddle/ice
+	name = "Ice"
+	icon_state = "icy_floor"
+	wet = TURF_WET_ICE
+	var/current_temp
+	var/ice_thickness = 5
+	// Alternative option to use /obj/effect/overlay/puddle's lifespan variable to dictate when the ice puddle is destroyed instead of
+	// the HP system.
+	var/time_based_melt = FALSE
+
 
 /obj/effect/overlay/puddle/New(var/turf/T, var/new_wet, var/new_lifespan)
 	..()
@@ -100,6 +112,36 @@
 	var/mob/living/L = AM
 	if (!L.ApplySlip(src))
 		return ..()
+
+/obj/effect/overlay/puddle/ice/New(var/turf/T, var/zone/zone)
+	..()
+	current_temp = T.air.temperature
+	if( zone != null )
+		// Refactor suggestion: zone SHOULD be managing ice_puddle_list, puddle should not have to worry about this at all.
+		zone.ice_puddle_list += src
+
+/obj/effect/overlay/puddle/ice/Destroy()
+	..()
+	var/turf/T = get_turf(src)
+	if(istype(T, /turf/simulated))
+		var/turf/simulated/S = T
+		if(S.zone)
+			S.zone.ice_puddle_list -= src
+
+/obj/effect/overlay/puddle/ice/process()
+	if(time_based_melt && world.time >= lifespan){
+		qdel(src)
+	}
+	else{
+		var/temp_delta = current_temp - T0C
+		// Increase or decrease HP based on temperature. Scales logarithmically, so ever-hotter temperatures cause it to melt faster.
+		if(temp_delta != 0)
+			ice_thickness = min( 100, ice_thickness + ((temp_delta < 0) ? 1 : -1 * log(8, abs(temp_delta)) / rand(1,3)))
+		if(ice_thickness < 0)
+			new /obj/effect/overlay/puddle(get_turf(src))
+			qdel(src)
+	}
+
 
 /obj/effect/overlay/holywaterpuddle
 	name = "Puddle"

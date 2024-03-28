@@ -263,8 +263,8 @@
 "aP" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	dir = 4;
-	scrub_CO2 = 0;
-	scrub_Toxins = 0
+	default_scrubbed_gases = list("plasma");
+	default_scrubbed_gases = list("carbon_dioxide")
 	},
 /turf/simulated/floor/carpet,
 /area/mining_bar)
@@ -304,8 +304,8 @@
 "aU" = (
 /obj/machinery/atmospherics/unary/vent_scrubber{
 	dir = 4;
-	scrub_CO2 = 0;
-	scrub_Toxins = 0
+	default_scrubbed_gases = list("plasma");
+	default_scrubbed_gases = list("carbon_dioxide")
 	},
 /turf/simulated/floor{
 	dir = 8;
@@ -513,7 +513,7 @@
 "bD" = (
 /obj/machinery/atmospherics/trinary/filter/mirrored{
 	dir = 8;
-	filter_type = 1;
+	filtered_gas = "oxygen";
 	on = 1
 	},
 /turf/simulated/floor/engine,
@@ -534,7 +534,7 @@
 "bI" = (
 /obj/machinery/atmospherics/trinary/filter/mirrored{
 	dir = 1;
-	filter_type = 2;
+	filtered_gas = "nitrogen";
 	on = 1
 	},
 /turf/simulated/floor/engine,

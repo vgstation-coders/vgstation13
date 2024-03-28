@@ -36,9 +36,9 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 //	if(istype(back,/obj/item/weapon/storage/backpack))
 //		back.contaminate()
 
-/mob/proc/pl_effects()
+/mob/proc/plasma_effects()
 
-/mob/living/carbon/human/pl_effects()
+/mob/living/carbon/human/plasma_effects()
 	//Handles all the bad things plasma can do.
 
 	if(flags & INVULNERABLE)
