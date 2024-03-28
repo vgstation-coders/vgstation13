@@ -328,7 +328,8 @@ var/list/map_dimension_cache = list()
 
 	//Locate the area object
 	instance = locate(members[index])
-
+	if(!isarea(instance))
+		WARNING("Instance at [members[index]] is not an area!")
 	if(!isspace(instance)) //Space is the default area and contains every loaded turf by default
 		instance.contents.Add(locate(xcrd,ycrd,zcrd))
 		spawned_atoms.Add(instance)
@@ -399,6 +400,8 @@ var/list/map_dimension_cache = list()
 	_preloader.setup(attributes, path)
 
 	var/turf/T = locate(x,y,z)
+	if(!T)
+		WARNING("Turf at [x], [y], [z] not found!")
 	if(ispath(path, /turf)) //Turfs use ChangeTurf
 		if(path != T.type)
 			instance = T.ChangeTurf(path, allow = 1)
@@ -416,6 +419,8 @@ var/list/map_dimension_cache = list()
 	var/timetook2instance = world.timeofday - timestart
 	if(timetook2instance > 1)
 		log_debug("Slow atom instance. [instance] ([instance.type]) at [T?.x],[T?.y],[T?.z] took [timetook2instance/10] seconds to instance.")
+	//if(!instance)
+		//WARNING("No instance created or found at [T?.x],[T?.y],[T?.z]!")
 	return instance
 
 //text trimming (both directions) helper proc
