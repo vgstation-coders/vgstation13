@@ -101,8 +101,6 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define GLASSTILE_PLANE			-1						// Another one that won't behave, since it's an overlay
 
-#define ABOVE_GLASSTILE_PLANE	1						// Another one that won't behave, since it's an overlay
-
 #define ABOVE_TURF_PLANE 		(1 + FLOAT_PLANE)			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
 	#define HOLOMAP_LAYER				1 //Note: Holomap images are not actually on ABOVE_TURF_PLANE. They are explicitly one plane above the parent turf.
