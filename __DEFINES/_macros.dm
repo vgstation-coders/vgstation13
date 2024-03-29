@@ -345,6 +345,8 @@
 #define isspace(A) (A.type == /area)
 
 #define isopenspace(A) istype(A, /turf/simulated/open)
+var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floor/glass)
+#define isvisiblespace(A) is_type_in_list(A, visible_spaces)
 
 //This one returns the "space" area
 //#define get_space_area (get_area(locate(1,1,2))) //xd

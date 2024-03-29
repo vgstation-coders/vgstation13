@@ -783,7 +783,7 @@
 	user.do_attack_animation(src, W)
 	src.log_message("Attacked by [W]. Attacker - [user]")
 	if(prob(src.deflect_chance))
-		to_chat(user, "<span class='attack'>The [W] bounces off [src.name] armor.</span>")
+		to_chat(user, "<span class='attack'>\The [W] bounces off [src.name] armor.</span>")
 		src.log_append_to_last("Armor saved.")
 /*
 		for (var/mob/V in viewers(src))

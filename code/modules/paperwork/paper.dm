@@ -12,6 +12,7 @@
 	item_state = "paper"
 	throwforce = 0
 	w_class = W_CLASS_TINY
+	starting_materials = list(MAT_CARDBOARD = 40)
 	w_type = RECYK_WOOD
 	throw_range = 1
 	throw_speed = 1

@@ -7,6 +7,7 @@
 
 /obj/structure/bed/chair/vehicle/gigadrill
 	name = "gigadrill"
+	desc = "If there's a wall in our way then we smash it down! If there isn't a path, then we carve one ourselves!"
 	icon_state = "gigadrill"
 	keytype = /obj/item/key/gigadrill
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/gigadrill
