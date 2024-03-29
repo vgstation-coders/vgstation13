@@ -125,7 +125,7 @@
 				set_light(5 * CANDLE_LUM)
 				if(source_temperature == 0) //only holocandles don't have source temp, using this so I don't add a new var
 					wax = 0.8 * wax //jury rigged so the wax reduction doesn't nuke the holocandles if flickered
-				visible_message("<span class='warning'>The [src]'s flame starts roaring unnaturally!</span>")
+				visible_message("<span class='warning'>\The [src]'s flame starts roaring unnaturally!</span>")
 			update_icon()
 			sleep(rand(5,8))
 			set_light(CANDLE_LUM)

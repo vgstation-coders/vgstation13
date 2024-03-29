@@ -636,7 +636,6 @@
 			grue_stat_updates(TRUE)
 		else
 			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
-		E.death(1)
 		E.drop_all()
 		E.gib()
 	busy=FALSE
