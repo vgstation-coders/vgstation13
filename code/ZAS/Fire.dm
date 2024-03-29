@@ -235,8 +235,6 @@ Attach to transfer valve and open. BOOM.
 		air_contents[GAS_OXYGEN] = 0
 	if(air_contents.molar_density(GAS_PLASMA) < 0.1 / CELL_VOLUME)
 		air_contents[GAS_PLASMA] = 0
-	if(air_contents.molar_density(GAS_VOLATILE) < 0.1 / CELL_VOLUME)
-		air_contents[GAS_VOLATILE] = 0
 
 	air_contents.update_values()
 
@@ -353,7 +351,6 @@ Attach to transfer valve and open. BOOM.
 		var/total_fuel = 0
 
 		total_fuel += src[GAS_PLASMA]
-		total_fuel += src[GAS_VOLATILE]
 
 		var/can_use_turf=(T && istype(T))
 		if(can_use_turf)
@@ -389,8 +386,7 @@ Attach to transfer valve and open. BOOM.
 		adjust_multi(
 			GAS_OXYGEN, -min(src[GAS_OXYGEN], total_oxygen * used_reactants_ratio),
 			GAS_PLASMA, -min(src[GAS_PLASMA], (src[GAS_PLASMA] * used_fuel_ratio * used_reactants_ratio) * 3),
-			GAS_CARBON, max(2 * total_fuel * used_reactants_ratio, 0),
-			GAS_VOLATILE, -(src[GAS_VOLATILE] * used_fuel_ratio * used_reactants_ratio) * 5) //Fuel burns 5 times as quick
+			GAS_CARBON, max(2 * total_fuel * used_reactants_ratio, 0))
 
 		if(can_use_turf)
 			if(T.getFireFuel()>0)
@@ -409,10 +405,8 @@ Attach to transfer valve and open. BOOM.
 /datum/gas_mixture/proc/check_recombustability(var/turf/T)
 	//this is a copy proc to continue a fire after its been started.
 
-	if(gas[GAS_OXYGEN] && (gas[GAS_PLASMA] || gas[GAS_VOLATILE]))
+	if(gas[GAS_OXYGEN] && gas[GAS_PLASMA])
 		if(QUANTIZE(molar_density(GAS_PLASMA) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
-			return 1
-		if(QUANTIZE(molar_density(GAS_VOLATILE) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ / CELL_VOLUME)
 			return 1
 
 	// Check if we're actually in a turf or not before trying to check object fires.
@@ -451,10 +445,8 @@ Attach to transfer valve and open. BOOM.
 		return 0
 	*/
 
-	if(gas[GAS_OXYGEN] && (gas[GAS_PLASMA] || gas[GAS_VOLATILE]))
+	if(gas[GAS_OXYGEN] && gas[GAS_PLASMA])
 		if(QUANTIZE(molar_density(GAS_PLASMA) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
-			return 1
-		if(QUANTIZE(molar_density(GAS_VOLATILE) * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ / CELL_VOLUME)
 			return 1
 
 	if(objects && istype(T))
@@ -482,8 +474,6 @@ Attach to transfer valve and open. BOOM.
 			for(var/atom/A in T)
 				if(A)
 					total_fuel += A.getFireFuel()
-
-		total_fuel += src[GAS_VOLATILE]
 
 		var/total_combustables = (total_fuel + src[GAS_OXYGEN])
 

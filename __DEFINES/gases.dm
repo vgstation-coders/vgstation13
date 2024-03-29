@@ -4,5 +4,3 @@
 #define GAS_PLASMA   "plasma"
 #define GAS_SLEEPING "sleeping_agent"
 #define GAS_CRYOTHEUM "cryotheum"
-#define GAS_VOLATILE "volatile_fuel"
-#define GAS_OXAGENT  "oxygen_agent_b"

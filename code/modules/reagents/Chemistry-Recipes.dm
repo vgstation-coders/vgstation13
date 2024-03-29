@@ -745,11 +745,7 @@
 		var/turf/location = get_turf(holder.my_atom.loc)
 
 		for(var/turf/simulated/floor/target_tile in range(0,location))
-			var/datum/gas_mixture/napalm = new()
-			napalm.adjust_gas(GAS_VOLATILE, created_volume, FALSE)
-			napalm.temperature = 400+T0C
-			napalm.update_values()
-			target_tile.assume_air(napalm)
+			new /obj/effect/decal/cleanable/liquid_fuel(target_tile, created_volume*4)
 			spawn(0)
 				target_tile.hotspot_expose(700, 400, surfaces = 1)
 

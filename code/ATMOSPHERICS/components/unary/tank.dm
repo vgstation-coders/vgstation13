@@ -77,16 +77,6 @@
 	air_contents.temperature = 90
 	air_contents.adjust_gas(GAS_NITROGEN, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
-/obj/machinery/atmospherics/unary/tank/oxygen_agent_b
-	icon_state = "plasma"
-	name = "Pressure Tank (Oxygen + Plasma)"
-
-/obj/machinery/atmospherics/unary/tank/oxygen_agent_b/New()
-	..()
-
-	air_contents.adjust_gas(GAS_OXAGENT, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
-
-
 /obj/machinery/atmospherics/unary/tank/oxygen
 	icon_state = "o2"
 	name = "Pressure Tank (Oxygen)"

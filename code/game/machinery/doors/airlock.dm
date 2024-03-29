@@ -287,11 +287,11 @@
 	for(var/turf/simulated/floor/target_tile in range(2,loc))
 //		if(target_tile.parent && target_tile.parent.group_processing) // THESE PROBABLY DO SOMETHING IMPORTANT BUT I DON'T KNOW HOW TO FIX IT - Erthilo
 //			target_tile.parent.suspend_group_processing()
-		var/datum/gas_mixture/napalm = new
+		var/datum/gas_mixture/plasma = new
 		var/toxinsToDeduce = 35
-		napalm.temperature = 400+T0C
-		napalm.adjust_gas(GAS_PLASMA, toxinsToDeduce)
-		target_tile.assume_air(napalm)
+		plasma.temperature = 400+T0C
+		plasma.adjust_gas(GAS_PLASMA, toxinsToDeduce)
+		target_tile.assume_air(plasma)
 		spawn (0)
 			target_tile.hotspot_expose(temperature, 400, surfaces=1)
 	for(var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve

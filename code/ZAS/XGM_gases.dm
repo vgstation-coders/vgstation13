@@ -80,50 +80,6 @@
 	name = "plasma"
 	icon_state = "plasma"
 
-/datum/gas/sleeping_agent
-	id = GAS_SLEEPING
-	name = "Sleeping Agent"
-	short_name = "N<sub>2</sub>O"
-	specific_heat = 40	// J/(mol*K)
-	molar_mass = 0.044	// kg/mol. N₂O
-
-	tile_overlay = new /obj/effect/overlay/gas_overlay/sleeping_agent()
-	overlay_limit = 1 / CELL_VOLUME
-	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
-
-/datum/gas/sleeping_agent/is_human_safe(moles, datum/gas_mixture/mixture)
-	return moles/mixture.total_moles() < 0.01
-
-/obj/effect/overlay/gas_overlay/sleeping_agent
-	name = "sleeping agent"
-	icon_state = "sleeping_agent"
-
-/datum/gas/volatile_fuel
-	id = GAS_VOLATILE
-	name = "Volatile Fuel"
-	short_name = "Fuel<sub>V</sub>"
-
-	specific_heat = 30
-	molar_mass = 0.163 // @MoMMI#9954 roll 32 405
-
-	flags = XGM_GAS_LOGGED
-
-/datum/gas/volatile_fuel/is_human_safe(moles, datum/gas_mixture/mixture)
-	return moles/mixture.total_moles() < 0.01
-
-/datum/gas/oxygen_agent_b
-	id = GAS_OXAGENT
-	name = "Oxygen Agent B"
-	short_name = "Oxy Agent<sub>B</sub>"
-
-	specific_heat = 300
-	molar_mass = 0.300
-
-	flags = XGM_GAS_LOGGED
-
-/datum/gas/oxygen_agent_b/is_human_safe(moles, datum/gas_mixture/mixture)
-	return moles/mixture.total_moles() < 0.01
-
 /datum/gas/cryotheum
 	id = GAS_CRYOTHEUM
 	name = "Cryotheum"
