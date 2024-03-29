@@ -190,10 +190,7 @@
 	file_name	= "tile_painter_d_"
 
 /datum/paint_info/decal/apply(var/turf/simulated/floor/T, var/pname, var/pdesc, var/dir)
-	var/image/I = image(icon, icon_state = icon_state, dir = dir)
-	I.layer = DECAL_LAYER
-	I.plane = ABOVE_TURF_PLANE
-	T.AddDecal(I)
+	T.AddDecal(image(icon, icon_state = icon_state, dir = dir))
 
 //The list of all available floor design groups.
 

@@ -422,7 +422,7 @@
 	if(density != old_density)
 		densityChanged()
 
-/turf/proc/AddDecal(const/image/decal)
+/turf/proc/AddDecal(var/image/decal)
 	if(!turfdecals)
 		turfdecals = new
 

@@ -8,8 +8,6 @@
 	I.pixel_x = pixel_x
 	I.pixel_y = pixel_y
 	I.color=color
-	I.layer = layer
-	I.plane = plane
 	T.AddDecal(I)
 	qdel(src)
 

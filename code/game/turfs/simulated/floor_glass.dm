@@ -52,6 +52,10 @@
 	current_damage_overlay = damage_overlay
 	overlays += damage_overlay
 
+/turf/simulated/floor/glass/AddDecal(var/image/decal)
+	decal.layer = DECAL_LAYER
+	decal.plane = GLASSTILE_PLANE
+	..()
 
 /turf/simulated/floor/glass/examine(var/mob/user)
 	..()
