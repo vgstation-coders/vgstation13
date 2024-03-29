@@ -2940,7 +2940,7 @@
 #include "maprendering\maprendering.dm"
 #include "maps\_map.dm"
 #include "maps\_map_override.dm"
-#include "maps\tgstation-snow.dm"
+#include "maps\tgstation.dm"
 #include "maps\defficiency\areas.dm"
 #include "maps\lampreystation\lamprey.dm"
 #include "maps\packedstation\telecomms.dm"
