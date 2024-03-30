@@ -136,9 +136,10 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 
 /turf/initialize()
 	. = ..()
-	var/turf/below = GetBelow(src)
-	if(below)
-		below.openspace_update(src)
+	if(HasBelow(src.z))
+		var/turf/below = GetBelow(src)
+		if(below)
+			below.openspace_update(src)
 
 /turf/unsimulated/floor/snow/openspace_update(var/turf/above)
 	if(above && !isopenspace(above))
