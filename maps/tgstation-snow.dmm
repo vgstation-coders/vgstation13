@@ -19549,6 +19549,12 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/simulated/floor/plating/vox,
 /area/vox_trading_post/solars)
+"aVn" = (
+/obj/machinery/door/airlock/maintenance{
+	req_access_txt = "12"
+	},
+/turf/simulated/floor/plating,
+/area/crew_quarters/fitness)
 "aVo" = (
 /obj/structure/rack,
 /obj/machinery/alarm/vox{
@@ -20689,6 +20695,7 @@
 /area/derelict/singularity_engine)
 "aZh" = (
 /obj/structure/table,
+/obj/abstract/map/spawner/maint/lowchance,
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
 "aZi" = (
@@ -21051,12 +21058,13 @@
 /turf/simulated/floor,
 /area/crew_quarters/fitness)
 "bbm" = (
-/obj/item/device/radio/intercom{
-	name = "Station Intercom (General)";
-	pixel_y = 20
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 8
 	},
-/turf/simulated/floor,
-/area/crew_quarters/fitness)
+/obj/structure/window/reinforced,
+/turf/simulated/floor/plating,
+/area/maintenance/fsmaint)
 "bbp" = (
 /obj/machinery/door/airlock/maintenance{
 	name = "Bar Storage";
@@ -21218,6 +21226,10 @@
 /area/station/garage)
 "bbX" = (
 /obj/structure/flora/pottedplant/random,
+/obj/item/device/radio/intercom{
+	name = "Station Intercom (General)";
+	pixel_y = 20
+	},
 /turf/simulated/floor{
 	dir = 4;
 	icon_state = "red"
@@ -34152,16 +34164,10 @@
 /turf/simulated/floor,
 /area/supply/office)
 "chy" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced{
-	dir = 8
+/obj/machinery/vending/sale,
+/obj/machinery/door/firedoor/border_only{
+	dir = 4;
+	name = "Firelock East"
 	},
 /turf/simulated/floor/plating,
 /area/supply/office)
@@ -58917,6 +58923,9 @@
 /obj/structure/shuttle/engine/propulsion/left{
 	dir = 8
 	},
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 8
+	},
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod3)
 "ejJ" = (
@@ -59250,7 +59259,9 @@
 /area/security/main)
 "ekY" = (
 /obj/docking_port/destination/pod3/station{
-	dir = 4
+	dir = 4;
+	base_turf_type = /turf/unsimulated/floor/snow/asphalt;
+	base_turf_override = 1
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
@@ -59583,6 +59594,7 @@
 /obj/structure/shuttle/engine/propulsion/right{
 	dir = 8
 	},
+/obj/structure/shuttle/diag_wall/smooth,
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod3)
 "elO" = (
@@ -65627,6 +65639,13 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/machinery/door/poddoor{
+	density = 0;
+	icon_state = "pdoor0";
+	id_tag = "xenobio1";
+	name = "Containment Blast Doors";
+	opacity = 0
+	},
 /turf/simulated/floor,
 /area/science/xenobiology/specimen_1)
 "fhx" = (
@@ -65761,11 +65780,10 @@
 "fjA" = (
 /obj/structure/grille,
 /obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced,
-/obj/structure/window/reinforced{
 	dir = 4
+	},
+/obj/structure/window/reinforced{
+	dir = 1
 	},
 /turf/simulated/floor/plating,
 /area/maintenance/fsmaint)
@@ -66251,15 +66269,10 @@
 /turf/simulated/floor,
 /area/hallway/primary/fore)
 "ftD" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+/obj/structure/hanging_lantern{
+	dir = 8
 	},
-/obj/structure/catwalk{
-	icon_state = "catwalk3"
-	},
-/turf/unsimulated/floor/snow,
+/turf/unsimulated/floor/snow/permafrost,
 /area/surface/snow)
 "ftE" = (
 /obj/structure/morgue{
@@ -68502,7 +68515,9 @@
 /area/shuttle/nuclearops)
 "gkq" = (
 /obj/docking_port/destination/pod5/station{
-	dir = 4
+	dir = 4;
+	base_turf_override = 1;
+	base_turf_type = /turf/unsimulated/floor/snow/asphalt
 	},
 /turf/simulated/floor/plating,
 /area/engineering/engineering_auxiliary)
@@ -68742,6 +68757,13 @@
 	icon_state = "1-4"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/door/poddoor{
+	density = 0;
+	icon_state = "pdoor0";
+	id_tag = "xenobio1";
+	name = "Containment Blast Doors";
+	opacity = 0
+	},
 /turf/simulated/floor,
 /area/science/xenobiology/specimen_4)
 "goP" = (
@@ -68946,6 +68968,9 @@
 /area/storage/nuke_storage)
 "gtK" = (
 /obj/structure/shuttle/engine/propulsion/left{
+	dir = 8
+	},
+/obj/structure/shuttle/diag_wall/smooth{
 	dir = 8
 	},
 /turf/simulated/floor/plating,
@@ -72399,7 +72424,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/virology_maint)
 "hCV" = (
-/obj/structure/sign/double/barsign,
+/obj/structure/sign/double/barsign/ghetto,
 /turf/simulated/wall,
 /area/maintenance/ghettobar)
 "hDc" = (
@@ -73451,6 +73476,7 @@
 /area/hallway/secondary/entry)
 "hUH" = (
 /obj/structure/shuttle/engine/propulsion/left,
+/obj/structure/shuttle/diag_wall/smooth,
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod1)
 "hUO" = (
@@ -73501,6 +73527,9 @@
 /area/engineering/engine)
 "hVt" = (
 /obj/structure/shuttle/engine/propulsion/right,
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod1)
 "hVx" = (
@@ -73526,6 +73555,7 @@
 /area/centcom/evac)
 "hVT" = (
 /obj/structure/shuttle/engine/propulsion/left,
+/obj/structure/shuttle/diag_wall/smooth,
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod2)
 "hVU" = (
@@ -73597,6 +73627,9 @@
 /area/engineering/burn_chamber)
 "hWy" = (
 /obj/structure/shuttle/engine/propulsion/right,
+/obj/structure/shuttle/diag_wall/smooth{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod2)
 "hWK" = (
@@ -73695,11 +73728,16 @@
 /turf/simulated/wall/r_wall,
 /area/maintenance/incinerator)
 "hZn" = (
-/obj/structure/catwalk{
-	icon_state = "catwalk1"
+/obj/structure/grille,
+/obj/structure/window/reinforced{
+	dir = 4
 	},
-/turf/unsimulated/floor/snow,
-/area/surface/snow)
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/maintenance/fsmaint2)
 "hZy" = (
 /obj/effect/landmark/start{
 	name = "Mobile MMI"
@@ -75142,7 +75180,10 @@
 /turf/simulated/floor,
 /area/engineering/break_room)
 "iAW" = (
-/obj/docking_port/destination/pod1/station,
+/obj/docking_port/destination/pod1/station{
+	base_turf_type = /turf/unsimulated/floor/snow/asphalt;
+	base_turf_override = 1
+	},
 /turf/simulated/floor/plating,
 /area/hallway/secondary/entry)
 "iBc" = (
@@ -75238,7 +75279,10 @@
 /turf/simulated/wall,
 /area/derelict/singularity_engine)
 "iCE" = (
-/obj/docking_port/destination/pod2/station,
+/obj/docking_port/destination/pod2/station{
+	base_turf_type = /turf/unsimulated/floor/snow/asphalt;
+	base_turf_override = 1
+	},
 /turf/simulated/floor/plating,
 /area/hallway/secondary/entry)
 "iCG" = (
@@ -77413,6 +77457,7 @@
 /obj/structure/shuttle/engine/propulsion/right{
 	dir = 8
 	},
+/obj/structure/shuttle/diag_wall/smooth,
 /turf/simulated/floor/plating,
 /area/shuttle/escape_pod5)
 "jqn" = (
@@ -89814,15 +89859,10 @@
 	},
 /area/hallway/primary/fore)
 "nNx" = (
-/obj/structure/cable{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
+/obj/structure/hanging_lantern{
+	dir = 4
 	},
-/obj/structure/catwalk{
-	icon_state = "catwalk3"
-	},
-/turf/unsimulated/floor/snow,
+/turf/unsimulated/floor/snow/permafrost,
 /area/surface/snow)
 "nNC" = (
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden{
@@ -89854,6 +89894,13 @@
 	icon_state = "1-4"
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/door/poddoor{
+	density = 0;
+	icon_state = "pdoor0";
+	id_tag = "xenobio1";
+	name = "Containment Blast Doors";
+	opacity = 0
+	},
 /turf/simulated/floor,
 /area/science/xenobiology/specimen_5)
 "nOg" = (
@@ -94173,7 +94220,9 @@
 	req_access_txt = "31"
 	},
 /obj/docking_port/destination/supply/station{
-	dir = 8
+	dir = 8;
+	base_turf_override = 1;
+	base_turf_type = /turf/unsimulated/floor/snow/permafrost
 	},
 /turf/simulated/floor/plating,
 /area/supply/storage)
@@ -100735,7 +100784,10 @@
 /obj/machinery/door/airlock/external{
 	name = "Arrival Airlock"
 	},
-/obj/docking_port/destination/arrival/station,
+/obj/docking_port/destination/arrival/station{
+	base_turf_override = 1;
+	base_turf_type = /turf/unsimulated/floor/snow/asphalt
+	},
 /turf/simulated/floor/plating,
 /area/hallway/secondary/entry)
 "rGE" = (
@@ -100975,6 +101027,14 @@
 	temperature = 80
 	},
 /area/hallway/secondary/entry)
+"rJw" = (
+/obj/structure/grille,
+/obj/structure/window/reinforced,
+/obj/structure/window/reinforced{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/maintenance/fsmaint)
 "rJy" = (
 /obj/machinery/door/poddoor{
 	id_tag = "thunderdome";
@@ -104160,6 +104220,13 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
 	},
+/obj/machinery/door/poddoor{
+	density = 0;
+	icon_state = "pdoor0";
+	id_tag = "xenobio1";
+	name = "Containment Blast Doors";
+	opacity = 0
+	},
 /turf/simulated/floor,
 /area/science/xenobiology/specimen_2)
 "sVN" = (
@@ -104957,7 +105024,9 @@
 	req_access_txt = "1"
 	},
 /obj/docking_port/destination/escape/shuttle/station{
-	dir = 4
+	dir = 4;
+	base_turf_type = /turf/unsimulated/snow;
+	base_turf_override = 1
 	},
 /turf/simulated/floor/plating,
 /area/hallway/secondary/exit)
@@ -105408,10 +105477,8 @@
 /turf/simulated/floor/plating,
 /area/crew_quarters/barber)
 "trr" = (
-/obj/structure/catwalk{
-	icon_state = "catwalk3"
-	},
-/turf/unsimulated/floor/snow,
+/obj/structure/hanging_lantern,
+/turf/unsimulated/floor/snow/permafrost,
 /area/surface/snow)
 "trD" = (
 /turf/simulated/floor{
@@ -106586,6 +106653,13 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 4
+	},
+/obj/machinery/door/poddoor{
+	density = 0;
+	icon_state = "pdoor0";
+	id_tag = "xenobio1";
+	name = "Containment Blast Doors";
+	opacity = 0
 	},
 /turf/simulated/floor,
 /area/science/xenobiology/specimen_3)
@@ -119431,6 +119505,13 @@
 	d1 = 1;
 	d2 = 4;
 	icon_state = "1-4"
+	},
+/obj/machinery/door/poddoor{
+	density = 0;
+	icon_state = "pdoor0";
+	id_tag = "xenobio1";
+	name = "Containment Blast Doors";
+	opacity = 0
 	},
 /turf/simulated/floor,
 /area/science/xenobiology/specimen_6)
@@ -229312,11 +229393,11 @@ iTt
 gXt
 umB
 iPV
-ftD
-ftD
-nNx
-trr
-hZn
+usu
+usu
+ekD
+qIF
+qIF
 bZp
 bZp
 bZp
@@ -231423,17 +231504,17 @@ oXm
 oXm
 vNz
 bbN
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bEg
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+trr
 orp
 orp
 bwv
@@ -231725,18 +231806,18 @@ xKD
 xKD
 qCM
 nJA
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bMb
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+ftD
 nvB
 bZp
 bZp
@@ -232027,18 +232108,18 @@ xkk
 xkk
 shH
 mYL
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
 nvB
 bZp
 bZp
@@ -232329,18 +232410,18 @@ iHo
 xkk
 shH
 fWG
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
 nvB
 bZp
 bZp
@@ -232631,18 +232712,18 @@ eAv
 xkk
 shH
 gpn
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
 nvB
 bZp
 bZp
@@ -232933,18 +233014,18 @@ uXJ
 xkk
 bKl
 nJA
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bMd
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+nNx
 nvB
 bZp
 bZp
@@ -233235,17 +233316,17 @@ jYt
 fqy
 hgQ
 aeX
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bZp
-bEg
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+tkh
+trr
 orp
 orp
 bwv
@@ -254333,7 +254414,7 @@ baN
 aZS
 aYV
 aZp
-aZp
+baO
 aZR
 bab
 baK
@@ -254635,7 +254716,7 @@ baN
 aZS
 aZh
 aZh
-aZh
+baN
 aZS
 bac
 gxo
@@ -254936,8 +255017,8 @@ aZS
 aYs
 aZS
 ePj
-eUi
-fjA
+bbm
+baN
 aZS
 aZS
 aZS
@@ -255238,14 +255319,14 @@ eDc
 eDc
 wNd
 wNd
-wNd
-wNd
-wNd
-wNd
-wNd
-wNd
-biG
-bbm
+rJw
+baN
+baN
+baN
+baN
+baN
+aVn
+bfc
 bfc
 bek
 bfc
@@ -255540,12 +255621,12 @@ wNd
 wNd
 wNd
 wNd
-wNd
-wNd
-wNd
-wNd
-wNd
-wNd
+fjA
+eUi
+bbm
+baN
+baN
+baN
 biG
 bbX
 bcA
@@ -255844,9 +255925,9 @@ wNd
 wNd
 wNd
 wNd
-wNd
-wNd
-wNd
+hZn
+brB
+brB
 gVE
 bci
 bci
@@ -256146,9 +256227,9 @@ wNd
 wNd
 wNd
 wNd
-wNd
-wNd
-wNd
+brz
+brB
+brB
 baR
 bne
 bne
@@ -256448,9 +256529,9 @@ wNd
 wNd
 wNd
 wNd
-wNd
-wNd
-wNd
+brz
+brB
+brB
 baR
 bne
 bne
@@ -256750,9 +256831,9 @@ wNd
 wNd
 wNd
 wNd
-wNd
-wNd
-wNd
+brz
+brB
+brB
 baR
 bne
 bne
@@ -257052,9 +257133,9 @@ wNd
 wNd
 wNd
 wNd
-wNd
-wNd
-wNd
+brz
+brB
+brB
 baR
 bne
 bne
@@ -257354,9 +257435,9 @@ wNd
 wNd
 wNd
 wNd
-wNd
-wNd
-biG
+brz
+brB
+brB
 gVV
 bne
 bne
@@ -257656,9 +257737,9 @@ wNd
 wNd
 wNd
 wNd
-wNd
-wNd
-biG
+brz
+brB
+brB
 gWh
 bne
 bne
@@ -257958,9 +258039,9 @@ wNd
 wNd
 wNd
 wNd
-wNd
-wNd
-biG
+brz
+brB
+brB
 gWD
 bne
 bne
@@ -258259,10 +258340,10 @@ wNd
 wNd
 wNd
 wNd
-wNd
-wNd
-wNd
-wNd
+brz
+brz
+brB
+brB
 baR
 bne
 bne
@@ -258558,13 +258639,13 @@ wNd
 wNd
 wNd
 wNd
-orp
-cQW
-cQW
+wNd
+wNd
+wNd
 brz
-fyr
-bad
-brz
+brB
+brB
+brB
 baR
 bne
 bne
@@ -258860,9 +258941,9 @@ wNd
 wNd
 wNd
 wNd
-evt
-aZi
-aZi
+wNd
+wNd
+wNd
 eqq
 fyW
 brB
@@ -259162,9 +259243,9 @@ wNd
 wNd
 wNd
 wNd
-evt
-aZi
-aZi
+wNd
+wNd
+wNd
 brv
 brB
 brB
@@ -259464,9 +259545,9 @@ wNd
 wNd
 wNd
 wNd
-evt
-aZi
-aZi
+wNd
+wNd
+wNd
 brv
 brB
 brB
@@ -259766,9 +259847,9 @@ wNd
 wNd
 wNd
 wNd
-evt
-aZi
-aZi
+wNd
+wNd
+wNd
 brw
 brB
 brB
@@ -260068,9 +260149,9 @@ wNd
 wNd
 wNd
 wNd
-evt
-aZi
-aZi
+wNd
+wNd
+wNd
 brz
 brB
 ggY
@@ -260370,9 +260451,9 @@ wNd
 wNd
 wNd
 wNd
-evt
-aZi
-aZi
+wNd
+wNd
+wNd
 brz
 brB
 bae
@@ -260672,9 +260753,9 @@ wNd
 wNd
 wNd
 wNd
-evt
-aZi
-aZi
+wNd
+wNd
+wNd
 brz
 brB
 baf
@@ -260974,9 +261055,9 @@ wNd
 wNd
 wNd
 wNd
-evt
-aZi
-aZi
+wNd
+wNd
+wNd
 bck
 brB
 ghP
@@ -261276,9 +261357,9 @@ wNd
 wNd
 wNd
 wNd
-evt
-aZi
-aZi
+orp
+cQW
+cQW
 bck
 aZW
 bag
