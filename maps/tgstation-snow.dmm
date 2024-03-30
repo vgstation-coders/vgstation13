@@ -105025,7 +105025,7 @@
 	},
 /obj/docking_port/destination/escape/shuttle/station{
 	dir = 4;
-	base_turf_type = /turf/unsimulated/snow;
+	base_turf_type = /turf/unsimulated/floor/snow;
 	base_turf_override = 1
 	},
 /turf/simulated/floor/plating,
