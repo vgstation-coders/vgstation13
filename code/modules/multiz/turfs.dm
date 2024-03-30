@@ -67,8 +67,10 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 /turf/simulated/open/proc/update()
 	plane = OPENSPACE_PLANE + src.z
 	below = GetBelow(src)
-	//turf_changed_event.register(below, src, /turf/simulated/open/update_icon)
-	universe.OnTurfChange(below) //I think this is equivalent??
+	if(below)
+		//turf_changed_event.register(below, src, /turf/simulated/open/update_icon)
+		universe.OnTurfChange(below) //I think this is equivalent??
+		below.openspace_update(src)
 	levelupdate()
 	for(var/atom/movable/A in src)
 		A.fall()
@@ -128,6 +130,28 @@ var/static/list/no_spacemove_turfs = list(/turf/simulated/wall,/turf/unsimulated
 	overlays.Cut()
 	vis_contents.Cut()
 	..()
+
+/turf/proc/openspace_update(var/turf/above) // function for changes in stuff if above is no longer open
+	return
+
+/turf/initialize()
+	. = ..()
+	var/turf/below = GetBelow(src)
+	if(below)
+		below.openspace_update(src)
+
+/turf/unsimulated/floor/snow/openspace_update(var/turf/above)
+	if(above && !isopenspace(above))
+		snow_intensity_override = SNOW_CALM // should be at least a bit chilly
+		ignore_blizzard_updates = TRUE
+		vis_contents.Cut()
+	else
+		snow_intensity_override = 0
+		ignore_blizzard_updates = FALSE
+		if(!blizzard_image)
+			blizzard_image = new
+		if(!(blizzard_image in vis_contents))
+			vis_contents += blizzard_image
 
 /turf/simulated/floor/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	var/turf/simulated/open/BS = GetBelow(src)
