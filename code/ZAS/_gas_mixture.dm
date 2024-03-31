@@ -139,6 +139,25 @@
 /datum/gas_mixture/proc/partial_pressure(g)
 	return total_moles && (src[g] / total_moles * pressure) //&& short circuits if total_moles is 0, and returns the second expression if it is not.
 
+// Returns the temperature in a rounded Kelvin format.
+/datum/gas_mixture/proc/temperature_kelvin_pretty()
+	if(temperature > 5)
+		return round(temperature,0.1)
+	else if(temperature > 0.1)
+		return round(temperature,0.01)
+	else
+		return round(temperature,0.0001)
+
+
+// Returns the temperature in a rounded Celsius format.
+/datum/gas_mixture/proc/temperature_celsius_pretty()
+	if(temperature > 5)
+		return round(temperature-T0C,0.1)
+	else if(temperature > 0.1)
+		return round(temperature-T0C,0.01)
+	else
+		return round(temperature-T0C,0.0001)
+
 ///////////////////////////////
 //PV=nRT - related procedures//
 ///////////////////////////////
@@ -535,7 +554,7 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 			if(reaction.reaction_is_possible(src))
 				possible_reactions += reaction
 
-// Ticks all reactions once.
+// Ticks all reactions once. Returns true if any reactions were performed, otherwise false.
 /datum/gas_mixture/proc/reaction_tick()
 	cache_reactions()
 	if(allow_reactions && possible_reactions.len)
@@ -570,3 +589,6 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 		// Now actually perform the reactions.
 		for(var/datum/gas_reaction/reaction in reaction_to_requested)
 			reaction.perform_reaction(src, reaction_to_requested[reaction])
+		return TRUE
+	else
+		return FALSE
