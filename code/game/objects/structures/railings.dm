@@ -12,7 +12,7 @@
 	plane = ABOVE_HUMAN_PLANE
 	layer = RAILING_BACK_LAYER
 	flow_flags = ON_BORDER
-	pass_flags_self = PASSTABLE|PASSGLASS
+	pass_flags_self = PASSRAILING|PASSGLASS
 	var/railingtype = "metal"
 	var/wrenchtime = 10
 	var/weldtime = 25
@@ -366,10 +366,7 @@
 	if(user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src]!</span>")
-		if(glasstype)
-			break_glass(TRUE)
-		else
-			make_into_sheets(TRUE)
+		handle_damage(rand(user.melee_damage_lower,user.melee_damage_upper),null,user)
 
 /obj/structure/railing/ex_act(severity)
 	switch(severity)

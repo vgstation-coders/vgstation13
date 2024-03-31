@@ -72,7 +72,7 @@ var/list/beam_master = list()
 	linear_movement = 0 //this will set out icon_state to ..._pixel if 1
 	layer = ABOVE_LIGHTING_LAYER
 	plane = ABOVE_LIGHTING_PLANE
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
+	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE | PASSRAILING
 	damage = 30
 	damage_type = BURN
 	flag = "laser"
@@ -466,10 +466,7 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/practice
 	name = "laser"
 	icon_state = "laser"
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
 	damage = 0
-	damage_type = BURN
-	flag = "laser"
 	eyeblur = 2
 
 /obj/item/projectile/beam/practice/stormtrooper
@@ -810,10 +807,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 
 /obj/item/projectile/beam/lasertag
 	name = "lasertag beam"
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
 	damage = 0
-	damage_type = BURN
-	flag = "laser"
 	icon_state = "bluelaser"
 	var/list/enemy_vest_types = list(/obj/item/clothing/suit/tag/redtag)
 
@@ -884,7 +878,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	icon_state = "heatray"
 	animate_movement = 0
 	linear_movement = 0
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	var/drawn = 0
 	var/tang = 0
 	var/turf/last = null
@@ -1158,7 +1152,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	fire_sound = null
 	custom_impact = 1
 	penetration = 0
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	var/has_splashed = FALSE
 	var/atom/splashed_atom = null
 
@@ -1248,5 +1242,5 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	travel_range = 5
 	damage = 10
 	damage_type = BRUTE
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	eyeblur = 0

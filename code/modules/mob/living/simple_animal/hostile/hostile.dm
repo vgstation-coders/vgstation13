@@ -483,6 +483,7 @@
 					 /obj/structure/grille,
 					 /obj/structure/girder,
 					 /obj/structure/rack,
+					 /obj/structure/railing,
 					 /obj/machinery/door/window,
 					 /obj/item/tape,
 					 /obj/item/toy/balloon/inflated/decoy,

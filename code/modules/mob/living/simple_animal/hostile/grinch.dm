@@ -6,7 +6,7 @@
 	icon_living = "grinch"
 	icon_dead = "grinch_dead"
 	held_items = list(null, null)
-	mob_bump_flag = PASSTABLE // Pass over everything
+	mob_bump_flag = PASSTABLE | PASSRAILING // Pass over everything
 	mutations = list(M_CLUMSY)
 
 	// -- Much more health than a regular gremlin.
