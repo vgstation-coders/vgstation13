@@ -58,9 +58,11 @@ var/list/datum/map_element/map_elements = list()
 			spawned_atoms = maploader.load_map(file, z, x, y, src, rotation, overwrite, clipmin_x, clipmax_x, clipmin_y, clipmax_y, clipmin_z, clipmax_z)
 			initialize(spawned_atoms)
 			return spawned_atoms
+		WARNING("[file_path] is not a file!")
 	else //No file specified - empty map element
 		//These variables are usually set by the map loader. Here we have to set them manually
 		initialize(list()) //Initialize with an empty list
+		WARNING("[file_path] is an empty or non-existant map element!")
 		return 1
 
 	return 0
