@@ -1390,6 +1390,10 @@ var/list/cult_spires = list()
 		qdel(src)
 		return
 	for (var/obj/O in loc)
+		if (istype(O, /obj/structure/window))
+			var/obj/structure/window/W = O
+			if (!W.is_fulltile)//reduces breaches ever so slightly
+				continue
 		if(O == src)
 			continue
 		O.ex_act(2)
@@ -1453,6 +1457,7 @@ var/list/cult_spires = list()
 	var/image/image_lights
 	var/image/image_damage
 	var/datum/faction/bloodcult/cult
+	var/list/pillars = list()
 
 /obj/structure/cult/bloodstone/New()
 	..()
@@ -1496,31 +1501,22 @@ var/list/cult_spires = list()
 /obj/structure/cult/bloodstone/admin/overlays_post()
 	return
 
-/obj/structure/cult/bloodstone/proc/flashy_entrance()
+/obj/structure/cult/bloodstone/proc/flashy_entrance(var/datum/rune_spell/tearreality/TR)
 	for (var/obj/O in loc)
 		if (O != src && !istype(O,/obj/item/weapon/melee/soulblade))
 			O.ex_act(2)
 	safe_space()
 	overlays_pre()
-	for(var/mob/M in player_list)
-		if (M.z == z && M.client)
-			if (get_dist(M,src)<=20)
-				M.playsound_local(src, get_sfx("explosion"), 50, 1)
-				shake_camera(M, 4, 1)
-			else
-				M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
-				shake_camera(M, 1, 1)
+	explosion_sound(TR)
+	if (TR)
+		TR.pillar_update(1)
+
 	spawn(10)
-		var/list/pillars = list()
+		pillars = list()
 		icon_state = "bloodstone-enter2"
-		for(var/mob/M in player_list)
-			if (M.z == z && M.client)
-				if (get_dist(M,src)<=20)
-					M.playsound_local(src, get_sfx("explosion"), 50, 1)
-					shake_camera(M, 4, 1)
-				else
-					M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
-					shake_camera(M, 1, 1)
+		explosion_sound(TR)
+		if (TR)
+			TR.pillar_update(2)
 		var/turf/T1 = locate(x-2,y-2,z)
 		pillars += new /obj/structure/cult/pillar(T1)
 		var/turf/T2 = locate(x+2,y-2,z)
@@ -1531,20 +1527,26 @@ var/list/cult_spires = list()
 		pillars += new /obj/structure/cult/pillar/alt(T4)
 		sleep(10)
 		icon_state = "bloodstone-enter3"
-		for(var/mob/M in player_list)
-			if (M.z == z && M.client)
-				if (get_dist(M,src)<=20)
-					M.playsound_local(src, get_sfx("explosion"), 50, 1)
-					shake_camera(M, 4, 1)
-				else
-					M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
-					shake_camera(M, 1, 1)
+		explosion_sound(TR)
+		if (TR)
+			TR.pillar_update(3)
 		for (var/obj/structure/cult/pillar/P in pillars)
 			P.update_icon()
 		sleep(10)
 		ready = TRUE
 		overlays_post()
 		set_animate()
+
+/obj/structure/cult/bloodstone/proc/explosion_sound(var/datum/rune_spell/tearreality/TR)
+	for(var/mob/M in player_list)
+		if (M.z == z && M.client)
+			if (TR || (get_dist(M,src)<=20))//If there's a tear reality rune, then spires should be appearing all over the station, so no point not having it be loud
+				M.playsound_local(src, get_sfx("explosion"), 50, 1)
+				shake_camera(M, 4, 1)
+			else
+				M.playsound_local(src, 'sound/effects/explosionfar.ogg', 50, 1)
+				shake_camera(M, 1, 1)
+
 
 /obj/structure/cult/bloodstone/Destroy()
 	new /obj/effect/decal/cleanable/ash(loc)
@@ -1553,6 +1555,9 @@ var/list/cult_spires = list()
 		cult.bloodstone = null
 		spawn()
 			cult.stage(BLOODCULT_STAGE_DEFEATED)
+	for (var/obj/effect/rune/R in src)
+		if (R.active_spell)
+			R.active_spell.abort()
 	..()
 
 /obj/structure/cult/bloodstone/attack_construct(var/mob/user)

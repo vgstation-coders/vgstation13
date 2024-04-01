@@ -28,6 +28,14 @@
 	var/datum/role/cultist/mentor = null
 	var/list/acolytes = list()
 
+	var/devotion = 0
+	/*
+		rank 1: 10
+		rank 2: 50
+		rank 3: 100
+		rank 4: 200
+	*/
+
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
 	wikiroute = role_wiki[CULTIST]
@@ -91,6 +99,49 @@
 		holywarning_cooldown--
 	if ((cultist_role == CULTIST_ROLE_ACOLYTE) && !mentor)
 		FindMentor()
+
+	if (faction)
+		var/datum/faction/bloodcult/cult = faction
+		switch(cult.stage)
+			if (BLOODCULT_STAGE_READY)
+				antag.current.add_particles("Cult Smoke")
+				antag.current.add_particles("Cult Smoke2")
+				if (cult.tear_ritual && cult.tear_ritual.dance_count)
+					var/count = clamp(cult.tear_ritual.dance_count / 400, 0.01, 0.6)
+					antag.current.adjust_particles("spawning",count,"Cult Smoke")
+					antag.current.adjust_particles("spawning",count,"Cult Smoke2")
+				else
+					if (prob(1))
+						antag.current.adjust_particles("spawning",0.05,"Cult Smoke")
+						antag.current.adjust_particles("spawning",0.05,"Cult Smoke2")
+					else
+						antag.current.adjust_particles("spawning",0,"Cult Smoke")
+						antag.current.adjust_particles("spawning",0,"Cult Smoke2")
+			if (BLOODCULT_STAGE_MISSED)
+				antag.current.remove_particles("Cult Smoke")
+				antag.current.remove_particles("Cult Smoke2")
+			if (BLOODCULT_STAGE_ECLIPSE)
+				antag.current.add_particles("Cult Smoke")
+				antag.current.add_particles("Cult Smoke2")
+				antag.current.adjust_particles("spawning",0.6,"Cult Smoke")
+				antag.current.adjust_particles("spawning",0.6,"Cult Smoke2")
+				antag.current.add_particles("Cult Halo")
+				antag.current.adjust_particles("icon_state","cult_halo[get_devotion_rank()]","Cult Halo")
+			if (BLOODCULT_STAGE_DEFEATED)
+				antag.current.add_particles("Cult Smoke")
+				antag.current.add_particles("Cult Smoke2")
+				antag.current.adjust_particles("spawning",0.19,"Cult Smoke")
+				antag.current.adjust_particles("spawning",0.21,"Cult Smoke2")
+				antag.current.add_particles("Cult Halo")
+				antag.current.adjust_particles("color","#00000066","Cult Halo")
+				antag.current.adjust_particles("icon_state","cult_halo[get_devotion_rank()]","Cult Halo")
+			if (BLOODCULT_STAGE_NARSIE)
+				antag.current.add_particles("Cult Smoke")
+				antag.current.add_particles("Cult Smoke2")
+				antag.current.adjust_particles("spawning",0.6,"Cult Smoke")
+				antag.current.adjust_particles("spawning",0.6,"Cult Smoke2")
+				antag.current.add_particles("Cult Halo")
+				antag.current.adjust_particles("icon_state","cult_halo[get_devotion_rank()]","Cult Halo")
 
 
 // 2022 - Commenting out some part of the greeting message and spacing it out a bit.
@@ -267,6 +318,37 @@
 		to_chat(mentor.antag.current, "<span class='sinister'>You are now mentoring <span class='danger'>[antag.name], the [antag.assigned_role=="MODE" ? (antag.special_role) : (antag.assigned_role)]</span>. </span>")
 		message_admins("[mentor.antag.key]/([mentor.antag.name]) is now mentoring [antag.name]")
 		log_admin("[mentor.antag.key]/([mentor.antag.name]) is now mentoring [antag.name]")
+
+/datum/role/cultist/proc/get_devotion_rank()
+	switch(devotion)
+		if (200 to INFINITY)
+			return DEVOTION_TIER_4
+		if (100 to 200)
+			return DEVOTION_TIER_3
+		if (50 to 100)
+			return DEVOTION_TIER_2
+		if (10 to 50)
+			return DEVOTION_TIER_1
+		if (0 to 10)
+			return DEVOTION_TIER_0
+
+/datum/role/cultist/proc/get_devotion(var/acquired_devotion = 0, var/tier = DEVOTION_TIER_0)
+	if (faction)
+		switch(faction.stage)
+			if (BLOODCULT_STAGE_DEFEATED)//no more devotion generation if the bloodstone has been destroyed
+				return
+			if (BLOODCULT_STAGE_NARSIE)//or narsie has risen
+				return
+
+	//The more devotion the cultist has acquired, the less devotion they obtain from lesser rituals
+	switch (get_devotion_rank() - tier)
+		if (3 to INFINITY)
+			return//until they just don't get any devotion anymore
+		if (2)
+			acquired_devotion /= 10
+		if (1)
+			acquired_devotion /= 2
+	devotion += acquired_devotion
 
 /datum/role/cultist/handle_reagent(var/reagent_id)
 	var/mob/living/carbon/human/H = antag.current
@@ -458,6 +540,7 @@
 		if(rune.word1 && rune.word2 && rune.word3)
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 			return
+	get_devotion(1, DEVOTION_TIER_0)
 	write_rune_word(get_turf(user), word, rune_blood_data["blood"], caster = user)
 	verbose = FALSE
 

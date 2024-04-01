@@ -110,6 +110,10 @@
 	var/image/top_crystal
 	var/image/narsie_glint
 
+	var/spawners_sent = FALSE
+	var/list/pillar_spawners = list()
+	var/list/gateway_spawners = list()
+
 /datum/rune_spell/tearreality/cast()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
@@ -286,12 +290,21 @@
 	for(var/obj/effect/cult_ritual/dance_platform/platform in dance_platforms)
 		qdel(platform)
 
+	spawn()
+		for(var/obj/effect/cult_ritual/tear_spawners/pillar_spawner/CR in pillar_spawners)
+			CR.cancel()
+			sleep(1)
+
+	for(var/obj/effect/cult_ritual/CR in gateway_spawners)
+		qdel(CR)
+
 	..()
 
 /datum/rune_spell/tearreality/proc/dancer_check(var/mob/living/carbon/C)
+	var/obj/effect/rune/R = spell_holder
 	if (dance_platforms.len <= 0)
 		return
-	if (!isturf(loc))//moved inside the blood stone
+	if (!isturf(R.loc))//moved inside the blood stone
 		return
 	if (dance_manager && C)
 		dance_manager.dancers |= C
@@ -305,8 +318,15 @@
 			return
 
 	//full dancers!
-	var/obj/effect/rune/R = spell_holder
 	var/turf/T = get_turf(R)
+
+	if (!spawners_sent)
+		spawners_sent = TRUE
+		new /obj/effect/cult_ritual/tear_spawners/vertical_spawner(T, src)
+		new /obj/effect/cult_ritual/tear_spawners/vertical_spawner/up(T, src)
+		new /obj/effect/cult_ritual/tear_spawners/horizontal_spawner/left(T, src)
+		new /obj/effect/cult_ritual/tear_spawners/horizontal_spawner/right(T, src)
+
 	dance_manager = new(T)
 
 	for(var/obj/effect/cult_ritual/dance_platform/platform in dance_platforms)
@@ -334,7 +354,7 @@
 	R.overlays += crystals
 	R.overlays += top_crystal
 	if (isturf(R.loc))
-		if (dance_count >= dance_target)
+		if (dance_count >= dance_target)// DANCE IS OVER!!
 			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 			if (cult && !cult.bloodstone)
 				var/obj/structure/cult/bloodstone/blood_stone = new(R.loc)
@@ -351,10 +371,17 @@
 				R.mouse_opacity = 0
 				R.forceMove(blood_stone)//keeping the rune safe inside the bloodstone
 				QDEL_NULL(dance_manager)
-				blood_stone.flashy_entrance()
+				blood_stone.flashy_entrance(src)
 		else
 			R.overlays += narsie_glint
 	R.update_moody_light('icons/lighting/moody_lights_96x96.dmi', crystals.icon_state)
+
+/datum/rune_spell/tearreality/proc/pillar_update(var/update_level)
+	for (var/obj/effect/cult_ritual/tear_spawners/pillar_spawner/PS in pillar_spawners)
+		PS.execute(update_level)
+
+	for (var/obj/effect/cult_ritual/tear_spawners/gateway_spawner/GS in gateway_spawners)
+		GS.execute(update_level)
 
 /datum/rune_spell/tearreality/proc/lost_dancer()
 	for(var/obj/effect/cult_ritual/dance_platform/platform in dance_platforms)
@@ -530,6 +557,258 @@
 
 /obj/structure/dance_check/to_bump(var/atom/A)
 	source.blocker = A//So we can tell the rune's activator exactly what is blocking the dance path
+
+//----------------------------------------------------------------------------
+/obj/effect/cult_ritual/tear_spawners
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "blank"
+	density = 0
+	mouse_opacity = 0
+	invisibility = 101
+	var/datum/rune_spell/tearreality/source = null
+	var/finished = FALSE
+	var/direction = 0
+	var/steps = 0
+
+	var/near_turfs = list()
+	var/far_turfs = list()
+
+/obj/effect/cult_ritual/tear_spawners/New(turf/loc, var/datum/rune_spell/tearreality/_source)
+	if (!_source)
+		qdel(src)
+		return
+	source = _source
+	if (source.destroying_self)
+		qdel(src)
+		return
+	..()
+	if (!finished)
+		start_loop()
+
+/obj/effect/cult_ritual/tear_spawners/Destroy()
+	source = null
+	..()
+
+/obj/effect/cult_ritual/tear_spawners/proc/perform_step()
+	move_step()
+	after_step()
+
+/obj/effect/cult_ritual/tear_spawners/proc/start_loop()
+	set waitfor = 0
+	spawn()
+		while(!finished && direction)
+			perform_step()
+			sleep(1)
+
+/obj/effect/cult_ritual/tear_spawners/proc/execute(var/level)
+	return
+/obj/effect/cult_ritual/tear_spawners/proc/after_step()
+	return
+/obj/effect/cult_ritual/tear_spawners/proc/move_step()
+	switch(direction)
+		if (SOUTH)
+			y--
+			if (y <= TRANSITIONEDGE)
+				finished = TRUE
+				qdel(src)
+				return
+		if (NORTH)
+			y++
+			if (y >= (world.maxy - TRANSITIONEDGE))
+				finished = TRUE
+				qdel(src)
+		if (EAST)
+			x++
+			if (x >= (world.maxx - TRANSITIONEDGE))
+				finished = TRUE
+				qdel(src)
+		if (WEST)
+			x--
+			if (x <= TRANSITIONEDGE)
+				finished = TRUE
+				qdel(src)
+				return
+
+	steps++
+
+/obj/effect/cult_ritual/tear_spawners/vertical_spawner
+	direction = SOUTH
+	var/steps_to_pillars_and_gateways = 16
+	var/steps_to_pillars = 8
+
+	var/ready_to_spawn_pillars_and_gateways = FALSE
+
+/obj/effect/cult_ritual/tear_spawners/vertical_spawner/after_step()
+	if (steps == steps_to_pillars)
+		new /obj/effect/cult_ritual/tear_spawners/horizontal_spawner/alt/left(loc,source)
+		new /obj/effect/cult_ritual/tear_spawners/horizontal_spawner/alt/right(loc,source)
+	if (steps == steps_to_pillars_and_gateways)
+		new /obj/effect/cult_ritual/tear_spawners/horizontal_spawner/left(loc,source)
+		new /obj/effect/cult_ritual/tear_spawners/horizontal_spawner/right(loc,source)
+		ready_to_spawn_pillars_and_gateways = TRUE
+		steps = 0
+
+	if (ready_to_spawn_pillars_and_gateways)
+		if (isfloor(loc))
+			new /obj/effect/cult_ritual/tear_spawners/gateway_spawner/special(loc, source)
+			ready_to_spawn_pillars_and_gateways = FALSE
+
+/obj/effect/cult_ritual/tear_spawners/vertical_spawner/up
+	direction = NORTH
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner
+	var/steps_to_spire = 8
+	var/steps_to_gateway = 15
+	var/also_spawn_gateways = TRUE
+
+	var/ready_to_spawn_pillar = FALSE
+	var/ready_to_spawn_gateway = FALSE
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner/after_step()
+	if (steps == steps_to_spire)
+		ready_to_spawn_pillar = TRUE
+	if (also_spawn_gateways && steps == steps_to_gateway)
+		ready_to_spawn_gateway = TRUE
+	if (steps == (2*steps_to_spire))
+		ready_to_spawn_pillar = TRUE
+		steps = 0
+
+	if (ready_to_spawn_pillar)
+		if (isfloor(loc))
+			new /obj/effect/cult_ritual/tear_spawners/pillar_spawner(loc, source, direction)
+			ready_to_spawn_pillar = FALSE
+
+	if (ready_to_spawn_gateway)
+		if (isfloor(loc))
+			new /obj/effect/cult_ritual/tear_spawners/gateway_spawner(loc, source)
+			ready_to_spawn_gateway = FALSE
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner/alt
+	steps = 4
+	also_spawn_gateways = FALSE
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner/left
+	direction = WEST
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner/right
+	direction = EAST
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner/alt/left
+	direction = WEST
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner/alt/right
+	direction = EAST
+
+/obj/effect/cult_ritual/tear_spawners/pillar_spawner
+	finished = TRUE
+	var/obj/structure/cult/pillar
+
+/obj/effect/cult_ritual/tear_spawners/pillar_spawner/New(turf/loc, var/datum/rune_spell/tearreality/_source, var/_direction)
+	if (!_direction)
+		qdel(src)
+		return
+	..()
+	if (source)
+		source.pillar_spawners += src
+	direction = _direction
+
+	for(var/direc in cardinal)
+		var/turf/T = get_step(src, direc)
+		near_turfs += T
+		var/turf/U = get_step(T, direc)
+		far_turfs += U
+
+	for(var/direc in diagonal)
+		var/turf/T = get_step(src, direc)
+		far_turfs += T
+
+/obj/effect/cult_ritual/tear_spawners/pillar_spawner/move_step()
+	return
+
+/obj/effect/cult_ritual/tear_spawners/pillar_spawner/execute(var/level)
+	switch(level)
+		if (1)
+			var/turf/T = loc
+			if (T && !T.holy)
+				T.cultify()
+		if (2)
+			var/turf/T = loc
+			if (T && !T.holy)
+				switch(direction)
+					if (EAST)
+						pillar = new /obj/structure/cult/pillar/alt(loc)
+					if (WEST)
+						pillar = new /obj/structure/cult/pillar(loc)
+			for (var/turf/U in near_turfs)
+				if (!U.holy)
+					U.cultify()
+		if (3)
+			if (pillar)
+				pillar.update_icon()
+			for (var/turf/T in far_turfs)
+				if (!T.holy)
+					T.cultify()
+
+/obj/effect/cult_ritual/tear_spawners/pillar_spawner/proc/cancel()
+	if (!pillar)
+		qdel(src)
+		return
+	spawn(rand(1 SECONDS, 5 SECONDS))
+		if (pillar)
+			pillar.takeDamage(100)
+		for (var/turf/T in far_turfs)
+			T.decultify()
+		sleep(rand(10 SECONDS, 20 SECONDS))
+		if (pillar)
+			pillar.takeDamage(100)
+		for (var/turf/T in near_turfs)
+			T.decultify()
+		sleep(rand(20 SECONDS, 30 SECONDS))
+		var/turf/T = loc
+		T.decultify()
+
+/obj/effect/cult_ritual/tear_spawners/gateway_spawner
+	finished = TRUE
+
+/obj/effect/cult_ritual/tear_spawners/gateway_spawner/New(turf/loc, var/datum/rune_spell/tearreality/_source)
+	..()
+	if (source)
+		source.gateway_spawners += src
+
+	for(var/direc in cardinal)
+		var/turf/T = get_step(src, direc)
+		near_turfs += T
+		var/turf/U = get_step(T, direc)
+		far_turfs += U
+
+	for(var/direc in diagonal)
+		var/turf/T = get_step(src, direc)
+		far_turfs += T
+
+/obj/effect/cult_ritual/tear_spawners/gateway_spawner/move_step()
+	return
+
+/obj/effect/cult_ritual/tear_spawners/gateway_spawner/special
+	finished = FALSE
+
+/obj/effect/cult_ritual/tear_spawners/gateway_spawner/special/start_loop()
+	spawn()
+		x++
+		if (isfloor(loc))
+			new /obj/effect/cult_ritual/tear_spawners/pillar_spawner(loc, source, EAST)
+		sleep(1)
+		x -= 2
+		if (isfloor(loc))
+			new /obj/effect/cult_ritual/tear_spawners/pillar_spawner(loc, source, WEST)
+		sleep(1)
+		x++
+	finished = TRUE
+
+/obj/effect/cult_ritual/tear_spawners/gateway_spawner/execute(var/level)
+	if (level == 3)
+		var/turf/T = loc
+		if (T && !T.holy)
+			new /obj/effect/gateway/active/cult(loc)
 
 /*
 Hall of fame of previous deprecated runes, might redesign later, noting their old word combinations there so I can easily retrieve them later.

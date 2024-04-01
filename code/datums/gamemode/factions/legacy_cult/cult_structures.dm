@@ -130,6 +130,7 @@
 
 /obj/effect/gateway/active/New()
 	flick("hole-appear", src)
+	set_light(3)
 	spawn(rand(30,60) SECONDS)
 		var/t = pick(spawnable)
 		new t(src.loc)

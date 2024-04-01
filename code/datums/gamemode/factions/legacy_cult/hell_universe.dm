@@ -34,10 +34,13 @@ In short:
 
 /datum/universal_state/hell/OnTurfChange(var/turf/T)
 	if(T.name == "space")
-		T.overlays += image(icon = T.icon, icon_state = "hell01")
+		T.overlays += image(icon = T.icon, icon_state = "hell01-old")//only visible for those without parallax
 		T.underlays -= "hell01"
+		T.add_particles("Space Runes")//visible for everyone
+		T.adjust_particles("spawning", rand(5,20)/1000 ,"Space Runes")
 	else
-		T.overlays -= image(icon = T.icon, icon_state = "hell01")
+		T.overlays -= image(icon = T.icon, icon_state = "hell01-old")
+		T.remove_particles("Space Runes")
 
 // Apply changes when entering state
 /datum/universal_state/hell/OnEnter()
@@ -96,7 +99,9 @@ In short:
 	set waitfor = FALSE
 	for(var/turf/T in world)
 		if(istype(T, /turf/space))
-			T.overlays += image(icon = T.icon, icon_state = "hell01")
+			T.overlays += image(icon = T.icon, icon_state = "hell01-old")//only visible for those without parallax
+			T.add_particles("Space Runes")//visible for everyone
+			T.adjust_particles("spawning", rand(5,20)/1000 ,"Space Runes")
 		else
 			if(!T.holy && prob(1) && T.z != map.zCentcomm)
 				new /obj/effect/gateway/active/cult(T)

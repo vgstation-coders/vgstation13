@@ -110,7 +110,19 @@
 			holder.particles.position = new_value
 		if ("velocity")
 			holder.particles.velocity = new_value
-
+		if ("icon_state")
+			holder.particles.icon_state = new_value
+		if ("color")
+			holder.particles.color = new_value
+		if ("plane")
+			holder.plane = new_value
+		if ("layer")
+			holder.layer = new_value
+		if ("pixel_x")
+			holder.pixel_x = new_value
+		if ("pixel_y")
+			holder.pixel_y = new_value
+		//add more as needed
 
 //HOLDER
 /obj/abstract/particles_holder
@@ -132,6 +144,12 @@
 		if ("Cult Gauge")
 			plane = HUD_PLANE
 			layer = MIND_UI_BUTTON+0.5
+		if ("Cult Smoke")
+			plane = FLOAT_PLANE
+		if ("Cult Smoke2")
+			plane = FLOAT_PLANE
+		if ("Cult Halo")
+			plane = ABOVE_LIGHTING_PLANE
 
 //////////////////////////////////////PARTICLES///////////////////////////////////
 
@@ -141,6 +159,10 @@ var/list/particle_string_to_type = list(
 	"Candle" = /particles/candle,
 	"Candle2" = /particles/candle_alt,
 	"Cult Gauge" = /particles/cult_gauge,
+	"Cult Smoke" = /particles/cult_smoke,
+	"Cult Smoke2" = /particles/cult_smoke/alt,
+	"Cult Halo" = /particles/cult_halo,
+	"Space Runes" = /particles/space_runes,
 	)
 
 //STEAM
@@ -195,7 +217,7 @@ var/list/particle_string_to_type = list(
 	position = generator("box", list(-1,12), list(1,12))
 	velocity = list(0,3)
 	friction = 0.3
-	drift = generator("sphere", 0, 1)
+	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
 
 /particles/candle_alt
 	width = 32
@@ -226,3 +248,58 @@ var/list/particle_string_to_type = list(
 	icon_state = "blood_gauge"
 	position = generator("box", list(-16,-1), list(-16,-14))
 	velocity = list(0,0)
+
+//CULT SMOKE
+/particles/cult_smoke
+	width = 32
+	height = 64
+	count = 20
+	spawning = 0
+	//spawning = 0.6
+	color = "#FFFFFF99"
+
+	lifespan = 8.5
+	fadein = 3
+	fade = 5
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "darkness"
+	position = list(0,-12)
+	scale = generator("num", 0.40,0.45)
+	velocity = generator("box", list(-1,4), list(-2,4))
+	drift = generator("box", list(0.1,0), list(0.2,0))
+	rotation = generator("num", 0,360)
+
+/particles/cult_smoke/alt
+	velocity = generator("box", list(1,4), list(2,4))
+	drift = generator("box", list(-0.1,0), list(-0.2,0))
+
+
+//CULT HALO
+/particles/cult_halo
+	width = 32
+	height = 64
+	count = 20
+	spawning = 0.1
+
+	lifespan = 20
+	fadein = 5
+	fade = 10
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "cult_halo4"
+	position = list(0,8)
+	drift = generator("box", list(-0.02,-0.02), list(0.02,0.02))
+
+
+//SPACE RUNES
+/particles/space_runes
+	width = 64
+	height = 64
+	count = 2
+	spawning = 0.01
+
+	lifespan = 20
+	fadein = 5
+	fade = 10
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = list("rune-1","rune-2","rune-4","rune-8","rune-16","rune-32","rune-64","rune-128","rune-256","rune-512",)
+	drift = generator("box", list(-0.02,-0.02), list(0.02,0.02))

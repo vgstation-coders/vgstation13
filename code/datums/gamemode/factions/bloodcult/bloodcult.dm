@@ -73,6 +73,7 @@
 
 	var/datum/rune_spell/tearreality/tear_ritual = null
 	var/obj/structure/cult/bloodstone/bloodstone = null		//we track the one spawned by the Tear Reality rune
+	var/obj/machinery/singularity/narsie/large/narsie = null
 
 /datum/faction/bloodcult/stage(var/value)
 	stage = value
@@ -112,7 +113,10 @@
 					O.decultify()
 					sleep(rand(1,5))
 		if (BLOODCULT_STAGE_NARSIE)
+			ticker.StartThematic("endgame")
 			call_shuttle_proc(null, "")
+			if (bloodstone)
+				narsie = new(bloodstone.loc)
 
 /datum/faction/bloodcult/IsSuccessful()
 	return cult_win
@@ -158,6 +162,8 @@
 				stage(BLOODCULT_STAGE_MISSED)
 		if (BLOODCULT_STAGE_ECLIPSE)
 			bloodstone.update_icon()
+			if (world.time >= bloodstone_target_time)
+				stage(BLOODCULT_STAGE_NARSIE)
 		if (BLOODCULT_STAGE_DEFEATED)
 			..()
 		if (BLOODCULT_STAGE_NARSIE)

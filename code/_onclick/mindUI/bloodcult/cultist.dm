@@ -941,8 +941,17 @@
 	set_tooltip()
 	..()
 
+/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/StopHovering()
+	..()
+	remove_particles()
+
 /obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/proc/set_tooltip()
 	if (associated_role)
+		add_particles("Cult Halo")
+		adjust_particles("icon_state","cult_halo[associated_role.get_devotion_rank()]","Cult Halo")
+		adjust_particles("plane",HUD_PLANE,"Cult Halo")
+		adjust_particles("layer",MIND_UI_BUTTON+0.5,"Cult Halo")
+		adjust_particles("pixel_x",-8,"Cult Halo")
 		var/datum/mind/M = associated_role.antag
 		tooltip_title = M.name
 		var/icon/flat = getFlatIcon(M.current, SOUTH, 0, 1)

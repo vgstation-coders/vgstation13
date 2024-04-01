@@ -585,6 +585,9 @@
 		return
 	ChangeTurf(get_base_turf(src.z))
 
+/turf/proc/decultify()
+	update_icon()
+
 /turf/proc/clockworkify()
 	return
 

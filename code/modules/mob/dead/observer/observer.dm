@@ -47,7 +47,6 @@ var/creating_arena = FALSE
 	var/lastchairspin
 	var/pathogenHUD = FALSE
 	var/manual_poltergeist_cooldown //var-edit this to manually modify a ghost's poltergeist cooldown, set it to null to reset to global
-	var/appearance_backup //so they recover their original appearance when de-cultified
 
 /mob/dead/observer/New(var/mob/body=null, var/flags=1)
 	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)

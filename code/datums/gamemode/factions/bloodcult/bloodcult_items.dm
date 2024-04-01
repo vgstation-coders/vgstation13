@@ -196,7 +196,7 @@ var/list/arcane_tomes = list()
 		return
 
 	..()
-	M.take_organ_damage(0,10)
+	M.take_organ_damage(0,rand(5,20))
 	to_chat(M, "<span class='warning'>You feel a searing heat inside of you!</span>")
 
 /obj/item/weapon/tome/attack_hand(var/mob/living/user)

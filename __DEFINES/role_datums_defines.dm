@@ -225,6 +225,12 @@
 #define CULTIST_ROLE_HERALD		2
 #define CULTIST_ROLE_MENTOR		3
 
+#define DEVOTION_TIER_0		0
+#define DEVOTION_TIER_1		1
+#define DEVOTION_TIER_2		2
+#define DEVOTION_TIER_3		3
+#define DEVOTION_TIER_4		4
+
 ////////////////////////////////////////////////////////////////////////////////
 
 // -- Objectives flags

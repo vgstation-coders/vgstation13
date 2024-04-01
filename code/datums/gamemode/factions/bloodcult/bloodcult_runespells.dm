@@ -2748,7 +2748,12 @@ var/list/bloodcult_exitportals = list()
 			sleep(20)
 	qdel(spell_holder)
 
-//RUNE XIX
+////////////////////////////////////////////////////////////////////
+//																  //
+//							ASTRAL JOURNEY						  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
 /datum/rune_spell/astraljourney
 	name = "Astral Journey"
 	desc = "Channel a fragment of your soul into an astral projection so you can spy on the crew and communicate your findings with the rest of the cult."

@@ -638,7 +638,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/eclipse_bloodstone
 	name = "Bloodstone has Risen"
 	alert_title = "Cult Activity Detected"
-	message = "A critical surge of occult energies has been detected emanating from your station. Paterns suggest an incursion by the Cult of Nar-Sie, which means a Blood Stone has been raised, find and destroy it at all costs or this station will be lost."
+	message = "A critical surge of occult energies has been detected emanating from your station. Paterns suggest an incursion by the Cult of Nar-Sie, which means a Blood Stone has been raised, find and destroy it at all costs or this station will be lost. Be careful of the eldritch entities that accompany them."
 
 /datum/command_alert/eclipse_bloodstone_broken
 	name = "Bloodstone is Broken"
