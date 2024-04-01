@@ -1,7 +1,7 @@
 /obj/item/movable_machinery
 	name = "undeployed ERROR"
 	desc = "something went wrong."
-	w_class = W_CLASS_LARGE
+	w_class = W_CLASS_HUGE
 	throw_range = 0
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND | SLOWDOWN_WHEN_CARRIED
 	slowdown = MAGBOOTS_SLOWDOWN_HIGH
@@ -22,7 +22,7 @@
 	playsound(src, 'sound/items/dispenser_generate_metal.wav', vol=100, vary=0)
 	qdel(src)
 	
-/obj/item/movable_machinery/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/movable_machinery/attackby(obj/item/weapon/W, mob/user)
 	if(!iswrench(W))
 		return ..()
 	if(!isturf(loc))
