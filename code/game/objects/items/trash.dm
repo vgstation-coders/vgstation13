@@ -281,20 +281,20 @@
 
 /obj/item/trash/mannequin/cultify()
 	if(icon_state != "mannequin_cult_empty")
-		name = "cult mannequin pedestale"
+		name = "cult mannequin pedestal"
 		icon_state = "mannequin_cult_empty"
 
 /obj/item/trash/mannequin
-	name = "mannequin pedestale"
+	name = "mannequin pedestal"
 	icon = 'icons/obj/mannequin.dmi'
 	icon_state = "mannequin_empty"
 
 /obj/item/trash/mannequin/cult
-	name = "cult mannequin pedestale"
+	name = "cult mannequin pedestal"
 	icon_state = "mannequin_cult_empty"
 
 /obj/item/trash/mannequin/large
-	name = "cyber mannequin pedestale"
+	name = "cyber mannequin pedestal"
 	icon_state = "mannequin_cyber_empty"
 
 /obj/item/trash/byond_box
