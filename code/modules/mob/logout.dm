@@ -12,6 +12,8 @@
 
 	remove_spell_channeling() //remove spell channeling before we log out
 
+	disable_pixel_movement()
+
 	nanomanager.user_logout(src) // this is used to clean up (remove) this user's Nano UIs
 
 	player_list -= src
