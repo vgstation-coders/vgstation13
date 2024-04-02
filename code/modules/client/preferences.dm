@@ -240,7 +240,6 @@ var/const/MAX_SAVE_SLOTS = 16
 
 	var/tgui_fancy = TRUE
 	var/fps = -1
-	var/pixel_movement = FALSE
 
 	var/client/client
 	var/saveloaded = 0
@@ -412,8 +411,6 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=stumble'><b>[(stumble) ? "Yes" : "No"]</b></a><br>
 	<b>Pulling action:</b>
 	<a href='?_src_=prefs;preference=pulltoggle'><b>[(pulltoggle) ? "Toggle Pulling" : "Always Pull"]</b></a><br>
-	<b>Enable pixel movement:</b>
-	<a href='?_src_=prefs;preference=pixel_movement'><b>[(pixel_movement) ? "Yes" : "No"]</b></a><br>
 	<b>Solo Antag Objectives:</b>
 	<a href='?_src_=prefs;preference=antag_objectives'><b>[(antag_objectives) ? "Standard" : "Freeform"]</b></a><br>
 	<b>Say bubbles:</b>
@@ -1263,12 +1260,6 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 					hear_instruments = !hear_instruments
 				if("pulltoggle")
 					pulltoggle = !pulltoggle
-				if("pixel_movement")
-					pixel_movement = !pixel_movement
-					if(pixel_movement)
-						client.mob?.enable_pixel_movement()
-					else
-						client.mob?.disable_pixel_movement()
 
 				if("ghost_deadchat")
 					toggles ^= CHAT_DEAD
