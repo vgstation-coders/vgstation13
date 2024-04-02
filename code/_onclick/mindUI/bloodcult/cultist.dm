@@ -531,6 +531,9 @@
 		/obj/abstract/mind_ui_element/bloodcult_eclipse_gauge,
 		/obj/abstract/mind_ui_element/bloodcult_eclipse_timer_front,
 
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_eclipse_rate,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_total_devotion,
+
 		/obj/abstract/mind_ui_element/bloodcult_cultist_slot_manager,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_cap,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/artificer,
@@ -762,6 +765,66 @@
 
 /obj/abstract/mind_ui_element/bloodcult_eclipse_timer_front/Click()
 	parent.Hide()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_eclipse_rate
+	name = "Eclipse Rate"
+	icon = 'icons/ui/bloodcult/104x40.dmi'
+	icon_state = "eclipse_rate"
+	offset_x = -9
+	offset_y = 103
+	layer = MIND_UI_FRONT+0.5
+
+	hover_state = FALSE
+	element_flags = MINDUI_FLAG_PROCESSING|MINDUI_FLAG_TOOLTIP
+	tooltip_title = "Eclipse Rate"
+	tooltip_content = "The rate at which the Eclipse is coming.<br>The rate can be increased by both increasing the cult's numbers, as well as the rank of each cultist.<br>Dead cultists no longer contribute to the rate, until they revive that is."
+	tooltip_theme = "radial-cult"
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_eclipse_rate/Appear()
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if(cult.stage != BLOODCULT_STAGE_NORMAL)
+		invisibility = 101
+		return
+	..()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_eclipse_rate/process()
+	if (invisibility == 101)
+		return
+	UpdateIcon()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_eclipse_rate/UpdateIcon()
+	overlays.len = 0
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	overlays += String2Image("[add_zero_before_and_after(round(cult.eclipse_increments, 0.001), 2, 3)]",_pixel_x = 10,_pixel_y = 2)
+
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_total_devotion
+	name = "Total Devotion"
+	icon = 'icons/ui/bloodcult/104x40.dmi'
+	icon_state = "total_devotion"
+	offset_x = -9
+	offset_y = 69
+	layer = MIND_UI_FRONT+0.5
+
+	hover_state = FALSE
+	element_flags = MINDUI_FLAG_PROCESSING|MINDUI_FLAG_TOOLTIP
+	tooltip_title = "Total Devotion"
+	tooltip_content = "The total devotion accumulated by all cultists aboard this station."
+	tooltip_theme = "radial-cult"
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_total_devotion/process()
+	if (invisibility == 101)
+		return
+	UpdateIcon()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_total_devotion/UpdateIcon()
+	overlays.len = 0
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	overlays += String2Image("[add_zero(cult.total_devotion,7)]",_pixel_x = 4,_pixel_y = 4)
 
 
 //------------------------------------------------------------

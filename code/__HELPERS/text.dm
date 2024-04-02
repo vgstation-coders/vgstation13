@@ -290,6 +290,25 @@ var/list/whitelist_name_diacritics_min = list(
 		t = "0[t]"
 	return t
 
+//u1 = how many numbers before the dot, u2 = how many numbers after the dot
+/proc/add_zero_before_and_after(t, u1, u2)
+	var/string = "[t]"
+	var/dot_pos = findtext(string, ".")
+	if (dot_pos)
+		dot_pos--
+		while (dot_pos < u1)
+			t = "0[t]"
+			dot_pos++
+		while (length(t) < (u1+u2+1))
+			t = "[t]0"
+	else
+		while (length(t) < u1)
+			t = "0[t]"
+		t = "[t]."
+		while (length(t) < (u1+u2+1))
+			t = "[t]0"
+	return t
+
 //Adds 'u' number of spaces ahead of the text 't'
 /proc/add_lspace(t, u)
 	while(length(t) < u)

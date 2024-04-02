@@ -363,6 +363,7 @@ var/list/mind_ui_ID2type = list()
 	var/tooltip_title = "Undefined UI Element"
 	var/tooltip_content = ""
 	var/tooltip_theme = "default"
+	var/hover_state = TRUE
 
 /obj/abstract/mind_ui_element/hoverable/MouseEntered(location,control,params)
 	StartHovering(location,control,params)
@@ -383,7 +384,8 @@ var/list/mind_ui_ID2type = list()
 	hovering = 0
 
 /obj/abstract/mind_ui_element/hoverable/proc/StartHovering(var/location,var/control,var/params)
-	icon_state = "[base_icon_state]-hover"
+	if (hover_state)
+		icon_state = "[base_icon_state]-hover"
 	if (element_flags & MINDUI_FLAG_TOOLTIP)
 		var/mob/M = GetUser()
 		if (M)
@@ -406,7 +408,8 @@ var/list/mind_ui_ID2type = list()
 			openToolTip(M,src,"icon-x=1;icon-y=1;screen-loc=[x_loc]:1,[y_loc]:1",title = tooltip_title,content = tooltip_content,theme = tooltip_theme)
 
 /obj/abstract/mind_ui_element/hoverable/proc/StopHovering()
-	icon_state = "[base_icon_state]"
+	if (hover_state)
+		icon_state = "[base_icon_state]"
 	if (element_flags & MINDUI_FLAG_TOOLTIP)
 		var/mob/M = GetUser()
 		if (M)

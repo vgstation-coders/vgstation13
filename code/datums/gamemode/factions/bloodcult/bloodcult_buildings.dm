@@ -286,7 +286,7 @@
 		update_icon()
 		var/mob/living/carbon/C = locate() in loc
 		var/mob/living/simple_animal/S = locate() in loc
-		if (C && C.resting)
+		if (C && C.lying)
 			C.unlock_from()
 			C.update_canmove()
 			lock_atom(C, lock_type)
@@ -682,18 +682,17 @@
 	var/mob/M = get_locked(lock_type)[1]
 	switch(altar_task)
 		if(ALTARTASK_SACRIFICE_HUMAN)
-			if(!M.mind)
-				to_chat(user, "<span class='warning'>\The [M] lacks a proper soul. They are an unsuitable sacrifice.</span>")
-				altar_task = ALTARTASK_NONE
-				return
 			if((!istype(blade, /obj/item/weapon/melee/cultblade) && !istype(blade, /obj/item/weapon/melee/soulblade)) || istype(blade, /obj/item/weapon/melee/cultblade/nocult))
 				to_chat(user, "<span class='warning'>\The [blade] is too weak to perform such a sacrifice. Forge a stronger blade.</span>")
 				altar_task = ALTARTASK_NONE
 				return
 			timeleft = 30
 			timetotal = timeleft
-			min_contributors = 2
-			to_chat(user, "<span class='warning'>You must wait for another cultist to join you in order to finish the ritual.</span>")
+			min_contributors = 1//monkey, or other carbon lifeforms
+			if (ishuman(M))
+				if (M.mind)
+					min_contributors = 3
+					to_chat(user, "<span class='sinister'>You need <span class='danger'>3</span> cultists to partake in the ritual for the sacrifice to proceed.</span>")
 		if(ALTARTASK_SACRIFICE_ANIMAL)
 			timeleft = 15
 			timetotal = timeleft
@@ -865,9 +864,6 @@
 				spawn(5)
 					M.gib()
 
-			var/obj/structure/cult/bloodstone/blood_stone = new(get_turf(src))
-			blood_stone.flashy_entrance()
-			qdel(src)
 		if(ALTARTASK_SACRIFICE_ANIMAL)
 			altar_task = ALTARTASK_NONE
 			var/mob/living/M = get_locked(lock_type)[1]
@@ -894,7 +890,10 @@
 			if(ALTARTASK_SACRIFICE_HUMAN)
 				var/mob/O = get_locked(lock_type)[1]
 				if (ishuman(O))
-					C.get_devotion(400, DEVOTION_TIER_4)
+					if (O.mind)
+						C.get_devotion(500, DEVOTION_TIER_4)
+					else//monkey-human
+						C.get_devotion(200, DEVOTION_TIER_4)
 				else//monkey
 					C.get_devotion(200, DEVOTION_TIER_3)
 			if(ALTARTASK_SACRIFICE_ANIMAL)

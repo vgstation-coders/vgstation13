@@ -150,7 +150,7 @@
 				var/mob/M = R.antag.current
 				calculate_eclipse_rate()
 				if (isliving(M) && !M.isDead())
-					//chaplain's countersmeasures can slow down it down, but not completely halt it.
+					//TODO: chaplain's countersmeasures can slow down it down, but not completely halt it.
 					//we calculate the progress relative to the time since the last process so the overall time is independant from server lag and shit
 					delta = 1
 					if (last_process_time && (last_process_time < world.time))//carefully dealing with midnight rollover
@@ -349,32 +349,3 @@
 			cult.eclipse_contributors[user.mind] += bonus
 		else
 			cult.eclipse_contributors[user.mind] = bonus
-
-
-/*
-	large bonuses:
-		* conversion attempts (once per target mind)			(+12) a successful conversion
-
-	small bonuses:
-		* aoe stuns on non-cultists								(+0.6) per affected victims, on a 5 minutes cooldown per victim
-		* touch stuns on non-cultists							(+1.8) per use, on a 5 minutes cooldown per victim
-		* deaf-mutes on non-cultists							(+1.2) per affected victims, on a 5 minutes cooldown per victim
-		* confusions on non-cultists							(+1.2) per affected victims, on a 5 minutes cooldown per victim
-		* hitting living non-cultists with a blood filled gobblet(+0.3) per hit
-		* hitting living non-cultists with a ritual knife		(+0.3) per hit
-		* hitting living non-cultists with an arcane tome		(+0.3) per hit
-		* hitting living non-cultists with a cult blade/soul blade	(+0.6) per hit
-		* artificer placing a cult floor						(+0.06)
-		* artificer placing a cult wall							(+0.12)
-
-	conditional repeating bonuses (repeats every second):
-		* living cultists										(+0.25) doesn't count on leaderboard
-		* living construct types								(+0.10) doesn't count on leaderboard
-		* having a spire up and not concealed on the station	(+0.20) counts for whoever placed the spire. If multiple players placed a spire on Z:1, they all get the bonus
-		* having a spire up and not concealed on the asteroid	(+0.10)
-		* having a spire up and not concealed on the derelict	(+0.10)
-		* having altars up and not concealed on the station		(+0.05 per altar)
-			* burning cult candles adjacent to an altar			(+0.01 per candle) altar can be concealed
-			* open tome on an altar								(+0.05 per candle) altar can be concealed
-		* cult doors											(+0.005)
-*/
