@@ -598,7 +598,7 @@
 	target.add_fingerprint(src)
 
 /mob/proc/movement_delay()
-	return (base_movement_tally() * movement_tally_multiplier()) * (step_size / WORLD_ICON_SIZE)
+	return (base_movement_tally() * movement_tally_multiplier())
 
 /mob/proc/base_movement_tally()
 	switch(m_intent)
@@ -621,16 +621,6 @@
 			. = T.adjust_slowdown(src, .)
 		if(movement_speed_modifier)
 			. *= (1/movement_speed_modifier)
-
-/mob/proc/enable_pixel_movement()
-	appearance_flags &= ~TILE_MOVER
-	step_size = 8
-	bound_x = 8
-	bound_width = 16
-	bound_height = 16
-
-/mob/proc/disable_pixel_movement()
-	appearance_flags |= TILE_MOVER
 
 /mob/living/carbon/proc/toggle_move_intent()
 	if(legcuffed)
