@@ -123,6 +123,7 @@
 	for(var/gas_id in gas_thresholds)
 		var/datum/airalarm_threshold/our_threshold = gas_thresholds[gas_id]
 		to_return.gas_thresholds[gas_id] = our_threshold.deep_copy()
+	to_return.temperature_threshold = temperature_threshold.deep_copy()
 	to_return.other_gas_threshold = other_gas_threshold.deep_copy()
 	to_return.pressure_threshold = pressure_threshold.deep_copy()
 	to_return.target_temperature = target_temperature
@@ -170,6 +171,7 @@
 	for(var/gas_id in gas_thresholds)
 		var/datum/airalarm_threshold/our_threshold = gas_thresholds[gas_id]
 		to_return.gas_thresholds[gas_id] = our_threshold.deep_copy()
+	to_return.temperature_threshold = temperature_threshold.deep_copy()
 	to_return.other_gas_threshold = other_gas_threshold.deep_copy()
 	to_return.pressure_threshold = pressure_threshold.deep_copy()
 	to_return.target_temperature = target_temperature
