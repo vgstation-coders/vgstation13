@@ -29,12 +29,15 @@
 	var/list/acolytes = list()
 
 	var/devotion = 0
+	var/rank = DEVOTION_TIER_0
 	/*
-		rank 1: 10
-		rank 2: 50
-		rank 3: 100
-		rank 4: 200
+		rank 1: 100
+		rank 2: 500
+		rank 3: 1000
+		rank 4: 2000
 	*/
+
+	var/blood_pool = FALSE
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
@@ -100,6 +103,29 @@
 	if ((cultist_role == CULTIST_ROLE_ACOLYTE) && !mentor)
 		FindMentor()
 
+	var/new_rank = get_devotion_rank()
+	if (new_rank > rank)
+		rank = new_rank
+		if (iscarbon(antag.current))//constructs and shades cannot make use of those powers so no point informing them.
+			to_chat(antag.current, "<span class='sinisterbig'>As your devotion to the cult increases, a new power awakens inside you.</span>")
+			switch(rank)
+				if (DEVOTION_TIER_1)
+					to_chat(antag.current, "<span class='danger'>Blood Pooling</span>")
+					to_chat(antag.current, "<b>Any blood cost required by a cult rune or ritual will now be reduced and split with other cult members that have attained this power. You can toggle blood pooling as needed.</b>")
+					GiveTattoo(/datum/cult_tattoo/bloodpool)
+				if (DEVOTION_TIER_2)
+					to_chat(antag.current, "<span class='danger'>Blood Dagger</span>")
+					to_chat(antag.current, "<b>You can now form a dagger using your own blood (or pooled blood, any blood that you can get your hands on). Hitting someone will let the dagger steal some of their blood, while sheathing the dagger will let you recover all the stolen blood. Throwing the dagger deals damage based on how much blood it carries, and nails the victim down, forcing them to pull the dagger out to move away.</b>")
+					GiveTattoo(/datum/cult_tattoo/dagger)
+				if (DEVOTION_TIER_3)
+					to_chat(antag.current, "<span class='danger'>Runic Skin</span>")
+					to_chat(antag.current, "<b>You can now fuse a talisman that has a rune imbued or attuned to it with your skin, granting you the ability to cast this talisman hands free, as long as you are conscious and not under the effects of Holy Water.</b>")
+					GiveTattoo(/datum/cult_tattoo/rune_store)
+				if (DEVOTION_TIER_4)
+					to_chat(antag.current, "<span class='danger'>Shortcut Sigil</span>")
+					to_chat(antag.current, "<b>Apply your palms on a wall to draw a sigil on it that lets you and any ally pass through it.</b>")
+					GiveTattoo(/datum/cult_tattoo/shortcut)
+			antag.current.DisplayUI("Cultist Right Panel")
 	if (faction)
 		var/datum/faction/bloodcult/cult = faction
 		switch(cult.stage)
@@ -156,12 +182,12 @@
 	switch(greeting)
 		if (GREET_ROUNDSTART)
 			to_chat(antag.current, {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'><font size=3>You are a cultist of <span class='danger'><font size=3>Nar-Sie</font></span>!</font><br>
-				I, the Geometer of Blood, want you to thin the veil between your reality and my realm<br>
-				so I can pull this place onto my plane of existence.<br>
+				I, the Geometer of Blood, want you to drag this station into the blood realm.<br>
 				You've managed to get a job here, and the time has come to put our plan into motion.<br>
-				However, the veil is currently so thick that I can barely bestow any power to you.<br>
-				Other cultists made their way into the crew. Talk to them. <span class='danger'>Self Other Technology</span>!<br>
-				Meet up with them. Raise an altar in my name. <span class='danger'>Blood Technology Join</span>!<br>
+				An Eclipse will soon arrive which will weaken this station's ties to reality, giving us a window of time to perform the Tear Reality ritual.<br>
+				Performing occult activities will hasten its arrival. Consult the Cult panel to track how much time is left, as well as the state of the Cult.<br>
+				Until the Eclipse arrives, work with your peers to disrupt the crew and increase your dominion over the station!<br>
+				But first of all, use the Cult panel to choose a role that fits you. You may change it later.<br>
 				</span>"})
 		if (GREET_ADMINTOGGLE)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
@@ -171,7 +197,7 @@
 		if (GREET_CONVERTED)
 			to_chat(antag.current, "<span class='sinister'>You feel like you've broken past the veil of reality, your mind has seen worlds from beyond this plane, you've listened to the words of the Geometer of Blood for what felt like both an instant and ages, and now share both his knowledge and his ambition.</span>")
 			to_chat(antag.current, "<span class='sinister'>The Cult of Nar-Sie now counts you as its newest member. Your fellow cultists will guide you.</span>")
-			to_chat(antag.current,"<b>The first thing you might want to do is to summon a tome (<span class='danger'>See Blood Hell</span>) to see the available runes and learn their uses.</b>")
+			to_chat(antag.current,"<b>The first thing you might want to do is set your role from the panel to the left, then summon a tome (<span class='danger'>See Blood Hell</span>) to see the available runes and learn their uses.</b>")
 		if (GREET_PAMPHLET)
 			to_chat(antag.current, "<span class='sinister'>Wow, that pamphlet was very convincing, in fact you're like totally a cultist now, hail Nar-Sie!</span>")//remember, debug item
 		if (GREET_SOULSTONE)
@@ -321,21 +347,21 @@
 
 /datum/role/cultist/proc/get_devotion_rank()
 	switch(devotion)
-		if (200 to INFINITY)
+		if (2000 to INFINITY)
 			return DEVOTION_TIER_4
-		if (100 to 200)
+		if (1000 to 2000)
 			return DEVOTION_TIER_3
-		if (50 to 100)
+		if (500 to 1000)
 			return DEVOTION_TIER_2
-		if (10 to 50)
+		if (100 to 500)
 			return DEVOTION_TIER_1
-		if (0 to 10)
+		if (0 to 100)
 			return DEVOTION_TIER_0
 
 /datum/role/cultist/proc/get_devotion(var/acquired_devotion = 0, var/tier = DEVOTION_TIER_0)
 	if (faction)
 		switch(faction.stage)
-			if (BLOODCULT_STAGE_DEFEATED)//no more devotion generation if the bloodstone has been destroyed
+			if (BLOODCULT_STAGE_DEFEATED)//no more devotion gains if the bloodstone has been destroyed
 				return
 			if (BLOODCULT_STAGE_NARSIE)//or narsie has risen
 				return
@@ -349,6 +375,23 @@
 		if (1)
 			acquired_devotion /= 2
 	devotion += acquired_devotion
+
+	if (faction)
+		var/datum/faction/bloodcult/cult = faction
+		cult.total_devotion += acquired_devotion
+
+/datum/role/cultist/proc/get_eclipse_increment()
+	switch(get_devotion_rank())
+		if (DEVOTION_TIER_0)
+			return 0.10
+		if (DEVOTION_TIER_1)
+			return 0.10 + (devotion-100)*0.000375
+		if (DEVOTION_TIER_2)
+			return 0.25 + (devotion-500)*0.0003
+		if (DEVOTION_TIER_3)
+			return 0.40 + (devotion-1000)*0.0001
+		if (DEVOTION_TIER_4)
+			return 0.50 + (devotion-2000)*0.00005
 
 /datum/role/cultist/handle_reagent(var/reagent_id)
 	var/mob/living/carbon/human/H = antag.current
@@ -540,7 +583,7 @@
 		if(rune.word1 && rune.word2 && rune.word3)
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 			return
-	get_devotion(1, DEVOTION_TIER_0)
+	get_devotion(10, DEVOTION_TIER_0)
 	write_rune_word(get_turf(user), word, rune_blood_data["blood"], caster = user)
 	verbose = FALSE
 
@@ -573,7 +616,7 @@
 	tattoos[T.name] = T
 	update_cult_hud()
 	T.getTattoo(antag.current)
-	anim(target = antag.current, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_receive", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	//anim(target = antag.current, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_receive", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 	sleep(1)
 	antag.current.update_mutations()
 	var/atom/movable/overlay/tattoo_markings = anim(target = antag.current, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[T.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)

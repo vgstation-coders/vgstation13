@@ -196,8 +196,13 @@ var/list/arcane_tomes = list()
 		return
 
 	..()
-	M.take_organ_damage(0,rand(5,20))
-	to_chat(M, "<span class='warning'>You feel a searing heat inside of you!</span>")
+
+	if (!M.isDead())
+		M.take_organ_damage(0,rand(5,20))
+		to_chat(M, "<span class='warning'>You feel a searing heat inside of you!</span>")
+		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+		if (C)
+			C.get_devotion(30, DEVOTION_TIER_3)
 
 /obj/item/weapon/tome/attack_hand(var/mob/living/user)
 	if(!iscultist(user) && state == TOME_OPEN)
@@ -582,6 +587,9 @@ var/list/arcane_tomes = list()
 	if(!checkcult)
 		return ..()
 	if (iscultist(user))
+		if (!iscultist(target) && !target.isDead())
+			var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+			C.get_devotion(30, DEVOTION_TIER_3)
 		if (ishuman(target) && target.resting)
 			var/obj/structure/cult/altar/altar = locate() in target.loc
 			if (altar)
@@ -814,6 +822,9 @@ var/list/arcane_tomes = list()
 		if(affecting && affecting.take_damage(rand(force/2, force))) //random amount of damage between half of the blade's force and the full force of the blade.
 			user.UpdateDamageIcon()
 		return
+	if (iscultist(user) && !iscultist(target) && !target.isDead())
+		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+		C.get_devotion(30, DEVOTION_TIER_3)
 	if (ishuman(target) && target.resting)
 		var/obj/structure/cult/altar/altar = locate() in target.loc
 		if (altar)
@@ -1066,7 +1077,7 @@ var/list/arcane_tomes = list()
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "blood_dagger"
 	item_state = "blood_dagger"
-	desc = "A knife-shaped hunk of solidified blood."
+	desc = "A knife-shaped hunk of solidified blood. Can be thrown to pin enemies down."
 	siemens_coefficient = 0.2
 	sharpness = 1.5
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
@@ -1110,6 +1121,9 @@ var/list/arcane_tomes = list()
 			playsound(user, 'sound/weapons/bladeslice.ogg', 30, 0, -2)
 			to_chat(user, "<span class='warning'>\The [src] takes a bit of your blood.</span>")
 		return
+	if (iscultist(user) && !iscultist(target) && !target.isDead())
+		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+		C.get_devotion(30, DEVOTION_TIER_3)
 	..()
 /obj/item/weapon/melee/blood_dagger/attack_hand(var/mob/living/user)
 	if(!ismob(loc))

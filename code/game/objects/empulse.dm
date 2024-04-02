@@ -1,4 +1,4 @@
-/proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
+/proc/empulse(turf/epicenter, heavy_range, light_range, log=0, var/mob/living/cultist = null)
 	if(!epicenter)
 		return
 
@@ -6,13 +6,14 @@
 		epicenter = get_turf(epicenter.loc)
 
 	if(heavy_range > 1)
-		var/obj/effect/overlay/pulse = new/obj/effect/overlay ( epicenter )
-		pulse.icon = 'icons/effects/effects.dmi'
-		pulse.icon_state = "emppulse"
-		pulse.name = "emp pulse"
-		pulse.anchored = 1
-		spawn(20)
-			qdel(pulse)
+		if (!cultist)
+			var/obj/effect/overlay/pulse = new/obj/effect/overlay ( epicenter )
+			pulse.icon = 'icons/effects/effects.dmi'
+			pulse.icon_state = "emppulse"
+			pulse.name = "emp pulse"
+			pulse.anchored = 1
+			spawn(20)
+				qdel(pulse)
 
 	if(heavy_range > light_range)
 		light_range = heavy_range
@@ -35,10 +36,19 @@
 				if(M_turf && (M_turf.z == epicenter.z || AreConnectedZLevels(M_turf.z,epicenter.z)))
 					var/dist = cheap_pythag(M_turf.x - x0, M_turf.y - y0)
 					if((dist <= round(heavy_range + world.view - 2, 1)) && (M_turf.z - epicenter.z <= max_range) && (epicenter.z - M_turf.z <= max_range))
-						M << 'sound/effects/EMPulse.ogg'
+						if (cultist)
+							M.playsound_local(epicenter, 'sound/effects/bloodboil.ogg', 25, 0)
+						else
+							M << 'sound/effects/EMPulse.ogg'
 
 		for(var/turf/T in multi_z_spiral_block(epicenter,max_range,0,0))
 			CHECK_TICK
+			if (cultist)
+				spawn(get_dist(T,epicenter))
+					var/atom/movable/overlay/animation = anim(target = T,a_icon = 'icons/obj/cult.dmi', flick_anim = "rune_pulse",sleeptime = 15)
+					animation.add_particles("Cult Smoke Box")
+					sleep(6)
+					animation.adjust_particles("spawning",0,"Cult Smoke Box")
 			var/dist = cheap_pythag(T.x - x0, T.y - y0)
 			if(dist > max_range)
 				continue
@@ -46,5 +56,12 @@
 			if(dist <= heavy_range)
 				act = 1
 			for(var/atom/movable/A in T.contents)
+				if (cultist && isliving(A))
+					var/mob/living/L = A
+					if (iscultist(L))
+						continue
+					else if (!L.isDead())
+						var/datum/role/cultist/C = cultist.mind.GetRole(CULTIST)
+						C.get_devotion(50, DEVOTION_TIER_2)
 				A.emp_act(act)
 	return

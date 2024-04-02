@@ -298,7 +298,7 @@
 		list("Altar", "radial_altar", "The nexus of a cult base. Lets you commune with Nar-Sie, conjure soul gems, and keep tabs on the cult's members and activities over the station."),
 		list("Spire", "radial_spire", "Allows all cultists in the level to communicate with each others using :x"),
 		list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience."),
-		list("Pylon", "radial_pylon", "Provides some light in the surrounding area, and has some use in rituals.")
+		list("Pylon", "radial_pylon", "Provides some light in the surrounding area.")
 	)
 	var/structure = show_radial_menu(user,R.loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
 
@@ -409,6 +409,9 @@
 	message_admins("A rune ritual has iterated for over 1000 blood payment procs. Something's wrong there.")
 
 /datum/rune_spell/raisestructure/proc/success()
+	for(var/mob/living/L in contributors)
+		var/datum/role/cultist/C = L.mind.GetRole(CULTIST)
+		C.get_devotion(10, DEVOTION_TIER_1)
 	new spawntype(spell_holder.loc)
 	qdel(spell_holder) //Deletes the datum as well.
 
@@ -642,6 +645,8 @@
 			return
 		if (pay_blood())
 			R.one_pulse()
+			var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+			C.get_devotion(10, DEVOTION_TIER_0)
 			var/obj/spawned_object
 			var/turf/T = get_turf(spell_holder)
 			switch (task)
@@ -1120,6 +1125,12 @@ var/list/converted_minds = list()
 				if (isalien(victim))
 					victim.Paralyse(8)
 
+				if (cult && victim.mind)
+					if (!(victim.mind in cult.previously_made_prisoner))
+						cult.previously_made_prisoner |= victim.mind
+						var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+						C.get_devotion(250, DEVOTION_TIER_3)
+
 				//let's start by removing any cuffs they might already have
 				if (victim.handcuffed)
 					var/obj/item/weapon/handcuffs/cuffs = victim.handcuffed
@@ -1175,6 +1186,13 @@ var/list/converted_minds = list()
 	if (!cult)
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 	cult.HandleRecruitedRole(newCultist)
+	if (!(victim.mind in cult.previously_converted))
+		cult.previously_made_prisoner |= M.mind
+		var/datum/role/cultist/C = converter.mind.GetRole(CULTIST)
+		if (victim.mind in cult.previously_made_prisoner)
+			C.get_devotion(250, DEVOTION_TIER_4)//making someone prisoner already grants 250 devotion on top.
+		else
+			C.get_devotion(500, DEVOTION_TIER_4)
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_CONVERTED)
 	newCultist.conversion["converted"] = activator
@@ -1259,13 +1277,13 @@ var/list/converted_minds = list()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
-	new/obj/effect/cult_ritual/stun(R.loc)
+	new/obj/effect/cult_ritual/stun(R.loc,1,activator)
 
 	qdel(R)
 
 /datum/rune_spell/stun/cast_talisman()
 	var/turf/T = get_turf(spell_holder)
-	new/obj/effect/cult_ritual/stun(T,2)
+	new/obj/effect/cult_ritual/stun(T,2,activator)
 	qdel(src)
 
 /datum/rune_spell/stun/cast_touch(var/mob/M)
@@ -1276,6 +1294,10 @@ var/list/converted_minds = list()
 		invoke(activator,"Dream sign ''Evil sealing talisman''!",1)
 	else
 		invoke(activator,invocation,1)
+
+	if (!M.isDead())
+		var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+		C.get_devotion(100, DEVOTION_TIER_2)
 
 	if(issilicon(M))
 		to_chat(M, "<span class='danger'>WARNING: Short-circuits detected, Rebooting...</span>")
@@ -1307,7 +1329,7 @@ var/list/converted_minds = list()
 	mouse_opacity = 0
 	var/stun_duration = 5
 
-/obj/effect/cult_ritual/stun/New(turf/loc,var/type=1)
+/obj/effect/cult_ritual/stun/New(turf/loc,var/type=1,var/mob/living/carbon/caster)
 	..()
 
 	switch (type)
@@ -1343,6 +1365,10 @@ var/list/converted_minds = list()
 			shadow(L,loc,"rune_stun")
 			if (iscultist(L))
 				duration--
+			else if (caster)
+				if (!L.isDead())
+					var/datum/role/cultist/C = caster.mind.GetRole(CULTIST)
+					C.get_devotion(50, DEVOTION_TIER_2)
 			if(iscarbon(L))
 				var/mob/living/carbon/C = L
 				C.flash_eyes(visual = 1)
@@ -1404,7 +1430,7 @@ var/list/confusion_victims = list()
 	var/duration = 5
 	var/hallucination_radius=25
 
-/obj/effect/cult_ritual/confusion/New(turf/loc,var/duration=300,var/radius=25,var/mob/specific_victim=null, var/culprit)
+/obj/effect/cult_ritual/confusion/New(turf/loc,var/duration=300,var/radius=25,var/mob/specific_victim=null, var/mob/culprit)
 	..()
 	//Alright, this is a pretty interesting rune, first of all we prepare the fake cult floors & walls that the victims will see.
 	var/turf/T = get_turf(src)
@@ -1436,6 +1462,10 @@ var/list/confusion_victims = list()
 		for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
 			potential_victims.Add(M)
 
+	var/datum/role/cultist/our_cultist
+	if (culprit && culprit.mind)
+		our_cultist = culprit.mind.GetRole(CULTIST)
+
 	for(var/mob/living/M in potential_victims)
 
 		if (iscarbon(M))
@@ -1450,11 +1480,16 @@ var/list/confusion_victims = list()
 				CM = new(M,duration)
 				confusion_victims[M] = CM
 
+			if (!M.isDead() && our_cultist)
+				our_cultist.get_devotion(50, DEVOTION_TIER_2)
+
 			spawn()
 				CM.apply_confusion(T,hallucinated_turfs)
 
 		if (issilicon(M) && !isAI(M))//Silicons get a fade to black, then just a flash, until I can think of something else
 			shadow(M,T)
+			if (!M.isDead() && our_cultist)
+				our_cultist.get_devotion(50, DEVOTION_TIER_2)
 			M.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)
 			M.update_fullscreen_alpha("blindblack", 255, 5)
 			spawn(5)
@@ -1469,7 +1504,9 @@ var/list/confusion_victims = list()
 			animate(C, color = col, time = 4)
 			animate(color = "black", time = 5)
 			animate(color = col, time = 5)
-			C.vision_flags = BLIND//Anyone using a security cameras computer will only see darkness
+			if (!(C.vision_flags & BLIND) && our_cultist)
+				our_cultist.get_devotion(50, DEVOTION_TIER_2)
+				C.vision_flags = BLIND//Anyone using a security cameras computer will only see darkness
 			C.setViewRange(-1)//The camera won't reveal the area for the AI anymore
 
 	qdel(src)
@@ -1592,6 +1629,9 @@ var/list/confusion_victims = list()
 	for(var/mob/living/M in range(effect_range,get_turf(spell_holder)))
 		if (iscultist(M))
 			continue
+		var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+		if (!M.isDead())
+			C.get_devotion(50, DEVOTION_TIER_2)
 		M.overlay_fullscreen("deafborder", /obj/abstract/screen/fullscreen/deafmute_border)//victims see a red overlay fade in-out for a second
 		M.update_fullscreen_alpha("deafborder", 100, 5)
 		M.Deafen(deaf_duration)
@@ -1638,12 +1678,9 @@ var/list/confusion_victims = list()
 	animation.alpha = 0
 	animate(animation, alpha = 255, time = 2)
 	animate(alpha = 0, time = 3)
-	//for(var/turf/U in range(effect_range,T))//DEBUG
-	//	var/dist = cheap_pythag(U.x - T.x, U.y - T.y)
-	//	if (dist <= effect_range+0.5)
-	//		U.color = "red"
 	to_chat(activator, "<span class='notice'>All runes and cult structures in range hide themselves behind a thin layer of reality.</span>")
-	//playsound(T, 'sound/effects/conceal.ogg', 50, 0, -4)
+	playsound(T, 'sound/effects/conceal.ogg', 50, 0, -5)
+	var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
 
 	for(var/obj/structure/cult/S in range(effect_range,T))
 		var/dist = cheap_pythag(S.x - T.x, S.y - T.y)
@@ -1651,6 +1688,7 @@ var/list/confusion_victims = list()
 			continue
 		if (dist <= effect_range+0.5)
 			S.conceal()
+			C.get_devotion(10, DEVOTION_TIER_0)
 
 	for(var/obj/effect/rune/R in range(effect_range,T))
 		if (R == spell_holder)
@@ -1660,6 +1698,7 @@ var/list/confusion_victims = list()
 		var/dist = cheap_pythag(R.x - T.x, R.y - T.y)
 		if (dist <= effect_range+0.5)
 			R.conceal()
+			C.get_devotion(10, DEVOTION_TIER_0)
 			var/atom/movable/overlay/trail = shadow(R,T,"rune_conceal")
 			trail.alpha = 0
 			animate(trail, alpha = 200, time = 2)
@@ -1698,18 +1737,15 @@ var/list/confusion_victims = list()
 
 /datum/rune_spell/reveal/cast()
 	var/turf/T = get_turf(spell_holder)
-	//for(var/turf/U in range(effect_range,T))//DEBUG
-	//	var/dist = cheap_pythag(U.x - T.x, U.y - T.y)
-	//	if (dist <= effect_range+0.5)
-	//		U.color = "red"
-
 	var/list/shocked = list()
 	to_chat(activator, "<span class='notice'>All concealed runes and cult structures in range phase back into reality, stunning nearby foes.</span>")
-	playsound(T, 'sound/effects/reveal.ogg', 50, 0, -2)
+	playsound(T, 'sound/effects/reveal.ogg', 50, 0, -3)
+	var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
 
 	for(var/obj/structure/cult/concealed/S in range(effect_range,T))//only concealed structures trigger the effect
 		var/dist = cheap_pythag(S.x - T.x, S.y - T.y)
 		if (dist <= effect_range+0.5)
+			C.get_devotion(10, DEVOTION_TIER_0)
 			anim(target = S, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*shock_range, offY = -WORLD_ICON_SIZE*shock_range, plane = ABOVE_LIGHTING_PLANE)
 			for(var/mob/living/L in viewers(S))
 				if (iscultist(L))
@@ -1728,6 +1764,7 @@ var/list/confusion_victims = list()
 		var/dist = cheap_pythag(R.x - T.x, R.y - T.y)
 		if (dist <= effect_range+0.5)
 			if (R.reveal())//only hidden runes trigger the effect
+				C.get_devotion(10, DEVOTION_TIER_0)
 				anim(target = R, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*shock_range, offY = -WORLD_ICON_SIZE*shock_range, plane = ABOVE_LIGHTING_PLANE)
 				for(var/mob/living/L in viewers(R))
 					if (iscultist(L))
@@ -1742,6 +1779,8 @@ var/list/confusion_victims = list()
 						shocked[L] = 2
 
 	for(var/mob/living/L in shocked)
+		if (!L.isDead())
+			C.get_devotion(50, DEVOTION_TIER_2)
 		new /obj/effect/cult_ritual/reveal(L.loc, L, shocked[L])
 		to_chat(L, "<span class='danger'>You feel a terrifying shock resonate within your body as the hidden runes are revealed!</span>")
 		L.update_fullscreen_alpha("shockborder", 100, 5)
@@ -2043,13 +2082,17 @@ var/list/seer_rituals = list()
 
 	anim(target = target, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_robes", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = ABOVE_LIGHTING_PLANE)
 
+	var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+	C.get_devotion(50, DEVOTION_TIER_0)
+
 	var/obj/item/weapon/blood_tesseract/BT = new(get_turf(activator))
 	if (istype (spell_holder,/obj/item/weapon/talisman))
 		var/obj/item/weapon/talisman/T = spell_holder
-		activator.u_equip(spell_holder)
-		if (T.uses > 1)
-			BT.remaining = spell_holder
-			spell_holder.forceMove(BT)
+		if (!T.linked_ui)
+			activator.u_equip(spell_holder)
+			if (T.uses > 1)
+				BT.remaining = spell_holder
+				spell_holder.forceMove(BT)
 
 	for(var/slot in slots_to_store)
 		var/obj/item/user_slot = target.get_item_by_slot(slot)
@@ -2145,6 +2188,8 @@ var/list/seer_rituals = list()
 		if (locate(/obj/machinery/door/mineral/cult) in range(spell_holder,1))
 			abort(RITUALABORT_NEAR)
 		else
+			var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+			C.get_devotion(10, DEVOTION_TIER_1)
 			new /obj/machinery/door/mineral/cult(get_turf(spell_holder))
 			qdel(spell_holder)
 	qdel(src)
@@ -2181,6 +2226,9 @@ var/list/seer_rituals = list()
 				if (C.occult_muted())
 					continue
 			if(L.stat != DEAD && iscultist(L))
+				if (L != activator)
+					var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+					C.get_devotion(50, DEVOTION_TIER_1)
 				playsound(L, 'sound/effects/fervor.ogg', 50, 0, -2)
 				anim(target = L, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_fervor", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE, direction = L.dir)
 				L.oxyloss = 0
@@ -2204,7 +2252,8 @@ var/list/seer_rituals = list()
 				L.stat = CONSCIOUS
 				if (L.reagents)
 					L.reagents.del_reagent(HOLYWATER)
-					L.reagents.add_reagent(HYPERZINE,1)
+					if (!L.reagents.has_any_reagents(HYPERZINES))
+						L.reagents.add_reagent(HYPERZINE,1)
 		qdel(spell_holder)
 	qdel(src)
 
@@ -2403,6 +2452,8 @@ var/list/seer_rituals = list()
 			if (valid_turfs.len)
 				for(var/mob/living/L in contributors)
 					use_available_blood(L, cost_rejoin,contributors[L])
+					var/datum/role/cultist/C = L.mind.GetRole(CULTIST)
+					C.get_devotion(100, DEVOTION_TIER_2)
 					make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 3)
 					var/atom/movable/overlay/landing_animation = anim(target = L, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
 					playsound(L, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
@@ -2419,6 +2470,8 @@ var/list/seer_rituals = list()
 				for(var/mob/living/L in contributors)
 					use_available_blood(L, cost_summon/contributors.len,contributors[L])
 					make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 3)
+					var/datum/role/cultist/C = L.mind.GetRole(CULTIST)
+					C.get_devotion(100, DEVOTION_TIER_2)
 				var/atom/movable/overlay/landing_animation = anim(target = src.target, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
 				var/mob/M = target//so we keep track of them after the datum is ded until we jaunt
 				var/turf/T = get_turf(spell_holder)
@@ -2561,6 +2614,9 @@ var/list/seer_rituals = list()
 	if (!destination)
 		to_chat(activator, "<span class='warning'>The \"[network]\" Path is closed. Set up a Path Exit rune to establish a Path.</span>")
 		return
+
+	var/datum/role/cultist/C = add_cultist.mind.GetRole(CULTIST)
+	C.get_devotion(20, DEVOTION_TIER_0)
 
 	var/turf/T = get_turf(spell_holder)
 	var/atom/movable/overlay/landing_animation = anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
@@ -2743,9 +2799,7 @@ var/list/bloodcult_exitportals = list()
 	playsound(T, 'sound/items/Welder2.ogg', 25, 1)
 	T.hotspot_expose(700,125,surfaces=1)
 	spawn(0)
-		for(var/i = 0; i < 3; i++)
-			empulse(T, 1, 3)
-			sleep(20)
+		empulse(T, 3, 3, cultist = activator)
 	qdel(spell_holder)
 
 ////////////////////////////////////////////////////////////////////
@@ -2961,6 +3015,10 @@ var/list/bloodcult_exitportals = list()
 			vessel.equip_or_collect(new /obj/item/clothing/under/leather_rags(vessel), slot_w_uniform)
 
 		M.regenerate_icons()
+
+		for(var/mob/living/L in contributors)
+			var/datum/role/cultist/C = L.mind.GetRole(CULTIST)
+			C.get_devotion(200, DEVOTION_TIER_3)
 
 	else
 		for(var/mob/living/L in contributors)

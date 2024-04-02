@@ -1,4 +1,8 @@
 /*
+These were designed by Gurfan following some guidelines I had left in my Cult 4 designed document.
+Since I've resumed work on cult, I replaced the mechanic of cult rituals that rely on Objectives with "Devotion" gains when performing any cult activities
+Keeping this file here for a while -Deity Link
+
 ///////////////////////////////////
 //            CULT RITUALS
 //

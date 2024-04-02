@@ -172,15 +172,15 @@ var/list/cult_parallax[(GRID_WIDTH**2)]
 			switch(starlight)
 				if (STARLIGHT_REDSHIFT)
 					C.parallax_dustmaster.color = list(
-					0.5,0,0,0,
-					0,0.5,0,0,
-					0,0,0.5,0,
-					0,0,0,1)
-				if (STARLIGHT_CULT)
-					C.parallax_dustmaster.color = list(
 					0.2,0,0,0,
 					0,0.2,0,0,
 					0,0,0.2,0,
+					0,0,0,1)
+				if (STARLIGHT_CULT)
+					C.parallax_dustmaster.color = list(
+					0.1,0,0,0,
+					0,0.1,0,0,
+					0,0,0.1,0,
 					0,0,0,1)
 				else
 					C.parallax_dustmaster.color = list(

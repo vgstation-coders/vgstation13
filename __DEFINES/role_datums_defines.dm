@@ -174,7 +174,7 @@
 #define RITUALABORT_MISSING	"missing"
 #define RITUALABORT_OVERCROWDED "overcrowded"
 
-#define TATTOO_POOL		"Blood Communion"
+#define TATTOO_POOL		"Blood Pooling"
 #define TATTOO_SILENT	"Silent Casting"
 #define TATTOO_DAGGER	"Blood Dagger"
 #define TATTOO_HOLY		"Unholy Protection"
@@ -183,7 +183,7 @@
 #define TATTOO_MANIFEST	"Pale Body"
 #define TATTOO_MEMORIZE	"Arcane Dimension"
 #define TATTOO_RUNESTORE "Runic Skin"
-#define TATTOO_SHORTCUT	"Shortcut Tracer"
+#define TATTOO_SHORTCUT	"Shortcut Sigil"
 
 #define	TOME_CLOSED	1
 #define	TOME_OPEN	2

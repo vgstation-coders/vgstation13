@@ -161,6 +161,7 @@ var/list/particle_string_to_type = list(
 	"Cult Gauge" = /particles/cult_gauge,
 	"Cult Smoke" = /particles/cult_smoke,
 	"Cult Smoke2" = /particles/cult_smoke/alt,
+	"Cult Smoke Box" = /particles/cult_smoke/box,
 	"Cult Halo" = /particles/cult_halo,
 	"Space Runes" = /particles/space_runes,
 	)
@@ -272,6 +273,12 @@ var/list/particle_string_to_type = list(
 /particles/cult_smoke/alt
 	velocity = generator("box", list(1,4), list(2,4))
 	drift = generator("box", list(-0.1,0), list(-0.2,0))
+
+/particles/cult_smoke/box
+	spawning = 0.8
+	position = generator("box", list(-12,-12), list(12,12))
+	velocity = list(0,4)
+	drift = generator("box", list(-0.2,0), list(0.2,0))
 
 
 //CULT HALO

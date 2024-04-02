@@ -411,10 +411,13 @@ var/list/astral_projections = list()
 
 	var/image/hudicon
 
+	var/last_devotion_gain = 0
+	var/devotion_gain_delay = 60 SECONDS
+
 /mob/living/simple_animal/astral_projection/New()
 	..()
 	astral_projections += src
-
+	last_devotion_gain = world.time
 	incorporeal_appearance = image('icons/mob/mob.dmi',"blank")
 	tangible_appearance = image('icons/mob/mob.dmi',"blank")
 	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
@@ -485,6 +488,11 @@ var/list/astral_projections = list()
 	else
 		death()
 		return
+
+	if (world.time >= (last_devotion_gain + devotion_gain_delay))
+		last_devotion_gain += devotion_gain_delay
+		var/datum/role/cultist/C = mind.GetRole(CULTIST)
+		C.get_devotion(50, DEVOTION_TIER_2)
 
 	//convertibility HUD
 	if (!tangibility && client)

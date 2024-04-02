@@ -207,7 +207,6 @@
 	var/gem_delay = 300
 	var/narsie_message_cooldown = 0
 
-	var/obj/effect/cult_offerings/offerings_effect
 	var/mob/sacrificer  // who started the sacrifice ritual
 	var/image/build
 
@@ -285,7 +284,7 @@
 		I.forceMove(src)
 		blade = I
 		update_icon()
-		var/mob/living/carbon/human/C = locate() in loc
+		var/mob/living/carbon/C = locate() in loc
 		var/mob/living/simple_animal/S = locate() in loc
 		if (C && C.resting)
 			C.unlock_from()
@@ -829,7 +828,7 @@
 			altar_task = ALTARTASK_NONE
 			update_icon()
 			var/mob/M = get_locked(lock_type)[1]
-			if (istype(blade) && !blade.shade && (cult && cult.CanConvert()))//If an empty soul blade was the tool used for the ritual, let's make them its shade.
+			if (istype(blade) && !blade.shade && M.mind)//If an empty soul blade was the tool used for the ritual, let's make them its shade.
 				var/mob/living/simple_animal/shade/new_shade = M.change_mob_type( /mob/living/simple_animal/shade , null, null, 1 )
 				blade.forceMove(loc)
 				blade.blood = blade.maxblood
@@ -862,7 +861,9 @@
 				new_shade.give_blade_powers()
 				playsound(src, get_sfx("soulstone"), 50,1)
 			else
-				M.gib()
+				anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_sac", lay = ABOVE_SINGULO_LAYER, plane = EFFECTS_PLANE)
+				spawn(5)
+					M.gib()
 
 			var/obj/structure/cult/bloodstone/blood_stone = new(get_turf(src))
 			blood_stone.flashy_entrance()
@@ -870,11 +871,9 @@
 		if(ALTARTASK_SACRIFICE_ANIMAL)
 			altar_task = ALTARTASK_NONE
 			var/mob/living/M = get_locked(lock_type)[1]
-			playsound(src, get_sfx("soulstone"), 50,1)
+			anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_sac", lay = ABOVE_SINGULO_LAYER, plane = EFFECTS_PLANE)
 			var/turf/TU = get_turf(src)
-			var/atom/movable/overlay/landing_animation = anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
-			playsound(src, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
-			spawn(10)
+			spawn(5)
 				var/obj/item/weapon/reagent_containers/R = locate(/obj/item/weapon/reagent_containers) in TU.contents
 				if(R)
 					var/remaining = R.volume - R.reagents.total_volume
@@ -886,9 +885,20 @@
 						R.on_reagent_change()
 				qdel(M)
 				bloodmess_splatter(TU)
-				playsound(src, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
-				flick("cult_jaunt_land",landing_animation)
+				playsound(src, "gib", 30, 0, -3)
 
+/obj/structure/cult/altar/ritual_reward(var/mob/M)
+	var/datum/role/cultist/C = M.mind.GetRole(CULTIST)
+	if (C)
+		switch(altar_task)
+			if(ALTARTASK_SACRIFICE_HUMAN)
+				var/mob/O = get_locked(lock_type)[1]
+				if (ishuman(O))
+					C.get_devotion(400, DEVOTION_TIER_4)
+				else//monkey
+					C.get_devotion(200, DEVOTION_TIER_3)
+			if(ALTARTASK_SACRIFICE_ANIMAL)
+				C.get_devotion(200, DEVOTION_TIER_3)
 
 #undef ALTARTASK_NONE
 #undef ALTARTASK_GEM
@@ -2006,8 +2016,12 @@ var/list/cult_spires = list()
 	for (var/mob/M in contributors)
 		if (M.client)
 			M.client.images -= progbar
+		ritual_reward(M)
 		contributors.Remove(M)
 	return 1
+
+/obj/structure/cult/proc/ritual_reward(var/mob/M)
+	return
 
 /obj/structure/cult/proc/dance_step()
 	var/dance_move = pick("clock","counter","spin")

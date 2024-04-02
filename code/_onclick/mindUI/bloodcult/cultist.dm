@@ -42,6 +42,7 @@
 		/datum/mind_ui/bloodcult_runes,
 		)
 	display_with_parent = TRUE
+	offset_layer = MIND_UI_GROUP_C
 	y = "BOTTOM"
 
 /datum/mind_ui/bloodcult_cultist_panel/Valid()
@@ -156,104 +157,124 @@
 /datum/mind_ui/bloodcult_right_panel
 	uniqueID = "Cultist Right Panel"
 	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/bloodcult_spells_background,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/pool,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/sigil,
+		/obj/abstract/mind_ui_element/hoverable/movable/cult_spells,
 		)
 
 	display_with_parent = TRUE
-	x = "RIGHT"
+	offset_layer = MIND_UI_GROUP_C
+
+/datum/mind_ui/bloodcult_right_panel/Valid()
+	var/mob/M = mind.current
+	if (!M)
+		return FALSE
+	var/datum/role/cultist/C = iscultist(M)
+	if(C && iscarbon(M))
+		return (C.rank > DEVOTION_TIER_0)
+	return FALSE
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/bloodcult_spells_background
+	name = "Cult Powers"
+	icon = 'icons/ui/bloodcult/32x121.dmi'
+	icon_state = "powers_bg"
+	offset_x = 192
+	offset_y = -96
+	layer = MIND_UI_BACK
 
 //////////////////////
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell
-	icon = 'icons/ui/bloodcult/32x32.dmi'
-	icon_state = "rune_back"
-	offset_x = -4
+	icon = 'icons/ui/bloodcult/24x24.dmi'
+	icon_state = "blank"
+	offset_x = 196
 	invisibility = 101 	// Invisible by default
+	layer = MIND_UI_BUTTON
 
-	var/allow_alien = FALSE
 	var/required_tattoo
 	var/image/spell_overlay
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/proc/CanAppear()
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/CanAppear()
 	if(!required_tattoo)
 		return TRUE
 	var/mob/living/M = GetUser()
-	if(isalien(M) && !allow_alien)
-		return FALSE
 	if(M.checkTattoo(required_tattoo))
 		return TRUE
 	return FALSE
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/Appear()
 	if(!CanAppear())
-		Hide()
-		return
-	invisibility = 0
-	UpdateIcon(1)
-	if(!mouse_opacity)
-		mouse_opacity = 1
-		flick("rune_appear",src)
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/Hide()
-	if (mouse_opacity)
-		mouse_opacity = 0
-		overlays.len = 0
-		if (spell_overlay)
-			animate(spell_overlay, alpha = 0, time = 2)
-			overlays += spell_overlay
-		icon_state = "blank"
-		flick("rune_hide",src)
-	spawn(10)
 		invisibility = 101
+		return
+	..()
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/UpdateIcon()
-	icon_state = "rune_back"
+/////////////////////////////////////////
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/pool
+	name = "Blood Pooling"
+	offset_y = -87
+	required_tattoo = TATTOO_POOL
+	icon_state = "power_pool"
+
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/pool/UpdateIcon(var/appear = FALSE)
+	var/mob/living/M = GetUser()
+	var/datum/role/cultist/C = iscultist(M)
+	if (C.blood_pool)
+		icon_state = "power_pool"
+	else
+		icon_state = "power_pool_off"
+	base_icon_state = icon_state
+
+	var/pool_current = 0
+	for (var/datum/role/cultist/CU in blood_communion)
+		if (CU.blood_pool && CU.antag && CU.antag.current && iscarbon(CU.antag.current) && !CU.antag.current.isDead())
+			pool_current++
 	overlays.len = 0
+	overlays += String2Image("[pool_current]",_pixel_x = 2,_pixel_y = 1)
 
-	if (hovering)
-		overlays += "select"
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/pool/Click()
+	var/mob/living/M = GetUser()
+	var/datum/role/cultist/C = iscultist(M)
 
-	overlays += spell_overlay
+	C.blood_pool = !C.blood_pool
 
+	for (var/datum/role/cultist/CU in blood_communion)
+		CU.antag.current.DisplayUI("Cultist Right Panel")
 
-/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/StartHovering()
-	hovering = TRUE
-	UpdateIcon()
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/StopHovering()
-	hovering = FALSE
+	if (C.blood_pool)
+		to_chat(M, "<span class='warning'>You return to the blood pool. Blood costs are slightly reduced, on top of getting split between you and other cultists.</span>")
+	else
+		to_chat(M, "<span class='warning'>You remove yourself from the blood pool. Blood costs must now be paid on your own.</span>")
 	UpdateIcon()
 
 /////////////////////////////////////////
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman
-	name = "Skin Talisman"
-	offset_y = -76
+	name = "Runic Skin"
+	offset_y = -31
 	required_tattoo = TATTOO_RUNESTORE
+	icon_state = "power_runic"
 
 	var/obj/item/weapon/talisman/talisman
 
-
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/UpdateIcon(var/appear = FALSE)
-	icon_state = "rune_back"
 	overlays.len = 0
 
-	if (hovering)
-		overlays += "select"
-
 	if(talisman)
-		spell_overlay = image(talisman.icon,src,"dagger")
-		spell_overlay.appearance = talisman.appearance
-		overlays += spell_overlay
-	else
-		spell_overlay = image('icons/ui/bloodcult/32x32.dmi',src,"talisman_empty")
-
-	if (appear && spell_overlay)
-		spell_overlay.alpha = 0
-		animate(spell_overlay, alpha = 255, time = 5)
-	overlays += spell_overlay
-
+		var/image/I = image('icons/ui/bloodcult/32x32.dmi',src,"blank")
+		I.appearance = talisman.appearance
+		I.layer = FLOAT_LAYER
+		I.plane = FLOAT_PLANE
+		I.pixel_x = -2
+		I.pixel_y = -5
+		overlays += I
+		overlays += "power_runic-over"
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/Click()
 	var/mob/living/M = GetUser()
@@ -267,6 +288,8 @@
 			T.linked_ui = src
 			T.forceMove(M)
 			talisman = T
+	else
+		to_chat(M, "<span class='warning'>Hold an imbued talisman in your active hand to fuse it with your skin.</span>")
 	UpdateIcon()
 
 
@@ -276,40 +299,11 @@
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger
 	name = "Blood Dagger"
-	offset_y = -112
+	offset_y = -59
 	required_tattoo = TATTOO_DAGGER
+	icon_state = "power_dagger"
 
-	allow_alien = TRUE
 	var/obj/item/weapon/melee/blood_dagger/dagger
-
-/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger/UpdateIcon(var/appear = FALSE)
-	icon_state = "rune_back"
-	overlays.len = 0
-
-	if (hovering)
-		overlays += "select"
-
-	var/mob/living/L = GetUser()
-	if(isalien(L))
-		offset_y = -105
-
-	if(!dagger)  // Dagger not pulled out by cultist.
-		var/blood_color = DEFAULT_BLOOD
-		if (isalien(L))
-			blood_color = ALIEN_BLOOD
-		else if (ishuman(L))
-			var/mob/living/carbon/human/H = L
-			if (H.species)
-				blood_color = H.species.blood_color
-		spell_overlay = image('icons/ui/bloodcult/32x32.dmi',src,"dagger")
-		spell_overlay.color = blood_color
-	else	// Dagger has been drawn
-		spell_overlay = image('icons/ui/bloodcult/32x32.dmi',src,"dagger_gone")
-
-	if (appear && spell_overlay)
-		spell_overlay.alpha = 0
-		animate(spell_overlay, alpha = 255, time = 5)
-	overlays += spell_overlay
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger/Click()
 
@@ -376,6 +370,32 @@
 		qdel(dagger)
 
 	UpdateIcon()
+
+/////////////////////////////////////////
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/sigil
+	name = "Shortcut Sigil"
+	offset_y = -3
+	icon_state = "power_sigil"
+	required_tattoo = TATTOO_SHORTCUT
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/sigil/Click()
+	var/mob/living/M = GetUser()
+
+	to_chat(M, "<span class='notice'>Click an adjacent wall to manifest a sigil on top of it.</span>")
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/movable/cult_spells
+	name = "Move Interface (Click and Drag)"
+	icon = 'icons/ui/bloodcult/16x32.dmi'
+	icon_state = "rune_move"
+	layer = MIND_UI_BUTTON
+	offset_x = 224
+	offset_y = -96
+	mouse_opacity = 1
+
+	move_whole_ui = TRUE
 
 ////////////////////////////////////////////////////////////////////
 //																  //
@@ -1216,6 +1236,8 @@
 		)
 	display_with_parent = TRUE//displays instantly when the cult panel is opened for the first time
 
+	offset_layer = MIND_UI_GROUP_B
+
 	var/selected_role = CULTIST_ROLE_NONE
 
 /datum/mind_ui/bloodcult_role/Valid()
@@ -1240,7 +1262,7 @@
 	offset_x = -165
 	offset_y = -93
 	alpha = 240
-	layer = MIND_UI_BACK + 3
+	layer = MIND_UI_BACK
 
 /obj/abstract/mind_ui_element/bloodcult_role_background/UpdateIcon()
 	overlays.len = 0
@@ -1266,7 +1288,7 @@
 	icon_state = "close"
 	offset_x = 181
 	offset_y = 120
-	layer = MIND_UI_BUTTON + 3
+	layer = MIND_UI_BUTTON
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_role_close/Click()
 	parent.Hide()
@@ -1276,7 +1298,7 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_role_select
 	icon = 'icons/ui/bloodcult/40x40.dmi'
 	icon_state = "button"
-	layer = MIND_UI_BUTTON + 3
+	layer = MIND_UI_BUTTON
 	var/role_small = ""
 	var/role = null
 
@@ -1345,7 +1367,7 @@
 	icon_state = "confirm"
 	offset_x = -36
 	offset_y = -78
-	layer = MIND_UI_BUTTON + 3
+	layer = MIND_UI_BUTTON
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_role_confirm/UpdateIcon()
 	var/datum/mind_ui/bloodcult_role/P = parent
@@ -1384,7 +1406,7 @@
 	name = "Move Interface (Click and Drag)"
 	icon = 'icons/ui/bloodcult/16x16.dmi'
 	icon_state = "move"
-	layer = MIND_UI_BUTTON + 3
+	layer = MIND_UI_BUTTON
 	offset_x = -165
 	offset_y = 120
 	mouse_opacity = 1
@@ -1408,6 +1430,7 @@
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_help_next,
 		/obj/abstract/mind_ui_element/hoverable/movable/bloodcult_help_move,
 		)
+	offset_layer = MIND_UI_GROUP_C
 	display_with_parent = FALSE
 
 /datum/mind_ui/bloodcult_help/Valid()

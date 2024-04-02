@@ -262,6 +262,11 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define MIND_UI_BUTTON 				11
 	#define MIND_UI_FRONT 				12
 
+	#define MIND_UI_GROUP_A 			0
+	#define MIND_UI_GROUP_B 			3
+	#define MIND_UI_GROUP_C 			6
+	#define MIND_UI_GROUP_D 			9
+
 #define ABOVE_HUD_PLANE 		24		// For being above the Head-Up Display
 
 

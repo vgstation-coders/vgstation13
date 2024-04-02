@@ -142,7 +142,7 @@ var/creating_arena = FALSE
 	// Legacy Cult stuff
 	if(istype(W,/obj/item/weapon/tome_legacy))
 		cultify()//takes care of making ghosts visible
-    // Big boy modern Cult 3.0 stuff
+    // Big boy modern Cult 3.0 and beyond stuff
 	if (iscultist(user))
 		if(istype(W,/obj/item/weapon/tome))
 			if(invisibility != 0 || icon_state != "ghost-narsie")
@@ -151,6 +151,8 @@ var/creating_arena = FALSE
 					"<span class='warning'>[user] drags a ghost to our plane of reality!</span>",
 					"<span class='warning'>You drag a ghost to our plane of reality!</span>"
 				)
+				var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+				C.get_devotion(50, DEVOTION_TIER_3)
 			return
 		else if (istype(W,/obj/item/weapon/talisman))
 			var/obj/item/weapon/talisman/T = W

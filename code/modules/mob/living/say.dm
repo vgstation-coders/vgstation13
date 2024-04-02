@@ -519,11 +519,18 @@ var/list/headset_modes = list(
 	if(stuttering || (undergoing_hypothermia() == MODERATE_HYPOTHERMIA && prob(25)) )
 		speech.message = stutter(speech.message)
 
-	if(reagents && reagents.has_any_reagents(HYPERZINES))
-		speech.message = replacetext(speech.message," ","") // motor mouth
-		speech.message = replacetext(speech.message,",","") // motor mouth
-		speech.message = replacetext(speech.message,";","") // motor mouth
-		speech.message = replacetext(speech.message,"-","") // motor mouth
+	if (iscultist(src))//preventing Fervor rune from triggering motor mouth. Also means you can now cult check with hyperzine cigarettes but that's no big deal.
+		if(reagents && reagents.has_any_reagents(HYPERZINES, 1.01))
+			speech.message = replacetext(speech.message," ","") // motor mouth
+			speech.message = replacetext(speech.message,",","") // motor mouth
+			speech.message = replacetext(speech.message,";","") // motor mouth
+			speech.message = replacetext(speech.message,"-","") // motor mouth
+	else
+		if(reagents && reagents.has_any_reagents(HYPERZINES))
+			speech.message = replacetext(speech.message," ","") // motor mouth
+			speech.message = replacetext(speech.message,",","") // motor mouth
+			speech.message = replacetext(speech.message,";","") // motor mouth
+			speech.message = replacetext(speech.message,"-","") // motor mouth
 
 	for(var/obj/item/weapon/implant/vocal/VI in src)
 		if(VI.imp_in == src)

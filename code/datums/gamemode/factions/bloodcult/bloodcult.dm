@@ -75,6 +75,12 @@
 	var/obj/structure/cult/bloodstone/bloodstone = null		//we track the one spawned by the Tear Reality rune
 	var/obj/machinery/singularity/narsie/large/narsie = null
 
+	//we track the mind of anyone that has been converted or made prisoner at least once.
+	var/previously_made_prisoner = list()
+	var/previously_converted = list()
+
+	var/total_devotion = 0
+
 /datum/faction/bloodcult/stage(var/value)
 	stage = value
 	switch(stage)
@@ -127,10 +133,10 @@
 
 /datum/faction/bloodcult/proc/calculate_eclipse_rate()
 	eclipse_increments = 0
-	for (var/datum/role/R in members)
+	for (var/datum/role/cultist/R in members)
 		var/mob/M = R.antag.current
 		if (isliving(M) && !M.isDead())
-			eclipse_increments += 0.25
+			eclipse_increments += R.get_eclipse_increment()
 
 /datum/faction/bloodcult/process()
 	..()
@@ -247,6 +253,7 @@
 		to_chat(R.antag.current, "<span class='notice'>Other cultists have shared some of their knowledge. It will be stored in your memory (check your Notes under the IC tab).</span>")
 	for (var/reminder in cult_reminders)
 		R.antag.store_memory("Shared Cultist Knowledge: [reminder].")
+	previously_converted |= R.antag
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
@@ -274,14 +281,15 @@
 	cult_founding_time = world.time
 	initialize_rune_words()
 	AppendObjective(/datum/objective/bloodcult)
-	for (var/datum/role/R in members)
+	for (var/datum/role/cultist/R in members)
 		var/mob/M = R.antag.current
-		to_chat(M, "<span class='sinister'>Our communion must remain small and secretive.</span>")
+		to_chat(M, "<span class='sinister'>Our communion must remain small and secretive until we are confident enough.</span>")
+		previously_converted |= R.antag
 	UpdateCap()
 	if (cultist_cap < 9)
 		for (var/datum/role/R in members)
 			var/mob/M = R.antag.current
-			to_chat(M, "<span class='sinister'>This number might rise up to 9 as more people arrive aboard the station. The first Artificer, Wraith, and Juggernaut each do not take up a slot.</span>")
+			to_chat(M, "<span class='sinister'>This number might rise up to 9 as more people arrive aboard the station. The first Artificer, Wraith, and Juggernaut each do not take up a slot. Check your panel to the left to set your role and get more information.</span>")
 	AnnounceObjectives()
 	..()
 

@@ -107,10 +107,10 @@ var/list/mind_ui_ID2type = list()
 	var/datum/mind_ui/parent = null
 	var/offset_x = 0 //KEEP THESE AT 0, they are set by /obj/abstract/mind_ui_element/hoverable/movable/
 	var/offset_y = 0
+	var/offset_layer = MIND_UI_GROUP_A
 
 	var/x = "CENTER"
 	var/y = "CENTER"
-
 
 	var/list/element_types_to_spawn = list()
 	var/list/sub_uis_to_spawn = list()
@@ -271,6 +271,9 @@ var/list/mind_ui_ID2type = list()
 		processing_objects.Remove(src)
 	..()
 
+/obj/abstract/mind_ui_element/proc/CanAppear()
+	return TRUE
+
 /obj/abstract/mind_ui_element/proc/Appear()
 	if (invisibility)
 		invisibility = 0
@@ -293,11 +296,12 @@ var/list/mind_ui_ID2type = list()
 
 /obj/abstract/mind_ui_element/proc/UpdateUIScreenLoc()
 	screen_loc = "[parent.x]:[offset_x + parent.offset_x],[parent.y]:[offset_y+parent.offset_y]"
+	layer = initial(layer) + parent.offset_layer
 
 /obj/abstract/mind_ui_element/proc/UpdateIcon(var/appear = FALSE)
 	return
 
-/obj/abstract/mind_ui_element/proc/String2Image(var/string,var/spacing=6,var/image_font='icons/ui/font_8x8.dmi',var/_color="#FFFFFF") // only supports numbers right now
+/obj/abstract/mind_ui_element/proc/String2Image(var/string,var/spacing=6,var/image_font='icons/ui/font_8x8.dmi',var/_color="#FFFFFF",var/_pixel_x = 0,var/_pixel_y = 0) // only supports numbers right now
 	if (!string)
 		return image(image_font,"")
 
@@ -307,6 +311,8 @@ var/list/mind_ui_ID2type = list()
 		I.pixel_x = (i - 1) * spacing
 		result.overlays += I
 	result.color = _color
+	result.pixel_x = _pixel_x
+	result.pixel_y = _pixel_y
 	return result
 
 /obj/abstract/mind_ui_element/proc/String2Maptext(var/string,var/font="Consolas",var/font_size="8pt",var/_color="#FFFFFF",var/_pixel_x = 0,var/_pixel_y = 0)

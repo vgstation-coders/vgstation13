@@ -234,7 +234,7 @@
 				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 				if (cult && !cult.CanConvert())
 					if (!blade || victim.isDead())
-						to_chat(user, "<span class='danger'>The cult has too many members already, \the [soul_receptacle] won't let you take their soul.</span>")
+						to_chat(user, "<span class='danger'>The cult has too many members already, \the [soul_receptacle] won't let you take their soul. Although you could bypass this restriction by sacrificing them at an Altar with this blade instead.</span>")
 					return
 
 	if (iscarbon(target))
@@ -502,6 +502,13 @@
 				newCultist.OnPostSetup()
 				newCultist.Greet(GREET_SOULSTONE)
 				newCultist.conversion["soulstone"] = user
+				if (!(shadeMob.mind in cult.previously_converted))
+					cult.previously_made_prisoner |= shadeMob.mind
+					var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+					if (shadeMob.mind in cult.previously_made_prisoner)
+						C.get_devotion(50, DEVOTION_TIER_4)//making someone prisoner already grants 250 devotion on top.
+					else
+						C.get_devotion(300, DEVOTION_TIER_4)
 
 		else
 			if (iscultist(shadeMob))
