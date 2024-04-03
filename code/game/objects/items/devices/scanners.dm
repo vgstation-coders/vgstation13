@@ -392,7 +392,7 @@ Subject's pulse: ??? BPM"})
 		message += "<span class='bnotice'><B>[bicon(container)] Results of [container] scan:</span></B>"
 	if(total_moles)
 		message += "<br>[human_standard && abs(pressure - ONE_ATMOSPHERE) > 10 ? "<span class='bad'>" : "<span class='notice'>"] Pressure: [round(pressure, 0.1)] kPa</span>"
-		
+
 		for (var/id in scanned.gas)
 			var/class = "notice"
 			var/moles = scanned[id]
@@ -417,6 +417,20 @@ Subject's pulse: ??? BPM"})
 	else
 		message += "<br><span class='warning'>No gasses detected[container && !istype(container, /turf) ? " in \the [container]." : ""]!</span>"
 	return message
+
+/obj/item/device/analyzer/wood
+	name = "wood analyzer"
+	desc = "Analyzes whether or not an object is wood."
+
+/obj/item/device/analyzer/wood/attack_self(mob/user as mob)
+	return
+
+/obj/item/device/analyzer/wood/afterattack(obj/O, mob/user as mob)
+	if(istype(O,/obj/item/stack/sheet/wood))
+		user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"Yep, it's wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows green.</span>")
+	else
+		user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"No, it's not wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows red.</span>")
+	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 
 /obj/item/device/mass_spectrometer
 	desc = "A hand-held mass spectrometer which identifies trace chemicals in a blood sample."

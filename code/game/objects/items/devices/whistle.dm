@@ -94,3 +94,14 @@
 
 	// ~ sound and cooldown ~ //
 	do_your_sound(user)
+
+/obj/item/device/hailer/lifeguard
+	name = "Lifeguard Hailer"
+	desc = "Used by sun-tanned lifeguards to stop people from running on the beach."
+
+/obj/item/device/hailer/lifeguard/say_your_thing()
+	if(emagged)
+		..()
+	else
+		var/alert = pick("NO RUNNING ON THE BEACH!","NO FOOD OR DRINKS ON THE BEACH!","SHORTS ARE REQURIED ON THE BEACH!", "NO SMOKING ON THE BEACH!")
+		return alert

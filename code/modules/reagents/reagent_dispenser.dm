@@ -277,6 +277,15 @@
 	. = ..()
 	reagents.add_reagent(FUEL, 1000)
 
+/obj/structure/reagent_dispensers/fueltank/bulk
+	name = "Bulk Welding Fuel Tank"
+	desc = "Massive welding fuel tank used to refill other welding fuel tanks."
+
+/obj/structure/reagent_dispensers/fueltank/bulk/New()
+	. = ..()
+	reagents.add_reagent(FUEL, 1000000)
+	transform *= 2 //haha big tank
+
 /obj/structure/reagent_dispensers/peppertank
 	name = "Pepper Spray Refiller"
 	desc = "Refill pepper spray canisters."
