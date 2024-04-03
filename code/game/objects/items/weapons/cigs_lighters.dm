@@ -208,6 +208,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	item_state = null
 	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
 	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
 	body_parts_covered = 0
 	var/list/unlit_attack_verb = list("prods", "pokes")
 	var/list/lit_attack_verb = list("burns", "singes")
