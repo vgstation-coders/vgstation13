@@ -149,6 +149,10 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	smoke.time_to_live = 10 SECONDS
 	smoke.start()
 
+/atom/proc/check_fire_protection()
+	if(fire_protection >= world.time)
+		return 1
+
 //charred overlay procs taken from Deity's food temperature overlays system (see food.dm)
 /atom/proc/process_charred_overlay()
 	if(thermal_mass)
@@ -303,7 +307,7 @@ var/global/list/image/charred_overlays = list()
 	QDEL_NULL(firelightdummy)
 
 /atom/proc/ignite()
-	if(fire_protection - world.time > 0)
+	if(check_fire_protection())
 		return 0
 
 	if(istype(loc, /mob)) //worn or held items don't ignite (for now >:^) )
@@ -401,7 +405,7 @@ var/global/list/image/charred_overlays = list()
 	var/obj/effect/foam/fire/W = locate() in contents
 	if(istype(W))
 		return 0
-	if(fire_protection - world.time > 0)
+	if(check_fire_protection())
 		return 0
 
 	var/datum/gas_mixture/air_contents = return_air()
@@ -424,7 +428,7 @@ var/global/list/image/charred_overlays = list()
 	return igniting
 
 /turf/ignite()
-	if(!flammable || !(fire_protection - world.time > 0))
+	if(!flammable || check_fire_protection())
 		return FALSE
 
 	var/in_fire = FALSE
@@ -568,7 +572,7 @@ var/global/list/image/charred_overlays = list()
 				if(istype(W))
 					firelevel -= 3
 					continue
-				if(enemy_tile.fire_protection > world.time)
+				if(enemy_tile.check_fire_protection())
 					firelevel -= 1.5
 					continue
 				//Spread the fire.
@@ -713,14 +717,14 @@ var/global/list/image/charred_overlays = list()
 		warning("check_recombustability being asked to check a [T.type] instead of /turf.")
 		return 0
 
-	if(T.flammable && T.fire_protection - world.time <= 0 && T.thermal_mass)
+	if(T.flammable && !T.check_fire_protection() && T.thermal_mass)
 		return 1
 
 	if(locate(/obj/effect/decal/cleanable/liquid_fuel) in T)
 		return 1
 
 	for(var/atom/A in T)
-		if(A.fire_protection - world.time <= 0)
+		if(!A.check_fire_protection)
 			if(A.flammable && A.thermal_mass)
 				return 1
 			if(A.reagents)
