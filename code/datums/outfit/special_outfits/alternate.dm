@@ -712,7 +712,7 @@
 		"Default" = list(
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/really_black,
-			slot_wear_suit_str = /obj/item/clothing/suit/wcoat
+			slot_wear_suit_str = /obj/item/clothing/suit/wcoat,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_head_str =  /obj/item/clothing/head/beret,
 			),
@@ -786,7 +786,7 @@
 
 /datum/outfit/wftr/post_equip(var/mob/living/carbon/human/H)
 	..()
-	var/obj/structure/reagent_dispensers/fueltank/bulk/B = new(get_turf(H))
+	new /obj/structure/reagent_dispensers/fueltank/bulk(get_turf(H))
 	H.put_in_hands(new /obj/item/weapon/reagent_containers/glass/bucket)
 
 /datum/outfit/historicalreenactor
@@ -834,7 +834,7 @@
 	var/obj/item/toy/gun/G = new /obj/item/toy/gun
 	G.name = "reenactment rifle"
 	G.desc = "A fake rifle used for historical reenactments."
+	G.icon_state = "mosinlarge"
+	G.item_state = "mosinlarge"
 	H.put_in_hands(G)
 	H.put_in_hands(new /obj/item/toy/ammo/gun)
-	icon_state = "mosinlarge"
-	item_state = "mosinlarge"
