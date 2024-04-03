@@ -26,6 +26,10 @@
 	desc = "A briefcase with a medical cross emblazoned on each side. It has a faintly sterile smell to it."
 	icon_state = "medbriefcase"
 
+/obj/item/weapon/storage/briefcase/insurance
+	name = "insurance briefcase"
+	desc = "A briefcase containing all the necessary tools for an insurance salesman."
+
 /obj/item/weapon/storage/briefcase/orderly/New()
 	..()
 	new /obj/item/weapon/cookiesynth/lollicheap(src)
@@ -41,6 +45,14 @@
 	new /obj/item/weapon/paper/demotion_key(src)
 	new /obj/item/weapon/paper/commendation_key(src)
 	new /obj/item/weapon/pen/NT(src)
+
+/obj/item/weapon/storage/briefcase/insurance/New()
+	..()
+	var/obj/item/weapon/folder/red/F = new /obj/item/weapon/folder/red(src)
+	F.name = "Plans and Subscriptions"
+	F.desc = "Inventory of all plan options and current policies."
+	new /obj/item/weapon/pen/NT(src)
+	dispense_cash(rand(10000,100000),src)
 
 /obj/item/weapon/storage/briefcase/attack(mob/living/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
@@ -75,7 +87,7 @@
 				else
 					H.eye_blurry += 3
 			if(H.stat < UNCONSCIOUS)
-				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")	
+				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")
 	return ..()
 
 /obj/item/weapon/storage/briefcase/MouseDropFrom(atom/over_object)

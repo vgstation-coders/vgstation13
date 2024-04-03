@@ -265,7 +265,9 @@
 	var/obj/item/stack/teeth/gold/T = new /obj/item/stack/teeth/gold
 	T.amount = 10
 	H.put_in_hands(T)
-
+	var/obj/item/weapon/book/occult/O = new /obj/item/weapon/book/occult
+	O.name = "The Big Book of British Smiles"
+	H.put_in_hands(O)
 
 /datum/outfit/managementconsultant
 	outfit_name = "Management Consultant"
@@ -413,10 +415,7 @@
 /datum/outfit/lifeguard/post_equip(var/mob/living/carbon/human/H)
 	..()
 	H.put_in_hands(new /obj/item/device/hailer/lifeguard)
-	var/obj/item/toy/gasha/skub/S = new /obj/item/toy/gasha/skub
-	S.name = "SkubCo Sunblock"
-	S.desc = "SkubCo does not guarantee use of Skub as sunblock prevents skin cancer."
-	H.put_in_hands(S)
+	H.put_in_hands(new /obj/item/device/megaphone)
 
 /datum/outfit/insurancesalesman
 	outfit_name = "Insurance Salesman"
@@ -471,10 +470,8 @@
 
 /datum/outfit/insurancesalesman/post_equip(var/mob/living/carbon/human/H)
 	..()
-	var/obj/item/weapon/folder/red/F = new /obj/item/weapon/folder/red
-	F.name = "Plans and Subscriptions"
-	F.desc = "Inventory of all plan options and current policies."
-	H.put_in_hands(F)
+	var/obj/item/weapon/storage/briefcase/insurance/B = new /obj/item/weapon/storage/briefcase/insurance
+	H.put_in_hands(B)
 
 /datum/outfit/cableguy
 
@@ -622,6 +619,12 @@
 		)
 	)
 
+	items_to_collect = list(
+		/obj/item/blueprints/construction_permit = null,
+		/obj/item/device/camera = null,
+		/obj/item/weapon/storage/photo_album = null,
+	)
+
 	pda_type = /obj/item/device/pda
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
@@ -715,14 +718,15 @@
 		)
 	)
 
+	items_to_collect = list(
+		/obj/item/weapon/storage/pill_bottle/mint/nano = null,
+		/obj/item/weapon/reagent_containers/glass/rag = null,
+		/obj/item/weapon/reagent_containers/spray/cleaner = null,
+	)
+
 	pda_type = /obj/item/device/pda
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
-
-/datum/outfit/bathroomattendant/post_equip(var/mob/living/carbon/human/H)
-	..()
-	H.put_in_hands(new /obj/item/weapon/storage/pill_bottle/mint/nano)
-	H.put_in_hands(new /obj/item/weapon/reagent_containers/glass/rag)
 
 /datum/outfit/wftr //DEBUG: add sprites
 	outfit_name = "Welding Fuel Tank Refiller"
@@ -818,4 +822,4 @@
 	G.icon_state = "mosinlarge"
 	G.item_state = "mosinlarge"
 	H.put_in_hands(G)
-	H.put_in_hands(new /obj/item/toy/ammo/gun)
+	H.put_in_hands(new /obj/item/weapon/sword/sabre)

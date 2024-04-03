@@ -103,5 +103,4 @@
 	if(emagged)
 		..()
 	else
-		var/alert = pick("NO RUNNING ON THE BEACH!","NO FOOD OR DRINKS ON THE BEACH!","SHORTS ARE REQURIED ON THE BEACH!", "NO SMOKING ON THE BEACH!")
-		return alert
+		return "HALT - BEACH VIOLATION!"
