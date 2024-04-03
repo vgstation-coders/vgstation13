@@ -401,7 +401,7 @@ var/global/list/image/charred_overlays = list()
 	var/obj/effect/foam/fire/W = locate() in contents
 	if(istype(W))
 		return 0
-	if(fire_protection - world.time <= 0)
+	if(fire_protection - world.time > 0)
 		return 0
 
 	var/datum/gas_mixture/air_contents = return_air()
@@ -424,7 +424,7 @@ var/global/list/image/charred_overlays = list()
 	return igniting
 
 /turf/ignite()
-	if(!flammable || !(fire_protection - world.time <= 0))
+	if(!flammable || !(fire_protection - world.time > 0))
 		return FALSE
 
 	var/in_fire = FALSE
@@ -568,7 +568,7 @@ var/global/list/image/charred_overlays = list()
 				if(istype(W))
 					firelevel -= 3
 					continue
-				if(enemy_tile.fire_protection > world.time-30)
+				if(enemy_tile.fire_protection > world.time)
 					firelevel -= 1.5
 					continue
 				//Spread the fire.
