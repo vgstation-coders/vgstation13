@@ -112,10 +112,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		fire_protection = world.time
 
 /atom/movable/firelightdummy
-	//this is a dummy that gets added to the vis_contents of a burning atom that can be a light source when its on fire so that it doesnt overwrite the light the atom might already be making
-	//ideally instead of this you could directly add multiple light source datums to a single atom that would all be processed by the lighting system nicely
-	//however, thats not how the lighting system currently works
-	//are you up to the challenge?
 	gender = PLURAL
 	name = "fire"
 	mouse_opacity = 0
@@ -333,7 +329,6 @@ var/global/list/image/charred_overlays = list()
 	var/atom/movable/AM = src
 	if(istype(AM))
 		firelightdummy = new (src)
-		AM.vis_contents += firelightdummy
 
 	burnSolidFuel()
 	burnLiquidFuel()
@@ -438,7 +433,6 @@ var/global/list/image/charred_overlays = list()
 	var/atom/movable/AM = src
 	if(istype(AM))
 		firelightdummy = new (src)
-		AM.vis_contents += firelightdummy
 
 	for(var/obj/effect/fire/F in src)
 		in_fire = TRUE
