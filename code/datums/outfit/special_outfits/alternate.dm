@@ -46,10 +46,6 @@
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
-/datum/outfit/doctor/post_equip(var/mob/living/carbon/human/H)
-	..()
-
-
 /datum/outfit/dogwalker
 	outfit_name = "Dog Walker"
 	associated_job = /datum/job/alternate/dogwalker
@@ -88,10 +84,6 @@
 	pda_type = /obj/item/device/pda
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
-
-/datum/outfit/dogwalker/post_equip(var/mob/living/carbon/human/H)
-	..()
-
 
 /datum/outfit/psychologist
 	outfit_name = "Psychologist"
@@ -141,10 +133,6 @@
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
-/datum/outfit/psychologist/post_equip(var/mob/living/carbon/human/H)
-	..()
-
-
 /datum/outfit/scubadiver
 	outfit_name = "Scuba Diver"
 	associated_job = /datum/job/alternate/scubadiver
@@ -184,10 +172,6 @@
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
-/datum/outfit/scubadiver/post_equip(var/mob/living/carbon/human/H)
-	..()
-
-
 /datum/outfit/plumber
 	outfit_name = "Plumber"
 	associated_job = /datum/job/alternate/plumber
@@ -226,9 +210,6 @@
 	pda_type = /obj/item/device/pda
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
-
-/datum/outfit/plumber/post_equip(var/mob/living/carbon/human/H)
-	..()
 
 
 /datum/outfit/dentist
@@ -340,7 +321,6 @@
 /datum/outfit/managementconsultant/post_equip(var/mob/living/carbon/human/H)
 	..()
 	H.put_in_hands(new /obj/item/weapon/book/manual/how_to_win_friends_and_influence_people_primer)
-
 
 /datum/outfit/weddingplanner
 	outfit_name = "Wedding Planner"
