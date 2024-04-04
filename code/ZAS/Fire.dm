@@ -191,7 +191,7 @@ var/global/list/image/charred_overlays = list()
 //Called on every obj/effect/fire/process()
 /atom/proc/burnSolidFuel()
 	//Don't burn the container until all reagents have been depleted via burnLiquidFuel().
-	if(reagents && !istype(/obj/item/weapon/reagent_containers/food)) //i am sorry
+	if(reagents && !istype(src, /obj/item/weapon/reagent_containers/food)) //i am sorry
 		return
 
 	if(!flammable)
