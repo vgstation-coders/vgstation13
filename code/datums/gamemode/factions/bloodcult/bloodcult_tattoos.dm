@@ -48,7 +48,7 @@ var/list/blood_communion = list()
 		C.blood_pool = TRUE
 
 /datum/cult_tattoo/bloodpool/Display()//Since that tattoo is now unlocked fairly early, better let cultists hide it easily by leaving the pool
-	var/datum/role/cultist/C = bearer
+	var/datum/role/cultist/C = iscultist(bearer)
 	if (C)
 		return C.blood_pool
 

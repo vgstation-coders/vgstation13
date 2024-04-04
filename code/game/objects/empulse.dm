@@ -60,7 +60,7 @@
 					var/mob/living/L = A
 					if (iscultist(L))
 						continue
-					else if (!L.isDead())
+					else if (L.client && !L.isDead())
 						var/datum/role/cultist/C = cultist.mind.GetRole(CULTIST)
 						C.get_devotion(50, DEVOTION_TIER_2)
 				A.emp_act(act)

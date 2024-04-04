@@ -205,7 +205,7 @@
 	icon = 'icons/ui/bloodcult/32x32.dmi'
 	icon_state = "devotion_counter"
 	offset_x = 192
-	offset_y = -96
+	offset_y = -110
 	layer = MIND_UI_BACK+0.5
 
 	hover_state = FALSE
