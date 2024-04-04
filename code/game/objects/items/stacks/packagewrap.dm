@@ -39,6 +39,8 @@
 		return
 	if(istype(target,/obj/machinery/autoprocessor/wrapping))
 		return
+	if(issilicon(user) && target.loc == user)
+		return
 	if(!is_type_in_list(target, cannot_wrap))
 		if(istype(target, /obj/item/weapon/storage))
 			to_chat(user, "<span class='notice'>You start wrapping \the [target] with \the [src].</span>")
