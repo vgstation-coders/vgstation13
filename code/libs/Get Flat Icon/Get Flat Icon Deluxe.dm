@@ -204,11 +204,11 @@ cons:
 	content_data = list(my_data)
 	var/list/underlays = to_sort:underlays
 	var/list/overlays = to_sort:overlays
-	for(var/image/underlay in underlays)
+	for(var/underlay in underlays)
 		var/list/L = get_content_image_datas(underlay,my_data, is_underlay = TRUE)
 		if (L)
 			content_data += L
-	for(var/image/overlay in overlays)
+	for(var/overlay in overlays)
 		var/list/L = get_content_image_datas(overlay,my_data)
 		if (L)
 			content_data += L
