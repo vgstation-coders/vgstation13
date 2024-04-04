@@ -417,6 +417,9 @@ var/global/list/image/charred_overlays = list()
 	var/igniting = 0
 
 	if(air_contents.check_combustability(src))
+		if(air_contents.check_combustability(src) == 2)
+			ignite()
+			igniting = 1
 		if((flammable || locate(/obj/effect/decal/cleanable/liquid_fuel) in src) && !on_fire)
 			ignite()
 			igniting = 1
@@ -744,9 +747,9 @@ var/global/list/image/charred_overlays = list()
 
 	if(gas[GAS_OXYGEN] && (gas[GAS_PLASMA] || gas[GAS_VOLATILE]))
 		if(QUANTIZE(molar_density(GAS_PLASMA) * ZAS_air_consumption_rate) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
-			return 1
+			return 2 //returns 2 if we're burning plasma or volatiles
 		if(QUANTIZE(molar_density(GAS_VOLATILE) * ZAS_air_consumption_rate) >= BASE_ZAS_FUEL_REQ / CELL_VOLUME)
-			return 1
+			return 2
 
 	for(var/atom/A in T)
 		if(A.flammable)
