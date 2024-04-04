@@ -422,7 +422,7 @@
 	if(density != old_density)
 		densityChanged()
 
-/turf/proc/AddDecal(const/image/decal)
+/turf/proc/AddDecal(var/image/decal)
 	if(!turfdecals)
 		turfdecals = new
 
@@ -492,7 +492,7 @@
 	for(var/dir in cardinal)
 		T = get_step(src, dir)
 		if(istype(T) && !T.density)
-			if(!LinkBlockedWithAccess(src, T, ID))
+			if(!LinkBlockedWithAccess(T, src, ID))
 				L.Add(T)
 	return L
 

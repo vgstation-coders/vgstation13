@@ -611,6 +611,19 @@ var/list/datum/stack_recipe/cloth_recipes_with_tool = list (
 	new_clothing.update_icon()
 	return R
 
+/* =========================================================================
+							WAX RECIPES
+========================================================================= */
+var/list/datum/stack_recipe/wax_recipes = list (
+	new/datum/stack_recipe/wax("candle",                           /obj/item/candle                            ),
+	)
+
+/datum/stack_recipe/wax/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/R)
+	R.color = S.color
+	if (R.color in colors_all)
+		R.name = "[colors_all[R.color]] [R.name]"
+	return R
+
 /* ========================================================================
 							LEATHER RECIPES
 ======================================================================== */

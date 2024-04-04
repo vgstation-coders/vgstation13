@@ -39,7 +39,7 @@
 					for(var/spell/targetspell in C.spell_list)
 						canAbsorb = TRUE
 						for(var/spell/holderspell in L.spell_list)
-							if(targetspell.user_type != USER_TYPE_WIZARD && targetspell.user_type != USER_TYPE_SPELLBOOK)
+							if(!holderspell.is_wizard_spell())
 								continue
 							if(targetspell.type == holderspell.type)
 								canAbsorb = FALSE
@@ -54,17 +54,18 @@
 						if(canAbsorb)
 							to_chat(target, "<span class='warning'>You feel the magical energy being drained from you!</span>")
 							to_chat(target, "<span class='warning'>You forget how to cast [targetspell.name]!</span>")
-							to_chat(holder, "<span class='notice'>You asborb the magical energies from your foe and have learned [targetspell.name]!</span>")
+							to_chat(holder, "<span class='notice'>You absorb the magical energies from your foe and have learned [targetspell.name]!</span>")
 							L.attack_log += text("\[[time_stamp()] <font color='orange'>[L.real_name] ([L.ckey]) absorbed the spell [targetspell.name] from [C.real_name] ([C.ckey]).</font>")
+							var/wizard_user = iswizard(L) //Wizards will steal and store it in their wizard spells
 							C.remove_spell(targetspell)
-							L.add_spell(targetspell)
+							L.add_spell(targetspell, iswizard = wizard_user)
 							if(!hasAbsorbed)
 								hasAbsorbed = TRUE
 					if(!hasAbsorbed)
 						to_chat(holder, "<span class='notice'>You find magical energy within your foe, but there is nothing new to learn.</span>")
 					if(iswizard(target))	//Wizards aren't wizards without magic! Dust their asses if they're a wizard
+						C.visible_message("<span class='sinister'>[C.real_name] dissolves in a burst of light!</span>")
 						target.dust()
-						L.visible_message("<span class='sinister'>[C.real_name] dissolves in a burst of light!</span>")
 				if(E)		//Remove portal effect if the absorbtion is cancelled early.
 					qdel(E)
 

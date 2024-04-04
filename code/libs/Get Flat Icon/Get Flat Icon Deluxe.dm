@@ -84,7 +84,7 @@ cons:
 			//making sure that our icon can turn
 			var/dir = data[GFI_DX_DIR]
 			if (dir != SOUTH) // south-facing atoms shouldn't pose any problem
-				var/icon_directions = get_icon_dir_count(data[GFI_DX_ICON],data[3])
+				var/icon_directions = get_icon_dir_count(data[GFI_DX_ICON],data[GFI_DX_STATE])
 				if (icon_directions == 1)
 					data[GFI_DX_DIR] = SOUTH // if the icon has only one direction we HAVE to face south
 				else if (icon_directions == 4)
@@ -204,11 +204,11 @@ cons:
 	content_data = list(my_data)
 	var/list/underlays = to_sort:underlays
 	var/list/overlays = to_sort:overlays
-	for (var/underlay in underlays)
+	for(var/underlay in underlays)
 		var/list/L = get_content_image_datas(underlay,my_data, is_underlay = TRUE)
 		if (L)
 			content_data += L
-	for (var/overlay in overlays)
+	for(var/overlay in overlays)
 		var/list/L = get_content_image_datas(overlay,my_data)
 		if (L)
 			content_data += L

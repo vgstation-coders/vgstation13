@@ -178,11 +178,6 @@
 		return FALSE
 	return ..()
 
-/datum/next_map/nerve
-	name = "Nerve Station"
-	path = "nervestation"
-	min_players = 20
-
 /datum/next_map/wheelstation
 	name = "Wheelstation"
 	path = "wheelstation"

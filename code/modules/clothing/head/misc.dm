@@ -30,6 +30,7 @@
 	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	siemens_coefficient = 0.9
+	vertical_offset = 1
 	wizard_garb = 5 //Treat this as a % chance to be a magic hat to start. It becomes TRUE/FALSE later.
 	var/timer
 
@@ -563,6 +564,7 @@
 	icon_state = "clownpiece"
 	item_state = "clownpiece"
 	species_fit = list(INSECT_SHAPED)
+	vertical_offset = 4
 
 /obj/item/clothing/head/headband
 	name = "head band"

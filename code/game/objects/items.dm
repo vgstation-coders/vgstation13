@@ -18,7 +18,7 @@
 	var/slot_flags = 0		//This is used to determine on which slots an item can fit.
 	var/clothing_flags = 0
 	var/obj/item/offhand/wielded = null
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	pressure_resistance = 5
 //	causeerrorheresoifixthis
 	var/obj/item/master = null//apparently used by device assemblies to track the object they are attached to.
@@ -87,8 +87,11 @@
 
 	var/is_cookvessel //If true, the item is a cooking vessel.
 
+	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
+
 /obj/item/New()
 	..()
+	fire_fuel = autoignition_temperature ? w_class : 0 //If the item has an autoignition temperature, use the size as the fuel amount. If not, provide no fuel amount.
 	for(var/path in actions_types)
 		new path(src)
 
@@ -220,6 +223,10 @@ var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/throw_impact(atom/impacted_atom, speed, mob/user)
 	..()
+	if(isliving(impacted_atom))
+		var/mob/living/L = impacted_atom
+		if(!L.tangibility)
+			return 1
 	if(isturf(impacted_atom))
 		var/turf/T = impacted_atom
 		if(objects_thrown_when_explode || (T.arcanetampered && T.arcanetampered != user))
@@ -428,13 +435,19 @@ var/global/objects_thrown_when_explode = FALSE
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
+
+	if(on_fire)
+		if(user.a_intent && user.a_intent == I_DISARM)
+			extinguish_with_hands(user)
+			return //don't pick it up immediately, you have to click it again after it's extinguished
+
 	if(can_pickup(user) && !user.put_in_active_hand(src))
 		forceMove(get_turf(user))
 
 	//transfers diseases between the mob and the item
 	disease_contact(user)
 
-	if(src.on_fire)
+	if(on_fire)
 		var/mob/living/L = user
 		L.visible_message("<span class='warning'>\The [src] burns [L]'s hands!</span>", "<span class='warning'>Your hands are burned by \the [src]!</span>")
 		L.drop_item(src, force_drop = 1)
@@ -1331,7 +1344,21 @@ var/global/objects_thrown_when_explode = FALSE
 	had_blood = TRUE
 	return TRUE //we applied blood to the item
 
-
+/obj/item/proc/copy_blood_from_item(var/obj/item/other_item)
+	virus2 = virus_copylist(other_item.virus2)
+	if (!other_item.blood_overlay)
+		return
+	blood_color = other_item.blood_color
+	blood_DNA = other_item.blood_DNA.Copy()
+	had_blood = TRUE
+	if(!blood_overlays["[type][icon_state]"])
+		set_blood_overlay()
+	if(!blood_overlay)
+		blood_overlay = blood_overlays["[type][icon_state]"]
+	else
+		overlays.Remove(blood_overlay)
+	blood_overlay.color = blood_color
+	overlays += blood_overlay
 
 var/global/list/image/blood_overlays = list()
 /obj/item/proc/set_blood_overlay() /* If your item needs to update its blood overlay when its icon_state changes, use this one. update_blood_overlay() is simply a helper proc for this one. */
@@ -1777,8 +1804,28 @@ var/global/list/image/blood_overlays = list()
 	if (is_open_container())
 		. = max(. , 0.5) //Even if it's perfectly insulating, if it's open then some heat can be exchanged.
 
-/obj/item/MiddleAltClick(var/mob/living/user)
+/obj/item/MiddleAltClick(var/mob/user)
+	extinguish_with_hands(user)
+
+/obj/item/proc/extinguish_with_hands(var/mob/user)
+	if(!isliving(user))
+		return
 	if(src.on_fire)
 		extinguish()
-		user.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src], burning your hand in the process.")
-		user.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
+		var/prot = 0
+
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(H.gloves)
+				var/obj/item/clothing/gloves/G = H.gloves
+				if(G.max_heat_protection_temperature)
+					prot = (G.max_heat_protection_temperature > 360)
+		else
+			prot = 1
+		var/datum/organ/external/active_hand_organ = user.get_active_hand_organ()
+		if(prot > 0 || (M_RESIST_HEAT in user.mutations) || active_hand_organ?.is_robotic())
+			user.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src].")
+			return
+		var/mob/living/L = user
+		L.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
+		L.visible_message("[user] snuffs out the burning [src].","You snuff out the burning [src], burning your hand in the process.")

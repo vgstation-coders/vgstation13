@@ -129,7 +129,7 @@ var/global/list/ghdel_profiling = list()
 		pixel_x = initialpixelx
 		pixel_y = initialpixely
 
-
+//xy: 1 if shakes horizontally, 2 if vertical, 3 if both
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
 	var/old_pixel_x = pixel_x
 	var/old_pixel_y = pixel_y
@@ -192,6 +192,7 @@ var/global/list/ghdel_profiling = list()
 				B.master.target = null
 		beams.len = 0
 	*/
+	remove_particles()
 	QDEL_NULL(firelightdummy)
 	..()
 
@@ -479,6 +480,11 @@ its easier to just keep the beam vertical.
 			to_chat(user, "<a href='?src=\ref[src];bug=\ref[bug]'>There's something hidden in there.</a>")
 		else if(isobserver(user) || prob(100 / (distance + 2)))
 			to_chat(user, "There's something hidden in there.")
+	if(isliving(user) && user.mind)
+		for(var/datum/role/R in get_list_of_elements(user.mind.antag_roles))
+			var/antag_text = R.role_examine_text_addition(src)
+			if(antag_text)
+				to_chat(user, "[antag_text]\n")
 	INVOKE_EVENT(src, /event/examined, "user" = user)
 
 /atom/Topic(href, href_list)
@@ -543,6 +549,8 @@ its easier to just keep the beam vertical.
 		clean_blood()
 	if (cleanliness >= CLEANLINESS_BLEACH)
 		color = ""
+	if (cleanliness >= CLEANLINESS_WATER)//I mean, not sure why we'd ever add a rank below water but, futur-proofing and all that jazz
+		extinguish()//Fire.dm
 
 //Called on every object in a shuttle which rotates
 /atom/proc/map_element_rotate(var/angle)
@@ -1064,7 +1072,7 @@ its easier to just keep the beam vertical.
 /atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
 	overlays -= moody_light
 	var/area/here = get_area(src)
-	if (here.dynamic_lighting)
+	if (here && here.dynamic_lighting)
 		moody_light = image(moody_icon, src, moody_state)
 		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 		moody_light.plane = LIGHTING_PLANE
@@ -1086,7 +1094,7 @@ its easier to just keep the beam vertical.
 	if (index in moody_lights)
 		overlays -= moody_lights[index]
 	var/area/here = get_area(src)
-	if (here.dynamic_lighting)
+	if (here && here.dynamic_lighting)
 		moody_light = image(moody_icon, src, moody_state)
 		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 		moody_light.plane = LIGHTING_PLANE

@@ -9,7 +9,7 @@
 	anchored = 1
 	density = 0
 	plane = ABOVE_HUMAN_PLANE
-	pass_flags = PASSTABLE | PASSGRILLE
+	pass_flags = PASSTABLE | PASSGRILLE | PASSRAILING
 	mouse_opacity = 1
 	var/energy = 0
 	var/obj/effect/biomass_controller/master = null

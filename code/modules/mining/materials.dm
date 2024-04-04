@@ -409,6 +409,16 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cc_per_sheet = CC_PER_SHEET_FABRIC
 	color = COLOR_LINEN
 
+/datum/material/wax
+	name="Wax"
+	id=MAT_WAX
+	value=0
+	oretype=null
+	sheettype=/obj/item/stack/sheet/wax
+	cointype=null
+	cc_per_sheet = CC_PER_SHEET_WAX
+	color = COLOR_BEESWAX
+
 /datum/material/brass
 	name = "Brass"
 	id = MAT_BRASS

@@ -206,7 +206,6 @@
 		ASSERT(istype(W, /obj/item/stack)) //in case someone adds a grille with a non-stackable item as a grille_material
 		var/obj/item/stack/stack = W
 		health = initial(health)
-		broken = 0
 		healthcheck()
 		user.visible_message("<span class='notice'>[user] repairs the [src] with [stack].</span>", \
 		"<span class='notice'>You repair the [src] with [stack].</span>")

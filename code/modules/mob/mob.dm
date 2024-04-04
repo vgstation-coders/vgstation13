@@ -239,6 +239,9 @@
 
 	update_colour(0)
 
+	register_event(/event/z_transition, src, nameof(src::update_multi_z_verbs()))
+	update_multi_z_verbs()
+
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
 		if(virtualhearer)
@@ -609,7 +612,6 @@
 
 //The list of slots by priority. equip_to_appropriate_slot() uses this list. Doesn't matter if a mob type doesn't have a slot.
 var/static/list/slot_equipment_priority = list( \
-		slot_wear_id,\
 		slot_wear_mask,\
 		slot_head,\
 		slot_shoes,\
@@ -617,6 +619,7 @@ var/static/list/slot_equipment_priority = list( \
 		slot_ears,\
 		slot_glasses,\
 		slot_belt,\
+		slot_wear_id,\
 		slot_s_store,\
 		slot_l_store,\
 		slot_r_store,\
@@ -648,7 +651,8 @@ Use this proc preferably at the end of an equipment loadout
 		return 0
 
 	var/list/backup_slots = list()
-	for(var/slot in slot_equipment_priority)
+	var/list/slots_to_use = W.quick_equip_priority | slot_equipment_priority
+	for(var/slot in slots_to_use)
 		if(!is_holding_item(W) && !override)
 			return 0
 		var/obj/item/S = get_item_by_slot(slot)
@@ -671,7 +675,8 @@ Use this proc preferably at the end of an equipment loadout
 	if(!istype(W))
 		return 0
 	var/openslot = 0
-	for(var/slot in slot_equipment_priority)
+	var/list/slots_to_use = W.quick_equip_priority | slot_equipment_priority
+	for(var/slot in slots_to_use)
 		if(W.mob_check_equip(src, slot, 1) == 1)
 			openslot = 1
 			break
@@ -907,7 +912,7 @@ Use this proc preferably at the end of an equipment loadout
 		//END HUMAN
 /mob/proc/reset_view(atom/A)
 	if (client)
-		if (istype(A, /atom/movable))
+		if (A)
 			client.perspective = EYE_PERSPECTIVE
 			client.eye = A
 		else
@@ -1630,17 +1635,17 @@ Use this proc preferably at the end of an equipment loadout
 		var/max_alpha = 0
 		for (var/key in dark_plane.alphas)
 			max_alpha = max(dark_plane.alphas[key], max_alpha)
-		animate(dark_plane, alpha = max_alpha, color = dark_plane.colours, time = 10)
+		animate(dark_plane, alpha = max_alpha, color = dark_plane.colours, time = 0)
 	else if (dark_plane)
-		animate(dark_plane, alpha = initial(dark_plane.alpha), color = dark_plane.colours, time = 10)
+		animate(dark_plane, alpha = initial(dark_plane.alpha), color = dark_plane.colours, time = 0)
 
 	if (self_vision)
 		if (isturf(loc))
 			var/turf/T = loc
 			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (master_plane.blend_mode == BLEND_MULTIPLY))
-				animate(self_vision, alpha = self_vision.target_alpha, time = 10)
+				animate(self_vision, alpha = self_vision.target_alpha, time = 0)
 			else
-				animate(self_vision, alpha = 0, time = 10)
+				animate(self_vision, alpha = 0, time = 0)
 
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
@@ -1838,10 +1843,14 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/dexterity_check()//can the mob use computers, guns, and other fine technologies
 	return FALSE
 
-/mob/proc/isTeleViewing(var/client_eye)
+/mob/proc/isTeleViewing(var/atom/client_eye)
 	if(istype(client_eye,/obj/machinery/camera))
 		return 1
 	if(istype(client_eye,/obj/item/projectile/rocket/nikita))
+		return 1
+	if(istype(client_eye,/turf/simulated/wall) && Adjacent(client_eye))
+		return 1
+	if(isvisiblespace(client_eye) && client_eye.x == src.x && client_eye.y == src.y)
 		return 1
 	return 0
 

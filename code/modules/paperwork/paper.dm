@@ -12,6 +12,7 @@
 	item_state = "paper"
 	throwforce = 0
 	w_class = W_CLASS_TINY
+	starting_materials = list(MAT_CARDBOARD = 40)
 	w_type = RECYK_WOOD
 	throw_range = 1
 	throw_speed = 1
@@ -19,7 +20,6 @@
 	pressure_resistance = 1
 	attack_verb = list("slaps")
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
 
 	var/info		//What's actually written on the paper.
 	var/info_links	//A different version of the paper which includes html links at fields and EOF

@@ -227,9 +227,12 @@ var/list/potential_bonus_items = list(
 			results = "The vox raiders didn't beat the previous record of [score_to_beat]."
 
 		for (var/datum/role/R in members)
-			to_chat(R.antag.current, "<span class='notice'>The raid is over. You'll go back to the shoal in a few minutes...</span>")
-			spawn (1 MINUTES)
-				qdel(R.antag.current)
+			if(get_area(R.antag.current) == end_area)
+				to_chat(R.antag.current, "<span class='notice'>The raid is over. You'll go back to the shoal in a few minutes...</span>")
+				spawn (1 MINUTES)
+					qdel(R.antag.current)
+			else
+				to_chat(R.antag.current, "<span class='notice'>The raid is over, but you were left behind by your skipjack. You're on your own now.</span>")
 
 /datum/faction/vox_shoal/proc/count_score(var/atom/O)
 	if (ishuman(O))

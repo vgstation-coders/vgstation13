@@ -58,6 +58,20 @@
 /datum/disease2/effect/hallucinations/activate(var/mob/living/mob)
 	mob.hallucination += 25
 
+/datum/disease2/effect/drunk
+	name = "Glasgow Syndrome"
+	desc = "Causes the infected to synthesize pure ethanol."
+	encyclopedia = "Without a cure, the infected's liver is sure to die, also effect strength increases the rate at which ethanol is synthesized."
+	stage = 3
+	badness = EFFECT_DANGER_HARMFUL
+	multiplier = 3
+	max_multiplier = 7
+
+/datum/disease2/effect/drunk/activate(var/mob/living/mob)
+	to_chat(mob, "<span class='notice'>You feel like you had one hell of a party!</span>")
+	if (mob.reagents.get_reagent_amount(GLASGOW) < multiplier*5)
+		mob.reagents.add_reagent(GLASGOW, multiplier*5)
+
 /datum/disease2/effect/giggle
 	name = "Uncontrolled Laughter Effect"
 	desc = "Gives the infected a sense of humor."
@@ -83,6 +97,7 @@
 		mob.emote("me",1,"vomits up a chicken egg!")
 		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
 		new eggspawn(get_turf(mob))
+
 
 /datum/disease2/effect/confusion
 	name = "Topographical Cretinism"

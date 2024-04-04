@@ -12,8 +12,6 @@
 
 	autoignition_temperature = AUTOIGNITION_PAPER
 
-	fire_fuel = 1
-
 /obj/item/weapon/paper/nano/New()
 	..()
 	pixel_y = rand(-8, 8) * PIXEL_MULTIPLIER

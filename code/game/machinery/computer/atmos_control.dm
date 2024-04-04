@@ -17,8 +17,8 @@ var/global/list/atmos_controllers = list()
 	var/list/filter=null
 	var/obj/item/weapon/card/id/log_in_id = null //the ID that's currently logged in
 	var/screen = ACA_SCREEN_DETAILSVIEW //the current screen in the UI
-	var/datum/airalarm_preset/selected_preset = null //stores the preset settings while they're being edited
-	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE
+	var/datum/airalarm_configuration/preset/selected_preset = null //stores the preset settings while they're being edited
+	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK
 
 	light_color = LIGHT_COLOR_CYAN
 
@@ -73,53 +73,24 @@ var/global/list/atmos_controllers = list()
 		nanomanager.update_uis(src)
 	return 1
 
-//largely copypasted from air alarms
-/obj/machinery/computer/atmoscontrol/proc/set_threshold(var/list/thresholds, var/threshold_name, var/index, var/value)
-	if (value<0)
-		thresholds[index] = -1.0
+// TODO: unify this with /obj/machinery/alarm/proc/set_threshold
+/obj/machinery/computer/atmoscontrol/proc/set_threshold(var/datum/airalarm_threshold/threshold, var/threshold_name, var/index, var/value)
+	if (value < 0)
+		value = -1.0
 	else if (threshold_name=="temperature" && value>5000)
-		thresholds[index] = 5000
+		value = 5000
 	else if (threshold_name=="pressure" && value>50*ONE_ATMOSPHERE)
-		thresholds[index] = 50*ONE_ATMOSPHERE
+		value = 50*ONE_ATMOSPHERE
 	else if (threshold_name!="temperature" && threshold_name!="pressure" && value>200)
-		thresholds[index] = 200
+		value = 200
 	else
 		value = round(value,0.01)
-		thresholds[index] = value
-	//blegh
-	if(index == 1)
-		if(thresholds[1] > thresholds[2])
-			thresholds[2] = thresholds[1]
-		if(thresholds[1] > thresholds[3])
-			thresholds[3] = thresholds[1]
-		if(thresholds[1] > thresholds[4])
-			thresholds[4] = thresholds[1]
-	if(index == 2)
-		if(thresholds[1] > thresholds[2])
-			thresholds[1] = thresholds[2]
-		if(thresholds[2] > thresholds[3])
-			thresholds[3] = thresholds[2]
-		if(thresholds[2] > thresholds[4])
-			thresholds[4] = thresholds[2]
-	if(index == 3)
-		if(thresholds[1] > thresholds[3])
-			thresholds[1] = thresholds[3]
-		if(thresholds[2] > thresholds[3])
-			thresholds[2] = thresholds[3]
-		if(thresholds[3] > thresholds[4])
-			thresholds[4] = thresholds[3]
-	if(index == 4)
-		if(thresholds[1] > thresholds[4])
-			thresholds[1] = thresholds[4]
-		if(thresholds[2] > thresholds[4])
-			thresholds[2] = thresholds[4]
-		if(thresholds[3] > thresholds[4])
-			thresholds[3] = thresholds[4]
+	threshold.adjust_threshold(value, index)
 
 /obj/machinery/computer/atmoscontrol/proc/apply_preset(var/presetname)
 	var/list/done_areas = list() //a little optimization to avoid needlessly repeating apply_mode()
-	for(var/obj/machinery/alarm/alarm in machines)
-		if(alarm.preset != presetname)
+	for(var/obj/machinery/alarm/alarm in air_alarms)
+		if(alarm.preset_key != presetname)
 			continue
 		if(alarm.rcon_setting == RCON_NO)
 			continue //no messing with alarms with no remote control
@@ -142,7 +113,7 @@ var/global/list/atmos_controllers = list()
 
 	var/list/done_areas = list() //a little optimization to avoid needlessly repeating apply_mode()
 	for(var/obj/machinery/alarm/alarm in machines)
-		if(alarm.preset != oldpreset)
+		if(alarm.preset_key != oldpreset)
 			continue
 		if(alarm.rcon_setting == RCON_NO)
 			continue //no messing with alarms with no remote control
@@ -155,8 +126,27 @@ var/global/list/atmos_controllers = list()
 		var/area/alarm_area = get_area(alarm)
 		if(alarm_area in done_areas)
 			continue
-		alarm.preset = newpreset
+		alarm.preset_key = newpreset
 		alarm.apply_preset(no_cycle_after, 1) //optionally cycle, propagate
+		done_areas += alarm_area
+
+/obj/machinery/computer/atmoscontrol/proc/mass_set_mode(var/mode)
+	if(!mode)
+		return
+
+	var/list/done_areas = list() //a little optimization to avoid needlessly repeating apply_mode()
+	for(var/obj/machinery/alarm/alarm in air_alarms)
+		if(alarm.mode == mode)
+			continue
+		if(alarm.rcon_setting == RCON_NO)
+			continue //no messing with alarms with no remote control
+		if(! ( emagged || usr.hasFullAccess() || (log_in_id&&(alarm.check_access(log_in_id)))))
+			continue
+		var/area/alarm_area = get_area(alarm)
+		if(alarm_area in done_areas)
+			continue
+		alarm.mode = mode
+		alarm.apply_mode()
 		done_areas += alarm_area
 
 /obj/machinery/computer/atmoscontrol/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
@@ -186,7 +176,7 @@ var/global/list/atmos_controllers = list()
 		data["name"] = current.name
 	else
 		var/list/alarms=list()
-		for(var/obj/machinery/alarm/alarm in sortNames(machines)) // removing sortAtom because nano updates it just enough for the lag to happen
+		for(var/obj/machinery/alarm/alarm in sortNames(air_alarms)) // removing sortAtom because nano updates it just enough for the lag to happen
 			if(log_in_id)
 				if(!emagged && !user.hasFullAccess() && !alarm.check_access(log_in_id))
 					continue //The logged in ID has no access to this card, and the user isn't an all-access user (eg. admin ghost, AI, etc.)
@@ -208,40 +198,12 @@ var/global/list/atmos_controllers = list()
 
 	var/list/tmplist = list()
 	for(var/preset in airalarm_presets) //this is a global list defined in alarm.dm
-		var/datum/airalarm_preset/preset_datum = airalarm_presets[preset]
-		tmplist[++tmplist.len] = list(
-			"name" = preset_datum.name,
-			"desc" = preset_datum.desc,
-			"core" = preset_datum.core,
-			"oxygen" = preset_datum.oxygen,
-			"nitrogen" = preset_datum.nitrogen,
-			"carbon_dioxide" = preset_datum.carbon_dioxide,
-			"plasma" = preset_datum.plasma,
-			"n2o" = preset_datum.n2o,
-			"other" = preset_datum.other,
-			"pressure" = preset_datum.pressure,
-			"temperature" = preset_datum.temperature,
-			"target_temperature" = preset_datum.target_temperature,
-			"scrubbers_gases" = preset_datum.scrubbers_gases
-		)
+		var/datum/airalarm_configuration/preset/preset_datum = airalarm_presets[preset]
+		tmplist[++tmplist.len] = preset_datum.nanoui_preset_data()
 	data["presets"] = tmplist
 
 	if(selected_preset)
-		data["selected_preset"] = list(
-			"name" = selected_preset.name,
-			"desc" = selected_preset.desc,
-			"core" = selected_preset.core,
-			"oxygen" = selected_preset.oxygen,
-			"nitrogen" = selected_preset.nitrogen,
-			"carbon_dioxide" = selected_preset.carbon_dioxide,
-			"plasma" = selected_preset.plasma,
-			"n2o" = selected_preset.n2o,
-			"other" = selected_preset.other,
-			"pressure" = selected_preset.pressure,
-			"temperature" = selected_preset.temperature,
-			"target_temperature" = selected_preset.target_temperature,
-			"scrubbers_gases" = selected_preset.scrubbers_gases
-		)
+		data["selected_preset"] = selected_preset.nanoui_preset_data()
 		data["selected_preset_name"] = selected_preset.name
 	else
 		data["selected_preset"] = null
@@ -254,6 +216,17 @@ var/global/list/atmos_controllers = list()
 		screen = ACA_SCREEN_DETAILSVIEW //this dumb hack stops unauthorized cards from seeing shit they shouldn't
 
 	data["aca_screen"] = screen //aca_screen so we don't conflict with air alarms, which already use screen
+
+	var/list/gas_datums=list()
+	for(var/gas_id in XGM.gases)
+		var/datum/gas/gas_datum = XGM.gases[gas_id]
+		var/list/datum_data = list()
+		datum_data["id"] = gas_id
+		datum_data["name"] = gas_datum.name
+		datum_data["short_name"] = gas_datum.short_name || gas_datum.name
+		gas_datums += list(datum_data)
+	data["gas_datums"]=gas_datums
+
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		ui = new(user, src, ui_key, "atmos_control.tmpl", name, 900, 800)
@@ -264,6 +237,7 @@ var/global/list/atmos_controllers = list()
 		ui.set_show_map(FALSE)
 		ui.set_initial_data(data)
 		ui.open()
+
 	ui.set_auto_update(!!current)
 
 //a bunch of this is copied from atmos alarms
@@ -310,7 +284,8 @@ var/global/list/atmos_controllers = list()
 	if(href_list["select_preset"])
 		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
 			return 1
-		selected_preset = new(airalarm_presets[href_list["select_preset"]]) //copy the existing preset for editing
+		var/datum/airalarm_configuration/preset/select = airalarm_presets[href_list["select_preset"]]
+		selected_preset = select.deep_preset_copy() // We make a copy to be edited locally.
 		return 1
 
 	if(href_list["add_preset"])
@@ -328,15 +303,22 @@ var/global/list/atmos_controllers = list()
 			to_chat(usr, "<span class='warning'>Invalid description.</span>")
 			return 1
 		//use the settings from whatever was previously selected to add this new one, but make sure it's not core (ie. can be deleted)
-		selected_preset = new(selected_preset, name, desc, FALSE)
-		airalarm_presets[name] = new /datum/airalarm_preset(selected_preset) //we'll put a copy of 'er in instead of the real deal
+		if(selected_preset)
+			selected_preset = selected_preset.deep_preset_copy()
+		else
+			var/datum/airalarm_configuration/preset/human = airalarm_presets["Human"]
+			selected_preset = human.deep_preset_copy()
+		selected_preset.name = name
+		selected_preset.desc = desc
+		selected_preset.core = FALSE
+		airalarm_presets[name] = selected_preset.deep_preset_copy()
 		return 1
 
 	if(href_list["save_preset_setting"])
 		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
 			return 1
 		var/name = selected_preset.name
-		airalarm_presets[name] = new /datum/airalarm_preset(selected_preset) //make a copy
+		airalarm_presets[name] = selected_preset.deep_preset_copy()
 		//re-apply preset on all air alarms that have it enabled
 		apply_preset(name)
 		to_chat(usr, "<span class='notice'>Preset saved and reapplied to alarms.</span>")
@@ -353,17 +335,24 @@ var/global/list/atmos_controllers = list()
 		if(!newname || newname == "")
 			to_chat(usr, "<span class='warning'>Invalid name.</span>")
 			return 1
+		if(newname in airalarm_presets)
+			to_chat(usr, "<span class='warning'>Preset with that name already exists.</span>")
+			return 1
 		var/newdesc = trimcenter(trim(stripped_input(usr,"Enter the description for the preset (max 50 characters).", "Preset name",""),1,50))
 		if(!newdesc || newdesc == "")
 			to_chat(usr, "<span class='warning'>Invalid description.</span>")
 			return 1
 		//add the fresh preset to the list first
-		airalarm_presets[newname] = new /datum/airalarm_preset(selected_preset, newname, newdesc)
+		var/datum/airalarm_configuration/preset/new_preset = selected_preset.deep_preset_copy()
+		new_preset.name = newname
+		new_preset.desc = newdesc
+		airalarm_presets[newname] = new_preset
+
 		//transfer all the alarms from old preset to new preset
 		var/oldname = selected_preset.name
 		switch_preset(oldname, newname)
 		//delete the old preset and set the new one as selected
-		selected_preset = new /datum/airalarm_preset(selected_preset, newname, newdesc)
+		selected_preset = new_preset.deep_preset_copy()
 		airalarm_presets.Remove(oldname)
 		return 1
 
@@ -377,7 +366,8 @@ var/global/list/atmos_controllers = list()
 		//put every alarm that used to be on this preset to the Human preset
 		var/oldname = selected_preset.name
 		switch_preset(oldname, "Human")
-		selected_preset = new /datum/airalarm_preset(airalarm_presets["Human"]) //set the current Human preset as active
+		var/datum/airalarm_configuration/preset/human_preset = airalarm_presets["Human"]
+		selected_preset = human_preset.deep_preset_copy()
 		airalarm_presets.Remove(oldname)
 		return 1
 
@@ -392,13 +382,13 @@ var/global/list/atmos_controllers = list()
 		var/name = selected_preset.name
 		switch(name)
 			if("Human")
-				selected_preset = new /datum/airalarm_preset/human
+				selected_preset = new /datum/airalarm_configuration/preset/human
 			if("Vox")
-				selected_preset = new /datum/airalarm_preset/vox
+				selected_preset = new /datum/airalarm_configuration/preset/vox
 			if("Coldroom")
-				selected_preset = new /datum/airalarm_preset/coldroom
+				selected_preset = new /datum/airalarm_configuration/preset/coldroom
 			if("Plasmaman")
-				selected_preset = new /datum/airalarm_preset/plasmaman
+				selected_preset = new /datum/airalarm_configuration/preset/plasmaman
 		return 1
 
 	if(href_list["apply_preset_batch"])
@@ -406,7 +396,7 @@ var/global/list/atmos_controllers = list()
 			return 1
 		//save preset
 		var/newname = selected_preset.name
-		airalarm_presets[newname] = new /datum/airalarm_preset(selected_preset) //make a copy
+		airalarm_presets[newname] = selected_preset.deep_preset_copy()
 		var/oldname = input("Select the preset you want to switch over from.\n\nAll air alarms currently on this preset will be switched over to the [newname] preset.", "Select preset", newname) in airalarm_presets
 		if(!oldname)
 			to_chat(usr, "<span class='warning'>Invalid selection!</span>")
@@ -418,54 +408,72 @@ var/global/list/atmos_controllers = list()
 	if(href_list["set_preset_setting"])
 		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
 			return 1
-		switch(href_list["set_preset_setting"])
-			if("oxygen", "nitrogen", "carbon_dioxide", "plasma", "n2o", "other", "pressure", "temperature")
-				//this could be better...
-				var/selected = null
+		if(href_list["set_preset_setting"] == "target_temperature")
+			var/max_temperature = MAX_TARGET_TEMPERATURE - T0C //these defines should come from code\game\machinery\alarm.dm
+			var/min_temperature = MIN_TARGET_TEMPERATURE - T0C
+			var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
+			if(input_temperature==null)
+				return 1
+			if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
+				to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
+			else
+				input_temperature = input_temperature + T0C
+			selected_preset.target_temperature = input_temperature
+			return 1
+		else if(href_list["set_preset_setting"] == "scrubbed_gases")
+			var/gas = href_list["gas"]
+			if(gas)
+				// This "toggle" isn't greatest for performance... but it should only occur once per user input.
+				if(!selected_preset.scrubbed_gases.Remove(gas))
+					selected_preset.scrubbed_gases += gas
+			return 1
+		else
+			//this could be better...
+			var/datum/airalarm_threshold/selected = null
+			var/target_name = href_list["set_preset_setting"]
+			if(target_name in selected_preset.gas_thresholds)
+				selected = selected_preset.gas_thresholds[target_name]
+			else
 				switch(href_list["set_preset_setting"])
-					if("oxygen")
-						selected = selected_preset.oxygen
-					if("nitrogen")
-						selected = selected_preset.nitrogen
-					if("carbon_dioxide")
-						selected = selected_preset.carbon_dioxide
-					if("plasma")
-						selected = selected_preset.plasma
-					if("n2o")
-						selected = selected_preset.n2o
 					if("other")
-						selected = selected_preset.other
+						selected = selected_preset.other_gas_threshold
 					if("pressure")
-						selected = selected_preset.pressure
+						selected = selected_preset.pressure_threshold
 					if("temperature")
-						selected = selected_preset.temperature
-				if(selected == null)
-					return 1 //this should never happen
-				var/env = href_list["set_preset_setting"]
-				var/index = text2num(href_list["index"])
-				var/list/thresholds = list("lower bound", "low warning", "high warning", "upper bound")
-				var/newval = input("Enter [thresholds[index]] for [env]", "Alarm triggers", selected[index]) as num|null
-				if (isnull(newval))
-					return 1
-				set_threshold(selected, href_list["set_preset_setting"], index, newval)
+						selected = selected_preset.temperature_threshold
+			if(selected == null)
 				return 1
-			if("target_temperature")
-				var/max_temperature = MAX_TARGET_TEMPERATURE - T0C //these defines should come from code\game\machinery\alarm.dm
-				var/min_temperature = MIN_TARGET_TEMPERATURE - T0C
-				var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
-				if(input_temperature==null)
-					return 1
-				if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
-					to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
-				else
-					input_temperature = input_temperature + T0C
-				selected_preset.target_temperature = input_temperature
+			var/env = href_list["set_preset_setting"]
+			var/index = text2num(href_list["index"])
+			var/list/thresholds = list("lower bound", "low warning", "high warning", "upper bound")
+			var/newval = input("Enter [thresholds[index]] for [env]", "Alarm triggers", selected.get_index(index)) as num|null
+			if (isnull(newval))
 				return 1
-			if("scrubbers_gases")
-				var/gas = href_list["gas"]
-				if(gas && (gas in selected_preset.scrubbers_gases))
-					selected_preset.scrubbers_gases[gas] = !selected_preset.scrubbers_gases[gas] //toggle scrubbing for it
-				return 1
+			set_threshold(selected, href_list["set_preset_setting"], index, newval)
+			return 1
+
+	if(href_list["set_mass_mode"])
+		if(!(log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess()))
+			return 1
+
+		var/list/scrubmodes = list(
+		"SCRUBBING MODE" = AALARM_MODE_SCRUBBING,
+		"REPLACEMENT MODE" = AALARM_MODE_REPLACEMENT,
+		"PANIC SIPHON MODE" = AALARM_MODE_PANIC,
+		"AIR CYCLE MODE" = AALARM_MODE_CYCLE,
+		"FILL MODE" = AALARM_MODE_FILL,
+		"OFF MODE" = AALARM_MODE_OFF
+		)
+		var/choice = input("Select the scrubber-mode you wish to set all air alarms to.\n\nAll air alarms will be set to this mode.", "Select mode", null) as null|anything in scrubmodes
+		if(choice)
+			var/newmode = scrubmodes[choice]
+			var/areyouforreal = alert(usr, "Are you sure you wish to change the mode of every air alarm to [choice]?",,"Yes", "No") == "Yes" ? 1 : 0
+			if(areyouforreal && ((log_in_id && (access_ce in log_in_id.GetAccess()) || emagged || usr.hasFullAccess())))
+				if(!usr.incapacitated() && (Adjacent(usr) || issilicon(usr)) && !(stat & (FORCEDISABLE|NOPOWER) && usr.dexterity_check()))
+					mass_set_mode(newmode)
+
+
+
 
 	if(current)
 		if(log_in_id)
@@ -478,45 +486,40 @@ var/global/list/atmos_controllers = list()
 			if(current.rcon_setting == RCON_NO)
 				return 1
 			var/device_id = href_list["id_tag"]
-			switch(href_list["command"])
-				if( "power",
-					"adjust_external_pressure",
-					"set_external_pressure",
-					"set_internal_pressure",
-					"checks",
-					"co2_scrub",
-					"tox_scrub",
-					"n2o_scrub",
-					"o2_scrub",
-					"n2_scrub",
-					"panic_siphon",
-					"scrubbing")
-					var/val
-					if(href_list["val"])
-						val=text2num(href_list["val"])
-					else
-						var/newval = input("Enter new value") as num|null
-						if(isnull(newval))
+			var/command = href_list["command"]
+			if(command in XGM.gases)
+				var/val=text2num(href_list["val"])
+				current.send_signal(device_id, list(command+"_scrub" = val ))
+			else
+				switch(href_list["command"])
+					if( "power",
+						"set_external_pressure",
+						"set_internal_pressure",
+						"checks",
+						"panic_siphon",
+						"scrubbing",
+						"direction")
+						var/val
+						if(href_list["val"])
+							val=text2num(href_list["val"])
+						else
+							var/newval = input("Enter new value") as num|null
+							if(isnull(newval))
+								return 1
+							if(href_list["command"]=="set_external_pressure")
+								newval = clamp(newval, 0, 1000+ONE_ATMOSPHERE)
+							val = newval
+
+						current.send_signal(device_id, list(href_list["command"] = val ) )
+
+					if("set_threshold")
+						var/env = href_list["env"]
+						var/threshold = text2num(href_list["var"])
+						var/list/thresholds = list("lower bound", "low warning", "high warning", "upper bound")
+						var/newval = input("Enter [thresholds[threshold]] for [env]", "Alarm triggers", 0) as num|null
+						if (isnull(newval))
 							return 1
-						if(href_list["command"]=="set_external_pressure")
-							if(newval>1000+ONE_ATMOSPHERE)
-								newval = 1000+ONE_ATMOSPHERE
-							if(newval<0)
-								newval = 0
-						val = newval
-
-					current.send_signal(device_id, list(href_list["command"] = val ) )
-
-				if("set_threshold")
-					var/env = href_list["env"]
-					var/threshold = text2num(href_list["var"])
-					var/list/selected = current.TLV[env]
-					var/list/thresholds = list("lower bound", "low warning", "high warning", "upper bound")
-					var/newval = input("Enter [thresholds[threshold]] for [env]", "Alarm triggers", selected[threshold]) as num|null
-					if (isnull(newval))
-						return 1
-					current.set_threshold(env, threshold, newval, 1)
-					return 1
+						current.set_threshold(env, threshold, newval, 1)
 		if(href_list["reset_thresholds"])
 			if(current.rcon_setting == RCON_NO)
 				return 1
@@ -539,6 +542,24 @@ var/global/list/atmos_controllers = list()
 			current.set_alarm(0)
 			return 1
 
+		if(href_list["enable_override"])
+			if(current.rcon_setting == RCON_NO)
+				return 1
+			var/area/this_area = get_area(current)
+			this_area.doors_overridden = TRUE
+			this_area.UpdateFirelocks()
+			current.update_icon()
+			return 1
+
+		if(href_list["disable_override"])
+			if(current.rcon_setting == RCON_NO)
+				return 1
+			var/area/this_area = get_area(current)
+			this_area.doors_overridden = FALSE
+			this_area.UpdateFirelocks()
+			current.update_icon()
+			return 1
+
 		if(href_list["mode"])
 			if(current.rcon_setting == RCON_NO)
 				return 1
@@ -556,22 +577,22 @@ var/global/list/atmos_controllers = list()
 			if(current.rcon_setting == RCON_NO)
 				return 1
 			if(href_list["preset"] in airalarm_presets)
-				current.preset = href_list["preset"]
+				current.preset_key = href_list["preset"]
 				current.apply_preset(!current.cycle_after_preset)
 			return 1
 
 		if(href_list["temperature"])
 			if(current.rcon_setting == RCON_NO)
 				return 1
-			var/list/selected = current.TLV["temperature"]
+			var/datum/airalarm_threshold/temperature_threshold = current.config.temperature_threshold
 			var/max_temperature
 			var/min_temperature
 			if(!current.locked)
 				max_temperature = MAX_TARGET_TEMPERATURE - T0C //these defines should come from code\game\machinery\alarm.dm
 				min_temperature = MIN_TARGET_TEMPERATURE - T0C
 			else
-				max_temperature = selected[3] - T0C
-				min_temperature = selected[2] - T0C
+				max_temperature = temperature_threshold.max_1() - T0C
+				min_temperature = temperature_threshold.min_1() - T0C
 			var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
 			if(input_temperature==null)
 				return 1

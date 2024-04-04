@@ -1,7 +1,7 @@
 
 // Allows you to monitor messages that passes the server.
 
-
+var/list/message_monitors = list()
 
 
 /obj/machinery/computer/message_monitor
@@ -30,8 +30,26 @@
 	var/obj/item/device/pda/customrecepient = null
 	var/customjob		= "Admin"
 	var/custommessage 	= "This is a test, please ignore."
+	var/switchboard_columns = 5
+	var/switchboard_namelength = 5
+	var/obj/landline/linking = null
+	var/obj/item/telephone/switchboard/switchboard_headset = null
+	var/switchboard_sound = 'sound/items/cable_plug.mp3'
+	var/switchboard_sound2 = 'sound/items/cable_unplug.mp3'
 
 	light_color = LIGHT_COLOR_GREEN
+
+
+/obj/machinery/computer/message_monitor/New()
+	..()
+	switchboard_headset = new /obj/item/telephone/switchboard (src)
+	message_monitors += src
+	
+/obj/machinery/computer/message_monitor/Destroy()
+	message_monitors -= src
+	if(switchboard_headset)
+		qdel(switchboard_headset)
+	..()
 
 
 /obj/machinery/computer/message_monitor/attackby(obj/item/weapon/O as obj, mob/living/user as mob)
@@ -94,17 +112,17 @@
 	if(auth)
 
 		dat += {"<h4><dd><A href='?src=\ref[src];auth=1'>&#09;<font color='green'>\[Authenticated\]</font></a>&#09;/
-			Server Power: <A href='?src=\ref[src];active=1'>[src.linkedServer && src.linkedServer.is_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</a></h4>"}
+			Server Power: <A href='?src=\ref[src];active=1'>[src.linkedServer && src.linkedServer.is_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</a>"}
+		dat += {"  Landline auto-routing: <A href='?src=\ref[src];toggleLandlines=1'>[src.linkedServer && src.linkedServer.landlines_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</a></h4>"}
 	else
-
 		dat += {"<h4><dd><A href='?src=\ref[src];auth=1'>&#09;<font color='red'>\[Unauthenticated\]</font></a>&#09;/
-			Server Power: <u>[src.linkedServer && src.linkedServer.is_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</u></h4>"}
+			Server Power: <u>[src.linkedServer && src.linkedServer.is_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</u>"}
+		dat += {"  Landline auto-routing: [src.linkedServer && src.linkedServer.landlines_functioning() ? "<font color='green'>\[On\]</font>":"<font color='red'>\[Off\]</font>"]</h4>"}
+	
 	if(hacking || emagged)
 		screen = 2
-	else if(!auth || !linkedServer || (linkedServer.stat & (NOPOWER|BROKEN|FORCEDISABLE)))
-		if(!linkedServer || (linkedServer.stat & (NOPOWER|BROKEN|FORCEDISABLE)))
-			message = noserver
-		screen = 0
+	if(!linkedServer || (linkedServer.stat & (NOPOWER|BROKEN|FORCEDISABLE)))
+		message = noserver
 
 	switch(screen)
 		//Main menu
@@ -131,7 +149,9 @@
 				dat += "<dd><A href='?src=\ref[src];hack=1'><i><font color='Red'>*&@#. Bruteforce Key</font></i></font></a><br></dd>"
 			else
 				dat += "<br>"
-
+			dat += "<hr><A href='?src=\ref[src];switchboard=1'> Landline Switchboard</a><br>"
+			//TODO add exclamation marks here if someone's calling
+			
 			//Bottom message
 			if(!auth)
 				dat += "<br><hr><dd><span class='notice'>Please authenticate with the server in order to show additional options.</span>"
@@ -246,6 +266,41 @@
 				dat += {"<tr><td width = '5%'><center><A href='?src=\ref[src];deleter=\ref[rc]' style='color: rgb(255,0,0)'>X</a></center></td><td width='15%'>[rc.send_dpt]</td>
 				<td width='15%'>[rc.rec_dpt]</td><td width='300px'>[rc.message]</td><td width='15%'>[rc.stamp]</td><td width='15%'>[rc.id_auth]</td><td width='15%'>[rc.priority]</td></tr>"}
 			dat += "</table>"
+		if(5) //manual switchboard
+			var/current_button_num = 1
+			dat += "<table>"
+			dat += "<tr>"
+			for(var/obj/machinery/requests_console/RC in requests_consoles)
+				var/shortname_end = RC.department_short ? RC.department_short : RC.department
+				shortname_end = copytext(shortname_end,1,switchboard_namelength-1)
+				var/shortname = RC.master_department_short + "-" + shortname_end
+				var/callconnector
+				if(RC.landline.calling)
+					callconnector = "<A href='?src=\ref[src];stopCall=\ref[RC.landline]'>x</A>"
+				else
+					if(linking && RC.landline != linking)
+						callconnector = "<A href='?src=\ref[src];manualCall=\ref[RC.landline]'>o</A>"
+					else
+						callconnector = "<A href='?src=\ref[src];setLink=\ref[RC.landline]'> </A>"
+					
+				var/b = RC.landline.get_status()
+				if(b)
+					shortname = "<A href='?src=\ref[src];setCurrentLine=\ref[RC.landline]'><font color=[b]>[shortname]</font></A>"
+				dat += "<td align=\"right\"><tt>[shortname]\[[callconnector]\]</tt></td>" //thanks no. 455311247
+				current_button_num += 1
+				if(current_button_num > switchboard_columns)
+					dat += "</tr><tr>"
+					current_button_num = 1
+			dat += "</tr>"
+			dat += "</table>"
+			var/currentline = "null"
+			if(switchboard_headset && switchboard_headset.linked_landline)
+				var/obj/machinery/requests_console/RC = switchboard_headset.linked_landline.attached_to
+				if(RC)
+					currentline = RC.master_department_short + "-" + copytext(RC.department,1,switchboard_namelength-1)
+			currentline = "<A href='?src=\ref[src];clearCurrentLine=1'>[currentline]</a>"
+			dat += "<br>Currently plugged to line: [currentline]"
+			dat += "<hr><br><A href='?src=\ref[src];back=1'>Back</a>"
 
 
 	dat += "</body>"
@@ -295,6 +350,10 @@
 		if (href_list["active"])
 			if(auth)
 				linkedServer.disabled = !linkedServer.disabled
+		//toggle automatic landline connections
+		if (href_list["toggleLandlines"])
+			if(auth)
+				linkedServer.automatic_landlines = !linkedServer.automatic_landlines
 		//Find a server
 		if (href_list["find"])
 			if(message_servers && message_servers.len > 1)
@@ -487,10 +546,72 @@
 					src.screen = 4
 
 //			to_chat(usr, href_list["select"])
-
+		if (href_list["switchboard"])
+			src.screen = 5
+		if (href_list["stopCall"])
+			var/obj/landline/L = locate(href_list["stopCall"])
+			if(L)
+				if(L.calling)
+					L.calling.last_call_log += text("call disconnected by operator<BR>")
+					L.calling.calling = null
+					if(L.calling.linked_phone)
+						playsound(L.calling.linked_phone, switchboard_sound2, 100, 1)
+				L.last_call_log += text("call disconnected by operator<BR>")
+				if(L.linked_phone)
+					playsound(L.linked_phone, switchboard_sound2, 100, 1)	
+				L.calling = null
+			updateUsrDialog()
+			playsound(src, switchboard_sound2, 100, 1)
+		if (href_list["manualCall"])
+			var/obj/landline/L = locate(href_list["manualCall"])
+			if(L && linking && (L != linking))
+				if(L.calling || linking.calling)
+					return
+				L.calling = linking
+				linking.calling = L
+				L.ring_loop()
+				linking.ring_loop()
+				var/obj/machinery/requests_console/L_console = L.attached_to
+				var/obj/machinery/requests_console/linking_console = linking.attached_to
+				L.last_call_log += text("connected to [linking_console.department] by operator<BR>")
+				linking.last_call_log += text("connected to [L_console.department] by operator<BR>")
+				if(L.calling.linked_phone)
+					playsound(L.calling.linked_phone, switchboard_sound, 100, 1)
+				if(L.linked_phone)
+					playsound(L.linked_phone, switchboard_sound, 100, 1)
+				playsound(src, switchboard_sound, 100, 1)
+				linking = FALSE
+		if (href_list["setLink"])
+			var/obj/landline/L = locate(href_list["setLink"])
+			if(!L || linking)
+				return
+			linking = L
+			playsound(src, switchboard_sound, 100, 1)
+			updateUsrDialog()
 		if (href_list["back"])
 			src.screen = 0
-
+		if (href_list["clearCurrentLine"])
+			if(switchboard_headset && switchboard_headset.linked_landline)
+				var/obj/landline/LL = switchboard_headset.linked_landline
+				if(LL.linked_phone)
+					playsound(LL.linked_phone, switchboard_sound2, 100, 1)
+				if(LL.calling && LL.calling.linked_phone)
+					playsound(LL.calling.linked_phone, switchboard_sound2, 100, 1)
+				LL.listening_operators -= src.switchboard_headset
+				switchboard_headset.linked_landline = null
+				playsound(src, switchboard_sound2, 100, 1)
+			updateUsrDialog()
+		if (href_list["setCurrentLine"])
+			var/obj/landline/L = locate(href_list["setCurrentLine"])
+			if(L && switchboard_headset)
+				L.listening_operators += switchboard_headset
+				switchboard_headset.linked_landline = L
+				playsound(src, switchboard_sound, 100, 1)
+				if(L.linked_phone)
+					playsound(L.linked_phone, switchboard_sound, 100, 1)
+				if(L.calling && L.calling.linked_phone)
+					playsound(L.calling.linked_phone, switchboard_sound, 100, 1)
+			updateUsrDialog()
 	return src.attack_hand(usr)
 
 

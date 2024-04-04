@@ -39,33 +39,35 @@
 				left_part = ""
 			if("directives")
 				left_part = directives()
-			if("pdamessage")
+			if(SOFT_DM)
 				left_part = pdamessage()
-			if("buy")
+			if(SOFT_BY)
 				left_part = downloadSoftware()
-			if("manifest")
+			if(SOFT_UN)
+				left_part = uninstallSoftware()
+			if(SOFT_CM)
 				left_part = softwareManifest()
-			if("medicalsupplement")
+			if(SOFT_MS)
 				left_part = softwareMedicalRecord()
-			if("securitysupplement")
+			if(SOFT_SS)
 				left_part = softwareSecurityRecord()
-			if("translator")
+			if(SOFT_UT)
 				left_part = softwareTranslator()
-			if("atmosensor")
+			if(SOFT_AS)
 				left_part = softwareAtmo()
-			if("wirejack")
+			if(SOFT_WJ)
 				left_part = softwareDoor()
-			if("chemsynth")
+			if(SOFT_CS)
 				left_part = softwareChem()
-			if("foodsynth")
+			if(SOFT_FS)
 				left_part = softwareFood()
-			if("signaller")
+			if(SOFT_RS)
 				left_part = softwareSignal()
-			if("shielding")
+			if(SOFT_RT)
 				left_part = softwareShield()
-			if("flashlight")
+			if(SOFT_FL)
 				left_part = softwareLight()
-			if("holomap")
+			if(SOFT_HM)
 				left_part = softwareHolomap()
 
 	//usr << browse_rsc('windowbak.png')		// This has been moved to the mob's Login() proc
@@ -117,7 +119,6 @@
 
 /mob/living/silicon/pai/Topic(href, href_list)
 	. = ..()
-
 	if(href_list["priv_msg"])	// Admin-PMs were triggering the interface popup. Hopefully this will stop it.
 		return
 	var/soft = href_list["software"]
@@ -128,7 +129,7 @@
 		subscreen = text2num(sub)
 	switch(soft)
 		// Purchasing new software
-		if("buy")
+		if(SOFT_BY)
 			if(subscreen == 1)
 				var/target = href_list["buy"]
 				if(available_software.Find(target))
@@ -137,7 +138,7 @@
 						ram -= cost
 						software.Add(target)
 					else
-						temp = "Insufficient RAM available."
+						temp = "Insufficient RAM available. Consider uninstalling unnecessary software."
 				else
 					temp = "Trunk <TT> \"[target]\"</TT> not found."
 
@@ -148,7 +149,7 @@
 		if("image")
 			card.setEmotion()
 
-		if("signaller")
+		if(SOFT_RS)
 
 			if(href_list["send"])
 
@@ -186,7 +187,7 @@
 						return 0
 				spawn CheckDNA(M, src)
 
-		if("pdamessage")
+		if(SOFT_DM)
 			if(!isnull(pda))
 				var/datum/pda_app/messenger/app = locate(/datum/pda_app/messenger) in pda.applications
 				if(app)
@@ -202,7 +203,7 @@
 						app.create_message(src, target)
 
 		// Accessing medical records
-		if("medicalsupplement")
+		if(SOFT_MS)
 			if(!medHUD)
 				apply_hud_by_type(/datum/visioneffect/medical)
 			medHUD = TRUE
@@ -219,7 +220,7 @@
 								M = E
 						medicalActive1 = R
 						medicalActive2 = M
-		if("securitysupplement")
+		if(SOFT_SS)
 			if(!secHUD)
 				apply_hud_by_type(/datum/visioneffect/security/arrest)
 				apply_hud_by_type(/datum/visioneffect/job)
@@ -237,26 +238,26 @@
 								M = E
 						securityActive1 = R
 						securityActive2 = M
-		if("translator")
+		if(SOFT_UT)
 			if(href_list["toggle"])
 				universal_speak = !universal_speak
 				universal_understand = !universal_understand
-		if("wirejack")
+		if(SOFT_WJ)
 			if(href_list["cancel"])
 				hacktarget = null
-		if("chemsynth")
+		if(SOFT_CS)
 			if(href_list["chem"])
 				if(!get_holder_of_type(loc, /mob))
 					to_chat(src, "<span class='warning'>You must have a carrier to inject with chemicals!</span>")
-				else if(chargeloop("chemsynth"))
+				else if(chargeloop(SOFT_CS))
 					var/mob/M = get_holder_of_type(loc, /mob)
 					if(M) //Sanity
 						M.reagents.add_reagent(href_list["chem"], 15)
 						playsound(loc, 'sound/effects/bubbles.ogg', 50, 1)
 				else
 					to_chat(src, "<span class='warning'>Charge interrupted.</span>")
-		if("foodsynth")
-			if(href_list["food"] && chargeloop("foodsynth"))
+		if(SOFT_FS)
+			if(href_list["food"] && chargeloop(SOFT_FS))
 				var/foodType = href_list["food"]
 				var/found = FALSE
 				for (var/name in synthable_default_food)
@@ -270,18 +271,18 @@
 					if(M)
 						M.put_in_hands(F)
 					playsound(loc, 'sound/machines/foodsynth.ogg', 50, 1)
-		if("flashlight")
+		if(SOFT_FL)
 			if(href_list["toggle"])
 				lighted = !lighted
 				if(lighted)
 					card.set_light(4) //Equal to flashlight
 				else
 					card.set_light(0)
-		if("pps")
+		if(SOFT_PS)
 			if(!pps_device)
 				pps_device = new(src)
 			pps_device.attack_self(src)
-		if("holomap")
+		if(SOFT_HM)
 			if(href_list["switch_target"])
 				if(holo_target == initial(holo_target))
 					holo_target = "show_user"
@@ -293,11 +294,45 @@
 					holomap_device.toggleHolomap(M)
 			if(href_list["show_map"])
 				holomap_device.toggleHolomap(src)
+
+		if(SOFT_UN)
+			if(href_list["cancel"])
+				uninstallprogress = -1
+			if(subscreen == 1)
+				var/target = href_list[SOFT_UN]
+				if(software.Find(target))
+					var/cost = available_software[target]
+					uninstallprogress = 0 //when canceled or not uninstalling it sits at -1. needs to be 0 or more for the uninstall loop to proceed.
+					if(uninstall_loop(cost))//uninstall operation must finish before refunding RAM
+						ram+=cost
+						if(screen == target) //if current screen is our target, send them to the uninstall screen.
+							screen = SOFT_UN
+						if(target==SOFT_FL)
+							lighted = FALSE
+							card.set_light(0)
+						if(target==SOFT_PS)
+							qdel(pps_device)
+							pps_device = null
+						if(target==SOFT_HM)
+							qdel(holomap_device)
+							holomap_device = null
+						if(target==SOFT_MS)//huds
+							remove_hud_by_type(/datum/visioneffect/medical)
+							medHUD = FALSE
+						if(target==SOFT_SS)//huds
+							remove_hud_by_type(/datum/visioneffect/security/arrest)
+							remove_hud_by_type(/datum/visioneffect/job)
+							secHUD = FALSE
+						software.Remove(target)
+					uninstallprogress = -1
+				else
+					temp = "Trunk <TT> \"[target]\"</TT> not found."
+
+
 	paiInterface()		 // So we'll just call the update directly rather than doing some default checks
 	return
 
-// MENUS
-
+//MENUS
 /mob/living/silicon/pai/proc/softwareMenu()			// Populate the right menu
 	var/dat = ""
 
@@ -314,46 +349,49 @@
 	dat += "<b>Basic</b> <br>"
 	for(var/s in software)
 		if(s == SOFT_CM)
-			dat += "<a href='byond://?src=\ref[src];software=manifest;sub=0'>Crew Manifest</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_CM];sub=0'>Crew Manifest</a> <br>"
 		if(s == SOFT_DM)
-			dat += "<a href='byond://?src=\ref[src];software=pdamessage;sub=0'>Digital Messenger</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_DM];sub=0'>Digital Messenger</a> <br>"
 		if(s == SOFT_RS)
-			dat += "<a href='byond://?src=\ref[src];software=signaller;sub=0'>Remote Signaller</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_RS];sub=0'>Remote Signaller</a> <br>"
 		if(s == SOFT_AS)
-			dat += "<a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Atmospheric Sensor</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_AS];sub=0'>Atmospheric Sensor</a> <br>"
 		if(s == SOFT_FL)
-			dat += "<a href='byond://?src=\ref[src];software=flashlight;sub=0'>Brightness Enhancer</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_FL];sub=0'>Brightness Enhancer</a> <br>"
 		if(s == SOFT_RT)
-			dat += "<a href='byond://?src=\ref[src];software=shielding;sub=0'>Redundant Threading</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_RT];sub=0'>Redundant Threading</a> <br>"
 	dat += "<br>"
 
 	//Standard
 	dat += "<b>Standard</b> <br>"
 	for(var/s in software)
 		if(s == SOFT_MS)
-			dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Medical Package</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_MS];sub=0'>Medical Package</a> <br>"
 		if(s == SOFT_SS)
-			dat += "<a href='byond://?src=\ref[src];software=securitysupplement;sub=0'>Security Package</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_SS];sub=0'>Security Package</a> <br>"
 		if(s == SOFT_WJ)
-			dat += "<a href='byond://?src=\ref[src];software=wirejack;sub=0'>Wire Jack</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_WJ];sub=0'>Wire Jack</a> <br>"
 		if(s == SOFT_UT)
-			dat += "<a href='byond://?src=\ref[src];software=translator;sub=0'>Universal Translator</a>[(universal_understand) ? "<font color=#55FF55>�</font>" : "<font color=#FF5555>�</font>"] <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_UT];sub=0'>Universal Translator</a>[(universal_understand) ? "<font color=#55FF55>�</font>" : "<font color=#FF5555>�</font>"] <br>"
 		if(s == SOFT_CS)
-			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0'>Chemical Synthesizer</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_CS];sub=0'>Chemical Synthesizer</a> <br>"
 		if(s == SOFT_FS)
-			dat += "<a href='byond://?src=\ref[src];software=foodsynth;sub=0'>Nutrition Synthesizer</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_FS];sub=0'>Nutrition Synthesizer</a> <br>"
 	dat += "<br>"
 
 	// Navigation
 	dat += "<b>Navigation</b> <br>"
 	for(var/s in software)
 		if(s == SOFT_PS)
-			dat += "<a href='byond://?src=\ref[src];software=pps;sub=0'>pAI Positioning System</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_PS];sub=0'>pAI Positioning System</a> <br>"
 		if(s == SOFT_HM)
-			dat += "<a href='byond://?src=\ref[src];software=holomap;sub=0'>Holomap Viewer</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_HM];sub=0'>Holomap Viewer</a> <br>"
 	dat += {"<br>
 		<br>
-		<a href='byond://?src=\ref[src];software=buy;sub=0'>Download additional software</a>"}
+		<a href='byond://?src=\ref[src];software=[SOFT_BY];sub=0'>Download additional software</a>"}
+	dat += {"<br>
+		<br>
+		<a href='byond://?src=\ref[src];software=[SOFT_UN];sub=0'>Uninstall software</a>"}
 	return dat
 
 
@@ -368,13 +406,51 @@
 		if(!software.Find(s))
 			var/cost = available_software[s]
 			var/displayName = uppertext(s)
-			dat += "<a href='byond://?src=\ref[src];software=buy;sub=1;buy=[s]'>[displayName]</a> ([cost]) <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_BY];sub=1;buy=[s]'>[displayName]</a> ([cost]) <br>"
 		else
 			var/displayName = lowertext(s)
 			dat += "[displayName] (Download Complete) <br>"
 	dat += "</p>"
 	return dat
 
+
+/mob/living/silicon/pai/proc/uninstallSoftware()
+	if(uninstallprogress<0) //currently not uninstalling software
+		var/dat = ""
+		dat += {"<h2>CentComm pAI Module Local Software</h2><br>
+			<pre>Remaining Available Memory: [ram]</pre><br>
+			<p style=\"text-align:center\"><b>Currently installed modules.</b><br>"}
+		for(var/s in software)
+			var/cost = available_software[s]
+			var/displayName = uppertext(s)
+			if(!cost)
+				continue
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_UN];sub=1;uninstall=[s]'>[displayName]</a> ([cost]) <br>"
+			dat += "<font color='blue'>Estimated Uninstall Time: ([cost*2]) seconds: </font><br>"
+		dat += "<font color='red'> WARNING: The uninstallation process must complete before allocated RAM can be released. During uninstallation no further sofware can be uninstalled. The duration is typically 2 seconds per unit RAM. </font>"
+		dat += "</p>"
+		return dat
+	//during an uninstall.
+	else
+		var/dat = {"<h3>Uninstalling</h3>: "}
+		dat += "... [uninstallprogress]% complete.<br>"
+		dat += "<a href='byond://?src=\ref[src];software=[SOFT_UN];cancel=1;sub=0'>Cancel</a> <br>"
+		//paiInterface()
+		return dat
+
+/mob/living/silicon/pai/proc/uninstall_loop(var/cost)
+	var/duration = cost*2 //2 seconds per unit RAM
+	while(uninstallprogress < 100)
+		if(uninstallprogress<0) //if canceled by the PAI, this becomes negative and the loop returns false here
+			return 0
+		uninstallprogress += round((1/duration)*100,1)  //store and calculate the value in percentages. easier to display.
+		uninstallprogress = min(100,uninstallprogress) //Never go above 100
+		if(uninstallprogress >= 100)
+			to_chat(src, "<span class='notice'>Software uninstallation complete!</span>")
+			return 1
+		if(screen == SOFT_UN) // Update our view, if appropriate
+			paiInterface()
+		sleep(1 SECONDS)
 
 /mob/living/silicon/pai/proc/directives()
 	var/dat = ""
@@ -422,20 +498,20 @@
 	dat += "<h3>Remote Signaller</h3><br><br>"
 	dat += {"<B>Frequency/Code</B> for signaler:<BR>
 	Frequency:
-	<A href='byond://?src=\ref[src];software=signaller;freq=-10;'>-</A>
-	<A href='byond://?src=\ref[src];software=signaller;freq=-2'>-</A>
+	<A href='byond://?src=\ref[src];software=[SOFT_RS];freq=-10;'>-</A>
+	<A href='byond://?src=\ref[src];software=[SOFT_RS];freq=-2'>-</A>
 	[format_frequency(sradio.frequency)]
-	<A href='byond://?src=\ref[src];software=signaller;freq=2'>+</A>
-	<A href='byond://?src=\ref[src];software=signaller;freq=10'>+</A><BR>
+	<A href='byond://?src=\ref[src];software=[SOFT_RS];freq=2'>+</A>
+	<A href='byond://?src=\ref[src];software=[SOFT_RS];freq=10'>+</A><BR>
 
 	Code:
-	<A href='byond://?src=\ref[src];software=signaller;code=-5'>-</A>
-	<A href='byond://?src=\ref[src];software=signaller;code=-1'>-</A>
+	<A href='byond://?src=\ref[src];software=[SOFT_RS];code=-5'>-</A>
+	<A href='byond://?src=\ref[src];software=[SOFT_RS];code=-1'>-</A>
 	[sradio.code]
-	<A href='byond://?src=\ref[src];software=signaller;code=1'>+</A>
-	<A href='byond://?src=\ref[src];software=signaller;code=5'>+</A><BR>
+	<A href='byond://?src=\ref[src];software=[SOFT_RS];code=1'>+</A>
+	<A href='byond://?src=\ref[src];software=[SOFT_RS];code=5'>+</A><BR>
 
-	<A href='byond://?src=\ref[src];software=signaller;send=1'>Send Signal</A><BR>"}
+	<A href='byond://?src=\ref[src];software=[SOFT_RS];send=1'>Send Signal</A><BR>"}
 	return dat
 
 // Crew Manifest
@@ -451,11 +527,11 @@
 /mob/living/silicon/pai/proc/softwareMedicalRecord()
 	var/dat = ""
 	if(subscreen == 0)
-		dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=2'>Host Bioscan</a><br>"
+		dat += "<a href='byond://?src=\ref[src];software=[SOFT_MS];sub=2'>Host Bioscan</a><br>"
 		dat += "<h3>Medical Records</h3><HR>"
 		if(!isnull(data_core.general))
 			for(var/datum/data/record/R in sortRecord(data_core.general))
-				dat += text("<A href='?src=\ref[];med_rec=\ref[];software=medicalsupplement;sub=1'>[]: []<BR>", src, R, R.fields["id"], R.fields["name"])
+				dat += text("<A href='?src=\ref[];med_rec=\ref[];software=[SOFT_MS];sub=1'>[]: []<BR>", src, R, R.fields["id"], R.fields["name"])
 		//dat += text("<HR><A href='?src=\ref[];screen=0;softFunction=medical records'>Back</A>", src)
 	if(subscreen == 1)
 		dat += "<CENTER><B>Medical Record</B></CENTER><BR>"
@@ -468,22 +544,22 @@
 			dat += text("<BR>\n<CENTER><B>Medical Data</B></CENTER><BR>\nBlood Type: <A href='?src=\ref[];field=b_type'>[]</A><BR>\nDNA: <A href='?src=\ref[];field=b_dna'>[]</A><BR>\n<BR>\nMinor Disabilities: <A href='?src=\ref[];field=mi_dis'>[]</A><BR>\nDetails: <A href='?src=\ref[];field=mi_dis_d'>[]</A><BR>\n<BR>\nMajor Disabilities: <A href='?src=\ref[];field=ma_dis'>[]</A><BR>\nDetails: <A href='?src=\ref[];field=ma_dis_d'>[]</A><BR>\n<BR>\nAllergies: <A href='?src=\ref[];field=alg'>[]</A><BR>\nDetails: <A href='?src=\ref[];field=alg_d'>[]</A><BR>\n<BR>\nCurrent Diseases: <A href='?src=\ref[];field=cdi'>[]</A> (per disease info placed in log/comment section)<BR>\nDetails: <A href='?src=\ref[];field=cdi_d'>[]</A><BR>\n<BR>\nImportant Notes:<BR>\n\t<A href='?src=\ref[];field=notes'>[]</A><BR>\n<BR>\n<CENTER><B>Comments/Log</B></CENTER><BR>", src, medicalActive2.fields["b_type"], src, medicalActive2.fields["b_dna"], src, medicalActive2.fields["mi_dis"], src, medicalActive2.fields["mi_dis_d"], src, medicalActive2.fields["ma_dis"], src, medicalActive2.fields["ma_dis_d"], src, medicalActive2.fields["alg"], src, medicalActive2.fields["alg_d"], src, medicalActive2.fields["cdi"], src, medicalActive2.fields["cdi_d"], src, medicalActive2.fields["notes"])
 		else
 			dat += "<pre>Requested medical record not found.</pre><BR>"
-		dat += text("<BR>\n<A href='?src=\ref[];software=medicalsupplement;sub=0'>Back</A><BR>", src)
+		dat += text("<BR>\n<A href='?src=\ref[];software=[SOFT_MS];sub=0'>Back</A><BR>", src)
 	if(subscreen == 2)
 		dat += {"<h3>Medical Analysis Suite</h3><br>
-				 <h4>Host Bioscan</h4><br>
-				"}
+				 <h4>Host Bioscan</h4>"}
 		var/mob/living/M = loc
 		if(!istype(M, /mob/living))
 			while (!istype(M, /mob/living))
 				M = M.loc
 				if(istype(M, /turf))
 					temp = "Error: No biological host found. <br>"
-					dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Return to Records</a><br>"
+					dat += "<a href='byond://?src=\ref[src];software=[SOFT_MS];sub=0'>Return to Records</a><br>"
 					subscreen = 0
 					return dat
+				dat += "<a href='byond://?src=\ref[src];software=[SOFT_MS];sub=2'>Update Scan</a><br>"
 				dat += healthanalyze(M, src, TRUE)
-		dat += "<br/><a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Return to Records</a><br>"
+		dat += "<br/><a href='byond://?src=\ref[src];software=[SOFT_MS];sub=0'>Return to Records</a><br>"
 	return dat
 
 // Security Records
@@ -493,7 +569,7 @@
 		dat += "<h3>Security Records</h3><HR>"
 		if(!isnull(data_core.general))
 			for(var/datum/data/record/R in sortRecord(data_core.general))
-				dat += text("<A href='?src=\ref[];sec_rec=\ref[];software=securitysupplement;sub=1'>[]: []<BR>", src, R, R.fields["id"], R.fields["name"])
+				dat += text("<A href='?src=\ref[];sec_rec=\ref[];software=[SOFT_SS];sub=1'>[]: []<BR>", src, R, R.fields["id"], R.fields["name"])
 	if(subscreen == 1)
 		dat += "<h3>Security Record</h3>"
 		if ((istype(securityActive1, /datum/data/record) && data_core.general.Find(securityActive1)))
@@ -509,7 +585,7 @@
 
 		else
 			dat += "<pre>Requested security record not found,</pre><BR>"
-		dat += text("<BR>\n<A href='?src=\ref[];software=securitysupplement;sub=0'>Back</A><BR>", src)
+		dat += text("<BR>\n<A href='?src=\ref[];software=[SOFT_SS];sub=0'>Back</A><BR>", src)
 	return dat
 
 // Universal Translator
@@ -517,7 +593,7 @@
 	var/dat = {"<h3>Universal Translator</h3><br>
 				When enabled, this device will automatically convert all spoken and written language into a format that any known recipient can understand.<br><br>
 				The device is currently [ (universal_understand) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br>
-				<a href='byond://?src=\ref[src];software=translator;sub=0;toggle=1'>Toggle Device</a><br>
+				<a href='byond://?src=\ref[src];software=[SOFT_UT];sub=0;toggle=1'>Toggle Device</a><br>
 				"}
 	return dat
 
@@ -526,7 +602,7 @@
 	var/dat = {"<h3>Facial Recognition Suite</h3><br>
 				When enabled, this package will scan all viewable faces and compare them against the known criminal database, providing real-time graphical data about any detected persons of interest.<br><br>
 				The package is currently [ (secHUD) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br>
-				<a href='byond://?src=\ref[src];software=securityhud;sub=0;toggle=1'>Toggle Package</a><br>
+				<a href='byond://?src=\ref[src];software=[SOFT_SS_HUD];sub=0;toggle=1'>Toggle Package</a><br>
 				"}
 	return dat
 
@@ -563,7 +639,7 @@
 					dat += "OTHER: [round(unknown_level)]%<br>"
 			dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 
-	dat += {"<a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Refresh Reading</a> <br>
+	dat += {"<a href='byond://?src=\ref[src];software=[SOFT_AS];sub=0'>Refresh Reading</a> <br>
 		<br>"}
 	return dat
 
@@ -577,7 +653,7 @@ Target Machine: "}
 	else
 		dat += "<font color=#55FF55>[hacktarget.name]</font> <br>"
 		dat += "... [hackprogress]% complete.<br>"
-		dat += "<a href='byond://?src=\ref[src];software=wirejack;cancel=1;sub=0'>Cancel</a> <br>"
+		dat += "<a href='byond://?src=\ref[src];software=[SOFT_WJ];cancel=1;sub=0'>Cancel</a> <br>"
 	return dat
 
 /mob/living/silicon/pai/proc/hackloop(var/obj/machinery/M)
@@ -603,18 +679,18 @@ Target Machine: "}
 			hacktarget = null
 			playsound(loc, 'sound/machines/ding.ogg', 50, 1)
 			return 1
-		sleep(10)			// Update every 1 second
+		sleep(1 SECONDS)			// Update every 1 second
 
 /mob/living/silicon/pai/proc/softwareChem()
 	var/dat = "<h3>Chemical Synthesizer</h3>"
 	if(!charge)
 		dat += "Default Chemicals:<br>"
 		for(var/chem in synthable_default_chems)
-			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=[synthable_default_chems[chem]]'>[chem]</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_CS];sub=0;chem=[synthable_default_chems[chem]]'>[chem]</a> <br>"
 		if(SOFT_MS in software)
 			dat += "<br>Medical Supplement Chemicals:<br>"
 			for(var/chem in synthable_medical_chems)
-				dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=[synthable_medical_chems[chem]]'>[chem]</a> <br>"
+				dat += "<a href='byond://?src=\ref[src];software=[SOFT_CS];sub=0;chem=[synthable_medical_chems[chem]]'>[chem]</a> <br>"
 	else
 		dat += "Charging... [charge]u ready.<br><br>Deploying at 15u."
 	return dat
@@ -624,7 +700,7 @@ Target Machine: "}
 	if(!charge)
 		dat += "Available Culinary Deployments:<br>"
 		for(var/grub in synthable_default_food)
-			dat += "<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=[synthable_default_food[grub]]'>[grub]</a> <br>"
+			dat += "<a href='byond://?src=\ref[src];software=[SOFT_FS];sub=0;food=[synthable_default_food[grub]]'>[grub]</a> <br>"
 	else
 		dat += "Charging... [round(charge*100/15)]% ready.<br><br>Deploying at 100%."
 	return dat
@@ -643,7 +719,7 @@ Target Machine: "}
 		else
 			charge = 0
 			return 0
-		sleep(10)
+		sleep(1 SECONDS)
 
 // EMP Shielding, just a description
 /mob/living/silicon/pai/proc/softwareShield()
@@ -657,7 +733,7 @@ Target Machine: "}
 /mob/living/silicon/pai/proc/softwareLight()
 	var/dat = "<h3>Brightness Enhancer</h3>"
 	dat += "Backlight enhancement by increased local thermal generation.<br><br>"
-	dat += "Lighting [ (lighted) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br> <a href='byond://?src=\ref[src];software=flashlight;sub=0;toggle=1'>Toggle Light</a><br>"
+	dat += "Lighting [ (lighted) ? "<font color=#55FF55>en" : "<font color=#FF5555>dis" ]abled.</font><br> <a href='byond://?src=\ref[src];software=[SOFT_FL];sub=0;toggle=1'>Toggle Light</a><br>"
 	return dat
 
 // Digital Messenger
@@ -669,14 +745,14 @@ Target Machine: "}
 	if(!message_app)
 		dat += "<b>The pAI has no PDA messenger initialised, please report this as an issue. You should not see this.</b>"
 		return
-	dat += {"<b>Signal/Receiver Status:</b> <A href='byond://?src=\ref[src];software=pdamessage;toggler=1'>
+	dat += {"<b>Signal/Receiver Status:</b> <A href='byond://?src=\ref[src];software=[SOFT_DM];toggler=1'>
 	[(message_app.toff) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br>
-	<b>Ringer Status:</b> <A href='byond://?src=\ref[src];software=pdamessage;ringer=1'>
+	<b>Ringer Status:</b> <A href='byond://?src=\ref[src];software=[SOFT_DM];ringer=1'>
 	[(message_app.silent) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br><br>"}
 	dat += "<ul>"
 	if(!message_app.toff)
 		for (var/obj/item/device/pda/P in get_viewable_pdas())
-			dat += {"<li><a href='byond://?src=\ref[src];software=pdamessage;target=\ref[P]'>[P]</a>
+			dat += {"<li><a href='byond://?src=\ref[src];software=[SOFT_DM];target=\ref[P]'>[P]</a>
 				</li>"}
 	dat += {"</ul>
 		<br><br>
@@ -694,6 +770,6 @@ Target Machine: "}
 		holomap_device = new(src)
 	var/dat = "<h2>Holomap Viewer</h2>"
 	dat+= "Creates a virtual map of the surrounding area.<BR>"
-	dat+= "Current mode: [holo_target == initial(holo_target)? "Internal Viewer" : "External Projector"] | <a href='byond://?src=\ref[src];software=holomap;switch_target=1;sub=0'>Switch Type</a><BR>"
-	dat+= "<BR><a href='byond://?src=\ref[src];software=holomap;[holo_target]=1;sub=0'>Toogle Holomap</a><BR>"
+	dat+= "Current mode: [holo_target == initial(holo_target)? "Internal Viewer" : "External Projector"] | <a href='byond://?src=\ref[src];software=[SOFT_HM];switch_target=1;sub=0'>Switch Type</a><BR>"
+	dat+= "<BR><a href='byond://?src=\ref[src];software=[SOFT_HM];[holo_target]=1;sub=0'>Toogle Holomap</a><BR>"
 	return dat

@@ -73,6 +73,9 @@ Helper procs and procs used in mobs
 /proc/sort_visioneffect_priority(var/datum/visioneffect/new_item, var/datum/visioneffect/current_item)
 	return new_item.priority < current_item.priority
 
+//A new subtype of images used specifically for these visioneffects
+/image/hud
+
 //Handle specific on-apply effects. Useful mainly for scanners like Mesons
 /mob/proc/apply_hud(var/datum/visioneffect/V)
 	if(!(V in huds)) //Prevent basic dupes of HUD instances
@@ -117,9 +120,8 @@ Helper procs and procs used in mobs
 /mob/proc/clean_up_hud()
 	//Reset the HUDs for all mobs before redrawing them.
 	if(client)
-		for(var/image/hud in client.images)
-			if(findtext(hud.icon_state, "hud", 1, 4))
-				client.images -= hud
+		for(var/image/hud/result in client.images)
+			client.images -= result
 	for(var/datum/visioneffect/V in huds)
 		V.on_clean_up(src)
 	//Maintain a list of security and medical HUD users for easy access to medbot/beepsky messages

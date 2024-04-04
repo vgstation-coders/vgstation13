@@ -10,7 +10,7 @@
 	opacity = 0
 	density = 0
 	plane = ABOVE_HUMAN_PLANE
-	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
+	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE | PASSRAILING
 	mouse_opacity = 1
 
 	health = 10

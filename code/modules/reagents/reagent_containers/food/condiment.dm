@@ -115,6 +115,7 @@
 				I.color = mix_color_from_reagents(reagents.reagent_list)
 			snack.extra_food_overlay.overlays += I
 			snack.overlays += I
+			snack.visible_condiments[condiment_overlay] = I.color
 	else if(isfloor(target))
 		if (amount_per_transfer_from_this > 1)
 			transfer(target, user, splashable_units = amount_per_transfer_from_this)
@@ -599,7 +600,7 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()
-	reagents.add_reagent(pickweight(possible_exotic_condiments), 30)
+	reagents.add_reagent(pickweight(possible_exotic_condiments), 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/coco
 	name = "cocoa powder"
@@ -693,7 +694,7 @@
 	icon_state = "packet_"
 	possible_transfer_amounts = list(1, 5)
 	amount_per_transfer_from_this = 1
-	var/trash_type = /obj/item/trash/misc_packet
+	var/trash_type = /obj/item/trash/packet
 	var/custom = FALSE
 
 /obj/item/weapon/reagent_containers/food/condiment/small/afterattack(obj/target, mob/user , flag, params)
@@ -783,7 +784,7 @@
 	name = "ketchup packet"
 	desc = "You feel more American already."
 	condiment_overlay = KETCHUP
-	trash_type = /obj/item/trash/ketchup_packet
+	trash_type = /obj/item/trash/packet/ketchup
 
 /obj/item/weapon/reagent_containers/food/condiment/small/ketchup/New()
 	..()
@@ -793,7 +794,7 @@
 	name = "mayonnaise packet"
 	desc = "Still not an instrument."
 	condiment_overlay = MAYO
-	trash_type = /obj/item/trash/mayo_packet
+	trash_type = /obj/item/trash/packet/mayo
 
 /obj/item/weapon/reagent_containers/food/condiment/small/mayo/New()
 	..()
@@ -803,7 +804,7 @@
 	name = "soy sauce packet"
 	desc = "Tasty soy sauce in a convenient tiny packet."
 	condiment_overlay = SOYSAUCE
-	trash_type = /obj/item/trash/soysauce_packet
+	trash_type = /obj/item/trash/packet/soysauce
 
 /obj/item/weapon/reagent_containers/food/condiment/small/soysauce/New()
 	..()
@@ -813,7 +814,7 @@
 	name = "malt vinegar packet"
 	desc = "Perfect for smaller portions of fish and chips."
 	condiment_overlay = VINEGAR
-	trash_type = /obj/item/trash/vinegar_packet
+	trash_type = /obj/item/trash/packet/vinegar
 
 /obj/item/weapon/reagent_containers/food/condiment/small/vinegar/New()
 	..()
@@ -823,7 +824,7 @@
 	name = "hotsauce packet"
 	desc = "For those who can't handle the real heat."
 	condiment_overlay = "hotsauce"
-	trash_type = /obj/item/trash/hotsauce_packet
+	trash_type = /obj/item/trash/packet/hotsauce
 
 /obj/item/weapon/reagent_containers/food/condiment/small/hotsauce/New()
 	..()
@@ -833,7 +834,7 @@
 	name = "Zam Spices Packet"
 	desc = "A tiny packet of mothership spices."
 	condiment_overlay = ZAMSPICES
-	trash_type = /obj/item/trash/zamspices_packet
+	trash_type = /obj/item/trash/packet/zamspices
 
 /obj/item/weapon/reagent_containers/food/condiment/small/zamspices/New()
 	..()
@@ -843,7 +844,7 @@
 	name = "Zam's Mild Sauce Packet"
 	desc = "More portable than the bottle, just as tasty."
 	condiment_overlay = ZAMMILD
-	trash_type = /obj/item/trash/zammild_packet
+	trash_type = /obj/item/trash/packet/zammild
 
 /obj/item/weapon/reagent_containers/food/condiment/small/zammild/New()
 	..()
@@ -853,7 +854,7 @@
 	name = "Zam's Spicy Sauce Packet"
 	desc = "More portable than the bottle, just as spicy."
 	condiment_overlay = ZAMSPICYTOXIN
-	trash_type = /obj/item/trash/zamspicytoxin_packet
+	trash_type = /obj/item/trash/packet/zamspicytoxin
 
 /obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin/New()
 	..()
@@ -863,7 +864,7 @@
 	name = "Discount Dan's Special Sauce"
 	desc = "Discount Dan brings you his very own special blend of delicious ingredients in one discount sauce!"
 	condiment_overlay = DISCOUNT
-	trash_type = /obj/item/trash/discount_packet
+	trash_type = /obj/item/trash/packet/discount
 
 /obj/item/weapon/reagent_containers/food/condiment/small/discount/New()
 	..()

@@ -374,7 +374,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#365E30" //rgb: 54, 94, 48
 	density = 9.68
-	specheatcap = 101.01
+	specheatcap = 1.0101
 
 /datum/reagent/fishbleach
 	name = "Fish Bleach"

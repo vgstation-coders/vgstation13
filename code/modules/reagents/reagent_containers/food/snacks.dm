@@ -7,7 +7,6 @@
 	desc = "yummy"
 	icon_state = null
 	log_reagents = 1
-	fire_fuel = 2//may get ignited by emagged microwave
 	autoignition_temperature = AUTOIGNITION_ORGANIC
 
 	var/food_flags	//Possible flags: FOOD_LIQUID, FOOD_MEAT, FOOD_ANIMAL, FOOD_SWEET
@@ -40,6 +39,12 @@
 	var/crumb_icon = "crumbs"
 	var/base_crumb_chance = 10
 	var/time_last_eaten
+
+	var/candles_state = CANDLES_NONE
+	var/list/candles = list()
+	var/always_candles = ""
+	var/candle_offset_x = 0
+	var/candle_offset_y = 0
 
 	var/valid_utensils = UTENSILE_FORK	//| UTENSILE_SPOON
 
@@ -220,9 +225,64 @@
 	if (random_filling_colors?.len > 0)
 		filling_color = pick(random_filling_colors)
 
+/obj/item/weapon/reagent_containers/food/snacks/proc/light(var/flavor_text = "<span class='notice'>[usr] lights [src].</span>", var/quiet = 0)
+	if(candles_state == CANDLES_UNLIT)
+		candles_state = CANDLES_LIT
+		visible_message(flavor_text)
+		set_light(CANDLE_LUM,1,LIGHT_COLOR_FIRE)
+		update_icon()
+
+/obj/item/weapon/reagent_containers/food/snacks/blow_act(var/mob/living/user)
+	if(candles_state == CANDLES_LIT)
+		candles_state = CANDLES_UNLIT
+		visible_message("<span  class='rose'>The candle[(candles.len > 1) ? "s" : ""] on \the [name] go[(candles.len > 1) ? "" : "es"] out.</span>")
+		set_light(0)
+		update_icon()
+
+/obj/item/weapon/reagent_containers/food/snacks/clean_act(var/cleanliness)
+	..()
+	if(candles_state == CANDLES_LIT)
+		candles_state = CANDLES_UNLIT
+		visible_message("<span  class='rose'>The candle[(candles.len > 1) ? "s" : ""] on \the [name] go[(candles.len > 1) ? "" : "es"] out.</span>")
+		set_light(0)
+		update_icon()
+
+/obj/item/weapon/reagent_containers/food/snacks/pickup(mob/user)
+	..()
+	update_icon()
+
 /obj/item/weapon/reagent_containers/food/snacks/update_icon()
 	overlays.len = 0//no choice here but to redraw everything in the correct order so condiments etc don't appear over ice and fire.
 	overlays += extra_food_overlay
+
+	if (candles_state != CANDLES_NONE)
+		for (var/image/I in candles)
+			overlays += I
+	if (candles_state == CANDLES_LIT)
+		for (var/image/I in candles)
+			var/image/M = image(I)
+			M.appearance = I.appearance
+			M.color = null
+			M.icon_state = "[M.icon_state]_lit"
+			M.appearance_flags = RESET_COLOR
+			M.blend_mode = BLEND_ADD
+			if (isturf(loc))
+				M.plane = ABOVE_LIGHTING_PLANE
+			else
+				M.plane = ABOVE_HUD_PLANE // inventory
+			overlays += M
+
+		if (always_candles)//birthday cake and its slices
+			var/image/I = image('icons/obj/food.dmi',src,"[always_candles]_lit")
+			I.appearance_flags = RESET_COLOR
+			I.blend_mode = BLEND_ADD
+			I.pixel_y = candle_offset_y
+			if (isturf(loc))
+				I.plane = ABOVE_LIGHTING_PLANE
+			else
+				I.plane = ABOVE_HUD_PLANE // inventory
+			overlays += I
+
 	update_temperature_overlays()
 	update_blood_overlay()//re-applying blood stains
 	if (on_fire && fire_overlay)
@@ -291,7 +351,7 @@
 	return
 
 //Bitesizemod to multiply how much of a bite should be taken out. 1 is default bitesize.
-/obj/item/weapon/reagent_containers/food/snacks/proc/consume(mob/living/carbon/eater, messages = 0, sounds = TRUE, bitesizemod = 1)
+/obj/item/weapon/reagent_containers/food/snacks/proc/consume(mob/living/eater, messages = 0, sounds = TRUE, bitesizemod = 1)
 	if(!istype(eater))
 		return
 	if(arcanetampered)
@@ -442,6 +502,10 @@
 		for(var/atom/A in T)
 			if (A == src)
 				continue
+			if(iscarbon(A))
+				var/mob/living/carbon/C = A
+				if(C.check_shields(throwforce, src))
+					continue
 			var/list/hit_zone = user && user.zone_sel ? list(user.zone_sel.selecting) : ALL_LIMBS
 			reagents.reaction(A, zone_sels = hit_zone)
 		return 1
@@ -536,7 +600,7 @@
 				slices_lost = rand(1, min(1, round(slices_num/2))) //Randomly lose a few slices along the way, but at least one and up to half
 			var/reagents_per_slice = reagents.total_volume/slices_num //Figure out how much reagents each slice inherits (losing slices loses reagents)
 			for(var/i = 1 to (slices_num - slices_lost)) //Transfer those reagents
-				var/obj/slice = new slice_path(src.loc)
+				var/obj/item/weapon/reagent_containers/food/snacks/slice = new slice_path(src.loc)
 				if(istype(src, /obj/item/weapon/reagent_containers/food/snacks/customizable)) //custom sliceable foods have overlays we need to apply
 					var/obj/item/weapon/reagent_containers/food/snacks/customizable/C = src
 					var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
@@ -548,6 +612,24 @@
 					var/obj/item/sliceItem = slice
 					sliceItem.luckiness += luckiness / slices_num
 				reagents.trans_to(slice, reagents_per_slice)
+				for (var/C in visible_condiments)
+					var/image/I = image('icons/obj/condiment_overlays.dmi',slice,C)
+					I.color = visible_condiments[C]
+					slice.extra_food_overlay.overlays += I
+					slice.overlays += I
+				if (candles.len > 0)
+					var/image/candle = pick(candles)
+					candles.Remove(candle)
+					candle.pixel_x = 0
+					candle.pixel_y = 0
+					slice.candles += candle
+					slice.candles_state = candles_state
+					if (slice.candles_state == CANDLES_LIT)
+						slice.set_light(CANDLE_LUM,0.5,LIGHT_COLOR_FIRE)
+				else if (always_candles)
+					slice.candles_state = candles_state
+					if (slice.candles_state == CANDLES_LIT)
+						slice.set_light(CANDLE_LUM,0.5,LIGHT_COLOR_FIRE)
 				slice.update_icon() //So hot slices start steaming right away
 			qdel(src) //So long and thanks for all the fish
 			return 1
@@ -556,6 +638,13 @@
 				A.forceMove(get_turf(src))
 			visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
 			return 1
+
+	if (istype(W, /obj/item/candle)) //candles added on afterattack
+		return 0
+
+	if((candles_state == CANDLES_UNLIT) && (W.is_hot() || W.sharpness_flags & (HOT_EDGE)))
+		light("<span class='notice'>[user] lights \the [src] with \the [W].</span>")
+		return 1
 
 	//Slipping items into food. Because this is below slicing, sharp items can't go into food. No knife-bread, sorry.
 	if(can_hold(W))
@@ -606,20 +695,20 @@
 /obj/item/weapon/reagent_containers/food/snacks/attack_animal(mob/M)
 	if(isanimal(M))
 		if(iscorgi(M)) //Feeding food to a corgi
+			var/bamount = min(reagents.total_volume,bitesize)/(reagents.reagent_list.len)
+			reagents.reaction(M, INGEST, amount_override = bamount)
+			reagents.trans_to(M, bamount)
+			bitecount++
+			after_consume(M, reagents)
+			playsound(M,'sound/items/eatfood.ogg', rand(10,50), 1)
 			M.delayNextAttack(10)
-			if(bitecount >= ANIMALBITECOUNT) //This really, really shouldn't be hardcoded like this, but sure I guess
+			if(!reagents || !reagents.total_volume)
 				M.visible_message("[M] [pick("burps from enjoyment", "yaps for more", "woofs twice", "looks at the area where \the [src] was")].", "<span class='notice'>You swallow up the last of \the [src].")
-				playsound(src.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
-				var/mob/living/simple_animal/corgi/C = M
-				if(C.health <= C.maxHealth + 5)
-					C.health += 5
-				else
-					C.health = C.maxHealth
 				qdel(src)
 			else
 				M.visible_message("[M] takes a bite of \the [src].", "<span class='notice'>You take a bite of \the [src].</span>")
-				playsound(src.loc,'sound/items/eatfood.ogg', rand(10, 50), 1)
-				bitecount++
+
+
 		else if(ismouse(M)) //Mouse eating shit
 			M.delayNextAttack(10)
 			var/mob/living/simple_animal/mouse/N = M
@@ -1749,13 +1838,21 @@
 		var/mob/M = hit_atom
 		src.visible_message("<span class='warning'>\The [src] splats in [M]'s face!</span>")
 
+		var/race_prefix = ""
+		if (isvox(M))
+			race_prefix = "vox"
+		else if (isgrey(M))
+			race_prefix = "grey"
+		else if (isinsectoid(M))
+			race_prefix = "insect"
+
 		M.eye_blind = 2
-		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied")
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
 		sleep(55)
-		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied")
-		M.overlays += image('icons/mob/messiness.dmi',icon_state = "pied-2")
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied")
+		M.overlays += image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied-2")
 		sleep(120)
-		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "pied-2")
+		M.overlays -= image('icons/mob/messiness.dmi',icon_state = "[race_prefix]pied-2")
 
 		if(luckiness)
 			M.luck_adjust(luckiness, temporary = TRUE)
@@ -2168,7 +2265,7 @@
 	name = "Cheesie Honkers"
 	icon_state = "cheesie_honkers"
 	desc = "Bite sized cheesie snacks that will honk all over your mouth."
-	trash = /obj/item/trash/cheesie
+	trash = /obj/item/trash/chips/cheesie
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
 	filling_color = "#FFCC33"
 	base_crumb_chance = 30
@@ -2236,7 +2333,7 @@
 	name = "Donitos"
 	desc = "Ranch or cool ranch?"
 	icon_state = "donitos"
-	trash = /obj/item/trash/donitos
+	trash = /obj/item/trash/chips/donitos
 	filling_color = "#C06800"
 	base_crumb_chance = 30
 
@@ -2249,7 +2346,7 @@
 	name = "Donitos Cool Ranch"
 	desc = "Cool ranch."
 	icon_state = "donitos_coolranch"
-	trash = /obj/item/trash/donitos_coolranch
+	trash = /obj/item/trash/chips/donitos_coolranch
 
 /obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch/New()
 	..()
@@ -2259,7 +2356,7 @@
 	name = "Danitos"
 	desc = "For only the most MLG hardcore robust spessmen."
 	icon_state = "danitos"
-	trash = /obj/item/trash/danitos
+	trash = /obj/item/trash/chips/danitos
 	filling_color = "#FF9933"
 	base_crumb_chance = 30
 
@@ -2632,7 +2729,7 @@
 	name = "Tomato soup"
 	desc = "Smells like iron."
 	icon_state = "tomatosoup"
-	food_flags = FOOD_LIQUID
+	food_flags = FOOD_LIQUID | FOOD_ANIMAL //blood
 	crumb_icon = "dribbles"
 	filling_color = "#FF3300"
 	valid_utensils = UTENSILE_SPOON
@@ -2835,6 +2932,7 @@
 	trash = /obj/item/trash/snack_bowl
 	crumb_icon = "dribbles"
 	filling_color = "#E23D12"
+	food_flags = FOOD_LIQUID | FOOD_MEAT
 	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/hotchili/New()
@@ -2851,6 +2949,7 @@
 	trash = /obj/item/trash/snack_bowl
 	crumb_icon = "dribbles"
 	filling_color = "#4375E8"
+	food_flags = FOOD_LIQUID | FOOD_MEAT
 	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/coldchili/New()
@@ -2867,6 +2966,7 @@
 	trash = /obj/item/trash/snack_bowl
 	crumb_icon = "dribbles"
 	filling_color = "#CE37BA"
+	food_flags = FOOD_LIQUID | FOOD_MEAT
 	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/plasmastew/New()
@@ -4013,6 +4113,8 @@
 	storage_slots = 3
 	w_class = W_CLASS_MEDIUM
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	candles_state = CANDLES_UNLIT
+	always_candles = "birthdaycake"
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/birthdaycake/New()
 	..()
@@ -4027,6 +4129,8 @@
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_icon = "bluecustom"
+	candles_state = CANDLES_UNLIT
+	always_candles = "birthdaycakeslice"
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
 	name = "bread"
@@ -4377,9 +4481,7 @@
 			icon_state = "pizzabox_open"
 
 		if(pizza)
-			if (!pizza.particles)
-				pizza.particles = new/particles/steam
-			particles = pizza.particles
+			pizza.link_particles(src)
 			var/image/pizzaimg = new()
 			pizzaimg.appearance = pizza.appearance
 			pizzaimg.pixel_y = -3 * PIXEL_MULTIPLIER
@@ -4391,7 +4493,7 @@
 		return
 	else
 		// Stupid code because byondcode sucks
-		particles = null
+		remove_particles()
 		var/doimgtag = 0
 		if( boxes.len > 0 )
 			var/obj/item/pizzabox/topbox = boxes[boxes.len]
@@ -4415,7 +4517,7 @@
 
 		to_chat(user, "<span class='notice'>You take the [src.pizza] out of the [src].</span>")
 		src.pizza = null
-		particles = null
+		remove_particles()
 		update_icon()
 		return
 
@@ -5189,7 +5291,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/zamitos
 	name = "Zamitos: Original Flavor"
 	desc = "An overly processed taste that reminds you of days past when you snacked on these as a small greyling."
-	trash = /obj/item/trash/zamitos_o
+	trash = /obj/item/trash/chips/zamitos_o
 	icon_state = "zamitos_original"
 	filling_color = "#F7CE7B"
 
@@ -5198,7 +5300,7 @@
 	if(prob(30))
 		name = "Zamitos: Blue Goo Flavor"
 		desc = "Not as filling as the original flavor, and the texture is strange."
-		trash = /obj/item/trash/zamitos_bg
+		trash = /obj/item/trash/chips/zamitos_bg
 		icon_state = "zamitos_bluegoo"
 		filling_color = "#5BC9DD"
 		reagents.add_reagent(NUTRIMENT, 1)
@@ -5212,7 +5314,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky
 	name = "Zamitos: Spicy Stok Jerky Flavor"
 	desc = "Meat-flavored crisps with three different seasonings! Almost as good as real meat."
-	trash = /obj/item/trash/zamitos_sj
+	trash = /obj/item/trash/chips/zamitos_sj
 	icon_state = "zamitos_stokjerky"
 	filling_color = "#A66626"
 
@@ -6375,6 +6477,7 @@
 	desc = "From a soup just like this, a sentient race could one day emerge. Better eat it to be safe."
 	icon_state = "primordialsoup"
 	bitesize = 2
+	food_flags = FOOD_LIQUID | FOOD_ANIMAL //blood is animal sourced
 	crumb_icon = "dribbles"
 	filling_color = "#720D00"
 
@@ -6463,6 +6566,7 @@
 	desc = "The strong, tangy flavor of the orange and soy sauce highlights the smooth, thick taste of the honey. This fusion dish is one of the highlights of Terran cuisine."
 	icon_state = "honeycitruschicken"
 	bitesize = 4
+	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycitruschicken/New()
@@ -6499,6 +6603,7 @@
 	desc = "There may be more fish in the sea, but there's only one kind of fish in the stars."
 	icon_state = "fishtacosupreme"
 	bitesize = 3
+	food_flags = FOOD_MEAT
 	base_crumb_chance = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme/New()
@@ -6510,6 +6615,7 @@
 	desc = "This dish became exceedingly rare after Space Texas seceeded from our plane of reality."
 	icon_state = "chiliconcarne"
 	bitesize = 3
+	food_flags = FOOD_LIQUID | FOOD_MEAT
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/chiliconcarne/New()
@@ -8046,7 +8152,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/greygreens
 	name = "Grey Greens"
 	desc = "A dish beloved by greys since first contact, acidic vegetables seasoned with soy sauce."
-	trash = /obj/item/trash/used_tray2
+	trash = /obj/item/trash/used_tray/type2
 	icon_state = "greygreens"
 	base_crumb_chance = 0
 
@@ -8059,7 +8165,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher
 	name = "Stuffed Pitcher"
 	desc = "A delicious grey alternative to a stuffed pepper. Very acidic."
-	trash = /obj/item/trash/used_tray2
+	trash = /obj/item/trash/used_tray/type2
 	icon_state = "stuffedpitcher"
 	food_flags = FOOD_ANIMAL
 	base_crumb_chance = 0
@@ -8072,7 +8178,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/nymphsperil
 	name = "Nymph's Peril"
 	desc = "A diona nymph steamed in sulphuric acid then stuffed with fried rice. Ruthlessly delicious!"
-	trash = /obj/item/trash/used_tray2
+	trash = /obj/item/trash/used_tray/type2
 	icon_state = "yahireatsbugs"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
@@ -8651,3 +8757,33 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(ROACHSHELL, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube
+	name = "salt cubes"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/saltcube
+	child_volume = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube/New()
+	..()
+	reagents.add_reagent(SODIUMCHLORIDE, 15) //spawns 5
+
+/obj/item/weapon/reagent_containers/food/snacks/saltcube
+	name = "salt cubes"
+	desc = "You wish you had a salt rhombicosidodecahedron, but a cube will do."
+	icon_state = "sugarsaltcube"
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube
+	name = "sugar cube"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sugarcube
+	child_volume = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube/New()
+	..()
+	reagents.add_reagent(SUGAR, 15) //spawns 5
+
+/obj/item/weapon/reagent_containers/food/snacks/sugarcube
+	name = "sugar cube"
+	desc = "The superior sugar delivery method. How will sugar sphere babies ever compare?"
+	icon_state = "sugarsaltcube"
+	bitesize = 3

@@ -39,7 +39,7 @@
 	var/light_intensity = 4
 	var/initial_color = null
 	density = 3.46
-	specheatcap = 512.3
+	specheatcap = 0.5123
 	flags = CHEMFLAG_PIGMENT
 	paint_light = PAINTLIGHT_LIMITED
 

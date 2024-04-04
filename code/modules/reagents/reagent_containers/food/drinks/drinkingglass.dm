@@ -47,10 +47,6 @@
 			if(R.light_color)
 				light_color = R.light_color
 
-			if(R.flammable)
-				if(!lit)
-					flammable = 1
-
 			name = R.glass_name ? R.glass_name : "glass of " + R.name //uses glass of [reagent name] if a glass name isn't defined
 			desc = R.glass_desc ? R.glass_desc : R.description //uses the description if a glass description isn't defined
 			isGlass = R.glass_isGlass
@@ -69,6 +65,20 @@
 				filling.icon += mix_color_from_reagents(reagents.reagent_list)
 				filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 				overlays += filling
+
+			if(R.flammable)
+				if(lit)
+					var/image/I = image(icon, src, "[icon_state]-flamin")
+					I.blend_mode = BLEND_ADD
+					if (isturf(loc))
+						I.plane = ABOVE_LIGHTING_PLANE
+					else
+						I.plane = ABOVE_HUD_PLANE // inventory
+					overlays += I
+					name = "flaming [name]"
+					desc += " Damn that looks hot!"
+				else
+					flammable = 1
 	else
 		icon_state = "glass_empty"
 		item_state = "glass_empty"

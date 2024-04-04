@@ -1282,7 +1282,7 @@ var/global/num_vending_terminals = 1
 		if (moody_state)
 			update_moody_light('icons/lighting/moody_lights.dmi', moody_state)
 		set_light(light_range_on, light_power_on)
-	
+
 	overlays -= panel_icon
 	if(panel_open)
 		overlays += panel_icon
@@ -1474,6 +1474,7 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/drinks/tomatosoup = 3,
+		/obj/item/weapon/reagent_containers/food/drinks/thermos = 3,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/ice = 10,
@@ -2883,14 +2884,23 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/suit/storage/greaserjacket/snakes = 10,
 		/obj/item/clothing/under/sl_suit = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/grey = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/black = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/brown = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/red = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkred = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/orange = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/yellow = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/green = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkgreen = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/lime = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/blue = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkblue = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/purple = 10,
-		/obj/item/clothing/suit/storage/wintercoat/hoodie/yellow = 10,
-		/obj/item/clothing/suit/storage/wintercoat/hoodie/orange = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkpurple = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/pink = 10,
 		/obj/item/clothing/suit/storage/wintercoat/hoodie/cyan = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/teal =10
 		)
 	contraband = list(
 		/obj/item/clothing/under/syndicate/tacticool = 5,
@@ -3604,7 +3614,7 @@ var/global/num_vending_terminals = 1
 		"It's all fun and games at Al's Fun And Games!",
 		"Roll for initiative!",
 		"It's a full house of fun!",
-		"Caves and Wyverns 3rd edition available now!"
+		"Red Core 1st Edition available now!"
 	)
 	product_ads = list(
 		"Sponsored by Warlocks of the Shore.",
@@ -3618,7 +3628,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/pill_bottle/dice = 5,
 		/obj/item/weapon/storage/pill_bottle/dice/fudge = 5,
 		/obj/item/weapon/storage/pill_bottle/dice/d6 = 5,
-		/obj/item/weapon/storage/pill_bottle/dice/cup = 10
+		/obj/item/weapon/storage/pill_bottle/dice/cup = 10,
+		/obj/item/dicetower = 2,
+		/obj/item/battlemat = 2,
+		/obj/item/weapon/storage/box/redcore = 1
 		)
 	contraband = list(
 		/obj/item/weapon/dice/loaded = 3,
@@ -3638,7 +3651,10 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/dice/loaded = 15,
 		/obj/item/weapon/dice/loaded/d20 = 15,
 		/obj/item/weapon/skull = 20,
-		/obj/item/weapon/storage/bag/wiz_cards/frog = 20
+		/obj/item/weapon/storage/bag/wiz_cards/frog = 20,
+		/obj/item/dicetower = 50,
+		/obj/item/battlemat = 40,
+		/obj/item/weapon/storage/box/redcore = 60
 		)
 
 	pack = /obj/structure/vendomatpack/games

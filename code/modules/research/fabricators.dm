@@ -234,7 +234,7 @@
 	return 1
 
 /obj/machinery/r_n_d/fabricator/proc/has_bluespace_bin()
-	var/I = /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace/
+	var/I = /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace
 	//return (I in component_parts)
 	return locate(I,component_parts)
 

@@ -19,7 +19,7 @@
 	var/list/misc_spells = list()
 
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
-	var/static/list/available_artifacts = list()
+	var/list/available_artifacts = list()
 
 	var/static/list/available_potions = list(
 		/obj/item/potion/healing = Sp_BASE_PRICE,
@@ -63,6 +63,8 @@
 
 	for(var/wizard_spell in getAllWizSpells())
 		var/spell/S = new wizard_spell
+		if(S.spell_flags & NO_SPELLBOOK)
+			continue
 		all_spells += wizard_spell
 		if(!S.holiday_required.len || (Holiday in S.holiday_required))
 			switch(S.specialization)
@@ -91,6 +93,12 @@
 
 	if(user.is_blind())
 		to_chat(user, "<span class='info'>You open \the [src] and run your fingers across the parchment. Suddenly, the pages coalesce in your mind!</span>")
+
+	if(istype(user,/mob/living/carbon))
+		var/mob/living/carbon/C = user
+		if(C.op_stage.butt == SURGERY_NO_BUTT)
+			to_chat(user, "<span class='info'>You are missing your ass! It would be pointless to attempt to learn magic without an ass to store it in.</span>")
+			return
 
 	user.set_machine(src)
 
@@ -326,7 +334,12 @@
 		var/buy_type = text2path(href_list["spell"])
 
 		if(ispath(buy_type, /spell)) //Passed a spell typepath
-			if(locate(buy_type) in usr.spell_list)
+			var/found_same_spell = FALSE
+			for(var/spell/spell_path_to_check in usr.spell_list)
+				if(buy_type == spell_path_to_check.type)
+					found_same_spell = TRUE
+					break
+			if(found_same_spell)
 				to_chat(usr, "<span class='notice'>You already know that spell. Perhaps you'd like to upgrade it instead?</span>")
 
 			else if(buy_type in all_spells)

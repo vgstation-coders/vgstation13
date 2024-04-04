@@ -577,45 +577,52 @@ Assign your candidates in choose_candidates() instead.
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/roundstart/blob
-	name = "Blob Conglomerate"
-	role_category = /datum/role/blob_overmind/
-	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel")
-	enemy_jobs = list("AI", "Cyborg", "Warden", "Head of Security", "Captain", "Quartermaster", "Head of Personnel", "Station Engineer", "Chief Engineer", "Atmospheric Technician")
-	required_pop = list(30,25,25,20,20,20,15,15,15,15)
-	required_enemies = list(4,4,4,4,4,4,4,3,2,1)
-	required_candidates = 1
-	weight = BASE_RULESET_WEIGHT
-	weight_category = "Blob"
-	weekday_rule_boost = list("Tue")
-	cost = 45
-	requirements = list(90,90,90,80,60,40,30,20,10,10)
-	high_population_requirement = 70
-	flags = HIGHLANDER_RULESET
+///////////////
+//Currently disabled from rolling roundstart.
+//Major source of grievances, as it would either end the round too fast or cause "blobstended" when it got killed.
+//Even though it hasn't won a single round in months due to Liberator guns.
+//Roundstart blob got axed so that midround blob may be buffed (and more fun).
+///////////////
 
-/datum/dynamic_ruleset/roundstart/blob/execute()
-	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
-	if (!blob_fac)
-		blob_fac = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate, null, 1)
-	var/blob_number = 1 + round(mode.roundstart_pop_ready/25) // + 1 Blob per 25 pop. ready.
-	for (var/i = 1 to min(blob_number, assigned.len))
-		var/mob/M = pick(assigned)
-		blob_fac.HandleNewMind(M.mind)
-		var/datum/role/blob = M.mind.GetRole(BLOBOVERMIND)
-		blob.Greet(GREET_ROUNDSTART)
-		switch(M.mind.assigned_role)
-			if("Clown")
-				blob_looks_player["clownscape"] = 32
-			if("Station Engineer","Atmospheric Technician","Chief Engineer")
-				blob_looks_player["AME"] = 32
-				blob_looks_player["AME_new"] = 64
-			if("Chaplain")
-				blob_looks_player["skelleton"] = 64
-			if("Security Officer","Detective","Head of Security","Warden")
-				blob_looks_player["secblob"] = 32
-		if (calledBy == "antag madness")//one core is plenty on antag madness
-			break
-	return 1
+// /datum/dynamic_ruleset/roundstart/blob
+// 	name = "Blob Conglomerate"
+// 	role_category = /datum/role/blob_overmind/
+// 	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel")
+// 	enemy_jobs = list("AI", "Cyborg", "Warden", "Head of Security", "Captain", "Quartermaster", "Head of Personnel", "Station Engineer", "Chief Engineer", "Atmospheric Technician")
+// 	required_pop = list(30,25,25,20,20,20,15,15,15,15)
+// 	required_enemies = list(4,4,4,4,4,4,4,3,2,1)
+// 	required_candidates = 1
+// 	weight = BASE_RULESET_WEIGHT
+// 	weight_category = "Blob"
+// 	weekday_rule_boost = list("Tue")
+// 	cost = 45
+// 	requirements = list(90,90,90,80,60,40,30,20,10,10)
+// 	high_population_requirement = 70
+// 	flags = HIGHLANDER_RULESET
+
+// /datum/dynamic_ruleset/roundstart/blob/execute()
+// 	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
+// 	if (!blob_fac)
+// 		blob_fac = ticker.mode.CreateFaction(/datum/faction/blob_conglomerate, null, 1)
+// 	var/blob_number = 1 + round(mode.roundstart_pop_ready/25) // + 1 Blob per 25 pop. ready.
+// 	for (var/i = 1 to min(blob_number, assigned.len))
+// 		var/mob/M = pick(assigned)
+// 		blob_fac.HandleNewMind(M.mind)
+// 		var/datum/role/blob = M.mind.GetRole(BLOBOVERMIND)
+// 		blob.Greet(GREET_ROUNDSTART)
+// 		switch(M.mind.assigned_role)
+// 			if("Clown")
+// 				blob_looks_player["clownscape"] = 32
+// 			if("Station Engineer","Atmospheric Technician","Chief Engineer")
+// 				blob_looks_player["AME"] = 32
+// 				blob_looks_player["AME_new"] = 64
+// 			if("Chaplain")
+// 				blob_looks_player["skelleton"] = 64
+// 			if("Security Officer","Detective","Head of Security","Warden")
+// 				blob_looks_player["secblob"] = 32
+// 		if (calledBy == "antag madness")//one core is plenty on antag madness
+// 			break
+// 	return 1
 
 //////////////////////////////////////////////
 //                                          //
@@ -638,6 +645,8 @@ Assign your candidates in choose_candidates() instead.
 
 // 70% chance of allowing extended at 0-30 threat, then (100-threat)% chance. Requires 30 pop still.
 /datum/dynamic_ruleset/roundstart/extended/ready(var/forced=0)
+	if(forced)
+		return TRUE
 	if (mode.roundstart_pop_ready < 30)
 		return FALSE
 	var/probability = clamp(mode.threat_level, 30, 100)
@@ -645,6 +654,9 @@ Assign your candidates in choose_candidates() instead.
 
 /datum/dynamic_ruleset/roundstart/extended/choose_candidates()
 	return TRUE
+
+/datum/dynamic_ruleset/roundstart/extended/trim_candidates()
+	return
 
 /datum/dynamic_ruleset/roundstart/extended/execute()
 	message_admins("Starting a round of extended.")

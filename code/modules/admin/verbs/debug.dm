@@ -1495,7 +1495,7 @@ var/obj/blend_test = null
 	set name = "Edit MotD"
 	set desc = "Appears to players upon lobby entry."
 
-	if(!check_rights(R_PERMISSIONS))
+	if(!check_rights(R_SERVER))
 		return
 	if(alert("You are about to edit the MotD, which is displayed to anyone who enters the lobby. All changes persist across rounds. Continue?", "Warning", "Yes", "Cancel") == "Cancel")
 		return
@@ -1513,3 +1513,65 @@ var/obj/blend_test = null
 	log_admin("[key_name(usr)] has edited the message of the day. The new text is as follows: [newmotd].")
 	feedback_add_details("admin_verb", "Edit MotD")
 	message_admins("[key_name(usr)] has edited the message of the day. Check the game log for the full text.")
+
+/client/proc/force_next_map()
+	set category = "Debug"
+	set name = "Force Next Map"
+	set desc = "Sets the next map and skips the map vote."
+
+	if(!check_rights(R_FUN))
+		return
+
+	var/list/all_maps = get_all_maps()
+	all_maps += "RESET"
+	to_chat(usr,"<span class='warning'>This needs to be done BEFORE a map vote is called otherwise use the vote rigging option!</div>")
+	var/rigged_choice = input(usr, "Pick a map.") as null|anything in all_maps
+	if(!rigged_choice)
+		return
+	if(rigged_choice == "RESET")
+		log_admin("[key_name(usr)] has reset the forced map.")
+		feedback_add_details("admin_verb", "Force Next Map")
+		message_admins("[key_name(usr)] has reset the forced map.")
+		vote.forced_map = null
+		return
+	log_admin("[key_name(usr)] has forced the next map. The new map is: [rigged_choice].")
+	feedback_add_details("admin_verb", "Force Next Map")
+	message_admins("[key_name(usr)] has forced the next map. The new map is: [rigged_choice].")
+
+	vote.forced_map = rigged_choice
+
+/client/proc/check_for_unconnected_atmos()
+	set category = "Debug"
+	set name = "Check Vent/Scrubber Connections"
+	set desc = "Outputs a list of all vents and scrubbers that aren't connected to the main station's pipe network."
+
+	if(!check_rights(R_DEBUG))
+		return
+
+	var/search_entire_world = 0
+	if(alert(usr, "Search the entire world, or just the station z-level?", "Specify scope of search", "Entire world!", "Just the station.") == "Entire world!")
+		search_entire_world = 1
+
+/* If search_entire_world is set, search all pumps and scrubbers. Otherwise, only search pumps and scrubbers on the map's designated main station z-level. */
+	var/list/unconnected_atmos = list()
+	for(var/obj/machinery/atmospherics/unary/vent_pump/V in atmos_machines)
+		if(istype(V) && (search_entire_world ? search_entire_world : V.z == map.zMainStation) && !V.node1)
+			unconnected_atmos.Add(V)
+	for(var/obj/machinery/atmospherics/unary/vent_scrubber/S in atmos_machines)
+		if(istype(S) && (search_entire_world ? search_entire_world : S.z == map.zMainStation) && !S.node1)
+			unconnected_atmos.Add(S)
+
+	var/output = ""
+	for(var/atom/found in unconnected_atmos)
+		output += "<a href='?_src_=vars;Vars=\ref[found]'>\ref[found]</a>"
+		if(found.loc && found.loc.x)
+			output += ": [found] in [found.loc] at ([found.loc.x], [found.loc.y], [found.loc.z])<br>"
+		else if (found.x)
+			output += ": [found] at ([found.x], [found.y], [found.z])<br>"
+		else
+			output += ": [found] at (no loc found (nullspace?))<br>"
+
+	if(!output)
+		output = "No unconnected vents/scrubbers found."
+
+	usr << browse (output, "window=unconnected-atmos-search")

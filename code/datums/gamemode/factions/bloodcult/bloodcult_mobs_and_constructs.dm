@@ -278,15 +278,15 @@
 	environment_smash_flags = 0
 	var/mob/living/simple_animal/construct/builder/perfect/master = null
 	var/no_master = TRUE
-
+	var/glow_color = "#FFFFFF"
 
 /mob/living/simple_animal/hostile/hex/New()
 	..()
-	setupglow(rgb(255,255,255))
+	setupglow(glow_color)
 	animate(src, pixel_y = 4 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
 	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
 
-/mob/living/simple_animal/hostile/hex/proc/setupglow(glowcolor)
+/mob/living/simple_animal/hostile/hex/proc/setupglow(var/_glowcolor = "#FFFFFF")
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = ABOVE_LIGHTING_PLANE
@@ -295,7 +295,7 @@
 		overlay_plane = FLOAT_PLANE
 
 	var/icon/glowicon = icon(icon,"glow-[icon_state]")
-	glowicon.Blend(glowcolor, ICON_ADD)
+	glowicon.Blend(_glowcolor, ICON_ADD)
 	var/image/glow = image(icon = glowicon, layer = overlay_layer)
 	glow.plane = relative_plane(overlay_plane)
 	overlays += glow
@@ -390,7 +390,7 @@ var/list/astral_projections = list()
 	now_pushing = 1 //prevents pushing atoms
 
 	//keeps track of whether we're in "ghost" form or "slightly less ghost" form
-	var/tangibility = FALSE
+	tangibility = FALSE
 
 	//the cultist's original body
 	var/mob/living/anchor
@@ -419,7 +419,7 @@ var/list/astral_projections = list()
 	tangible_appearance = image('icons/mob/mob.dmi',"blank")
 	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
 	see_in_dark = 100
-	hud_list[ID_HUD]          = image('icons/mob/hud.dmi', src, "hudunknown")
+	hud_list[ID_HUD]          = new/image/hud('icons/mob/hud.dmi', src, "hudunknown")
 	add_spell(new /spell/astral_return, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 	add_spell(new /spell/astral_toggle, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
@@ -551,6 +551,9 @@ var/list/astral_projections = list()
 	if(tangibility)
 		death()
 
+/mob/living/simple_animal/astral_projection/vine_protected()
+	return !tangibility
+
 //called once when we are created, shapes our appearance in the image of our anchor
 /mob/living/simple_animal/astral_projection/proc/ascend(var/mob/living/body)
 	if (!body)
@@ -565,14 +568,14 @@ var/list/astral_projections = list()
 		var/mob/living/carbon/human/H = body
 		//instead of just adding an overlay of the body's uniform and suit, we'll first process them a bit so the leg part is mostly erased, for a ghostly look.
 		overlays += crop_human_suit_and_uniform(body)
-		overlays += H.obj_overlays[ID_LAYER]
-		overlays += H.obj_overlays[EARS_LAYER]
-		overlays += H.obj_overlays[GLASSES_LAYER]
-		overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-		overlays += H.obj_overlays[BELT_LAYER]
-		overlays += H.obj_overlays[BACK_LAYER]
-		overlays += H.obj_overlays[HEAD_LAYER]
-		overlays += H.obj_overlays[HANDCUFF_LAYER]
+		overlays += H.overlays_standing[ID_LAYER]
+		overlays += H.overlays_standing[EARS_LAYER]
+		overlays += H.overlays_standing[GLASSES_LAYER]
+		overlays += H.overlays_standing[GLASSES_OVER_HAIR_LAYER]
+		overlays += H.overlays_standing[BELT_LAYER]
+		overlays += H.overlays_standing[BACK_LAYER]
+		overlays += H.overlays_standing[HEAD_LAYER]
+		overlays += H.overlays_standing[HANDCUFF_LAYER]
 
 	//giving control to the player
 	key = body.key

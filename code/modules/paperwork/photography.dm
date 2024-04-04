@@ -37,7 +37,6 @@
 	var/info 			//Info on the camera about mobs or some shit
 	var/photo_size = 3 //Used to scale up bigger images, 3 is default
 	autoignition_temperature = 530 // Kelvin
-	fire_fuel = TRUE
 
 	var/list/double_agent_completion_ids = list()
 

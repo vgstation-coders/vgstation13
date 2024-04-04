@@ -14,7 +14,7 @@
 
 /obj/item/weapon/paper/hydroponics
 	name = "paper- 'Greetings from Billy Bob'"
-	info = "<B>Hey fellow botanist!</B><br>n<br>nI didn't trust the station folk so I left<br>na couple of weeks ago. But here's some<br>ninstructions on how to operate things here.<br>nYou can grow plants and each iteration they become<br>nstronger, more potent and have better yield, if you<br>nknow which ones to pick. Use your botanist's analyzer<br>nfor that. You can turn harvested plants into seeds<br>nat the seed extractor, and replant them for better stuff!<br>nSometimes if the weed level gets high in the tray<br>nmutations into different mushroom or weed species have<br>nbeen witnessed. On the rare occassion even weeds mutate!<br>n<br>nEither way, have fun!<br>n<br>nBest regards,<br>nBilly Bob Johnson.<br>n<br>nPS.<br>nHere's a few tips:<br>nIn nettles, potency = damage<br>nIn amanitas, potency = deadliness + side effect<br>nIn Liberty caps, potency = drug power + effect<br>nIn chilis, potency = heat<br>n<B>Nutrients keep mushrooms alive!</B><br>n<B>Water keeps weeds such as nettles alive!</B><br>n<B>All other plants need both.</B>"
+	info = "<B>Hey fellow botanist!</B><br><br>I didn't trust the station folk so I left<br>a couple of weeks ago. But here's some<br>instructions on how to operate things here.<br>You can grow plants and each iteration they become<br>stronger, more potent and have better yield, if you<br>know which ones to pick. Use your botanist's analyzer<br>for that. You can turn harvested plants into seeds<br>at the seed extractor, and replant them for better stuff!<br>Sometimes if the weed level gets high in the tray<br>mutations into different mushroom or weed species have<br>been witnessed. On the rare occassion even weeds mutate!<br><br>Either way, have fun!<br><br>nBest regards,<br>Billy Bob Johnson.<br><br>PS.<br>Here's a few tips:<br>In nettles, potency = damage<br>In amanitas, potency = deadliness + side effect<br>In Liberty caps, potency = drug power + effect<br>In chilis, potency = heat<br><B>Nutrients keep mushrooms alive!</B><br><B>Water keeps weeds such as nettles alive!</B><br><B>All other plants need both.</B>"
 
 /obj/item/weapon/paper/jobs
 	name = "paper- 'Job Information'"
@@ -50,7 +50,7 @@
 
 /obj/item/weapon/paper/diy_soda
 	name = "paper- 'Instructions'"
-	info = "Thank you for purchasing Dr. Pecker's DIY Soda Kit!<br>nIt has been scientifically proven to bring your tastebuds into the delicious state and turn your teeth into a molar solution!<br>nNow as you may have guessed, you will have to mix this delicious beverage yourself.<br>nDon't worry, it's pretty basic stuff. Just remember to never lick the spoon!<br>nFirst, mix the contents of all three <b>small vials</b> into the <b>large flask</b>.<br>nThen, mix the contents of the <b>small flasks</b> into the <b>large flask</b>.<br>nAnd finally, get ready for our secret trademarked ingredient: <br>n<b>The element of surprise!</b>"
+	info = "Thank you for purchasing Dr. Pecker's DIY Soda Kit!<br>It has been scientifically proven to bring your tastebuds into the delicious state and turn your teeth into a molar solution!<br>Now as you may have guessed, you will have to mix this delicious beverage yourself.<br>Don't worry, it's pretty basic stuff. Just remember to never lick the spoon!<br>First, mix the contents of all three <b>small vials</b> into the <b>large flask</b>.<br>Then, mix the contents of the <b>small flasks</b> into the <b>large flask</b>.<br>And finally, get ready for our secret trademarked ingredient: <br><b>The element of surprise!</b>"
 
 /obj/item/weapon/paper/spectrometry_decommission
 	name = "paper- 'Re:Spectrometry Decommission'"
@@ -196,3 +196,96 @@
 	<b>HoP Name: </b><span class=\"paper_field\"></span> <br>
 	<b>HoP Signature: </b><span class=\"paper_field\"></span> <br>
 	<i><span style=\"font-size:15px\">The Head of Personnel must sign above and stamp this form to authorize this application before a weapon permit can be applied to the requesting employee's ID. The Warden or Head of Security must also approve the issuing of any firearms from the armory, where applicable. These guidelines must be followed or this form is void and illegal.</span></i>"}
+
+
+/****************************
+*                           *
+*     	  Game Master       *
+*                           *
+****************************/
+
+var/unlockable_fields = {"<i><b>Unlockables</b></i><br>
+    Unlocked: <span class=\"paper_field\"></span><br>
+    Unlocked: <span class=\"paper_field\"></span><br>
+    Unlocked: <span class=\"paper_field\"></span><br>
+    Unlocked: <span class=\"paper_field\"></span><br>"}
+
+/obj/item/weapon/paper/redcore/miner/New()
+	..()
+	name = "Shaft Miner Character Sheet"
+	fields = 5
+	info = {"<center><img src="https://ss13.moe/wiki/images/0/02/MinerD.png"> <b>Shaft Miner</b></center> <br>
+	<hr> <br>
+	<b>Employee Name:</b> <span class=\"paper_field\"></span> <br>
+	<b>Employee Job:</b> Shaft Miner
+	<hr> <br>
+    <i><b>Basics</b></i>
+    <i>You get two actions a turn. You can't do the same action twice in a turn.</i><br>
+    [rc_basic_dash]<br>
+    [rc_basic_drag]<br>
+    [rc_basic_pill]<br>
+	[rc_miner_armor]<br>
+	[rc_miner_shoot]<br>
+	[rc_miner_drill]<br>
+	<hr> <br>
+    [unlockable_fields]"}
+
+/obj/item/weapon/paper/redcore/para/New()
+	..()
+	name = "Paramedic Character Sheet"
+	fields = 5
+	info = {"<center><img src="https://ss13.moe/wiki/images/4/42/Paramedic2.png" style="width:32px;height:32px;"> <b>Paramedic</b></center> <br>
+	<hr> <br>
+	<b>Employee Name:</b> <span class=\"paper_field\"></span> <br>
+	<b>Employee Job:</b> Paramedic
+	<hr> <br>
+    <i><b>Basics</b></i>
+    <i>You get two actions a turn. You can't do the same action twice in a turn.</i><br>
+    [rc_basic_dash]<br>
+    [rc_basic_drag]<br>
+    [rc_basic_pill]<br>
+	[rc_para_roller]<br>
+	[rc_para_grenade]<br>
+	[rc_para_hyperzine]<br>
+	<hr> <br>
+    [unlockable_fields]"}
+
+/obj/item/weapon/paper/redcore/anom/New()
+	..()
+	name = "Anomalist Character Sheet"
+	fields = 5
+	info = {"<center><img src="https://ss13.moe/wiki/images/b/b0/XenoarchD.png"> <b>Anomalist</b></center> <br>
+	<hr> <br>
+	<b>Employee Name:</b> <span class=\"paper_field\"></span> <br>
+	<b>Employee Job:</b> Anomalist
+	<hr> <br>
+    <i><b>Basics</b></i>
+    <i>You get two actions a turn. You can't do the same action twice in a turn.</i><br>
+    [rc_basic_dash]<br>
+    [rc_basic_drag]<br>
+    [rc_basic_pill]<br>
+	[rc_anom_touched]<br>
+	[rc_anom_roulette]<br>
+	[rc_anom_excav]<br>
+	<hr> <br>
+    [unlockable_fields]"}
+
+/obj/item/weapon/paper/redcore/eng/New()
+	..()
+	name = "Engineer Character Sheet"
+	fields = 5
+	info = {"<center><img src="https://ss13.moe/wiki/images/a/ab/Engie.png"> <b>Engineer</b></center> <br>
+	<hr> <br>
+	<b>Employee Name:</b> <span class=\"paper_field\"></span> <br>
+	<b>Employee Job:</b> Engineer
+	<hr> <br>
+    <i><b>Basics</b></i>
+    <i>You get two actions a turn. You can't do the same action twice in a turn.</i><br>
+    [rc_basic_dash]<br>
+    [rc_basic_drag]<br>
+    [rc_basic_pill]<br>
+	[rc_eng_gloves]<br>
+	[rc_eng_emitter]<br>
+	[rc_eng_flamethrower]<br>
+	<hr> <br>
+    [unlockable_fields]"}

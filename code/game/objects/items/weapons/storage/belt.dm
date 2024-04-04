@@ -49,6 +49,7 @@
 		"/obj/item/airshield_projector",
 		"/obj/item/device/radio",
 		"/obj/item/device/gps",
+		"/obj/item/device/pager",
 		"/obj/item/blueprints/construction_permit"
 		)
 
@@ -120,7 +121,8 @@
 		"/obj/item/airshield_projector",
 		"/obj/item/tool/irons",
 		"/obj/item/device/radio",
-		"/obj/item/device/gps"
+		"/obj/item/device/gps",
+		"/obj/item/device/pager"
 		)
 
 /obj/item/weapon/storage/belt/utility/chief/full/New() //This is mostly for testing I guess
@@ -407,7 +409,8 @@
 		"/obj/item/device/wormhole_jaunter",
 		"/obj/item/weapon/lazarus_injector",
 		"/obj/item/weapon/anobattery",
-		"/obj/item/weapon/mining_drone_cube")
+		"/obj/item/weapon/mining_drone_cube",
+		"/obj/item/voucher/warp/kinetic_accelerator")
 
 /obj/item/weapon/storage/belt/lazarus
 	name = "trainer's belt"

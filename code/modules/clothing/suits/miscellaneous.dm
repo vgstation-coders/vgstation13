@@ -433,7 +433,7 @@ var/list/tag_suits_list = list()
 	item_state = "chickensuit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
-	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS
+	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS|HANDS|HIDETAIL
 	siemens_coefficient = 2.0
 
 /obj/item/clothing/suit/chickensuit/white
@@ -487,7 +487,7 @@ var/list/tag_suits_list = list()
 	icon_state = "strait_jacket"
 	item_state = "strait_jacket"
 	origin_tech = Tc_BIOTECH + "=2"
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|HIDETAIL
 	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/ianshirt

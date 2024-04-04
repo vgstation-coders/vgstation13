@@ -9,7 +9,7 @@
 	var/frequency = 1439
 
 	var/on = 1
-	var/output = 3
+	var/list/metrics_monitored = list("pressure", "temperature")
 	//Flags:
 	// 1 for pressure
 	// 2 for temperature
@@ -27,34 +27,43 @@
 /obj/machinery/air_sensor/update_icon()
 	icon_state = "gsensor[on]"
 
+/obj/machinery/air_sensor/proc/add_monitoring(var/input)
+	metrics_monitored |= input
+
+/obj/machinery/air_sensor/proc/remove_monitoring(var/input)
+	metrics_monitored -= input
+
+/obj/machinery/air_sensor/proc/toggle_monitoring(var/input)
+	if(!metrics_monitored.Remove(input))
+		metrics_monitored += input
+
+/obj/machinery/air_sensor/proc/is_monitoring(var/input)
+	return metrics_monitored.Find(input)
+
 /obj/machinery/air_sensor/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
-	return {"
+	var/dat = {"
 	<b>Main</b>
 	<ul>
 		<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[initial(frequency)]">Reset</a>)</li>
 		<li>[format_tag("ID Tag","id_tag")]</li>
-		<li>Monitor Pressure: <a href="?src=\ref[src];toggle_out_flag=1">[output&1 ? "Yes" : "No"]</a>
-		<li>Monitor Temperature: <a href="?src=\ref[src];toggle_out_flag=2">[output&2 ? "Yes" : "No"]</a>
-		<li>Monitor Oxygen Concentration: <a href="?src=\ref[src];toggle_out_flag=4">[output&4 ? "Yes" : "No"]</a>
-		<li>Monitor Plasma Concentration: <a href="?src=\ref[src];toggle_out_flag=8">[output&8 ? "Yes" : "No"]</a>
-		<li>Monitor Nitrogen Concentration: <a href="?src=\ref[src];toggle_out_flag=16">[output&16 ? "Yes" : "No"]</a>
-		<li>Monitor Carbon Dioxide Concentration: <a href="?src=\ref[src];toggle_out_flag=32">[output&32 ? "Yes" : "No"]</a>
-		<li>Monitor Nitrous Oxide Concentration: <a href="?src=\ref[src];toggle_out_flag=64">[output&64 ? "Yes" : "No"]</a>
-	</ul>"}
+		<li>Monitor Pressure: <a href="?src=\ref[src];toggle_monitoring=pressure">[is_monitoring("pressure") ? "Yes" : "No"]</a>
+		<li>Monitor Temperature: <a href="?src=\ref[src];toggle_monitoring=temperature">[is_monitoring("temperature") ? "Yes" : "No"]</a>"}
+
+	for(var/gas_ID in XGM.gases)
+		var/datum/gas/gas_datum = XGM.gases[gas_ID]
+		dat += {"<li>Monitor [gas_datum.name] Concentration: <a href="?src=\ref[src];toggle_monitoring=[gas_ID]">[is_monitoring(gas_ID) ? "Yes" : "No"]</a>"}
+	dat += "</ul>"
+	return dat
 
 /obj/machinery/air_sensor/multitool_topic(var/mob/user, var/list/href_list, var/obj/item/device/multitool/P)
 	. = ..()
 	if(.)
 		return .
 
-	if("toggle_out_flag" in href_list)
-		var/bitflag_value = text2num(href_list["toggle_out_flag"])//this is a string normally
-		if(!test_bitflag(bitflag_value) && bitflag_value <= 64) //Here to prevent breaking the sensors with HREF exploits
-			return 0
-		if(output&bitflag_value)//the bitflag is on ATM
-			output &= ~bitflag_value
-		else//can't not be off
-			output |= bitflag_value
+	if("toggle_monitoring" in href_list)
+		var/toggle_target = href_list["toggle_monitoring"]
+		if(toggle_target in XGM.gases || toggle_target == "pressure" || toggle_target == "temperature")
+			toggle_monitoring(toggle_target)
 		return MT_UPDATE
 
 /obj/machinery/air_sensor/attackby(var/obj/item/W as obj, var/mob/user as mob)
@@ -68,33 +77,17 @@
 		signal.data["timestamp"] = world.time
 
 		var/datum/gas_mixture/air_sample = return_air()
-
-		if(output&1)
-			// Fucking why do we need num2text
-			//signal.data["pressure"] = num2text(round(air_sample.return_pressure(),0.1),)
-			signal.data["pressure"] =round(air_sample.return_pressure(),0.1)
-		if(output&2)
-			signal.data["temperature"] = round(air_sample.temperature,0.1)
-
-		if(output>=4)
-			var/total_moles = air_sample.total_moles
-			if(total_moles > 0)
-				if(output & 4)
-					signal.data["oxygen"] = round(100 * air_sample[GAS_OXYGEN] / total_moles, 0.1)
-				if(output & 8)
-					signal.data["toxins"] = round(100 * air_sample[GAS_PLASMA] / total_moles, 0.1)
-				if(output & 16)
-					signal.data["nitrogen"] = round(100 * air_sample[GAS_NITROGEN] / total_moles, 0.1)
-				if(output & 32)
-					signal.data["carbon_dioxide"] = round(100 * air_sample[GAS_CARBON] / total_moles, 0.1)
-				if(output & 64)
-					signal.data["nitrous_oxide"] = round(100 * air_sample[GAS_SLEEPING] / total_moles, 0.1)
-			else
-				signal.data["oxygen"] = 0
-				signal.data["toxins"] = 0
-				signal.data["nitrogen"] = 0
-				signal.data["carbon_dioxide"] = 0
-				signal.data["nitrous_oxide"] = 0
+		var/total_moles = air_sample.total_moles
+		for(var/metric in metrics_monitored)
+			if(metric == "pressure")
+				signal.data["pressure"] =round(air_sample.return_pressure(),0.1)
+			if(metric == "temperature")
+				signal.data["temperature"] = round(air_sample.temperature,0.1)
+			else if(metric in XGM.gases)
+				signal.data[metric] = round(100 * air_sample[metric] / total_moles, 0.1)
+		for(var/gas_ID in XGM.gases)
+			if(!signal.data[gas_ID])
+				signal.data[gas_ID] = 0
 		signal.data["sigtype"]="status"
 		radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
 
@@ -174,21 +167,17 @@
 					sensor_part += "<tr><th>Pressure:</th><td>[data["pressure"]] kPa</td></tr>"
 				if(data["temperature"])
 					sensor_part += "<tr><th>Temperature:</th><td>[data["temperature"]] K</td></tr>"
-				if(data["oxygen"]||data["toxins"]||data["nitrogen"]||data["carbon_dioxide"])
-					sensor_part += "<tr><th>Gas Composition :</th><td><ul>"
-					if(data["oxygen"])
-						sensor_part += "<li>[data["oxygen"]]% O<sub>2</sub></li>"
-					if(data["nitrogen"])
-						sensor_part += "<li>[data["nitrogen"]]% N</li>"
-					if(data["carbon_dioxide"])
-						sensor_part += "<li>[data["carbon_dioxide"]]% CO<sub>2</sub></li>"
-					if(data["toxins"])
-						sensor_part += "<li>[data["toxins"]]% Plasma</li>"
-					if(data["nitrous_oxide"])
-						sensor_part += "<li>[data["nitrous_oxide"]]% N<sub>2</sub>O</li>"
+				var/header_added = FALSE
+				for(var/gas_ID in XGM.gases)
+					if(data[gas_ID])
+						if(!header_added)
+							header_added = TRUE
+							sensor_part += "<tr><th>Gas Composition :</th><td><ul>"
+						var/datum/gas/gas_datum = XGM.gases[gas_ID]
+						sensor_part += "<li>[data[gas_ID]]% [gas_datum.short_name]</li>"
+				if(header_added)
 					sensor_part += "</ul></td></tr>"
 				sensor_part += "</table>"
-
 			else
 				sensor_part += "<FONT color='red'>[long_name] can not be found!</FONT><BR>"
 			sensor_part += "</fieldset>"

@@ -412,7 +412,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#13BC5E" //rgb: 19, 188, 94
 	density = 3.35
-	specheatcap = 96.86
+	specheatcap = 0.09686
 
 /datum/reagent/mutagen/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())

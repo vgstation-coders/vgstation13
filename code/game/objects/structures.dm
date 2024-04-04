@@ -2,6 +2,7 @@
 	icon = 'icons/obj/structures.dmi'
 	penetration_dampening = 5
 	var/hasbolts = FALSE
+	fire_fuel = 0 //exceptions defined as needed
 
 /obj/structure/examine(mob/user)
 	..()

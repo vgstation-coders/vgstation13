@@ -29,7 +29,7 @@
 	var/has_mouse_bulked = 0
 	custom_metabolism = 0.1
 	density = 6.82
-	specheatcap = 678.67
+	specheatcap = 0.67867
 
 /datum/reagent/creatine/reagent_deleted()
 	if(..())

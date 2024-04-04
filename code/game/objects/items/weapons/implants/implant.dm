@@ -44,6 +44,16 @@
 	imp_in = null
 	return TRUE
 
+/obj/item/weapon/implant/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(istype(W, /obj/item/weapon/implanter))
+		var/obj/item/weapon/implanter/L = W
+		if(!L.imp)
+			forceMove(L)
+			user.show_message("<span class='warning'>You load \the [src] into \the [L].</span>")
+			L.imp = src
+			L.update()
+			return
+
 // Used by the implants that are activated by emotes.
 /obj/item/weapon/implant/proc/trigger(emote, mob/source)
 	return

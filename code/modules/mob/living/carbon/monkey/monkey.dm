@@ -5,7 +5,7 @@
 	icon_state = "monkey1"
 	icon = 'icons/mob/monkey.dmi'
 	gender = NEUTER
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	update_icon = 0		///no need to call regenerate_icon
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey
 	species_type = /mob/living/carbon/monkey
@@ -84,8 +84,8 @@
 		default_language = all_languages[languagetoadd]
 		init_language = default_language
 
-	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
-	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[HEALTH_HUD]      = new/image/hud('icons/mob/hud.dmi', src, "hudhealth100")
+	hud_list[STATUS_HUD]      = new/image/hud('icons/mob/hud.dmi', src, "hudhealthy")
 
 	..()
 	update_icons()

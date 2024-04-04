@@ -135,6 +135,7 @@ var/const/POS_HEADER = {"<html>
 	density = 0
 	name = "point of sale"
 	desc = "Also known as a cash register, or, more commonly, \"robbery magnet\"."
+	pass_flags = PASSTABLE
 
 	var/id = 0
 	var/sales = 0
