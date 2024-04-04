@@ -103,29 +103,6 @@
 	if ((cultist_role == CULTIST_ROLE_ACOLYTE) && !mentor)
 		FindMentor()
 
-	var/new_rank = get_devotion_rank()
-	if (new_rank > rank)
-		rank = new_rank
-		if (iscarbon(antag.current))//constructs and shades cannot make use of those powers so no point informing them.
-			to_chat(antag.current, "<span class='sinisterbig'>As your devotion to the cult increases, a new power awakens inside you.</span>")
-			switch(rank)
-				if (DEVOTION_TIER_1)
-					to_chat(antag.current, "<span class='danger'>Blood Pooling</span>")
-					to_chat(antag.current, "<b>Any blood cost required by a cult rune or ritual will now be reduced and split with other cult members that have attained this power. You can toggle blood pooling as needed.</b>")
-					GiveTattoo(/datum/cult_tattoo/bloodpool)
-				if (DEVOTION_TIER_2)
-					to_chat(antag.current, "<span class='danger'>Blood Dagger</span>")
-					to_chat(antag.current, "<b>You can now form a dagger using your own blood (or pooled blood, any blood that you can get your hands on). Hitting someone will let the dagger steal some of their blood, while sheathing the dagger will let you recover all the stolen blood. Throwing the dagger deals damage based on how much blood it carries, and nails the victim down, forcing them to pull the dagger out to move away.</b>")
-					GiveTattoo(/datum/cult_tattoo/dagger)
-				if (DEVOTION_TIER_3)
-					to_chat(antag.current, "<span class='danger'>Runic Skin</span>")
-					to_chat(antag.current, "<b>You can now fuse a talisman that has a rune imbued or attuned to it with your skin, granting you the ability to cast this talisman hands free, as long as you are conscious and not under the effects of Holy Water.</b>")
-					GiveTattoo(/datum/cult_tattoo/rune_store)
-				if (DEVOTION_TIER_4)
-					to_chat(antag.current, "<span class='danger'>Shortcut Sigil</span>")
-					to_chat(antag.current, "<b>Apply your palms on a wall to draw a sigil on it that lets you and any ally pass through it.</b>")
-					GiveTattoo(/datum/cult_tattoo/shortcut)
-			antag.current.DisplayUI("Cultist Right Panel")
 	if (faction)
 		var/datum/faction/bloodcult/cult = faction
 		switch(cult.stage)
@@ -375,10 +352,36 @@
 		if (1)
 			acquired_devotion /= 2
 	devotion += acquired_devotion
+	check_rank_upgrade()
 
 	if (faction)
 		var/datum/faction/bloodcult/cult = faction
 		cult.total_devotion += acquired_devotion
+
+/datum/role/cultist/proc/check_rank_upgrade()
+	var/new_rank = get_devotion_rank()
+	if (new_rank > rank)
+		rank = new_rank
+		if (iscarbon(antag.current))//constructs and shades cannot make use of those powers so no point informing them.
+			to_chat(antag.current, "<span class='sinisterbig'>As your devotion to the cult increases, a new power awakens inside you.</span>")
+			switch(rank)
+				if (DEVOTION_TIER_1)
+					to_chat(antag.current, "<span class='danger'>Blood Pooling</span>")
+					to_chat(antag.current, "<b>Any blood cost required by a cult rune or ritual will now be reduced and split with other cult members that have attained this power. You can toggle blood pooling as needed.</b>")
+					GiveTattoo(/datum/cult_tattoo/bloodpool)
+				if (DEVOTION_TIER_2)
+					to_chat(antag.current, "<span class='danger'>Blood Dagger</span>")
+					to_chat(antag.current, "<b>You can now form a dagger using your own blood (or pooled blood, any blood that you can get your hands on). Hitting someone will let the dagger steal some of their blood, while sheathing the dagger will let you recover all the stolen blood. Throwing the dagger deals damage based on how much blood it carries, and nails the victim down, forcing them to pull the dagger out to move away.</b>")
+					GiveTattoo(/datum/cult_tattoo/dagger)
+				if (DEVOTION_TIER_3)
+					to_chat(antag.current, "<span class='danger'>Runic Skin</span>")
+					to_chat(antag.current, "<b>You can now fuse a talisman that has a rune imbued or attuned to it with your skin, granting you the ability to cast this talisman hands free, as long as you are conscious and not under the effects of Holy Water.</b>")
+					GiveTattoo(/datum/cult_tattoo/rune_store)
+				if (DEVOTION_TIER_4)
+					to_chat(antag.current, "<span class='danger'>Shortcut Sigil</span>")
+					to_chat(antag.current, "<b>Apply your palms on a wall to draw a sigil on it that lets you and any ally pass through it.</b>")
+					GiveTattoo(/datum/cult_tattoo/shortcut)
+	antag.current.DisplayUI("Cultist Right Panel")
 
 /datum/role/cultist/proc/get_eclipse_increment()
 	switch(get_devotion_rank())

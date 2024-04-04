@@ -12,6 +12,9 @@
 /datum/cult_tattoo/proc/getTattoo(var/mob/M)
 	bearer = M
 
+/datum/cult_tattoo/proc/Display()
+	return TRUE
+
 /mob/proc/checkTattoo(var/tattoo_name)
 	if (!tattoo_name)
 		return
@@ -43,6 +46,11 @@ var/list/blood_communion = list()
 	if (C)
 		blood_communion.Add(C)
 		C.blood_pool = TRUE
+
+/datum/cult_tattoo/bloodpool/Display()//Since that tattoo is now unlocked fairly early, better let cultists hide it easily by leaving the pool
+	var/datum/role/cultist/C = bearer
+	if (C)
+		return C.blood_pool
 
 /datum/cult_tattoo/silent
 	name = TATTOO_SILENT

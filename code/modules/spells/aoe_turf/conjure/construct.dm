@@ -35,6 +35,11 @@
 		playsound(user, 'sound/items/welder.ogg', 100, 1)
 	. = ..()
 
+/spell/aoe_turf/conjure/construct/lesser/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	if (C)
+		C.get_devotion(50, DEVOTION_TIER_2)
+
 /spell/aoe_turf/conjure/floor
 	name = "Conjure Floor"
 	desc = "This spell conjures a cult floor. You can also click existing floors up to 3 tiles away to convert them."
@@ -72,6 +77,11 @@
 	shadow(target,holder.loc,"artificer_convert")
 	spawn(10)
 		QDEL_NULL(animation)
+
+/spell/aoe_turf/conjure/floor/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	if (C)
+		C.get_devotion(10, DEVOTION_TIER_1)
 
 /spell/aoe_turf/conjure/wall
 	name = "Conjure Wall"
@@ -111,6 +121,11 @@
 	spawn(10)
 		QDEL_NULL(animation)
 
+/spell/aoe_turf/conjure/wall/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	if (C)
+		C.get_devotion(10, DEVOTION_TIER_1)
+
 /spell/aoe_turf/conjure/door
 	name = "Conjure Door"
 	desc = "This spell conjures a cult door. Those automatically open and close upon the passage of a cultist, construct or shade."
@@ -136,6 +151,11 @@
 	shadow(target,holder.loc,"artificer_convert")
 	spawn(10)
 		QDEL_NULL(animation)
+
+/spell/aoe_turf/conjure/door/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	if (C)
+		C.get_devotion(10, DEVOTION_TIER_1)
 
 /spell/aoe_turf/conjure/wall/reinforced//what?
 	name = "Greater Construction"
@@ -175,6 +195,11 @@
 		playsound(user, 'sound/items/welder.ogg', 100, 1)
 	. = ..()
 
+/spell/aoe_turf/conjure/soulstone/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	if (C)
+		C.get_devotion(20, DEVOTION_TIER_2)
+
 /spell/aoe_turf/conjure/pylon
 	name = "Conjure Pylon"
 	desc = "This spell conjures a fragile crystal from Nar-Sie's realm. Makes for a convenient light source, or a weak obstacle."
@@ -192,6 +217,11 @@
 	cast_sound = 'sound/items/welder.ogg'
 	hud_state = "const_pylon"
 	override_base = "cult"
+
+/spell/aoe_turf/conjure/pylon/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	if (C)
+		C.get_devotion(10, DEVOTION_TIER_1)
 
 /spell/aoe_turf/conjure/pylon/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
 	if(!delay_animation)
@@ -364,6 +394,10 @@
 	var/mob/living/simple_animal/construct/builder = user
 	AM.setupglow(builder.construct_color)
 
+	var/datum/role/cultist/C = iscultist(user)
+	if (C)
+		C.get_devotion(40, DEVOTION_TIER_2)
+
 /spell/aoe_turf/conjure/struct
 	name = "Conjure Structure"
 	desc = "Raise a cult structure that you may then operate, such as an altar, a forge, or a spire."
@@ -415,6 +449,10 @@
 			summon_type = list(/obj/structure/cult/forge)
 	return 0
 
+/spell/aoe_turf/conjure/soulstone/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	if (C)
+		C.get_devotion(10, DEVOTION_TIER_1)
 
 /spell/aoe_turf/conjure/path_entrance
 	name = "Path Entrance"
@@ -453,6 +491,10 @@
 	R.one_pulse()
 	R.trigger(user)
 
+	var/datum/role/cultist/C = iscultist(user)
+	if (C)
+		C.get_devotion(30, DEVOTION_TIER_1)
+
 /spell/aoe_turf/conjure/path_exit
 	name = "Path Exit"
 	desc = "Place an exit to a shotcut through the veil between this world and the other one."
@@ -489,6 +531,10 @@
 	write_full_rune(R.loc, /datum/rune_spell/portalexit)
 	R.one_pulse()
 	R.trigger(user)
+
+	var/datum/role/cultist/C = iscultist(user)
+	if (C)
+		C.get_devotion(30, DEVOTION_TIER_1)
 
 
 /obj/effect/artificer_underlay

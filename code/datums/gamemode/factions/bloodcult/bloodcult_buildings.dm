@@ -1199,6 +1199,9 @@ var/list/cult_spires = list()
 				else
 					timeleft--
 					update_progbar()
+					var/datum/role/cultist/C = iscultist(forger)
+					if (C)
+						C.get_devotion(10, DEVOTION_TIER_2)
 					if (timeleft<=0)
 						playsound(L, 'sound/effects/forge_over.ogg', 50, 0, -3)
 						if (forger.client)

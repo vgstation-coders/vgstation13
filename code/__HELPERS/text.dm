@@ -286,9 +286,10 @@ var/list/whitelist_name_diacritics_min = list(
 
 //Adds 'u' number of zeros ahead of the text 't'
 /proc/add_zero(t, u)
-	while (length(t) < u)
-		t = "0[t]"
-	return t
+	var/string = "[t]"
+	while (length(string) < u)
+		string = "0[string]"
+	return string
 
 //u1 = how many numbers before the dot, u2 = how many numbers after the dot
 /proc/add_zero_before_and_after(t, u1, u2)
@@ -297,17 +298,17 @@ var/list/whitelist_name_diacritics_min = list(
 	if (dot_pos)
 		dot_pos--
 		while (dot_pos < u1)
-			t = "0[t]"
+			string = "0[string]"
 			dot_pos++
-		while (length(t) < (u1+u2+1))
-			t = "[t]0"
+		while (length(string) < (u1+u2+1))
+			string = "[string]0"
 	else
-		while (length(t) < u1)
-			t = "0[t]"
-		t = "[t]."
-		while (length(t) < (u1+u2+1))
-			t = "[t]0"
-	return t
+		while (length(string) < u1)
+			string = "0[string]"
+		string = "[string]."
+		while (length(string) < (u1+u2+1))
+			string = "[string]0"
+	return string
 
 //Adds 'u' number of spaces ahead of the text 't'
 /proc/add_lspace(t, u)

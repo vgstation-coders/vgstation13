@@ -99,6 +99,14 @@
 	if(find_active_faction_by_member(mind.GetRole(LEGACY_CULTIST)))
 		return 1
 
+/mob/living/simple_animal/construct/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)
+	var/datum/role/cultist/C = iscultist(src)
+	if (C && damage && !iscultist(target) && !target.isDead())
+		if (target.mind)
+			C.get_devotion(30, DEVOTION_TIER_3)
+		else
+			C.get_devotion(30, DEVOTION_TIER_2)
+
 #define SPEAK_OVER_GENERAL_CULT_CHAT 0
 #define SPEAK_OVER_CHANNEL_INTO_CULT_CHAT 1
 #define HEAR_CULT_CHAT 2

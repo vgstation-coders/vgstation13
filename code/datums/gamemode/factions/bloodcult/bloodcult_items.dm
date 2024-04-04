@@ -202,7 +202,10 @@ var/list/arcane_tomes = list()
 		to_chat(M, "<span class='warning'>You feel a searing heat inside of you!</span>")
 		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
 		if (C)
-			C.get_devotion(30, DEVOTION_TIER_3)
+			if (M.mind)
+				C.get_devotion(30, DEVOTION_TIER_3)
+			else
+				C.get_devotion(30, DEVOTION_TIER_2)
 
 /obj/item/weapon/tome/attack_hand(var/mob/living/user)
 	if(!iscultist(user) && state == TOME_OPEN)
@@ -589,7 +592,10 @@ var/list/arcane_tomes = list()
 	if (iscultist(user))
 		if (!iscultist(target) && !target.isDead())
 			var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
-			C.get_devotion(30, DEVOTION_TIER_3)
+			if (target.mind)
+				C.get_devotion(30, DEVOTION_TIER_3)
+			else
+				C.get_devotion(30, DEVOTION_TIER_2)
 		if (ishuman(target) && target.resting)
 			var/obj/structure/cult/altar/altar = locate() in target.loc
 			if (altar)
@@ -824,7 +830,10 @@ var/list/arcane_tomes = list()
 		return
 	if (iscultist(user) && !iscultist(target) && !target.isDead())
 		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
-		C.get_devotion(30, DEVOTION_TIER_3)
+		if (target.mind)
+			C.get_devotion(30, DEVOTION_TIER_3)
+		else
+			C.get_devotion(30, DEVOTION_TIER_2)
 	if (ishuman(target) && target.resting)
 		var/obj/structure/cult/altar/altar = locate() in target.loc
 		if (altar)
@@ -1123,7 +1132,10 @@ var/list/arcane_tomes = list()
 		return
 	if (iscultist(user) && !iscultist(target) && !target.isDead())
 		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
-		C.get_devotion(30, DEVOTION_TIER_3)
+		if (target.mind)
+			C.get_devotion(30, DEVOTION_TIER_3)
+		else
+			C.get_devotion(30, DEVOTION_TIER_2)
 	..()
 /obj/item/weapon/melee/blood_dagger/attack_hand(var/mob/living/user)
 	if(!ismob(loc))

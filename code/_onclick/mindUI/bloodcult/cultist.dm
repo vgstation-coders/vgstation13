@@ -158,6 +158,8 @@
 	uniqueID = "Cultist Right Panel"
 	element_types_to_spawn = list(
 		/obj/abstract/mind_ui_element/bloodcult_spells_background,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter/solo,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/pool,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/dagger,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman,
@@ -172,9 +174,8 @@
 	var/mob/M = mind.current
 	if (!M)
 		return FALSE
-	var/datum/role/cultist/C = iscultist(M)
-	if(C && iscarbon(M))
-		return (C.rank > DEVOTION_TIER_0)
+	if(iscultist(M))
+		return TRUE
 	return FALSE
 
 //------------------------------------------------------------
@@ -186,6 +187,64 @@
 	offset_x = 192
 	offset_y = -96
 	layer = MIND_UI_BACK
+
+/obj/abstract/mind_ui_element/bloodcult_spells_background/CanAppear()
+	var/mob/living/M = GetUser()
+	return iscarbon(M)
+
+/obj/abstract/mind_ui_element/bloodcult_spells_background/Appear()
+	if(!CanAppear())
+		invisibility = 101
+		return
+	..()
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter
+	name = "Devotion"
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "devotion_counter"
+	offset_x = 192
+	offset_y = -96
+	layer = MIND_UI_BACK+0.5
+
+	hover_state = FALSE
+	element_flags = MINDUI_FLAG_TOOLTIP
+	tooltip_title = "Devotion"
+	tooltip_content = "Performing cult activities generates devotion, which hastens the coming of the Eclipse and rewards you with new powers.<br><br>Cult activities range from using most runes, to harming living beings with cult weapons.<br><br>Some activities generate less devotion past a certain threshold. Experiment and find out."
+	tooltip_theme = "radial-cult"
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter/CanAppear()
+	var/mob/living/M = GetUser()
+	return iscarbon(M)
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter/Appear()
+	if(!CanAppear())
+		invisibility = 101
+		return
+	..()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter/process()
+	if (invisibility == 101)
+		return
+	UpdateIcon()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter/UpdateIcon()
+	overlays.len = 0
+	var/datum/role/cultist/C = parent.mind.GetRole(CULTIST)
+	var/devotion = min(9999,C.devotion)
+	overlays += String2Image("[add_zero(devotion,4)]",_pixel_x = 4,_pixel_y = 9)
+
+
+//------------------------------------------------------------
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter/solo
+	icon_state = "devotion_counter_solo"
+	offset_y = -92
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter/solo/CanAppear()
+	var/mob/living/M = GetUser()
+	return !iscarbon(M)
 
 //////////////////////
 
@@ -204,7 +263,7 @@
 		return TRUE
 	var/mob/living/M = GetUser()
 	if(M.checkTattoo(required_tattoo))
-		return TRUE
+		return iscarbon(M)
 	return FALSE
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/Appear()
@@ -246,6 +305,8 @@
 
 	for (var/datum/role/cultist/CU in blood_communion)
 		CU.antag.current.DisplayUI("Cultist Right Panel")
+
+	M.update_mutations()
 
 	if (C.blood_pool)
 		to_chat(M, "<span class='warning'>You return to the blood pool. Blood costs are slightly reduced, on top of getting split between you and other cultists.</span>")
@@ -797,7 +858,8 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_eclipse_rate/UpdateIcon()
 	overlays.len = 0
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	overlays += String2Image("[add_zero_before_and_after(round(cult.eclipse_increments, 0.001), 2, 3)]",_pixel_x = 10,_pixel_y = 2)
+	var/eclipse_rate = min(99.999, cult.eclipse_increments)
+	overlays += String2Image("[add_zero_before_and_after(round(eclipse_rate, 0.001), 2, 3)]",_pixel_x = 10,_pixel_y = 2)
 
 
 //------------------------------------------------------------
@@ -824,7 +886,8 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_total_devotion/UpdateIcon()
 	overlays.len = 0
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	overlays += String2Image("[add_zero(cult.total_devotion,7)]",_pixel_x = 4,_pixel_y = 4)
+	var/total_devotion = min(9999999,cult.total_devotion)
+	overlays += String2Image("[add_zero(total_devotion,7)]",_pixel_x = 4,_pixel_y = 4)
 
 
 //------------------------------------------------------------
