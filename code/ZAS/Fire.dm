@@ -383,6 +383,7 @@ var/global/list/image/charred_overlays = list()
 		last_char = world.time
 
 /turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume, var/soh = 0, var/surfaces=0)
+	return 0
 
 /turf/simulated/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	var/obj/effect/E = null
@@ -415,16 +416,17 @@ var/global/list/image/charred_overlays = list()
 
 	var/igniting = 0
 
-	if(surfaces && air_contents.molar_ratio(GAS_OXYGEN) >= MINOXY2BURN)
+	if(air_contents.check_combustability(src))
+		if((flammable || locate(/obj/effect/decal/cleanable/liquid_fuel) in src) && !on_fire)
+			ignite()
+			igniting = 1
 		for(var/obj/O in contents)
 			if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && O.flammable && !O.on_fire && exposed_temperature >= O.autoignition_temperature)
 				O.ignite()
 				igniting = 1
 				break
-	if(!igniting && exposed_temperature >= PLASMA_MINIMUM_BURN_TEMPERATURE && air_contents.check_combustability(src, surfaces))
-		igniting = 1
-	else if(igniting)
-		new /obj/effect/fire(src)
+		if(igniting)
+			new /obj/effect/fire(src)
 	return igniting
 
 /turf/ignite()
@@ -724,7 +726,7 @@ var/global/list/image/charred_overlays = list()
 		return 1
 
 	for(var/atom/A in T)
-		if(!A.check_fire_protection)
+		if(!A.check_fire_protection())
 			if(A.flammable && A.thermal_mass)
 				return 1
 			if(A.reagents)
