@@ -1844,7 +1844,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 
 // /datum/reagent/var/sport
 #define SPORTINESS_NONE 1
-#define SPORTINESS_SUGAR 1.2
+#define SPORTINESS_SUGAR 1.5
 #define SPORTINESS_SPORTS_DRINK 5
 
 //Luck-related defines
