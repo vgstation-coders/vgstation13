@@ -310,7 +310,7 @@ var/global/list/image/charred_overlays = list()
 	if(check_fire_protection())
 		return 0
 
-	if(istype(loc, /mob)) //worn or held items don't ignite (for now >:^) )
+	if(!istype(loc, /turf)) //worn or held items don't ignite (for now >:^) )
 		return 0
 
 	if(!flammable)

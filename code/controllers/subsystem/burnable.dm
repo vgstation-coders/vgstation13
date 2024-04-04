@@ -52,6 +52,8 @@ var/list/atom/burnableatoms = list()
 			burnSolidFuel()
 
 /obj/item/checkburn()
+	if(!istype(loc, /turf)) //Prevent things from burning if worn, held, or inside something else. Storage containers will eject their contents when ignited, allowing for burning of the contents.
+		return
 	if(flammable && !on_fire)
 		var/datum/gas_mixture/G = return_air()
 		if(smoke_holder)

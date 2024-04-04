@@ -324,7 +324,7 @@ Subject's pulse: ??? BPM"})
 	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	flammable = TRUE
+	flammable = FALSE //the thing used to see how hot the air around it is probably shouldn't be flammable
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
 
 /obj/item/device/analyzer/attack_self(mob/user as mob)
