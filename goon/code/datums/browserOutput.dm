@@ -277,7 +277,7 @@ For the main html chat area
 	if (isicon(obj))
 		return bicon(obj)
 
-	var/icon/I = getFlatIcon(obj)
+	var/icon/I = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(obj)))
 	return bicon(I)
 
 /proc/to_chat(target, message)
@@ -369,6 +369,6 @@ For the main html chat area
 		to_chat(M, message)
 	log_game("DEADCHAT: [message]")
 	return 1
-		
+
 /datum/log	//exists purely to capture to_chat() output
 	var/log = ""

@@ -119,11 +119,11 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/plated_food = snack
 		if (plated_food.ingredients.len)
 			var/obj/item/weapon/reagent_containers/food/snacks/ingredient = pick(plated_food.ingredients)
-			newcolor = ingredient.filling_color != "#FFFFFF" ? ingredient.filling_color : AverageColor(getFlatIcon(ingredient, ingredient.dir, 0), 1, 1)
+			newcolor = ingredient.filling_color != "#FFFFFF" ? ingredient.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(ingredient)), override_dir = ingredient.dir), 1, 1)
 		else
-			newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIcon(snack, snack.dir, 0), 1, 1)
+			newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)), override_dir = snack.dir), 1, 1)
 	else
-		newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIcon(snack, snack.dir, 0), 1, 1)
+		newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)), override_dir = snack.dir), 1, 1)
 	food_overlay.color = newcolor
 	overlays += food_overlay
 
@@ -223,11 +223,11 @@
 			var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/plated_food = snack
 			if (plated_food.ingredients.len)
 				var/obj/item/weapon/reagent_containers/food/snacks/ingredient = pick(plated_food.ingredients)
-				newcolor = ingredient.filling_color != "#FFFFFF" ? ingredient.filling_color : AverageColor(getFlatIcon(ingredient, ingredient.dir, 0), 1, 1)
+				newcolor = ingredient.filling_color != "#FFFFFF" ? ingredient.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(ingredient)), override_dir = ingredient.dir), 1, 1)
 			else
-				newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIcon(snack, snack.dir, 0), 1, 1)
+				newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)), override_dir = snack.dir), 1, 1)
 		else
-			newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIcon(snack, snack.dir, 0), 1, 1)
+			newcolor = snack.filling_color != "#FFFFFF" ? snack.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)), override_dir = snack.dir), 1, 1)
 		food_overlay.color = newcolor
 		overlays += food_overlay
 	else
@@ -235,11 +235,11 @@
 		if (istype(snack, /obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom))
 			var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/plated_food = snack
 			if (plated_food.ingredients.len)
-				food_to_load = getFlatIcon(pick(plated_food.ingredients)) // So the plate doesn't appear on the fork
+				food_to_load = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(pick(plated_food.ingredients)))) // So the plate doesn't appear on the fork
 			else
-				food_to_load = getFlatIcon(snack)
+				food_to_load = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)))
 		else
-			food_to_load = getFlatIcon(snack)
+			food_to_load = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)))
 		food_to_load.Scale(16,16)
 		food_overlay = image(food_to_load)
 		food_overlay.pixel_x = 8 * PIXEL_MULTIPLIER + pixel_x
@@ -371,11 +371,11 @@
 	if (istype(snack, /obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom))
 		var/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/plated_food = snack
 		if (plated_food.ingredients.len)
-			food_to_load = getFlatIcon(pick(plated_food.ingredients)) // So the plate doesn't appear on the fork
+			food_to_load = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(pick(plated_food.ingredients)))) // So the plate doesn't appear on the fork
 		else
-			food_to_load = getFlatIcon(snack)
+			food_to_load = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)))
 	else
-		food_to_load = getFlatIcon(snack)
+		food_to_load = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(snack)))
 	food_to_load.Scale(16,16)
 	food_overlay = image(food_to_load)
 	food_overlay.pixel_x = 8 * PIXEL_MULTIPLIER + pixel_x

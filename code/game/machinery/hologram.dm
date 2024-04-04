@@ -130,11 +130,11 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	var/icon/alpha_mask = new('icons/effects/effects.dmi', "scanline")
 	colored_holo.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
 	holo.icon = colored_holo
-	
-	var/icon/colored_ray = getFlatIcon(ray)
+
+	var/icon/colored_ray = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(ray)), override_dir = SOUTH)
 	colored_ray.ColorTone(A.holocolor)
 	ray.icon = colored_ray
-	
+
 	A.current = src
 	master = A//AI is the master.
 	use_power = MACHINE_POWER_USE_ACTIVE//Active power usage.

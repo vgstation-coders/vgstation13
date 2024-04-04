@@ -566,7 +566,7 @@
 	J.Shift(WEST, 13)
 	underlays += J
 	overlays += image(icon = icon, icon_state = "device")
-	rendered = getFlatIcon(src)
+	rendered = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(src)), override_dir = SOUTH)
 
 /obj/item/toy/bomb/examine(mob/user)
 	..()

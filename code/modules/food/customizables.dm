@@ -388,7 +388,7 @@
 			extra_food_overlay.overlays -= topping //thank you Comic
 		if(!fullyCustom && !stackIngredients && overlays.len)
 			extra_food_overlay.overlays -= filling //we can't directly modify the overlay, so we have to remove it and then add it again
-			var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
+			var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(S)), override_dir = S.dir), 1, 1)
 			filling.color = BlendRGB(filling.color, newcolor, 1/ingredients.len)
 			extra_food_overlay.overlays += image(filling)
 		else
@@ -439,7 +439,7 @@
 		if(istype(S) && S.filling_color != "#FFFFFF")
 			I.color = S.filling_color
 		else
-			I.color = AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
+			I.color = AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(S)), override_dir = S.dir), 1, 1)
 		if(stackIngredients)
 			I.pixel_y = ingredients.len * 2 * PIXEL_MULTIPLIER
 	if(fullyCustom || stackIngredients)
@@ -728,7 +728,7 @@
 				S.reagents.trans_to(src,S.reagents.total_volume)
 				ingredients += S
 				updateName()
-				var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
+				var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(S)), override_dir = S.dir), 1, 1)
 				filling.color = BlendRGB(filling.color, newcolor, 1/ingredients.len)
 				update_icon()
 		else
@@ -768,7 +768,7 @@
 	if(S.filling_color != "#FFFFFF")
 		I.color = S.filling_color
 	else
-		I.color = AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
+		I.color = AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(S)), override_dir = S.dir), 1, 1)
 	return I
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/Destroy()

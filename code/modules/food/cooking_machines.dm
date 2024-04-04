@@ -443,7 +443,7 @@ var/global/ingredientLimit = 10
 	if(cooks_in_reagents)
 		transfer_reagents_to_food(C) //add the stuff from the machine
 	C.name = "[ingredient.name] cereal"
-	var/image/I = image(getFlatIcon(ingredient, ingredient.dir, 0))
+	var/image/I = image(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(ingredient)), override_dir = ingredient.dir))
 	I.transform *= 0.7
 	C.extra_food_overlay.overlays += I
 	C.update_icon()

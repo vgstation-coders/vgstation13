@@ -105,7 +105,7 @@
 
 				if (istype(TrashItem, /obj/item/trash/plate))
 					var/obj/item/trash/plate/P = TrashItem
-					P.trash_color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
+					P.trash_color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(src)), override_dir = dir	), 1, 1)
 					P.update_icon()
 
 				if(ismob(old_loc))
@@ -417,7 +417,7 @@
 			C.icon_state = crumb_icon
 			C.name = crumb_icon
 			C.dir = pick(cardinal)
-			C.color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
+			C.color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(src)), override_dir = dir), 1, 1)
 			if (random_filling_colors?.len > 0)
 				filling_color = pick(random_filling_colors)
 		if (virus2?.len)
