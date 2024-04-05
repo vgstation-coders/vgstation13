@@ -23,10 +23,10 @@ var/list/atom/burnableatoms = list()
 
 /datum/subsystem/burnable/fire(var/resumed = FALSE)
     if(resumed)
-      for(burnable in burnableatoms)
-        burnable?.checkburn()
-        if (MC_TICK_CHECK)
-          break
+		for(burnable in burnableatoms)
+			burnable?.checkburn()
+			if (MC_TICK_CHECK)
+				break
 
 /atom/proc/checkburn()
 	if(on_fire) //if an object is burning, spawn a fire effect on the tile
