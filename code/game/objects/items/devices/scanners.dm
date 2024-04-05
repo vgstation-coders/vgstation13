@@ -537,12 +537,12 @@ Subject's pulse: ??? BPM"})
 		if(O.reagents.reagent_list.len)
 			for(var/datum/reagent/R in O.reagents.reagent_list)
 				var/reagent_percent = (R.volume/O.reagents.total_volume)*100
-				dat += "<br><span class='notice'>[R][details ? " ([R.volume] units, [reagent_percent]%, time in system: [R.real_tick*2] seconds" : ""]</span>"
+				dat += "<br><span class='notice'>[R][details ? " ([R.volume] units, [reagent_percent]%[ismob(O) ? " , time in system: [R.real_tick*2] seconds" : ""])" : ""]</span>"
 		if (istype (O, /obj/item/weapon/reagent_containers/food/snacks))
 			var/obj/item/weapon/reagent_containers/food/snacks/S = O
 			if(S.dip && S.dip.reagent_list.len > 0)
 				for (var/datum/reagent/R in S.dip.reagent_list)
-					dat += "<br><span class='notice'>[R][details ? " (trace amounts, time in system: [R.real_tick*2] seconds" : ""]</span>"
+					dat += "<br><span class='notice'>[R][details ? " (trace amounts)" : ""]</span>"
 		if(dat)
 			to_chat(user, "<span class='notice'>Chemicals found in \the [O]:[dat]</span>")
 		else
