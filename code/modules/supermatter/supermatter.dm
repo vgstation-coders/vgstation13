@@ -585,7 +585,7 @@
 
 /obj/machinery/power/supermatter/malfhack_valid(var/mob/living/silicon/malf)
 	if(..())
-		to_chat(malf, "<span class='warning'>You cannot hack the [src] as it has nothing for you to interface with!</span>")
+		to_chat(malf, "<span class='warning'>You cannot hack \the [src] as it has nothing for you to interface with!</span>")
 		return FALSE
 
 /obj/machinery/computer/supermatter
