@@ -22,7 +22,7 @@ var/list/atom/burnableatoms = list()
 	..("P:[burnableatoms.len]")
 
 /datum/subsystem/burnable/fire(var/resumed = FALSE)
-    if(resumed)
+	if(resumed)
 		for(burnable in burnableatoms)
 			burnable?.checkburn()
 			if (MC_TICK_CHECK)
