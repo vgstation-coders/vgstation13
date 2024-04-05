@@ -681,3 +681,8 @@
 		screen = !screen
 
 	return TRUE
+
+/obj/machinery/computer/supermatter/malfhack_valid(var/mob/living/silicon/malf)
+	if(..())
+		to_chat(malf, "<span class='warning'>You cannot hack the [src] as it has nothing for you to interface with!</span>")
+		return FALSE
