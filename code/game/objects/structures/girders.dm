@@ -450,6 +450,11 @@
 	icon_state = "reinforced"
 	state = 2
 
+/obj/structure/girder/reinforced/displaced
+	name = "displaced reinforced girder"
+	icon_state = "r_displaced"
+	anchored = 0
+
 /obj/structure/cultgirder
 	name = "cult girder"
 	icon = 'icons/obj/cult.dmi'

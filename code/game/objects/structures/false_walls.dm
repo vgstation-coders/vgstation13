@@ -214,9 +214,19 @@
 					"<span class='warning'>You hear welding noises.</span>")
 					dismantle()
 
-		if( istype(W, /obj/item/weapon/pickaxe) )
-			var/obj/item/weapon/pickaxe/used_pick = W
-			if(used_pick.diggables & DIG_WALLS)
+		if(istype(W, /obj/item/weapon/pickaxe))
+			var/obj/item/weapon/pickaxe/PK = W
+			if(!(PK.diggables & DIG_WALLS))
+				return
+			if(mineral == "diamond")
+				return
+
+			user.visible_message("<span class='warning'>[user] begins [PK.drill_verb] straight into \the [src].</span>", \
+			"<span class='notice'>You begin [PK.drill_verb] straight into \the [src].</span>")
+			PK.playtoolsound(src, 100)
+			if(do_after(user, src, (MINE_DURATION * PK.toolspeed) * 10))
+				user.visible_message("<span class='notice'>[user]'s [PK] tears though the last of \the [src], leaving nothing but a girder.</span>", \
+				"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
 				dismantle()
 	else
 		to_chat(user, "<span class='notice'>You can't reach, close it first!</span>")
@@ -236,7 +246,10 @@
 		var/M = text2path("/obj/item/stack/sheet/mineral/[mineral]")
 		if(M)
 			new M(T, 2)
-	new /obj/structure/girder/displaced(T, 2)
+	if(reinforced)
+		new /obj/structure/girder/reinforced/displaced(T)
+	else
+		new /obj/structure/girder/displaced(T)
 	qdel(src)
 
 /obj/structure/falsewall/suicide_act(var/mob/living/user)
@@ -255,11 +268,9 @@
 /obj/structure/falsewall/rwall
 	name = "reinforced wall"
 	desc = "A huge chunk of reinforced metal and anchored rods used to separate rooms and keep all but the most equipped crewmen out."
-	icon = 'icons/turf/walls.dmi'
 	icon_state = "r_wall"
 	density = 1
 	opacity = 1
-	anchored = 1
 	reinforced = 1
 
 /*
