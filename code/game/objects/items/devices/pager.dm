@@ -22,12 +22,12 @@ var/list/pager_list = list()
 	var/last_alert_time = 0
 	var/alert_delay = 10 SECONDS
 	var/last_alert = ""
-	var/covered_areas
+	var/list/covered_areas = list()
 
 /obj/item/device/pager/New()
 	..()
 	pager_list += src
-	var/blockedtypes = typesof(/area/research_outpost,/area/mine,/area/derelict,/area/djstation,/area/vox_trading_post,/area/tcommsat)
+	var/blockedtypes = typesof(/area/derelict,/area/djstation,/area/vox_trading_post,/area/tcommsat)
 	for(var/atype in (typesof(/area) - blockedtypes))
 		var/area/B = locate(atype) in areas
 		covered_areas += B
