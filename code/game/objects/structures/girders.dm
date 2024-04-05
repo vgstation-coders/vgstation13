@@ -236,7 +236,7 @@
 						S.use(use_amount)
 						user.visible_message("<span class='warning'>[user] creates a false reinforced wall!</span>", \
 						"<span class='notice'>You create a false reinforced wall. Push on it to open or close the passage.</span>")
-						var/obj/structure/falserwall/FW = new /obj/structure/falserwall(src.loc)
+						var/obj/structure/falsewall/rwall/FW = new /obj/structure/falsewall/rwall(src.loc)
 						FW.add_hiddenprint(user)
 						FW.add_fingerprint(user)
 						qdel(src)

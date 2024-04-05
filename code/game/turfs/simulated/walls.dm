@@ -37,7 +37,7 @@
 	var/static/list/smoothables = list(
 		/turf/simulated/wall,
 		/obj/structure/falsewall,
-		/obj/structure/falserwall,
+		/obj/structure/falsewall/rwall,
 	)
 	return smoothables
 
