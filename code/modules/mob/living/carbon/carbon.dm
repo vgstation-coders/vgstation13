@@ -761,7 +761,7 @@
 		return CAN_REVIVE_NO
 	if (!mind)
 		return CAN_REVIVE_NO
-	if (mind.suicidng)
+	if (mind.suiciding)
 		return CAN_REVIVE_NO
 	if (client)
 		return CAN_REVIVE_IN_BODY
