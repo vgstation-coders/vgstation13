@@ -11,7 +11,6 @@ var/list/atom/burnableatoms = list()
 
 /datum/subsystem/burnable/New()
 	NEW_SS_GLOBAL(SSburnable)
-	currentrun = list()
 
 /datum/subsystem/burnable/stat_entry(var/msg)
 	if (msg)
@@ -23,7 +22,7 @@ var/list/atom/burnableatoms = list()
 
 /datum/subsystem/burnable/fire(var/resumed = FALSE)
 	if(resumed)
-		for(burnable in burnableatoms)
+		for(var/atom/burnable in burnableatoms)
 			burnable?.checkburn()
 			if (MC_TICK_CHECK)
 				break
