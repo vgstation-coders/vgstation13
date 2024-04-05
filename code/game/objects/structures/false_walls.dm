@@ -238,17 +238,16 @@
 		return
 	if(reinforced)
 		new /obj/item/stack/sheet/plasteel(T, 2)
-	if(mineral == "metal")
-		new /obj/item/stack/sheet/metal(T, 2)
-	else if(mineral == "wood")
-		new /obj/item/stack/sheet/wood(T, 2)
-	else
-		var/M = text2path("/obj/item/stack/sheet/mineral/[mineral]")
-		if(M)
-			new M(T, 2)
-	if(reinforced)
 		new /obj/structure/girder/reinforced/displaced(T)
 	else
+		if(mineral == "metal")
+			new /obj/item/stack/sheet/metal(T, 2)
+		else if(mineral == "wood")
+			new /obj/item/stack/sheet/wood(T, 2)
+		else
+			var/M = text2path("/obj/item/stack/sheet/mineral/[mineral]")
+			if(M)
+				new M(T, 2)
 		new /obj/structure/girder/displaced(T)
 	qdel(src)
 
