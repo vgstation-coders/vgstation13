@@ -81,7 +81,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(thermal_mass)
 		initial_thermal_mass = thermal_mass //can't just use initial() here as some thermal masses are defined in New()
 	if(flammable)
-		burnableatoms+=src
+		burnableatoms[src] = null
 		add_particles("Smoke")
 		smoke_holder = particle_systems["Smoke"]
 

@@ -60,7 +60,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	else
 		icon_regular_floor = icon_state
 	if(flammable)
-		burnableatoms+=src
+		burnableatoms[src] = null
 
 /turf/simulated/floor/proc/create_floor_tile()
 	if(!floor_tile)
