@@ -451,7 +451,6 @@
 			if(PN) // We need actual power in the cable powernet to move
 				if(PN.avail)
 					zaptocable(T)
-					charge -= min(charge,5000)
 
 // Common function for all
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob, var/siemens_coeff = 1)
