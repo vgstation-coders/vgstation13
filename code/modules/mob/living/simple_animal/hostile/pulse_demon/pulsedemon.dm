@@ -441,7 +441,7 @@
 /mob/living/simple_animal/hostile/pulse_demon/RangedAttack(atom/A)
 	return
 
-/*// Cable zapping mobs
+// Cable zapping mobs
 /mob/living/simple_animal/hostile/pulse_demon/OpenFire(atom/ttarget)
 	var/turf/T = get_turf(ttarget)
 	if(T)
@@ -451,7 +451,7 @@
 			if(PN) // We need actual power in the cable powernet to move
 				if(PN.avail)
 					zaptocable(ttarget)
-					charge -= min(charge,5000)*/
+					charge -= min(charge,5000)
 
 // Common function for all
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob, var/siemens_coeff = 1)
