@@ -36,6 +36,7 @@
 	melee_damage_upper = 0											//Handled in unarmed_attack_mob() anyways
 	pass_flags = PASSDOOR //| PASSMOB									//Stops the message spam
 	//ranged = TRUE
+	ranged_cooldown_cap = 5
 
 	//VARS
 	var/charge = 1000												//Charge stored
