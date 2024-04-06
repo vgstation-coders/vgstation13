@@ -35,7 +35,7 @@
 	melee_damage_lower = 0
 	melee_damage_upper = 0											//Handled in unarmed_attack_mob() anyways
 	pass_flags = PASSDOOR //| PASSMOB									//Stops the message spam
-	//ranged = TRUE
+	ranged = TRUE
 	ranged_cooldown_cap = 5
 
 	//VARS
@@ -450,7 +450,7 @@
 			var/datum/powernet/PN = cable.get_powernet()
 			if(PN) // We need actual power in the cable powernet to move
 				if(PN.avail)
-					zaptocable(ttarget)
+					zaptocable(T)
 					charge -= min(charge,5000)
 
 // Common function for all
