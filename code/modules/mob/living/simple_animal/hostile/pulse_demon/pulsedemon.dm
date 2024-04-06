@@ -35,6 +35,7 @@
 	melee_damage_lower = 0
 	melee_damage_upper = 0											//Handled in unarmed_attack_mob() anyways
 	pass_flags = PASSDOOR //| PASSMOB									//Stops the message spam
+	ranged = TRUE
 
 	//VARS
 	var/charge = 1000												//Charge stored
@@ -435,9 +436,17 @@
 		var/mob/living/L = A
 		unarmed_attack_mob(L)
 
-// We don't do these
-/mob/living/simple_animal/hostile/pulse_demon/RangedAttack(atom/A)
-	return
+// Cable zapping mobs
+/mob/living/simple_animal/hostile/pulse_demon/OpenFire(atom/ttarget)
+	var/turf/T = get_turf(ttarget)
+	if(T)
+		if((ttarget in view(world.view, src)) && ((locate(/obj/structure/cable) in T.contents) || istype(target,/obj/structure/cable)))
+			var/obj/structure/cable/cable = locate() in T
+			var/datum/powernet/PN = cable.get_powernet()
+			if(PN) // We need actual power in the cable powernet to move
+				if(PN.avail)
+					zaptocable(ttarget)
+					charge -= min(charge,5000)
 
 // Common function for all
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob, var/siemens_coeff = 1)
