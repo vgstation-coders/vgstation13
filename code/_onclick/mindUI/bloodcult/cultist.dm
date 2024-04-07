@@ -233,6 +233,7 @@
 	overlays.len = 0
 	var/datum/role/cultist/C = parent.mind.GetRole(CULTIST)
 	var/devotion = min(9999,C.devotion)
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if ((cult.stage == BLOODCULT_STAGE_DEFEATED) || (cult.stage == BLOODCULT_STAGE_NARSIE))
 		overlays += String2Image("[add_zero(devotion,4)]",_color="#FF0000",_pixel_x = 4,_pixel_y = 9)
 	else
@@ -701,6 +702,7 @@
 
 /obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count/UpdateIcon()
 	overlays.len = 0
+	offset_x = -13
 
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (istype(cult))
@@ -750,12 +752,13 @@
 					overlays += String2Image("[hours_to_go]:[minutes_to_go]:[seconds_to_go]",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
 
 			if (BLOODCULT_STAGE_ECLIPSE)
+				offset_x = -24
 				var/time_before_narsie = max(0, (cult.bloodstone_target_time - world.time)/10)
 				var/minutes_to_go = num2text(round(time_before_narsie/60))
 				var/seconds_to_go
-				if (minutes_to_go == "7")
+				if (minutes_to_go == "7")//6:66 lmao
 					minutes_to_go = "6"
-					seconds_to_go = add_zero(num2text((round(time_before_narsie) % 60)+60), 2)
+					seconds_to_go = add_zero(num2text((min(6,round(time_before_narsie) % 60))+60), 2)
 				else
 					seconds_to_go = add_zero(num2text(round(time_before_narsie) % 60), 2)
 				overlays += String2Image("  [minutes_to_go]:[seconds_to_go]",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
@@ -764,6 +767,7 @@
 				overlays += String2Image("0:00:00",10,'icons/ui/font_16x16.dmi',"#FF0000")
 			else
 				overlays += String2Image("0:00:00",10,'icons/ui/font_16x16.dmi',"#999999")
+	UpdateUIScreenLoc()
 
 //------------------------------------------------------------
 

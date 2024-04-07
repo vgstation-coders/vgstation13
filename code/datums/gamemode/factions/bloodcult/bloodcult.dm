@@ -122,6 +122,11 @@
 			for (var/obj/effect/rune/R in runes)
 				qdel(R)//new runes can be written, but any pre-existing one gets nuked.
 			spawn()
+				for(var/mob/living/simple_animal/M in mob_list)
+					if(!M.client && (M.faction == "cult"))
+						M.death()
+					CHECK_TICK
+			spawn()
 				for (var/mob/dead/observer/O in player_list)
 					O.decultify()
 					sleep(rand(1,5))
@@ -129,6 +134,10 @@
 				S.upgrade(1)
 		if (BLOODCULT_STAGE_NARSIE)
 			if (bloodstone)
+				for (var/mob/M in player_list)
+					M.playsound_local(get_turf(M), 'sound/effects/tear_reality.ogg', 100, 0)
+				anim(target = bloodstone.loc, a_icon = 'icons/obj/narsie.dmi', flick_anim = "narsie_spawn_anim_start", offX = -236 * PIXEL_MULTIPLIER, offY = -256 * PIXEL_MULTIPLIER, plane = NARSIE_PLANE)
+				sleep(2)
 				narsie = new(bloodstone.loc)
 
 /datum/faction/bloodcult/IsSuccessful()

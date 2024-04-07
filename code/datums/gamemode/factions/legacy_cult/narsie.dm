@@ -60,11 +60,10 @@ var/global/list/narsie_list = list()
 					if (emergency_shuttle)
 						emergency_shuttle.incall()
 						emergency_shuttle.can_recall = 0
-						if(emergency_shuttle.endtime > world.timeofday + 1800 && emergency_shuttle.location != 1 && !emergency_shuttle.departed)
-							emergency_shuttle.settimeleft(180)
+						if(emergency_shuttle.endtime > world.timeofday + 2400 && emergency_shuttle.location != 1 && !emergency_shuttle.departed)
+							emergency_shuttle.settimeleft(240)
 
 					ticker.StartThematic("endgame")
-					call_shuttle_proc(null, "")
 
 					SetUniversalState(/datum/universal_state/hell)
 					narsie_cometh = 1
@@ -535,8 +534,6 @@ var/global/mr_clean_targets = list(
 	if (cult && (src == cult.narsie))
 		message_admins("BLOODCULT: Nar-Sie Has Risen.")
 		log_admin("BLOODCULT: Nar-Sie Has Risen.")
-		for (var/mob/M in player_list)
-			M.playsound_local(get_turf(M), 'sound/effects/tear_reality.ogg', 100, 0)
 		ticker.StopThematic()
 		flick("narsie_spawn_anim",src)
 		for(var/mob/M in player_list)
