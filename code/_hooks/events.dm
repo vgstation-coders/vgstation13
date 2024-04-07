@@ -374,5 +374,15 @@
 	if(!registered_events.len)
 		registered_events = null
 
+/**
+  * Checks if a datum has a registered event.
+  * Arguments:
+  * * event/event_type Required. The typepath of the event to unregister.
+  * * datum/target Required. The object that's been previously registered.
+  * * procname Required. The proc of the object.
+  */
+/datum/proc/has_event(event/event_type, datum/target, procname)
+	return registered_events && registered_events[event_type] && registered_events[event_type]["[ref(target)]:[procname]"]
+
 #undef EVENT_HANDLER_OBJREF_INDEX
 #undef EVENT_HANDLER_PROCNAME_INDEX
