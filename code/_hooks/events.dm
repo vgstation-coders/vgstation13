@@ -382,6 +382,8 @@
   * * procname Required. The proc of the object.
   */
 /datum/proc/has_event(event/event_type, datum/target, procname)
+	if(!target || !procname)
+		return registered_events && registered_events[event_type]
 	return registered_events && registered_events[event_type] && registered_events[event_type]["[ref(target)]:[procname]"]
 
 #undef EVENT_HANDLER_OBJREF_INDEX
