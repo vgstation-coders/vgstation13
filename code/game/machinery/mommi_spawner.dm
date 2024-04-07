@@ -135,6 +135,10 @@
 		// Make the MoMMI!
 		log_admin("([user.ckey]/[user]) became a MoMMI as a ghost.")
 		var/mob/living/silicon/robot/mommi/M = new mommi_type(loc)
+		if(locked_to_zlevel)
+			M.add_ion_law("[locked_law]")
+			var/turf/T = get_turf(src)
+			M.locked_to_z = T.z
 		M.key = user.key
 
 		PostMoMMIMaking(M)
@@ -158,11 +162,6 @@
 
 	if(M.mind.special_role)
 		M.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting.") //>signing your shit
-
-	if(locked_to_zlevel)
-		M.add_ion_law("[locked_law]")
-		var/turf/T = get_turf(src)
-		M.locked_to_z = T.z
 
 	spawn()
 		M.Namepick()
