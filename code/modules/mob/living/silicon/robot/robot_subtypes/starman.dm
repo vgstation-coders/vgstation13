@@ -18,6 +18,7 @@
 	src.add_spell(new /spell/aoe_turf/starman_heal)
 	src.add_spell(new /spell/targeted/starman_shield)
 	src.add_spell(new /spell/targeted/starman_warp)
+	src.add_spell(new /spell/starman_dance)
 
 /mob/living/silicon/robot/starman/updatename(var/prefix)
 
@@ -313,6 +314,22 @@
 		user.visible_message("<span class='danger'>\The [user] bends reality in impossible ways!</span>","<span class='notice'>*Beep* Hostile consciousnesses twisted.</span>")
 
 	..()
+
+/spell/starman_dance
+	name = "Starman's Dance"
+	desc = "Damn! Look at those moves!"
+	override_icon = 'icons/mob/robots.dmi'
+	hud_state = "starman"
+	charge_max = 100
+	spell_flags = INCLUDEUSER
+	range = 1
+
+//Because spellcode requires a target, any target, even if there is no target
+/spell/starman_dance/choose_targets(mob/user)
+	return list(user)
+
+/spell/starman_dance/cast(list/targets, mob/user)
+	flick("starman_dance", user)
 
 
 /obj/item/weapon/gun/energy/starman_beam
