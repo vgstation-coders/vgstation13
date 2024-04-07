@@ -46,13 +46,6 @@
 
 	var/mentor_count = 0 	//so we don't loop through the member list if we already know there are no mentors in there
 
-	var/list/arch_cultists = list()
-	var/list/departments_left = list("Security", "Medical", "Engineering", "Science", "Cargo")
-
-	var/mob/living/sacrifice_target = null
-	var/datum/mind/sacrifice_mind = null
-	var/target_sacrificed = FALSE
-
 	var/cult_founding_time = 0
 	var/last_process_time = 0
 	var/delta = 1
@@ -81,17 +74,27 @@
 
 	var/total_devotion = 0
 
+	var/twister = FALSE
+
+	var/list/deconverted = list()//tracking for scoreboard purposes
+
 /datum/faction/bloodcult/stage(var/value)
 	stage = value
 	switch(stage)
 		if (BLOODCULT_STAGE_READY)
 			eclipse_trigger_cult()
+			for(var/obj/structure/cult/spire/S in cult_spires)
+				S.upgrade(3)
 		if (BLOODCULT_STAGE_MISSED)
 			for (var/datum/role/cultist in members)
 				var/mob/M = cultist.antag.current
 				to_chat(M, "<span class='sinister'>The Eclipse has passed. You won't be able to tear reality aboard this station anymore. Escape the station alive with your fellow cultists so you may try again another day.</span>")
+			for(var/obj/structure/cult/spire/S in cult_spires)
+				S.upgrade(1)
 		if (BLOODCULT_STAGE_ECLIPSE)
 			update_all_parallax()
+			var/datum/zLevel/ZL = map.zLevels[map.zMainStation]
+			ZL.transitionLoops = TRUE
 			spawn()
 				for (var/mob/dead/observer/O in player_list)
 					O.cultify()
@@ -111,16 +114,20 @@
 					set_security_level("red")
 		if (BLOODCULT_STAGE_DEFEATED)
 			..()
+			var/datum/zLevel/ZL = map.zLevels[map.zMainStation]
+			ZL.transitionLoops = FALSE
 			command_alert(/datum/command_alert/eclipse_bloodstone_broken)
 			if (sun.eclipse == ECLIPSE_ONGOING)//destruction of the blood stone instantly ends the Eclipse
 				sun.eclipse_manager.eclipse_end()
+			for (var/obj/effect/rune/R in runes)
+				qdel(R)//new runes can be written, but any pre-existing one gets nuked.
 			spawn()
 				for (var/mob/dead/observer/O in player_list)
 					O.decultify()
 					sleep(rand(1,5))
+			for(var/obj/structure/cult/spire/S in cult_spires)
+				S.upgrade(1)
 		if (BLOODCULT_STAGE_NARSIE)
-			ticker.StartThematic("endgame")
-			call_shuttle_proc(null, "")
 			if (bloodstone)
 				narsie = new(bloodstone.loc)
 
@@ -128,8 +135,113 @@
 	return cult_win
 
 /datum/faction/bloodcult/GetScoreboard()
-	. = ..()
-	//TODO
+	var/dat = ""
+	var/cult_won = FALSE
+	var/end_message = "The cult couldn't thrive"
+
+	if (stage == BLOODCULT_STAGE_NARSIE)
+		cult_won = TRUE
+		end_message = "The cult has thrived!"
+	else if (stage == BLOODCULT_STAGE_DEFEATED)
+		end_message = "The cult has been broken by the crew!"
+	else if (stage == BLOODCULT_STAGE_ECLIPSE)
+		cult_won = TRUE
+		end_message = "The cult shall inherit the station!"
+	else if (twister)
+		end_message = "The cult unfortunately sucks at twister!"
+	else if(emergency_shuttle.location == map.zCentcomm)
+		var/escaped_on_shuttle = 0
+		var/escaped_on_pods = 0
+		var/arrested_cultists = 0
+
+		for (var/datum/role/cultist/C in members)
+			var/datum/mind/_M = C.antag
+			var/mob/M = _M.current
+
+			if (!M || M.isDead())
+				continue
+			if(issilicon(M))
+				arrested_cultists++
+				continue
+			if(isbrain(M))
+				continue
+			var/turf/location = get_turf(M.loc)
+			if(!location)
+				continue
+
+			var/datum/shuttle/S = is_on_shuttle(M)
+			if(emergency_shuttle.shuttle == S)
+				if(istype(location, /turf/simulated/floor/shuttle/brig))
+					if(istype(M, /mob/living/carbon/human))
+						var/mob/living/carbon/human/H = M
+						if(H.restrained())
+							arrested_cultists++
+						else
+							escaped_on_shuttle++
+					else if(istype(M, /mob/living/carbon))
+						var/mob/living/carbon/O = M
+						if (O.handcuffed)
+							arrested_cultists++
+						else
+							escaped_on_shuttle++
+					continue
+				escaped_on_shuttle++
+			else if(emergency_shuttle.escape_pods.Find(S))
+				escaped_on_pods++
+
+		if (escaped_on_shuttle)
+			cult_won = TRUE
+			end_message = "[escaped_on_shuttle] cultist[(escaped_on_shuttle > 1) ? "s":""] escaped alongside the crew to spread the cult's influence further!"
+		else if (escaped_on_pods)
+			end_message = "Some cultists cowardly escaped on pods to hide for another century!"
+		else if (arrested_cultists)
+			end_message = "The cult has been overpowered by the crew! [arrested_cultists] of them [(arrested_cultists > 1) ? "were":"was"] arrested and delivered to Nanotrasen for containment."
+
+
+	dat += "<br>Accumulated devotion: [total_devotion]"
+
+	if (cult_won)
+		dat += "<br><font color='green'><B>[end_message]</B></font>"
+		feedback_add_details("[ID]_success","SUCCESS")
+	else
+		dat += "<br><font color='red'><B>[end_message]</B></font>"
+		feedback_add_details("[ID]_success","FAIL")
+
+	dat += "<br><FONT size = 2><B>Nar-Sie's most devoted:</B></FONT><br>"
+
+	var/list/sorted_members = list()
+	for (var/datum/role/cultist/C in members)
+		var/pos = sorted_members.len
+		while(pos > 0)
+			var/datum/role/cultist/U = sorted_members[pos]
+			if (C.devotion > U.devotion)
+				break
+			else
+				pos--
+		sorted_members.Insert(pos+1, C)
+
+	var/i = 1
+	var/members_dat = ""
+	for(var/datum/role/R in sorted_members)
+		var/results = R.GetScoreboard()
+		if(results)
+			members_dat = "[results]<br>[members_dat]"
+		i++
+
+	dat += members_dat
+
+	if (deconverted.len > 0)
+		dat += "<br><FONT size = 2><B>those who turned back:</B></FONT><br>"
+		i = 1
+		for (var/D in deconverted)
+			dat += "<br><font color='#888888'>[D] ([deconverted[D]])</font>"
+			if (i < deconverted.len)
+				dat += "<br>"
+			i++
+
+	stat_collection.add_faction(src)
+
+	return dat
 
 /datum/faction/bloodcult/proc/calculate_eclipse_rate()
 	eclipse_increments = 0
@@ -170,10 +282,10 @@
 			bloodstone.update_icon()
 			if (world.time >= bloodstone_target_time)
 				stage(BLOODCULT_STAGE_NARSIE)
-		if (BLOODCULT_STAGE_DEFEATED)
-			..()
-		if (BLOODCULT_STAGE_NARSIE)
-			call_shuttle_proc(null, "")
+		//if (BLOODCULT_STAGE_DEFEATED)
+
+		//if (BLOODCULT_STAGE_NARSIE)
+
 
 
 #define HUDICON_BLINKDURATION 10
@@ -254,13 +366,17 @@
 	for (var/reminder in cult_reminders)
 		R.antag.store_memory("Shared Cultist Knowledge: [reminder].")
 	previously_converted |= R.antag
+	if (R.antag.name in deconverted)
+		deconverted -= R.antag.name
 
 /datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
 	var/list/dat = ..()
 
+	/*
 	dat += "<br>"
 	dat += "<a href='?src=\ref[src];unlockRitual=1'>\[Unlock Ritual\]</A><br>"
 	dat += "<br>"
+	*/
 
 	return dat
 
@@ -270,7 +386,6 @@
 	if(!usr.check_rights(R_ADMIN))
 		message_admins("[usr] tried to access bloodcult faction Topic() without permissions.")
 		return
-	//TODO: let admins change and lock cultist cap
 
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
@@ -293,7 +408,7 @@
 	AnnounceObjectives()
 	..()
 
-
+//we don't really have a use for that right now but there are plans for it0
 /datum/faction/bloodcult/proc/add_bloody_floor(var/turf/T)
 	if (!istype(T))
 		return
@@ -306,46 +421,3 @@
 	if (!istype(T))
 		return
 	bloody_floors -= T
-
-
-/datum/faction/bloodcult/proc/FindSacrificeTarget()
-	var/list/possible_targets = list()
-	var/list/backup_targets = list()
-	for(var/mob/living/carbon/human/player in player_list)
-		if(iscultist(player))
-			continue
-		//They may be dead, but we only need their flesh
-		var/turf/player_turf = get_turf(player)
-		if(player_turf.z != map.zMainStation)//We only look for people currently aboard the station
-			continue
-		var/is_implanted = player.is_loyalty_implanted()
-		if(is_implanted || isReligiousLeader(player))
-			possible_targets += player
-		else
-			backup_targets += player
-
-	if(possible_targets.len <= 0) // If there are only non-implanted players left on the station, we'll have to sacrifice one of them
-		if (backup_targets.len <= 0)
-			message_admins("Blood Cult: Could not find a suitable sacrifice target.")
-			log_admin("Blood Cult: Could not find a suitable sacrifice target.")
-			return null
-		else
-			sacrifice_target = pick(backup_targets)
-	else
-		sacrifice_target = pick(possible_targets)
-	return sacrifice_target
-
-/proc/eclipse_bonus(var/mob/user, var/bonus = 0, var/method = "unknown")
-	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-	if (!istype(cult))
-		return
-	if (cult.stage != BLOODCULT_STAGE_NORMAL)
-		return//we only track bonus points if they're added when it matters
-
-	cult.eclipse_increments += bonus
-
-	if (user.mind)//minds are unique and never deleted unlike roles or mobs, so they're great for tracking.
-		if (user.mind in cult.eclipse_contributors)
-			cult.eclipse_contributors[user.mind] += bonus
-		else
-			cult.eclipse_contributors[user.mind] = bonus

@@ -329,7 +329,7 @@
 	if(user.client)
 		user.client.images |= progbar
 	spell_holder.overlays += image('icons/obj/cult.dmi',"runetrigger-build")
-	to_chat(activator, "<span class='rose'>This ritual's can be sped up by having multiple cultists partake in it or by wearing cult attire.</span>")
+	to_chat(activator, "<span class='rose'>This ritual can be sped up by having multiple cultists partake in it or by wearing cult attire.</span>")
 	spawn()
 		payment()
 
@@ -460,16 +460,16 @@
 	for(var/datum/role/cultist/C in cult.members)
 		var/datum/mind/M = C.antag
 		if (iscultist(M.current))//failsafe for cultist brains put in MMIs
-			to_chat(M.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[reminder]</span></span>")
+			to_chat(M.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinisterbig'>[reminder]</span></span>")
 			to_chat(M.current, "<span class='notice'>This message will be remembered by all current cultists, and by new converts as well.</span>")
 			M.store_memory("Cult reminder: [text].")
 
 	for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
-		to_chat(A, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinister'>[reminder]</span></span>. (Cult reminder)")
+		to_chat(A, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinisterbig'>[reminder]</span></span>. (Cult reminder)")
 		to_chat(A, "<span class='notice'>This message will be remembered by all current cultists, and by new converts as well.</span>")
 
 	for(var/mob/dead/observer/O in player_list)
-		to_chat(O, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinister'>[reminder]</span></span>. (Cult reminder)")
+		to_chat(O, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinisterbig'>[reminder]</span></span>. (Cult reminder)")
 
 	log_cultspeak("[key_name(user)] Cult reminder: [reminder]")
 
@@ -482,13 +482,13 @@
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
 		if (iscultist(M.current))//failsafe for cultist brains put in MMIs
-			to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[message]</span></B></span>")
+			to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinisterbig'>[message]</span></B></span>")
 
 	for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
-		to_chat(A, "<span class='game say'><b>[activator.real_name]</b> communicates, <span class='sinister'>[message]</span></span>")
+		to_chat(A, "<span class='game say'><b>[activator.real_name]</b> communicates, <span class='sinisterbig'>[message]</span></span>")
 
 	for(var/mob/dead/observer/O in player_list)
-		to_chat(O, "<span class='game say'><b>[activator.real_name]</b> communicates, <span class='sinister'>[message]</span></span>")
+		to_chat(O, "<span class='game say'><b>[activator.real_name]</b> communicates, <span class='sinisterbig'>[message]</span></span>")
 
 	log_cultspeak("[key_name(activator)] Cult Communicate Talisman: [message]")
 
@@ -543,11 +543,11 @@
 			if (M.current == speech.speaker)//echoes are annoying
 				continue
 			if (iscultist(M.current))//failsafe for cultist brains put in MMIs
-				to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
+				to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinisterbig'>[speech.message]</span></B></span>")
 		for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
-			to_chat(A, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinister'>[speech.message]</span></span>")
+			to_chat(A, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[speech.message]</span></span>")
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinister'>[speech.message]</span></span>")
+			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[speech.message]</span></span>")
 		log_cultspeak("[key_name(speech.speaker)] Cult Communicate Rune: [rendered_message]")
 
 /obj/effect/cult_ritual/cult_communication/HasProximity(var/atom/movable/AM)
@@ -1406,10 +1406,20 @@ var/list/confusion_victims = list()
 	Every non-cultist human in range will see their surroundings appear covered with occult markings, and everyone will look like monsters to them. \
 	HUDs won't help officer differentiate their owns for the duration of the illusion.\
 	<br><br>Robots in view will be simply blinded for a short while, cameras however will remain dark until someone resets their wiring.\
-	<br><br>Because it also causes a few seconds of blindness to those affected, this rune is useful as both a way to initiate a fight, escape, or kidnap someone amidst the chaos."
+	<br><br>Because it also causes a few seconds of blindness to those affected, this rune is useful as both a way to initiate a fight, escape, or kidnap someone amidst the chaos.\
+	<br><br>The duration is a bit shorter when used from a talisman, but you can slap it directly on someone to only afflict them with the same duration as a rune's."
 	var/rune_duration=300//times are in tenths of a second
 	var/talisman_duration=200
 	var/hallucination_radius=25
+	touch_cast = 1
+
+/datum/rune_spell/confusion/cast_touch(var/mob/M)
+	var/turf/T = get_turf(M)
+	invoke(activator,invocation,1)
+
+	new /obj/effect/cult_ritual/confusion(T,rune_duration,hallucination_radius, M, activator)
+
+	qdel(src)
 
 /datum/rune_spell/confusion/cast(var/duration = rune_duration)
 	new /obj/effect/cult_ritual/confusion(spell_holder,duration,hallucination_radius, null, activator)
@@ -1435,7 +1445,8 @@ var/list/confusion_victims = list()
 	//Alright, this is a pretty interesting rune, first of all we prepare the fake cult floors & walls that the victims will see.
 	var/turf/T = get_turf(src)
 	var/list/hallucinated_turfs = list()
-	playsound(T, 'sound/effects/confusion_start.ogg', 75, 0, 0)
+	if (!specific_victim)
+		playsound(T, 'sound/effects/confusion_start.ogg', 75, 0, 0)
 	for(var/turf/U in range(T,radius))
 		if (istype(U,/area/chapel))//the chapel is protected against such illusions, the mobs in it will still be affected however.
 			continue
@@ -1458,6 +1469,7 @@ var/list/confusion_victims = list()
 
 	if (specific_victim)
 		potential_victims.Add(specific_victim)
+		specific_victim.playsound_local(T, 'sound/effects/confusion_start.ogg', 75, 0, 0)
 	else
 		for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
 			potential_victims.Add(M)
@@ -1617,13 +1629,41 @@ var/list/confusion_victims = list()
 	word2 = /datum/rune_word/other
 	word3 = /datum/rune_word/see
 	page = "This rune causes every non-cultist (both humans and robots) in a 7 tile radius to be unable to speak 30 seconds, and unable to hear for 50 seconds. \
-		The durations are halved when cast from a talisman.\
+		The durations are halved when cast from a talisman, unless you slap someone directly with one, which will also limits the effects to them.\
 		<br><br>This rune is great to sow disorder and delay the arrival of security, and can potentially combo with a Stun talisman used on an area. The only downside is that you can't hear them scream while they are muted."
 	var/deaf_rune_duration=50//times are in seconds
 	var/deaf_talisman_duration=30
 	var/mute_rune_duration=25
 	var/mute_talisman_duration=15
 	var/effect_range=7
+	touch_cast = 1
+
+/datum/rune_spell/deafmute/cast_touch(var/mob/living/M)
+	invoke(activator,invocation,1)
+
+	var/deaf_duration = deaf_rune_duration
+	var/mute_duration = mute_rune_duration
+
+	var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+	if (!iscultist(M) && M.mind && !M.isDead())
+		C.get_devotion(50, DEVOTION_TIER_2)
+	M.overlay_fullscreen("deafborder", /obj/abstract/screen/fullscreen/deafmute_border)//victims see a red overlay fade in-out for a second
+	M.update_fullscreen_alpha("deafborder", 100, 5)
+	M.Deafen(deaf_duration)
+	M.Mute(mute_duration)
+	if (!(M.sdisabilities & DEAF))
+		to_chat(M,"<span class='notice'>The world around you suddenly becomes quiet.</span>")
+	if (!(M.sdisabilities & MUTE))
+		if (iscarbon(M))
+			to_chat(M,"<span class='warning'>You feel a terrible chill! You find yourself unable to speak a word...</span>")
+		else if (issilicon(M))
+			to_chat(M,"<span class='warning'>A shortcut appears to have temporarily disabled your speaker!</span>")
+	spawn(8)
+		M.update_fullscreen_alpha("deafborder", 0, 5)
+		sleep(8)
+		M.clear_fullscreen("deafborder", animate = 0)
+
+	qdel(src)
 
 /datum/rune_spell/deafmute/cast(var/deaf_duration = deaf_rune_duration, var/mute_duration = mute_rune_duration)
 	for(var/mob/living/M in range(effect_range,get_turf(spell_holder)))
@@ -2778,21 +2818,35 @@ var/list/bloodcult_exitportals = list()
 
 ////////////////////////////////////////////////////////////////////
 //																  //
-//								PULSE							  //
+//							DARK PULSE							  //
 //																  //
 ////////////////////////////////////////////////////////////////////
 
 /datum/rune_spell/pulse
-	name = "Pulse"
+	name = "Dark Pulse"
 	desc = "Scramble the circuits of nearby devices."
 	desc_talisman = "Use to scramble the circuits of nearby devices."
 	invocation = "Ta'gh fara'qha fel d'amar det!"
 	word1 = /datum/rune_word/destroy
 	word2 = /datum/rune_word/see
 	word3 = /datum/rune_word/technology
-	page = "This rune triggers a series of short-range EMPs that messes with electronic machinery, devices, and robots.\
-		<br><br>Affects things up to 3 tiles away, but only adjacent targets will take the full force of the EMP.\
-		<br><br>Best used as a talisman."
+	page = "This rune triggers a strong EMP that messes with electronic machinery, devices, and robots up to 3 tiles away.\
+		<br><br>Cultists and the objects they carry will be unaffected.\
+		<br><br>You may also slap  someone directly with the talisman to have its effects only affect them, but with double intensity."
+	touch_cast = 1
+
+/datum/rune_spell/pulse/cast_touch(var/mob/M)
+	var/turf/T = get_turf(M)
+	invoke(activator,invocation,1)
+	playsound(T, 'sound/items/Welder2.ogg', 25, 0, -5)
+	playsound(T, 'sound/effects/bloodboil.ogg', 25, 0, -5)
+	var/atom/movable/overlay/animation = anim(target = T,a_icon = 'icons/obj/cult.dmi', flick_anim = "rune_pulse",sleeptime = 15)
+	animation.add_particles("Cult Smoke Box")
+	spawn(6)
+		animation.adjust_particles("spawning",0,"Cult Smoke Box")
+	M.emp_act(1)
+	M.emp_act(1)
+	qdel(src)
 
 /datum/rune_spell/pulse/cast()
 	var/turf/T = get_turf(spell_holder)

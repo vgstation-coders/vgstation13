@@ -633,7 +633,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/eclipse_too_long
 	name = "Eclipse Is Lasting Too Long"
 	alert_title = "Solar Eclipse of Occult Origin?"
-	message = "The eclipse is lasting longer than expected. The moon appears to have changed its trajectory and we don't know how long this state of affair will persist. Centcom advises the crew to investigate around the station for occult activities that may be the source of this anomalous phenomenon."
+	message = "The eclipse is lasting longer than expected. The moon appears to have changed its trajectory and we don't know how long this state of affair will persist. Centcom advises the crew to investigate around the station for occult activities that may be the source of this anomalous phenomenon. In case any occult rune is discovered, erase those using salt, or more efficiently, holy salt."
 
 /datum/command_alert/eclipse_bloodstone
 	name = "Bloodstone has Risen"

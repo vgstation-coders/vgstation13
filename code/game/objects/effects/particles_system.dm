@@ -150,6 +150,12 @@
 			plane = FLOAT_PLANE
 		if ("Cult Halo")
 			plane = ABOVE_LIGHTING_PLANE
+		if ("Nar-SieHasRisen1")
+			plane = ABOVE_HUD_PLANE
+		if ("Nar-SieHasRisen2")
+			plane = ABOVE_HUD_PLANE
+		if ("Nar-SieHasRisen3")
+			plane = ABOVE_HUD_PLANE
 
 //////////////////////////////////////PARTICLES///////////////////////////////////
 
@@ -164,6 +170,9 @@ var/list/particle_string_to_type = list(
 	"Cult Smoke Box" = /particles/cult_smoke/box,
 	"Cult Halo" = /particles/cult_halo,
 	"Space Runes" = /particles/space_runes,
+	"Nar-SieHasRisen1" = /particles/narsie_has_risen,
+	"Nar-SieHasRisen2" = /particles/narsie_has_risen/next,
+	"Nar-SieHasRisen3" = /particles/narsie_has_risen/last,
 	)
 
 //STEAM
@@ -310,3 +319,24 @@ var/list/particle_string_to_type = list(
 	icon = 'icons/effects/effects_particles.dmi'
 	icon_state = list("rune-1","rune-2","rune-4","rune-8","rune-16","rune-32","rune-64","rune-128","rune-256","rune-512",)
 	drift = generator("box", list(-0.02,-0.02), list(0.02,0.02))
+
+
+//NAR-SIE HAS RISEN
+/particles/narsie_has_risen
+	width = 300
+	height = 64
+	count = 20
+	spawning = 0.2
+
+	lifespan = 20
+	fadein = 5
+	fade = 10
+	icon = 'icons/ui/bloodcult/223x37.dmi'
+	icon_state = "narsie"
+	drift = generator("box", list(-0.05,-0.05), list(0.05,0.05))
+
+/particles/narsie_has_risen/next
+	icon_state = "has"
+
+/particles/narsie_has_risen/last
+	icon_state = "risen"

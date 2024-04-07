@@ -209,7 +209,7 @@
 	layer = MIND_UI_BACK+0.5
 
 	hover_state = FALSE
-	element_flags = MINDUI_FLAG_TOOLTIP
+	element_flags = MINDUI_FLAG_TOOLTIP|MINDUI_FLAG_PROCESSING
 	tooltip_title = "Devotion"
 	tooltip_content = "Performing cult activities generates devotion, which hastens the coming of the Eclipse and rewards you with new powers.<br><br>Cult activities range from using most runes, to harming living beings with cult weapons.<br><br>Some activities generate less devotion past a certain threshold. Experiment and find out."
 	tooltip_theme = "radial-cult"
@@ -233,7 +233,10 @@
 	overlays.len = 0
 	var/datum/role/cultist/C = parent.mind.GetRole(CULTIST)
 	var/devotion = min(9999,C.devotion)
-	overlays += String2Image("[add_zero(devotion,4)]",_pixel_x = 4,_pixel_y = 9)
+	if ((cult.stage == BLOODCULT_STAGE_DEFEATED) || (cult.stage == BLOODCULT_STAGE_NARSIE))
+		overlays += String2Image("[add_zero(devotion,4)]",_color="#FF0000",_pixel_x = 4,_pixel_y = 9)
+	else
+		overlays += String2Image("[add_zero(devotion,4)]",_color="#FFFFFF",_pixel_x = 4,_pixel_y = 9)
 
 
 //------------------------------------------------------------
@@ -688,6 +691,7 @@
 	offset_y = 88
 	layer = MIND_UI_FRONT
 	element_flags = MINDUI_FLAG_PROCESSING
+	mouse_opacity = 0
 	var/red_blink = FALSE
 
 /obj/abstract/mind_ui_element/bloodcult_eclipse_timer_count/process()
@@ -702,7 +706,6 @@
 	if (istype(cult))
 		switch(cult.stage)
 			if (BLOODCULT_STAGE_NORMAL)
-				name = "Time before the Eclipse"
 				var/eclipse_remaining = cult.eclipse_target - cult.eclipse_progress
 				var/eclipse_ticks_to_go_at_current_rate = 999999
 				if (cult.eclipse_increments > 0)
@@ -731,7 +734,6 @@
 					overlays += String2Image("[hours_to_go]:[minutes_to_go]:[seconds_to_go]",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
 
 			if (BLOODCULT_STAGE_READY)
-				name = "Time until the Eclipse ends"
 				var/eclipse_ticks_before_end_at_current_rate = max(0, (sun.eclipse_manager.eclipse_end_time - world.time)/10)
 				var/hours_to_go = round(eclipse_ticks_before_end_at_current_rate/3600)
 				var/minutes_to_go = add_zero(num2text(round(eclipse_ticks_before_end_at_current_rate/60) % 60), 2)
@@ -748,10 +750,20 @@
 					overlays += String2Image("[hours_to_go]:[minutes_to_go]:[seconds_to_go]",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
 
 			if (BLOODCULT_STAGE_ECLIPSE)
-				name = "Time until the Eclipse ends"
-				overlays += String2Image("0:00:00",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
+				var/time_before_narsie = max(0, (cult.bloodstone_target_time - world.time)/10)
+				var/minutes_to_go = num2text(round(time_before_narsie/60))
+				var/seconds_to_go
+				if (minutes_to_go == "7")
+					minutes_to_go = "6"
+					seconds_to_go = add_zero(num2text((round(time_before_narsie) % 60)+60), 2)
+				else
+					seconds_to_go = add_zero(num2text(round(time_before_narsie) % 60), 2)
+				overlays += String2Image("  [minutes_to_go]:[seconds_to_go]",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
+
+			if (BLOODCULT_STAGE_NARSIE)
+				overlays += String2Image("0:00:00",10,'icons/ui/font_16x16.dmi',"#FF0000")
 			else
-				overlays += String2Image("0:00:00",10,'icons/ui/font_16x16.dmi',"#FFFFFF")
+				overlays += String2Image("0:00:00",10,'icons/ui/font_16x16.dmi',"#999999")
 
 //------------------------------------------------------------
 
@@ -802,9 +814,10 @@
 				overlays += mask
 
 			if (BLOODCULT_STAGE_ECLIPSE)
-				adjust_particles("spawning", 0)
-				name = "Time until the Eclipse ends"
-				mask.pixel_x = 288*(cult.eclipse_progress/cult.eclipse_target)
+				name = "Time until Nar-Sie rises"
+				mask.pixel_x = max(0, 288*((world.time - cult.bloodstone_rising_time)/(cult.bloodstone_target_time - cult.bloodstone_rising_time)))
+				adjust_particles("position", generator("box", list(mask.pixel_x-16,-1), list(mask.pixel_x-16,-14)))
+				adjust_particles("velocity", list(-1*(mask.pixel_x)/40, 0))
 				overlays.len = 0
 				overlays += mask
 			else
@@ -823,6 +836,7 @@
 	offset_y = -93
 	alpha = 255
 	layer = MIND_UI_FRONT
+	mouse_opacity = 0
 
 /obj/abstract/mind_ui_element/bloodcult_eclipse_timer_front/Click()
 	parent.Hide()
@@ -887,7 +901,10 @@
 	overlays.len = 0
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	var/total_devotion = min(9999999,cult.total_devotion)
-	overlays += String2Image("[add_zero(total_devotion,7)]",_pixel_x = 4,_pixel_y = 4)
+	if ((cult.stage == BLOODCULT_STAGE_DEFEATED) || (cult.stage == BLOODCULT_STAGE_NARSIE))
+		overlays += String2Image("[add_zero(total_devotion,7)]",_color="#FF0000",_pixel_x = 4,_pixel_y = 4)
+	else
+		overlays += String2Image("[add_zero(total_devotion,7)]",_color="#FFFFFF",_pixel_x = 4,_pixel_y = 4)
 
 
 //------------------------------------------------------------
@@ -1100,7 +1117,7 @@
 		adjust_particles("pixel_x",-8,"Cult Halo")
 		var/datum/mind/M = associated_role.antag
 		tooltip_title = M.name
-		var/icon/flat = getFlatIcon(M.current, SOUTH, 0, 1)
+		var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M.current)), override_dir = SOUTH)
 		tooltip_content = "<img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]' style='position:relative; top:10px;'>"
 		switch(associated_role.cultist_role)
 			if (CULTIST_ROLE_NONE)
@@ -1664,3 +1681,48 @@
 
 //------------------------------------------------------------
 
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//					BLOODCULT - NAR-SIE HAS RISEN				  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind_ui/bloodcult_narsie_has_risen
+	uniqueID = "Nar-Sie Has Risen"
+	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/bloodcult_particle_holder/bloodcult_narsie,
+		/obj/abstract/mind_ui_element/bloodcult_particle_holder/bloodcult_has,
+		/obj/abstract/mind_ui_element/bloodcult_particle_holder/bloodcult_risen
+		)
+	offset_layer = MIND_UI_GROUP_D
+	display_with_parent = FALSE
+
+/datum/mind_ui/bloodcult_narsie_has_risen/Display()
+	active = TRUE
+
+	spawn()
+		sleep(5)
+		for (var/obj/abstract/mind_ui_element/bloodcult_particle_holder/element in elements)
+			element.invisibility = 0
+			element.add_particles(element.my_particle)
+			sleep(10)
+
+		for (var/obj/abstract/mind_ui_element/bloodcult_particle_holder/element in elements)
+			element.adjust_particles("spawning", 0)
+
+/obj/abstract/mind_ui_element/bloodcult_particle_holder
+	mouse_opacity = 0
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "blank"
+	layer = MIND_UI_FRONT
+	var/my_particle
+
+/obj/abstract/mind_ui_element/bloodcult_particle_holder/bloodcult_narsie
+	my_particle = "Nar-SieHasRisen1"
+	offset_y = 64
+/obj/abstract/mind_ui_element/bloodcult_particle_holder/bloodcult_has
+	my_particle = "Nar-SieHasRisen2"
+/obj/abstract/mind_ui_element/bloodcult_particle_holder/bloodcult_risen
+	my_particle = "Nar-SieHasRisen3"
+	offset_y = -64

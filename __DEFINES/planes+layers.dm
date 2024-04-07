@@ -231,7 +231,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define BASE_PLANE 				(18 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
-#define MISC_HUD_MARKERS_PLANE	19
+#define NARSIE_PLANE			19
 
 #define ANTAG_HUD_PLANE		 	20
 

@@ -42,12 +42,17 @@
 	update_all_parallax()
 	update_station_lights()
 
-	world << sound('sound/effects/wind/wind_5_1.ogg')
+	for (var/mob/M in player_list)
+		M.playsound_local(get_turf(M), 'sound/effects/wind/wind_5_1.ogg', 100, 0)
 
 	spawn (delay_first_announcement)
 		command_alert(/datum/command_alert/eclipse_start)
 
 /datum/eclipse_manager/proc/process()
+	if (universe.name in list("Hell Rising", "Supermatter Cascade"))
+		processing_objects -= src//shit's fucked
+		return
+
 	if (world.time >= eclipse_end_time)
 
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)

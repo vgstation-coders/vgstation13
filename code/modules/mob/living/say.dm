@@ -447,8 +447,14 @@ var/list/headset_modes = list(
 				var/mob/living/L = speech.speaker
 				var/themessage
 				var/datum/role/cultist/C = iscultist(L)
-				if (C && (C.cultist_role == CULTIST_ROLE_MENTOR))
-					themessage = text("<span class='sinisterbig'><b>[]:</b> []</span>",src.name,html_encode(speech.message))//mentor messages are bigger
+				if (C)
+					switch (C.cultist_role)
+						if (CULTIST_ROLE_MENTOR)
+							themessage = text("<span class='sinistermentor'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
+						if (CULTIST_ROLE_ACOLYTE)
+							themessage = text("<span class='sinisteracolyte'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
+						else
+							themessage = text("<span class='sinister'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
 				else
 					themessage = text("<span class='sinister'><b>[]:</b> []</span>",src.name,html_encode(speech.message))
 				for(var/mob/M in player_list)

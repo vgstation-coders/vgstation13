@@ -239,8 +239,27 @@
 		dat += "<br>"
 	return dat
 
+/datum/role/cultist/ExtraScoreboard()
+	switch(devotion)
+		if (2000 to INFINITY)
+			return " <font color='#FF0000'>[devotion]</font>"
+		if (1000 to 2000)
+			return " <font color='#FF8800'>[devotion]</font>"
+		if (500 to 1000)
+			return " <font color='#FFFF00'>[devotion]</font>"
+		if (100 to 500)
+			return " <font color='#88FF00'>[devotion]</font>"
+		else
+			return " <font color='#00FF00'>[devotion]</font>"
+
 /datum/role/cultist/Drop()
 	DropMentorship()
+	antag.current.remove_particles("Cult Smoke")
+	antag.current.remove_particles("Cult Smoke2")
+	antag.current.remove_particles("Cult Halo")
+	if (faction)
+		var/datum/faction/bloodcult/C = faction
+		C.deconverted[antag.name] = devotion
 	..()
 
 /datum/role/cultist/proc/DropMentorship()
@@ -405,56 +424,6 @@
 		H.Dizzy(12)
 		H.stuttering = max(H.stuttering, 12)
 		H.Jitter(12)
-		/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
-			switch (current_act)
-				if (CULT_MENDED)
-					H.dust()
-					return
-				if (CULT_PROLOGUE)
-					H.eye_blurry = max(H.eye_blurry, 3)
-					H.Dizzy(3)
-				if (CULT_ACT_I)
-					H.eye_blurry = max(H.eye_blurry, 6)
-					H.Dizzy(6)
-					H.stuttering = max(H.stuttering, 6)
-				if (CULT_ACT_II)
-					H.eye_blurry = max(H.eye_blurry, 12)
-					H.Dizzy(12)
-					H.stuttering = max(H.stuttering, 12)
-					H.Jitter(12)
-				if (CULT_ACT_III)
-					H.eye_blurry = max(H.eye_blurry, 16)
-					H.Dizzy(16)
-					H.stuttering = max(H.stuttering, 16)
-					H.Jitter(16)
-					if (prob(50))
-						H.Knockdown(1)
-					else if (prob(50))
-						H.confused = 2
-					H.adjustOxyLoss(5)
-				if (CULT_ACT_IV)
-					H.eye_blurry = max(H.eye_blurry, 20)
-					H.Dizzy(20)
-					H.stuttering = max(H.stuttering, 20)
-					H.Jitter(20)
-					if (prob(60))
-						H.Knockdown(2)
-					else if (prob(60))
-						H.confused = 4
-					H.adjustOxyLoss(10)
-					H.adjustToxLoss(5)
-				if (CULT_EPILOGUE)
-					H.eye_blurry = max(H.eye_blurry, 30)
-					H.Dizzy(30)
-					H.stuttering = max(H.stuttering, 30)
-					H.Jitter(30)
-					if (prob(70))
-						H.Knockdown(4)
-					else if (prob(70))
-						H.confused = 6
-					H.adjustOxyLoss(20)
-					H.adjustToxLoss(10)
-					*/
 
 /datum/role/cultist/handle_splashed_reagent(var/reagent_id)//also proc'd when holy water is drinked or ingested in any way
 	var/mob/living/carbon/human/H = antag.current
@@ -464,79 +433,12 @@
 		if (holywarning_cooldown <= 0)
 			holywarning_cooldown = 5
 			to_chat(H, "<span class='danger'>The cold touch of holy water makes your head spin, you're having trouble walking straight.</span>")
-				/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
-				switch (current_act)
-					if (CULT_MENDED)
-						to_chat(H, "<span class='danger'>The holy water permeates your skin and consumes your cursed blood like mercury digests gold.</span>")
-					if (CULT_PROLOGUE)
-						to_chat(H, "<span class='warning'>You feel the cold touch of holy water, but the veil is still too thick for it to be a real threat.</span>")
-					if (CULT_ACT_I)
-						to_chat(H, "<span class='warning'>The touch of holy water troubles your thoughts, you won't be able to cast spells under its effects.</span>")
-					if (CULT_ACT_II)
-						to_chat(H, "<span class='danger'>The holy water makes your head spin, you're having trouble walking straight.</span>")
-					if (CULT_ACT_III)
-						to_chat(H, "<span class='danger'>The holy water freezes your muscles, you find yourself short of breath.</span>")
-					if (CULT_ACT_IV)
-						to_chat(H, "<span class='danger'>The holy water makes you sick to your stomach.</span>")
-					if (CULT_EPILOGUE)
-						to_chat(H, "<span class='danger'>Even in these times, holy water proves itself capable of hindering your progression.</span>")
 
-				*/
 	if (reagent_id == HOLYWATER || reagent_id == INCENSE_HAREBELLS)
 		H.eye_blurry = max(H.eye_blurry, 12)
 		H.Dizzy(12)
 		H.stuttering = max(H.stuttering, 12)
 		H.Jitter(12)
-			/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
-			switch (current_act)
-				if (CULT_MENDED)
-					H.dust()
-					return
-				if (CULT_PROLOGUE)
-					H.eye_blurry = max(H.eye_blurry, 3)
-					H.Dizzy(3)
-				if (CULT_ACT_I)
-					H.eye_blurry = max(H.eye_blurry, 6)
-					H.Dizzy(6)
-					H.stuttering = max(H.stuttering, 6)
-				if (CULT_ACT_II)
-					H.eye_blurry = max(H.eye_blurry, 12)
-					H.Dizzy(12)
-					H.stuttering = max(H.stuttering, 12)
-					H.Jitter(12)
-				if (CULT_ACT_III)
-					H.eye_blurry = max(H.eye_blurry, 16)
-					H.Dizzy(16)
-					H.stuttering = max(H.stuttering, 16)
-					H.Jitter(16)
-					if (prob(50))
-						H.Knockdown(1)
-					else if (prob(50))
-						H.confused = 2
-					H.adjustOxyLoss(5)
-				if (CULT_ACT_IV)
-					H.eye_blurry = max(H.eye_blurry, 20)
-					H.Dizzy(20)
-					H.stuttering = max(H.stuttering, 20)
-					H.Jitter(20)
-					if (prob(60))
-						H.Knockdown(2)
-					else if (prob(60))
-						H.confused = 4
-					H.adjustOxyLoss(10)
-					H.adjustToxLoss(5)
-				if (CULT_EPILOGUE)
-					H.eye_blurry = max(H.eye_blurry, 30)
-					H.Dizzy(30)
-					H.stuttering = max(H.stuttering, 30)
-					H.Jitter(30)
-					if (prob(70))
-						H.Knockdown(4)
-					else if (prob(70))
-						H.confused = 6
-					H.adjustOxyLoss(20)
-					H.adjustToxLoss(10)
-			*/
 
 /datum/role/cultist/proc/write_rune(var/word_to_draw)
 	var/mob/living/user = antag.current

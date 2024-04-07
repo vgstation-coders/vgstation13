@@ -296,7 +296,7 @@
 				user.visible_message("<span class='danger'>\The [user] holds \the [I] above their stomach and impales themselves on \the [src]!</span>","<span class='danger'>You hold \the [I] above your stomach and impale yourself on \the [src]!</span>")
 			else
 				user.visible_message("<span class='danger'>\The [user] holds \the [I] above \the [C]'s stomach and impales them on \the [src]!</span>","<span class='danger'>You hold \the [I] above \the [C]'s stomach and impale them on \the [src]!</span>")
-		else if(S && !istype(S, /mob/living/simple_animal/hostile))
+		else if(S)
 			S.unlock_from()
 			S.update_canmove()
 			S.pixel_y = 6
@@ -307,6 +307,7 @@
 			user.visible_message("<span class='danger'>\The [user] holds \the [I] above \the [S] and impales it on \the [src]!</span>","<span class='danger'>You hold \the [I] above \the [S] and impale it on \the [src]!</span>")
 		else
 			to_chat(user, "You plant \the [blade] on top of \the [src]</span>")
+			processing_objects += src
 			if (istype(blade) && !blade.shade)
 				var/icon/logo_icon = icon('icons/logos.dmi', "shade-blade")
 				for(var/mob/M in observers)
@@ -520,6 +521,7 @@
 							blade.forceMove(loc)
 							blade.attack_hand(user)
 							to_chat(user, "<span class='warning'>You remove \the [blade] from \the [src]</span>")
+							processing_objects -= src
 							blade = null
 							playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 							update_icon()
@@ -547,6 +549,7 @@
 				blade.forceMove(loc)
 				blade.attack_hand(user)
 				to_chat(user, "<span class='notice'>You remove \the [blade] from \the [src]</span>")
+				processing_objects -= src
 				blade = null
 				playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 				update_icon()
@@ -554,6 +557,7 @@
 			blade.forceMove(loc)
 			blade.attack_hand(user)
 			to_chat(user, "<span class='notice'>You remove \the [blade] from \the [src]</span>")
+			processing_objects -= src
 			blade = null
 			playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 			update_icon()
@@ -730,6 +734,7 @@
 					blade.forceMove(loc)
 					blade.attack_hand(user)
 					to_chat(user, "You remove \the [blade] from \the [src]</span>")
+					processing_objects -= src
 					blade = null
 					playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 					update_icon()
@@ -737,6 +742,7 @@
 		blade.forceMove(loc)
 		blade.attack_hand(user)
 		to_chat(user, "You remove \the [blade] from \the [src]</span>")
+		processing_objects -= src
 		blade = null
 		playsound(loc, 'sound/weapons/blade1.ogg', 50, 1)
 		update_icon()
@@ -760,7 +766,13 @@
 		to_chat(user,"<span class='sinister'>You feel madness taking its toll, trying to figure out \the [name]'s purpose.</span>")
 	return 1
 
-
+/obj/structure/cult/altar/process()
+	if (istype(blade))
+		blade.blood = min(blade.maxblood,blade.blood+10)
+		if (blade.blood == blade.maxblood)
+			processing_objects -= src
+	else
+		processing_objects -= src
 
 /obj/structure/cult/altar/Topic(href, href_list)
 	if(href_list["signup"])
@@ -931,8 +943,22 @@ var/list/cult_spires = list()
 	..()
 	cult_spires += src
 	set_light(1)
-	//TODO (UPHEAVAL PART 2) appearance changes with cult score
-	stage = 1
+
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult)
+		switch(cult.stage)
+			if (BLOODCULT_STAGE_NORMAL)
+				stage = 2
+			if (BLOODCULT_STAGE_READY)
+				stage = 3
+			if (BLOODCULT_STAGE_MISSED)
+				stage = 1
+			if (BLOODCULT_STAGE_ECLIPSE)
+				stage = 3
+			if (BLOODCULT_STAGE_DEFEATED)
+				stage = 1
+			if (BLOODCULT_STAGE_NARSIE)
+				stage = 3
 	flick("spire[stage]-spawn",src)
 	spawn(10)
 		update_stage()
@@ -953,13 +979,20 @@ var/list/cult_spires = list()
 /obj/structure/cult/spire/proc/upgrade(var/new_stage)
 	new_stage = clamp(new_stage, 1, 3)
 	if (new_stage>stage)
-		stage = new_stage
 		alpha = 255
 		overlays.len = 0
 		color = null
 		flick("spire[new_stage]-morph", src)
 		spawn(3)
 			update_stage()
+	else if (new_stage<stage)
+		alpha = 255
+		overlays.len = 0
+		color = null
+		flick("spire[new_stage]-demorph", src)
+		spawn(3)
+			update_stage()
+	stage = new_stage
 
 /obj/structure/cult/spire/proc/update_stage()
 	animate(src, alpha = 128, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)
@@ -1425,6 +1458,7 @@ var/list/cult_spires = list()
 
 /obj/structure/cult/pillar/update_icon()
 	icon_state = "pillar[alt ? "alt": ""]2"
+	set_light(1, 2, LIGHT_COLOR_RED)
 	overlays.len = 0
 	if (health < maxHealth/3)
 		icon_state = "pillar[alt ? "alt": ""]0"
@@ -1454,8 +1488,8 @@ var/list/cult_spires = list()
 	icon_state = "bloodstone-enter1"
 	icon = 'icons/obj/cult_64x64.dmi'
 	pixel_x = -16 * PIXEL_MULTIPLIER
-	health = 600
-	maxHealth = 600
+	health = 1800
+	maxHealth = 1800
 	sound_damaged = 'sound/effects/stone_hit.ogg'
 	sound_destroyed = 'sound/effects/stone_crumble.ogg'
 	plane = EFFECTS_PLANE

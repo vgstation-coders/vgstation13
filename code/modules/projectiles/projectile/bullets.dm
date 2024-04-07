@@ -521,9 +521,10 @@
 		M.gib()
 	else if(istype(atarget, /obj/machinery/singularity/narsie) && blessed && damage >= 200) //MINE IS THE ROD THAT SHALL PIERCE THE HEAVENS
 		var/obj/machinery/singularity/narsie/N = atarget
-		if(!N.wounded)
-			N.visible_message("<span class = 'danger'>\The [src] strikes \the [N], wounding them. This god can bleed!</span>", range = 20)
-		N.wounded++
+		N.visible_message("<span class = 'danger'>\The [src] strikes \the [N], ripping through them and splattering blood around. This god can bleed!<span class = 'sinister'>...of course it can...it's a god of blood...and now you have its attention.</span></span>", range = 20)
+		if (firer)
+			N.acquire(firer)
+			new /obj/effect/cult_ritual/confusion(firer.loc)
 		bullet_die()
 		return
 	else

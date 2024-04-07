@@ -123,6 +123,10 @@ var/creating_arena = FALSE
 		name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
 	real_name = name
 
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult && ((cult.stage == BLOODCULT_STAGE_ECLIPSE) || (cult.stage == BLOODCULT_STAGE_NARSIE)))
+		cultify()
+
 	start_poltergeist_cooldown() //FUCK OFF GHOSTS
 	..()
 
