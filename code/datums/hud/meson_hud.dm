@@ -42,13 +42,11 @@ var/list/meson_images = list()
 	..()
 	if(is_on_mesons)
 		update_meson_image()
-		register_event(/event/moved, src, nameof(src::update_meson_image()))
 
 /atom/movable/Destroy()
 	if(meson_image)
 		is_on_mesons = FALSE
 		update_meson_image()
-		unregister_event(/event/moved, src, nameof(src::update_meson_image()))
 	..()
 
 /atom/movable/proc/set_on_mesons(var/set_on = 0)
@@ -68,3 +66,7 @@ var/list/meson_images = list()
 		for (var/mob/L in meson_wearers)
 			if (L.client)
 				L.client.images |= meson_image
+		if(!registered_events || !registered_events[/event/moved])
+			register_event(/event/moved, src, nameof(src::update_meson_image()))
+	else if(registered_events && registered_events[/event/moved])
+		unregister_event(/event/moved, src, nameof(src::update_meson_image()))
