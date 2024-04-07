@@ -8,6 +8,7 @@
 #define ST_PATRICKS_DAY "St. Patrick's Day"
 #define EASTER "Easter"
 #define APRIL_FOOLS_DAY "April Fool's Day"
+#define APRIL_NORMAL_DAY "Normal Day"
 #define AUTISM_AWARENESS_DAY "Autism Awareness Day"
 #define FOUR_TWENTY "Four-Twenty"
 #define EARTH_DAY "Earth Day"

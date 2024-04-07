@@ -43,7 +43,7 @@ var/global/Holiday = null
 
 		if(4) // Apr
 			if(DD != 1 && time2text(world.timeofday, "DDD") == "Sun") //no idea what would happen if april fools gets set twice so we check just in case
-				current_holidays += APRIL_FOOLS_DAY
+				current_holidays += list(APRIL_FOOLS_DAY, APRIL_NORMAL_DAY, APRIL_NORMAL_DAY, APRIL_NORMAL_DAY, APRIL_NORMAL_DAY, APRIL_NORMAL_DAY, APRIL_NORMAL_DAY, APRIL_NORMAL_DAY, APRIL_NORMAL_DAY, APRIL_NORMAL_DAY)
 			switch(DD)
 				if(1)
 					current_holidays += APRIL_FOOLS_DAY
