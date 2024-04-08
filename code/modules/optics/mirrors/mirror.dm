@@ -272,3 +272,10 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 		spawn()
 			B.process()
 	return ..()
+
+/obj/machinery/mirror/Crossed(var/mob/M)
+	var/list/data = list()
+	data += get_turf_image_datas(M.loc,src)
+	var/sorted_data = sort_image_datas(data)
+	var/icon/reflection = getFlatIconDeluxe(sorted_data,loc)
+	src.overlays += reflection
