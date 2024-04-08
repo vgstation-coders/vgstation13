@@ -1164,3 +1164,18 @@ var/list/tag_suits_list = list()
 
 /obj/item/clothing/suit/reticulatedvest/update_icon()
 	icon_state = "reticulated[hits]"
+
+/obj/item/clothing/suit/scuba
+	name = "scuba suit"
+	desc = "A watertight swimming suit used to support a Self-Contained Underwater Breathing Apparatus."
+	icon_state = "scuba"
+	item_state = "scuba"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=1"
+	w_class = W_CLASS_LARGE//bulky item
+	gas_transfer_coefficient = 0.90
+	permeability_coefficient = 0.50
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
+	slowdown = HARDSUIT_SLOWDOWN_LOW
+	pressure_resistance = 2 * ONE_ATMOSPHERE
+	species_fit = list(VOX_SHAPED)

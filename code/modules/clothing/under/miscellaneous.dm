@@ -1092,3 +1092,10 @@
 	dyeable_parts = list("drape","trim")
 	clothing_flags = COLORS_OVERLAY
 	color = COLOR_LINEN
+
+/obj/item/clothing/under/wftr
+	name ="welding fuel tank refiller shirt"
+	desc = "A shirt worn by those with a passion for refilling welding fuel tanks."
+	icon_state = "wftr"
+	item_state = "wftr"
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
