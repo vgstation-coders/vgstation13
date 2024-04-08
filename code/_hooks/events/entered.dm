@@ -23,5 +23,4 @@ var/event/entered/entered_event = new()
 
 /atom/Entered(atom/movable/enterer, atom/old_loc)
 	..()
-	var/list/inputs = list(enterer, old_loc)
-	entered_event.invoke_event(src, inputs)
+	INVOKE_EVENT(src,/event/entered,enterer,old_loc)

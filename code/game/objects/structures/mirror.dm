@@ -163,7 +163,7 @@
 
 	var/obj/effect/reflection/reflection = ref.get()
 	if(istype(reflection))
-		reflection.icon_state = "mirror_mask_broken"
+		reflection.alpha_icon_state = "mirror_mask_broken"
 		reflection.update_mirror_filters()
 
 	//Curse the shatterer with bad luck
@@ -287,8 +287,8 @@
 	mouse_opacity = 0
 	vis_flags = VIS_HIDE
 	layer = ABOVE_OBJ_LAYER
-	icon = 'icons/obj/watercloset.dmi'
-	icon_state = "mirror_mask"
+	var/alpha_icon = 'icons/obj/watercloset.dmi'
+	var/alpha_icon_state = "mirror_mask"
 	var/obj/mirror
 	desc = "Why are you locked in the bathroom?"
 	anchored = TRUE
@@ -332,7 +332,7 @@
 
 	transform = M
 
-	filters += filter("type" = "alpha", "icon" = icon(icon, icon_state), "x" = 0, "y" = 0)
+	filters += filter("type" = "alpha", "icon" = icon(alpha_icon, alpha_icon_state), "x" = 0, "y" = 0)
 	for(var/mob/living/carbon/human/H in loc)
 		check_vampire_enter(H.loc, H)
 

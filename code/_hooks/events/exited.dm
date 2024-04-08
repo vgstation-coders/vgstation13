@@ -23,5 +23,4 @@ var/event/exited/exited_event = new()
 
 /atom/Exited(atom/movable/exitee, atom/new_loc)
 	. = ..()
-	var/list/inputs = list(exitee, new_loc)
-	exited_event.invoke_event(src, inputs)
+	INVOKE_EVENT(src,/event/exited,exitee,new_loc)
