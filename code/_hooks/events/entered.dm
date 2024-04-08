@@ -15,7 +15,7 @@
 var/event/entered/entered_event = new()
 
 /event/entered
-	name = "Entered"
+	expected_type = /atom
 
 /*******************
 * Entered Handling *

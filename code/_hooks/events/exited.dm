@@ -15,7 +15,7 @@
 var/event/exited/exited_event = new()
 
 /event/exited
-	name = "Exited"
+	expected_type = /atom
 
 /******************
 * Exited Handling *
@@ -23,5 +23,5 @@ var/event/exited/exited_event = new()
 
 /atom/Exited(atom/movable/exitee, atom/new_loc)
 	. = ..()
-	var/list/inputs = list(exitee, old_loc)
+	var/list/inputs = list(exitee, new_loc)
 	exited_event.invoke_event(src, inputs)

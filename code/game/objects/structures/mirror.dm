@@ -18,6 +18,11 @@
 /obj/structure/mirror/New()
 	var/obj/effect/reflection/reflection = new(src.loc)
 	reflection.setup_visuals(src)
+
+	ref = makeweakref(reflection)
+
+	entered_event.register_event(entered_event, reflection, "check_vampire_enter")
+	exited_event.register_event(exited_event, reflection, "check_vampire_exit")
 	..()
 
 /obj/structure/mirror/Destroy()

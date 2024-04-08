@@ -3,6 +3,7 @@
 
 // Declare children of this type path to use as identifiers for the events.
 /event
+	var/expected_type = /datum
 
 // Called by human/proc/apply_radiation()
 // Arguments:
@@ -343,6 +344,8 @@
   */
 /datum/proc/register_event(event/event_type, datum/target, procname)
 	SHOULD_NOT_OVERRIDE(TRUE)
+	if(!istype(target,event_type.expected_type))
+		CRASH("Unexpected type. Expected [event_type.expected_type], was [target.type]")
 	if(!registered_events)
 		registered_events = list()
 	if(!registered_events[event_type])
