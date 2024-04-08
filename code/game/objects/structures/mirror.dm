@@ -1,4 +1,6 @@
 //wip wip wup
+//reflection code ported from Baystation with permission from CrimsonShrike
+//https://github.com/Baystation12/Baystation12/pull/30310
 /obj/structure/mirror
 	name = "mirror"
 	desc = "Mirror mirror on the wall, who's the most robust of them all? Touching the mirror will bring out Nanotrasen's state of the art hair modification system."
@@ -7,6 +9,25 @@
 	density = 0
 	anchored = 1
 	var/shattered = 0
+
+	/// Visual object for handling the viscontents
+	var/datum/weakref/ref
+	vis_flags = VIS_HIDE
+	var/timerid = null
+
+/obj/structure/mirror/New()
+	var/obj/effect/reflection/reflection = new(src.loc)
+	reflection.setup_visuals(src)
+	..()
+
+/obj/structure/mirror/Destroy()
+	var/obj/effect/reflection/reflection = ref.get()
+	if(istype(reflection))
+		entered_event.unregister_event(entered_event, reflection, "check_vampire_enter")
+		exited_event.unregister_event(exited_event, reflection, "check_vampire_exit")
+		qdel(reflection)
+	ref = null
+	return ..()
 
 /obj/structure/mirror/proc/can_use(mob/living/user, mob/living/carbon/human/target)
 	if(shattered)
@@ -135,6 +156,11 @@
 	playsound(src, "shatter", 70, 1)
 	desc = "Oh no, seven years of bad luck!"
 
+	var/obj/effect/reflection/reflection = ref.get()
+	if(istype(reflection))
+		reflection.icon_state = "mirror_mask_broken"
+		reflection.update_mirror_filters()
+
 	//Curse the shatterer with bad luck
 	var/datum/blesscurse/brokenmirror/mirrorcurse = new /datum/blesscurse/brokenmirror
 	shatterer.add_blesscurse(mirrorcurse)
@@ -249,3 +275,76 @@
 				targ.pick_appearance(M)
 
 		to_chat(targ, "<span class='notice'>You gaze into the [src].</span>")
+
+/obj/effect/reflection
+	name = "reflection"
+	appearance_flags = KEEP_TOGETHER|TILE_BOUND|PIXEL_SCALE
+	mouse_opacity = 0
+	vis_flags = VIS_HIDE
+	layer = ABOVE_OBJ_LAYER
+	icon = 'icons/obj/watercloset.dmi'
+	icon_state = "mirror_mask"
+	var/obj/mirror
+	desc = "Why are you locked in the bathroom?"
+	anchored = TRUE
+
+	var/blur_filter
+
+/obj/effect/reflection/proc/setup_visuals(target)
+	mirror = target
+
+	if(mirror.pixel_x > 0)
+		dir = WEST
+	else if (mirror.pixel_x < 0)
+		dir = EAST
+
+	if(mirror.pixel_y > 0)
+		dir = SOUTH
+	else if (mirror.pixel_y < 0)
+		dir = NORTH
+
+	pixel_x = mirror.pixel_x
+	pixel_y = mirror.pixel_y
+
+	blur_filter = filter(type="blur", size = 1)
+
+	update_mirror_filters()
+
+/obj/effect/reflection/proc/update_mirror_filters()
+	filters = null
+
+	vis_contents = null
+
+	if(!mirror)
+		return
+
+	var/matrix/M = matrix()
+	if(dir == WEST || dir == EAST)
+		M.Scale(-1, 1)
+	else if(dir == SOUTH|| dir == NORTH)
+		M.Scale(1, -1)
+		pixel_y = mirror.pixel_y + 5
+
+	transform = M
+
+	filters += filter("type" = "alpha", "icon" = icon(icon, icon_state), "x" = 0, "y" = 0)
+	for(var/mob/living/carbon/human/H in loc)
+		check_vampire_enter(H.loc, H)
+
+	vis_contents += get_turf(mirror)
+
+/obj/effect/reflection/proc/check_vampire_enter(var/turf/T, var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return
+	if(isvampire(H))
+		H.vis_flags |= VIS_HIDE
+	else if(isthrall(H))
+		filters += blur_filter
+
+/obj/effect/reflection/proc/check_vampire_exit(var/turf/T, var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return
+	if(isvampire(H))
+		H.vis_flags &= ~VIS_HIDE
+	else if(isthrall(H))
+		filters -= blur_filter
