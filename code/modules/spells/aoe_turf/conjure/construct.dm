@@ -382,17 +382,23 @@
 
 /spell/aoe_turf/conjure/hex/before_channel(var/mob/user)
 	var/mob/living/simple_animal/construct/builder/perfect/artificer = user
-	if (artificer.minions.len >= 3)
-		to_chat(user,"<span class='warning'>You cannot sustain more than 3 lesser constructs alive.</span>")
-		return 1
+	if (artificer.minions.len >= 2)
+		to_chat(user,"<span class='warning'>You cannot sustain more than 2 hexes. Creating a new one will replace your oldest one.</span>")
 	return 0
 
 /spell/aoe_turf/conjure/hex/on_creation(var/mob/living/simple_animal/hostile/hex/AM, var/mob/user)
-	AM.master = user
+	var/mob/living/simple_animal/construct/builder/perfect/builder = user
+	AM.master = builder
 	AM.no_master = FALSE
-	AM.master.minions.Add(AM)
-	var/mob/living/simple_animal/construct/builder = user
+	builder.minions.Add(AM)
 	AM.setupglow(builder.construct_color)
+	if (builder.minions.len >= 3)
+		var/mob/living/simple_animal/hostile/hex/SA = builder.minions[1]
+		builder.minions.Remove(SA)
+		SA.master = null//The old hex will crumble on its own within the next 10 seconds.
+
+	if (iscultist(builder))
+		builder.DisplayUI("Cultist Right Panel")
 
 	var/datum/role/cultist/C = iscultist(user)
 	if (C)

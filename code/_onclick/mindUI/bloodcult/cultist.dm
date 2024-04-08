@@ -158,6 +158,7 @@
 	uniqueID = "Cultist Right Panel"
 	element_types_to_spawn = list(
 		/obj/abstract/mind_ui_element/bloodcult_spells_background,
+		/obj/abstract/mind_ui_element/bloodcult_spells_background_artificer,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter/solo,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/pool,
@@ -165,6 +166,10 @@
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman,
 		/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/sigil,
 		/obj/abstract/mind_ui_element/hoverable/movable/cult_spells,
+		)
+	sub_uis_to_spawn = list(
+		/datum/mind_ui/hex_controller/first,
+		/datum/mind_ui/hex_controller/second,
 		)
 
 	display_with_parent = TRUE
@@ -200,6 +205,26 @@
 
 //------------------------------------------------------------
 
+/obj/abstract/mind_ui_element/bloodcult_spells_background_artificer
+	name = "Hex Control Panel"
+	icon = 'icons/ui/bloodcult/32x121.dmi'
+	icon_state = "artificer_bg"
+	offset_x = 192
+	offset_y = -96
+	layer = MIND_UI_BACK
+
+/obj/abstract/mind_ui_element/bloodcult_spells_background_artificer/CanAppear()
+	var/mob/living/M = GetUser()
+	return istype(M, /mob/living/simple_animal/construct/builder/perfect)
+
+/obj/abstract/mind_ui_element/bloodcult_spells_background_artificer/Appear()
+	if(!CanAppear())
+		invisibility = 101
+		return
+	..()
+
+//------------------------------------------------------------
+
 /obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter
 	name = "Devotion"
 	icon = 'icons/ui/bloodcult/32x32.dmi'
@@ -216,7 +241,11 @@
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter/CanAppear()
 	var/mob/living/M = GetUser()
-	return iscarbon(M)
+	if (iscarbon(M))
+		return TRUE
+	else if (istype(M, /mob/living/simple_animal/construct/builder/perfect))
+		return TRUE
+	return FALSE
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter/Appear()
 	if(!CanAppear())
@@ -248,7 +277,11 @@
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter/solo/CanAppear()
 	var/mob/living/M = GetUser()
-	return !iscarbon(M)
+	if (iscarbon(M))
+		return FALSE
+	else if (istype(M, /mob/living/simple_animal/construct/builder/perfect))
+		return FALSE
+	return TRUE
 
 //////////////////////
 
@@ -578,6 +611,190 @@
 		tooltip.Display()
 
 
+////////////////////////////////////////////////////////////////////
+//																  //
+//					BLOODCULT - HEX CONTROLLER					  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind_ui/hex_controller
+	uniqueID = "Hex Controller"
+	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/hoverable/hex_controller/harm,
+		/obj/abstract/mind_ui_element/hoverable/hex_controller/roam,
+		/obj/abstract/mind_ui_element/hoverable/hex_controller/escort,
+		/obj/abstract/mind_ui_element/hoverable/hex_controller/guard,
+		)
+	display_with_parent = TRUE
+
+	offset_layer = MIND_UI_GROUP_D
+	var/controller = 0
+
+/datum/mind_ui/hex_controller/Valid()
+	if (!controller)
+		return
+	var/mob/M = mind.current
+	if (!M)
+		return FALSE
+	if(istype(M, /mob/living/simple_animal/construct/builder/perfect))
+		var/mob/living/simple_animal/construct/builder/perfect/master = M
+		if (master.minions.len >= controller)
+			return TRUE
+	return FALSE
+
+/datum/mind_ui/hex_controller/first
+	controller = 1
+
+/datum/mind_ui/hex_controller/second
+	controller = 2
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller
+	icon = 'icons/ui/bloodcult/24x24.dmi'
+	offset_x = 196
+	offset_y = -87
+	layer = MIND_UI_BUTTON
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller/New(turf/loc, var/datum/mind_ui/hex_controller/P)
+	if (!istype(P))
+		qdel(src)
+		return
+	..()
+	if (P.controller > 1)
+		offset_y = -87 + (28*(P.controller-1))
+	UpdateUIScreenLoc()
+
+////////////////////////
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller/harm
+	name = "Aggressive"
+	icon_state = "hexcontrol_harm"
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller/harm/Click()
+	var/mob/living/simple_animal/construct/builder/perfect/M = GetUser()
+	var/datum/mind_ui/hex_controller/P = parent
+	if (M && P && P.controller)
+		if (M.minions.len >= P.controller)
+			var/mob/living/simple_animal/hostile/hex/H = M.minions[P.controller]
+			H.passive = !H.passive
+			H.update_harmglow()
+			if (H.passive)
+				name = "Passive"
+				icon_state = "hexcontrol_passive"
+				H.stance = HOSTILE_STANCE_IDLE
+				H.target = null
+			else
+				name = "Aggressive"
+				icon_state = "hexcontrol_harm"
+				var/new_target = H.FindTarget()
+				H.GiveTarget(new_target)
+				if (H.target)
+					H.MoveToTarget()
+			base_icon_state = icon_state
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller/harm/UpdateIcon()
+	var/mob/living/simple_animal/construct/builder/perfect/M = GetUser()
+	var/datum/mind_ui/hex_controller/P = parent
+	if (M && P && P.controller)
+		if (M.minions.len >= P.controller)
+			var/mob/living/simple_animal/hostile/hex/H = M.minions[P.controller]
+			if (H.passive)
+				name = "Passive"
+				icon_state = "hexcontrol_passive"
+			else
+				name = "Aggressive"
+				icon_state = "hexcontrol_harm"
+			base_icon_state = icon_state
+
+////////////////////////
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller/roam
+	name = "Roam"
+	icon_state = "hexcontrol_roam"
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller/roam/Click()
+	var/mob/living/simple_animal/construct/builder/perfect/M = GetUser()
+	var/datum/mind_ui/hex_controller/P = parent
+	if (M && P && P.controller)
+		if (M.minions.len >= P.controller)
+			var/mob/living/simple_animal/hostile/hex/H = M.minions[P.controller]
+			H.mode = HEX_MODE_ROAMING
+			walk(H,0)
+			P.Display()
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller/roam/UpdateIcon()
+	var/mob/living/simple_animal/construct/builder/perfect/M = GetUser()
+	var/datum/mind_ui/hex_controller/P = parent
+	if (M && P && P.controller)
+		if (M.minions.len >= P.controller)
+			var/mob/living/simple_animal/hostile/hex/H = M.minions[P.controller]
+			switch (H.mode)
+				if (HEX_MODE_ROAMING)
+					icon_state = "hexcontrol_roam"
+				else
+					icon_state = "hexcontrol_roam-off"
+			base_icon_state = icon_state
+
+////////////////////////
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller/escort
+	name = "Escort"
+	icon_state = "hexcontrol_escort-off"
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller/escort/Click()
+	var/mob/living/simple_animal/construct/builder/perfect/M = GetUser()
+	var/datum/mind_ui/hex_controller/P = parent
+	if (M && P && P.controller)
+		if (M.minions.len >= P.controller)
+			var/mob/living/simple_animal/hostile/hex/H = M.minions[P.controller]
+			H.mode = HEX_MODE_ESCORT
+			H.escort_routine()
+			P.Display()
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller/escort/UpdateIcon()
+	var/mob/living/simple_animal/construct/builder/perfect/M = GetUser()
+	var/datum/mind_ui/hex_controller/P = parent
+	if (M && P && P.controller)
+		if (M.minions.len >= P.controller)
+			var/mob/living/simple_animal/hostile/hex/H = M.minions[P.controller]
+			switch (H.mode)
+				if (HEX_MODE_ESCORT)
+					icon_state = "hexcontrol_escort"
+				else
+					icon_state = "hexcontrol_escort-off"
+			base_icon_state = icon_state
+
+////////////////////////
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller/guard
+	name = "Guard"
+	icon_state = "hexcontrol_guard-off"
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller/guard/Click()
+	var/mob/living/simple_animal/construct/builder/perfect/M = GetUser()
+	var/datum/mind_ui/hex_controller/P = parent
+	if (M && P && P.controller)
+		if (M.minions.len >= P.controller)
+			var/mob/living/simple_animal/hostile/hex/H = M.minions[P.controller]
+			H.mode = HEX_MODE_GUARD
+			H.guard_spot = get_turf(H)
+			walk(H,0)
+			P.Display()
+
+/obj/abstract/mind_ui_element/hoverable/hex_controller/guard/UpdateIcon()
+	var/mob/living/simple_animal/construct/builder/perfect/M = GetUser()
+	var/datum/mind_ui/hex_controller/P = parent
+	if (M && P && P.controller)
+		if (M.minions.len >= P.controller)
+			var/mob/living/simple_animal/hostile/hex/H = M.minions[P.controller]
+			switch (H.mode)
+				if (HEX_MODE_GUARD)
+					icon_state = "hexcontrol_guard"
+				else
+					icon_state = "hexcontrol_guard-off"
+			base_icon_state = icon_state
+
+
+//------------------------------------------------------------
 
 ////////////////////////////////////////////////////////////////////
 //																  //

@@ -1911,3 +1911,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define ECLIPSE_NOT_YET	0
 #define ECLIPSE_ONGOING	1
 #define ECLIPSE_OVER	2
+
+#define HEX_MODE_ROAMING 0
+#define HEX_MODE_GUARD	 1
+#define HEX_MODE_ESCORT	 2
