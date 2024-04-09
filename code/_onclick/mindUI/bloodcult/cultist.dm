@@ -830,6 +830,8 @@
 		)
 	sub_uis_to_spawn = list(
 		/datum/mind_ui/bloodcult_role,
+		/datum/mind_ui/bloodcult_rituals,
+		/datum/mind_ui/bloodcult_ritual_narsie,
 		)
 	display_with_parent = FALSE
 
@@ -1579,6 +1581,263 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_help_other/Click()
 	flick("help-click",src)
 	parent.mind.DisplayUI("Cultist Help")
+
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//						BLOODCULT - RITUALS						  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind_ui/bloodcult_rituals
+	uniqueID = "Cult Rituals"
+	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/faction_ritual/first,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/faction_ritual/second,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/faction_ritual/third,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/personal_ritual/first,
+		/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/personal_ritual/second,
+		)
+	display_with_parent = TRUE
+
+
+/datum/mind_ui/bloodcult_rituals/Valid()
+	var/mob/M = mind.current
+	if (!M)
+		return FALSE
+	if(iscultist(M))
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if ((cult.stage == BLOODCULT_STAGE_NORMAL) || (cult.stage == BLOODCULT_STAGE_MISSED) || (cult.stage == BLOODCULT_STAGE_DEFEATED))
+			return TRUE
+	return FALSE
+
+/obj/abstract/mind_ui_element/ritual_holder
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "blank"
+	mouse_opacity = 0
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual
+	name = "Faction Ritual"
+	icon = 'icons/ui/bloodcult/32x32.dmi'
+	icon_state = "ritual_multi"
+	offset_y = 32
+	layer = MIND_UI_BUTTON
+
+	element_flags = MINDUI_FLAG_TOOLTIP
+	tooltip_title = "Ritual"
+	tooltip_content = "Lorem Ipsum (you shouldn't be reading this!)"
+	tooltip_theme = "radial-cult"
+
+	var/datum/faction/bloodcult/cult
+	var/datum/role/cultist/cultist
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/New(turf/loc, var/datum/mind_ui/P)
+	if (!istype(P))
+		qdel(src)
+		return
+	..()
+	cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	var/mob/M = GetUser()
+	cultist = iscultist(M)
+
+	//This horseshit magically lets have screen objects use animate(). Maybe I should make it a default mindUI feature at some point. -Deity
+	animate(src, pixel_y = 2 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
+	animate(pixel_y = -2 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
+	var/obj/abstract/mind_ui_element/ritual_holder/my_holder = new(null, P)
+	my_holder.offset_x = offset_x
+	my_holder.offset_y = offset_y
+	my_holder.layer = layer
+	my_holder.UpdateUIScreenLoc()
+	P.elements += my_holder
+	my_holder.vis_contents += src
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/Appear()
+	..()
+	//we constantly remove ourself from client.screen, as the holder we spawned in New() takes care of displaying us in our animate()'d glory
+	var/mob/M = GetUser()
+	if (!M.client)
+		return
+	M.client.screen -= src
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/StartHovering(var/location,var/control,var/params)
+	UpdateIcon()
+	..()
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/faction_ritual
+	name = "Faction Ritual"
+	icon_state = "ritual_multi"
+	offset_y = 32
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/faction_ritual/first
+	offset_x = -110
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/faction_ritual/first/UpdateIcon()
+	overlays.len = 0
+	icon_state = "ritual_cleared"
+	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
+		var/datum/bloodcult_ritual/BR = cult.first_ritual
+		if (BR)
+			tooltip_title = BR.name
+			BR.update_desc()
+			tooltip_content = BR.desc
+			icon_state = "ritual_multi"
+			overlays += "ritual_[BR.difficulty]"
+	overlays += "ritual_multi_shape"
+	base_icon_state = icon_state
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/faction_ritual/second
+
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/faction_ritual/second/UpdateIcon()
+	overlays.len = 0
+	icon_state = "ritual_cleared"
+	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
+		var/datum/bloodcult_ritual/BR = cult.second_ritual
+		if (BR)
+			tooltip_title = BR.name
+			BR.update_desc()
+			tooltip_content = BR.desc
+			icon_state = "ritual_multi"
+			overlays += "ritual_[BR.difficulty]"
+	overlays += "ritual_multi_shape"
+	base_icon_state = icon_state
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/faction_ritual/third
+	offset_x = 110
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/faction_ritual/third/UpdateIcon()
+	overlays.len = 0
+	icon_state = "ritual_cleared"
+	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
+		var/datum/bloodcult_ritual/BR = cult.third_ritual
+		if (BR)
+			tooltip_title = BR.name
+			BR.update_desc()
+			tooltip_content = BR.desc
+			icon_state = "ritual_multi"
+			overlays += "ritual_[BR.difficulty]"
+	overlays += "ritual_multi_shape"
+	base_icon_state = icon_state
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/personal_ritual
+	name = "Personal Ritual"
+	icon_state = "ritual_solo"
+	offset_y = 6
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/personal_ritual/first
+	offset_x = -55
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/personal_ritual/first/UpdateIcon()
+	overlays.len = 0
+	icon_state = "ritual_cleared"
+	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
+		var/datum/bloodcult_ritual/BR = cultist.first_ritual
+		if (BR)
+			tooltip_title = BR.name
+			BR.update_desc()
+			tooltip_content = BR.desc
+			icon_state = "ritual_solo"
+			overlays += "ritual_[BR.difficulty]"
+	overlays += "ritual_solo_shape"
+	base_icon_state = icon_state
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/personal_ritual/second
+	offset_x = 55
+
+/obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/personal_ritual/second/UpdateIcon()
+	overlays.len = 0
+	icon_state = "ritual_cleared"
+	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
+		var/datum/bloodcult_ritual/BR = cultist.first_ritual
+		if (BR)
+			tooltip_title = BR.name
+			BR.update_desc()
+			tooltip_content = BR.desc
+			icon_state = "ritual_solo"
+			overlays += "ritual_[BR.difficulty]"
+	overlays += "ritual_solo_shape"
+	base_icon_state = icon_state
+	.
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//						BLOODCULT - RITUAL NARSIE				  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+/datum/mind_ui/bloodcult_ritual_narsie
+	uniqueID = "Cult Last Ritual"
+	element_types_to_spawn = list(
+		/obj/abstract/mind_ui_element/hoverable/ritual_narsie,
+		)
+	display_with_parent = TRUE
+
+/datum/mind_ui/bloodcult_ritual_narsie/Valid()
+	var/mob/M = mind.current
+	if (!M)
+		return FALSE
+	if(iscultist(M))
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if ((cult.stage == BLOODCULT_STAGE_READY) || (cult.stage == BLOODCULT_STAGE_ECLIPSE) || (cult.stage == BLOODCULT_STAGE_NARSIE))
+			return TRUE
+	return FALSE
+
+/obj/abstract/mind_ui_element/hoverable/ritual_narsie
+	name = "Tear Reality"
+	icon = 'icons/ui/bloodcult/40x40.dmi'
+	icon_state = "ritual_narsie"
+	offset_x = -4
+	offset_y = 15
+	layer = MIND_UI_BUTTON
+
+	element_flags = MINDUI_FLAG_TOOLTIP
+	tooltip_title = ""
+	tooltip_content = "<span class='sinister'>Hell...</span><br><span class='sinister'>Join...</span><br><span class='sinister'>Self...</span><br>"
+	tooltip_theme = "radial-cult"
+
+/obj/abstract/mind_ui_element/hoverable/ritual_narsie/New(turf/loc, var/datum/mind_ui/P)
+	if (!istype(P))
+		qdel(src)
+		return
+	..()
+
+	//This horseshit magically lets have screen objects use animate(). Maybe I should make it a default mindUI feature at some point. -Deity
+	animate(src, pixel_y = 1 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
+	animate(pixel_y = -1 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
+	var/obj/abstract/mind_ui_element/ritual_holder/my_holder = new(null, P)
+	my_holder.offset_x = offset_x
+	my_holder.offset_y = offset_y
+	my_holder.layer = layer
+	my_holder.UpdateUIScreenLoc()
+	P.elements += my_holder
+	my_holder.vis_contents += src
+
+/obj/abstract/mind_ui_element/hoverable/ritual_narsie/Appear()
+	..()
+	//we constantly remove ourself from client.screen, as the holder we spawned in New() takes care of displaying us in our animate()'d glory
+	var/mob/M = GetUser()
+	if (!M.client)
+		return
+	M.client.screen -= src
+
+/obj/abstract/mind_ui_element/hoverable/ritual_narsie/StartHovering(var/location,var/control,var/params)
+	UpdateIcon()
+	..()
+
+/obj/abstract/mind_ui_element/hoverable/ritual_narsie/UpdateIcon()
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	switch(cult.stage)
+		if (BLOODCULT_STAGE_READY)
+			if (!cult.tear_ritual)
+				tooltip_content = "Hell...<br>Join...<br>Self...<br>"
+			else if (!cult.tear_ritual.dance_manager)
+				tooltip_content = "Eight are needed...<br>Whether followers, or prisoners...<br>"
+			else
+				tooltip_content = "Show me your moves...<br>"
+		if (BLOODCULT_STAGE_ECLIPSE)
+			tooltip_content = "Protect the Blood Stone...<br>This is your last crucible...<br>"
+		if (BLOODCULT_STAGE_NARSIE)
+			tooltip_content = "Rejoice...<br>Feast...<br>Harvest...<<br>"
 
 
 ////////////////////////////////////////////////////////////////////

@@ -78,6 +78,16 @@
 
 	var/list/deconverted = list()//tracking for scoreboard purposes
 
+	var/datum/bloodcult_ritual/first_ritual = null
+	var/datum/bloodcult_ritual/second_ritual = null
+	var/datum/bloodcult_ritual/third_ritual = null
+
+	var/datum/bloodcult_ritual/bloodspill_ritual = null
+
+	var/list/possible_faction_rituals = list()
+	var/list/possible_personal_rituals = list()
+	var/list/accomplished_faction_rituals = list()
+
 /datum/faction/bloodcult/stage(var/value)
 	stage = value
 	switch(stage)
@@ -139,6 +149,12 @@
 				anim(target = bloodstone.loc, a_icon = 'icons/obj/narsie.dmi', flick_anim = "narsie_spawn_anim_start", offX = -236 * PIXEL_MULTIPLIER, offY = -256 * PIXEL_MULTIPLIER, plane = NARSIE_PLANE)
 				sleep(2)
 				narsie = new(bloodstone.loc)
+	for (var/datum/role/cultist in members)
+		var/datum/mind/M = cultist.antag
+		if ("Cult Panel" in M.activeUIs)
+			var/datum/mind_ui/m_ui = M.activeUIs["Cult Panel"]
+			if (m_ui.active)
+				m_ui.Display()
 
 /datum/faction/bloodcult/IsSuccessful()
 	return cult_win
@@ -266,6 +282,9 @@
 
 	switch(stage)
 		if (BLOODCULT_STAGE_NORMAL)
+			if (bloodspill_ritual)
+				if (bloodspill_ritual.key_found(bloody_floors.len))
+					bloodspill_ritual.complete()
 			//if there is at least one cultist alive, the eclipse comes forward
 			for (var/datum/role/R in members)
 				var/mob/M = R.antag.current
@@ -284,6 +303,10 @@
 					if (eclipse_progress >= eclipse_target)
 						stage(BLOODCULT_STAGE_READY)
 					break
+		if (BLOODCULT_STAGE_MISSED)
+			if (bloodspill_ritual)
+				if (bloodspill_ritual.key_found(bloody_floors.len))
+					bloodspill_ritual.complete()
 		if (BLOODCULT_STAGE_READY)
 			if (sun.eclipse == ECLIPSE_OVER)
 				stage(BLOODCULT_STAGE_MISSED)
@@ -417,7 +440,7 @@
 	AnnounceObjectives()
 	..()
 
-//we don't really have a use for that right now but there are plans for it0
+//we don't really have a use for that right now but there are plans for it.
 /datum/faction/bloodcult/proc/add_bloody_floor(var/turf/T)
 	if (!istype(T))
 		return

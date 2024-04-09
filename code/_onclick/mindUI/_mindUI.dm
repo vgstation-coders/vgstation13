@@ -513,6 +513,10 @@ var/list/mind_ui_ID2type = list()
 		parent.offset_x += dest_x_val - start_x_val
 		parent.offset_y += dest_y_val - start_y_val
 		parent.UpdateUIScreenLoc()
+		for (var/datum/mind_ui/sub in parent.subUIs)
+			sub.offset_x += dest_x_val - start_x_val
+			sub.offset_y += dest_y_val - start_y_val
+			sub.UpdateUIScreenLoc()
 	else
 		offset_x += dest_x_val - start_x_val
 		offset_y += dest_y_val - start_y_val

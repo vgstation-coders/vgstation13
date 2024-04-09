@@ -629,7 +629,7 @@ var/list/astral_projections = list()
 	if (world.time >= (last_devotion_gain + devotion_gain_delay))
 		last_devotion_gain += devotion_gain_delay
 		var/datum/role/cultist/C = mind.GetRole(CULTIST)
-		C.get_devotion(50, DEVOTION_TIER_2)
+		C.get_devotion(50, DEVOTION_TIER_2, "astral_journey")
 
 	//convertibility HUD
 	if (!tangibility && client)

@@ -903,13 +903,14 @@
 				var/mob/O = get_locked(lock_type)[1]
 				if (ishuman(O))
 					if (O.mind)
-						C.get_devotion(500, DEVOTION_TIER_4)
+						C.get_devotion(500, DEVOTION_TIER_4, "altar_sacrifice_human", O)
 					else//monkey-human
-						C.get_devotion(200, DEVOTION_TIER_4)
+						C.get_devotion(200, DEVOTION_TIER_4, "altar_sacrifice_human_nomind", O)
 				else//monkey
-					C.get_devotion(200, DEVOTION_TIER_3)
+					C.get_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_monkey", O)
 			if(ALTARTASK_SACRIFICE_ANIMAL)
-				C.get_devotion(200, DEVOTION_TIER_3)
+				var/mob/O = get_locked(lock_type)[1]
+				C.get_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_animal", O)
 
 #undef ALTARTASK_NONE
 #undef ALTARTASK_GEM
@@ -1146,6 +1147,7 @@ var/list/cult_spires = list()
 	var/set_temperature = 50
 	var/mob/forger = null
 	var/template = null
+	var/forge_icon = ""
 	var/obj/effect/cult_ritual/forge/forging = null
 
 
@@ -1234,7 +1236,7 @@ var/list/cult_spires = list()
 					update_progbar()
 					var/datum/role/cultist/C = iscultist(forger)
 					if (C)
-						C.get_devotion(10, DEVOTION_TIER_2)
+						C.get_devotion(10, DEVOTION_TIER_2, "[forge_icon]",timeleft)
 					if (timeleft<=0)
 						playsound(L, 'sound/effects/forge_over.ogg', 50, 0, -3)
 						if (forger.client)
@@ -1367,7 +1369,7 @@ var/list/cult_spires = list()
 	var/task = show_radial_menu(user,loc,choices,'icons/obj/cult_radial.dmi',"radial-cult")//spawning on loc so we aren't offset by pixel_x/pixel_y, or affected by animate()
 	if (template || !Adjacent(user) || !task )
 		return
-	var/forge_icon = ""
+	forge_icon = ""
 	switch (task)
 		if ("Forge Blade")
 			template = /obj/item/weapon/melee/cultblade

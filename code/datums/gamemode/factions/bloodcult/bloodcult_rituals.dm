@@ -1,3 +1,122 @@
+
+
+
+
+
+/datum/bloodcult_ritual
+	var/name = "Ritual"
+	var/desc = "Lorem Ipsum (you shouldn't be reading this!)"
+
+	var/only_once = FALSE
+	var/difficulty = "easy"//"medium", "hard"
+	var/personal = FALSE
+	var/datum/role/cultist/owner = null
+	var/reward_achiever = 0
+	var/reward_faction = 0
+
+	var/key = ""
+
+/datum/bloodcult_ritual/proc/init_ritual()
+
+/datum/bloodcult_ritual/proc/update_desc()
+	return
+
+/datum/bloodcult_ritual/proc/key_found(var/extra)
+	return TRUE
+
+/datum/bloodcult_ritual/proc/complete()
+	if (owner)
+		owner.get_devotion(reward_achiever, DEVOTION_TIER_4)//no key, duh
+	if (reward_faction)
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		for(var/datum/role/cultist/C in cult.members)
+			C.get_devotion(reward_faction, DEVOTION_TIER_4)//yes this means a larger cult gets more total devotion.
+
+///////////////////////////////////////////////////////////////////////////
+
+/datum/bloodcult_ritual/sacrifice_mouse
+	name = "Sacrifice Mouse"
+	desc = "a rodent...<br>an altar...<br>and a proper blade..."
+
+	only_once = TRUE
+	difficulty = "easy"
+	personal = TRUE
+	reward_achiever = 200
+	reward_faction = 2
+
+	key = "altar_sacrifice_animal"
+
+/datum/bloodcult_ritual/bloodspill/key_found(var/mob/living/simple_animal/mouse/extra)
+	if(istype(extra))
+		return TRUE
+	return FALSE
+
+///////////////////////////////////////////////////////////////////////////
+
+/datum/bloodcult_ritual/sacrifice_monkey
+	name = "Sacrifice Monkey"
+	desc = "a simian...<br>an altar...<br>and a proper blade..."
+
+	only_once = TRUE
+	difficulty = "easy"
+	personal = TRUE
+	reward_achiever = 300
+	reward_faction = 3
+
+	key = "altar_sacrifice_monkey"
+
+/datum/bloodcult_ritual/bloodspill/key_found(var/extra)
+	return TRUE
+
+///////////////////////////////////////////////////////////////////////////
+
+/datum/bloodcult_ritual/bloodspill
+	name = "Spill Blood"
+	desc = "more blood...need more...<br>on the floors...on the walls..."
+
+	only_once = TRUE
+	difficulty = "medium"
+	reward_achiever = 0
+	reward_faction = 500
+
+	key = "bloodspill"
+
+	var/percent_bloodspill = 4//percent of all the station's simulated floors, you should keep it under 5.
+	var/target_bloodspill = 0//actual amount of bloodied floors to reach
+	var/max_bloodspill = 0//max amount of bloodied floors simultanously reached
+
+/datum/bloodcult_ritual/bloodspill/init_ritual()
+	var/floor_count = 0
+	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+			var/turf/tile = locate(i, r, map.zMainStation)
+			if(tile && istype(tile, /turf/simulated/floor) && !isspace(tile.loc) && !istype(tile.loc, /area/asteroid) && !istype(tile.loc, /area/mine) && !istype(tile.loc, /area/vault) && !istype(tile.loc, /area/prison) && !istype(tile.loc, /area/vox_trading_post))
+				floor_count++
+	target_bloodspill = round(floor_count * percent_bloodspill / 100)
+	target_bloodspill += rand(-20,20)
+
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	cult.bloodspill_ritual = src
+
+/datum/bloodcult_ritual/bloodspill/update_desc()
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	desc = "more blood...need more...<br>on the floors...on the walls...<br>at least [target_bloodspill - cult.bloody_floors.len] more..."
+
+/datum/bloodcult_ritual/bloodspill/key_found(var/extra)
+	if(extra > max_bloodspill)
+		max_bloodspill = extra
+	if(max_bloodspill >= target_bloodspill)
+		return TRUE
+	return FALSE
+
+/datum/bloodcult_ritual/bloodspill/complete()
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	cult.bloodspill_ritual = null
+	..()
+
+
+
+
 /*
 These were designed by Gurfan following some guidelines I had left in my Cult 4 designed document.
 Since I've resumed work on cult, I replaced the mechanic of cult rituals that rely on Objectives with "Devotion" gains when performing any cult activities

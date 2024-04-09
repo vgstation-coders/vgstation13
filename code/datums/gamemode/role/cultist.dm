@@ -39,6 +39,10 @@
 
 	var/blood_pool = FALSE
 
+	var/datum/bloodcult_ritual/first_ritual = null
+	var/datum/bloodcult_ritual/second_ritual = null
+	var/accomplished_personal_rituals = 0
+
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
 	wikiroute = role_wiki[CULTIST]
@@ -354,13 +358,32 @@
 		if (0 to 100)
 			return DEVOTION_TIER_0
 
-/datum/role/cultist/proc/get_devotion(var/acquired_devotion = 0, var/tier = DEVOTION_TIER_0)
+/datum/role/cultist/proc/get_devotion(var/acquired_devotion = 0, var/tier = DEVOTION_TIER_0, var/key, var/extra)
 	if (faction)
 		switch(faction.stage)
 			if (BLOODCULT_STAGE_DEFEATED)//no more devotion gains if the bloodstone has been destroyed
 				return
 			if (BLOODCULT_STAGE_NARSIE)//or narsie has risen
 				return
+
+	if (key)
+		if (first_ritual && (first_ritual.key == key))
+			if (first_ritual.key_found(extra))
+				first_ritual.complete()
+		else if (second_ritual && (second_ritual.key == key))
+			if (second_ritual.key_found(extra))
+				second_ritual.complete()
+		else if (faction)
+			var/datum/faction/bloodcult/cult = faction
+			if (cult.second_ritual && (cult.second_ritual.key == key))
+				if (cult.second_ritual.key_found(extra))
+					cult.second_ritual.complete()
+			else if (cult.second_ritual && (cult.second_ritual.key == key))
+				if (cult.second_ritual.key_found(extra))
+					cult.second_ritual.complete()
+			else if (cult.third_ritual && (cult.third_ritual.key == key))
+				if (cult.third_ritual.key_found(extra))
+					cult.third_ritual.complete()
 
 	//The more devotion the cultist has acquired, the less devotion they obtain from lesser rituals
 	switch (get_devotion_rank() - tier)
@@ -488,7 +511,7 @@
 		if(rune.word1 && rune.word2 && rune.word3)
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 			return
-	get_devotion(10, DEVOTION_TIER_0)
+	get_devotion(10, DEVOTION_TIER_0, "write_rune", word.english)
 	write_rune_word(get_turf(user), word, rune_blood_data["blood"], caster = user)
 	verbose = FALSE
 

@@ -62,6 +62,6 @@
 						continue
 					else if (L.client && !L.isDead())
 						var/datum/role/cultist/C = cultist.mind.GetRole(CULTIST)
-						C.get_devotion(50, DEVOTION_TIER_2)
+						C.get_devotion(50, DEVOTION_TIER_2, "EMP", L)
 				A.emp_act(act)
 	return

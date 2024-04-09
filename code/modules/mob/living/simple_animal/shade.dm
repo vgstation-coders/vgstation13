@@ -155,9 +155,9 @@
 	var/datum/role/cultist/C = iscultist(src)
 	if (C && damage && !iscultist(target) && !target.isDead())
 		if (target.mind)
-			C.get_devotion(30, DEVOTION_TIER_3)
+			C.get_devotion(30, DEVOTION_TIER_3, "attack_shade", target)
 		else
-			C.get_devotion(30, DEVOTION_TIER_2)
+			C.get_devotion(30, DEVOTION_TIER_2, "attack_shade_nomind", target)
 
 ////////////////HUD//////////////////////
 

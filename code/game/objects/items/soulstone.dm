@@ -506,9 +506,9 @@
 					cult.previously_made_prisoner |= shadeMob.mind
 					var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
 					if (shadeMob.mind in cult.previously_made_prisoner)
-						C.get_devotion(50, DEVOTION_TIER_4)//making someone prisoner already grants 250 devotion on top.
+						C.get_devotion(50, DEVOTION_TIER_4, "soulstone_prisoner", shadeMob)//making someone prisoner already grants 250 devotion on top.
 					else
-						C.get_devotion(300, DEVOTION_TIER_4)
+						C.get_devotion(300, DEVOTION_TIER_4, "soulstone", shadeMob)
 
 		else
 			if (iscultist(shadeMob))
