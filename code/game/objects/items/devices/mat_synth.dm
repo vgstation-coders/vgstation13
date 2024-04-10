@@ -142,11 +142,10 @@ var/static/list/mat2type = list(
 	return 1
 
 /obj/item/device/material_synth/robot/create_material(mob/user, var/material)
-	var/obj/item/stack/sheet/material_type = material
-
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
 		if(R && R.cell && R.cell.charge)
+			var/obj/item/stack/sheet/material_type = material
 			if(material_type)
 				var/modifier = get_mat_cost(initial(active_material.perunit))
 				var/amount = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize? (0 - 50)", "Material Synthesizer") as num
