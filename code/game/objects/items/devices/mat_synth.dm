@@ -76,9 +76,6 @@ var/static/list/mat2type = list(
 							 "reinforced glass" = /obj/item/stack/sheet/glass/rglass,
 							 "floor tiles" = /obj/item/stack/tile/metal,
 							 "metal rods" = /obj/item/stack/rods)
-
-/obj/item/device/material_synth/robot/engiborg/New() //We have to do this during New() because BYOND can't pull a typesof() during compile time.
-	. = ..()
 	cant_scan = list(/obj/item/stack/sheet/mineral/clown, /obj/item/stack/sheet/mineral/phazon)
 
 /obj/item/device/material_synth/robot/mommi //MoMMI version, a few more materials to start with.
@@ -106,17 +103,51 @@ var/static/list/mat2type = list(
 /obj/item/device/material_synth/update_icon()
 	icon_state = "mat_synth[mode ? "on" : "off"]"
 
+/obj/item/device/material_synth/proc/get_mat_cost(var/per_unit)
+		if (per_unit < 2000)
+			return MAT_COST_RARE
+		else if (per_unit < 3750)
+			return MAT_COST_MEDIUM
+		else
+			return MAT_COST_COMMON
+
 /obj/item/device/material_synth/proc/create_material(mob/user, var/material)
+	var/obj/item/stack/sheet/material_type = material
+
+	if (material_type && matter >= 1)
+		var/modifier = get_mat_cost(initial(active_material.perunit))
+		var/unit_can_produce
+		var/tospawn
+
+		unit_can_produce = round(matter / modifier)
+
+		if (unit_can_produce >= 1)
+			tospawn = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize? (0 - [unit_can_produce])", "Material Synthesizer") as num
+			tospawn = clamp(round(tospawn), 0, unit_can_produce)
+
+			if (tospawn >= 1 && TakeCost(tospawn, modifier, user))
+				var/obj/item/stack/sheet/spawned_sheet = new material_type(get_turf(src))
+				spawned_sheet.amount = tospawn
+
+
+		else
+			to_chat(user, "<span class='warning'>\The [src] matter is not enough to create the selected material!</span>")
+			return
+	else if (matter >= 1)
+		to_chat(user, "<span class='warning'>You must select a sheet type first!</span>")
+		return
+	else
+		to_chat(user, "<span class='warning'>\The [src] is empty!</span>")
+
+	return 1
+
+/obj/item/device/material_synth/robot/create_material(mob/user, var/material)
 	var/obj/item/stack/sheet/material_type = material
 
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
 		if(R && R.cell && R.cell.charge && material_type)
-			var/modifier = MAT_COST_COMMON
-			if(initial(active_material.perunit) < 3750)
-				modifier = MAT_COST_MEDIUM
-			if(initial(active_material.perunit) < 2000)
-				modifier = MAT_COST_RARE
+			var/modifier = get_mat_cost(initial(active_material.perunit))
 			var/amount = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize", "Material Synthesizer") as num
 			amount = clamp(round(amount, 1), 0, 50)
 			if(amount)
@@ -162,39 +193,6 @@ var/static/list/mat2type = list(
 		else if(R.cell.charge)
 			to_chat(R, "<span class='warning'>You need to select a sheet type first!</span>")
 			return
-	else
-		if (material_type && matter >= 1)
-			var/modifier
-			var/unit_can_produce
-			var/tospawn
-			var/per_unit = initial(active_material.perunit)
-
-			if (per_unit < 2000)
-				modifier = MAT_COST_RARE
-			else if (per_unit < 3750)
-				modifier = MAT_COST_MEDIUM
-			else
-				modifier = MAT_COST_COMMON
-
-			unit_can_produce = round(matter / modifier)
-
-			if (unit_can_produce >= 1)
-				tospawn = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize? (0 - [unit_can_produce])", "Material Synthesizer") as num
-				tospawn = clamp(round(tospawn), 0, unit_can_produce)
-
-				if (tospawn >= 1 && TakeCost(tospawn, modifier, user))
-					var/obj/item/stack/sheet/spawned_sheet = new material_type(get_turf(src))
-					spawned_sheet.amount = tospawn
-
-
-			else
-				to_chat(user, "<span class='warning'>\The [src] matter is not enough to create the selected material!</span>")
-				return
-		else if (matter >= 1)
-			to_chat(user, "<span class='warning'>You must select a sheet type first!</span>")
-			return
-		else
-			to_chat(user, "<span class='warning'>\The [src] is empty!</span>")
 
 	return 1
 
@@ -243,10 +241,7 @@ var/static/list/mat2type = list(
 
 /obj/item/device/material_synth/examine(mob/user)
 	..()
-	if(istype(src, /obj/item/device/material_synth/robot))
-		to_chat(user, "It's been set to draw power from a power cell.")
-	else
-		to_chat(user, "It currently holds [matter]/[MAX_MATSYNTH_MATTER] matter-units.")
+	to_chat(user, "[istype(src, /obj/item/device/material_synth/robot) ? "It's been set to draw power from a power cell." : "It currently holds [matter]/[MAX_MATSYNTH_MATTER] matter-units."]")
 
 /obj/item/device/material_synth/attackby(var/obj/O, mob/user)
 	if(istype(O, /obj/item/stack/rcd_ammo))
