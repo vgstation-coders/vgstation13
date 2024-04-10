@@ -498,11 +498,7 @@ var/global/list/alcatraz_stuff = list(
 
 	log_attack("<font color='red'>[key_name(user)] Used the [name] to flash [key_name(M)]</font>")
 
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 
 
 	if(!iscarbon(M))

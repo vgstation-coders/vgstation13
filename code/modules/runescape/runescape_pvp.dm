@@ -57,9 +57,11 @@ var/list/non_standard_maint_areas = list(
 		for (var/client/C in clients)
 			C.images += skull
 
-
 /mob/proc/assaulted_by(var/mob/M,var/weak_assault=FALSE)
-	//might be nice to move the LAssailant stuff here at some point
+	if(!iscarbon(M))
+		LAssailant = null
+	else
+		LAssailant = makeweakref(M)
 
 	if (M == src)
 		return

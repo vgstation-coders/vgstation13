@@ -50,11 +50,7 @@
 		playsound(src, "swing_hit", 50, 1, -1)
 		return
 
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 
 	var/t = user.zone_sel.selecting
 	if (t == LIMB_HEAD)

@@ -1342,7 +1342,6 @@ Thanks.
 				now_pushing = 0
 				return
 
-			tmob.LAssailant = src
 			tmob.assaulted_by(src, TRUE)
 
 		now_pushing = 0
@@ -1536,11 +1535,7 @@ Thanks.
 				usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
 
 				log_attack("<font color='red'>[usr.name] ([usr.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				if(!iscarbon(usr))
-					M.LAssailant = null
-				else
-					M.LAssailant = usr
-					M.assaulted_by(usr)
+				M.assaulted_by(usr)
 				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null

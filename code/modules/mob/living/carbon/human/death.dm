@@ -106,11 +106,11 @@
 		/*if( LAssailant && ( istype( LAssailant,/mob/living/carbon/human ) ) )
 			var/mob/living/carbon/human/V = LAssailant
 			if (V.dna && (V.dna.mutantrace == "vox"))
-				*/ //Not currently feasible due to terrible LAssailant tracking.
+				*/ //Not currently feasible due to terrible LAssailant tracking, and the inviolate not even being a thing anymore.
 //		to_chat(world, "Vox kills: [vox_kills]")
 		//vox_kills++ //Bad vox. Shouldn't be killing humans.
-	if(ishuman(LAssailant))
-		var/mob/living/carbon/human/A=LAssailant
+	var/mob/living/carbon/human/A=LAssailant.get()
+	if(istype(A))
 		if(A.mind)
 			A.mind.kills += "[name] ([ckey])"
 

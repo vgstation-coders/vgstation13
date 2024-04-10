@@ -1134,11 +1134,7 @@
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Zapped [L.name] ([L.ckey]) with [name]</font>"
 		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Zapped by [user.name] ([user.ckey]) with [name]</font>"
 		log_attack("<font color='red'>[user.name] ([user.ckey]) zapped [L.name] ([L.ckey]) with [name]</font>" )
-		if(!iscarbon(user))
-			M.LAssailant = null
-		else
-			M.LAssailant = user
-			M.assaulted_by(user)
+		M.assaulted_by(user)
 
 /obj/item/weapon/melee/stunprobe/throw_impact(atom/hit_atom)
 	if(prob(50))
@@ -1162,11 +1158,7 @@
 	foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Zapped [L.name] ([L.ckey]) with [name]</font>"
 	L.attack_log += "\[[time_stamp()]\]<font color='orange'> Zapped by thrown [src] by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""])</font>"
 	log_attack("<font color='red'>Flying [src.name], thrown by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) zapped [L.name] ([L.ckey])</font>" )
-	if(!iscarbon(foundmob))
-		L.LAssailant = null
-	else
-		L.LAssailant = foundmob
-		L.assaulted_by(foundmob)
+	L.assaulted_by(foundmob)
 
 /obj/item/weapon/melee/stunprobe/emp_act(severity)
 	if(bcell)

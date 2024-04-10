@@ -135,10 +135,11 @@
 			M.canmove = 0
 			if(!client)
 				if(Victim && !attacked)
-					if(Victim.LAssailant && (Victim.LAssailant != Victim) && Victim.LAssailant.mind)
+					var/mob/assail = Victim.LAssailant.get()
+					if(istype(assail) && (assail != Victim) && assail.mind)
 						if(prob(50))
-							if(!(Victim.LAssailant in Friends))
-								Friends.Add(Victim.LAssailant) // no idea why i was using the |= operator
+							if(!(assail in Friends))
+								Friends.Add(assail) // no idea why i was using the |= operator
 
 			if(M.client && istype(src, /mob/living/carbon/human))
 				if(prob(85))
