@@ -100,17 +100,16 @@
 		to_chat(B.host_brain, "<span class='danger'>Just before your body passes, you feel a brief return of sensation.  You are now in control...  And dead.</span>")
 		do_release_control(0)
 
-	//Check for heist mode kill count.
-	//if(ticker.mode && ( istype( ticker.mode,/datum/game_mode/heist) ) )
-		//Check for last assailant's mutantrace.
-		/*if( LAssailant && ( istype( LAssailant,/mob/living/carbon/human ) ) )
-			var/mob/living/carbon/human/V = LAssailant
-			if (V.dna && (V.dna.mutantrace == "vox"))
-				*/ //Not currently feasible due to terrible LAssailant tracking, and the inviolate not even being a thing anymore.
-//		to_chat(world, "Vox kills: [vox_kills]")
-		//vox_kills++ //Bad vox. Shouldn't be killing humans.
 	if(LAssailant)
 		var/mob/living/carbon/human/A=LAssailant.get()
+		//Check for heist mode kill count.
+		//if(ticker.mode && ( istype( ticker.mode,/datum/game_mode/heist) ) )
+			//Check for last assailant's mutantrace.
+			/*if( istype(A) )
+				if (A.dna && (A.dna.mutantrace == "vox"))
+					*/ //Not currently feasible due to terrible LAssailant tracking, and the inviolate not even being a thing anymore.
+			//to_chat(world, "Vox kills: [vox_kills]")
+			//vox_kills++ //Bad vox. Shouldn't be killing humans.
 		if(istype(A))
 			if(A.mind)
 				A.mind.kills += "[name] ([ckey])"
