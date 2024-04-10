@@ -146,42 +146,41 @@ var/static/list/mat2type = list(
 
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
-		if(R && R.cell && R.cell.charge && material_type)
-			var/modifier = get_mat_cost(initial(active_material.perunit))
-			var/amount = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize? (0 - 50)", "Material Synthesizer") as num
-			amount = clamp(round(amount, 1), 0, 50)
-			if(amount)
-				if(TakeCost(amount, modifier, R))
-					var/obj/item/stack/sheet/inside_sheet = (locate(material_type) in R.module.modules)
-					var/newsheet = 0
-					if(!inside_sheet)
-						inside_sheet = new material_type(R.module)
-						R.module.modules += inside_sheet
-						newsheet = 1
-					if((inside_sheet.amount + (amount*newsheet)) <= inside_sheet.max_amount)
-						inside_sheet.amount += amount-(inside_sheet.amount*newsheet)
-						to_chat(R, "<span class='notice'>Added [amount] of [initial(material_type.name)] to the stack.</span>")
+		if(R && R.cell && R.cell.charge)
+			if(material_type)
+				var/modifier = get_mat_cost(initial(active_material.perunit))
+				var/amount = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize? (0 - 50)", "Material Synthesizer") as num
+				amount = clamp(round(amount, 1), 0, 50)
+				if(amount)
+					if(TakeCost(amount, modifier, R))
+						var/obj/item/stack/sheet/inside_sheet = (locate(material_type) in R.module.modules)
+						var/newsheet = 0
+						if(!inside_sheet)
+							inside_sheet = new material_type(R.module)
+							R.module.modules += inside_sheet
+							newsheet = 1
+						if((inside_sheet.amount + (amount*newsheet)) <= inside_sheet.max_amount)
+							inside_sheet.amount += amount-(inside_sheet.amount*newsheet)
+							to_chat(R, "<span class='notice'>Added [amount] of [initial(material_type.name)] to the stack.</span>")
+							return
+						else
+							if(inside_sheet.amount <= inside_sheet.max_amount)
+								var/transfer_amount = min(inside_sheet.max_amount - inside_sheet.amount, amount)
+								inside_sheet.amount += (transfer_amount-newsheet)
+								amount -= transfer_amount
+							if(amount >= 1 && (inside_sheet.amount >= inside_sheet.max_amount))
+								to_chat(R, "<span class='warning'>Dropping [amount], you cannot hold anymore of [initial(material_type.name)].</span>")
+								var/obj/item/stack/sheet/dropped_sheet = new material_type(get_turf(src))
+								dropped_sheet.amount = amount-newsheet
+						R.module.rebuild()
+						R.hud_used.update_robot_modules_display()
 						return
 					else
-						if(inside_sheet.amount <= inside_sheet.max_amount)
-							var/transfer_amount = min(inside_sheet.max_amount - inside_sheet.amount, amount)
-							inside_sheet.amount += (transfer_amount-newsheet)
-							amount -= transfer_amount
-						if(amount >= 1 && (inside_sheet.amount >= inside_sheet.max_amount))
-							to_chat(R, "<span class='warning'>Dropping [amount], you cannot hold anymore of [initial(material_type.name)].</span>")
-							var/obj/item/stack/sheet/dropped_sheet = new material_type(get_turf(src))
-							dropped_sheet.amount = amount-newsheet
-					R.module.rebuild()
-					R.hud_used.update_robot_modules_display()
-					return
-				else
-					to_chat(R, "<span class='warning'>You can't make that much [initial(material_type.name)] without shutting down!</span>")
-					return
-
-		else if(R.cell.charge)
-			to_chat(R, "<span class='warning'>You need to select a sheet type first!</span>")
-			return
-
+						to_chat(R, "<span class='warning'>You can't make that much [initial(material_type.name)] without shutting down!</span>")
+						return
+			else
+				to_chat(R, "<span class='warning'>You need to select a sheet type first!</span>")
+				return
 	return 1
 
 /obj/item/device/material_synth/preloaded/admin/create_material(mob/user, var/material)
