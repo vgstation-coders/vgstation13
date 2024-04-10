@@ -92,7 +92,7 @@
 	if (ismob(user))
 		user.attack_log += text("\[[time_stamp()]\] <span class='danger'>Has [what_done] [target_txt][object_txt].[intent_txt][addition_txt]</span>")
 	else if (ismob(target))
-		target.LAssailant = null
+		QDEL_NULL(target.LAssailant)
 
 	if (ismob(target))
 		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [what_done] by [user_txt][object_txt].[intent_txt][addition_txt]</font>")
