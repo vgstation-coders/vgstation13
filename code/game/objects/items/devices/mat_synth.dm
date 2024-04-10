@@ -153,36 +153,24 @@ var/static/list/mat2type = list(
 			if(amount)
 				if(TakeCost(amount, modifier, R))
 					var/obj/item/stack/sheet/inside_sheet = (locate(material_type) in R.module.modules)
+					var/newsheet = 0
 					if(!inside_sheet)
-						var/obj/item/stack/sheet/created_sheet = new material_type(R.module)
-						R.module.modules += created_sheet
-						if(amount <= created_sheet.max_amount)
-							created_sheet.amount += (amount-created_sheet.amount)
-							to_chat(R, "<span class='notice'>Added [amount] of [initial(material_type.name)] to the stack.</span>")
-						else
-							if(created_sheet.amount <= created_sheet.max_amount)
-								var/transfer_amount = min(created_sheet.max_amount - created_sheet.amount, amount)
-								created_sheet.amount += (transfer_amount-1)
-								amount -= transfer_amount
-							if(amount >= 1 && (created_sheet.amount >= created_sheet.max_amount))
-								to_chat(R, "<span class='warning'>Dropping [amount], you cannot hold anymore of [initial(material_type.name)].</span>")
-								var/obj/item/stack/sheet/dropped_sheet = new material_type(get_turf(src))
-								dropped_sheet.amount = (amount - 1)
-
+						inside_sheet = new material_type(R.module)
+						R.module.modules += inside_sheet
+						newsheet = 1
+					if((inside_sheet.amount + (amount*newsheet)) <= inside_sheet.max_amount)
+						inside_sheet.amount += amount-(inside_sheet.amount*newsheet)
+						to_chat(R, "<span class='notice'>Added [amount] of [initial(material_type.name)] to the stack.</span>")
+						return
 					else
-						if((inside_sheet.amount + amount) <= inside_sheet.max_amount)
-							inside_sheet.amount += amount
-							to_chat(R, "<span class='notice'>Added [amount] of [initial(material_type.name)] to the stack.</span>")
-							return
-						else
-							if(inside_sheet.amount <= inside_sheet.max_amount)
-								var/transfer_amount = min(inside_sheet.max_amount - inside_sheet.amount, amount)
-								inside_sheet.amount += transfer_amount
-								amount -= transfer_amount
-							if(amount >= 1 && (inside_sheet.amount >= inside_sheet.max_amount))
-								to_chat(R, "<span class='warning'>Dropping [amount], you cannot hold anymore of [initial(material_type.name)].</span>")
-								var/obj/item/stack/sheet/dropped_sheet = new material_type(get_turf(src))
-								dropped_sheet.amount = amount
+						if(inside_sheet.amount <= inside_sheet.max_amount)
+							var/transfer_amount = min(inside_sheet.max_amount - inside_sheet.amount, amount)
+							inside_sheet.amount += (transfer_amount-newsheet)
+							amount -= transfer_amount
+						if(amount >= 1 && (inside_sheet.amount >= inside_sheet.max_amount))
+							to_chat(R, "<span class='warning'>Dropping [amount], you cannot hold anymore of [initial(material_type.name)].</span>")
+							var/obj/item/stack/sheet/dropped_sheet = new material_type(get_turf(src))
+							dropped_sheet.amount = amount-newsheet
 					R.module.rebuild()
 					R.hud_used.update_robot_modules_display()
 					return
