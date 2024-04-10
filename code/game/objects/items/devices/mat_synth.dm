@@ -123,7 +123,7 @@ var/static/list/mat2type = list(
 
 		if (unit_can_produce >= 1)
 			tospawn = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize? (0 - [unit_can_produce])", "Material Synthesizer") as num
-			tospawn = clamp(round(tospawn), 0, unit_can_produce)
+			tospawn = clamp(round(tospawn, 1), 0, unit_can_produce)
 
 			if (tospawn >= 1 && TakeCost(tospawn, modifier, user))
 				var/obj/item/stack/sheet/spawned_sheet = new material_type(get_turf(src))
@@ -148,7 +148,7 @@ var/static/list/mat2type = list(
 		var/mob/living/silicon/robot/R = user
 		if(R && R.cell && R.cell.charge && material_type)
 			var/modifier = get_mat_cost(initial(active_material.perunit))
-			var/amount = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize", "Material Synthesizer") as num
+			var/amount = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize? (0 - 50)", "Material Synthesizer") as num
 			amount = clamp(round(amount, 1), 0, 50)
 			if(amount)
 				if(TakeCost(amount, modifier, R))
