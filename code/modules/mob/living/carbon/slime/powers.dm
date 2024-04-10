@@ -134,7 +134,7 @@
 		if(M.health <= -70)
 			M.canmove = 0
 			if(!client)
-				if(Victim && !attacked)
+				if(Victim && Victim.LAssailant && !attacked)
 					var/mob/assail = Victim.LAssailant.get()
 					if(istype(assail) && (assail != Victim) && assail.mind)
 						if(prob(50))
