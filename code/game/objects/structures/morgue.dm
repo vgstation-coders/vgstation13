@@ -83,27 +83,12 @@
 			to_chat(user, "<span class='info'>\The [src]'s light display indicates there is a potential clone candidate inside.</span>")
 
 /obj/structure/morgue/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			for(var/atom/movable/A in src)
-				A.forceMove(src.loc)
-				A.ex_act(severity)
-			qdel(src)
-			return
-		if(2.0)
-			if(prob(50))
-				for(var/atom/movable/A in src)
-					A.forceMove(src.loc)
-					A.ex_act(severity)
-				qdel(src)
-				return
-		if(3.0)
-			if(prob(5))
-				for(var/atom/movable/A in src)
-					A.forceMove(src.loc)
-					A.ex_act(severity)
-				qdel(src)
-				return
+	var/probdivide = severity == 3 ? 20 : severity
+	if (prob(100/probdivide)) //1 = 100, 2 = 50, 3 = 5
+		for(var/atom/movable/A as mob|obj in src)
+			A.forceMove(loc)
+			A.ex_act(severity)
+		qdel(src)
 
 /obj/structure/morgue/alter_health() //???????????????
 	return src.loc
@@ -146,9 +131,9 @@
 		if(istype(A, /mob/living/simple_animal/scp_173)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
 			continue
 		if(!A.anchored)
-			A.forceMove(src)				
+			A.forceMove(src)
 	qdel(connected)
-	
+
 	var/list/inside = recursive_type_check(src, /mob)
 	for(var/mob/M in inside)
 		if(M.mind && !M.client) //!M.client = mob has ghosted out of their body
@@ -291,24 +276,12 @@
 		icon_state = "crema1"
 
 /obj/structure/crematorium/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			for(var/atom/movable/A as mob|obj in src)
-				A.forceMove(src.loc)
-				ex_act(severity)
-			qdel(src)
-		if(2.0)
-			if (prob(50))
-				for(var/atom/movable/A as mob|obj in src)
-					A.forceMove(src.loc)
-					ex_act(severity)
-				qdel(src)
-		if(3.0)
-			if (prob(5))
-				for(var/atom/movable/A as mob|obj in src)
-					A.forceMove(src.loc)
-					ex_act(severity)
-				qdel(src)
+	var/probdivide = severity == 3 ? 20 : severity
+	if (prob(100/probdivide)) //1 = 100, 2 = 50, 3 = 5
+		for(var/atom/movable/A as mob|obj in src)
+			A.forceMove(loc)
+			A.ex_act(severity)
+		qdel(src)
 
 /obj/structure/crematorium/alter_health()
 	return src.loc

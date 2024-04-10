@@ -19,29 +19,17 @@
 	for(var/atom/movable/AM in contents)
 		AM.loc = loc
 
-	..()	
+	..()
 
 // When destroyed by explosions, properly handle contents.
 /obj/structure/transit_tube_pod/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			for(var/atom/movable/AM in contents)
-				AM.forceMove(loc)
-				// TODO: What the fuck are you doing
-				AM.ex_act(severity++)
-
-			qdel(src)
-			return
-		if(2.0)
-			if(prob(50))
-				for(var/atom/movable/AM in contents)
-					AM.forceMove(loc)
-					AM.ex_act(severity++)
-
-				qdel(src)
-				return
-		if(3.0)
-			return
+	if(severity < 2 && prob(100 - ((severity-1)*50))) // 1 = 100, 2 = 50, 3 = 0
+		for(var/atom/movable/AM in contents)
+			AM.forceMove(loc)
+			// TODO: What the fuck are you doing
+			AM.ex_act(severity++)
+			. += AM
+		qdel(src)
 
 /obj/structure/transit_tube_pod/proc/empty_pod(atom/location)
 	if(!location)
@@ -49,13 +37,13 @@
 	for(var/atom/movable/M in contents)
 		M.forceMove(location)
 	update_icon()
-	
+
 /obj/structure/transit_tube_pod/Process_Spacemove()
 	if(moving) //No drifting while moving in the tubes
 		return TRUE
 	else
 		return ..()
-	
+
 /obj/structure/transit_tube_pod/proc/follow_tube(var/reverse_launch)
 	if(moving)
 		return
@@ -128,8 +116,8 @@
 
 			while(isturf(loc) && Move(get_step(loc, dir)))
 
-		moving = 0	
-	
+		moving = 0
+
 /obj/structure/transit_tube_pod/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
@@ -141,7 +129,7 @@
 			TTFP.circuitry = new /obj/item/weapon/circuitboard/mecha/transitpod(TTFP)
 			qdel(src)
 		return 1
-		
+
 /obj/structure/transit_tube_pod/examine(mob/user)
 	..()
 	show_occupants(user)
@@ -157,7 +145,7 @@
 			return
 
 	to_chat(user, "<span class='info'>The tube pod looks empty.</span>")
-	
+
 // Should I return a copy here? If the caller edits or del()s the returned
 //  datum, there might be problems if I don't...
 //	Shut up bitch, let's do it MY way

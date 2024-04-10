@@ -68,14 +68,9 @@
 	stored_ores.Cut()
 
 /obj/structure/ore_box/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			dump_everything()
-			qdel(src)
-		if(2.0)
-			if (prob(50))
-				dump_everything()
-				qdel(src)
+	if(severity < 2 && prob(100-((severity-1)*50))) // 1= 100, 2 = 50, 3 = 0
+		dump_everything()
+		qdel(src)
 
 /obj/structure/ore_box/proc/try_add_ore(var/obj/item/stack/ore/O)
 	if (!O.can_orebox)

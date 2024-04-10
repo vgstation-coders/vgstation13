@@ -331,42 +331,19 @@
 	qdel(src)
 	return new_closet
 
-// this should probably use dump_contents()
 /obj/structure/closet/ex_act(severity)
 	var/obj/item/weapon/circuitboard/airlock/E
-	switch(severity)
-		if(1)
-			broken = 1
-			if(has_electronics)//If it's got electronics, generate them/pull them out
-				E = dump_electronics()
-				E.forceMove(src)
-			for(var/atom/movable/A in src)//pulls everything else out of the locker and hits it with an explosion
-				A.forceMove(src.loc)
-				A.ex_act(severity++)
-			dump_contents()
-			qdel(src)
-		if(2)
-			if(prob(50))
-				broken = 1
-				if(has_electronics)
-					E = dump_electronics()
-					E.forceMove(src)
-				for (var/atom/movable/A as mob|obj in src)
-					A.forceMove(src.loc)
-					A.ex_act(severity++)
-				dump_contents()
-				qdel(src)
-		if(3)
-			if(prob(5))
-				broken = 1
-				if(has_electronics)
-					E = dump_electronics()
-					E.forceMove(src)
-				for(var/atom/movable/A as mob|obj in src)
-					A.forceMove(src.loc)
-					A.ex_act(severity++)
-				dump_contents()
-				qdel(src)
+	var/probdivide = severity == 3 ? 20 : severity
+	if(prob(100/probdivide)) //1 = 100, 2 = 50, 3 = 5
+		broken = 1
+		if(has_electronics)//If it's got electronics, generate them/pull them out
+			E = dump_electronics()
+			E.forceMove(src)
+		for(var/atom/movable/A in src)//pulls everything else out of the locker and hits it with an explosion
+			A.forceMove(src.loc)
+			A.ex_act(severity++)
+		dump_contents()
+		qdel(src)
 
 /obj/structure/closet/shuttle_act()
 	for(var/atom/movable/AM in contents)
