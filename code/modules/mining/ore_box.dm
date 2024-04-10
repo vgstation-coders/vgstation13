@@ -68,7 +68,7 @@
 	stored_ores.Cut()
 
 /obj/structure/ore_box/ex_act(severity)
-	if(severity < 2 && prob(100-((severity-1)*50))) // 1= 100, 2 = 50, 3 = 0
+	if(severity < 3 && prob(100-((severity-1)*50))) // 1= 100, 2 = 50, 3 = 0
 		dump_everything()
 		qdel(src)
 

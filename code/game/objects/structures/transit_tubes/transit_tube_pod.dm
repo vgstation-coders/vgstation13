@@ -23,7 +23,7 @@
 
 // When destroyed by explosions, properly handle contents.
 /obj/structure/transit_tube_pod/ex_act(severity)
-	if(severity < 2 && prob(100 - ((severity-1)*50))) // 1 = 100, 2 = 50, 3 = 0
+	if(severity < 3 && prob(100 - ((severity-1)*50))) // 1 = 100, 2 = 50, 3 = 0
 		for(var/atom/movable/AM in contents)
 			AM.forceMove(loc)
 			// TODO: What the fuck are you doing
