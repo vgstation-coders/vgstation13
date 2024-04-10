@@ -153,12 +153,12 @@ var/static/list/mat2type = list(
 				if(amount)
 					if(TakeCost(amount, modifier, R))
 						var/obj/item/stack/sheet/inside_sheet = (locate(material_type) in R.module.modules)
-						var/newsheet = 0
+						var/newsheet = FALSE
 						if(!inside_sheet)
 							inside_sheet = new material_type(R.module)
 							R.module.modules += inside_sheet
-							newsheet = 1
-						if((inside_sheet.amount + (amount*newsheet)) <= inside_sheet.max_amount)
+							newsheet = TRUE
+						if((inside_sheet.amount + (amount*(!newsheet))) <= inside_sheet.max_amount)
 							inside_sheet.amount += amount-(inside_sheet.amount*newsheet)
 							to_chat(R, "<span class='notice'>Added [amount] of [initial(material_type.name)] to the stack.</span>")
 							return
