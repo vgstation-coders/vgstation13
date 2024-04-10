@@ -104,12 +104,12 @@ var/static/list/mat2type = list(
 	icon_state = "mat_synth[mode ? "on" : "off"]"
 
 /obj/item/device/material_synth/proc/get_mat_cost(var/per_unit)
-		if (per_unit < 2000)
-			return MAT_COST_RARE
-		else if (per_unit < 3750)
-			return MAT_COST_MEDIUM
-		else
-			return MAT_COST_COMMON
+	if (per_unit < 2000)
+		return MAT_COST_RARE
+	else if (per_unit < 3750)
+		return MAT_COST_MEDIUM
+	else
+		return MAT_COST_COMMON
 
 /obj/item/device/material_synth/proc/create_material(mob/user, var/material)
 	var/obj/item/stack/sheet/material_type = material
@@ -168,7 +168,7 @@ var/static/list/mat2type = list(
 								inside_sheet.amount += (transfer_amount-newsheet)
 								amount -= transfer_amount
 							if(amount >= 1 && (inside_sheet.amount >= inside_sheet.max_amount))
-								to_chat(R, "<span class='warning'>Dropping [amount], you cannot hold anymore of [initial(material_type.name)].</span>")
+								to_chat(R, "<span class='warning'>Dropping [amount] sheets, you cannot hold anymore [initial(material_type.name)].</span>")
 								var/obj/item/stack/sheet/dropped_sheet = new material_type(get_turf(src))
 								dropped_sheet.amount = amount-newsheet
 						R.module.rebuild()
