@@ -130,7 +130,7 @@ var/list/beam_master = list()
 			spawn()
 				portal(last_hit.hit_atom)
 
-	shot_ray.draw(distance, icon, icon_state)
+	shot_ray.draw(distance, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
 
 	if(gcDestroyed)
 		qdel(shot_ray)
