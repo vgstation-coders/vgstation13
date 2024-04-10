@@ -28,7 +28,6 @@
 			AM.forceMove(loc)
 			// TODO: What the fuck are you doing
 			AM.ex_act(severity++)
-			. += AM
 		qdel(src)
 
 /obj/structure/transit_tube_pod/proc/empty_pod(atom/location)
