@@ -369,27 +369,3 @@
 		new/obj/effect/decal/cleanable/clay_fragments(src.loc)
 		src.visible_message("<span class='warning'>\The [src.name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
 		qdel(src)
-
-//Currently unobtainable, just for admin testing
-
-/obj/item/stack/sheet/bonemeal
-	name = "bone meal"
-	desc = "A substance that immediately matures a plant for harvesting."
-	icon = 'icons/obj/bureaucracy.dmi'
-	singular_name = "bone meal scrap"
-	icon_state = "scrap"
-	origin_tech = Tc_BIOTECH + "=1"
-	autoignition_temperature = AUTOIGNITION_ORGANIC
-
-/obj/item/stack/sheet/bonemeal/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
-	. = ..()
-	if(istype(target,/obj/machinery/portable_atmospherics/hydroponics))
-		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-		if(tray.seed)
-			use(1)
-			tray.age = max(tray.seed.maturation,tray.age)
-			tray.harvest = 1
-			tray.update_icon()
-
-/obj/item/stack/sheet/bonemeal/bigstack
-	amount = 50
