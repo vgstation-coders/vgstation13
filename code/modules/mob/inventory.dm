@@ -245,7 +245,7 @@
 	return 0
 
 /mob/proc/put_in_hands_if_near(var/obj/item/W, var/atom/backup_loc)
-	if(Adjacent(W))
+	if(Adjacent(W) || W.arcanetampered)
 		put_in_hands(W)
 	else if(backup_loc)
 		W.forceMove(backup_loc)
