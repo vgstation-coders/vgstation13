@@ -41,7 +41,7 @@
 			report.forceMove(src.loc)
 			user.drop_item(P, loc, 1)
 			P.forceMove(src)
-			user.put_in_hands(report)
+			user.put_in_hands_if_near(report)
 			report = P
 		else
 			to_chat(user, "<span class='notice'>You attach the report to \the [src].</span>")
@@ -57,7 +57,7 @@
 	if (report)
 		to_chat(user, "<span class='notice'>You pick up the report attached to \the [src].</span>")
 		report.forceMove(src.loc)
-		user.put_in_hands(report)
+		user.put_in_hands_if_near(report)
 		report = null
 	update_icon()
 
@@ -73,7 +73,7 @@
 	else if (report)
 		to_chat(user, "<span class='notice'>You pick up the report attached to \the [src].</span>")
 		report.forceMove(src.loc)
-		user.put_in_hands(report)
+		user.put_in_hands_if_near(report)
 		report = null
 	update_icon()
 

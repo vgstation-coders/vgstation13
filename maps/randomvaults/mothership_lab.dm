@@ -1248,7 +1248,7 @@
 		else
 			var/obj/item/I = pick(contents)
 			if(ishuman(user))
-				user.put_in_hands(I)
+				user.put_in_hands_if_near(I, loc)
 			else
 				I.forceMove(get_turf(src))
 			to_chat(user, "<span class='notice'>You find \an [I] in the cistern.</span>")
