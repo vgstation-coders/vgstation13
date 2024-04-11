@@ -392,14 +392,14 @@
 				user.visible_message("<span class='notice'>[user] plucks \the [I] off \the [src].</span>", "You take \the [I] off \the [src].")
 				playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 				I.forceMove(loc)
-				user.put_in_active_hand(I)
+				user.put_in_hands_if_near(I)
 				overlays -= overlays[overlays.len]
 				return
 			I = contents[count]
 		user.visible_message("<span class='notice'>[user] retrieves something from the pot.</span>", "You retrieve \the [I] from the [src].")
 		playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
 		I.forceMove(loc)
-		user.put_in_active_hand(I)
+		user.put_in_hands_if_near(I)
 	else
 		to_chat(user, "You root around in the roots. There isn't anything in there.")
 		playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
