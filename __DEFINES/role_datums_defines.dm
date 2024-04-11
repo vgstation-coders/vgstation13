@@ -73,6 +73,8 @@
 #define CATBEAST "loose catbeast"
 #define TIMEAGENT "Time Agent"
 #define TIMEAGENTTWIN "time agent twin"
+#define GOODTIMEAGENT "Good Time Agent"
+#define EVILTIMEAGENT "Evil Time Agent"
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
 #define GIANTSPIDER "giant spider"
