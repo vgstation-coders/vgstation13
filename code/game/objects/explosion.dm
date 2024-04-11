@@ -116,7 +116,7 @@ var/explosion_shake_message_cooldown = 0
 
 				if(!explosion_shake_message_cooldown && !skip_shake)
 					var/area/M_area = M_turf.loc
-					to_chat(M, "<span class='danger'>You feel [is_type_in_list(M_area, the_station_areas ? "the station's structure" : "everything"] shaking all around you.</span>")
+					to_chat(M, "<span class='danger'>You feel [is_type_in_list(M_area, the_station_areas) ? "the station's structure" : "everything"] shaking all around you.</span>")
 					explosion_shake_message_cooldown = 1
 					spawn(50)
 						explosion_shake_message_cooldown = 0
