@@ -366,22 +366,22 @@
 			if (BLOODCULT_STAGE_NARSIE)//or narsie has risen
 				return
 
-	if (key)
-		if (first_ritual && (first_ritual.key == key))
+	if (key && (!faction || (faction.stage != BLOODCULT_STAGE_ECLIPSE)))
+		if (first_ritual && (key in first_ritual.keys))
 			if (first_ritual.key_found(extra))
 				first_ritual.complete()
-		else if (second_ritual && (second_ritual.key == key))
+		else if (second_ritual && (key in second_ritual.keys))
 			if (second_ritual.key_found(extra))
 				second_ritual.complete()
 		else if (faction)
 			var/datum/faction/bloodcult/cult = faction
-			if (cult.second_ritual && (cult.second_ritual.key == key))
+			if (cult.first_ritual && (key in cult.first_ritual.keys))
+				if (cult.first_ritual.key_found(extra))
+					cult.first_ritual.complete()
+			else if (cult.second_ritual && (key in cult.second_ritual.keys))
 				if (cult.second_ritual.key_found(extra))
 					cult.second_ritual.complete()
-			else if (cult.second_ritual && (cult.second_ritual.key == key))
-				if (cult.second_ritual.key_found(extra))
-					cult.second_ritual.complete()
-			else if (cult.third_ritual && (cult.third_ritual.key == key))
+			else if (cult.third_ritual && (key in cult.third_ritual.keys))
 				if (cult.third_ritual.key_found(extra))
 					cult.third_ritual.complete()
 

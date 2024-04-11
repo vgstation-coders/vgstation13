@@ -9,7 +9,6 @@ var/list/global_diseases = list()
 
 
 /datum/disease2/disease/predefined
-	var/category = ""
 	type_weight = list(0,0,0,0)
 
 /datum/disease2/disease/predefined/New()
@@ -128,14 +127,13 @@ var/list/global_diseases = list()
 /datum/disease2/disease/predefined/cult
 	form = "Curse"
 	category = DISEASE_CULT
-	stage_variance = -4
+	stage_variance = 0
 	can_kill = list()
 
 	effects = list(
 		new /datum/disease2/effect/cult_hallucination,
+		new /datum/disease2/effect/cult_confusion,
 		new /datum/disease2/effect/cult_vomit,
-		new /datum/disease2/effect/cult_teleport,
-		new /datum/disease2/effect/faithless
 	)
 
 	spread = SPREAD_BLOOD
@@ -150,8 +148,8 @@ var/list/global_diseases = list()
 
 /datum/disease2/disease/predefined/cult/New()
 	antigen = list(ANTIGEN_CULT)
-	uniqueID = rand(0,9999)
-	subID = rand(0,9999)
+	uniqueID = 666
+	subID = 666
 	strength = rand(80,100)
 
 	..()

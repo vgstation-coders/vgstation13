@@ -88,6 +88,8 @@
 	var/list/possible_personal_rituals = list()
 	var/list/accomplished_faction_rituals = list()
 
+	var/countdown_to_first_rituals = 10
+
 /datum/faction/bloodcult/stage(var/value)
 	stage = value
 	switch(stage)
@@ -131,6 +133,7 @@
 				sun.eclipse_manager.eclipse_end()
 			for (var/obj/effect/rune/R in runes)
 				qdel(R)//new runes can be written, but any pre-existing one gets nuked.
+			cultist_cap = 0
 			spawn()
 				for(var/mob/living/simple_animal/M in mob_list)
 					if(!M.client && (M.faction == "cult"))
@@ -142,6 +145,14 @@
 					sleep(rand(1,5))
 			for(var/obj/structure/cult/spire/S in cult_spires)
 				S.upgrade(1)
+			spawn(5 SECONDS)
+				for (var/datum/role/cultist in members)
+					var/mob/M = cultist.antag.current
+					to_chat(M, "<span class='sinister'>With the blood stone destroyed, the tear through the veil has been mended, and a great deal of occult energies have been purged from the Station.</span>")
+					sleep(3 SECONDS)
+					to_chat(M, "<span class='sinister'>Your connection to the Geometer of Blood has grown weaker and you can no longer recall the runes as easily as you did before. Maybe an Arcane Tome can alleviate the problem.</span>")
+					sleep(3 SECONDS)
+					to_chat(M, "<span class='sinister'>Lastly it seems that the toll of the ritual on your body hasn't gone away. Going unnoticed will be a lot harder.</span>")
 		if (BLOODCULT_STAGE_NARSIE)
 			if (bloodstone)
 				for (var/mob/M in player_list)
@@ -153,6 +164,10 @@
 		var/datum/mind/M = cultist.antag
 		if ("Cult Panel" in M.activeUIs)
 			var/datum/mind_ui/m_ui = M.activeUIs["Cult Panel"]
+			if (m_ui.active)
+				m_ui.Display()
+		if ("Cultist Panel" in M.activeUIs)
+			var/datum/mind_ui/m_ui = M.activeUIs["Cultist Panel"]
 			if (m_ui.active)
 				m_ui.Display()
 
@@ -275,6 +290,8 @@
 		if (isliving(M) && !M.isDead())
 			eclipse_increments += R.get_eclipse_increment()
 
+/datum/faction/bloodcult/proc/assign_rituals()
+
 /datum/faction/bloodcult/process()
 	..()
 	if (cultist_cap > 1) //The first call occurs in OnPostSetup()
@@ -303,6 +320,17 @@
 					if (eclipse_progress >= eclipse_target)
 						stage(BLOODCULT_STAGE_READY)
 					break
+			if (countdown_to_first_rituals)
+				countdown_to_first_rituals--
+				if (countdown_to_first_rituals <= 0)
+					assign_rituals()
+					for (var/datum/role/cultist in members)
+						var/datum/mind/M = cultist.antag
+						if ("Cult Panel" in M.activeUIs)
+							var/datum/mind_ui/m_ui = M.activeUIs["Cult Panel"]
+							if (m_ui.active)
+								m_ui.Display()
+
 		if (BLOODCULT_STAGE_MISSED)
 			if (bloodspill_ritual)
 				if (bloodspill_ritual.key_found(bloody_floors.len))
@@ -319,6 +347,23 @@
 		//if (BLOODCULT_STAGE_NARSIE)
 
 
+/datum/faction/bloodcult/proc/check_ritual(var/key, var/extra)
+	switch(stage)
+		if (BLOODCULT_STAGE_DEFEATED)//no more devotion gains if the bloodstone has been destroyed
+			return
+		if (BLOODCULT_STAGE_NARSIE)//or narsie has risen
+			return
+
+	if (key && stage != BLOODCULT_STAGE_ECLIPSE)
+		if (first_ritual && (key in first_ritual.keys))
+			if (first_ritual.key_found(extra))
+				first_ritual.complete()
+		else if (second_ritual && (key in second_ritual.keys))
+			if (second_ritual.key_found(extra))
+				second_ritual.complete()
+		else if (third_ritual && (key in third_ritual.keys))
+			if (third_ritual.key_found(extra))
+				third_ritual.complete()
 
 #define HUDICON_BLINKDURATION 10
 /datum/faction/bloodcult/update_hud_icons(var/offset = 0,var/factions_with_icons = 0)
@@ -357,6 +402,9 @@
 
 
 /datum/faction/bloodcult/proc/UpdateCap()
+	if (stage == BLOODCULT_STAGE_DEFEATED)
+		cultist_cap = 0
+		return
 	var/living_players = 0
 	var/new_cap = 0
 	for (var/mob/M in player_list)

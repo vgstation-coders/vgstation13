@@ -859,3 +859,13 @@
 	icon_state = "meatblob"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/obj/abstract/meatblob_spawner
+	name = "meat blob spawner"
+	invisibility = 101
+
+/obj/abstract/meatblob_spawner/New()
+	..()
+	var/datum/meat_blob/new_blob = new()
+	new_blob.instantiate(loc)
+	qdel(src)

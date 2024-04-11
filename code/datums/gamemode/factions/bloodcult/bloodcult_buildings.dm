@@ -292,6 +292,9 @@
 			lock_atom(C, lock_type)
 			C.apply_damage(blade.force, BRUTE, LIMB_CHEST)
 			I.add_blood(C)
+			var/datum/role/cultist/cul = iscultist(user)
+			if (cul)
+				cul.get_devotion(0, DEVOTION_TIER_0, "altar_plant", src)
 			if (C == user)
 				user.visible_message("<span class='danger'>\The [user] holds \the [I] above their stomach and impales themselves on \the [src]!</span>","<span class='danger'>You hold \the [I] above your stomach and impale yourself on \the [src]!</span>")
 			else
@@ -304,10 +307,16 @@
 			if(S.stat != DEAD)
 				S.death()
 			I.add_blood()
+			var/datum/role/cultist/cul = iscultist(user)
+			if (cul)
+				cul.get_devotion(0, DEVOTION_TIER_0, "altar_plant", src)
 			user.visible_message("<span class='danger'>\The [user] holds \the [I] above \the [S] and impales it on \the [src]!</span>","<span class='danger'>You hold \the [I] above \the [S] and impale it on \the [src]!</span>")
 		else
 			to_chat(user, "You plant \the [blade] on top of \the [src]</span>")
 			processing_objects += src
+			var/datum/role/cultist/cul = iscultist(user)
+			if (cul)
+				cul.get_devotion(0, DEVOTION_TIER_0, "altar_plant", src)
 			if (istype(blade) && !blade.shade)
 				var/icon/logo_icon = icon('icons/logos.dmi', "shade-blade")
 				for(var/mob/M in observers)

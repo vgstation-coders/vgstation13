@@ -87,7 +87,18 @@
 	offset_y = 39
 	mouse_opacity = 1
 
+
+/obj/abstract/mind_ui_element/hoverable/draw_runes_guided/Appear()
+	..()
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult.stage == BLOODCULT_STAGE_DEFEATED)
+		icon_state = "rune_guide-broken"
+		hover_state = FALSE
+
+
 /obj/abstract/mind_ui_element/hoverable/draw_runes_guided/Click()
+	if (!hover_state)
+		return
 	flick("rune_guide-click",src)
 	var/mob/M = GetUser()
 	if (M)
@@ -1157,6 +1168,13 @@
 				var/list/free_construct_slots = list()
 				var/list/construct_types = list("Artificer","Wraith","Juggernaut")
 				var/datum/mind_ui/bloodcult_panel/BP = parent
+				if (cult.cultist_cap == 0)//blood stone destroyed
+					var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_cap/cultist_cap = locate() in BP.elements
+					accumulated_offset -= 4
+					cultist_cap.offset_x = -98 + accumulated_offset
+					cultist_cap.UpdateUIScreenLoc()
+					accumulated_offset += 7
+					cap_placed = 1
 				for (var/datum/role/cultist/R in cult.members)
 					var/mob/O = R.antag.current
 					if (!O || O.isDead())
@@ -1674,6 +1692,8 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/faction_ritual/first/UpdateIcon()
 	overlays.len = 0
 	icon_state = "ritual_cleared"
+	tooltip_title = ""
+	tooltip_content = "..."
 	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
 		var/datum/bloodcult_ritual/BR = cult.first_ritual
 		if (BR)
@@ -1691,6 +1711,8 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/faction_ritual/second/UpdateIcon()
 	overlays.len = 0
 	icon_state = "ritual_cleared"
+	tooltip_title = ""
+	tooltip_content = "..."
 	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
 		var/datum/bloodcult_ritual/BR = cult.second_ritual
 		if (BR)
@@ -1708,6 +1730,8 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/faction_ritual/third/UpdateIcon()
 	overlays.len = 0
 	icon_state = "ritual_cleared"
+	tooltip_title = ""
+	tooltip_content = "..."
 	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
 		var/datum/bloodcult_ritual/BR = cult.third_ritual
 		if (BR)
@@ -1730,6 +1754,8 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/personal_ritual/first/UpdateIcon()
 	overlays.len = 0
 	icon_state = "ritual_cleared"
+	tooltip_title = ""
+	tooltip_content = "..."
 	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
 		var/datum/bloodcult_ritual/BR = cultist.first_ritual
 		if (BR)
@@ -1747,8 +1773,10 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_ritual/personal_ritual/second/UpdateIcon()
 	overlays.len = 0
 	icon_state = "ritual_cleared"
+	tooltip_title = ""
+	tooltip_content = "..."
 	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
-		var/datum/bloodcult_ritual/BR = cultist.first_ritual
+		var/datum/bloodcult_ritual/BR = cultist.second_ritual
 		if (BR)
 			tooltip_title = BR.name
 			BR.update_desc()
