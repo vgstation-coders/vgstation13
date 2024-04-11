@@ -92,7 +92,7 @@
 	if(panel_open && amplifier)
 		to_chat(user, "<span class='notice'>You carefully take \the [amplifier] from \the [src].</span>")
 		var/obj/item/bluespace_crystal/C=amplifier
-		user.put_in_hands(C)
+		user.put_in_hands_if_near(C, loc)
 		amplifier=null
 		return
 

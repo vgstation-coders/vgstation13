@@ -29,20 +29,18 @@
 /obj/machinery/communication/attack_hand(mob/user as mob)
 	if(..())
 		return 1
+	var/obj/item/commstone/stone
 	if(contents.len)
-		var/obj/item/commstone/stone = contents[1]
-		user.put_in_hands(stone)
-		to_chat(user, "<span class='notice'>You delicately remove one of the strange stones from the ancient device.</span>")
-		remaining--
-		return
-	if(remaining)
-		var/obj/item/commstone/stone = new(remaining)
+		stone = contents[1]
+	else if(remaining)
+		stone = new(remaining)
 		user.put_in_hands(stone)
 		stone.commdevice = src
 		allstones += stone
+	if(stone)
+		user.put_in_hands_if_near(stone, loc)
 		remaining--
 		to_chat(user, "<span class='notice'>You delicately remove one of the strange stones from the ancient device.</span>")
-		return
 
 /obj/machinery/communication/examine(mob/user as mob)
 	..()

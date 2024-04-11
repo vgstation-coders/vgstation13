@@ -120,7 +120,7 @@
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/weapon/cylinder/I = new (get_turf(user))
-				user.put_in_hands(I)
+				user.put_in_hands(I, loc)
 			else
 				new /obj/item/weapon/cylinder(get_turf(src.loc))
 			qdel(src)
@@ -466,7 +466,7 @@
 	if(isprox(D))
 		to_chat(user, "You add \the [D] to \the [src].")
 		QDEL_NULL(D)
-		user.put_in_hands(new /obj/item/weapon/bucket_sensor)
+		user.put_in_hands_if_near(new /obj/item/weapon/bucket_sensor(loc))
 		user.drop_from_inventory(src)
 		qdel(src)
 		return
