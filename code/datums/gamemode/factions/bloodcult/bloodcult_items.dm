@@ -1314,7 +1314,7 @@ var/list/arcane_tomes = list()
 	item_state = "cultrobes"
 	flags = FPRINT
 	allowed = list(/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract,/obj/item/weapon/tank)
-	armor = list(melee = 50, bullet = 30, laser = 30,energy = 20, bomb = 25, bio = 25, rad = 0)
+	armor = list(melee = 40, bullet = 15, laser = 15,energy = 20, bomb = 25, bio = 25, rad = 0)
 	siemens_coefficient = 0
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
@@ -1421,7 +1421,7 @@ var/list/arcane_tomes = list()
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
 	icon_state = "culthelmet"
 	item_state = "culthelmet"
-	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
+	armor = list(melee = 60, bullet = 25, laser = 25,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
@@ -1450,7 +1450,7 @@ var/list/arcane_tomes = list()
 	w_class = W_CLASS_MEDIUM
 	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tank,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract)
 	slowdown = HARDSUIT_SLOWDOWN_MED
-	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
+	armor = list(melee = 60, bullet = 25, laser = 25,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
