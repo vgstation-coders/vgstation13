@@ -255,6 +255,11 @@
 		// Make the UI auto-update.
 		ui.set_auto_update(1)
 
+/obj/machinery/disposal/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user))
+		flush = !flush
+	return ..()
+
 // handle machine interaction
 /obj/machinery/disposal/Topic(href, href_list)
 	if(usr.loc == src)
@@ -296,11 +301,12 @@
 	return
 
 // eject the contents of the disposal unit
-/obj/machinery/disposal/proc/eject()
-	for(var/atom/movable/AM in src)
-		AM.forceMove(src.loc)
-		AM.pipe_eject(0)
-	update_icon()
+/obj/machinery/disposal/proc/eject(var/atom/location = loc)
+	if(Adjacent(location))
+		for(var/atom/movable/AM in src)
+			AM.forceMove(location)
+			AM.pipe_eject(0)
+		update_icon()
 
 // update the icon & overlays to reflect mode & status
 /obj/machinery/disposal/update_icon()
@@ -545,6 +551,20 @@
 	add_fingerprint(user)
 	target.forceMove(src)
 	update_icon()
+
+/obj/machinery/disposal/MouseDropFrom(atom/over_object, src_location, over_location, src_control, over_control, params)
+	if(isAI(usr))
+		return
+
+	//We are restrained or can't move, this will compromise taking out the trash
+	if(usr.restrained() || !usr.canmove || usr.incapacitated())
+		return
+	if(!Adjacent(usr) || !Adjacent(over_location))
+		return
+	if(!usr.canMouseDrag())
+		return
+
+	eject(over_location)
 
 // virtual disposal object
 // travels through pipes in lieu of actual items
