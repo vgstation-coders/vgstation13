@@ -246,9 +246,10 @@
 
 /mob/proc/put_in_hands_if_near(var/obj/item/W, var/atom/backup_loc)
 	if(Adjacent(W) || W.arcanetampered)
-		put_in_hands(W)
+		return put_in_hands(W)
 	else if(backup_loc)
 		W.forceMove(backup_loc)
+	return 0
 
 //Puts the item our active hand if possible. Failing that it tries our inactive hand. Returns 1 on success.
 //If both fail it drops it on the floor and returns 0.
