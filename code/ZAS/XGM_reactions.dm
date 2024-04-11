@@ -27,7 +27,7 @@
 	name = "Cryotheum-Oxygen Reaction"
 
 /datum/gas_reaction/cryotheum_oxygen_reaction/reaction_is_possible(datum/gas_mixture/mixture)
-	return mixture[GAS_CRYOTHEUM] > 0 && mixture.molar_density(GAS_CRYOTHEUM) * CELL_VOLUME > MOLES_CRYOTHEUM_VISIBLE && mixture[GAS_OXYGEN] > 0
+	return mixture[GAS_CRYOTHEUM] > 0 && QUANTIZE(mixture.molar_density(GAS_CRYOTHEUM)) * CELL_VOLUME > MOLES_CRYOTHEUM_VISIBLE && mixture[GAS_OXYGEN] > 0
 
 /datum/gas_reaction/cryotheum_oxygen_reaction/reaction_amounts_requested(datum/gas_mixture/mixture)
 	var/to_return[] = list()
@@ -40,7 +40,9 @@
 	var/reaction_coefficient = reactant_amounts[GAS_OXYGEN]
 	mixture[GAS_OXYGEN] = max(0, mixture[GAS_OXYGEN] - reaction_coefficient)
 	// Should reduce a normal room down to a minimum of around -30C in less than a minute.
-	mixture.add_thermal_energy( reaction_coefficient * -170000, 242.8952)
+	var/const/temp_loss_per_one_reaction = -170000
+	var/const/min_oxy_reaction_temperature = 242.8952
+	mixture.add_thermal_energy( reaction_coefficient * temp_loss_per_one_reaction, min_oxy_reaction_temperature)
 
 
 // Cryotheum reacts with itself in the presence of plasma, disappearing but drastically lowering temperatures. Small amounts of gas will near-instantly turn to 0.1K, whereas
@@ -49,7 +51,7 @@
 	name = "Plasma Catalyzed Cryotheum Reaction"
 
 /datum/gas_reaction/cryotheum_plasma_reaction/reaction_is_possible(datum/gas_mixture/mixture)
-	return mixture[GAS_CRYOTHEUM] > 0 && mixture.molar_density(GAS_PLASMA) * CELL_VOLUME > MOLES_PLASMA_VISIBLE
+	return mixture[GAS_CRYOTHEUM] > 0 && QUANTIZE(mixture.molar_density(GAS_PLASMA)) * CELL_VOLUME > MOLES_PLASMA_VISIBLE
 
 /datum/gas_reaction/cryotheum_plasma_reaction/reaction_amounts_requested(datum/gas_mixture/mixture)
 	var/to_return[] = list()
@@ -65,4 +67,5 @@
 	var/distance_to_min_temp = max(0, mixture.temperature - 0.1)
 	var/logarithmic_modifier = max(0, log(40, distance_to_min_temp+1))
 	// Arbitrary number to reduce temperature by a significant amount, hardcapped at the minimum temperature.
-	mixture.add_thermal_energy( logarithmic_modifier * reaction_coefficient * -700000, 0.1)
+	var/const/temp_loss_per_one_reaction = -700000
+	mixture.add_thermal_energy( logarithmic_modifier * reaction_coefficient * temp_loss_per_one_reaction, 0.1)

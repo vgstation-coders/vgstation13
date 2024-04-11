@@ -163,10 +163,7 @@
 			update_icon()
 
 /obj/machinery/cryotheum_resonator/attack_hand(mob/user as mob)
-	if(issilicon(user))
-		add_hiddenprint(user)
-	else
-		add_fingerprint(user)
+	add_fingerprint(user)
 	..()
 	if(!anchored)
 		to_chat(user, "\The [src] needs to be anchored first!")
