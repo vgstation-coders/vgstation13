@@ -10,6 +10,8 @@
 	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | SHUTTLEWRENCH
 	var/activated = FALSE
 	var/obj/item/bluespace_crystal/crystal
+	ghost_read = 0
+	ghost_write = 0
 
 /obj/machinery/cryotheum_resonator/examine(mob/user)
 	..()
@@ -127,9 +129,9 @@
 		if(istype(crystal, /obj/item/bluespace_crystal/artificial))
 			amount = 120
 		else if(istype(crystal, /obj/item/bluespace_crystal/flawless))
-			amount = 250
+			amount = 950
 		else
-			amount = 630
+			amount = 240
 	if(emagged)
 		amount *= 1.2
 	return amount
@@ -161,7 +163,11 @@
 			update_icon()
 
 /obj/machinery/cryotheum_resonator/attack_hand(mob/user as mob)
-	src.add_fingerprint(user)
+	if(issilicon(user))
+		add_hiddenprint(user)
+	else
+		add_fingerprint(user)
+	..()
 	if(!anchored)
 		to_chat(user, "\The [src] needs to be anchored first!")
 		return

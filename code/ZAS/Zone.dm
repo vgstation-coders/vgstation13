@@ -90,7 +90,6 @@ Class Procs:
 	ASSERT(!invalid)
 	ASSERT(istype(T))
 	ASSERT(T.zone == src)
-	soft_assert(T in contents, "Lists are weird broseph")
 #endif
 
 	T.c_copy_air()
@@ -133,10 +132,11 @@ Class Procs:
 /zone/proc/c_invalidate()
 	invalid = 1
 	SSair.remove_zone(src)
+	for(var/turf/simulated/T in contents)
+		handle_events_remove(T)
 	#ifdef ZASDBG
 	for(var/turf/simulated/T in contents)
 		T.dbg(invalid_zone)
-		handle_events_remove(T)
 	#endif
 
 /zone/proc/rebuild()
@@ -151,7 +151,6 @@ Class Procs:
 		//T.dbg(invalid_zone)
 		T.needs_air_update = 0 //Reset the marker so that it will be added to the list.
 		SSair.mark_for_update(T)
-		handle_events_add(T)
 
 //Gets a list of the gas_mixtures of all zones connected to this one through arbitrarily many sleeping edges.
 //This is to cut down somewhat on differentials across open doors.
@@ -213,7 +212,7 @@ Class Procs:
 // In an ideal non-BYOND environment we could use something like events to hookup each ice tile to. However, our in-house implementation of events suck for performance. So you
 // can just hardcode the check here.
 /zone/proc/check_for_events()
-	// Only initialize ice_puddle_list and do these checks after cryotheum has been introduced to the zone.
+	// Only initialize ice_puddle_list and check for ice-related temperature events after cryotheum has been introduced to the zone.
 	if( ice_puddle_list != null )
 		for(var/obj/effect/overlay/puddle/ice/existing_ice in ice_puddle_list)
 			existing_ice.current_temp = air.temperature
@@ -234,12 +233,12 @@ Class Procs:
 
 /zone/proc/handle_events_add(turf/simulated/T)
 	for(var/obj/effect/overlay/puddle/ice/ice_puddle in T)
-		if( ice_puddle_list == null )
+		if(ice_puddle_list == null)
 			ice_puddle_list = list()
 		ice_puddle_list |= ice_puddle
 
 /zone/proc/handle_events_remove(turf/simulated/T)
-	if( ice_puddle_list != null )
+	if(ice_puddle_list != null)
 		for(var/obj/effect/overlay/puddle/ice/ice_puddle in T)
 			ice_puddle_list -= ice_puddle
 
