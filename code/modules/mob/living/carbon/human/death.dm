@@ -100,12 +100,12 @@
 		to_chat(B.host_brain, "<span class='danger'>Just before your body passes, you feel a brief return of sensation.  You are now in control...  And dead.</span>")
 		do_release_control(0)
 
-	if(LAssailant)
-		var/mob/living/carbon/human/A=LAssailant.get()
+	if(lastassailant)
+		var/mob/living/carbon/human/A=lastassailant.get()
 		if(istype(A))
 			//Check if last assailant is a vox raider.
 			//if (isvoxraider(A))
-				//Not currently feasible due to terrible LAssailant tracking, and the inviolate not even being a thing anymore.
+				//Not currently feasible due to terrible lastassailant tracking, and the inviolate not even being a thing anymore.
 				//vox_kills++ //Bad vox. Shouldn't be killing humans.
 				//to_chat(world, "Vox kills: [vox_kills]")
 			if(A.mind)

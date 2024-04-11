@@ -91,13 +91,13 @@ Whether or not the station was nuked. `0` is false, `1` is true.
 A big old log of a mob's death.
 
 #### Format:
-`MOB_DEATH|typepath|special role|timeofdeath|lAssailant|death location x|death locaton y|death location z|mind key|mind name`
+`MOB_DEATH|typepath|special role|timeofdeath|lastassailant|death location x|death locaton y|death location z|mind key|mind name`
 
 #### Example:
 `MOB_DEATH|/mob/living/carbon/monkey|null|782.3|Lorenzo Gibson|102|160|1|null|monkey (735)`
 
 #### Notes:
- - At time of writing, LAssailant isn't as good as it could be, and is an unreliable indicator of who killed who.
+ - At time of writing, lastassailant isn't as good as it could be, and is an unreliable indicator of who killed who.
  - timeofdeath is time since server start (not round start, or world time.)
 
 

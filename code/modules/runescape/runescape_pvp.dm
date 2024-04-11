@@ -59,9 +59,9 @@ var/list/non_standard_maint_areas = list(
 
 /mob/proc/assaulted_by(var/mob/M,var/weak_assault=FALSE)
 	if(!iscarbon(M))
-		QDEL_NULL(LAssailant)
+		QDEL_NULL(lastassailant)
 	else
-		LAssailant = makeweakref(M)
+		lastassailant = makeweakref(M)
 
 	if (M == src)
 		return
