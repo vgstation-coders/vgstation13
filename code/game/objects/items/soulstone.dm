@@ -661,7 +661,7 @@
 
 	if (iscultist(new_construct))
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-			cult.check_ritual("build_construct", new_construct)
+		cult.check_ritual("build_construct", new_construct)
 
 	if(islegacycultist(user))//legacy cult stuff
 		var/datum/faction/cult/narsie/cult_round = find_active_faction_by_member(user.mind.GetRole(LEGACY_CULTIST))

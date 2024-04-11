@@ -86,7 +86,7 @@
 
 	var/list/possible_rituals = list()
 
-	var/countdown_to_first_rituals = 10
+	var/countdown_to_first_rituals = 5
 
 /datum/faction/bloodcult/stage(var/value)
 	stage = value
