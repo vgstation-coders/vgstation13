@@ -515,7 +515,7 @@ var/global/global_cricket_population = 0
 		dir = SOUTH
 		if(iscarbon(user))
 			var/mob/living/carbon/C = user
-			C.put_in_hands(src)
+			C.put_in_hands_if_near(src)
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	else
 		..()
