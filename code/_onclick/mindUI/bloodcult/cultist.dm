@@ -1701,6 +1701,7 @@
 			BR.update_desc()
 			tooltip_content = BR.desc
 			icon_state = "ritual_multi"
+			overlays += "category_[BR.ritual_type]"
 			overlays += "ritual_[BR.difficulty]"
 	overlays += "ritual_multi_shape"
 	base_icon_state = icon_state
@@ -1720,6 +1721,7 @@
 			BR.update_desc()
 			tooltip_content = BR.desc
 			icon_state = "ritual_multi"
+			overlays += "category_[BR.ritual_type]"
 			overlays += "ritual_[BR.difficulty]"
 	overlays += "ritual_multi_shape"
 	base_icon_state = icon_state
@@ -1739,6 +1741,7 @@
 			BR.update_desc()
 			tooltip_content = BR.desc
 			icon_state = "ritual_multi"
+			overlays += "category_[BR.ritual_type]"
 			overlays += "ritual_[BR.difficulty]"
 	overlays += "ritual_multi_shape"
 	base_icon_state = icon_state
@@ -1763,6 +1766,7 @@
 			BR.update_desc()
 			tooltip_content = BR.desc
 			icon_state = "ritual_solo"
+			overlays += "category_[BR.ritual_type]"
 			overlays += "ritual_[BR.difficulty]"
 	overlays += "ritual_solo_shape"
 	base_icon_state = icon_state
@@ -1782,6 +1786,7 @@
 			BR.update_desc()
 			tooltip_content = BR.desc
 			icon_state = "ritual_solo"
+			overlays += "category_[BR.ritual_type]"
 			overlays += "ritual_[BR.difficulty]"
 	overlays += "ritual_solo_shape"
 	base_icon_state = icon_state

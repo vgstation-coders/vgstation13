@@ -5,6 +5,30 @@ Devotion both serves to unlock some cult powers, quicken the arrival of the Ecli
 In essence, these provide cultists with things to work toward to disrupt the crew without necessarily ending the round.
 */
 
+var/list/bloodcult_faction_rituals = list(
+	/datum/bloodcult_ritual/reach_cap,
+	/datum/bloodcult_ritual/convert_station,
+	/datum/bloodcult_ritual/produce_constructs,
+	/datum/bloodcult_ritual/blind_cameras_multi,
+	/datum/bloodcult_ritual/bloodspill,
+	/datum/bloodcult_ritual/sacrifice_captain,
+	/datum/bloodcult_ritual/cursed_infection,
+	)
+
+var/list/bloodcult_personal_rituals = list(
+	/datum/bloodcult_ritual/blind_cameras,
+	/datum/bloodcult_ritual/confuse_crew,
+	/datum/bloodcult_ritual/harm_crew,
+	/datum/bloodcult_ritual/sacrifice_mouse,
+	/datum/bloodcult_ritual/sacrifice_monkey,
+	/datum/bloodcult_ritual/altar/simple,
+	/datum/bloodcult_ritual/altar/elaborate,
+	/datum/bloodcult_ritual/altar/excentric,
+	/datum/bloodcult_ritual/altar/unholy,
+	/datum/bloodcult_ritual/suicide_tome,
+	/datum/bloodcult_ritual/suicide_soulblade,
+	)
+
 /datum/bloodcult_ritual
 	var/name = "Ritual"
 	var/desc = "Lorem Ipsum (you shouldn't be reading this!)"
@@ -21,6 +45,8 @@ In essence, these provide cultists with things to work toward to disrupt the cre
 
 //Needs to be TRUE for the Ritual to be assigned
 /datum/bloodcult_ritual/proc/pre_conditions(var/datum/role/cultist/potential)
+	if (potential)
+		owner = potential
 	return TRUE
 
 //Perform custom ritual setup here
@@ -41,6 +67,13 @@ In essence, these provide cultists with things to work toward to disrupt the cre
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		for(var/datum/role/cultist/C in cult.members)
 			C.get_devotion(reward_faction, DEVOTION_TIER_4)//yes this means a larger cult gets more total devotion.
+
+	if (personal)
+		message_admins("BLOODCULT: [key_name(owner)] has completed the [name] ritual.")
+		log_admin("BLOODCULT: [key_name(owner)] has completed the [name] ritual.")
+	else
+		message_admins("BLOODCULT: The [name] ritual has been completed.")
+		log_admin("BLOODCULT: The [name] ritual has been completed.")
 
 ////////////////////////////////////////////////////////////////////
 //																  //
@@ -174,7 +207,7 @@ In essence, these provide cultists with things to work toward to disrupt the cre
 	keys = list("bloodspill")
 
 	var/percent_bloodspill = 4//percent of all the station's simulated floors, you should keep it under 5.
-	var/target_bloodspill = 0//actual amount of bloodied floors to reach
+	var/target_bloodspill = 1000//actual amount of bloodied floors to reach
 	var/max_bloodspill = 0//max amount of bloodied floors simultanously reached
 
 /datum/bloodcult_ritual/bloodspill/init_ritual()
@@ -221,6 +254,8 @@ In essence, these provide cultists with things to work toward to disrupt the cre
 	keys = list("altar_sacrifice_human")
 
 /datum/bloodcult_ritual/sacrifice_captain/pre_conditions(var/datum/role/cultist/potential)
+	if (potential)
+		owner = potential
 	for(var/mob/M in player_list)
 		if(M.mind && M.mind.assigned_role == "Captain")
 			return TRUE
@@ -237,7 +272,7 @@ In essence, these provide cultists with things to work toward to disrupt the cre
 	name = "Cursed Blood"
 	desc = "from a tempting goblet...<br>pours a wicked drink..."
 
-	ritual_type = "category_infection"
+	ritual_type = "infection"
 	difficulty = "medium"
 	reward_faction = 300
 
@@ -315,7 +350,9 @@ In essence, these provide cultists with things to work toward to disrupt the cre
 		"confusion_papered",
 		)
 
-/datum/bloodcult_ritual/confuse_crew/key_found(var/extra)
+/datum/bloodcult_ritual/confuse_crew/key_found(var/mob/living/extra)
+	if (!extra.client)
+		return FALSE
 	return TRUE
 
 ////////////////////////HARM CREW MEMBERS/////////////////////////////
@@ -371,7 +408,7 @@ In essence, these provide cultists with things to work toward to disrupt the cre
 
 	keys = list("altar_sacrifice_animal")
 
-/datum/bloodcult_ritual/bloodspill/key_found(var/mob/living/simple_animal/mouse/extra)
+/datum/bloodcult_ritual/sacrifice_mouse/key_found(var/mob/living/simple_animal/mouse/extra)
 	if(istype(extra))
 		return TRUE
 	return FALSE
@@ -391,7 +428,7 @@ In essence, these provide cultists with things to work toward to disrupt the cre
 
 	keys = list("altar_sacrifice_monkey")
 
-/datum/bloodcult_ritual/bloodspill/key_found(var/extra)
+/datum/bloodcult_ritual/sacrifice_monkey/key_found(var/extra)
 	return TRUE
 
 
@@ -473,7 +510,7 @@ In essence, these provide cultists with things to work toward to disrupt the cre
 
 /datum/bloodcult_ritual/altar/simple
 	name = "Prepare Simple Altar"
-	desc = "raise an altar...<br>add proper paraphernalia around...<br>then plant a ritual knife on top..."
+	desc = "raise an altar...<br>add some lit blood candles around...<br>then plant a ritual knife on top..."
 
 	difficulty = "easy"
 	reward_achiever = 200
@@ -505,7 +542,7 @@ In essence, these provide cultists with things to work toward to disrupt the cre
 
 /datum/bloodcult_ritual/altar/excentric
 	name = "Prepare Excentric Altar"
-	desc = "raise an altar...<br>add proper paraphernalia around...<br>then plant a ritual knife on top..."
+	desc = "raise an altar...<br>add proper paraphernalia around...<br>lay an animal on top...<br>then plant a ritual knife into it..."
 
 	difficulty = "medium"
 	reward_achiever = 400
@@ -521,7 +558,7 @@ In essence, these provide cultists with things to work toward to disrupt the cre
 
 /datum/bloodcult_ritual/altar/unholy
 	name = "Prepare Unholy Altar"
-	desc = "raise an altar...<br>add proper paraphernalia around...<br>then plant a ritual knife on top..."
+	desc = "raise an altar...<br>add proper paraphernalia around...<br>lay a humanoid on top...<br>then plant a cult blade into them..."
 
 	difficulty = "hard"
 	reward_achiever = 600
@@ -551,6 +588,8 @@ In essence, these provide cultists with things to work toward to disrupt the cre
 	keys = list("suicide_tome")
 
 /datum/bloodcult_ritual/suicide_tome/pre_conditions(var/datum/role/cultist/potential)
+	if (potential)
+		owner = potential
 	if (potential.devotion > DEVOTION_TIER_4)
 		return TRUE
 	return FALSE
@@ -586,6 +625,8 @@ In essence, these provide cultists with things to work toward to disrupt the cre
 	keys = list("suicide_tome")
 
 /datum/bloodcult_ritual/suicide_soulblade/pre_conditions(var/datum/role/cultist/potential)
+	if (potential)
+		owner = potential
 	if (potential.devotion > DEVOTION_TIER_3)
 		return TRUE
 	return FALSE

@@ -84,9 +84,7 @@
 
 	var/datum/bloodcult_ritual/bloodspill_ritual = null
 
-	var/list/possible_faction_rituals = list()
-	var/list/possible_personal_rituals = list()
-	var/list/accomplished_faction_rituals = list()
+	var/list/possible_rituals = list()
 
 	var/countdown_to_first_rituals = 10
 
@@ -100,7 +98,8 @@
 		if (BLOODCULT_STAGE_MISSED)
 			for (var/datum/role/cultist in members)
 				var/mob/M = cultist.antag.current
-				to_chat(M, "<span class='sinister'>The Eclipse has passed. You won't be able to tear reality aboard this station anymore. Escape the station alive with your fellow cultists so you may try again another day.</span>")
+				if (M)
+					to_chat(M, "<span class='sinister'>The Eclipse has passed. You won't be able to tear reality aboard this station anymore. Escape the station alive with your fellow cultists so you may try again another day.</span>")
 			for(var/obj/structure/cult/spire/S in cult_spires)
 				S.upgrade(1)
 		if (BLOODCULT_STAGE_ECLIPSE)
@@ -291,6 +290,75 @@
 			eclipse_increments += R.get_eclipse_increment()
 
 /datum/faction/bloodcult/proc/assign_rituals()
+	var/list/valid_rituals = list()
+
+	for (var/datum/bloodcult_ritual/R in possible_rituals)
+		if (R.pre_conditions())
+			valid_rituals += R
+
+	if (valid_rituals.len < 3)
+		return
+
+	first_ritual = pick(valid_rituals)
+	possible_rituals -= first_ritual
+	valid_rituals -= first_ritual
+	first_ritual.init_ritual()
+
+	second_ritual = pick(valid_rituals)
+	possible_rituals -= second_ritual
+	valid_rituals -= second_ritual
+	second_ritual.init_ritual()
+
+	third_ritual = pick(valid_rituals)
+	possible_rituals -= third_ritual
+	valid_rituals -= third_ritual
+	third_ritual.init_ritual()
+
+	for (var/datum/role/cultist in members)
+		var/datum/mind/M = cultist.antag
+		if ("Cult Panel" in M.activeUIs)
+			var/datum/mind_ui/m_ui = M.activeUIs["Cult Panel"]
+			if (m_ui.active)
+				m_ui.Display()
+
+/datum/faction/bloodcult/proc/replace_rituals(var/slot)
+	if (gcDestroyed)
+		return
+	if (!slot)
+		return
+
+	var/list/valid_rituals = list()
+
+	for (var/datum/bloodcult_ritual/R in possible_rituals)
+		if (R.pre_conditions(src))
+			valid_rituals += R
+
+	if (valid_rituals.len < 1)
+		return
+
+	switch (slot)
+		if (1)
+			first_ritual = pick(valid_rituals)
+			possible_rituals -= first_ritual
+			first_ritual.init_ritual()
+		if (2)
+			second_ritual = pick(valid_rituals)
+			possible_rituals -= second_ritual
+			second_ritual.init_ritual()
+		if (3)
+			third_ritual = pick(valid_rituals)
+			possible_rituals -= third_ritual
+			third_ritual.init_ritual()
+
+	for (var/datum/role/cultist in members)
+		var/mob/O = cultist.antag.current
+		if (O)
+			to_chat(O, "<span class='sinister'>A new ritual is available...</span>")
+		var/datum/mind/M = cultist.antag
+		if ("Cult Panel" in M.activeUIs)
+			var/datum/mind_ui/m_ui = M.activeUIs["Cult Panel"]
+			if (m_ui.active)
+				m_ui.Display()
 
 /datum/faction/bloodcult/process()
 	..()
@@ -300,8 +368,7 @@
 	switch(stage)
 		if (BLOODCULT_STAGE_NORMAL)
 			if (bloodspill_ritual)
-				if (bloodspill_ritual.key_found(bloody_floors.len))
-					bloodspill_ritual.complete()
+				check_ritual("bloodspill", bloody_floors.len)
 			//if there is at least one cultist alive, the eclipse comes forward
 			for (var/datum/role/R in members)
 				var/mob/M = R.antag.current
@@ -324,17 +391,16 @@
 				countdown_to_first_rituals--
 				if (countdown_to_first_rituals <= 0)
 					assign_rituals()
-					for (var/datum/role/cultist in members)
-						var/datum/mind/M = cultist.antag
-						if ("Cult Panel" in M.activeUIs)
-							var/datum/mind_ui/m_ui = M.activeUIs["Cult Panel"]
-							if (m_ui.active)
-								m_ui.Display()
+					for (var/datum/role/cultist/C in members)
+						C.assign_rituals()
+						var/mob/M = C.antag.current
+						if (M)
+							to_chat(M, "<span class='sinister'>Although you can generate devotion by performing most cult activities, a couple rituals for you to perform are now available. Check the cult panel.</span>")
+
 
 		if (BLOODCULT_STAGE_MISSED)
 			if (bloodspill_ritual)
-				if (bloodspill_ritual.key_found(bloody_floors.len))
-					bloodspill_ritual.complete()
+				check_ritual("bloodspill", bloody_floors.len)
 		if (BLOODCULT_STAGE_READY)
 			if (sun.eclipse == ECLIPSE_OVER)
 				stage(BLOODCULT_STAGE_MISSED)
@@ -358,12 +424,39 @@
 		if (first_ritual && (key in first_ritual.keys))
 			if (first_ritual.key_found(extra))
 				first_ritual.complete()
-		else if (second_ritual && (key in second_ritual.keys))
+				if (!first_ritual.only_once)
+					possible_rituals += first_ritual
+				first_ritual = null
+				for (var/datum/role/cultist in members)
+					var/mob/M = cultist.antag.current
+					if (M)
+						to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
+				spawn(10 MINUTES)
+					replace_rituals(1)
+		if (second_ritual && (key in second_ritual.keys))
 			if (second_ritual.key_found(extra))
 				second_ritual.complete()
-		else if (third_ritual && (key in third_ritual.keys))
+				if (!second_ritual.only_once)
+					possible_rituals += second_ritual
+				second_ritual = null
+				for (var/datum/role/cultist in members)
+					var/mob/M = cultist.antag.current
+					if (M)
+						to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
+				spawn(10 MINUTES)
+					replace_rituals(2)
+		if (third_ritual && (key in third_ritual.keys))
 			if (third_ritual.key_found(extra))
 				third_ritual.complete()
+				if (!third_ritual.only_once)
+					possible_rituals += third_ritual
+				third_ritual = null
+				for (var/datum/role/cultist in members)
+					var/mob/M = cultist.antag.current
+					if (M)
+						to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
+				spawn(10 MINUTES)
+					replace_rituals(3)
 
 #define HUDICON_BLINKDURATION 10
 /datum/faction/bloodcult/update_hud_icons(var/offset = 0,var/factions_with_icons = 0)
@@ -473,6 +566,8 @@
 	M.special_role = "Cultist"
 
 /datum/faction/bloodcult/OnPostSetup()
+	for (var/ritual_type in bloodcult_faction_rituals)
+		possible_rituals += new ritual_type()
 	cult_founding_time = world.time
 	initialize_rune_words()
 	AppendObjective(/datum/objective/bloodcult)

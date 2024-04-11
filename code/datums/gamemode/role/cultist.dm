@@ -39,13 +39,17 @@
 
 	var/blood_pool = FALSE
 
+	var/initial_rituals = FALSE
+	var/list/possible_rituals = list()
 	var/datum/bloodcult_ritual/first_ritual = null
 	var/datum/bloodcult_ritual/second_ritual = null
-	var/accomplished_personal_rituals = 0
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
 	wikiroute = role_wiki[CULTIST]
+
+	for (var/ritual_type in bloodcult_personal_rituals)
+		possible_rituals += new ritual_type()
 
 /datum/role/cultist/OnPostSetup(var/laterole = FALSE)
 	. = ..()
@@ -109,6 +113,11 @@
 
 	if (faction)
 		var/datum/faction/bloodcult/cult = faction
+		if (!initial_rituals && cult.countdown_to_first_rituals <= 0)
+			assign_rituals()
+			var/mob/M = antag.current
+			if (M)
+				to_chat(M, "<span class='sinister'>Although you can generate devotion by performing most cult activities, a couple rituals for you to perform are now available. Check the cult panel.</span>")
 		switch(cult.stage)
 			if (BLOODCULT_STAGE_READY)
 				antag.current.add_particles("Cult Smoke")
@@ -166,7 +175,7 @@
 				I, the Geometer of Blood, want you to drag this station into the blood realm.<br>
 				You've managed to get a job here, and the time has come to put our plan into motion.<br>
 				An Eclipse will soon arrive which will weaken this station's ties to reality, giving us a window of time to perform the Tear Reality ritual.<br>
-				Performing occult activities will hasten its arrival. Consult the Cult panel to track how much time is left, as well as the state of the Cult.<br>
+				Performing occult activities will generate devotion, hastening its arrival. Consult the Cult panel to track how much time is left, as well as the state of the Cult.<br>
 				Until the Eclipse arrives, work with your peers to disrupt the crew and increase your dominion over the station!<br>
 				But first of all, use the Cult panel to choose a role that fits you. You may change it later.<br>
 				</span>"})
@@ -200,13 +209,6 @@
 	to_chat(antag.current, "<br>")
 	spawn(1)
 		if (faction)
-			/*
-			var/datum/objective_holder/OH = faction.objective_holder
-			if (OH.objectives.len > 0)
-				var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.
-				to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
-				to_chat(antag.current,"<b>First of all though, choose a role that fits you best using the button on the left.</b>")
-			*/
 			if (greeting != GREET_ROUNDSTART)
 				var/datum/faction/bloodcult/cult = faction
 				to_chat(antag.current, "<span class='sinister'>The station population is currently large enough for <span class='userdanger'>[cult.cultist_cap]</span> cultists.</span>")
@@ -370,20 +372,74 @@
 		if (first_ritual && (key in first_ritual.keys))
 			if (first_ritual.key_found(extra))
 				first_ritual.complete()
-		else if (second_ritual && (key in second_ritual.keys))
+				if (!first_ritual.only_once)
+					possible_rituals += first_ritual
+				first_ritual = null
+				var/mob/M = antag.current
+				if (M)
+					to_chat(M, "<span class='sinister'>You have completed a ritual and been reward for your devotion...soon another ritual will take its place.</span>")
+				spawn(5 MINUTES)
+					if (!gcDestroyed)
+						replace_rituals(1)
+		if (second_ritual && (key in second_ritual.keys))
 			if (second_ritual.key_found(extra))
 				second_ritual.complete()
-		else if (faction)
+				if (!second_ritual.only_once)
+					possible_rituals += second_ritual
+				second_ritual = null
+				var/mob/M = antag.current
+				if (M)
+					to_chat(M, "<span class='sinister'>You have completed a ritual and been reward for your devotion...soon another ritual will take its place.</span>")
+				spawn(5 MINUTES)
+					if (!gcDestroyed)
+						replace_rituals(2)
+		if (faction)
 			var/datum/faction/bloodcult/cult = faction
 			if (cult.first_ritual && (key in cult.first_ritual.keys))
 				if (cult.first_ritual.key_found(extra))
 					cult.first_ritual.complete()
-			else if (cult.second_ritual && (key in cult.second_ritual.keys))
+					if (!cult.first_ritual.only_once)
+						cult.possible_rituals += cult.first_ritual
+					cult.first_ritual = null
+					for (var/datum/role/cultist in cult.members)
+						var/mob/M = cultist.antag.current
+						if (M)
+							if (M == antag.current)
+								to_chat(M, "<span class='sinister'>You have completed a ritual, and rewarded the entire cult...soon another ritual will take its place.</span>")
+							else
+								to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
+					spawn(10 MINUTES)
+						cult.replace_rituals(1)
+			if (cult.second_ritual && (key in cult.second_ritual.keys))
 				if (cult.second_ritual.key_found(extra))
 					cult.second_ritual.complete()
-			else if (cult.third_ritual && (key in cult.third_ritual.keys))
+					if (!cult.second_ritual.only_once)
+						cult.possible_rituals += cult.second_ritual
+					cult.second_ritual = null
+					for (var/datum/role/cultist in cult.members)
+						var/mob/M = cultist.antag.current
+						if (M)
+							if (M == antag.current)
+								to_chat(M, "<span class='sinister'>You have completed a ritual, and rewarded the entire cult...soon another ritual will take its place.</span>")
+							else
+								to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
+					spawn(10 MINUTES)
+						cult.replace_rituals(2)
+			if (cult.third_ritual && (key in cult.third_ritual.keys))
 				if (cult.third_ritual.key_found(extra))
 					cult.third_ritual.complete()
+					if (!cult.third_ritual.only_once)
+						cult.possible_rituals += cult.third_ritual
+					cult.third_ritual = null
+					for (var/datum/role/cultist in cult.members)
+						var/mob/M = cultist.antag.current
+						if (M)
+							if (M == antag.current)
+								to_chat(M, "<span class='sinister'>You have completed a ritual, and rewarded the entire cult...soon another ritual will take its place.</span>")
+							else
+								to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
+					spawn(10 MINUTES)
+						cult.replace_rituals(3)
 
 	//The more devotion the cultist has acquired, the less devotion they obtain from lesser rituals
 	switch (get_devotion_rank() - tier)
@@ -424,6 +480,79 @@
 					to_chat(antag.current, "<b>Apply your palms on a wall to draw a sigil on it that lets you and any ally pass through it.</b>")
 					GiveTattoo(/datum/cult_tattoo/shortcut)
 	antag.current.DisplayUI("Cultist Right Panel")
+
+/datum/role/cultist/proc/current_ritual_categories()
+	var/list/categ = list()
+
+	if (first_ritual)
+		categ |= first_ritual.ritual_type
+	if (second_ritual)
+		categ |= second_ritual.ritual_type
+
+	return categ
+
+/datum/role/cultist/proc/assign_rituals()
+	initial_rituals = TRUE
+	var/list/valid_rituals = list()
+
+	for (var/datum/bloodcult_ritual/R in possible_rituals)
+		if (R.pre_conditions(src))
+			valid_rituals += R
+
+	if (valid_rituals.len < 2)
+		return
+
+	first_ritual = pick(valid_rituals)
+	possible_rituals -= first_ritual
+	valid_rituals -= first_ritual
+	first_ritual.init_ritual()
+
+	second_ritual = pick(valid_rituals)
+	if (second_ritual.ritual_type == first_ritual.ritual_type)//slightly reducing chances of having several rituals of the same type
+		second_ritual = pick(valid_rituals)
+	possible_rituals -= second_ritual
+	second_ritual.init_ritual()
+
+	var/datum/mind/M = antag
+
+	if ("Cult Panel" in M.activeUIs)
+		var/datum/mind_ui/m_ui = M.activeUIs["Cult Panel"]
+		if (m_ui.active)
+			m_ui.Display()
+
+/datum/role/cultist/proc/replace_rituals(var/slot)
+	if (gcDestroyed)
+		return
+	if (!slot)
+		return
+
+	var/list/valid_rituals = list()
+
+	for (var/datum/bloodcult_ritual/R in possible_rituals)
+		if (R.pre_conditions(src))
+			valid_rituals += R
+
+	if (valid_rituals.len < 1)
+		return
+
+	switch (slot)
+		if (1)
+			first_ritual = pick(valid_rituals)
+			possible_rituals -= first_ritual
+			first_ritual.init_ritual()
+		if (2)
+			second_ritual = pick(valid_rituals)
+			possible_rituals -= second_ritual
+			second_ritual.init_ritual()
+
+	var/mob/O = antag.current
+	if (O)
+		to_chat(O, "<span class='sinister'>A new ritual is available...</span>")
+	var/datum/mind/M = antag
+	if ("Cult Panel" in M.activeUIs)
+		var/datum/mind_ui/m_ui = M.activeUIs["Cult Panel"]
+		if (m_ui.active)
+			m_ui.Display()
 
 /datum/role/cultist/proc/get_eclipse_increment()
 	switch(get_devotion_rank())
