@@ -5712,6 +5712,7 @@
 	icon_state = "higashikata"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
+	crumb_icon = "dribbles"
 	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/higashikata/New()
@@ -5728,6 +5729,7 @@
 	icon_state = "sundae"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE //milk
 	base_crumb_chance = 0
+	crumb_icon = "dribbles"
 	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/sundae/New()
@@ -5745,6 +5747,7 @@
 	trash = /obj/item/weapon/reagent_containers/food/drinks/drinkingglass
 	valid_utensils = 0
 	base_crumb_chance = 0
+	crumb_icon = "dribbles"
 	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake/New()
