@@ -177,11 +177,11 @@
 		else
 			hand_hud_object.icon_state = "hand_inactive"
 
-/mob/proc/put_in_hand(index, obj/item/W, proximity)
+/mob/proc/put_in_hand(index, obj/item/W)
 	if(!is_valid_hand_index(index) || !is_valid_hand_index(active_hand))
 		return 0
 
-	if(!put_in_hand_check(W, index, proximity))
+	if(!put_in_hand_check(W, index))
 		return 0
 
 	if(W.prepickup(src))
@@ -211,7 +211,7 @@
 /mob/proc/put_in_r_hand(var/obj/item/W)
 	return put_in_hand(GRASP_RIGHT_HAND, W)
 
-/mob/proc/put_in_hand_check(var/obj/item/W, index, proximity)
+/mob/proc/put_in_hand_check(var/obj/item/W, index)
 	if(lying && !W.laying_pickup) //&& !(W.flags & ABSTRACT))
 		return 0
 	if(!isitem(W))
@@ -220,7 +220,7 @@
 	if(held_items[index])
 		return 0
 
-	if(proximity && !Adjacent(W) && !W.arcanetampered)
+	if(!Adjacent(W) && W.loc && !W.arcanetampered)
 		return 0
 
 	if((W.flags & MUSTTWOHAND) && !(M_STRONG in mutations))
@@ -237,13 +237,13 @@
 	return 1
 
 //Puts the item into our active hand if possible. returns 1 on success.
-/mob/proc/put_in_active_hand(var/obj/item/W, proximity)
-	return put_in_hand(active_hand, W, proximity)
+/mob/proc/put_in_active_hand(var/obj/item/W)
+	return put_in_hand(active_hand, W)
 
 //Puts the item into our inactive hand if possible. returns 1 on success.
-/mob/proc/put_in_inactive_hand(var/obj/item/W, proximity) // The technology has advanced, we can now handle lifeforms with more than 2 hands.
+/mob/proc/put_in_inactive_hand(var/obj/item/W) // The technology has advanced, we can now handle lifeforms with more than 2 hands.
 	for (var/i = held_items.len; i > 0; i--) // held_items.len returns us to the last available hand. We iterate until we come to 0.
-		if (i != active_hand && put_in_hand(i, W, proximity))
+		if (i != active_hand && put_in_hand(i, W))
 			return 1
 	return 0
 
@@ -261,7 +261,7 @@
 		return 1
 	if(put_in_inactive_hand(W, proximity))
 		return 1
-	W.forceMove(proximity && W.loc ? get_turf(W) : get_turf(src))
+	W.forceMove(W.loc ? get_turf(W) : get_turf(src))
 	W.reset_plane_and_layer()
 	W.dropped()
 	return 0

@@ -248,7 +248,7 @@
 				if(C.string_attached)
 					if(prob(50))
 						to_chat(user, "<span class='notice'>You manage to yank \the [C] back out before the machine swallows it!</span>")
-						user.put_in_hands(O, TRUE)
+						user.put_in_hands(O)
 					else
 						to_chat(user, "<span class='notice'>You weren't able to pull \the [C] out in time and the machine swallows it, string and all.</span>")
 						qdel(O)
@@ -271,7 +271,7 @@
 		if(amount > cost_per_game)
 			var/list/obj/item/weapon/spacecash/change = dispense_cash(amount - cost_per_game, src.loc)
 			for(var/obj/item/weapon/spacecash/C in change)
-				user.put_in_hands(C, TRUE)
+				user.put_in_hands(C)
 			if(prob(50))
 				playsound(src, 'sound/items/polaroid1.ogg', 25, 1)
 			else

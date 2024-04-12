@@ -320,7 +320,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 /obj/machinery/atmospherics/unary/cryo_cell/attackby(var/obj/item/weapon/G, var/mob/user)
 	if(istype(G, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
-			user.put_in_hands(beaker, TRUE)
+			user.put_in_hands(beaker)
 		if(G.w_class > W_CLASS_SMALL)
 			to_chat(user, "<span class='warning'>\The [G] is too big to fit.</span>")
 			return

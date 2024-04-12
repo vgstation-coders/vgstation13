@@ -1434,7 +1434,7 @@ FIRE ALARM
 			if(shelter)
 				var/obj/O = new /obj/item/inflatable/shelter(loc)
 				if(!isAdminGhost(usr)) //Silicons AND adminghosts drop it to the floor
-					usr.put_in_hands(O, TRUE)
+					usr.put_in_hands(O)
 				shelter = FALSE
 				update_icon()
 			else

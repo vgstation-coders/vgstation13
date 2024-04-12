@@ -345,7 +345,7 @@ to destroy them and players will be able to make replacements.
 			var/obj/item/I = new boardType(get_turf(user))
 			to_chat(user, "<span class='notice'>You fashion a crude [I] from the blank circuitboard.</span>")
 			qdel(src)
-			user.put_in_hands(I, TRUE)
+			user.put_in_hands(I)
 		soldering = 0
 	else if(iswelder(O))
 		var/obj/item/tool/weldingtool/WT = O
