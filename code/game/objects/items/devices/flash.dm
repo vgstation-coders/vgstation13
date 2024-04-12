@@ -135,7 +135,7 @@
 	to_chat(user, "<span class='warning'>You prepare the flash for the brainwashing sequence.</span>")
 	var/obj/item/device/flash/rev/R = new(get_turf(src))
 	qdel(src)
-	user.put_in_hands(R, TRUE)
+	user.put_in_hands(R)
 	return 1
 
 /obj/item/device/flash/rev/make_rev_flash()

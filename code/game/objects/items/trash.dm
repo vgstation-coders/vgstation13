@@ -172,7 +172,7 @@
 		var/obj/item/I = new /obj/item/clothing/head/tinfoil(get_turf(src))
 		qdel(W)
 		qdel(src)
-		user.put_in_hands(I, TRUE)
+		user.put_in_hands(I)
 	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/doughslice))
 		if(user.drop_item(W))
 			new/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie(get_turf(src),W)
@@ -188,7 +188,7 @@
 		coil.use(5)
 		to_chat(user, "<span class='notice'>You remove the insulation and wrap the cables around the pie tin.</span>")
 		qdel(src)
-		user.put_in_hands(I, TRUE)
+		user.put_in_hands(I)
 
 /obj/item/trash/wired_pietin_assembly
 	name = "wired pie tin assembly"
@@ -205,7 +205,7 @@
 		qdel(W)
 		qdel(src)
 		to_chat(user, "<span class='notice'>You add a second pie tin to the assembly.</span>")
-		user.put_in_hands(I, TRUE)
+		user.put_in_hands(I)
 
 /obj/item/trash/snack_bowl
 	name = "snack bowl"

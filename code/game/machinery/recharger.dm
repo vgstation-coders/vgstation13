@@ -160,7 +160,7 @@
 		charging.appearance = appearance_backup
 		charging.update_icon()
 		charging.forceMove(loc)
-		user.put_in_hands(charging, TRUE)
+		user.put_in_hands(charging)
 		charging = null
 		if(!self_powered)
 			use_power = MACHINE_POWER_USE_IDLE

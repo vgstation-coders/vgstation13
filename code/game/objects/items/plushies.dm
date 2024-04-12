@@ -91,7 +91,7 @@
 			add_fingerprint(user)
 		else
 			to_chat(user, "<span class='notice'>You remove \the [grenade] from \the [src].</span>")
-			user.put_in_hands(grenade, TRUE)
+			user.put_in_hands(grenade)
 			add_fingerprint(user)
 			grenade.add_fingerprint(user)
 		return 1

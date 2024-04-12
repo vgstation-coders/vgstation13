@@ -88,7 +88,7 @@
 	if(defib)
 		to_chat(usr, "<span class='notice'>You take out an emergency defibrillator from \the [src].</san>")
 		//new /obj/item/weapon/melee/defibrillator(src.loc)
-		usr.put_in_hands(defib, TRUE)
+		usr.put_in_hands(defib)
 		defib = null
 		update_icon()
 	return

@@ -728,13 +728,13 @@ Status: []<BR>"},
 
 			to_chat(user, "You remove \the [installed] from the turret frame.")
 			var/obj/item/I = installed
-			user.put_in_hands(I, TRUE)
+			user.put_in_hands(I)
 			installed = null
 
 		if(5)
 			to_chat(user, "You remove the prox sensor from the turret frame.")
 			var/obj/item/device/assembly/prox_sensor/P = new(user.loc)
-			user.put_in_hands(P, TRUE)
+			user.put_in_hands(P)
 			build_step = 4
 
 

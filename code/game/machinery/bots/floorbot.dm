@@ -463,7 +463,7 @@ var/global/list/floorbot_targets=list()
 	var/obj/item/weapon/toolbox_tiles/B = new /obj/item/weapon/toolbox_tiles
 	B.skin = floorbot_type()
 	B.icon_state = "[B.skin]toolbox_tiles"
-	user.put_in_hands(B, TRUE)
+	user.put_in_hands(B)
 	to_chat(user, "<span class='notice'>You add the tiles into the empty toolbox. They protrude from the top.</span>")
 	user.drop_from_inventory(src)
 	qdel(src)
@@ -476,7 +476,7 @@ var/global/list/floorbot_targets=list()
 		B.created_name = created_name
 		B.skin = skin
 		B.icon_state = "[B.skin]toolbox_tiles_sensor"
-		user.put_in_hands(B, TRUE)
+		user.put_in_hands(B)
 		to_chat(user, "<span class='notice'>You add the sensor to the toolbox and tiles!</span>")
 		user.drop_from_inventory(src)
 		qdel(src)

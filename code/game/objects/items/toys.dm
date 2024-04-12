@@ -450,7 +450,7 @@
 		W.forceMove(saber)
 		user.drop_item(src)
 		forceMove(saber)
-		user.put_in_hands(saber, TRUE)
+		user.put_in_hands(saber)
 		return 1
 	return ..()
 
@@ -1431,7 +1431,7 @@
 		BB.air_contents.react()
 		if(loc == user)
 			user.drop_item(src, force_drop = 1)
-			user.put_in_hands(BB, TRUE)
+			user.put_in_hands(BB)
 		qdel(W)
 		qdel(src)
 
@@ -1448,7 +1448,7 @@
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/clothing/gloves/anchor_arms/A = new (get_turf(user))
-			user.put_in_hands(A, TRUE)
+			user.put_in_hands(A)
 		else
 			new /obj/item/clothing/gloves/anchor_arms(get_turf(src.loc))
 		qdel(src)

@@ -24,7 +24,7 @@
 				if(real_coin.string_attached)
 					if(prob(30))
 						to_chat(user, "<SPAN CLASS='notice'>You were able to force the knob around and successfully pulled \the [O] out before [src] could swallow it.</SPAN>")
-						user.put_in_hands(O, TRUE)
+						user.put_in_hands(O)
 					else
 						to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull \the [O] out fast enough, the machine ate it, string and all.</SPAN>")
 						qdel(O)
@@ -114,7 +114,7 @@
 
 	var/obj/item/I = new capsule_prize(M)
 	M.u_equip(src, 0)
-	M.put_in_hands(I, TRUE)
+	M.put_in_hands(I)
 	I.add_fingerprint(M)
 	to_chat(M, "<span class='notice'>You got \a [I]!</span>")
 	qdel(src)

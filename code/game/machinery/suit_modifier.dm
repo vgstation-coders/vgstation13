@@ -155,7 +155,7 @@
 		var/obj/removed = input(user, "Choose an upgrade to remove from [src].", src) as null|anything in modules_to_install + cell
 		if(!removed || activated || !user.Adjacent(src) || user.incapacitated())
 			return
-		user.put_in_hands(removed, TRUE)
+		user.put_in_hands(removed)
 		if(removed.loc == src)
 			removed.forceMove(get_turf(src))
 		if(removed == cell)

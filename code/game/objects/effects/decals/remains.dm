@@ -40,7 +40,7 @@
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/weapon/bikehorn/skullhorn/S = new (get_turf(src))
-				user.put_in_hands(S, TRUE)
+				user.put_in_hands(S)
 			else
 				new /obj/item/weapon/bikehorn/skullhorn(get_turf(src.loc))
 			qdel(src)

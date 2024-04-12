@@ -90,7 +90,7 @@
 
 			if(user.drop_item(R, src))
 				if (src.beaker)
-					user.put_in_hands(src.beaker, TRUE)
+					user.put_in_hands(src.beaker)
 				src.beaker = R
 				to_chat(user, "You attach \the [R] to \the [src].")
 				investigation_log(I_CHEMS, "was loaded with \a [R] by [key_name(user)], containing [R.reagents.get_reagent_ids(1)]")

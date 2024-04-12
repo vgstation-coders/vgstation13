@@ -270,14 +270,14 @@ var/global/msg_id = 0
 				var/turf/T = loc
 				if(ismob(T))
 					T = T.loc
-				U.put_in_hands(cartridge, TRUE)
+				U.put_in_hands(cartridge)
 				if (cartridge.radio)
 					cartridge.radio.hostpda = null
 				cartridge = null
 				update_icon()
 		if("Eject Photo")
 			if(photo)
-				U.put_in_hands(photo, TRUE)
+				U.put_in_hands(photo)
 				photo = null
 
 //APPLICATIONS FUNCTIONS===========================
@@ -298,7 +298,7 @@ var/global/msg_id = 0
 				if("1")		// Configure pAI device
 					pai.attack_self(U)
 				if("2")		// Eject pAI device
-					U.put_in_hands(pai, TRUE)
+					U.put_in_hands(pai)
 
 //EXTRA FUNCTIONS===================================
 
@@ -333,7 +333,7 @@ var/global/msg_id = 0
 	if(!id)
 		to_chat(user, "<span class='notice'>This PDA does not have an ID in it.</span>")
 		return FALSE
-	user.put_in_hands(id, TRUE)
+	user.put_in_hands(id)
 	id = null
 	return TRUE
 
@@ -387,7 +387,7 @@ var/global/msg_id = 0
 		to_chat(user, "<span class='notice'>This PDA does not have a pen in it.</span>")
 		return FALSE
 
-	user.put_in_hands(pen, TRUE)
+	user.put_in_hands(pen)
 	to_chat(user, "<span class='notice'>You remove \the [pen] from \the [src].</span>")
 	pen = null
 	return TRUE
@@ -420,7 +420,7 @@ var/global/msg_id = 0
 			var/obj/old_id = id
 			if(user.drop_item(I, src))
 				id = I
-				user.put_in_hands(old_id, TRUE)
+				user.put_in_hands(old_id)
 	var/datum/pda_app/messenger/message_app = locate(/datum/pda_app/messenger) in applications
 	if(message_app && id && message_app.incoming_transactions.len)
 		message_app.receive_incoming_transactions(id)

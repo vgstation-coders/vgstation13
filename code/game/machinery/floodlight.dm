@@ -46,7 +46,7 @@
 /obj/machinery/floodlight/attack_hand(mob/user as mob)
 	if(panel_open && cell)
 		if(ishuman(user) || isMoMMI(user)) //Allow MoMMIs to do it, too
-			user.put_in_hands(cell, TRUE)
+			user.put_in_hands(cell)
 			cell.add_fingerprint(user)
 			cell.updateicon()
 			cell = null

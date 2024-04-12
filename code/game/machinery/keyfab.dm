@@ -72,7 +72,7 @@
 			if(KEYDONE)
 				to_chat(user, "<span class='notice'>You remove the finished key from \the [src].</span>")
 				storedkey.forceMove(loc)
-				user.put_in_hands(storedkey, TRUE)
+				user.put_in_hands(storedkey)
 				storedkey = null
 				busy = NOTBUSY
 				update_icon()
