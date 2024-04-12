@@ -14,7 +14,7 @@
 
 /obj/effect/decal/remains/human/attack_hand(mob/user)
 	if(icon_state == "remains")
-		user.put_in_hands(new /obj/item/weapon/skull(user))
+		user.put_in_hands(new /obj/item/weapon/skull(loc))
 		icon_state = "remains_noskull"
 
 /obj/effect/decal/remains/human/noskull
