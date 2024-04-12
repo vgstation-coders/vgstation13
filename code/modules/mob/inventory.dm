@@ -244,18 +244,13 @@
 			return 1
 	return 0
 
-/mob/proc/put_in_hands_if_near(var/obj/item/W, var/atom/backup_loc)
-	if(Adjacent(W) || W.arcanetampered)
-		return put_in_hands(W)
-	if(backup_loc)
-		W.forceMove(backup_loc)
-	return 0
-
 //Puts the item our active hand if possible. Failing that it tries our inactive hand. Returns 1 on success.
 //If both fail it drops it on the floor and returns 0.
 //This is probably the main one you need to know :)
-/mob/proc/put_in_hands(var/obj/item/W)
+/mob/proc/put_in_hands(var/obj/item/W, var/proximity = FALSE, var/atom/backup_loc)
 	if(!W)
+		return 0
+	if(proximity && !Adjacent(W) && !W.arcanetampered)
 		return 0
 	for (var/i = 1 to held_items.len)
 		if (held_items[i] == W)
@@ -265,7 +260,7 @@
 	else if(put_in_inactive_hand(W))
 		return 1
 	else
-		W.forceMove(get_turf(src))
+		W.forceMove(backup_loc || get_turf(src))
 		W.reset_plane_and_layer()
 		W.dropped()
 		return 0

@@ -41,7 +41,7 @@
 			report.forceMove(src.loc)
 			user.drop_item(P, loc, 1)
 			P.forceMove(src)
-			user.put_in_hands_if_near(report)
+			user.put_in_hands(report, TRUE, loc)
 			report = P
 		else
 			to_chat(user, "<span class='notice'>You attach the report to \the [src].</span>")

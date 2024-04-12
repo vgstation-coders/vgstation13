@@ -158,7 +158,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 					else
 						var/obj/item/O = Detach(colour)
 						if(O)
-							L.put_in_hands(O)
+							L.put_in_hands(O, TRUE, holder.loc)
 							holder.investigation_log(I_WIRES, "|| [O] \ref[O] detached from [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
 
 				// Attach

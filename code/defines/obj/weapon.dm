@@ -384,7 +384,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 				S.item_state = screw_state
 				S.icon_state = screw_istate
 				S.update_icon()
-				user.put_in_hands_if_near(S)
+				user.put_in_hands(S, TRUE, loc)
 				qdel(src)
 				return
 			else
