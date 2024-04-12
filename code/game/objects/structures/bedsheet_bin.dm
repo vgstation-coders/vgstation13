@@ -52,7 +52,7 @@ LINEN BINS
 
 			if(user.zone_sel.selecting == TARGET_EYES)
 				to_chat(user, "<span  class='notice'>You finish cutting eye holes into \the [src].</span>")
-				user.put_in_hands(new /obj/item/clothing/suit/bedsheet_ghost(loc))
+				user.put_in_hands(new /obj/item/clothing/suit/bedsheet_ghost())
 
 			else
 				to_chat(user, "<span  class='notice'>You finish cutting \the [src] into rags.</span>")

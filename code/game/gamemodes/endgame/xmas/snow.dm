@@ -88,7 +88,7 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 	if(do_after(user, src, 30))
 		snow_amount = SNOWCOVERING_MEDIUM
 		to_chat(user, "<span class='notice'>You form a snowball in your hands.</span>")
-		user.put_in_hands(new /obj/item/stack/sheet/snow)
+		user.put_in_hands(new /obj/item/stack/sheet/snow())
 		icon_state = "snow_grabbed"
 
 		if(snow_amount==SNOWCOVERING_LITTLE)
