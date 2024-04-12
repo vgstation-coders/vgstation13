@@ -941,7 +941,7 @@
 				var/eclipse_remaining = cult.eclipse_target - cult.eclipse_progress
 				var/eclipse_ticks_to_go_at_current_rate = 999999
 				if (cult.eclipse_increments > 0)
-					eclipse_ticks_to_go_at_current_rate = eclipse_remaining / max(0.1, cult.eclipse_increments - cult.eclipse_countermeasures)
+					eclipse_ticks_to_go_at_current_rate = eclipse_remaining / max(0.1, cult.eclipse_increments)
 					if(SSticker.initialized)
 						eclipse_ticks_to_go_at_current_rate *= (SSticker.wait/10)
 
