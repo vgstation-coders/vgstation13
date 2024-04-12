@@ -343,7 +343,7 @@ var/global/global_cricket_population = 0
 		return
 
 	if(href_list["scan"])
-		my_analyzer.afterattack(locate(href_list["scan"]), usr)
+		my_analyzer.afterattack(locate(href_list["scan"]), usr, TRUE)
 
 /*/obj/item/clothing/glasses/hud/hydro/process_hud(var/mob/M)
 	if(harm_labeled < min_harm_label)
