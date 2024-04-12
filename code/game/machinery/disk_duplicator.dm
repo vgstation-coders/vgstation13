@@ -137,7 +137,7 @@
 	if (disk_dest)
 		playsound(loc, 'sound/machines/click.ogg', 50, 1)
 		disk_dest.forceMove(loc)
-		user.put_in_hands(disk_dest)
+		user.put_in_hands(disk_dest, TRUE)
 		disk_dest = null
 		update_icon()
 		return
@@ -145,7 +145,7 @@
 	if (disk_source)
 		playsound(loc, 'sound/machines/click.ogg', 50, 1)
 		disk_source.forceMove(loc)
-		user.put_in_hands(disk_source)
+		user.put_in_hands(disk_source, TRUE)
 		disk_source = null
 		update_icon()
 
