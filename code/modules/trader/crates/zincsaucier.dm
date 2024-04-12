@@ -343,7 +343,7 @@ var/global/global_cricket_population = 0
 		return
 
 	if(href_list["scan"])
-		my_analyzer.afterattack(locate(href_list["scan"]), usr, TRUE)
+		my_analyzer.afterattack(locate(href_list["scan"]), usr)
 
 /*/obj/item/clothing/glasses/hud/hydro/process_hud(var/mob/M)
 	if(harm_labeled < min_harm_label)
@@ -515,7 +515,7 @@ var/global/global_cricket_population = 0
 		dir = SOUTH
 		if(iscarbon(user))
 			var/mob/living/carbon/C = user
-			C.put_in_hands(src, TRUE)
+			C.put_in_hands(src)
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	else
 		..()

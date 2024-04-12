@@ -80,7 +80,7 @@
 			"<span class='warning'>You shape the [src] into metal with the welding tool.</span>", \
 			"<span class='warning'>You hear welding.</span>")
 			use(1)
-			user.put_in_hands(M, TRUE)
+			user.put_in_hands(M)
 		return 1
 	return ..()
 

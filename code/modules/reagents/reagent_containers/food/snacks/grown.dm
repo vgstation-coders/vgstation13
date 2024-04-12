@@ -513,7 +513,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 		B.name = "[src.name] blunt"
 		B.filling = "[src.name]"
 		reagents.trans_to(B, (reagents.total_volume))
-		user.put_in_hands(B, TRUE)
+		user.put_in_hands(B)
 		user.drop_from_inventory(src)
 		qdel(src)
 	else
@@ -533,7 +533,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 		var/obj/item/clothing/mask/cigarette/blunt/deus/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/deus/rolled(src.loc)
 		reagents.trans_to(B, (reagents.total_volume))
 		B.light_color = filling_color
-		user.put_in_hands(B, TRUE)
+		user.put_in_hands(B)
 		user.drop_from_inventory(src)
 		qdel(src)
 	else
