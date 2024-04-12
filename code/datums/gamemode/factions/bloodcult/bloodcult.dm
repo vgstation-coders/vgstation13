@@ -287,7 +287,7 @@
 		var/mob/M = R.antag.current
 		if (isliving(M) && !M.isDead())
 			if (user.occult_muted())
-				eclipse_increments += R.get_eclipse_increment()
+				eclipse_increments -= R.get_eclipse_increment()
 			else
 				eclipse_increments += R.get_eclipse_increment()
 
