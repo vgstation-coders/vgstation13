@@ -4,8 +4,9 @@
 	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 2
 	var/randomize = 1 	//If set to 1 will create random floors. Always at 1 for the time being.
-	var/available_floors = list(			
-		/turf/simulated/floor/carpet, 
+	var/available_floors = list(
+		/turf/simulated/floor/carpet,
+		/turf/simulated/floor/carpet/stellar,
 		/turf/simulated/floor/arcade,
 		/turf/simulated/floor/damaged,
 		/turf/simulated/floor/grass,

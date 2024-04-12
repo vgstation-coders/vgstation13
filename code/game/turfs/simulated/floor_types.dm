@@ -402,7 +402,8 @@
 
 /turf/simulated/floor/carpet
 	name = "Carpet"
-	icon_state = "carpet"
+	icon_state = "carpet15-15"
+	var/base_icon_name = "carpet"
 	var/has_siding=1
 
 /turf/simulated/floor/carpet/create_floor_tile()
@@ -423,6 +424,16 @@
 
 /turf/simulated/floor/carpet/cultify()
 	return
+
+/turf/simulated/floor/carpet/stellar
+	name = "Stellar Carpet"
+	icon_state = "stellar15-15"
+	base_icon_name = "stellar"
+
+
+/turf/simulated/floor/carpet/stellar/create_floor_tile()
+	floor_tile = new /obj/item/stack/tile/carpet/stellar(null)
+
 
 /turf/simulated/floor/arcade
 	name = "Arcade Carpet"

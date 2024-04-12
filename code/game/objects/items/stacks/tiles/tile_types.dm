@@ -104,6 +104,13 @@
 	material = "fabric"
 	autoignition_temperature = AUTOIGNITION_FABRIC
 
+/obj/item/stack/tile/carpet/stellar
+	name = "length of stellar carpet"
+	singular_name = "length of stellar carpet"
+	desc = "A piece of carpet with stars embedded onto it."
+	icon_state = "tile-stellar"
+
+
 /obj/item/stack/tile/carpet/shag
 	name = "length of shag carpet"
 	singular_name = "length of shag carpet"

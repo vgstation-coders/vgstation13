@@ -188,7 +188,10 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 					if(FF.is_carpet_floor())
 						diagonalconnect |= 8
 
-			icon_state = "carpet[connectdir]-[diagonalconnect]"
+			var/base_icon = "carpet"
+			if(istype(floor_tile, /obj/item/stack/tile/carpet/stellar))
+				base_icon = "stellar"
+			icon_state = "[base_icon][connectdir]-[diagonalconnect]"
 
 	else if(is_arcade_floor())
 		if(!broken && !burnt)

@@ -295,9 +295,19 @@
 	amount = 30
 	cost = 15
 	containertype = /obj/structure/closet/crate/basic
-	containername = "carpet crate"
+	containername = "stellar carpet crate"
 	group = "Supplies"
 	containsdesc = "A formal carpet, able to cover about thirty square meters of area."
+
+/datum/supply_packs/stellar_carpet
+	name = "30 stellar carpet tiles"
+	contains = list(/obj/item/stack/tile/carpet/stellar)
+	amount = 30
+	cost = 15
+	containertype = /obj/structure/closet/crate/basic
+	containername = "stellar carpet crate"
+	group = "Supplies"
+	containsdesc = "Thirty squares of a sapphire-hue carpet emblazoned with six-pronged stars."
 
 /datum/supply_packs/arcade
 	name = "30 arcade tiles"
