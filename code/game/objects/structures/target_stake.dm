@@ -43,7 +43,7 @@
 		pinned_target.forceMove(user.loc)
 		if(ishuman(user))
 			if(!user.get_active_hand())
-				user.put_in_hands(pinned_target)
+				user.put_in_hands(pinned_target, TRUE)
 				to_chat(user, "You take the target out of the stake.")
 		else
 			pinned_target.forceMove(get_turf(user))

@@ -166,7 +166,7 @@
 		W.forceMove(saber)
 		user.drop_item(src)
 		forceMove(saber)
-		user.put_in_hands(saber)
+		user.put_in_hands(saber, TRUE)
 		return 1
 	return 0
 
@@ -278,7 +278,7 @@
 		for(var/obj/item/II in swords)
 			II.forceMove(get_turf(src))
 			swords.Remove(II)
-			user.put_in_hands(src)
+			user.put_in_hands(src, TRUE)
 		qdel(src)
 		return
 	..()
@@ -434,7 +434,7 @@
 	QDEL_NULL(W)
 	qdel(src)
 	var/B = new /obj/item/weapon/melee/energy/hfmachete/bloodlust(user.loc)
-	user.put_in_hands(B)
+	user.put_in_hands(B, TRUE)
 
 //Buggy if actually spawned and wielded, used by the holotool
 /obj/item/weapon/melee/energy/hfmachete/activated/New()

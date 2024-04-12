@@ -7,7 +7,7 @@
 		var/obj/item/weapon/grenade/iedcasing/W = new /obj/item/weapon/grenade/iedcasing
 		user.before_take_item(G)
 		user.before_take_item(src)
-		user.put_in_hands(W)
+		user.put_in_hands(W, TRUE)
 		to_chat(user, "<span  class='notice'>You stuff the [I] into the [src], emptying the contents beforehand.</span>")
 		W.underlays += image(src.icon, icon_state = src.icon_state)
 		QDEL_NULL(I)
@@ -18,7 +18,7 @@
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/aluminum_cylinder/W = new (get_turf(user))
-			user.put_in_hands(W)
+			user.put_in_hands(W, TRUE)
 			qdel(src)
 		else
 			new /obj/item/weapon/aluminum_cylinder(get_turf(src.loc))

@@ -119,7 +119,7 @@
 
 				var/obj/item/weapon/bikehorn/baton/B = new /obj/item/weapon/bikehorn/baton
 
-				user.put_in_hands(B)
+				user.put_in_hands(B, TRUE)
 				user.visible_message("<span class='notice'>[user] jams \the [src] into the mouth of \the [HONKER].</span>",\
 				"<span class='notice'>You jam \the [src] into the mouth of \the [HONKER]. Honk!</span>")
 				qdel(HONKER)

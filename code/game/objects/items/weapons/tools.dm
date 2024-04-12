@@ -69,7 +69,7 @@
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/tool/wrench_wired/I = new (get_turf(user))
-			user.put_in_hands(I)
+			user.put_in_hands(I, TRUE)
 		else
 			new /obj/item/tool/wrench_wired(get_turf(src.loc))
 		qdel(src)
@@ -763,14 +763,14 @@
 	if(istype(I,/obj/item/weapon/fireaxe))
 		var/obj/item/weapon/fireaxe/F = I
 		to_chat(user, "<span class='notice'>You attach \the [F] and [src] to carry them easier.</span>")
-		var/obj/item/tool/irons/SI = new (user.loc)
+		var/obj/item/tool/irons/SI = new (get_turf(src))
 		SI.fireaxe = F
 		SI.halligan = src
 		user.drop_item(F)
 		F.forceMove(SI)
 		user.drop_item(src)
 		forceMove(SI)
-		user.put_in_hands(SI)
+		user.put_in_hands(SI, TRUE)
 		return 1
 	return 0
 

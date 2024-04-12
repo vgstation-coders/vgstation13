@@ -426,7 +426,7 @@
 			stow(D,user.belt,user)
 		stow(D,user.w_uniform,user)
 	if(D.contents.len)
-		user.put_in_hands(D)
+		user.put_in_hands(D, TRUE)
 		update_icon()
 		playsound(loc, 'sound/effects/spray.ogg', 75, 1)
 		return 1

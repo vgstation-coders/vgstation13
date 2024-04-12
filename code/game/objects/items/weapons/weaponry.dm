@@ -178,7 +178,7 @@
 			if(prefix)
 				S.name = "[prefix] [S.name]"
 
-			user.put_in_hands(S)
+			user.put_in_hands(S, TRUE)
 			user.visible_message("<span class='danger'>[user] creates a spear with \a [I] and \a [src]!</span>",\
 			"<span class='notice'>You fasten \the [I] to the top of \the [src], creating \a [S].</span>")
 
@@ -191,7 +191,7 @@
 		user.before_take_item(I)
 		user.before_take_item(src)
 
-		user.put_in_hands(P)
+		user.put_in_hands(P, TRUE)
 		to_chat(user, "<span class='notice'>You fasten the wirecutters to the top of the rod with the cable, prongs outward.</span>")
 		qdel(I)
 		I =  null
@@ -203,7 +203,7 @@
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/rail_assembly/Q = new (get_turf(user))
-			user.put_in_hands(Q)
+			user.put_in_hands(Q, TRUE)
 		else
 			new /obj/item/weapon/rail_assembly(get_turf(src.loc))
 		R.use(1)

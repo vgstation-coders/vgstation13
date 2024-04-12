@@ -41,7 +41,7 @@
 			if(isMoMMI(user))
 				RG.forceMove(get_turf(user))
 			else
-				user.put_in_hands(RG)
+				user.put_in_hands(RG, TRUE)
 	else
 		return ..()
 

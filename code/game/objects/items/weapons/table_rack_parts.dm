@@ -231,7 +231,7 @@
 				if(src.loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/metal_gun_stock/I = new (user.loc)
-					user.put_in_hands(I)
+					user.put_in_hands(I, TRUE)
 					qdel(src)
 				else
 					new /obj/item/weapon/metal_gun_stock(loc)

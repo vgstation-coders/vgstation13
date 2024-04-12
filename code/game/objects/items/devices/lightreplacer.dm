@@ -196,7 +196,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		switch(href_list["eject"])
 			if("supply")
 				if(usr)
-					usr.put_in_hands(supply)
+					usr.put_in_hands(supply, TRUE)
 					usr.visible_message("[usr] removes \the [supply] from \the [src].", "You remove \the [src]'s supply container, \the [supply].")
 				else
 					supply.forceMove(get_turf(src))
@@ -205,7 +205,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 
 			if("waste")
 				if(usr)
-					usr.put_in_hands(waste)
+					usr.put_in_hands(waste, TRUE)
 					usr.visible_message("[usr] removes \the [waste] from \the [src].", "You remove \the [src]'s waste container, \the [waste].")
 				else
 					waste.forceMove(get_turf(src))

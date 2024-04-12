@@ -369,7 +369,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
 			return 1
 	var/list/L = dispense_cash(arbitrary_sum,get_turf(src))
 	for(var/obj/I in L)
-		user.put_in_hands(I)
+		user.put_in_hands(I, TRUE)
 	return 1
 
 /datum/pda_app/balance_check/Destroy()
