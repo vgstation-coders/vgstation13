@@ -300,7 +300,7 @@
 
 	..()
 
-/datum/rune_spell/tearreality/proc/dancer_check(var/mob/living/carbon/C)
+/datum/rune_spell/tearreality/proc/dancer_check(var/mob/living/C)
 	var/obj/effect/rune/R = spell_holder
 	if (dance_platforms.len <= 0)
 		return
@@ -400,20 +400,22 @@
 	R.overlays += top_crystal
 	R.kill_moody_light()
 
-/datum/rune_spell/tearreality/proc/dance_increment(var/mob/living/carbon/C)
+/datum/rune_spell/tearreality/proc/dance_increment(var/mob/living/L)
 	if (dance_manager)
 		var/increment = 0.5
-		if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
-			increment += 0.5
-		increment += (C.get_cult_power()) / 100
+		if (iscarbon(L))
+			var/mob/living/carbon/C = L
+			if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
+				increment += 0.5
+			increment += (C.get_cult_power()) / 100
 
-		var/obj/item/candle/blood/candle
-		if (istype(C.get_active_hand(), /obj/item/candle/blood))
-			candle = C.get_active_hand()
-		else if (istype(C.get_inactive_hand(), /obj/item/candle/blood))
-			candle = C.get_inactive_hand()
-		if (candle && candle.lit)
-			increment += 0.5
+			var/obj/item/candle/blood/candle
+			if (istype(C.get_active_hand(), /obj/item/candle/blood))
+				candle = C.get_active_hand()
+			else if (istype(C.get_inactive_hand(), /obj/item/candle/blood))
+				candle = C.get_inactive_hand()
+			if (candle && candle.lit)
+				increment += 0.5
 		dance_count += increment
 
 //---------------------------------------------------------------------------------------------------------------------

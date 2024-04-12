@@ -890,7 +890,7 @@ var/bloodstone_backup = 0
 	plane = OBJ_PLANE
 	alpha = 0
 	var/moving = FALSE
-	var/mob/living/carbon/dancer = null
+	var/mob/living/dancer = null
 	var/datum/rune_spell/tearreality/source = null
 	var/prisoner = FALSE
 	var/obj/effect/cult_ritual/dance/dance_manager
@@ -989,6 +989,23 @@ var/bloodstone_backup = 0
 						to_chat(C, "<span class='danger'>Dark tentacles emerge from the rune and trap your legs in place. You'll need to remove those cuffs or get some help if you are to escape this circle.</span>")
 						source.dancer_check(C)
 						return TRUE
+		else if (isshade(mover) || isconstruct(mover))
+			var/mob/living/simple_animal/SA = mover
+			if (SA.mind && !SA.isDead())
+				if (iscultist(SA))
+					dancer = SA
+					overlays.len = 0
+					var/image/I_circle = image(icon, src, "dance_platform_full")
+					I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+					I_circle.layer = ABOVE_TILE_LAYER
+					I_circle.appearance_flags |= RESET_COLOR
+					var/image/I_markings = image(icon, src,"dance_platform_markings")
+					I_markings.plane = relative_plane(OBJ_PLANE)
+					I_markings.layer = BELOW_TABLE_LAYER
+					overlays += I_circle
+					overlays += I_markings
+					source.dancer_check(SA)
+					return TRUE
 	return FALSE
 
 /obj/effect/cult_ritual/dance_platform/Uncrossed(var/atom/movable/mover)

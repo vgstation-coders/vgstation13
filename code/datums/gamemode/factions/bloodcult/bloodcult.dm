@@ -156,7 +156,7 @@
 				for (var/mob/M in player_list)
 					M.playsound_local(get_turf(M), 'sound/effects/tear_reality.ogg', 100, 0)
 				anim(target = bloodstone.loc, a_icon = 'icons/obj/narsie.dmi', flick_anim = "narsie_spawn_anim_start", offX = -236 * PIXEL_MULTIPLIER, offY = -256 * PIXEL_MULTIPLIER, plane = NARSIE_PLANE)
-				sleep(2)
+				sleep(5)
 				narsie = new(bloodstone.loc)
 	for (var/datum/role/cultist in members)
 		var/datum/mind/M = cultist.antag

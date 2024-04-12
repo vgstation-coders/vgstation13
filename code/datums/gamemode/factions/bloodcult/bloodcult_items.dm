@@ -456,6 +456,12 @@ var/list/arcane_tomes = list()
 				user.put_in_hands(src)
 		return
 
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		if (C.occult_muted())
+			to_chat(user, "<span class='danger'>You find yourself unable to focus your mind on the arcane words of the talisman.</span>")
+			return
+
 	if (attuned_rune)
 		if (attuned_rune.loc)
 			attuned_rune.trigger(user,1)

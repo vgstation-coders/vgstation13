@@ -1272,18 +1272,19 @@
 					cultist_cap.offset_x = -98 + accumulated_offset
 					cultist_cap.UpdateUIScreenLoc()
 					accumulated_offset += 7
-				while (i <= cult.max_cultist_cap)
-					var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/slot = BP.cultist_slots[i]
-					slot.offset_x = -98 + accumulated_offset
-					slot.UpdateUIScreenLoc()
-					accumulated_offset += 17
-					slot.overlays.len = 0
-					slot.associated_role = null
-					slot.icon_state = "slot_empty[slot.hovering ? "-hover" : ""]"
-					slot.base_icon_state = "slot_empty"
-					slot.locked = TRUE
-					slot.overlays += "locked"
-					i++
+				if (cult.stage != BLOODCULT_STAGE_DEFEATED)
+					while (i <= cult.max_cultist_cap)
+						var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/slot = BP.cultist_slots[i]
+						slot.offset_x = -98 + accumulated_offset
+						slot.UpdateUIScreenLoc()
+						accumulated_offset += 17
+						slot.overlays.len = 0
+						slot.associated_role = null
+						slot.icon_state = "slot_empty[slot.hovering ? "-hover" : ""]"
+						slot.base_icon_state = "slot_empty"
+						slot.locked = TRUE
+						slot.overlays += "locked"
+						i++
 				while (i <= MINDUI_MAX_CULT_SLOTS)
 					var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/slot = BP.cultist_slots[i]
 					slot.invisibility = 101

@@ -547,7 +547,10 @@ var/global/mr_clean_targets = list(
 			M.timestopped = 1
 		for(var/mob/M in player_list)
 			M.playsound_local(get_turf(M), 'sound/effects/wind/wind_5_1.ogg', 100, 0)
-			M.DisplayUI("Nar-Sie Has Risen")
+			if (M.mind && (M.mind.current == M))
+				M.DisplayUI("Nar-Sie Has Risen")
+			else
+				to_chat(M, "<font size='15' color='red'><b>[uppertext(name)] HAS RISEN</b></font>")
 		sleep(50)
 		ready = TRUE
 		for(var/mob/M in mob_list)
