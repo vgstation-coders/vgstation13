@@ -149,7 +149,7 @@ var/creating_arena = FALSE
     // Big boy modern Cult 3.0 and beyond stuff
 	if (iscultist(user))
 		if(istype(W,/obj/item/weapon/tome))
-			if(invisibility != 0 || icon_state != "ghost-narsie")
+			if(invisibility != 0)
 				cultify()
 				user.visible_message(
 					"<span class='warning'>[user] drags a ghost to our plane of reality!</span>",
