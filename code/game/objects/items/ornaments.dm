@@ -40,7 +40,7 @@
 			O.cant_drop = cant_drop
 			if(loc == user)
 				user.drop_item(src, force_drop = 1)
-				user.put_in_hands(O)
+				user.put_in_hands(O, TRUE)
 			qdel(src)
 			if(color_string)
 				to_chat(user, "You color \the [src] [color_string].")

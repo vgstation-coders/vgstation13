@@ -182,7 +182,7 @@
 			else
 				create_log("has logged out.", usr)
 				auth.forceMove(src.loc)
-				C.put_in_hands(auth)
+				C.put_in_hands(auth, TRUE)
 				auth = null
 			updateUsrDialog()
 			return

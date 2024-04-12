@@ -138,7 +138,7 @@
 
 /obj/structure/wetdryvac/attack_hand(mob/user)
 	if(myhandle && myhandle.loc == src)
-		user.put_in_hands(myhandle)
+		user.put_in_hands(myhandle, TRUE)
 		update_icon()
 	else
 		..()

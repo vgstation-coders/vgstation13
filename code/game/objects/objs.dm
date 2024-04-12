@@ -244,7 +244,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return
 
 	to_chat(M, "You eject \the [integratedpai] from \the [src].")
-	M.put_in_hands(eject_integratedpai_if_present())
+	M.put_in_hands(eject_integratedpai_if_present(), TRUE)
 	playsound(src, 'sound/misc/cartridge_out.ogg', 25)
 
 /obj/proc/eject_integratedpai_if_present()

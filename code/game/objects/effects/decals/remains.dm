@@ -39,8 +39,8 @@
 			to_chat(user, "You somehow manage to jam \the [W] inside \the [src].")
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/bikehorn/skullhorn/S = new (get_turf(user))
-				user.put_in_hands(S)
+				var/obj/item/weapon/bikehorn/skullhorn/S = new (get_turf(src))
+				user.put_in_hands(S, TRUE)
 			else
 				new /obj/item/weapon/bikehorn/skullhorn(get_turf(src.loc))
 			qdel(src)
