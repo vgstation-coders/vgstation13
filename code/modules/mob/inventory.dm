@@ -250,16 +250,16 @@
 //Puts the item our active hand if possible. Failing that it tries our inactive hand. Returns 1 on success.
 //If both fail it drops it on the floor and returns 0.
 //This is probably the main one you need to know :)
-/mob/proc/put_in_hands(var/obj/item/W, var/proximity = FALSE)
+/mob/proc/put_in_hands(var/obj/item/W)
 
 	if(!W)
 		return 0
 	for (var/i = 1 to held_items.len)
 		if (held_items[i] == W)
 			return 0 // If it's already in your hands and you move it, it's in a superposition and breaks everything.
-	if(put_in_active_hand(W, proximity))
+	if(put_in_active_hand(W))
 		return 1
-	if(put_in_inactive_hand(W, proximity))
+	if(put_in_inactive_hand(W))
 		return 1
 	W.forceMove(W.loc ? get_turf(W) : get_turf(src))
 	W.reset_plane_and_layer()
