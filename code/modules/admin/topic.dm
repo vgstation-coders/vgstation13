@@ -4161,7 +4161,9 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				if(choice == "Yes")
 					blood_stone.flashy_entrance()
 				if(choice == "No")
-					blood_stone.update_icon()
+					blood_stone.ready = TRUE
+					blood_stone.overlays_pre()
+					blood_stone.set_animate()
 				message_admins("[key_name_admin(usr)] spawned a blood stone at [formatJumpTo(get_turf(usr))].")
 
 

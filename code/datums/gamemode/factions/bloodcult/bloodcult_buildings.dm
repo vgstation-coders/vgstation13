@@ -74,6 +74,12 @@
 /obj/structure/cult/dissolvable()
 	return 0
 
+/obj/structure/cult/can_mech_drill()
+	return TRUE
+
+/obj/structure/cult/mech_drill_act(var/severity, var/child=null)
+	return ex_act(severity, child)
+
 /obj/structure/cult/ex_act(var/severity)
 	switch(severity)
 		if (1)
@@ -1623,6 +1629,7 @@ var/list/cult_spires = list()
 	cultist_act(user)
 	return 1
 
+/*
 /obj/structure/cult/bloodstone/cultist_act(var/mob/user)
 	.=..()
 	if (!.)
@@ -1638,6 +1645,7 @@ var/list/cult_spires = list()
 			user.say("Let me show you the dance of my people!","C")
 		else
 			user.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
+*/
 
 /obj/structure/cult/bloodstone/conceal()
 	return
