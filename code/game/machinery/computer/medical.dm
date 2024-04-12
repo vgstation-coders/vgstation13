@@ -194,7 +194,7 @@
 					scan.forceMove(usr.loc)
 
 					if(!usr.get_active_hand())
-						usr.put_in_hands(scan)
+						usr.put_in_hands(scan, TRUE)
 
 					scan = null
 

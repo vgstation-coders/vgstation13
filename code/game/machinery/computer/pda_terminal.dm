@@ -79,7 +79,7 @@
 			to_chat(usr, "You remove \the [pda_device] from \the [src].")
 			pda_device.forceMove(get_turf(src))
 			if(!usr.get_active_hand())
-				usr.put_in_hands(pda_device)
+				usr.put_in_hands(pda_device, TRUE)
 			pda_device = null
 			update_icon()
 		else
@@ -117,7 +117,7 @@
 				if(ishuman(usr))
 					pda_device.forceMove(usr.loc)
 					if(!usr.get_active_hand())
-						usr.put_in_hands(pda_device)
+						usr.put_in_hands(pda_device, TRUE)
 					pda_device = null
 				else
 					pda_device.forceMove(loc)

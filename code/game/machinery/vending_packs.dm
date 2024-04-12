@@ -40,7 +40,7 @@
 	if(I != null && loc)
 		if(!Adjacent(user))
 			return
-		user.put_in_hands(I)
+		user.put_in_hands(I, TRUE)
 
 /obj/structure/vendomatpack/undefined
 	//a placeholder for vending machines that don't have their own recharge packs

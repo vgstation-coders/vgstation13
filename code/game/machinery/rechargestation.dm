@@ -148,7 +148,7 @@
 		var/obj/item/weapon/cell/rcell = removed
 		if(istype(rcell))
 			rcell.updateicon()
-		user.put_in_hands(removed)
+		user.put_in_hands(removed, TRUE)
 		if(removed.loc == src)
 			removed.forceMove(get_turf(src))
 		upgrade_holder -= removed

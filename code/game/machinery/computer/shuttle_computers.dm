@@ -523,7 +523,7 @@
 			insert_disk(D, usr)
 		else
 			disk.forceMove(get_turf(src))
-			usr.put_in_hands(disk)
+			usr.put_in_hands(disk, TRUE)
 			to_chat(usr, "<span class='info'>You eject \the [disk] from \the [src].</span>")
 			if(disk.destination == selected_port)
 				selected_port = null
@@ -563,7 +563,7 @@
 				qdel(P)
 				return
 		to_chat(user, "<span class='info'>You insert \the [P] into \the [src], but it is rejected.</span>")
-		user.put_in_hands(P)
+		user.put_in_hands(P, TRUE)
 
 /obj/machinery/computer/shuttle_control/kick_act(mob/user)
 	..()

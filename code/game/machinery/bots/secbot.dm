@@ -425,7 +425,7 @@ Auto Patrol: []"},
 	if(S.secured)
 		qdel(S)
 		var/obj/item/weapon/secbot_assembly/A = new /obj/item/weapon/secbot_assembly
-		user.put_in_hands(A)
+		user.put_in_hands(A, TRUE)
 		to_chat(user, "You add the signaler to the helmet.")
 		user.drop_from_inventory(src)
 		qdel(src)
@@ -592,7 +592,7 @@ Auto Patrol: []"},
 	if(S.secured)
 		qdel(S)
 		var/obj/item/weapon/secbot_assembly/cheapsky/A = new /obj/item/weapon/secbot_assembly/cheapsky
-		user.put_in_hands(A)
+		user.put_in_hands(A, TRUE)
 		to_chat(user, "You add the signaler to \the [src].")
 		user.drop_from_inventory(src)
 		qdel(src)
@@ -682,7 +682,7 @@ Auto Patrol: []"},
 	if(S.secured)
 		qdel(S)
 		var/obj/item/weapon/secbot_assembly/britsky/A = new /obj/item/weapon/secbot_assembly/britsky
-		user.put_in_hands(A)
+		user.put_in_hands(A, TRUE)
 		to_chat(user, "You add the signaler to \the [src]!")
 		user.drop_from_inventory(src)
 		qdel(src)

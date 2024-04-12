@@ -947,7 +947,7 @@ var/global/num_vending_terminals = 1
 
 		coin.forceMove(get_turf(src))
 		if(!usr.get_active_hand())
-			usr.put_in_hands(coin)
+			usr.put_in_hands(coin, TRUE)
 		to_chat(usr, "<span class='notice'>You remove \the [coin] from \the [src]</span>")
 		coin = null
 	usr.set_machine(src)
@@ -1092,7 +1092,7 @@ var/global/num_vending_terminals = 1
 					to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull \the [coin] out fast enough, the machine ate it, string and all.</SPAN>")
 
 		if(return_coin)
-			user.put_in_hands(coin)
+			user.put_in_hands(coin, TRUE)
 			if(on_return_coin_detect(user))
 				coin = null
 				return

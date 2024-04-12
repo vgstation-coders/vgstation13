@@ -406,7 +406,7 @@ Status: []<BR>"},
 					if(L.lying) // if the perp is lying down, it's still a target but a less-important target
 						secondarytargets += L
 						continue
-					else 
+					else
 						targets += L // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
 
 	if(check_anomalies || emagged)
@@ -728,13 +728,13 @@ Status: []<BR>"},
 
 			to_chat(user, "You remove \the [installed] from the turret frame.")
 			var/obj/item/I = installed
-			user.put_in_hands(I)
+			user.put_in_hands(I, TRUE)
 			installed = null
 
 		if(5)
 			to_chat(user, "You remove the prox sensor from the turret frame.")
 			var/obj/item/device/assembly/prox_sensor/P = new(user.loc)
-			user.put_in_hands(P)
+			user.put_in_hands(P, TRUE)
 			build_step = 4
 
 

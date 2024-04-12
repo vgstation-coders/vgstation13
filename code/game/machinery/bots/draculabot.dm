@@ -111,7 +111,7 @@
 		var/obj/item/weapon/reagent_containers/blood/E = locate(href_list["slot"])
 		if(E.loc != src)
 			return //No fishing items with href exploits
-		usr.put_in_hands(E) //Try to put it in the user's hands if available.
+		usr.put_in_hands(E, TRUE) //Try to put it in the user's hands if available.
 		contained_bags -= E
 		updateUsrDialog()
 		update_icon()

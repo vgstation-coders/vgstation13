@@ -246,7 +246,7 @@ What a mess.*/
 			if("Confirm Identity")
 				if (scan)
 					if(istype(usr,/mob/living/carbon/human) && !usr.get_active_hand())
-						usr.put_in_hands(scan)
+						usr.put_in_hands(scan, TRUE)
 					else
 						scan.forceMove(get_turf(src))
 					scan = null
