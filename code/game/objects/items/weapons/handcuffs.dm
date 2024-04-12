@@ -146,7 +146,7 @@
 
 		user.before_take_item(src)
 
-		user.put_in_hands(W, TRUE)
+		user.put_in_hands(W)
 		to_chat(user, "<span class='notice'>You wrap the cable restraint around the top of the rod.</span>")
 
 		qdel(src)

@@ -111,7 +111,7 @@
 		var/obj/item/stack/telecrystal/crystals = new(user.loc, uses)
 		to_chat(user, "<span class='notice'>You remove [crystals.amount] telecrystal[crystals.amount > 1 ? "s" : ""] from the cartridge.</span>")
 		uses = 0
-		user.put_in_hands(crystals, TRUE)
+		user.put_in_hands(crystals)
 
 /datum/pda_app/cart/virus/fake_uplink
 	name = "Send Uplink"

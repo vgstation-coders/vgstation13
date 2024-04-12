@@ -112,7 +112,7 @@
 		to_chat(user, "<span class='notice'>You tightly coil the wire around the metal casing.</span>")
 		W.playtoolsound(src, 30, TRUE, -2)
 		user.before_take_item(src)
-		user.put_in_hands(E, TRUE)
+		user.put_in_hands(E)
 		qdel(src)
 	else if(W.is_screwdriver(user) && path != PATH_STAGE_COMPLETE)
 		if(stage == GRENADE_STAGE_ASSEMBLY_INSERTED )
@@ -186,7 +186,7 @@
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/weapon/fuel_reservoir/I = new (get_turf(user))
-				user.put_in_hands(I, TRUE)
+				user.put_in_hands(I)
 				qdel(src)
 			else
 				new /obj/item/weapon/fuel_reservoir(get_turf(src.loc))

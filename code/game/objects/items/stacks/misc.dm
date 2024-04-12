@@ -92,7 +92,7 @@
 			var/replace = (user.get_inactive_hand()==R)
 			R.use(2)
 			if (!R && replace)
-				user.put_in_hands(M, TRUE)
+				user.put_in_hands(M)
 		return 1
 	return ..()
 

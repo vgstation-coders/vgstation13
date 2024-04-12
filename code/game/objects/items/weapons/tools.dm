@@ -69,7 +69,7 @@
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/tool/wrench_wired/I = new (get_turf(user))
-			user.put_in_hands(I, TRUE)
+			user.put_in_hands(I)
 		else
 			new /obj/item/tool/wrench_wired(get_turf(src.loc))
 		qdel(src)
@@ -770,7 +770,7 @@
 		F.forceMove(SI)
 		user.drop_item(src)
 		forceMove(SI)
-		user.put_in_hands(SI, TRUE)
+		user.put_in_hands(SI)
 		return 1
 	return 0
 

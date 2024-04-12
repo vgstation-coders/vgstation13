@@ -61,7 +61,7 @@
 				new /obj/item/stack/cable_coil(user.loc, 30)
 		loaded.max_amount = initial(loaded.max_amount)
 		loaded.forceMove(user.loc)
-		user.put_in_hands(loaded, TRUE)
+		user.put_in_hands(loaded)
 		loaded = null
 		update_icon()
 	else

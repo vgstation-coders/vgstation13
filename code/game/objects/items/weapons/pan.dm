@@ -227,7 +227,7 @@
 /obj/item/weapon/reagent_containers/pan/proc/take_something_out(mob/user as mob)
 	if(contents.len)
 		var/atom/movable/content = contents[contents.len]
-		user.put_in_hands(content, TRUE)
+		user.put_in_hands(content)
 		if(content.loc != src) //If something was taken out successfully.
 			to_chat(user, "<span class='notice'>You take [content] out of [src].</span>")
 			cook_reboot(user)

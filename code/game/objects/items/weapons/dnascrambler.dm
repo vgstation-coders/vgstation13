@@ -32,6 +32,6 @@
 	//We don't want to leave an obvious "used dna scrambler" behind, let's just create a harmless syringe.
 	var/obj/item/weapon/reagent_containers/syringe/spent = new(get_turf(user))
 	transfer_fingerprints(src, spent)
-	user.put_in_hands(spent, TRUE)
+	user.put_in_hands(spent)
 
 	qdel(src)

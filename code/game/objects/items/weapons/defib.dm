@@ -274,7 +274,7 @@
 		to_chat(user, "<span class='notice'>You carefully remove the cell.</span>")
 
 		power_supply.forceMove(src.loc)
-		user.put_in_hands(power_supply, TRUE)
+		user.put_in_hands(power_supply)
 		src.power_supply = null
 		src.update_icon()
 
@@ -297,7 +297,7 @@
 
 		to_chat(user, "<span class='notice'>You remove the cell.</span>")
 		power_supply.forceMove(src.loc)
-		user.put_in_hands(power_supply, TRUE)
+		user.put_in_hands(power_supply)
 		src.power_supply = null
 		src.update_icon()
 

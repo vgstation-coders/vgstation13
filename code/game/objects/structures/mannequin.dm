@@ -370,7 +370,7 @@
 			if(get_held_item_by_index(hand_index))
 				var/obj/item/I = held_items[hand_index]
 				I.mannequin_unequip(src)
-				user.put_in_hands(I, TRUE)
+				user.put_in_hands(I)
 				held_items[hand_index] = null
 				to_chat(user, "<span class='info'>You pick up \the [I] from \the [src].</span>")
 		else
@@ -378,7 +378,7 @@
 				if(user.drop_item(item_in_hand,src))
 					var/obj/item/I = held_items[hand_index]
 					I.mannequin_unequip(src)
-					user.put_in_hands(I, TRUE)
+					user.put_in_hands(I)
 					held_items[hand_index] = item_in_hand
 					item_in_hand.mannequin_equip(src,"hands",hand_index)
 					to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
@@ -403,7 +403,7 @@
 			if(clothing[item_slot])
 				var/obj/item/I = clothing[item_slot]
 				I.mannequin_unequip(src)
-				user.put_in_hands(I, TRUE)
+				user.put_in_hands(I)
 				clothing[item_slot] = null
 				add_fingerprint(user)
 				to_chat(user, "<span class='info'>You pick up \the [I] from \the [src].</span>")
@@ -413,7 +413,7 @@
 					if(user.drop_item(item_in_hand,src))
 						var/obj/item/I = clothing[item_slot]
 						I.mannequin_unequip(src)
-						user.put_in_hands(I, TRUE)
+						user.put_in_hands(I)
 						clothing[item_slot] = item_in_hand
 						item_in_hand.mannequin_equip(src,item_slot)
 						add_fingerprint(user)

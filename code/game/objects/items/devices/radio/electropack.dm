@@ -74,7 +74,7 @@
 		master = A
 		A.part2 = src
 
-		user.put_in_hands(A, TRUE)
+		user.put_in_hands(A)
 		A.add_fingerprint(user)
 
 /obj/item/device/radio/electropack/Topic(href, href_list)
