@@ -55,7 +55,6 @@
 	var/eclipse_window = 10 MINUTES
 	var/eclipse_increments = 0
 	var/eclipse_contributors = list()//associative list: /mind = score
-	var/eclipse_countermeasures = 0//mostly chaplain's efforts to indirectly impede the cult with his own conversions and rituals
 
 	var/soon_announcement = FALSE
 	var/overtime_announcement = FALSE
@@ -287,7 +286,10 @@
 	for (var/datum/role/cultist/R in members)
 		var/mob/M = R.antag.current
 		if (isliving(M) && !M.isDead())
-			eclipse_increments += R.get_eclipse_increment()
+			if (user.occult_muted())
+				eclipse_increments += R.get_eclipse_increment()
+			else
+				eclipse_increments += R.get_eclipse_increment()
 
 /datum/faction/bloodcult/proc/assign_rituals()
 	var/list/valid_rituals = list()
@@ -383,7 +385,7 @@
 							delta /= SSticker.wait
 					last_process_time = world.time
 
-					eclipse_progress += max(0.1, eclipse_increments - eclipse_countermeasures) * delta
+					eclipse_progress += max(0.1, eclipse_increments) * delta
 					if (eclipse_progress >= eclipse_target)
 						stage(BLOODCULT_STAGE_READY)
 					break

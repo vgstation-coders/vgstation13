@@ -99,6 +99,12 @@ var/list/bloodcult_personal_rituals = list(
 		"soulstone_prisoner",
 		)
 
+/datum/bloodcult_ritual/reach_cap/pre_conditions(var/datum/role/cultist/potential)
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult.CanConvert())
+		return TRUE
+	return FALSE
+
 /datum/bloodcult_ritual/reach_cap/key_found(var/extra)
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!cult.CanConvert())

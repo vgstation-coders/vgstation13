@@ -458,8 +458,8 @@
 
 /datum/role/cultist/proc/check_rank_upgrade()
 	var/new_rank = get_devotion_rank()
-	if (new_rank > rank)
-		rank = new_rank
+	while (new_rank > rank)
+		rank++
 		if (iscarbon(antag.current))//constructs and shades cannot make use of those powers so no point informing them.
 			to_chat(antag.current, "<span class='sinisterbig'>As your devotion to the cult increases, a new power awakens inside you.</span>")
 			switch(rank)
@@ -676,8 +676,9 @@
 	//anim(target = antag.current, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_receive", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 	sleep(1)
 	antag.current.update_mutations()
-	var/atom/movable/overlay/tattoo_markings = anim(target = antag.current, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[T.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
-	animate(tattoo_markings, alpha = 0, time = 30)
+	//a bit too visible now that those may be unlocked at any time and no longer just in front of a spire
+	//var/atom/movable/overlay/tattoo_markings = anim(target = antag.current, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[T.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	//animate(tattoo_markings, alpha = 0, time = 30)
 
 
 /datum/role/cultist/proc/MakeArchCultist()

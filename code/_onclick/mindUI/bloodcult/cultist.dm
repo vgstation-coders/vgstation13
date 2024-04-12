@@ -1088,7 +1088,7 @@
 	hover_state = FALSE
 	element_flags = MINDUI_FLAG_PROCESSING|MINDUI_FLAG_TOOLTIP
 	tooltip_title = "Eclipse Rate"
-	tooltip_content = "The rate at which the Eclipse is coming.<br>The rate can be increased by both increasing the cult's numbers, as well as the rank of each cultist.<br>Dead cultists no longer contribute to the rate, until they revive that is."
+	tooltip_content = "The rate at which the Eclipse is coming.<br>The rate can be increased by both generating devotion, and growing the cult's numbers.<br>Dead cultists no longer contribute to the rate, until they revive that is."
 	tooltip_theme = "radial-cult"
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_eclipse_rate/Appear()
