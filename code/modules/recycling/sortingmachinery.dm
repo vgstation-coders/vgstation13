@@ -1057,7 +1057,7 @@
 
 /obj/machinery/autoprocessor/clothing/attack_hand(mob/user)
 	for(var/obj/item/I in held_clothing)
-		user.put_in_hands(I, TRUE, loc)
+		user.put_in_hands(I, TRUE)
 		held_clothing -= I
 	to_chat(user, "<span class='notice'>You retrieve some clothing from \the [src].</span>")
 

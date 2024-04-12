@@ -247,23 +247,26 @@
 //Puts the item our active hand if possible. Failing that it tries our inactive hand. Returns 1 on success.
 //If both fail it drops it on the floor and returns 0.
 //This is probably the main one you need to know :)
-/mob/proc/put_in_hands(var/obj/item/W, var/proximity = FALSE, var/atom/backup_loc)
+/mob/proc/put_in_hands(var/obj/item/W, var/proximity = FALSE)
+
 	if(!W)
-		return 0
-	if(proximity && !Adjacent(W) && !W.arcanetampered)
 		return 0
 	for (var/i = 1 to held_items.len)
 		if (held_items[i] == W)
 			return 0 // If it's already in your hands and you move it, it's in a superposition and breaks everything.
-	if(put_in_active_hand(W))
-		return 1
-	else if(put_in_inactive_hand(W))
-		return 1
-	else
-		W.forceMove(backup_loc || get_turf(src))
+	if(proximity && !Adjacent(W) && !W.arcanetampered)
+		W.forceMove(get_turf(W))
 		W.reset_plane_and_layer()
 		W.dropped()
 		return 0
+	if(put_in_active_hand(W))
+		return 1
+	if(put_in_inactive_hand(W))
+		return 1
+	W.forceMove(get_turf(src))
+	W.reset_plane_and_layer()
+	W.dropped()
+	return 0
 
 /mob/proc/set_hand_amount(new_amount)
 	if(new_amount < held_items.len) //Decrease hand amount - drop items held in hands which will no longer exist!

@@ -38,7 +38,7 @@
 		stone.commdevice = src
 		allstones += stone
 	if(stone)
-		user.put_in_hands(stone, TRUE, loc)
+		user.put_in_hands(stone, TRUE)
 		remaining--
 		to_chat(user, "<span class='notice'>You delicately remove one of the strange stones from the ancient device.</span>")
 

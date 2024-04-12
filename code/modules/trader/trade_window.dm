@@ -277,7 +277,7 @@
 		var/atom/movable/AM = new TP.path(user.loc)
 		product_selected = null
 		if(isitem(AM))
-			user.put_in_hands(AM, TRUE, loc)
+			user.put_in_hands(AM, TRUE)
 		else
 			AM.shake(1, 3) //Just a little movement to make it obvious it's here.
 
