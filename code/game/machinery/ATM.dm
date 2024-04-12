@@ -481,7 +481,7 @@ log transactions
 					authenticated_account = null
 
 					if(ishuman(usr) && !usr.get_active_hand())
-						usr.put_in_hands(atm_card)
+						usr.put_in_hands(atm_card, TRUE)
 					atm_card = null
 
 				else
@@ -515,7 +515,7 @@ log transactions
 				return
 		var/list/cash = dispense_cash(arbitrary_sum, H.loc)
 		for(var/obj/item/weapon/spacecash/dosh in cash)
-			H.put_in_hands(dosh)
+			H.put_in_hands(dosh, TRUE)
 
 //stolen wholesale and then edited a bit from newscasters, which are awesome and by Agouri
 /obj/machinery/atm/proc/scan_user(mob/living/carbon/human/human_user as mob)

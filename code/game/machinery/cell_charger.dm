@@ -120,7 +120,7 @@
 				explosion(src.loc, -1, 1, 3, adminlog = 0, whodunnit = user) //Overload
 				qdel(src) //It exploded, rip
 			return
-		usr.put_in_hands(charging)
+		usr.put_in_hands(charging, TRUE)
 		charging.add_fingerprint(user)
 		charging.updateicon()
 		src.charging = null
@@ -259,7 +259,7 @@
 /obj/item/device/crank_charger/attack_hand(mob/user)
 	if(stored && removablecell && user.get_inactive_hand() == src)
 		stored.updateicon()
-		user.put_in_hands(stored)
+		user.put_in_hands(stored, TRUE)
 		stored = null
 		update_icon()
 	else

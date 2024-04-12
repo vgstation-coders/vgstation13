@@ -261,7 +261,7 @@
 		return 1
 	if(put_in_inactive_hand(W, proximity))
 		return 1
-	W.forceMove(proximity ? get_turf(W) : get_turf(src))
+	W.forceMove(proximity && W.loc ? get_turf(W) : get_turf(src))
 	W.reset_plane_and_layer()
 	W.dropped()
 	return 0

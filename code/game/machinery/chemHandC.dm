@@ -88,7 +88,7 @@
 	if(held_container)
 		overlays -= onstage
 		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
-		user.put_in_hands(held_container)
+		user.put_in_hands(held_container, TRUE)
 		held_container = null
 		had_item = TRUE
 	toggle()
@@ -215,7 +215,7 @@
 	if(held_container)
 		overlays -= onstage
 		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
-		user.put_in_hands(held_container)
+		user.put_in_hands(held_container, TRUE)
 		held_container = null
 		had_item = TRUE
 	toggle()
