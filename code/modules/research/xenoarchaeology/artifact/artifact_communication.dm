@@ -34,7 +34,6 @@
 		stone = contents[1]
 	else if(remaining)
 		stone = new(remaining)
-		user.put_in_hands(stone)
 		stone.commdevice = src
 		allstones += stone
 	if(stone)
