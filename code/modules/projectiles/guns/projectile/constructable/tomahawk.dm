@@ -21,6 +21,7 @@
 		to_chat(user, "You affix \the [W] to the end of \the [src].")
 		var/obj/item/weapon/hatchet/tomahawk/pipe/I = new (get_turf(src.loc))
 		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
 			user.put_in_hands(I)
 		qdel(src)
 		qdel(W)
@@ -72,6 +73,7 @@
 	else
 		I = new /obj/item/tool/wrench(get_turf(src.loc))
 	if(src.loc == user)
+		user.drop_item(src, force_drop = 1)
 		user.put_in_hands(I)
 	qdel(src)
 
@@ -268,6 +270,7 @@
 			to_chat(user, "The crushed [blunt_name] falls out in the process.")
 		var/obj/item/weapon/hatchet/tomahawk/pipe/I = new (get_turf(src.loc))
 		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
 			user.put_in_hands(I)
 		qdel(src)
 		qdel(W)
