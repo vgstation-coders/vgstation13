@@ -37,11 +37,7 @@
 	..()
 	if(istype(W, /obj/item/weapon/metal_blade))
 		to_chat(user, "You attach \the [W] to \the [src].")
-		var/obj/item/weapon/sword/executioner/I = new (loc)
-		if(src.loc == user)
-			user.put_in_hands(I)
-		qdel(src)
-		qdel(W)
+		user.create_in_hands(src,new /obj/item/weapon/sword/executioner(loc),W)
 	if(W.type == /obj/item/weapon/reagent_containers/hypospray || W.type == /obj/item/weapon/reagent_containers/hypospray/creatine)
 		to_chat(user, "You wrap \the [src]'s grip around \the [W], affixing it to the base of \the [src].")
 		user.drop_item(W, force_drop = 1)
@@ -55,10 +51,7 @@
 		I.HY = hypo
 		hypo.forceMove(I)
 		hypo = null
-		if(src.loc == user)
-			user.put_in_hands(I)
-		qdel(src)
-		qdel(W)
+		user.create_in_hands(src,I,W)
 
 /obj/item/weapon/sword/weaponcraft/Destroy()
 	if(hypo)
@@ -191,10 +184,8 @@
 			H.reagents.clear_reagents()
 			I.hypo = H
 		I.update_icon()
-		if(src.loc == user)
-			user.put_in_hands(I)
 		new /obj/item/weapon/aluminum_cylinder(get_turf(src))
-		qdel(src)
+		user.create_in_hands(src,I)
 
 /obj/item/weapon/sword/venom/attack(mob/M as mob, mob/user as mob)
 	if(!..())	//If the attack missed.
