@@ -2143,7 +2143,7 @@ var/list/cult_spires = list()
 	name = "pylon"
 	desc = "A floating crystal that hums with an unearthly energy."
 	icon_state = "pylon"
-	light_range = 7
+	light_range = 5
 	light_color = LIGHT_COLOR_RED
 	health = 50
 	maxHealth = 50
@@ -2151,7 +2151,55 @@ var/list/cult_spires = list()
 	sound_destroyed = 'sound/effects/stone_crumble.ogg'
 	plane = EFFECTS_PLANE
 	layer = BELOW_PROJECTILE_LAYER
-	var/broken
+	var/broken = FALSE
+
+/obj/structure/cult/pylon/attack_hand(var/mob/M)
+	attackpylon(M, 5)
+
+/obj/structure/cult/pylon/attack_animal(var/mob/living/simple_animal/user)
+	if(istype(user, /mob/living/simple_animal/construct/builder))
+		if(broken)
+			repair(user)
+			return
+	attackpylon(user, user.melee_damage_upper)
+
+/obj/structure/cult/pylon/attackby(var/obj/item/W, var/mob/user)
+	attackpylon(user, W.force)
+
+/obj/structure/cult/pylon/proc/attackpylon(mob/user as mob, var/damage)
+	if(!broken)
+		if(prob(1+ damage * 5))
+			to_chat(user, "You hit the pylon, and its crystal breaks apart!")
+			for(var/mob/M in viewers(src))
+				if(M == user)
+					continue
+				M.show_message("[user.name] smashed the pylon!", 1, "You hear a tinkle of crystal shards.", 2)
+			playsound(src, 'sound/effects/Glassbr3.ogg', 75, 1)
+			broken = TRUE
+			setDensity(FALSE)
+			icon_state = "pylon-broken"
+			set_light(0)
+			kill_moody_light()
+		else
+			to_chat(user, "You hit the pylon!")
+			playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
+	else
+		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
+		if(prob(damage * 2))
+			to_chat(user, "You pulverize what was left of the pylon!")
+			qdel(src)
+		else
+			to_chat(user, "You hit the pylon!")
+
+/obj/structure/cult/pylon/proc/repair(var/mob/user)
+	if(broken)
+		to_chat(user, "You repair the pylon.")
+		broken = FALSE
+		setDensity(TRUE)
+		icon_state = "pylon"
+		sound_damaged = 'sound/effects/Glasshit.ogg'
+		set_light(5)
+		update_moody_light('icons/lighting/moody_lights.dmi', "pylon")
 
 /obj/structure/cult/pylon/takeDamage()
 	..()
@@ -2162,7 +2210,8 @@ var/list/cult_spires = list()
 		sound_damaged = 'sound/effects/stone_hit.ogg'
 		set_light(0)
 		setDensity(FALSE)
-		broken = 1
+		broken = TRUE
+		kill_moody_light()
 
 /obj/structure/cult/pylon/New()
 	..()

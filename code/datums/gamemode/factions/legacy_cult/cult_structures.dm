@@ -18,65 +18,6 @@
 	desc = "A forge used in crafting the unholy weapons used by the armies of Nar-Sie."
 	icon_state = "forge"
 
-/*
-/obj/structure/cult/pylon
-	name = "Pylon"
-	desc = "A floating crystal that hums with an unearthly energy."
-	icon_state = "pylon"
-	var/isbroken = 0
-	light_range = 5
-	light_color = LIGHT_COLOR_RED
-
-/obj/structure/cult/pylon/attack_hand(mob/M as mob)
-	attackpylon(M, 5)
-
-/obj/structure/cult/pylon/attack_animal(mob/living/simple_animal/user as mob)
-	if(istype(user, /mob/living/simple_animal/construct/builder))
-		if(isbroken)
-			if(prob(20))
-				repair(user)
-				return
-			else
-				to_chat(user, "You fail to repair the pylon.")
-	attackpylon(user, user.melee_damage_upper)
-
-/obj/structure/cult/pylon/attackby(obj/item/W as obj, mob/user as mob)
-	attackpylon(user, W.force)
-
-/obj/structure/cult/pylon/proc/attackpylon(mob/user as mob, var/damage)
-	if(!isbroken)
-		if(prob(1+ damage * 5))
-			to_chat(user, "You hit the pylon, and its crystal breaks apart!")
-			for(var/mob/M in viewers(src))
-				if(M == user)
-					continue
-				M.show_message("[user.name] smashed the pylon!", 1, "You hear a tinkle of crystal shards.", 2)
-			playsound(src, 'sound/effects/Glassbr3.ogg', 75, 1)
-			isbroken = 1
-			setDensity(FALSE)
-			icon_state = "pylon-broken"
-			set_light(0)
-		else
-			to_chat(user, "You hit the pylon!")
-			playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
-	else
-		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
-		if(prob(damage * 2))
-			to_chat(user, "You pulverize what was left of the pylon!")
-			qdel(src)
-		else
-			to_chat(user, "You hit the pylon!")
-
-
-
-/obj/structure/cult/pylon/proc/repair(mob/user as mob)
-	if(isbroken)
-		to_chat(user, "You repair the pylon.")
-		isbroken = 0
-		setDensity(TRUE)
-		icon_state = "pylon"
-		set_light(5)
-*/
 /obj/structure/cult_legacy/tome
 	name = "Desk"
 	desc = "A desk covered in arcane manuscripts and tomes in unknown languages. Looking at the text makes your skin crawl."

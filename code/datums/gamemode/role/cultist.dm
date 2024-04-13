@@ -37,9 +37,6 @@
 	var/list/possible_rituals = list()
 	var/list/rituals = list(RITUAL_CULTIST_1,RITUAL_CULTIST_2)
 
-	//var/datum/bloodcult_ritual/first_ritual = null
-	//var/datum/bloodcult_ritual/second_ritual = null
-
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
 	wikiroute = role_wiki[CULTIST]
@@ -155,10 +152,6 @@
 				antag.current.add_particles(PS_CULT_HALO)
 				antag.current.adjust_particles(PVAR_ICON_STATE,"cult_halo[get_devotion_rank()]",PS_CULT_HALO)
 
-
-// 2022 - Commenting out some part of the greeting message and spacing it out a bit.
-//  Getting converted floods the chat with a lot of unncessary information
-
 /datum/role/cultist/Greet(var/greeting,var/custom)
 	if(!greeting)
 		return
@@ -201,7 +194,6 @@
 				to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>You are a lone cultist. You've spent years studying the language of Nar-Sie, but haven't associated with his followers.</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-	//to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
 	to_chat(antag.current, "<br>")
 	spawn(1)
 		if (faction)
@@ -400,79 +392,6 @@
 									to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
 						spawn(10 MINUTES)
 							cult.replace_rituals(ritual_slot)
-	/*
-		if (first_ritual && (key in first_ritual.keys))
-			if (first_ritual.key_found(extra))
-				first_ritual.complete()
-				if (!first_ritual.only_once)
-					possible_rituals += first_ritual
-				first_ritual = null
-				var/mob/M = antag.current
-				if (M)
-					to_chat(M, "<span class='sinister'>You have completed a ritual and been reward for your devotion...soon another ritual will take its place.</span>")
-				spawn(5 MINUTES)
-					if (!gcDestroyed)
-						replace_rituals(1)
-		if (second_ritual && (key in second_ritual.keys))
-			if (second_ritual.key_found(extra))
-				second_ritual.complete()
-				if (!second_ritual.only_once)
-					possible_rituals += second_ritual
-				second_ritual = null
-				var/mob/M = antag.current
-				if (M)
-					to_chat(M, "<span class='sinister'>You have completed a ritual and been reward for your devotion...soon another ritual will take its place.</span>")
-				spawn(5 MINUTES)
-					if (!gcDestroyed)
-						replace_rituals(2)
-		if (faction)
-			var/datum/faction/bloodcult/cult = faction
-			if (cult.first_ritual && (key in cult.first_ritual.keys))
-				if (cult.first_ritual.key_found(extra))
-					cult.first_ritual.complete()
-					if (!cult.first_ritual.only_once)
-						cult.possible_rituals += cult.first_ritual
-					cult.first_ritual = null
-					for (var/datum/role/cultist in cult.members)
-						var/mob/M = cultist.antag.current
-						if (M)
-							if (M == antag.current)
-								to_chat(M, "<span class='sinister'>You have completed a ritual, and rewarded the entire cult...soon another ritual will take its place.</span>")
-							else
-								to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
-					spawn(10 MINUTES)
-						cult.replace_rituals(1)
-			if (cult.second_ritual && (key in cult.second_ritual.keys))
-				if (cult.second_ritual.key_found(extra))
-					cult.second_ritual.complete()
-					if (!cult.second_ritual.only_once)
-						cult.possible_rituals += cult.second_ritual
-					cult.second_ritual = null
-					for (var/datum/role/cultist in cult.members)
-						var/mob/M = cultist.antag.current
-						if (M)
-							if (M == antag.current)
-								to_chat(M, "<span class='sinister'>You have completed a ritual, and rewarded the entire cult...soon another ritual will take its place.</span>")
-							else
-								to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
-					spawn(10 MINUTES)
-						cult.replace_rituals(2)
-			if (cult.third_ritual && (key in cult.third_ritual.keys))
-				if (cult.third_ritual.key_found(extra))
-					cult.third_ritual.complete()
-					if (!cult.third_ritual.only_once)
-						cult.possible_rituals += cult.third_ritual
-					cult.third_ritual = null
-					for (var/datum/role/cultist in cult.members)
-						var/mob/M = cultist.antag.current
-						if (M)
-							if (M == antag.current)
-								to_chat(M, "<span class='sinister'>You have completed a ritual, and rewarded the entire cult...soon another ritual will take its place.</span>")
-							else
-								to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
-					spawn(10 MINUTES)
-						cult.replace_rituals(3)
-						*/
 
 	//The more devotion the cultist has acquired, the less devotion they obtain from lesser rituals
 	switch (get_devotion_rank() - tier)
@@ -536,18 +455,7 @@
 		possible_rituals -= BR
 		valid_rituals -= BR
 		BR.init_ritual()
-/*
-	first_ritual = pick(valid_rituals)
-	possible_rituals -= first_ritual
-	valid_rituals -= first_ritual
-	first_ritual.init_ritual()
 
-	second_ritual = pick(valid_rituals)
-	if (second_ritual.ritual_type == first_ritual.ritual_type)//slightly reducing chances of having several rituals of the same type
-		second_ritual = pick(valid_rituals)
-	possible_rituals -= second_ritual
-	second_ritual.init_ritual()
-*/
 	var/datum/mind/M = antag
 
 	if ("Cult Panel" in M.activeUIs)
@@ -575,17 +483,6 @@
 	possible_rituals -= BR
 	BR.init_ritual()
 
-	/*
-	switch (slot)
-		if (1)
-			first_ritual = pick(valid_rituals)
-			possible_rituals -= first_ritual
-			first_ritual.init_ritual()
-		if (2)
-			second_ritual = pick(valid_rituals)
-			possible_rituals -= second_ritual
-			second_ritual.init_ritual()
-	*/
 	var/mob/O = antag.current
 	if (O)
 		to_chat(O, "<span class='sinister'>A new ritual is available...</span>")

@@ -135,6 +135,8 @@
 
 /obj/abstract/particles_holder/proc/special_setup(var/particle_string)
 	switch(particle_string)
+		if (PS_TEAR_REALITY)
+			plane = NOIR_BLOOD_PLANE
 		if (PS_CANDLE)
 			appearance_flags = RESET_COLOR
 			blend_mode = BLEND_ADD
