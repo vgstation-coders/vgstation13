@@ -506,7 +506,10 @@
 /obj/item/weapon/kitchen/utensil/knife/large/ritual/attack(var/mob/living/target, var/mob/living/carbon/human/user)
 	if (iscultist(user) && !iscultist(target) && !target.isDead())
 		var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
-		C.get_devotion(30, DEVOTION_TIER_3, "attack_ritualknife", target)
+		if (target.mind)
+			C.gain_devotion(30, DEVOTION_TIER_3, "attack_ritualknife", target)
+		else
+			C.gain_devotion(30, DEVOTION_TIER_2, "attack_ritualknife_nomind", target)
 	..()
 
 /*

@@ -150,7 +150,7 @@
 	var/list/Targets = list()
 	var/Target
 	for(var/atom/A in ListTargets())
-		if (!ValidTarget(A))
+		if (!isValidTarget(A))
 			break
 		if(Found(A))//Just in case people want to override targetting
 			var/list/FoundTarget = list()
@@ -167,7 +167,7 @@
 /mob/living/simple_animal/hostile/proc/Found(var/atom/A)//This is here as a potential override to pick a specific target if available
 	return
 
-/mob/living/simple_animal/hostile/proc/ValidTarget(var/atom/A)//we should have made that proc long ago instead of expanding CanAttack()
+/mob/living/simple_animal/hostile/proc/isValidTarget(var/atom/A)//we should have made that proc long ago instead of expanding CanAttack()
 	return TRUE
 
 /mob/living/simple_animal/hostile/proc/PickTarget(var/list/Targets)//Step 3, pick amongst the possible, attackable targets

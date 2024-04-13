@@ -165,7 +165,7 @@
 					user.visible_message("<span class='warning'>[user] has painted a strange sigil on \the [src].</span>", \
 						"<span class='notice'>You finish drawing the sigil.</span>")
 					var/datum/role/cultist/cul = iscultist(user)
-					cul.get_devotion(5, DEVOTION_TIER_4, "shortcut_sigil", src)
+					cul.gain_devotion(5, DEVOTION_TIER_4, "shortcut_sigil", src)
 			return
 
 	if(bullet_marks)

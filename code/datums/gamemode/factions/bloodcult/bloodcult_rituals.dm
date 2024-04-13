@@ -62,11 +62,11 @@ var/list/bloodcult_personal_rituals = list(
 
 /datum/bloodcult_ritual/proc/complete()
 	if (owner)
-		owner.get_devotion(reward_achiever, DEVOTION_TIER_4)//no key, duh
+		owner.gain_devotion(reward_achiever, DEVOTION_TIER_4)//no key, duh
 	if (reward_faction)
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		for(var/datum/role/cultist/C in cult.members)
-			C.get_devotion(reward_faction, DEVOTION_TIER_4)//yes this means a larger cult gets more total devotion.
+			C.gain_devotion(reward_faction, DEVOTION_TIER_4)//yes this means a larger cult gets more total devotion.
 
 	if (personal)
 		message_admins("BLOODCULT: [key_name(owner)] has completed the [name] ritual.")
@@ -379,6 +379,7 @@ var/list/bloodcult_personal_rituals = list(
 		"attack_blooddagger",
 		"attack_construct",
 		"attack_shade",
+		"attack_ritualknife",
 		)
 
 	var/targets = 3

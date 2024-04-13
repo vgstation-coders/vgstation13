@@ -104,23 +104,25 @@
 	var/obj/abstract/particles_holder/holder = particle_systems[particle_string]
 
 	switch(adjustment)
-		if ("spawning")
+		if (PVAR_SPAWNING)
 			holder.particles.spawning = new_value
-		if ("position")
+		if (PVAR_POSITION)
 			holder.particles.position = new_value
-		if ("velocity")
+		if (PVAR_VELOCITY)
 			holder.particles.velocity = new_value
-		if ("icon_state")
+		if (PVAR_ICON_STATE)
 			holder.particles.icon_state = new_value
-		if ("color")
+		if (PVAR_COLOR)
 			holder.particles.color = new_value
-		if ("plane")
+		if (PVAR_SCALE)
+			holder.particles.scale = new_value
+		if (PVAR_PLANE)
 			holder.plane = new_value
-		if ("layer")
+		if (PVAR_LAYER)
 			holder.layer = new_value
-		if ("pixel_x")
+		if (PVAR_PIXEL_X)
 			holder.pixel_x = new_value
-		if ("pixel_y")
+		if (PVAR_PIXEL_Y)
 			holder.pixel_y = new_value
 		//add more as needed
 
@@ -133,46 +135,46 @@
 
 /obj/abstract/particles_holder/proc/special_setup(var/particle_string)
 	switch(particle_string)
-		if ("Candle")
+		if (PS_CANDLE)
 			appearance_flags = RESET_COLOR
 			blend_mode = BLEND_ADD
 			plane = ABOVE_LIGHTING_PLANE
-		if ("Candle2")
+		if (PS_CANDLE2)
 			appearance_flags = RESET_COLOR
 			blend_mode = BLEND_ADD
 			plane = ABOVE_LIGHTING_PLANE
-		if ("Cult Gauge")
+		if (PS_CULT_GAUGE)
 			plane = HUD_PLANE
 			layer = MIND_UI_BUTTON+0.5
-		if ("Cult Smoke")
+		if (PS_CULT_SMOKE)
 			plane = FLOAT_PLANE
-		if ("Cult Smoke2")
+		if (PS_CULT_SMOKE2)
 			plane = FLOAT_PLANE
-		if ("Cult Halo")
+		if (PS_CULT_HALO)
 			plane = ABOVE_LIGHTING_PLANE
-		if ("Nar-SieHasRisen1")
+		if (PS_NARSIEHASRISEN1)
 			plane = ABOVE_HUD_PLANE
-		if ("Nar-SieHasRisen2")
+		if (PS_NARSIEHASRISEN2)
 			plane = ABOVE_HUD_PLANE
-		if ("Nar-SieHasRisen3")
+		if (PS_NARSIEHASRISEN3)
 			plane = ABOVE_HUD_PLANE
 
 //////////////////////////////////////PARTICLES///////////////////////////////////
 
 var/list/particle_string_to_type = list(
-	"Steam" = /particles/steam,
-	"Tear Reality" = /particles/tear_reality,
-	"Candle" = /particles/candle,
-	"Candle2" = /particles/candle_alt,
-	"Cult Gauge" = /particles/cult_gauge,
-	"Cult Smoke" = /particles/cult_smoke,
-	"Cult Smoke2" = /particles/cult_smoke/alt,
-	"Cult Smoke Box" = /particles/cult_smoke/box,
-	"Cult Halo" = /particles/cult_halo,
-	"Space Runes" = /particles/space_runes,
-	"Nar-SieHasRisen1" = /particles/narsie_has_risen,
-	"Nar-SieHasRisen2" = /particles/narsie_has_risen/next,
-	"Nar-SieHasRisen3" = /particles/narsie_has_risen/last,
+	PS_STEAM = /particles/steam,
+	PS_TEAR_REALITY = /particles/tear_reality,
+	PS_CANDLE = /particles/candle,
+	PS_CANDLE2 = /particles/candle_alt,
+	PS_CULT_GAUGE = /particles/cult_gauge,
+	PS_CULT_SMOKE = /particles/cult_smoke,
+	PS_CULT_SMOKE2 = /particles/cult_smoke/alt,
+	PS_CULT_SMOKE_BOX = /particles/cult_smoke/box,
+	PS_CULT_HALO = /particles/cult_halo,
+	PS_SPACE_RUNES = /particles/space_runes,
+	PS_NARSIEHASRISEN1 = /particles/narsie_has_risen,
+	PS_NARSIEHASRISEN2 = /particles/narsie_has_risen/next,
+	PS_NARSIEHASRISEN3 = /particles/narsie_has_risen/last,
 	)
 
 //STEAM

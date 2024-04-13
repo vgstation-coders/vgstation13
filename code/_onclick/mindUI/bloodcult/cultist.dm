@@ -1017,7 +1017,7 @@
 	appearance_flags |= KEEP_TOGETHER
 	mask = image(icon, src, "eclipse_gauge_bg")
 	mask.blend_mode = BLEND_INSET_OVERLAY
-	add_particles("Cult Gauge")
+	add_particles(PS_CULT_GAUGE)
 
 /obj/abstract/mind_ui_element/bloodcult_eclipse_gauge/process()
 	if (invisibility == 101)
@@ -1031,8 +1031,8 @@
 			if (BLOODCULT_STAGE_NORMAL)
 				name = "Time before the Eclipse"
 				mask.pixel_x = 288*(cult.eclipse_progress/cult.eclipse_target)
-				adjust_particles("position", generator("box", list(mask.pixel_x-16,-1), list(mask.pixel_x-16,-14)))
-				adjust_particles("velocity", list(-1*(mask.pixel_x)/40, 0))
+				adjust_particles(PVAR_POSITION, generator("box", list(mask.pixel_x-16,-1), list(mask.pixel_x-16,-14)))
+				adjust_particles(PVAR_VELOCITY, list(-1*(mask.pixel_x)/40, 0))
 				overlays.len = 0
 				overlays += mask
 
@@ -1040,22 +1040,22 @@
 				name = "Time until the Eclipse ends"
 				mask.pixel_x = max(0, 288 - 288*((world.time - sun.eclipse_manager.eclipse_start_time)/(sun.eclipse_manager.eclipse_end_time - sun.eclipse_manager.eclipse_start_time)))
 				if (sun.eclipse_manager.eclipse_end_time <= world.time)
-					adjust_particles("spawning", 0)
+					adjust_particles(PVAR_SPAWNING, 0)
 				else
-					adjust_particles("position", generator("box", list(mask.pixel_x-16,-1), list(mask.pixel_x-16,-14)))
-					adjust_particles("velocity", list((288-mask.pixel_x)/40, 0))
+					adjust_particles(PVAR_POSITION, generator("box", list(mask.pixel_x-16,-1), list(mask.pixel_x-16,-14)))
+					adjust_particles(PVAR_VELOCITY, list((288-mask.pixel_x)/40, 0))
 				overlays.len = 0
 				overlays += mask
 
 			if (BLOODCULT_STAGE_ECLIPSE)
 				name = "Time until Nar-Sie rises"
 				mask.pixel_x = max(0, 288*((world.time - cult.bloodstone_rising_time)/(cult.bloodstone_target_time - cult.bloodstone_rising_time)))
-				adjust_particles("position", generator("box", list(mask.pixel_x-16,-1), list(mask.pixel_x-16,-14)))
-				adjust_particles("velocity", list(-1*(mask.pixel_x)/40, 0))
+				adjust_particles(PVAR_POSITION, generator("box", list(mask.pixel_x-16,-1), list(mask.pixel_x-16,-14)))
+				adjust_particles(PVAR_VELOCITY, list(-1*(mask.pixel_x)/40, 0))
 				overlays.len = 0
 				overlays += mask
 			else
-				adjust_particles("spawning", 0)
+				adjust_particles(PVAR_SPAWNING, 0)
 				mask.pixel_x = 0
 				overlays.len = 0
 				overlays += mask
@@ -1352,11 +1352,11 @@
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/proc/set_tooltip()
 	if (associated_role)
-		add_particles("Cult Halo")
-		adjust_particles("icon_state","cult_halo[associated_role.get_devotion_rank()]","Cult Halo")
-		adjust_particles("plane",HUD_PLANE,"Cult Halo")
-		adjust_particles("layer",MIND_UI_BUTTON+0.5,"Cult Halo")
-		adjust_particles("pixel_x",-8,"Cult Halo")
+		add_particles(PS_CULT_HALO)
+		adjust_particles(PVAR_ICON_STATE,"cult_halo[associated_role.get_devotion_rank()]",PS_CULT_HALO)
+		adjust_particles(PVAR_PLANE,HUD_PLANE,PS_CULT_HALO)
+		adjust_particles(PVAR_LAYER,MIND_UI_BUTTON+0.5,PS_CULT_HALO)
+		adjust_particles(PVAR_PIXEL_X,-8,PS_CULT_HALO)
 		var/datum/mind/M = associated_role.antag
 		tooltip_title = M.name
 		var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M.current)), override_dir = SOUTH)
@@ -1696,7 +1696,7 @@
 	tooltip_title = ""
 	tooltip_content = "..."
 	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
-		var/datum/bloodcult_ritual/BR = cult.first_ritual
+		var/datum/bloodcult_ritual/BR = cult.rituals[RITUAL_FACTION_1]
 		if (BR)
 			tooltip_title = BR.name
 			BR.update_desc()
@@ -1716,7 +1716,7 @@
 	tooltip_title = ""
 	tooltip_content = "..."
 	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
-		var/datum/bloodcult_ritual/BR = cult.second_ritual
+		var/datum/bloodcult_ritual/BR = cult.rituals[RITUAL_FACTION_2]
 		if (BR)
 			tooltip_title = BR.name
 			BR.update_desc()
@@ -1736,7 +1736,7 @@
 	tooltip_title = ""
 	tooltip_content = "..."
 	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
-		var/datum/bloodcult_ritual/BR = cult.third_ritual
+		var/datum/bloodcult_ritual/BR = cult.rituals[RITUAL_FACTION_3]
 		if (BR)
 			tooltip_title = BR.name
 			BR.update_desc()
@@ -1761,7 +1761,7 @@
 	tooltip_title = ""
 	tooltip_content = "..."
 	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
-		var/datum/bloodcult_ritual/BR = cultist.first_ritual
+		var/datum/bloodcult_ritual/BR = cultist.rituals[RITUAL_CULTIST_1]
 		if (BR)
 			tooltip_title = BR.name
 			BR.update_desc()
@@ -1781,7 +1781,7 @@
 	tooltip_title = ""
 	tooltip_content = "..."
 	if (cultist && (cult.stage != BLOODCULT_STAGE_DEFEATED))
-		var/datum/bloodcult_ritual/BR = cultist.second_ritual
+		var/datum/bloodcult_ritual/BR = cultist.rituals[RITUAL_CULTIST_2]
 		if (BR)
 			tooltip_title = BR.name
 			BR.update_desc()
@@ -2223,7 +2223,7 @@
 			sleep(10)
 
 		for (var/obj/abstract/mind_ui_element/bloodcult_particle_holder/element in elements)
-			element.adjust_particles("spawning", 0)
+			element.adjust_particles(PVAR_SPAWNING, 0)
 
 /obj/abstract/mind_ui_element/bloodcult_particle_holder
 	mouse_opacity = 0
@@ -2233,10 +2233,10 @@
 	var/my_particle
 
 /obj/abstract/mind_ui_element/bloodcult_particle_holder/bloodcult_narsie
-	my_particle = "Nar-SieHasRisen1"
+	my_particle = PS_NARSIEHASRISEN1
 	offset_y = 64
 /obj/abstract/mind_ui_element/bloodcult_particle_holder/bloodcult_has
-	my_particle = "Nar-SieHasRisen2"
+	my_particle = PS_NARSIEHASRISEN2
 /obj/abstract/mind_ui_element/bloodcult_particle_holder/bloodcult_risen
-	my_particle = "Nar-SieHasRisen3"
+	my_particle = PS_NARSIEHASRISEN3
 	offset_y = -64

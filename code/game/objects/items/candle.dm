@@ -41,8 +41,8 @@
 		lit = 0
 		update_icon()
 		set_light(0)
-		remove_particles("Candle")
-		remove_particles("Candle2")
+		remove_particles(PS_CANDLE)
+		remove_particles(PS_CANDLE2)
 
 /obj/item/candle/update_icon()
 	overlays.len = 0
@@ -108,8 +108,8 @@
 		if(!quiet)
 			visible_message(flavor_text)
 		set_light(CANDLE_LUM)
-		add_particles("Candle")
-		add_particles("Candle2")
+		add_particles(PS_CANDLE)
+		add_particles(PS_CANDLE2)
 		processing_objects.Add(src)
 		update_icon()
 		if(iscarbon(loc))

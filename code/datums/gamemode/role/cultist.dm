@@ -30,19 +30,15 @@
 
 	var/devotion = 0
 	var/rank = DEVOTION_TIER_0
-	/*
-		rank 1: 100
-		rank 2: 500
-		rank 3: 1000
-		rank 4: 2000
-	*/
 
 	var/blood_pool = FALSE
 
 	var/initial_rituals = FALSE
 	var/list/possible_rituals = list()
-	var/datum/bloodcult_ritual/first_ritual = null
-	var/datum/bloodcult_ritual/second_ritual = null
+	var/list/rituals = list(RITUAL_CULTIST_1,RITUAL_CULTIST_2)
+
+	//var/datum/bloodcult_ritual/first_ritual = null
+	//var/datum/bloodcult_ritual/second_ritual = null
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
@@ -120,44 +116,44 @@
 				to_chat(M, "<span class='sinister'>Although you can generate devotion by performing most cult activities, a couple rituals for you to perform are now available. Check the cult panel.</span>")
 		switch(cult.stage)
 			if (BLOODCULT_STAGE_READY)
-				antag.current.add_particles("Cult Smoke")
-				antag.current.add_particles("Cult Smoke2")
+				antag.current.add_particles(PS_CULT_SMOKE)
+				antag.current.add_particles(PS_CULT_SMOKE2)
 				if (cult.tear_ritual && cult.tear_ritual.dance_count)
 					var/count = clamp(cult.tear_ritual.dance_count / 400, 0.01, 0.6)
-					antag.current.adjust_particles("spawning",count,"Cult Smoke")
-					antag.current.adjust_particles("spawning",count,"Cult Smoke2")
+					antag.current.adjust_particles(PVAR_SPAWNING,count,PS_CULT_SMOKE)
+					antag.current.adjust_particles(PVAR_SPAWNING,count,PS_CULT_SMOKE2)
 				else
 					if (prob(1))
-						antag.current.adjust_particles("spawning",0.05,"Cult Smoke")
-						antag.current.adjust_particles("spawning",0.05,"Cult Smoke2")
+						antag.current.adjust_particles(PVAR_SPAWNING,0.05,PS_CULT_SMOKE)
+						antag.current.adjust_particles(PVAR_SPAWNING,0.05,PS_CULT_SMOKE2)
 					else
-						antag.current.adjust_particles("spawning",0,"Cult Smoke")
-						antag.current.adjust_particles("spawning",0,"Cult Smoke2")
+						antag.current.adjust_particles(PVAR_SPAWNING,0,PS_CULT_SMOKE)
+						antag.current.adjust_particles(PVAR_SPAWNING,0,PS_CULT_SMOKE2)
 			if (BLOODCULT_STAGE_MISSED)
-				antag.current.remove_particles("Cult Smoke")
-				antag.current.remove_particles("Cult Smoke2")
+				antag.current.remove_particles(PS_CULT_SMOKE)
+				antag.current.remove_particles(PS_CULT_SMOKE2)
 			if (BLOODCULT_STAGE_ECLIPSE)
-				antag.current.add_particles("Cult Smoke")
-				antag.current.add_particles("Cult Smoke2")
-				antag.current.adjust_particles("spawning",0.6,"Cult Smoke")
-				antag.current.adjust_particles("spawning",0.6,"Cult Smoke2")
-				antag.current.add_particles("Cult Halo")
-				antag.current.adjust_particles("icon_state","cult_halo[get_devotion_rank()]","Cult Halo")
+				antag.current.add_particles(PS_CULT_SMOKE)
+				antag.current.add_particles(PS_CULT_SMOKE2)
+				antag.current.adjust_particles(PVAR_SPAWNING,0.6,PS_CULT_SMOKE)
+				antag.current.adjust_particles(PVAR_SPAWNING,0.6,PS_CULT_SMOKE2)
+				antag.current.add_particles(PS_CULT_HALO)
+				antag.current.adjust_particles(PVAR_ICON_STATE,"cult_halo[get_devotion_rank()]",PS_CULT_HALO)
 			if (BLOODCULT_STAGE_DEFEATED)
-				antag.current.add_particles("Cult Smoke")
-				antag.current.add_particles("Cult Smoke2")
-				antag.current.adjust_particles("spawning",0.19,"Cult Smoke")
-				antag.current.adjust_particles("spawning",0.21,"Cult Smoke2")
-				antag.current.add_particles("Cult Halo")
-				antag.current.adjust_particles("color","#00000066","Cult Halo")
-				antag.current.adjust_particles("icon_state","cult_halo[get_devotion_rank()]","Cult Halo")
+				antag.current.add_particles(PS_CULT_SMOKE)
+				antag.current.add_particles(PS_CULT_SMOKE2)
+				antag.current.adjust_particles(PVAR_SPAWNING,0.19,PS_CULT_SMOKE)
+				antag.current.adjust_particles(PVAR_SPAWNING,0.21,PS_CULT_SMOKE2)
+				antag.current.add_particles(PS_CULT_HALO)
+				antag.current.adjust_particles(PVAR_COLOR,"#00000066",PS_CULT_HALO)
+				antag.current.adjust_particles(PVAR_ICON_STATE,"cult_halo[get_devotion_rank()]",PS_CULT_HALO)
 			if (BLOODCULT_STAGE_NARSIE)
-				antag.current.add_particles("Cult Smoke")
-				antag.current.add_particles("Cult Smoke2")
-				antag.current.adjust_particles("spawning",0.6,"Cult Smoke")
-				antag.current.adjust_particles("spawning",0.6,"Cult Smoke2")
-				antag.current.add_particles("Cult Halo")
-				antag.current.adjust_particles("icon_state","cult_halo[get_devotion_rank()]","Cult Halo")
+				antag.current.add_particles(PS_CULT_SMOKE)
+				antag.current.add_particles(PS_CULT_SMOKE2)
+				antag.current.adjust_particles(PVAR_SPAWNING,0.6,PS_CULT_SMOKE)
+				antag.current.adjust_particles(PVAR_SPAWNING,0.6,PS_CULT_SMOKE2)
+				antag.current.add_particles(PS_CULT_HALO)
+				antag.current.adjust_particles(PVAR_ICON_STATE,"cult_halo[get_devotion_rank()]",PS_CULT_HALO)
 
 
 // 2022 - Commenting out some part of the greeting message and spacing it out a bit.
@@ -360,7 +356,7 @@
 		if (0 to 100)
 			return DEVOTION_TIER_0
 
-/datum/role/cultist/proc/get_devotion(var/acquired_devotion = 0, var/tier = DEVOTION_TIER_0, var/key, var/extra)
+/datum/role/cultist/proc/gain_devotion(var/acquired_devotion = 0, var/tier = DEVOTION_TIER_0, var/key, var/extra)
 	if (faction)
 		switch(faction.stage)
 			if (BLOODCULT_STAGE_DEFEATED)//no more devotion gains if the bloodstone has been destroyed
@@ -369,6 +365,42 @@
 				return
 
 	if (key && (!faction || (faction.stage != BLOODCULT_STAGE_ECLIPSE)))
+		for (var/ritual_slot in rituals)
+			if (rituals[ritual_slot])
+				var/datum/bloodcult_ritual/my_ritual = rituals[ritual_slot]
+				if (key in my_ritual.keys)
+					if (my_ritual.key_found(extra))
+						my_ritual.complete()
+						if (!my_ritual.only_once)
+							possible_rituals += my_ritual
+						rituals[ritual_slot] = null
+						var/mob/M = antag.current
+						if (M)
+							to_chat(M, "<span class='sinister'>You have completed a ritual and been reward for your devotion...soon another ritual will take its place.</span>")
+						spawn(5 MINUTES)
+							if (!gcDestroyed)
+								replace_rituals(ritual_slot)
+	if (faction && (faction.stage != BLOODCULT_STAGE_ECLIPSE))
+		var/datum/faction/bloodcult/cult = faction
+		for (var/ritual_slot in cult.rituals)
+			if (cult.rituals[ritual_slot])
+				var/datum/bloodcult_ritual/faction_ritual = cult.rituals[ritual_slot]
+				if (key in faction_ritual.keys)
+					if (faction_ritual.key_found(extra))
+						faction_ritual.complete()
+						if (!faction_ritual.only_once)
+							cult.possible_rituals += faction_ritual
+						cult.rituals[ritual_slot] = null
+						for (var/datum/role/cultist in cult.members)
+							var/mob/M = cultist.antag.current
+							if (M)
+								if (M == antag.current)
+									to_chat(M, "<span class='sinister'>You have completed a ritual, and rewarded the entire cult...soon another ritual will take its place.</span>")
+								else
+									to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
+						spawn(10 MINUTES)
+							cult.replace_rituals(ritual_slot)
+	/*
 		if (first_ritual && (key in first_ritual.keys))
 			if (first_ritual.key_found(extra))
 				first_ritual.complete()
@@ -440,6 +472,7 @@
 								to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
 					spawn(10 MINUTES)
 						cult.replace_rituals(3)
+						*/
 
 	//The more devotion the cultist has acquired, the less devotion they obtain from lesser rituals
 	switch (get_devotion_rank() - tier)
@@ -481,16 +514,6 @@
 					GiveTattoo(/datum/cult_tattoo/shortcut)
 	antag.current.DisplayUI("Cultist Right Panel")
 
-/datum/role/cultist/proc/current_ritual_categories()
-	var/list/categ = list()
-
-	if (first_ritual)
-		categ |= first_ritual.ritual_type
-	if (second_ritual)
-		categ |= second_ritual.ritual_type
-
-	return categ
-
 /datum/role/cultist/proc/assign_rituals()
 	initial_rituals = TRUE
 	var/list/valid_rituals = list()
@@ -502,6 +525,18 @@
 	if (valid_rituals.len < 2)
 		return
 
+	var/datum/bloodcult_ritual/previous_ritual
+	for (var/ritual_slot in rituals)
+		var/datum/bloodcult_ritual/BR = pick(valid_rituals)
+		if ((previous_ritual) && (previous_ritual.ritual_type == BR.ritual_type))
+			BR = pick(valid_rituals)//slightly reducing chances of having several rituals of the same type
+		else
+			previous_ritual = BR
+		rituals[ritual_slot] = BR
+		possible_rituals -= BR
+		valid_rituals -= BR
+		BR.init_ritual()
+/*
 	first_ritual = pick(valid_rituals)
 	possible_rituals -= first_ritual
 	valid_rituals -= first_ritual
@@ -512,7 +547,7 @@
 		second_ritual = pick(valid_rituals)
 	possible_rituals -= second_ritual
 	second_ritual.init_ritual()
-
+*/
 	var/datum/mind/M = antag
 
 	if ("Cult Panel" in M.activeUIs)
@@ -535,6 +570,12 @@
 	if (valid_rituals.len < 1)
 		return
 
+	var/datum/bloodcult_ritual/BR = pick(valid_rituals)
+	rituals[slot] = BR
+	possible_rituals -= BR
+	BR.init_ritual()
+
+	/*
 	switch (slot)
 		if (1)
 			first_ritual = pick(valid_rituals)
@@ -544,7 +585,7 @@
 			second_ritual = pick(valid_rituals)
 			possible_rituals -= second_ritual
 			second_ritual.init_ritual()
-
+	*/
 	var/mob/O = antag.current
 	if (O)
 		to_chat(O, "<span class='sinister'>A new ritual is available...</span>")
@@ -640,7 +681,7 @@
 		if(rune.word1 && rune.word2 && rune.word3)
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 			return
-	get_devotion(10, DEVOTION_TIER_0, "write_rune", word.english)
+	gain_devotion(10, DEVOTION_TIER_0, "write_rune", word.english)
 	write_rune_word(get_turf(user), word, rune_blood_data["blood"], caster = user)
 	verbose = FALSE
 

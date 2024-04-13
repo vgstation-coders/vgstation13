@@ -300,7 +300,7 @@
 			I.add_blood(C)
 			var/datum/role/cultist/cul = iscultist(user)
 			if (cul)
-				cul.get_devotion(0, DEVOTION_TIER_0, "altar_plant", src)
+				cul.gain_devotion(0, DEVOTION_TIER_0, "altar_plant", src)
 			if (C == user)
 				user.visible_message("<span class='danger'>\The [user] holds \the [I] above their stomach and impales themselves on \the [src]!</span>","<span class='danger'>You hold \the [I] above your stomach and impale yourself on \the [src]!</span>")
 			else
@@ -315,14 +315,14 @@
 			I.add_blood()
 			var/datum/role/cultist/cul = iscultist(user)
 			if (cul)
-				cul.get_devotion(0, DEVOTION_TIER_0, "altar_plant", src)
+				cul.gain_devotion(0, DEVOTION_TIER_0, "altar_plant", src)
 			user.visible_message("<span class='danger'>\The [user] holds \the [I] above \the [S] and impales it on \the [src]!</span>","<span class='danger'>You hold \the [I] above \the [S] and impale it on \the [src]!</span>")
 		else
 			to_chat(user, "You plant \the [blade] on top of \the [src]</span>")
 			processing_objects += src
 			var/datum/role/cultist/cul = iscultist(user)
 			if (cul)
-				cul.get_devotion(0, DEVOTION_TIER_0, "altar_plant", src)
+				cul.gain_devotion(0, DEVOTION_TIER_0, "altar_plant", src)
 			if (istype(blade) && !blade.shade)
 				var/icon/logo_icon = icon('icons/logos.dmi', "shade-blade")
 				for(var/mob/M in observers)
@@ -918,14 +918,14 @@
 				var/mob/O = get_locked(lock_type)[1]
 				if (ishuman(O))
 					if (O.mind)
-						C.get_devotion(500, DEVOTION_TIER_4, "altar_sacrifice_human", O)
+						C.gain_devotion(500, DEVOTION_TIER_4, "altar_sacrifice_human", O)
 					else//monkey-human
-						C.get_devotion(200, DEVOTION_TIER_4, "altar_sacrifice_human_nomind", O)
+						C.gain_devotion(200, DEVOTION_TIER_4, "altar_sacrifice_human_nomind", O)
 				else//monkey
-					C.get_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_monkey", O)
+					C.gain_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_monkey", O)
 			if(ALTARTASK_SACRIFICE_ANIMAL)
 				var/mob/O = get_locked(lock_type)[1]
-				C.get_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_animal", O)
+				C.gain_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_animal", O)
 
 #undef ALTARTASK_NONE
 #undef ALTARTASK_GEM
@@ -1251,7 +1251,7 @@ var/list/cult_spires = list()
 					update_progbar()
 					var/datum/role/cultist/C = iscultist(forger)
 					if (C)
-						C.get_devotion(10, DEVOTION_TIER_2, "[forge_icon]",timeleft)
+						C.gain_devotion(10, DEVOTION_TIER_2, "[forge_icon]",timeleft)
 					if (timeleft<=0)
 						playsound(L, 'sound/effects/forge_over.ogg', 50, 0, -3)
 						if (forger.client)

@@ -390,6 +390,8 @@ var/list/mind_ui_ID2type = list()
 		var/mob/M = GetUser()
 		if (M)
 			//I hate this, I hate this, but somehow the tooltips won't appear in the right place unless I do this black magic
+			//this only happens with mindUI elements, but the more offset from the center the elements are, tooltips become even more offset.
+			//this code corrects this extra offset.
 			var/list/param_list = params2list(params)
 			var/screenloc = param_list["screen-loc"]
 			var/x_index = findtext(screenloc, ":", 1, 0)

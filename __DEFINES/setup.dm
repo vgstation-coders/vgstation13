@@ -1915,3 +1915,30 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define HEX_MODE_ROAMING 0
 #define HEX_MODE_GUARD	 1
 #define HEX_MODE_ESCORT	 2
+
+//Particles system defines
+#define PS_STEAM			"Steam"
+#define PS_TEAR_REALITY		"Tear Reality"
+#define PS_CANDLE			"Candle"
+#define PS_CANDLE2			"Candle2"
+#define PS_CULT_GAUGE		"Cult Gauge"
+#define PS_CULT_SMOKE		"Cult Smoke"
+#define PS_CULT_SMOKE2		"Cult Smoke2"
+#define PS_CULT_SMOKE_BOX	"Cult Smoke Box"
+#define PS_CULT_HALO		"Cult Halo"
+#define PS_SPACE_RUNES		"Space Runes"
+#define PS_NARSIEHASRISEN1	"Nar-SieHasRisen1"
+#define PS_NARSIEHASRISEN2	"Nar-SieHasRisen2"
+#define PS_NARSIEHASRISEN3	"Nar-SieHasRisen3"
+
+//Particles variable defines
+#define PVAR_SPAWNING	"spawning"
+#define PVAR_POSITION	"position"
+#define PVAR_VELOCITY	"velocity"
+#define PVAR_ICON_STATE	"icon_state"
+#define PVAR_COLOR		"color"
+#define PVAR_SCALE		"scale"
+#define PVAR_PLANE		"plane"
+#define PVAR_LAYER		"layer"
+#define PVAR_PIXEL_X	"pixel_x"
+#define PVAR_PIXEL_Y	"pixel_y"

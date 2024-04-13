@@ -29,7 +29,7 @@
 
 	if (pay_blood())
 		var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
-		C.get_devotion(10, DEVOTION_TIER_0, "conjure_paraphernalia", "Arcane Tome")
+		C.gain_devotion(10, DEVOTION_TIER_0, "conjure_paraphernalia", "Arcane Tome")
 		spell_holder.visible_message("<span class='rose'>The rune's symbols merge into each others, and an Arcane Tome takes form in their place</span>")
 		var/turf/T = get_turf(spell_holder)
 		var/obj/item/weapon/tome/AT = new (T)
@@ -45,7 +45,7 @@
 		activator.drop_item(spell_holder, T)
 		activator.put_in_active_hand(AT)
 		var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
-		C.get_devotion(10, DEVOTION_TIER_0, "conjure_paraphernalia", "Arcane Tome")
+		C.gain_devotion(10, DEVOTION_TIER_0, "conjure_paraphernalia", "Arcane Tome")
 	else//are we using the talisman from a tome?
 		activator.put_in_hands(AT)
 	flick("tome_spawn",AT)

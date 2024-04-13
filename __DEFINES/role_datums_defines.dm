@@ -231,6 +231,13 @@
 #define DEVOTION_TIER_3		3
 #define DEVOTION_TIER_4		4
 
+#define RITUAL_CULTIST_1	"first_ritual"
+#define RITUAL_CULTIST_2	"second_ritual"
+
+#define RITUAL_FACTION_1	"first_ritual"
+#define RITUAL_FACTION_2	"second_ritual"
+#define RITUAL_FACTION_3	"third_ritual"
+
 ////////////////////////////////////////////////////////////////////////////////
 
 // -- Objectives flags

@@ -156,7 +156,7 @@ var/creating_arena = FALSE
 					"<span class='warning'>You drag a ghost to our plane of reality!</span>"
 				)
 				var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
-				C.get_devotion(50, DEVOTION_TIER_3, "visible_ghost", src)
+				C.gain_devotion(50, DEVOTION_TIER_3, "visible_ghost", src)
 			return
 		else if (istype(W,/obj/item/weapon/talisman))
 			var/obj/item/weapon/talisman/T = W

@@ -26,9 +26,9 @@
 /obj/machinery/bunsen_burner/render_cookvessel(offset_x = 2, offset_y = 12)
 	..()
 	if(cookvessel || held_container)
-		adjust_particles("position", list(offset_x,offset_y))
+		adjust_particles(PVAR_POSITION, list(offset_x,offset_y))
 	else
-		adjust_particles("position", 0)
+		adjust_particles(PVAR_POSITION, 0)
 
 /obj/machinery/bunsen_burner/cook_temperature()
 	var/temperature = get_max_temperature()
@@ -67,7 +67,7 @@
 
 /obj/machinery/bunsen_burner/Destroy()
 	if(held_container)
-		adjust_particles("position", 0)
+		adjust_particles(PVAR_POSITION, 0)
 		held_container.forceMove(get_turf(src))
 		held_container = null
 	processing_objects.Remove(src)
@@ -103,7 +103,7 @@
 				add_fingerprint(user)
 				//if it is a cooking vessel, we do want to call afterattack() so that it gets added properly
 			else if(!held_container && user.drop_item(W, src))
-				W.adjust_particles("position", list(2,12))
+				W.adjust_particles(PVAR_POSITION, list(2,12))
 				W.link_particles(src)
 				to_chat(user, "<span class='notice'>You put [W] onto \the [src].</span>")
 				add_fingerprint(user)
@@ -218,7 +218,7 @@
 		..()
 	else if(held_container)
 		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
-		adjust_particles("position", 0)
+		adjust_particles(PVAR_POSITION, 0)
 		remove_particles()
 		held_container.forceMove(src.loc)
 		held_container.attack_hand(user)

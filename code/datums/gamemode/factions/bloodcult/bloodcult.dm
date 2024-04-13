@@ -77,13 +77,14 @@
 
 	var/list/deconverted = list()//tracking for scoreboard purposes
 
-	var/datum/bloodcult_ritual/first_ritual = null
-	var/datum/bloodcult_ritual/second_ritual = null
-	var/datum/bloodcult_ritual/third_ritual = null
+	//var/datum/bloodcult_ritual/first_ritual = null
+	//var/datum/bloodcult_ritual/second_ritual = null
+	//var/datum/bloodcult_ritual/third_ritual = null
 
 	var/datum/bloodcult_ritual/bloodspill_ritual = null
 
 	var/list/possible_rituals = list()
+	var/list/rituals = list(RITUAL_FACTION_1,RITUAL_FACTION_2,RITUAL_FACTION_3)
 
 	var/countdown_to_first_rituals = 5
 
@@ -301,6 +302,13 @@
 	if (valid_rituals.len < 3)
 		return
 
+	for (var/ritual_slot in rituals)
+		var/datum/bloodcult_ritual/BR = pick(valid_rituals)
+		rituals[ritual_slot] = BR
+		possible_rituals -= BR
+		valid_rituals -= BR
+		BR.init_ritual()
+	/*
 	first_ritual = pick(valid_rituals)
 	possible_rituals -= first_ritual
 	valid_rituals -= first_ritual
@@ -315,7 +323,7 @@
 	possible_rituals -= third_ritual
 	valid_rituals -= third_ritual
 	third_ritual.init_ritual()
-
+	*/
 	for (var/datum/role/cultist in members)
 		var/datum/mind/M = cultist.antag
 		if ("Cult Panel" in M.activeUIs)
@@ -338,6 +346,11 @@
 	if (valid_rituals.len < 1)
 		return
 
+	var/datum/bloodcult_ritual/BR = pick(valid_rituals)
+	rituals[slot] = BR
+	possible_rituals -= BR
+	BR.init_ritual()
+	/*
 	switch (slot)
 		if (1)
 			first_ritual = pick(valid_rituals)
@@ -351,6 +364,7 @@
 			third_ritual = pick(valid_rituals)
 			possible_rituals -= third_ritual
 			third_ritual.init_ritual()
+	*/
 
 	for (var/datum/role/cultist in members)
 		var/mob/O = cultist.antag.current
@@ -422,6 +436,23 @@
 		if (BLOODCULT_STAGE_NARSIE)//or narsie has risen
 			return
 
+	if (key && (stage != BLOODCULT_STAGE_ECLIPSE))
+		for (var/ritual_slot in rituals)
+			if (rituals[ritual_slot])
+				var/datum/bloodcult_ritual/faction_ritual = rituals[ritual_slot]
+				if (key in faction_ritual.keys)
+					if (faction_ritual.key_found(extra))
+						faction_ritual.complete()
+						if (!faction_ritual.only_once)
+							possible_rituals += faction_ritual
+						rituals[ritual_slot] = null
+						for (var/datum/role/cultist in members)
+							var/mob/M = cultist.antag.current
+							if (M)
+								to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
+						spawn(10 MINUTES)
+							replace_rituals(ritual_slot)
+	/*
 	if (key && stage != BLOODCULT_STAGE_ECLIPSE)
 		if (first_ritual && (key in first_ritual.keys))
 			if (first_ritual.key_found(extra))
@@ -459,7 +490,7 @@
 						to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
 				spawn(10 MINUTES)
 					replace_rituals(3)
-
+	*/
 #define HUDICON_BLINKDURATION 10
 /datum/faction/bloodcult/update_hud_icons(var/offset = 0,var/factions_with_icons = 0)
 	..()

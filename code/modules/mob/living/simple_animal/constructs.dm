@@ -103,9 +103,9 @@
 	var/datum/role/cultist/C = iscultist(src)
 	if (C && damage && !iscultist(target) && !target.isDead())
 		if (target.mind)
-			C.get_devotion(30, DEVOTION_TIER_3, "attack_construct", target)
+			C.gain_devotion(30, DEVOTION_TIER_3, "attack_construct", target)
 		else
-			C.get_devotion(30, DEVOTION_TIER_2, "attack_construct_nomind", target)
+			C.gain_devotion(30, DEVOTION_TIER_2, "attack_construct_nomind", target)
 
 #define SPEAK_OVER_GENERAL_CULT_CHAT 0
 #define SPEAK_OVER_CHANNEL_INTO_CULT_CHAT 1

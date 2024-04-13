@@ -623,7 +623,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/eclipse_start
 	name = "Eclipse Starts"
 	alert_title = "Solar Eclipse Alert"
-	message = "Some kind of moon is passing in front of the star, obstructing its light. On top of shorted solars power, anomalous disruptions of the electromagnetic field have been detected which may result in light not travelling as far aboard the station for the duration of the eclipse. We expect the object to shift away along its orbit in a dozen minutes at most."
+	message = "Some kind of moon is passing in front of your local star, obstructing its light. Not only has solar power production been reduced, but anomalous disruptions of the electromagnetic field have been detected, resulting in light not travelling as far for the duration of the eclipse."
 
 /datum/command_alert/eclipse_end
 	name = "Eclipse Ends"
@@ -633,12 +633,12 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/eclipse_too_long
 	name = "Eclipse Is Lasting Too Long"
 	alert_title = "Solar Eclipse of Occult Origin?"
-	message = "The eclipse is lasting longer than expected. The moon appears to have changed its trajectory and we don't know how long this state of affair will persist. Centcom advises the crew to investigate around the station for occult activities that may be the source of this anomalous phenomenon. In case any occult rune is discovered, erase those using salt, or more efficiently, holy salt."
+	message = "The eclipse is lasting longer than expected. The moon appears to have changed its trajectory and it is unknown how long this anomaly will persist. Centcomm advises the crew to investigate around the station for occult activities that may be the source of this anomalous phenomenon. In case any occult rune is discovered, erase those using salt, or more efficiently, holy salt."
 
 /datum/command_alert/eclipse_bloodstone
 	name = "Bloodstone has Risen"
 	alert_title = "Cult Activity Detected"
-	message = "A critical surge of occult energies has been detected emanating from your station. Paterns suggest an incursion by the Cult of Nar-Sie, which means a Blood Stone has been raised, find and destroy it at all costs or this station will be lost. Be careful of the eldritch entities that accompany them."
+	message = "Patterns suggest an incursion by the Cult of Nar-Sie, which means a Blood Stone has been raised. Find and destroy it at all costs or this station will be lost. Be careful of the eldritch entities that accompany them."
 
 /datum/command_alert/eclipse_bloodstone_broken
 	name = "Bloodstone is Broken"
