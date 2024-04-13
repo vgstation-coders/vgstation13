@@ -266,6 +266,15 @@
 	W.dropped()
 	return 0
 
+//Helper proc tied to above for creating something in-hand via construction
+/mob/proc/create_in_hands(var/obj/item/olditem, var/obj/item/newitem, var/obj/item/using, var/must_hold = TRUE)
+	if(olditem.loc == src && must_hold)
+		drop_item(olditem, force_drop = 1) // Necessary to show up in the same hand for below
+		. = put_in_hands(newitem)
+	qdel(olditem)
+	if(using)
+		qdel(using)
+
 /mob/proc/set_hand_amount(new_amount)
 	if(new_amount < held_items.len) //Decrease hand amount - drop items held in hands which will no longer exist!
 		for(var/i = (new_amount+1) to held_items.len)
