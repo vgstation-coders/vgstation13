@@ -29,6 +29,7 @@
 	var/assembling = 0 //if we're in a step, we won't be allowed to do another step
 	var/permanence = 0
 	var/list/used_atoms = list() //contains the stuff we add. Can be used in multiple-choice construction
+	var/in_hands = FALSE // put in mob hands afterwards?
 
 /datum/construction/New(atom)
 	..()
@@ -144,7 +145,9 @@
 	if(result)
 //		testing("[user] finished a [result]!")
 
-		new result(get_turf(holder))
+		var/obj/item/R = new result(get_turf(holder))
+		if(in_hands && istype(R))
+			user.put_in_hands(R)
 		spawn()
 			QDEL_NULL (holder)
 
