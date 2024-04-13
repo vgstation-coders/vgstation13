@@ -292,6 +292,7 @@ var/list/whitelist_name_diacritics_min = list(
 	return string
 
 //u1 = how many numbers before the dot, u2 = how many numbers after the dot
+//example: add_zero_before_and_after(3.14, 3, 5) = "003.14000"
 /proc/add_zero_before_and_after(t, u1, u2)
 	var/string = "[t]"
 	var/dot_pos = findtext(string, ".")

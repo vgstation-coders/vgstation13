@@ -258,7 +258,7 @@ var/global/list/narsie_list = list()
 		if(C2.flags & INVULNERABLE)
 			return 0
 
-		C2.dust() // Changed from gib(), just for less lag.
+		C2.gib() // Back from dust()! Surely it can't lag that bad anymore
 
 	else if (istype(A, /obj/))
 		if (isbot(A))
