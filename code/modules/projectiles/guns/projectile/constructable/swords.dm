@@ -38,7 +38,8 @@
 	if(istype(W, /obj/item/weapon/metal_blade))
 		to_chat(user, "You attach \the [W] to \the [src].")
 		var/obj/item/weapon/sword/executioner/I = new (loc)
-		user.put_in_hands(I)
+		if(src.loc == user)
+			user.put_in_hands(I)
 		qdel(src)
 		qdel(W)
 	if(W.type == /obj/item/weapon/reagent_containers/hypospray || W.type == /obj/item/weapon/reagent_containers/hypospray/creatine)
@@ -54,7 +55,8 @@
 		I.HY = hypo
 		hypo.forceMove(I)
 		hypo = null
-		user.put_in_hands(I)
+		if(src.loc == user)
+			user.put_in_hands(I)
 		qdel(src)
 		qdel(W)
 
@@ -189,7 +191,8 @@
 			H.reagents.clear_reagents()
 			I.hypo = H
 		I.update_icon()
-		user.put_in_hands(I)
+		if(src.loc == user)
+			user.put_in_hands(I)
 		new /obj/item/weapon/aluminum_cylinder(get_turf(src))
 		qdel(src)
 

@@ -20,7 +20,8 @@
 				I = new /obj/item/weapon/hatchet/tomahawk/metal/drilled(get_turf(src.loc))
 			else
 				I = new /obj/item/weapon/hatchet/tomahawk/drilled(get_turf(src.loc))
-			user.put_in_hands(I)
+			if(src.loc == user)
+				user.put_in_hands(I)
 			qdel(src)
 
 /obj/item/weapon/hatchet/tomahawk/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
