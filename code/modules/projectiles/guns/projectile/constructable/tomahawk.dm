@@ -15,19 +15,12 @@
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 30))
 			to_chat(user, "You drill a hole through the handle of \the [src].")
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				if(ismetal)
-					var/obj/item/weapon/hatchet/tomahawk/metal/drilled/I = new (get_turf(user))
-					user.put_in_hands(I)
-				else
-					var/obj/item/weapon/hatchet/tomahawk/drilled/I = new (get_turf(user))
-					user.put_in_hands(I)
+			var/obj/item/weapon/hatchet/tomahawk/I
+			if(ismetal)
+				I = new /obj/item/weapon/hatchet/tomahawk/metal/drilled(get_turf(src.loc))
 			else
-				if(ismetal)
-					new /obj/item/weapon/hatchet/tomahawk/metal/drilled(get_turf(src.loc))
-				else
-					new /obj/item/weapon/hatchet/tomahawk/drilled(get_turf(src.loc))
+				I = new /obj/item/weapon/hatchet/tomahawk/drilled(get_turf(src.loc))
+			user.put_in_hands(I)
 			qdel(src)
 
 /obj/item/weapon/hatchet/tomahawk/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
