@@ -140,7 +140,8 @@
 				for(var/turf/U in dview(world.view, T, INVISIBILITY_MAXIMUM))
 					if (!U.density)
 						potential_dests.Add(U)
-				set_target(pick(potential_dests))
+				if (potential_dests.len > 0)
+					set_target(pick(potential_dests))
 		if (MEATBLOB_ROAM)
 			update_speed = 5
 			if ((target_dist < 2) || (time_spent >= max_roam_duration))//we've reached or destination or won't be able to reach it, let's rest a moment
