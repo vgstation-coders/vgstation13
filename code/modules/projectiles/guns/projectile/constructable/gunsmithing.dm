@@ -824,8 +824,7 @@
 	if(cannon_assembly)
 		return
 	to_chat(usr, "You remove the barrel from \the [src].")
-	var/obj/item/weapon/gun_barrel/I = new (get_turf(usr))
-	usr.put_in_hands(I)
+	usr.put_in_hands(new /obj/item/weapon/gun_barrel(get_turf(usr)))
 	if (!base_wheelchair)
 		base_wheelchair = new (get_turf(src.loc))
 	else
@@ -892,9 +891,7 @@
 /obj/item/spring/attackby(var/obj/item/I, mob/user)
 	if((istype(I, /obj/item/clothing/shoes)) && (user.drop_item(I)))
 		playsound(src,'sound/effects/spring.ogg', 50,1)
-		var/obj/item/weapon/windup_assembly/W = new /obj/item/weapon/windup_assembly(get_turf(src))
-		user.before_take_item(src)
-		user.put_in_hands(W)
+		user.put_in_hands(new /obj/item/weapon/windup_assembly(get_turf(src)))
 		if(prob(10))
 			to_chat(user,"<span  class='notice'>You put some spring in your step.</span>")
 		else
@@ -935,9 +932,7 @@
 			if(istype(K, /obj/item/toy/crayon) && user.drop_item(K,src))
 				playsound(src,'sound/misc/balloon_twist_short.ogg', 25,1)
 				to_chat(user,"<span  class='notice'>You write B for boot.</span>")
-				var/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox/B = new (get_turf(user))
-				qdel(src)
-				user.put_in_hands(B)
+				user.put_in_hands(new /obj/item/weapon/gun/hookshot/whip/windup_box/bootbox(get_turf(src)))
 
 
 
