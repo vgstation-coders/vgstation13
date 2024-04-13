@@ -220,7 +220,7 @@
 	if(held_items[index])
 		return 0
 
-	if(!Adjacent(W) && W.loc && !W.arcanetampered)
+	if(!Adjacent(W) && isatom(W.loc) && !W.arcanetampered)
 		return 0
 
 	if((W.flags & MUSTTWOHAND) && !(M_STRONG in mutations))
@@ -261,7 +261,7 @@
 		return 1
 	if(put_in_inactive_hand(W))
 		return 1
-	W.forceMove(W.loc ? get_turf(W) : get_turf(src))
+	W.forceMove(isatom(W.loc) ? get_turf(W) : get_turf(src))
 	W.reset_plane_and_layer()
 	W.dropped()
 	return 0
