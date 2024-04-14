@@ -268,7 +268,7 @@
 
 //Helper proc tied to above for creating something in-hand via construction
 /mob/proc/create_in_hands(var/obj/item/olditem, var/obj/item/newitem, var/obj/item/using, var/must_hold = TRUE)
-	if(olditem.loc == src && must_hold)
+	if(olditem.loc == src || !must_hold)
 		drop_item(olditem, force_drop = 1) // Necessary to show up in the same hand for below
 		. = put_in_hands(newitem)
 	qdel(olditem)
