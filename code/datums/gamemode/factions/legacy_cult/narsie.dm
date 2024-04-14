@@ -534,7 +534,6 @@ var/global/mr_clean_targets = list(
 	if (cult && (src == cult.narsie))
 		message_admins("BLOODCULT: Nar-Sie Has Risen.")
 		log_admin("BLOODCULT: Nar-Sie Has Risen.")
-		ticker.StopThematic()
 		flick("narsie_spawn_anim",src)
 		for(var/mob/M in player_list)
 			M.overlay_fullscreen("narsie-rising", /obj/abstract/screen/fullscreen/narsie_rising)

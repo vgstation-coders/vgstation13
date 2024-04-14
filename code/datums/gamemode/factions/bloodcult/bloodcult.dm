@@ -150,6 +150,7 @@
 					to_chat(M, "<span class='sinister'>Lastly it seems that the toll of the ritual on your body hasn't gone away. Going unnoticed will be a lot harder.</span>")
 		if (BLOODCULT_STAGE_NARSIE)
 			if (bloodstone)
+				ticker.StopThematic()//music stops, then resumes from Nar-Sie.
 				for (var/mob/M in player_list)
 					M.playsound_local(get_turf(M), 'sound/effects/tear_reality.ogg', 100, 0)
 				anim(target = bloodstone.loc, a_icon = 'icons/obj/narsie.dmi', flick_anim = "narsie_spawn_anim_start", offX = -236 * PIXEL_MULTIPLIER, offY = -256 * PIXEL_MULTIPLIER, plane = NARSIE_PLANE)
