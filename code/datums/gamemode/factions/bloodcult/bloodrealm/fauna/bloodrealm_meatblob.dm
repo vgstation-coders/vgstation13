@@ -713,6 +713,9 @@
 	get_hit(dam,user)
 	..()
 
+/obj/meat_blob/cultify()
+	return
+
 //explosions
 /obj/meat_blob/ex_act(severity)
 	switch(severity)

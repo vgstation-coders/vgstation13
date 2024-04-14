@@ -512,6 +512,9 @@
 			C.gain_devotion(30, DEVOTION_TIER_2, "attack_ritualknife_nomind", target)
 	..()
 
+/obj/item/weapon/kitchen/utensil/knife/large/ritual/cultify()
+	return
+
 /*
  * Butcher's cleaver
  */

@@ -32,9 +32,9 @@
 
 	var/particle_type = particle_string_to_type[particle_string]
 	var/obj/abstract/particles_holder/new_holder = new
-	new_holder.special_setup(particle_string)
 	new_holder.main_holder = src
 	new_holder.particles = new particle_type
+	new_holder.special_setup()
 	particle_systems[particle_string] = new_holder
 	add_to_vis(particle_systems[particle_string])
 
@@ -134,32 +134,15 @@
 	var/atom/main_holder
 
 /obj/abstract/particles_holder/proc/special_setup(var/particle_string)
-	switch(particle_string)
-		if (PS_TEAR_REALITY)
-			plane = NOIR_BLOOD_PLANE
-		if (PS_CANDLE)
-			appearance_flags = RESET_COLOR
-			blend_mode = BLEND_ADD
-			plane = ABOVE_LIGHTING_PLANE
-		if (PS_CANDLE2)
-			appearance_flags = RESET_COLOR
-			blend_mode = BLEND_ADD
-			plane = ABOVE_LIGHTING_PLANE
-		if (PS_CULT_GAUGE)
-			plane = HUD_PLANE
-			layer = MIND_UI_BUTTON+0.5
-		if (PS_CULT_SMOKE)
-			plane = FLOAT_PLANE
-		if (PS_CULT_SMOKE2)
-			plane = FLOAT_PLANE
-		if (PS_CULT_HALO)
-			plane = ABOVE_LIGHTING_PLANE
-		if (PS_NARSIEHASRISEN1)
-			plane = ABOVE_HUD_PLANE
-		if (PS_NARSIEHASRISEN2)
-			plane = ABOVE_HUD_PLANE
-		if (PS_NARSIEHASRISEN3)
-			plane = ABOVE_HUD_PLANE
+	if (particles.plane)
+		plane = particles.plane
+	if (particles.appearance_flags)
+		appearance_flags = particles.appearance_flags
+	if (particles.blend_mode)
+		blend_mode = particles.blend_mode
+	layer = particles.layer
+	pixel_x = particles.pixel_x
+	pixel_y = particles.pixel_y
 
 //////////////////////////////////////PARTICLES///////////////////////////////////
 
@@ -178,6 +161,14 @@ var/list/particle_string_to_type = list(
 	PS_NARSIEHASRISEN2 = /particles/narsie_has_risen/next,
 	PS_NARSIEHASRISEN3 = /particles/narsie_has_risen/last,
 	)
+
+/particles
+	var/plane = 0
+	var/layer = 0
+	var/pixel_x = 0
+	var/pixel_y = 0
+	var/appearance_flags = 0
+	var/blend_mode = 0
 
 //STEAM
 /particles/steam
@@ -216,6 +207,7 @@ var/list/particle_string_to_type = list(
 	grow = list(0.05, 0.05)
 	rotation = generator("num", 0,360)
 
+	plane = NOIR_BLOOD_PLANE
 
 //CANDLE
 /particles/candle
@@ -233,6 +225,10 @@ var/list/particle_string_to_type = list(
 	friction = 0.3
 	drift = generator("box", list(-0.2,-0.2), list(0.2,0.2))
 
+	appearance_flags = RESET_COLOR
+	blend_mode = BLEND_ADD
+	plane = ABOVE_LIGHTING_PLANE
+
 /particles/candle_alt
 	width = 32
 	height = 64
@@ -248,6 +244,9 @@ var/list/particle_string_to_type = list(
 	friction = 0.3
 	drift = generator("sphere", 0, 1)
 
+	appearance_flags = RESET_COLOR
+	blend_mode = BLEND_ADD
+	plane = ABOVE_LIGHTING_PLANE
 
 //CULT GAUGE
 /particles/cult_gauge
@@ -262,6 +261,9 @@ var/list/particle_string_to_type = list(
 	icon_state = "blood_gauge"
 	position = generator("box", list(-16,-1), list(-16,-14))
 	velocity = list(0,0)
+
+	plane = HUD_PLANE
+	layer = MIND_UI_BUTTON+0.5
 
 //CULT SMOKE
 /particles/cult_smoke
@@ -283,6 +285,8 @@ var/list/particle_string_to_type = list(
 	drift = generator("box", list(0.1,0), list(0.2,0))
 	rotation = generator("num", 0,360)
 
+	plane = FLOAT_PLANE
+
 /particles/cult_smoke/alt
 	velocity = generator("box", list(1,4), list(2,4))
 	drift = generator("box", list(-0.1,0), list(-0.2,0))
@@ -293,6 +297,7 @@ var/list/particle_string_to_type = list(
 	velocity = list(0,4)
 	drift = generator("box", list(-0.2,0), list(0.2,0))
 
+	plane = FLOAT_PLANE
 
 //CULT HALO
 /particles/cult_halo
@@ -309,6 +314,7 @@ var/list/particle_string_to_type = list(
 	position = list(0,8)
 	drift = generator("box", list(-0.02,-0.02), list(0.02,0.02))
 
+	plane = ABOVE_LIGHTING_PLANE
 
 //SPACE RUNES
 /particles/space_runes
@@ -339,8 +345,14 @@ var/list/particle_string_to_type = list(
 	icon_state = "narsie"
 	drift = generator("box", list(-0.05,-0.05), list(0.05,0.05))
 
+	plane = ABOVE_HUD_PLANE
+
 /particles/narsie_has_risen/next
 	icon_state = "has"
 
+	plane = ABOVE_HUD_PLANE
+
 /particles/narsie_has_risen/last
 	icon_state = "risen"
+
+	plane = ABOVE_HUD_PLANE
