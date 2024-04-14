@@ -534,13 +534,7 @@
 			if(W.is_screwdriver(user))
 				to_chat(user, "You tighten the igniter to \the [src].")
 				W.playtoolsound(src, 50)
-				if(src.loc == user)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/blunderbuss/I = new (get_turf(user))
-					user.put_in_hands(I)
-				else
-					new /obj/item/weapon/blunderbuss(get_turf(src.loc))
-				qdel(src)
+				user.create_in_hands(src, new /obj/item/weapon/blunderbuss(get_turf(src.loc)))
 //BLUNDERBUSS END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //RAILGUN BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -586,13 +580,7 @@
 			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s triggering mechanism.")
 				W.playtoolsound(src, 50)
-				if(src.loc == user)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/gun/projectile/railgun/I = new (get_turf(user))
-					user.put_in_hands(I)
-				else
-					new /obj/item/weapon/gun/projectile/railgun(get_turf(src.loc))
-				qdel(src)
+				user.create_in_hands(src, new /obj/item/weapon/gun/projectile/railgun(get_turf(src.loc)))
 //RAILGUN END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //REVIALVER BEGIN//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -611,14 +599,7 @@
 				return
 			if(istype(W, /obj/item/device/label_roll))
 				to_chat(user, "You wrap \the [W] around the middle of the metal rod on \the [src].")
-				if(src.loc == user)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/gun/projectile/revialver/I = new (get_turf(user))
-					user.put_in_hands(I)
-				else
-					new /obj/item/weapon/gun/projectile/revialver(get_turf(src.loc))
-				qdel(W)
-				qdel(src)
+				user.create_in_hands(src, new /obj/item/weapon/gun/projectile/revialver(get_turf(src.loc)), W)
 //REVIALVER END////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //BLAST CANNON BEGIN///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -628,13 +609,7 @@
 				to_chat(user, "You begin welding the bent pipe to \the [src].")
 				if(WT.do_weld(user, src, 30))
 					to_chat(user, "You weld the bent pipe to \the [src].")
-					if(src.loc == user)
-						user.drop_item(src, force_drop = 1)
-						var/obj/item/weapon/gun/projectile/blastcannon/I = new (get_turf(user))
-						user.put_in_hands(I)
-					else
-						new /obj/item/weapon/gun/projectile/blastcannon(get_turf(src.loc))
-					qdel(src)
+					user.create_in_hands(src, new /obj/item/weapon/gun/projectile/blastcannon(get_turf(src.loc)))
 //BLAST CANNON END/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //SUBSPACE TUNNELER BEGIN//////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -673,14 +648,7 @@
 		if("subspacetunneler_assembly")
 			if(istype(W, /obj/item/weapon/stock_parts/subspace/crystal))
 				to_chat(user, "You place \the [W] into the prongs of the subspace ansible on \the [src].")
-				if(src.loc == user)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/subspacetunneler/I = new (get_turf(user))
-					user.put_in_hands(I)
-				else
-					new /obj/item/weapon/subspacetunneler(get_turf(src.loc))
-				qdel(W)
-				qdel(src)
+				user.create_in_hands(src, new /obj/item/weapon/subspacetunneler(get_turf(src.loc)), W)
 //SUBSPACE TUNNELER END////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //LASERMUSKET BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -705,13 +673,7 @@
 			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s triggering mechanism.")
 				W.playtoolsound(src, 50)
-				if(src.loc == user)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/gun/energy/lasmusket/I = new (get_turf(user))
-					user.put_in_hands(I)
-				else
-					new /obj/item/weapon/gun/energy/lasmusket(get_turf(src.loc))
-				qdel(src)
+				user.create_in_hands(src, new /obj/item/weapon/gun/energy/lasmusket(get_turf(src.loc)))
 //LASERMUSKET END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -773,23 +735,10 @@
 			to_chat(user, "You begin welding the blade to \the [src].")
 			if(WT.do_weld(user, src, 30, 0))
 				to_chat(user, "You weld the blade to \the [src].")
-				if(src.loc == user)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/hatchet/tomahawk/metal/I = new (get_turf(user))
-					user.put_in_hands(I)
-				else
-					new /obj/item/weapon/hatchet/tomahawk/metal(get_turf(src.loc))
-				qdel(src)
+				user.create_in_hands(src, new /obj/item/weapon/hatchet/tomahawk/metal(get_turf(src.loc)))
 	else if(istype(W, /obj/item/weapon/shard))
 		to_chat(user, "You fasten \the [W] to \the [src].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/hatchet/tomahawk/I = new (get_turf(user))
-			user.put_in_hands(I)
-		else
-			new /obj/item/weapon/hatchet/tomahawk(get_turf(src.loc))
-		qdel(src)
-		qdel(W)
+		user.create_in_hands(src, new /obj/item/weapon/hatchet/tomahawk(get_turf(src.loc)), W)
 	if(istype(W, /obj/item/weapon/metal_blade))
 		to_chat(user, "You loosely fasten \the [W] to \the [src].")
 		metal_assembly = 1
