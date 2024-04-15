@@ -108,8 +108,7 @@
 			to_chat(user, "You don't have enough cable to make a grip for \the [src].")
 			return
 		to_chat(user, "You wrap cable around the base of \the [src], creating a grip.")
-		C.use(5)
-		user.create_in_hands(src,new /obj/item/weapon/sword/weaponcraft(get_turf(src.loc)))
+		user.create_in_hands(src,new /obj/item/weapon/sword/weaponcraft(get_turf(src.loc)), C, 5)
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You begin welding the metal blades together.")

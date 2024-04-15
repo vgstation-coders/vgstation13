@@ -50,14 +50,14 @@
 
 /obj/item/clothing/mask/morphing/attackby(obj/item/weapon/W, mob/user)
 	if(!target_type)
-		var/obj/item/clothing/mask/morphing/T
+		var/chosen_type
 		for(var/i in skin_to_mask)
 			if(istype(W, i))
-				var/chosen_type = skin_to_mask[i]
-				T = new chosen_type(get_turf(src))
+				chosen_type = skin_to_mask[i]
+				break
 		if(T)
 			to_chat(user, "<span class='notice'>You wrap \the [W] around \the [src].</span>")
-			user.create_in_hands(src,T,W)
+			user.create_in_hands(src,new chosen_type(get_turf(src)),W)
 
 /obj/item/clothing/mask/morphing/proc/toggle_cursed()
 	cursed = !cursed
