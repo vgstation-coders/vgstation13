@@ -123,7 +123,6 @@
 /obj/item/weapon/gun/energy/lasmusket/proc/remove_cell(var/mob/user)
 	if(!loadedcell)
 		return
-	loadedcell.forceMove(user.loc)
 	user.put_in_hands(loadedcell)
 	to_chat(user, "You remove \the [loadedcell] from \the [src].")
 	loadedcell = null
@@ -132,7 +131,6 @@
 /obj/item/weapon/gun/energy/lasmusket/proc/remove_lens(var/mob/user)
 	if(!loadedassembly)
 		return
-	loadedassembly.forceMove(user.loc)
 	user.put_in_hands(loadedassembly)
 	to_chat(user, "You remove \the [loadedassembly] from the barrel of \the [src].")
 	loadedassembly = null
