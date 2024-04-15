@@ -653,7 +653,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	if(screen!=3.2)
 		options += "<A href='?src=\ref[src];menu=3.2'>Material Storage</A>"
 	if(screen!=3.4)
-		options += "<A href='?src=\ref[src];menu=3.4'>Production Queue</A> ([linked_lathe.queue.len])"
+		options += "<A href='?src=\ref[src];menu=3.4'>Production Queue ([linked_lathe.queue.len])</A>"
 	return {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A>
 	<div class="header">[options]<A href='?src=\ref[src];toggleAutoRefresh=1'>Auto-Refresh: [autorefresh ? "ON" : "OFF"]</A></div>"}
 
@@ -666,7 +666,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	if(screen!=4.2)
 		options += "<A href='?src=\ref[src];menu=4.2'>Chemical Storage</A>"
 	if(screen!=4.4)
-		options += "<A href='?src=\ref[src];menu=4.4'>Production Queue</A> ([linked_imprinter.queue.len])"
+		options += "<A href='?src=\ref[src];menu=4.4'>Production Queue ([linked_imprinter.queue.len])</A>"
 	return {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A>
 	<div class=\"header\">[options]<A href='?src=\ref[src];toggleAutoRefresh=1'>Auto-Refresh: [autorefresh ? "ON" : "OFF"]</A></div>"}
 
@@ -888,8 +888,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += protolathe_header()+{"<h1>Protolathe Construction Menu</h1>"}
 			dat += "Filter: "
 			for(var/name_set in linked_lathe.part_sets)
-				dat += "<a href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' [(name_set in filtered["protolathe"]) ? "" : "class='linkOn'"]>[name_set]</a> "
-			dat += "<a href='?src=\ref[src];toggleAllCategories=1;machine=["protolathe"]' style='color: #ffffff'>Filter All</a>"
+				dat += "<a href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' [(name_set in filtered["protolathe"]) ? "class='redBackground'" : ""]>[name_set]</a> "
+			dat += "<a href='?src=\ref[src];toggleAllCategories=1;machine=["protolathe"]'>Filter All</a>"
 
 			for(var/name_set in linked_lathe.part_sets)
 				if(name_set in filtered["protolathe"])
@@ -898,7 +898,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				for(var/datum/design/D in files.known_designs)
 					if(!(D.build_type & PROTOLATHE) || D.category != name_set)
 						continue
-					var/temp_dat = "[D.name] [linked_lathe.output_part_cost(D)]"
+					var/temp_dat = "[D.name] ([linked_lathe.output_part_cost(D)])"
 					var/upTo=20
 					for(var/M in D.materials)
 						var/num_units_avail=linked_lathe.check_mat(D,M)
@@ -910,12 +910,12 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						dat += {"<li>
 							<A href='?src=\ref[src];build=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
 						if(upTo>=5)
-							dat += "<A href='?src=\ref[src];build=[D.id];n=5'>(&times;5)</A>"
+							dat += "<A href='?src=\ref[src];build=[D.id];n=5'>&times;5</A>"
 						if(upTo>=10)
-							dat += "<A href='?src=\ref[src];build=[D.id];n=10'>(&times;10)</A>"
+							dat += "<A href='?src=\ref[src];build=[D.id];n=10'>&times;10</A>"
 						if(upTo>=20)
-							dat += "<A href='?src=\ref[src];build=[D.id];n=20'>(&times;20)</A>"
-						dat += "<A href='?src=\ref[src];build=[D.id];customamt=1'>(Custom)</A>"
+							dat += "<A href='?src=\ref[src];build=[D.id];n=20'>&times;20</A>"
+						dat += "<A href='?src=\ref[src];build=[D.id];customamt=1'>Custom</A>"
 						dat += "</li>"
 					else
 						dat += "<li>[temp_dat]</li>"
@@ -964,9 +964,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
 			dat += "<br><A href='?src=\ref[src];clearQ=1;device=protolathe'>Remove All Queued Items</A><br />"
 			if(linked_lathe.stopped)
-				dat += "<A href='?src=\ref[src];setProtolatheStopped=0' style='color:#00ff00'>Start Production</A>"
+				dat += "<A href='?src=\ref[src];setProtolatheStopped=0' class='linkOn'>Start Production</A>"
 			else
-				dat += "<A href='?src=\ref[src];setProtolatheStopped=1' style='color:red'>Stop Production</A>"
+				dat += "<A href='?src=\ref[src];setProtolatheStopped=1' class='redBackground'>Stop Production</A>"
 
 		///////////////////CIRCUIT IMPRINTER SCREENS////////////////////
 		if(4.0)
@@ -981,8 +981,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				<b>Chemical Volume:</b> [linked_imprinter.get_total_volume()] units<BR>"}
 			dat += "Filter: "
 			for(var/name_set in linked_imprinter.part_sets)
-				dat += "<a href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' [(name_set in filtered["imprinter"]) ? "" : "class='linkOn'"]>[name_set]</a> "
-			dat += "<a href='?src=\ref[src];toggleAllCategories=1;machine=["imprinter"]' style='color: #ffffff'>Filter All</a><BR>"
+				dat += "<a href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' [(name_set in filtered["imprinter"]) ? "class='redBackground'" : ""]>[name_set]</a> "
+			dat += "<a href='?src=\ref[src];toggleAllCategories=1;machine=["imprinter"]'>Filter All</a><BR>"
 
 			for(var/name_set in linked_imprinter.part_sets)
 				if(name_set in filtered["imprinter"])
@@ -991,7 +991,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				for(var/datum/design/D in files.known_designs)
 					if(!(D.build_type & IMPRINTER) || D.category != name_set)
 						continue
-					var/temp_dat = "[D.name] [linked_imprinter.output_part_cost(D)]"
+					var/temp_dat = "[D.name] ([linked_imprinter.output_part_cost(D)])"
 					var/upTo=10
 					for(var/M in D.materials)
 						var/num_units_avail=linked_imprinter.check_mat(D,M)
@@ -1002,10 +1002,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					if (upTo)
 						dat += {"<li><A href='?src=\ref[src];imprint=[D.id];n=1;now=1'>[temp_dat]</A> Queue: "}
 						if(upTo>=5)
-							dat += "<A href='?src=\ref[src];imprint=[D.id];n=5'>(&times;5)</A>"
+							dat += "<A href='?src=\ref[src];imprint=[D.id];n=5'>&times;5</A>"
 						if(upTo>=10)
-							dat += "<A href='?src=\ref[src];imprint=[D.id];n=10'>(&times;10)</A>"
-						dat += "<A href='?src=\ref[src];imprint=[D.id];customamt=1'>(Custom)</A>"
+							dat += "<A href='?src=\ref[src];imprint=[D.id];n=10'>&times;10</A>"
+						dat += "<A href='?src=\ref[src];imprint=[D.id];customamt=1'>Custom</A>"
 						dat += "</li>"
 					else
 						dat += "<li>[temp_dat]</li>"
@@ -1081,9 +1081,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 			dat += "<br><A href='?src=\ref[src];clearQ=1;device=imprinter'>Remove All Queued Items</A><br />"
 			if(linked_imprinter.stopped)
-				dat += "<A href='?src=\ref[src];setImprinterStopped=0' style='color:#00ff00'>Start Production</A>"
+				dat += "<A href='?src=\ref[src];setImprinterStopped=0' class='linkOn'>Start Production</A>"
 			else
-				dat += "<A href='?src=\ref[src];setImprinterStopped=1' style='color:red'>Stop Production</A>"
+				dat += "<A href='?src=\ref[src];setImprinterStopped=1' class='redBackground'>Stop Production</A>"
 
 	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "\ref[src]", name, 575, 400)
