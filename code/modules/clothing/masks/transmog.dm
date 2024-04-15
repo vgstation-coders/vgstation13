@@ -55,7 +55,7 @@
 			if(istype(W, i))
 				chosen_type = skin_to_mask[i]
 				break
-		if(T)
+		if(chosen_type)
 			to_chat(user, "<span class='notice'>You wrap \the [W] around \the [src].</span>")
 			user.create_in_hands(src,new chosen_type(get_turf(src)),W)
 
