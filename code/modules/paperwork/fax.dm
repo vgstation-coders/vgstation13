@@ -178,7 +178,9 @@ var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 
 	if(href_list["scan"])
 		if (scan)
-			usr.put_in_hands(scan)
+			scan.forceMove(src.loc)
+			if(ishuman(usr) && !usr.get_active_hand())
+				usr.put_in_hands(scan)
 			scan = null
 		else
 			var/obj/item/I = usr.get_active_hand()
