@@ -888,7 +888,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += protolathe_header()+{"<h1>Protolathe Construction Menu</h1>"}
 			dat += "Filter: "
 			for(var/name_set in linked_lathe.part_sets)
-				dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' style='color: [name_set in filtered["protolathe"] ? "" : "class='linkOn'"]'>[name_set]</a> "
+				dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' [name_set in filtered["protolathe"] ? "" : "class='linkOn'"]>[name_set]</a> "
 			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["protolathe"]' style='color: #ffffff'>Filter All</a>"
 
 			for(var/name_set in linked_lathe.part_sets)
@@ -981,7 +981,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				<b>Chemical Volume:</b> [linked_imprinter.get_total_volume()] units<BR>"}
 			dat += "Filter: "
 			for(var/name_set in linked_imprinter.part_sets)
-				dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' [name_set in filtered["imprinter"] ? "" : "class='linkOn'"]'>[name_set]</a> "
+				dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' [name_set in filtered["imprinter"] ? "" : "class='linkOn'"]>[name_set]</a> "
 			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["imprinter"]' style='color: #ffffff'>Filter All</a><BR>"
 
 			for(var/name_set in linked_imprinter.part_sets)
