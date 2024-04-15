@@ -888,8 +888,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += protolathe_header()+{"<h1>Protolathe Construction Menu</h1>"}
 			dat += "Filter: "
 			for(var/name_set in linked_lathe.part_sets)
-				dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' [name_set in filtered["protolathe"] ? "" : "class='linkOn'"]>[name_set]</a> "
-			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["protolathe"]' style='color: #ffffff'>Filter All</a>"
+				dat += "<a href='?src=\ref[src];toggleCategory=[name_set];machine=["protolathe"]' [(name_set in filtered["protolathe"]) ? "" : "class='linkOn'"]>[name_set]</a> "
+			dat += "<a href='?src=\ref[src];toggleAllCategories=1;machine=["protolathe"]' style='color: #ffffff'>Filter All</a>"
 
 			for(var/name_set in linked_lathe.part_sets)
 				if(name_set in filtered["protolathe"])
@@ -981,8 +981,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				<b>Chemical Volume:</b> [linked_imprinter.get_total_volume()] units<BR>"}
 			dat += "Filter: "
 			for(var/name_set in linked_imprinter.part_sets)
-				dat += "<A href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' [name_set in filtered["imprinter"] ? "" : "class='linkOn'"]>[name_set]</a> "
-			dat += "<A href='?src=\ref[src];toggleAllCategories=1;machine=["imprinter"]' style='color: #ffffff'>Filter All</a><BR>"
+				dat += "<a href='?src=\ref[src];toggleCategory=[name_set];machine=["imprinter"]' [(name_set in filtered["imprinter"]) ? "" : "class='linkOn'"]>[name_set]</a> "
+			dat += "<a href='?src=\ref[src];toggleAllCategories=1;machine=["imprinter"]' style='color: #ffffff'>Filter All</a><BR>"
 
 			for(var/name_set in linked_imprinter.part_sets)
 				if(name_set in filtered["imprinter"])
@@ -1027,7 +1027,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				else
 					dat += "<em>(Empty)</em><BR>"
 				dat += "<BR>"
-			dat += "<A href='?src=\ref[src];disposeallI=1'><U>Disposal All Chemicals in Storage</U></A><BR>"
+			dat += "<A href='?src=\ref[src];disposeallI=1'>Disposal All Chemicals in Storage</A><BR>"
 
 		if(4.3)
 
