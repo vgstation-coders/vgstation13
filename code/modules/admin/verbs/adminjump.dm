@@ -18,9 +18,10 @@
 		var/list/backup_turfs = list()
 		for(var/turf/T in A)
 			if(!T.density)
-				backup_turfs.Add(T)
 				if(!T.has_dense_content())
 					turfs.Add(T)
+				else
+					backup_turfs.Add(T)
 
 		var/turf/T = pick_n_take(turfs)
 		if(!T)
