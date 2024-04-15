@@ -57,15 +57,7 @@
 				T = new chosen_type(get_turf(src))
 		if(T)
 			to_chat(user, "<span class='notice'>You wrap \the [W] around \the [src].</span>")
-			if(istype(W, /obj/item/stack/sheet/animalhide))
-				var/obj/item/stack/sheet/animalhide/A = W
-				A.use(1)
-			else
-				qdel(W)
-			if(loc == user)
-				user.drop_item(src, force_drop = 1)
-				user.put_in_hands(T)
-			qdel(src)
+			user.create_in_hands(src,T,W)
 
 /obj/item/clothing/mask/morphing/proc/toggle_cursed()
 	cursed = !cursed

@@ -40,9 +40,7 @@
 	add_fingerprint(user)
 
 	if(stat & (FORCEDISABLE | NOPOWER | BROKEN) && id) //Power out/this thing is broken, but at least allow the guy to take his ID out if it's still in there.
-		id.forceMove(get_turf(src))
 		user.put_in_hands(id)
-
 		to_chat(user, "<span class='notify'>You pry the ID card out of \the [src]</span>")
 		id = null
 
@@ -161,9 +159,7 @@
 		if(!id)
 			return
 
-		id.forceMove(get_turf(src))
-		if(usr.Adjacent(src))
-			usr.put_in_hands(id)
+		usr.put_in_hands(id)
 		id = null
 		updateUsrDialog()
 		return 1
