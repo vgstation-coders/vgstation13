@@ -29,6 +29,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	light_range_on = 1
 	light_power_on = 2
 	use_auto_lights = 1
+	submerging = 1
 
 /obj/machinery/atmospherics/unary/cryo_cell/splashable()
 	return FALSE
@@ -394,29 +395,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		occupant.pixel_y = 20
 
 		if(src.on && !running_bob_animation) //no bobbing if off
-			var/up = 0 //used to see if we are going up or down, 1 is down, 2 is up
+			//var/up = 0 //used to see if we are going up or down, 1 is down, 2 is up
 			spawn(0) // Without this, the icon update will block. The new thread will die once the occupant leaves.
 				running_bob_animation = 1
 				while(src.on && occupant) // Just to make sure bobing stops if cryo goes off with a patient inside.
 					overlays.len = 0 //have to remove the overlays first
-
-					switch(occupant.pixel_y) //this looks messy as fuck but it works, switch won't call itself twice
-
-						if(21) //inbetween state, for smoothness
-							switch(up) //this is set later in the switch, to keep track of where the mob is supposed to go
-								if(2) //2 is up
-									occupant.pixel_y = 22 //set to highest
-
-								if(1) //1 is down
-									occupant.pixel_y = 20 //set to lowest
-
-						if(20) //mob is at it's lowest
-							occupant.pixel_y = 21 //set to inbetween
-							up = 2 //have to go up
-
-						if(22) //mob is at it's highest
-							occupant.pixel_y = 21 //set to inbetween
-							up = 1 //have to go down
 
 					if(occupant.stat == DEAD || !occupant.has_brain())
 						overlays += "moverlay_dead"
@@ -447,6 +430,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 						overlays += "nomix"
 
 					sleep(7) //don't want to jiggle violently, just slowly bob
+					// now handled in submerge_anim(), just didn't wanna remove this cus it would mess with the update time people are used to
 				running_bob_animation = 0
 
 	if (on && (beaker == null || beaker.reagents.total_volume == 0))
@@ -626,6 +610,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		add_fingerprint(user)
 	M.stop_pulling()
 	M.forceMove(src)
+	M.submerge_anim()
 	M.reset_view()
 	if(M.health > -100 && (M.health < 0 || M.sleeping))
 		to_chat(M, "<span class='bnotice'>You feel a cold liquid surround you. Your skin starts to freeze up.</span>")
