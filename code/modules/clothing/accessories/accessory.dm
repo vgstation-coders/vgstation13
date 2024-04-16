@@ -95,7 +95,7 @@
 /obj/item/clothing/generate_accessory_overlays(mutable_appearance/accessory_overlay_final)
 	if(accessories.len)
 		for(var/obj/item/clothing/accessory/accessory in accessories)
-			var/mutable_appearance/accessory_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', null,"[accessory._color || accessory.icon_state]")
+			var/mutable_appearance/accessory_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[accessory._color || accessory.icon_state]")
 			accessory_overlay.color = accessory.color
 			for(var/part in accessory.dyed_parts)
 				var/list/dye_data = accessory.dyed_parts[part]
@@ -106,7 +106,7 @@
 				if (!_state)
 					_state = accessory.icon_state
 
-				var/mutable_appearance/worn_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', null, "[_state]-[part]", alpha = dye_alpha, appearance_flags = RESET_COLOR)
+				var/mutable_appearance/worn_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[_state]-[part]", alpha = dye_alpha, appearance_flags = RESET_COLOR)
 				worn_overlay.color = dye_color
 				accessory_overlay.overlays += worn_overlay
 			accessory_overlay_final.overlays += accessory_overlay
