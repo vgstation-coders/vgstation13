@@ -226,7 +226,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	data["isOperating"] = on
 	data["ejecting"] 	= ejecting
 	data["hasOccupant"] = occupant ? 1 : 0
-	data["hasContent"] = get_floaters() ? 1 : 0
+	data["hasContents"] = get_floaters() ? 1 : 0
 
 	var/occupantData[0]
 	if (occupant)
