@@ -62,6 +62,12 @@ var/global/list/ghdel_profiling = list()
 	var/image/moody_light
 	var/list/moody_lights = list()
 
+/atom/Entered(var/atom/movable/Obj, var/atom/OldLoc)
+	. = ..()
+
+	if(submerging)
+		Obj.submerge_anim()
+
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
 		last_beamchecks = list()
