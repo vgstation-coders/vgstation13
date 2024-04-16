@@ -364,7 +364,7 @@
 
 	var/icon/res = get_base_photo_icon()
 
-	var/icon/img = getFlatIconDeluxe(sorted_data, center, (photo_size-1)/2)
+	var/icon/img = getFlatIconDeluxe(sorted_data, center, (photo_size-1)/2, large_canvas = TRUE)
 	res.Blend(img,ICON_OVERLAY)
 
 	return res
@@ -868,7 +868,6 @@
 	result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(L)), override_dir = NORTH),  "", dir = NORTH)
 	result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(L)), override_dir = EAST),  "", dir = EAST)
 	result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(L)), override_dir = WEST),  "", dir = WEST)
-	result.Crop(1,1,32,32)
 	return result
 
 /obj/machinery/photobooth/proc/print_photo(var/mob/living/L)
