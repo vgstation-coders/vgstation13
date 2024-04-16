@@ -16,6 +16,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/on = 0
 	var/ejecting = 0
 	var/temperature_archived
+	var/obj/effect/cryo_overlay/glass = null
 	var/mob/living/occupant = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 
@@ -68,6 +69,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(beaker)
 		detach()
 		//beaker.loc = get_step(loc, SOUTH) //Beaker is carefully ejected from the wreckage of the cryotube
+	QDEL_NULL(glass)
 	..()
 
 /obj/machinery/atmospherics/unary/cryo_cell/MouseDropTo(atom/movable/O as mob|obj, mob/user as mob)
@@ -91,7 +93,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/mob/user = usr
 	if(!user.canMouseDrag())
 		return
-	if(!occupant)
+	var/list/floaters = contents - beaker
+	if(!floaters.len)
 		to_chat(usr, "<span class='warning'>\The [src] is unoccupied!</span>")
 		return
 	if(panel_open)
@@ -112,7 +115,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			if((A == src) || istype(A, /mob))
 				continue
 			return
-	visible_message("[usr] starts to remove [occupant.name] from \the [src].")
+	visible_message("[usr] starts to remove [counted_english_list(floaters)] from \the [src].")
 	go_out(over_location, ejector = usr)
 
 /obj/machinery/atmospherics/unary/cryo_cell/process()
@@ -164,15 +167,22 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(contents.len)
 			to_chat(user, "You can just about make out some properties of the cryo's murky depths:")
 			var/count = 0
-			for(var/atom/movable/floater in (contents - beaker))
+			var/list/stuff = list()
+			for(var/atom/movable/floater in ((contents - beaker) - occupant))
 				if (isobserver(floater))
 					count++
 				else
-					to_chat(user, "A figure floats in the depths, they appear to be [floater.name]")
+					stuff += floater
+
+			if(occupant)
+				to_chat(user, "A figure floats in the depths, they appear to be [occupant]")
 
 			if (count)
 				// Let's just assume you can only have observers if there's a mob too.
 				to_chat(user, "<i>...[count] shape\s float behind them...</i>")
+
+			if(stuff.len)
+				to_chat(user, "Miscellaneous contents float in the depths, it appears to be [counted_english_list(stuff)]")
 
 			if(beaker)
 				to_chat(user, "A beaker, releasing the following chemicals into the fluids:")
@@ -353,21 +363,35 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 /obj/machinery/atmospherics/unary/cryo_cell/update_icon()
 	handle_update_icon()
 
+/obj/effect/cryo_overlay
+	plane = EFFECTS_PLANE
+	layer = BELOW_PROJECTILE_LAYER
+	icon = 'icons/obj/cryogenics.dmi'
+	icon_state = "lid0"
+
 /obj/machinery/atmospherics/unary/cryo_cell/proc/handle_update_icon() //making another proc to avoid spam in update_icon
 	overlays.Cut()
+	vis_contents.Cut()
+
+	if(!glass)
+		glass = new
+
+	glass.icon_state = "lid[on]"
+	vis_contents += glass
+
 	if(!panel_open)
 		icon_state = "pod[on]"
 
-	if(!src.occupant)
-		overlays += "lid[on]" //if no occupant, just put the lid overlay on, and ignore the rest
+	var/list/floaters = contents - beaker
+	for(var/atom/movable/floater in (floaters - occupant))
+		if (!isobserver(floater))
+			vis_contents += floater
+			floater.pixel_y = rand(8,32)
 
 	if(occupant)
-		var/image/pickle = image(occupant.icon, occupant.icon_state)
-		pickle.overlays = occupant.overlays
-		pickle.pixel_y = 20
+		vis_contents += occupant
+		occupant.pixel_y = 20
 
-		overlays += pickle
-		overlays += "lid[on]"
 		if(src.on && !running_bob_animation) //no bobbing if off
 			var/up = 0 //used to see if we are going up or down, 1 is down, 2 is up
 			spawn(0) // Without this, the icon update will block. The new thread will die once the occupant leaves.
@@ -375,27 +399,23 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 				while(src.on && occupant) // Just to make sure bobing stops if cryo goes off with a patient inside.
 					overlays.len = 0 //have to remove the overlays first
 
-					switch(pickle.pixel_y) //this looks messy as fuck but it works, switch won't call itself twice
+					switch(occupant.pixel_y) //this looks messy as fuck but it works, switch won't call itself twice
 
 						if(21) //inbetween state, for smoothness
 							switch(up) //this is set later in the switch, to keep track of where the mob is supposed to go
 								if(2) //2 is up
-									pickle.pixel_y = 22 //set to highest
+									occupant.pixel_y = 22 //set to highest
 
 								if(1) //1 is down
-									pickle.pixel_y = 20 //set to lowest
+									occupant.pixel_y = 20 //set to lowest
 
 						if(20) //mob is at it's lowest
-							pickle.pixel_y = 21 //set to inbetween
+							occupant.pixel_y = 21 //set to inbetween
 							up = 2 //have to go up
 
 						if(22) //mob is at it's highest
-							pickle.pixel_y = 21 //set to inbetween
+							occupant.pixel_y = 21 //set to inbetween
 							up = 1 //have to go down
-
-					pickle.overlays = occupant.overlays // We sync
-					overlays += pickle //re-add the mob to the icon
-					overlays += "lid[on]" //re-add the overlay of the pod, they are inside it, not floating
 
 					if(occupant.stat == DEAD || !occupant.has_brain())
 						overlays += "moverlay_dead"
@@ -508,11 +528,12 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	..()
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit, var/ejector)
-	if(!occupant || ejecting)
+	var/list/floaters = contents - beaker
+	if(!floaters.len || ejecting)
 		return 0
 	if(!exit)
 		exit = output_turf()
-	if (occupant.bodytemperature > T0C+31)
+	if (!occupant || occupant.bodytemperature > T0C+31)
 		boot_contents(exit, FALSE, ejector) //No temperature regulation cycle required
 	else
 		ejecting = 1
@@ -531,12 +552,14 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if((x in component_parts) || (x == src.beaker))
 			continue
 		x.forceMove(get_step(loc, SOUTH))//to avoid PLAAAAANES issues with our cryo cell
+		x.pixel_y = initial(x.pixel_y)
 	if(occupant)
 		if(exit == src.loc)
 			occupant.forceMove(get_step(loc, SOUTH))	//this doesn't account for walls or anything, but i don't forsee that being a problem.
 		else
 			occupant.forceMove(exit)
 		occupant.reset_view()
+		occupant.pixel_y = initial(occupant.pixel_y)
 		if (regulatetemp && occupant.bodytemperature < T0C+34.5)
 			occupant.bodytemperature = T0C+34.5 //just a little bit chilly still
 		if(istype(ejector) && ejector != occupant)
