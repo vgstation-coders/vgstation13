@@ -66,7 +66,8 @@ var/global/list/ghdel_profiling = list()
 	. = ..()
 
 	if(submerging && (!OldLoc || !OldLoc.submerging))
-		Obj.submerge_anim()
+		spawn(rand(0,3))
+			Obj.submerge_anim()
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
