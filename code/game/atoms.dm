@@ -65,7 +65,7 @@ var/global/list/ghdel_profiling = list()
 /atom/Entered(var/atom/movable/Obj, var/atom/OldLoc)
 	. = ..()
 
-	if(submerging)
+	if(submerging && (!OldLoc || !OldLoc.submerging))
 		Obj.submerge_anim()
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
