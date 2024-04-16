@@ -66,7 +66,7 @@ var/global/list/ghdel_profiling = list()
 	. = ..()
 
 	if(submerging && (!OldLoc || !OldLoc.submerging))
-		spawn(rand(0,13))
+		spawn(rand(0,6))
 			if(submerging && (!OldLoc || !OldLoc.submerging))
 				Obj.submerge_anim()
 
