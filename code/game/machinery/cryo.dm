@@ -87,6 +87,11 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return
 	put_mob(L, user)
 
+/obj/machinery/atmospherics/unary/cryo_cell/proc/get_floaters()
+	var/list/floaters = contents - beaker
+	if(floaters.len)
+		return floaters
+	return 0
 
 /obj/machinery/atmospherics/unary/cryo_cell/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
 	if(!ishigherbeing(usr) && !isrobot(usr) || occupant == usr || usr.incapacitated() || usr.lying)
@@ -94,8 +99,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/mob/user = usr
 	if(!user.canMouseDrag())
 		return
-	var/list/floaters = contents - beaker
-	if(!floaters.len)
+	var/list/floaters = get_floaters()
+	if(!floaters || !floaters.len)
 		to_chat(usr, "<span class='warning'>\The [src] is unoccupied!</span>")
 		return
 	if(panel_open)
@@ -220,7 +225,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	var/data[0]
 	data["isOperating"] = on
 	data["ejecting"] 	= ejecting
-	data["hasOccupant"] = occupant ? 1 : 0
+	data["hasOccupant"] = get_floaters() ? 1 : 0
 
 	var/occupantData[0]
 	if (occupant)
@@ -306,7 +311,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			detach()
 
 	if(href_list["ejectOccupant"])
-		if(!occupant || isslime(usr) || ispAI(usr))
+		if(!get_floaters() || isslime(usr) || ispAI(usr))
 			return 0 // don't update UIs attached to this object
 		go_out(ejector = usr)
 
@@ -383,8 +388,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(!panel_open)
 		icon_state = "pod[on]"
 
-	var/list/floaters = contents - beaker
-	for(var/atom/movable/floater in (floaters - occupant))
+	for(var/atom/movable/floater in get_floaters())
 		if (!isobserver(floater))
 			vis_contents += floater
 			floater.pixel_y = rand(8,32)
@@ -513,8 +517,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	..()
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit, var/ejector)
-	var/list/floaters = contents - beaker
-	if(!floaters.len || ejecting)
+	if(!get_floaters() || ejecting)
 		return 0
 	if(!exit)
 		exit = output_turf()
