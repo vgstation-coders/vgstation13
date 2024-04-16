@@ -221,7 +221,10 @@ var/static/list/mat2type = list(
 
 /obj/item/device/material_synth/examine(mob/user)
 	..()
-	to_chat(user, "[istype(src, /obj/item/device/material_synth/robot) ? "It's been set to draw power from a power cell." : "It currently holds [matter]/[MAX_MATSYNTH_MATTER] matter-units."]")
+	if(istype(src, /obj/item/device/material_synth/robot))
+		to_chat(user, "It's been set to draw power from a power cell.")
+	else
+		to_chat(user, "It currently holds [matter]/[MAX_MATSYNTH_MATTER] matter-units.")
 
 /obj/item/device/material_synth/attackby(var/obj/O, mob/user)
 	if(istype(O, /obj/item/stack/rcd_ammo))
