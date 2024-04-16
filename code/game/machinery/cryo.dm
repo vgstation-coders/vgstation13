@@ -387,7 +387,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if (!isobserver(floater))
 			vis_contents += floater
 			floater.pixel_y = rand(8,32)
-			floater.pixel_x = rand(1,-1)
+			floater.pixel_x = rand(-1,1)
 
 	if(occupant)
 		vis_contents += occupant
