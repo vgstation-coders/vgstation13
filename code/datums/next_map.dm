@@ -116,7 +116,6 @@
 /datum/next_map/metaclub
 	name = "Meta Club"
 	path = "Metaclub"
-	min_players = 20
 
 /datum/next_map/packed
 	name = "Packed Station"

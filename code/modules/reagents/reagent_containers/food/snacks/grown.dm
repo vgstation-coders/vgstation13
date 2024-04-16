@@ -206,7 +206,7 @@ var/list/special_fruits = list()
 		if(filling_color != "#FFFFFF")
 			S.color = filling_color
 		else
-			S.color = AverageColor(getFlatIcon(src, src.dir, 0), 1, 1)
+			S.color = AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(src)), override_dir = dir), 1, 1)
 		S.name = "[seed.seed_name] smudge"
 	if(seed.biolum && seed.biolum_colour)
 		S.set_light(1, l_color = seed.biolum_colour)

@@ -756,10 +756,12 @@
 	return TRUE
 
 
-/mob/living/carbon/proc/check_can_revive() // doesn't check suicides
+/mob/living/carbon/proc/check_can_revive()
 	if (!isDead())
 		return CAN_REVIVE_NO
 	if (!mind)
+		return CAN_REVIVE_NO
+	if (mind.suiciding)
 		return CAN_REVIVE_NO
 	if (client)
 		return CAN_REVIVE_IN_BODY

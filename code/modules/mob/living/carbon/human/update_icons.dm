@@ -1282,6 +1282,8 @@ var/global/list/damage_icon_parts = list()
 	if(tail_organ.overlap_overlays) // Tail is overlapped by limbs, so we need special tail icon generation
 		// Gives the underlimbs layer SEW directions since it's overlayed by limbs and just about everything else anyway.
 		var/mutable_appearance/tail_underlimbs_overlay = mutable_appearance(tail_file, "[tail_icon_state]_BEHIND", -TAIL_UNDERLIMBS_LAYER)
+		if(species.anatomy_flags & MULTICOLOR)
+			tail_underlimbs_overlay.color = COLOR_MATRIX_ADD(rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b))
 		if(body_alphas.len)
 			tail_underlimbs_overlay.alpha = get_lowest_body_alpha()
 		overlays += overlays_standing[TAIL_UNDERLIMBS_LAYER] = tail_underlimbs_overlay

@@ -39,6 +39,8 @@
 		return
 	if(istype(target,/obj/machinery/autoprocessor/wrapping))
 		return
+	if(issilicon(user) && istype(target.loc,/obj/item/weapon/robot_module))
+		return
 	if(!is_type_in_list(target, cannot_wrap))
 		if(istype(target, /obj/item/weapon/storage))
 			to_chat(user, "<span class='notice'>You start wrapping \the [target] with \the [src].</span>")
@@ -55,6 +57,8 @@
 	if(!istype(target))
 		return
 	if(istype(target,/obj/machinery/autoprocessor/wrapping))
+		return
+	if(issilicon(user) && istype(target.loc,/obj/item/weapon/robot_module))
 		return
 	if(is_type_in_list(target, cannot_wrap))
 		to_chat(user, "<span class='notice'>You can't wrap that.</span>")
