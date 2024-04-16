@@ -980,8 +980,7 @@ var/list/has_died_as_golem = list()
 
 /datum/species/slime/handle_death(var/mob/living/carbon/human/H, gibbed) //Handles any species-specific death events (such as dionaea nymph spawns).
 	H.dropBorers(gibbed)
-	for(var/atom/movable/I in H.contents)
-		I.forceMove(H.loc)
+	H.unequip_everything()
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", sleeptime = 15)
 	if(!gibbed)
 		handle_slime_puddle(H)
