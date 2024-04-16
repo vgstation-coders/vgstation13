@@ -564,7 +564,7 @@
 	if(!anchored)
 		return
 
-	if(istype(O, /obj/item/weapon/mop))
+	if(istype(O, /obj/item/weapon/mop) || istype(O, /obj/item/toy/waterballoon))
 		return
 
 	if (istype(O, /obj/item/weapon/reagent_containers))
