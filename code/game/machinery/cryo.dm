@@ -518,7 +518,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		nanomanager.update_uis(src)
 	..()
 
-/obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/exit, var/ejector)
+/obj/machinery/atmospherics/unary/cryo_cell/proc/go_out(var/turf/exit, var/ejector)
 	if(!get_floaters() || ejecting)
 		return 0
 	if(!exit)
@@ -537,19 +537,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			boot_contents(exit, TRUE, ejector)
 	return 1
 
-/obj/machinery/atmospherics/unary/cryo_cell/proc/boot_contents(var/exit = src.loc, var/regulatetemp = TRUE, var/mob/ejector)
-	var/turf/T = get_turf(exit)
-	if(exit == src.loc || (is_blocked_turf(T) && !(locate(/obj/structure/bed/roller) in T)))
-		var/found = FALSE
-		for(var/dirtocheck in list(SOUTH,SOUTHWEST,SOUTHEAST))
-			T = get_step(src.loc, dirtocheck) //to avoid PLAAAAANES issues with our cryo cell
-			if(!is_blocked_turf(T) || (locate(/obj/structure/bed/roller) in T))
-				found = TRUE
-				break
-		if(!found)
-			T = get_turf(src.loc) // all else fails, do this
+/obj/machinery/atmospherics/unary/cryo_cell/proc/boot_contents(var/turf/exit = src.loc, var/regulatetemp = TRUE, var/mob/ejector)
+	exit = check_output(exit)
 	for (var/atom/movable/x in get_floaters())
-		x.forceMove(T)
+		x.forceMove(exit)
 		x.pixel_y = initial(x.pixel_y)
 	unlock_atoms()	// do this after so mob comes out on right turf with no pixel_y issues
 	if(occupant)
@@ -717,10 +708,16 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	add_fingerprint(user)
 
 /obj/machinery/atmospherics/unary/cryo_cell/get_output()
-	var/turf/T = ..()
-	if(is_blocked_turf(T) && !locate(/obj/structure/bed/roller) in T)
-		return get_step(loc, SOUTH)
-	return T
+	return check_output(..())
+
+/obj/machinery/atmospherics/unary/cryo_cell/proc/check_output(var/turf/T)
+	if(T == src.loc || (is_blocked_turf(T) && !(locate(/obj/structure/bed/roller) in T)))
+		for(var/dirtocheck in list(SOUTH,SOUTHWEST,SOUTHEAST))
+			T = get_step(src.loc, dirtocheck) //to avoid PLAAAAANES issues with our cryo cell
+			if(!is_blocked_turf(T) || (locate(/obj/structure/bed/roller) in T))
+				return T
+		return get_turf(src.loc) // all else fails, do this
+	return get_turf(T)
 
 /obj/machinery/atmospherics/unary/cryo_cell/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(isliving(AM))
