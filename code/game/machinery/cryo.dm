@@ -12,6 +12,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	anchored = 1.0
 	layer = ABOVE_WINDOW_LAYER
 	plane = OBJ_PLANE
+	output_dir = SOUTH
 
 	var/on = 0
 	var/ejecting = 0
