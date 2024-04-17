@@ -165,7 +165,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(user.stat)
 		return
 
-	go_out(ejector = usr)
+	go_out(get_step(loc,SOUTH), ejector = usr)
 
 
 /obj/machinery/atmospherics/unary/cryo_cell/examine(mob/user)
