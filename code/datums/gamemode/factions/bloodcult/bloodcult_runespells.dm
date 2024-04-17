@@ -2297,7 +2297,7 @@ var/list/seer_rituals = list()
 				if (L.reagents)
 					L.reagents.del_reagent(HOLYWATER)
 					if (!L.reagents.has_any_reagents(HYPERZINES))
-						L.reagents.add_reagent(HYPERZINE,1)
+						L.reagents.add_reagent(HYPERZINE,1,"no motor mouth")
 		qdel(spell_holder)
 	qdel(src)
 
