@@ -47,11 +47,7 @@
 
 	log_attack("<font color='red'>[key_name(user)] Used the [src.name] to flash [key_name(M)]</font>")
 
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 
 	if(!clown_check(user))
 		return

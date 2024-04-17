@@ -241,22 +241,14 @@ var/list/beam_master = list()
 			firer_mob.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot himself with a <b>[type]</b>"
 			if(firer_mob.key || firer_mob.ckey)
 				msg_admin_attack("[key_name(firer_mob)] shot himself with a [type], [pick("top kek!","for shame.","he definitely meant to do that","probably not the last time either.")] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer_mob.x];Y=[firer_mob.y];Z=[firer_mob.z]'>JMP</a>)")
-			if(!iscarbon(firer_mob))
-				M.LAssailant = null
-			else
-				M.LAssailant = firer_mob
-				M.assaulted_by(firer_mob)
+			M.assaulted_by(firer_mob)
 		else
 			log_attack("<font color='red'>[key_name(firer_mob)] shot [key_name(M)] with a [type]</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			firer_mob.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			if((firer_mob.key || firer_mob.ckey) && (M.key || M.ckey))
 				msg_admin_attack("[key_name(firer_mob)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer_mob.x];Y=[firer_mob.y];Z=[firer_mob.z]'>JMP</a>)")
-			if(!iscarbon(firer_mob))
-				M.LAssailant = null
-			else
-				M.LAssailant = firer_mob
-				M.assaulted_by(firer_mob)
+			M.assaulted_by(firer_mob)
 	else
 		..()
 
@@ -1107,11 +1099,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			firer.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			msg_admin_attack("[key_name(firer)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)") //BS12 EDIT ALG
-			if(!iscarbon(firer))
-				M.LAssailant = null
-			else
-				M.LAssailant = firer
-				M.assaulted_by(firer)
+			M.assaulted_by(firer)
 		else
 			M.attack_log += "\[[time_stamp()]\] <b>UNKNOWN/(no longer exists)</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			msg_admin_attack("UNKNOWN/(no longer exists) shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)") //BS12 EDIT ALG

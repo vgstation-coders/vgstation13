@@ -17,7 +17,6 @@
 	target.grabbed_by += G
 
 	G.synch()
-	target.LAssailant = src
 	target.grabbed_by(src)
 	target.assaulted_by(src)
 
