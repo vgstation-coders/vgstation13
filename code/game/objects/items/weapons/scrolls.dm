@@ -68,7 +68,7 @@
 	smoke.start()
 	var/list/L = list()
 	for(var/turf/T in get_area_turfs(thearea.type))
-		if(!T.density && !T.has_dense_content())
+		if(!is_blocked_turf(T))
 			L+=T
 
 	if(!L.len)
