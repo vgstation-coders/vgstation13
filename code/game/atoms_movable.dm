@@ -291,8 +291,6 @@
 
 	locked_atoms[AM] = category
 	category.lock(AM)
-	if(category.flags & LOCKED_STAY_INSIDE)
-		AM.forceMove(src)
 
 	return TRUE
 
