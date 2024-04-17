@@ -521,7 +521,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(!get_floaters() || ejecting)
 		return 0
 	if(!exit)
-		exit = output_turf()
+		exit = get_output()
 	if (!occupant || occupant.bodytemperature > T0C+31)
 		boot_contents(exit, FALSE, ejector) //No temperature regulation cycle required
 	else
@@ -537,17 +537,17 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	return 1
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/boot_contents(var/exit = src.loc, var/regulatetemp = TRUE, var/mob/ejector)
+	var/turf/T = get_turf(exit)
+	if(exit == src.loc || is_blocked_turf(T))
+		T = get_step(src.loc, SOUTH) //to avoid PLAAAAANES issues with our cryo cell
+		if(is_blocked_turf(T))
+			T = get_turf(src.loc) // all else fails, do this
 	for (var/atom/movable/x in get_floaters())
-		x.forceMove(get_step(loc, SOUTH))//to avoid PLAAAAANES issues with our cryo cell
+		x.forceMove(T)
 		x.pixel_y = initial(x.pixel_y)
 	unlock_atoms()	// do this after so mob comes out on right turf with no pixel_y issues
 	if(occupant)
-		if(exit == src.loc)
-			occupant.forceMove(get_step(loc, SOUTH))	//this doesn't account for walls or anything, but i don't forsee that being a problem.
-		else
-			occupant.forceMove(exit)
 		occupant.reset_view()
-		occupant.pixel_y = initial(occupant.pixel_y)
 		if (regulatetemp && occupant.bodytemperature < T0C+34.5)
 			occupant.bodytemperature = T0C+34.5 //just a little bit chilly still
 		if(istype(ejector) && ejector != occupant)
@@ -710,13 +710,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		detach()
 	add_fingerprint(user)
 
-/obj/machinery/atmospherics/unary/cryo_cell/proc/output_turf()
-	if(!output_dir || !isturf(loc))
-		return loc
-
-	var/turf/T = get_step(get_turf(src), output_dir)
-	if(!T || is_blocked_turf(T))
-		return loc
+/obj/machinery/atmospherics/unary/cryo_cell/get_output()
+	var/turf/T = ..()
+	if(is_blocked_turf(T))
+		return get_step(loc, SOUTH)
 	return T
 
 /obj/machinery/atmospherics/unary/cryo_cell/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
