@@ -177,7 +177,7 @@ var/static/list/mat2type = list(
 			else
 				to_chat(R, "<span class='warning'>Your cell has no charge to use this with!</span>")
 		else
-			to_chat(R, "<span class='warning'>Your need a cell to use this!</span>")
+			to_chat(R, "<span class='warning'>You need a cell to use this!</span>")
 
 /obj/item/device/material_synth/preloaded/admin/create_material(mob/user, var/material)
 	var/obj/item/stack/sheet/material_type = material
