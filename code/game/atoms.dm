@@ -62,7 +62,7 @@ var/global/list/ghdel_profiling = list()
 	var/image/moody_light
 	var/list/moody_lights = list()
 
-/atom/Entered(var/atom/movable/Obj, var/atom/OldLoc)
+/atom/movable/Entered(var/atom/movable/Obj, var/atom/OldLoc)
 	. = ..()
 
 	if(submerging && (!OldLoc || !OldLoc.submerging))
