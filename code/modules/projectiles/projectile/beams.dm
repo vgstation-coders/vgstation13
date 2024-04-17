@@ -215,6 +215,7 @@ var/list/beam_master = list()
 	kill_count = 12
 	var/mob/firer_mob = null
 	var/yellow = 0
+	var/passdense = 0
 
 /obj/item/projectile/beam/lightning/proc/adjustAngle(angle)
 	angle = round(angle) + 45
@@ -349,17 +350,17 @@ var/list/beam_master = list()
 			sleep(2)
 		if(TT == firer.loc)
 			continue
-		if(TT.density)
+		if(TT.density && !passdense)
 			QDEL_NULL(X)
 			break
 		for(var/atom/movable/O in TT)
-			if(!O.Cross(src))
+			if(!O.Cross(src) && !passdense)
 				qdel(X)
 				broke = 1
 				break
 		for(var/mob/living/O in TT.contents)
 			if(istype(O, /mob/living))
-				if(O.density)
+				if(O.density && !passdense)
 					QDEL_NULL(X)
 					broke = 1
 					break
