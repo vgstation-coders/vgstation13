@@ -43,40 +43,41 @@
 
 // Updates the position for AM.
 /datum/locking_category/proc/update_lock(var/atom/movable/AM)
-	var/new_loc = owner.loc
+	if(~flags & LOCKED_STAY_INSIDE)
+		var/new_x = x_offset
+		var/new_y = y_offset
 
-	var/new_x = x_offset
-	var/new_y = y_offset
+		if (rotate_offsets)
+			//The shit below can be done through maths but I've decided to do it a simpler way
+			//Basically, imagine a point with coordinates [x_offset; y_offset]
+			//And that point is rotated around the point [0;0]
+			//Default position is NORTH - 0 degrees
+			//EAST means it's rotated 90 degrees clockwise
+			//SOUTH means it's rotated 180 degrees, and so on
 
-	if (rotate_offsets)
-		//The shit below can be done through maths but I've decided to do it a simpler way
-		//Basically, imagine a point with coordinates [x_offset; y_offset]
-		//And that point is rotated around the point [0;0]
-		//Default position is NORTH - 0 degrees
-		//EAST means it's rotated 90 degrees clockwise
-		//SOUTH means it's rotated 180 degrees, and so on
+			switch (owner.dir)
+				if (NORTH) //up
+					new_x = x_offset
+					new_y = y_offset
+				if (EAST) // right
+					new_x = y_offset
+					new_y = -x_offset
+				if (SOUTH) //down
+					new_x = -x_offset
+					new_y = -y_offset
+				if (WEST) //left
+					new_x = -y_offset
+					new_y = x_offset
 
-		switch (owner.dir)
-			if (NORTH) //up
-				new_x = x_offset
-				new_y = y_offset
-			if (EAST) // right
-				new_x = y_offset
-				new_y = -x_offset
-			if (SOUTH) //down
-				new_x = -x_offset
-				new_y = -y_offset
-			if (WEST) //left
-				new_x = -y_offset
-				new_y = x_offset
+			var/new_loc = owner.loc
+			if ((new_x || new_y) && isturf(new_loc))
+				var/newer_loc = locate(owner.x + new_x, owner.y + new_y, owner.z)
+				if (newer_loc) // Edge (no pun intended) case for map borders.
+					new_loc = newer_loc
 
-
-	if ((new_x || new_y) && isturf(new_loc))
-		var/newer_loc = locate(owner.x + new_x, owner.y + new_y, owner.z)
-		if (newer_loc) // Edge (no pun intended) case for map borders.
-			new_loc = newer_loc
-
-	AM.forceMove(new_loc, owner.step_x, owner.step_y, glide_size_override = owner.glide_size)
+			AM.forceMove(new_loc, owner.step_x, owner.step_y, glide_size_override = owner.glide_size)
+	else if(owner.loc != AM.loc)
+		AM.forceMove(owner)
 
 // Modifies the atom to undo changes in lock().
 /datum/locking_category/proc/unlock(var/atom/movable/AM)

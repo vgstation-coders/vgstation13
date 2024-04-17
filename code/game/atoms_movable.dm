@@ -291,6 +291,8 @@
 
 	locked_atoms[AM] = category
 	category.lock(AM)
+	if(category.flags & LOCKED_STAY_INSIDE)
+		AM.forceMove(src)
 
 	return TRUE
 
@@ -306,9 +308,15 @@
 		M.canmove = 1
 
 	category.unlock(AM)
+	if((category.flags & LOCKED_STAY_INSIDE) && AM.loc == src)
+		AM.forceMove(src.loc)
 	//AM.reset_glide_size() // FIXME: Currently broken.
 
 	return TRUE
+
+/atom/movable/proc/unlock_atoms(var/category, var/subtypes = FALSE)
+	for(var/atom/movable/AM in get_locked(category, subtypes))
+		unlock_atom(AM)
 
 /atom/movable/proc/unlock_from()
 	if(!locked_to)

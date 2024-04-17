@@ -537,11 +537,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	return 1
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/boot_contents(var/exit = src.loc, var/regulatetemp = TRUE, var/mob/ejector)
-	for (var/atom/movable/x in src.contents)
-		if((x in component_parts) || (x == src.beaker))
-			continue
+	for (var/atom/movable/x in get_floaters())
 		x.forceMove(get_step(loc, SOUTH))//to avoid PLAAAAANES issues with our cryo cell
 		x.pixel_y = initial(x.pixel_y)
+	unlock_atoms()	// do this after so mob comes out on right turf with no pixel_y issues
 	if(occupant)
 		if(exit == src.loc)
 			occupant.forceMove(get_step(loc, SOUTH))	//this doesn't account for walls or anything, but i don't forsee that being a problem.
@@ -560,6 +559,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		occupant = null
 	update_icon()
 	nanomanager.update_uis(src)
+
+/datum/locking_category/cryo
+	flags = LOCKED_STAY_INSIDE
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/put_mob(mob/living/M as mob, mob/living/user)
 	if (occupant)
@@ -613,7 +615,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(user)
 		add_fingerprint(user)
 	M.stop_pulling()
-	M.forceMove(src)
+	lock_atom(M,/datum/locking_category/cryo)
 	M.reset_view()
 	if(M.health > -100 && (M.health < 0 || M.sleeping))
 		to_chat(M, "<span class='bnotice'>You feel a cold liquid surround you. Your skin starts to freeze up.</span>")
