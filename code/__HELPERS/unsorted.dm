@@ -497,12 +497,7 @@
 	return 1
 
 /proc/is_blocked_turf(var/turf/T)
-	if(T.density)
-		return 1
-	for(var/atom/A in T)
-		if(A.density)//&&A.anchored
-			return 1
-	return 0
+	return T.density || T.has_dense_content()
 
 //if needs_item is 0 it won't need any item that existed in "holding" to finish
 /proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10, var/needs_item = 1) //This is quite an ugly solution but i refuse to use the old request system.
