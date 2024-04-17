@@ -711,10 +711,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	return check_output(..())
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/check_output(var/turf/T)
-	if(T == src.loc || (is_blocked_turf(T) && !(locate(/obj/structure/bed/roller) in T)))
+	if(T == src.loc || is_blocked_turf(T))
 		for(var/dirtocheck in list(SOUTH,SOUTHWEST,SOUTHEAST))
 			T = get_step(src.loc, dirtocheck) //to avoid PLAAAAANES issues with our cryo cell
-			if(!is_blocked_turf(T) || (locate(/obj/structure/bed/roller) in T))
+			if(!is_blocked_turf(T))
 				return T
 		return get_turf(src.loc) // all else fails, do this
 	return get_turf(T)
