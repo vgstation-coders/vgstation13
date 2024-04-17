@@ -43,7 +43,7 @@
 
 // Updates the position for AM.
 /datum/locking_category/proc/update_lock(var/atom/movable/AM)
-	if(!(flags & LOCKED_STAY_INSIDE))
+	if(~flags & LOCKED_STAY_INSIDE)
 		var/new_x = x_offset
 		var/new_y = y_offset
 
