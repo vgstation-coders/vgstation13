@@ -157,7 +157,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	return 0
 
 
-/obj/machinery/atmospherics/unary/cryo_cell/relaymove(mob/user as mob)
+/obj/machinery/atmospherics/unary/cryo_cell/relaymove(mob/user as mob, direction)
 	// Just gonna assume this guy's vent crawling don't mind me.
 	if (user != occupant)
 		return ..()
@@ -165,7 +165,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(user.stat)
 		return
 
-	go_out(get_step(loc,SOUTH), ejector = usr)
+	go_out(get_step(loc,direction), ejector = usr)
 
 
 /obj/machinery/atmospherics/unary/cryo_cell/examine(mob/user)
@@ -539,9 +539,14 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/boot_contents(var/exit = src.loc, var/regulatetemp = TRUE, var/mob/ejector)
 	var/turf/T = get_turf(exit)
-	if(exit == src.loc || is_blocked_turf(T))
-		T = get_step(src.loc, SOUTH) //to avoid PLAAAAANES issues with our cryo cell
-		if(is_blocked_turf(T))
+	if(exit == src.loc || (is_blocked_turf(T) && !(locate(/obj/structure/bed/roller) in T)))
+		var/found = FALSE
+		for(var/dirtocheck in list(SOUTH,SOUTHWEST,SOUTHEAST))
+			T = get_step(src.loc, dirtocheck) //to avoid PLAAAAANES issues with our cryo cell
+			if(!is_blocked_turf(T) || (locate(/obj/structure/bed/roller) in T))
+				found = TRUE
+				break
+		if(!found)
 			T = get_turf(src.loc) // all else fails, do this
 	for (var/atom/movable/x in get_floaters())
 		x.forceMove(T)
@@ -713,7 +718,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 /obj/machinery/atmospherics/unary/cryo_cell/get_output()
 	var/turf/T = ..()
-	if(is_blocked_turf(T))
+	if(is_blocked_turf(T) && !locate(/obj/structure/bed/roller) in T)
 		return get_step(loc, SOUTH)
 	return T
 
