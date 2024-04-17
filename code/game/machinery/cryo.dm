@@ -615,7 +615,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(user)
 		add_fingerprint(user)
 	M.stop_pulling()
-	lock_atom(M,/datum/locking_category/cryo)
+	lock_atom(M,/datum/locking_category/cryo) // puts the mob inside with this category
 	M.reset_view()
 	if(M.health > -100 && (M.health < 0 || M.sleeping))
 		to_chat(M, "<span class='bnotice'>You feel a cold liquid surround you. Your skin starts to freeze up.</span>")
