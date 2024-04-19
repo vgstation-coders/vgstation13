@@ -284,7 +284,7 @@ var/list/whitelist_name_diacritics_min = list(
  * Text modification
  */
 
-//Adds 'u' number of zeros ahead of the text 't'
+//example: add_zero(217, 6) = "000217"
 /proc/add_zero(_string, beforeZeroes)
 	var/string = "[_string]"
 	while (length(string) < beforeZeroes)

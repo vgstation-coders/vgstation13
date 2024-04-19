@@ -287,12 +287,7 @@
 	offset_y = -92
 
 /obj/abstract/mind_ui_element/hoverable/bloodcult_devotion_counter/solo/CanAppear()
-	var/mob/living/M = GetUser()
-	if (iscarbon(M))
-		return FALSE
-	else if (istype(M, /mob/living/simple_animal/construct/builder/perfect))
-		return FALSE
-	return TRUE
+	return !(..())//cultists get that one if they're neither carbon type nor artificers
 
 //////////////////////
 
@@ -332,10 +327,7 @@
 /obj/abstract/mind_ui_element/hoverable/bloodcult_spell/pool/UpdateIcon(var/appear = FALSE)
 	var/mob/living/M = GetUser()
 	var/datum/role/cultist/C = iscultist(M)
-	if (C.blood_pool)
-		icon_state = "power_pool"
-	else
-		icon_state = "power_pool_off"
+	icon_state = "power_pool[C.blood_pool ? "" : "_off"]"
 	base_icon_state = icon_state
 
 	var/pool_current = 0

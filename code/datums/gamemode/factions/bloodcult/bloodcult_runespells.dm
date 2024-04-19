@@ -2636,8 +2636,7 @@ var/list/seer_rituals = list()
 	to_chat(activator, "<span class='notice'>This rune will now let you travel through the \"[network]\" Path.</span>")
 
 	var/datum/role/cultist/C = iscultist(activator)
-	if (C)
-		C.gain_devotion(30, DEVOTION_TIER_1, "new_path_entrance", R)
+	C?.gain_devotion(30, DEVOTION_TIER_1, "new_path_entrance", R)
 
 	if ((HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]") in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"]
@@ -2773,8 +2772,7 @@ var/list/bloodcult_exitportals = list()
 	to_chat(activator, "<span class='notice'>This rune will now serve as a destination for the \"[network]\" Path.</span>")
 
 	var/datum/role/cultist/C = iscultist(activator)
-	if (C)
-		C.gain_devotion(30, DEVOTION_TIER_1, "new_path_exit", R)
+	C?.gain_devotion(30, DEVOTION_TIER_1, "new_path_exit", R)
 
 	if ((HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]") in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"]

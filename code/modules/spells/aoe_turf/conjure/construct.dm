@@ -37,8 +37,7 @@
 
 /spell/aoe_turf/conjure/construct/lesser/on_creation(atom/movable/AM, mob/user)
 	var/datum/role/cultist/C = iscultist(user)
-	if (C)
-		C.gain_devotion(50, DEVOTION_TIER_2, "conjure_shell", AM)
+	C?.gain_devotion(50, DEVOTION_TIER_2, "conjure_shell", AM)
 
 /spell/aoe_turf/conjure/floor
 	name = "Conjure Floor"
@@ -80,8 +79,7 @@
 
 /spell/aoe_turf/conjure/floor/on_creation(atom/movable/AM, mob/user)
 	var/datum/role/cultist/C = iscultist(user)
-	if (C)
-		C.gain_devotion(10, DEVOTION_TIER_1, "convert_floor", AM)
+	C?.gain_devotion(10, DEVOTION_TIER_1, "convert_floor", AM)
 
 /spell/aoe_turf/conjure/wall
 	name = "Conjure Wall"
@@ -123,8 +121,7 @@
 
 /spell/aoe_turf/conjure/wall/on_creation(atom/movable/AM, mob/user)
 	var/datum/role/cultist/C = iscultist(user)
-	if (C)
-		C.gain_devotion(10, DEVOTION_TIER_1, "convert_wall", AM)
+	C?.gain_devotion(10, DEVOTION_TIER_1, "convert_wall", AM)
 
 /spell/aoe_turf/conjure/door
 	name = "Conjure Door"
@@ -154,8 +151,7 @@
 
 /spell/aoe_turf/conjure/door/on_creation(atom/movable/AM, mob/user)
 	var/datum/role/cultist/C = iscultist(user)
-	if (C)
-		C.gain_devotion(10, DEVOTION_TIER_1, "summon_door", AM)
+	C?.gain_devotion(10, DEVOTION_TIER_1, "summon_door", AM)
 
 /spell/aoe_turf/conjure/wall/reinforced//what?
 	name = "Greater Construction"
@@ -197,8 +193,7 @@
 
 /spell/aoe_turf/conjure/soulstone/on_creation(atom/movable/AM, mob/user)
 	var/datum/role/cultist/C = iscultist(user)
-	if (C)
-		C.gain_devotion(20, DEVOTION_TIER_2, "conjure_soulstone", AM)
+	C?.gain_devotion(20, DEVOTION_TIER_2, "conjure_soulstone", AM)
 
 /spell/aoe_turf/conjure/pylon
 	name = "Conjure Pylon"
@@ -220,8 +215,7 @@
 
 /spell/aoe_turf/conjure/pylon/on_creation(atom/movable/AM, mob/user)
 	var/datum/role/cultist/C = iscultist(user)
-	if (C)
-		C.gain_devotion(10, DEVOTION_TIER_1,"raise_structure","Pylon")
+	C?.gain_devotion(10, DEVOTION_TIER_1,"raise_structure","Pylon")
 
 /spell/aoe_turf/conjure/pylon/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
 	if(!delay_animation)
@@ -401,8 +395,7 @@
 		builder.DisplayUI("Cultist Right Panel")
 
 	var/datum/role/cultist/C = iscultist(user)
-	if (C)
-		C.gain_devotion(40, DEVOTION_TIER_2,"summon_hex",AM)
+	C?.gain_devotion(40, DEVOTION_TIER_2,"summon_hex",AM)
 
 /spell/aoe_turf/conjure/struct
 	name = "Conjure Structure"
@@ -459,8 +452,7 @@
 
 /spell/aoe_turf/conjure/struct/on_creation(atom/movable/AM, mob/user)
 	var/datum/role/cultist/C = iscultist(user)
-	if (C)
-		C.gain_devotion(10, DEVOTION_TIER_1,"raise_structure",structure)
+	C?.gain_devotion(10, DEVOTION_TIER_1,"raise_structure",structure)
 
 /spell/aoe_turf/conjure/path_entrance
 	name = "Path Entrance"
@@ -500,8 +492,7 @@
 	R.trigger(user)
 
 	var/datum/role/cultist/C = iscultist(user)
-	if (C)
-		C.gain_devotion(30, DEVOTION_TIER_1, "new_path_entrance", R)
+	C?.gain_devotion(30, DEVOTION_TIER_1, "new_path_entrance", R)
 
 /spell/aoe_turf/conjure/path_exit
 	name = "Path Exit"
@@ -541,8 +532,7 @@
 	R.trigger(user)
 
 	var/datum/role/cultist/C = iscultist(user)
-	if (C)
-		C.gain_devotion(30, DEVOTION_TIER_1, "new_path_exit", R)
+	C?.gain_devotion(30, DEVOTION_TIER_1, "new_path_exit", R)
 
 
 /obj/effect/artificer_underlay

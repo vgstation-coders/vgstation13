@@ -881,6 +881,9 @@ var/bloodstone_backup = 0
 
 ///////////////////////////////////DANCE PLATEFORMS////////////////////////////////////
 //Tear Reality rune uses those
+
+var/list/dance_platform_prisoners = list()
+
 /obj/effect/cult_ritual/dance_platform
 	anchored = 1
 	icon = 'icons/obj/cult.dmi'
@@ -985,7 +988,12 @@ var/bloodstone_backup = 0
 						I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
 						I.layer = NARSIE_GLOW
 						overlays += I
-						to_chat(C, "<span class='danger'>Dark tentacles emerge from the rune and trap your legs in place. You'll need to remove those cuffs or get some help if you are to escape this circle.</span>")
+						var/mob_ref = "\ref[C]"
+						if (!(mob_ref in dance_platform_prisoners))//prevents chat spamming by dragging the prisoner across all the dance platforms
+							dance_platform_prisoners += mob_ref
+							to_chat(C, "<span class='danger'>Dark tentacles emerge from the rune and trap your legs in place. The occult bindings on your arms seem to react to them. You will need to resist out of those or get some outside help if you are to escape this circle.</span>")
+							spawn(20 SECONDS)
+								dance_platform_prisoners -= mob_ref
 						source.dancer_check(C)
 						return TRUE
 		else if (isshade(mover) || isconstruct(mover))
@@ -1258,8 +1266,7 @@ var/bloodstone_backup = 0
 
 /obj/effect/cult_ritual/tear_spawners/gateway_spawner/New(turf/loc, var/datum/rune_spell/tearreality/_source)
 	..()
-	if (source)
-		source.gateway_spawners += src
+	source?.gateway_spawners += src
 
 	for(var/direc in cardinal)
 		var/turf/T = get_step(src, direc)

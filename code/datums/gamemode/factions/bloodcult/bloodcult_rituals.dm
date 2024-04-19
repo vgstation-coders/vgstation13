@@ -61,8 +61,7 @@ var/list/bloodcult_personal_rituals = list(
 	return TRUE
 
 /datum/bloodcult_ritual/proc/complete()
-	if (owner)
-		owner.gain_devotion(reward_achiever, DEVOTION_TIER_4)//no key, duh
+	owner?.gain_devotion(reward_achiever, DEVOTION_TIER_4)//no key, duh
 	if (reward_faction)
 		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		for(var/datum/role/cultist/C in cult.members)

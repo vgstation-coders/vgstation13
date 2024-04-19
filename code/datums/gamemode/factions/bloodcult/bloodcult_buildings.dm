@@ -963,17 +963,11 @@ var/list/cult_spires = list()
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (cult)
 		switch(cult.stage)
+			if (BLOODCULT_STAGE_MISSED, BLOODCULT_STAGE_DEFEATED)
+				stage = 1
 			if (BLOODCULT_STAGE_NORMAL)
 				stage = 2
-			if (BLOODCULT_STAGE_READY)
-				stage = 3
-			if (BLOODCULT_STAGE_MISSED)
-				stage = 1
-			if (BLOODCULT_STAGE_ECLIPSE)
-				stage = 3
-			if (BLOODCULT_STAGE_DEFEATED)
-				stage = 1
-			if (BLOODCULT_STAGE_NARSIE)
+			if (BLOODCULT_STAGE_READY, BLOODCULT_STAGE_ECLIPSE, BLOODCULT_STAGE_NARSIE)
 				stage = 3
 	flick("spire[stage]-spawn",src)
 	spawn(10)
@@ -1571,15 +1565,13 @@ var/list/cult_spires = list()
 	safe_space()
 	overlays_pre()
 	explosion_sound(TR)
-	if (TR)
-		TR.pillar_update(1)
+	TR?.pillar_update(1)
 
 	spawn(10)
 		pillars = list()
 		icon_state = "bloodstone-enter2"
 		explosion_sound(TR)
-		if (TR)
-			TR.pillar_update(2)
+		TR?.pillar_update(2)
 		var/turf/T1 = locate(x-2,y-2,z)
 		pillars += new /obj/structure/cult/pillar(T1)
 		var/turf/T2 = locate(x+2,y-2,z)
@@ -1591,8 +1583,7 @@ var/list/cult_spires = list()
 		sleep(10)
 		icon_state = "bloodstone-enter3"
 		explosion_sound(TR)
-		if (TR)
-			TR.pillar_update(3)
+		TR?.pillar_update(3)
 		for (var/obj/structure/cult/pillar/P in pillars)
 			P.update_icon()
 		sleep(10)
@@ -1619,8 +1610,7 @@ var/list/cult_spires = list()
 		spawn()
 			cult.stage(BLOODCULT_STAGE_DEFEATED)
 	for (var/obj/effect/rune/R in src)
-		if (R.active_spell)
-			R.active_spell.abort()
+		R.active_spell?.abort()
 	..()
 
 /obj/structure/cult/bloodstone/attack_construct(var/mob/user)

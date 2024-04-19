@@ -628,7 +628,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/eclipse_end
 	name = "Eclipse Ends"
 	alert_title = "Solar Eclipse Ends"
-	message = "The moon has left along its path. Anomalous electromagnetic behaviour has come to an end."
+	message = "The moon has fully cleared the local star. Anomalous electromagnetic behavior has come to an end."
 
 /datum/command_alert/eclipse_too_long
 	name = "Eclipse Is Lasting Too Long"
@@ -638,7 +638,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/eclipse_bloodstone
 	name = "Bloodstone has Risen"
 	alert_title = "Cult Activity Detected"
-	message = "Patterns suggest an incursion by the Cult of Nar-Sie, which means a Blood Stone has been raised. Find and destroy it at all costs or this station will be lost. Be careful of the eldritch entities that accompany them."
+	message = "Bluespace fluctuation patterns match those observed during past incursions by the Cult of Nar-Sie, which means a Blood Stone has risen. Find and destroy it at all costs or this station will be lost. Be careful of the eldritch entities that may manifest across the station."
 
 /datum/command_alert/eclipse_bloodstone_broken
 	name = "Bloodstone is Broken"
