@@ -137,21 +137,21 @@ var/static/list/ALL_LIMBS = list(LIMB_HEAD,LIMB_CHEST,LIMB_GROIN,
 /proc/haircolordesc(v_hair)
 	switch(v_hair)
 		if("Green")
-			return "1"
+			return 1
 		if("Azure")
-			return "2"
+			return 2
 		if("Brown")
-			return "3"
+			return 3
 		if("Emerald")
-			return "4"
+			return 4
 		if("Gray")
-			return "5"
+			return 5
 		if("Light Green")
-			return "6"
+			return 6
 		if("Green-Brown")
-			return "7"
+			return 7
 		else
-			return "7"
+			return 7
 
 /proc/age2agedescription(age)
 	switch(age)
