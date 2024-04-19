@@ -412,7 +412,9 @@ Subject's pulse: ??? BPM"})
 						class = "bad"
 			message += "<br><span class='[class]'>[gas.name]: [round(moles, 0.1)] mol, [round(concentration*100)]%</span>"
 
-		message += "<br>[human_standard && !IsInRange(scanned.temperature, BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [round(scanned.temperature,0.1)]K ([round(scanned.temperature-T0C)]&deg;C)"
+		var/kelvinTemperatureDisplay = scanned.temperature_kelvin_pretty()
+		var/celsiusTemperatureDisplay = scanned.temperature_celsius_pretty()
+		message += "<br>[human_standard && !IsInRange(scanned.temperature, BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [kelvinTemperatureDisplay]K ([celsiusTemperatureDisplay]&deg;C)"
 		message += "<br><span class='notice'>Heat capacity: [round(scanned.heat_capacity(), 0.01)]</span>"
 	else
 		message += "<br><span class='warning'>No gasses detected[container && !istype(container, /turf) ? " in \the [container]." : ""]!</span>"
@@ -535,12 +537,12 @@ Subject's pulse: ??? BPM"})
 		if(O.reagents.reagent_list.len)
 			for(var/datum/reagent/R in O.reagents.reagent_list)
 				var/reagent_percent = (R.volume/O.reagents.total_volume)*100
-				dat += "<br><span class='notice'>[R][details ? " ([R.volume] units, [reagent_percent]%, time in system: [R.real_tick*2] seconds" : ""]</span>"
+				dat += "<br><span class='notice'>[R][details ? " ([R.volume] units, [reagent_percent]%[ismob(O) ? ", time in system: [R.real_tick*2] seconds" : ""])" : ""]</span>"
 		if (istype (O, /obj/item/weapon/reagent_containers/food/snacks))
 			var/obj/item/weapon/reagent_containers/food/snacks/S = O
 			if(S.dip && S.dip.reagent_list.len > 0)
 				for (var/datum/reagent/R in S.dip.reagent_list)
-					dat += "<br><span class='notice'>[R][details ? " (trace amounts, time in system: [R.real_tick*2] seconds" : ""]</span>"
+					dat += "<br><span class='notice'>[R][details ? " (trace amounts)" : ""]</span>"
 		if(dat)
 			to_chat(user, "<span class='notice'>Chemicals found in \the [O]:[dat]</span>")
 		else

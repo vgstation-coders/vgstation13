@@ -35,6 +35,8 @@
 	melee_damage_lower = 0
 	melee_damage_upper = 0											//Handled in unarmed_attack_mob() anyways
 	pass_flags = PASSDOOR //| PASSMOB									//Stops the message spam
+	ranged = TRUE
+	ranged_cooldown_cap = 5
 
 	//VARS
 	var/charge = 1000												//Charge stored
@@ -58,7 +60,8 @@
 	var/obj/machinery/power/current_power							// Current power machine we're in
 	var/mob/living/silicon/robot/current_robot						// Currently controlled robot
 	var/obj/machinery/bot/current_bot								// Currently controlled bot
-	var/obj/item/weapon/current_weapon								// Current gun we're controlling
+	var/obj/item/weapon/gun/current_weapon							// Current gun we're controlling
+	var/datum/action/pd_leave_item/PLI
 
 	//LISTS
 	var/list/image/cables_shown = list()							// In cable views
@@ -79,15 +82,39 @@
 		forceMove(current_power)
 	set_light(1.5,2,"#bbbb00")
 	add_spell(new /spell/pulse_demon/abilities, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
-	add_spell(new /spell/pulse_demon/toggle_drain, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
+	var/datum/action/pd_toggle_drain/PTD = new(src)
+	PTD.Grant(src)
+	PLI = new(src)
 	for(var/pd_spell in getAllPulseDemonSpells())
 		var/spell/S = new pd_spell
-		if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/abilities && S.type != /spell/pulse_demon/toggle_drain)
+		if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/abilities)
 			possible_spells += S
 	for(var/pd_upgrade in subtypesof(/datum/pulse_demon_upgrade))
 		var/datum/pulse_demon_upgrade/PDU = new pd_upgrade(src)
 		possible_upgrades += PDU
 	playsound(get_turf(src),'sound/effects/eleczap.ogg',50,1)
+
+/mob/living/simple_animal/hostile/pulse_demon/maxedout // For testing it, maybe other fun reasons too
+	charge = INFINITY
+	maxcharge = INFINITY
+	health_drain_rate = 1
+	health_regen_rate = INFINITY
+	amount_per_regen = 1
+	charge_absorb_amount = INFINITY
+//	max_can_absorb = INFINITY
+	takeover_time = 1
+	move_divide = 1
+
+/mob/living/simple_animal/hostile/pulse_demon/maxedout/New()
+	..()
+	for(var/spell/S in possible_spells)
+		add_spell(S, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
+		while(S.can_improve(Sp_POWER))
+			S.empower_spell()
+		while(S.can_improve(Sp_SPEED))
+			S.quicken_spell()
+		possible_spells -= S
+	QDEL_LIST_CUT(possible_upgrades)
 
 /mob/living/simple_animal/hostile/pulse_demon/update_perception()
 	// So we can see in maint better
@@ -413,6 +440,17 @@
 // We don't do these
 /mob/living/simple_animal/hostile/pulse_demon/RangedAttack(atom/A)
 	return
+
+// Cable zapping mobs
+/mob/living/simple_animal/hostile/pulse_demon/OpenFire(atom/ttarget)
+	var/turf/T = get_turf(ttarget)
+	if(T)
+		if((ttarget in view(world.view, src)) && ((locate(/obj/structure/cable) in T.contents) || istype(target,/obj/structure/cable)))
+			var/obj/structure/cable/cable = locate() in T
+			var/datum/powernet/PN = cable.get_powernet()
+			if(PN) // We need actual power in the cable powernet to move
+				if(PN.avail)
+					zaptocable(T)
 
 // Common function for all
 /mob/living/simple_animal/hostile/pulse_demon/proc/shockMob(mob/living/carbon/human/M as mob, var/siemens_coeff = 1)

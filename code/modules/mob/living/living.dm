@@ -123,15 +123,15 @@
 			G.overlays = 0
 			if(istype(G.mind.current, /mob/living/carbon/human/))
 				var/mob/living/carbon/human/H = G.mind.current
-				G.overlays += H.obj_overlays[ID_LAYER]
-				G.overlays += H.obj_overlays[EARS_LAYER]
-				G.overlays += H.obj_overlays[SUIT_LAYER]
-				G.overlays += H.obj_overlays[GLASSES_LAYER]
-				G.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-				G.overlays += H.obj_overlays[BELT_LAYER]
-				G.overlays += H.obj_overlays[BACK_LAYER]
-				G.overlays += H.obj_overlays[HEAD_LAYER]
-				G.overlays += H.obj_overlays[HANDCUFF_LAYER]
+				G.overlays += H.overlays_standing[ID_LAYER]
+				G.overlays += H.overlays_standing[EARS_LAYER]
+				G.overlays += H.overlays_standing[SUIT_LAYER]
+				G.overlays += H.overlays_standing[GLASSES_LAYER]
+				G.overlays += H.overlays_standing[GLASSES_OVER_HAIR_LAYER]
+				G.overlays += H.overlays_standing[BELT_LAYER]
+				G.overlays += H.overlays_standing[BACK_LAYER]
+				G.overlays += H.overlays_standing[HEAD_LAYER]
+				G.overlays += H.overlays_standing[HANDCUFF_LAYER]
 			G.invisibility = 0
 			to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
 		spawn(1)
@@ -1342,7 +1342,6 @@ Thanks.
 				now_pushing = 0
 				return
 
-			tmob.LAssailant = src
 			tmob.assaulted_by(src, TRUE)
 
 		now_pushing = 0
@@ -1536,11 +1535,7 @@ Thanks.
 				usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
 
 				log_attack("<font color='red'>[usr.name] ([usr.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				if(!iscarbon(usr))
-					M.LAssailant = null
-				else
-					M.LAssailant = usr
-					M.assaulted_by(usr)
+				M.assaulted_by(usr)
 				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null

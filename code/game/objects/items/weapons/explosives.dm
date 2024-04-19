@@ -92,11 +92,7 @@
 				user.visible_message("<span class='warning'>[user] found \himself unable to drop \the [src] after setting the timer on them!</span>")
 
 			playsound(target, 'sound/weapons/c4armed.ogg', 60, 1)
-			if(!iscarbon(user))
-				M.LAssailant = null
-			else
-				M.LAssailant = user
-				M.assaulted_by(user)
+			M.assaulted_by(user)
 		target.overlays += image('icons/obj/assemblies.dmi', "plastic-explosive2")
 		to_chat(user, "Bomb has been planted. Timer counting down from [timer].")
 		spawn(timer*10)

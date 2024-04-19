@@ -178,33 +178,6 @@
 	hud_list[STATUS_HUD_OOC]  = new/image/hud('icons/mob/hud.dmi', src, "hudhealthy")
 	hud_list[WAGE_HUD]        = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
 
-	obj_overlays[FIRE_LAYER]		= new /obj/abstract/Overlays/fire_layer
-	obj_overlays[MUTANTRACE_LAYER]	= new /obj/abstract/Overlays/mutantrace_layer
-	obj_overlays[TAIL_UNDERLIMBS_LAYER]	= new /obj/abstract/Overlays/tail_underlimbs_layer
-	obj_overlays[LIMBS_LAYER]	= new /obj/abstract/Overlays/limbs_layer
-	obj_overlays[MUTATIONS_LAYER]	= new /obj/abstract/Overlays/mutations_layer
-	obj_overlays[DAMAGE_LAYER]	= new /obj/abstract/Overlays/damage_layer
-	obj_overlays[UNIFORM_LAYER]		= new /obj/abstract/Overlays/uniform_layer
-	obj_overlays[ID_LAYER]			= new /obj/abstract/Overlays/id_layer
-	obj_overlays[SHOES_LAYER]		= new /obj/abstract/Overlays/shoes_layer
-	obj_overlays[GLOVES_LAYER]		= new /obj/abstract/Overlays/gloves_layer
-	obj_overlays[EARS_LAYER]		= new /obj/abstract/Overlays/ears_layer
-	obj_overlays[SUIT_LAYER]		= new /obj/abstract/Overlays/suit_layer
-	obj_overlays[GLASSES_LAYER]		= new /obj/abstract/Overlays/glasses_layer
-	obj_overlays[BELT_LAYER]		= new /obj/abstract/Overlays/belt_layer
-	obj_overlays[SUIT_STORE_LAYER]	= new /obj/abstract/Overlays/suit_store_layer
-	obj_overlays[BACK_LAYER]		= new /obj/abstract/Overlays/back_layer
-	obj_overlays[HAIR_LAYER]		= new /obj/abstract/Overlays/hair_layer
-	obj_overlays[GLASSES_OVER_HAIR_LAYER] = new /obj/abstract/Overlays/glasses_over_hair_layer
-	obj_overlays[TAIL_LAYER]		= new /obj/abstract/Overlays/tail_layer
-	obj_overlays[FACEMASK_LAYER]	= new /obj/abstract/Overlays/facemask_layer
-	obj_overlays[HEAD_LAYER]		= new /obj/abstract/Overlays/head_layer
-	obj_overlays[HANDCUFF_LAYER]	= new /obj/abstract/Overlays/handcuff_layer
-	obj_overlays[MUTUALCUFF_LAYER]	= new /obj/abstract/Overlays/mutualcuff_layer
-	obj_overlays[LEGCUFF_LAYER]		= new /obj/abstract/Overlays/legcuff_layer
-	//obj_overlays[HAND_LAYER]		= new /obj/abstract/Overlays/hand_layer
-	obj_overlays[TARGETED_LAYER]	= new /obj/abstract/Overlays/targeted_layer
-
 	..()
 
 	if(dna)

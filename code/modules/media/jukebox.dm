@@ -959,6 +959,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/superjuke/thematic
 	playlist_id="endgame"
+	use_power = 0
 
 /obj/machinery/media/jukebox/superjuke/thematic/update_music()
 	if(current_song && playing)

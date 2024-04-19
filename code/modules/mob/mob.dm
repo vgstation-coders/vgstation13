@@ -1064,11 +1064,7 @@ Use this proc preferably at the end of an equipment loadout
 		update_pull_icon()
 		if(ismob(P))
 			var/mob/M = P
-			if(!iscarbon(src))
-				M.LAssailant = null
-			else
-				M.LAssailant = usr
-				M.assaulted_by(usr, TRUE)
+			M.assaulted_by(usr, TRUE)
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"

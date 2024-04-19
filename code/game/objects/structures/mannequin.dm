@@ -684,65 +684,51 @@
 /obj/structure/mannequin/update_icon()
 	..()
 	overlays.len = 0
-	var/obj/abstract/Overlays/O = new /obj/abstract/Overlays/
-	O.layer = FLOAT_LAYER
-	O.overlays.len = 0
+	var/mutable_appearance/mannequin_overlay = mutable_appearance()
 	var/vox_suffix = ""
-
-	if (species && species.name == "Vox")
+	if(species && species.name == "Vox")
 		vox_suffix = "_0"
-
-	if (hair_style)
-		var/datum/sprite_accessory/hair_style_icon = hair_styles_list[hair_style]
-		var/icon/hair_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[hair_style_icon.icon_state][vox_suffix]_s")
-		if(hair_style_icon.additional_accessories)
-			hair_s.Blend(icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[hair_style_icon.icon_state]_acc"), ICON_OVERLAY)
-		if (species && species.name != "Human")
-			hair_s.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28))
-		hair_s.Blend(hair_color, ICON_ADD)
-		O.overlays += hair_s
-
-	if (beard_style)
-		var/datum/sprite_accessory/beard_style_icon = facial_hair_styles_list[beard_style]
-		var/icon/beard_s = new/icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[beard_style_icon.icon_state]_s")
-		if(beard_style_icon.additional_accessories)
-			beard_s.Blend(icon("icon" = 'icons/mob/hair_styles.dmi', "icon_state" = "[beard_style_icon.icon_state]_acc"), ICON_OVERLAY)
-		if (species && species.name != "Human")
-			beard_s.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28))
-		beard_s.Blend(hair_color, ICON_ADD)
-		O.overlays += beard_s
-
+	if(hair_style)
+		var/datum/sprite_accessory/hair_style_sprite = hair_styles_list[hair_style]
+		var/mutable_appearance/hair_style_overlay = mutable_appearance('icons/mob/hair_styles.dmi', "[hair_style_sprite.icon_state][vox_suffix]_s")
+		if(hair_style_sprite.additional_accessories)
+			hair_style_overlay.overlays += mutable_appearance('icons/mob/hair_styles.dmi', "[hair_style_sprite.icon_state]_acc")
+		var/color_blend_matrix = COLOR_MATRIX_ADD(hair_color)
+		if(species && species.name != "Human")
+			color_blend_matrix = list(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), hair_color)
+		hair_style_overlay.color = color_blend_matrix
+		mannequin_overlay.overlays += hair_style_overlay
+	if(beard_style)
+		var/datum/sprite_accessory/beard_style_sprite = facial_hair_styles_list[beard_style]
+		var/mutable_appearance/beard_style_overlay = mutable_appearance('icons/mob/hair_styles.dmi', "[beard_style_sprite.icon_state]_s")
+		if(beard_style_sprite.additional_accessories)
+			beard_style_overlay.overlays += mutable_appearance('icons/mob/hair_styles.dmi', "[beard_style_sprite.icon_state]_acc")
+		var/color_blend_matrix = COLOR_MATRIX_ADD(hair_color)
+		if(species && species.name != "Human")
+			color_blend_matrix = list(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), hair_color)
+		beard_style_overlay.color = color_blend_matrix
+		mannequin_overlay.overlays += beard_style_overlay
 	for(var/cloth_slot in clothing)
-		update_icon_slot(O,cloth_slot)
-
+		update_icon_slot(mannequin_overlay, cloth_slot)
 	for(var/i in 1 to held_items.len)
-		update_icon_hand(O,i)
-
-	var/image/I = new()
-	I.appearance = O.appearance
-	I.plane = FLOAT_PLANE
-	if (icon != 'icons/obj/mannequin_64x64.dmi')
-		if (has_pedestal)
+		update_icon_hand(mannequin_overlay, i)
+	if(icon != 'icons/obj/mannequin_64x64.dmi')
+		if(has_pedestal)
 			icon = 'icons/obj/mannequin.dmi'
-			I.pixel_x = clothing_offset_x
-			I.pixel_y = clothing_offset_y
+			mannequin_overlay.pixel_x = clothing_offset_x
+			mannequin_overlay.pixel_y = clothing_offset_y
 		else
 			icon = 'icons/mob/mannequin.dmi'
 	else
-		I.pixel_x = clothing_offset_x
-		I.pixel_y = clothing_offset_y
-	overlays += I
-	qdel(O)
+		mannequin_overlay.pixel_x = clothing_offset_x
+		mannequin_overlay.pixel_y = clothing_offset_y
+	overlays += mannequin_overlay
 
-
-/obj/structure/mannequin/proc/update_icon_slot(var/obj/abstract/Overlays/O, var/slot)
+/obj/structure/mannequin/proc/update_icon_slot(mutable_appearance/mannequin_overlay, slot)
 	var/obj/item/clothing/clothToUpdate = clothing[slot]
-	O.color = null
 	if(clothToUpdate)
 		var/t_state = clothToUpdate.icon_state
-
-		var/image/I
-
+		var/mutable_appearance/slot_overlay
 		var/list/slotIcon = all_slot_icons[slot]
 
 		switch(slot)
@@ -751,119 +737,113 @@
 					t_state = clothToUpdate._color
 				if(fat || species.anatomy_flags & IS_BULKY)
 					if(clothToUpdate.clothing_flags&ONESIZEFITSALL)
-						I = image(slotIcon[MANNEQUIN_ICONS_FAT], "[t_state]_s")
+						slot_overlay = mutable_appearance(slotIcon[MANNEQUIN_ICONS_FAT], "[t_state]_s")
 				else if(primitive)
-					t_state = clothToUpdate.item_state
-					if(!t_state)
-						t_state = clothToUpdate.icon_state
-					I = image(slotIcon[MANNEQUIN_ICONS_PRIMITIVE], "[t_state]")
+					t_state = clothToUpdate.item_state || clothToUpdate.icon_state
+					slot_overlay = mutable_appearance(slotIcon[MANNEQUIN_ICONS_PRIMITIVE], "[t_state]")
 				else
-					I = image(slotIcon[MANNEQUIN_ICONS_SLOT], "[t_state][(slot == SLOT_MANNEQUIN_ICLOTHING) ? "_s" : ""]")
+					slot_overlay = mutable_appearance(slotIcon[MANNEQUIN_ICONS_SLOT], "[t_state][(slot == SLOT_MANNEQUIN_ICLOTHING) ? "_s" : ""]")
 			else
 				if(primitive)
-					I = image(slotIcon[MANNEQUIN_ICONS_PRIMITIVE], t_state)
+					slot_overlay = mutable_appearance(slotIcon[MANNEQUIN_ICONS_PRIMITIVE], t_state)
 				else if (corgi)
-					I = image(slotIcon[MANNEQUIN_ICONS_CORGI], t_state)
+					slot_overlay = mutable_appearance(slotIcon[MANNEQUIN_ICONS_CORGI], t_state)
 				else if(clothToUpdate.icon_override)
-					I = image(clothToUpdate.icon_override, t_state)
+					slot_overlay = mutable_appearance(clothToUpdate.icon_override, t_state)
 				else
-					I = image(slotIcon[MANNEQUIN_ICONS_SLOT], t_state)
+					slot_overlay = mutable_appearance(slotIcon[MANNEQUIN_ICONS_SLOT], t_state)
 
 		var/icon/species_icon
 		if(species.name in clothToUpdate.species_fit)
 			species_icon = slotIcon[MANNEQUIN_ICONS_SPECIES]
 			if(species_icon)
-				I.icon = species_icon
+				slot_overlay.icon = species_icon
 
 		if(clothToUpdate.icon_override)
-			I.icon	= clothToUpdate.icon_override
+			slot_overlay.icon = clothToUpdate.icon_override
 
 		if(clothToUpdate.clothing_flags & COLORS_OVERLAY)
-			I.color = clothToUpdate.color
+			slot_overlay.color = clothToUpdate.color
 
-		O.overlays += I
+		mannequin_overlay.overlays += slot_overlay
 
 		if(clothToUpdate.dynamic_overlay)
 			if(clothToUpdate.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"])
-				var/image/dyn_overlay = clothToUpdate.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"]
+				var/mutable_appearance/dyn_overlay = clothToUpdate.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"]
 
 				if(species_icon)
 					dyn_overlay = replace_overlays_icon(dyn_overlay, species_icon)
 
-				O.overlays += dyn_overlay
+				mannequin_overlay.overlays += dyn_overlay
 
 		if(clothToUpdate.blood_DNA && clothToUpdate.blood_DNA.len)
 			var/bloodsies_state = get_bloodsies_state(clothToUpdate,slot)
 			if(bloodsies_state)
-				var/image/bloodsies	= image('icons/effects/blood.dmi', bloodsies_state)
-				bloodsies.color		= clothToUpdate.blood_color
-				O.overlays += bloodsies
+				var/mutable_appearance/bloodsies = mutable_appearance('icons/effects/blood.dmi', bloodsies_state)
+				bloodsies.color	 = clothToUpdate.blood_color
+				mannequin_overlay.overlays += bloodsies
 
-		clothToUpdate.generate_accessory_overlays(O)
+		clothToUpdate.generate_accessory_overlays(mannequin_overlay)
 
 		if(istype(clothToUpdate,/obj/item/clothing/head))
 			var/obj/item/clothing/head/hat = clothToUpdate
 			var/i = 1
 			for(var/obj/item/clothing/head/above = hat.on_top; above; above = above.on_top)
 				if(primitive)
-					I = image(slotIcon[MANNEQUIN_ICONS_PRIMITIVE], above.icon_state)
+					slot_overlay = mutable_appearance(slotIcon[MANNEQUIN_ICONS_PRIMITIVE], above.icon_state)
 				else if (corgi)
-					I = image(slotIcon[MANNEQUIN_ICONS_CORGI], above.icon_state)
+					slot_overlay = mutable_appearance(slotIcon[MANNEQUIN_ICONS_CORGI], above.icon_state)
 				else if(clothToUpdate.icon_override)
-					I = image(above.icon_override, above.icon_state)
+					slot_overlay = mutable_appearance(above.icon_override, above.icon_state)
 				else
-					I = image(slotIcon[MANNEQUIN_ICONS_SLOT], above.icon_state)
+					slot_overlay = mutable_appearance(slotIcon[MANNEQUIN_ICONS_SLOT], above.icon_state)
 
 				if(species.name in above.species_fit)
 					if(species_icon)
-						I.icon = species_icon
+						slot_overlay.icon = species_icon
 
-				I.pixel_y = (2 * i) * PIXEL_MULTIPLIER
-				O.overlays += I
+				slot_overlay.pixel_y = (2 * i) * PIXEL_MULTIPLIER
+				mannequin_overlay.overlays += slot_overlay
 
 				if(above.dynamic_overlay)
 					if(above.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"])
-						var/image/dyn_overlay = above.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"]
+						var/mutable_appearance/dyn_overlay = above.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"]
 						if(species_icon)
 							dyn_overlay = replace_overlays_icon(dyn_overlay, species_icon)
 						dyn_overlay.pixel_y = (2 * i) * PIXEL_MULTIPLIER
-						O.overlays += dyn_overlay
+						mannequin_overlay.overlays += dyn_overlay
 
 				if(above.blood_DNA && above.blood_DNA.len)
 					var/bloodsies_state = get_bloodsies_state(above,slot)
 					if(bloodsies_state)
-						var/image/bloodsies	= image('icons/effects/blood.dmi', bloodsies_state)
-						bloodsies.color		= above.blood_color
+						var/mutable_appearance/bloodsies = mutable_appearance('icons/effects/blood.dmi', bloodsies_state)
+						bloodsies.color	= above.blood_color
 						bloodsies.pixel_y = (2 * i) * PIXEL_MULTIPLIER
-						O.overlays += bloodsies
-
+						mannequin_overlay.overlays += bloodsies
 				//above.generate_accessory_overlays(O)
 				i++
 
-/obj/structure/mannequin/proc/update_icon_hand(var/obj/abstract/Overlays/O,var/index)
+/obj/structure/mannequin/proc/update_icon_hand(mutable_appearance/hand_overlay, index)
 	var/obj/item/heldItem = get_held_item_by_index(index)
 
 	if(heldItem)
-		var/t_state = heldItem.item_state
+		var/t_state = heldItem.item_state || heldItem.icon_state
 		var/t_inhand_state = heldItem.inhand_states[get_direction_by_index(index)]
 		var/icon/check_dimensions = new(t_inhand_state)
-		if(!t_state)
-			t_state = heldItem.icon_state
-
-		var/image/I  = image(t_inhand_state, t_state)
-		I.pixel_x = -1*(check_dimensions.Width() - WORLD_ICON_SIZE)/2
-		I.pixel_y = -1*(check_dimensions.Height() - WORLD_ICON_SIZE)/2
+		var/mutable_appearance/held_item_overlay = mutable_appearance(t_inhand_state, t_state)
+		held_item_overlay.pixel_x = -1*(check_dimensions.Width() - WORLD_ICON_SIZE)/2
+		held_item_overlay.pixel_y = -1*(check_dimensions.Height() - WORLD_ICON_SIZE)/2
 
 		var/list/offsets = get_item_offset_by_index(index)
 
-		I.pixel_x += offsets["x"]
-		I.pixel_y += offsets["y"]
+		held_item_overlay.pixel_x += offsets["x"]
+		held_item_overlay.pixel_y += offsets["y"]
 
 		if(heldItem.dynamic_overlay && heldItem.dynamic_overlay["[HAND_LAYER]-[index]"])
-			var/image/dyn_overlay = heldItem.dynamic_overlay["[HAND_LAYER]-[index]"]
-			O.overlays += dyn_overlay
+			var/mutable_appearance/dyn_overlay = heldItem.dynamic_overlay["[HAND_LAYER]-[index]"]
+			held_item_overlay.overlays += dyn_overlay
 
-		O.overlays += I
+		hand_overlay.overlays += held_item_overlay
 
 /obj/structure/mannequin/proc/get_slot_icons(var/slot)
 	var/list/slotIcon = list()
@@ -1119,12 +1099,12 @@
 		livingMannequin.captured_mob = captured
 		captured.forceMove(livingMannequin)
 		captured = null
-	var/image/I = image('icons/effects/32x32.dmi',"blank")
-	I.overlays |= overlays
-	if (has_pedestal)
-		I.pixel_x = -clothing_offset_x
-		I.pixel_y = -clothing_offset_y
-	livingMannequin.overlays += I
+	var/mutable_appearance/transferred_overlays = mutable_appearance('icons/effects/32x32.dmi',"blank")
+	transferred_overlays.overlays |= overlays
+	if(has_pedestal)
+		transferred_overlays.pixel_x = -clothing_offset_x
+		transferred_overlays.pixel_y = -clothing_offset_y
+	livingMannequin.overlays += transferred_overlays
 	for(var/slot in clothing)
 		if(clothing[slot])
 			var/obj/item/cloth = clothing[slot]
@@ -1390,7 +1370,7 @@
 
 			var/obj/structure/mannequin_frame/new_frame = new(T)
 			new_frame.icon_state = "mannequin_cyber_human"
-			new_frame.overlays |= image(icon, "lightout")
+			new_frame.overlays |= mutable_appearance(icon, "lightout")
 			new_frame.construct = new /datum/construction/mannequin(new_frame)
 			qdel(src)
 
@@ -1454,9 +1434,9 @@
 	overlays.len = 0
 	..()
 	if(destroyed)
-		overlays |= image(icon, "mannequin_cover_broken")
+		overlays |= mutable_appearance(icon, "mannequin_cover_broken")
 	else if(locked)
-		overlays |= image(icon, "mannequin_cover")
+		overlays |= mutable_appearance(icon, "mannequin_cover")
 
 
 /obj/structure/mannequin/cyber/attack_hand(var/mob/living/user)
@@ -1521,7 +1501,7 @@
 
 /datum/construction/mannequin_frame/custom_action(step, atom/used_atom, mob/user)
 	user.visible_message("[user] has connected [used_atom] to [holder].", "You connect [used_atom] to [holder]")
-	holder.overlays += image(holder.icon, used_atom.icon_state)
+	holder.overlays += mutable_appearance(holder.icon, used_atom.icon_state)
 	QDEL_NULL (used_atom)
 	return 1
 
@@ -1543,7 +1523,7 @@
 	const_holder.construct = new /datum/construction/mannequin(const_holder)
 	const_holder.overlays.len = 0
 	const_holder.icon_state = "mannequin_cyber_human"
-	const_holder.overlays |= icon(const_holder.icon, "lightout")
+	const_holder.overlays |= mutable_appearance(const_holder.icon, "lightout")
 	qdel(src)
 
 /datum/construction/mannequin
@@ -1568,7 +1548,7 @@
 			)
 		)
 
-/datum/construction/mannequin/custom_action(index, diff, atom/used_atom, mob/user)
+/datum/construction/mannequin/custom_action(step, atom/used_atom, mob/user)
 	if(!..())
 		return 0
 
@@ -1583,7 +1563,7 @@
 			const_holder.req_one_access = null
 
 		const_holder.icon_state = "mannequin_cyber_human"
-		const_holder.overlays -= icon(const_holder.icon, "lightout")
+		const_holder.overlays -= mutable_appearance(const_holder.icon, "lightout")
 
 	return 1
 

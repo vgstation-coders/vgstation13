@@ -40,6 +40,8 @@
 		return
 	if(istype(target,/obj/machinery/autoprocessor/wrapping))
 		return
+	if(issilicon(user) && istype(target.loc,/obj/item/weapon/robot_module))
+		return
 	if(!is_type_in_list(target, cannot_wrap))
 		if(istype(target, /obj/item/weapon/storage))
 			to_chat(user, "<span class='notice'>You start wrapping \the [target] with \the [src].</span>")
@@ -56,6 +58,8 @@
 	if(!istype(target))
 		return
 	if(istype(target,/obj/machinery/autoprocessor/wrapping))
+		return
+	if(issilicon(user) && istype(target.loc,/obj/item/weapon/robot_module))
 		return
 	if(is_type_in_list(target, cannot_wrap))
 		to_chat(user, "<span class='notice'>You can't wrap that.</span>")
@@ -127,11 +131,7 @@
 			H.forceMove(present)
 			H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been wrapped with [src.name]  by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to wrap [H.name] ([H.ckey])</font>")
-			if(!iscarbon(user))
-				H.LAssailant = null
-			else
-				H.LAssailant = user
-				H.assaulted_by(user)
+			H.assaulted_by(user)
 			log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to wrap [H.name] ([H.ckey])</font>")
 			use(2)
 			return 1

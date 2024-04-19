@@ -44,9 +44,13 @@ cons:
 #define GFI_DX_MAX		13	// Remember to keep this updated should you need to keep track of more variables
 
 
-/proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/override_dir = 0, var/ignore_spawn_items = FALSE)
+/proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/override_dir = 0, var/ignore_spawn_items = FALSE, var/large_canvas = FALSE)
 
-	var/icon/flat = icon('icons/effects/224x224.dmi',"empty") // Final flattened icon
+	var/icon/flat	 // Final flattened icon
+	if (large_canvas)
+		flat = icon('icons/effects/224x224.dmi',"empty")
+	else
+		flat = icon('icons/effects/32x32.dmi', "blank")
 	var/icon/add // Icon of overlay being added
 
 	for(var/data in image_datas)
@@ -204,11 +208,11 @@ cons:
 	content_data = list(my_data)
 	var/list/underlays = to_sort:underlays
 	var/list/overlays = to_sort:overlays
-	for (var/underlay in underlays)
+	for(var/underlay in underlays)
 		var/list/L = get_content_image_datas(underlay,my_data, is_underlay = TRUE)
 		if (L)
 			content_data += L
-	for (var/overlay in overlays)
+	for(var/overlay in overlays)
 		var/list/L = get_content_image_datas(overlay,my_data)
 		if (L)
 			content_data += L

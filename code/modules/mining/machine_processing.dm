@@ -393,6 +393,9 @@
 	if(stat & (FORCEDISABLE | NOPOWER | BROKEN))
 		return
 
+	if(!isturf(loc)) //flatpack check
+		return
+
 	var/turf/in_T = get_step(src, in_dir)
 	var/turf/out_T = get_step(src, out_dir)
 

@@ -583,6 +583,11 @@
 	set_frequency(O.frequency)
 	return 1
 
+/obj/machinery/power/supermatter/malfhack_valid(var/mob/living/silicon/malf)
+	if(..())
+		to_chat(malf, "<span class='warning'>You cannot hack \the [src] as it has nothing for you to interface with!</span>")
+		return FALSE
+
 /obj/machinery/computer/supermatter
 	name = "supermatter monitoring computer"
 	desc = "Monitors ambient temperature and stability of a linked shard to provide early warning information regarding delamination. Can be linked up to supermatter with a matching frequency and id_tag using a multitool. While using a multitool on supermatter is safe, Nanotrasen accepts no responsibility or liability for sudden rushes of wind or radiation poisoning."
