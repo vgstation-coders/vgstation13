@@ -515,6 +515,8 @@
 	..()
 	add_particles(PS_CULT_SMOKE)
 	add_particles(PS_CULT_SMOKE2)
+	adjust_particles(PVAR_SPAWNING,0.19,PS_CULT_SMOKE)
+	adjust_particles(PVAR_SPAWNING,0.21,PS_CULT_SMOKE2)
 
 /mob/living/simple_animal/corgi/Ian/narsie/reset_appearance()
 	name = "Nar-Sian"
