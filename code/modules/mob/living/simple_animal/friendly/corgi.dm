@@ -475,6 +475,63 @@
 	inventory_head = new/obj/item/clothing/head/christmas/santahat/red(src)
 	regenerate_icons()
 
+//scary but still friendly
+/mob/living/simple_animal/corgi/Ian/cultify()
+	var/turf/T = get_turf(src)
+	new /mob/living/simple_animal/corgi/Ian/narsie(T)
+	new /obj/effect/gibspawner/generic(T)
+	qdel(src)
+
+/mob/living/simple_animal/corgi/Ian/narsie
+	name = "Nar-Sian"
+	real_name = "Nar-Sian"
+	gender = MALE
+	desc = "It's a hellish abomination vaguely in the shape of a corgi. How cute."
+
+	faction = "cult"
+
+	icon_state = "narsian"
+	icon_living = "narsian"
+	icon_dead = "narsian_dead"
+
+	speak = list("Ta'gh fara'qha fel d'amar det!", "...mgar...", "N'ath reth sh'yro eth d'raggathnor!", "Grrrr!")
+	speak_emote = list("grunts", "murmurs")
+	emote_hear = list("barks eerily.", "emits some unholy noise.")
+	emote_see = list("drools from his gaping maw.", "stares your way hungrily.")
+	emote_sound = list("sound/voice/corgibark_echo.ogg")
+
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
+	maxbodytemp = 9001
+
+/mob/living/simple_animal/corgi/Ian/narsie/New()
+	..()
+	add_particles(PS_CULT_SMOKE)
+	add_particles(PS_CULT_SMOKE2)
+
+/mob/living/simple_animal/corgi/Ian/narsie/reset_appearance()
+	name = "Nar-Sian"
+	real_name = "Nar-Sian"
+	speak = list("Ta'gh fara'qha fel d'amar det!", "...mgar...", "N'ath reth sh'yro eth d'raggathnor!", "Grrrr!")
+	speak_emote = list("grunts", "murmurs")
+	emote_hear = list("barks eerily.", "emits some unholy noise.")
+	emote_see = list("drools from his gaping maw.", "stares your way hungrily.")
+	emote_sound = list("sound/voice/corgibark_echo.ogg")
+	min_oxy = 0
+	minbodytemp = 0
+	maxbodytemp = 9001
+	set_light(0)
+
+/mob/living/simple_animal/corgi/Ian/narsie/cultify()
+	health = maxHealth
+
 /mob/living/simple_animal/corgi/regenerate_icons()
 	overlays = list()
 
