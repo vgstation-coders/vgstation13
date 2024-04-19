@@ -14,7 +14,7 @@ var/list/one_way_windows
 	desc = "A silicate barrier, used to keep things out and in sight. Fragile."
 	icon = 'icons/obj/structures/window.dmi'
 	icon_state = "window0"
-	var/base_state = "window" //Base icon for update_icon
+	var/base_state = "" //Base icon for update_icon
 	density = 1
 	layer = SIDE_WINDOW_LAYER
 	pressure_resistance = 4*ONE_ATMOSPHERE
@@ -66,15 +66,14 @@ var/list/one_way_windows
 		return ..() && O.anchored && O.density
 
 /obj/structure/window/relativewall()
-	icon_state = anchored && density ? "[base_state][..()]" : initial(icon_state)
-	var/icon/I = new('icons/obj/structures/window.dmi', icon_state)
+	icon_state = anchored && density ? "[base_state]window[..()]" : initial(icon_state)
 	if(!is_fulltile)
-		var/cmasknumber = findSmoothingOnTurf()
-		if(cmasknumber)
-			var/icon/mask = new('icons/obj/structures/window.dmi', "cmask[cmasknumber]")
-			I.Blend(mask, ICON_OVERLAY)
-			I.SwapColor(rgb(0, 255, 0, 255), rgb(0, 0, 0, 0))
-	icon = I
+		overlays.Cut()
+		var/onturfdirs = findSmoothingOnTurf()
+		if(~onturfdirs & counterclockwise_perpendicular_dirs[dir])
+			overlays += image(icon, loc, "[base_state]corner_r", dir = src.dir)
+		if(~onturfdirs & clockwise_perpendicular_dirs(dir))
+			overlays += image(icon, loc, "[base_state]corner_l", dir = src.dir)
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)
@@ -697,7 +696,7 @@ var/list/one_way_windows
 	name = "reinforced window"
 	desc = "A window with a rod matrix. It looks more solid than the average window."
 	icon_state = "rwindow0"
-	base_state = "rwindow"
+	base_state = "r"
 	sheet_type = /obj/item/stack/sheet/glass/rglass
 	health = 40
 	d_state = WINDOWSECURE
@@ -718,7 +717,7 @@ var/list/one_way_windows
 	name = "plasma window"
 	desc = "A window made out of a plasma-silicate alloy. It looks insanely tough to break and burn through."
 	icon_state = "plasmawindow0"
-	base_state = "plasmawindow"
+	base_state = "plasma"
 	shardtype = /obj/item/weapon/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmaglass
 	health = 120
@@ -741,7 +740,7 @@ var/list/one_way_windows
 	name = "reinforced plasma window"
 	desc = "A window made out of a plasma-silicate alloy and a rod matrix. It looks hopelessly tough to break and is most likely nigh fireproof."
 	icon_state = "plasmarwindow0"
-	base_state = "plasmarwindow"
+	base_state = "plasmar"
 	shardtype = /obj/item/weapon/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
@@ -771,7 +770,7 @@ var/list/one_way_windows
 	name = "tinted window"
 	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall?"
 	icon_state = "twindow0"
-	base_state = "twindow"
+	base_state = "t"
 	opacity = 1
 	sheet_type = /obj/item/stack/sheet/glass/rglass //A glass type for this window doesn't seem to exist, so here's to you
 
@@ -780,7 +779,7 @@ var/list/one_way_windows
 	name = "frosted window"
 	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall?"
 	icon_state = "rwindow0"
-	base_state = "rwindow"
+	base_state = "r"
 	health = 30
 	sheet_type = /obj/item/stack/sheet/glass/rglass //Ditto above
 
@@ -788,7 +787,7 @@ var/list/one_way_windows
 	name = "brass window"
 	desc = "A paper-thin pane of translucent yet reinforced brass."
 	icon_state = "clockworkwindow0"
-	base_state = "clockworkwindow"
+	base_state = "clockwork"
 	shardtype = null
 	sheet_type = /obj/item/stack/sheet/brass
 	reinforcetype = /obj/item/stack/sheet/ralloy

@@ -30,15 +30,17 @@
 // OTHER FUNCTION SOME BORDER ITEMS MIGHT LIKE TO USE
 /atom/proc/findSmoothingOnTurf()
 	. = 0
+	var/turf/T = get_turf(src)
 	for(var/cdir in cardinal)
 		if((flow_flags & ON_BORDER) && !bordersmooth_override && (dir == cdir || opposite_dirs[dir] == cdir))
 			continue
-		var/turf/T = get_turf(src)
 		if(isSmoothableNeighbor(T,0) && T.dir == cdir)
 			. |= cdir
+			continue
 		for(var/atom/A in T)
 			if(isSmoothableNeighbor(A,0) && A.dir == cdir)
 				. |= cdir
+				break
 
 /atom/proc/isSmoothableNeighbor(atom/A, bordercheck = TRUE)
 	if(!A)
