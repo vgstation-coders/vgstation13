@@ -559,3 +559,4 @@ var/global/mr_clean_targets = list(
 		for (var/mob/M in player_list)
 			M.playsound_local(get_turf(M), 'sound/effects/wind/wind_5_1.ogg', 100, 0)
 		flick("narsie_spawn_anim_old",src)
+		ready = TRUE
