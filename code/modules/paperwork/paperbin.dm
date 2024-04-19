@@ -5,6 +5,7 @@
 	item_state = "sheet-metal"
 	throwforce = 1
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_CARDBOARD
 	throw_speed = 3
 	throw_range = 7
 	pressure_resistance = 10
@@ -13,10 +14,12 @@
 	var/list/papers = new/list()	//List of papers put in the bin for reference.
 	var/crayon = null
 	var/image/paper = null
+	flammable = TRUE
 
 /obj/item/weapon/paper_bin/New()
 	..()
 	update_icon()
+	thermal_mass = thermal_mass + amount //snowflaked (not sorry)
 
 /obj/item/weapon/paper_bin/black
 	crayon = "black"
@@ -67,11 +70,19 @@
 	crayon = "sterile"
 	update_icon()
 
-/obj/item/weapon/paper_bin/getThermalMass()
-	var/total_thermal_mass = thermal_mass
-	for(var/obj/item/weapon/paper/p in papers)
-		total_thermal_mass += p.thermal_mass
-	return total_thermal_mass
+/obj/item/weapon/paper_bin/useThermalMass(var/used_mass)
+	..()
+	if(amount)
+		var/burnt_papers = round(amount-(thermal_mass - initial_thermal_mass))
+		var/i = 0
+		while(i < burnt_papers)
+			var/obj/item/weapon/paper/P
+			if(papers.len > 0)
+				P = papers[papers.len]
+				papers.Remove(P)
+			amount--
+			i++
+		update_icon()
 
 /obj/item/weapon/paper_bin/ashify()
 	if(!on_fire)
@@ -129,6 +140,7 @@
 		to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
 		papers.Add(I)
 		amount++
+		thermal_mass++
 		update_icon()
 	else if(istype(I, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/C = I

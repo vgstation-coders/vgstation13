@@ -185,7 +185,7 @@ var/global/list/ghdel_profiling = list()
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
 	if(flammable)
-		burnableatoms -= burnableatoms[src]
+		burnableatoms -= src
 	/*if(istype(beams) && beams.len)
 		for(var/obj/effect/beam/B in beams)
 			if(B && B.target == src)
@@ -466,7 +466,8 @@ its easier to just keep the beam vertical.
 	if(on_fire)
 		user.simple_message("<span class='danger'>OH SHIT! IT'S ON FIRE!</span>",\
 			"<span class='info'>It's on fire, man.</span>")
-
+	if(charred_overlay)
+		to_chat(user, "<span class='info'>It's covered in ash.</span>")
 	if(min_harm_label && harm_labeled)
 		if(harm_labeled < min_harm_label)
 			to_chat(user, harm_label_examine[1])

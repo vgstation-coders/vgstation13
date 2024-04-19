@@ -8,6 +8,8 @@ var/list/atom/burnableatoms = list()
 	priority      = SS_PRIORITY_BURNABLE
 	display_order = SS_DISPLAY_BURNABLE
 
+	var/list/atom/currentrun
+	var/currentrun_index
 
 /datum/subsystem/burnable/New()
 	NEW_SS_GLOBAL(SSburnable)
@@ -21,11 +23,16 @@ var/list/atom/burnableatoms = list()
 	..("P:[burnableatoms.len]")
 
 /datum/subsystem/burnable/fire(var/resumed = FALSE)
-	if(resumed)
-		for(var/atom/burnable in burnableatoms)
-			burnable?.checkburn()
-			if (MC_TICK_CHECK)
-				break
+	if(!resumed)
+		currentrun_index = burnableatoms.len
+		currentrun = burnableatoms.Copy()
+	var/c = currentrun_index
+	while(c)
+		currentrun[c]?.checkburn()
+		c--
+		if (MC_TICK_CHECK)
+			break
+	currentrun_index = c
 
 /atom/proc/checkburn()
 	if(on_fire) //if an object is burning, spawn a fire effect on the tile

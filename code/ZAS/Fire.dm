@@ -15,7 +15,7 @@ To make your /turf flammable:
 //ZAS settings shortcuts
 var/ZAS_heat_multiplier = zas_settings.Get(/datum/ZAS_Setting/fire_heat_generation)
 var/ZAS_oxygen_consumption_multiplier = zas_settings.Get(/datum/ZAS_Setting/fire_oxygen_consumption)
-var/ZAS_fire_spread_multiplier = zas_settings.Get(/datum/ZAS_Setting/fire_spread_rate)
+var/ZAS_fire_spread_chance = zas_settings.Get(/datum/ZAS_Setting/fire_spread_rate)
 var/ZAS_air_consumption_rate = zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)
 var/ZAS_firelevel_multiplier = zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier)
 var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel_energy_release)
@@ -131,14 +131,11 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 /atom/proc/ashtype()
 	return /obj/effect/decal/cleanable/ash
 
-/atom/proc/getThermalMass()
-	return thermal_mass
-
 /atom/proc/useThermalMass(var/used_mass)
 	thermal_mass -= used_mass
 
 /atom/proc/genSmoke(var/oxy,var/temp,var/turf/where)
-	if(prob(clamp(lerp(temp,T20C,T0C + 1000,95,100),95,100))) //5% chance of smoke at 20C, 0% at 1000C
+	if(prob(clamp(lerp(temp,T20C,T0C + 1000,96,100),96,100))) //4% chance of smoke at 20C, 0% at 1000C
 		return FALSE
 	var/area/A = get_area(src)
 	if(A.smoke_in_area >= SMOKE_CAP) //limit number of smoke effects in any given area for performance
@@ -162,6 +159,9 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		else
 			update_charred_overlay()
 		last_char = world.time
+	else
+		if(prob(10)) //10% chance each tick of item getting charred
+			set_charred_overlay()
 
 var/global/list/image/charred_overlays = list()
 /atom/proc/set_charred_overlay()
@@ -191,7 +191,7 @@ var/global/list/image/charred_overlays = list()
 //Called on every obj/effect/fire/process()
 /atom/proc/burnSolidFuel()
 	//Don't burn the container until all reagents have been depleted via burnLiquidFuel().
-	if(reagents && !istype(src, /obj/item/weapon/reagent_containers/food)) //i am sorry
+	if(((locate(/obj/effect/decal/cleanable/liquid_fuel) in src) || reagents) && !istype(src, /obj/item/weapon/reagent_containers/food))
 		return
 
 	if(!flammable)
@@ -342,6 +342,8 @@ var/global/list/image/charred_overlays = list()
 	if(flammable && !on_fire)
 		ignite()
 		return 1
+	else
+		process_charred_overlay()
 	return 0
 
 /area/fire_act()
@@ -369,13 +371,14 @@ var/global/list/image/charred_overlays = list()
 /turf/ashify()
 	if(!on_fire)
 		return
-	var/ashtype = ashtype()
-	new ashtype(src.loc)
 	extinguish()
 
 /turf/process_charred_overlay()
 	if(thermal_mass)
-		char_alpha = clamp((80*(1-(thermal_mass/initial_thermal_mass))),0,80) //turf char overlays aren't as harsh as objects
+		if(flammable)
+			char_alpha = clamp((80*(1-(thermal_mass/initial_thermal_mass))),0,80) //turf char overlays aren't as harsh as objects
+		else
+			char_alpha = 40
 		if(!charred_overlays["[type][icon_state]"])
 			set_charred_overlay()
 		else
@@ -420,28 +423,25 @@ var/global/list/image/charred_overlays = list()
 		if(air_contents.check_combustability(src) == 2)
 			ignite()
 			igniting = 1
-		if((flammable || locate(/obj/effect/decal/cleanable/liquid_fuel) in src) && !on_fire)
+		if((flammable || locate(/obj/effect/decal/cleanable/liquid_fuel) in src) && !on_fire && surfaces)
 			ignite()
 			igniting = 1
-		for(var/obj/O in contents)
-			if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && O.flammable && !O.on_fire && exposed_temperature >= O.autoignition_temperature)
-				O.ignite()
-				igniting = 1
-				break
+		if(surfaces)
+			for(var/obj/O in contents)
+				if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && O.flammable && !O.on_fire && exposed_temperature >= O.autoignition_temperature)
+					O.ignite()
+					igniting = 1
+					break
 		if(igniting)
 			new /obj/effect/fire(src)
 	return igniting
 
-/turf/ignite()
-	if(!flammable || check_fire_protection())
+/turf/simulated/ignite()
+	if(!flammable || check_fire_protection() || thermal_mass <= 0)
 		return FALSE
 
 	var/in_fire = FALSE
 	on_fire=1
-
-	var/atom/movable/AM = src
-	if(istype(AM))
-		firelightdummy = new (src)
 
 	for(var/obj/effect/fire/F in src)
 		in_fire = TRUE
@@ -496,6 +496,7 @@ var/global/list/image/charred_overlays = list()
 	plane = ABOVE_TURF_PLANE
 	light_color = LIGHT_COLOR_FIRE
 	var/last_vis_refresh = 0
+	var/burn_duration = 0
 
 /obj/effect/fire/New()
 	. = ..()
@@ -530,9 +531,15 @@ var/global/list/image/charred_overlays = list()
 	//since the air is processed in fractions, we need to make sure not to have any minuscle residue or
 	//the amount of moles might get to low for some functions to catch them and thus result in wonky behaviour
 	var/datum/gas_mixture/air_contents = S.return_air()
-	if((air_contents.molar_ratio(GAS_OXYGEN)) < (MINOXY2BURN + rand(-2,2)*0.01))
+
+	//Check if there is something to combust.
+	if(!air_contents.check_recombustability(S))
 		Extinguish()
-		return
+	else if(air_contents.check_recombustability(S) == 1)
+		if((air_contents.molar_ratio(GAS_OXYGEN)) < (MINOXY2BURN + rand(-2,2)*0.01))
+			Extinguish()
+			return
+
 	if(air_contents.molar_ratio(GAS_OXYGEN) < 0.1 / CELL_VOLUME)
 		air_contents[GAS_OXYGEN] = 0
 	if(air_contents.molar_ratio(GAS_PLASMA) < 0.1 / CELL_VOLUME)
@@ -540,10 +547,6 @@ var/global/list/image/charred_overlays = list()
 	if(air_contents.molar_ratio(GAS_VOLATILE) < 0.1 / CELL_VOLUME)
 		air_contents[GAS_VOLATILE] = 0
 	air_contents.update_values()
-
-	//Check if there is something to combust.
-	if(!air_contents.check_recombustability(S))
-		Extinguish()
 
 	//Set firelevel and fire light.
 	var/firelevel = air_contents.calculate_firelevel(S)
@@ -582,7 +585,7 @@ var/global/list/image/charred_overlays = list()
 					continue
 				//Spread the fire.
 				if(!(locate(/obj/effect/fire) in enemy_tile))
-					if(prob(25 + 50 * ZAS_fire_spread_multiplier*(firelevel/ZAS_firelevel_multiplier)) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
+					if(prob(round(burn_duration/5) + ZAS_fire_spread_chance+100*(firelevel/ZAS_firelevel_multiplier)) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
 						new/obj/effect/fire(enemy_tile)
 	//seperate part of the present gas
 	//this is done to prevent the fire burning all gases in a single pass
@@ -593,6 +596,7 @@ var/global/list/image/charred_overlays = list()
 		//merge the air back
 		S.assume_air(flow)
 ///////////////////////////////// FLOW HAS BEEN REMERGED /// feel free to delete the fire again from here on //////////////////////////////////////////////////////////////////
+	burn_duration++
 
 /obj/effect/fire/proc/setfirelight(firelevel, firetemp)
 	// Update fire color.
@@ -711,9 +715,9 @@ var/global/list/image/charred_overlays = list()
 /datum/gas_mixture/proc/check_recombustability(var/turf/T)
 	if(gas[GAS_OXYGEN] && (gas[GAS_PLASMA] || gas[GAS_VOLATILE]))
 		if(QUANTIZE(molar_density(GAS_PLASMA) * ZAS_air_consumption_rate) >= MOLES_PLASMA_VISIBLE / CELL_VOLUME)
-			return 1
+			return 2
 		if(QUANTIZE(molar_density(GAS_VOLATILE) * ZAS_air_consumption_rate) >= BASE_ZAS_FUEL_REQ / CELL_VOLUME)
-			return 1
+			return 2
 
 	//Check if we're actually in a turf or not before trying to check object fires
 	if(!T)
@@ -722,7 +726,7 @@ var/global/list/image/charred_overlays = list()
 		warning("check_recombustability being asked to check a [T.type] instead of /turf.")
 		return 0
 
-	if(T.flammable && !T.check_fire_protection() && T.thermal_mass)
+	if(T.flammable && !T.check_fire_protection() && T.thermal_mass > 0)
 		return 1
 
 	if(locate(/obj/effect/decal/cleanable/liquid_fuel) in T)
@@ -730,7 +734,7 @@ var/global/list/image/charred_overlays = list()
 
 	for(var/atom/A in T)
 		if(!A.check_fire_protection())
-			if(A.flammable && A.thermal_mass)
+			if(A.flammable && A.thermal_mass > 0)
 				return 1
 			if(A.reagents)
 				for(var/possible_fuel in possible_fuels)
@@ -739,7 +743,7 @@ var/global/list/image/charred_overlays = list()
 
 //Checks if anything in a given turf can burn.
 /datum/gas_mixture/proc/check_combustability(var/turf/T)
-	if(T.flammable)
+	if(T.flammable && T.thermal_mass > 0)
 		return 1
 
 	if(locate(/obj/effect/decal/cleanable/liquid_fuel) in T)
@@ -752,7 +756,7 @@ var/global/list/image/charred_overlays = list()
 			return 2
 
 	for(var/atom/A in T)
-		if(A.flammable)
+		if(A.flammable && A.thermal_mass > 0)
 			return 1
 		if(A.reagents)
 			for(var/possible_fuel in possible_fuels)
