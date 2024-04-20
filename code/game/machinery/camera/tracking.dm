@@ -196,7 +196,7 @@
 
 	currently_tracking.register_event(/event/moved,src,nameof(src::on_camera_change()))
 	currently_tracking.register_event(/event/equipped,src,nameof(src::on_camera_change()))
-	currently_tracking.register_event(/event/unequipped,src,nameof(src::on_camera_change()))
+	//currently_tracking.register_event(/event/unequipped,src,nameof(src::on_camera_change()))
 	currently_tracking.register_event(/event/cameranet_changed,src,nameof(src::on_camera_change()))
 	to_chat(src, "Now tracking [currently_tracking.name] on camera.")
 
@@ -205,10 +205,10 @@
 /mob/living/silicon/ai/proc/on_camera_change(mover)
 	if(eyeobj && currently_tracking)
 		var/cantrack = can_track_atom(currently_tracking)
-		if(!eyeobj.locked_to && cantrack)
+		/*if(!eyeobj.locked_to && cantrack) // Retracking code
 			to_chat(src, "Target is trackable again.")
 			currently_tracking.lock_atom(eyeobj,/datum/locking_category/ai_eye)
-		else if(!cantrack && eyeobj.locked_to == currently_tracking)
+		else */if(!cantrack && eyeobj.locked_to == currently_tracking)
 			to_chat(src, "Target is no longer trackable.")
 			currently_tracking.unlock_atom(eyeobj)
 
@@ -217,7 +217,7 @@
 		to_chat(src, "No longer tracking [currently_tracking.name] on camera.")
 		currently_tracking.unregister_event(/event/moved,src,nameof(src::on_camera_change()))
 		currently_tracking.unregister_event(/event/equipped,src,nameof(src::on_camera_change()))
-		currently_tracking.unregister_event(/event/unequipped,src,nameof(src::on_camera_change()))
+		//currently_tracking.unregister_event(/event/unequipped,src,nameof(src::on_camera_change()))
 		currently_tracking.unregister_event(/event/cameranet_changed,src,nameof(src::on_camera_change()))
 		if(eyeobj?.locked_to == currently_tracking)
 			currently_tracking.unlock_from()
