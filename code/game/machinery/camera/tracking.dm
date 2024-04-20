@@ -114,7 +114,7 @@
 		return
 	spawn(0)
 		if(!can_track_atom(target))
-			to_chat(src, "Target is not near any active cameras.")
+			to_chat(src, "Target is not trackable by any means.")
 			return
 		var/obj/machinery/door/airlock/tobeopened
 		var/dist = -1
