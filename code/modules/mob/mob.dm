@@ -1406,6 +1406,13 @@ Use this proc preferably at the end of an equipment loadout
 		var/mob/living/carbon/human/H = src
 		H.handle_regular_hud_updates()
 
+/mob/living/silicon/ai/cancel_camera()
+	set name = "Cancel Camera View"
+	set category = "IC"
+	stop_ai_tracking()
+	unset_machine()
+	reset_view(null)
+
 // http://www.byond.com/forum/?post=2219001#comment22205313
 // TODO: Clean up and identify the args, document
 /mob/verb/DisableClick(argu = null as anything, sec = "" as text, number1 = 0 as num, number2 = 0 as num)
