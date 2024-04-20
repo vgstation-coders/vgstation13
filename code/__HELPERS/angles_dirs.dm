@@ -6,6 +6,8 @@ var/static/list/counterclockwise_perpendicular_dirs = list(EAST,WEST,EAST|WEST,S
 // Saves writing a whole new list
 #define clockwise_perpendicular_dirs(A) opposite_dirs[counterclockwise_perpendicular_dirs[A]]
 
+#define SIDE_DIRS(A) list(counterclockwise_perpendicular_dirs[A],clockwise_perpendicular_dirs(A))
+
 /proc/Get_Angle(atom/movable/start,atom/movable/end)//For beams.
 	if(!start || !end)
 		return 0

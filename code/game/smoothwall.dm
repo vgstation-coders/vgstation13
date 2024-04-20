@@ -15,9 +15,10 @@
 	// THIS IS A BITMAP BECAUSE NORTH/SOUTH/ETC ARE ALL BITFLAGS BECAUSE BYOND IS DUMB AND
 	// DOESN'T FUCKING MAKE SENSE, BUT IT WORKS TO OUR ADVANTAGE
 	. = 0
-	for(var/cdir in cardinal)
-		if((flow_flags & ON_BORDER) && !bordersmooth_override && (dir == cdir || opposite_dirs[dir] == cdir))
-			continue
+	var/list/dirs2use = cardinal
+	if((flow_flags & ON_BORDER) && !bordersmooth_override)
+		dirs2use = SIDE_DIRS(dir)
+	for(var/cdir in dirs2use)
 		var/turf/T = get_step(src,cdir)
 		if(isSmoothableNeighbor(T))
 			. |= cdir
@@ -31,9 +32,10 @@
 /atom/proc/findSmoothingOnTurf()
 	. = 0
 	var/turf/T = get_turf(src)
-	for(var/cdir in cardinal)
-		if((flow_flags & ON_BORDER) && !bordersmooth_override && (dir == cdir || opposite_dirs[dir] == cdir))
-			continue
+	var/list/dirs2use = cardinal
+	if((flow_flags & ON_BORDER) && !bordersmooth_override)
+		dirs2use = SIDE_DIRS(dir)
+	for(var/cdir in dirs2use)
 		if(isSmoothableNeighbor(T,0) && T.dir == cdir)
 			. |= cdir
 			continue
