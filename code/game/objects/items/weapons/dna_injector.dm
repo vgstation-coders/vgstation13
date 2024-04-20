@@ -735,6 +735,16 @@
 	block = HEADACHEBLOCK
 	..()
 
+/obj/item/weapon/dnainjector/nofail/eat
+	name = "DNA-Injector (Eat)"
+	desc = "Now I am become gut, devourer of worlds."
+	datatype = DNA2_BUF_SE
+	value = 0xFFF
+
+/obj/item/weapon/dnainjector/nofail/eat/initialize()
+	block = EATBLOCK
+	..()
+
 /obj/item/weapon/dnainjector/nofail/antiepi
 	name = "DNA-Injector (Anti-Epi.)"
 	desc = "Will fix you up from shaking the room."

@@ -78,7 +78,9 @@
 	W.time_inflicted = world.time
 
 /mob/living/carbon/human/var/list/organs = list()
+/mob/living/carbon/human/var/list/cosmetic_organs = list()
 /mob/living/carbon/human/var/list/datum/organ/external/organs_by_name = list() //Map organ names to organs
+/mob/living/carbon/human/var/list/datum/organ/external/cosmetic_organs_by_name = list()
 /mob/living/carbon/human/var/list/datum/organ/internal/internal_organs_by_name = list() //So internal organs have less ickiness too
 /mob/living/carbon/human/var/list/grasp_organs = list()
 
@@ -196,12 +198,12 @@
 	has_limbs = check_crawl_ability()
 
 /mob/living/carbon/human/proc/check_stand_ability()
-	//All legs must be usable in order for a human to stand
+	//At least one leg must be usable in order for a human to stand
 	for(var/datum/organ/external/leg in get_organs(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
-		if(!leg.can_stand())
-			return FALSE
+		if(leg.can_stand())
+			return TRUE
 
-	return TRUE
+	return FALSE
 
 /mob/living/carbon/human/proc/check_crawl_ability()
 	//At least one limb has to be usable for a human to crawl

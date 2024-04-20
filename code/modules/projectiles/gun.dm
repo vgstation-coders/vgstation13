@@ -74,6 +74,11 @@
 	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_NINJA
 	var/kick_fire_chance = 5
 
+/obj/item/weapon/gun/New()
+	..()
+	if(isHandgun())
+		quick_equip_priority |= list(slot_w_uniform) // for holsters
+
 /obj/item/weapon/gun/Destroy()
 	if(in_chamber)
 		QDEL_NULL(in_chamber)
@@ -192,9 +197,13 @@
 	var/dehand = FALSE
 	if(istype(user, /mob/living))
 		var/mob/living/M = user
+		var/honor = is_honorable(M, honorable)
+		if(honor_check && honor == MERELY_HONORABLE) //Merely honorable people simply cannot use guns
+			to_chat(M, "<span class='notice'>You are too honorable to use such weapons!</span>")
+			return
 		if(clumsy_check && clumsy_check(M) && prob(50))
 			explode = TRUE
-		if(honor_check && is_honorable(M, honorable))
+		if(honor_check && honor == VERY_HONORABLE)
 			explode = TRUE
 			dehand = TRUE
 		if(explode)

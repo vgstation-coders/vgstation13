@@ -172,18 +172,25 @@
 			anchored = 0
 			update_icon()
 
-	else if(istype(W, /obj/item/stack/sheet))
-		var/obj/item/stack/sheet/S = W
+	else if(istype(W, /obj/item/stack))//this could be either material stacks or tile stacks
+		var/use_amount = 2
+		var/obj/item/stack/S = W
+		if(istype(W,/obj/item/stack/sheet))//if sheet stack
+			use_amount = 2
+		else if(istype(W,/obj/item/stack/tile))//if tile stack
+			if(!S.sheettype) //only certain tiles have walltypes
+				return
+			use_amount = 8	//4 tiles per sheet, this is the equivalent of 2 sheets
 		switch(S.type)
 			if(/obj/item/stack/sheet/metal, /obj/item/stack/sheet/metal/cyborg)
 				if(state) //We are trying to finish a reinforced girder with regular metal
 					return
 				if(!anchored)
-					if(S.amount < 2)
+					if(S.amount < use_amount)
 						return
 					var/pdiff = performWallPressureCheck(src.loc)
 					if(!pdiff) //Should really not be that precise, 10 kPa is the usual breaking point
-						S.use(2)
+						S.use(use_amount)
 						user.visible_message("<span class='warning'>[user] creates a false wall!</span>", \
 						"<span class='notice'>You create a false wall. Push on it to open or close the passage.</span>")
 						var/obj/structure/falsewall/FW = new /obj/structure/falsewall (src.loc)
@@ -196,19 +203,21 @@
 						log_admin("Attempted false wall made by [user.real_name] (user.ckey) at [loc] had a pressure difference of [pdiff]!")
 						return
 				else
-					if(S.amount < 2)
+					if(S.amount < use_amount)
 						return ..() // ?
 					user.visible_message("<span class='notice'>[user] starts installing plating to \the [src].</span>", \
 					"<span class='notice'>You start installing plating to \the [src].</span>")
 					if(do_after(user, src, construction_length))
-						if(S.amount < 2) //User being tricky
+						if(S.amount < use_amount) //User being tricky
 							return
-						S.use(2)
+						S.use(use_amount)
 						user.visible_message("<span class='notice'>[user] finishes installing plating to \the [src].</span>", \
 						"<span class='notice'>You finish installing plating to \the [src].</span>")
 						var/turf/Tsrc = get_turf(src)
 						if(!istype(Tsrc))
 							return 0
+						for (var/obj/effect/decal/cleanable/blood/tracks/footprints in Tsrc)
+							qdel(footprints)//so footprints don't suddenly move on top of the new wall
 						var/turf/simulated/wall/X = Tsrc.ChangeTurf(/turf/simulated/wall)
 						if(X)
 							X.add_hiddenprint(user)
@@ -220,11 +229,11 @@
 
 				//Due to the way wall construction works, this uses both plasteel sheets immediately
 				if(!anchored)
-					if(S.amount < 2)
+					if(S.amount < use_amount)
 						return
 					var/pdiff = performWallPressureCheck(src.loc)
 					if(!pdiff)
-						S.use(2)
+						S.use(use_amount)
 						user.visible_message("<span class='warning'>[user] creates a false reinforced wall!</span>", \
 						"<span class='notice'>You create a false reinforced wall. Push on it to open or close the passage.</span>")
 						var/obj/structure/falserwall/FW = new /obj/structure/falserwall(src.loc)
@@ -249,6 +258,8 @@
 					user.visible_message("<span class='warning'>[user] finishes installing reinforced plating to \the [src].</span>", \
 					"<span class='notice'>You finish installing reinforced plating to \the [src].</span>")
 					var/turf/Tsrc = get_turf(src)
+					for (var/obj/effect/decal/cleanable/blood/tracks/footprints in Tsrc)
+						qdel(footprints)//so footprints don't suddenly move on top of the new wall
 					var/turf/simulated/wall/r_wall/X = Tsrc.ChangeTurf(/turf/simulated/wall/r_wall)
 					if(X)
 						X.add_hiddenprint(user)
@@ -260,15 +271,23 @@
 
 		if(S.sheettype)
 			var/M = S.sheettype
+			var/isLegacy = FALSE
+			if(istype(W,/obj/item/stack/tile)) // if using tiles, use the path for the legacy instance
+				isLegacy = TRUE
 			if(!anchored)
-				if(S.amount < 2)
+				if(S.amount < use_amount)
+					to_chat(user, "<span class='warning'>Not enough material to construct. A total of [use_amount] required.</span>")
 					return
-				var/F = text2path("/obj/structure/falsewall/[M]")
+				var/F
+				if(!isLegacy)
+					F = text2path("/obj/structure/falsewall/[M]")
+				else
+					F = text2path("/obj/structure/falsewall/[M]/[M]_old")
 				if(!ispath(F))
 					return
 				var/pdiff = performWallPressureCheck(src.loc)
 				if(!pdiff)
-					S.use(2)
+					S.use(use_amount)
 					user.visible_message("<span class='warning'>[user] creates a false wall!</span>", \
 					"<span class='notice'>You create a false wall. Push on it to open or close the passage.</span>")
 					var/obj/structure/falsewall/FW = new F (src.loc)
@@ -281,20 +300,35 @@
 					log_admin("Attempted false [M] wall made by [user.real_name] ([user.ckey]) at [loc] had a pressure difference of [pdiff]!")
 					return
 			else
-				if(S.amount < 2)
+				if(S.amount < use_amount)
+					to_chat(user, "<span class='warning'>Not enough material to construct. A total of [use_amount] required.</span>")
 					return ..()
-				var/wallpath = text2path("/turf/simulated/wall/mineral/[M]")
+				var/wallpath
+				if(!isLegacy)
+					wallpath = text2path("/turf/simulated/wall/mineral/[M]")
+				else
+					wallpath = text2path("/turf/simulated/wall/mineral/[M]/[M]_old")
 				if(!ispath(wallpath))
 					return ..()
-				user.visible_message("<span class='notice'>[user] starts installing plating to \the [src].</span>", \
-				"<span class='notice'>You start installing plating to \the [src].</span>")
+				if(!isLegacy)
+					user.visible_message("<span class='notice'>[user] starts installing plating to \the [src].</span>", \
+					"<span class='notice'>You start installing plating to \the [src].</span>")
+				else
+					user.visible_message("<span class='notice'>[user] starts reinforcing \the [src] with the [S.name].</span>", \
+					"<span class='notice'>You start reinforcing \the [src] with the [S.name].</span>")
 				if(do_after(user, src,construction_length))
-					if(S.amount < 2) //Don't be tricky now
+					if(S.amount < use_amount) //Don't be tricky now
 						return
-					S.use(2)
-					user.visible_message("<span class='notice'>[user] finishes installing plating to \the [src].</span>", \
-					"<span class='notice'>You finish installing plating to \the [src].</span>")
+					S.use(use_amount)
+					if(!isLegacy)
+						user.visible_message("<span class='notice'>[user] finishes installing plating to \the [src].</span>", \
+						"<span class='notice'>You finish installing plating to \the [src].</span>")
+					else
+						user.visible_message("<span class='notice'>[user] finishes reinforcing \the [src] with the [S.name].</span>", \
+						"<span class='notice'>You finish reinforcing \the [src] with the [S.name].</span>")
 					var/turf/Tsrc = get_turf(src)
+					for (var/obj/effect/decal/cleanable/blood/tracks/footprints in Tsrc)
+						qdel(footprints)//so footprints don't suddenly move on top of the new wall
 					var/turf/simulated/wall/mineral/X = Tsrc.ChangeTurf(wallpath)
 					if(X)
 						X.add_hiddenprint(user)

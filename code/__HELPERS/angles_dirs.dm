@@ -201,3 +201,14 @@ var/static/list/counterclockwise_perpendicular_dirs = list(EAST,WEST,EAST|WEST,S
 			return "&#8601;"
 		if(NORTHWEST)
 			return "&#8598;"
+
+/proc/splitdiagonals(var/dir)
+	switch(dir)
+		if(NORTHEAST)
+			return list(NORTH,EAST)
+		if(SOUTHEAST)
+			return list(SOUTH,EAST)
+		if(SOUTHWEST)
+			return list(SOUTH,WEST)
+		if(NORTHWEST)
+			return list(NORTH,WEST)

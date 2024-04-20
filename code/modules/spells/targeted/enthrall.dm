@@ -26,22 +26,9 @@
 		return FALSE
 
 /spell/targeted/enthrall/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
-	if (!ismob(target)) // Can only enthrall humans
+	if (!ishuman(target)) // Can only enthrall humans
 		return FALSE
-
-	var/mob/M = target
-
-	var/success = M.vampire_affected(user.mind)
-	switch (success)
-		if (TRUE)
-			if (!user.can_enthrall(target))
-				return FALSE
-			return ..()
-		if (FALSE)
-			return FALSE
-		if (VAMP_FAILURE)
-			critfail(target, user)
-			return FALSE
+	return ..()
 
 
 /spell/targeted/enthrall/cast(var/list/targets, var/mob/user)
@@ -54,7 +41,13 @@
 
 	if (!V)
 		return FALSE
-
+	var/success = target.vampire_affected(user.mind)
+	switch(success)
+		if(FALSE)
+			return TRUE
+		if(VAMP_FAILURE)
+			critfail(targets, user)
+			return
 	user.visible_message("<span class='warning'>[user] bites \the [target]'s neck!</span>", "<span class='warning'>You bite \the [target]'s neck and begin the flow of power.</span>")
 	to_chat(target, "<span class='sinister'>You feel the tendrils of evil [(locate(/datum/power/vampire/charisma) in V.current_powers) ? "aggressively" : "slowly"] invade your mind.</span>")
 
@@ -63,7 +56,7 @@
 			V.handle_enthrall(target.mind)
 	else
 		to_chat(user, "<span class='warning'>Either you or your target moved, and you couldn't finish enthralling them!</span>")
-		return FALSE
+		return TRUE
 
 	if(!target.client) //There is not a player "in control" of this corpse, so there is no one to inform.
 		var/mob/dead/observer/ghost = mind_can_reenter(target.mind)

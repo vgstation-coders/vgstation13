@@ -44,38 +44,39 @@
 
 /obj/item/weapon/storage/briefcase/attack(mob/living/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
-		to_chat(user, "<span class='warning'>The [src] slips out of your hand and hits your head.</span>")
+		to_chat(user, "<span class='warning'>\The [src] slips out of your hand and hits your head.</span>")
 		user.take_organ_damage(10)
 		user.Paralyse(2)
 		playsound(src, "swing_hit", 50, 1, -1)
 		return
-	..()
 
-/obj/item/weapon/storage/briefcase/afterattack(var/atom/target, var/mob/user, var/proximity_flag, var/click_parameters)
-	if(!proximity_flag)
-		return
+	if(!iscarbon(user))
+		M.LAssailant = null
+	else
+		M.LAssailant = user
+		M.assaulted_by(user)
 
-	if (!isliving(target))
-		return
-
-	var/mob/living/M = target
-
-	if (M.stat == CONSCIOUS && M.health < 50)
-		if(prob(90))
-			if ((istype(M, /mob/living/carbon/human) && istype(M, /obj/item/clothing/head) && M.flags & 8 && prob(80)))
-				to_chat(M, "<span class='warning'>The helmet protects you from being hit hard in the head!</span>")
-				return
-			var/time = rand(2, 6)
-			if (prob(75))
-				M.Paralyse(time)
-			else
-				M.Stun(time)
-			if(!(M.status_flags & BUDDHAMODE))
-				M.stat = UNCONSCIOUS
-				M.visible_message("<span class='danger'>\The [M] has been knocked unconscious by \the [user]!</span>", "<span class='danger'>You have been knocked unconscious!</span>", "<span class='warning'>You hear someone fall.</span>")
-		else
-			M.visible_message("<span class='warning'>\The [user] tried to knock \the [M] unconcious!</span>", "<span class='warning'>\The [user] tried to knock you unconcious!</span>")
-			M.eye_blurry += 3
+	var/t = user.zone_sel.selecting
+	if (t == LIMB_HEAD)
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H.stat < DEAD && H.health < 50 && prob(90))
+				if ((H.head && istype(H.head, /obj/item/clothing/head/helmet)) && prob(80))
+					to_chat(H, "<span class='warning'>The helmet protects you from being hit hard in the head!</span>")
+					return
+				var/time = rand(2, 6)
+				if (prob(75) && !H.stat && !(M.status_flags & BUDDHAMODE))
+					user.do_attack_animation(H, src)
+					playsound(H, hitsound, 50, 1, -1)
+					user.visible_message("<span class='danger'><B>[H] has been knocked unconscious!</B>", "<span class='warning'>You knock [H] unconscious!</span></span>")
+					H.Paralyse(time)
+					H.stat = UNCONSCIOUS
+					return
+				else
+					H.eye_blurry += 3
+			if(H.stat < UNCONSCIOUS)
+				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")
+	return ..()
 
 /obj/item/weapon/storage/briefcase/MouseDropFrom(atom/over_object)
 	if(istype(over_object,/mob/living/carbon/human))
@@ -110,12 +111,10 @@
 						cant_drop = 1
 						target.mutual_handcuffs = casecuff
 						casecuff.invisibility = INVISIBILITY_MAXIMUM
-						var/obj/abstract/Overlays/O = target.obj_overlays[HANDCUFF_LAYER]
-						O.icon = 'icons/obj/cuffs.dmi'
-						O.icon_state = "singlecuff[cuffslot]"
-						O.pixel_x = target.species.inventory_offsets["[cuffslot]"]["pixel_x"] * PIXEL_MULTIPLIER
-						O.pixel_y = target.species.inventory_offsets["[cuffslot]"]["pixel_y"] * PIXEL_MULTIPLIER
-						target.obj_to_plane_overlay(O,HANDCUFF_LAYER)
+						var/mutable_appearance/handcuff_overlay = mutable_appearance('icons/obj/cuffs.dmi', "singlecuff[cuffslot]", -HANDCUFF_LAYER)
+						handcuff_overlay.pixel_x = target.species.inventory_offsets["[cuffslot]"]["pixel_x"] * PIXEL_MULTIPLIER
+						handcuff_overlay.pixel_y = target.species.inventory_offsets["[cuffslot]"]["pixel_y"] * PIXEL_MULTIPLIER
+						target.overlays += target.overlays_standing[HANDCUFF_LAYER] = handcuff_overlay
 						close_all()
 						storage_locked = TRUE
 				else
@@ -128,7 +127,7 @@
 	if(casecuff && Obj == casecuff)  //when stripped, they get forcemoved from the case, that's why this works
 		var/mob/living/carbon/human/target = loc
 		target.mutual_handcuffs = null
-		target.overlays -= target.obj_overlays[HANDCUFF_LAYER]
+		target.overlays -= target.overlays_standing[HANDCUFF_LAYER]
 		casecuff.invisibility = initial(casecuff.invisibility)
 		canremove = 1
 		cant_drop = 0
@@ -143,7 +142,7 @@
 	if(casecuff)
 		var/mob/living/carbon/human/uncuffed = user
 		uncuffed.mutual_handcuffs = null
-		uncuffed.overlays -= uncuffed.obj_overlays[HANDCUFF_LAYER]
+		uncuffed.overlays -= uncuffed.overlays_standing[HANDCUFF_LAYER]
 		casecuff.invisibility = 0
 		casecuff.forceMove(user.loc)
 		canremove = 1

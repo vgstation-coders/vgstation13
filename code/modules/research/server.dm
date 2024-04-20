@@ -71,6 +71,10 @@
 			var/datum/tech/T = files.known_tech[ID]
 			if(prob(1))
 				T.level = 0 // This never happens, so make it dramatic. T.level--
+				message_admins("[src] lost [T.id] tech levels due to heat damage.")
+				for(var/obj/machinery/computer/rdservercontrol/SC in machines)
+					SC.screen = -1 //Display an alert
+					SC.updateUsrDialog()
 				changed=1
 		if(changed)
 			files.RefreshResearch()
@@ -241,6 +245,9 @@
 	var/dat = ""
 
 	switch(screen)
+		if(-1)
+			dat += "Alert! Technology data lost due to server heat damage.<BR><BR>"
+			dat += "<HR><A href='?src=\ref[src];main=1'>Main Menu</A>"
 		if(0) //Main Menu
 			dat += "Connected Servers:<BR><BR>"
 

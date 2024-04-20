@@ -4,7 +4,6 @@
 	icon_state = "compactor_on" //New sprite indicating fullness?
 	machine_flags = WRENCHMOVE | FIXED2WORK
 	flags = FPRINT
-	req_access = list(access_janitor)
 	template_path = "disposalsbincompactor.tmpl"
 
 	hack_abilities = list(

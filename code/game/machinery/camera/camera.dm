@@ -52,6 +52,10 @@ var/list/camera_names=list()
 	damage_armor = CAMERA_MIN_WEAPON_DAMAGE
 	damage_resist = 0
 
+/obj/machinery/camera/New()
+	..()
+	update_icon()
+
 /obj/machinery/camera/flawless
 	failure_chance = 0
 
@@ -69,10 +73,13 @@ var/list/camera_names=list()
 
 	if (deactivated)
 		icon_state = "[camtype]1"
+		kill_moody_light()
 	else if (EMPd)
 		icon_state = "[camtype]emp"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_cameraemp")
 	else
 		icon_state = "[camtype]"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_camera")
 
 /obj/machinery/camera/proc/update_hear()//only cameras with voice analyzers can hear, to reduce the number of unecessary /mob/virtualhearer
 	if(!hear_voice && isHearing())

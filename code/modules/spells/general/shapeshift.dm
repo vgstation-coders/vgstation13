@@ -22,7 +22,7 @@
 
 /spell/shapeshift/cast_check(skipcharge = 0, mob/user = usr)
 	. = ..()
-	if (!.) 
+	if (!.)
 		return FALSE
 
 /spell/shapeshift/choose_targets(var/mob/user = usr)
@@ -35,8 +35,6 @@
 		user.set_species("Vampire")
 		user.name = "Nosferatu"
 		user.real_name = "Nosferatu"
-		user.UpdateAppearance()
-		user.update_perception()
 		humanform = FALSE
 	else
 		user.set_species(identity.species, 0)
@@ -44,8 +42,8 @@
 		user.name = identity.real_name
 		user.real_name = identity.real_name
 		user.dna = identity
-		user.UpdateAppearance()
-		user.update_perception()
 		humanform = TRUE
-	
+	user.UpdateAppearance()
+	user.update_perception()
+	user.update_name()
 	..()

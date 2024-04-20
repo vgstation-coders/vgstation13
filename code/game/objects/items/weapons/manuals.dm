@@ -808,6 +808,7 @@
 	title = "A Crash Course in Virology"
 	book_width = 819
 	book_height = 516
+	id = 25
 	dat = {"<html>
 				<head>
 				<style>
@@ -1134,3 +1135,123 @@ var/virology_encyclopedia = ""
 		L.bodytemperature = L.bodytemperature + 10 //This is enough to push someone from the edge of passing out to safe
 		to_chat(L, "<span class='warning'>You feel a jolt of warmth from the flash-incineration of \the [src].")
 	qdel(src)
+
+/obj/item/weapon/book/manual/engineering_supermatter_guide
+	name = "\improper Introduction to Supermatter: Delamination (Not) Imminent"
+	icon_state = "bookSupermatter"
+	item_state = "bookSupermatter"
+	author = "Ashley Burns"
+	title = "Introduction to Supermatter: Delamination (Not) Imminent"
+	id = 23
+	wiki_page = "Supermatter"
+
+/obj/item/weapon/book/manual/wheelstation_sme_guide
+	name = "\improper Engine technician's notes"
+	icon_state = "bookSupermatter2"
+	item_state = "bookSupermatter2"
+	author = "Eris Bay"
+	title = "Engine technician's notes"
+	id = 24
+	dat = {"<html>
+			<head>
+			<style>
+			h1 {font-size: 18px; margin: 15px 0px 5px;}
+			h2 {font-size: 15px; margin: 15px 0px 5px;}
+			li {margin: 2px 0px 2px 15px;}
+			ul {list-style: none; margin: 5px; padding: 0px;}
+			ol {margin: 5px; padding: 0px 15px;}
+			</style>
+			</head>
+			<body>
+			<h1>Working This Piece of Junk Legacy Engine</h1>
+
+			<p>
+			So you were assigned to ol' NSS Wheelstation? My condolences. By the time you arrive,
+			I'll have rotated off this spinning bagel of rust. I'm leaving you some notes on this
+			ancient relic we call an engine so you can hopefully get it operational before reserve
+			power runs out. Good luck.
+			<br><br>
+			- Eris Bay, Engine Technician
+			</p>
+
+			<h2>Cold-starting the Engine</h2>
+
+			<p>
+			You arrived to find the engine fresh off its scheduled maintenance and have no idea how to
+			get it running again? Follow these steps.
+			</p>
+
+			<p>
+			<ol>
+			<li><b>Check the shard:</b> Put on your mesons and go have a look. Is the shard in the chamber? If all you see is a crate, the maintenance technician must've been too lazy or too scared to take the shard out of its box. Hit the bolts
+			control button in the observation room to unlock the airlock, then go in the chamber and <u>CAREFULLY</u>
+			take the shard out of the crate and drag the crate out of the chamber. Remember that contrary to
+			what some of the old farts will tell you, leaving the crate in the chamber with the shard is
+			NOT up to code, and neither is leaving the doors unbolted after you're done.</li>
+			<li><b>Fill the coolant loops:</b> There are two pipes connected to canister connector ports in front of
+			the observation room: green and cyan. Green is the "hot loop" that is injected into the chamber,
+			and cyan is the closed "cold loop" connected to the cooling pipes in space. Put two cans of CO2 into
+			the green pipe, and two cans of plasma into the cyan pipe. Remember to turn the pumps up all the way!</li>
+			<li><b>Set the filters:</b> Set the two gas filters in the green loop to filter for CO2 and turn the
+			pressure up all the way. These will scrub out waste gases from the loop into the yellow canister,
+			which must be periodically switched out for an empty one.</li>
+			<li><b>Start the cooling system:</b> Switch the four volume pumps next to the thermoelectric generators
+			on to enable the cold loop circulators. Then walk over to the Coolant Control computer in the
+			observation room and turn on the injector and the vent, and set the injector's rate to its maximum
+			of 10000.</li>
+			<li><b>Wait for the gas to get moving:</b> The loop takes a bit to get going. You'll know it's working
+			when the circulators on the TEGs are spinning, and when the meter on the green pipe outside the SM
+			chamber reports a temperature under 200 Kelvin.</li>
+			<li><b>Turn on the emitters:</b> Turn on the emitters to start powering up the shard. If it's your first
+			time, turn them on one by one while observing engine conditions just to be safe.</li>
+			<li><b>Monitor:</b> Monitor the readouts on the supermatter monitor and Coolant Control computers to
+			ensure that the shard does not get hotter than 800 Kelvin.</li>
+			</ol>
+			</p>
+
+			<h2>Controlling the temperature</h2>
+
+			<p>
+			If the shard is getting too toasty, you have three ways to regulate its temperature.
+			</p>
+			<p>
+			<ol>
+			<li><b>Turn off emitters.</b> Less emitters means less energy going into the shard, means less heat.
+			This may not help if oxygen concentrations in the chamber are too high, as the shard can enter a
+			self-sustaining chain reaction in a high-oxygen atmosphere.</li>
+			<li><b>Hit the emergency cool-off.</b> Below the TEGs you'll find two digital valves. One of them is
+			labeled Emergency Cool-off. This connects the hot loop to heat exchangers connected to the cold loop,
+			which will rapidly cool it down. This will decrease power production drastically.</li>
+			<li><b>Bypass the circulators.</b> The other digital valve is labeled Emergency Circulator Bypass.
+			You need both valves open for this one to work. It bypasses the TEG circulators, which should improve
+			cold gas flow speed in the chamber at the cost of killing nearly all power production.</li>
+			</ol>
+			</p>
+
+			<h2>OH SHIT IT'S DELAMINATING!!</h2>
+
+			<p>
+			The computer just announced some scary stuff over the radio and now the crew is out for blood!
+			First off, don't panic. You probably have over ten minutes to fix the situation.
+			</p>
+			<p>
+			<ol>
+			<li><b>Turn off all the emitters.</b> This should be a nobrainer. You don't want to excite the shard
+			any more than it already is.</li>
+			<li><b>Check the monitor.</b> How unstable is the shard? Once instability hits 100%, it's game over.
+			How high is the instability rate? How hot is the shard?</li>
+			<li><b>Instability is low, the rate is low, and the shard isn't far above 800 K:</b> Try opening both cool-off valves below the TEG.
+			Run back to the monitors and see if the shard temperature is going down. If it is, and you expect
+			it to cool back down to 800 K before it delaminates, crisis is averted. If not, move on to the next
+			step.</li>
+			<li><b>Instability is high, or the rate is high, or the shard is hot:</b> VENT IT! Hit the emergency
+			vent button in the observation room to open shutters connecting the chamber to space.</li>
+			<li><b>I vented the chamber and it's still delaminating AAHHH!!:</b> Put on a hardsuit and magboots,
+			you're going in. Unbolt the chamber, turn on your magboots and CAREFULLY drag the shard out into space.
+			Do not walk into it or touch it. Once it's in space, it should immediately calm down. You can also
+			put it back in its box to calm it down.</li>
+			</ol>
+			</p>
+			</body>
+			</html>
+			"}

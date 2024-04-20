@@ -196,6 +196,8 @@
 
 #define istable(A) (istype(A, /obj/structure/table))
 
+#define isshelf(A) (istype(A, /obj/structure/table) || istype(A, /obj/structure/rack) || istype(A, /obj/structure/closet) || istype(A, /obj/item/weapon/storage))
+
 #define issilicatesprayer(A) (istype(A, /obj/item/device/silicate_sprayer))
 
 #define iswindow(A) (istype(A, /obj/structure/window))
@@ -233,6 +235,8 @@
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/floor/shuttle) || istype(A, /turf/simulated/floor/shuttle/brig))
+
+#define iswall(A) (istype(A, /turf/simulated/wall) || istype(A, /turf/unsimulated/wall))
 
 #define isshuttleturf(A) (istype(A, /turf/simulated/wall/shuttle) || istype(A, /turf/simulated/floor/shuttle))
 
@@ -341,6 +345,8 @@
 #define isspace(A) (A.type == /area)
 
 #define isopenspace(A) istype(A, /turf/simulated/open)
+var/global/list/visible_spaces = list(/turf/simulated/open, /turf/simulated/floor/glass)
+#define isvisiblespace(A) is_type_in_list(A, visible_spaces)
 
 //This one returns the "space" area
 //#define get_space_area (get_area(locate(1,1,2))) //xd

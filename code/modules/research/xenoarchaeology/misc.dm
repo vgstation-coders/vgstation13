@@ -141,12 +141,12 @@
 		/obj/item/clothing/under/rank/scientist,
 		/obj/item/clothing/suit/storage/labcoat/science,
 		/obj/item/clothing/shoes/white,
-		/obj/item/clothing/glasses/science,
+		/obj/item/clothing/glasses/scanner/science,
 		/obj/item/device/radio/headset/headset_sci,
 		/obj/item/weapon/storage/belt/archaeology,
 		/obj/item/weapon/storage/box/excavation,
 	)
-	
+
 
 /obj/structure/closet/secure_closet/excavation
 	name = "Excavation Tools"
@@ -171,7 +171,7 @@
 		/obj/item/device/measuring_tape,
 		/obj/item/weapon/pickaxe/hand,
 	)
-	
+
 
 //---- Isolation room air alarms
 

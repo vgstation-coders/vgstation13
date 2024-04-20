@@ -245,6 +245,7 @@
 	linked_pod?.crashing_this_pod = FALSE
 
 /obj/machinery/podcomputer/update_icon()
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_podcomputer")
 	if(panel_open)
 		icon_state = "podcomputer_maint"
 	else if(emergency_shuttle.online)

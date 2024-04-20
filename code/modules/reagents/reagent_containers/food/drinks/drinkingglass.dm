@@ -21,16 +21,19 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
-	can_flip = FALSE
-	overlays.Cut()
 	flammable = 0
 	if(!molotov)
 		lit = 0
-	light_color = null
-	set_light(0)
+		light_color = null
+		set_light(0)
 	origin_tech = ""
-	switching = FALSE
 	available_drinks.Cut()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/update_icon()
+	..()
+	overlays.len = 0
+	can_flip = FALSE
 
 	if (reagents.reagent_list.len > 0)
 		if(reagents.has_reagent(BLACKCOLOR))
@@ -39,14 +42,10 @@
 			desc = "The identity of this drink has been concealed for its protection."
 		else
 			var/datum/reagent/R = reagents.get_master_reagent()
-			R.handle_special_behavior(src)
+			R.when_drinkingglass_master_reagent(src)
 
 			if(R.light_color)
 				light_color = R.light_color
-
-			if(R.flammable)
-				if(!lit)
-					flammable = 1
 
 			name = R.glass_name ? R.glass_name : "glass of " + R.name //uses glass of [reagent name] if a glass name isn't defined
 			desc = R.glass_desc ? R.glass_desc : R.description //uses the description if a glass description isn't defined
@@ -66,6 +65,20 @@
 				filling.icon += mix_color_from_reagents(reagents.reagent_list)
 				filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 				overlays += filling
+
+			if(R.flammable)
+				if(lit)
+					var/image/I = image(icon, src, "[icon_state]-flamin")
+					I.blend_mode = BLEND_ADD
+					if (isturf(loc))
+						I.plane = ABOVE_LIGHTING_PLANE
+					else
+						I.plane = ABOVE_HUD_PLANE // inventory
+					overlays += I
+					name = "flaming [name]"
+					desc += " Damn that looks hot!"
+				else
+					flammable = 1
 	else
 		icon_state = "glass_empty"
 		item_state = "glass_empty"
@@ -76,6 +89,9 @@
 	if(iscarbon(loc))
 		var/mob/living/carbon/M = loc
 		M.update_inv_hands()
+
+	update_temperature_overlays()
+	update_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/attack_self(mob/user)
 	if(switching)
@@ -88,6 +104,7 @@
 		getnofruit(user,W)
 	else
 		..()
+
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/proc/randomize()
 	if(!available_drinks.len || switching)
@@ -161,6 +178,9 @@
 	reagents.add_reagent(IRISHCOFFEE, 50)
 	on_reagent_change()
 
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/on_vending_machine_spawn()
+	reagents.chem_temp = COOKTEMP_READY
+
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake
 	name = "glass of sake"
 
@@ -183,9 +203,13 @@
 	starting_materials = list(MAT_IRON = 500)
 
 /obj/item/weapon/reagent_containers/food/drinks/mug/on_reagent_change()
+	..()
+	update_icon()
 
+/obj/item/weapon/reagent_containers/food/drinks/mug/update_icon()
+	..()
 	if (reagents.reagent_list.len > 0)
-		item_state = "mug_empty"
+		//item_state = "mug_empty"
 
 		var/datum/reagent/R = reagents.get_master_reagent()
 
@@ -196,18 +220,14 @@
 			icon_state = R.mug_icon_state
 			//item_state = R.mug_icon_state
 			//looks like there is none made yet so at least let's not hold an invisible mug
-
 		else
 			mug_reagent_overlay()
 	else
-		overlays.len = 0
 		icon_state = "mug_empty"
 		name = "mug"
 		desc = "A simple mug."
-		return
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/mug_reagent_overlay()
-	overlays.len = 0
 	icon_state = base_icon_state
 	var/image/filling = image('icons/obj/reagentfillings.dmi', src, "mug")
 	filling.icon += mix_color_from_reagents(reagents.reagent_list)

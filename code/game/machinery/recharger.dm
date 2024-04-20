@@ -22,7 +22,7 @@
 	var/appearance_backup = null
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 
 /obj/machinery/recharger/New()
 	. = ..()

@@ -74,9 +74,8 @@
 	desc = "\An [lifestage_name()] [colour] slime."
 	icon_state = "[iconstate_color()] [lifestage_name()] slime"
 	real_name = name
-	spawn (1)
+	spawn (0)
 		regenerate_icons()
-		to_chat(src, "<span class='notice'>Your icons have been generated!</span>")
 	..()
 
 /mob/living/carbon/slime/proc/lifestage_updates()

@@ -13,6 +13,9 @@
 	autoignition_temperature = AUTOIGNITION_PROTECTIVE
 	blood_overlay_type = "helmet"
 
+	autoignition_temperature = 0
+	fire_fuel = 0
+
 /obj/item/clothing/head/helmet/NoiseDampening()	// checked on headwear by flashbangs
 	return TRUE
 

@@ -9,6 +9,7 @@
 	flags = FPRINT
 	slot_flags = 0
 	w_class = W_CLASS_SMALL
+	quick_equip_priority = list(slot_w_uniform)
 	var/accessory_exclusion = DECORATION
 	var/obj/item/clothing/attached_to = null
 	var/image/inv_overlay
@@ -24,11 +25,34 @@
 	inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[_color || icon_state]")
 	if(color)
 		inv_overlay.color = color
+
+	overlays.len = 0
+	inv_overlay.overlays.len = 0
+	for (var/part in dyed_parts)
+		var/list/dye_data = dyed_parts[part]
+		var/dye_color = dye_data[1]
+		var/dye_alpha = dye_data[2]
+
+		var/_state = dye_base_iconstate_override
+		if (!_state)
+			_state = icon_state
+		var/image/object_overlay = image(icon, src, "[_state]-[part]")
+		object_overlay.appearance_flags = RESET_COLOR
+		object_overlay.color = dye_color
+		object_overlay.alpha = dye_alpha
+		overlays += object_overlay
+
+		var/image/worn_overlay = image(cloth_icon, src, "[_state]-[part]")
+		worn_overlay.appearance_flags = RESET_COLOR
+		worn_overlay.color = dye_color
+		worn_overlay.alpha = dye_alpha
+		inv_overlay.overlays += worn_overlay
+
 	if(attached_to)
 		attached_to.overlays += inv_overlay
-		if(ishuman(attached_to.loc))
-			var/mob/living/carbon/human/H = attached_to.loc
-			H.update_inv_by_slot(attached_to.slot_flags)
+		if(iscarbon(attached_to.loc))
+			var/mob/living/carbon/carbon_attached_to = attached_to.loc
+			carbon_attached_to.update_inv_by_slot(attached_to.slot_flags)
 
 /obj/item/clothing/accessory/proc/can_attach_to(obj/item/clothing/C)
 	return istype(C, /obj/item/clothing/under) //By default, accessories can only be attached to jumpsuits
@@ -68,10 +92,24 @@
 /obj/item/proc/generate_accessory_overlays()
 	return
 
-/obj/item/clothing/generate_accessory_overlays(var/obj/abstract/Overlays/O)
+/obj/item/clothing/generate_accessory_overlays(mutable_appearance/accessory_overlay_final)
 	if(accessories.len)
 		for(var/obj/item/clothing/accessory/accessory in accessories)
-			O.overlays += image("icon" = 'icons/mob/clothing_accessories.dmi', "icon_state" = "[accessory._color || accessory.icon_state]")
+			var/mutable_appearance/accessory_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', null,"[accessory._color || accessory.icon_state]")
+			accessory_overlay.color = accessory.color
+			for(var/part in accessory.dyed_parts)
+				var/list/dye_data = accessory.dyed_parts[part]
+				var/dye_color = dye_data[1]
+				var/dye_alpha = dye_data[2]
+
+				var/_state = accessory.dye_base_iconstate_override
+				if (!_state)
+					_state = accessory.icon_state
+
+				var/mutable_appearance/worn_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', null, "[_state]-[part]", alpha = dye_alpha, appearance_flags = RESET_COLOR)
+				worn_overlay.color = dye_color
+				accessory_overlay.overlays += worn_overlay
+			accessory_overlay_final.overlays += accessory_overlay
 
 //Defining this at item level to prevent CASTING HELL
 /obj/item/proc/description_accessories()
@@ -125,6 +163,16 @@
 	icon_state = "bolotie"
 	_color = "bolotie"
 	accessory_exclusion = TIE
+
+/obj/item/clothing/accessory/tie/linen
+	name = "tie"
+	desc = "A woven tie."
+	icon_state = "tie"
+	accessory_exclusion = TIE
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("pattern","tip")
 
 /obj/item/clothing/accessory/stethoscope
 	name = "stethoscope"
@@ -426,7 +474,6 @@
 	var/triggered = FALSE
 	var/event_key
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
 

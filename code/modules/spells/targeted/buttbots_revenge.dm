@@ -15,6 +15,7 @@
 	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
 	sparks_spread = 1
 	sparks_amt = 4
+	compatible_mobs = list(/mob/living/carbon/human,/mob/living/carbon/monkey)
 
 	amt_knockdown = 8
 	amt_stunned = 8
@@ -26,20 +27,15 @@
 /spell/targeted/buttbots_revenge/cast(var/list/targets)
 	..()
 	for(var/mob/living/target in targets)
-		if(ishuman(target) || ismonkey(target))
-			var/mob/living/carbon/C = target
-			if(C.op_stage.butt != 4) // does the target have an ass
-				if(summon_bot)
-					new /obj/machinery/bot/buttbot(C.loc)
-				else
-					var/obj/item/clothing/head/butt/B = new(C.loc)
-					B.transfer_buttdentity(C)
-				C.op_stage.butt = 4 //No having two butts.
-				to_chat(C, "<span class='warning'>Your ass just blew up!</span>")
-			playsound(src, 'sound/effects/superfart.ogg', 50, 1)
-			C.apply_damage(40, BRUTE, LIMB_GROIN)
-			C.apply_damage(10, BURN, LIMB_GROIN)
-			score.assesblasted++
+		if(ishuman(target))
+			var/mob/living/carbon/human/H = target
+			H.butt_blast()
+			if(summon_bot)
+				var/obj/machinery/bot/buttbot/assbot = new /obj/machinery/bot/buttbot(H.loc)
+				for(var/obj/item/clothing/head/butt/B in H.loc)
+					assbot.stored_ass = B
+					B.forceMove(assbot)
+					break
 	return
 
 /spell/targeted/buttbots_revenge/empower_spell()

@@ -9,6 +9,7 @@
 	var/list/currently_hacking_apcs = list()		//any apc's currently being hacked
 	var/apc_hacklimit = 1							//how many apc's can be hacked at a time
 	var/list/apc_checkpoints = list() //Sanity, keeps track of the number of APCs the AI once possessed
+	var/apc_process_power = 0.03
 	var/list/currently_hacking_machines = list()	//any non-apc machines currently being hacked
 	var/processing_power = 50
 	var/max_processing_power = 200
@@ -68,7 +69,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 		for(var/obj/machinery/power/apc/A in apcs)
 			if(!A.malf_disrupted)
 				count++
-		add_power(count * 0.03)
+		add_power(count * apc_process_power)
 
 /datum/role/malfAI/proc/add_power(var/amount)
 	if(antag && antag.current)
@@ -97,6 +98,11 @@ Once done, you will be able to interface with all systems, notably the onboard n
 		if(!(H.particleimg in antag.current.client.images))
 			antag.current.client.images |= H.particleimg
 
+/datum/role/malfAI/StatPanel()
+	stat(null, text("APCs hacked: [apcs.len]"))
+	stat(null, text("APC hack limit: [currently_hacking_apcs.len]/[apc_hacklimit]"))
+	stat(null, text("Machine hack limit: [currently_hacking_machines.len]/[apcs.len + 1]")) //Machine limit is equal to APCs hacked, and +1 from innate malf AI hacking slot
+	stat(null, text("Processing power per minute: [apcs.len * apc_process_power * 30]")) // 0.03 * 30 (process ticks, a tick is ~2 seconds)
 
 ////////////////////////////////////////////////
 

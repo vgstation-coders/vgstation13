@@ -50,6 +50,8 @@
 			obscured |= slot_w_uniform
 		if(is_slot_hidden(wear_suit.body_parts_covered, (HIDESHOES), 0))
 			obscured |= slot_shoes
+		if(is_slot_hidden(wear_suit.body_parts_covered, (HIDEBACK), 0))
+			obscured |= slot_back
 	if(head)
 		if(is_slot_hidden(head.body_parts_covered, (HIDEMASK), 0))
 			obscured |= slot_wear_mask
@@ -68,13 +70,14 @@
 /mob/living/carbon/human/proc/check_hidden_head_flags(var/hidden_flags = 0)
 	return check_hidden_flags(get_clothing_items(get_head_slots()), hidden_flags)
 
-/mob/living/carbon/human/proc/check_hidden_body_flags(var/hidden_flags = 0)
-	return check_hidden_flags(get_clothing_items(get_body_slots()), hidden_flags)
+/mob/living/carbon/human/proc/check_hidden_body_flags(var/hidden_flags = 0, force_check = FALSE)
+	return check_hidden_flags(get_clothing_items(get_body_slots()), hidden_flags, force_check)
 
-/mob/living/carbon/human/proc/check_hidden_flags(var/list/items, var/hidden_flags = 0)
+/mob/living/carbon/human/proc/check_hidden_flags(var/list/items, var/hidden_flags = 0, force_check = FALSE)
 	if(!items || !istype(items))
 		items = get_clothing_items()
-	items -= list(gloves,shoes,w_uniform,glasses,ears) // now that these can hide stuff they need to be excluded
+	if(!force_check)
+		items -= list(gloves,shoes,w_uniform,glasses,ears) // now that these can hide stuff they need to be excluded
 	if(!hidden_flags)
 		return 0
 	var/ignore_slot
@@ -203,7 +206,7 @@
 		if(slot_head)
 			return has_organ(LIMB_HEAD)
 		if(slot_shoes)
-			return has_organ(LIMB_RIGHT_FOOT) && has_organ(LIMB_LEFT_FOOT)
+			return has_organ(LIMB_RIGHT_FOOT) || has_organ(LIMB_LEFT_FOOT)
 		if(slot_wear_suit)
 			return has_organ(LIMB_CHEST)
 		if(slot_w_uniform)

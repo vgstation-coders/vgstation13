@@ -11,10 +11,13 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/eventsendured		= 0 //How many random events did the station endure?
 	var/powerloss			= 0 //How many APCs have alarms (under 30 %)?
 	var/atmoloss			= 0 //How many air alarms are giving issues?
+	var/powerbonus			= 0 //If all APCs on the station are running optimally, big bonus
+	var/atmobonus			= 0 //If all air alarms on the station are running optimally, big bonus
 	var/maxpower			= 0 //Most watts in grid on any of the world's powergrids.
 	var/escapees			= 0 //How many people got out alive?
 	var/deadcrew			= 0 //Humans who died during the round
 	var/deadsilicon			= 0 //Silicons who died during the round
+	var/deadaipenalty		= 0 //AIs who died during the round
 	var/mess				= 0 //How much messes on the floor went uncleaned
 	var/litter				= 0 //How much trash is laying on the station floor
 	var/meals				= 0 //How much food was actively cooked that day
@@ -28,12 +31,11 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/disease_bad			= 0 //How many unique diseases currently affecting living mobs of cumulated danger >= 3
 	var/disease_most		= null //Most spread disease
 	var/disease_most_count	= 0 //Most spread disease
+	var/turfssingulod		= 0 //Amount of turfs eaten by singularities.
+	var/static/list/badvars		= list("deadcrew","deadsilicon","deadaipenalty","mess","litter","powerloss","atmoloss","stuffnotforwarded","disease_bad","turfssingulod")
 
 	//These ones are mainly for the stat panel
-	var/powerbonus			= 0 //If all APCs on the station are running optimally, big bonus
-	var/atmobonus			= 0 //If all air alarms on the station are running optimally, big bonus
 	var/messbonus			= 0 //If there are no messes on the station anywhere, huge bonus
-	var/deadaipenalty		= 0 //AIs who died during the round
 	var/foodeaten			= 0 //How much food was consumed
 	var/clownabuse			= 0 //How many times a clown was punched, struck or otherwise maligned
 	var/slips				= 0 //How many people have slipped during this round
@@ -65,7 +67,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/largest_TTV			= 0 //The largest Tank Transfer Valve explosion this round
 	var/deadpets			= 0 //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
 	var/buttbotfarts		= 0 //Messages mimicked by buttbots.
-	var/turfssingulod		= 0 //Amount of turfs eaten by singularities.
 	var/shardstouched		= 0 //+1 for each pair of shards that bump into eachother.
 	var/kudzugrowth			= 0 //Amount of kudzu tiles successfully grown, even if they were later eradicated.
 	var/nukedefuse			= 9999 //Seconds the nuke had left when it was defused.
@@ -88,9 +89,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	var/list/global_paintings = list()
 
 /datum/controller/gameticker/scoreboard/proc/main(var/dat)
-	var/datum/faction/syndicate/nuke_op/NO = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
-	var/datum/faction/revolution/RV = find_active_faction_by_type(/datum/faction/revolution)
-
 	ticker.mode.declare_completion()
 	dat += "[ticker.mode.dat]<HR>"
 
@@ -100,10 +98,6 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += service_score()
 	dat += supply_score()
 	dat += science_score()
-	if(NO)
-		dat += nuke_op_score(NO)
-	if(RV)
-		dat += revolution_score(RV)
 	dat += syndicate_score()
 	dat += silicon_score()
 	dat += misc_score()
@@ -128,6 +122,8 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 	dat += "<U>THE GOOD:</U><BR>"
 	dat += "<B>Length of Shift:</B> [round(world.time/600)] Minutes ([round(score.time * 0.2)] Points)<BR>"
 	dat += "<B>Shuttle Escapees:</B> [score.escapees] ([score.escapees * 100] Points)<BR>"
+	if(is_research_fully_archived())
+		dat += "<B>Research was <span class='good'>fully completed</span> due to the work of:</B> [english_list(important_archivists)] (1800 Points)<BR>"
 	if(score.eventsendured > 0)
 		dat += "<B>Random Events Endured:</B> [score.eventsendured] ([score.eventsendured * 200] Points)<BR>"
 	if(score.meals > 0)
@@ -163,8 +159,10 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Destroyed Silicons:</B> [score.deadsilicon] ([find_active_faction_by_type(/datum/faction/malf) ? score.deadsilicon * 500 : score.deadsilicon * -500] Points)<BR>"
 	if (score.deadaipenalty > 0)
 		dat += "<B>AIs Destroyed:</B> [score.deadaipenalty] ([find_active_faction_by_type(/datum/faction/malf) ? score.deadaipenalty * 1000 : score.deadaipenalty * -1000] Points)<BR>"
-	dat += "<B>Uncleaned Messes:</B> [score.mess] (-[score.mess] Points)<BR>"
-	dat += "<B>Trash on Station:</B> [score.litter] (-[score.litter] Points)<BR>"
+	if(score.mess > 0)
+		dat += "<B>Uncleaned Messes:</B> [score.mess] (-[score.mess] Points)<BR>"
+	if(score.litter > 0)
+		dat += "<B>Trash on Station:</B> [score.litter] (-[score.litter] Points)<BR>"
 	if(score.stuffnotforwarded > 0)
 		dat += "<B>Cargo Crates Not Forwarded:</B> [score.stuffnotforwarded] (-[score.stuffnotforwarded * 25] Points)<BR>"
 	if (score.powerloss > 0)
@@ -175,6 +173,12 @@ var/global/datum/controller/gameticker/scoreboard/score = new()
 		dat += "<B>Tiles destroyed by a singularity:</B> [score.turfssingulod] (-[round(score.turfssingulod/2)] Points)<BR>"
 	if(score.disease_bad > 0)
 		dat += "<B>Bad diseases in living mobs:</B> [score.disease_bad] (-[score.disease_bad * 50] Points)<BR>"
+	var/badfound = FALSE
+	for(var/variable in src.badvars)
+		if(vars[variable] > 0)
+			badfound = TRUE
+	if(!badfound)
+		dat += "<B>Nothing bad to report! Good job, crew!</B><BR>"
 
 	dat += "<BR><U>THE WEIRD</U><BR>"
 /*	<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"

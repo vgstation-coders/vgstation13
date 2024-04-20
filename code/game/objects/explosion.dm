@@ -28,7 +28,7 @@
 
 var/explosion_shake_message_cooldown = 0
 
-/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit, var/list/whitelist, var/true_range)
+/proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1, var/mob/whodunnit, var/list/whitelist, var/true_range, var/list/shrapnel_whitelist)
 	var/explosion_time = world.time
 
 	spawn()
@@ -61,8 +61,7 @@ var/explosion_shake_message_cooldown = 0
 		var/y0 = epicenter.y
 		var/z0 = epicenter.z
 
-
-		var/datum/sensed_explosion/explosion_datum = explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit,whitelist,true_range)
+		var/datum/sensed_explosion/explosion_datum = explosion_destroy(epicenter,epicenter,devastation_range,heavy_impact_range,light_impact_range,flash_range,explosion_time,whodunnit,whitelist,true_range,shrapnel_whitelist)
 
 		var/took = stop_watch(watch)
 
@@ -136,7 +135,7 @@ var/explosion_shake_message_cooldown = 0
 	else
 		epicenter.turf_animation('icons/effects/96x96.dmi',"explosion_small",-WORLD_ICON_SIZE, -WORLD_ICON_SIZE, 13)
 
-/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit, var/list/whitelist, var/cap = 0)
+/proc/explosion_destroy(turf/epicenter, turf/offcenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, var/explosion_time, var/mob/whodunnit, var/list/whitelist, var/cap = 0, var/list/shrapnel_whitelist)
 	var/max_range = max(devastation_range, heavy_impact_range, light_impact_range)
 
 	var/x0 = offcenter.x
@@ -196,8 +195,7 @@ var/explosion_shake_message_cooldown = 0
 					continue
 				if(ismob(A))
 					to_chat(A, "<span class='warning'>You are blown away by the explosion!</span>")
-
-				A.throw_at(throwT,pushback+2,500)
+				A.throw_at(throwT,pushback+2,500,TRUE,0,shrapnel_whitelist)
 			A.ex_act(dist,null,whodunnit)
 			atomtime = world.time - atomtime
 			if(atomtime > 0)

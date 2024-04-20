@@ -30,6 +30,7 @@
 	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	siemens_coefficient = 0.9
+	vertical_offset = 1
 	wizard_garb = 5 //Treat this as a % chance to be a magic hat to start. It becomes TRUE/FALSE later.
 	var/timer
 
@@ -223,6 +224,18 @@
 	item_state = "detective"
 	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.9
+
+/obj/item/clothing/head/flatcap/linen
+	name = "flat cap"
+	desc = "A working man's cap."
+	icon_state = "flatcap"
+	item_state = "flatcap"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY
+	dyeable_parts = list("trim")
 
 /obj/item/clothing/head/pirate
 	name = "pirate hat"
@@ -551,6 +564,7 @@
 	icon_state = "clownpiece"
 	item_state = "clownpiece"
 	species_fit = list(INSECT_SHAPED)
+	vertical_offset = 4
 
 /obj/item/clothing/head/headband
 	name = "head band"
@@ -656,6 +670,7 @@
 	species_fit = list(INSECT_SHAPED)
 	desc = "A hood worn by the followers of Ratvar."
 	flags = FPRINT
+	body_parts_covered = HIDEHAIR
 
 /obj/item/clothing/head/franken_bolt
 	name = "neck bolts"
@@ -680,6 +695,13 @@
 	item_state = "devil_horns"
 	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
+
+/obj/item/clothing/head/bedsheet_ghost
+	name = "Bedsheet Ghost"
+	desc = "You did cut out eye holes, but you don't remember drawing a face. Spooooky"
+	icon_state = "bedsheet_ghost"
+	body_parts_covered = FACE|FULL_HEAD|HIDEHAIR
+	wear_override = new/icon("icon" = 'icons/misc/empty.dmi', "icon_state" = "empty_icon")
 
 /obj/item/clothing/head/elfhat
 	name = "elf hat"

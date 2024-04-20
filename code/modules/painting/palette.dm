@@ -53,13 +53,14 @@ interactions:
 */
 
 
-/obj/item/weapon/palette
+/obj/item/palette
 	// Graphics stuff
 	desc = "A palette on which to store colours. Let out your inner Picasso."
 	name = "palette"
 	icon = 'icons/obj/painting_items.dmi'
 	icon_state = "palette"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	item_state = "palette"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/arts_n_crafts.dmi', "right_hand" = 'icons/mob/in-hand/right/arts_n_crafts.dmi')
 
 	// Materials stuff
 	w_class = W_CLASS_SMALL
@@ -71,19 +72,24 @@ interactions:
 	// Paint stuff
 	var/tagindex = 0
 	var/list/stored_colours = list()
+	var/list/nanopaint_indexes = list()
+	var/list/components = list()
 
-/obj/item/weapon/palette/attack_self(mob/user)
+/obj/item/palette/attack_self(mob/user)
 	. = ..()
 	ui_interact(user)
 
-/obj/item/weapon/palette/attackby(obj/item/weapon/W, mob/user)
+/obj/item/palette/attackby(obj/item/weapon/W, mob/user)
 	. = ..()
 	var/datum/painting_utensil/p = new(user, W)
 	if (p.base_color)
 		stored_colours["[++tagindex]"] = p.base_color
+		nanopaint_indexes["[tagindex]"] = p.nano_paint
+		components["[tagindex]"] = p.components.Copy()
 		to_chat(user, "<span class='notice'>You add a new color to \the [src].</span>")
+		update_icon()
 
-/obj/item/weapon/palette/ui_interact(mob/user, ui_key, datum/nanoui/ui, force_open)
+/obj/item/palette/ui_interact(mob/user, ui_key, datum/nanoui/ui, force_open)
 	. = ..()
 	var/list/data = list()
 	var/list/paint_colours
@@ -94,6 +100,13 @@ interactions:
 		C_data["tag"] = C_tag
 		var/colour = rgb2num(stored_colours[C_tag]) // Shaving off the alpha channel
 		C_data["base_color"] = rgb(colour[1], colour[2], colour[3])
+		switch(nanopaint_indexes[C_tag])
+			if (PAINTLIGHT_NONE)
+				C_data["nano_paint"] = "#161616"
+			if (PAINTLIGHT_LIMITED)
+				C_data["nano_paint"] = "#999999"
+			if (PAINTLIGHT_FULL)
+				C_data["nano_paint"] = "#FFFFFF"
 		paint_colours += list(C_data)
 	data["paint_colours"] = paint_colours
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
@@ -107,21 +120,50 @@ interactions:
 		// Auto update every Master Controller tick.
 		ui.set_auto_update(1)
 
-/obj/item/weapon/palette/Topic(href, href_list)
+/obj/item/palette/update_icon()
+	overlays.len = 0
+	var/i = 0
+	var/image/paintleft = image(inhand_states["left_hand"], src, "palette-color")
+	var/image/paintright = image(inhand_states["right_hand"], src, "palette-color")
+	for (var/C_tag in stored_colours)
+		var/image/I = image(icon, src, "palette-color[(i % 12)+1]")
+		I.color = stored_colours[C_tag]
+		overlays += I
+
+		//dynamic in-hand overlay
+		var/image/paintcolorleft = image(inhand_states["left_hand"], src, "palette-color[(i % 4)+1]")
+		var/image/paintcolorright = image(inhand_states["right_hand"], src, "palette-color[(i % 4)+1]")
+		paintcolorleft.color = stored_colours[C_tag]
+		paintcolorright.color = stored_colours[C_tag]
+		paintleft.overlays += paintcolorleft
+		paintright.overlays += paintcolorright
+
+		i++
+
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = paintleft
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = paintright
+
+	if(ismob(loc))
+		var/mob/M = loc
+		M.update_inv_hands()
+
+/obj/item/palette/Topic(href, href_list)
 	if (..())
 		return
 	if (href_list["colour"])
 		var/colour_tag = href_list["colour"]
-		var/colour = stored_colours[href_list["colour"]]
+		var/colour = stored_colours[colour_tag]
+		var/nanopaint = nanopaint_indexes[colour_tag]
+		var/list/component = components[colour_tag]
 		if (!colour)
 			return
 		var/mob/living/L = usr
 		if (!istype(L))
 			return
-		var/obj/item/weapon/painting_brush/PB
+		var/obj/item/painting_brush/PB
 		for (var/i = 1 to L.held_items.len)
 			var/obj/O = L.held_items[i]
-			if (istype(O, /obj/item/weapon/painting_brush))
+			if (istype(O, /obj/item/painting_brush))
 				PB = O
 				break
 		if (!PB)
@@ -130,24 +172,43 @@ interactions:
 			if ("apply")
 				if (!PB.paint_color)
 					PB.paint_color = colour
+					PB.nano_paint = nanopaint
+					PB.component = component.Copy()
 					to_chat(usr, "<span class='notice'>You apply the color to \the [PB].</span>")
 				else
 					to_chat(usr, "<span class='notice'>You start mixing colours...</span>")
 					var/strengh = input("How much do you want to mix the colours? 0.5 is for an even mixing. Values toward 0 get a stronger shade of the colour in the palette, value toward 1 get a stronger shade of the colour in the pencil.", "Strenght of mixing", 0.5) as null|num
+					if (!strengh || (strengh < 0))
+						return
 					strengh = clamp(strengh, 0, 1)
 					var/colour_pencil = rgb2num(PB.paint_color)
 					var/colour_palette = rgb2num(colour)
-					var/blend = colorRybBlend(colour_pencil, colour_palette, strengh)
-					var/blend_rgb = rgb(blend[1], blend[2], blend[3], blend[4], "COLORSPACE_RGB")
-					stored_colours[colour_tag] = blend_rgb
-					PB.paint_color = blend_rgb
+					PB.component |= component
+					components[colour_tag] = PB.component.Copy()
+					//Nano Paint turns any paint it touches into more nano paint and blends additively
+					if ((nanopaint == PAINTLIGHT_FULL) || (PB.nano_paint == PAINTLIGHT_FULL))
+						var/blend_rgb = AddRGB(colour, PB.paint_color, strengh)
+						stored_colours[colour_tag] = blend_rgb
+						PB.paint_color = blend_rgb
+						PB.nano_paint = TRUE
+						nanopaint_indexes[colour_tag] = PAINTLIGHT_FULL
+					//Otherwise, if both paints have limited luminosity, the results will be luminous. Otherwise the result loses its luminosity.
+					else
+						var/blend = colorRybBlend(colour_pencil, colour_palette, strengh)
+						var/blend_rgb = rgb(blend[1], blend[2], blend[3], blend[4], "COLORSPACE_RGB")
+						stored_colours[colour_tag] = blend_rgb
+						PB.paint_color = blend_rgb
+						if ((nanopaint != PAINTLIGHT_LIMITED) || (PB.nano_paint != PAINTLIGHT_LIMITED))
+							PB.nano_paint = PAINTLIGHT_NONE
 				PB.update_icon()
 			if ("duplicate")
 				stored_colours["[++tagindex]"] += colour
-				return
+				nanopaint_indexes["[tagindex]"] = nanopaint
+				components["[tagindex]"] = component.Copy()
 			if ("delete")
 				stored_colours -= colour_tag
-				return
+				nanopaint_indexes -= colour_tag
+				components -= colour_tag
 
 	else if (href_list["wash_pencil"])
 		var/mob/living/carbon/C = usr
@@ -155,21 +216,22 @@ interactions:
 			return
 		for (var/i = 1 to C.held_items.len)
 			var/obj/O = C.held_items[i]
-			if (istype(O, /obj/item/weapon/painting_brush))
+			if (istype(O, /obj/item/painting_brush))
 				to_chat(usr, "<span class='notice'>You start cleaning \the [O]...</span>")
 				if (do_after(usr, src, 1 SECONDS))
 					to_chat(usr, "<span class='notice'>You finish cleaning \the [O].</span>")
-					var/obj/item/weapon/painting_brush/PB = O
+					var/obj/item/painting_brush/PB = O
 					PB.paint_color = null
 					PB.update_icon()
-					return
+	update_icon()
 
 
 // DM-side procs of the palette colour mixing.
 // DM doesn't have a RYB color space, so i'm doing this manually. #YOLO
 /proc/rgbToRyb(list/rgb)
 	// Soon-to-be result
-	var/ryb = list("r" = 0, "y" = 0, "b" = 0, "a" = rgb[4])
+
+	var/ryb = list("r" = 0, "y" = 0, "b" = 0, "a" = (rgb.len < 4 ? 255 : rgb[4]))
 
 	// Make a copy of the input to work on
 	var/tmpRgb = rgb.Copy()
@@ -250,10 +312,10 @@ interactions:
 	rgb[3] = round(rgb[3] + i)
 	return rgb
 
-/proc/colorRybBlend(c1, c2, alpha)
+/proc/colorRybBlend(var/list/c1, var/list/c2, alpha)
 	var/c1Ryb = rgbToRyb(c1)
 	var/c2Ryb = rgbToRyb(c2)
-	var/resultRyb = list("r" = 0, "y" = 0, "b" = 0, "a" = c2[4]);
+	var/resultRyb = list("r" = 0, "y" = 0, "b" = 0, "a" = (c2.len < 4 ? 255 : c2[4]));
 
 	alpha *= (c1Ryb["a"] / 255)
 
@@ -261,3 +323,11 @@ interactions:
 	resultRyb["y"] = round(alpha * c1Ryb["y"] + (1-alpha) * c2Ryb["y"])
 	resultRyb["b"] = round(alpha * c1Ryb["b"] + (1-alpha) * c2Ryb["b"])
 	return rybToRgb(resultRyb)
+
+/proc/BlendRYB(rgb1, rgb2, amount)
+	if (length(rgb1) < 8)
+		rgb1 += "FF"
+	if (length(rgb2) < 8)
+		rgb2 += "FF"
+	var/blend = colorRybBlend(rgb2num(rgb1), rgb2num(rgb2), amount)
+	return rgb(blend[1], blend[2], blend[3], blend[4], "COLORSPACE_RGB")

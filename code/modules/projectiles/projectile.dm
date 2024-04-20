@@ -19,7 +19,7 @@ var/list/impact_master = list()
 	plane = EFFECTS_PLANE
 	anchored = 1 //There's a reason this is here, Mport. God fucking damn it -Agouri. Find&Fix by Pete. The reason this is here is to stop the curving of emitter shots.
 	flags = FPRINT
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	mouse_opacity = 0
 	var/bumped = 0		//Prevents it from hitting more than one guy at once
 	var/def_zone = ""	//Aiming at
@@ -315,8 +315,6 @@ var/list/impact_master = list()
 
 	if (special_collision != PROJECTILE_COLLISION_MISS)
 		special_collision = A.bullet_act(src, def_zone) // searches for return value
-		if (A.gcDestroyed) // We killed the poor thing
-			A = A_turf
 	if(special_collision != PROJECTILE_COLLISION_DEFAULT && special_collision != PROJECTILE_COLLISION_BLOCKED) // the bullet is still flying, either from missing its target, bouncing off it, or going through a portal
 		bumped = 0 // reset bumped variable!
 

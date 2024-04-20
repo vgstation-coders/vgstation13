@@ -22,12 +22,12 @@
 	var/base_color = "#ffffff"
 
 	// Icon to render our painting data on
-	layer = CANVAS_LAYER
 	var/base_icon = 'icons/obj/paintings.dmi'
 	var/base_icon_state = "blank"
 	var/frame_icon = 'icons/obj/painting_items.dmi'
 	var/frame_icon_state = "frame"
-	var/show_on_scoreboard = TRUE
+
+	var/image/nanomap
 
 	starting_materials = list(MAT_WOOD = 2 * CC_PER_SHEET_WOOD)
 
@@ -44,6 +44,21 @@
 		gallery -= src
 	QDEL_NULL(painting_data)
 	..()
+
+/obj/structure/painting/custom/proc/smear(var/amount=50, var/strength=1)
+	painting_data.smear(amount,strength)
+	update_painting(TRUE)
+
+/obj/structure/painting/custom/proc/smear_until_clean()
+	var/strength = 1
+
+	for(var/i = 1 to 20)
+		smear((painting_height*painting_width)*(strength/5), strength)
+		strength = min(5,strength+1)
+		sleep(2)
+
+	painting_data.blank_contents()
+	update_painting(TRUE)
 
 /obj/structure/painting/custom/attackby(obj/item/W, mob/user)
 	// Painting
@@ -65,17 +80,52 @@
 			if (do_after(user, src, 10))
 				// Reagent mix is strong enough to clean the canvas, do so
 				var/cleaner_percent = get_reagent_paint_cleaning_percent(container)
-				if (cleaner_percent >= PAINT_CLEANER_THRESHOLD)
-					painting_data.blank_contents()
+				if (cleaner_percent > 1)//using acetone or bleach
+					spawn()
+						smear_until_clean()
 					to_chat(usr, "<span class='warning'>You wash the paint off \the [name]!</span>")
+				else if (cleaner_percent >= PAINT_CLEANER_THRESHOLD)//just water, or diluted cleaners
+					spawn()
+						smear((painting_height*painting_width)/2, 1)
+						sleep(2)
+						smear((painting_height*painting_width)/2, 2)
+					to_chat(usr, "<span class='warning'>You smear the paint across \the [name]!</span>")
 
 				// Reagent mix is opaque enough to paint the canvas, do so
 				else
-					painting_data.bucket_fill(mix_color_from_reagents(container.reagents.reagent_list))
+					var/mixed_color = mix_color_from_reagents(container.reagents.reagent_list, TRUE)
+					if (!mixed_color)
+						to_chat(usr, "<span class='warning'>Looks like there were no pigments inside \the [W]!</span>")
+						return TRUE
+					painting_data.components = container.reagents.get_pigment_names()
+					painting_data.bucket_fill(mixed_color, container.reagents.get_max_paint_light())
+				playsound(loc, 'sound/effects/slosh.ogg', 25, 1)
 				container.reagents.remove_any(5)
 				update_painting(TRUE)
 
 			return TRUE
+
+	// Covering
+	if (istype(W, /obj/item/paint_roller))
+		if (protected_by_glass)
+			return FALSE
+
+		var/obj/item/paint_roller/P = W
+
+		if (!P.paint_color)
+			to_chat(user, "<span class='warning'>You smear the paint across the canvas.</span>")
+			if (do_after(user, src, 10))
+				smear((painting_height*painting_width)/2, 1)
+				update_painting(TRUE)
+				playsound(loc, get_sfx("mop"), 10, 1)
+			return
+
+		to_chat(usr, "<span class='warning'>You start covering \the [src] in paint using \the [P].</span>")
+		if (do_after(user, src, 10))
+			painting_data.bucket_fill(P.paint_color, P.nano_paint)
+			update_painting(TRUE)
+
+		return TRUE
 
 	// Cleaning
 	if (istype(W, /obj/item/weapon/soap) && !protected_by_glass)
@@ -158,19 +208,26 @@
 
 /obj/structure/painting/custom/update_painting(render)
 	blank = painting_data.is_blank()
+	overlays.len = 0
 	if (!blank)
-		name = (painting_data.title ? ("\proper[painting_data.title]") : "untitled artwork") + (painting_data.author ? ", by [painting_data.author]" : "")
+		var/comp = painting_data.get_components()
+		name = (painting_data.title ? ("\proper[painting_data.title]") : "untitled artwork") + (painting_data.author ? ", [comp ? "[comp] " : ""]by [painting_data.author]" : "[comp ? ", [comp]" : ""]")
 		desc = painting_data.description ? "A small plaque reads: \"<span class='info'>[painting_data.description]\"</span>" : "A painting... But what could it mean?"
 		if (painting_data.copy)
 			desc += "A tag on this artwork indicates that it's a replica reproduced from Nanotrasen's databanks."
 		if (render)
 			icon = painting_data.render_on(icon(base_icon, base_icon_state))
+			nanomap = painting_data.render_nanomap(icon(base_icon, "[base_icon_state]-nano"))
+			nanomap.blend_mode = BLEND_ADD
+		nanomap.plane = ABOVE_LIGHTING_PLANE
+		overlays += nanomap
 	else
 		name = base_name
 		desc = base_desc
 		icon = icon(base_icon, base_icon_state)
 
-	overlays.Cut()
+	luminosity = 2 * painting_data.has_nano_paint
+
 	if (framed)
 		overlays += icon(frame_icon, frame_icon_state)
 
@@ -187,6 +244,7 @@
 	// Painting info
 	P.set_painting_data(painting_data.Copy())
 	P.rendered_icon = icon
+	P.rendered_nanomap = nanomap
 	P.base_name = base_name
 	P.base_desc = base_desc
 	P.base_icon = base_icon
@@ -227,6 +285,7 @@
 	var/frame_icon = 'icons/obj/painting_items.dmi'
 	var/frame_icon_state = "frame"
 	var/rendered_icon
+	var/image/rendered_nanomap
 
 	// Where to render the custom painting. Make sure it matches the structure icon state!
 	var/painting_height = 14
@@ -244,6 +303,10 @@
 /obj/item/mounted/frame/painting/custom/Destroy()
 	QDEL_NULL(painting_data)
 	..()
+
+/obj/item/mounted/frame/painting/custom/proc/smear(var/amount=50, var/strength=1)
+	painting_data.smear(amount,strength)
+	update_painting(TRUE)
 
 /obj/item/mounted/frame/painting/custom/attackby(obj/item/W, mob/user)
 	// Painting
@@ -265,16 +328,45 @@
 			if (do_after(user, src, 10))
 				// Reagent mix is strong enough to clean the canvas, do so
 				var/cleaner_percent = get_reagent_paint_cleaning_percent(container)
-				if (cleaner_percent >= PAINT_CLEANER_THRESHOLD)
+				if (cleaner_percent > 1)//using acetone or bleach
 					painting_data.blank_contents()
 					to_chat(usr, "<span class='warning'>You wash the paint off \the [name]!</span>")
+				else if (cleaner_percent >= PAINT_CLEANER_THRESHOLD)//just water, or diluted cleaners
+					spawn()
+						smear((painting_height*painting_width)/2, 3)
+					to_chat(usr, "<span class='warning'>You smear the paint across \the [name]!</span>")
 
 				// Reagent mix is opaque enough to paint the canvas, do so
 				else
-					painting_data.bucket_fill(mix_color_from_reagents(container.reagents.reagent_list))
-					container.reagents.remove_any(5)
+					var/mixed_color = mix_color_from_reagents(container.reagents.reagent_list, TRUE)
+					if (!mixed_color)
+						to_chat(usr, "<span class='warning'>Looks like there were no pigments inside \the [W]!</span>")
+						return TRUE
+					painting_data.components = container.reagents.get_pigment_names()
+					painting_data.bucket_fill(mixed_color, container.reagents.get_max_paint_light())
+				playsound(loc, 'sound/effects/slosh.ogg', 25, 1)
+				container.reagents.remove_any(5)
 				update_painting(TRUE)
+
 			return TRUE
+
+	// Covering
+	if (istype(W, /obj/item/paint_roller))
+		if (protected_by_glass)
+			return FALSE
+
+		var/obj/item/paint_roller/P = W
+
+		if (!P.paint_color)
+			to_chat(user, "<span class='warning'>There is no paint on your roller.</span>")
+			return
+
+		to_chat(usr, "<span class='warning'>You start covering \the [src] in paint using \the [P].</span>")
+		if (do_after(user, src, 10))
+			painting_data.bucket_fill(P.paint_color, P.nano_paint)
+			update_painting(TRUE)
+
+		return TRUE
 
 	// Cleaning
 	if (istype(W, /obj/item/weapon/soap) && !protected_by_glass)
@@ -344,10 +436,13 @@
 /obj/item/mounted/frame/painting/custom/update_painting(render)
 	blank = painting_data.is_blank()
 	if (!blank)
-		name = (painting_data.title ? ("\proper[painting_data.title]") : "untitled artwork") + (painting_data.author ? ", by [painting_data.author]" : "")
+		var/comp = painting_data.get_components()
+		name = (painting_data.title ? ("\proper[painting_data.title]") : "untitled artwork") + (painting_data.author ? ", [comp ? "[comp] " : ""]by [painting_data.author]" : "[comp ? ", [comp]" : ""]")
 		desc = painting_data.description ? "A small plaque reads: \"<span class='info'>[painting_data.description]\"</span>" : "A painting... But what could it mean?"
 		if (render)
 			rendered_icon = painting_data.render_on(icon(base_icon, base_icon_state))
+			rendered_nanomap = painting_data.render_nanomap(icon(base_icon, "[base_icon_state]-nano"))
+			rendered_nanomap.blend_mode = BLEND_ADD
 	else
 		name = base_name
 		desc = base_desc
@@ -363,6 +458,7 @@
 	// Painting info
 	P.set_painting_data(painting_data.Copy())
 	P.icon = rendered_icon ? rendered_icon : icon(base_icon, base_icon_state)
+	P.nanomap = rendered_nanomap ? rendered_nanomap : image('icons/effects/32x32.dmi',P,"black")
 	P.icon_state = base_icon_state
 	P.base_name = base_name
 	P.base_desc = base_desc

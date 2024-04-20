@@ -74,6 +74,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		/obj/item/weapon/stock_parts/micro_laser,
 		/obj/item/weapon/stock_parts/console_screen
 	)
+	if(Holiday != APRIL_FOOLS_DAY)
+		verbs -= /obj/machinery/chem_dispenser/verb/undeploy_dispenser
 
 	RefreshParts()
 	if(dispensable_reagents)
@@ -449,16 +451,16 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	pass_flags = PASSTABLE
 	required_quirk = MODULE_CAN_HANDLE_FOOD
 	dispensable_reagents = list(
-		TEA,
-		GREENTEA,
-		REDTEA,
-		COFFEE,
-		MILK,
-		CREAM,
-		WATER,
-		HOT_COCO,
-		SOYMILK
-		)
+		TEA = COOKTEMP_READY,
+		GREENTEA = COOKTEMP_READY,
+		REDTEA = COOKTEMP_READY,
+		COFFEE = COOKTEMP_READY,
+		MILK = COOKTEMP_READY,
+		CREAM = COOKTEMP_READY,
+		WATER = COOKTEMP_READY,
+		HOT_COCO = COOKTEMP_READY,
+		SOYMILK = COOKTEMP_READY
+		)//everything is HOT out of here
 
 /obj/machinery/chem_dispenser/brewer/New()
 	. = ..()
@@ -547,7 +549,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		BLUECURACAO,
 		KAHLUA,
 		ALE,
-		ICE = T0C,
+		ICE = (T0C-20),
 		WATER,
 		GIN,
 		SODAWATER,
@@ -640,3 +642,16 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	message_admins("[key_name(L)] has dispensed [reagent] ([amount]u)! [formatJumpTo(src)]")
 
 	dispense_reagent(reagent, amount)
+
+/obj/machinery/chem_dispenser/verb/undeploy_dispenser()
+	set category = "Object"
+	set name = "Undeploy dispenser"
+	set src in view(1)
+	if(usr.incapacitated())
+		to_chat(usr, "<span class='notice'>You cannot do this while incapacitated.</span>")
+		return
+	if(!usr.dexterity_check())
+		to_chat(usr, "<span class='notice'>You are not capable of such fine manipulation.</span>")
+		return
+	move_that_gear_up()
+	

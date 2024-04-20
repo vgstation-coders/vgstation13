@@ -582,6 +582,8 @@ What a mess.*/
 /obj/machinery/computer/secure_data/detective_computer
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "messyfiles"
+	moody_state = "overlay_messyfiles"
 
+	light_range_on = 1
 	light_color = null
 	computer_flags = NO_ONOFF_ANIMS

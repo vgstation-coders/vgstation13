@@ -182,3 +182,23 @@
 /obj/item/weapon/tank/nitrogen/New()
 	. = ..()
 	air_contents.adjust_gas(GAS_NITROGEN, (3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C))
+
+
+/obj/item/weapon/tank/cryotheum
+	name = "cryotheum tank"
+	desc = "A tank containing the rare gas, cryotheum."
+	icon_state = "cryotheum"
+	flags = FPRINT
+	slot_flags = SLOT_BELT
+	w_class = W_CLASS_SMALL
+	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
+	volume = 40
+
+/obj/item/weapon/tank/cryotheum/New()
+	. = ..()
+	air_contents.adjust_gas(GAS_CRYOTHEUM, (8 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * 253.15))
+	air_contents.temperature = 253.15
+
+/obj/item/weapon/tank/cryotheum/empty/New()
+	..()
+	air_contents.multiply(0)

@@ -7,9 +7,11 @@
 
 	school = "abjuration"
 	charge_max = 100
+	minimum_charge = 10 //1 second delay
 	spell_flags = SELECTABLE | WAIT_FOR_CLICK
 	hud_state = "wiz_bound"
-	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 2, Sp_POWER = 1)
+	level_max = list(Sp_TOTAL = 4, Sp_SPEED = 2, Sp_POWER = 2)
+	price = 0.5 * Sp_BASE_PRICE
 
 	var/has_object = 0
 	var/obj/bound
@@ -45,8 +47,22 @@
 		/obj/machinery/light,									//light bulbs and tubes
 		/obj/machinery/media/receiver/boombox/wallmount,		//sound systems
 		/obj/machinery/keycard_auth,							//keycard authentication devices
+		/obj/landline,											//telephone landlines
+		/obj/effect/phone_cord,									//the telephone cord effect
+		/obj/item/telephone,									//telephones
 		)
+	//Generally extremely dangerous things that could spell doom and devastation for anyone nearby, possibly the wizard too
+	var/list/empower_limited = list(
+		/obj/machinery/singularity,
+		/obj/machinery/power/supermatter,
+	)
 
+/spell/targeted/bound_object/get_upgrade_price(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return 5
+		if(Sp_POWER)
+			return 20
 
 /spell/targeted/bound_object/is_valid_target(obj/target, mob/user, options, bypass_range = 0)
 	if(!istype(target))
@@ -59,7 +75,6 @@
 	for(var/J in prohibited)
 		if(istype(target, J))
 			return 0
-
 	return target
 
 /spell/targeted/bound_object/before_channel(mob/user)
@@ -93,25 +108,46 @@
 /spell/targeted/bound_object/cast(list/targets, mob/user = user)
 	for(var/obj/target in targets)
 		if(!has_object)
+			if(spell_levels[Sp_POWER] < 2) //Moving this check here because if it returned 0 on is_valid_target it would force the character to touch it if in range. Ouch.
+				for(var/E in empower_limited)
+					if(istype(target, E))
+						to_chat(user, "<span class='warning'>This is too powerful to bind to yourself. Empower your spell sufficiently enough first!</span>")
+						return 0
 			has_object = 1
 			bound = target
-			bound_icon = image(target.icon, target.icon_state, layer = HUD_ITEM_LAYER)
-			connected_button.overlays += bound_icon
+			draw_bound_object(bound)
 			to_chat(user, "You bind \the [target] to yourself.")
 			channel_spell(force_remove = 1)
 	return 1
 
+//Creates the item's sprite for the spell sprite
+/spell/targeted/bound_object/proc/draw_bound_object(var/obj/target)
+	if(!connected_button || !target)
+		return
+	connected_button.overlays -= bound_icon
+	bound_icon = null
+	bound_icon = image(target.icon, target.icon_state, layer = HUD_ITEM_LAYER)
+	connected_button.overlays += bound_icon
+
 /spell/targeted/bound_object/empower_spell()
-	spell_levels[Sp_POWER]++
-	allow_anchored = 1
-
-	var/upgrade_desc = "You have reduced the restrictions on your binding."
-
+	var/upgrade_desc
+	if(spell_levels[Sp_POWER] == 0)
+		spell_levels[Sp_POWER]++
+		allow_anchored = 1
+		upgrade_desc = "You have reduced the restrictions on your binding."
+	else
+		spell_levels[Sp_POWER]++
+		upgrade_desc = "You can now bind far more destructive objects to yourself."
 	return upgrade_desc
 
 /spell/targeted/bound_object/get_upgrade_info(upgrade_type, level)
 	if(upgrade_type == Sp_POWER)
-		return "Increases your binding skill, allowing otherwise immobile structures and machines to be moved."
+		if(spell_levels[Sp_POWER] == 0)
+			return "Increases your binding skill, allowing otherwise immobile structures and machines to be moved."
+		if(spell_levels[Sp_POWER] == 1)
+			return "Further increases your binding skill, allowing you to bind [types_to_english_list(empower_limited)]."
+		else
+			return "You can already bind a great amount of things."
 	return ..()
 
 /spell/targeted/bound_object/on_right_click(mob/user)
@@ -126,7 +162,8 @@
 /spell/targeted/bound_object/proc/clear_bound()
 	has_object = 0
 	bound = null
-	connected_button.overlays -= bound_icon
+	if(connected_button)
+		connected_button.overlays -= bound_icon
 	bound_icon = null
 
 /spell/targeted/bound_object/on_added(mob/user)
@@ -142,6 +179,10 @@
 	clear_bound()
 	for(var/spell/unbind/spell in user.spell_list)
 		user.remove_spell(spell)
+
+//The connected button is regenerated, have it re-draw the image
+/spell/targeted/bound_object/on_transfer(mob/user)
+	draw_bound_object(bound)
 
 /spell/unbind
 	name = "Unbind"

@@ -148,6 +148,12 @@ The required techs are the following:
 	//log_admin("[total] for [part.name]")
 	return total
 
+//Do something to this buildable right after we finish building it
+//obj/O: The freshly created object
+//obj/machinery/r_n_d/fabricator/F: the machine where the object was just manufactured
+/datum/design/proc/after_craft(var/obj/O, var/obj/machinery/r_n_d/fabricator/F)
+	return
+
 ////////////////////////////////////////
 //Disks for transporting design datums//
 ////////////////////////////////////////

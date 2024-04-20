@@ -60,12 +60,15 @@ var/global/list/invoked_emotions = list()
 
 /spell/targeted/invoke_emotion/get_upgrade_info(upgrade_type)
 	switch(upgrade_type)
-		if(Sp_SPEED)
-			return "Nearly removes the cooldown of the spell."
 		if(Sp_POWER)
+			if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+				return "The invoked paper annoys the target as much as it can!"
 			return "Invoked paper is more likely to cut, or otherwise curse, the target."
 		if(Sp_MOVE)
+			if(spell_levels[Sp_MOVE] >= level_max[Sp_MOVE])
+				return "The invoked emotions can already place themselves in their target's hand!"
 			return "Invoked emotions have a chance to place themselves in their target's hand."
+	return ..()
 
 /obj/item/weapon/pen/invoked_quill
 	name = "invoked quill"

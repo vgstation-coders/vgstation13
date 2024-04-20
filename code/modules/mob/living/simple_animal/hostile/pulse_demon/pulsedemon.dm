@@ -27,6 +27,7 @@
 	flying = 1
 	size = SIZE_TINY
 	density = 0 //people walk over you isntead of bumping
+	tangibility = 0
 
 	attacktext = "electrocutes"
 	attack_sound = "sparks"
@@ -57,7 +58,8 @@
 	var/obj/machinery/power/current_power							// Current power machine we're in
 	var/mob/living/silicon/robot/current_robot						// Currently controlled robot
 	var/obj/machinery/bot/current_bot								// Currently controlled bot
-	var/obj/item/weapon/current_weapon								// Current gun we're controlling
+	var/obj/item/weapon/gun/current_weapon							// Current gun we're controlling
+	var/datum/action/pd_leave_item/PLI
 
 	//LISTS
 	var/list/image/cables_shown = list()							// In cable views
@@ -78,15 +80,39 @@
 		forceMove(current_power)
 	set_light(1.5,2,"#bbbb00")
 	add_spell(new /spell/pulse_demon/abilities, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
-	add_spell(new /spell/pulse_demon/toggle_drain, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
+	var/datum/action/pd_toggle_drain/PTD = new(src)
+	PTD.Grant(src)
+	PLI = new(src)
 	for(var/pd_spell in getAllPulseDemonSpells())
 		var/spell/S = new pd_spell
-		if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/abilities && S.type != /spell/pulse_demon/toggle_drain)
+		if(S.type != /spell/pulse_demon && S.type != /spell/pulse_demon/abilities)
 			possible_spells += S
 	for(var/pd_upgrade in subtypesof(/datum/pulse_demon_upgrade))
 		var/datum/pulse_demon_upgrade/PDU = new pd_upgrade(src)
 		possible_upgrades += PDU
 	playsound(get_turf(src),'sound/effects/eleczap.ogg',50,1)
+
+/mob/living/simple_animal/hostile/pulse_demon/maxedout // For testing it, maybe other fun reasons too
+	charge = INFINITY
+	maxcharge = INFINITY
+	health_drain_rate = 1
+	health_regen_rate = INFINITY
+	amount_per_regen = 1
+	charge_absorb_amount = INFINITY
+//	max_can_absorb = INFINITY
+	takeover_time = 1
+	move_divide = 1
+
+/mob/living/simple_animal/hostile/pulse_demon/maxedout/New()
+	..()
+	for(var/spell/S in possible_spells)
+		add_spell(S, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
+		while(S.can_improve(Sp_POWER))
+			S.empower_spell()
+		while(S.can_improve(Sp_SPEED))
+			S.quicken_spell()
+		possible_spells -= S
+	QDEL_LIST_CUT(possible_upgrades)
 
 /mob/living/simple_animal/hostile/pulse_demon/update_perception()
 	// So we can see in maint better
@@ -319,8 +345,23 @@
 
 // We aren't tangible
 /mob/living/simple_animal/hostile/pulse_demon/bullet_act(var/obj/item/projectile/Proj)
-	visible_message("<span class ='warning'>The [Proj] goes right through \the [src]!</span>")
-	return
+	if(!is_under_tile())
+		if(istype(Proj,/obj/item/projectile/ion))
+			return ..()
+		visible_message("<span class ='warning'>\the [Proj] goes right through \the [src]!</span>")
+
+/mob/living/simple_animal/hostile/pulse_demon/vine_protected()
+	return 1
+
+/mob/living/simple_animal/hostile/pulse_demon/hitby(atom/movable/AM, speed, dir, list/hit_whitelist)
+	if(!is_under_tile())
+		visible_message("<span class ='notice'>\the [AM] goes right through \the [src]!</span>")
+
+// Unless...
+/mob/living/simple_animal/hostile/pulse_demon/Crossed(atom/movable/AM)
+	. = ..()
+	if(!is_under_tile() && istype(AM,/obj/item/projectile/ion))
+		AM.to_bump(src)
 
 // Dumb moves
 /mob/living/simple_animal/hostile/pulse_demon/kick_act(mob/living/carbon/human/user)
@@ -370,7 +411,7 @@
 			C.use(charge_absorb_amount)
 			to_chat(user, "<span class='warning'>You touch \the [src] with \the [W] and \the [src] drains it!</span>")
 			to_chat(src, "<span class='notice'>[user] touches you with \the [W] and you drain its power!</span>")
-		visible_message("<span class ='notice'>The [W] goes right through \the [src].</span>")
+		visible_message("<span class ='notice'>\The [W] goes right through \the [src].</span>")
 		shockMob(user,W.siemens_coefficient)
 
 // In our way

@@ -392,27 +392,30 @@ Subject's pulse: ??? BPM"})
 		message += "<span class='bnotice'><B>[bicon(container)] Results of [container] scan:</span></B>"
 	if(total_moles)
 		message += "<br>[human_standard && abs(pressure - ONE_ATMOSPHERE) > 10 ? "<span class='bad'>" : "<span class='notice'>"] Pressure: [round(pressure, 0.1)] kPa</span>"
-		var/o2_concentration = scanned[GAS_OXYGEN]/total_moles
-		var/n2_concentration = scanned[GAS_NITROGEN]/total_moles
-		var/co2_concentration = scanned[GAS_CARBON]/total_moles
-		var/plasma_concentration = scanned[GAS_PLASMA]/total_moles
-		var/heat_capacity = scanned.heat_capacity()
 
-		var/unknown_concentration =  1 - (o2_concentration + n2_concentration + co2_concentration + plasma_concentration)
+		for (var/id in scanned.gas)
+			var/class = "notice"
+			var/moles = scanned[id]
+			var/concentration = moles / total_moles
+			var/datum/gas/gas = XGM.gases[id]
 
-		if(n2_concentration > 0.01)
-			message += "<br>[human_standard && abs(n2_concentration - N2STANDARD) > 20 ? "<span class='bad'>" : "<span class='notice'>"] Nitrogen: [round(scanned[GAS_NITROGEN], 0.1)] mol, [round(n2_concentration*100)]%</span>"
-		if(o2_concentration > 0.01)
-			message += "<br>[human_standard && abs(o2_concentration - O2STANDARD) > 2 ? "<span class='bad'>" : "<span class='notice'>"] Oxygen: [round(scanned[GAS_OXYGEN], 0.1)] mol, [round(o2_concentration*100)]%</span>"
-		if(co2_concentration > 0.01)
-			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] CO2: [round(scanned[GAS_CARBON], 0.1)] mol, [round(co2_concentration*100)]%</span>"
-		if(plasma_concentration > 0.01)
-			message += "<br>[human_standard ? "<span class='bad'>" : "<span class='notice'>"] Plasma: [round(scanned[GAS_PLASMA], 0.1)] mol, [round(plasma_concentration*100)]%</span>"
-		if(unknown_concentration > 0.01)
-			message += "<br><span class='notice'>Unknown: [round(unknown_concentration*100)]%</span>"
+			if (concentration < 0.01)
+				continue
 
-		message += "<br>[human_standard && !IsInRange(scanned.temperature, BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [round(scanned.temperature-T0C)]&deg;C"
-		message += "<br><span class='notice'>Heat capacity: [round(heat_capacity, 0.01)]</span>"
+			if (human_standard)
+				switch (id)
+					if (GAS_OXYGEN)
+						class = abs(concentration - O2STANDARD) > 2 ? "bad" : "notice"
+					if (GAS_NITROGEN)
+						class = abs(concentration - N2STANDARD) > 20 ? "bad" : "notice"
+					else
+						class = "bad"
+			message += "<br><span class='[class]'>[gas.name]: [round(moles, 0.1)] mol, [round(concentration*100)]%</span>"
+
+		var/kelvinTemperatureDisplay = scanned.temperature_kelvin_pretty()
+		var/celsiusTemperatureDisplay = scanned.temperature_celsius_pretty()
+		message += "<br>[human_standard && !IsInRange(scanned.temperature, BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [kelvinTemperatureDisplay]K ([celsiusTemperatureDisplay]&deg;C)"
+		message += "<br><span class='notice'>Heat capacity: [round(scanned.heat_capacity(), 0.01)]</span>"
 	else
 		message += "<br><span class='warning'>No gasses detected[container && !istype(container, /turf) ? " in \the [container]." : ""]!</span>"
 	return message
@@ -534,12 +537,12 @@ Subject's pulse: ??? BPM"})
 		if(O.reagents.reagent_list.len)
 			for(var/datum/reagent/R in O.reagents.reagent_list)
 				var/reagent_percent = (R.volume/O.reagents.total_volume)*100
-				dat += "<br><span class='notice'>[R][details ? " ([R.volume] units, [reagent_percent]%, time in system: [R.real_tick*2] seconds" : ""]</span>"
+				dat += "<br><span class='notice'>[R][details ? " ([R.volume] units, [reagent_percent]%[ismob(O) ? ", time in system: [R.real_tick*2] seconds" : ""])" : ""]</span>"
 		if (istype (O, /obj/item/weapon/reagent_containers/food/snacks))
 			var/obj/item/weapon/reagent_containers/food/snacks/S = O
 			if(S.dip && S.dip.reagent_list.len > 0)
 				for (var/datum/reagent/R in S.dip.reagent_list)
-					dat += "<br><span class='notice'>[R][details ? " (trace amounts, time in system: [R.real_tick*2] seconds" : ""]</span>"
+					dat += "<br><span class='notice'>[R][details ? " (trace amounts)" : ""]</span>"
 		if(dat)
 			to_chat(user, "<span class='notice'>Chemicals found in \the [O]:[dat]</span>")
 		else

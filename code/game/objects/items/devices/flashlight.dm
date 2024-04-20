@@ -196,7 +196,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	starting_materials = null
-	on = 1	//Lamps start on but are turned off unless someone spawns in the same department as them at roundstart.
+	on = 0	//Lamps start off but are turned on if someone spawns in the same department as them at roundstart.
 	var/drawspower = TRUE
 	var/datum/power_connection/consumer/pwrconn //the on var means the lamp switch is turned on but the area also has to be powered for it to produce light
 
@@ -384,7 +384,6 @@
 	autoignition_temperature = AUTOIGNITION_ORGANIC
 	var/brightness_max = 6
 	var/brightness_min = 2
-	on = 0
 	drawspower = FALSE //slime lamps don't draw power from the area apc
 
 	breakable_fragments = null

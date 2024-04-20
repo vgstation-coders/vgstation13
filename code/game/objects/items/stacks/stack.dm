@@ -12,6 +12,7 @@
 /obj/item/stack
 	gender = PLURAL
 	origin_tech = Tc_MATERIALS + "=1"
+	icon = 'icons/obj/stacks_sheets.dmi'
 	var/list/datum/stack_recipe/recipes
 	var/singular_name
 	var/irregular_plural //"Teeth", for example. Without this, you'd see "There are 30 tooths in the stack."
@@ -20,12 +21,15 @@
 	var/max_amount //also see stack recipes initialisation, param "max_res_amount" must be equal to this max_amount
 	var/redeemed = 0 // For selling minerals to central command via supply shuttle.
 	var/restock_amount = 0 //For borg chargers restocking.
+	var/sheettype = null //this is used for girders in the creation of walls/false walls. Used by both tiles and sheets.
+	var/last_work = 0 //rounded last world.time at which a crafting began
 
 /obj/item/stack/New(var/loc, var/amount=null)
 	..()
 	if (amount)
 		src.amount=amount
 	update_materials()
+	update_icon()
 	//forceMove(loc) // So that Crossed gets called, so that stacks can be merged
 
 /obj/item/stack/Destroy()
@@ -65,6 +69,9 @@
 
 		if(i > 1 && !isnull(recipe_list[i-1]))
 			t1 += "<br>"
+
+		if(istext(E))
+			t1 += "<b>[E]</b>"
 
 		if(istype(E, /datum/stack_recipe_list))
 			var/datum/stack_recipe_list/srl = E
@@ -134,15 +141,30 @@
 						t1 += " <A href='?src=\ref[src];make=[i];multiplier=[n]'>[n*R.res_amount]x</A>"
 				if (!(max_multiplier in multipliers))
 					t1 += " <A href='?src=\ref[src];make=[i];multiplier=[max_multiplier]'>[max_multiplier*R.res_amount]x</A>"
-
+	t1 += extra_message()
 	t1 += "</TT></body></HTML>"
 	user << browse(t1, "window=stack")
 	onclose(user, "stack")
 	return
 
+/obj/item/stack/proc/extra_message()
+	return null
+
+/obj/item/stack/proc/time_modifier(var/_time)
+	return _time
+
+/obj/item/stack/proc/loc_override()
+	return null
+
+/obj/item/stack/proc/allow_use(var/mob/living/user)
+	return (user.get_active_hand() == src)
+
+/obj/item/stack/proc/stop_build(var/_last_crafting = FALSE)
+	return
+
 /obj/item/stack/Topic(href, href_list)
 	..()
-	if ((usr.restrained() || usr.stat || usr.get_active_hand() != src))
+	if ((usr.restrained() || usr.stat || !allow_use(usr)))
 		return
 
 	if (href_list["sublist"] && !href_list["make"])
@@ -157,7 +179,7 @@
 			recipes_list = srl.recipes
 		var/datum/stack_recipe/R = recipes_list[text2num(href_list["make"])]
 		var/multiplier = text2num(href_list["multiplier"])
-		R.build(usr, src, multiplier)
+		R.build(usr, src, multiplier, loc_override())
 	if (src && usr.machine==src) //do not reopen closed window
 		spawn( 0 )
 			src.interact(usr)
@@ -178,28 +200,31 @@
 		return 0
 	. = 1
 	if (src.amount<=0) //If the stack is empty after removing the required amount of items!
-		if(usr)
-			if(istype(usr,/mob/living/silicon/robot))
-				var/mob/living/silicon/robot/R=usr
-				if(R.module)
-					R.module.modules -= src
-				if(R.module_active == src)
-					R.module_active = null
-				if(R.module_state_1 == src)
-					R.uneq_module(R.module_state_1)
-					R.module_state_1 = null
-					R.inv1.icon_state = "inv1"
-				else if(R.module_state_2 == src)
-					R.uneq_module(R.module_state_2)
-					R.module_state_2 = null
-					R.inv2.icon_state = "inv2"
-				else if(R.module_state_3 == src)
-					R.uneq_module(R.module_state_3)
-					R.module_state_3 = null
-					R.inv3.icon_state = "inv3"
-			usr.before_take_item(src)
+		on_empty()
 		spawn()
 			qdel(src)
+
+/obj/item/stack/proc/on_empty()
+	if(usr)
+		if(istype(usr,/mob/living/silicon/robot))
+			var/mob/living/silicon/robot/R=usr
+			if(R.module)
+				R.module.modules -= src
+			if(R.module_active == src)
+				R.module_active = null
+			if(R.module_state_1 == src)
+				R.uneq_module(R.module_state_1)
+				R.module_state_1 = null
+				R.inv1.icon_state = "inv1"
+			else if(R.module_state_2 == src)
+				R.uneq_module(R.module_state_2)
+				R.module_state_2 = null
+				R.inv2.icon_state = "inv2"
+			else if(R.module_state_3 == src)
+				R.uneq_module(R.module_state_3)
+				R.module_state_3 = null
+				R.inv3.icon_state = "inv3"
+		usr.before_take_item(src)
 
 /obj/item/stack/proc/add(var/amount)
 	src.amount += amount
@@ -220,6 +245,9 @@
 	if(pulledby)
 		pulledby.start_pulling(S)
 	S.copy_evidences(src)
+	S.transfer_data_from(src,transfer)
+	update_icon()
+	S.update_icon()
 	use(transfer)
 	S.add(transfer)
 
@@ -246,11 +274,17 @@
 		user.put_in_hands(F)
 		src.add_fingerprint(user)
 		F.add_fingerprint(user)
+		F.transfer_data_from(src,1)
 		use(1)
+		update_icon()
+		F.update_icon()
 		if (src && usr.machine==src)
 			spawn(0) src.interact(usr)
 	else
 		..()
+	return
+
+/obj/item/stack/proc/transfer_data_from(var/obj/item/stack/S, var/amount)
 	return
 
 /obj/item/stack/preattack(atom/target, mob/user, proximity_flag, click_parameters)
@@ -268,6 +302,7 @@
 		else
 			to_transfer = min(S.amount, max_amount-amount)
 		add(to_transfer)
+		transfer_data_from(S,to_transfer)
 		to_chat(user, "You add [to_transfer] [((to_transfer > 1) && S.irregular_plural) ? S.irregular_plural : "[S.singular_name]\s"] to \the [src]. It now contains [amount] [CORRECT_STACK_NAME(src)].")
 		if (S && user.machine==S)
 			spawn(0) interact(user)
@@ -334,6 +369,7 @@
 		S.amount = min(add_amount, S.max_amount)
 		add_amount -= S.amount
 		S.update_materials()
+		S.update_icon()
 	return S
 
 /obj/item/stack/verb_pickup(mob/living/user)

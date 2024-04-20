@@ -18,6 +18,7 @@
 	volume = 50
 	var/condiment_overlay = null
 	var/overlay_colored = FALSE
+	var/image/extra_condiment_overlay
 
 /obj/item/weapon/reagent_containers/food/condiment/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
@@ -105,13 +106,16 @@
 		var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You transfer [trans] units of the condiment to \the [target].</span>")
 		if (condiment_overlay && istype (target, /obj/item/weapon/reagent_containers/food/snacks))
+			var/obj/item/weapon/reagent_containers/food/snacks/snack = target
 			var/list/params_list = params2list(params)
-			var/image/I = image('icons/obj/condiment_overlays.dmi',target,condiment_overlay)
+			var/image/I = image('icons/obj/condiment_overlays.dmi',snack,condiment_overlay)
 			I.pixel_x = clamp(text2num(params_list["icon-x"]) - WORLD_ICON_SIZE/2 - pixel_x,-WORLD_ICON_SIZE/2,WORLD_ICON_SIZE/2)
 			I.pixel_y = clamp(text2num(params_list["icon-y"]) - WORLD_ICON_SIZE/2 - pixel_y,-WORLD_ICON_SIZE/2,WORLD_ICON_SIZE/2)
 			if (overlay_colored)
 				I.color = mix_color_from_reagents(reagents.reagent_list)
-			target.overlays += I
+			snack.extra_food_overlay.overlays += I
+			snack.overlays += I
+			snack.visible_condiments[condiment_overlay] = I.color
 	else if(isfloor(target))
 		if (amount_per_transfer_from_this > 1)
 			transfer(target, user, splashable_units = amount_per_transfer_from_this)
@@ -121,15 +125,19 @@
 /obj/item/weapon/reagent_containers/food/condiment/New(loc,altvol)
 	if(altvol)
 		volume = altvol
+
+	extra_condiment_overlay = image('icons/effects/32x32.dmi',null,"blank")
 	..(loc)
 
 /obj/item/weapon/reagent_containers/food/condiment/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
+
+	..()
 
 	if(reagents.reagent_list.len > 0)
 		condiment_overlay = null
 		overlay_colored = FALSE
 		item_state = null
-		overlays.len = 0
+		extra_condiment_overlay.overlays.len = 0
 		switch(reagents.get_master_reagent_id())
 
 			if(KETCHUP)
@@ -228,10 +236,10 @@
 				condiment_overlay = HONEY
 				var/image/I = image(icon, src, "honey-color")
 				I.color = mix_color_from_reagents(reagents.reagent_list)
-				overlays += I
+				extra_condiment_overlay.overlays += I
 				var/image/L = image(icon, src, "honey-light") // makes the honey a bit more shiny
 				L.blend_mode = BLEND_ADD
-				overlays += L
+				extra_condiment_overlay.overlays += L
 				overlay_colored = TRUE
 			if(ROYALJELLY)
 				name = "royal jelly pot"
@@ -241,7 +249,7 @@
 				condiment_overlay = ROYALJELLY
 				var/image/I = image(icon, src, "royaljelly-color")
 				I.color = mix_color_from_reagents(reagents.reagent_list)
-				overlays += I
+				extra_condiment_overlay.overlays += I
 				overlay_colored = TRUE
 			if(CHILLWAX)
 				name = "chill wax pot"
@@ -250,10 +258,10 @@
 				condiment_overlay = HONEY
 				var/image/I = image(icon, src, "honey-color")
 				I.color = mix_color_from_reagents(reagents.reagent_list)
-				overlays += I
+				extra_condiment_overlay.overlays += I
 				var/image/L = image(icon, src, "honey-light") // makes the honey a bit more shiny
 				L.blend_mode = BLEND_ADD
-				overlays += L
+				extra_condiment_overlay.overlays += L
 				overlay_colored = TRUE
 			if(CINNAMON)
 				name = "cinnamon shaker"
@@ -315,7 +323,7 @@
 				name = "Discount Dan's Special Sauce"
 				desc = "Discount Sauce now in a family sized package."
 				icon_state = "discount_sauce"
-				condiment_overlay = DISCOUNT 
+				condiment_overlay = DISCOUNT
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."
@@ -331,9 +339,19 @@
 		name = "condiment bottle"
 		desc = "An empty condiment bottle."
 
+	update_icon()
+
 	if(iscarbon(loc))
 		var/mob/living/carbon/M = loc
 		M.update_inv_hands()
+
+/obj/item/weapon/reagent_containers/food/condiment/update_icon()
+	overlays.len = 0//no choice here but to redraw everything in the correct order so condiments etc don't appear over ice and fire.
+	overlays += extra_condiment_overlay
+	update_temperature_overlays()
+	update_blood_overlay()//re-applying blood stains
+	if (on_fire && fire_overlay)
+		overlays += fire_overlay
 
 //Specific condiment bottle entities for mapping and potentially spawning (these are NOT used for any above procs)
 
@@ -478,11 +496,11 @@
 /obj/item/weapon/reagent_containers/food/condiment/cinnamon/New()
 	..()
 	reagents.add_reagent(CINNAMON, 50)
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/discount
 	name = "Discount Dan's Special Sauce"
 	desc = "Discount Sauce now in a family sized package."
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/discount/New()
 	..()
 	reagents.add_reagent(DISCOUNT, 50)
@@ -582,7 +600,7 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()
-	reagents.add_reagent(pickweight(possible_exotic_condiments), 30)
+	reagents.add_reagent(pickweight(possible_exotic_condiments), 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/coco
 	name = "cocoa powder"
@@ -673,10 +691,11 @@
 //////////////////////////////////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/condiment/small
-	icon_state = "packet_" 
+	icon_state = "packet_"
 	possible_transfer_amounts = list(1, 5)
 	amount_per_transfer_from_this = 1
-	var/trash_type = /obj/item/trash/misc_packet
+	var/trash_type = /obj/item/trash/packet
+	var/custom = FALSE
 
 /obj/item/weapon/reagent_containers/food/condiment/small/afterattack(obj/target, mob/user , flag, params)
 	if(!istype(target, /obj/structure/reagent_dispensers/cauldron) && istype(target, /obj/structure/reagent_dispensers))
@@ -688,12 +707,11 @@
 					// Worst case scenario, the empty packet will appear on the ground.
 
 /obj/item/weapon/reagent_containers/food/condiment/small/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
-
 	if(reagents.reagent_list.len > 0)
 		condiment_overlay = null
 		overlay_colored = FALSE
 		item_state = null
-		overlays.len = 0
+		extra_condiment_overlay.overlays.len = 0
 		switch(reagents.get_master_reagent_id())
 			if(KETCHUP)
 				name = KETCHUP
@@ -702,7 +720,7 @@
 			if(MAYO)
 				name = "mayonnaise packet"
 				desc = "Still not an instrument."
-				condiment_overlay = MAYO				
+				condiment_overlay = MAYO
 			if(CAPSAICIN)
 				name = "hotsauce packet"
 				desc = "For those who can't handle the real heat."
@@ -718,7 +736,7 @@
 			if(DISCOUNT)
 				name = "Discount Dan's Special Sauce"
 				desc = "Discount Dan brings you his very own special blend of delicious ingredients in one discount sauce!"
-				condiment_overlay = DISCOUNT 
+				condiment_overlay = DISCOUNT
 			if(ZAMSPICES)
 				name = "Zam Spice packet"
 				desc = "A tiny packet of mothership spices."
@@ -730,7 +748,7 @@
 			if(ZAMSPICYTOXIN)
 				name = "Zam's Spicy Sauce packet"
 				desc = "More portable than the bottle, just as spicy."
-				
+
 				condiment_overlay = ZAMSPICYTOXIN
 			else
 				if(!name) //these should probably just be ternaries
@@ -740,8 +758,12 @@
 				if(!has_icon(icon, "packet_"))
 					icon_state = "packet_misc"
 				overlay_colored = TRUE
-				update_icon(custom=TRUE)
+				var/image/packetcolor = image('icons/obj/food_condiment.dmi', src, "packet_overlay")
+				packetcolor.icon += mix_color_from_reagents(reagents.reagent_list)
+				packetcolor.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+				extra_condiment_overlay.overlays += packetcolor
 		icon_state = "[initial(icon_state)]" + condiment_overlay
+		update_icon()
 	else
 		if(is_empty() && trash_type)
 			var/obj/item/trash/trash = new trash_type(get_turf(src))
@@ -753,18 +775,8 @@
 					M.put_in_hand(hand_index, trash)
 					M.update_inv_hands()
 			qdel(src)
-
-/obj/item/weapon/reagent_containers/food/condiment/small/update_icon(var/custom=FALSE)
-	if(custom && reagents && reagents.total_volume)
-		overlays.len = 0
-		var/image/packetcolor = image('icons/obj/food_condiment.dmi', src, "packet_overlay")
-		packetcolor.icon += mix_color_from_reagents(reagents.reagent_list)
-		packetcolor.alpha = mix_alpha_from_reagents(reagents.reagent_list)
-		overlays += packetcolor
-
-	if(!is_open_container())
-		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
-		overlays += lid
+		else
+			update_icon()
 
 //-------------------------------------------------------------------------
 
@@ -772,7 +784,7 @@
 	name = "ketchup packet"
 	desc = "You feel more American already."
 	condiment_overlay = KETCHUP
-	trash_type = /obj/item/trash/ketchup_packet
+	trash_type = /obj/item/trash/packet/ketchup
 
 /obj/item/weapon/reagent_containers/food/condiment/small/ketchup/New()
 	..()
@@ -782,7 +794,7 @@
 	name = "mayonnaise packet"
 	desc = "Still not an instrument."
 	condiment_overlay = MAYO
-	trash_type = /obj/item/trash/mayo_packet
+	trash_type = /obj/item/trash/packet/mayo
 
 /obj/item/weapon/reagent_containers/food/condiment/small/mayo/New()
 	..()
@@ -792,7 +804,7 @@
 	name = "soy sauce packet"
 	desc = "Tasty soy sauce in a convenient tiny packet."
 	condiment_overlay = SOYSAUCE
-	trash_type = /obj/item/trash/soysauce_packet
+	trash_type = /obj/item/trash/packet/soysauce
 
 /obj/item/weapon/reagent_containers/food/condiment/small/soysauce/New()
 	..()
@@ -802,17 +814,17 @@
 	name = "malt vinegar packet"
 	desc = "Perfect for smaller portions of fish and chips."
 	condiment_overlay = VINEGAR
-	trash_type = /obj/item/trash/vinegar_packet
+	trash_type = /obj/item/trash/packet/vinegar
 
 /obj/item/weapon/reagent_containers/food/condiment/small/vinegar/New()
 	..()
 	reagents.add_reagent(VINEGAR, 5)
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/small/hotsauce
 	name = "hotsauce packet"
 	desc = "For those who can't handle the real heat."
 	condiment_overlay = "hotsauce"
-	trash_type = /obj/item/trash/hotsauce_packet
+	trash_type = /obj/item/trash/packet/hotsauce
 
 /obj/item/weapon/reagent_containers/food/condiment/small/hotsauce/New()
 	..()
@@ -822,7 +834,7 @@
 	name = "Zam Spices Packet"
 	desc = "A tiny packet of mothership spices."
 	condiment_overlay = ZAMSPICES
-	trash_type = /obj/item/trash/zamspices_packet
+	trash_type = /obj/item/trash/packet/zamspices
 
 /obj/item/weapon/reagent_containers/food/condiment/small/zamspices/New()
 	..()
@@ -832,7 +844,7 @@
 	name = "Zam's Mild Sauce Packet"
 	desc = "More portable than the bottle, just as tasty."
 	condiment_overlay = ZAMMILD
-	trash_type = /obj/item/trash/zammild_packet
+	trash_type = /obj/item/trash/packet/zammild
 
 /obj/item/weapon/reagent_containers/food/condiment/small/zammild/New()
 	..()
@@ -842,18 +854,43 @@
 	name = "Zam's Spicy Sauce Packet"
 	desc = "More portable than the bottle, just as spicy."
 	condiment_overlay = ZAMSPICYTOXIN
-	trash_type = /obj/item/trash/zamspicytoxin_packet
+	trash_type = /obj/item/trash/packet/zamspicytoxin
 
 /obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin/New()
 	..()
 	reagents.add_reagent(ZAMSPICYTOXIN, 5)
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/small/discount
 	name = "Discount Dan's Special Sauce"
 	desc = "Discount Dan brings you his very own special blend of delicious ingredients in one discount sauce!"
 	condiment_overlay = DISCOUNT
-	trash_type = /obj/item/trash/discount_packet
+	trash_type = /obj/item/trash/packet/discount
 
 /obj/item/weapon/reagent_containers/food/condiment/small/discount/New()
 	..()
 	reagents.add_reagent(DISCOUNT, 3)
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//I hate it but it works
+
+/obj/item/weapon/reagent_containers/food/condiment/fake_bottle
+	invisibility = 101
+
+/obj/item/weapon/reagent_containers/food/condiment/fake_bottle/proc/splash_that(var/obj/item/weapon/reagent_containers/food/snacks/snack, var/datum/reagent/source_reagent)
+	if (!istype(snack) || !source_reagent)
+		qdel(src)
+		return
+	if(snack.reagents.total_volume >= snack.reagents.maximum_volume)
+		qdel(src)
+		return
+	reagents.add_reagent(source_reagent.id, source_reagent.volume*2, source_reagent.data)
+	reagents.trans_to(snack.reagents, source_reagent.volume)
+	if (condiment_overlay)
+		var/image/I = image('icons/obj/condiment_overlays.dmi',snack,condiment_overlay)
+		I.pixel_x = rand(-3,3)
+		I.pixel_y = rand(-3,3)
+		if (overlay_colored)
+			I.color = mix_color_from_reagents(source_reagent.holder.reagent_list)
+		snack.extra_food_overlay.overlays += I
+		snack.overlays += I
+	qdel(src)

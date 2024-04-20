@@ -4,39 +4,37 @@
 
 [Website](http://ss13.moe) - [Code](https://github.com/vgstation-coders/vgstation13)
 
-[IRC](irc://irc.rizon.net/vgstation) (irc.rizon.net #vgstation), here is an embedded link to it:  [![Visit our IRC channel](https://kiwiirc.com/buttons/irc.rizon.net/vgstation.png)](https://kiwiirc.com/client/irc.rizon.net/?nick=Newcomer|?&theme=basic#vgstation)
-
 Discord Coding Server Invite Link:
 No longer available from github due to spambots using it.
-Ask on the /vg/ thread for a link or join the IRC at the link above and ask for an invite, there's a bot that relays messages between IRC and discord.
+Check the thread on /vg/ for a link or ask a player in-game for an invite.
 
 ---
 
 ### GETTING THE CODE
-The simplest but least useful way to obtain the code is using the Github .zip feature. You can click [here](https://github.com/vgstation-coders/vgstation13/archive/Bleeding-Edge.zip) to get the latest stable code as a .zip file, then unzip it to wherever you want. Alternatively, a much more useful method is to use a git client, the process for getting and using one is described below, (for more information our coders in IRC can tell you how to use one).
+The simplest but least useful way to obtain the code is using the Github .zip feature. You can click [here](https://github.com/vgstation-coders/vgstation13/archive/Bleeding-Edge.zip) to get the latest stable code as a .zip file, then unzip it to wherever you want. This is mostly useful for people looking to get assets from the server or to host a quick short-term game between friends.
+
+Alternatively, the code can be acquired via the use of a Git client as described below. If you're still having difficulty, reach out to one of our coders on Discord and they should be happy to help.
 
 ### Git client
 
-The more complicated but infinitely more useful way is to use a 'git' client.
+The slightly more complicated but way more useful way is to use a Git client. If you want to contribute code and updates to /vg/, you're going to want to do things this way.
 
-We recommend and support our users using the smartgit client, obtainable at [smartgit](http://www.syntevo.com/smartgit/). After installing it, create a new file folder where you want to host the code, right click on that folder and click on "Open in Smartgit".
+We recommend our users use the Github Desktop client, available [here](https://desktop.github.com/). After installing the client and logging in with your Github account, go back to the [Github page](https://github.com/vgstation-coders/vgstation13) for our code and press the "Fork" button at the top of the page. This will walk you through the process of creating a clone of our codebase on your account.
 
-When that opens, click repository at the top left and choose 'clone'. You can either use the link for the main repository https://github.com/vgstation-coders/vgstation13.git, or to clone your own fork the format is https://github.com/USERNAME/REPONAME.git, just copy the URL at your fork and add .git.
+Once the fork is complete, go back to the Github Desktop client and press the 'Current Reposistory' button at the top left. From there, click 'Add', then 'Clone Reposistory'. If your fork doesn't appear on the list immediately, press the refresh button at the top right and it should find it. Once you've selected it, Github Desktop will then begin downloading the codebase to the specified location on your machine. Once the clone finishes downloading, you've got your own copy of the code ready to go complete with easy tools to keep it sync'd and to make your own PRs to the repo.
 
-#### Updating the Code
+If your repository is behind on the latest updates to the code, navigate to the page for your forked repository on Github and press the 'Sync Fork' button near the top of the page and then press the 'Update Branch' button. Once that's done, press the 'Fetch Origin' button on your Github Desktop client and after it completes that action it should prompt your to 'Pull' the newest updates which will bring your code back up to date with /vg/.
 
-After you have cloned, make sure you have a remote to the main repository and your own forked repository by making a remote using the links above. By right clicking on your remote to this repo you can 'pull' the most recent version of the code from the main repository.
+#### Contributing Code
 
-You can then create new branches of code directly from our Bleeding-Edge branch on your computer.
-
-Warning: If you checkout different branches or update the code while Dream Maker is open, this can cause problems when someone adds/removes files or when one of the files changed is currently open.
+To contribute code updates to /vg/, open your Github Desktop client and from the 'Branch' dropdown menu, select 'New Branch'. Give this new branch a name that reflects what you're looking to change or update. From the main screen, press the 'Publish Branch' button to add it to your repo. From there, it's simply a matter of editing the files you wish to change in your editor of choice. By pressing the 'Commit' button on Github Desktop, you save your current changes to your branch and then press 'Push Origin' to upload them to your online repository which means you can change branch to another project should you need to without losing any of your work. Once you've committed all the changes you wanted and have tested your work, you can press the 'Preview Pull Request' button to see a summary of all the changes you've made, then 'Create Pull Request' to submit your proposed changes to Github for review by the Collaborators in charge of the master codebase.
 
 #### Branches
 
 Keep in mind that we have multiple branches for various purposes.
 
-* *master* - "stable" but ancient code, it was used on the main server until we realized we like living on the edge  :sunglasses:.
 * *Bleeding-Edge* - The latest code, this code is run on the main server.  _Please do any development against this branch!_
+* *master* - "stable" but ancient code, it was used on the main server until we realized we like living on the edge  :sunglasses:.
 
 ### INSTALLATION
 
@@ -83,3 +81,15 @@ The database is automatically installed during server startup, but you need to e
 ### IRC Bot Setup
 
 Included in the repo is an IRC bot capable of relaying adminhelps to a specified IRC channel/server (replaces the older one by Skibiliano).  Instructions for bot setup are included in the /bot/ folder along with the bot/relay script itself.
+
+---
+
+### LICENSE
+
+All code is licensed under the [GNU GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.html) unless specified otherwise.
+
+TGUI and the tgstation-server DMAPI are licensed under the MIT license.
+
+Goonchat is licensed under [CC BY-NC-SA 3.0](http://creativecommons.org/licenses/by-nc-sa/3.0/us/).
+
+Assets, including icons and sounds, are licensed under [CC BY-SA 3.0](http://creativecommons.org/licenses/by-sa/3.0/us/) unless specified otherwise.

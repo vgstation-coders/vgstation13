@@ -21,6 +21,8 @@
 								/obj/item/weapon/stock_parts/capacitor,
 								/obj/item/weapon/stock_parts/capacitor)
 
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_recharge_floor")
+
 /obj/machinery/mech_bay_recharge_floor/RefreshParts()
 	var/capcount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
@@ -135,8 +137,9 @@
 			return 0
 
 /obj/machinery/mech_bay_recharge_port/proc/stop_charge()
-	if(recharge_console && !recharge_console.stat)
-		recharge_console.icon_state = initial(recharge_console.icon_state)
+	if(recharge_console)
+		recharge_console.charging = FALSE
+		recharge_console.update_icon()
 	pr_recharger.stop()
 	return
 
@@ -207,39 +210,37 @@
 
 	light_color = LIGHT_COLOR_PINK
 
+	var/charging = FALSE
+
 /obj/machinery/computer/mech_bay_power_console/proc/mecha_in(var/obj/O)
 	if(stat&(FORCEDISABLE|NOPOWER|BROKEN))
 		to_mech(O,"<span class='rose'>Control console not responding. Terminating...</span>")
 		return
 	if(recharge_port && autostart)
-		var/answer = recharge_port.start_charge(O)
-		if(answer)
-			icon_state = initial(src.icon_state)+"_on"
+		charging = recharge_port.start_charge(O)
+		update_icon()
 
 /obj/machinery/computer/mech_bay_power_console/proc/mecha_out()
 	if(recharge_port)
 		recharge_port.stop_charge()
 
 /obj/machinery/computer/mech_bay_power_console/power_change()
-	if(stat & BROKEN)
-		icon_state = initial(icon_state) +"_broken"
+	..()
+	if(stat & (BROKEN|NOPOWER))
 		if(recharge_port)
 			recharge_port.stop_charge()
-	else if(powered())
-		icon_state = initial(icon_state)
-		stat &= ~NOPOWER
-	else
-		spawn(rand(0, 15))
-			icon_state = initial(icon_state)+"_nopower"
-			stat |= NOPOWER
-			if(recharge_port)
-				recharge_port.stop_charge()
+
+/obj/machinery/computer/mech_bay_power_console/update_icon()
+	..()
+	if(!(stat & (FORCEDISABLE|BROKEN|NOPOWER)))
+		if(charging)
+			icon_state = "recharge_comp-charging"
 
 /obj/machinery/computer/mech_bay_power_console/set_broken()
-	icon_state = initial(icon_state)+"_broken"
-	stat |= BROKEN
-	if(recharge_port)
-		recharge_port.stop_charge()
+	. = ..()
+	if(.)
+		if(recharge_port)
+			recharge_port.stop_charge()
 
 /obj/machinery/computer/mech_bay_power_console/attack_hand(mob/user as mob)
 	if(..())

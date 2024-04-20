@@ -8,6 +8,8 @@
 	plane = ABOVE_HUMAN_PLANE
 	var/ctype = 1
 	var/holo = FALSE
+	autoignition_temperature = AUTOIGNITION_PLASTIC
+	fire_fuel = 2
 
 /obj/structure/curtain/closed/left
 	ctype = 2

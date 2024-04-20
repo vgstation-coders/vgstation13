@@ -72,6 +72,10 @@
 
 	air_contents.adjust_gas(GAS_PLASMA, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
+/obj/machinery/atmospherics/unary/tank/toxins/coldroom/New()
+	..()
+	air_contents.temperature = 90
+	air_contents.adjust_gas(GAS_NITROGEN, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
 /obj/machinery/atmospherics/unary/tank/oxygen_agent_b
 	icon_state = "plasma"
@@ -99,6 +103,11 @@
 /obj/machinery/atmospherics/unary/tank/nitrogen/New()
 	..()
 
+	air_contents.adjust_gas(GAS_NITROGEN, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
+
+/obj/machinery/atmospherics/unary/tank/nitrogen/coldroom/New()
+	..()
+	air_contents.temperature = 90
 	air_contents.adjust_gas(GAS_NITROGEN, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
 /obj/machinery/atmospherics/unary/tank/air

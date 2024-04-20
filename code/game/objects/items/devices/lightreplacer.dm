@@ -338,7 +338,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		"\proper You pick up the broken [L.name] using \the [src].")
 			return 1
 		else
-			to_chat(usr, "<span class='warning'>The [src] has no waste container!</span>")
+			to_chat(usr, "<span class='warning'>\The [src] has no waste container!</span>")
 			return 0
 
 /obj/item/device/lightreplacer/proc/build_light()
@@ -444,7 +444,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		target.explode()
 
 /obj/item/device/lightreplacer/proc/get_best_light(var/obj/machinery/light/target)
-	if(!istype(supply))
+	if(!istype(supply) || !istype(target))
 		return 0
 	var/best_light
 	if(!target.fitting) //no idea how this happens

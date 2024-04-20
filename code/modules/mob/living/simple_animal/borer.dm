@@ -45,6 +45,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	universal_understand=1
 	heat_damage_per_tick = 1
 	cold_damage_per_tick = 1
+	holder_type = /obj/item/weapon/holder/animal/borer
 
 	var/busy = 0 // So we aren't trying to lay many eggs at once.
 

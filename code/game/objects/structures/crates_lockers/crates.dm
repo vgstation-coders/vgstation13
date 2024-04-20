@@ -16,6 +16,12 @@
 	var/sound_effect_open = 'sound/machines/click.ogg'
 	var/sound_effect_close = 'sound/machines/click.ogg'
 
+/obj/structure/closet/crate/proc/jiggle(var/obj/item/I)
+	var/jx = I.w_class == W_CLASS_TINY ? 7 : 3
+	var/jy = I.w_class == W_CLASS_TINY ? 3 : 1
+	I.pixel_x = rand(-jx,jx)
+	I.pixel_y = rand(-jy,jy)
+
 /obj/structure/closet/crate/basic
 	has_lock_type = /obj/structure/closet/crate/secure/basic
 
@@ -123,6 +129,9 @@
 	icon_closed = "freezer"
 	var/target_temp = T0C - 40
 	var/cooling_power = 40
+
+/obj/structure/closet/crate/freezer/get_heat_conductivity()
+	return HEAT_CONDUCTIVITY_REFRIGERATOR
 
 /obj/structure/closet/crate/freezer/return_air()
 	var/datum/gas_mixture/gas = (..())
@@ -438,6 +447,10 @@
 		return 0
 	playsound(src, sound_effect_open, 15, 1, -3)
 
+	for(var/obj/item/I in contents)
+		if(I.w_class <= W_CLASS_SMALL)
+			jiggle(I)
+
 	dump_contents()
 
 	icon_state = icon_opened
@@ -723,7 +736,7 @@
 			new/obj/item/weapon/gun/projectile/hecate(src)
 			new/obj/item/ammo_storage/box/BMG50(src)
 			new/obj/item/device/radio/headset/headset_earmuffs(src)
-			new/obj/item/clothing/glasses/thermal(src)
+			new/obj/item/clothing/glasses/hud/thermal(src)
 		if("gravitywell")
 			new/obj/item/clothing/suit/radiation(src)
 			new/obj/item/clothing/head/radiation(src)

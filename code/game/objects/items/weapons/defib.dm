@@ -159,6 +159,9 @@
 		if(!target.has_brain())
 			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. No central nervous system detected.</span>")
 			return
+		if(!target.has_attached_brain())
+			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Central nervous system detachment detected.</span>")
+			return
 		if(target.mind && target.mind.suiciding)
 			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Unrecoverable nerve trauma detected.</span>") // They suicided so they fried their brain. Space Magic.
 			return
@@ -317,10 +320,10 @@
 		to_chat(user, "<span class='warning'>You can't defibrillate [M]. You don't even know where to put the [defib_tool]!</span>")
 		return
 	else if (!power_supply)
-		to_chat(user, "<span class='warning'>There's no cell in the [src].</span>")
+		to_chat(user, "<span class='warning'>There's no cell in \the [src].</span>")
 		return
 	else if (!enough_charge())
-		to_chat(user, "<span class='warning'>The [src] fizzles weakly.</span>")
+		to_chat(user, "<span class='warning'>\The [src] fizzles weakly.</span>")
 		return
 	else
 		spark(src, 5)

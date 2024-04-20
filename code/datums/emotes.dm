@@ -1,5 +1,6 @@
-#define EMOTE_VISIBLE 1
-#define EMOTE_AUDIBLE 2
+#define EMOTE_VISIBLE (1<<0)
+#define EMOTE_AUDIBLE (1<<1)
+#define EMOTE_NO_RUNECHAT (1<<2)
 
 /* Emote datums, ported from TG station. */
 
@@ -66,17 +67,19 @@
 				if (user.client && M?.client?.prefs.mob_chat_on_map && get_dist(M, user) < M?.client.view)
 					M.create_chat_message(user, null, msg_runechat, "", list("italics"))
 
-	if (emote_type == EMOTE_VISIBLE)
+	if(emote_type & EMOTE_VISIBLE)
 		user.visible_message(msg)
-		for(var/z0 in GetOpenConnectedZlevels(user))
-			for (var/mob/O in viewers(world.view, locate(user.x,user.y,z0)))
-				if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !(isinvisible(user)))
-					O.create_chat_message(user, null, msg_runechat, "", list("italics"))
-	else
+		if(!(emote_type & EMOTE_NO_RUNECHAT))
+			for(var/z0 in GetOpenConnectedZlevels(user))
+				for (var/mob/O in viewers(world.view, locate(user.x,user.y,z0)))
+					if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !(isinvisible(user)))
+						O.create_chat_message(user, null, msg_runechat, "", list("italics"))
+	else if(emote_type & EMOTE_AUDIBLE)
 		for(var/mob/O in get_hearers_in_view(world.view, user))
 			O.show_message(msg)
-			if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !O.is_deaf())
-				O.create_chat_message(user, null, msg_runechat, "", list("italics"))
+			if(!(emote_type & EMOTE_NO_RUNECHAT))
+				if(user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !O.is_deaf())
+					O.create_chat_message(user, null, msg_runechat, "", list("italics"))
 
 	var/turf/T = get_turf(user)
 	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
@@ -161,9 +164,10 @@
 		if(user.stat > stat_allowed)
 			to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
 			return FALSE
-		if(restraint_check && (user.restrained() || user.locked_to))
-			to_chat(user, "<span class='warning'>You cannot [key] while restrained.</span>")
-			return FALSE
+		if(restraint_check)
+			if(user.restrained() || (user.locked_to && !user.can_use_hands()))
+				to_chat(user, "<span class='warning'>You cannot [key] while restrained.</span>")
+				return FALSE
 
 	if(isliving(user))
 		var/mob/living/L = user

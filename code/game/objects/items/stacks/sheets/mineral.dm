@@ -186,6 +186,7 @@ var/list/datum/stack_recipe/plasma_recipes = list ( \
 
 var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic floor tile", /obj/item/stack/tile/mineral/plastic, 1, 4, 20), \
+	new/datum/stack_recipe("plastic bucket", /obj/item/weapon/reagent_containers/glass/bucket, 3, time = 3 SECONDS, one_per_turf = 0, on_floor = 0), \
 	new/datum/stack_recipe("plastic crate", /obj/structure/closet/pcrate, 10, one_per_turf = 1, on_floor = 1, one_per_turf = 1), \
 	new/datum/stack_recipe("plastic ashtray", /obj/item/ashtray/plastic, 1, on_floor = 1), \
 	new/datum/stack_recipe("lunch box", /obj/item/weapon/storage/lunchbox/plastic, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0), \
@@ -239,6 +240,7 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 
 var/list/datum/stack_recipe/gold_recipes = list ( \
 	new/datum/stack_recipe("golden floor tile", /obj/item/stack/tile/mineral/gold, 1, 4, 20), \
+	new/datum/stack_recipe("alternate golden floor tile", /obj/item/stack/tile/mineral/gold/gold_old, 1, 4, 20), \
 	new/datum/stack_recipe("golden door", /obj/machinery/door/mineral/gold, 10, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("gold tooth", /obj/item/stack/teeth/gold, 1, 1, 20), \
 	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20,one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),\
@@ -304,6 +306,7 @@ var/list/datum/stack_recipe/phazon_recipes = list( \
 
 var/list/datum/stack_recipe/silver_recipes = list ( \
 	new/datum/stack_recipe("silver floor tile", /obj/item/stack/tile/mineral/silver, 1, 4, 20), \
+	new/datum/stack_recipe("alternate silver floor tile", /obj/item/stack/tile/mineral/silver/silver_old, 1, 4, 20), \
 	new/datum/stack_recipe("silver door", /obj/machinery/door/mineral/silver, 10, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20,one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),\
 	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),

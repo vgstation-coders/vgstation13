@@ -24,6 +24,9 @@
 	autoignition_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	on_armory_manifest = TRUE
 
+	autoignition_temperature = 0
+	fire_fuel = 0
+
 
 /obj/item/clothing/suit/armor/vest
 	name = "armor"
@@ -234,7 +237,6 @@
 	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	armor = list(melee = 50, bullet = 50, laser = 15, energy = 5, bomb = 35, bio = 0, rad = 0)
-	slowdown = HARDSUIT_SLOWDOWN_LOW
 	siemens_coefficient = 0.5
 
 /obj/item/clothing/suit/armor/xcomsquaddie/verb/toggle_sleeves()
@@ -277,7 +279,6 @@
 	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|IGNORE_INV
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 20, bomb = 25, bio = 0, rad = 0)
-	slowdown = HARDSUIT_SLOWDOWN_LOW
 	siemens_coefficient = 0.5
 
 /obj/item/clothing/suit/armor/xcomarmor/equipped(mob/living/carbon/human/H, equipped_slot)
@@ -315,6 +316,7 @@
 	desc = "A vest that excels in protecting the wearer against energy projectiles."
 	icon_state = "armor_reflec"
 	item_state = "armor_reflec"
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=4;"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 	blood_overlay_type = "armor"

@@ -19,7 +19,6 @@ var/list/arcane_tomes = list()
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	mech_flags = MECH_SCAN_FAIL
-	fire_fuel = 3
 	var/state = TOME_CLOSED
 	var/can_flick = 1
 	var/list/talismans = list()
@@ -356,7 +355,6 @@ var/list/arcane_tomes = list()
 	pressure_resistance = 1
 	attack_verb = list("slaps")
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
 	mech_flags = MECH_SCAN_FAIL
 	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/linked_ui
 	var/blood_text = ""
@@ -662,7 +660,7 @@ var/list/arcane_tomes = list()
 	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper))
 		return 1
 	if(istype(I,/obj/item/soulstone/gem))
-		to_chat(user,"<span class='warning'>The [src]'s damage doesn't allow it to hold \a [I] any longer.</span>")
+		to_chat(user,"<span class='warning'>\The [src]'s damage doesn't allow it to hold \a [I] any longer.</span>")
 		return 1
 	..()
 
@@ -947,7 +945,7 @@ var/list/arcane_tomes = list()
 		var/mob/living/carbon/C = loc
 		C.update_inv_hands()
 		if (areYouWorthy(C))
-			var/image/I = image('icons/mob/hud.dmi', src, "consthealth[10*round((blood/maxblood)*10)]")
+			var/image/I = new/image/hud('icons/mob/hud.dmi', src, "consthealth[10*round((blood/maxblood)*10)]")
 			I.pixel_x = 16
 			I.pixel_y = 16
 			overlays += I
@@ -1322,6 +1320,9 @@ var/list/arcane_tomes = list()
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	mech_flags = MECH_SCAN_FAIL
+	hood = new /obj/item/clothing/head/culthood()
+	auto_hood = TRUE
+	hood_suit_name = "robes"
 
 	//plasmaman stuff
 	var/next_extinguish=0
@@ -1332,6 +1333,7 @@ var/list/arcane_tomes = list()
 	desc = "A set of warm armored robes worn by the followers of Nar-Sie."
 	icon_state = "cultrobes_snow"
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	hood = new /obj/item/clothing/head/culthood/snow()
 
 /obj/item/clothing/suit/cultrobes/get_cult_power()
 	return 50
@@ -1506,6 +1508,7 @@ var/list/arcane_tomes = list()
 	icon_state = "cultrobes_old"
 	item_state = "cultrobes_old"
 	species_fit = list()
+	hood = new /obj/item/clothing/head/culthood/old()
 
 /obj/item/clothing/head/magus
 	name = "magus helm"
@@ -1582,7 +1585,6 @@ var/list/arcane_tomes = list()
 	pressure_resistance = 1
 	attack_verb = list("slaps")
 	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 1
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)
@@ -1917,19 +1919,26 @@ var/list/arcane_tomes = list()
 	desc = "A candle made out of blood moth wax, burns much longer than regular candles. Used for moody lighting and occult rituals."
 	icon = 'icons/obj/candle.dmi'
 	icon_state = "bloodcandle"
+	item_state = "bloodcandle"
+	food_candle = "foodbloodcandle"
+	color = null
 
-	wax = 1200 // 20 minutes
+	wax = 3600 // 60 minutes
 	trashtype = /obj/item/trash/blood_candle
 
 /obj/item/candle/blood/update_icon()
 	overlays.len = 0
-	var/i
-	if(wax > 800)
-		i = 1
-	else if(wax > 400)
-		i = 2
-	else i = 3
-	icon_state = "bloodcandle[i]"
+	if (wax == initial(wax))
+		icon_state = "bloodcandle"
+	else
+		var/i
+		if(wax > 2400)
+			i = 1
+		else if(wax > 1200)
+			i = 2
+		else i = 3
+		icon_state = "bloodcandle[i]"
+	update_blood_overlay()
 	if (lit)
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.blend_mode = BLEND_ADD
@@ -1938,6 +1947,16 @@ var/list/arcane_tomes = list()
 		else
 			I.plane = ABOVE_HUD_PLANE // inventory
 		overlays += I
+
+		//dynamic in-hands
+		var/image/left_I = image(inhand_states["left_hand"], src, "bloodcandle_lit")
+		var/image/right_I = image(inhand_states["right_hand"], src, "bloodcandle_lit")
+		left_I.blend_mode = BLEND_ADD
+		left_I.plane = ABOVE_LIGHTING_PLANE
+		right_I.blend_mode = BLEND_ADD
+		right_I.plane = ABOVE_LIGHTING_PLANE
+		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
+		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
 
 /obj/item/trash/blood_candle
 	name = "blood candle"

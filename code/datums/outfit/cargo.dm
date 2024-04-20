@@ -166,13 +166,17 @@
 		),
 	)
 
+	items_to_collect = list(
+		/obj/item/weapon/storage/belt/slim = SURVIVAL_BOX,
+		/obj/item/clothing/accessory/storage/fannypack = SURVIVAL_BOX
+	)
+
 	pda_type = /obj/item/device/pda/cargo
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/supply
 
 /datum/outfit/cargo_tech/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 
 // -- Shaft Miner
 

@@ -1284,7 +1284,6 @@ var/list/all_bible_styles = list(
 	bookstyle = "Slab"
 
 /datum/religion/clockworkcult/equip_chaplain(var/mob/living/carbon/human/H)
-	H.equip_or_collect(new /obj/item/clothing/head/clockwork_hood(H), slot_head)
 	H.equip_or_collect(new /obj/item/clothing/suit/clockwork_robes(H), slot_wear_suit)
 	H.equip_or_collect(new /obj/item/clothing/shoes/clockwork_boots(H), slot_shoes)
 
@@ -1565,3 +1564,14 @@ var/list/all_bible_styles = list(
 /datum/religion/loop/equip_chaplain(var/mob/living/carbon/human/H)
 	H.equip_or_collect(new /obj/item/clothing/suit/timefake(H), slot_wear_suit)
 	H.equip_or_collect(new /obj/item/clothing/head/timefake(H), slot_head)
+
+/datum/religion/viron
+	name = "The Vironese Faith"
+	deity_names = list("Pas", "Echidna", "Scylla", "Molpe", "Tartarus", "Heirax", "Thelxiepeia", "Phaea", "Sphigx", "Outsider")
+	bible_name = "The Chrasmologic Writings"
+	male_adept = "Augur"
+	female_adept = "Sibyl"
+	keys = list("viron", "vironese", "silk", "augury", "book of the long sun", "aureate path", "plan of pas")
+
+/datum/religion/viron/equip_chaplain(var/mob/living/carbon/human/H)
+	H.equip_or_collect(new /obj/item/clothing/suit/chaplain_hoodie(H), slot_wear_suit)

@@ -5,7 +5,7 @@
 	icon_state = "monkey1"
 	icon = 'icons/mob/monkey.dmi'
 	gender = NEUTER
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	update_icon = 0		///no need to call regenerate_icon
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey
 	species_type = /mob/living/carbon/monkey
@@ -84,8 +84,8 @@
 		default_language = all_languages[languagetoadd]
 		init_language = default_language
 
-	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
-	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
+	hud_list[HEALTH_HUD]      = new/image/hud('icons/mob/hud.dmi', src, "hudhealth100")
+	hud_list[STATUS_HUD]      = new/image/hud('icons/mob/hud.dmi', src, "hudhealthy")
 
 	..()
 	update_icons()
@@ -238,6 +238,9 @@
 			armorscore = uniform.armor[type]
 	return armorscore
 
+/mob/living/carbon/monkey/getarmorabsorb(var/def_zone, var/type)
+	return getarmor(def_zone, type)
+
 /mob/living/carbon/monkey/attack_paw(mob/living/M)
 	..()
 
@@ -319,8 +322,6 @@
 						to_chat(src, "<span class='notice'>Somebody jumped your claim on \the [src] and is already controlling it. Try another </span>")
 			else if(!(O.can_reenter_corpse))
 				to_chat(O,"<span class='notice'>While \the [src] may be mindless, you have recently ghosted and thus are not allowed to take over for now.</span>")
-
-
 
 /mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
 	if(!..())

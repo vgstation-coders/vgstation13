@@ -40,16 +40,16 @@
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
-/obj/item/clothing/gloves/swat/operator
+/obj/item/clothing/gloves/swat/specops
 	name = "operator gloves"
 	desc = "Once you touch down in the LZ at the FOB, locate the IEDs and don't put up with any FNGs."
 
-/obj/item/clothing/gloves/swat/operator/examine(mob/user)
+/obj/item/clothing/gloves/swat/specops/examine(mob/user)
 	..()
 	if(locate(/obj/item/weapon/implant/loyalty) in user)
 		to_chat(user,"<span class='info'>These gloves can be used to convey messages to other loyalty implanted crew. Use an open hand on yourself while wearing them.</span>")
 
-/obj/item/clothing/gloves/swat/operator/Touch(var/atom/A, mob/living/user, proximity)
+/obj/item/clothing/gloves/swat/specops/Touch(var/atom/A, mob/living/user, proximity)
 	if(A == user && !user.incapacitated())
 		if(user.is_implanted(/obj/item/weapon/implant/loyalty))
 			var/list/choices = list(
@@ -66,7 +66,7 @@
 			return 1 //exit the attack_hand
 	return ..()
 
-/obj/item/clothing/gloves/swat/operator/proc/signal(var/sign, mob/user)
+/obj/item/clothing/gloves/swat/specops/proc/signal(var/sign, mob/user)
 	if(user.incapacitated())
 		return
 	for(var/mob/living/M in view(7, user))
@@ -452,3 +452,15 @@
 
 /obj/item/clothing/gloves/mining/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "rockernaut")
+
+/obj/item/clothing/gloves/mittens
+	desc = "These mittens are quite comfortable, and will keep you warm!"
+	name = "mittens"
+	icon_state = "mittens"
+	item_state = "mittens"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/linencrafts.dmi', "right_hand" = 'icons/mob/in-hand/right/linencrafts.dmi')
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
+
+	color = COLOR_LINEN
+	clothing_flags = COLORS_OVERLAY

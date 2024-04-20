@@ -49,6 +49,9 @@ var/list/blob_overminds = list()
 
 	var/asleep = FALSE
 
+	var/meat = /obj/item/weapon/reagent_containers/food/snacks/meat/blob
+	var/meat_drop_factor = 1	// A weapon of force 8 and sharpness 0.5 will hack off meat with a probability of 4% at drop factor 1
+
 /obj/effect/blob/blob_act()
 	return
 
@@ -196,6 +199,14 @@ var/list/blob_overminds = list()
 				playsound(src, 'sound/effects/blobweld.ogg', 100, 1)
 		if("brute")
 			damage = (W.force / max(src.brute_resist,1))
+			if(prob((W.sharpness * W.force) * meat_drop_factor))
+				var/obj/item/I = new meat()
+				I.forceMove(src.loc)
+				if (!(src.looks in blob_diseases))
+					CreateBlobDisease(src.looks)
+				var/datum/disease2/disease/D = blob_diseases[src.looks]
+				I.infect_disease2(D)
+				I.throw_at(user, 1, 1)
 
 	health -= damage
 	update_health()
@@ -416,11 +427,12 @@ var/list/blob_looks_player = list(//Options available to players
 /obj/effect/blob/proc/run_action()
 	return 0
 
-/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1, var/mob/camera/blob/source)
+/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1, var/mob/camera/blob/source, var/manual = FALSE)
 	if(prob && !prob(health))
 		return
-	if(istype(T, /turf/space) && prob(75))
-		return
+	if(!manual) //Manually-expanded blobs don't care about 50% chance to not expand in space.
+		if(istype(T, /turf/space) && prob(50))
+			return
 	if(!T)
 		var/list/dirs = cardinal.Copy()
 		for(var/i in 1 to 4)
@@ -474,7 +486,7 @@ var/list/blob_looks_player = list(//Options available to players
 	if(!ispath(type))
 		error("[type] is an invalid type for the blob.")
 	if(special) //Send additional information to the New()
-		new type(src.loc, 200, null, 1, M, newlook = looks)
+		new type(src.loc, 200, null, 1, 1, newlook = looks)
 	else
 		var/obj/effect/blob/B = new type(src.loc, newlook = looks)
 		B.dir = dir
