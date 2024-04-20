@@ -246,6 +246,10 @@
 			playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
 			next_sound = world.time + sound_delay
 
+/obj/structure/Uncrossed(atom/movable/A)
+	if(A.type == /obj/machinery/crate_weigher)
+		A.Uncrossed(src)
+
 /obj/item/weapon/circuitboard/crate_weigher
 	name = "Circuit Board (Crate Weigher)"
 	desc = "A circuit board used to run a crate weighing machine."
