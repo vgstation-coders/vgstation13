@@ -726,6 +726,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(O.density)
 			return 1
 	return 0
+
 /obj/machinery/atmospherics/unary/cryo_cell/conveyor_act(var/atom/movable/AM, var/obj/machinery/conveyor/CB)
 	if(isliving(AM))
 		var/mob/living/L = AM
