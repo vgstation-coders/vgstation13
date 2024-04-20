@@ -66,14 +66,17 @@ var/list/one_way_windows
 		return ..() && O.anchored && O.density
 
 /obj/structure/window/relativewall()
-	icon_state = anchored && density ? "[base_state]window[..()]" : initial(icon_state)
+	. = ..()
 	if(!is_fulltile)
 		overlays.Cut()
 		var/onturfdirs = findSmoothingOnTurf()
-		if(~onturfdirs & counterclockwise_perpendicular_dirs[dir])
+		icon_state = anchored && density ? "[base_state]window[. | onturfdirs]" : initial(icon_state)
+		/*if(~onturfdirs & counterclockwise_perpendicular_dirs[dir])
 			overlays += image(icon, loc, "[base_state]corner_r", dir = src.dir)
 		if(~onturfdirs & clockwise_perpendicular_dirs(dir))
-			overlays += image(icon, loc, "[base_state]corner_l", dir = src.dir)
+			overlays += image(icon, loc, "[base_state]corner_l", dir = src.dir)*/
+	else
+		icon_state = anchored && density ? "[base_state]window[.]" : initial(icon_state)
 
 /obj/structure/window/proc/update_oneway_nearby_clients()
 	for(var/client/C in clients)

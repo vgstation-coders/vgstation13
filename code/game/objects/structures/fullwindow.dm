@@ -6,7 +6,7 @@
 /obj/structure/window/full
 	name = "window"
 	icon_state = "fwindow0" //Specifically for the map
-	base_state = "fwindow"
+	base_state = "f"
 	sheetamount = 2
 	mouse_opacity = 2 // Complete opacity //What in the name of everything is this variable ?
 	layer = FULL_WINDOW_LAYER
@@ -89,7 +89,7 @@
 	name = "reinforced window"
 	desc = "A window with a rod matrix. It looks more solid than the average window."
 	icon_state = "frwindow0"
-	base_state = "frwindow"
+	base_state = "fr"
 	sheet_type = /obj/item/stack/sheet/glass/rglass
 	health = 40
 	penetration_dampening = 3
@@ -107,7 +107,7 @@
 	name = "plasma window"
 	desc = "A window made out of a plasma-silicate alloy. It looks insanely tough to break and burn through."
 	icon_state = "fplasmawindow0"
-	base_state = "fplasmawindow"
+	base_state = "fplasma"
 	shardtype = /obj/item/weapon/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmaglass
 	health = 120
@@ -127,7 +127,7 @@
 	name = "reinforced plasma window"
 	desc = "A window made out of a plasma-silicate alloy and a rod matrix. It looks hopelessly tough to break and is most likely nigh fireproof."
 	icon_state = "fplasmarwindow0"
-	base_state = "fplasmarwindow"
+	base_state = "fplasmar"
 	shardtype = /obj/item/weapon/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
@@ -148,7 +148,7 @@
 	name = "tinted window"
 	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque. Why not a wall?"
 	icon_state = "ftwindow0"
-	base_state = "ftwindow"
+	base_state = "ft"
 	opacity = 1
 	sheet_type = /obj/item/stack/sheet/glass/rglass //A glass type for this window doesn't seem to exist, so here's to you
 
@@ -157,7 +157,7 @@
 	name = "frosted window"
 	desc = "A window with a rod matrix. Its surface is completely tinted, making it opaque, and it's frosty. Why not an ice wall?"
 	icon_state = "frwindow0"
-	base_state = "frwindow"
+	base_state = "fr"
 	health = 30
 	sheet_type = /obj/item/stack/sheet/glass/rglass //Ditto above
 
@@ -165,7 +165,7 @@
 	name = "brass window"
 	desc = "A paper-thin pane of translucent yet reinforced brass."
 	icon_state = "fclockworkwindow0"
-	base_state = "fclockworkwindow"
+	base_state = "fclockwork"
 	shardtype = null
 	sheet_type = /obj/item/stack/sheet/brass
 	reinforcetype = /obj/item/stack/sheet/ralloy
