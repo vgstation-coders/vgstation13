@@ -8,7 +8,4 @@
 	smashtext = ""
 	smashname = "broken flask"
 	controlled_splash = TRUE
-
-/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater/New()
-	..()
-	reagents.add_reagent(HOLYWATER, 100)
+	reagents_to_add = HOLYWATER

@@ -10,10 +10,7 @@
 	starting_materials = list(MAT_GLASS = 500)
 	melt_temperature = MELTPOINT_GLASS
 	w_type=RECYK_GLASS
-
-/obj/item/weapon/reagent_containers/food/drinks/jar/New()
-	..()
-	reagents.add_reagent(SLIMEJELLY, 50)
+	reagents_to_add = SLIMEJELLY
 
 /obj/item/weapon/reagent_containers/food/drinks/jar/on_reagent_change()
 	..()

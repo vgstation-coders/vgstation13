@@ -19,6 +19,10 @@
 
 	can_flip = TRUE
 
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/reagent_refill()
+	..()
+	on_reagent_change()
+
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
 	flammable = 0
@@ -155,39 +159,25 @@
 		to_chat(user,"<span class='warning'>This one is made out to 'My very best friend, [user.client.ckey]'</span>")
 
 // for /obj/machinery/vending/sovietsoda
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/soda/New()
-	..()
-	reagents.add_reagent(SODAWATER, 50)
-	on_reagent_change()
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/soda
+	reagents_to_add = SODAWATER
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/cola/New()
-	..()
-	reagents.add_reagent(COLA, 50)
-	on_reagent_change()
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/cola
+	reagents_to_add = COLA
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/toxinsspecial/New()
-	..()
-	reagents.add_reagent(TOXINSSPECIAL, 30)
-	on_reagent_change()
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/toxinsspecial
+	reagents_to_add = TOXINSSPECIAL
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee
 	name = "irish coffee"
-
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/New()
-	..()
-	reagents.add_reagent(IRISHCOFFEE, 50)
-	on_reagent_change()
+	reagents_to_add = IRISHCOFFEE
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/on_vending_machine_spawn()
 	reagents.chem_temp = COOKTEMP_READY
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake
 	name = "glass of sake"
-
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake/New()
-	..()
-	reagents.add_reagent(SAKE, 50)
-	on_reagent_change()
+	reagents_to_add = SAKE
 
 // Cafe Stuff. Mugs act the same as drinking glasses, but they don't break when thrown.
 
