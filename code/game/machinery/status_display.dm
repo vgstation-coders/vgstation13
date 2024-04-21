@@ -81,6 +81,9 @@ var/global/list/status_displays = list() //This list contains both normal status
 		remove_display()
 		return
 	update()
+	if(mode == MODE_SHUTTLE_TIMER || mode == MODE_CARGO_TIMER) // update again after a second just for these
+		spawn(10) // timers are every second
+			update()
 
 /obj/machinery/status_display/attack_ai(mob/user)
 	if(spookymode)
