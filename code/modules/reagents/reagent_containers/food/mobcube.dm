@@ -5,11 +5,8 @@
 	bitesize = 12
 	food_flags = FOOD_MEAT
 	valid_utensils = 0
+	reagents_to_add = list(NUTRIMENT = 10)
 	var/contained_mob = /mob/living/carbon/monkey
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/New()
-	..()
-	reagents.add_reagent(NUTRIMENT,10)
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/Destroy()
 	if(contained_mob && isdatum(contained_mob))
