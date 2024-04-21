@@ -127,51 +127,38 @@
 	name = "Creatine Suicide Pill (50 units)"
 	desc = "WILL ALSO KILL YOU VIOLENTLY."
 	icon_state = "pill5" //bright red oblong with stripe
-
-/obj/item/weapon/reagent_containers/pill/creatine/New()
-	..()
-	reagents.add_reagent(CREATINE, 50)
+	reagents_to_add = list(CREATINE = 50)
 
 /obj/item/weapon/reagent_containers/pill/laststand
 	name = "Creatine \"Last Stand\" suicide pill"
 	desc = "For when you really want to spend your last moments punching things to death."
 	icon_state = "pill5" //bright red oblong with stripe
-
-/obj/item/weapon/reagent_containers/pill/laststand/New()
-	..()
-	reagents.add_reagent(DEXALINP, 5) //STOP LAYING AROUND
-	reagents.add_reagent(MEDNANOBOTS, 0.4) //GET UP
-	reagents.add_reagent(HYPOZINE, 5) //GO FAST
-	reagents.add_reagent(COMNANOBOTS, 4.6) //FIGHT HARD
-	reagents.add_reagent(OXYCODONE, 5) //NO PAIN
-	reagents.add_reagent(CREATINE, 30) //ONLY FIST
+	reagents_to_add = list( // to preserve the comments below:
+		DEXALINP = 5, //STOP LAYING AROUND
+		MEDNANOBOTS = 0.4, //GET UP
+		HYPOZINE = 5, //GO FAST
+		COMNANOBOTS = 4.6, //FIGHT HARD
+		OXYCODONE = 5, //NO PAIN
+		CREATINE = 30, //ONLY FIST
+	)
 
 /obj/item/weapon/reagent_containers/pill/antitox
 	name = "Anti-toxins pill"
 	desc = "Neutralizes many common toxins."
 	icon_state = "pill14" //green round plain
-
-/obj/item/weapon/reagent_containers/pill/antitox/New()
-	..()
-	reagents.add_reagent(ANTI_TOXIN, 25)
+	reagents_to_add = list(ANTI_TOXIN = 25)
 
 /obj/item/weapon/reagent_containers/pill/tox
 	name = "Toxins pill"
 	desc = "Highly toxic."
 	icon_state = "pill5" //bright red oblong with stripe
-
-/obj/item/weapon/reagent_containers/pill/tox/New()
-	..()
-	reagents.add_reagent(TOXIN, 50)
+	reagents_to_add = list(TOXIN = 50)
 
 /obj/item/weapon/reagent_containers/pill/cyanide
 	name = "Cyanide pill"
 	desc = "Don't swallow this."
 	icon_state = "pill5" //bright red oblong with stripe
-
-/obj/item/weapon/reagent_containers/pill/cyanide/New()
-	..()
-	reagents.add_reagent(CYANIDE, 50)
+	reagents_to_add = list(CYANIDE = 50)
 
 /obj/item/weapon/reagent_containers/pill/cyanide/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] bites onto a [src.name] and swallows it! It looks like \he's trying to commit suicide.</span>")
@@ -186,19 +173,16 @@
 	name = "Adminordrazine pill"
 	desc = "It's magic. We don't have to explain it."
 	icon_state = "pill6" //cyan-brown oblong
-
-/obj/item/weapon/reagent_containers/pill/adminordrazine/New()
-	..()
-	reagents.add_reagent(ADMINORDRAZINE, 50)
+	reagents_to_add = list(ADMINORDRAZINE = 50)
 
 /obj/item/weapon/reagent_containers/pill/procizine
 	name = "procizine pill"
 	desc = "What could possibly go wrong?"
 	icon_state = "pill6" //cyan-brown oblong
+	reagents_to_add = list(PROCIZINE = 50)
 
 /obj/item/weapon/reagent_containers/pill/procizine/New()
 	..()
-	reagents.add_reagent(PROCIZINE, 50)
 	for(var/procname in procizine_calls)
 		if(procizine_calls[procname] in bad_procs)
 			desc = "You have a bad feeling about taking this."
@@ -208,132 +192,86 @@
 	name = "Sleeping pill"
 	desc = "Commonly used to treat insomnia."
 	icon_state = "pill11" //light blue round
-
-/obj/item/weapon/reagent_containers/pill/stox/New()
-	..()
-	reagents.add_reagent(STOXIN, 30)
+	reagents_to_add = list(STOXIN = 30)
 
 /obj/item/weapon/reagent_containers/pill/kelotane
 	name = "Kelotane pill"
 	desc = "Used to treat burns."
 	icon_state = "pill12" //yellow round
-
-/obj/item/weapon/reagent_containers/pill/kelotane/New()
-	..()
-	reagents.add_reagent(KELOTANE, 30)
+	reagents_to_add = list(KELOTANE = 30)
 
 /obj/item/weapon/reagent_containers/pill/tramadol
 	name = "Tramadol pill"
 	desc = "A simple painkiller."
 	icon_state = "pill11" //light blue round
-
-/obj/item/weapon/reagent_containers/pill/tramadol/New()
-	..()
-	reagents.add_reagent(TRAMADOL, 15)
+	reagents_to_add = list(TRAMADOL = 15)
 
 /obj/item/weapon/reagent_containers/pill/citalopram
 	name = "Citalopram pill"
 	desc = "Mild anti-depressant."
 	icon_state = "pill11" //light blue round
-
-/obj/item/weapon/reagent_containers/pill/citalopram/New()
-	..()
-	reagents.add_reagent(CITALOPRAM, 15)
+	reagents_to_add = list(CITALOPRAM = 15)
 
 /obj/item/weapon/reagent_containers/pill/inaprovaline
 	name = "Inaprovaline pill"
 	desc = "Used to stabilize patients."
 	icon_state = "pill9" //magenta/yellow oblong
-
-/obj/item/weapon/reagent_containers/pill/inaprovaline/New()
-	..()
-	reagents.add_reagent(INAPROVALINE, 30)
+	reagents_to_add = list(INAPROVALINE = 30)
 
 /obj/item/weapon/reagent_containers/pill/dexalin
 	name = "Dexalin pill"
 	desc = "Used to treat oxygen deprivation."
 	icon_state = "pill19" //dark blue/blue round
-
-/obj/item/weapon/reagent_containers/pill/dexalin/New()
-	..()
-	reagents.add_reagent(DEXALIN, 30)
+	reagents_to_add = list(DEXALIN = 30)
 
 /obj/item/weapon/reagent_containers/pill/bicaridine
 	name = "Bicaridine pill"
 	desc = "Used to treat physical injuries."
 	icon_state = "pill15" //red round
-
-/obj/item/weapon/reagent_containers/pill/bicaridine/New()
-	..()
-	reagents.add_reagent(BICARIDINE, 30)
+	reagents_to_add = list(BICARIDINE = 30)
 
 /obj/item/weapon/reagent_containers/pill/happy
 	name = "Happy pill"
 	desc = "Happy happy joy joy!"
 	icon_state = "pill7" //grey oblong
-
-/obj/item/weapon/reagent_containers/pill/happy/New()
-	..()
-	reagents.add_reagent(SPACE_DRUGS, 15)
-	reagents.add_reagent(SUGAR, 15)
+	reagents_to_add = list(SPACE_DRUGS = 15, SUGAR = 15)
 
 /obj/item/weapon/reagent_containers/pill/zoom
 	name = "Zoom pill"
 	desc = "Zoooom!"
 	icon_state = "pill7" //grey oblong
-
-/obj/item/weapon/reagent_containers/pill/zoom/New()
-	..()
-	reagents.add_reagent(IMPEDREZENE, 10)
-	reagents.add_reagent(SYNAPTIZINE, 1)
-	reagents.add_reagent(HYPERZINE, 10)
+	reagents_to_add = list(IMPEDREZENE = 10, SYNAPTIZINE = 1, HYPERZINE = 10)
 
 /obj/item/weapon/reagent_containers/pill/speedcrank
 	name = "Speedcrank pill"
 	desc = "Be up a hello!"
 	icon_state = "pill37" //darkblue tablet
-
-/obj/item/weapon/reagent_containers/pill/speedcrank/New()
-	..()
-	reagents.add_reagent(VALERENIC_ACID, 1)
-	reagents.add_reagent(PHYSOSTIGMINE, 3)
-	reagents.add_reagent(COCAINE, 1)
+	reagents_to_add = list(VALERENIC_ACID = 1, PHYSOSTIGMINE = 3, COCAINE = 1)
 
 /obj/item/weapon/reagent_containers/pill/hyperzine
 	name = "Hyperzine pill"
 	desc = "Gotta go fast!"
 
 	icon_state = "pill7" //grey oblong
-/obj/item/weapon/reagent_containers/pill/hyperzine/New()
-	..()
-	reagents.add_reagent(HYPERZINE, 10)
+	reagents_to_add = list(HYPERZINE = 10)
 
 /obj/item/weapon/reagent_containers/pill/creatine_safe
 	name = "Creatine Pill (26 units)"
 	desc = "Become the boss of this Gym."
 	icon_state = "pill5" //bright red oblong with stripe
-
-/obj/item/weapon/reagent_containers/pill/creatine_safe/New()
-	..()
-	reagents.add_reagent(CREATINE, 26)
+	reagents_to_add = list(CREATINE = 26)
 
 /obj/item/weapon/reagent_containers/pill/creatine_supplement
 	name = "Creatine Supplement (5 units)"
 	desc = "Maintain those massive gains!"
 	icon_state = "pill6" //cyan/brown oblong
-
-/obj/item/weapon/reagent_containers/pill/creatine_supplement/New()
-	..()
-	reagents.add_reagent(CREATINE, 5)
+	reagents_to_add = list(CREATINE = 5)
 
 /obj/item/weapon/reagent_containers/pill/ryetalyn
 	name = "Ryetalyn pill"
 	desc = "Eliminates genetic defects."
 	icon_state = "pill7" //grey oblong
-
-/obj/item/weapon/reagent_containers/pill/ryetalyn/New()
-	..()
-	reagents.add_reagent(RYETALYN, 1)
+	reagents_to_add = list(RYETALYN = 1)
 
 /obj/item/weapon/storage/pill_bottle/time_release
 	name = "controlled release pill bottle"
@@ -396,8 +334,7 @@
 		list(ZOMBIEPOWDER = 10)
 	)
 
-/obj/item/weapon/reagent_containers/pill/random/New()
-	. = ..()
+/obj/item/weapon/reagent_containers/pill/random/reagent_refill()
 	var/list/to_spawn = pickweight(possible_combinations)
 	for(var/index in to_spawn)
 		reagents.add_reagent(index, to_spawn[index])
@@ -504,43 +441,28 @@
 	name = "nanobot pill"
 	desc = "Experimental medication."
 	icon_state = "pill7" //grey oblong
-
-/obj/item/weapon/reagent_containers/pill/nanobot/New()
-	..()
-	reagents.add_reagent(NANOBOTS, 1)
+	reagents_to_add = list(NANOBOTS = 1)
 
 /obj/item/weapon/reagent_containers/pill/hyronalin
 	name = "hyronalin pill"
 	desc = "Radiation poisoning treatment."
 	icon_state = "pill14" //green round plain
-
-/obj/item/weapon/reagent_containers/pill/hyronalin/New()
-	..()
-	reagents.add_reagent(HYRONALIN, 20)
+	reagents_to_add = list(HYRONALIN = 20)
 
 /obj/item/weapon/reagent_containers/pill/arithrazine
 	name = "arithrazine pill"
 	desc = "Extreme radiation sickness treatment."
 	icon_state = "pill6"
-
-/obj/item/weapon/reagent_containers/pill/arithrazine/New()
-	..()
-	reagents.add_reagent(ARITHRAZINE, 10)
+	reagents_to_add = list(ARITHRAZINE = 10)
 
 /obj/item/weapon/reagent_containers/pill/lithotorcrazine
 	name = "lithotorcrazine pill"
 	desc = "Shields the body against radiation buildup, but does not cure it. Lasts around 5 minutes."
 	icon_state = "pill38"
-
-/obj/item/weapon/reagent_containers/pill/lithotorcrazine/New()
-	..()
-	reagents.add_reagent(LITHOTORCRAZINE, 30)
+	reagents_to_add = list(LITHOTORCRAZINE = 30)
 
 /obj/item/weapon/reagent_containers/pill/nanofloxacin
 	name = "nanofloxacin pill"
 	desc = "Extremely powerful antipathogenic, one dose is enough to cure almost any diseases."
 	icon_state = "pill30"
-
-/obj/item/weapon/reagent_containers/pill/nanofloxacin/New()
-	..()
-	reagents.add_reagent(NANOFLOXACIN, 1)
+	reagents_to_add = list(NANOFLOXACIN = 1)
