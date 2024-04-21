@@ -4,15 +4,11 @@
 	name = "egg"
 	desc = "An egg!"
 	icon_state = "egg"
+	bitesize = 3
+	reagents_to_add = list(EGG_YOLK = 4, CALCIUMCARBONATE = 1)
 	var/amount_grown = 0
 	var/can_color = TRUE
 	var/hatch_type = /mob/living/simple_animal/chick
-
-/obj/item/weapon/reagent_containers/food/snacks/egg/New()
-	..()
-	reagents.add_reagent(EGG_YOLK, 4)
-	reagents.add_reagent(CALCIUMCARBONATE, 1)
-	src.bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/process()
 	if(is_in_valid_nest(src)) //_macros.dm
@@ -127,9 +123,7 @@
 	can_color = FALSE
 	hatch_type = /mob/living/simple_animal/hostile/retaliate/cockatrice/chick
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/New()
-	..()
-
+/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/reagent_refill()
 	reagents.add_reagent(PETRITRICIN, rand(5,15)/10)
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/bigroach
@@ -139,9 +133,7 @@
 	can_color = FALSE
 	hatch_type = /mob/living/simple_animal/hostile/bigroach
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/bigroach/New()
-	..()
-
+/obj/item/weapon/reagent_containers/food/snacks/egg/bigroach/reagent_refill()
 	reagents.add_reagent(TOXIN, rand(5,15))
 	reagents.add_reagent(RADIUM, rand(1,5))
 

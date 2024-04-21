@@ -7,19 +7,20 @@ var/global/cockroach_egg_amount = 0
 	food_flags = FOOD_ANIMAL
 
 	icon_state = "roach_eggs1"
+	reagents_to_add = list(NUTRIMENT = 2, TOXIN = 0.2)
+	bitesize = 1.1
 	var/hatch_type = /mob/living/simple_animal/cockroach
 	var/amount_grown = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 2)
-	reagents.add_reagent(ROACHSHELL, rand(1,4))
-	reagents.add_reagent(TOXIN, 0.2)
-	src.bitesize = 1.1
-
 	icon_state = "roach_eggs[rand(1,3)]"
 
 	cockroach_egg_amount++
+
+/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/reagent_refill()
+	..()
+	reagents.add_reagent(ROACHSHELL, rand(1,4))
 
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/process()
 	if(is_in_valid_nest(src)) //_macros.dm
@@ -63,7 +64,7 @@ var/global/cockroach_egg_amount = 0
 
 	icon_state = "turkish_eggs1"
 	hatch_type = /mob/living/simple_animal/cockroach/turkish
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/turk/New()
 	..()
 	icon_state = "turkish_eggs[rand(1,3)]"
