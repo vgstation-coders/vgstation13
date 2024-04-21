@@ -32,7 +32,7 @@
 
 
 #### Server revision
-<!-- Found with the "Show server revision" verb in the OOC tab in game. -->
+<!-- Found with the "Show server revision" verb in the OOC tab in game or at .git/refs/heads/Bleeding-Edge on your copy of the source code, if up to date. -->
 
 <!-- SELF LABEL YOUR ISSUE TODAY!
 
