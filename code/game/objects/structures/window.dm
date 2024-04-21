@@ -71,9 +71,9 @@ var/list/one_way_windows
 		overlays.Cut()
 		var/onturfdirs = findSmoothingOnTurf()
 		icon_state = anchored && density ? "[base_state]window[. | onturfdirs]" : initial(icon_state)
-		if(~onturfdirs & clockwise_perpendicular_dirs(dir))
+		if(~onturfdirs & clockwise_perpendicular_dirs(dir) && . & clockwise_perpendicular_dirs(dir))
 			overlays += image(icon, loc, "[base_state]corner_r", dir = src.dir)
-		if(~onturfdirs & counterclockwise_perpendicular_dirs[dir])
+		if(~onturfdirs & counterclockwise_perpendicular_dirs[dir] && . & counterclockwise_perpendicular_dirs[dir])
 			overlays += image(icon, loc, "[base_state]corner_l", dir = src.dir)
 	else
 		icon_state = anchored && density ? "[base_state]window[.]" : initial(icon_state)
