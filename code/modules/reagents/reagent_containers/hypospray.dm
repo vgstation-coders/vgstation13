@@ -13,20 +13,14 @@
 	possible_transfer_amounts = null
 	flags = FPRINT  | OPENCONTAINER
 	slot_flags = SLOT_BELT
-	var/list/refill_reagent_list = list(DOCTORSDELIGHT = 30)
+	reagents_to_add = DOCTORSDELIGHT
 
 /obj/item/weapon/reagent_containers/hypospray/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-/obj/item/weapon/reagent_containers/hypospray/New() //comment this to make hypos start off empty //or just empty the reagent list idk
+/obj/item/weapon/reagent_containers/hypospray/reagent_refill()
 	..()
-	reagent_refill()
-
-/obj/item/weapon/reagent_containers/hypospray/proc/reagent_refill()
-	if(refill_reagent_list.len)
-		for(var/R in refill_reagent_list)
-			reagents.add_reagent(R, refill_reagent_list[R])
-		update_icon()
+	update_icon()
 
 /obj/item/weapon/reagent_containers/hypospray/attack(mob/M as mob, mob/user as mob)
 	if(!reagents.total_volume)
@@ -77,7 +71,7 @@
 
 /obj/item/weapon/reagent_containers/hypospray/creatine // TESTING!
 	name = "creatine hypospray"
-	refill_reagent_list = list(CREATINE = 30)
+	reagents_to_add = CREATINE
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector
 	name = "autoinjector"
@@ -114,7 +108,7 @@
 	amount_per_transfer_from_this = 15
 	volume = 15
 	flags = FPRINT
-	refill_reagent_list = list(BIOFOAM = 15)
+	reagents_to_add = BIOFOAM
 	starting_materials = list(MAT_IRON = 200)
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector/update_icon()
@@ -129,7 +123,7 @@
 	amount_per_transfer_from_this = 10
 	volume = 10
 	flags = FPRINT
-	refill_reagent_list = list(SUX = 10)
+	reagents_to_add = SUX
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/paralytic_injector/update_icon()
 	if(reagents.total_volume > 0)
@@ -141,7 +135,7 @@
 	name = "dummy autoinjector"
 	desc = "Why? why would a test dummy ever need something like this?"
 	mech_flags = MECH_SCAN_FAIL
-	refill_reagent_list = list(ADMINORDRAZINE = 5)
+	reagents_to_add = ADMINORDRAZINE
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/admin/afterattack(obj/target, mob/user, adjacency_flag, click_params)
 	. = ..()

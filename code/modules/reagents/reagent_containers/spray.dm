@@ -115,11 +115,11 @@
 /obj/item/weapon/reagent_containers/spray/cleaner
 	name = "space cleaner"
 	desc = "BLAM!-brand non-foaming space cleaner!"
+	reagents_to_add = CLEANER
 	var/image/content_reagent
 
 /obj/item/weapon/reagent_containers/spray/cleaner/New()
 	..()
-	reagents.add_reagent(CLEANER, 250)
 	content_reagent = image(icon,src,"cleaner-content3")
 	update_icon()
 
@@ -145,10 +145,7 @@
 	item_state = "pepperspray"
 	volume = 40
 	amount_per_transfer_from_this = 10
-
-/obj/item/weapon/reagent_containers/spray/pepper/New()
-	..()
-	reagents.add_reagent(CONDENSEDCAPSAICIN, 40)
+	reagents_to_add = CONDENSEDCAPSAICIN
 
 /obj/item/weapon/reagent_containers/spray/pepper/slime_act(primarytype, mob/user)
 	..()
@@ -167,10 +164,7 @@
 /obj/item/weapon/reagent_containers/spray/luminol
 	name = "spray bottle (luminol)"
 	desc = "A spray bottle with an unscrewable top. A label on the side reads 'Contains: Luminol'."
-
-/obj/item/weapon/reagent_containers/spray/luminol/New()
-	..()
-	reagents.add_reagent(LUMINOL, 250)
+	reagents_to_add = LUMINOL
 
 // Plant-B-Gone
 /obj/item/weapon/reagent_containers/spray/plantbgone
@@ -179,11 +173,7 @@
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
-	volume = 250
-
-/obj/item/weapon/reagent_containers/spray/plantbgone/New()
-	..()
-	reagents.add_reagent(PLANTBGONE, 250)
+	reagents_to_add = PLANTBGONE
 
 /obj/item/weapon/reagent_containers/spray/bugzapper
 	name = "Bug Zapper"
@@ -191,21 +181,13 @@
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "pestspray"
 	item_state = "pestspray"
-	volume = 250
-
-/obj/item/weapon/reagent_containers/spray/bugzapper/New()
-	..()
-	reagents.add_reagent(INSECTICIDE, 250)
+	reagents_to_add = INSECTICIDE
 
 //Fake Xeno Creep Sprayer
 /obj/item/weapon/reagent_containers/spray/creepspray
 	name = "Alien Weed Spray"
 	desc = "You're unsure if this is meant to cull or create weeds. The Discount Dan logo is haphazardly slapped on top of a faded yellow 'W' and gray 'Y'"
-	volume = 250
-
-/obj/item/weapon/reagent_containers/spray/creepspray/New()
-	..()
-	reagents.add_reagent(FAKE_CREEP, 250)
+	reagents_to_add = FAKE_CREEP
 
 //chemsprayer
 /obj/item/weapon/reagent_containers/spray/chemsprayer
