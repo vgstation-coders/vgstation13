@@ -608,10 +608,10 @@
 	icon_state = "maint"
 	chance = 20
 	/* Removed until they get properly converted to virus2 or something
-		/obj/item/weapon/reagent_containers/glass/bottle/epiglottis_virion,
-		/obj/item/weapon/reagent_containers/glass/bottle/flu_virion,
-		/obj/item/weapon/reagent_containers/glass/bottle/pierrot_throat,
-		/obj/item/weapon/reagent_containers/glass/bottle/cold,
+		/obj/item/weapon/reagent_containers/glass/bottle/virion/epiglottis,
+		/obj/item/weapon/reagent_containers/glass/bottle/virion,
+		/obj/item/weapon/reagent_containers/glass/bottle/virion/pierrot_throat,
+		/obj/item/weapon/reagent_containers/glass/bottle/virion/cold,
 	*/
 	to_spawn = list(
 		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,

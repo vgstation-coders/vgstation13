@@ -21,6 +21,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	var/controlled_splash = FALSE	//If true, splashing someone/something with the reagent container will only usr the current amount_per_transfer_from_this instead of all of it
 									//Honestly we should try setting this to TRUE by default for all containers at some point, it's just convenient.
+	var/reagents_to_add
 
 /obj/item/weapon/reagent_containers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
@@ -106,6 +107,11 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /obj/item/weapon/reagent_containers/New()
 	..()
 	create_reagents(volume)
+	if(islist(reagents_to_add))
+		for(var/reagent in reagents_to_add)
+			reagents.add_reagent(reagent,reagents_to_add[reagent] || volume)
+	else if(reagents_to_add)
+		reagents.add_reagent(reagents_to_add, volume)
 	all_reagent_containers.Add(src)
 
 	if(!is_open_container(src))

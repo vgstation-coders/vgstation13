@@ -5979,15 +5979,13 @@
 	trash = /obj/item/trash/lollipopstick
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	var/candyness = 161 //how long this thing will last
-	var/list/reagents_to_add = list(NUTRIMENT=2, SUGAR=8)
+	reagents_to_add = list(NUTRIMENT=2, SUGAR=8)
 	volume = 20 //not a lotta room for poison
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop/New()
 	..()
 	eatverb = pick("bite","crunch","chomp")
-	for (var/reagent in reagents_to_add)
-		reagents.add_reagent(reagent, reagents_to_add[reagent])
 	var/list/random_color_list = list("#00aedb","#a200ff","#f47835","#d41243","#d11141","#00b159","#00aedb","#f37735","#ffc425","#008744","#0057e7","#d62d20","#ffa700")
 	var/image/colorpop = image('icons/obj/candymachine.dmi', icon_state = "lollipop_head")
 	colorpop.color = pick(random_color_list)
