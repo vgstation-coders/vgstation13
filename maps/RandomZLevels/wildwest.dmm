@@ -1396,7 +1396,7 @@
 /area/awaymission/wwmines)
 "dY" = (
 /obj/structure/table/woodentable,
-/obj/item/weapon/reagent_containers/food/snacks/donut/slimejelly,
+/obj/item/weapon/reagent_containers/food/snacks/donut/jelly/slime,
 /turf/simulated/floor/carpet,
 /area/awaymission/wwmines)
 "dZ" = (
@@ -1625,7 +1625,7 @@
 "eG" = (
 /obj/structure/table/woodentable,
 /obj/item/weapon/reagent_containers/food/drinks/coffee,
-/obj/item/weapon/reagent_containers/food/snacks/donut/slimejelly,
+/obj/item/weapon/reagent_containers/food/snacks/donut/jelly/slime,
 /turf/simulated/floor/carpet,
 /area/awaymission/wwmines)
 "eH" = (

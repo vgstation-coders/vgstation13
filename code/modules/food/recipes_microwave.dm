@@ -22,11 +22,11 @@
 
 /datum/recipe/jellydonut/slime
 	reagents = list(SLIMEJELLY = 5, FLOUR = 5)
-	result = /obj/item/weapon/reagent_containers/food/snacks/donut/slimejelly
+	result = /obj/item/weapon/reagent_containers/food/snacks/donut/jelly/slime
 
 /datum/recipe/jellydonut/cherry
 	reagents = list(CHERRYJELLY = 5, FLOUR = 5)
-	result = /obj/item/weapon/reagent_containers/food/snacks/donut/cherryjelly
+	result = /obj/item/weapon/reagent_containers/food/snacks/donut/jelly/cherry
 
 /datum/recipe/chaosdonut
 	reagents = list(FROSTOIL = 5, CAPSAICIN = 5, FLOUR = 5)
@@ -3808,7 +3808,7 @@
 	reagents = list(SODIUMCHLORIDE = 10)
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube
 	cookable_with = COOKABLE_WITH_MIXING
-	
+
 /datum/recipe/saltcube
 	reagents = list(SUGARS = 10)
 	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube
