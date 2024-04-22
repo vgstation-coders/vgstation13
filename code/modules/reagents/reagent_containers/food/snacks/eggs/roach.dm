@@ -18,7 +18,7 @@ var/global/cockroach_egg_amount = 0
 
 	cockroach_egg_amount++
 
-/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/reagent_refill()
+/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/refill()
 	..()
 	reagents.add_reagent(ROACHSHELL, rand(1,4))
 

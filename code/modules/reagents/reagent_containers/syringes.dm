@@ -36,7 +36,7 @@
 								/obj/item/weapon/light,
 								/obj/item/weapon/fossil/egg)
 
-/obj/item/weapon/reagent_containers/syringe/reagent_refill()
+/obj/item/weapon/reagent_containers/syringe/refill()
 	..()
 	if(reagents.total_volume)
 		mode = SYRINGE_INJECT

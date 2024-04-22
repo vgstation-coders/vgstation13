@@ -139,7 +139,7 @@
 	desc = "A small bottle. Contains H13N1 flu virion culture in synthblood medium."
 	var/diseasetype = /datum/disease/advance/flu
 
-/obj/item/weapon/reagent_containers/glass/bottle/virion/reagent_refill()
+/obj/item/weapon/reagent_containers/glass/bottle/virion/refill()
 	var/datum/disease/F = new diseasetype(0)
 	var/list/data = list("viruses"= list(F))
 	reagents.add_reagent(BLOOD, 20, data)
@@ -174,7 +174,7 @@
 	desc = "A small bottle. Contains an unknown disease."
 	icon_state = "bottle_alt"
 
-/obj/item/weapon/reagent_containers/glass/bottle/random/reagent_refill()
+/obj/item/weapon/reagent_containers/glass/bottle/random/refill()
 	var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
 	var/datum/disease2/disease/new_virus = new virus_choice
 
@@ -245,7 +245,7 @@ var/datum/disease2/disease/magnitis = null
 	desc = "A small bottle. Contains a small dosage of Fukkos Miracos."
 	icon_state = "bottle_alt"
 
-/obj/item/weapon/reagent_containers/glass/bottle/magnitis/reagent_refill()
+/obj/item/weapon/reagent_containers/glass/bottle/magnitis/refill()
 	if (!magnitis)
 		magnitis = new
 		magnitis.form = "Fukkos Miracos"
@@ -301,7 +301,7 @@ var/datum/disease2/disease/wizarditis = null
 	desc = "A small bottle. Contains a sample of Rincewindus Vulgaris."
 	icon_state = "bottle_alt"
 
-/obj/item/weapon/reagent_containers/glass/bottle/wizarditis/reagent_refill()
+/obj/item/weapon/reagent_containers/glass/bottle/wizarditis/refill()
 	if (!wizarditis)
 		wizarditis = new
 		wizarditis.form = "Rincewindus Vulgaris"
@@ -365,7 +365,7 @@ var/datum/disease2/disease/wizarditis = null
 	desc = "A small bottle. Contains a liquid with effects decided on the whim of the gods."
 	reagents_to_add = PROCIZINE
 
-/obj/item/weapon/reagent_containers/glass/bottle/procizine/reagent_refill()
+/obj/item/weapon/reagent_containers/glass/bottle/procizine/refill()
 	for(var/procname in procizine_calls)
 		if(procizine_calls[procname] in bad_procs)
 			desc = "A small bottle. Contains a liquid with effects decided with the spite of the gods, this can't end well."

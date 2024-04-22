@@ -19,7 +19,7 @@
 
 	can_flip = TRUE
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/reagent_refill()
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/refill()
 	..()
 	on_reagent_change()
 

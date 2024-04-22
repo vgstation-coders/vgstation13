@@ -334,7 +334,7 @@
 		list(ZOMBIEPOWDER = 10)
 	)
 
-/obj/item/weapon/reagent_containers/pill/random/reagent_refill()
+/obj/item/weapon/reagent_containers/pill/random/refill()
 	var/list/to_spawn = pickweight(possible_combinations)
 	for(var/index in to_spawn)
 		reagents.add_reagent(index, to_spawn[index])

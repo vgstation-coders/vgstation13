@@ -104,7 +104,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /obj/item/weapon/reagent_containers/proc/blow_act(var/mob/living/user)
 	return
 
-/obj/item/weapon/reagent_containers/proc/reagent_refill()
+/obj/item/weapon/reagent_containers/proc/refill()
 	reagents.clear_reagents()
 	if(islist(reagents_to_add))
 		var/list/L = reagents_to_add
@@ -119,7 +119,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /obj/item/weapon/reagent_containers/New()
 	..()
 	create_reagents(volume)
-	reagent_refill()
+	refill()
 	all_reagent_containers.Add(src)
 
 	if(!is_open_container(src))

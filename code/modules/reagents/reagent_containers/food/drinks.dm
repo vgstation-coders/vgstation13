@@ -747,7 +747,7 @@
 		desc += " It feels warm..." //This is required
 		pulled = TRUE
 		reagents_to_add = list(DRY_RAMEN = 20, DISCOUNT = 10, TOXICWASTE = 8, GLOWINGRAMEN = 8)
-		reagent_refill()
+		refill()
 		user.drop_from_inventory(src)
 
 /obj/item/weapon/reagent_containers/food/drinks/discount_ramen/hot
@@ -1133,7 +1133,7 @@
 	icon_state = "bearbeer"
 	reagents_to_add = list(BEER = 30)
 
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear/reagent_refill()
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear/refill()
 	..()
 	reagents.add_reagent(HYPERZINE, rand(3,5))
 

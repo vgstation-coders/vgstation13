@@ -123,7 +123,7 @@
 	can_color = FALSE
 	hatch_type = /mob/living/simple_animal/hostile/retaliate/cockatrice/chick
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/reagent_refill()
+/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/refill()
 	reagents.add_reagent(PETRITRICIN, rand(5,15)/10)
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/bigroach
@@ -133,7 +133,7 @@
 	can_color = FALSE
 	hatch_type = /mob/living/simple_animal/hostile/bigroach
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/bigroach/reagent_refill()
+/obj/item/weapon/reagent_containers/food/snacks/egg/bigroach/refill()
 	reagents.add_reagent(TOXIN, rand(5,15))
 	reagents.add_reagent(RADIUM, rand(1,5))
 

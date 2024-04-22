@@ -195,7 +195,7 @@
 	reagents_to_add = list(NUTRIMENT = 3.5)
 	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/roach/reagent_refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach/refill()
 	..()
 	reagents.add_reagent(ROACHSHELL, rand(2,6))
 
@@ -218,7 +218,7 @@
 	icon_state = "roachmeat"
 	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/reagent_refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/refill()
 	..()
 	reagents.add_reagent(FLOUR, rand(4,10))
 
@@ -241,7 +241,7 @@
 	bitesize = 5
 	var/transformed = FALSE
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/reagent_refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/refill()
 	..()
 	reagents.add_reagent(SPACE_DRUGS, rand(0,4))
 	reagents.add_reagent(MINDBREAKER, rand(0,2))
@@ -327,11 +327,11 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	icon_state = "hivemeat"
 	reagents_to_add = list(NUTRIMENT = 3, CARBON = 5)
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/hive/reagent_refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive/refill()
 	..()
 	reagents.add_reagent(pick(IRON, GOLD, SILVER, URANIUM), rand(0,5))
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/hive/turret/reagent_refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive/turret/refill()
 	..()
 	reagents.add_reagent(OXYGEN, rand(1,5))
 	reagents.add_reagent(ETHANOL, rand(1,5))
@@ -347,7 +347,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	icon_state = "wendigo_meat"
 	bitesize = 30
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/reagent_refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/refill()
 	..()
 	reagents.add_reagent(NUTRIMENT, rand(10,25))
 
@@ -428,7 +428,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	name = "meat"
 	desc = "A slab of \"meat\". Something's a little strange about this one."
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/reagent_refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/refill()
 	//A new blend of meat in every slab! Can be better than or worse than normal meat.
 	reagents.clear_reagents()
 	//No room for normal meat chems in here. We're going full DAN

@@ -18,7 +18,7 @@
 /obj/item/weapon/reagent_containers/hypospray/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-/obj/item/weapon/reagent_containers/hypospray/reagent_refill()
+/obj/item/weapon/reagent_containers/hypospray/refill()
 	..()
 	update_icon()
 
@@ -140,4 +140,4 @@
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/admin/afterattack(obj/target, mob/user, adjacency_flag, click_params)
 	. = ..()
 	if(!reagents.total_volume)
-		reagent_refill()
+		refill()

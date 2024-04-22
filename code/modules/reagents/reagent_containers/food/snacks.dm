@@ -878,11 +878,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie
 	name = "Seasonal Cookies"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/holidaycookie/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(SUGAR, 6)
+	reagents_to_add = list(NUTRIMENT = 3, SUGAR = 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/cookie/holiday
 	name = "seasonal cookie"
@@ -1179,7 +1175,7 @@
 	reagents_to_add = list(NUTRIMENT = 3, PSILOCYBIN = 3)
 	bitesize = 6
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/mushroom_man/New()
+/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/mushroom_man/refill()
 	reagents_to_add = list(NUTRIMENT = 3, PSILOCYBIN = 3, TRICORDRAZINE = rand(1,5))
 	..()
 
@@ -1234,9 +1230,9 @@
 	icon_state = "sausage"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
+	bitesize = 7 //Three bites on average to finish
 
-/obj/item/weapon/reagent_containers/food/snacks/sausage/dan/New()
-	..()
+/obj/item/weapon/reagent_containers/food/snacks/sausage/dan/refill()
 	reagents.clear_reagents()
 	for(var/blendedmeat = 1 to 6)
 		switch(rand(1,3))
@@ -1250,7 +1246,6 @@
 	if(prob(50))
 		reagents.add_reagent(ROACHSHELL,rand(0,8)) //0
 	//36 to 111 nutrition. 4noraisins has 90...
-	bitesize = 7 //Three bites on average to finish
 
 /obj/item/weapon/reagent_containers/food/snacks/sausage/dan/on_vending_machine_spawn()
 	reagents.chem_temp = FRIDGETEMP_FROZEN
@@ -1260,12 +1255,8 @@
 	desc = "The food of choice for the seasoned traitor."
 	icon_state = "donkpocket"
 	food_flags = FOOD_MEAT | FOOD_DIPPABLE
-
+	reagents_to_add = list(NUTRIMENT = 4)
 	var/warm = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/donkpocket/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
 
 /obj/item/weapon/reagent_containers/food/snacks/donkpocket/process()
 	if(warm <= 0)
@@ -1323,11 +1314,7 @@
 	icon_state = "brainburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/brainburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(ALKYSINE, 6)
+	reagents_to_add = list(NUTRIMENT = 6, ALKYSINE = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/ghostburger
@@ -1335,10 +1322,7 @@
 	desc = "Spooky! It doesn't look very filling."
 	icon_state = "ghostburger"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/ghostburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/human
@@ -1347,10 +1331,7 @@
 	icon_state = "hburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/human/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger
@@ -1359,10 +1340,7 @@
 	icon_state = "hburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/on_vending_machine_spawn()//Fast-Food Menu
@@ -1371,8 +1349,6 @@
 /obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth
 	name = "synthetic burger"
 	desc = "It tastes like a normal burger, but it's just not the same."
-	icon_state = "hburger"
-	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/appendixburger
 	name = "appendix burger"
@@ -1380,10 +1356,7 @@
 	icon_state = "hburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/appendixburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/fishburger
@@ -1392,11 +1365,7 @@
 	icon_state = "fishburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/fishburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(CARPPHEROMONES, 3)
+	reagents_to_add = list(NUTRIMENT = 6, CARPPHEROMONES = 3)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/tofuburger
@@ -1404,10 +1373,7 @@
 	desc = "What... is that meat?"
 	icon_state = "tofuburger"
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/tofuburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/chickenburger
@@ -1416,10 +1382,7 @@
 	icon_state = "mc_chicken"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/chickenburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/veggieburger
@@ -1428,10 +1391,7 @@
 	icon_state = "veggieburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/veggieburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/veggieburgernymph // Alternate recipe using nymph meat
@@ -1440,31 +1400,21 @@
 	icon_state = "veggieburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/veggieburgernymph/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/roburger
 	name = "roburger"
 	desc = "The lettuce is the only organic component. Beep."
 	icon_state = "roburger"
-
-/obj/item/weapon/reagent_containers/food/snacks/roburger/New()
-	..()
-	reagents.add_reagent(NANITES, 2)
+	reagents_to_add = list(NANITES = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/roburgerbig
 	name = "roburger"
 	desc = "This massive patty looks like poison. Beep."
 	icon_state = "roburger"
-	volume = 100
-
-/obj/item/weapon/reagent_containers/food/snacks/roburgerbig/New()
-	..()
-	reagents.add_reagent(NANITES, 100)
+	reagents_to_add = NANITES
 	bitesize = 0.1
 
 /obj/item/weapon/reagent_containers/food/snacks/xenoburger
@@ -1473,10 +1423,7 @@
 	icon_state = "xburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/xenoburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/clownburger
@@ -1484,29 +1431,16 @@
 	desc = "This tastes funny..."
 	icon_state = "clownburger"
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/clownburger/New()
-	..()
-/*
-		var/datum/disease/F = new /datum/disease/pierrot_throat(0)
-		var/list/data = list("viruses"= list(F))
-		reagents.add_reagent(BLOOD, 4, data)
-*/
-
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(HONKSERUM, 6)
+	reagents_to_add = list(NUTRIMENT = 6, HONKSERUM = 6)
 	bitesize = 2
+	//reagents.add_reagent(BLOOD, 4, list("viruses"= list(new /datum/disease/pierrot_throat(0))))
 
 /obj/item/weapon/reagent_containers/food/snacks/mimeburger
 	name = "mime burger"
 	desc = "Its taste defies language."
 	icon_state = "mimeburger"
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/mimeburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(SILENCER, 6)
+	reagents_to_add = list(NUTRIMENT = 6, SILENCER = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/donutburger
@@ -1514,12 +1448,7 @@
 	desc = "Illegal to have out on code green."
 	icon_state = "donutburger"
 	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/donutburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(SPRINKLES, 6)
+	reagents_to_add = list(NUTRIMENT = 6, SPRINKLES = 6)
 	bitesize = 2
 	base_crumb_chance = 30
 
@@ -1529,10 +1458,7 @@
 	icon_state = "avocadoburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/avocadoburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/caramelburger
@@ -1541,11 +1467,7 @@
 	icon_state = "caramelburger"
 	food_flags = FOOD_MEAT | FOOD_SWEET
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/caramelburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(CARAMEL, 4)
+	reagents_to_add = list(NUTRIMENT = 8, CARAMEL = 4)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/bearburger
@@ -1554,12 +1476,8 @@
 	icon_state = "bearburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/bearburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 20)
-	reagents.add_reagent(HYPERZINE, 8)
-	src.bitesize = 4
+	reagents_to_add = list(NUTRIMENT = 20, HYPERZINE = 8)
+	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/glassburger
 	name = "glass burger"
@@ -1567,11 +1485,7 @@
 	icon_state = "glassburger"
 	filling_color = "#92CEE9"
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/glassburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(DIAMONDDUST, 4) //It's the closest we have to eating raw glass, causes some brute and screaming
+	reagents_to_add = list(NUTRIMENT = 6, DIAMONDDUST = 4) //It's the closest we have to eating raw glass, causes some brute and screaming
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/polypburger
@@ -1580,10 +1494,7 @@
 	icon_state = "polypburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/polypburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/blobburger
@@ -1592,11 +1503,7 @@
 	icon_state = "blobburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/blobburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(BLOBANINE, 5)
+	reagents_to_add = list(NUTRIMENT = 8, BLOBANINE = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/blobburger/consume(mob/living/carbon/eater, messages = 0, sounds = TRUE, bitesizemod = 1)
 	if(prob(50))
@@ -1610,11 +1517,7 @@
 	desc = "Blob meat, on a stick."
 	icon_state = "blobkabob"
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/blobkabob/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(BLOBANINE, 5)
+	reagents_to_add = list(NUTRIMENT = 8, BLOBANINE = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/blobpudding
 	name = "blob à l'impératrice"
@@ -1624,11 +1527,7 @@
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_MEAT
 	crumb_icon = "dribbles"
 	valid_utensils = UTENSILE_FORK | UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/blobpudding/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(BLOBANINE, 5)
+	reagents_to_add = list(NUTRIMENT = 8, BLOBANINE = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/blobegg
 	name = "oeufs en blob"
@@ -1638,11 +1537,7 @@
 	food_flags = FOOD_ANIMAL | FOOD_MEAT
 	crumb_icon = "dribbles"
 	valid_utensils = UTENSILE_FORK | UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/blobegg/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 20)
-	reagents.add_reagent(BLOBANINE, 5)
+	reagents_to_add = list(NUTRIMENT = 20, BLOBANINE = 5)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/blobsoup
@@ -1653,11 +1548,7 @@
 	food_flags = FOOD_ANIMAL | FOOD_MEAT
 	crumb_icon = "dribbles"
 	valid_utensils = UTENSILE_FORK | UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/blobsoup/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 15)
-	reagents.add_reagent(BLOBANINE, 5)
+	reagents_to_add = list(NUTRIMENT = 15, BLOBANINE = 5)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
@@ -1666,10 +1557,7 @@
 	icon_state = "omelette"
 	food_flags = FOOD_ANIMAL //made from eggs
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/omelette/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/muffin
@@ -1677,10 +1565,7 @@
 	desc = "A delicious and spongy little cake."
 	icon_state = "muffin"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/muffin/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/muffin/berry
@@ -1704,11 +1589,7 @@
 	icon_state = "pie"
 	trash = /obj/item/trash/pietin
 	food_flags = FOOD_SWEET
-
-/obj/item/weapon/reagent_containers/food/snacks/pie/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(BANANA,5)
+	reagents_to_add = list(NUTRIMENT = 4, BANANA = 5)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/throw_impact(atom/hit_atom)
@@ -1755,43 +1636,25 @@
 	name = "whipped clover pie"
 	desc = "Traditional dish in the Clownplanet's Irish exclusion zone."
 	icon_state = "clovercreampie"
-	trash = /obj/item/trash/pietin
-	food_flags = FOOD_SWEET
+	reagents_to_add = list(NUTRIMENT = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/clovercreampie/New()
-	..()
-	bitesize = 3
 	if(prob(25))
-		reagents.add_reagent(NUTRIMENT, 8) //Lucky pie is more nutritious
+		reagents_to_add = list(NUTRIMENT = 8) //Lucky pie is more nutritious
 		desc = "The pie was blessed by Saint Honktrick!"
-	else
-		reagents.add_reagent(NUTRIMENT, 5)
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/caramelpie
 	name = "caramel pie"
 	desc = "A sweet pie made with caramel."
 	icon_state = "pie"
-	trash = /obj/item/trash/pietin
-	food_flags = FOOD_SWEET
-
-/obj/item/weapon/reagent_containers/food/snacks/pie/caramelpie/New()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(CARAMEL, 3)
-	bitesize = 3
+	reagents_to_add = list(NUTRIMENT = 4, CARAMEL = 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/explosive_pie
 	name = "banana cream pie"
 	desc = "Just like back home, on clown planet! HONK!"
 	icon_state = "pie"
-	food_flags = FOOD_SWEET
-
-/obj/item/weapon/reagent_containers/food/snacks/explosive_pie/New()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(NUTRIMENT, 2)
-	reagents.add_reagent(BANANA,3)
+	reagents_to_add = list(NUTRIMENT = 2, BANANA = 3)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/explosive_pie/examine(mob/user)
@@ -1821,11 +1684,7 @@
 	desc = "No black birds, this is a good sign."
 	icon_state = "berryclafoutis"
 	food_flags = FOOD_SWEET
-
-/obj/item/weapon/reagent_containers/food/snacks/berryclafoutis/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(BERRYJUICE, 5)
+	reagents_to_add = list(NUTRIMENT = 4, BERRYJUICE = 5)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/waffles
@@ -1834,9 +1693,7 @@
 	icon_state = "waffles"
 	trash = /obj/item/trash/waffles
 	food_flags = FOOD_ANIMAL | FOOD_DIPPABLE
-/obj/item/weapon/reagent_containers/food/snacks/waffles/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/eggplantparm
@@ -1844,10 +1701,7 @@
 	desc = "The only good recipe for eggplant."
 	icon_state = "eggplantparm"
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
-
-/obj/item/weapon/reagent_containers/food/snacks/eggplantparm/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/soylentgreen
@@ -1855,10 +1709,7 @@
 	desc = "Not made of people. Honest." //Totally people.
 	icon_state = "soylent_green"
 	trash = /obj/item/trash/waffles
-
-/obj/item/weapon/reagent_containers/food/snacks/soylentgreen/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 10)
+	reagents_to_add = list(NUTRIMENT = 10)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/soylenviridians
@@ -1866,10 +1717,7 @@
 	desc = "Not made of people. Honest." //Actually honest for once.
 	icon_state = "soylent_yellow"
 	trash = /obj/item/trash/waffles
-
-/obj/item/weapon/reagent_containers/food/snacks/soylenviridians/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 10)
+	reagents_to_add = list(NUTRIMENT = 10)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/discount
@@ -1877,78 +1725,50 @@
 	icon_state = "meatpie"
 	desc = "Regulatory laws prevent us from lying to you in the technical sense, so you know this has to contain at least some meat!"
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/pie/discount/New()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(NUTRIMENT,2)
-	reagents.add_reagent(DISCOUNT,2)
-	reagents.add_reagent(TOXIN,2)
-	reagents.add_reagent(CORNSYRUP,4)
+	reagents_to_add = list(NUTRIMENT = 2, DISCOUNT = 2, TOXIN = 2, CORNSYRUP = 4)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/meatpie
 	name = "Meat-pie"
 	icon_state = "meatpie"
 	desc = "An old barber recipe, very delicious!"
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/pie/meatpie/New()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(NUTRIMENT, 10)
+	reagents_to_add = list(NUTRIMENT = 10)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/tofupie
 	name = "Tofu-pie"
 	icon_state = "meatpie"
 	desc = "A delicious tofu pie."
-
-/obj/item/weapon/reagent_containers/food/snacks/pie/tofupie/New()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(NUTRIMENT, 10)
+	reagents_to_add = list(NUTRIMENT = 10)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/amanita_pie
 	name = "amanita pie"
 	desc = "Sweet and tasty poison pie."
 	icon_state = "amanita_pie"
-
-/obj/item/weapon/reagent_containers/food/snacks/pie/amanita_pie/New()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(NUTRIMENT, 5)
-	reagents.add_reagent(AMATOXIN, 3)
-	reagents.add_reagent(PSILOCYBIN, 1)
+	reagents_to_add = list(NUTRIMENT = 5, AMATOXIN = 3, PSILOCYBIN = 1)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/plump_pie
 	name = "plump pie"
 	desc = "I bet you love stuff made out of plump helmets!"
 	icon_state = "plump_pie"
+	reagents_to_add = list(NUTRIMENT = 8)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/pie/plump_pie/New()
-	..()
-	reagents.clear_reagents()
 	if(prob(10))
 		name = "exceptional plump pie"
 		desc = "Microwave is taken by a fey mood! It has cooked an exceptional plump pie!"
-		reagents.add_reagent(NUTRIMENT, 8)
-		reagents.add_reagent(TRICORDRAZINE, 5)
-		bitesize = 2
-	else
-		reagents.add_reagent(NUTRIMENT, 8)
-		bitesize = 2
+		reagents_to_add += list(TRICORDRAZINE = 5)
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie
 	name = "Xeno-pie"
 	icon_state = "xenomeatpie"
 	desc = "A delicious meatpie. Probably heretical."
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie/New()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(NUTRIMENT, 10)
+	reagents_to_add = list(NUTRIMENT = 10)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/wingfangchu
@@ -1957,12 +1777,8 @@
 	icon_state = "wingfangchu"
 	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/wingfangchu/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
-
 
 /obj/item/weapon/reagent_containers/food/snacks/human/kabob
 	name = "-kabob"
@@ -1971,10 +1787,7 @@
 	trash = /obj/item/stack/rods
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/human/kabob/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeykabob
@@ -1984,19 +1797,12 @@
 	trash = /obj/item/stack/rods
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeykabob/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeykabob/synth
 	name = "Synth-kabob"
-	icon_state = "kabob"
 	desc = "Synthetic meat, on a stick."
-	trash = /obj/item/stack/rods
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/corgikabob
 	name = "Corgi-kabob"
@@ -2005,10 +1811,7 @@
 	trash = /obj/item/stack/rods
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/corgikabob/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/tofukabob
@@ -2017,10 +1820,7 @@
 	desc = "Vegan meat, on a stick."
 	trash = /obj/item/stack/rods
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/tofukabob/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/cubancarp
@@ -2028,12 +1828,7 @@
 	desc = "A grifftastic sandwich that burns your tongue and then leaves it numb!"
 	icon_state = "cubancarp"
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/cubancarp/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(CARPPHEROMONES, 3)
-	reagents.add_reagent(CAPSAICIN, 3)
+	reagents_to_add = list(NUTRIMENT = 6, CARPPHEROMONES = 3, CAPSAICIN = 3)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/popcorn
@@ -2044,13 +1839,13 @@
 	var/unpopped = 0
 	filling_color = "#EFE5D4"
 	valid_utensils = 0
+	reagents_to_add = list(NUTRIMENT = 2)
+	bitesize = 0.1 //this snack is supposed to be eating during looooong time. And this it not dinner food! --rastaf0
 
 /obj/item/weapon/reagent_containers/food/snacks/popcorn/New()
 		..()
 		eatverb = pick("bite","crunch","nibble","gnaw","gobble","chomp")
 		unpopped = rand(1,10)
-		reagents.add_reagent(NUTRIMENT, 2)
-		bitesize = 0.1 //this snack is supposed to be eating during looooong time. And this it not dinner food! --rastaf0
 
 /obj/item/weapon/reagent_containers/food/snacks/popcorn/after_consume()
 	if(prob(unpopped))	//lol ...what's the point? << AINT SO POINTLESS NO MORE
@@ -2067,10 +1862,7 @@
 	filling_color = "#733000"
 	valid_utensils = 0
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/sosjerky/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents_to_add = list(NUTRIMENT = 4)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/no_raisin
@@ -2081,10 +1873,7 @@
 	base_crumb_chance = 30
 	valid_utensils = 0
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/no_raisin/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/cheap_raisins
 	name = "economy-class raisins"
@@ -2094,12 +1883,7 @@
 	base_crumb_chance = 30
 	valid_utensils = 0
 	base_crumb_chance = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/cheap_raisins/New()
-	..()
-	reagents.add_reagent(GRAPEJUICE, 2) //Overall, these are 9x less nutritious than 4no raisins
-	reagents.add_reagent(WATER, 2)
-	reagents.add_reagent(DISCOUNT, 2)
+	reagents_to_add = list(GRAPEJUICE = 2, WATER = 2, DISCOUNT = 2) //Overall, these are 9x less nutritious than 4no raisins
 
 /obj/item/weapon/reagent_containers/food/snacks/bustanuts
 	name = "Busta-Nuts"
@@ -2109,12 +1893,7 @@
 	base_crumb_chance = 30
 	valid_utensils = 0
 	base_crumb_chance = 5
-
-/obj/item/weapon/reagent_containers/food/snacks/bustanuts/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(BUSTANUT, 6)
-	reagents.add_reagent(SODIUMCHLORIDE, 6)
+	reagents_to_add = list(NUTRIMENT = 6, BUSTANUT = 6, SODIUMCHLORIDE = 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/oldempirebar
 	name = "Old Empire Bar"
@@ -2123,12 +1902,11 @@
 	trash = /obj/item/trash/oldempirebar
 	base_crumb_chance = 30
 	valid_utensils = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/oldempirebar/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, rand(2,6))
-	reagents.add_reagent(ROGAN, 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/oldempirebar/refill()
+	reagents_to_add = list(NUTRIMENT = rand(2,6), ROGAN = 6)
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/spacetwinkie
 	name = "space twinkie"
@@ -2136,10 +1914,7 @@
 	desc = "Guaranteed to survive longer than you will."
 	valid_utensils = 0
 	food_flags = FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie/New()
-	..()
-	reagents.add_reagent(SUGAR, 4)
+	reagents_to_add = list(SUGAR = 4)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers
@@ -2151,10 +1926,7 @@
 	filling_color = "#FFCC33"
 	base_crumb_chance = 30
 	valid_utensils = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents_to_add = list(NUTRIMENT = 4)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/syndicake
@@ -2164,11 +1936,7 @@
 	trash = /obj/item/trash/syndi_cakes
 	base_crumb_chance = 30
 	valid_utensils = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/syndicake/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(DOCTORSDELIGHT, 5)
+	reagents_to_add = list(NUTRIMENT = 4, DOCTORSDELIGHT = 5)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/discountchocolate
@@ -2180,16 +1948,7 @@
 	filling_color = "#7D390D"
 	base_crumb_chance = 20
 	valid_utensils = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/discountchocolate/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(DISCOUNT, 4)
-	reagents.add_reagent(MOONROCKS, 4)
-	reagents.add_reagent(TOXICWASTE, 8)
-	reagents.add_reagent(URANIUM, 8)
-	reagents.add_reagent(CORNSYRUP, 2)
-	reagents.add_reagent(CHEMICAL_WASTE, 2) //Does nothing, but it's pretty fucking funny.
+	reagents_to_add = list(NUTRIMENT = 3, DISCOUNT = 4, MOONROCKS = 4, TOXICWASTE = 8, URANIUM = 8, CORNSYRUP = 2, CHEMICAL_WASTE = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/discountburger
@@ -2198,17 +1957,8 @@
 	icon_state = "goburger" //Someone make a better sprite for this.
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/discountburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(DISCOUNT, 4)
-	reagents.add_reagent(BEFF, 4)
-	reagents.add_reagent(HORSEMEAT, 4)
-	reagents.add_reagent(OFFCOLORCHEESE, 4)
-	reagents.add_reagent(CHEMICAL_WASTE, 2) //Does nothing, but it's pretty fucking funny.
+	reagents_to_add = list(NUTRIMENT = 4, DISCOUNT = 4, BEFF = 4, HORSEMEAT = 4, OFFCOLORCHEESE = 4, CHEMICAL_WASTE = 2)
 	bitesize = 2
-
 
 /obj/item/weapon/reagent_containers/food/snacks/donitos
 	name = "Donitos"
@@ -2217,21 +1967,14 @@
 	trash = /obj/item/trash/chips/donitos
 	filling_color = "#C06800"
 	base_crumb_chance = 30
-
-/obj/item/weapon/reagent_containers/food/snacks/donitos/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-	reagents.add_reagent(SPRINKLES, 10)
+	reagents_to_add = list(NUTRIMENT = 1, SPRINKLES = 10)
 
 /obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch
 	name = "Donitos Cool Ranch"
 	desc = "Cool ranch."
 	icon_state = "donitos_coolranch"
 	trash = /obj/item/trash/chips/donitos_coolranch
-
-/obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch/New()
-	..()
-	reagents.add_reagent(SPRINKLES, 5)
+	reagents_to_add = list(SPRINKLES = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/danitos
 	name = "Danitos"
@@ -2240,18 +1983,11 @@
 	trash = /obj/item/trash/chips/danitos
 	filling_color = "#FF9933"
 	base_crumb_chance = 30
-
-/obj/item/weapon/reagent_containers/food/snacks/danitos/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(DISCOUNT, 4)
-	reagents.add_reagent(BONEMARROW, 4)
-	reagents.add_reagent(TOXICWASTE, 8)
-	reagents.add_reagent(BUSTANUT, 2) //YOU FEELIN HARDCORE BRAH?
+	reagents_to_add = list(NUTRIMENT = 3, DISCOUNT = 4, BONEMARROW = 4, TOXICWASTE = 8, BUSTANUT = 2) //YOU FEELIN HARDCORE BRAH?
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles
-	name = "Dangles"
+	name = "Dangles: "
 	desc = "Once you pop, you'll wish you stopped."
 	icon_state = "dangles"
 	trash = /obj/item/trash/dangles
@@ -2259,10 +1995,31 @@
 	base_crumb_chance = 30
 	var/image/lid_overlay
 	var/popped
+	bitesize = 4
+	reagents_to_add = list(DISCOUNT = 10, SODIUMCHLORIDE = 5, NUTRIMENT = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/New()
+	switch(rand(1,4))
+		if(1)
+			name += "Arguably A Potato" //tomatos are actually closely related to potatos
+			icon_state += "_red"
+			reagents_to_add += list(ENZYME = 5, KETCHUP = 5, ICE = list(5, T0C), POTATO = list(5, T0C)) //frozen potato juice
+		if(2)
+			name += "Cheddar Craving Concussion"
+			icon_state += "_blue"
+			reagents_to_add += list(MANNITOL = 5, OFFCOLORCHEESE = 5, ICE = list(10, T0C)) //brainfreeze
+		if(3)
+			name += "Iodine & Industrial Vinegar"
+			icon_state += "_green"
+			reagents_to_add += list(TOXICWASTE = 5, STERILIZINE = 5, ETHANOL = 5, SACID = 5) //acetic acid but we don't have that
+		if(4)
+			name += "South of the Border Jalepeno"
+			icon_state += "_purple"
+			reagents_to_add += list(HORSEMEAT = 5, BEFF = 5, CAPSAICIN = 5, CONDENSEDCAPSAICIN = 5)
+	name += " Flavor"
 	..()
 	lid_overlay = image(icon, null, "dangles_lid")
+	update_icon()
 
 /obj/item/weapon/reagent_containers/food/snacks/dangles/can_consume(mob/user)
 	return popped
@@ -2284,64 +2041,18 @@
 		extra_food_overlay.overlays += lid_overlay
 	..()
 
-/obj/item/weapon/reagent_containers/food/snacks/dangles/New()
-	..()
-	update_icon()
-	switch(pick(1,2,3,4))
-		if(1)
-			name = "Dangles: Arguably A Potato Flavor"
-			icon_state += "_red"
-			reagents.add_reagent(ENZYME, 5)
-			reagents.add_reagent(KETCHUP, 5) //tomatos are actually closely related to potatos
-			reagents.add_reagent(ICE, 5, reagtemp = T0C) //frozen potato juice
-			reagents.add_reagent(POTATO, 5, reagtemp = T0C)
-
-		if(2)
-			name = "Dangles: Cheddar Craving Concussion Flavor"
-			icon_state += "_blue"
-			reagents.add_reagent(MANNITOL, 5)
-			reagents.add_reagent(OFFCOLORCHEESE, 5)
-			reagents.add_reagent(ICE, 10, reagtemp = T0C) //brainfreeze
-		if(3)
-			name = "Dangles: Iodine & Industrial Vinegar Flavor"
-			icon_state += "_green"
-			reagents.add_reagent(TOXICWASTE, 5)
-			reagents.add_reagent(STERILIZINE, 5)
-			reagents.add_reagent(ETHANOL, 5)
-			reagents.add_reagent(SACID, 5) //acetic acid but we don't have that
-		if(4)
-			name = "Dangles: South of the Border Jalepeno Flavor"
-			icon_state += "_purple"
-			reagents.add_reagent(HORSEMEAT, 5)
-			reagents.add_reagent(BEFF, 5)
-			reagents.add_reagent(CAPSAICIN, 5)
-			reagents.add_reagent(CONDENSEDCAPSAICIN, 5)
-	reagents.add_reagent(DISCOUNT, 10)
-	reagents.add_reagent(SODIUMCHLORIDE, 5)
-	reagents.add_reagent(NUTRIMENT, 5)
-	bitesize = 4
-
-
 /obj/item/weapon/reagent_containers/food/snacks/discountburrito
 	name = "Discount Dan's Burritos"
 	desc = "The perfect blend of cheap processing and cheap materials."
 	icon_state = "danburrito"
 	var/list/ddname = list("Spooky Dan's BOO-ritos - Texas Toast Chainsaw Massacre Flavor","Sconto Danilo's Burritos - 50% Real Mozzarella Pepperoni Pizza Party Flavor","Descuento Danito's Burritos - Pancake Sausage Brunch Flavor","Descuento Danito's Burritos - Homestyle Comfort Flavor","Spooky Dan's BOO-ritos - Nightmare on Elm Meat Flavor","Descuento Danito's Burritos - Strawberrito Churro Flavor","Descuento Danito's Burritos - Beff and Bean Flavor")
 	food_flags = FOOD_MEAT
+	reagents_to_add = list(NUTRIMENT = 3, DISCOUNT = 6, IRRADIATEDBEANS = 4, REFRIEDBEANS = 4, MUTATEDBEANS = 4, BEFF = 4, CHEMICAL_WASTE = 2)
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/discountburrito/New()
 	..()
 	name = pick(ddname)
-	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(DISCOUNT, 6)
-	reagents.add_reagent(IRRADIATEDBEANS, 4)
-	reagents.add_reagent(REFRIEDBEANS, 4)
-	reagents.add_reagent(MUTATEDBEANS, 4)
-	reagents.add_reagent(BEFF, 4)
-	reagents.add_reagent(CHEMICAL_WASTE, 2) //Does nothing, but it's pretty fucking funny.
-	bitesize = 2
-
-
 
 /obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato
 	name = "Loaded Baked Potato"
@@ -2350,10 +2061,7 @@
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -5
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/fries
@@ -2362,10 +2070,7 @@
 	icon_state = "fries"
 	plate_offset_y = -2
 	filling_color = "#FFCF62"
-
-/obj/item/weapon/reagent_containers/food/snacks/fries/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents_to_add = list(NUTRIMENT = 4)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/processed/New()
@@ -2385,10 +2090,7 @@
 	desc = "Dope from a soy."
 	icon_state = "soydope"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/soydope/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/soydope/processed/New()
@@ -2401,10 +2103,7 @@
 	icon_state = "butter"
 	food_flags = FOOD_ANIMAL
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/butter/New()
-	..()
-	reagents.add_reagent(LIQUIDBUTTER, 10)
+	reagents_to_add = list(LIQUIDBUTTER = 10)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/butter/Crossed(atom/movable/O)
@@ -2424,10 +2123,7 @@
 	var/pancakes = 1
 	var/max_pancakes = 10 // leaving badmins a way to raise it if they're ready to assume the consequences
 	base_crumb_chance = 1
-
-/obj/item/weapon/reagent_containers/food/snacks/pancake/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents_to_add = list(NUTRIMENT = 5)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/pancake/attackby(var/obj/item/O, var/mob/user)
@@ -2457,10 +2153,7 @@
 	desc = "Now thats a nice pasta!"
 	icon_state = "spaghetti"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/spaghetti/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 1)
+	reagents_to_add = list(NUTRIMENT = 1)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesyfries
@@ -2470,10 +2163,7 @@
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
 	plate_offset_y = -3
 	filling_color = "#FFEB3B"
-
-/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet
@@ -2489,21 +2179,14 @@
 	desc = "A true prophecy in each cookie!"
 	icon_state = "fortune_cookie"
 	food_flags = FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/fortunecookie/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
+	reagents_to_add = list(NUTRIMENT = 3)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/badrecipe
 	name = "Burned mess"
 	desc = "Someone should be demoted from chef for this."
 	icon_state = "badrecipe"
-
-/obj/item/weapon/reagent_containers/food/snacks/badrecipe/New()
-	..()
-	reagents.add_reagent(TOXIN, 1)
-	reagents.add_reagent(CARBON, 3)
+	reagents_to_add = list(TOXIN = 1, CARBON = 3)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/meatsteak
@@ -2512,12 +2195,7 @@
 	icon_state = "meatsteak"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/meatsteak/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(SODIUMCHLORIDE, 1)
-	reagents.add_reagent(BLACKPEPPER, 1)
+	reagents_to_add = list(NUTRIMENT = 4, SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meatsteak/synth
@@ -2535,11 +2213,7 @@
 	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
 	random_filling_colors = list("#FFB2AE","#FFB2E4","#EDB2FB","#BBB2FB","#B2D3FB","#B2FFF8","#BDF6B7","#D9E37F","#FBD365")
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/spacylibertyduff/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(PSILOCYBIN, 6)
+	reagents_to_add = list(NUTRIMENT = 6, PSILOCYBIN = 6)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/amanitajelly
@@ -2548,12 +2222,7 @@
 	icon_state = "amanitajelly"
 	trash = /obj/item/trash/snack_bowl
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/amanitajelly/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(AMATOXIN, 6)
-	reagents.add_reagent(PSILOCYBIN, 3)
+	reagents_to_add = list(NUTRIMENT = 6, AMATOXIN = 6, PSILOCYBIN = 3)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/jectie
@@ -2561,19 +2230,15 @@
 	desc = "<font color='red'><B>The jectie has failed!</B></font color>"
 	icon_state = "jectie_red"
 	base_crumb_chance = 0
+	reagents_to_add = list(REDTEA = 9, NUTRIMENT = 3)
+	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/jectie/New()
-	..()
 	if(prob(40)) //approximate solo antag winrate
 		icon_state = "jectie_green"
 		desc = "<font color='green'><B>The jectie was successful!</B></font color>"
-		reagents.add_reagent(GREENTEA, 18)
-		reagents.add_reagent(NUTRIMENT, 6)
-		bitesize = 4
-	else
-		reagents.add_reagent(REDTEA, 9)
-		reagents.add_reagent(NUTRIMENT, 3)
-		bitesize = 4
+		reagents_to_add = list(GREENTEA = 18, NUTRIMENT = 6)
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meatballsoup
 	name = "Meatball soup"
@@ -2584,11 +2249,7 @@
 	crumb_icon = "dribbles"
 	filling_color = "#F4BC77"
 	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/meatballsoup/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(WATER, 5)
+	reagents_to_add = list(NUTRIMENT = 8, WATER = 5)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/slimesoup
@@ -2599,11 +2260,7 @@
 	crumb_icon = "dribbles"
 	filling_color = "#B2B2B2"
 	valid_utensils = UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/slimesoup/New()
-	..()
-	reagents.add_reagent(SLIMEJELLY, 5)
-	reagents.add_reagent(WATER, 10)
+	reagents_to_add = list(SLIMEJELLY = 5, WATER = 10)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/bloodsoup
@@ -2614,12 +2271,7 @@
 	crumb_icon = "dribbles"
 	filling_color = "#FF3300"
 	valid_utensils = UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/bloodsoup/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
-	reagents.add_reagent(BLOOD, 10)
-	reagents.add_reagent(WATER, 5)
+	reagents_to_add = list(NUTRIMENT = 2, BLOOD = 10, WATER = 5)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/clownstears
@@ -2630,12 +2282,7 @@
 	crumb_icon = "dribbles"
 	random_filling_colors = list("#FF0000","#FFFF00","#00CCFF","#33CC00")
 	valid_utensils = UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/clownstears/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(BANANA, 5)
-	reagents.add_reagent(WATER, 10)
+	reagents_to_add = list(NUTRIMENT = 4, BANANA = 5, WATER = 10)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/roboticiststears
@@ -2646,12 +2293,7 @@
 	crumb_icon = "dribbles"
 	random_filling_colors = list("#5A01EF", "#4B2A7F", "#826BA7", "#573D80")
 	valid_utensils = UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/roboticiststears/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 60) //You're using phazon here, that's the good shit.
-	reagents.add_reagent(PHAZON, 1)
-	reagents.add_reagent(WATER, 5) //water turned into nutriment via phazon magic fuckery
+	reagents_to_add = list(NUTRIMENT = 60, PHAZON = 1, WATER = 5) //You're using phazon here, that's the good shit. //water turned into nutriment via phazon magic fuckery
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/vegetablesoup
@@ -2663,11 +2305,7 @@
 	crumb_icon = "dribbles"
 	filling_color = "#FAA810"
 	valid_utensils = UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/vegetablesoup/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(WATER, 5)
+	reagents_to_add = list(NUTRIMENT = 8, WATER = 5)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/nettlesoup
@@ -2679,12 +2317,7 @@
 	crumb_icon = "dribbles"
 	filling_color = "#C1E212"
 	valid_utensils = UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/nettlesoup/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(WATER, 5)
-	reagents.add_reagent(TRICORDRAZINE, 5)
+	reagents_to_add = list(NUTRIMENT = 8, WATER = 5, TRICORDRAZINE = 5)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/mysterysoup
@@ -2696,47 +2329,32 @@
 	crumb_icon = "dribbles"
 	filling_color = "#97479B"
 	valid_utensils = UTENSILE_SPOON
+	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/mysterysoup/New()
-	..()
-	var/mysteryselect = pick(1,2,3,4,5,6,7,8,9,10)
-	switch(mysteryselect)
+/obj/item/weapon/reagent_containers/food/snacks/mysterysoup/refill()
+	switch(rand(1,10))
 		if(1)
-			reagents.add_reagent(NUTRIMENT, 6)
-			reagents.add_reagent(CAPSAICIN, 3)
-			reagents.add_reagent(TOMATOJUICE, 2)
+			reagents_to_add = list(NUTRIMENT = 6, CAPSAICIN = 3, TOMATOJUICE = 2)
 		if(2)
-			reagents.add_reagent(NUTRIMENT, 6)
-			reagents.add_reagent(FROSTOIL, 3)
-			reagents.add_reagent(TOMATOJUICE, 2)
+			reagents_to_add = list(NUTRIMENT = 6, FROSTOIL = 3, TOMATOJUICE = 2)
 		if(3)
-			reagents.add_reagent(NUTRIMENT, 5)
-			reagents.add_reagent(WATER, 5)
-			reagents.add_reagent(TRICORDRAZINE, 5)
+			reagents_to_add = list(NUTRIMENT = 5, WATER = 5, TRICORDRAZINE = 5)
 		if(4)
-			reagents.add_reagent(NUTRIMENT, 5)
-			reagents.add_reagent(WATER, 10)
+			reagents_to_add = list(NUTRIMENT = 5, WATER = 10)
 		if(5)
-			reagents.add_reagent(NUTRIMENT, 2)
-			reagents.add_reagent(BANANA, 10)
+			reagents_to_add = list(NUTRIMENT = 2, BANANA = 10)
 		if(6)
-			reagents.add_reagent(NUTRIMENT, 6)
-			reagents.add_reagent(BLOOD, 10)
+			reagents_to_add = list(NUTRIMENT = 6, BLOOD = 10)
 			food_flags |= FOOD_MEAT
 		if(7)
-			reagents.add_reagent(SLIMEJELLY, 10)
-			reagents.add_reagent(WATER, 10)
+			reagents_to_add = list(SLIMEJELLY = 10, WATER = 10)
 		if(8)
-			reagents.add_reagent(CARBON, 10)
-			reagents.add_reagent(TOXIN, 10)
+			reagents_to_add = list(CARBON = 10, TOXIN = 10)
 		if(9)
-			reagents.add_reagent(NUTRIMENT, 5)
-			reagents.add_reagent(TOMATOJUICE, 10)
+			reagents_to_add = list(NUTRIMENT = 5, TOMATOJUICE = 10)
 		if(10)
-			reagents.add_reagent(NUTRIMENT, 6)
-			reagents.add_reagent(TOMATOJUICE, 5)
-			reagents.add_reagent(IMIDAZOLINE, 5)
-	bitesize = 5
+			reagents_to_add = list(NUTRIMENT = 6, TOMATOJUICE = 5, IMIDAZOLINE = 5)
+	..()
 
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeysoup
