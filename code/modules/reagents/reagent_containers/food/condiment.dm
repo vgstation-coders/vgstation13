@@ -355,10 +355,7 @@
 	name = "universal enzyme"
 	desc = "A universal enzyme used in the preperation of certain chemicals and foods."
 	icon_state = ENZYME
-
-/obj/item/weapon/reagent_containers/food/condiment/enzyme/New()
-	..()
-	reagents.add_reagent(ENZYME, 50)
+	reagents_to_add = ENZYME
 
 /obj/item/weapon/reagent_containers/food/condiment/enzyme/restock()
 	if(istype(src,/obj/item/weapon/reagent_containers/food/condiment/enzyme))
@@ -368,138 +365,87 @@
 /obj/item/weapon/reagent_containers/food/condiment/ketchup
 	name = "ketchup"
 	desc = "You feel more American already."
-
-/obj/item/weapon/reagent_containers/food/condiment/ketchup/New()
-	..()
-	reagents.add_reagent(KETCHUP, 50)
+	reagents_to_add = KETCHUP
 
 /obj/item/weapon/reagent_containers/food/condiment/mustard
 	name = "mustard"
 	desc = "A spicy yellow paste."
-
-/obj/item/weapon/reagent_containers/food/condiment/mustard/New()
-	..()
-	reagents.add_reagent(MUSTARD, 50)
+	reagents_to_add = MUSTARD
 
 /obj/item/weapon/reagent_containers/food/condiment/relish
 	name = "relish"
 	desc = "A pickled cucumber jam. Tasty!"
-
-/obj/item/weapon/reagent_containers/food/condiment/relish/New()
-	..()
-	reagents.add_reagent(RELISH, 50)
+	reagents_to_add = RELISH
 
 /obj/item/weapon/reagent_containers/food/condiment/hotsauce
 	name = "hotsauce"
 	desc = "You can almost TASTE the stomach ulcers now!"
-
-/obj/item/weapon/reagent_containers/food/condiment/hotsauce/New()
-	..()
-	reagents.add_reagent(CAPSAICIN, 50)
+	reagents_to_add = CAPSAICIN
 
 /obj/item/weapon/reagent_containers/food/condiment/flour
 	name = "flour sack"
 	desc = "A big bag of flour. Good for baking!"
-
-/obj/item/weapon/reagent_containers/food/condiment/flour/New()
-	..()
-	reagents.add_reagent(FLOUR, 50)
+	reagents_to_add = FLOUR
 
 /obj/item/weapon/reagent_containers/food/condiment/spacemilk
 	name = "space milk"
 	desc = "It's milk. White and nutritious goodness!"
-
-/obj/item/weapon/reagent_containers/food/condiment/spacemilk/New()
-	..()
-	reagents.add_reagent(MILK, 50)
+	reagents_to_add = MILK
 
 /obj/item/weapon/reagent_containers/food/condiment/soymilk
 	name = "soy milk"
 	desc = "It's soy milk. White and nutritious goodness!"
-
-/obj/item/weapon/reagent_containers/food/condiment/soymilk/New()
-	..()
-	reagents.add_reagent(SOYMILK, 50)
+	reagents_to_add = SOYMILK
 
 /obj/item/weapon/reagent_containers/food/condiment/rice
 	name = "rice sack"
 	desc = "A taste of Asia in the kitchen."
-
-/obj/item/weapon/reagent_containers/food/condiment/rice/New()
-	..()
-	reagents.add_reagent(RICE, 50)
+	reagents_to_add = RICE
 
 /obj/item/weapon/reagent_containers/food/condiment/soysauce
 	name = "soy sauce"
 	desc = "A salty soy-based flavoring."
-
-/obj/item/weapon/reagent_containers/food/condiment/soysauce/New()
-	..()
-	reagents.add_reagent(SOYSAUCE, 50)
+	reagents_to_add = SOYSAUCE
 
 /obj/item/weapon/reagent_containers/food/condiment/coldsauce
 	name = "coldsauce"
 	desc = "Leaves the tongue numb in its passage."
-
-/obj/item/weapon/reagent_containers/food/condiment/coldsauce/New()
-	..()
-	reagents.add_reagent(FROSTOIL, 50)
+	reagents_to_add = FROSTOIL
 
 /obj/item/weapon/reagent_containers/food/condiment/cornoil
 	name = "corn oil"
 	desc = "A delicious oil used in cooking. Made from corn."
-
-/obj/item/weapon/reagent_containers/food/condiment/cornoil/New()
-	..()
-	reagents.add_reagent(CORNOIL, 50)
+	reagents_to_add = CORNOIL
 
 /obj/item/weapon/reagent_containers/food/condiment/sugar
 	name = "sugar"
 	desc = "Tasty space sugar!"
-
-/obj/item/weapon/reagent_containers/food/condiment/sugar/New()
-	..()
-	reagents.add_reagent(SUGAR, 50)
+	reagents_to_add = SUGAR
 
 /obj/item/weapon/reagent_containers/food/condiment/caramel
 	name = "caramel"
 	desc = "Tasty caramel cubes!"
-
-/obj/item/weapon/reagent_containers/food/condiment/caramel/New()
-	..()
-	reagents.add_reagent(CARAMEL, 50)
+	reagents_to_add = CARAMEL
 
 /obj/item/weapon/reagent_containers/food/condiment/honey
 	name = "honey pot"
 	desc = "Sweet and healthy!"
-
-/obj/item/weapon/reagent_containers/food/condiment/honey/New()
-	..()
-	reagents.add_reagent(HONEY, 50)
+	reagents_to_add = HONEY
 
 /obj/item/weapon/reagent_containers/food/condiment/royaljelly
 	name = "royal jelly pot"
 	desc = "Spicy and healthy!"
-
-/obj/item/weapon/reagent_containers/food/condiment/royaljelly/New()
-	..()
-	reagents.add_reagent(ROYALJELLY, 50)
+	reagents_to_add = ROYALJELLY
 
 /obj/item/weapon/reagent_containers/food/condiment/cinnamon
 	name = "cinnamon shaker"
 	desc = "A spice, obtained from the bark of cinnamomum trees."
-
-/obj/item/weapon/reagent_containers/food/condiment/cinnamon/New()
-	..()
-	reagents.add_reagent(CINNAMON, 50)
+	reagents_to_add = CINNAMON
 
 /obj/item/weapon/reagent_containers/food/condiment/discount
 	name = "Discount Dan's Special Sauce"
 	desc = "Discount Sauce now in a family sized package."
-
-/obj/item/weapon/reagent_containers/food/condiment/discount/New()
-	..()
-	reagents.add_reagent(DISCOUNT, 50)
+	reagents_to_add = DISCOUNT
 
 /obj/item/weapon/reagent_containers/food/condiment/saltshaker
 	name = "salt shaker"
@@ -507,10 +453,7 @@
 	icon_state = "saltshakersmall"
 	possible_transfer_amounts = list(1, 10, 50)
 	amount_per_transfer_from_this = 1
-
-/obj/item/weapon/reagent_containers/food/condiment/saltshaker/New()
-	..()
-	reagents.add_reagent(SODIUMCHLORIDE, 50)
+	reagents_to_add = SODIUMCHLORIDE
 
 /obj/item/weapon/reagent_containers/food/condiment/holysalts
 	name = "holy salts"
@@ -518,10 +461,7 @@
 	icon_state = "holysalts"
 	possible_transfer_amounts = list(1, 10, 50)
 	amount_per_transfer_from_this = 10
-
-/obj/item/weapon/reagent_containers/food/condiment/holysalts/New()
-	..()
-	reagents.add_reagent(HOLYSALTS, 50)
+	reagents_to_add = HOLYSALTS
 
 /obj/item/weapon/reagent_containers/food/condiment/peppermill
 	name = "pepper mill"
@@ -529,45 +469,29 @@
 	icon_state = "peppermillsmall"
 	possible_transfer_amounts = list(1, 10, 50)
 	amount_per_transfer_from_this = 1
-
-/obj/item/weapon/reagent_containers/food/condiment/peppermill/New()
-	..()
-	reagents.add_reagent(BLACKPEPPER, 50)
+	reagents_to_add = BLACKPEPPER
 
 /obj/item/weapon/reagent_containers/food/condiment/syndisauce
 	name = "Chef Excellence's Special Sauce"
 	desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp with an extra touch of LSD, because why not?"
 	amount_per_transfer_from_this = 1
-
-/obj/item/weapon/reagent_containers/food/condiment/syndisauce/New()
-	..()
-	reagents.add_reagent(CHEFSPECIAL, 20)
+	reagents_to_add = list(CHEFSPECIAL = 20)
 
 /obj/item/weapon/reagent_containers/food/condiment/vinegar
 	name = "malt vinegar bottle"
 	desc = "Perfect for fish and chips."
-
-/obj/item/weapon/reagent_containers/food/condiment/vinegar/New()
-	..()
-	reagents.add_reagent(VINEGAR, 50)
+	reagents_to_add = VINEGAR
 
 /obj/item/weapon/reagent_containers/food/condiment/gravy
 	name = "gravy boat"
 	desc = "Too small to set sail on."
 	volume = 10 //So nutrment isn't added
-
-/obj/item/weapon/reagent_containers/food/condiment/gravy/New()
-	..()
-	reagents.add_reagent(GRAVY, 10)
+	reagents_to_add = GRAVY
 
 /obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig
 	name = "gravy cruise"
 	desc = "Still a bit too small to sail on."
 	volume = 50
-
-/obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig/New()
-	..()
-	reagents.add_reagent(GRAVY, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic
 	name = "exotic bottle"
@@ -595,94 +519,58 @@
 	CHEFSPECIAL=1)
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
+	reagents_to_add = pickweight(possible_exotic_condiments)
 	..()
-	reagents.add_reagent(pickweight(possible_exotic_condiments), 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/coco
 	name = "cocoa powder"
 	desc = "A vital component for making chocolate."
-
-/obj/item/weapon/reagent_containers/food/condiment/coco/New()
-	..()
-	reagents.add_reagent(COCO, 50)
-
+	reagents_to_add = COCO
 
 /obj/item/weapon/reagent_containers/food/condiment/mayo
 	name = "mayonnaise jar"
 	desc = "we have such sights to show you."
-
-/obj/item/weapon/reagent_containers/food/condiment/mayo/New()
-	..()
-	reagents.add_reagent(MAYO, 50)
-
+	reagents_to_add = MAYO
 
 /obj/item/weapon/reagent_containers/food/condiment/zamspices
 	name = "Zam Spice Bottle"
 	desc = "A blend of several mothership spices. It has a sharp, tangy aroma."
-
-/obj/item/weapon/reagent_containers/food/condiment/zamspices/New()
-	..()
-	reagents.add_reagent(ZAMSPICES, 50)
+	reagents_to_add = ZAMSPICES
 
 /obj/item/weapon/reagent_containers/food/condiment/zammild
 	name = "Zam's Mild Sauce"
 	desc = "A tasty sauce made from mothership spices and acid."
-
-/obj/item/weapon/reagent_containers/food/condiment/zammild/New()
-	..()
-	reagents.add_reagent(ZAMMILD, 50)
+	reagents_to_add = ZAMMILD
 
 /obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin
 	name = "Zam's Spicy Sauce"
 	desc = "A dangerously flavorful sauce made from mothership spices and powerful acid."
-
-/obj/item/weapon/reagent_containers/food/condiment/zamspicytoxin/New()
-	..()
-	reagents.add_reagent(ZAMSPICYTOXIN, 50)
+	reagents_to_add = ZAMSPICYTOXIN
 
 /obj/item/weapon/reagent_containers/food/condiment/polypgelatin
 	name = "Polyp Gelatin Bottle"
 	desc = "A thick, nutritious gelatin collected from space polyps. It has a mild flavor with a hint of salt."
-
-/obj/item/weapon/reagent_containers/food/condiment/polypgelatin/New()
-	..()
-	reagents.add_reagent(POLYPGELATIN, 50)
-
+	reagents_to_add = POLYPGELATIN
 
 /obj/item/weapon/reagent_containers/food/condiment/cream
 	name = "whipped cream dispenser"
 	desc = "Instant delight!"
-
-/obj/item/weapon/reagent_containers/food/condiment/cream/New()
-	..()
-	reagents.add_reagent(CREAM, 50)
-
+	reagents_to_add = CREAM
 
 /obj/item/weapon/reagent_containers/food/condiment/liquidbutter
 	name = "liquid butter bottle"
 	desc = "A one way trip to obesity."
-
-/obj/item/weapon/reagent_containers/food/condiment/liquidbutter/New()
-	..()
-	reagents.add_reagent(LIQUIDBUTTER, 50)
-
+	reagents_to_add = LIQUIDBUTTER
 
 /obj/item/weapon/reagent_containers/food/condiment/maple_syrup
 	name = "maple syrup"
 	desc = "Reddish brown Canadian maple syrup, perfectly sweet and thick. Nutritious and effective at healing."
-
-/obj/item/weapon/reagent_containers/food/condiment/maple_syrup/New()
-	..()
-	reagents.add_reagent(MAPLESYRUP, 50)
-
+	reagents_to_add = MAPLESYRUP
 
 /obj/item/weapon/reagent_containers/food/condiment/chillwax
 	name = "chill wax pot"
 	desc = "A bluish wax produced by insects found on Vox worlds. Sweet to the taste, albeit trippy."
-
-/obj/item/weapon/reagent_containers/food/condiment/chillwax/New()
-	..()
-	reagents.add_reagent(CHILLWAX, 50)
+	reagents_to_add = CHILLWAX
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -781,90 +669,63 @@
 	desc = "You feel more American already."
 	condiment_overlay = KETCHUP
 	trash_type = /obj/item/trash/packet/ketchup
-
-/obj/item/weapon/reagent_containers/food/condiment/small/ketchup/New()
-	..()
-	reagents.add_reagent(KETCHUP, 5)
+	reagents_to_add = KETCHUP
 
 /obj/item/weapon/reagent_containers/food/condiment/small/mayo
 	name = "mayonnaise packet"
 	desc = "Still not an instrument."
 	condiment_overlay = MAYO
 	trash_type = /obj/item/trash/packet/mayo
-
-/obj/item/weapon/reagent_containers/food/condiment/small/mayo/New()
-	..()
-	reagents.add_reagent(MAYO, 5)
+	reagents_to_add = MAYO
 
 /obj/item/weapon/reagent_containers/food/condiment/small/soysauce
 	name = "soy sauce packet"
 	desc = "Tasty soy sauce in a convenient tiny packet."
 	condiment_overlay = SOYSAUCE
 	trash_type = /obj/item/trash/packet/soysauce
-
-/obj/item/weapon/reagent_containers/food/condiment/small/soysauce/New()
-	..()
-	reagents.add_reagent(SOYSAUCE, 5)
+	reagents_to_add = SOYSAUCE
 
 /obj/item/weapon/reagent_containers/food/condiment/small/vinegar
 	name = "malt vinegar packet"
 	desc = "Perfect for smaller portions of fish and chips."
 	condiment_overlay = VINEGAR
 	trash_type = /obj/item/trash/packet/vinegar
-
-/obj/item/weapon/reagent_containers/food/condiment/small/vinegar/New()
-	..()
-	reagents.add_reagent(VINEGAR, 5)
+	reagents_to_add = VINEGAR
 
 /obj/item/weapon/reagent_containers/food/condiment/small/hotsauce
 	name = "hotsauce packet"
 	desc = "For those who can't handle the real heat."
 	condiment_overlay = "hotsauce"
 	trash_type = /obj/item/trash/packet/hotsauce
-
-/obj/item/weapon/reagent_containers/food/condiment/small/hotsauce/New()
-	..()
-	reagents.add_reagent(CAPSAICIN, 5)
+	reagents_to_add = CAPSAICIN
 
 /obj/item/weapon/reagent_containers/food/condiment/small/zamspices
 	name = "Zam Spices Packet"
 	desc = "A tiny packet of mothership spices."
 	condiment_overlay = ZAMSPICES
 	trash_type = /obj/item/trash/packet/zamspices
-
-/obj/item/weapon/reagent_containers/food/condiment/small/zamspices/New()
-	..()
-	reagents.add_reagent(ZAMSPICES, 5)
+	reagents_to_add = ZAMSPICES
 
 /obj/item/weapon/reagent_containers/food/condiment/small/zammild
 	name = "Zam's Mild Sauce Packet"
 	desc = "More portable than the bottle, just as tasty."
 	condiment_overlay = ZAMMILD
 	trash_type = /obj/item/trash/packet/zammild
-
-/obj/item/weapon/reagent_containers/food/condiment/small/zammild/New()
-	..()
-	reagents.add_reagent(ZAMMILD, 5)
+	reagents_to_add = ZAMMILD
 
 /obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin
 	name = "Zam's Spicy Sauce Packet"
 	desc = "More portable than the bottle, just as spicy."
 	condiment_overlay = ZAMSPICYTOXIN
 	trash_type = /obj/item/trash/packet/zamspicytoxin
-
-/obj/item/weapon/reagent_containers/food/condiment/small/zamspicytoxin/New()
-	..()
-	reagents.add_reagent(ZAMSPICYTOXIN, 5)
+	reagents_to_add = ZAMSPICYTOXIN
 
 /obj/item/weapon/reagent_containers/food/condiment/small/discount
 	name = "Discount Dan's Special Sauce"
 	desc = "Discount Dan brings you his very own special blend of delicious ingredients in one discount sauce!"
 	condiment_overlay = DISCOUNT
 	trash_type = /obj/item/trash/packet/discount
-
-/obj/item/weapon/reagent_containers/food/condiment/small/discount/New()
-	..()
-	reagents.add_reagent(DISCOUNT, 3)
+	reagents_to_add = list(DISCOUNT = 3)
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //I hate it but it works
