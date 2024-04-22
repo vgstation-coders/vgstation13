@@ -4,9 +4,8 @@
 //The mob's butchering_drops list is made from get_butchering_products() when it dies. Humans however get it when they're created.
 
 /datum/butchering_product
-	var/obj/item/result //can also be a list of items
+	var/obj/item/result
 	//What item this is for
-
 	var/verb_name
 	//Something like "skin", don't name this "Butcher" please
 
@@ -25,6 +24,9 @@
 	var/radial_icon = "radial_butcher"
 	//Icon in the radial menu
 
+	/// Optional name to use instead of the result name
+	var/product_name
+
 /datum/butchering_product/New()
 	..()
 
@@ -33,16 +35,14 @@
 /datum/butchering_product/proc/spawn_result(location, mob/parent)
 	if(amount > 0)
 		amount--
-		if(!islist(result))
-			return new result(location)
-		var/list/returned_results = list()
-		for(var/result_item in result)
-			returned_results += new result_item(location)
-		return returned_results
+		return new result(location)
 
 //This is added to the description of dead mobs! It's important to add a space at the end (like this: "It has been skinned. ").
 /datum/butchering_product/proc/desc_modifier(mob/parent, mob/user) //User - the guy who is looking at Parent
 	return
+
+/datum/butchering_product/proc/get_product_name()
+	return product_name || result.name
 
 //==============Teeth============
 
@@ -260,7 +260,14 @@
 		return "Its claws have been cut off. "
 
 /datum/butchering_product/xeno_claw/crab_claw
-	result = list(/obj/item/organ/external/r_hand/crab, /obj/item/organ/external/l_hand/crab)
+	product_name = "claws"
+	result = null
+
+/datum/butchering_product/xeno_claw/crab_claw/spawn_result(location, mob/parent)
+	while(amount > 0)
+		new /obj/item/organ/external/r_hand/crab(location)
+		new /obj/item/organ/external/l_hand/crab(location)
+		amount--
 
 //======frog legs
 
