@@ -105,9 +105,14 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return
 
 /obj/item/weapon/reagent_containers/proc/reagent_refill()
+	reagents.clear_reagents()
 	if(islist(reagents_to_add))
-		for(var/reagent in reagents_to_add)
-			reagents.add_reagent(reagent,reagents_to_add[reagent] || volume)
+		var/list/L = reagents_to_add
+		for(var/reagent in L)
+			if(islist(reagents_to_add[reagent]))
+				reagents.add_reagent(reagent, reagents_to_add[reagent][1], reagtemp = reagents_to_add[reagent][2])
+			else
+				reagents.add_reagent(reagent,reagents_to_add[reagent] || volume / L.len)
 	else if(reagents_to_add)
 		reagents.add_reagent(reagents_to_add, volume)
 

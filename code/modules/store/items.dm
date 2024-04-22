@@ -73,14 +73,14 @@
 	cost = 45
 	category = "Food"
 
-/datum/storeitem/canned_bread
+/datum/storeitem/canned_matter/bread
 	name = "Canned Bread"
 	desc = "Best thing since sliced."
-	typepath = /obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_bread
+	typepath = /obj/item/weapon/reagent_containers/food/drinks/soda_cans/canned_matter/bread
 	cost = 15
 	category = "Food"
 
-/datum/storeitem/canned_bread/available_to_user(mob/user)
+/datum/storeitem/canned_matter/bread/available_to_user(mob/user)
 	return(isskrell(user) || Holiday == APRIL_FOOLS_DAY)
 
 /////////////////////////////

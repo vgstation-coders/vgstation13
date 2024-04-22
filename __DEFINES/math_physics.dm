@@ -27,6 +27,7 @@
 
 #define T0C  273.15					// 0degC
 #define T20C 293.15					// 20degC
+#define T80C  353.15				// 80degC
 #define TCMB 2.73					// -270.42degC
 
 #define QUANTIZE(variable)		(round(variable, 0.0001))
