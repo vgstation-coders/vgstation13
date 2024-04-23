@@ -346,6 +346,10 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	if(timeleft < 0)		// Sanity
 		timeleft = 0
 
+
+	for(var/obj/machinery/status_display/S in status_displays)
+		S.update()
+
 	if(timeleft > 6)
 		warmup_sound = 0
 

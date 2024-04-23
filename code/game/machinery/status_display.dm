@@ -17,7 +17,8 @@
 #define MODE_IMAGE				3
 #define MODE_CARGO_TIMER		4
 
-var/global/list/status_displays = list() //This list contains both normal status displays, and AI status dispays
+var/global/list/status_displays = list() //This list contains both normal status displays, and AI status displays
+var/global/list/supply_displays = list()
 
 /obj/machinery/status_display
 	icon = 'icons/obj/status_display.dmi'
@@ -62,6 +63,10 @@ var/global/list/status_displays = list() //This list contains both normal status
 	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 
+/obj/machinery/status_display/supply/New()
+	..()
+	supply_displays |= src
+
 /obj/machinery/status_display/initialize()
 	..()
 	if(radio_controller)
@@ -70,6 +75,10 @@ var/global/list/status_displays = list() //This list contains both normal status
 /obj/machinery/status_display/Destroy()
 	.=..()
 	status_displays -= src
+
+/obj/machinery/status_display/supply/Destroy()
+	.=..()
+	supply_displays -= src
 
 // timed process
 /obj/machinery/status_display/process()
@@ -80,10 +89,8 @@ var/global/list/status_displays = list() //This list contains both normal status
 		spookymode = 0
 		remove_display()
 		return
-	update()
-	if(mode == MODE_SHUTTLE_TIMER || mode == MODE_CARGO_TIMER) // update again after a second just for these
-		spawn(10) // timers are every second
-			update()
+	if(mode != MODE_SHUTTLE_TIMER && mode != MODE_CARGO_TIMER) // handled in their subsystems
+		update()
 
 /obj/machinery/status_display/attack_ai(mob/user)
 	if(spookymode)

@@ -102,6 +102,9 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		centcomm_last_order = world.time
 		centcomm_order_cooldown = rand(modified_min,modified_max)
 
+	for(var/obj/machinery/status_display/supply/S in supply_displays)
+		S.update()
+
 /datum/supply_order
 	var/ordernum
 	var/datum/supply_packs/object = null
