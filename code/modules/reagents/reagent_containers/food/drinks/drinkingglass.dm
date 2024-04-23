@@ -91,7 +91,7 @@
 		M.update_inv_hands()
 
 	update_temperature_overlays()
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/attack_self(mob/user)
 	if(switching)

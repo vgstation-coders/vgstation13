@@ -58,7 +58,7 @@
 		icon_state = "candle[i]"
 	wick.icon_state = "[icon_state]-wick"
 	overlays += wick
-	update_blood_overlay()
+	set_blood_overlay()
 	if (lit)
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.appearance_flags = RESET_COLOR

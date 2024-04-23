@@ -1934,7 +1934,7 @@ var/list/arcane_tomes = list()
 			i = 2
 		else i = 3
 		icon_state = "bloodcandle[i]"
-	update_blood_overlay()
+	set_blood_overlay()
 	if (lit)
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.blend_mode = BLEND_ADD
