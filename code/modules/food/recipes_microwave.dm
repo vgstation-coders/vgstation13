@@ -3370,7 +3370,7 @@
 	/obj/item/weapon/reagent_containers/food/snacks/butter,
 	)
 
- result = /obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/
+ result = /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/r/
 /datum/recipe/butterfingers_l
 	items = list(/obj/item/organ/external/l_hand,
 	/obj/item/weapon/reagent_containers/food/snacks/butter,
@@ -3472,7 +3472,7 @@
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter/exciting
 
 /datum/recipe/saltednuts
 	reagents = list(SODIUMCHLORIDE = 5)
@@ -3551,7 +3551,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		/obj/item/weapon/reagent_containers/food/snacks/butter
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_roll_butter
+	result = /obj/item/weapon/reagent_containers/food/snacks/lobster_roll/butter
 
 /datum/recipe/lobster_tail_baked
 	reagents = list (SODIUMCHLORIDE = 1)

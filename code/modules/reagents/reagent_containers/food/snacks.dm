@@ -5553,32 +5553,22 @@
 	desc = "While not looking very appetizing, it at least looks like somebody had fun making it."
 	icon_state = "mud_pie"
 	filling_color = "#462B20"
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/mudpie/New()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(NUTRIMENT, rand(0,2))
-	reagents.add_reagent(TOXIN, rand(1,5))
+	reagents_to_add = list(NUTRIMENT = rand(0,2), TOXIN = rand(1,5))
 	if(prob(15))
 		name = "exceptional " + initial(name)
 		desc = "The crème de la pire of culinary arts."
-		reagents.add_reagent(SUGAR, 2)
-		reagents.add_reagent(TOXIN, rand(3,8))
-		reagents.add_reagent(COCO, 3)
-	bitesize = 2
+		reagents_to_add = list(NUTRIMENT = rand(0,2), SUGAR = 2, TOXIN = rand(4,13), COCO = 3) // extra 3-8 toxin
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/magbites
 	name = "mag-bites"
 	desc = "Tiny boot-shaped cheese puffs. Made with real magnets!\
 	<br>Warning: not suitable for those with heart conditions or on medication, consult your doctor before consuming this product. Cheese dust may stain or dissolve fabrics."
 	icon_state = "magbites"
-
-/obj/item/weapon/reagent_containers/food/snacks/magbites/New()
-	..()
-	reagents.add_reagent(MEDCORES, 6)
-	reagents.add_reagent(SODIUMCHLORIDE, 6)
-	reagents.add_reagent(NUTRIMENT, 4)
-
+	reagents_to_add = list(MEDCORES = 6, SODIUMCHLORIDE = 6, NUTRIMENT = 4)
 
 /obj/item/weapon/reagent_containers/food/snacks/lasagna
 	name = "lasagna"
@@ -5589,11 +5579,7 @@
 	w_class = W_CLASS_MEDIUM
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/lasagna/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(TOMATOJUICE, 15)
+	reagents_to_add = list(NUTRIMENT = 8, TOMATOJUICE = 15)
 
 var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/item/toy/bomb, /obj/item/weapon/c4, /obj/item/cannonball/fuse_bomb, /obj/item/weapon/grenade, /obj/item/device/onetankbomb)
 
@@ -5607,10 +5593,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A fashionable dish that some critics say engages the aesthetic sensibilities of even the most refined gastronome."
 	icon_state = "tontesdepelouse"
 	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/tontesdepelouse/New()
-	..()
-	reagents.add_reagent(NUTRIMENT,1)
+	reagents_to_add = list(NUTRIMENT = 1)
 
 // fishtank stuff
 
@@ -5622,10 +5605,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	filling_color = "#FFDEFE"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/salmonmeat/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents_to_add = list(NUTRIMENT = 5)
 	bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/salmonsteak
@@ -5636,10 +5616,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	filling_color = "#7A3D11"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/salmonsteak/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 7)
+	reagents_to_add = list(NUTRIMENT = 7)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/catfishmeat
@@ -5650,10 +5627,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	filling_color = "#FFDEFE"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/catfishmeat/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents_to_add = list(NUTRIMENT = 5)
 	bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/shrimp
@@ -5662,11 +5636,11 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "shrimp_raw"
 	filling_color = "#FF1C1C"
 	bitesize = 1
+	reagents_to_add = list(NUTRIMENT = 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/shrimp/New()
 	..()
 	desc = pick("Anyway, like I was sayin', shrimp is the fruit of the sea.", "You can barbecue it, boil it, broil it, bake it, saute it.")
-	reagents.add_reagent(NUTRIMENT, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/glofishmeat
 	name = "raw glofish"
@@ -5676,10 +5650,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	filling_color = "#FFDEFE"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/glofishmeat/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/goldfishmeat
@@ -5690,10 +5661,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	filling_color = "#FFDEFE"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/goldfishmeat/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/fried_shrimp
@@ -5703,10 +5671,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "shrimp_fried"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/fried_shrimp/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/boiled_shrimp
@@ -5716,10 +5681,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "shrimp_cooked"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/boiled_shrimp/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 3
 
 ////////	SUSHI	////////
@@ -5732,10 +5694,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ebi
 	name = "Ebi Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ebi
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ebi/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ebi
 	name = "Ebi Sushi"
@@ -5747,10 +5706,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ikura
 	name = "Ikura Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ikura
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Ikura/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
+	reagents_to_add = list(NUTRIMENT = 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Ikura
 	name = "Ikura Sushi"
@@ -5762,10 +5718,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Sake
 	name = "Sake Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Sake
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Sake/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Sake
 	name = "Sake Sushi"
@@ -5777,10 +5730,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_SmokedSalmon
 	name = "Smoked Salmon Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_SmokedSalmon
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_SmokedSalmon/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_SmokedSalmon
 	name = "Smoked Salmon Sushi"
@@ -5792,10 +5742,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tamago
 	name = "Tamago Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tamago
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tamago/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tamago
 	name = "Tamago Sushi"
@@ -5807,10 +5754,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Inari
 	name = "Inari Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Inari
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Inari/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Inari
 	name = "Inari Sushi"
@@ -5822,10 +5766,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Masago
 	name = "Masago Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Masago
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Masago/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
+	reagents_to_add = list(NUTRIMENT = 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Masago  																																			/*Every night I watch the skies from inside my bunker. They'll come back. If I watch they'll come. I can hear their voices from the sky. Calling out my name. There's the ridge. The guns in the jungle. Screaming. Smoke. The blood. All over my hands. */
 	name = "Masago Sushi"
@@ -5837,10 +5778,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tobiko
 	name = "Tobiko Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tobiko
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tobiko/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
+	reagents_to_add = list(NUTRIMENT = 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tobiko
 	name = "Tobiko Sushi"
@@ -5856,19 +5794,13 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_TobikoEgg"
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/sushi_TobikoEgg/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
+	reagents_to_add = list(NUTRIMENT = 3)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tai
 	name = "Tai Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tai
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Tai/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Tai
 	name = "Tai Sushi"
@@ -5881,10 +5813,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Unagi
 	name = "Unagi Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Unagi
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_Unagi/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_Unagi // i have seen the face of god and it was weeping
 	name = "Unagi Sushi"
@@ -5896,10 +5825,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_avocado
 	name = "Avocado Sushi"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_avocado
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sushi_avocado/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 1)
+	reagents_to_add = list(NUTRIMENT = 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi/sushi_avocado
 	name = "Avocado Sushi"
@@ -5916,10 +5842,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "shrimp_fried"
 	bitesize = 3
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/friedshrimp/New()
-	..()
-	reagents.add_reagent(CORNOIL, 3)
+	reagents_to_add = list(CORNOIL = 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/soyscampi
 	name = "soy scampi"
@@ -5929,11 +5852,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/soyscampi/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-	reagents.add_reagent(SOYSAUCE, 2)
+	reagents_to_add = list(NUTRIMENT = 1, SOYSAUCE = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/shrimpcocktail
 	name = "shrimp cocktail"
@@ -5943,16 +5862,16 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/shrimpcocktail/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
 	if(prob(50))
 		desc += " This one is ironic."
-		reagents.add_reagent(HONKSERUM, 1)
+		reagents_to_add += list(HONKSERUM = 1)
 	else
 		desc += " This one is high fashion."
-		reagents.add_reagent(MINTTOXIN, 1)
+		reagents += list(MINTTOXIN = 1)
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/friedcatfish
 	name = "fried catfish"
@@ -5961,10 +5880,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "friedcatfish"
 	bitesize = 3
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/friedcatfish/New()
-	..()
-	reagents.add_reagent(CORNOIL, 3)
+	reagents_to_add = list(CORNOIL = 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/catfishgumbo
 	name = "catfish gumbo"
@@ -5974,10 +5890,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/catfishgumbo/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/catfishcourtbouillon
 	name = "catfish courtbouillon"
@@ -5986,11 +5899,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "catfishcourtbouillon"
 	bitesize = 3
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/catfishcourtbouillon/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(CAPSAICIN, 3)
+	reagents_to_add = list(NUTRIMENT = 6, CAPSAICIN = 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/smokedsalmon
 	name = "smoked salmon"
@@ -6000,10 +5909,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/smokedsalmon/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/planksalmon
 	name = "plank-grilled salmon"
@@ -6014,10 +5920,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 	trash = /obj/item/stack/sheet/wood
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/planksalmon/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/citrussalmon
 	name = "citrus-baked salmon"
@@ -6027,10 +5930,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/citrussalmon/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 
 /obj/item/weapon/reagent_containers/food/snacks/salmonavocado
 	name = "salmon avocado salad"
@@ -6040,10 +5940,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/salmonavocado/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 
 /obj/item/weapon/reagent_containers/food/snacks/rumshark
 	name = "spiced rum shark supreme"
@@ -6053,11 +5950,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/rumshark/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(RUM, 15)
+	reagents_to_add = list(NUTRIMENT = 6, RUM = 15)
 
 
 /obj/item/weapon/reagent_containers/food/snacks/akutaq
@@ -6068,11 +5961,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_MEAT | FOOD_SWEET | FOOD_LACTOSE
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/akutaq/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-	reagents.add_reagent(SUGAR, 6)
+	reagents_to_add = list(NUTRIMENT = 1, SUGAR = 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/carpcurry
 	name = "golden carp curry"
@@ -6082,10 +5971,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/carpcurry/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/carpconsomme
 	name = "golden carp consomme"
@@ -6095,11 +5981,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/carpconsomme/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
-	reagents.add_reagent(METHYLIN,5)
+	reagents_to_add = list(NUTRIMENT = 2, METHYLIN = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/butterstick
 	name = "butter on a stick"
@@ -6108,6 +5990,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 3
 	food_flags = FOOD_ANIMAL
 	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/butterstick/Crossed(atom/movable/O)
 	if(..())
@@ -6118,10 +6001,6 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 			new/obj/effect/decal/cleanable/smashed_butter(src.loc)
 			qdel(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/butterstick/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 1)
-
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/ambrosia_brownies
 	name = "brownie sheet"
 	desc = "Give them to your friends."
@@ -6131,35 +6010,13 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	storage_slots = 3
 	w_class = W_CLASS_MEDIUM
 	food_flags = FOOD_SWEET | FOOD_ANIMAL
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/ambrosia_brownies/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/ambrosia_brownie
 	name = "brownie"
 	desc = "A brownie that may or may not get you sky high."
 	icon_state = "ambrosia_brownie"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/butterfingers_r
-	name = "butter fingers"
-	desc = "It's a microwaved hand slathered in butter!"
-	icon_state = "butterfingers_r"
-	food_flags = FOOD_ANIMAL | FOOD_MEAT
-	plate_offset_y = -3
-	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
-
-/obj/item/weapon/reagent_containers/food/snacks/butterfingers_r/Crossed(atom/movable/O)
-	if(..())
-		return 1
-	if(iscarbon(O))
-		var/mob/living/carbon/C = O
-		C.Slip(4, 3, slipped_on = src)
 
 /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	name = "butter fingers"
@@ -6168,10 +6025,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_ANIMAL | FOOD_MEAT
 	plate_offset_y = -3
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/Crossed(atom/movable/O)
 	if(..())
@@ -6180,25 +6034,22 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		var/mob/living/carbon/C = O
 		C.Slip(4, 3, slipped_on = src)
 
+/obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/r
+	icon_state = "butterfingers_r"
+
 /obj/item/weapon/reagent_containers/food/snacks/butteredtoast
 	name = "buttered toast"
 	desc = "Toasted bread with butter on it."
 	icon_state = "butteredtoast"
 	food_flags = FOOD_ANIMAL | FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/butteredtoast/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/pierogi
 	name = "pierogi"
 	desc = "Dumplings with potatoes and curd inside."
 	icon_state = "pierogi"
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
-
-/obj/item/weapon/reagent_containers/food/snacks/pierogi/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 
 
 /obj/item/weapon/reagent_containers/food/snacks/sauerkraut
@@ -6207,10 +6058,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "sauerkraut"
 	trash = /obj/item/trash/snack_bowl
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/sauerkraut/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 1)
+	reagents_to_add = list(NUTRIMENT = 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/pickledpears
 	name = "pickled pears"
@@ -6218,10 +6066,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "pickledpears"
 	food_flags = FOOD_SWEET
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/pickledpears/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents_to_add = list(NUTRIMENT = 5)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/pickledbeets
@@ -6229,10 +6074,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A jar of pickled whitebeets. How did they become so red, then?"
 	icon_state = "pickledbeets"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/pickledbeets/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents_to_add = list(NUTRIMENT = 5)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/bulgogi
@@ -6241,10 +6083,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "bulgogi"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/bulgogi/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 10)
+	reagents_to_add = list(NUTRIMENT = 10)
 	bitesize = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/candiedpear
@@ -6252,10 +6091,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A pear covered with caramel. Quite sugary."
 	icon_state = "candiedpear"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/candiedpear/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/bakedpears
@@ -6263,10 +6099,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "Baked pears cooked with cinnamon, sugar and some cream."
 	icon_state = "bakedpears"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/bakedpears/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents_to_add = list(NUTRIMENT = 4)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/winepear
@@ -6274,10 +6107,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "This pear has been laced with wine, some cinnamon and a touch of cream."
 	icon_state = "winepear"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/winepear/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
+	reagents_to_add = list(NUTRIMENT = 3)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter
@@ -6289,11 +6119,11 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "suppermatter"
 	w_class = W_CLASS_MEDIUM
 	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 48)
+	bitesize = 12
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 48)
-	bitesize = 12
 	set_light(1.4,2,"#FFFF00")
 
 /obj/item/weapon/reagent_containers/food/snacks/suppermattershard
@@ -6308,31 +6138,24 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	..()
 	set_light(1.4,1.4,"#FFFF00")
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter/exciting
 	name = "exciting suppermatter"
 	desc = "Extremely dense, powerful and exciting food!"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard
-	storage_slots = 1
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/suppermattershard/exciting
 	slices_num = 5
 	icon_state = "excitingsuppermatter"
-	w_class = W_CLASS_MEDIUM
-	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 60)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 60)
-	bitesize = 12
 	set_light(1.4,2,"#FF0000")
 
-/obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard
+/obj/item/weapon/reagent_containers/food/snacks/suppermattershard/exciting
 	name = "exciting suppermatter shard"
 	desc = "A single portion of exciting power!"
 	icon_state = "excitingsuppermattershard"
-	bitesize = 3
-	trash = null
-	base_crumb_chance = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/excitingsuppermattershard/New()
+/obj/item/weapon/reagent_containers/food/snacks/suppermattershard/exciting/New()
 	..()
 	set_light(1.4,1.4,"#FF0000")
 
@@ -6342,11 +6165,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "grapejelly"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/grapejelly/New()
-	..()
-	reagents.add_reagent (NUTRIMENT, 2)
-	reagents.add_reagent (SUGAR, 2)
+	reagents_to_add = list(NUTRIMENT = 2, SUGAR = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/peanutbutter
@@ -6355,10 +6174,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "peanutbutter"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/peanutbutter/New()
-	..()
-	reagents.add_reagent (NUTRIMENT, 3)
+	reagents_to_add = list(NUTRIMENT = 3)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/saltednuts
@@ -6367,11 +6183,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "saltednuts"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/saltednuts/New()
-	..()
-	reagents.add_reagent (NUTRIMENT, 2)
-	reagents.add_reagent (SODIUMCHLORIDE, 2)
+	reagents_to_add = list(NUTRIMENT = 2, SODIUMCHLORIDE = 2)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/pbj
@@ -6380,10 +6192,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "pbj"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/pbj/New()
-	..()
-	reagents.add_reagent (NUTRIMENT, 4)
+	reagents_to_add = list(NUTRIMENT = 4)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/PAIcookie
@@ -6391,12 +6200,12 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "Oh god, it's self-replicating!"
 	icon = 'icons/obj/food2.dmi'
 	food_flags = FOOD_DIPPABLE
+	reagents_to_add = list(NUTRIMENT = 5)
+	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/PAIcookie/New()
 	..()
 	icon_state = "paicookie[pick(1,2,3)]"
-	reagents.add_reagent(NUTRIMENT,5)
-	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread
 	icon = 'icons/obj/food2.dmi'
@@ -6404,10 +6213,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	trash = 0
 	desc = "A slice of bread. Browned onto it is the image of a familiar friend."
 	food_flags = FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread/New()
-	..()
-	reagents.add_reagent(NUTRIMENT,5)
+	reagents_to_add = list(NUTRIMENT = 5)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread/attackby(obj/item/I,mob/user,params)
@@ -6420,12 +6226,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 	bitesize = 1
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/escargot/New()
-	. = ..()
-	reagents.add_reagent(NUTRIMENT,10)
-	reagents.add_reagent(SODIUMCHLORIDE, 2)
-	reagents.add_reagent(HOLYWATER, 2)
+	reagents_to_add = list(NUTRIMENT = 10, SODIUMCHLORIDE = 2, HOLYWATER = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/es_cargo
 	icon_state = "es_cargo_closed"
@@ -6435,12 +6236,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 	var/open = FALSE
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/es_cargo/New()
-	. = ..()
-	reagents.add_reagent(NUTRIMENT,10)
-	reagents.add_reagent(SODIUMCHLORIDE, 2)
-	reagents.add_reagent(HOLYWATER, 2)
+	reagents_to_add = list(NUTRIMENT = 10, SODIUMCHLORIDE = 2, HOLYWATER = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/es_cargo/can_consume(mob/living/carbon/eater, mob/user)
 	if (!open)
@@ -6476,10 +6272,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 1 //your eating a raw lobster tail, shell still attatched, you disgusting animal
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents_to_add = list(NUTRIMENT = 4)
 
 /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat
 	name = "Raw Lobster Meat"
@@ -6488,10 +6281,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "raw_lobster_meat"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
+	reagents_to_add = list(NUTRIMENT = 3)
 
 
 /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe
@@ -6502,12 +6292,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 	trash = /obj/item/trash/plate
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe/New()
-	..()
-	reagents.add_reagent (NUTRIMENT, 6)
-	reagents.add_reagent (LEMONJUICE, 1)
-	reagents.add_reagent (LIQUIDBUTTER, 3)
+	reagents_to_add = list(NUTRIMENT = 6, LEMONJUICE = 1, LIQUIDBUTTER = 3)
 	bitesize = 2 //lobster takes a long time to eat
 
 /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple  // this one has no fancy butter or lemon
@@ -6518,11 +6303,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 	trash = /obj/item/trash/plate
 	base_crumb_chance = 0
-
-
-/obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple/New()
-	..()
-	reagents.add_reagent (NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2 //lobster takes a long time to eat
 
 
@@ -6532,25 +6313,12 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_roll" //it dont need trash, its a hot dog, lobster edition
 	food_flags = FOOD_MEAT
-
-
-/obj/item/weapon/reagent_containers/food/snacks/lobster_roll/New()
-	..()
-	reagents.add_reagent (NUTRIMENT, 1)
-	reagents.add_reagent (MAYO, 5)
+	reagents_to_add = list(NUTRIMENT = 1, MAYO = 5)
 	bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/lobster_roll_butter  // instead of mayo it uses butter
-	name = "Lobster Roll"
+/obj/item/weapon/reagent_containers/food/snacks/lobster_roll/butter  // instead of mayo it uses butter
 	desc = "A glob of lobster meat drenched in butter."
-	icon = 'icons/obj/food.dmi'
-	icon_state = "lobster_roll" //it dont need trash, its a hot dog, lobster edition
-	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/lobster_roll_butter/New()
-	..()
-	reagents.add_reagent (NUTRIMENT, 1)
-	bitesize = 3
+	reagents_to_add = list(NUTRIMENT = 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/lobster_tail_baked
 	name = "Baked Lobster Tail"
@@ -6560,10 +6328,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 	trash = /obj/item/trash/plate
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/lobster_tail_baked/New()
-	..()
-	reagents.add_reagent (NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/lobster_dumplings
@@ -6573,10 +6338,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "lobster_dumplings"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/lobster_dumplings/New()
-	..()
-	reagents.add_reagent (NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/lobster_sushi
@@ -6586,10 +6348,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "lobster_sushi"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/lobster_sushi/New()
-	..()
-	reagents.add_reagent (NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sweetroll
@@ -6598,11 +6357,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/food.dmi'
 	icon_state = "sweetroll"
 	food_flags = FOOD_ANIMAL | FOOD_SWEET | FOOD_LACTOSE | FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/sweetroll/New()
-	..()
-	reagents.add_reagent (NUTRIMENT, 2)
-	reagents.add_reagent (SUGAR, 6)
+	reagents_to_add = list(NUTRIMENT = 2, SUGAR = 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit
@@ -6611,11 +6366,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "phelmbiscuit"
 	bitesize = 1
 	food_flags = FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/dorfbiscuit/New()
-	..()
-	reagents.add_reagent(SOFTCORES, 3)
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents_to_add = list(SOFTCORES = 3, NUTRIMENT = 5)
 
 //You have now entered the ayy food zone
 
