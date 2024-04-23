@@ -1556,7 +1556,7 @@
 /datum/recipe/mothershipbroth_spicy
 	reagents = list(ZAMSPICYTOXIN = 5, CREAM = 5)
 	items = list()
-	result = /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth_spicy
+	result = /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth/spicy
 
 /datum/recipe/cheesybroth
 	reagents = list(ZAMMILD = 5, CREAM = 5)

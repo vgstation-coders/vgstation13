@@ -6420,11 +6420,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 	w_class = W_CLASS_MEDIUM
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/zamdinnerclassic/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 7)
-	reagents.add_reagent(SACID, 4)
+	reagents_to_add = list(NUTRIMENT = 7, SACID = 4)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinnerclassic
@@ -6434,12 +6430,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "tvdinner_1"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/greytvdinnerclassic/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 11)
-	reagents.add_reagent(DOCTORSDELIGHT, 5)
-	reagents.add_reagent(SACID, 4)
+	reagents_to_add = list(NUTRIMENT = 11, DOCTORSDELIGHT = 5, SACID = 4)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner1
@@ -6450,11 +6441,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
 	wrapped = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 18)
-	reagents.add_reagent(SACID, 8)
+	reagents_to_add = list(NUTRIMENT = 18, SACID = 8)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner1/wrapped
@@ -6486,11 +6473,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	trash = /obj/item/trash/used_tray
 	base_crumb_chance = 0
 	wrapped = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 15)
-	reagents.add_reagent(SACID, 7)
+	reagents_to_add = list(NUTRIMENT = 15, SACID = 7)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner2/wrapped
@@ -6522,11 +6505,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
 	wrapped = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 12)
-	reagents.add_reagent(SACID, 6)
+	reagents_to_add = list(NUTRIMENT = 12, SACID = 6)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/greytvdinner3/wrapped
@@ -6557,11 +6536,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	trash = /obj/item/trash/used_tray/type2
 	icon_state = "greygreens"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/greygreens/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(SOYSAUCE, 10)
+	reagents_to_add = list(NUTRIMENT = 6, SOYSAUCE = 10)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher
@@ -6571,10 +6546,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "stuffedpitcher"
 	food_flags = FOOD_ANIMAL
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/nymphsperil
@@ -6584,11 +6556,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "yahireatsbugs"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/nymphsperil/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 10)
-	reagents.add_reagent(SACID, 5)
+	reagents_to_add = list(NUTRIMENT = 10, SACID = 5)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit
@@ -6596,14 +6564,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A sweet biscuit with an exquisite blend of chocolate and acid flavors. The recipe is a mothership secret."
 	icon_state = "zambiscuit"
 	food_flags = FOOD_SWEET | FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/zambiscuit/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(HYRONALIN, 3)
-	reagents.add_reagent(COCO, 2)
-	reagents.add_reagent(SUGAR, 2)
-	reagents.add_reagent(SACID, 4)
+	reagents_to_add = list(NUTRIMENT = 3, HYRONALIN = 3, COCO = 2, SUGAR = 2, SACID = 4)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter
@@ -6611,14 +6572,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "Butter and acid blend together to make a divine biscuit flavor. Administrator Zam's favorite!"
 	icon_state = "zambiscuit_buttery"
 	food_flags = FOOD_ANIMAL | FOOD_SWEET | FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(HYRONALIN, 3)
-	reagents.add_reagent(LIQUIDBUTTER, 2)
-	reagents.add_reagent(SUGAR, 2)
-	reagents.add_reagent(SACID, 4)
+	reagents_to_add = list(NUTRIMENT = 4, HYRONALIN = 3, LIQUIDBUTTER = 2, SUGAR = 2, SACID = 4)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical
@@ -6626,13 +6580,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "This Zam biscuit is oddly warm to the touch and glows faintly. It's probably not safe for consumption..." // Despite the warning, I'm sure someone will eat it.
 	icon_state = "zambiscuit_radical"
 	food_flags = FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(MUTAGEN, 4)
-	reagents.add_reagent(URANIUM, 3)
-	reagents.add_reagent(SACID, 4)
+	reagents_to_add = list(NUTRIMENT = 3, MUTAGEN = 4, URANIUM = 3, SACID = 4)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_notraisins
@@ -6641,10 +6589,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	trash = /obj/item/trash/zam_notraisins
 	icon_state = "zam_notraisins"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/zam_notraisins/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
+	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese
@@ -6655,11 +6600,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	wrapped = 0
 	bitesize = 3
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(MOONROCKS, 2)
+	reagents_to_add = list(NUTRIMENT = 3, MOONROCKS = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped
 	name = "Zam Moon Cheese"
@@ -6687,11 +6628,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "zam_spiderslider"
 	wrapped = 0
 	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5)
-	reagents.add_reagent(SACID, 3)
+	reagents_to_add = list(NUTRIMENT = 5, SACID = 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped
 	name = "Zam Spider Slider"
@@ -6723,48 +6660,30 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	crumb_icon = "dribbles"
 	filling_color = "#B38B26"
 	valid_utensils = UTENSILE_SPOON
+	reagents_to_add = list(NUTRIMENT = 2, ZAMMILD = 5)
+	bitesize = 2
+	var/nutrimentbonus = 0
+	var/spicetype = ZAMMILD
 
 /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth/New()
-	..()
-	reagents.clear_reagents()
 	if(prob(10))
 		name = "Abducted Mothership Broth"
 		desc = "An unidentified microwave object has abducted your broth and made it slightly more nutritious!"
 		icon_state = "mothershipbroth_ufo"
 		trash = /obj/item/trash/emptybowl_ufo
-		reagents.add_reagent(NUTRIMENT, 4)
-		reagents.add_reagent(ZAMMILD, 5)
-		bitesize = 2
-	else
-		reagents.add_reagent(NUTRIMENT, 2)
-		reagents.add_reagent(ZAMMILD, 5)
-		bitesize = 2
+		reagents_to_add = list(NUTRIMENT = 4+nutrimentbonus, spicetype = 5)
+	..()
 
-/obj/item/weapon/reagent_containers/food/snacks/mothershipbroth_spicy
+/obj/item/weapon/reagent_containers/food/snacks/mothershipbroth/spicy
 	name = "Mothership Spicy Broth"
 	desc = "A simple dish of mothership broth. Soothing, but not very nourishing. At least it's spicy."
 	icon_state = "mothershipbroth_spicy"
 	trash = /obj/item/trash/emptybowl
-	food_flags = FOOD_LIQUID
-	crumb_icon = "dribbles"
 	filling_color = "#D35A0D"
-	valid_utensils = UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/mothershipbroth_spicy/New()
-	..()
-	reagents.clear_reagents()
-	if(prob(10))
-		name = "Abducted Mothership Spicy Broth"
-		desc = "An unidentified microwave object has abducted your broth and made it slightly more nutritious!"
-		icon_state = "mothershipbroth_spicyufo"
-		trash = /obj/item/trash/emptybowl_ufo
-		reagents.add_reagent(NUTRIMENT, 5)
-		reagents.add_reagent(ZAMSPICYTOXIN, 5)
-		bitesize = 2
-	else
-		reagents.add_reagent(NUTRIMENT, 3)
-		reagents.add_reagent(ZAMSPICYTOXIN, 5)
-		bitesize = 2
+	reagents_to_add = list(NUTRIMENT = 3, ZAMSPICYTOXIN = 5)
+	bitesize = 2
+	spicetype = ZAMSPICYTOXIN
+	nutrimentbonus = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesybroth
 	name = "Mothership Cheesy Broth"
@@ -6775,11 +6694,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	crumb_icon = "dribbles"
 	filling_color = "#FFEB3B"
 	valid_utensils = UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/cheesybroth/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(ZAMMILD, 5)
+	reagents_to_add = list(NUTRIMENT = 6, ZAMMILD = 5)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/swimmingcarp
@@ -6791,11 +6706,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	crumb_icon = "dribbles"
 	filling_color = "#B38B26"
 	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/swimmingcarp/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(ZAMMILD, 5)
+	reagents_to_add = list(NUTRIMENT = 8, ZAMMILD = 5)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/swimmingcarp_spicy
@@ -6807,11 +6718,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	crumb_icon = "dribbles"
 	filling_color = "#D35A0D"
 	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/swimmingcarp_spicy/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 9)
-	reagents.add_reagent(ZAMSPICYTOXIN, 5)
+	reagents_to_add = list(NUTRIMENT = 9, ZAMSPICYTOXIN = 5)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup
@@ -6825,6 +6732,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
 	bitesize = 3
 	wrapped = FALSE
+	reagents_to_add = list(NUTRIMENT = 6, SACID = 10, LOCUTOGEN = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/wrapped
 	icon_state = "blethernoodlesoup_closed"
@@ -6840,9 +6748,6 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "blethernoodlesoup_open"
 	wrapped = FALSE
 	playsound(user, 'sound/effects/can_open1.ogg', 50, 1)
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(SACID, 10)
-	reagents.add_reagent(LOCUTOGEN, 5)
 	if(user)
 		to_chat(user, "<span class='notice'>You pull the tab on the soup can and pop the lid open. An inviting smell wafts out.")
 
@@ -6855,11 +6760,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	crumb_icon = "dribbles"
 	filling_color = "#00FFFF"
 	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/polyppudding/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(POLYPGELATIN, 5)
+	reagents_to_add = list(NUTRIMENT = 8, POLYPGELATIN = 5)
 	bitesize = 3
 
 //You have now exited the ayy food zone. Thanks for visiting.
