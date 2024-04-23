@@ -584,7 +584,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread/synth
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat/synth
 
 /datum/recipe/moonsyntibread //Alternate recipe using moon cheese
 	reagents = list(FLOUR = 15)
@@ -596,7 +596,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread/synth
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat/synth
 
 /datum/recipe/xenomeatbread
 	reagents = list(FLOUR = 15)
@@ -608,7 +608,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/xenomeatbread
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat/xeno
 
 /datum/recipe/moonxenomeatbread //Alternate recipe using moon cheese
 	reagents = list(FLOUR = 15)
@@ -620,7 +620,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/xenomeatbread
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat/xeno
 
 /datum/recipe/spidermeatbread
 	reagents = list(FLOUR = 15)
@@ -632,7 +632,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/spidermeatbread
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat/spider
 
 /datum/recipe/moonspidermeatbread //Alternate recipe using moon cheese
 	reagents = list(FLOUR = 15)
@@ -644,7 +644,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/spidermeatbread
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat/spider
 
 /datum/recipe/meatbread
 	reagents = list(FLOUR = 15)
@@ -656,7 +656,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat
 
 /datum/recipe/moonmeatbread //Alternate recipe using moon cheese
 	reagents = list(FLOUR = 15)
@@ -668,7 +668,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat
 
 /datum/recipe/bananabread
 	reagents = list(MILK = 5, FLOUR = 15)

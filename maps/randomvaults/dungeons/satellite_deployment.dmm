@@ -590,7 +590,7 @@
 /area/vault/spy_sat/deployment)
 "bM" = (
 /obj/structure/table,
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread,
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat,
 /turf/simulated/floor{
 	icon_state = "freezerfloor"
 	},

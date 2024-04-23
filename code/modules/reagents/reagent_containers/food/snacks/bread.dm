@@ -1,35 +1,70 @@
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
+	name = "bread"
+	desc = "Some plain old Earthen bread."
+	icon_state = "bread"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice
+	slices_num = 5
+	storage_slots = 3
+	w_class = W_CLASS_MEDIUM
+	reagents_to_add = list(NUTRIMENT = 6)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/nova
+	name = "nova bread"
+	desc = "Some plain old destabilizing star bread."
+	icon_state = "novabread"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
+	reagents_to_add = list(NUTRIMENT = 6, HELL_RAMEN = 3, NOVAFLOUR = 1)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/breadslice
+	name = "bread slice"
+	desc = "A slice of home."
+	icon_state = "breadslice"
+	bitesize = 2
+	food_flags = FOOD_DIPPABLE
+
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
+	name = "nova bread slice"
+	desc = "A slice of Sol."
+	icon_state = "novabreadslice"
+	plate_icon = "novacustom"
+	food_flags = FOOD_DIPPABLE
+
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread
+	icon = 'icons/obj/food2.dmi'
+	icon_state = "paitoast"
+	trash = 0
+	desc = "A slice of bread. Browned onto it is the image of a familiar friend."
+	food_flags = FOOD_DIPPABLE
+	reagents_to_add = list(NUTRIMENT = 5)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread/attackby(obj/item/I,mob/user,params)
+	return ..() //sorry no custom pai sandwiches
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat
 	name = "meatbread loaf"
 	desc = "The culinary base of every self-respecting eloquen/tg/entleman."
 	icon_state = "meatbread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/meatbreadslice
-	slices_num = 5
-	storage_slots = 3
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice/meat
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
-	w_class = W_CLASS_MEDIUM
 	reagents_to_add = list(NUTRIMENT = 30)
-	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/meatbreadslice
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/meat
 	name = "meatbread slice"
 	desc = "A slice of delicious meatbread."
 	icon_state = "meatbreadslice"
-	bitesize = 2
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -4
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/xenomeatbread
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat/xeno
 	name = "xenomeatbread loaf"
 	desc = "The culinary base of every self-respecting eloquen/tg/entleman. Extra Heretical."
 	icon_state = "xenomeatbread"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/xenomeatbreadslice
-	slices_num = 5
-	storage_slots = 3
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
-	w_class = W_CLASS_MEDIUM
-	reagents_to_add = list(NUTRIMENT = 30)
-	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/xenomeatbreadslice
 	name = "xenomeatbread slice"
@@ -39,17 +74,11 @@
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -4
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/spidermeatbread
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat/spider
 	name = "spider meat loaf"
 	desc = "Reassuringly green meatloaf made from spider meat."
 	icon_state = "spidermeatbread"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/spidermeatbreadslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
-	reagents_to_add = list(NUTRIMENT = 30) //If the meat is toxic, it will inherit that
-	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/spidermeatbreadslice
 	name = "spider meat bread slice"
@@ -59,11 +88,11 @@
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -5
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread/synth
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat/synth
 	name = "synthmeatbread loaf"
 	desc = "A loaf of synthetic meatbread. You can just taste the mass-production."
 	icon_state = "meatbread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/meatbreadslice/synth
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice/meat/synth
 	slices_num = 5
 	storage_slots = 3
 	w_class = W_CLASS_MEDIUM
@@ -71,7 +100,7 @@
 	reagents_to_add = list(NUTRIMENT = 30)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/meatbreadslice/synth
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/meat/synth
 	name = "synthmeatbread slice"
 	desc = "A slice of synthetic meatbread."
 	icon_state = "meatbreadslice"
@@ -116,53 +145,6 @@
 	bitesize = 2
 	plate_offset_y = -5
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
-	name = "bread"
-	desc = "Some plain old Earthen bread."
-	icon_state = "bread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	reagents_to_add = list(NUTRIMENT = 6)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/nova
-	name = "nova bread"
-	desc = "Some plain old destabilizing star bread."
-	icon_state = "novabread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/nova
-	reagents_to_add = list(NUTRIMENT = 6, HELL_RAMEN = 3, NOVAFLOUR = 1)
-	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/breadslice
-	name = "bread slice"
-	desc = "A slice of home."
-	icon_state = "breadslice"
-	bitesize = 2
-	food_flags = FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
-	name = "nova bread slice"
-	desc = "A slice of Sol."
-	icon_state = "novabreadslice"
-	plate_icon = "novacustom"
-	food_flags = FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread
-	icon = 'icons/obj/food2.dmi'
-	icon_state = "paitoast"
-	trash = 0
-	desc = "A slice of bread. Browned onto it is the image of a familiar friend."
-	food_flags = FOOD_DIPPABLE
-	reagents_to_add = list(NUTRIMENT = 5)
-	bitesize = 1
-
-/obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread/attackby(obj/item/I,mob/user,params)
-	return ..() //sorry no custom pai sandwiches
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread
 	name = "cream cheese bread"
