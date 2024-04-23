@@ -4618,13 +4618,7 @@
 	icon_state = "higashikata"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/higashikata/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 10)
-	reagents.add_reagent(SUGAR, 10)
-	reagents.add_reagent(ICE, 10, reagtemp = T0C)
-	reagents.add_reagent(WATERMELONJUICE, 5)
+	reagents_to_add = list(NUTRIMENT = 10, SUGAR = 10, ICE = list(10, T0C), WATERMELONJUICE = 5)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/sundae
@@ -4633,12 +4627,7 @@
 	icon_state = "sundae"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE //milk
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/sundae/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5)
-	reagents.add_reagent(SUGAR, 5)
-	reagents.add_reagent(ICE, 5, reagtemp = T0C)
+	reagents_to_add = list(NUTRIMENT = 5, SUGAR = 5, ICE = list(5, T0C))
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake
@@ -4649,12 +4638,7 @@
 	trash = /obj/item/weapon/reagent_containers/food/drinks/drinkingglass
 	valid_utensils = 0
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 10)
-	reagents.add_reagent(SUGAR, 5)
-	reagents.add_reagent(ICE, 5, reagtemp = T0C)
+	reagents_to_add = list(NUTRIMENT = 10, SUGAR = 5, ICE = list(5, T0C))
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/potatosalad
@@ -4664,10 +4648,7 @@
 	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/potatosalad/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 10)
+	reagents_to_add = list(NUTRIMENT = 10)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/coleslaw
@@ -4676,10 +4657,7 @@
 	icon_state = "coleslaw"
 	plate_offset_y = 1
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/coleslaw/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents_to_add = list(NUTRIMENT = 4)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/risotto
@@ -4688,11 +4666,7 @@
 	icon_state = "risotto"
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/risotto/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(WINE, 2)
+	reagents_to_add = list(NUTRIMENT = 4, WINE = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/cinnamonroll
@@ -4701,11 +4675,7 @@
 	icon_state = "cinnamon_roll"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = 1
-
-/obj/item/weapon/reagent_containers/food/snacks/cinnamonroll/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(CINNAMON,5)
+	reagents_to_add = list(NUTRIMENT = 3, CINNAMON = 5)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/cinnamonpie
@@ -4714,11 +4684,7 @@
 	icon_state = "cinnamon_pie"
 	trash = /obj/item/trash/pietin
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
-
-/obj/item/weapon/reagent_containers/food/snacks/cinnamonpie/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(CINNAMON,5)
+	reagents_to_add = list(NUTRIMENT = 6, CINNAMON = 5)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/sundaeramen
@@ -4727,11 +4693,7 @@
 	icon_state = "sundaeramen"
 	food_flags = FOOD_SWEET
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/sundaeramen/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 10)
-	reagents.add_reagent(DISCOUNT, 2)
+	reagents_to_add = list(NUTRIMENT = 10, DISCOUNT = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sweetsundaeramen
@@ -4740,45 +4702,41 @@
 	icon_state = "sweetsundaeramen"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL //uses puddi in recipe
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/sweetsundaeramen/New()
-	..()
 	bitesize = 4
-	while(reagents.total_volume<70)
-		generatecontents()
 
-/obj/item/weapon/reagent_containers/food/snacks/sweetsundaeramen/proc/generatecontents()
-	switch(pick(1,2,3,4,5,6,7,8,9,10))
-		if(1)
-			desc += " It has peppermint flavoring! But just a few drops."
-			reagents.add_reagent(ZOMBIEPOWDER, 10)
-		if(2)
-			desc += " This may not be everyone's cup of tea, but it's great, I promise."
-			reagents.add_reagent(OXYCODONE, 10)
-		if(3)
-			desc += " This has the cook's favorite ingredient -- and a lot of it!"
-			reagents.add_reagent(MINDBREAKER, 10)
-		if(4)
-			desc += " It has TONS of flavor!"
-			reagents.add_reagent(MINTTOXIN, 10)
-		if(5)
-			desc += " The recipe for this thing got lost somewhere..."
-			reagents.add_reagent(NUTRIMENT, 10)
-		if(6)
-			desc += " It has extra sweetness and a little bit of crumble!"
-			reagents.add_reagent(TRICORDRAZINE, 10)
-		if(7)
-			desc += " It may be thick, but the noodles slip around easily."
-			reagents.add_reagent(NUTRIMENT, 10)
-		if(8)
-			desc += " It has a nice crunch!"
-			reagents.add_reagent(NUTRIMENT, 10)
-		if(9)
-			desc += " Yummy, but with all the sweets, your chest starts to hurt."
-			reagents.add_reagent(NUTRIMENT, 10)
-		if(10)
-			desc += " Just a dollop of garnishes."
-			reagents.add_reagent(NUTRIMENT, 10)
+/obj/item/weapon/reagent_containers/food/snacks/sweetsundaeramen/refill()
+	while(reagents.total_volume<70)
+		switch(rand(1,10))
+			if(1)
+				desc += " It has peppermint flavoring! But just a few drops."
+				reagents.add_reagent(ZOMBIEPOWDER, 10)
+			if(2)
+				desc += " This may not be everyone's cup of tea, but it's great, I promise."
+				reagents.add_reagent(OXYCODONE, 10)
+			if(3)
+				desc += " This has the cook's favorite ingredient -- and a lot of it!"
+				reagents.add_reagent(MINDBREAKER, 10)
+			if(4)
+				desc += " It has TONS of flavor!"
+				reagents.add_reagent(MINTTOXIN, 10)
+			if(5)
+				desc += " The recipe for this thing got lost somewhere..."
+				reagents.add_reagent(NUTRIMENT, 10)
+			if(6)
+				desc += " It has extra sweetness and a little bit of crumble!"
+				reagents.add_reagent(TRICORDRAZINE, 10)
+			if(7)
+				desc += " It may be thick, but the noodles slip around easily."
+				reagents.add_reagent(NUTRIMENT, 10)
+			if(8)
+				desc += " It has a nice crunch!"
+				reagents.add_reagent(NUTRIMENT, 10)
+			if(9)
+				desc += " Yummy, but with all the sweets, your chest starts to hurt."
+				reagents.add_reagent(NUTRIMENT, 10)
+			if(10)
+				desc += " Just a dollop of garnishes."
+				reagents.add_reagent(NUTRIMENT, 10)
 
 /obj/item/weapon/reagent_containers/food/snacks/chocofrog
 	name = "chocolate frog"
@@ -4789,11 +4747,7 @@
 	food_flags = FOOD_SWEET
 	base_crumb_chance = 0
 	var/jump_cd
-
-/obj/item/weapon/reagent_containers/food/snacks/chocofrog/New()
-	..()
-	reagents.add_reagent(NUTRIMENT,2)
-	reagents.add_reagent(HYPERZINE,1)
+	reagents_to_add = list(NUTRIMENT = 2, HYPERZINE = 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/chocofrog/HasProximity(atom/movable/AM as mob|obj)
 	if(!jump_cd && isliving(AM))
@@ -4835,10 +4789,7 @@
 	icon_state = "potentham"
 	volume = 1
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/potentham/New()
-	..()
-	reagents.add_reagent(HAMSERUM, 1)
+	reagents_to_add = list(HAMSERUM = 1)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet
