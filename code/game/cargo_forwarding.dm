@@ -242,6 +242,7 @@
 					CF.weighed = TRUE
 
 /obj/machinery/crate_weigher/Uncrossed(atom/movable/A)
+	..()
 	if(istype(A,/obj/structure)) //Ideally crate types stay these
 		remove_crate()
 
