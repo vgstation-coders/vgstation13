@@ -1091,9 +1091,6 @@ var/global/floorIsLava = 0
 	if(!ticker)
 		alert("Unable to start the game as it is not set up.")
 		return
-	var/confirm = alert("Start the round RIGHT NOW?", "Start", "Yes", "Cancel")
-	if(confirm == "Cancel")
-		return
 	if(ticker.current_state == GAME_STATE_PREGAME)
 		ticker.current_state = GAME_STATE_SETTING_UP
 		log_admin("[usr.key] has started the game.")
