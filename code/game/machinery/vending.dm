@@ -3552,7 +3552,7 @@ var/global/num_vending_terminals = 1
 	moody_state = "overlay_vending_mining"
 	products = list(
 		/obj/item/toy/canary = 10,
-		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 10,
+		/obj/item/weapon/reagent_containers/food/snacks/soup/chili = 10,
 		/obj/item/clothing/mask/cigarette/cigar/havana = 5,
 		/obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey = 10,
@@ -3581,7 +3581,7 @@ var/global/num_vending_terminals = 1
 		)
 	prices = list(
 		/obj/item/toy/canary = 20,
-		/obj/item/weapon/reagent_containers/food/snacks/hotchili = 20,
+		/obj/item/weapon/reagent_containers/food/snacks/soup/chili = 20,
 		/obj/item/clothing/mask/cigarette/cigar/havana = 20,
 		/obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning = 15,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey = 15,

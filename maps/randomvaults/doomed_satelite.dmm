@@ -80,7 +80,7 @@
 /area/vault/satelite)
 "s" = (
 /obj/structure/table,
-/obj/item/weapon/reagent_containers/food/snacks/beetsoup,
+/obj/item/weapon/reagent_containers/food/snacks/soup/beet,
 /obj/item/weapon/coin/adamantine,
 /obj/item/weapon/coin/adamantine{
 	pixel_x = -4;

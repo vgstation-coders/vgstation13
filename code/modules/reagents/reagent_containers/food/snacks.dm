@@ -2188,63 +2188,7 @@
 		reagents_to_add = list(GREENTEA = 18, NUTRIMENT = 6)
 	..()
 
-/obj/item/weapon/reagent_containers/food/snacks/meatballsoup
-	name = "Meatball soup"
-	desc = "You've got balls kid, BALLS!"
-	icon_state = "meatballsoup"
-	trash = /obj/item/trash/snack_bowl
-	food_flags = FOOD_MEAT | FOOD_LIQUID
-	crumb_icon = "dribbles"
-	filling_color = "#F4BC77"
-	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
-	reagents_to_add = list(NUTRIMENT = 8, WATER = 5)
-	bitesize = 5
-
-/obj/item/weapon/reagent_containers/food/snacks/slimesoup
-	name = "slime soup"
-	desc = "If no water is available, you may substitute tears."
-	icon_state = "slimesoup"
-	food_flags = FOOD_LIQUID
-	crumb_icon = "dribbles"
-	filling_color = "#B2B2B2"
-	valid_utensils = UTENSILE_SPOON
-	reagents_to_add = list(SLIMEJELLY = 5, WATER = 10)
-	bitesize = 5
-
-/obj/item/weapon/reagent_containers/food/snacks/bloodsoup
-	name = "Tomato soup"
-	desc = "Smells like iron."
-	icon_state = "tomatosoup"
-	food_flags = FOOD_LIQUID | FOOD_ANIMAL //blood
-	crumb_icon = "dribbles"
-	filling_color = "#FF3300"
-	valid_utensils = UTENSILE_SPOON
-	reagents_to_add = list(NUTRIMENT = 2, BLOOD = 10, WATER = 5)
-	bitesize = 5
-
-/obj/item/weapon/reagent_containers/food/snacks/clownstears
-	name = "Clown's Tears"
-	desc = "Not very funny."
-	icon_state = "clownstears"
-	food_flags = FOOD_LIQUID | FOOD_SWEET
-	crumb_icon = "dribbles"
-	random_filling_colors = list("#FF0000","#FFFF00","#00CCFF","#33CC00")
-	valid_utensils = UTENSILE_SPOON
-	reagents_to_add = list(NUTRIMENT = 4, BANANA = 5, WATER = 10)
-	bitesize = 5
-
-/obj/item/weapon/reagent_containers/food/snacks/roboticiststears
-	name = "Roboticist's Tears"
-	desc = "Absolutely hilarious."
-	icon_state = "roboticiststears"
-	food_flags = FOOD_LIQUID
-	crumb_icon = "dribbles"
-	random_filling_colors = list("#5A01EF", "#4B2A7F", "#826BA7", "#573D80")
-	valid_utensils = UTENSILE_SPOON
-	reagents_to_add = list(NUTRIMENT = 60, PHAZON = 1, WATER = 5) //You're using phazon here, that's the good shit. //water turned into nutriment via phazon magic fuckery
-	bitesize = 5
-
-/obj/item/weapon/reagent_containers/food/snacks/vegetablesoup
+/obj/item/weapon/reagent_containers/food/snacks/soup
 	name = "Vegetable soup"
 	desc = "A true vegan meal." //TODO
 	icon_state = "vegetablesoup"
@@ -2256,31 +2200,61 @@
 	reagents_to_add = list(NUTRIMENT = 8, WATER = 5)
 	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/nettlesoup
+/obj/item/weapon/reagent_containers/food/snacks/soup/meatball
+	name = "Meatball soup"
+	desc = "You've got balls kid, BALLS!"
+	icon_state = "meatballsoup"
+	food_flags = FOOD_MEAT | FOOD_LIQUID
+	filling_color = "#F4BC77"
+	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
+
+/obj/item/weapon/reagent_containers/food/snacks/soup/slime
+	name = "slime soup"
+	desc = "If no water is available, you may substitute tears."
+	icon_state = "slimesoup"
+	filling_color = "#B2B2B2"
+	reagents_to_add = list(SLIMEJELLY = 5, WATER = 10)
+
+/obj/item/weapon/reagent_containers/food/snacks/soup/blood
+	name = "Tomato soup"
+	desc = "Smells like iron."
+	icon_state = "tomatosoup"
+	food_flags = FOOD_LIQUID | FOOD_ANIMAL //blood
+	filling_color = "#FF3300"
+	reagents_to_add = list(NUTRIMENT = 2, BLOOD = 10, WATER = 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/soup/clownstears
+	name = "Clown's Tears"
+	desc = "Not very funny."
+	icon_state = "clownstears"
+	food_flags = FOOD_LIQUID | FOOD_SWEET
+	random_filling_colors = list("#FF0000","#FFFF00","#00CCFF","#33CC00")
+	reagents_to_add = list(NUTRIMENT = 4, BANANA = 5, WATER = 10)
+
+/obj/item/weapon/reagent_containers/food/snacks/soup/robostears
+	name = "Roboticist's Tears"
+	desc = "Absolutely hilarious."
+	icon_state = "roboticiststears"
+	random_filling_colors = list("#5A01EF", "#4B2A7F", "#826BA7", "#573D80")
+	reagents_to_add = list(NUTRIMENT = 60, PHAZON = 1, WATER = 5) //You're using phazon here, that's the good shit. //water turned into nutriment via phazon magic fuckery
+
+/obj/item/weapon/reagent_containers/food/snacks/soup/nettle
 	name = "Nettle soup"
 	desc = "To think, the botanist would've beat you to death with one of these."
 	icon_state = "nettlesoup"
-	trash = /obj/item/trash/snack_bowl
-	food_flags = FOOD_LIQUID
-	crumb_icon = "dribbles"
 	filling_color = "#C1E212"
-	valid_utensils = UTENSILE_SPOON
 	reagents_to_add = list(NUTRIMENT = 8, WATER = 5, TRICORDRAZINE = 5)
-	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/mysterysoup
+/obj/item/weapon/reagent_containers/food/snacks/soup/mystery
 	name = "Mystery soup"
 	desc = "The mystery is, why aren't you eating it?"
 	icon_state = "mysterysoup"
-	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_LIQUID | FOOD_ANIMAL | FOOD_LACTOSE
-	crumb_icon = "dribbles"
 	filling_color = "#97479B"
-	valid_utensils = UTENSILE_SPOON
-	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/mysterysoup/refill()
-	switch(rand(1,10))
+/obj/item/weapon/reagent_containers/food/snacks/soup/mystery/refill()
+	var/result = rand(1,10)
+	switch(result)
 		if(1)
 			reagents_to_add = list(NUTRIMENT = 6, CAPSAICIN = 3, TOMATOJUICE = 2)
 		if(2)
@@ -2302,97 +2276,67 @@
 			reagents_to_add = list(NUTRIMENT = 5, TOMATOJUICE = 10)
 		if(10)
 			reagents_to_add = list(NUTRIMENT = 6, TOMATOJUICE = 5, IMIDAZOLINE = 5)
+	if(result != 6)
+		food_flags = initial(food_flags)
 	..()
 
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeysoup
+/obj/item/weapon/reagent_containers/food/snacks/soup/monkey
 	name = "Monkey Soup"
 	desc = "Uma delicia."
 	icon_state = "monkeysoup"
 	trash = /obj/item/trash/monkey_bowl
-	food_flags = FOOD_LIQUID
-	crumb_icon = "dribbles"
 	filling_color = "#D7DE77"
-	valid_utensils = UTENSILE_SPOON
 	reagents_to_add = list(WATER = 5, NUTRIMENT = 8, VINEGAR = 4)
-	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/wishsoup
+/obj/item/weapon/reagent_containers/food/snacks/soup/wish
 	name = "Wish Soup"
 	desc = "I wish this was soup."
 	icon_state = "wishsoup"
-	trash = /obj/item/trash/snack_bowl
-	food_flags = FOOD_LIQUID
-	crumb_icon = "dribbles"
 	filling_color = "#DEF7F5"
-	valid_utensils = UTENSILE_SPOON
 	reagents_to_add = list(WATER = 10)
-	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/wishsoup/New()
+/obj/item/weapon/reagent_containers/food/snacks/soup/wish/New()
 	if(prob(25))
 		desc = "A wish come true!"
 		reagents_to_add += list(NUTRIMENT, 8)
 	..()
 
-/obj/item/weapon/reagent_containers/food/snacks/avocadosoup
+/obj/item/weapon/reagent_containers/food/snacks/soup/avocado
 	name = "Avocado Soup"
 	desc = "May be served either hot or cold."
 	icon_state = "avocadosoup"
-	trash = /obj/item/trash/snack_bowl
-	food_flags = FOOD_LIQUID
-	crumb_icon = "dribbles"
 	filling_color = "#CBD15B"
-	valid_utensils = UTENSILE_SPOON
 	reagents_to_add = list(NUTRIMENT = 8, LIMEJUICE = 5)
-	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/silicatesoup
+/obj/item/weapon/reagent_containers/food/snacks/soup/silicate
 	name = "silicate soup"
 	desc = "It's like eating sand in liquid form."
 	icon_state = "silicatesoup"
-	food_flags = FOOD_LIQUID
-	crumb_icon = "dribbles"
 	filling_color = "#C5C5FF"
-	valid_utensils = UTENSILE_SPOON
 	reagents_to_add = list(WATER = 10, NUTRIMENT = 6, SILICATE = 5)
-	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/hotchili
+/obj/item/weapon/reagent_containers/food/snacks/soup/chili
 	name = "Hot Chili"
 	desc = "A five alarm Texan Chili!"
 	icon_state = "hotchili"
-	trash = /obj/item/trash/snack_bowl
-	crumb_icon = "dribbles"
 	filling_color = "#E23D12"
 	food_flags = FOOD_LIQUID | FOOD_MEAT
-	valid_utensils = UTENSILE_SPOON
 	reagents_to_add = list(NUTRIMENT = 6, CAPSAICIN = 3, TOMATOJUICE = 2)
-	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/coldchili
+/obj/item/weapon/reagent_containers/food/snacks/soup/chili/cold
 	name = "Cold Chili"
 	desc = "This slush is barely a liquid!"
 	icon_state = "coldchili"
-	trash = /obj/item/trash/snack_bowl
-	crumb_icon = "dribbles"
 	filling_color = "#4375E8"
-	food_flags = FOOD_LIQUID | FOOD_MEAT
-	valid_utensils = UTENSILE_SPOON
 	reagents_to_add = list(NUTRIMENT = 6, FROSTOIL = 3, TOMATOJUICE = 2)
-	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/plasmastew
+/obj/item/weapon/reagent_containers/food/snacks/soup/plasmastew
 	name = "Plasma Stew"
 	desc = "Plasma free and flavour full."
 	icon_state = "plasmastew"
-	trash = /obj/item/trash/snack_bowl
-	crumb_icon = "dribbles"
 	filling_color = "#CE37BA"
 	food_flags = FOOD_LIQUID | FOOD_MEAT
-	valid_utensils = UTENSILE_SPOON
 	reagents_to_add = list(NUTRIMENT = 12, TOMATOJUICE = 2)
-	bitesize = 5
 
 /* No more of this
 /obj/item/weapon/reagent_containers/food/snacks/telebacon
@@ -2522,15 +2466,11 @@
 	if(prob(10))	//Eating this is just an unpleasant experience, so a player might get a negative flavor message. Has no effect besides rp value. I hope ayy wardens feed these to prisoners as a punishment :)
 		to_chat(user, "<span class='warning'>The sandwich is soggy and tastes too salty to be appetizing...</span>")
 
-/obj/item/weapon/reagent_containers/food/snacks/tomatosoup
+/obj/item/weapon/reagent_containers/food/snacks/soup/tomato
 	name = "Tomato Soup"
 	desc = "Drinking this feels like being a vampire! A tomato vampire..."
 	icon_state = "tomatosoup"
-	trash = /obj/item/trash/snack_bowl
-	food_flags = FOOD_LIQUID
-	valid_utensils = UTENSILE_SPOON
 	reagents_to_add = list(NUTRIMENT = 5, TOMATO_SOUP = 10)
-	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/rofflewaffles
 	name = "Roffle Waffles"
@@ -2598,14 +2538,10 @@
 /obj/item/weapon/reagent_containers/food/snacks/burger/jelly/cherry
 	reagents_to_add = list(NUTRIMENT = 5, CHERRYJELLY = 5)
 
-/obj/item/weapon/reagent_containers/food/snacks/milosoup
+/obj/item/weapon/reagent_containers/food/snacks/soup/milo
 	name = "Milosoup"
 	desc = "The universes best soup! Yum!!!"
 	icon_state = "milosoup"
-	trash = /obj/item/trash/snack_bowl
-	food_flags = FOOD_LIQUID
-	valid_utensils = UTENSILE_SPOON
-	reagents_to_add = list(NUTRIMENT = 8, WATER = 5)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/stewedsoymeat
@@ -2875,11 +2811,10 @@
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/homemade/safe
 	safeforfat = TRUE
 
-/obj/item/weapon/reagent_containers/food/snacks/mushroomsoup
+/obj/item/weapon/reagent_containers/food/snacks/soup/mushroom
 	name = "chanterelle soup"
 	desc = "A delicious and hearty mushroom soup."
 	icon_state = "mushroomsoup"
-	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 3
@@ -2909,19 +2844,15 @@
 	reagents_to_add = list(NUTRIMENT = 5)
 	bitesize = 1
 
-/obj/item/weapon/reagent_containers/food/snacks/beetsoup
+/obj/item/weapon/reagent_containers/food/snacks/soup/beet
 	name = "beet soup"
 	desc = "Wait, how do you spell it again..?"
 	icon_state = "beetsoup"
-	trash = /obj/item/trash/snack_bowl
-	food_flags = FOOD_LIQUID
-	crumb_icon = "dribbles"
 	filling_color = "#E00000"
-	valid_utensils = UTENSILE_SPOON
 	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/beetsoup/New()
+/obj/item/weapon/reagent_containers/food/snacks/soup/beet/New()
 	..()
 	eatverb = pick("slurp","sip","suck","inhale",DRINK)
 	name = pick("borsch","bortsch","borstch","borsh","borshch","borscht")
@@ -5188,13 +5119,12 @@
 	..()
 	set_light(2)
 
-/obj/item/weapon/reagent_containers/food/snacks/primordialsoup
+/obj/item/weapon/reagent_containers/food/snacks/soup/primordial
 	name = "primordial soup"
 	desc = "From a soup just like this, a sentient race could one day emerge. Better eat it to be safe."
 	icon_state = "primordialsoup"
 	bitesize = 2
 	food_flags = FOOD_LIQUID | FOOD_ANIMAL //blood is animal sourced
-	crumb_icon = "dribbles"
 	filling_color = "#720D00"
 	reagents_to_add = list(NUTRIMENT = 8)
 
@@ -6772,39 +6702,35 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 
 /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/New()
 	if(prob(30))
-		reagents_to_add += list(SALTWATER = 3) //the best non-karm emetic we have
+		reagents_to_add = list(NUTRIMENT = 6, ROACHSHELL = 5, SALTWATER = 3) //the best non-karm emetic we have
 		desc = "Legs wriggling, bug juices oozing out and that rotten smell... Oh god, you're gonna THR-"
 	..()
 
-/obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/deluxe
 	name = "deluxe gunk burger"
 	desc = "GunkCo's latest innovation! You won't guess the special ingredient!"
 	icon_state = "deluxebugburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
 	reagents_to_add = list(NUTRIMENT = 12, ROACHSHELL = 10)
-	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger/New()
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/deluxe/New()
 	if(prob(30))
-		reagents_to_add += list(SALTWATER = 3) //the best non-karm emetic we have
+		reagents_to_add = list(NUTRIMENT = 12, ROACHSHELL = 10, SALTWATER = 3) //the best non-karm emetic we have
 		desc = "You can't comprehend how much I regret biting into this thing. The disgusting texture, burning juices and terrible taste will never leave my mind."
 	..()
 
-/obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/super
 	name = "Super Gunk Burger"
 	desc = "The Cockroach King! Or matriarch actually. You can't even fathom eating that much cockroach."
 	icon_state = "supergunkburger"
 	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
-	base_crumb_chance = 20
 	skitterchance = 40
 	skitterdelay = 60 //takes longer for super gunkburgers to walk and they walk less, muh weight or something
 	reagents_to_add = list(NUTRIMENT = 40, ROACHSHELL = 15)
 	bitesize = 10
 
-/obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger/New()
+/obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/super/New()
 	if(prob(30))
-		reagents_to_add += list(SALTWATER = 3) //the best non-karm emetic we have
+		reagents_to_add = list(NUTRIMENT = 40, ROACHSHELL = 15, SALTWATER = 3) //the best non-karm emetic we have
 		desc = "I have tasted upon all the universe has to hold of gunk, and even the ambrosias and blingpizzas must ever afterward be poison to me."
 	..()
 
@@ -6846,25 +6772,22 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		unpopped = max(0, unpopped-3) //max 3 roaches per roach salad
 		new /mob/living/simple_animal/cockroach(get_turf(src))
 
-/obj/item/weapon/reagent_containers/food/snacks/gunksoup
+/obj/item/weapon/reagent_containers/food/snacks/soup/gunk
 	name = "Gunk Soup"
 	desc = "Smells like a garbage can."
 	icon_state = "gunksoup"
-	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_MEAT | FOOD_LIQUID
-	crumb_icon = "dribbles"
 	filling_color = "#6D4930"
 	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
 	reagents_to_add = list(NUTRIMENT = 8, ROACHSHELL = 5, WATER = 5)
-	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/gunksoup/embassy
+/obj/item/weapon/reagent_containers/food/snacks/soup/gunk/embassy
 	name = "Gunk Soup Embassy"
 	desc = "Space Turkey's finest politicians are sent to this elite GunkCo facility."
 	icon_state = "gunksoup_embassy_2" //here so it isn't invisible on nofruit pie rolls, gets overwritten on new()
 	reagents_to_add = list(NUTRIMENT = 10, ROACHSHELL = 8, WATER = 5) //we lobbied for extra nutriment for you! no roaches were harmed this time, it's all exoskeleton flakes
 
-/obj/item/weapon/reagent_containers/food/snacks/gunksoup/embassy/New()
+/obj/item/weapon/reagent_containers/food/snacks/soup/gunk/embassy/New()
 	..()
 	if(prob(50))  //two flag waving styles
 		icon_state = "gunksoup_embassy_1"
@@ -6873,7 +6796,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	processing_objects += src
 	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/gunksoup/embassy/process()
+/obj/item/weapon/reagent_containers/food/snacks/soup/gunk/embassy/process()
 	timer += 1
 	if(prob(20) && timer >= 10)
 		timer = 0
@@ -6882,7 +6805,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		else
 			icon_state = "gunksoup_embassy_2"
 
-/obj/item/weapon/reagent_containers/food/snacks/gunksoup/embassy/Destroy()
+/obj/item/weapon/reagent_containers/food/snacks/soup/gunk/embassy/Destroy()
 	processing_objects -= src
 	new /mob/living/simple_animal/cockroach/turkish(get_turf(src))
 	new /mob/living/simple_animal/cockroach/turkish(get_turf(src))

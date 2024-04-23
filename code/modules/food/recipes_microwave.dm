@@ -863,7 +863,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/chili,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/hotchili
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/chili
 
 /datum/recipe/coldchili
 	items = list(
@@ -871,7 +871,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/coldchili
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/chili/cold
 
 /datum/recipe/plasmastew
 	items = list(
@@ -879,10 +879,10 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/plasmastew
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/plasmastew
 
 /datum/recipe/plasmastew/make_food(var/obj/container, var/mob/user)
-	var/obj/item/weapon/reagent_containers/food/snacks/plasmastew/being_cooked = ..(container)
+	var/obj/item/weapon/reagent_containers/food/snacks/soup/plasmastew/being_cooked = ..(container)
 	being_cooked.reagents.del_reagent(PLASMA)
 	return being_cooked
 
@@ -1388,7 +1388,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/meatballsoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/meatball
 
 /datum/recipe/vegetablesoup
 	reagents = list(WATER = 10)
@@ -1398,7 +1398,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/eggplant,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/vegetablesoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup
 
 /datum/recipe/nettlesoup
 	reagents = list(WATER = 10)
@@ -1407,18 +1407,18 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/nettlesoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/nettle
 
 /datum/recipe/monkeysoup
 	reagents = list(WATER = 10, VINEGAR = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/monkeycube
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/monkeysoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/monkey
 
 /datum/recipe/wishsoup
 	reagents = list(WATER = 20)
-	result = /obj/item/weapon/reagent_containers/food/snacks/wishsoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/wish
 
 /datum/recipe/stew
 	reagents = list(WATER = 10)
@@ -1440,7 +1440,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/tofu,
 		/obj/item/weapon/reagent_containers/food/snacks/tofu,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/milosoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/milo
 
 /datum/recipe/stewedsoymeat
 	items = list(
@@ -1457,7 +1457,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/tomatosoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/tomato
 
 /datum/recipe/bloodsoup
 	reagents = list(BLOOD = 10)
@@ -1465,12 +1465,12 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/bloodtomato,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/bloodtomato,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/bloodsoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/blood
 
 /datum/recipe/slimesoup
 	reagents = list(WATER = 10, SLIMEJELLY = 5)
 	items = list()
-	result = /obj/item/weapon/reagent_containers/food/snacks/slimesoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/slime
 
 /datum/recipe/clownstears
 	reagents = list(WATER = 10)
@@ -1478,7 +1478,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
 		/obj/item/stack/sheet/mineral/clown,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/clownstears
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/clownstears
 
 /datum/recipe/roboticiststears
 	reagents = list(WATER = 10)
@@ -1486,12 +1486,12 @@
 		/obj/item/robot_parts/head,
 		/obj/item/stack/sheet/mineral/phazon,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/roboticiststears
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/robostears
 
 /datum/recipe/mushroomsoup
 	reagents = list(WATER = 5, MILK = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chanterelle)
-	result = /obj/item/weapon/reagent_containers/food/snacks/mushroomsoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/mushroom
 
 /datum/recipe/beetsoup
 	reagents = list(WATER = 10)
@@ -1499,7 +1499,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/beetsoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/beet
 
 /datum/recipe/mysterysoup
 	reagents = list(WATER = 10)
@@ -1509,7 +1509,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/mysterysoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/mystery
 
 /datum/recipe/moonmysterysoup //Alternate recipe using moon cheese
 	reagents = list(WATER = 10)
@@ -1519,7 +1519,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/mysterysoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/mystery
 
 /datum/recipe/primordialsoup
 	reagents = list(WATER = 10)
@@ -1529,7 +1529,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/bloodtomato
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/primordialsoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/primordial
 
 /datum/recipe/avocadosoup
 	reagents = list(LIMEJUICE = 5, CREAM = 5)
@@ -1540,13 +1540,13 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/avocadosoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/avocado
 
 /datum/recipe/silicatesoup
 	reagents = list(WATER = 10)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus)
-	result = /obj/item/weapon/reagent_containers/food/snacks/silicatesoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/silicate
 
 /datum/recipe/mothershipbroth
 	reagents = list(ZAMMILD = 5, CREAM = 5)
@@ -3647,7 +3647,7 @@
 	reagents = list(FLOUR = 5)
 	priority = 1
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/roach/big)
-	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger
+	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/deluxe
 
 /datum/recipe/supergunkburger
 	reagents = list(GUNKS = 10, FLOUR = 15)
@@ -3667,7 +3667,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
+	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/super
 
 /datum/recipe/moonsupergunkburger
 	reagents = list(GUNKS = 10, FLOUR = 15)
@@ -3687,7 +3687,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
+	result = /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/super
 
 /datum/recipe/hopcorn
 	items = list(
@@ -3731,7 +3731,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/gunksoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/gunk
 
 /datum/recipe/gunksoupcricket
 	reagents = list(WATER = 10, GUNKS = 5)
@@ -3739,7 +3739,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/cricket,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/gunksoup
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/gunk
 
 /datum/recipe/gunksoupembassy
 	reagents = list(WATER = 10, GUNKS = 5)
@@ -3749,7 +3749,7 @@
 		/obj/item/toy/crayon/red,
 		/obj/item/stack/sheet/cardboard
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/gunksoup/embassy
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/gunk/embassy
 
 /datum/recipe/gunkbread
 	reagents = list(FLOUR = 15, GUNKS = 5)

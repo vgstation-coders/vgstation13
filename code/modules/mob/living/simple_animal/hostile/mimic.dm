@@ -390,7 +390,7 @@ var/global/list/item_mimic_disguises = list(
 	"lowhealth" = list(/obj/item/trash/cigbutt, /obj/item/weapon/shard, /obj/item/toy/blink, /obj/item/toy/ammo/crossbow, /obj/item/ammo_casing/a666), //Small, hard-to-notice items to turn into when at low health
 
 	//All foods except for customizable stuff
-	"kitchen" = (existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) - typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable) - /obj/item/weapon/reagent_containers/food/snacks/slimesoup - typesof(/obj/item/weapon/reagent_containers/food/snacks/sweet)),
+	"kitchen" = (existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) - typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable) - /obj/item/weapon/reagent_containers/food/snacks/soup/slime - typesof(/obj/item/weapon/reagent_containers/food/snacks/sweet)),
 
 	"library" = typesof(/obj/item/weapon/book), //All default books
 

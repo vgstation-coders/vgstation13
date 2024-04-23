@@ -570,7 +570,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	to_chat(user, "Its ID tag is \"[id_tag]\", and its ID number is \"[id_num]\".")
 
 /mob/living/simple_animal/robot/food_samples/New()
-	var/list/all_food_types = (existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) - typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable) - /obj/item/weapon/reagent_containers/food/snacks/slimesoup - typesof(/obj/item/weapon/reagent_containers/food/snacks/sweet))
+	var/list/all_food_types = (existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) - typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable) - /obj/item/weapon/reagent_containers/food/snacks/soup/slime - typesof(/obj/item/weapon/reagent_containers/food/snacks/sweet))
 	food_type = pick(all_food_types)
 
 	var/name_preffix = "[random_name(pick(MALE, FEMALE), (prob(30) ? "vox" : "human"))]'s "
