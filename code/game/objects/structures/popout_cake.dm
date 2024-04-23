@@ -89,7 +89,7 @@
 /obj/structure/popout_cake/proc/drop_slice()
 	slices_amount--
 
-	return new /obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full(get_turf(src))
+	return new /obj/item/weapon/reagent_containers/food/snacks/cakeslice/full(get_turf(src))
 
 /obj/structure/popout_cake/proc/check_slices()
 	if(slices_amount <= 0)

@@ -957,7 +957,7 @@
 /area/vault/research)
 "cK" = (
 /obj/effect/decal/cleanable/cobweb2,
-/obj/item/weapon/reagent_containers/food/snacks/braincakeslice,
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/brain,
 /turf/simulated/floor/shuttle/brig,
 /area/vault/research)
 "cL" = (

@@ -939,7 +939,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/carrotcake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/carrot
 
 /datum/recipe/cheesecake
 	reagents = list(MILK = 5, FLOUR = 15)
@@ -950,7 +950,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesecake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/cheese
 
 /datum/recipe/mooncheesecake //Alternate recipe using moon cheese
 	reagents = list(MILK = 5, FLOUR = 15)
@@ -961,7 +961,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesecake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/cheese
 
 /datum/recipe/plaincake
 	reagents = list(MILK = 5, FLOUR = 15)
@@ -970,7 +970,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/plaincake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake
 
 /datum/recipe/braincake
 	reagents = list(MILK = 5, FLOUR = 15)
@@ -980,7 +980,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/organ/internal/brain
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/braincake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/brain
 
 /datum/recipe/birthdaycake
 	reagents = list(MILK = 5, FLOUR = 15)

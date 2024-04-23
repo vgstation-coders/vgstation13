@@ -3010,76 +3010,18 @@
 	plate_offset_y = -5
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/carrotcake
-	name = "carrot cake"
-	desc = "A favorite desert of a certain wascally wabbit. Not a lie."
-	icon_state = "carrotcake"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/carrotcakeslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
-	reagents_to_add = list(NUTRIMENT = 25, IMIDAZOLINE = 10)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/carrotcakeslice
-	name = "carrot cake slice"
-	desc = "Carrotty slice of carrot cake, carrots are good for your eyes! Also not a lie."
-	icon_state = "carrotcake_slice"
-	bitesize = 2
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
-	plate_offset_y = -1
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/braincake
-	name = "brain cake"
-	desc = "A squishy cake-thing."
-	icon_state = "braincake"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/braincakeslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
-	reagents_to_add = list(NUTRIMENT = 25, ALKYSINE = 10)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/braincakeslice
-	name = "brain cake slice"
-	desc = "Lemme tell you something about prions. THEY'RE DELICIOUS."
-	icon_state = "braincakeslice"
-	bitesize = 2
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE //meat, milk, eggs
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesecake
-	name = "cheese cake"
-	desc = "DANGEROUSLY cheesy."
-	icon_state = "cheesecake"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cheesecakeslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE //cheese
-	reagents_to_add = list(NUTRIMENT = 25)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/cheesecakeslice
-	name = "cheese cake slice"
-	desc = "A slice of pure cheestisfaction."
-	icon_state = "cheesecake_slice"
-	bitesize = 2
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/plaincake
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake
 	name = "vanilla cake"
 	desc = "A plain cake, not a lie."
 	icon_state = "plaincake"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/plaincakeslice
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice
 	slices_num = 5
 	storage_slots = 3
 	w_class = W_CLASS_MEDIUM
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE //milk and eggs
 	reagents_to_add = list(NUTRIMENT = 20)
 
-/obj/item/weapon/reagent_containers/food/snacks/plaincakeslice
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice
 	name = "vanilla cake slice"
 	desc = "Just a slice of cake, it is enough for everyone."
 	icon_state = "plaincake_slice"
@@ -3087,8 +3029,48 @@
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -1
 
-/obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/full
 	reagents_to_add = list(NUTRIMENT = 4)
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/carrot
+	name = "carrot cake"
+	desc = "A favorite desert of a certain wascally wabbit. Not a lie."
+	icon_state = "carrotcake"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/carrot
+	reagents_to_add = list(NUTRIMENT = 25, IMIDAZOLINE = 10)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/carrot
+	name = "carrot cake slice"
+	desc = "Carrotty slice of carrot cake, carrots are good for your eyes! Also not a lie."
+	icon_state = "carrotcake_slice"
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/brain
+	name = "brain cake"
+	desc = "A squishy cake-thing."
+	icon_state = "braincake"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/brain
+	reagents_to_add = list(NUTRIMENT = 25, ALKYSINE = 10)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/brain
+	name = "brain cake slice"
+	desc = "Lemme tell you something about prions. THEY'RE DELICIOUS."
+	icon_state = "braincakeslice"
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/cheese
+	name = "cheese cake"
+	desc = "DANGEROUSLY cheesy."
+	icon_state = "cheesecake"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/cheese
+	reagents_to_add = list(NUTRIMENT = 25)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/cheese
+	name = "cheese cake slice"
+	desc = "A slice of pure cheestisfaction."
+	icon_state = "cheesecake_slice"
+	plate_offset_y = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/orangecake
 	name = "orange cake"

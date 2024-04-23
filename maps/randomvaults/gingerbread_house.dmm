@@ -145,7 +145,7 @@
 	pixel_x = -5;
 	pixel_y = -3
 	},
-/obj/item/weapon/reagent_containers/food/snacks/braincakeslice{
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/brain{
 	pixel_x = 6;
 	pixel_y = 10
 	},
@@ -1265,7 +1265,7 @@
 /obj/item/weapon/tray{
 	pixel_y = 6
 	},
-/obj/item/weapon/reagent_containers/food/snacks/braincakeslice{
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/brain{
 	pixel_y = 8
 	},
 /obj/item/weapon/reagent_containers/food/snacks/human/kabob,

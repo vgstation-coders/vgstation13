@@ -497,9 +497,9 @@
 /area/vault/prison)
 "bu" = (
 /obj/structure/table/reinforced,
-/obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full,
-/obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full,
-/obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full,
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/full,
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/full,
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/full,
 /turf/simulated/floor{
 	icon_state = "pattern_red"
 	},
