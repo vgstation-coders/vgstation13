@@ -1847,7 +1847,7 @@
 /area/awaymission/academy/classrooms)
 "fo" = (
 /obj/structure/table,
-/obj/item/weapon/reagent_containers/food/snacks/spellburger,
+/obj/item/weapon/reagent_containers/food/snacks/burger/spell,
 /obj/machinery/light{
 	dir = 4
 	},

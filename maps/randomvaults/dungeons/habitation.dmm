@@ -1122,9 +1122,9 @@
 /obj/item/weapon/reagent_containers/food/snacks/nymphsperil,
 /obj/item/weapon/reagent_containers/food/snacks/dionaroast,
 /obj/item/weapon/reagent_containers/food/snacks/dionaroast,
-/obj/item/weapon/reagent_containers/food/snacks/polypburger,
-/obj/item/weapon/reagent_containers/food/snacks/polypburger,
-/obj/item/weapon/reagent_containers/food/snacks/polypburger,
+/obj/item/weapon/reagent_containers/food/snacks/burger/polyp,
+/obj/item/weapon/reagent_containers/food/snacks/burger/polyp,
+/obj/item/weapon/reagent_containers/food/snacks/burger/polyp,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/administration)
 "jJ" = (
@@ -4328,7 +4328,7 @@
 "LA" = (
 /obj/machinery/light/he/broken,
 /obj/structure/table,
-/obj/item/weapon/reagent_containers/food/snacks/polypburger,
+/obj/item/weapon/reagent_containers/food/snacks/burger/polyp,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "LB" = (

@@ -1988,19 +1988,19 @@
 	},
 /area/vault/podstation/interior)
 "Sc" = (
-/obj/item/weapon/reagent_containers/food/snacks/fishburger,
-/obj/item/weapon/reagent_containers/food/snacks/xenoburger,
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger,
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger,
+/obj/item/weapon/reagent_containers/food/snacks/burger/fish,
+/obj/item/weapon/reagent_containers/food/snacks/burger/xeno,
+/obj/item/weapon/reagent_containers/food/snacks/burger,
+/obj/item/weapon/reagent_containers/food/snacks/burger,
 /obj/item/weapon/reagent_containers/food/snacks/fishandchips,
 /obj/item/weapon/reagent_containers/food/snacks/hotdog,
 /obj/item/weapon/reagent_containers/food/snacks/hotdog,
 /obj/structure/closet/crate/freezer,
-/obj/item/weapon/reagent_containers/food/snacks/avocadoburger,
+/obj/item/weapon/reagent_containers/food/snacks/burger/avocado,
 /obj/item/weapon/storage/fancy/food_box/chicken_bucket,
 /obj/item/weapon/reagent_containers/food/snacks/chicken_tenders,
-/obj/item/weapon/reagent_containers/food/snacks/bearburger,
-/obj/item/weapon/reagent_containers/food/snacks/chickenburger,
+/obj/item/weapon/reagent_containers/food/snacks/burger/bear,
+/obj/item/weapon/reagent_containers/food/snacks/burger/chicken,
 /obj/machinery/camera{
 	dir = 8;
 	id_tag = "podstationcameras";

@@ -321,7 +321,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 
 /obj/item/weapon/storage/bag/food/menu1
 	items_to_spawn = list(
-		/obj/item/weapon/reagent_containers/food/snacks/monkeyburger,//6 nutriments
+		/obj/item/weapon/reagent_containers/food/snacks/burger,//6 nutriments
 		/obj/item/weapon/reagent_containers/food/snacks/fries/cone,//4 nutriments
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,//-3 drowsy
 		/obj/item/weapon/reagent_containers/food/condiment/small/ketchup,
@@ -331,7 +331,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 
 /obj/item/weapon/storage/bag/food/menu2
 	items_to_spawn = list(
-		/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger,//14 nutriments
+		/obj/item/weapon/reagent_containers/food/snacks/burger/bigbite,//14 nutriments
 		/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet,//6 nutriments
 		/obj/item/weapon/kitchen/utensil/fork/plastic,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind,//-7 drowsy, -1 sleepy

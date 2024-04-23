@@ -41,7 +41,7 @@
 			sauce = 1
 		if (3)
 			requested = list(
-				/obj/item/weapon/reagent_containers/food/snacks/superbiteburger = rand(1,3)
+				/obj/item/weapon/reagent_containers/food/snacks/burger/superbite = rand(1,3)
 			)
 			worth = 300*requested[requested[1]]
 			sauce = 2

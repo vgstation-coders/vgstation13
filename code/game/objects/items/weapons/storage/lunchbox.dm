@@ -7,10 +7,10 @@
 								/obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry,
 								/obj/item/weapon/reagent_containers/food/snacks/pbj,
                                 /obj/item/weapon/reagent_containers/food/snacks/meatbreadslice,
-								/obj/item/weapon/reagent_containers/food/snacks/monkeyburger,
-                               	/obj/item/weapon/reagent_containers/food/snacks/fishburger,
-								/obj/item/weapon/reagent_containers/food/snacks/chickenburger,
-								/obj/item/weapon/reagent_containers/food/snacks/veggieburger,
+								/obj/item/weapon/reagent_containers/food/snacks/burger,
+                               	/obj/item/weapon/reagent_containers/food/snacks/burger/fish,
+								/obj/item/weapon/reagent_containers/food/snacks/burger/chicken,
+								/obj/item/weapon/reagent_containers/food/snacks/burger/veggie,
 								/obj/item/weapon/reagent_containers/food/snacks/hotdog,
                                 /obj/item/weapon/reagent_containers/food/snacks/margheritaslice,
                                 /obj/item/weapon/reagent_containers/food/snacks/meatpizzaslice,
@@ -110,12 +110,12 @@
 	var/entree_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/toastedsandwich,
                                 /obj/item/weapon/reagent_containers/food/snacks/notasandwich,
 								/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
-								/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger,
-								/obj/item/weapon/reagent_containers/food/snacks/bearburger,
-								/obj/item/weapon/reagent_containers/food/snacks/avocadoburger,
-                               	/obj/item/weapon/reagent_containers/food/snacks/fishburger,
-								/obj/item/weapon/reagent_containers/food/snacks/chickenburger,
-								/obj/item/weapon/reagent_containers/food/snacks/veggieburger,
+								/obj/item/weapon/reagent_containers/food/snacks/burger/bigbite,
+								/obj/item/weapon/reagent_containers/food/snacks/burger/bear,
+								/obj/item/weapon/reagent_containers/food/snacks/burger/avocado,
+                               	/obj/item/weapon/reagent_containers/food/snacks/burger/fish,
+								/obj/item/weapon/reagent_containers/food/snacks/burger/chicken,
+								/obj/item/weapon/reagent_containers/food/snacks/burger/veggie,
 								/obj/item/weapon/reagent_containers/food/snacks/cubancarp,
 								/obj/item/weapon/reagent_containers/food/snacks/fishandchips,
 								/obj/item/weapon/reagent_containers/food/snacks/turkeyslice,
@@ -227,7 +227,7 @@
 // -----------------------------
 /obj/item/weapon/storage/lunchbox/discount/proc/pickfood_discount()
 	var/entree_discount = pick(list(/obj/item/weapon/reagent_containers/food/snacks/discountburrito,
-								/obj/item/weapon/reagent_containers/food/snacks/discountburger,
+								/obj/item/weapon/reagent_containers/food/snacks/burger/discount,
 								/obj/item/weapon/reagent_containers/food/snacks/pie/discount,
 								/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan,
 								/obj/item/weapon/reagent_containers/food/snacks/sausage/dan))
@@ -263,8 +263,8 @@
 //          LUNCH FOOD LISTS (ZAM)
 // -----------------------------
 /obj/item/weapon/storage/lunchbox/metal/zam/proc/pickfood_zam()
-	var/entree_zam = pick(list(/obj/item/weapon/reagent_containers/food/snacks/polypburger,
-								/obj/item/weapon/reagent_containers/food/snacks/xenoburger,
+	var/entree_zam = pick(list(/obj/item/weapon/reagent_containers/food/snacks/burger/polyp,
+								/obj/item/weapon/reagent_containers/food/snacks/burger/xeno,
 								/obj/item/weapon/reagent_containers/food/snacks/blethernoodlesoup/wrapped,
 								/obj/item/weapon/reagent_containers/food/snacks/cheesybroth,
 								/obj/item/weapon/reagent_containers/food/snacks/swimmingcarp,

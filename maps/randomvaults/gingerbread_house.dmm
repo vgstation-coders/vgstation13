@@ -608,11 +608,11 @@
 /area/vault/gingerbread_house)
 "vF" = (
 /obj/structure/table,
-/obj/item/weapon/reagent_containers/food/snacks/spellburger{
+/obj/item/weapon/reagent_containers/food/snacks/burger/spell{
 	pixel_x = 7;
 	pixel_y = 5
 	},
-/obj/item/weapon/reagent_containers/food/snacks/mimeburger{
+/obj/item/weapon/reagent_containers/food/snacks/burger/mime{
 	pixel_x = -7
 	},
 /turf/simulated/floor/mineral/gingerbread,
@@ -874,11 +874,11 @@
 /area/vault/gingerbread_house)
 "Jd" = (
 /obj/structure/table,
-/obj/item/weapon/reagent_containers/food/snacks/clownburger,
+/obj/item/weapon/reagent_containers/food/snacks/burger/clown,
 /turf/simulated/floor/mineral/gingerbread,
 /area/vault/gingerbread_house)
 "Ji" = (
-/obj/item/weapon/reagent_containers/food/snacks/jellyburger/slime,
+/obj/item/weapon/reagent_containers/food/snacks/burger/jelly/slime,
 /obj/structure/table/reinforced,
 /turf/simulated/floor/mineral/gingerbread_tile,
 /area/vault/gingerbread_house)

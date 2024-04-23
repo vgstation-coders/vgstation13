@@ -806,7 +806,7 @@
 //	the bites. No more contained reagents = no more bites.
 
 //Here is an example of the new formatting for anyone who wants to add more food items.
-///obj/item/weapon/reagent_containers/food/snacks/xenoburger			//Identification path for the object.
+///obj/item/weapon/reagent_containers/food/snacks/burger/xeno			//Identification path for the object.
 //	name = "Xenoburger"													//Name that displays in the UI.
 //	desc = "Smells caustic. Tastes like heresy."						//Duh
 //	icon_state = "xburger"												//Refers to an icon in food.dmi
@@ -1308,23 +1308,6 @@
 		wrapped = 0
 		unwrapping = FALSE
 
-/obj/item/weapon/reagent_containers/food/snacks/brainburger
-	name = "brainburger"
-	desc = "A strange looking burger. It looks almost sentient."
-	icon_state = "brainburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
-	reagents_to_add = list(NUTRIMENT = 6, ALKYSINE = 6)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/ghostburger
-	name = "ghost burger"
-	desc = "Spooky! It doesn't look very filling."
-	icon_state = "ghostburger"
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 2)
-	bitesize = 2
-
 /obj/item/weapon/reagent_containers/food/snacks/human
 	name = "-burger"
 	desc = "A bloody burger."
@@ -1334,7 +1317,7 @@
 	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger
+/obj/item/weapon/reagent_containers/food/snacks/burger
 	name = "burger"
 	desc = "The cornerstone of every nutritious breakfast."
 	icon_state = "hburger"
@@ -1343,65 +1326,54 @@
 	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/on_vending_machine_spawn()//Fast-Food Menu
+/obj/item/weapon/reagent_containers/food/snacks/burger/on_vending_machine_spawn()//Fast-Food Menu
 	reagents.chem_temp = COOKTEMP_READY
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth
+/obj/item/weapon/reagent_containers/food/snacks/burger/synth
 	name = "synthetic burger"
 	desc = "It tastes like a normal burger, but it's just not the same."
 
-/obj/item/weapon/reagent_containers/food/snacks/appendixburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/brain
+	name = "brainburger"
+	desc = "A strange looking burger. It looks almost sentient."
+	icon_state = "brainburger"
+	reagents_to_add = list(NUTRIMENT = 6, ALKYSINE = 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/burger/ghost
+	name = "ghost burger"
+	desc = "Spooky! It doesn't look very filling."
+	icon_state = "ghostburger"
+	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/burger/appendix
 	name = "appendix burger"
 	desc = "Tastes like appendicitis."
-	icon_state = "hburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
-	reagents_to_add = list(NUTRIMENT = 6)
-	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/fishburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/fish
 	name = "fillet -o- carp sandwich"
 	desc = "Almost like a carp is yelling somewhere... Give me back that fillet -o- carp, give me that carp."
 	icon_state = "fishburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
 	reagents_to_add = list(NUTRIMENT = 6, CARPPHEROMONES = 3)
 	bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/tofuburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/tofu
 	name = "tofu burger"
 	desc = "What... is that meat?"
 	icon_state = "tofuburger"
-	base_crumb_chance = 20
-	reagents_to_add = list(NUTRIMENT = 6)
-	bitesize = 2
+	food_flags = null
 
-/obj/item/weapon/reagent_containers/food/snacks/chickenburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/chicken
 	name = "chicken burger"
 	desc = "Tastes like chi... oh wait!"
 	icon_state = "mc_chicken"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
-	reagents_to_add = list(NUTRIMENT = 6)
-	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/veggieburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/veggie
 	name = "veggie burger"
 	desc = "Technically vegetarian."
 	icon_state = "veggieburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
-	reagents_to_add = list(NUTRIMENT = 6)
-	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/veggieburgernymph // Alternate recipe using nymph meat
-	name = "veggie burger"
-	desc = "Technically vegetarian."
-	icon_state = "veggieburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
-	reagents_to_add = list(NUTRIMENT = 6)
-	bitesize = 2
+/obj/item/weapon/reagent_containers/food/snacks/burger/veggie/nymph // Alternate recipe using nymph meat
 
 /obj/item/weapon/reagent_containers/food/snacks/roburger
 	name = "roburger"
@@ -1410,102 +1382,81 @@
 	reagents_to_add = list(NANITES = 2)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/roburgerbig
-	name = "roburger"
+/obj/item/weapon/reagent_containers/food/snacks/roburger/big
 	desc = "This massive patty looks like poison. Beep."
-	icon_state = "roburger"
 	reagents_to_add = NANITES
 	bitesize = 0.1
 
-/obj/item/weapon/reagent_containers/food/snacks/xenoburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/xeno
 	name = "xenoburger"
 	desc = "Smells caustic. Tastes like heresy."
 	icon_state = "xburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
 	reagents_to_add = list(NUTRIMENT = 8)
-	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/clownburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/clown
 	name = "clown burger"
 	desc = "This tastes funny..."
 	icon_state = "clownburger"
-	base_crumb_chance = 20
+	food_flags = null
 	reagents_to_add = list(NUTRIMENT = 6, HONKSERUM = 6)
-	bitesize = 2
 	//reagents.add_reagent(BLOOD, 4, list("viruses"= list(new /datum/disease/pierrot_throat(0))))
 
-/obj/item/weapon/reagent_containers/food/snacks/mimeburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/mime
 	name = "mime burger"
 	desc = "Its taste defies language."
 	icon_state = "mimeburger"
-	base_crumb_chance = 20
+	food_flags = null
 	reagents_to_add = list(NUTRIMENT = 6, SILENCER = 6)
-	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/donutburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/donut
 	name = "donut burger"
 	desc = "Illegal to have out on code green."
 	icon_state = "donutburger"
-	food_flags = FOOD_MEAT
 	reagents_to_add = list(NUTRIMENT = 6, SPRINKLES = 6)
-	bitesize = 2
 	base_crumb_chance = 30
 
-/obj/item/weapon/reagent_containers/food/snacks/avocadoburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/avocado
 	name = "avocado burger"
 	desc = "Blurring the line between ingredient and condiment."
 	icon_state = "avocadoburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
 	reagents_to_add = list(NUTRIMENT = 8)
-	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/caramelburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/caramel
 	name = "caramel burger"
 	desc = "Too sweet to be any good."
 	icon_state = "caramelburger"
 	food_flags = FOOD_MEAT | FOOD_SWEET
-	base_crumb_chance = 20
 	reagents_to_add = list(NUTRIMENT = 8, CARAMEL = 4)
-	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/bearburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/bear
 	name = "bear burger"
 	desc = "Fits perfectly in any pic-a-nic basket. Oh bothering to grizzle into this won't be a boo-boo. Honey, it would be beary foolish to hibernate on such a unbearably, ursa majorly good treat!"
 	icon_state = "bearburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
 	reagents_to_add = list(NUTRIMENT = 20, HYPERZINE = 8)
 	bitesize = 4
 
-/obj/item/weapon/reagent_containers/food/snacks/glassburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/glass
 	name = "glass burger"
 	desc = "Goes down surprisingly easily considering the ingredients."
 	icon_state = "glassburger"
+	food_flags = null
 	filling_color = "#92CEE9"
-	base_crumb_chance = 20
 	reagents_to_add = list(NUTRIMENT = 6, DIAMONDDUST = 4) //It's the closest we have to eating raw glass, causes some brute and screaming
-	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/polypburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/polyp
 	name = "polyp burger"
 	desc = "Millions of burgers like these are cooked and sold by McZargalds every year."
 	icon_state = "polypburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
 	reagents_to_add = list(NUTRIMENT = 8)
-	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/blobburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/blob
 	name = "bloburger"
 	desc = "Careful, has a tendency to spill sauce in every direction when squeezed too hard."
 	icon_state = "blobburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
 	reagents_to_add = list(NUTRIMENT = 8, BLOBANINE = 5)
+	bitesize = 1
 
-/obj/item/weapon/reagent_containers/food/snacks/blobburger/consume(mob/living/carbon/eater, messages = 0, sounds = TRUE, bitesizemod = 1)
+/obj/item/weapon/reagent_containers/food/snacks/burger/blob/consume(mob/living/carbon/eater, messages = 0, sounds = TRUE, bitesizemod = 1)
 	if(prob(50))
 		src.crumb_icon = "dribbles"
 	else
@@ -1951,14 +1902,11 @@
 	reagents_to_add = list(NUTRIMENT = 3, DISCOUNT = 4, MOONROCKS = 4, TOXICWASTE = 8, URANIUM = 8, CORNSYRUP = 2, CHEMICAL_WASTE = 2)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/discountburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/discount
 	name = "\improper Discount Dan's On The Go Burger"
 	desc = "It's still warm..."
 	icon_state = "goburger" //Someone make a better sprite for this.
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
 	reagents_to_add = list(NUTRIMENT = 4, DISCOUNT = 4, BEFF = 4, HORSEMEAT = 4, OFFCOLORCHEESE = 4, CHEMICAL_WASTE = 2)
-	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/donitos
 	name = "Donitos"
@@ -2466,23 +2414,22 @@
 		baconbeacon.digest_delay()
 */
 
-/obj/item/weapon/reagent_containers/food/snacks/spellburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/spell
 	name = "Spell Burger"
 	desc = "This is absolutely Ei Nath."
 	icon_state = "spellburger"
+	food_flags = null
+	base_crumb_chance = 10
 	reagents_to_add = list(NUTRIMENT = 6)
-	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/bigbite
 	name = "Big Bite Burger"
 	desc = "Forget the Big Mac. THIS is the future!"
 	icon_state = "bigbiteburger"
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 20
 	reagents_to_add = list(NUTRIMENT = 14)
 	bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger/on_vending_machine_spawn()//Fast-Food Menu XL
+/obj/item/weapon/reagent_containers/food/snacks/burger/bigbite/on_vending_machine_spawn()//Fast-Food Menu XL
 	reagents.chem_temp = COOKTEMP_READY
 
 /obj/item/weapon/reagent_containers/food/snacks/enchiladas
@@ -2631,23 +2578,24 @@
 	reagents_to_add = list(NUTRIMENT = 5)
 	bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/jellyburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/jelly
 	name = "Jelly Burger"
 	desc = "Culinary delight..?"
 	icon_state = "jellyburger"
+	food_flags = null
 	reagents_to_add = list(NUTRIMENT = 5)
-	bitesize = 2
+	base_crumb_chance = 10
 
-/obj/item/weapon/reagent_containers/food/snacks/jellyburger/slime
+/obj/item/weapon/reagent_containers/food/snacks/burger/jelly/slime
 	reagents_to_add = list(NUTRIMENT = 5, SLIMEJELLY = 5)
 
-/obj/item/weapon/reagent_containers/food/snacks/jellyburger/gelatin
+/obj/item/weapon/reagent_containers/food/snacks/burger/jelly/gelatin
 	name = "Gelatin Burger"
 	desc = "It's a bit soggy."
 	food_flags = FOOD_MEAT | FOOD_ANIMAL
 	reagents_to_add = list(NUTRIMENT = 6)
 
-/obj/item/weapon/reagent_containers/food/snacks/jellyburger/cherry
+/obj/item/weapon/reagent_containers/food/snacks/burger/jelly/cherry
 	reagents_to_add = list(NUTRIMENT = 5, CHERRYJELLY = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/milosoup
@@ -2798,12 +2746,11 @@
 /obj/item/weapon/reagent_containers/food/snacks/diamondfries/processed
 	reagents_to_add = null
 
-/obj/item/weapon/reagent_containers/food/snacks/superbiteburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/superbite
 	name = "Super Bite Burger"
 	desc = "This is a mountain of a burger. FOOD!"
 	icon_state = "superbiteburger"
 	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
-	base_crumb_chance = 20
 	reagents_to_add = list(NUTRIMENT = 40)
 	bitesize = 10
 
@@ -3919,13 +3866,12 @@
 	reagents_to_add = list(NUTRIMENT = 6, CARPPHEROMONES = 5)
 	bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/assburger
+/obj/item/weapon/reagent_containers/food/snacks/burger/ass
 	name = "assburger"
 	desc = "You better be REALLY nice to this burger, or it'll report you to the police!"
 	icon_state = "assburger"
-	food_flags = FOOD_MEAT
 	reagents_to_add = list(NUTRIMENT = 6, MINDBREAKER = 10, MERCURY = 10) // Screaming // Idiot
-	bitesize = 2
+	base_crumb_chance = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/asspie
 	name = "asspie"
@@ -4705,6 +4651,8 @@
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/sweetsundaeramen/refill()
+	desc = initial(desc)
+	reagents.clear_reagents()
 	while(reagents.total_volume<70)
 		switch(rand(1,10))
 			if(1)
@@ -4799,13 +4747,14 @@
 	base_crumb_chance = 0
 	icon = 'icons/obj/candymachine.dmi'
 	bitesize = 5
+	reagents_to_add = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet/New()
-	..()
 	var/list/possible_reagents=list(NUTRIMENT=5, SUGAR=10, CORNOIL=5, BANANA=15, LIQUIDBUTTER=5, NUTRIMENT=10, CARAMEL=10, LEMONJUICE=10, APPLEJUICE=10, WATERMELONJUICE=10, GRAPEJUICE=10, ORANGEJUICE=10, TOMATOJUICE=10, LIMEJUICE=10, CARROTJUICE=10, BERRYJUICE=10, GGRAPEJUICE=10, POTATO=10, PLUMPHJUICE=10, COCO=10, SPRINKLES=10, NUTRIMENT=20)
 	var/list/flavors = list("\improper strawberry","\improper lime","\improper blueberry","\improper banana","\improper grape","\improper lemonade","\improper bubblegum","\improper raspberry","\improper orange","\improper liquorice","\improper apple","\improper cranberry")
 	var/reagent=pick(possible_reagents)
-	reagents.add_reagent(reagent, possible_reagents[reagent])
+	reagents_to_add += list(reagent = possible_reagents[reagent])
+	..()
 	var/variety = rand(1,flavors.len) //MORE SWEETS MAYBE IF YOU SPRITE IT
 	icon_state = "sweet[variety]"
 	name = "[flavors[variety]] sweet"
@@ -4814,11 +4763,11 @@
 	desc = "Something about this sweet doesn't seem right."
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet/strange/New()
-	..()
 	var/list/possible_reagents=list(ZOMBIEPOWDER=5, MINDBREAKER=5, PACID=5, HYPERZINE=5, CHLORALHYDRATE=5, TRICORDRAZINE=5, DOCTORSDELIGHT=5, MUTATIONTOXIN=5, MERCURY=5, ANTI_TOXIN=5, SPACE_DRUGS=5, HOLYWATER=5,  RYETALYN=5, CRYPTOBIOLIN=5, DEXALINP=5, HAMSERUM=1,
 	LEXORIN=5, GRAVY=5, DETCOFFEE=5, AMUTATIONTOXIN=5, GYRO=5, SILENCER= 5, URANIUM=5, WATER=5, DIABEETUSOL =5, SACID=5, LITHIUM=5, CHILLWAX=5, OXYCODONE=5, VOMIT=5, BLEACH=5, HEARTBREAKER=5, NANITES=5, CORNOIL=5, NOVAFLOUR=5, DEGENERATECALCIUM = 5, COLORFUL_REAGENT = 5, LIQUIDBUTTER = 5)
 	var/reagent=pick(possible_reagents)
-	reagents.add_reagent(reagent, possible_reagents[reagent])
+	reagents_to_add += list(reagent = possible_reagents[reagent])
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/lollipop
 	name = "lollipop"

@@ -983,7 +983,7 @@
 /obj/structure/closet,
 /obj/item/weapon/reagent_containers/food/snacks/discountchocolate,
 /obj/item/weapon/reagent_containers/food/snacks/discountburrito,
-/obj/item/weapon/reagent_containers/food/snacks/discountburger,
+/obj/item/weapon/reagent_containers/food/snacks/burger/discount,
 /obj/item/weapon/reagent_containers/food/drinks/discount_ramen,
 /obj/item/weapon/reagent_containers/food/snacks/pie/discount,
 /obj/effect/decal/cleanable/cobweb,

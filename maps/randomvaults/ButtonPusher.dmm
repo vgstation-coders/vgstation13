@@ -1883,28 +1883,28 @@
 	},
 /area/vault/radioactivelab)
 "NW" = (
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth{
+/obj/item/weapon/reagent_containers/food/snacks/burger/synth{
 	pixel_x = 1;
 	pixel_y = 1
 	},
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth{
+/obj/item/weapon/reagent_containers/food/snacks/burger/synth{
 	pixel_x = 2;
 	pixel_y = 5
 	},
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth{
+/obj/item/weapon/reagent_containers/food/snacks/burger/synth{
 	pixel_x = 5;
 	pixel_y = 7
 	},
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth{
+/obj/item/weapon/reagent_containers/food/snacks/burger/synth{
 	pixel_x = -4;
 	pixel_y = -6
 	},
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth{
+/obj/item/weapon/reagent_containers/food/snacks/burger/synth{
 	pixel_x = 7;
 	pixel_y = -2
 	},
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth,
-/obj/item/weapon/reagent_containers/food/snacks/monkeyburger/synth{
+/obj/item/weapon/reagent_containers/food/snacks/burger/synth,
+/obj/item/weapon/reagent_containers/food/snacks/burger/synth{
 	pixel_y = 5;
 	pixel_x = -5
 	},

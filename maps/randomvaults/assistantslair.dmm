@@ -474,7 +474,7 @@
 /area/vault/assistantlair)
 "bB" = (
 /obj/effect/decal/cleanable/vomit,
-/obj/item/weapon/reagent_containers/food/snacks/brainburger,
+/obj/item/weapon/reagent_containers/food/snacks/burger/brain,
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "bC" = (
