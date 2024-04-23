@@ -132,7 +132,7 @@
 
 /datum/food_processor_process/mob/voxchicken //Do not relocate please I will cry; I tried sorting all fancylike with some help, but it seems the file is scuffed beyond my mortal means
 	input = /mob/living/carbon/monkey/vox
-	output = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
+	output = /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets/vox
 
 /datum/food_processor_process/mob/monkey
 	input = /mob/living/carbon/monkey

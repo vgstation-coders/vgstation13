@@ -695,14 +695,14 @@
 	item_state = "kfc_bucket"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 	icon_type = "drumstick"
-	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/vox_chicken_drumstick")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick/vox")
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 
 /obj/item/weapon/storage/fancy/food_box/vox_chicken_bucket/New()
 	..()
 	for(var/i=1; i <= storage_slots; i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/vox_chicken_drumstick(src)
+		new /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick/vox(src)
 
 /obj/item/weapon/storage/fancy/food_box/vox_chicken_bucket/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	. = ..()

@@ -2456,7 +2456,7 @@
 		/obj/item/stack/sheet/cardboard,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
+	result = /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets/vox
 
 /datum/recipe/vox_chicken_drumstick
 	priority = 1
@@ -2471,7 +2471,7 @@
 	priority = 1
 	reagents = list(CORNOIL = 3)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/raw_vox_chicken)
-	result = /obj/item/weapon/reagent_containers/food/snacks/vox_chicken_tenders
+	result = /obj/item/weapon/reagent_containers/food/snacks/chicken_tenders/vox
 
 /datum/recipe/vox_nuggets_pox
 	reagents = list(KETCHUP = 5)
@@ -2480,7 +2480,7 @@
 		/obj/item/stack/sheet/cardboard,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/vox_nuggets
+	result = /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets/vox
 
 /datum/recipe/vox_chicken_drumstick_pox
 	priority = 1
@@ -2495,7 +2495,7 @@
 	priority = 1
 	reagents = list(CORNOIL = 3)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox)
-	result = /obj/item/weapon/reagent_containers/food/snacks/vox_chicken_tenders
+	result = /obj/item/weapon/reagent_containers/food/snacks/chicken_tenders/vox
 
 /datum/recipe/crab_sticks
 	reagents = list(SODIUMCHLORIDE = 1, SUGARS = 1)
