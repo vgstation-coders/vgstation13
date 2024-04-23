@@ -1046,7 +1046,7 @@
 /area/awaymission/wwgov)
 "df" = (
 /obj/structure/table/woodentable,
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/lemoncake,
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/lemon,
 /turf/simulated/floor{
 	icon_state = "stage_bleft";
 	tag = "icon-stage_bleft"

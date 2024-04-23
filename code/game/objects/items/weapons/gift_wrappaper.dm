@@ -180,7 +180,7 @@
 //christmas and festive food
 /obj/item/weapon/winter_gift/food/attack_self(mob/M as mob)
 	var/gift_type = pick(
-		/obj/item/weapon/reagent_containers/food/snacks/sliceable/birthdaycake,
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/birthday,
 		/obj/item/weapon/reagent_containers/food/snacks/sliceable/buchedenoel,
 		/obj/item/weapon/reagent_containers/food/snacks/sliceable/turkey,
 		)

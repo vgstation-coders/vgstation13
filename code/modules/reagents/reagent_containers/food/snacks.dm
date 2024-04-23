@@ -3057,6 +3057,7 @@
 	name = "brain cake slice"
 	desc = "Lemme tell you something about prions. THEY'RE DELICIOUS."
 	icon_state = "braincakeslice"
+	plate_offset_y = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/cheese
 	name = "cheese cake"
@@ -3072,100 +3073,65 @@
 	icon_state = "cheesecake_slice"
 	plate_offset_y = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/orangecake
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/orange
 	name = "orange cake"
 	desc = "A cake with added orange."
 	icon_state = "orangecake"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/orangecakeslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/orange
 	reagents_to_add = list(NUTRIMENT = 20)
 
-/obj/item/weapon/reagent_containers/food/snacks/orangecakeslice
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/orange
 	name = "orange cake slice"
 	desc = "Just a slice of cake, it is enough for everyone."
 	icon_state = "orangecake_slice"
-	bitesize = 2
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
-	plate_offset_y = -1
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/limecake
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/lime
 	name = "lime cake"
 	desc = "A cake with added lime."
 	icon_state = "limecake"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/limecakeslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/lime
 	reagents_to_add = list(NUTRIMENT = 20)
 
-/obj/item/weapon/reagent_containers/food/snacks/limecakeslice
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/lime
 	name = "lime cake slice"
 	desc = "Just a slice of cake, it is enough for everyone."
 	icon_state = "limecake_slice"
-	bitesize = 2
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
-	plate_offset_y = -1
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/lemoncake
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/lemon
 	name = "lemon cake"
 	desc = "A cake with added lemon."
 	icon_state = "lemoncake"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/lemoncakeslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/lemon
 	reagents_to_add = list(NUTRIMENT = 20)
 
-/obj/item/weapon/reagent_containers/food/snacks/lemoncakeslice
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/lemon
 	name = "lemon cake slice"
 	desc = "Just a slice of cake, enough for everyone."
 	icon_state = "lemoncake_slice"
-	bitesize = 2
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
-	plate_offset_y = -1
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/chocolatecake
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/chocolate
 	name = "chocolate cake"
 	desc = "A cake with added chocolate."
 	icon_state = "chocolatecake"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/chocolatecakeslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/chocolate
 	reagents_to_add = list(NUTRIMENT = 20)
 
-/obj/item/weapon/reagent_containers/food/snacks/chocolatecakeslice
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/chocolate
 	name = "chocolate cake slice"
 	desc = "Just a slice of cake, enough for everyone."
 	icon_state = "chocolatecake_slice"
-	bitesize = 2
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
-	plate_offset_y = -1
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/caramel
 	name = "caramel cake"
 	desc = "A cake with added caramel."
 	icon_state = "caramelcake"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/caramelcakeslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/caramel
 	reagents_to_add = list(NUTRIMENT = 15, CARAMEL = 5)
 
-/obj/item/weapon/reagent_containers/food/snacks/caramelcakeslice
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/caramel
 	name = "caramel cake slice"
 	desc = "Just a slice of cake, enough for everyone."
 	icon_state = "caramelcake_slice"
-	bitesize = 2
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
-	plate_offset_y = -1
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
 	name = "cheese wheel"
@@ -3190,29 +3156,24 @@
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/birthdaycake
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/birthday
 	name = "Birthday Cake"
 	desc = "Happy Birthday..."
 	icon_state = "birthdaycake"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/birthdaycakeslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/birthday
 	candles_state = CANDLES_UNLIT
 	always_candles = "birthdaycake"
 	reagents_to_add = list(NUTRIMENT = 20, SPRINKLES = 10)
 	bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/birthdaycakeslice
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/birthday
 	name = "Birthday Cake slice"
 	desc = "A slice of your birthday!"
 	icon_state = "birthdaycakeslice"
-	bitesize = 2
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_icon = "bluecustom"
 	candles_state = CANDLES_UNLIT
 	always_candles = "birthdaycakeslice"
+	plate_offset_y = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
 	name = "bread"

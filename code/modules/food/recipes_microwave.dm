@@ -990,7 +990,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/clothing/head/cakehat
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/birthdaycake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/birthday
 
 /datum/recipe/applecake
 	reagents = list(MILK = 5, FLOUR = 15)
@@ -1012,7 +1012,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/orange,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/orange,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/orangecake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/orange
 
 /datum/recipe/limecake
 	reagents = list(MILK = 5, FLOUR = 15)
@@ -1023,7 +1023,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/lime,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/lime,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/limecake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/lime
 
 /datum/recipe/lemoncake
 	reagents = list(MILK = 5, FLOUR = 15)
@@ -1034,7 +1034,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/lemoncake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/lemon
 
 /datum/recipe/chocolatecake
 	reagents = list(MILK = 5, FLOUR = 15)
@@ -1045,7 +1045,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/chocolatecake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/chocolate
 
 /datum/recipe/caramelcake
 	reagents = list(MILK = 5, FLOUR = 15, CARAMEL = 15)
@@ -1054,7 +1054,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/caramel
 
 /datum/recipe/buchedenoel
 	reagents = list(MILK = 5, FLOUR = 15, CREAM = 10)
@@ -3463,14 +3463,14 @@
 /datum/recipe/suppermatter
 	reagents = list(PLASMA = 5, NITROGEN = 5)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/caramel
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter
 
 /datum/recipe/excitingsuppermatter
 	reagents = list(PLASMA = 5, OXYGEN = 5)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/sliceable/caramelcake
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/caramel
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter/exciting
 
