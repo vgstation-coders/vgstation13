@@ -3749,7 +3749,7 @@
 		/obj/item/toy/crayon/red,
 		/obj/item/stack/sheet/cardboard
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy
+	result = /obj/item/weapon/reagent_containers/food/snacks/gunksoup/embassy
 
 /datum/recipe/gunkbread
 	reagents = list(FLOUR = 15, GUNKS = 5)

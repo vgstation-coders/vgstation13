@@ -6771,13 +6771,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "dionaroast"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/dionaroast/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 10)
-	reagents.add_reagent(BLACKPEPPER, 1)
-	reagents.add_reagent(SODIUMCHLORIDE, 1)
-	reagents.add_reagent(CORNOIL, 1)
+	reagents_to_add = list(NUTRIMENT = 10, BLACKPEPPER = 1, SODIUMCHLORIDE = 1, CORNOIL = 1)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps
@@ -6788,10 +6782,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/cheesewedge_scraps/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
+	reagents_to_add = list(NUTRIMENT = 3)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/skitter/ //if ye dish is a child of skitter it will move around after 30 ticks
@@ -6827,15 +6818,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "bugburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
+	reagents_to_add = list(NUTRIMENT = 6, ROACHSHELL = 5)
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/skitter/gunkburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(ROACHSHELL, 5)
 	if(prob(30))
-		reagents.add_reagent(SALTWATER, 3) //the best non-karm emetic we have
+		reagents_to_add += list(SALTWATER = 3) //the best non-karm emetic we have
 		desc = "Legs wriggling, bug juices oozing out and that rotten smell... Oh god, you're gonna THR-"
-	bitesize = 2
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger
 	name = "deluxe gunk burger"
@@ -6843,15 +6833,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "deluxebugburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
+	reagents_to_add = list(NUTRIMENT = 12, ROACHSHELL = 10)
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/skitter/deluxegunkburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 12)
-	reagents.add_reagent(ROACHSHELL, 10)
 	if(prob(30))
-		reagents.add_reagent(SALTWATER, 3)
+		reagents_to_add += list(SALTWATER = 3) //the best non-karm emetic we have
 		desc = "You can't comprehend how much I regret biting into this thing. The disgusting texture, burning juices and terrible taste will never leave my mind."
-	bitesize = 2
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger
 	name = "Super Gunk Burger"
@@ -6861,15 +6850,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	base_crumb_chance = 20
 	skitterchance = 40
 	skitterdelay = 60 //takes longer for super gunkburgers to walk and they walk less, muh weight or something
+	reagents_to_add = list(NUTRIMENT = 40, ROACHSHELL = 15)
+	bitesize = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/skitter/supergunkburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 40)
-	reagents.add_reagent(ROACHSHELL, 15)
 	if(prob(30))
-		reagents.add_reagent(SALTWATER, 3)
+		reagents_to_add += list(SALTWATER = 3) //the best non-karm emetic we have
 		desc = "I have tasted upon all the universe has to hold of gunk, and even the ambrosias and blingpizzas must ever afterward be poison to me."
-	bitesize = 10
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/gunkkabob
 	name = "Gunk-kabob"
@@ -6878,12 +6866,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	trash = /obj/item/stack/rods
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/gunkkabob/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(ROACHSHELL, 5)
-	reagents.add_reagent(SALINE, 0.5) //just a taste
+	reagents_to_add = list(NUTRIMENT = 8, ROACHSHELL = 5, SALINE = 0.5) //just a taste
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/popcorn/cricket
@@ -6923,37 +6906,25 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	crumb_icon = "dribbles"
 	filling_color = "#6D4930"
 	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/gunksoup/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(ROACHSHELL, 5)
-	reagents.add_reagent(WATER, 5)
+	reagents_to_add = list(NUTRIMENT = 8, ROACHSHELL = 5, WATER = 5)
 	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy
+/obj/item/weapon/reagent_containers/food/snacks/gunksoup/embassy
 	name = "Gunk Soup Embassy"
 	desc = "Space Turkey's finest politicians are sent to this elite GunkCo facility."
 	icon_state = "gunksoup_embassy_2" //here so it isn't invisible on nofruit pie rolls, gets overwritten on new()
-	trash = /obj/item/trash/snack_bowl
-	food_flags = FOOD_MEAT | FOOD_LIQUID
-	crumb_icon = "dribbles"
-	filling_color = "#6D4930"
-	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
+	reagents_to_add = list(NUTRIMENT = 10, ROACHSHELL = 8, WATER = 5) //we lobbied for extra nutriment for you! no roaches were harmed this time, it's all exoskeleton flakes
 
-/obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy/New()
+/obj/item/weapon/reagent_containers/food/snacks/gunksoup/embassy/New()
 	..()
 	if(prob(50))  //two flag waving styles
 		icon_state = "gunksoup_embassy_1"
 	else
 		icon_state = "gunksoup_embassy_2"
 	processing_objects += src
-	reagents.add_reagent(NUTRIMENT, 10) //we lobbied for extra nutriment for you!
-	reagents.add_reagent(ROACHSHELL, 8) //no roaches were harmed this time, it's all exoskeleton flakes
-	reagents.add_reagent(WATER, 5)
 	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy/process()
+/obj/item/weapon/reagent_containers/food/snacks/gunksoup/embassy/process()
 	timer += 1
 	if(prob(20) && timer >= 10)
 		timer = 0
@@ -6962,7 +6933,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		else
 			icon_state = "gunksoup_embassy_2"
 
-/obj/item/weapon/reagent_containers/food/snacks/gunksoupembassy/Destroy()
+/obj/item/weapon/reagent_containers/food/snacks/gunksoup/embassy/Destroy()
 	processing_objects -= src
 	new /mob/living/simple_animal/cockroach/turkish(get_turf(src))
 	new /mob/living/simple_animal/cockroach/turkish(get_turf(src))
@@ -6977,12 +6948,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	storage_slots = 3
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
 	w_class = W_CLASS_MEDIUM
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkbread/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 30)
-	reagents.add_reagent(ROACHSHELL, 5)
-	reagents.add_reagent(CHEMICAL_WASTE, 5)
+	reagents_to_add = list(NUTRIMENT = 30, ROACHSHELL = 5, CHEMICAL_WASTE = 5)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/gunkbreadslice
@@ -6998,17 +6964,14 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "Surprisingly free of toxins!"
 	icon_state = "gunkpie"
 	food_flags = FOOD_MEAT
+	reagents_to_add = list(NUTRIMENT = 5, ROACHSHELL = 5)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/gunk_pie/New()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(NUTRIMENT, 5)
-	reagents.add_reagent(ROACHSHELL, 5)
 	if(prob(30))
-		reagents.add_reagent(CHEMICAL_WASTE, 5)
-		reagents.add_reagent(SALINE, 1)
+		reagents_to_add = list(NUTRIMENT = 5, ROACHSHELL = 5, CHEMICAL_WASTE = 5, SALINE = 1)
 		desc = "The flavour of the maintenance halls in pie form."
-	bitesize = 3
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkcake
 	name = "gunk cake"
@@ -7019,11 +6982,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	storage_slots = 3
 	w_class = W_CLASS_MEDIUM
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/gunkcake/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 25)
-	reagents.add_reagent(ROACHSHELL, 10)
+	reagents_to_add = list(NUTRIMENT = 25, ROACHSHELL = 10)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/gunkcakeslice
@@ -7040,11 +6999,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon_state = "roachesonastick"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/roachesonstick/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5)
-	reagents.add_reagent(ROACHSHELL, 5)
+	reagents_to_add = list(NUTRIMENT = 5, ROACHSHELL = 5)
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/grandpatiks
@@ -7055,20 +7010,13 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	valid_utensils = 0
 	base_crumb_chance = 0
 	food_flags = FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/grandpatiks/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5)
-	reagents.add_reagent(ROACHSHELL, 1)
+	reagents_to_add = list(NUTRIMENT = 5, ROACHSHELL = 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube
 	name = "salt cubes"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/saltcube
 	child_volume = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube/New()
-	..()
-	reagents.add_reagent(SODIUMCHLORIDE, 15) //spawns 5
+	reagents_to_add = list(SODIUMCHLORIDE = 15) //spawns 5
 
 /obj/item/weapon/reagent_containers/food/snacks/saltcube
 	name = "salt cubes"
@@ -7080,10 +7028,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	name = "sugar cube"
 	child_type = /obj/item/weapon/reagent_containers/food/snacks/sugarcube
 	child_volume = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube/New()
-	..()
-	reagents.add_reagent(SUGAR, 15) //spawns 5
+	reagents_to_add = list(SUGAR = 15) //spawns 5
 
 /obj/item/weapon/reagent_containers/food/snacks/sugarcube
 	name = "sugar cube"
