@@ -243,20 +243,19 @@
 
 /obj/machinery/crate_weigher/Uncrossed(atom/movable/A)
 	if(istype(A,/obj/structure)) //Ideally crate types stay these
-		current_crate = null
-		icon_state = "up"
-		if (world.time > next_sound)
-			playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
-			next_sound = world.time + sound_delay
+		remove_crate()
 
 /obj/machinery/crate_weigher/Move(NewLoc, Dir, step_x, step_y, glide_size_override)
 	. = ..()
-	if(current_crate && current_crate.loc != src.loc) //Ideally crate types stay these
-		icon_state = "up"
-		current_crate = null
-		if (world.time > next_sound)
-			playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
-			next_sound = world.time + sound_delay
+	if(current_crate && current_crate.loc != src.loc)
+		remove_crate()
+
+/obj/machinery/crate_weigher/proc/remove_crate()
+	current_crate = null
+	icon_state = "up"
+	if (world.time > next_sound)
+		playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
+		next_sound = world.time + sound_delay
 
 /obj/item/weapon/circuitboard/crate_weigher
 	name = "Circuit Board (Crate Weigher)"
