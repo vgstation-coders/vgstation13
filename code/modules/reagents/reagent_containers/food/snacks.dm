@@ -2657,11 +2657,7 @@
 	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_LIQUID
 	valid_utensils = UTENSILE_SPOON
-
-/obj/item/weapon/reagent_containers/food/snacks/milosoup/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
-	reagents.add_reagent(WATER, 5)
+	reagents_to_add = list(NUTRIMENT = 8, WATER = 5)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/stewedsoymeat
@@ -2669,10 +2665,7 @@
 	desc = "Even non-vegetarians will LOVE this!"
 	icon_state = "stewedsoymeat"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/stewedsoymeat/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/mommispaghetti
@@ -2680,10 +2673,7 @@
 	desc = "You can feel the autism in this one."
 	icon_state = "mommispaghetti"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/mommispaghetti/New()
-	..()
-	reagents.add_reagent(AUTISTNANITES, 2)
+	reagents_to_add = list(AUTISTNANITES = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti
@@ -2693,10 +2683,7 @@
 	restraint_resist_time = 1 SECONDS
 	toolsounds = list('sound/weapons/cablecuff.ogg')
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledrice
@@ -2705,10 +2692,7 @@
 	icon_state = "boiledrice"
 	trash = /obj/item/trash/snack_bowl
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/boiledrice/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/ricepudding
@@ -2719,10 +2703,7 @@
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/ricepudding/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents_to_add = list(NUTRIMENT = 4)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/riceball
@@ -2730,10 +2711,7 @@
 	desc = "In mining culture, this is also known as a donut."
 	icon_state = "riceball"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/riceball/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/eggplantsushi
@@ -2741,11 +2719,7 @@
 	desc = "Eggplant rolls are an example of Asian Fusion as eggplants were introduced from mainland Asia to Japan. This dish is Earth Fusion, originating after the introduction of the chili from the Americas to Japan. Fusion HA!"
 	icon_state = "eggplantsushi"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/eggplantsushi/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 4)
-	reagents.add_reagent(CAPSAICIN, 2)
+	reagents_to_add = list(NUTRIMENT = 4, CAPSAICIN = 2)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/pastatomato
@@ -2753,11 +2727,7 @@
 	desc = "Spaghetti and crushed tomatoes. Just like your abusive father used to make!"
 	icon_state = "pastatomato"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/pastatomato/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 6)
-	reagents.add_reagent(TOMATOJUICE, 10)
+	reagents_to_add = list(NUTRIMENT = 6, TOMATOJUICE = 10)
 	bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/copypasta
@@ -2765,11 +2735,7 @@
 	desc = "You probably shouldn't try this, you always hear people talking about how bad it is..."
 	icon_state = "copypasta"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/copypasta/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 12)
-	reagents.add_reagent(TOMATOJUICE, 20)
+	reagents_to_add = list(NUTRIMENT = 12, TOMATOJUICE = 20)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/meatballspaghetti
@@ -2778,10 +2744,7 @@
 	icon_state = "meatballspaghetti"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/meatballspaghetti/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/crabspaghetti
@@ -2790,10 +2753,7 @@
 	icon_state = "crabspaghetti"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/crabspaghetti/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/spesslaw
@@ -2801,10 +2761,7 @@
 	desc = "A lawyer's favorite."
 	icon_state = "spesslaw"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/spesslaw/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/poppypretzel
@@ -2813,10 +2770,7 @@
 	icon_state = "poppypretzel"
 	food_flags = FOOD_DIPPABLE
 	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/poppypretzel/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 5)
+	reagents_to_add = list(NUTRIMENT = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/carrotfries
 	name = "Carrot Fries"
@@ -2824,11 +2778,7 @@
 	icon_state = "carrotfries"
 	plate_offset_y = -2
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/carrotfries/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(IMIDAZOLINE, 3)
+	reagents_to_add = list(NUTRIMENT = 3, IMIDAZOLINE = 3)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/carrotfries/processed/New()
@@ -2842,15 +2792,11 @@
 	filling_color = "#95FFFF"
 	plate_offset_y = -2
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/diamondfries/processed/New()
-	..()
-	reagents.clear_reagents()
-
-/obj/item/weapon/reagent_containers/food/snacks/diamondfries/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 10)
+	reagents_to_add = list(NUTRIMENT = 10)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/diamondfries/processed
+	reagents_to_add = null
 
 /obj/item/weapon/reagent_containers/food/snacks/superbiteburger
 	name = "Super Bite Burger"
@@ -2858,10 +2804,7 @@
 	icon_state = "superbiteburger"
 	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
 	base_crumb_chance = 20
-
-/obj/item/weapon/reagent_containers/food/snacks/superbiteburger/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 40)
+	reagents_to_add = list(NUTRIMENT = 40)
 	bitesize = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/candiedapple
@@ -2870,10 +2813,7 @@
 	icon_state = "candiedapple"
 	food_flags = FOOD_SWEET
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/candiedapple/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
+	reagents_to_add = list(NUTRIMENT = 3)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/applepie
@@ -2881,11 +2821,7 @@
 	desc = "A pie containing sweet sweet love...or apple."
 	icon_state = "applepie"
 	food_flags = FOOD_SWEET
-
-/obj/item/weapon/reagent_containers/food/snacks/pie/applepie/New()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents_to_add = list(NUTRIMENT = 4)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/caramelapple
@@ -2894,11 +2830,7 @@
 	icon_state = "caramelapple"
 	food_flags = FOOD_SWEET
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/caramelapple/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 3)
-	reagents.add_reagent(CARAMEL, 2)
+	reagents_to_add = list(NUTRIMENT = 3, CARAMEL = 2)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/cherrypie
@@ -2906,11 +2838,7 @@
 	desc = "Taste so good, make a grown man cry."
 	icon_state = "cherrypie"
 	food_flags = FOOD_SWEET
-
-/obj/item/weapon/reagent_containers/food/snacks/pie/cherrypie/New()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents_to_add = list(NUTRIMENT = 4)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/mincepie
@@ -2919,44 +2847,28 @@
 	icon = 'icons/obj/food_seasonal.dmi'
 	icon_state = "mincepie"
 	food_flags = FOOD_SWEET | FOOD_MEAT
-
-/obj/item/weapon/reagent_containers/food/snacks/pie/mincepie/New()
-	..()
-	reagents.clear_reagents()
-	reagents.add_reagent(NUTRIMENT, 8)
+	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/twobread
 	name = "Two Bread"
 	desc = "It is very bitter and winy."
 	icon_state = "twobread"
-
-/obj/item/weapon/reagent_containers/food/snacks/twobread/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/jellysandwich
 	name = "Jelly Sandwich"
 	desc = "You wish you had some peanut butter to go with this..."
 	icon_state = "jellysandwich"
-
-/obj/item/weapon/reagent_containers/food/snacks/jellysandwich/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 2)
+	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/jellysandwich/slime
-
-/obj/item/weapon/reagent_containers/food/snacks/jellysandwich/slime/New()
-	..()
-	reagents.add_reagent(SLIMEJELLY, 5)
+	reagents_to_add = list(NUTRIMENT = 2, SLIMEJELLY = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry
-
-/obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry/New()
-	..()
-	reagents.add_reagent(CHERRYJELLY, 5)
+	reagents_to_add = list(NUTRIMENT = 2, CHERRYJELLY = 5)
 
 /*
 /obj/item/weapon/reagent_containers/food/snacks/boiledslimecore
@@ -2964,12 +2876,10 @@
 	desc = "A boiled red thing."
 	icon_state = "boiledslimecore"
 	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/boiledslimecore/New()
-	..()
-	reagents.add_reagent(SLIMEJELLY, 5)
+	reagents_to_add = list(SLIMEJELLY = 5)
 	bitesize = 3
 */
+
 /obj/item/weapon/reagent_containers/food/snacks/mint
 	name = "mint"
 	desc = "It is only wafer thin."
