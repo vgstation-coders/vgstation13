@@ -163,6 +163,46 @@
 /obj/item/weapon/reagent_containers/food/snacks/burger/bigbite/on_vending_machine_spawn()//Fast-Food Menu XL
 	reagents.chem_temp = COOKTEMP_READY
 
+/obj/item/weapon/reagent_containers/food/snacks/burger/discount
+	name = "\improper Discount Dan's On The Go Burger"
+	desc = "It's still warm..."
+	icon_state = "goburger" //Someone make a better sprite for this.
+	reagents_to_add = list(NUTRIMENT = 4, DISCOUNT = 4, BEFF = 4, HORSEMEAT = 4, OFFCOLORCHEESE = 4, CHEMICAL_WASTE = 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/burger/jelly
+	name = "Jelly Burger"
+	desc = "Culinary delight..?"
+	icon_state = "jellyburger"
+	food_flags = null
+	reagents_to_add = list(NUTRIMENT = 5)
+	base_crumb_chance = 10
+
+/obj/item/weapon/reagent_containers/food/snacks/burger/jelly/slime
+	reagents_to_add = list(NUTRIMENT = 5, SLIMEJELLY = 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/burger/jelly/gelatin
+	name = "Gelatin Burger"
+	desc = "It's a bit soggy."
+	food_flags = FOOD_MEAT | FOOD_ANIMAL
+	reagents_to_add = list(NUTRIMENT = 6)
+
+/obj/item/weapon/reagent_containers/food/snacks/burger/jelly/cherry
+	reagents_to_add = list(NUTRIMENT = 5, CHERRYJELLY = 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/burger/superbite
+	name = "Super Bite Burger"
+	desc = "This is a mountain of a burger. FOOD!"
+	icon_state = "superbiteburger"
+	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
+	reagents_to_add = list(NUTRIMENT = 40)
+	bitesize = 10
+
+/obj/item/weapon/reagent_containers/food/snacks/burger/ass
+	name = "assburger"
+	desc = "You better be REALLY nice to this burger, or it'll report you to the police!"
+	icon_state = "assburger"
+	reagents_to_add = list(NUTRIMENT = 6, MINDBREAKER = 10, MERCURY = 10) // Screaming // Idiot
+	base_crumb_chance = 10
 ////////////////SLIDERS////////////////
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/slider

@@ -55,7 +55,7 @@
 	var/sweet = pick(list(/obj/item/weapon/reagent_containers/food/snacks/donut/normal,
 								/obj/item/weapon/reagent_containers/food/snacks/donut/jelly,
 								/obj/item/weapon/reagent_containers/food/snacks/candiedapple,
-								/obj/item/weapon/reagent_containers/food/snacks/applecakeslice,
+								/obj/item/weapon/reagent_containers/food/snacks/cakeslice/apple,
 								/obj/item/weapon/reagent_containers/food/snacks/cakeslice/carrot,
 								/obj/item/weapon/reagent_containers/food/snacks/cakeslice/cheese,
 								/obj/item/weapon/reagent_containers/food/snacks/cakeslice/orange,

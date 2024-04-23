@@ -561,7 +561,7 @@
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/amanita_pie,
 		/obj/item/weapon/reagent_containers/food/snacks/amanitajelly,
-		/obj/item/weapon/reagent_containers/food/snacks/applecakeslice,
+		/obj/item/weapon/reagent_containers/food/snacks/cakeslice/apple,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/applepie,
 		/obj/item/weapon/reagent_containers/food/snacks/burger/bigbite,
 		/obj/item/weapon/reagent_containers/food/snacks/boiledegg,

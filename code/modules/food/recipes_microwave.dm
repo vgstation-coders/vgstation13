@@ -1001,7 +1001,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/apple,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/apple,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/applecake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/apple
 
 /datum/recipe/orangecake
 	reagents = list(MILK = 5, FLOUR = 15)
