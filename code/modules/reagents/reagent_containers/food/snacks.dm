@@ -1453,42 +1453,6 @@
 	base_crumb_chance = 3
 	reagents_to_add = list(NUTRIMENT = 4)
 
-/obj/item/weapon/reagent_containers/food/snacks/sandwich
-	name = "Sandwich"
-	desc = "A grand creation of meat, cheese, bread, and several leaves of lettuce! Arthur Dent would be proud."
-	icon_state = "sandwich"
-	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
-	reagents_to_add = list(NUTRIMENT = 6)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/toastedsandwich
-	name = "Toasted Sandwich"
-	desc = "Now if you only had a pepper bar."
-	icon_state = "toastedsandwich"
-	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL //This is made from a sandwich, which contains meat!
-	reagents_to_add = list(NUTRIMENT = 6, CARBON = 2)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/grilledcheese
-	name = "Grilled Cheese Sandwich"
-	desc = "Goes great with Tomato soup!"
-	icon_state = "toastedsandwich"
-	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
-	reagents_to_add = list(NUTRIMENT = 7)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/polypwich
-	name = "Polypwich"
-	desc = "Polyp meat and gelatin between two slices of bread makes for a nutritious sandwich. Unfortunately it has a soggy and unpleasant texture. These are commonly served to mothership prisoners who misbehave."
-	icon_state = "polypwich"
-	food_flags = FOOD_MEAT | FOOD_ANIMAL
-	reagents_to_add = list(NUTRIMENT = 10)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/polypwich/after_consume(mob/user)
-	if(prob(10))	//Eating this is just an unpleasant experience, so a player might get a negative flavor message. Has no effect besides rp value. I hope ayy wardens feed these to prisoners as a punishment :)
-		to_chat(user, "<span class='warning'>The sandwich is soggy and tastes too salty to be appetizing...</span>")
-
 /obj/item/weapon/reagent_containers/food/snacks/rofflewaffles
 	name = "Roffle Waffles"
 	desc = "Waffles from Roffle. Co."
@@ -1512,28 +1476,6 @@
 /obj/item/weapon/reagent_containers/food/snacks/stew/New()
 	..()
 	eatverb = pick("slurp","sip","suck","inhale",DRINK)
-
-/obj/item/weapon/reagent_containers/food/snacks/jelliedtoast
-	name = "Jellied Toast"
-	desc = "A slice of bread covered with delicious jam."
-	icon_state = "jellytoast"
-	food_flags = FOOD_SWEET | FOOD_DIPPABLE
-	reagents_to_add = list(NUTRIMENT = 1)
-	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/jelliedtoast/cherry
-	reagents_to_add = list(NUTRIMENT = 1, CHERRYJELLY = 5)
-
-/obj/item/weapon/reagent_containers/food/snacks/jelliedtoast/slime
-	reagents_to_add = list(NUTRIMENT = 1, SLIMEJELLY = 5)
-
-/obj/item/weapon/reagent_containers/food/snacks/avocadotoast
-	name = "avocado toast"
-	desc = "Salted avocado on a slice of toast. For the authentic experience, make sure you pay an exorbitant price for it."
-	icon_state = "avocadotoast"
-	food_flags = FOOD_DIPPABLE
-	reagents_to_add = list(NUTRIMENT = 5)
-	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/stewedsoymeat
 	name = "Stewed Soy Meat"
@@ -1673,26 +1615,6 @@
 /obj/item/weapon/reagent_containers/food/snacks/diamondfries/processed
 	reagents_to_add = null
 
-/obj/item/weapon/reagent_containers/food/snacks/twobread
-	name = "Two Bread"
-	desc = "It is very bitter and winy."
-	icon_state = "twobread"
-	reagents_to_add = list(NUTRIMENT = 2)
-	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/jellysandwich
-	name = "Jelly Sandwich"
-	desc = "You wish you had some peanut butter to go with this..."
-	icon_state = "jellysandwich"
-	reagents_to_add = list(NUTRIMENT = 2)
-	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/jellysandwich/slime
-	reagents_to_add = list(NUTRIMENT = 2, SLIMEJELLY = 5)
-
-/obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry
-	reagents_to_add = list(NUTRIMENT = 2, CHERRYJELLY = 5)
-
 /*
 /obj/item/weapon/reagent_containers/food/snacks/boiledslimecore
 	name = "Boiled slime Core"
@@ -1775,215 +1697,6 @@
 	base_crumb_chance = 0
 	reagents_to_add = list(NUTRIMENT = 5)
 	bitesize = 1
-
-/////////////////////////////////////////////////Sliceable////////////////////////////////////////
-// All the food items that can be sliced into smaller bits like Meatbread and Cheesewheels
-
-// sliceable is just an organization type path, it doesn't have any additional code or variables tied to it.
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread
-	name = "meatbread loaf"
-	desc = "The culinary base of every self-respecting eloquen/tg/entleman."
-	icon_state = "meatbread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/meatbreadslice
-	slices_num = 5
-	storage_slots = 3
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
-	w_class = W_CLASS_MEDIUM
-	reagents_to_add = list(NUTRIMENT = 30)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/meatbreadslice
-	name = "meatbread slice"
-	desc = "A slice of delicious meatbread."
-	icon_state = "meatbreadslice"
-	bitesize = 2
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
-	plate_offset_y = -4
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/xenomeatbread
-	name = "xenomeatbread loaf"
-	desc = "The culinary base of every self-respecting eloquen/tg/entleman. Extra Heretical."
-	icon_state = "xenomeatbread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/xenomeatbreadslice
-	slices_num = 5
-	storage_slots = 3
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
-	w_class = W_CLASS_MEDIUM
-	reagents_to_add = list(NUTRIMENT = 30)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/xenomeatbreadslice
-	name = "xenomeatbread slice"
-	desc = "A slice of delicious meatbread. Extra Heretical."
-	icon_state = "xenobreadslice"
-	bitesize = 2
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
-	plate_offset_y = -4
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/spidermeatbread
-	name = "spider meat loaf"
-	desc = "Reassuringly green meatloaf made from spider meat."
-	icon_state = "spidermeatbread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/spidermeatbreadslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
-	reagents_to_add = list(NUTRIMENT = 30) //If the meat is toxic, it will inherit that
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/spidermeatbreadslice
-	name = "spider meat bread slice"
-	desc = "A slice of meatloaf made from an animal that most likely still wants you dead."
-	icon_state = "xenobreadslice"
-	bitesize = 2
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
-	plate_offset_y = -5
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/meatbread/synth
-	name = "synthmeatbread loaf"
-	desc = "A loaf of synthetic meatbread. You can just taste the mass-production."
-	icon_state = "meatbread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/meatbreadslice/synth
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
-	reagents_to_add = list(NUTRIMENT = 30)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/meatbreadslice/synth
-	name = "synthmeatbread slice"
-	desc = "A slice of synthetic meatbread."
-	icon_state = "meatbreadslice"
-	bitesize = 2
-	food_flags = FOOD_MEAT | FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/bananabread
-	name = "banana-nut bread"
-	desc = "A heavenly and filling treat."
-	icon_state = "bananabread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/bananabreadslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
-	reagents_to_add = list(BANANA = 20, NUTRIMENT = 20)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/bananabreadslice
-	name = "banana-nut bread slice"
-	desc = "A slice of delicious banana bread."
-	icon_state = "bananabreadslice"
-	bitesize = 2
-	food_flags = FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/tofubread
-	name = "tofubread"
-	icon_state = "Like meatbread but for vegetarians. Not guaranteed to give superpowers."
-	icon_state = "tofubread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/tofubreadslice
-	slices_num = 5
-	storage_slots = 3
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE
-	w_class = W_CLASS_MEDIUM
-	reagents_to_add = list(NUTRIMENT = 30)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/tofubreadslice
-	name = "tofubread slice"
-	desc = "A slice of delicious tofubread."
-	icon_state = "tofubreadslice"
-	bitesize = 2
-	plate_offset_y = -5
-	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
-	name = "cheese wheel"
-	desc = "A big wheel of delicious cheddar."
-	icon_state = "cheesewheel"
-	filling_color = "#FFCC33"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cheesewedge
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 20)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
-	name = "cheese wedge"
-	desc = "A wedge of delicious cheddar. The cheese wheel it was cut from can't have gone far."
-	icon_state = "cheesewedge"
-	filling_color = "#FFCC33"
-	bitesize = 2
-	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
-	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread
-	name = "bread"
-	desc = "Some plain old Earthen bread."
-	icon_state = "bread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	reagents_to_add = list(NUTRIMENT = 6)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/nova
-	name = "nova bread"
-	desc = "Some plain old destabilizing star bread."
-	icon_state = "novabread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/nova
-	reagents_to_add = list(NUTRIMENT = 6, HELL_RAMEN = 3, NOVAFLOUR = 1)
-	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/breadslice
-	name = "bread slice"
-	desc = "A slice of home."
-	icon_state = "breadslice"
-	bitesize = 2
-	food_flags = FOOD_DIPPABLE
-
-/obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
-	name = "nova bread slice"
-	desc = "A slice of Sol."
-	icon_state = "novabreadslice"
-	plate_icon = "novacustom"
-	food_flags = FOOD_DIPPABLE
-
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread
-	name = "cream cheese bread"
-	desc = "Yum yum yum!"
-	icon_state = "creamcheesebread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/creamcheesebreadslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_LACTOSE | FOOD_ANIMAL
-	reagents_to_add = list(NUTRIMENT = 20)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/creamcheesebreadslice
-	name = "cream cheese bread slice"
-	desc = "A slice of yum!"
-	icon_state = "creamcheesebreadslice"
-	bitesize = 2
-	food_flags = FOOD_LACTOSE | FOOD_DIPPABLE
-	plate_offset_y = -5
-
-/obj/item/weapon/reagent_containers/food/snacks/watermelonslice
-	name = "watermelon slice"
-	desc = "A slice of watery goodness."
-	icon_state = "watermelonslice"
-	bitesize = 2
-	food_flags = FOOD_SWEET
 
 /obj/item/weapon/reagent_containers/food/snacks/cracker
 	name = "cracker"
@@ -2166,52 +1879,6 @@
 	bitesize = 2
 	reagents_to_add = list(NUTRIMENT = 4)
 
-//////////////////CHRISTMAS AND WINTER FOOD//////////////////
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/buchedenoel
-	name = "\improper Buche de Noel"
-	desc = "Merry Christmas."
-	icon_state = "buche"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/bucheslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	trash = /obj/item/trash/tray
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE //eggs
-	reagents_to_add = list(NUTRIMENT = 20, SUGAR = 9, COCO = 5)
-	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/bucheslice
-	name = "\improper Buche de Noel slice"
-	desc = "A slice of winter magic."
-	icon_state = "buche_slice"
-	bitesize = 2
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
-	plate_offset_y = -2
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/turkey
-	name = "turkey"
-	desc = "Tastes like chicken."
-	icon_state = "turkey"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/turkeyslice
-	slices_num = 2
-	storage_slots = 2
-	w_class = W_CLASS_MEDIUM
-	trash = /obj/item/trash/tray
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 20, BLACKPEPPER = 1, SODIUMCHLORIDE = 1, CORNOIL = 1)
-	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/turkeyslice
-	name = "turkey drumstick"
-	desc = "Guaranteed vox-free!"
-	icon_state = "turkey_drumstick"
-	bitesize = 2
-	food_flags = FOOD_MEAT
-	plate_offset_y = -1
-	base_crumb_chance = 0
-
 //////////////////CHICKEN//////////////////
 
 /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets
@@ -2365,23 +2032,6 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/omurice/face
 	icon_state = "omuriceface"
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/pumpkinbread
-	name = "Pumpkin Bread"
-	desc = "A loaf of pumpkin bread."
-	icon_state = "pumpkinbread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/pumpkinbreadslice
-	slices_num = 5
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	reagents_to_add = list(NUTRIMENT = 15)
-
-/obj/item/weapon/reagent_containers/food/snacks/pumpkinbreadslice
-	name = "Pumpkin Bread slice"
-	desc = "A slice of pumpkin bread."
-	icon_state = "pumpkinbreadslice"
-	bitesize = 2
-	food_flags = FOOD_DIPPABLE
 
 /obj/item/weapon/reagent_containers/food/snacks/corndog
 	name = "Corndog"
@@ -2702,13 +2352,6 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/butterfingers_l/r
 	icon_state = "butterfingers_r"
 
-/obj/item/weapon/reagent_containers/food/snacks/butteredtoast
-	name = "buttered toast"
-	desc = "Toasted bread with butter on it."
-	icon_state = "butteredtoast"
-	food_flags = FOOD_ANIMAL | FOOD_DIPPABLE
-	reagents_to_add = list(NUTRIMENT = 2)
-
 /obj/item/weapon/reagent_containers/food/snacks/pierogi
 	name = "pierogi"
 	desc = "Dumplings with potatoes and curd inside."
@@ -2767,55 +2410,6 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	reagents_to_add = list(NUTRIMENT = 3)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter
-	name = "suppermatter"
-	desc = "Extremely dense and powerful food."
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/suppermattershard
-	storage_slots = 1
-	slices_num = 4
-	icon_state = "suppermatter"
-	w_class = W_CLASS_MEDIUM
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 48)
-	bitesize = 12
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter/New()
-	..()
-	set_light(1.4,2,"#FFFF00")
-
-/obj/item/weapon/reagent_containers/food/snacks/suppermattershard
-	name = "suppermatter shard"
-	desc = "A single portion of power."
-	icon_state = "suppermattershard"
-	bitesize = 3
-	trash = null
-	base_crumb_chance = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/suppermattershard/New()
-	..()
-	set_light(1.4,1.4,"#FFFF00")
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter/exciting
-	name = "exciting suppermatter"
-	desc = "Extremely dense, powerful and exciting food!"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/suppermattershard/exciting
-	slices_num = 5
-	icon_state = "excitingsuppermatter"
-	reagents_to_add = list(NUTRIMENT = 60)
-
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter/New()
-	..()
-	set_light(1.4,2,"#FF0000")
-
-/obj/item/weapon/reagent_containers/food/snacks/suppermattershard/exciting
-	name = "exciting suppermatter shard"
-	desc = "A single portion of exciting power!"
-	icon_state = "excitingsuppermattershard"
-
-/obj/item/weapon/reagent_containers/food/snacks/suppermattershard/exciting/New()
-	..()
-	set_light(1.4,1.4,"#FF0000")
-
 /obj/item/weapon/reagent_containers/food/snacks/grapejelly
 	name = "jelly"
 	desc = "The choice of choosy moms."
@@ -2851,18 +2445,6 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	base_crumb_chance = 0
 	reagents_to_add = list(NUTRIMENT = 4)
 	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread
-	icon = 'icons/obj/food2.dmi'
-	icon_state = "paitoast"
-	trash = 0
-	desc = "A slice of bread. Browned onto it is the image of a familiar friend."
-	food_flags = FOOD_DIPPABLE
-	reagents_to_add = list(NUTRIMENT = 5)
-	bitesize = 1
-
-/obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread/attackby(obj/item/I,mob/user,params)
-	return ..() //sorry no custom pai sandwiches
 
 /obj/item/weapon/reagent_containers/food/snacks/escargot
 	icon_state = "escargot"
