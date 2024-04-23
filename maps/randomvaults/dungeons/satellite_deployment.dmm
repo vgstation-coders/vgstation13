@@ -911,7 +911,7 @@
 /area/vault/spy_sat/deployment)
 "cQ" = (
 /obj/structure/table,
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake,
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/fruit,
 /obj/machinery/light{
 	dir = 8
 	},

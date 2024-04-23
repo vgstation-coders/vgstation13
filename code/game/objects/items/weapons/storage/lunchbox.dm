@@ -177,7 +177,7 @@
 								/obj/item/weapon/reagent_containers/food/snacks/eclair,
 								/obj/item/weapon/reagent_containers/food/snacks/sweetroll,
 								/obj/item/weapon/reagent_containers/food/snacks/cookiebowl,
-								/obj/item/weapon/reagent_containers/food/snacks/chococherrycakeslice,
+								/obj/item/weapon/reagent_containers/food/snacks/cakeslice/chococherry,
 								/obj/item/weapon/reagent_containers/food/snacks/pie/clovercreampie,
 								/obj/item/weapon/reagent_containers/food/snacks/pie/cherrypie,
 								/obj/item/weapon/reagent_containers/food/snacks/pie/applepie,

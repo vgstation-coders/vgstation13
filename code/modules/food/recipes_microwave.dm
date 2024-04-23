@@ -1096,16 +1096,16 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/orange,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/fruit
 
 /datum/recipe/christmascake
 	reagents = list(SUGARS = 10)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/fruit
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake/christmascake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/fruit/christmas
 
 // Pies ////////////////////////////////////////////////////////
 
@@ -2628,7 +2628,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/chococherrycake
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/chococherry
 
 /datum/recipe/pumpkinbread
 	reagents = list(FLOUR = 15)

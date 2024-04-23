@@ -151,18 +151,43 @@
 	name = "apple cake slice"
 	desc = "A slice of heavenly cake."
 	icon_state = "applecakeslice"
-
-/obj/item/weapon/reagent_containers/food/snacks/pie/mudpie
-	name = "mud pie"
-	desc = "While not looking very appetizing, it at least looks like somebody had fun making it."
-	icon_state = "mud_pie"
-	filling_color = "#462B20"
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/pie/mudpie/New()
-	reagents_to_add = list(NUTRIMENT = rand(0,2), TOXIN = rand(1,5))
-	if(prob(15))
-		name = "exceptional " + initial(name)
-		desc = "The crème de la pire of culinary arts."
-		reagents_to_add = list(NUTRIMENT = rand(0,2), SUGAR = 2, TOXIN = rand(4,13), COCO = 3) // extra 3-8 toxin
 	..()
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/chococherry
+	name = "chocolate-cherry cake"
+	desc = "A chocolate cake with icing and cherries."
+	icon_state = "chococherrycake"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/chococherry
+	reagents_to_add = list(NUTRIMENT = 20)
+
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/chococherry
+	name = "chocolate-cherry cake slice"
+	desc = "Just a slice of cake, enough for everyone."
+	icon_state = "chococherrycake_slice"
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/fruit
+	name = "fruitcake"
+	desc = "A hefty fruitcake that could double as a hammer in a pinch."
+	icon = 'icons/obj/food_seasonal.dmi'
+	icon_state = "fruitcake"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/fruit
+	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 20)
+
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/fruit
+	name = "fruitcake slice"
+	desc = "Delicious and fruity."
+	icon = 'icons/obj/food_seasonal.dmi'
+	icon_state = "fruitcakeslice"
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/fruit/christmas
+	name = "\improper Christmas cake"
+	desc = "A hefty fruitcake covered in royal icing."
+	icon_state = "christmascake"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/fruit/christmas
+	reagents_to_add = list(NUTRIMENT = 10)
+
+/obj/item/weapon/reagent_containers/food/snacks/cakeslice/fruit/christmas
+	name = "\improper Christmas cake slice"
+	desc = "Sweet and fruity."
+	icon_state = "christmascakeslice"
