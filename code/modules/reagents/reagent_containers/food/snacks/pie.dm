@@ -95,13 +95,6 @@
 		explosion(get_turf(hit_atom), -1, 0, 1, 3)
 		qdel(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/pie/discount
-	name = "Discount Pie"
-	icon_state = "meatpie"
-	desc = "Regulatory laws prevent us from lying to you in the technical sense, so you know this has to contain at least some meat!"
-	food_flags = FOOD_MEAT
-	reagents_to_add = list(NUTRIMENT = 2, DISCOUNT = 2, TOXIN = 2, CORNSYRUP = 4)
-
 /obj/item/weapon/reagent_containers/food/snacks/pie/meatpie
 	name = "Meat-pie"
 	icon_state = "meatpie"

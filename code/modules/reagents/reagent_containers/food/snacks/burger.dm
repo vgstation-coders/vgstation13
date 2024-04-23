@@ -163,12 +163,6 @@
 /obj/item/weapon/reagent_containers/food/snacks/burger/bigbite/on_vending_machine_spawn()//Fast-Food Menu XL
 	reagents.chem_temp = COOKTEMP_READY
 
-/obj/item/weapon/reagent_containers/food/snacks/burger/discount
-	name = "\improper Discount Dan's On The Go Burger"
-	desc = "It's still warm..."
-	icon_state = "goburger" //Someone make a better sprite for this.
-	reagents_to_add = list(NUTRIMENT = 4, DISCOUNT = 4, BEFF = 4, HORSEMEAT = 4, OFFCOLORCHEESE = 4, CHEMICAL_WASTE = 2)
-
 /obj/item/weapon/reagent_containers/food/snacks/burger/jelly
 	name = "Jelly Burger"
 	desc = "Culinary delight..?"
