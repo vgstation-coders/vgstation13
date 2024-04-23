@@ -2496,6 +2496,7 @@
 #include "code\modules\reagents\reagent_containers\food\snacks\gunk.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\meat.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\pizza.dm"
+#include "code\modules\reagents\reagent_containers\food\snacks\seafood.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\snackbar.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\soup.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\eggs\roach.dm"
