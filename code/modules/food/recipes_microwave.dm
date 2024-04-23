@@ -1465,7 +1465,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/bloodtomato,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/bloodtomato,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/soup/blood
+	result = /obj/item/weapon/reagent_containers/food/snacks/soup/tomato/blood
 
 /datum/recipe/slimesoup
 	reagents = list(WATER = 10, SLIMEJELLY = 5)

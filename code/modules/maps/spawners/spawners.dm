@@ -814,7 +814,7 @@
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
 		/obj/item/weapon/reagent_containers/food/snacks/burger/appendix,
-		/obj/item/weapon/reagent_containers/food/snacks/soup/blood,
+		/obj/item/weapon/reagent_containers/food/snacks/soup/tomato/blood,
 		/obj/item/weapon/reagent_containers/food/snacks/candy/donor,
 		/obj/item/weapon/reagent_containers/food/snacks/burger/clown,
 		/obj/item/weapon/reagent_containers/food/snacks/soup/mystery,
