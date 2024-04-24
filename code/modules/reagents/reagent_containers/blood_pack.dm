@@ -19,7 +19,10 @@
 /obj/item/weapon/reagent_containers/blood/refill()
 	if(blood_type != null)
 		name = "\improper[blood_type] bloodpack"
-	..(reagents_to_add == BLOOD ? list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null, "virus2"=list()) : null)
+	if(reagents_to_add == BLOOD || (islist(reagents_to_add) && (BLOOD in reagents_to_add)))
+		var/list/data = list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null, "virus2"=list())
+		reagents_to_add = list(BLOOD = list("volume" = volume, "data" = data))
+	..()
 	update_icon()
 
 /obj/item/weapon/reagent_containers/blood/on_reagent_change()
