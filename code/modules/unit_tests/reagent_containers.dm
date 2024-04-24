@@ -22,4 +22,5 @@
 				volume = RC.reagents_to_add[entry]
 			if(!RC.reagents.has_reagent(entry, volume))
 				fail("Reagent ID [entry] from reagents_to_add not found in at least [volume] units in atom [RC]]. (got [RC.reagents.get_reagent_amount(entry)] units instead)")
-
+	else
+		fail("[RC] could not create a reagents holder.")

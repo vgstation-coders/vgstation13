@@ -578,6 +578,7 @@
 	icon_state = "packet_"
 	possible_transfer_amounts = list(1, 5)
 	amount_per_transfer_from_this = 1
+	clears_on_refill = FALSE // because it deletes itself when emptied, allows refill() to work better
 	var/trash_type = /obj/item/trash/packet
 	var/custom = FALSE
 

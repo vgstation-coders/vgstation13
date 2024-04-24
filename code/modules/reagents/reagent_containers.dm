@@ -8,6 +8,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	icon_state = null
 	w_class = W_CLASS_TINY
 	heat_conductivity = 0.90
+	var/clears_on_refill = TRUE
 	var/amount_per_transfer_from_this = 5
 	var/possible_transfer_amounts = list(5,10,15,25,30)
 	var/volume = 30
@@ -106,7 +107,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 /obj/item/weapon/reagent_containers/proc/refill(var/data)
 	if(reagents)
-		if(!reagents.is_empty())
+		if(clears_on_refill && !reagents.is_empty())
 			reagents.clear_reagents()
 		if(islist(reagents_to_add))
 			var/list/L = reagents_to_add
