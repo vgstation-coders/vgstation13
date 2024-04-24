@@ -20,7 +20,7 @@
 	if(blood_type != null)
 		name = "\improper[blood_type] bloodpack"
 	if(islist(reagents_to_add) && (BLOOD in reagents_to_add) && ("data" in reagents_to_add[BLOOD]))
-		reagents_to_add[BLOOD]["data"]["blood_type"] == blood_type
+		reagents_to_add[BLOOD]["data"]["blood_type"] = blood_type
 	..()
 	update_icon()
 
