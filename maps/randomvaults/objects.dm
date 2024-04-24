@@ -918,16 +918,13 @@
 	desc = "Tangy tasting!"
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled/New()
-	..()
-	reagents.clear_reagents()
 	var/room_remaining = reagents.maximum_volume
 	var/poly_to_add = rand(room_remaining/10,room_remaining/2)
-	reagents.add_reagent(PACID, poly_to_add)
 	room_remaining -= poly_to_add
 	var/sulph_to_add = rand(room_remaining/10,room_remaining/2)
-	reagents.add_reagent(SACID, sulph_to_add)
 	room_remaining -= sulph_to_add
-	reagents.add_reagent(NUTRIMENT, room_remaining)
+	reagents_to_add = list(PACID = poly_to_add, SACID = sulph_to_add, NUTRIMENT = room_remaining)
+	..()
 
 /obj/item/weapon/reagent_containers/spray/chemsprayer/lube/New()
 	..()

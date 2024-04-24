@@ -10,8 +10,8 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/processed/New()
+	reagents_to_add = null
 	..()
-	reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/cone
 	name = "cone of Space Fries"
