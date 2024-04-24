@@ -6,10 +6,12 @@
 			continue
 		RC = new type
 		if(RC.reagents)
-			var/list/info = list()
-			for(var/datum/reagent/R in RC.reagents)
-				info += list(R.id = R.volume)
-			for(var/entry in info)
-				if(!RC.reagents.has_reagent(entry, info[entry]))
+			for(var/entry in reagents_to_add)
+				var/volume
+				if(islist(reagents_to_add[entry]) && ("volume" in reagents_to_add[entry]))
+					var/volume = reagents_to_add[entry]["volume"]
+				else
+					var/volume = reagents_to_add[entry]
+				if(!RC.reagents.has_reagent(entry, reagents_to_add[entry]))
 					fail("Reagent ID [entry] from reagents_to_add not found in at least [info[entry]] units in atom [RC]]")
 		qdel(RC)
