@@ -142,7 +142,7 @@
 	icon_state = "poutineocean"
 	pixel_x = -16 * PIXEL_MULTIPLIER
 	pixel_y = -8 * PIXEL_MULTIPLIER
-	var/type_to_dispense = /obj/item/weapon/reagent_containers/food/snacks/poutine
+	var/type_to_dispense = /obj/item/weapon/reagent_containers/food/snacks/fries/poutine
 
 /obj/structure/poutineocean/attack_hand(mob/user)
 	to_chat(user, "<span class='warning'>You need a plate to get food from \the [src]!</span>")
@@ -173,4 +173,4 @@
 	icon_state = "poutinecitadel"
 	pixel_x = -16 * PIXEL_MULTIPLIER
 	pixel_y = -8 * PIXEL_MULTIPLIER
-	type_to_dispense = /obj/item/weapon/reagent_containers/food/snacks/poutinesyrup
+	type_to_dispense = /obj/item/weapon/reagent_containers/food/snacks/fries/poutine/syrup

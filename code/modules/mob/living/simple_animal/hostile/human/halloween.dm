@@ -39,8 +39,8 @@
 /mob/living/simple_animal/hostile/humanoid/kitchen/poutine/death(var/gibbed = FALSE)
 	..(TRUE)
 	for(var/i=1 to 3)
-		var/to_spawn = pick(/obj/item/weapon/reagent_containers/food/snacks/poutine, /obj/item/weapon/reagent_containers/food/snacks/poutinedangerous,\
-							/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel)
+		var/to_spawn = pick(/obj/item/weapon/reagent_containers/food/snacks/fries/poutine, /obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous,\
+							/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous/barrel)
 		new to_spawn (src.loc)
 
 	new /obj/item/weapon/reagent_containers/food/snacks/mapleleaf(src.loc)

@@ -85,11 +85,11 @@
 
 /datum/food_processor_process/food/diamondcarrot
 	input = /obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond
-	output = /obj/item/weapon/reagent_containers/food/snacks/diamondfries/processed
+	output = /obj/item/weapon/reagent_containers/food/snacks/fries/diamond/processed
 
 /datum/food_processor_process/food/carrot
 	input = /obj/item/weapon/reagent_containers/food/snacks/grown/carrot
-	output = /obj/item/weapon/reagent_containers/food/snacks/carrotfries/processed
+	output = /obj/item/weapon/reagent_containers/food/snacks/fries/carrot/processed
 
 /datum/food_processor_process/food/soybeans
 	input = /obj/item/weapon/reagent_containers/food/snacks/grown/soybeans

@@ -820,21 +820,21 @@
 		/obj/item/weapon/reagent_containers/food/snacks/fries,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/cheesyfries
+	result = /obj/item/weapon/reagent_containers/food/snacks/fries/cheesy
 
 /datum/recipe/mooncheesyfries //Alternate recipe using moon cheese
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/fries,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/cheesyfries
+	result = /obj/item/weapon/reagent_containers/food/snacks/fries/cheesy
 
 /datum/recipe/punnetofcheesyfries
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/cheesyfries,
+		/obj/item/weapon/reagent_containers/food/snacks/fries/cheesy,
 		/obj/item/stack/sheet/cardboard,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet
+	result = /obj/item/weapon/reagent_containers/food/snacks/fries/cheesy/punnet
 
 /datum/recipe/coneoffries
 	items = list(
@@ -3015,7 +3015,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/fries,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/poutine
+	result = /obj/item/weapon/reagent_containers/food/snacks/fries/poutine
 
 /datum/recipe/moonpoutine //Alternate recipe using moon cheese
 	reagents = list(GRAVY = 5)
@@ -3023,25 +3023,25 @@
 		/obj/item/weapon/reagent_containers/food/snacks/fries,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/poutine
+	result = /obj/item/weapon/reagent_containers/food/snacks/fries/poutine
 
 /datum/recipe/poutinedangerous
 	reagents = list(GRAVY = 10)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/poutine,
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine,
 		/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/poutinedangerous
+	result = /obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous
 
 /datum/recipe/poutinebarrel
 	reagents = list(GRAVY = 50)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/poutinedangerous,
-		/obj/item/weapon/reagent_containers/food/snacks/poutinedangerous,
-		/obj/item/weapon/reagent_containers/food/snacks/poutinedangerous,
-		/obj/item/weapon/reagent_containers/food/snacks/poutinedangerous
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous,
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous,
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous,
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
+	result = /obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous/barrel
 
 /datum/recipe/mapleleaf
 	reagents = list (SUGARS = 10, HONEY = 15)
@@ -3055,28 +3055,28 @@
 /datum/recipe/poutinesyrup
 	reagents = list (MAPLESYRUP = 5)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/poutine
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/poutinesyrup
+	result = /obj/item/weapon/reagent_containers/food/snacks/fries/poutine/syrup
 
 /datum/recipe/poutineocean
 	reagents = list (GRAVY = 100)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
-		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
-		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
-		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous/barrel,
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous/barrel,
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous/barrel,
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous/barrel
 		)
 	result = /obj/structure/poutineocean
 
 /datum/recipe/poutinecitadel
 	reagents = list (MAPLESYRUP = 50)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
-		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
-		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
-		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel,
-		/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous/barrel,
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous/barrel,
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous/barrel,
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous/barrel,
+		/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous/barrel
 		)
 	result = /obj/structure/poutineocean/poutinecitadel
 

@@ -140,7 +140,7 @@
 	if(E.is_empty())
 		E.reagents.add_reagent(NUTRIMENT, 9)
 
-	var/snack_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet,
+	var/snack_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/fries/cheesy/punnet,
                                 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear,
 								/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating,
 								/obj/item/weapon/reagent_containers/food/snacks/breadslice/meat,
@@ -328,7 +328,7 @@
 								/obj/item/weapon/reagent_containers/food/snacks/mushnslush,
 								/obj/item/weapon/reagent_containers/food/snacks/vanishingstew,
 								/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
-								/obj/item/weapon/reagent_containers/food/snacks/poutine))
+								/obj/item/weapon/reagent_containers/food/snacks/fries/poutine))
 
 	new snack_trader(src)
 

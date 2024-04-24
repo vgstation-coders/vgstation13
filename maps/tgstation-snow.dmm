@@ -90855,7 +90855,7 @@
 /area/storage/primary)
 "ogB" = (
 /obj/structure/table/holotable/wood,
-/obj/item/weapon/reagent_containers/food/snacks/poutinedangerous,
+/obj/item/weapon/reagent_containers/food/snacks/fries/poutine/dangerous,
 /obj/item/weapon/kitchen/utensil/fork{
 	pixel_x = 10;
 	pixel_y = -2

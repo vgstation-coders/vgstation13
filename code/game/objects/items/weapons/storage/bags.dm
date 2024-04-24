@@ -332,7 +332,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 /obj/item/weapon/storage/bag/food/menu2
 	items_to_spawn = list(
 		/obj/item/weapon/reagent_containers/food/snacks/burger/bigbite,//14 nutriments
-		/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet,//6 nutriments
+		/obj/item/weapon/reagent_containers/food/snacks/fries/cheesy/punnet,//6 nutriments
 		/obj/item/weapon/kitchen/utensil/fork/plastic,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind,//-7 drowsy, -1 sleepy
 		/obj/item/weapon/reagent_containers/food/condiment/small/ketchup,
