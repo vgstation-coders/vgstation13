@@ -842,23 +842,6 @@
 	reagents_to_add = list(MAPLESYRUP = 10)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/ambrosia_brownies
-	name = "brownie sheet"
-	desc = "Give them to your friends."
-	icon_state = "ambrosia_brownies"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/ambrosia_brownie
-	slices_num = 6
-	storage_slots = 3
-	w_class = W_CLASS_MEDIUM
-	food_flags = FOOD_SWEET | FOOD_ANIMAL
-	reagents_to_add = list(NUTRIMENT = 2)
-
-/obj/item/weapon/reagent_containers/food/snacks/ambrosia_brownie
-	name = "brownie"
-	desc = "A brownie that may or may not get you sky high."
-	icon_state = "ambrosia_brownie"
-	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_DIPPABLE
-
 /obj/item/weapon/reagent_containers/food/snacks/candiedpear
 	name = "candied pear"
 	desc = "A pear covered with caramel. Quite sugary."
