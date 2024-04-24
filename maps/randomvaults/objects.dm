@@ -918,7 +918,7 @@
 	desc = "Tangy tasting!"
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled/New()
-	var/room_remaining = reagents.maximum_volume
+	var/room_remaining = volume
 	var/poly_to_add = rand(room_remaining/10,room_remaining/2)
 	room_remaining -= poly_to_add
 	var/sulph_to_add = rand(room_remaining/10,room_remaining/2)
@@ -927,8 +927,8 @@
 	..()
 
 /obj/item/weapon/reagent_containers/spray/chemsprayer/lube/New()
+	reagents_to_add = list(LUBE = rand(50,volume))
 	..()
-	reagents.add_reagent(LUBE, rand(50,volume))
 
 /obj/effect/decal/cleanable/blood/stattrack //Not the same as tracks. Less nonsense required, for aesthetic purposes only
 	icon_state = "tracks"
