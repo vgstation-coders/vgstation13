@@ -352,7 +352,7 @@
 /area/vault/mothership_lab/hobo)
 "cV" = (
 /obj/structure/table,
-/obj/item/weapon/reagent_containers/food/snacks/polypwich,
+/obj/item/weapon/reagent_containers/food/snacks/sandwich/polyp,
 /turf/unsimulated/floor/ayy,
 /area/vault/mothership_lab/habitation)
 "cX" = (

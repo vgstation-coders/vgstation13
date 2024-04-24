@@ -119,7 +119,7 @@
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
 	dir = 9
 	},
-/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
+/obj/item/weapon/reagent_containers/food/snacks/sandwich/grilledcheese,
 /turf/simulated/floor/wood,
 /area/mining_bar)
 "as" = (

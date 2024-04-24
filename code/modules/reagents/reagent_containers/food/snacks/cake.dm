@@ -151,7 +151,6 @@
 	name = "apple cake slice"
 	desc = "A slice of heavenly cake."
 	icon_state = "applecakeslice"
-	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/chococherry
 	name = "chocolate-cherry cake"

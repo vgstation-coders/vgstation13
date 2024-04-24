@@ -21240,7 +21240,7 @@
 /area/maintenance/fsmaint2)
 "bcl" = (
 /obj/structure/table/woodentable,
-/obj/item/weapon/reagent_containers/food/snacks/bananabreadslice,
+/obj/item/weapon/reagent_containers/food/snacks/breadslice/banana,
 /obj/item/clothing/mask/gas/clown_hat,
 /obj/machinery/light_construct/small{
 	dir = 8

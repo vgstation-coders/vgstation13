@@ -710,7 +710,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/creamcheese
 
 /datum/recipe/mooncreamcheesebread //Alternate recipe using moon cheese
 	reagents = list(FLOUR = 15)
@@ -718,7 +718,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/creamcheesebread
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/creamcheese
 
 /datum/recipe/eucharist
 	reagents = list(FLOUR = 5, HOLYWATER = 5)
@@ -1625,7 +1625,7 @@
 
 /datum/recipe/toastedsandwich
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/sandwich)
-	result = /obj/item/weapon/reagent_containers/food/snacks/toastedsandwich
+	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich/toasted
 
 /datum/recipe/grilledcheese
 	items = list(
@@ -1633,7 +1633,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/grilledcheese
+	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich/grilledcheese
 
 /datum/recipe/moongrilledcheese //Alternate recipe using moon cheese
 	items = list(
@@ -1641,17 +1641,17 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/grilledcheese
+	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich/grilledcheese
 
 /datum/recipe/slimetoast
 	reagents = list(SLIMEJELLY = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/breadslice)
-	result = /obj/item/weapon/reagent_containers/food/snacks/jelliedtoast/slime
+	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich/jelliedtoast/slime
 
 /datum/recipe/jelliedtoast
 	reagents = list(CHERRYJELLY = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/breadslice)
-	result = /obj/item/weapon/reagent_containers/food/snacks/jelliedtoast/cherry
+	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich/jelliedtoast/cherry
 
 /datum/recipe/notasandwich
 	items = list(
@@ -1695,7 +1695,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted,
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/avocadotoast
+	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich/avocadotoast
 
 /datum/recipe/pbj
 	items = list(
@@ -1714,7 +1714,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/polypwich
+	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich/polyp
 	cookable_with = COOKABLE_WITH_MIXING
 
 // Coder Snacks ///////////////////////////////////////////////////////
@@ -2635,7 +2635,7 @@
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/pumpkinbread
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/pumpkin
 
 /datum/recipe/corndog
 	reagents = list(FLOUR = 5)

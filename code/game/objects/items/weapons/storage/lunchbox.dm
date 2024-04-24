@@ -3,7 +3,7 @@
 // -----------------------------
 /obj/item/weapon/storage/lunchbox/plastic/nt/proc/pickfood()
 	var/entree = pick(list(/obj/item/weapon/reagent_containers/food/snacks/sandwich,
-								/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
+								/obj/item/weapon/reagent_containers/food/snacks/sandwich/grilledcheese,
 								/obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry,
 								/obj/item/weapon/reagent_containers/food/snacks/pbj,
                                 /obj/item/weapon/reagent_containers/food/snacks/breadslice/meat,
@@ -36,7 +36,7 @@
                                 /obj/item/weapon/reagent_containers/food/snacks/sosjerky,
 								/obj/item/weapon/reagent_containers/food/snacks/donkpocket,
 								/obj/item/weapon/reagent_containers/food/snacks/breadslice,
-								/obj/item/weapon/reagent_containers/food/snacks/creamcheesebreadslice,
+								/obj/item/weapon/reagent_containers/food/snacks/breadslice/creamcheese,
                                 /obj/item/weapon/reagent_containers/food/snacks/no_raisin,
                                 /obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers,
                                 /obj/item/weapon/reagent_containers/food/snacks/poppypretzel,
@@ -68,7 +68,7 @@
 								/obj/item/weapon/reagent_containers/food/snacks/fortunecookie,
 								/obj/item/weapon/reagent_containers/food/snacks/sugarcookie,
 								/obj/item/weapon/reagent_containers/food/snacks/caramelcookie,
-								/obj/item/weapon/reagent_containers/food/snacks/bananabreadslice,
+								/obj/item/weapon/reagent_containers/food/snacks/breadslice/banana,
 								/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
 								/obj/item/weapon/reagent_containers/food/snacks/ricepudding))
 
@@ -107,9 +107,9 @@
 //          LUNCH FOOD LISTS (SYNDICATE)
 // -----------------------------
 /obj/item/weapon/storage/lunchbox/metal/syndie/proc/pickfood_syndie()
-	var/entree_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/toastedsandwich,
+	var/entree_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/sandwich/toasted,
                                 /obj/item/weapon/reagent_containers/food/snacks/notasandwich,
-								/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
+								/obj/item/weapon/reagent_containers/food/snacks/sandwich/grilledcheese,
 								/obj/item/weapon/reagent_containers/food/snacks/burger/bigbite,
 								/obj/item/weapon/reagent_containers/food/snacks/burger/bear,
 								/obj/item/weapon/reagent_containers/food/snacks/burger/avocado,
@@ -144,7 +144,7 @@
                                 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear,
 								/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating,
 								/obj/item/weapon/reagent_containers/food/snacks/breadslice/meat,
-								/obj/item/weapon/reagent_containers/food/snacks/creamcheesebreadslice,
+								/obj/item/weapon/reagent_containers/food/snacks/breadslice/creamcheese,
 								/obj/item/weapon/reagent_containers/food/snacks/twobread,
                                 /obj/item/weapon/reagent_containers/food/snacks/soup/chili,
 								/obj/item/weapon/reagent_containers/food/snacks/soup/meatball,
