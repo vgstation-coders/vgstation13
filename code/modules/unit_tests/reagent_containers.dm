@@ -13,7 +13,7 @@
 
 /datum/unit_test/reagent_containers/proc/check_container(var/obj/item/weapon/reagent_containers/RC)
 	if(RC.reagents)
-		var/to_add = RC.reagents_to_add
+		var/list/to_add = RC.reagents_to_add
 		if(!islist(RC.reagents_to_add))
 			to_add = list(RC.reagents_to_add)
 		for(var/entry in to_add)
