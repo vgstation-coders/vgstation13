@@ -113,7 +113,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/soup/wish/New()
 	if(prob(25))
 		desc = "A wish come true!"
-		reagents_to_add += list(NUTRIMENT, 8)
+		reagents_to_add += list(NUTRIMENT = 8)
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/soup/avocado

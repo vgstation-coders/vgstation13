@@ -170,9 +170,16 @@
 	icon_state = "donut1"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_DIPPABLE //eggs are used
 	var/soggy = 0
+	var/frosts = FALSE
 	base_crumb_chance = 30
 
 //Called in drinks.dm attackby
+
+/obj/item/weapon/reagent_containers/food/snacks/donut/New()
+	if(frosts && prob(30))
+		frost()
+	..()
+
 /obj/item/weapon/reagent_containers/food/snacks/donut/proc/dip(var/obj/item/weapon/reagent_containers/R, mob/user)
 	var/probability = 15*soggy
 	to_chat(user, "<span class='notice'>You dip \the [src] into \the [R]</span>")
@@ -186,19 +193,18 @@
 		name = "soggy [name]"
 	soggy += 1
 
+/obj/item/weapon/reagent_containers/food/snacks/donut/proc/frost()
+	icon_state = "donut2"
+	name = "frosted [initial.name]"
+	reagents_to_add[SPRINKLES] += 2
+
 /obj/item/weapon/reagent_containers/food/snacks/donut/normal
 	name = "donut"
 	desc = "Goes great with Robust Coffee."
 	icon_state = "donut1"
 	bitesize = 3
 	reagents_to_add = list(NUTRIMENT = 3, SPRINKLES = 1)
-
-/obj/item/weapon/reagent_containers/food/snacks/donut/normal/New()
-	if(prob(30))
-		icon_state = "donut2"
-		name = "frosted donut"
-		reagents_to_add = list(NUTRIMENT = 3, SPRINKLES = 3)
-	..()
+	frosts = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/donut/chaos
 	name = "Chaos Donut"
@@ -206,12 +212,9 @@
 	icon_state = "donut1"
 	reagents_to_add = list(NUTRIMENT = 2, SPRINKLES = 1)
 	bitesize = 10
+	frosts = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/donut/chaos/New()
-	if(prob(30))
-		icon_state = "donut2"
-		name = "frosted chaos donut"
-		reagents_to_add = list(NUTRIMENT = 2, SPRINKLES = 3)
 	switch(rand(1,10))
 		if(1)
 			reagents_to_add = list(NUTRIMENT = 5, SPRINKLES = 3)
@@ -235,24 +238,23 @@
 			reagents_to_add += list(TRICORDRAZINE = 3)
 	..()
 
-
 /obj/item/weapon/reagent_containers/food/snacks/donut/jelly
 	name = "jelly donut"
 	desc = "You jelly?"
 	icon_state = "jdonut1"
 	bitesize = 5
-	var/filling = BERRYJUICE
+	reagents_to_add = list(NUTRIMENT = 3, SPRINKLES = 1, BERRYJUICE = 5)
+	frosts = TRUE
 
-/obj/item/weapon/reagent_containers/food/snacks/donut/jelly/New()
-	reagents_to_add = list(NUTRIMENT = 3, SPRINKLES = 1, filling = 5)
-	if(prob(30))
-		icon_state = "jdonut2"
-		name = "Frosted Jelly Donut"
-		reagents_to_add = list(NUTRIMENT = 3, SPRINKLES = 3, filling = 5)
+/obj/item/weapon/reagent_containers/food/snacks/donut/jelly/frost()
 	..()
+	icon_state = "jdonut2"
 
 /obj/item/weapon/reagent_containers/food/snacks/donut/jelly/slime
-	filling = SLIMEJELLY
+	reagents_to_add = list(NUTRIMENT = 3, SPRINKLES = 1, SLIMEJELLY = 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/donut/jelly/cherry
+	reagents_to_add = list(NUTRIMENT = 3, SPRINKLES = 1, CHERRYJELLY = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/donutiron //not a subtype of donuts to avoid inheritance
 	name = "ironman donut"
@@ -260,9 +262,6 @@
 	desc = "An ironman donut will keep you cool when things heat up."
 	bitesize = 3
 	reagents_to_add = list(NUTRIMENT = 6, LEPORAZINE = 6, IRON = 6)
-
-/obj/item/weapon/reagent_containers/food/snacks/donut/jelly/cherry
-	filling = CHERRYJELLY
 
 /obj/item/weapon/reagent_containers/food/snacks/bagel
 	name = "bagel"

@@ -293,7 +293,6 @@
 	reagents_to_add = list(NUTRIMENT = 2, ZAMMILD = 5)
 	bitesize = 2
 	var/nutrimentbonus = 0
-	var/spicetype = ZAMMILD
 
 /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth/New()
 	if(prob(10))
@@ -301,7 +300,7 @@
 		desc = "An unidentified microwave object has abducted your broth and made it slightly more nutritious!"
 		icon_state = "mothershipbroth_ufo"
 		trash = /obj/item/trash/emptybowl_ufo
-		reagents_to_add = list(NUTRIMENT = 4+nutrimentbonus, spicetype = 5)
+		reagents_to_add[NUTRIMENT] += 2+nutrimentbonus
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/mothershipbroth/spicy
@@ -312,7 +311,6 @@
 	filling_color = "#D35A0D"
 	reagents_to_add = list(NUTRIMENT = 3, ZAMSPICYTOXIN = 5)
 	bitesize = 2
-	spicetype = ZAMSPICYTOXIN
 	nutrimentbonus = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/cheesybroth
