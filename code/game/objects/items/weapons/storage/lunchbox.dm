@@ -130,7 +130,7 @@
 								/obj/item/weapon/reagent_containers/food/snacks/aesirsalad,
 								/obj/item/weapon/reagent_containers/food/snacks/validsalad,
 								/obj/item/weapon/reagent_containers/food/snacks/chickensalad,
-								/obj/item/weapon/reagent_containers/food/snacks/monkeykabob,
+								/obj/item/weapon/reagent_containers/food/snacks/kabob,
 								/obj/item/weapon/reagent_containers/food/snacks/curry,
 								/obj/item/weapon/reagent_containers/food/snacks/curry/vindaloo,
 								/obj/item/weapon/reagent_containers/food/snacks/curry/crab,

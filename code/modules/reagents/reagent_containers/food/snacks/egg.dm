@@ -211,3 +211,84 @@ var/snail_egg_count = 0
 /obj/item/weapon/reagent_containers/food/snacks/egg/pomf/can_consume(mob/living/carbon/eater, mob/user)
 	to_chat(user,"<span class='warning'>The shell is too hard for your teeth. Is that really an egg?</span>")
 	return FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/friedegg
+	name = "fried egg"
+	desc = "A fried egg, with a touch of salt and pepper."
+	icon_state = "friedegg"
+	food_flags = FOOD_ANIMAL
+	base_crumb_chance = 0
+	bitesize = 1
+	reagents_to_add = list(NUTRIMENT = 2, SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/boiledegg
+	name = "boiled egg"
+	desc = "A hard boiled egg."
+	icon_state = "egg"
+	food_flags = FOOD_ANIMAL
+	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/blobegg
+	name = "oeufs en blob"
+	desc = "Baked egg in a delicious, sticky broth. Bón appetit!"
+	icon_state = "blobegg"
+	trash = /obj/item/trash/emptybowl
+	food_flags = FOOD_ANIMAL | FOOD_MEAT
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_FORK | UTENSILE_SPOON
+	reagents_to_add = list(NUTRIMENT = 20, BLOBANINE = 5)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
+	name = "omelette du fromage"
+	desc = "That's all you can say!"
+	icon_state = "omelette"
+	food_flags = FOOD_ANIMAL //made from eggs
+	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 8)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/wrap
+	name = "egg wrap"
+	desc = "The precursor to Pigs in a Blanket."
+	icon_state = "wrap"
+	food_flags = FOOD_ANIMAL
+	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 5)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/benedict
+	name = "eggs benedict"
+	desc = "There is only one egg on this, how rude."
+	icon_state = "benedict"
+	food_flags = FOOD_ANIMAL
+	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 3)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/omurice
+	name = "omelette rice"
+	desc = "Just like your Japanese animes!"
+	icon_state = "omurice"
+	food_flags = FOOD_ANIMAL //egg
+	plate_offset_y = 1
+	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
+	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 8)
+	bitesize = 1
+
+/obj/item/weapon/reagent_containers/food/snacks/omurice/heart
+	icon_state = "omuriceheart"
+	plate_offset_y = -1
+
+/obj/item/weapon/reagent_containers/food/snacks/omurice/face
+	icon_state = "omuriceface"
+
+/obj/item/weapon/reagent_containers/food/snacks/spicycoldnoodles
+	name = "spicy cold noodles"
+	desc = "A noodle dish in the style popular in Space China."
+	icon_state = "spicycoldnoodles"
+	bitesize = 2
+	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 5)

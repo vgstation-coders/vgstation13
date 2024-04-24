@@ -816,23 +816,6 @@
 
 // Eggs
 
-/obj/item/weapon/reagent_containers/food/snacks/friedegg
-	name = "fried egg"
-	desc = "A fried egg, with a touch of salt and pepper."
-	icon_state = "friedegg"
-	food_flags = FOOD_ANIMAL
-	base_crumb_chance = 0
-	bitesize = 1
-	reagents_to_add = list(NUTRIMENT = 2, SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
-
-/obj/item/weapon/reagent_containers/food/snacks/boiledegg
-	name = "boiled egg"
-	desc = "A hard boiled egg."
-	icon_state = "egg"
-	food_flags = FOOD_ANIMAL
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 2)
-
 /obj/item/weapon/reagent_containers/food/snacks/organ
 	name		=	"organ"
 	desc		=	"It's good for you."
@@ -1002,13 +985,6 @@
 	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/blobkabob
-	name = "keblob"
-	desc = "Blob meat, on a stick."
-	icon_state = "blobkabob"
-	food_flags = FOOD_MEAT
-	reagents_to_add = list(NUTRIMENT = 8, BLOBANINE = 5)
-
 /obj/item/weapon/reagent_containers/food/snacks/blobpudding
 	name = "blob à l'impératrice"
 	desc = "An extremely thick \"pudding\" that requires a tough jaw."
@@ -1018,17 +994,6 @@
 	crumb_icon = "dribbles"
 	valid_utensils = UTENSILE_FORK | UTENSILE_SPOON
 	reagents_to_add = list(NUTRIMENT = 8, BLOBANINE = 5)
-
-/obj/item/weapon/reagent_containers/food/snacks/blobegg
-	name = "oeufs en blob"
-	desc = "Baked egg in a delicious, sticky broth. Bón appetit!"
-	icon_state = "blobegg"
-	trash = /obj/item/trash/emptybowl
-	food_flags = FOOD_ANIMAL | FOOD_MEAT
-	crumb_icon = "dribbles"
-	valid_utensils = UTENSILE_FORK | UTENSILE_SPOON
-	reagents_to_add = list(NUTRIMENT = 20, BLOBANINE = 5)
-	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/blobsoup
 	name = "blobisque"
@@ -1040,16 +1005,6 @@
 	valid_utensils = UTENSILE_FORK | UTENSILE_SPOON
 	reagents_to_add = list(NUTRIMENT = 15, BLOBANINE = 5)
 	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
-	name = "omelette du fromage"
-	desc = "That's all you can say!"
-	icon_state = "omelette"
-	food_flags = FOOD_ANIMAL //made from eggs
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 8)
-	bitesize = 1
-
 
 /obj/item/weapon/reagent_containers/food/snacks/berryclafoutis
 	name = "berry clafoutis"
@@ -1099,49 +1054,6 @@
 	trash = /obj/item/trash/snack_bowl
 	food_flags = FOOD_MEAT
 	reagents_to_add = list(NUTRIMENT = 6)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/human/kabob
-	name = "-kabob"
-	icon_state = "kabob"
-	desc = "A human meat, on a stick."
-	trash = /obj/item/stack/rods
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 8)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeykabob
-	name = "Meat-kabob"
-	icon_state = "kabob"
-	desc = "Delicious meat, on a stick."
-	trash = /obj/item/stack/rods
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 8)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/monkeykabob/synth
-	name = "Synth-kabob"
-	desc = "Synthetic meat, on a stick."
-
-/obj/item/weapon/reagent_containers/food/snacks/corgikabob
-	name = "Corgi-kabob"
-	icon_state = "kabob"
-	desc = "Only someone without a heart could make this."
-	trash = /obj/item/stack/rods
-	food_flags = FOOD_MEAT
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 8)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/tofukabob
-	name = "Tofu-kabob"
-	icon_state = "kabob"
-	desc = "Vegan meat, on a stick."
-	trash = /obj/item/stack/rods
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 8)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/cubancarp
@@ -1503,42 +1415,6 @@
 	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/boiledrice
-	name = "Boiled Rice"
-	desc = "A boring dish of boring rice."
-	icon_state = "boiledrice"
-	trash = /obj/item/trash/snack_bowl
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 2)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/ricepudding
-	name = "Rice Pudding"
-	desc = "Where's the Jam!"
-	icon_state = "rpudding"
-	trash = /obj/item/trash/snack_bowl
-	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
-	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 4)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/riceball
-	name = "Rice Ball"
-	desc = "In mining culture, this is also known as a donut."
-	icon_state = "riceball"
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 2)
-	bitesize = 1
-
-/obj/item/weapon/reagent_containers/food/snacks/eggplantsushi
-	name = "Spicy Eggplant Sushi Rolls"
-	desc = "Eggplant rolls are an example of Asian Fusion as eggplants were introduced from mainland Asia to Japan. This dish is Earth Fusion, originating after the introduction of the chili from the Americas to Japan. Fusion HA!"
-	icon_state = "eggplantsushi"
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 4, CAPSAICIN = 2)
-	bitesize = 3
-
 /obj/item/weapon/reagent_containers/food/snacks/pastatomato
 	name = "Spaghetti"
 	desc = "Spaghetti and crushed tomatoes. Just like your abusive father used to make!"
@@ -1707,15 +1583,6 @@
 
 ////////////////////////////////FOOD ADDITIONS////////////////////////////////////////////
 
-/obj/item/weapon/reagent_containers/food/snacks/wrap
-	name = "egg wrap"
-	desc = "The precursor to Pigs in a Blanket."
-	icon_state = "wrap"
-	food_flags = FOOD_ANIMAL
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 5)
-	bitesize = 2
-
 /obj/item/weapon/reagent_containers/food/snacks/beans
 	name = "tin of beans"
 	desc = "Musical fruit in a slightly less musical container."
@@ -1724,15 +1591,6 @@
 	base_crumb_chance = 0
 	reagents_to_add = list(NUTRIMENT = 10)
 	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/benedict
-	name = "eggs benedict"
-	desc = "There is only one egg on this, how rude."
-	icon_state = "benedict"
-	food_flags = FOOD_ANIMAL
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 3)
-	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/hotdog
 	name = "hotdog"
@@ -1933,63 +1791,6 @@
 	desc = "Respect has to be earned, Sweet - just like money."
 	icon_state = "vox_tendies"
 
-//////////////////CURRY//////////////////
-
-/obj/item/weapon/reagent_containers/food/snacks/curry
-	name = "Chicken Balti"
-	desc = "Finest Indian Cuisine, at least you think it is chicken."
-	icon_state = "curry_balti"
-	item_state = "curry_balti"
-	food_flags = FOOD_MEAT
-	valid_utensils = UTENSILE_SPOON
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 20)
-	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/curry/vindaloo
-	name = "Chicken Vindaloo"
-	desc = "Me and me Mum and me Dad and me Nan are off to Waterloo, me and me Mum and me Dad and me Nan and a bucket of Vindaloo!"
-	icon_state = "curry_vindaloo"
-	item_state = "curry_vindaloo"
-	reagents_to_add = list(NUTRIMENT = 20, CAPSAICIN = 10)
-
-/obj/item/weapon/reagent_containers/food/snacks/curry/crab
-	name = "Crab Curry"
-	desc = "An Indian dish with a snappy twist!"
-	icon_state = "curry_crab"
-	item_state = "curry_crab"
-
-/obj/item/weapon/reagent_containers/food/snacks/curry/lemon
-	name = "Lemon Curry"
-	desc = "This actually exists?"
-	icon_state = "curry_lemon"
-	item_state = "curry_lemon"
-
-/obj/item/weapon/reagent_containers/food/snacks/curry/xeno
-	name = "Xeno Balti"
-	desc = "Waste not want not."
-	icon_state = "curry_xeno"
-	item_state = "curry_xeno"
-
-/obj/item/weapon/reagent_containers/food/snacks/gigapuddi
-	name = "Giga Puddi"
-	desc = "A large crème caramel."
-	icon_state = "gigapuddi"
-	food_flags = FOOD_ANIMAL | FOOD_LACTOSE | FOOD_SWEET
-	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
-	filling_color = "#FFEC4D"
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 20)
-	bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/gigapuddi/happy
-	desc = "A large crème caramel, made with extra love."
-	icon_state = "happypuddi"
-
-/obj/item/weapon/reagent_containers/food/snacks/gigapuddi/anger
-	desc = "A large crème caramel, made with extra hate."
-	icon_state = "angerpuddi"
-
 /obj/item/weapon/reagent_containers/food/snacks/flan
 	name = "Flan"
 	desc = "A small crème caramel."
@@ -2002,7 +1803,6 @@
 	reagents_to_add = list(NUTRIMENT = 10)
 	bitesize = 2
 
-
 /obj/item/weapon/reagent_containers/food/snacks/honeyflan
 	name = "Honey Flan"
 	desc = "The systematic slavery of an entire society of insects, elegantly sized to fit in your mouth."
@@ -2013,25 +1813,6 @@
 	base_crumb_chance = 0
 	reagents_to_add = list(NUTRIMENT = 8, CINNAMON = 5, HONEY = 6)
 	bitesize = 3
-
-
-/obj/item/weapon/reagent_containers/food/snacks/omurice
-	name = "omelette rice"
-	desc = "Just like your Japanese animes!"
-	icon_state = "omurice"
-	food_flags = FOOD_ANIMAL //egg
-	plate_offset_y = 1
-	valid_utensils = UTENSILE_FORK|UTENSILE_SPOON
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 8)
-	bitesize = 1
-
-/obj/item/weapon/reagent_containers/food/snacks/omurice/heart
-	icon_state = "omuriceheart"
-	plate_offset_y = -1
-
-/obj/item/weapon/reagent_containers/food/snacks/omurice/face
-	icon_state = "omuriceface"
 
 /obj/item/weapon/reagent_containers/food/snacks/corndog
 	name = "Corndog"
@@ -2124,14 +1905,6 @@
 /obj/item/weapon/reagent_containers/food/snacks/midnightsnack/New()
 	..()
 	set_light(2)
-
-/obj/item/weapon/reagent_containers/food/snacks/spicycoldnoodles
-	name = "spicy cold noodles"
-	desc = "A noodle dish in the style popular in Space China."
-	icon_state = "spicycoldnoodles"
-	bitesize = 2
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycitruschicken
 	name = "honey citrus chicken"

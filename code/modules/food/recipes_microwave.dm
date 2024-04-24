@@ -191,7 +191,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/blob,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/blob
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/blobkabob
+	result = /obj/item/weapon/reagent_containers/food/snacks/kabob/blob
 
 /datum/recipe/blobpudding
 	reagents = list(SUGARS = 5, CREAM = 5)
@@ -1215,7 +1215,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/monkeykabob/synth
+	result = /obj/item/weapon/reagent_containers/food/snacks/kabob/synth
 
 /datum/recipe/monkeykabob
 	items = list(
@@ -1223,7 +1223,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/animal,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/animal,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/monkeykabob
+	result = /obj/item/weapon/reagent_containers/food/snacks/kabob
 
 /datum/recipe/corgikabob
 	items = list(
@@ -1231,7 +1231,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/corgikabob
+	result = /obj/item/weapon/reagent_containers/food/snacks/kabob/corgi
 
 /datum/recipe/tofukabob
 	items = list(
@@ -1239,7 +1239,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/tofu,
 		/obj/item/weapon/reagent_containers/food/snacks/tofu,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/tofukabob
+	result = /obj/item/weapon/reagent_containers/food/snacks/kabob/tofu
 
 // Pizza ///////////////////////////////////////////////////////
 

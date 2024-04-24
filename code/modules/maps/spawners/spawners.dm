@@ -572,7 +572,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
 		/obj/item/weapon/reagent_containers/food/snacks/soup/clownstears,
 		/obj/item/weapon/reagent_containers/food/snacks/soup/chili/cold,
-		/obj/item/weapon/reagent_containers/food/snacks/corgikabob,
+		/obj/item/weapon/reagent_containers/food/snacks/kabob/corgi,
 		/obj/item/weapon/reagent_containers/food/snacks/donkpocket,
 		/obj/item/weapon/reagent_containers/food/snacks/donut,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey,
