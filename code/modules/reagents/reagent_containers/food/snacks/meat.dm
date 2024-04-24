@@ -196,8 +196,8 @@
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/refill()
+	reagents_to_add = list(NUTRIMENT = 3.5, ROACHSHELL = rand(2,6))
 	..()
-	reagents.add_reagent(ROACHSHELL, rand(2,6))
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/on_vending_machine_spawn()
 	reagents.chem_temp = FRIDGETEMP_FROZEN
@@ -219,8 +219,8 @@
 	bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/cricket/refill()
+	reagents_to_add = list(NUTRIMENT = 3, FLOUR = rand(4,10))
 	..()
-	reagents.add_reagent(FLOUR, rand(4,10))
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/cricket/big
 	name = "creatine cricket meat"
@@ -242,12 +242,8 @@
 	var/transformed = FALSE
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/refill()
+	reagents_to_add = list(NUTRIMENT = 3, SPACE_DRUGS = rand(0,4), MINDBREAKER = rand(0,2), NUTRIMENT = rand(0,4), TOXIN = rand(0,2))
 	..()
-	reagents.add_reagent(SPACE_DRUGS, rand(0,4))
-	reagents.add_reagent(MINDBREAKER, rand(0,2))
-	reagents.add_reagent(NUTRIMENT, rand(0,4))
-	reagents.add_reagent(TOXIN, rand(0,2))
-
 	shapeshift()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/bless()
@@ -328,8 +324,8 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	reagents_to_add = list(NUTRIMENT = 3, CARBON = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/hive/refill()
+	reagents_to_add = list(NUTRIMENT = 3, CARBON = 5, pick(IRON, GOLD, SILVER, URANIUM) = rand(0,5))
 	..()
-	reagents.add_reagent(pick(IRON, GOLD, SILVER, URANIUM), rand(0,5))
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/hive/turret/refill()
 	..()
@@ -348,8 +344,8 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	bitesize = 30
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/refill()
+	reagents_to_add = list(NUTRIMENT = rand(10,25))
 	..()
-	reagents.add_reagent(NUTRIMENT, rand(10,25))
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/consume(mob/living/carbon/eater, messages = 0)
 	. = ..()

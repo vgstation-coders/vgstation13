@@ -324,8 +324,8 @@
 	reagents_to_add = list(BEER = 30)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear/refill()
+	reagents_to_add = list(BEER = 30, HYPERZINE = rand(3,5))
 	..()
-	reagents.add_reagent(HYPERZINE, rand(3,5))
 
 // Here be ayy canned drinks
 

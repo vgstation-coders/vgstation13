@@ -124,7 +124,8 @@
 	hatch_type = /mob/living/simple_animal/hostile/retaliate/cockatrice/chick
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/refill()
-	reagents.add_reagent(PETRITRICIN, rand(5,15)/10)
+	reagents_to_add = list(PETRITRICIN = rand(5,15)/10)
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/bigroach
 	name = "mutated cockroach eggs"
@@ -134,8 +135,8 @@
 	hatch_type = /mob/living/simple_animal/hostile/bigroach
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/bigroach/refill()
-	reagents.add_reagent(TOXIN, rand(5,15))
-	reagents.add_reagent(RADIUM, rand(1,5))
+	reagents_to_add = list(TOXIN = rand(5,15), RADIUM = rand(1,5))
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/parrot
 	name = "parrot egg"
