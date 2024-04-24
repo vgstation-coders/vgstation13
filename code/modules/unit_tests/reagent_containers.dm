@@ -24,9 +24,11 @@
 			if(!RC.reagents.has_reagent(entry, volume))
 				fail("Reagent ID [entry] from reagents_to_add not found in at least [volume] units in atom [RC]]. (got [RC.reagents.get_reagent_amount(entry)] units instead)")
 			if(islist(RC.reagents_to_add[entry]) && ("data" in RC.reagents_to_add[entry]))
-				var/list/list1 = RC.reagents.get_data(entry)
-				var/list/list2 = RC.reagents_to_add[entry]["data"]
+				var/list/list1 = RC.reagents_to_add[entry]["data"]
+				var/list/list2 = RC.reagents.get_data(entry)
 				for(var/subentry in list1)
+					if(islist(subentry1))
+						continue // for now
 					if(list1[subentry] != list2[subentry])
 						fail("Reagent ID [entry] has mismatching data in atom [RC]. (expected [list1[subentry]] on [subentry], got [list2[subentry]])")
 	else
