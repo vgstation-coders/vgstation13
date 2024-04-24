@@ -1323,7 +1323,7 @@ var/global/floorIsLava = 0
 	feedback_add_details("admin_verb","SA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 // Helper functions for proc call madness
-/atom/proc/spawn_at(var/type, var/list/varchanges = list())
+/atom/proc/spawn_at(var/type, var/list/varchanges = list(), var/jitter = 0)
 	if(!ispath(type))
 		return
 	//preloader is hooked to atom/New(), and is automatically disabled once it 'loads' an object
@@ -1338,13 +1338,24 @@ var/global/floorIsLava = 0
 
 		T.set_area(A)
 	else
-		new type(src)
+		var/atom/A = new type(src)
+		if(jitter)
+			A.pixel_x = rand(jitter,-jitter) * PIXEL_MULTIPLIER
+			A.pixel_y = rand(jitter,-jitter) * PIXEL_MULTIPLIER
 
-/atom/proc/spawn_at_turf(var/type, var/list/varchanges = list())
+/atom/proc/spawn_at_turf(var/type, var/list/varchanges = list(), var/jitter = 0)
 	if(isarea(src))
 		return
 	var/turf/T = get_turf(src)
-	T.spawn_at(type,varchanges)
+	T.spawn_at(type,varchanges,jitter)
+
+/atom/proc/spawn_subtypes_at(var/type, var/list/varchanges = list(), var/jitter = 16)
+	for(var/subtype in subtypesof(type))
+		spawn_at(subtype,varchanges,jitter)
+
+/atom/proc/spawn_subtypes_at_turf(var/type, var/list/varchanges = list(), var/jitter = 16)
+	for(var/subtype in subtypesof(type))
+		spawn_at_turf(subtype,varchanges,jitter)
 
 /datum/admins/proc/show_role_panel(var/mob/M in mob_list)
 	set category = "Admin"

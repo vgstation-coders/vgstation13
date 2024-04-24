@@ -24,8 +24,8 @@
 	name = "poutine"
 	desc = "Fries, cheese & gravy. Your arteries will hate you for this."
 	icon_state = "poutine"
+	filling_color = "#885555"
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
-	filling_color = "#FFFFFF"
 	plate_offset_y = -3
 	reagents_to_add = list(NUTRIMENT = 8)
 
@@ -71,7 +71,7 @@
 	name = "Carrot Fries"
 	desc = "Tasty fries from fresh carrots."
 	icon_state = "carrotfries"
-	filling_color =  "#FFFFFF"
+	filling_color = "#FF9933"
 	base_crumb_chance = 0
 	reagents_to_add = list(NUTRIMENT = 3, IMIDAZOLINE = 3)
 
