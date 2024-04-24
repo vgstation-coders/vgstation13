@@ -28,7 +28,7 @@
 /area/vault/assistantlair)
 "ag" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "ah" = (
@@ -214,7 +214,7 @@
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "aM" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/vault/assistantlair)
 "aN" = (
@@ -506,7 +506,7 @@
 /turf/simulated/floor/wood,
 /area/vault/assistantlair)
 "bH" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/wood,
 /area/vault/assistantlair)
 "bI" = (

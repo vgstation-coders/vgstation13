@@ -5,7 +5,7 @@
 // Used for caching purposes. Returns true if this reaction can occur inside this mixture - i.e. the necessary reagents are inside the mixture. Caching_flags
 // determine when this function is called - if no flags, it will be called constantly on every update to a mixture. Additional flags will improve efficiency by
 // reducing calls.
-/datum/gas_reaction/proc/reaction_is_possible( datum/gas_mixture/mixture )
+/datum/gas_reaction/proc/reaction_is_possible(datum/gas_mixture/mixture)
 	return FALSE
 
 // Given that this reaction is the only reaction occuring in mixture, how much of each reagent would it use up this tick? Values must be accurate, since if for instance
@@ -27,10 +27,11 @@
 	name = "Cryotheum-Oxygen Reaction"
 
 /datum/gas_reaction/cryotheum_oxygen_reaction/reaction_is_possible(datum/gas_mixture/mixture)
-	return mixture[GAS_CRYOTHEUM] > 0 && mixture[GAS_OXYGEN] > 0
+	return mixture[GAS_CRYOTHEUM] > 0 && QUANTIZE(mixture.molar_density(GAS_CRYOTHEUM)) * CELL_VOLUME > MOLES_CRYOTHEUM_VISIBLE && mixture[GAS_OXYGEN] > 0
 
 /datum/gas_reaction/cryotheum_oxygen_reaction/reaction_amounts_requested(datum/gas_mixture/mixture)
 	var/to_return[] = list()
+	// Reach maximum efficiency when the Cryo:Oxy ratio is 1:50 or higher. Any less and scale linearly, i.e. 1:100 is half speed.
 	var/catalyst_coefficient = min(1.0, mixture[GAS_CRYOTHEUM] / mixture[GAS_OXYGEN] * 50)
 	to_return[GAS_OXYGEN] = catalyst_coefficient * mixture[GAS_OXYGEN]*0.0015
 	return to_return
@@ -38,8 +39,10 @@
 /datum/gas_reaction/cryotheum_oxygen_reaction/perform_reaction(datum/gas_mixture/mixture, reactant_amounts)
 	var/reaction_coefficient = reactant_amounts[GAS_OXYGEN]
 	mixture[GAS_OXYGEN] = max(0, mixture[GAS_OXYGEN] - reaction_coefficient)
-	// -120000 times 0.0015 * mols of oxygen should reduce a normal room by about 1.7C every time this ticks.
-	mixture.add_thermal_energy( reaction_coefficient * -120000, 232.8952)
+	// Should reduce a normal room down to a minimum of around -30C in less than a minute.
+	var/const/temp_loss_per_one_reaction = -170000
+	var/const/min_oxy_reaction_temperature = 242.8952
+	mixture.add_thermal_energy( reaction_coefficient * temp_loss_per_one_reaction, min_oxy_reaction_temperature)
 
 
 // Cryotheum reacts with itself in the presence of plasma, disappearing but drastically lowering temperatures. Small amounts of gas will near-instantly turn to 0.1K, whereas
@@ -48,10 +51,11 @@
 	name = "Plasma Catalyzed Cryotheum Reaction"
 
 /datum/gas_reaction/cryotheum_plasma_reaction/reaction_is_possible(datum/gas_mixture/mixture)
-	return mixture[GAS_CRYOTHEUM] > 0 && mixture[GAS_PLASMA] > 0
+	return mixture[GAS_CRYOTHEUM] > 0 && QUANTIZE(mixture.molar_density(GAS_PLASMA)) * CELL_VOLUME > MOLES_PLASMA_VISIBLE
 
 /datum/gas_reaction/cryotheum_plasma_reaction/reaction_amounts_requested(datum/gas_mixture/mixture)
 	var/to_return[] = list()
+	// Reach maximum efficiency when the Plasma/Cryo ratio is 1:10 or higher. Any less and scale linearly, i.e. 1:20 is half speed.
 	var/catalyst_coefficient = min(1.0, mixture[GAS_PLASMA] / mixture[GAS_CRYOTHEUM] * 10)
 	to_return[GAS_CRYOTHEUM] = catalyst_coefficient * mixture[GAS_CRYOTHEUM]*0.2
 	return to_return
@@ -63,4 +67,5 @@
 	var/distance_to_min_temp = max(0, mixture.temperature - 0.1)
 	var/logarithmic_modifier = max(0, log(40, distance_to_min_temp+1))
 	// Arbitrary number to reduce temperature by a significant amount, hardcapped at the minimum temperature.
-	mixture.add_thermal_energy( logarithmic_modifier * reaction_coefficient * -700000, 0.1)
+	var/const/temp_loss_per_one_reaction = -700000
+	mixture.add_thermal_energy( logarithmic_modifier * reaction_coefficient * temp_loss_per_one_reaction, 0.1)
