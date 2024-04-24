@@ -5,9 +5,10 @@
 		if(isnull(initial(RC.reagents_to_add)))
 			continue
 		RC = new type
-		check_container(RC)
-		RC.refill()
-		check_container(RC)
+		if(RC)
+			check_container(RC)
+			RC.refill()
+			check_container(RC)
 		qdel(RC)
 
 /datum/unit_test/reagent_containers/proc/check_container(var/obj/item/weapon/reagent_containers/RC)
