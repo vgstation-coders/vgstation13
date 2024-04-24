@@ -678,7 +678,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bananabread
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/banana
 
 /datum/recipe/tofubread
 	reagents = list(FLOUR = 15)
@@ -690,7 +690,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/tofubread
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/tofu
 
 /datum/recipe/moontofubread //Alternate recipe using moon cheese
 	reagents = list(FLOUR = 15)
@@ -702,7 +702,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/tofubread
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/tofu
 
 /datum/recipe/creamcheesebread
 	reagents = list(FLOUR = 15)
