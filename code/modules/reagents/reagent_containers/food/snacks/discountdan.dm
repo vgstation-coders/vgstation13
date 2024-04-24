@@ -17,9 +17,9 @@
 			if(3)
 				reagents_to_add[HORSEMEAT] += rand(3,6) //9-18
 	if(prob(75))
-		reagents_to_add[BONEMARROW] += rand(1,3) //0-3
+		reagents_to_add[BONEMARROW] = rand(1,3) //0-3
 	if(prob(44))
-		reagents_to_add[ROACHSHELL] += rand(1,8) //0-8
+		reagents_to_add[ROACHSHELL] = rand(1,8) //0-8
 	//36 to 111 nutrition. 4noraisins has 90...
 	..()
 

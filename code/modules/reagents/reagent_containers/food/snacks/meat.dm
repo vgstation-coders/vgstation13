@@ -426,20 +426,22 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/refill()
 	//A new blend of meat in every slab! Can be better than or worse than normal meat.
-	reagents.clear_reagents()
+	reagents_to_add = list()
 	//No room for normal meat chems in here. We're going full DAN
 	for(var/blendedmeat = 1 to 3)
 		switch(rand(1,3))
 			if(1)
-				reagents.add_reagent(NUTRIMENT, 1) //15 nutrition
+				reagents_to_add[NUTRIMENT] += 1 //15 nutrition
 			if(2)
-				reagents.add_reagent(BEFF,rand(3,8)) //6-16
+				reagents_to_add[BEFF] += rand(3,8) //6-16
 			if(3)
-				reagents.add_reagent(HORSEMEAT,rand(3,6)) //9-18
-	reagents.add_reagent(BONEMARROW,rand(0,3)) //0-3
+				reagents_to_add[HORSEMEAT] += rand(3,6) //9-18
+	if(prob(75))
+		reagents_to_add[BONEMARROW] = rand(1,3) //0-3
 	if(prob(5))
-		reagents.add_reagent(ROACHSHELL,1) //Sometimes a roach gets in. No nutritional value
+		reagents_to_add[ROACHSHELL] = 1 //Sometimes a roach gets in. No nutritional value
 	//Total ranging from 18 to 57 nutrition. Normal meat provides 45.
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/on_vending_machine_spawn()
 	reagents.chem_temp = FRIDGETEMP_FROZEN
