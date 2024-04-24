@@ -13,5 +13,5 @@
 				else
 					var/volume = RC.reagents_to_add[entry]
 				if(!RC.reagents.has_reagent(entry, RC.reagents_to_add[entry]))
-					fail("Reagent ID [entry] from reagents_to_add not found in at least [info[entry]] units in atom [RC]]")
+					fail("Reagent ID [entry] from reagents_to_add not found in at least [RC.reagents_to_add[entry]] units in atom [RC]]")
 		qdel(RC)
