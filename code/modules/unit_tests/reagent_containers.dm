@@ -24,7 +24,7 @@
 			if(!RC.reagents.has_reagent(entry, volume))
 				fail("Reagent ID [entry] from reagents_to_add not found in at least [volume] units in atom [RC]]. (got [RC.reagents.get_reagent_amount(entry)] units instead)")
 			if(islist(RC.reagents_to_add[entry]) && ("data" in RC.reagents_to_add[entry]))
-				var/datum/reagent/R = RC.get_reagent(entry)
+				var/datum/reagent/R = RC.reagents.get_reagent(entry)
 				if(R.data != RC.reagents_to_add[entry]["data"])
 					fail("Reagent ID [entry] has mismatching data in atom [RC]. (expected [json_encode(R.data)], got [RC.reagents_to_add[entry]["data"]])")
 	else
