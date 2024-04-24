@@ -1094,3 +1094,21 @@
 	..()
 	reagents.add_reagent(DIABEETUSOL, 4)
 	reagents.add_reagent(SUGAR, 5)
+
+/obj/item/projectile/bullet/rocksalt
+	name = "rock-salt slug"
+	icon_state = "rsshell"
+	damage = 10
+	agony = 20
+	penetration = 1
+
+/obj/item/projectile/bullet/rocksalt/New()
+	..()
+	create_reagents(10)
+	reagents.add_reagent(HOLYSALTS, 5)
+	reagents.add_reagent(HOLYWATER, 5)
+
+/obj/item/projectile/bullet/rocksalt/on_hit(var/atom/atarget, var/blocked = 0)
+	..()
+	if(!blocked)
+		reagents.trans_to(atarget, reagents.total_volume)
