@@ -407,3 +407,4 @@
 	name = "syringe (mixed)"
 	desc = "Contains inaprovaline & anti-toxins."
 	reagents_to_add = list(INAPROVALINE = 8, ANTI_TOXIN = 7)
+	flags = FPRINT | NOREACT
