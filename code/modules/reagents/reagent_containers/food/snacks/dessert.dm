@@ -195,7 +195,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/donut/proc/frost()
 	icon_state = "donut2"
-	name = "frosted [initial.name]"
+	name = "frosted [initial(name)]"
 	reagents_to_add[SPRINKLES] += 2
 
 /obj/item/weapon/reagent_containers/food/snacks/donut/normal
