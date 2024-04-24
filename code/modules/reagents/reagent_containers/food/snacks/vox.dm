@@ -228,3 +228,4 @@
 	crumb_icon = "dribbles"
 	filling_color = "#FF9933"
 	reagents_to_add = list(NUTRIMENT = 3)
+	valid_utensils = UTENSILE_SPOON

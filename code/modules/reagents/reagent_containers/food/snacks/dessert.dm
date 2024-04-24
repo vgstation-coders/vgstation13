@@ -475,6 +475,8 @@
 	base_crumb_chance = 0
 	reagents_to_add = list(NUTRIMENT = 10, SUGAR = 10, ICE = list(10, T0C), WATERMELONJUICE = 5)
 	bitesize = 3
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/sundae
 	name = "Sundae"
@@ -484,6 +486,8 @@
 	base_crumb_chance = 0
 	reagents_to_add = list(NUTRIMENT = 5, SUGAR = 5, ICE = list(5, T0C))
 	bitesize = 3
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake
 	name = "avocado milkshake"
@@ -491,10 +495,11 @@
 	icon_state = "avocadomilkshake"
 	food_flags = FOOD_LIQUID | FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE //milk
 	trash = /obj/item/weapon/reagent_containers/food/drinks/drinkingglass
-	valid_utensils = 0
 	base_crumb_chance = 0
 	reagents_to_add = list(NUTRIMENT = 10, SUGAR = 5, ICE = list(5, T0C))
 	bitesize = 4
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/cinnamonroll
 	name = "cinnamon roll"
@@ -790,6 +795,8 @@
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
 	reagents_to_add = list(NUTRIMENT = 2, SUGAR = 2, MILK = 2)
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/pannacotta
 	name = "panna cotta"
