@@ -355,48 +355,39 @@
 		var/obj/item/weapon/storage/S = loc
 		S.update_icon()
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/uranium/New()
-	..()
-	reagents.add_reagent(URANIUM, 25)
+/obj/item/weapon/reagent_containers/glass/beaker/vial/uranium
+	reagents_to_add = URANIUM
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/tencarbon/New()
-	..()
-	reagents.add_reagent(CARBON, 10)
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tencarbon
+	reagents_to_add = list(CARBON = 10)
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/tenwater/New()
-	..()
-	reagents.add_reagent(WATER, 10)
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tenwater
+	reagents_to_add = list(WATER = 10)
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/tenantitox/New()
-	..()
-	reagents.add_reagent(ANTI_TOXIN, 10)
+/obj/item/weapon/reagent_containers/glass/beaker/vial/tenantitox
+	reagents_to_add = list(ANTI_TOXIN = 10)
 
-/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/lemonlime/New()
-	..()
-	reagents.add_reagent(LEMON_LIME, 30)
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/lemonlime
+	reagents_to_add = list(LEMON_LIME = 30)
 
-/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater/New()
-	..()
-	reagents.add_reagent(SODAWATER, 30)
+/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater
+	reagents_to_add = list(SODAWATER = 30)
 
-/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone/New()
-	..()
-	reagents.add_reagent(CRYOXADONE, 30)
+/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone
+	reagents_to_add = list(CRYOXADONE = 30)
 
-/obj/item/weapon/reagent_containers/glass/beaker/sulphuric/New()
-	..()
-	reagents.add_reagent(SACID, 50)
+/obj/item/weapon/reagent_containers/glass/beaker/sulphuric
+	reagents_to_add = SACID
 
-/obj/item/weapon/reagent_containers/glass/beaker/slime/New()
-	..()
-	reagents.add_reagent(SLIMEJELLY, 50)
+/obj/item/weapon/reagent_containers/glass/beaker/slime
+	reagents_to_add = SLIMEJELLY
 
 /obj/item/weapon/reagent_containers/glass/beaker/mednanobots
 	name = "beaker 'nanobots'"
+	reagents_to_add = list(MEDNANOBOTS = 25)
 
 /obj/item/weapon/reagent_containers/glass/beaker/mednanobots/New()
 	..()
-	reagents.add_reagent("mednanobots", 25)
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/bucket
@@ -491,9 +482,11 @@
 	update_temperature_overlays()
 	update_blood_overlay()//re-applying blood stains
 
+/obj/item/weapon/reagent_containers/glass/bucket/water_filled
+	reagents_to_add = list(WATER = 150)
+
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
 	..()
-	reagents.add_reagent(WATER, 150)
 	update_icon()
 
 /obj/item/weapon/reagent_containers/glass/soupcan
@@ -564,9 +557,7 @@
 /obj/item/weapon/reagent_containers/glass/dispenser/surfactant
 	name = "reagent glass (surfactant)"
 	icon_state = "liquid"
-/obj/item/weapon/reagent_containers/glass/dispenser/surfactant/New()
-	..()
-	reagents.add_reagent(FLUOROSURFACTANT, 20)
+	reagents_to_add = list(FLUOROSURFACTANT = 20)
 */
 
 //No idea if this actually works anymore. Please handle carefully
@@ -604,7 +595,9 @@
 /obj/item/weapon/reagent_containers/glass/kettle/green
 	icon_state = "kettle_green"
 
+/obj/item/weapon/reagent_containers/glass/kettle/full
+	reagents_to_add = TEA
+
 /obj/item/weapon/reagent_containers/glass/kettle/full/New()
 	..()
 	icon_state = "kettle[pick("_red","_blue","_purple","_green")]"
-	reagents.add_reagent(TEA,75)
