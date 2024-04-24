@@ -115,7 +115,7 @@
 	icon_state = "excitingsuppermatter"
 	reagents_to_add = list(NUTRIMENT = 60)
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/excitingsuppermatter/New()
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter/exciting/New()
 	..()
 	set_light(1.4,2,"#FF0000")
 
