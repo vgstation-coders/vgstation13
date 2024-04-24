@@ -13,23 +13,23 @@
 
 /datum/unit_test/reagent_containers/proc/check_container(var/obj/item/weapon/reagent_containers/RC)
 	if(RC.reagents)
-		var/toadd = RC.reagents_to_add
+		var/to_add = RC.reagents_to_add
 		if(!islist(RC.reagents_to_add))
-			toadd = list(RC.reagents_to_add)
-		for(var/entry in RC.reagents_to_add)
+			to_add = list(RC.reagents_to_add)
+		for(var/entry in to_add)
 			if(!chemical_reagents_list[entry])
 				fail("Reagent ID [entry] is not a valid reagent.")
 			var/volume
-			if(islist(RC.reagents_to_add[entry]) && ("volume" in RC.reagents_to_add[entry]))
-				volume = RC.reagents_to_add[entry]["volume"]
-			else if(isnum(RC.reagents_to_add[entry]))
-				volume = RC.reagents_to_add[entry]
+			if(islist(to_add[entry]) && ("volume" in to_add[entry]))
+				volume = to_add[entry]["volume"]
+			else if(isnum(to_add[entry]))
+				volume = to_add[entry]
 			else
-				volume = RC.volume
+				volume = (RC.volume/to_add.len)
 			if(!RC.reagents.has_reagent(entry, volume))
 				fail("Reagent ID [entry] from reagents_to_add not found in at least [volume] units in atom [RC]]. (got [RC.reagents.get_reagent_amount(entry)] units instead)")
-			if(islist(RC.reagents_to_add[entry]) && ("data" in RC.reagents_to_add[entry]))
-				var/list/list1 = RC.reagents_to_add[entry]["data"]
+			if(islist(to_add[entry]) && ("data" in to_add[entry]))
+				var/list/list1 = to_add[entry]["data"]
 				var/list/list2 = RC.reagents.get_data(entry)
 				for(var/subentry in list1)
 					if(islist(list1[subentry]))
