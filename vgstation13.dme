@@ -2496,6 +2496,7 @@
 #include "code\modules\reagents\reagent_containers\food\snacks\dessert.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\discountdan.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\egg.dm"
+#include "code\modules\reagents\reagent_containers\food\snacks\european.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\fries.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\grey.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\grown.dm"

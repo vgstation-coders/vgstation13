@@ -91,3 +91,53 @@
 	base_crumb_chance = 0
 	reagents_to_add = list(NUTRIMENT = 4, CAPSAICIN = 2)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/fortunecookie
+	name = "Fortune cookie"
+	desc = "A true prophecy in each cookie!"
+	icon_state = "fortune_cookie"
+	food_flags = FOOD_DIPPABLE
+	reagents_to_add = list(NUTRIMENT = 3)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/soydope
+	name = "Soy Dope"
+	desc = "Dope from a soy."
+	icon_state = "soydope"
+	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 2)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/wingfangchu
+	name = "Wing Fang Chu"
+	desc = "A savory dish of alien wing wang in soy."
+	icon_state = "wingfangchu"
+	trash = /obj/item/trash/snack_bowl
+	food_flags = FOOD_MEAT
+	reagents_to_add = list(NUTRIMENT = 6)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/tofu
+	name = "Tofu"
+	icon_state = "tofu"
+	desc = "We all love tofu."
+	reagents_to_add = list(NUTRIMENT = 3)
+	bitesize = 3
+	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/tofurkey
+	name = "Tofurkey"
+	desc = "A fake turkey made from tofu."
+	icon_state = "tofurkey"
+	reagents_to_add = list(NUTRIMENT = 12, STOXIN = 3)
+	bitesize = 3
+	base_crumb_chance = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/sashimi
+	name = "carp sashimi"
+	desc = "Celebrate surviving attack from hostile alien lifeforms by hospitalising yourself."
+	icon_state = "sashimi"
+	food_flags = FOOD_MEAT
+	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 6, CARPPHEROMONES = 5)
+	bitesize = 3
