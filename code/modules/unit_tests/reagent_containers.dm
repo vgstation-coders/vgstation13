@@ -26,8 +26,8 @@
 			if(islist(RC.reagents_to_add[entry]) && ("data" in RC.reagents_to_add[entry]))
 				var/list/list1 = RC.reagents.get_data(entry)
 				var/list/list2 = RC.reagents_to_add[entry]["data"]
-				for(var/entry in list1)
-					if(list1[entry] != list2[entry])
-						fail("Reagent ID [entry] has mismatching data in atom [RC]. (expected [list1[entry]] on [entry], got [list2[entry]])")
+				for(var/subentry in list1)
+					if(list1[subentry] != list2[subentry])
+						fail("Reagent ID [entry] has mismatching data in atom [RC]. (expected [list1[subentry]] on [subentry], got [list2[subentry]])")
 	else
 		fail("[RC] could not create a reagents holder.")
