@@ -2484,6 +2484,7 @@
 #include "code\modules\reagents\reagent_containers\food\drinks.dm"
 #include "code\modules\reagents\reagent_containers\food\mobcube.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks.dm"
+#include "code\modules\reagents\reagent_containers\food\drinks\bottles.dm"
 #include "code\modules\reagents\reagent_containers\food\drinks\cans.dm"
 #include "code\modules\reagents\reagent_containers\food\drinks\drinkingglass.dm"
 #include "code\modules\reagents\reagent_containers\food\drinks\groans.dm"
