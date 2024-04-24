@@ -27,7 +27,7 @@
 				var/list/list1 = RC.reagents_to_add[entry]["data"]
 				var/list/list2 = RC.reagents.get_data(entry)
 				for(var/subentry in list1)
-					if(islist(subentry1))
+					if(islist(subentry))
 						continue // for now
 					if(list1[subentry] != list2[subentry])
 						fail("Reagent ID [entry] has mismatching data in atom [RC]. (expected [list1[subentry]] on [subentry], got [list2[subentry]])")
