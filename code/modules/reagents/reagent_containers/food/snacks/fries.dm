@@ -9,9 +9,8 @@
 	reagents_to_add = list(NUTRIMENT = 4)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/fries/processed/New()
+/obj/item/weapon/reagent_containers/food/snacks/fries/processed
 	reagents_to_add = null
-	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/cone
 	name = "cone of Space Fries"
@@ -76,9 +75,8 @@
 	base_crumb_chance = 0
 	reagents_to_add = list(NUTRIMENT = 3, IMIDAZOLINE = 3)
 
-/obj/item/weapon/reagent_containers/food/snacks/fries/carrot/processed/New()
-	..()
-	reagents.clear_reagents()
+/obj/item/weapon/reagent_containers/food/snacks/fries/carrot/processed
+	reagents_to_add = null
 
 /obj/item/weapon/reagent_containers/food/snacks/fries/diamond
 	name = "Diamond Fries"

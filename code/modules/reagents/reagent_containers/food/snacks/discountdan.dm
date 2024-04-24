@@ -11,15 +11,17 @@
 	for(var/blendedmeat = 1 to 6)
 		switch(rand(1,3))
 			if(1)
-				reagents.add_reagent(NUTRIMENT, 1) //15 nutrition
+				reagents_to_add[NUTRIMENT] += 1 //15 nutrition
 			if(2)
-				reagents.add_reagent(BEFF,rand(3,8)) //6-16
+				reagents_to_add[BEFF] += rand(3,8) //6-16
 			if(3)
-				reagents.add_reagent(HORSEMEAT,rand(3,6)) //9-18
-	reagents.add_reagent(BONEMARROW,rand(0,3)) //0-3
-	if(prob(50))
-		reagents.add_reagent(ROACHSHELL,rand(0,8)) //0
+				reagents_to_add[HORSEMEAT] += rand(3,6) //9-18
+	if(prob(75))
+	reagents.add_reagent[BONEMARROW] += rand(1,3) //0-3
+	if(prob(44))
+		reagents.add_reagent[ROACHSHELL] += rand(1,8) //0-8
 	//36 to 111 nutrition. 4noraisins has 90...
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/sausage/dan/on_vending_machine_spawn()
 	reagents.chem_temp = FRIDGETEMP_FROZEN

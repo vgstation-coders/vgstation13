@@ -92,9 +92,8 @@
 	bitesize = 2
 	reagents_to_add = list(NUTRIMENT = 3)
 
-/obj/item/weapon/reagent_containers/food/snacks/faggot/processed/New()
-	..()
-	reagents.clear_reagents()
+/obj/item/weapon/reagent_containers/food/snacks/faggot/processed
+	reagents_to_add = null
 
 /obj/item/weapon/reagent_containers/food/snacks/sausage
 	name = "sausage"
