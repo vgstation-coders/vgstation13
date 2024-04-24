@@ -19,6 +19,7 @@
 	return 1
 
 /obj/item/weapon/reagent_containers/food/dipping_sauce
+	reagents_to_add = list(DIPPING_SAUCE = 30)
 	var/dip_message = ""
 
 /obj/item/weapon/reagent_containers/food/update_icon()
@@ -40,10 +41,6 @@
 	else
 		icon_state = initial(icon_state)
 		desc = initial(desc)
-
-/obj/item/weapon/reagent_containers/food/dipping_sauce/New()
-	..()
-	reagents.add_reagent(DIPPING_SAUCE,30)
 
 /obj/item/weapon/reagent_containers/food/dipping_sauce/attackby(obj/item/weapon/reagent_containers/food/snacks/S, mob/user) //Dipping sauce is not a snack because you can't just pick it up and eat it. Instead, you need to dip snacks in it.
 	if(..()) return
@@ -130,10 +127,7 @@
 	desc = "Bland without dipping sauce."
 	bitesize = 4
 	icon_state = "tortillachip"
-
-/obj/item/weapon/reagent_containers/food/snacks/tortillachip/New()
-	..()
-	reagents.add_reagent(NUTRIMENT,1)
+	reagents_to_add = list(NUTRIMENT = 1)
 
 /obj/structure/poutineocean
 	name = "poutine ocean"
