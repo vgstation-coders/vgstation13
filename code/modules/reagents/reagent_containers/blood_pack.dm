@@ -14,14 +14,13 @@
 
 	starting_materials = list(MAT_PLASTIC = 3*CC_PER_SHEET_MISC) //Recipe calls for 3 sheets
 	w_type = RECYK_PLASTIC
-	reagents_to_add = BLOOD
+	reagents_to_add = list(BLOOD = list("volume" = volume, "data" = list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null, "virus2"=list())))
 
 /obj/item/weapon/reagent_containers/blood/refill()
 	if(blood_type != null)
 		name = "\improper[blood_type] bloodpack"
-	if(reagents_to_add == BLOOD || (islist(reagents_to_add) && (BLOOD in reagents_to_add)))
-		var/list/data = list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null, "virus2"=list())
-		reagents_to_add = list(BLOOD = list("volume" = volume, "data" = data))
+	if(islist(reagents_to_add) && (BLOOD in reagents_to_add) && ("data" in reagents_to_add[BLOOD]))
+		reagents_to_add[BLOOD]["data"]["blood_type"] == blood_type
 	..()
 	update_icon()
 
