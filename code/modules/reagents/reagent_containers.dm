@@ -113,7 +113,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			var/list/L = reagents_to_add
 			for(var/reagent in L)
 				if(islist(reagents_to_add[reagent]))
-					reagents.add_reagent(reagent, reagents_to_add[reagent]["volume"], data || reagents_to_add[reagent]["data"], reagents_to_add[reagent]["temp"])
+					reagents.add_reagent(reagent, reagents_to_add[reagent]["volume"] || volume, data || reagents_to_add[reagent]["data"], reagents_to_add[reagent]["temp"])
 				else
 					reagents.add_reagent(reagent,reagents_to_add[reagent] || volume / L.len, data)
 		else if(reagents_to_add)
