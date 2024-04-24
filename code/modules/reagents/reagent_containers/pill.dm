@@ -341,6 +341,7 @@
 		reagents_to_add += list(index = to_spawn[index])
 	if(hidereagents)
 		reagents_to_add += list(BLACKCOLOR = 1)
+	..()
 
 
 /obj/item/weapon/reagent_containers/pill/random/maintenance

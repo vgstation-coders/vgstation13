@@ -19,7 +19,7 @@
 /obj/item/weapon/reagent_containers/blood/refill()
 	if(blood_type != null)
 		name = "\improper[blood_type] bloodpack"
-	reagents.add_reagent(BLOOD, 200, list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null, "virus2"=list()))
+	..(reagents_to_add == BLOOD ? list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null, "virus2"=list()) : null)
 	update_icon()
 
 /obj/item/weapon/reagent_containers/blood/on_reagent_change()
@@ -147,9 +147,6 @@
 //not needed anymore
 //	icon = 'icons/obj/chemopack.dmi'
 ////////////////////////////////////////
-/obj/item/weapon/reagent_containers/blood/chemo/refill()
-	reagents.clear_reagents()
-	reagents.add_reagent(PHALANXIMINE, volume)
 
 /obj/item/weapon/reagent_containers/blood/attackby(obj/item/W as obj, mob/user as mob)
 	var/turf/T = get_turf(src)

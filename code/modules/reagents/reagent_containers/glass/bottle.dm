@@ -143,7 +143,7 @@
 /obj/item/weapon/reagent_containers/glass/bottle/virion/refill()
 	var/datum/disease/F = new diseasetype(0)
 	var/list/data = list("viruses"= list(F))
-	reagents.add_reagent(BLOOD, 20, data)
+	..(data)
 
 /obj/item/weapon/reagent_containers/glass/bottle/virion/epiglottis
 	name = "Epiglottis virion culture bottle"
@@ -208,7 +208,7 @@
 		"virus2" = list()
 	)
 	blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
-	reagents.add_reagent(BLOOD, volume, blood_data)
+	..(blood_data)
 
 /obj/item/weapon/reagent_containers/glass/bottle/virion/retrovirus
 	name = "Retrovirus culture bottle"
