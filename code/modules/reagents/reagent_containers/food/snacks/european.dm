@@ -215,3 +215,11 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 		open = FALSE
 		icon_state = "es_cargo_closed"
 		visible_message("<span class='notice'>\The [usr] closes \the [src]!</span>", drugged_message = "<span class='notice'>Enough for today !</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/baguette
+	name = "Baguette"
+	desc = "Bon appetit!"
+	icon_state = "baguette"
+	base_crumb_chance = 20
+	reagents_to_add = list(NUTRIMENT = 6, BLACKPEPPER = 1, SODIUMCHLORIDE = 1)
+	bitesize = 3

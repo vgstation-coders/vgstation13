@@ -229,3 +229,23 @@
 	filling_color = "#FF9933"
 	reagents_to_add = list(NUTRIMENT = 3)
 	valid_utensils = UTENSILE_SPOON
+
+//////////////////VOX CHICKEN//////////////////
+
+/obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets/vox
+	name = "Vox Nuggets"
+	desc = "Looks awful and off-colour, you wish you'd gone to Cluckin' Bell instead."
+	icon_state = "vox_nuggets"
+	item_state = "kfc_bucket"
+	filling_color = "#4A75F4"
+
+/obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick/vox
+	name = "Vox drumstick"
+	desc = "I can't stand cold food. Unlike you, I ain't never ate from a trash can."
+	icon_state = "vox_drumstick"
+	filling_color = "#4A75F4"
+
+/obj/item/weapon/reagent_containers/food/snacks/chicken_tenders/vox
+	name = "Vox Tenders"
+	desc = "Respect has to be earned, Sweet - just like money."
+	icon_state = "vox_tendies"
