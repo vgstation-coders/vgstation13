@@ -17,6 +17,7 @@
 #include "outfit_datums.dm"
 #include "ray.dm"
 #include "vector.dm"
+#include "reagent_containers.dm"
 #include "reagent_ids.dm"
 #include "smelting.dm"
 #include "supermatter_airflow.dm"
