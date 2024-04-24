@@ -338,6 +338,10 @@
 		for(var/obj/effect/decal/cleanable/C in src)
 			qdel(C)//enough with footprints floating in space
 
+	if(!istype(N, /turf/simulated))
+		for(var/obj/effect/overlay/puddle/ice/P in src)
+			qdel(P)
+
 	//Rebuild turf
 	var/turf/T = src
 	env = T.air //Get the air before the change
