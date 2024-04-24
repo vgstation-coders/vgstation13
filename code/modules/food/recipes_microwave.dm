@@ -1677,7 +1677,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/jellysandwich/slime
+	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich/jelly/slime
 	cookable_with = COOKABLE_WITH_MIXING
 
 /datum/recipe/cherrysandwich
@@ -1686,7 +1686,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry
+	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich/jelly/cherry
 	cookable_with = COOKABLE_WITH_MIXING
 
 /datum/recipe/avocadotoast

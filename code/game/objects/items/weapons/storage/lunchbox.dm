@@ -4,7 +4,7 @@
 /obj/item/weapon/storage/lunchbox/plastic/nt/proc/pickfood()
 	var/entree = pick(list(/obj/item/weapon/reagent_containers/food/snacks/sandwich,
 								/obj/item/weapon/reagent_containers/food/snacks/sandwich/grilledcheese,
-								/obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry,
+								/obj/item/weapon/reagent_containers/food/snacks/sandwich/jelly/cherry,
 								/obj/item/weapon/reagent_containers/food/snacks/pbj,
                                 /obj/item/weapon/reagent_containers/food/snacks/breadslice/meat,
 								/obj/item/weapon/reagent_containers/food/snacks/burger,

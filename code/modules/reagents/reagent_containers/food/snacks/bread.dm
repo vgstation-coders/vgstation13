@@ -161,19 +161,6 @@
 	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/jellysandwich
-	name = "Jelly Sandwich"
-	desc = "You wish you had some peanut butter to go with this..."
-	icon_state = "jellysandwich"
-	reagents_to_add = list(NUTRIMENT = 2)
-	bitesize = 3
-
-/obj/item/weapon/reagent_containers/food/snacks/jellysandwich/slime
-	reagents_to_add = list(NUTRIMENT = 2, SLIMEJELLY = 5)
-
-/obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry
-	reagents_to_add = list(NUTRIMENT = 2, CHERRYJELLY = 5)
-
 /obj/item/weapon/reagent_containers/food/snacks/butteredtoast
 	name = "buttered toast"
 	desc = "Toasted bread with butter on it."
@@ -188,6 +175,20 @@
 	food_flags = FOOD_MEAT | FOOD_LACTOSE | FOOD_ANIMAL
 	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/sandwich/jelly
+	name = "Jelly Sandwich"
+	desc = "You wish you had some peanut butter to go with this..."
+	icon_state = "jellysandwich"
+	food_flags = null
+	reagents_to_add = list(NUTRIMENT = 2)
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sandwich/jelly/slime
+	reagents_to_add = list(NUTRIMENT = 2, SLIMEJELLY = 5)
+
+/obj/item/weapon/reagent_containers/food/snacks/sandwich/jelly/cherry
+	reagents_to_add = list(NUTRIMENT = 2, CHERRYJELLY = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/sandwich/toasted
 	name = "Toasted Sandwich"
