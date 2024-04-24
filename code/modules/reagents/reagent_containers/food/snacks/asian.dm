@@ -108,6 +108,9 @@
 	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/soydope/processed
+	reagents_to_add = null
+
 /obj/item/weapon/reagent_containers/food/snacks/wingfangchu
 	name = "Wing Fang Chu"
 	desc = "A savory dish of alien wing wang in soy."

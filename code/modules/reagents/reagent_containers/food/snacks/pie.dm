@@ -44,9 +44,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty //so the H.O.N.K. cream pie mortar can't generate free nutriment
 	trash = null
-/obj/item/weapon/reagent_containers/food/snacks/pie/empty/New()
-	..()
-	reagents.clear_reagents()
+	reagents_to_add = null
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/clovercreampie
 	name = "whipped clover pie"

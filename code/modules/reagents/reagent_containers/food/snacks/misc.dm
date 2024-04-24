@@ -269,10 +269,6 @@
 	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/soydope/processed/New()
-	..()
-	reagents.clear_reagents()
-
 /obj/item/weapon/reagent_containers/food/snacks/butter
 	name = "butter"
 	desc = "Today we feast."
