@@ -2503,6 +2503,7 @@
 #include "code\modules\reagents\reagent_containers\food\snacks\gunk.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\kabob.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\meat.dm"
+#include "code\modules\reagents\reagent_containers\food\snacks\misc.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\pie.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\pizza.dm"
 #include "code\modules\reagents\reagent_containers\food\snacks\salad.dm"
