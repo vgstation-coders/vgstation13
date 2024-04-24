@@ -66,7 +66,7 @@
 			reagents_to_add += list(RUM = 30)
 		if(4)
 			name = "Filk: Sugar Blast Editon"
-			reagents_to_add += list(SUGAR = 30, RADIUM = 10, TOXICWASTE = 10) // le epik fallout may mays
+			reagents_to_add = list(SUGAR = 30, RADIUM = 10, TOXICWASTE = 10) // le epik fallout may mays // TODO: no dansauce due to over limit
 		if(5)
 			name = "Filk: Pure Filk Edition"
 			reagents_to_add = list(DISCOUNT = 30)
@@ -89,7 +89,7 @@
 			reagents_to_add += list(FROSTOIL = 30)
 		if(3)
 			name = "Grifeo: Crystallic"
-			reagents_to_add += list(CORNSYRUP = 20, ICE = list("volume" = 20,"temp" = T0C), SPACE_DRUGS = 20)
+			reagents_to_add = list(CORNSYRUP = 20, ICE = list("volume" = 20,"temp" = T0C), SPACE_DRUGS = 10) // was 20 but went over storage limit, same diff
 		if(4)
 			name = "Grifeo: Rich"
 			reagents_to_add += list(TEQUILA = 10, CHEMICAL_WASTE = 10)
