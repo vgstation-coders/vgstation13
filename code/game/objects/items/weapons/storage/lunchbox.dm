@@ -273,8 +273,8 @@
 								/obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher,
 								/obj/item/weapon/reagent_containers/food/snacks/nymphsperil,
 								/obj/item/weapon/reagent_containers/food/snacks/dionaroast,
-								/obj/item/weapon/reagent_containers/food/snacks/xenomeatbreadslice,
-								/obj/item/weapon/reagent_containers/food/snacks/spidermeatbreadslice,
+								/obj/item/weapon/reagent_containers/food/snacks/breadslice/meat/xeno,
+								/obj/item/weapon/reagent_containers/food/snacks/breadslice/meat/spider,
 								/obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie,
 								/obj/item/weapon/reagent_containers/food/snacks/spidereggsham))
 
