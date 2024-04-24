@@ -230,3 +230,4 @@
 		name = "exceptional " + initial(name)
 		desc = "The crème de la pire of culinary arts."
 		reagents_to_add = list(NUTRIMENT = rand(0,2), SUGAR = 2, TOXIN = rand(4,13), COCO = 3) // extra 3-8 toxin
+	..()
