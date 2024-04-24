@@ -138,6 +138,7 @@
 	name = "Flu virion culture bottle"
 	desc = "A small bottle. Contains H13N1 flu virion culture in synthblood medium."
 	var/diseasetype = /datum/disease/advance/flu
+	reagents_to_add = list(BLOOD = 20)
 
 /obj/item/weapon/reagent_containers/glass/bottle/virion/refill()
 	var/datum/disease/F = new diseasetype(0)
@@ -173,6 +174,7 @@
 	name = "unknown culture bottle"
 	desc = "A small bottle. Contains an unknown disease."
 	icon_state = "bottle_alt"
+	reagents_to_add = BLOOD
 
 /obj/item/weapon/reagent_containers/glass/bottle/random/refill()
 	var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
@@ -244,6 +246,7 @@ var/datum/disease2/disease/magnitis = null
 	name = "Magnitis culture bottle"
 	desc = "A small bottle. Contains a small dosage of Fukkos Miracos."
 	icon_state = "bottle_alt"
+	reagents_to_add = BLOOD
 
 /obj/item/weapon/reagent_containers/glass/bottle/magnitis/refill()
 	if (!magnitis)
@@ -300,6 +303,7 @@ var/datum/disease2/disease/wizarditis = null
 	name = "Wizarditis culture bottle"
 	desc = "A small bottle. Contains a sample of Rincewindus Vulgaris."
 	icon_state = "bottle_alt"
+	reagents_to_add = BLOOD
 
 /obj/item/weapon/reagent_containers/glass/bottle/wizarditis/refill()
 	if (!wizarditis)

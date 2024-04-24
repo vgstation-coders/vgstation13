@@ -14,6 +14,7 @@
 
 	starting_materials = list(MAT_PLASTIC = 3*CC_PER_SHEET_MISC) //Recipe calls for 3 sheets
 	w_type = RECYK_PLASTIC
+	reagents_to_add = BLOOD
 
 /obj/item/weapon/reagent_containers/blood/refill()
 	if(blood_type != null)
@@ -126,6 +127,7 @@
 	name = "\improper empty bloodpack"
 	desc = "Seems pretty useless... Maybe if there were a way to fill it?"
 	icon_state = "bloodpack"
+	reagents_to_add = null
 
 /obj/item/weapon/reagent_containers/blood/empty/New()
 	..()
@@ -136,6 +138,7 @@
 /obj/item/weapon/reagent_containers/blood/chemo
 	name = "\improper phalanximine IV kit"
 	desc = "IV kit for chemotherapy."
+	reagents_to_add = PHALANXIMINE
 
 //if cancer gets re-introduced, someone will need to update on_reagent_change()
 //else&if you are able to make chemo via chemistry, chemopacks will be seen as "murky bloodpacks"
@@ -145,7 +148,8 @@
 //	icon = 'icons/obj/chemopack.dmi'
 ////////////////////////////////////////
 /obj/item/weapon/reagent_containers/blood/chemo/refill()
-	reagents.add_reagent(PHALANXIMINE, 200)
+	reagents.clear_reagents()
+	reagents.add_reagent(PHALANXIMINE, volume)
 
 /obj/item/weapon/reagent_containers/blood/attackby(obj/item/W as obj, mob/user as mob)
 	var/turf/T = get_turf(src)

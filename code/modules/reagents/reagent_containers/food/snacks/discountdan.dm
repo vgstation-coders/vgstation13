@@ -99,11 +99,11 @@
 		if(1)
 			name += "Arguably A Potato" //tomatos are actually closely related to potatos
 			icon_state += "_red"
-			reagents_to_add += list(ENZYME = 5, KETCHUP = 5, ICE = list(5, T0C), POTATO = list(5, T0C)) //frozen potato juice
+			reagents_to_add += list(ENZYME = 5, KETCHUP = 5, ICE = list("volume" = 5,"temp" = T0C), POTATO = list("volume" = 5,"temp" = T0C)) //frozen potato juice
 		if(2)
 			name += "Cheddar Craving Concussion"
 			icon_state += "_blue"
-			reagents_to_add += list(MANNITOL = 5, OFFCOLORCHEESE = 5, ICE = list(10, T0C)) //brainfreeze
+			reagents_to_add += list(MANNITOL = 5, OFFCOLORCHEESE = 5, ICE = list("volume" = 10,"temp" = T0C)) //brainfreeze
 		if(3)
 			name += "Iodine & Industrial Vinegar"
 			icon_state += "_green"

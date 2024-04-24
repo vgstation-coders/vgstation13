@@ -542,14 +542,14 @@
 	desc = "Careful, cold ice, do not chew."
 	icon_state = "icecup"
 	randpix = TRUE
-	reagents_to_add = list(ICE = list(30, T0C))
+	reagents_to_add = list(ICE = list("volume" = 30,"temp" = T0C))
 
 /obj/item/weapon/reagent_containers/food/drinks/tomatosoup
 	name = "Tomato Soup"
 	desc = "Tomato Soup! In a cup!"
 	icon_state = "tomatosoup"
 	randpix = TRUE
-	reagents_to_add = list(TOMATO_SOUP = list(30, T80C))
+	reagents_to_add = list(TOMATO_SOUP = list("volume" = 30,"temp" = T80C))
 
 /obj/item/weapon/reagent_containers/food/drinks/tomatosoup/on_vending_machine_spawn()
 	reagents.chem_temp = COOKTEMP_READY

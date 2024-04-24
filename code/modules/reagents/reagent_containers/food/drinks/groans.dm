@@ -17,7 +17,7 @@
 			name = "Groans Soda: Icey Cold Flavor"
 			desc = "Cold in a can. Er, bottle."
 			icon_state += "_cold"
-			reagents_to_add += list(FROSTOIL= 10, ICE = list(10, T0C))
+			reagents_to_add += list(FROSTOIL= 10, ICE = list("volume" = 10,"temp" = T0C))
 		if(3)
 			name = "Groans Soda: Zero Calories"
 			desc = "Zero Point Calories. That's right, we fit even MORE nutriment in this thing."
@@ -89,7 +89,7 @@
 			reagents_to_add += list(FROSTOIL = 30)
 		if(3)
 			name = "Grifeo: Crystallic"
-			reagents_to_add += list(CORNSYRUP = 20, ICE = list(20, T0C), SPACE_DRUGS = 20)
+			reagents_to_add += list(CORNSYRUP = 20, ICE = list("volume" = 20,"temp" = T0C), SPACE_DRUGS = 20)
 		if(4)
 			name = "Grifeo: Rich"
 			reagents_to_add += list(TEQUILA = 10, CHEMICAL_WASTE = 10)

@@ -520,7 +520,7 @@
 	icon_state = "icecreamsandwich"
 	food_flags = FOOD_SWEET
 	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 2, ICE = list(2, T0C))
+	reagents_to_add = list(NUTRIMENT = 2, ICE = list("volume" = 2,"temp" = T0C))
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/notasandwich

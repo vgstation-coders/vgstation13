@@ -424,7 +424,7 @@
 	icon_state = "icecream_cone"
 	volume = 500
 	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 3, SUGAR = 7, ICE = list(2, T0C))
+	reagents_to_add = list(NUTRIMENT = 3, SUGAR = 7, ICE = list("volume" = 2,"temp" = T0C))
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcup
@@ -433,7 +433,7 @@
 	icon_state = "icecream_cup"
 	volume = 500
 	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 5, SUGAR = 9, ICE = list(2, T0C))
+	reagents_to_add = list(NUTRIMENT = 5, SUGAR = 9, ICE = list("volume" = 2,"temp" = T0C))
 	bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/muffin/bluespace
@@ -473,7 +473,7 @@
 	icon_state = "higashikata"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 10, SUGAR = 10, ICE = list(10, T0C), WATERMELONJUICE = 5)
+	reagents_to_add = list(NUTRIMENT = 10, SUGAR = 10, ICE = list("volume" = 10,"temp" = T0C), WATERMELONJUICE = 5)
 	bitesize = 3
 	crumb_icon = "dribbles"
 	valid_utensils = UTENSILE_SPOON
@@ -484,7 +484,7 @@
 	icon_state = "sundae"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE //milk
 	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 5, SUGAR = 5, ICE = list(5, T0C))
+	reagents_to_add = list(NUTRIMENT = 5, SUGAR = 5, ICE = list("volume" = 5,"temp" = T0C))
 	bitesize = 3
 	crumb_icon = "dribbles"
 	valid_utensils = UTENSILE_SPOON
@@ -496,7 +496,7 @@
 	food_flags = FOOD_LIQUID | FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE //milk
 	trash = /obj/item/weapon/reagent_containers/food/drinks/drinkingglass
 	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 10, SUGAR = 5, ICE = list(5, T0C))
+	reagents_to_add = list(NUTRIMENT = 10, SUGAR = 5, ICE = list("volume" = 5,"temp" = T0C))
 	bitesize = 4
 	crumb_icon = "dribbles"
 	valid_utensils = UTENSILE_SPOON

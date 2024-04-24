@@ -335,11 +335,12 @@
 	)
 
 /obj/item/weapon/reagent_containers/pill/random/refill()
+	reagents_to_add = list()
 	var/list/to_spawn = pickweight(possible_combinations)
 	for(var/index in to_spawn)
-		reagents.add_reagent(index, to_spawn[index])
+		reagents_to_add += list(index = to_spawn[index])
 	if(hidereagents)
-		reagents.add_reagent(BLACKCOLOR, 1)
+		reagents_to_add += list(BLACKCOLOR = 1)
 
 
 /obj/item/weapon/reagent_containers/pill/random/maintenance
