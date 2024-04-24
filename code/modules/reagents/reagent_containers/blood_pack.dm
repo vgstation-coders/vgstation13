@@ -14,7 +14,7 @@
 
 	starting_materials = list(MAT_PLASTIC = 3*CC_PER_SHEET_MISC) //Recipe calls for 3 sheets
 	w_type = RECYK_PLASTIC
-	reagents_to_add = list(BLOOD = list("volume" = volume, "data" = list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null, "virus2"=list())))
+	reagents_to_add = list(BLOOD = list("volume" = volume, "data" = list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=null,"resistances"=null,"trace_chem"=null, "virus2"=list())))
 
 /obj/item/weapon/reagent_containers/blood/refill()
 	if(blood_type != null)
