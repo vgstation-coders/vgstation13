@@ -5,7 +5,7 @@
 		if(isnull(initial(RC.reagents_to_add)))
 			continue
 		RC = new type
-		if(RC)
+		if(!RC.gcDestroyed)
 			check_container(RC)
 			RC.refill()
 			check_container(RC)
