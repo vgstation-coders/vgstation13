@@ -495,6 +495,7 @@
 	name = "Tea"
 	icon = 'icons/obj/cafe.dmi'
 	icon_state = "mug_empty"
+	base_icon_state = "mug_empty"
 	item_state = "mug_empty"
 	randpix = TRUE
 
@@ -529,8 +530,10 @@
 /obj/item/weapon/reagent_containers/food/drinks/chifir
 	name = "Siberian Chifir"
 	desc = "Only a true siberian can appreciate its deep and rich flavor. Embrace siberian tradition!"
+	icon = 'icons/obj/cafe.dmi'
 	icon_state = "tea"
 	item_state = "mug_empty"
+	base_icon_state = "mug_empty"
 	reagents_to_add = list(CHIFIR = 30)
 	randpix = TRUE
 
@@ -558,6 +561,7 @@
 	name = "Dutch Hot Coco"
 	desc = "Made in Space South America."
 	icon = 'icons/obj/cafe.dmi'
+	base_icon_state = "mug_empty"
 	icon_state = "mug_empty"
 	item_state = "mug_empty"
 	reagents_to_add = list(HOT_COCO = 30)
