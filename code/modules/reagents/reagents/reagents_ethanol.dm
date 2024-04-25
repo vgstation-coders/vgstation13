@@ -1867,7 +1867,11 @@
 	color = "#664300" //rgb: 102, 67, 0
 
 /datum/reagent/ethanol/drink/pintpointer/when_drinkingglass_master_reagent(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
-	var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/P = new (get_turf(D))
+	var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/P
+	if(D.type == /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer)
+		P = D
+	else
+		P = new (get_turf(D))
 	var/datum/reagents/glassreagents = D.reagents
 
 	if(glassreagents.last_ckey_transferred_to_this)
@@ -1876,8 +1880,9 @@
 				var/mob/M = C.mob
 				P.creator = M
 	glassreagents.trans_to(P, glassreagents.total_volume)
-	spawn(1)
-		qdel(D)
+	if(D.type != /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer)
+		spawn(1)
+			qdel(D)
 
 /datum/reagent/ethanol/drink/monstermash
 	name = "Monster Mash"
