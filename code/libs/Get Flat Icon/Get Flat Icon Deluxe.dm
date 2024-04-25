@@ -111,6 +111,10 @@ cons:
 
 		// Apply any color or alpha settings
 		if(data[GFI_DX_COLOR] || data[GFI_DX_ALPHA] != 255)
+			if (islist(data[GFI_DX_COLOR]))
+				var/list/color_matrix = data[GFI_DX_COLOR]
+				if (color_matrix.len >= 16)//getting the color for hair and facial hair out of the matrix
+					data[GFI_DX_COLOR] = rgb(color_matrix[13]*255, color_matrix[14]*255, color_matrix[15]*255)
 			var/rgba = (data[GFI_DX_COLOR] || "#FFFFFF") + copytext(rgb(0,0,0,data[GFI_DX_ALPHA]), 8)
 			add.Blend(rgba, ICON_MULTIPLY)
 
@@ -155,7 +159,10 @@ cons:
 		if (!istype(parent[GFI_DX_ATOM],/obj/effect/blob)) // blob connection overlays use custom dirs
 			data[GFI_DX_DIR] = parent[GFI_DX_DIR]
 		if (to_sort:plane == FLOAT_PLANE)
-			if (is_underlay)
+			if (parent[GFI_DX_STATE] == "bald_s")//because hair and beard overlays are on an overlay already themselves. sigh.
+				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE]
+				data[GFI_DX_LAYER] = parent[GFI_DX_LAYER]
+			else if (is_underlay)
 				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] - 0.1
 			else
 				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] + 0.1
