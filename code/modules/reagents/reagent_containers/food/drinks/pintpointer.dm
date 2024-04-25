@@ -22,7 +22,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/proc/calculate_distance()
 	if(!creator)
-		return round(reagents.total_volume/10)
+		return reagents ? round(reagents.total_volume/10) : 0
 	else if(creator.gcDestroyed)
 		creator = null
 		return .()
