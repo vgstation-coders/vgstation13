@@ -302,9 +302,8 @@
 	valid_utensils = 0
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/oldempirebar/refill()
+/obj/item/weapon/reagent_containers/food/snacks/oldempirebar/set_reagents_to_add()
 	reagents_to_add = list(NUTRIMENT = rand(2,6), ROGAN = 6)
-	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/spacetwinkie
 	name = "space twinkie"
@@ -526,7 +525,7 @@
 	base_crumb_chance = 0
 	bitesize = 4
 
-/obj/item/weapon/reagent_containers/food/snacks/sweetsundaeramen/refill()
+/obj/item/weapon/reagent_containers/food/snacks/sweetsundaeramen/set_reagents_to_add()
 	desc = initial(desc)
 	reagents.clear_reagents()
 	while(reagents.total_volume<70)
@@ -879,12 +878,11 @@
 	var/safeforfat = FALSE
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/mint/refill()
+/obj/item/weapon/reagent_containers/food/snacks/mint/set_reagents_to_add()
 	if(!safeforfat)
 		reagents_to_add = list(MINTTOXIN = 1)
 	else
 		reagents_to_add = list(MINTESSENCE = 2)
-	..()
 
 //the syndie version for muh tators
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint

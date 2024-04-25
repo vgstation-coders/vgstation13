@@ -321,11 +321,9 @@
 	name = "Bear Arms Beer"
 	desc = "Crack open a Bear at the end of a long shift."
 	icon_state = "bearbeer"
-	reagents_to_add = list(BEER = 30)
 
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear/refill()
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear/set_reagents_to_add()
 	reagents_to_add = list(BEER = 30, HYPERZINE = rand(3,5))
-	..()
 
 // Here be ayy canned drinks
 

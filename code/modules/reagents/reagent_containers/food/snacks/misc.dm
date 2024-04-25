@@ -60,9 +60,8 @@
 	reagents_to_add = list(NUTRIMENT = 3, PSILOCYBIN = 3)
 	bitesize = 6
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/mushroom_man/refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/mushroom_man/set_reagents_to_add()
 	reagents_to_add = list(NUTRIMENT = 3, PSILOCYBIN = 3, TRICORDRAZINE = rand(1,5))
-	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/tomatomeat
 	name = "tomato slice"

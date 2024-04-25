@@ -196,10 +196,9 @@
 	bitesize = 5
 	var/smolbitofextraroachie = TRUE
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/roach/refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/roach/set_reagents_to_add()
 	if(smolbitofextraroachie)
 		reagents_to_add[ROACHSHELL] = rand(2,6)
-	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/on_vending_machine_spawn()
 	reagents.chem_temp = FRIDGETEMP_FROZEN
@@ -222,10 +221,9 @@
 	bitesize = 5
 	var/smolbitofextrafleur = TRUE
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/set_reagents_to_add()
 	if(smolbitofextrafleur)
 		reagents_to_add[FLOUR] = rand(4,10)
-	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/cricket/big
 	name = "creatine cricket meat"
@@ -347,9 +345,8 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	icon_state = "wendigo_meat"
 	bitesize = 30
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/set_reagents_to_add()
 	reagents_to_add = list(NUTRIMENT = rand(13,28))
-	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/consume(mob/living/carbon/eater, messages = 0)
 	. = ..()
@@ -428,7 +425,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	name = "meat"
 	desc = "A slab of \"meat\". Something's a little strange about this one."
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/set_reagents_to_add()
 	//A new blend of meat in every slab! Can be better than or worse than normal meat.
 	reagents_to_add = list()
 	//No room for normal meat chems in here. We're going full DAN
@@ -445,7 +442,6 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	if(prob(5))
 		reagents_to_add[ROACHSHELL] = 1 //Sometimes a roach gets in. No nutritional value
 	//Total ranging from 18 to 57 nutrition. Normal meat provides 45.
-	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/animal/dan/on_vending_machine_spawn()
 	reagents.chem_temp = FRIDGETEMP_FROZEN

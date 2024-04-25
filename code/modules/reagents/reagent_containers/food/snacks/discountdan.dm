@@ -6,7 +6,7 @@
 	base_crumb_chance = 0
 	bitesize = 7 //Three bites on average to finish
 
-/obj/item/weapon/reagent_containers/food/snacks/sausage/dan/refill()
+/obj/item/weapon/reagent_containers/food/snacks/sausage/dan/set_reagents_to_add()
 	reagents_to_add = list()
 	for(var/blendedmeat = 1 to 6)
 		switch(rand(1,3))
@@ -21,7 +21,6 @@
 	if(prob(44))
 		reagents_to_add[ROACHSHELL] = rand(1,8) //0-8
 	//36 to 111 nutrition. 4noraisins has 90...
-	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/sausage/dan/on_vending_machine_spawn()
 	reagents.chem_temp = FRIDGETEMP_FROZEN

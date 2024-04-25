@@ -67,7 +67,7 @@
 	food_flags = FOOD_LIQUID | FOOD_ANIMAL | FOOD_LACTOSE
 	filling_color = "#97479B"
 
-/obj/item/weapon/reagent_containers/food/snacks/soup/mystery/refill()
+/obj/item/weapon/reagent_containers/food/snacks/soup/mystery/set_reagents_to_add()
 	var/result = rand(1,10)
 	switch(result)
 		if(1)
@@ -93,7 +93,6 @@
 			reagents_to_add = list(NUTRIMENT = 6, TOMATOJUICE = 5, IMIDAZOLINE = 5)
 	if(result != 6)
 		food_flags = initial(food_flags)
-	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/soup/monkey
 	name = "Monkey Soup"

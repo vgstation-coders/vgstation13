@@ -334,15 +334,13 @@
 		list(ZOMBIEPOWDER = 10)
 	)
 
-/obj/item/weapon/reagent_containers/pill/random/refill()
+/obj/item/weapon/reagent_containers/pill/random/set_reagents_to_add()
 	reagents_to_add = list()
 	var/list/to_spawn = pickweight(possible_combinations)
 	for(var/index in to_spawn)
 		reagents_to_add += list(index = to_spawn[index])
 	if(hidereagents)
 		reagents_to_add += list(BLACKCOLOR = 1)
-	..()
-
 
 /obj/item/weapon/reagent_containers/pill/random/maintenance
 	flags = FPRINT | NOREACT
