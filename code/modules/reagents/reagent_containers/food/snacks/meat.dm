@@ -138,7 +138,7 @@
 	desc = "A fillet of space carp meat."
 	icon_state = "fishfillet"
 	sactype = /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
-	reagents_to_add = list(NUTRIMENT = 3, CARPOTOXIN = 3)
+	reagents_to_add = list(NUTRIMENT = 6, CARPOTOXIN = 3)
 	bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/New()
@@ -194,9 +194,11 @@
 	icon_state = "roachmeat"
 	reagents_to_add = list(NUTRIMENT = 3.5)
 	bitesize = 5
+	var/smolbitofextraroachie = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/refill()
-	reagents_to_add = list(NUTRIMENT = 3.5, ROACHSHELL = rand(2,6))
+	if(smolbitofextraroachie)
+		reagents_to_add[ROACHSHELL] = rand(2,6)
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/on_vending_machine_spawn()
@@ -207,6 +209,7 @@
 	desc = "A chunk of meat from an above-average sized cockroach."
 	icon_state = "bigroachmeat"
 	reagents_to_add = list(NUTRIMENT = 8.5, ROACHSHELL = 16)
+	smolbitofextraroachie = FALSE
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big/isopod
 	name = "Isopod meat"
@@ -217,9 +220,11 @@
 	desc = "Tastes a bit like nuts, very earthy. Not much of a serving, though."
 	icon_state = "roachmeat"
 	bitesize = 5
+	var/smolbitofextrafleur = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/cricket/refill()
-	reagents_to_add = list(NUTRIMENT = 3, FLOUR = rand(4,10))
+	if(smolbitofextrafleur)
+		reagents_to_add[FLOUR] = rand(4,10)
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/cricket/big
@@ -227,11 +232,11 @@
 	desc = "An oddly large slab of cricket meat. Tastes like nuts and protein. Very earthy and chewy."
 	icon_state = "bigroachmeat"
 	reagents_to_add = list(NUTRIMENT = 8, FLOUR = 32)
+	smolbitofextrafleur = FALSE
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/king
+/obj/item/weapon/reagent_containers/food/snacks/meat/cricket/big/king
 	name = "cricket king meat"
 	desc = "A royal bloodline was felled to make this. Tastes like regicide."
-	icon_state = "bigroachmeat"
 	reagents_to_add = list(NUTRIMENT = 28, FLOUR = 75)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
@@ -344,7 +349,7 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	bitesize = 30
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/refill()
-	reagents_to_add = list(NUTRIMENT = rand(10,25))
+	reagents_to_add = list(NUTRIMENT = rand(13,28))
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/consume(mob/living/carbon/eater, messages = 0)

@@ -5,11 +5,11 @@
 	icon_state = "cricket_creatine"
 	icon_living = "cricket_creatine"
 	icon_dead = "cricket_creatine_dead"
-	
+
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm   = "stomps on the"
-	
+
 	emote_hear = list("chirps")
 	emote_sound = list("sound/effects/creatine_cricket_chirp.ogg")
 
@@ -43,7 +43,7 @@
 	attacktext = "kicks"
 	attack_sound = 'sound/weapons/punch1.ogg'
 	//to do: make it so the attack animation is a kick or the ayylien or whatever, low priority
-	
+
 	faction = "cricket"
 
 	var/icon_aggro = "cricket_creatine-angry"
@@ -118,7 +118,7 @@
 
 	icon_aggro = "cricket_creatine_king-angry"
 	wander_icon = "cricket_creatine_king-hop"
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/cricket/king
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/cricket/big/king
 
 /mob/living/simple_animal/hostile/retaliate/creatinecricket/king/New()
 	..()
