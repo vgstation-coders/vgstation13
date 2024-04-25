@@ -762,7 +762,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		handle_reactions()
 		return 0
 	else
-		warning("[my_atom] attempted to add a reagent called '[reagent]' which doesn't exist. ([usr])")
+		warning("[my_atom] ([my_atom.type]) attempted to add a reagent called '[reagent]' which doesn't exist. ([usr])")
 
 	handle_reactions()
 
