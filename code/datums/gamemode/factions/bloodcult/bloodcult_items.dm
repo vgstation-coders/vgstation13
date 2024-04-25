@@ -1699,7 +1699,7 @@ var/list/arcane_tomes = list()
 		if(R.id == BLOOD)
 			var/datum/reagent/blood/B = R
 			var/datum/disease2/disease/cultvirus = global_diseases[DISEASE_CULT]
-			B.data["virus2"]["[cultvirus.uniqueID]-[cultvirus.subID]"] += cultvirus.getcopy()
+			B.handle_data_mix(list("virus2" = list("[cultvirus.uniqueID]-[cultvirus.subID]" = cultvirus.getcopy())))
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/throw_impact(var/atom/hit_atom)
 	if(reagents.total_volume)
