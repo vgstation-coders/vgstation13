@@ -237,7 +237,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/meat/cricket/big/king
 	name = "cricket king meat"
 	desc = "A royal bloodline was felled to make this. Tastes like regicide."
-	reagents_to_add = list(NUTRIMENT = 28, FLOUR = 75)
+	reagents_to_add = list(NUTRIMENT = 28, FLOUR = 72)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
 	name = "mimic meat"

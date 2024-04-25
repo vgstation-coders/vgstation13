@@ -16,6 +16,7 @@
 		var/list/to_add = RC.reagents_to_add
 		if(!islist(RC.reagents_to_add))
 			to_add = list(RC.reagents_to_add)
+		var/total_volume = 0
 		for(var/entry in to_add)
 			if(!chemical_reagents_list[entry])
 				fail("Reagent ID [entry] is not a valid reagent.")
@@ -26,6 +27,7 @@
 				volume = to_add[entry]
 			else
 				volume = (RC.volume/to_add.len)
+			total_volume += volume
 			if(!RC.reagents.has_reagent(entry, volume))
 				fail("Reagent ID [entry] from reagents_to_add not found in at least [volume] units in atom [RC]]. (got [RC.reagents.get_reagent_amount(entry)] units instead)")
 			if(islist(to_add[entry]) && ("data" in to_add[entry]))
@@ -36,5 +38,7 @@
 						continue // for now
 					if(list1[subentry] != list2[subentry])
 						fail("Reagent ID [entry] has mismatching data in atom [RC]. (expected [list1[subentry]] on [subentry], got [list2[subentry]])")
+			if(total_volume > RC.volume)
+				fail("Reagents being added on [RC] exceeds volume capacity of [RC.volume] (got [total_volume] in total)")
 	else
 		fail("[RC] could not create a reagents holder.")
