@@ -768,13 +768,17 @@
 	var/child_type = /obj/item/weapon/reagent_containers/food/snacks
 	var/child_volume = 3 // every spawned child will have this much or less reagent transferred to it. Small number = a lot of small items spawn
 
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/New()
+	. = ..()
+	if(isturf(loc)) // for testing and misc uses
+		spawn_children()
+
 // called when it leaves the microwave
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/forceMove(atom/destination, step_x = 0, step_y = 0, no_tp = FALSE, harderforce = FALSE, glide_size_override = 0)
 	. = ..()
 	if(isnull(destination))
 		return
 	spawn_children()
-	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/proc/spawn_children()
 	var/num_of_children = reagents.total_volume / child_volume
@@ -787,3 +791,4 @@
 		child.forceMove(loc)
 		child.pixel_x = rand(-8, 8)
 		child.pixel_y = rand(-8, 8)
+	qdel(src)
