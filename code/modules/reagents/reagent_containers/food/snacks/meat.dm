@@ -248,6 +248,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/refill()
 	reagents_to_add = list(NUTRIMENT = 3, SPACE_DRUGS = rand(0,4), MINDBREAKER = rand(0,2), NUTRIMENT = rand(0,4), TOXIN = rand(0,2))
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/refill()
 	..()
 	shapeshift()
 
@@ -326,16 +328,13 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	name = "alien tissue"
 	desc = "A long piece of rough, black tissue."
 	icon_state = "hivemeat"
-	reagents_to_add = list(NUTRIMENT = 3, CARBON = 5)
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/hive/refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive/set_reagents_to_add()
 	reagents_to_add = list(NUTRIMENT = 3, CARBON = 5, pick(IRON, GOLD, SILVER, URANIUM) = rand(0,5))
-	..()
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/hive/turret/refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/hive/turret/set_reagents_to_add()
 	..()
-	reagents.add_reagent(OXYGEN, rand(1,5))
-	reagents.add_reagent(ETHANOL, rand(1,5))
+	reagents_to_add += list(OXYGEN = rand(1,5), ETHANOL = rand(1,5))
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/cockatrice
 	name = "cockatrice meat"

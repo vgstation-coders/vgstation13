@@ -119,9 +119,13 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		else if(reagents_to_add)
 			reagents.add_reagent(reagents_to_add, volume, data)
 
+/obj/item/weapon/reagent_containers/proc/set_reagents_to_add()
+	return
+
 /obj/item/weapon/reagent_containers/New()
 	..()
 	create_reagents(volume)
+	set_reagents_to_add()
 	refill()
 	all_reagent_containers.Add(src)
 
