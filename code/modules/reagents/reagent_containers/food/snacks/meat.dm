@@ -246,7 +246,7 @@
 	bitesize = 5
 	var/transformed = FALSE
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/refill()
+/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/set_reagents_to_add()
 	reagents_to_add = list(NUTRIMENT = 3, SPACE_DRUGS = rand(0,4), MINDBREAKER = rand(0,2), NUTRIMENT = rand(0,4), TOXIN = rand(0,2))
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/refill()
