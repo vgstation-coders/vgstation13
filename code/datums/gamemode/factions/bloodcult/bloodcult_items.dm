@@ -1731,10 +1731,7 @@ var/list/arcane_tomes = list()
 	acid_melt()
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/bloodfilled
-
-/obj/item/weapon/reagent_containers/food/drinks/cult/bloodfilled/New()
-	..()
-	reagents.add_reagent(BLOOD, 50)
+	reagents_to_add = list(BLOOD = 50)
 
 
 ///////////////////////////////////////CULT CUFFS////////////////////////////////////////////////
