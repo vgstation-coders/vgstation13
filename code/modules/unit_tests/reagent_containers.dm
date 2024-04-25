@@ -38,7 +38,7 @@
 						continue // for now
 					if(list1[subentry] != list2[subentry])
 						fail("Reagent ID [entry] has mismatching data in atom [RC]. (expected [list1[subentry]] on [subentry], got [list2[subentry]])")
-			if(total_volume > RC.volume)
-				fail("Reagents being added on [RC] exceeds volume capacity of [RC.volume] (got [total_volume] in total)")
+		if(total_volume > RC.volume)
+			fail("Reagents being added on [RC] exceeds volume capacity of [RC.volume] (got [total_volume] in total)")
 	else
 		fail("[RC] could not create a reagents holder.")
