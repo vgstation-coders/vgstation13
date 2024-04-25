@@ -563,7 +563,7 @@
 /obj/machinery/disease2/centrifuge/breakdown()
 	for (var/i = 1 to vial_data.len)
 		var/isolation_centrifuge_vial/vial_datum = vial_data[i]
-		vial_datum.vial.forceMove(loc)
+		vial_datum?.vial?.forceMove(loc)
 		vial_data[i] = null
 
 	special = CENTRIFUGE_LIGHTSPECIAL_OFF
