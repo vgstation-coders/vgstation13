@@ -106,7 +106,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return
 
 /obj/item/weapon/reagent_containers/proc/refill(var/data)
-	if(reagents)
+	if(reagents && reagents_to_add)
 		if(clears_on_refill && !reagents.is_empty())
 			reagents.clear_reagents()
 		if(islist(reagents_to_add))
