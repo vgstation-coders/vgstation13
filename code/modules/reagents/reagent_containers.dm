@@ -105,6 +105,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 /obj/item/weapon/reagent_containers/proc/blow_act(var/mob/living/user)
 	return
 
+/obj/item/weapon/reagent_containers/proc/set_reagents_to_add()
+	return
+
 /obj/item/weapon/reagent_containers/proc/refill(var/data)
 	set_reagents_to_add()
 	if(reagents && reagents_to_add)
