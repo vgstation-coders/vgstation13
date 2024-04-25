@@ -114,9 +114,14 @@ cons:
 			if (islist(data[GFI_DX_COLOR]))
 				var/list/color_matrix = data[GFI_DX_COLOR]
 				if (color_matrix.len >= 16)//getting the color for hair and facial hair out of the matrix
+					for (var/i = 1 to color_matrix.len)
+						to_chat(world, "[color_matrix[i]]")
 					data[GFI_DX_COLOR] = rgb(color_matrix[13]*255, color_matrix[14]*255, color_matrix[15]*255)
-			var/rgba = (data[GFI_DX_COLOR] || "#FFFFFF") + copytext(rgb(0,0,0,data[GFI_DX_ALPHA]), 8)
-			add.Blend(rgba, ICON_MULTIPLY)
+				var/rgba = (data[GFI_DX_COLOR] || "#FFFFFF") + copytext(rgb(0,0,0,data[GFI_DX_ALPHA]), 8)
+				add.Blend(rgba, ICON_ADD)
+			else
+				var/rgba = (data[GFI_DX_COLOR] || "#FFFFFF") + copytext(rgb(0,0,0,data[GFI_DX_ALPHA]), 8)
+				add.Blend(rgba, ICON_MULTIPLY)
 
 		// Blend the overlay into the flattened icon
 
