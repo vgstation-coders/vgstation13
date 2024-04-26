@@ -139,9 +139,8 @@ Included in this file
 /area/vault/hotspring
 	name = "hotspring"
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/bahamamama/New()
-	..()
-	reagents.add_reagent(BAHAMA_MAMA, 30)
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/bahamamama
+	reagents_to_add = list(BAHAMA_MAMA = 30)
 
 /mob/living/simple_animal/capybara
 	name = "capybara"

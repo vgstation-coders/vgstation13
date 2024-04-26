@@ -195,20 +195,17 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 /obj/item/weapon/reagent_containers/spray/rev
 	name = "Lubricant spray"
 	desc = "Nothing more working class than slipping the floors."
+	reagents_to_add = list(LUBE = 250)
 
 /obj/item/weapon/reagent_containers/spray/rev/New()
 	..()
-	reagents.add_reagent(LUBE, 250)
 	new /obj/item/weapon/reagent_containers/spray/antilube(src.loc)
 
 /obj/item/weapon/reagent_containers/spray/antilube
 	name = "Antilube Spray"
 	desc = "Use to make ground manueverable, or if you hate fun."
 	color = "#FFAAAA" //Shade it red so it's easy to distinguish
-
-/obj/item/weapon/reagent_containers/spray/antilube/New()
-	..()
-	reagents.add_reagent(SODIUM_POLYACRYLATE, 250)
+	reagents_to_add = list(SODIUM_POLYACRYLATE = 250)
 
 //equip
 

@@ -883,10 +883,7 @@
 	name = "unknown pill"
 	desc = "It has a marking from the mothership's chemical research division, but no other useful information."
 	icon_state = "pill7"
-
-/obj/item/weapon/reagent_containers/pill/greygoo/New()
-	..()
-	reagents.add_reagent(GREYGOO, 5)
+	reagents_to_add = list(GREYGOO = 5)
 
 /obj/item/weapon/storage/pill_bottle/greygoo
 	name = "Cortex MkI"

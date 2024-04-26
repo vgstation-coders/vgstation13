@@ -340,6 +340,7 @@
 	icon = 'icons/obj/food_custom.dmi'
 	trash = /obj/item/trash/plate
 	bitesize = 2
+	reagents_to_add = list(NUTRIMENT = 3)
 
 	var/ingMax = 100
 	var/list/ingredients = list()
@@ -353,7 +354,6 @@
 	. = ..()
 	topping = image(icon,,"[initial(icon_state)]_top")
 	filling = image(icon,,"[initial(icon_state)]_filling")
-	reagents.add_reagent(NUTRIMENT,3)
 	if (ingredient)
 		if (ingredient.virus2?.len)
 			for (var/ID in ingredient.virus2)
@@ -498,12 +498,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/nova
 	icon_state = "c_sandwich_nova"
 	plate_icon = "novacustom"
-
-
-/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/nova/New(loc,ingredient)
-	. = ..()
-	reagents.add_reagent(HELL_RAMEN, 0.6)
-	reagents.add_reagent(NOVAFLOUR, 0.2)
+	reagents_to_add = list(NUTRIMENT = 3, HELL_RAMEN = 0.6, NOVAFLOUR = 0.2)
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/attackby(obj/item/I,mob/user)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/breadslice) && !addTop)
@@ -704,12 +699,13 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/New()
 	. = ..()
-	if(initReagent)
-		reagents.add_reagent(initReagent,50)
 	var/icon/opaquefilling = new(icon,"[initial(icon_state)]_filling")
 	opaquefilling.ChangeOpacity(0.8)
 	filling = image(opaquefilling)
-	return
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/set_reagents_to_add()
+	if(initReagent)
+		reagents_to_add[initReagent] = 50
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/attackby(obj/item/I,mob/user)
 	if(istype(I,/obj/item/weapon/pen))

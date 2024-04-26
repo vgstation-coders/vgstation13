@@ -86,9 +86,8 @@
 	food_type = /obj/item/weapon/reagent_containers/food/drinks/mug/joe
 	toxin_type = HEMOSCYANINE
 
-/obj/item/weapon/reagent_containers/food/drinks/mug/joe/New()
-	..()
-	reagents.add_reagent(DETCOFFEE, 20)
+/obj/item/weapon/reagent_containers/food/drinks/mug/joe
+	reagents_to_add = list(DETCOFFEE = 20)
 
 /obj/item/weapon/cookiesynth/lollipop
 	name = "medipop synthesizer"

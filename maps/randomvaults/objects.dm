@@ -955,14 +955,10 @@
 /obj/item/weapon/reagent_containers/glass/beaker/vial/flavor
 	name = "essence of pure flavor"
 	desc = "This will really knock any dish up a notch. Bam!"
+	reagents_to_add = MINDBREAKER
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/flavor/New()
-	..()
-	reagents.add_reagent(MINDBREAKER, 25)
-
-/obj/item/weapon/reagent_containers/glass/beaker/vial/radium/New()
-	..()
-	reagents.add_reagent(RADIUM, 25)
+/obj/item/weapon/reagent_containers/glass/beaker/vial/radium
+	reagents_to_add = RADIUM
 
 /obj/machinery/microwave/upgraded
 	component_parts = newlist(\

@@ -65,11 +65,10 @@
 	if(user!=M && M.reagents && !M.reagents.has_reagent(CHILLWAX,1))
 		M.reagents.add_reagent(CHILLWAX,0.3)
 
-/obj/item/weapon/reagent_containers/food/snacks/quiche/frittata/New()
-	..()
+/obj/item/weapon/reagent_containers/food/snacks/quiche/frittata
 	name = "frittata"
 	desc = "Now you have no need to eat balls for breakfast."
-	reagents.add_reagent(DOCTORSDELIGHT,37)
+	reagents_to_add = list(DOCTORSDELIGHT = 37)
 
 /obj/item/clothing/mask/necklace/crystal
 	name = "crystal necklace"

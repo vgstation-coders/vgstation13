@@ -64,10 +64,7 @@
 	icon_state = "feederfish"
 	filling_color = "#FF1C1C"
 	bitesize = 1
-
-/obj/item/weapon/reagent_containers/food/snacks/feederfish/New()
-	..()
-	reagents.add_reagent(NUTRIMENT, 1)
+	reagents_to_add = list(NUTRIMENT = 1)
 
 /obj/item/weapon/fish
 	name = "fish"

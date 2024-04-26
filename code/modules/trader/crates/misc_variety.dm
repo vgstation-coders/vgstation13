@@ -116,11 +116,9 @@
 		PAISMOKE
 	)
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/mystery/New()
-	..()
+/obj/item/weapon/reagent_containers/glass/beaker/vial/mystery/set_reagents_to_add()
 	var/list/mysteryChems = chemical_reagents_list - illegalChems
-	reagents.add_reagent(pick(mysteryChems), volume)
-
+	reagents_to_add = pick(mysteryChems)
 
 //Mystery circuits////////////
 
