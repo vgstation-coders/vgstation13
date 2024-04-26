@@ -692,7 +692,6 @@
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable
 	volume = 100
 	var/list/ingredients = list()
-	var/initReagent
 	var/ingMax = 3
 	var/image/filling
 	isGlass = 1
@@ -702,10 +701,6 @@
 	var/icon/opaquefilling = new(icon,"[initial(icon_state)]_filling")
 	opaquefilling.ChangeOpacity(0.8)
 	filling = image(opaquefilling)
-
-/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/set_reagents_to_add()
-	if(initReagent)
-		reagents_to_add[initReagent] = 50
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/attackby(obj/item/I,mob/user)
 	if(istype(I,/obj/item/weapon/pen))
@@ -778,34 +773,34 @@
 	name = "wine"
 	desc = "Classy."
 	icon_state = "winecustom"
-	initReagent = WINE
+	reagents_to_add = list(WINE = 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/whiskey
 	name = "whiskey"
 	desc = "A bottle of quite-a-bit-proof whiskey."
 	icon_state = "whiskeycustom"
-	initReagent = WHISKEY
+	reagents_to_add = list(WHISKEY = 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/vermouth
 	name = "vermouth"
 	desc = "Shaken, not stirred."
 	icon_state = "vermouthcustom"
-	initReagent = VERMOUTH
+	reagents_to_add = list(VERMOUTH = 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/vodka
 	name = "vodka"
 	desc = "Get drunk, comrade."
 	icon_state = "vodkacustom"
-	initReagent = VODKA
+	reagents_to_add = list(VODKA = 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/ale
 	name = "ale"
 	desc = "Strike the asteroid!"
 	icon_state = "alecustom"
-	initReagent = ALE
+	reagents_to_add = list(ALE = 50)
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/degreaser
 	name = "engine degreaser"
 	desc = "Engines, full speed!"
 	icon_state = "degreasercustom"
-	initReagent = ETHANOL
+	reagents_to_add = list(ETHANOL = 50)
