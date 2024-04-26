@@ -25,6 +25,7 @@
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 4)
 
 /obj/item/weapon/reagent_containers/food/snacks/watermelonslice
 	name = "watermelon slice"
@@ -55,6 +56,7 @@
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -2
+	reagents_to_add = list(NUTRIMENT = 4, SUGAR = 1.8, COCO = 1.2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/turkey
 	name = "turkey"
@@ -78,6 +80,7 @@
 	food_flags = FOOD_MEAT
 	plate_offset_y = -1
 	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 10, BLACKPEPPER = 0.5, SODIUMCHLORIDE = 0.5, CORNOIL = 0.5)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/suppermatter
 	name = "suppermatter"
@@ -102,6 +105,7 @@
 	bitesize = 3
 	trash = null
 	base_crumb_chance = 0
+	reagents_to_add = list(NUTRIMENT = 12)
 
 /obj/item/weapon/reagent_containers/food/snacks/suppermattershard/New()
 	..()
@@ -144,3 +148,4 @@
 	desc = "A brownie that may or may not get you sky high."
 	icon_state = "ambrosia_brownie"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_DIPPABLE
+	reagents_to_add = list(NUTRIMENT = 0.3)
