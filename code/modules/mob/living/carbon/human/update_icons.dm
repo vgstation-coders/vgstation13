@@ -366,7 +366,7 @@ var/global/list/damage_icon_parts = list()
 		add_image = TRUE
 		for (var/T in C.tattoos)
 			var/datum/cult_tattoo/tattoo = C.tattoos[T]
-			if (tattoo)
+			if (tattoo && tattoo.Display())
 				var/mutable_appearance/cult_tattoo_overlay = mutable_appearance('icons/mob/cult_tattoos.dmi', tattoo.icon_state)
 				cult_tattoo_overlay.blend_mode = BLEND_MULTIPLY
 				mutations_overlay.overlays += cult_tattoo_overlay

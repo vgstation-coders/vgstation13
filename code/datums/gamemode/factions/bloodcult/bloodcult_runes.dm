@@ -138,6 +138,9 @@ var/list/rune_appearances_cache = list()
 /obj/effect/rune/proc/can_read_rune(var/mob/user) //Overload for specific criteria.
 	return iscultist(user)
 
+/obj/effect/rune/get_cult_power()
+	return 1
+
 /obj/effect/rune/cultify()
 	return
 
@@ -258,7 +261,7 @@ var/list/rune_appearances_cache = list()
 	else
 		animate(src)
 
-/obj/effect/rune/proc/idle_pulse()
+/obj/effect/proc/idle_pulse()
 	//This masterpiece of a color matrix stack produces a nice animation no matter which color the rune is.
 	animate(src, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 10, loop = -1)//1
 	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)//2
@@ -569,7 +572,6 @@ var/list/rune_appearances_cache = list()
 	rune.manage_diseases(source)
 
 	if (rune.blood3)
-		TriggerCultRitual(ritualtype = /datum/bloodcult_ritual/always_active/draw_rune, extrainfo = list("erased" = FALSE))
 		return RUNE_WRITE_COMPLETE
 	return RUNE_WRITE_CONTINUE
 
@@ -585,12 +587,11 @@ var/list/rune_appearances_cache = list()
 		word_erased = rune.word3.rune
 		rune.word3 = null
 		rune.blood3 = null
-		rune.update_icon()
-		TriggerCultRitual(ritualtype = /datum/bloodcult_ritual/always_active/draw_rune, extrainfo = list("erased" = TRUE))
 		if (rune.active_spell)
 			rune.active_spell.abort(RITUALABORT_ERASED)
 			rune.active_spell = null
 			rune.overlays.len = 0
+		rune.update_icon()
 	else if(rune.word2)
 		rune.erase_word(rune.word2.english, rune.blood2)
 		word_erased = rune.word2.rune

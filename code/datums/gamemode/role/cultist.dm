@@ -28,9 +28,21 @@
 	var/datum/role/cultist/mentor = null
 	var/list/acolytes = list()
 
+	var/devotion = 0
+	var/rank = DEVOTION_TIER_0
+
+	var/blood_pool = FALSE
+
+	var/initial_rituals = FALSE
+	var/list/possible_rituals = list()
+	var/list/rituals = list(RITUAL_CULTIST_1,RITUAL_CULTIST_2)
+
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
 	wikiroute = role_wiki[CULTIST]
+
+	for (var/ritual_type in bloodcult_personal_rituals)
+		possible_rituals += new ritual_type()
 
 /datum/role/cultist/OnPostSetup(var/laterole = FALSE)
 	. = ..()
@@ -92,9 +104,53 @@
 	if ((cultist_role == CULTIST_ROLE_ACOLYTE) && !mentor)
 		FindMentor()
 
-
-// 2022 - Commenting out some part of the greeting message and spacing it out a bit.
-//  Getting converted floods the chat with a lot of unncessary information
+	if (faction)
+		var/datum/faction/bloodcult/cult = faction
+		if (!initial_rituals && cult.countdown_to_first_rituals <= 0)
+			assign_rituals()
+			var/mob/M = antag.current
+			if (M)
+				to_chat(M, "<span class='sinister'>Although you can generate devotion by performing most cult activities, a couple rituals for you to perform are now available. Check the cult panel.</span>")
+		switch(cult.stage)
+			if (BLOODCULT_STAGE_READY)
+				antag.current.add_particles(PS_CULT_SMOKE)
+				antag.current.add_particles(PS_CULT_SMOKE2)
+				if (cult.tear_ritual && cult.tear_ritual.dance_count)
+					var/count = clamp(cult.tear_ritual.dance_count / 400, 0.01, 0.6)
+					antag.current.adjust_particles(PVAR_SPAWNING,count,PS_CULT_SMOKE)
+					antag.current.adjust_particles(PVAR_SPAWNING,count,PS_CULT_SMOKE2)
+				else
+					if (prob(1))
+						antag.current.adjust_particles(PVAR_SPAWNING,0.05,PS_CULT_SMOKE)
+						antag.current.adjust_particles(PVAR_SPAWNING,0.05,PS_CULT_SMOKE2)
+					else
+						antag.current.adjust_particles(PVAR_SPAWNING,0,PS_CULT_SMOKE)
+						antag.current.adjust_particles(PVAR_SPAWNING,0,PS_CULT_SMOKE2)
+			if (BLOODCULT_STAGE_MISSED)
+				antag.current.remove_particles(PS_CULT_SMOKE)
+				antag.current.remove_particles(PS_CULT_SMOKE2)
+			if (BLOODCULT_STAGE_ECLIPSE)
+				antag.current.add_particles(PS_CULT_SMOKE)
+				antag.current.add_particles(PS_CULT_SMOKE2)
+				antag.current.adjust_particles(PVAR_SPAWNING,0.6,PS_CULT_SMOKE)
+				antag.current.adjust_particles(PVAR_SPAWNING,0.6,PS_CULT_SMOKE2)
+				antag.current.add_particles(PS_CULT_HALO)
+				antag.current.adjust_particles(PVAR_ICON_STATE,"cult_halo[get_devotion_rank()]",PS_CULT_HALO)
+			if (BLOODCULT_STAGE_DEFEATED)
+				antag.current.add_particles(PS_CULT_SMOKE)
+				antag.current.add_particles(PS_CULT_SMOKE2)
+				antag.current.adjust_particles(PVAR_SPAWNING,0.19,PS_CULT_SMOKE)
+				antag.current.adjust_particles(PVAR_SPAWNING,0.21,PS_CULT_SMOKE2)
+				antag.current.add_particles(PS_CULT_HALO)
+				antag.current.adjust_particles(PVAR_COLOR,"#00000066",PS_CULT_HALO)
+				antag.current.adjust_particles(PVAR_ICON_STATE,"cult_halo[get_devotion_rank()]",PS_CULT_HALO)
+			if (BLOODCULT_STAGE_NARSIE)
+				antag.current.add_particles(PS_CULT_SMOKE)
+				antag.current.add_particles(PS_CULT_SMOKE2)
+				antag.current.adjust_particles(PVAR_SPAWNING,0.6,PS_CULT_SMOKE)
+				antag.current.adjust_particles(PVAR_SPAWNING,0.6,PS_CULT_SMOKE2)
+				antag.current.add_particles(PS_CULT_HALO)
+				antag.current.adjust_particles(PVAR_ICON_STATE,"cult_halo[get_devotion_rank()]",PS_CULT_HALO)
 
 /datum/role/cultist/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -105,22 +161,22 @@
 	switch(greeting)
 		if (GREET_ROUNDSTART)
 			to_chat(antag.current, {"<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'><font size=3>You are a cultist of <span class='danger'><font size=3>Nar-Sie</font></span>!</font><br>
-				I, the Geometer of Blood, want you to thin the veil between your reality and my realm<br>
-				so I can pull this place onto my plane of existence.<br>
+				I, the Geometer of Blood, want you to drag this station into the blood realm.<br>
 				You've managed to get a job here, and the time has come to put our plan into motion.<br>
-				However, the veil is currently so thick that I can barely bestow any power to you.<br>
-				Other cultists made their way into the crew. Talk to them. <span class='danger'>Self Other Technology</span>!<br>
-				Meet up with them. Raise an altar in my name. <span class='danger'>Blood Technology Join</span>!<br>
+				An Eclipse will soon arrive which will weaken this station's ties to reality, giving us a window of time to perform the Tear Reality ritual.<br>
+				Performing occult activities will generate devotion, hastening its arrival. Consult the Cult panel to track how much time is left, as well as the state of the Cult.<br>
+				Until the Eclipse arrives, work with your peers to disrupt the crew and increase your dominion over the station!<br>
+				But first of all, use the Cult panel to choose a role that fits you. You may change it later.<br>
 				</span>"})
 		if (GREET_ADMINTOGGLE)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 			to_chat(antag.current, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 		if (GREET_CUSTOM)
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>[custom]</span>")
+			to_chat(antag.current, "<img src='data:image /png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>[custom]</span>")
 		if (GREET_CONVERTED)
 			to_chat(antag.current, "<span class='sinister'>You feel like you've broken past the veil of reality, your mind has seen worlds from beyond this plane, you've listened to the words of the Geometer of Blood for what felt like both an instant and ages, and now share both his knowledge and his ambition.</span>")
 			to_chat(antag.current, "<span class='sinister'>The Cult of Nar-Sie now counts you as its newest member. Your fellow cultists will guide you.</span>")
-			to_chat(antag.current,"<b>The first thing you might want to do is to summon a tome (<span class='danger'>See Blood Hell</span>) to see the available runes and learn their uses.</b>")
+			to_chat(antag.current,"<b>The first thing you might want to do is set your role from the panel to the left, then summon a tome (<span class='danger'>See Blood Hell</span>) to see the available runes and learn their uses.</b>")
 		if (GREET_PAMPHLET)
 			to_chat(antag.current, "<span class='sinister'>Wow, that pamphlet was very convincing, in fact you're like totally a cultist now, hail Nar-Sie!</span>")//remember, debug item
 		if (GREET_SOULSTONE)
@@ -138,17 +194,9 @@
 				to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='sinister'>You are a lone cultist. You've spent years studying the language of Nar-Sie, but haven't associated with his followers.</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
-	//to_chat(antag.current, "<span class='sinister'>You find yourself to be well-versed in the runic alphabet of the cult.</span>")
 	to_chat(antag.current, "<br>")
 	spawn(1)
 		if (faction)
-			/*
-			var/datum/objective_holder/OH = faction.objective_holder
-			if (OH.objectives.len > 0)
-				var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.
-				to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
-				to_chat(antag.current,"<b>First of all though, choose a role that fits you best using the button on the left.</b>")
-			*/
 			if (greeting != GREET_ROUNDSTART)
 				var/datum/faction/bloodcult/cult = faction
 				to_chat(antag.current, "<span class='sinister'>The station population is currently large enough for <span class='userdanger'>[cult.cultist_cap]</span> cultists.</span>")
@@ -185,18 +233,45 @@
 		dat += "<br>"
 	return dat
 
+/datum/role/cultist/ExtraScoreboard()
+	switch(devotion)
+		if (2000 to INFINITY)
+			return " <font color='#FF0000'>[devotion]</font>"
+		if (1000 to 2000)
+			return " <font color='#FF8800'>[devotion]</font>"
+		if (500 to 1000)
+			return " <font color='#FFFF00'>[devotion]</font>"
+		if (100 to 500)
+			return " <font color='#88FF00'>[devotion]</font>"
+		else
+			return " <font color='#00FF00'>[devotion]</font>"
+
+/datum/role/cultist/Drop()
+	DropMentorship()
+	antag.current.remove_particles("Cult Smoke")
+	antag.current.remove_particles("Cult Smoke2")
+	antag.current.remove_particles("Cult Halo")
+	if (faction)
+		var/datum/faction/bloodcult/C = faction
+		C.deconverted[antag.name] = devotion
+	..()
+
 /datum/role/cultist/proc/DropMentorship()
 	if (mentor)
 		to_chat(antag.current,"<span class='warning'>You have ended your mentorship under [mentor.antag.name].</span>")
 		to_chat(mentor.antag.current,"<span class='warning'>[antag.name] has ended their mentorship under you.</span>")
 		message_admins("[antag.key]/([antag.name]) has ended their mentorship under [mentor.antag.name]")
 		log_admin("[antag.key]/([antag.name]) has ended their mentorship under [mentor.antag.name]")
+		mentor.acolytes -= src
+		mentor = null
 	if (acolytes.len > 0)
 		for (var/datum/role/cultist/acolyte in acolytes)
 			to_chat(antag.current,"<span class='warning'>You have ended your mentorship of [acolyte.antag.name].</span>")
 			to_chat(acolyte.antag.current,"<span class='warning'>[antag.name] has ended their mentorship.</span>")
 			message_admins("[antag.key]/([antag.name]) has ended their mentorship of [acolyte.antag.name]")
 			log_admin("[antag.key]/([antag.name]) has ended their mentorship of [acolyte.antag.name]")
+			acolyte.mentor = null
+		acolytes = list()
 
 /datum/role/cultist/proc/ChangeCultistRole(var/new_role)
 	if (!new_role)
@@ -233,8 +308,9 @@
 			cultist_role = CULTIST_ROLE_NONE
 	if (cult)
 		cult.update_hud_icons()
-	if (antag.current)
+	if (antag.current)//refreshing the UI so the current role icon appears on the cult panel button and role change button.
 		antag.current.DisplayUI("Cultist Left Panel")
+		antag.current.DisplayUI("Cult Panel")
 	time_role_changed_last = world.time
 
 /datum/role/cultist/proc/FindMentor()
@@ -259,6 +335,176 @@
 		message_admins("[mentor.antag.key]/([mentor.antag.name]) is now mentoring [antag.name]")
 		log_admin("[mentor.antag.key]/([mentor.antag.name]) is now mentoring [antag.name]")
 
+/datum/role/cultist/proc/get_devotion_rank()
+	switch(devotion)
+		if (2000 to INFINITY)
+			return DEVOTION_TIER_4
+		if (1000 to 2000)
+			return DEVOTION_TIER_3
+		if (500 to 1000)
+			return DEVOTION_TIER_2
+		if (100 to 500)
+			return DEVOTION_TIER_1
+		if (0 to 100)
+			return DEVOTION_TIER_0
+
+/datum/role/cultist/proc/gain_devotion(var/acquired_devotion = 0, var/tier = DEVOTION_TIER_0, var/key, var/extra)
+	if (faction)
+		switch(faction.stage)
+			if (BLOODCULT_STAGE_DEFEATED)//no more devotion gains if the bloodstone has been destroyed
+				return
+			if (BLOODCULT_STAGE_NARSIE)//or narsie has risen
+				return
+
+	if (key && (!faction || (faction.stage != BLOODCULT_STAGE_ECLIPSE)))
+		for (var/ritual_slot in rituals)
+			if (rituals[ritual_slot])
+				var/datum/bloodcult_ritual/my_ritual = rituals[ritual_slot]
+				if (key in my_ritual.keys)
+					if (my_ritual.key_found(extra))
+						my_ritual.complete()
+						if (!my_ritual.only_once)
+							possible_rituals += my_ritual
+						rituals[ritual_slot] = null
+						var/mob/M = antag.current
+						if (M)
+							to_chat(M, "<span class='sinister'>You have completed a ritual and been reward for your devotion...soon another ritual will take its place.</span>")
+						spawn(5 MINUTES)
+							if (!gcDestroyed)
+								replace_rituals(ritual_slot)
+	if (faction && (faction.stage != BLOODCULT_STAGE_ECLIPSE))
+		var/datum/faction/bloodcult/cult = faction
+		for (var/ritual_slot in cult.rituals)
+			if (cult.rituals[ritual_slot])
+				var/datum/bloodcult_ritual/faction_ritual = cult.rituals[ritual_slot]
+				if (key in faction_ritual.keys)
+					if (faction_ritual.key_found(extra))
+						faction_ritual.complete()
+						if (!faction_ritual.only_once)
+							cult.possible_rituals += faction_ritual
+						cult.rituals[ritual_slot] = null
+						for (var/datum/role/cultist in cult.members)
+							var/mob/M = cultist.antag.current
+							if (M)
+								if (M == antag.current)
+									to_chat(M, "<span class='sinister'>You have completed a ritual, and rewarded the entire cult...soon another ritual will take its place.</span>")
+								else
+									to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
+						spawn(10 MINUTES)
+							cult.replace_rituals(ritual_slot)
+
+	//The more devotion the cultist has acquired, the less devotion they obtain from lesser rituals
+	switch (get_devotion_rank() - tier)
+		if (3 to INFINITY)
+			return//until they just don't get any devotion anymore
+		if (2)
+			acquired_devotion /= 10
+		if (1)
+			acquired_devotion /= 2
+	devotion += acquired_devotion
+	check_rank_upgrade()
+
+	if (faction)
+		var/datum/faction/bloodcult/cult = faction
+		cult.total_devotion += acquired_devotion
+
+/datum/role/cultist/proc/check_rank_upgrade()
+	var/new_rank = get_devotion_rank()
+	while (new_rank > rank)
+		rank++
+		if (iscarbon(antag.current))//constructs and shades cannot make use of those powers so no point informing them.
+			to_chat(antag.current, "<span class='sinisterbig'>As your devotion to the cult increases, a new power awakens inside you.</span>")
+			switch(rank)
+				if (DEVOTION_TIER_1)
+					to_chat(antag.current, "<span class='danger'>Blood Pooling</span>")
+					to_chat(antag.current, "<b>Any blood cost required by a cult rune or ritual will now be reduced and split with other cult members that have attained this power. You can toggle blood pooling as needed.</b>")
+					GiveTattoo(/datum/cult_tattoo/bloodpool)
+				if (DEVOTION_TIER_2)
+					to_chat(antag.current, "<span class='danger'>Blood Dagger</span>")
+					to_chat(antag.current, "<b>You can now form a dagger using your own blood (or pooled blood, any blood that you can get your hands on). Hitting someone will let the dagger steal some of their blood, while sheathing the dagger will let you recover all the stolen blood. Throwing the dagger deals damage based on how much blood it carries, and nails the victim down, forcing them to pull the dagger out to move away.</b>")
+					GiveTattoo(/datum/cult_tattoo/dagger)
+				if (DEVOTION_TIER_3)
+					to_chat(antag.current, "<span class='danger'>Runic Skin</span>")
+					to_chat(antag.current, "<b>You can now fuse a talisman that has a rune imbued or attuned to it with your skin, granting you the ability to cast this talisman hands free, as long as you are conscious and not under the effects of Holy Water.</b>")
+					GiveTattoo(/datum/cult_tattoo/rune_store)
+				if (DEVOTION_TIER_4)
+					to_chat(antag.current, "<span class='danger'>Shortcut Sigil</span>")
+					to_chat(antag.current, "<b>Apply your palms on a wall to draw a sigil on it that lets you and any ally pass through it.</b>")
+					GiveTattoo(/datum/cult_tattoo/shortcut)
+	antag.current.DisplayUI("Cultist Right Panel")
+
+/datum/role/cultist/proc/assign_rituals()
+	initial_rituals = TRUE
+	var/list/valid_rituals = list()
+
+	for (var/datum/bloodcult_ritual/R in possible_rituals)
+		if (R.pre_conditions(src))
+			valid_rituals += R
+
+	if (valid_rituals.len < 2)
+		return
+
+	var/datum/bloodcult_ritual/previous_ritual
+	for (var/ritual_slot in rituals)
+		var/datum/bloodcult_ritual/BR = pick(valid_rituals)
+		if ((previous_ritual) && (previous_ritual.ritual_type == BR.ritual_type))
+			BR = pick(valid_rituals)//slightly reducing chances of having several rituals of the same type
+		else
+			previous_ritual = BR
+		rituals[ritual_slot] = BR
+		possible_rituals -= BR
+		valid_rituals -= BR
+		BR.init_ritual()
+
+	var/datum/mind/M = antag
+
+	if ("Cult Panel" in M.activeUIs)
+		var/datum/mind_ui/m_ui = M.activeUIs["Cult Panel"]
+		if (m_ui.active)
+			m_ui.Display()
+
+/datum/role/cultist/proc/replace_rituals(var/slot)
+	if (gcDestroyed)
+		return
+	if (!slot)
+		return
+
+	var/list/valid_rituals = list()
+
+	for (var/datum/bloodcult_ritual/R in possible_rituals)
+		if (R.pre_conditions(src))
+			valid_rituals += R
+
+	if (valid_rituals.len < 1)
+		return
+
+	var/datum/bloodcult_ritual/BR = pick(valid_rituals)
+	rituals[slot] = BR
+	possible_rituals -= BR
+	BR.init_ritual()
+
+	var/mob/O = antag.current
+	if (O)
+		to_chat(O, "<span class='sinister'>A new ritual is available...</span>")
+	var/datum/mind/M = antag
+	if ("Cult Panel" in M.activeUIs)
+		var/datum/mind_ui/m_ui = M.activeUIs["Cult Panel"]
+		if (m_ui.active)
+			m_ui.Display()
+
+/datum/role/cultist/proc/get_eclipse_increment()
+	switch(get_devotion_rank())
+		if (DEVOTION_TIER_0)
+			return 0.10
+		if (DEVOTION_TIER_1)
+			return 0.10 + (devotion-100)*0.000375
+		if (DEVOTION_TIER_2)
+			return 0.25 + (devotion-500)*0.0003
+		if (DEVOTION_TIER_3)
+			return 0.40 + (devotion-1000)*0.0001
+		if (DEVOTION_TIER_4)
+			return 0.50 + (devotion-2000)*0.00005
+
 /datum/role/cultist/handle_reagent(var/reagent_id)
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
@@ -268,56 +514,6 @@
 		H.Dizzy(12)
 		H.stuttering = max(H.stuttering, 12)
 		H.Jitter(12)
-		/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
-			switch (current_act)
-				if (CULT_MENDED)
-					H.dust()
-					return
-				if (CULT_PROLOGUE)
-					H.eye_blurry = max(H.eye_blurry, 3)
-					H.Dizzy(3)
-				if (CULT_ACT_I)
-					H.eye_blurry = max(H.eye_blurry, 6)
-					H.Dizzy(6)
-					H.stuttering = max(H.stuttering, 6)
-				if (CULT_ACT_II)
-					H.eye_blurry = max(H.eye_blurry, 12)
-					H.Dizzy(12)
-					H.stuttering = max(H.stuttering, 12)
-					H.Jitter(12)
-				if (CULT_ACT_III)
-					H.eye_blurry = max(H.eye_blurry, 16)
-					H.Dizzy(16)
-					H.stuttering = max(H.stuttering, 16)
-					H.Jitter(16)
-					if (prob(50))
-						H.Knockdown(1)
-					else if (prob(50))
-						H.confused = 2
-					H.adjustOxyLoss(5)
-				if (CULT_ACT_IV)
-					H.eye_blurry = max(H.eye_blurry, 20)
-					H.Dizzy(20)
-					H.stuttering = max(H.stuttering, 20)
-					H.Jitter(20)
-					if (prob(60))
-						H.Knockdown(2)
-					else if (prob(60))
-						H.confused = 4
-					H.adjustOxyLoss(10)
-					H.adjustToxLoss(5)
-				if (CULT_EPILOGUE)
-					H.eye_blurry = max(H.eye_blurry, 30)
-					H.Dizzy(30)
-					H.stuttering = max(H.stuttering, 30)
-					H.Jitter(30)
-					if (prob(70))
-						H.Knockdown(4)
-					else if (prob(70))
-						H.confused = 6
-					H.adjustOxyLoss(20)
-					H.adjustToxLoss(10)
-					*/
 
 /datum/role/cultist/handle_splashed_reagent(var/reagent_id)//also proc'd when holy water is drinked or ingested in any way
 	var/mob/living/carbon/human/H = antag.current
@@ -327,79 +523,12 @@
 		if (holywarning_cooldown <= 0)
 			holywarning_cooldown = 5
 			to_chat(H, "<span class='danger'>The cold touch of holy water makes your head spin, you're having trouble walking straight.</span>")
-				/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
-				switch (current_act)
-					if (CULT_MENDED)
-						to_chat(H, "<span class='danger'>The holy water permeates your skin and consumes your cursed blood like mercury digests gold.</span>")
-					if (CULT_PROLOGUE)
-						to_chat(H, "<span class='warning'>You feel the cold touch of holy water, but the veil is still too thick for it to be a real threat.</span>")
-					if (CULT_ACT_I)
-						to_chat(H, "<span class='warning'>The touch of holy water troubles your thoughts, you won't be able to cast spells under its effects.</span>")
-					if (CULT_ACT_II)
-						to_chat(H, "<span class='danger'>The holy water makes your head spin, you're having trouble walking straight.</span>")
-					if (CULT_ACT_III)
-						to_chat(H, "<span class='danger'>The holy water freezes your muscles, you find yourself short of breath.</span>")
-					if (CULT_ACT_IV)
-						to_chat(H, "<span class='danger'>The holy water makes you sick to your stomach.</span>")
-					if (CULT_EPILOGUE)
-						to_chat(H, "<span class='danger'>Even in these times, holy water proves itself capable of hindering your progression.</span>")
 
-				*/
 	if (reagent_id == HOLYWATER || reagent_id == INCENSE_HAREBELLS)
 		H.eye_blurry = max(H.eye_blurry, 12)
 		H.Dizzy(12)
 		H.stuttering = max(H.stuttering, 12)
 		H.Jitter(12)
-			/* // TODO (UPHEAVAL PART 2) stronger effects the more cult points have been accumulated
-			switch (current_act)
-				if (CULT_MENDED)
-					H.dust()
-					return
-				if (CULT_PROLOGUE)
-					H.eye_blurry = max(H.eye_blurry, 3)
-					H.Dizzy(3)
-				if (CULT_ACT_I)
-					H.eye_blurry = max(H.eye_blurry, 6)
-					H.Dizzy(6)
-					H.stuttering = max(H.stuttering, 6)
-				if (CULT_ACT_II)
-					H.eye_blurry = max(H.eye_blurry, 12)
-					H.Dizzy(12)
-					H.stuttering = max(H.stuttering, 12)
-					H.Jitter(12)
-				if (CULT_ACT_III)
-					H.eye_blurry = max(H.eye_blurry, 16)
-					H.Dizzy(16)
-					H.stuttering = max(H.stuttering, 16)
-					H.Jitter(16)
-					if (prob(50))
-						H.Knockdown(1)
-					else if (prob(50))
-						H.confused = 2
-					H.adjustOxyLoss(5)
-				if (CULT_ACT_IV)
-					H.eye_blurry = max(H.eye_blurry, 20)
-					H.Dizzy(20)
-					H.stuttering = max(H.stuttering, 20)
-					H.Jitter(20)
-					if (prob(60))
-						H.Knockdown(2)
-					else if (prob(60))
-						H.confused = 4
-					H.adjustOxyLoss(10)
-					H.adjustToxLoss(5)
-				if (CULT_EPILOGUE)
-					H.eye_blurry = max(H.eye_blurry, 30)
-					H.Dizzy(30)
-					H.stuttering = max(H.stuttering, 30)
-					H.Jitter(30)
-					if (prob(70))
-						H.Knockdown(4)
-					else if (prob(70))
-						H.confused = 6
-					H.adjustOxyLoss(20)
-					H.adjustToxLoss(10)
-			*/
 
 /datum/role/cultist/proc/write_rune(var/word_to_draw)
 	var/mob/living/user = antag.current
@@ -449,6 +578,7 @@
 		if(rune.word1 && rune.word2 && rune.word3)
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 			return
+	gain_devotion(10, DEVOTION_TIER_0, "write_rune", word.english)
 	write_rune_word(get_turf(user), word, rune_blood_data["blood"], caster = user)
 	verbose = FALSE
 
@@ -481,11 +611,12 @@
 	tattoos[T.name] = T
 	update_cult_hud()
 	T.getTattoo(antag.current)
-	anim(target = antag.current, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_receive", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	//anim(target = antag.current, a_icon = 'icons/effects/32x96.dmi', flick_anim = "tattoo_receive", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
 	sleep(1)
 	antag.current.update_mutations()
-	var/atom/movable/overlay/tattoo_markings = anim(target = antag.current, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[T.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
-	animate(tattoo_markings, alpha = 0, time = 30)
+	//a bit too visible now that those may be unlocked at any time and no longer just in front of a spire
+	//var/atom/movable/overlay/tattoo_markings = anim(target = antag.current, a_icon = 'icons/mob/cult_tattoos.dmi', flick_anim = "[T.icon_state]_mark", sleeptime = 30, lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+	//animate(tattoo_markings, alpha = 0, time = 30)
 
 
 /datum/role/cultist/proc/MakeArchCultist()

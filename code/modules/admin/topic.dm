@@ -3939,7 +3939,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			if("fakealerts")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEA")
-				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") as null|anything in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Revs", "Bloodstones raised", "Bloodstones destroyed")
+				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") as null|anything in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Revs")
 				//Big fat lists of effects, not very modular but at least there's less buttons
 				switch (choice)
 					if("Biohazard") //GUISE WE HAVE A BLOB
@@ -3990,7 +3990,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 						message_admins("[key_name_admin(usr)] triggered a FAKE revolution alert.")
 						log_admin("[key_name_admin(usr)] triggered a FAKE revolution alert.")
 						return
-					//TODO (UPHEAVAL PART 2) think of fake alerts too
+
 			if("fakebooms") //Michael Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")
@@ -4157,11 +4157,13 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				if (!choice)
 					return
 				var/turf/T = get_turf(usr)
-				var/obj/structure/cult/bloodstone/blood_stone = new(T)
+				var/obj/structure/cult/bloodstone/admin/blood_stone = new(T)
 				if(choice == "Yes")
 					blood_stone.flashy_entrance()
 				if(choice == "No")
-					blood_stone.update_icon()
+					blood_stone.ready = TRUE
+					blood_stone.overlays_pre()
+					blood_stone.set_animate()
 				message_admins("[key_name_admin(usr)] spawned a blood stone at [formatJumpTo(get_turf(usr))].")
 
 

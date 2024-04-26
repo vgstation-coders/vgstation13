@@ -89,7 +89,9 @@ h1.alert, h2.alert		{color: #000000;}
 .danger					{color: #ff0000;	font-weight: bold;}
 .userdanger				{color: #ff0000;	font-weight: bold;	font-size: 120%}
 .warning				{color: #ff0000;	font-style: italic;}
+.sinisteracolyte		{color: #600080;	font-weight: bold;	font-style: italic;} /* /vg/ */
 .sinister				{color: #800080;	font-weight: bold;	font-style: italic;} /* /vg/ */
+.sinistermentor			{color: #A00080;	font-weight: bold;	font-style: italic;} /* /vg/ */
 .sinisterbig			{color: #800080;	font-weight: bold;	font-style: italic;	font-size: 120%} /* /vg/ */
 .blob					{color: #006221;	font-weight: bold;	font-style: italic;}
 .numb					{color: transparent;font-weight: bold;	text-shadow: 0 0 2px rgba(0,161,161,0.5);} /* blurry text */
