@@ -690,7 +690,7 @@ a {
 		if(isrobot(user))
 			var/mob/living/silicon/robot/R = user
 			return HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN)
-		return (M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA) || user.reagents.has_reagent(HONKSERUM) || arcanetampered
+		return (M_CLUMSY in user.mutations) || (user.reagents?.has_reagent(INCENSE_BANANA)) || (user.reagents?.has_reagent(HONKSERUM)) || arcanetampered
 	return 0
 
 //Proc that handles NPCs (gremlins) "tampering" with this object.
