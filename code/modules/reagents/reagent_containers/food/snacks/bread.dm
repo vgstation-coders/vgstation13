@@ -11,14 +11,6 @@
 	reagents_to_add = list(NUTRIMENT = 6)
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/nova
-	name = "nova bread"
-	desc = "Some plain old destabilizing star bread."
-	icon_state = "novabread"
-	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
-	reagents_to_add = list(NUTRIMENT = 6, HELL_RAMEN = 3, NOVAFLOUR = 1)
-	bitesize = 3
-
 /obj/item/weapon/reagent_containers/food/snacks/breadslice
 	name = "bread slice"
 	desc = "A slice of home."
@@ -27,19 +19,25 @@
 	food_flags = FOOD_DIPPABLE
 	reagents_to_add = list(NUTRIMENT = 1.2)
 
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/nova
+	name = "nova bread"
+	desc = "Some plain old destabilizing star bread."
+	icon_state = "novabread"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
+	reagents_to_add = list(NUTRIMENT = 6, HELL_RAMEN = 3, NOVAFLOUR = 1)
+	bitesize = 3
+
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
 	name = "nova bread slice"
 	desc = "A slice of Sol."
 	icon_state = "novabreadslice"
 	plate_icon = "novacustom"
-	food_flags = FOOD_DIPPABLE
+	reagents_to_add = list(NUTRIMENT = 1.2, HELL_RAMEN = 0.6, NOVAFLOUR = 0.2)
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "paitoast"
-	trash = 0
 	desc = "A slice of bread. Browned onto it is the image of a familiar friend."
-	food_flags = FOOD_DIPPABLE
 	reagents_to_add = list(NUTRIMENT = 5)
 	bitesize = 1
 
@@ -60,6 +58,7 @@
 	icon_state = "meatbreadslice"
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -4
+	reagents_to_add = list(NUTRIMENT = 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/meat/xeno
 	name = "xenomeatbread loaf"
@@ -108,6 +107,7 @@
 	desc = "A slice of delicious banana bread."
 	icon_state = "bananabreadslice"
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
+	reagents_to_add = list(BANANA = 4, NUTRIMENT = 4)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/tofu
 	name = "tofubread"
@@ -123,6 +123,7 @@
 	icon_state = "tofubreadslice"
 	plate_offset_y = -5
 	food_flags = FOOD_MEAT | FOOD_ANIMAL | FOOD_LACTOSE | FOOD_DIPPABLE
+	reagents_to_add = list(NUTRIMENT = 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/creamcheese
 	name = "cream cheese bread"
@@ -138,6 +139,7 @@
 	icon_state = "creamcheesebreadslice"
 	food_flags = FOOD_LACTOSE | FOOD_DIPPABLE
 	plate_offset_y = -5
+	reagents_to_add = list(NUTRIMENT = 4)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/bread/pumpkin
 	name = "Pumpkin Bread"
@@ -152,6 +154,7 @@
 	desc = "A slice of pumpkin bread."
 	icon_state = "pumpkinbreadslice"
 	plate_offset_y = 0
+	reagents_to_add = list(NUTRIMENT = 3)
 
 // sammiches, sandviches, etc
 
