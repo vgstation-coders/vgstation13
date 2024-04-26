@@ -90,6 +90,21 @@ var/list/holopads = list()
 		activate_holo(user)
 	return
 
+// For when an AI bounces between one holopad to another - it should look seamless by reusing the same hologram. Returns whether the transfer was successful.
+/obj/machinery/hologram/holopad/proc/transfer_ai(obj/machinery/hologram/holopad/source_pad)
+	if(stat & (FORCEDISABLE|NOPOWER))
+		return FALSE
+	if(master || holo)
+		return FALSE
+
+	var/transferred_master = source_pad.master
+	var/transferred_holo = source_pad.holo
+	source_pad.clear_holo(FALSE)
+	source_pad.holo = null
+
+	transfer_holo(transferred_master, transferred_holo)
+	return TRUE
+
 /obj/machinery/hologram/holopad/proc/activate_holo(mob/living/silicon/ai/user)
 	if(!(stat & (FORCEDISABLE|NOPOWER)) && user.eyeobj.loc == loc)//If the projector has power and client eye is on it.
 		if(!holo)//If there is not already a hologram.
@@ -129,11 +144,11 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	var/icon/alpha_mask = new('icons/effects/effects.dmi', "scanline")
 	colored_holo.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
 	holo.icon = colored_holo
-	
-	var/icon/colored_ray = getFlatIcon(ray)
+
+	var/icon/colored_ray = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(ray)), override_dir = SOUTH)
 	colored_ray.ColorTone(A.holocolor)
 	ray.icon = colored_ray
-	
+
 	A.current = src
 	master = A//AI is the master.
 	use_power = MACHINE_POWER_USE_ACTIVE//Active power usage.
@@ -145,6 +160,29 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 				ol.icon_state = "holopad1"
 				break
 
+	return 1
+
+/obj/machinery/hologram/holopad/proc/transfer_holo(mob/living/silicon/ai/A, obj/effect/overlay/hologram/transferred_holo)
+	ray = new(loc)
+	holo = transferred_holo
+
+	set_light(2, 0, A.holocolor)
+	icon_state = "holopad1"
+
+	var/icon/colored_ray = getFlatIcon(ray)
+	colored_ray.ColorTone(A.holocolor)
+	ray.icon = colored_ray
+
+	A.current = src
+	master = A
+	use_power = MACHINE_POWER_USE_ACTIVE
+	holo.set_glide_size(DELAY2GLIDESIZE(1))
+	move_hologram()
+	if(A && A.holopadoverlays.len)
+		for(var/image/ol in A.holopadoverlays)
+			if(ol.loc == src)
+				ol.icon_state = "holopad1"
+				break
 	return 1
 
 /obj/machinery/hologram/holopad/proc/create_advanced_holo(var/mob/living/silicon/ai/A)
@@ -182,7 +220,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 		newlist["[M.name]"] = M
 	return newlist
 
-/obj/machinery/hologram/holopad/proc/clear_holo()
+/obj/machinery/hologram/holopad/proc/clear_holo(var/delete_holo = TRUE)
 	if(master && master.holopadoverlays.len)
 		for(var/image/ol in master.holopadoverlays)
 			if(ol.loc == src)
@@ -198,14 +236,13 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 			master.current = null
 		master = null //Null the master, since no-one is using it now.
 	QDEL_NULL(ray)
-	if(holo)
+	if(delete_holo && holo)
 		var/obj/effect/overlay/hologram/H = holo
 		visible_message("<span class='warning'>The image of [holo] fades away.</span>")
 		holo = null
 		animate(H, alpha = 0, time = 5)
 		spawn(5)
 			qdel(H)//Get rid of hologram.
-	return 1
 
 /obj/machinery/hologram/holopad/emp_act()
 	if(holo)
@@ -258,7 +295,14 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 				else
 					ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
 		else
-			clear_holo()
+			var/transferred = FALSE
+			for(var/obj/machinery/hologram/holopad/other_holopad in range(holo_range, master.eyeobj.loc))
+				if(other_holopad != src && other_holopad.transfer_ai(src))
+					transferred = TRUE
+					break
+			if(!transferred)
+				clear_holo()
+
 	return 1
 
 /*

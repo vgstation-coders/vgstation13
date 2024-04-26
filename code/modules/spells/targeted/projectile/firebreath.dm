@@ -27,7 +27,7 @@
 	hud_state = "wiz_firebreath"
 
 /spell/targeted/projectile/dumbfire/firebreath/spawn_projectile(var/location, var/direction)
-	return new proj_type(location,direction,P = pressure)
+	return new proj_type(location, direction, P = pressure)
 
 /spell/targeted/projectile/dumbfire/firebreath/get_upgrade_info(upgrade_type, level)
 	if(upgrade_type == Sp_POWER)

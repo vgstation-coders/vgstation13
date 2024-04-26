@@ -35,8 +35,9 @@
 /spell/targeted/push/cast(var/list/targets)
 	..()
 	var/area/thearea
-	var/area/prospective = pick(areas)
+	var/area/prospective
 	while(!thearea)
+		prospective = pick(areas)
 		if(prospective.type != /area)
 			var/list/prospective_turfs = get_area_turfs(prospective.type)
 			if(!prospective_turfs.len) //An in-game area somehow lost its turfs, search for another one
@@ -45,7 +46,6 @@
 			if(T.z == holder.z)
 				thearea = prospective
 				break
-		prospective = pick(areas)
 	var/list/L = list()
 	for(var/turf/T in get_area_turfs(thearea.type))
 		if(!T.density)

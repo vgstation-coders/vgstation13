@@ -64,11 +64,7 @@
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [src.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
-		if(!iscarbon(user))
-			M.LAssailant = null
-		else
-			M.LAssailant = user
-			M.assaulted_by(user)
+		M.assaulted_by(user)
 
 		if(reagents.total_volume) //Deal with the reagents in the food
 			reagents.reaction(M, INGEST, amount_override = min(reagents.total_volume,amount_per_transfer_from_this)/(reagents.reagent_list.len))

@@ -750,6 +750,23 @@
 			emote("scratch")
 			return
 
+/**
+ * Returns a number between -2 to 2.
+ * TODO: What's the default return value?
+ */
+/mob/living/carbon/monkey/eyecheck()
+	. = 0
+	var/obj/item/clothing/head/headwear = src.hat
+	var/obj/item/clothing/glasses/eyewear = src.glasses
+
+	if (istype(headwear))
+		. += headwear.eyeprot
+
+	if (istype(eyewear))
+		. += eyewear.eyeprot
+
+	return clamp(., -2, 2)
+
 ///FIRE CODE
 /mob/living/carbon/monkey/handle_fire()
 	if(..())

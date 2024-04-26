@@ -59,6 +59,7 @@
 /datum/gas/plasma
 	id = GAS_PLASMA
 	name = "Plasma"
+	short_name = "Plasma"
 
 	//Note that this has a significant impact on TTV yield.
 	//Because it is so high, any leftover plasma soaks up a lot of heat and drops the yield pressure.

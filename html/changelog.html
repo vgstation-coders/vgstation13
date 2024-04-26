@@ -73,6 +73,61 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2024.04.19</h2>
+			<h3 class="author">13spacemen updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Vox hair color selection is less buggy</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Implants no longer remain in the user&#39;s hand after using an empty implanter on them, which would also fill the implanter. In addition, superglued implants cannot be removed from the user&#39;s hand via the implanter.</li>
+			</ul>
+			<h2 class="date">2024.04.17</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Diagonal shuttle walls and false walls now properly update on mesons if moved</li>
+				<li class="bugfix">Pulse demon cable zapping now actually follows the arc of the jump</li>
+				<li class="tweak">Pulse demon cable zap lightning is now yellow</li>
+			</ul>
+			<h2 class="date">2024.04.16</h2>
+			<h3 class="author">13spacemen updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Tail underlimbs get dyed properly</li>
+				<li class="bugfix">heavy fur coat icon actually shows up</li>
+				<li class="bugfix">fixed accessory icon issues</li>
+			</ul>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscdel">the RPD will no longer try to remember which layer you selected when swapping from multilayer mode, as it led to severe issues that broke the RPD</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed people missing their hair and facial hair on the round end scoreboard.</li>
+				<li class="bugfix">Music should play again during thematic endgame events such as the Cult, Nuke Ops, or Supermatter Cascade.</li>
+			</ul>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The tackling range check for sportiness is now actually reachable.</li>
+				<li class="tweak">Sugar, Mint Toxin and Mint Essence now have slightly better sport-improving performance (from 1.2 to 1.5).</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Suicides now properly show corpses as unrevivable on health analysers and medHUDs</li>
+				<li class="bugfix">PDA messages can no longer be sent by the dead if the message window is still open.</li>
+			</ul>
+			<h3 class="author">nervere updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Slimepeople no longer incorrectly show up on the Crew Monitoring Console after turning into a dead slime puddle.</li>
+				<li class="tweak">Malfunctioning AI&#39;s can no longer hack a supermatter and delete it with a lackluster explosion.</li>
+			</ul>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Supply borgs can no longer package wrap their modules.</li>
+				<li class="bugfix">Ore processing machines will no longer work while in a flatpack.</li>
+				<li class="tweak">You can now fill water balloons using sinks.</li>
+				<li class="bugfix">The Station Alerts Pager will no longer alert you when off-station areas have alarms.</li>
+				<li class="tweak">Removed the minimum population requirement for Metastation - Metamen rejoice.</li>
+			</ul>
 			<h2 class="date">2024.04.06</h2>
 			<h3 class="author">SECBATON-GRIFFON updated:</h3>
 			<ul class="changes bgimages16">
@@ -2075,107 +2130,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="bugfix">Fixed light replacers not being able to replace bulb-less light fixtures</li>
 				<li class="bugfix">Fixed runtime when a light fixture&#39;s fitting var is set to null for some reason (???)</li>
 				<li class="rscadd">Added mass-buddha mode admin button, found in the Secrets panel.</li>
-			</ul>
-			<h2 class="date">2023.06.27</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Regular blob tiles once again (after 7 years) visibly brighten when a pulse passes through them. Pulses are emitted by Cores, Nodes, and Overminds. So if you see some nearby blob blinking brightly despite no Node being nearby, that means the Overmind currently has their attention on you. Hopefully it shouldn&#39;t cause more CPU usage this time.</li>
-				<li class="rscadd">Blob Cores and Nodes now emit light, whose color depends upon which skin has been selected</li>
-				<li class="tweak">The Blob Core and Node pulse animations once again render above darkness, like they were meant to.</li>
-				<li class="bugfix">Fixed Blob turning shuttle tiles black when expanding over them.</li>
-				<li class="bugfix">Fixed some roundstart Blob ruleset initialization issue that could lead to the blob getting extra antag roles if multiple roundstart rulesets fire together.</li>
-				<li class="bugfix">Fixed some animations (such as the cult teleport animations) ending about a second earlier than they should.</li>
-				<li class="bugfix">Parallax wraparound has finally been fixed, you will no longer leave stars behind forever if you keep moving in one direction in space.</li>
-				<li class="bugfix">Fixed hookshots and their chains not being visible in many cases.</li>
-				<li class="bugfix">Fixed hookshots having a much shorter range when firing in diagonals.</li>
-				<li class="bugfix">Fixed hookshots failing to properly reel you in if the hook hits something at the longest range possible.</li>
-				<li class="bugfix">Fixed a sanity issue that occurred when mobs exit a Cryo Tube, Body Scanner, DNA Scanner, Mecha, or Cyborg Recharging Station through teleportation or getting pulled by a hookshot chain, and that would either allow other players to teleport them back to it, or just prevent the object from being used by other players.</li>
-				<li class="rscadd">ANTAG MADNESS: Players that have no roles when the clock hits the automated ERT call now become Survivors. Latejoiners that don&#39;t have Traitor enabled get that role as well.</li>
-				<li class="tweak">ANTAG MADNESS: Changed some of the messages sent to latejoin traitors to have them better notice that this isn&#39;t a regular antag roll.</li>
-				<li class="tweak">ANTAG MADNESS: Attempting to call the ERT early will now always result in a failure (note that it won&#39;t prevent the automated ERT call to occur after 20 minutes).</li>
-				<li class="tweak">ANTAG MADNESS: Reduced the ERT call delay from 20 to 18 minutes (so the ERT may actually arrive at the Station after 20 minutes)</li>
-				<li class="tweak">ANTAG MADNESS: During that mode, the Blob-related biohazard announcement will now trigger much later, but the Blob will also be unable to spawn any additional Blob Cores.</li>
-				<li class="bugfix">ANTAG MADNESS: Fixed Nanotrasen Officials not getting their Survive objective unless they latejoined.</li>
-				<li class="tweak">If a faction&#39;s defeat is supposed to reduce the security level and call the shuttle, it will only do so if no other faction also has the shuttle under lockdown or warrants a higher security level.</li>
-				<li class="imageadd">Added a new logo and Greeting message for Survivors that aren&#39;t created by Wizards summoning guns.</li>
-			</ul>
-			<h3 class="author">DorainGrey updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds a radio for Nukies, where they can request reinforcement and get extra TC in exchange for waiting 10 minutes during the ensuing bluespace distortion.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">There is now an art vendor. Coming soon to a library near you.</li>
-				<li class="rscadd">The librarian can now request the removal of a book from the library database with a button. Do your civic duty and delete the garbage.</li>
-				<li class="rscadd">Librarians and admins can now preview a book in the database without ordering it.</li>
-				<li class="bugfix">Books should not briefly flash a different cover when first ordered from the checkout computer.</li>
-			</ul>
-			<h3 class="author">gurfan updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Product lists can now be imported into cash registers again.</li>
-			</ul>
-			<h3 class="author">jellyveggie2 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Pressure valves can now also compare temperature, and have been renamed to conditional valves.</li>
-				<li class="tweak">Conditional valves can now also compare the control pipe against the input pipes&#39; gases, rather than just a fixed value.</li>
-				<li class="tweak">Conditional valves can now also forego the side input entirely, using either of the two other pipes as control. This might help make some designs neater and more compact.</li>
-				<li class="rscdel">Conditional valves can no longer be controlled via AAC, beyond simple on/off commands.</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Deadchat is now notified when and where a player dies, with an option to jump to that player&#39;s location.</li>
-				<li class="bugfix">AI&#39;s are no longer forced to attach images to a PDA message</li>
-				<li class="rscadd">LOWFATBAGEL: An additional exit to atmospherics has been added to make accessing gas storage easier.</li>
-				<li class="bugfix">Non-existent bodies can once again be cloned, assuming you got yourself a DNA scan beforehand.</li>
-				<li class="bugfix">Slimepeople that are dusted no longer generate slime puddles.</li>
-				<li class="bugfix">Slimepeople that are gibbed are now cloneable, provided you have their slime puddle.</li>
-				<li class="bugfix">Arcane Tampering is now properly cleared from all objects when a wizard dies.</li>
-				<li class="bugfix">Fixed orange hardhat sprites being at an incorrect position for insectoids.</li>
-				<li class="bugfix">Slimepeople can be cloned once more. Simply put the slime puddle inside the cloning machine and scan. Make sure it has its slime core (brain) inside or it won&#39;t work!</li>
-				<li class="tweak">Slimepeople now take toxins damage when cloning instead of clone damage. This is to prevent them from instantly cloning (as they&#39;re immune to cloneloss), while also providing a way for xenobio to ease their cloning process (through giving them a slime heart).</li>
-				<li class="bugfix">The PDA pinpointer will no longer display negative values when showing the time until its next scan.</li>
-			</ul>
-			<h3 class="author">smonkeM updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added one new reagent, one new spray bottle, and added this to the AutoDrobe&#39;s contraband section</li>
-				<li class="rscdel">Apparently I deleted two lines somewhere. And then added two lines. I&#39;m an idiot and I don&#39;t believe this breaks anything?</li>
-			</ul>
-			<h2 class="date">2023.06.24</h2>
-			<h3 class="author">Eneocho updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Getmore and Discount Dan&#39;s have started stocking their machines with mint candy. Getmore sells a pack for 30 credits, while Discount Dan&#39;s sells them for a coin, as it is one of the rare non toxic items they sell, and that cuts into profits. The old vendortron somehow got access to a homemade brand of mints.</li>
-				<li class="rscadd">Mint Essence, only available inside mint candy, it is the unrefined version of Mint Toxin, being perfectly safe to consume.</li>
-				<li class="rscadd">Mint Toxin and Mint Essence will keep you minty fresh. This helps with heat (like drinking iced coffee) and gives you an ever so slight boost to sports performance (same level as sugar).</li>
-				<li class="rscadd">Being minty fresh and drinking ice water might cause dental pain. Drinking coffee immediately afterwards will cause some less than desirable effects to your dental health.</li>
-				<li class="bugfix">Fixes some icon issues with the icons calling for a pill bottle label.</li>
-				<li class="tweak">Made the NT icon for the NT mints blue, instead of green.</li>
-			</ul>
-			<h2 class="date">2023.06.20</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Mice once again may periodically squeek. They also will squeek if you step on them while they&#39;re conscious.</li>
-				<li class="rscadd">The Vacuum Dishwasher from the Vox Traders&#39; Zinc Saucier&#39;s crate now has density, improved visual and audio feedback reflecting its state or when vacuuming and cleaning plates, as well as some minor bugs fixed.</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed instruments breaking when a song has a space (comma) at the end of a line</li>
-				<li class="rscadd">Added alt-click functionality to advanced pinpointer to change its mode</li>
-				<li class="bugfix">Fixed coordinate tracking functionality on advanced pinpointer not working</li>
-				<li class="tweak">WAY: Added lightswitch to kitchen.</li>
-				<li class="tweak">WAY: Re-oriented genetics to make it easier to break out of if necessary.</li>
-				<li class="tweak">WAY: Added new fire extinguisher to central hallway loop.</li>
-				<li class="tweak">WAY: Fixed half of trader outpost&#39;s solar panels not having wire knots under them.</li>
-				<li class="tweak">WAY: Fixed disposals not having a vent/scrubber.</li>
-				<li class="tweak">WAY: Mechanics now have access to telecomms.</li>
-				<li class="rscadd">Light Replacers have been greatly improved. You may now click a tile to replace/upgrade the light fixture on it, or to pick up all broken lights found on that tile. This functionality is available for all types (normal, advanced, cyborg, etc.).</li>
-				<li class="rscadd">Added chat messages for some uses of the light replacer.</li>
-				<li class="rscdel">Removed redundant and broken refresh button on janitor PDA cartridge.</li>
-				<li class="bugfix">Janitor PDA&#39;s now properly show the direction in which whichever item you&#39;re looking for is. Locate your equipment much easier!</li>
-				<li class="bugfix">Reduced lag and chat spam when stuff gets ashed by a supermatter.</li>
-			</ul>
-			<h3 class="author">pedr69 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">AI&#39;s now get an audio beep when requested at a holopad</li>
 			</ul>
 		</div>
 		<!--

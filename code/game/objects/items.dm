@@ -1205,11 +1205,7 @@ var/global/objects_thrown_when_explode = FALSE
 	M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>"
 	msg_admin_attack("ATTACK: [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])") //BS12 EDIT ALG
 	log_attack("<font color='red'> [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 
 	add_fingerprint(user)
 	//if(clumsy_check(user) && prob(50))
@@ -1585,11 +1581,7 @@ var/global/list/image/blood_overlays = list()
 
 	M.attack_log += text("\[[time_stamp()]] <span style='color: orange'>Has been restrained (attempt) by [user.name] ([user.ckey]) with \the [src].</span>")
 	user.attack_log += text("\[[time_stamp()]] <span style='color: red'>Attempted to restrain [M.name] ([M.ckey]) with \the [src].</span>")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 	log_attack("[user.name] ([user.ckey]) Attempted to restrain [M.name] ([M.ckey]) with \the [src].")
 	return TRUE
 

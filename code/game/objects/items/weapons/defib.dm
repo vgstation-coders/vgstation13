@@ -122,11 +122,7 @@
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Shocked [target.name] ([target.ckey]) with an emagged [src.name]</font>"
 		target.attack_log += "\[[time_stamp()]\]<font color='orange'> Shocked by [user.name] ([user.ckey]) with an emagged [src.name]</font>"
 		log_attack("<font color='red'>[user.name] ([user.ckey]) shocked [target.name] ([target.ckey]) with an emagged [src.name]</font>" )
-		if(!iscarbon(user))
-			target.LAssailant = null
-		else
-			target.LAssailant = user
-			target.assaulted_by(user)
+		target.assaulted_by(user)
 	playsound(src,'sound/items/defib.ogg',50,1)
 	charges--
 	update_icon()
