@@ -16,8 +16,6 @@
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	plate_offset_y = -1
-
-/obj/item/weapon/reagent_containers/food/snacks/cakeslice/full
 	reagents_to_add = list(NUTRIMENT = 4)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/carrot
@@ -32,6 +30,7 @@
 	name = "carrot cake slice"
 	desc = "Carrotty slice of carrot cake, carrots are good for your eyes! Also not a lie."
 	icon_state = "carrotcake_slice"
+	reagents_to_add = list(NUTRIMENT = 5, IMIDAZOLINE = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/brain
 	name = "brain cake"
@@ -46,6 +45,7 @@
 	desc = "Lemme tell you something about prions. THEY'RE DELICIOUS."
 	icon_state = "braincakeslice"
 	plate_offset_y = 0
+	reagents_to_add = list(NUTRIMENT = 5, ALKYSINE = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/cheese
 	name = "cheese cake"
@@ -60,13 +60,13 @@
 	desc = "A slice of pure cheestisfaction."
 	icon_state = "cheesecake_slice"
 	plate_offset_y = 0
+	reagents_to_add = list(NUTRIMENT = 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/orange
 	name = "orange cake"
 	desc = "A cake with added orange."
 	icon_state = "orangecake"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/orange
-	reagents_to_add = list(NUTRIMENT = 20)
 
 /obj/item/weapon/reagent_containers/food/snacks/cakeslice/orange
 	name = "orange cake slice"
@@ -78,7 +78,6 @@
 	desc = "A cake with added lime."
 	icon_state = "limecake"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/lime
-	reagents_to_add = list(NUTRIMENT = 20)
 
 /obj/item/weapon/reagent_containers/food/snacks/cakeslice/lime
 	name = "lime cake slice"
@@ -90,7 +89,6 @@
 	desc = "A cake with added lemon."
 	icon_state = "lemoncake"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/lemon
-	reagents_to_add = list(NUTRIMENT = 20)
 
 /obj/item/weapon/reagent_containers/food/snacks/cakeslice/lemon
 	name = "lemon cake slice"
@@ -102,7 +100,6 @@
 	desc = "A cake with added chocolate."
 	icon_state = "chocolatecake"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/chocolate
-	reagents_to_add = list(NUTRIMENT = 20)
 
 /obj/item/weapon/reagent_containers/food/snacks/cakeslice/chocolate
 	name = "chocolate cake slice"
@@ -120,6 +117,7 @@
 	name = "caramel cake slice"
 	desc = "Just a slice of cake, enough for everyone."
 	icon_state = "caramelcake_slice"
+	reagents_to_add = list(NUTRIMENT = 3, CARAMEL = 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/birthday
 	name = "Birthday Cake"
@@ -139,6 +137,7 @@
 	candles_state = CANDLES_UNLIT
 	always_candles = "birthdaycakeslice"
 	plate_offset_y = 0
+	reagents_to_add = list(NUTRIMENT = 4, SPRINKLES = 2)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/apple
 	name = "apple cake"
@@ -151,13 +150,13 @@
 	name = "apple cake slice"
 	desc = "A slice of heavenly cake."
 	icon_state = "applecakeslice"
+	reagents_to_add = list(NUTRIMENT = 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/cake/chococherry
 	name = "chocolate-cherry cake"
 	desc = "A chocolate cake with icing and cherries."
 	icon_state = "chococherrycake"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/chococherry
-	reagents_to_add = list(NUTRIMENT = 20)
 
 /obj/item/weapon/reagent_containers/food/snacks/cakeslice/chococherry
 	name = "chocolate-cherry cake slice"
@@ -171,7 +170,6 @@
 	icon_state = "fruitcake"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/cakeslice/fruit
 	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 20)
 
 /obj/item/weapon/reagent_containers/food/snacks/cakeslice/fruit
 	name = "fruitcake slice"
@@ -190,3 +188,4 @@
 	name = "\improper Christmas cake slice"
 	desc = "Sweet and fruity."
 	icon_state = "christmascakeslice"
+	reagents_to_add = list(NUTRIMENT = 2)
