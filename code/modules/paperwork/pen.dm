@@ -99,6 +99,7 @@
 	t = replacetext(t, "\[date\]", "[current_date_string]")
 	t = replacetext(t, "\[time\]", "[worldtime2text()]")
 	t = replacetext(t, "\[stationname\]", "[station_name()]")
+	t = replacetext(t, "\[logo\]", "<img src=\"http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png\">")
 
 	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
 
