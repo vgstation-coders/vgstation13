@@ -217,7 +217,9 @@
 	extinguish()
 	qdel(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/New()
+/obj/item/weapon/reagent_containers/food/snacks/New(loc, parent)
+	if(parent)
+		reagents_to_add = null
 	..()
 	dip = new/datum/reagents(1)
 	dip.my_atom = src
@@ -600,7 +602,7 @@
 				slices_lost = rand(1, min(1, round(slices_num/2))) //Randomly lose a few slices along the way, but at least one and up to half
 			var/reagents_per_slice = reagents.total_volume/slices_num //Figure out how much reagents each slice inherits (losing slices loses reagents)
 			for(var/i = 1 to (slices_num - slices_lost)) //Transfer those reagents
-				var/obj/item/weapon/reagent_containers/food/snacks/slice = new slice_path(src.loc)
+				var/obj/item/weapon/reagent_containers/food/snacks/slice = new slice_path(src.loc, src.type)
 				if(istype(src, /obj/item/weapon/reagent_containers/food/snacks/customizable)) //custom sliceable foods have overlays we need to apply
 					var/obj/item/weapon/reagent_containers/food/snacks/customizable/C = src
 					var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
@@ -786,7 +788,7 @@
 	num_of_children = (round(num_of_children) < num_of_children) ? round(num_of_children) + 1 : round(num_of_children)
 	var/amount_to_transfer = reagents.total_volume / num_of_children
 	for(var/i in 1 to num_of_children)
-		var/obj/child = new child_type()
+		var/obj/child = new child_type(parent = src.type)
 		reagents.trans_to(child, amount_to_transfer)
 		child.forceMove(loc)
 		child.pixel_x = rand(-8, 8)

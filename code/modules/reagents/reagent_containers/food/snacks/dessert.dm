@@ -782,12 +782,9 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/multispawner/ijzerkoekjes
 	name = "ijzerkoekjes"
-	child_type = /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje/multispawned
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje
 	child_volume = 10
 	reagents_to_add = list(NUTRIMENT = 30, IRON = 30) //spawns 6
-
-/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje/multispawned
-	reagents_to_add = null
 
 /obj/item/weapon/reagent_containers/food/snacks/gelatin
 	name = "gelatin"
