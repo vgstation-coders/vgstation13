@@ -98,6 +98,7 @@
 	t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
 	t = replacetext(t, "\[date\]", "[current_date_string]")
 	t = replacetext(t, "\[time\]", "[worldtime2text()]")
+	t = replacetext(t, "\[stationname\]", "[station_name()]")
 
 	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
 
