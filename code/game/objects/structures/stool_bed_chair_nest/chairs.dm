@@ -648,7 +648,7 @@
 	ghost_can_rotate = TRUE
 
 /obj/structure/bed/chair/shuttle/attackby(var/obj/item/W, var/mob/user)
-	var/mob/M = locate() in loc//so attacking people isn't made harder by the seats' bulkiness
+	var/mob/living/M = locate() in loc //so attacking people isn't made harder by the seats' bulkiness
 	if (M && M != user)
 		return M.attackby(W,user)
 	if(istype(W, /obj/item/assembly/shock_kit))
