@@ -25,6 +25,7 @@
 	icon_state = "breadslice"
 	bitesize = 2
 	food_flags = FOOD_DIPPABLE
+	reagents_to_add = list(NUTRIMENT = 1.2)
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/nova
 	name = "nova bread slice"

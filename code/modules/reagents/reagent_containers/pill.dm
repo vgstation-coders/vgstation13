@@ -338,7 +338,7 @@
 	reagents_to_add = list()
 	var/list/to_spawn = pickweight(possible_combinations)
 	for(var/index in to_spawn)
-		reagents_to_add += list(index = to_spawn[index])
+		reagents_to_add[index] = to_spawn[index]
 	if(hidereagents)
 		reagents_to_add += list(BLACKCOLOR = 1)
 
