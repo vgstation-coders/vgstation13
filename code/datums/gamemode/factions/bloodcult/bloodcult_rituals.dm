@@ -388,7 +388,7 @@ var/list/bloodcult_personal_rituals = list(
 	hit_targets = list()
 
 /datum/bloodcult_ritual/harm_crew/update_desc()
-	desc = "wield cult weaponry...<br>spill their blood...<br>sear their skin...<br>at least [targets - hit_targets] different individuals..."
+	desc = "wield cult weaponry...<br>spill their blood...<br>sear their skin...<br>at least [targets - hit_targets.len] different individuals..."
 
 /datum/bloodcult_ritual/harm_crew/key_found(var/mob/living/L)
 	if (iscultist(L))

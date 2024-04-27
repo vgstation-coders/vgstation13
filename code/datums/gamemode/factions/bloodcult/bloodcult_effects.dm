@@ -688,7 +688,7 @@ var/bloodstone_backup = 0
 /obj/effect/cult_ritual/dance/proc/i_can_dance(var/mob/living/carbon/M)
 	if (!M.incapacitated())
 		return  TRUE
-	else if (istype(M.handcuffed,/obj/item/weapon/handcuffs/cult)) //prisoners will be forced to dance even if incapacitated
+	else if (istype(M) && istype(M.handcuffed,/obj/item/weapon/handcuffs/cult)) //prisoners will be forced to dance even if incapacitated
 		return TRUE
 	return FALSE
 
