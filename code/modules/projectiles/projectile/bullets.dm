@@ -1110,5 +1110,7 @@
 
 /obj/item/projectile/bullet/rocksalt/on_hit(var/atom/atarget, var/blocked = 0)
 	..()
-	if(!blocked)
+	if(!blocked && ishuman(atarget))
 		reagents.trans_to(atarget, reagents.total_volume)
+	else
+		reagents.reaction(atarget)
