@@ -162,10 +162,7 @@ cons:
 		if (!istype(parent[GFI_DX_ATOM],/obj/effect/blob)) // blob connection overlays use custom dirs
 			data[GFI_DX_DIR] = parent[GFI_DX_DIR]
 		if (to_sort:plane == FLOAT_PLANE)
-			if (parent[GFI_DX_STATE] == "bald_s")//because hair and beard overlays are on an overlay already themselves. sigh.
-				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE]
-				data[GFI_DX_LAYER] = parent[GFI_DX_LAYER]
-			else if (is_underlay)
+			if (is_underlay)
 				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] - 0.1
 			else
 				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] + 0.1
