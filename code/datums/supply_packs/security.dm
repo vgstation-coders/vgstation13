@@ -294,14 +294,13 @@
 	contains = list(/obj/item/weapon/storage/box/lethalshells,
 					/obj/item/weapon/storage/box/buckshotshells,
 					/obj/item/weapon/storage/box/stunshells,
-					/obj/item/weapon/storage/box/dartshells,
-					/obj/item/weapon/storage/box/rocksaltshells)
+					/obj/item/weapon/storage/box/dartshells)
 	cost = 20
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "shotgun shells crate"
 	access = list(access_armory)
 	group = "Security"
-	containsdesc = "A refill of various shotgun shells. Includes standard, buckshot, stun, darts, and rock-salt."
+	containsdesc = "A refill of various shotgun shells. Includes standard, buckshot, stun, and darts."
 
 /datum/supply_packs/expenergy
 	name = "High-Tech energy weapons"
