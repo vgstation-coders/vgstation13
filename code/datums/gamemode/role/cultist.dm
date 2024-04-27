@@ -111,6 +111,8 @@
 			var/mob/M = antag.current
 			if (M)
 				to_chat(M, "<span class='sinister'>Although you can generate devotion by performing most cult activities, a couple rituals for you to perform are now available. Check the cult panel.</span>")
+		if (!antag.current)
+			return
 		switch(cult.stage)
 			if (BLOODCULT_STAGE_READY)
 				antag.current.add_particles(PS_CULT_SMOKE)
