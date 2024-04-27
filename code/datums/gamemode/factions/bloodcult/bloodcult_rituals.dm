@@ -68,8 +68,8 @@ var/list/bloodcult_personal_rituals = list(
 			C.gain_devotion(reward_faction, DEVOTION_TIER_4)//yes this means a larger cult gets more total devotion.
 
 	if (personal)
-		message_admins("BLOODCULT: [key_name(owner)] has completed the [name] ritual.")
-		log_admin("BLOODCULT: [key_name(owner)] has completed the [name] ritual.")
+		message_admins("BLOODCULT: [key_name(owner.antag.current)] has completed the [name] ritual.")
+		log_admin("BLOODCULT: [key_name(owner.antag.current)] has completed the [name] ritual.")
 	else
 		message_admins("BLOODCULT: The [name] ritual has been completed.")
 		log_admin("BLOODCULT: The [name] ritual has been completed.")
@@ -388,7 +388,7 @@ var/list/bloodcult_personal_rituals = list(
 	hit_targets = list()
 
 /datum/bloodcult_ritual/harm_crew/update_desc()
-	desc = "wield cult weaponry...<br>spill their blood...<br>sear their skin...<br>at least [targets - hit_targets] different individuals..."
+	desc = "wield cult weaponry...<br>spill their blood...<br>sear their skin...<br>at least [targets - hit_targets.len] different individuals..."
 
 /datum/bloodcult_ritual/harm_crew/key_found(var/mob/living/L)
 	if (iscultist(L))
