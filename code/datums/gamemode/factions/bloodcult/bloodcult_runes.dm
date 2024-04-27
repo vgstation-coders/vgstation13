@@ -346,7 +346,14 @@ var/list/rune_appearances_cache = list()
 		to_chat(user, "<span class='notice'>You disrupt the vile magic with the deadening field of \the [I]!</span>")
 		qdel(src)
 		return
-	if(istype(I, /obj/item/weapon/tome) || istype(I, /obj/item/weapon/melee/cultblade) || istype(I, /obj/item/weapon/melee/soulblade) || istype(I, /obj/item/weapon/melee/blood_dagger))
+	var/list/valid_rune_activators = list(
+		/obj/item/weapon/tome,
+		/obj/item/weapon/melee/cultblade,
+		/obj/item/weapon/melee/soulblade,
+		/obj/item/weapon/melee/blood_dagger,
+		/obj/item/weapon/kitchen/utensil/knife/large/ritual,
+		)
+	if(is_type_in_list(I, valid_rune_activators))
 		trigger(user)
 	if(istype(I, /obj/item/weapon/talisman))
 		var/obj/item/weapon/talisman/T = I
