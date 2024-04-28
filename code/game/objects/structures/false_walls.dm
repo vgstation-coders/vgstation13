@@ -192,7 +192,10 @@
 			user.visible_message("[user] tightens some bolts on the wall.", "You tighten the bolts on the wall.")
 			W.playtoolsound(T, 50)
 			if(!mineral || mineral == "metal")
-				T.ChangeTurf(text2path("/turf/simulated/wall/[reinforced ? "r_wall" : ""]"))
+				if(reinforced)
+					T.ChangeTurf(/turf/simulated/wall/r_wall)
+				else
+					T.ChangeTurf(/turf/simulated/wall)
 			else
 				T.ChangeTurf(text2path("/turf/simulated/wall/mineral/[mineral]"))
 			qdel(src)
