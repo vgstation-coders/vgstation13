@@ -97,7 +97,7 @@
 	..(new_loc)
 	initialize_basic_NPC_components()
 
-/mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
+/mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0, no_tail = FALSE) //Just fuck my shit up: the mob
 	var/list/valid_species = (all_species - list("Krampus", "Horror", "Manifested"))
 
 	var/datum/species/new_species = all_species[pick(valid_species)]
@@ -109,7 +109,20 @@
 
 	for(var/datum/organ/external/E in organs)
 		E.species = all_species[pick(valid_species)]
-
+	var/datum/organ/external/tail/tail_datum = get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
+	if(no_tail)
+		tail_datum.droplimb(TRUE, spawn_limb = FALSE)
+	else
+		var/list/tailed_species = list()
+		for(var/species_name in all_species)
+			var/datum/species/picked_species = all_species[species_name]
+			if(picked_species.anatomy_flags & HAS_TAIL)
+				tailed_species += picked_species
+		var/datum/species/species_with_tail = pick(tailed_species)
+		tail_datum.fleshify()
+		tail_datum.create_tail_info(species_with_tail)
+		tail_datum.species = species_with_tail
+		tail_datum.update_tail(src, random = TRUE)
 	update_body()
 
 /mob/living/carbon/human/mushroom/New(var/new_loc, delay_ready_dna = 0)
@@ -164,31 +177,6 @@
 	hud_list[SPECIALROLE_HUD] = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = new/image/hud('icons/mob/hud.dmi', src, "hudhealthy")
 	hud_list[WAGE_HUD]        = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
-
-	obj_overlays[FIRE_LAYER]		= new /obj/abstract/Overlays/fire_layer
-	obj_overlays[MUTANTRACE_LAYER]	= new /obj/abstract/Overlays/mutantrace_layer
-	obj_overlays[MUTATIONS_LAYER]	= new /obj/abstract/Overlays/mutations_layer
-	obj_overlays[DAMAGE_LAYER]	= new /obj/abstract/Overlays/damage_layer
-	obj_overlays[UNIFORM_LAYER]		= new /obj/abstract/Overlays/uniform_layer
-	obj_overlays[ID_LAYER]			= new /obj/abstract/Overlays/id_layer
-	obj_overlays[SHOES_LAYER]		= new /obj/abstract/Overlays/shoes_layer
-	obj_overlays[GLOVES_LAYER]		= new /obj/abstract/Overlays/gloves_layer
-	obj_overlays[EARS_LAYER]		= new /obj/abstract/Overlays/ears_layer
-	obj_overlays[SUIT_LAYER]		= new /obj/abstract/Overlays/suit_layer
-	obj_overlays[GLASSES_LAYER]		= new /obj/abstract/Overlays/glasses_layer
-	obj_overlays[BELT_LAYER]		= new /obj/abstract/Overlays/belt_layer
-	obj_overlays[SUIT_STORE_LAYER]	= new /obj/abstract/Overlays/suit_store_layer
-	obj_overlays[BACK_LAYER]		= new /obj/abstract/Overlays/back_layer
-	obj_overlays[HAIR_LAYER]		= new /obj/abstract/Overlays/hair_layer
-	obj_overlays[GLASSES_OVER_HAIR_LAYER] = new /obj/abstract/Overlays/glasses_over_hair_layer
-	obj_overlays[FACEMASK_LAYER]	= new /obj/abstract/Overlays/facemask_layer
-	obj_overlays[HEAD_LAYER]		= new /obj/abstract/Overlays/head_layer
-	obj_overlays[HANDCUFF_LAYER]	= new /obj/abstract/Overlays/handcuff_layer
-	obj_overlays[MUTUALCUFF_LAYER]	= new /obj/abstract/Overlays/mutualcuff_layer
-	obj_overlays[LEGCUFF_LAYER]		= new /obj/abstract/Overlays/legcuff_layer
-	//obj_overlays[HAND_LAYER]		= new /obj/abstract/Overlays/hand_layer
-	obj_overlays[TAIL_LAYER]		= new /obj/abstract/Overlays/tail_layer
-	obj_overlays[TARGETED_LAYER]	= new /obj/abstract/Overlays/targeted_layer
 
 	..()
 
@@ -2104,6 +2092,9 @@
 	// Or being a husk...
 	if(M_HUSK in mutations)
 		return FALSE
+	// Or being appearance banned...
+	if(appearance_isbanned(src))
+		return FALSE
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
@@ -2204,11 +2195,25 @@
 	if(wear_suit && wear_suit.get_cell())
 		return wear_suit.get_cell()
 
+/mob/living/carbon/human/proc/butt_blast()
+	var/mob/living/carbon/C = src
+	if(C.op_stage.butt != SURGERY_NO_BUTT)
+		if(remove_butt())
+			to_chat(src, "<span class='warning'>Your ass just blew up!</span>")
+	playsound(src, 'sound/effects/superfart.ogg', 50, 1)
+	C.apply_damage(40, BRUTE, LIMB_GROIN)
+	C.apply_damage(10, BURN, LIMB_GROIN)
+	score.assesblasted++
+
 // Returns null on failure, the butt on success.
 /mob/living/carbon/human/proc/remove_butt(var/where = loc)
 	if(op_stage.butt == SURGERY_NO_BUTT)
 		return
 	var/obj/item/clothing/head/butt/donkey = new(where)
+	if(mind.wizard_spells)
+		donkey.spells.Add(mind.wizard_spells)
+		for(var/spell/spell in mind.wizard_spells)
+			remove_spell(spell)
 	donkey.transfer_buttdentity(src)
 	op_stage.butt = SURGERY_NO_BUTT
 	return donkey

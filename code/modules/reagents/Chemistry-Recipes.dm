@@ -1647,10 +1647,12 @@
 	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slime_extract/slimecritweak/on_reaction(var/datum/reagents/holder)
+	var/atom/location = holder.my_atom.loc
 	if(!istype(holder.my_atom.loc, /obj/item/weapon/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to slowly vibrate!</span>")
+	else
+		location = location.loc
 
-	var/atom/location = holder.my_atom.loc
 	spawn(5 SECONDS)
 		if(isturf(location))
 			var/list/disguise_candidates = list()
@@ -4176,9 +4178,9 @@
 	name = "Random chemical"
 	id = "random"
 	result = null
-	required_reagents = list(NOTHING = 10, PHAZON = 10)
-	required_catalysts = list(MUTAGEN = 10, ENZYME = 10)
-	result_amount = 1
+	required_reagents = list(NOTHING = 1, PHAZON = 1)
+	required_catalysts = list(MUTAGEN = 5, ENZYME = 5)
+	result_amount = 5
 
 /datum/chemical_reaction/fake_creep // Xenomorph weeds aka creep.
 	name = "Dan's Purple Drank"

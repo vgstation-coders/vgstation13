@@ -34,6 +34,8 @@
 	var/blade_harm = TRUE
 	var/mob/master = null
 
+	var/soulblade_ritual = FALSE
+
 	blooded = FALSE
 
 /mob/living/simple_animal/shade/New()
@@ -148,6 +150,14 @@
 	..()
 	if(!client)
 		to_chat(user, "<span class='warning'>It appears to be dormant.</span>")
+
+/mob/living/simple_animal/shade/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)
+	var/datum/role/cultist/C = iscultist(src)
+	if (C && damage && !iscultist(target) && !target.isDead())
+		if (target.mind)
+			C.gain_devotion(30, DEVOTION_TIER_3, "attack_shade", target)
+		else
+			C.gain_devotion(30, DEVOTION_TIER_2, "attack_shade_nomind", target)
 
 ////////////////HUD//////////////////////
 

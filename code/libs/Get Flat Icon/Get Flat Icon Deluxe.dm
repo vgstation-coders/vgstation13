@@ -44,9 +44,13 @@ cons:
 #define GFI_DX_MAX		13	// Remember to keep this updated should you need to keep track of more variables
 
 
-/proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/override_dir = 0, var/ignore_spawn_items = FALSE)
+/proc/getFlatIconDeluxe(list/image_datas, var/turf/center, var/radius = 0, var/override_dir = 0, var/ignore_spawn_items = FALSE, var/large_canvas = FALSE)
 
-	var/icon/flat = icon('icons/effects/224x224.dmi',"empty") // Final flattened icon
+	var/icon/flat	 // Final flattened icon
+	if (large_canvas)
+		flat = icon('icons/effects/224x224.dmi',"empty")
+	else
+		flat = icon('icons/effects/32x32.dmi', "blank")
 	var/icon/add // Icon of overlay being added
 
 	for(var/data in image_datas)
@@ -107,8 +111,15 @@ cons:
 
 		// Apply any color or alpha settings
 		if(data[GFI_DX_COLOR] || data[GFI_DX_ALPHA] != 255)
-			var/rgba = (data[GFI_DX_COLOR] || "#FFFFFF") + copytext(rgb(0,0,0,data[GFI_DX_ALPHA]), 8)
-			add.Blend(rgba, ICON_MULTIPLY)
+			if (islist(data[GFI_DX_COLOR]))
+				var/list/color_matrix = data[GFI_DX_COLOR]
+				if (color_matrix.len >= 16)//getting the color for hair and facial hair out of the matrix
+					data[GFI_DX_COLOR] = rgb(color_matrix[13]*255, color_matrix[14]*255, color_matrix[15]*255)
+					var/rgba = (data[GFI_DX_COLOR] || "#FFFFFF") + copytext(rgb(0,0,0,data[GFI_DX_ALPHA]), 8)
+					add.Blend(rgba, ICON_ADD)//adding color onto black hair sprites
+			else
+				var/rgba = (data[GFI_DX_COLOR] || "#FFFFFF") + copytext(rgb(0,0,0,data[GFI_DX_ALPHA]), 8)
+				add.Blend(rgba, ICON_MULTIPLY)
 
 		// Blend the overlay into the flattened icon
 
@@ -151,7 +162,10 @@ cons:
 		if (!istype(parent[GFI_DX_ATOM],/obj/effect/blob)) // blob connection overlays use custom dirs
 			data[GFI_DX_DIR] = parent[GFI_DX_DIR]
 		if (to_sort:plane == FLOAT_PLANE)
-			if (is_underlay)
+			if (parent[GFI_DX_STATE] == "bald_s")//because hair and beard overlays are on an overlay already themselves. sigh.
+				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE]
+				data[GFI_DX_LAYER] = parent[GFI_DX_LAYER]
+			else if (is_underlay)
 				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] - 0.1
 			else
 				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] + 0.1
@@ -204,11 +218,11 @@ cons:
 	content_data = list(my_data)
 	var/list/underlays = to_sort:underlays
 	var/list/overlays = to_sort:overlays
-	for (var/underlay in underlays)
+	for(var/underlay in underlays)
 		var/list/L = get_content_image_datas(underlay,my_data, is_underlay = TRUE)
 		if (L)
 			content_data += L
-	for (var/overlay in overlays)
+	for(var/overlay in overlays)
 		var/list/L = get_content_image_datas(overlay,my_data)
 		if (L)
 			content_data += L

@@ -35,6 +35,10 @@
 		playsound(user, 'sound/items/welder.ogg', 100, 1)
 	. = ..()
 
+/spell/aoe_turf/conjure/construct/lesser/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	C?.gain_devotion(50, DEVOTION_TIER_2, "conjure_shell", AM)
+
 /spell/aoe_turf/conjure/floor
 	name = "Conjure Floor"
 	desc = "This spell conjures a cult floor. You can also click existing floors up to 3 tiles away to convert them."
@@ -72,6 +76,10 @@
 	shadow(target,holder.loc,"artificer_convert")
 	spawn(10)
 		QDEL_NULL(animation)
+
+/spell/aoe_turf/conjure/floor/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	C?.gain_devotion(10, DEVOTION_TIER_1, "convert_floor", AM)
 
 /spell/aoe_turf/conjure/wall
 	name = "Conjure Wall"
@@ -111,6 +119,10 @@
 	spawn(10)
 		QDEL_NULL(animation)
 
+/spell/aoe_turf/conjure/wall/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	C?.gain_devotion(10, DEVOTION_TIER_1, "convert_wall", AM)
+
 /spell/aoe_turf/conjure/door
 	name = "Conjure Door"
 	desc = "This spell conjures a cult door. Those automatically open and close upon the passage of a cultist, construct or shade."
@@ -136,6 +148,10 @@
 	shadow(target,holder.loc,"artificer_convert")
 	spawn(10)
 		QDEL_NULL(animation)
+
+/spell/aoe_turf/conjure/door/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	C?.gain_devotion(10, DEVOTION_TIER_1, "summon_door", AM)
 
 /spell/aoe_turf/conjure/wall/reinforced//what?
 	name = "Greater Construction"
@@ -175,6 +191,10 @@
 		playsound(user, 'sound/items/welder.ogg', 100, 1)
 	. = ..()
 
+/spell/aoe_turf/conjure/soulstone/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	C?.gain_devotion(20, DEVOTION_TIER_2, "conjure_soulstone", AM)
+
 /spell/aoe_turf/conjure/pylon
 	name = "Conjure Pylon"
 	desc = "This spell conjures a fragile crystal from Nar-Sie's realm. Makes for a convenient light source, or a weak obstacle."
@@ -192,6 +212,10 @@
 	cast_sound = 'sound/items/welder.ogg'
 	hud_state = "const_pylon"
 	override_base = "cult"
+
+/spell/aoe_turf/conjure/pylon/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	C?.gain_devotion(10, DEVOTION_TIER_1,"raise_structure","Pylon")
 
 /spell/aoe_turf/conjure/pylon/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
 	if(!delay_animation)
@@ -352,17 +376,26 @@
 
 /spell/aoe_turf/conjure/hex/before_channel(var/mob/user)
 	var/mob/living/simple_animal/construct/builder/perfect/artificer = user
-	if (artificer.minions.len >= 3)
-		to_chat(user,"<span class='warning'>You cannot sustain more than 3 lesser constructs alive.</span>")
-		return 1
+	if (artificer.minions.len >= 2)
+		to_chat(user,"<span class='warning'>You cannot sustain more than 2 hexes. Creating a new one will replace your oldest one.</span>")
 	return 0
 
 /spell/aoe_turf/conjure/hex/on_creation(var/mob/living/simple_animal/hostile/hex/AM, var/mob/user)
-	AM.master = user
+	var/mob/living/simple_animal/construct/builder/perfect/builder = user
+	AM.master = builder
 	AM.no_master = FALSE
-	AM.master.minions.Add(AM)
-	var/mob/living/simple_animal/construct/builder = user
+	builder.minions.Add(AM)
 	AM.setupglow(builder.construct_color)
+	if (builder.minions.len >= 3)
+		var/mob/living/simple_animal/hostile/hex/SA = builder.minions[1]
+		builder.minions.Remove(SA)
+		SA.master = null//The old hex will crumble on its own within the next 10 seconds.
+
+	if (iscultist(builder))
+		builder.DisplayUI("Cultist Right Panel")
+
+	var/datum/role/cultist/C = iscultist(user)
+	C?.gain_devotion(40, DEVOTION_TIER_2,"summon_hex",AM)
 
 /spell/aoe_turf/conjure/struct
 	name = "Conjure Structure"
@@ -380,6 +413,8 @@
 	override_base = "cult"
 	hud_state = "const_struct"
 	cast_sound = 'sound/items/welder.ogg'
+
+	var/structure
 
 /spell/aoe_turf/conjure/struct/choose_targets(mob/user = usr)
 	return list(get_turf(user))
@@ -403,7 +438,7 @@
 		list("Spire", "radial_spire", "Allows all cultists in the level to communicate with each others using :x"),
 		list("Forge", "radial_forge", "Enables the forging of cult blades and armor, as well as new construct shells. Raise the temperature of nearby creatures."),
 	)
-	var/structure = show_radial_menu(user,T,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
+	structure = show_radial_menu(user,T,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
 	if (!T.Adjacent(user) || !structure )
 		return 1
 	switch(structure)
@@ -415,6 +450,9 @@
 			summon_type = list(/obj/structure/cult/forge)
 	return 0
 
+/spell/aoe_turf/conjure/struct/on_creation(atom/movable/AM, mob/user)
+	var/datum/role/cultist/C = iscultist(user)
+	C?.gain_devotion(10, DEVOTION_TIER_1,"raise_structure",structure)
 
 /spell/aoe_turf/conjure/path_entrance
 	name = "Path Entrance"
@@ -453,6 +491,9 @@
 	R.one_pulse()
 	R.trigger(user)
 
+	var/datum/role/cultist/C = iscultist(user)
+	C?.gain_devotion(30, DEVOTION_TIER_1, "new_path_entrance", R)
+
 /spell/aoe_turf/conjure/path_exit
 	name = "Path Exit"
 	desc = "Place an exit to a shotcut through the veil between this world and the other one."
@@ -489,6 +530,9 @@
 	write_full_rune(R.loc, /datum/rune_spell/portalexit)
 	R.one_pulse()
 	R.trigger(user)
+
+	var/datum/role/cultist/C = iscultist(user)
+	C?.gain_devotion(30, DEVOTION_TIER_1, "new_path_exit", R)
 
 
 /obj/effect/artificer_underlay

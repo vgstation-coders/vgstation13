@@ -26,7 +26,7 @@
 	holomap_offset_y = list(0,0,0,94,10,0,0,)
 
 	center_x = 221
-	center_y = 241
+	center_y = 226
 
 #include "waystation.dmm"
 #endif

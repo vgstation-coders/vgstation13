@@ -43,9 +43,13 @@
 	return
 
 /obj/item/toy/waterballoon/afterattack(atom/A as mob|obj, mob/user as mob)
-	if (istype(A, /obj/structure/reagent_dispensers/watertank) && get_dist(src,A) <= 1)
-		A.reagents.trans_to(src, 10)
-		to_chat(user, "<span class = 'notice'>You fill the balloon with the contents of \the [A].</span>")
+	if(get_dist(src,A) <= 1)
+		if(istype(A, /obj/structure/reagent_dispensers/watertank))
+			A.reagents.trans_to(src, 10)
+			to_chat(user, "<span class = 'notice'>You fill the balloon with the contents of \the [A].</span>")
+		else if(istype(A,/obj/structure/sink))
+			reagents.add_reagent(WATER, 10)
+			to_chat(user, "<span class = 'notice'>You fill the balloon using \the [A].</span>")
 		src.desc = "A translucent balloon with some form of liquid sloshing around in it."
 		src.update_icon()
 	return
@@ -566,7 +570,7 @@
 	J.Shift(WEST, 13)
 	underlays += J
 	overlays += image(icon = icon, icon_state = "device")
-	rendered = getFlatIcon(src)
+	rendered = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(src)), override_dir = SOUTH)
 
 /obj/item/toy/bomb/examine(mob/user)
 	..()
@@ -830,6 +834,8 @@
 	icon = 'icons/obj/module.dmi'
 	icon_state = "gooncode"
 	w_class = W_CLASS_TINY
+	origin_tech = Tc_MATERIALS + "=10;" + Tc_PLASMATECH + "=6;" + Tc_SYNDICATE + "=6;" + Tc_PROGRAMMING + "=-10;" + Tc_BLUESPACE + "=6;" + Tc_POWERSTORAGE + "=6;" + Tc_BIOTECH + "=6;" + Tc_NANOTRASEN + "1"
+	mech_flags = MECH_SCAN_GOONECODE //It's closed source!
 
 /obj/item/toy/gooncode/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's trying to re-add poo!</span>")

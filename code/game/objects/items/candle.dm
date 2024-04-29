@@ -41,6 +41,8 @@
 		lit = 0
 		update_icon()
 		set_light(0)
+		remove_particles(PS_CANDLE)
+		remove_particles(PS_CANDLE2)
 
 /obj/item/candle/update_icon()
 	overlays.len = 0
@@ -106,8 +108,13 @@
 		if(!quiet)
 			visible_message(flavor_text)
 		set_light(CANDLE_LUM)
+		add_particles(PS_CANDLE)
+		add_particles(PS_CANDLE2)
 		processing_objects.Add(src)
 		update_icon()
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
 
 /obj/item/candle/proc/flicker(var/amount = rand(5, 15))
 	if(flickering)
@@ -117,7 +124,7 @@
 		for(var/i = 0; i < amount; i++)
 			if(prob(95))
 				if(prob(30))
-					lit = 0
+					extinguish()
 				else
 					var/candleflick = pick(0.5, 0.7, 0.9, 1, 1.3, 1.5, 2)
 					set_light(candleflick * CANDLE_LUM)
@@ -125,7 +132,7 @@
 				set_light(5 * CANDLE_LUM)
 				if(source_temperature == 0) //only holocandles don't have source temp, using this so I don't add a new var
 					wax = 0.8 * wax //jury rigged so the wax reduction doesn't nuke the holocandles if flickered
-				visible_message("<span class='warning'>The [src]'s flame starts roaring unnaturally!</span>")
+				visible_message("<span class='warning'>\The [src]'s flame starts roaring unnaturally!</span>")
 			update_icon()
 			sleep(rand(5,8))
 			set_light(CANDLE_LUM)
@@ -151,8 +158,7 @@
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
-		src.lit = 0
-		set_light(0)
+		extinguish()
 		processing_objects.Remove(src)
 		update_icon()
 		return
@@ -168,9 +174,7 @@
 
 /obj/item/candle/attack_self(mob/user as mob)
 	if(lit)
-		lit = 0
-		update_icon()
-		set_light(0)
+		extinguish()
 		to_chat(user, "<span class='warning'>You pinch \the [src]'s wick.</span>")
 		if(iscarbon(loc))
 			var/mob/living/carbon/M = loc

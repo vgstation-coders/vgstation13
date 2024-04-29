@@ -90,6 +90,7 @@
 	var/datum/objective_holder/objectives=new
 	var/logo_icon = 'icons/logos.dmi'
 	var/logo_state = "synd-logo"
+	var/logo_image //Where the image itself gets stored
 
 	var/default_admin_voice = "Supreme Leader"
 	var/admin_voice_style = "radio" // check stylesheet.dm for a list of all possible styles
@@ -134,6 +135,8 @@
 	objectives.owner = M
 	stat_datum = new stat_datum_type()
 
+	//In case we want a simpler copy of the icon without creating the image over and over again, such as in examine text
+	logo_image = "<img src='data:image/png;base64,[icon2base64(icon(logo_icon, logo_state))]'>"
 	return 1
 
 /datum/role/proc/AssignToRole(var/datum/mind/M, var/override = 0, var/msg_admins = TRUE)
@@ -313,6 +316,9 @@
 /datum/role/proc/GetFaction()
 	return faction
 
+/datum/role/proc/ExtraScoreboard()
+	return ""
+
 /datum/role/proc/GetScoreboard()
 	var/win = 1
 	var/text = ""
@@ -323,7 +329,7 @@
 		var/icon/sprotch = icon('icons/effects/blood.dmi', "sprotch")
 		text += "<img src='data:image/png;base64,[icon2base64(sprotch)]' style='position:relative; top:10px;'/>"
 	else
-		var/icon/flat = getFlatIcon(M, SOUTH, 0, 1)
+		var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 		if(M.stat == DEAD)
 			if (ishuman(M) || ismonkey(M))
 				flat.Turn(90)
@@ -348,6 +354,8 @@
 		text += "body destroyed"
 		win = 0
 	text += ")"
+
+	text += ExtraScoreboard()
 
 	if(objectives.objectives.len > 0)
 		var/count = 1
@@ -582,6 +590,10 @@
 		return
 	D.spend_midround_threat(amount)
 	D.threat_log += "[worldtime2text()]: [name] has decreased the threat amount by [amount]."
+
+//Additional text that appears when examining something.
+/datum/role/proc/role_examine_text_addition(var/target)
+	return
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 

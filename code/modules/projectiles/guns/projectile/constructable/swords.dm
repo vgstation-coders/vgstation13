@@ -228,11 +228,7 @@
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used \the [src] to inject [M.name] ([M.key]). Reagents: [contained]</font>")
 		msg_admin_attack("[user.name] ([user.ckey]) injected [M.name] ([M.key]) with \a [src]. Reagents: [contained] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) injected [M.name] ([M.ckey]) with \a [src]. Reagents: [contained]</font>" )
-		if(!iscarbon(user))
-			M.LAssailant = null
-		else
-			M.LAssailant = user
-			M.assaulted_by(user)
+		M.assaulted_by(user)
 
 		B.reagents.trans_to(M, inject_amount)
 

@@ -72,7 +72,7 @@ var/list/beam_master = list()
 	linear_movement = 0 //this will set out icon_state to ..._pixel if 1
 	layer = ABOVE_LIGHTING_LAYER
 	plane = ABOVE_LIGHTING_PLANE
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
+	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE | PASSRAILING
 	damage = 30
 	damage_type = BURN
 	flag = "laser"
@@ -107,19 +107,16 @@ var/list/beam_master = list()
 	previous_turf = shot_ray.previous_turf
 	if(!gcDestroyed)
 		past_rays += shot_ray
-	else
-		shot_ray.fired_beam = null // hard-delete prevention
 
+	var/distance = MAX_BEAM_DISTANCE
 	if(isnull(hits) || hits.len == 0)
 		if(travel_range)
-			shot_ray.draw(travel_range, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
-		else
-			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+			distance = travel_range
 
 	else
 		var/rayCastHit/last_hit = hits[hits.len]
 
-		shot_ray.draw(last_hit.distance, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+		distance = last_hit.distance
 
 		if(last_hit.hit_type == RAY_CAST_REBOUND)
 			final_turf=null
@@ -132,6 +129,11 @@ var/list/beam_master = list()
 			ASSERT(!gcDestroyed)
 			spawn()
 				portal(last_hit.hit_atom)
+
+	shot_ray.draw(distance, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+
+	if(gcDestroyed)
+		qdel(shot_ray)
 
 /obj/item/projectile/beam/process()
 	var/vector/origin = atom2vector(starting)
@@ -215,6 +217,7 @@ var/list/beam_master = list()
 	kill_count = 12
 	var/mob/firer_mob = null
 	var/yellow = 0
+	var/passdense = 0
 
 /obj/item/projectile/beam/lightning/proc/adjustAngle(angle)
 	angle = round(angle) + 45
@@ -240,22 +243,14 @@ var/list/beam_master = list()
 			firer_mob.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot himself with a <b>[type]</b>"
 			if(firer_mob.key || firer_mob.ckey)
 				msg_admin_attack("[key_name(firer_mob)] shot himself with a [type], [pick("top kek!","for shame.","he definitely meant to do that","probably not the last time either.")] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer_mob.x];Y=[firer_mob.y];Z=[firer_mob.z]'>JMP</a>)")
-			if(!iscarbon(firer_mob))
-				M.LAssailant = null
-			else
-				M.LAssailant = firer_mob
-				M.assaulted_by(firer_mob)
+			M.assaulted_by(firer_mob)
 		else
 			log_attack("<font color='red'>[key_name(firer_mob)] shot [key_name(M)] with a [type]</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			firer_mob.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			if((firer_mob.key || firer_mob.ckey) && (M.key || M.ckey))
 				msg_admin_attack("[key_name(firer_mob)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer_mob.x];Y=[firer_mob.y];Z=[firer_mob.z]'>JMP</a>)")
-			if(!iscarbon(firer_mob))
-				M.LAssailant = null
-			else
-				M.LAssailant = firer_mob
-				M.assaulted_by(firer_mob)
+			M.assaulted_by(firer_mob)
 	else
 		..()
 
@@ -349,17 +344,17 @@ var/list/beam_master = list()
 			sleep(2)
 		if(TT == firer.loc)
 			continue
-		if(TT.density)
+		if(TT.density && !passdense)
 			QDEL_NULL(X)
 			break
 		for(var/atom/movable/O in TT)
-			if(!O.Cross(src))
+			if(!O.Cross(src) && !passdense)
 				qdel(X)
 				broke = 1
 				break
 		for(var/mob/living/O in TT.contents)
 			if(istype(O, /mob/living))
-				if(O.density)
+				if(O.density && !passdense)
 					QDEL_NULL(X)
 					broke = 1
 					break
@@ -466,10 +461,7 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/practice
 	name = "laser"
 	icon_state = "laser"
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
 	damage = 0
-	damage_type = BURN
-	flag = "laser"
 	eyeblur = 2
 
 /obj/item/projectile/beam/practice/stormtrooper
@@ -750,14 +742,12 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/humanelaser/to_bump(atom/A as mob|obj|turf|area)
 	if(ishuman(A))
 		damage = 10
-	if(istype(A,/obj/effect/blob))
-		damage = 40
+	if(istype(A,/obj/effect/blob)) //It will deal half of its damage to a nearby blob tile on hit.
 		var/obj/effect/blob/B = A
-		var/splash_damage = damage/B.fire_resist - B.health
-		if(splash_damage > 0)
-			for(var/obj/effect/B2 in orange(1,B))
-				B2.bullet_act(src, null, splash_damage)
-				break
+		var/actual_damage = damage/B.fire_resist //More resistant tiles such as strong blobs will cause less damage to be spread
+		for(var/obj/effect/blob/B2 in orange(1,B))
+			B2.bullet_act(src, null, actual_damage)
+			break
 	return ..()
 
 /obj/item/projectile/beam/heavylaser
@@ -812,10 +802,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 
 /obj/item/projectile/beam/lasertag
 	name = "lasertag beam"
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
 	damage = 0
-	damage_type = BURN
-	flag = "laser"
 	icon_state = "bluelaser"
 	var/list/enemy_vest_types = list(/obj/item/clothing/suit/tag/redtag)
 
@@ -886,7 +873,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	icon_state = "heatray"
 	animate_movement = 0
 	linear_movement = 0
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	var/drawn = 0
 	var/tang = 0
 	var/turf/last = null
@@ -1114,11 +1101,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			firer.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			msg_admin_attack("[key_name(firer)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)") //BS12 EDIT ALG
-			if(!iscarbon(firer))
-				M.LAssailant = null
-			else
-				M.LAssailant = firer
-				M.assaulted_by(firer)
+			M.assaulted_by(firer)
 		else
 			M.attack_log += "\[[time_stamp()]\] <b>UNKNOWN/(no longer exists)</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			msg_admin_attack("UNKNOWN/(no longer exists) shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)") //BS12 EDIT ALG
@@ -1160,7 +1143,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	fire_sound = null
 	custom_impact = 1
 	penetration = 0
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	var/has_splashed = FALSE
 	var/atom/splashed_atom = null
 
@@ -1250,5 +1233,5 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	travel_range = 5
 	damage = 10
 	damage_type = BRUTE
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	eyeblur = 0

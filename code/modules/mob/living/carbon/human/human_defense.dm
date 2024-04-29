@@ -611,8 +611,9 @@ emp_act
 			show_message("<span class='warning'>The blob attacks you!</span>")
 			var/dam_zone = pick(organs_by_name)
 			var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
-
-			apply_damage(run_armor_absorb(affecting, "melee", rand(30,40)), BRUTE, affecting, run_armor_check(affecting, "melee"))
+			//Blobs do 50% brute damage and 50% burn damage, and reduce armor value by 50% multiplicatively, so 80% damage reduction becomes 40%.
+			apply_damage(run_armor_absorb(affecting, "melee", rand(15,20)), BRUTE, affecting, run_armor_check(affecting, "melee", modifier = 0.5))
+			apply_damage(run_armor_absorb(affecting, "melee", rand(15,20)), BURN, affecting, run_armor_check(affecting, "melee", modifier = 0.5))
 
 /mob/living/carbon/human/dissolvable()
 	if(species && species.anatomy_flags & ACID4WATER)
