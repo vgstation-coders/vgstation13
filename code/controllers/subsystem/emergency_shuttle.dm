@@ -20,4 +20,4 @@ var/datum/subsystem/emergency_shuttle/SSemergency_shuttle
 
 
 /datum/subsystem/emergency_shuttle/fire(resumed = FALSE)
-	emergency_shuttle.process()
+	emergency_shuttle.process(times_fired)

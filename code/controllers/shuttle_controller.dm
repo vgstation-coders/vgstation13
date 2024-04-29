@@ -336,7 +336,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 			online = 0
 
-/datum/emergency_shuttle/proc/process()
+/datum/emergency_shuttle/proc/process(tick)
 	if(!online || shutdown)
 		return
 
@@ -358,9 +358,10 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 			/* --- Shuttle is in transit toward centcom --- */
 			if(direction == 2)
-				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
-					spawn()
-						P.shoot_exhaust(backward = 3)
+				if(tick % 2 == 0)
+					for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
+						spawn()
+							P.shoot_exhaust(backward = 3)
 
 				var/collision_imminent = FALSE
 				for(var/datum/shuttle/escape/pod/pod in escape_pods)
