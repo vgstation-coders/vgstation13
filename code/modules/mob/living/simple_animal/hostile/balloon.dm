@@ -56,11 +56,16 @@
 	overlays += shine_overlay
 
 /mob/living/simple_animal/hostile/balloon/CanAttack(var/atom/the_target)
+	var/clumsyfound = FALSE
 	if(isliving(the_target))
 		var/mob/living/L = the_target
 		if(M_CLUMSY in L.mutations)
-			return 0
-	return ..(the_target)
+			clumsyfound = TRUE
+	if(arcanetampered) // tampered ones only go after clowns now!
+		clumsyfound = !clumsyfound
+	if(!clumsyfound)
+		return ..(the_target)
+	return 0
 
 /mob/living/simple_animal/hostile/balloon/FindTarget()
 	. = ..()
