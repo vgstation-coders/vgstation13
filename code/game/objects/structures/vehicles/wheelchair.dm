@@ -16,6 +16,7 @@
 	can_have_carts = FALSE
 
 	var/image/wheel_overlay
+	var/multi_people = 0
 
 /obj/structure/bed/chair/vehicle/wheelchair/New()
 	. = ..()
@@ -53,7 +54,7 @@
 		overlays -= wheel_overlay
 
 /obj/structure/bed/chair/vehicle/wheelchair/can_buckle(mob/M, mob/user)
-	if(!Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to || occupant) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
+	if(!Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to || (!multi_people && occupant)) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
 		return 0
 	if(M_HULK in M.mutations)
 		if(M == user)
@@ -178,31 +179,28 @@
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people
 	nick = "hella ride"
 	desc = "A chair with fitted wheels. Something seems off about this one..."
+	multi_people = 1
 
-/obj/structure/bed/chair/vehicle/wheelchair/multi_people/examine(mob/user)
+/obj/structure/bed/chair/vehicle/wheelchair/examine(mob/user)
 	..()
-
-	if(is_locking(/datum/locking_category/buckle/chair/vehicle) > 9)
+	if(multi_people && is_locking(/datum/locking_category/buckle/chair/vehicle) > 9)
 		to_chat(user, "<b>WHAT THE FUCK</b>")
 
-/obj/structure/bed/chair/vehicle/wheelchair/multi_people/can_buckle(mob/M, mob/user)
-	//Same as parent's, but no occupant check!
-	if(!Adjacent(user) && !user.Adjacent(M) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || M.locked_to)
-		return 0
-	return 1
+/obj/structure/bed/chair/vehicle/wheelchair/update_mob()
+	if(multi_people)
+		var/i = 0
+		for(var/mob/living/L in get_locked(/datum/locking_category/buckle/chair/vehicle))
+			L.pixel_x = 0
+			L.pixel_y = 3 * PIXEL_MULTIPLIER + (i * 6 * PIXEL_MULTIPLIER) //Stack people on top of each other!
 
-/obj/structure/bed/chair/vehicle/wheelchair/multi_people/update_mob()
-	var/i = 0
-	for(var/mob/living/L in get_locked(/datum/locking_category/buckle/chair/vehicle))
-		L.pixel_x = 0
-		L.pixel_y = 3 * PIXEL_MULTIPLIER + (i * 6 * PIXEL_MULTIPLIER) //Stack people on top of each other!
+			i++
+	else
+		..()
 
-		i++
-
-/obj/structure/bed/chair/vehicle/wheelchair/multi_people/manual_unbuckle(mob/user, var/resisting)
+/obj/structure/bed/chair/vehicle/wheelchair/manual_unbuckle(mob/user, var/resisting)
 	..()
-
-	update_mob() //Update the rest
+	if(multi_people)
+		update_mob() //Update the rest
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized
 	name = "motorized wheelchair"
@@ -266,6 +264,14 @@
 	desc = "A high-riding wheelchair fitted with a powerful cell and blades under the carriage. Better get a table between you and it."
 	var/attack_cooldown = 0
 
+/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/arcane_act(mob/user)
+	multi_people = TRUE
+	return ..()
+
+/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/bless()
+	multi_people = FALSE
+	..()
+
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/to_bump(var/atom/A)
 	if(isliving(A) && !attack_cooldown)
 		var/mob/living/L = A
@@ -281,6 +287,8 @@
 			L.Knockdown(5)
 			L.lying = 1
 			L.update_icons()
+		if(arcanetampered && multi_people)
+			buckle_chair(L,occupant)
 	..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/proc/crush(var/mob/living/H,var/bloodcolor) //Basically identical to the MULE, see mulebot.dm
@@ -290,6 +298,8 @@
 	H.apply_damage(damage, BRUTE, LIMB_CHEST)
 	H.apply_damage(damage, BRUTE, LIMB_LEFT_LEG)
 	H.apply_damage(damage, BRUTE, LIMB_RIGHT_LEG)
+	if(arcanetampered && multi_people)
+		buckle_chair(H,occupant)
 	attack_cooldown = 1
 	spawn(10)
 		attack_cooldown = 0

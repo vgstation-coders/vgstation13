@@ -396,9 +396,18 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 /obj/item/stack/cable_coil/white
 	color = "#D0D0D0"
 
+/obj/item/stack/cable_coil/random
+	var/list/colors = list("#FF0000","#FFED00","#0B8400","#005C84","#CA00B6")
+
+/obj/item/stack/cable_coil/random/toolbox
+	colors = list("#FF0000","#FFED00","#0B8400","#005C84","#CA00B6","#CA6900","#00B5CA","#D0D0D0")
+
+/obj/item/stack/cable_coil/random/etoolbox
+	colors = list("red","yellow","green","blue","pink","orange","cyan","white")
+
 /obj/item/stack/cable_coil/random/New(loc, amount, var/param_color = null)
 	..()
-	color = pick("#FF0000","#FFED00","#0B8400","#005C84","#CA00B6")
+	color = pick(colors)
 	update_icon()
 	if (ismob(loc))
 		var/mob/M = loc
