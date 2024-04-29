@@ -41,18 +41,20 @@
 /spell/targeted/push/get_upgrade_price(upgrade_type)
 	return price / 2
 
-/atom/movable/proc/dimensional_push(var/user)
+/atom/movable/proc/dimensional_push(var/mob/user)
 	. = 0
 	var/area/thearea
 	var/area/prospective
 	while(!thearea)
 		prospective = pick(areas)
-		if(prospective.type != /area)
+		if(!user)
+			thearea = prospective
+		if(!thearea || prospective.type != /area)
 			var/list/prospective_turfs = get_area_turfs(prospective.type)
 			if(!prospective_turfs.len) //An in-game area somehow lost its turfs, search for another one
 				continue
 			var/turf/T = pick(prospective_turfs)
-			if(!user || T.z == user.z)
+			if(T.z == user.z)
 				thearea = prospective
 				break
 	var/list/L = list()
