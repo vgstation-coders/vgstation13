@@ -103,7 +103,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		centcomm_order_cooldown = rand(modified_min,modified_max)
 
 	for(var/obj/machinery/status_display/supply/S in supply_displays)
-		S.update()
+		if(S.mode == 4)
+			S.update()
 
 /datum/supply_order
 	var/ordernum

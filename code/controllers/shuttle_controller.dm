@@ -348,7 +348,8 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 
 	for(var/obj/machinery/status_display/S in status_displays)
-		S.update()
+		if(S.mode == 1)
+			S.update()
 
 	if(timeleft > 6)
 		warmup_sound = 0
