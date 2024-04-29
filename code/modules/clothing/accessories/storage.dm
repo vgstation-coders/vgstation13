@@ -74,7 +74,6 @@
 	icon_state = "vest_white"
 	_color = "vest_white"
 	storage_slots = 4
-	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/accessory/storage/black_vest
 	name = "black webbing vest"

@@ -10,6 +10,7 @@
 	slot_flags = 0
 	w_class = W_CLASS_SMALL
 	quick_equip_priority = list(slot_w_uniform)
+	species_fit = list(VOX_SHAPED)
 	var/accessory_exclusion = DECORATION
 	var/obj/item/clothing/attached_to = null
 	var/image/inv_overlay
@@ -100,7 +101,7 @@
 		species = wearer.species
 	for(var/obj/item/clothing/accessory/accessory in accessories)
 		var/mutable_appearance/accessory_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[accessory._color || accessory.icon_state]", accessory_overlay_final.layer)
-		if(species && (species.name in accessory.species_fit) && has_icon(species.accessory_icons, accessory_overlay.icon_state))
+		if(species && (species.name in accessory.species_fit) && icon_exists(species.accessory_icons, accessory_overlay.icon_state))
 			accessory_overlay.icon = species.accessory_icons
 		accessory_overlay.color = accessory.color
 		for(var/part in accessory.dyed_parts)
