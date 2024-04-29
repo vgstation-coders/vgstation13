@@ -16,7 +16,8 @@
 	var/thermal_energy_transfer = 0
 	var/part_kind = 0
 	var/onstage = null
-
+	var/image/OLholder
+	var/image/ULholder
 	var/obj/item/weapon/reagent_containers/held_container
 	var/working = FALSE
 	var/had_item = FALSE
@@ -24,20 +25,30 @@
 /obj/machinery/chemtemper/RefreshParts()
 	var/T = 0
 	overlays = null
-	if(is_type_in_list(/obj/item/weapon/stock_parts/scanning_module, component_parts))
+	part_kind = initial(part_kind)
+	if(part_kind == "laser")
+		for(var/obj/item/weapon/stock_parts/micro_laser/L in component_parts)
+			T += L.rating
+			part_kind = L.rating //Sets what tier of laser we have
+		thermal_energy_transfer = initial(thermal_energy_transfer) * T
+		overlays += image(icon = icon, icon_state = "t[part_kind]_laser")
+		OLholder = image(icon = icon, icon_state = "t[part_kind]_beam")
+		OLholder.plane = OBJ_PLANE
+		OLholder.layer = ABOVE_OBJ_LAYER
+
+	if(part_kind == "scanner")
 		for(var/obj/item/weapon/stock_parts/scanning_module/S in component_parts)
 			T += S.rating
 			part_kind = S.rating //Sets what tier of scanner we have
 		thermal_energy_transfer = initial(thermal_energy_transfer) * T
-
 		overlays += image(icon = icon, icon_state = "t[part_kind]_scanner")
-	if(is_type_in_list(/obj/item/weapon/stock_parts/micro_laser, component_parts))
-		for(var/obj/item/weapon/stock_parts/micro_laser/L in component_parts)
-			T += L.rating
-			part_kind = L.rating //Sets what tier of scanner we have
-		thermal_energy_transfer = initial(thermal_energy_transfer) * T
+		OLholder = image(icon = icon, icon_state = "t[part_kind]_waveFront")
+		OLholder.plane = OBJ_PLANE
+		OLholder.layer = ABOVE_OBJ_LAYER
+		ULholder = image(icon = icon, icon_state = "t[part_kind]_waveBack")
+		ULholder.plane = OBJ_PLANE
+		ULholder.layer = BELOW_OBJ_LAYER
 
-		overlays += image(icon = icon, icon_state = "t[part_kind]_laser")
 	T = 0
 	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
 		T += C.rating-1
@@ -99,6 +110,37 @@
 	set name = "Toggle active"
 	set category = "Object"
 
+/obj/machinery/chemtemper/toggle()
+	if(!held_container && working) //For when you take the beaker off but left the heater/cooler on
+		working = !working
+		if(OLholder)
+			overlays -= OLholder
+		if(ULholder)
+			underlays -= ULholder
+		processing_objects.Remove(src)
+		to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
+		return
+	else if(held_container)
+		working = !working
+		if(working)
+			if(OLholder)
+				overlays += OLholder
+			if(ULholder)
+				underlays += ULholder
+			processing_objects.Add(src)
+			to_chat(usr, "<span class='notice'>You turn on \the [src].</span>")
+		else
+			if(OLholder)
+				overlays -= OLholder
+			if(ULholder)
+				underlays -= ULholder
+			processing_objects.Remove(src)
+			to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
+		return
+	else
+		if(!had_item)
+			to_chat(usr, "<span class='notice'>\The [src] doesn't have a container to work on right now.</span>")
+
 //Heater//
 
 /obj/machinery/chemtemper/heater
@@ -109,6 +151,7 @@
 
 	max_temperature = TEMPERATURE_LASER
 	thermal_energy_transfer = 3000
+	part_kind = "laser"
 
 /obj/machinery/chemtemper/heater/New()
 	. = ..()
@@ -120,30 +163,6 @@
 	)
 	RefreshParts()
 
-/obj/machinery/chemtemper/heater/toggle()
-	..()
-
-	if(!held_container && working) //For when you take the beaker off but left the heater on
-		working = !working
-		overlays -= image(icon = icon, icon_state = "t[part_kind]_beam")
-		processing_objects.Remove(src)
-		to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
-		return
-	else if(held_container)
-		working = !working
-		if(working)
-			overlays += image(icon = icon, icon_state = "t[part_kind]_beam")
-			processing_objects.Add(src)
-			to_chat(usr, "<span class='notice'>You turn on \the [src].</span>")
-		else
-			overlays -= image(icon = icon, icon_state = "t[part_kind]_beam")
-			processing_objects.Remove(src)
-			to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
-		return
-	else
-		if(!had_item)
-			to_chat(usr, "<span class='notice'>\The [src] doesn't have anything to heat right now.</span>")
-
 //Cooler//
 
 /obj/machinery/chemtemper/cooler
@@ -154,6 +173,7 @@
 
 	max_temperature = 0 //You can make stuff REALLY cold
 	thermal_energy_transfer = -3000
+	part_kind = "scanner"
 
 /obj/machinery/chemtemper/cooler/New()
 	. = ..()
@@ -164,33 +184,6 @@
 		/obj/item/weapon/stock_parts/capacitor
 	)
 	RefreshParts()
-
-/obj/machinery/chemtemper/cooler/toggle()
-	..()
-
-	if(!held_container && working) //For when you take the beaker off but left the heater on
-		working = !working
-		overlays -= image(icon = icon, icon_state = "t[part_kind]_waveFront")
-		underlays -= image(icon = icon, icon_state = "t[part_kind]_waveBack")
-		processing_objects.Remove(src)
-		to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
-		return
-	else if(held_container)
-		working = !working
-		if(working)
-			overlays += image(icon = icon, icon_state = "t[part_kind]_waveFront")
-			underlays += image(icon = icon, icon_state = "t[part_kind]_waveBack")
-			processing_objects.Add(src)
-			to_chat(usr, "<span class='notice'>You turn on \the [src].</span>")
-		else
-			overlays -= image(icon = icon, icon_state = "t[part_kind]_waveFront")
-			underlays -= image(icon = icon, icon_state = "t[part_kind]_waveBack")
-			processing_objects.Remove(src)
-			to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
-		return
-	else
-		if(!had_item)
-			to_chat(usr, "<span class='notice'>\The [src] doesn't have anything to cool right now.</span>")
 
 /*
 //Unused desired temp setting. Maybe useful in the future? Not likely since who doesn't want their ice to be absolute zero?
