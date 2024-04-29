@@ -122,7 +122,14 @@
 		P.changetype=changetype
 	return 1
 
+/obj/item/weapon/gun/energy/staff/change/arcane_act(mob/user, recursive)
+	changetype = null
+	return ..()
+
 /obj/item/weapon/gun/energy/staff/change/attack_self(var/mob/living/user)
+	if(arcanetampered)
+		to_chat(user, "<span class='sinister'>The dial conspicuously mounted on the side of your staff is spinning too hard for you to even touch!</span>")
+		return
 	if(world.time < next_changetype)
 		to_chat(user, "<span class='warning'>[src] is still recharging.</span>")
 		return
@@ -194,6 +201,9 @@
 	var/next_changetype = 0
 
 /obj/item/weapon/gun/energy/staff/polymorph/attack_self(var/mob/living/user)
+	if(arcanetampered)
+		to_chat(user, "<span class='sinister'>The dial conspicuously mounted on the side of your staff is spinning too hard for you to even touch!</span>")
+		return
 	if(world.time < next_changetype)
 		to_chat(user, "<span class='warning'>[src] is still recharging.</span>")
 		return
@@ -212,7 +222,10 @@
 		return 0
 	var/obj/item/projectile/polymorph/P=in_chamber
 	if(P && istype(P))
-		P.status=setting
+		if(arcanetampered)
+			P.status=pick(MINOR, MAJOR)
+		else
+			P.status=setting
 	return 1
 
 /obj/item/weapon/gun/energy/staff/necro
@@ -266,11 +279,12 @@
 		if(H.stat)
 			if(raisetype)
 				H.dropBorers()
-				var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
+				var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), arcanetampered ? null : user, H)
 				H.gib()
-				spooky.faction = "\ref[user]"
+				if(!arcanetampered)
+					spooky.faction = "\ref[user]"
 			else
-				H.zombify(user)
+				H.zombify(arcanetampered ? null : user)
 		else
 			success = FALSE
 			
@@ -282,17 +296,19 @@
 		var/mob/living/L = target
 		if(L.stat == DEAD)
 			success = TRUE
-			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(L), user)
+			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(L), arcanetampered ? null : user)
 			mG.ghoulifyMeat(L)
-			mG.faction = "\ref[user]"
+			if(!arcanetampered)
+				mG.faction = "\ref[user]"
 			L.gib()
 		else
 			to_chat(user,"<span class = 'warning'>The creature must be dead before it can be undead.</span>")
 	else if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat))
-		var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user, target)
+		var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), arcanetampered ? null : user, target)
 		success = TRUE
 		aG.ghoulifyAnimal(target)
-		aG.faction = "\ref[user]"
+		if(!arcanetampered)
+			aG.faction = "\ref[user]"
 		qdel(target)
 
 	if(success)

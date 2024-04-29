@@ -66,7 +66,7 @@
 			qdel(src)
 
 /obj/effect/cult_shortcut/attack_hand(var/mob/living/user)
-	if (!iscultist(user))
+	if (!iscultist(user) && !arcanetampered)
 		to_chat(user, "<span class='warning'>The markings on this wall are peculiar. You don't feel comfortable staring at them.</span>")
 		return
 	var/turf/T = get_turf(user)
@@ -79,7 +79,23 @@
 		user.forceMove(loc)
 		sleep(1)
 		new /obj/effect/afterimage/red(loc,user)
-		user.forceMove(get_step(loc,jump_dir))
+		if(!arcanetampered)
+			user.forceMove(get_step(loc,jump_dir))
+		else
+			user.dimensional_push()
+			if(!iscultist(user))
+				user.Knockdown(3)
+				user.Stun(3)
+				if(ishuman(user))
+					shake_camera(L, 20, 1)
+					spawn(20)
+						if(user)
+							to_chat(user,"<span class='danger'>You vomit from travelling through \the [src]!</span>")
+							user.nutrition = max(user.nutrition-20,0)
+							user.adjustToxLoss(-3)
+							var/turf/V = get_turf(user) //V for Vomit
+							V.add_vomit_floor(user)
+							playsound(V, 'sound/effects/splat.ogg', 50, 1)
 
 /obj/effect/cult_shortcut/cultify()
 	return

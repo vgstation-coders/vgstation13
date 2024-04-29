@@ -34,6 +34,15 @@
 
 /spell/targeted/push/cast(var/list/targets)
 	..()
+	for(var/atom/movable/target in targets)
+		if(target.dimensional_push())
+			score.dimensionalpushes++
+
+/spell/targeted/push/get_upgrade_price(upgrade_type)
+	return price / 2
+
+/atom/movable/proc/dimensional_push(var/user)
+	. = 0
 	var/area/thearea
 	var/area/prospective
 	while(!thearea)
@@ -43,7 +52,7 @@
 			if(!prospective_turfs.len) //An in-game area somehow lost its turfs, search for another one
 				continue
 			var/turf/T = pick(prospective_turfs)
-			if(T.z == holder.z)
+			if(!user || T.z == user.z)
 				thearea = prospective
 				break
 	var/list/L = list()
@@ -57,24 +66,21 @@
 			if(clear)
 				L+=T
 	if(!L.len)
-		to_chat(holder, "The spell matrix was unable to locate a suitable destination for an unknown reason. Sorry.")
-		return
+		if(user)
+			to_chat(user, "The spell matrix was unable to locate a suitable destination for an unknown reason. Sorry.")
+		return 0
 
 	var/list/backup_L = L
-	for(var/atom/movable/target in targets)
-		target.unlock_from()
-		var/attempt = null
-		var/success = 0
-		while(L.len)
-			attempt = pick(L)
-			success = target.Move(attempt)
-			if(!success)
-				L.Remove(attempt)
-			else
-				score.dimensionalpushes++
-				break
+	unlock_from()
+	var/attempt = null
+	var/success = 0
+	while(L.len)
+		attempt = pick(L)
+		success = Move(attempt)
 		if(!success)
-			target.forceMove(pick(backup_L))
-
-/spell/targeted/push/get_upgrade_price(upgrade_type)
-	return price / 2
+			L.Remove(attempt)
+		else
+			return 1
+	if(!success)
+		forceMove(pick(backup_L))
+	return 0

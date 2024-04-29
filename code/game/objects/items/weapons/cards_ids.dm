@@ -55,6 +55,14 @@
 /*
  * ID CARDS
  */
+ 
+/obj/item/weapon/card/fake_emag
+	desc = "It's a card with a magnetic strip attached to some circuitry... NOT!"
+	name = "cryptographic sequencer"
+	icon_state = "emag"
+	item_state = "card-id"
+	slot_flags = SLOT_ID
+
 /obj/item/weapon/card/emag
 	desc = "It's a card with a magnetic strip attached to some circuitry."
 	name = "cryptographic sequencer"

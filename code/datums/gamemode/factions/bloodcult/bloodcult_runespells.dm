@@ -63,9 +63,12 @@
 			    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint\
 			     occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." //Arcane tome page description.
 
-/datum/rune_spell/New(var/mob/user, var/obj/holder, var/use = "ritual", var/mob/target)
+	var/spell_holder.spell_holder.arcanetampered = 0
+
+/datum/rune_spell/New(var/mob/user, var/obj/holder, var/use = "ritual", var/mob/target, var/tampered)
 	spell_holder = holder
 	activator = user
+	spell_holder.spell_holder.arcanetampered = tampered
 
 	if(use == "ritual")
 		pre_cast()
@@ -312,15 +315,21 @@
 		R.active_spell.midcast(user)
 		return
 
-	switch(structure)
-		if("Altar")
-			spawntype = /obj/structure/cult/altar
-		if("Spire")
-			spawntype = /obj/structure/cult/spire
-		if("Forge")
-			spawntype = /obj/structure/cult/forge
-		if("Pylon")
-			spawntype = /obj/structure/cult/pylon
+	if(spell_holder?.arcanetampered)
+		spawntype = pick(/obj/item/weapon/reagent_containers/food/snacks/badrecipe,\
+			/obj/item/weapon/bikehorn/rubberducky,\
+			/obj/item/weapon/bikehorn,\
+			/obj/item/weapon/card/fake_emag)
+	else
+		switch(structure)
+			if("Altar")
+				spawntype = /obj/structure/cult/altar
+			if("Spire")
+				spawntype = /obj/structure/cult/spire
+			if("Forge")
+				spawntype = /obj/structure/cult/forge
+			if("Pylon")
+				spawntype = /obj/structure/cult/pylon
 
 	if(!spell_holder)
 		return
@@ -413,6 +422,8 @@
 	for(var/mob/living/L in contributors)
 		var/datum/role/cultist/C = L.mind.GetRole(CULTIST)
 		C.gain_devotion(10, DEVOTION_TIER_1,"raise_structure",structure)
+	if(spell_holder.arcanetampered)
+		playsound(spell_holder.loc, 'sound/misc/fart.ogg', 50, 1)
 	new spawntype(spell_holder.loc)
 	qdel(spell_holder) //Deletes the datum as well.
 
@@ -444,6 +455,7 @@
 	R.one_pulse()
 	var/mob/living/user = activator
 	comms = new /obj/effect/cult_ritual/cult_communication(spell_holder.loc,user,src)
+	comms.arcanetampered = spell_holder?.arcanetampered
 
 /datum/rune_spell/communication/midcast(var/mob/living/user)
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
@@ -538,17 +550,25 @@
 			speaker_name = H.real_name
 			L = speech.speaker
 		rendered_message = speech.render_message()
+		var/shownmessage = speech.message
+		if(arcanetampered)
+			if(prob(50))
+				shownmessage = derpspeech(speech.message)
+			else
+				shownmessage = tumblrspeech(speech.message)
+				shownmessage = nekospeech(speech.message)
+			speaker_name = pick(clown_names)
 		var/datum/faction/bloodcult = find_active_faction_by_member(iscultist(L))
 		for(var/datum/role/cultist/C in bloodcult.members)
 			var/datum/mind/M = C.antag
 			if (M.current == speech.speaker)//echoes are annoying
 				continue
 			if (iscultist(M.current))//failsafe for cultist brains put in MMIs
-				to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinisterbig'>[speech.message]</span></B></span>")
+				to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinisterbig'>[shownmessage]</span></B></span>")
 		for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
-			to_chat(A, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[speech.message]</span></span>")
+			to_chat(A, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[shownmessage]</span></span>")
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[speech.message]</span></span>")
+			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[shownmessage]</span></span>")
 		log_cultspeak("[key_name(speech.speaker)] Cult Communicate Rune: [rendered_message]")
 
 /obj/effect/cult_ritual/cult_communication/HasProximity(var/atom/movable/AM)
@@ -2296,7 +2316,9 @@ var/list/seer_rituals = list()
 				L.stat = CONSCIOUS
 				if (L.reagents)
 					L.reagents.del_reagent(HOLYWATER)
-					if (!L.reagents.has_any_reagents(HYPERZINES))
+					if(spell_holder.arcanetampered && !L.reagents.has_any_reagents(HONKSERUM))
+						L.reagents.add_reagent(HONKSERUM,1)
+					else if (!L.reagents.has_any_reagents(HYPERZINES))
 						L.reagents.add_reagent(HYPERZINE,1,"no motor mouth")
 		qdel(spell_holder)
 	qdel(src)
@@ -2488,6 +2510,11 @@ var/list/seer_rituals = list()
 		for(var/mob/living/L in contributors)
 			to_chat(activator, "<span class='warning'>The ritual failed, the target seems to be under a curse that prevents us from reaching them through the veil.</span>")
 	else
+		if(spell_holder?.arcanetampered) // send in the clowns!
+			for (var/mob/living/carbon/human/H in player_list)
+				if(istype(H) && !H.stat && istype(H.get_item_by_slot(slot_wear_mask),/obj/item/clothing/mask/gas/clown_hat))
+					target = H
+					break
 		if (rejoin)
 			var/list/valid_turfs = list()
 			for(var/turf/T in orange(target,1))
@@ -3077,6 +3104,8 @@ var/list/bloodcult_exitportals = list()
 			newCultist.tattoos[TATTOO_MANIFEST] = new /datum/cult_tattoo/manifest()
 
 			vessel.equip_or_collect(new /obj/item/clothing/under/leather_rags(vessel), slot_w_uniform)
+			if(spell_holder?.arcanetampered)
+				vessel.adjustBrainLoss(100)
 
 		M.regenerate_icons()
 
