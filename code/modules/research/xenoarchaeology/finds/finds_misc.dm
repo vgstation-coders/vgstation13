@@ -34,18 +34,22 @@
 	desc = "There's a label on the box: 'Retired Excavation Suit. Dispose ASAP'. The box is warped beyond use, but it could be used in research or broken down and remade."
 	can_only_hold = null
 	items_to_spawn = list(/obj/item/clothing/head/helmet/space/anomaly, /obj/item/clothing/suit/space/anomaly)
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/storage/box/large/xa_anomsuit
 	desc = "There's a label on the box: 'Retired Anomaly Suit. Dispose ASAP'. The box is warped beyond use, but it could be used in research or broken down and remade."
 	can_only_hold = null
 	items_to_spawn = list(/obj/item/clothing/head/bio_hood/anomaly/old, /obj/item/clothing/suit/bio_suit/anomaly/old)
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/storage/box/large/nasasuit
 	desc = "There's a label on the box: 'Retired Space Suit'. The box is warped beyond use, but it could be used in research or broken down and remade."
 	can_only_hold = null
 	items_to_spawn = list(/obj/item/clothing/head/helmet/space/ancient, /obj/item/clothing/suit/space/ancient)
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/blood_tesseract/xenoarchfind
+	mech_flags = MECH_SCAN_FAIL //Redundant flag, but adding it just in case.
 
 /obj/item/weapon/blood_tesseract/xenoarchfind/New()
 	..()
