@@ -24,6 +24,14 @@
 			var/jacket = dude.is_wearing_item(/obj/item/clothing/suit/strait_jacket, slot_wear_suit)
 			if(jacket)
 				source.u_equip(jacket, TRUE)
+		if(arcanetampered)	
+			playsound(source.loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+			source.Knockdown(10)
+			source.Stun(10)
+			if(iscarbon(source))
+				var/mob/living/L = source
+				L.apply_effect(10, STUTTER)
+
 
 /obj/item/weapon/implant/freedom/implanted(mob/implanter)
 	imp_in.register_event(/event/emote, src, nameof(src::trigger()))

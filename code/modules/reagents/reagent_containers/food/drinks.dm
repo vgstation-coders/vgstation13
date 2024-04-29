@@ -69,15 +69,52 @@
 /obj/item/weapon/reagent_containers/food/drinks/arcane_act(mob/user)
 	..()
 	cant_drop = 1
+	processing_objects.Add(src)
 	return prob(50) ? "D'TA EX'P'GED!" : "R'D'CTED!"
 
 /obj/item/weapon/reagent_containers/food/drinks/bless()
 	..()
 	cant_drop = 0
+	processing_objects.Remove(src)
+
+/obj/item/weapon/reagent_containers/food/drinks/process()
+	. =	..()
+	if(arcanetampered && ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		if(src in H.held_items)
+			if(!reagents.is_full())
+				H.vessel.trans_to(reagents,reagents.maximum_volume-reagents.total_volume)
+				H.nutrition += 3
+			else
+				H.overeatduration = 0
+				H.nutrition -= 10
+
+/obj/item/weapon/reagent_containers/food/drinks/proc/drop_arcane(mob/user, body_destroyed)
+	user.unregister_event(/event/death, src, nameof(src::drop_arcane()))
+	cant_drop = 0
+	user.drop_item(src, user.loc)
+	cant_drop = 1
+	var/list/obj/structure/table/tables = list()
+	for(var/obj/structure/table/T in view(7,src))
+		tables += T
+	var/obj/structure/table/ourtable = pick(tables)
+	forceMove(ourtable.loc)
+	reagents.clear_reagents()
+	var/static/list/blocked = list(
+		/datum/reagent/drink,
+		/datum/reagent/drink/cold,
+	)
+	var/list/things_can_add = existing_typesof(/datum/reagent/drink) - blocked
+	var/list/things2add
+	for(var/addtype in things_can_add)
+		var/datum/reagent/R = addtype
+		things2add += list(initial(R.id))
+	reagents.add_reagent(pick(things2add),reagents.maximum_volume/rand(4,5))
 
 /obj/item/weapon/reagent_containers/food/drinks/pickup(var/mob/user)
 	..()
 	if(ishuman(user) && arcanetampered) // wizards turn it into SCP-198
+		user.register_event(/event/death, src, nameof(src::drop_arcane()))
 		var/mob/living/carbon/human/H = user
 		reagents.clear_reagents()
 		H.audible_scream()
