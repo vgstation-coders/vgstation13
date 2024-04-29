@@ -109,6 +109,8 @@
 		for(var/i = 1 to (max_res_amount>1 ? res_amount*multiplier : 1))
 			O = new result_type(construct_loc)
 
+	if(S.arcanetampered)
+		O.arcanetampered = S.arcanetampered
 	S.stop_build(current_work == S.last_work)
 	O.change_dir(usr.dir)
 	if(start_unanchored)
