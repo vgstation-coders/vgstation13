@@ -82,13 +82,6 @@ var/global/list/supply_displays = list()
 
 // timed process
 /obj/machinery/status_display/process()
-	if(stat & (FORCEDISABLE|NOPOWER))
-		remove_display()
-		return
-	if(spookymode)
-		spookymode = 0
-		remove_display()
-		return
 	if(mode != MODE_SHUTTLE_TIMER && mode != MODE_CARGO_TIMER) // handled in their subsystems
 		update()
 
@@ -141,6 +134,13 @@ var/global/list/supply_displays = list()
 	// set what is displayed
 
 /obj/machinery/status_display/proc/update()
+	if(stat & (FORCEDISABLE|NOPOWER))
+		remove_display()
+		return
+	if(spookymode)
+		spookymode = 0
+		remove_display()
+		return
 	if(friendc && mode!=4) //Makes all status displays except supply shuttle timer display the eye -- Urist
 		set_picture("ai_friend")
 		return
