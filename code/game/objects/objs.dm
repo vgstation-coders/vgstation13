@@ -58,8 +58,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/is_cooktop //If true, the object can be used in conjunction with a cooking vessel, eg. a frying pan, to cook food.
 	var/obj/item/weapon/reagent_containers/pan/cookvessel //The vessel being used to cook food in. If generalized out to other types of vessels, make sure to also generalize the frying pan's cook_start(), etc. as well.
 
-	var/obj/abstract/particles_holder/smoke_holder
-
 /obj/New()
 	..()
 	if(breakable_flags)
@@ -82,8 +80,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		initial_thermal_mass = thermal_mass //can't just use initial() here as some thermal masses are defined in New()
 	if(flammable)
 		burnableatoms += src
-		add_particles(PS_SMOKE)
-		smoke_holder = particle_systems[PS_SMOKE]
 
 //More cooking stuff:
 /obj/proc/can_cook() //Returns true if object is currently in a state that would allow for food to be cooked on it (eg. the grill is currently powered on). Can (and generally should) be overriden to check for more specific conditions.
@@ -423,7 +419,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/ignite()
 	..()
-	smoke_holder.particles.spawning = 0
+	remove_particles(PS_SMOKE)
 
 /obj/singularity_act()
 	if(flags & INVULNERABLE)

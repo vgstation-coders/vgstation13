@@ -55,7 +55,10 @@ var/list/atom/burnableatoms = list()
 		return
 	if(flammable && !on_fire)
 		var/datum/gas_mixture/G = return_air()
-		if(smoke_holder)
-			if(G && (G.temperature >= (autoignition_temperature * 0.75)))
-				smoke_holder.particles.spawning = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+		add_particles(PS_SMOKE)
+		if(G && (G.temperature >= (autoignition_temperature * 0.75)))
+			var/rate = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+			adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
+		else
+			remove_particles(PS_SMOKE)
 	..()

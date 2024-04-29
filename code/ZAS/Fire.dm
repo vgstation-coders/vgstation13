@@ -191,8 +191,9 @@ var/global/list/image/charred_overlays = list()
 //Called on every obj/effect/fire/process()
 /atom/proc/burnSolidFuel()
 	//Don't burn the container until all reagents have been depleted via burnLiquidFuel().
-	if(((locate(/obj/effect/decal/cleanable/liquid_fuel) in src) || reagents) && !istype(src, /obj/item/weapon/reagent_containers/food))
-		return
+	if(reagents)
+		if(reagents.total_volume && !istype(src, /obj/item/weapon/reagent_containers/food) && ((locate(/obj/effect/decal/cleanable/liquid_fuel) in src) || has_liquid_fuel()))
+			return
 
 	if(!flammable)
 		extinguish()
@@ -219,6 +220,8 @@ var/global/list/image/charred_overlays = list()
 		in_fire = TRUE
 		break
 
+	burntime += 1 SECONDS
+
 	//Rate at which energy is consumed from the burning atom and delivered to the fire.
 	//Provides the "heat" and "oxygen" portions of the fire triangle.
 	var/burnrate = (oxy_ratio/(MINOXY2BURN + rand(-2,2)*0.01)) * (temperature/T20C) //burnrate ~ 1 for standard air
@@ -235,7 +238,6 @@ var/global/list/image/charred_overlays = list()
 
 	//Change in internal energy = energy produced by combustion (assuming perfect combustion).
 	heat_out = material.heating_value * delta_m
-	burntime += 1 SECONDS
 
 	//Moles of Oxygen consumed and CO2 produced.
 	oxy_used = (delta_m / material.molecular_weight) / material.fuel_ox_ratio
@@ -265,12 +267,31 @@ var/global/list/image/charred_overlays = list()
 	if(!reagents)
 		return
 
+	if(!reagents.total_volume)
+		return
+
+	if(istype(src, /obj/item/weapon/reagent_containers/food))
+		return
+
+	//Setup
+	var/turf/T = isturf(src) ? src : get_turf(src)
+	if(!T)
+		extinguish()
+		message_admins("DEBUG: extinguished because is not on a turf")
+		return
+
 	var/heat_out = 0 //MJ
 	var/oxy_used = 0 //mols
 	var/co2_prod = 0 //mols (some reagents consume co2 when they burn)
 	var/max_temperature = 0 //K
 	var/consumption_rate = 1.0 //units per tick
 	var/has_fuel = FALSE
+
+	//Check if a fire is present at the current location.
+	var/in_fire = FALSE
+	for(var/obj/effect/fire/F in T)
+		in_fire = TRUE
+		break
 
 	for(var/possible_fuel in possible_fuels)
 		if(reagents.has_reagent(possible_fuel))
@@ -282,12 +303,27 @@ var/global/list/image/charred_overlays = list()
 			oxy_used += fuel_stats["o2_cons"]
 			co2_prod += -fuel_stats["co2_cons"]
 			reagents.remove_reagent(possible_fuel, consumption_rate)
+			message_admins("DEBUG: removed [consumption_rate] of [possible_fuel]")
 
 	if(!has_fuel)
-		for(var/liquid in reagents.reagent_list)
-			reagents.remove_reagent(liquid,1) //evaporate non-flammable reagents
+		for(var/datum/reagent/liquid in reagents.reagent_list)
+			reagents.remove_reagent(liquid.id,1) //evaporate non-flammable reagents
+			message_admins("DEBUG: atom does not have fuel; removing 1u of [liquid.id]")
+
+	//Start a fire on the tile if a burning object is present without an underlying fire effect.
+	if(!in_fire && T)
+		message_admins("DEBUG: created a fire at the burning atom")
+		T.hotspot_expose(max_temperature, CELL_VOLUME, surfaces=1)
+		new /obj/effect/fire(loc)
 
 	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=max_temperature)
+
+/atom/proc/has_liquid_fuel()
+	if(!reagents)
+		return FALSE
+	for(var/possible_fuel in possible_fuels)
+		if(reagents.has_reagent(possible_fuel))
+			return TRUE
 
 /atom/proc/ashify()
 	if(!on_fire)
@@ -316,12 +352,9 @@ var/global/list/image/charred_overlays = list()
 	if(!flammable)
 		if(!reagents)
 			return 0
-		var/flammable_contents = FALSE
-		for(var/possible_fuel in possible_fuels)
-			if(reagents.has_reagent(possible_fuel))
-				flammable_contents = TRUE
-				break
-		if(!flammable_contents)
+		if(!reagents.total_volume)
+			return 0
+		if(!has_liquid_fuel())
 			return 0
 
 	on_fire=1

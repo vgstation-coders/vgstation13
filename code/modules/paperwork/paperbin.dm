@@ -61,10 +61,6 @@
 	crayon = "mime"
 	icon_state = "paper_bin_mime"
 
-/obj/item/weapon/paper_bin/ignite()
-	if(amount || papers.len)
-		..()
-
 /obj/item/weapon/paper_bin/decontaminate()
 	..()
 	crayon = "sterile"
@@ -82,20 +78,8 @@
 				papers.Remove(P)
 			amount--
 			i++
+	else
 		update_icon()
-
-/obj/item/weapon/paper_bin/ashify()
-	if(!on_fire)
-		return
-	if(amount || papers.len)
-		var/ashtype = ashtype()
-		new ashtype(src.loc)
-		amount = 0
-		for(var/obj/item/weapon/paper/p in papers)
-			qdel(p)
-		papers = list() //In case somehow there's still something in it
-	extinguish()
-	update_icon()
 
 /obj/item/weapon/paper_bin/Exited(atom/movable/Obj, atom/newloc)
 	papers -= Obj

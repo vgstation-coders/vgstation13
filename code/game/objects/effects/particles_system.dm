@@ -373,4 +373,3 @@ var/list/particle_string_to_type = list(
 	icon_state = "risen"
 
 	plane = ABOVE_HUD_PLANE
->>>>>>> 3bcd5ebe59672beaee0efad5e8811faf944f7394
