@@ -1874,6 +1874,8 @@ var/list/arcane_tomes = list()
 			var/obj/item/I = stored_gear[slot]
 			stored_gear -= slot
 			I.forceMove(T)
+		for(var/obj/A in contents)
+			A.forceMove(T)
 	if (remaining)
 		QDEL_NULL(remaining)
 	..()
