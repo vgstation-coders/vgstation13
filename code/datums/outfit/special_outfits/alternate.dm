@@ -388,8 +388,6 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = /obj/item/clothing/under/swimsuit/red,
 			slot_shoes_str = /obj/item/clothing/shoes/sandal,
-			slot_belt_str = /obj/item/weapon/storage/bag/bookbag,
-			slot_head_str =  /obj/item/clothing/head/beret,
 			),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = /obj/item/device/radio/headset,
@@ -491,6 +489,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/mechanic,
 			slot_shoes_str = /obj/item/clothing/shoes/workboots,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
+			slot_head_str = /obj/item/clothing/head/trucker,
 		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_engsci,
@@ -519,6 +518,17 @@
 		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 		/datum/species/vox = /obj/item/weapon/storage/box/survival/engineer/vox,
 		/datum/species/grey = /obj/item/weapon/storage/box/survival/engineer,
+	)
+
+	items_to_collect = list(
+		/obj/item/stack/cable_coil = null,
+		/obj/item/stack/cable_coil/white = null,
+		/obj/item/stack/cable_coil/yellow = null,
+		/obj/item/stack/cable_coil/blue = null,
+		/obj/item/stack/cable_coil/green = null,
+		/obj/item/stack/cable_coil/pink = null,
+		/obj/item/stack/cable_coil/orange = null,
+		/obj/item/stack/cable_coil/cyan = null,
 	)
 
 	pda_type = /obj/item/device/pda/mechanic
@@ -699,7 +709,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/really_black,
 			slot_wear_suit_str = /obj/item/clothing/suit/wcoat,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-			slot_head_str =  /obj/item/clothing/head/beret,
+			slot_head_str =  /obj/item/clothing/head/collectable/tophat,
 			),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = /obj/item/device/radio/headset,
@@ -742,13 +752,14 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_engsci,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/mechanic,
+			slot_w_uniform_str = /obj/item/clothing/under/color/orange,
 			slot_shoes_str = /obj/item/clothing/shoes/workboots,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
+			slot_wear_suit_str = /obj/item/clothing/suit/wftr,
 		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_engsci,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/mechanic,
+			slot_w_uniform_str = /obj/item/clothing/under/color/orange,
 			slot_shoes_str = /obj/item/clothing/shoes/workboots,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/engineer,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
@@ -757,7 +768,7 @@
 		),
 		/datum/species/vox/ = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_engsci,
-			slot_w_uniform_str = /obj/item/clothing/under/rank/mechanic,
+			slot_w_uniform_str = /obj/item/clothing/under/color/orange,
 			slot_shoes_str = /obj/item/clothing/shoes/workboots,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/mechanic,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
@@ -820,7 +831,10 @@
 	var/obj/item/toy/gun/G = new /obj/item/toy/gun
 	G.name = "reenactment rifle"
 	G.desc = "A fake rifle used for historical reenactments."
+	G.icon = 'icons/obj/biggun.dmi'
 	G.icon_state = "mosinlarge"
+	G.icon_override = "mosinlarge"
 	G.item_state = "mosinlarge"
+	G.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	H.put_in_hands(G)
 	H.put_in_hands(new /obj/item/weapon/sword/sabre)

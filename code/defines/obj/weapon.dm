@@ -98,6 +98,7 @@
 /obj/item/weapon/disk/jobdisk
 	name = "Alternate Jobs Database"
 	desc = "A disk which scrambles the jobs database when installed in the Labor Management Console."
+	icon_state = "synddisk"
 
 //TODO: Figure out wtf this is and possibly remove it -Nodrak
 /obj/item/weapon/dummy

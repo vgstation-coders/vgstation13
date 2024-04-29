@@ -62,10 +62,6 @@ var/total_alt_positions
 	title = "Wood Identifier"
 	outfit_datum = /datum/outfit/woodidentifier
 
-/datum/job/alternate/interiordesigner
-	title = "Interior Designer"
-	outfit_datum = /datum/outfit/interiordesigner
-
 /datum/job/alternate/sommelier
 	title = "Sommelier"
 	outfit_datum = /datum/outfit/sommelier

@@ -425,12 +425,21 @@ Subject's pulse: ??? BPM"})
 /obj/item/device/analyzer/wood/attack_self(mob/user as mob)
 	return
 
-/obj/item/device/analyzer/wood/afterattack(obj/O, mob/user as mob)
-	if(istype(O,/obj/item/stack/sheet/wood))
-		user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"Yep, it's wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows green.</span>")
+/obj/item/device/analyzer/wood/preattack(atom/A, mob/user as mob, proximity_flag)
+	if(!proximity_flag)
+		return
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
+	if(istype(A,/obj))
+		var/obj/O = A
+		if(O.w_type == RECYK_WOOD)
+			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"Yep, it's wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows green.</span>")
+		else
+			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"No, it's not wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows red.</span>")
+		playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 	else
-		user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"No, it's not wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows red.</span>")
-	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+		return
 
 /obj/item/device/mass_spectrometer
 	desc = "A hand-held mass spectrometer which identifies trace chemicals in a blood sample."

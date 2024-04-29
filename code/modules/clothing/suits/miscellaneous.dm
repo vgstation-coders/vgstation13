@@ -720,7 +720,7 @@ var/list/tag_suits_list = list()
 	desc = "You'll be the Ruler of the King's Navy in no time."
 	icon_state = "lordadmiral"
 	species_fit = list(INSECT_SHAPED)
-	allowed = list (/obj/item/weapon/gun)
+	allowed = list (/obj/item/weapon/gun,/obj/item/toy/gun)
 
 /obj/item/clothing/suit/raincoat
 	name = "Raincoat"
@@ -1174,8 +1174,17 @@ var/list/tag_suits_list = list()
 	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.50
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	allowed = list(/obj/item/weapon/tank)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	pressure_resistance = 2 * ONE_ATMOSPHERE
 	species_fit = list(VOX_SHAPED)
+
+
+/obj/item/clothing/suit/wftr
+	name ="welding fuel tank refiller shirt"
+	desc = "A shirt worn by those with a passion for refilling welding fuel tanks."
+	icon_state = "wftr"
+	item_state = "wftr"
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
+	body_parts_covered = FULL_TORSO
