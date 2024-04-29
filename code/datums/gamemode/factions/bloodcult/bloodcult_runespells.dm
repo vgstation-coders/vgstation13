@@ -63,12 +63,9 @@
 			    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint\
 			     occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." //Arcane tome page description.
 
-	var/spell_holder.spell_holder.arcanetampered = 0
-
-/datum/rune_spell/New(var/mob/user, var/obj/holder, var/use = "ritual", var/mob/target, var/tampered)
+/datum/rune_spell/New(var/mob/user, var/obj/holder, var/use = "ritual", var/mob/target)
 	spell_holder = holder
 	activator = user
-	spell_holder.spell_holder.arcanetampered = tampered
 
 	if(use == "ritual")
 		pre_cast()

@@ -87,7 +87,7 @@
 				user.Knockdown(3)
 				user.Stun(3)
 				if(ishuman(user))
-					shake_camera(L, 20, 1)
+					shake_camera(user, 20, 1)
 					spawn(20)
 						if(user)
 							to_chat(user,"<span class='danger'>You vomit from travelling through \the [src]!</span>")
