@@ -433,72 +433,21 @@
 		return
 
 	//No need to make an exception for mechas, as they get deleted as soon as they get in view of narnar
-
 	if((N.z == src.z)&&(get_dist(N,src) <= (N.consume_range+10)) && !(N in view(src)))
 		if(!narsimage) //Create narsimage
 			narsimage = image('icons/obj/narsie.dmi',src.loc,"narsie",9,1)
 			narsimage.mouse_opacity = 0
-		if(!narglow) //Create narglow
-			narglow = image('icons/obj/narsie.dmi',narsimage.loc,"glow-narsie", NARSIE_GLOW, 1)
-			narglow.plane = ABOVE_LIGHTING_PLANE
-			narglow.mouse_opacity = 0
-/* Animating narsie works like shit thanks to fucking byond
-		if(!N.old_x || !N.old_y)
-			N.old_x = src.x
-			N.old_y = src.y
-		//Reset narsie's location to the mob
-		var/old_pixel_x = 32 * (N.old_x - src.x) + N.pixel_x
-		var/old_pixel_y = 32 * (N.old_y - src.y) + N.pixel_y
-		narsimage.pixel_x = old_pixel_x
-		narsimage.pixel_y = old_pixel_y
-		narglow.pixel_x = old_pixel_x
-		narglow.pixel_y = old_pixel_y
-		narsimage.forceMove(src.loc)
-		narglow.forceMove(src.loc)
-		//Animate narsie based on dir
-		if(dir)
-			var/x_diff = 0
-			var/y_diff = 0
-			switch(dir) //I bet somewhere out there a proc does something like this already
-				if(1)
-					x_diff = 32
-				if(2)
-					x_diff = -32
-				if(4)
-					y_diff = 32
-				if(8)
-					y_diff = -32
-				if(5)
-					x_diff = 32
-					y_diff = 32
-				if(6)
-					x_diff = 32
-					y_diff = -32
-				if(9)
-					x_diff = -32
-					y_diff = 32
-				if(10)
-					x_diff = -32
-					y_diff = -32
-			animate(narsimage, pixel_x = old_pixel_x+x_diff, pixel_y = old_pixel_y+y_diff, time = 8) //Animate the movement of narsie to narsie's new location
-			animate(narglow, pixel_x = old_pixel_x+x_diff, pixel_y = old_pixel_y+y_diff, time = 8)
-*/
-		//Else if no dir is given, simply send them the image of narsie
+			narsimage.plane = NARSIE_PLANE
 		var/new_x = WORLD_ICON_SIZE * (N.x - src.x) + N.pixel_x
 		var/new_y = WORLD_ICON_SIZE * (N.y - src.y) + N.pixel_y
 		narsimage.pixel_x = new_x
 		narsimage.pixel_y = new_y
-		narglow.pixel_x = new_x
-		narglow.pixel_y = new_y
 		narsimage.loc = src.loc
-		narglow.loc = src.loc
 		//Display the new narsimage to the player
 		src << narsimage
-		src << narglow
 	else
 		if(narsimage)
 			del(narsimage)
-			del(narglow)
 
 /mob/proc/see_rift(var/obj/machinery/singularity/narsie/large/exit/R)
 	var/turf/T_mob = get_turf(src)

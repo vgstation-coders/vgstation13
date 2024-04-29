@@ -124,7 +124,7 @@
 		damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
 
 	target.unarmed_attacked(src, damage, damage_type, zone)
-	after_unarmed_attack(target, damage, damage_type, affecting, armor_block)
+	after_unarmed_attack(target, damage_done, damage_type, affecting, armor_block)
 
 	INVOKE_EVENT(src, /event/unarmed_attack, "attacker" = target, "attacked" = src)
 

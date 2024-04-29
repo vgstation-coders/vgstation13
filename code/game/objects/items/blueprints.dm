@@ -426,8 +426,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 		return BORDER_2NDTILE
 	if (locate(/obj/structure/falsewall) in T2)
 		return BORDER_2NDTILE
-	if (locate(/obj/structure/falserwall) in T2)
-		return BORDER_2NDTILE
 
 	return BORDER_NONE
 

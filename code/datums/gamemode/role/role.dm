@@ -316,6 +316,9 @@
 /datum/role/proc/GetFaction()
 	return faction
 
+/datum/role/proc/ExtraScoreboard()
+	return ""
+
 /datum/role/proc/GetScoreboard()
 	var/win = 1
 	var/text = ""
@@ -351,6 +354,8 @@
 		text += "body destroyed"
 		win = 0
 	text += ")"
+
+	text += ExtraScoreboard()
 
 	if(objectives.objectives.len > 0)
 		var/count = 1

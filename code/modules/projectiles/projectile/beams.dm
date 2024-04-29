@@ -107,19 +107,16 @@ var/list/beam_master = list()
 	previous_turf = shot_ray.previous_turf
 	if(!gcDestroyed)
 		past_rays += shot_ray
-	else
-		shot_ray.fired_beam = null // hard-delete prevention
 
+	var/distance = MAX_BEAM_DISTANCE
 	if(isnull(hits) || hits.len == 0)
 		if(travel_range)
-			shot_ray.draw(travel_range, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
-		else
-			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+			distance = travel_range
 
 	else
 		var/rayCastHit/last_hit = hits[hits.len]
 
-		shot_ray.draw(last_hit.distance, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+		distance = last_hit.distance
 
 		if(last_hit.hit_type == RAY_CAST_REBOUND)
 			final_turf=null
@@ -132,6 +129,11 @@ var/list/beam_master = list()
 			ASSERT(!gcDestroyed)
 			spawn()
 				portal(last_hit.hit_atom)
+
+	shot_ray.draw(distance, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+
+	if(gcDestroyed)
+		qdel(shot_ray)
 
 /obj/item/projectile/beam/process()
 	var/vector/origin = atom2vector(starting)

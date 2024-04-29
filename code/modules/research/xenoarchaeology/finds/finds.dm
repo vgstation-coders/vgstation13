@@ -492,26 +492,7 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/cultrobes/spawn_item()
-
-	//75% chance to get a headgear
-	//25% chance to get a suit
-
-	//33% chance to get current cult hood/robes
-	//26.6% chance to get red cult hood/robes
-	//20% chance to get magus hood/robes
-	//13% chance to get current cult helmet/armor
-	//6.6% chance to get legacy cult helmet/armor
-
-	var/choice = pick(
-	25;/obj/item/clothing/suit/cultrobes,
-	20;/obj/item/clothing/suit/cultrobes/old,
-	45;/obj/item/clothing/head/magus,
-	15;/obj/item/clothing/suit/magusred,
-	30;/obj/item/clothing/head/helmet/space/cult,
-	10;/obj/item/clothing/suit/space/cult,
-	15;/obj/item/clothing/head/helmet/space/legacy_cult,
-	5;/obj/item/clothing/suit/space/legacy_cult)
-	return new choice
+	return new /obj/item/weapon/blood_tesseract/xenoarchfind
 
 /datum/find/soulstone
 	find_ID = ARCHAEO_SOULSTONE
@@ -956,8 +937,7 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/spacesuit/spawn_item()
-	var/result = pick(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/head/helmet/space/ancient)
-	return new result
+	return new /obj/item/weapon/storage/box/large/nasasuit
 
 /datum/find/excasuit
 	find_ID = ARCHAEO_EXCASUIT
@@ -966,8 +946,7 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/excasuit/spawn_item()
-	var/result = pick(/obj/item/clothing/suit/space/anomaly, /obj/item/clothing/head/helmet/space/anomaly)
-	return new result
+	return new /obj/item/weapon/storage/box/large/xa_excasuit
 
 /datum/find/anomsuit
 	find_ID = ARCHAEO_ANOMSUIT
@@ -976,8 +955,7 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/anomsuit/spawn_item()
-	var/result = pick(/obj/item/clothing/suit/bio_suit/anomaly/old, /obj/item/clothing/head/bio_hood/anomaly/old)
-	return new result
+	return new /obj/item/weapon/storage/box/large/xa_anomsuit
 
 /datum/find/lance
 	find_ID = ARCHAEO_LANCE
