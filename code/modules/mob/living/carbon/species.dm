@@ -125,7 +125,7 @@ var/global/list/playable_species = list("Human")
 	var/wear_mask_icons     = 'icons/mob/mask.dmi'
 	var/back_icons          = 'icons/mob/back.dmi'
 	var/id_icons            = 'icons/mob/ids.dmi'
-
+	var/accessory_icons		= 'icons/mob/clothing_accessories.dmi'
 
 	//Used in icon caching.
 	var/race_key = 0
