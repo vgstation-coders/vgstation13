@@ -8,6 +8,8 @@ var/list/atom/burnableatoms = list()
 	priority      = SS_PRIORITY_BURNABLE
 	display_order = SS_DISPLAY_BURNABLE
 
+	var/list/atom/currentrun
+	var/currentrun_index
 
 /datum/subsystem/burnable/New()
 	NEW_SS_GLOBAL(SSburnable)
@@ -21,11 +23,16 @@ var/list/atom/burnableatoms = list()
 	..("P:[burnableatoms.len]")
 
 /datum/subsystem/burnable/fire(var/resumed = FALSE)
-	if(resumed)
-		for(var/atom/burnable in burnableatoms)
-			burnable?.checkburn()
-			if (MC_TICK_CHECK)
-				break
+	if(!resumed)
+		currentrun_index = burnableatoms.len
+		currentrun = burnableatoms.Copy()
+	var/c = currentrun_index
+	while(c)
+		currentrun[c]?.checkburn()
+		c--
+		if (MC_TICK_CHECK)
+			break
+	currentrun_index = c
 
 /atom/proc/checkburn()
 	if(on_fire) //if an object is burning, spawn a fire effect on the tile
@@ -48,7 +55,10 @@ var/list/atom/burnableatoms = list()
 		return
 	if(flammable && !on_fire)
 		var/datum/gas_mixture/G = return_air()
-		if(smoke_holder)
-			if(G && (G.temperature >= (autoignition_temperature * 0.75)))
-				smoke_holder.particles.spawning = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+		add_particles(PS_SMOKE)
+		if(G && (G.temperature >= (autoignition_temperature * 0.75)))
+			var/rate = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+			adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
+		else
+			remove_particles(PS_SMOKE)
 	..()

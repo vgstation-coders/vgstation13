@@ -58,8 +58,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/is_cooktop //If true, the object can be used in conjunction with a cooking vessel, eg. a frying pan, to cook food.
 	var/obj/item/weapon/reagent_containers/pan/cookvessel //The vessel being used to cook food in. If generalized out to other types of vessels, make sure to also generalize the frying pan's cook_start(), etc. as well.
 
-	var/obj/abstract/particles_holder/smoke_holder
-
 /obj/New()
 	..()
 	if(breakable_flags)
@@ -81,9 +79,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(thermal_mass)
 		initial_thermal_mass = thermal_mass //can't just use initial() here as some thermal masses are defined in New()
 	if(flammable)
-		burnableatoms[src] = null
-		add_particles("Smoke")
-		smoke_holder = particle_systems["Smoke"]
+		burnableatoms += src
 
 //More cooking stuff:
 /obj/proc/can_cook() //Returns true if object is currently in a state that would allow for food to be cooked on it (eg. the grill is currently powered on). Can (and generally should) be overriden to check for more specific conditions.
@@ -107,9 +103,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		cookvesselimage.pixel_x = offset_x
 		cookvesselimage.pixel_y = offset_y
 		overlays += cookvesselimage
-		shift_particles(list(offset_x,offset_y))
+		adjust_particles(PVAR_POSITION, list(offset_x,offset_y))
 	else
-		shift_particles(0)
+		adjust_particles(PVAR_POSITION, 0)
 
 /obj/proc/cook_temperature() //Returns the temperature the object cooks at.
 	return COOKTEMP_DEFAULT
@@ -423,7 +419,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/ignite()
 	..()
-	smoke_holder.particles.spawning = 0
+	remove_particles(PS_SMOKE)
 
 /obj/singularity_act()
 	if(flags & INVULNERABLE)
@@ -707,7 +703,7 @@ a {
 		if(isrobot(user))
 			var/mob/living/silicon/robot/R = user
 			return HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN)
-		return (M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA) || user.reagents.has_reagent(HONKSERUM) || arcanetampered
+		return (M_CLUMSY in user.mutations) || (user.reagents?.has_reagent(INCENSE_BANANA)) || (user.reagents?.has_reagent(HONKSERUM)) || arcanetampered
 	return 0
 
 //Proc that handles NPCs (gremlins) "tampering" with this object.

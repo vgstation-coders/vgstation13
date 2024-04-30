@@ -115,7 +115,7 @@
 	var/pai_completions = ""
 	var/completions = ""
 	for(var/mob/living/silicon/player in player_list)
-		var/icon/flat = getFlatIcon(player)
+		var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(player)), override_dir = SOUTH)
 		if(istype(player, /mob/living/silicon/ai))
 			var/mob/living/silicon/ai/ai = player
 			if(ai.stat != DEAD)

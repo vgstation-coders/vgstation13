@@ -80,9 +80,8 @@
 	dat += "<tr><td><b>Potency</b></td><td>[round(grown_seed.potency, 0.01)]</td></tr>"
 	dat += "</table>"
 
-	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
 	dat += "<h2>Reagent Data</h2>"
-		
+
 	if(!grown_reagents) //checking if the thing is produce or seed
 		dat += "This plant will produce: "
 		var/datum/reagent/N
@@ -135,7 +134,7 @@
 
 	dat += "It has a toxin affinity of [grown_seed.toxin_affinity] "
 	if(grown_seed.toxin_affinity < 5)
-		dat += "and will get damaged if exposed to them.<br>" 
+		dat += "and will get damaged if exposed to them.<br>"
 	else if(grown_seed.toxin_affinity > 7)
 		dat += "and will require toxins as a fluid, getting damaged if exposed to water.<br>"
 	else if(grown_seed.toxin_affinity >= 5 && grown_seed.toxin_affinity <= 7)
@@ -156,7 +155,7 @@
 		dat += "It is remarkably resistant to them.<br>"
 	else
 		dat += "It is average.<br>"
-		
+
 	if(grown_seed.consume_gasses)
 		for(var/gas in grown_seed.consume_gasses)
 			dat += "It will consume [grown_seed.consume_gasses[gas]] moles of [gas] from the environment per cycle.<br>"

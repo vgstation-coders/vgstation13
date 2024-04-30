@@ -81,7 +81,7 @@
 			if(!user.drop_item(W))
 				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
 				return
-			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed(hhud = src, shud = W)
+			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed(loc, src, W)
 			W.transfer_fingerprints_to(I)
 			I.base_health = src
 			I.base_sec = W
@@ -187,7 +187,7 @@
 			if(!user.drop_item(W))
 				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
 				return
-			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed(hhud = W, shud = src)
+			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed(loc, W, src)
 			W.transfer_fingerprints_to(I)
 			I.base_health = W
 			I.base_sec = src

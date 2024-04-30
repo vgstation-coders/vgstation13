@@ -37,7 +37,6 @@
 	var/static/list/smoothables = list(
 		/turf/simulated/wall,
 		/obj/structure/falsewall,
-		/obj/structure/falserwall,
 	)
 	return smoothables
 
@@ -165,6 +164,8 @@
 					new /obj/effect/cult_shortcut(src)
 					user.visible_message("<span class='warning'>[user] has painted a strange sigil on \the [src].</span>", \
 						"<span class='notice'>You finish drawing the sigil.</span>")
+					var/datum/role/cultist/cul = iscultist(user)
+					cul.gain_devotion(5, DEVOTION_TIER_4, "shortcut_sigil", src)
 			return
 
 	if(bullet_marks)
@@ -451,7 +452,10 @@
 /turf/simulated/wall/cultify()
 	ChangeTurf(/turf/simulated/wall/cult)
 	turf_animation('icons/effects/effects.dmi',"cultwall", 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
-	return
+
+/turf/simulated/wall/decultify()
+	..()
+	ChangeTurf(/turf/simulated/wall)
 
 /turf/simulated/wall/attack_construct(mob/user as mob)
 	if(istype(user,/mob/living/simple_animal/construct/builder))

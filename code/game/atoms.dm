@@ -185,7 +185,7 @@ var/global/list/ghdel_profiling = list()
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
 	if(flammable)
-		burnableatoms -= burnableatoms[src]
+		burnableatoms -= src
 	/*if(istype(beams) && beams.len)
 		for(var/obj/effect/beam/B in beams)
 			if(B && B.target == src)
@@ -466,7 +466,8 @@ its easier to just keep the beam vertical.
 	if(on_fire)
 		user.simple_message("<span class='danger'>OH SHIT! IT'S ON FIRE!</span>",\
 			"<span class='info'>It's on fire, man.</span>")
-
+	if(charred_overlay)
+		to_chat(user, "<span class='info'>It's covered in ash.</span>")
 	if(min_harm_label && harm_labeled)
 		if(harm_labeled < min_harm_label)
 			to_chat(user, harm_label_examine[1])
@@ -1073,7 +1074,7 @@ its easier to just keep the beam vertical.
 	return FALSE
 
 //Single overlay moody light
-/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
+/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff", offX = 0, offY = 0)
 	overlays -= moody_light
 	var/area/here = get_area(src)
 	if (here && here.dynamic_lighting)
@@ -1083,6 +1084,8 @@ its easier to just keep the beam vertical.
 		moody_light.blend_mode = BLEND_ADD
 		moody_light.alpha = moody_alpha
 		moody_light.color = moody_color
+		moody_light.pixel_x = offX
+		moody_light.pixel_y = offY
 		overlays += moody_light
 	luminosity = max(luminosity, 2)
 
@@ -1092,7 +1095,7 @@ its easier to just keep the beam vertical.
 	moody_light = null
 
 //Multi-overlay moody lights. don't combine both procs on a single atom, use one or the other.
-/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff")
+/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff", offX = 0, offY = 0)
 	if (!index)
 		return
 	if (index in moody_lights)
@@ -1105,6 +1108,8 @@ its easier to just keep the beam vertical.
 		moody_light.blend_mode = BLEND_ADD
 		moody_light.alpha = moody_alpha
 		moody_light.color = moody_color
+		moody_light.pixel_x = offX
+		moody_light.pixel_y = offY
 		moody_lights[index] = moody_light
 		overlays += moody_lights[index]
 	luminosity = max(luminosity, 2)

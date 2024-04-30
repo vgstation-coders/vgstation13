@@ -316,6 +316,9 @@
 /datum/role/proc/GetFaction()
 	return faction
 
+/datum/role/proc/ExtraScoreboard()
+	return ""
+
 /datum/role/proc/GetScoreboard()
 	var/win = 1
 	var/text = ""
@@ -326,7 +329,7 @@
 		var/icon/sprotch = icon('icons/effects/blood.dmi', "sprotch")
 		text += "<img src='data:image/png;base64,[icon2base64(sprotch)]' style='position:relative; top:10px;'/>"
 	else
-		var/icon/flat = getFlatIcon(M, SOUTH, 0, 1)
+		var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 		if(M.stat == DEAD)
 			if (ishuman(M) || ismonkey(M))
 				flat.Turn(90)
@@ -351,6 +354,8 @@
 		text += "body destroyed"
 		win = 0
 	text += ")"
+
+	text += ExtraScoreboard()
 
 	if(objectives.objectives.len > 0)
 		var/count = 1

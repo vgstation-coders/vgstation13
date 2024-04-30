@@ -307,7 +307,7 @@
 		var/obj/item/slowSuit = wear_suit
 		if(slowSuit.slowdown > NO_SLOWDOWN)
 			tR -= 1
-	if(reagents.get_sportiness()>=10)	//Not as easy as just a swig of sport drink
+	if(reagents.get_sportiness()>=5)
 		tR += 1
 	return max(0, tR)
 

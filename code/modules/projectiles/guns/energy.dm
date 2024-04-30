@@ -118,7 +118,6 @@
 		return
 
 	to_chat(user, "<span class='notice'>You slide the energy cell out of \the [src].</span>")
-	power_supply.forceMove(src.loc)
 	user.put_in_hands(power_supply)
 	power_supply.add_fingerprint(user)
 	power_supply.updateicon()
@@ -133,10 +132,9 @@
 	if(detachable_cell && istype(I,/obj/item/weapon/cell))
 		if(power_supply)
 			to_chat(user,"<span class='notice'>You quickly swap the cell of \the [src].</span>")
-			power_supply.forceMove(src.loc)
+			user.put_in_hands(power_supply)
 			user.drop_item(I, loc, 1)
 			I.forceMove(src)
-			user.put_in_hands(power_supply)
 			power_supply.add_fingerprint(user)
 			power_supply.updateicon()
 			src.power_supply = I

@@ -27,7 +27,7 @@
 				var/title = painting.painting_data.title
 				if(!title)
 					title = "Nameless"
-				var/icon/flat = getFlatIcon(painting)
+				var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(painting	)), override_dir = SOUTH)
 				row1 += {"<td><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'></td>"}
 				row2 += {"<td>"[title]"</td>"}
 

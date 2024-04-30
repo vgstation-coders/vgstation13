@@ -2182,7 +2182,23 @@
 		to_chat(M, "<span class='warning'>You have been sent to the prison station!</span>")
 		log_admin("[key_name(usr)] sent [key_name(M)] to the prison station.")
 		message_admins("<span class='notice'>[key_name_admin(usr)] sent [key_name_admin(M)] to the prison station.</span>", 1)
-
+	else if(href_list["sendbacktolobby"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/mob/player_to_send = locate(href_list["sendbacktolobby"])
+		if(!isobserver(player_to_send))
+			to_chat(usr, span_notice("You can only send ghost players back to the Lobby."))
+			return
+		if(!player_to_send.client)
+			to_chat(usr, span_warning("[player_to_send] doesn't seem to have an active client."))
+			return
+		if(alert(usr, "Send [key_name(player_to_send)] back to Lobby?", "Message", "Yes", "No") != "Yes")
+			return
+		log_admin("[key_name(usr)] has sent [key_name(player_to_send)] back to the Lobby.")
+		message_admins("[key_name(usr)] has sent [key_name(player_to_send)] back to the Lobby.")
+		var/mob/new_player/new_lobby_player = new()
+		new_lobby_player.ckey = player_to_send.ckey
+		qdel(player_to_send)
 	else if(href_list["tdome1"] || href_list["tdome2"])
 		if(!check_rights(R_FUN))
 			return
@@ -3939,7 +3955,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			if("fakealerts")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEA")
-				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") as null|anything in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Revs", "Bloodstones raised", "Bloodstones destroyed")
+				var/choice = input("Choose the type of fake alert you wish to trigger","False Flag and Bait Panel") as null|anything in list("Biohazard", "Lifesigns", "Malfunction", "Ion", "Meteor Wave", "Carp Migration", "Revs")
 				//Big fat lists of effects, not very modular but at least there's less buttons
 				switch (choice)
 					if("Biohazard") //GUISE WE HAVE A BLOB
@@ -3990,7 +4006,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 						message_admins("[key_name_admin(usr)] triggered a FAKE revolution alert.")
 						log_admin("[key_name_admin(usr)] triggered a FAKE revolution alert.")
 						return
-					//TODO (UPHEAVAL PART 2) think of fake alerts too
+
 			if("fakebooms") //Michael Bay is in the house !
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FAKEE")
@@ -4157,11 +4173,13 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 				if (!choice)
 					return
 				var/turf/T = get_turf(usr)
-				var/obj/structure/cult/bloodstone/blood_stone = new(T)
+				var/obj/structure/cult/bloodstone/admin/blood_stone = new(T)
 				if(choice == "Yes")
 					blood_stone.flashy_entrance()
 				if(choice == "No")
-					blood_stone.update_icon()
+					blood_stone.ready = TRUE
+					blood_stone.overlays_pre()
+					blood_stone.set_animate()
 				message_admins("[key_name_admin(usr)] spawned a blood stone at [formatJumpTo(get_turf(usr))].")
 
 

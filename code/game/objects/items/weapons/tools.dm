@@ -763,7 +763,7 @@
 	if(istype(I,/obj/item/weapon/fireaxe))
 		var/obj/item/weapon/fireaxe/F = I
 		to_chat(user, "<span class='notice'>You attach \the [F] and [src] to carry them easier.</span>")
-		var/obj/item/tool/irons/SI = new (user.loc)
+		var/obj/item/tool/irons/SI = new (get_turf(src))
 		SI.fireaxe = F
 		SI.halligan = src
 		user.drop_item(F)

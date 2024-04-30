@@ -23,7 +23,6 @@
 	if(!hypo)
 		return
 	to_chat(user, "You remove \the [hypo] from \the [src].")
-	hypo.forceMove(get_turf(user.loc))
 	user.put_in_hands(hypo)
 	hypo = null
 	overlays.len = 0
@@ -35,16 +34,10 @@
 		overlays += hypo_icon
 
 /obj/item/weapon/sword/weaponcraft/attackby(obj/item/weapon/W, mob/user)
+	..()
 	if(istype(W, /obj/item/weapon/metal_blade))
 		to_chat(user, "You attach \the [W] to \the [src].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/sword/executioner/I = new (get_turf(user))
-			user.put_in_hands(I)
-		else
-			new /obj/item/weapon/sword/executioner(get_turf(src.loc))
-		qdel(src)
-		qdel(W)
+		user.create_in_hands(src,new /obj/item/weapon/sword/executioner(loc),W)
 	if(W.type == /obj/item/weapon/reagent_containers/hypospray || W.type == /obj/item/weapon/reagent_containers/hypospray/creatine)
 		to_chat(user, "You wrap \the [src]'s grip around \the [W], affixing it to the base of \the [src].")
 		user.drop_item(W, force_drop = 1)
@@ -53,18 +46,12 @@
 		update_icon()
 	if(hypo && istype(W, /obj/item/weapon/aluminum_cylinder))
 		to_chat(user, "You affix \the [W] to the bottom of \the [src]'s [hypo.name].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/sword/venom/I = new (get_turf(user))
-			hypo.reagents.clear_reagents()
-			I.HY = hypo
-			hypo.forceMove(I)
-			hypo = null
-			user.put_in_hands(I)
-		else
-			new /obj/item/weapon/sword/venom(get_turf(src.loc))
-		qdel(src)
-		qdel(W)
+		var/obj/item/weapon/sword/venom/I = new (loc)
+		hypo.reagents.clear_reagents()
+		I.HY = hypo
+		hypo.forceMove(I)
+		hypo = null
+		user.create_in_hands(src,I,W)
 
 /obj/item/weapon/sword/weaponcraft/Destroy()
 	if(hypo)
@@ -76,7 +63,7 @@
 	desc = "A unique and deadly sword. Its hypospray allows it to be coated in a variety of dangerous chemicals."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "venom_sword"
-	var/beaker = null
+	var/obj/item/weapon/reagent_containers/glass/beaker/beaker = null
 	var/obj/item/weapon/reagent_containers/hypospray/HY = null
 	var/max_beaker_volume = 500 //The maximum volume a beaker can have and still be placed into the sword
 	var/min_inject_amount = 5
@@ -103,8 +90,7 @@
 	..()
 	if(beaker)
 		to_chat(user, "[bicon(beaker)] There is \a [beaker] in \the [src]'s beaker port.")
-		var/obj/item/weapon/reagent_containers/glass/beaker/B = beaker
-		B.reagents.get_examine(user)
+		beaker.reagents.get_examine(user)
 	to_chat(user, "<span class='info'>\The [src] is set to inject [inject_amount] units each hit.</span>")
 
 /obj/item/weapon/sword/venom/Destroy()
@@ -163,15 +149,14 @@
 	if(!beaker)
 		return
 	else
-		var/obj/item/weapon/reagent_containers/glass/beaker/B = beaker
-		B.forceMove(user.loc)
-		user.put_in_hands(B)
+		user.put_in_hands(beaker)
+		to_chat(user, "You remove \the [beaker] from \the [src].")
 		beaker = null
-		to_chat(user, "You remove \the [B] from \the [src].")
 		icon_state = "venom_sword"
 		update_color()
 
 /obj/item/weapon/sword/venom/attackby(obj/item/weapon/W, mob/user)
+	..()
 	if(istype(W, /obj/item/weapon/reagent_containers/glass/beaker))
 		if(beaker)
 			to_chat(user, "<span class='notice'>There is already a beaker in \the [src]'s beaker port.</span>")
@@ -199,44 +184,36 @@
 			H.reagents.clear_reagents()
 			I.hypo = H
 		I.update_icon()
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			user.put_in_hands(I)
 		new /obj/item/weapon/aluminum_cylinder(get_turf(src))
-		qdel(src)
+		user.create_in_hands(src,I)
 
 /obj/item/weapon/sword/venom/attack(mob/M as mob, mob/user as mob)
 	if(!..())	//If the attack missed.
 		return
 	if(!beaker)
 		return
-	var/obj/item/weapon/reagent_containers/glass/beaker/B = beaker
-	if(!B.reagents.total_volume)
+	if(!beaker.reagents.total_volume)
 		update_color()
 		return
 
 	to_chat(M, "<span class='warning'>The blade's coating seeps into your wound!</span>")
 
-	B.reagents.reaction(M, INGEST, amount_override = min(B.reagents.total_volume,inject_amount)/(B.reagents.reagent_list.len))
+	beaker.reagents.reaction(M, INGEST, amount_override = min(beaker.reagents.total_volume,inject_amount)/(beaker.reagents.reagent_list.len))
 
 	if(M.reagents)
 		var/list/injected = list()
-		for(var/datum/reagent/R in B.reagents.reagent_list)
+		for(var/datum/reagent/R in beaker.reagents.reagent_list)
 			injected += R.name
 		var/contained = english_list(injected)
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been injected with \the [src] by [user.name] ([user.ckey]). Reagents: [contained]</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used \the [src] to inject [M.name] ([M.key]). Reagents: [contained]</font>")
 		msg_admin_attack("[user.name] ([user.ckey]) injected [M.name] ([M.key]) with \a [src]. Reagents: [contained] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) injected [M.name] ([M.ckey]) with \a [src]. Reagents: [contained]</font>" )
-		if(!iscarbon(user))
-			M.LAssailant = null
-		else
-			M.LAssailant = user
-			M.assaulted_by(user)
+		M.assaulted_by(user)
 
-		B.reagents.trans_to(M, inject_amount)
+		beaker.reagents.trans_to(M, inject_amount)
 
-	if(!B.reagents.total_volume)
+	if(!beaker.reagents.total_volume)
 		update_color()
 
 /obj/item/weapon/sword/executioner //takes a long time to swing and doesn't do much more damage than the sword, however it has a much higher chance to sever a limb

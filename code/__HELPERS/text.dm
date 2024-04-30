@@ -284,11 +284,31 @@ var/list/whitelist_name_diacritics_min = list(
  * Text modification
  */
 
-//Adds 'u' number of zeros ahead of the text 't'
-/proc/add_zero(t, u)
-	while (length(t) < u)
-		t = "0[t]"
-	return t
+//example: add_zero(217, 6) = "000217"
+/proc/add_zero(_string, beforeZeroes)
+	var/string = "[_string]"
+	while (length(string) < beforeZeroes)
+		string = "0[string]"
+	return string
+
+//example: add_zero_before_and_after(3.14, 3, 5) = "003.14000"
+/proc/add_zero_before_and_after(_string, beforeZeroes, afterZeroes)
+	var/string = "[_string]"
+	var/dot_pos = findtext(string, ".")
+	if (dot_pos)
+		dot_pos--
+		while (dot_pos < beforeZeroes)
+			string = "0[string]"
+			dot_pos++
+		while (length(string) < (beforeZeroes+afterZeroes+1))
+			string = "[string]0"
+	else
+		while (length(string) < beforeZeroes)
+			string = "0[string]"
+		string = "[string]."
+		while (length(string) < (beforeZeroes+afterZeroes+1))
+			string = "[string]0"
+	return string
 
 //Adds 'u' number of spaces ahead of the text 't'
 /proc/add_lspace(t, u)

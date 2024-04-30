@@ -152,9 +152,6 @@
 	active_hand = selhand
 	update_hands_icons()
 
-/mob/living/carbon/proc/update_inv_by_slot(var/slot_flags)
-	return
-
 /mob/living/carbon/proc/update_hands_icons()
 	if(!hud_used)
 		return
@@ -692,6 +689,9 @@
 		spawn(time)
 			make_visible(source_define)
 
+/mob/living/carbon
+	var/ice_sliding = 0
+
 /mob/living/carbon/make_visible(var/source_define)
 	if(!source_define)
 		return
@@ -707,38 +707,61 @@
 	if(unslippable) //if unslippable, don't even bother making checks
 		return FALSE
 
+	var/slide_dir = dir
 	switch(P.wet)
 		if(TURF_WET_WATER)
 			if(Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = FALSE, overlay_type = TURF_WET_WATER, onwhat = "the wet floor", otherscansee = TRUE, spanclass = "warning"))
-				step(src, dir)
+				step(src, slide_dir)
 			else
 				return FALSE
 
 		if(TURF_WET_LUBE)
-			step(src, dir)
+			step(src, slide_dir)
 			if(Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE, onwhat = "the floor", otherscansee = TRUE, spanclass = "warning"))
 				for(var/i = 1 to 4)
 					spawn(i)
 						if(!locked_to)
-							step(src, dir)
+							step(src, slide_dir)
 				take_organ_damage(2) // Was 5 -- TLE
 			else
 				return FALSE
 
 
 		if(TURF_WET_ICE)
-			if(prob(30) && Slip(stun_amount = 4, weaken_amount = 3,  overlay_type = TURF_WET_ICE, onwhat = "the icy floor", otherscansee = TRUE, spanclass = "warning"))
-				step(src, dir)
+			if(!ice_sliding && prob(15) && Slip(stun_amount = 4, weaken_amount = 3,  overlay_type = TURF_WET_ICE, onwhat = "the icy floor", otherscansee = TRUE, spanclass = "warning"))
+				ice_sliding = 1
+				// Wait movement_delay(), which is how long it takes for the movement step onto the slippery tile to finish.
+				spawn(ceil(movement_delay()))
+					var/slide_speed = movement_delay()*4
+					var/turf/next_turf = get_turf(src)
+					// Loop until you reach a tile that doesn't have ice on it. Speed progressively gets slower. next_turf represents the turf you expect to be on
+					// after the next step completes - if you're not on that, it indicates the user manually moved and thus the slide is over.
+					while(can_apply_inertia())
+						if(next_turf != get_turf(src))
+							break
+						next_turf = get_step(src, slide_dir)
+						set_glide_size(DELAY2GLIDESIZE(slide_speed))
+						step(src, slide_dir)
+						sleep(ceil(slide_speed))
+						slide_speed *= 1.1
+						var/obj/effect/overlay/puddle/ice/next = locate(/obj/effect/overlay/puddle/ice) in next_turf
+						if(!next)
+							break
+						if(	next.wet != TURF_WET_ICE)
+							break
+					ice_sliding = 0
 			else
 				return FALSE
 
 	return TRUE
 
 
-/mob/living/carbon/proc/check_can_revive() // doesn't check suicides
+/mob/living/carbon/proc/check_can_revive()
 	if (!isDead())
 		return CAN_REVIVE_NO
 	if (!mind)
+		return CAN_REVIVE_NO
+	if (mind.suiciding)
 		return CAN_REVIVE_NO
 	if (client)
 		return CAN_REVIVE_IN_BODY

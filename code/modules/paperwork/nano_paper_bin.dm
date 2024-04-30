@@ -24,10 +24,7 @@
 /obj/item/weapon/paper_bin/nano/attack_hand(mob/user as mob)
 	if(resources > 0)
 		resources--
-		var/obj/item/weapon/paper/nano/p
-		p = new /obj/item/weapon/paper/nano
-		p.forceMove(user.loc)
-		user.put_in_hands(p)
+		user.put_in_hands(new /obj/item/weapon/paper/nano(loc))
 		to_chat(user, "<span class='notice'>\The [src] spits out a piece of nano paper.</span>")
 		if(resources == 0)
 			to_chat(user, "<span class=notice>The dispenser is now empty!")

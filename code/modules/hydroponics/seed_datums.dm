@@ -478,14 +478,14 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		SSplant.seeds[name] = src
 
 //Place the plant products at the feet of the user.
-/datum/seed/proc/harvest(var/mob/user)
+/datum/seed/proc/harvest(var/mob/user, var/atom/movable/holder)
 	if(!user)
 		return
 	if(isnull(products) || !products.len || yield <= 0)
 		to_chat(user, "<span class='warning'>You fail to harvest anything useful.</span>")
 	else
 		to_chat(user, "You harvest from the [display_name].")
-		generate_product(get_turf(user), user)
+		generate_product((holder && holder.Adjacent(user)) || !holder ? get_turf(user) : get_turf(holder), user)
 
 /datum/seed/proc/generate_product(var/turf/T, mob/harvester)
 	add_newline_to_controller()

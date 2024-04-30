@@ -170,7 +170,6 @@
 	if(heldkey && !user.incapacitated() && Adjacent(user) && user.dexterity_check())
 		to_chat(user, "<span class='notice'>You remove \the [heldkey] from \the [src]'s ignition.</span>")
 		user.visible_message("<span class='notice'>\The [src]'s engine shuts off.</span>")
-		heldkey.forceMove(get_turf(user))
 		user.put_in_hands(heldkey)
 		heldkey = null
 	else

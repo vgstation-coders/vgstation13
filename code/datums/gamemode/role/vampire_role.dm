@@ -172,11 +172,7 @@
 	else
 		to_chat(antag.current, "<span class='warning'>You quietly latch on to \the [target]'s neck...")
 
-	if(!iscarbon(assailant))
-		target.LAssailant = null
-	else
-		target.LAssailant = assailant
-		target.assaulted_by(assailant)
+	target.assaulted_by(assailant)
 	var/initial_silentbite = silentbite //No switching bite types after latching onto someone
 	while(do_mob(assailant, target, (5 SECONDS) * (initial_silentbite + 1)))
 		if(!isvampire(assailant))

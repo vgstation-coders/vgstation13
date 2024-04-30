@@ -139,7 +139,7 @@
 			overlays += frontblood
 		update_temperature_overlays()
 	else
-		remove_particles("Steam")
+		remove_particles(PS_STEAM)
 
 		//Note: an alternative to the above might be to overlay all of the non-reagent ingredients onto a single icon, then mask it with the "pan_mask" icon_state.
 		//This would obviate the need to regenerate the blood overlay, and help avoid anomalies with large ingredient sprites.

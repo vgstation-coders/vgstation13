@@ -98,6 +98,8 @@
 	t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
 	t = replacetext(t, "\[date\]", "[current_date_string]")
 	t = replacetext(t, "\[time\]", "[worldtime2text()]")
+	t = replacetext(t, "\[stationname\]", "[station_name()]")
+	t = replacetext(t, "\[logo\]", "<img src=\"http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png\">")
 
 	// tables ported from Baystation12 : https://github.com/Baystation12/Baystation12
 
@@ -359,11 +361,7 @@
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stabbed with [type]  by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [type] to stab [M.name] ([M.ckey])</font>")
 	msg_admin_attack("[user.name] ([user.ckey]) Used the [type] to stab [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 	if(reagents && reagents.total_volume)
 		reagents.trans_to(M,50)
 

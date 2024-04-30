@@ -12,7 +12,7 @@
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "minidrone"
 	icon_living = "minidrone"
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	maxHealth = 30 // Quite fragile
 	health = 30
 	melee_damage_type = BURN
@@ -79,7 +79,7 @@
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "hoverdisc_drone"
 	icon_living = "hoverdisc_drone"
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	maxHealth = 200 // Pretty decent HP, but the armor is the real problem
 	health = 200
 	melee_damage_type = BURN
@@ -325,7 +325,7 @@
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(user.client), 20)
 				qdel(O)
-				user.put_in_hands(new /obj/item/weapon/coin/iron)
+				user.put_in_hands(new /obj/item/weapon/coin/iron(loc))
 				last_trade = world.time
 			else
 				visible_message("<span class='notice'>[src] doesn't seem interested in \the [O] at the moment.</span>")
