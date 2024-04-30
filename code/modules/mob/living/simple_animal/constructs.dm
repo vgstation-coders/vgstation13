@@ -256,6 +256,7 @@
 		if (O.damtype == HALLOSS)
 			damage = 0
 		if(isholyweapon(O))
+			playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
 			damage *= 2
 			purge = 3
 		adjustBruteLoss(damage)
