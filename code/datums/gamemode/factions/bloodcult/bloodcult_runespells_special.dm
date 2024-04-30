@@ -108,7 +108,7 @@
 	var/atom/blocker
 	var/list/dance_platforms = list()
 	var/dance_count = 0
-	var/dance_target = 240
+	var/dance_target = 120
 	var/obj/effect/cult_ritual/dance/dance_manager
 	var/image/crystals
 	var/image/top_crystal
@@ -343,6 +343,12 @@
 			dance_manager.dancers += platform.dancer
 			if(iscultist(platform.dancer))
 				C.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
+				if (iscarbon(C))
+					var/mob/living/carbon/CA = C
+					if (CA.get_cult_power() < 80)
+						to_chat(C, "<span class='warning'>You feel like you could dance more effectively by wearing proper cult attire.</span>")
+					else if (!istype(CA.get_active_hand(), /obj/item/candle/blood) && !istype(CA.get_inactive_hand(), /obj/item/candle/blood))
+						to_chat(C, "<span class='warning'>Holding a lit blood candle would help you focus your mind on the ritual while you dance.</span>")
 			else
 				to_chat(C, "<span class='sinister'>The tentacles shift and force your body to move alongside them, performing some kind of dance.</span>")
 
