@@ -20,7 +20,7 @@
 	else
 		health = maxHealth - getBruteLoss() - getFireLoss()
 
-/mob/living/silicon/pai/proc/handle_regular_status_updates()
+/mob/living/silicon/pai/handle_regular_status_updates()
 
 	updatehealth()
 
@@ -33,8 +33,9 @@
 
 	if(health <= 0 && stat != 2) //die only once
 		death()
+		return 1
 
-	if (stat != 2) //Alive.
+	if (stat != DEAD) //Alive.
 		if (paralysis || stunned || knockdown) //Stunned etc.
 			stat = 1
 			if (stunned > 0)
@@ -52,34 +53,7 @@
 
 	else //Dead.
 		blinded = 1
-		stat = 2
+		stat = DEAD
+		return 1
 
-	if (stuttering)
-		stuttering--
-
-	if (eye_blind)
-		eye_blind--
-		blinded = 1
-
-	if (ear_deaf > 0)
-		ear_deaf--
-	if (say_mute > 0)
-		say_mute--
-	if (ear_damage < 25)
-		ear_damage -= 0.05
-		ear_damage = max(ear_damage, 0)
-
-	if (sdisabilities & BLIND)
-		blinded = 1
-	if (sdisabilities & DEAF)
-		ear_deaf = 1
-
-	if (eye_blurry > 0)
-		eye_blurry--
-		eye_blurry = max(0, eye_blurry)
-
-	if (druggy > 0)
-		druggy--
-		druggy = max(0, druggy)
-
-	return 1
+	return ..()

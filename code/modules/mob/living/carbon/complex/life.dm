@@ -33,9 +33,6 @@
 	//Check if we're on fire
 	handle_fire()
 
-	//Status updates, death etc.
-	handle_regular_status_updates()
-
 	update_canmove()
 
 	if(client)
@@ -266,7 +263,7 @@
 
 
 
-/mob/living/carbon/complex/proc/handle_regular_status_updates()
+/mob/living/carbon/complex/handle_regular_status_updates()
 	updatehealth()
 
 	if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP

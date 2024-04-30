@@ -26,8 +26,6 @@
 	if(environment)	// More error checking -- TLE
 		handle_environment(environment)
 
-	//Status updates, death etc.
-	handle_regular_status_updates()
 	update_canmove()
 
 	if(client)
@@ -125,13 +123,10 @@
 	return //TODO: DEFERRED
 
 
-/mob/living/carbon/brain/proc/handle_regular_status_updates()	//TODO: comment out the unused bits >_>
+/mob/living/carbon/brain/handle_regular_status_updates()
 	updatehealth()
 
-	if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
-		blinded = 1
-		silent = 0
-	else				//ALIVE. LIGHTS ARE ON
+	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
 		if( !container && (health < config.health_threshold_dead || ((world.time - timeofhostdeath) > config.revival_brain_life)) )
 			death()
 			blinded = 1
@@ -190,23 +185,7 @@
 					alert = 0
 					to_chat(src, "<span class='warning'>All systems restored.</span>")
 					emp_damage -= 1
-
-		//Other
-		if(stunned)
-			AdjustStunned(-1)
-
-		if(knockdown)
-			knockdown = max(knockdown-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
-
-		if(stuttering)
-			stuttering = max(stuttering-1, 0)
-
-		if(silent)
-			silent = max(silent-1, 0)
-
-		if(druggy)
-			druggy = max(druggy-1, 0)
-	return 1
+	return ..()
 
 
 /mob/living/carbon/brain/handle_regular_hud_updates()

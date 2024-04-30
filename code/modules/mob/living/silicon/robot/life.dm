@@ -74,7 +74,7 @@
 		stat = UNCONSCIOUS
 
 
-/mob/living/silicon/robot/proc/handle_regular_status_updates()
+/mob/living/silicon/robot/handle_regular_status_updates()
 	updatehealth()
 
 	if(sleeping)
@@ -95,30 +95,6 @@
 		blinded = TRUE
 		stat = DEAD
 
-	if(stunned > 0)
-		AdjustStunned(-1)
-	if(knockdown > 0)
-		AdjustKnockdown(-1)
-	if(paralysis > 0)
-		AdjustParalysis(-1)
-	if(stuttering)
-		stuttering = max(stuttering-1, 0)
-	if(eye_blind)
-		eye_blind = max(eye_blind-1,0)
-	if(ear_deaf)
-		ear_deaf = max(ear_deaf-1,0)
-	if(ear_damage < 25)
-		ear_damage = max(ear_damage-0.05, 0)
-	if((sdisabilities & DEAF))
-		ear_deaf = TRUE
-	if(say_mute)
-		say_mute = max(say_mute-1, 0)
-
-	if(eye_blurry)
-		eye_blurry = max(eye_blurry-1,0)
-	if(druggy)
-		druggy = max(druggy-1,0)
-
 	if(jitteriness)
 		jitteriness = max(jitteriness-1,0)
 	handle_jitteriness()
@@ -131,7 +107,7 @@
 	if(radio)
 		radio.on = is_component_functioning("radio")
 
-	return TRUE
+	return ..()
 
 /mob/living/silicon/robot/proc/handle_sensor_modes()
 	change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS|BLIND)

@@ -42,9 +42,6 @@
 	if(environment)
 		handle_environment(environment)
 
-	//Status updates, death etc.
-	handle_regular_status_updates()
-
 /mob/living/carbon/slime/proc/AIprocess()  // the master AI process
 
 //	to_chat(world, "AI proc started.")
@@ -238,7 +235,7 @@
 
 	return //TODO: DEFERRED
 
-/mob/living/carbon/slime/proc/handle_regular_status_updates()
+/mob/living/carbon/slime/handle_regular_status_updates()
 
 
 	if(slime_lifestage == SLIME_ADULT)

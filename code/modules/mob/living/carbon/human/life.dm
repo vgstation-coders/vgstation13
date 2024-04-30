@@ -181,7 +181,6 @@ var/global/list/organ_damage_overlays = list(
 		return //We go ahead and process them 5 times for HUD images and other stuff though.
 	handle_environment(environment)
 	handle_fire()
-	handle_regular_status_updates()	//Optimized a bit
 	update_canmove()
 	//Update our name based on whether our face is obscured/disfigured
 	handle_regular_hud_updates()
