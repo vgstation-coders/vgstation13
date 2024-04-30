@@ -331,7 +331,7 @@ var/global/list/damage_icon_parts = list()
 	if(M_FAT in mutations)
 		fat = "fat"
 	remove_overlay(MUTATIONS_LAYER)
-	var/mutable_appearance/mutations_overlay = mutable_appearance('icons/effects/genetics.dmi', layer = -MUTATIONS_LAYER)
+	var/list/mutations_overlays = list()
 	var/add_image = FALSE
 	// DNA2 - Drawing underlays.
 	var/g = gender == FEMALE ? "f" : "m"
@@ -341,22 +341,22 @@ var/global/list/damage_icon_parts = list()
 			continue
 		var/underlay=gene.OnDrawUnderlays(src,g,fat)
 		if(underlay)
-			mutations_overlay.underlays += mutable_appearance('icons/effects/genetics.dmi', underlay)
+			mutations_overlays += mutable_appearance('icons/effects/genetics.dmi', underlay, layer = -MUTATIONS_LAYER)
 			add_image = TRUE
 	for(var/mut in mutations)
 		switch(mut)
 			if(M_LASER)
-				mutations_overlay.overlays += mutable_appearance('icons/effects/genetics.dmi', "lasereyes_s")
+				mutations_overlays += mutable_appearance('icons/effects/genetics.dmi', "lasereyes_s", layer = -MUTATIONS_LAYER)
 				add_image = TRUE
 	if((M_RESIST_COLD in mutations) && (M_RESIST_HEAT in mutations))
 		if(!(species.name == "Vox") && !(species.name == "Skeletal Vox"))
-			mutations_overlay.underlays	-= mutable_appearance('icons/effects/genetics.dmi', "cold[fat]_s")
-			mutations_overlay.underlays	-= mutable_appearance('icons/effects/genetics.dmi', "fire[fat]_s")
-			mutations_overlay.underlays	+= mutable_appearance('icons/effects/genetics.dmi', "coldfire[fat]_s")
+			mutations_overlays	-= mutable_appearance('icons/effects/genetics.dmi', "cold[fat]_s", layer = -MUTATIONS_LAYER)
+			mutations_overlays	-= mutable_appearance('icons/effects/genetics.dmi', "fire[fat]_s", layer = -MUTATIONS_LAYER)
+			mutations_overlays	+= mutable_appearance('icons/effects/genetics.dmi', "coldfire[fat]_s", layer = -MUTATIONS_LAYER)
 		else if((species.name == "Vox") || (species.name == "Skeletal Vox"))
-			mutations_overlay.underlays -= mutable_appearance('icons/effects/genetics.dmi', "coldvox_s")
-			mutations_overlay.underlays	-= mutable_appearance('icons/effects/genetics.dmi', "firevox_s")
-			mutations_overlay.underlays	+= mutable_appearance('icons/effects/genetics.dmi', "coldfirevox_s")
+			mutations_overlays -= mutable_appearance('icons/effects/genetics.dmi', "coldvox_s", layer = -MUTATIONS_LAYER)
+			mutations_overlays	-= mutable_appearance('icons/effects/genetics.dmi', "firevox_s", layer = -MUTATIONS_LAYER)
+			mutations_overlays	+= mutable_appearance('icons/effects/genetics.dmi', "coldfirevox_s", layer = -MUTATIONS_LAYER)
 
 	//Cultist tattoos
 	if (iscultist(src))
@@ -365,11 +365,11 @@ var/global/list/damage_icon_parts = list()
 		for (var/T in C.tattoos)
 			var/datum/cult_tattoo/tattoo = C.tattoos[T]
 			if (tattoo && tattoo.Display())
-				var/mutable_appearance/cult_tattoo_overlay = mutable_appearance('icons/mob/cult_tattoos.dmi', tattoo.icon_state)
+				var/mutable_appearance/cult_tattoo_overlay = mutable_appearance('icons/mob/cult_tattoos.dmi', tattoo.icon_state, layer = -MUTATIONS_LAYER)
 				cult_tattoo_overlay.blend_mode = BLEND_MULTIPLY
-				mutations_overlay.overlays += cult_tattoo_overlay
+				mutations_overlays += cult_tattoo_overlay
 	if(add_image)
-		overlays += overlays_standing[MUTATIONS_LAYER] = mutations_overlay
+		overlays += overlays_standing[MUTATIONS_LAYER] = mutations_overlays
 	if(update_icons)
 		update_icons()
 
