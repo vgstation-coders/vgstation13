@@ -77,6 +77,7 @@
 /mob/living/silicon/robot/check_dead()
 	if(health <= 0 && !isDead()) //die only once
 		death()
+		return 1
 
 /mob/living/silicon/robot/handle_regular_status_updates()
 	. = ..()
