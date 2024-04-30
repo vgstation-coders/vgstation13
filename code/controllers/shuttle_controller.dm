@@ -115,7 +115,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 // sets the time left to a given delay (in seconds)
 /datum/emergency_shuttle/proc/settimeleft(var/delay)
 	if (extremely_hihg_speed)
-		endtime = world.time + 600
+		endtime = world.time + 60 SECONDS
 		timelimit = 60
 	else
 		endtime = world.time + delay * 10
