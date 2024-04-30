@@ -74,7 +74,7 @@
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
-			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal
+			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(loc)
 			M.amount = 2
 			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \
 			"<span class='warning'>You shape the [src] into metal with the welding tool.</span>", \

@@ -58,7 +58,6 @@
 		user.visible_message("<span class='notice'>[user] takes \the [lantern] off of the \the [src].</span>", \
 		"<span class='notice'>You take \the [lantern] off of the \the [src].</span>")
 		playsound(src, 'sound/machines/click.ogg', 20, 1)
-		lantern.forceMove(user.loc)
 		lantern.add_fingerprint(user)
 		user.put_in_hands(lantern)
 		lantern = null

@@ -406,7 +406,7 @@ Status: []<BR>"},
 					if(L.lying) // if the perp is lying down, it's still a target but a less-important target
 						secondarytargets += L
 						continue
-					else 
+					else
 						targets += L // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
 
 	if(check_anomalies || emagged)

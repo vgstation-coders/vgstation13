@@ -143,7 +143,6 @@
 	if(!flashbulb)
 		return
 	else
-		flashbulb.forceMove(get_turf(loc))
 		usr.put_in_hands(flashbulb)
 		to_chat(usr, "You remove the broken [flashbulb.name] from \the [src].")
 		flashbulb = null
@@ -194,15 +193,12 @@
 			return
 		to_chat(user, "You cut the wires out of the film chamber.")
 		W.playtoolsound(user, 50)
+		var/obj/item/device/camera/I = new decon_path(get_turf(loc), empty = TRUE)
+		handle_camera(I)
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/device/camera/I = new decon_path(get_turf(user), empty = TRUE)
-			handle_camera(I)
 			user.put_in_hands(I)
-		else
-			var/obj/item/device/camera/I = new decon_path(get_turf(loc), empty = TRUE)
-			handle_camera(I)
-		var/obj/item/stack/cable_coil/C = new (get_turf(user))
+		var/obj/item/stack/cable_coil/C = new (get_turf(loc))
 		C.amount = 5
 		qdel(src)
 

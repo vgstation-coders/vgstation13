@@ -325,7 +325,7 @@
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(user.client), 20)
 				qdel(O)
-				user.put_in_hands(new /obj/item/weapon/coin/iron)
+				user.put_in_hands(new /obj/item/weapon/coin/iron(loc))
 				last_trade = world.time
 			else
 				visible_message("<span class='notice'>[src] doesn't seem interested in \the [O] at the moment.</span>")

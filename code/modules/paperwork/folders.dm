@@ -121,7 +121,6 @@
 				admin_log.Add(message)
 				return
 			if(P)
-				P.forceMove(usr.loc)
 				usr.put_in_hands(P)
 
 		if(href_list["read"])

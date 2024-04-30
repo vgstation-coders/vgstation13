@@ -59,7 +59,9 @@ cons:
 		var/atom/atom = data[GFI_DX_ACTUAL_ATOM]
 		if (atom.blend_mode == BLEND_ADD)//additive overlays don't show up properly, especially if they're partly transparent
 			continue
-
+		var/blending = atom.blend_mode
+		if (blending == BLEND_MULTIPLY)
+			blending = BLEND_DEFAULT
 		if (ignore_spawn_items)
 			// looks like we're getting some reference pics for an ID picture, let's ignore the items held on spawn
 			var/list/icon_states_to_ignore = list(
@@ -124,9 +126,12 @@ cons:
 		// Blend the overlay into the flattened icon
 
 		if (center)
-			flat.Blend(add,blendMode2iconMode(atom.blend_mode),1+data[GFI_DX_PIXEL_X]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_X]-center.x+radius),1+data[GFI_DX_PIXEL_Y]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_Y]-center.y+radius))
+			flat.Blend(add,blendMode2iconMode(blending),1+data[GFI_DX_PIXEL_X]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_X]-center.x+radius),1+data[GFI_DX_PIXEL_Y]+PIXEL_MULTIPLIER*32*(data[GFI_DX_COORD_Y]-center.y+radius))
 		else // if there is no center that means we're probably dealing with a single atom, so we only care about the pixel offset
-			flat.Blend(add,blendMode2iconMode(atom.blend_mode),1+data[GFI_DX_PIXEL_X],1+data[GFI_DX_PIXEL_Y])
+			flat.Blend(add,blendMode2iconMode(blending),1+data[GFI_DX_PIXEL_X],1+data[GFI_DX_PIXEL_Y])
+
+	if (!large_canvas)
+		flat.Crop(1,1,32,32)
 
 	return flat
 
@@ -162,10 +167,7 @@ cons:
 		if (!istype(parent[GFI_DX_ATOM],/obj/effect/blob)) // blob connection overlays use custom dirs
 			data[GFI_DX_DIR] = parent[GFI_DX_DIR]
 		if (to_sort:plane == FLOAT_PLANE)
-			if (parent[GFI_DX_STATE] == "bald_s")//because hair and beard overlays are on an overlay already themselves. sigh.
-				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE]
-				data[GFI_DX_LAYER] = parent[GFI_DX_LAYER]
-			else if (is_underlay)
+			if (is_underlay)
 				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] - 0.1
 			else
 				data[GFI_DX_PLANE] = parent[GFI_DX_PLANE] + 0.1

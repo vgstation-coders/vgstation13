@@ -69,7 +69,7 @@
 	to_chat(user, "<span class='notice'>You remove [src] from [attached_to].</span>")
 	attached_to.overlays -= inv_overlay
 	attached_to = null
-	forceMove(get_turf(user || src))
+	forceMove(get_turf(src))
 	if(user)
 		user.put_in_hands(src)
 		add_fingerprint(user)

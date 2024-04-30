@@ -793,14 +793,14 @@
 			destroy(FALSE)
 		if(2.0)
 			if(prob(50))
-				destroy(TRUE)
-			else
 				destroy(FALSE)
+			else
+				destroy(TRUE)
 		if(3.0)
 			if(prob(25))
-				destroy(TRUE)
-			else
 				destroy(FALSE)
+			else
+				destroy(TRUE)
 
 /obj/structure/rack/proc/checkhealth()
 	if(health <= 0)

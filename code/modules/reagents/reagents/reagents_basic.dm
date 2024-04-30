@@ -297,7 +297,8 @@
 		else if(isslimeperson(H))
 
 			H.adjustToxLoss(rand(1,3))
-	M.clean_act(CLEANLINESS_WATER)
+	if(method == TOUCH)
+		M.clean_act(CLEANLINESS_WATER)
 
 /datum/reagent/water/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())

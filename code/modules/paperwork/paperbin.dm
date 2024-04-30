@@ -110,7 +110,6 @@
 					P.rigged = 1
 					P.updateinfolinks()
 		update_icon()
-		P.forceMove(user.loc)
 		user.put_in_hands(P)
 		to_chat(user, "<span class='notice'>You take [P] out of the [src].</span>")
 	else
