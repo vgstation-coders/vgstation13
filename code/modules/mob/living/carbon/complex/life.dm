@@ -264,8 +264,7 @@
 
 
 /mob/living/carbon/complex/handle_regular_status_updates()
-	updatehealth()
-
+	. = ..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
 		if((health < config.health_threshold_dead || !has_brain()) && !(status_flags & BUDDHAMODE))
 			death()
@@ -290,7 +289,6 @@
 		else if(resting)
 			if(halloss > 0)
 				adjustHalLoss(-3)
-	return ..()
 
 /mob/living/carbon/complex/proc/handle_chemicals_in_body()
 

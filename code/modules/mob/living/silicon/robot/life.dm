@@ -75,8 +75,7 @@
 
 
 /mob/living/silicon/robot/handle_regular_status_updates()
-	updatehealth()
-
+	. = ..()
 	if(sleeping)
 		Paralyse(3)
 		sleeping = max(sleeping-1, 0)
@@ -106,8 +105,6 @@
 		camera.status = !(isDead() || wires.IsCameraCut())
 	if(radio)
 		radio.on = is_component_functioning("radio")
-
-	return ..()
 
 /mob/living/silicon/robot/proc/handle_sensor_modes()
 	change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS|BLIND)

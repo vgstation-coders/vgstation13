@@ -225,8 +225,7 @@
 	return //TODO: DEFERRED
 
 /mob/living/carbon/alien/larva/handle_regular_status_updates()
-	updatehealth()
-
+	. = ..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
 		if((health < -25 || !has_brain()) && !(status_flags & BUDDHAMODE))
 			death()
@@ -260,8 +259,6 @@
 		/*	What in the living hell is this?*/
 		if(move_delay_add > 0)
 			move_delay_add = max(0, move_delay_add - rand(1, 2))
-	return ..()
-
 
 /mob/living/carbon/alien/larva/handle_regular_hud_updates()
 

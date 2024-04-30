@@ -1,13 +1,13 @@
 //Refer to life.dm for caller
 
 /mob/living/carbon/human/handle_regular_status_updates()
+	..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
 
 		//Sobering multiplier.
 		//Sober block grants quadruple the alcohol metabolism.
 		var/sober_str =! (M_SOBER in mutations) ? 1:4
 
-		updatehealth() //TODO
 		if(!in_stasis)
 			handle_organs()	//Optimized.
 			handle_blood()
@@ -49,5 +49,3 @@
 
 		handle_dizziness()
 		handle_jitteriness()
-
-	return ..()

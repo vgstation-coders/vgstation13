@@ -124,8 +124,7 @@
 
 
 /mob/living/carbon/brain/handle_regular_status_updates()
-	updatehealth()
-
+	. = ..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
 		if( !container && (health < config.health_threshold_dead || ((world.time - timeofhostdeath) > config.revival_brain_life)) )
 			death()
@@ -185,7 +184,6 @@
 					alert = 0
 					to_chat(src, "<span class='warning'>All systems restored.</span>")
 					emp_damage -= 1
-	return ..()
 
 
 /mob/living/carbon/brain/handle_regular_hud_updates()

@@ -295,8 +295,7 @@
 
 
 /mob/living/carbon/alien/humanoid/handle_regular_status_updates()
-	updatehealth()
-
+	. = ..()
 	if(stat != DEAD)				//ALIVE. LIGHTS ARE ON
 		if((health < config.health_threshold_dead || !has_brain()) && !(status_flags & BUDDHAMODE))
 			death()
@@ -328,7 +327,6 @@
 		//Other
 		if(!stunned)
 			update_icons()
-	return ..()
 
 
 /mob/living/carbon/alien/humanoid/handle_regular_hud_updates()

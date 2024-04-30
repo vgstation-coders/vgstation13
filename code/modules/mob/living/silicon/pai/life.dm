@@ -21,8 +21,7 @@
 		health = maxHealth - getBruteLoss() - getFireLoss()
 
 /mob/living/silicon/pai/handle_regular_status_updates()
-
-	updatehealth()
+	. = ..()
 
 	if(sleeping)
 		Paralyse(3)
@@ -55,5 +54,3 @@
 		blinded = 1
 		stat = DEAD
 		return 1
-
-	return ..()
