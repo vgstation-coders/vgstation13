@@ -1,7 +1,7 @@
 //Refer to life.dm for caller
 
 /mob/living/carbon/human/handle_regular_status_updates()
-	..()
+	. = ..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
 
 		//Sobering multiplier.
@@ -46,6 +46,3 @@
 		else if(istype(glasses, /obj/item/clothing/glasses/sunglasses/blindfold)) //Resting your eyes with a blindfold heals blurry eyes faster
 			eye_blurry = max(eye_blurry - 3, 0)
 			blinded =    1
-
-		handle_dizziness()
-		handle_jitteriness()

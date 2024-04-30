@@ -211,6 +211,8 @@
 			if(!druggy)
 				to_chat(src, "It looks like you are back in Kansas.")
 
+		handle_dizziness()
+		handle_jitteriness()
 		if(teleportitis)
 			teleportitis = max(teleportitis - 1, 0)
 			if(prob(10))
