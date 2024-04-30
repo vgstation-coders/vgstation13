@@ -71,14 +71,15 @@
 		held_container.reagents.heating(thermal_energy_transfer, max_temperature)
 
 /obj/machinery/chemtemper/attack_hand(mob/user)
-	if(held_container)
-		overlays -= onstage
-		to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
-		user.put_in_hands(held_container)
-		held_container = null
-		had_item = TRUE
-	toggle()
-	had_item = FALSE
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
+		if(held_container)
+			overlays -= onstage
+			to_chat(user, "<span class='notice'>You remove \the [held_container] from \the [src].</span>")
+			user.put_in_hands(held_container)
+			held_container = null
+			had_item = TRUE
+		toggle(user)
+		had_item = FALSE
 
 /obj/machinery/chemtemper/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/reagent_containers) && anchored)
@@ -100,8 +101,8 @@
 	return
 
 /obj/machinery/chemtemper/AltClick(mob/user)
-	if(!user.incapacitated() && Adjacent(user) && !(stat & (FORCEDISABLE|NOPOWER) && user.dexterity_check()))
-		toggle()
+	if(Adjacent(user))
+		toggle(user)
 		return
 	return ..()
 
@@ -110,36 +111,37 @@
 	set name = "Toggle active"
 	set category = "Object"
 
-/obj/machinery/chemtemper/toggle()
-	if(!held_container && working) //For when you take the beaker off but left the heater/cooler on
-		working = !working
-		if(OLholder)
-			overlays -= OLholder
-		if(ULholder)
-			underlays -= ULholder
-		processing_objects.Remove(src)
-		to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
-		return
-	else if(held_container)
-		working = !working
-		if(working)
-			if(OLholder)
-				overlays += OLholder
-			if(ULholder)
-				underlays += ULholder
-			processing_objects.Add(src)
-			to_chat(usr, "<span class='notice'>You turn on \the [src].</span>")
-		else
+/obj/machinery/chemtemper/toggle(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && !(stat & (FORCEDISABLE|NOPOWER)) && user.dexterity_check())
+		if(!held_container && working) //For when you take the beaker off but left the heater/cooler on
+			working = !working
 			if(OLholder)
 				overlays -= OLholder
 			if(ULholder)
 				underlays -= ULholder
 			processing_objects.Remove(src)
-			to_chat(usr, "<span class='notice'>You turn off \the [src].</span>")
-		return
-	else
-		if(!had_item)
-			to_chat(usr, "<span class='notice'>\The [src] doesn't have a container to work on right now.</span>")
+			to_chat(user, "<span class='notice'>You turn off \the [src].</span>")
+			return
+		else if(held_container)
+			working = !working
+			if(working)
+				if(OLholder)
+					overlays += OLholder
+				if(ULholder)
+					underlays += ULholder
+				processing_objects.Add(src)
+				to_chat(user, "<span class='notice'>You turn on \the [src].</span>")
+			else
+				if(OLholder)
+					overlays -= OLholder
+				if(ULholder)
+					underlays -= ULholder
+				processing_objects.Remove(src)
+				to_chat(user, "<span class='notice'>You turn off \the [src].</span>")
+			return
+		else
+			if(!had_item)
+				to_chat(user, "<span class='notice'>\The [src] doesn't have a container to work on right now.</span>")
 
 //Heater//
 
