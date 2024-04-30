@@ -393,12 +393,23 @@ var/list/all_doors = list()
 
 /obj/machinery/door/arcane_act(mob/user)
 	..()
-	if(!(flow_flags & ON_BORDER))
-		while(!arcane_linked_door || arcane_linked_door == src || arcane_linked_door.flow_flags & ON_BORDER || arcane_linked_door.z == map.zCentcomm) // no windoors or centcomm pls
+	if(!(flow_flags & ON_BORDER) && arcane_linkable())
+		while(!arcane_linked_door || arcane_linked_door == src || !arcane_linked_door.arcane_linkable())
 			arcane_linked_door = pick(all_doors)
 		arcane_linked_door.arcanetampered = arcanetampered
 		arcane_linked_door.arcane_linked_door = src
 		return "D'R ST'K!"
+
+/obj/machinery/door/proc/arcane_linkable()
+	// no windoors, blocked doors or centcomm pls
+	if(!(flow_flags & ON_BORDER) && z != map.zCentcomm)
+		var/turf/T = get_turf(src)
+		if(T && !is_blocked_turf(T, src))
+			for(var/dir in shuffle(cardinal))
+				var/turf/T2 = get_step(T,dir)
+				if(T2 && !is_blocked_turf(T2))
+					return T2
+	return 0
 
 /obj/machinery/door/bless()
 	..()
@@ -427,14 +438,11 @@ var/list/all_doors = list()
 		open()
 	if(arcanetampered && arcane_linked_door && !density && istype(AM,/atom/movable))
 		var/atom/movable/A = AM
-		var/turf/T = get_turf(arcane_linked_door)
-		if(T && T.Cross())
-			for(var/dir in cardinal)
-				var/turf/T2 = get_step(T,dir)
-				if(T2 && T2.Cross())
-					A.forceMove(T2)
-					if(A.dir != dir)
-						A.change_dir(dir)
+		var/turf/goodturf = arcane_linked_door.arcane_linkable()
+		if(goodturf)
+			A.forceMove(goodturf)
+			if(A.dir != get_dir(arcane_linked_door, goodturf))
+				A.dir = get_dir(arcane_linked_door, goodturf)
 
 /obj/machinery/door/CanAStarPass(var/obj/item/weapon/card/id/ID)
 	return !density || check_access(ID)
