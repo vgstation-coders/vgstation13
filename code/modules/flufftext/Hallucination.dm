@@ -18,6 +18,8 @@ Gunshots/explosions/opening doors/less rare audio (done)
 	var/obj/halitem
 	var/hal_screwyhud = 0 //1 - critical, 2 - dead, 3 - oxygen indicator, 4 - toxin indicator
 	var/handling_hal = 0
+
+/mob/living // for the sleep checks pls merge back if you know a better way kthx
 	var/hal_crit = 0
 
 /mob/living/carbon/proc/handle_hallucinations()
