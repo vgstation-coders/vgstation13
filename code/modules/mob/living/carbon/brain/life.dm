@@ -123,14 +123,16 @@
 	return //TODO: DEFERRED
 
 
+/mob/living/carbon/brain/check_dead()
+	if( !container && (health < config.health_threshold_dead || ((world.time - timeofhostdeath) > config.revival_brain_life)) )
+		death()
+		blinded = 1
+		silent = 0
+		return 1
+
 /mob/living/carbon/brain/handle_regular_status_updates()
 	. = ..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
-		if( !container && (health < config.health_threshold_dead || ((world.time - timeofhostdeath) > config.revival_brain_life)) )
-			death()
-			blinded = 1
-			silent = 0
-			return 1
 
 		//Handling EMP effect in the Life(), it's made VERY simply, and has some additional effects handled elsewhere
 		if(emp_damage)			//This is pretty much a damage type only used by MMIs, dished out by the emp_act

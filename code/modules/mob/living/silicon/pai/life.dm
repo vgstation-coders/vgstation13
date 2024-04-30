@@ -20,6 +20,11 @@
 	else
 		health = maxHealth - getBruteLoss() - getFireLoss()
 
+/mob/living/silicon/pai/check_dead()
+	if(health <= 0 && !isDead()) //die only once
+		death()
+		return 1
+	
 /mob/living/silicon/pai/handle_regular_status_updates()
 	. = ..()
 
@@ -29,10 +34,6 @@
 
 	if(resting)
 		Knockdown(5)
-
-	if(health <= 0 && stat != 2) //die only once
-		death()
-		return 1
 
 	if (stat != DEAD) //Alive.
 		if (paralysis || stunned || knockdown) //Stunned etc.

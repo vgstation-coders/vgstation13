@@ -224,6 +224,13 @@
 
 	return //TODO: DEFERRED
 
+/mob/living/carbon/alien/larva/check_dead()
+	if((health < -25 || !has_brain()) && !(status_flags & BUDDHAMODE))
+		death()
+		blinded = 1
+		silent = 0
+		return 1
+
 /mob/living/carbon/alien/larva/handle_regular_status_updates()
 	. = ..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON

@@ -263,16 +263,14 @@
 
 
 
+/mob/living/carbon/complex/check_dead()
+	. = ..()
+	if(.)
+		stat = DEAD
+
 /mob/living/carbon/complex/handle_regular_status_updates()
 	. = ..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
-		if((health < config.health_threshold_dead || !has_brain()) && !(status_flags & BUDDHAMODE))
-			death()
-			blinded = 1
-			stat = DEAD
-			silent = 0
-			return 1
-
 		//UNCONSCIOUS. NO-ONE IS HOME
 		if( (getOxyLoss() > 25) || (config.health_threshold_crit > health) )
 			if( health <= 20 && prob(1) )

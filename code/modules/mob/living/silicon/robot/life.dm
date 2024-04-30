@@ -74,6 +74,10 @@
 		stat = UNCONSCIOUS
 
 
+/mob/living/silicon/robot/check_dead()
+	if(health <= 0 && !isDead()) //die only once
+		death()
+
 /mob/living/silicon/robot/handle_regular_status_updates()
 	. = ..()
 	if(sleeping)
@@ -83,9 +87,6 @@
 	if(resting)
 		Knockdown(5)
 	setDensity(!(lying))
-
-	if(health <= 0 && !isDead()) //die only once
-		death()
 
 	if(!isDead()) //Alive.
 		blinded = !(paralysis || is_component_functioning("camera"))

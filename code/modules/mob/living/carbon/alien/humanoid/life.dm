@@ -293,16 +293,14 @@
 
 	return //TODO: DEFERRED
 
+/mob/living/carbon/alien/humanoid/check_dead()
+	. = ..()
+	if(.)
+		stat = DEAD
 
 /mob/living/carbon/alien/humanoid/handle_regular_status_updates()
 	. = ..()
 	if(stat != DEAD)				//ALIVE. LIGHTS ARE ON
-		if((health < config.health_threshold_dead || !has_brain()) && !(status_flags & BUDDHAMODE))
-			death()
-			blinded = 1
-			stat = DEAD
-			silent = 0
-			return 1
 
 		//UNCONSCIOUS. NO-ONE IS HOME
 		if((getOxyLoss() > 50 || config.health_threshold_crit > health) && !(status_flags & BUDDHAMODE))

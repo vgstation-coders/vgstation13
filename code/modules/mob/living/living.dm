@@ -90,7 +90,15 @@
 		IgniteMob() // ffffFIRE!!!! FIRE!!! FIRE!!
 	return 1
 
-/mob/living/handle_regular_status_updates() //Refer to life.dm for caller
+/mob/living/proc/check_dead()
+	if((health <= config.health_threshold_dead || !has_brain()) && !(status_flags & BUDDHAMODE))
+		death()
+		blinded = 1
+		silent = 0
+		return 1
+	return 0
+
+/mob/living/proc/handle_regular_status_updates() //Refer to life.dm for caller
 	if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
 		blinded = 1
 		silent = 0
@@ -102,10 +110,7 @@
 
 		updatehealth() //TODO
 
-		if((health <= config.health_threshold_dead || !has_brain()) && !(status_flags & BUDDHAMODE))
-			death()
-			blinded = 1
-			silent = 0
+		if(check_dead())
 			return 1
 
 		//The analgesic effect wears off slowly

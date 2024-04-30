@@ -1,4 +1,8 @@
 //Refer to life.dm for caller
+/mob/living/carbon/human/check_dead()
+	. = ..()
+	if(.)
+		emote("deathgasp", message = TRUE)
 
 /mob/living/carbon/human/handle_regular_status_updates()
 	. = ..()
@@ -11,13 +15,6 @@
 		if(!in_stasis)
 			handle_organs()	//Optimized.
 			handle_blood()
-
-		if((health <= config.health_threshold_dead || !has_brain()) && !(status_flags & BUDDHAMODE))
-			emote("deathgasp", message = TRUE)
-			death()
-			blinded = 1
-			silent = 0
-			return 1
 
 		//The analgesic effect wears off slowly
 		pain_numb = max(0, pain_numb - 1)
