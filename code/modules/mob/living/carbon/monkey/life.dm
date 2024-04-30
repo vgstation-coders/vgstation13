@@ -546,19 +546,19 @@
 	if(.)
 		stat = DEAD
 
+/mob/living/carbon/monkey/handle_crit_updates()
+	if((getOxyLoss() > 25 || config.health_threshold_crit > health) && !(status_flags & BUDDHAMODE))
+		if( health <= 20 && prob(1) )
+			spawn(0)
+				emote("gasp")
+		if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
+			adjustOxyLoss(1)
+
 /mob/living/carbon/monkey/handle_regular_status_updates()
 	. = ..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
 
-		//UNCONSCIOUS. NO-ONE IS HOME
-		if((getOxyLoss() > 25 || config.health_threshold_crit > health) && !(status_flags & BUDDHAMODE))
-			if( health <= 20 && prob(1) )
-				spawn(0)
-					emote("gasp")
-			if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
-				adjustOxyLoss(1)
-
-		else if(sleeping)
+		if(!paralysis && sleeping)
 			handle_dreams()
 			if( prob(10) && health && !hal_crit )
 				spawn(0)

@@ -231,22 +231,20 @@
 		silent = 0
 		return 1
 
+/mob/living/carbon/alien/larva/handle_crit_updates()
+	if( (getOxyLoss() > 25) || (0 > health) )
+		//if( health <= 20 && prob(1) )
+		//	spawn(0)
+		//		emote("gasp")
+		if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
+			adjustOxyLoss(1)
+
 /mob/living/carbon/alien/larva/handle_regular_status_updates()
 	. = ..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
 
-		//UNCONSCIOUS. NO-ONE IS HOME
-		if( (getOxyLoss() > 25) || (0 > health) )
-			//if( health <= 20 && prob(1) )
-			//	spawn(0)
-			//		emote("gasp")
-			if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
-				adjustOxyLoss(1)
-
 		if(paralysis)
-			AdjustParalysis(-2)
-			blinded = 1
-			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
+			AdjustParalysis(-1) // extra -1 for larvae for some reason
 		else if(sleeping)
 			sleeping = max(sleeping-1, 0)
 			blinded = 1
@@ -254,9 +252,6 @@
 			if( prob(10) && health )
 				spawn(0)
 					emote("hiss_")
-		//CONSCIOUS
-		else
-			stat = CONSCIOUS
 
 		/*	What in the living hell is this?*/
 		if(move_delay_add > 0)

@@ -268,16 +268,17 @@
 	if(.)
 		stat = DEAD
 
+/mob/living/carbon/complex/handle_crit_updates()
+	if( (getOxyLoss() > 25) || (config.health_threshold_crit > health) )
+		if( health <= 20 && prob(1) )
+			spawn(0)
+				emote("gasp")
+		if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
+			adjustOxyLoss(1)
+
 /mob/living/carbon/complex/handle_regular_status_updates()
 	. = ..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
-		//UNCONSCIOUS. NO-ONE IS HOME
-		if( (getOxyLoss() > 25) || (config.health_threshold_crit > health) )
-			if( health <= 20 && prob(1) )
-				spawn(0)
-					emote("gasp")
-			if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
-				adjustOxyLoss(1)
 
 		if(!paralysis && sleeping)
 			handle_dreams()

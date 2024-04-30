@@ -98,6 +98,11 @@
 		return 1
 	return 0
 
+/mob/living/proc/handle_crit_updates()
+	if((getOxyLoss() > 50 || config.health_threshold_crit > health) && !(status_flags & BUDDHAMODE))
+		Paralyse(3)
+		return 1
+
 /mob/living/proc/handle_regular_status_updates() //Refer to life.dm for caller
 	if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
 		blinded = 1
@@ -117,8 +122,7 @@
 		pain_numb = max(0, pain_numb - 1)
 
 		//UNCONSCIOUS. NO-ONE IS HOME
-		if((getOxyLoss() > 50 || config.health_threshold_crit > health) && !(status_flags & BUDDHAMODE))
-			Paralyse(3)
+		handle_crit_updates()
 
 		if(hallucination)
 			if(hallucination<=2)

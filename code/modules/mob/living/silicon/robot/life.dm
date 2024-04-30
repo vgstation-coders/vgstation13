@@ -79,6 +79,9 @@
 		death()
 		return 1
 
+/mob/living/silicon/handle_crit_updates()
+	return
+
 /mob/living/silicon/robot/handle_regular_status_updates()
 	. = ..()
 	if(sleeping)

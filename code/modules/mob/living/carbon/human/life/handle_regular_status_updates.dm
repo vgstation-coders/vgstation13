@@ -4,6 +4,13 @@
 	if(.)
 		emote("deathgasp", message = TRUE)
 
+/mob/living/carbon/human/handle_crit_updates()
+	//UNCONSCIOUS. NO-ONE IS HOME
+	if((getOxyLoss() > 50 || config.health_threshold_crit > health) && !(status_flags & BUDDHAMODE))
+		species.OnCrit(src)
+	else
+		species.OutOfCrit(src)
+
 /mob/living/carbon/human/handle_regular_status_updates()
 	. = ..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
@@ -18,12 +25,6 @@
 
 		//The analgesic effect wears off slowly
 		pain_numb = max(0, pain_numb - 1)
-
-		//UNCONSCIOUS. NO-ONE IS HOME
-		if((getOxyLoss() > 50 || config.health_threshold_crit > health) && !(status_flags & BUDDHAMODE))
-			species.OnCrit(src)
-		else
-			species.OutOfCrit(src)
 
 		if(hallucination)
 			if(hallucination >= 20 && !handling_hal)

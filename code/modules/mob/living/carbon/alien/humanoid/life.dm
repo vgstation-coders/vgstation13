@@ -298,25 +298,23 @@
 	if(.)
 		stat = DEAD
 
+/mob/living/carbon/alien/humanoid/handle_crit_updates()
+	. = ..()
+	if(.)
+		if( health <= 20 && prob(1) )
+			spawn(0)
+				emote("gasp")
+		if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
+			adjustOxyLoss(1)
+
 /mob/living/carbon/alien/humanoid/handle_regular_status_updates()
 	. = ..()
 	if(stat != DEAD)				//ALIVE. LIGHTS ARE ON
 
-		//UNCONSCIOUS. NO-ONE IS HOME
-		if((getOxyLoss() > 50 || config.health_threshold_crit > health) && !(status_flags & BUDDHAMODE))
-			if( health <= 20 && prob(1) )
-				spawn(0)
-					emote("gasp")
-			if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
-				adjustOxyLoss(1)
-
-		else if(sleeping)
+		if(!paralysis && sleeping)
 			if( prob(10) && health )
 				spawn(0)
 					emote("hiss")
-		//CONSCIOUS
-		else
-			stat = CONSCIOUS
 
 		/*	What in the living hell is this?*/
 		if(move_delay_add > 0)
