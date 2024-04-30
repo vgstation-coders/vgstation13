@@ -293,6 +293,13 @@
 /obj/docking_port/destination/vault/amelab
 	areaname = "Nanotrasen Experimental AME Lab"
 
+/area/vault/soulblade_sanctum
+	jammed = 2
+	color = "red"
+	ambient_sounds = list(
+		/datum/ambience/spaced2,
+		/datum/ambience/spaced3,
+		)
 
 /area/vault/meteorlogical
 	name = "\improper Meteorlogical Station"
@@ -1020,7 +1027,7 @@
 /obj/item/device/pda/clown/broken/attack_self(mob/user)
 	INVOKE_EVENT(src, /event/item_attack_self, "user" = user) // Minimalist version of original function
 
-/obj/structure/falserwall/doorobscurer
+/obj/structure/falsewall/rwall/doorobscurer
 	layer = ABOVE_DOOR_LAYER
 
 /mob/living/simple_animal/hostile/retaliate/cookbot

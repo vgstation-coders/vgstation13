@@ -825,3 +825,10 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
 	desc = "It survived an explosive implant, it'll survive you."
 	flags = FPRINT
 	icon_state = "syndiefootballhelmet"
+
+/obj/item/clothing/head/trucker
+	name = "cable appreciation hat"
+	desc = "Trucker hat with \"I FUCKING LOVE CABLES\" written on the front in a large and obnoxious font."
+	flags = FPRINT
+	icon_state = "trucker"
+	item_state = "trucker"

@@ -103,7 +103,7 @@ var/list/special_fruits = list()
 	if(seed.teleporting)
 		splat_reagent_reaction(get_turf(hit_atom),user)
 		if(do_fruit_teleport(hit_atom, usr, potency))
-			visible_message("<span class='danger'>The [src] splatters, causing a distortion in space-time!</span>")
+			visible_message("<span class='danger'>\The [src] splatters, causing a distortion in space-time!</span>")
 		else if(splat_decal(get_turf(hit_atom)))
 			visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
@@ -206,7 +206,7 @@ var/list/special_fruits = list()
 		if(filling_color != "#FFFFFF")
 			S.color = filling_color
 		else
-			S.color = AverageColor(getFlatIcon(src, src.dir, 0), 1, 1)
+			S.color = AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(src)), override_dir = dir), 1, 1)
 		S.name = "[seed.seed_name] smudge"
 	if(seed.biolum && seed.biolum_colour)
 		S.set_light(1, l_color = seed.biolum_colour)
@@ -348,6 +348,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#E6E6FA"
 	plantname = "moonflowers"
 	fragrance = INCENSE_MOONFLOWERS
+	slot_flags = SLOT_HEAD
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato
 	name = "potato"

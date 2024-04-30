@@ -347,7 +347,7 @@
 /turf/simulated/floor/wood,
 /area/vault/meteorlogical)
 "bc" = (
-/obj/structure/falserwall,
+/obj/structure/falsewall/rwall,
 /turf/simulated/floor/plating,
 /area/vault/meteorlogical)
 "bd" = (

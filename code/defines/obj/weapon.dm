@@ -1,8 +1,13 @@
+var/list/redphones = list()
+var/list/available_redphone_names1 = list("alpha","bravo","charlie","delta","echo","foxtrot","golf","hotel","india")
+var/list/available_redphone_names2 = list("anton","boris","vasilij","grigorij","dimitrij","elena","zhenja","ivan","nikolaj")
+var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
+
 /obj/item/weapon/phone
 	name = "red phone"
 	desc = "Should anything ever go wrong..."
 	icon = 'icons/obj/items.dmi'
-	icon_state = "red_phone"
+	icon_state = "red_phone_base"
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 3.0
@@ -12,6 +17,62 @@
 	w_class = W_CLASS_SMALL
 	attack_verb = list("calls", "rings", "dials")
 	hitsound = 'sound/weapons/ring.ogg'
+	var/obj/landline/landline
+	
+/obj/item/weapon/phone/New()
+	..()
+	landline = new /obj/landline/red (src,src)
+	redphones += src
+	
+	var/a = pick_n_take(available_redphone_names1)
+	var/b = pick_n_take(available_redphone_names2)
+	var/c = pick_n_take(available_redphone_names3)
+	if(a && b && c)
+		name += " [a]-[b]-[c]" //9 possible "normal" names, enough for the roundstart redphones
+	else
+		name += " " + Gibberish("ERROR ERROR",50) //someone's gonna spawn 50 of them eventually, doesn't really matter if their names are the same at that point
+	
+/obj/item/weapon/phone/Destroy()
+	redphones -= src
+	..()
+	
+/obj/item/weapon/phone/verb/pick_up_phone()
+	set category = "Object"
+	set name = "Pick up telephone"
+	set src in oview(1)
+	if(!landline)
+		to_chat(usr, "<span class='notice'>\the [src] model does not come with a telephone!</span>")
+		return
+	landline.pick_up_phone(usr)
+	
+/obj/item/weapon/phone/verb/dial()
+	set category = "Object"
+	set name = "Dial"
+	set src in oview(1)
+	if(!iscarbon(usr))
+		to_chat(usr, "<span class='notice'>You are not capable of such fine manipulation.</span>")
+		return
+	if(usr.dexterity_check())
+		var/obj/item/weapon/phone/P = input("Where would you like to call?", "destination picker") as null|anything in redphones
+		if(P)
+			landline.start_call(P.landline)
+	else
+		usr.visible_message("<span class='notice'>too clumsy to operate \the [src], [usr] bangs on it instead!</span>")
+		if(prob(50))
+			return
+		var/obj/item/weapon/phone/P = pick(redphones)
+		if(P)
+			landline.start_call(P.landline)
+	
+/obj/item/weapon/phone/MouseDropFrom(atom/over_object)
+	MouseDropPickUp(over_object)
+	return ..()
+
+/obj/item/weapon/phone/attack_hand(mob/user as mob)
+	pick_up_phone(user)
+	
+/obj/item/weapon/phone/attackby(var/obj/item/weapon/phone/P as obj, var/mob/user as mob)
+	landline.attackby(P, user)
 
 /obj/item/weapon/phone/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] wraps the cord of the [src.name] around \his neck! It looks like \he's trying to commit suicide.</span>")
@@ -98,6 +159,7 @@
 /obj/item/weapon/disk/jobdisk
 	name = "Alternate Jobs Database"
 	desc = "A disk which scrambles the jobs database when installed in the Labor Management Console."
+	icon_state = "synddisk"
 
 //TODO: Figure out wtf this is and possibly remove it -Nodrak
 /obj/item/weapon/dummy

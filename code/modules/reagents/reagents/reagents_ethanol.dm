@@ -383,10 +383,10 @@
 				if(istype(M.current.loc,/obj/mecha))
 					imageloc = M.current.loc
 					imagelocB = M.current.loc
-				var/image/I = new/image/hud('icons/mob/HUD.dmi', loc = imageloc, icon_state = "metaclub")
+				var/image/I = image('icons/mob/HUD.dmi', loc = imageloc, icon_state = "metaclub")
 				I.plane = ANTAG_HUD_PLANE
 				M.current.client.images += I
-				var/image/J = new/image/hud('icons/mob/HUD.dmi', loc = imagelocB, icon_state = "metaclub")
+				var/image/J = image('icons/mob/HUD.dmi', loc = imagelocB, icon_state = "metaclub")
 				J.plane = ANTAG_HUD_PLANE
 				new_buddy.current.client.images += J
 
@@ -624,17 +624,20 @@
 		return 1
 
 	switch(tick)
-		if(0 to 65)
+		if(0 to 33)
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
-		if(65 to 130)
+		if(34 to 66)
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
-		if(130 to 250)
+		if(67)
+			M.visible_message("<span class='warning'>[M] starts to emit a gravitational field!</span>","<span class='warning'>You feel your organs rearrange as you start pulling stuff towards you!</span>")
+			M.adjustBruteLoss(1)
+		if(68 to 99)
 			if(prob(5))
 				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
 			M.adjustBruteLoss(1)
-		if(250 to INFINITY)
+		if(100 to INFINITY)
 			M.visible_message("<span class='alert'>[M]'s entire mass collapses inwards, leaving a singularity behind!</span>","<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
 			var/turf/T = get_turf(M)
 			//Can only make a singulo if active mind, otherwise a singulo toy
@@ -645,10 +648,10 @@
 				new /obj/item/toy/spinningtoy(T)
 				M.gib()
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange((tick+30)/50, M))
+	for(var/atom/X in orange((tick+30)/20, M))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
-		X.singularity_pull(M, tick/50, tick/50)
+		X.singularity_pull(M, tick/20, tick/20)
 
 /datum/reagent/drink/tea/gravsingularitea
 	name = "Gravitational Singularitea"
@@ -664,17 +667,20 @@
 		return 1
 
 	switch(tick)
-		if(0 to 65)
+		if(0 to 33)
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
-		if(65 to 130)
+		if(34 to 66)
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
-		if(130 to 250)
+		if(67)
+			M.visible_message("<span class='warning'>[M] starts to emit a gravitational field!</span>","<span class='warning'>You feel your organs rearrange as you start pulling stuff towards you!</span>")
+			M.adjustBruteLoss(1)
+		if(68 to 99)
 			if(prob(5))
 				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
 			M.adjustBruteLoss(1)
-		if(250 to INFINITY)
+		if(100 to INFINITY)
 			M.visible_message("<span class='alert'>[M]'s entire mass collapses inwards, leaving a singularity behind!</span>","<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
 			var/turf/T = get_turf(M)
 			//Can only make a singulo if active mind, otherwise a singulo toy
@@ -685,10 +691,10 @@
 				new /obj/item/toy/spinningtoy(T)
 				M.gib()
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange((tick+30)/50, M))
+	for(var/atom/X in orange((tick+30)/20, M))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
-		X.singularity_pull(M, tick/50, tick/50)
+		X.singularity_pull(M, tick/20, tick/20)
 
 /datum/reagent/ethanol/drink
 	id = EXPLICITLY_INVALID_REAGENT_ID

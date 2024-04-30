@@ -292,7 +292,7 @@
 			var/is_safe = gas.is_human_safe(environment[g], environment)
 			to_chat(src, "<span class='[is_safe ? "notice" : "warning"]'>[XGM.name[g]]: [round(environment[g] / total_moles * 100)]% ([round(environment.molar_density(g) * CELL_VOLUME, 0.01)] moles)</span>")
 
-		to_chat(src, "<span class='notice'>Temperature: [round(environment.temperature - T0C, 0.01)]&deg;C</span>")
+		to_chat(src, "<span class='notice'>Temperature: [environment.temperature_celsius_pretty()]&deg;C</span>")
 		to_chat(src, "<span class='notice'>Heat Capacity: [round(environment.heat_capacity() / tiles, 0.01)]</span>")
 
 /mob/dead/observer/verb/view_manfiest()
@@ -322,10 +322,7 @@
 	if(C && C.members.len > config.cult_ghostwriter_req_cultists)
 		ghosts_can_write = TRUE
 
-	//TODO (UPHEAVAL PART 2): Allow ghosts_can_write during Eclipse
-	//if (veil_thickness >= CULT_ACT_III)
-	//	ghosts_can_write = TRUE
-	if (invisibility == 0)
+	if (invisibility == 0)//All ghosts become visible during the Eclipse ritual
 		ghosts_can_write = TRUE
 
 	if(!ghosts_can_write)

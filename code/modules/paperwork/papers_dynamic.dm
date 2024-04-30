@@ -184,3 +184,26 @@
 /obj/item/weapon/paper/inventory/armory
 	name = "\improper Armory Inventory Manifest"
 	areastocheck = list(/area/security/armory,/area/security/warden)
+
+/obj/item/weapon/paper/audit/New(loc, user, account, wage, newwage)
+	name = "Wage Audit - [account]"
+	display_x = 500
+	display_y = 600
+	info = {"<html><style>
+			body {color: #000000; background: #ccffff;}
+			h1 {color: #000000; font-size:30px;}
+			fieldset {width:140px;}
+			</style>
+			<body>
+			<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center>
+			An unusual wage increase has been authorized at the accounts database on your station. Although command staff have broad latitude to set wages within reason, there are documented cases of abuse, off-books dealing, cryptographic sequencing, and even simple security errors such as leaving a computer logged in without supervision. For this reason, Internal Affairs is requested to audit the following recent wage modification.<BR>
+			Account name: [account]<BR>
+			Old wage: [wage]<BR>
+			New wage: [newwage]<BR>
+			Name on authorizing ID: [user]<BR>
+			Time of operation: [worldtime2text()]<BR><BR>
+			We wish you the best of luck in your investigation. This paper should be taken as official authorization to inspect the Accounts Database.<BR>
+			<I>Central Command Audits Department</I>
+			</body></html>"}
+	CentcommStamp(src)
+	..()

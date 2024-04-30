@@ -282,7 +282,8 @@
 	desc = "Massive welding fuel tank used to refill other welding fuel tanks."
 
 /obj/structure/reagent_dispensers/fueltank/bulk/New()
-	. = ..()
+	..()
+	create_reagents(1000000)
 	reagents.add_reagent(FUEL, 1000000)
 	transform *= 2 //haha big tank
 

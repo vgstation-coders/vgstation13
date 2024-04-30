@@ -636,7 +636,6 @@
 			grue_stat_updates(TRUE)
 		else
 			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
-		E.death(1)
 		E.drop_all()
 		E.gib()
 	busy=FALSE
@@ -649,8 +648,6 @@
 	//melee damage, 50 damage limit
 	melee_damage_lower = min(50, base_melee_dam_lw + (5 * eatencount))
 	melee_damage_upper = min(50, base_melee_dam_up + (5 * eatencount))
-	//How much armor they ignore on hit, +10% armor penetration for every target consumed up to 50% of armor ignored, meaning 80% damage reduction becomes 40%.
-	armor_modifier = max(0.5, 1 - (0.1 * eatencount))
 
 	//speed bonus in dark and dim conditions
 	lightparams.speed_m_dark_dim_light[1]=max(1/2,lightparams.base_speed_m_dark_dim_light[1]/(1.2 ** eatencount))//faster in darkness

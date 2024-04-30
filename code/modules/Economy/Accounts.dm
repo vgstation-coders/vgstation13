@@ -346,6 +346,16 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 					access_level = 2
 				else if((access_hop in idcard.access) || (access_captain in idcard.access))
 					access_level = 1
+	if(issolder(O) && emagged)
+		var/obj/item/tool/solder/S = O
+		if(!S.remove_fuel(4,user))
+			return
+		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+		if(do_after(user, src,4 SECONDS * S.work_speed))
+			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+			emagged = FALSE
+			access_level = 0
+			to_chat(user, "<span class='notice'>You repair the security checks on \the [src].</span>")
 
 /obj/machinery/account_database/emag_act(mob/user)
 	if(emagged)
@@ -434,10 +444,36 @@ var/station_bonus = 0 //A bonus to station allowance that gets reset after wage 
 				if(acc)
 					var/new_payout = input(usr, "Select a new payout for this account", "New payout", acc.wage_gain) as null|num
 					if(new_payout >= 0 && new_payout != null)
+						if(new_payout > ARBITRARILY_LARGE_NUMBER)
+							//10x what the entire station should be earning
+							spark(loc, 3, FALSE)
+							visible_message("<span class='warning'>\The [src] shoots out sparks!</span>")
+							return
+						if(!isAdminGhost(usr))
+							//Admin ghosts never trigger audit
+							var/suspicious_user = held_card ? held_card.registered_name : "ERR;\\ invalid objectName 'ZZTPW00"
+							if(requested_payroll_amount && new_payout > requested_payroll_amount)
+								//Requesting more than the entire station earned last cycle
+								//Doesn't play if this is the first cycle
+								var/datum/command_alert/suspicious_wages/SW = new()
+								SW.announce(suspicious_user,acc.owner_name)
+								qdel(SW)
+							if(acc.wage_gain && new_payout > acc.wage_gain*2)
+								//Send an audit request to IAA if more than double old age
+								//Doesn't send if account had no wage before
+								var/obj/item/weapon/paper/audit/P
+								for(var/obj/machinery/faxmachine/F in allfaxes)
+									if(F.department == "Internal Affairs" && !F.stat)
+										flick("faxreceive", F)
+										playsound(F.loc, "sound/effects/fax.ogg", 50, 1)
+										P = new (F,suspicious_user,acc.owner_name,acc.wage_gain,new_payout)
+										spawn(2 SECONDS)
+											P.forceMove(F.loc)
+
 						acc.wage_gain = round(new_payout)
 					detailed_account_view = acc
 
-	src.attack_hand(usr)
+	attack_hand(usr)
 
 /obj/machinery/account_database/proc/charge_to_account(var/attempt_account_number, var/source_name, var/purpose, var/terminal_id, var/amount, var/target_name)
 	if(!activated || !attempt_account_number)

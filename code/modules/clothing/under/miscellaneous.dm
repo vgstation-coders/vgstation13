@@ -913,7 +913,7 @@
 	_color = "skelesuit"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
-	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR|HIDETAIL
 
 /obj/item/clothing/under/clownpsyche
 	name = "Psychedelic clown outfit"
@@ -1092,10 +1092,3 @@
 	dyeable_parts = list("drape","trim")
 	clothing_flags = COLORS_OVERLAY
 	color = COLOR_LINEN
-
-/obj/item/clothing/under/wftr
-	name ="welding fuel tank refiller shirt"
-	desc = "A shirt worn by those with a passion for refilling welding fuel tanks."
-	icon_state = "wftr"
-	item_state = "wftr"
-	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)

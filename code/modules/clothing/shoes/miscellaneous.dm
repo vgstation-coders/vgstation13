@@ -631,4 +631,5 @@
 	desc = "SCUBA floppers for swimming quickly... in space?"
 	icon_state = "scubafloppers"
 	item_state = "scubafloppers"
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, UNDEAD_SHAPED, MUSHROOM_SHAPED, INSECT_SHAPED)

@@ -235,9 +235,10 @@ var/MAX_EXPLOSION_RANGE = 32
 #define PASSBLOB	16
 #define PASSMACHINE	32 //computers, vending machines, rnd machines
 #define PASSDOOR	64 //not just airlocks, but also firelocks, windoors etc
-#define PASSGIRDER	128 //not just airlocks, but also firelocks, windoors etc
+#define PASSGIRDER	128
+#define PASSRAILING 256
 
-#define PASSALL 191 //really ugly, shouldn't this be PASSTABLE|PASSGLASS|PASSGRILLE etc?
+#define PASSALL	PASSTABLE|PASSGLASS|PASSGRILLE|PASSMOB|PASSBLOB|PASSMACHINE|PASSGIRDER|PASSRAILING
 
 
 /*
@@ -326,6 +327,7 @@ var/MAX_EXPLOSION_RANGE = 32
 #define ARM_RIGHT		256
 #define HAND_LEFT		512
 #define HAND_RIGHT		1024
+#define TAIL			524288
 
 
 // bitflags for clothing parts
@@ -352,6 +354,7 @@ var/MAX_EXPLOSION_RANGE = 32
 #define HIDEEARS			EARS
 #define HIDEEYES			EYES
 #define HIDEFACE			FACE
+#define HIDETAIL			TAIL
 #define HIDEHEADHAIR 		65536
 #define MASKHEADHAIR		131072
 #define HIDEBEARDHAIR		BEARD
@@ -555,13 +558,6 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define MAX_STACK_AMOUNT_METAL	50
 #define MAX_STACK_AMOUNT_GLASS	50
 #define MAX_STACK_AMOUNT_RODS	60
-
-#define GAS_O2 	(1 << 0)
-#define GAS_N2	(1 << 1)
-#define GAS_PL	(1 << 2)
-#define GAS_CO2	(1 << 3)
-#define GAS_N2O	(1 << 4)
-
 
 #define INV_SLOT_SIGHT "sight_slot"
 #define INV_SLOT_TOOL "tool_slot"
@@ -1006,6 +1002,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define ACID4WATER 4096 //Acid now acts like water, and vice versa.
 #define NO_BALD 8192 //cannot lose hair through being shaved/radiation/etc
 #define RGBSKINTONE 16384
+#define HAS_ICON_SKIN_TONE 32768
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1115,6 +1112,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define RECYK_PLASTIC    7
 #define RECYK_FABRIC     8
 #define RECYK_WAX	     9
+#define RECYK_CARDBOARD	 10
 
 ////////////////
 // job.info_flags
@@ -1199,6 +1197,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define MECH_SCAN_FAIL		1 // Cannot be scanned at all.
 #define MECH_SCAN_ILLEGAL	2 // Can only be scanned by the antag scanner.
 #define MECH_SCAN_ACCESS	4 // Can only be scanned with the access required for the machine
+#define MECH_SCAN_GOONECODE 8 // Cannot be scanned and gives a "this is closed source!" message on scan attempt.
 
 
 // EMOTES!
@@ -1250,31 +1249,33 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define STAGE_SSGSS	13
 
 //Human Overlays Indexes/////////THIS DEFINES WHAT LAYERS APPEARS ON TOP OF OTHERS
-#define FIRE_LAYER				1		//If you're on fire (/tg/ shit)
-#define MUTANTRACE_LAYER		2		//TODO: make part of body?
-#define MUTATIONS_LAYER			3
-#define DAMAGE_LAYER			4
-#define UNIFORM_LAYER			5
-#define SHOES_LAYER				6
-#define GLOVES_LAYER			7
-#define EARS_LAYER				8
-#define SUIT_LAYER				9
-#define GLASSES_LAYER			10
-#define BELT_LAYER				11		//Possible make this an overlay of somethign required to wear a belt?
-#define SUIT_STORE_LAYER		12
-#define HAIR_LAYER				13		//TODO: make part of head layer?
-#define GLASSES_OVER_HAIR_LAYER	14
-#define FACEMASK_LAYER			15
-#define HEAD_LAYER				16
-#define BACK_LAYER				17		//Back should be above head so that headgear doesn't hides backpack when facing north
-#define ID_LAYER				18		//IDs should be visible above suits and backpacks
-#define HANDCUFF_LAYER			19
-#define MUTUALCUFF_LAYER		20
-#define LEGCUFF_LAYER			21
-#define HAND_LAYER				22
-#define TAIL_LAYER				23		//bs12 specific. this hack is probably gonna come back to haunt me
-#define TARGETED_LAYER			24		//BS12: Layer for the target overlay from weapon targeting system
-#define TOTAL_LAYERS			24
+#define FIRE_LAYER				26		//If you're on fire (/tg/ shit)
+#define MUTANTRACE_LAYER		25		//TODO: make part of body?
+#define TAIL_UNDERLIMBS_LAYER	24
+#define LIMBS_LAYER				23
+#define MUTATIONS_LAYER			22
+#define DAMAGE_LAYER			21
+#define UNIFORM_LAYER			20
+#define SHOES_LAYER				19
+#define GLOVES_LAYER			18
+#define EARS_LAYER				17
+#define SUIT_LAYER				16
+#define GLASSES_LAYER			15
+#define BELT_LAYER				14		//Possible make this an overlay of somethign required to wear a belt?
+#define SUIT_STORE_LAYER		13
+#define HAIR_LAYER				12		//TODO: make part of head layer?
+#define GLASSES_OVER_HAIR_LAYER	11
+#define TAIL_LAYER				10
+#define FACEMASK_LAYER			9
+#define HEAD_LAYER				8
+#define BACK_LAYER				7		//Back should be above head so that headgear doesn't hides backpack when facing north
+#define ID_LAYER				6		//IDs should be visible above suits and backpacks
+#define HANDCUFF_LAYER			5
+#define MUTUALCUFF_LAYER		4
+#define LEGCUFF_LAYER			3
+#define HAND_LAYER				2
+#define TARGETED_LAYER			1		//BS12: Layer for the target overlay from weapon targeting system
+#define TOTAL_LAYERS			26
 //////////////////////////////////
 
 //Snake stuff so leaderboard can see it too
@@ -1382,6 +1383,7 @@ var/proccalls = 1
 #define CHANNEL_ADMINMUSIC			1024
 #define CHANNEL_STARMAN				1025
 #define CHANNEL_CRITSOUNDS			1026
+#define CHANNEL_TELEPHONES			1027
 
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0
@@ -1633,9 +1635,8 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_DISK				"diskspawn"
 #define HOLOMAP_MARKER_SKIPJACK			"skipjack"
 #define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
+#define HOLOMAP_MARKER_TEARREALITY		"tearreality"
 #define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
-#define HOLOMAP_MARKER_BLOODSTONE_BROKEN	"bloodstone-broken"
-#define HOLOMAP_MARKER_BLOODSTONE_ANCHOR	"bloodstone-narsie"
 #define HOLOMAP_MARKER_CULT_ALTAR		"altar"
 #define HOLOMAP_MARKER_CULT_FORGE		"forge"
 #define HOLOMAP_MARKER_CULT_SPIRE		"spire"
@@ -1842,7 +1843,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 
 // /datum/reagent/var/sport
 #define SPORTINESS_NONE 1
-#define SPORTINESS_SUGAR 1.2
+#define SPORTINESS_SUGAR 1.5
 #define SPORTINESS_SPORTS_DRINK 5
 
 //Luck-related defines
@@ -1901,3 +1902,43 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define CANDLES_NONE 0
 #define CANDLES_UNLIT 1
 #define CANDLES_LIT 2
+
+#define MINDUI_FLAG_PROCESSING	1
+#define MINDUI_FLAG_TOOLTIP		2
+
+#define MINDUI_MAX_CULT_SLOTS	14
+
+#define ECLIPSE_NOT_YET	0
+#define ECLIPSE_ONGOING	1
+#define ECLIPSE_OVER	2
+
+#define HEX_MODE_ROAMING 0
+#define HEX_MODE_GUARD	 1
+#define HEX_MODE_ESCORT	 2
+
+//Particles system defines
+#define PS_STEAM			"Steam"
+#define PS_TEAR_REALITY		"Tear Reality"
+#define PS_CANDLE			"Candle"
+#define PS_CANDLE2			"Candle2"
+#define PS_CULT_GAUGE		"Cult Gauge"
+#define PS_CULT_SMOKE		"Cult Smoke"
+#define PS_CULT_SMOKE2		"Cult Smoke2"
+#define PS_CULT_SMOKE_BOX	"Cult Smoke Box"
+#define PS_CULT_HALO		"Cult Halo"
+#define PS_SPACE_RUNES		"Space Runes"
+#define PS_NARSIEHASRISEN1	"Nar-SieHasRisen1"
+#define PS_NARSIEHASRISEN2	"Nar-SieHasRisen2"
+#define PS_NARSIEHASRISEN3	"Nar-SieHasRisen3"
+
+//Particles variable defines
+#define PVAR_SPAWNING	"spawning"
+#define PVAR_POSITION	"position"
+#define PVAR_VELOCITY	"velocity"
+#define PVAR_ICON_STATE	"icon_state"
+#define PVAR_COLOR		"color"
+#define PVAR_SCALE		"scale"
+#define PVAR_PLANE		"plane"
+#define PVAR_LAYER		"layer"
+#define PVAR_PIXEL_X	"pixel_x"
+#define PVAR_PIXEL_Y	"pixel_y"

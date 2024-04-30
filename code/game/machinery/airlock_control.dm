@@ -37,7 +37,7 @@
 			update_icon()
 
 		if("lock")
-			locked = 1
+			locked = boltsDestroyed ? 0 : 1
 			playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 			update_icon()
 
@@ -55,7 +55,7 @@
 					sleep(2)
 				open(1)
 
-				locked = 1
+				locked =  boltsDestroyed ? 0 : 1
 				playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 				update_icon()
 			else
@@ -64,7 +64,7 @@
 					playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 				close(1)
 
-				locked = 1
+				locked =  boltsDestroyed ? 0 : 1
 				playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 				sleep(2)
 				update_icon()
@@ -77,7 +77,7 @@
 				sleep(2)
 			open(1)
 
-			locked = 1
+			locked =  boltsDestroyed ? 0 : 1
 			playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 			update_icon()
 
@@ -87,7 +87,7 @@
 				playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 			close(1)
 
-			locked = 1
+			locked =  boltsDestroyed ? 0 : 1
 			playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 			sleep(2)
 			update_icon()

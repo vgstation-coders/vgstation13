@@ -9,6 +9,7 @@
 	flags = FPRINT
 	slot_flags = 0
 	w_class = W_CLASS_SMALL
+	quick_equip_priority = list(slot_w_uniform)
 	var/accessory_exclusion = DECORATION
 	var/obj/item/clothing/attached_to = null
 	var/image/inv_overlay
@@ -49,9 +50,9 @@
 
 	if(attached_to)
 		attached_to.overlays += inv_overlay
-		if(ishuman(attached_to.loc))
-			var/mob/living/carbon/human/H = attached_to.loc
-			H.update_inv_by_slot(attached_to.slot_flags)
+		if(iscarbon(attached_to.loc))
+			var/mob/living/carbon/carbon_attached_to = attached_to.loc
+			carbon_attached_to.update_inv_by_slot(attached_to.slot_flags)
 
 /obj/item/clothing/accessory/proc/can_attach_to(obj/item/clothing/C)
 	return istype(C, /obj/item/clothing/under) //By default, accessories can only be attached to jumpsuits
@@ -91,13 +92,12 @@
 /obj/item/proc/generate_accessory_overlays()
 	return
 
-/obj/item/clothing/generate_accessory_overlays(var/obj/abstract/Overlays/O)
+/obj/item/clothing/generate_accessory_overlays(mutable_appearance/accessory_overlay_final)
 	if(accessories.len)
 		for(var/obj/item/clothing/accessory/accessory in accessories)
-			var/image/I = image('icons/mob/clothing_accessories.dmi',null,"[accessory._color || accessory.icon_state]")
-			I.color = accessory.color
-
-			for (var/part in accessory.dyed_parts)
+			var/mutable_appearance/accessory_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[accessory._color || accessory.icon_state]")
+			accessory_overlay.color = accessory.color
+			for(var/part in accessory.dyed_parts)
 				var/list/dye_data = accessory.dyed_parts[part]
 				var/dye_color = dye_data[1]
 				var/dye_alpha = dye_data[2]
@@ -106,12 +106,10 @@
 				if (!_state)
 					_state = accessory.icon_state
 
-				var/image/worn_overlay = image('icons/mob/clothing_accessories.dmi', null, "[_state]-[part]")
-				worn_overlay.appearance_flags = RESET_COLOR
+				var/mutable_appearance/worn_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[_state]-[part]", alpha = dye_alpha, appearance_flags = RESET_COLOR)
 				worn_overlay.color = dye_color
-				worn_overlay.alpha = dye_alpha
-				I.overlays += worn_overlay
-			O.overlays += I
+				accessory_overlay.overlays += worn_overlay
+			accessory_overlay_final.overlays += accessory_overlay
 
 //Defining this at item level to prevent CASTING HELL
 /obj/item/proc/description_accessories()

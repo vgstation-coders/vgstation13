@@ -5,7 +5,6 @@
 	layer = MIND_UI_BUTTON
 	mouse_opacity = 0
 	var/word = ""
-	var/hovering = FALSE
 	var/image/word_overlay
 
 /obj/abstract/mind_ui_element/hoverable/rune_word/Appear()
@@ -129,6 +128,7 @@
 		/obj/abstract/mind_ui_element/hoverable/rune_word/rune_hide,
 		)
 	display_with_parent = FALSE
+	offset_layer = MIND_UI_GROUP_D
 	var/datum/rune_spell/queued_rune = null
 
 /datum/mind_ui/bloodcult_runes/Valid()
@@ -160,7 +160,6 @@
 	icon = 'icons/ui/bloodcult/32x32.dmi'
 	icon_state = "return"
 	layer = MIND_UI_BUTTON
-	var/hovering = FALSE
 
 /obj/abstract/mind_ui_element/hoverable/rune_close/StartHovering()
 	hovering = TRUE

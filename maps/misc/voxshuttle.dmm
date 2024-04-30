@@ -890,7 +890,7 @@
 /turf/simulated/floor/shuttle/plating/vox,
 /area/shuttle/vox/station)
 "ce" = (
-/obj/item/trash/danitos,
+/obj/item/trash/chips/danitos,
 /turf/simulated/floor/shuttle/plating/vox,
 /area/shuttle/vox/station)
 "cf" = (

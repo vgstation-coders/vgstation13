@@ -1,11 +1,11 @@
 var/global/datum/controller/occupations/job_master
+var/global/alt_job_limit = 0 //list of alternate jobs available for new hires
+
 
 #define FREE_ASSISTANTS 2
 
 // The logic requires a shift of 1. The technical reason is that the way it is written, it boils to if (0 > 0) {"reject the assistants"}. Unfortunately, 0 is not > 0.
 #define FREE_ASSISTANTS_BRUT (FREE_ASSISTANTS-1)
-
-#define MAX_ALTERNATES 3
 
 /datum/controller/occupations
 		//List of all jobs
@@ -92,12 +92,12 @@ var/global/datum/controller/occupations/job_master
 		if(!latejoin)
 			position_limit = job.spawn_positions
 		if((job.current_positions < position_limit) || position_limit == -1)
-			if(alt_database_active && (total_alt_positions <= MAX_ALTERNATES) && latejoin) //Labor console database has been hacked; Centcomm is sending the wrong employees!
+			if(alt_database_active && (total_alt_positions < alt_job_limit) && latejoin) //Labor console database has been hacked; Centcomm is sending the wrong employees!
 				var/altrank = pick(alternate_positions)
 				if(altjobprompt(altrank,rank,player))
 					rank = altrank
 					Debug("[player] is being assigned non-standard job as the alternate jobs database is installed.")
-					Debug("Player: [player] is now Rank: [rank], JCP:[total_alt_positions], JPL:[MAX_ALTERNATES]")
+					Debug("Player: [player] is now Rank: [rank], JCP:[total_alt_positions], JPL:[alt_job_limit]")
 					total_alt_positions++
 			else
 				Debug("Player: [player] is now Rank: [rank], JCP:[job.current_positions], JPL:[position_limit]")
@@ -604,7 +604,7 @@ var/global/datum/controller/occupations/job_master
 /datum/controller/occupations/proc/altjobprompt(var/newrank,var/oldrank,var/mob/user)
 	var/turf/oldloc = get_turf(user)
 	user.forceMove(null)
-	if(alert(user,"Central Command had a mix-up and is attempting to send you to the station as \an [newrank]! Would you like to correct them?",,"Yes - play as [oldrank]","No - play as [newrank]") == "Yes - play as [oldrank]")
+	if(alert(user,"Central Command had a mix-up and is attempting to send you to the station as \an [newrank]! Would you like to correct them?",,"No - play as [newrank]","Yes - play as [oldrank]") == "No - play as [newrank]")
 		return 1
 	user.forceMove(oldloc)
 	message_admins("[user.key] has opted out of playing as \an [newrank].")

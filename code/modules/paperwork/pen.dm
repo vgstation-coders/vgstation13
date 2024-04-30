@@ -196,6 +196,7 @@
 	starting_materials = list(MAT_IRON = 10)
 	w_type = RECYK_MISC
 	pressure_resistance = 2
+	quick_equip_priority = list(slot_wear_id)
 
 	var/colour = "black"	//what colour the ink is!
 	var/colour_rgb = "#000000"
@@ -358,11 +359,7 @@
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stabbed with [type]  by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [type] to stab [M.name] ([M.ckey])</font>")
 	msg_admin_attack("[user.name] ([user.ckey]) Used the [type] to stab [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 	if(reagents && reagents.total_volume)
 		reagents.trans_to(M,50)
 
