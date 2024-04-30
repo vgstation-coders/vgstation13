@@ -11,30 +11,23 @@
 	else
 		species.OutOfCrit(src)
 
+/mob/living/carbon/human/handle_sleep()
+	..()
+	handle_dreams()
+	if( prob(2) && health && !hal_crit )
+		spawn(0)
+			emote("snore")
+
 /mob/living/carbon/human/handle_regular_status_updates()
 	. = ..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
-
-		//Sobering multiplier.
-		//Sober block grants quadruple the alcohol metabolism.
-		var/sober_str =! (M_SOBER in mutations) ? 1:4
-
 		if(!in_stasis)
 			handle_organs()	//Optimized.
 			handle_blood()
 
-		//The analgesic effect wears off slowly
-		pain_numb = max(0, pain_numb - 1)
-
 		if(hallucination)
 			if(hallucination >= 20 && !handling_hal)
 				spawn handle_hallucinations() //The not boring kind!
-
-		if(!paralysis && sleeping)
-			handle_dreams()
-			if(prob(2) && health && !hal_crit)
-				spawn(0)
-					emote("snore")
 
 		//Eyes
 		if(!species.has_organ["eyes"]) //Presumably if a species has no eyes, they see via something else.

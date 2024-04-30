@@ -241,21 +241,8 @@
 
 /mob/living/carbon/alien/larva/handle_regular_status_updates()
 	. = ..()
-	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
-
-		if(paralysis)
-			AdjustParalysis(-1) // extra -1 for larvae for some reason
-		else if(sleeping)
-			sleeping = max(sleeping-1, 0)
-			blinded = 1
-			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
-			if( prob(10) && health )
-				spawn(0)
-					emote("hiss_")
-
-		/*	What in the living hell is this?*/
-		if(move_delay_add > 0)
-			move_delay_add = max(0, move_delay_add - rand(1, 2))
+	if(stat != DEAD && paralysis)
+		AdjustParalysis(-1) // extra -1 for larvae for some reason
 
 /mob/living/carbon/alien/larva/handle_regular_hud_updates()
 

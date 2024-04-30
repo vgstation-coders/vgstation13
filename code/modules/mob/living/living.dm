@@ -103,6 +103,12 @@
 		Paralyse(3)
 		return 1
 
+/mob/living/proc/handle_sleep()
+	adjustHalLoss(-3)
+	sleeping = max(sleeping-1, 0)
+	blinded = 1
+	stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
+
 /mob/living/proc/handle_regular_status_updates() //Refer to life.dm for caller
 	if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
 		blinded = 1
@@ -149,10 +155,7 @@
 			if(halloss > 0)
 				adjustHalLoss(-3)
 		else if(sleeping)
-			adjustHalLoss(-3)
-			sleeping = max(sleeping-1, 0)
-			blinded = 1
-			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
+			handle_sleep()
 		else if(undergoing_hypothermia() >= SEVERE_HYPOTHERMIA)
 			blinded = 1
 			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS

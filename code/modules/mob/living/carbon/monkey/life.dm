@@ -554,18 +554,12 @@
 		if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 			adjustOxyLoss(1)
 
-/mob/living/carbon/monkey/handle_regular_status_updates()
-	. = ..()
-	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
-
-		if(!paralysis && sleeping)
-			handle_dreams()
-			if( prob(10) && health && !hal_crit )
-				spawn(0)
-					emote("snore")
-		else if(resting)
-			if(halloss > 0)
-				adjustHalLoss(-3)
+/mob/living/carbon/monkey/handle_sleep()
+	..()
+	handle_dreams()
+	if( prob(10) && health && !hal_crit )
+		spawn(0)
+			emote("snore")
 
 /mob/living/carbon/monkey/handle_regular_hud_updates()
 	if(!client)

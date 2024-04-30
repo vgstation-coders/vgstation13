@@ -307,22 +307,23 @@
 		if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 			adjustOxyLoss(1)
 
-/mob/living/carbon/alien/humanoid/handle_regular_status_updates()
+/mob/living/carbon/alien/handle_sleep() // larvae are the same here
+	..()
+	if( prob(10) && health )
+		spawn(0)
+			emote("hiss")
+
+/mob/living/carbon/alien/handle_regular_status_updates()
 	. = ..()
 	if(stat != DEAD)				//ALIVE. LIGHTS ARE ON
-
-		if(!paralysis && sleeping)
-			if( prob(10) && health )
-				spawn(0)
-					emote("hiss")
-
 		/*	What in the living hell is this?*/
 		if(move_delay_add > 0)
 			move_delay_add = max(0, move_delay_add - rand(1, 2))
 
-		//Other
-		if(!stunned)
-			update_icons()
+/mob/living/carbon/alien/humanoid/handle_regular_status_updates()
+	. = ..()
+	if(stat != DEAD && !stunned)
+		update_icons()
 
 
 /mob/living/carbon/alien/humanoid/handle_regular_hud_updates()
