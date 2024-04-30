@@ -531,7 +531,7 @@
 
 /datum/outfit/woodidentifier
 
-	outfit_name = "Research Director"
+	outfit_name = "Wood Identifier"
 	associated_job = /datum/job/alternate/woodidentifier
 
 	backpack_types = list(

@@ -151,7 +151,7 @@ var/list/labor_console_categories = list(
 		W.forceMove(src)
 		if(do_after(user,src,30))
 			playsound(src, 'sound/machines/ping.ogg', 35, 0, -2)
-			to_chat(user, "<span class='notice'>Alternate jobs  database successfully installed.</span>")
+			to_chat(user, "<span class='notice'>Alternate jobs database successfully installed.</span>")
 			job_master.alt_database_active = TRUE
 			W.forceMove(loc)
 			update_icon()
