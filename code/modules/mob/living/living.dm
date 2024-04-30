@@ -140,11 +140,7 @@
 				halloss = 0
 			else
 				hallucination -= 2
-
 		else
-			for(var/atom/a in hallucinations)
-				qdel(a)
-
 			if(halloss > 100)
 				to_chat(src, "<span class='notice'>You're in too much pain to keep going...</span>")
 				for(var/mob/O in oviewers(src, null))

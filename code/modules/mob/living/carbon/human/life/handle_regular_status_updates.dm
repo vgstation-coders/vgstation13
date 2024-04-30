@@ -21,6 +21,9 @@
 		if(hallucination)
 			if(hallucination >= 20 && !handling_hal)
 				spawn handle_hallucinations() //The not boring kind!
+		else
+			for(var/atom/a in hallucinations)
+				qdel(a)
 
 		//Eyes
 		if(!species.has_organ["eyes"]) //Presumably if a species has no eyes, they see via something else.
