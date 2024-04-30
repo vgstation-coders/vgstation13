@@ -266,11 +266,7 @@
 /mob/living/carbon/complex/handle_regular_status_updates()
 	updatehealth()
 
-	if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
-		blinded = 1
-		silent = 0
-	else				//ALIVE. LIGHTS ARE ON
-		updatehealth()
+	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON
 		if((health < config.health_threshold_dead || !has_brain()) && !(status_flags & BUDDHAMODE))
 			death()
 			blinded = 1
@@ -285,74 +281,16 @@
 					emote("gasp")
 			if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 				adjustOxyLoss(1)
-			Paralyse(3)
-		if(halloss > 100)
-			visible_message("<B>[src]</B> slumps to the ground, too weak to continue fighting.","<span class='notice'>You're in too much pain to keep going.</span>")
-			Paralyse(10)
-			setHalLoss(99)
 
-		if(paralysis)
-			AdjustParalysis(-1)
-			blinded = 1
-			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
-			if(halloss > 0)
-				adjustHalLoss(-3)
-		else if(sleeping)
+		if(!paralysis && sleeping)
 			handle_dreams()
-			adjustHalLoss(-3)
-			sleeping = max(sleeping-1, 0)
-			blinded = 1
-			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
 			if( prob(10) && health && !hal_crit )
 				spawn(0)
 					emote("snore")
 		else if(resting)
 			if(halloss > 0)
 				adjustHalLoss(-3)
-		//CONSCIOUS
-		else if(undergoing_hypothermia() >= SEVERE_HYPOTHERMIA)
-			stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
-		else
-			stat = CONSCIOUS
-			if(halloss > 0)
-				adjustHalLoss(-1)
-
-		//Eyes
-		if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
-			blinded = 1
-		else if(eye_blind)			//blindness, heals slowly over time
-			eye_blind = max(eye_blind-1,0)
-			blinded = 1
-		else if(eye_blurry)			//blurry eyes heal slowly
-			eye_blurry = max(eye_blurry-1, 0)
-
-		//Ears
-		if(sdisabilities & DEAF)		//disabled-deaf, doesn't get better on its own
-			ear_deaf = max(ear_deaf, 1)
-		else if(ear_deaf)			//deafness, heals slowly over time
-			ear_deaf = max(ear_deaf-1, 0)
-		else if(ear_damage < 25)	//ear damage heals slowly under this threshold. otherwise you'll need earmuffs
-			ear_damage = max(ear_damage-0.05, 0)
-
-		//Other
-		if(stunned)
-			AdjustStunned(-1)
-
-		if(knockdown)
-			knockdown = max(knockdown-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
-
-		if(say_mute)
-			say_mute = max(say_mute-1, 0)
-
-		if(stuttering)
-			stuttering = max(stuttering-1, 0)
-
-		if(silent)
-			silent = max(silent-1, 0)
-
-		if(druggy)
-			druggy = max(druggy-1, 0)
-	return 1
+	return ..()
 
 /mob/living/carbon/complex/proc/handle_chemicals_in_body()
 
