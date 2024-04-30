@@ -50,8 +50,3 @@
 
 		else	//Not stunned.
 			stat = 0
-
-	else //Dead.
-		blinded = 1
-		stat = DEAD
-		return 1

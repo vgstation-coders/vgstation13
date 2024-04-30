@@ -82,12 +82,12 @@
 /mob/living/silicon/handle_crit_updates()
 	return
 
+/mob/living/silicon/robot/handle_sleep()
+	Paralyse(3)
+	sleeping = max(sleeping-1, 0)
+
 /mob/living/silicon/robot/handle_regular_status_updates()
 	. = ..()
-	if(sleeping)
-		Paralyse(3)
-		sleeping = max(sleeping-1, 0)
-
 	if(resting)
 		Knockdown(5)
 	setDensity(!(lying))
