@@ -1,4 +1,5 @@
 /mob/living/carbon/complex
+	sleep_emote = "snore"
 	var/icon_state_standing
 	var/icon_state_lying
 	var/icon_state_dead

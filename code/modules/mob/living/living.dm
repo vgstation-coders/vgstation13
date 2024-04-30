@@ -104,10 +104,14 @@
 		return 1
 
 /mob/living/proc/handle_sleep()
+	handle_dreams()
 	adjustHalLoss(-3)
 	sleeping = max(sleeping-1, 0)
 	blinded = 1
 	stat = status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
+	if(sleep_emote && prob(sleep_emote_prob) && health && !hal_crit)
+		spawn(0)
+			emote(sleep_emote)
 
 /mob/living/proc/handle_regular_status_updates() //Refer to life.dm for caller
 	if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP

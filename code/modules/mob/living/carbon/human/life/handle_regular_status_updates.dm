@@ -11,13 +11,6 @@
 	else
 		species.OutOfCrit(src)
 
-/mob/living/carbon/human/handle_sleep()
-	..()
-	handle_dreams()
-	if( prob(2) && health && !hal_crit )
-		spawn(0)
-			emote("snore")
-
 /mob/living/carbon/human/handle_regular_status_updates()
 	. = ..()
 	if(stat != DEAD)	//ALIVE. LIGHTS ARE ON

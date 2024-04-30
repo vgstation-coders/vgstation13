@@ -34,7 +34,10 @@
 				break
 		dreaming = 0
 
-/mob/living/carbon/proc/handle_dreams()
+/mob/living/proc/handle_dreams()
+	return //TODO: maybe one day?
+
+/mob/living/carbon/handle_dreams()
 	if(prob(5) && !dreaming)
 		dream()
 

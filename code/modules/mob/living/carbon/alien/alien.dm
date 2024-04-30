@@ -16,6 +16,8 @@
 
 	see_in_dark = 8
 
+	sleep_emote = "hiss"
+
 	var/plasma = 250
 	var/max_plasma = 500
 	var/neurotoxin_cooldown = 0

@@ -10,6 +10,7 @@
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey
 	species_type = /mob/living/carbon/monkey
 	treadmill_speed = 0.8 //Slow apes!
+	sleep_emote = "snore"
 	var/attack_text = "bites"
 	var/languagetoadd = LANGUAGE_MONKEY
 	var/namenumbers = TRUE

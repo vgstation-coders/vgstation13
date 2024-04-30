@@ -25,12 +25,12 @@
 		death()
 		return 1
 	
+/mob/living/silicon/pai/handle_sleep()
+	Paralyse(3)
+	sleeping = max(sleeping-1, 0)
+
 /mob/living/silicon/pai/handle_regular_status_updates()
 	. = ..()
-
-	if(sleeping)
-		Paralyse(3)
-		sleeping--
 
 	if(resting)
 		Knockdown(5)

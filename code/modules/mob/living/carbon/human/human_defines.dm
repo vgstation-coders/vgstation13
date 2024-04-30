@@ -1,4 +1,6 @@
 /mob/living/carbon/human
+	sleep_emote = "snore"
+	sleep_emote_prob = 2
 	//Hair colour and style are in apperance.dm
 
 	var/multicolor_skin_r = 0	//Only used when the human has a species datum with the MULTICOLOR anatomical flag

@@ -307,12 +307,6 @@
 		if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 			adjustOxyLoss(1)
 
-/mob/living/carbon/alien/handle_sleep() // larvae are the same here
-	..()
-	if( prob(10) && health )
-		spawn(0)
-			emote("hiss")
-
 /mob/living/carbon/alien/handle_regular_status_updates()
 	. = ..()
 	if(stat != DEAD)				//ALIVE. LIGHTS ARE ON
