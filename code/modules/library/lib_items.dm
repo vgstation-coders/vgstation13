@@ -107,12 +107,9 @@
 	if(contents.len)
 		var/obj/item/weapon/book/choice = input("Which book would you like to remove from \the [src]?") as null|obj in contents
 		if(choice)
-			if(user.incapacitated() || user.lying || get_dist(user, src) > 1)
+			if(user.incapacitated() || user.lying || !in_range(src, user))
 				return
-			if(!user.get_active_hand())
-				user.put_in_hands(choice)
-			else
-				choice.forceMove(get_turf(src))
+			user.put_in_hands(choice)
 			update_icon()
 
 /obj/structure/bookcase/attack_ghost(mob/dead/observer/user as mob)
