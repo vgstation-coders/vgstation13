@@ -66,7 +66,6 @@
 /proc/getShiftDuration()
 	return altFormatTimeDuration(world.timeofday - roundstart_timestamp)
 
-
 /proc/time_stamp()
 	return time2text(world.timeofday, "hh:mm:ss")
 
