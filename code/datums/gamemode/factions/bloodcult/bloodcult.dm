@@ -322,7 +322,7 @@
 	var/list/valid_rituals = list()
 
 	for (var/datum/bloodcult_ritual/R in possible_rituals)
-		if (R.pre_conditions(src))
+		if (R.pre_conditions())
 			valid_rituals += R
 
 	if (valid_rituals.len < 1)

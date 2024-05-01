@@ -118,7 +118,9 @@ cons:
 					var/rgba = (data[GFI_DX_COLOR] || "#FFFFFF") + copytext(rgb(0,0,0,data[GFI_DX_ALPHA]), 8)
 					add.Blend(rgba, ICON_ADD)//adding color onto black hair sprites
 			else
-				var/rgba = (data[GFI_DX_COLOR] || "#FFFFFF") + copytext(rgb(0,0,0,data[GFI_DX_ALPHA]), 8)
+				var/rgba = (data[GFI_DX_COLOR] || "#FFFFFF")
+				if (length(rgba) < 8)
+					rgba += copytext(rgb(0,0,0,data[GFI_DX_ALPHA]), 8)
 				add.Blend(rgba, ICON_MULTIPLY)
 
 		// Blend the overlay into the flattened icon
