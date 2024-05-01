@@ -58,7 +58,7 @@ var/global/list/ghdel_profiling = list()
 	var/arcanetampered = 0 //A looot of things can be
 
 	var/image/moody_light
-	var/list/moody_lights = list()
+	var/list/moody_lights
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
@@ -1093,6 +1093,8 @@ its easier to just keep the beam vertical.
 /atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff", offX = 0, offY = 0)
 	if (!index)
 		return
+	if (isnull(moody_lights))
+		moody_lights = list()
 	if (index in moody_lights)
 		overlays -= moody_lights[index]
 	var/area/here = get_area(src)
@@ -1110,6 +1112,8 @@ its easier to just keep the beam vertical.
 	luminosity = max(luminosity, 2)
 
 /atom/proc/kill_moody_light_index(var/index)
+	if (isnull(moody_lights))
+		moody_lights = list()
 	if (!index || !(index in moody_lights))
 		return
 	overlays -= moody_lights[index]
@@ -1118,6 +1122,8 @@ its easier to just keep the beam vertical.
 		luminosity = initial(luminosity)
 
 /atom/proc/kill_moody_light_all()
+	if (isnull(moody_lights))
+		moody_lights = list()
 	for (var/i in moody_lights)
 		overlays -= moody_lights[i]
 		moody_lights.Remove(i)
