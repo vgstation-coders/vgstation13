@@ -10,6 +10,7 @@
 	var/icon_position = 0
 
 	var/obj/item/organ_item = null //The actual item used to make the organ
+	var/generic_type = null //Typepath for a generic type of the datum
 	var/list/slots_to_drop
 
 	var/damage_state = "00"
@@ -1137,7 +1138,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			return 1
 	return 0
 
-/datum/organ/external/get_icon(gender = "", isFat = 0)
+/datum/organ/external/get_icon(gender = "", isFat = 0, forced_icon_file)
 	//stand_icon = new /icon(icobase, "torso_[g][fat?"_fat":""]")
 	if(gender)
 		gender="_[gender]"
@@ -1152,7 +1153,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 		baseicon = 'icons/mob/human_races/o_peg.dmi'
 	else if(is_robotic())
 		baseicon = 'icons/mob/human_races/o_robot.dmi'
-	return new /icon(baseicon, icon_state)
+	if(forced_icon_file)
+		baseicon = forced_icon_file
+	return icon(baseicon, icon_state)
 
 //Our external limb is a peg
 /datum/organ/external/proc/is_peg()
@@ -1252,6 +1255,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	has_fat = 1
 	vital = 1
 	encased = "ribcage"
+	generic_type = /obj/item/organ
 
 /datum/organ/external/groin
 	name = LIMB_GROIN
@@ -1261,6 +1265,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 70
 	body_part = LOWER_TORSO
 	vital = 1
+	generic_type = /obj/item/organ
 
 /datum/organ/external/tail
 	name = COSMETIC_ORGAN_TAIL
@@ -1273,6 +1278,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/tail_icon_file = 'icons/mob/tails.dmi'
 	var/tail_type
 	var/overlap_overlays = TRUE
+	generic_type = /obj/item/organ/external/tail
 
 /datum/organ/external/tail/New(datum/organ/external/parent, datum/species/passed_species)
 	if(passed_species && (!(passed_species.anatomy_flags & HAS_TAIL)))
@@ -1351,6 +1357,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 30
 	body_part = LEG_LEFT
 	icon_position = LEFT
+	generic_type = /obj/item/organ/external/l_leg
 
 /datum/organ/external/l_leg/can_stand()
 	//Peg legs don't require an attached foot
@@ -1386,6 +1393,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 30
 	body_part = LEG_RIGHT
 	icon_position = RIGHT
+	generic_type = /obj/item/organ/external/r_leg
 
 //This proc is same as l_leg/can_stand()
 /datum/organ/external/r_leg/can_stand()
@@ -1423,6 +1431,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	max_damage = 75
 	min_broken_damage = 30
 	body_part = ARM_LEFT
+	generic_type = /obj/item/organ/external/l_arm
 
 	grasp_id = GRASP_LEFT_HAND
 
@@ -1443,6 +1452,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	max_damage = 75
 	min_broken_damage = 30
 	body_part = ARM_RIGHT
+	generic_type = /obj/item/organ/external/r_arm
 
 	grasp_id = GRASP_RIGHT_HAND
 
@@ -1464,6 +1474,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 15
 	body_part = FOOT_LEFT
 	icon_position = LEFT
+	generic_type = /obj/item/organ/external/l_foot
 
 	slots_to_drop = list(slot_shoes, slot_legcuffed)
 
@@ -1483,6 +1494,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	min_broken_damage = 15
 	body_part = FOOT_RIGHT
 	icon_position = RIGHT
+	generic_type = /obj/item/organ/external/r_foot
 
 	slots_to_drop = list(slot_shoes, slot_legcuffed)
 
@@ -1494,45 +1506,60 @@ Note that amputating the affected organ does in fact remove the infection from t
 			current_organ = new /obj/item/organ/external/r_foot(owner.loc, owner, src)
 	return current_organ
 
-/datum/organ/external/r_hand
+/datum/organ/external/hand
+	name = LIMB_HAND
+	display_name = "hand"
+	icon_name = "r_hand" //had to pick one in case of weirdness
+	max_damage = 40
+	min_broken_damage = 15
+	grasp_id = 0
+	can_grasp = 0
+	generic_type = /obj/item/organ/external/r_hand
+
+/datum/organ/external/hand/get_icon(gender = "", isFat = 0)
+	var/obj/item/organ/external/hand_obj = new generic_type()
+	var/overriding_icon = hand_obj.forced_icon_file
+	return ..(forced_icon_file = overriding_icon)
+
+/datum/organ/external/hand/robotize()
+	generic_type = initial(generic_type)
+	..()
+
+/datum/organ/external/hand/peggify()
+	generic_type = initial(generic_type)
+	..()
+
+/datum/organ/external/hand/generate_dropped_organ(current_organ)
+	if(is_peg())
+		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+	if(!current_organ)
+		if(!is_robotic())
+			current_organ = new generic_type(owner.loc, owner, src)
+	return current_organ
+
+/datum/organ/external/hand/on_attach(obj/item/organ/external/hand_item)
+	display_name = hand_item.name
+	generic_type = hand_item.type
+
+/datum/organ/external/hand/r_hand
 	name = LIMB_RIGHT_HAND
 	display_name = "right hand"
 	icon_name = "r_hand"
-	max_damage = 40
-	min_broken_damage = 15
 	body_part = HAND_RIGHT
 	grasp_id = GRASP_RIGHT_HAND
 	can_grasp = 1
-
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
+	generic_type = /obj/item/organ/external/r_hand
 
-/datum/organ/external/r_hand/generate_dropped_organ(current_organ)
-	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
-	if(!current_organ)
-		if(!is_robotic())
-			current_organ = new /obj/item/organ/external/r_hand(owner.loc, owner, src)
-	return current_organ
-
-/datum/organ/external/l_hand
+/datum/organ/external/hand/l_hand
 	name = LIMB_LEFT_HAND
 	display_name = "left hand"
 	icon_name = "l_hand"
-	max_damage = 40
-	min_broken_damage = 15
 	body_part = HAND_LEFT
 	grasp_id = GRASP_LEFT_HAND
 	can_grasp = 1
-
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
-
-/datum/organ/external/l_hand/generate_dropped_organ(current_organ)
-	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
-	if(!current_organ)
-		if(!is_robotic())
-			current_organ = new /obj/item/organ/external/l_hand(owner.loc, owner, src)
-	return current_organ
+	generic_type = /obj/item/organ/external/l_hand
 
 /datum/organ/external/head
 	icon_name = "head"
@@ -1544,6 +1571,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/disfigured = FALSE
 	vital = 1
 	encased = "skull"
+	generic_type = /obj/item/organ/external/head
 
 	slots_to_drop = list(slot_glasses, slot_wear_mask, slot_head, slot_ears)
 
@@ -1696,6 +1724,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 	//It doesn't contain the whole tree, only the organs attached to this one
 	var/list/obj/item/organ/external/children = list()
 
+	var/forced_icon_file //Has a specific icon to be forced
+	var/forbid_gloves = TRUE //For organs forced to be used as hands, do they block gloves
+	var/list/mutations = list() //does this organ store specific mutations?
+	var/attack_verb_text
+	var/is_dexterous = FALSE
+	var/attack_punch_damage
 
 /obj/item/organ/external/New(loc, mob/living/carbon/human/H, datum/organ/external/source)
 	..(loc)
@@ -1851,6 +1885,18 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_state = LIMB_LEFT_HAND
 	part = LIMB_LEFT_HAND
 	w_class = W_CLASS_TINY
+	is_dexterous = TRUE
+	forbid_gloves = FALSE
+
+/obj/item/organ/external/l_hand/crab
+	name = "left claw"
+	icon = 'icons/mob/human_races/crab_claws.dmi'
+	attack_verb_text = "pinches"
+	is_dexterous = FALSE
+	attack_punch_damage = 7
+	mutations = list(M_CLAWS)
+	forced_icon_file = 'icons/mob/human_races/crab_claws.dmi'
+	forbid_gloves = TRUE
 
 /obj/item/organ/external/l_leg
 	name = "left leg"
@@ -1887,6 +1933,18 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_state = LIMB_RIGHT_HAND
 	part = LIMB_RIGHT_HAND
 	w_class = W_CLASS_TINY
+	is_dexterous = TRUE
+	forbid_gloves = FALSE
+
+/obj/item/organ/external/r_hand/crab
+	name = "right claw"
+	icon = 'icons/mob/human_races/crab_claws.dmi'
+	attack_verb_text = "pinches"
+	is_dexterous = FALSE
+	attack_punch_damage = 7
+	mutations = list(M_CLAWS)
+	forced_icon_file = 'icons/mob/human_races/crab_claws.dmi'
+	forbid_gloves = TRUE
 
 /obj/item/organ/external/r_leg
 	name = "right leg"

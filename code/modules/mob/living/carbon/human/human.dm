@@ -1671,6 +1671,10 @@
 /mob/living/carbon/human/dexterity_check()
 	if (stat != CONSCIOUS)
 		return FALSE
+	var/datum/organ/external/hand_organ_datum = get_active_hand_organ()
+	var/obj/item/organ/external/hand_obj = new hand_organ_datum.generic_type
+	if(!(hand_obj.is_dexterous))
+		return FALSE
 	if(gloves && istype(gloves, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = gloves
 		if(!G.dexterity_check())//some gloves might make it harder to interact with complex technologies, or fit your index in a gun's trigger
@@ -1872,7 +1876,7 @@
 	if(new_amount > held_items.len)
 		for(var/i = (held_items.len + 1) to new_amount) //For all the new indexes, create a hand organ
 			if(!find_organ_by_grasp_index(i))
-				var/datum/organ/external/OE = new/datum/organ/external/r_hand(organs_by_name[LIMB_GROIN]) //Fuck it the new hand will grow out of the groin (it doesn't matter anyways)
+				var/datum/organ/external/OE = new/datum/organ/external/hand/r_hand(organs_by_name[LIMB_GROIN]) //Fuck it the new hand will grow out of the groin (it doesn't matter anyways)
 				OE.grasp_id = i
 				OE.owner = src
 

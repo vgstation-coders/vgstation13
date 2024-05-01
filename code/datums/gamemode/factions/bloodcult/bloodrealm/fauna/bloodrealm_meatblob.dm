@@ -768,8 +768,7 @@
 	if (user.a_intent == I_HURT)
 		user.delayNextAttack(8)
 		user.do_attack_animation(src, user)
-		var/datum/species/S = user.get_organ_species(user.get_active_hand_organ())
-		user.visible_message("<span class='danger'>\The [user] [S.attack_verb] \the [src].</span>")
+		user.visible_message(span_danger("\The [user] [user.get_hand_attack_verb()] \the [src]."))
 		get_hit(user.get_unarmed_damage(src),user, user.get_unarmed_hit_sound())
 
 //slashed (touched?) by monkeys

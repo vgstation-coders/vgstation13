@@ -685,21 +685,21 @@ var/global/objects_thrown_when_explode = FALSE
 						return CANNOT_EQUIP
 				return CAN_EQUIP
 			if(slot_gloves)
-				if( !(slot_flags & SLOT_GLOVES) )
+				if(!(slot_flags & SLOT_GLOVES))
 					return CANNOT_EQUIP
-
-				for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
-					if(!OE.species) //Organ has same species as body
-						if(H.species.anatomy_flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL)) //Use the body's base species
-							if(!disable_warning)
-								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
-							return CANNOT_EQUIP
-					else //Organ's species is different from body
-						if(OE.species.anatomy_flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL))
-							if(!disable_warning)
-								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
-							return CANNOT_EQUIP
-
+				for(var/datum/organ/external/hand_datum in get_organs_by_slot(slot, H))
+					var/obj/item/organ/external/hand_obj = new hand_datum.generic_type()
+					var/failed_gloves_equip = FALSE
+					var/datum/species/checked_species = hand_datum.species || H.species
+					if(!(clothing_flags & ONESIZEFITSALL))
+						if(checked_species.anatomy_flags & IS_BULKY)
+							failed_gloves_equip = TRUE
+						if(hand_obj.forbid_gloves)
+							failed_gloves_equip = TRUE
+					if(failed_gloves_equip)
+						if(!disable_warning)
+							to_chat(H, span_warning("You can't get \the [src] to fasten around your bulky fingers!"))
+						return CANNOT_EQUIP
 				if(H.gloves)
 					if(automatic)
 						if(H.check_for_open_slot(src))
