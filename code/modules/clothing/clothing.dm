@@ -322,7 +322,7 @@
 	if (hood && (mannequin.clothing[SLOT_MANNEQUIN_HEAD] == hood))
 		hooddown(mannequin)
 
-//for fabric clothing can can be fully dyed in a cauldron
+//for fabric clothing that can be fully dyed in a cauldron
 /obj/item/clothing/dye_act(var/obj/structure/reagent_dispensers/cauldron/cauldron, var/mob/user)
 	if (clothing_flags & COLORS_OVERLAY)
 		var/dye_target = "full"
