@@ -193,8 +193,8 @@
 		if(resting && halloss > 0)
 			adjustHalLoss(-3)
 
-		handle_blind()
-		handle_deaf()
+		handle_blind_updates()
+		handle_deaf_updates()
 
 		//Flying
 		if(flying)

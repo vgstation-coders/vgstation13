@@ -86,6 +86,16 @@
 	Paralyse(3)
 	sleeping = max(sleeping-1, 0)
 
+/mob/living/silicon/robot/handle_jitteriness()
+	if(jitteriness)
+		jitteriness = max(jitteriness-1,0)
+	..()
+	
+/mob/living/silicon/robot/handle_dizziness()
+	if(dizziness)
+		dizziness = max(0, dizziness - 1)
+	..()
+
 /mob/living/silicon/robot/handle_regular_status_updates()
 	. = ..()
 	if(resting)
@@ -98,11 +108,6 @@
 	else if(!(status_flags & BUDDHAMODE)) //Dead.
 		blinded = TRUE
 		stat = DEAD
-
-	if(jitteriness)
-		jitteriness = max(jitteriness-1,0)
-	if(dizziness)
-		dizziness = max(0, dizziness - 1)
 
 	if(camera && !scrambledcodes)
 		camera.status = !(isDead() || wires.IsCameraCut())

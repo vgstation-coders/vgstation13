@@ -191,6 +191,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/proc/check_environment_susceptibility()
 	return TRUE
 
+/mob/living/simple_animal/handle_crit_updates()
+	if(health <= 0 && stat != DEAD)
+		death()
+		return 0
+
+/mob/living/simple_animal/handle_jitteriness()
+	..()
+	jitteriness = max(0, jitteriness - 1)
+
 /mob/living/simple_animal/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -209,48 +218,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			src.delayedRegen()
 		return 0
 
-	if(health <= 0 && stat != DEAD)
-		death()
-		return 0
-
 	life_tick++
 
 	health = min(health, maxHealth)
 
-	if(stunned)
-		AdjustStunned(-1)
-	if(knockdown)
-		AdjustKnockdown(-1)
-	if(paralysis)
-		AdjustParalysis(-1)
 	update_canmove()
 
-	handle_jitteriness()
-	jitteriness = max(0, jitteriness - 1)
-
-	//Eyes
-	if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
-		blinded = 1
-	else if(eye_blind)			//blindness, heals slowly over time
-		eye_blind = max(eye_blind - 1, 0)
-		blinded = 1
-	else
-		if(eye_blurry)	//blurry eyes heal slowly
-			eye_blurry = max(eye_blurry - 1, 0)
-		blinded = null
-
-	//Ears
-	if(sdisabilities & DEAF)	//disabled-deaf, doesn't get better on its own
-		ear_deaf = max(ear_deaf, 1)
-	else if(ear_deaf)			//deafness, heals slowly over time
-		ear_deaf = max(ear_deaf-1, 0)
-	else if(ear_damage < 25)	//ear damage heals slowly under this threshold.
-		ear_damage = max(ear_damage-0.05, 0)
-
 	remove_confused(1)
-
-	if(say_mute)
-		say_mute = max(say_mute-1, 0)
 
 	if(purge)
 		purge -= 1
