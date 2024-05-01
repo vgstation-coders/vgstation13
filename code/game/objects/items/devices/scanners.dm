@@ -420,6 +420,29 @@ Subject's pulse: ??? BPM"})
 		message += "<br><span class='warning'>No gasses detected[container && !istype(container, /turf) ? " in \the [container]." : ""]!</span>"
 	return message
 
+/obj/item/device/analyzer/wood
+	name = "wood analyzer"
+	desc = "Analyzes whether or not an object is wood."
+
+/obj/item/device/analyzer/wood/attack_self(mob/user as mob)
+	return
+
+/obj/item/device/analyzer/wood/preattack(atom/A, mob/user as mob, proximity_flag)
+	if(!proximity_flag)
+		return
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
+	if(istype(A,/obj))
+		var/obj/O = A
+		if(O.w_type == RECYK_WOOD)
+			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"Yep, it's wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows green.</span>")
+		else
+			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"No, it's not wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows red.</span>")
+		playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+	else
+		return
+
 /obj/item/device/mass_spectrometer
 	desc = "A hand-held mass spectrometer which identifies trace chemicals in a blood sample."
 	name = "mass-spectrometer"
