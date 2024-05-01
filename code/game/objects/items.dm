@@ -683,13 +683,13 @@ var/global/objects_thrown_when_explode = FALSE
 				if(!(slot_flags & SLOT_GLOVES))
 					return CANNOT_EQUIP
 				for(var/datum/organ/external/hand_datum in get_organs_by_slot(slot, H))
-					var/obj/item/organ/external/hand_obj = new hand_datum:hand_type()
+					var/obj/item/organ/external/hand_obj = new hand_datum.generic_type()
 					var/failed_gloves_equip = FALSE
 					var/datum/species/checked_species = hand_datum.species || H.species
 					if(!(clothing_flags & ONESIZEFITSALL))
 						if(checked_species.anatomy_flags & IS_BULKY)
 							failed_gloves_equip = TRUE
-						if(hand_obj:forbid_gloves)
+						if(hand_obj.forbid_gloves)
 							failed_gloves_equip = TRUE
 					if(failed_gloves_equip)
 						if(!disable_warning)

@@ -109,8 +109,8 @@
 	if(istype(organ, /datum/organ/external))
 		var/datum/organ/external/datum_organ = organ
 		if(datum_organ.can_grasp)
-			var/obj/item/organ/external/hand_obj_type = new datum_organ:hand_type
-			var/list/hand_object_mutations = hand_obj_type:mutations
+			var/obj/item/organ/external/hand_obj_type = new datum_organ.generic_type
+			var/list/hand_object_mutations = hand_obj_type.mutations
 			found_mutation = hand_object_mutations.Find(mutation)
 	var/datum/species/S = get_organ_species(organ)
 	if(istype(S))
@@ -122,17 +122,17 @@
 /mob/living/carbon/human/proc/get_hand_attack_verb()
 	var/hand_obj_text
 	var/datum/organ/external/active_hand_organ_datum = get_active_hand_organ()
+	var/obj/item/organ/external/hand_obj_type = new active_hand_organ_datum.generic_type
+	hand_obj_text = hand_obj_type.attack_verb_text
 	var/datum/species/hand_species = get_organ_species(active_hand_organ_datum)
-	var/obj/item/organ/external/hand_obj_type = new active_hand_organ_datum:hand_type
-	hand_obj_text = hand_obj_type:attack_verb_text
 	return hand_obj_text || hand_species.attack_verb
 
 /mob/living/carbon/human/proc/get_hand_punch_damage()
 	var/hand_obj_damage
 	var/datum/organ/external/active_hand_organ_datum = get_active_hand_organ()
+	var/obj/item/organ/external/hand_obj_type = new active_hand_organ_datum.generic_type
+	hand_obj_damage = hand_obj_type.attack_punch_damage
 	var/datum/species/hand_species = get_organ_species(active_hand_organ_datum)
-	var/obj/item/organ/external/hand_obj_type = new active_hand_organ_datum:hand_type
-	hand_obj_damage = hand_obj_type:attack_punch_damage
 	return hand_obj_damage || hand_species.punch_damage
 
 /mob/living/carbon/human/get_unarmed_verb()
