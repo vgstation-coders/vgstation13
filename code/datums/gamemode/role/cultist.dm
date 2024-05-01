@@ -433,7 +433,8 @@
 					to_chat(antag.current, "<span class='danger'>Shortcut Sigil</span>")
 					to_chat(antag.current, "<b>Apply your palms on a wall to draw a sigil on it that lets you and any ally pass through it.</b>")
 					GiveTattoo(/datum/cult_tattoo/shortcut)
-	antag.current.DisplayUI("Cultist Right Panel")
+	if (antag.current)//because gibbed cultists might still gain devotion through faction rituals
+		antag.current.DisplayUI("Cultist Right Panel")
 
 /datum/role/cultist/proc/assign_rituals()
 	initial_rituals = TRUE

@@ -543,7 +543,7 @@
 			var/datum/mind/M = C.antag
 			if (M.current == speech.speaker)//echoes are annoying
 				continue
-			if (iscultist(M.current))//failsafe for cultist brains put in MMIs
+			if (M.current && iscultist(M.current))//failsafe for cultist brains put in MMIs
 				to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinisterbig'>[speech.message]</span></B></span>")
 		for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
 			to_chat(A, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[speech.message]</span></span>")

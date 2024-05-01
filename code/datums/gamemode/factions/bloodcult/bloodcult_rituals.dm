@@ -293,12 +293,14 @@ var/list/bloodcult_personal_rituals = list(
 	desc = "from a tempting goblet...<br>pours a wicked drink...<br>have at least [targets - infected_targets.len] more individuals consume it..."
 
 /datum/bloodcult_ritual/cursed_infection/key_found(var/mob/living/L)
+	if (!L.mind)
+		return FALSE
 	if (iscultist(L))
 		return FALSE
-	if (L in infected_targets)
+	if (L.mind in infected_targets)
 		return FALSE
-	infected_targets += L
-	if(infected_targets >= targets)
+	infected_targets += L.mind
+	if(infected_targets.len >= targets)
 		return TRUE
 	return FALSE
 
@@ -393,10 +395,10 @@ var/list/bloodcult_personal_rituals = list(
 /datum/bloodcult_ritual/harm_crew/key_found(var/mob/living/L)
 	if (iscultist(L))
 		return FALSE
-	if (L in hit_targets)
+	if (L.mind in hit_targets)
 		return FALSE
-	hit_targets += L
-	if(hit_targets >= targets)
+	hit_targets += L.mind
+	if(hit_targets.len >= targets)
 		return TRUE
 	return FALSE
 
