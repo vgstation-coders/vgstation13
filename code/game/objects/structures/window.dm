@@ -28,7 +28,7 @@ var/list/one_way_windows
 	var/reinforced = 0 //Used for deconstruction steps
 	penetration_dampening = 1
 	pass_flags_self = PASSGLASS
-	var/mutable_appearance/damage_overlay
+	var/mutable_appearance/damage_underlay
 	var/image/oneway_overlay
 	var/cracked_base = "crack"
 
@@ -45,7 +45,6 @@ var/list/one_way_windows
 	..(loc)
 	flow_flags |= ON_BORDER | KEEP_DIR
 	setup_border_dummy()
-
 	update_nearby_tiles()
 	oneway_overlay = image('icons/obj/structures/window.dmi', src, "one_way_overlay")
 	if(one_way)
@@ -143,17 +142,14 @@ var/list/one_way_windows
 	else
 		if(sound)
 			playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
-		if(!damage_overlay)
-			damage_overlay = new(src)
-			damage_overlay.icon = icon('icons/obj/structures/window.dmi')
-			damage_overlay.dir = src.dir
-
-		overlays -= damage_overlay
+		if(!damage_underlay)
+			damage_underlay = mutable_appearance('icons/obj/structures/window.dmi')
+		underlays -= damage_underlay
 
 		if(health < initial(health))
 			var/damage_fraction = clamp(round((initial(health) - health) / initial(health) * 5) + 1, 1, 5) //gives a number, 1-5, based on damagedness
-			damage_overlay.icon_state = "[cracked_base][damage_fraction]"
-			overlays += damage_overlay
+			damage_underlay.icon_state = "[cracked_base][damage_fraction]"
+			underlays += damage_underlay
 
 /obj/structure/window/proc/adjustHealthLoss(var/amount = 0, var/atom/movable/W = null)
 	if(amount < dmg_threshold)
