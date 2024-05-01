@@ -45,7 +45,7 @@ var/global/list/ghdel_profiling = list()
 
 	appearance_flags = TILE_BOUND|LONG_GLIDE|TILE_MOVER
 	/// sources of setting KEEP_TOGETHER on an atom
-	var/list/keep_together_sources = list()
+	var/list/keep_together_sources
 	var/slowdown_modifier //modified on how fast a person can move over the tile we are on, see turf.dm for more info
 	/// Last name used to calculate a color for the chatmessage overlays
 	var/chat_color_name
