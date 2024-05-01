@@ -113,6 +113,31 @@
 		spawn(0)
 			emote(sleep_emote)
 
+/mob/living/proc/handle_blind()
+	if(!has_eyes())           //Eyes cut out? Permablind.
+		eye_blind =  1
+		blinded =    1
+		eye_blurry = 0
+	else if(sdisabilities & BLIND) //Disabled-blind, doesn't get better on its own
+		blinded =    1
+		eye_blurry = 0
+	else if(eye_blind)		       //Blindness, heals slowly over time
+		eye_blind =  max(eye_blind - 1, 0)
+		blinded =    1
+	else if(eye_blurry)
+		eye_blurry = max(eye_blurry - 1, 0)
+
+/mob/living/proc/handle_deaf()
+	if(sdisabilities & DEAF) //Disabled-deaf, doesn't get better on its own
+		ear_deaf = max(ear_deaf, 1)
+	else if(earprot()) //Resting your ears with earmuffs heals ear damage faster
+		ear_damage = max(ear_damage - 0.15, 0)
+		ear_deaf = max(ear_deaf, 1) //This MUST be above the following else if or deafness cures itself while wearing earmuffs
+	else if(ear_deaf) //Deafness, heals slowly over time
+		ear_deaf = max(ear_deaf - 1, 0)
+	else if(ear_damage < 25) //Ear damage heals slowly under this threshold. otherwise you'll need earmuffs
+		ear_damage = max(ear_damage - 0.05, 0)
+
 /mob/living/proc/handle_regular_status_updates() //Refer to life.dm for caller
 	if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
 		blinded = 1
@@ -123,7 +148,7 @@
 		//Sober block grants quadruple the alcohol metabolism.
 		var/sober_str =! (M_SOBER in mutations) ? 1:4
 
-		updatehealth() //TODO
+		updatehealth() //TODO: this comment said TODO when this coder found it, but todo what?
 
 		if(check_dead())
 			return 1
@@ -168,30 +193,8 @@
 		if(resting && halloss > 0)
 			adjustHalLoss(-3)
 
-		//Eyes
-		else if(!has_eyes())           //Eyes cut out? Permablind.
-			eye_blind =  1
-			blinded =    1
-			eye_blurry = 0
-		else if(sdisabilities & BLIND) //Disabled-blind, doesn't get better on its own
-			blinded =    1
-			eye_blurry = 0
-		else if(eye_blind)		       //Blindness, heals slowly over time
-			eye_blind =  max(eye_blind - 1, 0)
-			blinded =    1
-		else if(eye_blurry)
-			eye_blurry = max(eye_blurry - 1, 0)
-
-		//Ears
-		if(sdisabilities & DEAF) //Disabled-deaf, doesn't get better on its own
-			ear_deaf = max(ear_deaf, 1)
-		else if(earprot()) //Resting your ears with earmuffs heals ear damage faster
-			ear_damage = max(ear_damage - 0.15, 0)
-			ear_deaf = max(ear_deaf, 1) //This MUST be above the following else if or deafness cures itself while wearing earmuffs
-		else if(ear_deaf) //Deafness, heals slowly over time
-			ear_deaf = max(ear_deaf - 1, 0)
-		else if(ear_damage < 25) //Ear damage heals slowly under this threshold. otherwise you'll need earmuffs
-			ear_damage = max(ear_damage - 0.05, 0)
+		handle_blind()
+		handle_deaf()
 
 		//Flying
 		if(flying)

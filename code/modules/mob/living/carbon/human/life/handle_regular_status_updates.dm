@@ -25,11 +25,13 @@
 			for(var/atom/a in hallucinations)
 				qdel(a)
 
-		//Eyes
-		if(!species.has_organ["eyes"]) //Presumably if a species has no eyes, they see via something else.
-			eye_blind =  0
-			blinded =    0
-			eye_blurry = 0
-		else if(istype(glasses, /obj/item/clothing/glasses/sunglasses/blindfold)) //Resting your eyes with a blindfold heals blurry eyes faster
-			eye_blurry = max(eye_blurry - 3, 0)
-			blinded =    1
+/mob/living/carbon/human/handle_blind()
+	if(!species.has_organ["eyes"]) //Presumably if a species has no eyes, they see via something else.
+		eye_blind =  0
+		blinded =    0
+		eye_blurry = 0
+	else if(istype(glasses, /obj/item/clothing/glasses/sunglasses/blindfold)) //Resting your eyes with a blindfold heals blurry eyes faster
+		eye_blurry = max(eye_blurry - 3, 0)
+		blinded =    1
+	else
+		..()
