@@ -213,7 +213,7 @@
 				client.screen -= hud_used.cult_tattoo_display
 			hud_used.cult_tattoo_display = null
 
-/mob/proc/cultify()
+/mob/proc/cultify(var/obj/machinery/singularity/narsie/N)
 	return
 
 /mob/proc/clockworkify()

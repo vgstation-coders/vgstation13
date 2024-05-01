@@ -135,8 +135,9 @@
 	var/mob/M = mind.current
 	if (!M)
 		return FALSE
-	if(iscultist(M) && iscarbon(M))
-		return TRUE
+	if(iscultist(M))
+		if(iscarbon(M) || istype(M, /mob/living/simple_animal/construct/harvester/perfect))
+			return TRUE
 	return FALSE
 
 /datum/mind_ui/bloodcult_runes/Display()
