@@ -85,6 +85,8 @@ var/station_name = null
 var/game_version = "veegee"
 var/changelog_hash = ""
 var/game_year = (text2num(time2text(world.realtime, "YYYY")) + 544)
+var/time_taken_to_init = 0
+var/roundstart_timestamp = 0
 
 var/going = 1.0
 var/master_mode = "extended"//"extended"

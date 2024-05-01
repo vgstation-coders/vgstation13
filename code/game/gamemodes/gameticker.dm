@@ -720,6 +720,8 @@ var/datum/controller/gameticker/ticker
 					qdel(obj)
 
 		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
+		roundstart_timestamp = world.timeofday
+
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
 
