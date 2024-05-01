@@ -128,6 +128,7 @@
 		/obj/abstract/mind_ui_element/hoverable/rune_word/rune_hide,
 		)
 	display_with_parent = FALSE
+	never_move = TRUE
 	offset_layer = MIND_UI_GROUP_D
 	var/datum/rune_spell/queued_rune = null
 
