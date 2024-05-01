@@ -646,6 +646,12 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	force_report = 1
 	message = "Destruction of the Blood Stone has been confirmed. The Cult's power aboard the station will be greatly diminished."
 
+/datum/command_alert/narsie_has_risen
+	name = "Nar-Sie Has Risen"
+	alert_title = "Emergency Evacuation"
+	force_report = 1
+	message = "The station will not stay in this plane for much longer. At great expense, we are dispatching an Emergency Shuttle to your Escape dock within the next minute, and it will be leaving after an short stop. We recommend keeping any Enemies of the Corporation off the vessel. It's leaving with or without you."
+
 //////////////BLOOD CULT
 
 /*
