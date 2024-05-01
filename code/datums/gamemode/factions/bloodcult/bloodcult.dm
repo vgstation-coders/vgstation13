@@ -456,6 +456,9 @@
 	if (stage == BLOODCULT_STAGE_DEFEATED)
 		cultist_cap = 0
 		return
+	if (stage == BLOODCULT_STAGE_NARSIE)
+		cultist_cap = 666
+		return
 	var/living_players = 0
 	var/new_cap = 0
 	for (var/mob/M in player_list)

@@ -1249,6 +1249,8 @@
 					if (i > MINDUI_MAX_CULT_SLOTS)//If the cult manages to overflow to over 5 cultists over the cap, we don't bother tracking them anymore.
 						break
 				while (i <= cult.cultist_cap)
+					if (i > MINDUI_MAX_CULT_SLOTS)
+						break
 					var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/slot = BP.cultist_slots[i]
 					slot.overlays.len = 0
 					slot.offset_x = -98 + accumulated_offset
@@ -1261,12 +1263,18 @@
 					i++
 				if (!cap_placed)
 					var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_cap/cultist_cap = locate() in BP.elements
-					accumulated_offset -= 4
-					cultist_cap.offset_x = -98 + accumulated_offset
-					cultist_cap.UpdateUIScreenLoc()
-					accumulated_offset += 7
+					if (cult.cultist_cap > MINDUI_MAX_CULT_SLOTS)
+						cultist_cap.alpha = 0
+					else
+						cultist_cap.alpha = 255
+						accumulated_offset -= 4
+						cultist_cap.offset_x = -98 + accumulated_offset
+						cultist_cap.UpdateUIScreenLoc()
+						accumulated_offset += 7
 				if (cult.stage != BLOODCULT_STAGE_DEFEATED)
 					while (i <= cult.max_cultist_cap)
+						if (i > MINDUI_MAX_CULT_SLOTS)
+							break
 						var/obj/abstract/mind_ui_element/hoverable/bloodcult_cultist_slot/slot = BP.cultist_slots[i]
 						slot.offset_x = -98 + accumulated_offset
 						slot.UpdateUIScreenLoc()
