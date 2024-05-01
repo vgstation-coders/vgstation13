@@ -25,7 +25,7 @@
 			for(var/atom/a in hallucinations)
 				qdel(a)
 
-/mob/living/carbon/human/handle_blind()
+/mob/living/carbon/human/handle_blind_updates()
 	if(!species.has_organ["eyes"]) //Presumably if a species has no eyes, they see via something else.
 		eye_blind =  0
 		blinded =    0

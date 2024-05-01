@@ -554,6 +554,13 @@
 		if(!reagents.has_any_reagents(list(INAPROVALINE,PRESLOMITE)))
 			adjustOxyLoss(1)
 
+/mob/living/carbon/monkey/handle_blind_updates()
+	if(istype(glasses, /obj/item/clothing/glasses/sunglasses/blindfold)) //Resting your eyes with a blindfold heals blurry eyes faster
+		eye_blurry = max(eye_blurry - 3, 0)
+		blinded =    1
+	else
+		..()
+
 /mob/living/carbon/monkey/handle_regular_hud_updates()
 	if(!client)
 		return

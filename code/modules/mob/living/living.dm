@@ -113,7 +113,7 @@
 		spawn(0)
 			emote(sleep_emote)
 
-/mob/living/proc/handle_blind()
+/mob/living/proc/handle_blind_updates()
 	if(!has_eyes())           //Eyes cut out? Permablind.
 		eye_blind =  1
 		blinded =    1
@@ -127,7 +127,7 @@
 	else if(eye_blurry)
 		eye_blurry = max(eye_blurry - 1, 0)
 
-/mob/living/proc/handle_deaf()
+/mob/living/proc/handle_deaf_updates()
 	if(sdisabilities & DEAF) //Disabled-deaf, doesn't get better on its own
 		ear_deaf = max(ear_deaf, 1)
 	else if(earprot()) //Resting your ears with earmuffs heals ear damage faster
