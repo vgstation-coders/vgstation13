@@ -1,355 +1,221 @@
-///////////////////////////////////
-//            CULT RITUALS
-// 
-// 	Flow Overview: 
-//      TriggerCultRitual Global Proc =>
-//			Trigger() Ritual Proc => Check For Completion
-//				Reward() Ritual Proc =>
-//					Finish() => Ritual Proc
-//
-//
-//
-//		Procs to override:
-//		Trigger()  -  Called every time a ritual should be checked for completion
-//		extraInfo() - Returns text to be added to objective description on roundend screen
-//
-// 
-///////////////////////////////////
 
-var/global/veil_weakness = 0	            // how weak the veil of reality is. as cultists perform rituals, this increases
-var/global/list/unlocked_rituals = list()		// Rituals that the cult can perform, and have yet to do so.
-var/global/list/completed_rituals = list()	// Rituals that the cult has completed, and can no longer perform.
-var/global/list/locked_rituals = list()		// Rituals that the cult hasn't unlocked yet.
-var/global/list/cult_altars = list()       // List of cult altars in the world.
+/*
+"Rituals" in this context are basically objectives that cultists can accomplish to get rewarded with devotion.
+Devotion both serves to unlock some cult powers, quicken the arrival of the Eclipse, and overall bragging rights on the scoreboard.
+In essence, these provide cultists with things to work toward to disrupt the crew without necessarily ending the round.
+*/
 
+var/list/bloodcult_faction_rituals = list(
+	/datum/bloodcult_ritual/reach_cap,
+	/datum/bloodcult_ritual/convert_station,
+	/datum/bloodcult_ritual/produce_constructs,
+	/datum/bloodcult_ritual/blind_cameras_multi,
+	/datum/bloodcult_ritual/bloodspill,
+	/datum/bloodcult_ritual/sacrifice_captain,
+	/datum/bloodcult_ritual/cursed_infection,
+	)
 
-#define SPIRE_STAGE_2 	30
-#define SPIRE_STAGE_3 	60
-
-/proc/ChangeVeilWeakness(var/add, var/set_to)
-	if(set_to)
-		veil_weakness = set_to
-	else 
-		veil_weakness += add
-	var/datum/faction/bloodcult/B = locate(/datum/faction/bloodcult) in ticker.mode.factions
-	if(B)
-		B.update_cultist_uis()
-	if(veil_weakness >= SPIRE_STAGE_3)	
-		for(var/obj/structure/cult/spire/S in cult_spires)
-			S.upgrade(3)
-	else if(veil_weakness >= SPIRE_STAGE_2)
-		for(var/obj/structure/cult/spire/S in cult_spires)
-			S.upgrade(2)
-
-/proc/TriggerCultRitual(var/ritualtype, var/mob/cultist, var/list/extrainfo )
-	var/datum/bloodcult_ritual/R = locate(ritualtype) in unlocked_rituals
-	if(R)
-		R.Trigger(cultist, extrainfo)
-
-
-/datum/faction/bloodcult/proc/GetVeilWeakness()
-	return veil_weakness
-
-/datum/faction/bloodcult/proc/GetUnlockedRituals()
-	return unlocked_rituals
-
-/datum/faction/bloodcult/proc/GetCultAltars()
-	return cult_altars
-
-/datum/faction/bloodcult/proc/initialize_rituals()
-	for(var/type in (subtypesof(/datum/bloodcult_ritual) - typesof(/datum/bloodcult_ritual/always_active)))
-		locked_rituals += new type
-	for(var/i = 1 to 3)
-		UnlockRandomRitual()
-	for(var/type in subtypesof(/datum/bloodcult_ritual/always_active))
-		new type
-
-/datum/faction/bloodcult/proc/UnlockRandomRitual(var/announce)
-	if(locked_rituals.len > 0)
-		var/datum/bloodcult_ritual/R = pick(locked_rituals)
-		R.Unlock(announce)
-		return R
-	else 
-		for(var/datum/role/cultist/C in members)
-			to_chat(C.antag.current, "<span class='sinister'>The veil of reality is close to shattering... there are no more rituals to complete.</span>")
-		return null
-
-
-/datum/faction/bloodcult/proc/update_cultist_uis()
-	for(var/datum/role/cultist/C in members)
-		C.update_cult_hud()
-
-
-///////////////////////////////////////////
-
+var/list/bloodcult_personal_rituals = list(
+	/datum/bloodcult_ritual/blind_cameras,
+	/datum/bloodcult_ritual/confuse_crew,
+	/datum/bloodcult_ritual/harm_crew,
+	/datum/bloodcult_ritual/sacrifice_mouse,
+	/datum/bloodcult_ritual/sacrifice_monkey,
+	/datum/bloodcult_ritual/altar/simple,
+	/datum/bloodcult_ritual/altar/elaborate,
+	/datum/bloodcult_ritual/altar/excentric,
+	/datum/bloodcult_ritual/altar/unholy,
+	/datum/bloodcult_ritual/suicide_tome,
+	/datum/bloodcult_ritual/suicide_soulblade,
+	)
 
 /datum/bloodcult_ritual
-	var/name = "Cult Ritual"        
-	var/desc = ""
-	var/point_limit = 0       // The ritual will stop working after this many points. 0 = infinite
-	var/only_once = 0		  // Can only be completed once.
-	var/total_points_rewarded = 0
-	var/datum/objective/bloodcult_ritual/jectie = null
-	var/datum/faction/bloodcult/cult = null 	// Quick reference
+	var/name = "Ritual"
+	var/desc = "Lorem Ipsum (you shouldn't be reading this!)"
 
-	// Flavor
-	var/list/completion_text_minor = list(
-		"<span class='sinister'>You sense reality shifting around you slightly.</span>",
-		"<span class='sinister'>You feel occult energies beginning to chip away at the veil.</span>",
-		"<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>One step closer to our goal...</span>"
-	)
+	var/only_once = FALSE //If TRUE the ritual won't return to the pool of possible rituals after completion
+	var/ritual_type = "error"//ritual category. the game tries to assign rituals of diverse categories
+	var/difficulty = "easy"//"medium", "hard"
+	var/personal = FALSE//FALSE = Faction ritual. TRUE = Personal ritual
+	var/datum/role/cultist/owner = null//Only really matters if ritual is personal but you can also assign it on key_found on faction ritual to give them extra devotion
+	var/reward_achiever = 0//Reward to the cultist who completed the achievement
+	var/reward_faction = 0//Reward to every member of the faction
 
-	var/list/completion_text_major = list(
-		"<span class='sinister'>The walls twist and turn around you as reality begins to collapse.</span>",
-		"<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>Remarkable... for a mortal.</span>"
-	)
+	var/list/keys = list()
 
-/datum/bloodcult_ritual/New()
-	..()
-	cult = locate(/datum/faction/bloodcult) in ticker.mode.factions
-	if(!cult)
-		message_admins("An initialized cult ritual failed to find the bloodcult faction. This shouldn't appear; expect problems.")
+//Needs to be TRUE for the Ritual to be assigned
+/datum/bloodcult_ritual/proc/pre_conditions(var/datum/role/cultist/potential)
+	if (potential)
+		owner = potential
+	return TRUE
 
-/datum/bloodcult_ritual/always_active/New()
-	..()
-	Unlock()
+//Perform custom ritual setup here
+/datum/bloodcult_ritual/proc/init_ritual()
 
-/datum/bloodcult_ritual/always_active/Unlock()
-	unlocked_rituals += src
-	locked_rituals -= src
-
-/datum/bloodcult_ritual/proc/Finish(var/worth)
-	if(!jectie.complete)
-		jectie.complete = TRUE
-		for(var/datum/role/cultist/C in cult.members)
-			var/completion_text = worth >= 50 ? pick(completion_text_major) : pick(completion_text_minor)
-			to_chat(C.antag.current, completion_text)
-		cult.UnlockRandomRitual(TRUE)
-
-	if(only_once)
-		unlocked_rituals -= src
-		completed_rituals += src
-
-/datum/bloodcult_ritual/proc/Trigger()
+//Called when a cultist is about to hover the corresponding ritual UI button
+/datum/bloodcult_ritual/proc/update_desc()
 	return
 
-/datum/bloodcult_ritual/proc/Unlock(var/announce)
-	unlocked_rituals += src
-	locked_rituals -= src
-	jectie = new(src)
-	if(announce)
+//Perform custom ritual validation checks here
+/datum/bloodcult_ritual/proc/key_found(var/extra)
+	return TRUE
+
+/datum/bloodcult_ritual/proc/complete()
+	owner?.gain_devotion(reward_achiever, DEVOTION_TIER_4)//no key, duh
+	if (reward_faction)
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 		for(var/datum/role/cultist/C in cult.members)
-			to_chat(C.antag.current, "<b>New Objective: </b>[desc]")
-	cult.AppendObjective(jectie, 1)
+			C.gain_devotion(reward_faction, DEVOTION_TIER_4)//yes this means a larger cult gets more total devotion.
 
-/datum/bloodcult_ritual/proc/extraInfo()
-	return ""
-
-/datum/bloodcult_ritual/proc/Reward(var/worth)
-	if(point_limit == 0 || (total_points_rewarded + worth <= point_limit))
-		total_points_rewarded += worth
-		ChangeVeilWeakness(worth)
-
-	Finish(worth)
-
-/datum/bloodcult_ritual/always_active/Reward(var/worth)
-	if(point_limit == 0 || (total_points_rewarded + worth <= point_limit))
-		total_points_rewarded += worth
-		ChangeVeilWeakness(worth)
-
-/datum/bloodcult_ritual/proc/GrantTattoo(var/mob/cultist, var/type)
-	if(!ishuman(cultist))
-		return
-	if(cultist.mind)
-		var/datum/role/cultist/C = cultist.mind.GetRole(CULTIST)
-		if(!C)
-			return
-		C.GiveTattoo(type)
-
-/datum/bloodcult_ritual/proc/GetMobValue(var/type, var/multiplier)
-	var/awardedpoints = 0
-	switch(type)
-		if(/mob/living/simple_animal/cat/salem)
-			awardedpoints = 16
-		if(/mob/living/simple_animal/cat/Runtime)
-			awardedpoints = 16
-		if(/mob/living/simple_animal/cat)
-			awardedpoints = 8
-		if(/mob/living/simple_animal/corgi/Ian)
-			awardedpoints = 30
-		if(/mob/living/simple_animal/corgi/sasha)
-			awardedpoints = 25
-		if(/mob/living/simple_animal/corgi/Lisa)
-			awardedpoints = 30
-		if(/mob/living/simple_animal/corgi)
-			awardedpoints = 15
-		if(/mob/living/simple_animal/parrot/Poly)
-			awardedpoints = 10
-		if(/mob/living/simple_animal/mouse)
-			awardedpoints = 2
-		else
-			awardedpoints = 5
-	return awardedpoints * multiplier
-
-///////////////////////////////////
-
-/datum/bloodcult_ritual/always_active/draw_rune
-	name = "Draw Rune"
-	desc = "Draw a rune."
-	point_limit = 100
-
-/datum/bloodcult_ritual/always_active/draw_rune/Trigger(var/mob/cultist, var/list/extrainfo)
-	var/erased = extrainfo["erased"]
-	erased ? Reward(-1) : Reward(1)
-
-
-//////////////////////
-
-/datum/bloodcult_ritual/sow_confusion
-	name = "Sow Confusion"
-	desc = "Corrupt the minds of the unenlightened. Curse at least two people with a single confusion rune."
-
-/datum/bloodcult_ritual/sow_confusion/Trigger(var/mob/cultist, var/list/extrainfo)
-	var/people = extrainfo["victimcount"]
-	if(people > 1)
-		Reward(people * 10)
-	
-
-/datum/bloodcult_ritual/animal_sacrifice
-	name = "Sacrifice Animal"
-	desc = "The Geometer demands blood. Sacrifice an animal at an altar."
-	
-/datum/bloodcult_ritual/animal_sacrifice/Trigger(var/mob/cultist, var/list/extrainfo)
-	var/mobtype = extrainfo["mobtype"]
-	var/points = GetMobValue(mobtype,4)
-	Reward(points)
-	if(points >= 20)
-		GrantTattoo(cultist, /datum/cult_tattoo/dagger)
+	if (personal)
+		message_admins("BLOODCULT: [key_name(owner.antag.current)] has completed the [name] ritual.")
+		log_admin("BLOODCULT: [key_name(owner.antag.current)] has completed the [name] ritual.")
 	else
-		var/datum/role/cultist/C = cultist.mind.GetRole(CULTIST)
-		if(!locate(/datum/cult_tattoo/dagger) in C.tattoos)
-			to_chat(cultist, "<span class='warning'>Sacrifice something more valuable to earn your tattoo.</span>")
+		message_admins("BLOODCULT: The [name] ritual has been completed.")
+		log_admin("BLOODCULT: The [name] ritual has been completed.")
 
-/datum/bloodcult_ritual/spirited_away
-	name = "Spirited Away"
-	desc = "Show a nonbeliever life beyond this world. Send them on a trip through a path rune."
-	var/list/previous_victims = list()
+////////////////////////////////////////////////////////////////////
+//																  //
+//						FACTION RITUALS							  //
+//																  //
+////////////////////////////////////////////////////////////////////
 
-/datum/bloodcult_ritual/spirited_away/Trigger(var/mob/cultist, var/list/extrainfo)
-	var/list/victims = extrainfo["victims"]
-	for(var/mob/V in victims)
-		if((V in previous_victims) || !V.mind)
-			victims -= V
-	previous_victims += victims
-	if(victims.len > 0)
-		Reward(25 * victims.len)
-		GrantTattoo(cultist, /datum/cult_tattoo/shortcut)
+////////////////////////CONVERSION/////////////////////////////
 
-/datum/bloodcult_ritual/human_sacrifice
-	name = "Sacrifice Human"
-	desc = "The Geometer demands a meal. Sacrifice a human at an altar with the help of another cultist."
+/datum/bloodcult_ritual/reach_cap
+	name = "Reach the cap"
+	desc = "the cult must grow...<br>until it cannot..."
+
 	only_once = TRUE
-	var/accept_anyone = FALSE
+	ritual_type = "conversion"
+	difficulty = "medium"
+	reward_faction = 400
 
-/datum/bloodcult_ritual/human_sacrifice/New()
-	..()
-	if(cult.FindSacrificeTarget())
-		desc = "The Geometer demands a meal. Sacrifice the flesh of [cult.sacrifice_target][cult.sacrifice_target?.mind?.assigned_role ? ", the [cult.sacrifice_target.mind.assigned_role]," : ""] at an altar with the help of another cultist."
-	else
-		accept_anyone = TRUE
+	keys = list(
+		"conversion",
+		"converted_prisoner",
+		"soulstone",
+		"soulstone_prisoner",
+		)
 
-/datum/bloodcult_ritual/human_sacrifice/Trigger(var/mob/cultist, var/list/extrainfo)
-	var/mob/living/carbon/human/victim = extrainfo["victim"]
-	if(accept_anyone || (cult.sacrifice_target == victim))	// No target? Oh well, just accept anybody.
-		Reward(500)
+/datum/bloodcult_ritual/reach_cap/pre_conditions(var/datum/role/cultist/potential)
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult.CanConvert())
+		return TRUE
+	return FALSE
 
-		var/datum/role/cultist/C = cultist.mind.GetRole(CULTIST)
-		if(!C)
-			return  // huh?
-		if(!cultist.mind)
-			return  // HUH?
-		GrantTattoo(cultist, /datum/cult_tattoo/manifest)
-		playsound(cultist, 'sound/effects/fervor.ogg', 50, 0, -2)
-		anim(target = cultist, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_fervor", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE, direction = cultist.dir)
-		C.MakeArchCultist()
+/datum/bloodcult_ritual/reach_cap/key_found(var/extra)
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult.CanConvert())
+		return TRUE
+	return FALSE
 
-/datum/bloodcult_ritual/reveal_truth 
-	name = "Reveal the Truth"
-	desc = "Reveal the truth to the nonbelievers. Reveal hidden runes to nonbelievers and ensnare them in occult energy."
+////////////////////////CONSTRUCT/////////////////////////////
 
-/datum/bloodcult_ritual/reveal_truth/Trigger(var/mob/cultist, var/list/extrainfo)
-	var/points = 0
-	var/list/shocked = extrainfo["shocked"]
-	if(!shocked || shocked.len == 0)
-		return
-	for(var/mob/living/L in shocked)
-		points += 10*(shocked[L])
-	if(points > 0)
-		Reward(points)
+/datum/bloodcult_ritual/convert_station
+	name = "Cultify the Station"
+	desc = "convert the floors...<br>convert the walls..."
 
-/datum/bloodcult_ritual/silence_lambs
-	name = "Silence the Lambs"
-	desc = "Silence heretics aboard the station. Use a deaf/mute rune on at least two nonbelievers."
+	ritual_type = "constructs"
+	difficulty = "easy"
+	reward_faction = 200
 
-/datum/bloodcult_ritual/silence_lambs/Trigger(var/mob/cultist, var/list/extrainfo)
-	var/people = extrainfo["victimcount"]
-	if(people > 1)
-		Reward(people * 10)
-		GrantTattoo(cultist, /datum/cult_tattoo/silent)
-	
-/datum/bloodcult_ritual/curse_blood
-	name = "Spread the Gift"
-	desc = "Spread our gift amongst the crew. Create cursed blood by pouring it into a goblet, then have at least 3 nonbelievers ingest that blood."
-	point_limit = 100
-	var/list/infected = list()
+	keys = list(
+		"convert_floor",
+		"convert_wall",
+		)
 
-/datum/bloodcult_ritual/curse_blood/Trigger(var/list/extrainfo)
-	var/mob/living/victim = extrainfo["victim"]
-	if(!victim || !victim.mind || (victim in infected))
-		return
-	infected += victim
+	var/target = 30
+	var/list/turfs = list()
 
-	if(infected.len == 3)
-		Reward(100)
-		for(var/datum/role/cultist/C in cult.members)
-			GrantTattoo(C.antag.current, /datum/cult_tattoo/bloodpool)
+/datum/bloodcult_ritual/convert_station/init_ritual()
+	turfs = list()
 
-/datum/bloodcult_ritual/conversion
-	name = "Blood Missionary"
-	desc = "Spread our message amongst the crew. Convert a crewmember and have them join our cause."
-	var/list/converted = list()
+/datum/bloodcult_ritual/convert_station/update_desc()
+	desc = "convert the floors...<br>convert the walls...<br>need [target - turfs.len] more..."
 
-// Only succeeds if the conversion was successful! 
-// Be careful about reaching the cult capacity before unlocking this ritual.
-// Only works on people who haven't been converted before.
-// (Might make it so the ritual is completed if conversion fails ONLY due to cult capacity)
-/datum/bloodcult_ritual/conversion/Trigger(var/mob/living/cultist, var/list/extrainfo)
-	var/mob/living/victim = extrainfo["victim"]
-	if(victim && !(victim in converted))
-		converted += victim
-		Reward(200)
-		GrantTattoo(cultist, /datum/cult_tattoo/rune_store)
+/datum/bloodcult_ritual/convert_station/key_found(var/turf/T)
+	if (T in turfs)
+		return FALSE
+	turfs += T
+	if(turfs.len >= target)
+		return TRUE
+	return FALSE
 
 
-/datum/bloodcult_ritual/build_construct
-	name = "Forge Construct"
-	desc = "Create the perfect servant. Use a captive soul to create a construct."
+///////////////////////////////////////////////////////////////
 
-/datum/bloodcult_ritual/build_construct/Trigger(var/list/extrainfo)
-	var/perfect = extrainfo["perfect"]
-	perfect ? Reward(150) : Reward(75)
+/datum/bloodcult_ritual/produce_constructs
+	name = "One of each"
+	desc = "artificer...<br>wraith...<br>juggernaut..."
 
+	ritual_type = "constructs"
+	difficulty = "medium"
+	reward_faction = 300
 
-/datum/bloodcult_ritual/spill_blood
+	keys = list("build_construct")
+
+	var/list/types_to_build = list("Artificer", "Wraith", "Juggernaut")
+
+/datum/bloodcult_ritual/produce_constructs/init_ritual()
+	types_to_build = list("Artificer", "Wraith", "Juggernaut")
+
+/datum/bloodcult_ritual/produce_constructs/key_found(var/extra)
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	for (var/datum/role/R in cult.members)
+		var/mob/M = R.antag.current
+		if (istype(M, /mob/living/simple_animal/construct))
+			var/mob/living/simple_animal/construct/C = M
+			types_to_build -= C.construct_type
+	if (types_to_build.len <= 0)
+		return TRUE
+	return FALSE
+
+////////////////////////CONFUSION/////////////////////////////
+
+/datum/bloodcult_ritual/blind_cameras_multi
+	name = "Blind Many Cameras"
+	desc = "confusion runes and talismans...<br>darken their lenses..."
+
+	ritual_type = "confusion"
+	difficulty = "easy"
+	reward_faction = 200
+
+	keys = list("confusion_camera")
+
+	var/target_cameras = 20
+
+/datum/bloodcult_ritual/blind_cameras_multi/init_ritual()
+	target_cameras = 20
+
+/datum/bloodcult_ritual/blind_cameras_multi/update_desc()
+	desc = "confusion runes and talismans...<br>darken their lenses...<br>[target_cameras] to go..."
+
+/datum/bloodcult_ritual/blind_cameras_multi/key_found(var/extra)
+	target_cameras--
+	if(target_cameras <= 0)
+		return TRUE
+	return FALSE
+
+////////////////////////BLOODSPILL/////////////////////////////
+
+/datum/bloodcult_ritual/bloodspill
 	name = "Spill Blood"
-	desc = "Prepare this station for the Geometer's arrival. Spill blood across the station's floors."
+	desc = "more blood...need more...<br>on the floors...on the walls..."
+
 	only_once = TRUE
+	ritual_type = "bloodspill"
+	difficulty = "hard"
+	reward_achiever = 0
+	reward_faction = 500
+
+	keys = list("bloodspill")
+
 	var/percent_bloodspill = 4//percent of all the station's simulated floors, you should keep it under 5.
-	var/target_bloodspill = 0//actual amount of bloodied floors to reach
+	var/target_bloodspill = 1000//actual amount of bloodied floors to reach
 	var/max_bloodspill = 0//max amount of bloodied floors simultanously reached
 
-/datum/bloodcult_ritual/spill_blood/New()
-	..()
+/datum/bloodcult_ritual/bloodspill/init_ritual()
 	var/floor_count = 0
 	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
@@ -358,14 +224,430 @@ var/global/list/cult_altars = list()       // List of cult altars in the world.
 				floor_count++
 	target_bloodspill = round(floor_count * percent_bloodspill / 100)
 	target_bloodspill += rand(-20,20)
-	desc = "Prepare this station for the Geometer's arrival. Spill blood across [target_bloodspill] of the station's floors."
 
-/datum/bloodcult_ritual/spill_blood/extraInfo()
-	return " (Highest bloody floor count reached: [max_bloodspill])"
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	cult.bloodspill_ritual = src
 
-/datum/bloodcult_ritual/spill_blood/Trigger()
-	var/count = cult.bloody_floors.len 
-	if(count > max_bloodspill)
-		max_bloodspill = count
+/datum/bloodcult_ritual/bloodspill/update_desc()
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	desc = "more blood...need more...<br>on the floors...on the walls...<br>at least [target_bloodspill - cult.bloody_floors.len] more..."
+
+/datum/bloodcult_ritual/bloodspill/key_found(var/extra)
+	if(extra > max_bloodspill)
+		max_bloodspill = extra
 	if(max_bloodspill >= target_bloodspill)
-		Reward(500)
+		return TRUE
+	return FALSE
+
+/datum/bloodcult_ritual/bloodspill/complete()
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	cult.bloodspill_ritual = null
+	..()
+
+
+////////////////////////SACRIFICE/////////////////////////////
+
+/datum/bloodcult_ritual/sacrifice_captain
+	name = "Sacrifice Captain"
+	desc = "a simian...<br>an altar...<br>and a proper blade..."
+
+	only_once = TRUE
+	ritual_type = "sacrifice"
+	difficulty = "hard"
+	reward_faction = 500
+
+	keys = list("altar_sacrifice_human")
+
+/datum/bloodcult_ritual/sacrifice_captain/pre_conditions(var/datum/role/cultist/potential)
+	if (potential)
+		owner = potential
+	for(var/mob/M in player_list)
+		if(M.mind && M.mind.assigned_role == "Captain")
+			return TRUE
+	return FALSE
+
+/datum/bloodcult_ritual/sacrifice_captain/key_found(var/mob/living/O)
+	if (istype(O) && O.mind && O.mind.assigned_role == "Captain")
+		return TRUE
+	return FALSE
+
+////////////////////////INFECTION/////////////////////////////
+
+/datum/bloodcult_ritual/cursed_infection
+	name = "Cursed Blood"
+	desc = "from a tempting goblet...<br>pours a wicked drink..."
+
+	ritual_type = "infection"
+	difficulty = "medium"
+	reward_faction = 300
+
+	keys = list("cursed_infection")
+
+	var/targets = 5
+	var/list/infected_targets = list()
+
+/datum/bloodcult_ritual/cursed_infection/init_ritual()
+	infected_targets = list()
+
+/datum/bloodcult_ritual/cursed_infection/update_desc()
+	desc = "from a tempting goblet...<br>pours a wicked drink...<br>have at least [targets - infected_targets.len] more individuals consume it..."
+
+/datum/bloodcult_ritual/cursed_infection/key_found(var/mob/living/L)
+	if (iscultist(L))
+		return FALSE
+	if (L in infected_targets)
+		return FALSE
+	infected_targets += L
+	if(infected_targets >= targets)
+		return TRUE
+	return FALSE
+
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//						PERSONAL RITUALS						  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
+////////////////////////CONFUSION/////////////////////////////
+
+/datum/bloodcult_ritual/blind_cameras
+	name = "Blind Cameras"
+	desc = "confusion runes and talismans...<br>darken their lenses..."
+
+	ritual_type = "confusion"
+	difficulty = "easy"
+	personal = TRUE
+	reward_achiever = 200
+	reward_faction = 2
+
+	keys = list("confusion_camera")
+
+	var/target_cameras = 3
+
+/datum/bloodcult_ritual/blind_cameras/init_ritual()
+	target_cameras = 3
+
+//Called when a cultist is about to hover the corresponding ritual UI button
+/datum/bloodcult_ritual/blind_cameras/update_desc()
+	desc = "confusion runes and talismans...<br>darken their lenses...<br>[target_cameras] to go..."
+
+/datum/bloodcult_ritual/blind_cameras/key_found(var/extra)
+	target_cameras--
+	if(target_cameras <= 0)
+		return TRUE
+	return FALSE
+
+////////////////////////////////////////////////////////////////
+
+/datum/bloodcult_ritual/confuse_crew
+	name = "Confuse Crew"
+	desc = "confusion runes and talismans...<br>bring their nightmares to life..."
+
+	ritual_type = "confusion"
+	difficulty = "medium"
+	personal = TRUE
+	reward_achiever = 200
+	reward_faction = 2
+
+	keys = list(
+		"confusion_carbon",
+		"confusion_papered",
+		)
+
+/datum/bloodcult_ritual/confuse_crew/key_found(var/mob/living/extra)
+	if (!extra.client)
+		return FALSE
+	return TRUE
+
+////////////////////////HARM CREW MEMBERS/////////////////////////////
+
+/datum/bloodcult_ritual/harm_crew
+	name = "Harm Crew"
+	desc = "wield cult weaponry...<br>spill their blood...<br>sear their skin..."
+
+	ritual_type = "harm"
+	difficulty = "medium"
+	personal = TRUE
+	reward_achiever = 200
+	reward_faction = 2
+
+	keys = list(
+		"attack_tome",
+		"attack_cultblade",
+		"attack_blooddagger",
+		"attack_construct",
+		"attack_shade",
+		"attack_ritualknife",
+		)
+
+	var/targets = 3
+	var/list/hit_targets = list()
+
+/datum/bloodcult_ritual/harm_crew/init_ritual()
+	hit_targets = list()
+
+/datum/bloodcult_ritual/harm_crew/update_desc()
+	desc = "wield cult weaponry...<br>spill their blood...<br>sear their skin...<br>at least [targets - hit_targets.len] different individuals..."
+
+/datum/bloodcult_ritual/harm_crew/key_found(var/mob/living/L)
+	if (iscultist(L))
+		return FALSE
+	if (L in hit_targets)
+		return FALSE
+	hit_targets += L
+	if(hit_targets >= targets)
+		return TRUE
+	return FALSE
+
+////////////////////////SACRIFICE/////////////////////////////
+
+/datum/bloodcult_ritual/sacrifice_mouse
+	name = "Sacrifice Mouse"
+	desc = "a rodent...<br>an altar...<br>and a proper blade..."
+
+	ritual_type = "sacrifice"
+	difficulty = "easy"
+	personal = TRUE
+	reward_achiever = 200
+	reward_faction = 2
+
+	keys = list("altar_sacrifice_animal")
+
+/datum/bloodcult_ritual/sacrifice_mouse/key_found(var/mob/living/simple_animal/mouse/extra)
+	if(istype(extra))
+		return TRUE
+	return FALSE
+
+
+//////////////////////////////////////////////////////////////
+
+/datum/bloodcult_ritual/sacrifice_monkey
+	name = "Sacrifice Monkey"
+	desc = "a simian...<br>an altar...<br>and a proper blade..."
+
+	ritual_type = "sacrifice"
+	difficulty = "easy"
+	personal = TRUE
+	reward_achiever = 200
+	reward_faction = 2
+
+	keys = list("altar_sacrifice_monkey")
+
+/datum/bloodcult_ritual/sacrifice_monkey/key_found(var/extra)
+	return TRUE
+
+
+////////////////////////ALTAR/////////////////////////////////
+
+/datum/bloodcult_ritual/altar
+	name = "Prepare Altar"
+	desc = "raise an altar...<br>add proper paraphernalia around...<br>then plant a ritual knife on top..."
+
+	ritual_type = "altar"
+	difficulty = "easy"
+	personal = TRUE
+	reward_achiever = 200
+	reward_faction = 2
+
+	var/required_candles = 0
+	var/required_tomes = 0
+	var/required_runes = 0
+	var/required_pylons = 0
+	var/required_animal = 0
+	var/required_humanoid = 0
+	var/required_cultblade = 0
+
+	keys = list("altar_plant")
+
+/datum/bloodcult_ritual/altar/key_found(var/obj/structure/cult/altar/altar)
+	var/mob/user = owner.antag.current
+
+	var/valid = TRUE
+	var/found_candles = 0
+	for (var/obj/item/candle/blood/CB in range(1, altar))
+		if (CB.lit)
+			found_candles++
+	if (found_candles < required_candles)
+		to_chat(user, "<span class='sinister'>Need more lit blood candles...</span>")
+		valid = FALSE
+
+	var/found_tomes = 0
+	for (var/obj/item/weapon/tome/T in range(1, altar))
+		found_tomes++
+	if (found_tomes < required_tomes)
+		to_chat(user, "<span class='sinister'>Need more arcane tomes...</span>")
+		valid = FALSE
+
+	var/found_runes = 0
+	for (var/obj/effect/rune/R in range(1, altar))
+		found_runes++
+	if (found_runes < required_runes)
+		to_chat(user, "<span class='sinister'>Need more runes...</span>")
+		valid = FALSE
+
+	var/found_pylons = 0
+	for (var/obj/structure/cult/pylon/P in range(1, altar))
+		found_pylons++
+	if (found_pylons < required_pylons)
+		to_chat(user, "<span class='sinister'>You must construct additional pylons...</span>")
+		valid = FALSE
+
+	var/found_animal = FALSE
+	var/found_humanoid = FALSE
+	if(altar.is_locking(altar.lock_type))
+		var/mob/M = altar.get_locked(altar.lock_type)[1]
+		if (ishuman(M))
+			found_humanoid = TRUE
+		if (ismonkey(M) || isanimal(M))
+			found_animal = TRUE
+	if (required_animal && !found_animal)
+		to_chat(user, "<span class='sinister'>You must impale an animal on top...</span>")
+		valid = FALSE
+	if (required_humanoid && !found_humanoid)
+		to_chat(user, "<span class='sinister'>You must impale an humanoid on top...</span>")
+		valid = FALSE
+
+	var/obj/item/weapon/melee/B = altar.blade
+	if (required_cultblade && !istype(B))
+		to_chat(user, "<span class='sinister'>Lastly, a mere ritual knife won't do here. Forge a better implement...</span>")
+
+	return valid
+
+/datum/bloodcult_ritual/altar/simple
+	name = "Prepare Simple Altar"
+	desc = "raise an altar...<br>add some lit blood candles around...<br>then plant a ritual knife on top..."
+
+	difficulty = "easy"
+	reward_achiever = 200
+	reward_faction = 2
+
+	required_candles = 4
+	required_tomes = 0
+	required_runes = 0
+	required_pylons = 0
+	required_animal = 0
+	required_humanoid = 0
+	required_cultblade = 0
+
+/datum/bloodcult_ritual/altar/elaborate
+	name = "Prepare Elaborate Altar"
+	desc = "raise an altar...<br>add proper paraphernalia around...<br>then plant a ritual knife on top..."
+
+	difficulty = "easy"
+	reward_achiever = 200
+	reward_faction = 2
+
+	required_candles = 4
+	required_tomes = 1
+	required_runes = 4
+	required_pylons = 0
+	required_animal = 0
+	required_humanoid = 0
+	required_cultblade = 0
+
+/datum/bloodcult_ritual/altar/excentric
+	name = "Prepare Excentric Altar"
+	desc = "raise an altar...<br>add proper paraphernalia around...<br>lay an animal on top...<br>then plant a ritual knife into it..."
+
+	difficulty = "medium"
+	reward_achiever = 400
+	reward_faction = 4
+
+	required_candles = 4
+	required_tomes = 0
+	required_runes = 4
+	required_pylons = 0
+	required_animal = 1
+	required_humanoid = 0
+	required_cultblade = 0
+
+/datum/bloodcult_ritual/altar/unholy
+	name = "Prepare Unholy Altar"
+	desc = "raise an altar...<br>add proper paraphernalia around...<br>lay a humanoid on top...<br>then plant a cult blade into them..."
+
+	difficulty = "hard"
+	reward_achiever = 600
+	reward_faction = 6
+
+	required_candles = 2
+	required_tomes = 1
+	required_runes = 3
+	required_pylons = 2
+	required_animal = 0
+	required_humanoid = 1
+	required_cultblade = 1
+
+////////////////////////SUICIDE/////////////////////////////
+
+/datum/bloodcult_ritual/suicide_tome
+	name = "An Ending"
+	desc = "grab a tome...<br>then think of an ending...<br>preferably one with many witnesses..."
+
+	only_once = TRUE
+	ritual_type = "suicide"
+	difficulty = "hard"
+	personal = TRUE
+	reward_achiever = 500
+	reward_faction = 100
+
+	keys = list("suicide_tome")
+
+/datum/bloodcult_ritual/suicide_tome/pre_conditions(var/datum/role/cultist/potential)
+	if (potential)
+		owner = potential
+	if (potential.devotion > DEVOTION_TIER_4)
+		return TRUE
+	return FALSE
+
+/datum/bloodcult_ritual/suicide_tome/key_found(var/mob/living/extra)
+	for(var/mob/M in dview(world.view, get_turf(extra), INVISIBILITY_MAXIMUM))
+		if (!M.client)
+			continue
+		if (isobserver(M))
+			reward_achiever += 50
+			reward_faction += 10
+		else if (iscultist(M))
+			reward_achiever += 100
+			reward_faction += 20
+		else
+			reward_achiever += 200
+			reward_faction += 40
+	return TRUE
+
+///////////////////////////////////////////////////////////////////////////
+
+/datum/bloodcult_ritual/suicide_soulblade
+	name = "Soul Blade"
+	desc = "Become the bone of your own sword..."
+
+	only_once = TRUE
+	ritual_type = "suicide"
+	difficulty = "hard"
+	personal = TRUE
+	reward_achiever = 500
+	reward_faction = 100
+
+	keys = list("suicide_tome")
+
+/datum/bloodcult_ritual/suicide_soulblade/pre_conditions(var/datum/role/cultist/potential)
+	if (potential)
+		owner = potential
+	if (potential.devotion > DEVOTION_TIER_3)
+		return TRUE
+	return FALSE
+
+/datum/bloodcult_ritual/suicide_soulblade/key_found(var/mob/living/extra)
+	for(var/mob/M in dview(world.view, get_turf(extra), INVISIBILITY_MAXIMUM))
+		if (!M.client)
+			continue
+		if (isobserver(M))
+			reward_achiever += 25
+			reward_faction += 5
+		else if (iscultist(M))
+			reward_achiever += 50
+			reward_faction += 10
+		else
+			reward_achiever += 100
+			reward_faction += 20
+	return TRUE

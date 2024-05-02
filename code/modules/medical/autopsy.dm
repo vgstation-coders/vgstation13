@@ -157,7 +157,7 @@
 
 	sleep(1 SECONDS)
 
-	var/obj/item/weapon/paper/P = new(user.loc)
+	var/obj/item/weapon/paper/P = new(loc)
 	P.name = "Autopsy Data ([target_name])"
 	P.info = "<tt>[format_autopsy_data()]</tt>"
 	P.overlays += image(icon = P.icon, icon_state = "paper_words")

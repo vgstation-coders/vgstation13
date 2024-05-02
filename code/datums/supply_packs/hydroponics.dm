@@ -234,8 +234,8 @@
 	name = "Exotic seeds"
 	contains = list(/obj/item/seeds/dionanode,
 					/obj/item/seeds/dionanode,
-					/obj/item/seeds/libertymycelium,
-					/obj/item/seeds/reishimycelium,
+					/obj/item/seeds/random,
+					/obj/item/seeds/random,
 					/obj/item/seeds/random,
 					/obj/item/seeds/random,
 					/obj/item/seeds/random,

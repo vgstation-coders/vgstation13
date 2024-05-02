@@ -134,7 +134,7 @@
 	if(!seed.check_harvest(user))
 		return
 
-	seed.harvest(user)
+	seed.harvest(user, src)
 	after_harvest()
 	return
 

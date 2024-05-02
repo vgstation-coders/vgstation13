@@ -273,6 +273,7 @@
 		<br><br>Spires provide easy communication for the cult in the entire region. Use :x (or .x, or #x) to use cult chat after one is built."
 	var/turf/loc_memory = null
 	var/spawntype = /obj/structure/cult/altar
+	var/structure
 
 /datum/rune_spell/raisestructure/proc/proximity_check()
 	var/obj/effect/rune/R = spell_holder
@@ -298,9 +299,9 @@
 		list("Altar", "radial_altar", "The nexus of a cult base. Lets you commune with Nar-Sie, conjure soul gems, and keep tabs on the cult's members and activities over the station."),
 		list("Spire", "radial_spire", "Allows all cultists in the level to communicate with each others using :x"),
 		list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience."),
-		list("Pylon", "radial_pylon", "Provides some light in the surrounding area, and has some use in rituals.")
+		list("Pylon", "radial_pylon", "Provides some light in the surrounding area.")
 	)
-	var/structure = show_radial_menu(user,R.loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
+	structure = show_radial_menu(user,R.loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
 
 	if(!R.Adjacent(user) || !structure )
 		abort()
@@ -329,7 +330,7 @@
 	if(user.client)
 		user.client.images |= progbar
 	spell_holder.overlays += image('icons/obj/cult.dmi',"runetrigger-build")
-	to_chat(activator, "<span class='rose'>This ritual's can be sped up by having multiple cultists partake in it or by wearing cult attire.</span>")
+	to_chat(activator, "<span class='rose'>This ritual can be sped up by having multiple cultists partake in it or by wearing cult attire.</span>")
 	spawn()
 		payment()
 
@@ -409,6 +410,9 @@
 	message_admins("A rune ritual has iterated for over 1000 blood payment procs. Something's wrong there.")
 
 /datum/rune_spell/raisestructure/proc/success()
+	for(var/mob/living/L in contributors)
+		var/datum/role/cultist/C = L.mind.GetRole(CULTIST)
+		C.gain_devotion(10, DEVOTION_TIER_1,"raise_structure",structure)
 	new spawntype(spell_holder.loc)
 	qdel(spell_holder) //Deletes the datum as well.
 
@@ -457,16 +461,16 @@
 	for(var/datum/role/cultist/C in cult.members)
 		var/datum/mind/M = C.antag
 		if (iscultist(M.current))//failsafe for cultist brains put in MMIs
-			to_chat(M.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[reminder]</span></span>")
+			to_chat(M.current, "<span class='game say'><b>[user.real_name]</b>'s voice echoes in your head, <B><span class='sinisterbig'>[reminder]</span></span>")
 			to_chat(M.current, "<span class='notice'>This message will be remembered by all current cultists, and by new converts as well.</span>")
 			M.store_memory("Cult reminder: [text].")
 
 	for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
-		to_chat(A, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinister'>[reminder]</span></span>. (Cult reminder)")
+		to_chat(A, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinisterbig'>[reminder]</span></span>. (Cult reminder)")
 		to_chat(A, "<span class='notice'>This message will be remembered by all current cultists, and by new converts as well.</span>")
 
 	for(var/mob/dead/observer/O in player_list)
-		to_chat(O, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinister'>[reminder]</span></span>. (Cult reminder)")
+		to_chat(O, "<span class='game say'><b>[user.real_name]</b> communicates, <span class='sinisterbig'>[reminder]</span></span>. (Cult reminder)")
 
 	log_cultspeak("[key_name(user)] Cult reminder: [reminder]")
 
@@ -479,13 +483,13 @@
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
 		if (iscultist(M.current))//failsafe for cultist brains put in MMIs
-			to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinister'>[message]</span></B></span>")
+			to_chat(M.current, "<span class='game say'><b>[activator.real_name]</b>'s voice echoes in your head, <B><span class='sinisterbig'>[message]</span></B></span>")
 
 	for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
-		to_chat(A, "<span class='game say'><b>[activator.real_name]</b> communicates, <span class='sinister'>[message]</span></span>")
+		to_chat(A, "<span class='game say'><b>[activator.real_name]</b> communicates, <span class='sinisterbig'>[message]</span></span>")
 
 	for(var/mob/dead/observer/O in player_list)
-		to_chat(O, "<span class='game say'><b>[activator.real_name]</b> communicates, <span class='sinister'>[message]</span></span>")
+		to_chat(O, "<span class='game say'><b>[activator.real_name]</b> communicates, <span class='sinisterbig'>[message]</span></span>")
 
 	log_cultspeak("[key_name(activator)] Cult Communicate Talisman: [message]")
 
@@ -540,11 +544,11 @@
 			if (M.current == speech.speaker)//echoes are annoying
 				continue
 			if (iscultist(M.current))//failsafe for cultist brains put in MMIs
-				to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinister'>[speech.message]</span></B></span>")
+				to_chat(M.current, "<span class='game say'><b>[speaker_name]</b>'s voice echoes in your head, <B><span class='sinisterbig'>[speech.message]</span></B></span>")
 		for(var/mob/living/simple_animal/astral_projection/A in astral_projections)
-			to_chat(A, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinister'>[speech.message]</span></span>")
+			to_chat(A, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[speech.message]</span></span>")
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinister'>[speech.message]</span></span>")
+			to_chat(O, "<span class='game say'><b>[speaker_name]</b> communicates, <span class='sinisterbig'>[speech.message]</span></span>")
 		log_cultspeak("[key_name(speech.speaker)] Cult Communicate Rune: [rendered_message]")
 
 /obj/effect/cult_ritual/cult_communication/HasProximity(var/atom/movable/AM)
@@ -555,7 +559,7 @@
 
 ////////////////////////////////////////////////////////////////////
 //																  //
-//							Paraphernalia						  //
+//							PARAPHERNALIA						  //
 //																  //
 ////////////////////////////////////////////////////////////////////
 
@@ -634,7 +638,7 @@
 			list("Tempting Goblet", "radial_paraphernalia_goblet", "A classy holder for your beverage of choice. Prank your enemies by hitting them with a goblet full of blood."),
 			list("Coffer", "radial_paraphernalia_coffer", "Keep your occult lab orderly by storing your cult paraphernalia in those coffers."),
 			list("Ritual Knife", "radial_paraphernalia_knife", "A long time ago a wizard enchanted one of those to infiltrate the realm of Nar-Sie and steal some soul stone shards. Now it's just a cool knife. Don't rely on it in a fight though."),
-			list("Arcane Tome", "radial_paraphernalia_tome", "Bring forth an arcane tome filled with Nar-Sie's knowledge. Harmful to the uninitiated in more ways than one. Ghosts can flick their pages."),
+			list("Arcane Tome", "radial_paraphernalia_tome", "Bring forth an arcane tome filled with Nar-Sie's knowledge. Contains a wealth of information regarding each runes, along with many other aspects of the cult."),
 			)
 		var/task = show_radial_menu(activator,get_turf(spell_holder),choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
 		if (!spell_holder.Adjacent(activator) || !task || gcDestroyed)
@@ -642,6 +646,8 @@
 			return
 		if (pay_blood())
 			R.one_pulse()
+			var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+			C.gain_devotion(10, DEVOTION_TIER_0, "conjure_paraphernalia", task)
 			var/obj/spawned_object
 			var/turf/T = get_turf(spell_holder)
 			switch (task)
@@ -755,7 +761,7 @@ var/list/converted_minds = list()
 
 /datum/rune_spell/conversion
 	name = "Conversion"
-	desc = "The unenlightened will be made humble before Nar-Sie, or their lives will come to a fantastic end."
+	desc = "The unenlightened will bask before Nar-Sie's glory and given the chance to join the cult, or they will be made your prisoner."
 	desc_talisman = "Use to remotely trigger the rune and incapacitate someone on top."
 	invocation = "Mah'weyh pleggh at e'ntrath!"
 	word1 = /datum/rune_word/join
@@ -1086,7 +1092,7 @@ var/list/converted_minds = list()
 					qdel(H)
 				convert(convertee, converter)
 				conversion.icon_state = ""
-				TriggerCultRitual(/datum/bloodcult_ritual/conversion, converter, list("victim" = convertee))
+
 				flick("rune_convert_success",conversion)
 				message_admins("BLOODCULT: [key_name(convertee)] has been converted by [key_name(converter)].")
 				log_admin("BLOODCULT: [key_name(convertee)] has been converted by [key_name(converter)].")
@@ -1119,6 +1125,12 @@ var/list/converted_minds = list()
 				victim.Jitter(5)
 				if (isalien(victim))
 					victim.Paralyse(8)
+
+				if (cult && victim.mind)
+					if (!(victim.mind in cult.previously_made_prisoner))
+						cult.previously_made_prisoner |= victim.mind
+						var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+						C.gain_devotion(250, DEVOTION_TIER_3,"made_prisoner",victim)
 
 				//let's start by removing any cuffs they might already have
 				if (victim.handcuffed)
@@ -1175,6 +1187,13 @@ var/list/converted_minds = list()
 	if (!cult)
 		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
 	cult.HandleRecruitedRole(newCultist)
+	if (!(victim.mind in cult.previously_converted))
+		cult.previously_made_prisoner |= M.mind
+		var/datum/role/cultist/C = converter.mind.GetRole(CULTIST)
+		if (victim.mind in cult.previously_made_prisoner)
+			C.gain_devotion(250, DEVOTION_TIER_4,"converted_prisoner", victim)//making someone prisoner already grants 250 devotion on top.
+		else
+			C.gain_devotion(500, DEVOTION_TIER_4,"conversion", victim)
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_CONVERTED)
 	newCultist.conversion["converted"] = activator
@@ -1259,13 +1278,13 @@ var/list/converted_minds = list()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
-	new/obj/effect/cult_ritual/stun(R.loc)
+	new/obj/effect/cult_ritual/stun(R.loc,1,activator)
 
 	qdel(R)
 
 /datum/rune_spell/stun/cast_talisman()
 	var/turf/T = get_turf(spell_holder)
-	new/obj/effect/cult_ritual/stun(T,2)
+	new/obj/effect/cult_ritual/stun(T,2,activator)
 	qdel(src)
 
 /datum/rune_spell/stun/cast_touch(var/mob/M)
@@ -1276,6 +1295,10 @@ var/list/converted_minds = list()
 		invoke(activator,"Dream sign ''Evil sealing talisman''!",1)
 	else
 		invoke(activator,invocation,1)
+
+	if (!M.isDead())
+		var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+		C.gain_devotion(100, DEVOTION_TIER_2, "stun_papered", M)
 
 	if(issilicon(M))
 		to_chat(M, "<span class='danger'>WARNING: Short-circuits detected, Rebooting...</span>")
@@ -1307,7 +1330,7 @@ var/list/converted_minds = list()
 	mouse_opacity = 0
 	var/stun_duration = 5
 
-/obj/effect/cult_ritual/stun/New(turf/loc,var/type=1)
+/obj/effect/cult_ritual/stun/New(turf/loc,var/type=1,var/mob/living/carbon/caster)
 	..()
 
 	switch (type)
@@ -1343,6 +1366,10 @@ var/list/converted_minds = list()
 			shadow(L,loc,"rune_stun")
 			if (iscultist(L))
 				duration--
+			else if (caster)
+				if (!L.isDead())
+					var/datum/role/cultist/C = caster.mind.GetRole(CULTIST)
+					C.gain_devotion(50, DEVOTION_TIER_2, "stun_rune", L)
 			if(iscarbon(L))
 				var/mob/living/carbon/C = L
 				C.flash_eyes(visual = 1)
@@ -1380,10 +1407,20 @@ var/list/confusion_victims = list()
 	Every non-cultist human in range will see their surroundings appear covered with occult markings, and everyone will look like monsters to them. \
 	HUDs won't help officer differentiate their owns for the duration of the illusion.\
 	<br><br>Robots in view will be simply blinded for a short while, cameras however will remain dark until someone resets their wiring.\
-	<br><br>Because it also causes a few seconds of blindness to those affected, this rune is useful as both a way to initiate a fight, escape, or kidnap someone amidst the chaos."
+	<br><br>Because it also causes a few seconds of blindness to those affected, this rune is useful as both a way to initiate a fight, escape, or kidnap someone amidst the chaos.\
+	<br><br>The duration is a bit shorter when used from a talisman, but you can slap it directly on someone to only afflict them with the same duration as a rune's."
 	var/rune_duration=300//times are in tenths of a second
 	var/talisman_duration=200
 	var/hallucination_radius=25
+	touch_cast = 1
+
+/datum/rune_spell/confusion/cast_touch(var/mob/M)
+	var/turf/T = get_turf(M)
+	invoke(activator,invocation,1)
+
+	new /obj/effect/cult_ritual/confusion(T,rune_duration,hallucination_radius, M, activator)
+
+	qdel(src)
 
 /datum/rune_spell/confusion/cast(var/duration = rune_duration)
 	new /obj/effect/cult_ritual/confusion(spell_holder,duration,hallucination_radius, null, activator)
@@ -1404,12 +1441,13 @@ var/list/confusion_victims = list()
 	var/duration = 5
 	var/hallucination_radius=25
 
-/obj/effect/cult_ritual/confusion/New(turf/loc,var/duration=300,var/radius=25,var/mob/specific_victim=null, var/culprit)
+/obj/effect/cult_ritual/confusion/New(turf/loc,var/duration=300,var/radius=25,var/mob/specific_victim=null, var/mob/culprit)
 	..()
 	//Alright, this is a pretty interesting rune, first of all we prepare the fake cult floors & walls that the victims will see.
 	var/turf/T = get_turf(src)
 	var/list/hallucinated_turfs = list()
-	playsound(T, 'sound/effects/confusion_start.ogg', 75, 0, 0)
+	if (!specific_victim)
+		playsound(T, 'sound/effects/confusion_start.ogg', 75, 0, 0)
 	for(var/turf/U in range(T,radius))
 		if (istype(U,/area/chapel))//the chapel is protected against such illusions, the mobs in it will still be affected however.
 			continue
@@ -1432,20 +1470,21 @@ var/list/confusion_victims = list()
 
 	if (specific_victim)
 		potential_victims.Add(specific_victim)
+		specific_victim.playsound_local(T, 'sound/effects/confusion_start.ogg', 75, 0, 0)
 	else
 		for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
 			potential_victims.Add(M)
 
-	var/ritual_victim_count = 0
+	var/datum/role/cultist/our_cultist
+	if (culprit && culprit.mind)
+		our_cultist = culprit.mind.GetRole(CULTIST)
+
 	for(var/mob/living/M in potential_victims)
 
 		if (iscarbon(M))
 			var/mob/living/carbon/C = M
 			if (iscultist(C))
 				continue
-
-			if(C.stat == CONSCIOUS)
-				ritual_victim_count++
 
 			var/datum/confusion_manager/CM
 			if (M in confusion_victims)
@@ -1454,20 +1493,24 @@ var/list/confusion_victims = list()
 				CM = new(M,duration)
 				confusion_victims[M] = CM
 
+			if (!M.isDead() && our_cultist)
+				if (specific_victim == M)
+					our_cultist.gain_devotion(50, DEVOTION_TIER_2, "confusion_papered", M)
+				else
+					our_cultist.gain_devotion(50, DEVOTION_TIER_2, "confusion_carbon", M)
+
 			spawn()
 				CM.apply_confusion(T,hallucinated_turfs)
 
 		if (issilicon(M) && !isAI(M))//Silicons get a fade to black, then just a flash, until I can think of something else
 			shadow(M,T)
+			if (!M.isDead() && our_cultist)
+				our_cultist.gain_devotion(50, DEVOTION_TIER_2, "confusion_silicon", M)
 			M.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)
 			M.update_fullscreen_alpha("blindblack", 255, 5)
 			spawn(5)
 				M.clear_fullscreen("blindblack", animate = 0)
 				M.flash_eyes(visual = 1)
-
-	//temp ritual stuff
-	if(culprit && ritual_victim_count > 0)
-		TriggerCultRitual(/datum/bloodcult_ritual/sow_confusion, culprit, list("victimcount" = ritual_victim_count))
 
 	//now to blind cameras, the effects on cameras do not time out, but they can be fixed
 	if (!specific_victim)
@@ -1477,7 +1520,9 @@ var/list/confusion_victims = list()
 			animate(C, color = col, time = 4)
 			animate(color = "black", time = 5)
 			animate(color = col, time = 5)
-			C.vision_flags = BLIND//Anyone using a security cameras computer will only see darkness
+			if (!(C.vision_flags & BLIND) && our_cultist)
+				our_cultist.gain_devotion(50, DEVOTION_TIER_2, "confusion_camera", C)
+				C.vision_flags = BLIND//Anyone using a security cameras computer will only see darkness
 			C.setViewRange(-1)//The camera won't reveal the area for the AI anymore
 
 	qdel(src)
@@ -1588,20 +1633,49 @@ var/list/confusion_victims = list()
 	word2 = /datum/rune_word/other
 	word3 = /datum/rune_word/see
 	page = "This rune causes every non-cultist (both humans and robots) in a 7 tile radius to be unable to speak 30 seconds, and unable to hear for 50 seconds. \
-		The durations are halved when cast from a talisman.\
+		The durations are halved when cast from a talisman, unless you slap someone directly with one, which will also limits the effects to them.\
 		<br><br>This rune is great to sow disorder and delay the arrival of security, and can potentially combo with a Stun talisman used on an area. The only downside is that you can't hear them scream while they are muted."
 	var/deaf_rune_duration=50//times are in seconds
 	var/deaf_talisman_duration=30
 	var/mute_rune_duration=25
 	var/mute_talisman_duration=15
 	var/effect_range=7
+	touch_cast = 1
+
+/datum/rune_spell/deafmute/cast_touch(var/mob/living/M)
+	invoke(activator,invocation,1)
+
+	var/deaf_duration = deaf_rune_duration
+	var/mute_duration = mute_rune_duration
+
+	var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+	if (!iscultist(M) && M.mind && !M.isDead())
+		C.gain_devotion(50, DEVOTION_TIER_2, "deafmute_papered", M)
+	M.overlay_fullscreen("deafborder", /obj/abstract/screen/fullscreen/deafmute_border)//victims see a red overlay fade in-out for a second
+	M.update_fullscreen_alpha("deafborder", 100, 5)
+	M.Deafen(deaf_duration)
+	M.Mute(mute_duration)
+	if (!(M.sdisabilities & DEAF))
+		to_chat(M,"<span class='notice'>The world around you suddenly becomes quiet.</span>")
+	if (!(M.sdisabilities & MUTE))
+		if (iscarbon(M))
+			to_chat(M,"<span class='warning'>You feel a terrible chill! You find yourself unable to speak a word...</span>")
+		else if (issilicon(M))
+			to_chat(M,"<span class='warning'>A shortcut appears to have temporarily disabled your speaker!</span>")
+	spawn(8)
+		M.update_fullscreen_alpha("deafborder", 0, 5)
+		sleep(8)
+		M.clear_fullscreen("deafborder", animate = 0)
+
+	qdel(src)
 
 /datum/rune_spell/deafmute/cast(var/deaf_duration = deaf_rune_duration, var/mute_duration = mute_rune_duration)
-	var/ritual_victim_count = 0
 	for(var/mob/living/M in range(effect_range,get_turf(spell_holder)))
 		if (iscultist(M))
 			continue
-		ritual_victim_count += 1
+		var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+		if (!M.isDead())
+			C.gain_devotion(50, DEVOTION_TIER_2, "deafmute", M)
 		M.overlay_fullscreen("deafborder", /obj/abstract/screen/fullscreen/deafmute_border)//victims see a red overlay fade in-out for a second
 		M.update_fullscreen_alpha("deafborder", 100, 5)
 		M.Deafen(deaf_duration)
@@ -1617,8 +1691,6 @@ var/list/confusion_victims = list()
 			M.update_fullscreen_alpha("deafborder", 0, 5)
 			sleep(8)
 			M.clear_fullscreen("deafborder", animate = 0)
-	if(activator && ritual_victim_count > 0)
-		TriggerCultRitual(/datum/bloodcult_ritual/silence_lambs, activator, list("victimcount" = ritual_victim_count))
 	qdel(spell_holder)
 
 /datum/rune_spell/deafmute/cast_talisman()
@@ -1650,12 +1722,9 @@ var/list/confusion_victims = list()
 	animation.alpha = 0
 	animate(animation, alpha = 255, time = 2)
 	animate(alpha = 0, time = 3)
-	//for(var/turf/U in range(effect_range,T))//DEBUG
-	//	var/dist = cheap_pythag(U.x - T.x, U.y - T.y)
-	//	if (dist <= effect_range+0.5)
-	//		U.color = "red"
 	to_chat(activator, "<span class='notice'>All runes and cult structures in range hide themselves behind a thin layer of reality.</span>")
-	//playsound(T, 'sound/effects/conceal.ogg', 50, 0, -4)
+	playsound(T, 'sound/effects/conceal.ogg', 50, 0, -5)
+	var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
 
 	for(var/obj/structure/cult/S in range(effect_range,T))
 		var/dist = cheap_pythag(S.x - T.x, S.y - T.y)
@@ -1663,6 +1732,7 @@ var/list/confusion_victims = list()
 			continue
 		if (dist <= effect_range+0.5)
 			S.conceal()
+			C.gain_devotion(10, DEVOTION_TIER_0, "conceal_structure", S)
 
 	for(var/obj/effect/rune/R in range(effect_range,T))
 		if (R == spell_holder)
@@ -1672,6 +1742,7 @@ var/list/confusion_victims = list()
 		var/dist = cheap_pythag(R.x - T.x, R.y - T.y)
 		if (dist <= effect_range+0.5)
 			R.conceal()
+			C.gain_devotion(10, DEVOTION_TIER_0, "conceal_rune", R)
 			var/atom/movable/overlay/trail = shadow(R,T,"rune_conceal")
 			trail.alpha = 0
 			animate(trail, alpha = 200, time = 2)
@@ -1710,18 +1781,15 @@ var/list/confusion_victims = list()
 
 /datum/rune_spell/reveal/cast()
 	var/turf/T = get_turf(spell_holder)
-	//for(var/turf/U in range(effect_range,T))//DEBUG
-	//	var/dist = cheap_pythag(U.x - T.x, U.y - T.y)
-	//	if (dist <= effect_range+0.5)
-	//		U.color = "red"
-
 	var/list/shocked = list()
 	to_chat(activator, "<span class='notice'>All concealed runes and cult structures in range phase back into reality, stunning nearby foes.</span>")
-	playsound(T, 'sound/effects/reveal.ogg', 50, 0, -2)
+	playsound(T, 'sound/effects/reveal.ogg', 50, 0, -3)
+	var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
 
 	for(var/obj/structure/cult/concealed/S in range(effect_range,T))//only concealed structures trigger the effect
 		var/dist = cheap_pythag(S.x - T.x, S.y - T.y)
 		if (dist <= effect_range+0.5)
+			C.gain_devotion(10, DEVOTION_TIER_0, "reveal_structure", S)
 			anim(target = S, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*shock_range, offY = -WORLD_ICON_SIZE*shock_range, plane = ABOVE_LIGHTING_PLANE)
 			for(var/mob/living/L in viewers(S))
 				if (iscultist(L))
@@ -1740,6 +1808,7 @@ var/list/confusion_victims = list()
 		var/dist = cheap_pythag(R.x - T.x, R.y - T.y)
 		if (dist <= effect_range+0.5)
 			if (R.reveal())//only hidden runes trigger the effect
+				C.gain_devotion(10, DEVOTION_TIER_0, "reveal_rune", R)
 				anim(target = R, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE*shock_range, offY = -WORLD_ICON_SIZE*shock_range, plane = ABOVE_LIGHTING_PLANE)
 				for(var/mob/living/L in viewers(R))
 					if (iscultist(L))
@@ -1754,8 +1823,9 @@ var/list/confusion_victims = list()
 						shocked[L] = 2
 
 	for(var/mob/living/L in shocked)
+		if (!L.isDead())
+			C.gain_devotion(50, DEVOTION_TIER_2, "reveal_stun", L)
 		new /obj/effect/cult_ritual/reveal(L.loc, L, shocked[L])
-		TriggerCultRitual(/datum/bloodcult_ritual/reveal_truth, activator, list("shocked" = shocked))
 		to_chat(L, "<span class='danger'>You feel a terrifying shock resonate within your body as the hidden runes are revealed!</span>")
 		L.update_fullscreen_alpha("shockborder", 100, 5)
 		spawn(8)
@@ -2056,13 +2126,17 @@ var/list/seer_rituals = list()
 
 	anim(target = target, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_robes", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = ABOVE_LIGHTING_PLANE)
 
+	var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+	C.gain_devotion(50, DEVOTION_TIER_0, "summon_robes", target)
+
 	var/obj/item/weapon/blood_tesseract/BT = new(get_turf(activator))
 	if (istype (spell_holder,/obj/item/weapon/talisman))
 		var/obj/item/weapon/talisman/T = spell_holder
-		activator.u_equip(spell_holder)
-		if (T.uses > 1)
-			BT.remaining = spell_holder
-			spell_holder.forceMove(BT)
+		if (!T.linked_ui)
+			activator.u_equip(spell_holder)
+			if (T.uses > 1)
+				BT.remaining = spell_holder
+				spell_holder.forceMove(BT)
 
 	for(var/slot in slots_to_store)
 		var/obj/item/user_slot = target.get_item_by_slot(slot)
@@ -2158,7 +2232,9 @@ var/list/seer_rituals = list()
 		if (locate(/obj/machinery/door/mineral/cult) in range(spell_holder,1))
 			abort(RITUALABORT_NEAR)
 		else
-			new /obj/machinery/door/mineral/cult(get_turf(spell_holder))
+			var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+			var/obj/machinery/door/mineral/cult/new_door = new /obj/machinery/door/mineral/cult(get_turf(spell_holder))
+			C.gain_devotion(10, DEVOTION_TIER_1, "summon_door", new_door)
 			qdel(spell_holder)
 	qdel(src)
 
@@ -2194,6 +2270,9 @@ var/list/seer_rituals = list()
 				if (C.occult_muted())
 					continue
 			if(L.stat != DEAD && iscultist(L))
+				if (L != activator)
+					var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+					C.gain_devotion(50, DEVOTION_TIER_1, "fervor", L)
 				playsound(L, 'sound/effects/fervor.ogg', 50, 0, -2)
 				anim(target = L, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_fervor", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE, direction = L.dir)
 				L.oxyloss = 0
@@ -2217,7 +2296,8 @@ var/list/seer_rituals = list()
 				L.stat = CONSCIOUS
 				if (L.reagents)
 					L.reagents.del_reagent(HOLYWATER)
-					L.reagents.add_reagent(HYPERZINE,1)
+					if (!L.reagents.has_any_reagents(HYPERZINES))
+						L.reagents.add_reagent(HYPERZINE,1,"no motor mouth")
 		qdel(spell_holder)
 	qdel(src)
 
@@ -2416,6 +2496,8 @@ var/list/seer_rituals = list()
 			if (valid_turfs.len)
 				for(var/mob/living/L in contributors)
 					use_available_blood(L, cost_rejoin,contributors[L])
+					var/datum/role/cultist/C = L.mind.GetRole(CULTIST)
+					C.gain_devotion(100, DEVOTION_TIER_2, "bloodmagnetism_rejoin", L)
 					make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 3)
 					var/atom/movable/overlay/landing_animation = anim(target = L, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
 					playsound(L, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
@@ -2432,6 +2514,8 @@ var/list/seer_rituals = list()
 				for(var/mob/living/L in contributors)
 					use_available_blood(L, cost_summon/contributors.len,contributors[L])
 					make_tracker_effects(L.loc,spell_holder, 1, "soul", 3, /obj/effect/tracker/drain, 3)
+					var/datum/role/cultist/C = L.mind.GetRole(CULTIST)
+					C.gain_devotion(100, DEVOTION_TIER_2, "bloodmagnetism_summon", L)
 				var/atom/movable/overlay/landing_animation = anim(target = src.target, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
 				var/mob/M = target//so we keep track of them after the datum is ded until we jaunt
 				var/turf/T = get_turf(spell_holder)
@@ -2481,7 +2565,7 @@ var/list/seer_rituals = list()
 	..()
 
 /obj/effect/cult_ritual/feet_portal/HasProximity(var/atom/movable/AM)
-	if (!caster || caster.loc != loc)
+	if (caster && caster.loc != loc)
 		forceMove(get_turf(caster))
 
 ////////////////////////////////////////////////////////////////////
@@ -2551,6 +2635,9 @@ var/list/seer_rituals = list()
 
 	to_chat(activator, "<span class='notice'>This rune will now let you travel through the \"[network]\" Path.</span>")
 
+	var/datum/role/cultist/C = iscultist(activator)
+	C?.gain_devotion(30, DEVOTION_TIER_1, "new_path_entrance", R)
+
 	if ((HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]") in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"]
 		holomarker.id = HOLOMAP_MARKER_CULT_ENTRANCE
@@ -2575,12 +2662,15 @@ var/list/seer_rituals = list()
 		to_chat(activator, "<span class='warning'>The \"[network]\" Path is closed. Set up a Path Exit rune to establish a Path.</span>")
 		return
 
+	var/datum/role/cultist/C = add_cultist.mind.GetRole(CULTIST)
+
 	var/turf/T = get_turf(spell_holder)
 	var/atom/movable/overlay/landing_animation = anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_prepare", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
 	playsound(T, 'sound/effects/cultjaunt_prepare.ogg', 75, 0, -3)
 	spawn(10)
 		playsound(T, 'sound/effects/cultjaunt_land.ogg', 30, 0, -3)
-		new /obj/effect/bloodcult_jaunt(T,null,destination,T, activator = activator)
+		var/obj/effect/bloodcult_jaunt/new_jaunt = new /obj/effect/bloodcult_jaunt(T,null,destination,T, activator = activator)
+		C.gain_devotion(10, DEVOTION_TIER_0, "path_entrance", new_jaunt)
 		flick("cult_jaunt_land",landing_animation)
 
 /datum/rune_spell/portalentrance/midcast_talisman(var/mob/add_cultist)
@@ -2681,6 +2771,9 @@ var/list/bloodcult_exitportals = list()
 
 	to_chat(activator, "<span class='notice'>This rune will now serve as a destination for the \"[network]\" Path.</span>")
 
+	var/datum/role/cultist/C = iscultist(activator)
+	C?.gain_devotion(30, DEVOTION_TIER_1, "new_path_exit", R)
+
 	if ((HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]") in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"]
 		holomarker.id = HOLOMAP_MARKER_CULT_EXIT
@@ -2735,33 +2828,50 @@ var/list/bloodcult_exitportals = list()
 
 ////////////////////////////////////////////////////////////////////
 //																  //
-//								PULSE							  //
+//							DARK PULSE							  //
 //																  //
 ////////////////////////////////////////////////////////////////////
 
 /datum/rune_spell/pulse
-	name = "Pulse"
+	name = "Dark Pulse"
 	desc = "Scramble the circuits of nearby devices."
 	desc_talisman = "Use to scramble the circuits of nearby devices."
 	invocation = "Ta'gh fara'qha fel d'amar det!"
 	word1 = /datum/rune_word/destroy
 	word2 = /datum/rune_word/see
 	word3 = /datum/rune_word/technology
-	page = "This rune triggers a series of short-range EMPs that messes with electronic machinery, devices, and robots.\
-		<br><br>Affects things up to 3 tiles away, but only adjacent targets will take the full force of the EMP.\
-		<br><br>Best used as a talisman."
+	page = "This rune triggers a strong EMP that messes with electronic machinery, devices, and robots up to 3 tiles away.\
+		<br><br>Cultists and the objects they carry will be unaffected.\
+		<br><br>You may also slap  someone directly with the talisman to have its effects only affect them, but with double intensity."
+	touch_cast = 1
+
+/datum/rune_spell/pulse/cast_touch(var/mob/M)
+	var/turf/T = get_turf(M)
+	invoke(activator,invocation,1)
+	playsound(T, 'sound/items/Welder2.ogg', 25, 0, -5)
+	playsound(T, 'sound/effects/bloodboil.ogg', 25, 0, -5)
+	var/atom/movable/overlay/animation = anim(target = T,a_icon = 'icons/obj/cult.dmi', flick_anim = "rune_pulse",sleeptime = 15)
+	animation.add_particles(PS_CULT_SMOKE_BOX)
+	spawn(6)
+		animation.adjust_particles(PVAR_SPAWNING,0,PS_CULT_SMOKE_BOX)
+	M.emp_act(1)
+	M.emp_act(1)
+	qdel(src)
 
 /datum/rune_spell/pulse/cast()
 	var/turf/T = get_turf(spell_holder)
 	playsound(T, 'sound/items/Welder2.ogg', 25, 1)
 	T.hotspot_expose(700,125,surfaces=1)
 	spawn(0)
-		for(var/i = 0; i < 3; i++)
-			empulse(T, 1, 3)
-			sleep(20)
+		darkpulse(T, 3, 3, cultist = activator)
 	qdel(spell_holder)
 
-//RUNE XIX
+////////////////////////////////////////////////////////////////////
+//																  //
+//							ASTRAL JOURNEY						  //
+//																  //
+////////////////////////////////////////////////////////////////////
+
 /datum/rune_spell/astraljourney
 	name = "Astral Journey"
 	desc = "Channel a fragment of your soul into an astral projection so you can spy on the crew and communicate your findings with the rest of the cult."
@@ -2770,7 +2880,9 @@ var/list/bloodcult_exitportals = list()
 	word1 = /datum/rune_word/hell
 	word2 = /datum/rune_word/travel
 	word3 = /datum/rune_word/self
-	page = "Upon use, your soul will float above your body, allowing you to freely move invisibly around the Z-Level. Words you speak while in this state will be heard by everyone in the cult. You can also become tangible which lets you converse with people, but taking any damage while in this state will end the ritual. Your body being moved away from the rune will also end the ritual. Should your body die while you were still using the rune, a shade will form wherever your astral projection stands."
+	page = "Upon use, your soul will float above your body, allowing you to freely move invisibly around the Z-Level. Words you speak while in this state will be heard by everyone in the cult. You can also become tangible which lets you converse with people, but taking any damage while in this state will end the ritual. Your body being moved away from the rune will also end the ritual.\
+		<br><br>Should your body die while you were still using the rune, a shade will form wherever your astral projection stands.\
+		<br><br>This rune persists upon use, allowing repeated usage."
 	rune_flags = RUNE_STAND
 	var/mob/living/simple_animal/astral_projection/astral = null
 	var/cultist_key = ""
@@ -2968,9 +3080,13 @@ var/list/bloodcult_exitportals = list()
 
 		M.regenerate_icons()
 
+		for(var/mob/living/L in contributors)
+			var/datum/role/cultist/C = L.mind.GetRole(CULTIST)
+			C.gain_devotion(200, DEVOTION_TIER_3, "reincarnation", M)
+
 	else
 		for(var/mob/living/L in contributors)
-			to_chat(activator, "<span class='warning'>Something went wrong with the ritual, the shade appears to have vanished.</span>")
+			to_chat(L, "<span class='warning'>Something went wrong with the ritual, the shade appears to have vanished.</span>")
 
 
 	for(var/mob/living/L in contributors)

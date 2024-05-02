@@ -123,6 +123,10 @@ var/creating_arena = FALSE
 		name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
 	real_name = name
 
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult && ((cult.stage == BLOODCULT_STAGE_ECLIPSE) || (cult.stage == BLOODCULT_STAGE_NARSIE)))
+		cultify()
+
 	start_poltergeist_cooldown() //FUCK OFF GHOSTS
 	..()
 
@@ -142,15 +146,17 @@ var/creating_arena = FALSE
 	// Legacy Cult stuff
 	if(istype(W,/obj/item/weapon/tome_legacy))
 		cultify()//takes care of making ghosts visible
-    // Big boy modern Cult 3.0 stuff
+    // Big boy modern Cult 3.0 and beyond stuff
 	if (iscultist(user))
 		if(istype(W,/obj/item/weapon/tome))
-			if(invisibility != 0 || icon_state != "ghost-narsie")
+			if(invisibility != 0)
 				cultify()
 				user.visible_message(
 					"<span class='warning'>[user] drags a ghost to our plane of reality!</span>",
 					"<span class='warning'>You drag a ghost to our plane of reality!</span>"
 				)
+				var/datum/role/cultist/C = user.mind.GetRole(CULTIST)
+				C.gain_devotion(50, DEVOTION_TIER_3, "visible_ghost", src)
 			return
 		else if (istype(W,/obj/item/weapon/talisman))
 			var/obj/item/weapon/talisman/T = W
@@ -203,9 +209,8 @@ var/creating_arena = FALSE
 						W.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 
 	if(istype(W,/obj/item/weapon/storage/bible) || isholyweapon(W))
-		var/mob/dead/M = src
-		if(src.invisibility == 0)
-			M.invisibility = 60
+		if(invisibility == 0)
+			decultify()
 			user.visible_message(
 				"<span class='warning'>[user] banishes the ghost from our plane of reality!</span>",
 				"<span class='warning'>You banish the ghost from our plane of reality!</span>"

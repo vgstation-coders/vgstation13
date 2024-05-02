@@ -195,6 +195,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define EFFECTS_PLANE 			(12 + FLOAT_PLANE)			// For special effects.
 
+	#define BLOODSTONE_BASE		 		2
 	#define BELOW_PROJECTILE_LAYER 		3
 	#define PROJECTILE_LAYER 			4
 	#define ABOVE_PROJECTILE_LAYER 		5
@@ -230,7 +231,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 
 #define BASE_PLANE 				(18 + FLOAT_PLANE)		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
-#define MISC_HUD_MARKERS_PLANE	19
+#define NARSIE_PLANE			19
 
 #define ANTAG_HUD_PLANE		 	20
 
@@ -260,6 +261,11 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define MIND_UI_BACK 				10
 	#define MIND_UI_BUTTON 				11
 	#define MIND_UI_FRONT 				12
+
+	#define MIND_UI_GROUP_A 			0
+	#define MIND_UI_GROUP_B 			3
+	#define MIND_UI_GROUP_C 			6
+	#define MIND_UI_GROUP_D 			9
 
 #define ABOVE_HUD_PLANE 		24		// For being above the Head-Up Display
 

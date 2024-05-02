@@ -322,10 +322,7 @@
 	if(C && C.members.len > config.cult_ghostwriter_req_cultists)
 		ghosts_can_write = TRUE
 
-	//TODO (UPHEAVAL PART 2): Allow ghosts_can_write during Eclipse
-	//if (veil_thickness >= CULT_ACT_III)
-	//	ghosts_can_write = TRUE
-	if (invisibility == 0)
+	if (invisibility == 0)//All ghosts become visible during the Eclipse ritual
 		ghosts_can_write = TRUE
 
 	if(!ghosts_can_write)
