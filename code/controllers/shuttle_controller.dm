@@ -42,6 +42,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	var/voting_cache = 0
 
 	var/warmup_sound = 0
+	var/takeoff = 0
 
 	var/was_early_launched = FALSE //had timer shortened to 10 seconds
 
@@ -415,7 +416,8 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				warmup_sound = 1
 				hyperspace_sounds("begin")
 			// Just before it leaves, close the damn doors!
-			if(timeleft == 2 || timeleft == 1)
+			if(timeleft <= 2 && !takeoff)
+				takeoff = 1
 				for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
 					spawn(0)
 						D.close()
