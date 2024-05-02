@@ -694,7 +694,7 @@
 /area/awaymission/example)
 "bU" = (
 /obj/structure/table/woodentable,
-/obj/item/weapon/reagent_containers/food/snacks/validsalad,
+/obj/item/weapon/reagent_containers/food/snacks/salad/valid,
 /turf/simulated/floor{
 	icon_state = "bar"
 	},

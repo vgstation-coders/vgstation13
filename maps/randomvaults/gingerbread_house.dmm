@@ -330,7 +330,7 @@
 	pixel_x = -3;
 	pixel_y = 6
 	},
-/obj/item/weapon/reagent_containers/food/snacks/validsalad{
+/obj/item/weapon/reagent_containers/food/snacks/salad/valid{
 	pixel_x = -6;
 	pixel_y = 4
 	},

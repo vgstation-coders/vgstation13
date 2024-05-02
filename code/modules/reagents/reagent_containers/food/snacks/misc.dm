@@ -784,15 +784,6 @@
 	base_crumb_chance = 0
 	reagents_to_add = list(SUGAR = 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/confederatespirit
-	name = "confederate spirit"
-	desc = "Even in space, where a north/south orientation is meaningless, the South will rise again."
-	icon_state = "confederatespirit"
-	bitesize = 2
-	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 8)
-
 /obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme
 	name = "fish taco supreme"
 	desc = "There may be more fish in the sea, but there's only one kind of fish in the stars."
@@ -844,13 +835,6 @@
 	<br>Warning: not suitable for those with heart conditions or on medication, consult your doctor before consuming this product. Cheese dust may stain or dissolve fabrics."
 	icon_state = "magbites"
 	reagents_to_add = list(MEDCORES = 6, SODIUMCHLORIDE = 6, NUTRIMENT = 4)
-
-/obj/item/weapon/reagent_containers/food/snacks/tontesdepelouse/
-	name = "tontes de pelouse"
-	desc = "A fashionable dish that some critics say engages the aesthetic sensibilities of even the most refined gastronome."
-	icon_state = "tontesdepelouse"
-	bitesize = 3
-	reagents_to_add = list(NUTRIMENT = 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/butterstick
 	name = "butter on a stick"

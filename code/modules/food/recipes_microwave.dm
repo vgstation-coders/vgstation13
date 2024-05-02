@@ -1803,10 +1803,10 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/apple,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/herbsalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad
 
 /datum/recipe/salad/herbsalad/make_food(var/obj/container, var/mob/user)
-	var/obj/item/weapon/reagent_containers/food/snacks/herbsalad/being_cooked = ..(container)
+	var/obj/item/weapon/reagent_containers/food/snacks/salad/being_cooked = ..(container)
 	being_cooked.reagents.del_reagent(TOXIN)
 	return being_cooked
 
@@ -1817,7 +1817,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/aesirsalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/aesir
 	reagents_forbidden = SYNAPTIZINES
 
 /datum/recipe/salad/validsalad
@@ -1828,10 +1828,10 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
 		/obj/item/weapon/reagent_containers/food/snacks/faggot,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/validsalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/valid
 
 /datum/recipe/salad/validsalad/make_food(var/obj/container, var/mob/user)
-	var/obj/item/weapon/reagent_containers/food/snacks/validsalad/being_cooked = ..(container)
+	var/obj/item/weapon/reagent_containers/food/snacks/salad/valid/being_cooked = ..(container)
 	being_cooked.reagents.del_reagent(TOXIN)
 	return being_cooked
 
@@ -1842,7 +1842,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/chinesecoldsalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/chinesecold
 
 /datum/recipe/salad/confederatespirit
 	items = list(
@@ -1852,7 +1852,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/confederatespirit
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/confederate
 
 /datum/recipe/salad/moonconfederatespirit //Alternate recipe using moon cheese
 	items = list(
@@ -1862,7 +1862,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/confederatespirit
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/confederate
 
 /datum/recipe/salad/fruitsalad
 	items = list(
@@ -1871,7 +1871,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/orange
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/fruitsalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/fruit
 
 /datum/recipe/salad/nofruitsalad
 	items = list(
@@ -1879,7 +1879,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/nofruitsalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/nofruit
 
 /datum/recipe/salad/chickensalad
 	reagents = list (VINEGAR = 5)
@@ -1888,7 +1888,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken,
 		/obj/item/weapon/reagent_containers/food/snacks/boiledegg
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/chickensalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/chicken
 
 /datum/recipe/salad/grapesalad
 	reagents = list (SUGARS = 10)
@@ -1896,7 +1896,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/grapesalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/grape
 
 /datum/recipe/salad/moongrapesalad //Alternate recipe using moon cheese
 	reagents = list (SUGARS = 10)
@@ -1904,7 +1904,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
 		/obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/grapesalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/grape
 
 /datum/recipe/salad/orzosalad
 	reagents = list (RICE = 10)
@@ -1914,7 +1914,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
 		/obj/item/weapon/reagent_containers/food/snacks/mint
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/orzosalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/orzo
 
 /datum/recipe/salad/mexicansalad
 	reagents = list (LIMEJUICE = 5)
@@ -1924,7 +1924,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/pimiento,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/mexicansalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/mexican
 
 /datum/recipe/salad/moonmexicansalad //Alternate recipe using moon cheese
 	reagents = list (LIMEJUICE = 5)
@@ -1934,7 +1934,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/pimiento,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/mexicansalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/mexican
 
 /datum/recipe/salad/tontesdepelouse
 	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
@@ -1959,7 +1959,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/starrynightsalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/starrynight
 
 /datum/recipe/salad/rosolli
 	items = list(
@@ -1967,7 +1967,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/rosolli
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/rosolli
 
 // Curry ///////////////////////////////////////////////////////
 
@@ -2693,7 +2693,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/potatosalad
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/potato
 
 /datum/recipe/coleslaw
 	reagents = list(VINEGAR = 2)

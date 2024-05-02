@@ -25,8 +25,8 @@
 								/obj/item/weapon/reagent_containers/food/snacks/threebeanburrito,
 								/obj/item/weapon/reagent_containers/food/snacks/enchiladas,
 								/obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme,
-								/obj/item/weapon/reagent_containers/food/snacks/potatosalad,
-								/obj/item/weapon/reagent_containers/food/snacks/herbsalad))
+								/obj/item/weapon/reagent_containers/food/snacks/salad/potato,
+								/obj/item/weapon/reagent_containers/food/snacks/salad))
 
 	var/obj/item/weapon/reagent_containers/food/snacks/E = new entree(src)
 	if(E.is_empty())
@@ -46,7 +46,7 @@
 								/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/vinegar,
 								/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/cheddar,
 								/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot,
-								/obj/item/weapon/reagent_containers/food/snacks/fruitsalad))
+								/obj/item/weapon/reagent_containers/food/snacks/salad/fruit))
 
 	var/obj/item/weapon/reagent_containers/food/snacks/S = new snack(src)
 	if(S.is_empty())
@@ -127,9 +127,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme,
 								/obj/item/weapon/reagent_containers/food/snacks/dionaroast,
 								/obj/item/weapon/reagent_containers/food/snacks/salmonavocado,
-								/obj/item/weapon/reagent_containers/food/snacks/aesirsalad,
-								/obj/item/weapon/reagent_containers/food/snacks/validsalad,
-								/obj/item/weapon/reagent_containers/food/snacks/chickensalad,
+								/obj/item/weapon/reagent_containers/food/snacks/salad/aesir,
+								/obj/item/weapon/reagent_containers/food/snacks/salad/valid,
+								/obj/item/weapon/reagent_containers/food/snacks/salad/chicken,
 								/obj/item/weapon/reagent_containers/food/snacks/kabob,
 								/obj/item/weapon/reagent_containers/food/snacks/curry,
 								/obj/item/weapon/reagent_containers/food/snacks/curry/vindaloo,
@@ -155,9 +155,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/soup/beet,
                                 /obj/item/weapon/reagent_containers/food/snacks/pie/plump_pie,
 								/obj/item/weapon/reagent_containers/food/snacks/fishfingers,
-								/obj/item/weapon/reagent_containers/food/snacks/fruitsalad,
-								/obj/item/weapon/reagent_containers/food/snacks/herbsalad,
-								/obj/item/weapon/reagent_containers/food/snacks/potatosalad,
+								/obj/item/weapon/reagent_containers/food/snacks/salad/fruit,
+								/obj/item/weapon/reagent_containers/food/snacks/salad,
+								/obj/item/weapon/reagent_containers/food/snacks/salad/potato,
 								/obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato,
 								/obj/item/weapon/reagent_containers/food/snacks/baguette,
 								/obj/item/weapon/reagent_containers/food/snacks/crab_sticks,
