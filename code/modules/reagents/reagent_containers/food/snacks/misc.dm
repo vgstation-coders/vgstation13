@@ -703,15 +703,6 @@
 	reagents_to_add = list(NUTRIMENT = 15)
 	bitesize = 5
 
-/obj/item/weapon/reagent_containers/food/snacks/coleslaw
-	name = "Coleslaw"
-	desc = "You fought the 'slaw, and the 'slaw won."
-	icon_state = "coleslaw"
-	plate_offset_y = 1
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 4)
-	bitesize = 2
-
 /obj/item/weapon/reagent_containers/food/snacks/potentham
 	name = "potent ham"
 	desc = "I'm sorry Dave, but I'm afraid I can't let you eat that."

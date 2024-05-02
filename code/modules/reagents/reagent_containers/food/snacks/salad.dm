@@ -110,11 +110,25 @@
 	icon_state = "confederatespirit"
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
-	reagents_to_add = list(NUTRIMENT = 8)
 	
-/obj/item/weapon/reagent_containers/food/snacks/tontesdepelouse
+/obj/item/weapon/reagent_containers/food/snacks/salad/tontes
 	name = "tontes de pelouse"
 	desc = "A fashionable dish that some critics say engages the aesthetic sensibilities of even the most refined gastronome."
 	icon_state = "tontesdepelouse"
 	bitesize = 3
 	reagents_to_add = list(NUTRIMENT = 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/salad/sauerkraut
+	name = "sauerkraut"
+	desc = "Cabbage that has fermented in salty brine."
+	icon_state = "sauerkraut"
+	reagents_to_add = list(NUTRIMENT = 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/salad/coleslaw
+	name = "Coleslaw"
+	desc = "You fought the 'slaw, and the 'slaw won."
+	icon_state = "coleslaw"
+	plate_offset_y = 1
+	trash = null
+	reagents_to_add = list(NUTRIMENT = 4)
+	bitesize = 2

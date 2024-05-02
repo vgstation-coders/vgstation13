@@ -163,14 +163,6 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	reagents_to_add = list(NUTRIMENT = 2)
 
-/obj/item/weapon/reagent_containers/food/snacks/sauerkraut
-	name = "sauerkraut"
-	desc = "Cabbage that has fermented in salty brine."
-	icon_state = "sauerkraut"
-	trash = /obj/item/trash/snack_bowl
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 1)
-
 /obj/item/weapon/reagent_containers/food/snacks/escargot
 	icon_state = "escargot"
 	name = "cooked escargot"

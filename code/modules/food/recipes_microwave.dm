@@ -1942,7 +1942,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/grass,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/clover
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/tontesdepelouse
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/tontes
 
 /datum/recipe/salad/midnightsnack
 	items = list(
@@ -2701,7 +2701,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/carrot,
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/coleslaw
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/coleslaw
 	cookable_with = COOKABLE_WITH_MIXING
 
 /datum/recipe/risotto
@@ -3398,7 +3398,7 @@
 	reagents = list(SODIUMCHLORIDE = 2, WATER = 15)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage)
 
-	result = /obj/item/weapon/reagent_containers/food/snacks/sauerkraut
+	result = /obj/item/weapon/reagent_containers/food/snacks/salad/sauerkraut
 	cookable_with = COOKABLE_WITH_MIXING
 
 /datum/recipe/pickledpears
