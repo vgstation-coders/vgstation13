@@ -84,7 +84,7 @@
 			if(metric == "temperature")
 				signal.data["temperature"] = round(air_sample.temperature,0.1)
 			else if(metric in XGM.gases)
-				signal.data[metric] = round(100 * air_sample[metric] / total_moles, 0.1)
+				signal.data[metric] = total_moles ? round(100 * air_sample[metric] / total_moles, 0.1) : 0
 		for(var/gas_ID in XGM.gases)
 			if(!signal.data[gas_ID])
 				signal.data[gas_ID] = 0

@@ -94,9 +94,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		cookvesselimage.pixel_x = offset_x
 		cookvesselimage.pixel_y = offset_y
 		overlays += cookvesselimage
-		shift_particles(list(offset_x,offset_y))
+		adjust_particles(PVAR_POSITION, list(offset_x,offset_y))
 	else
-		shift_particles(0)
+		adjust_particles(PVAR_POSITION, 0)
 
 /obj/proc/cook_temperature() //Returns the temperature the object cooks at.
 	return COOKTEMP_DEFAULT
@@ -690,7 +690,7 @@ a {
 		if(isrobot(user))
 			var/mob/living/silicon/robot/R = user
 			return HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN)
-		return (M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA) || user.reagents.has_reagent(HONKSERUM) || arcanetampered
+		return (M_CLUMSY in user.mutations) || (user.reagents?.has_reagent(INCENSE_BANANA)) || (user.reagents?.has_reagent(HONKSERUM)) || arcanetampered
 	return 0
 
 //Proc that handles NPCs (gremlins) "tampering" with this object.

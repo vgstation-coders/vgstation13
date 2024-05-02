@@ -453,8 +453,7 @@
 		var/obj/item/weapon/gun/G = A
 		if(isHandgun() && G.isHandgun())
 			var/obj/item/weapon/gun/akimbo/AA = new /obj/item/weapon/gun/akimbo(get_turf(src),src,G)
-			if(user.drop_item(G, AA) && user.drop_item(src, AA))
-				user.put_in_hands(AA)
+			if(user.drop_item(G, AA) && user.drop_item(src, AA) && user.put_in_hands(AA))
 				AA.update_icon(user)
 			else
 				to_chat(user, "<span class = 'warning'>You can not combine \the [G] and \the [src].</span>")

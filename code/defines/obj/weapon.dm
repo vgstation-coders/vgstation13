@@ -18,12 +18,12 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	attack_verb = list("calls", "rings", "dials")
 	hitsound = 'sound/weapons/ring.ogg'
 	var/obj/landline/landline
-	
+
 /obj/item/weapon/phone/New()
 	..()
 	landline = new /obj/landline/red (src,src)
 	redphones += src
-	
+
 	var/a = pick_n_take(available_redphone_names1)
 	var/b = pick_n_take(available_redphone_names2)
 	var/c = pick_n_take(available_redphone_names3)
@@ -31,11 +31,11 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 		name += " [a]-[b]-[c]" //9 possible "normal" names, enough for the roundstart redphones
 	else
 		name += " " + Gibberish("ERROR ERROR",50) //someone's gonna spawn 50 of them eventually, doesn't really matter if their names are the same at that point
-	
+
 /obj/item/weapon/phone/Destroy()
 	redphones -= src
 	..()
-	
+
 /obj/item/weapon/phone/verb/pick_up_phone()
 	set category = "Object"
 	set name = "Pick up telephone"
@@ -44,7 +44,7 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 		to_chat(usr, "<span class='notice'>\the [src] model does not come with a telephone!</span>")
 		return
 	landline.pick_up_phone(usr)
-	
+
 /obj/item/weapon/phone/verb/dial()
 	set category = "Object"
 	set name = "Dial"
@@ -63,14 +63,14 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 		var/obj/item/weapon/phone/P = pick(redphones)
 		if(P)
 			landline.start_call(P.landline)
-	
+
 /obj/item/weapon/phone/MouseDropFrom(atom/over_object)
 	MouseDropPickUp(over_object)
 	return ..()
 
 /obj/item/weapon/phone/attack_hand(mob/user as mob)
 	pick_up_phone(user)
-	
+
 /obj/item/weapon/phone/attackby(var/obj/item/weapon/phone/P as obj, var/mob/user as mob)
 	landline.attackby(P, user)
 
@@ -372,11 +372,12 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 		if(istype(O, /obj/item/weapon/legcuffs/bolas)) //don't stack into infinity
 			return
 		if(I.is_wirecutter(user)) //allows you to convert the wire back to a cable coil
+			var/atom/loctogo = Adjacent(user) ? user.loc : loc
 			if(!weight1 && !weight2) //if there's nothing attached
 				user.show_message("<span class='notice'>You cut the knot in the [src].</span>")
 				I.playtoolsound(usr, 50)
-				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(user.loc) //we get back the wire lengths we put in
-				var /obj/item/stack/cable_coil/S = new /obj/item/tool/screwdriver(user.loc)
+				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(loctogo) //we get back the wire lengths we put in
+				var /obj/item/stack/cable_coil/S = new /obj/item/tool/screwdriver(loctogo)
 				C.amount = 10
 				C.color = cable_color
 				C.update_icon()
@@ -389,10 +390,10 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 			else
 				user.show_message("<span class='notice'>You cut off [weight1] [weight2 ? "and [weight2]" : ""].</span>") //you remove the items currently attached
 				if(weight1)
-					weight1.forceMove(get_turf(usr))
+					weight1.forceMove(loctogo)
 					weight1 = null
 				if(weight2)
-					weight2.forceMove(get_turf(usr))
+					weight2.forceMove(loctogo)
 					weight2 = null
 				I.playtoolsound(user, 50)
 				update_icon()

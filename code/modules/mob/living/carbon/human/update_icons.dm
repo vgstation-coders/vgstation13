@@ -296,33 +296,31 @@ var/global/list/damage_icon_parts = list()
 		if(update_icons)
 			update_icons()
 		return
-	var/mutable_appearance/hair_overlay = mutable_appearance('icons/mob/hair_styles.dmi', "bald_s", -HAIR_LAYER)
+	var/list/hair_overlays = list()
 	var/hair_suffix = check_hidden_head_flags(MASKHEADHAIR) ? "s2" : "s" // s2 = cropped icon
 	if(my_appearance.f_style && !(check_hidden_flags(get_clothing_items(), HIDEBEARDHAIR, force_check = TRUE))) //If the beard is hidden, don't draw it
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[my_appearance.f_style]
 		if((facial_hair_style) && (species.name in facial_hair_style.species_allowed))
-			var/mutable_appearance/facial_hair_overlay = mutable_appearance(facial_hair_style.icon, "[facial_hair_style.icon_state]_s")
+			var/mutable_appearance/facial_hair_overlay = mutable_appearance(facial_hair_style.icon, "[facial_hair_style.icon_state]_s", -HAIR_LAYER)
 			if(facial_hair_style.do_colouration)
 				facial_hair_overlay.color = COLOR_MATRIX_ADD(rgb(my_appearance.r_facial, my_appearance.g_facial, my_appearance.b_facial))
-			hair_overlay.overlays += facial_hair_overlay
+			hair_overlays += facial_hair_overlay
 	if(my_appearance.h_style && !(check_hidden_flags(get_clothing_items(), HIDEHEADHAIR, force_check = TRUE))) //If the hair is hidden, don't draw it
 		var/datum/sprite_accessory/hair_style = hair_styles_list[my_appearance.h_style]
 		if((hair_style) && (species.name in hair_style.species_allowed))
-			var/mutable_appearance/hair_style_overlay
 			if(isvox(src))
 				if(my_appearance.r_hair > 7)
 					my_appearance.r_hair = rand(1,7)
-				hair_style_overlay = mutable_appearance(hair_style.icon, "[hair_style.icon_state]_[my_appearance.r_hair]_[hair_suffix]")
-			else
-				hair_style_overlay = mutable_appearance(hair_style.icon, "[hair_style.icon_state]_[hair_suffix]")
-				if(hair_style.do_colouration)
-					hair_style_overlay.color = COLOR_MATRIX_ADD(rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair))
-				if(hair_style.additional_accessories)
-					hair_style_overlay.overlays += mutable_appearance(hair_style.icon, "[hair_style.icon_state]_acc")
-			hair_overlay.overlays += hair_style_overlay
+			var/mutable_appearance/hair_overlay = mutable_appearance(hair_style.icon, "[hair_style.icon_state][isvox(src) ? "_[my_appearance.r_hair]" : ""]_[hair_suffix]", -HAIR_LAYER)
+			if(hair_style.do_colouration)
+				hair_overlay.color = COLOR_MATRIX_ADD(rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair))
+			if(hair_style.additional_accessories)
+				hair_overlay.overlays += mutable_appearance(hair_style.icon, "[hair_style.icon_state]_acc", -HAIR_LAYER)
+			hair_overlays += hair_overlay
 	if(body_alphas.len)
-		hair_overlay.alpha = get_lowest_body_alpha()
-	overlays += overlays_standing[HAIR_LAYER] = hair_overlay
+		for(var/mutable_appearance/overlay_image as anything in hair_overlays)
+			overlay_image.alpha = get_lowest_body_alpha()
+	overlays += overlays_standing[HAIR_LAYER] = hair_overlays
 	if(update_icons)
 		update_icons()
 
@@ -333,7 +331,7 @@ var/global/list/damage_icon_parts = list()
 	if(M_FAT in mutations)
 		fat = "fat"
 	remove_overlay(MUTATIONS_LAYER)
-	var/mutable_appearance/mutations_overlay = mutable_appearance('icons/effects/genetics.dmi', layer = -MUTATIONS_LAYER)
+	var/list/mutations_overlays = list()
 	var/add_image = FALSE
 	// DNA2 - Drawing underlays.
 	var/g = gender == FEMALE ? "f" : "m"
@@ -343,22 +341,22 @@ var/global/list/damage_icon_parts = list()
 			continue
 		var/underlay=gene.OnDrawUnderlays(src,g,fat)
 		if(underlay)
-			mutations_overlay.underlays += mutable_appearance('icons/effects/genetics.dmi', underlay)
+			mutations_overlays += mutable_appearance('icons/effects/genetics.dmi', underlay, layer = -MUTATIONS_LAYER)
 			add_image = TRUE
 	for(var/mut in mutations)
 		switch(mut)
 			if(M_LASER)
-				mutations_overlay.overlays += mutable_appearance('icons/effects/genetics.dmi', "lasereyes_s")
+				mutations_overlays += mutable_appearance('icons/effects/genetics.dmi', "lasereyes_s", layer = -MUTATIONS_LAYER)
 				add_image = TRUE
 	if((M_RESIST_COLD in mutations) && (M_RESIST_HEAT in mutations))
 		if(!(species.name == "Vox") && !(species.name == "Skeletal Vox"))
-			mutations_overlay.underlays	-= mutable_appearance('icons/effects/genetics.dmi', "cold[fat]_s")
-			mutations_overlay.underlays	-= mutable_appearance('icons/effects/genetics.dmi', "fire[fat]_s")
-			mutations_overlay.underlays	+= mutable_appearance('icons/effects/genetics.dmi', "coldfire[fat]_s")
+			mutations_overlays	-= mutable_appearance('icons/effects/genetics.dmi', "cold[fat]_s", layer = -MUTATIONS_LAYER)
+			mutations_overlays	-= mutable_appearance('icons/effects/genetics.dmi', "fire[fat]_s", layer = -MUTATIONS_LAYER)
+			mutations_overlays	+= mutable_appearance('icons/effects/genetics.dmi', "coldfire[fat]_s", layer = -MUTATIONS_LAYER)
 		else if((species.name == "Vox") || (species.name == "Skeletal Vox"))
-			mutations_overlay.underlays -= mutable_appearance('icons/effects/genetics.dmi', "coldvox_s")
-			mutations_overlay.underlays	-= mutable_appearance('icons/effects/genetics.dmi', "firevox_s")
-			mutations_overlay.underlays	+= mutable_appearance('icons/effects/genetics.dmi', "coldfirevox_s")
+			mutations_overlays -= mutable_appearance('icons/effects/genetics.dmi', "coldvox_s", layer = -MUTATIONS_LAYER)
+			mutations_overlays	-= mutable_appearance('icons/effects/genetics.dmi', "firevox_s", layer = -MUTATIONS_LAYER)
+			mutations_overlays	+= mutable_appearance('icons/effects/genetics.dmi', "coldfirevox_s", layer = -MUTATIONS_LAYER)
 
 	//Cultist tattoos
 	if (iscultist(src))
@@ -366,12 +364,12 @@ var/global/list/damage_icon_parts = list()
 		add_image = TRUE
 		for (var/T in C.tattoos)
 			var/datum/cult_tattoo/tattoo = C.tattoos[T]
-			if (tattoo)
-				var/mutable_appearance/cult_tattoo_overlay = mutable_appearance('icons/mob/cult_tattoos.dmi', tattoo.icon_state)
+			if (tattoo && tattoo.Display())
+				var/mutable_appearance/cult_tattoo_overlay = mutable_appearance('icons/mob/cult_tattoos.dmi', tattoo.icon_state, layer = -MUTATIONS_LAYER)
 				cult_tattoo_overlay.blend_mode = BLEND_MULTIPLY
-				mutations_overlay.overlays += cult_tattoo_overlay
+				mutations_overlays += cult_tattoo_overlay
 	if(add_image)
-		overlays += overlays_standing[MUTATIONS_LAYER] = mutations_overlay
+		overlays += overlays_standing[MUTATIONS_LAYER] = mutations_overlays
 	if(update_icons)
 		update_icons()
 

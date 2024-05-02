@@ -573,9 +573,9 @@
 	thermal_variation_modifier = 0.01
 
 /obj/item/weapon/reagent_containers/glass/kettle/steam_spawn_adjust(var/_temp)
-	if (!("Steam" in particle_systems))
-		add_particles("Steam")
-	var/obj/abstract/particles_holder/steam_holder = particle_systems["Steam"]
+	if (!(PS_STEAM in particle_systems))
+		add_particles(PS_STEAM)
+	var/obj/abstract/particles_holder/steam_holder = particle_systems[PS_STEAM]
 	if (_temp < STEAMTEMP)
 		steam_holder.particles.spawning = 0
 	else

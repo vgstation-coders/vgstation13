@@ -546,7 +546,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				update_ice_overlay()
 		steam_spawn_adjust(reagents.chem_temp)
 	else
-		remove_particles("Steam")
+		remove_particles(PS_STEAM)
 
 ///////////ICE OVERLAY///////////////////////////////////////////////////////////////////////////////////////////////////////////
 //appears when the food item's reagents' temperature falls to 0°C or below
@@ -597,9 +597,9 @@ var/global/list/image/ice_overlays = list()
 ///////////STEAM PARTICLES/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/proc/steam_spawn_adjust(var/_temp)
-	if (!("Steam" in particle_systems))
-		add_particles("Steam")
-	var/obj/abstract/particles_holder/steam_holder = particle_systems["Steam"]
+	if (!(PS_STEAM in particle_systems))
+		add_particles(PS_STEAM)
+	var/obj/abstract/particles_holder/steam_holder = particle_systems[PS_STEAM]
 	if (_temp < STEAMTEMP)
 		steam_holder.particles.spawning = 0
 	else

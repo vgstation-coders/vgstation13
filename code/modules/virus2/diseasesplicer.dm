@@ -251,10 +251,7 @@
 		dish.name = "growth dish ([dish.contained_virus.name(TRUE)])"
 		spliced = FALSE
 		dish.contained_virus.update_global_log()
-	dish.forceMove(loc)
-	if (Adjacent(usr))
-		dish.forceMove(usr.loc)
-		usr.put_in_hands(dish)
+	usr.put_in_hands(dish)
 	dish = null
 	update_icon()
 
