@@ -517,14 +517,6 @@
 	reagents_to_add = list(NUTRIMENT = 2, ICE = list("volume" = 2,"temp" = T0C))
 	bitesize = 2
 
-/obj/item/weapon/reagent_containers/food/snacks/notasandwich
-	name = "not-a-sandwich"
-	desc = "Something seems to be wrong with this, you can't quite figure what. Maybe it's his moustache."
-	icon_state = "notasandwich"
-	base_crumb_chance = 0
-	reagents_to_add = list(NUTRIMENT = 6)
-	bitesize = 2
-
 /obj/item/weapon/reagent_containers/food/snacks/boiledspiderleg
 	name = "boiled spider leg"
 	desc = "A giant spider's leg that's still twitching after being cooked. Gross!"

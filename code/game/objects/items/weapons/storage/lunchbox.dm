@@ -108,7 +108,7 @@
 // -----------------------------
 /obj/item/weapon/storage/lunchbox/metal/syndie/proc/pickfood_syndie()
 	var/entree_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/sandwich/toasted,
-                                /obj/item/weapon/reagent_containers/food/snacks/notasandwich,
+                                /obj/item/weapon/reagent_containers/food/snacks/sandwich/not,
 								/obj/item/weapon/reagent_containers/food/snacks/sandwich/grilledcheese,
 								/obj/item/weapon/reagent_containers/food/snacks/burger/bigbite,
 								/obj/item/weapon/reagent_containers/food/snacks/burger/bear,

@@ -184,7 +184,7 @@
 	name = "Jelly Sandwich"
 	desc = "You wish you had some peanut butter to go with this..."
 	icon_state = "jellysandwich"
-	food_flags = null
+	food_flags = 0
 	reagents_to_add = list(NUTRIMENT = 2)
 	bitesize = 3
 
@@ -238,3 +238,10 @@
 	food_flags = FOOD_DIPPABLE
 	reagents_to_add = list(NUTRIMENT = 5)
 	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sandwich/not
+	name = "not-a-sandwich"
+	desc = "Something seems to be wrong with this, you can't quite figure what. Maybe it's his moustache."
+	icon_state = "notasandwich"
+	base_crumb_chance = 0
+	food_flags = 0

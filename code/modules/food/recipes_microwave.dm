@@ -1659,7 +1659,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice,
 		/obj/item/clothing/mask/fakemoustache,
 		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/notasandwich
+	result = /obj/item/weapon/reagent_containers/food/snacks/sandwich/not
 	cookable_with = COOKABLE_WITH_MIXING
 
 /datum/recipe/twobread

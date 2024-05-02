@@ -43,7 +43,7 @@
 	name = "tofu burger"
 	desc = "What... is that meat?"
 	icon_state = "tofuburger"
-	food_flags = null
+	food_flags = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/burger/chicken
 	name = "chicken burger"
@@ -79,7 +79,7 @@
 	name = "clown burger"
 	desc = "This tastes funny..."
 	icon_state = "clownburger"
-	food_flags = null
+	food_flags = 0
 	reagents_to_add = list(NUTRIMENT = 6, HONKSERUM = 6)
 	//reagents.add_reagent(BLOOD, 4, list("viruses"= list(new /datum/disease/pierrot_throat(0))))
 
@@ -87,7 +87,7 @@
 	name = "mime burger"
 	desc = "Its taste defies language."
 	icon_state = "mimeburger"
-	food_flags = null
+	food_flags = 0
 	reagents_to_add = list(NUTRIMENT = 6, SILENCER = 6)
 
 /obj/item/weapon/reagent_containers/food/snacks/burger/donut
@@ -121,7 +121,7 @@
 	name = "glass burger"
 	desc = "Goes down surprisingly easily considering the ingredients."
 	icon_state = "glassburger"
-	food_flags = null
+	food_flags = 0
 	filling_color = "#92CEE9"
 	reagents_to_add = list(NUTRIMENT = 6, DIAMONDDUST = 4) //It's the closest we have to eating raw glass, causes some brute and screaming
 
@@ -149,7 +149,7 @@
 	name = "Spell Burger"
 	desc = "This is absolutely Ei Nath."
 	icon_state = "spellburger"
-	food_flags = null
+	food_flags = 0
 	base_crumb_chance = 10
 	reagents_to_add = list(NUTRIMENT = 6)
 
@@ -167,7 +167,7 @@
 	name = "Jelly Burger"
 	desc = "Culinary delight..?"
 	icon_state = "jellyburger"
-	food_flags = null
+	food_flags = 0
 	reagents_to_add = list(NUTRIMENT = 5)
 	base_crumb_chance = 10
 
