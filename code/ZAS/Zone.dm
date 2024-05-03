@@ -225,7 +225,6 @@ Class Procs:
 					break
 				if(!found)
 					var/obj/effect/overlay/puddle/ice/new_ice = new /obj/effect/overlay/puddle/ice(T, T.zone)
-					new_ice.wet = TURF_WET_ICE
 		else if(air.temperature >= T0C+5 && isemptylist(ice_puddle_list))
 			ice_puddle_list = null
 	else if ( air.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME )

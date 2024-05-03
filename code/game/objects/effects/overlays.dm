@@ -104,6 +104,11 @@
 /obj/effect/overlay/puddle/process()
 	if(world.time >= lifespan)
 		qdel(src)
+	else
+		var/turf/simulated/T = get_turf(src)
+		if(istype(T) && T.zone && T.zone.air.temperature <= T0C)
+			new /obj/effect/overlay/puddle/ice(get_turf(src), T.zone)
+			qdel(src)
 
 /obj/effect/overlay/puddle/Crossed(atom/movable/AM)
 
@@ -114,10 +119,12 @@
 		return ..()
 
 /obj/effect/overlay/puddle/ice/New(var/turf/T, var/zone/zone)
-	..()
-	current_temp = T.air.temperature
+	..(T, TURF_WET_ICE, 0)
 	if( zone != null )
+		current_temp = zone.air.temperature
 		// Refactor suggestion: zone SHOULD be managing ice_puddle_list, puddle should not have to worry about this at all.
+		if(zone.ice_puddle_list == null)
+			zone.ice_puddle_list = list()
 		zone.ice_puddle_list += src
 
 /obj/effect/overlay/puddle/ice/Destroy()
@@ -138,7 +145,7 @@
 		if(temp_delta != 0)
 			ice_thickness = min( 100, ice_thickness + ((temp_delta < 0) ? 1 : -1 * log(8, abs(temp_delta)) / rand(1,3)))
 		if(ice_thickness < 0)
-			new /obj/effect/overlay/puddle(get_turf(src))
+			new /obj/effect/overlay/puddle(get_turf(src), TURF_WET_WATER, 20 SECONDS)
 			qdel(src)
 	}
 
