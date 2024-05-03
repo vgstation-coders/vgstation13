@@ -62,10 +62,16 @@
 
 /datum/gas_reaction/cryotheum_plasma_reaction/perform_reaction(datum/gas_mixture/mixture, reactant_amounts)
 	var/reaction_coefficient = reactant_amounts[GAS_CRYOTHEUM]
+
 	mixture[GAS_CRYOTHEUM] = max(0, mixture[GAS_CRYOTHEUM] - reaction_coefficient)
-	// Cryotheum can only cool things down to 0.1K. As we approach that temperature, it cools less and less. Conversely, at higher temperatures it cools more.
-	var/distance_to_min_temp = max(0, mixture.temperature - 0.1)
-	var/logarithmic_modifier = max(0, log(40, distance_to_min_temp+1))
-	// Arbitrary number to reduce temperature by a significant amount, hardcapped at the minimum temperature.
-	var/const/temp_loss_per_one_reaction = -700000
-	mixture.add_thermal_energy( logarithmic_modifier * reaction_coefficient * temp_loss_per_one_reaction, 0.1)
+	// Cryotheum can only cool things down to 0.1K. However, the cooling power changes based on the current temperature of the mixture - that is, the closer it is to 0.1K,
+	// the more it cools. This exists for a lot of reasons, but the big one is that cryotheum was broken as a way to cool engines by simply pumping a bunch of cryotheum into
+	// it. This will help cement it as more of a plasma-cooling method while still allowing it as an engine cooling method in some scenarios.
+	var/const/min_temp = 0.1
+	var/distance_to_min_temp = max(0, mixture.temperature - min_temp)
+	// Cooling coefficient with the current numbers will reach a max of 6 at around 10K and will scale down from there, reaching around 0.4 at 300K and 0.13 at 1000K.
+	var/cooling_coefficient = min(1, 80 / distance_to_min_temp) + min(5, 50 / distance_to_min_temp)
+
+	// Arbitrary number to reduce temperature by a significant amount.
+	var/const/base_temp_loss_per_one_reaction = -240000
+	mixture.add_thermal_energy( cooling_coefficient * reaction_coefficient * base_temp_loss_per_one_reaction, 0.1)
