@@ -828,6 +828,11 @@ var/list/converted_minds = list()
 			if (!iscultist(S))
 				targets.Add(S)
 
+	for (var/mob/living/simple_animal/corgi/Ian/dog in T)
+		dog.cultify()
+		qdel(src)
+		return
+
 	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons. (unless it's April 1st)
 		if (!iscultist(C) && !C.isDead())//no more corpse conversions!
 			targets.Add(C)
@@ -1598,24 +1603,26 @@ var/list/confusion_victims = list()
 
 	if (time_of_last_confusion != time_key)//only the last applied confusion gets to end it
 		return
-
-	victim.update_fullscreen_alpha("blindborder", 0, 5)
-	victim.overlay_fullscreen("blindwhite", /obj/abstract/screen/fullscreen/white)
-	victim.update_fullscreen_alpha("blindwhite", 255, 3)
+	if (victim)
+		victim.update_fullscreen_alpha("blindborder", 0, 5)
+		victim.overlay_fullscreen("blindwhite", /obj/abstract/screen/fullscreen/white)
+		victim.update_fullscreen_alpha("blindwhite", 255, 3)
 	sleep(5)
-	confusion_victims.Remove(victim)
-	victim.update_fullscreen_alpha("blindwhite", 0, 12)
-	victim.clear_fullscreen("blindblack", animate = 0)
-	victim.clear_fullscreen("blindborder", animate = 0)
-	victim.clear_fullscreen("blindblind", animate = 0)
-	anim(target = victim, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind_remove", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
-	if (victim.client)
-		victim.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
-	if (victim.mind)
-		message_admins("BLOODCULT: [key_name(victim)] is no longer under the effects of Confusion.")
-		log_admin("BLOODCULT: [key_name(victim)] is no longer under the effects of Confusion.")
+	if (victim)
+		confusion_victims.Remove(victim)
+		victim.update_fullscreen_alpha("blindwhite", 0, 12)
+		victim.clear_fullscreen("blindblack", animate = 0)
+		victim.clear_fullscreen("blindborder", animate = 0)
+		victim.clear_fullscreen("blindblind", animate = 0)
+		anim(target = victim, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind_remove", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+		if (victim.client)
+			victim.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
+		if (victim.mind)
+			message_admins("BLOODCULT: [key_name(victim)] is no longer under the effects of Confusion.")
+			log_admin("BLOODCULT: [key_name(victim)] is no longer under the effects of Confusion.")
 	sleep(15)
-	victim.clear_fullscreen("blindwhite", animate = 0)
+	if (victim)
+		victim.clear_fullscreen("blindwhite", animate = 0)
 	qdel(src)
 
 ////////////////////////////////////////////////////////////////////
