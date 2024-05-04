@@ -44,7 +44,8 @@ var/global/list/ghdel_profiling = list()
 	var/timestopped
 
 	appearance_flags = TILE_BOUND|LONG_GLIDE|TILE_MOVER
-
+	/// sources of setting KEEP_TOGETHER on an atom
+	var/list/keep_together_sources
 	var/slowdown_modifier //modified on how fast a person can move over the tile we are on, see turf.dm for more info
 	/// Last name used to calculate a color for the chatmessage overlays
 	var/chat_color_name
@@ -965,6 +966,11 @@ its easier to just keep the beam vertical.
 
 /atom/proc/thermal_energy_transfer()
 	return
+
+/atom/proc/update_keep_together()
+	appearance_flags &= ~KEEP_TOGETHER
+	if(length(keep_together_sources))
+		appearance_flags |= KEEP_TOGETHER
 
 /atom/proc/suitable_colony()
 	return FALSE

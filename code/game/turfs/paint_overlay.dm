@@ -303,23 +303,13 @@
 			for (var/obj/abstract/paint_light/PL in paintlights)
 				if (PL.light_color == wet_color)
 					S.luminous_paint = TRUE
-		if(!blood_overlays["[S.type][S.icon_state]"])
-			S.set_blood_overlay()
-
-		if(S.blood_overlay != null)
-			S.overlays.Remove(S.blood_overlay)
-		else
-			S.blood_overlay = blood_overlays["[S.type][S.icon_state]"]
-
 		if(!S.blood_DNA)
 			S.blood_DNA = list()
 		S.blood_DNA |= blood_DNA.Copy()
 
 		var/newcolor = (S.blood_color && S.blood_DNA.len) ? BlendRYB(S.blood_color, wet_color, 0.5) : wet_color
-		S.blood_overlay.color = newcolor
-		S.overlays += S.blood_overlay
 		S.blood_color = newcolor
-
+		S.set_blood_overlay()
 		H.update_inv_shoes(1)
 
 	else

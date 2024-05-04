@@ -83,7 +83,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlays.len = 0
 	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = null
 	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = null
-	update_blood_overlay()
+	set_blood_overlay()
 
 	switch(lit)
 		if(1)
@@ -260,7 +260,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	dynamic_overlay["[FACEMASK_LAYER]"] = null
 	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = null
 	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = null
-	update_blood_overlay()
+	set_blood_overlay()
 
 	switch(lit)
 		if(1)
@@ -958,7 +958,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlays.len = 0
 	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = null
 	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = null
-	update_blood_overlay()
+	set_blood_overlay()
 
 	switch(lit)
 		if(1)
