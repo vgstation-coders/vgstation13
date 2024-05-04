@@ -1815,7 +1815,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		base = H.get_organ(part).get_icon(H.gender == FEMALE? "f":"m", (M_FAT in H.mutations) && (H.species && H.species.anatomy_flags & CAN_BE_FAT))
 	else if(species)
 		base = icon(species.icobase)
-
+	if(forced_icon_file)
+		base = icon(forced_icon_file, icon_state)
 	//Display organs attached to this one
 	if(children.len)
 		for(var/obj/item/organ/external/attached in children)
@@ -1825,8 +1826,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 			base.Blend(attached.icon, ICON_OVERLAY)
 
 	if(base)
-		//Changing limb's skin tone to match owner
-		if(H)
+		//Changing limb's skin tone to match owner, skip if forced_icon_file to not have strangely colored organs
+		if(!forced_icon_file && H)
 			if(!H.species || H.species.anatomy_flags & HAS_SKIN_TONE)
 				if(H.my_appearance.s_tone >= 0)
 					base.Blend(rgb(H.my_appearance.s_tone, H.my_appearance.s_tone, H.my_appearance.s_tone), ICON_ADD)
