@@ -114,6 +114,9 @@
 	var/datum/stat/role/stat_datum = null
 	var/datum/stat/role/stat_datum_type = /datum/stat/role
 
+	var/shows_spells = FALSE //shows any spells the user got
+	var/spell_exclude //don't count these
+
 /datum/role/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
 	// Link faction.
 	faction=fac
@@ -384,8 +387,26 @@
 		text += "</ul>"
 
 	stat_collection.add_role(src, win)
+	text += GetBought()
 
 	return text
+
+/datum/role/proc/GetBought()
+	if(shows_spells)
+		var/mob/living/carbon/human/H = antag.current
+		if(H.spell_list)
+			. += "<BR>\The [name] knew:<BR>"
+			for(var/spell/S in antag.wizard_spells)
+				var/icon/tempimage
+				if(spell_exclude && istype(S,spell_exclude))
+					continue
+				if(S.override_icon != "")
+					tempimage = icon(S.override_icon, S.hud_state)
+				else
+					tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+				. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
+	else
+		return ""
 
 /datum/role/proc/extraPanelButtons()
 	var/dat = ""
