@@ -1325,18 +1325,21 @@ var/global/objects_thrown_when_explode = FALSE
 	had_blood = TRUE
 	set_blood_overlay()
 
-/obj/item/proc/set_blood_overlay(passed_color = blood_color)
-	overlays -= blood_overlay
+/obj/item/proc/set_blood_overlay(passed_color = blood_color, forced = FALSE)
+	REMOVE_KEEP_TOGETHER(src, "bloody_item")
+	cut_overlay(blood_overlay)
 	var/mutable_appearance/item_blood_overlay = mutable_appearance('icons/effects/blood.dmi', "itemblood", appearance_flags = RESET_COLOR|RESET_ALPHA)
-	ADD_KEEP_TOGETHER(src, "bloody_item")
 	item_blood_overlay.blend_mode = BLEND_INSET_OVERLAY
 	item_blood_overlay.color = passed_color
-	overlays += blood_overlay = item_blood_overlay
+	blood_overlay = item_blood_overlay
+	if(forced || is_blood_stained(src))
+		ADD_KEEP_TOGETHER(src, "bloody_item")
+		add_overlay(blood_overlay)
 
 /obj/item/apply_luminol()
 	if(!..())
 		return FALSE
-	set_blood_overlay(LIGHT_COLOR_CYAN)
+	set_blood_overlay(LIGHT_COLOR_CYAN, TRUE)
 	var/obj/effect/decal/cleanable/blueglow/BG
 	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
 		BG = had_blood
