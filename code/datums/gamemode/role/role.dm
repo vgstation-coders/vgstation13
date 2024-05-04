@@ -392,6 +392,7 @@
 	return text
 
 /datum/role/proc/GetBought()
+	. = ""
 	if(shows_spells)
 		if(antag?.current?.spell_list?.len)
 			. += "<BR>The [name] knew:<BR>"
@@ -404,8 +405,6 @@
 				else
 					tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
 				. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
-	else
-		return ""
 
 /datum/role/proc/extraPanelButtons()
 	var/dat = ""

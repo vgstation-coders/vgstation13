@@ -85,4 +85,4 @@
 		for(var/entry in potions_bought)
 			. += "[entry]<BR>"
 	else if(. == "")
-		. += "The wizard used only the magic of charisma this round."
+		return "The wizard used only the magic of charisma this round."
