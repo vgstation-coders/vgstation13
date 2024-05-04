@@ -23,7 +23,7 @@
 	var/recoil = FALSE // if TRUE projectiles fired in this mode have recoil
 	var/activation_message // spoken by the gun when the mode is activated
 	var/ammo_casing_type // if specified, it will be spawned at the user's location
-	var/ammo_per_shot = 1
+	var/ammo_per_shot = 5 //number of shots per mode.
 	var/rapid_fire_spread = FALSE //if TRUE, rapid fire projectiles will spread during a burst
 
 /datum/lawgiver_mode/stun
@@ -33,7 +33,6 @@
 	fire_sound = 'sound/weapons/Taser.ogg'
 	projectile_type = /obj/item/projectile/energy/electrode
 	activation_message = "STUN."
-	ammo_per_shot = 20
 
 /datum/lawgiver_mode/laser
 	name = "laser"
@@ -43,7 +42,6 @@
 	projectile_type = /obj/item/projectile/beam/heavylaser/lawgiver
 	fire_delay = 5
 	activation_message = "LASER."
-	ammo_per_shot = 20
 
 /datum/lawgiver_mode/rapid_fire
 	name = "rapid fire"
@@ -105,7 +103,7 @@
 //HONKGIVER===========================================================
 /datum/lawgiver_mode/scream
 	name = "scream"
-	voice_triggers = list("scream")
+	voice_triggers = list("scream","zcream")
 	firing_mode = HONKGIVER_SCREAM
 	fire_sound = 'sound/weapons/Taser.ogg'
 	projectile_type = /obj/item/projectile/energy/electrode/scream_shot
@@ -152,6 +150,7 @@
 	kind = LAWGIVER_MODE_KIND_BULLET
 	//fire_sound = 'sound/items/egg_squash.ogg'//this is what the supersoaker uses.
 	projectile_type = /obj/item/projectile/bullet/pie_shot
+	fire_sound = 'sound/effects/pop_toony.ogg'
 	activation_message = "RAPID PIE-ER!"
 	fire_delay = 0
 	ammo_per_shot = 200
@@ -164,6 +163,7 @@
 	kind = LAWGIVER_MODE_KIND_BULLET
 	//fire_sound = 'sound/items/egg_squash.ogg'//this is what the supersoaker uses.
 	projectile_type = /obj/item/projectile/bullet/peel_shot
+	fire_sound = 'sound/items/bikehorn.ogg'
 	activation_message = "BANANA PEEL!"
 	ammo_per_shot = 200
 
@@ -185,11 +185,11 @@ var/list/lawgiver_modes = list(
 	),
 	/obj/item/weapon/gun/lawgiver/honkgiver = newlist(
 		/datum/lawgiver_mode/scream,
-		/datum/lawgiver_mode/doomlazor,
 		/datum/lawgiver_mode/watergun,
 		/datum/lawgiver_mode/pie,
 		/datum/lawgiver_mode/peel,
 		/datum/lawgiver_mode/ball,
+		/datum/lawgiver_mode/doomlazor,
 	)
 )
 
@@ -217,6 +217,7 @@ var/list/lawgiver_modes = list(
 	var/damage_multiplier = 1
 	var/has_played_alert = 0
 	var/voiceclass = "siliconsay"
+	clowned = CLOWNABLE
 
 /obj/item/weapon/gun/lawgiver/proc/available_modes()
 	return lawgiver_modes[type]
@@ -250,7 +251,19 @@ var/list/lawgiver_modes = list(
 		item_state = "[initial(icon_state)]1"
 		var/image/magazine_overlay = image('icons/obj/gun.dmi', src, "[initial(icon_state)]Mag")
 		var/image/ammo_overlay = null
-		var/icon_state_suffix = magazine.ammo_counters[firing_mode_datum] / firing_mode_datum.ammo_per_shot
+		var/icon_state_suffix
+		var/fifth_of_total = firing_mode_datum.ammo_per_shot/5
+		if(magazine.ammo_counters[firing_mode_datum]<=firing_mode_datum.ammo_per_shot-(fifth_of_total*4))
+			icon_state_suffix = 1	//1 blip
+		if(magazine.ammo_counters[firing_mode_datum]<=firing_mode_datum.ammo_per_shot-(fifth_of_total*3))
+			icon_state_suffix = 2	//2 blip
+		if(magazine.ammo_counters[firing_mode_datum]<=firing_mode_datum.ammo_per_shot-(fifth_of_total*2))
+			icon_state_suffix = 3	//3blip
+		if(magazine.ammo_counters[firing_mode_datum]<=firing_mode_datum.ammo_per_shot-(fifth_of_total))
+			icon_state_suffix = 4 	//4blip
+		if(magazine.ammo_counters[firing_mode_datum]<=firing_mode_datum.ammo_per_shot)
+			icon_state_suffix = 5 	//5blip
+
 		ammo_overlay = image('icons/obj/gun.dmi', src, "[initial(icon_state)][icon_state_suffix]")
 		overlays += magazine_overlay
 		overlays += ammo_overlay
@@ -426,18 +439,18 @@ var/list/lawgiver_modes = list(
 		else
 			for(var/datum/lawgiver_mode/M in lawgiver_modes[type])
 				if(in_chamber && (in_chamber.type == M.projectile_type))
-					magazine.ammo_counters[M] = min(magazine.ammo_counters[M]+M.ammo_per_shot,LAWGIVER_MAX_AMMO * M.ammo_per_shot)
+					magazine.ammo_counters[M] = min(magazine.ammo_counters[M]+1, M.ammo_per_shot)
 					QDEL_NULL(in_chamber)
 			if(in_chamber)
 				return 1
 	if(!magazine)
 		return 0
-	if(magazine.ammo_counters[firing_mode_datum] < firing_mode_datum.ammo_per_shot)
+	if(!magazine.ammo_counters[firing_mode_datum])
 		return 0
 	if(!projectile_type)
 		return 0
 	in_chamber = new projectile_type(src)
-	magazine.ammo_counters[firing_mode_datum] -= firing_mode_datum.ammo_per_shot
+	magazine.ammo_counters[firing_mode_datum]--
 	return 1
 
 /obj/item/weapon/gun/lawgiver/can_discharge()
@@ -445,7 +458,7 @@ var/list/lawgiver_modes = list(
 		return FALSE
 	if(!magazine)
 		return FALSE
-	if(magazine.ammo_counters[firing_mode_datum] < firing_mode_datum.ammo_per_shot)
+	if(!magazine.ammo_counters[firing_mode_datum])
 		return FALSE
 	if(in_chamber)
 		return TRUE
@@ -464,6 +477,24 @@ var/list/lawgiver_modes = list(
 			to_chat(user, "<span class='warning'>There is already a magazine loaded in \the [src]!</span>")
 	else if (istype(A, /obj/item/ammo_storage/magazine))
 		to_chat(user, "<span class='warning'>You can't load \the [src] with that kind of magazine!</span>")
+
+	if(clowned == CLOWNABLE && istype(A,/obj/item/toy/crayon/rainbow))
+		to_chat(user, "<span class = 'notice'>You begin modifying \the [src].</span>")
+		if(do_after(user, src, 4 SECONDS))
+			to_chat(user, "<span class = 'notice'>You finish modifying \the [src]!</span>")
+			clownify()
+
+/obj/item/weapon/gun/lawgiver/proc/clownify()
+	var/obj/item/weapon/gun/lawgiver/honkgiver/HG = new /obj/item/weapon/gun/lawgiver/honkgiver(loc)
+	if(magazine) //has magazine at time of clowning? run the ammo conversion
+		var/obj/item/ammo_storage/magazine/lawgiver/honkgiver/HGM = HG.magazine
+		magazine.honkgiver_ammo_conversion(HGM)	//run honkgiver clip conversion//convert and transfer shots to honkgiver
+		HGM.original_type = magazine.type //store our original type into the honkgiver mag in case we get declowned in the future, we can turn into the right mag.
+	else
+		qdel(HG.magazine) //no magazine at time of clowning. honkgiver shall also not have a magazine
+	//transfer fingerprints and microcameras?
+	HG.original_type = src.type		//store typepath for lawgiver into honkgiver
+	qdel(src)
 
 /obj/item/weapon/gun/lawgiver/proc/check_mag_type(obj/item/I, mob/user)
 	if(istype(I, /obj/item/ammo_storage/magazine/lawgiver/demolition))
@@ -593,13 +624,17 @@ var/list/lawgiver_modes = list(
 
 /obj/item/weapon/gun/lawgiver/honkgiver
 	name = "honkgiver"
-	desc = "The Honkgiver, for all your head of clowning needs."
+	desc = "The Honkgiver, for all your head of clowning needs. You can see the words SCREAM, DOOMLAZOR, WATERGUN, PIE, PEEL and BOUNCY crayoned in small print on its barreling."
+
 	clumsy_check = 0
 	firing_mode = HONKGIVER_SCREAM
 	magazine_type = /obj/item/ammo_storage/magazine/lawgiver/honkgiver
 	icon_state = "honkgiver"
 	item_state = "honkgiver"
 	voiceclass = "clown"
+	var/original_type = null //if this is a clowned lawgiver, the original lawgiver type is stored here for when we get unclowned.
+
+	//stored origin supertype, leave empty to prevent from de-clowning
 //	origin tech??? recipe should require bananium but mechanic should be able to mass produce this.
 //	no DNA profile.
 /obj/item/weapon/gun/lawgiver/honkgiver/New()
@@ -645,6 +680,27 @@ var/list/lawgiver_modes = list(
 		to_chat(user, "<span class='warning'>This HONK-model [src.name] can only take honkgiver magazines!</span>")
 		return 0
 	return 1
+//TODO call unclownify proc when it would be appropriate: bleaching really
+
+/obj/item/weapon/gun/lawgiver/honkgiver/proc/unclownify()
+	if(!original_type)
+		visible_message("<span class='notice'>\the [src] cannot be undone. This... this is a true Honkgiver. Woah...</span>")
+	else
+		var/obj/item/weapon/gun/lawgiver/LG = new original_type
+		if(magazine)
+			var/obj/item/ammo_storage/magazine/lawgiver/honkgiver/HGM = magazine
+			if(!HGM.original_type) //eject and give message noting that its a true honkgiver mag.
+				visible_message("<span class='notice'>\the [magazine] is ejected as it resists your efforts to declownify it! It must truly be a relic of clownliness...</span>")
+				RemoveMag()
+			else
+				magazine.honkgiver_ammo_conversion(LG.magazine)
+		//transfer fingerprints and shit.
+		qdel(src)
+
+/obj/item/weapon/gun/lawgiver/honkgiver/true_honkgiver
+	//for adminbus and vault loot
+	//TODO... actually coding it.
+
 
 #undef LAWGIVER_DOUBLE_WHAMMY
 #undef LAWGIVER_RICOCHET

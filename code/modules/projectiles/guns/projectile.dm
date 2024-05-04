@@ -128,7 +128,7 @@
 /obj/item/weapon/gun/projectile/proc/mag_overlay()
 	if(stored_magazine)
 		var/mag_sprite = initial(stored_magazine.icon_state)
-		if(!magazine_overlay || magazine_overlay.icon_state != mag_sprite) 
+		if(!magazine_overlay || magazine_overlay.icon_state != mag_sprite)
 			overlays -= magazine_overlay
 			var/image/magazine_adjustment = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = mag_sprite)
 			magazine_adjustment.pixel_x -= stored_magazine.magoffsetx
@@ -142,7 +142,7 @@
 		if(magazine_overlay)
 			overlays -= magazine_overlay
 			magazine_overlay = null
-		
+
 
 /obj/item/weapon/gun/projectile/proc/chamber_round() //Only used by guns with magazine
 	if(chambered || !stored_magazine)

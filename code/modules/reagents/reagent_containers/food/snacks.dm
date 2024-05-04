@@ -1866,6 +1866,9 @@
 	..()
 	reagents.clear_reagents()
 
+/obj/item/weapon/reagent_containers/food/snacks/pie/empty/no_throwforce
+	throwforce = 0
+
 /obj/item/weapon/reagent_containers/food/snacks/pie/clovercreampie
 	name = "whipped clover pie"
 	desc = "Traditional dish in the Clownplanet's Irish exclusion zone."

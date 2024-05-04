@@ -111,6 +111,7 @@ var/list/impact_master = list()
 	var/special_collision = PROJECTILE_COLLISION_DEFAULT
 
 	var/is_crit = FALSE
+	var/has_special_suicide = FALSE //when set to true will invoke a custom_mouthshot() in place of the standard mouthshot effect.
 
 /obj/item/projectile/New()
 	..()
@@ -857,4 +858,7 @@ var/list/impact_master = list()
 	return
 
 /obj/item/projectile/proc/teleport_act()
+	return
+
+/obj/item/projectile/proc/custom_mouthshot(mob/living/user)
 	return

@@ -319,14 +319,14 @@
 	..()
 	var/list/new_ammo_counters = list()
 	for(var/datum/lawgiver_mode/mode in lawgiver_modes[compatible_gun_type])
-		new_ammo_counters[mode] = LAWGIVER_MAX_AMMO * mode.ammo_per_shot
+		new_ammo_counters[mode] = mode.ammo_per_shot
 	ammo_counters = new_ammo_counters
 	update_icon()
 
 /obj/item/ammo_storage/magazine/lawgiver/proc/generate_description()
 	. = list("<span class='info'>")
 	for(var/datum/lawgiver_mode/mode in ammo_counters)
-		var/ammo_left = ammo_counters[mode] / mode.ammo_per_shot
+		var/ammo_left = ammo_counters[mode]
 		switch(mode.kind)
 			if(LAWGIVER_MODE_KIND_ENERGY)
 				. += "It has enough energy for [ammo_left] [mode.firing_mode] shot[ammo_left != 1 ? "s" : ""] left.\n"
@@ -349,7 +349,20 @@
 	)
 	for(var/i in 1 to min(available_overlays.len, ammo_counters.len))
 		var/datum/lawgiver_mode/mode = ammo_counters[i]
-		var/ammo_left = ammo_counters[mode] / mode.ammo_per_shot
+		var/ammo_left
+		var/fifth_of_total = mode.ammo_per_shot/5
+		if(ammo_counters[mode]<=mode.ammo_per_shot-(fifth_of_total*4))
+			ammo_left = 1	//1 blip
+		if(ammo_counters[mode]<=mode.ammo_per_shot-(fifth_of_total*3))
+			ammo_left = 2	//2 blip
+		if(ammo_counters[mode]<=mode.ammo_per_shot-(fifth_of_total*2))
+			ammo_left = 3	//3blip
+		if(ammo_counters[mode]<=mode.ammo_per_shot-(fifth_of_total))
+			ammo_left = 4 	//4blip
+		if(ammo_counters[mode]<=mode.ammo_per_shot)
+			ammo_left = 5 	//5blip
+		//I think there's a clean way to do this with ceil() and modulo
+		//ceil(magazine.ammo_counters-(firing_mode_datum.ammo_per_shot/5))
 		overlays += image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-[available_overlays[i]]-[ammo_left]")
 
 /obj/item/ammo_storage/magazine/lawgiver/proc/isEmpty()
@@ -360,7 +373,7 @@
 
 /obj/item/ammo_storage/magazine/lawgiver/proc/isFull()
 	for(var/datum/lawgiver_mode/mode in ammo_counters)
-		if(ammo_counters[mode] != LAWGIVER_MAX_AMMO * mode.ammo_per_shot)
+		if(ammo_counters[mode] != mode.ammo_per_shot)
 			return FALSE
 	return TRUE
 
@@ -374,21 +387,27 @@
 
 	var/charged_amount = 0
 	for(var/datum/lawgiver_mode/mode in ammo_counters)
-		if(ammo_counters[mode] == LAWGIVER_MAX_AMMO * mode.ammo_per_shot)
+		if(ammo_counters[mode] ==  mode.ammo_per_shot)
 			continue
 		charged_amount += mode.ammo_per_shot * charger.charging_speed_modifier
-		ammo_counters[mode] = min(ammo_counters[mode] + charged_amount, LAWGIVER_MAX_AMMO * mode.ammo_per_shot)
+		ammo_counters[mode] = min(ammo_counters[mode] + charged_amount, mode.ammo_per_shot)
 
 	charger.try_use_power(100 * charger.charging_speed_modifier + 100 * charger.charging_speed_modifier * charger.efficiency_modifier)
 	charger.update_icon()
+
+/obj/item/ammo_storage/magazine/lawgiver/proc/honkgiver_ammo_conversion(var/obj/item/ammo_storage/magazine/lawgiver/honkgiver/HGM)//pass clowned type
+	for(var/datum/lawgiver_mode/mode in ammo_counters)
+		ammo_counters[mode] //max number of shots per mode/max
 
 /obj/item/ammo_storage/magazine/lawgiver/demolition
 	desc = "State-of-the-art bluespace technology allows this magazine to generate new rounds from energy, requiring only a power source to refill the full suite of ammunition types. This model is outfitted with high-explosive rounds."
 	compatible_gun_type = /obj/item/weapon/gun/lawgiver/demolition
 
+//HONKGIVER //TODO overlay states for all the different shots. make them green.
 /obj/item/ammo_storage/magazine/lawgiver/honkgiver
-	desc = "State-of-the=HONK clownspace technology allows this magazine to generate new rounds by honking it with a simple bike horn."
+	desc = "State-of-the-HONK clownspace technology allows this magazine to generate new rounds by honking it with a simple bike horn."
 	compatible_gun_type = /obj/item/weapon/gun/lawgiver/honkgiver
+	icon_state = "honkgiver"
 
 /obj/item/ammo_storage/magazine/invisible
 	desc = "Reading how many shots you had left just got a lot more difficult."
