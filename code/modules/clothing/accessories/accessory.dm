@@ -100,7 +100,7 @@
 		var/mob/living/carbon/human/wearer = loc
 		species = wearer.species
 	for(var/obj/item/clothing/accessory/accessory in accessories)
-		var/mutable_appearance/accessory_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[accessory._color || accessory.icon_state]", accessory_overlay_final.layer)
+		var/mutable_appearance/accessory_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[accessory._color || accessory.icon_state]")
 		if(species && (species.name in accessory.species_fit) && icon_exists(species.accessory_icons, accessory_overlay.icon_state))
 			accessory_overlay.icon = species.accessory_icons
 		accessory_overlay.color = accessory.color
@@ -109,7 +109,7 @@
 			var/dye_color = dye_data[1]
 			var/dye_alpha = dye_data[2]
 			var/_state = accessory.dye_base_iconstate_override || accessory.icon_state
-			var/mutable_appearance/worn_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[_state]-[part]", accessory_overlay_final.layer, alpha = dye_alpha, appearance_flags = RESET_COLOR)
+			var/mutable_appearance/worn_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[_state]-[part]", alpha = dye_alpha, appearance_flags = RESET_COLOR)
 			worn_overlay.color = dye_color
 			accessory_overlay.overlays += worn_overlay
 		accessory_overlay_final.overlays += accessory_overlay
