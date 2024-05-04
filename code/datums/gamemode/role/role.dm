@@ -393,7 +393,7 @@
 
 /datum/role/proc/GetBought()
 	if(shows_spells)
-		if(antag?.current?.spell_list)
+		if(antag?.current?.spell_list?.len)
 			. += "<BR>The [name] knew:<BR>"
 			for(var/spell/S in antag.current.spell_list)
 				var/icon/tempimage
