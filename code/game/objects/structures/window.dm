@@ -144,10 +144,9 @@ var/list/one_way_windows
 		if(sound)
 			playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 		if(!damage_overlay)
-			damage_overlay = new(src)
+			damage_overlay = mutable_appearance(src)
 			damage_overlay.icon = icon('icons/obj/structures/window.dmi')
 			damage_overlay.dir = src.dir
-			damage_overlay.plane = FLOAT_PLANE
 			damage_overlay.layer = OBJ_LAYER
 			damage_overlay.blend_mode = BLEND_ADD
 
