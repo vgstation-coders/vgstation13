@@ -890,6 +890,12 @@ its easier to just keep the beam vertical.
 
 /atom/proc/update_icon()
 
+/atom/proc/add_overlay(overlay_appearances)
+	overlays += overlay_appearances
+
+/atom/proc/cut_overlay(overlay_appearances)
+	overlays -= overlay_appearances
+
 /atom/proc/splashable()
 	return TRUE
 
