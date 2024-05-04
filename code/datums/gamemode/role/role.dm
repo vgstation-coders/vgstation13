@@ -393,10 +393,9 @@
 
 /datum/role/proc/GetBought()
 	if(shows_spells)
-		var/mob/living/carbon/human/H = antag.current
-		if(H.spell_list)
-			. += "<BR>\The [name] knew:<BR>"
-			for(var/spell/S in antag.wizard_spells)
+		if(antag?.current?.spell_list)
+			. += "<BR>The [name] knew:<BR>"
+			for(var/spell/S in antag.current.spell_list)
 				var/icon/tempimage
 				if(spell_exclude && istype(S,spell_exclude))
 					continue
