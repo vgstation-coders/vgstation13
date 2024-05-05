@@ -157,7 +157,7 @@
 
 			user.drop_item(src, force_drop = 1)
 
-			var/obj/item/weapon/spear/S = new /obj/item/weapon/spear
+			var/obj/item/weapon/spear/S = new /obj/item/weapon/spear(get_turf(src))
 
 			S.base_force = 5 + I.force
 			S.force = S.base_force
@@ -186,15 +186,12 @@
 			qdel(src)
 
 	else if(I.is_wirecutter(user))
-		var/obj/item/weapon/melee/baton/cattleprod/P = new /obj/item/weapon/melee/baton/cattleprod
-
 		user.before_take_item(I)
 		user.before_take_item(src)
 
-		user.put_in_hands(P)
+		user.put_in_hands(new /obj/item/weapon/melee/baton/cattleprod(get_turf(src)))
 		to_chat(user, "<span class='notice'>You fasten the wirecutters to the top of the rod with the cable, prongs outward.</span>")
 		qdel(I)
-		I =  null
 		qdel(src)
 
 	else if(istype(I, /obj/item/stack/rods))

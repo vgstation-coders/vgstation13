@@ -141,12 +141,11 @@
 	..()
 	if(istype(I, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = I
-		var/obj/item/weapon/wirerod/W = new /obj/item/weapon/wirerod
 		R.use(1)
 
 		user.before_take_item(src)
 
-		user.put_in_hands(W)
+		user.put_in_hands(new /obj/item/weapon/wirerod(get_turf(src)))
 		to_chat(user, "<span class='notice'>You wrap the cable restraint around the top of the rod.</span>")
 
 		qdel(src)
