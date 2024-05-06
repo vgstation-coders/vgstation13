@@ -405,7 +405,6 @@ steam.start() -- spawns the effect
 		direction = direct
 
 /datum/effect/system/smoke_spread/start()
-	var/area/A = get_area(location)
 	var/i = 0
 	for(i=0, i<src.number, i++)
 		if(src.total_smoke > 20)

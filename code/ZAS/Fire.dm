@@ -178,7 +178,7 @@ var/global/list/image/charred_overlays = list()
 	if(charred_overlays["[type][icon_state]"])
 		if (charred_overlay)
 			overlays -= charred_overlay
-		charred_overlay = image(charred_overlays["[type][icon_state]"])
+		charred_overlay = mutable_appearance(charred_overlays["[type][icon_state]"])
 		charred_overlay.appearance_flags = RESET_COLOR|RESET_ALPHA
 		charred_overlay.alpha = char_alpha
 		overlays += charred_overlay
@@ -274,7 +274,6 @@ var/global/list/image/charred_overlays = list()
 	var/turf/T = isturf(src) ? src : get_turf(src)
 	if(!T)
 		extinguish()
-		message_admins("DEBUG: extinguished because is not on a turf")
 		return
 
 	var/heat_out = 0 //MJ
@@ -300,16 +299,13 @@ var/global/list/image/charred_overlays = list()
 			oxy_used += fuel_stats["o2_cons"]
 			co2_prod += -fuel_stats["co2_cons"]
 			reagents.remove_reagent(possible_fuel, consumption_rate)
-			message_admins("DEBUG: removed [consumption_rate] of [possible_fuel]")
 
 	if(!has_fuel)
 		for(var/datum/reagent/liquid in reagents.reagent_list)
 			reagents.remove_reagent(liquid.id,1) //evaporate non-flammable reagents
-			message_admins("DEBUG: atom does not have fuel; removing 1u of [liquid.id]")
 
 	//Start a fire on the tile if a burning object is present without an underlying fire effect.
 	if(!in_fire && T)
-		message_admins("DEBUG: created a fire at the burning atom")
 		T.hotspot_expose(max_temperature, CELL_VOLUME, surfaces=1)
 		new /obj/effect/fire(loc)
 
@@ -357,7 +353,7 @@ var/global/list/image/charred_overlays = list()
 	on_fire=1
 
 	if(fire_dmi && fire_sprite && !isturf(src) && !fire_overlay)
-		fire_overlay = image(fire_dmi,fire_sprite)
+		fire_overlay = mutable_appearance(fire_dmi,fire_sprite)
 		overlays += fire_overlay
 
 	var/atom/movable/AM = src
