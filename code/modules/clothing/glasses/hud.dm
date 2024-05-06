@@ -73,23 +73,15 @@
 /obj/item/clothing/glasses/hud/health/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, /obj/item/clothing/glasses/hud/security/scouter))
-		var/worn = FALSE
-		if(user.is_wearing_item(src, slot_glasses))
-			worn = TRUE
 		if(do_after(user, src, 1 SECONDS))
-			user.drop_item(src)
-			if(!user.drop_item(W))
-				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
-				return
+			var/worn = FALSE
+			if(user.is_wearing_item(src, slot_glasses))
+				worn = TRUE
 			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed(loc, src, W)
-			W.transfer_fingerprints_to(I)
-			W.forceMove(I)
-			src.forceMove(I)
+			user.create_in_hands(src, I, W, move_in = TRUE)
 			var/mob/living/carbon/human/H = user
 			if(worn && istype(H))
 				H.equip_to_slot_if_possible(I,slot_glasses,EQUIP_FAILACTION_DROP)
-			else
-				user.put_in_hands(I)
 			to_chat(user, "<span class='notice'>You synchronize \the [W] with \the [src].</span>")
 
 /obj/item/clothing/glasses/hud/health/cmo

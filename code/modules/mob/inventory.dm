@@ -273,20 +273,27 @@
 		return 0
 	. = 0
 	if(olditem.loc == src)
-		drop_item(olditem, force_drop = 1) // Necessary to show up in the same hand for below
+		if(!drop_item(olditem)) // Necessary to show up in the same hand for below
+			return 0
 		. = put_in_hands(newitem)
-	if(move_in)
-		olditem.forceMove(newitem)
-	else
-		qdel(olditem)
 	if(using)
+		using.transfer_fingerprints_to(newitem)
 		if(istype(using,/obj/item/stack) && uses)
 			var/obj/item/stack/S = using
 			S.use(uses)
 		else if(move_in)
-			using.forceMove(newitem)
+			if(using.loc != src)
+				using.forceMove(newitem)
+			else if(!drop_item(using, newitem))
+				return 0
 		else
+			if(using.loc == src && !drop_item(using))
+				return 0
 			qdel(using)
+	if(move_in)
+		olditem.forceMove(newitem)
+	else
+		qdel(olditem)
 	if(olditem.loc != src)
 		. = 1 // return this if not runtiming
 
