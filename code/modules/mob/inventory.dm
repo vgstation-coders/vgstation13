@@ -220,8 +220,8 @@
 	if(held_items[index])
 		return 0
 
-	// adjacent only loc checks one way around, so first part is necessary
-	if(W.loc != src && !Adjacent(W) && isatom(W.loc) && !W.arcanetampered)
+	// adjacent only loc checks one way around, so first part is necessary, also for anything inside too
+	if(!W.recursive_in_contents_of(src) && !Adjacent(W) && isatom(W.loc) && !W.arcanetampered)
 		return 0
 
 	if((W.flags & MUSTTWOHAND) && !(M_STRONG in mutations))
