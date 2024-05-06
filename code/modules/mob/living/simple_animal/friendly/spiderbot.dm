@@ -76,8 +76,7 @@
 			return
 
 
-		if(!user.drop_item(O, src))
-			user << "<span class='warning'>You can't let go of \the [O].</span>"
+		if(!user.drop_item(O, src, failmsg = 1))
 
 		to_chat(user, "<span class='notice'>You install [O] in [src]!</span>")
 

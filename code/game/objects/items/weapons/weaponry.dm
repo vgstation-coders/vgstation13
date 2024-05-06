@@ -151,11 +151,8 @@
 			if(!I || !src)
 				return
 
-			if(!user.drop_item(I))
-				to_chat(user, "<span class='warning'>You can't let go of \the [I]! You quickly unsecure it from \the [src].</span>")
+			if(!user.drop_item(I, failmsg = "<span class='warning'>You can't let go of \the [I]! You quickly unsecure it from \the [src].</span>"))
 				return
-
-			user.drop_item(src, force_drop = 1)
 
 			var/obj/item/weapon/spear/S = new /obj/item/weapon/spear(loc)
 

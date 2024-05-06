@@ -94,8 +94,7 @@
 				if(!brainmob)
 					to_chat(user, "<span class='warning'>Why are you sticking robot legs on an empty [src], you idiot?</span>")
 					return TRUE
-				if(!user.drop_item(O, src))
-					to_chat(user, "<span class='warning'>You can't let go of \the [src]!</span>")
+				if(!user.drop_item(O, src, failmsg = 1))
 					return FALSE
 
 				contents += O
@@ -125,8 +124,7 @@
 		if(istype(O,t))
 			var/cc=contents_count(t)
 			if(cc<sammi_assembly_parts[t])
-				if(!user.drop_item(O, src))
-					to_chat(user, "<span class='warning'>You can't let go of \the [src]!</span>")
+				if(!user.drop_item(O, src, failmsg = 1))
 					return FALSE
 
 				contents += O

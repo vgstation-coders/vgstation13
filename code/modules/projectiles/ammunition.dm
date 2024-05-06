@@ -100,11 +100,10 @@
 			to_chat(user, "<span class='warning'>\the [AC] does not fit into [src]. </span>")
 			return
 		if(AC.BB && accepted && stored_ammo.len < max_ammo)
-			if(user.drop_item(A, src))
+			if(user.drop_item(A, src, failmsg = 1))
 				to_chat(user, "<span class='notice'>You successfully load the [src] with \the [AC]. </span>")
 				playsound(usr, reload_sound, 100, 1)
 			else
-				to_chat(user, "<span class='warning'>You can't let go of \the [A]!</span>")
 				return
 
 

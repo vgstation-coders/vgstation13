@@ -61,8 +61,7 @@
 /mob/living/carbon/monkey/vox/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
 		if(!stat && eggsleft < 8)
-			if(!user.drop_item(O))
-				to_chat(user, "<span class='notice'>You can't let go of \the [O]!</span>")
+			if(!user.drop_item(O, failmsg = 1))
 				return
 
 			user.visible_message("<span class='notice'>[user] feeds [O] to [name]! It clucks happily.</span>","<span class='notice'>You feed [O] to [name]! It clucks happily.</span>")

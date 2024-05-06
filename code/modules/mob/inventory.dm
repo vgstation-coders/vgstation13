@@ -268,13 +268,12 @@
 	return 0
 
 //Helper proc tied to above for creating something in-hand via construction
-/mob/proc/create_in_hands(var/obj/item/olditem, var/obj/item/newitem, var/obj/item/using, var/uses = 1, var/msg, var/vismsg, var/sound, var/move_in = FALSE, var/forcedrops = FALSE)
+/mob/proc/create_in_hands(var/obj/item/olditem, var/obj/item/newitem, var/obj/item/using, var/uses = 1, var/msg, var/vismsg, var/sound, var/move_in = FALSE)
 	if(!olditem || !newitem)
 		return 0
 	. = 0
 	if(olditem.loc == src)
-		if(!drop_item(olditem, force_drop = forcedrops)) // Necessary to show up in the same hand for below
-			return 0
+		drop_item(olditem, force_drop = 1) // Necessary to show up in the same hand for below
 		. = put_in_hands(newitem)
 	if(using)
 		using.transfer_fingerprints_to(newitem)

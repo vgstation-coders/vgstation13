@@ -76,8 +76,7 @@
 					critter.forceMove(loc)
 					lock_atom(critter, lock_type)
 		if (istype (O,/obj/item/weapon/reagent_containers/food/snacks))
-			if(!user.drop_item(O, loc))
-				to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
+			if(!user.drop_item(O, loc, failmsg = 1))
 				return
 			O.forceMove(loc)
 			O.pixel_x = pixel_x

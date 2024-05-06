@@ -64,7 +64,7 @@
 		I = new /obj/item/weapon/broken_pipe_tomahawk(get_turf(src.loc))
 	else
 		I = new /obj/item/tool/wrench(get_turf(src.loc))
-	user.create_in_hands(src,I,sound="shatter",msg="<span class='warning'>\The [src]'s blade shatters!</span>",forcedrops = TRUE)
+	user.create_in_hands(src,I,sound="shatter",msg="<span class='warning'>\The [src]'s blade shatters!</span>")
 
 /obj/item/weapon/hatchet/tomahawk/examine(mob/user)
 	..()
