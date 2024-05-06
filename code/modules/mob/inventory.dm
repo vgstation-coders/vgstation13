@@ -268,7 +268,7 @@
 	return 0
 
 //Helper proc tied to above for creating something in-hand via construction
-/mob/proc/create_in_hands(var/obj/item/olditem, var/obj/item/newitem, var/obj/item/using, var/uses = 1, var/move_in = FALSE)
+/mob/proc/create_in_hands(var/obj/item/olditem, var/obj/item/newitem, var/obj/item/using, var/uses = 1, var/msg, var/sound, var/move_in = FALSE)
 	if(!olditem || !newitem)
 		return 0
 	. = 0
@@ -294,6 +294,10 @@
 		olditem.forceMove(newitem)
 	else
 		qdel(olditem)
+	if(msg)
+		to_chat(src, msg)
+	if(sound)
+		playsound(src, sound, 50)
 	if(olditem.loc != src)
 		. = 1 // return this if not runtiming
 

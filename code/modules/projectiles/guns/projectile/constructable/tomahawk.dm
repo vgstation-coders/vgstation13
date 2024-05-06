@@ -18,8 +18,7 @@
 			to_chat(user, "You drill a hole through the handle of \the [src].")
 			drilled = 1
 	if(drilled && istype(W, /obj/item/ashtray))
-		to_chat(user, "You affix \the [W] to the end of \the [src].")
-		user.create_in_hands(src,new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(src.loc)),W)
+		user.create_in_hands(src,new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(src.loc)),W,msg="You affix \the [W] to the end of \the [src].")
 
 /obj/item/weapon/hatchet/tomahawk/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	var/parent_return = ..()
