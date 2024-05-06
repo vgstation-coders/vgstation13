@@ -354,8 +354,8 @@
 
 /mob/proc/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0, failmsg) //Set force_drop to 1 to force the item to drop (even if it can't be dropped normally)
 
-	if(failmsg == TRUE && to_drop)
-		failmsg = "<span class='warning'>You can't let go of \the [to_drop]!</span>"
+	if(failmsg == TRUE)
+		failmsg = to_drop ? "<span class='warning'>You can't let go of \the [to_drop]!</span>" : null
 		
 	if(!candrop) //can't drop items while etheral
 		if(failmsg)
