@@ -262,25 +262,33 @@
 		return 1
 	if(put_in_inactive_hand(W))
 		return 1
-	W.forceMove(isatom(W.loc) ? get_turf(W) : get_turf(src))
+	W.forceMove(W.loc ? get_turf(W) : get_turf(src))
 	W.reset_plane_and_layer()
 	W.dropped()
 	return 0
 
 //Helper proc tied to above for creating something in-hand via construction
-/mob/proc/create_in_hands(var/obj/item/olditem, var/obj/item/newitem, var/obj/item/using, var/uses = 1)
+/mob/proc/create_in_hands(var/obj/item/olditem, var/obj/item/newitem, var/obj/item/using, var/uses = 1, var/move_in = FALSE)
 	if(!olditem || !newitem)
 		return 0
+	. = 0
 	if(olditem.loc == src)
 		drop_item(olditem, force_drop = 1) // Necessary to show up in the same hand for below
 		. = put_in_hands(newitem)
-	qdel(olditem)
+	if(move_in)
+		olditem.forceMove(newitem)
+	else
+		qdel(olditem)
 	if(using)
 		if(istype(using,/obj/item/stack) && uses)
 			var/obj/item/stack/S = using
 			S.use(uses)
+		else if(move_in)
+			using.forceMove(newitem)
 		else
 			qdel(using)
+	if(olditem.loc != src)
+		. = 1 // return this if not runtiming
 
 /mob/proc/set_hand_amount(new_amount)
 	if(new_amount < held_items.len) //Decrease hand amount - drop items held in hands which will no longer exist!
