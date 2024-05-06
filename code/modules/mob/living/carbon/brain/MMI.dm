@@ -157,8 +157,7 @@
 		if(!BM.client)
 			to_chat(user, "<span class='warning'>\The [src] indicates that \the [O] [BM.ghost_reenter_alert("Someone is trying to put your brain in a MMI. Return to your body if you want to be resurrected!") ? "seems slow to respond. Try again in a few seconds" : "is completely unresponsive; there's no point"].</span>")
 			return TRUE
-		if(!user.drop_item(O))
-			to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
+		if(!user.drop_item(O, failmsg = 1))
 			return TRUE
 
 		src.visible_message("<span class='notice'>[user] sticks \a [O] into \the [src].</span>")

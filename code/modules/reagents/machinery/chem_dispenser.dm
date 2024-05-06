@@ -370,8 +370,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			to_chat(user, "<span class='warning'>\The [D] is too big to fit.</span>")
 			return
 		else if(!panel_open)
-			if(!user.drop_item(D, src))
-				to_chat(user, "<span class='warning'>You can't let go of \the [D]!</span>")
+			if(!user.drop_item(D, src, failmsg = 1))
 				return
 
 			container =  D

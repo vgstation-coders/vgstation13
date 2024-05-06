@@ -151,8 +151,7 @@
 		if(loadedassembly)
 			to_chat(user, "There is already a set of lenses in \the [src].")
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = 1))
 			return 1
 		to_chat(user, "You insert \the [W] into \the [src].")
 		W.forceMove(src)
@@ -163,8 +162,7 @@
 		if(loadedcell)
 			to_chat(user, "There is already a power cell in \the [src].")
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = 1))
 			return 1
 		to_chat(user, "You insert \the [W] into \the [src].")
 		W.forceMove(src)

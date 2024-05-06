@@ -30,8 +30,7 @@
 		if(dish)
 			to_chat(user, "<span class='warning'>A virus containment dish is already inside \the [src].</span>")
 			return
-		if(!user.drop_item(I, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [I]!</span>")
+		if(!user.drop_item(I, src, failmsg = 1))
 			return
 		dish = I
 		playsound(loc, 'sound/machines/click.ogg', 50, 1)

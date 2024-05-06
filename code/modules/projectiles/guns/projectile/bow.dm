@@ -63,8 +63,7 @@
 /obj/item/weapon/crossbow/attackby(obj/item/W as obj, mob/user as mob)
 	if(!arrow)
 		if (istype(W,/obj/item/weapon/arrow))
-			if(!user.drop_item(W, src))
-				user << "<span class='warning'>You can't let go of \the [W]!</span>"
+			if(!user.drop_item(W, src, failmsg = 1))
 				return
 
 			arrow = W
@@ -89,8 +88,7 @@
 
 	if(istype(W, /obj/item/weapon/cell))
 		if(!cell)
-			if(!user.drop_item(W, src))
-				user << "<span class='warning'>You can't let go of \the [W]!</span>"
+			if(!user.drop_item(W, src, failmsg = 1))
 				return
 
 			cell = W

@@ -164,8 +164,7 @@
 		if(B.volume > max_beaker_volume)
 			to_chat(user, "<span class='warning'>That beaker is too large to fit into \the [src]'s beaker port.</span>")
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = 1))
 			return 1
 		beaker = W
 		to_chat(user, "You insert \the [W] into \the [src]'s beaker port.")

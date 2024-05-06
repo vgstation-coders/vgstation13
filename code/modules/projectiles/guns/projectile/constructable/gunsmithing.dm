@@ -249,8 +249,7 @@
 				if(!V.is_empty())
 					to_chat(user, "<span class='warning'>The contents of \the [V] will spill out if there's not a lid on it.</span>")
 					return
-			if(!user.drop_item(V, src))
-				to_chat(user, "<span class='warning'>You can't let go of \the [V]!</span>")
+			if(!user.drop_item(V, src, failmsg = 1))
 				return 1
 			cycle_back() //vials are loaded in "first in, last out" configuration, so that there's no gap between consecutive shots
 			chambers[current_chamber] = V
