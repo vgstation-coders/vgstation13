@@ -18,8 +18,6 @@ var/area/space_area
 	var/obj/effect/narration/narrator = null
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
-	var/smoke_in_area = 0
-
 	flags = 0
 
 /area/New()

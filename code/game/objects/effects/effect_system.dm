@@ -410,15 +410,12 @@ steam.start() -- spawns the effect
 	for(i=0, i<src.number, i++)
 		if(src.total_smoke > 20)
 			return
-		if(A.smoke_in_area >= SMOKE_CAP)
-			return
 		spawn(0)
 			if(holder)
 				src.location = get_turf(holder)
 			var/obj/effect/smoke/smoke = new smoke_type(src.location)
 			smoke.time_to_live = time_to_live
 			total_smoke++
-			A.smoke_in_area++
 			var/direction = src.direction
 			if(!direction)
 				if(src.cardinals)
@@ -432,7 +429,6 @@ steam.start() -- spawns the effect
 				if (smoke)
 					qdel(smoke)
 				src.total_smoke--
-				A.smoke_in_area--
 
 
 /datum/effect/system/smoke_spread/bad

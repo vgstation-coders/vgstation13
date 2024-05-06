@@ -137,9 +137,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 /atom/proc/genSmoke(var/oxy,var/temp,var/turf/where)
 	if(prob(clamp(lerp(temp,T20C,T0C + 1000,96,100),96,100))) //4% chance of smoke at 20C, 0% at 1000C
 		return FALSE
-	var/area/A = get_area(src)
-	if(A.smoke_in_area >= SMOKE_CAP) //limit number of smoke effects in any given area for performance
-		return FALSE
 	var/smoke_density = clamp(5 * ((MINOXY2BURN/oxy) ** 2),1,5)
 	var/datum/effect/system/smoke_spread/bad/smoke = new /datum/effect/system/smoke_spread/bad()
 	smoke.set_up(smoke_density,0,where)
@@ -404,6 +401,7 @@ var/global/list/image/charred_overlays = list()
 /turf/ashify()
 	if(!on_fire)
 		return
+	burnableatoms -= src
 	extinguish()
 
 /turf/process_charred_overlay()

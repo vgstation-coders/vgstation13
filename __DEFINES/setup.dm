@@ -1173,8 +1173,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define AUTOIGNITION_BIOLOGICAL 633.15 //animal fat
 #define AUTOIGNITION_WELDERFUEL 561.15 //butane
 
-// max number of smoke effects in a single zone
-#define SMOKE_CAP 100
 
 //////////////////
 
