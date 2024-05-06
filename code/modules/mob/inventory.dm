@@ -221,7 +221,7 @@
 		return 0
 
 	// adjacent only loc checks one way around, so first part is necessary, also for anything inside too
-	if(!W.recursive_in_contents_of(src) && !Adjacent(W) && isatom(W.loc) && !W.arcanetampered)
+	if(!W.recursive_in_contents_of(src) && !Adjacent(W) && !W.arcanetampered)
 		return 0
 
 	if((W.flags & MUSTTWOHAND) && !(M_STRONG in mutations))
