@@ -283,10 +283,10 @@
 		else if(move_in)
 			if(using.loc != src)
 				using.forceMove(newitem)
-			else if(!drop_item(using, newitem))
+			else if(!drop_item(using, newitem, failmsg = TRUE))
 				return 0
 		else
-			if(using.loc == src && !drop_item(using))
+			if(using.loc == src && !drop_item(using, failmsg = TRUE))
 				return 0
 			qdel(using)
 	if(move_in)
