@@ -110,7 +110,7 @@
 				to_chat(user, gun.non_rechargeable_reason)
 				return 1
 
-		if(!user.drop_item(G, src, failmsg = 1))
+		if(!user.drop_item(G, src, failmsg = TRUE))
 			return 1
 		appearance_backup = G.appearance
 		var/matrix/M = matrix()

@@ -65,7 +65,7 @@
 			if(rig)
 				to_chat(user, "<span class='warning'>Somebody already attached something to \the [src].</span>")
 				return
-			if(!user.drop_item(W, src, failmsg = 1))
+			if(!user.drop_item(W, src, failmsg = TRUE))
 				return
 
 			user.visible_message("<span class='notice'>[user] rigs [W] to \the [src].", "<span class='notice'>You rig [W] to \the [src].</span>")

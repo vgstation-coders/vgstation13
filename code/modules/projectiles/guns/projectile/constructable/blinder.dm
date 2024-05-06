@@ -153,7 +153,7 @@
 		if(cell)
 			to_chat(user, "<span class='warning'>There is already a power cell inside \the [src].</span>")
 			return
-		if(!user.drop_item(W, src, failmsg = 1))
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return 1
 		cell = W
 		user.visible_message("[user] inserts \the [W] into \the [src].","You insert \the [W] into \the [src].")
@@ -175,7 +175,7 @@
 		else if(B.status == LIGHT_BURNED)
 			to_chat(user, "<span class='warning'>That [B.name] is burned out, it won't function in \the [src].</span>")
 			return
-		if(!user.drop_item(W, src, failmsg = 1))
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return 1
 		flashbulb = B
 		user.visible_message("[user] inserts \the [W] into \the [src].","You insert \the [W] into \the [src].")

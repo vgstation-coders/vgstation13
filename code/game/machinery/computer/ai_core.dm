@@ -112,7 +112,7 @@
 					to_chat(user, "<span class='warning'>This [P] does not seem to fit.</span>")
 					return
 
-				if(!user.drop_item(P, src, failmsg = 1))
+				if(!user.drop_item(P, src, failmsg = TRUE))
 					return
 
 				if (!brain)

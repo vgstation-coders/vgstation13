@@ -152,7 +152,7 @@ var/global/list/juice_items = list (
 			to_chat(user, "<span class='warning'>\The [O] is too big to fit.</span>")
 			return 0
 		else
-			if(!user.drop_item(O, src, failmsg = 1))
+			if(!user.drop_item(O, src, failmsg = TRUE))
 				return
 
 			src.beaker =  O

@@ -33,7 +33,7 @@
 			P.update_brightness()
 			add_fingerprint(user)
 			return
-		if(!user.drop_item(W, src, failmsg = 1))
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return
 		var/obj/item/clothing/mask/cigarette/cig = W
 		if(istype(cig, /obj/item/trash/cigbutt))

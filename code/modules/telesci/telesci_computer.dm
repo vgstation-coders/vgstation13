@@ -125,7 +125,7 @@
 		to_chat(user, "<span class='warning'>There is already a cell in \the [name].</span>")
 		return TRUE
 
-	if(user.drop_item(W, src, failmsg = 1))
+	if(user.drop_item(W, src, failmsg = TRUE))
 		cell = W
 		user.visible_message("[user] inserts a cell into \the [src].", "You insert a cell into \the [src].")
 		nanomanager.update_uis(src)

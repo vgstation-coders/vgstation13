@@ -73,7 +73,7 @@
 		crushable = N
 		to_chat(user, "<span class='notice'>You place \the [N] in \the [src].</span>")
 		return 0
-	else if(!user.drop_item(O, src, failmsg = 1))
+	else if(!user.drop_item(O, src, failmsg = TRUE))
 		return
 
 	crushable = O

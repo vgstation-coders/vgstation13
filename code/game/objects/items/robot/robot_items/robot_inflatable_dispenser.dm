@@ -147,7 +147,7 @@
 			S.remove_from_storage(I,src)
 		else if(istype(I.loc, /mob))
 			var/mob/M = I.loc
-			if(!M.drop_item(I,src, failmsg = 1))
+			if(!M.drop_item(I,src, failmsg = TRUE))
 				stored_doors -= I
 				stored_walls -= I
 				return FALSE

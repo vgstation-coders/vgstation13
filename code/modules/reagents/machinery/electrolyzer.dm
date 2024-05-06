@@ -114,6 +114,6 @@
 		..()
 
 /obj/item/weapon/electrolyzer/proc/insert_beaker(obj/item/weapon/W as obj, mob/user as mob)
-	if(user.drop_item(W, src, failmsg = 1))
+	if(user.drop_item(W, src, failmsg = TRUE))
 		W.forceMove(src)
 		beakers += W

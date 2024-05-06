@@ -621,7 +621,7 @@ Status: []<BR>"},
 
 		if(3)
 			if(istype(W, /obj/item/weapon/gun/energy) || istype(W, /obj/item/weapon/gun/projectile/roulette_revolver)) // the gun installation part
-				if(!user.drop_item(W, src, failmsg = 1))
+				if(!user.drop_item(W, src, failmsg = TRUE))
 					return
 				playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 				installed = W
@@ -637,7 +637,7 @@ Status: []<BR>"},
 
 		if(4)
 			if(isprox(W))
-				if(!user.drop_item(W, src, failmsg = 1))
+				if(!user.drop_item(W, src, failmsg = TRUE))
 					return
 				playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 				build_step = 5

@@ -76,7 +76,7 @@
 			return
 
 
-		if(!user.drop_item(O, src, failmsg = 1))
+		if(!user.drop_item(O, src, failmsg = TRUE))
 
 		to_chat(user, "<span class='notice'>You install [O] in [src]!</span>")
 

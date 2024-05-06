@@ -24,7 +24,7 @@
 	if(user.attack_delayer.blocked())
 		return
 
-	if(user.drop_item(I, src, failmsg = 1))
+	if(user.drop_item(I, src, failmsg = TRUE))
 		holstered = I
 		holstered.add_fingerprint(user)
 		user.visible_message("<span class='notice'>[user] holsters \the [holstered].</span>", "<span class='notice'>You holster \the [holstered].</span>")

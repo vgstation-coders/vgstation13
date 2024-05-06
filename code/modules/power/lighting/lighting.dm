@@ -379,7 +379,7 @@ var/global/list/obj/machinery/light/alllights = list()
 			src.add_fingerprint(user)
 			var/obj/item/weapon/light/L = W
 			if(L.fitting == fitting)
-				if(!user.drop_item(L, src, failmsg = 1))
+				if(!user.drop_item(L, src, failmsg = TRUE))
 					return
 
 				to_chat(user, "You insert \the [L.name].")

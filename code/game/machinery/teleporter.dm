@@ -40,7 +40,7 @@
 
 
 		if(istype(L, /obj/effect/landmark/) && istype(L.loc, /turf))
-			if(!user.drop_item(I, failmsg = 1))
+			if(!user.drop_item(I, failmsg = TRUE))
 				return
 
 			to_chat(usr, "You insert the coordinates into the machine.")

@@ -57,7 +57,7 @@
 			if (inside.size > SIZE_TINY)
 				to_chat(user, "<span class='warning'>\The [inside] is too big for \the [src]!</span>")
 				return
-			if(!user.drop_item(O, loc, failmsg = 1))
+			if(!user.drop_item(O, loc, failmsg = TRUE))
 				return
 			critter = inside
 			qdel(store)
@@ -76,7 +76,7 @@
 					critter.forceMove(loc)
 					lock_atom(critter, lock_type)
 		if (istype (O,/obj/item/weapon/reagent_containers/food/snacks))
-			if(!user.drop_item(O, loc, failmsg = 1))
+			if(!user.drop_item(O, loc, failmsg = TRUE))
 				return
 			O.forceMove(loc)
 			O.pixel_x = pixel_x

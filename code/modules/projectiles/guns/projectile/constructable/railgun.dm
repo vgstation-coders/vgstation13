@@ -105,7 +105,7 @@
 			to_chat(user, "There is already a set of rails in \the [src].")
 			return
 		to_chat(user, "You insert \the [W] into the barrel of \the [src].")
-		if(!user.drop_item(W, src, failmsg = 1))
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return 1
 		W.forceMove(src)
 		loadedassembly = W
@@ -114,7 +114,7 @@
 		if(loadedcapacitor)
 			to_chat(user, "There is already a capacitor in the capacitor bank of \the [src].")
 			return
-		if(!user.drop_item(W, src, failmsg = 1))
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return 1
 		to_chat(user, "You insert \the [W] into the capacitor bank of \the [src].")
 		W.forceMove(src)
@@ -135,7 +135,7 @@
 			R.use(1)
 			loadedammo = new /obj/item/stack/rods(null)
 		else if(istype(W, /obj/item/weapon/nullrod))
-			if(!user.drop_item(W, src, failmsg = 1))
+			if(!user.drop_item(W, src, failmsg = TRUE))
 				return 1
 			loadedammo = W
 		else if(istype(W, /obj/item/weapon/coin))
@@ -146,7 +146,7 @@
 			if (C.siemens_coefficient == 0)
 				to_chat(user, "That [C.name] won't work.")
 				return
-			if(!user.drop_item(C, src, failmsg = 1))
+			if(!user.drop_item(C, src, failmsg = TRUE))
 				return 1
 			loadedammo = C
 		update_icon()

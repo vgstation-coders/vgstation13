@@ -98,7 +98,7 @@
 			to_chat(user, "<span class='warning'>Nothing's going to happen if there[!T.tank_one && !T.tank_two ? " aren't any tanks" : "'s only one tank"] attached to \the [W]!</span>")
 			return
 		bomb_appearance = W.appearance
-		if(!user.drop_item(W, src, failmsg = 1))
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			bomb_appearance = null
 			return 1
 		bomb = W
@@ -114,7 +114,7 @@
 			to_chat(user, "<span class='warning'>There's already a [toybomb.name] attached to \the [src]!</span>")
 			return
 		bomb_appearance = W.appearance
-		if(!user.drop_item(W, src, failmsg = 1))
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			bomb_appearance = null
 			return 1
 		toybomb = W

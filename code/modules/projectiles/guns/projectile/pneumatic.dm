@@ -53,7 +53,7 @@
 
 /obj/item/weapon/storage/pneumatic/attackby(obj/item/W as obj, mob/user as mob)
 	if(!tank && istype(W,/obj/item/weapon/tank))
-		if(!user.drop_item(W, src.tank_container, failmsg = 1))
+		if(!user.drop_item(W, src.tank_container, failmsg = TRUE))
 			return
 
 		tank = W

@@ -14,7 +14,7 @@
 			to_chat(user, "<span class='warning'>You aren't sure where this brain came from, but you're pretty sure it's a useless brain.</span>")
 			posibrain = null
 			return
-		if(!user.drop_item(posibrain, src, failmsg = 1))
+		if(!user.drop_item(posibrain, src, failmsg = TRUE))
 			return
 
 		src.visible_message("<span class='notice'>[user] sticks \a [O] into \the [src].</span>")
