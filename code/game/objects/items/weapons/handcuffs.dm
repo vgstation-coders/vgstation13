@@ -140,15 +140,8 @@
 /obj/item/weapon/handcuffs/cable/attackby(var/obj/item/I, mob/user as mob)
 	..()
 	if(istype(I, /obj/item/stack/rods))
-		var/obj/item/stack/rods/R = I
-		R.use(1)
-
-		user.before_take_item(src)
-
-		user.put_in_hands(new /obj/item/weapon/wirerod(get_turf(src)))
 		to_chat(user, "<span class='notice'>You wrap the cable restraint around the top of the rod.</span>")
-
-		qdel(src)
+		user.create_in_hands(src. new /obj/item/weapon/wirerod(loc), I)
 
 /obj/item/weapon/handcuffs/cable/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag == 0) // not adjacent
