@@ -57,8 +57,7 @@
 			if (inside.size > SIZE_TINY)
 				to_chat(user, "<span class='warning'>\The [inside] is too big for \the [src]!</span>")
 				return
-			if(!user.drop_item(O, loc))
-				to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
+			if(!user.drop_item(O, loc, failmsg = 1))
 				return
 			critter = inside
 			qdel(store)

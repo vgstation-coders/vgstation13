@@ -40,8 +40,7 @@
 
 
 		if(istype(L, /obj/effect/landmark/) && istype(L.loc, /turf))
-			if(!user.drop_item(I))
-				user << "<span class='warning'>You can't let go of \the [I]!</span>"
+			if(!user.drop_item(I, failmsg = 1))
 				return
 
 			to_chat(usr, "You insert the coordinates into the machine.")

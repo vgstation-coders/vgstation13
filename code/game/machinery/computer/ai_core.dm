@@ -112,8 +112,7 @@
 					to_chat(user, "<span class='warning'>This [P] does not seem to fit.</span>")
 					return
 
-				if(!user.drop_item(P, src))
-					user << "<span class='warning'>You can't let go of \the [P]!</span>"
+				if(!user.drop_item(P, src, failmsg = 1))
 					return
 
 				if (!brain)

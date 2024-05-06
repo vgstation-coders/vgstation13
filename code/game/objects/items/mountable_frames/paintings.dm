@@ -156,8 +156,7 @@ var/global/list/available_paintings = list(
 			desc = "So perfectly blank you dare not paint on it."
 
 /obj/item/mounted/frame/painting/do_build(turf/on_wall, mob/user)
-	if(!user.drop_item(src))
-		to_chat(user, "<span class='warning'>You can't let go of \the [src]!</span>")
+	if(!user.drop_item(src, failmsg = 1))
 		return
 
 	to_chat(user, "<span class='notice'>You hang the [src] on \the [on_wall]...</span>")

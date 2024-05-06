@@ -126,8 +126,7 @@
 				if(istype(P, /obj/item/weapon/circuitboard))
 					var/obj/item/weapon/circuitboard/B = P
 					if(B.board_type == MACHINE)
-						if(!user.drop_item(B, src))
-							user << "<span class='warning'>You can't let go of \the [B]!</span>"
+						if(!user.drop_item(B, src, failmsg = 1))
 							return
 
 						playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)

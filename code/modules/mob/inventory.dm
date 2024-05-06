@@ -353,7 +353,7 @@
 
 //Drops the item in our hand - you can specify an item and a location to drop to
 
-/mob/proc/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0) //Set force_drop to 1 to force the item to drop (even if it can't be dropped normally)
+/mob/proc/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0, failmsg) //Set force_drop to 1 to force the item to drop (even if it can't be dropped normally)
 
 	if(!candrop) //can't drop items while etheral
 		return 0
@@ -365,6 +365,10 @@
 		return 0 //bail
 
 	if((to_drop.cant_drop > 0) && !force_drop)
+		if(failmsg)
+			if(failmsg == TRUE)
+				failmsg = "<span class='warning'>You can't let go of \the [to_drop]!</span>"
+			to_chat(src, failmsg)
 		return 0
 
 	if(!Target)

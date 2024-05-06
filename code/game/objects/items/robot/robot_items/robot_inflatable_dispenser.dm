@@ -147,8 +147,7 @@
 			S.remove_from_storage(I,src)
 		else if(istype(I.loc, /mob))
 			var/mob/M = I.loc
-			if(!M.drop_item(I,src))
-				to_chat(user, "<span class='notice'>You can't let go of \the [I]!</span>")
+			if(!M.drop_item(I,src, failmsg = 1))
 				stored_doors -= I
 				stored_walls -= I
 				return FALSE

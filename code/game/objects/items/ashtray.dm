@@ -33,8 +33,7 @@
 			P.update_brightness()
 			add_fingerprint(user)
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = 1))
 			return
 		var/obj/item/clothing/mask/cigarette/cig = W
 		if(istype(cig, /obj/item/trash/cigbutt))

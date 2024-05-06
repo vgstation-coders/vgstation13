@@ -82,8 +82,7 @@
 	if(bug)
 		to_chat(user, "<span class='warning'>\A [bug] is already on \the [A].</span>")
 		return 1
-	if(!user.drop_item(src, A))
-		to_chat(user, "<span class='warning'>You can't let go of \the [src]!</span>")
+	if(!user.drop_item(src, A, failmsg = 1))
 		return 1
 	to_chat(user, "<span class='notice'>You stealthily place \the [src] onto \the [A].</span>")
 	active = TRUE

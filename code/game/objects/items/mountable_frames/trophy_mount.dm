@@ -95,8 +95,7 @@
 		user.visible_message("\The [user] removes \the [I] from \the [src].", "You remove \the [I] from \the [src].")
 
 /obj/item/mounted/frame/trophy_mount/do_build(turf/on_wall, mob/user)
-	if(!user.drop_item(src))
-		to_chat(user, "<span class='warning'>You can't let go of \the [src]!</span>")
+	if(!user.drop_item(src, failmsg = 1))
 		return
 	user.visible_message("\The [user] hangs \the [src] on \the [on_wall].", "You hang \the [src] on \the [on_wall].")
 	add_fingerprint(user)
