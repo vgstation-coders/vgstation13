@@ -182,7 +182,7 @@ var/global/list/narsie_list = list()
 			if(M.flags & INVULNERABLE)
 				return 0
 
-			M.cultify()
+			M.cultify(src)
 
 	//ITEM PROCESSING
 		else if (istype(A, /obj/))

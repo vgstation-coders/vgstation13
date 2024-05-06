@@ -7,7 +7,16 @@
 /mob/dead/gib()		//ghosts can't be gibbed.
 	return
 
-/mob/dead/cultify()
+/mob/dead/cultify(var/obj/machinery/singularity/narsie/N)
+	if (N)//cultified by Nar-Sie
+		if(iscultist(src) && client && !isantagbanned(src) && !jobban_isbanned(src, CULTIST))
+			var/mob/living/simple_animal/construct/harvester/perfect/new_body = new (loc)
+			new_body.name = "[mind.name] the Harvester"
+			new_body.real_name = mind.name
+			mind.transfer_to(new_body)
+			new_body.key = mind.key
+			new_body.DisplayUI("Cultist")
+			return
 	if(invisibility != 0)
 		appearance_backup = appearance
 		icon = 'icons/mob/mob.dmi'
