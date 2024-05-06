@@ -178,17 +178,13 @@
 			if(prefix)
 				S.name = "[prefix] [S.name]"
 
-			user.visible_message("<span class='danger'>[user] creates a spear with \a [I] and \a [src]!</span>",\
-			"<span class='notice'>You fasten \the [I] to the top of \the [src], creating \a [S].</span>")
-			user.create_in_hands(src, S, I)
+			user.create_in_hands(src, S, I, vismsg = "<span class='danger'>[user] creates a spear with \a [I] and \a [src]!</span>", msg = "<span class='notice'>You fasten \the [I] to the top of \the [src], creating \a [S].</span>")
 
 	else if(I.is_wirecutter(user))
-		to_chat(user, "<span class='notice'>You fasten the wirecutters to the top of the rod with the cable, prongs outward.</span>")
-		user.create_in_hands(src, new /obj/item/weapon/melee/baton/cattleprod(loc), I)
+		user.create_in_hands(src, new /obj/item/weapon/melee/baton/cattleprod(loc), I, msg = "<span class='notice'>You fasten the wirecutters to the top of the rod with the cable, prongs outward.</span>")
 
 	else if(istype(I, /obj/item/stack/rods))
-		to_chat(user, "You fasten the metal rods together.")
-		user.create_in_hands(src, new /obj/item/weapon/rail_assembly(loc), I)
+		user.create_in_hands(src, new /obj/item/weapon/rail_assembly(loc), I, msg = "You fasten the metal rods together.")
 
 /obj/item/weapon/kitchen/utensil/knife/tactical
 	name = "tactical knife"

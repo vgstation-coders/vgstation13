@@ -78,11 +78,10 @@
 			if(user.is_wearing_item(src, slot_glasses))
 				worn = TRUE
 			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed(loc, src, W)
-			user.create_in_hands(src, I, W, move_in = TRUE)
+			user.create_in_hands(src, I, W, move_in = TRUE, msg = "<span class='notice'>You synchronize \the [W] with \the [src].</span>")
 			var/mob/living/carbon/human/H = user
 			if(worn && istype(H))
 				H.equip_to_slot_if_possible(I,slot_glasses,EQUIP_FAILACTION_DROP)
-			to_chat(user, "<span class='notice'>You synchronize \the [W] with \the [src].</span>")
 
 /obj/item/clothing/glasses/hud/health/cmo
 	name = "advanced health scanner HUD"

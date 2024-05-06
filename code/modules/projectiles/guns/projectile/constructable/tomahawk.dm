@@ -56,8 +56,6 @@
 /obj/item/weapon/hatchet/tomahawk/proc/shatter(mob/user)
 	if(ismetal)
 		return
-	to_chat(user, "<span class='warning'>\The [src]'s blade shatters!</span>")
-	playsound(user, "shatter", 50, 1)
 	var/obj/item/I
 	if(istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
 		var/obj/item/weapon/hatchet/tomahawk/pipe/P = src
@@ -66,7 +64,7 @@
 		I = new /obj/item/weapon/broken_pipe_tomahawk(get_turf(src.loc))
 	else
 		I = new /obj/item/tool/wrench(get_turf(src.loc))
-	user.create_in_hands(src,I)
+	user.create_in_hands(src,I,sound="shatter",msg="<span class='warning'>\The [src]'s blade shatters!</span>",forcedrops = TRUE)
 
 /obj/item/weapon/hatchet/tomahawk/examine(mob/user)
 	..()
@@ -256,10 +254,8 @@
 
 /obj/item/weapon/broken_pipe_tomahawk/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/shard))
-		to_chat(user, "You fasten \the [W] to \the [src].")
-		if(current_blunt)
+		if(user.create_in_hands(src,new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(src.loc)),W,msg="You fasten \the [W] to \the [src].") && current_blunt)
 			to_chat(user, "The crushed [blunt_name] falls out in the process.")
-		user.create_in_hands(src,new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(src.loc)),W)
 	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown))
 		if(current_blunt)
 			to_chat(user, "<span class='notice'>There is already crushed [blunt_name] in the bowl.</span>")
