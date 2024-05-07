@@ -66,7 +66,6 @@
 	if(!loaded_item)
 		return
 	else
-		loaded_item.forceMove(usr.loc)
 		usr.put_in_hands(loaded_item)
 		loaded_item = null
 		to_chat(usr, "You remove \the [loaded_item] from \the [src].")

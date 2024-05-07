@@ -824,13 +824,15 @@ var/global/list/charcoal_doesnt_remove=list(
 			var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
 			if(eyes_covered)
 				return
-			else //eyedrops, why not
+			if(TARGET_EYES in zone_sels) /* If you're targeting eyes specifically, splashing the reagent into them will also work. */
 				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 				if(istype(E) && !E.robotic)
 					M.eye_blurry = 0
 					M.eye_blind = 0
 					if(E.damage > 0)
 						E.damage = 0 //cosmic technologies
+					if(M.sdisabilities & BLIND)
+						M.sdisabilities ^= BLIND
 					to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
 
 /datum/reagent/imidazoline/reaction_dropper_mob(var/mob/living/M)
@@ -847,6 +849,8 @@ var/global/list/charcoal_doesnt_remove=list(
 				M.eye_blind = 0
 				if(E.damage > 0)
 					E.damage = 0 //cosmic technologies
+				if(M.sdisabilities & BLIND)
+					M.sdisabilities ^= BLIND
 				to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
 
 /datum/reagent/inacusiate
@@ -865,6 +869,8 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	M.ear_damage = 0
 	M.ear_deaf = 0
+	if(M.sdisabilities & DEAF)
+		M.sdisabilities ^= DEAF
 
 /datum/reagent/inaprovaline
 	name = "Inaprovaline"
@@ -1414,7 +1420,8 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	M.alpha = 255
 	M.disabilities = 0
-	M.sdisabilities = 0
+	if(M.sdisabilities & MUTE) /* We don't want other sdisabilities (damage-induced blindness & deafness) to be cured since they're not genetic, but muteness gets a pass. */
+		M.sdisabilities ^= MUTE
 
 	//Makes it more obvious that it worked.
 	M.remove_jitter()

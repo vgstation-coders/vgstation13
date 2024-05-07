@@ -71,11 +71,7 @@
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
-		if(!iscarbon(user))
-			M.LAssailant = null
-		else
-			M.LAssailant = user
-			M.assaulted_by(user)
+		M.assaulted_by(user)
 		src.add_fingerprint(user)
 		for(var/mob/O in viewers(M))
 			if (O.client)
@@ -175,11 +171,7 @@
 			target.visible_message("<span class='danger'>[target] has been stunned with \the [src] by [user]!</span>",\
 				drugged_message="<span class='notice'>[user] smacks [target] with the fishing rod!</span>")
 
-			if(!iscarbon(user))
-				target.LAssailant = null
-			else
-				target.LAssailant = user
-				target.assaulted_by(user)
+			target.assaulted_by(user)
 		return
 	else
 		return ..()
@@ -331,7 +323,7 @@
 		qdel(src)
 
 /obj/item/weapon/caber
-	name = "Ullapool Caber"
+	name = "\improper Ullapool Caber"
 	desc = "A potato-masher style hand grenade. Only explodes when swung against a target while the safety grip is on."
 	icon_state = "ullapoolcaber"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
@@ -368,7 +360,7 @@
 	if(admintier && timer == rechargetime)
 		timer = 0
 		exploded = FALSE
-		visible_message(user, "<span class='notice'>The [src] vibrates as the newly assembled explosive charge is deployed!</span>")
+		visible_message(user, "<span class='notice'>\The [src] vibrates as the newly assembled explosive charge is deployed!</span>")
 		playsound(src, 'sound/misc/tf2critsound.ogg', 100, 0)
 		icon_state = initial(icon_state)
 		sharpness_flags = initial(sharpness_flags)
@@ -397,7 +389,7 @@
 //TO DO: explosion when used against walls or windows
 
 /obj/item/weapon/caber/admin
-	name = "Demoman's Own Ullapool Caber"
+	name = "\improper Demoman's Own Ullapool Caber"
 	desc = "I'm goin' ta blast ya into thin gruel!"
 	rechargetime = 10 SECONDS //good luck surviving using this shit without the advanced EOD suit
 	admintier = TRUE

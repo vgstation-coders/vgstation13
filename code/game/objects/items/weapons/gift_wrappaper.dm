@@ -50,6 +50,8 @@
 			item_state = "gift-large"
 
 /obj/item/weapon/gift/attack_self(mob/user as mob)
+	for(var/I in contents)
+		user.put_in_hands(I)
 	user.drop_item(src, force_drop = 1)
 	if(gift)
 		user.put_in_active_hand(gift)

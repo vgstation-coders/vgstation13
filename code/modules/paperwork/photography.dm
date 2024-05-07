@@ -364,7 +364,7 @@
 
 	var/icon/res = get_base_photo_icon()
 
-	var/icon/img = getFlatIconDeluxe(sorted_data, center, (photo_size-1)/2)
+	var/icon/img = getFlatIconDeluxe(sorted_data, center, (photo_size-1)/2, large_canvas = TRUE)
 	res.Blend(img,ICON_OVERLAY)
 
 	return res
@@ -509,7 +509,7 @@
 		aipicture(user, temp, mobs, user, blueprints)
 
 /obj/item/device/camera/proc/printpicture(mob/user, icon/temp, mobs, flag) //Normal camera proc for creating photos
-	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
+	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo(loc)
 	user.put_in_hands(P)
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
@@ -554,7 +554,7 @@
 		double_agent_completion_ids = list()
 
 /obj/item/device/camera/sepia/printpicture(mob/user, icon/temp, mobs, flag) //Creates photos in sepia
-	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
+	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo(loc)
 	user.put_in_hands(P)
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
@@ -868,7 +868,6 @@
 	result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(L)), override_dir = NORTH),  "", dir = NORTH)
 	result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(L)), override_dir = EAST),  "", dir = EAST)
 	result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(L)), override_dir = WEST),  "", dir = WEST)
-	result.Crop(1,1,32,32)
 	return result
 
 /obj/machinery/photobooth/proc/print_photo(var/mob/living/L)

@@ -435,6 +435,18 @@ to destroy them and players will be able to make replacements.
 	build_path = /obj/machinery/power/port_gen/pacman/mrs
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_POWERSTORAGE + "=5;" + Tc_ENGINEERING + "=5"
 
+/obj/item/weapon/circuitboard/pacman/baby
+	name = "Circuit Board (BABYPACMAN-type Generator)"
+	desc = "A circuit board used to run a machine that converts bananium into electricity."
+	build_path = /obj/machinery/power/port_gen/pacman/baby
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_POWERSTORAGE + "=6;" + Tc_ENGINEERING + "=5"
+
+/obj/item/weapon/circuitboard/pacman/professor
+	name = "Circuit Board (PROFESSORPACMAN-type Generator)"
+	desc = "A circuit board used to run a machine that converts phazon into electricity."
+	build_path = /obj/machinery/power/port_gen/pacman/professor
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_POWERSTORAGE + "=7;" + Tc_ENGINEERING + "=5"
+
 /obj/item/weapon/circuitboard/air_alarm
 	name = "Circuit board (Air Alarm)"
 	desc = "A circuit board used to run an air alarm."
@@ -549,7 +561,7 @@ to destroy them and players will be able to make replacements.
 /obj/item/weapon/circuitboard/chemheater
 	name = "Circuit Board (Directed Laser Heater)"
 	desc = "A circuit board used to run a container heating device."
-	build_path = /obj/machinery/chemheater
+	build_path = /obj/machinery/chemtemper/heater
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=4;" + Tc_ENGINEERING + "=3;" + Tc_POWERSTORAGE + "=4"
 	req_components = list (
@@ -559,7 +571,7 @@ to destroy them and players will be able to make replacements.
 /obj/item/weapon/circuitboard/chemcooler
 	name = "Circuit Board (Cryonic Wave Projector)"
 	desc = "A circuit board used to run a container cooling device."
-	build_path = /obj/machinery/chemcooler
+	build_path = /obj/machinery/chemtemper/cooler
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=4;" + Tc_ENGINEERING + "=3;" + Tc_POWERSTORAGE + "=4"
 	req_components = list (

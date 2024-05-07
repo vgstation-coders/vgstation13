@@ -5,6 +5,7 @@
 
 /datum/surgery_step/limb
 	can_infect = 1
+
 /datum/surgery_step/limb/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (!hasorgans(target))
 		return 0
@@ -147,9 +148,7 @@
 	allowed_tools = list(
 		/obj/item/robot_parts = 100,
 		)
-
 	can_infect = 0
-
 	duration = 8 SECONDS
 
 /datum/surgery_step/limb/attach/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -193,7 +192,6 @@
 		)
 
 	can_infect = 0
-
 	duration = 8 SECONDS
 
 /datum/surgery_step/limb/attach_plank/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

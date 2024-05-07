@@ -213,7 +213,7 @@
 				client.screen -= hud_used.cult_tattoo_display
 			hud_used.cult_tattoo_display = null
 
-/mob/proc/cultify()
+/mob/proc/cultify(var/obj/machinery/singularity/narsie/N)
 	return
 
 /mob/proc/clockworkify()
@@ -238,6 +238,9 @@
 		virtualhearer = new /mob/virtualhearer(src)
 
 	update_colour(0)
+
+	register_event(/event/z_transition, src, nameof(src::update_multi_z_verbs()))
+	update_multi_z_verbs()
 
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
@@ -432,72 +435,21 @@
 		return
 
 	//No need to make an exception for mechas, as they get deleted as soon as they get in view of narnar
-
 	if((N.z == src.z)&&(get_dist(N,src) <= (N.consume_range+10)) && !(N in view(src)))
 		if(!narsimage) //Create narsimage
 			narsimage = image('icons/obj/narsie.dmi',src.loc,"narsie",9,1)
 			narsimage.mouse_opacity = 0
-		if(!narglow) //Create narglow
-			narglow = image('icons/obj/narsie.dmi',narsimage.loc,"glow-narsie", NARSIE_GLOW, 1)
-			narglow.plane = ABOVE_LIGHTING_PLANE
-			narglow.mouse_opacity = 0
-/* Animating narsie works like shit thanks to fucking byond
-		if(!N.old_x || !N.old_y)
-			N.old_x = src.x
-			N.old_y = src.y
-		//Reset narsie's location to the mob
-		var/old_pixel_x = 32 * (N.old_x - src.x) + N.pixel_x
-		var/old_pixel_y = 32 * (N.old_y - src.y) + N.pixel_y
-		narsimage.pixel_x = old_pixel_x
-		narsimage.pixel_y = old_pixel_y
-		narglow.pixel_x = old_pixel_x
-		narglow.pixel_y = old_pixel_y
-		narsimage.forceMove(src.loc)
-		narglow.forceMove(src.loc)
-		//Animate narsie based on dir
-		if(dir)
-			var/x_diff = 0
-			var/y_diff = 0
-			switch(dir) //I bet somewhere out there a proc does something like this already
-				if(1)
-					x_diff = 32
-				if(2)
-					x_diff = -32
-				if(4)
-					y_diff = 32
-				if(8)
-					y_diff = -32
-				if(5)
-					x_diff = 32
-					y_diff = 32
-				if(6)
-					x_diff = 32
-					y_diff = -32
-				if(9)
-					x_diff = -32
-					y_diff = 32
-				if(10)
-					x_diff = -32
-					y_diff = -32
-			animate(narsimage, pixel_x = old_pixel_x+x_diff, pixel_y = old_pixel_y+y_diff, time = 8) //Animate the movement of narsie to narsie's new location
-			animate(narglow, pixel_x = old_pixel_x+x_diff, pixel_y = old_pixel_y+y_diff, time = 8)
-*/
-		//Else if no dir is given, simply send them the image of narsie
+			narsimage.plane = NARSIE_PLANE
 		var/new_x = WORLD_ICON_SIZE * (N.x - src.x) + N.pixel_x
 		var/new_y = WORLD_ICON_SIZE * (N.y - src.y) + N.pixel_y
 		narsimage.pixel_x = new_x
 		narsimage.pixel_y = new_y
-		narglow.pixel_x = new_x
-		narglow.pixel_y = new_y
 		narsimage.loc = src.loc
-		narglow.loc = src.loc
 		//Display the new narsimage to the player
 		src << narsimage
-		src << narglow
 	else
 		if(narsimage)
 			del(narsimage)
-			del(narglow)
 
 /mob/proc/see_rift(var/obj/machinery/singularity/narsie/large/exit/R)
 	var/turf/T_mob = get_turf(src)
@@ -609,7 +561,6 @@
 
 //The list of slots by priority. equip_to_appropriate_slot() uses this list. Doesn't matter if a mob type doesn't have a slot.
 var/static/list/slot_equipment_priority = list( \
-		slot_wear_id,\
 		slot_wear_mask,\
 		slot_head,\
 		slot_shoes,\
@@ -617,6 +568,7 @@ var/static/list/slot_equipment_priority = list( \
 		slot_ears,\
 		slot_glasses,\
 		slot_belt,\
+		slot_wear_id,\
 		slot_s_store,\
 		slot_l_store,\
 		slot_r_store,\
@@ -648,7 +600,8 @@ Use this proc preferably at the end of an equipment loadout
 		return 0
 
 	var/list/backup_slots = list()
-	for(var/slot in slot_equipment_priority)
+	var/list/slots_to_use = W.quick_equip_priority | slot_equipment_priority
+	for(var/slot in slots_to_use)
 		if(!is_holding_item(W) && !override)
 			return 0
 		var/obj/item/S = get_item_by_slot(slot)
@@ -671,7 +624,8 @@ Use this proc preferably at the end of an equipment loadout
 	if(!istype(W))
 		return 0
 	var/openslot = 0
-	for(var/slot in slot_equipment_priority)
+	var/list/slots_to_use = W.quick_equip_priority | slot_equipment_priority
+	for(var/slot in slots_to_use)
 		if(W.mob_check_equip(src, slot, 1) == 1)
 			openslot = 1
 			break
@@ -907,7 +861,7 @@ Use this proc preferably at the end of an equipment loadout
 		//END HUMAN
 /mob/proc/reset_view(atom/A)
 	if (client)
-		if (istype(A, /atom/movable))
+		if (A)
 			client.perspective = EYE_PERSPECTIVE
 			client.eye = A
 		else
@@ -1061,11 +1015,7 @@ Use this proc preferably at the end of an equipment loadout
 		update_pull_icon()
 		if(ismob(P))
 			var/mob/M = P
-			if(!iscarbon(src))
-				M.LAssailant = null
-			else
-				M.LAssailant = usr
-				M.assaulted_by(usr, TRUE)
+			M.assaulted_by(usr, TRUE)
 
 /mob/verb/stop_pulling()
 	set name = "Stop Pulling"
@@ -1630,17 +1580,17 @@ Use this proc preferably at the end of an equipment loadout
 		var/max_alpha = 0
 		for (var/key in dark_plane.alphas)
 			max_alpha = max(dark_plane.alphas[key], max_alpha)
-		animate(dark_plane, alpha = max_alpha, color = dark_plane.colours, time = 10)
+		animate(dark_plane, alpha = max_alpha, color = dark_plane.colours, time = 0)
 	else if (dark_plane)
-		animate(dark_plane, alpha = initial(dark_plane.alpha), color = dark_plane.colours, time = 10)
+		animate(dark_plane, alpha = initial(dark_plane.alpha), color = dark_plane.colours, time = 0)
 
 	if (self_vision)
 		if (isturf(loc))
 			var/turf/T = loc
 			if (T.get_lumcount() <= 0 && (dark_plane.alpha <= 15) && (master_plane.blend_mode == BLEND_MULTIPLY))
-				animate(self_vision, alpha = self_vision.target_alpha, time = 10)
+				animate(self_vision, alpha = self_vision.target_alpha, time = 0)
 			else
-				animate(self_vision, alpha = 0, time = 10)
+				animate(self_vision, alpha = 0, time = 0)
 
 //Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
 /mob/change_dir(new_dir, var/changer)
@@ -1838,10 +1788,14 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/dexterity_check()//can the mob use computers, guns, and other fine technologies
 	return FALSE
 
-/mob/proc/isTeleViewing(var/client_eye)
+/mob/proc/isTeleViewing(var/atom/client_eye)
 	if(istype(client_eye,/obj/machinery/camera))
 		return 1
 	if(istype(client_eye,/obj/item/projectile/rocket/nikita))
+		return 1
+	if(istype(client_eye,/turf/simulated/wall) && Adjacent(client_eye))
+		return 1
+	if(isvisiblespace(client_eye) && client_eye.x == src.x && client_eye.y == src.y)
 		return 1
 	return 0
 

@@ -17,6 +17,9 @@
 	if(!.)
 		return
 	equip_wizard(antag.current, apprentice = TRUE)
+	antag.current.flavor_text = null
+	antag.current.faction = "wizard"
+	antag.mob_legacy_fac = "wizard"
 
 /datum/role/wizard_apprentice/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -32,9 +35,9 @@
 
 /datum/role/wizard_apprentice/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	. = ..()
-	for (var/spell/S in old_character.spell_list)
-		if (S.user_type == USER_TYPE_WIZARD && !(S.spell_flags & LOSE_IN_TRANSFER))
-			new_character.add_spell(S)
+	for (var/spell/S in antag.wizard_spells)
+		if (!(S.spell_flags & LOSE_IN_TRANSFER))
+			transfer_spell(new_character, old_character, S)
 
 /datum/role/wizard_apprentice/GetScoreboard()
 	. = ..()
@@ -45,8 +48,6 @@
 		return
 
 	. += "<BR>The apprentice knew:<BR>"
-	for(var/spell/S in H.spell_list)
-		if(S.user_type != USER_TYPE_WIZARD)
-			continue
+	for(var/spell/S in antag.wizard_spells)
 		var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
 		. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"

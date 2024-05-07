@@ -356,6 +356,10 @@
 
 	job_master.AssignRole(src, rank, 1)
 
+	if(job_master.alt_database_active)
+		rank = src.mind.assigned_role
+		job = job_master.GetJob(rank)
+
 	var/mob/living/carbon/human/character = create_human(client.prefs)	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)

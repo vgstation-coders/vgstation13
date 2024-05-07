@@ -18,7 +18,7 @@
 	var/slot_flags = 0		//This is used to determine on which slots an item can fit.
 	var/clothing_flags = 0
 	var/obj/item/offhand/wielded = null
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	pressure_resistance = 5
 //	causeerrorheresoifixthis
 	var/obj/item/master = null//apparently used by device assemblies to track the object they are attached to.
@@ -87,6 +87,7 @@
 
 	var/is_cookvessel //If true, the item is a cooking vessel.
 
+	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
 
 /obj/item/New()
 	..()
@@ -222,6 +223,10 @@ var/global/objects_thrown_when_explode = FALSE
 
 /obj/item/throw_impact(atom/impacted_atom, speed, mob/user)
 	..()
+	if(isliving(impacted_atom))
+		var/mob/living/L = impacted_atom
+		if(!L.tangibility)
+			return 1
 	if(isturf(impacted_atom))
 		var/turf/T = impacted_atom
 		if(objects_thrown_when_explode || (T.arcanetampered && T.arcanetampered != user))
@@ -430,12 +435,12 @@ var/global/objects_thrown_when_explode = FALSE
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
-	
+
 	if(on_fire)
 		if(user.a_intent && user.a_intent == I_DISARM)
 			extinguish_with_hands(user)
 			return //don't pick it up immediately, you have to click it again after it's extinguished
-	
+
 	if(can_pickup(user) && !user.put_in_active_hand(src))
 		forceMove(get_turf(user))
 
@@ -680,21 +685,21 @@ var/global/objects_thrown_when_explode = FALSE
 						return CANNOT_EQUIP
 				return CAN_EQUIP
 			if(slot_gloves)
-				if( !(slot_flags & SLOT_GLOVES) )
+				if(!(slot_flags & SLOT_GLOVES))
 					return CANNOT_EQUIP
-
-				for(var/datum/organ/external/OE in get_organs_by_slot(slot, H))
-					if(!OE.species) //Organ has same species as body
-						if(H.species.anatomy_flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL)) //Use the body's base species
-							if(!disable_warning)
-								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
-							return CANNOT_EQUIP
-					else //Organ's species is different from body
-						if(OE.species.anatomy_flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL))
-							if(!disable_warning)
-								to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your bulky fingers!</span>")
-							return CANNOT_EQUIP
-
+				for(var/datum/organ/external/hand_datum in get_organs_by_slot(slot, H))
+					var/obj/item/organ/external/hand_obj = new hand_datum.generic_type()
+					var/failed_gloves_equip = FALSE
+					var/datum/species/checked_species = hand_datum.species || H.species
+					if(!(clothing_flags & ONESIZEFITSALL))
+						if(checked_species.anatomy_flags & IS_BULKY)
+							failed_gloves_equip = TRUE
+						if(hand_obj.forbid_gloves)
+							failed_gloves_equip = TRUE
+					if(failed_gloves_equip)
+						if(!disable_warning)
+							to_chat(H, span_warning("You can't get \the [src] to fasten around your bulky fingers!"))
+						return CANNOT_EQUIP
 				if(H.gloves)
 					if(automatic)
 						if(H.check_for_open_slot(src))
@@ -1198,11 +1203,7 @@ var/global/objects_thrown_when_explode = FALSE
 	M.attack_log += "\[[time_stamp()]\]<font color='orange'> Attacked by [user.name] ([user.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>"
 	msg_admin_attack("ATTACK: [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])") //BS12 EDIT ALG
 	log_attack("<font color='red'> [user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [name] (INTENT: [uppertext(user.a_intent)])</font>")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 
 	add_fingerprint(user)
 	//if(clumsy_check(user) && prob(50))
@@ -1257,31 +1258,19 @@ var/global/objects_thrown_when_explode = FALSE
 /obj/item/clean_blood()
 	. = ..()
 	remove_disease2()
-	if (blood_overlay)
-		overlays.Remove(blood_overlay)
-	if (had_blood)
+	REMOVE_KEEP_TOGETHER(src, "bloody_item")
+	if(blood_overlay)
+		overlays -= blood_overlay
+	if(had_blood)
 		clear_luminol()
-	if (istype(src, /obj/item/clothing/gloves))
+	if(istype(src, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = src
 		G.transfer_blood = 0
-
 
 /obj/item/add_blood(var/mob/living/carbon/human/M)
 	if (!..())
 		return FALSE
-
-	//if we haven't made our blood_overlay already
-	if(!blood_overlays["[type][icon_state]"])
-		set_blood_overlay()
-
-	if(!blood_overlay)
-		blood_overlay = blood_overlays["[type][icon_state]"]
-	else
-		overlays.Remove(blood_overlay)
-
-	//apply the blood-splatter overlay if it isn't already in there, else it updates it.
-	blood_overlay.color = blood_color
-	overlays += blood_overlay
+	set_blood_overlay()
 	//if this blood isn't already in the list, add it
 	if(!M)
 		return
@@ -1306,19 +1295,7 @@ var/global/objects_thrown_when_explode = FALSE
 /obj/item/add_blood_from_data(var/list/blood_data)
 	if (!..())
 		return FALSE
-
-	//if we haven't made our blood_overlay already
-	if(!blood_overlays["[type][icon_state]"])
-		set_blood_overlay()
-
-	if(!blood_overlay)
-		blood_overlay = blood_overlays["[type][icon_state]"]
-	else
-		overlays.Remove(blood_overlay)
-
-	//apply the blood-splatter overlay if it isn't already in there, else it updates it.
-	blood_overlay.color = blood_color
-	overlays += blood_overlay
+	set_blood_overlay()
 	//if this blood isn't already in the list, add it
 	if(!blood_data)
 		return
@@ -1346,50 +1323,23 @@ var/global/objects_thrown_when_explode = FALSE
 	blood_color = other_item.blood_color
 	blood_DNA = other_item.blood_DNA.Copy()
 	had_blood = TRUE
-	if(!blood_overlays["[type][icon_state]"])
-		set_blood_overlay()
-	if(!blood_overlay)
-		blood_overlay = blood_overlays["[type][icon_state]"]
-	else
-		overlays.Remove(blood_overlay)
-	blood_overlay.color = blood_color
-	overlays += blood_overlay
+	set_blood_overlay()
 
-var/global/list/image/blood_overlays = list()
-/obj/item/proc/set_blood_overlay() /* If your item needs to update its blood overlay when its icon_state changes, use this one. update_blood_overlay() is simply a helper proc for this one. */
-	if(update_blood_overlay())
-		return
-
-	var/icon/I = new /icon(icon, icon_state)
-	I.Blend(rgb(255,255,255),ICON_ADD) //fills the icon_state with white (except where it's transparent)
-	I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY) //adds blood and the remaining white areas become transparant
-
-	var/image/img = image(I)
-	img.name = "blood_overlay"
-	img.appearance_flags = RESET_COLOR|RESET_ALPHA
-	blood_overlays["[type][icon_state]"] = img
-	update_blood_overlay()
-
-/obj/item/proc/update_blood_overlay() /* See comment on set_blood_overlay() - this shouldn't be used outside of that proc! */
-	if(blood_overlays["[type][icon_state]"] && blood_overlay)
-		overlays -= blood_overlay
-		blood_overlay = blood_overlays["[type][icon_state]"]
-		blood_overlay.color = blood_color
-		overlays += blood_overlay
-		return 1
+/obj/item/proc/set_blood_overlay(passed_color = blood_color, forced = FALSE)
+	REMOVE_KEEP_TOGETHER(src, "bloody_item")
+	cut_overlay(blood_overlay)
+	var/mutable_appearance/item_blood_overlay = mutable_appearance('icons/effects/blood.dmi', "itemblood", appearance_flags = RESET_COLOR|RESET_ALPHA)
+	item_blood_overlay.blend_mode = BLEND_INSET_OVERLAY
+	item_blood_overlay.color = passed_color
+	blood_overlay = item_blood_overlay
+	if(forced || is_blood_stained(src))
+		ADD_KEEP_TOGETHER(src, "bloody_item")
+		add_overlay(blood_overlay)
 
 /obj/item/apply_luminol()
 	if(!..())
 		return FALSE
-	if(!blood_overlays["[type][icon_state]"]) //Blood overlay generation if it lacks one.
-		set_blood_overlay()
-	if(blood_overlay)
-		overlays.Remove(blood_overlay)
-	else
-		blood_overlay = blood_overlays["[type][icon_state]"]
-	var/image/luminol_overlay = blood_overlay
-	luminol_overlay.color = LIGHT_COLOR_CYAN
-	overlays += luminol_overlay
+	set_blood_overlay(LIGHT_COLOR_CYAN, TRUE)
 	var/obj/effect/decal/cleanable/blueglow/BG
 	if(istype(had_blood,/obj/effect/decal/cleanable/blueglow))
 		BG = had_blood
@@ -1578,11 +1528,7 @@ var/global/list/image/blood_overlays = list()
 
 	M.attack_log += text("\[[time_stamp()]] <span style='color: orange'>Has been restrained (attempt) by [user.name] ([user.ckey]) with \the [src].</span>")
 	user.attack_log += text("\[[time_stamp()]] <span style='color: red'>Attempted to restrain [M.name] ([M.ckey]) with \the [src].</span>")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 	log_attack("[user.name] ([user.ckey]) Attempted to restrain [M.name] ([M.ckey]) with \the [src].")
 	return TRUE
 

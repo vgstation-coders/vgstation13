@@ -183,12 +183,6 @@ var/list/infected_cleanables = list()
 			perp.add_blood_to_feet(amount, basecolor, blood_DNA)
 			amount--
 
-/obj/effect/decal/cleanable/proc/messcheck(var/obj/effect/decal/cleanable/M)
-	return 1
-
-
-
-
 ///////////////////CULT BLOODSPILL STUFF/////////////////////////////////////
 
 /obj/effect/decal/cleanable/proc/bloodspill_add()

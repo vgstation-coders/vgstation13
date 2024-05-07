@@ -634,27 +634,27 @@ var/datum/controller/gameticker/ticker
 	if(platinum_tier.len)
 		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(platinum)]'> <b>Platinum Trophy</b> (never removed his clothes, kept his bomb dispenser until the end, and escaped on the shuttle):"}
 		for (var/mob/M in platinum_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(gold_tier.len)
 		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(gold)]'> <b>Gold Trophy</b> (kept his bomb dispenser until the end, and escaped on the shuttle):"}
 		for (var/mob/M in gold_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(silver_tier.len)
 		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(silver)]'> <b>Silver Trophy</b> (kept his bomb dispenser until the end, and escaped in a pod):"}
 		for (var/mob/M in silver_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(bronze_tier.len)
 		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(bronze)]'> <b>Bronze Trophy</b> (kept his bomb dispenser until the end):"}
 		for (var/mob/M in bronze_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(special_tier.len)
 		text += "<br><b>Special Mention</b> to those adorable MoMMis:"
 		for (var/mob/M in special_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.name]</b>"}
 
 	return text

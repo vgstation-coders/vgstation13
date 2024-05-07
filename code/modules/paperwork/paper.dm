@@ -12,6 +12,7 @@
 	item_state = "paper"
 	throwforce = 0
 	w_class = W_CLASS_TINY
+	starting_materials = list(MAT_CARDBOARD = 40)
 	w_type = RECYK_WOOD
 	throw_range = 1
 	throw_speed = 1
@@ -259,6 +260,8 @@
 		\[row\] - Creates a new table row.<br>
 		\[cell\] - Creates a new table cell.<br>
 		\[sign\] : Inserts a signature of your name in a foolproof way.<br>
+		\[stationname\] : Inserts the name of the station.<br>
+		\[logo\] : Inserts a medium-size Nanotrasen logo.<br>
 		\[field\] : Inserts an invisible field which lets you start type from there. Useful for forms.<br>
 		\[date\] : Inserts the current date in the format DAY MONTH, YEAR.<br>
 		\[time\] : Inserts the current station time.<br>

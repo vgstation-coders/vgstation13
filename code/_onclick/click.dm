@@ -6,11 +6,13 @@
 //BYOND has a quirk (maybe bug?) where, if you initiate a clickdrag with one mouse button, any clicks with another button during the drag hit the object being dragged.
 //This allowed you to, for example, start a middle-click drag on someone and then have an aimbot that allows you to effortlessly hit them in melee or ranged combat as long as you held MMB.
 //This code discards clicks performed during a drag to prevent this.
-/client/Click(object, location, control, params)
-	var/list/p = params2list(params)
-	if(p["drag"])
-		return
-	..()
+
+//As of 2024 this code has been commented out because the bug/exploit is no longer active.
+// /client/Click(object, location, control, params)
+// 	var/list/p = params2list(params)
+// 	if(p["drag"])
+// 		return
+// 	..()
 
 /*
 	Before anything else, defer these calls to a per-mobtype handler.  This allows us to
@@ -459,3 +461,7 @@
 	var/obj/item/W = get_active_hand()
 	if (W)
 		W.MouseWheeled(src, delta_x, delta_y, params)
+
+//Currently used to allow a little bit of freedom in click-dragging for melee combat in _onclick/drag_drop.dm
+/mob/living/MouseDown(location, control, params, var/past_time)
+	usr.client.click_held_down_time = world.timeofday

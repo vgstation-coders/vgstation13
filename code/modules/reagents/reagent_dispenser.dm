@@ -277,6 +277,16 @@
 	. = ..()
 	reagents.add_reagent(FUEL, 1000)
 
+/obj/structure/reagent_dispensers/fueltank/bulk
+	name = "Bulk Welding Fuel Tank"
+	desc = "Massive welding fuel tank used to refill other welding fuel tanks."
+
+/obj/structure/reagent_dispensers/fueltank/bulk/New()
+	..()
+	create_reagents(1000000)
+	reagents.add_reagent(FUEL, 1000000)
+	transform *= 2 //haha big tank
+
 /obj/structure/reagent_dispensers/peppertank
 	name = "Pepper Spray Refiller"
 	desc = "Refill pepper spray canisters."
@@ -317,7 +327,7 @@
 
 /obj/structure/reagent_dispensers/water_cooler/attack_hand(mob/user as mob)
 	if(paper_cups > 0)
-		user.put_in_hands(new/obj/item/weapon/reagent_containers/food/drinks/sillycup())
+		user.put_in_hands(new/obj/item/weapon/reagent_containers/food/drinks/sillycup(loc))
 		to_chat(user, "You pick up an empty paper cup from \the [src]")
 		paper_cups--
 		desc = "[initial(desc)] There's [paper_cups] paper cups stored inside."

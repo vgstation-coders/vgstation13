@@ -392,7 +392,7 @@ Subject's pulse: ??? BPM"})
 		message += "<span class='bnotice'><B>[bicon(container)] Results of [container] scan:</span></B>"
 	if(total_moles)
 		message += "<br>[human_standard && abs(pressure - ONE_ATMOSPHERE) > 10 ? "<span class='bad'>" : "<span class='notice'>"] Pressure: [round(pressure, 0.1)] kPa</span>"
-		
+
 		for (var/id in scanned.gas)
 			var/class = "notice"
 			var/moles = scanned[id]
@@ -412,11 +412,36 @@ Subject's pulse: ??? BPM"})
 						class = "bad"
 			message += "<br><span class='[class]'>[gas.name]: [round(moles, 0.1)] mol, [round(concentration*100)]%</span>"
 
-		message += "<br>[human_standard && !IsInRange(scanned.temperature, BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [round(scanned.temperature,0.1)]K ([round(scanned.temperature-T0C)]&deg;C)"
+		var/kelvinTemperatureDisplay = scanned.temperature_kelvin_pretty()
+		var/celsiusTemperatureDisplay = scanned.temperature_celsius_pretty()
+		message += "<br>[human_standard && !IsInRange(scanned.temperature, BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [kelvinTemperatureDisplay]K ([celsiusTemperatureDisplay]&deg;C)"
 		message += "<br><span class='notice'>Heat capacity: [round(scanned.heat_capacity(), 0.01)]</span>"
 	else
 		message += "<br><span class='warning'>No gasses detected[container && !istype(container, /turf) ? " in \the [container]." : ""]!</span>"
 	return message
+
+/obj/item/device/analyzer/wood
+	name = "wood analyzer"
+	desc = "Analyzes whether or not an object is wood."
+
+/obj/item/device/analyzer/wood/attack_self(mob/user as mob)
+	return
+
+/obj/item/device/analyzer/wood/preattack(atom/A, mob/user as mob, proximity_flag)
+	if(!proximity_flag)
+		return
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
+	if(istype(A,/obj))
+		var/obj/O = A
+		if(O.w_type == RECYK_WOOD)
+			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"Yep, it's wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows green.</span>")
+		else
+			user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"No, it's not wood.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows red.</span>")
+		playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+	else
+		return
 
 /obj/item/device/mass_spectrometer
 	desc = "A hand-held mass spectrometer which identifies trace chemicals in a blood sample."
@@ -535,12 +560,12 @@ Subject's pulse: ??? BPM"})
 		if(O.reagents.reagent_list.len)
 			for(var/datum/reagent/R in O.reagents.reagent_list)
 				var/reagent_percent = (R.volume/O.reagents.total_volume)*100
-				dat += "<br><span class='notice'>[R][details ? " ([R.volume] units, [reagent_percent]%, time in system: [R.real_tick*2] seconds" : ""]</span>"
+				dat += "<br><span class='notice'>[R][details ? " ([R.volume] units, [reagent_percent]%[ismob(O) ? ", time in system: [R.real_tick*2] seconds" : ""])" : ""]</span>"
 		if (istype (O, /obj/item/weapon/reagent_containers/food/snacks))
 			var/obj/item/weapon/reagent_containers/food/snacks/S = O
 			if(S.dip && S.dip.reagent_list.len > 0)
 				for (var/datum/reagent/R in S.dip.reagent_list)
-					dat += "<br><span class='notice'>[R][details ? " (trace amounts, time in system: [R.real_tick*2] seconds" : ""]</span>"
+					dat += "<br><span class='notice'>[R][details ? " (trace amounts)" : ""]</span>"
 		if(dat)
 			to_chat(user, "<span class='notice'>Chemicals found in \the [O]:[dat]</span>")
 		else

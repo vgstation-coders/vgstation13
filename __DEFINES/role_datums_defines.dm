@@ -123,6 +123,13 @@
 
 #define MALF_CHOOSING_NUKE	4
 
+#define BLOODCULT_STAGE_NORMAL		1	//default
+#define BLOODCULT_STAGE_READY		2	//eclipse timer has reached zero
+#define BLOODCULT_STAGE_ECLIPSE		FACTION_ENDGAME		//3 - narsie summoning ritual undergoing
+#define BLOODCULT_STAGE_MISSED		4	//eclipse window has ended
+#define BLOODCULT_STAGE_DEFEATED	FACTION_DEFEATED	//5 - narsie summoning ritual failed
+#define BLOODCULT_STAGE_NARSIE		6	//endgame
+
 //////////////////////////////////CULT STUFF////////////////////////////////////
 
 #define BLOODCOST_TARGET_BLEEDER	"bleeder"
@@ -167,7 +174,7 @@
 #define RITUALABORT_MISSING	"missing"
 #define RITUALABORT_OVERCROWDED "overcrowded"
 
-#define TATTOO_POOL		"Blood Communion"
+#define TATTOO_POOL		"Blood Pooling"
 #define TATTOO_SILENT	"Silent Casting"
 #define TATTOO_DAGGER	"Blood Dagger"
 #define TATTOO_HOLY		"Unholy Protection"
@@ -176,7 +183,7 @@
 #define TATTOO_MANIFEST	"Pale Body"
 #define TATTOO_MEMORIZE	"Arcane Dimension"
 #define TATTOO_RUNESTORE "Runic Skin"
-#define TATTOO_SHORTCUT	"Shortcut Tracer"
+#define TATTOO_SHORTCUT	"Shortcut Sigil"
 
 #define	TOME_CLOSED	1
 #define	TOME_OPEN	2
@@ -217,6 +224,19 @@
 #define CULTIST_ROLE_ACOLYTE	1
 #define CULTIST_ROLE_HERALD		2
 #define CULTIST_ROLE_MENTOR		3
+
+#define DEVOTION_TIER_0		0
+#define DEVOTION_TIER_1		1
+#define DEVOTION_TIER_2		2
+#define DEVOTION_TIER_3		3
+#define DEVOTION_TIER_4		4
+
+#define RITUAL_CULTIST_1	"first_ritual"
+#define RITUAL_CULTIST_2	"second_ritual"
+
+#define RITUAL_FACTION_1	"first_ritual"
+#define RITUAL_FACTION_2	"second_ritual"
+#define RITUAL_FACTION_3	"third_ritual"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -263,8 +283,8 @@
 #define LATEJOIN_DELAY_MIN (5 MINUTES)/20
 #define LATEJOIN_DELAY_MAX (30 MINUTES)/20
 
-#define MIDROUND_DELAY_MIN (15 MINUTES)/20
-#define MIDROUND_DELAY_MAX (50 MINUTES)/20
+#define MIDROUND_DELAY_MIN (5 MINUTES)/20
+#define MIDROUND_DELAY_MAX (30 MINUTES)/20
 
 // -- Rulesets flags
 
