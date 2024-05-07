@@ -68,7 +68,7 @@
 	// the more it cools. This exists for a lot of reasons, but the big one is that cryotheum was broken as a way to cool engines by simply pumping a bunch of cryotheum into
 	// it. This will help cement it as more of a plasma-cooling method while still allowing it as an engine cooling method in some scenarios.
 	var/const/min_temp = 0.1
-	var/distance_to_min_temp = max(0, mixture.temperature - min_temp)
+	var/distance_to_min_temp = max(0.00001, mixture.temperature - min_temp)
 	// Cooling coefficient with the current numbers will reach a max of 6 at around 10K and will scale down from there, reaching around 0.4 at 300K and 0.13 at 1000K.
 	var/cooling_coefficient = min(1, 80 / distance_to_min_temp) + min(5, 50 / distance_to_min_temp)
 
