@@ -21,6 +21,8 @@
 
 /obj/item/weapon/brick_sock/attack_self(mob/user)
 	user.put_in_hands(new /obj/item/stack/sheet/mineral/brick(user))
+	if(!base_sock)
+		base_sock = new(src)
 	user.create_in_hands(src, base_sock, msg = "<span class='notice'>You remove the brick from \the [src].</span>")
 
 /obj/item/weapon/brick_sock/soap
@@ -41,5 +43,9 @@
 		base_soap = new(src)
 		
 /obj/item/weapon/brick_sock/soap/attack_self(mob/user)
+	if(!base_soap)
+		base_soap = new(src)
 	user.put_in_hands(base_soap)
+	if(!base_sock)
+		base_sock = new(src)
 	user.create_in_hands(src, base_sock, msg = "<span class='notice'>You remove the soap from \the [src].</span>")
