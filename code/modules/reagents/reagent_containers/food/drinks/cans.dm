@@ -10,7 +10,7 @@
 	..()
 	if (flags & OPENCONTAINER)
 		overlays += image(icon = icon, icon_state = "soda_open")
-		update_blood_overlay()
+		set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
 	if(!is_open_container())
@@ -131,7 +131,7 @@
 	overlays.len = 0
 	if (!(flags & OPENCONTAINER))
 		overlays += image(icon = icon, icon_state = "bottle_cap")
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum
 	name = "Nuka Cola Quantum"
@@ -157,7 +157,7 @@
 	overlays.len = 0
 	if (!(flags & OPENCONTAINER))
 		overlays += image(icon = icon, icon_state = "bottle_cap")
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink
 	name = "Brawndo"
