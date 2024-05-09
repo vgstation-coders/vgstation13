@@ -14,6 +14,7 @@ var/list/special_fruits = list()
 	var/hydroflags = 0
 	var/datum/seed/seed
 	var/fragrance
+	var/blunttype = /obj/item/clothing/mask/cigarette/blunt/rolled
 	autoignition_temperature = AUTOIGNITION_FABRIC
 
 	icon = 'icons/obj/hydroponics/apple.dmi'
@@ -507,15 +508,10 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/paper))
-		qdel(O)
-		to_chat(user, "<span class='notice'>You roll a blunt out of \the [src].</span>")
-		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(src.loc)
-		B.name = "[src.name] blunt"
-		B.filling = "[src.name]"
-		reagents.trans_to(B, (reagents.total_volume))
-		user.put_in_hands(B)
-		user.drop_from_inventory(src)
-		qdel(src)
+		var/createmsg = "blunt out of \the [src]"
+		if(blunttype == /obj/item/clothing/mask/cigarette/blunt/deus/rolled)
+			createmsg = "godly blunt"
+		user.create_in_hands(src, new blunttype(src.loc, src), O, msg = "<span class='notice'>You roll a [createmsg].</span>")
 	else
 		return ..()
 
@@ -525,19 +521,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 10
 	filling_color = "#229E11"
 	plantname = "ambrosiadeus"
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/paper))
-		qdel(O)
-		to_chat(user, "<span class='notice'>You roll a godly blunt.</span>")
-		var/obj/item/clothing/mask/cigarette/blunt/deus/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/deus/rolled(src.loc)
-		reagents.trans_to(B, (reagents.total_volume))
-		B.light_color = filling_color
-		user.put_in_hands(B)
-		user.drop_from_inventory(src)
-		qdel(src)
-	else
-		return ..()
+	blunttype = /obj/item/clothing/mask/cigarette/blunt/deus/rolled
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/apple
 	name = "apple"
