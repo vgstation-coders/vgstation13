@@ -313,17 +313,9 @@
 		if(C.amount < 5)
 			to_chat(user, "You don't have enough cable to alter \the [src].")
 			return
-		to_chat(user, "You attach [C.amount > 5 ? "some" : "the"] wires to \the [src]'s flash circuit.")
-		if(loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/device/blinder/Q = new(get_turf(user), empty = TRUE)
-			handle_blinder(Q)
-			user.put_in_hands(Q)
-		else
-			var/obj/item/device/blinder/Q = new(get_turf(loc), empty = TRUE)
-			handle_blinder(Q)
-		C.use(5)
-		qdel(src)
+		var/obj/item/device/blinder/Q = new(loc, empty = TRUE)
+		handle_blinder(Q)
+		user.create_in_hands(src, Q, C, 5, "You attach [C.amount > 5 ? "some" : "the"] wires to \the [src]'s flash circuit.")
 
 	if(istype(I, /obj/item/device/camera_film))
 		if(pictures_left)

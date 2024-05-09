@@ -1037,27 +1037,12 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	..()
 	if(W.sharpness_flags & SHARP_BLADE)
 		if(cut && cant_eat_msg)
-			user.visible_message("\The [user] removes the pit from \the [src] with \the [W].","You remove the pit from \the [src] with \the [W].")
-			new /obj/item/seeds/avocadoseed/whole(get_turf(user))
-			if(loc == user)
-				if(src in user.held_items)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted/P = new(get_turf(src))
-					user.put_in_hands(P)
-					qdel(src)
-					return
-			new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src))
-			qdel(src)
+			new /obj/item/seeds/avocadoseed/whole(loc)
+			new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(loc)
+			user.create_in_hands(src, /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted, vismsg = "\The [user] removes the pit from \the [src] with \the [W].", msg = "You remove the pit from \the [src] with \the [W].")
 		else if(!cut)
-			user.visible_message("\The [user] slices \the [src] in half with \the [W].","You slice \the [src] in half with \the [W].")
 			var/list/halves = list(new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut(get_turf(src)), new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src)))
-			if(loc == user)
-				if(src in user.held_items)
-					user.drop_item(src, force_drop = 1)
-					user.put_in_hands(pick(halves))
-					qdel(src)
-					return
-			qdel(src)
+			user.create_in_hands(src, pick(halves), vismsg = "\The [user] slices \the [src] in half with \the [W].", msg = "You slice \the [src] in half with \the [W].")
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut
 	name = "avocado half"
