@@ -274,10 +274,13 @@
 	. = 0
 	if(ispath(newitem))
 		newitem = new newitem(olditem.loc)
+	if(!newitem) // If it deleted after creation
+		return 0
 	if(using)
 		if(istype(using,/obj/item/stack) && uses)
 			var/obj/item/stack/S = using
 			if(S.amount < uses)
+				to_chat(src, "<span class='warning'>You need at least [S.amount] [S.correct_name()] to make [newitem]!")
 				qdel(newitem)
 				return 0
 			S.use(uses)
@@ -292,7 +295,7 @@
 				qdel(newitem)
 				return 0
 			qdel(using)
-		using.transfer_fingerprints_to(newitem)
+		//using.transfer_fingerprints_to(newitem)
 	if(olditem.loc == src)
 		drop_item(olditem, force_drop = 1) // Necessary to show up in the same hand for below
 		. = put_in_hands(newitem)

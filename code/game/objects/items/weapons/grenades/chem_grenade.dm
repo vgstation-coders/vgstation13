@@ -104,11 +104,8 @@
 		name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 		stage = GRENADE_STAGE_ASSEMBLY_INSERTED
 	else if(istype(W,/obj/item/stack/cable_coil) && !beakers.len)
-		var/obj/item/stack/cable_coil/coil = W
-		if(coil.amount < 2)
-			return
 		W.playtoolsound(src, 30, TRUE, -2)
-		user.create_in_hands(src, /obj/item/weapon/electrolyzer, coil, 2, "<span class='notice'>You tightly coil the wire around the metal casing.</span>")
+		user.create_in_hands(src, /obj/item/weapon/electrolyzer, W, 2, "<span class='notice'>You tightly coil the wire around the metal casing.</span>")
 	else if(W.is_screwdriver(user) && path != PATH_STAGE_COMPLETE)
 		if(stage == GRENADE_STAGE_ASSEMBLY_INSERTED )
 			path = PATH_STAGE_CONTAINER_INSERTED
