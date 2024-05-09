@@ -263,7 +263,9 @@
 /event/area_exited
 
 // Called by miscellaneous functions not covered by entered, equipped and unequipped events for cameranet updates
-/event/cameranet_changed
+// Arguments:
+// atom/movable/mover: the atom changing status on the cameranet
+/event/camera_sight_changed
 
 // Called by both area/Entered and area/Exited if the atom changing areas is a mob
 // Arguments:

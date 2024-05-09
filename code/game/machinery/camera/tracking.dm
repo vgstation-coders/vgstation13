@@ -146,7 +146,7 @@
 		return
 
 /mob/living/silicon/ai/proc/can_track_atom(var/atom/target)
-	if(target == src)
+	if(!target || target.gcDestroyed || target == src)
 		return FALSE
 
 	var/turf/T = get_turf(target)
@@ -197,7 +197,7 @@
 	currently_tracking.register_event(/event/moved,src,nameof(src::on_camera_change()))
 	currently_tracking.register_event(/event/equipped,src,nameof(src::on_camera_change()))
 	//currently_tracking.register_event(/event/unequipped,src,nameof(src::on_camera_change()))
-	currently_tracking.register_event(/event/cameranet_changed,src,nameof(src::on_camera_change()))
+	currently_tracking.register_event(/event/camera_sight_changed,src,nameof(src::on_camera_change()))
 	to_chat(src, "Now tracking [currently_tracking.name] on camera.")
 
 /datum/locking_category/ai_eye
@@ -219,7 +219,7 @@
 		currently_tracking.unregister_event(/event/moved,src,nameof(src::on_camera_change()))
 		currently_tracking.unregister_event(/event/equipped,src,nameof(src::on_camera_change()))
 		//currently_tracking.unregister_event(/event/unequipped,src,nameof(src::on_camera_change()))
-		currently_tracking.unregister_event(/event/cameranet_changed,src,nameof(src::on_camera_change()))
+		currently_tracking.unregister_event(/event/camera_sight_changed,src,nameof(src::on_camera_change()))
 		if(eyeobj?.locked_to == currently_tracking)
 			currently_tracking.unlock_from()
 		currently_tracking = null
