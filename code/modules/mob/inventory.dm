@@ -277,6 +277,9 @@
 	if(using)
 		if(istype(using,/obj/item/stack) && uses)
 			var/obj/item/stack/S = using
+			if(S.amount < uses)
+				qdel(newitem)
+				return 0
 			S.use(uses)
 		else if(move_in)
 			if(using.loc != src)

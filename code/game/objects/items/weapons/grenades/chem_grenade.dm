@@ -107,13 +107,8 @@
 		var/obj/item/stack/cable_coil/coil = W
 		if(coil.amount < 2)
 			return
-		coil.use(2)
-		var/obj/item/weapon/electrolyzer/E = new /obj/item/weapon/electrolyzer
-		to_chat(user, "<span class='notice'>You tightly coil the wire around the metal casing.</span>")
 		W.playtoolsound(src, 30, TRUE, -2)
-		user.before_take_item(src)
-		user.put_in_hands(E)
-		qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/electrolyzer, coil, 2, "<span class='notice'>You tightly coil the wire around the metal casing.</span>")
 	else if(W.is_screwdriver(user) && path != PATH_STAGE_COMPLETE)
 		if(stage == GRENADE_STAGE_ASSEMBLY_INSERTED )
 			path = PATH_STAGE_CONTAINER_INSERTED
