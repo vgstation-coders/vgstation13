@@ -331,8 +331,8 @@ to destroy them and players will be able to make replacements.
 	else
 		*/if(!soldering&&issolder(O))
 		//local_fuses.Interact(user)
-		var/t = input(user, "Which board should be designed?") as null|anything in allowed_boards
-		if(!t)
+		var/choice = input(user, "Which board should be designed?") as null|anything in allowed_boards
+		if(!choice)
 			return
 		var/obj/item/tool/solder/S = O
 		if(!S.remove_fuel(4,user))
@@ -340,11 +340,8 @@ to destroy them and players will be able to make replacements.
 		S.playtoolsound(loc, 50)
 		soldering = 1
 		if(do_after(user, src,4 SECONDS * S.work_speed))
-			var/boardType = allowed_boards[t]
-			var/obj/item/I = new boardType(get_turf(user))
-			to_chat(user, "<span class='notice'>You fashion a crude [I] from the blank circuitboard.</span>")
-			qdel(src)
-			user.put_in_hands(I)
+			user.create_in_hands(src, allowed_boards[choice], msg = "<span class='notice'>You fashion a crude [choice] from the blank circuitboard.</span>")
+			return
 		soldering = 0
 	else if(iswelder(O))
 		var/obj/item/tool/weldingtool/WT = O
