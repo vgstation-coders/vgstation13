@@ -311,7 +311,8 @@
 			return
 		var/obj/item/device/blinder/Q = new(loc, empty = TRUE)
 		handle_blinder(Q)
-		user.create_in_hands(src, Q, I, 5, "You attach [C.amount > 5 ? "some" : "the"] wires to \the [src]'s flash circuit.")
+		var/obj/item/stack/cable_coil/C = I
+		user.create_in_hands(src, Q, C, 5, "You attach [C.amount > 5 ? "some" : "the"] wires to \the [src]'s flash circuit.")
 
 	if(istype(I, /obj/item/device/camera_film))
 		if(pictures_left)
