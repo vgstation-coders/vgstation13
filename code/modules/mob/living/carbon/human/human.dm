@@ -1014,23 +1014,11 @@
 		var/obj/item/clothing/shoes/S = shoes
 		S.track_blood = max(0, _amount, S.track_blood)                //Adding blood to shoes
 		S.luminous_paint = luminous
-
-		if(!blood_overlays["[S.type][S.icon_state]"]) //If there isn't a precreated blood overlay make one
-			S.set_blood_overlay()
-
-		if(S.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
-			S.overlays.Remove(S.blood_overlay)
-		else
-			S.blood_overlay = blood_overlays["[S.type][S.icon_state]"]
-
 		if(!S.blood_DNA)
 			S.blood_DNA = list()
-
 		var/newcolor = (S.blood_color && S.blood_DNA.len) ? BlendRYB(S.blood_color, _color, 0.5) : _color
-		S.blood_overlay.color = newcolor
-		S.overlays += S.blood_overlay
 		S.blood_color = newcolor
-
+		S.set_blood_overlay()
 		if(_blood_DNA)
 			S.blood_DNA |= _blood_DNA.Copy()
 		update_inv_shoes(1)
@@ -1671,6 +1659,10 @@
 /mob/living/carbon/human/dexterity_check()
 	if (stat != CONSCIOUS)
 		return FALSE
+	var/datum/organ/external/hand_organ_datum = get_active_hand_organ()
+	var/obj/item/organ/external/hand_obj = new hand_organ_datum.generic_type
+	if(!(hand_obj.is_dexterous))
+		return FALSE
 	if(gloves && istype(gloves, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = gloves
 		if(!G.dexterity_check())//some gloves might make it harder to interact with complex technologies, or fit your index in a gun's trigger
@@ -1872,7 +1864,7 @@
 	if(new_amount > held_items.len)
 		for(var/i = (held_items.len + 1) to new_amount) //For all the new indexes, create a hand organ
 			if(!find_organ_by_grasp_index(i))
-				var/datum/organ/external/OE = new/datum/organ/external/r_hand(organs_by_name[LIMB_GROIN]) //Fuck it the new hand will grow out of the groin (it doesn't matter anyways)
+				var/datum/organ/external/OE = new/datum/organ/external/hand/r_hand(organs_by_name[LIMB_GROIN]) //Fuck it the new hand will grow out of the groin (it doesn't matter anyways)
 				OE.grasp_id = i
 				OE.owner = src
 

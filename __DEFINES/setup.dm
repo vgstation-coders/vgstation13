@@ -1635,9 +1635,8 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_DISK				"diskspawn"
 #define HOLOMAP_MARKER_SKIPJACK			"skipjack"
 #define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
+#define HOLOMAP_MARKER_TEARREALITY		"tearreality"
 #define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
-#define HOLOMAP_MARKER_BLOODSTONE_BROKEN	"bloodstone-broken"
-#define HOLOMAP_MARKER_BLOODSTONE_ANCHOR	"bloodstone-narsie"
 #define HOLOMAP_MARKER_CULT_ALTAR		"altar"
 #define HOLOMAP_MARKER_CULT_FORGE		"forge"
 #define HOLOMAP_MARKER_CULT_SPIRE		"spire"
@@ -1903,3 +1902,43 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define CANDLES_NONE 0
 #define CANDLES_UNLIT 1
 #define CANDLES_LIT 2
+
+#define MINDUI_FLAG_PROCESSING	1
+#define MINDUI_FLAG_TOOLTIP		2
+
+#define MINDUI_MAX_CULT_SLOTS	14
+
+#define ECLIPSE_NOT_YET	0
+#define ECLIPSE_ONGOING	1
+#define ECLIPSE_OVER	2
+
+#define HEX_MODE_ROAMING 0
+#define HEX_MODE_GUARD	 1
+#define HEX_MODE_ESCORT	 2
+
+//Particles system defines
+#define PS_STEAM			"Steam"
+#define PS_TEAR_REALITY		"Tear Reality"
+#define PS_CANDLE			"Candle"
+#define PS_CANDLE2			"Candle2"
+#define PS_CULT_GAUGE		"Cult Gauge"
+#define PS_CULT_SMOKE		"Cult Smoke"
+#define PS_CULT_SMOKE2		"Cult Smoke2"
+#define PS_CULT_SMOKE_BOX	"Cult Smoke Box"
+#define PS_CULT_HALO		"Cult Halo"
+#define PS_SPACE_RUNES		"Space Runes"
+#define PS_NARSIEHASRISEN1	"Nar-SieHasRisen1"
+#define PS_NARSIEHASRISEN2	"Nar-SieHasRisen2"
+#define PS_NARSIEHASRISEN3	"Nar-SieHasRisen3"
+
+//Particles variable defines
+#define PVAR_SPAWNING	"spawning"
+#define PVAR_POSITION	"position"
+#define PVAR_VELOCITY	"velocity"
+#define PVAR_ICON_STATE	"icon_state"
+#define PVAR_COLOR		"color"
+#define PVAR_SCALE		"scale"
+#define PVAR_PLANE		"plane"
+#define PVAR_LAYER		"layer"
+#define PVAR_PIXEL_X	"pixel_x"
+#define PVAR_PIXEL_Y	"pixel_y"

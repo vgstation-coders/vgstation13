@@ -561,7 +561,7 @@ to destroy them and players will be able to make replacements.
 /obj/item/weapon/circuitboard/chemheater
 	name = "Circuit Board (Directed Laser Heater)"
 	desc = "A circuit board used to run a container heating device."
-	build_path = /obj/machinery/chemheater
+	build_path = /obj/machinery/chemtemper/heater
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=4;" + Tc_ENGINEERING + "=3;" + Tc_POWERSTORAGE + "=4"
 	req_components = list (
@@ -571,7 +571,7 @@ to destroy them and players will be able to make replacements.
 /obj/item/weapon/circuitboard/chemcooler
 	name = "Circuit Board (Cryonic Wave Projector)"
 	desc = "A circuit board used to run a container cooling device."
-	build_path = /obj/machinery/chemcooler
+	build_path = /obj/machinery/chemtemper/cooler
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=4;" + Tc_ENGINEERING + "=3;" + Tc_POWERSTORAGE + "=4"
 	req_components = list (

@@ -39,7 +39,7 @@
 	wear_suit_icons = 'icons/mob/species/vox/suit.dmi'
 	wear_mask_icons = 'icons/mob/species/vox/masks.dmi'
 	back_icons      = 'icons/mob/species/vox/back.dmi'
-
+	accessory_icons = 'icons/mob/species/vox/clothing_accessories.dmi'
 	has_mutant_race = 0
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart/vox,
@@ -145,7 +145,7 @@
 	wear_suit_icons = 'icons/mob/species/vox/suit.dmi'
 	wear_mask_icons = 'icons/mob/species/vox/masks.dmi'
 //	back_icons      = 'icons/mob/back.dmi'
-
+	accessory_icons = 'icons/mob/species/vox/clothing_accessories.dmi'
 	has_organ = list(
 		"brain" =    /datum/organ/internal/brain,
 		"eyes" =     /datum/organ/internal/eyes/vox

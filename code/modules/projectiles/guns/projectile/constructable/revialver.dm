@@ -16,7 +16,7 @@
 	ammo_type = null
 	fire_sound = 'sound/weapons/dartgun.ogg'
 	conventional_firearm = 0
-	var/cylinder = null
+	var/obj/item/weapon/cylinder/cylinder = null
 
 /obj/item/weapon/gun/projectile/revialver/Destroy()
 	if(cylinder)
@@ -26,18 +26,14 @@
 /obj/item/weapon/gun/projectile/revialver/attack_self(mob/user as mob)
 	if(!cylinder)
 		return
-
-	var/obj/item/weapon/cylinder/C = cylinder
-	C.cycle()
-	to_chat(user, "You cycle \the [src]'s [C] to the next chamber.")
+	cylinder.cycle()
+	to_chat(user, "You cycle \the [src]'s [cylinder] to the next chamber.")
 	playsound(user, 'sound/weapons/switchblade.ogg', 50, 1)
 
 /obj/item/weapon/gun/projectile/revialver/proc/spin()
 	if(!cylinder)
 		return
-
-	var/obj/item/weapon/cylinder/C = cylinder
-	C.current_chamber = rand(1,6)
+	cylinder.current_chamber = rand(1,6)
 
 /obj/item/weapon/gun/projectile/revialver/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/cylinder))
@@ -73,11 +69,9 @@
 	if(!cylinder)
 		return
 
-	var/obj/item/weapon/cylinder/C = cylinder
-	C.forceMove(usr.loc)
-	usr.put_in_hands(C)
+	usr.put_in_hands(cylinder)
+	to_chat(usr, "You remove \the [cylinder] from \the [src].")
 	cylinder = null
-	to_chat(usr, "You remove \the [C] from \the [src].")
 	icon_state = "revialver0"
 	usr.update_inv_hands()
 
@@ -104,10 +98,9 @@
 /obj/item/weapon/gun/projectile/revialver/examine(mob/user)
 	..()
 	if(cylinder)
-		var/obj/item/weapon/cylinder/C = cylinder
 		var/chambercount = 0
 		for(var/i = 1; i<=6; i++)
-			if(C.chambers[i])
+			if(cylinder.chambers[i])
 				chambercount += 1
 		if(chambercount)
 			to_chat(user, "<span class='info'>There [chambercount > 1 ? "are" : "is"] [chambercount] vial[chambercount > 1 ? "s loaded" : " loaded"] into \the [src]'s cylinder.</span>")
@@ -127,8 +120,7 @@
 	else if (locate (/obj/structure/table, src.loc))
 		return
 
-	var/obj/item/weapon/cylinder/C = cylinder
-	if(!(istype(C) && C.chambers[C.current_chamber]))
+	if(!cylinder || !cylinder.chambers[cylinder.current_chamber])
 		click_empty(user)
 		return
 
@@ -140,17 +132,16 @@
 
 	var/obj/item/projectile/bullet/vial/V = new(null)
 	var/obj/item/weapon/reagent_containers/glass/beaker/vial/I
-	I = C.chambers[C.current_chamber]
+	I = cylinder.chambers[cylinder.current_chamber]
 	I.forceMove(V)
 	V.vial = I
-	C.chambers[C.current_chamber] = null
+	cylinder.chambers[cylinder.current_chamber] = null
 	V.user = user
 	in_chamber = V
 	if(Fire(A,user,params, "struggle" = struggle))
 		return
 	else
 		V.vial = null
-		I.forceMove(C)
-		C.chambers[C.current_chamber] = I
-		qdel(V)
-		in_chamber = null
+		I.forceMove(cylinder)
+		cylinder.chambers[cylinder.current_chamber] = I
+		QDEL_NULL(in_chamber)

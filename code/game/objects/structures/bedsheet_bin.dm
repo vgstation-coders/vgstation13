@@ -52,7 +52,7 @@ LINEN BINS
 
 			if(user.zone_sel.selecting == TARGET_EYES)
 				to_chat(user, "<span  class='notice'>You finish cutting eye holes into \the [src].</span>")
-				user.put_in_hands(new /obj/item/clothing/suit/bedsheet_ghost())
+				user.put_in_hands(new /obj/item/clothing/suit/bedsheet_ghost(loc))
 
 			else
 				to_chat(user, "<span  class='notice'>You finish cutting \the [src] into rags.</span>")
@@ -200,7 +200,7 @@ LINEN BINS
 			var/image/I = image(icon, src, "sheet-overlay")
 			I.appearance_flags = RESET_COLOR
 			overlays += I
-			update_blood_overlay()
+			set_blood_overlay()
 		user.update_inv_hands()
 	return TRUE
 
@@ -219,7 +219,7 @@ LINEN BINS
 	if (icon_state in plaid_sheet_colors)
 		icon_state = "plaid[icon_state]"
 		overlays.len = 0
-		update_blood_overlay()
+		set_blood_overlay()
 		return PLAIDPATTERN_TO_PLAID
 	else if  (copytext(icon_state, 1, 6) == "plaid")
 		icon_state = copytext(icon_state, 6)

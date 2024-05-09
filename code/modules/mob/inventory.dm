@@ -220,6 +220,9 @@
 	if(held_items[index])
 		return 0
 
+	if(!Adjacent(W) && isturf(W.loc) && !W.arcanetampered)
+		return 0
+
 	if((W.flags & MUSTTWOHAND) && !(M_STRONG in mutations))
 		if(!W.wield(src, 1))
 			to_chat(src, "You need both hands to pick up \the [W].")
@@ -248,6 +251,7 @@
 //If both fail it drops it on the floor and returns 0.
 //This is probably the main one you need to know :)
 /mob/proc/put_in_hands(var/obj/item/W)
+
 	if(!W)
 		return 0
 	for (var/i = 1 to held_items.len)
@@ -255,13 +259,27 @@
 			return 0 // If it's already in your hands and you move it, it's in a superposition and breaks everything.
 	if(put_in_active_hand(W))
 		return 1
-	else if(put_in_inactive_hand(W))
+	if(put_in_inactive_hand(W))
 		return 1
-	else
-		W.forceMove(get_turf(src))
-		W.reset_plane_and_layer()
-		W.dropped()
+	W.forceMove(isatom(W.loc) ? get_turf(W) : get_turf(src))
+	W.reset_plane_and_layer()
+	W.dropped()
+	return 0
+
+//Helper proc tied to above for creating something in-hand via construction
+/mob/proc/create_in_hands(var/obj/item/olditem, var/obj/item/newitem, var/obj/item/using, var/uses = 1)
+	if(!olditem || !newitem)
 		return 0
+	if(olditem.loc == src)
+		drop_item(olditem, force_drop = 1) // Necessary to show up in the same hand for below
+		. = put_in_hands(newitem)
+	qdel(olditem)
+	if(using)
+		if(istype(using,/obj/item/stack) && uses)
+			var/obj/item/stack/S = using
+			S.use(uses)
+		else
+			qdel(using)
 
 /mob/proc/set_hand_amount(new_amount)
 	if(new_amount < held_items.len) //Decrease hand amount - drop items held in hands which will no longer exist!

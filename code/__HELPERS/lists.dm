@@ -10,6 +10,15 @@
  * Misc
  */
 
+///Initialize the lazylist
+#define LAZYINITLIST(L) if (!L) { L = list(); }
+///If the provided list is empty, set it to null
+#define UNSETEMPTY(L) if (L && !length(L)) L = null
+///Remove an item from the list, set the list to null if empty
+#define LAZYREMOVE(L, I) if(L) { L -= I; if(!length(L)) { L = null; } }
+///Add an item to the list, if the list is null it will initialize it
+#define LAZYADD(L, I) if(!L) { L = list(); } L += I;
+
 //Returns a list in plain english as a string
 /proc/english_list(var/list/input, nothing_text = "nothing", and_text = " and ", comma_text = ", ", final_comma_text = "" )
 	var/total = input.len

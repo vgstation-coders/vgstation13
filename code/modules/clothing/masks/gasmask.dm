@@ -444,3 +444,11 @@
 	if(slot == slot_wear_mask)
 		on_face = 0
 	..()
+
+/obj/item/clothing/mask/gas/scubamask
+	name = "scuba mask"
+	desc = "SCUBA mask used to breathe underwater."
+	icon_state = "scubamask"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	can_flip = 0
+	canstage = 0

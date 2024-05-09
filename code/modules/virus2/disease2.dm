@@ -61,6 +61,8 @@ var/global/list/disease2_list = list()
 
 	var/list/type_weight = list(1,1,1,1) //weight that it will appear in dish, new player, mouse; 4 is base
 
+	var/category = ""
+
 /datum/disease2/disease/virus
 	form = "Virus"
 	max_stage = 4
@@ -828,6 +830,7 @@ var/global/list/disease2_list = list()
 	disease.pattern_color = pattern_color
 	disease.can_kill = can_kill.Copy()
 	disease.mutation_modifier = mutation_modifier
+	disease.category = category
 	for(var/datum/disease2/effect/e in effects)
 		disease.effects += e.getcopy(disease)
 	return disease

@@ -37,7 +37,7 @@
 
 			if(!finishing_requirements.len) //We're done
 				user.drop_item(src)
-				result = new result
+				result = new result(loc)
 				result.materials = new /datum/materials(result)
 				result.materials.addFrom(materials)
 				var/datum/material/mat = material_type

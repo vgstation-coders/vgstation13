@@ -135,7 +135,7 @@
 			G.invisibility = 0
 			to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
 		spawn(1)
-			dust()
+			gib()
 
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]

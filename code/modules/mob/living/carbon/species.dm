@@ -125,7 +125,7 @@ var/global/list/playable_species = list("Human")
 	var/wear_mask_icons     = 'icons/mob/mask.dmi'
 	var/back_icons          = 'icons/mob/back.dmi'
 	var/id_icons            = 'icons/mob/ids.dmi'
-
+	var/accessory_icons		= 'icons/mob/clothing_accessories.dmi'
 
 	//Used in icon caching.
 	var/race_key = 0
@@ -236,8 +236,8 @@ var/global/list/playable_species = list("Human")
 	H.organs_by_name[LIMB_RIGHT_ARM] = new/datum/organ/external/r_arm(H.organs_by_name[LIMB_CHEST])
 	H.organs_by_name[LIMB_RIGHT_LEG] = new/datum/organ/external/r_leg(H.organs_by_name[LIMB_GROIN])
 	H.organs_by_name[LIMB_LEFT_LEG] = new/datum/organ/external/l_leg(H.organs_by_name[LIMB_GROIN])
-	H.organs_by_name[LIMB_LEFT_HAND] = new/datum/organ/external/l_hand(H.organs_by_name[LIMB_LEFT_ARM])
-	H.organs_by_name[LIMB_RIGHT_HAND] = new/datum/organ/external/r_hand(H.organs_by_name[LIMB_RIGHT_ARM])
+	H.organs_by_name[LIMB_LEFT_HAND] = new/datum/organ/external/hand/l_hand(H.organs_by_name[LIMB_LEFT_ARM])
+	H.organs_by_name[LIMB_RIGHT_HAND] = new/datum/organ/external/hand/r_hand(H.organs_by_name[LIMB_RIGHT_ARM])
 	H.organs_by_name[LIMB_LEFT_FOOT] = new/datum/organ/external/l_foot(H.organs_by_name[LIMB_LEFT_LEG])
 	H.organs_by_name[LIMB_RIGHT_FOOT] = new/datum/organ/external/r_foot(H.organs_by_name[LIMB_RIGHT_LEG])
 
