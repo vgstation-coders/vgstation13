@@ -75,8 +75,8 @@
 			to_chat(user, "<span class='warning'>[O] is dead. Sticking it into the frame would sort of defeat the purpose.</span>")
 			return
 
-
 		if(!user.drop_item(O, src, failmsg = TRUE))
+			return
 
 		to_chat(user, "<span class='notice'>You install [O] in [src]!</span>")
 
