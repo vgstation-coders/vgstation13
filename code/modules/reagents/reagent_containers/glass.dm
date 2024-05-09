@@ -208,7 +208,7 @@
 		overlays += lid
 
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 
 /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer
 	name = "small erlenmeyer flask"
@@ -480,7 +480,7 @@
 		overlays += filling
 
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled
 	reagents_to_add = list(WATER = 150)
@@ -517,7 +517,7 @@
 		overlays += filling
 
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 
 /*
 /obj/item/weapon/reagent_containers/glass/blender_jug

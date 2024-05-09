@@ -931,7 +931,7 @@
 	..()
 	if (reagents.reagent_list.len > 0)
 		mug_reagent_overlay()
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup
 	name = "\improper cup"

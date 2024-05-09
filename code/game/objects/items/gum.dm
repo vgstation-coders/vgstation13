@@ -212,15 +212,8 @@
 		return
 	if(H.shoes)
 		var/obj/item/clothing/shoes/S = H.shoes
-		if(!blood_overlays[S.type]) //If there isn't a precreated blood overlay make one
-			S.set_blood_overlay()
-		if(S.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
-			S.overlays.Remove(S.blood_overlay)
-		else
-			S.blood_overlay = blood_overlays["[S.type][S.icon_state]"]
-		S.blood_overlay.color = "#FFB2C4"
-		S.overlays += S.blood_overlay
 		S.blood_color = "#FFB2C4"
+		S.set_blood_overlay()
 		H.update_inv_shoes(1)
 	else
 		H.feet_blood_color = "#FFB2C4"

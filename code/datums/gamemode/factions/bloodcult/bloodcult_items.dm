@@ -1728,17 +1728,21 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/on_reagent_change()
 	..()
-	overlays.len = 0
+	update_icon()
+	for(var/datum/reagent/R in reagents.reagent_list)
+		if(R.id == BLOOD)
+			var/datum/reagent/blood/B = R
+			var/datum/disease2/disease/cultvirus = global_diseases[DISEASE_CULT]
+			if (!("[cultvirus.uniqueID]-[cultvirus.subID]" in B.data["virus2"]))
+				B.data["virus2"]["[cultvirus.uniqueID]-[cultvirus.subID]"] = cultvirus.getcopy()
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/update_icon()
+	..()
 	if (reagents.reagent_list.len > 0)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "cult")
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += filling
-
-	for(var/datum/reagent/R in reagents.reagent_list)
-		if(R.id == BLOOD)
-			var/datum/disease2/disease/cultvirus = global_diseases[DISEASE_CULT]
-			R.handle_data_mix(list("virus2" = list("[cultvirus.uniqueID]-[cultvirus.subID]" = cultvirus.getcopy())))
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/throw_impact(var/atom/hit_atom)
 	if(reagents.total_volume)
@@ -1975,7 +1979,7 @@ var/list/arcane_tomes = list()
 			i = 2
 		else i = 3
 		icon_state = "bloodcandle[i]"
-	update_blood_overlay()
+	set_blood_overlay()
 	if (lit)
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.blend_mode = BLEND_ADD

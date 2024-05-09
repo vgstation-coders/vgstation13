@@ -144,10 +144,10 @@
 			if(r_foot.status & ORGAN_BLEEDING)
 				bleeding = 1
 		if (HANDS)//walking over infected blood, broken dishes
-			var/datum/organ/external/l_hand = organs_by_name[LIMB_LEFT_HAND]
+			var/datum/organ/external/hand/l_hand = organs_by_name[LIMB_LEFT_HAND]
 			if(l_hand.status & ORGAN_BLEEDING)
 				bleeding = 1
-			var/datum/organ/external/r_hand = organs_by_name[LIMB_RIGHT_HAND]
+			var/datum/organ/external/hand/r_hand = organs_by_name[LIMB_RIGHT_HAND]
 			if(r_hand.status & ORGAN_BLEEDING)
 				bleeding = 1
 	return bleeding

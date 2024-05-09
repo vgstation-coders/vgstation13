@@ -26,7 +26,7 @@
 	..()
 	overlays.len = 0
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 	if (on_fire && fire_overlay)
 		overlays += fire_overlay
 

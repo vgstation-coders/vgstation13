@@ -576,6 +576,12 @@
 	icon_state = "frag_shells"
 	can_add_storageslots = TRUE
 	items_to_spawn = list(/obj/item/ammo_casing/shotgun/frag = 16)
+	
+/obj/item/weapon/storage/box/rocksaltshells
+	name = "12-gauge rocksalt shells"
+	icon_state = "rocksalt_shells"
+	can_add_storageslots = TRUE
+	items_to_spawn = list(/obj/item/ammo_casing/shotgun/rocksalt = 16)
 
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"

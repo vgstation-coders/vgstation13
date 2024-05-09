@@ -33,6 +33,8 @@
 //The variables should be apparent enough.
 	if(!location && target)
 		location = get_turf(target)
+		if (!location)//target in nullspace
+			return
 	if(location && !target)
 		target = location
 	if(!location && !target)

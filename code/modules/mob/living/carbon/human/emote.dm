@@ -4,10 +4,10 @@
 /datum/emote/living/carbon/human/can_run_emote(var/mob/living/carbon/human/user, var/status_check = TRUE)
 	if (istype(user) && hands_needed > 0)
 		var/available_hands = 0
-		for (var/datum/organ/external/r_hand/right_hand in user.grasp_organs)
+		for (var/datum/organ/external/hand/r_hand/right_hand in user.grasp_organs)
 			if (!right_hand.status)
 				available_hands++
-		for (var/datum/organ/external/l_hand/left_hand in user.grasp_organs)
+		for (var/datum/organ/external/hand/l_hand/left_hand in user.grasp_organs)
 			if (!left_hand.status)
 				available_hands++
 		if (available_hands < hands_needed)

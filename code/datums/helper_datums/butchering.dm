@@ -6,7 +6,6 @@
 /datum/butchering_product
 	var/obj/item/result
 	//What item this is for
-
 	var/verb_name
 	//Something like "skin", don't name this "Butcher" please
 
@@ -25,6 +24,9 @@
 	var/radial_icon = "radial_butcher"
 	//Icon in the radial menu
 
+	/// Optional name to use instead of the result name
+	var/product_name
+
 /datum/butchering_product/New()
 	..()
 
@@ -38,6 +40,9 @@
 //This is added to the description of dead mobs! It's important to add a space at the end (like this: "It has been skinned. ").
 /datum/butchering_product/proc/desc_modifier(mob/parent, mob/user) //User - the guy who is looking at Parent
 	return
+
+/datum/butchering_product/proc/get_product_name()
+	return product_name || result.name
 
 //==============Teeth============
 
@@ -242,7 +247,7 @@
 	if(amount < 8)
 		return "It only has [amount] [amount==1 ? "leg" : "legs"]. "
 
-//=============Alien claws========
+//=============Claws========
 
 /datum/butchering_product/xeno_claw
 	result = /obj/item/xenos_claw
@@ -253,6 +258,16 @@
 /datum/butchering_product/xeno_claw/desc_modifier()
 	if(!amount)
 		return "Its claws have been cut off. "
+
+/datum/butchering_product/xeno_claw/crab_claw
+	product_name = "claws"
+	result = null
+
+/datum/butchering_product/xeno_claw/crab_claw/spawn_result(location, mob/parent)
+	while(amount > 0)
+		new /obj/item/organ/external/r_hand/crab(location)
+		new /obj/item/organ/external/l_hand/crab(location)
+		amount--
 
 //======frog legs
 

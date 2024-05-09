@@ -162,7 +162,7 @@
 		I.pixel_x = (i%5)*3
 		overlays += I
 	overlays += "[icon_state]_cover"
-	update_blood_overlay()
+	set_blood_overlay()
 
 	//dynamic in-hands
 	var/inhand_candles = 0

@@ -322,7 +322,7 @@
 	var/list/valid_rituals = list()
 
 	for (var/datum/bloodcult_ritual/R in possible_rituals)
-		if (R.pre_conditions(src))
+		if (R.pre_conditions())
 			valid_rituals += R
 
 	if (valid_rituals.len < 1)
@@ -455,6 +455,9 @@
 /datum/faction/bloodcult/proc/UpdateCap()
 	if (stage == BLOODCULT_STAGE_DEFEATED)
 		cultist_cap = 0
+		return
+	if (stage == BLOODCULT_STAGE_NARSIE)
+		cultist_cap = 666
 		return
 	var/living_players = 0
 	var/new_cap = 0
