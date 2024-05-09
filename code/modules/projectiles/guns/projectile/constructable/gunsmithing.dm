@@ -10,7 +10,7 @@
 /obj/item/weapon/aluminum_cylinder/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, src))
-		user.create_in_hands(src, new /obj/item/weapon/cylinder_assembly(get_turf(src.loc)), W, msg = "You press the two [src.name]s together.")
+		user.create_in_hands(src, /obj/item/weapon/cylinder_assembly, W, msg = "You press the two [src.name]s together.")
 
 /obj/item/weapon/cylinder_assembly
 	name = "cylinder assembly"
@@ -24,7 +24,7 @@
 		var/obj/item/tool/weldingtool/WT = W
 		to_chat(user, "You begin welding \the [src] together.")
 		if(WT.do_weld(user, src, 30))
-			user.create_in_hands(src, new /obj/item/weapon/gun_barrel(get_turf(src.loc)), msg = "You weld \the [src] together.")
+			user.create_in_hands(src, /obj/item/weapon/gun_barrel, msg = "You weld \the [src] together.")
 
 /obj/item/weapon/cylinder_assembly/attack_self(mob/user as mob)
 	..()
@@ -78,7 +78,7 @@
 
 /obj/item/weapon/metal_blade/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, src))
-		user.create_in_hands(src, new /obj/item/weapon/large_metal_blade(get_turf(src.loc)), W, msg = "You attach \the [W] to \the [src].")
+		user.create_in_hands(src, /obj/item/weapon/large_metal_blade, W, msg = "You attach \the [W] to \the [src].")
 
 /obj/item/weapon/large_metal_blade
 	name = "large metal blade"
@@ -166,7 +166,7 @@
 		icon_state = "ghettosplint"
 		qdel(W)
 	if(istype(W,/obj/item/weapon/handcuffs/cable) && stage == 1)
-		user.create_in_hands(src, new /obj/item/stack/medical/splint/ghetto(get_turf(src.loc)), W, msg = "<span class='notice'>You tie up \the [src] with \the [W], creating a ghetto splint!</span>")
+		user.create_in_hands(src, /obj/item/stack/medical/splint/ghetto, W, msg = "<span class='notice'>You tie up \the [src] with \the [W], creating a ghetto splint!</span>")
 
 /obj/item/weapon/cylinder
 	name = "beaker"
@@ -452,7 +452,7 @@
 				qdel(W)
 		if("blunderbuss_assembly")
 			if(W.is_screwdriver(user))
-				user.create_in_hands(src, new /obj/item/weapon/blunderbuss(get_turf(src.loc)), msg = "You tighten the igniter to \the [src].")
+				user.create_in_hands(src, /obj/item/weapon/blunderbuss, msg = "You tighten the igniter to \the [src].")
 				W.playtoolsound(src, 50)
 //BLUNDERBUSS END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -498,7 +498,7 @@
 		if("railgun_assembly")
 			if(W.is_screwdriver(user))
 				W.playtoolsound(src, 50)
-				user.create_in_hands(src, new /obj/item/weapon/gun/projectile/railgun(get_turf(src.loc)), msg = "You secure \the [src]'s triggering mechanism.")
+				user.create_in_hands(src, /obj/item/weapon/gun/projectile/railgun, msg = "You secure \the [src]'s triggering mechanism.")
 //RAILGUN END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //REVIALVER BEGIN//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -516,7 +516,7 @@
 				to_chat(user, "<span class='warning'>\The [W] will fall off if there's nothing on \the [src] to hold it.</span>")
 				return
 			if(istype(W, /obj/item/device/label_roll))
-				user.create_in_hands(src, new /obj/item/weapon/gun/projectile/revialver(get_turf(src.loc)), W, msg = "You wrap \the [W] around the middle of the metal rod on \the [src].")
+				user.create_in_hands(src, /obj/item/weapon/gun/projectile/revialver, W, msg = "You wrap \the [W] around the middle of the metal rod on \the [src].")
 //REVIALVER END////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //BLAST CANNON BEGIN///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -525,7 +525,7 @@
 				var/obj/item/tool/weldingtool/WT = W
 				to_chat(user, "You begin welding the bent pipe to \the [src].")
 				if(WT.do_weld(user, src, 30))
-					user.create_in_hands(src, new /obj/item/weapon/gun/projectile/blastcannon(get_turf(src.loc)), msg = "You weld the bent pipe to \the [src].")
+					user.create_in_hands(src, /obj/item/weapon/gun/projectile/blastcannon, msg = "You weld the bent pipe to \the [src].")
 //BLAST CANNON END/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //SUBSPACE TUNNELER BEGIN//////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -563,7 +563,7 @@
 				update_assembly()
 		if("subspacetunneler_assembly")
 			if(istype(W, /obj/item/weapon/stock_parts/subspace/crystal))
-				user.create_in_hands(src, new /obj/item/weapon/subspacetunneler(get_turf(src.loc)), W, msg = "You place \the [W] into the prongs of the subspace ansible on \the [src].")
+				user.create_in_hands(src, /obj/item/weapon/subspacetunneler, W, msg = "You place \the [W] into the prongs of the subspace ansible on \the [src].")
 //SUBSPACE TUNNELER END////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //LASERMUSKET BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -586,7 +586,7 @@
 				qdel(W)
 		if("lasmusket_assembly")
 			if(W.is_screwdriver(user))
-				user.create_in_hands(src, new /obj/item/weapon/gun/energy/lasmusket(get_turf(src.loc)), msg = "You secure \the [src]'s triggering mechanism.")
+				user.create_in_hands(src, /obj/item/weapon/gun/energy/lasmusket, msg = "You secure \the [src]'s triggering mechanism.")
 				W.playtoolsound(src, 50)
 //LASERMUSKET END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -648,9 +648,9 @@
 			var/obj/item/tool/weldingtool/WT = W
 			to_chat(user, "You begin welding the blade to \the [src].")
 			if(WT.do_weld(user, src, 30, 0))
-				user.create_in_hands(src, new /obj/item/weapon/hatchet/tomahawk/metal(get_turf(src.loc)), msg = "You weld the blade to \the [src].")
+				user.create_in_hands(src, /obj/item/weapon/hatchet/tomahawk/metal, msg = "You weld the blade to \the [src].")
 	else if(istype(W, /obj/item/weapon/shard))
-		user.create_in_hands(src, new /obj/item/weapon/hatchet/tomahawk(get_turf(src.loc)), W, msg = "You fasten \the [W] to \the [src].")
+		user.create_in_hands(src, /obj/item/weapon/hatchet/tomahawk, W, msg = "You fasten \the [W] to \the [src].")
 	if(istype(W, /obj/item/weapon/metal_blade))
 		to_chat(user, "You loosely fasten \the [W] to \the [src].")
 		metal_assembly = 1

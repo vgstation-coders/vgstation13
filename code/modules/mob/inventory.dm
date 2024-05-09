@@ -268,15 +268,13 @@
 	return 0
 
 //Helper proc tied to above for creating something in-hand via construction
-/mob/proc/create_in_hands(var/obj/item/olditem, var/obj/item/newitem, var/obj/item/using, var/uses = 1, var/msg, var/vismsg, var/sound, var/move_in = FALSE)
+/mob/proc/create_in_hands(var/obj/item/olditem, var/newitem, var/obj/item/using, var/uses = 1, var/msg, var/vismsg, var/sound, var/move_in = FALSE)
 	if(!olditem || !newitem)
 		return 0
 	. = 0
-	if(olditem.loc == src)
-		drop_item(olditem, force_drop = 1) // Necessary to show up in the same hand for below
-		. = put_in_hands(newitem)
+	if(ispath(newitem))
+		newitem = new newitem(olditem.loc)
 	if(using)
-		using.transfer_fingerprints_to(newitem)
 		if(istype(using,/obj/item/stack) && uses)
 			var/obj/item/stack/S = using
 			S.use(uses)
@@ -284,11 +282,17 @@
 			if(using.loc != src)
 				using.forceMove(newitem)
 			else if(!drop_item(using, newitem, failmsg = TRUE))
+				qdel(newitem)
 				return 0
 		else
 			if(using.loc == src && !drop_item(using, failmsg = TRUE))
+				qdel(newitem)
 				return 0
 			qdel(using)
+		using.transfer_fingerprints_to(newitem)
+	if(olditem.loc == src)
+		drop_item(olditem, force_drop = 1) // Necessary to show up in the same hand for below
+		. = put_in_hands(newitem)
 	if(move_in)
 		olditem.forceMove(newitem)
 	else

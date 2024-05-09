@@ -464,7 +464,7 @@
 
 /obj/item/weapon/reagent_containers/glass/bucket/attackby(var/obj/D, mob/user as mob)
 	if(isprox(D))
-		user.create_in_hands(src, new /obj/item/weapon/bucket_sensor(loc), D, msg = "You add \the [D] to \the [src].")
+		user.create_in_hands(src, /obj/item/weapon/bucket_sensor, D, msg = "You add \the [D] to \the [src].")
 		return
 	attempt_heating(D, user)
 	process_temperature()

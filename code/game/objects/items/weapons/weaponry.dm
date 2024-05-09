@@ -178,10 +178,10 @@
 			user.create_in_hands(src, S, I, vismsg = "<span class='danger'>[user] creates a spear with \a [I] and \a [src]!</span>", msg = "<span class='notice'>You fasten \the [I] to the top of \the [src], creating \a [S].</span>")
 
 	else if(I.is_wirecutter(user))
-		user.create_in_hands(src, new /obj/item/weapon/melee/baton/cattleprod(loc), I, msg = "<span class='notice'>You fasten the wirecutters to the top of the rod with the cable, prongs outward.</span>")
+		user.create_in_hands(src, /obj/item/weapon/melee/baton/cattleprod, I, msg = "<span class='notice'>You fasten the wirecutters to the top of the rod with the cable, prongs outward.</span>")
 
 	else if(istype(I, /obj/item/stack/rods))
-		user.create_in_hands(src, new /obj/item/weapon/rail_assembly(loc), I, msg = "You fasten the metal rods together.")
+		user.create_in_hands(src, /obj/item/weapon/rail_assembly, I, msg = "You fasten the metal rods together.")
 
 /obj/item/weapon/kitchen/utensil/knife/tactical
 	name = "tactical knife"
