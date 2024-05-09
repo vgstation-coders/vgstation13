@@ -417,20 +417,11 @@ Auto Patrol: []"},
 //Secbot Construction
 
 /obj/item/clothing/head/helmet/tactical/sec/attackby(var/obj/item/device/assembly/signaler/S, mob/user as mob)
-	..()
 	if(!issignaler(S))
 		..()
 		return
-
 	if(S.secured)
-		qdel(S)
-		var/obj/item/weapon/secbot_assembly/A = new /obj/item/weapon/secbot_assembly
-		user.put_in_hands(A)
-		to_chat(user, "You add the signaler to the helmet.")
-		user.drop_from_inventory(src)
-		qdel(src)
-	else
-		return
+		user.create_in_hands(src, /obj/item/weapon/secbot_assembly, S, msg = "You add the signaler to \the [src].")
 
 /obj/item/weapon/secbot_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -588,14 +579,8 @@ Auto Patrol: []"},
 	..()
 	if(!issignaler(S))
 		return
-
 	if(S.secured)
-		qdel(S)
-		var/obj/item/weapon/secbot_assembly/cheapsky/A = new /obj/item/weapon/secbot_assembly/cheapsky
-		user.put_in_hands(A)
-		to_chat(user, "You add the signaler to \the [src].")
-		user.drop_from_inventory(src)
-		qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/secbot_assembly/cheapsky, S, msg = "You add the signaler to \the [src].")
 
 /obj/item/weapon/secbot_assembly/cheapsky/attackby(obj/item/weapon/W, mob/user)
 	if(W.sharpness && W.sharpness_flags & SHARP_BLADE && (!src.build_step))
@@ -678,14 +663,8 @@ Auto Patrol: []"},
 	..()
 	if(!issignaler(S))
 		return
-
 	if(S.secured)
-		qdel(S)
-		var/obj/item/weapon/secbot_assembly/britsky/A = new /obj/item/weapon/secbot_assembly/britsky
-		user.put_in_hands(A)
-		to_chat(user, "You add the signaler to \the [src]!")
-		user.drop_from_inventory(src)
-		qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/secbot_assembly/britsky, S, msg = "You add the signaler to \the [src].")
 
 /obj/item/weapon/secbot_assembly/britsky/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
