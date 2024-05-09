@@ -181,16 +181,8 @@
 	else if(iscrowbar(W))
 		to_chat(user, "You begin pressing \the [W] into \the [src].")
 		if(do_after(user, src, 30))
-			to_chat(user, "You poke a hole in \the [src].")
 			eject_contents()
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/fuel_reservoir/I = new (get_turf(user))
-				user.put_in_hands(I)
-				qdel(src)
-			else
-				new /obj/item/weapon/fuel_reservoir(get_turf(src.loc))
-				qdel(src)
+			user.create_in_hands(src, /obj/item/weapon/fuel_reservoir, msg = "You poke a hole in \the [src].")
 
 /obj/item/weapon/grenade/chem_grenade/examine(mob/user)
 	..()

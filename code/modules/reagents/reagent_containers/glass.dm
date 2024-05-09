@@ -116,14 +116,7 @@
 		to_chat(user, "You begin drilling holes into the bottom of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 60))
-			to_chat(user, "You drill six holes through the bottom of \the [src].")
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/cylinder/I = new (get_turf(user))
-				user.put_in_hands(I)
-			else
-				new /obj/item/weapon/cylinder(get_turf(src.loc))
-			qdel(src)
+			user.create_in_hands(src, /obj/item/weapon/cylinder, msg = "You drill six holes through the bottom of \the [src].")
 		return
 	return ..()
 

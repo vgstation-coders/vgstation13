@@ -13,16 +13,8 @@
 		QDEL_NULL(I)
 		qdel(src)
 	else if(I.is_wirecutter(user))
-		to_chat(user, "You cut out the top and bottom of \the [src] with \the [I].")
 		I.playtoolsound(user, 50)
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/aluminum_cylinder/W = new (get_turf(user))
-			user.put_in_hands(W)
-			qdel(src)
-		else
-			new /obj/item/weapon/aluminum_cylinder(get_turf(src.loc))
-			qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/aluminum_cylinder, msg = "You cut out the top and bottom of \the [src] with \the [I].")
 	else
 		return ..()
 

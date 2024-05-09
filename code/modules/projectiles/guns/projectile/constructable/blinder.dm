@@ -193,12 +193,9 @@
 		W.playtoolsound(user, 50)
 		var/obj/item/device/camera/I = new decon_path(get_turf(loc), empty = TRUE)
 		handle_camera(I)
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			user.put_in_hands(I)
 		var/obj/item/stack/cable_coil/C = new (get_turf(loc))
 		C.amount = 5
-		qdel(src)
+		user.create_in_hands(src, I)
 
 /obj/item/device/blinder/proc/handle_camera(obj/item/device/camera/camera)
 	if(flashbulb)

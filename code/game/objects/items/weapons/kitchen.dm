@@ -486,16 +486,7 @@
 	if(iswelder(W))
 		var/obj/item/tool/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
-			to_chat(user, "You slice the handle off of \the [src].")
-			WT.playtoolsound(user, 50)
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/metal_blade/I = new (get_turf(user))
-				user.put_in_hands(I)
-			else
-				new /obj/item/weapon/metal_blade(get_turf(src.loc))
-			qdel(src)
-			return
+			user.create_in_hands(src, /obj/item/weapon/metal_blade, msg = "You slice the handle off of \the [src].")
 
 /obj/item/weapon/kitchen/utensil/knife/large/ritual
 	name = "ritual knife"

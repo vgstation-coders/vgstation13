@@ -6214,13 +6214,7 @@
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
 	else
 		user.visible_message("[user] smacks \the [src].","You smack \the [src].")
-	if(src.loc == user)
-		user.drop_item(src, force_drop = 1)
-		var/I = new current_path(get_turf(user))
-		user.put_in_hands(I)
-	else
-		new current_path(get_turf(src))
-	qdel(src)
+	user.create_in_hands(src,current_path)
 
 /obj/item/weapon/reagent_containers/food/snacks/sundayroast
 	name = "Sunday roast"
