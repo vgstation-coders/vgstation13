@@ -195,6 +195,7 @@
 	currently_tracking.lock_atom(eyeobj,/datum/locking_category/ai_eye)
 
 	currently_tracking.register_event(/event/moved,src,nameof(src::on_camera_change()))
+	currently_tracking.register_event(/event/destroyed,src,nameof(src::on_camera_change()))
 	currently_tracking.register_event(/event/equipped,src,nameof(src::on_camera_change()))
 	//currently_tracking.register_event(/event/unequipped,src,nameof(src::on_camera_change()))
 	currently_tracking.register_event(/event/camera_sight_changed,src,nameof(src::on_camera_change()))
@@ -217,6 +218,7 @@
 	if(currently_tracking)
 		to_chat(src, "No longer tracking [currently_tracking.name] on camera.")
 		currently_tracking.unregister_event(/event/moved,src,nameof(src::on_camera_change()))
+		currently_tracking.unregister_event(/event/destroyed,src,nameof(src::on_camera_change()))
 		currently_tracking.unregister_event(/event/equipped,src,nameof(src::on_camera_change()))
 		//currently_tracking.unregister_event(/event/unequipped,src,nameof(src::on_camera_change()))
 		currently_tracking.unregister_event(/event/camera_sight_changed,src,nameof(src::on_camera_change()))
