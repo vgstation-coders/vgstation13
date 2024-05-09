@@ -210,7 +210,7 @@
 			currently_tracking.lock_atom(eyeobj,/datum/locking_category/ai_eye)
 		else */if(!cantrack && eyeobj.locked_to == currently_tracking)
 			to_chat(src, "Target is no longer trackable.")
-			currently_tracking.unlock_atom(eyeobj)
+			//currently_tracking.unlock_atom(eyeobj)
 			stop_ai_tracking() // remove this if you want retracking
 
 /mob/living/silicon/ai/proc/stop_ai_tracking()
