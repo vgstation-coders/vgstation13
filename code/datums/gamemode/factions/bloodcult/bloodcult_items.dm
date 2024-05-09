@@ -1731,10 +1731,8 @@ var/list/arcane_tomes = list()
 	update_icon()
 	for(var/datum/reagent/R in reagents.reagent_list)
 		if(R.id == BLOOD)
-			var/datum/reagent/blood/B = R
 			var/datum/disease2/disease/cultvirus = global_diseases[DISEASE_CULT]
-			if (!("[cultvirus.uniqueID]-[cultvirus.subID]" in B.data["virus2"]))
-				B.data["virus2"]["[cultvirus.uniqueID]-[cultvirus.subID]"] = cultvirus.getcopy()
+			R.handle_data_mix(list("virus2" = list("[cultvirus.uniqueID]-[cultvirus.subID]" = cultvirus.getcopy())))
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/update_icon()
 	..()
