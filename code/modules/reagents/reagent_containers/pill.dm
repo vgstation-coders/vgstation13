@@ -357,7 +357,7 @@
 		return
 	var/timer = round(reagents.get_reagent_amount(SUGAR),1)
 	forceMove(M)
-	spawn(timer*30)
+	spawn(timer*10 SECONDS) //10 seconds per unit of sugar
 		reagents.del_reagent(SUGAR)
 		reagents.reaction(M, INGEST)
 		reagents.trans_to(M, reagents.total_volume)
