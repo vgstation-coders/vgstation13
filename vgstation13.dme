@@ -34,6 +34,7 @@
 #include "__DEFINES\dates.dm"
 #include "__DEFINES\disease2.dm"
 #include "__DEFINES\error_hander.dm"
+#include "__DEFINES\flags.dm"
 #include "__DEFINES\game.dm"
 #include "__DEFINES\gases.dm"
 #include "__DEFINES\global.dm"

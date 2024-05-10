@@ -44,7 +44,8 @@ var/global/list/ghdel_profiling = list()
 	var/timestopped
 
 	appearance_flags = TILE_BOUND|LONG_GLIDE|TILE_MOVER
-
+	/// sources of setting KEEP_TOGETHER on an atom
+	var/list/keep_together_sources
 	var/slowdown_modifier //modified on how fast a person can move over the tile we are on, see turf.dm for more info
 	/// Last name used to calculate a color for the chatmessage overlays
 	var/chat_color_name
@@ -58,7 +59,7 @@ var/global/list/ghdel_profiling = list()
 	var/arcanetampered = 0 //A looot of things can be
 
 	var/image/moody_light
-	var/list/moody_lights = list()
+	var/list/moody_lights
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
@@ -889,6 +890,12 @@ its easier to just keep the beam vertical.
 
 /atom/proc/update_icon()
 
+/atom/proc/add_overlay(overlay_appearances)
+	overlays += overlay_appearances
+
+/atom/proc/cut_overlay(overlay_appearances)
+	overlays -= overlay_appearances
+
 /atom/proc/splashable()
 	return TRUE
 
@@ -965,6 +972,11 @@ its easier to just keep the beam vertical.
 
 /atom/proc/thermal_energy_transfer()
 	return
+
+/atom/proc/update_keep_together()
+	appearance_flags &= ~KEEP_TOGETHER
+	if(length(keep_together_sources))
+		appearance_flags |= KEEP_TOGETHER
 
 /atom/proc/suitable_colony()
 	return FALSE
@@ -1093,6 +1105,8 @@ its easier to just keep the beam vertical.
 /atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff", offX = 0, offY = 0)
 	if (!index)
 		return
+	if (isnull(moody_lights))
+		moody_lights = list()
 	if (index in moody_lights)
 		overlays -= moody_lights[index]
 	var/area/here = get_area(src)
@@ -1110,6 +1124,8 @@ its easier to just keep the beam vertical.
 	luminosity = max(luminosity, 2)
 
 /atom/proc/kill_moody_light_index(var/index)
+	if (isnull(moody_lights))
+		moody_lights = list()
 	if (!index || !(index in moody_lights))
 		return
 	overlays -= moody_lights[index]
@@ -1118,6 +1134,8 @@ its easier to just keep the beam vertical.
 		luminosity = initial(luminosity)
 
 /atom/proc/kill_moody_light_all()
+	if (isnull(moody_lights))
+		moody_lights = list()
 	for (var/i in moody_lights)
 		overlays -= moody_lights[i]
 		moody_lights.Remove(i)

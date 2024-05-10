@@ -534,6 +534,16 @@
 /mob/living/simple_animal/corgi/Ian/narsie/cultify()
 	health = maxHealth
 
+/mob/living/simple_animal/corgi/Ian/narsie/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if(istype(O, /obj/item/weapon/storage/bible))
+		var/turf/T = get_turf(src)
+		playsound(T, 'sound/effects/bonk.ogg', 80, 1)
+		new /mob/living/simple_animal/corgi/Ian(T)
+		anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "deconversion", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+		qdel(src)
+		return
+	..()
+
 /mob/living/simple_animal/corgi/regenerate_icons()
 	overlays = list()
 
