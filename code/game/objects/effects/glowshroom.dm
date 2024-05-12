@@ -128,11 +128,41 @@
 	floor = 1
 	return 1
 
-/obj/effect/glowshroom/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/effect/glowshroom/attackby(var/obj/item/weapon/W, var/mob/user)
+	if (istype(W))
+		if(user.a_intent == I_HELP || W.force == 0)
+			visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
+		else
+			user.delayNextAttack(8)
+			user.do_attack_animation(src, W)
+			playsound(loc, 'sound/weapons/hivehand_empty.ogg', 50, 1)
+			if (W.attack_verb)
+				visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
+			else
+				visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>")
+			endurance -= W.force
+			CheckEndurance()
+			return
 	..()
 
-	endurance -= W.force
+/obj/effect/glowshroom/attack_paw(var/mob/living/carbon/monkey/user)
+	user.delayNextAttack(8)
+	user.do_attack_animation(src, user)
+	playsound(loc, 'sound/weapons/hivehand_empty.ogg', 50, 1)
+	user.visible_message("<span class='danger'>[user.name] [user.attack_text] \the [src]!</span>", \
+						"<span class='danger'>You strike at \the [src]!</span>")
+	endurance -= user.get_unarmed_damage(src)
+	CheckEndurance()
 
+/obj/effect/glowshroom/attack_animal(var/mob/living/simple_animal/user)
+	if(user.melee_damage_upper == 0)
+		return
+	user.delayNextAttack(8)
+	user.do_attack_animation(src, user)
+	playsound(loc, 'sound/weapons/hivehand_empty.ogg', 50, 1)
+	user.visible_message("<span class='danger'>[user.name] [user.attacktext] \the [src]!</span>", \
+						"<span class='danger'>You strike at \the [src]!</span>")
+	endurance -= user.get_unarmed_damage(src)
 	CheckEndurance()
 
 /obj/effect/glowshroom/ex_act(severity)
