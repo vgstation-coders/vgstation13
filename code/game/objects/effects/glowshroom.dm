@@ -162,7 +162,7 @@
 	playsound(loc, 'sound/weapons/hivehand_empty.ogg', 50, 1)
 	user.visible_message("<span class='danger'>[user.name] [user.attacktext] \the [src]!</span>", \
 						"<span class='danger'>You strike at \the [src]!</span>")
-	endurance -= user.get_unarmed_damage(src)
+	endurance -= user.melee_damage_upper
 	CheckEndurance()
 
 /obj/effect/glowshroom/ex_act(severity)
