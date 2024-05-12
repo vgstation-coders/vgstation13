@@ -370,6 +370,10 @@
 	if(prob(70))
 		var/regex/duplicate = new("(\\w)(?=\\1)", "g")
 		message = replacetext(message, duplicate, "") //duplicate letters into one letter, for all words
+	if(prob(40)) //occasionally replaces one word with umm.
+		var/list/words = splittext(message, " ")
+		words[rand(0, words.len)] = pick("um,", "umm,", "uh,", "uhh,")
+		message = jointext(words, " ")
 			
 	//specific words we want replaced every time, mainly references to the actual brain damage lines, so they stay consistent with brain damage regular speech
 	message = replacetext(message, "stop", "sotp")
