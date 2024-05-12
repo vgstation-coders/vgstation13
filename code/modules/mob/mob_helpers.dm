@@ -331,9 +331,9 @@
 	return returntext
 
 /proc/derpspeech(message, stuttering)
-	message = replacetext(message, "he", "eh") //he, she, the becomes eh, seh, teh, etc
-	message = replacetext(message, "ies", "is") //monkies becomes monkis
-	message = replacetext(message, "you", "u") //
+	message = replacetext(message, "he", "eh") //he, she, the -> eh, seh, teh, etc
+	message = replacetext(message, "ies", "is") //monkis
+	message = replacetext(message, "you", "u") 
 	message = replacetext(message, "iou", "ou") //delicous
 	message = replacetext(message, "xc", "x") //exited
 	message = replacetext(message, "air", "er") //cher, her
@@ -341,7 +341,11 @@
 	message = replacetext(message, "dg", "g") //knowlege, 
 	message = replacetext(message, "tch", "ch") //bich
 	message = replacetext(message, "are", "ar")
-		
+	message = replacetext(message, "pl", "pul")
+	message = replacetext(message, "oul", "ul")
+	message = replacetext(message, "ght", "gt")
+	message = replacetext(message, "gna", "ga")
+
 	if(prob(50)) //stuff we only want replaced this way SOME of the time, the alternative goes under ELSE
 		message = replacetext(message, "eau", "eu") //beutiful
 		message = replacetext(message, "ie", "ei")
@@ -349,7 +353,7 @@
 		message = replacetext(message, "'re", "re")
 		message = replacetext(message, "help", "halp")
 		message = replacetext(message, "wood", "woody")
-		message = replacetext(message, "ain", "ein")
+		message = replacetext(message, "ain", "ian")
 		if(prob(25)) //13%
 			message = replacetext(message, " am ", " ")
 			message = replacetext(message, " is ", " ")
@@ -362,7 +366,7 @@
 		message = replacetext(message, "help", "helb")
 		message = replacetext(message, "y ", "i ")
 		message = replacetext(message, "y,", "i")
-		message = replacetext(message, "ain", "ian")
+		message = replacetext(message, "captain", "COMDOM")
 	if(prob(70))
 		var/regex/duplicate = new("(\\w)(?=\\1)", "g")
 		message = replacetext(message, duplicate, "") //duplicate letters into one letter, for all words
@@ -389,7 +393,6 @@
 	message = replacetext(message, "pinpointer", "pin pointner")
 	message = replacetext(message, "singularity", "scrungularity")
 	message = replacetext(message, "based", "BASTE")
-	message = replacetext(message, "captain", "COMDOM")
 	message = replacetext(message, "hos", "HITLER")
 	message = replacetext(message, "like", "liek")
 	message = replacetext(message, "damage", "damag")
