@@ -684,7 +684,7 @@ var/global/list/alert_overlays_global = list()
 				return 1
 			var/current_turf = get_turf(src)
 			for(var/obj/machinery/door/firedoor/FD in current_turf)
-				if (FD.is_fulltile)
+				if (FD.is_fulltile())
 					to_chat(user, "<span class='warning'>That would overlap another firedoor.</span>")
 					return 1
 				if(FD.dir == user.dir)
@@ -703,8 +703,7 @@ var/global/list/alert_overlays_global = list()
 			if(loc != user)
 				return 1
 			var/current_turf = get_turf(src)
-			var/obj/machinery/door/firedoor/F = locate(/obj/machinery/door/firedoor) in current_turf
-			if(locate(/obj/machinery/door/firedoor) in user.loc)
+			if(locate(/obj/machinery/door/firedoor) in current_turf)
 				to_chat(user, "<span class='warning'>That would overlap another firedoor.</span>")
 				return 1
 			user.visible_message("<span class='warning'>[user] starts building a firedoor.</span>", \
