@@ -132,13 +132,18 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	..()
 	return
 
-
 /obj/structure/particle_accelerator/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(master && master.active)
 		master.toggle_power()
 		investigation_log(I_SINGULO,"was moved whilst active; it <font color='red'>powered down</font>.")
-
+	
+/obj/structure/particle_accelerator/forceMove(atom/destination, step_x, step_y, no_tp, harderforce, glide_size_override)
+	if(master && master.active)
+		master.toggle_power()
+		investigation_log(I_SINGULO,"was moved whilst active; it <font color='red'>powered down</font>.")
+	. = ..()
+	
 /obj/structure/particle_accelerator/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -412,7 +417,13 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 		update_icon()
 		return 1
 
-/obj/machinery/particle_accelerator/forceMove(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/obj/machinery/particle_accelerator/control_box/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	..()
+	if(active)
+		toggle_power()
+		investigation_log(I_SINGULO,"was moved whilst active; it <font color='red'>powered down</font>.")
+	
+/obj/machinery/particle_accelerator/control_box/forceMove(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	if(active)
 		toggle_power()
 		investigation_log(I_SINGULO,"was moved whilst active; it <font color='red'>powered down</font>.")
