@@ -21,6 +21,7 @@
 	var/obj/structure/m_tray/connected = null
 	var/traytype = /obj/structure/m_tray
 	var/alerts_inside = TRUE
+	var/deconstructable = TRUE
 	anchored = 1.0
 	light_power = 0.5
 	light_range = 1
@@ -162,22 +163,23 @@
 							Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 
 /obj/structure/morgue/attackby(obj/item/P, mob/user)
-	if(iscrowbar(P))
-		user.visible_message("<span class='notice'>\The [user] begins dismantling \the [src].</span>", "<span class='notice'>You begin dismantling \the [src].</span>")
-		if(do_after(user, src, 50))
-			user.visible_message("<span class='notice'>\The [user] dismantles \the [src].</span>", "<span class='notice'>You dismantle \the [src].</span>")
-			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-			new /obj/structure/closet/body_bag(src.loc)
-			new /obj/item/stack/sheet/metal(src.loc, 5)
-			for (var/atom/movable/content in contents)
-				content.forceMove(src.loc)
-			qdel(src)
-	if(P.is_wrench(user))
-		P.playtoolsound(src, 50)
-		if(dir == 4)
-			dir = 8
-		else
-			dir = 4
+	if(deconstructable)
+		if(iscrowbar(P))
+			user.visible_message("<span class='notice'>\The [user] begins dismantling \the [src].</span>", "<span class='notice'>You begin dismantling \the [src].</span>")
+			if(do_after(user, src, 50))
+				user.visible_message("<span class='notice'>\The [user] dismantles \the [src].</span>", "<span class='notice'>You dismantle \the [src].</span>")
+				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+				new /obj/structure/closet/body_bag(src.loc)
+				new /obj/item/stack/sheet/metal(src.loc, 5)
+				for (var/atom/movable/content in contents)
+					content.forceMove(src.loc)
+				qdel(src)
+		if(P.is_wrench(user))
+			P.playtoolsound(src, 50)
+			if(dir == 4)
+				dir = 8
+			else
+				dir = 4
 	if (istype(P, /obj/item/weapon/pen))
 		set_tiny_label(user, " - '", "'", maxlength=32)
 	src.add_fingerprint(user)
@@ -284,6 +286,8 @@
 	traytype = /obj/structure/m_tray/crematorium
 	light_power = 0
 	light_range = 0
+	alerts_inside = FALSE
+	deconstructable = FALSE
 	var/cremating = 0
 	var/id = 1
 	var/locked = 0
@@ -311,11 +315,6 @@
 		to_chat(usr, "<span class='warning'>It's locked.</span>")
 		return
 	..()
-
-/obj/structure/morgue/crematorium/attackby(P as obj, mob/user as mob)
-	if (istype(P, /obj/item/weapon/pen))
-		set_tiny_label(user, " - '", "'", maxlength=32)
-	src.add_fingerprint(user)
 
 /obj/structure/morgue/crematorium/proc/cremate(mob/user)
 //	for(var/obj/machinery/crema_switch/O in src) //trying to figure a way to call the switch, too drunk to sort it out atm
