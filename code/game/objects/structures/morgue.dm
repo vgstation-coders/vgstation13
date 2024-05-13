@@ -141,7 +141,7 @@
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.connected.loc)
 		connected.dir = src.dir
-		lock_atom(connected, /datum/locking_category/morgue_tray)
+		//lock_atom(connected, /datum/locking_category/morgue_tray)
 	else
 		QDEL_NULL(connected)
 
@@ -154,7 +154,7 @@
 				continue
 			if(!A.anchored)
 				A.forceMove(src)	
-	unlock_atom(connected)
+	//unlock_atom(connected)
 	QDEL_NULL(connected)
 	
 	if(alerts_inside)
@@ -212,7 +212,7 @@
 
 /obj/structure/morgue/Destroy()
 	if(connected)
-		unlock_atom(connected)
+		//unlock_atom(connected)
 		qdel(connected)
 	. = ..()
 
