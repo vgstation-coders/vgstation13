@@ -137,23 +137,24 @@
 	var/turf/T = get_step(src, src.dir)
 	if(T.contents.Find(connected))
 		src.connected.connected = src //like a dog chasing it's own tail
-		lock_atom(connected, /datum/locking_category/morgue_tray)
 		src.icon_state = open_icon_state
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.connected.loc)
 		connected.dir = src.dir
+		lock_atom(connected, /datum/locking_category/morgue_tray)
 	else
 		QDEL_NULL(connected)
 
 /obj/structure/morgue/proc/close_up()
 	if(!connected)
 		return
-	for(var/atom/movable/A as mob|obj in connected.loc)
-		if(istype(A, /mob/living/simple_animal/scp_173)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
-			continue
-		if(!A.anchored)
-			A.forceMove(src)	
-	unlock_atom(connected)			
+	if(Adjacent(connected))
+		for(var/atom/movable/A as mob|obj in connected.loc)
+			if(istype(A, /mob/living/simple_animal/scp_173)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
+				continue
+			if(!A.anchored)
+				A.forceMove(src)	
+	unlock_atom(connected)
 	QDEL_NULL(connected)
 	
 	if(alerts_inside)
