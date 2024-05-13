@@ -411,3 +411,9 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 			use_power = MACHINE_POWER_USE_IDLE
 		update_icon()
 		return 1
+
+/obj/machinery/particle_accelerator/forceMove(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	if(active)
+		toggle_power()
+		investigation_log(I_SINGULO,"was moved whilst active; it <font color='red'>powered down</font>.")
+	. = ..()
