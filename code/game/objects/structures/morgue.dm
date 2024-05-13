@@ -128,6 +128,8 @@
 	update()
 	return
 
+/datum/locking_category/morgue_tray
+
 /obj/structure/morgue/proc/open_up()
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	connected = new traytype(loc)
@@ -135,6 +137,7 @@
 	var/turf/T = get_step(src, src.dir)
 	if(T.contents.Find(connected))
 		src.connected.connected = src //like a dog chasing it's own tail
+		lock_atom(connected, /datum/locking_category/morgue_tray)
 		src.icon_state = open_icon_state
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.connected.loc)
@@ -149,7 +152,8 @@
 		if(istype(A, /mob/living/simple_animal/scp_173)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
 			continue
 		if(!A.anchored)
-			A.forceMove(src)				
+			A.forceMove(src)	
+	unlock_atom(connected)			
 	QDEL_NULL(connected)
 	
 	if(alerts_inside)
@@ -205,16 +209,9 @@
 		spawn(1) //delay here because the ghostmob doesn't exist immediately after ghosting
 			update()
 
-/obj/structure/morgue/Move(NewLoc, Dir, step_x, step_y, glide_size_override, moved_tray)
-	. = ..()
-	if(connected && !moved_tray)
-		if(isturf(NewLoc))
-			connected.Move(get_step(NewLoc, dir), Dir, step_x, step_y, glide_size_override, moved_parent = TRUE)
-		else
-			close_up()
-
 /obj/structure/morgue/Destroy()
 	if(connected)
+		unlock_atom(connected)
 		qdel(connected)
 	. = ..()
 
@@ -261,11 +258,6 @@
 	O.forceMove(src.loc)
 	if (user != O)
 		visible_message("<span class='warning'>[user] stuffs [O] into [src]!</span>")
-
-/obj/structure/m_tray/Move(NewLoc, Dir, step_x, step_y, glide_size_override, moved_parent)
-	. = ..()
-	if(connected && !moved_parent)
-		connected.Move(NewLoc, Dir, step_x, step_y, glide_size_override, moved_tray = TRUE)
 
 /obj/structure/m_tray/Destroy()
 	. = ..()
