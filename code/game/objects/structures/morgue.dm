@@ -148,7 +148,7 @@
 /obj/structure/morgue/proc/close_up()
 	if(!connected)
 		return
-	if(Adjacent(connected))
+	if(connected.Adjacent(src))
 		for(var/atom/movable/A as mob|obj in connected.loc)
 			if(istype(A, /mob/living/simple_animal/scp_173)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
 				continue
