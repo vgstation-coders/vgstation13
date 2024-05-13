@@ -101,6 +101,14 @@
 		return TRUE
 	return FALSE
 
+/obj/machinery/portable_atmospherics/forceMove(atom/destination, step_x, step_y, no_tp, harderforce, glide_size_override)
+	if(connected_port)
+		disconnect()
+		visible_message("<span class='warning'>\The [src] gets yanked off of its port!</span>")
+		pixel_x = 0
+		pixel_y = 0
+	. = ..()
+
 /obj/machinery/portable_atmospherics/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 
 	var/obj/icon = src

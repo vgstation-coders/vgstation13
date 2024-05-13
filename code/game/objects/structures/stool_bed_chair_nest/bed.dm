@@ -52,6 +52,12 @@
 /obj/structure/bed/AltClick(mob/user as mob)
 	buckle_mob(user, user)
 
+/obj/structure/bed/forceMove(atom/destination, step_x, step_y, no_tp, harderforce, glide_size_override)
+	var/atom/movable/M = manual_unbuckle()
+	if(istype(M))
+		visible_message("<span class='warning'>\The [src] is ripped from [M]!</span>")
+	. = ..()
+	
 /obj/structure/bed/verb/buckle_in_out()
 	set name = "Buckle In/Out"
 	set category = "Object"
@@ -67,6 +73,12 @@
 		buckle_mob(usr, usr)
 
 /obj/structure/bed/proc/manual_unbuckle(var/mob/user, var/resisting = FALSE)
+	if(!user)
+		if(is_locking(mob_lock_type))
+			user = get_locked(mob_lock_type)[1]
+		if(!user)
+			return
+
 	if(user.isStunned())
 		return FALSE
 
@@ -111,6 +123,7 @@
 						H.visible_message("<span class='alert'>[H] collapses to the ground after standing up too fast.</span>", "<span class='warning'>Your vision swims as you fall over.</span>")
 						H.lastAnemia=world.time
 		playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
+		return M
 	return TRUE
 
 /obj/structure/bed/arcane_act(mob/user)
