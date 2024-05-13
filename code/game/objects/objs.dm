@@ -77,7 +77,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			if(W_CLASS_GIANT)
 				thermal_mass = 100
 	if(thermal_mass)
-		initial_thermal_mass = thermal_mass //can't just use initial() here as some thermal masses are defined in New()
+		initial_thermal_mass = thermal_mass
 	if(flammable)
 		burnableatoms += src
 
