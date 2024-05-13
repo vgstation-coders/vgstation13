@@ -980,6 +980,7 @@ var/global/list/damage_icon_parts = list()
 				i++
 
 		overlays += overlays_standing[HEAD_LAYER] = head_overlay
+	update_tail_layer(FALSE)
 	if(update_icons)
 		update_icons()
 
@@ -1268,7 +1269,7 @@ var/global/list/damage_icon_parts = list()
 	var/datum/organ/external/tail/tail_organ = get_cosmetic_organ(COSMETIC_ORGAN_TAIL)
 	if(!tail_organ || (tail_organ.status & ORGAN_DESTROYED))
 		return
-	if(check_hidden_body_flags(HIDETAIL, force_check = TRUE))
+	if(check_hidden_body_flags(HIDETAIL, force_check = TRUE)|| check_hidden_head_flags(HIDETAIL))
 		return
 	var/tail_file = tail_organ.tail_icon_file
 	var/tail_icon_state = tail_organ.icon_name

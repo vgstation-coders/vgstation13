@@ -185,7 +185,7 @@ BLIND     // can't see anything
 	desc = "Forest green glasses, like the kind you'd wear when hatching a nasty scheme."
 	icon_state = "gglasses"
 	item_state = "gglasses"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses
 	name = "sunglasses"

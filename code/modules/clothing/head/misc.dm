@@ -222,7 +222,7 @@
 	desc = "A working man's cap."
 	icon_state = "flat_cap"
 	item_state = "detective"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	siemens_coefficient = 0.9
 
 /obj/item/clothing/head/flatcap/linen
