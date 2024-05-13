@@ -37,9 +37,8 @@ var/list/atom/burnableatoms = list()
 /atom/proc/checkburn()
 	if(on_fire) //if an object is burning, spawn a fire effect on the tile
 		var/in_fire = FALSE
-		for(var/obj/effect/fire/F in loc)
+		if(locate(/obj/effect/fire) in loc)
 			in_fire = TRUE
-			break
 		if(!in_fire)
 			burnSolidFuel()
 	else if(flammable) //if an object is not on fire, is flammable, and is in an environment with temperature above its autoignition temp & sufficient oxygen, ignite it

@@ -22,7 +22,7 @@
 
 	var/list/files = list(  )
 	quick_equip_priority = list(slot_wear_id)
-  
+
 /obj/item/weapon/card/data
 	name = "data disk"
 	desc = "A disk of data."

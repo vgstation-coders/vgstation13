@@ -70,20 +70,20 @@
 	..()
 	if(amount)
 		var/burnt_papers = round(amount-(thermal_mass - initial_thermal_mass))
-		var/i = 0
-		while(i < burnt_papers)
+		for(var/i in 1 to burnt_papers)
 			var/obj/item/weapon/paper/P
 			if(papers.len > 0)
 				P = papers[papers.len]
 				papers.Remove(P)
+				qdel(P)
 			amount--
-			i++
 	else
 		update_icon()
 
 /obj/item/weapon/paper_bin/Exited(atom/movable/Obj, atom/newloc)
-	papers -= Obj
-	..()
+	if(papers.Remove(Obj))
+		amount--
+		thermal_mass--
 
 /obj/item/weapon/paper_bin/MouseDropFrom(atom/over_object)
 	MouseDropPickUp(over_object)
@@ -97,6 +97,7 @@
 /obj/item/weapon/paper_bin/attack_hand(mob/user as mob)
 	if(amount >= 1)
 		amount--
+		thermal_mass--
 
 		var/obj/item/weapon/paper/P
 		if(papers.len > 0)	//If there's any custom paper on the stack, use that instead of creating a new paper.

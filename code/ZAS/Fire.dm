@@ -149,7 +149,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		if(prob(clamp(lerp(temp,T20C,T0C + 1000,96,100),96,100))) //4% chance of smoke at 20C, 0% at 1000C
 			return FALSE
 	var/smoke_density = clamp(5 * ((MINOXY2BURN/oxy) ** 2),1,5)
-	var/datum/effect/system/smoke_spread/bad/smoke = new /datum/effect/system/smoke_spread/bad()
+	var/datum/effect/system/smoke_spread/bad/smoke = new
 	smoke.set_up(smoke_density,0,where)
 	smoke.time_to_live = 10 SECONDS
 	smoke.start()
@@ -195,6 +195,10 @@ var/global/list/image/charred_overlays = list()
 		overlays += charred_overlay
 		return 1
 
+/atom/proc/flammable_reagent_check()
+	if(reagents?.total_volume)
+		return TRUE
+
 /**
  * Burns solid objects and produces heat.
  *
@@ -204,16 +208,15 @@ var/global/list/image/charred_overlays = list()
  */
 /atom/proc/burnSolidFuel()
 	//Don't burn the container until all reagents have been depleted via burnLiquidFuel().
-	if(reagents)
-		if(reagents.total_volume && !istype(src, /obj/item/weapon/reagent_containers/food) && ((locate(/obj/effect/decal/cleanable/liquid_fuel) in src) || has_liquid_fuel()))
-			return
+	if(flammable_reagent_check())
+		return
 
 	if(!flammable)
 		extinguish()
 		return
 
 	//Setup
-	var/turf/T = isturf(src) ? src : get_turf(src)
+	var/turf/T = get_turf(src)
 	if(!T)
 		extinguish()
 		return
@@ -229,9 +232,8 @@ var/global/list/image/charred_overlays = list()
 
 	//Check if a fire is present at the current location.
 	var/in_fire = FALSE
-	for(var/obj/effect/fire/F in T)
+	if(locate(/obj/effect/fire) in T)
 		in_fire = TRUE
-		break
 
 	burntime += 1 SECONDS
 
@@ -257,11 +259,11 @@ var/global/list/image/charred_overlays = list()
 	co2_prod = oxy_used //simplification
 
 	//Start a fire on the tile if a burning object is present without an underlying fire effect.
-	if(!in_fire && T)
+	if(!in_fire)
 		//Change in internal energy = change in energy due to heat transfer due to isochoric reaction
 		delta_t = heat_out/(delta_m * material.heating_value)
 		T.hotspot_expose(temperature + delta_t, CELL_VOLUME, surfaces=1)
-		new /obj/effect/fire(loc)
+		new /obj/effect/fire(T)
 
 	//Ash the object if all of its mass has been consumed.
 	if(thermal_mass <= 0.05)
@@ -283,17 +285,11 @@ var/global/list/image/charred_overlays = list()
  * Outputs heat produced (MJ), Oxygen consumed (mol), CO2 produced (mol), and max temperature (K) of the burning object.
  */
 /atom/proc/burnLiquidFuel()
-	if(!reagents)
-		return
-
-	if(!reagents.total_volume)
-		return
-
-	if(istype(src, /obj/item/weapon/reagent_containers/food))
+	if(!flammable_reagent_check())
 		return
 
 	//Setup
-	var/turf/T = isturf(src) ? src : get_turf(src)
+	var/turf/T = get_turf(src)
 	if(!T)
 		extinguish()
 		return
@@ -307,9 +303,8 @@ var/global/list/image/charred_overlays = list()
 
 	//Check if a fire is present at the current location.
 	var/in_fire = FALSE
-	for(var/obj/effect/fire/F in T)
+	if(locate(/obj/effect/fire) in T)
 		in_fire = TRUE
-		break
 
 	for(var/possible_fuel in possible_fuels)
 		if(reagents.has_reagent(possible_fuel))
@@ -327,9 +322,9 @@ var/global/list/image/charred_overlays = list()
 			reagents.remove_reagent(liquid.id,1) //evaporate non-flammable reagents
 
 	//Start a fire on the tile if a burning object is present without an underlying fire effect.
-	if(!in_fire && T)
+	if(!in_fire)
 		T.hotspot_expose(max_temperature, CELL_VOLUME, surfaces=1)
-		new /obj/effect/fire(loc)
+		new /obj/effect/fire(T)
 
 	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=max_temperature)
 
@@ -374,17 +369,17 @@ var/global/list/image/charred_overlays = list()
 
 	on_fire=1
 
-	if(fire_dmi && fire_sprite && !isturf(src) && !fire_overlay)
+	if(fire_dmi && fire_sprite && !fire_overlay)
 		fire_overlay = mutable_appearance(fire_dmi,fire_sprite)
 		overlays += fire_overlay
-
-	var/atom/movable/AM = src
-	if(istype(AM))
-		firelightdummy = new (src)
 
 	burnSolidFuel()
 	burnLiquidFuel()
 	return 1
+
+/atom/movable/ignite()
+	..()
+	firelightdummy = new (src)
 
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(flammable && !on_fire)
@@ -482,7 +477,7 @@ var/global/list/image/charred_overlays = list()
 		if(air_contents.check_combustability(src) == 2)
 			ignite()
 			igniting = 1
-		if((flammable || locate(/obj/effect/decal/cleanable/liquid_fuel) in src) && !on_fire && surfaces)
+		if((flammable || flammable_reagent_check()) && !on_fire && surfaces)
 			ignite()
 			igniting = 1
 		if(surfaces)
@@ -502,12 +497,15 @@ var/global/list/image/charred_overlays = list()
 	var/in_fire = FALSE
 	on_fire=1
 
-	for(var/obj/effect/fire/F in src)
+	if(locate(/obj/effect/fire) in src)
 		in_fire = TRUE
-		break
 	if(!in_fire)
 		new /obj/effect/fire(src)
 	return TRUE
+
+/turf/simulated/flammable_reagent_check()
+	if(locate(/obj/effect/decal/cleanable/liquid_fuel) in src)
+		return TRUE
 
 /turf/unsimulated/burnSolidFuel()
 	return
@@ -517,7 +515,7 @@ var/global/list/image/charred_overlays = list()
 
 // Burning puddles of fuel.
 /turf/simulated/burnLiquidFuel()
-	if(!(locate(/obj/effect/decal/cleanable/liquid_fuel) in src))
+	if(!flammable_reagent_check())
 		return
 
 	var/heat_out = 0 //J

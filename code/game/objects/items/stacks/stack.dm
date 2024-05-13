@@ -32,7 +32,7 @@
 	update_icon()
 	//forceMove(loc) // So that Crossed gets called, so that stacks can be merged
 	initial_thermal_mass = thermal_mass
-	thermal_mass = initial_thermal_mass * amount
+	thermal_mass = initial_thermal_mass * src.amount
 
 /obj/item/stack/Destroy()
 	if (usr && usr.machine==src)
@@ -201,7 +201,9 @@
 		return
 
 	if(src.amount>=amount)
+		var/thermal_mass_used = thermal_mass/src.amount
 		src.amount-=amount
+		thermal_mass -= thermal_mass_used
 		update_materials()
 	else
 		return 0
@@ -277,7 +279,6 @@
 
 /obj/item/stack/attack_hand(mob/user as mob)
 	if (user.get_inactive_hand() == src)
-		var/thermal_mass_used = thermal_mass/amount
 		var/obj/item/stack/F = new src.type( user, amount=1)
 		F.copy_evidences(src)
 		F.material_type = material_type
@@ -285,9 +286,7 @@
 		src.add_fingerprint(user)
 		F.add_fingerprint(user)
 		F.transfer_data_from(src,1)
-		F.thermal_mass = thermal_mass_used
 		use(1)
-		thermal_mass -= thermal_mass_used
 		update_icon()
 		F.update_icon()
 		if (src && usr.machine==src)
