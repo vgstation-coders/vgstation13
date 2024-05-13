@@ -132,7 +132,7 @@
 /turf/simulated/floor/plating,
 /area/vault/factory)
 "aB" = (
-/obj/structure/crematorium,
+/obj/structure/morgue/crematorium,
 /turf/simulated/floor/plating,
 /area/vault/factory)
 "aC" = (

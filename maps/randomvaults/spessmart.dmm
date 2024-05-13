@@ -1744,7 +1744,7 @@
 	},
 /area/vault/supermarket/entrance)
 "eb" = (
-/obj/structure/crematorium,
+/obj/structure/morgue/crematorium,
 /turf/simulated/floor/plating/airless,
 /area/vault/supermarket/restricted)
 "ec" = (

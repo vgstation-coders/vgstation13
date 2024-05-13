@@ -93653,7 +93653,7 @@
 /turf/simulated/floor/wood,
 /area/library)
 "oYI" = (
-/obj/structure/crematorium,
+/obj/structure/morgue/crematorium,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},

@@ -3533,7 +3533,7 @@
 	},
 /area/vault/black_site_prism)
 "Ll" = (
-/obj/structure/crematorium,
+/obj/structure/morgue/crematorium,
 /obj/structure/window/reinforced{
 	dir = 1
 	},

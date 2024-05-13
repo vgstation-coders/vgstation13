@@ -303,7 +303,7 @@
 /turf/simulated/floor/plating,
 /area/vault/research)
 "aQ" = (
-/obj/structure/crematorium,
+/obj/structure/morgue/crematorium,
 /turf/simulated/floor{
 	dir = 6;
 	icon_state = "dark"
