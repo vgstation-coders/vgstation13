@@ -84,6 +84,7 @@
 	if(papers.Remove(Obj))
 		amount--
 		thermal_mass--
+	..()
 
 /obj/item/weapon/paper_bin/MouseDropFrom(atom/over_object)
 	MouseDropPickUp(over_object)
