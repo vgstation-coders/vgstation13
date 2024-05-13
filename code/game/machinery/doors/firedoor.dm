@@ -708,7 +708,7 @@ var/global/list/alert_overlays_global = list()
 				return 1
 			user.visible_message("<span class='warning'>[user] starts building a firedoor.</span>", \
 			"<span class='notice'>You start building a firedoor.</span>")
-			if(do_after(user, src, 5 SECONDS))
+			if(do_after(user, user, 5 SECONDS))
 				to_chat(user, "<span class='notice'>You finish the firedoor.</span>")
 				new /obj/machinery/door/firedoor(current_turf)
 				qdel(src)
