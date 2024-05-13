@@ -423,7 +423,7 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 		toggle_power()
 		investigation_log(I_SINGULO,"was moved whilst active; it <font color='red'>powered down</font>.")
 	
-/obj/machinery/particle_accelerator/control_box/forceMove(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+/obj/machinery/particle_accelerator/control_box/forceMove(atom/destination, step_x, step_y, no_tp, harderforce, glide_size_override)
 	if(active)
 		toggle_power()
 		investigation_log(I_SINGULO,"was moved whilst active; it <font color='red'>powered down</font>.")
