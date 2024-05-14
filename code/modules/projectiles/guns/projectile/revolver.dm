@@ -3,25 +3,35 @@
 	name = "revolver"
 	icon_state = "detective"
 	max_shells = 6
-	caliber = list(POINT38 = 1, POINT357 = 1)
+	caliber = list(POINT38 = 1, POINT357 = 0)
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/c38"
 	recoil = 3
 	var/perfect = 0
 	gun_flags = EMPTYCASINGS | CHAMBERSPENT
 
+/**
+ * Checks for 357 ammo modifications and handles various related failure states
+ *
+ * Returns 1 if able to fire, otherwise 0
+ */
 /obj/item/weapon/gun/projectile/detective/special_check(var/mob/living/carbon/human/M) //to see if the gun fires 357 rounds safely. A non-modified revolver randomly blows up
-	if(getAmmo()) //this is a good check, I like this check
-		var/obj/item/ammo_casing/AC = loaded[1]
-		if(caliber[POINT38] == 0) //if it's been modified, this is true
-			return 1
-		if(istype(AC, /obj/item/ammo_casing/a357) && !perfect && prob(70 - (getAmmo() * 10)))	//minimum probability of 10, maximum of 60
-			to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
-			M.take_organ_damage(0,20)
-			M.drop_item(src, force_drop = 1)
-			qdel(src)
-			return 0
-	return 1
+	if(perfect) //perfectly modified gun always fires correctly
+		return 1
+	var/dakka = getAmmo() //run the semi expensive proc once
+	if(!dakka) //out of dakka
+		return 0
+	if(!istype(loaded[1], /obj/item/ammo_casing/a357)) //only 357 explodes
+		return 1
+	if(!caliber[POINT357] || prob(70 - (dakka * 10))) //gun has 357 but isn't 357 firable, or not properly modified and fails luck
+		to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
+		explosion(get_turf(M), -1, -1, 0, 3, whodunnit = M)
+		M.take_organ_damage(0,20)
+		M.drop_item(src, force_drop = 1)
+		qdel(src)
+		return 0
+	else //passed all checks! fire!
+		return 1
 
 /obj/item/weapon/gun/projectile/detective/verb/rename_gun()
 	set name = "Name Gun"
@@ -62,7 +72,7 @@
 				if(getAmmo())
 					to_chat(user, "<span class='notice'>You can't modify it!</span>")
 					return
-				caliber[POINT38] = 0
+				caliber[POINT357] = 1
 				desc = "The barrel and chamber assembly seems to have been modified."
 				to_chat(user, "<span class='warning'>You reinforce the barrel of [src]! Now it will fire .357 rounds.</span>")
 				if(CK && istype(CK))
@@ -78,9 +88,9 @@
 				if(getAmmo())
 					to_chat(user, "<span class='notice'>You can't modify it!</span>")
 					return
-				caliber[POINT38] = 1
+				caliber[POINT357] = 0
 				desc = initial(desc)
-				to_chat(user, "<span class='warning'>You remove the modifications on [src]! Now it will fire .38 rounds.</span>")
+				to_chat(user, "<span class='warning'>You remove the modifications on [src]! Now it will only fire .38 rounds.</span>")
 				perfect = 0
 
 
