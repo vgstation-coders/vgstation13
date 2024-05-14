@@ -71,10 +71,15 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	var/strength = null
 	var/desc_holder = null
 
+/obj/structure/particle_accelerator/New()
+	..()
+	register_event(/event/after_move, src, nameof(src::move_deactivate()))
+
 /obj/structure/particle_accelerator/Destroy()
 	construction_state = 0
 	if(master)
 		master.part_scan()
+	unregister_event(/event/after_move, src, nameof(src::move_deactivate()))
 	..()
 
 /obj/structure/particle_accelerator/end_cap
@@ -132,17 +137,10 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	..()
 	return
 
-/obj/structure/particle_accelerator/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	..()
+/obj/structure/particle_accelerator/proc/move_deactivate()
 	if(master && master.active)
 		master.toggle_power()
 		investigation_log(I_SINGULO,"was moved whilst active; it <font color='red'>powered down</font>.")
-	
-/obj/structure/particle_accelerator/forceMove(atom/destination, step_x, step_y, no_tp, harderforce, glide_size_override)
-	if(master && master.active)
-		master.toggle_power()
-		investigation_log(I_SINGULO,"was moved whilst active; it <font color='red'>powered down</font>.")
-	. = ..()
 	
 /obj/structure/particle_accelerator/ex_act(severity)
 	switch(severity)
@@ -280,7 +278,6 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	var/strength = 0
 	var/desc_holder = null
 
-
 /obj/machinery/particle_accelerator/verb/rotate()
 	set name = "Rotate Clockwise"
 	set category = "Object"
@@ -416,15 +413,3 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 			use_power = MACHINE_POWER_USE_IDLE
 		update_icon()
 		return 1
-
-/obj/machinery/particle_accelerator/control_box/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	..()
-	if(active)
-		toggle_power()
-		investigation_log(I_SINGULO,"was moved whilst active; it <font color='red'>powered down</font>.")
-	
-/obj/machinery/particle_accelerator/control_box/forceMove(atom/destination, step_x, step_y, no_tp, harderforce, glide_size_override)
-	if(active)
-		toggle_power()
-		investigation_log(I_SINGULO,"was moved whilst active; it <font color='red'>powered down</font>.")
-	. = ..()

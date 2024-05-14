@@ -27,9 +27,11 @@
 	wires = new(src)
 	connected_parts = list()
 	update_icon()
+	register_event(/event/after_move, src, nameof(src::move_deactivate()))
 	..()
 
 /obj/machinery/particle_accelerator/control_box/Destroy()
+	unregister_event(/event/after_move, src, nameof(src::move_deactivate()))
 	if(active)
 		toggle_power()
 
@@ -37,6 +39,11 @@
 		QDEL_NULL(wires)
 
 	..()
+
+/obj/machinery/particle_accelerator/control_box/proc/move_deactivate()
+	if(active)
+		toggle_power()
+		investigation_log(I_SINGULO,"was moved whilst active; it <font color='red'>powered down</font>.")
 
 /obj/machinery/particle_accelerator/control_box/attack_hand(mob/user as mob)
 	if(construction_state >= 3)
