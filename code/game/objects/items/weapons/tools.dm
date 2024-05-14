@@ -387,7 +387,10 @@
 		if(M.is_holding_item(src))
 			location = get_turf(M)
 	if (istype(location, /turf) && welding)
-		location.hotspot_expose(source_temperature, 5,surfaces=istype(loc,/turf))
+		if(prob(1))
+			location.hotspot_expose(source_temperature, 5,surfaces=istype(loc,/turf))
+		else
+			location.hotspot_expose(source_temperature, 5,surfaces=0)
 
 /obj/item/tool/weldingtool/attack(mob/M as mob, mob/user as mob)
 	if(hasorgans(M))

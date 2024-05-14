@@ -167,33 +167,19 @@ steam.start() -- spawns the effect
 
 /obj/effect/sparks/New(var/travel_dir)
 	..()
-	var/turf/T = loc
-	if(istype(T))
-		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 
 /obj/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
 	move_dir=travel_dir
 	energy=rand(1,max_energy)
 	processing_objects.Add(src)
-	var/turf/T = loc
-	if (istype(T, /turf))
-		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 
 /obj/effect/sparks/Destroy()
 	processing_objects.Remove(src)
-	var/turf/T = src.loc
-
-	if (istype(T, /turf))
-		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
-
 	..()
 
 /obj/effect/sparks/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
-	var/turf/T = src.loc
-	if (istype(T, /turf))
-		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
-	return
+
 
 /obj/effect/sparks/process()
 	if(energy==0)
@@ -201,6 +187,9 @@ steam.start() -- spawns the effect
 		qdel(src)
 		return
 	else
+		var/turf/T = src.loc
+		if(istype(T, /turf) && prob(1))
+			T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 		step(src,move_dir)
 	energy--
 
