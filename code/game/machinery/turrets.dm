@@ -593,6 +593,7 @@
 	var/admin_only = 0 //Can non-admins interface with this turret's controls?
 	var/roulette_mode = FALSE
 	var/list/available_projectiles = list()
+	var/list/roulette_projectiles = list()
 
 	health = 40
 	var/list/scan_for = list("human"=0,"cyborg"=0,"mecha"=0,"alien"=1)
@@ -603,6 +604,9 @@
 /obj/structure/turret/gun_turret/New()
 	..()
 	available_projectiles = existing_typesof(/obj/item/projectile)
+	roulette_projectiles = available_projectiles - restricted_roulette_projectiles
+	for(var/projectile_types in restrict_with_subtypes)
+		roulette_projectiles -= typesof(projectile_types)
 
 /obj/structure/turret/gun_turret/examine(mob/user)
 	..()
@@ -789,18 +793,6 @@
 		target = pick(pos_targets)
 	return target
 
-/obj/structure/turret/gun_turret/proc/choose_roulette_projectile()
-	var/chosen_projectile = pick(available_projectiles)
-	for(var/I in restricted_roulette_projectiles)
-		if(chosen_projectile == I)
-			choose_roulette_projectile()
-			return
-	for(var/I in restrict_with_subtypes)
-		if(ispath(chosen_projectile, I))
-			choose_roulette_projectile()
-			return
-	return chosen_projectile
-
 /obj/structure/turret/gun_turret/proc/fire(atom/target)
 	if(!target)
 		cur_target = null
@@ -817,7 +809,7 @@
 			continue
 		playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
 		if(roulette_mode)
-			projectile_type = choose_roulette_projectile()
+			projectile_type = pick(roulette_projectiles)
 		var/obj/item/projectile/A = new projectile_type(curloc)
 		src.projectiles--
 		A.original = target
