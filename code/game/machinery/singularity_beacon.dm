@@ -33,6 +33,13 @@
 		QDEL_NULL(power_connection)
 	. = ..()
 
+/obj/machinery/singularity_beacon/forceMove(atom/destination, step_x, step_y, no_tp, harderforce, glide_size_override)
+	deactivate()
+	if(power_connection.connected)
+		power_connection.disconnect()
+		visible_message("<span class='warning'>\The [src] disconnects from the cable!</span>")
+	. = ..()
+
 /obj/machinery/singularity_beacon/get_cell()
 	return cell
 

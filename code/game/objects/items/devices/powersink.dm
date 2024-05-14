@@ -1,5 +1,9 @@
 // Powersink - used to drain station power
 
+#define PSINK_DISCONNECTED 0
+#define PSINK_CONNECTED_OFF 1
+#define PSINK_CONNECTED_ON 2
+
 /obj/item/device/powersink
 	desc = "A nulling power sink which drains energy from electrical systems."
 	name = "power sink"
@@ -25,6 +29,12 @@
 
 	var/datum/power_connection/consumer/cable/power_connection = null
 
+/obj/item/device/powersink/forceMove(atom/destination, step_x, step_y, no_tp, harderforce, glide_size_override)
+	if(mode)
+		set_mode(PSINK_DISCONNECTED)
+		visible_message("<span class='warning'>\The [src] disconnects from the cable!</span>")
+	. = ..()
+
 /obj/item/device/powersink/New()
 	. = ..()
 	power_connection = new(src)
@@ -46,32 +56,15 @@
 					to_chat(user, "No exposed cable here to attach to.")
 					return
 				else
-					power_connection.connect()
-					anchored = 1
-					mode = 1
-					to_chat(user, "You attach the device to the cable.")
-					for(var/mob/M in viewers(user))
-						if(M == user)
-							continue
-						to_chat(M, "[user] attaches the power sink to the cable.")
+					user.visible_message("[user] attaches the power sink to the cable.","You attach the device to the cable.")
+					set_mode(PSINK_CONNECTED_OFF)
 					return
 			else
 				to_chat(user, "Device must be placed over an exposed cable to attach to it.")
 				return
 		else
-			if (mode == 2)
-				processing_objects.Remove(src) // Now the power sink actually stops draining the station's power if you unhook it. --NeoFite
-			anchored = 0
-			mode = 0
-			to_chat(user, "You detach the device from the cable.")
-			power_connection.disconnect()
-			for(var/mob/M in viewers(user))
-				if(M == user)
-					continue
-				to_chat(M, "[user] detaches the power sink from the cable.")
-			set_light(0)
-			icon_state = "powersink0"
-
+			user.visible_message("[user] detaches the power sink from the cable.","You detach the power sink from the cable.")
+			set_mode(PSINK_DISCONNECTED)
 			return
 	else
 		..()
@@ -83,35 +76,38 @@
 	return
 
 /obj/item/device/powersink/attack_hand(var/mob/user)
-	switch(mode)
-		if(0)
-			..()
+	if(!mode)
+		return ..()
+	var/de = ""
+	var/off = 0
+	if(mode == PSINK_CONNECTED_ON)
+		de = "de"
+		off = 1
+	user.visible_message("[user] [de]activates the power sink!","You [de]activate the device!")
+	set_mode(PSINK_CONNECTED_ON - off)
 
-		if(1)
-			to_chat(user, "You activate the device!")
-			for(var/mob/M in viewers(user))
-				if(M == user)
-					continue
-				to_chat(M, "[user] activates the power sink!")
-			mode = 2
-			icon_state = "powersink1"
-			playsound(src, 'sound/effects/phasein.ogg', 30, 1)
-			processing_objects.Add(src)
-			last_drain = 0
-		if(2)  //This switch option wasn't originally included. It exists now. --NeoFite
-			to_chat(user, "You deactivate the device!")
-			for(var/mob/M in viewers(user))
-				if(M == user)
-					continue
-				to_chat(M, "[user] deactivates the power sink!")
-			mode = 1
-			set_light(0)
-			icon_state = "powersink0"
-			playsound(src, 'sound/effects/teleport.ogg', 50, 1)
+/obj/item/device/powersink/proc/set_mode(var/newmode)
+	if(mode && !newmode)
+		power_connection.disconnect()
+	else if(!mode)
+		power_connection.connect()
+	if(newmode < PSINK_CONNECTED_ON)
+		set_light(0)
+		if(mode == PSINK_CONNECTED_ON)
 			processing_objects.Remove(src)
+			playsound(src, 'sound/effects/teleport.ogg', 50, 1)
+	else
+		playsound(src, 'sound/effects/phasein.ogg', 30, 1)
+		processing_objects.Add(src)
+		last_drain = 0
+	icon_state = "powersink[newmode >= PSINK_CONNECTED_ON ? 1 : 0]"
+	anchored = newmode > 0
+	mode = newmode
 
 /obj/item/device/powersink/process()
 	if(power_connection.connected)
+		if(!anchored)
+			set_mode(0) //something like a singulo yanked it off
 		var/datum/powernet/PN = power_connection.get_powernet()
 		if(PN)
 			set_light(12)
@@ -142,3 +138,7 @@
 			processing_objects.Remove(src)
 			explosion(src.loc, 1 * dev_multi, 2 * dev_multi, 3 * dev_multi, 4 * dev_multi)
 			qdel(src)
+
+#undef PSINK_DISCONNECTED
+#undef PSINK_CONNECTED_OFF
+#undef PSINK_CONNECTED_ON
