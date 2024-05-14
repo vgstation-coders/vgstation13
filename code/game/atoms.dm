@@ -57,18 +57,8 @@ var/global/list/ghdel_profiling = list()
 
 	var/arcanetampered = 0 //A looot of things can be
 
-	var/submerging = 0 // if atom is a liquid body for contents inside
-
 	var/image/moody_light
 	var/list/moody_lights = list()
-
-/atom/movable/Entered(var/atom/movable/Obj, var/atom/OldLoc)
-	. = ..()
-
-	if(submerging && (!OldLoc || !OldLoc.submerging))
-		spawn(rand(0,6))
-			if(submerging && (!OldLoc || !OldLoc.submerging))
-				Obj.submerge_anim()
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
