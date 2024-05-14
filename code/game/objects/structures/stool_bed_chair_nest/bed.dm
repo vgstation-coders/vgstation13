@@ -53,9 +53,10 @@
 	buckle_mob(user, user)
 
 /obj/structure/bed/forceMove(atom/destination, step_x, step_y, no_tp, harderforce, glide_size_override)
-	var/atom/movable/M = manual_unbuckle()
-	if(istype(M))
-		visible_message("<span class='warning'>\The [src] is ripped from [M]!</span>")
+	if(!isturf(destination))
+		var/atom/movable/M = manual_unbuckle()
+		if(istype(M))
+			visible_message("<span class='warning'>\The [src] is ripped from [M]!</span>")
 	. = ..()
 	
 /obj/structure/bed/verb/buckle_in_out()

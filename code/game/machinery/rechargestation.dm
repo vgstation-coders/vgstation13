@@ -254,9 +254,10 @@
 	..()
 
 /obj/machinery/recharge_station/forceMove(atom/destination, step_x, step_y, no_tp, harderforce, glide_size_override)
-	var/mob/M = go_out()
-	if(istype(M))
-		visible_message("<span class='warning'>\The [src] ejects [M]!</span>")
+	if(!isturf(destination))
+		var/mob/M = go_out()
+		if(istype(M))
+			visible_message("<span class='warning'>\The [src] ejects [M]!</span>")
 	. = ..()
 	
 /obj/machinery/recharge_station/proc/go_out(var/turf/T)
