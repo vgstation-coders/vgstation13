@@ -1346,9 +1346,9 @@
 /atom/movable/Entered(var/atom/movable/Obj, var/atom/OldLoc)
 	. = ..()
 	
-	if(ismovable(OldLoc))
+	if(submerging && ismovable(OldLoc))
 		var/atom/movable/mloc = OldLoc
-		if(submerging && (!mloc || !mloc.submerging))
+		if(!mloc || !mloc.submerging)
 			spawn(rand(0,6))
 				if(submerging && (!mloc || !mloc.submerging))
 					Obj.submerge_anim()
