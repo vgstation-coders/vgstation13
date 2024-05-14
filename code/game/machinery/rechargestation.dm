@@ -253,6 +253,12 @@
 		build_icon()
 	..()
 
+/obj/machinery/recharge_station/forceMove(atom/destination, step_x, step_y, no_tp, harderforce, glide_size_override)
+	var/mob/M = go_out()
+	if(istype(M))
+		visible_message("<span class='warning'>\The [src] ejects [M]!</span>")
+	. = ..()
+	
 /obj/machinery/recharge_station/proc/go_out(var/turf/T)
 	if(!T)
 		T = get_turf(src)
@@ -270,6 +276,7 @@
 			occupant.client.eye = occupant.client.mob
 			occupant.client.perspective = MOB_PERSPECTIVE
 		occupant.forceMove(T)
+	. = occupant
 	occupant = null
 	build_icon()
 	src.use_power = MACHINE_POWER_USE_IDLE
@@ -277,7 +284,6 @@
 	for (var/atom/movable/x in src.contents)
 		if(!(x in upgrade_holder | component_parts))
 			x.forceMove(src.loc)
-	return
 
 /obj/machinery/recharge_station/proc/restock_modules()
 	if(isrobot(occupant))
