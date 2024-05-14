@@ -1,17 +1,10 @@
 var/datum/subsystem/burnable/SSburnable
 var/list/atom/burnableatoms = list()
 
-//Currently disabled in:
-//code/controllers/subsystem/burnable.dm (this file)
-//code/game/objects/objs.dm, in /obj/New()
-//code/ZAS/Fire.dm, in burnFireFuel()
-
-//To re-enable it here, change "SS_NO_FIRE" to "SS_KEEP_TIMING"
-
 /datum/subsystem/burnable
 	name          = "Burnable"
 	wait          = SS_WAIT_BURNABLE
-	flags         = SS_NO_FIRE
+	flags         = SS_KEEP_TIMING
 	priority      = SS_PRIORITY_BURNABLE
 	display_order = SS_DISPLAY_BURNABLE
 
@@ -20,7 +13,6 @@ var/list/atom/burnableatoms = list()
 
 /datum/subsystem/burnable/New()
 	NEW_SS_GLOBAL(SSburnable)
-	currentrun = list()
 
 /datum/subsystem/burnable/stat_entry(var/msg)
 	if (msg)
@@ -42,14 +34,30 @@ var/list/atom/burnableatoms = list()
 			break
 	currentrun_index = c
 
-#define MINOXY2BURN (1 / CELL_VOLUME)
 /atom/proc/checkburn()
-	if(on_fire)
+	if(on_fire) //if an object is burning, spawn a fire effect on the tile
+		var/in_fire = FALSE
+		if(locate(/obj/effect/fire) in loc)
+			in_fire = TRUE
+		if(!in_fire)
+			burnSolidFuel()
+	else if(flammable) //if an object is not on fire, is flammable, and is in an environment with temperature above its autoignition temp & sufficient oxygen, ignite it
+		if(thermal_mass <= 0)
+			return
 		var/datum/gas_mixture/G = return_air()
-		if(!G || G.molar_density(GAS_OXYGEN) < MINOXY2BURN) //no oxygen so it goes out
-			extinguish()
-	else if(autoignition_temperature && isturf(loc))
+		if(G && (G.temperature >= autoignition_temperature) && ((G.molar_ratio(GAS_OXYGEN)) >= MINOXY2BURN))
+			if(prob(50))
+				ignite()
+
+/obj/item/checkburn()
+	if(!istype(loc, /turf)) //Prevent things from burning if worn, held, or inside something else. Storage containers will eject their contents when ignited, allowing for burning of the contents.
+		return
+	if(flammable && !on_fire)
 		var/datum/gas_mixture/G = return_air()
-		if(G && G.temperature >= autoignition_temperature && G.molar_density(GAS_OXYGEN) >= MINOXY2BURN)
-			ignite()
-#undef MINOXY2BURN
+		add_particles(PS_SMOKE)
+		if(G && (G.temperature >= (autoignition_temperature * 0.75)))
+			var/rate = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+			adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
+		else
+			remove_particles(PS_SMOKE)
+	..()

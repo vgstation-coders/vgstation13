@@ -31,12 +31,13 @@
 	icon_state = "photo"
 	item_state = "paper"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	var/icon/img		//Big photo image
 	var/scribble		//Scribble on the back.
 	var/blueprints = FALSE	//Does it include the blueprints?
 	var/info 			//Info on the camera about mobs or some shit
 	var/photo_size = 3 //Used to scale up bigger images, 3 is default
-	autoignition_temperature = 530 // Kelvin
 
 	var/list/double_agent_completion_ids = list()
 

@@ -16,10 +16,11 @@
 	desc = "Does card things."
 	icon = 'icons/obj/card.dmi'
 	w_class = W_CLASS_TINY
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	var/associated_account_number = 0
 
 	var/list/files = list(  )
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	quick_equip_priority = list(slot_wear_id)
 
 /obj/item/weapon/card/data

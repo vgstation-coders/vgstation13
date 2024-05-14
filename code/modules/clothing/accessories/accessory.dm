@@ -476,9 +476,10 @@
 	var/rad_threshold = 45
 	var/triggered = FALSE
 	var/event_key
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
+	flammable = TRUE
 
 /obj/item/clothing/accessory/rad_patch/proc/check_rads(mob/living/carbon/human/user, rads)
 	if(triggered)

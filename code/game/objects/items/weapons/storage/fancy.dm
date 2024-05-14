@@ -20,13 +20,14 @@
 	icon = 'icons/obj/food_container.dmi'
 	icon_state = "donutbox6"
 	name = "donut box"
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	var/icon_type = "donut"
 	var/plural_type = "s" //Why does the english language have to be so complicated to work with ?
 	var/empty = 0
 	var/descriptive_type = "" //piece of, stick of, et cetera
 	var/plural_descriptive_type = "" //pieces of, sticks of
 	var/box_type = "box"
-	autoignition_temperature = AUTOIGNITION_PAPER
 
 	foldable = /obj/item/stack/sheet/cardboard
 

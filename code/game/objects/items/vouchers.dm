@@ -4,9 +4,11 @@
 	icon = 'icons/obj/vouchers.dmi'
 	icon_state = "voucher"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	force = 0
 	throwforce = 0
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 	var/shred_on_use = 1
 

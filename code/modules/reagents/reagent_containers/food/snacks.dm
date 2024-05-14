@@ -7,7 +7,8 @@
 	desc = "yummy"
 	icon_state = null
 	log_reagents = 1
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE //<--- clueless
 
 	var/food_flags	//Possible flags: FOOD_LIQUID, FOOD_MEAT, FOOD_ANIMAL, FOOD_SWEET
 					//FOOD_LIQUID	- for stuff like soups
@@ -6090,7 +6091,6 @@
 	slot_flags = SLOT_MASK
 	goes_in_mouth = TRUE
 	throwforce = 1
-	autoignition_temperature = 0
 	w_type = RECYK_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 100)
 	species_fit = list(INSECT_SHAPED)

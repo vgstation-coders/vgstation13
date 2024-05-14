@@ -1,8 +1,8 @@
 /obj/item/clothing
 	name = "clothing"
 	sterility = 5
-	autoignition_temperature = AUTOIGNITION_FABRIC
 	w_type = RECYK_FABRIC
+	flammable = TRUE
 	starting_materials = list(MAT_FABRIC = CC_PER_SHEET_FABRIC)
 	var/list/species_restricted = null //Only these species can wear this kit.
 	var/wizard_garb = 0 //Wearing this empowers a wizard.
@@ -1074,9 +1074,8 @@ var/global/maxStackDepth = 10
 	cold_breath_protection = 230
 	sterility = 100
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
+	flammable = FALSE
 
-	autoignition_temperature = 0
-	fire_fuel = 0
 
 /obj/item/clothing/suit/space
 	name = "Space suit"
@@ -1099,10 +1098,7 @@ var/global/maxStackDepth = 10
 	clothing_flags = CANEXTINGUISH
 	sterility = 100
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
-
-	autoignition_temperature = 0
-	fire_fuel = 0
-
+	flammable = FALSE
 
 /* ========================================================================
 								UNIFORMS

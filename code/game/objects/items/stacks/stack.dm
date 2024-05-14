@@ -31,6 +31,8 @@
 	update_materials()
 	update_icon()
 	//forceMove(loc) // So that Crossed gets called, so that stacks can be merged
+	initial_thermal_mass = thermal_mass
+	thermal_mass = initial_thermal_mass * src.amount
 
 /obj/item/stack/Destroy()
 	if (usr && usr.machine==src)
@@ -162,6 +164,11 @@
 /obj/item/stack/proc/stop_build(var/_last_crafting = FALSE)
 	return
 
+/obj/item/stack/useThermalMass(var/used_mass)
+	..()
+	var/used_amount = round(initial_thermal_mass * amount - thermal_mass)
+	use(used_amount)
+
 /obj/item/stack/Topic(href, href_list)
 	..()
 	if ((usr.restrained() || usr.stat || !allow_use(usr)))
@@ -194,7 +201,9 @@
 		return
 
 	if(src.amount>=amount)
+		var/thermal_mass_used = thermal_mass/src.amount
 		src.amount-=amount
+		thermal_mass -= thermal_mass_used
 		update_materials()
 	else
 		return 0
@@ -228,6 +237,8 @@
 
 /obj/item/stack/proc/add(var/amount)
 	src.amount += amount
+	if(thermal_mass)
+		thermal_mass += initial_thermal_mass * amount
 	update_materials()
 
 /obj/item/stack/proc/set_amount(new_amount)

@@ -379,37 +379,6 @@ steam.start() -- spawns the effect
 	R.burn_skin(2)
 	R.bodytemperature = min(60, R.bodytemperature + (30 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
-/////////////////////////////////////////////
-// Fire Smoke
-/////////////////////////////////////////////
-
-
-/obj/effect/smoke/fire
-	name = "fire smoke"
-	icon_state = "firesmoke"
-
-/obj/effect/smoke/fire/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	..()
-	for(var/mob/living/carbon/human/R in get_turf(src))
-		affect(R)
-
-/obj/effect/smoke/fire/affect(var/mob/living/carbon/human/R)
-	if (!..())
-		return 0
-	if (R.wear_suit != null)
-		return 0
-	R.burn_skin(0.75)
-	if (R.resting)	//crawling prevents suffocation but not burning
-		return 0
-	R.adjustOxyLoss(1)
-	if (R.coughedtime != 1)
-		R.coughedtime = 1
-		R.emote("gasp", null, null, TRUE)
-		spawn (20)
-			R.coughedtime = 0
-	R.updatehealth()
-	return
-
 /obj/effect/smoke/transparent
 	opacity = FALSE
 
@@ -475,9 +444,6 @@ steam.start() -- spawns the effect
 
 /datum/effect/system/smoke_spread/transparent
 	smoke_type = /obj/effect/smoke/transparent
-
-/datum/effect/system/smoke_spread/fire
-	smoke_type = /obj/effect/smoke/fire
 
 /////////////////////////////////////////////
 // Chem smoke

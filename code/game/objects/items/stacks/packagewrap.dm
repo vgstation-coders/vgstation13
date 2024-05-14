@@ -5,10 +5,11 @@
 	icon_state = "deliveryPaper"
 	singular_name = "paper sheet"
 	w_class = W_CLASS_SMALL
+	w_type = RECYK_WOOD
 	amount = 24
 	max_amount = 24
 	restock_amount = 2
-	autoignition_temperature = AUTOIGNITION_PAPER
+	flammable = TRUE
 	//If it's null, it can't wrap that type.
 	var/smallpath = /obj/item/delivery //We use this for items
 	var/bigpath = /obj/item/delivery/large //We use this for structures (crates, closets, recharge packs, etc.)
