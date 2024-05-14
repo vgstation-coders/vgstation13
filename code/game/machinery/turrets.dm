@@ -789,6 +789,17 @@
 		target = pick(pos_targets)
 	return target
 
+/obj/structure/turret/gun_turret/proc/choose_roulette_projectile()
+	var/chosen_projectile = pick(available_projectiles)
+	for(var/I in restricted_roulette_projectiles)
+		if(chosen_projectile == I)
+			choose_roulette_projectile()
+			return
+	for(var/I in restrict_with_subtypes)
+		if(ispath(chosen_projectile, I))
+			choose_roulette_projectile()
+			return
+	return chosen_projectile
 
 /obj/structure/turret/gun_turret/proc/fire(atom/target)
 	if(!target)
@@ -806,7 +817,7 @@
 			continue
 		playsound(src, 'sound/weapons/Gunshot.ogg', 50, 1)
 		if(roulette_mode)
-			projectile_type = pick(available_projectiles - restricted_roulette_projectiles)
+			projectile_type = choose_roulette_projectile()
 		var/obj/item/projectile/A = new projectile_type(curloc)
 		src.projectiles--
 		A.original = target
