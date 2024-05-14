@@ -128,7 +128,7 @@
 	update()
 	return
 
-/datum/locking_category/morgue_tray
+//datum/locking_category/morgue_tray
 
 /obj/structure/morgue/proc/open_up()
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
