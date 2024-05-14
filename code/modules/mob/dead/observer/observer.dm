@@ -128,13 +128,19 @@ var/creating_arena = FALSE
 		cultify()
 
 	start_poltergeist_cooldown() //FUCK OFF GHOSTS
+	register_event(/event/after_move, src, nameof(src::update_holomaps()))
 	..()
 
 /mob/dead/observer/Destroy()
 	..()
+	unregister_event(/event/after_move, src, nameof(src::update_holomaps()))
 	QDEL_NULL(station_holomap)
 	ghostMulti = null
 	observers.Remove(src)
+
+/mob/dead/observer/proc/update_holomaps()
+	if(station_holomap)
+		station_holomap.update_holomap()
 
 /mob/dead/observer/hasFullAccess()
 	return isAdminGhost(src)
