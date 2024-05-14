@@ -63,11 +63,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	update_brightness()
 
 /obj/item/weapon/match/extinguish()
-	..()
-	if (lit)
+	if (lit > 0)
+		visible_message("<span class='notice'>\The [name] goes out.</span>")
 		lit = -1
 		update_brightness()
-		visible_message("<span class='notice'>\The [name] goes out.</span>")
 
 /obj/item/weapon/match/examine(mob/user)
 	..()
