@@ -9,13 +9,15 @@
 	slot_flags = SLOT_EYES
 	flammable = FALSE
 	var/vision_flags = 0
-	var/darkness_view = 0//Base human is 2
+	var/darkness_view = 0 //Base human is 2
 	var/invisa_view = 0
 	var/cover_hair = 0
 	var/see_invisible = 0
 	var/see_in_dark = 0
 	var/seedarkness = TRUE
 	var/prescription_type = null
+	var/on //For HUDs/scanners
+	var/multiple_states //Set this var to the MAXIMUM states when on. IE if you had 2 different active states then 0:off, 1:state regular active, 2:state alt. active
 	min_harm_label = 12
 	harm_label_examine = list("<span class='info'>A label is covering one lens, but doesn't reach the other.</span>","<span class='warning'>A label covers the lenses!</span>")
 	species_restricted = list("exclude","Muton")
@@ -28,6 +30,14 @@
 	var/my_dark_plane_alpha_override_value
 	cloth_layer = GLASSES_LAYER
 	cloth_icon = 'icons/mob/eyes.dmi'
+
+/obj/item/clothing/glasses/New()
+	..()
+	if(multiple_states) //see "var multiple_states"'s comment above
+		if(on)
+			multiple_states = 1
+		else
+			multiple_states = 0
 
 /obj/item/clothing/glasses/proc/update_perception(var/mob/living/carbon/human/M)
 	return

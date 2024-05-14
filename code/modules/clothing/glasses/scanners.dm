@@ -3,7 +3,8 @@
 /obj/item/clothing/glasses/scanner
 	item_state = "glasses"
 	species_fit = list(GREY_SHAPED)
-	var/on = TRUE
+	on = TRUE
+	multiple_states = FALSE //Set this var to the MAXIMUM states when on. IE if you had 2 different active states then 0:off, 1:state A, 2:state B
 	var/list/stored_huds = list() // Stores a hud datum instance to apply to a mob
 	var/list/hud_types = list() // What HUD the glasses provides, if any
 
@@ -22,7 +23,6 @@
 
 /obj/item/clothing/glasses/scanner/attack_self()
 	toggle()
-
 
 /obj/item/clothing/glasses/scanner/equipped(var/mob/living/carbon/M, glasses)
 	if(istype(M, /mob/living/carbon/monkey))
@@ -66,10 +66,18 @@
 		return
 
 	playsound(C,'sound/misc/click.ogg',30,0,-5)
-	if (on)
-		disable(C)
+	if(initial(multiple_states))
+		if((multiple_states >= initial(multiple_states)) && on) //Move to off in cycle
+			multiple_states = 0
+			disable(C)
+		else //Move a step forward in cycle
+			multiple_states++
+			enable(C)
 	else
-		enable(C)
+		if(on)
+			disable(C)
+		else
+			enable(C)
 
 	update_icon()
 	C.update_inv_glasses()
@@ -81,7 +89,7 @@
 	if(src == C.get_item_by_slot(slot_glasses))
 		for(var/datum/visioneffect/H in stored_huds)
 			C.apply_hud(H)
-	to_chat(C, "You turn \the [src] on.")
+	to_chat(C, "You turn \the [src] on[multiple_states >= 1 ? " to [multiple_states]" : ""].")
 	C.handle_regular_hud_updates()
 
 /obj/item/clothing/glasses/scanner/proc/disable(var/mob/living/carbon/C)
@@ -253,6 +261,7 @@
 
 	glasses_fit = TRUE
 	on = FALSE
+	multiple_states = 2 //State: 0:off, 1:purple overlay + virus scan, 2:no overlay + virus scan
 
 /obj/item/clothing/glasses/scanner/science/prescription
 	name = "prescription science goggles"

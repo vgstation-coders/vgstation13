@@ -104,34 +104,40 @@
 	mech_flags = MECH_SCAN_ILLEGAL
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	prescription_type = null
-	var/on = FALSE
+	on = FALSE
+	multiple_states = 2
 	var/datum/visioneffect/pathogen/stored_pathogen_hud = null
 
 /obj/item/clothing/glasses/hud/health/cmo/New()
 	..()
 	stored_pathogen_hud = new /datum/visioneffect/pathogen
+	//Parent New() sets up "multiple_states" var
 
 /obj/item/clothing/glasses/hud/health/cmo/attack_self(mob/user)
 	toggle(user)
 
 /obj/item/clothing/glasses/hud/health/cmo/proc/toggle(mob/user)
-	if (user.incapacitated())
+	if(user.incapacitated())
 		return
 
 	playsound(user,'sound/misc/click.ogg',30,0,-5)
-	if (on)
-		on = FALSE
-		to_chat(user, "You turn the pathogen scanner off.")
-		disable(user)
+	if(multiple_states >= initial(multiple_states))
+		multiple_states = 0
+		if(on)
+			on = FALSE
+			to_chat(user, "You turn the pathogen scanner off.")
+			disable(user)
 	else
-		on = TRUE
-		to_chat(user, "You turn the pathogen scanner on.")
-		enable(user)
+		multiple_states++
+		to_chat(user, "You turn the pathogen scanner on[multiple_states >= 1 ? " to [multiple_states]" : ""].")
+		if(!on)
+			on = TRUE
+			enable(user)
 	user.handle_regular_hud_updates()
 
 /obj/item/clothing/glasses/hud/health/cmo/equipped(mob/M, slot)
 	if(slot == slot_glasses)
-		if (on)
+		if(on)
 			enable(M)
 	..()
 
@@ -142,11 +148,11 @@
 
 /obj/item/clothing/glasses/hud/health/cmo/proc/enable(mob/M)
 	var/toggle = 0
-	if (ishuman(M))
+	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if (H.glasses == src)
 			toggle = 1
-	if (ismonkey(M))
+	if(ismonkey(M))
 		var/mob/living/carbon/monkey/H = M
 		if (H.glasses == src)
 			toggle = 1
