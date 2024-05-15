@@ -35,29 +35,36 @@ var/list/atom/burnableatoms = list()
 	currentrun_index = c
 
 /atom/proc/checkburn()
-	if(on_fire) //if an object is burning, spawn a fire effect on the tile
-		var/in_fire = FALSE
-		if(locate(/obj/effect/fire) in loc)
-			in_fire = TRUE
-		if(!in_fire)
-			burnSolidFuel()
-	else if(flammable) //if an object is not on fire, is flammable, and is in an environment with temperature above its autoignition temp & sufficient oxygen, ignite it
+	if(flammable) //if an object is not on fire, is flammable, and is in an environment with temperature above its autoignition temp & sufficient oxygen, ignite it
 		if(thermal_mass <= 0)
+			ashify()
 			return
 		var/datum/gas_mixture/G = return_air()
-		if(G && (G.temperature >= autoignition_temperature) && ((G.molar_ratio(GAS_OXYGEN)) >= MINOXY2BURN))
-			if(prob(50))
-				ignite()
+		if(!G)
+			return
+		if(!(G.temperature >= autoignition_temperature))
+			return
+		if(!(G.molar_ratio(GAS_OXYGEN) >= MINOXY2BURN))
+			return
+		if(prob(50))
+			ignite()
 
 /obj/item/checkburn()
-	if(!istype(loc, /turf)) //Prevent things from burning if worn, held, or inside something else. Storage containers will eject their contents when ignited, allowing for burning of the contents.
+	if(!flammable)
+		burnableatoms -= src //why are you even in this list?!
 		return
-	if(flammable && !on_fire)
-		var/datum/gas_mixture/G = return_air()
-		add_particles(PS_SMOKE)
-		if(G && (G.temperature >= (autoignition_temperature * 0.75)))
-			var/rate = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
-			adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
-		else
-			remove_particles(PS_SMOKE)
+	if(on_fire)
+		return
+	var/datum/gas_mixture/G = return_air()
+	if(!G)
+		return
+	if(G.temperature >= (autoignition_temperature * 0.75))
+		if(!smoking)
+			add_particles(PS_SMOKE)
+			smoking = TRUE
+		var/rate = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+		adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
+	else
+		remove_particles(PS_SMOKE)
+		smoking = FALSE
 	..()
