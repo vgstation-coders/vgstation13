@@ -424,6 +424,26 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	remove_particles(PS_SMOKE)
 	..()
 
+/obj/item/checkburn()
+	if(!flammable)
+		burnableatoms -= src
+		CRASH("[src] was added to burnableatoms despite not being flammable!")
+	if(on_fire)
+		return
+	var/datum/gas_mixture/G = return_air()
+	if(!G)
+		return
+	if(G.temperature >= (autoignition_temperature * 0.75))
+		if(!smoking)
+			add_particles(PS_SMOKE)
+			smoking = TRUE
+		var/rate = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+		adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
+	else
+		remove_particles(PS_SMOKE)
+		smoking = FALSE
+	..()
+
 /obj/singularity_act()
 	if(flags & INVULNERABLE)
 		return

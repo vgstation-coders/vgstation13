@@ -389,6 +389,23 @@ var/global/list/image/charred_overlays = list()
 		process_charred_overlay()
 	return 0
 
+/atom/proc/checkburn()
+	if(on_fire)
+		return
+	if(flammable) //if an object is not on fire, is flammable, and is in an environment with temperature above its autoignition temp & sufficient oxygen, ignite it
+		if(thermal_mass <= 0)
+			ashify()
+			return
+		var/datum/gas_mixture/G = return_air()
+		if(!G)
+			return
+		if(!(G.temperature >= autoignition_temperature))
+			return
+		if(!(G.molar_ratio(GAS_OXYGEN) >= MINOXY2BURN))
+			return
+		if(prob(50))
+			ignite()
+
 /area/fire_act()
 	return
 
