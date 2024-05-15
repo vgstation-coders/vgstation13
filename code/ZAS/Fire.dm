@@ -439,7 +439,7 @@ var/global/list/image/charred_overlays = list()
  * * soh - Unused.
  * * surfaces - Whether or not the hotspot should ignite any atoms in the turf in addition to gasses (Boolean).
  */
-/turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume, var/soh = 0, var/surfaces=0)
+/turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume = CELL_VOLUME, var/soh = 0, var/surfaces=0)
 	return 0
 
 /turf/simulated/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
@@ -642,7 +642,7 @@ var/global/list/image/charred_overlays = list()
 					continue
 				//Spread the fire.
 				if(!(locate(/obj/effect/fire) in enemy_tile))
-					if(prob(round(burn_duration/5) + ZAS_fire_spread_chance+100*(firelevel/ZAS_firelevel_multiplier)) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
+					if(prob(clamp(50*round(burn_duration/5) + ZAS_fire_spread_chance + 25*firelevel,0,100)) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
 						new/obj/effect/fire(enemy_tile)
 	//seperate part of the present gas
 	//this is done to prevent the fire burning all gases in a single pass
