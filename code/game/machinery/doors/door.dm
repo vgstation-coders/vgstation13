@@ -271,7 +271,7 @@ var/list/all_doors = list()
 	if(!ticker)
 		return 0
 	for (var/obj/O in src.loc)
-		if (O.blocks_doors())
+		if (O.blocks_doors(src))
 			return 0
 	if(arcanetampered && arcane_linked_door && arcane_linked_door.density)
 		spawn(1)
@@ -316,7 +316,7 @@ var/list/all_doors = list()
 		return
 
 	for (var/obj/O in src.loc)
-		if (O.blocks_doors())
+		if (O.blocks_doors(src))
 			return 0
 
 	if(arcanetampered && arcane_linked_door && !arcane_linked_door.density)

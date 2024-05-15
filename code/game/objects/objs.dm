@@ -138,7 +138,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
 
-/obj/proc/blocks_doors()
+/obj/proc/blocks_doors(var/obj/machinery/door/D)
 	return 0
 
 /obj/proc/install_pai(obj/item/device/paicard/P)
