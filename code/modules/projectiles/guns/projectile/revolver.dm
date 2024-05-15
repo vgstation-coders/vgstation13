@@ -24,8 +24,8 @@
 	if(!istype(loaded[1], /obj/item/ammo_casing/a357)) //only 357 explodes
 		return 1
 	if(!caliber[POINT357] || prob(70 - (dakka * 10))) //gun has 357 but isn't 357 firable, or not properly modified and fails luck
-		to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
-		explosion(get_turf(M), -1, -1, 0, 3, whodunnit = M)
+		M.visible_message("<span class='danger'>[src] explodes!</span>", "<span class='danger'>[src] explodes in your hand!</span>")
+		explosion(get_turf(M), -1, -1, -1, -1, whodunnit = M)
 		M.take_organ_damage(0,20)
 		M.drop_item(src, force_drop = 1)
 		qdel(src)
@@ -74,9 +74,11 @@
 					return
 				caliber[POINT357] = 1
 				desc = "The barrel and chamber assembly seems to have been modified."
-				to_chat(user, "<span class='warning'>You reinforce the barrel of [src]! Now it will fire .357 rounds.</span>")
 				if(CK && istype(CK))
 					perfect = 1
+					to_chat(user, "You reinforce the barrel of [src]! Now it can accept and safely fire .357 rounds.")
+				else
+					to_chat(user, "<span class='warning'>You shoddily reinforce the barrel of [src]! Now it can accept and fire .357 rounds.</span>")
 		else
 			to_chat(user, "<span class='notice'>You begin to revert the modifications to [src].</span>")
 			if(getAmmo())
