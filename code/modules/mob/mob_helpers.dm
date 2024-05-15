@@ -395,7 +395,7 @@
 	message = replacetext(message, "reason", "raisin")
 	message = replacetext(message, "engineer", "engiener")
 	message = replacetext(message, "pinpointer", "pin pointner")
-	message = replacetext(message, "singularity", "scrungularity")
+	message = replacetext(message, "singularity", "scrungulartiy")
 	message = replacetext(message, "based", "BASTE")
 	message = replacetext(message, "hos", "HITLER")
 	message = replacetext(message, "like", "liek")
