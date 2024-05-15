@@ -10,10 +10,11 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "defib"
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_ELECTRONIC
+	flammable = TRUE
 	force = 5
 	throwforce = 5
 	origin_tech = Tc_BIOTECH + "=3"
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 	var/charges = 10
 	var/ready = 0
@@ -122,11 +123,7 @@
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Shocked [target.name] ([target.ckey]) with an emagged [src.name]</font>"
 		target.attack_log += "\[[time_stamp()]\]<font color='orange'> Shocked by [user.name] ([user.ckey]) with an emagged [src.name]</font>"
 		log_attack("<font color='red'>[user.name] ([user.ckey]) shocked [target.name] ([target.ckey]) with an emagged [src.name]</font>" )
-		if(!iscarbon(user))
-			target.LAssailant = null
-		else
-			target.LAssailant = user
-			target.assaulted_by(user)
+		target.assaulted_by(user)
 	playsound(src,'sound/items/defib.ogg',50,1)
 	charges--
 	update_icon()
@@ -320,10 +317,10 @@
 		to_chat(user, "<span class='warning'>You can't defibrillate [M]. You don't even know where to put the [defib_tool]!</span>")
 		return
 	else if (!power_supply)
-		to_chat(user, "<span class='warning'>There's no cell in the [src].</span>")
+		to_chat(user, "<span class='warning'>There's no cell in \the [src].</span>")
 		return
 	else if (!enough_charge())
-		to_chat(user, "<span class='warning'>The [src] fizzles weakly.</span>")
+		to_chat(user, "<span class='warning'>\The [src] fizzles weakly.</span>")
 		return
 	else
 		spark(src, 5)

@@ -28,7 +28,7 @@
 	linked_phone = new phone_type (src)
 	linked_phone.linked_landline = src
 	phone = linked_phone
-	
+
 	phone_overlay = image(icon = overlay_icon, icon_state = overlay_iconstate)
 	attached_to.overlays.Add(phone_overlay) //TODO make this less shit
 
@@ -47,9 +47,9 @@
 		if(get_dist(src, linked_phone) > tether_length)
 			linked_phone.visible_message("<span class='warning'>The cord snaps!</span>")
 			linked_phone.linked_landline = null
-			linked_phone = null		
+			linked_phone = null
 			return
-			
+
 	var/obj/cable1
 	var/obj/cable2
 	var/turf/T = attached_to.loc
@@ -75,11 +75,11 @@
 		cable1.dir = turn(D,180)
 		linked_cord += cable1
 		linked_cord += cable2
-		
+
 /obj/landline/proc/reattach_cord(mob/user)
 	if(!phone)
 		to_chat(user, "<span class='warning'>There's no phone to fix!</span>")
-		return 	
+		return
 	if(phone.linked_landline)
 		to_chat(user, "<span class='warning'>\the [phone] is already connected!</span>")
 		return
@@ -89,7 +89,7 @@
 	phone.linked_landline = src
 	linked_phone = phone
 	return TRUE
-		
+
 /obj/landline/proc/shake_phone_overlay(amplitude = 2)
 	if(!phone)
 		return
@@ -98,13 +98,13 @@
 		var/pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 		animate(attached_to, pixel_x = attached_to.pixel_x + pixel_x_diff, pixel_y = attached_to.pixel_y + pixel_y_diff , time = 1, loop = 10,easing = BOUNCE_EASING)
 		animate(pixel_x = attached_to.pixel_x - pixel_x_diff, pixel_y = attached_to.pixel_y - pixel_y_diff , time = 1, loop = 10,easing = BOUNCE_EASING)
-	
+
 /obj/landline/proc/has_power()
 	var/obj/machinery/requests_console/RC = attached_to
 	if(istype(RC, /obj/machinery/requests_console) && RC.stat)
 		return FALSE
 	return TRUE //redphones stay powered regardless
-	
+
 /obj/landline/proc/end_call_loop()
 	if(is_endcall_looping)
 		return
@@ -115,7 +115,7 @@
 		while(linked_phone && !phone && has_power() && is_endcall_looping)
 			playsound(source=linked_phone, soundin=linked_phone.end_call_sound, vol=100, vary=FALSE, channel=0)
 			sleep(1 SECONDS)
-	
+
 /obj/landline/proc/ring_loop()
 	is_endcall_looping = FALSE
 	is_dialtone_looping = TRUE
@@ -148,8 +148,8 @@
 			ring_loop()
 			return "dialling..."
 	return "auto-routing offline. please wait for operator..."
-	
-			
+
+
 
 /obj/landline/proc/ring()
 	if(!linked_phone)
@@ -172,7 +172,7 @@
 	if(!phone)
 		to_chat(user, "<span class='notice'>\the [src] has no telephone!</span>")
 		return
-	
+
 	user.put_in_hands(src.phone)
 	playsound(source=src, soundin= phone.pickup_sound, vol=100, vary=TRUE, channel=CHANNEL_TELEPHONES, wait=0)
 	phone = null //do not delete phone
@@ -207,12 +207,12 @@
 			return "orange"	//YELLOW 2a one phone dialling operator, other not yet defined
 				//TODO add an orange variant, for when the thing is still picked up but has already spoken to an operator
 		return 				//idle, most machines should be this
-	
+
 /obj/landline/proc/get_department()
 	var/obj/machinery/requests_console/RC = attached_to
 	if(istype(RC, /obj/machinery/requests_console))
 		return RC.department
-	return "ERROR"	
+	return "ERROR"
 
 /obj/landline/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
 	if(!istype(O, /obj/item/telephone))
@@ -248,25 +248,25 @@
 				break
 	for(var/obj/machinery/computer/message_monitor/MM in message_monitors)
 		MM.updateUsrDialog()
-	
+
 	user.visible_message("<span class='notice'>[user] puts \the [O] onto \the [src.attached_to].</span>")
 	var/obj/item/telephone/P = O
 	playsound(source=O, soundin=P.pickup_sound, vol=100, vary=TRUE, channel=0)
 	phone = O
 	O.forceMove(src)
 	attached_to.overlays.Add(phone_overlay)
-	
+
 /obj/landline/red
 	overlay_icon = 'icons/obj/items.dmi'
 	overlay_iconstate = "red_phone_handset"
-	
-	
+
+
 /obj/item/telephone
 	name = "telephone"
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "phone"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
-	item_state = "rpb_phone"	
+	item_state = "rpb_phone"
 	flags = HEAR | FPRINT
 	var/mic_range = 3
 	var/speaker_range = 3
@@ -277,9 +277,9 @@
 	var/ringtone = 'sound/items/telephone_ring.ogg'
 	var/end_call_sound = 'sound/items/telephone_end_call_440hz.mp3'
 	var/dial_sound = 'sound/items/telephone_dial_440hz.mp3'
-	var/clowned = FALSE 
+	var/clowned = FALSE
 	var/broken = FALSE
-		
+
 /obj/item/telephone/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
 	if(istype(O,/obj/item/toy/crayon/rainbow) && clowned == FALSE)
 		to_chat(user, "<span class = 'notice'>You begin modifying \the [src].</span>")
@@ -287,7 +287,7 @@
 			to_chat(user, "<span class = 'notice'>You finish modifying \the [src]!</span>")
 			honkify()
 			clowned = TRUE
-			
+
 /obj/item/telephone/proc/honkify()
 	name = "Bananaphone"
 	icon = 'icons/obj/hydroponics/banana.dmi'
@@ -297,22 +297,22 @@
 	if(linked_landline)
 		linked_landline.phone_overlay = image(icon = linked_landline.overlay_icon, icon_state = "phone_overlay_banana")
 	update_icon()
-	
+
 /obj/item/telephone/proc/make_cord()
 	if(!linked_landline)
 		return
 	linked_landline.delete_cord()
 	linked_landline.make_cord()
-	
+
 /obj/item/telephone/pickup(var/mob/user)
 	..()
 	make_cord()
-	user?.register_event(/event/after_move, src, /obj/item/telephone/proc/make_cord)	
-	
+	user?.register_event(/event/after_move, src, /obj/item/telephone/proc/make_cord)
+
 /obj/item/telephone/dropped(var/mob/user)
 	..()
 	make_cord()
-	user?.unregister_event(/event/after_move, src, /obj/item/telephone/proc/make_cord)	
+	user?.unregister_event(/event/after_move, src, /obj/item/telephone/proc/make_cord)
 
 /obj/item/telephone/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	//TODO make this work while in lockers and backpacks and such
@@ -335,7 +335,7 @@
 /obj/item/telephone/send_speech(var/datum/speech/speech, var/range=7, var/bubble_type)
 	if(broken)
 		return
-	
+
 	if(speech && speech.wrapper_classes["spoken_into_telephone"])
 		if(speech.wrapper_classes["spoken_into_telephone"] > 3)
 			speech.message_classes.Add("verybig")
@@ -371,12 +371,12 @@
 			linked_landline.calling.attached_to.updateUsrDialog()
 	for(var/obj/item/telephone/switchboard/ST in linked_landline.listening_operators)
 		ST.send_speech(lastmsg, ST.speaker_range, bubble_type = "")
-	
+
 /obj/item/telephone/switchboard
 	name = "switchboard operator headset"
 	desc = "you shouldn't ever see this."
 	mic_range = 1
-	
+
 /obj/item/telephone/switchboard/explode()
 	explosion_effect(get_turf(src),-1,-1,-1) //fake boom, doesn't alert bhangmeters
 	var/obj/machinery/computer/message_monitor/MM = loc
@@ -411,7 +411,7 @@
 		P.send_speech(lastmsg, P.speaker_range, bubble_type = "")
 		linked_landline.calling.last_call_log += msg
 		linked_landline.calling.attached_to.updateUsrDialog()
-		
+
 	for(var/obj/item/telephone/switchboard/ST in linked_landline.listening_operators)
 		if(ST == src)
 			continue

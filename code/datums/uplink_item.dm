@@ -8,6 +8,7 @@ var/list/discounted_items_of_the_round = list()
 
 	var/list/static/forbidden_items = list(
 		/datum/uplink_item/badass/bundle,
+		/datum/uplink_item/badass/random,
 		/datum/uplink_item/badass/experimental_gear,
 		/datum/uplink_item/implants/uplink,
 	)
@@ -567,7 +568,7 @@ var/list/discounted_items_of_the_round = list()
 	cost = 12
 	discounted_cost = 10
 	jobs_with_discount = ENGINEERING_POSITIONS
- 
+
 /datum/uplink_item/sabotage_tools/reportintercom
 	name = "NT Central Command Report Falsifier"
 	desc = "A command report intercom stolen from Nanotrasen Command that allows for a single fake Command Update to be sent. Ensure tastefulness so that the crew actually falls for the message. Item is particular obvious and will have to be manually discarded after use."
@@ -1271,6 +1272,14 @@ var/list/discounted_items_of_the_round = list()
 	cost = 4
 	discounted_cost = 2
 	jobs_with_discount = list("Internal Affairs Agent")
+
+/datum/uplink_item/jobspecific/command/jobdisk
+	name = "Alternate Jobs Database"
+	desc = "A disk which scrambles the jobs database when installed in the Labor Management Console."
+	item = /obj/item/weapon/disk/jobdisk
+	cost = 6
+	discounted_cost = 3
+	jobs_with_discount = list("Captain", "Head of Personnel")
 
 /datum/uplink_item/jobspecific/trader
 	category = "Trader Specials"

@@ -26,7 +26,7 @@
 	var/combustible = 1200
 	var/maxCombustible = 1200
 	var/lit = FALSE
-	var/flammable = TRUE
+	var/can_be_lit = TRUE
 
 	var/fragrance = null
 	var/adjective = null
@@ -121,7 +121,7 @@
 	if(lit)
 		to_chat(user, "<span class='warning'>\The [src] is already lit.</span>")
 		return
-	else if (!flammable)
+	else if (!can_be_lit)
 		to_chat(user,"<span class='warning'>The incense was recently put out, you must wait a few seconds before lighting it up again.</span>")
 		return
 	else if(W.is_hot() || W.sharpness_flags & (HOT_EDGE))
@@ -152,9 +152,9 @@
 		T.update_icon()
 
 /obj/item/incense_stick/proc/burn()
-	if (!flammable)
+	if (!can_be_lit)
 		return
-	flammable = FALSE
+	can_be_lit = FALSE
 	lit = TRUE
 	damtype = BURN
 	attack_verb = lit_attack_verb
@@ -173,7 +173,7 @@
 		//are we on a turf? or held by a mob that's on a turf? or in a thurible (that's on the ground or held by a mob?)
 		if (istype(location) && (isturf(loc) || (ismob(loc) && isturf(loc.loc)) || (istype(loc,/obj/item/weapon/thurible) && (isturf(loc.loc) || (ismob(loc.loc) && isturf(loc.loc.loc))))))//I'm sorry
 			if (location)
-				location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
+				location.hotspot_expose(source_temperature, 5, surfaces = 0)
 				anim(target = location, a_icon = 'icons/effects/160x160.dmi', flick_anim = "incense", offX = -WORLD_ICON_SIZE*2+pixel_x, offY = -WORLD_ICON_SIZE*2+pixel_y)
 				if (location.zone)//is there a simulated atmosphere where we are?
 
@@ -220,7 +220,7 @@
 			qdel(src)
 			return
 		sleep(50)
-	flammable = TRUE
+	can_be_lit = TRUE
 
 /obj/item/incense_stick/update_icon()
 	var/length = round((maxCombustible - combustible) / 260)
@@ -510,7 +510,7 @@
 			user.visible_message("<span class='notice'>[user] carefully puts out the ember on \the [incense] after removing it from \the [src].</span>")
 			user.put_in_hands(incense)
 			incense = null
-		else if (!incense.flammable)
+		else if (!incense.can_be_lit)
 			to_chat(user,"<span class='warning'>The incense was recently put out, you must wait a few seconds before lighting it up again.</span>")
 			return
 		else

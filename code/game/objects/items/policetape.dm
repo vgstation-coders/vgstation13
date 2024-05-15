@@ -5,13 +5,14 @@
 	icon_state = "rollstart"
 	flags = FPRINT
 	w_class = W_CLASS_TINY
+	w_type = RECYK_PLASTIC
 	restraint_resist_time = 20 SECONDS
 	toolsounds = list('sound/weapons/cablecuff.ogg')
 	var/turf/start
 	var/turf/end
 	var/tape_type = /obj/item/tape
 	var/icon_base
-	autoignition_temperature = AUTOIGNITION_PAPER
+	flammable = TRUE
 
 /obj/item/tape
 	name = "tape"
@@ -20,9 +21,12 @@
 	density = 1
 	layer = ABOVE_DOOR_LAYER
 	pass_flags_self = PASSGLASS
+	w_class = W_CLASS_TINY
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	var/icon_base
 	var/robot_compatibility
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 /obj/item/taperoll/police
 	name = "police tape"

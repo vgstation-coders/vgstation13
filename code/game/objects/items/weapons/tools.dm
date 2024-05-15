@@ -286,7 +286,7 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = 0
+	flammable = FALSE
 
 	//R&D tech level
 	origin_tech = Tc_ENGINEERING + "=1"
@@ -387,7 +387,10 @@
 		if(M.is_holding_item(src))
 			location = get_turf(M)
 	if (istype(location, /turf) && welding)
-		location.hotspot_expose(source_temperature, 5,surfaces=istype(loc,/turf))
+		if(prob(1))
+			location.hotspot_expose(source_temperature, 5,surfaces=istype(loc,/turf))
+		else
+			location.hotspot_expose(source_temperature, 5,surfaces=0)
 
 /obj/item/tool/weldingtool/attack(mob/M as mob, mob/user as mob)
 	if(hasorgans(M))
@@ -763,7 +766,7 @@
 	if(istype(I,/obj/item/weapon/fireaxe))
 		var/obj/item/weapon/fireaxe/F = I
 		to_chat(user, "<span class='notice'>You attach \the [F] and [src] to carry them easier.</span>")
-		var/obj/item/tool/irons/SI = new (user.loc)
+		var/obj/item/tool/irons/SI = new (get_turf(src))
 		SI.fireaxe = F
 		SI.halligan = src
 		user.drop_item(F)

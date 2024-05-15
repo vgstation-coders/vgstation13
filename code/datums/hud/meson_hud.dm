@@ -45,21 +45,33 @@ var/list/meson_images = list()
 
 /atom/movable/Destroy()
 	if(meson_image)
+		is_on_mesons = FALSE
+		update_meson_image()
+	..()
+
+/atom/movable/proc/set_on_mesons(var/set_on = 0)
+	is_on_mesons = set_on
+	update_meson_image()
+
+/atom/movable/proc/update_meson_image(atom/movable/mover)
+	if(meson_image)
 		for (var/mob/L in meson_wearers)
 			if (L.client)
 				L.client.images -= meson_image
 		meson_images -= meson_image
-	..()
-
-/atom/movable/proc/update_meson_image()
-	for (var/mob/L in meson_wearers)
-		if (L.client)
-			L.client.images -= meson_image
-	meson_images -= meson_image
 	if(is_on_mesons)
+		//in case of the mover event calling this proc on something sent to the nullspace realm...
+		if(isnull(loc))
+			return
 		meson_image = image(icon,loc,icon_state,layer,dir)
+		if(!meson_image)
+			return
 		meson_image.plane = relative_plane_to_plane(plane, loc.plane)
 		meson_images += meson_image
 		for (var/mob/L in meson_wearers)
 			if (L.client)
 				L.client.images |= meson_image
+		if(!has_event(/event/moved, src, nameof(src::update_meson_image())))
+			register_event(/event/moved, src, nameof(src::update_meson_image()))
+	else if(has_event(/event/moved, src, nameof(src::update_meson_image())))
+		unregister_event(/event/moved, src, nameof(src::update_meson_image()))

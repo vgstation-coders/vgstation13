@@ -4,6 +4,7 @@
 	icon_state = "gas_alt"
 	clothing_flags = BLOCK_GAS_SMOKE_EFFECT | MASKINTERNALS
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_PLASTIC
 	can_flip = 1
 	item_state = "gas_alt"
 	gas_transfer_coefficient = 0.01
@@ -12,7 +13,6 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	body_parts_covered = FACE
 	pressure_resistance = ONE_ATMOSPHERE
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	var/canstage = 1
 	var/stage = 0
 
@@ -443,3 +443,11 @@
 	if(slot == slot_wear_mask)
 		on_face = 0
 	..()
+
+/obj/item/clothing/mask/gas/scubamask
+	name = "scuba mask"
+	desc = "SCUBA mask used to breathe underwater."
+	icon_state = "scubamask"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	can_flip = 0
+	canstage = 0

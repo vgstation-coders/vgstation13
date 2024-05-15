@@ -1,8 +1,8 @@
 /obj/item/clothing
 	name = "clothing"
 	sterility = 5
-	autoignition_temperature = AUTOIGNITION_FABRIC
 	w_type = RECYK_FABRIC
+	flammable = TRUE
 	starting_materials = list(MAT_FABRIC = CC_PER_SHEET_FABRIC)
 	var/list/species_restricted = null //Only these species can wear this kit.
 	var/wizard_garb = 0 //Wearing this empowers a wizard.
@@ -129,10 +129,25 @@
 	for(var/obj/item/clothing/accessory/storage/A in accessories)
 		if(A.hold && A.hold.can_be_inserted(I,1))
 			return 1
+	for(var/obj/item/clothing/accessory/holster/A2 in accessories)
+		if(!A2.holstered && A2.can_holster(I))
+			return 1
+	if(istype(I,/obj/item/clothing/accessory))
+		var/obj/item/clothing/accessory/A3 = I
+		if(!check_accessory_overlap(A3) && A3.can_attach_to(src))
+			return 1
 
 /obj/item/clothing/quick_store(var/obj/item/I,mob/user)
 	for(var/obj/item/clothing/accessory/storage/A in accessories)
 		if(A.hold && A.hold.handle_item_insertion(I,0))
+			return 1
+	for(var/obj/item/clothing/accessory/holster/A2 in accessories)
+		if(A2.holster(I,user))
+			return 1
+	if(istype(I,/obj/item/clothing/accessory))
+		var/obj/item/clothing/accessory/A3 = I
+		if(user.drop_item(I, src))
+			attach_accessory(A3,user)
 			return 1
 
 /obj/item/clothing/CtrlClick(var/mob/user)
@@ -161,12 +176,10 @@
 			to_chat(user, "<span class='notice'>\The [A] cannot be attached to [src].</span>")
 			return
 		if(user.drop_item(I, src))
-			to_chat(user, "<span class='notice'>You attach [A] to [src].</span>")
-			attach_accessory(A)
-			A.add_fingerprint(user)
-		if(ishuman(loc))
-			var/mob/living/carbon/human/H = loc
-			H.update_inv_by_slot(slot_flags)
+			attach_accessory(A, user)
+		if(iscarbon(loc))
+			var/mob/living/carbon/carbon_wearer = loc
+			carbon_wearer.update_inv_by_slot(slot_flags)
 		return 1
 	if(I.is_screwdriver(user))
 		for(var/obj/item/clothing/accessory/accessory in priority_accessories())
@@ -175,6 +188,20 @@
 	for(var/obj/item/clothing/accessory/accessory in priority_accessories())
 		if(accessory.attackby(I, user))
 			return 1
+	if(istype(I, /obj/item/painting_brush))
+		var/obj/item/painting_brush/P = I
+		if (P.paint_color)
+			paint_act(P.paint_color,user)
+		else
+			to_chat(user, "<span class='warning'>There is no paint on \the [P].</span>")
+		return 1
+	if(istype(I, /obj/item/paint_roller))
+		var/obj/item/paint_roller/P = I
+		if (P.paint_color)
+			paint_act(P.paint_color,user)
+		else
+			to_chat(user, "<span class='warning'>There is no paint on \the [P].</span>")
+		return 1
 
 	..()
 
@@ -295,6 +322,7 @@
 	if (hood && (mannequin.clothing[SLOT_MANNEQUIN_HEAD] == hood))
 		hooddown(mannequin)
 
+//for fabric clothing that can be fully dyed in a cauldron
 /obj/item/clothing/dye_act(var/obj/structure/reagent_dispensers/cauldron/cauldron, var/mob/user)
 	if (clothing_flags & COLORS_OVERLAY)
 		var/dye_target = "full"
@@ -338,8 +366,39 @@
 				dyed_parts[actual_parts[dye_target]] = list(mixed_color,mixed_alpha)//getting back the actual overlay name
 			update_icon()
 			user.update_inv_hands()
+	else if (dyeable_parts.len > 0)
+		to_chat(user, "<span class='warning'>Can't dye that, but you can probably apply some paint directly with a painting brush.</span>")
 	else
 		to_chat(user, "<span class='warning'>Can't dye that.</span>")
+	return TRUE
+
+//for clothing that gets color applied with a tool over certain parts
+/obj/item/clothing/proc/paint_act(var/_color, var/mob/user)
+	if (clothing_flags & COLORS_OVERLAY)
+		to_chat(user, "<span class='warning'>Can't paint that directly, use a cauldron.</span>")
+	else if (dyeable_parts.len > 0)
+		var/dye_target = ""
+		var/list/actual_parts = list()
+		var/list/choices = list()
+		if (dyeable_parts.len > 0)
+			for (var/part in dyeable_parts)//doing some swapping so we get an easier list to read in-game
+				var/part_proper_name = dyeable_part_to_name[part]
+				choices += part_proper_name
+				actual_parts[part_proper_name] = part
+			dye_target = input("Which part do you want to paint?","Clothing Painting",1) as null|anything in choices
+		if (!dye_target)
+			return
+		to_chat(user, "<span class='notice'>You begin painting \the [src][(dye_target != "Full") ? "'s [dye_target]" : ""].</span>")
+		playsound(loc, "mop", 10, 1)
+		if (do_after(user, src, 20))
+			if (_color == "#FFFFFF")
+				_color = "#FEFEFE" //null color prevention
+			dyed_parts -= dye_target//moving the new layer on top
+			dyed_parts[actual_parts[dye_target]] = list(_color,255)//getting back the actual overlay name
+			update_icon()
+			user.regenerate_icons()
+	else
+		to_chat(user, "<span class='warning'>Can't paint that.</span>")
 	return TRUE
 
 /obj/item/clothing/proc/attach_accessory(obj/item/clothing/accessory/accessory, mob/user)
@@ -347,6 +406,9 @@
 	accessory.forceMove(src)
 	accessory.on_attached(src)
 	update_verbs()
+	if(user)
+		to_chat(user, "<span class='notice'>You attach [accessory] to [src].</span>")
+		accessory.add_fingerprint(user)
 
 /obj/item/clothing/proc/priority_accessories()
 	if(!accessories.len)
@@ -376,9 +438,9 @@
 
 	accessory.on_removed(user)
 	accessories.Remove(accessory)
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-		H.update_inv_by_slot(slot_flags)
+	if(iscarbon(user))
+		var/mob/living/carbon/carbon_user = user
+		carbon_user.update_inv_by_slot(slot_flags)
 	update_verbs()
 
 /obj/item/clothing/proc/get_accessory_by_exclusion(var/exclusion)
@@ -1012,9 +1074,8 @@ var/global/maxStackDepth = 10
 	cold_breath_protection = 230
 	sterility = 100
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
+	flammable = FALSE
 
-	autoignition_temperature = 0
-	fire_fuel = 0
 
 /obj/item/clothing/suit/space
 	name = "Space suit"
@@ -1027,7 +1088,7 @@ var/global/maxStackDepth = 10
 	permeability_coefficient = 0.02
 	flags = FPRINT
 	pressure_resistance = 5 * ONE_ATMOSPHERE
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|TAIL
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|HIDETAIL
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/)
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
@@ -1037,10 +1098,7 @@ var/global/maxStackDepth = 10
 	clothing_flags = CANEXTINGUISH
 	sterility = 100
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
-
-	autoignition_temperature = 0
-	fire_fuel = 0
-
+	flammable = FALSE
 
 /* ========================================================================
 								UNIFORMS

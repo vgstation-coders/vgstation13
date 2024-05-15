@@ -14,7 +14,8 @@ var/list/special_fruits = list()
 	var/hydroflags = 0
 	var/datum/seed/seed
 	var/fragrance
-	autoignition_temperature = AUTOIGNITION_FABRIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 
 	icon = 'icons/obj/hydroponics/apple.dmi'
 	icon_state = "produce"
@@ -103,7 +104,7 @@ var/list/special_fruits = list()
 	if(seed.teleporting)
 		splat_reagent_reaction(get_turf(hit_atom),user)
 		if(do_fruit_teleport(hit_atom, usr, potency))
-			visible_message("<span class='danger'>The [src] splatters, causing a distortion in space-time!</span>")
+			visible_message("<span class='danger'>\The [src] splatters, causing a distortion in space-time!</span>")
 		else if(splat_decal(get_turf(hit_atom)))
 			visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
@@ -206,7 +207,7 @@ var/list/special_fruits = list()
 		if(filling_color != "#FFFFFF")
 			S.color = filling_color
 		else
-			S.color = AverageColor(getFlatIcon(src, src.dir, 0), 1, 1)
+			S.color = AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(src)), override_dir = dir), 1, 1)
 		S.name = "[seed.seed_name] smudge"
 	if(seed.biolum && seed.biolum_colour)
 		S.set_light(1, l_color = seed.biolum_colour)

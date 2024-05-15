@@ -9,9 +9,10 @@
 	throw_speed = 1
 	throw_range = 4
 	w_class = W_CLASS_LARGE
+	w_type = RECYK_BIOLOGICAL //leather
+	flammable = TRUE
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 16
-	autoignition_temperature = AUTOIGNITION_ORGANIC //fancy leather briefcases
 	hitsound = "swing_hit"
 	var/obj/item/weapon/handcuffs/casecuff = null
 
@@ -25,6 +26,10 @@
 	name = "orderly briefcase"
 	desc = "A briefcase with a medical cross emblazoned on each side. It has a faintly sterile smell to it."
 	icon_state = "medbriefcase"
+
+/obj/item/weapon/storage/briefcase/insurance
+	name = "insurance briefcase"
+	desc = "A briefcase containing all the necessary tools for an insurance salesman."
 
 /obj/item/weapon/storage/briefcase/orderly/New()
 	..()
@@ -42,19 +47,23 @@
 	new /obj/item/weapon/paper/commendation_key(src)
 	new /obj/item/weapon/pen/NT(src)
 
+/obj/item/weapon/storage/briefcase/insurance/New()
+	..()
+	var/obj/item/weapon/folder/red/F = new /obj/item/weapon/folder/red(src)
+	F.name = "Plans and Subscriptions"
+	F.desc = "Inventory of all plan options and current policies."
+	new /obj/item/weapon/pen/NT(src)
+	dispense_cash(rand(10000,100000),src)
+
 /obj/item/weapon/storage/briefcase/attack(mob/living/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
-		to_chat(user, "<span class='warning'>The [src] slips out of your hand and hits your head.</span>")
+		to_chat(user, "<span class='warning'>\The [src] slips out of your hand and hits your head.</span>")
 		user.take_organ_damage(10)
 		user.Paralyse(2)
 		playsound(src, "swing_hit", 50, 1, -1)
 		return
 
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 
 	var/t = user.zone_sel.selecting
 	if (t == LIMB_HEAD)
@@ -75,7 +84,7 @@
 				else
 					H.eye_blurry += 3
 			if(H.stat < UNCONSCIOUS)
-				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")	
+				H.visible_message("<span class='warning'>[user] tried to knock [H] unconscious!</span>", "<span class='warning'>[user] tried to knock you unconscious!</span>")
 	return ..()
 
 /obj/item/weapon/storage/briefcase/MouseDropFrom(atom/over_object)
@@ -111,12 +120,10 @@
 						cant_drop = 1
 						target.mutual_handcuffs = casecuff
 						casecuff.invisibility = INVISIBILITY_MAXIMUM
-						var/obj/abstract/Overlays/O = target.obj_overlays[HANDCUFF_LAYER]
-						O.icon = 'icons/obj/cuffs.dmi'
-						O.icon_state = "singlecuff[cuffslot]"
-						O.pixel_x = target.species.inventory_offsets["[cuffslot]"]["pixel_x"] * PIXEL_MULTIPLIER
-						O.pixel_y = target.species.inventory_offsets["[cuffslot]"]["pixel_y"] * PIXEL_MULTIPLIER
-						target.obj_to_plane_overlay(O,HANDCUFF_LAYER)
+						var/mutable_appearance/handcuff_overlay = mutable_appearance('icons/obj/cuffs.dmi', "singlecuff[cuffslot]", -HANDCUFF_LAYER)
+						handcuff_overlay.pixel_x = target.species.inventory_offsets["[cuffslot]"]["pixel_x"] * PIXEL_MULTIPLIER
+						handcuff_overlay.pixel_y = target.species.inventory_offsets["[cuffslot]"]["pixel_y"] * PIXEL_MULTIPLIER
+						target.overlays += target.overlays_standing[HANDCUFF_LAYER] = handcuff_overlay
 						close_all()
 						storage_locked = TRUE
 				else
@@ -129,7 +136,7 @@
 	if(casecuff && Obj == casecuff)  //when stripped, they get forcemoved from the case, that's why this works
 		var/mob/living/carbon/human/target = loc
 		target.mutual_handcuffs = null
-		target.overlays -= target.obj_overlays[HANDCUFF_LAYER]
+		target.overlays -= target.overlays_standing[HANDCUFF_LAYER]
 		casecuff.invisibility = initial(casecuff.invisibility)
 		canremove = 1
 		cant_drop = 0
@@ -144,7 +151,7 @@
 	if(casecuff)
 		var/mob/living/carbon/human/uncuffed = user
 		uncuffed.mutual_handcuffs = null
-		uncuffed.overlays -= uncuffed.obj_overlays[HANDCUFF_LAYER]
+		uncuffed.overlays -= uncuffed.overlays_standing[HANDCUFF_LAYER]
 		casecuff.invisibility = 0
 		casecuff.forceMove(user.loc)
 		canremove = 1

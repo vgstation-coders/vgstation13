@@ -27,7 +27,7 @@
 	specific_heat = 20	// J/(mol*K)
 	molar_mass = 0.032	// kg/mol
 
-	flags = XGM_GAS_OXIDIZER
+	flags = XGM_GAS_NOTEWORTHY
 
 /datum/gas/oxygen/is_human_safe(moles, datum/gas_mixture/mixture)
 	return abs(moles/mixture.total_moles() - O2STANDARD) < 0.02
@@ -39,6 +39,8 @@
 	specific_heat = 20	// J/(mol*K)
 	molar_mass = 0.028	// kg/mol
 
+	flags = XGM_GAS_NOTEWORTHY
+
 /datum/gas/nitrogen/is_human_safe(moles, datum/gas_mixture/mixture)
 	return abs(moles/mixture.total_moles() - N2STANDARD) < 0.2
 
@@ -49,7 +51,7 @@
 	specific_heat = 30	// J/(mol*K)
 	molar_mass = 0.044	// kg/mol
 
-	flags = XGM_GAS_LOGGED
+	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
 
 /datum/gas/carbon_dioxide/is_human_safe(moles, datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
@@ -57,6 +59,7 @@
 /datum/gas/plasma
 	id = GAS_PLASMA
 	name = "Plasma"
+	short_name = "Plasma"
 
 	//Note that this has a significant impact on TTV yield.
 	//Because it is so high, any leftover plasma soaks up a lot of heat and drops the yield pressure.
@@ -69,7 +72,7 @@
 
 	tile_overlay = new /obj/effect/overlay/gas_overlay/plasma()
 	overlay_limit = MOLES_PLASMA_VISIBLE / CELL_VOLUME
-	flags = XGM_GAS_FUEL | XGM_GAS_CONTAMINANT | XGM_GAS_LOGGED
+	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
 
 /datum/gas/plasma/is_human_safe(moles, datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
@@ -87,7 +90,7 @@
 
 	tile_overlay = new /obj/effect/overlay/gas_overlay/sleeping_agent()
 	overlay_limit = 1 / CELL_VOLUME
-	flags = XGM_GAS_OXIDIZER | XGM_GAS_LOGGED // N₂O is a powerful oxidizer
+	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
 
 /datum/gas/sleeping_agent/is_human_safe(moles, datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
@@ -99,11 +102,12 @@
 /datum/gas/volatile_fuel
 	id = GAS_VOLATILE
 	name = "Volatile Fuel"
+	short_name = "Fuel<sub>V</sub>"
 
 	specific_heat = 30
 	molar_mass = 0.163 // @MoMMI#9954 roll 32 405
 
-	flags = XGM_GAS_FUEL | XGM_GAS_LOGGED
+	flags = XGM_GAS_LOGGED
 
 /datum/gas/volatile_fuel/is_human_safe(moles, datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
@@ -111,11 +115,31 @@
 /datum/gas/oxygen_agent_b
 	id = GAS_OXAGENT
 	name = "Oxygen Agent B"
+	short_name = "Oxy Agent<sub>B</sub>"
 
 	specific_heat = 300
 	molar_mass = 0.300
 
-	flags = XGM_GAS_FUEL | XGM_GAS_OXIDIZER | XGM_GAS_CONTAMINANT | XGM_GAS_LOGGED
+	flags = XGM_GAS_LOGGED
 
 /datum/gas/oxygen_agent_b/is_human_safe(moles, datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
+
+/datum/gas/cryotheum
+	id = GAS_CRYOTHEUM
+	name = "Cryotheum"
+	short_name = "O<sub>2</sub>β"
+	specific_heat = 10
+
+	molar_mass = 0.032
+
+	tile_overlay = new /obj/effect/overlay/gas_overlay/cryotheum()
+	overlay_limit = MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME
+	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
+
+/datum/gas/cryotheum/is_human_safe(moles, datum/gas_mixture/mixture)
+	return moles/mixture.total_moles() < 0.01
+
+/obj/effect/overlay/gas_overlay/cryotheum
+	name = "cryotheum"
+	icon_state = "cryotheum"

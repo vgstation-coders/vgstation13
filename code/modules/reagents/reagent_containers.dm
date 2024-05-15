@@ -516,20 +516,16 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	process_temperature()
 
 /obj/item/weapon/reagent_containers/update_temperature_overlays()
-	if (particles)
-		particles.spawning = 0
 	if(reagents && reagents.total_volume)
-		switch(reagents.chem_temp)
-			if (-INFINITY to (T0C+2))
-				ice_alpha = 96 + clamp((-64*((reagents.chem_temp-T0C)/80)),0,64)
-				if(!ice_overlays["[type][icon_state]"])
-					set_ice_overlay()
-				else
-					update_ice_overlay()
-			if (STEAMTEMP to INFINITY)
-				if (!particles)
-					particles = new/particles/steam
-				steam_spawn_adjust(reagents.chem_temp)
+		if (reagents.chem_temp <= (T0C+2))
+			ice_alpha = 96 + clamp((-64*((reagents.chem_temp-T0C)/80)),0,64)
+			if(!ice_overlays["[type][icon_state]"])
+				set_ice_overlay()
+			else
+				update_ice_overlay()
+		steam_spawn_adjust(reagents.chem_temp)
+	else
+		remove_particles(PS_STEAM)
 
 ///////////ICE OVERLAY///////////////////////////////////////////////////////////////////////////////////////////////////////////
 //appears when the food item's reagents' temperature falls to 0°C or below
@@ -579,25 +575,13 @@ var/global/list/image/ice_overlays = list()
 
 ///////////STEAM PARTICLES/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/particles/steam
-	width = 64
-	height = 64
-	count = 20
-	spawning = 0
-
-	lifespan = 1 SECONDS
-	fade = 1 SECONDS
-	icon = 'icons/effects/effects.dmi'
-	icon_state = "steam"
-	color = "#FFFFFF99"
-	position = 0
-	velocity = 1
-	scale = list(0.6, 0.6)
-	grow = list(0.05, 0.05)
-	rotation = generator("num", 0,360)
-
 /obj/item/weapon/reagent_containers/proc/steam_spawn_adjust(var/_temp)
-	if (particles)
-		particles.spawning = clamp(0.1 + 0.002 * (_temp - STEAMTEMP),0.1,0.5)
+	if (!(PS_STEAM in particle_systems))
+		add_particles(PS_STEAM)
+	var/obj/abstract/particles_holder/steam_holder = particle_systems[PS_STEAM]
+	if (_temp < STEAMTEMP)
+		steam_holder.particles.spawning = 0
+	else
+		steam_holder.particles.spawning = clamp(0.1 + 0.002 * (_temp - STEAMTEMP),0.1,0.5)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -12,7 +12,7 @@
 	plane = ABOVE_HUMAN_PLANE
 	layer = RAILING_BACK_LAYER
 	flow_flags = ON_BORDER
-	pass_flags_self = PASSTABLE|PASSGLASS
+	pass_flags_self = PASSRAILING|PASSGLASS
 	var/railingtype = "metal"
 	var/wrenchtime = 10
 	var/weldtime = 25
@@ -183,27 +183,37 @@
 		if(4, 8)
 			layer = RAILING_MID_LAYER
 
-/obj/structure/railing/verb/revrotate()
+/obj/structure/railing/AltClick(mob/user)
+	if(user.incapacitated() || !Adjacent(user))
+		return
+	ccwrotate()
+
+/obj/structure/railing/verb/cwrotate()
 	set name = "Rotate Railing Clockwise"
 	set category = "Object"
 	set src in oview(1)
 
-	if(anchored)
-		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
-		return
+	rotate(270)
 
-	change_dir(turn(dir, 270))
-
-/obj/structure/railing/verb/rotate()
+/obj/structure/railing/verb/ccwrotate()
 	set name = "Rotate Railing Counter-Clockwise"
 	set category = "Object"
 	set src in oview(1)
 
+	rotate(90)
+
+/obj/structure/railing/proc/rotate(var/angle = 90)
 	if(anchored)
+		var/turf/T = loc
+		if(T)
+			for(var/obj/structure/railing/R in T)
+				if(!R.anchored && R.dir == src.dir)
+					R.rotate(angle)
+					return
 		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
 		return
 
-	change_dir(turn(dir, 90))
+	change_dir(turn(dir, angle))
 
 /obj/structure/railing/attackby(var/obj/item/C, var/mob/user)
 	if(..())
@@ -356,10 +366,7 @@
 	if(user.environment_smash_flags & SMASH_LIGHT_STRUCTURES)
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src]!</span>")
-		if(glasstype)
-			break_glass(TRUE)
-		else
-			make_into_sheets(TRUE)
+		handle_damage(rand(user.melee_damage_lower,user.melee_damage_upper),null,user)
 
 /obj/structure/railing/ex_act(severity)
 	switch(severity)

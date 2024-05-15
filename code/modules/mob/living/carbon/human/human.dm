@@ -178,33 +178,6 @@
 	hud_list[STATUS_HUD_OOC]  = new/image/hud('icons/mob/hud.dmi', src, "hudhealthy")
 	hud_list[WAGE_HUD]        = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
 
-	obj_overlays[FIRE_LAYER]		= new /obj/abstract/Overlays/fire_layer
-	obj_overlays[MUTANTRACE_LAYER]	= new /obj/abstract/Overlays/mutantrace_layer
-	obj_overlays[TAIL_UNDERLIMBS_LAYER]	= new /obj/abstract/Overlays/tail_underlimbs_layer
-	obj_overlays[LIMBS_LAYER]	= new /obj/abstract/Overlays/limbs_layer
-	obj_overlays[MUTATIONS_LAYER]	= new /obj/abstract/Overlays/mutations_layer
-	obj_overlays[DAMAGE_LAYER]	= new /obj/abstract/Overlays/damage_layer
-	obj_overlays[UNIFORM_LAYER]		= new /obj/abstract/Overlays/uniform_layer
-	obj_overlays[ID_LAYER]			= new /obj/abstract/Overlays/id_layer
-	obj_overlays[SHOES_LAYER]		= new /obj/abstract/Overlays/shoes_layer
-	obj_overlays[GLOVES_LAYER]		= new /obj/abstract/Overlays/gloves_layer
-	obj_overlays[EARS_LAYER]		= new /obj/abstract/Overlays/ears_layer
-	obj_overlays[SUIT_LAYER]		= new /obj/abstract/Overlays/suit_layer
-	obj_overlays[GLASSES_LAYER]		= new /obj/abstract/Overlays/glasses_layer
-	obj_overlays[BELT_LAYER]		= new /obj/abstract/Overlays/belt_layer
-	obj_overlays[SUIT_STORE_LAYER]	= new /obj/abstract/Overlays/suit_store_layer
-	obj_overlays[BACK_LAYER]		= new /obj/abstract/Overlays/back_layer
-	obj_overlays[HAIR_LAYER]		= new /obj/abstract/Overlays/hair_layer
-	obj_overlays[GLASSES_OVER_HAIR_LAYER] = new /obj/abstract/Overlays/glasses_over_hair_layer
-	obj_overlays[TAIL_LAYER]		= new /obj/abstract/Overlays/tail_layer
-	obj_overlays[FACEMASK_LAYER]	= new /obj/abstract/Overlays/facemask_layer
-	obj_overlays[HEAD_LAYER]		= new /obj/abstract/Overlays/head_layer
-	obj_overlays[HANDCUFF_LAYER]	= new /obj/abstract/Overlays/handcuff_layer
-	obj_overlays[MUTUALCUFF_LAYER]	= new /obj/abstract/Overlays/mutualcuff_layer
-	obj_overlays[LEGCUFF_LAYER]		= new /obj/abstract/Overlays/legcuff_layer
-	//obj_overlays[HAND_LAYER]		= new /obj/abstract/Overlays/hand_layer
-	obj_overlays[TARGETED_LAYER]	= new /obj/abstract/Overlays/targeted_layer
-
 	..()
 
 	if(dna)
@@ -1041,23 +1014,11 @@
 		var/obj/item/clothing/shoes/S = shoes
 		S.track_blood = max(0, _amount, S.track_blood)                //Adding blood to shoes
 		S.luminous_paint = luminous
-
-		if(!blood_overlays["[S.type][S.icon_state]"]) //If there isn't a precreated blood overlay make one
-			S.set_blood_overlay()
-
-		if(S.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
-			S.overlays.Remove(S.blood_overlay)
-		else
-			S.blood_overlay = blood_overlays["[S.type][S.icon_state]"]
-
 		if(!S.blood_DNA)
 			S.blood_DNA = list()
-
 		var/newcolor = (S.blood_color && S.blood_DNA.len) ? BlendRYB(S.blood_color, _color, 0.5) : _color
-		S.blood_overlay.color = newcolor
-		S.overlays += S.blood_overlay
 		S.blood_color = newcolor
-
+		S.set_blood_overlay()
 		if(_blood_DNA)
 			S.blood_DNA |= _blood_DNA.Copy()
 		update_inv_shoes(1)
@@ -1698,6 +1659,10 @@
 /mob/living/carbon/human/dexterity_check()
 	if (stat != CONSCIOUS)
 		return FALSE
+	var/datum/organ/external/hand_organ_datum = get_active_hand_organ()
+	var/obj/item/organ/external/hand_obj = new hand_organ_datum.generic_type
+	if(!(hand_obj.is_dexterous))
+		return FALSE
 	if(gloves && istype(gloves, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = gloves
 		if(!G.dexterity_check())//some gloves might make it harder to interact with complex technologies, or fit your index in a gun's trigger
@@ -1899,7 +1864,7 @@
 	if(new_amount > held_items.len)
 		for(var/i = (held_items.len + 1) to new_amount) //For all the new indexes, create a hand organ
 			if(!find_organ_by_grasp_index(i))
-				var/datum/organ/external/OE = new/datum/organ/external/r_hand(organs_by_name[LIMB_GROIN]) //Fuck it the new hand will grow out of the groin (it doesn't matter anyways)
+				var/datum/organ/external/OE = new/datum/organ/external/hand/r_hand(organs_by_name[LIMB_GROIN]) //Fuck it the new hand will grow out of the groin (it doesn't matter anyways)
 				OE.grasp_id = i
 				OE.owner = src
 
@@ -2118,6 +2083,9 @@
 		return FALSE
 	// Or being a husk...
 	if(M_HUSK in mutations)
+		return FALSE
+	// Or being appearance banned...
+	if(appearance_isbanned(src))
 		return FALSE
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE

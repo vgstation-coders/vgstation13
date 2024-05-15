@@ -24,6 +24,13 @@
 
 	var/tmp/fuel_burnt = 0
 
+	var/allow_reactions = TRUE
+	// This is a list of all gas reactions that can take place in this mixture. Maintained on every update to this gas_mixture.
+	// For instance, if only one reaction existed in the codebase (2*N + O = N2O) and this mixture had no nitrogen, this would be empty.
+	// But if after an update there was now nitrogen and oxygen, that reaction would be added to this list. The exact requirements to be added
+	// to this list are defined by whether /datum/gas_reaction/proc/reaction_is_possible( datum/gas_mixture/mixture ) returns true or not.
+	var/list/possible_reactions = list()
+
 /datum/gas_mixture/New(datum/gas_mixture/to_copy)
 	..()
 	if(istype(to_copy))
@@ -124,6 +131,8 @@
 /datum/gas_mixture/proc/thermal_energy()
 	return temperature * heat_capacity()
 
+/datum/gas_mixture/proc/molar_ratio(g) //ratio of moles of the input gas to total mols of all gasses in the area
+	return src[g] / total_moles
 
 /datum/gas_mixture/proc/molar_density(g) //Per liter. You should probably be using pressure instead, but considering this had to be made, you wouldn't be the first not to.
 	return (g ? src[g] : total_moles) / volume
@@ -131,6 +140,25 @@
 
 /datum/gas_mixture/proc/partial_pressure(g)
 	return total_moles && (src[g] / total_moles * pressure) //&& short circuits if total_moles is 0, and returns the second expression if it is not.
+
+// Returns the temperature in a rounded Kelvin format.
+/datum/gas_mixture/proc/temperature_kelvin_pretty()
+	if(temperature > 5)
+		return round(temperature,0.1)
+	else if(temperature > 0.1)
+		return round(temperature,0.01)
+	else
+		return round(temperature,0.0001)
+
+
+// Returns the temperature in a rounded Celsius format.
+/datum/gas_mixture/proc/temperature_celsius_pretty()
+	if(temperature > 5)
+		return round(temperature-T0C,0.1)
+	else if(temperature > 0.1)
+		return round(temperature-T0C,0.01)
+	else
+		return round(temperature-T0C,0.0001)
 
 ///////////////////////////////
 //PV=nRT - related procedures//
@@ -202,7 +230,7 @@
 //	//return R_IDEAL_GAS_EQUATION * ( log (1 + IDEAL_GAS_ENTROPY_CONSTANT/partial_pressure) + 20 )
 
 
-//Updates the calculated vars (total_moles, pressure, etc.) (actually currently only those two), and culls empty gases from the mix.
+//Updates the calculated vars (total_moles, pressure, etc.) (actually currently only those two) and culls empty gases from the mix.
 //Called by default by all methods that alter a gas_mixture, and should be called if you manually alter it.
 /datum/gas_mixture/proc/update_values()
 	total_moles = 0
@@ -512,3 +540,57 @@ var/static/list/sharing_lookup_table = list(0.30, 0.40, 0.48, 0.54, 0.60, 0.66)
 
 /datum/gas_mixture/unsimulated/divide(factor)
 	return FALSE
+
+
+/datum/gas_mixture/unsimulated
+	allow_reactions = FALSE
+
+
+// This currently gets called in reaction_tick(). In the future, however, many reactions should be moved to an alternative event-based system
+// so that the reaction_is_possible is only checked on certain events (i.e. a certain gas type goes above or below 0, which are most reactions as
+// most reactions only care whether a gas exists or not).
+/datum/gas_mixture/proc/cache_reactions()
+	if(allow_reactions)
+		possible_reactions.Cut()
+		for(var/datum/gas_reaction/reaction in XGM.reactions)
+			if(reaction.reaction_is_possible(src))
+				possible_reactions += reaction
+
+// Ticks all reactions once. Returns true if any reactions were performed, otherwise false.
+/datum/gas_mixture/proc/reaction_tick()
+	cache_reactions()
+	if(allow_reactions && possible_reactions.len)
+		var/list/reaction_to_requested = list()
+		// First, grab the amount of reagents each reaction wants to use.
+		for(var/datum/gas_reaction/reaction in possible_reactions)
+			reaction_to_requested[reaction] = reaction.reaction_amounts_requested(src)
+		// Calculate the sum of all requested reagents and see if that's more gas than the environment has (i.e. two reactions are both requesting 80%
+		// of the oxygen, which sums up to 160%). Then we divide all reaction amounts by the worst offender so that at most 100% of a gas is used.
+		// Only need to do this if there's more than one reaction though (since a reaction SHOULDN'T be trying to use 150% of oxygen in a room)
+
+		// TODO: reactions should be grouped into interfering sections, i.e. if we have two oxygen reactions requesting 200% of oxygen it will reduce ALL
+		// reactions in half, even if the other reactions don't touch oxygen at all.
+		if(possible_reactions.len > 1)
+			var/list/total_requested = list()
+			for(var/datum/gas_reaction/reaction in reaction_to_requested)
+				var/list/requested = reaction_to_requested[reaction]
+				for(var/gas_ID in requested)
+					total_requested[gas_ID] += requested[gas_ID]
+
+			var/worst_ratio = 1.0
+			for(var/gas_ID in total_requested)
+				var/environment_amount = gas[gas_ID]
+				worst_ratio = max(worst_ratio, total_requested[gas_ID] / environment_amount)
+
+			if(worst_ratio > 1.0)
+				for(var/datum/gas_reaction/reaction in reaction_to_requested)
+					var/list/requested = reaction_to_requested[reaction]
+					for(var/gas_ID in requested)
+						requested[gas_ID] /= worst_ratio
+
+		// Now actually perform the reactions.
+		for(var/datum/gas_reaction/reaction in reaction_to_requested)
+			reaction.perform_reaction(src, reaction_to_requested[reaction])
+		return TRUE
+	else
+		return FALSE

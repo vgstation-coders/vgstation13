@@ -7,7 +7,8 @@
 	desc = "yummy"
 	icon_state = null
 	log_reagents = 1
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE //<--- clueless
 
 	var/food_flags	//Possible flags: FOOD_LIQUID, FOOD_MEAT, FOOD_ANIMAL, FOOD_SWEET
 					//FOOD_LIQUID	- for stuff like soups
@@ -105,7 +106,7 @@
 
 				if (istype(TrashItem, /obj/item/trash/plate))
 					var/obj/item/trash/plate/P = TrashItem
-					P.trash_color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
+					P.trash_color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(src)), override_dir = dir	), 1, 1)
 					P.update_icon()
 
 				if(ismob(old_loc))
@@ -284,7 +285,7 @@
 			overlays += I
 
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 	if (on_fire && fire_overlay)
 		overlays += fire_overlay
 
@@ -417,7 +418,7 @@
 			C.icon_state = crumb_icon
 			C.name = crumb_icon
 			C.dir = pick(cardinal)
-			C.color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
+			C.color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(src)), override_dir = dir), 1, 1)
 			if (random_filling_colors?.len > 0)
 				filling_color = pick(random_filling_colors)
 		if (virus2?.len)
@@ -502,6 +503,10 @@
 		for(var/atom/A in T)
 			if (A == src)
 				continue
+			if(iscarbon(A))
+				var/mob/living/carbon/C = A
+				if(C.check_shields(throwforce, src))
+					continue
 			var/list/hit_zone = user && user.zone_sel ? list(user.zone_sel.selecting) : ALL_LIMBS
 			reagents.reaction(A, zone_sels = hit_zone)
 		return 1
@@ -2261,7 +2266,7 @@
 	name = "Cheesie Honkers"
 	icon_state = "cheesie_honkers"
 	desc = "Bite sized cheesie snacks that will honk all over your mouth."
-	trash = /obj/item/trash/cheesie
+	trash = /obj/item/trash/chips/cheesie
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE //cheese
 	filling_color = "#FFCC33"
 	base_crumb_chance = 30
@@ -2329,7 +2334,7 @@
 	name = "Donitos"
 	desc = "Ranch or cool ranch?"
 	icon_state = "donitos"
-	trash = /obj/item/trash/donitos
+	trash = /obj/item/trash/chips/donitos
 	filling_color = "#C06800"
 	base_crumb_chance = 30
 
@@ -2342,7 +2347,7 @@
 	name = "Donitos Cool Ranch"
 	desc = "Cool ranch."
 	icon_state = "donitos_coolranch"
-	trash = /obj/item/trash/donitos_coolranch
+	trash = /obj/item/trash/chips/donitos_coolranch
 
 /obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch/New()
 	..()
@@ -2352,7 +2357,7 @@
 	name = "Danitos"
 	desc = "For only the most MLG hardcore robust spessmen."
 	icon_state = "danitos"
-	trash = /obj/item/trash/danitos
+	trash = /obj/item/trash/chips/danitos
 	filling_color = "#FF9933"
 	base_crumb_chance = 30
 
@@ -3586,14 +3591,14 @@
 	..()
 	if(!safeforfat)
 		reagents.add_reagent(MINTTOXIN, 1)
+		bitesize = 1
 	else
 		reagents.add_reagent(MINTESSENCE, 2)
-	bitesize = 1
+		bitesize = 2
 
 //the syndie version for muh tators
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint
 	name = "mint candy"
-	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/nano
 	desc = "It's not just a mint!"
@@ -4477,9 +4482,7 @@
 			icon_state = "pizzabox_open"
 
 		if(pizza)
-			if (!pizza.particles)
-				pizza.particles = new/particles/steam
-			particles = pizza.particles
+			pizza.link_particles(src)
 			var/image/pizzaimg = new()
 			pizzaimg.appearance = pizza.appearance
 			pizzaimg.pixel_y = -3 * PIXEL_MULTIPLIER
@@ -4491,7 +4494,7 @@
 		return
 	else
 		// Stupid code because byondcode sucks
-		particles = null
+		remove_particles()
 		var/doimgtag = 0
 		if( boxes.len > 0 )
 			var/obj/item/pizzabox/topbox = boxes[boxes.len]
@@ -4515,7 +4518,7 @@
 
 		to_chat(user, "<span class='notice'>You take the [src.pizza] out of the [src].</span>")
 		src.pizza = null
-		particles = null
+		remove_particles()
 		update_icon()
 		return
 
@@ -5289,7 +5292,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/zamitos
 	name = "Zamitos: Original Flavor"
 	desc = "An overly processed taste that reminds you of days past when you snacked on these as a small greyling."
-	trash = /obj/item/trash/zamitos_o
+	trash = /obj/item/trash/chips/zamitos_o
 	icon_state = "zamitos_original"
 	filling_color = "#F7CE7B"
 
@@ -5298,7 +5301,7 @@
 	if(prob(30))
 		name = "Zamitos: Blue Goo Flavor"
 		desc = "Not as filling as the original flavor, and the texture is strange."
-		trash = /obj/item/trash/zamitos_bg
+		trash = /obj/item/trash/chips/zamitos_bg
 		icon_state = "zamitos_bluegoo"
 		filling_color = "#5BC9DD"
 		reagents.add_reagent(NUTRIMENT, 1)
@@ -5312,7 +5315,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/zamitos_stokjerky
 	name = "Zamitos: Spicy Stok Jerky Flavor"
 	desc = "Meat-flavored crisps with three different seasonings! Almost as good as real meat."
-	trash = /obj/item/trash/zamitos_sj
+	trash = /obj/item/trash/chips/zamitos_sj
 	icon_state = "zamitos_stokjerky"
 	filling_color = "#A66626"
 
@@ -5710,6 +5713,8 @@
 	icon_state = "higashikata"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/higashikata/New()
 	..()
@@ -5725,6 +5730,8 @@
 	icon_state = "sundae"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE //milk
 	base_crumb_chance = 0
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/sundae/New()
 	..()
@@ -5741,6 +5748,8 @@
 	trash = /obj/item/weapon/reagent_containers/food/drinks/drinkingglass
 	valid_utensils = 0
 	base_crumb_chance = 0
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake/New()
 	..()
@@ -6082,7 +6091,6 @@
 	slot_flags = SLOT_MASK
 	goes_in_mouth = TRUE
 	throwforce = 1
-	autoignition_temperature = 0
 	w_type = RECYK_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 100)
 	species_fit = list(INSECT_SHAPED)
@@ -6440,6 +6448,7 @@
 	bitesize = 2
 	crumb_icon = "dribbles"
 	filling_color = "#FF9933"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/vanishingstew/New()
 	..()
@@ -6478,6 +6487,7 @@
 	food_flags = FOOD_LIQUID | FOOD_ANIMAL //blood is animal sourced
 	crumb_icon = "dribbles"
 	filling_color = "#720D00"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/primordialsoup/New()
 	..()
@@ -6773,6 +6783,8 @@
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/yogurt/New()
 	..()
@@ -8150,7 +8162,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/greygreens
 	name = "Grey Greens"
 	desc = "A dish beloved by greys since first contact, acidic vegetables seasoned with soy sauce."
-	trash = /obj/item/trash/used_tray2
+	trash = /obj/item/trash/used_tray/type2
 	icon_state = "greygreens"
 	base_crumb_chance = 0
 
@@ -8163,7 +8175,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/stuffedpitcher
 	name = "Stuffed Pitcher"
 	desc = "A delicious grey alternative to a stuffed pepper. Very acidic."
-	trash = /obj/item/trash/used_tray2
+	trash = /obj/item/trash/used_tray/type2
 	icon_state = "stuffedpitcher"
 	food_flags = FOOD_ANIMAL
 	base_crumb_chance = 0
@@ -8176,7 +8188,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 /obj/item/weapon/reagent_containers/food/snacks/nymphsperil
 	name = "Nymph's Peril"
 	desc = "A diona nymph steamed in sulphuric acid then stuffed with fried rice. Ruthlessly delicious!"
-	trash = /obj/item/trash/used_tray2
+	trash = /obj/item/trash/used_tray/type2
 	icon_state = "yahireatsbugs"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
@@ -8755,3 +8767,33 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
 	reagents.add_reagent(ROACHSHELL, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube
+	name = "salt cubes"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/saltcube
+	child_volume = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube/New()
+	..()
+	reagents.add_reagent(SODIUMCHLORIDE, 15) //spawns 5
+
+/obj/item/weapon/reagent_containers/food/snacks/saltcube
+	name = "salt cubes"
+	desc = "You wish you had a salt rhombicosidodecahedron, but a cube will do."
+	icon_state = "sugarsaltcube"
+	bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube
+	name = "sugar cube"
+	child_type = /obj/item/weapon/reagent_containers/food/snacks/sugarcube
+	child_volume = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube/New()
+	..()
+	reagents.add_reagent(SUGAR, 15) //spawns 5
+
+/obj/item/weapon/reagent_containers/food/snacks/sugarcube
+	name = "sugar cube"
+	desc = "The superior sugar delivery method. How will sugar sphere babies ever compare?"
+	icon_state = "sugarsaltcube"
+	bitesize = 3

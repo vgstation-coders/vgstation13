@@ -9,3 +9,6 @@
 
 /spell/passive/nogunallowed/on_added(mob/user)
 	user.flags |= HONORABLE_NOGUNALLOWED
+
+/spell/passive/nogunallowed/on_transfer(mob/user)
+	user.flags |= HONORABLE_NOGUNALLOWED

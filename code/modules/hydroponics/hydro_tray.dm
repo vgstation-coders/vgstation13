@@ -134,7 +134,7 @@
 	if(!seed.check_harvest(user))
 		return
 
-	seed.harvest(user)
+	seed.harvest(user, src)
 	after_harvest()
 	return
 
@@ -166,7 +166,7 @@
 		return
 
 	remove_plant()
-	to_chat(user, "You remove the dead plant from the [src].")
+	to_chat(user, "You remove the dead plant from \the [src].")
 
 	update_icon()
 	return

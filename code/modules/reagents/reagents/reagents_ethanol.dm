@@ -1294,7 +1294,7 @@
 	color = "#b01522" //176, 21, 34
 	glass_icon_state = "dragonsblood"
 	glass_name = "\improper Dragon's Blood"
-	flammable = 1
+	can_be_lit = 1
 	light_color = "#540303"
 
 /datum/reagent/ethanol/drink/dragonspit
@@ -1306,7 +1306,7 @@
 	glass_icon_state = "dragonsspit"
 	glass_name = "\improper Dragon's Spit"
 	light_color = "#ff7003"
-	flammable = 1
+	can_be_lit = 1
 
 /datum/reagent/ethanol/drink/firecider
 	name = "Fire Cider"
@@ -1337,7 +1337,7 @@
 	glass_icon_state = "manhattanfireball"
 	glass_name = "\improper Manhattan Fireball"
 	light_color = "#540303"
-	flammable = 1
+	can_be_lit = 1
 
 /datum/reagent/ethanol/drink/fireballcola
 	name = "Fireball Cola"
@@ -1378,7 +1378,7 @@
 	glass_icon_state = "b52glass"
 	glass_name = "\improper B-52"
 	light_color = "#000080"
-	flammable = 1
+	can_be_lit = 1
 
 /datum/reagent/ethanol/drink/irishcoffee
 	name = "Irish Coffee"

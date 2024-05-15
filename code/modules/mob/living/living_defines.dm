@@ -53,10 +53,6 @@
 
 	var/locked_to_z = 0 // Locked to a Z-level if nonzero.
 
-	// Fix ashifying in hot fires.
-	//autoignition_temperature=0
-	//fire_fuel=0
-
 	var/list/icon/pipes_shown = list()
 	var/last_played_vent
 	var/is_ventcrawling = 0
@@ -84,3 +80,4 @@
 
 	var/blood_color2	//color of this creature's blood for gibbing purposes (humanoids have their own species-defined values)
 	var/flesh_color2	//color of this creature's flesh for meat purposes (humanoids have their own species-defined values)
+	var/tangibility = 1 //can this mob be interacted with things hitting it and etc?

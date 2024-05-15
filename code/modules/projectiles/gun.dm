@@ -74,6 +74,11 @@
 	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_NINJA
 	var/kick_fire_chance = 5
 
+/obj/item/weapon/gun/New()
+	..()
+	if(isHandgun())
+		quick_equip_priority |= list(slot_w_uniform) // for holsters
+
 /obj/item/weapon/gun/Destroy()
 	if(in_chamber)
 		QDEL_NULL(in_chamber)
@@ -448,8 +453,7 @@
 		var/obj/item/weapon/gun/G = A
 		if(isHandgun() && G.isHandgun())
 			var/obj/item/weapon/gun/akimbo/AA = new /obj/item/weapon/gun/akimbo(get_turf(src),src,G)
-			if(user.drop_item(G, AA) && user.drop_item(src, AA))
-				user.put_in_hands(AA)
+			if(user.drop_item(G, AA) && user.drop_item(src, AA) && user.put_in_hands(AA))
 				AA.update_icon(user)
 			else
 				to_chat(user, "<span class = 'warning'>You can not combine \the [G] and \the [src].</span>")

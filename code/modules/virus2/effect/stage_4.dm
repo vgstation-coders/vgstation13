@@ -1185,7 +1185,7 @@
 		H.set_species("Grey")
 		H.regenerate_icons()
 
-
+/*
 /datum/disease2/effect/faithless
 	name = "Curse of the Faithless"
 	desc = "UNKNOWN"
@@ -1226,5 +1226,5 @@
 		H.update_mutantrace()
 		H.update_body()
 		H.handle_regular_hud_updates()
-
+*/
 

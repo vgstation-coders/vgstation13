@@ -44,6 +44,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	var/image/floor_overlay
 
 	melt_temperature = 1643.15 // Melting point of steel
+	thermal_mass = 1
 
 	plane = TURF_PLANE
 
@@ -58,6 +59,8 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		icon_regular_floor = "floor"
 	else
 		icon_regular_floor = icon_state
+	if(flammable)
+		burnableatoms += src
 
 /turf/simulated/floor/proc/create_floor_tile()
 	if(!floor_tile)
@@ -366,6 +369,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	else if(is_mineral_floor())
 		burnt = 1
 	update_paint_overlay()
+	extinguish()
 
 //This proc will delete the floor_tile and the update_iocn() proc will then change the icon_state of the turf
 //This proc auto corrects the grass tiles' siding.

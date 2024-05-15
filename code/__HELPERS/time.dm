@@ -37,10 +37,9 @@
 //Returns the world time in english
 /proc/worldtime2text(timestamp = world.time, give_seconds = FALSE)
 	if(timestamp == world.time)
-		timestamp -= Master.time_taken_to_init
-	return "[(round(((timestamp / 600) + 55) / 60) + 11) % 24]:\
-	[(((timestamp / 600) + 55) % 60) < 10 ? add_zero(((timestamp / 600) + 55) % 60, 1) : ((timestamp / 600) + 55) % 60]\
-	[give_seconds ? ":[(timestamp / 10 % 60) < 10 ? add_zero(timestamp / 10 % 60, 1) : timestamp / 10 % 60]" : ""]"
+		timestamp -= time_taken_to_init
+	return "[add_zero((round(((timestamp / 600) + 55) / 60) + 11) % 24, 2)]:[add_zero(round(((timestamp / 600) + 55) % 60), 2)]\
+	[give_seconds ? " : [add_zero(round(timestamp / 10) % 60, 2)]" : ""]"
 
 /proc/formatTimeDuration(var/deciseconds)
 	var/m = round(deciseconds / 600)
@@ -63,6 +62,9 @@
 	if(m > 0)
 		. += "[m]m "
 	. += "[s]s"
+
+/proc/getShiftDuration()
+	return altFormatTimeDuration(world.timeofday - roundstart_timestamp)
 
 /proc/time_stamp()
 	return time2text(world.timeofday, "hh:mm:ss")

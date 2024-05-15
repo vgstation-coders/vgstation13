@@ -11,7 +11,7 @@
 	var/mob/living/silicon/ai/ai = list()
 	var/last_tick //used to delay the powercheck
 	var/buildstage = 0
-	autoignition_temperature = 0
+	flammable = FALSE
 
 /obj/item/device/radio/intercom/supports_holomap()
 	return TRUE

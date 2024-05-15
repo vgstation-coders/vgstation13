@@ -15,7 +15,8 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_MATERIALS + "=2"
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = RECYK_ELECTRONIC
+	flammable = TRUE
 	var/emagged = 0
 	var/upgraded
 	var/device_mode = LIGHTREPLACER_BASIC
@@ -338,7 +339,7 @@ This used to be handled by attackby() on the light fixtures and bulbs themselves
 		"\proper You pick up the broken [L.name] using \the [src].")
 			return 1
 		else
-			to_chat(usr, "<span class='warning'>The [src] has no waste container!</span>")
+			to_chat(usr, "<span class='warning'>\The [src] has no waste container!</span>")
 			return 0
 
 /obj/item/device/lightreplacer/proc/build_light()

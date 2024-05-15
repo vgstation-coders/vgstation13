@@ -17,12 +17,16 @@ var/global/list/narsie_list = list()
 	dissipate = 0 // Do we lose energy over time?
 	grav_pull = 10 //How many tiles out do we pull?
 	consume_range = 3 //How many tiles out do we eat
-	var/wounded = FALSE
+
+	plane = NARSIE_PLANE
+
+	var/ready = TRUE
 
 
 /obj/machinery/singularity/narsie/New()
 	..()
 	narsie_list.Add(src)
+	power_machines.Remove(src)//Don't want Nar-Sie hungering for singularity beacons
 
 /obj/machinery/singularity/narsie/Destroy()
 	narsie_list.Remove(src)
@@ -43,26 +47,29 @@ var/global/list/narsie_list = list()
 	consume_range = 12 // How many tiles out do we eat.
 	var/announce=1
 	var/narnar = 1
+	ready = FALSE
 //	var/old_x
 //	var/old_y
 
 /obj/machinery/singularity/narsie/large/New()
 	..()
 	if(announce)
-		to_chat(world, "<font size='15' color='red'><b>[uppertext(name)] HAS RISEN</b></font>")
-		world << sound('sound/effects/wind/wind_5_1.ogg')
 		if(narnar)
-			narsie_spawn_animation()
-	if(!narsie_cometh)//so we don't initiate Hell more than one time.
-		if (emergency_shuttle)
-			emergency_shuttle.incall()
-			emergency_shuttle.can_recall = 0
-			if(emergency_shuttle.endtime > world.timeofday + 1800 && emergency_shuttle.location != 1 && !emergency_shuttle.departed)
-				emergency_shuttle.settimeleft(180)
+			spawn()
+				narsie_spawn_animation()
+				if(!narsie_cometh)//so we don't initiate Hell more than one time.
+					if (emergency_shuttle)
+						emergency_shuttle.extremely_hihg_speed = TRUE
+						emergency_shuttle.incall()
+						emergency_shuttle.can_recall = 0
+						if(emergency_shuttle.endtime > world.timeofday + 600 && emergency_shuttle.location != 1 && !emergency_shuttle.departed)
+							emergency_shuttle.settimeleft(60)
+						spawn(5 SECONDS)
+							command_alert(/datum/command_alert/narsie_has_risen)
+					ticker.StartThematic("endgame")
 
-		if(narnar)
-			SetUniversalState(/datum/universal_state/hell)
-		narsie_cometh = 1
+					SetUniversalState(/datum/universal_state/hell)
+					narsie_cometh = 1
 
 	/* //For animating narsie manually, doesn't work well
 	//Begin narsie vision
@@ -76,11 +83,22 @@ var/global/list/narsie_list = list()
 */
 
 /obj/machinery/singularity/narsie/process()
+	if (!ready)
+		return
+
 	eat()
 
-	if (!target || prob(5))
+	if (!target)
 		pickcultist()
-
+	else if (isobserver(target) && prob(5))
+		pickcultist()
+	else
+		var/mob/living/L = target
+		if (iscultist(L))
+			if (prob(5))
+				pickcultist()
+		else if (prob(1))
+			pickcultist()//if a non-cultist manages to get his attention, they'll keep it longer
 	move()
 
 	if (prob(25))
@@ -165,7 +183,7 @@ var/global/list/narsie_list = list()
 			if(M.flags & INVULNERABLE)
 				return 0
 
-			M.cultify()
+			M.cultify(src)
 
 	//ITEM PROCESSING
 		else if (istype(A, /obj/))
@@ -243,7 +261,7 @@ var/global/list/narsie_list = list()
 		if(C2.flags & INVULNERABLE)
 			return 0
 
-		C2.dust() // Changed from gib(), just for less lag.
+		C2.gib() // Back from dust()! Surely it can't lag that bad anymore
 
 	else if (istype(A, /obj/))
 		if (isbot(A))
@@ -302,6 +320,8 @@ var/global/list/narsie_list = list()
 		if(food.stat)
 			continue
 		var/turf/pos = get_turf(food)
+		if(!pos)
+			continue
 		if(pos.z != src.z)
 			continue
 		cultists += food
@@ -324,13 +344,17 @@ var/global/list/narsie_list = list()
 /obj/machinery/singularity/narsie/proc/acquire(const/mob/food)
 	var/capname = uppertext(name)
 
-	to_chat(target, "<span class='notice'><b>[capname] HAS LOST INTEREST IN YOU.</b></span>")
+	if (ismob(target))
+		to_chat(target, "<span class='notice'><b>[capname] HAS LOST INTEREST IN YOU.</b></span>")
 	target = food
 
-	if (ishuman(target))
-		to_chat(target, "<span class='danger'>[capname] HUNGERS FOR YOUR SOUL.</span>")
-	else
+	var/mob/living/M
+	if (isliving(target))
+		M = target
+	if ((M && iscultist(M)) || isobserver(target))
 		to_chat(target, "<span class='danger'>[capname] HAS CHOSEN YOU TO LEAD HIM TO HIS NEXT MEAL.</span>")
+	else
+		to_chat(target, "<span class='danger'>[capname] HUNGERS FOR YOUR SOUL.</span>")
 
 /obj/machinery/singularity/narsie/on_capture()
 	chained = 1
@@ -495,6 +519,7 @@ var/global/mr_clean_targets = list(
 	announce = 0
 	move_self = 0
 	consume_range = 0
+	narnar = 0
 
 /obj/machinery/singularity/narsie/large/calm/New()
 	narsie_cometh = 1//so we don't force a shuttle call
@@ -508,9 +533,33 @@ var/global/mr_clean_targets = list(
 		..()
 
 /obj/machinery/singularity/narsie/proc/narsie_spawn_animation()
-	icon = 'icons/obj/narsie_spawn_anim.dmi'
-	dir = SOUTH
-	flick("narsie_spawn_anim",src)
-	sleep(10)
-	icon = 'icons/obj/narsie.dmi'
-	icon_state = "narsie"
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (cult && (src == cult.narsie))
+		message_admins("BLOODCULT: Nar-Sie Has Risen.")
+		log_admin("BLOODCULT: Nar-Sie Has Risen.")
+		flick("narsie_spawn_anim",src)
+		for(var/mob/M in player_list)
+			M.overlay_fullscreen("narsie-rising", /obj/abstract/screen/fullscreen/narsie_rising)
+		sleep(11)
+		if (cult.bloodstone)
+			cult.bloodstone.density = 0
+			cult.bloodstone.invisibility = 101
+		sleep(19)
+		for(var/mob/M in mob_list)
+			M.timestopped = 1
+		for(var/mob/M in player_list)
+			M.playsound_local(get_turf(M), 'sound/effects/wind/wind_5_1.ogg', 100, 0)
+			if (M.mind && (M.mind.current == M))
+				M.DisplayUI("Nar-Sie Has Risen")
+			else
+				to_chat(M, "<font size='15' color='red'><b>[uppertext(name)] HAS RISEN</b></font>")
+		sleep(50)
+		ready = TRUE
+		for(var/mob/M in mob_list)
+			M.timestopped = 0
+	else
+		to_chat(world, "<font size='15' color='red'><b>[uppertext(name)] HAS RISEN</b></font>")
+		for (var/mob/M in player_list)
+			M.playsound_local(get_turf(M), 'sound/effects/wind/wind_5_1.ogg', 100, 0)
+		flick("narsie_spawn_anim_old",src)
+		ready = TRUE

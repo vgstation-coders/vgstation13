@@ -10,14 +10,15 @@
 	hitsound = "sound/weapons/whip.ogg"
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list("rustle")
-	autoignition_temperature = AUTOIGNITION_ORGANIC //leather
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_BIOLOGICAL //leather
+	flammable = TRUE
 
 /obj/item/weapon/storage/belt/utility
 	name = "tool-belt" //Carn: utility belt is nicer, but it bamboozles the text parsing.
 	desc = "It has a tag that rates it for compatibility with standard tools, device analyzers, flashlights, cables, engineering tape, small fire extinguishers, compressed matter cartridges, light replacers, and fuel cans."
 	icon_state = "utilitybelt"
 	item_state = "utility"
-	w_class = W_CLASS_LARGE
 	storage_slots = 14
 	max_combined_w_class = 200 //This actually doesn't matter as long as it is arbitrarily high, bar will be set by storage slots
 	fits_ignoring_w_class = list(
@@ -87,6 +88,7 @@
 	desc = "The ancestral belt of Many-APCs-Charging, the original chief engineer from Space Native America. It's made out of the skins of the ancient enemy of engineers, giant spiders."
 	icon_state = "utilitychief"
 	item_state = "utilitychief"
+	flammable = FALSE //fireproof
 	fits_max_w_class = 5
 	can_only_hold = list(
 		"/obj/item/tool/crowbar",
@@ -409,7 +411,8 @@
 		"/obj/item/device/wormhole_jaunter",
 		"/obj/item/weapon/lazarus_injector",
 		"/obj/item/weapon/anobattery",
-		"/obj/item/weapon/mining_drone_cube")
+		"/obj/item/weapon/mining_drone_cube",
+		"/obj/item/voucher/warp/kinetic_accelerator")
 
 /obj/item/weapon/storage/belt/lazarus
 	name = "trainer's belt"

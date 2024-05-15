@@ -7,12 +7,12 @@
 ///////////////////////////////////////////////////////////////////SAUCER DRONE///////////
 // A tiny robotic ranged enemy that fills the same niche for the MDF that the viscerator does for the Syndicate. Very weak and fragile, but can overwhelm even an equipped enemy with sheer volume of tiny bolts
 /mob/living/simple_animal/hostile/mothership_saucerdrone
-	name = "Saucer Drone"
+	name = "\improper Saucer Drone"
 	desc = "A tiny ufo-shaped scout drone. Where's a tiny interceptor when you need one?"
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "minidrone"
 	icon_living = "minidrone"
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	maxHealth = 30 // Quite fragile
 	health = 30
 	melee_damage_type = BURN
@@ -57,7 +57,7 @@
 /mob/living/simple_animal/hostile/mothership_saucerdrone/death(var/gibbed = FALSE)
 	..(TRUE)
 	playsound(src, "sound/effects/explosion_small1.ogg", 50, 1)
-	visible_message("<span class='warning'>The [src] loses altitude and crash lands!</span>")
+	visible_message("<span class='warning'>\The [src] loses altitude and crash lands!</span>")
 	qdel(src)
 
 /mob/living/simple_animal/hostile/mothership_saucerdrone/emp_act(severity) // Vulnerable to EMP damage, not that you NEED to use EMPs
@@ -74,12 +74,12 @@
 ///////////////////////////////////////////////////////////////////HOVERDISC DRONE///////////
 // An armored robotic enemy meant to support grey soldiers in combat. It will usually stay back, using its detection range to its advantage while firing high-damage laser blasts from afar
 /mob/living/simple_animal/hostile/mothership_hoverdisc
-	name = "Hoverdisc Drone"
+	name = "\improper Hoverdisc Drone"
 	desc = "A heavily armored mothership combat drone. It's equipped with an anti-gravity propulsion system and an integrated heavy disintegrator."
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "hoverdisc_drone"
 	icon_living = "hoverdisc_drone"
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	maxHealth = 200 // Pretty decent HP, but the armor is the real problem
 	health = 200
 	melee_damage_type = BURN
@@ -141,7 +141,7 @@
 /mob/living/simple_animal/hostile/mothership_hoverdisc/Life()
 	..()
 	if((last_ufosound + ufosound_cooldown < world.time) && prob(5)) // Will occasionally play a spoopy ufo sound
-		visible_message("<span class='notice'>The [src] emits a rhythmic hum.</span>")
+		visible_message("<span class='notice'>\The [src] emits a rhythmic hum.</span>")
 		playsound(src, 'sound/effects/ufo_appear.ogg', 50, 0)
 		last_ufosound = world.time
 	if(health >= (maxHealth/2)) // We've got a good bit of health, let's stay back and snipe
@@ -153,7 +153,7 @@
 
 /mob/living/simple_animal/hostile/mothership_hoverdisc/death(var/gibbed = FALSE)
 	..(TRUE)
-	visible_message("<span class='warning'>The [src] shudders and violently explodes!</span>")
+	visible_message("<span class='warning'>\The [src] shudders and violently explodes!</span>")
 	new /obj/effect/gibspawner/robot(src.loc)
 	explosion(get_turf(src), -1, 2, 4, whodunnit = src)
 	qdel(src)
@@ -174,7 +174,7 @@
 /mob/living/simple_animal/hostile/mothership_hoverdisc/proc/discblock(var/damage, var/atom/A) // Hoverdiscs have thick armor, and are unaffected by low force melee weapons
 	if (!damage || damage <= damageblock)
 		if (A)
-			visible_message("<span class='danger'>\The [A] glances harmlessly off of the [src]'s armor plating! </span>")
+			visible_message("<span class='danger'>\The [A] glances harmlessly off of \the [src]'s armor plating! </span>")
 			anim(target = src, a_icon = 'icons/effects/64x64.dmi', flick_anim = "juggernaut_armor", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2 + 4, plane = ABOVE_LIGHTING_PLANE) // Copied from juggernauts so players get visual feedback when their attacks aren't doing damage
 			playsound(src, 'sound/items/metal_impact.ogg', 25)
 		return TRUE
@@ -325,7 +325,7 @@
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(user.client), 20)
 				qdel(O)
-				user.put_in_hands(new /obj/item/weapon/coin/iron)
+				user.put_in_hands(new /obj/item/weapon/coin/iron(loc))
 				last_trade = world.time
 			else
 				visible_message("<span class='notice'>[src] doesn't seem interested in \the [O] at the moment.</span>")

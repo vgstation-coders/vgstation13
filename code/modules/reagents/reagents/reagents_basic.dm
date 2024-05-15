@@ -297,7 +297,8 @@
 		else if(isslimeperson(H))
 
 			H.adjustToxLoss(rand(1,3))
-	M.clean_act(CLEANLINESS_WATER)
+	if(method == TOUCH)
+		M.clean_act(CLEANLINESS_WATER)
 
 /datum/reagent/water/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
@@ -313,10 +314,8 @@
 
 	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
-		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles())
-		lowertemp.temperature = max(min(lowertemp.temperature-2000, lowertemp.temperature / 2), 0)
-		lowertemp.react()
-		T.assume_air(lowertemp)
+		var/datum/gas_mixture/G = T.return_air()
+		G.temperature = max(G.temperature - rand(1,5),T20C) //water extinguishers can only cool to 20C
 		qdel(hotspot)
 
 /datum/reagent/water/reaction_obj(var/obj/O, var/volume)

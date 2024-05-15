@@ -1,22 +1,27 @@
 /var/datum/xgm_data/XGM = new()
 
 /datum/xgm_data
-	// List of ID = gas datum.
+	// Maps gas ID to gas datum.
 	var/list/gases = list()
+	// Maps gas ID to gas datum, including only gases that have the XGM_GAS_NOTEWORTHY flag.
+	var/list/noteworthy_gases = list()
 	// The friendly, human-readable name for the gas.
 	var/list/name = list()
-	// Shorter and HTML formatted names, falls back to regular name if no short name is given.
+	// Shorter and HTML formatted name of the gas, falls back to regular name if no short name is given.
 	var/list/short_name = list()
 	// Specific heat of the gas. Used for calculating heat capacity.
 	var/list/specific_heat = list()
 	// Molar mass of the gas. Used for calculating specific entropy.
 	var/list/molar_mass = list()
-	// Tile overlays.
+	// Tile overlay of the gas if it has one.
 	var/list/tile_overlay = list()
-	// Overlay limits. There must be strictly more than this many moles per liter for the overlay to appear.
+	// Overlay limits for the gas. There must be strictly more than this many moles per liter for the overlay to appear.
 	var/list/overlay_limit = list()
-	// Flags.
+	// Flags of the gas.
 	var/list/flags = list()
+
+	// All possible gas reactions in no particular order.
+	var/list/reactions = list()
 
 /datum/xgm_data/New()
 	for(var/p in subtypesof(/datum/gas))
@@ -24,6 +29,8 @@
 
 		if(!add(gas))
 			stack_trace("Duplicate gas id '[gas.id]' in from typepath '[p]'")
+	for(var/reaction_path in subtypesof(/datum/gas_reaction))
+		reactions += new reaction_path
 
 /datum/xgm_data/proc/add(var/datum/gas/gas)
 	if(gases[gas.id])
@@ -32,6 +39,8 @@
 
 /datum/xgm_data/proc/update(var/datum/gas/gas)
 	gases[gas.id] = gas
+	if(gas.flags & XGM_GAS_NOTEWORTHY)
+		noteworthy_gases[gas.id] = gas
 	name[gas.id] = gas.name
 	short_name[gas.id] = gas.short_name || gas.name
 	specific_heat[gas.id] = gas.specific_heat

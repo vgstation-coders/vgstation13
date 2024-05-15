@@ -292,7 +292,7 @@
 			var/dat = {"<html><div><span style="color:#ff0000;">H</span><span style="color:#99ff00;">O</span><span style="color:#0000ff;">N</span><span style="color:#00ff80;">K</span><span style="color:#0066ff;">!</span></html></div>"}
 			to_chat(user, dat)
 			playsound(user, 'sound/items/bikehorn.ogg', 100, 0)
-			var/obj/item/weapon/reagent_containers/food/snacks/grown/banana/B = new()
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/banana/B = new(loc)
 			B.name = "consolation banana"
 			B.desc = "This one seems to be enchanted..."
 			B.potency = 1337 //Honk
@@ -444,7 +444,7 @@
 			if(!user.drop_item(W))
 				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
 				return
-			var/obj/item/weapon/soap_sock/I = new (get_turf(user))
+			var/obj/item/weapon/soap_sock/I = new (get_turf(loc))
 			W.transfer_fingerprints_to(I)
 			I.base_soap = W
 			I.base_sock = src
@@ -459,7 +459,7 @@
 			if(!user.drop_item(S))
 				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
 				return
-			var/obj/item/weapon/brick_sock/I = new (get_turf(user))
+			var/obj/item/weapon/brick_sock/I = new (get_turf(loc))
 			if(!S.use(1))
 				return
 			I.base_sock = src
@@ -625,3 +625,11 @@
 	icon_state = "secshoes"
 	item_state = "secshoes"
 	species_fit = list(VOX_SHAPED)
+
+/obj/item/clothing/shoes/scubafloppers
+	name = "scuba floppers"
+	desc = "SCUBA floppers for swimming quickly... in space?"
+	icon_state = "scubafloppers"
+	item_state = "scubafloppers"
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, UNDEAD_SHAPED, MUSHROOM_SHAPED, INSECT_SHAPED)

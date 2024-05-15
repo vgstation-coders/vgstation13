@@ -618,8 +618,43 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	message = "Due to timespace anomalies of unknown origin, [station_name] is now host to several [mob_name]\s more than there were a moment ago."
 
 
+////////ECLIPSE
+
+/datum/command_alert/eclipse_start
+	name = "Eclipse Starts"
+	alert_title = "Solar Eclipse Alert"
+	message = "Some kind of moon is passing in front of your local star, obstructing its light. Not only has solar power production been reduced, but anomalous disruptions of the electromagnetic field have been detected, resulting in light not travelling as far for the duration of the eclipse."
+
+/datum/command_alert/eclipse_end
+	name = "Eclipse Ends"
+	alert_title = "Solar Eclipse Ends"
+	message = "The moon has fully cleared the local star. Anomalous electromagnetic behavior has come to an end."
+
+/datum/command_alert/eclipse_too_long
+	name = "Eclipse Is Lasting Too Long"
+	alert_title = "Solar Eclipse of Occult Origin?"
+	message = "The eclipse is lasting longer than expected. The moon appears to have changed its trajectory and it is unknown how long this anomaly will persist. Centcomm advises the crew to investigate around the station for occult activities that may be the source of this anomalous phenomenon. In case any occult rune is discovered, erase those using salt, or more efficiently, holy salt."
+
+/datum/command_alert/eclipse_bloodstone
+	name = "Bloodstone has Risen"
+	alert_title = "Cult Activity Detected"
+	message = "Bluespace fluctuation patterns match those observed during past incursions by the Cult of Nar-Sie, which means a Blood Stone has risen. Find and destroy it at all costs or this station will be lost. Be careful of the eldritch entities that may manifest across the station."
+
+/datum/command_alert/eclipse_bloodstone_broken
+	name = "Bloodstone is Broken"
+	alert_title = "Cult Operations Thwarted"
+	force_report = 1
+	message = "Destruction of the Blood Stone has been confirmed. The Cult's power aboard the station will be greatly diminished."
+
+/datum/command_alert/narsie_has_risen
+	name = "Nar-Sie Has Risen"
+	alert_title = "Emergency Evacuation"
+	force_report = 1
+	message = "The station will not stay in this plane for much longer. At great expense, we are dispatching an Emergency Shuttle to your Escape dock within the next minute, and it will be leaving after an short stop. We recommend keeping any Enemies of the Corporation off the vessel. It's leaving with or without you."
+
 //////////////BLOOD CULT
 
+/*
 /datum/command_alert/eclipse_start
 	name = "Blood Cult Eclipse Start"
 	alert_title = "Anomalous Solar Eclipse"
@@ -675,6 +710,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/cult_eclipse_end/announce()
 	message = "Sensors indicate that the fabric of space-time around [station_name()] has stabilized. Continue to monitor the station for persistent occult activity. Directive 7-10 is hereby lifted."
 	..()
+*/
 
 ////////MISC STUFF
 

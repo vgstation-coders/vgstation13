@@ -84,14 +84,10 @@
 /obj/item/weapon/reagent_containers/glass/update_temperature_overlays()
 	//we only care about the steam
 
-	if (!particles)
-		particles = new/particles/steam
-
-	particles.spawning = 0
-
 	if(reagents && reagents.total_volume)
-		if (reagents.chem_temp >= STEAMTEMP)
-			steam_spawn_adjust(reagents.chem_temp)
+		steam_spawn_adjust(reagents.chem_temp)
+	else
+		steam_spawn_adjust(0)
 
 /obj/item/weapon/reagent_containers/glass/beaker
 	name = "beaker"
@@ -212,7 +208,7 @@
 		overlays += lid
 
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 
 /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer
 	name = "small erlenmeyer flask"
@@ -411,9 +407,9 @@
 	item_state = "bucket"
 	species_fit = list(INSECT_SHAPED)
 	starting_materials = list(MAT_PLASTIC = 200)
-	autoignition_temperature = AUTOIGNITION_PLASTIC
-	w_type = RECYK_PLASTIC
+	w_type = RECYK_PLASTIC //>implying this is a glass bucket
 	w_class = W_CLASS_MEDIUM
+	flammable = TRUE
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = list(10,20,25,30,50,100,150)
 	armor = list(melee = 8, bullet = 3, laser = 3, energy = 0, bomb = 1, bio = 1, rad = 0)
@@ -493,7 +489,7 @@
 		overlays += filling
 
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 
 /obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
 	..()
@@ -528,7 +524,7 @@
 		overlays += filling
 
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 
 /*
 /obj/item/weapon/reagent_containers/glass/blender_jug
@@ -586,10 +582,15 @@
 	thermal_variation_modifier = 0.01
 
 /obj/item/weapon/reagent_containers/glass/kettle/steam_spawn_adjust(var/_temp)
-	if (particles)
-		particles.spawning = clamp(0.1 + 0.002 * (_temp - STEAMTEMP),0.1,0.5)
-		particles.position = list(12,5)
-		particles.scale = list(0.3, 0.3)
+	if (!(PS_STEAM in particle_systems))
+		add_particles(PS_STEAM)
+	var/obj/abstract/particles_holder/steam_holder = particle_systems[PS_STEAM]
+	if (_temp < STEAMTEMP)
+		steam_holder.particles.spawning = 0
+	else
+		steam_holder.particles.spawning = clamp(0.1 + 0.002 * (_temp - STEAMTEMP),0.1,0.5)
+		steam_holder.particles.position = list(12,5)
+		steam_holder.particles.scale = list(0.3, 0.3)
 
 /obj/item/weapon/reagent_containers/glass/kettle/red
 	icon_state = "kettle_red"

@@ -36,7 +36,7 @@
 			var/mob/living/simple_animal/C = M
 			C.purge = 3
 			C.adjustBruteLoss(5)
-			C.visible_message("<span class='danger'>The holy water erodes \the [src].</span>")
+			C.visible_message("<span class='danger'>The [src] erodes \the [M].</span>")
 
 /datum/reagent/holywater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
@@ -81,7 +81,7 @@
 			var/mob/living/simple_animal/C = M
 			C.purge = 3
 			C.adjustBruteLoss(5)
-			C.visible_message("<span class='danger'>The holy salts erode \the [src].</span>")
+			C.visible_message("<span class='danger'>The [src] erodes \the [M].</span>")
 
 /datum/reagent/holysalts/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()

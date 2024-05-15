@@ -68,7 +68,7 @@
 	var/datum/radio_frequency/radio_connection
 
 	//Add types to this list so it doesn't make a message or get desroyed by the Supermatter on touch.
-	var/list/message_exclusions = list(/obj/effect/sparks,/obj/effect/overlay/hologram)
+	var/list/message_exclusions = list(/obj/effect/sparks,/obj/effect/overlay/hologram,/obj/abstract)
 	machine_flags = MULTITOOL_MENU
 
 	var/has_exploded = 0 // increments each times it tries to explode so we may track how it may occur more than once
@@ -582,6 +582,11 @@
 	id_tag = O.id_tag
 	set_frequency(O.frequency)
 	return 1
+
+/obj/machinery/power/supermatter/malfhack_valid(var/mob/living/silicon/malf)
+	if(..())
+		to_chat(malf, "<span class='warning'>You cannot hack \the [src] as it has nothing for you to interface with!</span>")
+		return FALSE
 
 /obj/machinery/computer/supermatter
 	name = "supermatter monitoring computer"
