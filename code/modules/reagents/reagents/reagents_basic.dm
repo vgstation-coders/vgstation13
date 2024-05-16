@@ -315,7 +315,7 @@
 	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
 		var/datum/gas_mixture/G = T.return_air()
-		G.temperature = max(G.temperature - rand(1,5),T20C) //water extinguishers can only cool to 20C
+		G.temperature = max(G.temperature - (0.10 * rand(1,5)),T20C) //water extinguishers can only cool to 20C
 		qdel(hotspot)
 
 /datum/reagent/water/reaction_obj(var/obj/O, var/volume)
