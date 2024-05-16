@@ -592,7 +592,6 @@
 	var/firing_delay = 2
 	var/admin_only = 0 //Can non-admins interface with this turret's controls?
 	var/roulette_mode = FALSE
-	var/list/available_projectiles = list()
 	var/list/roulette_projectiles = list()
 
 	health = 40
@@ -603,8 +602,7 @@
 
 /obj/structure/turret/gun_turret/New()
 	..()
-	available_projectiles = existing_typesof(/obj/item/projectile)
-	roulette_projectiles = available_projectiles - restricted_roulette_projectiles
+	roulette_projectiles = existing_typesof(/obj/item/projectile) - restricted_roulette_projectiles
 	for(var/projectile_types in restrict_with_subtypes)
 		roulette_projectiles -= typesof(projectile_types)
 
