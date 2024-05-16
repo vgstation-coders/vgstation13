@@ -1,4 +1,4 @@
-can /*
+/*
  * Contents:
  *		Welding mask
  *		Cakehat
