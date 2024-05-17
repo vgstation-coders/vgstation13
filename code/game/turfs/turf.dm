@@ -79,6 +79,8 @@
 	..()
 	if(bullet_marks)
 		to_chat(user, "It has [bullet_marks > 1 ? "some holes" : "a hole"] in it.")
+	if(locate(/obj/effect/ash) in src)
+		to_chat(user, "It is covered in ashes.")
 
 /turf/proc/process()
 	set waitfor = FALSE

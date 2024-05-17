@@ -93,7 +93,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/fire_overlay = null
 
 	var/image/charred_overlay = null
-	var/char_alpha = 64
 	var/last_char = 0
 
 	var/atom/movable/firelightdummy/firelightdummy
@@ -156,23 +155,25 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 
 /atom/proc/check_fire_protection()
 	if(fire_protection >= world.time)
-		return 1
+		return TRUE
+
+/atom/proc/flammable_reagent_check()
+	if(reagents?.total_volume)
+		return TRUE
 
 //charred overlay procs taken from Deity's food temperature overlays system (see food.dm)
-/atom/proc/process_charred_overlay()
-	if(thermal_mass)
-		char_alpha = 96 + clamp((64*(1-(thermal_mass/initial_thermal_mass))),0,64)
-		if(!charred_overlays["[type][icon_state]"])
-			set_charred_overlay()
-		else
-			update_charred_overlay()
-		last_char = world.time
-	else
-		if(prob(10)) //10% chance each tick of item getting charred
-			set_charred_overlay()
-
 var/global/list/image/charred_overlays = list()
+
 /atom/proc/set_charred_overlay()
+	return
+
+/atom/proc/update_charred_overlay(var/char_alpha)
+	return
+
+/atom/proc/process_charred_overlay()
+	return
+
+/obj/set_charred_overlay()
 	if(update_charred_overlay())
 		return
 
@@ -185,20 +186,49 @@ var/global/list/image/charred_overlays = list()
 	charred_overlays["[type][icon_state]"] = img
 	update_charred_overlay()
 
-/atom/proc/update_charred_overlay()
+/obj/update_charred_overlay(var/char_alpha = 96)
 	if(charred_overlays["[type][icon_state]"])
 		if (charred_overlay)
 			overlays -= charred_overlay
 		charred_overlay = mutable_appearance(charred_overlays["[type][icon_state]"])
-		charred_overlay.appearance_flags = RESET_COLOR|RESET_ALPHA
+		charred_overlay.appearance_flags = RESET_COLOR|RESET_ALPHA|KEEP_TOGETHER
 		charred_overlay.alpha = char_alpha
 		overlays += charred_overlay
 		return 1
 
-/atom/proc/flammable_reagent_check()
-	if(reagents?.total_volume)
-		return TRUE
+/obj/process_charred_overlay()
+	if(thermal_mass)
+		var/c_alpha = 96 + clamp((64*(1-(thermal_mass/initial_thermal_mass))),0,64)
+		if(!charred_overlays["[type][icon_state]"])
+			set_charred_overlay()
+		else
+			update_charred_overlay(c_alpha)
+		last_char = world.time
+	else
+		if(prob(10)) //10% chance each tick of item getting charred
+			set_charred_overlay()
 
+/obj/effect/process_charred_overlay()
+	return
+
+/turf/process_charred_overlay()
+	if(locate(/obj/effect/ash) in src)
+		var/obj/effect/ash/A = locate(/obj/effect/ash) in src
+		if(flammable)
+			A.alpha = clamp((80*(1-(thermal_mass/initial_thermal_mass))),0,80) //turf's char overlays aren't as harsh as objects'
+		else
+			A.alpha = 40
+	else
+		new /obj/effect/ash(src)
+
+/obj/effect/ash
+	name = "ash"
+	icon_state = "char"
+	alpha = 0
+
+/obj/effect/ash/clean_act(var/cleanliness)
+	if(cleanliness >= CLEANLINESS_SPACECLEANER)
+		qdel(src)
 /**
  * Burns solid objects and produces heat.
  *
@@ -417,18 +447,6 @@ var/global/list/image/charred_overlays = list()
 		return
 	burnableatoms -= src
 	extinguish()
-
-/turf/process_charred_overlay()
-	if(thermal_mass)
-		if(flammable)
-			char_alpha = clamp((80*(1-(thermal_mass/initial_thermal_mass))),0,80) //turf char overlays aren't as harsh as objects
-		else
-			char_alpha = 40
-		if(!charred_overlays["[type][icon_state]"])
-			set_charred_overlay()
-		else
-			update_charred_overlay()
-		last_char = world.time
 
 /**
  * Creates a hotspot on the given turf.
