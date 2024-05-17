@@ -402,6 +402,7 @@ var/global/list/image/charred_overlays = list()
 	var/soot_type = /obj/effect/decal/cleanable/soot
 
 /turf/New()
+	..()
 	if(!thermal_material)
 		flammable = FALSE
 		return
