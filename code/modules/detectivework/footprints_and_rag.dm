@@ -146,5 +146,7 @@
 
 /obj/item/weapon/reagent_containers/glass/rag/attackby(var/obj/item/I, var/mob/user)
 	if(I.is_hot())
+		user.drop_item(src,get_turf(src))
 		ignite()
+		return
 	..()

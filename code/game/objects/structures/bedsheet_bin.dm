@@ -42,7 +42,9 @@ LINEN BINS
 					to_chat(user, "<span class='notice'>You remove the bedsheet's plaid pattern.</span>")
 		return
 	if(I.is_hot())
+		user.drop_item(src,get_turf(src))
 		ignite()
+		return
 	var/cut_time=0
 	if(I.is_sharp())
 		cut_time = 60 / I.sharpness
