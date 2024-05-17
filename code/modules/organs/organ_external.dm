@@ -133,7 +133,7 @@
 			step(gib, pick(alldirs)) //move the last spawned gib in a random direction
 
 		if(is_robotic())
-			T.hotspot_expose(1000,1000,surfaces=1)
+			T.hotspot_expose(1000,MEDIUM_FLAME,1)
 		else
 			playsound(T, 'sound/effects/gib3.ogg', 50, 1)
 

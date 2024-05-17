@@ -33,10 +33,7 @@ var/global/list/igniters = list()
 	if (src.on && !(stat & (NOPOWER|FORCEDISABLE)) )
 		var/turf/location = src.loc
 		if (isturf(location))
-			if(prob(1))
-				location.hotspot_expose(1000,500,1,surfaces=1)
-			else
-				location.hotspot_expose(1000,500,1,surfaces=0)
+			location.hotspot_expose(1000,MEDIUM_FLAME,1,surfaces=1)
 	return 1
 
 /obj/machinery/igniter/proc/toggle_state()
@@ -146,7 +143,7 @@ var/global/list/igniters = list()
 	use_power(1000)
 	var/turf/location = src.loc
 	if (isturf(location))
-		location.hotspot_expose(1000,500,1,surfaces=1)
+		location.hotspot_expose(1000,MEDIUM_FLAME,1,surfaces=1)
 	return 1
 
 /obj/machinery/sparker/emp_act(severity)

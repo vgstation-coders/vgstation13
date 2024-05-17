@@ -56,7 +56,7 @@
 	dir = d //Setting this direction means you won't get torched by your own flamethrower.
 	var/turf/T = newLoc
 	if(istype(T))
-		T.hotspot_expose(70000, 50000, 1, surfaces=1)
+		T.hotspot_expose(70000, FULL_FLAME, 1, surfaces=1)
 	//. = ..()
 
 /obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel/Spread()
@@ -85,7 +85,7 @@
 				return
 
 			spawn(1)
-				O.hotspot_expose(7000, 500, 1, 1)
+				O.hotspot_expose(7000, FULL_FLAME, 1)
 				//O.hotspot_expose((T20C*2) + 380, 500, surfaces = 1)
 
 			if(FF)

@@ -262,7 +262,7 @@ var/global/list/image/charred_overlays = list()
 	if(!in_fire)
 		//Change in internal energy = change in energy due to heat transfer due to isochoric reaction
 		delta_t = heat_out/(delta_m * material.heating_value)
-		T.hotspot_expose(temperature + delta_t, CELL_VOLUME, surfaces=1)
+		T.hotspot_expose(temperature + delta_t, FULL_FLAME, 1)
 		new /obj/effect/fire(T)
 
 	//Ash the object if all of its mass has been consumed.
@@ -323,7 +323,7 @@ var/global/list/image/charred_overlays = list()
 
 	//Start a fire on the tile if a burning object is present without an underlying fire effect.
 	if(!in_fire)
-		T.hotspot_expose(max_temperature, CELL_VOLUME, surfaces=1)
+		T.hotspot_expose(max_temperature, FULL_FLAME, 1)
 		new /obj/effect/fire(T)
 
 	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=max_temperature)
@@ -437,11 +437,43 @@ var/global/list/image/charred_overlays = list()
  * Arguments:
  * * exposed_temperature - Temperature of the hotspot (Kelvin).
  * * exposed_volume - Relative volume of the turf exposed to the hotspot (Milliliter).
- * * soh - Unused.
  * * surfaces - Whether or not the hotspot should ignite any atoms in the turf in addition to gasses (Boolean).
  */
-/turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume = CELL_VOLUME, var/soh = 0, var/surfaces=0)
+/turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume = CELL_VOLUME, var/surfaces=0)
 	return 0
+
+/turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, surfaces)
+	var/obj/effect/foam/fire/W = locate() in contents
+	if(istype(W))
+		return 0
+	if(check_fire_protection())
+		return 0
+
+	var/datum/gas_mixture/air_contents = return_air()
+
+	if(!air_contents)
+		return 0
+
+	var/igniting = 0
+
+	if(air_contents.check_combustability(src))
+		if(air_contents.check_combustability(src) == 2)
+			if(prob(exposed_volume * 100 / CELL_VOLUME))
+				ignite()
+				igniting = 1
+		if(surfaces)
+			if((flammable || flammable_reagent_check()) && !on_fire)
+				if(prob(exposed_volume * 100 / CELL_VOLUME))
+					ignite()
+					igniting = 1
+			for(var/obj/O in contents)
+				if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && O.flammable && !O.on_fire && exposed_temperature >= O.autoignition_temperature)
+					O.ignite()
+					igniting = 1
+					break
+		if(igniting)
+			new /obj/effect/fire(src)
+	return igniting
 
 /turf/simulated/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	var/obj/effect/E = null
@@ -459,37 +491,6 @@ var/global/list/image/charred_overlays = list()
 	if(!E && soot_type && prob(25))
 		new soot_type(src)
 	return 0
-
-/turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh, surfaces)
-	var/obj/effect/foam/fire/W = locate() in contents
-	if(istype(W))
-		return 0
-	if(check_fire_protection())
-		return 0
-
-	var/datum/gas_mixture/air_contents = return_air()
-
-	if(!air_contents)
-		return 0
-
-	var/igniting = 0
-
-	if(air_contents.check_combustability(src))
-		if(air_contents.check_combustability(src) == 2)
-			ignite()
-			igniting = 1
-		if((flammable || flammable_reagent_check()) && !on_fire && surfaces)
-			ignite()
-			igniting = 1
-		if(surfaces)
-			for(var/obj/O in contents)
-				if(prob(exposed_volume * 100 / CELL_VOLUME) && istype(O) && O.flammable && !O.on_fire && exposed_temperature >= O.autoignition_temperature)
-					O.ignite()
-					igniting = 1
-					break
-		if(igniting)
-			new /obj/effect/fire(src)
-	return igniting
 
 /turf/simulated/ignite()
 	if(!flammable || check_fire_protection() || thermal_mass <= 0)
