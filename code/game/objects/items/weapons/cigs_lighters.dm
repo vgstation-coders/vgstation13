@@ -148,7 +148,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		update_brightness()
 		if(M)
 			to_chat(M, "The flame on \the [src] suddenly goes out in a weak fashion.")
-	if(location)
+	if(location && lit == 1)
 		var/surf = isturf(loc)?TRUE:FALSE
 		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
 		return
@@ -176,7 +176,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/match/strike_anywhere/s_a_k/process()//never burns out, extra swiss quality magic matches
 	var/turf/location = get_turf(src)
-	if(location)
+	if(location && lit == 1)
 		var/surf = isturf(loc)?TRUE:FALSE
 		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
 
@@ -500,7 +500,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			M.u_equip(src, 0)	//Un-equip it so the overlays can update
 		qdel(src)
 		return
-	if(location)
+	if(location && lit == 1)
 		var/surf = isturf(loc)?TRUE:FALSE
 		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
 	//Oddly specific and snowflakey reagent transfer system below
@@ -860,7 +860,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 				M.update_inv_wear_mask(0)
 		update_brightness()
 		return
-	if(location)
+	if(location && lit == 1)
 		var/surf = isturf(loc)?TRUE:FALSE
 		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
 	return
@@ -1076,7 +1076,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter/process()
 	var/turf/location = get_turf(src)
-	if(location)
+	if(location && lit == 1)
 		var/surf = isturf(loc)?TRUE:FALSE
 		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
 	if(!fueltime)

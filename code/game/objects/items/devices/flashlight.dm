@@ -310,7 +310,7 @@
 
 /obj/item/device/flashlight/flare/process()
 	var/turf/pos = get_turf(src)
-	if(pos)
+	if(pos && on)
 		var/surf = isturf(loc)?TRUE:FALSE
 		pos.hotspot_expose(heat_production, LARGE_FLAME, surf)
 	fuel = max(fuel - 1, 0)
