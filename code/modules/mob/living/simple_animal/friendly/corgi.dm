@@ -67,7 +67,7 @@
 	if(nutrition > 150 && health < maxHealth)
 		nutrition = nutrition-10 //Heal by spending nutrition
 		health++
-	if(nutrition < 150 && prob(15))
+	if(nutrition < 150 && prob(1))
 		for(var/mob/living/carbon/human/H in view(7, src))
 			if(H.client)
 				emote("me", 1, "whines hungrily.") //Only whine if we see a human with a client in our view
