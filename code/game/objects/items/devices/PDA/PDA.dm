@@ -540,7 +540,7 @@ var/global/msg_id = 0
 		M.show_message("<span class='warning'>Your [src] explodes!</span>", 1)
 
 	if(T)
-		T.hotspot_expose(700,SMALL_FLAME,1)
+		T.hotspot_expose(700,SMALL_FLAME,0)
 
 		explosion(T, -1, -1, 2, 3, whodunnit = user)
 

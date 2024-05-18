@@ -290,7 +290,7 @@
 				if(prob(30))
 					spark(src)
 				T.ex_act(3)
-				T.hotspot_expose(1000,MEDIUM_FLAME,1,surfaces=1)
+				T.hotspot_expose(1000,MEDIUM_FLAME,1,1)
 
 /obj/machinery/computer/HolodeckControl/proc/derez(var/obj/obj , var/silent = 1)
 
@@ -334,7 +334,7 @@
 						spark(T, 2)
 						if(T)
 							T.temperature = 5000
-							T.hotspot_expose(50000,FULL_FLAME,1,surfaces=1)
+							T.hotspot_expose(50000,FULL_FLAME,1,1)
 
 		active = 1
 	else
@@ -381,7 +381,7 @@
 					spark(T, 2)
 					if(T)
 						T.temperature = 5000
-						T.hotspot_expose(50000,FULL_FLAME,1,surfaces=1)
+						T.hotspot_expose(50000,FULL_FLAME,1,1)
 			if(L.name=="Holocarp Spawn")
 				new /mob/living/simple_animal/hostile/carp/holocarp(L.loc)
 
