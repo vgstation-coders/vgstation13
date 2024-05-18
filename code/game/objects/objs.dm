@@ -564,6 +564,7 @@ a {
 
 /obj/update_icon()
 	if(ash_covered)
+		overlays -= charred_overlay
 		process_charred_overlay()
 	return
 
