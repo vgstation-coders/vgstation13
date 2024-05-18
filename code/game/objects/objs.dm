@@ -58,6 +58,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/is_cooktop //If true, the object can be used in conjunction with a cooking vessel, eg. a frying pan, to cook food.
 	var/obj/item/weapon/reagent_containers/pan/cookvessel //The vessel being used to cook food in. If generalized out to other types of vessels, make sure to also generalize the frying pan's cook_start(), etc. as well.
 
+	//Is the object covered in ash?
+	var/ash_covered = FALSE
+
 /obj/New()
 	..()
 	if(breakable_flags)
@@ -288,6 +291,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	..()
 	if (cleanliness >= CLEANLINESS_WATER)
 		unglue()
+		ash_covered = FALSE
 
 /obj/proc/cultify()
 	qdel(src)
@@ -418,7 +422,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return SUICIDE_ACT_BRUTELOSS
 
 /obj/ignite()
-	..()
+	. = ..()
+	ash_covered = TRUE
 	remove_particles(PS_SMOKE)
 
 /obj/singularity_act()
@@ -558,6 +563,8 @@ a {
 	onclose(user, "mtcomputer")
 
 /obj/update_icon()
+	if(ash_covered)
+		process_charred_overlay()
 	return
 
 /mob/proc/unset_machine()

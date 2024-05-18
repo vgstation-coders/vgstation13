@@ -344,7 +344,7 @@ var/global/list/image/charred_overlays = list()
 			var/list/fuel_stats = possible_fuels[possible_fuel]
 			max_temperature = max(max_temperature,fuel_stats["max_temperature"])
 			heat_out += fuel_stats["thermal_energy_transfer"]
-			consumption_rate += fuel_stats["consumption_rate"]
+			consumption_rate = fuel_stats["consumption_rate"]
 			oxy_used += fuel_stats["o2_cons"]
 			co2_prod += -fuel_stats["co2_cons"]
 			reagents.remove_reagent(possible_fuel, consumption_rate)
@@ -475,7 +475,6 @@ var/global/list/image/charred_overlays = list()
 		return 0
 
 	var/igniting = 0
-
 	if(air_contents.check_combustability(src))
 		if(air_contents.check_combustability(src) == 2)
 			if(prob(exposed_volume * 100 / CELL_VOLUME))
@@ -529,38 +528,14 @@ var/global/list/image/charred_overlays = list()
 	if(locate(/obj/effect/decal/cleanable/liquid_fuel) in src)
 		return TRUE
 
+/turf/simulated/burnLiquidFuel()
+	return
+
 /turf/unsimulated/burnSolidFuel()
 	return
 
 /turf/unsimulated/burnLiquidFuel()
 	return
-
-// Burning puddles of fuel.
-/turf/simulated/burnLiquidFuel()
-	if(!flammable_reagent_check())
-		return
-
-	var/heat_out = 0 //J
-	var/oxy_used = 0 //mols
-	var/co2_prod = 0 //mols (some reagents consume co2 when they burn)
-	var/max_temperature = 0 //K
-	var/consumption_rate = 1.0 //units per tick
-
-	var/obj/effect/decal/cleanable/liquid_fuel/puddle = locate(/obj/effect/decal/cleanable/liquid_fuel) in src
-	var/list/fuel_stats = possible_fuels[puddle.reagent]
-	max_temperature = fuel_stats["max_temperature"]
-	heat_out = fuel_stats["thermal_energy_transfer"]
-	consumption_rate = fuel_stats["consumption_rate"]
-	oxy_used = fuel_stats["o2_cons"]
-	co2_prod = -fuel_stats["co2_cons"]
-
-	puddle.amount -= consumption_rate
-
-	if(puddle.amount <= 0)
-		qdel(puddle)
-
-	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=max_temperature)
-
 
 ///////////////////////////////////////////////
 // FIRE
@@ -600,6 +575,11 @@ var/global/list/image/charred_overlays = list()
 	if(timestopped)
 		return 0
 	. = 1
+
+	//Fires shouldn't spawn in areas or mobs, but it has happened...
+	if(istype(loc,/area) || istype(loc,/mob))
+		qdel(src)
+		CRASH("Fire was created at [loc] instead of a turf.")
 
 	// Get location and check if it is in a proper ZAS zone.
 	var/turf/simulated/S = get_turf(loc)
@@ -648,6 +628,7 @@ var/global/list/image/charred_overlays = list()
 	for(var/direction in cardinal)
 		if(S.open_directions & direction) //Grab all valid bordering tiles
 			var/turf/simulated/enemy_tile = get_step(S, direction)
+			var/liquidburn = FALSE
 			if(istype(enemy_tile))
 				var/datum/gas_mixture/acs = enemy_tile.return_air()
 				if(!acs)
@@ -662,9 +643,11 @@ var/global/list/image/charred_overlays = list()
 				if(enemy_tile.check_fire_protection())
 					firelevel -= 1.5
 					continue
+				if(enemy_tile.flammable_reagent_check())
+					liquidburn = TRUE
 				//Spread the fire.
 				if(!(locate(/obj/effect/fire) in enemy_tile))
-					if(prob(clamp(ZAS_fire_spread_chance*round(burn_duration/5)*((acs.temperature/T20C)**0.5) + 25*firelevel,0,100)) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
+					if(prob(clamp(ZAS_fire_spread_chance*round(burn_duration/5)*((acs.temperature/T20C)**0.5) + 25*firelevel + 50*liquidburn,0,100)) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
 						new/obj/effect/fire(enemy_tile)
 	//seperate part of the present gas
 	//this is done to prevent the fire burning all gases in a single pass
@@ -747,13 +730,6 @@ var/global/list/image/charred_overlays = list()
 				combustion_oxy_used += solid_burn_products["oxy_used"]
 				combustion_co2_prod += solid_burn_products["co2_prod"]
 				max_temperature = max(max_temperature, solid_burn_products["max_temperature"])
-		if(locate(/obj/effect/decal/cleanable/liquid_fuel) in T) //burn liquids on the turf
-			liquid_burn_products = T.burnLiquidFuel()
-			if(liquid_burn_products)
-				combustion_energy += liquid_burn_products["heat_out"]
-				combustion_oxy_used += liquid_burn_products["oxy_used"]
-				combustion_co2_prod += liquid_burn_products["co2_prod"]
-				max_temperature = max(max_temperature, liquid_burn_products["max_temperature"])
 		for(var/atom/A in T)
 			if(A.flammable) //burn items on the turf
 				solid_burn_products = A.burnSolidFuel()
@@ -762,7 +738,7 @@ var/global/list/image/charred_overlays = list()
 					combustion_oxy_used += solid_burn_products["oxy_used"]
 					combustion_co2_prod += solid_burn_products["co2_prod"]
 					max_temperature = max(max_temperature, solid_burn_products["max_temperature"])
-			if(A.reagents) //burn liquids in containers on the turf
+			if(A.reagents || istype(A,/obj/effect/decal/cleanable/liquid_fuel)) //burn liquids in containers on the turf
 				liquid_burn_products = A.burnLiquidFuel()
 				if(liquid_burn_products)
 					combustion_energy += liquid_burn_products["heat_out"]

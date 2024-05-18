@@ -48,6 +48,45 @@
 					new /obj/effect/decal/cleanable/liquid_fuel(target, amount*0.25)
 					amount *= 0.75
 
+/obj/effect/decal/cleanable/liquid_fuel/flammable_reagent_check()
+	return TRUE
+
+/obj/effect/decal/cleanable/liquid_fuel/burnLiquidFuel()
+	//Setup
+	var/turf/T = get_turf(src)
+	if(!T)
+		extinguish()
+		return
+
+	var/heat_out = 0 //MJ
+	var/oxy_used = 0 //mols
+	var/co2_prod = 0 //mols (some reagents consume co2 when they burn)
+	var/max_temperature = 0 //K
+	var/consumption_rate = 0 //units per tick
+
+	//Check if a fire is present at the current location.
+	var/in_fire = FALSE
+	if(locate(/obj/effect/fire) in T)
+		in_fire = TRUE
+
+	if(amount > 0)
+		var/list/fuel_stats = possible_fuels[reagent]
+		max_temperature = max(max_temperature,fuel_stats["max_temperature"])
+		heat_out = fuel_stats["thermal_energy_transfer"]
+		consumption_rate = fuel_stats["consumption_rate"]
+		oxy_used = fuel_stats["o2_cons"]
+		co2_prod = -fuel_stats["co2_cons"]
+		amount -= consumption_rate
+	else
+		qdel(src)
+
+	//Start a fire on the tile if a burning object is present without an underlying fire effect.
+	if(!in_fire)
+		T.hotspot_expose(max_temperature, FULL_FLAME, 1)
+		new /obj/effect/fire(T)
+
+	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=max_temperature)
+
 /obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel
 		icon_state = "mustard"
 		anchored = 1 //Why the fuck was this set to 0
@@ -56,7 +95,7 @@
 	dir = d //Setting this direction means you won't get torched by your own flamethrower.
 	var/turf/T = newLoc
 	if(istype(T))
-		T.hotspot_expose(70000, FULL_FLAME, 1, surfaces=1)
+		T.hotspot_expose(70000, FULL_FLAME, 1, 1)
 	//. = ..()
 
 /obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel/Spread()
