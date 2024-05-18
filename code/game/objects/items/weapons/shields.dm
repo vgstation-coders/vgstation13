@@ -214,7 +214,6 @@
 	throwforce = 0
 	throw_speed = 1
 	throw_range = 1
-	w_class = W_CLASS_HUGE
 	w_type = RECYK_BIOLOGICAL
 	flammable = TRUE
 	mech_flags = MECH_SCAN_ILLEGAL

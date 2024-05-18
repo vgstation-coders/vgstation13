@@ -11,7 +11,6 @@ var/global/list/obj/item/beacon/beacons = list()
 	var/emagged = 0
 	origin_tech = Tc_BLUESPACE + "=1"
 	flags = FPRINT
-	w_class = W_CLASS_SMALL
 	w_type = RECYK_PLASTIC
 	flammable = TRUE
 

@@ -17,7 +17,6 @@
 	icon_state = "sheet-human"
 	source_string = "human"
 	origin_tech = ""
-	w_class = W_CLASS_SMALL
 	w_type = RECYK_BIOLOGICAL
 	flammable = TRUE
 	var/skin_color = DEFAULT_FLESH

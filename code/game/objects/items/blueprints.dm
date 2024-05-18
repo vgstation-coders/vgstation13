@@ -22,7 +22,6 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "blueprints"
 	attack_verb = list("attacks", "baps", "hits")
-	w_class = W_CLASS_SMALL
 	w_type = RECYK_WOOD
 	flammable = TRUE
 
