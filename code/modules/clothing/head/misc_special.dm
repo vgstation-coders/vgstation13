@@ -220,7 +220,9 @@
 	name = "kitty ears"
 	desc = "A pair of kitty ears. Meow!"
 	icon_state = "kitty"
+	species_fit = list(VOX_SHAPED)
 	flags = FPRINT
+	body_parts_covered = HIDETAIL
 	var/haircolored = TRUE
 	var/cringe = FALSE
 	var/anime = FALSE
