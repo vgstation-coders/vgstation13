@@ -95,7 +95,7 @@
 			return
 
 	if (istype(location, /turf))
-		location.hotspot_expose(700, 1)
+		location.hotspot_expose(700, SMALL_FLAME, 0)
 
 /obj/item/clothing/head/cakehat/attack_self(mob/user as mob)
 	if(status > 1)

@@ -57,7 +57,7 @@
 		if(M.is_holding_item(src))
 			location = M.loc
 	if(isturf(location)) //start a fire if possible
-		location.hotspot_expose(700, 2,surfaces=istype(loc,/turf))
+		location.hotspot_expose(700, SMALL_FLAME, 1)
 	return
 
 

@@ -183,7 +183,7 @@
 		napalm.adjust_gas(GAS_PLASMA, toxinsToDeduce)
 
 		target_tile.assume_air(napalm)
-		spawn (0) target_tile.hotspot_expose(temperature, 400,surfaces=1)
+		spawn (0) target_tile.hotspot_expose(temperature, MEDIUM_FLAME,surfaces=1)
 
 		hardness -= toxinsToDeduce/100
 		CheckHardness()

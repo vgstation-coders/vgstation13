@@ -179,7 +179,7 @@ steam.start() -- spawns the effect
 	else
 		var/turf/T = src.loc
 		if(istype(T, /turf) && prob(1))
-			T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
+			T.hotspot_expose(SPARK_TEMP, SMALL_FLAME, surfaces = surfaceburn)
 		step(src,move_dir)
 	energy--
 
