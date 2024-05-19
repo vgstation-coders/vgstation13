@@ -375,7 +375,7 @@
 	playsound(U, 'sound/items/Welder2.ogg', 25, 1)
 	var/turf/T = get_turf(U)
 	if(T)
-		T.hotspot_expose(700,125,surfaces=1)
+		T.hotspot_expose(700,SMALL_FLAME,1)
 	var/rune = src // detaching the proc - in theory
 	empulse(U, (range_red - 2), range_red)
 	qdel(rune)
@@ -1302,14 +1302,14 @@
 					else
 						to_chat(M, "<span class='warning'>The rune suddenly ignites, burning you!</span>")
 					var/turf/T = get_turf(R)
-					T.hotspot_expose(700,125,surfaces=1)
+					T.hotspot_expose(700,SMALL_FLAME,1)
 		for(var/obj/effect/decal/cleanable/blood/B in effects_list)
 			if(B.blood_DNA == src.blood_DNA)
 				for(var/mob/living/M in orange(1,B))
 					M.take_overall_damage(0,5)
 					to_chat(M, "<span class='warning'>The blood suddenly ignites, burning you!</span>")
 					var/turf/T = get_turf(B)
-					T.hotspot_expose(700,125,surfaces=1)
+					T.hotspot_expose(700,SMALL_FLAME,1)
 					qdel(B)
 		qdel(src)
 

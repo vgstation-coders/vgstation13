@@ -676,14 +676,42 @@ var/global/list/alert_overlays_global = list()
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 0
 
-	var/current_turf = get_turf(src)
-	var/obj/machinery/door/firedoor/border_only/F = locate(/obj/machinery/door/firedoor) in current_turf
-	if(F && F.dir == user.dir)
-		to_chat(user, "<span class = 'warning'>There is already a firedoor facing that direction.</span>")
-		return 1
-	if(do_after(user, user, 5 SECONDS))
-		new /obj/machinery/door/firedoor/border_only(current_turf, user.dir)
-		qdel(src)
+	switch(alert("What do you want?", "Firedoor Frame", "Directional", "Full Tile", "Cancel", null))
+		if("Directional")
+			if(!src)
+				return 1
+			if(loc != user)
+				return 1
+			var/current_turf = get_turf(src)
+			for(var/obj/machinery/door/firedoor/FD in current_turf)
+				if (FD.is_fulltile())
+					to_chat(user, "<span class='warning'>That would overlap another firedoor.</span>")
+					return 1
+				if(FD.dir == user.dir)
+					to_chat(user, "<span class = 'warning'>There is already a firedoor facing that direction.</span>")
+					return 1
+			user.visible_message("<span class='warning'>[user] starts building a firedoor.</span>", \
+			"<span class='notice'>You start building a firedoor.</span>")
+			if(do_after(user, user, 5 SECONDS))
+				to_chat(user, "<span class='notice'>You finish the firedoor.</span>")
+				new /obj/machinery/door/firedoor/border_only(current_turf, user.dir)
+				qdel(src)
+
+		if("Full Tile")
+			if(!src)
+				return 1
+			if(loc != user)
+				return 1
+			var/current_turf = get_turf(src)
+			if(locate(/obj/machinery/door/firedoor) in current_turf)
+				to_chat(user, "<span class='warning'>That would overlap another firedoor.</span>")
+				return 1
+			user.visible_message("<span class='warning'>[user] starts building a firedoor.</span>", \
+			"<span class='notice'>You start building a firedoor.</span>")
+			if(do_after(user, user, 5 SECONDS))
+				to_chat(user, "<span class='notice'>You finish the firedoor.</span>")
+				new /obj/machinery/door/firedoor(current_turf)
+				qdel(src)
 
 /obj/item/firedoor_frame/attackby(var/obj/item/weapon/C, var/mob/user)
 	if(C.is_wrench(user))

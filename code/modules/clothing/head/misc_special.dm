@@ -94,8 +94,9 @@
 		else
 			return
 
-	if (istype(location, /turf))
-		location.hotspot_expose(700, 1)
+	var/surf = isturf(loc)?TRUE:FALSE
+	location = get_turf(src)
+	location.hotspot_expose(700, SMALL_FLAME, surf)
 
 /obj/item/clothing/head/cakehat/attack_self(mob/user as mob)
 	if(status > 1)
@@ -220,7 +221,9 @@
 	name = "kitty ears"
 	desc = "A pair of kitty ears. Meow!"
 	icon_state = "kitty"
+	species_fit = list(VOX_SHAPED)
 	flags = FPRINT
+	body_parts_covered = HIDETAIL
 	var/haircolored = TRUE
 	var/cringe = FALSE
 	var/anime = FALSE

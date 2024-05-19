@@ -143,3 +143,10 @@
 /obj/item/weapon/reagent_containers/glass/rag/unequipped(mob/living/carbon/human/user, from_slot = null)
 	..()
 	processing_objects.Remove(src)
+
+/obj/item/weapon/reagent_containers/glass/rag/attackby(var/obj/item/I, var/mob/user)
+	if(I.is_hot())
+		user.drop_item(src,get_turf(src))
+		ignite()
+		return
+	..()

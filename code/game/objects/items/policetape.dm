@@ -168,7 +168,7 @@
 	if(proximity_flag == 0)//Check adjacency.
 		return 0
 
-	if(istype(target, /obj/machinery/door/airlock) || istype(target, /obj/machinery/door/firedoor))	//Make sure we can tape the target.
+	if(istype(target, /obj/machinery/door/airlock))	//Make sure we can tape the target.
 		var/turf = get_turf(target)
 
 		//Check to see if the object already has any tape of any kind on it.
@@ -185,7 +185,9 @@
 			to_chat(user, "<span class='notice'>You placed \the [src].</span>")
 			return 1
 
-/obj/item/tape/blocks_doors()
+/obj/item/tape/blocks_doors(var/obj/machinery/door/D)
+	if (istype(D, /obj/machinery/door/firedoor/border_only))
+		return FALSE
 	return TRUE
 
 /obj/item/tape/Bumped(var/atom/movable/AM)

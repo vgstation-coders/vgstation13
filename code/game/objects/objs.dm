@@ -59,6 +59,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/is_cooktop //If true, the object can be used in conjunction with a cooking vessel, eg. a frying pan, to cook food.
 	var/obj/item/weapon/reagent_containers/pan/cookvessel //The vessel being used to cook food in. If generalized out to other types of vessels, make sure to also generalize the frying pan's cook_start(), etc. as well.
 
+	//Is the object covered in ash?
+	var/ash_covered = FALSE
+
 /obj/New()
 	..()
 	if(breakable_flags)
@@ -148,7 +151,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
 
-/obj/proc/blocks_doors()
+/obj/proc/blocks_doors(var/obj/machinery/door/D)
 	return 0
 
 /obj/proc/install_pai(obj/item/device/paicard/P)
@@ -289,6 +292,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	..()
 	if (cleanliness >= CLEANLINESS_WATER)
 		unglue()
+		ash_covered = FALSE
 
 /obj/proc/cultify()
 	qdel(src)
@@ -421,8 +425,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/ignite()
 	if(!istype(loc, /turf)) //Prevent things from burning if worn, held, or inside something else. Storage containers will eject their contents when ignited, allowing for burning of the contents.
 		return
+	. = ..()
+	ash_covered = TRUE
 	remove_particles(PS_SMOKE)
-	..()
 
 /obj/item/checkburn()
 	if(!flammable)
@@ -581,6 +586,9 @@ a {
 	onclose(user, "mtcomputer")
 
 /obj/update_icon()
+	if(ash_covered)
+		overlays -= charred_overlay
+		process_charred_overlay()
 	return
 
 /mob/proc/unset_machine()
