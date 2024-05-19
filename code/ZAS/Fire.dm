@@ -229,7 +229,7 @@ var/global/list/image/charred_overlays = list()
 	alpha = 0
 
 /obj/effect/ash/clean_act(var/cleanliness)
-	if(cleanliness >= CLEANLINESS_SPACECLEANER)
+	if(cleanliness >= CLEANLINESS_WATER)
 		qdel(src)
 /**
  * Burns solid objects and produces heat.
