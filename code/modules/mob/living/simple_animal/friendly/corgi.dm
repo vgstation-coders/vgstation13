@@ -64,9 +64,10 @@
 	spinaroo(spin_emotes)
 	. = ..()
 	nutrition = max(nutrition-hunger_rate, 0)
-	if(nutrition > 150 && health < maxHealth)
-		nutrition = nutrition-10 //Heal by spending nutrition
-		health++
+	if(.)
+		if(nutrition > 150 && health < maxHealth)
+			nutrition = nutrition-10 //Heal by spending nutrition
+			health++
 	if(nutrition < 150 && prob(1))
 		for(var/mob/living/carbon/human/H in view(7, src))
 			if(H.client)
