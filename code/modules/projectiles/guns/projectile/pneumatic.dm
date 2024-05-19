@@ -124,6 +124,9 @@
 		else if(clumsy_check(M) && prob(50))
 			to_chat(M, "<span class='danger'>[src] blows up in your face!</span>")
 			target = M
+			M.take_organ_damage(0,20)
+			M.drop_item(src, force_drop = 1)
+			qdel(src)
 
 	var/turf/curloc = get_turf(user)
 	var/turf/targloc = get_turf(target)
