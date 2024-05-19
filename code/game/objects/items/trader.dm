@@ -200,6 +200,12 @@
 		else if(P.wet == TURF_WET_WATER)
 			reagents.add_reagent(WATER,1)
 		qdel(P)
+	for(var/obj/effect/ash/A in T)
+		if(reagents.is_full())
+			visible_message("<span class='warning'>\The [src] sputters, wet tank full!</span>")
+			break
+		reagents.add_reagent(CARBON,1)
+		qdel(A)
 	T.clean_blood()
 	for(var/obj/item/trash/R in T)
 		if(trash.len >= max_trash)

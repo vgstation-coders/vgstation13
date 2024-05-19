@@ -15,6 +15,53 @@
 		return 1
 	M.immune_system.ApplyAntipathogenics(100, list(ANTIGEN_CULT), 2)
 
+/datum/reagent/holywater/reaction_mob(var/mob/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
+	if(..())
+		return 1
+
+	//Put out fire
+	if(method == TOUCH)
+		if(iscarbon(M))
+			var/mob/living/carbon/C = M
+			var/datum/disease2/effect/E = C.has_active_symptom(/datum/disease2/effect/thick_skin)
+			C.make_visible(INVISIBLESPRAY,FALSE)
+			if(E)
+				E.multiplier = max(E.multiplier - rand(1,3), 1)
+				to_chat(C, "<span class='notice'>The water quenches your dry skin.</span>")
+		else
+			M.make_visible(INVISIBLESPRAY)
+		if(isliving(M))
+			var/mob/living/L = M
+			L.ExtinguishMob()
+
+	//Water now directly damages slimes instead of being a turf check
+	if(isslime(M))
+		var/mob/living/L = M
+		L.adjustToxLoss(rand(15, 20))
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species && H.species.anatomy_flags & ACID4WATER) //oof ouch, water is spicy now
+			if(method == TOUCH)
+				if(H.check_body_part_coverage(EYES|MOUTH))
+					to_chat(H, "<span class='warning'>Your face is protected from a splash of water!</span>")
+					return
+				if(prob(15) && volume >= 30)
+					var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+					if(head_organ)
+						if(head_organ.take_damage(0, 25))
+							H.UpdateDamageIcon(1)
+						head_organ.disfigure("burn")
+						H.audible_scream()
+				else
+					H.take_organ_damage(0, min(15, volume * 2))
+
+		else if(isslimeperson(H))
+
+			H.adjustToxLoss(rand(1,3))
+	if(method == TOUCH)
+		M.clean_act(CLEANLINESS_WATER)
+
 /datum/reagent/holywater/reaction_obj(var/obj/O, var/volume)
 	if(..())
 		return 1
@@ -22,11 +69,15 @@
 	if(volume >= 1)
 		O.bless()
 
+	O.clean_act(CLEANLINESS_WATER)//removes glue and extinguishes fire
+
 /datum/reagent/holywater/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
 		return 1
 	if(volume >= 5)
 		T.bless()
+
+	T.clean_act(CLEANLINESS_WATER)
 
 /datum/reagent/holywater/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	..()
