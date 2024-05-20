@@ -35,8 +35,6 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	var/init_time
 	var/tickdrift = 0
 
-	var/time_taken_to_init = 0
-
 	var/sleep_delta
 
 	var/make_runtime = 0

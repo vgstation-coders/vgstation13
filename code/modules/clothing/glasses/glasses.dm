@@ -7,7 +7,7 @@
 	w_class = W_CLASS_SMALL
 	body_parts_covered = EYES
 	slot_flags = SLOT_EYES
-	autoignition_temperature = 0
+	flammable = FALSE
 	var/vision_flags = 0
 	var/darkness_view = 0//Base human is 2
 	var/invisa_view = 0
@@ -185,7 +185,7 @@ BLIND     // can't see anything
 	desc = "Forest green glasses, like the kind you'd wear when hatching a nasty scheme."
 	icon_state = "gglasses"
 	item_state = "gglasses"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/glasses/sunglasses
 	name = "sunglasses"

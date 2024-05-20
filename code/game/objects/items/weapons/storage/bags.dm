@@ -21,7 +21,8 @@
 	use_to_pickup = TRUE
 	slot_flags = SLOT_BELT
 	flags = FPRINT
-	autoignition_temperature = AUTOIGNITION_FABRIC
+	w_type = RECYK_FABRIC
+	flammable = TRUE
 
 // -----------------------------
 //          Trash bag

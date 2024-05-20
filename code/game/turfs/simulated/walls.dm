@@ -420,7 +420,7 @@
 		investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been thermited through by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 		message_admins("\The [src] with a pdiff of [pdiff] has been thermited by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 
-	hotspot_expose(3000, 125, surfaces = 1) //Only works once when the thermite is created, but else it would need to not be an effect to work
+	hotspot_expose(3000, LARGE_FLAME, 1) //Only works once when the thermite is created, but else it would need to not be an effect to work
 	spawn(100)
 		if(O)
 			visible_message("<span class='danger'>\The [O] melts right through \the [src].</span>")

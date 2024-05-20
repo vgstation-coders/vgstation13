@@ -53,10 +53,6 @@
 
 	var/locked_to_z = 0 // Locked to a Z-level if nonzero.
 
-	// Fix ashifying in hot fires.
-	//autoignition_temperature=0
-	//fire_fuel=0
-
 	var/list/icon/pipes_shown = list()
 	var/last_played_vent
 	var/is_ventcrawling = 0

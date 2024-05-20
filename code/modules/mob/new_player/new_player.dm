@@ -498,10 +498,6 @@
 		qdel(speech)
 
 /mob/new_player/proc/LateChoices()
-	var/mills = world.time // 1/10 of a second, not real milliseconds but whatever
-	//var/secs = ((mills % 36000) % 600) / 10 //Not really needed, but I'll leave it here for refrence.. or something
-	var/mins = (mills % 36000) / 600
-	var/hours = mills / 36000
 
 	var/list/highprior = new()
 	var/list/heads = new()
@@ -525,7 +521,7 @@
 		.manifest tr.requested_department td {background-color: #00FF00}
 		.manifest th.reqhead td {background-color: #844}
 		.manifest tr.reqalt td {background-color: #FCC}
-		</style></head><body><center>Round Duration: [round(hours)]h [round(mins)]m<br>"}
+		</style></head><body><center>Shift duration: [getShiftDuration()]<br>"}
 	if(emergency_shuttle) //In case Nanotrasen decides reposess CentComm's shuttles.
 		if(emergency_shuttle.direction == 2) //Shuttle is going to centcomm, not recalled
 			dat += "<font color='red'><b>The station has been evacuated.</b></font><br>"

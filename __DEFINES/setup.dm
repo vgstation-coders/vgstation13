@@ -1127,16 +1127,59 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define MT_UPDATE 1
 #define MT_REINIT 2
 
+//////////////////
+// FIRE
+//////////////////
+
+// high heating value for burning objects, assuming perfect combustion (MJ/kg)
+#define HHV_WOOD 18.0
+#define HHV_PLASTIC 46.4 // Polypropylene
+#define HHV_FABRIC 19.4 // Cotton
+#define HHV_WAX 42.0 // Paraffin wax
+#define HHV_BIOLOGICAL 38.0 // Body fat
+
+// combustion requires about 14% oxygen concentration
+#define MINOXY2BURN 0.14
+
+// minimum burn time
+#define MIN_BURN_TIME 3 SECONDS
+
+// stoichiometric combustion ratios in oxygen
+#define FUEL_OX_RATIO_WOOD (1/6) // C6H10O5 (cellulose)
+#define FUEL_OX_RATIO_PLASTIC (2/9) // C3H6 ((poly)propylene)
+#define FUEL_OX_RATIO_FABRIC (1/6) // C6H10O5 (cellulose)
+#define FUEL_OX_RATIO_WAX (1/38) // C25H52 (paraffin wax)
+#define FUEL_OX_RATIO_BIOLOGICAL (1/78) // C55H104O6 ("average" triglyceride)
+
+// maximum flame temperature (K)
+#define FLAME_TEMPERATURE_WOOD 1300.15
+#define FLAME_TEMPERATURE_PLASTIC 1773.15
+#define FLAME_TEMPERATURE_FABRIC 1073.15
+#define FLAME_TEMPERATURE_WAX 973.15
+#define FLAME_TEMPERATURE_BIOLOGICAL 1173.15
+
+// molecular weight (km/mol)
+#define MOLECULAR_WEIGHT_WOOD 0.16
+#define MOLECULAR_WEIGHT_PLASTIC 0.042
+#define MOLECULAR_WEIGHT_FABRIC 0.16
+#define MOLECULAR_WEIGHT_WAX 0.35
+#define MOLECULAR_WEIGHT_BIOLOGICAL 0.86
+
+// Autoignition temperatures (K)
 #define AUTOIGNITION_WOOD  573.15
-#define AUTOIGNITION_PAPER 519.15
-#define AUTOIGNITION_PLASTIC 689.15 //autoignition temperature of ABS plastic
+#define AUTOIGNITION_PLASTIC 661.15 //polypropylene
 #define AUTOIGNITION_FABRIC 523.15
-#define AUTOIGNITION_PROTECTIVE 573.15 //autoignition temperature of protective clothing like firesuits or kevlar vests
-#define AUTOIGNITION_ORGANIC 633.15 //autoignition temperature of animal fats
-// Assuming this is http://en.wikipedia.org/wiki/Butane
-// (Autoignition temp 288°C, or 561.15°K)
-// Used in fueltanks exploding.
-#define AUTOIGNITION_WELDERFUEL 561.15
+#define AUTOIGNITION_WAX 518.15
+#define AUTOIGNITION_BIOLOGICAL 633.15 //animal fat
+#define AUTOIGNITION_WELDERFUEL 561.15 //butane
+
+// flame sizes (% of cell volume occupied by a flame)
+#define SMALL_FLAME 250 //a match, a candle, or a lighter (10% chance to ignite)
+#define MEDIUM_FLAME 625 //a single burning object on the ground (25%)
+#define LARGE_FLAME 1250 //a healthy campfire (50%)
+#define FULL_FLAME 2500 //floor to ceiling flames
+
+//////////////////
 
 // snow business
 #define SNOWBALL_MINIMALTEMP 265	//about -10°C, the minimal temperature at which a thrown snowball can cool you down.
@@ -1918,6 +1961,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 
 //Particles system defines
 #define PS_STEAM			"Steam"
+#define PS_SMOKE			"Smoke"
 #define PS_TEAR_REALITY		"Tear Reality"
 #define PS_CANDLE			"Candle"
 #define PS_CANDLE2			"Candle2"

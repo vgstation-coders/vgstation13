@@ -29,8 +29,8 @@
 	// Materials stuff
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_WOOD = 23) //1cm wide, 30cm long
-	autoignition_temperature=AUTOIGNITION_WOOD
 	w_type = RECYK_WOOD
+	flammable = TRUE
 	siemens_coefficient = 0
 
 	// Paint brush stuff
@@ -211,8 +211,8 @@
 
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_PLASTIC = 50)
-	autoignition_temperature=AUTOIGNITION_PLASTIC
 	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	siemens_coefficient = 0
 
 	var/paint_color = null

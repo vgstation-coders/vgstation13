@@ -29,9 +29,9 @@
 	item_state = "box"
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
 	starting_materials = list(MAT_CARDBOARD = 3750)
-	w_type=RECYK_MISC
-	autoignition_temperature = AUTOIGNITION_PAPER
-	autoignition_temperature = AUTOIGNITION_PAPER
+	w_type=RECYK_WOOD
+	flammable = TRUE
+
 	on_armory_manifest = TRUE
 
 /obj/item/weapon/storage/box/large
@@ -45,8 +45,6 @@
 	starting_materials = list(MAT_CARDBOARD = 15000)
 	storage_slots = 21
 	max_combined_w_class = 42 // 21*2
-
-	autoignition_temperature = AUTOIGNITION_PAPER
 
 /obj/item/weapon/storage/box/surveillance
 	name = "\improper DromedaryCo packet"

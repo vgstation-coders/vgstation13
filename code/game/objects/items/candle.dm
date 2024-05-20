@@ -170,7 +170,7 @@
 		return
 	update_icon()
 	if(istype(T)) //Start a fire if possible
-		T.hotspot_expose(source_temperature, 5, surfaces = 0)
+		T.hotspot_expose(source_temperature, SMALL_FLAME, 0)
 
 /obj/item/candle/attack_self(mob/user as mob)
 	if(lit)

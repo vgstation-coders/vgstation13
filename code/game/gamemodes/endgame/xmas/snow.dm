@@ -424,7 +424,6 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	name = "snow_flora"
 	icon = 'icons/obj/flora/snowflora.dmi'
 	icon_state = "snowbush1"
-	autoignition_temperature=AUTOIGNITION_WOOD
 
 /obj/structure/snow_flora/sappling
 	name = "sappling"

@@ -133,7 +133,7 @@
 			step(gib, pick(alldirs)) //move the last spawned gib in a random direction
 
 		if(is_robotic())
-			T.hotspot_expose(1000,1000,surfaces=1)
+			T.hotspot_expose(1000,MEDIUM_FLAME,1)
 		else
 			playsound(T, 'sound/effects/gib3.ogg', 50, 1)
 
@@ -343,16 +343,10 @@
 	var/datum/species/species = src.species || owner.species
 
 	//First check whether we can widen an existing wound
-	if(wounds.len > 0 && prob(50 + owner.number_wounds * 10))
-		if((type == CUT || type == BRUISE) && damage >= 5)
-			var/datum/wound/W = pick(wounds)
-			if(W.amount == 1 && W.started_healing())
-				W.open_wound(damage)
-				if(prob(25))
-					owner.visible_message("<span class='warning'>The wound on [owner.name]'s [display_name] widens with a nasty ripping sound.</span>", \
-					"<span class='warning'>The wound on your [display_name] widens with a nasty ripping sound.</span>", \
-					"You hear a nasty ripping noise, as if flesh is being torn apart.")
-				return
+	if(widenwound(type, damage))
+		update_damages()
+		owner.updatehealth()
+		return
 
 	//Creating wound
 	var/datum/wound/W
@@ -397,6 +391,35 @@
 
 	update_damages()
 	owner.updatehealth()
+
+/**
+ * Tries to expand an existing wound. Returns TRUE if successful.
+ *
+ * Arguments
+ * * type - Damage type inflicted. Expects CUT or BRUISE
+ * * damage - Amount of post-modifier damage inflicted
+ */
+/datum/organ/external/proc/widenwound(var/type = CUT, var/damage)
+	if(!wounds.len)
+		return
+	if(damage < 5)
+		return
+	if(!(type == CUT || type == BRUISE))
+		return
+	if(!prob(50 + owner.number_wounds * 10))
+		return
+	var/list/valid_wounds = list()
+	for(var/datum/wound/testwound in wounds)
+		if(testwound.amount == 1 && !istype(testwound, /datum/wound/burn/) && testwound.started_healing())
+			valid_wounds += testwound
+	if(valid_wounds.len)
+		var/datum/wound/W = pick(valid_wounds)
+		W.open_wound(damage)
+		if(prob(25))
+			owner.visible_message("<span class='warning'>The wound on [owner.name]'s [display_name] widens with a nasty ripping sound.</span>", \
+			"<span class='warning'>The wound on your [display_name] widens with a nasty ripping sound.</span>", \
+			"You hear a nasty ripping noise, as if flesh is being torn apart.")
+		return TRUE
 
 /****************************************************
 			   PROCESSING & UPDATING

@@ -150,7 +150,7 @@
 		var/datum/wound/internal_bleeding/I = new (15)
 		affected.wounds += I
 		affected.owner.custom_pain("You feel something rip in your [affected.display_name]!", 1, scream=TRUE)
-	user.drop_item()
+	user.drop_item(tool)
 	affected.hidden = tool
 	tool.forceMove(target)
 

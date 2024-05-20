@@ -29,8 +29,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/brightness_on = 1 //Barely enough to see where you're standing, it's a shitty discount match
 	heat_production = 1000
 	source_temperature = TEMPERATURE_FLAME
-	autoignition_temperature = AUTOIGNITION_PAPER
 	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
+	flammable = FALSE //matches are LIT and should not catch on fire
 	origin_tech = Tc_MATERIALS + "=1"
 	var/list/unlit_attack_verb = list("prods", "pokes")
 	var/list/lit_attack_verb = list("burns", "singes")
@@ -62,11 +63,10 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	update_brightness()
 
 /obj/item/weapon/match/extinguish()
-	..()
-	if (lit)
+	if (lit > 0)
+		visible_message("<span class='notice'>\The [name] goes out.</span>")
 		lit = -1
 		update_brightness()
-		visible_message("<span class='notice'>\The [name] goes out.</span>")
 
 /obj/item/weapon/match/examine(mob/user)
 	..()
@@ -148,8 +148,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		update_brightness()
 		if(M)
 			to_chat(M, "The flame on \the [src] suddenly goes out in a weak fashion.")
-	if(location)
-		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
+	if(location && lit == 1)
+		var/surf = isturf(loc)?TRUE:FALSE
+		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
 		return
 
 /obj/item/weapon/match/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -175,8 +176,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/match/strike_anywhere/s_a_k/process()//never burns out, extra swiss quality magic matches
 	var/turf/location = get_turf(src)
-	if(location)
-		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
+	if(location && lit == 1)
+		var/surf = isturf(loc)?TRUE:FALSE
+		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
 
 /obj/item/weapon/match/strike_anywhere/afterattack(atom/target, mob/user, prox_flags)
 	if(!prox_flags == 1)
@@ -207,6 +209,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	item_state = null
 	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
 	w_class = W_CLASS_TINY
+	w_type = RECYK_WOOD
 	body_parts_covered = 0
 	var/list/unlit_attack_verb = list("prods", "pokes")
 	var/list/lit_attack_verb = list("burns", "singes")
@@ -497,8 +500,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			M.u_equip(src, 0)	//Un-equip it so the overlays can update
 		qdel(src)
 		return
-	if(location)
-		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
+	if(location && lit == 1)
+		var/surf = isturf(loc)?TRUE:FALSE
+		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
 	//Oddly specific and snowflakey reagent transfer system below
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
 		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
@@ -674,7 +678,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	starting_materials = list(MAT_CARDBOARD = 50)
 	w_type = RECYK_MISC
 	throwforce = 1
-	autoignition_temperature = 0 //The filter doesn't burn
+	flammable = FALSE
 
 /obj/item/trash/cigbutt/bidibutt
 	name = "bidi butt"
@@ -856,8 +860,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 				M.update_inv_wear_mask(0)
 		update_brightness()
 		return
-	if(location)
-		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
+	if(location && lit == 1)
+		var/surf = isturf(loc)?TRUE:FALSE
+		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
 	return
 
 /obj/item/clothing/mask/cigarette/pipe/attack_self(mob/user as mob) //Refills the pipe. Can be changed to an attackby later, if loose tobacco is added to vendors or something. //Later meaning never
@@ -1071,8 +1076,9 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/weapon/lighter/process()
 	var/turf/location = get_turf(src)
-	if(location)
-		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
+	if(location && lit == 1)
+		var/surf = isturf(loc)?TRUE:FALSE
+		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
 	if(!fueltime)
 		fueltime = world.time + 100
 	if(world.time > fueltime)

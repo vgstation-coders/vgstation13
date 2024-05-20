@@ -879,14 +879,24 @@
 /atom/movable/proc/process_inertia(turf/start)
 	set waitfor = 0
 	if(Process_Spacemove(1))
-		inertia_dir  = 0
+		inertia_dir = 0
 		return
 
 	sleep(INERTIA_MOVEDELAY)
 
 	if(can_apply_inertia() && (src.loc == start))
 		if(!inertia_dir)
-			return //inertia_dir = last_move
+			return
+
+		set_glide_size(DELAY2GLIDESIZE(INERTIA_MOVEDELAY))
+		step(src, inertia_dir)
+
+/atom/movable/proc/process_inertia_ignore_gravity(turf/start)
+	sleep(INERTIA_MOVEDELAY)
+
+	if(can_apply_inertia() && (src.loc == start))
+		if(!inertia_dir)
+			return
 
 		set_glide_size(DELAY2GLIDESIZE(INERTIA_MOVEDELAY))
 		step(src, inertia_dir)

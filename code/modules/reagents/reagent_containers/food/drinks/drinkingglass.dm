@@ -25,7 +25,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
-	flammable = 0
+	can_be_lit = 0
 	if(!molotov)
 		lit = 0
 		light_color = null
@@ -70,7 +70,7 @@
 				filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 				overlays += filling
 
-			if(R.flammable)
+			if(R.can_be_lit)
 				if(lit)
 					var/image/I = image(icon, src, "[icon_state]-flamin")
 					I.blend_mode = BLEND_ADD
@@ -82,7 +82,7 @@
 					name = "flaming [name]"
 					desc += " Damn that looks hot!"
 				else
-					flammable = 1
+					can_be_lit = 1
 	else
 		icon_state = "glass_empty"
 		item_state = "glass_empty"

@@ -18,7 +18,7 @@
 	level = LEVEL_ABOVE_FLOOR
 	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE | PASSRAILING
 	slowdown_modifier = 2
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 	var/add_state = "_bare"
 	var/grown = 0
 	var/growdirs = 0

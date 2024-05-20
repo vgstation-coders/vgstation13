@@ -25,7 +25,7 @@
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_WOOD = 75)
 	w_type = RECYK_WOOD
-	autoignition_temperature = AUTOIGNITION_WOOD
+	flammable = TRUE
 	attack_verb = list("stabs")
 
 	var/obj/item/stack/sheet/cloth/stored_cloth = null
@@ -41,7 +41,7 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	siemens_coefficient = 1
-	autoignition_temperature = 0
+	flammable = FALSE
 	force = 10
 	throwforce = 15
 	throw_range = 7
