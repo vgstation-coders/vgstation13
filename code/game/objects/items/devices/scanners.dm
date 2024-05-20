@@ -53,8 +53,6 @@ BREATHALYZER
 			if(istype(A,/obj/))
 				var/obj/O = A
 				O.t_scanner_expose()
-			else if(istype(A,/obj/effect/ash))
-				continue
 			else if(istype(A,/mob/living/carbon))
 				var/mob/living/carbon/C = A
 				if(C.alpha < OPAQUE || (C.invisibility > 0 && C.invisibility < INVISIBILITY_OBSERVER) || length(C.body_alphas))
