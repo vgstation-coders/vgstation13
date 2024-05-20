@@ -233,10 +233,9 @@ Class Procs:
 		ice_puddle_list = list()
 	if(air.temperature >= AUTOIGNITION_TRIGGER)
 		if(!(src in burnable_zones_processing))
-			burnable_zones_processing += src
+			burnable_zones_processing |= src
 	else
-		if(src in burnable_zones_processing)
-			burnable_zones_processing -= src
+		burnable_zones_processing -= src
 
 /zone/proc/handle_events_add(turf/simulated/T)
 	for(var/obj/effect/overlay/puddle/ice/ice_puddle in T)
