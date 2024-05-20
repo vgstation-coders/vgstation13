@@ -186,7 +186,8 @@ var/global/list/ghdel_profiling = list()
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
 	var/turf/simulated/T = get_turf(src)
-	T?.zone?.burnable_atoms -= src
+	if(istype(T))
+		T?.zone?.burnable_atoms -= src
 	/*if(istype(beams) && beams.len)
 		for(var/obj/effect/beam/B in beams)
 			if(B && B.target == src)
