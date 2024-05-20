@@ -232,8 +232,7 @@ Class Procs:
 	else if ( air.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME )
 		ice_puddle_list = list()
 	if(air.temperature >= AUTOIGNITION_TRIGGER)
-		if(!(src in burnable_zones_processing))
-			burnable_zones_processing |= src
+		burnable_zones_processing |= src
 	else
 		burnable_zones_processing -= src
 
@@ -243,22 +242,18 @@ Class Procs:
 			ice_puddle_list = list()
 		ice_puddle_list |= ice_puddle
 	if(T.flammable)
-		if(!(T in burnable_atoms))
-			burnable_atoms += T
+		burnable_atoms |= T
 	for(var/obj/O in T)
 		if(O.flammable)
-			if(!(O in burnable_atoms))
-				burnable_atoms += O
+			burnable_atoms |= O
 
 /zone/proc/handle_events_remove(turf/simulated/T)
 	if(ice_puddle_list != null)
 		for(var/obj/effect/overlay/puddle/ice/ice_puddle in T)
 			ice_puddle_list -= ice_puddle
-	if(T in burnable_atoms)
-		burnable_atoms -= T
+	burnable_atoms -= T
 	for(var/obj/O in T)
-		if(O in burnable_atoms)
-			burnable_atoms -= O
+		burnable_atoms -= O
 
 /zone/proc/checkzoneburn()
 	for(var/atom/A in burnable_atoms)
