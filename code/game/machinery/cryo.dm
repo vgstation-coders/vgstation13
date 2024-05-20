@@ -30,7 +30,25 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	light_range_on = 1
 	light_power_on = 2
 	use_auto_lights = 1
-	submerging = 1
+
+/obj/machinery/atmospherics/unary/cryo_cell/Entered(var/atom/movable/Obj, var/atom/OldLoc)
+	. = ..()
+	
+	if(OldLoc.type != src.type)
+		spawn(rand(0,6))
+			if(OldLoc.type != src.type)
+				Obj.submerge_anim()
+
+/atom/movable/proc/submerge_anim()
+	if(loc.type == /obj/machinery/atmospherics/unary/cryo_cell)
+		spawn()
+			animate(src, pixel_y = pixel_y + 2 * PIXEL_MULTIPLIER, time = 7, loop = 1)
+		spawn(14)
+			if(loc.type == /obj/machinery/atmospherics/unary/cryo_cell)
+				animate(src, pixel_y = pixel_y - 2 * PIXEL_MULTIPLIER, time = 7, loop = 1)
+				sleep(14)
+				if(loc.type == /obj/machinery/atmospherics/unary/cryo_cell)
+					submerge_anim()
 
 /obj/machinery/atmospherics/unary/cryo_cell/splashable()
 	return FALSE

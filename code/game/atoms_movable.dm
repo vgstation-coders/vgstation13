@@ -59,8 +59,6 @@
 
 	var/atom/movable/border_dummy/border_dummy //Used for border objects. The old Uncross() method fails miserably with pixel movement or large hitboxes.
 
-	var/submerging = 0 // if atom is a liquid body for contents inside
-
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
@@ -1342,26 +1340,3 @@
 			change_dir(new_dir)
 			sleep(1)
 	change_dir(prev_dir)
-
-/atom/movable/Entered(var/atom/movable/Obj, var/atom/OldLoc)
-	. = ..()
-	
-	if(submerging && ismovable(OldLoc))
-		var/atom/movable/mloc = OldLoc
-		if(!mloc || !mloc.submerging)
-			spawn(rand(0,6))
-				if(submerging && (!mloc || !mloc.submerging))
-					Obj.submerge_anim()
-
-/atom/movable/proc/submerge_anim()
-	if(ismovable(loc))
-		var/atom/movable/mloc = loc
-		if(mloc && mloc.submerging)
-			spawn()
-				animate(src, pixel_y = pixel_y + 2 * PIXEL_MULTIPLIER, time = 7, loop = 1)
-			spawn(14)
-				if(mloc && mloc.submerging)
-					animate(src, pixel_y = pixel_y - 2 * PIXEL_MULTIPLIER, time = 7, loop = 1)
-					sleep(14)
-					if(mloc && mloc.submerging)
-						submerge_anim()
