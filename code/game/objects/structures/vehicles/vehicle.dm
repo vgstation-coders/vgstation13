@@ -69,6 +69,13 @@
 	var/headlights = FALSE
 	var/explodes_fueltanks = FALSE
 
+/obj/structure/bed/chair/vehicle/forceMove(atom/destination, step_x, step_y, no_tp, harderforce, glide_size_override)
+	if(!isturf(destination))
+		var/atom/movable/M = manual_unbuckle()
+		if(istype(M))
+			visible_message("<span class='warning'>\The [src] is ripped from [M]!</span>")
+	. = ..()
+
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
 

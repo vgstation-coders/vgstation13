@@ -51,13 +51,6 @@
 
 /obj/structure/bed/AltClick(mob/user as mob)
 	buckle_mob(user, user)
-
-/obj/structure/bed/forceMove(atom/destination, step_x, step_y, no_tp, harderforce, glide_size_override)
-	if(!isturf(destination))
-		var/atom/movable/M = manual_unbuckle()
-		if(istype(M))
-			visible_message("<span class='warning'>\The [src] is ripped from [M]!</span>")
-	. = ..()
 	
 /obj/structure/bed/verb/buckle_in_out()
 	set name = "Buckle In/Out"
