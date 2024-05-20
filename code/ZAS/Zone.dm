@@ -232,7 +232,8 @@ Class Procs:
 	else if ( air.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME )
 		ice_puddle_list = list()
 	if(air.temperature >= AUTOIGNITION_TRIGGER)
-		burnable_zones_processing += src
+		if(!(src in burnable_zones_processing))
+			burnable_zones_processing += src
 	else
 		if(src in burnable_zones_processing)
 			burnable_zones_processing -= src

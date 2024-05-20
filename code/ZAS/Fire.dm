@@ -120,12 +120,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		if(!autoignition_temperature)
 			autoignition_temperature = thermal_material.autoignition_temperature
 		fire_protection = world.time
-		var/turf/simulated/T = get_turf(src)
-		if(T && istype(T))
-			var/zone/Z = T.zone
-			if(Z)
-				if(!(src in Z.burnable_atoms))
-					Z.burnable_atoms += src
 
 /atom/movable/firelightdummy
 	gender = PLURAL
