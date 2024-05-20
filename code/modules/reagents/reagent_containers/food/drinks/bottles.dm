@@ -332,7 +332,7 @@
 				var/turf/loca = get_turf(src)
 				if(loca)
 					new /obj/effect/fire(loca)
-					loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
+					loca.hotspot_expose(fueltemp["max_temperature"], 1000,surfaces=istype(loc,/turf))
 			else
 				new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
 
@@ -414,10 +414,10 @@
 		visible_message(flavor_text)
 		processing_objects.Add(src)
 		update_icon()
-	if(!lit && flammable)
+	if(!lit && can_be_lit)
 		lit = 1
 		visible_message(flavor_text)
-		flammable = 0
+		can_be_lit = 0
 		update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/blow_act(var/mob/living/user)
