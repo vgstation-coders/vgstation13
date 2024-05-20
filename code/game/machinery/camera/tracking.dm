@@ -194,7 +194,7 @@
 	eyeobj.forceMove(get_turf(currently_tracking))
 	currently_tracking.lock_atom(eyeobj,/datum/locking_category/ai_eye)
 
-	currently_tracking.register_event(/event/moved,src,nameof(src::on_camera_change()))
+	currently_tracking.register_event(/event/after_move,src,nameof(src::on_camera_change()))
 	currently_tracking.register_event(/event/destroyed,src,nameof(src::stop_ai_tracking()))
 	currently_tracking.register_event(/event/equipped,src,nameof(src::on_camera_change()))
 	//currently_tracking.register_event(/event/unequipped,src,nameof(src::on_camera_change()))
@@ -203,7 +203,7 @@
 
 /datum/locking_category/ai_eye
 
-/mob/living/silicon/ai/proc/on_camera_change(mover)
+/mob/living/silicon/ai/proc/on_camera_change()
 	if(eyeobj && currently_tracking)
 		var/cantrack = can_track_atom(currently_tracking)
 		/*if(!eyeobj.locked_to && cantrack) // Retracking code
@@ -217,8 +217,8 @@
 /mob/living/silicon/ai/proc/stop_ai_tracking()
 	if(currently_tracking)
 		to_chat(src, "No longer tracking [currently_tracking.name] on camera.")
-		currently_tracking.unregister_event(/event/moved,src,nameof(src::on_camera_change()))
-		currently_tracking.unregister_event(/event/destroyed,src,nameof(src::stop_ai_tracking()))
+		currently_tracking.unregister_event(/event/after_move,src,nameof(src::on_camera_change()))
+		currently_tracking.unregister_event(/event/destroyed,src,nameof(src::()))
 		currently_tracking.unregister_event(/event/equipped,src,nameof(src::on_camera_change()))
 		//currently_tracking.unregister_event(/event/unequipped,src,nameof(src::on_camera_change()))
 		currently_tracking.unregister_event(/event/camera_sight_changed,src,nameof(src::on_camera_change()))
