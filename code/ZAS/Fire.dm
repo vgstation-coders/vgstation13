@@ -227,6 +227,8 @@ var/global/list/image/charred_overlays = list()
 	name = "ash"
 	icon_state = "char"
 	alpha = 0
+	anchored = 1
+	mouse_opacity = 0
 
 /obj/effect/ash/clean_act(var/cleanliness)
 	if(cleanliness >= CLEANLINESS_WATER)
