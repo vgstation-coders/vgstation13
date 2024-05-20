@@ -218,7 +218,7 @@
 	if(currently_tracking)
 		to_chat(src, "No longer tracking [currently_tracking.name] on camera.")
 		currently_tracking.unregister_event(/event/after_move,src,nameof(src::on_camera_change()))
-		currently_tracking.unregister_event(/event/destroyed,src,nameof(src::()))
+		currently_tracking.unregister_event(/event/destroyed,src,nameof(src::stop_ai_tracking()))
 		currently_tracking.unregister_event(/event/equipped,src,nameof(src::on_camera_change()))
 		//currently_tracking.unregister_event(/event/unequipped,src,nameof(src::on_camera_change()))
 		currently_tracking.unregister_event(/event/camera_sight_changed,src,nameof(src::on_camera_change()))
