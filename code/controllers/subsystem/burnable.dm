@@ -1,5 +1,5 @@
 var/datum/subsystem/burnable/SSburnable
-var/list/atom/burnableatoms = list()
+var/list/zone/burnable_zones_processing = list()
 
 /datum/subsystem/burnable
 	name          = "Burnable"
@@ -14,20 +14,20 @@ var/list/atom/burnableatoms = list()
 	NEW_SS_GLOBAL(SSburnable)
 
 /datum/subsystem/burnable/stat_entry()
-	..("P:[burnableatoms.len]")
+	..("P:[burnable_zones_processing.len]")
 
 /datum/subsystem/burnable/fire(var/resumed = FALSE)
 	if(!resumed)
-		currentrun = burnableatoms.Copy()
+		currentrun = burnable_zones_processing.Copy()
 
 	while(currentrun.len)
-		var/atom/A = currentrun[currentrun.len]
+		var/zone/Z = currentrun[currentrun.len]
 		currentrun.len--
 
-		if(!A || A.gcDestroyed || A.timestopped)
+		if(!Z || Z.gcDestroyed)
 			continue
 
-		A.checkburn()
+		Z.checkzoneburn()
 
 		if (MC_TICK_CHECK)
 			break

@@ -73,7 +73,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	fuel_ox_ratio = FUEL_OX_RATIO_BIOLOGICAL
 	flame_temp = FLAME_TEMPERATURE_BIOLOGICAL
 
-
 ///////////////////////////////////////////////
 // COMBUSTION
 ///////////////////////////////////////////////
@@ -121,6 +120,12 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		if(!autoignition_temperature)
 			autoignition_temperature = thermal_material.autoignition_temperature
 		fire_protection = world.time
+		var/turf/simulated/T = get_turf(src)
+		if(T && istype(T))
+			var/zone/Z = T.zone
+			if(Z)
+				if(!(src in Z.burnable_atoms))
+					Z.burnable_atoms += src
 
 /atom/movable/firelightdummy
 	gender = PLURAL
@@ -443,11 +448,9 @@ var/global/list/image/charred_overlays = list()
 		ignite()
 
 /area/checkburn()
-	burnableatoms -= src
 	CRASH("[src] added to burnableatoms!")
 
 /mob/checkburn()
-	burnableatoms -= src
 	CRASH("[src] added to burnableatoms!")
 
 /area/fire_act()
@@ -476,7 +479,6 @@ var/global/list/image/charred_overlays = list()
 /turf/ashify()
 	if(!on_fire)
 		return
-	burnableatoms -= src
 	extinguish()
 
 /**

@@ -82,8 +82,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 				thermal_mass = 100
 	if(thermal_mass)
 		initial_thermal_mass = thermal_mass
-	if(flammable)
-		burnableatoms += src
 
 //More cooking stuff:
 /obj/proc/can_cook() //Returns true if object is currently in a state that would allow for food to be cooked on it (eg. the grill is currently powered on). Can (and generally should) be overriden to check for more specific conditions.
@@ -431,7 +429,6 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/item/checkburn()
 	if(!flammable)
-		burnableatoms -= src
 		CRASH("[src] was added to burnableatoms despite not being flammable!")
 	if(on_fire)
 		return
