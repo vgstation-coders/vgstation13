@@ -93,9 +93,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/fire_sprite = "fire"
 	var/fire_overlay = null
 
-	var/image/charred_overlay = null
-	var/last_char = 0
-
 	var/atom/movable/firelightdummy/firelightdummy
 
 /atom/movable/New()
@@ -162,76 +159,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(reagents?.total_volume)
 		return TRUE
 
-//charred overlay procs taken from Deity's food temperature overlays system (see food.dm)
-var/global/list/image/charred_overlays = list()
-
-/atom/proc/set_charred_overlay()
-	return
-
-/atom/proc/update_charred_overlay(var/char_alpha)
-	return
-
-/atom/proc/process_charred_overlay()
-	return
-
-/obj/set_charred_overlay()
-	if(update_charred_overlay())
-		return
-
-	var/icon/I = new /icon(icon, icon_state)
-	I.Blend(rgb(255,255,255),ICON_ADD)
-	I.Blend(new /icon('icons/effects/effects.dmi', "char"),ICON_MULTIPLY)
-
-	var/image/img = image(I)
-	img.name = "charred_overlay"
-	charred_overlays["[type][icon_state]"] = img
-	update_charred_overlay()
-
-/obj/update_charred_overlay(var/char_alpha = 96)
-	if(charred_overlays["[type][icon_state]"])
-		if (charred_overlay)
-			overlays -= charred_overlay
-		charred_overlay = mutable_appearance(charred_overlays["[type][icon_state]"])
-		charred_overlay.appearance_flags = RESET_COLOR|RESET_ALPHA|KEEP_TOGETHER
-		charred_overlay.alpha = char_alpha
-		overlays += charred_overlay
-		return 1
-
-/obj/process_charred_overlay()
-	if(thermal_mass)
-		var/c_alpha = 96 + clamp((64*(1-(thermal_mass/initial_thermal_mass))),0,64)
-		if(!charred_overlays["[type][icon_state]"])
-			set_charred_overlay()
-		else
-			update_charred_overlay(c_alpha)
-		last_char = world.time
-	else
-		if(prob(10)) //10% chance each tick of item getting charred
-			set_charred_overlay()
-
-/obj/effect/process_charred_overlay()
-	return
-
-/turf/process_charred_overlay()
-	if(locate(/obj/effect/ash) in src)
-		var/obj/effect/ash/A = locate(/obj/effect/ash) in src
-		if(flammable)
-			A.alpha = clamp((80*(1-(thermal_mass/initial_thermal_mass))),0,80) //turf's char overlays aren't as harsh as objects'
-		else
-			A.alpha = 40
-	else
-		new /obj/effect/ash(src)
-
-/obj/effect/ash
-	name = "ash"
-	icon_state = "char"
-	alpha = 0
-	anchored = 1
-	mouse_opacity = 0
-
-/obj/effect/ash/clean_act(var/cleanliness)
-	if(cleanliness >= CLEANLINESS_WATER)
-		qdel(src)
 /**
  * Burns solid objects and produces heat.
  *
@@ -280,9 +207,6 @@ var/global/list/image/charred_overlays = list()
 	var/delta_m = 0.20 * burnrate * ZAS_mass_consumption_multiplier
 	useThermalMass(delta_m)
 	genSmoke(oxy_ratio,temperature,T)
-
-	if(world.time - last_char >= 10 SECONDS)
-		process_charred_overlay()
 
 	//Change in internal energy = energy produced by combustion (assuming perfect combustion).
 	heat_out = material.heating_value * delta_m
@@ -418,15 +342,12 @@ var/global/list/image/charred_overlays = list()
 	if(flammable && !on_fire)
 		ignite()
 		return 1
-	else
-		process_charred_overlay()
-	return 0
 
 /atom/proc/checkburn()
 	if(on_fire)
 		return
 	if(!flammable)
-		return
+		CRASH("[src] was added to burnableatoms despite not being flammable!")
 	//if an object is not on fire, is flammable, and is in an environment with temperature above its autoignition temp & sufficient oxygen, ignite it
 	if(thermal_mass <= 0)
 		ashify()
