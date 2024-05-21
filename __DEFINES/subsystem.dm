@@ -76,7 +76,7 @@
 #define SS_WAIT_THERM_DISS			1 SECONDS
 #define SS_WAIT_TICKER              2 SECONDS
 #define SS_WAIT_ENGINES				30 SECONDS
-#define SS_WAIT_BURNABLE			7.5 SECONDS
+#define SS_WAIT_BURNABLE			3 SECONDS
 
 #define SS_DISPLAY_TIMER          -110
 #define SS_DISPLAY_GARBAGE        -100

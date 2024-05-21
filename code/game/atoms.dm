@@ -185,8 +185,9 @@ var/global/list/ghdel_profiling = list()
 	invisibility = 101
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
-	if(flammable)
-		burnableatoms -= src
+	var/turf/simulated/T = get_turf(src)
+	if(istype(T))
+		T.zone?.burnable_atoms -= src
 	/*if(istype(beams) && beams.len)
 		for(var/obj/effect/beam/B in beams)
 			if(B && B.target == src)

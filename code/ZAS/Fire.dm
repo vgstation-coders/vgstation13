@@ -73,7 +73,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	fuel_ox_ratio = FUEL_OX_RATIO_BIOLOGICAL
 	flame_temp = FLAME_TEMPERATURE_BIOLOGICAL
 
-
 ///////////////////////////////////////////////
 // COMBUSTION
 ///////////////////////////////////////////////
@@ -364,11 +363,9 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		ignite()
 
 /area/checkburn()
-	burnableatoms -= src
 	CRASH("[src] added to burnableatoms!")
 
 /mob/checkburn()
-	burnableatoms -= src
 	CRASH("[src] added to burnableatoms!")
 
 /area/fire_act()
@@ -397,7 +394,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 /turf/ashify()
 	if(!on_fire)
 		return
-	burnableatoms -= src
 	extinguish()
 
 /**

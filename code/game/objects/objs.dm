@@ -80,7 +80,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(thermal_mass)
 		initial_thermal_mass = thermal_mass
 	if(flammable)
-		burnableatoms += src
+		var/turf/simulated/T = get_turf(src)
+		if(istype(T))
+			T.zone?.burnable_atoms |= src
 
 //More cooking stuff:
 /obj/proc/can_cook() //Returns true if object is currently in a state that would allow for food to be cooked on it (eg. the grill is currently powered on). Can (and generally should) be overriden to check for more specific conditions.
