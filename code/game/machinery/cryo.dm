@@ -40,14 +40,14 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 				Obj.submerge_anim()
 
 /atom/movable/proc/submerge_anim()
-	if(loc.type == /obj/machinery/atmospherics/unary/cryo_cell)
+	if(loc?.type == /obj/machinery/atmospherics/unary/cryo_cell)
 		spawn()
 			animate(src, pixel_y = pixel_y + 2 * PIXEL_MULTIPLIER, time = 7, loop = 1)
 		spawn(14)
-			if(loc.type == /obj/machinery/atmospherics/unary/cryo_cell)
+			if(loc?.type == /obj/machinery/atmospherics/unary/cryo_cell)
 				animate(src, pixel_y = pixel_y - 2 * PIXEL_MULTIPLIER, time = 7, loop = 1)
 				sleep(14)
-				if(loc.type == /obj/machinery/atmospherics/unary/cryo_cell)
+				if(loc?.type == /obj/machinery/atmospherics/unary/cryo_cell)
 					submerge_anim()
 
 /obj/machinery/atmospherics/unary/cryo_cell/splashable()
