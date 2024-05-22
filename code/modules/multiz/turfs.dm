@@ -274,6 +274,7 @@ var/obj/effect/glass_open_overlay/plasma/openpgfloor
 		else
 			// We space background now, forget the vis contentsing of it
 			icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
+			return ..()
 		switch(glass_state)
 			if("glass_floor")
 				if(!opengfloor)
