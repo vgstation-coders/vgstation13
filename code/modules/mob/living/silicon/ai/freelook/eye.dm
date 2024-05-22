@@ -121,8 +121,6 @@
 		CAN_MOVE_DIAGONALLY = FALSE
 		user.eyeobj.glide_size = DELAY2GLIDESIZE(1)
 		user.delayNextMove(1)
-	else if(user.currently_tracking)
-		user.eyeobj.glide_size = user.currently_tracking.glide_size
 	else
 		user.eyeobj.glide_size = WORLD_ICON_SIZE
 		CAN_MOVE_DIAGONALLY = TRUE
