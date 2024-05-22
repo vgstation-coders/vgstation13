@@ -55,7 +55,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	return 0
 
 /obj/item/weapon/match/ignite(temperature)
-	. = ..()
 	light()
 
 /obj/item/weapon/match/proc/light()
@@ -220,6 +219,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	slot_flags = SLOT_MASK|SLOT_EARS
 	goes_in_mouth = TRUE
 	var/lit = 0
+	flammable = FALSE //cigs are LIT not IGNITED
 	var/overlay_on = "ciglit" //Apparently not used
 	var/type_butt = /obj/item/trash/cigbutt
 	var/lastHolder = null
@@ -313,6 +313,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	update_icon()
 
 /obj/item/clothing/mask/cigarette/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(lit)
+		return
+	ignite()
+
+/obj/item/clothing/mask/cigarette/ignite()
 	if(lit)
 		return
 	light("<span class='danger'>The raging fire sets \the [src] alight.</span>")
@@ -924,6 +929,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	attack_verb = list("prods", "pokes")
 	light_color = LIGHT_COLOR_FIRE
 	var/lit = 0
+	flammable = FALSE //lit not ignited
 	var/base_icon = "lighter"
 	surgerysound = 'sound/items/cautery.ogg'
 	var/light_icon = "lighter-light"

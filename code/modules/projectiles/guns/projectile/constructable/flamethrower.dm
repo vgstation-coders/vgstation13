@@ -236,6 +236,11 @@
 		C.update_inv_hands()
 	return
 
+/obj/item/weapon/gun/projectile/flamethrower/extinguish()
+	lit = 0
+	update_icon()
+	..()
+
 /obj/item/weapon/gun/projectile/flamethrower/full/New(var/loc)
 	..()
 	weldtool = new /obj/item/tool/weldingtool(src)
