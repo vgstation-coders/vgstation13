@@ -841,7 +841,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 				"<span class='danger'>Your [display_name] goes flying off!</span>", \
 				"<span class='danger'>You hear a terrible sound of ripping tendons and flesh.</span>")
 
-			if(isturf(organ.loc))
+			if(organ.loc?.type == /obj/machinery/atmospherics/unary/cryo_cell)
 				//Throw organs around
 				var/randomdir = pick(cardinal)
 				step(organ, randomdir)
