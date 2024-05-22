@@ -3,6 +3,8 @@
 	penetration_dampening = 5
 	var/hasbolts = FALSE
 
+	pass_flags_self = PASSMACHINE
+
 /obj/structure/examine(mob/user)
 	..()
 	if(hasbolts)
