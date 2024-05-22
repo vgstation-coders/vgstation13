@@ -1563,6 +1563,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/hand/on_attach(obj/item/organ/external/hand_item)
 	display_name = hand_item.name
 	generic_type = hand_item.type
+	icon_name = hand_item.icon_state
 
 /datum/organ/external/hand/r_hand
 	name = LIMB_RIGHT_HAND
@@ -1922,6 +1923,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 	forced_icon_file = 'icons/mob/human_races/crab_claws.dmi'
 	forbid_gloves = TRUE
 
+/obj/item/organ/external/l_hand/crab/megamad
+	icon_state = "left_claw_megamad"
+	attack_punch_damage = 10
+
 /obj/item/organ/external/l_leg
 	name = "left leg"
 	icon_state = LIMB_LEFT_LEG
@@ -1969,6 +1974,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 	mutations = list(M_CLAWS)
 	forced_icon_file = 'icons/mob/human_races/crab_claws.dmi'
 	forbid_gloves = TRUE
+
+/obj/item/organ/external/r_hand/crab/megamad
+	icon_state = "right_claw_megamad"
+	attack_punch_damage = 10
 
 /obj/item/organ/external/r_leg
 	name = "right leg"

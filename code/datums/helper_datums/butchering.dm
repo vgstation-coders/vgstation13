@@ -249,25 +249,33 @@
 
 //=============Claws========
 
-/datum/butchering_product/xeno_claw
-	result = /obj/item/xenos_claw
+/datum/butchering_product/claws
 	verb_name = "declaw"
 	verb_gerund = "declawing"
 	radial_icon = "radial_xclaw"
 
-/datum/butchering_product/xeno_claw/desc_modifier()
+/datum/butchering_product/claws/desc_modifier()
 	if(!amount)
 		return "Its claws have been cut off. "
 
-/datum/butchering_product/xeno_claw/crab_claw
-	product_name = "claws"
-	result = null
+/datum/butchering_product/claws/xeno
+	result = /obj/item/xenos_claw
 
-/datum/butchering_product/xeno_claw/crab_claw/spawn_result(location, mob/parent)
+/datum/butchering_product/claws/crab
+	product_name = "claws"
+	/// The path for subtypes
+	var/claw_path
+
+/datum/butchering_product/claws/crab/spawn_result(location, mob/parent)
 	while(amount > 0)
-		new /obj/item/organ/external/r_hand/crab(location)
-		new /obj/item/organ/external/l_hand/crab(location)
+		var/left_claw = text2path("/obj/item/organ/external/l_hand/crab[claw_path]")
+		var/right_claw = text2path("/obj/item/organ/external/r_hand/crab[claw_path]")
+		new left_claw(location)
+		new right_claw(location)
 		amount--
+
+/datum/butchering_product/claws/crab/megamad
+	claw_path = "/megamad"
 
 //======frog legs
 
