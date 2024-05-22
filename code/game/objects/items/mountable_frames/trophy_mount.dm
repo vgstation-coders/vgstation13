@@ -8,7 +8,7 @@
 	w_type = RECYK_WOOD
 	frame_material = /obj/item/stack/sheet/wood
 	sheets_refunded = 2
-	autoignition_temperature = AUTOIGNITION_WOOD
+	flammable = TRUE
 	var/obj/item/held_item
 	var/list/params_list
 	var/icon/clicked
@@ -126,7 +126,9 @@
 	desc = "A wooden trophy mount."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "trophy_mount"
-	autoignition_temperature = AUTOIGNITION_WOOD
+	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	anchored = 1
 	var/obj/item/held_item
 	var/list/params_list

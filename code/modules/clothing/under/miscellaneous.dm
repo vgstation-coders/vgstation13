@@ -218,7 +218,7 @@
 	icon_state = "blackskirt"
 	_color = "blackskirt"
 	body_parts_covered = FULL_TORSO|ARMS
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/under/schoolgirl
 	name = "schoolgirl uniform"

@@ -319,7 +319,9 @@
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
+
 	surgerysound = 'sound/items/bonegel.ogg'
 
 /obj/item/tool/bonegel/suicide_act(var/mob/living/user)
@@ -338,7 +340,9 @@
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
+
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=3"
 	var/usage_amount = 10
 	surgerysound = 'sound/items/fixovein.ogg'

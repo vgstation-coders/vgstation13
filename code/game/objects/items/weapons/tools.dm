@@ -278,7 +278,7 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = 0
+	flammable = FALSE
 
 	//R&D tech level
 	origin_tech = Tc_ENGINEERING + "=1"
@@ -378,8 +378,9 @@
 		var/mob/M = location
 		if(M.is_holding_item(src))
 			location = get_turf(M)
-	if (istype(location, /turf) && welding)
-		location.hotspot_expose(source_temperature, 5,surfaces=istype(loc,/turf))
+	if (welding)
+		var/surf = isturf(loc)?TRUE:FALSE
+		location.hotspot_expose(source_temperature, MEDIUM_FLAME, surf)
 
 /obj/item/tool/weldingtool/attack(mob/M as mob, mob/user as mob)
 	if(hasorgans(M))

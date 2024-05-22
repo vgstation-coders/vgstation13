@@ -347,7 +347,7 @@
 /obj/item/weapon/paper/lamprey
 	icon = 'icons/lamprey.dmi'
 	icon_state = "lampreynote"
-	fire_fuel = 0
+
 
 /obj/item/weapon/paper/lamprey/update_icon()
 	return 0

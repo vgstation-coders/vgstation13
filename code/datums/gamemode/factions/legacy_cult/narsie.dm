@@ -26,6 +26,7 @@ var/global/list/narsie_list = list()
 /obj/machinery/singularity/narsie/New()
 	..()
 	narsie_list.Add(src)
+	power_machines.Remove(src)//Don't want Nar-Sie hungering for singularity beacons
 
 /obj/machinery/singularity/narsie/Destroy()
 	narsie_list.Remove(src)
@@ -182,7 +183,7 @@ var/global/list/narsie_list = list()
 			if(M.flags & INVULNERABLE)
 				return 0
 
-			M.cultify()
+			M.cultify(src)
 
 	//ITEM PROCESSING
 		else if (istype(A, /obj/))

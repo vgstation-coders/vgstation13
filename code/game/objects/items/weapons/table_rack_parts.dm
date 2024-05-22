@@ -109,7 +109,7 @@
 	flags = 0
 	table_type = /obj/structure/table/woodentable
 	sheet_type = /obj/item/stack/sheet/wood
-	autoignition_temperature = AUTOIGNITION_WOOD
+	flammable = TRUE
 
 /obj/item/weapon/table_parts/wood/cultify()
 	return
@@ -198,7 +198,7 @@
 	icon_state = "plastic_tableparts"
 	starting_materials = list(MAT_PLASTIC = 3750)
 	w_type = RECYK_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	table_type = /obj/structure/table/plastic
 	sheet_type = /obj/item/stack/sheet/mineral/plastic
 	sheet_amount = 5

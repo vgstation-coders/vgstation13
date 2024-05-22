@@ -29,6 +29,9 @@
 	if (on_fire && fire_overlay)
 		overlays += fire_overlay
 
+/obj/item/weapon/reagent_containers/food/flammable_reagent_check()
+	return FALSE //don't bother burning reagents in food
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/dipping_sauce/update_icon()

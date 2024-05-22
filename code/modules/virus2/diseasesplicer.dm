@@ -154,7 +154,7 @@
 
 
 /obj/machinery/computer/diseasesplicer/update_icon()
-	..()
+
 	overlays.len = 0
 
 	if (dish)
@@ -173,7 +173,7 @@
 		overlays += dish_content
 
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))
-		return
+		return ..()
 
 	if (dish && dish.contained_virus)
 		if (dish.analysed)
@@ -197,6 +197,7 @@
 		buffer_light.plane = ABOVE_LIGHTING_PLANE
 		buffer_light.layer = ABOVE_LIGHTING_LAYER
 		overlays += buffer_light
+	..()
 
 /obj/machinery/computer/diseasesplicer/proc/buffer2dish()
 	if(!memorybank || !dish || !dish.contained_virus)

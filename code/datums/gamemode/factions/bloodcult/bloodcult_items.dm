@@ -361,7 +361,7 @@ var/list/arcane_tomes = list()
 	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 1
 	attack_verb = list("slaps")
-	autoignition_temperature = AUTOIGNITION_PAPER
+	flammable = TRUE
 	mech_flags = MECH_SCAN_FAIL
 	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/linked_ui
 	var/blood_text = ""
@@ -1620,7 +1620,7 @@ var/list/arcane_tomes = list()
 	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 1
 	attack_verb = list("slaps")
-	autoignition_temperature = AUTOIGNITION_PAPER
+	flammable = TRUE
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)
@@ -1728,18 +1728,21 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/on_reagent_change()
 	..()
-	overlays.len = 0
+	update_icon()
+	for(var/datum/reagent/R in reagents.reagent_list)
+		if(R.id == BLOOD)
+			var/datum/reagent/blood/B = R
+			var/datum/disease2/disease/cultvirus = global_diseases[DISEASE_CULT]
+			if (!("[cultvirus.uniqueID]-[cultvirus.subID]" in B.data["virus2"]))
+				B.data["virus2"]["[cultvirus.uniqueID]-[cultvirus.subID]"] = cultvirus.getcopy()
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/update_icon()
+	..()
 	if (reagents.reagent_list.len > 0)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "cult")
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += filling
-
-	for(var/datum/reagent/R in reagents.reagent_list)
-		if(R.id == BLOOD)
-			var/datum/reagent/blood/B = R
-			var/datum/disease2/disease/cultvirus = global_diseases[DISEASE_CULT]
-			B.data["virus2"]["[cultvirus.uniqueID]-[cultvirus.subID]"] += cultvirus.getcopy()
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/throw_impact(var/atom/hit_atom)
 	if(reagents.total_volume)

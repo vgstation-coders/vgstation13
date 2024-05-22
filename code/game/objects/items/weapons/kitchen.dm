@@ -186,10 +186,10 @@
 	icon_state = "pspoon"
 	force = 1
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	bendable = FALSE
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
+	flammable = TRUE
 
 /*
  * Sporks
@@ -289,7 +289,7 @@
 	desc = "Plork!"
 	icon_state = "pspork"
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
 
@@ -387,7 +387,7 @@
 	desc = "Yay, no washing up to do."
 	icon_state = "pfork"
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
 
@@ -396,7 +396,7 @@
 	desc = "Less likely to dissolve when picking up a forkful of mothership stew."
 	icon_state = "tfork"
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 
 /*
  * Knives
@@ -432,7 +432,7 @@
 	throwforce = 1
 	sharpness = 0.8
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	starting_materials = list(MAT_PLASTIC = 1*CC_PER_SHEET_MISC) //Recipe calls for 1 sheet
 	w_type = RECYK_PLASTIC
 
@@ -583,7 +583,8 @@
 	throw_speed = 2
 	throw_range = 7
 	w_class = W_CLASS_MEDIUM
-	autoignition_temperature=AUTOIGNITION_WOOD
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	attack_verb = list("bashes", "batters", "bludgeons", "thrashes", "whacks") //I think the rollingpin attackby will end up ignoring this anyway.
 
 /obj/item/weapon/kitchen/rollingpin/attack(mob/living/M as mob, mob/living/user as mob)

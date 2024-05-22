@@ -148,6 +148,7 @@
 
 var/list/particle_string_to_type = list(
 	PS_STEAM = /particles/steam,
+	PS_SMOKE = /particles/smoke,
 	PS_TEAR_REALITY = /particles/tear_reality,
 	PS_CANDLE = /particles/candle,
 	PS_CANDLE2 = /particles/candle_alt,
@@ -188,6 +189,22 @@ var/list/particle_string_to_type = list(
 	grow = list(0.05, 0.05)
 	rotation = generator("num", 0,360)
 
+/particles/smoke
+	width = 64
+	height = 64
+	count = 20
+	spawning = 0
+
+	lifespan = 1 SECONDS
+	fade = 1 SECONDS
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "steam"
+	color = "#4d473e99"
+	position = 0
+	velocity = 1
+	scale = list(0.6, 0.6)
+	grow = list(0.05, 0.05)
+	rotation = generator("num", 0,360)
 
 //TEAR REALITY DARKNESS
 /particles/tear_reality

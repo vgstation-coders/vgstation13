@@ -20,11 +20,12 @@ effective or pretty fucking useless.
 	icon_state = "batterer"
 	throwforce = 5
 	w_class = W_CLASS_TINY
+	w_type = RECYK_ELECTRONIC
 	throw_speed = 4
 	throw_range = 10
 	flags = FPRINT
 	siemens_coefficient = 1
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	item_state = "electronic"
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_COMBAT + "=3;" + Tc_SYNDICATE + "=3"
 

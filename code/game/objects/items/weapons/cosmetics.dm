@@ -5,9 +5,11 @@
 	icon_state = "lipstick"
 	flags = FPRINT
 	w_class = W_CLASS_TINY
+	w_type = RECYK_WAX
+	flammable = TRUE
 	var/colour = "red"
 	var/open = 0
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 
 /obj/item/weapon/lipstick/purple

@@ -40,7 +40,6 @@
 	icon_opened = "bodybag_open"
 	density = 0
 	sound_file = 'sound/items/zip.ogg'
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	w_type = NOT_RECYCLABLE
 
 /obj/structure/closet/body_bag/attackby(obj/item/W, mob/user)

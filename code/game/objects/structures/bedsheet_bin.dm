@@ -22,8 +22,8 @@ LINEN BINS
 	restraint_resist_time = 20 SECONDS
 	toolsounds = list("rustle")
 	species_fit = list(VOX_SHAPED)
-	autoignition_temperature = AUTOIGNITION_FABRIC
 	w_type = RECYK_FABRIC
+	flammable = TRUE
 	starting_materials = list(MAT_FABRIC = 1250)
 
 //cutting the bedsheet into rags and other things
@@ -40,6 +40,10 @@ LINEN BINS
 					to_chat(user, "<span class='notice'>You add a plaid pattern to the bedsheet.</span>")
 				if (PLAIDPATTERN_TO_NOT_PLAID)
 					to_chat(user, "<span class='notice'>You remove the bedsheet's plaid pattern.</span>")
+		return
+	if(I.is_hot())
+		user.drop_item(src,get_turf(src))
+		ignite()
 		return
 	var/cut_time=0
 	if(I.is_sharp())

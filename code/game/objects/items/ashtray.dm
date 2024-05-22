@@ -91,7 +91,7 @@
 	w_type = RECYK_PLASTIC
 	empty_desc = "Cheap plastic ashtray."
 	throwforce = 3
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 
 /obj/item/ashtray/plastic/die()
 	..()

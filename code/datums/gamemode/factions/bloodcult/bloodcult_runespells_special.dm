@@ -342,15 +342,15 @@
 		if (platform.dancer)
 			dance_manager.dancers += platform.dancer
 			if(iscultist(platform.dancer))
-				C.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
-				if (iscarbon(C))
-					var/mob/living/carbon/CA = C
+				platform.dancer.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
+				if (iscarbon(platform.dancer))
+					var/mob/living/carbon/CA = platform.dancer
 					if (CA.get_cult_power() < 80)
-						to_chat(C, "<span class='warning'>You feel like you could dance more effectively by wearing proper cult attire.</span>")
+						to_chat(platform.dancer, "<span class='warning'>You feel like you could dance more effectively by wearing proper cult attire.</span>")
 					else if (!istype(CA.get_active_hand(), /obj/item/candle/blood) && !istype(CA.get_inactive_hand(), /obj/item/candle/blood))
-						to_chat(C, "<span class='warning'>Holding a lit blood candle would help you focus your mind on the ritual while you dance.</span>")
+						to_chat(platform.dancer, "<span class='warning'>Holding a lit blood candle would help you focus your mind on the ritual while you dance.</span>")
 			else
-				to_chat(C, "<span class='sinister'>The tentacles shift and force your body to move alongside them, performing some kind of dance.</span>")
+				to_chat(platform.dancer, "<span class='sinister'>The tentacles shift and force your body to move alongside them, performing some kind of dance.</span>")
 
 	dance_manager.tear = src
 	dance_manager.we_can_dance()

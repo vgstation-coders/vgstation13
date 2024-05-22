@@ -771,7 +771,9 @@
 /obj/item/weapon/storage/proc/is_full()
 	return (storage_slots && (contents.len >= storage_slots)) || (get_sum_w_class() >= max_combined_w_class)
 
-/obj/item/weapon/storage/ignite(var/temperature)
+/obj/item/weapon/storage/ignite()
+	if(!istype(loc, /turf)) //worn or held items don't ignite (for now >:^) )
+		return 0
 	var/turf/T = get_turf(src)
 	mass_remove(T) //dump contents if it's burning
 	..()

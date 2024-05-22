@@ -21,11 +21,8 @@
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.6
-	autoignition_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	on_armory_manifest = TRUE
-
-	autoignition_temperature = 0
-	fire_fuel = 0
+	flammable = FALSE
 
 
 /obj/item/clothing/suit/armor/vest

@@ -473,6 +473,9 @@
 	animate(src, alpha = 0, time = 3)
 	..()
 
+/obj/effect/bloodcult_jaunt/visible
+	invisibility = 0
+	alpha = 255
 
 ///////////////////////////////////////BLOODSTONE DEFENSES////////////////////////////////////////////////
 

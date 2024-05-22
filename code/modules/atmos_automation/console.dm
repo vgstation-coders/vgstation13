@@ -48,17 +48,9 @@
 			A.process()
 
 /obj/machinery/computer/general_air_control/atmos_automation/update_icon()
-	icon_state = initial(icon_state)
-	// Broken
-	if(stat & BROKEN)
-		icon_state += "b"
-
-	// Powered
-	else if(stat & (FORCEDISABLE|NOPOWER))
-		icon_state = initial(icon_state)
-		icon_state += "0"
-	else if(on)
-		icon_state += "_active"
+	..()
+	if(!(stat & (BROKEN|FORCEDISABLE|NOPOWER)) && on)
+		icon_state = "aac_active"
 
 /obj/machinery/computer/general_air_control/atmos_automation/proc/request_device_refresh(var/device)
 	send_signal(list("tag"=device, "status"))
@@ -372,7 +364,7 @@
 	var/datum/automation/set_injector_power/inj_on=new(src)
 	inj_on.injector=injector_tag
 	inj_on.state=1
-	
+
 	var/datum/automation/set_injector_power/inj_off=new(src)
 	inj_off.injector=injector_tag
 	inj_off.state=0

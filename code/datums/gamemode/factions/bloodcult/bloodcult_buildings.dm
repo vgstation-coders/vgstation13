@@ -920,16 +920,16 @@
 		switch(altar_task)
 			if(ALTARTASK_SACRIFICE_HUMAN)
 				var/mob/O = get_locked(lock_type)[1]
-				if (ishuman(O))
-					if (O.mind)
-						C.gain_devotion(500, DEVOTION_TIER_4, "altar_sacrifice_human", O)
-					else//monkey-human
-						C.gain_devotion(200, DEVOTION_TIER_4, "altar_sacrifice_human_nomind", O)
-				else//monkey
-					C.gain_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_monkey", O)
+				if (O.mind)
+					C.gain_devotion(500, DEVOTION_TIER_4, "altar_sacrifice_human", O)
+				else//monkey-human
+					C.gain_devotion(200, DEVOTION_TIER_4, "altar_sacrifice_human_nomind", O)
 			if(ALTARTASK_SACRIFICE_ANIMAL)
 				var/mob/O = get_locked(lock_type)[1]
-				C.gain_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_animal", O)
+				if (ismonkey(O))
+					C.gain_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_monkey", O)
+				else
+					C.gain_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_animal", O)
 
 #undef ALTARTASK_NONE
 #undef ALTARTASK_GEM
@@ -1223,7 +1223,7 @@ var/list/cult_spires = list()
 	if (isturf(loc))
 		var/turf/simulated/L = loc
 		if(istype(L))
-			L.hotspot_expose(TEMPERATURE_FLAME, 125, surfaces = 1)//we start fires in plasma atmos
+			L.hotspot_expose(TEMPERATURE_FLAME, SMALL_FLAME, 0)//we start fires in plasma atmos
 			var/datum/gas_mixture/env = L.return_air()
 			if (env.total_moles > 0)//we cannot manipulate temperature in a vacuum
 				if(env.temperature != set_temperature + T0C)
