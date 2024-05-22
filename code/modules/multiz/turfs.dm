@@ -266,8 +266,9 @@ var/obj/effect/glass_open_overlay/plasma/openpgfloor
 	icon = 'icons/effects/floor_decals.dmi'
 
 /turf/simulated/floor/glass/update_icon()
-	..()
 	if(get_base_turf(src.z) == /turf/simulated/open)
+		vis_contents.Cut()
+		overlays.Cut()
 		if(make_openspace_view()) // Space below us
 			icon_state = "" // Remove any previous space stuff, if any
 		else
@@ -286,6 +287,8 @@ var/obj/effect/glass_open_overlay/plasma/openpgfloor
 			var/obj/effect/glass_open_overlay/damage/overdamage = new /obj/effect/glass_open_overlay/damage
 			overdamage.icon_state = icon_state
 			vis_contents.Add(overdamage)
+	else
+		..()
 
 /turf/simulated/floor/glass/AddDecal(var/image/decal)
 	if(get_base_turf(src.z) == /turf/simulated/open)
