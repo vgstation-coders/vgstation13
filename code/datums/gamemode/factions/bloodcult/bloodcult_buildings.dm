@@ -1223,7 +1223,7 @@ var/list/cult_spires = list()
 	if (isturf(loc))
 		var/turf/simulated/L = loc
 		if(istype(L))
-			L.hotspot_expose(TEMPERATURE_FLAME, SMALL_FLAME, 0)//we start fires in plasma atmos
+			try_hotspot_expose(TEMPERATURE_FLAME, SMALL_FLAME, 0)//we start fires in plasma atmos
 			var/datum/gas_mixture/env = L.return_air()
 			if (env.total_moles > 0)//we cannot manipulate temperature in a vacuum
 				if(env.temperature != set_temperature + T0C)

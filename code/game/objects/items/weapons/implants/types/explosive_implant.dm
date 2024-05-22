@@ -39,7 +39,7 @@
 
 		M.gib()
 		explosion(T, 1, 3, 4, 6, whodunnit = M)
-		T.hotspot_expose(3500, SMALL_FLAME, 1)
+		try_hotspot_expose(3500, SMALL_FLAME, 1)
 
 		qdel(src)
 
@@ -150,7 +150,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 		M.gib()
 		explosion(T, 1, 1, 3, 4, whodunnit = user)
-		T.hotspot_expose(3500, SMALL_FLAME, 1)
+		try_hotspot_expose(3500, SMALL_FLAME, 1)
 
 		qdel(src)
 

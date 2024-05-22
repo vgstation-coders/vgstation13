@@ -374,6 +374,28 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 /mob/fire_act()
 	return
 
+/**
+ * Creates a hotspot on the input turf. Called by an obj to aid in logging and surface burn checking.
+ *
+ * Hotspots ignite any atoms (including the turf itself) on or gasses in the turf with autoignition temperatures below the input temperature.
+ * Arguments:
+ * * exposed_temperature - Temperature of the hotspot (Kelvin).
+ * * exposed_volume - Relative volume of the turf exposed to the hotspot (Milliliter).
+ * * surfaces - -1: Ignite surfaces if on the ground, 0: Only ignite gasses, 1: Always ignite surfaces.
+ */
+/obj/proc/try_hotspot_expose(var/exposed_temperature, var/exposed_volume = CELL_VOLUME, var/surfaces=0)
+	var/turf/simulated/T = get_turf(src)
+	if(!istype(T))
+		return
+	if(surfaces == -1)
+		if(loc == T)
+			surfaces = TRUE
+		else
+			surfaces = FALSE
+	if(T.hotspot_expose(exposed_temperature,exposed_volume,surfaces))
+		message_admins("\The [src] started a fire at [loc] ([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
+		log_game("\The [src] started a fire at [loc]([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
+
 ///////////////////////////////////////////////
 // TURF COMBUSTION
 ///////////////////////////////////////////////
@@ -403,7 +425,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
  * Arguments:
  * * exposed_temperature - Temperature of the hotspot (Kelvin).
  * * exposed_volume - Relative volume of the turf exposed to the hotspot (Milliliter).
- * * surfaces - Whether or not the hotspot should ignite any atoms in the turf in addition to gasses (Boolean).
+ * * surfaces - 0: Only ignite gasses, 1: Always ignite surfaces.
  */
 /turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume = CELL_VOLUME, var/surfaces=0)
 	return 0
@@ -414,9 +436,10 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		return 0
 	if(check_fire_protection())
 		return 0
+	if(locate(/obj/effect/fire) in src)
+		return 0
 
 	var/datum/gas_mixture/air_contents = return_air()
-
 	if(!air_contents)
 		return 0
 

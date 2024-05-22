@@ -149,8 +149,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		if(M)
 			to_chat(M, "The flame on \the [src] suddenly goes out in a weak fashion.")
 	if(location && lit == 1)
-		var/surf = isturf(loc)?TRUE:FALSE
-		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
+		try_hotspot_expose(source_temperature, SMALL_FLAME, -1)
 		return
 
 /obj/item/weapon/match/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -177,8 +176,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/match/strike_anywhere/s_a_k/process()//never burns out, extra swiss quality magic matches
 	var/turf/location = get_turf(src)
 	if(location && lit == 1)
-		var/surf = isturf(loc)?TRUE:FALSE
-		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
+		try_hotspot_expose(source_temperature, SMALL_FLAME, -1)
 
 /obj/item/weapon/match/strike_anywhere/afterattack(atom/target, mob/user, prox_flags)
 	if(!prox_flags == 1)
@@ -501,8 +499,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		qdel(src)
 		return
 	if(location && lit == 1)
-		var/surf = isturf(loc)?TRUE:FALSE
-		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
+		try_hotspot_expose(source_temperature, SMALL_FLAME, -1)
 	//Oddly specific and snowflakey reagent transfer system below
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
 		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
@@ -861,8 +858,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		update_brightness()
 		return
 	if(location && lit == 1)
-		var/surf = isturf(loc)?TRUE:FALSE
-		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
+		try_hotspot_expose(source_temperature, SMALL_FLAME, -1)
 	return
 
 /obj/item/clothing/mask/cigarette/pipe/attack_self(mob/user as mob) //Refills the pipe. Can be changed to an attackby later, if loose tobacco is added to vendors or something. //Later meaning never
@@ -1077,8 +1073,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 /obj/item/weapon/lighter/process()
 	var/turf/location = get_turf(src)
 	if(location && lit == 1)
-		var/surf = isturf(loc)?TRUE:FALSE
-		location.hotspot_expose(source_temperature, SMALL_FLAME, surf)
+		try_hotspot_expose(source_temperature, SMALL_FLAME, -1)
 	if(!fueltime)
 		fueltime = world.time + 100
 	if(world.time > fueltime)
