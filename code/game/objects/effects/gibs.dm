@@ -53,10 +53,12 @@
 
 	if(loc?.type != /obj/machinery/atmospherics/unary/cryo_cell)
 		Gib(get_turf(loc))
+	else
+		register_event(/event/after_move, src, nameof(src::gib_out_cryo()))
 
-/obj/effect/gibspawner/Move(NewLoc, Dir, step_x, step_y, glide_size_override)
-	. = ..()
+/obj/effect/gibspawner/proc/gib_out_cryo()
 	if(loc?.type != /obj/machinery/atmospherics/unary/cryo_cell)
+		unregister_event(/event/after_move, src, nameof(src::gib_out_cryo()))
 		Gib(get_turf(loc))
 
 /obj/effect/gibspawner/proc/Gib(atom/location)
