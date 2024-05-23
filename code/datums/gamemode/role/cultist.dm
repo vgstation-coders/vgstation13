@@ -97,8 +97,9 @@
 			return {"<a href='?_src_=holder;adminplayeropts=\ref[AP]'>astral projecting</a>"}
 	return "logged out"
 
-/datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
-	var/dat = ..()
+
+/datum/role/cultist/extraPanelButtons()
+	var/dat = ""
 	dat += "  - <a href='?src=\ref[src]&mind=\ref[antag]&givedevotion=1'>Give devotion ([devotion])</a>"
 	dat += "<br>rituals: "
 	for (var/ritual_slot in rituals)
@@ -108,6 +109,11 @@
 		else
 			dat += "<i>cooldown</i> - "
 	dat += "<a href='?src=\ref[src]&mind=\ref[antag]&replaceritual=1'>\[Replace\]</a>"
+	return dat
+
+/datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
+	var/dat = ..()
+	dat += "  - <a href='?src=\ref[src]&mind=\ref[antag]&givedevotion=1'>Give devotion ([devotion])</a>"
 	return dat
 
 /datum/role/cultist/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
@@ -120,7 +126,7 @@
 			return FALSE
 		gain_devotion(amount, DEVOTION_TIER_4)
 	if (href_list["replaceritual"])
-		var/choice = alert(src,"Which ritual do you want to replace?","Replace Ritual","first ritual","second ritual")
+		var/choice = alert(usr,"Which ritual do you want to replace?","Replace Ritual","first ritual","second ritual")
 		switch(choice)
 			if ("first ritual")
 				replace_rituals(RITUAL_CULTIST_1)

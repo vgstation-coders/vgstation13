@@ -534,7 +534,7 @@
 		return
 
 	if(href_list["replaceritual"])
-		var/choice = alert(src,"Which ritual do you want to replace?","Replace Ritual","first ritual","second ritual","third ritual")
+		var/choice = alert(usr,"Which ritual do you want to replace?","Replace Ritual","first ritual","second ritual","third ritual")
 		switch(choice)
 			if ("first ritual")
 				replace_rituals(RITUAL_FACTION_1)
@@ -542,18 +542,6 @@
 				replace_rituals(RITUAL_FACTION_2)
 			if ("third ritual")
 				replace_rituals(RITUAL_FACTION_3)
-
-
-
-/datum/role/cultist/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
-	..()
-	if (!usr.client.holder)
-		return FALSE
-	if (href_list["givedevotion"])
-		var/amount = input("How much would you like to give?", "Giving devotion") as null|num
-		if (!amount)
-			return FALSE
-		gain_devotion(amount, DEVOTION_TIER_4)
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
 	. = ..()
