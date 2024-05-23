@@ -34,15 +34,7 @@
 		manipulator_count += M.rating
 	bstext = ""
 	if(manipulator_count >= 6)
-		bstext =  {"<b>Bluespace pipe caps:</b>
-		           <li><a href='?src=\ref[src];make=[PIPE_BSCAP]       ;dir=1'>White Bluespace Pipe Cap</a></li>
-		           <li><a href='?src=\ref[src];make=[PIPE_BSCAP_BLUE]  ;dir=1'>Blue Bluespace Pipe Cap</a></li>
-		           <li><a href='?src=\ref[src];make=[PIPE_BSCAP_CYAN]  ;dir=1'>Cyan Bluespace Pipe Cap</a></li>
-		           <li><a href='?src=\ref[src];make=[PIPE_BSCAP_GREEN] ;dir=1'>Green Bluespace Pipe Cap</a></li>
-		           <li><a href='?src=\ref[src];make=[PIPE_BSCAP_PINK]  ;dir=1'>Pink Bluespace Pipe Cap</a></li>
-		           <li><a href='?src=\ref[src];make=[PIPE_BSCAP_PURPLE];dir=1'>Purple Bluespace Pipe Cap</a></li>
-		           <li><a href='?src=\ref[src];make=[PIPE_BSCAP_RED]   ;dir=1'>Red Bluespace Pipe Cap</a></li>
-		           <li><a href='?src=\ref[src];make=[PIPE_BSCAP_ORANGE];dir=1'>Orange Bluespace Pipe Cap</a></li>"}
+		bstext =  "<li><a href='?src=\ref[src];make=[PIPE_BSCAP];dir=1'>Bluespace Pipe Cap</a></li>"
 
 /obj/machinery/pipedispenser/attack_hand(user as mob)
 	if(..())
@@ -93,6 +85,7 @@
 	<li><a href='?src=\ref[src];make=[PIPE_THERMAL_PLATE];dir=1'>Thermal Plate</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_INJECTOR];dir=1'>Injector</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_DP_VENT];dir=1'>Dual-Port Vent</a></li>
+	[bstext]
 </ul>
 <b>Heat exchange:</b>
 <ul>
@@ -109,7 +102,6 @@
 	<li><a href='?src=\ref[src];make=[PIPE_INSUL_MANIFOLD];dir=1'>Manifold</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_INSUL_MANIFOLD4W];dir=1'>4-Way Manifold</a></li>
 </ul>
-[bstext]
 [multi_z_dat]
 <b> Currently aligned at: [layer_to_make] \[ <a href='?src=\ref[src];editlayer=1'>EDIT</a> \]</b></li>
 "}

@@ -51,6 +51,7 @@
 		/datum/rcd_schematic/pipe/heat_pump,
 		/datum/rcd_schematic/pipe/injector,
 		/datum/rcd_schematic/pipe/dp_vent,
+		/datum/rcd_schematic/pipe/bscap,
 
 		/* H/E Pipes */
 		/datum/rcd_schematic/pipe/he,
@@ -73,16 +74,6 @@
 		/datum/rcd_schematic/pipe/disposal/sort_wrap,
 		/datum/rcd_schematic/pipe/disposal/up,
 		/datum/rcd_schematic/pipe/disposal/down,
-		
-		/* Bluespace Pipe Caps*/
-		/datum/rcd_schematic/pipe/bscap,
-		/datum/rcd_schematic/pipe/bscap/blue,
-		/datum/rcd_schematic/pipe/bscap/cyan,
-		/datum/rcd_schematic/pipe/bscap/green,
-		/datum/rcd_schematic/pipe/bscap/pink,
-		/datum/rcd_schematic/pipe/bscap/purple,
-		/datum/rcd_schematic/pipe/bscap/red,
-		/datum/rcd_schematic/pipe/bscap/orange,
 	)
 
 /obj/item/device/rcd/rpd/examine(var/mob/user)
@@ -144,6 +135,8 @@
 		for(var/datum/rcd_schematic/C in L)
 			var/turf/T = get_turf(src)
 			if(!T || ((C.flags & RCD_Z_DOWN) && !HasBelow(T.z)) || ((C.flags & RCD_Z_UP) && !HasAbove(T.z)))
+				continue
+			if(C.name == "Bluespace Pipe Cap" && !has_bluespace_slime)
 				continue
 			dat += C.schematic_list_line(interface,FALSE,src.selected==C)
 
