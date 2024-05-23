@@ -116,8 +116,10 @@
 		switch(choice)
 			if ("first ritual")
 				replace_rituals(RITUAL_CULTIST_1)
+				antag.role_panel()
 			if ("second ritual")
 				replace_rituals(RITUAL_CULTIST_2)
+				antag.role_panel()
 
 /datum/role/cultist/process()
 	..()

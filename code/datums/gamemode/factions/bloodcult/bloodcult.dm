@@ -538,10 +538,13 @@
 		switch(choice)
 			if ("first ritual")
 				replace_rituals(RITUAL_FACTION_1)
+				check_antagonists()
 			if ("second ritual")
 				replace_rituals(RITUAL_FACTION_2)
+				check_antagonists()
 			if ("third ritual")
 				replace_rituals(RITUAL_FACTION_3)
+				check_antagonists()
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
 	. = ..()
