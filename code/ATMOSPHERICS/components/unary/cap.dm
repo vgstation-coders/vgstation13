@@ -214,7 +214,5 @@
 		network_color = new_color
 		var/members = network.normal_members
 		qdel(network)
-		for(var/obj/machinery/atmospherics/M in members)
-			M.build_network()
 		merge_all()
 	return ..()
