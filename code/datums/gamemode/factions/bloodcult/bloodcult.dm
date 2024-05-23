@@ -523,10 +523,10 @@
 			dat += "[my_ritual.name] - "
 		else
 			dat += "<i>cooldown</i> - "
-	dat += "<a href='?src=\ref[src]&mind=\ref[antag]&replaceritual=1'>\[Replace\]</a>"
+	dat += "<a href='?src=\ref[src];replaceritual=1'>\[Replace\]</a><br>"
 	return dat
 
-/datum/faction/Topic(href, href_list)
+/datum/faction/bloodcult/Topic(href, href_list)
 	..()
 
 	if(!usr.check_rights(R_ADMIN))
