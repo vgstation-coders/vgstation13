@@ -65,7 +65,8 @@
 				to_chat(M, "<span class='sinister'>The Eclipse is entering overtime. Even though its time as run out, Nar-Sie won't let it end as long as the Tear Reality rune is still active, or the Blood Stone is still standing.</span>")
 		else if (!problem_announcement && (world.time >= eclipse_problem_announcement))
 			problem_announcement = TRUE
-			command_alert(/datum/command_alert/eclipse_too_long)
+			if (cult.stage == BLOODCULT_STAGE_READY)//no point warning the crew if the cult has already made itself known
+				command_alert(/datum/command_alert/eclipse_too_long)
 
 /datum/eclipse_manager/proc/eclipse_end()
 	processing_objects -= src

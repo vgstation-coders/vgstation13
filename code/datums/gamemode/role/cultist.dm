@@ -97,6 +97,36 @@
 			return {"<a href='?_src_=holder;adminplayeropts=\ref[AP]'>astral projecting</a>"}
 	return "logged out"
 
+/datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
+	var/dat = ..()
+	dat += "  - <a href='?src=\ref[src]&mind=\ref[antag]&givedevotion=1'>Give devotion ([devotion])</a>"
+	dat += "<br>rituals: "
+	for (var/ritual_slot in rituals)
+		if (rituals[ritual_slot])
+			var/datum/bloodcult_ritual/my_ritual = rituals[ritual_slot]
+			dat += "[my_ritual.name] - "
+		else
+			dat += "<i>cooldown</i> - "
+	dat += "<a href='?src=\ref[src]&mind=\ref[antag]&replaceritual=1'>\[Replace\]</a>"
+	return dat
+
+/datum/role/cultist/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
+	..()
+	if (!usr.client.holder)
+		return FALSE
+	if (href_list["givedevotion"])
+		var/amount = input("How much would you like to give?", "Giving devotion") as null|num
+		if (!amount)
+			return FALSE
+		gain_devotion(amount, DEVOTION_TIER_4)
+	if (href_list["replaceritual"])
+		var/choice = alert(src,"Which ritual do you want to replace?","Replace Ritual","first ritual","second ritual")
+		switch(choice)
+			if ("first ritual")
+				replace_rituals(RITUAL_CULTIST_1)
+			if ("second ritual")
+				replace_rituals(RITUAL_CULTIST_2)
+
 /datum/role/cultist/process()
 	..()
 	if (holywarning_cooldown > 0)
@@ -372,7 +402,7 @@
 						if (M)
 							to_chat(M, "<span class='sinister'>You have completed a ritual and been reward for your devotion...soon another ritual will take its place.</span>")
 						spawn(5 MINUTES)
-							if (!gcDestroyed)
+							if (!gcDestroyed && !rituals[ritual_slot])
 								replace_rituals(ritual_slot)
 	if (faction && (faction.stage != BLOODCULT_STAGE_ECLIPSE))
 		var/datum/faction/bloodcult/cult = faction
@@ -393,7 +423,8 @@
 								else
 									to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
 						spawn(10 MINUTES)
-							cult.replace_rituals(ritual_slot)
+							if (!cult.rituals[ritual_slot])
+								cult.replace_rituals(ritual_slot)
 
 	//The more devotion the cultist has acquired, the less devotion they obtain from lesser rituals
 	switch (get_devotion_rank() - tier)
