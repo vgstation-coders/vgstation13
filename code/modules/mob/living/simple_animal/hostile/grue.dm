@@ -73,7 +73,7 @@
 /datum/grue_calc/proc/ddl_update(var/mob/living/G)
 	if(isturf(G.loc))
 		var/turf/T = G.loc
-		current_brightness=10*T.get_lumcount()
+		current_brightness=max(current_brightness,10*T.get_lumcount())
 	else												//else, there's considered to be no light (vents, lockers, etc.)
 		current_brightness=0
 	if(current_brightness<=bright_limit_gain)
@@ -212,6 +212,7 @@
 					time_limit = max(0, time_limit - 2)
 			else //Grue is in darkness, recover the timer twice as fast
 				time_limit = min(2 SECONDS, time_limit + 4)
+		lightparams.current_brightness=0 //reset the brightness back to 0 once done to reset the value
 		sleep(2)
 	loop_active = FALSE
 	return
@@ -250,6 +251,10 @@
 //Grues already have a way to check their own health and the damage indicator doesn't mesh well with the vision.
 /mob/living/simple_animal/hostile/grue/standard_damage_overlay_updates()
 	return
+
+/mob/living/simple_animal/hostile/grue/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	lightparams.ddl_update(src) //Checks the light condition when moving to a new tile as well
+	. = ..()
 
 //AI stuff:
 /mob/living/simple_animal/hostile/grue/proc/grue_ai()
