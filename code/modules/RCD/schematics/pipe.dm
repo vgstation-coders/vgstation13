@@ -740,6 +740,62 @@ var/global/list/disposalpipeID2State = list(
 
 	pipe_id		= PIPE_DP_VENT
 	pipe_type	= PIPE_UNARY
+	
+/datum/rcd_schematic/pipe/bscap
+	name		= "White Bluespace Pipe Cap"
+	category	= "Bluespace Pipe Caps"
+
+	pipe_id		= PIPE_BSCAP
+	pipe_type	= PIPE_UNARY
+	
+/datum/rcd_schematic/pipe/bscap/blue
+	name		= "Blue Bluespace Pipe Cap"
+	category	= "Bluespace Pipe Caps"
+
+	pipe_id		= PIPE_BSCAP_BLUE
+	pipe_type	= PIPE_UNARY
+	
+/datum/rcd_schematic/pipe/bscap/cyan
+	name		= "Cyan Bluespace Pipe Cap"
+	category	= "Bluespace Pipe Caps"
+
+	pipe_id		= PIPE_BSCAP_CYAN
+	pipe_type	= PIPE_UNARY
+	
+/datum/rcd_schematic/pipe/bscap/green
+	name		= "Green Bluespace Pipe Cap"
+	category	= "Bluespace Pipe Caps"
+
+	pipe_id		= PIPE_BSCAP_GREEN
+	pipe_type	= PIPE_UNARY
+	
+/datum/rcd_schematic/pipe/bscap/pink
+	name		= "Pink Bluespace Pipe Cap"
+	category	= "Bluespace Pipe Caps"
+
+	pipe_id		= PIPE_BSCAP_PINK
+	pipe_type	= PIPE_UNARY
+	
+/datum/rcd_schematic/pipe/bscap/purple
+	name		= "Purple Bluespace Pipe Cap"
+	category	= "Bluespace Pipe Caps"
+
+	pipe_id		= PIPE_BSCAP_PURPLE
+	pipe_type	= PIPE_UNARY
+	
+/datum/rcd_schematic/pipe/bscap/red
+	name		= "Red Bluespace Pipe Cap"
+	category	= "Bluespace Pipe Caps"
+
+	pipe_id		= PIPE_BSCAP_RED
+	pipe_type	= PIPE_UNARY
+	
+/datum/rcd_schematic/pipe/bscap/orange
+	name		= "Orange Bluespace Pipe Cap"
+	category	= "Bluespace Pipe Caps"
+
+	pipe_id		= PIPE_BSCAP_ORANGE
+	pipe_type	= PIPE_UNARY
 
 //H/E Pipes.
 

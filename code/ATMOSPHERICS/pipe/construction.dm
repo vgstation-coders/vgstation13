@@ -43,6 +43,14 @@ Buildable meters
 #define PIPE_Z_DOWN				36
 #define PIPE_MPVALVE			37
 #define PIPE_DPVALVE			38
+#define PIPE_BSCAP              39
+#define PIPE_BSCAP_BLUE         40
+#define PIPE_BSCAP_CYAN         41
+#define PIPE_BSCAP_GREEN        42
+#define PIPE_BSCAP_PINK         43
+#define PIPE_BSCAP_PURPLE       44
+#define PIPE_BSCAP_RED          45
+#define PIPE_BSCAP_ORANGE       46
 
 //Disposal piping numbers - do NOT hardcode these, use the defines
 #define DISP_PIPE_STRAIGHT		0
@@ -177,6 +185,22 @@ var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 				src.pipe_type = PIPE_INSUL_MANIFOLD4W
 			else
 				src.pipe_type = PIPE_MANIFOLD4W
+		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap/bluespace))
+			src.pipe_type = PIPE_BSCAP
+		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap/bluespace/blue))
+			src.pipe_type = PIPE_BSCAP_BLUE
+		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap/bluespace/cyan))
+			src.pipe_type = PIPE_BSCAP_CYAN
+		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap/bluespace/green))
+			src.pipe_type = PIPE_BSCAP_GREEN
+		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap/bluespace/pink))
+			src.pipe_type = PIPE_BSCAP_PINK
+		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap/bluespace/purple))
+			src.pipe_type = PIPE_BSCAP_PURPLE
+		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap/bluespace/red))
+			src.pipe_type = PIPE_BSCAP_RED
+		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap/bluespace/orange))
+			src.pipe_type = PIPE_BSCAP_ORANGE
 		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap/heat))
 			src.pipe_type = PIPE_HE_CAP
 		else if(istype(make_from, /obj/machinery/atmospherics/unary/cap))
@@ -255,7 +279,15 @@ var/global/list/pipeID2State = list(
 	"z_up",
 	"z_down",
 	"mpvalve",
-	"dpvalve"
+	"dpvalve",
+	"bscap",
+	"bscap_blue",
+	"bscap_cyan",
+	"bscap_green",
+	"bscap_pink",
+	"bscap_purple",
+	"bscap_red",
+	"bscap_orange"
 )
 var/global/list/nlist = list( \
 	"pipe", \
@@ -297,6 +329,14 @@ var/global/list/nlist = list( \
 	"down pipe", \
 	"manual conditional valve", \
 	"digital conditional valve", \
+	"bluespace pipe cap", \
+	"bluespace pipe cap", \
+	"bluespace pipe cap", \
+	"bluespace pipe cap", \
+	"bluespace pipe cap", \
+	"bluespace pipe cap", \
+	"bluespace pipe cap", \
+	"bluespace pipe cap", \
 )
 /obj/item/pipe/proc/update()
 
@@ -383,7 +423,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 			return flip|cw|acw
 		if(PIPE_GAS_FILTER, PIPE_GAS_MIXER,PIPE_MTVALVE,PIPE_DTVALVE,PIPE_MPVALVE,PIPE_DPVALVE)
 			return dir|flip|cw
-		if(PIPE_CAP, PIPE_HE_CAP, PIPE_Z_UP, PIPE_Z_DOWN)
+		if(PIPE_CAP, PIPE_HE_CAP, PIPE_BSCAP, PIPE_BSCAP_BLUE, PIPE_BSCAP_CYAN, PIPE_BSCAP_GREEN, PIPE_BSCAP_PINK, PIPE_BSCAP_PURPLE, PIPE_BSCAP_RED, PIPE_BSCAP_ORANGE, PIPE_Z_UP, PIPE_Z_DOWN)
 			return dir
 	return 0
 
@@ -509,6 +549,30 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 
 		if(PIPE_HE_CAP)
 			P=new /obj/machinery/atmospherics/unary/cap/heat(src.loc)
+			
+		if(PIPE_BSCAP)
+			P=new /obj/machinery/atmospherics/unary/cap/bluespace(src.loc)
+			
+		if(PIPE_BSCAP_BLUE)
+			P=new /obj/machinery/atmospherics/unary/cap/bluespace/blue(src.loc)
+			
+		if(PIPE_BSCAP_CYAN)
+			P=new /obj/machinery/atmospherics/unary/cap/bluespace/cyan(src.loc)
+			
+		if(PIPE_BSCAP_GREEN)
+			P=new /obj/machinery/atmospherics/unary/cap/bluespace/green(src.loc)
+			
+		if(PIPE_BSCAP_PINK)
+			P=new /obj/machinery/atmospherics/unary/cap/bluespace/pink(src.loc)
+			
+		if(PIPE_BSCAP_PURPLE)
+			P=new /obj/machinery/atmospherics/unary/cap/bluespace/purple(src.loc)
+			
+		if(PIPE_BSCAP_RED)
+			P=new /obj/machinery/atmospherics/unary/cap/bluespace/red(src.loc)
+			
+		if(PIPE_BSCAP_ORANGE)
+			P=new /obj/machinery/atmospherics/unary/cap/bluespace/orange(src.loc)
 
 		if(PIPE_PASSIVE_GATE)		//passive gate
 			P=new /obj/machinery/atmospherics/binary/passive_gate(src.loc)

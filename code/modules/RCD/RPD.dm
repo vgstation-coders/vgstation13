@@ -6,6 +6,7 @@
 	id = null
 	var/has_metal_slime = 0
 	var/has_yellow_slime = 0
+	var/has_bluespace_slime = 0
 	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
 	var/build_all = 0
 	var/autowrench = 0
@@ -72,6 +73,16 @@
 		/datum/rcd_schematic/pipe/disposal/sort_wrap,
 		/datum/rcd_schematic/pipe/disposal/up,
 		/datum/rcd_schematic/pipe/disposal/down,
+		
+		/* Bluespace Pipe Caps*/
+		/datum/rcd_schematic/pipe/bscap,
+		/datum/rcd_schematic/pipe/bscap/blue,
+		/datum/rcd_schematic/pipe/bscap/cyan,
+		/datum/rcd_schematic/pipe/bscap/green,
+		/datum/rcd_schematic/pipe/bscap/pink,
+		/datum/rcd_schematic/pipe/bscap/purple,
+		/datum/rcd_schematic/pipe/bscap/red,
+		/datum/rcd_schematic/pipe/bscap/orange,
 	)
 
 /obj/item/device/rcd/rpd/examine(var/mob/user)
@@ -126,6 +137,8 @@
 		<div id='fav_list'></div>
 	"}
 	for(var/cat in schematics)
+		if(cat == "Bluespace Pipe Caps" && !has_bluespace_slime)
+			continue
 		dat += "<b>[cat]:</b><ul style='list-style-type:disc'>"
 		var/list/L = schematics[cat]
 		for(var/datum/rcd_schematic/C in L)
@@ -237,6 +250,14 @@
 			has_yellow_slime=1
 			verbs += /obj/item/device/rcd/rpd/proc/autowrench
 			to_chat(user, "You jam the slime extract into the RPD's output nozzle.")
+			return TRUE
+	if(primarytype == /mob/living/carbon/slime/bluespace)
+		if(has_bluespace_slime)
+			to_chat(user, "It already has a slime extract attached.")
+			return FALSE
+		else
+			has_bluespace_slime=1
+			to_chat(user, "You jam the slime extract into the RPD's fabricator.")
 			return TRUE
 
 /obj/item/device/rcd/rpd/afterattack(var/atom/A, var/mob/user)

@@ -125,3 +125,61 @@
 		return // Coloring pipes.
 
 	return ..()
+
+/obj/machinery/atmospherics/unary/cap/bluespace
+	name = "bluespace pipe endcap"
+	desc = "A bluespace endcap for pipes."
+	icon = 'icons/obj/pipes.dmi'
+	icon_state = "bscap"
+	can_be_coloured = 0
+	var/global/list/obj/machinery/atmospherics/bspipe_list = list()
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/blue
+	color=PIPE_COLOR_BLUE
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/cyan
+	color=PIPE_COLOR_CYAN
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/green
+	color=PIPE_COLOR_GREEN
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/pink
+	color="#ff66cc"
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/purple
+	color=PIPE_COLOR_PURPLE
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/red
+	color=PIPE_COLOR_RED
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/orange
+	color=PIPE_COLOR_ORANGE
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/update_icon()
+	overlays = 0
+	alpha = invisibility ? 128 : 255
+	icon_state = "bscap"
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/New()
+	..()
+	bspipe_list.Add(src)
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/Destroy()
+	bspipe_list.Remove(src)
+	..()
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/proc/merge_all()
+	var/datum/pipe_network/main_network
+	for(var/obj/machinery/atmospherics/unary/cap/bluespace/bscap in bspipe_list)
+		if(!main_network && bscap.network && (src.color == bscap.color))
+			main_network = bscap.network
+			continue
+		if(main_network && bscap.network && (src.color == bscap.color))
+			main_network.merge(bscap.network)
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/build_network()
+	if(!network && node1)
+		network = new /datum/pipe_network
+		network.normal_members += src
+		network.build_network(node1, src)
+		merge_all()
