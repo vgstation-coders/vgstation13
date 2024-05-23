@@ -97,20 +97,6 @@
 			return {"<a href='?_src_=holder;adminplayeropts=\ref[AP]'>astral projecting</a>"}
 	return "logged out"
 
-
-/datum/role/cultist/extraPanelButtons()
-	var/dat = ""
-	dat += "  - <a href='?src=\ref[src]&mind=\ref[antag]&givedevotion=1'>Give devotion ([devotion])</a>"
-	dat += "<br>rituals: "
-	for (var/ritual_slot in rituals)
-		if (rituals[ritual_slot])
-			var/datum/bloodcult_ritual/my_ritual = rituals[ritual_slot]
-			dat += "[my_ritual.name] - "
-		else
-			dat += "<i>cooldown</i> - "
-	dat += "<a href='?src=\ref[src]&mind=\ref[antag]&replaceritual=1'>\[Replace\]</a>"
-	return dat
-
 /datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/dat = ..()
 	dat += "  - <a href='?src=\ref[src]&mind=\ref[antag]&givedevotion=1'>Give devotion ([devotion])</a>"
@@ -262,6 +248,15 @@
 
 /datum/role/cultist/extraPanelButtons()
 	var/dat = ""
+	dat += "  - <a href='?src=\ref[src]&mind=\ref[antag]&givedevotion=1'>Give devotion ([devotion])</a>"
+	dat += "<br>rituals: "
+	for (var/ritual_slot in rituals)
+		if (rituals[ritual_slot])
+			var/datum/bloodcult_ritual/my_ritual = rituals[ritual_slot]
+			dat += "[my_ritual.name] - "
+		else
+			dat += "<i>cooldown</i> - "
+	dat += "<a href='?src=\ref[src]&mind=\ref[antag]&replaceritual=1'>\[Replace\]</a>"
 	if (mentor)
 		dat = "<br>Currently under the mentorship of <b>[mentor.antag.name]/([mentor.antag.key])</b><br>"
 	if (acolytes.len)
