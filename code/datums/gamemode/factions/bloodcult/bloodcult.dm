@@ -532,19 +532,20 @@
 	if(!usr.check_rights(R_ADMIN))
 		message_admins("[usr] tried to access bloodcult faction Topic() without permissions.")
 		return
-
+	if(!usr.client || !usr.client.holder)
+		return
 	if(href_list["replaceritual"])
 		var/choice = alert(usr,"Which ritual do you want to replace?","Replace Ritual","first ritual","second ritual","third ritual")
 		switch(choice)
 			if ("first ritual")
 				replace_rituals(RITUAL_FACTION_1)
-				check_antagonists()
+				usr.client.holder.check_antagonists()
 			if ("second ritual")
 				replace_rituals(RITUAL_FACTION_2)
-				check_antagonists()
+				usr.client.holder.check_antagonists()
 			if ("third ritual")
 				replace_rituals(RITUAL_FACTION_3)
-				check_antagonists()
+				usr.client.holder.check_antagonists()
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
 	. = ..()
