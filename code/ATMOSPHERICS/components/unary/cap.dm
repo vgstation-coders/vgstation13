@@ -174,11 +174,12 @@
 /obj/machinery/atmospherics/unary/cap/bluespace/proc/merge_all()
 	var/datum/pipe_network/main_network
 	for(var/obj/machinery/atmospherics/unary/cap/bluespace/bscap in bspipe_list)
-		if(!main_network && bscap.network && (src.network_color == bscap.network_color))
-			main_network = bscap.network
-			continue
-		if(main_network && bscap.network && (src.network_color == bscap.network_color))
-			main_network.merge(bscap.network)
+		if(bscap.network && (src.network_color == bscap.network_color))
+			if(!main_network)
+				main_network = bscap.network
+				continue
+			else
+				main_network.merge(bscap.network)
 	
 /obj/machinery/atmospherics/unary/cap/bluespace/build_network()
 	if(!network && node1)
