@@ -220,7 +220,6 @@
 	if (istype(receptacle, /obj/item/soulstone/gem))
 		gem = TRUE
 
-	var/mob/victim
 	if (iscarbon(target))
 		victim = target
 	else if (istype(target, /obj/item/organ/external/head))
