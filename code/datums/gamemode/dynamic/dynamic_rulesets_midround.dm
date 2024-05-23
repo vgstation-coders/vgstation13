@@ -875,8 +875,8 @@
 	weight = BASE_RULESET_WEIGHT
 	weight_category = "Pulse"
 	cost = 20
-	requirements = list(70,40,20,20,20,20,15,15,5,5)
-	high_population_requirement = 10
+	requirements = list(101,101,101,101,101,101,101,101,101,101)
+	high_population_requirement = 101
 	logo = "pulsedemon-logo"
 	var/list/cables_to_spawn_at = list()
 
