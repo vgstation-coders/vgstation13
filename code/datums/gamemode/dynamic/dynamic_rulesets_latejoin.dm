@@ -247,8 +247,8 @@
 	weight = BASE_RULESET_WEIGHT
 	weight_category = "Grue"
 	cost = 20
-	requirements = list(70,60,50,40,30,20,10,10,10,10)
-	high_population_requirement = 10
+	requirements = list(101,101,101,101,101,101,101,101,101,101)
+	high_population_requirement = 101
 	logo = "grue-logo"
 	repeatable = TRUE
 	var/list/grue_spawn_spots=list()
