@@ -213,7 +213,7 @@ steam.start() -- spawns the effect
 				var/obj/effect/sparks/nosurfaceburn/sparks = new /obj/effect/sparks/nosurfaceburn(location)
 				sparks.start(nextdir)
 // This sparks.
-/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = TRUE) //surfaceburn means the sparks can ignite things on the ground. set it to false to keep eg. portals like in the time agent event from burning down the station
+/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = FALSE) //surfaceburn means the sparks can ignite things on the ground. set it to false to keep eg. portals like in the time agent event from burning down the station
 	loc = get_turf(loc)
 	var/datum/effect/system/spark_spread/S = new
 	S.set_up(amount, cardinals, loc)

@@ -138,7 +138,7 @@ var/global/list/igniters = list()
 
 
 	flick("[base_state]-spark", src)
-	spark(src, 2)
+	spark(src, 2, surfaceburn = TRUE)
 	src.last_spark = world.time
 	use_power(1000)
 	var/turf/location = src.loc
