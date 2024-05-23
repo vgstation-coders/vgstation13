@@ -221,12 +221,6 @@
 		gem = TRUE
 
 	if (iscarbon(target))
-		victim = target
-	else if (istype(target, /obj/item/organ/external/head))
-		var/obj/item/organ/external/head/target_head = target
-		victim = target_head.brainmob
-
-	if (iscarbon(target))
 		init_body(target,user)
 
 	if (istype(target, /obj/item/organ/external/head))
