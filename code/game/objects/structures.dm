@@ -3,8 +3,6 @@
 	penetration_dampening = 5
 	var/hasbolts = FALSE
 
-	pass_flags_self = PASSMACHINE
-
 /obj/structure/examine(mob/user)
 	..()
 	if(hasbolts)
@@ -71,4 +69,6 @@
 /obj/structure/Bumped(var/atom/A)
 	if(istype(A,/obj/effect/foam/fire) || istype(A,/obj/effect/water)) //snowflaked until clean_act is updated to affect dense objects (probably never)
 		extinguish()
+		var/turf/T = get_turf(src)
+		T.extinguish()
 	..()
