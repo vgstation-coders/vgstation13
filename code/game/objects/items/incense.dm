@@ -111,6 +111,11 @@
 		return
 	burn()
 
+/obj/item/incense_stick/ignite()
+	if(lit)
+		return
+	burn()
+
 /obj/item/incense_stick/is_hot()
 	if(lit)
 		return source_temperature
