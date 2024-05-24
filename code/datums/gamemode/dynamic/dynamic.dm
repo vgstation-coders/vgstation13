@@ -99,8 +99,8 @@ var/stacking_limit = 90
 	else
 		dat += "none.<br>"
 	dat += "<br>Injection Timers: (<b>[GetInjectionChance()]%</b> chance)<BR>"
-	dat += "Latejoin: [latejoin_injection_cooldown>60 ? "[round(latejoin_injection_cooldown/60,0.1)] minutes" : "[latejoin_injection_cooldown] seconds"] <a href='?_src_=holder;injectnow=1'>\[Now!\]</A><BR>"
-	dat += "Midround: [midround_injection_cooldown>60 ? "[round(midround_injection_cooldown/60,0.1)] minutes" : "[midround_injection_cooldown] seconds"] <a href='?_src_=holder;injectnow=2'>\[Now!\]</A><BR>"
+	dat += "Latejoin: [round(latejoin_injection_cooldown*2/60)]m [(latejoin_injection_cooldown*2) % 60]s <a href='?_src_=holder;injectnow=1'>\[Now!\]</A><BR>"
+	dat += "Midround: [round(midround_injection_cooldown*2/60)]m [(midround_injection_cooldown*2) % 60]s <a href='?_src_=holder;injectnow=2'>\[Now!\]</A><BR>"
 	return jointext(dat, "")
 
 /datum/gamemode/dynamic/Topic(href, href_list)
@@ -635,7 +635,7 @@ var/stacking_limit = 90
 				message_admins("DYNAMIC MODE: Couldn't ready-up a single ruleset. Lack of eligible candidates, population, or threat.")
 				log_admin("DYNAMIC MODE: Couldn't ready-up a single ruleset. Lack of eligible candidates, population, or threat.")
 		else
-			midround_injection_cooldown = rand(600,1050)
+			midround_injection_cooldown = rand(MIDROUND_EXTENDED_DELAY_MIN, MIDROUND_EXTENDED_DELAY_MAX)
 
 
 /datum/gamemode/dynamic/proc/update_playercounts()
