@@ -212,7 +212,6 @@
 		update_icon()
 		
 		network_color = new_color
-		var/members = network.normal_members
 		qdel(network)
 		merge_all()
 	return ..()
