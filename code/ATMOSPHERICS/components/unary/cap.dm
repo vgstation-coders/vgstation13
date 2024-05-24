@@ -132,6 +132,7 @@
 	icon = 'icons/obj/pipes.dmi'
 	icon_state = "bscap"
 	can_be_coloured = 0
+	level = LEVEL_ABOVE_FLOOR
 	var/network_color = "#b4b4b4"    // default grey color that all pipes have
 	var/global/list/obj/machinery/atmospherics/bspipe_list = list()
 	
@@ -159,9 +160,10 @@
 	alpha = invisibility ? 128 : 255
 	icon_state = "bscap"
 	
-	color_overlay = image('icons/obj/pipes.dmi', icon_state = "bscap_overlay")
+	color_overlay = image('icons/obj/pipes.dmi', icon_state = "bscap-overlay")
 	color_overlay.color = rgb(color_r,color_g,color_b)
 	overlays += color_overlay
+	
 	
 /obj/machinery/atmospherics/unary/cap/bluespace/New()
 	..()
@@ -171,23 +173,28 @@
 	bspipe_list.Remove(src)
 	..()
 	
+	
 /obj/machinery/atmospherics/unary/cap/bluespace/proc/merge_all()
 	var/datum/pipe_network/main_network
 	for(var/obj/machinery/atmospherics/unary/cap/bluespace/bscap in bspipe_list)
-		if(bscap.network && (src.network_color == bscap.network_color))
-			if(!main_network)
-				main_network = bscap.network
-				continue
-			else
-				main_network.merge(bscap.network)
-	
+		if(!bscap.network)
+			continue
+		if(src.network_color != bscap.network_color)
+			continue
+		if(!main_network)
+			main_network = bscap.network
+			continue
+		else
+			main_network.merge(bscap.network)
+				
 /obj/machinery/atmospherics/unary/cap/bluespace/build_network()
 	if(!network && node1)
 		network = new /datum/pipe_network
 		network.normal_members += src
 		network.build_network(node1, src)
 		merge_all()
-	
+		
+		
 /obj/machinery/atmospherics/unary/cap/bluespace/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O,/obj/item/device/multitool))
 		var/list/choice_list = pipe_colors
