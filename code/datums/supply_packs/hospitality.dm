@@ -93,10 +93,10 @@
 
 /datum/supply_packs/lunchboxes
 	name = "Empty lunchbox crate"
-	contains = list(/obj/item/weapon/storage/lunchbox/plastic/nt
-					/obj/item/weapon/storage/lunchbox/plastic/nt
-					/obj/item/weapon/storage/lunchbox/plastic/nt
-					/obj/item/weapon/storage/lunchbox/plastic/nt
+	contains = list(/obj/item/weapon/storage/lunchbox/plastic/nt,
+					/obj/item/weapon/storage/lunchbox/plastic/nt,
+					/obj/item/weapon/storage/lunchbox/plastic/nt,
+					/obj/item/weapon/storage/lunchbox/plastic/nt,
 					/obj/item/weapon/storage/lunchbox/plastic/nt)
 	cost = 25
 	containertype = /obj/structure/closet/crate/freezer
