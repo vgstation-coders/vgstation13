@@ -94,9 +94,7 @@
 		else
 			return
 
-	var/surf = isturf(loc)?TRUE:FALSE
-	location = get_turf(src)
-	location.hotspot_expose(700, SMALL_FLAME, surf)
+	try_hotspot_expose(700, SMALL_FLAME, -1)
 
 /obj/item/clothing/head/cakehat/attack_self(mob/user as mob)
 	if(status > 1)

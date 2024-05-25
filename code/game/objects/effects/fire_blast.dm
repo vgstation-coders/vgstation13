@@ -98,7 +98,7 @@
 
 			var/turf/T2 = get_turf(src)
 			if(T2)
-				T2.hotspot_expose((blast_temperature * 2) + 380,MEDIUM_FLAME, 1)
+				try_hotspot_expose((blast_temperature * 2) + 380,MEDIUM_FLAME, 1)
 			sleep(2)
 		qdel(src)
 

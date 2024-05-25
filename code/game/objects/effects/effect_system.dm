@@ -177,8 +177,7 @@ steam.start() -- spawns the effect
 		qdel(src)
 		return
 	else
-		var/turf/T = src.loc
-		T.hotspot_expose(SPARK_TEMP, SMALL_FLAME, surfaceburn)
+		try_hotspot_expose(SPARK_TEMP, SMALL_FLAME, surfaceburn)
 		step(src,move_dir)
 	energy--
 

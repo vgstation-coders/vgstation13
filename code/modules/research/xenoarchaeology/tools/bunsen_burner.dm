@@ -160,7 +160,7 @@
 					GAS_OXYGEN, -o2_consumption,
 					GAS_CARBON, -co2_consumption)
 				if(prob(unsafety) && T)
-					T.hotspot_expose(max_temperature, SMALL_FLAME)
+					try_hotspot_expose(max_temperature, SMALL_FLAME,0)
 				break
 
 		if(!max_temperature)

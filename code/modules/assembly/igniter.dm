@@ -19,8 +19,7 @@
 	else
 		var/turf/location = get_turf(loc)
 		if(location)
-			var/surf = isturf(loc)?TRUE:FALSE
-			location.hotspot_expose(1000,LARGE_FLAME,surf)
+			try_hotspot_expose(1000,LARGE_FLAME,-1)
 
 		spark(src, surfaceburn = TRUE)
 
