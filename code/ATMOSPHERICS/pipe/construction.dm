@@ -205,6 +205,8 @@ var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 	else
 		src.pipe_type = pipe_type
 		src.dir = dir
+	if(src.pipe_type == PIPE_BSCAP)
+		src.w_class = W_CLASS_LARGE
 	//src.pipe_dir = get_pipe_dir()
 	update()
 //	src.pixel_x = rand(-5, 5)
