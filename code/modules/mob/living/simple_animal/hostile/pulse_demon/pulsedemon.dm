@@ -76,6 +76,7 @@
 		current_cable = locate(/obj/structure/cable) in loc
 		if(!current_cable)
 			death()
+			return
 		if(current_cable.powernet)
 			current_cable.powernet.haspulsedemon = TRUE
 	else
