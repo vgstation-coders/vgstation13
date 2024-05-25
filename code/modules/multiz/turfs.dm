@@ -235,6 +235,7 @@ var/list/open_overlay_depths
 
 /turf/simulated/floor/glass
 	var/obj/effect/glass_open_overlay/damage/overdamage
+	var/list/obj/effect/glass_open_overlay/decal/overdecals
 
 /turf/simulated/floor/glass/New(loc)
 	..(loc)
@@ -243,6 +244,13 @@ var/list/open_overlay_depths
 		plane = OPENSPACE_PLANE_START
 		layer = 0
 		update_icon()
+
+/turf/simulated/floor/glass/Destroy()
+	if(overdamage)
+		QDEL_NULL(overdamage)
+	if(overdecals)
+		QDEL_LIST(overdecals)
+	. = ..()
 
 /obj/effect/glass_open_overlay
 	name = "glass open overlay"
@@ -302,6 +310,9 @@ var/obj/effect/glass_open_overlay/plasma/openpgfloor
 		overdecal.icon_state = decal.icon_state
 		overdecal.dir = decal.dir
 		vis_contents.Add(overdecal)
+		if(!overdecals)
+			overdecals = list()
+		overdecals += overdecal
 	else
 		..()
 
