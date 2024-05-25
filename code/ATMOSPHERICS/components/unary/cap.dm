@@ -131,13 +131,14 @@
 	desc = "A bluespace endcap for pipes."
 	icon = 'icons/obj/pipes.dmi'
 	icon_state = "bscap"
-	can_be_coloured = 0
 	level = LEVEL_ABOVE_FLOOR
+	can_be_coloured = 0
+	color = "#FFFFFF"
 	var/network_color = "#b4b4b4"    // default grey color that all pipes have
 	
-	var/color_r = 255
-	var/color_g = 255
-	var/color_b = 255
+	var/color_r = 180
+	var/color_g = 180
+	var/color_b = 180
 
 	var/image/color_overlay
 	
@@ -158,7 +159,7 @@ var/global/list/pipe_colors = list(
 	overlays = 0
 	alpha = invisibility ? 128 : 255
 	icon_state = "bscap"
-	
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_bscap")
 	color_overlay = image('icons/obj/pipes.dmi', icon_state = "bscap-overlay")
 	color_overlay.color = rgb(color_r,color_g,color_b)
 	overlays += color_overlay
