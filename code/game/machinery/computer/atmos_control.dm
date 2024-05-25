@@ -214,7 +214,8 @@ var/global/list/atmos_controllers = list()
 		data["admin_access"] = TRUE
 	else
 		data["admin_access"] = FALSE
-		screen = ACA_SCREEN_DETAILSVIEW //this dumb hack stops unauthorized cards from seeing shit they shouldn't
+		if(screen == ACA_SCREEN_ADMINPANEL)
+			screen = ACA_SCREEN_DETAILSVIEW //this dumb hack stops unauthorized cards from seeing shit they shouldn't
 
 	data["aca_screen"] = screen //aca_screen so we don't conflict with air alarms, which already use screen
 
@@ -261,6 +262,7 @@ var/global/list/atmos_controllers = list()
 		return 1
 
 	if(href_list["login"])
+		screen = ACA_SCREEN_DETAILSVIEW
 		if(log_in_id || emagged)
 			return 1
 		var/mob/M = usr
