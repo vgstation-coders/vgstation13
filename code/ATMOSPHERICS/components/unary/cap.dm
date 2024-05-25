@@ -134,7 +134,6 @@
 	can_be_coloured = 0
 	level = LEVEL_ABOVE_FLOOR
 	var/network_color = "#b4b4b4"    // default grey color that all pipes have
-	var/global/list/obj/machinery/atmospherics/bspipe_list = list()
 	
 	var/color_r = 255
 	var/color_g = 255
@@ -142,18 +141,18 @@
 
 	var/image/color_overlay
 	
-	var/list/pipe_colors = list(
-		"custom", \
-		"grey" = rgb(180,180,180), \
-		"blue" = rgb(0,0,183), \
-		"cyan" = rgb(0,184,184), \
-		"green" = rgb(0,185,0), \
-		"pink" = rgb(255,102,204), \
-		"purple" = rgb(128,0,128), \
-		"red" = rgb(183,0,0), \
-		"orange" = rgb(183,121,0), \
-		"white" = rgb(255,255,255), \
-	)
+var/global/list/pipe_colors = list(
+	"custom", \
+	"grey" = rgb(180,180,180), \
+	"blue" = rgb(0,0,183), \
+	"cyan" = rgb(0,184,184), \
+	"green" = rgb(0,185,0), \
+	"pink" = rgb(255,102,204), \
+	"purple" = rgb(128,0,128), \
+	"red" = rgb(183,0,0), \
+	"orange" = rgb(183,121,0), \
+	"white" = rgb(255,255,255), \
+)
 	
 /obj/machinery/atmospherics/unary/cap/bluespace/update_icon()
 	overlays = 0
@@ -164,7 +163,10 @@
 	color_overlay.color = rgb(color_r,color_g,color_b)
 	overlays += color_overlay
 	
-	
+
+var/global/list/bspipe_list = list()
+var/global/list/bspipe_item_list = list()
+
 /obj/machinery/atmospherics/unary/cap/bluespace/New()
 	..()
 	bspipe_list.Add(src)
@@ -180,6 +182,8 @@
 		if(!bscap.network)
 			continue
 		if(src.network_color != bscap.network_color)
+			continue
+		if(src.z != bscap.z)
 			continue
 		if(!main_network)
 			main_network = bscap.network
