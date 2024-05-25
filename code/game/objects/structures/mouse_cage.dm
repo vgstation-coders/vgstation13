@@ -54,6 +54,9 @@
 		if (!critter && istype (O,/obj/item/weapon/holder/animal))
 			var/obj/item/weapon/holder/animal/store = O
 			var/mob/living/simple_animal/inside = store.stored_mob
+			if(!inside.tangibility)
+				to_chat(user, "<span class='warning'>\The [inside] cannot be held by \the [src]!</span>")
+				return
 			if (inside.size > SIZE_TINY)
 				to_chat(user, "<span class='warning'>\The [inside] is too big for \the [src]!</span>")
 				return
