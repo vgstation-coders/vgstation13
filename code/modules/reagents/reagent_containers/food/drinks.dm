@@ -2211,6 +2211,24 @@
 			var/obj/item/weapon/reagent_containers/food/snacks/donut/D = I
 			D.dip(src, user)
 
+/obj/item/weapon/reagent_containers/food/drinks/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(!(molotov == 1))
+		return
+	if(lit)
+		return
+	ignite()
+
+/obj/item/weapon/reagent_containers/food/drinks/ignite()
+	if(lit)
+		return
+	light("<span class='danger'>The raging fire sets \the [src] alight.</span>")
+
+/obj/item/weapon/reagent_containers/food/drinks/extinguish()
+	lit = 0
+	update_brightness()
+	update_icon()
+	..()
+
 /obj/item/weapon/reagent_containers/food/drinks/molotov
 	name = "incendiary cocktail"
 	smashtext = ""

@@ -111,6 +111,11 @@
 		return
 	burn()
 
+/obj/item/incense_stick/ignite()
+	if(lit)
+		return
+	burn()
+
 /obj/item/incense_stick/is_hot()
 	if(lit)
 		return source_temperature
@@ -234,6 +239,11 @@
 	if(ismob(loc))
 		var/mob/M = loc
 		M.update_inv_hands()
+
+/obj/item/incense_stick/extinguish()
+	lit = 0
+	update_icon()
+	..()
 
 /obj/item/incense_stick/proc/set_fragrance(var/newfrag)
 	if(fragrance == newfrag)
