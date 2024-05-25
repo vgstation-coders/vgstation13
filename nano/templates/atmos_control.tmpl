@@ -29,6 +29,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 		<div class="line">
 			{{:helper.link('Show Tracker Map', 'pin-s', {'reset': 1, 'showMap' : 1})}}
 			{{:helper.link('Show Detail List', 'script', {'set_screen': 1})}}
+			{{:helper.link('Show Bluespace Caps List', 'script', {'set_screen': 3})}}
 		</div>
 
 		<div class="line">
@@ -125,6 +126,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 	{{else data.aca_screen == "1"}}
 		<div class="line">
 			{{:helper.link('Show Tracker Map', 'pin-s', {'reset': 1, 'showMap' : 1})}}
+			{{:helper.link('Show Bluespace Caps List', 'script', {'set_screen': 3})}}
 			{{if data.admin_access}}
 				{{:helper.link('Show Presets Panel', 'gear', {'set_screen': 2})}}
                 {{:helper.link("Mass Set Mode",'alert',{'set_mass_mode': 1},null,"floatRight")}}
@@ -424,5 +426,23 @@ Used In File(s): /code/game/machinery/alarm.dm
 			{{/if}}
 			<!-- End air_alarm.tmpl copypaste -->
 		{{/if}}
+	{{else data.aca_screen == "3"}}
+		<div class="line">
+			{{:helper.link('Show Tracker Map', 'pin-s', {'reset': 1, 'showMap' : 1})}}
+			{{:helper.link('Show Detail List', 'script', {'set_screen': 1})}}
+			{{if data.admin_access}}
+				{{:helper.link('Show Presets Panel', 'gear', {'set_screen': 2})}}
+                {{:helper.link("Mass Set Mode",'alert',{'set_mass_mode': 1},null,"floatRight")}}
+			{{/if}}
+		</div>
+		<h3>Bluespace Pipes Locations</h3>
+		<div class="statusDisplay">
+		{{for data.bspipes}}
+			<div class="line">
+				{{:helper.string("<div class='statusValue good'>{0}</div>",value.name)}}
+				{{:helper.string("<div class='floatRight'>X: {0}, Y: {1}, Z: {2}</div>",value.x,value.y,value.z)}}
+			</div>
+		{{/for}}
+		</div>
 	{{/if}}
 {{/if}}
