@@ -218,8 +218,6 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/death(var/gibbed = 0)
 	..()
-	if(current_cable?.powernet)
-		current_cable.powernet.haspulsedemon = FALSE
 	var/turf/T = get_turf(src)
 	spark(src,rand(2,4))
 	var/heavyemp_radius = min(charge/50000, 20)
@@ -228,6 +226,11 @@
 	playsound(T,"pd_wail_sound",50,1)
 	qdel(src) // We vaporise into thin air
 
+/mob/living/simple_animal/hostile/pulse_demon/Destroy()
+	if(current_cable?.powernet)
+		current_cable.powernet.haspulsedemon = FALSE
+	. = ..()
+	
 /mob/living/simple_animal/hostile/pulse_demon/proc/is_under_tile()
 	var/turf/simulated/floor/F = get_turf(src)
 	return istype(F,/turf/simulated/floor) && F.floor_tile
