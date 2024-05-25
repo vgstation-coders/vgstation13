@@ -233,6 +233,9 @@ var/list/open_overlay_depths
 			user.emote("flip")
 		return SUICIDE_ACT_CUSTOM
 
+/turf/simulated/floor/glass
+	var/obj/effect/glass_open_overlay/damage/overdamage
+
 /turf/simulated/floor/glass/New(loc)
 	..(loc)
 	if(get_base_turf(src.z) == /turf/simulated/open)
@@ -285,7 +288,8 @@ var/obj/effect/glass_open_overlay/plasma/openpgfloor
 					openpgfloor = new
 				vis_contents.Add(openpgfloor)
 		if(health < initial(health))
-			var/obj/effect/glass_open_overlay/damage/overdamage = new /obj/effect/glass_open_overlay/damage
+			if(!overdamage)
+				overdamage = new
 			overdamage.icon_state = icon_state
 			vis_contents.Add(overdamage)
 	else
