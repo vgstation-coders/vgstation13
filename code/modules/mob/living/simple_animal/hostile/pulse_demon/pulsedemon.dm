@@ -359,6 +359,14 @@
 	if(!is_under_tile())
 		visible_message("<span class ='notice'>\the [AM] goes right through \the [src]!</span>")
 
+/mob/living/simple_animal/hostile/pulse_demon/scoop_up(mob/M)
+	if(!is_under_tile())
+		if(M.is_wearing_item(/obj/item/clothing/gloves/golden,slot_gloves))
+			return ..()
+		to_chat(M,"<span class ='warning'>Your hands go right through \the [src] as you try to pick it up!</span>")
+		shockMob(M)
+	return 0
+
 // Unless...
 /mob/living/simple_animal/hostile/pulse_demon/Crossed(atom/movable/AM)
 	. = ..()
