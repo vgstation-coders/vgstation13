@@ -6,7 +6,6 @@
 	id = null
 	var/has_metal_slime = 0
 	var/has_yellow_slime = 0
-	var/has_bluespace_slime = 0
 	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
 	var/build_all = 0
 	var/autowrench = 0

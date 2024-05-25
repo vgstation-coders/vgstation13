@@ -740,7 +740,7 @@ var/global/list/disposalpipeID2State = list(
 
 	pipe_id		= PIPE_DP_VENT
 	pipe_type	= PIPE_UNARY
-	
+
 //H/E Pipes.
 
 /datum/rcd_schematic/pipe/he
