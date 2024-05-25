@@ -741,13 +741,6 @@ var/global/list/disposalpipeID2State = list(
 	pipe_id		= PIPE_DP_VENT
 	pipe_type	= PIPE_UNARY
 	
-/datum/rcd_schematic/pipe/bscap
-	name		= "Bluespace Pipe Cap"
-	category	= "Devices"
-
-	pipe_id		= PIPE_BSCAP
-	pipe_type	= PIPE_UNARY
-
 //H/E Pipes.
 
 /datum/rcd_schematic/pipe/he

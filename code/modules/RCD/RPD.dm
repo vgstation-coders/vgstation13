@@ -51,7 +51,6 @@
 		/datum/rcd_schematic/pipe/heat_pump,
 		/datum/rcd_schematic/pipe/injector,
 		/datum/rcd_schematic/pipe/dp_vent,
-		/datum/rcd_schematic/pipe/bscap,
 
 		/* H/E Pipes */
 		/datum/rcd_schematic/pipe/he,
@@ -128,15 +127,11 @@
 		<div id='fav_list'></div>
 	"}
 	for(var/cat in schematics)
-		if(cat == "Bluespace Pipe Caps" && !has_bluespace_slime)
-			continue
 		dat += "<b>[cat]:</b><ul style='list-style-type:disc'>"
 		var/list/L = schematics[cat]
 		for(var/datum/rcd_schematic/C in L)
 			var/turf/T = get_turf(src)
 			if(!T || ((C.flags & RCD_Z_DOWN) && !HasBelow(T.z)) || ((C.flags & RCD_Z_UP) && !HasAbove(T.z)))
-				continue
-			if(C.name == "Bluespace Pipe Cap" && !has_bluespace_slime)
 				continue
 			dat += C.schematic_list_line(interface,FALSE,src.selected==C)
 
@@ -243,14 +238,6 @@
 			has_yellow_slime=1
 			verbs += /obj/item/device/rcd/rpd/proc/autowrench
 			to_chat(user, "You jam the slime extract into the RPD's output nozzle.")
-			return TRUE
-	if(primarytype == /mob/living/carbon/slime/bluespace)
-		if(has_bluespace_slime)
-			to_chat(user, "It already has a slime extract attached.")
-			return FALSE
-		else
-			has_bluespace_slime=1
-			to_chat(user, "You jam the slime extract into the RPD's fabricator.")
 			return TRUE
 
 /obj/item/device/rcd/rpd/afterattack(var/atom/A, var/mob/user)
