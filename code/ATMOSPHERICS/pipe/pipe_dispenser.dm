@@ -8,6 +8,7 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	var/bstext = ""
 	var/layer_to_make = PIPING_LAYER_DEFAULT
+	var/bspipe_limit = 20
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -125,13 +126,14 @@
 		if(!wait)
 			var/p_type = text2num(href_list["make"])
 			var/p_dir = text2num(href_list["dir"])
-			var/obj/item/pipe/P = new /obj/item/pipe(get_turf(src), pipe_type = p_type, dir = p_dir)
-			P.setPipingLayer(layer_to_make)
-			P.update()
-			P.add_fingerprint(usr)
-			wait = 1
-			spawn(10)
-				wait = 0
+			if(!(p_type == PIPE_BSCAP && bspipe_item_list.len+bspipe_list.len >= bspipe_limit))
+				var/obj/item/pipe/P = new /obj/item/pipe(get_turf(src), pipe_type = p_type, dir = p_dir)
+				P.setPipingLayer(layer_to_make)
+				P.update()
+				P.add_fingerprint(usr)
+				wait = 1
+				spawn(10)
+					wait = 0
 	if(href_list["makemeter"])
 		if(!wait)
 			new /obj/item/pipe_meter(/*usr.loc*/ src.loc)

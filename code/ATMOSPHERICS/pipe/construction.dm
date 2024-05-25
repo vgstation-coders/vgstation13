@@ -207,10 +207,15 @@ var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 		src.dir = dir
 	if(src.pipe_type == PIPE_BSCAP)
 		src.w_class = W_CLASS_LARGE
+		bspipe_item_list.Add(src)
 	//src.pipe_dir = get_pipe_dir()
 	update()
 //	src.pixel_x = rand(-5, 5)
 //	src.pixel_y = rand(-5, 5)
+
+/obj/item/pipe/Destroy()
+	bspipe_item_list.Remove(src)
+	..()
 
 /obj/item/pipe/proc/setPipingLayer(new_layer = PIPING_LAYER_DEFAULT)
 	piping_layer = new_layer
