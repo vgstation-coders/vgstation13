@@ -364,6 +364,8 @@
 	clothing_flags = PLASMAGUARD
 	armor = list(melee = 40, bullet = 0, laser = 0, energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	dyeable_parts = list("visor","primary","secondary")
+	dye_base_iconstate_override = "rig0-atmos"
 
 /obj/item/clothing/suit/space/rig/atmos
 	desc = "A special suit that protects against hazardous low pressure environments. Trades radiation shielding for plasma proofing compared to engineering hardsuits."
@@ -376,6 +378,8 @@
 	armor = list(melee = 40, bullet = 0, laser = 0, energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	head_type = /obj/item/clothing/head/helmet/space/rig/atmos
+	dyeable_parts = list("visor","primary","secondary")
+
 
 //Firefighting/Atmos RIG (old /vg/)
 /obj/item/clothing/head/helmet/space/rig/atmos/gold
@@ -387,6 +391,7 @@
 	_color = "atmos_gold"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
+	dyeable_parts = list()
 
 /obj/item/clothing/suit/space/rig/atmos/gold
 	desc = "A special suit that protects against hazardous low pressure environments and extreme temperatures. In other words, perfect for atmos."
@@ -401,6 +406,7 @@
 	armor = list(melee = 30, bullet = 5, laser = 40,energy = 5, bomb = 35, bio = 100, rad = 60)
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/extinguisher/foam, /obj/item/weapon/storage/toolbox, /obj/item/tool/wrench/socket, /obj/item/tool/irons)
 	head_type = /obj/item/clothing/head/helmet/space/rig/atmos/gold
+	dyeable_parts = list()
 
 //ADMINBUS RIGS. SOVIET + NAZI
 /obj/item/clothing/head/helmet/space/rig/nazi
