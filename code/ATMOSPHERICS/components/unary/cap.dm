@@ -128,7 +128,7 @@
 
 /obj/machinery/atmospherics/unary/cap/bluespace
 	name = "bluespace pipe endcap"
-	desc = "A bluespace endcap for pipes."
+	desc = "A bluespace-powered pipe endcap that can instantaneously transfer gases between two points."
 	icon = 'icons/obj/pipes.dmi'
 	icon_state = "bscap"
 	level = LEVEL_ABOVE_FLOOR
