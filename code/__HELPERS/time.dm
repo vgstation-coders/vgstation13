@@ -52,9 +52,9 @@
 		. += "[(m<10)?"0":""][m]:"
 	. += "[(s<10)?"0":""][s]"
 
-/proc/altFormatTimeDuration(var/deciseconds)
+/proc/altFormatTimeDuration(var/deciseconds, var/show_seconds = TRUE)
 	var/m = round(deciseconds / 600)
-	var/s = (deciseconds % 600)/10
+	var/s = round((deciseconds % 600)/10)
 	var/h = round(m / 60)
 	m = m % 60
 	if(h > 0)
@@ -64,7 +64,7 @@
 	. += "[s]s"
 
 /proc/getShiftDuration()
-	return altFormatTimeDuration(world.timeofday - roundstart_timestamp)
+	return altFormatTimeDuration(world.time - roundstart_timestamp)
 
 /proc/time_stamp()
 	return time2text(world.timeofday, "hh:mm:ss")
