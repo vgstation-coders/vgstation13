@@ -6,9 +6,9 @@
 	anchored = 1
 	var/wait = 0
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
-	var/bstext = ""
 	var/layer_to_make = PIPING_LAYER_DEFAULT
 	var/bspipe_limit = 20
+	var/show_bscaps = FALSE
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -33,9 +33,9 @@
 	var/manipulator_count = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
 		manipulator_count += M.rating
-	bstext = ""
+	show_bscaps = FALSE
 	if(manipulator_count >= 6)
-		bstext =  "<li><a href='?src=\ref[src];make=[PIPE_BSCAP];dir=1'>Bluespace Pipe Cap</a></li>"
+		show_bscaps = TRUE
 
 /obj/machinery/pipedispenser/attack_hand(user as mob)
 	if(..())
@@ -85,8 +85,10 @@
 	<li><a href='?src=\ref[src];make=[PIPE_GAS_MIXER];dir=9'>Gas Mixer \[M]</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_THERMAL_PLATE];dir=1'>Thermal Plate</a></li>
 	<li><a href='?src=\ref[src];make=[PIPE_INJECTOR];dir=1'>Injector</a></li>
-	<li><a href='?src=\ref[src];make=[PIPE_DP_VENT];dir=1'>Dual-Port Vent</a></li>
-	[bstext]
+	<li><a href='?src=\ref[src];make=[PIPE_DP_VENT];dir=1'>Dual-Port Vent</a></li>"}
+	if(show_bscaps)
+		dat += "<li><a href='?src=\ref[src];make=[PIPE_BSCAP];dir=1'>Bluespace Pipe Cap</a> ([20-(bspipe_list.len+bspipe_item_list.len)] caps available)</li>"
+	dat+= {"
 </ul>
 <b>Heat exchange:</b>
 <ul>
@@ -119,7 +121,6 @@
 	if(!anchored)
 		usr << browse(null, "window=pipedispenser")
 		return 1
-
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
 	if(href_list["make"])
@@ -134,6 +135,8 @@
 				wait = 1
 				spawn(10)
 					wait = 0
+			if(p_type == PIPE_BSCAP)
+				interact(usr)
 	if(href_list["makemeter"])
 		if(!wait)
 			new /obj/item/pipe_meter(/*usr.loc*/ src.loc)
