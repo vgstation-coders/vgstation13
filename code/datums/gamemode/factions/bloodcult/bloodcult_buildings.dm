@@ -1473,7 +1473,7 @@ var/list/cult_spires = list()
 
 /obj/structure/cult/pillar/update_icon()
 	icon_state = "pillar[alt ? "alt": ""]2"
-	set_light(1, 2, LIGHT_COLOR_RED)
+	set_light(1.5, 2.5, LIGHT_COLOR_RED)
 	overlays.len = 0
 	if (health < maxHealth/3)
 		icon_state = "pillar[alt ? "alt": ""]0"

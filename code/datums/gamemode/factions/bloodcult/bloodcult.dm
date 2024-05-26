@@ -235,6 +235,13 @@
 
 
 	dat += "<br>Accumulated devotion: [total_devotion]"
+	switch(stage)
+		if (BLOODCULT_STAGE_NORMAL)
+			dat += "<br>Eclipse progress: [round((eclipse_progress/eclipse_target)*100)]%"
+		else
+			if (sun && sun.eclipse_manager)
+				var/seconds_to_eclipse = (sun.eclipse_manager.eclipse_start_time - cult_founding_time)/10
+				dat += "<br>Eclipse arrival: [round(seconds_to_eclipse/3600)]h [add_zero(num2text(round(seconds_to_eclipse/60) % 60), 2)]m [add_zero(num2text(round(seconds_to_eclipse) % 60), 2)]s"
 
 	if (cult_won)
 		dat += "<br><font color='green'><B>[end_message]</B></font>"
@@ -414,7 +421,8 @@
 							if (M)
 								to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
 						spawn(10 MINUTES)
-							replace_rituals(ritual_slot)
+							if (!rituals[ritual_slot])
+								replace_rituals(ritual_slot)
 
 #define HUDICON_BLINKDURATION 10
 /datum/faction/bloodcult/update_hud_icons(var/offset = 0,var/factions_with_icons = 0)
@@ -502,6 +510,42 @@
 	previously_converted |= R.antag
 	if (R.antag.name in deconverted)
 		deconverted -= R.antag.name
+
+
+/datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
+	var/list/dat = ..()
+
+	dat += "<br>accumulated devotion: [total_devotion]"
+	dat += "<br>available rituals: "
+	for (var/ritual_slot in rituals)
+		if (rituals[ritual_slot])
+			var/datum/bloodcult_ritual/my_ritual = rituals[ritual_slot]
+			dat += "[my_ritual.name] - "
+		else
+			dat += "<i>cooldown</i> - "
+	dat += "<a href='?src=\ref[src];replaceritual=1'>\[Replace\]</a><br>"
+	return dat
+
+/datum/faction/bloodcult/Topic(href, href_list)
+	..()
+
+	if(!usr.check_rights(R_ADMIN))
+		message_admins("[usr] tried to access bloodcult faction Topic() without permissions.")
+		return
+	if(!usr.client || !usr.client.holder)
+		return
+	if(href_list["replaceritual"])
+		var/choice = alert(usr,"Which ritual do you want to replace?","Replace Ritual","first ritual","second ritual","third ritual")
+		switch(choice)
+			if ("first ritual")
+				replace_rituals(RITUAL_FACTION_1)
+				usr.client.holder.check_antagonists()
+			if ("second ritual")
+				replace_rituals(RITUAL_FACTION_2)
+				usr.client.holder.check_antagonists()
+			if ("third ritual")
+				replace_rituals(RITUAL_FACTION_3)
+				usr.client.holder.check_antagonists()
 
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
 	. = ..()
