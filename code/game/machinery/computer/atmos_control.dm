@@ -229,6 +229,8 @@ var/global/list/atmos_controllers = list()
 		gas_datums += list(datum_data)
 	data["gas_datums"]=gas_datums
 	
+	if(bspipe_list.len>0)
+		data["bspipe_exist"] = TRUE
 	var/list/bspipes=list()
 	for(var/obj/machinery/atmospherics/unary/cap/bluespace/bscap in bspipe_list)
 		var/list/pipe_data = list()
