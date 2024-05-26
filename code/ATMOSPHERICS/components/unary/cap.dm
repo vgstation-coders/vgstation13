@@ -204,7 +204,7 @@ var/global/list/obj/machinery/atmospherics/unary/cap/bluespace/bspipe_item_list 
 	if(istype(O,/obj/item/device/multitool))
 		var/list/choice_list = pipe_colors
 
-		var/choice = input(user,"Select a colour to set [src] to.","[src]") in choice_list
+		var/choice = input(user,"Select a color to set [src] to.","[src]") in choice_list
 		if(!Adjacent(user))
 			return
 
