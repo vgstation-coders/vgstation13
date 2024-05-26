@@ -165,8 +165,8 @@ var/global/list/pipe_colors = list(
 	overlays += color_overlay
 	
 
-var/global/list/bspipe_list = list()
-var/global/list/bspipe_item_list = list()
+var/global/list/obj/machinery/atmospherics/unary/cap/bluespace/bspipe_list = list()
+var/global/list/obj/machinery/atmospherics/unary/cap/bluespace/bspipe_item_list = list()
 
 /obj/machinery/atmospherics/unary/cap/bluespace/New()
 	..()
