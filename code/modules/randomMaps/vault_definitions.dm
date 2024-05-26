@@ -322,3 +322,7 @@ var/list/existing_vaults = list()
 /area/vault/radioactivecatwalk
 	name = "Research Laboratory Catwalk"
 	dynamic_lighting = 0
+
+/area/vault/croesus_vault
+	name = "The Golden Vault of the Space King"
+	spawn_cost = 3
