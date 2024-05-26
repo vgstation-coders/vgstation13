@@ -323,6 +323,6 @@ var/list/existing_vaults = list()
 	name = "Research Laboratory Catwalk"
 	dynamic_lighting = 0
 
-/area/vault/croesus_vault
-	name = "The Golden Vault of the Space King"
+/datum/map_element/vault/croesus_vault
+	file_path = "maps/randomvaults/croesus_vault.dmm"
 	spawn_cost = 3
