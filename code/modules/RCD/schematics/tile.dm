@@ -394,7 +394,9 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info/decal(DIR_ALL,	"siding"),
 		new /datum/paint_info/decal(DIR_ONE,	"siding_full"),
 		new /datum/paint_info/decal(DIR_ALL,	"wood_siding"),
-		new /datum/paint_info/decal(DIR_ONE,	"wood_siding_full")
+		new /datum/paint_info/decal(DIR_ONE,	"wood_siding_full"),
+		new /datum/paint_info/decal(DIR_ONE,	"radiation"),
+		new /datum/paint_info/decal(DIR_ONE,	"radiation_huge"),
 	),
 	"Gray" = list(
 		new /datum/paint_info(DIR_ONE,		"floor"),
