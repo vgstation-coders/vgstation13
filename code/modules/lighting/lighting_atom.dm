@@ -54,6 +54,7 @@
 	if (light)
 		light.destroy()
 		light = null
+	QDEL_NULL(firelightdummy)
 	. = ..()
 
 // Should always be used to change the opacity of an atom.
