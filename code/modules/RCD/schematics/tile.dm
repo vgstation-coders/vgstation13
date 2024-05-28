@@ -194,6 +194,8 @@
 
 //The list of all available floor design groups.
 
+/datum/rcd_schematic/tile/departments
+	name = "Department Directions"
 /datum/rcd_schematic/tile/gray
 	name = "Gray"
 
@@ -304,19 +306,6 @@
 
 /datum/rcd_schematic/tile/warning_plating
 	name = "Plating warning"
-
-/datum/rcd_schematic/tile/siding
-	name = "Siding"
-
-/datum/rcd_schematic/tile/siding_gold
-	name = "Wood siding"
-
-/datum/rcd_schematic/tile/siding_full
-	name = "Siding"
-
-/datum/rcd_schematic/tile/siding_gold_full
-	name = "Wood siding"
-
 /datum/rcd_schematic/tile/chapel
 	name = "Chapel"
 
@@ -397,7 +386,31 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info/decal(DIR_ONE,	"wood_siding_full"),
 		new /datum/paint_info/decal(DIR_ONE,	"radiation"),
 		new /datum/paint_info/decal(DIR_ONE,	"radiation_huge"),
+		new /datum/paint_info/decal(DIR_ONE,	"fire"),
+		new /datum/paint_info/decal(DIR_ONE,	"securearea"),
+		new /datum/paint_info/decal(DIR_ONE,	"shock"),
+		new /datum/paint_info/decal(DIR_ONE,	"space"),
+		new /datum/paint_info/decal(DIR_ONE,	"xenobio"),
+		new /datum/paint_info/decal(DIR_ONE,	"nosmoking2"),
+		new /datum/paint_info/decal(DIR_ONE,	"deathsposal"),
+		new /datum/paint_info/decal(DIR_ONE,	"pods"),
+		new /datum/paint_info/decal(DIR_ONE,	"shard_b"),
+		new /datum/paint_info/decal(DIR_ONE,	"crime"),
+		new /datum/paint_info/decal(DIR_ONE,	"crime_p"),
+		new /datum/paint_info/decal(DIR_ONE,	"voxtrade")
 	),
+
+	"Department Directions" = list(
+		new /datum/paint_info/decal(DIR_ORTHO,	"direction_eng"),
+		new /datum/paint_info/decal(DIR_ORTHO,	"direction_evac"),
+		new /datum/paint_info/decal(DIR_ORTHO,	"direction_med"),
+		new /datum/paint_info/decal(DIR_ORTHO,	"direction_sci"),
+		new /datum/paint_info/decal(DIR_ORTHO,	"direction_sec"),
+		new /datum/paint_info/decal(DIR_ORTHO,	"direction_trad"),
+		new /datum/paint_info/decal(DIR_ORTHO,	"direction_pod"),
+		new /datum/paint_info/decal(DIR_ORTHO,	"direction_chap")
+	),
+
 	"Gray" = list(
 		new /datum/paint_info(DIR_ONE,		"floor"),
 		new /datum/paint_info(DIR_ALL,		"black"),
