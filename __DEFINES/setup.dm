@@ -1172,11 +1172,12 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define AUTOIGNITION_WAX 518.15
 #define AUTOIGNITION_BIOLOGICAL 633.15 //animal fat
 #define AUTOIGNITION_WELDERFUEL 561.15 //butane
+#define AUTOIGNITION_TRIGGER 500.00 //temperature at which an area begins checking for autoignition
 
 // flame sizes (% of cell volume occupied by a flame)
-#define SMALL_FLAME 250 //a match, a candle, or a lighter (10% chance to ignite)
-#define MEDIUM_FLAME 625 //a single burning object on the ground (25%)
-#define LARGE_FLAME 1250 //a healthy campfire (50%)
+#define SMALL_FLAME 25 //a match, a candle, or a lighter (1% chance to ignite)
+#define MEDIUM_FLAME 250 //a single burning object on the ground (10%)
+#define LARGE_FLAME 675 //a healthy campfire (25%)
 #define FULL_FLAME 2500 //floor to ceiling flames
 
 //////////////////

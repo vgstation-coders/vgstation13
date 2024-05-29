@@ -31,9 +31,7 @@ var/global/list/igniters = list()
 
 /obj/machinery/igniter/process()	//ugh why is this even in process()?
 	if (src.on && !(stat & (NOPOWER|FORCEDISABLE)) )
-		var/turf/location = src.loc
-		var/surf = isturf(location)?TRUE:FALSE
-		location.hotspot_expose(1000,MEDIUM_FLAME,1,surf)
+		try_hotspot_expose(1000,MEDIUM_FLAME,1)
 	return 1
 
 /obj/machinery/igniter/proc/toggle_state()
@@ -138,12 +136,10 @@ var/global/list/igniters = list()
 
 
 	flick("[base_state]-spark", src)
-	spark(src, 2)
+	spark(src, 2, surfaceburn = TRUE)
 	src.last_spark = world.time
 	use_power(1000)
-	var/turf/location = src.loc
-	var/surf = isturf(location)?TRUE:FALSE
-	location.hotspot_expose(1000,MEDIUM_FLAME,1,surf)
+	try_hotspot_expose(1000,MEDIUM_FLAME,1)
 	return 1
 
 /obj/machinery/sparker/emp_act(severity)

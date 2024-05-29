@@ -58,6 +58,7 @@ Class Procs:
 
 	// Hardcoded-event specific variables.
 	var/ice_puddle_list
+	var/list/atom/burnable_atoms = list()
 
 /zone/New()
 	SSair.add_zone(src)
@@ -230,17 +231,33 @@ Class Procs:
 			ice_puddle_list = null
 	else if ( air.molar_density(GAS_CRYOTHEUM) > MOLES_CRYOTHEUM_VISIBLE / CELL_VOLUME )
 		ice_puddle_list = list()
+	if(air.temperature >= AUTOIGNITION_TRIGGER)
+		burnable_zones_processing |= src
+	else
+		burnable_zones_processing -= src
 
 /zone/proc/handle_events_add(turf/simulated/T)
 	for(var/obj/effect/overlay/puddle/ice/ice_puddle in T)
 		if(ice_puddle_list == null)
 			ice_puddle_list = list()
 		ice_puddle_list |= ice_puddle
+	if(T.flammable)
+		burnable_atoms |= T
+	for(var/obj/O in T)
+		if(O.flammable)
+			burnable_atoms |= O
 
 /zone/proc/handle_events_remove(turf/simulated/T)
 	if(ice_puddle_list != null)
 		for(var/obj/effect/overlay/puddle/ice/ice_puddle in T)
 			ice_puddle_list -= ice_puddle
+	burnable_atoms -= T
+	for(var/obj/O in T)
+		burnable_atoms -= O
+
+/zone/proc/checkzoneburn()
+	for(var/atom/A in burnable_atoms)
+		A.checkburn()
 
 #ifdef ZAS_COLOR
 #undef ZAS_COLOR

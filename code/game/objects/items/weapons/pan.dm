@@ -449,7 +449,8 @@
 
 	//Hotspot expose
 	var/turf/T = get_turf(src)
-	T?.hotspot_expose(O ? O.cook_temperature() : COOKTEMP_DEFAULT, MEDIUM_FLAME, 0) //Everything but the first arg is taken from igniter.
+	if(T)
+		try_hotspot_expose(O ? O.cook_temperature() : COOKTEMP_DEFAULT, MEDIUM_FLAME, 0) //Everything but the first arg is taken from igniter.
 
 /obj/item/weapon/reagent_containers/pan/proc/reset_cooking_progress()
 	cookingprogress = 0

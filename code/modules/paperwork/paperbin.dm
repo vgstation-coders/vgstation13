@@ -19,7 +19,7 @@
 /obj/item/weapon/paper_bin/New()
 	..()
 	update_icon()
-	thermal_mass = thermal_mass + amount //snowflaked (not sorry)
+	thermal_mass = thermal_mass + amount * 0.1 //0.1 = paper thermal_mass
 
 /obj/item/weapon/paper_bin/black
 	crayon = "black"
@@ -69,7 +69,7 @@
 /obj/item/weapon/paper_bin/useThermalMass(var/used_mass)
 	..()
 	if(amount)
-		var/burnt_papers = round(amount-(thermal_mass - initial_thermal_mass))
+		var/burnt_papers = round((amount * 0.1)-(thermal_mass - initial_thermal_mass)) //0.1 = paper thermal_mass
 		for(var/i in 1 to burnt_papers)
 			var/obj/item/weapon/paper/P
 			if(papers.len > 0)

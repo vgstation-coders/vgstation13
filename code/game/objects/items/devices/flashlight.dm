@@ -311,8 +311,7 @@
 /obj/item/device/flashlight/flare/process()
 	var/turf/pos = get_turf(src)
 	if(pos && on)
-		var/surf = isturf(loc)?TRUE:FALSE
-		pos.hotspot_expose(heat_production, LARGE_FLAME, surf)
+		try_hotspot_expose(heat_production, LARGE_FLAME, -1)
 	fuel = max(fuel - 1, 0)
 	if(!fuel || !on)
 		turn_off()
@@ -344,6 +343,17 @@
 	// All good, turn it on.
 	user.visible_message("<span class='notice'>[user] activates the flare.</span>", "<span class='notice'>You pull the cord on the flare, activating it!</span>")
 	Light(user)
+
+
+/obj/item/device/flashlight/flare/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(on)
+		return
+	ignite()
+
+/obj/item/device/flashlight/flare/ignite()
+	if(on)
+		return
+	Light()
 
 /obj/item/device/flashlight/flare/proc/Light(var/mob/user as mob)
 	on = 1

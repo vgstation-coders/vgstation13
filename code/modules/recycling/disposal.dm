@@ -184,6 +184,8 @@
 	if(user.drop_item(I, src))
 		user.visible_message("[user.name] places \the [I] into the [src].", "You place \the [I] into the [src].")
 
+	I.extinguish()
+
 	update_icon()
 
 // can breath normally in the disposal

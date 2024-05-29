@@ -19,10 +19,9 @@
 	else
 		var/turf/location = get_turf(loc)
 		if(location)
-			var/surf = isturf(loc)?TRUE:FALSE
-			location.hotspot_expose(1000,LARGE_FLAME,surf)
+			try_hotspot_expose(1000,LARGE_FLAME,-1)
 
-		spark(src)
+		spark(src, surfaceburn = TRUE)
 
 		if (istype(src.loc,/obj/item/device/assembly_holder))
 			if (istype(src.loc.loc, /obj/structure/reagent_dispensers/))

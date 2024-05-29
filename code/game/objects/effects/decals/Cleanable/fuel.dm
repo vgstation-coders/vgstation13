@@ -82,8 +82,7 @@
 
 	//Start a fire on the tile if a burning object is present without an underlying fire effect.
 	if(!in_fire)
-		T.hotspot_expose(max_temperature, FULL_FLAME, 1)
-		new /obj/effect/fire(T)
+		try_hotspot_expose(max_temperature, FULL_FLAME, 1)
 
 	return list("heat_out"=heat_out,"oxy_used"=oxy_used,"co2_prod"=co2_prod,"max_temperature"=max_temperature)
 
@@ -95,7 +94,7 @@
 	dir = d //Setting this direction means you won't get torched by your own flamethrower.
 	var/turf/T = newLoc
 	if(istype(T))
-		T.hotspot_expose(70000, FULL_FLAME, 1, 1)
+		try_hotspot_expose(70000, FULL_FLAME, 1)
 	//. = ..()
 
 /obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel/Spread()
@@ -124,7 +123,7 @@
 				return
 
 			spawn(1)
-				O.hotspot_expose(7000, FULL_FLAME, 1)
+				try_hotspot_expose(7000, FULL_FLAME, 1)
 				//O.hotspot_expose((T20C*2) + 380, 500, surfaces = 1)
 
 			if(FF)

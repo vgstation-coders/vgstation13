@@ -57,6 +57,7 @@
 	var/image/extra_food_overlay
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
+	QDEL_NULL(dip)
 	var/turf/T = get_turf(src)
 	if(contents.len)
 		for(var/atom/movable/A in src)

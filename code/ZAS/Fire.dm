@@ -73,7 +73,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	fuel_ox_ratio = FUEL_OX_RATIO_BIOLOGICAL
 	flame_temp = FLAME_TEMPERATURE_BIOLOGICAL
 
-
 ///////////////////////////////////////////////
 // COMBUSTION
 ///////////////////////////////////////////////
@@ -93,9 +92,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/fire_dmi = 'icons/effects/fire.dmi'
 	var/fire_sprite = "fire"
 	var/fire_overlay = null
-
-	var/image/charred_overlay = null
-	var/last_char = 0
 
 	var/atom/movable/firelightdummy/firelightdummy
 
@@ -163,76 +159,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(reagents?.total_volume)
 		return TRUE
 
-//charred overlay procs taken from Deity's food temperature overlays system (see food.dm)
-var/global/list/image/charred_overlays = list()
-
-/atom/proc/set_charred_overlay()
-	return
-
-/atom/proc/update_charred_overlay(var/char_alpha)
-	return
-
-/atom/proc/process_charred_overlay()
-	return
-
-/obj/set_charred_overlay()
-	if(update_charred_overlay())
-		return
-
-	var/icon/I = new /icon(icon, icon_state)
-	I.Blend(rgb(255,255,255),ICON_ADD)
-	I.Blend(new /icon('icons/effects/effects.dmi', "char"),ICON_MULTIPLY)
-
-	var/image/img = image(I)
-	img.name = "charred_overlay"
-	charred_overlays["[type][icon_state]"] = img
-	update_charred_overlay()
-
-/obj/update_charred_overlay(var/char_alpha = 96)
-	if(charred_overlays["[type][icon_state]"])
-		if (charred_overlay)
-			overlays -= charred_overlay
-		charred_overlay = mutable_appearance(charred_overlays["[type][icon_state]"])
-		charred_overlay.appearance_flags = RESET_COLOR|RESET_ALPHA|KEEP_TOGETHER
-		charred_overlay.alpha = char_alpha
-		overlays += charred_overlay
-		return 1
-
-/obj/process_charred_overlay()
-	if(thermal_mass)
-		var/c_alpha = 96 + clamp((64*(1-(thermal_mass/initial_thermal_mass))),0,64)
-		if(!charred_overlays["[type][icon_state]"])
-			set_charred_overlay()
-		else
-			update_charred_overlay(c_alpha)
-		last_char = world.time
-	else
-		if(prob(10)) //10% chance each tick of item getting charred
-			set_charred_overlay()
-
-/obj/effect/process_charred_overlay()
-	return
-
-/turf/process_charred_overlay()
-	if(locate(/obj/effect/ash) in src)
-		var/obj/effect/ash/A = locate(/obj/effect/ash) in src
-		if(flammable)
-			A.alpha = clamp((80*(1-(thermal_mass/initial_thermal_mass))),0,80) //turf's char overlays aren't as harsh as objects'
-		else
-			A.alpha = 40
-	else
-		new /obj/effect/ash(src)
-
-/obj/effect/ash
-	name = "ash"
-	icon_state = "char"
-	alpha = 0
-	anchored = 1
-	mouse_opacity = 0
-
-/obj/effect/ash/clean_act(var/cleanliness)
-	if(cleanliness >= CLEANLINESS_WATER)
-		qdel(src)
 /**
  * Burns solid objects and produces heat.
  *
@@ -281,9 +207,6 @@ var/global/list/image/charred_overlays = list()
 	var/delta_m = 0.20 * burnrate * ZAS_mass_consumption_multiplier
 	useThermalMass(delta_m)
 	genSmoke(oxy_ratio,temperature,T)
-
-	if(world.time - last_char >= 10 SECONDS)
-		process_charred_overlay()
 
 	//Change in internal energy = energy produced by combustion (assuming perfect combustion).
 	heat_out = material.heating_value * delta_m
@@ -419,15 +342,12 @@ var/global/list/image/charred_overlays = list()
 	if(flammable && !on_fire)
 		ignite()
 		return 1
-	else
-		process_charred_overlay()
-	return 0
 
 /atom/proc/checkburn()
 	if(on_fire)
 		return
 	if(!flammable)
-		return
+		CRASH("[src] was added to burnableatoms despite not being flammable!")
 	//if an object is not on fire, is flammable, and is in an environment with temperature above its autoignition temp & sufficient oxygen, ignite it
 	if(thermal_mass <= 0)
 		ashify()
@@ -443,11 +363,9 @@ var/global/list/image/charred_overlays = list()
 		ignite()
 
 /area/checkburn()
-	burnableatoms -= src
 	CRASH("[src] added to burnableatoms!")
 
 /mob/checkburn()
-	burnableatoms -= src
 	CRASH("[src] added to burnableatoms!")
 
 /area/fire_act()
@@ -455,6 +373,28 @@ var/global/list/image/charred_overlays = list()
 
 /mob/fire_act()
 	return
+
+/**
+ * Creates a hotspot on the input turf. Called by an obj to aid in logging and surface burn checking.
+ *
+ * Hotspots ignite any atoms (including the turf itself) on or gasses in the turf with autoignition temperatures below the input temperature.
+ * Arguments:
+ * * exposed_temperature - Temperature of the hotspot (Kelvin).
+ * * exposed_volume - Relative volume of the turf exposed to the hotspot (Milliliter).
+ * * surfaces - -1: Ignite surfaces if on the ground, 0: Only ignite gasses, 1: Always ignite surfaces.
+ */
+/obj/proc/try_hotspot_expose(var/exposed_temperature, var/exposed_volume = CELL_VOLUME, var/surfaces=0)
+	var/turf/simulated/T = get_turf(src)
+	if(!istype(T))
+		return
+	if(surfaces == -1)
+		if(loc == T)
+			surfaces = TRUE
+		else
+			surfaces = FALSE
+	if(T.hotspot_expose(exposed_temperature,exposed_volume,surfaces))
+		message_admins("\The [src] started a fire at [loc] ([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
+		log_game("\The [src] started a fire at [loc]([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
 
 ///////////////////////////////////////////////
 // TURF COMBUSTION
@@ -476,7 +416,6 @@ var/global/list/image/charred_overlays = list()
 /turf/ashify()
 	if(!on_fire)
 		return
-	burnableatoms -= src
 	extinguish()
 
 /**
@@ -486,7 +425,7 @@ var/global/list/image/charred_overlays = list()
  * Arguments:
  * * exposed_temperature - Temperature of the hotspot (Kelvin).
  * * exposed_volume - Relative volume of the turf exposed to the hotspot (Milliliter).
- * * surfaces - Whether or not the hotspot should ignite any atoms in the turf in addition to gasses (Boolean).
+ * * surfaces - 0: Only ignite gasses, 1: Always ignite surfaces.
  */
 /turf/proc/hotspot_expose(var/exposed_temperature, var/exposed_volume = CELL_VOLUME, var/surfaces=0)
 	return 0
@@ -497,9 +436,10 @@ var/global/list/image/charred_overlays = list()
 		return 0
 	if(check_fire_protection())
 		return 0
+	if(locate(/obj/effect/fire) in src)
+		return 0
 
 	var/datum/gas_mixture/air_contents = return_air()
-
 	if(!air_contents)
 		return 0
 
@@ -585,6 +525,11 @@ var/global/list/image/charred_overlays = list()
 	. = ..()
 	dir = pick(cardinal)
 	var/turf/T = get_turf(loc)
+	var/i = 0
+	for(var/obj/effect/fire/F in T)
+		i++
+	if(i>1)
+		qdel(src)
 	var/datum/gas_mixture/air_contents=T.return_air()
 	if(air_contents)
 		setfirelight(air_contents.calculate_firelevel(get_turf(src)), air_contents.temperature)
