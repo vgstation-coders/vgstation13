@@ -133,7 +133,7 @@
 	spell_flags = SELECTABLE|TALKED_BEFORE
 	override_base = "genetic"
 	hud_state = "gen_project"
-	compatible_mobs = list(/mob/living/carbon/human, /datum/mind)
+	valid_targets = list(/mob/living/carbon/human, /datum/mind)
 	mind_affecting = 1
 	var/telepathy_type = SPECIFIC_TELEPATHY
 	var/targeted = 0

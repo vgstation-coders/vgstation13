@@ -23,7 +23,7 @@
 	cooldown_min = 150
 	selection_type = "range"
 	range = 7
-	compatible_mobs = list(/mob/living/carbon)
+	valid_targets = list(/mob/living/carbon)
 	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_AMOUNT = 0, Sp_MOVE = 0)
 	level_max = list(Sp_TOTAL = 16, Sp_SPEED = 3, Sp_POWER = 1, Sp_AMOUNT = 5, Sp_MOVE = 7)
 	var/menuType = SUMMON_SNACKS_FILLING

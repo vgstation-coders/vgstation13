@@ -13,7 +13,7 @@
 	max_targets = 3
 	spell_flags = NEEDSCLOTHES | LOSE_IN_TRANSFER | IS_HARMFUL
 
-	compatible_mobs = list(/mob/living)
+	valid_targets = list(/mob/living)
 
 	hud_state = "wiz_fist"
 

@@ -55,6 +55,12 @@
 			AG.master_spell = null
 			golems.Remove(AG)
 
+/mob/proc/get_arcane_golems() // helper proc to get the golems
+	var/spell/aoe_turf/conjure/arcane_golem/S = locate() in spell_list
+	if(S)
+		return S.golems
+	return list()
+
 /spell/aoe_turf/conjure/arcane_golem/on_creation(mob/living/simple_animal/hostile/arcane_golem/AG, mob/user)
 	AG.faction = "wizard" // so they get along with other wizard mobs
 	to_chat(user, "<span class='sinister'>You infuse \the [AG] with your mana and knowledge. If it dies, your arcane abilities will be affected.</span>")
