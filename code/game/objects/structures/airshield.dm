@@ -4,12 +4,29 @@
 	name = "airshield"
 	desc = "A shield that allows only non-gasses to pass through."
 	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "emancipation_grill_on"
+	icon_state = "emancipation_grill"
 	opacity = 1
 	density = 0
 	anchored = 1
 	plane = ABOVE_HUMAN_PLANE
 	var/construction_step = WIRINGSECURE
+
+var/obj/effect/airshield_overlay/AO
+
+/obj/effect/airshield_overlay
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "emancipation_grill_on"
+	plane = FLOAT_PLANE
+	
+/obj/structure/airshield/New()
+	..()
+	if(!AO)
+		AO = new
+	vis_contents.Add(AO)
+
+/obj/structure/airshield/Destroy()
+	vis_contents.Cut()
+	..()
 
 /obj/structure/airshield/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover))
@@ -54,7 +71,7 @@
 	name = "airshield"
 	desc = "A shield that allows only non-gasses to pass through."
 	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "emancipation_grill_on"
+	icon_state = "emancipation_grill"
 	opacity = 0
 	density = 0
 	anchored = 1
@@ -69,6 +86,9 @@
 
 /obj/machinery/airshield/New()
 	..()
+	if(!AO)
+		AO = new
+	vis_contents.Add(AO)
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/airshield,\
 		/obj/item/weapon/stock_parts/manipulator,\
@@ -124,6 +144,7 @@
 /obj/machinery/airshield/Destroy()
 	stat |= NOPOWER
 	update_nearby_tiles()
+	vis_contents.Cut()
 	..()
 
 /obj/machinery/airshield/power_change()
