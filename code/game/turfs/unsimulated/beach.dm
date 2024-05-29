@@ -26,7 +26,7 @@
 /obj/effect/beach_water
 	plane = MOB_PLANE-1 // turf_plane is -1 without the float stuff
 	layer = MOB_LAYER+0.1
-	icon = "icons/misc/beach.dmi"
+	icon = 'icons/misc/beach.dmi'
 	icon_state = "water2"
 
 var/obj/effect/beach_water/BW
