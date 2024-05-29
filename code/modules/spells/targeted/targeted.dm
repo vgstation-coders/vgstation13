@@ -36,9 +36,11 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 		return 0
 	if(!(range == GLOBALCAST) && !bypass_range && !(range == SELFCAST && target == user) && (options && !(target in options))) //Shouldn't be necessary but a good check in case of overrides
 		return 0
-	if(ismob(target) && mind_affecting)
+	if(ismob(target))
 		var/mob/M = target
-		if (!user.can_mind_interact(M.mind))
+		if (mind_affecting && !user.can_mind_interact(M.mind))
+			return 0
+		if(user in M.get_arcane_golems())
 			return 0
 	return !valid_targets.len || is_type_in_list(target, valid_targets)
 
