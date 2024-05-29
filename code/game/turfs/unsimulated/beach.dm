@@ -24,18 +24,23 @@
 	icon_state = "water"
 
 /obj/effect/beach_water
-	plane = MOB_PLANE-1 // turf_plane is -1 without the float stuff
-	layer = MOB_LAYER+0.1
+	plane =	ABOVE_HUMAN_PLANE-1 // turf_plane is -1 without the float stuff
 	icon = 'icons/misc/beach.dmi'
+	icon_state = "water5"
+
+/obj/effect/beach_water/unsimmed
+	plane =	MOB_PLANE-1 // turf_plane is -1 without the float stuff
+	layer = MOB_LAYER+0.1
 	icon_state = "water2"
 
 var/obj/effect/beach_water/BW
+var/obj/effect/beach_water/unsimmed/BWU
 
 /turf/unsimulated/beach/water/New()
 	..()
-	if(!BW)
-		BW = new
-	vis_contents.Add(BW)
+	if(!BWU)
+		BWU = new
+	vis_contents.Add(BWU)
 
 /turf/unsimulated/beach/water/Destroy()
 	vis_contents.Cut()
