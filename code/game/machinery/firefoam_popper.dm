@@ -101,7 +101,7 @@
 		/obj/item/weapon/stock_parts/manipulator,
 		/obj/item/weapon/stock_parts/manipulator
 	)
-
+	icon_state = "popper_deploy"
 	RefreshParts()
 
 /obj/machinery/firefoam_popper/RefreshParts()
