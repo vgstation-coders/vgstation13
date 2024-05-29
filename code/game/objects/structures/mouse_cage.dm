@@ -85,7 +85,7 @@
 	. = ..()
 	if (.)
 		critter = AM
-		AM.forceMove(src)
+		AM.forceMove(loc)
 		AM.plane = MOB_PLANE
 		AM.pixel_x = pixel_x
 		if(isliving(critter))
@@ -104,13 +104,10 @@
 /obj/item/critter_cage/pickup(var/mob/user)//When we pick up the cage, let's move the critter inside
 	if (critter)
 		critter.forceMove(src)
-		var/image/I = image(critter.icon, src, critter.icon_state, layer+1, critter.dir)
-		I.pixel_y = 5
-		overlays += I
+		vis_contents.Add(critter)
 
 /obj/item/critter_cage/dropped(var/mob/user)//When we drop the cage, let's place the mouse back on top of it
-	overlays.len = 0
-
+	vis_contents.Cut()
 	if (critter)
 		critter.forceMove(loc)
 		critter.pixel_x = pixel_x
