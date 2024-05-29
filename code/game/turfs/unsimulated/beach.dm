@@ -23,11 +23,23 @@
 	name = "Water"
 	icon_state = "water"
 
+/obj/effect/beach_water
+	plane = MOB_PLANE
+	layer = MOB_LAYER+0.1
+	icon = "icons/misc/beach.dmi"
+	icon_state = "water2"
+
+var/obj/effect/beach_water/BW
+
 /turf/unsimulated/beach/water/New()
 	..()
-	var/image/water = image("icon"='icons/misc/beach.dmi',"icon_state"="water2","layer"=MOB_LAYER+0.1)
-	water.plane = MOB_PLANE
-	overlays += water
+	if(!BW)
+		BW = new
+	vis_contents.Add(BW)
+
+/turf/unsimulated/beach/water/Destroy()
+	vis_contents.Cut()
+	..()
 
 /turf/unsimulated/beach/water/deep
 	name = "deep water"
