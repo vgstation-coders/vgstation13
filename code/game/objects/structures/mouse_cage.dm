@@ -104,10 +104,13 @@
 /obj/item/critter_cage/pickup(var/mob/user)//When we pick up the cage, let's move the critter inside
 	if (critter)
 		critter.forceMove(src)
-		vis_contents.Add(critter)
+		var/image/I = image(critter.icon, src, critter.icon_state, layer+1, critter.dir)
+		I.pixel_y = 5
+		overlays += I
 
 /obj/item/critter_cage/dropped(var/mob/user)//When we drop the cage, let's place the mouse back on top of it
-	vis_contents.Cut()
+	overlays.len = 0
+
 	if (critter)
 		critter.forceMove(loc)
 		critter.pixel_x = pixel_x
