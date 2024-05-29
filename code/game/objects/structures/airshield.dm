@@ -151,9 +151,9 @@ var/obj/effect/airshield_overlay/AO
 	if (powered(power_channel))
 		stat &= ~NOPOWER
 		set_light(light_range_on, light_power_on)
-		src.icon_state = "emancipation_grill_on"
+		vis_contents.Add(AO)
 	else
 		stat |= NOPOWER
 		set_light(0)
-		src.icon_state = "emancipation_grill"
+		vis_contents.Cut()
 	update_nearby_tiles()
