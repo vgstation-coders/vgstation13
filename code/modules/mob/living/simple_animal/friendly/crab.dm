@@ -23,7 +23,7 @@
 	held_items = list()
 
 /mob/living/simple_animal/crab/get_butchering_products()
-	return list(/datum/butchering_product/xeno_claw/crab_claw)
+	return list(/datum/butchering_product/claws/crab)
 
 /mob/living/simple_animal/crab/Life()
 	if(timestopped)
