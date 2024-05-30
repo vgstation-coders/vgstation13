@@ -161,6 +161,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		var/mob/M = target
 		if(user in M.get_arcane_golems())
 			return FALSE
+		if(user.shares_arcane_golem_spell(M))
+			return FALSE
 	if(bypass_range && istype(target, /mob/living))
 		return TRUE
 	if(options)

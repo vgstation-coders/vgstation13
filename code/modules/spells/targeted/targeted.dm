@@ -42,6 +42,8 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 			return 0
 		if(user in M.get_arcane_golems())
 			return 0
+		if(user.shares_arcane_golem_spell(M))
+			return 0
 	return !valid_targets.len || is_type_in_list(target, valid_targets)
 
 /spell/targeted/choose_targets(mob/user = usr)
