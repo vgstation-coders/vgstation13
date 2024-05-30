@@ -1,5 +1,6 @@
 #define ACA_SCREEN_DETAILSVIEW 1
 #define ACA_SCREEN_ADMINPANEL 2
+#define ACA_SCREEN_BSCAPVIEW 3
 
 var/global/list/atmos_controllers = list()
 /obj/item/weapon/circuitboard/atmoscontrol
@@ -213,7 +214,8 @@ var/global/list/atmos_controllers = list()
 		data["admin_access"] = TRUE
 	else
 		data["admin_access"] = FALSE
-		screen = ACA_SCREEN_DETAILSVIEW //this dumb hack stops unauthorized cards from seeing shit they shouldn't
+		if(screen == ACA_SCREEN_ADMINPANEL)
+			screen = ACA_SCREEN_DETAILSVIEW //this dumb hack stops unauthorized cards from seeing shit they shouldn't
 
 	data["aca_screen"] = screen //aca_screen so we don't conflict with air alarms, which already use screen
 
@@ -226,6 +228,18 @@ var/global/list/atmos_controllers = list()
 		datum_data["short_name"] = gas_datum.short_name || gas_datum.name
 		gas_datums += list(datum_data)
 	data["gas_datums"]=gas_datums
+	
+	if(bspipe_list.len>0)
+		data["bspipe_exist"] = TRUE
+	var/list/bspipes=list()
+	for(var/obj/machinery/atmospherics/unary/cap/bluespace/bscap in bspipe_list)
+		var/list/pipe_data = list()
+		pipe_data["name"] = bscap.name
+		pipe_data["x"] = bscap.x - WORLD_X_OFFSET[bscap.z]
+		pipe_data["y"] = bscap.y - WORLD_Y_OFFSET[bscap.z]
+		pipe_data["z"] = bscap.z
+		bspipes += list(pipe_data)
+	data["bspipes"]=bspipes
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
@@ -250,6 +264,7 @@ var/global/list/atmos_controllers = list()
 		return 1
 
 	if(href_list["login"])
+		screen = ACA_SCREEN_DETAILSVIEW
 		if(log_in_id || emagged)
 			return 1
 		var/mob/M = usr
@@ -605,3 +620,4 @@ var/global/list/atmos_controllers = list()
 
 #undef ACA_SCREEN_DETAILSVIEW
 #undef ACA_SCREEN_ADMINPANEL
+#undef ACA_SCREEN_BSCAPVIEW
