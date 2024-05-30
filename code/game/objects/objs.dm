@@ -59,6 +59,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/is_cooktop //If true, the object can be used in conjunction with a cooking vessel, eg. a frying pan, to cook food.
 	var/obj/item/weapon/reagent_containers/pan/cookvessel //The vessel being used to cook food in. If generalized out to other types of vessels, make sure to also generalize the frying pan's cook_start(), etc. as well.
 
+	//Is the object covered in ash?
+	var/ash_covered = FALSE
+
 /obj/New()
 	..()
 	if(breakable_flags)
@@ -291,6 +294,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	..()
 	if (cleanliness >= CLEANLINESS_WATER)
 		unglue()
+		ash_covered = FALSE
 
 /obj/proc/cultify()
 	qdel(src)
@@ -421,8 +425,29 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return SUICIDE_ACT_BRUTELOSS
 
 /obj/ignite()
-	if(!istype(loc, /turf)) //Prevent things from burning if worn, held, or inside something else. Storage containers will eject their contents when ignited, allowing for burning of the contents.
+	if(!isturf(loc)) //Prevent things from burning if worn, held, or inside something else. Storage containers will eject their contents when ignited, allowing for burning of the contents.
 		return
+	ash_covered = TRUE
+	remove_particles(PS_SMOKE)
+	return ..()
+
+/obj/item/checkburn()
+	if(!flammable)
+		CRASH("[src] tried to burn despite not being flammable!")
+	if(on_fire)
+		return
+	var/datum/gas_mixture/G = return_air()
+	if(!G)
+		return
+	if(G.temperature >= (autoignition_temperature * 0.75))
+		if(!smoking)
+			add_particles(PS_SMOKE)
+			smoking = TRUE
+		var/rate = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+		adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
+	else
+		remove_particles(PS_SMOKE)
+		smoking = FALSE
 	..()
 
 /obj/singularity_act()
@@ -562,6 +587,9 @@ a {
 	onclose(user, "mtcomputer")
 
 /obj/update_icon()
+	if(ash_covered)
+		cut_overlay(charred_overlay)
+		process_charred_overlay()
 	return
 
 /mob/proc/unset_machine()

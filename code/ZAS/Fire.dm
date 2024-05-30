@@ -93,6 +93,9 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/fire_sprite = "fire"
 	var/fire_overlay = null
 
+	var/mutable_appearance/charred_overlay
+	var/last_char = 0
+
 	var/atom/movable/firelightdummy/firelightdummy
 
 /atom/movable/New()
@@ -159,6 +162,54 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(reagents?.total_volume)
 		return TRUE
 
+/atom/proc/set_charred_overlay()
+	return
+
+/atom/proc/process_charred_overlay()
+	return
+
+/obj/set_charred_overlay(char_alpha = 96)
+	REMOVE_KEEP_TOGETHER(src, "ash_charred")
+	cut_overlay(charred_overlay)
+	var/mutable_appearance/new_charred_overlay = mutable_appearance('icons/effects/effects.dmi', "char", alpha = char_alpha, appearance_flags = RESET_COLOR|RESET_ALPHA)
+	new_charred_overlay.blend_mode = BLEND_INSET_OVERLAY
+	charred_overlay = new_charred_overlay
+	ADD_KEEP_TOGETHER(src, "ash_charred")
+	add_overlay(charred_overlay)
+
+/obj/process_charred_overlay()
+	if(thermal_mass)
+		var/c_alpha = 96 + clamp((64*(1-(thermal_mass/initial_thermal_mass))),0,64)
+		set_charred_overlay(c_alpha)
+		last_char = world.time
+	else
+		if(prob(10)) //10% chance each tick of item getting charred
+			set_charred_overlay()
+
+/obj/effect/process_charred_overlay()
+	return
+
+/turf/process_charred_overlay()
+	if(locate(/obj/effect/ash) in src)
+		var/obj/effect/ash/A = locate(/obj/effect/ash) in src
+		if(flammable)
+			A.alpha = clamp((80*(1-(thermal_mass/initial_thermal_mass))),0,80) //turf's char overlays aren't as harsh as objects'
+		else
+			A.alpha = 40
+	else
+		new /obj/effect/ash(src)
+
+/obj/effect/ash
+	name = "ash"
+	icon_state = "char"
+	alpha = 0
+	anchored = 1
+	mouse_opacity = 0
+
+/obj/effect/ash/clean_act(var/cleanliness)
+	if(cleanliness >= CLEANLINESS_WATER)
+		qdel(src)
+
 /**
  * Burns solid objects and produces heat.
  *
@@ -207,6 +258,9 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/delta_m = 0.20 * burnrate * ZAS_mass_consumption_multiplier
 	useThermalMass(delta_m)
 	genSmoke(oxy_ratio,temperature,T)
+
+	if(world.time - last_char >= 10 SECONDS)
+		process_charred_overlay()
 
 	//Change in internal energy = energy produced by combustion (assuming perfect combustion).
 	heat_out = material.heating_value * delta_m
@@ -341,13 +395,16 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(flammable && !on_fire)
 		ignite()
-		return 1
+		return TRUE
+	else
+		process_charred_overlay()
+	return FALSE
 
 /atom/proc/checkburn()
 	if(on_fire)
 		return
 	if(!flammable)
-		CRASH("[src] was added to burnableatoms despite not being flammable!")
+		CRASH("[src] tried to burn despite not being flammable!")
 	//if an object is not on fire, is flammable, and is in an environment with temperature above its autoignition temp & sufficient oxygen, ignite it
 	if(thermal_mass <= 0)
 		ashify()
