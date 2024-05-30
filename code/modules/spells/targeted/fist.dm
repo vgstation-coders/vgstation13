@@ -17,6 +17,13 @@
 
 	hud_state = "wiz_fist"
 
+/spell/targeted/fist/is_valid_target(atom/target, mob/user, options, bypass_range)
+	if(target in user.get_arcane_golems())
+		return FALSE
+	if((target in doppelgangers) && doppelgangers[target] == user)
+		return FALSE
+	return ..()	
+
 /spell/targeted/fist/cast(var/list/targets)
 	var/mob/living/L = holder
 	if(istype(L) && L.has_hand_check()) //Can't punch if you have no haaands
