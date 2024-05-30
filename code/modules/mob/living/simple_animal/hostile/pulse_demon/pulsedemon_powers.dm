@@ -646,6 +646,7 @@
 		PD.current_robot = null
 		PD.current_bot = null
 		PD.current_weapon = null
+		PD.change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
 	else
 		owner.forceMove(get_turf(owner))
 	Remove(owner)
