@@ -117,4 +117,4 @@
 	return FALSE
 
 /mob/living/simple_animal/hostile/arcane_golem/shares_arcane_golem_spell(mob/living/simple_animal/hostile/arcane_golem/other)
-	return master_spell == other.master_spell
+	return istype(other) ? master_spell == other.master_spell : FALSE
