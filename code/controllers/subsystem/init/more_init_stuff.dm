@@ -27,7 +27,7 @@ var/datum/subsystem/more_init/SSmore_init
 	log_debug("  Finished caching space parallax simulation in [stop_watch(watch)]s.", FALSE)
 
 	init_sensed_explosions_list()
-	if (!config.skip_minimap_generation)
+	if (!config.skip_holominimap_generation)
 		watch=start_watch()
 		generateHoloMinimaps()
 		log_debug("  Finished holominimaps in [stop_watch(watch)]s.", FALSE)
