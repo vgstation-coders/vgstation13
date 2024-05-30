@@ -649,3 +649,22 @@
 	else
 		owner.forceMove(get_turf(owner))
 	Remove(owner)
+
+/datum/action/pd_change_camera
+	name = "Change camera view"
+	desc = "Move to another camera in the area."
+	icon_icon = 'icons/mob/screen_ai.dmi'
+	button_icon_state = "camera"
+
+/datum/action/pd_change_camera/Trigger()
+	if(ispulsedemon(owner))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = owner
+		var/list/camstouse = list()
+		var/area/ourarea = get_area(PD)
+		for (var/obj/machinery/camera/C in cameranet.cameras)
+			if(get_area(C) == ourarea)
+				camstouse["[C.c_tag]"] += C
+		var/camtag = input(PD,"Choose a camera to jump to","Area cameras") as null|anything in camstouse
+		if(camtag)
+			var/obj/machinery/camera/ourcam = camstouse[camtag]
+			ourcam.attack_pulsedemon(PD)
