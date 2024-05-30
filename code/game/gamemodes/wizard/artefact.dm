@@ -285,7 +285,7 @@
 			H.forceMove(get_turf(src))
 		charges--
 		update_icon()
-	else //backup in case the mob was logged out on death
+	else if(!revive_action) //backup in case the mob was logged out on death
 		revive_action = new(phylactery = src)
 		revive_action.Grant(original)
 
@@ -306,6 +306,7 @@
 		to_chat(owner, "Somehow, you clicked this alert but the phylactery was destroyed and your body wasn't dusted, report this to coders.")
 		return
 	phylac.revive_soul(owner)
+	qdel(src)
 
 /obj/item/phylactery/proc/unbind()
 	if(bound_soul)
