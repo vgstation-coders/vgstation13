@@ -326,8 +326,8 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 	if(istype(mob, /mob/new_player))
 		return //One extra layer of sanity
 	if(istype(mob,/mob/dead/observer))
-		var/reference = "<a href='?src=\ref[mob];follow=\ref[speaker]'>(Follow)</a> "
-		message = reference+message
+		var/reference = formatFollow(mob,speaker)
+		message = reference+" "+message
 		to_chat(mob, message)
 	else
 		to_chat(mob, message)

@@ -197,7 +197,7 @@ var/datum/paiController/paiController			// Global handler for pAI candidates
 	for(var/mob/dead/observer/O in player_list) // We handle polling ourselves.
 		if(O.client && get_role_desire_str(O.client.prefs.roles[ROLE_PAI]) != "Never")
 			if(check_recruit(O))
-				to_chat(O, "<span class='recruit'>A pAI card is looking for personalities. (<a href='?src=\ref[src];signup=1'>Sign Up</a> | <a href='?src=\ref[O];follow=\ref[p]'>Teleport</a>)</span>")
+				to_chat(O, "<span class='recruit'>A pAI card is looking for personalities. (<a href='?src=\ref[src];signup=1'>Sign Up</a> | [formatFollow(O,p,"Teleport")])</span>")
 				//question(O.client)
 
 /datum/paiController/proc/check_recruit(var/mob/dead/observer/O)

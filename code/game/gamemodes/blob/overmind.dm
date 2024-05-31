@@ -143,7 +143,7 @@
 
 	for (var/mob/M in dead_mob_list)
 		if(!istype(M,/mob/new_player) && !istype(M,/mob/living/carbon/brain)) //No meta-evesdropping
-			rendered = "<font color=\"#EE4000\"><i><span class='game say'>Blob Telepathy, <span class='name'>[name]</span> <a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a> <span class='message'>[message_a]</span></span></i></font>"
+			rendered = "<font color=\"#EE4000\"><i><span class='game say'>Blob Telepathy, <span class='name'>[name]</span> [formatFollow(M,src)] <span class='message'>[message_a]</span></span></i></font>"
 			M.show_message(rendered, 2)
 
 /mob/camera/blob/emote(act, m_type = null, message = null, ignore_status = FALSE, arguments)

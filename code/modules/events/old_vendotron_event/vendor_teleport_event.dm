@@ -64,7 +64,7 @@
 /obj/effect/old_vendotron_entrance/New()
 	..()
 	for(var/mob/dead/observer/people in observers)
-		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, <a href='?src=\ref[people];follow=\ref[src]'>Follow it</a></span>")
+		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, [formatFollow(people,src,"Follow it")]</span>")
 
 /obj/effect/old_vendotron_entrance/proc/aestheticEntrance()
 	animate(src, alpha = 255, transform = matrix()*2, time = 3 SECONDS)
