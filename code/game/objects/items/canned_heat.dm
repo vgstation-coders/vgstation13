@@ -42,7 +42,7 @@
 			if (istype(M.loc, /obj/machinery/atmospherics/pipe))
 				var/obj/machinery/atmospherics/pipe/P_other = M.loc
 				if (P.parent == P_other.parent)
-					M.playsound_local(P_other.loc,'sound/items/canned_heat.ogg', 30, 0, null, FALLOFF_SOUNDS, 0)
+					M.playsound_local(P_other.loc,'sound/music/canned_heat.ogg', 30, 0, null, FALLOFF_SOUNDS, 0)
 					to_chat(M, "<span class='warning'>You feel canned heat in your heels tonight!</span>")
 	else if (istype(user.loc, /obj/structure/inflatable/shelter))
 		var/obj/structure/inflatable/shelter/S = user.loc
@@ -50,7 +50,7 @@
 		air.temperature += heat
 		air.update_values()
 		for (var/mob/M in S.contents)
-			M.playsound_local(S.loc,'sound/items/canned_heat.ogg', 30, 0, null, FALLOFF_SOUNDS, 0)
+			M.playsound_local(S.loc,'sound/music/canned_heat.ogg', 30, 0, null, FALLOFF_SOUNDS, 0)
 			to_chat(M, "<span class='warning'>You feel canned heat in your heels tonight!</span>")
 	else
 		var/turf/T = get_turf(src)
@@ -74,5 +74,5 @@
 			if (isturf(M.loc))
 				var/turf/U = M.loc
 				if (U in target_zone.contents)
-					M.playsound_local(U,'sound/items/canned_heat.ogg', 30, 0, null, FALLOFF_SOUNDS, 0)
+					M.playsound_local(U,'sound/music/canned_heat.ogg', 30, 0, null, FALLOFF_SOUNDS, 0)
 					to_chat(M, "<span class='warning'>You feel canned heat in your heels tonight!</span>")
