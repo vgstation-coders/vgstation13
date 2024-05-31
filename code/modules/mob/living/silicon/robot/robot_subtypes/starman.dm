@@ -328,8 +328,16 @@
 /spell/starman_dance/choose_targets(mob/user)
 	return list(user)
 
+//Because the .dmi file sprite is larger than the robots sprite the new sprite will be displaced
+//Temporarily shifts the starman's sprite for the duration of the animation
+//The duration is set manually because BYOND doesn't support playing it for as long as the flick lasts
+//The duration is 0.4 (40ms) frame delay * 45 frames (and one frame is 10ms shorter because the timing is not precise) = 1.79 seconds
 /spell/starman_dance/cast(list/targets, mob/user)
-	flick("starman_dance", user)
+	var/original_x = user.pixel_x
+	user.pixel_x -= 7 * PIXEL_MULTIPLIER
+	flick('icons/mob/robots_starman_dance.dmi', user)
+	spawn(18)
+		user.pixel_x = original_x
 
 
 /obj/item/weapon/gun/energy/starman_beam
