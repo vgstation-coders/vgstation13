@@ -331,7 +331,7 @@
 //Because the .dmi file sprite is larger than the robots sprite the new sprite will be displaced
 //Temporarily shifts the starman's sprite for the duration of the animation
 //The duration is set manually because BYOND doesn't support playing it for as long as the flick lasts
-//The duration is 0.4 (40ms) frame delay * 45 frames (and one frame is 10ms shorter because the timing is not precise) = 1.79 seconds
+//The duration is 0.4 (40ms) frame delay * 45 frames (and one frame is 10ms shorter because the timing is not precise) = 1.799 seconds
 /spell/starman_dance/cast(list/targets, mob/user)
 	var/original_x = user.pixel_x
 	user.pixel_x -= 7 * PIXEL_MULTIPLIER
