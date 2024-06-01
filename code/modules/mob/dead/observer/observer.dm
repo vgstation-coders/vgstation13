@@ -466,7 +466,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			if(target)
 				if(isAI(target))
 					var/mob/living/silicon/ai/M = target
-					target = M.eyeobj
+					if(!istype(M.loc,/obj/item/device/aicard))
+						target = M.eyeobj
 				O.manual_follow(target)
 			else
 				to_chat(O, "That mob doesn't seem to exist anymore.")
