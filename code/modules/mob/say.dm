@@ -74,7 +74,7 @@ var/list/global_deadchat_listeners = list()
 	log_say("[name]/[key_name(src)] (@[location_text]) Deadsay: [message]")
 
 	for(var/mob/M in get_deadchat_hearers())
-		to_chat(M, "[formatFollow(M,src)] <span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>")
+		to_chat(M, "[formatFollow(src)] <span class='name'>[name]</span>[alt_name] <span class='message'>[message]</span></span>")
 
 /mob/proc/get_ear()
 	// returns an atom representing a location on the map from which this

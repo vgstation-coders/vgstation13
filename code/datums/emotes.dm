@@ -63,7 +63,7 @@
 				continue
 			var/T = get_turf(user)
 			if(isobserver(M) && M.client && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(T)))
-				M.show_message(formatFollow(M, user) + " " + msg)
+				M.show_message(formatFollow(user) + " " + msg)
 				if (user.client && M?.client?.prefs.mob_chat_on_map && get_dist(M, user) < M?.client.view)
 					M.create_chat_message(user, null, msg_runechat, "", list("italics"))
 

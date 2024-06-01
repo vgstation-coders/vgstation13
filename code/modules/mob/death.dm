@@ -67,7 +67,7 @@
 			var/mindname = (src.mind && src.mind.name) ? "[src.mind.name]" : "[real_name]"
 			var/died_as = (mindname == real_name) ? "" : " (died as [real_name])"
 			for(var/mob/M in get_deadchat_hearers())
-				var/rendered = "\proper[formatFollow(M,src)] <span class='game deadsay'> \The <span class='name'>[mindname][died_as]</span> has died at \the <span class='name'>[get_area(place_of_death)]</span>.</span>"
+				var/rendered = "\proper[formatFollow(src)] <span class='game deadsay'> \The <span class='name'>[mindname][died_as]</span> has died at \the <span class='name'>[get_area(place_of_death)]</span>.</span>"
 				to_chat(M, rendered)
 			log_game("[key_name(src)] has died at [get_area(place_of_death)]. Coordinates: ([get_coordinates_string(src)])")
 		is_dying = FALSE

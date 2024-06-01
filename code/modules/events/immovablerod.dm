@@ -89,7 +89,7 @@ var/list/all_rods = list()
 
 /obj/item/projectile/immovablerod/throw_at(atom/end)
 	for(var/mob/dead/observer/people in observers)
-		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, [formatFollow(people,src,"Follow it")]</span>")
+		to_chat(people, "<span class = 'notice'>\A [src] has been thrown at the station, [formatFollow(src,"Follow it")]</span>")
 	original = end
 	starting = loc
 	current = loc

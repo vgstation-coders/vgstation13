@@ -274,7 +274,7 @@
         msg_id++
         for(var/mob/dead/observer/M in player_list)
             if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
-                M.show_message("[formatFollow(M,U)] <span class='game say'>PDA Message - <span class='name'>\
+                M.show_message("[formatFollow(U)] <span class='game say'>PDA Message - <span class='name'>\
                     [U.real_name][U.real_name == pda_device.owner ? "" : " (as [pda_device.owner])"]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span>\
                     [pda_device.photo ? " (<a href='byond://?src=\ref[P_app];choice=viewPhoto;image=\ref[pda_device.photo];skiprefresh=1;target=\ref[reply_to]'>View Photo</a>)</span>" : ""]")
 

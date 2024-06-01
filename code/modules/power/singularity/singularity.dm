@@ -978,7 +978,7 @@ var/list/obj/machinery/singularity/white_hole_candidates
 
 			var/message = "<span class='recruit'>An admin has begun DEADCHAT-CONTROLLED SINGULARITY!<br>It is on <b>ANARCHY</b> mode.<br>Simply type UP, DOWN, LEFT, or RIGHT to move the singularity.<br>Cooldown per person is currently [new_singulo.input_cooldown/10] seconds.<br>"
 			for(var/mob/M in get_deadchat_hearers())
-				to_chat(M, message + formatFollow(M,new_singulo))
+				to_chat(M, message + formatFollow(new_singulo))
 		else if(option_chosen == "Democracy")
 			var/interval = input("Please enter the interval that the singulo makes a move in seconds.", "Interval") as num
 			if(!interval)
@@ -1003,7 +1003,7 @@ var/list/obj/machinery/singularity/white_hole_candidates
 
 			var/message = "<span class='recruit'>An admin has begun DEADCHAT-CONTROLLED SINGULARITY!<br>It is on <b>DEMOCRACY</b> mode.<br>Simply type UP, DOWN, LEFT, or RIGHT to cast a vote on which direction it should move. Your vote will be your latest message.<br>The singulo will move every [new_singulo.democracy_cooldown/10] seconds. Votes start now!<br>"
 			for(var/mob/M in get_deadchat_hearers())
-				to_chat(M, message + formatFollow(M,new_singulo))
+				to_chat(M, message + formatFollow(new_singulo))
 
 /obj/machinery/singularity/special
 	name = "specialarity"

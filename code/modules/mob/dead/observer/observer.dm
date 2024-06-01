@@ -453,33 +453,37 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			if(istype(A))
 				A.reenter_corpse()
 
-	//BEGIN TELEPORT HREF CODE
 	if(usr != src)
 		return
 	..()
 
-	if(href_list["follow"])
-		var/target = locate(href_list["follow"])
-		if(target)
-			if(isAI(target))
-				var/mob/living/silicon/ai/M = target
-				target = M.eyeobj
-			manual_follow(target)
+//BEGIN TELEPORT HREF CODE
+/datum/subsystem/mob/Topic(href, href_list)
+	if(istype(usr,/mob/dead/observer))
+		var/mob/dead/observer/O = usr
+		if(href_list["follow"])
+			var/target = locate(href_list["follow"])
+			if(target)
+				if(isAI(target))
+					var/mob/living/silicon/ai/M = target
+					target = M.eyeobj
+				O.manual_follow(target)
 
-	if (href_list["jump"])
-		var/mob/target = locate(href_list["jump"])
-		var/mob/A = usr;
-		to_chat(A, "Teleporting to [target]...")
-		if(target && target != usr)
-			var/turf/pos = get_turf(A)
-			var/turf/T=get_turf(target)
-			if(T != pos)
-				if(!T)
-					to_chat(A, "<span class='warning'>Target not in a turf.</span>")
-					return
-				if(locked_to)
-					manual_stop_follow(locked_to)
-				forceMove(T)
+		if (href_list["jump"])
+			var/mob/target = locate(href_list["jump"])
+			var/mob/A = usr;
+			to_chat(A, "Teleporting to [target]...")
+			if(target && target != usr)
+				var/turf/pos = get_turf(A)
+				var/turf/T=get_turf(target)
+				if(T != pos)
+					if(!T)
+						to_chat(A, "<span class='warning'>Target not in a turf.</span>")
+						return
+					if(O.locked_to)
+						O.manual_stop_follow(O.locked_to)
+					O.forceMove(T)
+	return ..()
 
 //END TELEPORT HREF CODE
 
@@ -522,7 +526,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if (get_dist(source_turf, src) <= world.view) // If this isn't true, we can't be in view, so no need for costlier proc.
 		if (source_turf in view(src))
 			rendered_speech = "<B>[rendered_speech]</B>"
-			to_chat(src, "[formatFollow(src,source)] [rendered_speech]")
+			to_chat(src, "[formatFollow(source)] [rendered_speech]")
 
 /mob/dead/observer/hasHUD(var/hud_kind)
 	switch(hud_kind)

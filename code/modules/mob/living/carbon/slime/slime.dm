@@ -960,7 +960,7 @@
 		if(O.client)
 			var/area/A = get_area(src)
 			if(A)
-				to_chat(O, "<span class=\"recruit\">Golem rune created in [A.name]. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>")
+				to_chat(O, "<span class=\"recruit\">Golem rune created in [A.name]. ([formatGhostJump(src)] | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>")
 
 /obj/effect/golem_rune/Topic(href,href_list)
 	if("signup" in href_list)
