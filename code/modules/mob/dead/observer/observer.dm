@@ -473,7 +473,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			return
 
 		if (href_list["jump"])
-			var/mob/target = locate(href_list["jump"])
+			var/target = locate(href_list["jump"])
 			if(target && target != usr)
 				to_chat(O, "Teleporting to [target]...")
 				var/turf/pos = get_turf(O)
@@ -486,7 +486,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 						O.manual_stop_follow(O.locked_to)
 					O.forceMove(T)
 			else
-				to_chat(O, "That mob doesn't seem to exist anymore, or is you.")
+				to_chat(O, "That thing doesn't seem to exist anymore, or is you.")
 			return
 
 		if(href_list["targetarena"])
