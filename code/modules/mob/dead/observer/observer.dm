@@ -481,16 +481,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 					manual_stop_follow(locked_to)
 				forceMove(T)
 
-	if(href_list["jumptoarenacood"])
-		var/datum/bomberman_arena/targetarena = locate(href_list["targetarena"])
-		if(targetarena)
-			if(locked_to)
-				manual_stop_follow(locked_to)
-			usr.forceMove(targetarena.center)
-			to_chat(usr, "Remember to enable darkness to be able to see the spawns. Click on a green spawn between rounds to register on it.")
-		else
-			to_chat(usr, "That arena doesn't seem to exist anymore.")
-
 //END TELEPORT HREF CODE
 
 /mob/dead/observer/html_mob_check()
