@@ -987,28 +987,12 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		message_admins("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[center.x];Y=[center.y];Z=[center.z]'>JMP</A>)")
 		log_game("[key_name_admin(user.client)] created a \"[size]\" Bomberman arena at [center.loc.name] ([center.x],[center.y],[center.z]) ")
 
-		if(!BT)
-			BT = new
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<spawn class='notice'><b>[user.client.key] created a \"[size]\" Bomberman arena at [center.loc.name]. <A HREF='?src=\ref[BT];targetarena=\ref[src]'>Click here to JUMP to it.</A></b></span>")
+			to_chat(O, "<spawn class='notice'><b>[user.client.key] created a \"[size]\" Bomberman arena at [center.loc.name]. <A HREF='?src=\ref[SSmob];targetarena=\ref[src]'>Click here to JUMP to it.</A></b></span>")
 		return 1
 	else
 		qdel(src)
 		return 0
-
-var/datum/bomberman_topic/BT // global single item to persist for each check below
-
-/datum/bomberman_topic/Topic(href, href_list)
-	var/datum/bomberman_arena/targetarena = locate(href_list["targetarena"])
-	if(targetarena)
-		if(istype(usr,/mob/dead/observer))
-			var/mob/dead/observer/O = usr
-			if(O.locked_to)
-				O.manual_stop_follow(O.locked_to)
-			O.forceMove(targetarena.center)
-			to_chat(O, "Remember to enable darkness to be able to see the spawns. Click on a green spawn between rounds to register on it.")
-	else
-		to_chat(usr, "That arena doesn't seem to exist anymore.")
 
 /datum/bomberman_arena/proc/spawn_player(var/turf/T, var/mob/M)
 	M.forceMove(T)
