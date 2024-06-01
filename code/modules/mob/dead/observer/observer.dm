@@ -496,7 +496,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 				if(O.locked_to)
 					O.manual_stop_follow(O.locked_to)
 				O.forceMove(targetarena.center)
-				to_chat(O, "Remember to enable darkness to be able to see the spawns. Click on a green spawn between rounds to register on it.")
+				to_chat(O, "Click on a green spawn between rounds to register on it.")
 			else
 				to_chat(O, "That arena doesn't seem to exist anymore.")
 			return
