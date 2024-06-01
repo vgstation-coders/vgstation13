@@ -354,10 +354,10 @@ For the main html chat area
 				if(B.brain_dead_chat())
 					. += M
 
-/proc/formatFollow(var/mob/source,var/mob/target,var/custom_text="(Follow)")
+/proc/formatFollow(var/mob/target,var/custom_text="(Follow)")
 	return "<a href='?src=\ref[SSmob];follow=\ref[target]'>[custom_text]</a>"
 
-/proc/formatGhostJump(var/mob/source,var/mob/target,var/custom_text="Teleport")
+/proc/formatGhostJump(var/mob/target,var/custom_text="Teleport")
 	return "<a href='?src=\ref[SSmob];jump=\ref[target]'>[custom_text]</a>"
 
 /* This proc only handles sending the message to everyone who can hear deadchat. Formatting that message is up to you! Consider using <span class='game deadsay'></span> on your message! */

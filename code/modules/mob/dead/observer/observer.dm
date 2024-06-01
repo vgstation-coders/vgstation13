@@ -468,6 +468,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 					var/mob/living/silicon/ai/M = target
 					target = M.eyeobj
 				O.manual_follow(target)
+				return
 
 		if (href_list["jump"])
 			var/mob/target = locate(href_list["jump"])
@@ -483,6 +484,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 					if(O.locked_to)
 						O.manual_stop_follow(O.locked_to)
 					O.forceMove(T)
+					return
 	return ..()
 
 //END TELEPORT HREF CODE
