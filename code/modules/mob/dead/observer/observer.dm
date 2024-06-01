@@ -475,7 +475,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if (href_list["jump"])
 			var/mob/target = locate(href_list["jump"])
 			if(target && target != usr)
-				to_chat(A, "Teleporting to [target]...")
+				to_chat(O, "Teleporting to [target]...")
 				var/turf/pos = get_turf(O)
 				var/turf/T=get_turf(target)
 				if(T != pos)
