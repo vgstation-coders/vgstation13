@@ -413,12 +413,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/proc/manual_follow(var/atom/movable/target)
 	if(target)
 		var/turf/targetloc = get_turf(target)
+		if(targetloc && targetloc.holy && (!invisibility || islegacycultist(src)))
+			to_chat(usr, "<span class='warning'>You cannot follow a mob standing on holy grounds!</span>")
+			return
 		var/area/targetarea = get_area(target)
 		if(targetarea && targetarea.anti_ethereal && !isAdminGhost(usr))
 			to_chat(usr, "<span class='sinister'>You can sense a sinister force surrounding that mob, your spooky body itself refuses to follow it.</span>")
-			return
-		if(targetloc && targetloc.holy && (!invisibility || islegacycultist(src)))
-			to_chat(usr, "<span class='warning'>You cannot follow a mob standing on holy grounds!</span>")
 			return
 		if(target != src)
 			if(locked_to)
