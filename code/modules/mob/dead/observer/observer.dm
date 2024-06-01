@@ -468,23 +468,26 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 					var/mob/living/silicon/ai/M = target
 					target = M.eyeobj
 				O.manual_follow(target)
-				return
+			else
+				to_chat(O, "That mob doesn't seem to exist anymore.")
+			return
 
 		if (href_list["jump"])
 			var/mob/target = locate(href_list["jump"])
-			var/mob/A = usr;
-			to_chat(A, "Teleporting to [target]...")
 			if(target && target != usr)
-				var/turf/pos = get_turf(A)
+				to_chat(A, "Teleporting to [target]...")
+				var/turf/pos = get_turf(O)
 				var/turf/T=get_turf(target)
 				if(T != pos)
 					if(!T)
-						to_chat(A, "<span class='warning'>Target not in a turf.</span>")
+						to_chat(O, "<span class='warning'>Target not in a turf.</span>")
 						return
 					if(O.locked_to)
 						O.manual_stop_follow(O.locked_to)
 					O.forceMove(T)
-					return
+			else
+				to_chat(O, "That mob doesn't seem to exist anymore, or is you.")
+			return
 
 		if(href_list["targetarena"])
 			var/datum/bomberman_arena/targetarena = locate(href_list["targetarena"])
