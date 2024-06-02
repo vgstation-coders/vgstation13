@@ -490,7 +490,7 @@ var/global/list/blend_items = list (
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 		var/amount = allowed[r_id]
 		if (amount == 0)
-			if (reagents != null && reagents.has_reagent(r_id))
+			if (reagents?.has_reagent(r_id))
 				beaker.reagents.add_reagent(r_id,min(reagents.get_reagent_amount(r_id), space))
 		else
 			var/data
@@ -514,7 +514,7 @@ var/global/list/blend_items = list (
 	for (var/r_id in allowed)
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 		var/amount = allowed[r_id]
-		if(amount <= 0 && reagents != null && reagents.total_volume)
+		if(amount <= 0 && reagents?.has_reagent(NUTRIMENT))
 			if(amount == 0)
 				amount = -1
 			beaker.reagents.add_reagent(r_id, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(amount)), space))
@@ -532,7 +532,7 @@ var/global/list/blend_items = list (
 	for (var/r_id in allowed)
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 		var/amount = allowed[r_id]
-		if(amount <= 0 && reagents != null && reagents.has_reagent(NUTRIMENT))
+		if(amount <= 0 && reagents?.has_reagent(NUTRIMENT))
 			if(amount == 0)
 				amount = -1
 			beaker.reagents.add_reagent(r_id, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(amount)), space))
