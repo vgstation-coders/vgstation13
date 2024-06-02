@@ -79,7 +79,7 @@
 				var/obj/item/weapon/rocksliver/R = crushable
 				reagents.add_reagent(id[1],amount,R.geological_data)
 			else //Generic processes
-				if(isemptylist(id[1]))
+				if(isemptylist(id))
 					crushable.reagents.trans_to(src,crushable.reagents.total_volume)
 				else
 					reagents.add_reagent(id[1],amount)
