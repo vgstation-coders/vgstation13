@@ -11,6 +11,7 @@
                 var/obj/item/object = new type
                 M.attackby(object,user)
                 M.attack_self(user)
-                assert_eq(M.reagents.has_reagent(reagentlist[1]), TRUE)
+                if(!M.reagents.has_reagent(reagentlist[1]))
+                    fail("Reagent ID [reagentlist[1]] was not created from grinding [object].")
                 qdel(object)
                 M.reagents.clear_reagents()
