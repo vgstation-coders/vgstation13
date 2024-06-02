@@ -537,5 +537,5 @@ var/global/list/blend_items = list (
 
 			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 				break
-		if(!O.reagents.reagent_list.len)
+		if(!O.reagents || !O.reagents.reagent_list.len)
 			remove_object(O)
