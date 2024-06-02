@@ -43,7 +43,6 @@ var/global/list/blend_items = list (
 		/obj/item/weapon/reagent_containers/food/snacks/grown/plastellium = list(PLASTICIDE = 5),
 
 		/obj/item/seeds = list(BLACKPEPPER = 5),
-		/obj/item/weapon/grown/novaflower = list(NOVAFLOUR = 10),
 
 		//Other
 		/obj/item/weapon/ectoplasm = list(ECTOPLASM = 5),
@@ -62,6 +61,7 @@ var/global/list/blend_items = list (
 
 		//All types that you can put into the grinder to transfer the reagents to the beaker. !Put all recipes above this.!
 		/obj/item/ice_crystal                = list(ICE = 10),
+		/obj/item/weapon/grown/novaflower    = list(NOVAFLOUR = 10),
 		/obj/item/weapon/reagent_containers/pill = list(),
 		/obj/item/weapon/reagent_containers/food = list(),
 		/obj/item/weapon/grown                   = list(),
