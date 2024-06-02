@@ -517,6 +517,8 @@ var/global/list/blend_items = list (
 					if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 						break
 					beaker.reagents.add_reagent(r_id, allowed[r_id], additional_data = list("color" = O.color))
+			if(O.gcDestroyed)
+				holdingitems -= O
 		else
 			for (var/r_id in allowed)		
 				var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
@@ -533,7 +535,5 @@ var/global/list/blend_items = list (
 
 				if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 					break
-		if(O.gcDestroyed)
-			holdingitems -= O
-		if(!O.reagents || !O.reagents.reagent_list.len)
-			remove_object(O)
+			if(!O.reagents || !O.reagents.reagent_list.len)
+				remove_object(O)
