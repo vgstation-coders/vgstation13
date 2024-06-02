@@ -400,26 +400,26 @@ var/global/list/blend_items = list (
 		holdingitems -= O
 	holdingitems = list()
 
-/obj/machinery/reagentgrinder/proc/is_allowed(var/obj/item/weapon/reagent_containers/O)
+/proc/is_allowed(var/obj/item/weapon/reagent_containers/O)
 	for (var/i in blend_items)
 		if(istype(O, i))
 			return 1
 	return 0
 
-/obj/machinery/reagentgrinder/proc/get_allowed_by_id(var/obj/item/weapon/grown/O)
+/proc/get_allowed_by_id(var/obj/item/weapon/grown/O)
 	for (var/i in blend_items)
 		if (istype(O, i))
 			return blend_items[i]
 
-/obj/machinery/reagentgrinder/proc/get_allowed_juice_by_id(var/obj/item/weapon/reagent_containers/food/snacks/O)
+/proc/get_allowed_juice_by_id(var/obj/item/weapon/reagent_containers/food/snacks/O)
 	for(var/i in juice_items)
 		if(istype(O, i))
 			return juice_items[i]
 
-/obj/machinery/reagentgrinder/proc/get_grownweapon_amount(var/obj/item/weapon/grown/O)
+/proc/get_grownweapon_amount(var/obj/item/weapon/grown/O)
 	return !istype(O) || O.potency == -1 ? 5 : round(O.potency)
 
-/obj/machinery/reagentgrinder/proc/get_juice_amount(var/obj/item/weapon/reagent_containers/food/snacks/grown/O)
+/proc/get_juice_amount(var/obj/item/weapon/reagent_containers/food/snacks/grown/O)
 	return !istype(O) || O.potency == -1 ? 5 : round(5*sqrt(O.potency))
 
 /obj/machinery/reagentgrinder/proc/remove_object(var/obj/item/O)

@@ -81,10 +81,7 @@
 				id = items_to_check[i]
 		if(id)
 			if(items_to_check == juice_items)
-				var/obj/item/weapon/reagent_containers/food/snacks/grown/juiceable = crushable
-				if(juiceable.potency == -1)
-					juiceable.potency = 0
-				reagents.add_reagent(id[1], min(round(5*sqrt(juiceable.potency)), space))
+				reagents.add_reagent(id[1], get_juice_amount(crushable), space)
 			else if(items_to_check == blend_items)
 				var/amount = min(abs(id[id[1]]), space)
 				if(crushable.type == /obj/item/weapon/rocksliver) //Xenoarch
