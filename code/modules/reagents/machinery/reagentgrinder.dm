@@ -81,7 +81,7 @@ var/global/list/blend_items = list (
 	var/obj/item/weapon/reagent_containers/beaker = null
 	var/max_combined_w_class = 20
 	var/speed_multiplier = 1
-	var/list/holdingitems = list()
+	var/list/obj/item/holdingitems = list()
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -477,50 +477,55 @@ var/global/list/blend_items = list (
 	for (var/obj/item/O in holdingitems)
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			return
-		var/allowed = get_allowed_by_id(O)
-		if(istype(O,/obj/item/stack/sheet))
-			var/obj/item/stack/sheet/S = O
-			while(beaker.reagents.total_volume < beaker.reagents.maximum_volume && S.use(1))
-				for(var/r_id in allowed)
-					beaker.reagents.add_reagent(r_id, allowed[r_id], additional_data = list("color" = O.color))
-					if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-						break
-			if(O.gcDestroyed)
-				holdingitems -= O
-		else
-			if(istype(O,/obj/item/weapon/reagent_containers/food/snacks))
-				var/obj/item/weapon/reagent_containers/food/snacks/S = O
-				if (S.dip?.total_volume)
-					S.dip.trans_to(beaker, S.dip.total_volume)
+		O.get_ground_value(beaker)
+		if(O.gcDestroyed)
+			holdingitems -= O
+		if(!O.reagents || !O.reagents.reagent_list.len)
+			remove_object(O)
 
-				for (var/r_id in allowed)
-					var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-					var/amount = allowed[r_id]
-					if(amount <= 0 && O.reagents != null && O.reagents.has_reagent(NUTRIMENT))
-						if(amount == 0)
-							amount = -1
-						beaker.reagents.add_reagent(r_id, min(round(O.reagents.get_reagent_amount(NUTRIMENT)*abs(amount)), space))
-						O.reagents.remove_reagent(NUTRIMENT, min(O.reagents.get_reagent_amount(NUTRIMENT), space))
-					else
-						O.reagents.trans_id_to(beaker, r_id, min(amount, space))
-					if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-						break
-			else
-				if(istype(O,/obj/item/weapon/reagent_containers)) //Transfer these to beaker
-					O.reagents.trans_to(beaker, O.reagents.total_volume)
-				for (var/r_id in allowed)
-					var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-					var/amount = allowed[r_id]
-					if (amount == 0)
-						if (O.reagents != null && O.reagents.has_reagent(r_id))
-							beaker.reagents.add_reagent(r_id,min(O.reagents.get_reagent_amount(r_id), space))
-					else
-						var/data
-						if(O.type == /obj/item/weapon/rocksliver)
-							var/obj/item/weapon/rocksliver/R = O
-							data = R.geological_data
-						beaker.reagents.add_reagent(r_id,min(amount, space),data)
-					if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-						break
-			if(!O.reagents || !O.reagents.reagent_list.len)
-				remove_object(O)
+/obj/item/proc/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
+	var/allowed = get_allowed_by_id(src)
+	for (var/r_id in allowed)
+		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+		var/amount = allowed[r_id]
+		if (amount == 0)
+			if (reagents != null && reagents.has_reagent(r_id))
+				beaker.reagents.add_reagent(r_id,min(reagents.get_reagent_amount(r_id), space))
+		else
+			var/data
+			if(type == /obj/item/weapon/rocksliver)
+				var/obj/item/weapon/rocksliver/R = src
+				data = R.geological_data
+			beaker.reagents.add_reagent(r_id,min(amount, space),data)
+		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+			return
+
+/obj/item/stack/sheet/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
+	var/allowed = get_allowed_by_id(src)
+	while(beaker.reagents.total_volume < beaker.reagents.maximum_volume && use(1))
+		for(var/r_id in allowed)
+			beaker.reagents.add_reagent(r_id, allowed[r_id], additional_data = list("color" = color))
+			if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+				return
+
+/obj/item/weapon/reagent_containers/food/snacks/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
+	var/allowed = get_allowed_by_id(src)
+	if (dip?.total_volume)
+		dip.trans_to(beaker, dip.total_volume)
+
+	for (var/r_id in allowed)
+		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+		var/amount = allowed[r_id]
+		if(amount <= 0 && reagents != null && reagents.has_reagent(NUTRIMENT))
+			if(amount == 0)
+				amount = -1
+			beaker.reagents.add_reagent(r_id, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(amount)), space))
+			reagents.remove_reagent(NUTRIMENT, min(reagents.get_reagent_amount(NUTRIMENT), space))
+		else
+			reagents.trans_id_to(beaker, r_id, min(amount, space))
+		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+			return
+
+/obj/item/weapon/reagent_containers/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
+	reagents.trans_to(beaker, reagents.total_volume) //Transfer these to beaker
+	..()

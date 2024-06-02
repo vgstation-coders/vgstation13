@@ -64,25 +64,14 @@
 		to_chat(user, "<span class='warning'>There is no more space inside!</span>")
 		return
 	flick(crush_flick,src)
-	var/space = volume - reagents.total_volume
 	if(is_type_in_list(crushable, juice_items))
 		to_chat(user, "<span class='notice'>You smash the contents into juice!</span>")
 		var/id = get_allowed_juice_by_id(crushable)
 		if(id)
-			reagents.add_reagent(id[1], get_juice_amount(crushable), space)
+			reagents.add_reagent(id[1], get_juice_amount(crushable), volume - reagents.total_volume)
 	else if(is_type_in_list(crushable, blend_items))
 		to_chat(user, "<span class='notice'>You grind the contents into dust!</span>")
-		var/id = get_allowed_by_id(crushable)
-		if(id)
-			var/amount = max(min(abs(id[id[1]]), space),1)
-			if(crushable.type == /obj/item/weapon/rocksliver) //Xenoarch
-				var/obj/item/weapon/rocksliver/R = crushable
-				reagents.add_reagent(id[1],amount,R.geological_data)
-			else //Generic processes
-				if(isemptylist(id))
-					crushable.reagents.trans_to(src,crushable.reagents.total_volume)
-				else
-					reagents.add_reagent(id[1],amount)
+		crushable.get_ground_value(src)
 	else
 		to_chat(user, "<span class='notice'>You smash the contents into nothingness.</span>")
 	QDEL_NULL(crushable)
