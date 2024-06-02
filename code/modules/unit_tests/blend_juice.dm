@@ -11,6 +11,6 @@
                 var/obj/item/object = new type
                 M.attackby(object,user)
                 M.attack_self(user)
-                assert_eq(M.reagents.has_reagent(reagentlist[1], TRUE)
+                assert_eq(M.reagents.has_reagent(reagentlist[1]), TRUE)
                 qdel(object)
                 M.reagents.clear_reagents()
