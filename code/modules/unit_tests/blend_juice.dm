@@ -8,6 +8,8 @@
                 var/list/reagentlist = items[type]
                 if(!reagentlist.len)
                     continue
+                if(items == blend_items && (type in juice_items)) //mortars prioritise this so skip it
+                    continue
                 var/obj/item/object = new type
                 M.attackby(object,user)
                 M.attack_self(user)
