@@ -423,19 +423,20 @@ var/global/list/blend_items = list (
 	holdingitems -= O
 	QDEL_NULL(O)
 
-/obj/machinery/reagentgrinder/proc/juice()
-	power_change()
-	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
-		return
-	if(inuse)
-		return
-	if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
-		return
-	playsound(src, speed_multiplier < 2 ? 'sound/machines/juicer.ogg' : 'sound/machines/juicerfast.ogg', 30, 1)
-	inuse = 1
-	spawn(50/speed_multiplier)
-		inuse = 0
-		interact(usr)
+/obj/machinery/reagentgrinder/proc/juice(var/test = FALSE)
+	if(!test)
+		power_change()
+		if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
+			return
+		if(inuse)
+			return
+		if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
+			return
+		playsound(src, speed_multiplier < 2 ? 'sound/machines/juicer.ogg' : 'sound/machines/juicerfast.ogg', 30, 1)
+		inuse = 1
+		spawn(50/speed_multiplier)
+			inuse = 0
+			interact(usr)
 	//Snacks
 	for (var/obj/item/weapon/reagent_containers/food/snacks/O in holdingitems)
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
@@ -457,19 +458,20 @@ var/global/list/blend_items = list (
 
 		remove_object(O)
 
-/obj/machinery/reagentgrinder/proc/grind()
-	power_change()
-	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
-		return
-	if(inuse)
-		return
-	if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
-		return
-	playsound(src, speed_multiplier < 2 ? 'sound/machines/blender.ogg' : 'sound/machines/blenderfast.ogg', 50, 1)
-	inuse = 1
-	spawn(60/speed_multiplier)
-		inuse = 0
-		updateUsrDialog()
+/obj/machinery/reagentgrinder/proc/grind(var/test = FALSE)
+	if(!test)
+		power_change()
+		if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
+			return
+		if(inuse)
+			return
+		if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
+			return
+		playsound(src, speed_multiplier < 2 ? 'sound/machines/blender.ogg' : 'sound/machines/blenderfast.ogg', 50, 1)
+		inuse = 1
+		spawn(60/speed_multiplier)
+			inuse = 0
+			updateUsrDialog()
 	//Snacks and Plants
 	for (var/obj/item/weapon/reagent_containers/food/snacks/O in holdingitems)
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)

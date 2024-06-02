@@ -1,19 +1,31 @@
 /datum/unit_test/grind_juice/start()
     var/obj/item/weapon/reagent_containers/glass/mortar/M = new
+    var/obj/machinery/reagentgrinder/R = new
     var/mob/user = new
     var/lists = list(juice_items,blend_items)
     for(var/list/items in lists)
         for(var/type in items)
             if(islist(items[type]))
                 var/list/reagentlist = items[type]
-                if(!reagentlist.len)
+                if(!reagentlist.len) //not testing this for now
                     continue
+                R.holdingitems += new type
+                var/name = "[R.holdingitems[1]]"
+                if(items == juice_items)
+                    R.juice(TRUE)
+                else
+                    R.grind(TRUE)
+                if(!M.reagents.has_reagent(reagentlist[1]))
+                    fail("Reagent ID [reagentlist[1]] was not created from [items == juice_items ? "juic" : "grind"]ing [name] in [R].")
+                QDEL_LIST_CUT(R.holdingitems)
                 if(items == blend_items && (type in juice_items)) //mortars prioritise this so skip it
                     continue
-                var/obj/item/object = new type
-                M.attackby(object,user)
+                M.crushable = new type
                 M.attack_self(user)
                 if(!M.reagents.has_reagent(reagentlist[1]))
-                    fail("Reagent ID [reagentlist[1]] was not created from grinding [object].")
-                qdel(object)
+                    fail("Reagent ID [reagentlist[1]] was not created from [items == juice_items ? "juic" : "grind"]ing [M.crushable] in [M].")
+                QDEL_NULL(M.crushable)
                 M.reagents.clear_reagents()
+    qdel(M)
+    qdel(R)
+    qdel(user)
