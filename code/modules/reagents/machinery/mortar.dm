@@ -10,41 +10,6 @@
 	amount_per_transfer_from_this = 5
 	//We want the all-in-one grinder audience
 	var/crush_flick = "mortar_crush"
-
-	var/list/blend_items = list (
-		/obj/item/stack/sheet/metal           = list(IRON,20),
-		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA,20),
-		/obj/item/stack/sheet/mineral/uranium = list(URANIUM,20),
-		/obj/item/stack/sheet/mineral/clown   = list(BANANA,20),
-		/obj/item/stack/sheet/mineral/silver  = list(SILVER,20),
-		/obj/item/stack/sheet/mineral/gold    = list(GOLD,20),
-		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = 20),
-		/obj/item/weapon/grown/nettle         = list(FORMIC_ACID,10),
-		/obj/item/weapon/grown/deathnettle    = list(PHENOL,10),
-		/obj/item/stack/sheet/charcoal        = list("charcoal",20),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans   = list(SOYMILK,1),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato     = list(KETCHUP,2),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/corn       = list(CORNOIL,3),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/wheat      = list(FLOUR,5),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk  = list(RICE,5),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries   = list(CHERRYJELLY,1),
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans        = list(ALUMINUM,10),
-		/obj/item/trash/soda_cans										 = list(ALUMINUM,10),
-		/obj/item/trash/egg												 = list(CALCIUMCARBONATE,1),
-		/obj/item/seeds	                      = list(BLACKPEPPER,5),
-		/obj/item/device/flashlight/flare     = list(SULFUR,10),
-		/obj/item/stack/cable_coil            = list(COPPER, 10),
-		/obj/item/weapon/cell                 = list(LITHIUM, 10),
-		/obj/item/clothing/head/butt          = list(MERCURY, 10),
-		/obj/item/weapon/rocksliver           = list(GROUND_ROCK,30),
-		/obj/item/weapon/match                = list(PHOSPHORUS, 2),
-
-		//Recipes must include both variables!
-		/obj/item/weapon/reagent_containers/food = list("generic",0),
-		/obj/item/ice_crystal                = list(ICE, 10),
-	)
-
-
 	var/obj/item/crushable = null
 
 /obj/item/weapon/reagent_containers/glass/mortar/Destroy()
@@ -98,50 +63,39 @@
 	if (reagents.total_volume >= volume)
 		to_chat(user, "<span class='warning'>There is no more space inside!</span>")
 		return
+	flick(crush_flick,src)
+	var/list/items_to_check
+	var/space = volume - reagents.total_volume
 	if(is_type_in_list(crushable, juice_items))
-		flick(crush_flick,src)
 		to_chat(user, "<span class='notice'>You smash the contents into juice!</span>")
-		var/id = null
-		for(var/i in juice_items)
-			if(istype(crushable, i))
-				id = juice_items[i]
-		if(!id)
-			return
-		var/obj/item/weapon/reagent_containers/food/snacks/grown/juiceable = crushable
-		if(juiceable.potency == -1)
-			juiceable.potency = 0
-		reagents.add_reagent(id[1], min(round(5*sqrt(juiceable.potency)), volume - reagents.total_volume))
+		items_to_check = juice_items
 	else if(is_type_in_list(crushable, blend_items))
-		flick(crush_flick,src)
 		to_chat(user, "<span class='notice'>You grind the contents into dust!</span>")
-		var/id = null
-		var/space = volume - reagents.total_volume
-		for(var/i in blend_items)
-			if(istype(crushable, i))
-				id = blend_items[i]
-				break
-		if(!id)
-			return
-		if(istype(crushable, /obj/item/weapon/reagent_containers/food/snacks)) //Most growable food
-			if(id[1] == "generic")
-				crushable.reagents.trans_to(src,crushable.reagents.total_volume)
-			else
-				reagents.add_reagent(id[1],min(id[2], space))
-		else if(istype(crushable, /obj/item/stack/sheet) || istype(crushable, /obj/item/seeds) || /obj/item/device/flashlight/flare || /obj/item/stack/cable_coil || /obj/item/weapon/cell || /obj/item/clothing/head/butt) //Generic processes
-			reagents.add_reagent(id[1],min(id[2], space))
-		else if(istype(crushable, /obj/item/weapon/grown)) //Nettle and death nettle
-			crushable.reagents.trans_to(src,crushable.reagents.total_volume)
-		else if(istype(crushable, /obj/item/weapon/rocksliver)) //Xenoarch
-			var/obj/item/weapon/rocksliver/R = crushable
-			reagents.add_reagent(id[1],min(id[2], space), R.geological_data)
-		else
-			to_chat(user, "<span class ='warning'>An error was encountered. Report this message.</span>")
-			return
+		items_to_check = blend_items
 	else
-		flick(crush_flick,src)
 		to_chat(user, "<span class='notice'>You smash the contents into nothingness.</span>")
+	if(items_to_check)
+		var/id = null
+		for(var/i in items_to_check)
+			if(istype(crushable, i))
+				id = items_to_check[i]
+		if(id)
+			if(items_to_check == juice_items)
+				var/obj/item/weapon/reagent_containers/food/snacks/grown/juiceable = crushable
+				if(juiceable.potency == -1)
+					juiceable.potency = 0
+				reagents.add_reagent(id[1], min(round(5*sqrt(juiceable.potency)), space))
+			else if(items_to_check == blend_items)
+				var/amount = min(abs(id[id[1]]), space)
+				if(crushable.type == /obj/item/weapon/rocksliver) //Xenoarch
+					var/obj/item/weapon/rocksliver/R = crushable
+					reagents.add_reagent(id[1],amount,R.geological_data)
+				else //Generic processes
+					if(isemptylist(id[1]))
+						crushable.reagents.trans_to(src,crushable.reagents.total_volume)
+					else
+						reagents.add_reagent(id[1],amount)
 	QDEL_NULL(crushable)
-	return
 
 /obj/item/weapon/reagent_containers/glass/mortar/examine(mob/user)
 	..()
