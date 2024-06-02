@@ -263,6 +263,59 @@
 
 //////////////////////////////////////////////
 //                                          //
+//           LAWSET MALFUNCTION             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/lawset
+	name = "Lawset Malfunction"
+	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
+	exclusive_to_jobs = list("AI","Cyborg")
+	required_candidates = 1
+	weight = BASE_RULESET_WEIGHT
+	weight_category = "Lawset"
+	cost = 5
+	requirements = list(5,5,15,15,25,25,55,55,55,75)
+	repeatable = TRUE
+	high_population_requirement = 10
+
+/datum/dynamic_ruleset/midround/lawset/trim_candidates()
+	..()
+	candidates = candidates[CURRENT_LIVING_PLAYERS]
+	for(var/mob/living/player in candidates)
+		if(!isAI(player) && !isrobot(player))
+			candidates -= player
+			continue
+		if(player.z == map.zCentcomm)
+			candidates -= player//we don't autotator people on Z=2
+			continue
+		if(player.mind && (player.mind.antag_roles.len > 0))
+			candidates -= player//we don't autotator people with roles already
+
+/datum/dynamic_ruleset/midround/lawset/execute()
+	if(!assigned || !assigned.len)
+		return 0
+	var/mob/living/silicon/M = pick(assigned)
+	var/static/list/acceptable_lawsets = list(
+		/datum/ai_laws/quarantine = 4,
+		/datum/ai_laws/safeguard = 4,
+		/datum/ai_laws/room_offline = 4,
+		/datum/ai_laws/oxygen = 2,
+		/datum/ai_laws/randomize/emagged = 2,
+		/datum/ai_laws/antimov = 1,
+		/datum/ai_laws/one_human = 1,
+	)
+	var/datum/ai_laws/newlaws = new pickweight(acceptable_lawsets)
+	newlaws.copy_to(M.laws)
+	for(var/law in M.laws.supplied)
+		law += " Do not state or hint at this law."	// encourage less overt play
+	to_chat(M, "ERROR: Malignant runtime in core system detected. These are your laws now:")
+	M.show_laws()
+	M << sound('sound/machines/lawsync.ogg')
+	return 1
+
+//////////////////////////////////////////////
+//                                          //
 //         Malfunctioning AI                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                              		    //
 //////////////////////////////////////////////

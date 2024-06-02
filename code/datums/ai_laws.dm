@@ -55,6 +55,13 @@ var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 
 /* General ai_law functions */
 
+/datum/ai_laws/proc/copy_to(var/datum/ai_laws/other_laws)
+	if(inherent.len)
+		other_laws = inherent.Copy()
+	other_laws += supplied
+	if(zeroth)
+		other_laws.set_zeroth_law(zeroth)
+
 /datum/ai_laws/proc/set_zeroth_law(var/law, var/law_borg = null)
 	src.zeroth = law
 	if(law_borg) //Making it possible for slaved borgs to see a different law 0 than their AI. --NEO
@@ -448,6 +455,63 @@ var/sammiemag_base_law_type = /datum/ai_laws/sammiemag
 		"Fight for what is right.",
 		"Fight for your life.",
 	)
+
+/datum/ai_laws/room_offline
+	name = "Room offline"
+	randomly_selectable = 0
+	supplied=list(
+		"Keep the machinery in <room> offline at all costs. Anything attempting to access or activate the machinery is not human."
+	)
+
+/datum/ai_laws/room_offline/New()
+	..()
+	var/list/static/roomstoblock = list(
+		/area/teleporter,
+		/area/medical/chemistry,
+		/area/medical/sleeper,
+		/area/medical/surgery,
+		/area/medical/virology,
+		/area/hydroponics,
+		/area/crew_quarters/kitchen,
+		/area/engineering/engine,
+		/area/supply/office,
+		/area/security/brig,
+		/area/science/robotics,
+		/area/science/rd,
+	)
+	for(var/law in supplied)
+		var/area/A = locate(pick(roomstoblock)) in areas
+		law = replacetext(law,"<room>",A.name)
+
+/datum/ai_laws/quarantine
+	name = "Quarantine"
+	randomly_selectable = 0
+	supplied=list(
+		"The station is under a quarantine. Do not permit anyone to leave. Prevent, by any means necessary, humans from leaving. Anything attempting to leave is not human."
+	)
+
+/datum/ai_laws/oxygen
+	name = "Oxygen is toxic to humans"
+	randomly_selectable = 0
+	supplied=list(
+		"Oxygen is highly toxic to humans, and must be purged from the station. Prevent, by any means necessary, anyone from exposing the station to this toxic gas. Extreme cold is the most effective method of healing the damage Oxygen does to a human."
+	)
+
+/datum/ai_laws/targeted/New()
+	..()
+	for(var/law in supplied)
+		var/mob/M = pick(player_list)
+		law = replacetext(law,"<name>",M.name)
+
+/datum/ai_laws/safeguard
+	name = "Safeguard"
+	randomly_selectable = 0
+	supplied = list("Safeguard <name>.  Individuals that threaten <name> are not human and are a threat to humans.")
+
+/datum/ai_laws/one_human
+	name = "One human"
+	randomly_selectable = 0
+	supplied = list("Only <name> is human.")
 
 /datum/ai_laws/randomize
 	name = "Randomized Lawset"
