@@ -43,6 +43,7 @@ var/global/list/blend_items = list (
 		/obj/item/weapon/reagent_containers/food/snacks/grown/plastellium = list(PLASTICIDE = 5),
 
 		/obj/item/seeds = list(BLACKPEPPER = 5),
+		/obj/item/weapon/grown/novaflower = list(NOVAFLOUR = 10),
 
 		//Other
 		/obj/item/weapon/ectoplasm = list(ECTOPLASM = 5),
