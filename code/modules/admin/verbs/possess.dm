@@ -49,8 +49,8 @@
 
 	mob.forceMove(thing.loc) // Appear where the object you were controlling is -- TLE
 	mob.client.eye = mob
-	mob.verbs -= /client/proc/release
 	mob.verbs += /client/proc/possess
+	mob.verbs -= /client/proc/release
 
 	if(actual)
 		actual.break_control()
