@@ -477,6 +477,9 @@ var/global/list/blend_items = list (
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			return
 
+		if (O.dip?.total_volume)
+			O.dip.trans_to(beaker, O.dip.total_volume)
+	
 		var/allowed = get_allowed_by_id(O)
 		if(isnull(allowed))
 			break
@@ -512,23 +515,12 @@ var/global/list/blend_items = list (
 		if(O.gcDestroyed)
 			holdingitems -= O
 
-	//Everything else - Transfers reagents from it into beaker
-	for (var/obj/item/weapon/reagent_containers/O in holdingitems)
-		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-			return
-		var/amount = O.reagents.total_volume
-		O.reagents.trans_to(beaker, amount)
-		if (istype (O, /obj/item/weapon/reagent_containers/food/snacks))
-			var/obj/item/weapon/reagent_containers/food/snacks/S = O
-			if (S.dip && S.dip.total_volume)
-				S.dip.trans_to(beaker, S.dip.total_volume)
-		if(!O.reagents.total_volume)
-			remove_object(O)
-
 	//All other generics
 	for (var/obj/item/O in holdingitems)
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			return
+		if(istype(O,/obj/item/weapon/reagent_containers)) //Transfer these to beaker
+			O.reagents.trans_to(beaker, O.reagents.total_volume)
 		var/allowed = get_allowed_by_id(O)
 		for (var/r_id in allowed)
 			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
@@ -545,4 +537,5 @@ var/global/list/blend_items = list (
 
 			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 				break
-		remove_object(O)
+		if(!O.reagents.reagent_list.len)
+			remove_object(O)
