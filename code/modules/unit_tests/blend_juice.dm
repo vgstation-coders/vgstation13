@@ -22,9 +22,10 @@
                 if(items == blend_items && (type in juice_items)) //mortars prioritise this so skip it
                     continue
                 M.crushable = new type
+                name = M.crushable.name
                 M.attack_self(user)
                 if(!M.reagents.has_reagent(reagentlist[1]))
-                    fail("Reagent ID [reagentlist[1]] was not created from [items == juice_items ? "juic" : "grind"]ing [M.crushable] in [M].")
+                    fail("Reagent ID [reagentlist[1]] was not created from [items == juice_items ? "juic" : "grind"]ing \the [name] in [M].")
                 QDEL_NULL(M.crushable)
                 M.reagents.clear_reagents()
     qdel(M)
