@@ -488,7 +488,6 @@ var/global/list/blend_items = list (
 	if(istype(allowed))
 		if(!allowed.len && reagents)
 			reagents.trans_to(beaker, reagents.total_volume)
-			return
 		for (var/r_id in allowed)
 			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 			var/amount = allowed[r_id]
