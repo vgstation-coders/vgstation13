@@ -30,13 +30,13 @@
 	O.register_event(/event/destroyed, src, nameof(src::release()))
 	feedback_add_details("admin_verb","PO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/release(obj/O as obj in world)
+/client/proc/release(obj/thing as obj in world)
 	set name = "Release Obj"
 	set category = "Object"
 	//mob.loc = get_turf(mob)
 	var/datum/control/actual
 	for(var/datum/control/C in mob.control_object)
-		if(C.controlled == O)
+		if(C.controlled == thing)
 			actual = C
 			break
 	if(actual && mob.name_archive) //if you have a name archived and if you are actually relassing an object
@@ -47,7 +47,7 @@
 			H.update_name()
 //		mob.regenerate_icons() //So the name is updated properly
 
-	mob.forceMove(O.loc) // Appear where the object you were controlling is -- TLE
+	mob.forceMove(thing.loc) // Appear where the object you were controlling is -- TLE
 	mob.client.eye = mob
 	mob.verbs -= /client/proc/release
 	mob.verbs += /client/proc/possess
