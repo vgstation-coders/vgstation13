@@ -64,34 +64,27 @@
 		to_chat(user, "<span class='warning'>There is no more space inside!</span>")
 		return
 	flick(crush_flick,src)
-	var/list/items_to_check
 	var/space = volume - reagents.total_volume
 	if(is_type_in_list(crushable, juice_items))
 		to_chat(user, "<span class='notice'>You smash the contents into juice!</span>")
-		items_to_check = juice_items
+		var/id = get_allowed_juice_by_id(crushable)
+		if(id)
+			reagents.add_reagent(id[1], get_juice_amount(crushable), space)
 	else if(is_type_in_list(crushable, blend_items))
 		to_chat(user, "<span class='notice'>You grind the contents into dust!</span>")
-		items_to_check = blend_items
+		var/id = get_allowed_by_id(crushable)
+		if(id)
+			var/amount = min(abs(id[id[1]]), space)
+			if(crushable.type == /obj/item/weapon/rocksliver) //Xenoarch
+				var/obj/item/weapon/rocksliver/R = crushable
+				reagents.add_reagent(id[1],amount,R.geological_data)
+			else //Generic processes
+				if(isemptylist(id[1]))
+					crushable.reagents.trans_to(src,crushable.reagents.total_volume)
+				else
+					reagents.add_reagent(id[1],amount)
 	else
 		to_chat(user, "<span class='notice'>You smash the contents into nothingness.</span>")
-	if(items_to_check)
-		var/id = null
-		for(var/i in items_to_check)
-			if(istype(crushable, i))
-				id = items_to_check[i]
-		if(id)
-			if(items_to_check == juice_items)
-				reagents.add_reagent(id[1], get_juice_amount(crushable), space)
-			else if(items_to_check == blend_items)
-				var/amount = min(abs(id[id[1]]), space)
-				if(crushable.type == /obj/item/weapon/rocksliver) //Xenoarch
-					var/obj/item/weapon/rocksliver/R = crushable
-					reagents.add_reagent(id[1],amount,R.geological_data)
-				else //Generic processes
-					if(isemptylist(id[1]))
-						crushable.reagents.trans_to(src,crushable.reagents.total_volume)
-					else
-						reagents.add_reagent(id[1],amount)
 	QDEL_NULL(crushable)
 
 /obj/item/weapon/reagent_containers/glass/mortar/examine(mob/user)

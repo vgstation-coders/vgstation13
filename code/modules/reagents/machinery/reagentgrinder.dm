@@ -416,9 +416,6 @@ var/global/list/blend_items = list (
 		if(istype(O, i))
 			return juice_items[i]
 
-/proc/get_grownweapon_amount(var/obj/item/weapon/grown/O)
-	return !istype(O) || O.potency == -1 ? 5 : round(O.potency)
-
 /proc/get_juice_amount(var/obj/item/weapon/reagent_containers/food/snacks/grown/O)
 	return !istype(O) || O.potency == -1 ? 5 : round(5*sqrt(O.potency))
 
