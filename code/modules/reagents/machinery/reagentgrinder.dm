@@ -510,15 +510,15 @@ var/global/list/blend_items = list (
 		if(istype(O,/obj/item/weapon/reagent_containers)) //Transfer these to beaker
 			O.reagents.trans_to(beaker, O.reagents.total_volume)
 		var/allowed = get_allowed_by_id(O)
-		for (var/r_id in allowed)
-			if(istype(O,/obj/item/stack/sheet))
-				var/obj/item/stack/sheet/S = O
-				while(beaker.reagents.total_volume < beaker.reagents.maximum_volume && S.use(1))
-					for(var/r_id in allowed)
-						if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-							break
-						beaker.reagents.add_reagent(r_id, allowed[r_id], additional_data = list("color" = O.color))
-			else
+		if(istype(O,/obj/item/stack/sheet))
+			var/obj/item/stack/sheet/S = O
+			while(beaker.reagents.total_volume < beaker.reagents.maximum_volume && S.use(1))
+				for(var/r_id in allowed)
+					if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+						break
+					beaker.reagents.add_reagent(r_id, allowed[r_id], additional_data = list("color" = O.color))
+		else
+			for (var/r_id in allowed)		
 				var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 				var/amount = allowed[r_id]
 				if (amount == 0)
