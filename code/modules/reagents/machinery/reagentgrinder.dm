@@ -486,7 +486,7 @@ var/global/list/blend_items = list (
 /obj/item/proc/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
 	var/list/allowed = get_allowed_by_id(src)
 	if(istype(allowed))
-		if(!allowed.len)
+		if(!allowed.len && reagents)
 			reagents.trans_to(beaker, reagents.total_volume)
 			return
 		for (var/r_id in allowed)
