@@ -484,21 +484,25 @@ var/global/list/blend_items = list (
 			remove_object(O)
 
 /obj/item/proc/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	var/allowed = get_allowed_by_id(src)
-	for (var/r_id in allowed)
-		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-		var/amount = allowed[r_id]
-		if (amount == 0)
-			if (reagents != null && reagents.has_reagent(r_id))
-				beaker.reagents.add_reagent(r_id,min(reagents.get_reagent_amount(r_id), space))
-		else
-			var/data
-			if(type == /obj/item/weapon/rocksliver)
-				var/obj/item/weapon/rocksliver/R = src
-				data = R.geological_data
-			beaker.reagents.add_reagent(r_id,min(amount, space),data)
-		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+	var/list/allowed = get_allowed_by_id(src)
+	if(istype(allowed))
+		if(!allowed.len)
+			reagents.trans_to(beaker, reagents.total_volume)
 			return
+		for (var/r_id in allowed)
+			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+			var/amount = allowed[r_id]
+			if (amount == 0)
+				if (reagents != null && reagents.has_reagent(r_id))
+					beaker.reagents.add_reagent(r_id,min(reagents.get_reagent_amount(r_id), space))
+			else
+				var/data
+				if(type == /obj/item/weapon/rocksliver)
+					var/obj/item/weapon/rocksliver/R = src
+					data = R.geological_data
+				beaker.reagents.add_reagent(r_id,min(amount, space),data)
+			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+				return
 
 /obj/item/stack/sheet/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
 	var/allowed = get_allowed_by_id(src)
