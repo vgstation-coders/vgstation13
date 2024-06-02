@@ -61,10 +61,11 @@ var/global/list/blend_items = list (
 
 		//All types that you can put into the grinder to transfer the reagents to the beaker. !Put all recipes above this.!
 		/obj/item/ice_crystal                = list(ICE = 10),
-		/obj/item/weapon/grown/novaflower    = list(NOVAFLOUR = 10),
+		/obj/item/weapon/grown/novaflower    = list(NOVAFLOUR = 0),
+		/obj/item/weapon/grown/nettle        = list(FORMIC_ACID = 0),
+		/obj/item/weapon/grown/deathnettle   = list(PHENOL = 0),
 		/obj/item/weapon/reagent_containers/pill = list(),
 		/obj/item/weapon/reagent_containers/food = list(),
-		/obj/item/weapon/grown                   = list(),
 	)
 
 /obj/machinery/reagentgrinder
@@ -510,6 +511,21 @@ var/global/list/blend_items = list (
 			beaker.reagents.add_reagent(r_id, allowed[r_id], additional_data = list("color" = color))
 			if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 				return
+
+/obj/item/weapon/grown/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
+	var/allowed = get_allowed_by_id(src)
+	for (var/r_id in allowed)
+		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+		var/amount = allowed[r_id]
+		if(amount <= 0 && reagents != null && reagents.total_volume)
+			if(amount == 0)
+				amount = -1
+			beaker.reagents.add_reagent(r_id, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(amount)), space))
+			reagents.remove_reagent(NUTRIMENT, min(reagents.get_reagent_amount(NUTRIMENT), space))
+		else
+			reagents.trans_id_to(beaker, r_id, min(amount, space))
+		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+			return
 
 /obj/item/weapon/reagent_containers/food/snacks/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
 	var/allowed = get_allowed_by_id(src)
