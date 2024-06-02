@@ -15,7 +15,7 @@
                     R.juice(TRUE)
                 else
                     R.grind(TRUE)
-                if(!M.reagents.has_reagent(reagentlist[1]))
+                if(!R.beaker.reagents.has_reagent(reagentlist[1]))
                     fail("Reagent ID [reagentlist[1]] was not created from [items == juice_items ? "juic" : "grind"]ing [name] in [R].")
                 QDEL_LIST_CUT(R.holdingitems)
                 R.beaker.reagents.clear_reagents()
