@@ -503,19 +503,6 @@ var/global/list/blend_items = list (
 		if(O.reagents.reagent_list.len == 0)
 			remove_object(O)
 
-
-	//Sheets
-	for(var/obj/item/stack/sheet/O in holdingitems)
-		var/allowed = get_allowed_by_id(O)
-
-		while(beaker.reagents.total_volume < beaker.reagents.maximum_volume && O.use(1))
-			for(var/r_id in allowed)
-				if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-					break
-				beaker.reagents.add_reagent(r_id, allowed[r_id], additional_data = list("color" = O.color))
-		if(O.gcDestroyed)
-			holdingitems -= O
-
 	//All other generics
 	for (var/obj/item/O in holdingitems)
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
@@ -524,19 +511,29 @@ var/global/list/blend_items = list (
 			O.reagents.trans_to(beaker, O.reagents.total_volume)
 		var/allowed = get_allowed_by_id(O)
 		for (var/r_id in allowed)
-			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-			var/amount = allowed[r_id]
-			if (amount == 0)
-				if (O.reagents != null && O.reagents.has_reagent(r_id))
-					beaker.reagents.add_reagent(r_id,min(O.reagents.get_reagent_amount(r_id), space))
+			if(istype(O,/obj/item/stack/sheet))
+				var/obj/item/stack/sheet/S = O
+				while(beaker.reagents.total_volume < beaker.reagents.maximum_volume && S.use(1))
+					for(var/r_id in allowed)
+						if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+							break
+						beaker.reagents.add_reagent(r_id, allowed[r_id], additional_data = list("color" = O.color))
 			else
-				var/data
-				if(O.type == /obj/item/weapon/rocksliver)
-					var/obj/item/weapon/rocksliver/R = O
-					data = R.geological_data
-				beaker.reagents.add_reagent(r_id,min(amount, space),data)
+				var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+				var/amount = allowed[r_id]
+				if (amount == 0)
+					if (O.reagents != null && O.reagents.has_reagent(r_id))
+						beaker.reagents.add_reagent(r_id,min(O.reagents.get_reagent_amount(r_id), space))
+				else
+					var/data
+					if(O.type == /obj/item/weapon/rocksliver)
+						var/obj/item/weapon/rocksliver/R = O
+						data = R.geological_data
+					beaker.reagents.add_reagent(r_id,min(amount, space),data)
 
-			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-				break
+				if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
+					break
+		if(O.gcDestroyed)
+			holdingitems -= O
 		if(!O.reagents || !O.reagents.reagent_list.len)
 			remove_object(O)
