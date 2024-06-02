@@ -295,7 +295,7 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/enable_debug_verbs,
 	/client/proc/mob_list,
 	/client/proc/possess,
-	/proc/release,
+	/client/proc/release,
 	/client/proc/gc_dump_hdl,
 	/client/proc/create_map_element
 	)
