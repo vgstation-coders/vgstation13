@@ -417,7 +417,7 @@ var/global/list/blend_items = list (
 			return juice_items[i]
 
 /proc/get_juice_amount(var/obj/item/weapon/reagent_containers/food/snacks/grown/O)
-	return !istype(O) || O.potency == -1 ? 5 : round(5*sqrt(O.potency))
+	return !istype(O) || O.potency <= 0 ? 5 : round(5*sqrt(O.potency))
 
 /obj/machinery/reagentgrinder/proc/remove_object(var/obj/item/O)
 	holdingitems -= O
