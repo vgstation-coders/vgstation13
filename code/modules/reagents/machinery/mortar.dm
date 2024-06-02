@@ -74,7 +74,7 @@
 		to_chat(user, "<span class='notice'>You grind the contents into dust!</span>")
 		var/id = get_allowed_by_id(crushable)
 		if(id)
-			var/amount = min(abs(id[id[1]]), space)
+			var/amount = max(min(abs(id[id[1]]), space),1)
 			if(crushable.type == /obj/item/weapon/rocksliver) //Xenoarch
 				var/obj/item/weapon/rocksliver/R = crushable
 				reagents.add_reagent(id[1],amount,R.geological_data)
