@@ -512,6 +512,8 @@ Assign your candidates in choose_candidates() instead.
 // You should `not` perform any null checks on M. M being null is a sign of a problem and should runtime.
 /datum/dynamic_ruleset/roundstart/malf/choose_candidates()
 	var/mob/M = progressive_job_search() //dynamic_rulesets.dm. Handles adding the guy to assigned.
+	if(!M)
+		return 0
 	if(M.mind.assigned_role != "AI")
 		for(var/mob/living/silicon/ai/player in player_list) //mode.candidates is everyone readied up, not to be confused with candidates
 			if(player != M)	// This should always be true but in case something goes terribly terribly wrong we definitely do not want to end up displacing the malf AI
