@@ -390,7 +390,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 
 /atom/movable/ignite()
 	..()
-	firelightdummy = new (src)
+	if(!firelightdummy)
+		firelightdummy = new (src)
 
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(flammable && !on_fire)
@@ -582,11 +583,6 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	. = ..()
 	dir = pick(cardinal)
 	var/turf/T = get_turf(loc)
-	var/i = 0
-	for(var/obj/effect/fire/F in T)
-		i++
-	if(i>1)
-		qdel(src)
 	var/datum/gas_mixture/air_contents=T.return_air()
 	if(air_contents)
 		setfirelight(air_contents.calculate_firelevel(get_turf(src)), air_contents.temperature)
@@ -600,6 +596,10 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 /obj/effect/fire/proc/Extinguish()
 	for(var/atom/A in loc)
 		A.extinguish()
+	qdel(src)
+
+/obj/effect/fire/extinguish() //lol
+	QDEL_NULL(firelightdummy)
 	qdel(src)
 
 /obj/effect/fire/process()
