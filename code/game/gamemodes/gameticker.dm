@@ -215,27 +215,28 @@ var/datum/controller/gameticker/ticker
 		CHECK_TICK
 
 	//Now that we have all of the occupied areas, we handle the lights being on or off, before actually putting the players into their bodies.
-	if(roundstart_occupied_area_paths.len)
+	if(config.roundstart_lights_on || roundstart_occupied_area_paths.len)
 		var/tick = get_game_time()
-		var/obj/machinery/light_switch/LS
-		var/obj/machinery/light/lightykun
-		var/obj/item/device/flashlight/lamp/lampychan
-		for(var/area/A in areas)
-			if(A.type in roundstart_occupied_area_paths)
-				for(var/obj/O in A)
-					LS = O
-					lightykun = O
-					lampychan = O
-					if(istype(LS))
-						LS.toggle_switch(1, playsound = FALSE)
-					else if(istype(lightykun))
-						lightykun.on = 1
-						lightykun.update()
-					else if(istype(lampychan))
-						lampychan.toggle_onoff(1)
+		var/area/A
+		for(var/obj/item/device/flashlight/lamp/lampychan in lamps)
+			A = get_area(lampychan)
+			if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+				lampychan.toggle_onoff(1)
+		for(var/obj/machinery/light_switch/LS in lightswitches)
+			A = get_area(LS)
+			if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+				LS.toggle_switch(1, playsound = FALSE) // lights are covered below, no need for power
+				roundstart_occupied_area_paths -= A.type
+		if(roundstart_occupied_area_paths.len)
+			for(var/obj/machinery/light/lightykun in alllights)
+				A = get_area(lightykun)
+				if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+					lightykun.on = 1
+					lightykun.update()
 		//Force the lighting subsystem to update.
 		SSlighting.fire(FALSE, FALSE)
 		log_admin("Turned the lights on in [(get_game_time() - tick) / 10] seconds.")
+		message_admins("Turned the lights on in [(get_game_time() - tick) / 10] seconds.")
 
 	var/list/clowns = list()
 	var/already_an_ai = FALSE

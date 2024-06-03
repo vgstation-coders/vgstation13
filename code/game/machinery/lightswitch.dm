@@ -1,6 +1,9 @@
 // the light switch
 // can have multiple per area
 // can also operate on non-loc area through "otherarea" var
+
+var/list/obj/machinery/light_switch/lightswitches = list()
+
 /obj/machinery/light_switch
 	name = "light switch"
 	desc = "It turns lights on and off. What are you, simple?"
@@ -10,22 +13,30 @@
 	var/buildstage = 2
 	var/on = 0
 	var/image/overlay
+	var/area/controlled_area
 
 /obj/machinery/light_switch/supports_holomap()
 	return TRUE
 
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)
 	..()
-	var/area/this_area = get_area(src)
-	name = "[this_area.name] light switch"
+	controlled_area = get_area(src)
+	name = "[controlled_area.name] light switch"
 	buildstage = building
-	this_area.haslightswitch = TRUE
+	controlled_area.haslightswitch = TRUE
+	lightswitches += src
+	controlled_area.lightswitches += src
 	if(!buildstage)
 		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER)
 		pixel_y = (ndir & 3)? (ndir ==1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
 		dir = ndir
 	updateicon()
 	add_self_to_holomap()
+
+/obj/machinery/light_switch/Destroy()
+	lightswitches -= src
+	controlled_area.lightswitches -= src
+	..()
 
 /obj/machinery/light_switch/proc/updateicon()
 	if(!overlay)
@@ -128,14 +139,14 @@
 	if(playsound)
 		playsound(src,'sound/misc/click.ogg',30,0,-1)
 
-	var/area/this_area = get_area(src)
-	this_area.updateicon()
+	controlled_area.updateicon()
 
-	for(var/obj/machinery/light_switch/L in this_area)
-		L.on = on
-		L.updateicon()
+	for(var/obj/machinery/light_switch/L in controlled_area.lightswitches)
+		if(L != src)
+			L.on = on
+			L.updateicon()
 
-	this_area.power_change()
+	controlled_area.power_change()
 
 /obj/machinery/light_switch/power_change()
 	if(powered(LIGHT))

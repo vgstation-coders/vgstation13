@@ -462,7 +462,7 @@ var/global/list/obj/machinery/light/alllights = list()
 		return FALSE
 	if(!this_area.haslightswitch || !this_area.requires_power)
 		return TRUE
-	for(var/obj/machinery/light_switch/L in this_area)
+	for(var/obj/machinery/light_switch/L in this_area.lightswitches)
 		if(L.on)
 			success = TRUE
 		break
