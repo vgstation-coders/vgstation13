@@ -225,8 +225,9 @@ var/datum/controller/gameticker/ticker
 		for(var/obj/machinery/light_switch/LS in lightswitches)
 			A = get_area(LS)
 			if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
-				LS.toggle_switch(1, playsound = FALSE) // lights are covered below, no need for power
-				roundstart_occupied_area_paths -= A.type
+				if(!LS.on)
+					LS.toggle_switch(1, playsound = FALSE)
+					roundstart_occupied_area_paths -= A.type // lights are covered by this so skip these areas
 		if(roundstart_occupied_area_paths.len)
 			for(var/obj/machinery/light/lightykun in alllights)
 				A = get_area(lightykun)

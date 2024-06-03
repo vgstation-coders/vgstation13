@@ -126,14 +126,14 @@ var/list/obj/machinery/light_switch/lightswitches = list()
 	toggle_switch()
 
 /obj/machinery/light_switch/proc/toggle_switch(var/newstate = null, var/playsound = TRUE)
-	if(buildstage != 2)
+	if(on == newstate)
 		return
-
 	if(isnull(newstate))
 		on = !on
-	else if(on != newstate)
-		on = newstate
 	else
+		on = newstate
+
+	if(buildstage != 2)
 		return
 
 	if(playsound)
