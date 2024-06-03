@@ -406,4 +406,4 @@ var/runescape_pvp = FALSE
 var/runescape_skull_display = FALSE
 
 //Custom Harm Alarm lines
-var/global/harm_alarm_line = pick(file2list("config/custom_lines.txt"))
+var/global/harm_alarm_line = fexists("config/custom_lines.txt") ? pick(file2list("config/custom_lines.txt")) : "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZT"
