@@ -404,3 +404,6 @@ var/list/machinery_rating_cache = list() // list of type path -> number
 
 var/runescape_pvp = FALSE
 var/runescape_skull_display = FALSE
+
+//Custom Harm Alarm lines
+var/global/harm_alarm_line = pick(file2list("config/custom_lines.txt"))
