@@ -5,11 +5,12 @@
 	var/cooldown = 0
 	var/alarm = "HUMAN HARM"
 	var/alarm_sound = 'sound/AI/harmalarm.ogg'
-	var/emagged_alarm
+	var/emagged_alarm = "BZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZT"
 	var/emagged_alarm_sound = 'sound/machines/warning-buzzer.ogg'
 	var/vary = TRUE
 
 /obj/item/device/harmalarm/New()
+	..()
 	emagged_alarm = uppertext(harm_alarm_line)
 
 /obj/item/device/harmalarm/attack_self(mob/user)
