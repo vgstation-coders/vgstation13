@@ -219,21 +219,23 @@ var/datum/controller/gameticker/ticker
 		var/tick = get_game_time()
 		var/area/A
 		for(var/obj/item/device/flashlight/lamp/lampychan in lamps)
-			A = get_area(lampychan)
-			if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
-				lampychan.toggle_onoff(1)
+			if(!lampychan.on)
+				A = get_area(lampychan)
+				if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+					lampychan.toggle_onoff(1)
 		for(var/obj/machinery/light_switch/LS in lightswitches)
-			A = get_area(LS)
-			if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
-				if(!LS.on)
+			if(!LS.on)
+				A = get_area(LS)
+				if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
 					LS.toggle_switch(1, playsound = FALSE)
 					roundstart_occupied_area_paths -= A.type // lights are covered by this so skip these areas
 		if(roundstart_occupied_area_paths.len)
 			for(var/obj/machinery/light/lightykun in alllights)
-				A = get_area(lightykun)
-				if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
-					lightykun.on = 1
-					lightykun.update()
+				if(!lightykun.on)
+					A = get_area(lightykun)
+					if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+						lightykun.on = 1
+						lightykun.update()
 		//Force the lighting subsystem to update.
 		SSlighting.fire(FALSE, FALSE)
 		log_admin("Turned the lights on in [(get_game_time() - tick) / 10] seconds.")
