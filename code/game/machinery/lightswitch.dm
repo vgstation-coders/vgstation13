@@ -139,6 +139,10 @@ var/list/obj/machinery/light_switch/lightswitches = list()
 	if(playsound)
 		playsound(src,'sound/misc/click.ogg',30,0,-1)
 
+	if(controlled_area)
+		controlled_area.lightswitches -= src
+	controlled_area = get_area(src)
+	controlled_area.lightswitches |= src
 	controlled_area.updateicon()
 
 	for(var/obj/machinery/light_switch/L in controlled_area.lightswitches)
