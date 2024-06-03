@@ -527,9 +527,17 @@ Assign your candidates in choose_candidates() instead.
 	return (assigned.len > 0)
 
 /datum/dynamic_ruleset/roundstart/malf/progressive_job_search()
-	var/mob/M = ..()
-	if(!jobban_isbanned(M, "AI"))
-		return M
+	for(var/job in job_priority)
+		for(var/mob/M in candidates)
+			if(M.mind.assigned_role == job && !jobban_isbanned(M, "AI"))
+				assigned += M
+				candidates -= M
+				return M
+	while(candidates.len)
+		var/mob/M = pick_n_take(candidates)
+		if(!jobban_isbanned(M, "AI"))
+			assigned += M
+			return M
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
