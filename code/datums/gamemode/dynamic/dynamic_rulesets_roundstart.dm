@@ -526,6 +526,9 @@ Assign your candidates in choose_candidates() instead.
 		assigned.Add(M)
 	return (assigned.len > 0)
 
+/datum/dynamic_ruleset/roundstart/malf/progressive_job_check(var/mob/M, var/job)
+	return ..() && !jobban_isbanned(M, "AI")
+
 /datum/dynamic_ruleset/roundstart/malf/execute()
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
 	if (!unction)
