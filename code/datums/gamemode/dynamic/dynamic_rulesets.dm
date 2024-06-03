@@ -271,7 +271,7 @@
 /datum/dynamic_ruleset/proc/progressive_job_search()
 	for(var/job in job_priority)
 		for(var/mob/M in candidates)
-			if(progressive_job_check(M,job))
+			if(M.mind.assigned_role == job)
 				assigned += M
 				candidates -= M
 				return M
@@ -279,9 +279,6 @@
 	assigned += M
 	candidates -= M
 	return M
-
-/datum/dynamic_ruleset/proc/progressive_job_check(var/mob/M,var/job)
-	return M.mind.assigned_role == job
 
 ////////////////////////////////////////////////////////////////////////
 
