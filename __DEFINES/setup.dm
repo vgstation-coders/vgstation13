@@ -67,9 +67,9 @@ var/global/disable_vents     = 0
 #define BODYTEMP_HEAT_DAMAGE_LIMIT 360.15 // The limit the human body can take before it starts taking damage from heat.
 #define BODYTEMP_COLD_DAMAGE_LIMIT 220.15 // The limit the human body can take before it starts taking damage from coldness.
 
-#define SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE 5000	//These need better heat protect
-#define FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE 30000 //what max_heat_protection_temperature is set to for firesuit quality headwear. MUST NOT BE 0.
-#define FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE 30000 //for fire helmet quality items (red and white hardhats)
+#define SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE 1250	//These need better heat protect
+#define FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE 2500 //what max_heat_protection_temperature is set to for firesuit quality headwear. MUST NOT BE 0.
+#define FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE 2500 //for fire helmet quality items (red and white hardhats)
 
 #define HELMET_MAX_HEAT_PROTECTION_TEMPERATURE 600	//For normal helmets
 
