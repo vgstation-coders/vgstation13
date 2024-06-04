@@ -89,7 +89,6 @@
 #include "__DEFINES\weapons.dm"
 #include "__DEFINES\world.dm"
 #include "__DEFINES\ZAS.dm"
-#include "code\_secrets.dm"
 #include "code\hub.dm"
 #include "code\names.dm"
 #include "code\world.dm"

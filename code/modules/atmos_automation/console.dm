@@ -146,7 +146,7 @@
 /obj/machinery/computer/general_air_control/atmos_automation/Topic(href,href_list)
 	if(..())
 		return 1
-	if(secret_check_two(usr, href_list))
+	if(AAC_age_check(usr, href_list))
 		return 1
 	if(href_list["on"])
 		on = !on
@@ -291,6 +291,11 @@
 
 		onclose(usr, "AAC_assemblies")
 
+/obj/machinery/computer/general_air_control/atmos_automation/proc/AAC_age_check(var/mob/M,var/list/href_list)
+	if(href_list["on"] || href_list["runonce"])
+		if(M.client && !M.client.holder && M.client.player_age < 30)
+			message_admins("[key_name(M)] attempted to [href_list["on"] ? "toggle" : "single-run"] an AAC script despite their player age of [M.client.player_age].")
+			return TRUE
 
 /obj/machinery/computer/general_air_control/atmos_automation/proc/MakeCompare(var/datum/automation/a, var/datum/automation/b, var/comparetype)
 	var/datum/automation/compare/compare=new(src)
