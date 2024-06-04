@@ -508,7 +508,10 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 				ignite()
 				igniting = 1
 		if(surfaces)
-			if((flammable || flammable_reagent_check()) && !on_fire)
+			if(flammable_reagent_check())
+				ignite()
+				igniting = 1
+			else if(flammable && !on_fire)
 				if(prob(exposed_volume * 100 / CELL_VOLUME))
 					ignite()
 					igniting = 1
