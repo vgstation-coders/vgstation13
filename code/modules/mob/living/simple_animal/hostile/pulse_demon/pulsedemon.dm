@@ -62,6 +62,7 @@
 	var/obj/machinery/bot/current_bot								// Currently controlled bot
 	var/obj/item/weapon/gun/current_weapon							// Current gun we're controlling
 	var/datum/action/pd_leave_item/PLI
+	var/datum/action/pd_change_camera/PCC
 
 	//LISTS
 	var/list/image/cables_shown = list()							// In cable views
@@ -71,6 +72,7 @@
 /mob/living/simple_animal/hostile/pulse_demon/New()
 	..()
 	// Must be spawned on a power source or cable, or else die
+	PCC = new(src)
 	current_power = locate(/obj/machinery/power) in loc
 	if(!current_power)
 		current_cable = locate(/obj/structure/cable) in loc
@@ -79,6 +81,7 @@
 	else
 		if(istype(current_power,/obj/machinery/power/apc))
 			controlling_area = get_area(current_power)
+			PCC.Grant(src)
 		forceMove(current_power)
 	set_light(1.5,2,"#bbbb00")
 	add_spell(new /spell/pulse_demon/abilities, "pulsedemon_spell_ready", /obj/abstract/screen/movable/spell_master/pulse_demon)
@@ -252,6 +255,7 @@
 				return
 			if(current_apc.pulsecompromised)
 				controlling_area = get_area(current_power)
+				PCC.Grant(src)
 				to_chat(src, "<span class='notice'>You can interact with various electronic objects in the room while connected to the APC.</span>")
 			else
 				hijackAPC(current_apc)
@@ -269,6 +273,7 @@
 			if(!isturf(loc))
 				loc = get_turf(NewLoc)
 			controlling_area = null
+			PCC.Remove(src)
 			if(!moved)
 				forceMove(NewLoc)
 		else
@@ -475,6 +480,7 @@
 		current_apc.pulsecompromising = 0
 		current_apc.pulsecompromised = 1
 		controlling_area = get_area(current_power)
+		PCC.Grant(src)
 		to_chat(src,"<span class='notice'>Takeover complete.</span>")
 		// Add to the stats if we can
 		if(mind && mind.GetRole(PULSEDEMON))
