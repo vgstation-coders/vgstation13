@@ -36,9 +36,11 @@
 		var/turf/T = get_turf(src)
 		if(isSmoothableNeighbor(T,0) && T.dir == cdir)
 			. |= cdir
+			continue // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 		for(var/atom/A in T)
 			if(isSmoothableNeighbor(A,0) && A.dir == cdir)
 				. |= cdir
+				break // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 
 /atom/proc/isSmoothableNeighbor(atom/A, bordercheck = TRUE)
 	if(!A)
