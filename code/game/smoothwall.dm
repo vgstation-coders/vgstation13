@@ -54,8 +54,7 @@
 		return 0
 	if(istype(A, /turf/simulated/wall))
 		var/turf/simulated/wall/W = A
-		if(src.mineral != W.mineral)
-			return 0
+		return src.mineral == W.mineral && !(is_type_in_list(A, cannotSmoothWith()))
 	return is_type_in_list(A, canSmoothWith()) && !(is_type_in_list(A, cannotSmoothWith()))
 		
 
