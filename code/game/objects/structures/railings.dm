@@ -150,7 +150,7 @@
 	return 1
 
 /obj/structure/railing/isSmoothableNeighbor(atom/A)
-	if(A.dir == src.dir && istype(A,/obj/structure/railing))
+	if(A?.dir == src.dir && istype(A,/obj/structure/railing))
 		var/atom/movable/O = A
 		return O.anchored
 

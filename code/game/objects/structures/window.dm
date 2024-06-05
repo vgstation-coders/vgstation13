@@ -61,7 +61,7 @@ var/list/one_way_windows
 	return unsmoothables
 
 /obj/structure/window/isSmoothableNeighbor(atom/A)
-	if(A.density && ismovable(A))
+	if(A?.density && ismovable(A))
 		var/atom/movable/O = A
 		return O.anchored && ..() 
 
