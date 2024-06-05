@@ -125,7 +125,7 @@ var/list/obj/machinery/light_switch/lightswitches = list()
 /obj/machinery/light_switch/attack_hand(mob/user)
 	toggle_switch()
 
-/obj/machinery/light_switch/proc/toggle_switch(var/newstate = null, var/playsound = TRUE)
+/obj/machinery/light_switch/proc/toggle_switch(var/newstate = null, var/playsound = TRUE, var/non_instant = TRUE)
 	if(on == newstate)
 		return
 	if(isnull(newstate))
@@ -150,7 +150,8 @@ var/list/obj/machinery/light_switch/lightswitches = list()
 			L.on = on
 			L.updateicon()
 
-	controlled_area.power_change()
+	for(var/obj/machinery/L2 in controlled_area.lights)
+		L2.power_change(non_instant)
 
 /obj/machinery/light_switch/power_change()
 	if(powered(LIGHT))
