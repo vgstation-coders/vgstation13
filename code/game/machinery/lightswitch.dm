@@ -42,7 +42,6 @@ var/list/obj/machinery/light_switch/lightswitches = list()
 /obj/machinery/light_switch/proc/updateicon()
 	if((stat & (FORCEDISABLE|NOPOWER)) || buildstage != 2)
 		icon_state = "light-p"
-		set_light(0)
 	else
 		icon_state = on ? "light1" : "light0"
 
