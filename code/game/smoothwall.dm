@@ -34,11 +34,11 @@
 		if((flow_flags & ON_BORDER) && !bordersmooth_override && (dir == cdir || opposite_dirs[dir] == cdir))
 			continue
 		var/turf/T = get_turf(src)
-		if(isSmoothableNeighbor(T,0) && T.dir == cdir)
+		if(T.dir == cdir && isSmoothableNeighbor(T,0))
 			. |= cdir
 			continue // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 		for(var/atom/A in T)
-			if(isSmoothableNeighbor(A,0) && A.dir == cdir)
+			if(A.dir == cdir && isSmoothableNeighbor(A,0))
 				. |= cdir
 				break // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 
@@ -52,15 +52,12 @@
 /turf/simulated/wall/isSmoothableNeighbor(atom/A)
 	if(!A)
 		return 0
-	if(is_type_in_list(A, canSmoothWith()) && !(is_type_in_list(A, cannotSmoothWith())))
-		if(istype(A, /turf/simulated/wall))
-			var/turf/simulated/wall/W = A
-			if(src.mineral == W.mineral)
-				return 1
-		else
-			return 1
-
-	return 0
+	if(istype(A, /turf/simulated/wall))
+		var/turf/simulated/wall/W = A
+		if(src.mineral != W.mineral)
+			return 0
+	return is_type_in_list(A, canSmoothWith()) && !(is_type_in_list(A, cannotSmoothWith()))
+		
 
 /**
  * WALL SMOOTHING SHIT

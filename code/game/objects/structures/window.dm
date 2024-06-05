@@ -61,9 +61,9 @@ var/list/one_way_windows
 	return unsmoothables
 
 /obj/structure/window/isSmoothableNeighbor(atom/A)
-	if(isobj(A))
-		var/obj/O = A
-		return ..() && O.anchored && O.density
+	if(A.density && ismovable(A))
+		var/atom/movable/O = A
+		return O.anchored && ..() 
 
 /obj/structure/window/relativewall()
 	icon_state = anchored && density ? "[base_state][..()]" : initial(icon_state)
