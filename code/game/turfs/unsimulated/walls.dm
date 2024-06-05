@@ -9,33 +9,32 @@
 	flags = TIMELESS
 	holomap_draw_override = HOLOMAP_DRAW_FULL
 	var/walltype = "riveted"
+	var/smooths = 1
 
+/turf/unsimulated/wall/isSmoothableNeighbor(atom/A, bordercheck)
+	return smooths && istype(A, src.type)
+	
 /turf/unsimulated/wall/canSmoothWith()
-	var/static/list/smoothables = list(/turf/unsimulated/wall)
-	return smoothables
+	return smooths
 
 /turf/unsimulated/wall/fakeglass
 	name = "window"
 	icon_state = "fakewindows"
 	opacity = 0
-/turf/unsimulated/wall/fakeglass/canSmoothWith()
-	return null
+	smooths = 0
 
 /turf/unsimulated/wall/blastdoor
 	name = "Shuttle Bay Blast Door"
 	desc = "Why it no open!"
 	icon = 'icons/obj/doors/rapid_pdoor.dmi'
 	icon_state = "pdoor1"
-/turf/unsimulated/wall/blastdoor/canSmoothWith()
-	return null
+	smooths = 0
 
 /turf/unsimulated/wall/rock
 	name = "unnaturally hard rock wall"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
-
-/turf/unsimulated/wall/rock/canSmoothWith()
-	return null
+	smooths = 0
 
 /turf/unsimulated/wall/rock/ice
 	name = "unnaturally hard ice wall"
@@ -69,8 +68,7 @@
 	icon = null
 	icon_state = null
 	plane = EFFECTS_PLANE
-/turf/unsimulated/wall/splashscreen/canSmoothWith()
-	return null
+	smooths = 0
 
 // Global var for fade-in
 var/icon/current_round_splashscreen
@@ -92,8 +90,7 @@ var/icon/current_round_splashscreen
 
 /turf/unsimulated/wall/other
 	icon_state = "r_wall"
-/turf/unsimulated/wall/other/canSmoothWith()
-	return null
+	smooths = 0
 
 /turf/unsimulated/wall/cult
 	name = "wall"
@@ -101,8 +98,7 @@ var/icon/current_round_splashscreen
 	icon_state = "cult0"
 	opacity = 1
 	density = 1
-/turf/unsimulated/wall/cult/canSmoothWith()
-	return null
+	smooths = 0
 
 /turf/unsimulated/wall/cultify()
 	ChangeTurf(/turf/unsimulated/wall/cult)
@@ -118,8 +114,7 @@ var/icon/current_round_splashscreen
 	icon_state = "evilwall_1"
 	opacity = 1
 	density = 1
-/turf/unsimulated/wall/evil/canSmoothWith()
-	return null
+	smooths = 0
 
 /turf/unsimulated/wall/evil/New()
 	..()
