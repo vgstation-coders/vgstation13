@@ -31,7 +31,7 @@ var/list/obj/machinery/light_switch/lightswitches = list()
 		pixel_y = (ndir & 3)? (ndir ==1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
 		dir = ndir
 	updateicon()
-	update_moody_light('icons/lighting/moody_lights.dmi', "overlay-lightswitch")
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_lightswitch")
 	add_self_to_holomap()
 
 /obj/machinery/light_switch/Destroy()
