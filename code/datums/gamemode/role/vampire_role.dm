@@ -195,7 +195,7 @@
 			feeders[targetref] = 0
 		var/mature = locate(/datum/power/vampire/mature) in current_powers
 		if(target.stat < DEAD) //alive
-			blood = min(mature ? 40 : 20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
+			blood = min(mature ? 40 : 20, target.vessel.get_reagent_amount(BLOOD)/BLOOD_UNIT_DRAIN_MULTIPLIER) // if they have less than 20 blood, give them the remnant else they get 20 blood
 			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
@@ -206,7 +206,7 @@
 			var/datum/organ/external/head/head_organ = target.get_organ(LIMB_HEAD)
 			head_organ.add_autopsy_data("sharp teeth", 1)
 		else
-			blood = min(mature ? 20 : 10, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 10 blood
+			blood = min(mature ? 20 : 10, target.vessel.get_reagent_amount(BLOOD)/BLOOD_UNIT_DRAIN_MULTIPLIER) // The dead only give 10 blood
 			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
