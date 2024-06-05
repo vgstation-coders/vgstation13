@@ -9,7 +9,7 @@
 	default_admin_voice = "Common Sense"
 	admin_voice_style = "warning"
 	var/survivor_type = "survivor"
-	var/summons_received
+	var/list/summons_received = list()
 
 /datum/role/survivor/crusader
 	id = CRUSADER
@@ -36,7 +36,11 @@
 
 /datum/role/survivor/GetScoreboard()
 	. = ..()
-	. += "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
+	. += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
+	for(var/list/L in summons_received)
+		var/item = L["item_name"]
+		var/item_image = L["icon"]
+		. += "[item_image] [item]<BR>"
 
 //Note this is a wizard subtype
 
@@ -60,7 +64,11 @@
 
 /datum/role/wizard/summon_magic/GetScoreboard()
 	. = ..()
-	. += "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
+	. += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
+	for(var/list/L in summons_received)
+		var/item = L["item_name"]
+		var/item_image = L["icon"]
+		. += "[item_image] [item]<BR>"
 
 /datum/role/wizard/summon_magic/artifact
 	name = MAGICIAN_ARTIFACT
@@ -90,5 +98,8 @@
 
 /datum/role/wizard/summon_potions/GetScoreboard()
 	. = ..()
-	. += "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
-
+	. += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
+	for(var/list/L in summons_received)
+		var/item = L["item_name"]
+		var/item_image = L["icon"]
+		. += "[item_image] [item]<BR>"

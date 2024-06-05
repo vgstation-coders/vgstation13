@@ -595,6 +595,13 @@
 /datum/role/proc/role_examine_text_addition(var/target)
 	return
 
+//Mostly used in regards to wizards, since there are multiple wizard roles it'd be better to use a shared proc
+/datum/role/proc/spellbook_spell_change(var/spell/S, var/keyword)
+	return
+
+/datum/role/proc/absorb_spell_change(var/spell/S, var/keyword)
+	return
+
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
 //________________________________________________
