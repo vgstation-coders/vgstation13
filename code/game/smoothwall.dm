@@ -47,15 +47,15 @@
 		return 0
 	if(bordercheck && (flow_flags & ON_BORDER) && (A.flow_flags & ON_BORDER) && !bordersmooth_override && A.dir != dir)
 		return 0
-	return is_type_in_list(A, canSmoothWith()) && !(is_type_in_list(A, cannotSmoothWith()))
+	return is_type_in_list(A, canSmoothWith()) && !(cannotSmoothWith() && (is_type_in_list(A, cannotSmoothWith())))
 
 /turf/simulated/wall/isSmoothableNeighbor(atom/A)
 	if(!A)
 		return 0
 	if(istype(A, /turf/simulated/wall))
 		var/turf/simulated/wall/W = A
-		return src.mineral == W.mineral && !(is_type_in_list(A, cannotSmoothWith()))
-	return is_type_in_list(A, canSmoothWith()) && !(is_type_in_list(A, cannotSmoothWith()))
+		return src.mineral == W.mineral && !(cannotSmoothWith() && is_type_in_list(A, cannotSmoothWith()))
+	return is_type_in_list(A, canSmoothWith()) && !(cannotSmoothWith() && (is_type_in_list(A, cannotSmoothWith())))
 		
 
 /**
