@@ -55,17 +55,17 @@
 
 		var/list/anti = list(
 			ANTIGEN_BLOOD	= 0,
-			ANTIGEN_COMMON	= 1,
-			ANTIGEN_RARE	= 2,
-			ANTIGEN_ALIEN	= 0,
+			ANTIGEN_COMMON	= 0,
+			ANTIGEN_RARE	= 1,
+			ANTIGEN_ALIEN	= 2,
 			)
 		var/list/bad = list(
 			EFFECT_DANGER_HELPFUL	= 0,
 			EFFECT_DANGER_FLAVOR	= 0,
 			EFFECT_DANGER_ANNOYING	= 1,
 			EFFECT_DANGER_HINDRANCE	= 1,
-			EFFECT_DANGER_HARMFUL	= 2,
-			EFFECT_DANGER_DEADLY	= 3,
+			EFFECT_DANGER_HARMFUL	= 3,
+			EFFECT_DANGER_DEADLY	= 5,
 			)
 		plague.origin = "Black Plague"
 
@@ -74,8 +74,12 @@
 		plague.color = "#ADAEAA"
 		plague.pattern = 3
 		plague.pattern_color = "#EE9A9C"
+		plague.stage = 4 //4 stages, unlocks the really dangerous symptoms rather than just DNA Degradation
+		plague.speed = 4 //Takes about 50 seconds to advance to the next stage
 
-		plague.makerandom(list(80,100),list(25,50),anti,bad,null)
+		plague.makerandom(list(90,100),list(40,75),anti,bad,null)
+		for(var/datum/disease2/effect/e in plague.effects)
+			e.chance *= 2 //More likely to trigger symptoms per tick
 
 		diseaseID = "[plague.uniqueID]-[plague.subID]"
 
