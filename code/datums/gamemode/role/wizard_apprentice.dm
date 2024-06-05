@@ -50,7 +50,7 @@
 	. = ..()
 	var/mob/living/carbon/human/H = antag.current
 	var/has_wizard_spell = FALSE
-	//Spells that are learned from the spellbook
+	//Spells that are learned from spellbooks. They cannot use the normal spellbook but they can use the one-time use ones.
 	if(spells_from_spellbook.len)
 		has_wizard_spell = TRUE
 		. += "<BR>The [apprentice_type] apprentice learned:<BR>"
