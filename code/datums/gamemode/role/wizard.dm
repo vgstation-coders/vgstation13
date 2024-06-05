@@ -79,21 +79,6 @@
 			//Transfer the spell without doing on_added() or on_removed(), instead doing on_transfer()
 			transfer_spell(new_character, old_character, S)
 
-/datum/role/wizard/spellbook_spell_change(var/spell/S, var/keyword)
-	switch(keyword)
-		if("add")
-			spells_from_spellbook += S
-		if("remove")
-			spells_from_spellbook -= S
-
-/datum/role/wizard/absorb_spell_change(var/spell/S, var/keyword)
-	switch(keyword)
-		if("add")
-			spells_from_absorb += S
-		if("remove")
-			spells_from_absorb -= S
-
-
 /datum/role/wizard/GetScoreboard()
 	. = ..()
 	if(!disallow_job) //It's a survivor wizzie

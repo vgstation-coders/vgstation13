@@ -46,20 +46,6 @@
 		if (!(S.spell_flags & LOSE_IN_TRANSFER))
 			transfer_spell(new_character, old_character, S)
 
-/datum/role/wizard_apprentice/spellbook_spell_change(var/spell/S, var/keyword)
-	switch(keyword)
-		if("add")
-			spells_from_spellbook += S
-		if("remove")
-			spells_from_spellbook -= S
-
-/datum/role/wizard_apprentice/absorb_spell_change(var/spell/S, var/keyword)
-	switch(keyword)
-		if("add")
-			spells_from_absorb += S
-		if("remove")
-			spells_from_absorb -= S
-
 /datum/role/wizard_apprentice/GetScoreboard()
 	. = ..()
 	var/mob/living/carbon/human/H = antag.current
