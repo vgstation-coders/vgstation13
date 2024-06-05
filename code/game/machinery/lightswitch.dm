@@ -146,9 +146,8 @@ var/list/obj/machinery/light_switch/lightswitches = list()
 	controlled_area.updateicon()
 
 	for(var/obj/machinery/light_switch/L in controlled_area.lightswitches)
-		if(L != src)
-			L.on = on
-			L.updateicon()
+		L.on = on
+		L.updateicon()
 
 	for(var/obj/machinery/L2 in controlled_area.lights)
 		L2.power_change(non_instant)
