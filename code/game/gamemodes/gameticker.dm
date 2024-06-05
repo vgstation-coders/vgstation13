@@ -128,6 +128,7 @@ var/datum/controller/gameticker/ticker
 	theme.update_icon()
 
 /datum/controller/gameticker/proc/setup()
+	var/total_tick = get_game_time()
 	//Create and announce mode
 	if(master_mode=="secret")
 		hide_mode = 1
@@ -216,7 +217,7 @@ var/datum/controller/gameticker/ticker
 
 	//Now that we have all of the occupied areas, we handle the lights being on or off, before actually putting the players into their bodies.
 	if(config.roundstart_lights_on || roundstart_occupied_area_paths.len)
-		var/tick = get_game_time()
+		var/light_tick = get_game_time()
 		var/area/A
 		for(var/obj/item/device/flashlight/lamp/lampychan in lamps)
 			A = get_area(lampychan)
@@ -235,8 +236,8 @@ var/datum/controller/gameticker/ticker
 					lightykun.update()
 		//Force the lighting subsystem to update.
 		SSlighting.fire(FALSE, FALSE)
-		log_admin("Turned the lights on in [(get_game_time() - tick) / 10] seconds.")
-		message_admins("Turned the lights on in [(get_game_time() - tick) / 10] seconds.")
+		log_admin("Turned the lights on in [(get_game_time() - light_tick) / 10] seconds.")
+		message_admins("Turned the lights on in [(get_game_time() - light_tick) / 10] seconds.")
 
 	var/list/clowns = list()
 	var/already_an_ai = FALSE
@@ -314,6 +315,8 @@ var/datum/controller/gameticker/ticker
 	Master.RoundStart()
 	wageSetup()
 	post_roundstart()
+	log_admin("Roundstart complete in [(get_game_time() - total_tick) / 10] seconds.")
+	message_admins("Roundstart complete in [(get_game_time() - total_tick) / 10] seconds.")
 	return 1
 
 /mob/living/carbon/human/proc/make_fake_ai()
