@@ -31,6 +31,7 @@ var/list/obj/machinery/light_switch/lightswitches = list()
 		pixel_y = (ndir & 3)? (ndir ==1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
 		dir = ndir
 	updateicon()
+	update_moody_light('icons/lighting/moody_lights.dmi', "light")
 	add_self_to_holomap()
 
 /obj/machinery/light_switch/Destroy()
@@ -39,23 +40,11 @@ var/list/obj/machinery/light_switch/lightswitches = list()
 	..()
 
 /obj/machinery/light_switch/proc/updateicon()
-	if(!overlay)
-		overlay = image(icon, "light1-overlay")
-		overlay.plane = ABOVE_LIGHTING_PLANE
-		overlay.layer = ABOVE_LIGHTING_LAYER
-
-	overlays.Cut()
 	if((stat & (FORCEDISABLE|NOPOWER)) || buildstage != 2)
 		icon_state = "light-p"
 		set_light(0)
 	else
 		icon_state = on ? "light1" : "light0"
-		overlay.icon_state = "[icon_state]-overlay"
-		overlays += overlay
-		//If the lightswitch itself is in total darkness, even the overlay won't render, so we gotta light up the lightswitch just a tiny bit.
-		//...which, sadly, thanks to goonlights means "oops we have to softlight up the entire 3x3 around the lightswitch because we can't handle one-tile lights anymore"
-		//Maybe vis-contents will bring a more elegant solution when we support them?
-		set_light(1, 0.5, on ? "#82ff4c" : "#f86060")
 
 /obj/machinery/light_switch/examine(mob/user)
 	..()
