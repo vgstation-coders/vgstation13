@@ -1,6 +1,7 @@
 /obj/item
 	var/blend_reagent
-	var/grind_amount = null //Zero add these reagents in proportion to the nutriment inside, and minus numbers multiply it, ..--==the more you know!*
+	var/grind_amount //Zero add these reagents in proportion to the nutriment inside, and minus numbers multiply it, ..--==the more you know!*
+	var/transfers_reagents_on_grind = FALSE
 	var/juice_reagent
 
 /obj/machinery/reagentgrinder
@@ -398,6 +399,8 @@
 			remove_object(O)
 
 /obj/item/proc/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
+	if(transfers_reagents_on_grind && reagents)
+		reagents.trans_to(beaker, reagents.total_volume) //Transfer these to beaker
 	if(blend_reagent)
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 		if (grind_amount == 0)
@@ -441,8 +444,3 @@
 			reagents.remove_reagent(NUTRIMENT, min(reagents.get_reagent_amount(NUTRIMENT), space))
 		else
 			reagents.trans_id_to(beaker, blend_reagent, min(grind_amount, space))
-
-/obj/item/weapon/reagent_containers/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	if(!isnull(grind_amount) && reagents)
-		reagents.trans_to(beaker, reagents.total_volume) //Transfer these to beaker
-	..()

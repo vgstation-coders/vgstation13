@@ -5,7 +5,7 @@
     var/obj/item/I
     for(var/itempath in subtypesof(/obj/item))
         I = itempath
-        if(isnull(initial(I.grind_amount)) && !initial(I.juice_reagent))
+        if(!initial(I.blend_reagent) && !initial(I.juice_reagent)  && !initial(I.transfers_reagents_on_grind))
             continue
         I = new itempath
         R.holdingitems += I
