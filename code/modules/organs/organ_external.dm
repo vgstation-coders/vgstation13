@@ -177,12 +177,12 @@
 				burn *= species.burn_mod
 
 	//If limb took enough damage, try to cut or tear it off
-	if(body_part != UPPER_TORSO && body_part != LOWER_TORSO) //As hilarious as it is, getting hit on the chest too much shouldn't effectively gib you.
+	if(body_part != UPPER_TORSO && body_part != LOWER_TORSO && config.limbs_can_break) //As hilarious as it is, getting hit on the chest too much shouldn't effectively gib you.
 		var/threshold_multiplier = 1
 		if(isslimeperson(owner))
 			threshold_multiplier = 0
 		//Brute weapons can destroy limbs if they are already heavily damaged
-		if(config.limbs_can_break && get_health() >= max_damage * config.organ_health_multiplier * threshold_multiplier)
+		if(get_health() >= max_damage * config.organ_health_multiplier * threshold_multiplier)
 			if(isslimeperson(owner))
 				var/chance_multiplier = 1
 				if(istype(src, /datum/organ/external/head))
@@ -204,9 +204,11 @@
 						return
 
 		//items of exceptional sharpness and damage are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
-		else if(sharp >= 2) //Minimum of 2 sharpness required
-			if(config.limbs_can_break && ((get_health() + brute) >= (max_damage * config.organ_health_multiplier)/sharp))
-				if(prob((5 * (brute * sharp)) * (sharp - 1))) //the same chance multiplier based on sharpness applies here as well
+		else if(sharp)
+			//Damage overflow, only the remaining damage after the reduction will be counted for the subsequent calculations
+			var/damage_overflow = (get_health() + brute) * sharp - max_damage * config.organ_health_multiplier
+			if(damage_overflow > 0)
+				if(prob((5 * (damage_overflow * sharp)) * (sharp - 1))) //the same chance multiplier based on sharpness applies here as well
 					droplimb(1)
 					return
 
