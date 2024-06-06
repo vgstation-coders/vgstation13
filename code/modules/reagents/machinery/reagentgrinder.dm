@@ -443,6 +443,6 @@
 			reagents.trans_id_to(beaker, blend_reagent, min(grind_amount, space))
 
 /obj/item/weapon/reagent_containers/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	if(!isnull(grind_amount))
+	if(!isnull(grind_amount) && reagents)
 		reagents.trans_to(beaker, reagents.total_volume) //Transfer these to beaker
 	..()
