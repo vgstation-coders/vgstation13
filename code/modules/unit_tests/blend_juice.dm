@@ -18,10 +18,11 @@
             R.holdingitems.Cut()
             I = new itempath(T)
             R.holdingitems += I
+        var/non_nutriment_volume = I.reagents.total_volume - I.reagents.get_reagent_amount(NUTRIMENT)
+        var/required = I.reagents ? clamp(R.beaker.reagents.total_volume - non_nutriment_volume, 0, I.grind_amount) : I.grind_amount
         R.grind()
         var/amount
-        var/required = I.grind_amount
-        if(I.blend_reagent)
+        if(I.blend_reagent && required)
             if(!R.beaker.reagents.has_reagent(I.blend_reagent))
                 fail("Reagent ID [I.blend_reagent] was not created from blending [I] in [R].")
             amount = R.beaker.reagents.get_reagent_amount(I.blend_reagent)
@@ -32,6 +33,7 @@
         if(!I || I.gcDestroyed)
             I = new itempath(T)
         M.crushable = I
+        required = I.reagents ? clamp(M.reagents.total_volume - non_nutriment_volume, 0, I.grind_amount) : I.grind_amount
         M.attack_self(user)
         if(I.juice_reagent) //mortars prioritise this
             if(!M.reagents.has_reagent(I.juice_reagent))
