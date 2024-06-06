@@ -45,7 +45,7 @@
 	if(ishuman(src)) //Human check, because it isn't easy to override all this code
 		var/datum/organ/external/affecting = get_organ(target_zone)
 		if(affecting.status & ORGAN_DESTROYED) //Target zone ended up on a missing limb, count it as a miss
-			missing_due_to_no_limb_text = "[user] misses [src] with \the [I] due aiming at where their <span class='danger'>[affecting.display_name]</span> used to be!"
+			missing_due_to_no_limb_text = "[user] misses [src] with \the [I] due to aiming at where their <span class='danger'>[affecting.display_name]</span> used to be!"
 			target_zone = null
 
 	if(user == src) // Attacking yourself can't miss
