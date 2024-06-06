@@ -14,6 +14,8 @@
 	melt_temperature = MELTPOINT_WAX
 	starting_materials = list(MAT_WAX = CC_PER_SHEET_WAX)
 	color = COLOR_DEFAULT_CANDLE
+	blend_reagent = WAX
+	grind_amount = 1.25
 
 	var/wax = 1800 // 30 minutes
 	var/lit = 0

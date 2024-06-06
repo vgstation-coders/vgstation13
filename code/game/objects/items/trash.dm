@@ -239,6 +239,8 @@
 	icon_state = "candle4"
 	starting_materials = list(MAT_WAX = (4*CC_PER_SHEET_WAX/5))
 	w_type=RECYK_WAX
+	blend_reagent = WAX
+	grind_amount = 1
 	var/image/wick
 
 /obj/item/trash/candle/New(turf/loc, var/obj/item/candle/source)
