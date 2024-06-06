@@ -38,7 +38,7 @@
         if(I.juice_reagent) //mortars prioritise this
             if(!M.reagents.has_reagent(I.juice_reagent))
                 fail("Reagent ID [I.juice_reagent] was not created from juicing \the [I] in [M].")
-        else if(I.blend_reagent)
+        else if(I.blend_reagent && required)
             if(!M.reagents.has_reagent(I.blend_reagent))
                 fail("Reagent ID [I.blend_reagent] was not created from blending \the [I] in [M].")
             amount = M.reagents.get_reagent_amount(I.blend_reagent)
