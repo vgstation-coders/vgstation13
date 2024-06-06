@@ -9,7 +9,6 @@
 	volume = 50
 	amount_per_transfer_from_this = 5
 	//We want the all-in-one grinder audience
-	var/crush_flick = "mortar_crush"
 	var/obj/item/crushable = null
 
 /obj/item/weapon/reagent_containers/glass/mortar/Destroy()
@@ -63,7 +62,7 @@
 	if (reagents.total_volume >= volume)
 		to_chat(user, "<span class='warning'>There is no more space inside!</span>")
 		return
-	flick(crush_flick,src)
+	flick("mortar_crush",src)
 	if(crushable.juice_reagent)
 		to_chat(user, "<span class='notice'>You smash the contents into juice!</span>")
 		reagents.add_reagent(crushable.juice_reagent, crushable.get_juice_amount(), volume - reagents.total_volume)
