@@ -18,11 +18,12 @@
             I = new itempath
         R.holdingitems += I
         R.grind()
+        var/amount
+        var/required = I.grind_amount
         if(I.blend_reagent)
             if(!R.beaker.reagents.has_reagent(I.blend_reagent))
                 fail("Reagent ID [I.blend_reagent] was not created from blending [I] in [R].")
-            var/amount = R.beaker.reagents.get_reagent_amount(I.blend_reagent)
-            var/required = I.grind_amount
+            amount = R.beaker.reagents.get_reagent_amount(I.blend_reagent)
             if(amount < required)
                 fail("Reagent ID [I.blend_reagent] was not created to [required] units from grinding [I] in [R]. (got [amount])")
         R.holdingitems.Cut()
