@@ -424,9 +424,10 @@
 	if(blend_reagent)
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 		if(grind_amount <= 0 && reagents?.has_reagent(NUTRIMENT))
+			var/amount = grind_amount
 			if(grind_amount == 0)
-				grind_amount = -1
-			beaker.reagents.add_reagent(blend_reagent, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(grind_amount)), space))
+				amount = -1
+			beaker.reagents.add_reagent(blend_reagent, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(amount)), space))
 			reagents.remove_reagent(NUTRIMENT, min(reagents.get_reagent_amount(NUTRIMENT), space))
 		else
 			reagents.trans_id_to(beaker, blend_reagent, min(grind_amount, space))
@@ -438,9 +439,10 @@
 	if(blend_reagent)
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 		if(grind_amount <= 0 && reagents?.has_reagent(NUTRIMENT))
+			var/amount = grind_amount
 			if(grind_amount == 0)
-				grind_amount = -1
-			beaker.reagents.add_reagent(blend_reagent, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(grind_amount)), space))
+				amount = -1
+			beaker.reagents.add_reagent(blend_reagent, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(amount)), space))
 			reagents.remove_reagent(NUTRIMENT, min(reagents.get_reagent_amount(NUTRIMENT), space))
 		else
 			reagents.trans_id_to(beaker, blend_reagent, min(grind_amount, space))
