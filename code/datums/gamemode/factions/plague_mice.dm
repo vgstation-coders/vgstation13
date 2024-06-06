@@ -67,9 +67,9 @@
 			EFFECT_DANGER_HARMFUL	= 3,
 			EFFECT_DANGER_DEADLY	= 5,
 			)
-		plague.origin = "Black Plague"
+		plague.origin = pick("Black Plague", "Javorian Pox", "Gray Death", "Doom of Pandyssia")
 
-		plague.spread = SPREAD_BLOOD|SPREAD_CONTACT|SPREAD_AIRBORNE//gotta ensure that our mice can spread that disease
+		plague.spread = SPREAD_BLOOD|SPREAD_CONTACT|SPREAD_AIRBORNE|SPREAD_COLONY//gotta ensure that our mice can spread that disease
 
 		plague.color = "#ADAEAA"
 		plague.pattern = 3
