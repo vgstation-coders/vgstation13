@@ -19,7 +19,7 @@
             I = new itempath(T)
             R.holdingitems += I
         var/non_nutriment_volume = I.reagents ? I.reagents.total_volume - I.reagents.get_reagent_amount(NUTRIMENT) : 0
-        var/required = I.reagents ? clamp(R.beaker.reagents.total_volume - non_nutriment_volume, 0, I.grind_amount) : I.grind_amount
+        var/required = I.reagents ? clamp(R.beaker.reagents.maximum_volume - non_nutriment_volume, 0, I.grind_amount) : I.grind_amount
         R.grind()
         var/amount
         if(I.blend_reagent && required)
@@ -33,7 +33,7 @@
         if(!I || I.gcDestroyed)
             I = new itempath(T)
         M.crushable = I
-        required = I.reagents ? clamp(M.reagents.total_volume - non_nutriment_volume, 0, I.grind_amount) : I.grind_amount
+        required = I.reagents ? clamp(M.reagents.maximum_volume - non_nutriment_volume, 0, I.grind_amount) : I.grind_amount
         M.attack_self(user)
         if(I.juice_reagent) //mortars prioritise this
             if(!M.reagents.has_reagent(I.juice_reagent))
