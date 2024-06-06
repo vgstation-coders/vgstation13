@@ -10,7 +10,7 @@
         I = new itempath
         R.holdingitems += I
         R.juice()
-        if(!R.beaker.reagents.has_reagent(I.juice_reagent))
+        if(I.juice_reagent && !R.beaker.reagents.has_reagent(I.juice_reagent))
             fail("Reagent ID [I.juice_reagent] was not created from juicing [I] in [R].")
         R.holdingitems.Cut()
         R.beaker.reagents.clear_reagents()
