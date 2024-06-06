@@ -25,6 +25,7 @@
 /mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
 	if(!I || !user)
 		return FALSE
+	var/accuracy_modifier = get_total_accuracy_modifier(user, src) //Negative value make it more likely to hit, and the opposite for positive values
 	target_zone = null
 	var/power = I.force
 	if (ishuman(user))
@@ -33,13 +34,13 @@
 	if (crit)
 		power *= CRIT_MULTIPLIER
 	if(def_zone)
-		target_zone = get_zone_with_miss_chance(def_zone, src)
+		target_zone = get_zone_with_miss_chance(def_zone, src, accuracy_modifier)
 	else if(originator)
 		if(ismob(originator))
 			var/mob/M = originator
-			target_zone = get_zone_with_miss_chance(M.zone_sel.selecting, src)
+			target_zone = get_zone_with_miss_chance(M.zone_sel.selecting, src, accuracy_modifier)
 	else
-		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src)
+		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src, accuracy_modifier)
 
 	if(user == src) // Attacking yourself can't miss
 		if(isnull(user.zone_sel)) //If the mob attacks itself without a client controlling it and therefore has no zone select active. This could happen if a catatonic person wielding a sword slips.
