@@ -21,11 +21,11 @@
                 R.holdingitems += I
         var/non_nutriment_volume
         var/required
+        var/amount
         if(I.blend_reagent)
             non_nutriment_volume = I.reagents ? I.reagents.total_volume - I.reagents.get_reagent_amount(NUTRIMENT) : 0
             required = clamp(R.beaker.reagents.maximum_volume - non_nutriment_volume, 0, I.grind_amount)
             R.grind()
-            var/amount
             if(required)
                 if(!R.beaker.reagents.has_reagent(I.blend_reagent))
                     fail("Reagent ID [I.blend_reagent] was not created from blending [I] in [R].")
