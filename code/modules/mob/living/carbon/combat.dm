@@ -41,6 +41,13 @@
 	else
 		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src)
 
+	var/missing_due_to_no_limb_text //Offers an unique missing sound message to clue players in as to why they missed
+	if(ishuman(src)) //Human check, because it isn't easy to override all this code
+		var/datum/organ/external/affecting = get_organ(target_zone)
+		if(affecting.status & ORGAN_DESTROYED) //Target zone ended up on a missing limb, count it as a miss
+			missing_due_to_no_limb_text = "[user] misses [src] with \the [I] due aiming at where their <span class='danger'>[affecting.display_name]</span> used to be!"
+			target_zone = null
+
 	if(user == src) // Attacking yourself can't miss
 		if(isnull(user.zone_sel)) //If the mob attacks itself without a client controlling it and therefore has no zone select active. This could happen if a catatonic person wielding a sword slips.
 			target_zone = pick("head", "eyes", "mouth")
@@ -48,7 +55,10 @@
 			target_zone = user.zone_sel.selecting
 
 	if(!target_zone && !src.stat)
-		visible_message("<span class='borange'>[user] misses [src] with \the [I]!</span>")
+		if(missing_due_to_no_limb_text)
+			visible_message("<span class='borange'>[missing_due_to_no_limb_text]</span>")
+		else
+			visible_message("<span class='borange'>[user] misses [src] with \the [I]!</span>")
 		add_logs(user, src, "missed", admin=1, object=I, addition="intended damage: [power]")
 		if(I.miss_sound)
 			playsound(loc, I.miss_sound, 50)
