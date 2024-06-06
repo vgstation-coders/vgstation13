@@ -67,8 +67,14 @@
 			EFFECT_DANGER_HARMFUL	= 3,
 			EFFECT_DANGER_DEADLY	= 5,
 			)
-		plague.origin = pick("Black Plague", "Javorian Pox", "Gray Death", "Doom of Pandyssia", "Thrassian Plague",
-							"Redlight", "Khaara Bacterium", "MEV-1")
+		if(prob(2)) //Dan's Discount products are notoriously bad
+			plague.origin = "Discount Dan's Gas Station Sushi"
+		else if(Holiday == APRIL_FOOLS_DAY)
+			plague.origin = pick("Nurgle's Cauldron", "Deadly Africanized Water", "Public Bathroom", "Thrax",
+								"A spaceman got a mouse disease, this is what happened to his body")
+		else
+			plague.origin = pick("Black Plague", "Javorian Pox", "Gray Death", "Doom of Pandyssia", "Thrassian Plague",
+								"Redlight", "Khaara Bacterium", "MEV-1")
 
 		plague.spread = SPREAD_BLOOD|SPREAD_CONTACT|SPREAD_AIRBORNE|SPREAD_COLONY//gotta ensure that our mice can spread that disease
 
