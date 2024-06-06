@@ -3,53 +3,53 @@
     var/obj/item/weapon/reagent_containers/glass/mortar/M = new(T)
     var/obj/machinery/reagentgrinder/R = new(T)
     var/mob/user = new(T)
-    var/obj/item/I
+    var/obj/item/O
     for(var/itempath in subtypesof(/obj/item))
-        I = itempath
-        if(!initial(I.blend_reagent) && !initial(I.juice_reagent)) // not testing transfers for now
+        O = itempath
+        if(!initial(O.blend_reagent) && !initial(O.juice_reagent)) // not testing transfers for now
             continue
-        I = new itempath(T)
-        R.holdingitems += I
-        if(I.juice_reagent)
+        O = new itempath(T)
+        R.holdingitems += O
+        if(O.juice_reagent)
             R.juice()
-            if(!R.beaker.reagents.has_reagent(I.juice_reagent))
-                fail("Reagent ID [I.juice_reagent] was not created from juicing [I.type] in [R].")
+            if(!R.beaker.reagents.has_reagent(O.juice_reagent))
+                fail("Reagent ID [O.juice_reagent] was not created from juicing [O.type] in [R].")
             R.beaker.reagents.clear_reagents()
             QDEL_LIST_CUT(R.holdingitems)
-            I = new itempath(T)
-            R.holdingitems += I
+            O = new itempath(T)
+            R.holdingitems += O
         var/non_nutriment_volume
         var/required
         var/amount
-        if(I.blend_reagent)
-            non_nutriment_volume = I.reagents ? I.reagents.total_volume - I.reagents.get_reagent_amount(NUTRIMENT) : 0
-            required = clamp(R.beaker.reagents.maximum_volume - non_nutriment_volume, 0, I.grind_amount)
+        if(O.blend_reagent)
+            non_nutriment_volume = O.reagents ? O.reagents.total_volume - O.reagents.get_reagent_amount(NUTRIMENT) : 0
+            required = clamp(R.beaker.reagents.maximum_volume - non_nutriment_volume, 0, O.grind_amount)
             R.grind()
             if(required)
-                if(!R.beaker.reagents.has_reagent(I.blend_reagent))
-                    fail("Reagent ID [I.blend_reagent] was not created from grinding [I.type] in [R].")
-                amount = R.beaker.reagents.get_reagent_amount(I.blend_reagent)
+                if(!R.beaker.reagents.has_reagent(O.blend_reagent))
+                    fail("Reagent ID [O.blend_reagent] was not created from grinding [O.type] in [R].")
+                amount = R.beaker.reagents.get_reagent_amount(O.blend_reagent)
                 if(amount < required)
-                    fail("Reagent ID [I.blend_reagent] was not created to [required] units from grinding [I.type] in [R]. (got [amount])")
+                    fail("Reagent ID [O.blend_reagent] was not created to [required] units from grinding [O.type] in [R]. (got [amount])")
         R.beaker.reagents.clear_reagents()
         QDEL_LIST_CUT(R.holdingitems)
-        I = new itempath(T)
-        M.crushable = I
-        non_nutriment_volume = I.reagents ? I.reagents.total_volume - I.reagents.get_reagent_amount(NUTRIMENT) : 0
-        required = clamp(M.reagents.maximum_volume - non_nutriment_volume, 0, I.grind_amount)
+        O = new itempath(T)
+        M.crushable = O
+        non_nutriment_volume = O.reagents ? O.reagents.total_volume - O.reagents.get_reagent_amount(NUTRIMENT) : 0
+        required = clamp(M.reagents.maximum_volume - non_nutriment_volume, 0, O.grind_amount)
         M.attack_self(user)
-        if(I.juice_reagent) //mortars prioritise this
-            if(!M.reagents.has_reagent(I.juice_reagent))
-                fail("Reagent ID [I.juice_reagent] was not created from juicing [I.type] in [M].")
-        else if(I.blend_reagent && required)
-            if(!M.reagents.has_reagent(I.blend_reagent))
-                fail("Reagent ID [I.blend_reagent] was not created from grinding [I.type] in [M].")
-            amount = M.reagents.get_reagent_amount(I.blend_reagent)
+        if(O.juice_reagent) //mortars prioritise this
+            if(!M.reagents.has_reagent(O.juice_reagent))
+                fail("Reagent ID [O.juice_reagent] was not created from juicing [O.type] in [M].")
+        else if(O.blend_reagent && required)
+            if(!M.reagents.has_reagent(O.blend_reagent))
+                fail("Reagent ID [O.blend_reagent] was not created from grinding [O.type] in [M].")
+            amount = M.reagents.get_reagent_amount(O.blend_reagent)
             if(amount < required)
-                fail("Reagent ID [I.blend_reagent] was not created to [required] units from grinding [I.type] in [M]. (got [amount])")
+                fail("Reagent ID [O.blend_reagent] was not created to [required] units from grinding [O.type] in [M]. (got [amount])")
         M.crushable = null
         M.reagents.clear_reagents()
-        QDEL_NULL(I)
+        QDEL_NULL(O)
     qdel(M)
     qdel(R)
     qdel(user)
