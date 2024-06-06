@@ -1,7 +1,7 @@
 /obj/item
 	var/blend_reagent
 	var/grind_amount //Zero add these reagents in proportion to the nutriment inside, and minus numbers multiply it, ..--==the more you know!*
-	var/transfers_reagents_on_grind = FALSE
+	var/grind_flags = 0 // GRIND_TRANSFER, GRIND_NUTRIMENT_TO_REAGENT
 	var/juice_reagent
 
 /obj/machinery/reagentgrinder
@@ -399,19 +399,29 @@
 			remove_object(O)
 
 /obj/item/proc/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	if(transfers_reagents_on_grind && reagents)
+	if((grind_flags & GRIND_TRANSFER) && reagents)
 		reagents.trans_to(beaker, reagents.total_volume) //Transfer these to beaker
 	if(blend_reagent)
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-		if (grind_amount == 0)
-			if (reagents?.has_reagent(blend_reagent))
-				beaker.reagents.add_reagent(blend_reagent,min(reagents.get_reagent_amount(blend_reagent), space))
+		if(grind_flags & GRIND_NUTRIMENT_TO_REAGENT)
+			if(grind_amount <= 0 && reagents?.has_reagent(NUTRIMENT))
+				var/amount = grind_amount
+				if(grind_amount == 0)
+					amount = -1
+				beaker.reagents.add_reagent(blend_reagent, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(amount)), space))
+				reagents.remove_reagent(NUTRIMENT, min(reagents.get_reagent_amount(NUTRIMENT), space))
+			else
+				reagents.trans_id_to(beaker, blend_reagent, min(grind_amount, space))
 		else
-			var/data
-			if(type == /obj/item/weapon/rocksliver)
-				var/obj/item/weapon/rocksliver/R = src
-				data = R.geological_data
-			beaker.reagents.add_reagent(blend_reagent,min(grind_amount, space),data)
+			if (grind_amount == 0)
+				if (reagents?.has_reagent(blend_reagent))
+					beaker.reagents.add_reagent(blend_reagent,min(reagents.get_reagent_amount(blend_reagent), space))
+			else
+				var/data
+				if(type == /obj/item/weapon/rocksliver)
+					var/obj/item/weapon/rocksliver/R = src
+					data = R.geological_data
+				beaker.reagents.add_reagent(blend_reagent,min(grind_amount, space),data)
 
 /obj/item/stack/sheet/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
 	if(blend_reagent)
@@ -435,14 +445,4 @@
 /obj/item/weapon/reagent_containers/food/snacks/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
 	if (dip?.total_volume)
 		dip.trans_to(beaker, dip.total_volume)
-
-	if(blend_reagent)
-		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-		if(grind_amount <= 0 && reagents?.has_reagent(NUTRIMENT))
-			var/amount = grind_amount
-			if(grind_amount == 0)
-				amount = -1
-			beaker.reagents.add_reagent(blend_reagent, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(amount)), space))
-			reagents.remove_reagent(NUTRIMENT, min(reagents.get_reagent_amount(NUTRIMENT), space))
-		else
-			reagents.trans_id_to(beaker, blend_reagent, min(grind_amount, space))
+	..()

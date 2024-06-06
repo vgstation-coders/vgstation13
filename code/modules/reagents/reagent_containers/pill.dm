@@ -12,7 +12,7 @@
 	starting_materials = null
 	w_type = RECYK_METAL
 	attack_delay = 0 //so you don't get a delay after pilling someone. as of the time of writing, this only applies to mobs, remove if in the future this allows you to kenshiro windows
-	transfers_reagents_on_grind = TRUE
+	grind_flags = GRIND_TRANSFER
 	var/prearcane_name = ""
 
 /obj/item/weapon/reagent_containers/pill/New()

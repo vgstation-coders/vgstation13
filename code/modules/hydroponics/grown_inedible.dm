@@ -5,6 +5,7 @@
 /obj/item/weapon/grown // Grown weapons
 	name = "grown_weapon"
 	icon = 'icons/obj/hydroponics/nettle.dmi'
+	grind_flags = GRIND_TRANSFER|GRIND_NUTRIMENT_TO_REAGENT
 	var/plantname
 	var/potency = 1
 	var/fragrance = null
