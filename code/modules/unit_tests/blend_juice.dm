@@ -18,7 +18,7 @@
             R.holdingitems.Cut()
             I = new itempath(T)
             R.holdingitems += I
-        var/non_nutriment_volume = I.reagents.total_volume - I.reagents.get_reagent_amount(NUTRIMENT)
+        var/non_nutriment_volume = I.reagents ? I.reagents.total_volume - I.reagents.get_reagent_amount(NUTRIMENT) : 0
         var/required = I.reagents ? clamp(R.beaker.reagents.total_volume - non_nutriment_volume, 0, I.grind_amount) : I.grind_amount
         R.grind()
         var/amount
