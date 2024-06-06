@@ -430,18 +430,6 @@
 			if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 				return
 
-/obj/item/weapon/grown/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	if(blend_reagent)
-		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-		if(grind_amount <= 0 && reagents?.has_reagent(NUTRIMENT))
-			var/amount = grind_amount
-			if(grind_amount == 0)
-				amount = -1
-			beaker.reagents.add_reagent(blend_reagent, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(amount)), space))
-			reagents.remove_reagent(NUTRIMENT, min(reagents.get_reagent_amount(NUTRIMENT), space))
-		else
-			reagents.trans_id_to(beaker, blend_reagent, min(grind_amount, space))
-
 /obj/item/weapon/reagent_containers/food/snacks/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
 	if (dip?.total_volume)
 		dip.trans_to(beaker, dip.total_volume)
