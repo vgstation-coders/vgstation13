@@ -181,6 +181,7 @@
 		var/threshold_multiplier = 1
 		if(isslimeperson(owner))
 			threshold_multiplier = 0
+		//Brute weapons can destroy limbs if they are already heavily damaged
 		if(config.limbs_can_break && get_health() >= max_damage * config.organ_health_multiplier * threshold_multiplier)
 			if(isslimeperson(owner))
 				var/chance_multiplier = 1
@@ -194,18 +195,20 @@
 					if(prob((5 * brute) * sharp)) //sharp things have a greater chance to sever based on how sharp they are
 						droplimb(1)
 						return
-				else if(!sharp && brute > 15) //Massive blunt damage can result in limb explosion
+				else if((brute > 20) && prob(2 * brute)) //non-sharp hits with force greater than 20 can cause limbs to sever, too (smaller chance)
+					droplimb(1)
+					return
+				else if(brute > 15) //Massive blunt damage can result in limb explosion
 					if(prob((brute/7.5)**3)) //15 dmg - 8% chance, 22 dmg - 27%, 30 dmg - 64%, anything higher than ~35 is a guaranteed limbgib
 						explode()
 						return
-				else if(brute > 20 && prob(2 * brute)) //non-sharp hits with force greater than 20 can cause limbs to sever, too (smaller chance)
+
+		//items of exceptional sharpness and damage are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
+		else if(sharp >= 2) //Minimum of 2 sharpness required
+			if(config.limbs_can_break && ((get_health() + brute) >= (max_damage * config.organ_health_multiplier)/sharp))
+				if(prob((5 * (brute * sharp)) * (sharp - 1))) //the same chance multiplier based on sharpness applies here as well
 					droplimb(1)
 					return
-
-		else if((config.limbs_can_break && sharp == 100) || ((sharp >= 2) && (config.limbs_can_break && brute_dam + burn_dam >= (max_damage * config.organ_health_multiplier)/sharp))) //items of exceptional sharpness are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
-			if(prob((5 * (brute * sharp)) * (sharp - 1))) //the same chance multiplier based on sharpness applies here as well
-				droplimb(1)
-				return
 
 	//High brute damage or sharp objects may damage internal organs
 	if(internal_organs != null)
