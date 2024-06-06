@@ -374,6 +374,9 @@
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			break
 
+		if(!O.juice_reagent)
+			continue
+
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 		var/amount = O.get_juice_amount()
 
