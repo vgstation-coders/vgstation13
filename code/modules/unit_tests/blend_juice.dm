@@ -1,13 +1,14 @@
 /datum/unit_test/grind_juice/start()
-    var/obj/item/weapon/reagent_containers/glass/mortar/M = new
-    var/obj/machinery/reagentgrinder/R = new
-    var/mob/user = new
+    var/turf/T = locate(100,100,1) // just for chemical reactions so they don't runtime
+    var/obj/item/weapon/reagent_containers/glass/mortar/M = new(T)
+    var/obj/machinery/reagentgrinder/R = new(T)
+    var/mob/user = new(T)
     var/obj/item/I
     for(var/itempath in subtypesof(/obj/item))
         I = itempath
         if(!initial(I.blend_reagent) && !initial(I.juice_reagent)) // not testing transfers for now
             continue
-        I = new itempath
+        I = new itempath(T)
         R.holdingitems += I
         R.juice()
         if(I.juice_reagent && !R.beaker.reagents.has_reagent(I.juice_reagent))
@@ -15,7 +16,7 @@
         R.holdingitems.Cut()
         R.beaker.reagents.clear_reagents()
         if(!I || I.gcDestroyed)
-            I = new itempath
+            I = new itempath(T)
         R.holdingitems += I
         R.grind()
         var/amount
@@ -29,7 +30,7 @@
         R.holdingitems.Cut()
         R.beaker.reagents.clear_reagents()
         if(!I || I.gcDestroyed)
-            I = new itempath
+            I = new itempath(T)
         M.crushable = I
         M.attack_self(user)
         if(I.juice_reagent) //mortars prioritise this
