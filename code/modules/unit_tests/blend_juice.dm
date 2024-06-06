@@ -14,7 +14,7 @@
             fail("Reagent ID [I.juice_reagent] was not created from juicing [I] in [R].")
         R.holdingitems.Cut()
         R.beaker.reagents.clear_reagents()
-        if(!I)
+        if(!I || I.gcDestroyed)
             I = new itempath
         R.holdingitems += I
         R.grind()
@@ -28,7 +28,7 @@
                 fail("Reagent ID [I.blend_reagent] was not created to [required] units from grinding [I] in [R]. (got [amount])")
         R.holdingitems.Cut()
         R.beaker.reagents.clear_reagents()
-        if(!I)
+        if(!I || I.gcDestroyed)
             I = new itempath
         M.crushable = I
         M.attack_self(user)
