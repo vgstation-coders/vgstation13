@@ -10,29 +10,34 @@
             continue
         I = new itempath(T)
         R.holdingitems += I
-        R.juice()
-        if(I.juice_reagent && !R.beaker.reagents.has_reagent(I.juice_reagent))
-            fail("Reagent ID [I.juice_reagent] was not created from juicing [I] in [R].")
-        R.beaker.reagents.clear_reagents()
-        if(!I || I.gcDestroyed)
+        if(I.juice_reagent)
+            R.juice()
+            if(!R.beaker.reagents.has_reagent(I.juice_reagent))
+                fail("Reagent ID [I.juice_reagent] was not created from juicing [I] in [R].")
+            R.beaker.reagents.clear_reagents()
+            if(!I || I.gcDestroyed)
+                R.holdingitems.Cut()
+                I = new itempath(T)
+                R.holdingitems += I
+        var/non_nutriment_volume
+        var/required
+        if(I.blend_reagent)
+            non_nutriment_volume = I.reagents ? I.reagents.total_volume - I.reagents.get_reagent_amount(NUTRIMENT) : 0
+            required = clamp(R.beaker.reagents.maximum_volume - non_nutriment_volume, 0, I.grind_amount)
+            R.grind()
+            var/amount
+            if(required)
+                if(!R.beaker.reagents.has_reagent(I.blend_reagent))
+                    fail("Reagent ID [I.blend_reagent] was not created from blending [I] in [R].")
+                amount = R.beaker.reagents.get_reagent_amount(I.blend_reagent)
+                if(amount < required)
+                    fail("Reagent ID [I.blend_reagent] was not created to [required] units from blending [I] in [R]. (got [amount])")
             R.holdingitems.Cut()
-            I = new itempath(T)
-            R.holdingitems += I
-        var/non_nutriment_volume = I.reagents ? I.reagents.total_volume - I.reagents.get_reagent_amount(NUTRIMENT) : 0
-        var/required = clamp(R.beaker.reagents.maximum_volume - non_nutriment_volume, 0, I.grind_amount)
-        R.grind()
-        var/amount
-        if(I.blend_reagent && required)
-            if(!R.beaker.reagents.has_reagent(I.blend_reagent))
-                fail("Reagent ID [I.blend_reagent] was not created from blending [I] in [R].")
-            amount = R.beaker.reagents.get_reagent_amount(I.blend_reagent)
-            if(amount < required)
-                fail("Reagent ID [I.blend_reagent] was not created to [required] units from blending [I] in [R]. (got [amount])")
-        R.holdingitems.Cut()
-        R.beaker.reagents.clear_reagents()
-        if(!I || I.gcDestroyed)
-            I = new itempath(T)
+            R.beaker.reagents.clear_reagents()
+            if(!I || I.gcDestroyed)
+                I = new itempath(T)
         M.crushable = I
+        non_nutriment_volume = I.reagents ? I.reagents.total_volume - I.reagents.get_reagent_amount(NUTRIMENT) : 0
         required = clamp(M.reagents.maximum_volume - non_nutriment_volume, 0, I.grind_amount)
         M.attack_self(user)
         if(I.juice_reagent) //mortars prioritise this
