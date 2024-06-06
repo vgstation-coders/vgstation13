@@ -406,21 +406,24 @@ var/global/list/blend_items = list (
 		holdingitems -= O
 	holdingitems = list()
 
-/proc/get_allowed_by_id(var/obj/item/weapon/grown/O)
+/obj/item/proc/get_allowed_by_id()
 	for (var/i in blend_items)
-		if (istype(O, i))
+		if (istype(src, i))
 			return blend_items[i]
 
-/proc/get_allowed_juice_by_id(var/obj/item/weapon/reagent_containers/food/snacks/O)
+/obj/item/proc/get_allowed_juice_by_id()
 	for(var/i in juice_items)
-		if(istype(O, i))
+		if(istype(src, i))
 			return juice_items[i]
 
-/proc/get_juice_amount(var/obj/item/weapon/reagent_containers/food/snacks/grown/O)
-	if (!istype(O) || O.potency <= 0)
+/obj/item/proc/get_juice_amount()
+	return 5
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/get_juice_amount()
+	if (potency <= 0)
 		return 5
 	else
-		return round(5*sqrt(O.potency))
+		return round(5*sqrt(potency))
 
 /obj/machinery/reagentgrinder/proc/remove_object(var/obj/item/O)
 	holdingitems -= O
@@ -446,14 +449,14 @@ var/global/list/blend_items = list (
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			break
 
-		var/allowed = get_allowed_juice_by_id(O)
+		var/allowed = O.get_allowed_juice_by_id()
 		if(isnull(allowed))
 			break
 
 		for (var/r_id in allowed)
 
 			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-			var/amount = get_juice_amount(O)
+			var/amount = O.get_juice_amount()
 
 			beaker.reagents.add_reagent(r_id, min(amount, space))
 
@@ -473,7 +476,7 @@ var/global/list/blend_items = list (
 			remove_object(O)
 
 /obj/item/proc/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	var/allowed = get_allowed_by_id(src)
+	var/allowed = get_allowed_by_id()
 	for (var/r_id in allowed)
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 		var/amount = allowed[r_id]
@@ -490,7 +493,7 @@ var/global/list/blend_items = list (
 			return
 
 /obj/item/stack/sheet/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	var/allowed = get_allowed_by_id(src)
+	var/allowed = get_allowed_by_id()
 	while(beaker.reagents.total_volume < beaker.reagents.maximum_volume && use(1))
 		for(var/r_id in allowed)
 			beaker.reagents.add_reagent(r_id, allowed[r_id], additional_data = list("color" = color))
@@ -498,7 +501,7 @@ var/global/list/blend_items = list (
 				return
 
 /obj/item/weapon/grown/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	var/allowed = get_allowed_by_id(src)
+	var/allowed = get_allowed_by_id()
 	for (var/r_id in allowed)
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 		var/amount = allowed[r_id]
@@ -513,7 +516,7 @@ var/global/list/blend_items = list (
 			return
 
 /obj/item/weapon/reagent_containers/food/snacks/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	var/allowed = get_allowed_by_id(src)
+	var/allowed = get_allowed_by_id()
 	if (dip?.total_volume)
 		dip.trans_to(beaker, dip.total_volume)
 
