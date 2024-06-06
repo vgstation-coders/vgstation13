@@ -15,10 +15,9 @@
             if(!R.beaker.reagents.has_reagent(I.juice_reagent))
                 fail("Reagent ID [I.juice_reagent] was not created from juicing [I.type] in [R].")
             R.beaker.reagents.clear_reagents()
-            if(!I || I.gcDestroyed)
-                R.holdingitems.Cut()
-                I = new itempath(T)
-                R.holdingitems += I
+            QDEL_LIST_CUT(R.holdingitems)
+            I = new itempath(T)
+            R.holdingitems += I
         var/non_nutriment_volume
         var/required
         var/amount
@@ -32,10 +31,9 @@
                 amount = R.beaker.reagents.get_reagent_amount(I.blend_reagent)
                 if(amount < required)
                     fail("Reagent ID [I.blend_reagent] was not created to [required] units from grinding [I.type] in [R]. (got [amount])")
-            R.holdingitems.Cut()
-            R.beaker.reagents.clear_reagents()
-            if(!I || I.gcDestroyed)
-                I = new itempath(T)
+        R.beaker.reagents.clear_reagents()
+        QDEL_LIST_CUT(R.holdingitems)
+        I = new itempath(T)
         M.crushable = I
         non_nutriment_volume = I.reagents ? I.reagents.total_volume - I.reagents.get_reagent_amount(NUTRIMENT) : 0
         required = clamp(M.reagents.maximum_volume - non_nutriment_volume, 0, I.grind_amount)
