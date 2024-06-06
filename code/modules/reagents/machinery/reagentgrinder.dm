@@ -334,9 +334,11 @@ var/global/list/blend_items = list (
 	usr.set_machine(src)
 	switch(href_list["action"])
 		if ("grind")
-			grind()
+			if(pre_use(60))
+				grind()
 		if("juice")
-			juice()
+			if(pre_use(50))
+				juice()
 		if("eject")
 			eject()
 		if ("detach")
@@ -370,9 +372,11 @@ var/global/list/blend_items = list (
 
 		switch(task)
 			if("Grind")
-				grind()
+				if(pre_use(60))
+					grind()
 			if("Juice")
-				juice()
+				if(pre_use(50))
+					juice()
 			if("Eject Ingredients")
 				eject()
 			if("Detach Beaker")
@@ -419,21 +423,22 @@ var/global/list/blend_items = list (
 	holdingitems -= O
 	QDEL_NULL(O)
 
-/obj/machinery/reagentgrinder/proc/juice(var/test = FALSE)
-	if(!test)
-		power_change()
-		if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
-			return
-		if(inuse)
-			return
-		if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
-			return
-		playsound(src, speed_multiplier < 2 ? 'sound/machines/juicer.ogg' : 'sound/machines/juicerfast.ogg', 30, 1)
-		inuse = 1
-		spawn(50/speed_multiplier)
-			inuse = 0
-			interact(usr)
-	//Snacks
+/obj/machinery/reagentgrinder/proc/pre_use(var/speed = 50)
+	power_change()
+	if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
+		return
+	if(inuse)
+		return
+	if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
+		return
+	playsound(src, speed_multiplier < 2 ? 'sound/machines/juicer.ogg' : 'sound/machines/juicerfast.ogg', 30, 1)
+	inuse = 1
+	spawn(speed/speed_multiplier)
+		inuse = 0
+		updateUsrDialog()
+	return 1
+
+/obj/machinery/reagentgrinder/proc/juice()
 	for (var/obj/item/weapon/reagent_containers/food/snacks/O in holdingitems)
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			break
@@ -454,21 +459,7 @@ var/global/list/blend_items = list (
 
 		remove_object(O)
 
-/obj/machinery/reagentgrinder/proc/grind(var/test = FALSE)
-	if(!test)
-		power_change()
-		if(stat & (FORCEDISABLE|NOPOWER|BROKEN))
-			return
-		if(inuse)
-			return
-		if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
-			return
-		playsound(src, speed_multiplier < 2 ? 'sound/machines/blender.ogg' : 'sound/machines/blenderfast.ogg', 50, 1)
-		inuse = 1
-		spawn(60/speed_multiplier)
-			inuse = 0
-			updateUsrDialog()
-
+/obj/machinery/reagentgrinder/proc/grind()
 	for (var/obj/item/O in holdingitems)
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			return

@@ -12,9 +12,9 @@
                 R.holdingitems += new type
                 var/name = "[R.holdingitems[1]]"
                 if(items == juice_items)
-                    R.juice(TRUE)
+                    R.juice()
                 else
-                    R.grind(TRUE)
+                    R.grind()
                 if(!R.beaker.reagents.has_reagent(reagentlist[1]))
                     fail("Reagent ID [reagentlist[1]] was not created from [items == juice_items ? "juic" : "grind"]ing [name] in [R].")
                 var/amount = R.beaker.reagents.get_reagent_amount(reagentlist[1])
