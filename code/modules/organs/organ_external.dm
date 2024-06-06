@@ -204,11 +204,11 @@
 						return
 
 		//items of exceptional sharpness and damage are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
-		else if(sharp)
+		else if(sharp > 1)
 			//Damage overflow, only the remaining damage after the reduction will be counted for the subsequent calculations
-			var/damage_overflow = (get_health() + brute) * sharp - max_damage * config.organ_health_multiplier
+			var/damage_overflow = get_health() + brute * sharp - max_damage * config.organ_health_multiplier
 			if(damage_overflow > 0)
-				if(prob((5 * (damage_overflow * sharp)) * (sharp - 1))) //the same chance multiplier based on sharpness applies here as well
+				if(prob(2 * (damage_overflow * sharp - 0.5) * (sharp - 1))) //the same chance multiplier based on sharpness applies here as well
 					droplimb(1)
 					return
 
