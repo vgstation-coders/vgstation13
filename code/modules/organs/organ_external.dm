@@ -204,7 +204,7 @@
 					return
 
 		//items of exceptional sharpness and damage are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
-		else if(sharp > 1)
+		else if(sharp > 1 && (body_part != HEAD)) //Don't allow too-easy decapitations with this!
 			//Damage overflow, only the remaining damage after the reduction will be counted for the subsequent calculations
 			var/damage_overflow = get_health() + brute * sharp - max_damage * config.organ_health_multiplier
 			if(damage_overflow > 0)
