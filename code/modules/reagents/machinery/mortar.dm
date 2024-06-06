@@ -27,7 +27,7 @@
 	if (crushable)
 		to_chat(user, "<span class ='warning'>There's already something inside!</span>")
 		return 1
-	if (!is_type_in_list(O, blend_items) && !is_type_in_list(O, juice_items))
+	if (isnull(O.grind_amount) && !O.juice_reagent)
 		to_chat(user, "<span class ='warning'>You can't grind that!</span>")
 		return ..()
 
@@ -64,12 +64,10 @@
 		to_chat(user, "<span class='warning'>There is no more space inside!</span>")
 		return
 	flick(crush_flick,src)
-	if(is_type_in_list(crushable, juice_items))
+	if(crushable.juice_reagent)
 		to_chat(user, "<span class='notice'>You smash the contents into juice!</span>")
-		var/id = crushable.get_allowed_juice_by_id()
-		if(id)
-			reagents.add_reagent(id[1], crushable.get_juice_amount(), volume - reagents.total_volume)
-	else if(is_type_in_list(crushable, blend_items))
+		reagents.add_reagent(crushable.juice_reagent, crushable.get_juice_amount(), volume - reagents.total_volume)
+	else if(!isnull(crushable.grind_amount))
 		to_chat(user, "<span class='notice'>You grind the contents into dust!</span>")
 		crushable.get_ground_value(src)
 	else

@@ -1,72 +1,7 @@
-var/global/list/juice_items = list (
-	/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list(TOMATOJUICE = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/grown/carrot = list(CARROTJUICE = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/grown/grapes = list(GRAPEJUICE = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes = list(GGRAPEJUICE = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/grown/berries = list(BERRYJUICE = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/grown/banana = list(BANANA = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/grown/potato = list(POTATO = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/grown/apple = list(APPLEJUICE = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/grown/lemon = list(LEMONJUICE = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/grown/orange = list(ORANGEJUICE = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/grown/lime = list(LIMEJUICE = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/grown/watermelon = list(WATERMELONJUICE = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/watermelonslice = list(WATERMELONJUICE = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/grown/poisonberries = list(POISONBERRYJUICE = 0),
-	/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet = list(PLUMPHJUICE = 0),
-	)
-
-var/global/list/blend_items = list (
-		//Sheets
-		/obj/item/stack/sheet/metal           = list(IRON = 20),
-		/obj/item/stack/sheet/mineral/plasma  = list(PLASMA = 20),
-		/obj/item/stack/sheet/mineral/uranium = list(URANIUM = 20),
-		/obj/item/stack/sheet/mineral/clown   = list(BANANA = 20),
-		/obj/item/stack/sheet/mineral/silver  = list(SILVER = 20),
-		/obj/item/stack/sheet/mineral/gold    = list(GOLD = 20),
-		/obj/item/stack/sheet/mineral/diamond = list(DIAMONDDUST = 20),
-		/obj/item/stack/sheet/mineral/phazon  = list(PHAZON = 1),
-		/obj/item/stack/sheet/wax			  = list(WAX = 5),
-		/obj/item/candle					  = list(WAX = 1.25),
-		/obj/item/trash/candle				  = list(WAX = 1),
-		/obj/item/stack/sheet/charcoal        = list(CHARCOAL = 20),
-		/obj/item/stack/sheet/bone	          = list(BONEMARROW = 20),
-
-		//Blender Stuff
-		//Inverted numbers add these reagents in proportion to the nutriment inside, and minus numbers multiply it, ..--==the more you know!*
-		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans = list(SOYMILK = -10),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato = list(KETCHUP = -7),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/corn = list(CORNOIL = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/wheat = list(FLOUR = -5),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk = list(RICE = -5),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries = list(CHERRYJELLY = 0),
-		/obj/item/weapon/reagent_containers/food/snacks/grown/plastellium = list(PLASTICIDE = 5),
-
-		/obj/item/seeds = list(BLACKPEPPER = 5),
-
-		//Other
-		/obj/item/weapon/ectoplasm = list(ECTOPLASM = 5),
-		/obj/item/trash/egg = list(CALCIUMCARBONATE = 1),
-		/obj/item/device/flashlight/flare     = list(SULFUR = 10),
-		/obj/item/stack/cable_coil            = list(COPPER = 10),
-		/obj/item/weapon/cell                 = list(LITHIUM = 10),
-		/obj/item/clothing/head/butt          = list(MERCURY = 10),
-		/obj/item/weapon/rocksliver           = list(GROUND_ROCK = 30),
-		/obj/item/weapon/match                = list(PHOSPHORUS = 2),
-		/obj/item/weapon/reagent_containers/food/drinks/soda_cans        = list(ALUMINUM = 10),
-		/obj/item/trash/soda_cans										 = list(ALUMINUM = 10),
-
-		//archaeology!
-		/obj/item/weapon/rocksliver = list(GROUND_ROCK = 30),
-
-		//All types that you can put into the grinder to transfer the reagents to the beaker. !Put all recipes above this.!
-		/obj/item/ice_crystal                = list(ICE = 10),
-		/obj/item/weapon/grown/novaflower    = list(NOVAFLOUR = 0),
-		/obj/item/weapon/grown/nettle        = list(FORMIC_ACID = 0),
-		/obj/item/weapon/grown/deathnettle   = list(PHENOL = 0),
-		/obj/item/weapon/reagent_containers/pill = list(),
-		/obj/item/weapon/reagent_containers/food = list(),
-	)
+/obj/item
+	var/blend_reagent
+	var/grind_amount = null //Zero add these reagents in proportion to the nutriment inside, and minus numbers multiply it, ..--==the more you know!*
+	var/juice_reagent
 
 /obj/machinery/reagentgrinder
 	name = "All-In-One Grinder"
@@ -195,7 +130,7 @@ var/global/list/blend_items = list (
 		src.updateUsrDialog()
 		return 0
 
-	if (!is_type_in_list(O, blend_items) && !is_type_in_list(O, juice_items))
+	if (isnull(O.grind_amount) && !O.juice_reagent)
 		to_chat(user, "Cannot refine into a reagent.")
 		return 1
 
@@ -251,19 +186,19 @@ var/global/list/blend_items = list (
 			return FALSE
 		return TRUE
 
-	if (!is_type_in_list(AM, blend_items) && !is_type_in_list(AM, juice_items))
-		return FALSE
-
 	if(istype(AM,/obj/item))
 		var/obj/item/O = AM
+		if (isnull(O.grind_amount) && !O.juice_reagent)
+			return FALSE
 		if(sum_w_class + O.w_class >= max_combined_w_class)
 			return FALSE
+	
+		O.forceMove(src)
 
-	AM.forceMove(src)
-
-	holdingitems += AM
-	src.updateUsrDialog()
-	return TRUE
+		holdingitems += O
+		src.updateUsrDialog()
+		return TRUE
+	return FALSE
 
 /obj/machinery/reagentgrinder/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -406,16 +341,6 @@ var/global/list/blend_items = list (
 		holdingitems -= O
 	holdingitems = list()
 
-/obj/item/proc/get_allowed_by_id()
-	for (var/i in blend_items)
-		if (istype(src, i))
-			return blend_items[i]
-
-/obj/item/proc/get_allowed_juice_by_id()
-	for(var/i in juice_items)
-		if(istype(src, i))
-			return juice_items[i]
-
 /obj/item/proc/get_juice_amount()
 	return 5
 
@@ -449,19 +374,13 @@ var/global/list/blend_items = list (
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			break
 
-		var/allowed = O.get_allowed_juice_by_id()
-		if(isnull(allowed))
+		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
+		var/amount = O.get_juice_amount()
+
+		beaker.reagents.add_reagent(O.juice_reagent, min(amount, space))
+
+		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			break
-
-		for (var/r_id in allowed)
-
-			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-			var/amount = O.get_juice_amount()
-
-			beaker.reagents.add_reagent(r_id, min(amount, space))
-
-			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-				break
 
 		remove_object(O)
 
@@ -476,63 +395,51 @@ var/global/list/blend_items = list (
 			remove_object(O)
 
 /obj/item/proc/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	var/allowed = get_allowed_by_id()
-	for (var/r_id in allowed)
+	if(blend_reagent)
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-		var/amount = allowed[r_id]
-		if (amount == 0)
-			if (reagents?.has_reagent(r_id))
-				beaker.reagents.add_reagent(r_id,min(reagents.get_reagent_amount(r_id), space))
+		if (grind_amount == 0)
+			if (reagents?.has_reagent(blend_reagent))
+				beaker.reagents.add_reagent(blend_reagent,min(reagents.get_reagent_amount(blend_reagent), space))
 		else
 			var/data
 			if(type == /obj/item/weapon/rocksliver)
 				var/obj/item/weapon/rocksliver/R = src
 				data = R.geological_data
-			beaker.reagents.add_reagent(r_id,min(amount, space),data)
-		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-			return
+			beaker.reagents.add_reagent(blend_reagent,min(grind_amount, space),data)
 
 /obj/item/stack/sheet/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	var/allowed = get_allowed_by_id()
-	while(beaker.reagents.total_volume < beaker.reagents.maximum_volume && use(1))
-		for(var/r_id in allowed)
-			beaker.reagents.add_reagent(r_id, allowed[r_id], additional_data = list("color" = color))
+	if(blend_reagent)
+		while(beaker.reagents.total_volume < beaker.reagents.maximum_volume && use(1))
+			beaker.reagents.add_reagent(blend_reagent, grind_amount, additional_data = list("color" = color))
 			if(beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 				return
 
 /obj/item/weapon/grown/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	var/allowed = get_allowed_by_id()
-	for (var/r_id in allowed)
+	if(blend_reagent)
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-		var/amount = allowed[r_id]
-		if(amount <= 0 && reagents?.has_reagent(NUTRIMENT))
-			if(amount == 0)
-				amount = -1
-			beaker.reagents.add_reagent(r_id, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(amount)), space))
+		if(grind_amount <= 0 && reagents?.has_reagent(NUTRIMENT))
+			if(grind_amount == 0)
+				grind_amount = -1
+			beaker.reagents.add_reagent(blend_reagent, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(grind_amount)), space))
 			reagents.remove_reagent(NUTRIMENT, min(reagents.get_reagent_amount(NUTRIMENT), space))
 		else
-			reagents.trans_id_to(beaker, r_id, min(amount, space))
-		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-			return
+			reagents.trans_id_to(beaker, blend_reagent, min(grind_amount, space))
 
 /obj/item/weapon/reagent_containers/food/snacks/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	var/allowed = get_allowed_by_id()
 	if (dip?.total_volume)
 		dip.trans_to(beaker, dip.total_volume)
 
-	for (var/r_id in allowed)
+	if(blend_reagent)
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
-		var/amount = allowed[r_id]
-		if(amount <= 0 && reagents?.has_reagent(NUTRIMENT))
-			if(amount == 0)
-				amount = -1
-			beaker.reagents.add_reagent(r_id, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(amount)), space))
+		if(grind_amount <= 0 && reagents?.has_reagent(NUTRIMENT))
+			if(grind_amount == 0)
+				grind_amount = -1
+			beaker.reagents.add_reagent(blend_reagent, min(round(reagents.get_reagent_amount(NUTRIMENT)*abs(grind_amount)), space))
 			reagents.remove_reagent(NUTRIMENT, min(reagents.get_reagent_amount(NUTRIMENT), space))
 		else
-			reagents.trans_id_to(beaker, r_id, min(amount, space))
-		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
-			return
+			reagents.trans_id_to(beaker, blend_reagent, min(grind_amount, space))
 
 /obj/item/weapon/reagent_containers/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	reagents.trans_to(beaker, reagents.total_volume) //Transfer these to beaker
+	if(!isnull(grind_amount))
+		reagents.trans_to(beaker, reagents.total_volume) //Transfer these to beaker
 	..()

@@ -14,6 +14,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sheets_n_ores.dmi', "right_hand" = 'icons/mob/in-hand/right/sheets_n_ores.dmi')
 	var/mat_type //What material this is. e.g. MAT_GLASS, MAT_DIAMOND, etc.
 	mech_flags = MECH_SCAN_FAIL
+	grind_amount = 20
 
 /obj/item/stack/sheet/New(var/newloc, var/amount = null)
 	pixel_x = (rand(0,4)-4) * PIXEL_MULTIPLIER

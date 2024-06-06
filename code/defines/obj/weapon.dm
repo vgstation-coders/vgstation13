@@ -1152,7 +1152,8 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "ectoplasm"
 	w_type = RECYK_BIOLOGICAL
-
+	blend_reagent = ECTOPLASM
+	grind_amount = 5
 
 /obj/item/weapon/ectoplasm/New(turf/loc, var/alt_color)
 	..()
