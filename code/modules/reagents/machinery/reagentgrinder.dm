@@ -402,12 +402,6 @@ var/global/list/blend_items = list (
 		holdingitems -= O
 	holdingitems = list()
 
-/proc/is_allowed(var/obj/item/weapon/reagent_containers/O)
-	for (var/i in blend_items)
-		if(istype(O, i))
-			return 1
-	return 0
-
 /proc/get_allowed_by_id(var/obj/item/weapon/grown/O)
 	for (var/i in blend_items)
 		if (istype(O, i))
