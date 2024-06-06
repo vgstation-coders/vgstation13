@@ -13,11 +13,11 @@
         R.juice()
         if(I.juice_reagent && !R.beaker.reagents.has_reagent(I.juice_reagent))
             fail("Reagent ID [I.juice_reagent] was not created from juicing [I] in [R].")
-        R.holdingitems.Cut()
         R.beaker.reagents.clear_reagents()
         if(!I || I.gcDestroyed)
+            R.holdingitems.Cut()
             I = new itempath(T)
-        R.holdingitems += I
+            R.holdingitems += I
         R.grind()
         var/amount
         var/required = I.grind_amount
