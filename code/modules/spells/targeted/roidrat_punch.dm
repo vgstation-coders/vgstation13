@@ -7,7 +7,7 @@
 	charge_max = 300 // Much longer cooldown than the wizard spell
 	spell_flags = IS_HARMFUL | WAIT_FOR_CLICK
 	invocation_type = SpI_NONE
-	compatible_mobs = list(/mob/living) // Unlike the other version, this one can't target and destroy mechs
+	valid_targets = list(/mob/living) // Unlike the other version, this one can't target and destroy mechs
 	hud_state = "gen_hulk"
 
 /spell/targeted/punch/roidrat/invocation(mob/user, list/targets) // No invocation on this one, just raw muscle
