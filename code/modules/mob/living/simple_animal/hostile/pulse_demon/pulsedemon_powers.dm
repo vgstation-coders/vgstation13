@@ -422,6 +422,7 @@
 	L.yo = TTarget.y - T.y
 	L.xo = TTarget.x - T.x
 	L.process()
+	unlock_from() // just in case
 	forceMove(TTarget)
 
 /spell/pulse_demon/remote_hijack
