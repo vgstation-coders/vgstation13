@@ -272,7 +272,7 @@
 	else
 		if(new_cable)
 			current_cable = new_cable
-			if(current_cable.powernet)
+			if(current_cable?.powernet)
 				current_cable.powernet.haspulsedemon = TRUE
 			current_power = null
 			current_robot = null
