@@ -14,7 +14,7 @@
 	var/unsatisfied_priority = 1	// First load priority that did not reach full satisfaction last tick. Loads before it are 100% satisfied, loads after are 0% satisfied.
 									//  An unsatisfied_priority of 0 means either there was either no power or more than enough to cover every load, so priorities get the
 									//  same satisfaction (0% for no power, 100% for excess)
-
+	var/haspulsedemon = 0
 
 ////////////////////////////////////////////
 // POWERNET DATUM PROCS

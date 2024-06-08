@@ -52,7 +52,7 @@
 	var/draining = TRUE												//For draining power or not
 	var/move_divide = 16											//when unlocked, ability lets you move out of cables with a BIG slowdown
 	var/powerloss_alerted = FALSE									//Prevent spam notifying
-	var/health_lock = 0												//Goes down every tick, while this is on it prevents the Pulse Demon from regenerating
+	var/emp_lock = 0												//Goes down every tick, while this is on it prevents the Pulse Demon from regenerating
 
 	//TYPES
 	var/area/controlling_area										// Area controlled from an APC
@@ -78,6 +78,9 @@
 		current_cable = locate(/obj/structure/cable) in loc
 		if(!current_cable)
 			death()
+			return
+		if(current_cable.powernet)
+			current_cable.powernet.haspulsedemon = TRUE
 	else
 		if(istype(current_power,/obj/machinery/power/apc))
 			controlling_area = get_area(current_power)
@@ -176,7 +179,7 @@
 		//TODO add a sound
 
 /mob/living/simple_animal/hostile/pulse_demon/proc/power_restored()
-	if(!health_lock)
+	if(!emp_lock)
 		var/health_to_add = maxHealth - health < health_regen_rate ? maxHealth - health : health_regen_rate
 		if(health < maxHealth)
 			health = min(maxHealth, health + health_to_add)
@@ -187,9 +190,9 @@
 
 /mob/living/simple_animal/hostile/pulse_demon/Life()
 	update_glow()
-	if(health_lock)
-		health_lock = max(--health_lock, 0)
-		if(!health_lock) //Tell the Pulse Demon it's all good.
+	if(emp_lock)
+		emp_lock = max(--emp_lock, 0)
+		if(!emp_lock) //Tell the Pulse Demon it's all good.
 			to_chat(src, "<span class='good'>You can regenerate again!</span>")
 	if(current_cable)
 		if(current_cable.avail() < amount_per_regen) // Drain our health if powernet is dead, otherwise drain powernet
@@ -227,6 +230,11 @@
 	playsound(T,"pd_wail_sound",50,1)
 	qdel(src) // We vaporise into thin air
 
+/mob/living/simple_animal/hostile/pulse_demon/Destroy()
+	if(current_cable?.powernet)
+		current_cable.powernet.haspulsedemon = FALSE
+	. = ..()
+	
 /mob/living/simple_animal/hostile/pulse_demon/proc/is_under_tile()
 	var/turf/simulated/floor/F = get_turf(src)
 	return istype(F,/turf/simulated/floor) && F.floor_tile
@@ -244,6 +252,8 @@
 		spark(src,rand(2,4))
 	if(new_power)
 		current_power = new_power
+		if(current_cable?.powernet)
+			current_cable.powernet.haspulsedemon = FALSE
 		current_cable = null
 		forceMove(new_power.loc)
 		playsound(src,'sound/weapons/electriczap.ogg',50, 1)
@@ -266,6 +276,8 @@
 	else
 		if(new_cable)
 			current_cable = new_cable
+			if(current_cable?.powernet)
+				current_cable.powernet.haspulsedemon = TRUE
 			current_power = null
 			current_robot = null
 			current_bot = null
@@ -277,6 +289,8 @@
 			if(!moved)
 				forceMove(NewLoc)
 		else
+			if(current_cable?.powernet)
+				current_cable.powernet.haspulsedemon = FALSE
 			current_cable = null
 			current_power = null
 			current_robot = null
@@ -352,10 +366,9 @@
 
 // We aren't tangible
 /mob/living/simple_animal/hostile/pulse_demon/bullet_act(var/obj/item/projectile/Proj)
-	if(!is_under_tile())
-		if(istype(Proj,/obj/item/projectile/ion))
-			return ..()
-		visible_message("<span class ='warning'>\the [Proj] goes right through \the [src]!</span>")
+	if(istype(Proj,/obj/item/projectile/ion))
+		return ..()
+	visible_message("<span class ='warning'>\the [Proj] goes right through \the [src]!</span>")
 
 /mob/living/simple_animal/hostile/pulse_demon/vine_protected()
 	return 1
@@ -367,7 +380,7 @@
 // Unless...
 /mob/living/simple_animal/hostile/pulse_demon/Crossed(atom/movable/AM)
 	. = ..()
-	if(!is_under_tile() && istype(AM,/obj/item/projectile/ion))
+	if(istype(AM,/obj/item/projectile/ion))
 		AM.to_bump(src)
 
 // Dumb moves
@@ -396,7 +409,7 @@
 	to_chat(src, "<span class='warning'>You have been blasted by an EMP and cannot regenerate for a while!</span>")
 	playsound(get_turf(src),"pd_wail_sound",50,1)
 	health -= round(max(25, round(maxHealth/4)), 1) //Takes 1/4th of max health as damage if health is big enough
-	health_lock = 5 //EMP prevents the Pulse Demon from regenerating
+	emp_lock = 5 //EMP prevents the Pulse Demon from regenerating or using powers
 
 // Shock therapy
 /mob/living/simple_animal/hostile/pulse_demon/attack_hand(mob/living/carbon/human/M as mob)
