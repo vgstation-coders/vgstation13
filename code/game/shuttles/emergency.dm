@@ -131,14 +131,12 @@ var/global/datum/shuttle/escape/escape_shuttle
 
 	set_transit_dock(/obj/docking_port/destination/pod1/transit)
 
-/obj/docking_port/destination/pod1
-	shuttle_type = /datum/shuttle/escape/pod/one
-
 /obj/docking_port/destination/pod1/centcom
 	areaname = "central command"
 
 /obj/docking_port/destination/pod1/station
 	areaname = "station dock"
+	shuttle_type = /datum/shuttle/escape/pod/one
 
 /obj/docking_port/destination/pod1/transit
 	areaname = "hyperspace (pod 1)"
@@ -158,14 +156,12 @@ var/global/datum/shuttle/escape/escape_shuttle
 
 	set_transit_dock(/obj/docking_port/destination/pod2/transit)
 
-/obj/docking_port/destination/pod2
-	shuttle_type = /datum/shuttle/escape/pod/two
-
 /obj/docking_port/destination/pod2/centcom
 	areaname = "central command"
 
 /obj/docking_port/destination/pod2/station
 	areaname = "station dock"
+	shuttle_type = /datum/shuttle/escape/pod/two
 
 /obj/docking_port/destination/pod2/transit
 	areaname = "hyperspace (pod 2)"
@@ -185,14 +181,12 @@ var/global/datum/shuttle/escape/escape_shuttle
 
 	set_transit_dock(/obj/docking_port/destination/pod3/transit)
 
-/obj/docking_port/destination/pod3
-	shuttle_type = /datum/shuttle/escape/pod/three
-
 /obj/docking_port/destination/pod3/centcom
 	areaname = "central command"
 
 /obj/docking_port/destination/pod3/station
 	areaname = "station dock"
+	shuttle_type = /datum/shuttle/escape/pod/three
 
 /obj/docking_port/destination/pod3/transit
 	areaname = "hyperspace (pod 3)"
@@ -212,14 +206,12 @@ var/global/datum/shuttle/escape/escape_shuttle
 
 	set_transit_dock(/obj/docking_port/destination/pod4/transit)
 
-/obj/docking_port/destination/pod4
-	shuttle_type = /datum/shuttle/escape/pod/four
-
 /obj/docking_port/destination/pod4/centcom
 	areaname = "central command"
 
 /obj/docking_port/destination/pod4/station
 	areaname = "station dock"
+	shuttle_type = /datum/shuttle/escape/pod/four
 
 /obj/docking_port/destination/pod4/transit
 	areaname = "hyperspace (pod 4)"
@@ -239,14 +231,12 @@ var/global/datum/shuttle/escape/escape_shuttle
 
 	set_transit_dock(/obj/docking_port/destination/pod5/transit)
 
-/obj/docking_port/destination/pod5
-	shuttle_type = /datum/shuttle/escape/pod/five
-
 /obj/docking_port/destination/pod5/centcom
 	areaname = "central command"
 
 /obj/docking_port/destination/pod5/station
 	areaname = "station dock"
+	shuttle_type = /datum/shuttle/escape/pod/five
 
 /obj/docking_port/destination/pod5/transit
 	areaname = "hyperspace (pod 5)"
