@@ -1,20 +1,16 @@
-var/datum/shuttle/bagel/bagel_shuttle = new(starting_area = /area/shuttle/bagel)
-
 /datum/shuttle/bagel
 	name = "bagel ferry"
 	can_link_to_computer = LINK_FREE
 	destroy_everything = TRUE // So that it can replace part of maintenance. Possibly a terrible idea?
+	linked_area = /area/shuttle/bagel
 
 /datum/shuttle/bagel/initialize()
 	. = ..()
 	add_dock(/obj/docking_port/destination/bagel_aftstarboard)
 	add_dock(/obj/docking_port/destination/bagel_foreport)
 
-
-/obj/machinery/computer/shuttle_control/bagel/New()
-	link_to(bagel_shuttle)
-	..()
-
+/obj/machinery/computer/shuttle_control/bagel
+	shuttle = /area/shuttle/bagel
 
 /obj/docking_port/destination/bagel_aftstarboard
 	areaname = "aft starboard"
