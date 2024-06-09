@@ -13,7 +13,7 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 /datum/event/heist
 	var/list/raid_objectives = list()     //Raid objectives.
 	var/list/raiders = list() // Mobs for 'leave nobody behind' objective.
-
+	var/datum/shuttle/vox/vox_shuttle
 	announceWhen	= 600
 	oneShot			= 1
 
@@ -24,6 +24,7 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 /datum/event/heist/setup()
 	announceWhen = rand(announceWhen, announceWhen + 50)
 	sent_aliens_to_station = 1
+	vox_shuttle = locate() in shuttles
 
 /datum/event/heist/announce()
 	return

@@ -72,10 +72,14 @@ var/list/potential_bonus_items = list(
 
 	var/total_points = 0
 	var/list/our_bounty_lockers = list()
+	var/datum/shuttle/vox/vox_shuttle
 
 /datum/faction/vox_shoal/New()
 	..()
 	load_dungeon(/datum/map_element/dungeon/vox_shuttle)
+	vox_shuttle = locate() in shuttles
+	if(!vox_shuttle)
+		CRASH("Vox raiders fired with no vox shuttle found! Report this to coders")
 	vox_shuttle.initialize() //As the area isn't loaded until the above call, its docking ports aren't populated until we call this
 
 /datum/faction/vox_shoal/forgeObjectives()

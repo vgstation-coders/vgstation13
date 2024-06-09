@@ -1,8 +1,6 @@
 #define VOX_SHUTTLE_COOLDOWN 460
 #define VOX_SHUTTLE_TRANSIT_DELAY 260
 
-var/global/datum/shuttle/vox/vox_shuttle
-
 /datum/shuttle/vox
 	name = "vox skipjack"
 
@@ -43,7 +41,6 @@ var/global/datum/shuttle/vox/vox_shuttle
 	add_dock(/obj/docking_port/destination/vox/deepspace) //z6 middle of nowhere so vox can hide
 
 	set_transit_dock(/obj/docking_port/destination/vox/transit)
-	vox_shuttle = src
 
 /* USED IN HEIST
 /datum/shuttle/vox/travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
