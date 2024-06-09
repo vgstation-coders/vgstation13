@@ -1,8 +1,6 @@
 #define SYNDICATE_SHUTTLE_TRANSIT_DELAY 240
 #define SYNDICATE_SHUTTLE_COOLDOWN 200
 
-var/global/datum/shuttle/syndicate/syndicate_shuttle
-
 /datum/shuttle/syndicate
 	name = "syndicate shuttle"
 
@@ -37,7 +35,6 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle
 	add_dock(/obj/docking_port/destination/syndicate/commssat)
 
 	set_transit_dock(/obj/docking_port/destination/syndicate/transit)
-	syndicate_shuttle = src
 
 /datum/shuttle/syndicate/after_flight()
 	..()
@@ -56,7 +53,6 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle
 	emag_disables_access = FALSE
 
 /obj/machinery/computer/shuttle_control/syndicate/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
-	link_to(syndicate_shuttle)
 	.=..()
 
 	var/datum/holomap_marker/newMarker = new()
