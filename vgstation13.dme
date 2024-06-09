@@ -1347,7 +1347,6 @@
 #include "code\game\objects\structures\vehicles\carts\cart.dm"
 #include "code\game\objects\structures\vehicles\carts\datum_cart_network.dm"
 #include "code\game\objects\structures\vehicles\carts\mining_cart.dm"
-#include "code\game\shuttles\bagel.dm"
 #include "code\game\shuttles\brokeufo.dm"
 #include "code\game\shuttles\cargo.dm"
 #include "code\game\shuttles\emergency.dm"
