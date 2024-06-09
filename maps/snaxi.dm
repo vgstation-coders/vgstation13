@@ -48,15 +48,17 @@
 /datum/subsystem/daynightcycle
 	flags = SS_FIRE_IN_LOBBY
 
-/datum/map/active/New()
-	. = ..()
+/datum/shuttle/research // WHY is this absolutely hacky stuff allowed??? oh well it's harmless but looks bad
+	name = "Southern Station Shuttle"
+	req_access = list()
 
-	research_shuttle.name = "Southern Station Shuttle"
-	research_shuttle.req_access = list()
-	mining_shuttle.name = "Northwest Station Shuttle"
-	mining_shuttle.req_access = list()
-	security_shuttle.name = "Northeast Station Shuttle"
-	security_shuttle.req_access = list()
+/datum/shuttle/mining
+	name = "Northwest Station Shuttle"
+	req_access = list()
+
+/datum/shuttle/security
+	name = "Northeast Station Shuttle"
+	req_access = list()
 
 /datum/map/active/special_ui(var/obj/abstract/screen/S, mob/user)
 	if(!user)

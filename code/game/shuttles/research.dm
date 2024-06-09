@@ -1,5 +1,3 @@
-var/global/datum/shuttle/research/research_shuttle
-
 /datum/shuttle/research
 	name = "research shuttle"
 	can_link_to_computer = LINK_FREE
@@ -10,7 +8,7 @@ var/global/datum/shuttle/research/research_shuttle
 	.=..()
 	add_dock(/obj/docking_port/destination/research/station)
 	add_dock(/obj/docking_port/destination/research/outpost)
-	research_shuttle = src
+	outpost_shuttles |= src
 
 /obj/machinery/computer/shuttle_control/research //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
 	shuttle = /datum/shuttle/research

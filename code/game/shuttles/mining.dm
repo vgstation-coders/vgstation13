@@ -1,4 +1,4 @@
-var/global/datum/shuttle/mining/mining_shuttle
+var/list/outpost_shuttles = list()
 
 /datum/shuttle/mining
 	name = "mining shuttle"
@@ -10,7 +10,7 @@ var/global/datum/shuttle/mining/mining_shuttle
 	.=..()
 	add_dock(/obj/docking_port/destination/mining/station)
 	add_dock(/obj/docking_port/destination/mining/outpost)
-	mining_shuttle = src
+	outpost_shuttles |= src
 
 /obj/machinery/computer/shuttle_control/mining //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
 	shuttle = /datum/shuttle/mining

@@ -143,8 +143,8 @@
 				var/law = "The station is under quarantine. Do not permit anyone to leave so long as blob overminds are present. Disregard all other laws if necessary to preserve quarantine."
 				aiPlayer.set_zeroth_law(law)
 				to_chat(aiPlayer, "Laws Updated: [law]")
-			research_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice." //LOCKDOWN THESE SHUTTLES
-			mining_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice."
+			for(var/datum/shuttle/S in outpost_shuttles)
+				S.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice." //LOCKDOWN THESE SHUTTLES
 			emergency_shuttle_lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice."
 			stage = FACTION_ACTIVE
 
@@ -201,8 +201,8 @@
 			command_alert(/datum/command_alert/biohazard_station_unlock)
 			send_intercept(FACTION_DEFEATED)
 			emergency_shuttle_lockdown = null
-			research_shuttle.lockdown = null
-			mining_shuttle.lockdown = null
+			for(var/datum/shuttle/S in outpost_shuttles)
+				S.lockdown = null
 			declared = FALSE
 			world << sound('sound/misc/notice1.ogg')
 			if(stage >= FACTION_ENDGAME)

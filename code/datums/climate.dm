@@ -198,9 +198,8 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 
 /datum/weather/snow/calm/execute()
 	..()
-	research_shuttle.lockdown = FALSE //note: blob can't happen on this map
-	mining_shuttle.lockdown = FALSE
-	security_shuttle.lockdown = FALSE
+	for(var/datum/shuttle/S in outpost_shuttles)
+		S.lockdown = FALSE //note: blob can't happen on this map
 
 /datum/weather/snow/light
 	name = "light"
@@ -213,9 +212,8 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 
 /datum/weather/snow/light/execute()
 	..()
-	research_shuttle.lockdown = FALSE
-	mining_shuttle.lockdown = FALSE
-	security_shuttle.lockdown = FALSE
+	for(var/datum/shuttle/S in outpost_shuttles)
+		S.lockdown = FALSE
 
 /datum/weather/snow/heavy
 	name = "<font color='orange'>heavy</font>"
@@ -228,9 +226,8 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 
 /datum/weather/snow/heavy/execute()
 	..()
-	research_shuttle.lockdown = FALSE
-	mining_shuttle.lockdown = FALSE
-	security_shuttle.lockdown = FALSE
+	for(var/datum/shuttle/S in outpost_shuttles)
+		S.lockdown = FALSE
 
 /datum/weather/snow/blizzard
 	name = "<font color='red'>blizzard</font>"
@@ -244,10 +241,9 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 
 /datum/weather/snow/blizzard/execute()
 	..()
-	research_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
-	mining_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
-	security_shuttle.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
-
+	for(var/datum/shuttle/S in outpost_shuttles)
+		S.lockdown = "Under directive 1-49, surface-to-space light craft have been locked for duration of blizzard. Only escape-class shuttles are rated for stability in blizzards."
+	
 /datum/weather/snow/blizzard/omega
 	name = "<font color='purple'>dark season</font>"
 	next_weather = list(/datum/weather/snow/heavy = 100)

@@ -137,16 +137,16 @@
 		var/law = "The station is under quarantine. Do not permit anyone to leave so long the alien threat is present. Disregard all other laws if necessary to preserve quarantine."
 		aiPlayer.set_zeroth_law(law)
 		to_chat(aiPlayer, "Laws Updated: [law]")
-	research_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice." //LOCKDOWN THESE SHUTTLES
-	mining_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice."
+	for(var/datum/shuttle/S in outpost_shuttles)
+		S.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice." //LOCKDOWN THESE SHUTTLES
 	emergency_shuttle.shutdown = TRUE //Quarantine
 
 /datum/faction/xenomorph/proc/LiftQuarantine()
 	if(emergency_shuttle.shutdown == FALSE)
 		return
 	emergency_shuttle.shutdown = FALSE
-	research_shuttle.lockdown = null
-	mining_shuttle.lockdown = null
+	for(var/datum/shuttle/S in outpost_shuttles)
+		S.lockdown = null
 	world << sound('sound/misc/notice1.ogg')
 	for(var/mob/living/silicon/ai/aiPlayer in player_list)
 		aiPlayer.set_zeroth_law("")
@@ -159,8 +159,8 @@
 	world <<  sound('sound/AI/aimalf.ogg')
 	command_alert(/datum/command_alert/xenomorph_station_deathsquad)
 	emergency_shuttle.shutdown = FALSE
-	research_shuttle.lockdown = null
-	mining_shuttle.lockdown = null
+	for(var/datum/shuttle/S in outpost_shuttles)
+		S.lockdown = null
 	for(var/mob/living/silicon/ai/aiPlayer in player_list)
 		aiPlayer.set_zeroth_law("")
 		to_chat(aiPlayer, "$/!@--LAWS UPDATED###%$$")

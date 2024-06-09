@@ -1,5 +1,3 @@
-var/global/datum/shuttle/security/security_shuttle
-
 /datum/shuttle/security
 	name = "security shuttle"
 	can_link_to_computer = LINK_FREE
@@ -10,7 +8,7 @@ var/global/datum/shuttle/security/security_shuttle
 	.=..()
 	add_dock(/obj/docking_port/destination/security/station)
 	add_dock(/obj/docking_port/destination/security/outpost)
-	security_shuttle = src
+	outpost_shuttles |= src
 
 /obj/machinery/computer/shuttle_control/security //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
 	shuttle = /datum/shuttle/security

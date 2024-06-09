@@ -60,11 +60,9 @@
 	center_y = 249
 
 //The central shuttle leads to both outposts
-/datum/map/active/New()
-	. = ..()
-
-	mining_shuttle.name = "Asteroid Shuttle" //There is only one shuttle on defficiency now - the asteroid shuttle
-	mining_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
+/datum/shuttle/mining
+	name = "Asteroid Shuttle" //There is only one shuttle on defficiency now - the asteroid shuttle
+	req_access = list() //It's shared by miners and researchers, so remove access requirements
 
 /obj/docking_port/destination/mining/station
 	areaname = "main station dock"
