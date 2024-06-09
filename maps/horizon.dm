@@ -67,11 +67,9 @@
 		null
 	)
 
-/datum/map/active/New()
-	.=..()
-
-	research_shuttle.name = "Asteroid Shuttle" //There is only one shuttle on packedstation - the asteroid shuttle
-	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
+/datum/shuttle/research
+	name = "Asteroid Shuttle" //There is only one shuttle on packedstation - the asteroid shuttle
+	req_access = list() //It's shared by miners and researchers, so remove access requirements
 
 /datum/shuttle/salvage
 	can_rotate = 1
