@@ -1,7 +1,7 @@
 #define VOX_SHUTTLE_COOLDOWN 460
 #define VOX_SHUTTLE_TRANSIT_DELAY 260
 
-var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/station)
+var/global/datum/shuttle/vox/vox_shuttle
 
 /datum/shuttle/vox
 	name = "vox skipjack"
@@ -15,6 +15,7 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 
 	stable = 1 //Don't stun everyone and don't throw anything when moving
 	can_rotate = TRUE
+	linked_area = /area/shuttle/vox/station
 
 	var/returned_home = 0
 	var/obj/docking_port/destination/dock_home
@@ -42,6 +43,7 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 	add_dock(/obj/docking_port/destination/vox/deepspace) //z6 middle of nowhere so vox can hide
 
 	set_transit_dock(/obj/docking_port/destination/vox/transit)
+	vox_shuttle = src
 
 /* USED IN HEIST
 /datum/shuttle/vox/travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
@@ -86,13 +88,11 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 	allow_silicons = 0
 
 	req_access = list(access_syndicate)
-
+	shuttle = /datum/shuttle/vox
 	light_color = LIGHT_COLOR_RED
 
 /obj/machinery/computer/shuttle_control/vox/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
-	link_to(vox_shuttle)
 	.=..()
-
 	var/datum/holomap_marker/newMarker = new()
 	newMarker.id = HOLOMAP_MARKER_SKIPJACK
 	newMarker.icon = 'icons/holomap_markers_32x32.dmi'
@@ -106,9 +106,9 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 	holomap_markers[HOLOMAP_MARKER_SKIPJACK] = newMarker
 
 //code/game/objects/structures/docking_port.dm
-
 /obj/docking_port/destination/vox/station // ends the round
 	areaname = "home base"
+	shuttle_type = /datum/shuttle/vox
 
 /obj/docking_port/destination/vox/northeast_station
 	areaname = "north east solars"

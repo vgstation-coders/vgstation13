@@ -22,6 +22,7 @@
 
 	stable = 1 //Don't stun everyone and don't throw anything when moving
 	can_rotate = 0 //Probably just won't work with this shuttle
+	linked_area = /area/shuttle/brokeufo/start
 
 /datum/shuttle/brokeufo/initialize()
 	.=..()
@@ -38,24 +39,19 @@
 
 /obj/machinery/computer/shuttle_control/brokeufo
 	icon_state = "syndishuttle"
-
+	shuttle = /datum/shuttle/brokeufo
 	light_color = LIGHT_COLOR_RED
 
 /obj/machinery/computer/shuttle_control/brokeufo/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
-
-	var/global/datum/shuttle/brokeufo/brokeufo_shuttle = new(starting_area=/area/shuttle/brokeufo/start)
-	brokeufo_shuttle.initialize()
-	link_to(brokeufo_shuttle)
-
-	var/obj/item/weapon/paper/manual_ufo = new(get_turf(src))
-
-	manual_ufo.name = "GDR Scout Passcode"
-	manual_ufo.info = "Keep this document in a secure location. Your craft's passcode is: \"<b>[brokeufo_shuttle.password]</b>\"."
 	.=..()
+	var/obj/item/weapon/paper/manual_ufo = new(get_turf(src))
+	manual_ufo.name = "GDR Scout Passcode"
+	manual_ufo.info = "Keep this document in a secure location. Your craft's passcode is: \"<b>[shuttle.password]</b>\"."
 
 //code/game/objects/structures/docking_port.dm
 /obj/docking_port/destination/brokeufo/start
 	areaname = "deep space"
+	shuttle_type = /datum/shuttle/brokeufo
 
 /obj/docking_port/destination/brokeufo/lab
 	areaname = "mothership lab z12"

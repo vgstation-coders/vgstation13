@@ -89,15 +89,12 @@
 
 /datum/shuttle/New(var/area/starting_area)
 	.=..()
-
 	if(starting_area)
-		if(ispath(starting_area))
-			linked_area = locate(starting_area)
-		else if(isarea(starting_area))
-			linked_area = starting_area
-		else
-			linked_area = starting_area
-			warning("Unable to find area [starting_area] in world - [src.type] ([src.name]) won't be able to function properly.")
+		linked_area = starting_area
+	else if(ispath(linked_area))
+		linked_area = locate(linked_area) in areas
+	else
+		warning("Unable to find area [linked_area] in world - [src.type] ([src.name]) won't be able to function properly.")
 
 	if(istype(linked_area)) //Only add the shuttle to the list if its area exists and it has something in it
 		shuttles |= src

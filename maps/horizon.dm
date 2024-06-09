@@ -72,7 +72,9 @@
 
 	research_shuttle.name = "Asteroid Shuttle" //There is only one shuttle on packedstation - the asteroid shuttle
 	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
-	salvage_shuttle.can_rotate = 1
+
+/datum/shuttle/salvage
+	can_rotate = 1
 
 ////////////////////////////////////////////////////////////////
 #include "horizon.dmm"

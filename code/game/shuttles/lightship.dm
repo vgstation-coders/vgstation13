@@ -22,6 +22,7 @@
 
 	stable = 1 //Don't stun everyone and don't throw anything when moving
 	can_rotate = 0 //Sleepers, body scanners and multi-tile airlocks aren't rotated properly
+	linked_area = /area/shuttle/lightship/start
 
 /datum/shuttle/lightship/initialize()
 	.=..()
@@ -39,20 +40,12 @@
 
 /obj/machinery/computer/shuttle_control/lightship
 	icon_state = "syndishuttle"
-
+	shuttle = /datum/shuttle/lightship
 	light_color = LIGHT_COLOR_RED
-
-/obj/machinery/computer/shuttle_control/lightship/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
-
-	var/global/datum/shuttle/lightship/lightship_shuttle = new(starting_area=/area/shuttle/lightship/start)
-	lightship_shuttle.initialize()
-	link_to(lightship_shuttle)
-	.=..()
 
 /obj/docking_port/destination/lightship/start
 	areaname = "deep space"
-
-
+	shuttle_type = /datum/shuttle/lightship
 
 #undef LIGHT_SHIP_MOVE_TIME
 #undef LIGHT_SHIP_COOLDOWN

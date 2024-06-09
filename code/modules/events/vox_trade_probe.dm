@@ -42,7 +42,7 @@
 	//Lock trade shuttle so that it can't crush the probe
 	trade_shuttle.lockdown = "The trade shuttle has been temporarily locked while a pod is in port. The pod will depart after 10 minutes."
 	load_dungeon(/datum/map_element/dungeon/tradeprobe)
-	tradeprobe = new(starting_area = /area/shuttle/tradeprobe)
+	tradeprobe = new
 	tradeprobe.initialize()
 	tradeprobe.move()
 	/*tradeprobe.set_transit_dock(/obj/docking_port/destination/trade/station)
@@ -114,10 +114,12 @@ var/global/datum/shuttle/voxprobe/tradeprobe
 	password = TRUE
 	stable = TRUE
 	can_rotate = TRUE
+	linked_area = /area/shuttle/tradeprobe
 
 /datum/shuttle/voxprobe/initialize()
 	.=..()
 	add_dock(/obj/docking_port/destination/trade/station)
+	tradeprobe = src
 
 /datum/map_element/dungeon/tradeprobe
 	name = "Trade Probe"

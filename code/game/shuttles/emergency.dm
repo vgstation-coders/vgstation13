@@ -1,4 +1,4 @@
-var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle/escape/centcom)
+var/global/datum/shuttle/escape/escape_shuttle
 
 /datum/shuttle/escape
 	name = "emergency shuttle"
@@ -13,6 +13,7 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 	can_rotate = 0 //Sleepers, body scanners and multi-tile airlocks aren't rotated properly
 
 	destroy_everything = 1 //Can't stop us
+	linked_area = /area/shuttle/escape/centcom
 
 	var/obj/docking_port/destination/dock_centcom
 	var/obj/docking_port/destination/dock_station
@@ -26,14 +27,16 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 	dock_centcom = add_dock(/obj/docking_port/destination/escape/shuttle/centcom)
 
 	set_transit_dock(/obj/docking_port/destination/escape/shuttle/transit)
+	if(src.type == /datum/shuttle/escape)
+		escape_shuttle = src
 
 //code/game/objects/structures/docking_port.dm
-
 /obj/docking_port/destination/escape/shuttle/station
 	areaname = "escape shuttle docking"
 
 /obj/docking_port/destination/escape/shuttle/centcom
 	areaname = "central command"
+	shuttle_type = /datum/shuttle/escape
 
 /obj/docking_port/destination/escape/shuttle/transit
 	areaname = "hyperspace (emergency shuttle)"
@@ -116,18 +119,9 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 				qdel(linked_area)
 				qdel(src)
 
-
-var/global/datum/shuttle/escape/pod/one/EP1 = new(starting_area=/area/shuttle/escape_pod1)
-
-var/global/datum/shuttle/escape/pod/two/EP2 = new(starting_area=/area/shuttle/escape_pod2)
-
-var/global/datum/shuttle/escape/pod/three/EP3 = new(starting_area=/area/shuttle/escape_pod3)
-
-var/global/datum/shuttle/escape/pod/four/EP4 = new(starting_area=/area/shuttle/escape_pod4)
-
-var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/escape_pod5)
-
-/datum/shuttle/escape/pod/one/name = "Escape pod 1"
+/datum/shuttle/escape/pod/one
+	name = "Escape pod 1"
+	linked_area = /area/shuttle/escape_pod1
 
 /datum/shuttle/escape/pod/one/initialize()
 	.=..()
@@ -136,6 +130,9 @@ var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/e
 	dock_shuttle = add_dock(/obj/docking_port/destination/pod1/shuttle)
 
 	set_transit_dock(/obj/docking_port/destination/pod1/transit)
+
+/obj/docking_port/destination/pod1
+	shuttle_type = /datum/shuttle/escape/pod/one
 
 /obj/docking_port/destination/pod1/centcom
 	areaname = "central command"
@@ -149,7 +146,9 @@ var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/e
 /obj/docking_port/destination/pod1/shuttle
 	areaname = "emergency shuttle"
 
-/datum/shuttle/escape/pod/two/name = "Escape pod 2"
+/datum/shuttle/escape/pod/two
+	name = "Escape pod 2"
+	linked_area = /area/shuttle/escape_pod2
 
 /datum/shuttle/escape/pod/two/initialize()
 	.=..()
@@ -158,6 +157,9 @@ var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/e
 	dock_shuttle = add_dock(/obj/docking_port/destination/pod2/shuttle)
 
 	set_transit_dock(/obj/docking_port/destination/pod2/transit)
+
+/obj/docking_port/destination/pod2
+	shuttle_type = /datum/shuttle/escape/pod/two
 
 /obj/docking_port/destination/pod2/centcom
 	areaname = "central command"
@@ -171,8 +173,9 @@ var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/e
 /obj/docking_port/destination/pod2/shuttle
 	areaname = "emergency shuttle"
 
-
-/datum/shuttle/escape/pod/three/name = "Escape pod 3"
+/datum/shuttle/escape/pod/three
+	name = "Escape pod 3"
+	linked_area = /area/shuttle/escape_pod3
 
 /datum/shuttle/escape/pod/three/initialize()
 	.=..()
@@ -181,6 +184,9 @@ var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/e
 	dock_shuttle = add_dock(/obj/docking_port/destination/pod3/shuttle)
 
 	set_transit_dock(/obj/docking_port/destination/pod3/transit)
+
+/obj/docking_port/destination/pod3
+	shuttle_type = /datum/shuttle/escape/pod/three
 
 /obj/docking_port/destination/pod3/centcom
 	areaname = "central command"
@@ -194,7 +200,9 @@ var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/e
 /obj/docking_port/destination/pod3/shuttle
 	areaname = "emergency shuttle"
 
-/datum/shuttle/escape/pod/four/name = "Escape pod 4"
+/datum/shuttle/escape/pod/four
+	name = "Escape pod 4"
+	linked_area = /area/shuttle/escape_pod4
 
 /datum/shuttle/escape/pod/four/initialize()
 	.=..()
@@ -203,6 +211,9 @@ var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/e
 	dock_shuttle = add_dock(/obj/docking_port/destination/pod4/shuttle)
 
 	set_transit_dock(/obj/docking_port/destination/pod4/transit)
+
+/obj/docking_port/destination/pod4
+	shuttle_type = /datum/shuttle/escape/pod/four
 
 /obj/docking_port/destination/pod4/centcom
 	areaname = "central command"
@@ -216,7 +227,9 @@ var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/e
 /obj/docking_port/destination/pod4/shuttle
 	areaname = "emergency shuttle"
 
-/datum/shuttle/escape/pod/five/name = "Escape pod 5"
+/datum/shuttle/escape/pod/five
+	name = "Escape pod 5"
+	linked_area = /area/shuttle/escape_pod5
 
 /datum/shuttle/escape/pod/five/initialize()
 	.=..()
@@ -225,6 +238,9 @@ var/global/datum/shuttle/escape/pod/five/EP5 = new(starting_area=/area/shuttle/e
 	dock_shuttle = add_dock(/obj/docking_port/destination/pod5/shuttle)
 
 	set_transit_dock(/obj/docking_port/destination/pod5/transit)
+
+/obj/docking_port/destination/pod5
+	shuttle_type = /datum/shuttle/escape/pod/five
 
 /obj/docking_port/destination/pod5/centcom
 	areaname = "central command"

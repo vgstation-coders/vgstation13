@@ -18,12 +18,15 @@ var/global/list/all_docking_ports = list()
 	var/require_admin_permission = 0
 
 	var/areaname = "space"
+	var/shuttle_type
 
 	var/obj/docking_port/docked_with
 
 /obj/docking_port/New()
 	.=..()
 	all_docking_ports |= src
+	if(shuttle_type && !(locate(shuttle_type) in shuttles))
+		new shuttle_type
 
 /obj/docking_port/Destroy()
 	.=..()

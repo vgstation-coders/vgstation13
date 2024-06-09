@@ -1,7 +1,7 @@
 #define SYNDICATE_SHUTTLE_TRANSIT_DELAY 240
 #define SYNDICATE_SHUTTLE_COOLDOWN 200
 
-var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area/shuttle/nuclearops)
+var/global/datum/shuttle/syndicate/syndicate_shuttle
 
 /datum/shuttle/syndicate
 	name = "syndicate shuttle"
@@ -19,6 +19,7 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 	can_rotate = 0 //Sleepers, body scanners and multi-tile airlocks aren't rotated properly
 
 	req_access = list(access_syndicate)
+	linked_area = /area/shuttle/nuclearops
 
 /datum/shuttle/syndicate/initialize()
 	.=..()
@@ -36,6 +37,7 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 	add_dock(/obj/docking_port/destination/syndicate/commssat)
 
 	set_transit_dock(/obj/docking_port/destination/syndicate/transit)
+	syndicate_shuttle = src
 
 /datum/shuttle/syndicate/after_flight()
 	..()
@@ -48,12 +50,10 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 
 /obj/machinery/computer/shuttle_control/syndicate
 	icon_state = "syndishuttle"
-
+	shuttle = /datum/shuttle/syndicate
 	light_color = LIGHT_COLOR_RED
 	allow_silicons = 0 //no NT robots allowed
-
-/obj/machinery/computer/shuttle_control/syndicate/emag_act()
-	return
+	emag_disables_access = FALSE
 
 /obj/machinery/computer/shuttle_control/syndicate/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
 	link_to(syndicate_shuttle)
@@ -75,6 +75,7 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 
 /obj/docking_port/destination/syndicate/start
 	areaname = "syndicate outpost"
+	shuttle_type = /datum/shuttle/syndicate
 
 /obj/docking_port/destination/syndicate/north
 	areaname = "north of the station"

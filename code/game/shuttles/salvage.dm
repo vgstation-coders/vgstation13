@@ -1,8 +1,6 @@
 #define SALVAGE_SHIP_MOVE_TIME 300
 #define SALVAGE_SHIP_COOLDOWN 800
 
-var/global/datum/shuttle/salvage/salvage_shuttle = new(starting_area=/area/shuttle/salvage/start)
-
 /datum/shuttle/salvage
 	name = "salvage shuttle"
 
@@ -17,6 +15,7 @@ var/global/datum/shuttle/salvage/salvage_shuttle = new(starting_area=/area/shutt
 	can_rotate = 0 //Sleepers, body scanners and multi-tile airlocks aren't rotated properly
 
 	req_access = list(access_salvage_captain)
+	linked_area = /area/shuttle/salvage/start
 
 /datum/shuttle/salvage/initialize()
 	.=..()
@@ -39,21 +38,21 @@ var/global/datum/shuttle/salvage/salvage_shuttle = new(starting_area=/area/shutt
 
 /obj/machinery/computer/shuttle_control/salvage
 	icon_state = "syndishuttle"
-
+	shuttle = /datum/shuttle/salvage
 	light_color = LIGHT_COLOR_RED
 
 /obj/machinery/computer/shuttle_control/salvage/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
-	link_to(salvage_shuttle)
 	var/obj/item/weapon/paper/manual = new(get_turf(src))
 
 	manual.name = "Salvage Shuttle manual"
-	manual.info = "Thank you for purchasing the ShuttleTec Salvage Shuttle!<hr>This shuttle's password is: \"<b>[salvage_shuttle.password]</b>\"."
+	manual.info = "Thank you for purchasing the ShuttleTec Salvage Shuttle!<hr>This shuttle's password is: \"<b>[shuttle.password]</b>\"."
 	.=..()
 
 //code/game/objects/structures/docking_port.dm
 
 /obj/docking_port/destination/salvage/start
 	areaname = "deep space"
+	shuttle_type = /datum/shuttle/salvage
 
 /obj/docking_port/destination/salvage/arrivals
 	areaname = "station auxillary docking"

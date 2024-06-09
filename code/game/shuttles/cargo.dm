@@ -1,4 +1,4 @@
-var/global/datum/shuttle/supply/cargo_shuttle = new(starting_area = /area/shuttle/supply)
+var/global/datum/shuttle/supply/cargo_shuttle
 
 /datum/shuttle/supply
 	name = "supply shuttle"
@@ -9,7 +9,7 @@ var/global/datum/shuttle/supply/cargo_shuttle = new(starting_area = /area/shuttl
 	pre_flight_delay = 0
 	destroy_everything = 1 //The cargo shuttle should never be cancelled because of something in the way
 	cooldown = 0
-
+	linked_area = /area/shuttle/supply
 	stable = 1 //Don't stun everyone and don't throw anything when moving
 
 /datum/shuttle/supply/is_special()
@@ -19,9 +19,11 @@ var/global/datum/shuttle/supply/cargo_shuttle = new(starting_area = /area/shuttl
 	.=..()
 	dock_centcom = add_dock(/obj/docking_port/destination/supply/centcom)
 	dock_station = add_dock(/obj/docking_port/destination/supply/station)
+	cargo_shuttle = src
 
 /obj/docking_port/destination/supply/centcom
 	areaname = "centcom loading bay"
+	shuttle_type = /datum/shuttle/supply
 
 /obj/docking_port/destination/supply/station
 	areaname = "cargo bay"

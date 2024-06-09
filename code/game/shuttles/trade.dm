@@ -1,7 +1,7 @@
 #define TRADE_SHUTTLE_TRANSIT_DELAY 240
 #define TRADE_SHUTTLE_COOLDOWN 200
 
-var/global/datum/shuttle/trade/trade_shuttle = new(starting_area = /area/shuttle/trade/start)
+var/global/datum/shuttle/trade/trade_shuttle
 
 /datum/shuttle/trade
 	name = "trade shuttle"
@@ -13,6 +13,7 @@ var/global/datum/shuttle/trade/trade_shuttle = new(starting_area = /area/shuttle
 	cooldown = 200
 	stable = 0 //Don't stun everyone and don't throw anything when moving
 	can_rotate = 0 //Sleepers, body scanners and multi-tile airlocks aren't rotated properly
+	linked_area = /area/shuttle/trade/start
 
 /datum/shuttle/trade/proc/notify_port_toggled(var/reason)
 	for(var/obj/machinery/computer/shuttle_control/trade/T in control_consoles)
@@ -27,13 +28,9 @@ var/global/datum/shuttle/trade/trade_shuttle = new(starting_area = /area/shuttle
 
 /obj/machinery/computer/shuttle_control/trade
 	icon_state = "syndishuttle"
-
+	shuttle = /datum/shuttle/trade
 	light_color = LIGHT_COLOR_RED
 	machine_flags = EMAGGABLE | SCREWTOGGLE
-
-/obj/machinery/computer/shuttle_control/trade/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
-	link_to(trade_shuttle)
-	.=..()
 
 /obj/machinery/computer/shuttle_control/trade/initialize()
 	. = ..()
@@ -65,9 +62,9 @@ var/global/datum/shuttle/trade/trade_shuttle = new(starting_area = /area/shuttle
 		P.stamps += "<HR><i>This paper has been stamped by the Central Command Quantum Relay.</i>"
 
 //code/game/objects/structures/docking_port.dm
-
 /obj/docking_port/destination/trade/start
 	areaname = "Trade Outpost"
+	shuttle_type = /datum/shuttle/trade
 
 /obj/docking_port/destination/trade/station
 	areaname = "NanoTrasen Station"

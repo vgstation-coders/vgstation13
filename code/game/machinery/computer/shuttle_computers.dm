@@ -150,6 +150,7 @@
 								//used for admin-only shuttles so that borgs cant hijack 'em
 
 	var/obj/item/weapon/disk/shuttle_coords/disk
+	var/emag_disables_access = TRUE //If emags do anything to it
 
 	//Variables used for custom destinations
 	var/custom_x = 0
@@ -159,8 +160,9 @@
 
 /obj/machinery/computer/shuttle_control/New()
 	if(shuttle)
+		if(ispath(shuttle))
+			link_to()
 		name = "[shuttle.name] console"
-
 	.=..()
 
 /obj/machinery/computer/shuttle_control/Destroy()
@@ -583,16 +585,23 @@
 		if(src in shuttle.control_consoles)
 			shuttle.control_consoles -= src
 
-	shuttle = S
+	if(S)
+		shuttle = S
+	else if(ispath(shuttle))
+		var/spath = shuttle
+		shuttle = locate(shuttle) in shuttles
+		if(!shuttle)
+			shuttle = new spath
 	if(add_to_list)
 		shuttle.control_consoles |= src
 	req_access = shuttle.req_access
 	updateUsrDialog()
 
 /obj/machinery/computer/shuttle_control/emag_act(mob/user as mob)
-	..()
-	req_access = list()
-	if(user)
-		to_chat(user, "You disable the console's access requirement.")
+	if(emag_disables_access)
+		..()
+		req_access = list()
+		if(user)
+			to_chat(user, "You disable the console's access requirement.")
 
 #undef MAX_SHUTTLE_NAME_LEN

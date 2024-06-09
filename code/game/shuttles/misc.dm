@@ -1,15 +1,13 @@
 //Other shuttles which are less-used or not used at all go here
 
 //ARRIVALS SHUTTLE
-var/global/datum/shuttle/arrival/arrival_shuttle = new(starting_area = /area/shuttle/arrival/station)
-
 /datum/shuttle/arrival
 	name = "arrival shuttle"
 
 	cant_leave_zlevel = list() //It's only adminbusable anyways
 
 	cooldown = 0
-
+	linked_area = /area/shuttle/arrival/station
 	stable = 1
 
 /datum/shuttle/arrival/initialize()
@@ -20,10 +18,10 @@ var/global/datum/shuttle/arrival/arrival_shuttle = new(starting_area = /area/shu
 
 /obj/docking_port/destination/arrival/station
 	areaname = "station arrivals"
-
+	shuttle_type = /datum/shuttle/arrival
 
 //CENTCOM FERRY
-var/global/datum/shuttle/transport/transport_shuttle = new(starting_area = /area/shuttle/transport1/centcom)
+var/global/datum/shuttle/transport/transport_shuttle
 
 /datum/shuttle/transport
 	name = "centcom ferry"
@@ -35,24 +33,20 @@ var/global/datum/shuttle/transport/transport_shuttle = new(starting_area = /area
 	transit_delay = 0
 
 	stable = 1
-
+	linked_area = /area/shuttle/transport1/centcom
 	req_access = list(access_cent_captain)
 
 /datum/shuttle/transport/initialize()
 	.=..()
 	add_dock(/obj/docking_port/destination/transport/station)
 	add_dock(/obj/docking_port/destination/transport/centcom)
+	transport_shuttle = src
 
 /obj/machinery/computer/shuttle_control/transport
 	machine_flags = 0 //No screwtoggle / emaggable to prevent mortals from fucking with shit
 	allow_silicons = 0
-
-/obj/machinery/computer/shuttle_control/transport/New()
-	link_to(transport_shuttle)
-	.=..()
-
-/obj/machinery/computer/shuttle_control/transport/emag_act() //Can't be emagged to hijack the centcom ferry
-	return
+	shuttle = /datum/shuttle/transport
+	emag_disables_access = FALSE //Can't be emagged to hijack the centcom ferry
 
 //code/game/objects/structures/docking_port.dm
 
@@ -62,11 +56,9 @@ var/global/datum/shuttle/transport/transport_shuttle = new(starting_area = /area
 /obj/docking_port/destination/transport/centcom
 	areaname = "central command"
 	require_admin_permission = 1
-
+	shuttle_type = /datum/shuttle/transport
 
 //ERT SHUTTLE
-var/global/datum/shuttle/ert/ert_shuttle = new(starting_area = /area/shuttle/ert/centcom)
-
 /datum/shuttle/ert
 	name = "ert shuttle"
 
@@ -77,7 +69,7 @@ var/global/datum/shuttle/ert/ert_shuttle = new(starting_area = /area/shuttle/ert
 	transit_delay = 0
 
 	stable = 0
-
+	linked_area = /area/shuttle/ert/centcom
 	req_access = list(access_cent_ert)
 
 /datum/shuttle/ert/initialize()
@@ -88,13 +80,8 @@ var/global/datum/shuttle/ert/ert_shuttle = new(starting_area = /area/shuttle/ert
 /obj/machinery/computer/shuttle_control/ert
 	machine_flags = 0 //No screwtoggle / emaggable to prevent mortals from fucking with shit
 	allow_silicons = 0
-
-/obj/machinery/computer/shuttle_control/ert/New()
-	link_to(ert_shuttle)
-	.=..()
-
-/obj/machinery/computer/shuttle_control/ert/emag_act() //Can't be emagged to hijack the ert shuttle
-	return
+	shuttle = /datum/shuttle/ert
+	emag_disables_access = FALSE //Can't be emagged to hijack the ert shuttle
 
 //code/game/objects/structures/docking_port.dm
 
@@ -104,11 +91,9 @@ var/global/datum/shuttle/ert/ert_shuttle = new(starting_area = /area/shuttle/ert
 /obj/docking_port/destination/ert/centcom
 	areaname = "central command"
 	require_admin_permission = 1
-
+	shuttle_type = /datum/shuttle/ert
 
 //DEATHSQUAD SHUTTLE
-var/global/datum/shuttle/deathsquad/deathsquad_shuttle = new(starting_area = /area/shuttle/specops/centcom)
-
 /datum/shuttle/deathsquad
 	name = "deathsquad shuttle"
 
@@ -119,7 +104,7 @@ var/global/datum/shuttle/deathsquad/deathsquad_shuttle = new(starting_area = /ar
 	transit_delay = 0
 	destroy_everything = 1
 	stable = 0
-
+	linked_area = /area/shuttle/specops/centcom
 	req_access = list(access_cent_specops)
 
 /datum/shuttle/deathsquad/initialize()
@@ -131,13 +116,8 @@ var/global/datum/shuttle/deathsquad/deathsquad_shuttle = new(starting_area = /ar
 /obj/machinery/computer/shuttle_control/deathsquad
 	machine_flags = 0 //No screwtoggle / emaggable to prevent mortals from fucking with shit
 	allow_silicons = 0
-
-/obj/machinery/computer/shuttle_control/deathsquad/New()
-	link_to(deathsquad_shuttle)
-	.=..()
-
-/obj/machinery/computer/shuttle_control/deathsquad/emag_act() //Can't be emagged to hijack the deathsquad shuttle
-	return
+	shuttle = /datum/shuttle/deathsquad
+	emag_disables_access = FALSE //Can't be emagged to hijack the deathsquad shuttle
 
 //code/game/objects/structures/docking_port.dm
 
@@ -150,11 +130,9 @@ var/global/datum/shuttle/deathsquad/deathsquad_shuttle = new(starting_area = /ar
 /obj/docking_port/destination/deathsquad/centcom
 	areaname = "central command"
 	require_admin_permission = 1
-
+	shuttle_type = /datum/shuttle/deathsquad
 
 //ELITE SYNDIE SHUTTLE
-var/global/datum/shuttle/elite_syndie/elite_syndie_shuttle = new(starting_area = /area/shuttle/syndicate_elite/mothership)
-
 /datum/shuttle/elite_syndie
 	name = "elite syndie shuttle"
 
@@ -165,7 +143,7 @@ var/global/datum/shuttle/elite_syndie/elite_syndie_shuttle = new(starting_area =
 	transit_delay = 0
 	destroy_everything = 1
 	stable = 0
-
+	linked_area = /area/shuttle/syndicate_elite/mothership
 	req_access = list(access_syndicate)
 
 /datum/shuttle/elite_syndie/initialize()
@@ -179,13 +157,8 @@ var/global/datum/shuttle/elite_syndie/elite_syndie_shuttle = new(starting_area =
 	allow_silicons = 0
 	icon_state = "syndishuttle"
 	light_color = LIGHT_COLOR_RED
-
-/obj/machinery/computer/shuttle_control/elite_syndie/New()
-	link_to(elite_syndie_shuttle)
-	.=..()
-
-/obj/machinery/computer/shuttle_control/elite_syndie/emag_act() //Can't be emagged to hijack the elite syndie shuttle
-	return
+	shuttle = /datum/shuttle/elite_syndie
+	emag_disables_access = FALSE //Can't be emagged to hijack the elite syndie shuttle
 
 //code/game/objects/structures/docking_port.dm
 
@@ -198,11 +171,9 @@ var/global/datum/shuttle/elite_syndie/elite_syndie_shuttle = new(starting_area =
 /obj/docking_port/destination/elite_syndie/motherbase
 	areaname = "syndicate motherbase"
 	require_admin_permission = 1
-
+	shuttle_type = /datum/shuttle/elite_syndie
 
 //CUSTOM STRIKE TEAM SHUTTLE
-var/global/datum/shuttle/striketeam/strike_team_shuttle = new(starting_area = /area/shuttle/striketeam/centcom)
-
 /datum/shuttle/striketeam
 	name = "strike team shuttle"
 
@@ -213,7 +184,7 @@ var/global/datum/shuttle/striketeam/strike_team_shuttle = new(starting_area = /a
 	transit_delay = 0
 	destroy_everything = 1
 	stable = 0
-
+	linked_area = /area/shuttle/striketeam/centcom
 	req_access = list(access_cent_captain)
 
 /datum/shuttle/striketeam/initialize()
@@ -227,13 +198,8 @@ var/global/datum/shuttle/striketeam/strike_team_shuttle = new(starting_area = /a
 	allow_silicons = 0
 	icon_state = "syndishuttle"
 	light_color = LIGHT_COLOR_RED
-
-/obj/machinery/computer/shuttle_control/striketeam/New()
-	link_to(strike_team_shuttle)
-	.=..()
-
-/obj/machinery/computer/shuttle_control/striketeam/emag_act() //Can't be emagged to hijack the strike team shuttle
-	return
+	shuttle = /datum/shuttle/striketeam
+	emag_disables_access = FALSE //Can't be emagged to hijack the strike team shuttle
 
 //code/game/objects/structures/docking_port.dm
 
@@ -246,10 +212,10 @@ var/global/datum/shuttle/striketeam/strike_team_shuttle = new(starting_area = /a
 /obj/docking_port/destination/striketeam/base
 	areaname = "base"
 	require_admin_permission = 1
-
+	shuttle_type = /datum/shuttle/striketeam
 
 //ADMIN SHUTTLE
-var/global/datum/shuttle/admin/admin_shuttle = new(starting_area = /area/shuttle/administration/centcom)
+var/global/datum/shuttle/admin/admin_shuttle
 /datum/shuttle/admin
 	name = "admin shuttle"
 
@@ -260,25 +226,22 @@ var/global/datum/shuttle/admin/admin_shuttle = new(starting_area = /area/shuttle
 	transit_delay = 0
 
 	stable = 1
-
+	linked_area = /area/shuttle/administration/centcom
 	req_access = list(access_cent_captain)
 
 /datum/shuttle/admin/initialize()
 	.=..()
 	add_dock(/obj/docking_port/destination/admin/centcom)
 	add_dock(/obj/docking_port/destination/salvage/arrivals) //We share a docking port with the salvage shuttle - this should turn out fine
+	admin_shuttle = src
 
 /obj/docking_port/destination/admin/centcom
 	areaname = "centcom hangar bay"
 	require_admin_permission = 1
+	shuttle_type = /datum/shuttle/admin
 
 /obj/machinery/computer/shuttle_control/admin_shuttle
 	machine_flags = 0 //No screwtoggle / emaggable to prevent mortals from fucking with shit
 	allow_silicons = 0
-
-/obj/machinery/computer/shuttle_control/admin_shuttle/New()
-	link_to(admin_shuttle)
-	.=..()
-
-/obj/machinery/computer/shuttle_control/admin_shuttle/emag_act() //Can't be emagged to hijack the centcom ferry
-	return
+	shuttle = /datum/shuttle/admin
+	emag_disables_access = FALSE //Can't be emagged to hijack the centcom ferry
