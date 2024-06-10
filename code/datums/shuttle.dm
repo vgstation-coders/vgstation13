@@ -90,7 +90,13 @@
 /datum/shuttle/New(var/area/starting_area)
 	.=..()
 	if(starting_area)
-		linked_area = starting_area
+		if(ispath(starting_area))
+			linked_area = locate(starting_area) in areas
+		else if(isarea(starting_area))
+			linked_area = starting_area
+		else
+			linked_area = starting_area
+			warning("Unable to find area [starting_area] in world - [src.type] ([src.name]) won't be able to function properly.")
 	else if(ispath(linked_area))
 		linked_area = locate(linked_area) in areas
 	else
