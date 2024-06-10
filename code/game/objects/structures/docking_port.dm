@@ -18,15 +18,12 @@ var/global/list/all_docking_ports = list()
 	var/require_admin_permission = 0
 
 	var/areaname = "space"
-	var/shuttle_type
 
 	var/obj/docking_port/docked_with
 
 /obj/docking_port/New()
 	.=..()
 	all_docking_ports |= src
-	if(shuttle_type && !(locate(shuttle_type) in shuttles))
-		new shuttle_type
 
 /obj/docking_port/Destroy()
 	.=..()
@@ -155,7 +152,7 @@ var/global/list/all_docking_ports = list()
 	icon_state = "docking_station"
 	var/turf/origin_turf = null
 	var/list/disk_references = list() //List of shuttle destination disks that know about this docking port
-
+	var/shuttle_type
 	var/base_turf_type			= /turf/space
 	var/base_turf_icon			= null
 	var/base_turf_icon_state	= null
@@ -165,6 +162,8 @@ var/global/list/all_docking_ports = list()
 
 /obj/docking_port/destination/New()
 	.=..()
+	if(shuttle_type && !(locate(shuttle_type) in shuttles))
+		new shuttle_type
 
 	origin_turf = get_turf(src)
 	//The following few lines exist to make shuttle corners and the syndicate base Less Shit :*
