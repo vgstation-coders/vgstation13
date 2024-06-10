@@ -1,3 +1,5 @@
+#define BLACKLISTED_EFFECTS "/datum/artifact_effect - /datum/artifact_effect/gas - /datum/artifact_effect/heat - /datum/artifact_effect/cold" //format this with "- /datum/artifact_effect/NAME".
+
 var/list/excavated_large_artifacts = list()
 var/list/destroyed_large_artifacts = list()
 var/list/razed_large_artifacts = list()//destroyed while still inside a rock wall/boulder
@@ -42,7 +44,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 
 /obj/machinery/artifact/proc/generate_effect()
 	//setup primary effect
-	var/effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
+	var/effecttype = pick(typesof(/datum/artifact_effect) - BLACKLISTED_EFFECTS)
 	primary_effect = new effecttype(src, 1) //pass the 1 so that the effect knows to generate a trigger
 	primary_effect.artifact_id = "[artifact_id]a"
 	spawn(1)	//delay logging so if admin tools override/other fuckery occurs the logs still end up correct
@@ -53,7 +55,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 
 	//75% chance to have a secondary effect
 	if(prob(75))
-		effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
+		effecttype = pick(typesof(/datum/artifact_effect) - BLACKLISTED_EFFECTS)
 		secondary_effect = new effecttype(src, 1, FALSE)
 		secondary_effect.artifact_id = "[artifact_id]b"
 		spawn(1)
@@ -243,3 +245,5 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 
 /obj/machinery/artifact/can_overload()
 	return 0
+
+#undef BLACKLISTED_EFFECTS

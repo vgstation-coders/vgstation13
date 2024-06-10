@@ -1,3 +1,5 @@
+#define BLACKLISTED_TRIGGERS "/datum/artifact_trigger - /datum/artifact_trigger/gas - /datum/artifact_trigger/pressure - /datum/artifact_trigger/temperature"
+
 //override procs in children as necessary
 /datum/artifact_effect
 	var/effecttype = "unknown"		//purely used for admin checks ingame, not needed any more
@@ -190,9 +192,9 @@
 	if(effect == ARTIFACT_EFFECT_TOUCH)
 		triggertype = /datum/artifact_trigger/touch
 	else if (primary_effect)
-		triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger)
+		triggertype = pick(typesof(/datum/artifact_trigger) - BLACKLISTED_TRIGGERS)
 	else
-		triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger - /datum/artifact_trigger/pay2use)
+		triggertype = pick(typesof(/datum/artifact_trigger) - BLACKLISTED_TRIGGERS - /datum/artifact_trigger/pay2use)
 
 	trigger = new triggertype(src)
 
@@ -215,3 +217,5 @@
 	copy_for_battery = null
 	holder = null
 	..()
+
+#undef BLACKLISTED_TRIGGERS
