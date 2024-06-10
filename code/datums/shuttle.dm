@@ -830,7 +830,7 @@
 		AM.map_element_rotate(rotate)
 
 /proc/setup_shuttles()
-
+	var/watch = start_watch()
 	var/msg
 	for(var/datum/shuttle/S in shuttles)
 		msg = null
@@ -852,7 +852,7 @@
 		warning("Emergency shuttle handler does not exist!")
 	else if(!emergency_shuttle.shuttle)
 		warning("Emergency shuttle datum does not exist!")
-
+	log_debug("Initialized shuttles in [stop_watch(watch)]s.", FALSE)
 //Custom shuttles
 /datum/shuttle/custom
 	name = "custom shuttle"
