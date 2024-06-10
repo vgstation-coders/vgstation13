@@ -829,26 +829,21 @@
 
 /proc/setup_shuttles()
 
+	var/msg
 	for(var/datum/shuttle/S in shuttles)
+		msg = null
 		switch(S.initialize())
 			if(INIT_NO_AREA)
-				if(S.is_special())
-					var/msg = S.linked_area ? "- \"[S.linked_area]\" was given as a starting area." : ""
-					warning("Invalid or missing starting area for [S.name] ([S.type]) [msg]")
-				else
-					var/msg = S.linked_area ? "- \"[S.linked_area]\" was given as a starting area." : ""
-					world.log << "Invalid or missing starting area for [S.name] ([S.type]) [msg]"
+				msg = "Invalid or missing starting area for [S.name] ([S.type]) [S.linked_area ? "- \"[S.linked_area]\" was given as a starting area." : ""]"
 			if(INIT_NO_PORT)
-				if(S.is_special())
-					warning("Couldn't find a shuttle docking port for [S.name] ([S.type]).")
-				else
-					world.log << "Couldn't find a shuttle docking port for [S.name] ([S.type])."
+				msg = "Couldn't find a shuttle docking port for [S.name] ([S.type])."
 			if(INIT_NO_START)
-				if(S.is_special())
-					warning("[S.name] ([S.type]) couldn't connect to a destination port on init - unless this is intended, there might be problems.")
-				else
-					world.log << "[S.name] ([S.type]) couldn't connect to a destination port on init - unless this is intended, there might be problems."
-
+				msg = "[S.name] ([S.type]) couldn't connect to a destination port on init - unless this is intended, there might be problems."
+		if(msg)
+			if(S.is_special())
+				warning(msg)
+			else
+				world.log << msg
 
 	//THE MOST IMPORTANT PIECE OF CODE HERE
 	if(!emergency_shuttle)
