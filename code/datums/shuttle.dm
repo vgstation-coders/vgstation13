@@ -106,6 +106,8 @@
 		shuttles |= src
 	if(password)
 		password = rand(10000,99999)
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
 //initialize() proc - called automatically in proc/setup_shuttles() below.
 //Returns INIT_SUCCESS, INIT_NO_AREA, INIT_NO_START or INIT_NO_PORT, depending on whether there were any errors
