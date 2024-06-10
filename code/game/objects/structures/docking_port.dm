@@ -162,8 +162,14 @@ var/global/list/all_docking_ports = list()
 
 /obj/docking_port/destination/New()
 	.=..()
-	if(shuttle_type && !(locate(shuttle_type) in shuttles))
-		new shuttle_type
+	if(shuttle_type)
+		var/already_in_shuttles = FALSE
+		for(var/datum/S in shuttles)
+			if(S.type == shuttle_type)
+				already_in_shuttles = TRUE
+				break
+		if(!already_in_shuttles)
+			new shuttle_type
 
 	origin_turf = get_turf(src)
 	//The following few lines exist to make shuttle corners and the syndicate base Less Shit :*
