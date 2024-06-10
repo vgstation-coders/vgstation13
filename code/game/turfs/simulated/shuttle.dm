@@ -85,6 +85,8 @@
 /obj/structure/shuttle/diag_wall/initialize()
 	var/turf/T = get_turf(src)
 	if(T)
+		if(!T.dynamic_lighting)
+			update_moody_light('icons/lighting/moody_lights.dmi', "diag_wall")
 		T.dynamic_lighting = 1
 		if(SSlighting && SSlighting.initialized && !T.lighting_overlay)
 			new /atom/movable/lighting_overlay(T, TRUE)
@@ -109,6 +111,9 @@
 	..()
 	T = get_turf(destination)
 	if(T)
+		kill_moody_light()
+		if(!T.dynamic_lighting)
+			update_moody_light('icons/lighting/moody_lights.dmi', "diag_wall")
 		T.dynamic_lighting = 1
 		if(!T.lighting_overlay)
 			new /atom/movable/lighting_overlay(T, TRUE)
