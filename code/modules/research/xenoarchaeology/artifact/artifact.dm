@@ -32,7 +32,8 @@
 	100;/obj/machinery/replicator,
 	100;/obj/machinery/communication,
 	100;/mob/living/simple_animal/hostile/roboduck,
-	1000;/obj/machinery/artifact)
+	//1000;/obj/machinery/artifact
+	)
 
 var/list/all_generated_artifact_ids = list()
 
