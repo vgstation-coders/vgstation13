@@ -851,8 +851,6 @@
 
 
 	//THE MOST IMPORTANT PIECE OF CODE HERE
-	emergency_shuttle.shuttle = escape_shuttle
-
 	if(!emergency_shuttle)
 		warning("Emergency shuttle handler does not exist!")
 	else if(!emergency_shuttle.shuttle)

@@ -1,5 +1,3 @@
-var/global/datum/shuttle/escape/escape_shuttle
-
 /datum/shuttle/escape
 	name = "emergency shuttle"
 
@@ -28,7 +26,7 @@ var/global/datum/shuttle/escape/escape_shuttle
 
 	set_transit_dock(/obj/docking_port/destination/escape/shuttle/transit)
 	if(src.type == /datum/shuttle/escape)
-		escape_shuttle = src
+		emergency_shuttle.shuttle = src
 
 //code/game/objects/structures/docking_port.dm
 /obj/docking_port/destination/escape/shuttle/station
