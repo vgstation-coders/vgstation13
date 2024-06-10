@@ -539,7 +539,6 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	my_shuttle_home_base.dir = opposite_dirs[DP.dir]
 
 	var/datum/shuttle/custom/S = new(starting_area = A)
-	S.initialize()
 	S.name = name
 	S.linked_port.docked_with = my_shuttle_home_base
 

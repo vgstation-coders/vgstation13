@@ -5131,7 +5131,8 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			return
 
 		var/datum/shuttle/custom/S = new(starting_area = A)
-		S.initialize()
+		if(ticker && ticker.current_state != GAME_STATE_PLAYING)
+			S.initialize()
 		S.name = name
 
 		to_chat(usr, "Shuttle created!")
