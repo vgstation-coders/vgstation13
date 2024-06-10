@@ -25,7 +25,12 @@ var/list/science_goggles_wearers = list()
 
 /datum/visioneffect/pathogen/process_hud(var/mob/M)
 	..()
-	M.overlay_fullscreen("science", /obj/abstract/screen/fullscreen/science)
+	if(M.get_item_by_slot(slot_glasses))
+		var/obj/item/clothing/glasses/MS = M.get_item_by_slot(slot_glasses) //State: 0:off, 1:purple overlay + virus scan, 2:no overlay + virus scan
+		if((MS.multiple_states == 1) || (!initial(MS.multiple_states)))
+			M.overlay_fullscreen("science", /obj/abstract/screen/fullscreen/science)
+		else
+			M.clear_fullscreen("science",0)
 
 /datum/visioneffect/pathogen/on_remove(var/mob/M)
 	..()
