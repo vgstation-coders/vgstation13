@@ -91,7 +91,7 @@
 		plague.color = "#ADAEAA"
 		plague.pattern = 3
 		plague.pattern_color = "#EE9A9C"
-		plague.stage = 4 //4 stages, unlocks the really dangerous symptoms rather than just DNA Degradation
+		plague.max_stage = 4 //4 stages, unlocks the really dangerous symptoms rather than just DNA Degradation
 		plague.speed = 4 //Takes about 50 seconds to advance to the next stage
 
 		plague.makerandom(list(90,100),list(40,75),anti,bad,null)
