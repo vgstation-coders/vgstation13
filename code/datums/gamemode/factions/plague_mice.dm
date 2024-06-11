@@ -65,27 +65,38 @@
 
 		var/list/anti = list(
 			ANTIGEN_BLOOD	= 0,
-			ANTIGEN_COMMON	= 1,
-			ANTIGEN_RARE	= 2,
-			ANTIGEN_ALIEN	= 0,
+			ANTIGEN_COMMON	= 0,
+			ANTIGEN_RARE	= 1,
+			ANTIGEN_ALIEN	= 2,
 			)
 		var/list/bad = list(
 			EFFECT_DANGER_HELPFUL	= 0,
 			EFFECT_DANGER_FLAVOR	= 0,
 			EFFECT_DANGER_ANNOYING	= 1,
 			EFFECT_DANGER_HINDRANCE	= 1,
-			EFFECT_DANGER_HARMFUL	= 2,
-			EFFECT_DANGER_DEADLY	= 3,
+			EFFECT_DANGER_HARMFUL	= 3,
+			EFFECT_DANGER_DEADLY	= 5,
 			)
-		plague.origin = "Black Plague"
+		if(prob(2)) //Dan's Discount products are notoriously bad
+			plague.origin = "Discount Dan's Gas Station Sushi"
+		else if(Holiday == APRIL_FOOLS_DAY)
+			plague.origin = pick("Nurgle's Cauldron", "Deadly Africanized Water", "Public Bathroom", "Thrax",
+								"A spaceman got a mouse disease, this is what happened to his body")
+		else
+			plague.origin = pick("Black Plague", "Javorian Pox", "Gray Death", "Doom of Pandyssia", "Thrassian Plague",
+								"Redlight", "Khaara Bacterium", "MEV-1")
 
-		plague.spread = SPREAD_BLOOD|SPREAD_CONTACT|SPREAD_AIRBORNE//gotta ensure that our mice can spread that disease
+		plague.spread = SPREAD_BLOOD|SPREAD_CONTACT|SPREAD_AIRBORNE|SPREAD_COLONY//gotta ensure that our mice can spread that disease
 
 		plague.color = "#ADAEAA"
 		plague.pattern = 3
 		plague.pattern_color = "#EE9A9C"
+		plague.stage = 4 //4 stages, unlocks the really dangerous symptoms rather than just DNA Degradation
+		plague.speed = 4 //Takes about 50 seconds to advance to the next stage
 
-		plague.makerandom(list(80,100),list(25,50),anti,bad,null)
+		plague.makerandom(list(90,100),list(40,75),anti,bad,null)
+		for(var/datum/disease2/effect/e in plague.effects)
+			e.chance *= 2 //More likely to trigger symptoms per tick
 
 		diseaseID = "[plague.uniqueID]-[plague.subID]"
 
