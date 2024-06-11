@@ -482,35 +482,32 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/scorchray/on_hit(var/atom/target, var/blocked = 0)
 	if(!..())
 		return 0
-	var/mob/living/M = target
-	if(ishuman(target))
-		var/mob/living/carbon/human/H = M
-		var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-		if (H.isDead())
-			if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (To-Do: Add animations for mushmen, catbeasts, skrell, and unathi)
-				return 0
-			var/lying_animation = "dust-h2-nohead" //Defaults to humanoid ashing sprites if it doesn't get changed
-			var/standing_animation = "dust-h-nohead"
-			if(isgrey(H))
-				lying_animation = "dust-g2-nohead"
-				standing_animation = "dust-g-nohead"
-			else if(isvox(H))
-				lying_animation = "dust-v2-nohead"
-				standing_animation = "dust-v-nohead"
-			else if(isinsectoid(H))
-				lying_animation = "dust-i2-nohead"
-				standing_animation = "dust-i-nohead"
-			H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-			playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-			H.drop_all() // So their gear doesn't all get deleted
-			if(head_organ)
-				head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
-			if(H.lying)
-				anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = lying_animation, sleeptime = 15)
-			else
-				anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = standing_animation, sleeptime = 15)
-			new /obj/effect/decal/cleanable/ash(get_turf(target))
-			qdel(H)
+	var/mob/living/carbon/human/H = target
+	if(!istype(H) || !H.isDead() || !(H.species.anatomy_flags & NO_BLOOD)) //Not human, not dead or doesn't have blood
+		return 1 // This way it should only apply to the more fleshy species (To-Do: Add animations for mushmen, catbeasts, skrell, and unathi)
+	var/lying_animation = "dust-h2-nohead" //Defaults to humanoid ashing sprites if it doesn't get changed
+	var/standing_animation = "dust-h-nohead"
+	if(isgrey(H))
+		lying_animation = "dust-g2-nohead"
+		standing_animation = "dust-g-nohead"
+	else if(isvox(H))
+		lying_animation = "dust-v2-nohead"
+		standing_animation = "dust-v-nohead"
+	else if(isinsectoid(H))
+		lying_animation = "dust-i2-nohead"
+		standing_animation = "dust-i-nohead"
+	H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+	playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
+	H.drop_all() // So their gear doesn't all get deleted
+	var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+	if(head_organ)
+		head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
+	if(H.lying)
+		anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = lying_animation, sleeptime = 15)
+	else
+		anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = standing_animation, sleeptime = 15)
+	new /obj/effect/decal/cleanable/ash(get_turf(target))
+	qdel(H)
 	return 1
 
 /obj/item/projectile/beam/scorchray/immolationray
