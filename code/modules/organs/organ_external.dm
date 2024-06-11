@@ -853,17 +853,17 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 		//Robotic limbs explode if sabotaged.
 		if(status & ORGAN_ROBOT && !no_explode && sabotaged)
-			owner.visible_message("<span class='danger'>\The [owner]'s [display_name] explodes violently!</span>", \
-			"<span class='danger'>Your [display_name] explodes violently!</span>", \
-			"<span class='danger'>You hear an explosion followed by a scream!</span>")
+			owner.visible_message("<span class='moderate'>\The [owner]'s [display_name] explodes violently!</span>", \
+			"<span class='moderate'>Your [display_name] explodes violently!</span>", \
+			"<span class='moderate'>You hear an explosion followed by a scream!</span>")
 			explosion(get_turf(owner), -1, -1, 2, 3, whodunnit = owner)
 			spark(src, 5, FALSE)
 
 		if(organ)
 			if(display_message)
-				owner.visible_message("<span class='danger'>[owner.name]'s [display_name] flies off in an arc.</span>", \
-				"<span class='danger'>Your [display_name] goes flying off!</span>", \
-				"<span class='danger'>You hear a terrible sound of ripping tendons and flesh.</span>")
+				owner.visible_message("<span class='moderate'>[owner.name]'s [display_name] flies off in an arc!</span>", \
+				"<span class='moderate'>Your [display_name] goes flying off!</span>", \
+				"<span class='moderate'>You hear a terrible sound of ripping tendons and flesh!</span>")
 
 			//Throw organs around
 			var/randomdir = pick(cardinal)
