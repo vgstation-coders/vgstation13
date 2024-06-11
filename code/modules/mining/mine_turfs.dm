@@ -146,7 +146,8 @@ var/global/list/mineralSpawnChance[]
 /turf/unsimulated/mineral/New()
 	mineral_turfs += src
 	. = ..()
-	MineralSpread()
+	if(istype(src))
+		MineralSpread()
 	update_icon()
 
 var/list/icon_state_to_appearance = list()
