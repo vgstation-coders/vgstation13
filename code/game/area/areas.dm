@@ -9,6 +9,8 @@ var/area/space_area
 	var/uid
 	var/obj/machinery/power/apc/areaapc = null
 	var/list/obj/machinery/alarm/air_alarms = list()
+	var/list/obj/machinery/light_switch/lightswitches = list()
+	var/list/obj/machinery/light/lights = list()
 	var/list/area_turfs
 	plane = ABOVE_LIGHTING_PLANE
 	layer = MAPPING_AREA_LAYER
