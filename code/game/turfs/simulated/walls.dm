@@ -206,15 +206,13 @@
 		peepers -= L
 
 /turf/simulated/wall/proc/attack_rotting(mob/user as mob)
-	if(istype(src, /turf/simulated/wall/r_wall)) //I wish I didn't have to do typechecks
-		to_chat(user, "<span class='notice'>This [src] feels rather unstable.</span>")
-		return
-	else
-		//Should be a normal wall or a mineral wall, SHOULD
-		user.visible_message("<span class='warning'>\The [src] crumbles under [user]'s touch.</span>", \
-		"<span class='notice'>\The [src] crumbles under your touch.</span>")
-		dismantle_wall()
-		return
+	//Should be a normal wall or a mineral wall, SHOULD
+	user.visible_message("<span class='warning'>\The [src] crumbles under [user]'s touch.</span>", \
+	"<span class='notice'>\The [src] crumbles under your touch.</span>")
+	dismantle_wall()
+	
+/turf/simulated/wall/r_wall/attack_rotting(mob/user as mob)
+	to_chat(user, "<span class='notice'>This [src] feels rather unstable.</span>")
 
 /turf/simulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(W.attack_delay)

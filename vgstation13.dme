@@ -739,6 +739,7 @@
 #include "code\game\machinery\disk_duplicator.dm"
 #include "code\game\machinery\door_control.dm"
 #include "code\game\machinery\emancipation.dm"
+#include "code\game\machinery\firefoam_popper.dm"
 #include "code\game\machinery\flasher.dm"
 #include "code\game\machinery\floodlight.dm"
 #include "code\game\machinery\Freezer.dm"

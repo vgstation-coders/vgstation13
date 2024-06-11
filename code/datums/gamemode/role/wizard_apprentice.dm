@@ -39,15 +39,7 @@
 		if (!(S.spell_flags & LOSE_IN_TRANSFER))
 			transfer_spell(new_character, old_character, S)
 
-/datum/role/wizard_apprentice/GetScoreboard()
+/datum/role/wizard_apprentice/GetBought()
 	. = ..()
-	var/mob/living/carbon/human/H = antag.current
-
-	if(!length(H.spell_list))
-		. += "The apprentice somehow forgot everything he learned in magic school."
-		return
-
-	. += "<BR>The apprentice knew:<BR>"
-	for(var/spell/S in antag.wizard_spells)
-		var/icon/tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
-		. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
+	if(. == "")
+		return "The apprentice somehow forgot everything he learned in magic school."

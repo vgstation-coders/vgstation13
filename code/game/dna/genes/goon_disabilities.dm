@@ -264,7 +264,7 @@
 	range = SELFCAST
 	max_targets = 1
 	selection_type = "range"
-	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+	valid_targets = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 	cast_sound = 'sound/effects/bamf.ogg'
 
 	hud_state = "gen_immolate"
