@@ -251,7 +251,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	//Rate at which energy is consumed from the burning atom and delivered to the fire.
 	//Provides the "heat" and "oxygen" portions of the fire triangle.
 	var/burnrate = (oxy_ratio/(MINOXY2BURN + rand(-2,2)*0.01)) * (temperature/T20C) //burnrate ~ 1 for standard air
-	if(burnrate < 0.1)
+	if(burnrate < 0.1 || (air[GAS_OXYGEN] * CELL_VOLUME < air.volume)) //evil fucking unit manipulation; extinguishes if less than 1mol O2 per tile in a zone
 		extinguish()
 		return
 
@@ -416,6 +416,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(!(G.temperature >= autoignition_temperature))
 		return
 	if(!(G.molar_ratio(GAS_OXYGEN) >= MINOXY2BURN))
+		return
+	if(G[GAS_OXYGEN] * CELL_VOLUME < G.volume) //if less than 1 mol/tile, no fire
 		return
 	if(prob(50))
 		ignite()
