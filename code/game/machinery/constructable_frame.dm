@@ -261,7 +261,7 @@
 											break
 								to_chat(user, desc)
 
-								if(P && P.loc != src && ! (istype(P, /obj/item/stack)))
+								if(P && P.loc != src && ! (istype(P, /obj/item/stack/cable_coil)))
 									to_chat(user, "<span class='warning'>You cannot add that component to the machine!</span>")
 
 /obj/machinery/constructable_frame/machine_frame/proc/set_build_state(var/state)
