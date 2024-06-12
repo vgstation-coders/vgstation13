@@ -2669,6 +2669,7 @@
 #include "code\modules\research\xenoarchaeology\machinery\analysis_base.dm"
 #include "code\modules\research\xenoarchaeology\machinery\analysis_fourier_transform.dm"
 #include "code\modules\research\xenoarchaeology\machinery\analysis_hyperspectral.dm"
+#include "code\modules\research\xenoarchaeology\machinery\analysis_triangul.dm"
 #include "code\modules\research\xenoarchaeology\machinery\artifact_analyser.dm"
 #include "code\modules\research\xenoarchaeology\machinery\artifact_harvester.dm"
 #include "code\modules\research\xenoarchaeology\machinery\artifact_scanner.dm"
