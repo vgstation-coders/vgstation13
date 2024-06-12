@@ -424,9 +424,8 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 		return
 
 	var/z = mob.z
-	to_chat(usr, "<span class = 'notice'>Checking wire connections on current Z Level [z]</span>")
-
-	for(var/obj/structure/cable/C in world)
+	var/error_str = "<h1>Wire connections on current Z Level [z]</h1>"
+	for(var/obj/structure/cable/C in cable_list)
 		if(C.z != z)
 			continue
 		if(!C.d1) //It's a stub
@@ -434,10 +433,14 @@ var/global/movement_disabled_exception //This is the client that calls the proc,
 		var/obj/structure/cable/neighbour
 		neighbour = locate() in get_step(get_turf(C),C.d1)
 		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
-			to_chat(usr, "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span>")
+			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span><br>"
 		neighbour = locate() in get_step(get_turf(C),C.d2)
 		if(!neighbour || neighbour.get_powernet() != C.get_powernet())
-			to_chat(usr, "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span>")
+			error_str += "<span class = 'warning'>Disconnected wire at [formatJumpTo(get_turf(C))]</span><br>"
+	
+	var/datum/browser/popup = new(usr, "Wire connections", usr.name, 300, 400)
+	popup.set_content(error_str)
+	popup.open()
 
 /client/proc/check_pipes()
 	set category = "Mapping"
