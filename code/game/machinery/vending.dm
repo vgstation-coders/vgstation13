@@ -201,15 +201,18 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/splashable()
 	return FALSE
 
+/obj/machinery/vending/spillContents(destroy_chance)
+	. = ..()
+	dump_vendpack_and_coinbox()
+
 /obj/machinery/vending/proc/dump_vendpack_and_coinbox()
 	if(product_records.len && cardboard) //Only spit out if we have slotted cardboard
+		var/obj/structure/vendomatpack/custom/newpack = new(src.loc)
 		if(is_custom_machine)
-			var/obj/structure/vendomatpack/custom/newpack = new(src.loc)
 			for(var/obj/item/I in custom_stock)
 				I.forceMove(newpack)
 				custom_stock.Remove(I)
 		else
-			var/obj/structure/vendomatpack/partial/newpack = new(src.loc)
 			newpack.stock = products
 			newpack.secretstock = contraband
 			newpack.preciousstock = premium
@@ -220,7 +223,8 @@ var/global/num_vending_terminals = 1
 			newpack.targetvendomat = src.type
 
 	if(coinbox)
-		coinbox.forceMove(get_turf(src))
+		coinbox.forceMove(src.loc)
+		coinbox = null
 
 /obj/machinery/vending/examine(var/mob/user)
 	..()

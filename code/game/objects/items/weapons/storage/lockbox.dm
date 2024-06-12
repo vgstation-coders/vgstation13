@@ -275,8 +275,8 @@
 	throwforce = 10
 	storage_slots = 20
 	req_one_access = list(access_qm)
-	locked = 1
-	broken = 0
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL)
+	w_type = RECYK_ELECTRONIC
 	icon_locked = "coinbox+l"
 	icon_closed = "coinbox"
 	icon_broken = "coinbox+b"
