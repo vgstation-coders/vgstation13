@@ -68,7 +68,7 @@ var/list/impact_master = list()
 	var/penetration = 0	//if set to -1, will always phase through obstacles
 	var/mark_type = "trace"	//what marks will the bullet leave on a wall that it penetrates? from 'icons/effects/96x96.dmi'
 
-	var/inaccurate = 0
+	var/inaccurate = 0 //Will be rendered inaccurate and more likely to miss at a distance
 
 	var/turf/target = null
 	var/datum/tracker/tracker_datum = null
@@ -111,6 +111,9 @@ var/list/impact_master = list()
 	var/special_collision = PROJECTILE_COLLISION_DEFAULT
 
 	var/is_crit = FALSE
+	var/point_blank = FALSE //If fired at point-blank, deals extra damage and doesn't miss.
+	var/projectile_miss_chance = 0 //Innate miss chance, often modified by the gun
+	var/projectile_miss_message //If it has an unique miss message then it will be appended upon missing a hit
 
 /obj/item/projectile/New()
 	..()
@@ -248,11 +251,13 @@ var/list/impact_master = list()
 		//Lower accurancy/longer range tradeoff. Distance matters a lot here, so at
 		// close distance, actually RAISE the chance to hit.
 		var/distance = get_dist(starting,loc)
-		var/miss_modifier = (is_crit ? -99999 : -30) // Crits never miss
+		var/miss_modifier = ((is_crit ? -99999 : -30) + projectile_miss_chance) // Crits never miss
 		if (istype(shot_from,/obj/item/weapon/gun))	//If you aim at someone beforehead, it'll hit more often.
 			var/obj/item/weapon/gun/daddy = shot_from //Kinda balanced by fact you need like 2 seconds to aim
 			if (daddy.target && (original in daddy.target)) //As opposed to no-delay pew pew
 				miss_modifier += -30
+		if(point_blank) //Accurate at point blank.
+			miss_modifier += -50
 		if(istype(src, /obj/item/projectile/beam/lightning)) //Lightning is quite accurate
 			miss_modifier += -200
 			if(inaccurate)
@@ -269,15 +274,25 @@ var/list/impact_master = list()
 
 			def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier)
 
-		if(!def_zone)
-			visible_message("<span class='notice'>\The [src] misses [M] narrowly!</span>")
+		var/missing_due_to_no_limb_text //Offers an unique missing sound message to clue players in as to why they missed
+		if(ishuman(M)) //Human check
+			var/mob/living/carbon/human/H = M
+			var/datum/organ/external/affecting = H.get_organ(def_zone)
+			if(affecting.status & ORGAN_DESTROYED) //Target zone ended up on a missing limb, count it as a miss
+				missing_due_to_no_limb_text = "\The [src] misses [H] narrowly due to flying through where their <span class='danger'>[affecting.display_name]</span> used to be!"
+				def_zone = null
+		if(!def_zone) //The miss messages have an extra space at the beginning in order to be spaced properly
+			if(missing_due_to_no_limb_text)
+				M.visible_message("<span class='notice'>[missing_due_to_no_limb_text][projectile_miss_message ? " [projectile_miss_message]" : ""]</span>")
+			else
+				M.visible_message("<span class='notice'>\The [src] misses [M] narrowly![projectile_miss_message ? " [projectile_miss_message]" : ""]</span>")
 			special_collision = PROJECTILE_COLLISION_MISS
 		else
 			if(!custom_impact)
 				if(silenced)
 					to_chat(M, "<span class='warning'>You've been shot in the [parse_zone(def_zone)] by the [src.name]!</span>")
 				else
-					visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
+					M.visible_message("<span class='warning'>[M.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
 			admin_warn(M)
 			if(istype(firer, /mob))
 				M.do_hitmarker(firer)

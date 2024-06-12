@@ -57,7 +57,6 @@ var/list/beam_master = list()
 				if (PROJECTILE_COLLISION_REBOUND)
 					return new /rayCastHit(info, RAY_CAST_REBOUND)
 				if (PROJECTILE_COLLISION_MISS)
-					A.visible_message("<span class='notice'>\The [fired_beam] misses \the [A] narrowly!</span>")
 					return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 				if (PROJECTILE_COLLISION_PORTAL)
 					return new /rayCastHit(info, RAY_CAST_PORTAL)
@@ -213,7 +212,6 @@ var/list/beam_master = list()
 	eyeblur = 50
 	var/tang = 0
 	layer = PROJECTILE_LAYER
-	var/turf/last = null
 	kill_count = 12
 	var/mob/firer_mob = null
 	var/yellow = 0
@@ -255,6 +253,157 @@ var/list/beam_master = list()
 		..()
 
 /obj/item/projectile/beam/lightning/process()
+	icon_state = "lightning"
+	var/first = 1 //So we don't make the overlay in the same tile as the firer
+	var/broke = 0
+	var/broken
+	var/atom/curr = current
+	var/Angle=round(Get_Angle(firer,curr))
+	var/icon/I=new('icons/obj/lightning.dmi',"[icon_state][yellow ? "_yellow" : ""]")
+	var/icon/Istart=new('icons/obj/lightning.dmi',"[icon_state]start[yellow ? "_yellow" : ""]")
+	var/icon/Iend=new('icons/obj/lightning.dmi',"[icon_state]end[yellow ? "_yellow" : ""]")
+	I.Turn(Angle+45)
+	Istart.Turn(Angle+45)
+	Iend.Turn(Angle+45)
+	var/DX=(WORLD_ICON_SIZE*curr.x+curr.pixel_x)-(WORLD_ICON_SIZE*firer.x+firer.pixel_x)
+	var/DY=(WORLD_ICON_SIZE*curr.y+curr.pixel_y)-(WORLD_ICON_SIZE*firer.y+firer.pixel_y)
+	var/N=0
+	var/length=round(sqrt((DX)**2+(DY)**2))
+	var/count = 0
+	var/turf/T = get_turf(src)
+	var/list/ouroverlays = list()
+
+	spawn() for(N,N<length,N+=WORLD_ICON_SIZE)
+		if(count >= kill_count)
+			break
+		count++
+		var/obj/effect/overlay/beam/persist/lightning_segment = new /obj/effect/overlay/beam/persist(T)
+		lightning_segment.BeamSource=src
+		ouroverlays += lightning_segment
+		if((N+WORLD_ICON_SIZE*2>length) && (N+WORLD_ICON_SIZE<=length))
+			lightning_segment.icon=Iend
+		else if(N==0)
+			lightning_segment.icon=Istart
+		else if(N+WORLD_ICON_SIZE>length)
+			lightning_segment.icon=null
+		else
+			lightning_segment.icon=I
+
+		// We set pixel_x to the position it should be based on the angle of the lightning, then we reduce pixel_x by a factor of 32 and add it to the
+		// x position variable instead, resulting in the same overall position. Then, we do the same for y.
+		lightning_segment.pixel_x = round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE)/WORLD_ICON_SIZE)
+		lightning_segment.pixel_y = round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE)/WORLD_ICON_SIZE)
+		if(lightning_segment.pixel_x >= 0)
+			lightning_segment.x += Floor( lightning_segment.pixel_x / WORLD_ICON_SIZE )
+		else
+			lightning_segment.x += Ceiling( lightning_segment.pixel_x / WORLD_ICON_SIZE )
+		if(lightning_segment.pixel_y >= 0)
+			lightning_segment.y += Floor( lightning_segment.pixel_y / WORLD_ICON_SIZE )
+		else
+			lightning_segment.y += Ceiling( lightning_segment.pixel_y / WORLD_ICON_SIZE )
+		lightning_segment.pixel_y %= 32
+		lightning_segment.pixel_x %= 32
+
+
+		var/turf/TT = get_turf(lightning_segment.loc)
+		TT.color = "#00ff00"
+		while((TT.timestopped || timestopped || lightning_segment.timestopped) && count)
+			sleep(2)
+
+		if(TT == firer.loc)
+			continue
+		if(TT.density)
+			QDEL_NULL(lightning_segment)
+			break
+		for(var/atom/movable/O in TT)
+			if(!O.Cross(src))
+				qdel(lightning_segment)
+				broke = 1
+				break
+		for(var/mob/living/O in TT.contents)
+			if(istype(O, /mob/living))
+				if(O.density)
+					QDEL_NULL(lightning_segment)
+					broke = 1
+					break
+		if(broke)
+			if(lightning_segment)
+				QDEL_NULL(lightning_segment)
+			break
+
+	spawn(10)
+		for(var/atom/thing in ouroverlays)
+			if(!thing.timestopped && thing.loc && !thing.loc.timestopped)
+				ouroverlays -= thing
+				qdel(thing)
+	spawn
+		var/tS = 0
+		while(loc) //Move until we hit something
+			if(tS)
+				tS = 0
+				timestopped = loc.timestopped
+			while((loc.timestopped || timestopped) && !first)
+				tS = 1
+				sleep(3)
+			if(first)
+				icon = midicon
+				if(timestopped || loc.timestopped)
+					tS = 1
+					timestopped = 0
+			if((!( current ) || loc == current)) //If we pass our target
+				broken = 1
+				icon = endicon
+				tang = adjustAngle(get_angle(original,current))
+				if(tang > 180)
+					tang -= 180
+				else
+					tang += 180
+				icon_state = "[tang]"
+				var/turf/simulated/floor/f = current
+				if(f && istype(f))
+					f.break_tile()
+					f.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
+			if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
+//				to_chat(world, "deleting")
+				//del(src) //Delete if it passes the world edge
+				broken = 1
+				return
+			if(kill_count < 1)
+//				to_chat(world, "deleting")
+				//del(src)
+				broken = 1
+			kill_count--
+//			to_chat(world, "[x] [y]")
+			if(!bumped && !isturf(original))
+				if(loc == get_turf(original))
+					if(!(original in permutated))
+						icon = endicon
+					if(!broken)
+						tang = adjustAngle(get_angle(original,current))
+						if(tang > 180)
+							tang -= 180
+						else
+							tang += 180
+						icon_state = "[tang]"
+					to_bump(original)
+			first = 0
+			if(broken)
+//				to_chat(world, "breaking")
+				break
+			else
+				step_towards(src, current) //Move~
+				if(src.loc != current)
+					tang = adjustAngle(get_angle(src.loc,current))
+				icon_state = "[tang]"
+		if(ouroverlays.len)
+			sleep(10)
+			for(var/atom/thing in ouroverlays)
+				ouroverlays -= thing
+				qdel(thing)
+
+		//del(src)
+		qdel(src)
+/*
 	icon_state = "lightning"
 	var/first = 1 //So we don't make the overlay in the same tile as the firer
 	var/broke = 0
@@ -441,7 +590,7 @@ var/list/beam_master = list()
 	sleep(50)
 	src.invisibility = 101
 	return*/
-
+*/
 /obj/item/projectile/beam/lightning/on_hit(atom/target, blocked = 0)
 	if(istype(target, /mob/living))
 		var/mob/living/M = target
@@ -452,6 +601,8 @@ var/list/beam_master = list()
 	var/spell/lightning/our_spell
 	weaken = 0
 	stun = 0
+	stutter = 0
+	eyeblur = 0
 /obj/item/projectile/beam/lightning/spell/to_bump(atom/A as mob|obj|turf|area)
 	. = ..()
 	if(.)

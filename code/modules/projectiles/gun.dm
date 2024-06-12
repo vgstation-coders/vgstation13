@@ -74,6 +74,10 @@
 	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_NINJA
 	var/kick_fire_chance = 5
 
+	//Affects the accuracy of the weapon
+	var/gun_miss_chance_value
+	var/gun_miss_message
+
 /obj/item/weapon/gun/New()
 	..()
 	if(isHandgun())
@@ -193,6 +197,7 @@
 
 /obj/item/weapon/gun/proc/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	//Exclude lasertag guns from the M_CLUMSY check.
+	. = reset_point_blank_shot()
 	var/explode = FALSE
 	var/dehand = FALSE
 	if(istype(user, /mob/living))
@@ -319,6 +324,9 @@
 			in_chamber.p_x = text2num(mouse_control["icon-x"])
 		if(mouse_control["icon-y"])
 			in_chamber.p_y = text2num(mouse_control["icon-y"])
+	if(gun_miss_chance_value)
+		in_chamber.projectile_miss_chance = gun_miss_chance_value
+		in_chamber.projectile_miss_message = gun_miss_message
 
 	spawn()
 		if(in_chamber)
@@ -338,6 +346,11 @@
 		return 1
 
 	return 1
+
+/obj/item/weapon/gun/proc/reset_point_blank_shot()
+	if(in_chamber)
+		in_chamber.point_blank = FALSE
+		in_chamber.damage = in_chamber.damage/1.3
 
 /obj/item/weapon/gun/proc/canbe_fired()
 	return process_chambered()
@@ -409,6 +422,7 @@
 			user.visible_message("<span class='danger'> \The [user] fires \the [src] point blank at [M]!</span>")
 			if (process_chambered()) //Load whatever it is we fire
 				in_chamber.damage *= 1.3 //Some guns don't work with damage / chambers, like dart guns!
+				in_chamber.point_blank = TRUE
 			src.Fire(M,user,0,0,1)
 			return
 		else if(target && (M in target))
