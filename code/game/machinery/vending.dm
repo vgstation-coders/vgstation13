@@ -186,6 +186,9 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/RefreshParts()
 	var/manipcount = 0
+	var/obj/item/stack/sheet/metal/S = locate() in component_parts
+	if(S)
+		qdel(S) //hotfix so it doesn't show up. TODO: write a better system for excluding stuff like this on built machines and test it all
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating
