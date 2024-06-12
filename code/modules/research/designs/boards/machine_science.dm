@@ -102,6 +102,11 @@
 	name = "Circuit Design (Hyperspectral Imager)"
 	id = "hyperspectral"
 	build_path = /obj/item/weapon/circuitboard/anom/hyper
+	
+/datum/design/anom/triangul
+	name = "Circuit Design (Placeholder)"
+	id = "triangul"
+	build_path = /obj/item/weapon/circuitboard/anom/triangul
 
 /datum/design/anom/analyser
 	name = "Circuit Design (Anomaly Analyzer)"

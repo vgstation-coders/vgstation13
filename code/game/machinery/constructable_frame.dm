@@ -1438,6 +1438,11 @@ to destroy them and players will be able to make replacements.
 	name = "Circuit Board (Hyperspectral Imager)"
 	desc = "A circuit board used to run a machine used in xenoarcheology."
 	build_path = /obj/machinery/anomaly/hyperspectral
+	
+/obj/item/weapon/circuitboard/anom/triangul
+	name = "Circuit Board (Placeholder)"
+	desc = "A circuit board used to run a machine used in xenoarcheology."
+	build_path = /obj/machinery/anomaly/triangul
 
 /obj/item/weapon/circuitboard/anom/analyser
 	name = "Circuit Board (Anomaly Analyzer)"

@@ -52,6 +52,9 @@
 /datum/geosample
 	var/artifact_id = ""					//id of a nearby artifact, if there is one
 	var/artifact_distance = -1				//proportional to distance
+	var/artifact_x = -1
+	var/artifact_y = -1
+	var/artifact_exotic_distance = -1
 
 //have this separate from UpdateTurf() so that we dont have a billion turfs being updated (redundantly) every time an artifact spawns
 /datum/geosample/proc/UpdateNearbyArtifactInfo(var/turf/unsimulated/mineral/container)
@@ -61,6 +64,9 @@
 	if(container.artifact_find)
 		artifact_distance = rand() // 0-1
 		artifact_id = container.artifact_find.artifact_id
+		if(container.artifact_find.artifact_find_type == /obj/machinery/artifact)
+			artifact_x = container.x - WORLD_X_OFFSET[container.z]
+			artifact_y = container.y - WORLD_Y_OFFSET[container.z]
 		return
 
 	if(!SSxenoarch) //Sanity check due to runtimes ~Z
@@ -69,7 +75,12 @@
 	for(var/turf/unsimulated/mineral/T in SSxenoarch.artifact_spawning_turfs)
 		if(T.artifact_find)
 			var/cur_dist = sqrt(get_dist_squared(container, T))
-			if(artifact_distance < 0 || cur_dist < artifact_distance)
+			if(T.artifact_find.artifact_find_type == /obj/machinery/artifact && (artifact_exotic_distance < 0 || cur_dist < artifact_exotic_distance))
+				artifact_exotic_distance = cur_dist + rand() * 2 - 1
+				artifact_id = T.artifact_find.artifact_id
+				artifact_x = T.x - WORLD_X_OFFSET[T.z]
+				artifact_y = T.y - WORLD_Y_OFFSET[T.z]
+			else if(artifact_distance < 0 || cur_dist < artifact_distance)
 				artifact_distance = cur_dist + rand() * 2 - 1
 				artifact_id = T.artifact_find.artifact_id
 		else
