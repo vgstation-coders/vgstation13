@@ -348,7 +348,7 @@
 	return 1
 
 /obj/item/weapon/gun/proc/reset_point_blank_shot()
-	if(in_chamber)
+	if(in_chamber && in_chamber.point_blank)
 		in_chamber.point_blank = FALSE
 		in_chamber.damage = in_chamber.damage/1.3
 
@@ -420,7 +420,7 @@
 				to_chat(user, "<span class='notice'>[pick("Hey that's dangerous...wouldn't want hurting people.","You don't feel like firing \the [src] at \the [M].","Peace, my [user.gender == FEMALE ? "girl" : "man"]...")]</span>")
 				return
 			user.visible_message("<span class='danger'> \The [user] fires \the [src] point blank at [M]!</span>")
-			if (process_chambered()) //Load whatever it is we fire
+			if (process_chambered() && !in_chamber.point_blank) //Load whatever it is we fire
 				in_chamber.damage *= 1.3 //Some guns don't work with damage / chambers, like dart guns!
 				in_chamber.point_blank = TRUE
 			src.Fire(M,user,0,0,1)
