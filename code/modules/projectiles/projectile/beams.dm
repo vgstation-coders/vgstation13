@@ -306,7 +306,6 @@ var/list/beam_master = list()
 
 
 		var/turf/TT = get_turf(lightning_segment.loc)
-		TT.color = "#00ff00"
 		while((TT.timestopped || timestopped || lightning_segment.timestopped) && count)
 			sleep(2)
 
