@@ -435,12 +435,17 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/practice/stormtrooper
 	fire_sound = "sound/weapons/blaster-storm.ogg"
+	excessive_missing = TRUE
+	projectile_miss_chance = 99999
+	projectile_miss_message_replace = TRUE
 
-/obj/item/projectile/beam/practice/stormtrooper/on_hit(var/atom/target, var/blocked = 0)
-	if(..(target, blocked))
-		var/mob/living/L = target
-		var/message = pick("\the [src] narrowly whizzes past [L]!","\the [src] almost hits [L]!","\the [src] straight up misses its target.","[L]'s hair is singed off by \the [src]!","\the [src] misses [L] by a millimetre!","\the [src] doesn't hit","\the [src] misses its intended target.","[L] has a lucky escape from \the [src]!")
-		target.loc.visible_message("<span class='danger'>[message]</span>")
+/obj/item/projectile/beam/practice/stormtrooper/to_bump(atom/A)
+	var/selected_message = pick("\The [src] narrowly whizzes past [A]!","\The [src] almost hits [A]!",
+								"\The [src] straight up misses [A].","[A]'s hair is singed off by \the [src]!",
+								"\The [src] misses [A] by a millimetre!","\The [src] doesn't hit [A]!",
+								"\The [src] misses [A].","[A] has a lucky escape from \the [src]!")
+	projectile_miss_message = "<span class='danger'>[selected_message]</span>"
+	return ..()
 
 /obj/item/projectile/beam/scorchray
 	name = "scorch ray"

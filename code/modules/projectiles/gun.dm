@@ -75,8 +75,10 @@
 	var/kick_fire_chance = 5
 
 	//Affects the accuracy of the weapon
-	var/gun_miss_chance_value
-	var/gun_miss_message
+	var/gun_excessive_missing //If toggled on, projectiles that fail to hit a specified zone will always miss
+	var/gun_miss_chance_value //Additive miss chance
+	var/gun_miss_message //Message that shows up as an addition to the message text
+	var/gun_miss_message_replace //If toggled on, will cause gun_miss_message to replace the entire missing message
 
 /obj/item/weapon/gun/New()
 	..()
@@ -324,9 +326,14 @@
 			in_chamber.p_x = text2num(mouse_control["icon-x"])
 		if(mouse_control["icon-y"])
 			in_chamber.p_y = text2num(mouse_control["icon-y"])
+	if(gun_excessive_missing)
+		in_chamber.excessive_missing = gun_excessive_missing
 	if(gun_miss_chance_value)
 		in_chamber.projectile_miss_chance = gun_miss_chance_value
+	if(gun_miss_message)
 		in_chamber.projectile_miss_message = gun_miss_message
+	if(gun_miss_message_replace)
+		in_chamber.projectile_miss_message_replace = gun_miss_message_replace
 
 	spawn()
 		if(in_chamber)

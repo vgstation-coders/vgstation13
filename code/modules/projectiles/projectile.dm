@@ -112,8 +112,11 @@ var/list/impact_master = list()
 
 	var/is_crit = FALSE
 	var/point_blank = FALSE //If fired at point-blank, deals extra damage and doesn't miss.
+
+	var/excessive_missing = FALSE //If toggled on, projectiles will always miss instead of hitting a different body part when missing
 	var/projectile_miss_chance = 0 //Innate miss chance, often modified by the gun
 	var/projectile_miss_message //If it has an unique miss message then it will be appended upon missing a hit
+	var/projectile_miss_message_replace //If toggled on, the miss message will completely replace the message for missing targets instead
 
 /obj/item/projectile/New()
 	..()
@@ -272,7 +275,7 @@ var/list/impact_master = list()
 				miss_modifier += 8*distance
 				miss_modifier += (abs(miss_modifier))
 
-			def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier)
+			def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier, excessive_missing)
 
 		var/missing_due_to_no_limb_text //Offers an unique missing sound message to clue players in as to why they missed
 		if(ishuman(M)) //Human check
@@ -282,7 +285,9 @@ var/list/impact_master = list()
 				missing_due_to_no_limb_text = "\The [src] misses [H] narrowly due to flying through where their <span class='danger'>[affecting.display_name]</span> used to be!"
 				def_zone = null
 		if(!def_zone) //The miss messages have an extra space at the beginning in order to be spaced properly
-			if(missing_due_to_no_limb_text)
+			if(projectile_miss_message_replace)
+				M.visible_message(projectile_miss_message)
+			else if(missing_due_to_no_limb_text)
 				M.visible_message("<span class='notice'>[missing_due_to_no_limb_text][projectile_miss_message ? " [projectile_miss_message]" : ""]</span>")
 			else
 				M.visible_message("<span class='notice'>\The [src] misses [M] narrowly![projectile_miss_message ? " [projectile_miss_message]" : ""]</span>")
