@@ -281,6 +281,9 @@
 	icon_closed = "coinbox"
 	icon_broken = "coinbox+b"
 
+/obj/item/weapon/storage/lockbox/coinbox/allaccess	
+	req_one_access = null
+
 /obj/item/weapon/storage/lockbox/lawgiver
 	name = "lockbox (lawgiver)"
 	req_one_access = list(access_armory)

@@ -141,7 +141,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/circuitboard/vendomat,\
 		/obj/item/weapon/stock_parts/matter_bin,\
 		/obj/item/weapon/stock_parts/manipulator,\
-		/obj/item/weapon/stock_parts/scanning_module\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/storage/lockbox/coinbox\
 	)
 
 	RefreshParts()
@@ -154,8 +155,6 @@ var/global/num_vending_terminals = 1
 		last_slogan = world.time + rand(0, slogan_delay)
 
 		power_change()
-
-	coinbox = new(src)
 
 	for(var/langname in slogan_languages)
 		if(istext(langname))
@@ -186,13 +185,14 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/RefreshParts()
 	var/manipcount = 0
-	var/obj/item/stack/sheet/metal/S = locate() in component_parts
-	if(S)
-		qdel(S) //hotfix so it doesn't show up. TODO: write a better system for excluding stuff like this on built machines and test it all
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating
 	shoot_chance = manipcount * 3
+	
+	coinbox = locate() in component_parts
+	if(!coinbox)
+		coinbox = new(src)
 
 /obj/machinery/vending/Destroy()
 	if(wires)
@@ -293,7 +293,6 @@ var/global/num_vending_terminals = 1
 				if(user.machine==src)
 					newmachine.attack_hand(user)
 				component_parts = 0
-				qdel(coinbox)
 				qdel(src)
 			else
 				is_being_filled = FALSE
