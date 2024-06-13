@@ -39,6 +39,7 @@
 	var/list/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)
 	if(recursive_list.len) // Placing a bag of holding into another will singuloose when stored inside other objects too, such as when on your back or on a diona's back and stuffed in
 		singulocreate(recursive_list, usr)
+		return
 
 //BoH+BoH=Singularity, WAS commented out
 /obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/list/obj/item/weapon/storage/backpack/holding/Hs, var/mob/user)
