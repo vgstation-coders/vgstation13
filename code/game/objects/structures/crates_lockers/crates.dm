@@ -156,6 +156,37 @@
 	icon_opened = "surgeryfreezeropen"
 	icon_closed = "surgeryfreezer"
 
+/obj/structure/closet/crate/freezer/surgery/close(mob/user)
+	..()
+	update_icon()
+
+	var/list/inside = recursive_type_check(src, /mob)
+	for(var/mob/braine in inside)
+		if(braine.mind && !braine.client) //!M.client = mob has ghosted out of their body
+			var/mob/dead/observer/ghost = mind_can_reenter(braine.mind)
+			if(ghost)
+				var/mob/ghostmob = ghost.get_top_transmogrification()
+				if(ghostmob)
+					to_chat(ghostmob, "<span class='interface'><span class='big bold'>Your brain has been placed into a surgery freezer.</span> \
+						Re-entering your corpse will cause the freezer's heart to pulse, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
+
+/obj/structure/closet/crate/freezer/surgery/update_icon()
+	..()
+
+	var/list/inside = recursive_type_check(src, /mob/living/carbon/brain)
+	for(var/mob/living/carbon/brain in inside)
+		if(brain.mind && brain.mind.suiciding)
+			continue
+		if(brain && brain.client)
+			icon_state = "surgeryfreezerbrained" // clone that mofo
+			return
+
+/obj/structure/closet/crate/freezer/surgery/on_login(var/mob/M)
+	update_icon()
+
+/obj/structure/closet/crate/freezer/surgery/on_logout(var/mob/M)
+	update_icon()
+
 /obj/structure/closet/crate/bin
 	desc = "A large bin."
 	name = "Large bin"
