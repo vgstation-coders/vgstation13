@@ -583,6 +583,7 @@
 	required_reagents = list(FUEL = 1)
 	required_temp = AUTOIGNITION_WELDERFUEL
 	result_amount = 1
+	quiet = 1
 	var/fire_temp = AUTOIGNITION_WELDERFUEL
 	var/power = 0
 

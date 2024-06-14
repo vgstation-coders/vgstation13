@@ -7,7 +7,7 @@
 	melt_temperature = 0 // Doesn't melt.
 	flags = INVULNERABLE
 	walltype = "swall"
-
+	hardness = 100 // nohulkz
 
 /turf/simulated/wall/shuttle/canSmoothWith()
 	var/static/list/smoothables = list(
@@ -43,7 +43,10 @@
 /turf/simulated/wall/shuttle/ex_act(severity)
 	return
 
-/turf/simulated/wall/shuttle/mech_drill_act(severity)
+/turf/simulated/wall/shuttle/dismantle_wall(devastated, explode)
+	return
+
+/turf/simulated/wall/shuttle/attack_rotting(mob/user)
 	return
 
 /turf/simulated/wall/shuttle/attack_animal(var/mob/living/simple_animal/M)
@@ -81,6 +84,8 @@
 /obj/structure/shuttle/diag_wall/initialize()
 	var/turf/T = get_turf(src)
 	if(T)
+		if(!T.dynamic_lighting)
+			update_moody_light('icons/lighting/moody_lights.dmi', "diag_wall")
 		T.dynamic_lighting = 1
 		if(SSlighting && SSlighting.initialized && !T.lighting_overlay)
 			new /atom/movable/lighting_overlay(T, TRUE)
@@ -105,6 +110,9 @@
 	..()
 	T = get_turf(destination)
 	if(T)
+		kill_moody_light()
+		if(!T.dynamic_lighting)
+			update_moody_light('icons/lighting/moody_lights.dmi', "diag_wall")
 		T.dynamic_lighting = 1
 		if(!T.lighting_overlay)
 			new /atom/movable/lighting_overlay(T, TRUE)

@@ -106,3 +106,15 @@
 	visible_message("<span class='warning'>\The <b>[src]</b> shatters into pieces!</span>")
 	new /obj/item/weapon/ectoplasm (src.loc)
 	qdel(src)
+
+/mob/proc/get_arcane_golems() // helper proc to get the golems
+	var/spell/aoe_turf/conjure/arcane_golem/S = locate() in spell_list
+	if(S)
+		return S.golems
+	return list()
+
+/mob/proc/shares_arcane_golem_spell(mob/living/simple_animal/hostile/arcane_golem/other)
+	return FALSE
+
+/mob/living/simple_animal/hostile/arcane_golem/shares_arcane_golem_spell(mob/living/simple_animal/hostile/arcane_golem/other)
+	return istype(other) ? master_spell == other.master_spell : FALSE

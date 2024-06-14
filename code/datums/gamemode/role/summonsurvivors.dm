@@ -34,9 +34,10 @@
 	var/datum/objective/survive/S = new
 	AppendObjective(S)
 
-/datum/role/survivor/GetScoreboard()
-	. = ..()
-	. += "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
+/datum/role/survivor/GetBought()
+	if(!summons_received)
+		return ""
+	return "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
 
 //Note this is a wizard subtype
 
@@ -58,9 +59,10 @@
 /datum/role/wizard/summon_magic/OnPostSetup(var/laterole = FALSE)
 	return TRUE
 
-/datum/role/wizard/summon_magic/GetScoreboard()
-	. = ..()
-	. += "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
+/datum/role/wizard/summon_magic/GetBought()
+	if(!summons_received)
+		return ""
+	return "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
 
 /datum/role/wizard/summon_magic/artifact
 	name = MAGICIAN_ARTIFACT
@@ -88,7 +90,8 @@
 /datum/role/wizard/summon_potions/OnPostSetup(var/laterole = FALSE)
 	return TRUE
 
-/datum/role/wizard/summon_potions/GetScoreboard()
-	. = ..()
-	. += "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
+/datum/role/wizard/summon_potions/GetBought()
+	if(!summons_received)
+		return ""
+	return "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
 

@@ -249,12 +249,13 @@ emp_act
 
 	if (!affecting)
 		return FALSE
-	if(affecting.status & ORGAN_DESTROYED)
-		if(originator)
-			to_chat(originator, "What [affecting.display_name]?")
-		else
-			to_chat(user, "What [affecting.display_name]?")
-		return FALSE
+
+	// if(affecting.status & ORGAN_DESTROYED)
+	// 	if(originator)
+	// 		to_chat(originator, "What [affecting.display_name]?")
+	// 	else
+	// 		to_chat(user, "What [affecting.display_name]?")
+	// 	return FALSE
 	var/hit_area = affecting.display_name
 
 	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NO_ATTACK_MSG))

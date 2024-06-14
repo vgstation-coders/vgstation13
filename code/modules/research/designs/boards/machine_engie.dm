@@ -177,6 +177,16 @@
 	category = "Misc"
 	build_path = /obj/item/weapon/circuitboard/airshield
 
+/datum/design/firefoam_popper
+	name = "Circuit Design (Firefoam Popper)"
+	desc = "Allows for the construction of circuit boards used to build a firefoam popper."
+	id = "fire_popper"
+	req_tech = list(Tc_ENGINEERING = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/firefoam_popper
+
 //
 //MECHANICS MACHINES.
 //

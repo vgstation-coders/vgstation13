@@ -338,3 +338,12 @@
 		knock_out_teeth()
 	..(hurtAmount, knockAmount, hurtSound)
 
+/mob/living/carbon/human/get_attacker_accuracy_increase()
+	var/accuracy_bonus = 0
+	if(isninja(src)) //Ninjas are expert combatants
+		accuracy_bonus = 50
+	return accuracy_bonus
+
+/mob/living/carbon/human/get_defender_accuracy_decrease()
+	var/accuracy = 0
+	return accuracy

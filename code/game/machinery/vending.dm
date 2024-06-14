@@ -4227,7 +4227,8 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 	product_slogans = list(
 		"Il est temps pour vous de jeter des perles devant ces porcs incultes.",
 		"Oui, j'ai capitulé. Vous pouvez aussi acheter des crayons maintenant.",
-		"Il y a la peinture sur toile, et puis il y a l'art véritable. Pouvez-vous voir la différence ?"
+		"Il y a la peinture sur toile, et puis il y a l'art véritable. Pouvez-vous voir la différence?",
+		"'Omelette du Fromage, Omelette du Fromage!' C'est tout ce que tu peux diiiiiire!"
 	)
 	product_ads = list(
 		"This is not a cigarette vendor."
@@ -4253,7 +4254,8 @@ var/global/list/obj/item/weapon/paper/lotto_numbers/lotto_papers = list()
 
 	contraband = list(
 		/obj/item/stack/sheet/wood/bigstack = 3,
-		/obj/item/clothing/mask/cigarette/pipe = 2
+		/obj/item/clothing/mask/cigarette/pipe = 2,
+		/obj/item/weapon/reagent_containers/food/snacks/omelette = 3
 		)
 
 	premium = list(

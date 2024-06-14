@@ -242,13 +242,19 @@
 		on = onoff
 	update_brightness(playsound = FALSE)
 
+var/list/obj/item/device/flashlight/lamp/lamps = list()
 //Lamps draw power from the area they're in, unlike flashlights.
 /obj/item/device/flashlight/lamp/New()
+	lamps += src
 	if(drawspower)
 		pwrconn = new(src)
 		pwrconn.channel = LIGHT
 		pwrconn.active_usage = 60 * brightness_on / 5 //power usage scales with brightness
 	update_brightness(playsound = FALSE)
+
+/obj/item/device/flashlight/lamp/Destroy()
+	lamps -= src
+	..()
 
 /obj/item/device/flashlight/lamp/update_brightness(var/mob/user = null, var/playsound = TRUE)
 	if(drawspower)
