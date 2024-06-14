@@ -149,6 +149,9 @@
 	make_into_sheets()
 	return 1
 
+/obj/structure/railing/canSmoothWith()
+	return 1
+
 /obj/structure/railing/isSmoothableNeighbor(atom/A)
 	if(A?.dir == src.dir && istype(A,/obj/structure/railing))
 		var/atom/movable/O = A
