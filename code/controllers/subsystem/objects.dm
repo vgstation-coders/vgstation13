@@ -36,7 +36,7 @@ var/list/processing_objects = list()
 			//Toggle lights without lightswitches
 			//with better area organization, a lot of this headache can be limited
 			if(!A.requires_power || !A.haslightswitch)
-				for(var/obj/machinery/light/L in A)
+				for(var/obj/machinery/light/L in A.lights)
 					L.seton(1)
 
 /datum/subsystem/obj/stat_entry()
