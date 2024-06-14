@@ -210,13 +210,13 @@ var/stacking_limit = 90
 
 	generate_threat()
 
-	if(latejoin_starting_round_cooldown >= 0)
+	if(latejoin_starting_round_cooldown > 0)
 		latejoin_injection_cooldown = latejoin_starting_round_cooldown
 	else
 		var/latejoin_injection_cooldown_middle = 0.5*(LATEJOIN_DELAY_MAX + LATEJOIN_DELAY_MIN)
 		latejoin_injection_cooldown = round(clamp(exp_distribution(latejoin_injection_cooldown_middle), LATEJOIN_DELAY_MIN, LATEJOIN_DELAY_MAX))
 
-	if(midround_starting_round_cooldown >= 0)
+	if(midround_starting_round_cooldown > 0)
 		midround_injection_cooldown = midround_starting_round_cooldown
 	else
 		var/midround_injection_cooldown_middle = 0.5*(MIDROUND_DELAY_MAX + MIDROUND_DELAY_MIN)
