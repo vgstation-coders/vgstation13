@@ -642,7 +642,7 @@
 		E.drop_all()
 		if(can_skeletonize(E))
 			var/mob/living/carbon/human/H = E
-			gibs(H.loc, H.virus2, H.dna)
+			gibs(H.loc, H.virus2, H.dna, H.species.flesh_color, H.species.blood_color)
 			if(isvox(H))
 				H.set_species("Skeletal Vox")
 			else
