@@ -262,8 +262,6 @@
 	if(lifestage>=GRUE_JUVENILE && stance==HOSTILE_STANCE_IDLE && lightparams.dark_dim_light<GRUE_LIGHT)
 		var/list/feed_targets = list()
 		for(var/mob/living/carbon/C in range(1,get_turf(src)))
-			if(isskellington(C))
-				continue
 			feed_targets += C
 		if(feed_targets.len)
 			handle_feed(pick(feed_targets))
