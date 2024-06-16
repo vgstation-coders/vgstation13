@@ -1,6 +1,6 @@
 /spell/targeted/grue_eat
 	name = "Eat"
-	desc = "Eat someone."
+	desc = "Eat someone. Doesn't work on certain skeletons."
 	user_type = USER_TYPE_GRUE
 	panel = "Grue"
 	hud_state = "grue_eat"

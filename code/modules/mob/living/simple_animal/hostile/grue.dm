@@ -615,14 +615,14 @@
 //Eating sentient beings.
 
 /mob/living/simple_animal/hostile/grue/proc/handle_feed(var/mob/living/E)
-	if(isskellington(E)) //This also covers skeleton vox
-		to_chat(src, "<span class='warning'>There is nothing to eat! It is only bone!</span>")
+	if(isskellington(E)) //Don't let them eat the mob, does not apply to other skeleton races because it is more fun that way
+		to_chat(src, "<span class='warning'>It has no flesh to eat!</span>")
 		return
 	visible_message("<span class='danger'>\The [src] opens its mouth wide...</span>","<span class='danger'>You open your mouth wide, preparing to eat \the [E]!</span>")
 	busy=TRUE
 	if(do_mob(src , E, eattime, eattime, 0)) //check on every tick
-		if(isskellington(E)) //Sanity
-			to_chat(src, "<span class='warning'>Somehow the victim became a skeleton before you finished eating! You cannot eat it!</span>")
+		if(isskellington(E))
+			to_chat(src, "<span class='warning'>Somehow it already became a skeleton! You cannot eat it!</span>")
 			busy = FALSE
 			return
 		to_chat(src, "<span class='danger'>You have eaten \the [E]!</span>")
@@ -646,18 +646,26 @@
 		else
 			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
 		E.drop_all()
-		if(ishuman(E)) //Strip all the flesh from the mob if it's human
-			var/mob/living/carbon/human/H = E //The skeleton check is above so we don't need one here
+		if(can_skeletonize(E))
+			var/mob/living/carbon/human/H = E
+			gibs(H.loc, H.virus2, H.dna)
 			if(isvox(H))
 				H.set_species("Skeletal Vox")
 			else
 				H.set_species("Skellington")
 			H.regenerate_icons()
-			gibs(H.loc, H.virus2, H.dna)
 			H.death(FALSE)
 		else //Eat the mob otherwise
 			E.gib()
 	busy=FALSE
+
+//Determines whether the human will be gibbed or turned into a skeleton
+/mob/living/simple_animal/hostile/grue/proc/can_skeletonize(var/mob/living/E)
+	if(ishuman(E))
+		var/mob/living/carbon/human/H = E
+		if(H.species.anatomy_flags & NO_BLOOD)
+			return 0
+	return 1
 
 /mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = FALSE) //update stats, called by lifestage_updates() as well as handle_feed()
 
