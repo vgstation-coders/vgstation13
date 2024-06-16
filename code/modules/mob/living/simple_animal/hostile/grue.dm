@@ -615,16 +615,9 @@
 //Eating sentient beings.
 
 /mob/living/simple_animal/hostile/grue/proc/handle_feed(var/mob/living/E)
-	if(isskellington(E)) //Don't let them eat the mob, does not apply to other skeleton races because it is more fun that way
-		to_chat(src, "<span class='warning'>It has no flesh to eat!</span>")
-		return
 	visible_message("<span class='danger'>\The [src] opens its mouth wide...</span>","<span class='danger'>You open your mouth wide, preparing to eat \the [E]!</span>")
 	busy=TRUE
 	if(do_mob(src , E, eattime, eattime, 0)) //check on every tick
-		if(isskellington(E))
-			to_chat(src, "<span class='warning'>Somehow it already became a skeleton! You cannot eat it!</span>")
-			busy = FALSE
-			return
 		to_chat(src, "<span class='danger'>You have eaten \the [E]!</span>")
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
@@ -634,7 +627,7 @@
 		E.reagents.trans_to(src, E.reagents.total_volume)
 
 		//Upgrade the grue's stats as it feeds
-		if(E.mind) //eaten creature must have a mind to power up the grue
+		if(E.mind && !isskellington(E)) //eaten creature must have a mind to power up the grue, and mustn't be pure skeletons
 			playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
 			eatencount++					//makes the grue stronger
 			if(mind && mind.GetRole(GRUE)) //also increment the counter for objectives
@@ -644,7 +637,10 @@
 			eatencharge++ //can be spent on egg laying
 			grue_stat_updates(TRUE)
 		else
-			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
+			if(isskellington(E))
+				to_chat(src, "<span class='warning'>That creature was only bones, and didn't quite satisfy your hunger...</span>")
+			else
+				to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
 		E.drop_all()
 		if(can_skeletonize(E))
 			var/mob/living/carbon/human/H = E
