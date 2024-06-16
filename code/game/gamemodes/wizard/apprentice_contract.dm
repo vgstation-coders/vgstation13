@@ -184,6 +184,10 @@ var/list/wizard_apprentice_setups_by_name = list()
 		contract_faction.forgeObjectives()
 
 	var/datum/role/wizard_apprentice/apprentice_role = contract_faction.HandleRecruitedMind(apprentice.mind, override = TRUE)
+	if(owner.GetRole(WIZARD))
+		var/datum/faction/wizard/civilwar/CW = find_active_faction_by_typeandmember(/datum/faction/wizard/civilwar, WIZARD, owner)
+		if(CW) //Apprentice is being drafted into the civil war
+			CW.HandleRecruitedRole(apprentice_role)
 	apprentice_role.Greet(GREET_DEFAULT)
 	apprentice_role.AnnounceObjectives()
 	if(forced_apprentice_name)
