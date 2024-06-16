@@ -34,13 +34,14 @@
 	var/datum/objective/survive/S = new
 	AppendObjective(S)
 
-/datum/role/survivor/GetScoreboard()
-	. = ..()
-	. += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
+/datum/role/survivor/GetBought()
+  var/dat
+	dat += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
 	for(var/list/L in summons_received)
 		var/item = L["item_name"]
 		var/item_image = L["icon"]
-		. += "[item_image] [item]<BR>"
+		dat += "[item_image] [item]<BR>"
+  return dat
 
 //Note this is a wizard subtype
 
@@ -62,13 +63,14 @@
 /datum/role/wizard/summon_magic/OnPostSetup(var/laterole = FALSE)
 	return TRUE
 
-/datum/role/wizard/summon_magic/GetScoreboard()
-	. = ..()
-	. += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
+/datum/role/wizard/summon_magic/GetBought()
+  var/dat
+	dat += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
 	for(var/list/L in summons_received)
 		var/item = L["item_name"]
 		var/item_image = L["icon"]
-		. += "[item_image] [item]<BR>"
+		dat += "[item_image] [item]<BR>""
+  return dat
 
 /datum/role/wizard/summon_magic/artifact
 	name = MAGICIAN_ARTIFACT
@@ -96,10 +98,11 @@
 /datum/role/wizard/summon_potions/OnPostSetup(var/laterole = FALSE)
 	return TRUE
 
-/datum/role/wizard/summon_potions/GetScoreboard()
-	. = ..()
-	. += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
+/datum/role/wizard/summon_potions/GetBought()
+  var/dat
+	dat += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
 	for(var/list/L in summons_received)
 		var/item = L["item_name"]
 		var/item_image = L["icon"]
-		. += "[item_image] [item]<BR>"
+		dat += "[item_image] [item]<BR>"
+  return dat

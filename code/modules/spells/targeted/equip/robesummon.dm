@@ -23,7 +23,7 @@
 
 	cooldown_min = 50
 
-	compatible_mobs = list(/mob/living/carbon/human)
+	valid_targets = list(/mob/living/carbon/human)
 
 	hud_state = "wiz_robesummon"
 

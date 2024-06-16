@@ -136,6 +136,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	var/static_power_used = 0
 	var/flickering = 0
 	var/obj/item/weapon/light/current_bulb = null
+	var/area/lights_area
 	var/spawn_with_bulb = /obj/item/weapon/light/tube
 	var/fitting = "tube"
 	var/rgb_upgrade = FALSE //add plastic to enable RGB mode
@@ -154,6 +155,9 @@ var/global/list/obj/machinery/light/alllights = list()
 	else
 		update(0)
 	alllights += src
+	lights_area = get_area(src)
+	if(lights_area)
+		lights_area.lights += src
 
 	if(map.broken_lights)
 		switch(fitting)
@@ -240,6 +244,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	seton(0)
 	..()
 	alllights -= src
+	if(lights_area)
+		lights_area.lights -= src
 
 /obj/machinery/light/update_icon()
 
@@ -462,7 +468,7 @@ var/global/list/obj/machinery/light/alllights = list()
 		return FALSE
 	if(!this_area.haslightswitch || !this_area.requires_power)
 		return TRUE
-	for(var/obj/machinery/light_switch/L in this_area)
+	for(var/obj/machinery/light_switch/L in this_area.lightswitches)
 		if(L.on)
 			success = TRUE
 		break
@@ -628,8 +634,8 @@ var/global/list/obj/machinery/light/alllights = list()
 /*
  * Called when area power state changes.
  */
-/obj/machinery/light/power_change()
-	spawn(10)
+/obj/machinery/light/power_change(var/non_instant = TRUE)
+	spawn(10 * non_instant)
 		seton(has_power())
 
 // called when on fire

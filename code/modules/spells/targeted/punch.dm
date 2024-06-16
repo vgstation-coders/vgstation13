@@ -13,7 +13,7 @@
 	invocation_type = SpI_SHOUT
 	max_targets = 1
 	range = 1
-	compatible_mobs = list(/mob/living, /obj/mecha)
+	valid_targets = list(/mob/living, /obj/mecha)
 	hud_state = "wiz_punch"
 	var/empowered = 0
 	var/mob/living/present_target //A placeholder proc that records the target for the purpose of actually getting the impact handled.

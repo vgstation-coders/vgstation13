@@ -22,7 +22,6 @@
 	if (critter)
 		unlock_atom(critter)
 		critter.forceMove(get_turf(src))
-		critter = null
 	..()
 
 /datum/locking_category/buckle/cage
@@ -33,17 +32,17 @@
 /obj/item/critter_cage/attack_hand(var/mob/user)
 	if (critter)
 		if( !user.get_active_hand() )
+			var/atom/movable/unlocked = critter
 			unlock_atom(critter)
-			if(isliving(critter))
-				var/mob/living/L = critter
+			if(isliving(unlocked))
+				var/mob/living/L = unlocked
 				L.scoop_up(user)
 			else
 				var/matrix/grow = matrix()
 				grow.Scale(1)
-				critter.transform = grow
-				user.put_in_hands(critter)
-			user.visible_message("<span class='notice'>[user] picks up \the [critter].</span>", "<span class='notice'>You pick up \the [critter].</span>")
-			critter = null
+				unlocked.transform = grow
+				user.put_in_hands(unlocked)
+			user.visible_message("<span class='notice'>[user] picks up \the [unlocked].</span>", "<span class='notice'>You pick up \the [unlocked].</span>")
 	else
 		MouseDropFrom(user)
 
@@ -60,10 +59,8 @@
 			if(!user.drop_item(O, loc))
 				to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
 				return
-			critter = inside
 			qdel(store)
-			critter.forceMove(loc)
-			lock_atom(critter,lock_type)
+			lock_atom(inside,lock_type)
 		if(!critter && istype(O, /obj/item/device/mmi))
 			var/obj/item/device/mmi/M = O
 			if(!M.brainmob)
@@ -73,9 +70,7 @@
 					var/matrix/shrink = matrix()
 					shrink.Scale(0.5)
 					M.transform = shrink
-					critter = M
-					critter.forceMove(loc)
-					lock_atom(critter, lock_type)
+					lock_atom(M, lock_type)
 		if (istype (O,/obj/item/weapon/reagent_containers/food/snacks))
 			if(!user.drop_item(O, loc))
 				to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
@@ -89,6 +84,8 @@
 /obj/item/critter_cage/lock_atom(var/atom/movable/AM)
 	. = ..()
 	if (.)
+		critter = AM
+		AM.forceMove(loc)
 		AM.plane = MOB_PLANE
 		AM.pixel_x = pixel_x
 		if(isliving(critter))
@@ -102,6 +99,7 @@
 		AM.plane = initial(AM.plane)
 		AM.pixel_x = initial(AM.pixel_x)
 		AM.pixel_y = initial(AM.pixel_y)
+		critter = null
 
 /obj/item/critter_cage/pickup(var/mob/user)//When we pick up the cage, let's move the critter inside
 	if (critter)

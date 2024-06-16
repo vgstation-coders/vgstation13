@@ -1,4 +1,5 @@
 #define MAX_BLOOD_PER_TARGET 200
+#define BLOOD_UNIT_DRAIN_MULTIPLIER 2 //How many units of blood get drained from victim at a time per point of blood the vampire gains
 
 /datum/role/vampire
 	id = VAMPIRE
@@ -194,7 +195,7 @@
 			feeders[targetref] = 0
 		var/mature = locate(/datum/power/vampire/mature) in current_powers
 		if(target.stat < DEAD) //alive
-			blood = min(mature ? 40 : 20, target.vessel.get_reagent_amount(BLOOD)) // if they have less than 20 blood, give them the remnant else they get 20 blood
+			blood = min(mature ? 40 : 20, target.vessel.get_reagent_amount(BLOOD)/BLOOD_UNIT_DRAIN_MULTIPLIER) // if they have less than 20 blood, give them the remnant else they get 20 blood
 			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
@@ -205,7 +206,7 @@
 			var/datum/organ/external/head/head_organ = target.get_organ(LIMB_HEAD)
 			head_organ.add_autopsy_data("sharp teeth", 1)
 		else
-			blood = min(mature ? 20 : 10, target.vessel.get_reagent_amount(BLOOD)) // The dead only give 10 blood
+			blood = min(mature ? 20 : 10, target.vessel.get_reagent_amount(BLOOD)/BLOOD_UNIT_DRAIN_MULTIPLIER) // The dead only give 10 blood
 			if (feeders[targetref] < MAX_BLOOD_PER_TARGET)
 				blood_total += blood
 			else
@@ -214,7 +215,7 @@
 		if(blood_total_before != blood_total)
 			to_chat(assailant, "<span class='notice'>You have accumulated [blood_total] [blood_total > 1 ? "units" : "unit"] of blood[blood_usable_before != blood_usable ?", and have [blood_usable] left to use." : "."]</span>")
 		check_vampire_upgrade()
-		target.vessel.remove_reagent(BLOOD,blood)
+		target.vessel.remove_reagent(BLOOD,blood * BLOOD_UNIT_DRAIN_MULTIPLIER)
 		var/mob/living/carbon/V = assailant
 		if(V)
 			var/fatty_chemicals = target.reagents.has_any_reagents(list(CHEESYGLOOP, CORNOIL)) //If the target has these chemicals in his blood the vampire can get fat from sucking blood.

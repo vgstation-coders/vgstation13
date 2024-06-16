@@ -14,6 +14,7 @@
 	//Can get lost through absorbing
 	var/list/spells_from_spellbook = list()
 	var/list/spells_from_absorb = list()
+//Does not show spells because the scoreboard code overrides it
 
 	var/list/artifacts_bought = list()
 	var/list/potions_bought = list()

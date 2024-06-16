@@ -198,6 +198,7 @@
 						var/blood_total_before = V.blood_total
 						var/blood_usable_before = V.blood_usable
 						var/divisor = (locate(/datum/power/vampire/mature) in V.current_powers) ? min(2,foundmob.stat + 1) : (min(2,foundmob.stat + 1)*2)
+						divisor = divisor * BLOOD_UNIT_DRAIN_MULTIPLIER
 						if (!(targetref in V.feeders))
 							V.feeders[targetref] = 0
 						if (V.feeders[targetref] < MAX_BLOOD_PER_TARGET)

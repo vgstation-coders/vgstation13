@@ -16,6 +16,7 @@
 	invocation = "ZAP MUTHA FUH KA"
 	invocation_type = SpI_SHOUT
 	hud_state = "wiz_zap"
+	valid_targets = list(/mob/living,/obj/machinery/bot,/obj/mecha)
 
 	var/basedamage = 50
 	var/bounces = 0
@@ -29,11 +30,6 @@
 /spell/lightning/New()
 	..()
 	chargeoverlay = image("icon" = 'icons/mob/mob.dmi', "icon_state" = "sithlord")
-
-/spell/lightning/is_valid_target(atom/target, mob/user, options, bypass_range = 0)
-	if(options)
-		return (target in options)
-	return ((target in view_or_range(range, user, selection_type)) && (istype(target, /mob/living) || istype(target, /obj/machinery/bot) || istype(target, /obj/mecha)))
 
 /spell/lightning/quicken_spell()
 	if(!can_improve(Sp_SPEED))

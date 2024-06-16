@@ -232,7 +232,10 @@
 		return FALSE
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-		if (PD.charge < charge_cost) // Custom charge handling
+		if(PD.emp_lock)
+			to_chat(PD, "<span class='warning'>You cannot use this ability while unable to regenerate.</span>")
+			return FALSE
+		if(PD.charge < charge_cost) // Custom charge handling
 			to_chat(PD, "<span class='warning'>You are too low on power, this spell needs a charge of [charge_cost]W to cast.</span>")
 			return FALSE
 	else //only pulse demons allowed
@@ -422,6 +425,7 @@
 	L.yo = TTarget.y - T.y
 	L.xo = TTarget.x - T.x
 	L.process()
+	unlock_from() // just in case
 	forceMove(TTarget)
 
 /spell/pulse_demon/remote_hijack
