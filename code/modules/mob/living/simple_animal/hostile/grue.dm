@@ -262,6 +262,8 @@
 	if(lifestage>=GRUE_JUVENILE && stance==HOSTILE_STANCE_IDLE && lightparams.dark_dim_light<GRUE_LIGHT)
 		var/list/feed_targets = list()
 		for(var/mob/living/carbon/C in range(1,get_turf(src)))
+			if(isskellington(C))
+				continue
 			feed_targets += C
 		if(feed_targets.len)
 			handle_feed(pick(feed_targets))
@@ -613,9 +615,16 @@
 //Eating sentient beings.
 
 /mob/living/simple_animal/hostile/grue/proc/handle_feed(var/mob/living/E)
+	if(isskellington(E)) //This also covers skeleton vox
+		to_chat(src, "<span class='warning'>There is nothing to eat! It is only bone!</span>")
+		return
 	visible_message("<span class='danger'>\The [src] opens its mouth wide...</span>","<span class='danger'>You open your mouth wide, preparing to eat \the [E]!</span>")
 	busy=TRUE
 	if(do_mob(src , E, eattime, eattime, 0)) //check on every tick
+		if(isskellington(E)) //Sanity
+			to_chat(src, "<span class='warning'>Somehow the victim became a skeleton before you finished eating! You cannot eat it!</span>")
+			busy = FALSE
+			return
 		to_chat(src, "<span class='danger'>You have eaten \the [E]!</span>")
 		to_chat(E, "<span class='danger'>You have been eaten by a grue.</span>")
 
@@ -637,7 +646,17 @@
 		else
 			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
 		E.drop_all()
-		E.gib()
+		if(ishuman(E)) //Strip all the flesh from the mob if it's human
+			var/mob/living/carbon/human/H = E //The skeleton check is above so we don't need one here
+			if(isvox(H))
+				H.set_species("Skeletal Vox")
+			else
+				H.set_species("Skellington")
+			H.regenerate_icons()
+			gibs(H.loc, H.virus2, H.dna)
+			H.death(FALSE)
+		else //Eat the mob otherwise
+			E.gib()
 	busy=FALSE
 
 /mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = FALSE) //update stats, called by lifestage_updates() as well as handle_feed()
