@@ -27,9 +27,8 @@
 			return "Allows you to throw an extra pie, and increases the throwing damage of each pie by 4."
 	return ..()
 
+//It only has empowerment as an available upgrade
 /spell/targeted/projectile/pie/get_upgrade_price(upgrade_type)
-	if(upgrade_type == Sp_SPEED)
-		return quicken_price
 	if(upgrade_type == Sp_POWER)
 		return Sp_BASE_PRICE * 0.5
 
