@@ -35,7 +35,7 @@
 	AppendObjective(S)
 
 /datum/role/survivor/GetBought()
-  var/dat
+	var/dat
 	dat += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
 	for(var/list/L in summons_received)
 		var/item = L["item_name"]
@@ -64,12 +64,12 @@
 	return TRUE
 
 /datum/role/wizard/summon_magic/GetBought()
-  var/dat
+	var/dat
 	dat += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
 	for(var/list/L in summons_received)
 		var/item = L["item_name"]
 		var/item_image = L["icon"]
-		dat += "[item_image] [item]<BR>""
+		dat += "[item_image] [item]<BR>"
   return dat
 
 /datum/role/wizard/summon_magic/artifact
@@ -99,10 +99,10 @@
 	return TRUE
 
 /datum/role/wizard/summon_potions/GetBought()
-  var/dat
+	var/dat
 	dat += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
 	for(var/list/L in summons_received)
 		var/item = L["item_name"]
 		var/item_image = L["icon"]
 		dat += "[item_image] [item]<BR>"
-  return dat
+	return dat
