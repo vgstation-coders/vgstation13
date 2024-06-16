@@ -18,11 +18,6 @@
 	name += spellname
 
 /obj/item/weapon/spellbook/oneuse/attack_self(mob/user)
-	if(istype(user,/mob/living/carbon))
-		var/mob/living/carbon/C = user
-		if(C.op_stage.butt == SURGERY_NO_BUTT)
-			to_chat(user, "<span class='info'>You are missing your ass! It would be pointless to attempt to learn magic without an ass to store it in.</span>")
-			return
 	var/spell/S = new spell(user)
 	for(var/spell/knownspell in user.spell_list)
 		if(knownspell.type == S.type)

@@ -94,12 +94,6 @@
 	if(user.is_blind())
 		to_chat(user, "<span class='info'>You open \the [src] and run your fingers across the parchment. Suddenly, the pages coalesce in your mind!</span>")
 
-	if(istype(user,/mob/living/carbon))
-		var/mob/living/carbon/C = user
-		if(C.op_stage.butt == SURGERY_NO_BUTT)
-			to_chat(user, "<span class='info'>You are missing your ass! It would be pointless to attempt to learn magic without an ass to store it in.</span>")
-			return
-
 	user.set_machine(src)
 
 	var/dat
