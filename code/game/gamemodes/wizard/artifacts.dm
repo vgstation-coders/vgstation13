@@ -98,6 +98,9 @@
 	abbreviation = "CT"
 	spawned_items = list(/obj/item/wizard_apprentice_contract)
 
+/datum/spellbook_artifact/apprentice/can_buy(var/mob/user)
+	return is_not_civil_war_caster(user)
+
 /datum/spellbook_artifact/bundle
 	name = "Spellbook Bundle"
 	desc = "Feeling adventurous? Buy this bundle and receive seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
@@ -177,6 +180,21 @@
 		return TRUE
 
 	return FALSE
+
+//For things that you do not want to be multiplied several times over during a civil war
+/datum/spellbook_artifact/proc/is_not_civil_war_caster(var/mob/user)
+	if (!ticker || !ticker.mode || !istype(ticker.mode,/datum/gamemode/dynamic))
+		return TRUE
+
+	if (!user.mind)
+		return FALSE
+
+	var/datum/role/wizard/myWizard = user.mind.GetRole(WIZARD)
+
+	if(istype(myWizard.GetFaction(), /datum/faction/wizard/civilwar))
+		return FALSE
+
+	return TRUE
 
 //SUMMON GUNS
 /datum/spellbook_artifact/summon_guns
