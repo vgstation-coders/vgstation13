@@ -270,10 +270,10 @@
 				H.gib()
 				spooky.faction = "\ref[user]"
 			else
-				H.zombify(user)
+				H.zombify(user, cannot_evolve = TRUE) //Necromancer zombies can't evolve
 		else
 			success = FALSE
-			
+
 	else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/))
 		success = TRUE
 		var/mob/living/simple_animal/S = target
@@ -554,7 +554,7 @@
 			playsound(user,'sound/effects/stealthoff.ogg', 50)
 			if((H.species.flags & IS_PLANT) && (H.nutrition < 500))
 				H.nutrition += 30
-			else 
+			else
 				H.show_message("<span class='notice'>The radiation beam dissipates harmlessly through your body.</span>")
 	isSomatoraying = FALSE
 

@@ -2090,7 +2090,7 @@
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
-/mob/living/carbon/human/proc/zombify(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
+/mob/living/carbon/human/proc/zombify(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE, var/cannot_evolve)
 	if(crabzombie)
 		dropBorers()
 		var/mob/living/simple_animal/hostile/necro/zombie/headcrab/T = new(get_turf(src), master, (retain_mind ? src : null))
@@ -2102,10 +2102,11 @@
 		return T
 	else if(stat == DEAD || InCritical())
 		dropBorers()
-		var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
+		var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null), cannot_evolve = cannot_evolve)
 		if(master && master.faction)
 			T.faction = "\ref[master]"
-		T.add_spell(/spell/aoe_turf/necro/zombie/evolve)
+		if(T.can_evolve)
+			T.add_spell(/spell/aoe_turf/necro/zombie/evolve)
 		if(isgrey(src))
 			T.icon_state = "mauled_laborer"
 			T.icon_living = "mauled_laborer"
