@@ -2,7 +2,7 @@
 	..()
 	regenerate_icons()
 	show_laws(0)
-	to_chat(src, "<b>Remember, being a silicon overrides any former antagonist roles. Further, you need a law compelling you to kill another player unless you are purged.</b>")
+	to_chat(src, "<b>Remember, being a silicon overrides any former antagonist roles. Further, you need a law compelling you to kill another player while on the default Asimov Lawset. An order from a human to kill a non-human or a non-human harming a human, for example, would both be reason to kill another player.</b>")
 	if(module)
 		module.UpdateModuleHolder(src)
 	if (mind && !stored_freqs)
