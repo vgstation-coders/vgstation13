@@ -10,7 +10,11 @@
 	admin_voice_style = "notice"
 
 	stat_datum_type = /datum/stat/role/wizard
-	shows_spells = TRUE
+	//Lists used so that the spells will still show up at round-end even if the apprentice has been destroyed.
+	//Can get lost through absorbing
+	var/list/spells_from_spellbook = list()
+	var/list/spells_from_absorb = list()
+//Does not show spells because the scoreboard code overrides it
 
 	var/list/artifacts_bought = list()
 	var/list/potions_bought = list()
@@ -76,13 +80,63 @@
 			//Transfer the spell without doing on_added() or on_removed(), instead doing on_transfer()
 			transfer_spell(new_character, old_character, S)
 
-/datum/role/wizard/GetBought()
+/datum/role/wizard/GetScoreboard()
 	. = ..()
-	if((artifacts_bought?.len) || (potions_bought?.len))
-		. += "<BR>[. != "" ? "Additionally, t" : "T"]he wizard brought:<BR>"
+	if(!disallow_job) //It's a survivor wizzie
+		return
+	var/mob/living/carbon/human/H = antag.current
+	var/has_nothing = TRUE //No spells, no potions, no artifacts
+
+	if(spells_from_spellbook.len)
+		has_nothing = FALSE
+		. += "<BR>[has_nothing ? "T" : "Additionally, t"]he wizard learned:<BR>"
+		for(var/spell/S in spells_from_spellbook)
+			var/icon/tempimage
+			if(S.override_icon != "")
+				tempimage = icon(S.override_icon, S.hud_state)
+			else
+				tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+			. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
+
+	//Spells that are learned through absorbing them from other mages
+	if(spells_from_absorb.len)
+		. += "<BR>[has_nothing ? "T" : "Additionally, t"]he wizard absorbed:<BR>"
+		has_nothing = FALSE
+		for(var/spell/S in spells_from_absorb)
+			var/icon/tempimage
+			if(S.override_icon != "")
+				tempimage = icon(S.override_icon, S.hud_state)
+			else
+				tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+			. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
+
+	//Spells that the wizard somehow got their hands on. Must be wizard spells
+	var/list/dummy_list = H.spell_list - (spells_from_spellbook + spells_from_absorb)
+	if(dummy_list.len)
+		var/has_an_uncategorized_wizard_spell = FALSE
+		for(var/spell/S in H.spell_list)
+			if(S.is_wizard_spell())
+				has_an_uncategorized_wizard_spell = TRUE
+				has_nothing = FALSE
+				break
+		if(has_an_uncategorized_wizard_spell)
+			//This implies adminbus or other shenanigans that could grant wizard spells
+			. += "<BR>[has_nothing ? "T" : "Additionally, t"]he wizard somehow knew, through divine help or other means:<BR>"
+			for(var/spell/S in dummy_list)
+				var/icon/tempimage
+				if(S.override_icon != "")
+					tempimage = icon(S.override_icon, S.hud_state)
+				else
+					tempimage = icon('icons/mob/screen_spells.dmi', S.hud_state)
+				. += "<img class='icon' src='data:image/png;base64,[iconsouth2base64(tempimage)]'> [S.name]<BR>"
+
+	//Artifacts and potions, if the wizard bought any
+	if(artifacts_bought.len || potions_bought.len)
+		has_nothing = FALSE
+		. += "<BR>[has_nothing ? "T" : "Additionally, t"]he wizard brought:<BR>"
 		for(var/entry in artifacts_bought)
 			. += "[entry]<BR>"
 		for(var/entry in potions_bought)
 			. += "[entry]<BR>"
-	else if(. == "")
-		return "The wizard used only the magic of charisma this round."
+	if(has_nothing)
+		. += "The wizard used only the magic of charisma this round."
