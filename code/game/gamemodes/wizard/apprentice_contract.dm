@@ -190,6 +190,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 			contract_faction.HandleRemovedRole(apprentice_role) //Remove the apprentice from the contract faction
 			contract_faction.HandleRemovedRole(owner) //The master is no longer a contract master, everyone is in this together
 			CW.HandleRecruitedRole(apprentice_role) //Bring the apprentice into the owner's civil war faction
+			CW.HandleRecruitedRole(owner) //HandleRemovedRole removes a role's faction and orphans the role, this should help
 	apprentice_role.Greet(GREET_DEFAULT)
 	apprentice_role.AnnounceObjectives()
 	if(forced_apprentice_name)
