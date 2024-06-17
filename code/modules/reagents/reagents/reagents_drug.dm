@@ -193,7 +193,7 @@
 	id = HYPERZINE
 	description = "Hyperzine is a highly effective, long lasting, muscle stimulant."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#DCDCDC" //rgb: 220, 220, 220
 	custom_metabolism = 0.03
 	overdose_am = REAGENTS_OVERDOSE/2
 	density = 1.79

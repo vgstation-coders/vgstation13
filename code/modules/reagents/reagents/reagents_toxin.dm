@@ -139,7 +139,7 @@
 	id = CHEFSPECIAL
 	description = "An extremely toxic chemical that will surely end in death."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#CF3600" //rgb: 207, 54, 0
+	color = "#D957F9" //rgb: 217, 82, 249
 	custom_metabolism = 0.01
 	overdose_tick = 165
 	density = 0.687 //Let's assume it's a compound of cyanide
