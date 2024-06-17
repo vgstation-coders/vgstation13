@@ -28,14 +28,8 @@ var/global/list/light_colors = list(
 	plane = ABOVE_HUMAN_PLANE
 	layer = LIGHT_FIXTURE_LAYER
 	var/stage = 1
-	var/fixture_type = "tube"
+	var/fixture_type = /obj/machinery/light/built
 	var/sheets_refunded = 2
-	var/obj/machinery/light/newlight = null
-
-/obj/machinery/light_construct/New()
-	..()
-	if (fixture_type == "bulb")
-		icon_state = "bulb-construct-stage1"
 
 /obj/machinery/light_construct/examine(mob/user)
 	..()
@@ -71,20 +65,15 @@ var/global/list/light_colors = list(
 			var/obj/item/stack/cable_coil/coil = W
 			coil.use(1)
 			switch(fixture_type)
-				if ("tube")
+				if (/obj/machinery/light/built)
 					src.icon_state = "tube-empty"
-				if("bulb")
+				if(/obj/machinery/light/small/built)
 					src.icon_state = "bulb-empty"
 			src.stage = 2
 			user.visible_message("[user.name] adds wires to \the [src].", \
 				"You add wires to \the [src]")
-
-			switch(fixture_type)
-				if("tube")
-					newlight = new /obj/machinery/light/built(src.loc)
-				if ("bulb")
-					newlight = new /obj/machinery/light/small/built(src.loc)
-
+			
+			var/obj/machinery/light/newlight = new fixture_type(src.loc)
 			newlight.dir = src.dir
 			src.transfer_fingerprints_to(newlight)
 			qdel(src)
@@ -107,13 +96,8 @@ var/global/list/light_colors = list(
 /obj/machinery/light_construct/small
 	name = "small light fixture frame"
 	desc = "A small light fixture under construction."
-	icon = 'icons/obj/lighting.dmi'
 	icon_state = "bulb-construct-stage1"
-	anchored = 1
-	plane = OBJ_PLANE
-	layer = ABOVE_DOOR_LAYER
-	stage = 1
-	fixture_type = "bulb"
+	fixture_type = /obj/machinery/light/small/built
 	sheets_refunded = 1
 
 var/global/list/obj/machinery/light/alllights = list()
@@ -125,8 +109,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	icon_state = "ltube1"
 	desc = "A lighting fixture."
 	anchored = 1
-	plane = OBJ_PLANE
-	layer = ABOVE_DOOR_LAYER
+	plane = ABOVE_HUMAN_PLANE
+	layer = LIGHT_FIXTURE_LAYER
 	use_power = MACHINE_POWER_USE_ACTIVE
 	idle_power_usage = 2
 	active_power_usage = 20
