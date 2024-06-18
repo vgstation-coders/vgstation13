@@ -287,8 +287,12 @@
 			// 	H.gib()
 			// 	spooky.faction = "\ref[user]"
 			// else
-			success = TRUE
-			H.zombify(user, cannot_evolve = TRUE) //Necromancer zombies can't evolve
+			if(charges)
+				success = TRUE
+				H.zombify(user, cannot_evolve = TRUE) //Necromancer zombies can't evolve
+			else
+				to_chat(user, "<span class='warning'>\The [src] does not have any charges!</span>")
+				return 1
 		else
 			return 0 //Target is still alive, smack it
 
@@ -303,12 +307,16 @@
 		else if(istype(target, /mob/living/simple_animal/hostile/necro/animal_ghoul)) //No, it's a ghoulified animal!
 			can_convert = TRUE
 		if(can_convert)
-			var/mob/living/simple_animal/S = target
-			if(S.faction != "\ref[user]") //If not the same faction as the user, make it so
-				success = TRUE
-				S.faction = "\ref[user]"
+			if(charges)
+				var/mob/living/simple_animal/S = target
+				if(S.faction != "\ref[user]") //If not the same faction as the user, make it so
+					success = TRUE
+					S.faction = "\ref[user]"
+				else
+					to_chat(user, "<span class='warning'>This undead creature already belongs to you!</span>")
+					return 1
 			else
-				to_chat(user, "<span class='warning'>This undead creature already belongs to you!</span>")
+				to_chat(user, "<span class='warning'>\The [src] does not have any charges!</span>")
 				return 1
 		else
 			return 0
@@ -316,21 +324,29 @@
 	else if(isanimal(target) || ismonkey(target)) //Any animal or monkey will become a meat ghoul if dead
 		var/mob/living/L = target
 		if(L.stat == DEAD)
-			success = TRUE
-			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(L), user, L)
-			mG.ghoulifyMeat(L)
-			mG.faction = "\ref[user]"
-			L.gib()
+			if(charges)
+				success = TRUE
+				var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(L), user, L)
+				mG.ghoulifyMeat(L)
+				mG.faction = "\ref[user]"
+				L.gib()
+			else
+				to_chat(user, "<span class='warning'>\The [src] does not have any charges!</span>")
+				return 1
 		else
 			return 0
 			//to_chat(user,"<span class = 'warning'>The creature must be dead before it can be undead.</span>")
 
 	else if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat)) //Meat can be turned into the undead
-		var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user)
-		success = TRUE
-		aG.ghoulifyAnimal(target)
-		aG.faction = "\ref[user]"
-		qdel(target)
+		if(charges)
+			var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user)
+			success = TRUE
+			aG.ghoulifyAnimal(target)
+			aG.faction = "\ref[user]"
+			qdel(target)
+		else
+			to_chat(user, "<span class='warning'>\The [src] does not have any charges!</span>")
+			return 1
 
 	if(success)
 		make_tracker_effects(target_turf, user)
