@@ -825,7 +825,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/proc/delayedRegen()
 	set waitfor = 0
 	isRegenerating = 1
-	sleep(rand(minRegenTime, maxRegenTime)) //Don't want it being predictable
+	var/timer = rand(minRegenTime, maxRegenTime) //Don't want it being predictable
+	while((timer > 0))
+		timer -= 1 SECONDS
+		if(!(stat == DEAD)) //Some shenanigans caused the mob to be revived early, quit the regeneration
+			isRegenerating = 0
+			return
+		sleep(1 SECONDS)
 	if(src)
 		resurrect()
 		revive()

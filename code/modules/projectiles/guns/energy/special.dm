@@ -296,7 +296,7 @@
 		else
 			return 0 //Target is still alive, smack it
 
-	//Handle forcing the mob to switch allegiances to the necromancer
+	//Handle forcing the mob to switch allegiances to the necromancer, or reviving them immediately.
 	else if(istype(target, /mob/living/simple_animal/hostile/necro))
 		var/can_convert = FALSE
 		if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/headcrab)) //The headcrabs are not undead!
@@ -309,9 +309,15 @@
 		if(can_convert)
 			if(charges)
 				var/mob/living/simple_animal/S = target
-				if(S.faction != "\ref[user]") //If not the same faction as the user, make it so
+				if((S.faction == "\ref[user]") && (S.stat == DEAD)) //Bring them back
+					S.resurrect()
+					S.revive()
+					to_chat(user, "<span class='notice'>You rejuvenate \the dead [S], immediately bringing them back to life!</span>")
+					success = TRUE
+				else if(S.faction != "\ref[user]") //If not the same faction as the user, make it so
 					success = TRUE
 					S.faction = "\ref[user]"
+					to_chat(user, "<span class='notice'>You convert \the [S] to your side!</span>")
 				else
 					to_chat(user, "<span class='warning'>This undead creature already belongs to you!</span>")
 					return 1
