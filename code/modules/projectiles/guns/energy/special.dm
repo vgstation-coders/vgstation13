@@ -215,88 +215,125 @@
 		P.status=setting
 	return 1
 
-/obj/item/weapon/gun/energy/staff/necro
+//This is not actually a real gun, but it doesn't behave as a gun so it's just a staff
+/obj/item/weapon/staff/necro
 	name = "staff of necromancy"
 	desc = "A wicked looking staff that pulses with evil energy."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "necrostaff"
 	item_state = "necrostaff"
-	charge_tick = 0
+	slot_flags = SLOT_BACK
+	w_class = W_CLASS_LARGE
+	var/charge_tick = 0
 	var/charges = 3
 	var/raisetype = 0
 	var/next_change = 0
+	var/charge_tick_required = 10 //20 seconds per charge
 
-/obj/item/weapon/gun/energy/staff/necro/New()
+/obj/item/weapon/staff/necro/New()
 	..()
 	processing_objects.Add(src)
 
-/obj/item/weapon/gun/energy/staff/necro/Destroy()
+/obj/item/weapon/staff/necro/Destroy()
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/gun/energy/staff/necro/process()
-	if(islich(loc))
+/obj/item/weapon/staff/necro/process()
+	var/lich_user = islich(loc)
+	if(lich_user) //Liches are empowered just by holding onto it
 		var/mob/living/carbon/human/L = loc
 		L.adjustBruteLoss(-2)
+	if(charges >= 3)
+		return
+	if(lich_user) //Charge it twice as fast if the user is a lich
 		charge_tick++
 	charge_tick++
-	if(charge_tick < 4)
+	if(charge_tick < charge_tick_required)
 		return 0
 	charge_tick = 0
 	charges++
 	return 1
 
-/obj/item/weapon/gun/energy/staff/necro/attack_self(mob/user)
-	if(next_change > world.timeofday)
-		to_chat(user, "<span class='warning'>You must wait longer to decide on a minion type.</span>")
-		return
-	raisetype = !raisetype
+/obj/item/weapon/staff/necro/examine(mob/user, size, show_name)
+	..()
+	to_chat(user, "<span class='notice'>It has [charges ? charges : "no"] charges left.</span>")
 
-	to_chat(user, "<span class='notice'>You will now raise [raisetype ? "skeletal" : "zombified"] minions from corpses.</span>")
-	next_change = world.timeofday + 30
+//Commented out because skeletonizing people was basically removing them from the round instantly.
+//Can only raise zombies.
 
-/obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/living/user = usr, flag, params, struggle = 0)
-	if(!charges || get_dist(target, user) > 7)
+
+// /obj/item/weapon/staff/necro/attack_self(mob/user)
+// 	if(next_change > world.timeofday)
+// 		to_chat(user, "<span class='warning'>You must wait longer to decide on a minion type.</span>")
+// 		return
+// 	raisetype = !raisetype
+
+// 	to_chat(user, "<span class='notice'>You will now raise [raisetype ? "skeletal" : "zombified"] minions from corpses.</span>")
+// 	next_change = world.timeofday + 30
+
+//Returning 0 will cause the staff to attack an object, 1 will cause it to not attack
+/obj/item/weapon/staff/necro/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(get_dist(target, user) > 7)
 		return 0
 	var/success = FALSE
+	var/turf/target_turf = get_turf(target) //Because the target could get deleted and it'd break the particle effects
 
-	if(ishuman(target))
-		success = TRUE
+	if(ishuman(target)) //Zombify a human
 		var/mob/living/carbon/human/H = target
-		if(H.stat)
-			if(raisetype)
-				H.dropBorers()
-				var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
-				H.gib()
-				spooky.faction = "\ref[user]"
-			else
-				H.zombify(user, cannot_evolve = TRUE) //Necromancer zombies can't evolve
+		if(H.stat) //Unconscious or dead
+			// if(raisetype)
+			// 	H.dropBorers()
+			// 	var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
+			// 	H.gib()
+			// 	spooky.faction = "\ref[user]"
+			// else
+			success = TRUE
+			H.zombify(user, cannot_evolve = TRUE) //Necromancer zombies can't evolve
 		else
-			success = FALSE
+			return 0 //Target is still alive, smack it
 
-	else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/))
-		success = TRUE
-		var/mob/living/simple_animal/S = target
-		S.faction = "\ref[user]"
-	else if(isanimal(target) || ismonkey(target))
+	//Handle forcing the mob to switch allegiances to the necromancer
+	else if(istype(target, /mob/living/simple_animal/hostile/necro))
+		var/can_convert = FALSE
+		if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/headcrab)) //The headcrabs are not undead!
+		else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie)) //It's a zombie
+			can_convert = TRUE
+		else if(istype(target, /mob/living/simple_animal/hostile/necro/meat_ghoul)) //It's a meat ghoul
+			can_convert = TRUE
+		else if(istype(target, /mob/living/simple_animal/hostile/necro/animal_ghoul)) //No, it's a ghoulified animal!
+			can_convert = TRUE
+		if(can_convert)
+			var/mob/living/simple_animal/S = target
+			if(S.faction != "\ref[user]") //If not the same faction as the user, make it so
+				success = TRUE
+				S.faction = "\ref[user]"
+			else
+				to_chat(user, "<span class='warning'>This undead creature already belongs to you!</span>")
+				return 1
+		else
+			return 0
+
+	else if(isanimal(target) || ismonkey(target)) //Any animal or monkey will become a meat ghoul if dead
 		var/mob/living/L = target
 		if(L.stat == DEAD)
 			success = TRUE
-			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(L), user)
+			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(L), user, L)
 			mG.ghoulifyMeat(L)
 			mG.faction = "\ref[user]"
 			L.gib()
 		else
-			to_chat(user,"<span class = 'warning'>The creature must be dead before it can be undead.</span>")
-	else if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat))
-		var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user, target)
+			return 0
+			//to_chat(user,"<span class = 'warning'>The creature must be dead before it can be undead.</span>")
+
+	else if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat)) //Meat can be turned into the undead
+		var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user)
 		success = TRUE
 		aG.ghoulifyAnimal(target)
 		aG.faction = "\ref[user]"
 		qdel(target)
 
 	if(success)
-		make_tracker_effects(get_turf(target), user)
+		make_tracker_effects(target_turf, user)
 		if(iswizard(user) || isapprentice(user))
 			user.say(pick("ARISE, [pick("MY CREATION","MY MINION","CH'KUN")].",\
 			"BOW BEFORE [pick("MY POWER","ME, [uppertext(target.name)]")].",\
@@ -309,9 +346,8 @@
 			"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
 		playsound(src, get_sfx("soulstone"), 50,1)
 		charges--
-
-/obj/item/weapon/gun/energy/staff/necro/attack(mob/living/target as mob, mob/living/user as mob)
-	afterattack(target,user,1)
+		return 1
+	return 0
 
 /obj/item/weapon/gun/energy/staff/destruction_wand
 	name = "wand of destruction"
