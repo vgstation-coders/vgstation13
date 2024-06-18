@@ -224,11 +224,16 @@
 	item_state = "necrostaff"
 	slot_flags = SLOT_BACK
 	w_class = W_CLASS_LARGE
-	var/charge_tick = 0
-	var/charges = 3
-	var/raisetype = 0
-	var/next_change = 0
-	var/charge_tick_required = 10 //20 seconds per charge
+	var/charges = 30 //Zombification costs 10 charges
+	var/charge_limit = 30
+	var/list/necro_blacklist = list(
+		/mob/living/simple_animal/hostile/necro/zombie/headcrab, //Headcrab "zombies" are not undead
+		/mob/living/simple_animal/hostile/necro/zombie/ghoul, //Ghouls are just horribly irradiated
+		/mob/living/simple_animal/hostile/necro/necromorph, //Technically a different kind of lifeform
+		/mob/living/simple_animal/hostile/necro/zombie/leatherman, //You're not the boss of this gym
+	)
+//	var/raisetype = 0
+//	var/next_change = 0
 
 /obj/item/weapon/staff/necro/New()
 	..()
@@ -243,25 +248,19 @@
 	if(lich_user) //Liches are empowered just by holding onto it
 		var/mob/living/carbon/human/L = loc
 		L.adjustBruteLoss(-2)
-	if(charges >= 3)
+	if(charges >= charge_limit)
 		return
-	if(lich_user) //Charge it twice as fast if the user is a lich
-		charge_tick++
-	charge_tick++
-	if(charge_tick < charge_tick_required)
-		return 0
-	charge_tick = 0
-	charges++
+	var/charge_rate = islich(loc) ? 2 : 1
+	charges = min(charges + charge_rate, charge_limit)
 	return 1
 
 /obj/item/weapon/staff/necro/examine(mob/user, size, show_name)
 	..()
-	to_chat(user, "<span class='notice'>It has [charges ? charges : "no"] charges left.</span>")
+	to_chat(user, "<span class='notice'>It has [charges ? charges/10 : "no"] charges left.</span>")
 
 //Commented out because skeletonizing people was basically removing them from the round instantly.
 //Can only raise zombies.
-
-
+///////////////////////////////////////////////////////
 // /obj/item/weapon/staff/necro/attack_self(mob/user)
 // 	if(next_change > world.timeofday)
 // 		to_chat(user, "<span class='warning'>You must wait longer to decide on a minion type.</span>")
@@ -270,46 +269,47 @@
 
 // 	to_chat(user, "<span class='notice'>You will now raise [raisetype ? "skeletal" : "zombified"] minions from corpses.</span>")
 // 	next_change = world.timeofday + 30
+///////////////////////////////////////////////////////
 
 //Returning 0 will cause the staff to attack an object, 1 will cause it to not attack
 /obj/item/weapon/staff/necro/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(get_dist(target, user) > 7)
 		return 0
 	var/success = FALSE
-	var/turf/target_turf = get_turf(target) //Because the target could get deleted and it'd break the particle effects
+	var/charge_cost = 10 //Because some actions are less expensive to perform
+	var/turf/target_location = get_turf(target) //Because the original target could get deleted and it'd break the particle effects
 
 	if(ishuman(target)) //Zombify a human
 		var/mob/living/carbon/human/H = target
 		if(H.stat) //Unconscious or dead
+		///////////////////////////////////////////////////////
 			// if(raisetype)
 			// 	H.dropBorers()
 			// 	var/mob/living/simple_animal/hostile/necro/skeleton/spooky = new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(H), user, H)
 			// 	H.gib()
 			// 	spooky.faction = "\ref[user]"
 			// else
-			if(charges)
+		///////////////////////////////////////////////////////
+			if(charges >= charge_cost)
 				success = TRUE
 				H.zombify(user, cannot_evolve = TRUE) //Necromancer zombies can't evolve
 			else
-				to_chat(user, "<span class='warning'>\The [src] does not have any charges!</span>")
+				to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
 				return 1
 		else
 			return 0 //Target is still alive, smack it
 
 	//Handle forcing the mob to switch allegiances to the necromancer, or reviving them immediately.
 	else if(istype(target, /mob/living/simple_animal/hostile/necro))
-		var/can_convert = FALSE
-		if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/headcrab)) //The headcrabs are not undead!
-		else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie)) //It's a zombie
-			can_convert = TRUE
-		else if(istype(target, /mob/living/simple_animal/hostile/necro/meat_ghoul)) //It's a meat ghoul
-			can_convert = TRUE
-		else if(istype(target, /mob/living/simple_animal/hostile/necro/animal_ghoul)) //No, it's a ghoulified animal!
-			can_convert = TRUE
+		var/can_convert = TRUE
+		for(var/blacklisted_type in necro_blacklist)
+			if(istype(target, blacklisted_type))
+				can_convert = FALSE
+				break
 		if(can_convert)
-			if(charges)
+			if(charges >= charge_cost)
 				var/mob/living/simple_animal/S = target
-				if((S.faction == "\ref[user]") && (S.stat == DEAD)) //Bring them back
+				if((S.faction == "\ref[user]") && (S.stat == DEAD)) //Bring them back if on the same side as the user
 					S.resurrect()
 					S.revive()
 					to_chat(user, "<span class='notice'>You rejuvenate \the dead [S], immediately bringing them back to life!</span>")
@@ -322,7 +322,7 @@
 					to_chat(user, "<span class='warning'>This undead creature already belongs to you!</span>")
 					return 1
 			else
-				to_chat(user, "<span class='warning'>\The [src] does not have any charges!</span>")
+				to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
 				return 1
 		else
 			return 0
@@ -330,32 +330,33 @@
 	else if(isanimal(target) || ismonkey(target)) //Any animal or monkey will become a meat ghoul if dead
 		var/mob/living/L = target
 		if(L.stat == DEAD)
-			if(charges)
+			if(charges >= charge_cost)
 				success = TRUE
 				var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(L), user, L)
 				mG.ghoulifyMeat(L)
 				mG.faction = "\ref[user]"
 				L.gib()
 			else
-				to_chat(user, "<span class='warning'>\The [src] does not have any charges!</span>")
+				to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
 				return 1
 		else
 			return 0
 			//to_chat(user,"<span class = 'warning'>The creature must be dead before it can be undead.</span>")
 
 	else if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat)) //Meat can be turned into the undead
-		if(charges)
+		charge_cost = 5 //Meat is cheaper to raise
+		if(charges >= charge_cost)
 			var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user)
 			success = TRUE
 			aG.ghoulifyAnimal(target)
 			aG.faction = "\ref[user]"
 			qdel(target)
 		else
-			to_chat(user, "<span class='warning'>\The [src] does not have any charges!</span>")
+			to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
 			return 1
 
 	if(success)
-		make_tracker_effects(target_turf, user)
+		make_tracker_effects(target_location, user)
 		if(iswizard(user) || isapprentice(user))
 			user.say(pick("ARISE, [pick("MY CREATION","MY MINION","CH'KUN")].",\
 			"BOW BEFORE [pick("MY POWER","ME, [uppertext(target.name)]")].",\
@@ -367,7 +368,7 @@
 			"YOUR TIME HAS NOT COME, YET.",\
 			"YOUR SOUL MAY BELONG TO [uppertext(ticker.Bible_deity_name)] BUT YOU BELONG TO ME."))
 		playsound(src, get_sfx("soulstone"), 50,1)
-		charges--
+		charges -= charge_cost
 		return 1
 	return 0
 
