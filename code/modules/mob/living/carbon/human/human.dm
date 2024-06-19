@@ -1270,7 +1270,7 @@ var/datum/record_organ
 		// if(src.species && src.species.name && (src.species.name == new_species_name))
 		// 	return
 	if(!new_species_name)
-		else if(src.dna)
+		if(src.dna)
 			new_species_name = src.dna.species
 		else
 			new_species_name = "Human"
