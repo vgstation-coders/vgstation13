@@ -1215,7 +1215,7 @@
 		to_chat(usr, "<span class='info'>You moved while counting. Try again.</span>")
 
 //Record_organ datum, stores as much info as it can about each organ
-var/datum/record_organ
+/datum/record_organ
 	var/name
 
 /datum/record_organ/external
