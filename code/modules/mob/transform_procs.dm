@@ -293,7 +293,7 @@
 	new_human.randomise_appearance_for(new_human.gender)
 	if(!new_species || !(new_species in all_species))
 		new_species = pick(whitelisted_species)
-	new_human.set_species(new_species, target_override = src)
+	new_human.set_species(new_species, transfer_damage = TRUE, target_override = src) //Transfer damage from the current mob to the new one
 	new_human.regenerate_icons()
 	if(isliving(src))
 		var/mob/living/L = src

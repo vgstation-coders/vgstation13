@@ -146,6 +146,8 @@
 	multicolor_skin_g = rand(0,255)
 	multicolor_skin_b = rand(0,255)
 
+	create_reagents(1000) //Moved it here because it could sometimes lead to errors in set_species() in certain cases
+
 	if(!src.species)
 		if(new_species_name)
 			src.set_species(new_species_name)
@@ -156,8 +158,6 @@
 
 	default_language = get_default_language()
 	init_language = default_language
-
-	create_reagents(1000)
 
 	if(!dna)
 		dna = new /datum/dna(null)
@@ -1228,50 +1228,34 @@
 	var/damage
 	var/robotic
 
-/mob/living/carbon/human/proc/set_species(var/new_species_name, var/force_organs, var/default_colour, var/transfer_damage = 1, var/mob/living/carbon/human/target_override)
+/mob/living/carbon/human/proc/set_species(var/new_species_name, var/force_organs, var/default_colour, var/transfer_damage = 0, var/mob/living/carbon/human/target_override)
 	set waitfor = FALSE
 	// Target override, in case we want to transfer stuff from a previous mob (the override) to the current one.
-	// Only applied to the wound transfer system.
+	// Only applied to the damage transfer system.
 	var/mob/living/carbon/human/target = src
 	if(target_override && istype(target_override, /mob/living/carbon/human))
 		target = target_override
-	//A list of organs and their associated damages
-	//External and internal organs have different damage systems
-	var/list/recorded_external_damage = list()
-	var/list/recorded_internal_damage = list()
-	if(transfer_damage) //Don't bother recording any of it if we're not transferring the damage
-		for(var/datum/organ/external/E in target.organs) //"organs" is actually external organs
-			to_chat(world, "added [E.name]")
-			var/datum/record_organ/external/external_data = new
-			external_data.name = E.name
-			external_data.brute_damage = E.brute_dam
-			external_data.burn_damage = E.burn_dam
-			external_data.wounds = E.wounds.Copy() //Just in case that for some reason the new wounds would track E.wounds
-			E.wounds = list() //Because otherwise the wounds would get caught in the garbage collection and fully heal the mob as they get deleted
-			external_data.status_flags = E.status
-			recorded_external_damage += external_data
-		for(var/datum/organ/internal/I in target.internal_organs)
-			to_chat(world, "added [I.name]")
-			var/datum/record_organ/internal/internal_data = new
-			internal_data.name = I.name
-			internal_data.damage = I.damage
-			internal_data.robotic = I.robotic
-			recorded_internal_damage += internal_data
-	for(var/list/external_organ in recorded_external_damage)
-		to_chat(world, "[english_list(external_organ)]")
-	for(var/list/internal_organ in recorded_internal_damage)
-		to_chat(world, "[english_list(internal_organ)]")
+	//Store all of the current mob damages, they will get randomly redistributed to the new mob
+	var/brute_damage = target.getBruteLoss()
+	var/burn_damage = target.getFireLoss()
+	var/oxy_damage = target.getOxyLoss()
+	var/tox_damage = target.getToxLoss()
+	var/clone_damage = target.getCloneLoss()
 
-	//Removed a check here, it's meant for optimizing but it froze the damage-tracking code in its tracks
-
-	//if(new_species_name)
-		// if(src.species && src.species.name && (src.species.name == new_species_name))
-		// 	return
-	if(!new_species_name)
-		if(src.dna)
-			new_species_name = src.dna.species
-		else
-			new_species_name = "Human"
+	if(new_species_name)
+		if(src.species && src.species.name && (src.species.name == new_species_name))
+			if(transfer_damage)
+				if(target != src) //It's a different mob, let's apply the damage
+					take_overall_damage(brute_damage, burn_damage, no_damage_change = TRUE)
+					adjustOxyLoss(oxy_damage)
+					adjustToxLoss(tox_damage)
+					adjustCloneLoss(clone_damage)
+					handle_organs(TRUE)
+			return
+	else if(src.dna)
+		new_species_name = src.dna.species
+	else
+		new_species_name = "Human"
 
 	if(src.species)
 		//if(src.species.language)	src.remove_language(species.language)
@@ -1333,39 +1317,13 @@
 	meat_type = species.meat_type
 	src.movement_speed_modifier = species.move_speed_multiplier
 
-	//Now re-apply all the damages from before the transformation, for each organ that's still standing
-	for(var/some_list in recorded_external_damage)
-		to_chat(world, "[some_list["name"]]")
-	for(var/some_other_list in recorded_internal_damage)
-		to_chat(world, "[some_other_list["name"]]")
+	//Now re-apply all the damages from before the transformation
 	if(transfer_damage)
-		for(var/datum/organ/external/new_external in organs)
-			to_chat(world, "[new_external.name] is in mob organs")
-			for(var/datum/record_organ/external/old_external in recorded_external_damage)
-				to_chat(world, "attempting [old_external.name] external comparison")
-				if(new_external.name == old_external.name)
-					to_chat(world, "external organ matched, transferring damage")
-					new_external.brute_dam = old_external.brute_damage
-					new_external.burn_dam = old_external.burn_damage
-					new_external.wounds = old_external.wounds.Copy()
-					old_external.wounds = list()
-					new_external.status = old_external.status_flags
-					recorded_external_damage -= old_external
-					QDEL_NULL(old_external)
-					break
-		for(var/datum/organ/internal/new_internal in internal_organs)
-			to_chat(world, "found new internal organ [new_internal.name]")
-			for(var/datum/record_organ/internal/old_internal in recorded_internal_damage)
-				to_chat(world, "attempting [old_internal.name] external comparison")
-				if(new_internal.name == old_internal.name)
-					to_chat(world, "internal organ matched, transferring damage")
-					new_internal.damage = old_internal.damage
-					new_internal.robotic = old_internal.robotic
-					recorded_internal_damage -= old_internal //Trim the list so it doesn't search as much
-					QDEL_NULL(old_internal)
-					break //We found a matching internal organ, move on to the next organ
-		src.handle_organs(TRUE) //Now handle all of them
-
+		take_overall_damage(brute_damage, burn_damage, no_damage_change = TRUE)
+		adjustOxyLoss(oxy_damage)
+		adjustToxLoss(tox_damage)
+		adjustCloneLoss(clone_damage)
+		handle_organs(TRUE)
 	if(dna)
 		dna.species = new_species_name
 

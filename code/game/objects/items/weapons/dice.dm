@@ -146,7 +146,7 @@
 					to_chat(user, "<span class=sinister><B>A natural failure, your poor roll has cursed you. Better luck next time! </span></B>")
 					h.flash_eyes(visual = 1)
 					if(h.species.name != "Tajaran")
-						if(h.set_species("Tajaran"))
+						if(h.set_species("Tajaran", transfer_damage = TRUE))
 							h.regenerate_icons()
 						to_chat(user, "<span class=danger><B>You have been turned into a disgusting catbeast! </span></B>")
 					else
@@ -219,7 +219,7 @@
 								switch(pick(1,2,3))
 									if(1)
 										if(h.species.name != "Unathi")
-											if(h.set_species("Unathi"))
+											if(h.set_species("Unathi", transfer_damage = TRUE))
 												h.regenerate_icons()
 											to_chat(user, "<span class=danger><B>You have been turned into a disgusting lizard! </span></B>")
 										else
@@ -227,7 +227,7 @@
 												E.droplimb(1)
 									if(2)
 										if(h.species.name != "Skrell")
-											if(h.set_species("Skrell"))
+											if(h.set_species("Skrell", transfer_damage = TRUE))
 												h.regenerate_icons()
 											to_chat(user, "<span class=danger><B>You have been turned into a disgusting squidman! </span></B>")
 										else
@@ -235,7 +235,7 @@
 												E.droplimb(1)
 									if(3)
 										if(h.species.name != "Vox")
-											if(h.set_species("Vox"))
+											if(h.set_species("Vox", transfer_damage = TRUE))
 												h.regenerate_icons()
 											to_chat(user, "<span class=danger><B>You have been turned into a dumb, diseased bird! </span></B>")
 										else

@@ -154,7 +154,7 @@
 	new I(owner.loc)
 	droplimb(1, spawn_limb = 0, display_message = FALSE)
 
-/datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
+/datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list(), var/no_damage_modifier = FALSE)
 	if(cosmetic_only)
 		return
 	if(owner?.status_flags & GODMODE)
@@ -165,16 +165,17 @@
 	if(!is_existing()) //No limb there
 		return 0
 
-	if(!is_organic())
-		brute *= 0.66 //~2/3 damage for ROBOLIMBS
-		burn *= (status & (ORGAN_PEG) ? 2 : 0.66) //~2/3 damage for ROBOLIMBS 2x for peg
-	else
-		var/datum/species/species = src.species || owner.species
-		if(species)
-			if(species.brute_mod)
-				brute *= species.brute_mod
-			if(species.burn_mod)
-				burn *= species.burn_mod
+	if(!no_damage_modifier)
+		if(!is_organic())
+			brute *= 0.66 //~2/3 damage for ROBOLIMBS
+			burn *= (status & (ORGAN_PEG) ? 2 : 0.66) //~2/3 damage for ROBOLIMBS 2x for peg
+		else
+			var/datum/species/species = src.species || owner.species
+			if(species)
+				if(species.brute_mod)
+					brute *= species.brute_mod
+				if(species.burn_mod)
+					burn *= species.burn_mod
 
 	//If limb took enough damage, try to cut or tear it off
 	if(body_part != UPPER_TORSO && body_part != LOWER_TORSO) //As hilarious as it is, getting hit on the chest too much shouldn't effectively gib you.
@@ -1678,8 +1679,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		baseicon = 'icons/mob/human_races/o_robot.dmi'
 	return new /icon(baseicon, "[icon_name]_[gender]")
 
-/datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list())
-	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs)
+/datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list(), no_damage_modifier)
+	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs, no_damage_modifier)
 	if(!disfigured)
 		/*
 		if(brute_dam > 40)
