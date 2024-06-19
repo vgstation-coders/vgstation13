@@ -1216,17 +1216,15 @@
 
 //Record_organ datum, stores as much info as it can about each organ
 var/datum/record_organ
-	var/name = "organ"
+	var/name
 
 /datum/record_organ/external
-	var/name
 	var/brute_damage
 	var/burn_damage
 	var/list/wounds = list()
 	var/status_flags
 
 /datum/record_organ/internal
-	var/name
 	var/damage
 	var/robotic
 
