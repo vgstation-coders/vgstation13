@@ -1214,20 +1214,6 @@
 	else
 		to_chat(usr, "<span class='info'>You moved while counting. Try again.</span>")
 
-//Record_organ datum, stores as much info as it can about each organ
-/datum/record_organ
-	var/name
-
-/datum/record_organ/external
-	var/brute_damage
-	var/burn_damage
-	var/list/wounds = list()
-	var/status_flags
-
-/datum/record_organ/internal
-	var/damage
-	var/robotic
-
 /mob/living/carbon/human/proc/set_species(var/new_species_name, var/force_organs, var/default_colour, var/transfer_damage = 0, var/mob/living/carbon/human/target_override)
 	set waitfor = FALSE
 	// Target override, in case we want to transfer stuff from a previous mob (the override) to the current one.
@@ -1317,6 +1303,8 @@
 	meat_type = species.meat_type
 	src.movement_speed_modifier = species.move_speed_multiplier
 
+	if(dna)
+		dna.species = new_species_name
 	//Now re-apply all the damages from before the transformation
 	if(transfer_damage)
 		take_overall_damage(brute_damage, burn_damage, no_damage_change = TRUE)
@@ -1324,8 +1312,6 @@
 		adjustToxLoss(tox_damage)
 		adjustCloneLoss(clone_damage)
 		handle_organs(TRUE)
-	if(dna)
-		dna.species = new_species_name
 
 	if(my_appearance)
 		var/list/valid_hair = valid_sprite_accessories(hair_styles_list, null, species.name)

@@ -154,11 +154,15 @@
 	new I(owner.loc)
 	droplimb(1, spawn_limb = 0, display_message = FALSE)
 
-/datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list(), var/no_damage_modifier = FALSE)
+/datum/organ/external/proc/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list(), var/no_damage_modifier, var/spread_damage = TRUE)
 	if(cosmetic_only)
 		return
 	if(owner?.status_flags & GODMODE)
 		return 0	//godmode
+	if(brute < 0)
+		brute = 0
+	if(burn < 0)
+		burn = 0
 	if((brute <= 0) && (burn <= 0))
 		return 0
 
@@ -237,20 +241,20 @@
 		//If we can't inflict the full amount of damage, spread the damage in other ways
 		//How much damage can we actually cause?
 		var/can_inflict = max_damage * config.organ_health_multiplier - (brute_dam + burn_dam)
-		if(can_inflict)
+		if(can_inflict > 0)
 			if(brute > 0)
-				//Inflict all burte damage we can
+				//Inflict all brute damage we can
 				if(can_cut)
 					createwound(CUT, min(brute,can_inflict))
 				else
 					createwound(BRUISE, min(brute,can_inflict))
 				var/temp = can_inflict
-				//How much mroe damage can we inflict
+				//How much more damage can we inflict
 				can_inflict = max(0, can_inflict - brute)
 				//How much brute damage is left to inflict
 				brute = max(0, brute - temp)
 
-			if(burn > 0 && can_inflict)
+			if(burn > 0 && (can_inflict > 0))
 				//Inflict all burn damage we can
 				createwound(BURN, min(burn,can_inflict))
 				//How much burn damage is left to inflict
@@ -260,18 +264,19 @@
 			if(!is_organic())
 				droplimb(1) //Non-organic limbs just drop off with no further complications
 			else
-				//List organs we can pass it to
-				var/list/datum/organ/external/possible_points = list()
-				if(parent)
-					possible_points += parent
-				if(children)
-					possible_points += children
-				if(forbidden_limbs.len)
-					possible_points -= forbidden_limbs
-				if(possible_points.len)
-					//And pass the pain around
-					var/datum/organ/external/target = pick(possible_points)
-					target.take_damage(brute, burn, sharp, edge, used_weapon, forbidden_limbs + src)
+				if(spread_damage)
+					//List organs we can pass it to
+					var/list/datum/organ/external/possible_points = list()
+					if(parent)
+						possible_points += parent
+					if(children)
+						possible_points += children
+					if(forbidden_limbs.len)
+						possible_points -= forbidden_limbs
+					if(possible_points.len)
+						//And pass the pain around
+						var/datum/organ/external/target = pick(possible_points)
+						target.take_damage(brute, burn, sharp, edge, used_weapon, forbidden_limbs + src, no_damage_modifier = no_damage_modifier)
 
 	//Sync the organ's damage with its wounds
 	src.update_damages()
@@ -342,7 +347,6 @@
 		return
 
 	var/datum/species/species = src.species || owner.species
-
 	//First check whether we can widen an existing wound
 	if(widenwound(type, damage))
 		update_damages()
@@ -685,10 +689,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/datum/species/species = src.species || owner.species
 
 	for(var/datum/wound/W in wounds)
-		if(W.damage_type == CUT || W.damage_type == BRUISE)
-			brute_dam += W.damage
-		else if(W.damage_type == BURN)
-			burn_dam += W.damage
+		if(!W.internal) //Internal wounds don't count for the total mob damage
+			if(W.damage_type == CUT || W.damage_type == BRUISE)
+				brute_dam += W.damage
+			else if(W.damage_type == BURN)
+				burn_dam += W.damage
 
 		if(is_organic() && W.bleeding() && !(species.anatomy_flags & NO_BLOOD))
 			W.bleed_timer--
@@ -1679,8 +1684,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 		baseicon = 'icons/mob/human_races/o_robot.dmi'
 	return new /icon(baseicon, "[icon_name]_[gender]")
 
-/datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list(), no_damage_modifier)
-	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs, no_damage_modifier)
+/datum/organ/external/head/take_damage(brute, burn, sharp, edge, used_weapon = null, list/forbidden_limbs = list(), no_damage_modifier, spread_damage)
+	..(brute, burn, sharp, edge, used_weapon, forbidden_limbs, no_damage_modifier, spread_damage)
 	if(!disfigured)
 		/*
 		if(brute_dam > 40)
