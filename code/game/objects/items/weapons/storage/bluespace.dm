@@ -33,7 +33,7 @@
 	qdel(user)
 
 /obj/item/weapon/storage/backpack/holding/quick_store(var/obj/item/I,mob/user)
-	if(user.client)
+	if(user?.client)
 		if(world.time - user.client.last_quick_stored < 3) // to handle mistakenly doing it fast, plus any info about the baguloose is shown below anyways
 			var/list/recursive_list = recursive_type_check(I, /obj/item/weapon/storage/backpack/holding)
 			if(recursive_list.len) 
