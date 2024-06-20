@@ -345,19 +345,19 @@
 				to_chat(usr, "<span class='notice'>\The [W] is too big for \the [src].</span>")
 			return 0
 
+	var/stacktypefound = FALSE
 	if(istype(W,/obj/item/stack))
 		var/obj/item/stack/S = W
 		for(var/obj/item/stack/otherS in src)
-			if(otherS.amount < otherS.max_amount && otherS.type == S.type)
-				return TRUE
-	if(storage_slots && (contents.len >= storage_slots))
+			if(otherS.type == S.type)
+				if(otherS.amount < otherS.max_amount)
+					return TRUE
+				stacktypefound = TRUE
+				break
+	if((storage_slots && (contents.len >= storage_slots)) || (get_sum_w_class() + W.w_class > max_combined_w_class))
 		if(!stop_messages)
-			to_chat(usr, "<span class='notice'>\The [src] is full, make some space.</span>")
+			to_chat(usr, "<span class='notice'>\The [src] is full[stacktypefound ? " of this kind of stack": ""], make some space.</span>")
 		return 0 //Storage item is full
-	if(get_sum_w_class() + W.w_class > max_combined_w_class)
-		if(!stop_messages)
-			to_chat(usr, "<span class='notice'>\The [src] is full, make some space.</span>")
-		return 0
 
 	if(W.w_class >= src.w_class && (istype(W, /obj/item/weapon/storage)))
 		if(!istype(src, /obj/item/weapon/storage/backpack/holding))	//bohs should be able to hold backpacks again. The override for putting a boh in a boh is in backpack.dm.
