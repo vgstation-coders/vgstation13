@@ -128,9 +128,9 @@
 	icon_state = "mining_satchel"
 	slot_flags = SLOT_BELT | SLOT_POCKET
 	w_class = W_CLASS_MEDIUM
-	storage_slots = 21
+	storage_slots = 50
 	fits_max_w_class = 3
-	max_combined_w_class = 21 //Doesn't matter what this is, so long as it's more or equal to storage_slots * types of ore found on the mine
+	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * ore.w_class
 	can_only_hold = list("/obj/item/stack/ore")
 	display_contents_with_number = TRUE
 
