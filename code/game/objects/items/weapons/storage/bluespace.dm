@@ -12,6 +12,9 @@
 	fits_max_w_class = W_CLASS_LARGE
 	max_combined_w_class = 28
 
+/mob
+	var/last_quick_stored = 0
+
 /obj/item/weapon/storage/backpack/holding/return_air()//prevents hot food from getting cold while in it.
 	return
 
@@ -31,6 +34,15 @@
 	user.visible_message("<span class = 'danger'><b>[user] puts \the [src.name] on the ground and jumps inside, never to be seen again.<</b></span>")
 	user.drop_item(src)
 	qdel(user)
+
+/obj/item/weapon/storage/backpack/holding/quick_store(var/obj/item/I,mob/user)
+	if(world.time - user.last_quick_stored < 3) // to handle mistakenly doing it fast, plus any info about the baguloose is shown below anyways
+		var/list/recursive_list = recursive_type_check(I, /obj/item/weapon/storage/backpack/holding)
+		if(recursive_list.len) 
+			message_admins("[key_name_admin(user)] created a baguloose from quick equipping fast, might be worth noting.")
+			log_game("[key_name(user)] created a baguloose from quick equipping fast, might be worth noting.")
+	user.last_quick_stored = world.time
+	return ..()
 
 /obj/item/weapon/storage/backpack/holding/handle_item_insertion(obj/item/W, prevent_warning)
 	. = ..()
