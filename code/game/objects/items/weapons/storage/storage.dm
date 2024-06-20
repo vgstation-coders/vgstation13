@@ -383,9 +383,10 @@
 				if(usr)
 					add_fingerprint(usr)
 					if(!prevent_warning)
-						to_chat(usr, "You add [to_transfer] [((to_transfer > 1) && S.irregular_plural) ? S.irregular_plural : "[S.singular_name]\s"] to \the [otherS]. It now contains [otherS.amount] [(otherS.irregular_plural && otherS.amount > 1) ? otherS.irregular_plural : "[otherS.singular_name]"].")
 						for(var/mob/M in viewers(usr, null)) //If someone is standing close enough, they can tell what it is, otherwise they can only see large or normal items from a distance
-							if (!stealthy(usr) && (M in range(1) || W.w_class >= W_CLASS_MEDIUM))
+							if(M == usr)
+								to_chat(usr, "You add [to_transfer] [((to_transfer > 1) && S.irregular_plural) ? S.irregular_plural : "[S.singular_name]\s"] to \the [otherS]. It now contains [otherS.amount] [(otherS.irregular_plural && otherS.amount > 1) ? otherS.irregular_plural : "[otherS.singular_name]"].")
+							else if (!stealthy(usr) && (M in range(1) || W.w_class >= W_CLASS_MEDIUM))
 								M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
 				S.use(to_transfer)
 				refresh_all()
@@ -405,9 +406,10 @@
 		add_fingerprint(usr)
 
 		if(!prevent_warning && !istype(W, /obj/item/weapon/gun/energy/crossbow))
-			to_chat(usr, "<span class='notice'>You put \the [W] into \the [src].</span>")
 			for(var/mob/M in viewers(usr, null)) //If someone is standing close enough, they can tell what it is, otherwise they can only see large or normal items from a distance
-				if (!stealthy(usr) && (M in range(1) || W.w_class >= W_CLASS_MEDIUM))
+				if(M == usr)
+					to_chat(usr, "<span class='notice'>You put \the [W] into \the [src].</span>")
+				else if (!stealthy(usr) && (M in range(1) || W.w_class >= W_CLASS_MEDIUM))
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
 
 	W.mouse_opacity = 2 //So you can click on the area around the item to equip it, instead of having to pixel hunt
