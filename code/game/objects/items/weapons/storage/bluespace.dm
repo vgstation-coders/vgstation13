@@ -12,9 +12,6 @@
 	fits_max_w_class = W_CLASS_LARGE
 	max_combined_w_class = 28
 
-/client
-	var/last_quick_stored_boh = 0
-
 /obj/item/weapon/storage/backpack/holding/return_air()//prevents hot food from getting cold while in it.
 	return
 
@@ -37,12 +34,11 @@
 
 /obj/item/weapon/storage/backpack/holding/quick_store(var/obj/item/I,mob/user)
 	if(user.client)
-		if(world.time - user.client.last_quick_stored_boh < 3) // to handle mistakenly doing it fast, plus any info about the baguloose is shown below anyways
+		if(world.time - user.client.last_quick_stored < 3) // to handle mistakenly doing it fast, plus any info about the baguloose is shown below anyways
 			var/list/recursive_list = recursive_type_check(I, /obj/item/weapon/storage/backpack/holding)
 			if(recursive_list.len) 
 				message_admins("[key_name_admin(user)] created a baguloose from quick equipping fast, might be worth noting.")
 				log_game("[key_name(user)] created a baguloose from quick equipping fast, might be worth noting.")
-		user.client.last_quick_stored_boh = world.time
 	return ..()
 
 /obj/item/weapon/storage/backpack/holding/handle_item_insertion(obj/item/W, prevent_warning)

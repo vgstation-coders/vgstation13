@@ -682,7 +682,12 @@ a {
 /obj/proc/can_quick_store(var/obj/item/I) //proc used to check that the current object can store another through quick equip
 	return 0
 
+/client
+	var/last_quick_stored = 0
+
 /obj/proc/quick_store(var/obj/item/I,mob/user) //proc used to handle quick storing
+	if(user?.client)
+		user.client.last_quick_stored = world.time
 	return 0
 
 /**
