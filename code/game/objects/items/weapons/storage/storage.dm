@@ -227,7 +227,7 @@
 			var/found = 0
 			for(var/datum/numbered_display/ND in numbered_contents)
 				if(ND.sample_object.type == I.type)
-					ND.number += ND.sample_object.get_storage_number_display_value()
+					ND.number += I.get_storage_number_display_value()
 					found = 1
 					break
 			if(!found)
