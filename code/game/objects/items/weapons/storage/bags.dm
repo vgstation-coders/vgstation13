@@ -426,6 +426,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	max_combined_w_class = 18
 	can_only_hold = list("/obj/item/stack/sheet")
 	cant_hold = list("/obj/item/stack/sheet/mineral/sandstone","/obj/item/stack/sheet/wood")
+	//display_contents_with_number = TRUE //used to be broken with old snowflake behaviour, now works. uncomment to add it.
 
 
 /obj/item/weapon/storage/bag/sheetsnatcher/borg
