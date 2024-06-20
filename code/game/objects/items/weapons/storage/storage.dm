@@ -378,15 +378,8 @@
 		var/obj/item/stack/S = W
 		for(var/obj/item/stack/otherS in src)
 			if(otherS.amount < otherS.max_amount && otherS.type == S.type)
-				var/remaining = otherS.max_amount - otherS.amount
-				var/to_transfer = remaining
-				if(S.amount > remaining)
-					S.use(remaining)
-					otherS.amount = otherS.max_amount
-				else
-					to_transfer = S.amount
-					otherS.amount += S.amount
-					qdel(S)
+				var/to_transfer = S.amount > otherS.max_amount - otherS.amount ? S.amount : otherS.max_amount - otherS.amount
+				otherS.amount += to_transfer
 				if(usr)
 					add_fingerprint(usr)
 					if(!prevent_warning)
@@ -394,6 +387,7 @@
 						for(var/mob/M in viewers(usr, null)) //If someone is standing close enough, they can tell what it is, otherwise they can only see large or normal items from a distance
 							if (!stealthy(usr) && (M in range(1) || W.w_class >= W_CLASS_MEDIUM))
 								M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
+				S.use(to_transfer)
 				refresh_all()
 				return 1
 
