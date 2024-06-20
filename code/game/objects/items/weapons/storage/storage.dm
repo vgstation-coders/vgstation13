@@ -378,7 +378,7 @@
 		var/obj/item/stack/S = W
 		for(var/obj/item/stack/otherS in src)
 			if(otherS.amount < otherS.max_amount && otherS.type == S.type)
-				var/to_transfer = S.amount > otherS.max_amount - otherS.amount ? otherS.max_amount - otherS.amount : S.amount
+				var/to_transfer = min(S.amount, otherS.max_amount - otherS.amount)
 				otherS.amount += to_transfer
 				if(usr)
 					add_fingerprint(usr)
