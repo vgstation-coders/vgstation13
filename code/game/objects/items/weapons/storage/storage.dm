@@ -353,7 +353,6 @@
 				if(otherS.amount < otherS.max_amount)
 					return TRUE
 				stacktypefound = TRUE
-				break
 	if((storage_slots && (contents.len >= storage_slots)) || (get_sum_w_class() + W.w_class > max_combined_w_class))
 		if(!stop_messages)
 			to_chat(usr, "<span class='notice'>\The [src] is full[stacktypefound ? " of this kind of stack": ""], make some space.</span>")
