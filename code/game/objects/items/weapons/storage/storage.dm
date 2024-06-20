@@ -394,6 +394,7 @@
 						for(var/mob/M in viewers(usr, null)) //If someone is standing close enough, they can tell what it is, otherwise they can only see large or normal items from a distance
 							if (!stealthy(usr) && (M in range(1) || W.w_class >= W_CLASS_MEDIUM))
 								M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
+				refresh_all()
 				return 1
 
 	if(usr) //WHYYYYY
