@@ -419,13 +419,19 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 /obj/item/weapon/storage/bag/sheetsnatcher
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "sheetsnatcher"
-	name = "Sheet Snatcher 9000"
+	name = "Sheet Snatcher"
 	desc = "A patented Nanotrasen storage system designed for any kind of mineral sheet."
 	w_class = W_CLASS_MEDIUM
 	storage_slots = 50
-	max_combined_w_class = 15 //Borgs get more because >specialization
+	max_combined_w_class = 18
 	can_only_hold = list("/obj/item/stack/sheet")
 	cant_hold = list("/obj/item/stack/sheet/mineral/sandstone","/obj/item/stack/sheet/wood")
+
+
+/obj/item/weapon/storage/bag/sheetsnatcher/borg
+	name = "Sheet Snatcher 9000"
+	desc = ""
+	max_combined_w_class = 30 //Borgs get more because >specialization
 
 // -----------------------------
 //          Gadget Bag
