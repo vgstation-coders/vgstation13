@@ -348,7 +348,7 @@
 	if(istype(W,/obj/item/stack))
 		var/obj/item/stack/S = W
 		for(var/obj/item/stack/otherS in src)
-			if(otherS.amount < otherS.max_amount && istype(otherS,S.type))
+			if(otherS.amount < otherS.max_amount && otherS.type == S.type)
 				return TRUE
 	if(storage_slots && (contents.len >= storage_slots))
 		if(!stop_messages)
@@ -377,7 +377,7 @@
 	if(istype(W,/obj/item/stack))
 		var/obj/item/stack/S = W
 		for(var/obj/item/stack/otherS in src)
-			if(otherS.amount < otherS.max_amount && istype(otherS,S.type))
+			if(otherS.amount < otherS.max_amount && otherS.type == S.type)
 				var/remaining = otherS.max_amount - otherS.amount
 				var/to_transfer = remaining
 				if(S.amount > remaining)
