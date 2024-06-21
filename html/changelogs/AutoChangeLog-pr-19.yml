@@ -1,0 +1,19 @@
+author: toomykins
+delete-after: true
+changes:
+- type: rscadd
+  description: Added new thing.
+- type: rscdel
+  description: Removed old thing.
+- type: bugfix
+  description: Fixed a bug that caused something bad to happen.
+- type: tweak
+  description: Changed a 5 to a 6.
+- type: imageadd
+  description: Added new sprites.
+- type: imagedel
+  description: Removed old sprites.
+- type: experiment
+  description: Added an experimental/work-in-progress something.
+- type: spellcheck
+  description: Fixed missing punctuation, typos or restructured a sentence.
