@@ -60,9 +60,11 @@
 /turf/simulated/floor/wood
 	name = "floor"
 	icon_state = "wood"
-
 	soot_type = null
 	melt_temperature = 0 // Doesn't melt.
+	flammable = TRUE
+	thermal_material = new/datum/thermal_material/wood()
+	thermal_mass = 5
 
 /turf/simulated/floor/wood/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/wood(null)
@@ -300,6 +302,9 @@
 	icon_state = "deck"
 	icon_plating = "deck"
 	desc = "Children love to play on this deck."
+	flammable = TRUE
+	thermal_material = new/datum/thermal_material/wood()
+	thermal_mass = 5
 
 /turf/simulated/floor/plating/deck/New()
 	..()
@@ -381,13 +386,20 @@
 
 /turf/simulated/floor/beach/water/New()
 	..()
-	var/image/water = image("icon"='icons/misc/beach.dmi',"icon_state"="water5")
-	water.plane = ABOVE_HUMAN_PLANE
-	overlays += water
+	if(!BW)
+		BW = new
+	vis_contents.Add(BW)
+
+/turf/simulated/floor/beach/water/Destroy()
+	vis_contents.Cut()
+	..()
 
 /turf/simulated/floor/grass
 	name = "Grass patch"
 	icon_state = "grass1"
+	flammable = TRUE
+	thermal_material = new/datum/thermal_material/wood()
+	thermal_mass = 5
 
 /turf/simulated/floor/grass/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/grass(null)
@@ -407,6 +419,9 @@
 	name = "Carpet"
 	icon_state = "carpet"
 	var/has_siding=1
+	flammable = TRUE
+	thermal_material = new/datum/thermal_material/fabric()
+	thermal_mass = 5
 
 /turf/simulated/floor/carpet/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/carpet(null)
@@ -430,6 +445,9 @@
 /turf/simulated/floor/arcade
 	name = "Arcade Carpet"
 	icon_state = "arcade"
+	flammable = TRUE
+	thermal_material = new/datum/thermal_material/fabric()
+	thermal_mass = 5
 
 /turf/simulated/floor/arcade/create_floor_tile()
 	floor_tile = new /obj/item/stack/tile/arcade(null)

@@ -27,7 +27,7 @@
 	var/bottleheight = 23 //To offset the molotov rag and fire - beer and ale are 23
 	var/smashtext = "bottle of " //To handle drinking glasses and the flask of holy water
 	var/smashname = "broken bottle" //As above
-	var/flammable = 0
+	var/can_be_lit = 0
 	var/flammin = 0
 	var/flammin_color = null
 	var/base_icon_state = "glassbottle"
@@ -2149,9 +2149,10 @@
 			if(lit)
 				new /obj/effect/decal/cleanable/ash(get_turf(src))
 				var/turf/loca = get_turf(src)
+				var/fueltemp = possible_fuels[FUEL]
 				if(loca)
 					new /obj/effect/fire(loca)
-					loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
+					loca.hotspot_expose(fueltemp["max_temperature"], FULL_FLAME,1)
 			else
 				new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
 
@@ -2210,6 +2211,24 @@
 			var/obj/item/weapon/reagent_containers/food/snacks/donut/D = I
 			D.dip(src, user)
 
+/obj/item/weapon/reagent_containers/food/drinks/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(!(molotov == 1))
+		return
+	if(lit)
+		return
+	ignite()
+
+/obj/item/weapon/reagent_containers/food/drinks/ignite()
+	if(lit)
+		return
+	light("<span class='danger'>The raging fire sets \the [src] alight.</span>")
+
+/obj/item/weapon/reagent_containers/food/drinks/extinguish()
+	lit = 0
+	update_brightness()
+	update_icon()
+	..()
+
 /obj/item/weapon/reagent_containers/food/drinks/molotov
 	name = "incendiary cocktail"
 	smashtext = ""
@@ -2233,10 +2252,10 @@
 		visible_message(flavor_text)
 		processing_objects.Add(src)
 		update_icon()
-	if(!lit && flammable)
+	if(!lit && can_be_lit)
 		lit = 1
 		visible_message(flavor_text)
-		flammable = 0
+		can_be_lit = 0
 		update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/blow_act(var/mob/living/user)
@@ -2297,7 +2316,7 @@
 	var/turf/loca = get_turf(src)
 	if(lit && loca)
 //		to_chat(world, "<span  class='warning'>Burning...</span>")
-		loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
+		loca.hotspot_expose(700, SMALL_FLAME)
 	return
 
 // Sliding from one table to another

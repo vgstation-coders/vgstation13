@@ -9,9 +9,10 @@
 	throw_speed = 1
 	throw_range = 4
 	w_class = W_CLASS_LARGE
+	w_type = RECYK_BIOLOGICAL //leather
+	flammable = TRUE
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 16
-	autoignition_temperature = AUTOIGNITION_ORGANIC //fancy leather briefcases
 	hitsound = "swing_hit"
 	var/obj/item/weapon/handcuffs/casecuff = null
 

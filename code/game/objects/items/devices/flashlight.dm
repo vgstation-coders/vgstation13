@@ -13,6 +13,7 @@
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL // Assuming big beefy fucking maglite.
 	actions_types = list(/datum/action/item_action/toggle_light)
+	flammable = TRUE
 	var/on = 0
 	var/brightness_on = 4 //luminosity when on
 	var/has_sound = 1 //The CLICK sound when turning on/off
@@ -193,6 +194,7 @@
 	item_state = "lamp"
 	brightness_on = 5
 	w_class = W_CLASS_LARGE
+	flammable = FALSE
 	flags = FPRINT
 	siemens_coefficient = 1
 	starting_materials = null
@@ -240,13 +242,19 @@
 		on = onoff
 	update_brightness(playsound = FALSE)
 
+var/list/obj/item/device/flashlight/lamp/lamps = list()
 //Lamps draw power from the area they're in, unlike flashlights.
 /obj/item/device/flashlight/lamp/New()
+	lamps += src
 	if(drawspower)
 		pwrconn = new(src)
 		pwrconn.channel = LIGHT
 		pwrconn.active_usage = 60 * brightness_on / 5 //power usage scales with brightness
 	update_brightness(playsound = FALSE)
+
+/obj/item/device/flashlight/lamp/Destroy()
+	lamps -= src
+	..()
 
 /obj/item/device/flashlight/lamp/update_brightness(var/mob/user = null, var/playsound = TRUE)
 	if(drawspower)
@@ -286,6 +294,7 @@
 	var/on_damage = 7
 	heat_production = 1500
 	source_temperature = TEMPERATURE_FLAME
+	flammable = FALSE //lol
 	var/H_color = ""
 
 	light_color = LIGHT_COLOR_FLARE
@@ -307,8 +316,8 @@
 
 /obj/item/device/flashlight/flare/process()
 	var/turf/pos = get_turf(src)
-	if(pos)
-		pos.hotspot_expose(heat_production, 5,surfaces=istype(loc,/turf))
+	if(pos && on)
+		try_hotspot_expose(heat_production, LARGE_FLAME, -1)
 	fuel = max(fuel - 1, 0)
 	if(!fuel || !on)
 		turn_off()
@@ -340,6 +349,17 @@
 	// All good, turn it on.
 	user.visible_message("<span class='notice'>[user] activates the flare.</span>", "<span class='notice'>You pull the cord on the flare, activating it!</span>")
 	Light(user)
+
+
+/obj/item/device/flashlight/flare/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(on)
+		return
+	ignite()
+
+/obj/item/device/flashlight/flare/ignite()
+	if(on)
+		return
+	Light()
 
 /obj/item/device/flashlight/flare/proc/Light(var/mob/user as mob)
 	on = 1
@@ -381,7 +401,7 @@
 	light_color = LIGHT_COLOR_SLIME_LAMP
 	luminosity = 2
 	has_sound = 0
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	w_type = RECYK_BIOLOGICAL
 	var/brightness_max = 6
 	var/brightness_min = 2
 	drawspower = FALSE //slime lamps don't draw power from the area apc

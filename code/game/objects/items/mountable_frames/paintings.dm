@@ -33,7 +33,6 @@ var/global/list/available_paintings = list(
 	//"anatomy", TODO: add one in medbay/surgery.
 	//"daddy", TODO: well it's not a painting...so make it its own item...?
 
-
 /obj/item/mounted/frame/painting
 	name = "painting"
 	desc = "A blank painting."
@@ -43,9 +42,9 @@ var/global/list/available_paintings = list(
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	flags = FPRINT
 	w_type = RECYK_WOOD
+	flammable = TRUE
 	frame_material = /obj/item/stack/sheet/wood
 	sheets_refunded = 2
-	autoignition_temperature = AUTOIGNITION_WOOD
 	var/paint = ""
 
 /obj/item/mounted/frame/painting/New()
@@ -208,7 +207,8 @@ var/global/list/available_paintings = list(
 	desc = "A blank painting."
 	icon = 'icons/obj/paintings.dmi'
 	icon_state = "blank_old"
-	autoignition_temperature = AUTOIGNITION_WOOD
+	w_type = RECYK_WOOD
+	flammable = FALSE //no good way of burning these yet
 	anchored = 1
 	plane = ABOVE_HUMAN_PLANE
 	layer = CANVAS_LAYER

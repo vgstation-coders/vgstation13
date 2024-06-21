@@ -356,7 +356,7 @@
 	id = BICARIDINE
 	description = "Bicaridine is an analgesic medication and can be used to treat blunt trauma."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#5962F8" //rgb: 89, 98, 248
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.96
 	specheatcap = 0.57
@@ -668,7 +668,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = DEXALIN
 	description = "Dexalin is used in the treatment of oxygen deprivation."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#C2733F" //rgb: 74, 230, 252
 	density = 2.28
 	specheatcap = 0.91
 
@@ -701,7 +701,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = DEXALINP
 	description = "Dexalin Plus is used in the treatment of oxygen deprivation. Its highly effective."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#C2733F" //rgb: 74, 230, 252
 	density = 4.14
 	specheatcap = 0.29
 
@@ -713,6 +713,21 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	if(holder.has_any_reagents(LEXORINS))
 		holder.remove_reagents(LEXORINS, 2 * REM)
+
+/datum/reagent/dexalinp/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(30))
+			T.mutate(GENE_XENOPHYSIOLOGY)
+			T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/dietine
 	name = "Dietine"
@@ -898,7 +913,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = KELOTANE
 	description = "Kelotane is a drug used to treat burns."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#C2733F" //rgb: 94, 15, 63
 	density = 2.3
 	specheatcap = 0.51
 

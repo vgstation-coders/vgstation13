@@ -21,8 +21,6 @@
 /mob/recycle(var/datum/materials)
 	return RECYK_BIOLOGICAL
 
-/mob/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio)
-
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
 	for(var/datum/mind/mind in heard_by)
 		for(var/M in mind.heard_before)
@@ -1268,6 +1266,13 @@ Use this proc preferably at the end of an equipment loadout
 	if(prefs.lastchangelog != changelog_hash)
 		prefs.SetChangelog(ckey, changelog_hash)
 		winset(src, "rpane.changelog", "background-color=none;font-style=;")
+
+/client/verb/check_my_byond_version()
+	set name = "Check My BYOND Version"
+	set category = "OOC"
+	var/output = {"Your BYOND version is: <b>[byond_version].[byond_build]</b><br>
+		You can view all of the latest server-compatible BYOND builds here: https://www.byond.com/download/build/[world.byond_version]/"}
+	usr << browse(output, "window=byond-version-data");
 
 /mob/verb/observe()
 	set name = "Observe"

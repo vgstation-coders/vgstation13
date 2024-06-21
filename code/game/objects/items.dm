@@ -91,9 +91,11 @@
 
 	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
 
+	var/last_burn
+
 /obj/item/New()
 	..()
-	fire_fuel = autoignition_temperature ? w_class : 0 //If the item has an autoignition temperature, use the size as the fuel amount. If not, provide no fuel amount.
+
 	for(var/path in actions_types)
 		new path(src)
 
@@ -450,10 +452,13 @@ var/global/objects_thrown_when_explode = FALSE
 	disease_contact(user)
 
 	if(on_fire)
+		if(world.time - last_burn <= 5 SECONDS)
+			return //no spam clicking burning items to seppuku
 		var/mob/living/L = user
 		L.visible_message("<span class='warning'>\The [src] burns [L]'s hands!</span>", "<span class='warning'>Your hands are burned by \the [src]!</span>")
 		L.drop_item(src, force_drop = 1)
 		L.apply_damage(10,BURN,L.get_active_hand_organ())
+		last_burn = world.time
 
 /obj/item/requires_dexterity(mob/user)
 	return TRUE

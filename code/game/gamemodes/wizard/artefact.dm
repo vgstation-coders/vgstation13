@@ -191,6 +191,7 @@
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "phylactery_empty_noglow"
 	var/charges = 0
+	var/datum/action/phylacteryrevive/revive_action
 	var/mob/bound_soul
 	var/datum/mind/bound_mind
 
@@ -199,9 +200,9 @@
 	if(user.mind == bound_mind)
 		to_chat(user, "<span class='notice'>It has [charges ? "[charges]" : "no"] charges left!</span>")
 	if(iswizard(user)) //Wizards are scholars
-		to_chat(user, "<span class='notice'>This is a phylactery! Whoever is bound to it will come back as a lich wherever the phylactery may be, as long as it is charged.</span>")
-		to_chat(user, "<span class='notice'>You can charge it using filled soulstones. The more charges you have, the faster you will revive.</span>")
-		to_chat(user, "<span class='notice'>The phylactery will revive you faster the closer you are to it when perishing, up to ten times faster if you are 3 tiles away from it.</span>")
+		to_chat(user, "<span class='notice'>This is a phylactery! Whoever is bound to it will come back as a lich wherever the phylactery may be, as long as it is charged.<BR>\
+						You can charge it using filled soulstones. The more charges you have, the faster you will revive.<BR>\
+						The phylactery will revive you faster the closer you are to it when perishing, up to ten times faster if you are 3 tiles away from it.</span>")
 
 /obj/item/phylactery/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/soulstone))
@@ -218,6 +219,7 @@
 
 /obj/item/phylactery/Destroy()
 	if(bound_soul)
+		QDEL_NULL(revive_action)
 		bound_soul.unregister_event(/event/death, src, nameof(src::revive_soul()))
 		bound_soul.unregister_event(/event/z_transition, src, nameof(src::z_block()))
 		to_chat(bound_soul, "<span class = 'warning'><b>You feel your form begin to unwind!</b></span>")
@@ -257,7 +259,7 @@
 		unbind()
 		return
 	var/mob/living/original = user
-	if(original.mind)
+	if(original.mind && original.ckey)
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human/lich(src)
 		H.real_name = original.real_name
 		H.flavor_text = original.flavor_text
@@ -281,8 +283,30 @@
 		spawn(release_time)
 			to_chat(H, "<span class = 'notice'>\The [src] permits you exit from it.</span>")
 			H.forceMove(get_turf(src))
-	charges--
-	update_icon()
+		charges--
+		update_icon()
+	else if(!revive_action) //backup in case the mob was logged out on death
+		revive_action = new(phylactery = src)
+		revive_action.Grant(original)
+
+/datum/action/phylacteryrevive
+	name = "Return to Life"
+	desc = "Regenerate your body as a lich."
+	icon_icon = 'icons/obj/wizard.dmi'
+	button_icon_state = "phylactery"
+	var/obj/item/phylactery/phylac
+
+/datum/action/phylacteryrevive/New(location, obj/item/phylactery)
+	..()
+	if(phylactery)
+		phylac = phylactery
+
+/datum/action/phylacteryrevive/Trigger()
+	if(!phylac)
+		to_chat(owner, "Somehow, you clicked this alert but the phylactery was destroyed and your body wasn't dusted, report this to coders.")
+		return
+	phylac.revive_soul(owner)
+	qdel(src)
 
 /obj/item/phylactery/proc/unbind()
 	if(bound_soul)

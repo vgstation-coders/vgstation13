@@ -10,7 +10,8 @@
 	hitsound = "sound/weapons/whip.ogg"
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list("rustle")
-	autoignition_temperature = AUTOIGNITION_ORGANIC //leather
+	w_type = RECYK_BIOLOGICAL //leather
+	flammable = TRUE
 
 /obj/item/weapon/storage/belt/utility
 	name = "tool-belt" //Carn: utility belt is nicer, but it bamboozles the text parsing.
@@ -87,6 +88,7 @@
 	desc = "The ancestral belt of Many-APCs-Charging, the original chief engineer from Space Native America. It's made out of the skins of the ancient enemy of engineers, giant spiders."
 	icon_state = "utilitychief"
 	item_state = "utilitychief"
+	flammable = FALSE //fireproof
 	fits_max_w_class = 5
 	can_only_hold = list(
 		"/obj/item/tool/crowbar",

@@ -583,6 +583,7 @@
 	required_reagents = list(FUEL = 1)
 	required_temp = AUTOIGNITION_WELDERFUEL
 	result_amount = 1
+	quiet = 1
 	var/fire_temp = AUTOIGNITION_WELDERFUEL
 	var/power = 0
 
@@ -593,7 +594,7 @@
 
 			for(var/turf/simulated/floor/target_tile in range(0,location))
 				spawn(0)
-					target_tile.hotspot_expose(fire_temp, created_volume, surfaces = 1)
+					target_tile.hotspot_expose(fire_temp, created_volume, 1)
 
 		for(var/reagent in required_reagents)
 			holder.del_reagent(reagent)
@@ -679,7 +680,7 @@
 				if (orange_flames)
 					T.visible_message("<span class='notice'>[red_flames ? "As well as" : "You count"] <font color='orange'><b>[(orange_flames > 1) ? "[orange_flames] distinct" : "a single"]</b></font> dim orange flame[(orange_flames > 1) ? "s":""].</span>")
 				playsound(T, 'sound/effects/bubbles.ogg', 80, 1)
-				T.hotspot_expose(500 * red_flames + 100 * orange_flames, 10)
+				T.hotspot_expose(500 * red_flames + 100 * orange_flames, SMALL_FLAME)
 				holder.remove_reagent(BLOOD, 5)
 				return
 
@@ -751,7 +752,7 @@
 			napalm.update_values()
 			target_tile.assume_air(napalm)
 			spawn(0)
-				target_tile.hotspot_expose(700, 400, surfaces = 1)
+				target_tile.hotspot_expose(700, FULL_FLAME, 1)
 
 	holder.del_reagent("napalm")
 
@@ -1887,7 +1888,7 @@
 		napalm.adjust_gas(GAS_PLASMA, 25)
 		target_tile.assume_air(napalm)
 		spawn(0)
-			target_tile.hotspot_expose(700, 400,surfaces = 1)
+			target_tile.hotspot_expose(700, FULL_FLAME, 1)
 	..()
 
 //Yellow

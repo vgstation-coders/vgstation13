@@ -57,7 +57,7 @@
 
 		//Calculate necessary moles to transfer using PV = nRT.
 		recent_moles_transferred = (last_pressure_delta * air2.volume / (air1.temperature * R_IDEAL_GAS_EQUATION))		//Uses the volume of the whole network, not just itself.
-		volume_capacity_used = min((last_pressure_delta * air1.volume / 3) / (input_starting_pressure * air1.volume), 1)	//How much of the gas in the input air volume is consumed.
+		volume_capacity_used = min(last_pressure_delta * air1.volume / (input_starting_pressure * air1.volume), 1)	//How much of the gas in the input air volume is consumed.
 
 		//Calculate energy generated from kinetic turbine.
 		//Most of the below are constants. Instead, think of it as 0.051702*air1.volume*min(pressure difference, starting pressure)

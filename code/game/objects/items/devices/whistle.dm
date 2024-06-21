@@ -5,9 +5,10 @@
 	item_state = "flashbang"	//looks exactly like a flash (and nothing like a flashbang)
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_COMBAT + "=1"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_ELECTRONIC
 	flags = FPRINT
 	siemens_coefficient = 1
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 
 	var/nextuse = 0
 	var/cooldown = 2 SECONDS

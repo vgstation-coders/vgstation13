@@ -11,7 +11,8 @@ var/global/list/obj/item/beacon/beacons = list()
 	var/emagged = 0
 	origin_tech = Tc_BLUESPACE + "=1"
 	flags = FPRINT
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 
 /obj/item/beacon/New()
 	..()

@@ -145,7 +145,7 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	colored_holo.AddAlphaMask(alpha_mask)//Finally, let's mix in a distortion effect.
 	holo.icon = colored_holo
 
-	var/icon/colored_ray = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(ray)), override_dir = SOUTH)
+	var/icon/colored_ray = getFlatIcon(ray)
 	colored_ray.ColorTone(A.holocolor)
 	ray.icon = colored_ray
 

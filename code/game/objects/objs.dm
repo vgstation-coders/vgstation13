@@ -11,6 +11,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/sharpness_flags = 0 //Describe in which way this thing is sharp. Shouldn't sharpness be exclusive to obj/item?
 	var/heat_production = 0
 	var/source_temperature = 0
+	var/smoking = FALSE //is the obj emitting smoke particles
 	var/price = 0
 
 	var/in_use = 0 // If we have a user using us, this will be set on. We will check if the user has stopped using us, and thus stop updating and LAGGING EVERYTHING!
@@ -58,19 +59,33 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/is_cooktop //If true, the object can be used in conjunction with a cooking vessel, eg. a frying pan, to cook food.
 	var/obj/item/weapon/reagent_containers/pan/cookvessel //The vessel being used to cook food in. If generalized out to other types of vessels, make sure to also generalize the frying pan's cook_start(), etc. as well.
 
+	//Is the object covered in ash?
+	var/ash_covered = FALSE
+
 /obj/New()
 	..()
 	if(breakable_flags)
 		breakable_init()
 	if(is_cooktop)
 		add_component(/datum/component/cooktop)
-//Disabled because autoignition would too often turn rooms into firestorms due to a chain reaction
-//where one item would burn up, increase the room temperature (in code/ZAS/Fire.dm, proc/burnFireFuel()) and cause
-//other items to burn up.
-
-//To re-enable, un-comment the lines of code.
-	// if(autoignition_temperature)
-	// 	burnableatoms+=src
+	if(!thermal_mass)
+		switch(w_class)
+			if(W_CLASS_TINY, W_CLASS_SMALL)
+				thermal_mass = 0.1
+			if(W_CLASS_MEDIUM)
+				thermal_mass = 1.0
+			if(W_CLASS_LARGE)
+				thermal_mass = 10.0
+			if(W_CLASS_HUGE)
+				thermal_mass = 25.0 //combo breaker but 100kg is way too heavy
+			if(W_CLASS_GIANT)
+				thermal_mass = 100
+	if(thermal_mass)
+		initial_thermal_mass = thermal_mass
+	if(flammable)
+		var/turf/simulated/T = get_turf(src)
+		if(istype(T))
+			T.zone?.burnable_atoms |= src
 
 //More cooking stuff:
 /obj/proc/can_cook() //Returns true if object is currently in a state that would allow for food to be cooked on it (eg. the grill is currently powered on). Can (and generally should) be overriden to check for more specific conditions.
@@ -138,7 +153,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
 
-/obj/proc/blocks_doors()
+/obj/proc/blocks_doors(var/obj/machinery/door/D)
 	return 0
 
 /obj/proc/install_pai(obj/item/device/paicard/P)
@@ -279,6 +294,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	..()
 	if (cleanliness >= CLEANLINESS_WATER)
 		unglue()
+		ash_covered = FALSE
 
 /obj/proc/cultify()
 	qdel(src)
@@ -407,6 +423,32 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			playsound(user, 'sound/items/trayhit2.ogg', 50, 1)
 		user.visible_message("<span class='danger'>[user] strikes his head on \the [src]! It looks like \he's trying to commit suicide.</span>")
 		return SUICIDE_ACT_BRUTELOSS
+
+/obj/ignite()
+	if(!isturf(loc)) //Prevent things from burning if worn, held, or inside something else. Storage containers will eject their contents when ignited, allowing for burning of the contents.
+		return
+	ash_covered = TRUE
+	remove_particles(PS_SMOKE)
+	return ..()
+
+/obj/item/checkburn()
+	if(!flammable)
+		CRASH("[src] tried to burn despite not being flammable!")
+	if(on_fire)
+		return
+	var/datum/gas_mixture/G = return_air()
+	if(!G)
+		return
+	if(G.temperature >= (autoignition_temperature * 0.75))
+		if(!smoking)
+			add_particles(PS_SMOKE)
+			smoking = TRUE
+		var/rate = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
+		adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
+	else
+		remove_particles(PS_SMOKE)
+		smoking = FALSE
+	..()
 
 /obj/singularity_act()
 	if(flags & INVULNERABLE)
@@ -545,6 +587,9 @@ a {
 	onclose(user, "mtcomputer")
 
 /obj/update_icon()
+	if(ash_covered)
+		cut_overlay(charred_overlay)
+		process_charred_overlay()
 	return
 
 /mob/proc/unset_machine()

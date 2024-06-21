@@ -79,6 +79,8 @@
 	..()
 	if(bullet_marks)
 		to_chat(user, "It has [bullet_marks > 1 ? "some holes" : "a hole"] in it.")
+	if(locate(/obj/effect/ash) in src)
+		to_chat(user, "It is covered in ashes.")
 
 /turf/proc/process()
 	set waitfor = FALSE
@@ -127,8 +129,17 @@
 	//THIS IS OLD TURF ENTERED CODE
 	var/loopsanity = 100
 
+
+
+	var/obj/A_obj = A
 	if(!src.has_gravity())
 		inertial_drift(A)
+	else if(istype(A_obj))
+		var/obj/effect/overlay/puddle/ice/this_puddle = locate(/obj/effect/overlay/puddle/ice) in src
+		if(!this_puddle || !A_obj.last_move)
+			A.inertia_dir = 0
+		else
+			A.process_inertia_ignore_gravity(src)
 	else
 		A.inertia_dir = 0
 

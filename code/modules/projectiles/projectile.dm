@@ -261,7 +261,7 @@ var/list/impact_master = list()
 			var/turf/simulated/floor/f = get_turf(A.loc)
 			if(f && istype(f))
 				f.break_tile()
-				f.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
+				f.hotspot_expose(1000,FULL_FLAME,1)
 		else
 			if(inaccurate)
 				miss_modifier += 8*distance

@@ -108,7 +108,7 @@
 	if(!client)
 		return 0
 
-	if(secret_check_one(src,href_list))
+	if(voting_age_check(src,href_list))
 		return 0
 
 	if(href_list["show_preferences"])
@@ -497,11 +497,13 @@
 		Broadcast_Message(speech, vmask=null, data=0, compression=0, level=list(0,1))
 		qdel(speech)
 
+/proc/voting_age_check(var/mob/M,var/list/href_list)
+	if(href_list["votepollid"] && href_list["votetype"])
+		if(M.client && !M.client.holder && M.client.player_age < 30)
+			message_admins("[key_name(M)] attempted to vote in poll # [href_list["votepollid"]] despite their player age of [M.client.player_age].")
+			return TRUE
+
 /mob/new_player/proc/LateChoices()
-	var/mills = world.time // 1/10 of a second, not real milliseconds but whatever
-	//var/secs = ((mills % 36000) % 600) / 10 //Not really needed, but I'll leave it here for refrence.. or something
-	var/mins = (mills % 36000) / 600
-	var/hours = mills / 36000
 
 	var/list/highprior = new()
 	var/list/heads = new()
@@ -525,7 +527,7 @@
 		.manifest tr.requested_department td {background-color: #00FF00}
 		.manifest th.reqhead td {background-color: #844}
 		.manifest tr.reqalt td {background-color: #FCC}
-		</style></head><body><center>Round Duration: [round(hours)]h [round(mins)]m<br>"}
+		</style></head><body><center>Shift duration: [getShiftDuration()]<br>"}
 	if(emergency_shuttle) //In case Nanotrasen decides reposess CentComm's shuttles.
 		if(emergency_shuttle.direction == 2) //Shuttle is going to centcomm, not recalled
 			dat += "<font color='red'><b>The station has been evacuated.</b></font><br>"

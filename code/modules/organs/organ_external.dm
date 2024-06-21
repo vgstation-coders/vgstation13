@@ -133,7 +133,7 @@
 			step(gib, pick(alldirs)) //move the last spawned gib in a random direction
 
 		if(is_robotic())
-			T.hotspot_expose(1000,1000,surfaces=1)
+			T.hotspot_expose(1000,MEDIUM_FLAME,1)
 		else
 			playsound(T, 'sound/effects/gib3.ogg', 50, 1)
 
@@ -343,16 +343,10 @@
 	var/datum/species/species = src.species || owner.species
 
 	//First check whether we can widen an existing wound
-	if(wounds.len > 0 && prob(50 + owner.number_wounds * 10))
-		if((type == CUT || type == BRUISE) && damage >= 5)
-			var/datum/wound/W = pick(wounds)
-			if(W.amount == 1 && W.started_healing())
-				W.open_wound(damage)
-				if(prob(25))
-					owner.visible_message("<span class='warning'>The wound on [owner.name]'s [display_name] widens with a nasty ripping sound.</span>", \
-					"<span class='warning'>The wound on your [display_name] widens with a nasty ripping sound.</span>", \
-					"You hear a nasty ripping noise, as if flesh is being torn apart.")
-				return
+	if(widenwound(type, damage))
+		update_damages()
+		owner.updatehealth()
+		return
 
 	//Creating wound
 	var/datum/wound/W
@@ -397,6 +391,35 @@
 
 	update_damages()
 	owner.updatehealth()
+
+/**
+ * Tries to expand an existing wound. Returns TRUE if successful.
+ *
+ * Arguments
+ * * type - Damage type inflicted. Expects CUT or BRUISE
+ * * damage - Amount of post-modifier damage inflicted
+ */
+/datum/organ/external/proc/widenwound(var/type = CUT, var/damage)
+	if(!wounds.len)
+		return
+	if(damage < 5)
+		return
+	if(!(type == CUT || type == BRUISE))
+		return
+	if(!prob(50 + owner.number_wounds * 10))
+		return
+	var/list/valid_wounds = list()
+	for(var/datum/wound/testwound in wounds)
+		if(testwound.amount == 1 && !istype(testwound, /datum/wound/burn/) && testwound.started_healing())
+			valid_wounds += testwound
+	if(valid_wounds.len)
+		var/datum/wound/W = pick(valid_wounds)
+		W.open_wound(damage)
+		if(prob(25))
+			owner.visible_message("<span class='warning'>The wound on [owner.name]'s [display_name] widens with a nasty ripping sound.</span>", \
+			"<span class='warning'>The wound on your [display_name] widens with a nasty ripping sound.</span>", \
+			"You hear a nasty ripping noise, as if flesh is being torn apart.")
+		return TRUE
 
 /****************************************************
 			   PROCESSING & UPDATING
@@ -830,21 +853,22 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 		//Robotic limbs explode if sabotaged.
 		if(status & ORGAN_ROBOT && !no_explode && sabotaged)
-			owner.visible_message("<span class='danger'>\The [owner]'s [display_name] explodes violently!</span>", \
-			"<span class='danger'>Your [display_name] explodes violently!</span>", \
-			"<span class='danger'>You hear an explosion followed by a scream!</span>")
+			owner.visible_message("<span class='moderate'>\The [owner]'s [display_name] explodes violently!</span>", \
+			"<span class='moderate'>Your [display_name] explodes violently!</span>", \
+			"<span class='moderate'>You hear an explosion followed by a scream!</span>")
 			explosion(get_turf(owner), -1, -1, 2, 3, whodunnit = owner)
 			spark(src, 5, FALSE)
 
 		if(organ)
 			if(display_message)
-				owner.visible_message("<span class='danger'>[owner.name]'s [display_name] flies off in an arc.</span>", \
-				"<span class='danger'>Your [display_name] goes flying off!</span>", \
-				"<span class='danger'>You hear a terrible sound of ripping tendons and flesh.</span>")
+				owner.visible_message("<span class='moderate'>[owner.name]'s [display_name] flies off in an arc!</span>", \
+				"<span class='moderate'>Your [display_name] goes flying off!</span>", \
+				"<span class='moderate'>You hear a terrible sound of ripping tendons and flesh!</span>")
 
-			//Throw organs around
-			var/randomdir = pick(cardinal)
-			step(organ, randomdir)
+			if(organ.loc?.type != /obj/machinery/atmospherics/unary/cryo_cell)
+				//Throw organs around
+				var/randomdir = pick(cardinal)
+				step(organ, randomdir)
 		if(!owner)
 			return organ
 		owner.update_body(1)
@@ -1540,6 +1564,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/hand/on_attach(obj/item/organ/external/hand_item)
 	display_name = hand_item.name
 	generic_type = hand_item.type
+	icon_name = hand_item.icon_state
 
 /datum/organ/external/hand/r_hand
 	name = LIMB_RIGHT_HAND
@@ -1899,6 +1924,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 	forced_icon_file = 'icons/mob/human_races/crab_claws.dmi'
 	forbid_gloves = TRUE
 
+/obj/item/organ/external/l_hand/crab/megamad
+	icon_state = "left_claw_megamad"
+	attack_punch_damage = 10
+
 /obj/item/organ/external/l_leg
 	name = "left leg"
 	icon_state = LIMB_LEFT_LEG
@@ -1946,6 +1975,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 	mutations = list(M_CLAWS)
 	forced_icon_file = 'icons/mob/human_races/crab_claws.dmi'
 	forbid_gloves = TRUE
+
+/obj/item/organ/external/r_hand/crab/megamad
+	icon_state = "right_claw_megamad"
+	attack_punch_damage = 10
 
 /obj/item/organ/external/r_leg
 	name = "right leg"

@@ -306,9 +306,15 @@
 		M.canmove = 1
 
 	category.unlock(AM)
+	if((category.flags & LOCKED_STAY_INSIDE) && AM.loc == src)
+		AM.forceMove(src.loc)
 	//AM.reset_glide_size() // FIXME: Currently broken.
 
 	return TRUE
+
+/atom/movable/proc/unlock_atoms(var/category, var/subtypes = FALSE)
+	for(var/atom/movable/AM in get_locked(category, subtypes))
+		unlock_atom(AM)
 
 /atom/movable/proc/unlock_from()
 	if(!locked_to)
@@ -879,14 +885,24 @@
 /atom/movable/proc/process_inertia(turf/start)
 	set waitfor = 0
 	if(Process_Spacemove(1))
-		inertia_dir  = 0
+		inertia_dir = 0
 		return
 
 	sleep(INERTIA_MOVEDELAY)
 
 	if(can_apply_inertia() && (src.loc == start))
 		if(!inertia_dir)
-			return //inertia_dir = last_move
+			return
+
+		set_glide_size(DELAY2GLIDESIZE(INERTIA_MOVEDELAY))
+		step(src, inertia_dir)
+
+/atom/movable/proc/process_inertia_ignore_gravity(turf/start)
+	sleep(INERTIA_MOVEDELAY)
+
+	if(can_apply_inertia() && (src.loc == start))
+		if(!inertia_dir)
+			return
 
 		set_glide_size(DELAY2GLIDESIZE(INERTIA_MOVEDELAY))
 		step(src, inertia_dir)

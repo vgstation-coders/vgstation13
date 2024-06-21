@@ -19,7 +19,7 @@ BREATHALYZER
 	starting_materials = list(MAT_IRON = 500, MAT_GLASS = 100)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
 
 	var/on = 0
@@ -53,6 +53,8 @@ BREATHALYZER
 			if(istype(A,/obj/))
 				var/obj/O = A
 				O.t_scanner_expose()
+			else if(istype(A,/obj/effect/ash))
+				continue
 			else if(istype(A,/mob/living/carbon))
 				var/mob/living/carbon/C = A
 				if(C.alpha < OPAQUE || (C.invisibility > 0 && C.invisibility < INVISIBILITY_OBSERVER) || length(C.body_alphas))
@@ -106,7 +108,7 @@ BREATHALYZER
 	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_BIOTECH + "=1"
 	attack_delay = 0
 	var/tmp/last_scantime = 0
@@ -324,7 +326,7 @@ Subject's pulse: ??? BPM"})
 	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = FALSE //the thing used to see how hot the air around it is probably shouldn't be flammable
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
 
 /obj/item/device/analyzer/attack_self(mob/user as mob)
@@ -457,7 +459,7 @@ Subject's pulse: ??? BPM"})
 	throw_range = 20
 	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_BIOTECH + "=2"
 	var/details = 0
 
@@ -543,7 +545,7 @@ Subject's pulse: ??? BPM"})
 	throw_range = 20
 	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_BIOTECH + "=2"
 	var/details = 0
 	var/recent_fail = 0
@@ -595,7 +597,7 @@ Subject's pulse: ??? BPM"})
 	starting_materials = list(MAT_IRON = 50)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	origin_tech = Tc_ENGINEERING + "=1;" + Tc_BIOTECH + "=1"
 
 	var/legal_limit

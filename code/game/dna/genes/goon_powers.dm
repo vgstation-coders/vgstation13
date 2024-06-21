@@ -156,7 +156,7 @@
 
 	override_base = "genetic"
 	hud_state = "gen_ice"
-	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+	valid_targets = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 
 /spell/targeted/cryokinesis/cast(list/targets)
 	..()
@@ -224,7 +224,7 @@
 	hud_state = "gen_eat"
 
 	cast_sound = 'sound/items/eatfood.ogg'
-	compatible_mobs = list(
+	valid_targets = list(
 		/obj/item,
 		/mob/living/simple_animal/parrot,
 		/mob/living/simple_animal/cat,
@@ -258,14 +258,14 @@
 		return 0
 	if(get_dist(usr, target) > range)
 		return 0
-	return is_type_in_list(target, compatible_mobs)
+	return is_type_in_list(target, valid_targets)
 
 /spell/targeted/eat/choose_targets(mob/user = usr)
 	var/list/targets = list()
 
 	if(max_targets == 0) //unlimited
 		for(var/atom/movable/target in view_or_range(range, user, selection_type))
-			if(!is_type_in_list(target, compatible_mobs) && !istype(target, /obj/item))
+			if(!is_type_in_list(target, valid_targets) && !istype(target, /obj/item))
 				continue
 			if(istype(target, /obj/item/weapon/implant))
 				var/obj/item/weapon/implant/implant = target
@@ -281,7 +281,7 @@
 			for(var/atom/movable/M in view_or_range(range, user, selection_type))
 				if(!(spell_flags & INCLUDEUSER) && M == user)
 					continue
-				if(!is_type_in_list(M, compatible_mobs) && !istype(M, /obj/item))
+				if(!is_type_in_list(M, valid_targets) && !istype(M, /obj/item))
 					continue
 				if(istype(M, /obj/item/weapon/implant))
 					var/obj/item/weapon/implant/implant = M
@@ -331,10 +331,10 @@
 	if(!(spell_flags & INCLUDEUSER) && (user in targets))
 		targets -= user
 
-	if(compatible_mobs && compatible_mobs.len)
+	if(valid_targets && valid_targets.len)
 		for(var/mob/living/target in targets) //filters out all the non-compatible mobs
 			var/found = 0
-			for(var/mob_type in compatible_mobs)
+			for(var/mob_type in valid_targets)
 				if(istype(target, mob_type))
 					found = 1
 			if(!found)
@@ -553,7 +553,7 @@
 	range = 1
 	max_targets = 1
 	selection_type = "range"
-	compatible_mobs = list(/mob/living/carbon/human)
+	valid_targets = list(/mob/living/carbon/human)
 
 	hud_state = "wiz_hulk"
 	override_base = "genetic"
@@ -604,7 +604,7 @@
 	charge_type = Sp_RECHARGE
 	charge_max = 100
 
-	compatible_mobs = list(/mob/living/carbon)
+	valid_targets = list(/mob/living/carbon)
 
 	hud_state = "gen_rmind"
 	override_base = "genetic"

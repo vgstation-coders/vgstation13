@@ -61,6 +61,7 @@
 							L.add_spell(targetspell, iswizard = wizard_user)
 							if(!hasAbsorbed)
 								hasAbsorbed = TRUE
+							update_wizard_role_spells(targetspell, L, C)
 					if(!hasAbsorbed)
 						to_chat(holder, "<span class='notice'>You find magical energy within your foe, but there is nothing new to learn.</span>")
 					if(iswizard(target))	//Wizards aren't wizards without magic! Dust their asses if they're a wizard
@@ -70,6 +71,26 @@
 					qdel(E)
 
 ///////////////
+
+/spell/targeted/absorb/proc/update_wizard_role_spells(var/spell/S, var/mob/living/absorber, var/mob/living/absorbed)
+	//Handle the victim
+	var/datum/role/wizard/absorbed_W = absorbed.mind.GetRole(WIZARD)
+	if(istype(absorbed_W))
+		absorbed_W.spells_from_spellbook -= S
+		absorbed_W.spells_from_absorb -= S
+	var/datum/role/wizard_apprentice/absorbed_WA = absorbed.mind.GetRole(WIZAPP)
+	if(istype(absorbed_WA))
+		absorbed_WA.spells_from_spellbook -= S
+		absorbed_WA.spells_from_absorb -= S
+	//Handle the attacker
+	var/datum/role/wizard/absorber_W = absorbed.mind.GetRole(WIZARD)
+	if(istype(absorber_W))
+		absorber_W.spells_from_spellbook += S
+		absorber_W.spells_from_absorb += S
+	var/datum/role/wizard_apprentice/absorber_WA = absorbed.mind.GetRole(WIZAPP)
+	if(istype(absorber_WA))
+		absorber_WA.spells_from_spellbook += S
+		absorber_WA.spells_from_absorb += S
 
 /obj/effect/absorb_effect
 	icon_state = "absorb" // I renamed it but the icon is still a duplicate from rune_rejoin, would be nice if some spriter tweaked it

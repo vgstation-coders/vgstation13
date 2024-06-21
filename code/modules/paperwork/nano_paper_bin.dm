@@ -10,7 +10,6 @@
 	throw_range = 3
 	var/resources = 30	// how much nano paper it contains
 	var/max_resources = 30 // the maxium amount of paper it can contain, un-used for now
-	autoignition_temperature = 1000 // Kelvin
 
 
 /obj/item/weapon/paper_bin/nano/MouseDropFrom(atom/over_object)

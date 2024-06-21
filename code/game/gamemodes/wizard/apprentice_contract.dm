@@ -14,7 +14,10 @@ var/list/wizard_apprentice_setups_by_name = list()
 
 /datum/wizard_apprentice_setup/proc/give_spells(mob/target)
 	for(var/spell_path in spells)
-		target.add_spell(spell_path)
+		target.add_spell(spell_path, iswizard = TRUE)
+		var/datum/role/wizard_apprentice/WA = target.mind.GetRole(WIZAPP)
+		if(istype(WA))
+			WA.spells_from_spellbook += spell_path
 
 /datum/wizard_apprentice_setup/destruction
 	name = "Destruction"
@@ -24,21 +27,21 @@ var/list/wizard_apprentice_setups_by_name = list()
 	)
 
 /datum/wizard_apprentice_setup/bluespace_manipulation
-	name = "Bluespace manipulation"
+	name = "Bluespace Manipulation"
 	spells = list(
 		/spell/targeted/ethereal_jaunt,
 		/spell/area_teleport,
 	)
 
 /datum/wizard_apprentice_setup/clown_magic
-	name = "Clown magic"
+	name = "Clown Magic"
 	spells = list(
 		/spell/targeted/equip_item/clowncurse,
 		/spell/targeted/shoesnatch,
 	)
 
 /datum/wizard_apprentice_setup/muscle_magic
-	name = "Muscle magic"
+	name = "Muscle Magic"
 	spells = list(
 		/spell/targeted/genetic/mutate,
 		/spell/targeted/genetic/blind,
@@ -55,10 +58,10 @@ var/list/wizard_apprentice_setups_by_name = list()
 	name = "contract of apprenticeship"
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "contract0"
-	autoignition_temperature = AUTOIGNITION_PAPER
 	throwforce = 0
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
+	flammable = TRUE
 	throw_range = 1
 	throw_speed = 1
 	var/consumed = FALSE
@@ -190,6 +193,7 @@ var/list/wizard_apprentice_setups_by_name = list()
 		apprentice.fully_replace_character_name(apprentice.real_name, forced_apprentice_name)
 	else
 		name_wizard(apprentice, "Wizard's Apprentice")
+	apprentice_role.apprentice_type = chosen_setup.name //Set their type
 	update_faction_icons()
 	visible_message("<span class='notice'>\The [src] folds back on itself as the apprentice appears!</span>")
 	set_light(0)

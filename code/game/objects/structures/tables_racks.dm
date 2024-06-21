@@ -598,8 +598,10 @@
 	icon_state = "woodtable"
 	parts = /obj/item/weapon/table_parts/wood
 	health = 50
-	autoignition_temperature = AUTOIGNITION_WOOD // TODO:  Special ash subtype that looks like charred table legs.
-	fire_fuel = 5
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
+
 
 /obj/structure/table/woodentable/cultify()
 	return
@@ -749,6 +751,9 @@
 	desc = "A plastic table perfect for on a space patio."
 	icon_state = "plastictable"
 	parts = /obj/item/weapon/table_parts/plastic
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 
 /*
  * Racks

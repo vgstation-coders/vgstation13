@@ -228,12 +228,14 @@
 	slot_flags = null
 	force = 18
 	throwforce = 0
-	w_class = 5
+	w_class = W_CLASS_HUGE
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 	sharpness = 1.5
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	mech_flags = MECH_SCAN_ILLEGAL
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
