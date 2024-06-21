@@ -8461,7 +8461,7 @@ resolve@^2.0.0-next.3:
     glob: ^7.1.7
     source-map: ^0.7.4
     stacktrace-parser: ^0.1.10
-    ws: ^7.5.3
+    ws: ^7.5.10
   languageName: unknown
   linkType: soft
 
@@ -9348,7 +9348,7 @@ typescript@^4.3.5:
   languageName: node
   linkType: hard
 
-"ws@npm:^7.3.1, ws@npm:^7.4.6, ws@npm:^7.5.3":
+"ws@npm:^7.3.1, ws@npm:^7.4.6":
   version: 7.5.3
   resolution: "ws@npm:7.5.3"
   peerDependencies:
@@ -9360,6 +9360,21 @@ typescript@^4.3.5:
     utf-8-validate:
       optional: true
   checksum: 423dc0d859fa74020f5555140905b862470a60ea1567bb9ad55a087263d7718b9c94f69678be1cee9868925c570f1e6fc79d09f90c39057bc63fa2edbb2c547b
+  languageName: node
+  linkType: hard
+
+"ws@npm:^7.5.10":
+  version: 7.5.10
+  resolution: "ws@npm:7.5.10"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ^5.0.2
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: f9bb062abf54cc8f02d94ca86dcd349c3945d63851f5d07a3a61c2fcb755b15a88e943a63cf580cbdb5b74436d67ef6b67f745b8f7c0814e411379138e1863cb
   languageName: node
   linkType: hard
 
