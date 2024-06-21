@@ -94,7 +94,7 @@ if write_cl["changes"]:
         changelog_path.as_posix(),
         f"Automatic changelog generation for PR #{pr_number} [ci skip]",
         content=changelog_path.read_text(),
-        branch="master",
+        branch="Bleeding-Edge",
         committer=InputGitAuthor(git_name, git_email),
     )
     print("Done!")
