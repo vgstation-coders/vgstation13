@@ -26,6 +26,6 @@ jobs:
         env:
           #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} Use this instead if you have unprotected branches
           GITHUB_TOKEN: ${{ secrets.CL_TOKEN }}
-          GIT_EMAIL: "PUT YOUR BOT ACCOUNT EMAIL HERE"
-          GIT_NAME: "PUT YOUR BOT ACCOUNT USERNAME HERE"
+          GIT_EMAIL: "pomf@ss13.moe"
+          GIT_NAME: "D3athrow-Issues"
         run: python tools/changelog/gen_cl.py
