@@ -211,7 +211,7 @@
 			currently_tracking.lock_atom(eyeobj,/datum/locking_category/ai_eye)
 		else */if(!cantrack && eyeobj.locked_to == currently_tracking)
 			to_chat(src, "Target is no longer trackable.")
-			//currently_tracking.unlock_atom(eyeobj)
+			//eyeobj.unlock_from()
 			stop_ai_tracking() // remove this if you want retracking
 
 /mob/living/silicon/ai/proc/stop_ai_tracking()
@@ -223,7 +223,7 @@
 		//currently_tracking.unregister_event(/event/unequipped,src,nameof(src::on_camera_change()))
 		currently_tracking.unregister_event(/event/camera_sight_changed,src,nameof(src::on_camera_change()))
 		if(eyeobj?.locked_to == currently_tracking)
-			currently_tracking.unlock_from()
+			eyeobj.unlock_from()
 		currently_tracking = null
 
 /proc/near_camera(var/mob/living/M)
