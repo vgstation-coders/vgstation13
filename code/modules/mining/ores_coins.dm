@@ -515,7 +515,7 @@
 	credits = 1000
 
 /obj/item/weapon/coin/mythril
-	material="mythril"
+	material=MAT_MYTHRIL
 	name = "mythril coin"
 	desc = "An expensive coin minted long ago from extremely rare, light, non-conductive metal."
 	icon_state = "coin_mythril"
