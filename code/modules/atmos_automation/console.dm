@@ -295,6 +295,7 @@
 	if(href_list["read"])
 		if(M.client && !M.client.holder && M.client.player_age < 7)
 			to_chat(M, "<span class=warning>Code importing functionality is not available yet. Keep playing to unlock it.</span>")
+			to_chat(M, "<span class=warning>Importing functionality is unavailable for new personnel. Please wait an additional [7 - M.client.player_age] days before use.</span>")
 			message_admins("[key_name(M)] attempted to import an AAC script despite their player age of [M.client.player_age].")
 			return TRUE
 
