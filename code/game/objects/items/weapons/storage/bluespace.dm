@@ -34,11 +34,11 @@
 
 /obj/item/weapon/storage/backpack/holding/quick_store(var/obj/item/I,mob/user)
 	if(user?.client)
-		if(world.time - user.client.last_quick_stored < 3) // to handle mistakenly doing it fast, plus any info about the baguloose is shown below anyways
-			var/list/recursive_list = recursive_type_check(I, /obj/item/weapon/storage/backpack/holding)
-			if(recursive_list.len) 
-				message_admins("[key_name_admin(user)] created a baguloose from quick equipping fast, might be worth noting.")
-				log_game("[key_name(user)] created a baguloose from quick equipping fast, might be worth noting.")
+		var/list/recursive_list = recursive_type_check(I, /obj/item/weapon/storage/backpack/holding)
+		if(recursive_list.len)
+			var/report = " created a baguloose from quick equipping in [(world.time - user.client.last_quick_stored) / 10] seconds, might be worth noting."
+			message_admins("[key_name_admin(user)][report]") // any info about the baguloose is shown below anyways
+			log_game("[key_name(user)][report]")
 	return ..()
 
 /obj/item/weapon/storage/backpack/holding/handle_item_insertion(obj/item/W, prevent_warning)
