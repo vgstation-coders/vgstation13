@@ -865,9 +865,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 				"<span class='moderate'>Your [display_name] goes flying off!</span>", \
 				"<span class='moderate'>You hear a terrible sound of ripping tendons and flesh!</span>")
 
-			//Throw organs around
-			var/randomdir = pick(cardinal)
-			step(organ, randomdir)
+			if(organ.loc?.type != /obj/machinery/atmospherics/unary/cryo_cell)
+				//Throw organs around
+				var/randomdir = pick(cardinal)
+				step(organ, randomdir)
 		if(!owner)
 			return organ
 		owner.update_body(1)
