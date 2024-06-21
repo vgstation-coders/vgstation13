@@ -34,4 +34,4 @@ jobs:
         with:
           #github_token: ${{ secrets.GITHUB_TOKEN }} Use this instead if you have unprotected branches
           token: ${{ secrets.CL_TOKEN }} 
-          branch: master
+          branch: Bleeding-Edge

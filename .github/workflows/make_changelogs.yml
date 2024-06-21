@@ -3,7 +3,7 @@ name: Make changelogs
 on:
   push:
     branches:
-      - master
+      - Bleeding-Edge
 
 jobs:
   MakeCL:
