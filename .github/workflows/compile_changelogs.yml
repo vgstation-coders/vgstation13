@@ -1,0 +1,37 @@
+name: Compile changelogs
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+jobs:
+  CompileCL:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 25
+      - name: Python setup
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Install depends
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r tools/changelog/requirements.txt
+      - name: Compile CL
+        run: python tools/changelog/ss13_genchangelog.py html/changelog.html html/changelogs
+      - name: Commit
+        run: |
+          git config --local user.email "29069174+toomykins@users.noreply.github.com"
+          git config --local user.name "toomykins"
+          git pull origin master
+          git commit -m "Automatic changelog compile [ci skip]" -a || true
+      - name: Push
+        uses: CasperWA/push-protected@v2
+        with:
+          #github_token: ${{ secrets.GITHUB_TOKEN }} Use this instead if you have unprotected branches
+          token: ${{ secrets.CL_TOKEN }} 
+          branch: master
