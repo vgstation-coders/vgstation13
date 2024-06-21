@@ -1,0 +1,4 @@
+PyYAML==6.0
+beautifulsoup4==4.11.2
+ruamel.yaml==0.17.21
+PyGithub==1.58.0
