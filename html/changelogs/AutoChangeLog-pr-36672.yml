@@ -1,4 +1,0 @@
-author: Eneocho
-delete-after: true
-changes:
-- bugfix: Mythril coins will now recycle properly.
