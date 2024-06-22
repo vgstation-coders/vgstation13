@@ -1,4 +1,0 @@
-author: Pancakemines
-delete-after: true
-changes:
-- bugfix: Fixed a bug that caused boomerangs to kill the server.
