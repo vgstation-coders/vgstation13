@@ -1,0 +1,4 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Explosions now process more than twice as fast.
