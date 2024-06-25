@@ -1,5 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: Washing hands and mops in the sink now use the same delay bars as washing
-    other items.

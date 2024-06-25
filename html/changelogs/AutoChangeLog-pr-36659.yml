@@ -1,5 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- bugfix: Improved the alien scorch/immolation/atomizing ray code, removing a few
-    potential errors with the way it has been turning targets to dust.
