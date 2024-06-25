@@ -1,0 +1,5 @@
+author: CrazyAmphibian
+delete-after: true
+changes:
+- tweak: Newer accounts may use the AAC, though the import functionality is still
+    restricted
