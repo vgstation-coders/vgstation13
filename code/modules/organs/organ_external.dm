@@ -721,7 +721,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/tburn = 0
 	var/tbrute = 0
 
-	if(burn_dam == 0)
+	var/datum/species/species = src.species || owner.species
+
+	if(species && !species.damage_overlays.Find("burn")) //Species has disabled burn damaged overlays
+		tburn = 0
+	else if((burn_dam == 0))
 		tburn = 0
 	else if(burn_dam < (max_damage * 0.25 / 2))
 		tburn = 1
@@ -730,7 +734,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 	else
 		tburn = 3
 
-	if(brute_dam == 0)
+	if(species && !species.damage_overlays.Find("brute")) //Species has disabled brute damage overlays
+		tbrute = 0
+	else if(brute_dam == 0)
 		tbrute = 0
 	else if(brute_dam < (max_damage * 0.25 / 2))
 		tbrute = 1

@@ -158,6 +158,8 @@ var/global/list/playable_species = list("Human")
 
 	var/datum/speech_filter/speech_filter
 
+	var/list/damage_overlays = list("brute", "burn") //What damage overlays will be rendered on the species when harmed
+
 /datum/species/New()
 	..()
 	if(all_species[name])
@@ -457,6 +459,7 @@ var/global/list/playable_species = list("Human")
 					You have no skin, no blood, no lips, and only just enough brain to function.<br>\
 					You can not eat normally, as your necrotic state only permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe.<br>\
 					You are also incredibly weak to brute damage, but you're fast and don't need to breathe, so that's going for you."
+	damage_overlays = list()
 
 /datum/species/skellington/conditional_playable()
 	var/MM = text2num(time2text(world.timeofday, "MM"))
@@ -1272,6 +1275,7 @@ var/list/has_died_as_golem = list()
 					A more refined version of the skellington, you're not as brittle, but not quite as fast.<br>\
 					You have no skin, no blood, and only a brain to guide you.<br>\
 					You can not eat normally, as your necrotic state permits you to only eat raw flesh. As you lack skin, you can not be injected via syringe."
+	damage_overlays = list()
 
 /datum/species/lich/gib(mob/living/carbon/human/H)
 	..()
