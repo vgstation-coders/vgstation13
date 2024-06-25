@@ -28,7 +28,7 @@ jobs:
           git config --local user.email "misterserver123@gmail.com"
           git config --local user.name "D3athrow-Issues"
           if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "Automatic changelog compile [ci skip]"
+            git commit -m "Automatic changelog compile [ci skip]" -a || true
           fi
           git pull origin Bleeding-Edge --rebase
       - name: Push
