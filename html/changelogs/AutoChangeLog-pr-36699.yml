@@ -1,0 +1,8 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- rscadd: Improved the Absorb spell that Civil War of Casters wizards and Summon Magic
+    survivors get; every spell that the absorber and the absorbed share will upgrade
+    the absorber's respective spell, it now displays a message as to whether the target
+    has any spells that could be stolen, and it will no longer attempt to absorb non-wizardly
+    spells.
