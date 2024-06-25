@@ -233,34 +233,39 @@
 
 						else
 							if(istype(P, /obj/item/weapon) || istype(P, /obj/item/stack))
+								var/matched = FALSE
 								for(var/I in req_components)
 									if(istype(P, I) && (req_components[I] > 0))
+										matched = TRUE
+										var/wentin = FALSE
 										playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 										if(istype(P, /obj/item/stack))
 											var/obj/item/stack/CP = P
-											if(CP.amount >= req_components[I])
-												var/camt = min(CP.amount, req_components[I]) // amount of the stack to take, idealy amount required, but limited by amount provided
-												var/obj/item/stack/CC = new I(src)
-												CC.amount = camt
-												CC.update_icon()
-												CP.use(camt)
+											var/camt = min(CP.amount, req_components[I]) // amount of the stack to take, idealy amount required, but limited by amount provided
+											var/obj/item/stack/CC = locate() in src
+											if(!CC)
+												CC = new I(src)
+											CC.amount = camt
+											CC.update_icon()
+											CP.use(camt)
+											if(!(CC in components))
 												components += CC
-												req_components[I] -= camt
-												update_desc()
-												break
-											else
-												to_chat(user, "<span class='warning'>You do not have enough [P]!</span>")
+											req_components[I] -= camt
+											wentin = TRUE
 
-										if(user.drop_item(P, src))
+										else if(user.drop_item(P, src))
 											components += P
 											req_components[I]--
-											update_desc()
 											if(P.is_open_container())
 												. = 1
-											break
-								to_chat(user, desc)
+											wentin = TRUE
 
-								if(P && P.loc != src && ! (istype(P, /obj/item/stack/cable_coil)))
+										if(wentin)
+											update_desc()
+											to_chat(user, desc)
+											break
+
+								if(!matched)
 									to_chat(user, "<span class='warning'>You cannot add that component to the machine!</span>")
 
 /obj/machinery/constructable_frame/machine_frame/proc/set_build_state(var/state)
