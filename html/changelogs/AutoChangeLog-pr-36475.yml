@@ -1,0 +1,10 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- bugfix: Putting in hand adjacency now checks when inside things too again.
+- bugfix: Wired rods, cattle prods and spears no longer teleport into user's hands
+    on telekinesis when made anymore.
+- bugfix: Items stuck to one's hand can no longer be removed by creating an item with
+    it in many cases.
+- bugfix: Superglue-laden items can no longer have the glue removed by creating an
+    item on them in many cases.
