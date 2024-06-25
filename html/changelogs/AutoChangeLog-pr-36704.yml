@@ -1,5 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- bugfix: Fixed a 2-months old bug where Bound Object could not actually recall items
-    into the user's hand.

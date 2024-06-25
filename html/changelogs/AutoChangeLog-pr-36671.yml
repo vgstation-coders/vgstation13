@@ -1,9 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: The "you cannot add that component!" error no longer shows up on stacks
-    being added to machine frames if they're the right type.
-- tweak: The parts to use list only gets updated and shown to the user on a successful
-    change.
-- tweak: Stacks can now be used on machine frames if under the required amount, although
-    it will only reduce the requirement by that amount.

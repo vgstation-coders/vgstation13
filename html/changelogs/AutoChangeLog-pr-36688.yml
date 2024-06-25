@@ -1,5 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- bugfix: Fixed a bug where AI-controlled grues could still reproduce even when the
-    server setting to allow it was disabled.

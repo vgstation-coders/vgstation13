@@ -1,5 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- tweak: Airflow mechanics now have a limit of knocking down unfortunate victims for
-    a maximum of 10 seconds.

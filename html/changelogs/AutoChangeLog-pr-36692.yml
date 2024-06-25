@@ -1,5 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- bugfix: Improved Push code to reduce the chances of failing to Push a target.
-- bugfix: Fixed a bug where time-stopped targets of the Push spell couldn't be Pushed

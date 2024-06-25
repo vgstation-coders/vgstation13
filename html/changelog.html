@@ -74,6 +74,10 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		-->
 		<div class="commit sansserif">
 			<h2 class="date">2024.06.25</h2>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Newer accounts may use the AAC, though the import functionality is still restricted</li>
+			</ul>
 			<h3 class="author">SECBATON-GRIFFON updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Putting in hand adjacency now checks when inside things too again.</li>
@@ -81,10 +85,23 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="bugfix">Items stuck to one&#39;s hand can no longer be removed by creating an item with it in many cases.</li>
 				<li class="bugfix">Superglue-laden items can no longer have the glue removed by creating an item on them in many cases.</li>
 				<li class="bugfix">Washing hands and mops in the sink now use the same delay bars as washing other items.</li>
+				<li class="tweak">Explosions now process more than twice as fast.</li>
+				<li class="bugfix">The &#34;you cannot add that component!&#34; error no longer shows up on stacks being added to machine frames if they&#39;re the right type.</li>
+				<li class="tweak">The parts to use list only gets updated and shown to the user on a successful change.</li>
+				<li class="tweak">Stacks can now be used on machine frames if under the required amount, although it will only reduce the requirement by that amount.</li>
 			</ul>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Improved the alien scorch/immolation/atomizing ray code, removing a few potential errors with the way it has been turning targets to dust.</li>
+				<li class="bugfix">Fixed a bug where AI-controlled grues could still reproduce even when the server setting to allow it was disabled.</li>
+				<li class="bugfix">Improved Push code to reduce the chances of failing to Push a target.</li>
+				<li class="bugfix">Fixed a bug where time-stopped targets of the Push spell couldn&#39;t be Pushed</li>
+				<li class="tweak">Skeletons and liches will no longer look bloody nor burnt when damaged by brute damage or burn damage respectively. Watch out for skeletons that are probably still alive!</li>
+				<li class="rscdel">The mouse plague can no longer penetrate hardsuits.</li>
+				<li class="tweak">The mouse plague now takes nearly twice as long to reach its final stage, giving the crew more time to come up with a cure.</li>
+				<li class="bugfix">Fixed a 2-months old bug where Bound Object could not actually recall items into the user&#39;s hand.</li>
+				<li class="tweak">Airflow mechanics now have a limit of knocking down unfortunate victims for a maximum of 10 seconds.</li>
+				<li class="rscadd">Improved the Absorb spell that Civil War of Casters wizards and Summon Magic survivors get; every spell that the absorber and the absorbed share will upgrade the absorber&#39;s respective spell, it now displays a message as to whether the target has any spells that could be stolen, and it will no longer attempt to absorb non-wizardly spells.</li>
 			</ul>
 			<h2 class="date">2024.06.22</h2>
 			<h3 class="author">Pancakemines updated:</h3>
