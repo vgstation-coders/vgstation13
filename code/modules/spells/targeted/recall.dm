@@ -97,6 +97,7 @@
 						return 1
 					M.drop_item(I, force_drop = 1)
 					M.update_icons()
+				bound.forceMove(get_turf(user))
 				user.put_in_hands(I)
 			else
 				bound.forceMove(get_turf(user))
