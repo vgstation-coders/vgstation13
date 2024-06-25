@@ -1,0 +1,6 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- rscdel: The mouse plague can no longer penetrate hardsuits.
+- tweak: The mouse plague now takes nearly twice as long to reach its final stage,
+    giving the crew more time to come up with a cure.
