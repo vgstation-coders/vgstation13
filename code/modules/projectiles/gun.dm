@@ -451,13 +451,8 @@
 /obj/item/weapon/gun/attackby(var/obj/item/A, mob/user)
 	if(istype(A, /obj/item/weapon/gun))
 		var/obj/item/weapon/gun/G = A
-		if(isHandgun() && G.isHandgun())
-			var/obj/item/weapon/gun/akimbo/AA = new /obj/item/weapon/gun/akimbo(get_turf(src),src,G)
-			if(user.drop_item(G, AA) && user.drop_item(src, AA) && user.put_in_hands(AA))
-				AA.update_icon(user)
-			else
-				to_chat(user, "<span class = 'warning'>You can not combine \the [G] and \the [src].</span>")
-				qdel(AA)
+		if(!isHandgun() || !G.isHandgun() || !user.create_in_hands(src, new /obj/item/weapon/gun/akimbo(loc, src, G), G, move_in = TRUE))
+			to_chat(user, "<span class = 'warning'>You can not combine \the [G] and \the [src].</span>")
 	if(clowned == CLOWNABLE && istype(A,/obj/item/toy/crayon/rainbow))
 		to_chat(user, "<span class = 'notice'>You begin modifying \the [src].</span>")
 		if(do_after(user, src, 4 SECONDS))

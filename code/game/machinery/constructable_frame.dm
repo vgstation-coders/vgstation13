@@ -126,8 +126,7 @@
 				if(istype(P, /obj/item/weapon/circuitboard))
 					var/obj/item/weapon/circuitboard/B = P
 					if(B.board_type == MACHINE)
-						if(!user.drop_item(B, src))
-							user << "<span class='warning'>You can't let go of \the [B]!</span>"
+						if(!user.drop_item(B, src, failmsg = TRUE))
 							return
 
 						playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -332,8 +331,8 @@ to destroy them and players will be able to make replacements.
 	else
 		*/if(!soldering&&issolder(O))
 		//local_fuses.Interact(user)
-		var/t = input(user, "Which board should be designed?") as null|anything in allowed_boards
-		if(!t)
+		var/choice = input(user, "Which board should be designed?") as null|anything in allowed_boards
+		if(!choice)
 			return
 		var/obj/item/tool/solder/S = O
 		if(!S.remove_fuel(4,user))
@@ -341,11 +340,8 @@ to destroy them and players will be able to make replacements.
 		S.playtoolsound(loc, 50)
 		soldering = 1
 		if(do_after(user, src,4 SECONDS * S.work_speed))
-			var/boardType = allowed_boards[t]
-			var/obj/item/I = new boardType(get_turf(user))
-			to_chat(user, "<span class='notice'>You fashion a crude [I] from the blank circuitboard.</span>")
-			qdel(src)
-			user.put_in_hands(I)
+			user.create_in_hands(src, allowed_boards[choice], msg = "<span class='notice'>You fashion a crude [choice] board from the blank circuitboard.</span>")
+			return
 		soldering = 0
 	else if(iswelder(O))
 		var/obj/item/tool/weldingtool/WT = O

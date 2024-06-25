@@ -3,26 +3,12 @@
 //iedcasing assembly crafting//
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(var/obj/item/I, mob/user as mob)
 	if(istype(I, /obj/item/device/assembly/igniter))
-		var/obj/item/device/assembly/igniter/G = I
 		var/obj/item/weapon/grenade/iedcasing/W = new /obj/item/weapon/grenade/iedcasing
-		user.before_take_item(G)
-		user.before_take_item(src)
-		user.put_in_hands(W)
-		to_chat(user, "<span  class='notice'>You stuff the [I] into the [src], emptying the contents beforehand.</span>")
 		W.underlays += image(src.icon, icon_state = src.icon_state)
-		QDEL_NULL(I)
-		qdel(src)
+		user.create_in_hands(src, W, I, msg = "<span class='notice'>You stuff the [I] into the [src], emptying the contents beforehand.</span>")
 	else if(I.is_wirecutter(user))
-		to_chat(user, "You cut out the top and bottom of \the [src] with \the [I].")
 		I.playtoolsound(user, 50)
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/aluminum_cylinder/W = new (get_turf(user))
-			user.put_in_hands(W)
-			qdel(src)
-		else
-			new /obj/item/weapon/aluminum_cylinder(get_turf(src.loc))
-			qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/aluminum_cylinder, msg = "You cut out the top and bottom of \the [src] with \the [I].")
 	else
 		return ..()
 

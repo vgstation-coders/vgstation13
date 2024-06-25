@@ -265,8 +265,7 @@
 /mob/living/simple_animal/chicken/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
 		if(!stat && eggsleft < 8)
-			if(!user.drop_item(O))
-				user << "<span class='notice'>You can't let go of \the [O]!</span>"
+			if(!user.drop_item(O, failmsg = TRUE))
 				return
 
 			user.visible_message("<span class='notice'>[user] feeds [O] to [name]! It clucks happily.</span>","<span class='notice'>You feed [O] to [name]! It clucks happily.</span>")
@@ -386,8 +385,7 @@
 /mob/living/simple_animal/hostile/retaliate/box/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom)) //Pigs like mushrooms
 		if(!stat && size < SIZE_BIG)
-			if(!user.drop_item(O))
-				user << "<span class='notice'>You can't let go of \the [O]!</span>"
+			if(!user.drop_item(O, failmsg = TRUE))
 				return
 
 			user.visible_message("<span class='notice'>[user] feeds [O] to [name].</span>","<span class='notice'>You feed [O] to [name].</span>")

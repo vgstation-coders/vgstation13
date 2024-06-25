@@ -363,15 +363,10 @@
 	else if(iswelder(I))
 		var/obj/item/tool/weldingtool/WT = I
 		if(WT.remove_fuel(1,user))
-			var/obj/item/weapon/circuitboard/blank/B = new /obj/item/weapon/circuitboard/blank(src.loc)
-			to_chat(user, "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
-			I.playtoolsound(B.loc, 30)
-			if(user.get_inactive_hand() == src)
-				user.before_take_item(src)
-				user.put_in_hands(B)
-			qdel(src)
-			return
-	return
+			I.playtoolsound(loc, 30)
+			user.create_in_hands(src, /obj/item/weapon/circuitboard/blank, msg = "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
+	else
+		return ..()
 
 /obj/item/weapon/circuitboard/proc/solder_improve(mob/user)
 	to_chat(user, "<span class='warning'>You fiddle with a few random fuses but can't find a routing that doesn't short the board.</span>")
