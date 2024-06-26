@@ -47,6 +47,15 @@
 		new /mob/living/simple_animal/cow(loc)
 	..()
 
+/obj/structure/largecrate/chocolatecow
+	name = "chocolate cow crate"
+	icon_state = "lisacrate"
+
+/obj/structure/largecrate/chocolatecow/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iscrowbar(W))
+		new /mob/living/simple_animal/cow/chocolate(loc)
+	..()
+
 /obj/structure/largecrate/goat
 	name = "goat crate"
 	icon_state = "lisacrate"

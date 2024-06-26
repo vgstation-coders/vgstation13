@@ -215,6 +215,7 @@
 #define NOTHING 			"nothing"
 #define POTATO 			"potato"
 #define MILK 			"milk"
+#define CHOCOLATEMILK	"chocolatemilk"
 #define MOMMIMILK 			"mommimilk"
 #define SOYMILK 			"soymilk"
 #define CREAM 			"cream"

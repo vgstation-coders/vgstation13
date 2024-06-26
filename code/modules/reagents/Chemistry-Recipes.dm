@@ -2363,6 +2363,22 @@
 	for(var/i = 1, i <= created_volume, i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/chocolatebar(location)
 
+/datum/chemical_reaction/choccymilk
+	name = "Chocolate Milk"
+	id = CHOCOLATEMILK
+	result = CHOCOLATEMILK
+	required_reagents = list(MILK = 5, COCO = 1)
+	required_catalysts = list(CHOCOLATEMILK = 5) //some weird fucked up chocolate breeding going on
+	result_amount = 5
+
+/datum/chemical_reaction/hot_coco_from_choccymilk
+	name = "Hot Coco"
+	id = HOT_COCO
+	result = HOT_COCO
+	required_reagents = list(CHOCOLATEMILK = 1)
+	required_temp = T0C + 60
+	result_amount = 1
+
 /datum/chemical_reaction/hot_coco
 	name = "Hot Coco"
 	id = HOT_COCO

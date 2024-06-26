@@ -136,6 +136,7 @@
 
 	size = SIZE_BIG
 	holder_type = /obj/item/weapon/holder/animal/cow
+	var/milktype = MILK
 
 /mob/living/simple_animal/cow/splashable()
 	return FALSE
@@ -148,7 +149,7 @@
 	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
 		var/obj/item/weapon/reagent_containers/glass/G = O
-		var/transfered = reagents.trans_id_to(G, MILK, rand(5,10))
+		var/transfered = reagents.trans_id_to(G, milktype, rand(5,10))
 		if(G.reagents.total_volume >= G.volume)
 			to_chat(user, "<span class='warning'>[O] is full.</span>")
 		if(!transfered)
@@ -162,7 +163,7 @@
 	. = ..()
 	if(stat == CONSCIOUS)
 		if(reagents && prob(5))
-			reagents.add_reagent(MILK, rand(5, 10))
+			reagents.add_reagent(milktype, rand(5, 10))
 
 /mob/living/simple_animal/cow/attack_hand(mob/living/carbon/M as mob)
 	if(!stat && M.a_intent == I_DISARM && icon_state != icon_dead)
@@ -179,6 +180,16 @@
 				to_chat(M, pick(responses))
 	else
 		..()
+
+/mob/living/simple_animal/cow/chocolate
+	name = "chocolate cow"
+	desc = "Where did you think chocolate milk came from? We don't talk about strawberry milk."
+	icon_state = "choco_cow"
+	icon_living = "choco_cow"
+	icon_dead = "choco_cow_dead"
+	icon_gib = "choco_cow_gib"
+	holder_type = /obj/item/weapon/holder/animal/chocolatecow
+	milktype = CHOCOLATEMILK
 
 /mob/living/simple_animal/chick
 	name = "chick"
