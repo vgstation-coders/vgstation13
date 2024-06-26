@@ -180,6 +180,35 @@
 	else
 		..()
 
+/mob/living/simple_animal/cow/chocolate
+	name = "chocolate cow"
+	desc = "Where did you think chocolate milk came from? We don't talk about strawberry milk."
+	icon_state = "choco_cow"
+	icon_living = "choco_cow"
+	icon_dead = "choco_cow_dead"
+	icon_gib = "choco_cow_gib"
+	holder_type = /obj/item/weapon/holder/animal/chocolatecow
+
+/mob/living/simple_animal/cow/chocolate/attackby(var/obj/item/O as obj, var/mob/user as mob) //copypasted and edited because inheritance broke weirdly
+	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
+		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
+		var/obj/item/weapon/reagent_containers/glass/G = O
+		var/transfered = reagents.trans_id_to(G, CHOCOLATEMILK, rand(5,10))
+		if(G.reagents.total_volume >= G.volume)
+			to_chat(user, "<span class='warning'>[O] is full.</span>")
+		if(!transfered)
+			to_chat(user, "<span class='warning'>The udder is dry. Wait a bit longer...</span>")
+	else
+		..()
+
+/mob/living/simple_animal/cow/chocolate/Life()
+	if(timestopped)
+		return 0 //under effects of time magick
+	. = ..()
+	if(stat == CONSCIOUS)
+		if(reagents && prob(5))
+			reagents.add_reagent(CHOCOLATEMILK, rand(5, 10))
+
 /mob/living/simple_animal/chick
 	name = "chick"
 	desc = "Adorable! They make such a racket though."
