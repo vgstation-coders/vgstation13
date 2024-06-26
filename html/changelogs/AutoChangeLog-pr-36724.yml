@@ -1,4 +1,0 @@
-author: Eneocho
-delete-after: true
-changes:
-- bugfix: Dexalin and Dexplus should be cyan as intended (instead of orange).
