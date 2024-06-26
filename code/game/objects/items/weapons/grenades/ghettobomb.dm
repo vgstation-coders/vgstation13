@@ -3,7 +3,7 @@
 //iedcasing assembly crafting//
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(var/obj/item/I, mob/user as mob)
 	if(istype(I, /obj/item/device/assembly/igniter))
-		var/obj/item/weapon/grenade/iedcasing/W = new /obj/item/weapon/grenade/iedcasing
+		var/obj/item/weapon/grenade/iedcasing/W = new /obj/item/weapon/grenade/iedcasing(loc)
 		W.underlays += image(src.icon, icon_state = src.icon_state)
 		user.create_in_hands(src, W, I, msg = "<span class='notice'>You stuff the [I] into the [src], emptying the contents beforehand.</span>")
 	else if(I.is_wirecutter(user))
