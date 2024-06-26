@@ -53,8 +53,8 @@
 			Calm()
 
 		if(stat == CONSCIOUS)
-			if(udder && prob(5))
-				udder.add_reagent(MILK, rand(5, 10))
+			if(udder && prob(15))
+				udder.add_reagent(MILK, rand(10, 15))
 
 		if(locate(/obj/effect/plantsegment) in loc)
 			var/obj/effect/plantsegment/SV = locate(/obj/effect/plantsegment) in loc
@@ -162,8 +162,8 @@
 		return 0 //under effects of time magick
 	. = ..()
 	if(stat == CONSCIOUS)
-		if(reagents && prob(5))
-			reagents.add_reagent(milktype, rand(5, 10))
+		if(reagents && prob(25))
+			reagents.add_reagent(milktype, rand(10, 15))
 
 /mob/living/simple_animal/cow/attack_hand(mob/living/carbon/M as mob)
 	if(!stat && M.a_intent == I_DISARM && icon_state != icon_dead)
