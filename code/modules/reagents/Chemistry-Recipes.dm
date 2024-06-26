@@ -2368,7 +2368,7 @@
 	id = CHOCOLATEMILK
 	result = CHOCOLATEMILK
 	required_reagents = list(MILK = 5, COCO = 1)
-	required_catalysts = list(ENZYME = 5)
+	required_catalysts = list(ENZYME = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/hot_coco_from_choccymilk
