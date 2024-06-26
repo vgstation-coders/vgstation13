@@ -36,7 +36,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/goat/New()
 	if(gives_milk)
-		udder = new(50)
+		udder = new(100)
 		udder.my_atom = src
 	..()
 
@@ -143,7 +143,7 @@
 
 /mob/living/simple_animal/cow/New()
 	..()
-	reagents.maximum_volume = 50
+	reagents.maximum_volume = 150
 
 /mob/living/simple_animal/cow/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
