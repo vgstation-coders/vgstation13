@@ -1,5 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- tweak: The right click icon for lightswitches no longer has a big black box around
-    the switch itself.
