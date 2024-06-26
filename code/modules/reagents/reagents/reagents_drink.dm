@@ -310,6 +310,14 @@
 	T.add_nutrientlevel(1)
 	T.add_waterlevel(1)
 
+/datum/reagent/drink/milk/chocolate
+	name = "Chocolate Milk"
+	id = CHOCOLATEMILK
+	description = "A delicious blend of swiss chocolate and milk made by chocolate cows or enterprising gastronomers."
+	color = "#BF965E"
+	alpha = 240
+	nutriment_factor = 6 * REAGENTS_METABOLISM //equal to hot coco
+	glass_desc = "Don't tip it!"
 
 /datum/reagent/drink/milk/mommimilk
 	name = "MoMMI Milk"
