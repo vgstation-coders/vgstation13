@@ -668,7 +668,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = DEXALIN
 	description = "Dexalin is used in the treatment of oxygen deprivation."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C2733F" //rgb: 74, 230, 252
+	color = "#4CE9FF" //rgb: 74, 230, 252
 	density = 2.28
 	specheatcap = 0.91
 
@@ -701,7 +701,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = DEXALINP
 	description = "Dexalin Plus is used in the treatment of oxygen deprivation. Its highly effective."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C2733F" //rgb: 74, 230, 252
+	color = "#4CE9FF" //rgb: 74, 230, 252
 	density = 4.14
 	specheatcap = 0.29
 
