@@ -297,7 +297,7 @@
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
 	
-/proc/check_tatorborg(mob/living/silicon/killer)
+/proc/check_traitorborg(mob/living/silicon/killer)
 	if(!isRobot(killer))
 		return FALSE
 	var/mob/living/silicon/robot/KR = killer
