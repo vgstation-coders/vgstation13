@@ -33,7 +33,7 @@
 	var/allow_vote_restart = 0 			// allow votes to restart
 	var/allow_vote_mode = 0				// allow votes to change mode
 	var/toggle_maps = 0					// Change from votable maps = 0 to all compiled maps = 1
-	var/toggle_vote_method = 1			// Toggle voting methods: Weighted = 1, Majority = 2, Persistent = 3, Random = 4
+	var/toggle_vote_method = 5			// Toggle voting methods: Weighted = 1, Majority = 2, Persistent = 3, Random = 4, Non-previous weighted = 5.
 	var/allow_admin_jump = 1			// allows admin jumping
 	var/allow_admin_spawning = 1		// allows admin item spawning
 	var/allow_admin_rev = 1				// allows admin revives

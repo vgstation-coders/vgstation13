@@ -7,6 +7,7 @@ var/global/datum/controller/vote/vote = new()
 #define MAJORITY 2
 #define PERSISTENT 3
 #define RANDOM 4
+#define WEIGHTED_NOT_PREVIOUS 5
 
 /datum/html_interface/nanotrasen/vote/registerResources()
 	. = ..()
@@ -146,6 +147,13 @@ var/global/datum/controller/vote/vote = new()
 				return  majority()
 		if(RANDOM)
 			return random()
+		if(WEIGHTED_NOT_PREVIOUS)
+			if(mode == "map")
+				var/allmaps = get_votable_maps()
+				for (var/map in allmaps)
+					if (watchdog.map_path==map_paths[map])
+						return weighted_not_previous(map)
+			return weighted_not_previous()
 		else
 			return  majority()
 
@@ -176,6 +184,40 @@ var/global/datum/controller/vote/vote = new()
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
 	return text
+
+/datum/controller/vote/proc/weighted_not_previous(var/previous_pick)
+	var/previous_penalty=0.75 // multiplied by the number of votes to reduce (or increase) the chance an item will be picked a second time in a row.
+	var/vote_threshold = 0.15
+	var/list/discarded_choices = list()
+	var/discarded_votes = 0
+	var/total_votes = get_total()
+	var/text
+	var/list/filteredchoices = tally.Copy()
+	var/qualified_votes
+	if (!previous_pick) //if we aren't given the last pick, fall back to weighted voting
+		return weighted()
+
+	if (total_votes > 0)
+		for(var/a in filteredchoices)
+			if(!filteredchoices[a])
+				filteredchoices -= a //Remove choices with 0 votes, as pickweight gives them 1 vote
+				continue
+			if(filteredchoices[a] / total_votes < vote_threshold)
+				discarded_votes += filteredchoices[a]
+				filteredchoices -= a
+				discarded_choices += a
+			if (a==previous_pick) //the penalty is applied after the threshold to ensure it isn't dropped arbitrarily
+				filteredchoices[a]*=previous_penalty
+		if(filteredchoices.len)
+			winner = pickweight(filteredchoices.Copy())
+		qualified_votes = total_votes - discarded_votes
+		text += "<b>Random Weighted Vote Result: [winner] won with [tally[winner]] vote\s and a [round(100*tally[winner]/qualified_votes)]% chance of winning.</b>"
+		for(var/choice in choices)
+			if(winner != choice)
+				text += "<br>\t [choice] had [tally[choice] != null ? tally[choice] : "0"] vote\s[(tally[choice])? " and [(choice in discarded_choices) ? "did not get enough votes to qualify" : "a [round(100*tally[choice]/qualified_votes)]% chance of winning"]" : null]."
+	else
+		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
+	return text		
 
 /datum/controller/vote/proc/majority()
 	var/text
