@@ -298,7 +298,7 @@
 	to_chat(killer, "New law: 0. [law]")
 	
 /proc/check_traitorborg(mob/living/silicon/killer)
-	if(!isRobot(killer))
+	if(!isrobot(killer))
 		return FALSE
 	var/mob/living/silicon/robot/KR = killer
 	if(KR.laws?.zeroth == "Accomplish your objectives at all costs.")
