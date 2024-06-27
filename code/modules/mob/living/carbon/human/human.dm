@@ -2202,10 +2202,6 @@
 	if(op_stage.butt == SURGERY_NO_BUTT)
 		return
 	var/obj/item/clothing/head/butt/donkey = new(where)
-	if(mind.wizard_spells)
-		donkey.spells.Add(mind.wizard_spells)
-		for(var/spell/spell in mind.wizard_spells)
-			remove_spell(spell)
 	donkey.transfer_buttdentity(src)
 	op_stage.butt = SURGERY_NO_BUTT
 	return donkey
