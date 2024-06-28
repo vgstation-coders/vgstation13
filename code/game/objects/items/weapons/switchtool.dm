@@ -30,6 +30,7 @@
 											"/obj/item/tool/wirecutters:wirecutters" = null,
 											"/obj/item/weapon/chisel:chisel" = null,
 											"/obj/item/device/multitool:multitool" = null)
+	var/list/obj/item/skipped_modules = list()//add something both here and in the stored modules to enable it being added to a switchtool, but not start with one
 	var/obj/item/deployed //what's currently in use
 	var/removing_item = /obj/item/tool/screwdriver //the type of item that lets you take tools out
 
@@ -70,7 +71,8 @@
 
 /obj/item/weapon/switchtool/New()
 	..()
-	for(var/module in stored_modules) //making the modules
+	var/modulestoadd = stored_modules - skipped_modules
+	for(var/module in modulestoadd) //making the modules
 		var/new_type = text2path(get_module_type(module))
 		stored_modules[module] = new new_type(src)
 
@@ -348,13 +350,15 @@
 						"/obj/item/tool/crowbar:crowbar" = null,
 						"/obj/item/tool/wrench:wrench" = null,
 						"/obj/item/tool/wirecutters:wirecutters" = null,
+						"/obj/item/device/multitool:multitool" = null,
+						"/obj/item/tool/wirecutters:wirecutters" = null,
 						"/obj/item/weapon/kitchen/utensil/knife/large:knife" = null,
 						"/obj/item/weapon/kitchen/utensil/fork:fork" = null,
 						"/obj/item/weapon/hatchet/metalhandle:hatchet" = null,
 						"/obj/item/weapon/lighter/zippo:Zippo lighter" = null,
 						"/obj/item/weapon/match/strike_anywhere/s_a_k:strike-anywhere match" = null,
 						"/obj/item/weapon/pen:pen" = null)
-
+	skipped_modules = list("/obj/item/device/multitool:multitool" = null)
 
 /obj/item/weapon/switchtool/swiss_army_knife/edit_deploy(var/doedit)
 	..()
