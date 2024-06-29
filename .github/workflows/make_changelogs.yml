@@ -29,17 +29,19 @@ jobs:
           GIT_EMAIL: "29069174+toomykins@users.noreply.github.com"
           GIT_NAME: "toomykins"
         run: python tools/changelog/gen_cl.py
-      - name: Check for running instances of Make Changelogs
-        id: check_workflows
+      - name: Compile CL
+        run: python tools/changelog/ss13_genchangelog.py html/changelog.html html/changelogs
+      - name: Commit
         run: |
-          runs=$(curl -s -H "Authorization: token ${{ secrets.CL_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/actions/workflows/make_changelogs.yml/runs?status=in_progress" | jq '.workflow_runs | length')
-          echo "runs=$runs" >> $GITHUB_ENV
-      - name: Trigger Compile Changelogs
-        if: env.runs == '0'
-        run: |
-          curl -X POST \
-          -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: token ${{ secrets.CL_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/dispatches \
-          -d '{"event_type":"trigger-compile-changelogs"}'
+          git config --local user.email "29069174+toomykins@users.noreply.github.com"
+          git config --local user.name "toomykins"
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "Automatic changelog compile [ci skip]" -a || true
+          fi
+          git pull origin Bleeding-Edge --rebase
+      - name: Push
+        uses: CasperWA/push-protected@v2
+        with:
+          #github_token: ${{ secrets.GITHUB_TOKEN }} Use this instead if you have unprotected branches
+          token: ${{ secrets.CL_TOKEN }} 
+          branch: Bleeding-Edge
