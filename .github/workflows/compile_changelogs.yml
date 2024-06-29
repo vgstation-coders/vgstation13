@@ -4,6 +4,10 @@ on:
   repository_dispatch:
     types: [trigger-compile-changelog]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   CompileCL:
     runs-on: ubuntu-latest
