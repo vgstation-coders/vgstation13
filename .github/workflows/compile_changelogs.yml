@@ -1,9 +1,12 @@
 name: Compile changelogs
 
 on:
-  schedule:
-    - cron: "0 * * * *"
-  workflow_dispatch:
+  repository_dispatch:
+    types: [trigger-compile-changelog]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   CompileCL:
