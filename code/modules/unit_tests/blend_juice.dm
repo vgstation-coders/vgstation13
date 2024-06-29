@@ -6,7 +6,7 @@
     var/obj/item/O
     for(var/itempath in subtypesof(/obj/item))
         O = itempath
-        if(!initial(O.blend_reagent) && !initial(O.juice_reagent) && !initial(O.transfers_reagents_on_grind))
+        if(!initial(O.blend_reagent) && !initial(O.juice_reagent) && !initial(O.grind_flags))
             continue
         O = new itempath(T)
         R.holdingitems += O
