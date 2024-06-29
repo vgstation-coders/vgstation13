@@ -90,13 +90,13 @@ if write_cl["changes"]:
         yaml.dump(write_cl, cl_file)
 
     # Push the newly generated changelog to the master branch so that it can be compiled
-#    repo.create_file(
-#        changelog_path.as_posix(),
-#        f"Automatic changelog generation for PR #{pr_number} [ci skip]",
-#        content=changelog_path.read_text(),
-#        branch="Bleeding-Edge",
-#        committer=InputGitAuthor(git_name, git_email),
-#    )
+    repo.create_file(
+        changelog_path.as_posix(),
+        f"Automatic changelog generation for PR #{pr_number} [ci skip]",
+        content=changelog_path.read_text(),
+        branch="Bleeding-Edge",
+        committer=InputGitAuthor(git_name, git_email),
+    )
     print("Done!")
 else:
     print("No CL changes detected!")
