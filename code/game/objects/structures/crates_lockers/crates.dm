@@ -160,9 +160,9 @@
 	..()
 	update_icon()
 
-	var/list/inside = recursive_type_check(src, /mob)
-	for(var/mob/braine in inside)
-		if(braine.mind && !braine.client) //!M.client = mob has ghosted out of their body
+	var/list/inside = recursive_type_check(src, /mob/living/carbon/brain)
+	for(var/mob/living/carbon/brain/braine in inside)
+		if(braine.mind && !braine.client) //!braine.client = mob has ghosted out of their body
 			var/mob/dead/observer/ghost = mind_can_reenter(braine.mind)
 			if(ghost)
 				var/mob/ghostmob = ghost.get_top_transmogrification()
@@ -174,17 +174,19 @@
 	..()
 
 	var/list/inside = recursive_type_check(src, /mob/living/carbon/brain)
-	for(var/mob/living/carbon/brain in inside)
-		if(brain.mind && brain.mind.suiciding)
+	for(var/mob/living/carbon/brain/brained in inside)
+		if(brained.mind && brained.mind.suiciding)
 			continue
-		if(brain && brain.client)
-			icon_state = "surgeryfreezerbrained" // clone that mofo
+		if(brained && brained.client)
+			icon_state = "surgeryfreezerbrained"
 			return
 
 /obj/structure/closet/crate/freezer/surgery/on_login(var/mob/M)
+	..()
 	update_icon()
 
 /obj/structure/closet/crate/freezer/surgery/on_logout(var/mob/M)
+	..()
 	update_icon()
 
 /obj/structure/closet/crate/bin
