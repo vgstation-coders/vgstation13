@@ -1,9 +1,8 @@
 name: Compile changelogs
 
 on:
-  schedule:
-    - cron: "0 * * * *"
   workflow_dispatch:
+    types: [trigger-compile-changelogs]
 
 jobs:
   CompileCL:
@@ -25,8 +24,8 @@ jobs:
         run: python tools/changelog/ss13_genchangelog.py html/changelog.html html/changelogs
       - name: Commit
         run: |
-          git config --local user.email "misterserver123@gmail.com"
-          git config --local user.name "D3athrow-Issues"
+          git config --local user.email "29069174+toomykins@users.noreply.github.com"
+          git config --local user.name "toomykins"
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Automatic changelog compile [ci skip]" -a || true
           fi
