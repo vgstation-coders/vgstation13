@@ -54,10 +54,10 @@ jobs:
         run: |
           git config --local user.email "29069174+toomykins@users.noreply.github.com"
           git config --local user.name "toomykins"
+          git pull origin Bleeding-Edge --rebase
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Automatic changelog compile [ci skip]" -a || true
           fi
-          git pull origin Bleeding-Edge --rebase
       - name: Push
         uses: CasperWA/push-protected@v2
         with:
