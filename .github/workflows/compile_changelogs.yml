@@ -1,8 +1,8 @@
 name: Compile changelogs
 
 on:
-  dispatch:
-    - trigger-compile-changelog
+  repository_dispatch:
+    types: [trigger-compile-changelog]
 
 jobs:
   CompileCL:
