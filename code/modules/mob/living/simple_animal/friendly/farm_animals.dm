@@ -36,7 +36,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/goat/New()
 	if(gives_milk)
-		udder = new(50)
+		udder = new(100)
 		udder.my_atom = src
 	..()
 
@@ -53,8 +53,8 @@
 			Calm()
 
 		if(stat == CONSCIOUS)
-			if(udder && prob(5))
-				udder.add_reagent(MILK, rand(5, 10))
+			if(udder && prob(15))
+				udder.add_reagent(MILK, rand(10, 15))
 
 		if(locate(/obj/effect/plantsegment) in loc)
 			var/obj/effect/plantsegment/SV = locate(/obj/effect/plantsegment) in loc
@@ -143,7 +143,7 @@
 
 /mob/living/simple_animal/cow/New()
 	..()
-	reagents.maximum_volume = 50
+	reagents.maximum_volume = 150
 
 /mob/living/simple_animal/cow/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
@@ -162,8 +162,8 @@
 		return 0 //under effects of time magick
 	. = ..()
 	if(stat == CONSCIOUS)
-		if(reagents && prob(5))
-			reagents.add_reagent(milktype, rand(5, 10))
+		if(reagents && prob(25))
+			reagents.add_reagent(milktype, rand(10, 15))
 
 /mob/living/simple_animal/cow/attack_hand(mob/living/carbon/M as mob)
 	if(!stat && M.a_intent == I_DISARM && icon_state != icon_dead)
