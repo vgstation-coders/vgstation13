@@ -155,7 +155,7 @@
 /mob/living/silicon/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj.nodamage)
 		adjustBruteLoss(Proj.damage)
-	Proj.on_hit(src,2)
+	Proj.on_hit(src,100)
 	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/silicon/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)
