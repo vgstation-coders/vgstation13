@@ -86,8 +86,8 @@
 		sandToConvert.use(sandToConvert.amount)
 
 
-	drop_stack(/obj/item/stack/sheet/mineral/sandstone, user.loc, src.amount, user) //sand in hand
-	use(src.amount)
+	drop_stack(/obj/item/stack/sheet/mineral/sandstone, user.loc, amount, user) //sand in hand
+	use(amount)
 
 /obj/item/stack/ore/plasma
 	name = "\improper plasma ore"
