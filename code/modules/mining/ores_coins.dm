@@ -80,13 +80,14 @@
 				atm.extinguish()
 
 /obj/item/stack/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
-	var/location = get_turf(user)
-	for(var/obj/item/stack/ore/glass/sandToConvert in location)
-		drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, sandToConvert.amount, user)
+	to_chat(user, "<span class='notice'>You compact the sand together.</span>") //Strong hands -- American Mcgee
+	for(var/obj/item/stack/ore/glass/sandToConvert in user.loc) //sand on floor
+		drop_stack(/obj/item/stack/sheet/mineral/sandstone, user.loc, sandToConvert.amount, user)
 		sandToConvert.use(sandToConvert.amount)
 
-	drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
-	use(1)
+
+	drop_stack(/obj/item/stack/sheet/mineral/sandstone, user.loc, src.amount, user) //sand in hand
+	use(src.amount)
 
 /obj/item/stack/ore/plasma
 	name = "\improper plasma ore"
