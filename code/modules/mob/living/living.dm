@@ -1917,3 +1917,29 @@ Thanks.
 			for(var/role in mind.antag_roles)
 				var/datum/role/R = mind.antag_roles[role]
 				stat(R.StatPanel())
+
+//Now in a living proc form instead of just a carbon proc!
+/mob/living/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor, var/force = 0)
+	if(!I || !user)
+		return FALSE
+	switch(I.damtype)
+		if("brute")
+			// Not only was this initially checking an item if it was "/mob/living/carbon/slime", but it was also not actually working because
+			// the holder doesn't actually have a force value of its own
+			//
+			// if(istype(I, /obj/item/weapon/holder/animal/slime))
+			// 	adjustBrainLoss(force)
+			if(istype(src, /mob/living/carbon/monkey))
+				var/mob/living/carbon/monkey/K = src
+				force = K.defense(force,def_zone)
+			take_organ_damage(force)
+			if (prob(33) && I.force) // Added blood for whacking non-humans too
+				var/turf/location = loc
+				if (istype(location, /turf/simulated))
+					location:add_blood_floor(src)
+		if("fire")
+			if (!(M_RESIST_COLD in mutations))
+				if(istype(src, /mob/living/carbon/monkey))
+					var/mob/living/carbon/monkey/K = src
+					force = K.defense(force,def_zone)
+				take_organ_damage(0, force)

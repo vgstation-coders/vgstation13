@@ -364,8 +364,8 @@
 		return state_laws_ui_interact(user, ui_key, ui, force_open) //state_laws.dm
 
 //A separate check from attacked_by (a carbon-level proc), with only a fragment in order to play hitsounds
-/mob/living/silicon/proc/attacked_by(var/obj/item/I, var/mob/living/user)
-	if(!I || !user)
+/mob/living/silicon/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor, var/force)
+	if(!..())
 		return FALSE
 	if(I.hitsound)
 		playsound(loc, I.hitsound, 50, 1, -1)

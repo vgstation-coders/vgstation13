@@ -22,12 +22,12 @@
 
 
 //Checks armor, special attackby of object instances, and miss chance
-/mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
+/mob/living/carbon/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor, var/force)
 	if(!I || !user)
 		return FALSE
 	var/accuracy_modifier = get_total_accuracy_modifier(user, src) //Negative value make it more likely to hit, and the opposite for positive values
 	target_zone = null
-	var/power = I.force
+	var/power = I.force //This is intentionally NOT using the force in the proc arguments
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
 		power = power * H.species?.power_multiplier
