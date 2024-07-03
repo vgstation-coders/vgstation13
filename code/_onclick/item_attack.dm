@@ -219,6 +219,9 @@
 		else
 			. = C.attacked_by(I, user, def_zone, crit = is_crit)
 	else
+		if(istype(M, /mob/living/silicon)) //This is mostly so that they actually have their own hitsound.
+			var/mob/living/silicon/S = M
+			. = S.attacked_by(I, user)
 		switch(I.damtype)
 			if("brute")
 				if(istype(src, /mob/living/carbon/slime))
