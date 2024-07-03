@@ -257,6 +257,15 @@
 /obj/item/weapon/staff/necro/examine(mob/user, size, show_name)
 	..()
 	to_chat(user, "<span class='notice'>It has [charges ? charges/10 : "no"] charges left.</span>")
+	if(iswizard(user))
+		var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
+		to_chat(user, "<span class='notice'>[W.logo_image] This is a Staff of Necromancy! This staff allows you to turn most dead creatures into subservient undead.</span>")
+		to_chat(user, "<span class='notice'>Dead people will be controlled by their previous souls if they had any and they cannot harm you.</span>")
+		to_chat(user, "<span class='notice'>You can use the Staff of Necromancy on dead subservient undead to immediately bring them back to life at the cost of a charge.</span>")
+		to_chat(user, "<span class='notice'>You can use it on meat to create a walking piece of meat at the cost of only half a charge.</span>")
+		to_chat(user, "<span class='notice'>You can use it on most undead creatures not under your control to bring them under your control.</span>")
+		to_chat(user, "<span class='notice'>Becoming an undead lich yourself will unlock the staff's potential, recharging twice as fast and passively healing you of brute damage.</span>")
+
 
 //Commented out because skeletonizing people was basically removing them from the round instantly.
 //Can only raise zombies.
@@ -281,7 +290,7 @@
 
 	if(ishuman(target)) //Zombify a human
 		var/mob/living/carbon/human/H = target
-		if(H.stat) //Unconscious or dead
+		if(H.InCritical() || (H.stat == DEAD)) //Unconscious or dead
 		///////////////////////////////////////////////////////
 			// if(raisetype)
 			// 	H.dropBorers()
@@ -327,14 +336,14 @@
 		else
 			return 0
 
-	else if(isanimal(target) || ismonkey(target)) //Any animal or monkey will become a meat ghoul if dead
+	else if(isanimal(target) || ismonkey(target)) //Any animal or monkey will become an animal ghoul if dead
 		var/mob/living/L = target
 		if(L.stat == DEAD)
 			if(charges >= charge_cost)
 				success = TRUE
-				var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(L), user, L)
-				mG.ghoulifyMeat(L)
-				mG.faction = "\ref[user]"
+				var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user, L)
+				aG.ghoulifyAnimal(target)
+				aG.faction = "\ref[user]"
 				L.gib()
 			else
 				to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
@@ -346,10 +355,10 @@
 	else if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat)) //Meat can be turned into the undead
 		charge_cost = 5 //Meat is cheaper to raise
 		if(charges >= charge_cost)
-			var/mob/living/simple_animal/hostile/necro/animal_ghoul/aG = new /mob/living/simple_animal/hostile/necro/animal_ghoul(get_turf(target), user)
+			var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(target), user)
 			success = TRUE
-			aG.ghoulifyAnimal(target)
-			aG.faction = "\ref[user]"
+			mG.ghoulifyMeat(target)
+			mG.faction = "\ref[user]"
 			qdel(target)
 		else
 			to_chat(user, "<span class='warning'>\The [src] does not have enough charges!</span>")
