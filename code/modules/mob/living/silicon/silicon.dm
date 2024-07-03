@@ -369,3 +369,4 @@
 		return FALSE
 	if(I.hitsound)
 		playsound(loc, I.hitsound, 50, 1, -1)
+	return TRUE

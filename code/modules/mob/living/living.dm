@@ -1943,3 +1943,4 @@ Thanks.
 					var/mob/living/carbon/monkey/K = src
 					force = K.defense(force,def_zone)
 				take_organ_damage(0, force)
+	return TRUE

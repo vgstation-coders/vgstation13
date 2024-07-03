@@ -1030,7 +1030,7 @@
 
 //This was previously added directly in item_attack.dm in handle_attack()
 //Now it's its own proc that gets called there, freeing up roughly 61 lines of code
-/mob/living/carbon/slime/slime_item_attacked(var/obj/item/I, var/mob/living/user, force)
+/mob/living/carbon/slime/proc/slime_item_attacked(var/obj/item/I, var/mob/living/user, var/force)
 	if(force > 0)
 		attacked += 10
 
@@ -1038,33 +1038,26 @@
 		Discipline = 0
 
 	if(force >= 3)
-		if(slime_lifestage == SLIME_ADULT)
+		if(slime_lifestage == SLIME_ADULT) //Adults are harder to detach from victims and cannot be disciplined
 			if(prob(5 + round(force/2)))
-
-				if(Victim)
-					if(prob(80) && !client)
-						Discipline++
 				Victim = null
 				anchored = 0
 
-				spawn()
-					if(src)
+				spawn() //In case the adult slime splits into two right after attack code ends
+					if(!gcDestroyed)
 						SStun = 1
-						sleep(rand(5,20))
-						if(src)
+						spawn(rand(5,20))
 							SStun = 0
 
-				spawn(0)
-					if(src)
+				spawn()
+					if(!gcDestroyed)
 						canmove = 0
 						step_away(src, user)
 						if(prob(25 + force))
-							sleep(2)
-							if(src && user)
-								step_away(src, user)
+							step_away(src, user)
 						canmove = 1
 
-		else
+		else //Handle younger slimes
 			if(prob(10 + force*2))
 				if(Victim)
 					if(prob(80) && !client)
@@ -1074,24 +1067,19 @@
 							attacked = 0
 
 					spawn()
-						if(src)
-							SStun = 1
-							sleep(rand(5,20))
-							if(src)
-								SStun = 0
+						SStun = 1
+						spawn(rand(5,20))
+							SStun = 0
 
 				Victim = null
 				anchored = 0
 
 				spawn(0)
-					if(src && user)
+					step_away(src, user)
+					canmove = 0
+					if(prob(25 + force*4))
 						step_away(src, user)
-						src.canmove = 0
-						if(prob(25 + force*4))
-							sleep(2)
-							if(src && user)
-								step_away(src, user)
-						canmove = 1
+					canmove = 1
 
 //////////////////////////////Old shit from metroids/RoRos, and the old cores, would not take much work to re-add them////////////////////////
 

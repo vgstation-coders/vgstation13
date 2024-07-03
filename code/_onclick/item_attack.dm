@@ -103,12 +103,14 @@
 		power *= CRIT_MULTIPLIER
 
 	if(!(ishuman(M) || ismonkey(M)))
+		//Check for slimes here
 		if(istype(M, /mob/living/carbon/slime))
 			var/mob/living/carbon/slime/slime = M
 			if(prob(25))
 				to_chat(user, "<span class='warning'>[I] passes right through [M]!</span>")
 				return 0
 			slime.slime_item_attacked(src, user, power) //The code has been moved to code/modules/mob/living/carbon/slime/slime.dm
+
 		var/showname = ""
 		if(user)
 			showname = "[user]"
