@@ -360,7 +360,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 			/* --- Shuttle is in transit toward centcom --- */
 			if(direction == 2)
-				if(tick % 2 == 0)
+				if(tick % 20 == 0)
 					for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
 						spawn()
 							P.shoot_exhaust(backward = 3)
