@@ -1,8 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: Nettles and death nettles now properly grind their reagents out.
-- tweak: Mortars can now grind anything an all-in-one grinder can, to the same amounts,
-    and vice versa.
-- tweak: Ground novaflowers, nettles and death nettles now grind their reagents in
-    scale with potency.
