@@ -25,6 +25,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	mat_type = MAT_IRON
 	perunit = CC_PER_SHEET_METAL
+	blend_reagent = IRON
 
 /obj/item/stack/sheet/metal/ex_act(severity)
 	switch(severity)
@@ -280,6 +281,8 @@
 	mat_type = MAT_WAX
 	perunit = CC_PER_SHEET_WAX
 	color = COLOR_BEESWAX
+	blend_reagent = WAX
+	grind_amount = 5
 	var/image/glint
 
 /obj/item/stack/sheet/wax/New(loc, amount, var/param_color = null)
@@ -357,6 +360,7 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 	origin_tech = Tc_MATERIALS + "=1"
 	w_type = RECYK_WOOD
 	flammable = TRUE
+	blend_reagent = CHARCOAL
 
 /obj/item/stack/sheet/charcoal/New(var/loc, var/amount=null)
 		recipes = charcoal_recipes
@@ -372,6 +376,7 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 	//item_state = "bone"
 	w_type = RECYK_BIOLOGICAL
 	flammable = TRUE
+	blend_reagent = BONEMARROW
 
 /obj/item/stack/sheet/brass
 	name = "brass"

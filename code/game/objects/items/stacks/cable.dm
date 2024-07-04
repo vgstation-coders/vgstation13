@@ -37,6 +37,8 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	attack_verb = list("whips", "lashes", "disciplines", "flogs")
 	toolsounds = list('sound/weapons/cablecuff.ogg')
 	surgerysound = 'sound/items/fixovein.ogg'
+	blend_reagent = COPPER
+	grind_amount = 10
 
 // Noose suicides, now ported from hippie!
 /obj/item/stack/cable_coil/suicide_act(var/mob/living/user)

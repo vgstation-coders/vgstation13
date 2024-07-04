@@ -1960,6 +1960,9 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define HEX_MODE_GUARD	 1
 #define HEX_MODE_ESCORT	 2
 
+#define GRIND_TRANSFER 1
+#define GRIND_NUTRIMENT_TO_REAGENT 2
+
 //Particles system defines
 #define PS_STEAM			"Steam"
 #define PS_SMOKE			"Smoke"

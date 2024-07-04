@@ -16,6 +16,8 @@
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 50)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL // Rugged
+	blend_reagent = LITHIUM
+	grind_amount = 10
 	var/rigged = 0		// true if rigged to explode
 	var/minor_fault = 0 //If not 100% reliable, it will build up faults.
 	var/brute_damage = 0 //Used by cyborgs

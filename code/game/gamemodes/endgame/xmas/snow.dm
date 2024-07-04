@@ -639,6 +639,8 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	icon_state = "ice_crystal"
 	melt_temperature = MELTPOINT_SNOW
 	w_class = W_CLASS_TINY
+	blend_reagent = ICE
+	grind_amount = 10
 
 #undef SNOWCOVERING_FULL
 #undef SNOWCOVERING_MEDIUM

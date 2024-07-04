@@ -5,6 +5,8 @@
 	icon_state = "seed"
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
+	blend_reagent = BLACKPEPPER
+	grind_amount = 5
 
 	var/seed_type
 	var/datum/seed/seed

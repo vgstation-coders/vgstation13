@@ -20,6 +20,8 @@
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "sliver"
 	w_class = W_CLASS_TINY
+	blend_reagent = GROUND_ROCK
+	grind_amount = 30
 	var/datum/geosample/geological_data
 
 /obj/item/weapon/rocksliver/attackby(obj/item/weapon/W as obj, mob/user as mob)

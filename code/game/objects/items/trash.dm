@@ -224,6 +224,8 @@
 	icon_state = "candle4"
 	starting_materials = list(MAT_WAX = (4*CC_PER_SHEET_WAX/5))
 	w_type=RECYK_WAX
+	blend_reagent = WAX
+	grind_amount = 1
 	var/image/wick
 
 /obj/item/trash/candle/New(turf/loc, var/obj/item/candle/source)
@@ -300,6 +302,8 @@ var/list/crushed_cans_cache = list()
 	throwforce = 2
 	throw_range = 8
 	throw_speed = 3
+	blend_reagent = ALUMINUM
+	grind_amount = 10
 
 /obj/item/trash/soda_cans/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
 	name = color
@@ -371,6 +375,8 @@ var/list/crushed_cans_cache = list()
 	icon_state	= "egg"
 	desc = "Pieces of calcium carbonate."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
+	blend_reagent = CALCIUMCARBONATE
+	grind_amount = 1
 
 /obj/item/trash/egg/borer
 	icon_state	= "borer egg-growing"
