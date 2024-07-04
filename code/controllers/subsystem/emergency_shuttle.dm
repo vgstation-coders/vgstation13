@@ -4,7 +4,7 @@ var/datum/subsystem/emergency_shuttle/SSemergency_shuttle
 /datum/subsystem/emergency_shuttle
 	name       = "Emergency Shuttle"
 	init_order = SS_INIT_EMERGENCY_SHUTTLE
-	wait       = 2 SECONDS
+	wait       = 1
 	flags      = SS_KEEP_TIMING | SS_NO_TICK_CHECK
 
 
@@ -20,4 +20,4 @@ var/datum/subsystem/emergency_shuttle/SSemergency_shuttle
 
 
 /datum/subsystem/emergency_shuttle/fire(resumed = FALSE)
-	emergency_shuttle.process()
+	emergency_shuttle.process(times_fired)
