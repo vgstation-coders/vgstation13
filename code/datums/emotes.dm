@@ -39,6 +39,11 @@
 	. = TRUE
 	if(!(type_override) && !(can_run_emote(user, !ignore_status))) // ignore_status == TRUE means that status_check should be FALSE and vise-versa
 		return FALSE
+	//Tries to rework the "mobs shouldn't render their emotes in chat when nobody is near" feature
+	//Previously it relied on can_run_emote which in turn relied on type_override
+	//But most mob emotes also set type_override to TRUE which defeated the purpose. This is a separate check.
+	if(!clientless_mob_check(user))
+		return FALSE
 	var/msg = select_message_type(user)
 	if(params && message_param)
 		msg = select_param(user, params)
@@ -54,9 +59,10 @@
 	var/msg_runechat = msg
 	msg = "<b>[user]</b> " + msg
 
+	//This is so that if someone else is near the mobs it shouldn't play the emotes to every observer in the game.
 	var/obs_pass = TRUE
 	// Don't hear simple mobs without a client.
-	if (is_type_in_list(user, OBSERVERS_DONT_HEAR_THEM) && !user.client)
+	if (istype(user, OBSERVERS_DONT_HEAR_THEM) && !user.client)
 		obs_pass = FALSE
 
 	if (obs_pass)
@@ -154,14 +160,6 @@
 		return FALSE
 	if((isvox(user) || isskelevox(user)) && voxemote == FALSE)
 		return FALSE
-	if(!user.client && user.ckey == null) //Auto emote, like a monkey or corgi
-		var/someone_in_earshot=0
-		for(var/mob/M in get_hearers_in_view(world.view, user)) //See if anyone is in earshot
-			if(M.client)
-				someone_in_earshot=1
-				break
-		if(!someone_in_earshot)
-			return FALSE
 	if(status_check && !(is_type_in_list(user, mob_type_ignore_stat_typelist)))
 		if(user.stat > stat_allowed)
 			to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
@@ -177,6 +175,17 @@
 			to_chat(user, "<span class='warning'>You cannot do that while silenced.</span>")
 			return FALSE
 
+	return TRUE
+
+/datum/emote/proc/clientless_mob_check(mob/user)
+	if(!user.client && user.ckey == null) //Auto emote, like a monkey or corgi
+		var/someone_in_earshot=0
+		for(var/mob/M in get_hearers_in_view(world.view, user)) //See if anyone is in earshot
+			if(M.client)
+				someone_in_earshot=1
+				break
+		if(!someone_in_earshot)
+			return FALSE
 	return TRUE
 
 /datum/emote/sound

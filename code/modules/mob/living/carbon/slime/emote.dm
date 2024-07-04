@@ -1,5 +1,5 @@
 /datum/emote/living/carbon/slime/
-	mob_type_allowed_typelist = list(/mob/living/carbon/monkey)
+	mob_type_allowed_typelist = list(/mob/living/carbon/slime) //This used to be "/mob/living/carbon/monkey" here
 
 /datum/emote/living/carbon/slime/bounce
 	key = "bounce"

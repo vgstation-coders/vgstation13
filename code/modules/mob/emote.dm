@@ -9,7 +9,8 @@
 	var/datum/emote/E
 	E = E.emote_list[lowertext(act)]
 	if(!E || !E.run_emote(src, param, m_type, ignore_status, arguments))
-		to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
+		if(client)
+			to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
 
 /datum/emote/flip
 	key = "flip"
@@ -48,7 +49,9 @@
 /datum/emote/me/run_emote(mob/user, params, m_type)
 	. = TRUE
 	if (user.stat)
-		return
+		return FALSE
+	if(!clientless_mob_check(user))
+		return FALSE
 
 	var/message = params
 
@@ -69,11 +72,18 @@
 
 	var/turf/T = get_turf(user) // for pAIs
 
-	for(var/mob/M in dead_mob_list)
-		if (!M.client)
-			continue //skip leavers
-		if(isobserver(M) && M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(user)))
-			M.show_message(formatFollow(user) + " " + msg)
+	// Copypasted here because me/run_emote overrides the parent's run_emote check and some things would call the "me" emote instead.
+	var/obs_pass = TRUE
+	// Don't hear simple mobs without a client.
+	if (is_type_in_list(user, OBSERVERS_DONT_HEAR_THEM) && !user.client)
+		obs_pass = FALSE
+
+	if(obs_pass)
+		for(var/mob/M in dead_mob_list)
+			if (!M.client)
+				continue //skip leavers
+			if(isobserver(M) && M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(user)))
+				M.show_message(formatFollow(user) + " " + msg)
 
 	if(emote_type & EMOTE_VISIBLE)
 		user.visible_message(msg)
