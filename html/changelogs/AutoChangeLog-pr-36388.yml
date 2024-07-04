@@ -1,6 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: Shuttle timers on status displays no longer skip a second on countdown.
-- bugfix: The emergency shuttle no longer docks a second late, arriving at the correct
-    ETA of 0:00 instead of -0:01.
