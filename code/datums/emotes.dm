@@ -2,6 +2,8 @@
 #define EMOTE_AUDIBLE (1<<1)
 #define EMOTE_NO_RUNECHAT (1<<2)
 
+#define OBSERVERS_DONT_HEAR_THEM list(/mob/living/simple_animal, /mob/living/carbon/slime)
+
 /* Emote datums, ported from TG station. */
 
 /datum/emote
@@ -54,7 +56,7 @@
 
 	var/obs_pass = TRUE
 	// Don't hear simple mobs without a client.
-	if (istype(user, /mob/living/simple_animal) && !user.client)
+	if (is_type_in_list(user, OBSERVERS_DONT_HEAR_THEM) && !user.client)
 		obs_pass = FALSE
 
 	if (obs_pass)

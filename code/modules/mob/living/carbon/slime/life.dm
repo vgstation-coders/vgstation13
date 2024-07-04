@@ -45,6 +45,8 @@
 	//Status updates, death etc.
 	handle_regular_status_updates()
 
+	SStun = max(0, SStun - 1)
+
 /mob/living/carbon/slime/proc/AIprocess()  // the master AI process
 
 //	to_chat(world, "AI proc started.")
