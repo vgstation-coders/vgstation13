@@ -1041,7 +1041,7 @@
 			spawn() //Because we don't want phantom teleporting rabid slimes until we make sure the slime isn't dead
 				if(!gcDestroyed)
 					step_away(src, user)
-					if(prob(25 + force * (isslimeadult() ? 1 : 4))) //Younger slimes are more likely to be knocked farther away
+					if(prob(25 + force * (isslimeadult(src) ? 1 : 4))) //Younger slimes are more likely to be knocked farther away
 						step_away(src, user)
 			canmove = 1
 
