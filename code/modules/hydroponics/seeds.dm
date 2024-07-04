@@ -923,7 +923,7 @@
 	plant_dmi = 'icons/obj/hydroponics/angel.dmi'
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/angel)
-	chems = list(NUTRIMENT = list(1,50), AMANATIN = list(1,3))
+	chems = list(NUTRIMENT = list(1,50), AMANITIN = list(1,3))
 
 	maturation = 12
 	yield = 2
