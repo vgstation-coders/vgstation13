@@ -6,11 +6,12 @@
 	set category = "Object"
 	set desc = "Posess or release an object"
 
+	var/atom/possessing_old
 	if(possessing)
 		//mob.loc = get_turf(mob)
 		var/datum/control/actual
 		for(var/datum/control/C in mob.control_object)
-			if(C.controlled == thing)
+			if(C.controlled == possessing)
 				actual = C
 				break
 		if(actual && mob.name_archive) //if you have a name archived and if you are actually releasing an object
@@ -23,6 +24,7 @@
 
 		mob.forceMove(thing.loc) // Appear where the object you were controlling is -- TLE
 		mob.client.eye = mob
+		possessing_old = possessing
 		possessing = null
 		thing.unregister_event(/event/destroyed, src, nameof(src::possess()))
 
@@ -30,7 +32,7 @@
 			actual.break_control()
 			qdel(actual)
 		feedback_add_details("admin_verb","RO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	else
+	if(possessing_old != thing)
 		if(config.forbid_singulo_possession && istype(thing,/obj/machinery/singularity))
 			to_chat(mob, "It is forbidden to possess singularities.")
 			return
