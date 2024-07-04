@@ -81,8 +81,7 @@ Unwall spell, sadly has to be targeted to be any fun to use
 	var/turf/T = get_turf(src.loc)
 	if(T)
 		var/mob/M = pick(T.contents)
-		if(M)
-			M.bullet_act(Proj, def_zone)
+		M?.bullet_act(Proj, def_zone)
 	return ..()
 
 /obj/effect/forcefield/wizard
