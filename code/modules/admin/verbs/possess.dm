@@ -1,5 +1,5 @@
 /client
-	var/possessing = 0
+	var/atom/possessing = null
 
 /client/proc/possess(obj/thing as obj in world)
 	set name = "Possess/Release Object"
@@ -23,7 +23,7 @@
 
 		mob.forceMove(thing.loc) // Appear where the object you were controlling is -- TLE
 		mob.client.eye = mob
-		possessing = 0
+		possessing = null
 		thing.unregister_event(/event/destroyed, src, nameof(src::possess()))
 
 		if(actual)
@@ -48,7 +48,7 @@
 		mob.name = thing.name
 		var/datum/control/new_control = new /datum/control/lock_move(mob, thing)
 		mob.control_object.Add(new_control)
-		possessing = 1
+		possessing = thing
 		new_control.take_control()
 		thing.register_event(/event/destroyed, src, nameof(src::possess()))
 		feedback_add_details("admin_verb","PO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
