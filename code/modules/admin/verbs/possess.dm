@@ -1,61 +1,62 @@
+/client
+	var/possessing = 0
+
 /client/proc/possess(obj/O as obj in world)
-	set name = "Possess Obj"
+	set name = "Possess/Release Object"
 	set category = "Object"
+	set desc = "Posess or release an object"
 
-	if(istype(O,/obj/machinery/singularity))
-		if(config.forbid_singulo_possession)
-			to_chat(mob, "It is forbidden to possess singularities.")
-			return
+	if(possessing)
+		//mob.loc = get_turf(mob)
+		var/datum/control/actual
+		for(var/datum/control/C in mob.control_object)
+			if(C.controlled == O)
+				actual = C
+				break
+		if(actual && mob.name_archive) //if you have a name archived and if you are actually releasing an object
+			mob.real_name = mob.name_archive
+			mob.name = mob.real_name
+			if(ishuman(mob))
+				var/mob/living/carbon/human/H = mob
+				H.update_name()
+	//		mob.regenerate_icons() //So the name is updated properly
 
-	var/turf/T = get_turf(O)
+		mob.forceMove(O.loc) // Appear where the object you were controlling is -- TLE
+		mob.client.eye = mob
+		possessing = 0
+		O.unregister_event(/event/destroyed, src, nameof(src::possess()))
 
-	if(T)
-		log_admin("[key_name(mob)] has possessed [O] ([O.type]) at ([T.x], [T.y], [T.z])")
-		message_admins("[key_name(mob)] has possessed [O] ([O.type]) at ([T.x], [T.y], [T.z])", 1)
+		if(actual)
+			actual.break_control()
+			qdel(actual)
+		feedback_add_details("admin_verb","RO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	else
-		log_admin("[key_name(mob)] has possessed [O] ([O.type]) at an unknown location")
-		message_admins("[key_name(mob)] has possessed [O] ([O.type]) at an unknown location", 1)
+		if(istype(O,/obj/machinery/singularity))
+			if(config.forbid_singulo_possession)
+				to_chat(mob, "It is forbidden to possess singularities.")
+				return
 
-	if(!mob.control_object.len) //If you're not already possessing something...
-		mob.name_archive = mob.real_name
+		var/turf/T = get_turf(O)
 
-	mob.forceMove(O)
-	mob.real_name = O.name
-	mob.name = O.name
-	var/datum/control/new_control = new /datum/control/lock_move(mob, O)
-	mob.control_object.Add(new_control)
-	mob.verbs += /client/proc/release
-	mob.verbs -= /client/proc/possess
-	new_control.take_control()
-	O.register_event(/event/destroyed, src, nameof(src::release()))
-	feedback_add_details("admin_verb","PO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+		if(T)
+			log_admin("[key_name(mob)] has possessed [O] ([O.type]) at ([T.x], [T.y], [T.z])")
+			message_admins("[key_name(mob)] has possessed [O] ([O.type]) at ([T.x], [T.y], [T.z])", 1)
+		else
+			log_admin("[key_name(mob)] has possessed [O] ([O.type]) at an unknown location")
+			message_admins("[key_name(mob)] has possessed [O] ([O.type]) at an unknown location", 1)
 
-/client/proc/release(obj/thing as obj in world)
-	set name = "Release Obj"
-	set category = "Object"
-	//mob.loc = get_turf(mob)
-	var/datum/control/actual
-	for(var/datum/control/C in mob.control_object)
-		if(C.controlled == thing)
-			actual = C
-			break
-	if(actual && mob.name_archive) //if you have a name archived and if you are actually relassing an object
-		mob.real_name = mob.name_archive
-		mob.name = mob.real_name
-		if(ishuman(mob))
-			var/mob/living/carbon/human/H = mob
-			H.update_name()
-//		mob.regenerate_icons() //So the name is updated properly
+		if(!mob.control_object.len) //If you're not already possessing something...
+			mob.name_archive = mob.real_name
 
-	mob.forceMove(thing.loc) // Appear where the object you were controlling is -- TLE
-	mob.client.eye = mob
-	mob.verbs += /client/proc/possess
-	mob.verbs -= /client/proc/release
-
-	if(actual)
-		actual.break_control()
-		qdel(actual)
-	feedback_add_details("admin_verb","RO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+		mob.forceMove(O)
+		mob.real_name = O.name
+		mob.name = O.name
+		var/datum/control/new_control = new /datum/control/lock_move(mob, O)
+		mob.control_object.Add(new_control)
+		possessing = 1
+		new_control.take_control()
+		O.register_event(/event/destroyed, src, nameof(src::possess()))
+		feedback_add_details("admin_verb","PO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /proc/givetestverbs(mob/M as mob in mob_list)
 	set desc = "Give this guy possess/release verbs"
