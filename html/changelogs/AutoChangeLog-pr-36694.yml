@@ -1,0 +1,7 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- bugfix: The Projectile Pastry spell will no longer be considered a fire-based spell.
+- tweak: The Projectile Pastry spell now costs half as much to empower.
+- tweak: The Projectile Pastry spell now throws pies faster the more pies there are
+    to throw.
