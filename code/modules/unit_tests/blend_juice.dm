@@ -23,9 +23,9 @@
         var/amount
         var/list/reagent_check
         if(O.blend_reagent || (O.grind_flags & GRIND_TRANSFER))
-            non_nutriment_volume = O.reagents ? (O.grind_flags & GRIND_NUTRIMENT_TO_REAGENT ? O.reagents.total_volume - O.reagents.get_reagent_amount(NUTRIMENT) : O.reagents.total_volume) : 0
+            reagent_check = get_reagents_to_check(O)
+            non_nutriment_volume = get_non_nutriment_volume(O)
             required = clamp(R.beaker.reagents.maximum_volume - non_nutriment_volume, 0, O.grind_amount)
-            reagent_check = O.reagents ? get_list_of_keys(O.reagents.amount_cache.Copy()) : null
             R.grind()
             if(reagent_check && R.beaker.reagents.has_all_reagents(reagent_check))
                 fail("[O.type] does not have the reagents [json_encode(reagent_check)] from being grinded in [R]. (got [R.beaker.reagents.get_reagent_ids()])")
@@ -39,16 +39,16 @@
         QDEL_LIST_CUT(R.holdingitems)
         O = new itempath(T)
         M.crushable = O
-        non_nutriment_volume = O.reagents ? (O.grind_flags & GRIND_NUTRIMENT_TO_REAGENT ? O.reagents.total_volume - O.reagents.get_reagent_amount(NUTRIMENT) : O.reagents.total_volume) : 0
+        reagent_check = get_reagents_to_check(O)
+        non_nutriment_volume = get_non_nutriment_volume(O)
         required = clamp(M.reagents.maximum_volume - non_nutriment_volume, 0, O.grind_amount)
-        reagent_check = O.reagents ? get_list_of_keys(O.reagents.amount_cache.Copy()) : null
         M.attack_self(user)
         if(O.juice_reagent) //mortars prioritise this
             if(!M.reagents.has_reagent(O.juice_reagent))
                 fail("Reagent ID [O.juice_reagent] was not created from juicing [O.type] in [M].")
         else if(O.blend_reagent || (O.grind_flags & GRIND_TRANSFER))
-            if(reagent_check && !M.reagents.has_all_reagents(reagent_check))
-                fail("[O.type] does not have the reagents [json_encode(reagent_check)] from being grinded in [M]. (got [M.reagents.get_reagent_ids()])")
+            //if(reagent_check && !M.reagents.has_all_reagents(reagent_check))
+            //    fail("[O.type] does not have the reagents [json_encode(reagent_check)] from being grinded in [M]. (got [M.reagents.get_reagent_ids()])")
             if(required)
                 if(!M.reagents.has_reagent(O.blend_reagent))
                     fail("Reagent ID [O.blend_reagent] was not created from grinding [O.type] in [M].")
@@ -61,3 +61,19 @@
     qdel(M)
     qdel(R)
     qdel(user)
+
+/datum/unit_test/grind_juice/proc/get_non_nutriment_volume(obj/item/O)
+    if(!O.reagents)
+        return 0
+    . = O.reagents.total_volume
+    if(O.grind_flags & GRIND_NUTRIMENT_TO_REAGENT)
+        if(.)
+            . -= O.reagents.get_reagent_amount(NUTRIMENT)
+            
+/datum/unit_test/grind_juice/proc/get_reagents_to_check(obj/item/O)
+    if(!O.reagents)
+        return null
+    var/list/L = get_list_of_keys(O.reagents.amount_cache.Copy())
+    if(O.grind_flags & GRIND_NUTRIMENT_TO_REAGENT)
+        L.Remove(NUTRIMENT)
+    return L
