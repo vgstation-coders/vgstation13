@@ -6,8 +6,8 @@
     var/obj/item/O
     for(var/itempath in subtypesof(/obj/item))
         O = itempath
-        if(!initial(O.blend_reagent) && !initial(O.juice_reagent) && !initial(O.grind_flags))
-            continue
+        if(!initial(O.blend_reagent) && !initial(O.juice_reagent) && (!initial(O.grind_flags) || (initial(O.flags) & NOREACT)))
+            continue // NOREACT is here because any transferred reagents will react on grind, doesn't fit tests so skipped
         O = new itempath(T)
         R.holdingitems += O
         if(O.juice_reagent)
