@@ -6,12 +6,10 @@
 
 /datum/unit_test/icons/start()
     if(types)
-        var/turf/centre = locate(100, 100, 1)
         for(var/type in types)
-            var/atom/A = new type(centre)
-            if(!has_icon(A.icon, A.icon_state))
-                fail("FAILED FOR [type] :: \"[A.name]\" with icon: \"[A.icon]\" and icon_state: \"[A.icon_state]\"")
-            qdel(A)
+            var/atom/A = type
+            if(!has_icon(initial(A.icon), initial(A.icon_state)))
+                fail("FAILED FOR [type] :: \"[initial(A.name)]\" with icon: \"[initial(A.icon)]\" and icon_state: \"[initial(A.icon_state)]\"")
 
 /datum/unit_test/icons/food/start()
     // basically every food item except those who have a special icon handling. We don't test those
