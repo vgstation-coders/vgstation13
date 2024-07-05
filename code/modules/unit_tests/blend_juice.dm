@@ -9,6 +9,9 @@
         if(!initial(O.blend_reagent) && !initial(O.juice_reagent) && (!initial(O.grind_flags) || (initial(O.flags) & NOREACT)))
             continue // NOREACT is here because any transferred reagents will react on grind, doesn't fit tests so skipped
         O = new itempath(T)
+        if(O.reagents && !O.reagents.amount_cache.len && !O.blend_reagent && !O.juice_reagent)
+            QDEL_NULL(O) // nothing comes from this item so move on
+            continue
         R.holdingitems += O
         if(O.juice_reagent)
             R.juice()
@@ -27,7 +30,7 @@
             non_nutriment_volume = get_non_nutriment_volume(O)
             required = clamp(R.beaker.reagents.maximum_volume - non_nutriment_volume, 0, O.grind_amount)
             R.grind()
-            if(reagent_check && R.beaker.reagents.has_all_reagents(reagent_check))
+            if(reagent_check && !R.beaker.reagents.has_all_reagents(reagent_check))
                 fail("[O.type] does not have the reagents [json_encode(reagent_check)] from being grinded in [R]. (got [R.beaker.reagents.get_reagent_ids()])")
             if(required)
                 if(!R.beaker.reagents.has_reagent(O.blend_reagent))
