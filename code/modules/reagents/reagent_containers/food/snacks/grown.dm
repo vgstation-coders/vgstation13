@@ -51,6 +51,8 @@ var/list/special_fruits = list()
 		throwforce = seed.thorny ? 5+seed.voracious*3 : 0
 		if(seed.noreact)
 			flags |= NOREACT
+		else
+			flags &= ~NOREACT
 
 		if(seed.teleporting)
 			name = "blue-space [name]"

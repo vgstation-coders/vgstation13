@@ -117,6 +117,7 @@
 	desc = "It is small, round and hard. Its skin is a thick dark purple."
 	plantname = "amauri"
 	hydroflags = HYDRO_PREHISTORIC
+	flags = NOREACT
 
 /datum/seed/gelthi
 	name = "gelthi"
