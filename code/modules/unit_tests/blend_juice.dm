@@ -22,7 +22,7 @@
         var/required
         var/amount
         if(O.blend_reagent)
-            non_nutriment_volume = O.reagents ? O.reagents.total_volume - O.reagents.get_reagent_amount(NUTRIMENT) : 0
+            non_nutriment_volume = O.reagents ? (O.grind_flags & GRIND_NUTRIMENT_TO_REAGENT ? O.reagents.total_volume - O.reagents.get_reagent_amount(NUTRIMENT) : O.reagents.total_volume) : 0
             required = clamp(R.beaker.reagents.maximum_volume - non_nutriment_volume, 0, O.grind_amount)
             R.grind()
             if(required)
@@ -35,7 +35,7 @@
         QDEL_LIST_CUT(R.holdingitems)
         O = new itempath(T)
         M.crushable = O
-        non_nutriment_volume = O.reagents ? O.reagents.total_volume - O.reagents.get_reagent_amount(NUTRIMENT) : 0
+        non_nutriment_volume = O.reagents ? (O.grind_flags & GRIND_NUTRIMENT_TO_REAGENT ? O.reagents.total_volume - O.reagents.get_reagent_amount(NUTRIMENT) : O.reagents.total_volume) : 0
         required = clamp(M.reagents.maximum_volume - non_nutriment_volume, 0, O.grind_amount)
         M.attack_self(user)
         if(O.juice_reagent) //mortars prioritise this
