@@ -1,13 +1,21 @@
 // Tests that make sure items have valid sprites.
 // If this test fails then you broke some sprite. Shame on you
 
+/datum/unit_test/icons
+	var/types
+
 /datum/unit_test/icons/start()
-    return
+    if(types)
+        var/turf/centre = locate(100, 100, 1)
+        for(var/type in types)
+            var/atom/A = new type(centre)
+            if(!has_icon(A.icon, A.icon_state))
+                fail("FAILED FOR [type] :: \"[A.name]\" with icon: \"[A.icon]\" and icon_state: \"[A.icon_state]\"")
+            qdel(A)
 
 /datum/unit_test/icons/food/start()
     // basically every food item except those who have a special icon handling. We don't test those
-    var/types = subtypesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/multispawner)
-    var/turf/centre = locate(100, 100, 1)
+    types = subtypesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/multispawner)
     types -= typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable)
     types -= /obj/item/weapon/reagent_containers/food/snacks/sliceable
     types -= /obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza
@@ -15,16 +23,14 @@
     types -= /obj/item/weapon/reagent_containers/food/snacks/snackbar/nutriment
     types -= /obj/item/weapon/reagent_containers/food/snacks/sushi
     types -= /obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue //because of meat recoloring
-    for(var/type in types)
-        var/obj/item/weapon/reagent_containers/food/snacks/food = new type(centre)
-        if(!has_icon(food.icon, food.icon_state))
-            fail("FAILED FOR [type] :: \"[food.name]\" with icon state: \"[food.icon_state]\"")
-        qdel(food)
+    ..()
+
+/datum/unit_test/icons/drinks/start()
+	// basically every drink
+	types = subtypesof(/obj/item/weapon/reagent_containers/food/drinks)
+	..()
 
 /datum/unit_test/icons/seeds/start()
     // basically every seed packet
-    var/types = subtypesof(/obj/item/seeds)
-    for(var/type in types)
-        var/obj/item/seeds/seed = new type()
-        if(!has_icon(seed.icon, seed.icon_state))
-            fail("FAILED FOR [type] :: \"[seed.name]\" with icon: \"[seed.icon]\" and icon_state: \"[seed.icon_state]\"")
+    types = subtypesof(/obj/item/seeds)
+    ..()
