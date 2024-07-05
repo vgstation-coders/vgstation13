@@ -39,14 +39,14 @@
         QDEL_LIST_CUT(R.holdingitems)
         O = new itempath(T)
         M.crushable = O
+        non_nutriment_volume = O.reagents ? (O.grind_flags & GRIND_NUTRIMENT_TO_REAGENT ? O.reagents.total_volume - O.reagents.get_reagent_amount(NUTRIMENT) : O.reagents.total_volume) : 0
+        required = clamp(M.reagents.maximum_volume - non_nutriment_volume, 0, O.grind_amount)
+        reagent_check = O.reagents ? O.reagents.amount_cache.Copy() : null
         M.attack_self(user)
         if(O.juice_reagent) //mortars prioritise this
             if(!M.reagents.has_reagent(O.juice_reagent))
                 fail("Reagent ID [O.juice_reagent] was not created from juicing [O.type] in [M].")
         else if(O.blend_reagent || (O.grind_flags & GRIND_TRANSFER))
-            non_nutriment_volume = O.reagents ? (O.grind_flags & GRIND_NUTRIMENT_TO_REAGENT ? O.reagents.total_volume - O.reagents.get_reagent_amount(NUTRIMENT) : O.reagents.total_volume) : 0
-            required = clamp(M.reagents.maximum_volume - non_nutriment_volume, 0, O.grind_amount)
-            reagent_check = O.reagents ? O.reagents.amount_cache.Copy() : null
             if(reagent_check && !M.reagents.has_all_reagents(reagent_check))
                 fail("[O.type] does not have the reagents [json_encode(get_list_of_keys(reagent_check))] from being grinded in [M]. (got [json_encode(get_list_of_keys(M.reagents.amount_cache))])")
             if(required)
