@@ -156,7 +156,15 @@
 /proc/has_icon(var/icon/I, var/wanted_state = null)
 	if(!I)
 		return FALSE
-	if(wanted_state in icon_states(I,1))
+
+	var/found = FALSE
+
+	for(var/found_state in icon_states(I,1))
+		if(found_state == wanted_state)
+			found = TRUE
+			break
+
+	if(found)
 		return TRUE
 	else
 		return FALSE
