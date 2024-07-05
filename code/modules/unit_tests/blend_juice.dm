@@ -28,7 +28,7 @@
             reagent_check = O.reagents ? get_list_of_keys(O.reagents.amount_cache.Copy()) : null
             R.grind()
             if(reagent_check && !R.beaker.reagents.has_all_reagents(reagent_check))
-                fail("[O.type] does not have the reagents [json_encode(reagent_check)] from being grinded in [R]. (got [json_encode(get_list_of_keys(M.reagents.amount_cache))])")
+                fail("[O.type] does not have the reagents [json_encode(reagent_check)] from being grinded in [R]. (got [json_encode(get_list_of_keys(R.beaker.reagents.amount_cache))])")
             if(required)
                 if(!R.beaker.reagents.has_reagent(O.blend_reagent))
                     fail("Reagent ID [O.blend_reagent] was not created from grinding [O.type] in [R].")
