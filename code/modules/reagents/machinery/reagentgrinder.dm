@@ -398,8 +398,6 @@
 			remove_object(O)
 
 /obj/item/proc/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
-	if((grind_flags & GRIND_TRANSFER) && reagents)
-		reagents.trans_to(beaker, reagents.total_volume) //Transfer these to beaker
 	if(blend_reagent)
 		var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 		if(grind_flags & GRIND_NUTRIMENT_TO_REAGENT)
@@ -421,6 +419,8 @@
 					var/obj/item/weapon/rocksliver/R = src
 					data = R.geological_data
 				beaker.reagents.add_reagent(blend_reagent,min(grind_amount, space),data)
+	if((grind_flags & GRIND_TRANSFER) && reagents)
+		reagents.trans_to(beaker, reagents.total_volume) //Transfer these to beaker
 
 /obj/item/stack/sheet/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
 	if(blend_reagent)
@@ -430,6 +430,6 @@
 				return
 
 /obj/item/weapon/reagent_containers/food/snacks/get_ground_value(var/obj/item/weapon/reagent_containers/beaker)
+	..()
 	if (dip?.total_volume)
 		dip.trans_to(beaker, dip.total_volume)
-	..()
