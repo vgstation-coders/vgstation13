@@ -50,8 +50,8 @@
             if(!M.reagents.has_reagent(O.juice_reagent))
                 fail("Reagent ID [O.juice_reagent] was not created from juicing [O.type] in [M].")
         else if(O.blend_reagent || (O.grind_flags & GRIND_TRANSFER))
-            //if(reagent_check && !M.reagents.has_all_reagents(reagent_check))
-            //    fail("[O.type] does not have the reagents [json_encode(reagent_check)] from being grinded in [M]. (got [M.reagents.get_reagent_ids()])")
+            if(reagent_check && !M.reagents.has_all_reagents(reagent_check))
+                fail("[O.type] does not have the reagents [json_encode(reagent_check)] from being grinded in [M]. (got [M.reagents.get_reagent_ids()])")
             if(required)
                 if(!M.reagents.has_reagent(O.blend_reagent))
                     fail("Reagent ID [O.blend_reagent] was not created from grinding [O.type] in [M].")
@@ -70,8 +70,7 @@
         return 0
     . = O.reagents.total_volume
     if(O.grind_flags & GRIND_NUTRIMENT_TO_REAGENT)
-        if(.)
-            . -= O.reagents.get_reagent_amount(NUTRIMENT)
+        . -= O.reagents.get_reagent_amount(NUTRIMENT)
             
 /datum/unit_test/grind_juice/proc/get_reagents_to_check(obj/item/O)
     if(!O.reagents)
