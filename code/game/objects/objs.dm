@@ -387,6 +387,24 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 					attack_hand(M, TRUE)
 		in_use = is_in_use
 
+/obj/item/updateUsrDialog()
+	if(in_use)
+		var/is_in_use = 0
+		if(usr)
+			_using |= usr
+		if(_using && _using.len)
+			for(var/mob/M in _using) // Only check things actually messing with us.
+				if ((M.client && M.machine == src && src.loc == M))
+					is_in_use = 1
+					src.attack_self(M)
+				if (isMoMMI(M))
+					if ((M.client && M.machine == src && src.loc == M)) // && M.machine == src is omitted because if we triggered this by using the dialog, it doesn't matter if our machine changed in between triggering it and this - the dialog is probably still supposed to refresh.
+						is_in_use = 1
+						src.attack_self(M)
+
+		// check for TK users
+		in_use = is_in_use
+
 /obj/proc/updateDialog()
 	// Check that people are actually using the machine. If not, don't update anymore.
 	if(in_use)
