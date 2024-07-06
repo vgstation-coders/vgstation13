@@ -9,7 +9,6 @@
 	log_reagents = 1
 	w_type = RECYK_BIOLOGICAL
 	flammable = TRUE //<--- clueless
-	grind_flags = GRIND_TRANSFER|GRIND_NUTRIMENT_TO_REAGENT
 
 	var/food_flags	//Possible flags: FOOD_LIQUID, FOOD_MEAT, FOOD_ANIMAL, FOOD_SWEET
 					//FOOD_LIQUID	- for stuff like soups

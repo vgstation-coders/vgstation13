@@ -305,8 +305,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#FFEE00"
 	trash = /obj/item/weapon/corncob
 	fragrance = INCENSE_CORNOIL
-	blend_reagent = CORNOIL
-	grind_amount = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/corn/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
@@ -321,8 +319,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	gender = PLURAL
 	plantname = "cherry"
 	slot_flags = SLOT_EARS
-	blend_reagent = CHERRYJELLY
-	grind_amount = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/cinnamon
 	name = "cinnamon sticks"
@@ -362,7 +358,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 25
 	filling_color = "#E6E8DA"
 	plantname = "potato"
-	juice_reagent = POTATO
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -383,7 +378,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "Nutritious!"
 	filling_color = "#A332AD"
 	plantname = "grapes"
-	juice_reagent = GRAPEJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes
 	name = "bunch of green grapes"
@@ -391,7 +385,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 25
 	filling_color = "#A6FFA3"
 	plantname = "greengrapes"
-	juice_reagent = GGRAPEJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/peanut
 	name = "peanut"
@@ -458,15 +451,12 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "Nutritious!"
 	filling_color = "#C2C9FF"
 	plantname = "berries"
-	juice_reagent = BERRYJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/plastellium
 	name = "clump of plastellium"
 	desc = "Hmm, needs some processing."
 	filling_color = "#C4C4C4"
 	plantname = "plastic"
-	blend_reagent = PLASTICIDE
-	grind_amount = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/glowberries
 	name = "bunch of glow-berries"
@@ -495,7 +485,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 15
 	filling_color = "#B422C7"
 	plantname = "poisonberries"
-	juice_reagent = POISONBERRYJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/deathberries
 	name = "bunch of death-berries"
@@ -541,7 +530,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "apple"
-	juice_reagent = APPLEJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned
 	filling_color = "#B3BD5E"
@@ -563,7 +551,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	slices_num = 5
 	storage_slots = 3
 	plantname = "watermelon"
-	juice_reagent = WATERMELONJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
 	name = "pumpkin"
@@ -586,7 +573,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#28FA59"
 	plantname = "lime"
-	juice_reagent = LIMEJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/lemon
 	name = "lemon"
@@ -594,7 +580,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#FAF328"
 	plantname = "lemon"
-	juice_reagent = LEMONJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/orange
 	name = "orange"
@@ -602,7 +587,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 20
 	filling_color = "#FAAD28"
 	plantname = "orange"
-	juice_reagent = ORANGEJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/silicatecitrus
 	name = "silicate citrus"
@@ -625,7 +609,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	trash = /obj/item/weapon/bananapeel
 	plantname = "banana"
 	fragrance = INCENSE_BANANA
-	juice_reagent = BANANA
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/banana/isHandgun()
 	return TRUE
@@ -669,8 +652,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	gender = PLURAL
 	filling_color = "#E6E8B7"
 	plantname = "soybean"
-	blend_reagent = SOYMILK
-	grind_amount = -10
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/koibeans
 	name = "koibean"
@@ -685,9 +666,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#FF0000"
 	potency = 10
 	plantname = "tomato"
-	blend_reagent = KETCHUP
-	grind_amount = -7
-	juice_reagent = TOMATOJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato
 	name = "tomato" //"blue-space" is applied on new(), provided it's teleporting trait hasn't been removed
@@ -741,8 +719,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	gender = PLURAL
 	filling_color = "#F7E186"
 	plantname = "wheat"
-	blend_reagent = FLOUR
-	grind_amount = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk
 	name = "rice stalk"
@@ -750,8 +726,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	gender = PLURAL
 	filling_color = "#FFF8DB"
 	plantname = "rice"
-	blend_reagent = RICE
-	grind_amount = -5
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod
 	name = "kudzu pod"
@@ -787,7 +761,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 10
 	filling_color = "#FFC400"
 	plantname = "carrot"
-	juice_reagent = CARROTJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond
 	name = "diamond carrot"
@@ -830,7 +803,6 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	filling_color = "#F714BE"
 	plantname = "plumphelmet"
 	fragrance = INCENSE_BOOZE
-	juice_reagent = PLUMPHJUICE
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/walkingmushroom
 	name = "walking mushroom"

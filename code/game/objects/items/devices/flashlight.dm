@@ -295,8 +295,6 @@ var/list/obj/item/device/flashlight/lamp/lamps = list()
 	heat_production = 1500
 	source_temperature = TEMPERATURE_FLAME
 	flammable = FALSE //lol
-	blend_reagent = SULFUR
-	grind_amount = 10
 	var/H_color = ""
 
 	light_color = LIGHT_COLOR_FLARE

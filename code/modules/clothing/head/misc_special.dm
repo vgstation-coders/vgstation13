@@ -273,8 +273,7 @@
 	throwforce = 2
 	throw_speed = 3
 	throw_range = 5
-	blend_reagent = MERCURY
-	grind_amount = 10
+
 	wizard_garb = 1
 
 	var/s_tone = 0.0

@@ -270,10 +270,8 @@ var/list/apiaries_list = list()
 		for(var/chem in S.chems)
 			var/list/reagent_data = list()
 			if (chem == NUTRIMENT)
-				if (S.products.len)
-					var/obj/item/I = S.products[1]
-					if(initial(I.juice_reagent))
-						reagent_data = S.chems[chem]
+				if (S.products.len && juice_items.Find(S.products[1]))
+					reagent_data = S.chems[chem]
 				else
 					continue
 			else
@@ -288,11 +286,10 @@ var/list/apiaries_list = list()
 				var/list/reagent_data = list()
 				var/chemToAdd = null
 				if (chem == NUTRIMENT)
-					if (S.products.len)
-						var/obj/item/I = S.products[1]
-						if(initial(I.juice_reagent))
-							chemToAdd = I.juice_reagent
-							reagent_data = S.chems[chem]
+					if (S.products.len && juice_items.Find(S.products[1]))
+						var/i = juice_items.Find(S.products[1])
+						chemToAdd = pick(juice_items[juice_items[i]])
+						reagent_data = S.chems[chem]
 					else
 						continue
 				else
