@@ -33,8 +33,6 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	w_type = RECYK_WOOD
 	flammable = FALSE //matches are LIT and should not catch on fire
 	origin_tech = Tc_MATERIALS + "=1"
-	blend_reagent = PHOSPHORUS
-	grind_amount = 2
 	var/list/unlit_attack_verb = list("prods", "pokes")
 	var/list/lit_attack_verb = list("burns", "singes")
 	attack_verb = list("prods", "pokes")

@@ -5,7 +5,6 @@
 /obj/item/weapon/grown // Grown weapons
 	name = "grown_weapon"
 	icon = 'icons/obj/hydroponics/nettle.dmi'
-	grind_flags = GRIND_TRANSFER|GRIND_NUTRIMENT_TO_REAGENT
 	var/plantname
 	var/potency = 1
 	var/fragrance = null
@@ -139,8 +138,6 @@
 	throw_range = 3
 	attack_verb = list("sears", "heats", "whacks", "steams")
 	fragrance = INCENSE_NOVAFLOWERS
-	blend_reagent = NOVAFLOUR
-	grind_amount = 0
 
 /obj/item/weapon/grown/novaflower/New(atom/loc, custom_plantname)
 	..()
@@ -180,8 +177,6 @@
 	throw_speed = 1
 	throw_range = 3
 	origin_tech = Tc_COMBAT + "=1"
-	blend_reagent = FORMIC_ACID
-	grind_amount = 0
 
 /obj/item/weapon/grown/nettle/pickup(mob/living/carbon/human/user as mob) //todo this
 	if(istype(user))
@@ -229,8 +224,6 @@
 	throw_range = 3
 	origin_tech = Tc_COMBAT + "=3"
 	attack_verb = list("stings", "pricks")
-	blend_reagent = PHENOL
-	grind_amount = 0
 
 /obj/item/weapon/grown/deathnettle/suicide_act(var/mob/living/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")

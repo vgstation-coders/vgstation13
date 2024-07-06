@@ -862,8 +862,6 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans
 	vending_cat = "carbonated drinks"
 	flags = FPRINT //Starts sealed until you pull the tab! Lacks OPENCONTAINER for this purpose
-	blend_reagent = ALUMINUM
-	grind_amount = 10
 	//because playsound(user, 'sound/effects/can_open[rand(1,3)].ogg', 50, 1) just wouldn't work. also so badmins can varedit these
 	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
 	var/tabself = "You pull back the tab of"
