@@ -704,8 +704,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/New()
 	. = ..()
-	if(initReagent)
-		reagents.add_reagent(initReagent,50)
+	reagents.add_reagent(initReagent,50)
 	var/icon/opaquefilling = new(icon,"[initial(icon_state)]_filling")
 	opaquefilling.ChangeOpacity(0.8)
 	filling = image(opaquefilling)
