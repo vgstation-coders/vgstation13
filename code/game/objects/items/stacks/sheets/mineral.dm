@@ -89,7 +89,6 @@ var/list/datum/stack_recipe/brick_recipes = list ( \
 	perunit = CC_PER_SHEET_DIAMOND
 	mat_type = MAT_DIAMOND
 	starting_materials = list(MAT_DIAMOND = CC_PER_SHEET_DIAMOND)
-	blend_reagent = DIAMONDDUST
 
 var/list/datum/stack_recipe/diamond_recipes = list ( \
 	new/datum/stack_recipe("diamond floor tile", /obj/item/stack/tile/mineral/diamond, 1, 4, 20), \
@@ -120,7 +119,6 @@ var/list/datum/stack_recipe/diamond_recipes = list ( \
 	perunit = CC_PER_SHEET_URANIUM
 	mat_type = MAT_URANIUM
 	starting_materials = list(MAT_URANIUM = CC_PER_SHEET_URANIUM)
-	blend_reagent = URANIUM
 
 var/list/datum/stack_recipe/uranium_recipes = list ( \
 	new/datum/stack_recipe("uranium floor tile", /obj/item/stack/tile/mineral/uranium, 1, 4, 20), \
@@ -153,7 +151,6 @@ var/list/datum/stack_recipe/uranium_recipes = list ( \
 	perunit = CC_PER_SHEET_PLASMA
 	mat_type = MAT_PLASMA
 	starting_materials = list(MAT_PLASMA = CC_PER_SHEET_PLASMA)
-	blend_reagent = PLASMA
 
 var/list/datum/stack_recipe/plasma_recipes = list ( \
 	new/datum/stack_recipe("plasma floor tile", /obj/item/stack/tile/mineral/plasma, 1, 4, 20), \
@@ -240,7 +237,6 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 	perunit = CC_PER_SHEET_GOLD
 	mat_type = MAT_GOLD
 	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD)
-	blend_reagent = GOLD
 
 var/list/datum/stack_recipe/gold_recipes = list ( \
 	new/datum/stack_recipe("golden floor tile", /obj/item/stack/tile/mineral/gold, 1, 4, 20), \
@@ -285,8 +281,6 @@ var/list/datum/stack_recipe/phazon_recipes = list( \
 	perunit = CC_PER_SHEET_PHAZON
 	mat_type = MAT_PHAZON
 	starting_materials = list(MAT_PHAZON = CC_PER_SHEET_PHAZON)
-	blend_reagent = PHAZON
-	grind_amount = 1
 
 /obj/item/stack/sheet/mineral/phazon/New(var/loc, var/amount=null)
 		recipes = phazon_recipes
@@ -309,7 +303,6 @@ var/list/datum/stack_recipe/phazon_recipes = list( \
 	perunit = CC_PER_SHEET_SILVER
 	mat_type = MAT_SILVER
 	starting_materials = list(MAT_SILVER = CC_PER_SHEET_SILVER)
-	blend_reagent = SILVER
 
 var/list/datum/stack_recipe/silver_recipes = list ( \
 	new/datum/stack_recipe("silver floor tile", /obj/item/stack/tile/mineral/silver, 1, 4, 20), \
@@ -343,7 +336,6 @@ var/list/datum/stack_recipe/silver_recipes = list ( \
 	perunit = CC_PER_SHEET_CLOWN
 	mat_type = MAT_CLOWN
 	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_CLOWN)
-	blend_reagent = BANANA
 
 var/list/datum/stack_recipe/clown_recipes = list ( \
 	new/datum/stack_recipe("bananium floor tile", /obj/item/stack/tile/mineral/clown, 1, 40, 20), \
