@@ -201,9 +201,7 @@
 	if(href_list["toggle_mode"])
 		constant_pulse = !constant_pulse
 
-	if(usr)
-		attack_self(usr)
-
+	updateUsrDialog()
 	return
 
 #undef VALUE_SCANNING

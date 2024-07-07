@@ -180,8 +180,7 @@
 				QDEL_NULL(beam)
 			process()
 
-	if(usr)
-		attack_self(usr)
+	updateUsrDialog()
 
 
 /***************************IBeam*********************************/

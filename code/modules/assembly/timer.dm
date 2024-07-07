@@ -120,9 +120,7 @@
 	if(href_list["set_default_time"])
 		default_time = time
 
-	if(usr)
-		attack_self(usr)
-
+	updateUsrDialog()
 	return
 
 /obj/item/device/assembly/timer/send_to_past(var/duration)
