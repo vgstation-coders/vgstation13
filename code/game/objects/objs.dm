@@ -397,14 +397,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 				if (!M || !M.client || !is_holder_of(M,src))  // NOT ON MOB
 					_using.Remove(M)
 					continue
-
-				if ((M.client && M.machine == src && src.loc == M))
-					is_in_use = 1
-					src.attack_self(M)
-				if (isMoMMI(M))
-					if ((M.client && M.machine == src && src.loc == M)) // && M.machine == src is omitted because if we triggered this by using the dialog, it doesn't matter if our machine changed in between triggering it and this - the dialog is probably still supposed to refresh.
-						is_in_use = 1
-						src.attack_self(M)
+				is_in_use = 1
+				src.attack_self(M)
 
 		// check for TK users
 		in_use = is_in_use
