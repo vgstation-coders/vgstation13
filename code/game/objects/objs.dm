@@ -394,7 +394,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			_using |= usr
 		if(_using && _using.len)
 			for(var/mob/M in _using) // Only check things actually messing with us.
-				if (!M || !M.client || !is_holder_of(M,src))  // NOT ON MOB
+				if (!M || !M.client || !in_range(loc,M))  // NOT ON MOB
 					_using.Remove(M)
 					continue
 				is_in_use = 1
