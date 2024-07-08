@@ -98,8 +98,8 @@
 			flashfail = TRUE
 		else
 			if(Subject.eyecheck() <= 0)
-				Subject.Knockdown(Subject.eyecheck() * 5 * -1 +10)
-				Subject.Stun(Subject.eyecheck() * 5 * -1 +10)
+				Subject.Knockdown(Subject.eyecheck() * 5 * -1 +5)
+				Subject.Stun(Subject.eyecheck() * 5 * -1 +5)
 
 	else if(issilicon(M))
 		var/mob/living/silicon/S = M
