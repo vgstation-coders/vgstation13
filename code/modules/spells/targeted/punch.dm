@@ -41,18 +41,18 @@
 
 /spell/targeted/punch/cast(var/list/targets)
 	var/mob/living/L = holder
+	var/T = targets[1]
+	if(L.is_pacified(1,T))
+		return
 	if(istype(L) && L.has_hand_check() && !L.restrained())
 		var/image/I = generate_punch_sprite()
 		for(var/mob/living/target in targets)
-			if(L.is_pacified(1,target))
-				return
 			playsound(get_turf(L), 'sound/weapons/punch_reverb.ogg', 100)
 			if(M_HULK in target.mutations) //Target is a hulk and too tough to throw, cannot be stunned
 				L.visible_message("<span class='danger'>[L] throws an overwhelmingly powerful punch against \the [target]!</span>")
 				L.do_attack_animation(target, L, I)
 				target.take_organ_damage(calculate_damage(flat_damage, TRUE, target))
-				if(explosive_punches)
-					explosive_punch(target)
+				explosive_punch(target)
 				return
 			if(istype(target.locked_to, /obj/structure/bed)) //Target is sitting on something, knock them off it
 				var/obj/structure/bed/B = target.locked_to
@@ -60,8 +60,7 @@
 					L.visible_message("<span class='danger'>[L] throws an overwhelmingly powerful punch against \the [target]!</span>")
 					L.do_attack_animation(target, L, I)
 					target.take_organ_damage(calculate_damage(flat_damage, TRUE, target))
-					if(explosive_punches)
-						explosive_punch(target)
+					explosive_punch(target)
 					return
 			present_target = target
 //Use two events because each does something the other cannot do, even if they are mostly similar.
@@ -88,12 +87,9 @@
 					target.unregister_event(/event/throw_impact, src, nameof(src::handle_throw_impact()))
 
 		for(var/obj/mecha/M in targets) //Target is a mecha
-			if(L.is_pacified(1, M))
-				return
 			L.visible_message("<span class='danger'>[L] throws an overwhelmingly powerful punch that breaks \the [M]!</span>")
 			L.do_attack_animation(M, L, I)
-			if(explosive_punches)
-				explosive_punch(M)
+			explosive_punch(M)
 			M.ex_act(1)
 
 /spell/targeted/punch/proc/handle_bump(atom/movable/bumper, atom/bumped)
@@ -127,6 +123,8 @@
 
 //Explosion as a result of the target not flying away, significantly stronger than launching punches
 /spell/targeted/punch/proc/explosive_punch(atom/target)
+	if(!explosive_punches) //No explosive punches allowed!
+		return
 	var/list/explosion_whitelist = list()
 	var/list/projectile_whitelist = list()
 	explosion_whitelist += holder
