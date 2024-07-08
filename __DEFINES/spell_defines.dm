@@ -36,6 +36,7 @@
 #define Sp_MOVE		"mobility"
 #define Sp_AMOUNT	"amount"
 #define Sp_RANGE	"range"
+#define Sp_MISC     "miscellaneous"
 
 #define Sp_TOTAL	"total"
 

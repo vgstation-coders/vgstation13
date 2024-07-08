@@ -28,14 +28,34 @@
 	var/ex_light = 3
 	var/ex_flash = 5
 
-	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
+	var/safe = 0 //If toggled on, the user will be included in the explosion blacklist, making them immune to both the explosion and the shrapnel
+
+	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_MISC = 0) //Needs to be defined since it's searching for these in the spellbook code
+	level_max = list(Sp_TOTAL = 6, Sp_SPEED = 4, Sp_POWER = 1, Sp_MISC = 1)
 
 	hud_state = "wiz_fireball"
+
+/spell/targeted/projectile/dumbfire/fireball/get_upgrade_price(upgrade_type)
+	if(upgrade_type == Sp_MISC) //Safety comes at a premium
+		return 60
+	return ..()
+
+/spell/targeted/projectile/dumbfire/fireball/apply_upgrade(upgrade_type)
+	if(upgrade_type == Sp_MISC)
+		spell_levels[Sp_MISC]++
+		safe = 1
+		return 1
+	return ..()
 
 /spell/targeted/projectile/dumbfire/fireball/prox_cast(var/list/targets, spell_holder)
 	for(var/mob/living/M in targets)
 		apply_spell_damage(M)
-	explosion(get_turf(spell_holder), ex_severe, ex_heavy, ex_light, ex_flash, whodunnit = holder)
+	if(safe)
+		var/list/immune_wizard = list()
+		immune_wizard += holder
+		explosion(get_turf(spell_holder), ex_severe, ex_heavy, ex_light, ex_flash, whodunnit = holder, whitelist = immune_wizard, shrapnel_whitelist = immune_wizard)
+	else
+		explosion(get_turf(spell_holder), ex_severe, ex_heavy, ex_light, ex_flash, whodunnit = holder)
 	return targets
 
 /spell/targeted/projectile/dumbfire/fireball/choose_prox_targets(mob/user = usr, var/atom/movable/spell_holder)
@@ -73,7 +93,13 @@
 
 /spell/targeted/projectile/dumbfire/fireball/get_upgrade_info(upgrade_type, level)
 	if(upgrade_type == Sp_POWER)
+		if(spell_levels[Sp_POWER] >= level_max[Sp_POWER])
+			return "The spell is already targetable!"
 		return "Make the spell targetable."
+	else if(upgrade_type == Sp_MISC)
+		if(spell_levels[Sp_MISC] >= level_max[Sp_MISC])
+			return "You are already immune to your own fireballs!"
+		return "Makes the user immune to their own fireballs, shrapnel included."
 	return ..()
 
 //PROJECTILE
