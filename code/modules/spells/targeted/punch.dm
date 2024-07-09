@@ -58,7 +58,7 @@
 		return
 	var/mob/living/target = T
 	var/obj/structure/bed/B = target.locked_to //If the target can't be unlocked from something they're sitting on, do a super punch
-	if(M_HULK in target.mutations || (B && !B.unlock_atom(target))) //Target is a hulk or can't be removed, do the punch
+	if((M_HULK in target.mutations) || (B && !B.unlock_atom(target))) //Target is a hulk or can't be removed, do the punch
 		L.visible_message("<span class='danger'>[L] throws an overwhelmingly powerful punch against \the [target]!</span>")
 		L.do_attack_animation(target, L, I)
 		target.take_organ_damage(calculate_damage(flat_damage, TRUE, target))
