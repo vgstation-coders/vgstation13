@@ -37,7 +37,7 @@
 
 /spell/targeted/projectile/dumbfire/fireball/get_upgrade_price(upgrade_type)
 	if(upgrade_type == Sp_MISC) //Safety comes at a premium
-		return 60
+		return 40
 	return ..()
 
 /spell/targeted/projectile/dumbfire/fireball/apply_upgrade(upgrade_type)
