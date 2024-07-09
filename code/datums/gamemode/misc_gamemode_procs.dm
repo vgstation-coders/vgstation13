@@ -296,6 +296,14 @@
 	to_chat(killer, "<b>Your laws have been changed!</b>")
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
+	
+/proc/check_traitorborg(mob/living/silicon/killer)
+	if(!isrobot(killer))
+		return FALSE
+	var/mob/living/silicon/robot/KR = killer
+	if(KR.laws?.zeroth == "Accomplish your objectives at all costs.")
+		return TRUE
+	return FALSE
 
 /proc/equip_time_agent(var/mob/living/carbon/human/H, var/datum/role/time_agent/T, var/is_twin = FALSE)
 	H.delete_all_equipped_items()
