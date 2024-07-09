@@ -17,6 +17,7 @@
 	hud_state = "wiz_punch"
 	var/empowered = 0
 	var/mob/living/present_target //A placeholder proc that records the target for the purpose of actually getting the impact handled.
+	var/list/currently_flying_targets = list()
 	var/has_triggered = 0 //Variable to avoid having multiple explosions as a result of multiple to_bump and throw_impact being triggered
 
 	//A bunch of variables used for roid rat punching, to avoid copypasting a lot of code
@@ -41,72 +42,66 @@
 
 /spell/targeted/punch/cast(var/list/targets)
 	var/mob/living/L = holder
+	if(!istype(L) || !L.has_hand_check() || L.restrained())
+		return
 	var/T = targets[1]
 	if(L.is_pacified(1,T))
 		return
-	if(istype(L) && L.has_hand_check() && !L.restrained())
-		var/image/I = generate_punch_sprite()
-		for(var/mob/living/target in targets)
-			playsound(get_turf(L), 'sound/weapons/punch_reverb.ogg', 100)
-			if(M_HULK in target.mutations) //Target is a hulk and too tough to throw, cannot be stunned
-				L.visible_message("<span class='danger'>[L] throws an overwhelmingly powerful punch against \the [target]!</span>")
-				L.do_attack_animation(target, L, I)
-				target.take_organ_damage(calculate_damage(flat_damage, TRUE, target))
-				explosive_punch(target)
-				return
-			if(istype(target.locked_to, /obj/structure/bed)) //Target is sitting on something, knock them off it
-				var/obj/structure/bed/B = target.locked_to
-				if(!B.unlock_atom(target)) //We can't knock them off, let them taste the full brunt of this super punch
-					L.visible_message("<span class='danger'>[L] throws an overwhelmingly powerful punch against \the [target]!</span>")
-					L.do_attack_animation(target, L, I)
-					target.take_organ_damage(calculate_damage(flat_damage, TRUE, target))
-					explosive_punch(target)
-					return
-			present_target = target
-//Use two events because each does something the other cannot do, even if they are mostly similar.
-			if(explosive_punches)
-				target.register_event(/event/to_bump, src, nameof(src::handle_bump()))
-				target.register_event(/event/throw_impact, src, nameof(src::handle_throw_impact()))
-			L.do_attack_animation(target, L, I)
-			target.take_organ_damage(calculate_damage(flat_damage, FALSE, target)) //A PUNCH THAT SHALL PIERCE PROTECTIONS
-			target.throw_at(get_edge_target_turf(L, L.dir), INFINITY, 1)
-			L.visible_message("<span class='danger'>[L] throws a mighty punch that launches \the [target] away!</span>")
-			var/turns = 0 //Fixes a bug where the transform could occasionally get messed up such as when the target is lying down
-			spawn(0) //Continue spell-code
-				target.SetStunned(2) //Make sure this kicks in ASAP
-				while(target.throwing)
-					sleep(1) //Moved it here so that it fixes a bug caused by throw_at() cancelling time stop for a split second
-					if(!target.timestopped)
-						target.transform = turn(target.transform, 45) //Spin the target
-						target.SetStunned(2) //We don't want the target to move during this time
-						turns += 45
-				target.transform = turn(target.transform, -turns)
-				target.Knockdown(2)
-				if(explosive_punches)
-					target.unregister_event(/event/to_bump, src, nameof(src::handle_bump())) //Just in case
-					target.unregister_event(/event/throw_impact, src, nameof(src::handle_throw_impact()))
-
-		for(var/obj/mecha/M in targets) //Target is a mecha
-			L.visible_message("<span class='danger'>[L] throws an overwhelmingly powerful punch that breaks \the [M]!</span>")
-			L.do_attack_animation(M, L, I)
-			explosive_punch(M)
-			M.ex_act(1)
+	var/image/I = generate_punch_sprite()
+	playsound(get_turf(L), 'sound/weapons/punch_reverb.ogg', 100)
+	if(istype(T, /obj/mecha)) //Target is a mecha, destroy it
+		var/obj/mecha/M = T
+		L.visible_message("<span class='danger'>[L] throws an overwhelmingly powerful punch that breaks \the [M]!</span>")
+		L.do_attack_animation(M, L, I)
+		explosive_punch(M)
+		M.ex_act(1)
+		return
+	var/mob/living/target = T
+	var/obj/structure/bed/B = target.locked_to //If the target can't be unlocked from something they're sitting on, do a super punch
+	if(M_HULK in target.mutations || (B && !B.unlock_atom(target))) //Target is a hulk or can't be removed, do the punch
+		L.visible_message("<span class='danger'>[L] throws an overwhelmingly powerful punch against \the [target]!</span>")
+		L.do_attack_animation(target, L, I)
+		target.take_organ_damage(calculate_damage(flat_damage, TRUE, target))
+		explosive_punch(target)
+		return
+	//Use two events because each does something the other cannot do, even if they are mostly similar.
+	if(explosive_punches)
+		target.register_event(/event/to_bump, src, nameof(src::handle_bump()))
+		target.register_event(/event/throw_impact, src, nameof(src::handle_throw_impact()))
+	L.do_attack_animation(target, L, I)
+	target.take_organ_damage(calculate_damage(flat_damage, FALSE, target)) //A PUNCH THAT SHALL PIERCE PROTECTIONS
+	target.throw_at(get_edge_target_turf(L, L.dir), INFINITY, 1)
+	L.visible_message("<span class='danger'>[L] throws a mighty punch that launches \the [target] away!</span>")
+	var/turns = 0 //Fixes a bug where the transform could occasionally get messed up such as when the target is lying down
+	spawn(0) //Continue spell-code
+		target.SetStunned(2) //Make sure this kicks in ASAP
+		while(target.throwing)
+			sleep(1) //Moved it here so that it fixes a bug caused by throw_at() cancelling time stop for a split second
+			if(!target.timestopped)
+				target.transform = turn(target.transform, 45) //Spin the target
+				target.SetStunned(2) //We don't want the target to move during this time
+				turns += 45
+		target.transform = turn(target.transform, -turns)
+		target.Knockdown(2)
+		if(explosive_punches)
+			target.unregister_event(/event/to_bump, src, nameof(src::handle_bump())) //Just in case
+			target.unregister_event(/event/throw_impact, src, nameof(src::handle_throw_impact()))
 
 /spell/targeted/punch/proc/handle_bump(atom/movable/bumper, atom/bumped)
-	present_target.unregister_event(/event/to_bump, src, nameof(src::handle_bump()))
-	present_target.unregister_event(/event/throw_impact, src, nameof(src::handle_throw_impact()))
+	bumper.unregister_event(/event/to_bump, src, nameof(src::handle_bump()))
+	bumper.unregister_event(/event/throw_impact, src, nameof(src::handle_throw_impact()))
 	var/mob/living/L = holder
-	explode_on_impact(bumped, present_target, L)
+	explode_on_impact(bumped, bumper, L)
 
-/spell/targeted/punch/proc/handle_throw_impact(atom/hit_atom, speed, mob/living/user)
-	present_target.unregister_event(/event/to_bump, src, nameof(src::handle_bump()))
-	present_target.unregister_event(/event/throw_impact, src, nameof(src::handle_throw_impact()))
+/spell/targeted/punch/proc/handle_throw_impact(atom/hit_atom, speed, mob/living/user, atom/thrown_atom)
+	thrown_atom.unregister_event(/event/to_bump, src, nameof(src::handle_bump()))
+	thrown_atom.unregister_event(/event/throw_impact, src, nameof(src::handle_throw_impact()))
 	var/mob/living/L = holder
-	explode_on_impact(hit_atom, present_target, L)
+	explode_on_impact(hit_atom, thrown_atom, L)
 
 //Explosion is centered on the collided entity.
 /spell/targeted/punch/proc/explode_on_impact(var/atom/bumped, var/mob/living/T, var/mob/living/user)
-	if(has_triggered)
+	if(has_triggered || !explosive_punches)
 		return
 	var/list/explosion_whitelist = list()
 	var/list/projectile_whitelist = list()
