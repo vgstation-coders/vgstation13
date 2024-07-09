@@ -147,7 +147,7 @@
 
 	var/absorb = run_armor_check(def_zone, P.flag, armor_penetration = P.armor_penetration)
 	if(absorb >= 100)
-		P.on_hit(src,2)
+		P.on_hit(src,100)
 		return PROJECTILE_COLLISION_BLOCKED
 	if(!P.nodamage)
 		var/damage = run_armor_absorb(def_zone, P.flag, P.damage)

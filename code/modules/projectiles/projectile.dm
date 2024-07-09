@@ -157,6 +157,11 @@ var/list/impact_master = list()
 		playsound(loc, hitsound, 35, 1)
 	return 1
 
+//A special on_hit variant that gets applied to robots, for when you want some things to affect robots but not everything.
+//Code that checks for this is in code/modules/mob/living/silicon/silicon.dm
+/obj/item/projectile/proc/robot_on_hit(var/atom/atarget, var/blocked = 0)
+	return on_hit(atarget, blocked)
+
 /obj/item/projectile/proc/check_fire(var/mob/living/target as mob, var/mob/living/user as mob)  //Checks if you can hit them or not.
 	if(!istype(target) || !istype(user))
 		return 0
