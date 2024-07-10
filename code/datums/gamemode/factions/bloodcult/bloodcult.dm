@@ -532,10 +532,6 @@
 	else if (sun && sun.eclipse_manager)
 		var/seconds_to_eclipse = (sun.eclipse_manager.eclipse_start_time - cult_founding_time)/10
 		dat += "<br>the Eclipse arrived after [round(seconds_to_eclipse/3600)]h [add_zero(num2text(round(seconds_to_eclipse/60) % 60), 2)]m [add_zero(num2text(round(seconds_to_eclipse) % 60), 2)]s"
-
-
-
-	dat += "<br>estimated time before Eclipse: [total_devotion]"
 	dat += "<br>available rituals: "
 	for (var/ritual_slot in rituals)
 		if (rituals[ritual_slot])
