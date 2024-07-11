@@ -62,7 +62,7 @@
 	//This is so that if someone else is near the mobs it shouldn't play the emotes to every observer in the game.
 	var/obs_pass = TRUE
 	// Don't hear simple mobs without a client.
-	if (istype(user, OBSERVERS_DONT_HEAR_THEM) && !user.client)
+	if (is_type_in_list(user, OBSERVERS_DONT_HEAR_THEM) && !user.client)
 		obs_pass = FALSE
 
 	if (obs_pass)

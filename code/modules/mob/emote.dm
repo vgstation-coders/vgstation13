@@ -72,7 +72,7 @@
 
 	var/turf/T = get_turf(user) // for pAIs
 
-	// Copypasted here because me/run_emote overrides the parent's run_emote check and some things would call the "me" emote instead.
+	// Copypasted here because emote/me/run_emote() overrides the parent's run_emote() check and some things would call the "me" emote instead.
 	var/obs_pass = TRUE
 	// Don't hear simple mobs without a client.
 	if (is_type_in_list(user, OBSERVERS_DONT_HEAR_THEM) && !user.client)

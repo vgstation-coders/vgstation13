@@ -109,6 +109,7 @@
 			if(prob(25))
 				to_chat(user, "<span class='warning'>[I] passes right through [M]!</span>")
 				return 0
+			//Handles pushing slimes off of targets, making them hostile from being attacked etc.
 			slime.slime_item_attacked(src, user, power) //The code has been moved to code/modules/mob/living/carbon/slime/slime.dm
 
 		var/showname = ""
@@ -163,8 +164,6 @@
 	if(power && (I.breakable_flags & BREAKABLE_AS_MELEE) && (I.breakable_flags & BREAKABLE_MOB) && (I.damtype == BRUTE))
 		take_damage(min(power, BREAKARMOR_MEDIUM), skip_break = TRUE, mute = FALSE) //Cap recoil damage at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used. Be verbose about the item being damaged if applicable.
 		try_break(hit_atom = M) //Break the item and spill any reagents onto the target.
-
-		. = TRUE //The attack always lands
 		M.updatehealth()
 	I.add_fingerprint(user)
 

@@ -1028,7 +1028,7 @@
 		Discipline = 0
 
 	if(force >= 3)
-		var/probability = isslimeadult(src) ? (prob(5 + round(force/2))) : prob(10 + force*2)
+		var/probability = isslimeadult(src) ? (prob(5 + round(force/2))) : (prob(10 + force*2))
 		if(probability) //We basically roll the check already in the above variable, to save up on copypaste by not having two separate rolls
 			if(Victim) //Can only be disciplined if they are currently attacking someone
 				if(prob(80) && !client)
@@ -1036,14 +1036,12 @@
 					attacked = !isslimeadult(src) //Adult slimes will not stop attacking, since discipline doesn't affect them.
 			Victim = null
 			anchored = 0
-			canmove = 0
 			SStun = 1
 			spawn() //Because we don't want phantom teleporting rabid slimes until we make sure the slime isn't dead
 				if(!gcDestroyed)
 					step_away(src, user)
 					if(prob(25 + force * (isslimeadult(src) ? 1 : 4))) //Younger slimes are more likely to be knocked farther away
 						step_away(src, user)
-			canmove = 1
 
 //////////////////////////////Old shit from metroids/RoRos, and the old cores, would not take much work to re-add them////////////////////////
 

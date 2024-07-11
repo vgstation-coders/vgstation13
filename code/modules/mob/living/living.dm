@@ -1934,9 +1934,9 @@ Thanks.
 				force = K.defense(force,def_zone)
 			take_organ_damage(force)
 			if (prob(33) && I.force) // Added blood for whacking non-humans too
-				var/turf/location = loc
-				if (istype(location, /turf/simulated))
-					location:add_blood_floor(src)
+				var/turf/simulated/location = loc
+				if (istype(location))
+					location.add_blood_floor(src)
 		if("fire")
 			if (!(M_RESIST_COLD in mutations))
 				if(istype(src, /mob/living/carbon/monkey))
