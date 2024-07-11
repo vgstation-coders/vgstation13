@@ -17,7 +17,6 @@
 	hud_state = "wiz_punch"
 	var/empowered = 0
 	var/mob/living/present_target //A placeholder proc that records the target for the purpose of actually getting the impact handled.
-	var/list/currently_flying_targets = list()
 	var/has_triggered = 0 //Variable to avoid having multiple explosions as a result of multiple to_bump and throw_impact being triggered
 
 	//A bunch of variables used for roid rat punching, to avoid copypasting a lot of code
