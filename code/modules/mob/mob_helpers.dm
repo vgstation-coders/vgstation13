@@ -331,51 +331,7 @@
 	return returntext
 
 /proc/derpspeech(message, stuttering)
-	message = replacetext(message, "he", "eh") //he, she, the -> eh, seh, teh, etc
-	message = replacetext(message, "ies", "is") //monkis
-	message = replacetext(message, "you", "u") 
-	message = replacetext(message, "iou", "ou") //delicous
-	message = replacetext(message, "xc", "x") //exited
-	message = replacetext(message, "air", "er") //cher, her
-	message = replacetext(message, "uni", "uin")
-	message = replacetext(message, "dg", "g") //knowlege, 
-	message = replacetext(message, "tch", "ch") //bich
-	message = replacetext(message, "are", "ar")
-	message = replacetext(message, "pl", "pul")
-	message = replacetext(message, "oul", "ul")
-	message = replacetext(message, "ght", "gt")
-	message = replacetext(message, "gna", "ga")
-
-	if(prob(50)) //stuff we only want replaced this way SOME of the time, the alternative goes under ELSE
-		message = replacetext(message, "eau", "eu") //beutiful
-		message = replacetext(message, "ie", "ei")
-		message = replacetext(message, "tab", "tib") //tible, comfortible
-		message = replacetext(message, "'re", "re")
-		message = replacetext(message, "help", "halp")
-		message = replacetext(message, "wood", "woody")
-		message = replacetext(message, "ain", "ian")
-		if(prob(25)) //13%
-			message = replacetext(message, " am ", " ")
-			message = replacetext(message, " is ", " ")
-			message = replacetext(message, " are ", " ")
-	else //these prob checks are per sentence, so saying friend 100 times in one sentence will have all 100 look the same instead of mix and match
-		message = replacetext(message, "eau", "u")
-		message = replacetext(message, "friend", "fren")
-		message = replacetext(message, "tab", "teib") //teible, comforteible
-		message = replacetext(message, "you're", "your")
-		message = replacetext(message, "help", "helb")
-		message = replacetext(message, "y ", "i ")
-		message = replacetext(message, "y,", "i")
-		message = replacetext(message, "captain", "COMDOM")
-	if(prob(70))
-		var/regex/duplicate = new("(\\w)(?=\\1)", "g")
-		message = replacetext(message, duplicate, "") //duplicate letters into one letter, for all words
-	if(prob(40)) //occasionally replaces one word with umm.
-		var/list/words = splittext(message, " ")
-		words[rand(0, words.len)] = pick("um,", "umm,", "uh,", "uhh,")
-		message = jointext(words, " ")
-			
-	//specific words we want replaced every time, mainly references to the actual brain damage lines, so they stay consistent with brain damage regular speech
+//specific words we want replaced every time, mainly references to the actual brain damage lines, so they stay consistent with brain damage regular speech
 	message = replacetext(message, "stop", "sotp")
 	message = replacetext(message, "retarded", "rarted")
 	message = replacetext(message, "george", "[pick("joerge", "george", "gorge", "gdoruge")]")
@@ -397,7 +353,7 @@
 	message = replacetext(message, "pinpointer", "pin pointner")
 	message = replacetext(message, "singularity", "scrungulartiy")
 	message = replacetext(message, "based", "BASTE")
-	message = replacetext(message, "hos", "HITLER")
+	message = replacetext(message, "hos", "hitler")
 	message = replacetext(message, "like", "liek")
 	message = replacetext(message, "damage", "damag")
 	message = replacetext(message, "millenial", "milenian")
@@ -407,9 +363,57 @@
 	message = replacetext(message, "shotgun", "shotgum it duntt mis")
 	message = replacetext(message, "suspicious", "sus")
 	message = replacetext(message, "among us", "amogus")
+
+	//assorted replacements to make text feel "dumb"
+	message = replacetext(message, "he", "eh") //he, she, the -> eh, seh, teh, etc
+	message = replacetext(message, "ies", "is")
+	message = replacetext(message, "you", "u") 
+	message = replacetext(message, "iou", "ou") //delicous
+	message = replacetext(message, "xc", "x") //exited
+	message = replacetext(message, "air", "er") //cher, her
+	message = replacetext(message, "uni", "uin")
+	message = replacetext(message, "dg", "g") //knowlege, 
+	message = replacetext(message, "tch", "ch") //bich
+	message = replacetext(message, "are", "ar")
+	message = replacetext(message, "pl", "pul")
+	message = replacetext(message, "oul", "ul")
+	message = replacetext(message, "ght", "gt")
+	message = replacetext(message, "gna", "ga")
+
+	if(prob(50)) //stuff we only want replaced this way SOME of the time, the alternative goes under ELSE
+		message = replacetext(message, "eau", "eu") //beutiful
+		message = replacetext(message, "ie", "ei")
+		message = replacetext(message, "tab", "tib") //tible, comfortible
+		message = replacetext(message, "'re", "re")
+		message = replacetext(message, "help", "halp")
+		message = replacetext(message, "wood", "woody")
+		message = replacetext(message, "ain", "ian")
+		message = replacetext(message, "your", "youre")
+		if(prob(25)) //13%
+			message = replacetext(message, " am ", " ")
+			message = replacetext(message, " is ", " ")
+			message = replacetext(message, " are ", " ")
+	else //these prob checks are per sentence, so saying friend 100 times in one sentence will have all 100 look the same instead of mix and match
+		message = replacetext(message, "eau", "u")
+		message = replacetext(message, "friend", "fren")
+		message = replacetext(message, "tab", "teb") //teble, comforteble
+		message = replacetext(message, "you're", "your")
+		message = replacetext(message, "help", "helb")
+		message = replacetext(message, "y ", "i ")
+		message = replacetext(message, "y,", "i")
+		message = replacetext(message, "captain", "COMDOM")
+	if(prob(70))
+		var/regex/duplicate = new("(\\w)(?=\\1)", "g")
+		message = replacetext(message, duplicate, "") //duplicate letters into one letter, for all words
+	if(prob(20)) //occasionally replaces one word with umm.
+		var/list/words = splittext(message, " ")
+		words[rand(0, words.len)] = pick("um,", "umm,", "uh,", "uhh,")
+		message = jointext(words, " ")
+			
 	if(prob(35))
 		message = uppertext(message)
-		message += "[stutter(pick("!", "!!", "!!!"))]"
+		if(prob(50))
+			message += "[stutter(pick("!", "!!", "!!!"))]"
 	if(!stuttering && prob(10))
 		message = stutter(message)
 	return message
