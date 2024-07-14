@@ -469,6 +469,7 @@
 	desc = "Large armored boots, very weak to large spikes."
 	icon_state = "megaboots"
 	item_state = "megaboots"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/protoboots
 	name = "Prototype Boots"

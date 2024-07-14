@@ -541,7 +541,7 @@
 	icon_state = "mega"
 	item_state = "mega"
 	_color = "mega"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/under/proto
 	name = "The Prototype Suit"
