@@ -13,6 +13,8 @@
 	anchored = 1
 	machine_flags = WRENCHMOVE
 
+	var/init_temp = T20C
+	var/init_gas
 	var/list/rotate_verbs = list(
 		/obj/machinery/atmospherics/unary/tank/verb/rotate,
 		/obj/machinery/atmospherics/unary/tank/verb/rotate_ccw,
@@ -20,10 +22,12 @@
 
 /obj/machinery/atmospherics/unary/tank/New()
 	..()
-	air_contents.temperature = T20C
+	air_contents.temperature = init_temp
 	atmos_machines.Remove(src)
 	if(anchored)
 		verbs -= rotate_verbs
+	if(init_gas)
+		air_contents.adjust_gas(init_gas, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
 
 /obj/machinery/atmospherics/unary/tank/Destroy()
 	new /obj/item/stack/sheet/metal(get_turf(src), 5)
@@ -56,59 +60,33 @@
 
 /obj/machinery/atmospherics/unary/tank/carbon_dioxide
 	name = "Pressure Tank (Carbon Dioxide)"
-
-/obj/machinery/atmospherics/unary/tank/carbon_dioxide/New()
-	..()
-
-	air_contents.adjust_gas(GAS_CARBON, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
-
+	init_gas = GAS_CARBON
 
 /obj/machinery/atmospherics/unary/tank/toxins
 	icon_state = "plasma"
 	name = "Pressure Tank (Plasma)"
+	init_gas = GAS_PLASMA
 
-/obj/machinery/atmospherics/unary/tank/toxins/New()
-	..()
-
-	air_contents.adjust_gas(GAS_PLASMA, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
-
-/obj/machinery/atmospherics/unary/tank/toxins/coldroom/New()
-	..()
-	air_contents.temperature = 90
-	air_contents.adjust_gas(GAS_NITROGEN, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
+/obj/machinery/atmospherics/unary/tank/toxins/coldroom
+	init_temp = 90
 
 /obj/machinery/atmospherics/unary/tank/oxygen_agent_b
 	icon_state = "plasma"
 	name = "Pressure Tank (Oxygen + Plasma)"
-
-/obj/machinery/atmospherics/unary/tank/oxygen_agent_b/New()
-	..()
-
-	air_contents.adjust_gas(GAS_OXAGENT, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
-
+	init_gas = GAS_OXAGENT
 
 /obj/machinery/atmospherics/unary/tank/oxygen
 	icon_state = "o2"
 	name = "Pressure Tank (Oxygen)"
-
-/obj/machinery/atmospherics/unary/tank/oxygen/New()
-	..()
-
-	air_contents.adjust_gas(GAS_OXYGEN, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
+	init_gas = GAS_OXYGEN
 
 /obj/machinery/atmospherics/unary/tank/nitrogen
 	icon_state = "n2"
 	name = "Pressure Tank (Nitrogen)"
+	init_gas = GAS_NITROGEN
 
-/obj/machinery/atmospherics/unary/tank/nitrogen/New()
-	..()
-
-	air_contents.adjust_gas(GAS_NITROGEN, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
-
-/obj/machinery/atmospherics/unary/tank/nitrogen/coldroom/New()
-	..()
-	air_contents.temperature = 90
-	air_contents.adjust_gas(GAS_NITROGEN, (STARTING_PRESSURE)*(starting_volume)/(R_IDEAL_GAS_EQUATION*air_contents.temperature))
+/obj/machinery/atmospherics/unary/tank/nitrogen/coldroom
+	init_temp = 90
 
 /obj/machinery/atmospherics/unary/tank/air
 	icon_state = "air"
