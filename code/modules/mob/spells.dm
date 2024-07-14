@@ -87,4 +87,4 @@
 		return
 	old_character.remove_spell(spell_to_transfer, on_removed = FALSE)
 	new_character.add_spell(spell_to_transfer, on_added = FALSE)
-	spell_to_transfer.on_transfer()
+	spell_to_transfer.on_transfer(new_character)
