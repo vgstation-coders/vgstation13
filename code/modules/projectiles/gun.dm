@@ -74,6 +74,12 @@
 	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_NINJA
 	var/kick_fire_chance = 5
 
+	//Affects the accuracy of the weapon
+	var/gun_excessive_missing //If toggled on, projectiles that fail to hit a specified zone will always miss
+	var/gun_miss_chance_value //Additive miss chance
+	var/gun_miss_message //Message that shows up as an addition to the message text
+	var/gun_miss_message_replace //If toggled on, will cause gun_miss_message to replace the entire missing message
+
 /obj/item/weapon/gun/New()
 	..()
 	if(isHandgun())
@@ -193,6 +199,7 @@
 
 /obj/item/weapon/gun/proc/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	//Exclude lasertag guns from the M_CLUMSY check.
+	. = reset_point_blank_shot()
 	var/explode = FALSE
 	var/dehand = FALSE
 	if(istype(user, /mob/living))
@@ -319,6 +326,14 @@
 			in_chamber.p_x = text2num(mouse_control["icon-x"])
 		if(mouse_control["icon-y"])
 			in_chamber.p_y = text2num(mouse_control["icon-y"])
+	if(gun_excessive_missing)
+		in_chamber.excessive_missing = gun_excessive_missing
+	if(gun_miss_chance_value)
+		in_chamber.projectile_miss_chance = gun_miss_chance_value
+	if(gun_miss_message)
+		in_chamber.projectile_miss_message = gun_miss_message
+	if(gun_miss_message_replace)
+		in_chamber.projectile_miss_message_replace = gun_miss_message_replace
 
 	spawn()
 		if(in_chamber)
@@ -338,6 +353,11 @@
 		return 1
 
 	return 1
+
+/obj/item/weapon/gun/proc/reset_point_blank_shot()
+	if(in_chamber && in_chamber.point_blank)
+		in_chamber.point_blank = FALSE
+		in_chamber.damage = in_chamber.damage/1.3
 
 /obj/item/weapon/gun/proc/canbe_fired()
 	return process_chambered()
@@ -407,8 +427,9 @@
 				to_chat(user, "<span class='notice'>[pick("Hey that's dangerous...wouldn't want hurting people.","You don't feel like firing \the [src] at \the [M].","Peace, my [user.gender == FEMALE ? "girl" : "man"]...")]</span>")
 				return
 			user.visible_message("<span class='danger'> \The [user] fires \the [src] point blank at [M]!</span>")
-			if (process_chambered()) //Load whatever it is we fire
+			if (process_chambered() && !in_chamber.point_blank) //Load whatever it is we fire
 				in_chamber.damage *= 1.3 //Some guns don't work with damage / chambers, like dart guns!
+				in_chamber.point_blank = TRUE
 			src.Fire(M,user,0,0,1)
 			return
 		else if(target && (M in target))
