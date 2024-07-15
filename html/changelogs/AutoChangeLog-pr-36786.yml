@@ -1,4 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- bugfix: APCs with their covers knocked off will now properly unexpose the wires.
