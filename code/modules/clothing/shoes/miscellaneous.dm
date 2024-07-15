@@ -450,6 +450,7 @@
 	desc = "As worn by the clowns of old."
 	icon_state = "jestershoes"
 	item_state = "jestershoes"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/aviatorboots
 	name = "Aviator Boots"
@@ -463,6 +464,7 @@
 	desc = "Freedom isn't free, neither were these shoes."
 	icon_state = "libertyshoes"
 	item_state = "libertyshoes"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/megaboots
 	name = "DRN-001 Boots"
