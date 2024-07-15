@@ -213,6 +213,7 @@
 			S.name = initial(S.name)
 			charges++
 			update_icon()
+			S.icon_state = "soulstone"
 			qdel(sacrifice)
 	else
 		..()
@@ -263,8 +264,6 @@
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human/lich(src)
 		H.real_name = original.real_name
 		H.flavor_text = original.flavor_text
-		for(var/spell/S in original.mind.wizard_spells)
-			transfer_spell(H, original, S)
 		//Let's give the lich some spooky clothes. Including non-wizards.
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/skelelich(H), slot_head)
 		H.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/skelelich(H), slot_wear_suit)

@@ -138,6 +138,7 @@
 
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
+	INVOKE_EVENT(src, /event/after_mind_transfer, "mind" = src)
 
 /datum/mind/proc/store_memory(new_text, var/forced)
 	if(!forced)
