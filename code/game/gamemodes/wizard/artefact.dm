@@ -214,6 +214,7 @@
 			charges++
 			update_icon()
 			S.icon_state = "soulstone"
+			S.shade = null
 			qdel(sacrifice)
 	else
 		..()
