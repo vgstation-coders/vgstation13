@@ -265,6 +265,11 @@
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human/lich(src)
 		H.real_name = original.real_name
 		H.flavor_text = original.flavor_text
+		//So that non-wizards can enjoy the spells.
+		//Wizards are already doing their own transfer_spell and doing that while the mob is mindless leads to bugs
+		if((!iswizard(original) && !isapprentice(original)))
+			for(var/spell/S in original.mind.wizard_spells)
+				transfer_spell(H, original, S)
 		//Let's give the lich some spooky clothes. Including non-wizards.
 		H.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/skelelich(H), slot_head)
 		H.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/skelelich(H), slot_wear_suit)
