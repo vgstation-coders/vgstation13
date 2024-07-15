@@ -73,6 +73,23 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2024.07.15</h2>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The laser pistol and laser rifle from R&amp;D now have extremely poor accuracy during April Fools.</li>
+				<li class="rscadd">Added a few variables that admins might find useful, related to ranged weapon accuracy.</li>
+				<li class="bugfix">Fixed an at least 4 years old bug where lasers did not say what living entity they&#39;ve hit.</li>
+				<li class="bugfix">(ApotheoticOrder provided the fix) Fixed the Lightning effects such as from the wizard&#39;s spell or the traitor&#39;s power gloves, the sprites will now properly show up. There is still a bug where the visuals do not line up in some circumstances with the target but it is a vast improvement over nothing.</li>
+				<li class="bugfix">The Lightning wizard spell will now properly target bots and mechas.</li>
+				<li class="bugfix">Wizards can no longer cast Lightning on themselves, which didn&#39;t do anything because they are immune to their own Lightning.</li>
+				<li class="bugfix">Fixed an exploit where a gun could have unlimited damage by repeatedly attempting to perform point-blank shots with a ballistic weapon while not actually being able to fire the gun, such as through wearing boxing gloves, and then firing the weapon.</li>
+				<li class="tweak">Hitting a missing limb with a projectile will no longer hit the target, but instead display a missing message and what limb is missing.</li>
+				<li class="tweak">Improved the Stormtrooper Blaster Rifle&#39;s ability to miss its targets.</li>
+				<li class="tweak">The EMP effect from the Lightning spell is now more severe.</li>
+				<li class="tweak">The Lightning spell will no longer cause blurriness and stuttering.</li>
+				<li class="tweak">The Lightning spell will no longer chain arc to other targets if it hits something that isn&#39;t a valid target. That means no random lightning through walls!</li>
+				<li class="tweak">Point blank shots now have an accuracy boost, such that under normal conditions they should never miss.</li>
+			</ul>
 			<h2 class="date">2024.07.09</h2>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
 			<ul class="changes bgimages16">
@@ -1854,35 +1871,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">gheritt updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">This adds the ability to filter books in the library by multiple categories, as well as to sort them by Title, Author, and Category.</li>
-			</ul>
-			<h2 class="date">2023.09.22</h2>
-			<h3 class="author">CrazyAmphibian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed the plasma suit mod being able to be applied to suits that are already sealed</li>
-				<li class="rscadd">rigsuit mods can now use custom install conditions</li>
-			</ul>
-			<h3 class="author">Hinaichigo updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Made item kicking arc have a lower zenith.</li>
-				<li class="tweak">Changed item kicking sound.</li>
-				<li class="bugfix">Frying pans can be removed from barrels.</li>
-				<li class="bugfix">Wooden table parts are made of wood.</li>
-				<li class="rscadd">Ghosts can drink from ectoplasm-containing drinks.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Malfunctioning AIs should now properly see their stats. The issue was that the code that added the stats was not being called, and the code that called it was instead human-exclusive. Now the code checks at all living mobs rather than just humans, which includes silicons.</li>
-				<li class="bugfix">&#34;Machine hack limit&#34; status in the Malfunctioning AI&#39;s status bar will now properly reflect on the AI&#39;s innate hacking limit of 1, rather than starting off as &#34;0/0&#34;.</li>
-				<li class="bugfix">The following Wizard spells can no longer use the floor as a target (in which case they had no effect and put the spell on cooldown): Buttbot&#39;s Revenge/Arse Nath, Flesh to Stone, Blind, Heal, Ice Barrage, Wrap.</li>
-				<li class="bugfix">The Wizard&#39;s &#34;Teleport&#34; spell will no longer go on cooldown if it is cancelled.</li>
-				<li class="rscadd">Malfunctioning AIs now once again have access to an upgrade that rigs them to explode if they are deactivated, with a significant blast radius.</li>
-				<li class="rscadd">Malfunctioning AIs with certain graphics displayed on their cores (Override and Xerxes) will now play unique audio upon activating System Override.</li>
-				<li class="bugfix">Fixed a bug where late-join rulesets (the prompt you may get to become an antagonist if you spawn in the game during the round) did not refund their Dynamic threat cost if the candidate refused to become an antagonist.</li>
-				<li class="rscadd">There is a new round-end credits song that plays when a Malfunctioning AI wins.</li>
-			</ul>
-			<h3 class="author">gheritt updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Added chair clapping.</li>
 			</ul>
 		</div>
 		<!--
