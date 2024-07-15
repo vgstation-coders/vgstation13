@@ -2513,7 +2513,13 @@ var/list/seer_rituals = list()
 						new /obj/effect/bloodcult_jaunt(get_turf(L),L,pick(valid_turfs))
 						flick("cult_jaunt_land",landing_animation)
 		else
-			if(target.locked_to || !isturf(target.loc))
+			var/mob/living/carbon/carbonTarget = target
+			// Suggestion: make some sort of flag on an object preventing blood magnetism pulls instead of hardcoding a check here.
+			if(istype(carbonTarget) && carbonTarget.handcuffed)
+				to_chat(target, "<span class='warning'>You feel a tug from some force in the veil wanting to whisk you away... but your handcuffs anchor you into the mortal plane!</span>")
+				for(var/mob/living/L in contributors)
+					to_chat(activator, "<span class='warning'>The ritual failed, the target is being weighed down by some kind of device.</span>")
+			else if(target.locked_to || !isturf(target.loc))
 				to_chat(target, "<span class='warning'>You feel that some force wants to pull you through the veil, but cannot proceed while you are buckled or inside something.</span>")
 				for(var/mob/living/L in contributors)
 					to_chat(activator, "<span class='warning'>The ritual failed, the target seems to be anchored to where they are.</span>")
