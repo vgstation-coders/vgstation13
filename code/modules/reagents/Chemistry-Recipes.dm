@@ -116,7 +116,7 @@
 	name = "Creatine"
 	id = CREATINE
 	result = CREATINE
-	required_reagents = list(NUTRIMENT = 1, BICARIDINES = 1, HYPERZINES = 1, MUTAGENS = 1)
+	required_reagents = list(NUTRIMENT = 1, BICARIDINES = 1, SAFEHYPERZINES = 1, MUTAGENS = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/discount
@@ -463,7 +463,7 @@
 	name = "Liquid PCP"
 	id = LIQUIDPCP
 	result = LIQUIDPCP
-	required_reagents = list(HYPERZINES = 5, MINDBREAKER = 5)
+	required_reagents = list(SAFEHYPERZINES = 5, MINDBREAKER = 5)
 	required_temp = T0C + 200
 	result_amount = 5
 
@@ -3696,7 +3696,7 @@
 	name = "Albuterol"
 	id = ALBUTEROL
 	result = ALBUTEROL
-	required_reagents = list(TRAMADOL = 1, HYPERZINES = 1)
+	required_reagents = list(TRAMADOL = 1, SAFEHYPERZINES = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/saltwater
