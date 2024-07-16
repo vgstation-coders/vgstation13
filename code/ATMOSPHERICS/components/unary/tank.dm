@@ -62,6 +62,9 @@
 	name = "Pressure Tank (Carbon Dioxide)"
 	init_gas = GAS_CARBON
 
+/obj/machinery/atmospherics/unary/tank/carbon_dioxide/coldroom
+	init_temp = 90
+
 /obj/machinery/atmospherics/unary/tank/toxins
 	icon_state = "plasma"
 	name = "Pressure Tank (Plasma)"
