@@ -27,7 +27,8 @@
 	var/static/list/allowed_targets = list(/obj/item/weapon/reagent_containers, /obj/structure/reagent_dispensers/cauldron)
 	if(!adjacency_flag || !is_type_in_list(target, allowed_targets) || !target.is_open_container())
 		return
-
+	if(user.a_intent == I_HELP)
+		return
 	if(target.reagents.is_full())
 		to_chat(user, "<span class='notice'>\The [target] is full!</span>")
 		return
