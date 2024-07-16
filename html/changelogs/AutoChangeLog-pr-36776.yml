@@ -1,0 +1,7 @@
+author: DeityLink
+delete-after: true
+changes:
+- bugfix: Fixed Nar-Sie being braindead
+- bugfix: Using a Cult Pamphlet after a random Eclipse has already started, or is
+    already over, properly updates the Cult's stage.
+- bugfix: Fixed cult runes being writable directly on top of space tiles.
