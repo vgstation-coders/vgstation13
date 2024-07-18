@@ -1,0 +1,8 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- tweak: Grues will now strip the flesh off of the bones of humans they kill instead
+    of gibbing them, unless they are races with no blood such as plasmamen. They can
+    chomp them again to gib them.
+- tweak: Grues can no longer gain power from eating pure skeletons. Does not include
+    plasmamen or liches.
