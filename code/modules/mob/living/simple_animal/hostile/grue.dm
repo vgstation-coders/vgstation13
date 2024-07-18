@@ -625,7 +625,7 @@
 		E.reagents.trans_to(src, E.reagents.total_volume)
 
 		//Upgrade the grue's stats as it feeds
-		if(E.mind) //eaten creature must have a mind to power up the grue
+		if(E.mind && !isskellington(E)) //eaten creature must have a mind to power up the grue, and mustn't be pure skeletons
 			playsound(src, 'sound/misc/grue_growl.ogg', 50, 1)
 			eatencount++					//makes the grue stronger
 			if(mind && mind.GetRole(GRUE)) //also increment the counter for objectives
@@ -635,10 +635,31 @@
 			eatencharge++ //can be spent on egg laying
 			grue_stat_updates(TRUE)
 		else
-			to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
+			if(isskellington(E))
+				to_chat(src, "<span class='warning'>That creature was only bones, and didn't quite satisfy your hunger...</span>")
+			else
+				to_chat(src, "<span class='warning'>That creature didn't quite satisfy your hunger...</span>")
 		E.drop_all()
-		E.gib()
+		if(can_skeletonize(E))
+			var/mob/living/carbon/human/H = E
+			gibs(H.loc, H.virus2, H.dna, H.species.flesh_color, H.species.blood_color)
+			if(isvox(H))
+				H.set_species("Skeletal Vox")
+			else
+				H.set_species("Skellington")
+			H.regenerate_icons()
+			H.death(FALSE)
+		else //Eat the mob otherwise
+			E.gib()
 	busy=FALSE
+
+//Determines whether the human will be gibbed or turned into a skeleton
+/mob/living/simple_animal/hostile/grue/proc/can_skeletonize(var/mob/living/E)
+	if(ishuman(E))
+		var/mob/living/carbon/human/H = E
+		if(H.species.anatomy_flags & NO_BLOOD)
+			return 0
+	return 1
 
 /mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = FALSE) //update stats, called by lifestage_updates() as well as handle_feed()
 
