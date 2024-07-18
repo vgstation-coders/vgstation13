@@ -93,7 +93,7 @@
 		if(istype(O, /obj/item/weapon/reagent_containers/glass))
 			user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
 			var/obj/item/weapon/reagent_containers/glass/G = O
-			var/transfered = udder.trans_id_to(G, MILK, rand(5,10))
+			var/transfered = udder.trans_id_to(G, MILK, rand(15,25))
 			if(G.reagents.total_volume >= G.volume)
 				to_chat(user, "<span class='warning'>[O] is full.</span>")
 			if(!transfered)
@@ -149,7 +149,7 @@
 	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
 		var/obj/item/weapon/reagent_containers/glass/G = O
-		var/transfered = reagents.trans_id_to(G, milktype, rand(5,10))
+		var/transfered = reagents.trans_id_to(G, milktype, rand(15,25))
 		if(G.reagents.total_volume >= G.volume)
 			to_chat(user, "<span class='warning'>[O] is full.</span>")
 		if(!transfered)
