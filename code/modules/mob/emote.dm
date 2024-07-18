@@ -69,11 +69,19 @@
 
 	var/turf/T = get_turf(user) // for pAIs
 
-	for(var/mob/M in dead_mob_list)
-		if (!M.client)
-			continue //skip leavers
-		if(isobserver(M) && M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(user)))
-			M.show_message(formatFollow(user) + " " + msg)
+
+	// Copypasted here because emote/me/run_emote() overrides the parent's run_emote() check and some things would call the "me" emote instead.
+	var/obs_pass = TRUE
+	// Don't hear simple mobs without a client.
+	if (istype(user, /mob/living/simple_animal) && !user.client)
+		obs_pass = FALSE
+
+	if(obs_pass)
+		for(var/mob/M in dead_mob_list)
+			if (!M.client)
+				continue //skip leavers
+			if(isobserver(M) && M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(user)))
+				M.show_message(formatFollow(user) + " " + msg)
 
 	if(emote_type & EMOTE_VISIBLE)
 		user.visible_message(msg)
