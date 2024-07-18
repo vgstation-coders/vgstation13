@@ -885,7 +885,7 @@ a {
 		if(sharpness_flags && sharpness)
 			force = initial(force)*(material_type.sharpness_mod*(quality/B_AVERAGE))
 			throwforce = initial(throwforce)*(material_type.sharpness_mod*(quality/B_AVERAGE))
-			sharpness = initial(sharpness)*(material_type.sharpness_mod*(quality/B_AVERAGE))
+			sharpness = min(initial(sharpness)*(material_type.sharpness_mod*(quality/B_AVERAGE)), 2) //Don't let the sharpness get too crazy
 		else
 			force = initial(force)*(material_type.brunt_damage_mod*(quality/B_AVERAGE))
 			throwforce = initial(throwforce)*(material_type.brunt_damage_mod*(quality/B_AVERAGE))
