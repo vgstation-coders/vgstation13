@@ -1028,6 +1028,40 @@
 /mob/living/carbon/slime/ApplySlip(var/obj/effect/overlay/puddle/P)
 	return FALSE
 
+//This was previously added directly in item_attack.dm in handle_attack()
+//Now it's its own proc that gets called there, freeing up roughly 61 lines of code
+/mob/living/carbon/slime/proc/slime_item_attacked(var/obj/item/I, var/mob/living/user, var/force)
+	if(force > 0)
+		attacked += 10
+
+	if(Discipline && prob(50))	// wow, buddy, why am I getting attacked??
+		Discipline = 0
+
+	if(force >= 3)
+		var/probability = isslimeadult(src) ? (prob(5 + round(force/2))) : (prob(10 + force*2))
+		if(probability) //We basically roll the check already in the above variable, to save up on copypaste by not having two separate rolls
+			if(Victim) //Can only be disciplined if they are currently attacking someone
+				if(prob(80) && !client)
+					Discipline++
+					attacked = !isslimeadult(src) //Adult slimes will not stop attacking, since discipline doesn't affect them.
+			Victim = null
+			anchored = 0
+			spawn()
+				if(src)
+					SStun = 1
+					sleep(rand(5,20))
+					if(src)
+						SStun = 0
+			spawn(0)
+				if(src)
+					canmove = 0
+					step_away(src, user)
+					if(prob(25 + force * (isslimeadult(src) ? 1 : 4)))
+						sleep(2)
+						if(src && user)
+							step_away(src, user)
+					canmove = 1
+
 //////////////////////////////Old shit from metroids/RoRos, and the old cores, would not take much work to re-add them////////////////////////
 
 /*
