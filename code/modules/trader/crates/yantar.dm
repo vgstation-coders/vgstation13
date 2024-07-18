@@ -4,15 +4,28 @@
 	has_lock_type = null
 
 var/global/list/yantar_stuff = list(
-	//3 of a kind
+	//2 of a kind
 	/obj/item/weapon/depocket_wand/suit,/obj/item/weapon/depocket_wand/suit,
 	//1 of a kind
 	/obj/item/weapon/storage/trader_chemistry,
 	/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer,
 	/obj/structure/largecrate/secure/frankenstein,
 	/obj/item/weapon/reagent_containers/hypospray/autoinjector/self_refilling,
-
+	/obj/item/weapon/melee/defibrillator/advanced,
+	/obj/item/weapon/virusdish/super_meme,
+	/obj/item/weapon/storage/pill_bottle/panacea,
+	/obj/item/device/antibody_resetter,
+	/obj/item/weapon/storage/box/advanced_surgeon
 	)
+
+var/global/list/yantar_freebies = list(
+	/obj/item/weapon/medbot_cube,
+	/obj/item/weapon/medbot_cube,
+	/obj/item/weapon/medbot_cube,
+	/obj/item/weapon/storage/firstaid/adv,
+	/obj/item/weapon/storage/firstaid/adv,
+	/obj/item/weapon/storage/firstaid/adv
+)
 
 /obj/structure/closet/crate/medical/yantar/New()
 	..()
@@ -21,6 +34,11 @@ var/global/list/yantar_stuff = list(
 			return
 		var/path = pick_n_take(yantar_stuff)
 		new path(src)
+	for(var/i = 1 to 3)
+		if(!yantar_freebies.len)
+			return
+		var/freebie_path = pick_n_take(yantar_freebies)
+		new freebie_path(src)
 
 /obj/item/weapon/storage/trader_chemistry
 	name = "chemist's pallet"

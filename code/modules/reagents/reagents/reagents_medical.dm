@@ -93,7 +93,8 @@
 
 /datum/reagent/panacea/on_mob_life(mob/living/M, alien)
 	..()
-	M.rejuvenate()
+	if(volume >= 0.2)
+		M.rejuvenate()
 
 /datum/reagent/panacea/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	..()
