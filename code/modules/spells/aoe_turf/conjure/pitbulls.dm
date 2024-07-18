@@ -33,7 +33,7 @@
 
 var/list/pitbulls_exclude_kinlist = list() //all pitbulls go in here so pitbulls won't attack other pitbulls when feeling treacherous (and instead attack the wizard)
 
-/spell/aoe_turf/conjure/pitbull/perform()
+/spell/aoe_turf/conjure/pitbull/perform(mob/user = usr, skipcharge = 0, list/target_override, var/ignore_timeless = FALSE, var/ignore_path = null)
 	if(empowered)
 		summon_type = list(/mob/living/simple_animal/hostile/pitbull/smashednslammed/summoned_pitbull)
 	..()
