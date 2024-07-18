@@ -107,13 +107,14 @@
 
 /mob/living/simple_animal/hostile/pitbull/smashednslammed/New()
 	..()
-	desc = pick("SMASHED and SLAMMED",
-				"Certified OPP!",
-				"Help I can't breathe",
-				"Bloodskull!",
-				"Two times Pimpy...",
-				"Three times Bape!"
-				)
+	desc = pick(
+		"SMASHED and SLAMMED",
+		"Certified Toadline.",
+		"Help I can't breathe",
+		"Bloodskull!",
+		"Two times Pimpy...",
+		"Three times Bape!",
+		"Not a family tree, but a family circle.")
 
 /mob/living/simple_animal/hostile/pitbull/smashednslammed/summoned_pitbull
 	faction = "wizard" // so they get along with other wizard mobs
