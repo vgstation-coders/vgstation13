@@ -254,19 +254,6 @@
 		if(I_GRAB)
 			M.grab_mob(src)
 
-
-/mob/living/carbon/monkey/proc/defense(var/power, var/def_zone)
-	var/armor = run_armor_check(def_zone, "melee", "Your armor has protected your [def_zone].", "Your armor has softened hit to your [def_zone].")
-	if(armor >= 2)
-		return 0
-	if(!power)
-		return 0
-
-	var/damage = power
-	if(armor)
-		damage = (damage/(armor+1))
-	return damage
-
 /mob/living/carbon/monkey/attack_hand(var/mob/living/carbon/human/M)
 	var/touch_zone = get_part_from_limb(M.zone_sel.selecting)
 	var/block = 0
