@@ -79,14 +79,9 @@
 			if(atm.on_fire) // For extinguishing objects on fire
 				atm.extinguish()
 
-/obj/item/stack/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
-	var/location = get_turf(user)
-	for(var/obj/item/stack/ore/glass/sandToConvert in location)
-		drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, sandToConvert.amount, user)
-		sandToConvert.use(sandToConvert.amount)
-
-	drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
-	use(1)
+/obj/item/stack/ore/glass/New(var/loc, var/amount=null)
+	recipes = sand_recipes
+	..()
 
 /obj/item/stack/ore/plasma
 	name = "\improper plasma ore"

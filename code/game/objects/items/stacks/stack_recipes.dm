@@ -682,3 +682,11 @@ var/list/datum/stack_recipe/ralloy_recipes = list (
 	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = TRUE, on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
 	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
 	)
+
+/* ========================================================================
+							SAND RECIPES
+======================================================================== */
+
+var/list/datum/stack_recipe/sand_recipes = list (
+	new/datum/stack_recipe("sandstone", /obj/item/stack/sheet/mineral/sandstone, 1, 1, 50),
+	)
