@@ -196,7 +196,7 @@
 					return
 			else
 				if(sharp || is_peg())
-					if(prob((5 * brute) * sharp)) //sharp things have a greater chance to sever based on how sharp they are
+					if(prob((5 * brute) * (sharp ? sharp : 1))) //sharp things have a greater chance to sever based on how sharp they are
 						droplimb(1)
 						return
 				else if(!sharp && brute > 15) //Massive blunt damage can result in limb explosion
