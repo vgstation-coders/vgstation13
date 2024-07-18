@@ -199,11 +199,11 @@
 					if(prob((5 * brute) * sharp)) //sharp things have a greater chance to sever based on how sharp they are
 						droplimb(1)
 						return
-				else if(!sharp && brute > 15) //Massive blunt damage can result in limb explosion
-					if(prob((brute/7.5)**3)) //15 dmg - 8% chance, 22 dmg - 27%, 30 dmg - 64%, anything higher than ~35 is a guaranteed limbgib
-						explode()
-						return
-				else if(brute > 20 && prob(2 * brute)) //non-sharp hits with force greater than 20 can cause limbs to sever, too (smaller chance)
+				//15 dmg - 8% chance, 22 dmg - 27%, 30 dmg - 64%, anything higher than ~35 is a guaranteed limbgib
+				else if((brute > 15) && prob((brute/7.5)**3)) //Massive blunt damage can result in limb explosion
+					explode()
+					return
+				else if((brute > 20) && prob(2 * brute)) //non-sharp hits with force greater than 20 can cause limbs to sever, too (smaller chance)
 					droplimb(1)
 					return
 
