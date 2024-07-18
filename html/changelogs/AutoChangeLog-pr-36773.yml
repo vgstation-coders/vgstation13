@@ -1,0 +1,4 @@
+author: SonixApache
+delete-after: true
+changes:
+- rscadd: You can now alt-click signallers to switch between use-to-signal or use-to-open-menu.
