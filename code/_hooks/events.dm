@@ -215,6 +215,7 @@
 // atom/hit_atom: the atom hit by the throw impact
 // speed: the speed at which the thrown atom was thrown
 // mob/living/user: the mob who threw the atom, if any
+// thrown_atom: the atom that was thrown
 /event/throw_impact
 
 //Called by examine
