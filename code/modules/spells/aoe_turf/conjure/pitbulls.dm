@@ -8,7 +8,7 @@
 	summon_amt = 3
 
 	price = Sp_BASE_PRICE
-	level_max = list(Sp_TOTAL = 2, Sp_SPEED = 2)
+	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 2, Sp_POWER = 1) //empower makes them SMASHED and SLAMMED
 	charge_max = 300
 	cooldown_reduc = 100
 	cooldown_min = 100
@@ -18,12 +18,33 @@
 	hud_state = "pitbull"
 	cast_sound = 'sound/voice/pitbullbark.ogg'
 	quicken_price = Sp_BASE_PRICE
+	var/empowered
+
+/spell/aoe_turf/conjure/pitbull/empower_spell()
+	..()
+	empowered += 1
+	spell_levels[Sp_POWER]++
+	. = "You have perfected the SMASHED and SLAMMED summon."
+
+/spell/aoe_turf/conjure/pitbull/invocation(mob/user, list/targets)
+	if(empowered)
+		invocation = pick("P'MPY S'N 'PP", "P'MPY S'N 'PP", "R'V'R'D' K'NN'LS", "BL'DSK'LL") 
+	..()
 
 var/list/pitbulls_exclude_kinlist = list() //all pitbulls go in here so pitbulls won't attack other pitbulls when feeling treacherous (and instead attack the wizard)
 
+/spell/aoe_turf/conjure/pitbull/perform()
+	if(empowered)
+		summon_type = list(/mob/living/simple_animal/hostile/pitbull/smashednslammed/summoned_pitbull)
+	..()
+
 /spell/aoe_turf/conjure/pitbull/summon_object(var/type, var/location)
-	var/mob/living/simple_animal/hostile/pitbull/summoned_pitbull/P = new type(location)
-	P.friends.Add(holder)//summoner is my friend, but we have a tendency to turn on our friends
+	if(empowered)
+		var/mob/living/simple_animal/hostile/pitbull/smashednslammed/summoned_pitbull/P = new type(location)
+		P.friends.Add(holder)
+	else
+		var/mob/living/simple_animal/hostile/pitbull/summoned_pitbull/P = new type(location)
+		P.friends.Add(holder)//summoner is my friend, but we have a tendency to turn on our friends
 
 /spell/aoe_turf/conjure/pitbull/choose_targets(var/mob/user = usr)
 	var/list/turf/locs = new
