@@ -4102,11 +4102,11 @@
 			if(isskellington(H) || isskelevox(H) || islich(H))
 				bigBoned(H, created_volume)
 			if(isvox(H))						//Copy paste of the melt power, ack ack
-				H.set_species("Skeletal Vox")
+				H.set_species("Skeletal Vox", transfer_damage = TRUE)
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s skeleton jumps right out of their skin, forcefully!</span>")
 				H.drop_all()
-			else if(H.set_species("Skellington"))
+			else if(H.set_species("Skellington", transfer_damage = TRUE))
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s skeleton jumps right out of their skin, forcefully!</span>")
 				H.drop_all()
