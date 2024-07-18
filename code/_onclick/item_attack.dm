@@ -224,9 +224,6 @@
 				if(istype(src, /mob/living/carbon/slime))
 					M.adjustBrainLoss(power)
 				else
-					if(istype(M, /mob/living/carbon/monkey))
-						var/mob/living/carbon/monkey/K = M
-						power = K.defense(power,def_zone)
 					M.take_organ_damage(power)
 					if (prob(33) && I.force) // Added blood for whacking non-humans too
 						var/turf/location = M.loc
@@ -234,9 +231,6 @@
 							location:add_blood_floor(M)
 			if("fire")
 				if (!(M_RESIST_COLD in M.mutations))
-					if(istype(M, /mob/living/carbon/monkey))
-						var/mob/living/carbon/monkey/K = M
-						power = K.defense(power,def_zone)
 					M.take_organ_damage(0, power)
 					to_chat(M, "Aargh it burns!")
 
