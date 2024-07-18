@@ -172,7 +172,7 @@
 #define POLYPGELATIN				"polypgelatin"
 #define COCO 			"coco"
 #define AMATOXIN 			"amatoxin"
-#define AMANATIN 			"amanatin"
+#define AMANITIN 			"amanitin"
 #define PSILOCYBIN 			"psilocybin"
 #define SPRINKLES 			"sprinkles"
 #define SYNDICREAM 			"syndicream"

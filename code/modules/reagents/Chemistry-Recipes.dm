@@ -3911,7 +3911,7 @@
 	name = "Ironrot"
 	id = IRONROT
 	result = IRONROT
-	required_reagents = list(AMANATIN = 1, RADIUM = 1, IRON = 1)
+	required_reagents = list(AMANITIN = 1, RADIUM = 1, IRON = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/aminomicin

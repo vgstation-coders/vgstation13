@@ -1,14 +1,14 @@
 //Poisonous chemicals
 
-/datum/reagent/amanatin
-	name = "Alpha-Amanatin"
-	id = AMANATIN
+/datum/reagent/amanitin
+	name = "Alpha-Amanitin"
+	id = AMANITIN
 	description = "A deadly poison derived from certain species of Amanita. Sits in the victim's system for a long period of time, then ravages the body."
 	color = "#792300" //rgb: 121, 35, 0
 	custom_metabolism = 0.01
 	var/activated = 0
 
-/datum/reagent/amanatin/on_mob_life(var/mob/living/M)
+/datum/reagent/amanitin/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
