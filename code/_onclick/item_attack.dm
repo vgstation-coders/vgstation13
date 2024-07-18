@@ -97,6 +97,11 @@
 
 	power = I.modify_attack_power(power, M, user) //Apply any special modifiers to the power here.
 
+	var/is_crit = I.on_attack(M,user)
+	if (is_crit == CRITICAL_HIT)
+		power *= CRIT_MULTIPLIER
+
+
 	if(!(ishuman(M) || ismonkey(M)))
 		if(istype(M, /mob/living/carbon/slime))
 			var/mob/living/carbon/slime/slime = M
@@ -208,9 +213,6 @@
 						to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
 				else
 					to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
-	var/is_crit = I.on_attack(M,user)
-	if (is_crit == CRITICAL_HIT)
-		power *= CRIT_MULTIPLIER
 
 	if(istype(M, /mob/living/carbon))
 		var/mob/living/carbon/C = M
