@@ -238,7 +238,6 @@
 						var/mob/living/carbon/monkey/K = M
 						power = K.defense(power,def_zone)
 					M.take_organ_damage(0, power)
-					to_chat(M, "Aargh it burns!")
 
 	//Break the item if applicable.
 	if(power && (I.breakable_flags & BREAKABLE_AS_MELEE) && (I.breakable_flags & BREAKABLE_MOB) && (I.damtype == BRUTE))
