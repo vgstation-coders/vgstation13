@@ -1,0 +1,12 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- bugfix: Mindless cyborgs, AIs and MoMMIs can now be properly transformed.
+- bugfix: Fixed a bug where a piece of code responsible for generalized damaged dealing
+    could, in some cases (mostly regarding species resistances and weaknesses to damage
+    types) do far more damage than intended.
+- tweak: Internal wounds will no longer be considered sources of damage to determine
+    limb damage.
+- experiment: Attempted a fix where humans transformed into other humans through means
+    such as the Staff of Change will now properly transfer their damage over instead
+    of being completely healed.
