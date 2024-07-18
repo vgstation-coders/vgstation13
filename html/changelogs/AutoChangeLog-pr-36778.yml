@@ -1,0 +1,4 @@
+author: jwhitak
+delete-after: true
+changes:
+- rscadd: Bug reports now show byond client version and build.
