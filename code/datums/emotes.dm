@@ -99,7 +99,7 @@
 				message = replacetext(message, "%s", "")
 			return message
 	if (replace_pronouns)
-		switch(H.gender)
+		switch(user.gender)
 			if(MALE)
 				if(findtext(message, "their"))
 					message = replacetext(message, "their", "his")
