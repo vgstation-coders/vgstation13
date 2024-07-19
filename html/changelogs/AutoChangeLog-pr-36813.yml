@@ -1,6 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- bugfix: Fixed a bug where eating non-humanoid things such as monkeys or creatures
-    as a grue would cause an error and completely prevent the grue from using most
-    abilities.
