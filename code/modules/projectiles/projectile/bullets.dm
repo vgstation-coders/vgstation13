@@ -38,13 +38,13 @@
 	icon_state = "bbshell"
 	damage = 10
 	stun = 1
-	weaken = 5
+	weaken = 1
 	embed = 0
 	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/weakbullet/booze
 	name = "booze bullet"
-	stun = 3
+	weaken = 5
 	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/weakbullet/mech
