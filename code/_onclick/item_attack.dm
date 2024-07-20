@@ -245,7 +245,6 @@
 		take_damage(min(power, BREAKARMOR_MEDIUM), skip_break = TRUE, mute = FALSE) //Cap recoil damage at BREAKARMOR_MEDIUM to avoid a powerful weapon also needing really strong armor to avoid breaking apart when used. Be verbose about the item being damaged if applicable.
 		try_break(hit_atom = M) //Break the item and spill any reagents onto the target.
 
-		. = TRUE //The attack always lands
 		M.updatehealth()
 	I.add_fingerprint(user)
 
