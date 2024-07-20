@@ -40,7 +40,7 @@
 	stun = 3
 	weaken = 5
 	embed = 0
-	projectile_speed = 0.5
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/weakbullet/booze
 	name = "booze bullet"
@@ -49,6 +49,7 @@
 /obj/item/projectile/bullet/weakbullet/mech
 	stun = 0
 	weaken = 0
+	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/weakbullet/booze/on_hit(var/atom/target, var/blocked = 0)
 	if(..(target, blocked))
