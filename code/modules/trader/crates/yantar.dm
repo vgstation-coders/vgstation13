@@ -13,7 +13,7 @@ var/global/list/yantar_stuff = list(
 	/obj/item/weapon/reagent_containers/hypospray/autoinjector/self_refilling,
 	/obj/item/weapon/melee/defibrillator/advanced,
 	/obj/item/weapon/virusdish/super_meme,
-	/obj/item/weapon/storage/pill_bottle/panacea,
+	/obj/item/weapon/storage/panacea_storage,
 	/obj/item/device/antibody_resetter,
 	/obj/item/weapon/storage/box/advanced_surgeon
 	)
@@ -121,7 +121,7 @@ var/global/list/yantar_freebies = list(
 	name = "self-refilling autoinjector"
 	desc = "Created in the 'X' laboratory, this device uses a miniaturized hybrid-substance dispenser and a radio-isotope thermoelectric setup to slowly refill itself. However, due to a design flaw, it will not permit injection until it is fully refueled."
 	mech_flags = MECH_SCAN_FAIL
-	item_state = "hypo"
+	item_state = "hypo_refilling"
 	icon_state = "hypo_refilling"
 	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 50, MAT_URANIUM = 50, MAT_DIAMOND = 50)
 	origin_tech = Tc_BIOTECH + "=5" + Tc_ANOMALY + "=2"
@@ -246,10 +246,11 @@ var/global/list/yantar_freebies = list(
 //Panacea pill bottle
 //Contains 3 pills that each contain 0.2u of Adminordrazine, the most potent healing chemical in the game.
 //The pill bottle is a reskinned lockbox.
-/obj/item/weapon/storage/pill_bottle/panacea
+/obj/item/weapon/storage/panacea_storage
 	name = "Panacea pill bottle"
 	desc = "A pill bottle that has been tailor-made to store 3 doses of an incredibly potent healing substance."
-	icon_state = "pill_canister_panacea"
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "pill_canister_panacea3"
 	item_state = "contsolid_panacea"
 	can_only_hold = list("/obj/item/weapon/reagent_containers/pill/panacea")
 	w_class = W_CLASS_SMALL
@@ -258,11 +259,17 @@ var/global/list/yantar_freebies = list(
 	max_combined_w_class = 3
 	storage_slots = 3
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/pill/panacea = 3)
+	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 60, MAT_URANIUM = 30, MAT_DIAMOND = 50, MAT_PHAZON = 20) //A powerful pill storage
+
+/obj/item/weapon/storage/panacea_storage/update_icon()
+	var/base_sprite = "pill_canister_panacea"
+	var/amount_of_pills = clamp(contents.len, 0, 3) //If it somehow has less or more than the amount
+	icon_state = "[base_sprite][amount_of_pills]"
 
 /obj/item/weapon/reagent_containers/pill/panacea
 	name = "Panacea"
 	desc = "The final product of the 'X' Laboratory's Substance Division before the entire division was obliterated in a freak accident, this incredibly rare and incredibly potent substance was 'stolen' through esoteric research that could have involved the Wizards Federation, the brightest minds in bluespace research and a clown."
-	icon_state = "panacea"
+	icon_state = "pill_panacea"
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/reagent_containers/pill/panacea/New()
@@ -277,7 +284,7 @@ var/global/list/yantar_freebies = list(
 	name = "antibody resetter"
 	desc = "A device with 3 injection ports, it uses a combination of biochemical and eletrical inputs that causes a human patient's immune system to 'forget' their antibodies. Created in the 'X' Laboratory to tackle the problem of widespread disease immunities preventing the more beneficial applications of diseases."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
-	icon_state = "health"
+	icon_state = "immunity_resetter"
 	item_state = "healthanalyzer"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -297,6 +304,7 @@ var/global/list/yantar_freebies = list(
 			return
 		user.visible_message("<span class='warning'>[user] is attempting to reset [H]'s antibodies!</span>", "<span class='notice'>You attempt to reset [H]'s antibodies.</span>")
 		if(do_after(user, H, 5 SECONDS))
+			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 			user.visible_message("<span class='warning'>[user] resets [H]'s antibodies!</span>", "<span class='notice'>You reset [H]'s antibodies.</span>")
 			for(var/antibody in H.immune_system.antibodies)
 				if(H.immune_system.antibodies[antibody] > 5)
@@ -306,7 +314,7 @@ var/global/list/yantar_freebies = list(
 /obj/item/weapon/storage/box/advanced_surgeon
 	name = "advanced surgeon tools"
 	desc = "A box containing a full set of high-end surgery tools, for the distinguished surgeon."
-	icon_state = "surgeon_box"
+	icon_state = "medical_box"
 	mech_flags = MECH_SCAN_FAIL
 	items_to_spawn = list(
 		/obj/item/tool/scalpel/laser/tier2 = 1,
