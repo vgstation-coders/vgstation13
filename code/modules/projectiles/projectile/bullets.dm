@@ -37,13 +37,14 @@
 	name = "weak bullet"
 	icon_state = "bbshell"
 	damage = 10
-	stun = 3
+	stun = 1
 	weaken = 5
 	embed = 0
 	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/weakbullet/booze
 	name = "booze bullet"
+	stun = 3
 	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/weakbullet/mech
