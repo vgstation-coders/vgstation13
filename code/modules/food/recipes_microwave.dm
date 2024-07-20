@@ -3817,5 +3817,5 @@
 /datum/recipe/trackingbacon
 	reagents = list(CORNOIL = 10, SODIUMCHLORIDE = 5) //fried, salted, and not actually bacon
 	items = list(
-		/obj/item/weapon/reagent_container/food/snacks/meat)
+		/obj/item/weapon/reagent_containers/food/snacks/meat)
 	result = /obj/item/weapon/reagent_containers/food/snacks/telebacon
