@@ -1,0 +1,5 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- bugfix: Removed a redundant line of code in item attacking code that did not do
+    anything.
