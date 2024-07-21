@@ -227,9 +227,6 @@
 	var/charges = 30 //Zombification costs 10 charges
 	var/charge_limit = 30
 	var/list/necro_blacklist = list(
-		/mob/living/simple_animal/hostile/necro/zombie/headcrab, //Headcrab "zombies" are not undead
-		/mob/living/simple_animal/hostile/necro/zombie/ghoul, //Ghouls are just horribly irradiated
-		/mob/living/simple_animal/hostile/necro/necromorph, //Technically a different kind of lifeform
 		/mob/living/simple_animal/hostile/necro/zombie/leatherman, //You're not the boss of this gym
 	)
 //	var/raisetype = 0
