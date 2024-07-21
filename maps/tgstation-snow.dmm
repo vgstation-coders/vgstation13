@@ -58701,7 +58701,7 @@
 /turf/simulated/floor/plating,
 /area/maintenance/aft)
 "ejb" = (
-/obj/machinery/atmospherics/unary/tank/nitrogen{
+/obj/machinery/atmospherics/unary/tank/nitrogen/coldroom{
 	dir = 4;
 	initialize_directions = 4
 	},
