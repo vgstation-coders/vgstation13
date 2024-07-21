@@ -1,6 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- tweak: The server rooms on all stations are now much closer to their intended temperatures
-    at roundstart.
-- bugfix: The tank in wheelstation telecomms now actually have cool plasma as intended.
