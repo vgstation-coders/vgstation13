@@ -1,0 +1,5 @@
+author: Eneocho
+delete-after: true
+changes:
+- bugfix: Fixes PCP not being added to the HYPERZINES define, thus not behaving like
+    hyperzine for any interaction.
