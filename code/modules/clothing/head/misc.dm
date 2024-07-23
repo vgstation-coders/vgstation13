@@ -532,7 +532,7 @@
 	desc = "Show everyone just how patriotic you are."
 	icon_state = "libertyhat"
 	item_state = "libertyhat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/maidhat
@@ -540,7 +540,7 @@
 	desc = "Do these even do anything besides look cute?"
 	icon_state = "maidhat"
 	item_state = "maidhat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/maidhat
@@ -556,14 +556,14 @@
 	desc = "A funny hat worn by extremely boring people."
 	icon_state = "mitre"
 	item_state = "mitre"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/clownpiece
 	name = "Clownpiece's jester hat"
 	desc = "A purple polka-dotted jester's hat with yellow pompons."
 	icon_state = "clownpiece"
 	item_state = "clownpiece"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	vertical_offset = 4
 
 /obj/item/clothing/head/headband
