@@ -35,11 +35,9 @@
 		var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
 		if(istype(W))
 			W.spells_from_spellbook += S
-			W.spells_from_absorb += S
 		var/datum/role/wizard_apprentice/WA = user.mind.GetRole(WIZAPP)
 		if(istype(WA))
 			WA.spells_from_spellbook += S
-			WA.spells_from_absorb += S
 		to_chat(user, "<span class='notice'>you rapidly read through the arcane book. Suddenly you realize you understand [spellname]!</span>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.real_name] ([user.ckey]) learned the spell [spellname] ([S]).</font>")
 		onlearned(user)
