@@ -1,0 +1,5 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- bugfix: Fixed a critical bug with slimes so that critical hits will now affect how
+    likely they are to be pushed away when hit.
