@@ -163,6 +163,7 @@
 				var/rngForce = rand(tackleForce/2, tackleForce)	//RNG or else most people would just bounce off each other.
 				var/rngDefense = rand(tackleDefense/2, tackleDefense)
 				var/tKnock = max(0, rngDefense - rngForce)
+				var/extinguish_roll = 50 + clamp(luck(), -50, 50)
 				if(isrobot(L))
 					var/mob/living/silicon/robot/R = L
 					R.tip(get_dir(src, R))
@@ -180,12 +181,25 @@
 						if(M_HORNS in mutations)
 							tKnock += 5
 						L.adjustBruteLoss(tKnock)
+						if(prob(extinguish_roll)) //tackled is extinguished
+							L.extinguish()
+							visible_message("<span class='warning'>[src] manages to extinguish [L]!</span>")
+						else //tackler catches on fire
+							ignite()
+							visible_message("<span class='warning'>[src] catches on fire on contact with [L]!</span>")
 						for (var/obj/held in L.held_items)
 							var/dir = pick(alldirs)
 							var/turf/target = get_turf(src)
 							for(var/i in 1 to 3)
 								target = get_step(target, dir)
 							L.throw_item(target, held)
+					else
+						if(prob(extinguish_roll) && prob(extinguish_roll)) //roll twice for your failure motherfucker
+							L.extinguish()
+							visible_message("<span class='warning'>[src] manages to extinguish [L]!</span>")
+						else
+							ignite()
+							visible_message("<span class='warning'>[src] catches on fire on contact with [L]!</span>")
 			spawn(3)	//Just to let throw_impact stop throwing a tantrum
 				isTackling = FALSE
 	..()
