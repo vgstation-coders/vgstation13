@@ -213,6 +213,9 @@
 		else
 			overlays.Add(image('icons/turf/floors.dmi', icon_state = "r_floor_unsec"))
 
+/turf/simulated/floor/engine/burn_tile()
+	return//Reinforced floors don't burn
+
 /turf/simulated/floor/engine/bolted
 	name = "bolted floor"
 	desc = "This floor has jutting bolts that would make crawling across it impossible."

@@ -341,31 +341,17 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	update_paint_overlay()
 
 /turf/simulated/floor/proc/burn_tile()
-	if(istype(src,/turf/simulated/floor/engine))
-		return//Reinforced floors don't burn
-	if(istype(src,/turf/unsimulated/floor/asteroid))
-		return//Asteroid tiles don't burn
-	if(istype(src,/turf/simulated/floor/shuttle))
-		if(!(locate(/obj/effect/decal/cleanable/soot) in src))
-			new /obj/effect/decal/cleanable/soot(src)
-		burnt = 1
-	else if(is_metal_floor())
+	if(is_metal_floor())
 		icon_state = "damaged[pick(1,2,3,4,5)]"
-		burnt = 1
 	else if(is_plating())
 		icon_state = "panelscorched"
-		burnt = 1
 	else if(is_wood_floor())
 		icon_state = "wood-broken"
-		burnt = 1
 	else if((is_carpet_floor()) || (is_arcade_floor()))
 		icon_state = "carpet-broken"
-		burnt = 1
 	else if(is_grass_floor())
 		icon_state = "sand[pick("1","2","3")]"
-		burnt = 1
-	else if(is_mineral_floor())
-		burnt = 1
+	burnt = 1
 	update_paint_overlay()
 	extinguish()
 
@@ -387,6 +373,8 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 	if(floor_tile)
 		qdel(floor_tile)
+	if(burnt)
+		ChangeTurf(/turf/simulated/floor) //changes a fully-burnt tile into an inflammable tile
 	icon_plating = "plating"
 	set_light(0)
 	floor_tile = null

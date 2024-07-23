@@ -155,6 +155,12 @@
 /turf/simulated/floor/shuttle/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	return
 
+/turf/simulated/floor/shuttle/burn_tile()
+	if(!(locate(/obj/effect/decal/cleanable/soot) in src))
+		new /obj/effect/decal/cleanable/soot(src)
+	burnt = 1
+	..()
+
 /turf/simulated/floor/shuttle/airless
 	oxygen   = 0.01
 	nitrogen = 0.01
