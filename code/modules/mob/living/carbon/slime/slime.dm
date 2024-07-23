@@ -310,6 +310,7 @@
 
 /mob/living/carbon/slime/attack_animal(mob/living/simple_animal/M)
 	M.unarmed_attack_mob(src)
+	return 1
 
 /mob/living/carbon/slime/attack_paw(mob/living/carbon/monkey/M)
 	if(!(istype(M, /mob/living/carbon/monkey)))

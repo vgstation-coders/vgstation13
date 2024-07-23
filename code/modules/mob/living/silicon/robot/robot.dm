@@ -945,6 +945,7 @@
 
 /mob/living/silicon/robot/attack_animal(mob/living/simple_animal/M)
 	M.unarmed_attack_mob(src)
+	return 1
 
 /mob/living/silicon/robot/attack_hand(mob/living/user)
 	add_fingerprint(user)

@@ -152,7 +152,7 @@
 		user.forceMove(src)
 		src.update_icon()
 	else
-		..()
+		return ..()
 
 /mob/living/simple_animal/spiderbot/proc/transfer_personality(var/obj/item/device/mmi/M as obj)
 	src.mind = M.brainmob.mind
