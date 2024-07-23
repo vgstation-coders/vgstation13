@@ -118,6 +118,9 @@
 						message = replacetext(message, "they", "she")
 					if(findtext(message, "%s"))
 						message = replacetext(message, "%s", "s")
+				else //Plural or neuter
+					if(findtext(message, "%s"))
+						message = replacetext(message, "%s", "")
 	return message
 
 /datum/emote/proc/select_message_type(mob/user)
