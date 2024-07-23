@@ -1,0 +1,7 @@
+author: Eneocho
+delete-after: true
+changes:
+- rscadd: Regular antimatter tanks can now be refueled at a decent rate by exposing
+    them to radiation.
+- tweak: Antimatter Decelerator tanks (the trader one) will refuel 25x faster than
+    the regular tank and can hold 10x the fuel (10000).
