@@ -248,6 +248,7 @@
 		update_icons()
 	else
 		M.unarmed_attack_mob(src)
+		return 1
 
 /mob/living/simple_animal/construct/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)

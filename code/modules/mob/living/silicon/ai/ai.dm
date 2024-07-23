@@ -296,7 +296,7 @@ var/static/list/ai_icon_states = list(
 		"Xerxes" = "ai-xerxes",
 		"Yes Man" = "yes-man",
 	)
-	
+
 /mob/living/silicon/ai/verb/pick_icon()
 	set category = "AI Commands"
 	set name = "Set AI Core Display"
@@ -579,6 +579,7 @@ var/static/list/ai_icon_states = list(
 
 /mob/living/silicon/ai/attack_animal(mob/living/simple_animal/M as mob)
 	M.unarmed_attack_mob(src)
+	return 1
 
 /mob/living/silicon/ai/reset_view(atom/A)
 	if(camera_light_on)
