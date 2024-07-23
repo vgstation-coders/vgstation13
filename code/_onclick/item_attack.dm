@@ -108,70 +108,8 @@
 			if(prob(25))
 				to_chat(user, "<span class='warning'>[I] passes right through [M]!</span>")
 				return 0
-
-			if(power > 0)
-				slime.attacked += 10
-
-			if(slime.Discipline && prob(50))	// wow, buddy, why am I getting attacked??
-				slime.Discipline = 0
-
-			if(power >= 3)
-				if(slime.slime_lifestage == SLIME_ADULT)
-					if(prob(5 + round(power/2)))
-
-						if(slime.Victim)
-							if(prob(80) && !slime.client)
-								slime.Discipline++
-						slime.Victim = null
-						slime.anchored = 0
-
-						spawn()
-							if(slime)
-								slime.SStun = 1
-								sleep(rand(5,20))
-								if(slime)
-									slime.SStun = 0
-
-						spawn(0)
-							if(slime)
-								slime.canmove = 0
-								step_away(slime, user)
-								if(prob(25 + power))
-									sleep(2)
-									if(slime && user)
-										step_away(slime, user)
-								slime.canmove = 1
-
-				else
-					if(prob(10 + power*2))
-						if(slime)
-							if(slime.Victim)
-								if(prob(80) && !slime.client)
-									slime.Discipline++
-
-									if(slime.Discipline == 1)
-										slime.attacked = 0
-
-								spawn()
-									if(slime)
-										slime.SStun = 1
-										sleep(rand(5,20))
-										if(slime)
-											slime.SStun = 0
-
-							slime.Victim = null
-							slime.anchored = 0
-
-
-						spawn(0)
-							if(slime && user)
-								step_away(slime, user)
-								slime.canmove = 0
-								if(prob(25 + power*4))
-									sleep(2)
-									if(slime && user)
-										step_away(slime, user)
-								slime.canmove = 1
+			//Handles pushing slimes off of targets, making them hostile from being attacked etc.
+			slime.slime_item_attacked(src, user, power) //The code has been moved to code/modules/mob/living/carbon/slime/slime.dm
 
 		var/showname = ""
 		if(user)
