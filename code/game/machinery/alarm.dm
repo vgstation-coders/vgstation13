@@ -8,6 +8,7 @@
 #define AALARM_MODE_CYCLE		4 //sucks off all air, then refill and switches to scrubbing
 #define AALARM_MODE_FILL		5 //emergency fill
 #define AALARM_MODE_OFF			6 //Shuts it all down.
+#define AALARM_MODE_DEOXY		7 //Removes all oxygen and disables all vents.
 
 #define AALARM_SCREEN_MAIN		1
 #define AALARM_SCREEN_VENT		2
@@ -320,6 +321,7 @@ var/global/list/air_alarms = list()
 
 	machine_flags = WIREJACK
 
+	var/auto_deox = FALSE //automatically enable deoxygenation mode when a fire is detected
 
 /obj/machinery/alarm/xenobio
 	req_one_access = list(access_rd, access_atmospherics, access_engine_minor, access_xenobiology)
@@ -490,6 +492,11 @@ var/global/list/air_alarms = list()
 		*/
 		if(RCON_YES)
 			remote_control = 1
+	if(auto_deox)
+		var/area/this_area = get_area(src)
+		if(this_area.fire)
+			mode = AALARM_MODE_DEOXY
+			apply_mode()
 	return
 
 /obj/machinery/alarm/proc/calculate_local_danger_level(const/datum/gas_mixture/environment)
@@ -713,6 +720,18 @@ var/global/list/air_alarms = list()
 			for(var/device_id in this_area.air_vent_names)
 				send_signal(device_id, list("power"= 0) )
 
+		if(AALARM_MODE_DEOXY)
+			for(var/device_id in this_area.air_scrub_names)
+				var/list/signal_data = list("power"= 1, "scrubbing"= 1, "panic_siphon"= 0)
+				for(var/gas_id in XGM.gases)
+					if(gas_id == GAS_OXYGEN)
+						signal_data[gas_id + "_scrub"] = 1
+					else
+						signal_data[gas_id + "_scrub"] = 0
+				send_signal(device_id,  signal_data)
+			for(var/device_id in this_area.air_vent_names)
+				send_signal(device_id, list("power"= 0) )
+
 // This sets our danger level, and, if it's changed, forces a new election of danger levels.
 /obj/machinery/alarm/proc/setDangerLevel(var/new_danger_level)
 	if(local_danger_level==new_danger_level)
@@ -838,7 +857,8 @@ var/global/list/air_alarms = list()
 		AALARM_MODE_PANIC       = list("name"="Panic",       "desc"="Siphons air out of the room"),\
 		AALARM_MODE_CYCLE       = list("name"="Cycle",       "desc"="Siphons air before replacing"),\
 		AALARM_MODE_FILL        = list("name"="Fill",        "desc"="Shuts off scrubbers and opens vents"),\
-		AALARM_MODE_OFF         = list("name"="Off",         "desc"="Shuts off vents and scrubbers"))
+		AALARM_MODE_OFF         = list("name"="Off",         "desc"="Shuts off vents and scrubbers"),\
+		AALARM_MODE_DEOXY		= list("name"="Deoxygenation", "desc"="Shuts off vents and scrubs Oxygen only"))
 	data["mode"]=mode
 
 	var/list/tmplist = new/list()
