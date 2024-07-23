@@ -163,8 +163,8 @@
 			if("brute")
 				M.take_organ_damage(power)
 				if (prob(33) && I.force) // Added blood for whacking non-humans too
-					var/turf/location = M.loc
-					if (istype(location, /turf/simulated))
+					var/turf/simulated/location = M.loc
+					if (istype(location))
 						location.add_blood_floor(M)
 			if("fire")
 				if (!(M_RESIST_COLD in M.mutations))
