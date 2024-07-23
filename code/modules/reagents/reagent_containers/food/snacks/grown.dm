@@ -581,7 +581,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 		return
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin/squash
-	name = "squash"
+	name = "slammed squash"
 	desc = "Sometimes used to stop zombies invading your lawn."
 	potency = 10
 	filling_color = "#F5CD62"
