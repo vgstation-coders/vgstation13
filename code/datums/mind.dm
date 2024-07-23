@@ -212,7 +212,8 @@
 	if(!ticker || !ticker.mode)
 		alert("Ticker and Game Mode aren't initialized yet!", "Alert")
 		return
-
+	if(!check_rights(R_ADMIN))
+		return
 	var/out = {"<TITLE>Role purchase log</TITLE><B>[name]</B>[(current&&(current.real_name!=name))?" (as [current.real_name])":""]<BR>Assigned job: [assigned_role]<hr>"}
 	if(current.spell_list && current.spell_list.len)
 		out += "Known spells:<BR>"
