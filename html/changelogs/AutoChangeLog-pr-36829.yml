@@ -1,4 +1,0 @@
-author: jwhitak
-delete-after: true
-changes:
-- bugfix: Closed exploit where you could see what a traitor purchased as a non-admin
