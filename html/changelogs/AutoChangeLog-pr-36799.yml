@@ -1,0 +1,5 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- rscdel: Creatures and silicons that are attacked by burn-causing melee weapons such
+    as the scrying orb will no longer be spammed with "Aargh it burns!" in every attack.
