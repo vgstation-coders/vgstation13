@@ -1,5 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- bugfix: Emotes that change their wording based on the user's gender will now properly
-    affect non-humans such as monkeys.
