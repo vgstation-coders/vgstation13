@@ -74,6 +74,31 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		-->
 		<div class="commit sansserif">
 			<h2 class="date">2024.07.23</h2>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes PCP not being added to the HYPERZINES define, thus not behaving like hyperzine for any interaction.</li>
+				<li class="rscadd">Regular antimatter tanks can now be refueled at a decent rate by exposing them to radiation.</li>
+				<li class="tweak">Antimatter Decelerator tanks (the trader one) will refuel 25x faster than the regular tank and can hold 10x the fuel (10000).</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug where reviving at least twice with the phylactery would completely wipe out the lich&#39;s list of spells.</li>
+				<li class="bugfix">Fixed a runtime caused by an attempt to find a spell&#39;s button in the spell menu when it didn&#39;t have any (such as the No Gun Allowed spell)</li>
+				<li class="bugfix">A soulstone that is used to fuel a phylactery will now properly change to its inert icon. It will also no longer allow the user for a brief period of time to summon the shade it just used on the phylactery, which did nothing.</li>
+				<li class="bugfix">Fixed a bug where certain elements for the No Gun Allowed, Bind Object and Magical Wardrobe spells were not being properly transferred due to a missing &#34;user&#34; variable.</li>
+				<li class="bugfix">No Gun Allowed will now properly allow someone to fire a weapon again when removed.</li>
+				<li class="bugfix">Fixed a bug where the wizard and wizard&#39;s apprentice scoreboards would show spells learned from spellbooks as being absorbed.</li>
+				<li class="bugfix">Should fix an error with the wizard and wizard&#39;s apprentice scoreboard where spells would show up at least twice, and generally improved them a little.</li>
+				<li class="tweak">Adjusted the phylactery set&#39;s spawns so that the phylactery itself is more likely to appear above the necromancer clothes instead of under them.</li>
+				<li class="bugfix">Removed unused code regarding monkeys being attacked with items, and the monkeys already take damage through other systems.</li>
+				<li class="bugfix">Fixed a 7-year-old bug where slimes wouldn&#39;t do roughly 4 of the emotes they were meant to do once in a while because the emote system was checking to see if they were a monkey. They can now bounce, jiggle, light up for a bit and vibrate.</li>
+				<li class="rscdel">Creatures and silicons that are attacked by burn-causing melee weapons such as the scrying orb will no longer be spammed with &#34;Aargh it burns!&#34; in every attack.</li>
+				<li class="bugfix">Cleaned a section of the game&#39;s code where item attacks against slimes were defined. It should now be easier for future coders to read the piece of code where it used to be.</li>
+				<li class="bugfix">Surrendering via a character that wasn&#39;t male nor female should no longer say &#34;they surrender%s!&#34;, and will now properly say &#34;they surrender!&#34;.</li>
+				<li class="rscadd">Robots now have an unique message when surrendering.</li>
+				<li class="bugfix">Fixed a critical bug with slimes so that critical hits will now affect how likely they are to be pushed away when hit.</li>
+				<li class="bugfix">Fixed a 4-months-old bug where cyber horrors couldn&#39;t inject medical nanobots.</li>
+			</ul>
 			<h3 class="author">jwhitak updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="bugfix">Closed exploit where you could see what a traitor purchased as a non-admin</li>

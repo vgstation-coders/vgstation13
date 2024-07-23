@@ -1,5 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- bugfix: Removed unused code regarding monkeys being attacked with items, and the
-    monkeys already take damage through other systems.
