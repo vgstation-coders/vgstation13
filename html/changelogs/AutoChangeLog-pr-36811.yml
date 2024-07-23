@@ -1,5 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- bugfix: Fixed a 7-year-old bug where peg limbs couldn't be properly removed by less
-    damaging weapons.
