@@ -12,7 +12,7 @@ var/global/list/obj/item/beacon/beacons = list()
 	origin_tech = Tc_BLUESPACE + "=1"
 	flags = FPRINT
 	w_type = RECYK_PLASTIC
-	flammable = TRUE
+	flammable = FALSE
 
 /obj/item/beacon/New()
 	..()
