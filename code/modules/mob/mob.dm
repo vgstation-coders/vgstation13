@@ -1233,8 +1233,8 @@ Use this proc preferably at the end of an equipment loadout
 	set name = "Github Report"
 	set category = "OOC"
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
-					Revision: [return_revision()]
-					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
+					Version: [byond_version].[byond_build] Revision: [return_revision()]
+					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&byondver=[byond_version].[byond_build]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
 	src << browse(dat, "window=github;size=480x480")
 
 /client/verb/changes()

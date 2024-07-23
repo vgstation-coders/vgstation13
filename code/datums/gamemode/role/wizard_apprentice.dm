@@ -82,3 +82,7 @@
 	//Zero wizard spells known at all, could have been absorbed by someone else
 	if(!has_wizard_spell)
 		. += "The [apprentice_type] apprentice somehow forgot everything he learned in magic school."
+
+//Handled in GetScoreboard()
+/datum/role/wizard_apprentice/GetBought()
+	return ""

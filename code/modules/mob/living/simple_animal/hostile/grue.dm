@@ -659,7 +659,8 @@
 		var/mob/living/carbon/human/H = E
 		if(H.species.anatomy_flags & NO_BLOOD)
 			return 0
-	return 1
+		return 1
+	return 0
 
 /mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = FALSE) //update stats, called by lifestage_updates() as well as handle_feed()
 
