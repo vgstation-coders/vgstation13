@@ -1,7 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- bugfix: Removed unused code which concerned attacking with slimes in order to cause
-    brain damage, which was unused for a variety of reasons including; regular slimes
-    cannot be picked up, the code only works with items, and it only worked against
-    non-carbon mobs which, as far as I know, are not affected by brain damage.

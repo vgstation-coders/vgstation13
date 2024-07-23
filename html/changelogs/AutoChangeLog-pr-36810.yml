@@ -1,7 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- bugfix: Fixed a 7-year-old bug where non-sharp items with enough force did not have
-    any chance of ripping off a limb as opposed to turning it into gibs. The check
-    has now been fixed and now strong blunt melee weapons have a chance to rip off
-    a broken limb instead of gibbing a broken limb.
