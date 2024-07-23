@@ -1,0 +1,6 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- bugfix: Cleaned a section of the game's code where item attacks against slimes were
+    defined. It should now be easier for future coders to read the piece of code where
+    it used to be.
