@@ -245,3 +245,13 @@
 	materials = list(MAT_IRON = 500, MAT_GLASS = 200)
 	build_path = /obj/item/device/pager
 	category = "Engineering"
+
+/datum/design/ass
+	name = "Automatic Suppression System"
+	desc = "Upgrade to allow fire alarms to fill a room with firefoam when a fire is detected."
+	id = "ass"
+	req_tech = list(Tc_ENGINEERING = 5, Tc_MATERIALS = 6, Tc_PROGRAMMING = 3)
+	build_type = PROTOLATHE
+	materials = list(MAT_GOLD = 1200, MAT_DIAMOND = 3000)
+	build_path = /obj/item/device/pager
+	category = "Engineering"

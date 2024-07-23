@@ -1193,6 +1193,12 @@ FIRE ALARM
 	var/alarm = 0
 	var/last_alarm_time = 0
 	var/alarm_delay = 10 SECONDS
+	var/ass = FALSE //is an Automated Suppression System installed
+
+/obj/machinery/firealarm/examine(mob/user)
+	..()
+	if(ass)
+		to_chat(user, "<span class='info'>An automatic suppression system is installed.</span>")
 
 /obj/machinery/firealarm/empty
 	shelter = 0
@@ -1339,8 +1345,22 @@ FIRE ALARM
 					W.playtoolsound(src, 50)
 					qdel(src)
 		return
-
-	src.alarm()
+	if(istype(W, /obj/item/weapon/disk/ass))
+		to_chat(user, "<span class='notice'>You begin installing \the [W].</span>")
+		if(!user.drop_item(W))
+			to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
+			return
+		W.forceMove(src)
+		if(do_after(user,src,30))
+			playsound(src, 'sound/machines/ping.ogg', 35, 0, -2)
+			to_chat(user, "<span class='notice'>[W] successfully installed.</span>")
+			ass = TRUE
+			W.forceMove(loc)
+			qdel(W)
+		else
+			W.forceMove(loc)
+	else
+		src.alarm()
 
 /obj/machinery/firealarm/process()
 	if(stat & (NOPOWER|BROKEN|FORCEDISABLE))
@@ -1474,6 +1494,8 @@ FIRE ALARM
 	else
 		playsound(src, 'sound/misc/fire_alarm.ogg', 75, 0, 5)
 	last_alarm_time = world.time
+	if(ass)
+		this_area.mass_extinguish(emagged)
 
 var/global/list/firealarms = list() //shrug
 

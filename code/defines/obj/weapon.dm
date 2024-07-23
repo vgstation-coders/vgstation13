@@ -161,6 +161,11 @@ var/list/available_redphone_names3 = list("1","2","3","4","5","6","7","8","9")
 	desc = "A disk which scrambles the jobs database when installed in the Labor Management Console."
 	icon_state = "synddisk"
 
+/obj/item/weapon/disk/ass
+	name = "Automatic Suppression System Upgrade"
+	desc = "A disk which enables fire alarms to fill a room with firefoam when a fire is detected."
+	icon_state = "disk_tech"
+
 //TODO: Figure out wtf this is and possibly remove it -Nodrak
 /obj/item/weapon/dummy
 	name = "dummy"

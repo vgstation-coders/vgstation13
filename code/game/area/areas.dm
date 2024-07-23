@@ -718,3 +718,25 @@ var/list/moved_landmarks = list(latejoin, wizardstart) //Landmarks that are move
 
 /area/proc/make_geyser(turf/T)
 	return
+
+/area/proc/mass_extinguish(evil = FALSE) //area-wide foam extinguishing
+	for(var/turf/simulated/floor/F in src)
+		var/datum/reagents/R = new/datum/reagents(5)
+		R.my_atom = F
+		if(evil)
+			R.add_reagent(LUBE, 5)
+		else
+			R.add_reagent(WATER, 5)
+		var/obj/effect/foam/fire/FF = new /obj/effect/foam/fire(F,R)
+		var/turf/FF_turf = get_turf(FF)
+		FF.reagents.reaction(FF_turf, TOUCH)
+		for(var/atom/atm in FF_turf)
+			if(!FF || !FF.reagents)
+				continue
+			FF.reagents.reaction(atm, TOUCH)
+			if(FF.reagents.has_reagent(WATER))
+				if(isliving(atm))
+					var/mob/living/M = atm
+					M.ExtinguishMob()
+				if(atm.on_fire)
+					atm.extinguish()
