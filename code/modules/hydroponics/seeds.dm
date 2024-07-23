@@ -362,7 +362,7 @@
 	vending_cat = "vegetables"
 
 /obj/item/seeds/squashseed
-	name = "packet of squash seeds"
+	name = "packet of slammed squash seeds"
 	seed_type = "squash"
 	vending_cat = "vegetables"
 
@@ -1470,7 +1470,7 @@
 /datum/seed/squash
 	name = "squash"
 	seed_name = "squash"
-	display_name = "squash vine"
+	display_name = "slammed squash vine"
 	plant_dmi = 'icons/obj/hydroponics/squash.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin/squash)
 	harvest_repeat = 1
