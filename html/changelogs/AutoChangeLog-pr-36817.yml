@@ -1,0 +1,5 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- bugfix: The "Set Holiday" admin command will now show up to admins in their command
+    panel.
