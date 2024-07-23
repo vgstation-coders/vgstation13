@@ -1,0 +1,5 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- bugfix: Removed an unused proc that was getting called by the code regarding monkeys
+    being attacked with items.
