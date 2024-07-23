@@ -161,14 +161,11 @@
 	else
 		switch(I.damtype)
 			if("brute")
-				if(istype(src, /mob/living/carbon/slime))
-					M.adjustBrainLoss(power)
-				else
-					M.take_organ_damage(power)
-					if (prob(33) && I.force) // Added blood for whacking non-humans too
-						var/turf/location = M.loc
-						if (istype(location, /turf/simulated))
-							location:add_blood_floor(M)
+				M.take_organ_damage(power)
+				if (prob(33) && I.force) // Added blood for whacking non-humans too
+					var/turf/simulated/location = M.loc
+					if (istype(location))
+						location.add_blood_floor(M)
 			if("fire")
 				if (!(M_RESIST_COLD in M.mutations))
 					M.take_organ_damage(0, power)
