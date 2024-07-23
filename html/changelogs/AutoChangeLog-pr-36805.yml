@@ -1,0 +1,7 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- bugfix: Fixed a 7-year-old bug where slimes wouldn't do roughly 4 of the emotes
+    they were meant to do once in a while because the emote system was checking to
+    see if they were a monkey. They can now bounce, jiggle, light up for a bit and
+    vibrate.
