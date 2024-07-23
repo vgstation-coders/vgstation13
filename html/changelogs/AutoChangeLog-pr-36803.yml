@@ -1,0 +1,5 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- bugfix: Surrendering via a character that wasn't male nor female should no longer
+    say "they surrender%s!", and will now properly say "they surrender!".
