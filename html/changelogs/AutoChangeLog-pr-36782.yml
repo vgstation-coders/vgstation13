@@ -1,0 +1,21 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- bugfix: Fixed a bug where reviving at least twice with the phylactery would completely
+    wipe out the lich's list of spells.
+- bugfix: Fixed a runtime caused by an attempt to find a spell's button in the spell
+    menu when it didn't have any (such as the No Gun Allowed spell)
+- bugfix: A soulstone that is used to fuel a phylactery will now properly change to
+    its inert icon. It will also no longer allow the user for a brief period of time
+    to summon the shade it just used on the phylactery, which did nothing.
+- bugfix: Fixed a bug where certain elements for the No Gun Allowed, Bind Object and
+    Magical Wardrobe spells were not being properly transferred due to a missing "user"
+    variable.
+- bugfix: No Gun Allowed will now properly allow someone to fire a weapon again when
+    removed.
+- bugfix: Fixed a bug where the wizard and wizard's apprentice scoreboards would show
+    spells learned from spellbooks as being absorbed.
+- bugfix: Should fix an error with the wizard and wizard's apprentice scoreboard where
+    spells would show up at least twice, and generally improved them a little.
+- tweak: Adjusted the phylactery set's spawns so that the phylactery itself is more
+    likely to appear above the necromancer clothes instead of under them.
