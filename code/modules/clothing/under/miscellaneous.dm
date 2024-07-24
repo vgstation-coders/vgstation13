@@ -58,6 +58,7 @@
 	icon_state = "mailman"
 	item_state = "b_suit"
 	_color = "mailman"
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/sexyclown
