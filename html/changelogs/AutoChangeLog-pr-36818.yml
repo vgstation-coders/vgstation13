@@ -1,0 +1,6 @@
+author: Eneocho
+delete-after: true
+changes:
+- rscadd: Restores the Tracking Bacon dish that was commented out 12 years ago. They
+    behave like regular tracking beacons, but can be eaten and can be cooked with
+    10u corn oil, 5u salt and a slab of meat.
