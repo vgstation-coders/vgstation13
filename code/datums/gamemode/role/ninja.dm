@@ -608,6 +608,7 @@ Helpers For Both Variants
 	active_state = "blade1"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	activeforce = 40
+	sharpness_on = 2
 	siemens_coefficient = 0
 	onsound = null
 	actions_types = list(/datum/action/item_action/toggle_teleport)
