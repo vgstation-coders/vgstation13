@@ -1,0 +1,8 @@
+author: Eneocho
+delete-after: true
+changes:
+- rscadd: Wizards can upgrade the Pitbull spell to summon Toadline Pitbulls for 20
+    spell points. Toadline Pitbulls move slightly slower than a regular pitbull, but
+    have the advantage of being able to pass through airlocks and other mobs unimpeded
+    (the airlock pass is NOT instantaneous, it takes a bit). They also do 1 more Brute
+    damage on average compared to a regular Pitbull.
