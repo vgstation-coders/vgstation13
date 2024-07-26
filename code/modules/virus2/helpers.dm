@@ -201,7 +201,7 @@ var/list/infected_contact_mobs = list()
 		//--Cult Stuff--
 		if (disease.category == DISEASE_CULT)
 			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-			cult.check_ritual("cursed_infection", src)
+			cult?.check_ritual("cursed_infection", src)
 		//----------------
 
 		for (var/obj/item/device/pda/p in contents)
