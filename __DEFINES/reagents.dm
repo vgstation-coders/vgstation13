@@ -533,6 +533,11 @@
 #define FLAXOIL			"flax_oil"
 #define WAX				"wax"
 
+#define PLUTONIUM		"plutonium"
+#define RADON			"radon"
+#define LEAD			"lead"
+#define THALLIUM		"thallium"
+
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
 

@@ -170,6 +170,8 @@
 	specheatcap = 0.094
 	flags = CHEMFLAG_PIGMENT
 	paint_light = PAINTLIGHT_LIMITED
+	fission_time=900 //15 minutes.
+	fission_power=15000
 
 /datum/reagent/radium/on_mob_life(var/mob/living/M)
 	if(..())

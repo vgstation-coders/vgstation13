@@ -79,6 +79,8 @@
 	description = "Plasma in its liquid form."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#500064" //rgb: 80, 0, 100
+	fission_time=3600 //60 minutes.
+	fission_power=-25000
 
 /datum/reagent/plasma/New()
 	..()
@@ -141,6 +143,8 @@
 	color = "#B8B8C0" //rgb: 184, 184, 192
 	density = 19.05
 	specheatcap = 0.124
+	fission_time=1800 //30 minutes.
+	fission_power=50000
 
 /datum/reagent/uranium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -221,3 +225,68 @@
 	if ("color" in additional_data)
 		data["color"] = additional_data["color"]
 		color = data["color"]
+
+
+
+//TODO: give these an effect.
+/datum/reagent/plutonium
+	name ="Plutonium"
+	id = PLUTONIUM
+	description = "A silvery-white metallic chemical element in the actinide series, very radioactive."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#CACAD2" //rgb: 202, 202, 210
+	density = 19.85
+	specheatcap = 0.124
+	fission_time=900 //15 minutes.
+	fission_power=200000
+	
+/datum/reagent/plutonium/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.apply_radiation(4, RAD_INTERNAL)
+
+/datum/reagent/radon
+	name ="Radon"
+	id = RADON
+	description = "A colorless, odorless, highly radioactive noble gas."
+	reagent_state = REAGENT_STATE_GAS
+	color = "#808080" //rgb: 128, 128, 128
+	density = 9.73
+	specheatcap = 0.936
+	fission_time=300 //5 minutes.
+	fission_power=5000
+	
+/datum/reagent/plutonium/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.apply_radiation(3, RAD_INTERNAL)
+
+
+/datum/reagent/lead
+	name ="Lead"
+	id = LEAD
+	description = "A dull grey metallic element and heavy metal. ingestion leads to organ damage, most notably the brain."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#676767" //rgb: 103, 103, 103
+	density = 11.34
+	specheatcap = 0.129
+	
+/datum/reagent/lead/on_mob_life(var/mob/living/M) //less potent mercury
+	if(..())
+		return 1
+	M.adjustBrainLoss(1)
+
+
+/datum/reagent/thallium
+	name ="Thallium"
+	id = THALLIUM
+	description = "A silvery-grey metallic chemical element in the post-transition metal series. Toxic when touched, ingested, or inhaled."
+	reagent_state = REAGENT_STATE_SOLID
+	color = "#CACAD2" //rgb: 202, 202, 210
+	density = 11.87
+	specheatcap = 0.128
+
+/datum/reagent/thallium/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.adjustToxLoss(2)
