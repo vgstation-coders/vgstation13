@@ -1082,7 +1082,7 @@
 				src.connected.occupant.dna.SE = buf.dna.SE
 				src.connected.occupant.dna.UpdateSE()
 				domutcheck(src.connected.occupant,src.connected)
-			src.connected.occupant.radiation += rand(20,50)
+			src.connected.occupant.radiation += rand(1,10)
 			return 1
 
 		if (bufferOption == "createInjector")
