@@ -276,8 +276,7 @@
 	var/thislifetime=0
 	var/thiswattage=0	
 	
-	for(var/A in fuel)
-		var/datum/reagent/R = A
+	for(var/datum/reagent/R in fuel.reagent_list)
 		if (R.fission_time != null)
 			thislifetime+=R.fission_time* (fuel.amount_cache[R.id] + 0)/(fuel.total_volume) //fuel time is a weighted average
 		thiswattage+=R.fission_power
@@ -291,8 +290,7 @@
 	if(!fuel)
 		return products
 	
-	for(var/A in fuel)
-		var/datum/reagent/R = A
+	for(var/datum/reagent/R in fuel.reagent_list)
 		var/reagamt=fuel.amount_cache[R.id] //reagent amount.
 		if (reagamt<=0) //skip reagents we don't have.
 			continue
@@ -368,4 +366,12 @@
 	var/datum/fission_reactor_holder/associated_reactor=null
 	name="fission reactor casing"
 	
-	
+
+
+//because radon is a gas, we need to interface with gasses. yeah, this kind of sucks, but what are you gonna do? (inb4 make better code lol)
+/obj/machinery/atmospherics/unary/fissionfuelmaker
+	name="isotopic separational combiner." //just about the most technobable you could get.
+	var/datum/reagents/held_elements=new /datum/reagents
+	use_power = MACHINE_POWER_USE_IDLE
+	idle_power_usage = 25
+	active_power_usage = 100
