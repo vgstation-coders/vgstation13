@@ -828,7 +828,7 @@
 	if(istype(W, /obj/item/mecha_parts/mecha_equipment))
 		var/obj/item/mecha_parts/mecha_equipment/E = W
 		spawn()
-			if((E.can_attach(src) || is_killdozer()) && get_remaining_equipment_slots())
+			if(E.can_attach(src)  && get_remaining_equipment_slots())
 				if(user.drop_item(W))
 					E.attach(src)
 					user.visible_message("[user] attaches [W] to [src]", "You attach [W] to [src]")
