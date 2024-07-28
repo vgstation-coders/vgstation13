@@ -79,6 +79,7 @@
 	R.mech_sprites = list("killdozer","killdozer_clean")
 	R.icon_state = "killdozer"
 	R.initial_icon = "killdozer"
+	R.silicon_icon_state = "killdozer"
 	R.damage_absorption = list("brute"=0.01,"fire"=0.05,"bullet"=0.01,"laser"=0.05,"energy"=0.05,"bomb"=0.1) //good fucking luck killing it without ions
 	R.step_in = 2.5 //make it as slow as the mk2 ripley
 	R.fast_pressure_step_in = 2.5
