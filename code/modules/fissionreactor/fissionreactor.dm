@@ -1,17 +1,17 @@
 
 
 /datum/fission_reactor_holder
-	var/fuel_rods=list() //phase 0 vars, set upon construction
-	var/control_rods=list()
-	var/coolant_ports=list()
-	var/casing_parts=list()
+	var/list/fuel_rods=list() //phase 0 vars, set upon construction
+	var/list/control_rods=list()
+	var/list/coolant_ports=list()
+	var/list/casing_parts=list()
 	var/heat_capacity=0
 	var/fuel_reactivity=1
 	var/fuel_rods_affected_by_rods=0
 	
 	var/coolantport_counter=0 // this varible exists to ensure that all coolant ports get treated equally, because if we didn't it would have a flow prefrence towards the ports with lower indexes.
 	var/control_rod_insertion=1  //phase 1 vars. modified during runtime
-	var/temp=0 //this is set last
+	var/temperature=0 //this is set last
 	
 	var/datum/gas_mixture/coolant
 
@@ -26,10 +26,9 @@
 	
 /datum/fission_reactor_holder/New()
 	..()
-	update_dir()
-	air_contents = new
-	air_contents.temperature = T20C //vaguely room temp.
-	air_contents.volume = 2500
+	coolant = new /datum/gas_mixture
+	coolant.temperature = T20C //vaguely room temp.
+	coolant.volume = 2500
 
 /datum/fission_reactor_holder/proc/init_resize(var/turf/origin) //code responsible for setting up the parameters of the reactor.
 	if(!origin) //something has gone wrong.
@@ -43,26 +42,26 @@
 	var/directions=0
 	
 	//copy
-	var/wc = wall_up.contents
-	for (i=1,i<wc.len,i++)
+	var/list/wc = wall_up.contents
+	for (var/i=1,i<wc.len,i++)
 		if(istype(wc[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
 			directions|=NORTH
 			break
 
 	wc = wall_down.contents
-	for (i=1,i<wc.len,i++)
+	for (var/i=1,i<wc.len,i++)
 		if(istype(wc[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
 			directions|=SOUTH
 			break
 
 	wc = wall_left.contents
-	for (i=1,i<wc.len,i++)
+	for (var/i=1,i<wc.len,i++)
 		if(istype(wc[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
 			directions|=WEST
 			break
 
 	wc = wall_right.contents
-	for (i=1,i<wc.len,i++)
+	for (var/i=1,i<wc.len,i++)
 		if(istype(wc[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
 			directions|=EAST
 			break
@@ -82,8 +81,8 @@
 		xs=-1
 		while(TRUE) //it'll be fiiiiiiiine.	
 			var/turf/turftosearch=locate(origin.x+xs-1,origin.y,origin.z)
-			contents = wall_left.contents
-			for (i=1,i<contents.len,i++)
+			var/list/contents = turftosearch.contents
+			for (var/i=1,i<contents.len,i++)
 				if(istype(contents[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
 					xs--
 					goto searchforanotherW
@@ -93,8 +92,8 @@
 		xs=1
 		while(TRUE)
 			var/turf/turftosearch=locate(origin.x+xs+1,origin.y,origin.z)
-			contents = wall_left.contents
-			for (i=1,i<contents.len,i++)
+			var/list/contents = turftosearch.contents
+			for (var/i=1,i<contents.len,i++)
 				if(istype(contents[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
 					xs++
 					goto searchforanotherE
@@ -104,8 +103,8 @@
 		ys=1
 		while(TRUE)
 			var/turf/turftosearch=locate(origin.x,origin.y+ys+1,origin.z)
-			contents = wall_left.contents
-			for (i=1,i<contents.len,i++)
+			var/list/contents = turftosearch.contents
+			for (var/i=1,i<contents.len,i++)
 				if(istype(contents[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
 					ys++
 					goto searchforanotherN
@@ -115,8 +114,8 @@
 		ys=-1
 		while(TRUE)
 			var/turf/turftosearch=locate(origin.x,origin.y+ys-1,origin.z)
-			contents = wall_left.contents
-			for (i=1,i<contents.len,i++)
+			var/list/contents = turftosearch.contents
+			for (var/i=1,i<contents.len,i++)
 				if(istype(contents[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
 					ys--
 					goto searchforanotherS
@@ -138,33 +137,37 @@
 	// XOOOOO
 	
 	if(directions&WEST)
-		for (searchx=0,searchx>xs,searchx--) //hey at least this one isn't an infinite loop :)
+		for (var/searchx=0,searchx>xs,searchx--) //hey at least this one isn't an infinite loop :)
 			var/turf/turftosearch=locate(origin.x+searchx,origin.y+ys,origin.z)
-			for (i=1,i<contents.len,i++)
+			var/list/contents = turftosearch.contents
+			for (var/i=1,i<contents.len,i++)
 				if(istype(contents[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
 					goto correctobjW
 			return  //return because the setup is invalid.
 			correctobjW: //unless it's fine, in which case skip the return.
 	if(directions&EAST)
-		for (searchx=0,searchx<xs,searchx++)
+		for (var/searchx=0,searchx<xs,searchx++)
 			var/turf/turftosearch=locate(origin.x+searchx,origin.y+ys,origin.z)
-			for (i=1,i<contents.len,i++)
+			var/list/contents = turftosearch.contents
+			for (var/i=1,i<contents.len,i++)
 				if(istype(contents[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
 					goto correctobjE
 			return
 			correctobjE:
 	if(directions&SOUTH)
-		for (searchy=0,searchy>ys,searchy--)
+		for (var/searchy=0,searchy>ys,searchy--)
 			var/turf/turftosearch=locate(origin.x+xs,origin.y+searchy,origin.z)
-			for (i=1,i<contents.len,i++)
+			var/list/contents = turftosearch.contents
+			for (var/i=1,i<contents.len,i++)
 				if(istype(contents[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
 					goto correctobjS
 			return
 			correctobjS:
 	if(directions&NORTH)
-		for (searchy=0,searchy<ys,searchy++)
+		for (var/searchy=0,searchy<ys,searchy++)
 			var/turf/turftosearch=locate(origin.x+xs,origin.y+searchy,origin.z)
-			for (i=1,i<contents.len,i++)
+			var/list/contents = turftosearch.contents
+			for (var/i=1,i<contents.len,i++)
 				if(istype(contents[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
 					goto correctobjN
 			return
@@ -187,19 +190,19 @@
 	heat_capacity=sizex*sizey*1000 // this scales with area as well.
 	
 /datum/fission_reactor_holder/proc/clear_parts() 
-	for (i=1,i<casing_parts.len,i++)
+	for (var/i=1,i<casing_parts.len,i++)
 		casing_parts[i].associated_reactor=null
 	casing_parts=list()
 	
-	for (i=1,i<coolant_ports.len,i++)
+	for (var/i=1,i<coolant_ports.len,i++)
 		coolant_ports[i].associated_reactor=null
 	coolant_ports=list()
 	
-	for (i=1,i<control_rods.len,i++)
+	for (var/i=1,i<control_rods.len,i++)
 		control_rods[i].associated_reactor=null
 	control_rods=list()
 	
-	for (i=1,i<fuel_rods.len,i++)
+	for (var/i=1,i<fuel_rods.len,i++)
 		fuel_rods[i].associated_reactor=null
 	fuel_rods=list()
 	
@@ -208,33 +211,34 @@
 
 /datum/fission_reactor_holder/proc/init_parts() //this assigns the reactor to the parts and vice versa
 	clear_parts()
-	for (y=min(origin_y,corner_y), x<x=max(origin_y,corner_y),y++ )
-		for (x=min(origin_x,corner_x), x<x=max(origin_x,corner_x),x++ )
-			var/turf/turftosearch=locate(origin.x+xs,origin.y+searchy,origin.z)
-			for (i=1,i<contents.len,i++)
+	for (var/y=min(origin_y,corner_y), y<max(origin_y,corner_y),y++ )
+		for (var/x=min(origin_x,corner_x), x<max(origin_x,corner_x),x++ )
+			var/turf/turftosearch=locate(origin_x+x,origin_y+y,zlevel)
+			var/list/contents = turftosearch.contents
+			for (var/i=1,i<contents.len,i++)
 					
 				if(istype(contents[i], /obj/machinery/fissionreactor )) //look, i don't like all the copy paste either.
 					var/obj/machinery/fissionreactor/this_thing=contents[i]
 					this_thing.associated_reactor=src
-					casing_parts.add(this_thing)
+					casing_parts.Add(this_thing)
 					break
 				if(istype(contents[i], /obj/machinery/atmospherics/unary/fissionreactor_coolantport )) //but these are different subtypes
 					var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/this_thing=contents[i]
 					this_thing.associated_reactor=src
-					coolant_ports.add(this_thing)
+					coolant_ports.Add(this_thing)
 					break
 				if(istype(contents[i], /obj/machinery/fissionreactor/fissionreactor_controlrod )) //so we kind of have to snowflake it to hell
 					var/obj/machinery/fissionreactor/fissionreactor_controlrod/this_thing=contents[i]
 					this_thing.associated_reactor=src
-					control_rods.add(this_thing)
+					control_rods.Add(this_thing)
 					break
 				if(istype(contents[i], /obj/machinery/fissionreactor/fissionreactor_fuelrod ))
 					var/obj/machinery/fissionreactor/fissionreactor_fuelrod/this_thing=contents[i]
 					this_thing.associated_reactor=src
-					fuel_rods.add(this_thing)
+					fuel_rods.Add(this_thing)
 					break
 	
-	for (i=1,i<fuel_rods.len,i++)
+	for (var/i=1,i<fuel_rods.len,i++)
 		fuel_reactivity+=fuel_rods[i].get_reactivity()
 		fuel_rods_affected_by_rods+=fuel_rods[i].get_iscontrolled() ? 1 : 0
 	fuel_reactivity/=fuel_rods.len //average them out.
@@ -264,7 +268,7 @@
 	var/datum/reagents/fuel= new /datum/reagents //this probably isn't the best way to do things, but that's a problem for future me (someone else) to deal with.
 	fuel.maximum_volume=150
 	
-/datum/fission_fuel/rederive_stats() //should be called whenever you change the materials
+/datum/fission_fuel/proc/rederive_stats() //should be called whenever you change the materials
 	if(!fuel)
 		lifetime=0
 		wattage=0
@@ -276,12 +280,12 @@
 		var/datum/reagent/R = A
 		if (R.fission_time != null)
 			thislifetime+=R.fission_time* (fuel.amount_cache[R.id] + 0)/(fuel.total_volume) //fuel time is a weighted average
-		thiswattage+=fission_power
+		thiswattage+=R.fission_power
 
 	lifetime=max(thislifetime,0)
 	wattage=max(thiswattage,0)
 	
-/datum/fission_fuel/get_products()	//fission products.
+/datum/fission_fuel/proc/get_products()	//fission products.
 	var/datum/reagents/products = new /datum/reagents
 	products.maximum_volume=150
 	if(!fuel)
@@ -295,8 +299,8 @@
 		var/fissionprods=R.irradiate()
 		for(var/RID in fissionprods) //associative lists hurt my brain. don't think too hard about how they work, ok?
 			var/RCT=fissionprods[RID]
-			products.add_reagent(RID, reagamt*RCT*(1.0-fuel.life)) // we multiply the proportion of outputs by the amount of that fuel type, by the amount we actually processed.
-		products.add_reagent(R.id, fuel.life*reagamt ) //add unspent fuel back.
+			products.add_reagent(RID, reagamt*RCT*(1.0-life)) // we multiply the proportion of outputs by the amount of that fuel type, by the amount we actually processed.
+		products.add_reagent(R.id, life*reagamt ) //add unspent fuel back.
 			
 	
 	return products
@@ -320,11 +324,11 @@
 	if (pdiff<0) //flowing external->reactor
 		pdiff*=-1 
 		var/molestotransfer=  pdiff*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-		var/datum/gas_mixture/nu_mix=air_contents.remove(molestotransfer *.5) //we multiply by 1/2 because if we transfer the whole difference, then it'll just swap between the 2 bodies forever.
+		var/datum/gas_mixture/nu_mix=air_contents.remove(molestotransfer *0.5) //we multiply by 1/2 because if we transfer the whole difference, then it'll just swap between the 2 bodies forever.
 		associated_reactor.coolant.merge(nu_mix) 
 	else //flowing reactor->external
 		var/molestotransfer=  pdiff*associated_reactor.coolant.volume/(R_IDEAL_GAS_EQUATION*associated_reactor.coolant.temperature)
-		var/datum/gas_mixture/nu_mix=associated_reactor.coolant.remove(molestotransfer *.5)
+		var/datum/gas_mixture/nu_mix=associated_reactor.coolant.remove(molestotransfer *0.5)
 		air_contents.merge(nu_mix)
 		
 		
@@ -341,8 +345,8 @@
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/proc/get_reactivity()
 	var/adjacency_reactivity_bonus=1.0 //addative per neighbor. max of 4x this number.
 	var/num_adjacent_fuel_rods=0
-	var/lofrds=associated_reactor.fuel_rods
-	for (i=1,i<lofrds.len,i++) //probably not the most efficent way... but it works well enough
+	var/list/lofrds=associated_reactor.fuel_rods
+	for (var/i=1,i<lofrds.len,i++) //probably not the most efficent way... but it works well enough
 		if (lofrds[i].loc.y==src.loc.y)
 			if (lofrds[i].loc.y==src.loc.y+1 || lofrds[i].loc.y==src.loc.y-1)
 				num_adjacent_fuel_rods++
@@ -353,8 +357,8 @@
 	return 1.0+num_adjacent_fuel_rods*adjacency_reactivity_bonus
 
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/proc/get_iscontrolled()
-	var/lofrds=associated_reactor.control_rods
-	for (i=1,i<lofrds.len,i++)
+	var/list/lofrds=associated_reactor.control_rods
+	for (var/i=1,i<lofrds.len,i++)
 		if ((lofrds[i].loc.x-src.loc.x)^2<=1 &&  (lofrds[i].loc.y-src.loc.y)^2<=1  ) //ensure it's within 1 tile
 			return TRUE
 	return FALSE
