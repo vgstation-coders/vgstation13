@@ -31,6 +31,7 @@
 	if(!action_checks(target))
 		return
 	if(!istype(chassis, /obj/mecha/working))
+		occupant_message("<span class='warning'>Hydraulic systems damaged or missing. Contact a technician specializing in working exosuits.</span>")
 		return
 	var/obj/mecha/working/W = chassis
 
