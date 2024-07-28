@@ -59,17 +59,30 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit
-	name = "exosuit killdozer modkit"
-	desc = "This suspicious adapter allows various types of usually unsupported equipment to be attached to a mech."
+	name = "ripley killdozer kit"
+	desc = "A set of thick armor plates and gun mounts."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "modkit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	is_activateable = FALSE
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=2;"
-	starting_materials = list(MAT_IRON = 12500, MAT_GLASS = 500)
+	starting_materials = list(MAT_IRON = 112500, MAT_GLASS = 500)
 	
-/obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/detach()
-	if(chassis.equipment.len > 1)	//only detach if we're the only part left
-		playsound(chassis,'sound/machines/buzz-sigh.ogg',40,1)
+/obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/can_attach(obj/mecha/working/W)
+	if(!..())
 		return 0
+	if(istype(W,/obj/mecha/working/ripley))
+		return 1
+	
+/obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/attach(obj/mecha/working/ripley/R)
 	..()
+	R.mech_sprites = list("killdozer","killdozer_clean")
+	R.icon_state = "killdozer"
+	R.initial_icon = "killdozer"
+	R.damage_absorption = list("brute"=0.01,"fire"=0.05,"bullet"=0.01,"laser"=0.05,"energy"=0.05,"bomb"=0.1) //good fucking luck killing it without ions
+	R.step_in = 2.5 //Move speed, lower is faster.
+	R.fast_pressure_step_in = 2.5
+	R.slow_pressure_step_in = 4
+
+/obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/detach()
+	return 0
