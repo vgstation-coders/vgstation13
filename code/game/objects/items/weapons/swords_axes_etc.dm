@@ -338,7 +338,7 @@
 	attack_verb = list("blasts", "smacks", "smashes")
 	var/exploded = FALSE
 	var/admintier = TRUE
-	var/rechargetime = 30 //1 minute between each boom, only used by the admincaber
+	var/rechargetime = 30 //1 minute between each boom
 	var/timer = 0
 
 /obj/item/weapon/caber/New()
@@ -381,7 +381,7 @@
 			exploded = TRUE
 			icon_state = "ullapoolcaberexploded"
 			sharpness = 1.3 //ragged metal edges are kinda like a serrated knife
-			sharpness_flags = SHARP_TIP | SERRATED_EDGE | INSULATED_EDGE //ever cut yourself when opening a can of whatever with a can opener? same deal here, sharp spikes, uneven ragged metal and wooden handle
+			sharpness_flags = SHARP_TIP | SERRATED_BLADE | INSULATED_EDGE //ever cut yourself when opening a can of whatever with a can opener? same deal here, sharp spikes, uneven ragged metal and wooden handle
 		else
 			playsound(target, 'sound/misc/caber_hitsound.ogg', 100, 0)
 	else
