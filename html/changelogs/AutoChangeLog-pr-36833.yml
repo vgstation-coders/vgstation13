@@ -1,5 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- bugfix: Fixed a bug where the SPS would not perform an alarm if the wearer was gibbed
-    or turned to ash.
