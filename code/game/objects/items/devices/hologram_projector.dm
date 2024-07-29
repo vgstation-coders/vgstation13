@@ -119,7 +119,9 @@
 		fade_out.appearance = holoperson.appearance
 		animate(fade_out, alpha = 0, time = 5)
 		holoperson.set_light(0)
+		holoperson.drop_hands()
 		holoperson.unequip_everything()
+
 		QDEL_NULL(holoperson)
 		update_ray()
 		icon_state = "shield0"
