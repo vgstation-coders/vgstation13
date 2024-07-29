@@ -23,7 +23,6 @@
 
 /obj/item/device/hologram_projector/Destroy()
 	if(holoperson)
-		holoperson.unequip_everything()
 		QDEL_NULL(holoperson)
 	if(ray)
 		QDEL_NULL(ray)
@@ -37,11 +36,8 @@
 		P.pai.verbs += /obj/item/device/hologram_projector/proc/spawn_hologram
 		spawn_pai_hologram()
 
-/obj/item/device/hologram_projector/remove_pai()
-	clear_holo()
-	..()
-
 /obj/item/device/hologram_projector/eject_integratedpai_if_present()
+	clear_holo()
 	if(integratedpai)
 		var/obj/item/device/paicard/P = integratedpai
 		if(P?.pai)
@@ -127,7 +123,6 @@
 		QDEL_NULL(holoperson)
 		update_ray()
 		icon_state = "shield0"
-		remove_pai()//since there's no UI to let pAIs become hologram again, we'll keep requiring someone else to slot the card back into the projector
 
 /obj/item/device/hologram_projector/proc/recruit_holoperson()
 	if(polling_ghosts)
