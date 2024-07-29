@@ -415,6 +415,10 @@
 					var/turf/simulated/floor/FF = get_step(src,direction)
 					FF.update_icon() //so siding get updated properly
 
+/turf/simulated/floor/grass/fireproof
+	name = "Grass"
+	flammable = FALSE
+
 /turf/simulated/floor/carpet
 	name = "Carpet"
 	icon_state = "carpet"

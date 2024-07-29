@@ -901,3 +901,29 @@
 		H.update_mutations(0)
 		H.update_inv_w_uniform(0)
 		H.update_inv_wear_suit()
+
+/datum/outfit/special/tribalmale
+	outfit_name = "Male Tribesman"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/leather_rags,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_wear_suit_str = /obj/item/clothing/suit/unathi/mantle,
+		)
+	)
+
+/datum/outfit/special/tribalmale/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
+/datum/outfit/special/tribalfemale
+	outfit_name = "Female Tribesman"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/leather_rags,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_wear_suit_str = /obj/item/clothing/suit/unathi/robe,
+		)
+	)
+
+/datum/outfit/special/tribalfemale/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE

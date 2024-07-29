@@ -3678,6 +3678,20 @@
 							var/dis_level = clamp(round((dis.get_total_badness()+1)/2),1,8)
 							spawn(rand(0,3000))
 								biohazard_alert(dis_level)
+			if("mass_equip_outfit")
+				var/choice = input("Do you want to delete existing clothing instead of drop?") in list("Yeah!", "Nah.", "Cancel")
+				if(choice == "Cancel")
+					return
+				var/outfit_type = select_loadout()
+				if(!outfit_type || !ispath(outfit_type))
+					return
+				var/delete_items = choice == "Yeah" ? TRUE : FALSE
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","EQU")
+				for(var/mob/living/carbon/human/H in player_list)
+					var/datum/outfit/concrete_outfit = new outfit_type
+					concrete_outfit.equip(H, TRUE, strip = delete_items, delete = delete_items)
+				message_admins("[key_name_admin(usr)] has mass equipped a loadout of type [outfit_type] to everyone.")
 			if("retardify")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RET")
@@ -3757,8 +3771,13 @@
 					custom.generate_icon()
 
 					message_admins("[key_name_admin(usr)] has created a custom artifact")
-
-
+			if("naturify")
+				var/choice = input("Are you sure you want to return the station to nature? This will irreversibly break most of the station!") in list("Yeah!", "Cancel")
+				if(choice != "Cancel")
+					feedback_inc("admin_secrets_fun_used",1)
+					feedback_add_details("admin_secrets_fun_used","NA")
+					naturify_station()
+					message_admins("[key_name_admin(usr)] turned the station into wilderness.")
 			if("schoolgirl")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SG")

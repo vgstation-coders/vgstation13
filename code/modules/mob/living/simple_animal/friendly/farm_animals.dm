@@ -137,19 +137,24 @@
 	size = SIZE_BIG
 	holder_type = /obj/item/weapon/holder/animal/cow
 	var/milktype = MILK
+	var/datum/reagents/milkable_reagents
+	var/min_reagent_regen_per_tick = 10
+	var/max_reagent_regen_per_tick = 15
+	var/reagent_regen_chance_per_tick = 25
 
 /mob/living/simple_animal/cow/splashable()
 	return FALSE
 
 /mob/living/simple_animal/cow/New()
 	..()
-	reagents.maximum_volume = 150
+	milkable_reagents = new(150)
+	milkable_reagents.my_atom = src
 
 /mob/living/simple_animal/cow/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
 		var/obj/item/weapon/reagent_containers/glass/G = O
-		var/transfered = reagents.trans_id_to(G, milktype, rand(15,25))
+		var/transfered = milkable_reagents.trans_id_to(G, milktype, rand(15,25))
 		if(G.reagents.total_volume >= G.volume)
 			to_chat(user, "<span class='warning'>[O] is full.</span>")
 		if(!transfered)
@@ -162,8 +167,8 @@
 		return 0 //under effects of time magick
 	. = ..()
 	if(stat == CONSCIOUS)
-		if(reagents && prob(25))
-			reagents.add_reagent(milktype, rand(10, 15))
+		if(milkable_reagents && prob(reagent_regen_chance_per_tick))
+			milkable_reagents.add_reagent(milktype, rand(min_reagent_regen_per_tick, max_reagent_regen_per_tick))
 
 /mob/living/simple_animal/cow/attack_hand(mob/living/carbon/M as mob)
 	if(!stat && M.a_intent == I_DISARM && icon_state != icon_dead)
