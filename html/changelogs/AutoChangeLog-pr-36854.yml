@@ -1,0 +1,4 @@
+author: 13spacemen
+delete-after: true
+changes:
+- bugfix: Fat sprite limbs don't overlap any more
