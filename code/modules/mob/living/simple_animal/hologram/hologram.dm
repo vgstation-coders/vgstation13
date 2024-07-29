@@ -11,6 +11,7 @@
 		\n<span class='danger'>You know nothing of this station or its crew except what you learn from this point on.</span>\
 		\n<span class='danger'>Do not damage the holodeck. Do not harm crew members without their consent.</span>"
 	blooded = FALSE
+	var/holodeck_bound = TRUE
 
 /mob/living/simple_animal/hologram/death(var/gibbed = FALSE)
 	..(gibbed)
@@ -112,7 +113,8 @@
 /mob/living/simple_animal/hologram/advanced/Life()
 	..()
 	regular_hud_updates()
-	if(!istype(get_area(src), /area/holodeck) || (mind && !client))
+
+	if(holodeck_bound && !istype(get_area(src), /area/holodeck) || (mind && !client))
 		dissipate()
 
 /mob/living/simple_animal/hologram/proc/dissipate()
