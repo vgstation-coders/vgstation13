@@ -21,6 +21,7 @@
 			new /obj/item/weapon/pen/paralysis(src)
 			new /obj/item/device/chameleon(src)
 			new /obj/item/weapon/soap/syndie(src)
+			new /obj/item/weapon/syndie_spray/silent_spray(src)
 
 		if("Screwed")//6?+6?+10+4=26
 			new /obj/effect/spawner/newbomb/timer(src)
@@ -175,7 +176,7 @@
 			new /obj/item/weapon/spellbook/oneuse/mutate/highlander(src)
 
 		if("Clown") //4 + 4 + 6 + 14 + 6 + ? = 34?
-			new /obj/item/weapon/invisible_spray/permanent(src)
+			new /obj/item/weapon/syndie_spray/invisible_spray/permanent(src)
 			new /obj/item/weapon/glue(src)
 			new /obj/item/weapon/glue(src)
 			new /obj/item/weapon/gun/hookshot/whip/windup_box/clownbox(src)

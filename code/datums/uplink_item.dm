@@ -1148,14 +1148,22 @@ var/list/discounted_items_of_the_round = list()
 /datum/uplink_item/jobspecific/clown_mime/invisible_spray
 	name = "Can of Invisible Spray"
 	desc = "Spray something to render it invisible for five minutes! Can only be used once. Permanence not guaranteed when exposed to water, may not render all parts invisible, especially for humans."
-	item = /obj/item/weapon/invisible_spray
+	item = /obj/item/weapon/syndie_spray/invisible_spray
 	cost = 6
 	jobs_excluded = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/clown_mime/invisible_spray/permanent
 	name = "Can of Permanent Invisible Spray"
 	desc = "Spray something to render it permanently invisible! Can only be used once. Permanence not guaranteed when exposed to water, may not render all parts invisible, especially for humans."
-	item = /obj/item/weapon/invisible_spray/permanent
+	item = /obj/item/weapon/syndie_spray/invisible_spray/permanent
+	cost = 4
+	jobs_excluded = list()
+	jobs_exclusive = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/clown_mime/silent_spray/permanent
+	name = "Can of Permanent Silencing Spray"
+	desc = "Spray something to render it permanently silent! Can only be used once. Permanence not guaranteed when exposed to water."
+	item = /obj/item/weapon/syndie_spray/silent_spray/permanent
 	cost = 4
 	jobs_excluded = list()
 	jobs_exclusive = list("Clown", "Mime")
