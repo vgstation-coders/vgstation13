@@ -509,8 +509,11 @@
 /obj/item/weapon/syndie_spray/invisible_spray/preattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
 	if(!..())
 		return
+	if(istype(target, /obj/machinery/power/supermatter))
+		return 0
 	if(istype(target, /obj/machinery/singularity))
 		animate(target, color = grayscale, time = 6 SECONDS)
+		return 0
 
 /obj/item/weapon/syndie_spray/invisible_spray/permanent
 	desc = "A can of... invisibility?"
