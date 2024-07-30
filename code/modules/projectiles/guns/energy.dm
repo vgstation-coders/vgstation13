@@ -101,8 +101,9 @@
 		return 1
 	return ..()
 
-/obj/item/weapon/gun/energy/attack_self(mob/user)
-	return detach_cell(user)
+//There is a verb for this!
+// /obj/item/weapon/gun/energy/attack_self(mob/user)
+// 	return detach_cell(user)
 
 /obj/item/weapon/gun/energy/verb/detach_cell_verb()
 	set name = "Detach cell"
