@@ -85,6 +85,10 @@ var/global/list/mineralSpawnChance[]
 	base_icon_state = "cave_wall"
 	mined_type = /turf/unsimulated/floor/asteroid/underground
 
+/turf/unsimulated/mineral/random/air
+	name = "cave wall"
+	mined_type = /turf/simulated/floor/asteroid/air
+
 /turf/unsimulated/mineral/air
 	oxygen = MOLES_O2STANDARD
 	nitrogen = MOLES_N2STANDARD
