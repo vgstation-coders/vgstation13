@@ -308,7 +308,7 @@
 			var/mob/living/carbon/human/H = nearest_officer
 			D = get_first_word(H.name)
 		else
-			D = pick("borg","officer","chief", "beepsky")
+			D = pick("boss","officer","chief", "beepsky")
 		var/list/schizo = list("I can breathe fine.",
 								"Vault was SHIT today, man.",
 								"Do you know any gamer girls who could shit on my face?", //in honor of the alltime classic
