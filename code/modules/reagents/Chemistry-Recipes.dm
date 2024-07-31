@@ -467,6 +467,15 @@
 	required_temp = T0C + 200
 	result_amount = 5
 
+/datum/chemical_reaction/meth
+	name = "Methamphetamine"
+	id = METHAMPHETAMINE
+	result = METHAMPHETAMINE
+	required_reagents = list(ALBUTEROL = 1, HYDROGEN = 3, CHLORINE = 1) //a flimsy equivalent to ephedrine + hydrogen to make DL-meth, and then adding HCL to make crystal meth
+	required_catalysts = list(CARBON = 5)
+	required_temp = T0C + 200
+	result_amount = 5
+
 /datum/chemical_reaction/ryetalyn
 	name = "Ryetalyn"
 	id = RYETALYN
@@ -3696,7 +3705,14 @@
 	name = "Albuterol"
 	id = ALBUTEROL
 	result = ALBUTEROL
-	required_reagents = list(TRAMADOL = 1, HYPERZINES = 1)
+	required_reagents = list(TRAMADOL = 1, SAFEHYPERZINES = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/albuterolPCP
+	name = "Albuterol"
+	id = ALBUTEROL
+	result = ALBUTEROL
+	required_reagents = list(TRAMADOL = 1, LIQUIDPCP = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/saltwater
