@@ -1,0 +1,5 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- tweak: The Genetics' DNA Scanner's "transfer" function will now only irradiate as
+    much as a DNA injector would, which is far less.
