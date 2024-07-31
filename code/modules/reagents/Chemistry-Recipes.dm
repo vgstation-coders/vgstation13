@@ -3705,14 +3705,7 @@
 	name = "Albuterol"
 	id = ALBUTEROL
 	result = ALBUTEROL
-	required_reagents = list(TRAMADOL = 1, SAFEHYPERZINES = 1)
-	result_amount = 2
-
-/datum/chemical_reaction/albuterolPCP
-	name = "Albuterol"
-	id = ALBUTEROL
-	result = ALBUTEROL
-	required_reagents = list(TRAMADOL = 1, LIQUIDPCP = 1)
+	required_reagents = list(TRAMADOL = 1, HYPERZINES = 1)
 	result_amount = 2
 
 /datum/chemical_reaction/saltwater
