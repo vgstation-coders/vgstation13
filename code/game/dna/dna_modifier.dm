@@ -522,11 +522,18 @@
 		arr += "[i]:[EncodeDNABlock(buffer[i])]"
 	return arr
 
-/obj/machinery/computer/scan_consolenew/proc/setInjectorBlock(var/obj/item/weapon/dnainjector/I, var/blk, var/datum/dna2/record/buffer)
+//So that we can get the number of the block.
+/obj/machinery/computer/scan_consolenew/proc/find_block_number(var/blk)
 	var/pos = findtext(blk,":")
 	if(!pos)
-		return 0
+		return
 	var/id = text2num(copytext(blk,1,pos))
+	if(!id)
+		return
+	return id
+
+/obj/machinery/computer/scan_consolenew/proc/setInjectorBlock(var/obj/item/weapon/dnainjector/I, var/blk, var/datum/dna2/record/buffer)
+	var/id = find_block_number(blk)
 	if(!id)
 		return 0
 	I.block = id
@@ -1093,6 +1100,7 @@
 				if(arcanetampered)
 					I.arcanetampered = arcanetampered
 				var/datum/dna2/record/buf = src.buffers[bufferId]
+				var/name_to_give = " ([buf.name])" //Will also add the block it has been
 				if(href_list["createBlockInjector"])
 					waiting_for_user_input=1
 					var/list/selectedbuf
@@ -1106,6 +1114,7 @@
 					else
 						qdel(I)
 						success = FALSE
+					name_to_give += " (Block [find_block_number(blk)])"
 
 
 				else
@@ -1113,7 +1122,7 @@
 				waiting_for_user_input=0
 				if(success)
 					I.forceMove(src.loc)
-					I.name += " ([buf.name])"
+					I.name += name_to_give
 					injector_ready = 0
 					spawn(connected.injector_cooldown)
 						setInjectorReady()
