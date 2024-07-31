@@ -73,6 +73,11 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2024.07.31</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Siberian chifir now shows up with its icon again.</li>
+			</ul>
 			<h2 class="date">2024.07.29</h2>
 			<h3 class="author">13spacemen updated:</h3>
 			<ul class="changes bgimages16">
@@ -1818,109 +1823,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">jwhitak updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Radstorms no longer fire unless there&#39;s at least 7 active space mans.</li>
-			</ul>
-			<h2 class="date">2023.10.29</h2>
-			<h3 class="author">CrazyAmphibian updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">The spacesuit modification station will now say why a module was not installed.</li>
-			</ul>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Solar Panels no longer sometimes do an almost complete rotation when their target orientation requires them to pass through the 0°|360° mark.</li>
-				<li class="imageadd">Solar Panels are no longer visually constrained to 8 directions, and can be observed rotating in real time.</li>
-				<li class="rscadd">Solar Panels can now generate powers even if they aren&#39;t connected to a Solar Panel Control computer.</li>
-				<li class="rscadd">Players can now use a wrench on Solar Panels to change their rotation manually. Rotating them this way is faster than doing it from a computer, but you need to remain adjacent until the rotation is over or it will be incomplete.</li>
-				<li class="rscadd">Solar Panels are now affected by EMPs, which cause them to spin to a random orientation. They will re-calibrate themselves on their own as long as they are connected to a working Solar Panel Control computer.</li>
-				<li class="imageadd">Solar Panels now feature visual cracks when they&#39;ve taken some damage, but not enough to break them. Since damage reduces their power output, this lets you identify at a glance which panels need repairs.</li>
-				<li class="rscadd">Attacking a Solar Panel with a weapon now gives visual and textual feedback</li>
-				<li class="rscadd">Simple Animals and Aliens can now attack solar panels.</li>
-				<li class="rscadd">Added proper descriptions to both Solar Panels and Solar Trackers.</li>
-				<li class="rscadd">Solar Panels can now be distinguished through darkness, and their panel becomes fully lit when in direct view of the star.</li>
-				<li class="imageadd">The color of Solar Panels now brightens slightly the better aligned with the star it is, producing a visible glow at near-perfect alignment.</li>
-				<li class="bugfix">Fixed Solar Panels not emitting any power in some cases despite them being nearly aligned with the sun.</li>
-				<li class="tweak">Solar Trackers now actually need line of sight to the star to provide its angle. Despite them iconically being mapped at the extremity of solar arrays, you could just build them inside the station.</li>
-				<li class="imageadd">Solar Trackers now have a broken sprite. While broken, they cannot be used by Solar Panel Control computers to automatically track the star. They also now more clearly indicate the current star&#39;s rotation as long as they have sight of it, while a solar tracker without view of a star will appear noticeable darker.</li>
-				<li class="tweak">Catwalks have had their cost reduced from 3 metal rods to just 2 (both including the 1 rod lattice cost). Their construction time has also been halved.</li>
-				<li class="tweak">You no longer have a chance to slip when walking on catwalks.</li>
-				<li class="bugfix">Fixed an edge case where placing cables in space didn&#39;t check for proper support.</li>
-				<li class="rscadd">Player-controlled mice now visibly rest.</li>
-				<li class="rscadd">The Rapid Cable Layer (RCL) has been rewritten from scratch and is now much easier to use and less prone to accidentally placing unwanted wire knots. You can click adjacent tiles directly to create a pair of wires that connects both that tile and yours (and that tries to connect to existing nodes on both tiles even if you didn&#39;t pixel-perfect clicked them). Placing wires this way, or clicking the RCL enables its active mode, during which you can lay wires by just walking around. Unlike previously the RCL won&#39;t attempt to place extra nodes on tiles that already have wires connecting from the same direction, but you can still force that behaviour when clicking tiles. Clicking the RCL again disables it.</li>
-				<li class="rscadd">RCL added to YouTool vendors at a premium, and Engi-Vends as part of their regular stock.</li>
-				<li class="rscadd">Electricians (the Station Engineer alt-job) spawn with their own RCL in their backpack, and holding an electrical toolbox.</li>
-				<li class="imageadd">Of course the RCL had its sprites revamped and now displays not only better how much wire is in it, but also its color.</li>
-				<li class="bugfix">Fixed cable coil always appearing red in your character&#39;s hands despite sprites for other colours existing.</li>
-				<li class="rscadd">Actually fuck those sprites, cables are now entirely coloured through code, and you can paint coils by dipping them in reagent containers containing reagents flagged as pigments (such as paint buckets, but blood and a few others work as well). The colour carries over to placed wires and cable cuffs.</li>
-			</ul>
-			<h3 class="author">Irradiation updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Metaclub: Added a Bhangmeter to the bridge.</li>
-				<li class="rscadd">Metaclub: Added some missing wires to power up some electrified grilles.</li>
-				<li class="tweak">Metaclub: Remodeled the Bridge command room to accommodate the Bhangmeter.</li>
-				<li class="tweak">Sleep Toxin now has an overdose amount (30 units) that will deal some toxin damage if you go over it.</li>
-				<li class="tweak">Sleep Toxin will now start destroying your heart if it&#39;s in your system for more than 8 minutes.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed a bug where the target that was initially hit by the wizard&#39;s &#34;Lightning&#34; spell would randomly cause the Lightning spell to not arc to nearby targets and randomly hit the same target twice. The Lightning spell will now properly arc to other targets and not have a random chance to instantly put someone into critical condition while at it.</li>
-				<li class="bugfix">The wizard that casts the &#39;Lightning&#34; spell will no longer be a valid target to be dealt damage to, which was caused by the Lightning spell arcing to a target that the wizard was in the way of. However, it will still arc off the wizard if it is able to do so.</li>
-				<li class="bugfix">Fixed a bug that caused Pain Mirror to be able to indefinitely ping-pong between different Pain Mirror users, provided that they were not human. This was, most notably, possible with the wizard&#39;s Arcane Golems.</li>
-				<li class="bugfix">Fixed a bug where detaching a mech&#39;s jetpack while the jetpack was active would render the mech permanently immobile.</li>
-				<li class="bugfix">Fixed a bug where MMIs and posibrains getting inserted into a mech would not update its sprite, making it appear as if it was not occupied until they moved.</li>
-				<li class="bugfix">Fixed a bug where MMIs and posibrains getting inserted into a mech would not have their spell menu appear until their equipment changed.</li>
-				<li class="bugfix">Fixed a bug where users did not receive any message when failing to insert a posibrain into a mech with a DNA-lock active, because the posibrain does not have a DNA.</li>
-				<li class="bugfix">Fixed a bug where a mech that had its hydraulic clamp removed could still automatically collect ore when digging.</li>
-				<li class="spellcheck">Added more descriptive messages for when trying to insert an MMI or posibrain into a mech with a DNA-lock active.</li>
-				<li class="tweak">Grues will no longer see the red damage overlay as they get more damaged.</li>
-				<li class="tweak">Civil War of Casters is slightly more likely to happen.</li>
-				<li class="tweak">Grues will now nuzzle other grues instead of hitting them.</li>
-				<li class="rscadd">Grues will now become increasingly more effective against armored targets the more people they eat. After eating 5 people they will reach the limit of reducing damage reduction by 50%, multiplicatively.</li>
-				<li class="tweak">Grues are now limited to a maximum of 50 damage per hit.</li>
-				<li class="tweak">Grues will gain slightly less damage out of every consumed player, from 7 to 5.</li>
-				<li class="bugfix">Fixed a bug where the vampire&#39;s Glare ability worked while blindfolded.</li>
-				<li class="bugfix">Fixed a bug where shapeshifted vampires didn&#39;t initially update their visible name when shapeshifting with no ID.</li>
-				<li class="bugfix">Fixed a bug where a max-power vampire using the Screech ability would get a backlash from every single nearby null rod wearer rather than just one. This also means the Screech ability will be properly stopped and blocked rather than still affecting everyone in the vicinity.</li>
-				<li class="bugfix">Null rods carried by people with ear protection will now properly cause a backlash against max-power vampires using the Screech ability instead of doing nothing.</li>
-				<li class="bugfix">Fixed a bug where the vampire&#39;s Screech ability would play its sound for every single target. It will now only play once per Screech.</li>
-				<li class="tweak">Reduced the amount of jittering caused by the vampire&#39;s Screech ability from 5 minutes to 40 seconds.</li>
-				<li class="tweak">The vampire&#39;s Screech ability can be used at any time, rather than only when there are living targets nearby.</li>
-				<li class="tweak">Failing to Enthrall someone as a vampire will no longer put the ability on cooldown.</li>
-				<li class="tweak">Failing to Hypnotise someone as a vampire, whether because they are blind or for other reasons, will no longer put the ability on cooldown.</li>
-				<li class="tweak">Vampire abilities that get backlashed by null rods will now go on cooldown. This also fixed a bug where the max-power vampire&#39;s Glare ability could be spammed non-stop.</li>
-				<li class="spellcheck">Fixed a tiny typo regarding the message that a vampire receives when a null rod causes a backlash.</li>
-				<li class="spellcheck">Fixed a tiny typo regarding the message that a victim of a vampire&#39;s Screech receives. This also extends to the NPC vampire creature.</li>
-			</ul>
-			<h3 class="author">brndd updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">PackedStation now has a pneumatic disposals system.</li>
-				<li class="tweak">Dionae are now about 33% faster, making them slightly faster than using a wheelchair.</li>
-			</ul>
-			<h3 class="author">falcon2346 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">The paramedic winter coat suit slot now uses the correct list of objects.</li>
-			</ul>
-			<h3 class="author">jellyveggie2 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds a ghost costume to the halloween costume crate.</li>
-				<li class="rscadd">You may also craft your own ghost costume by cutting up a bed sheet while targeting the eyes.</li>
-				<li class="tweak">A number of robes now have toggleable hoods, just like winter coats.</li>
-				<li class="rscadd">Added a face paint spray can to the Halloween costume crate. Use in hand to switch modes. Use paper aiming at your head to clean it off.</li>
-			</ul>
-			<h3 class="author">jwhitak updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Low pop events that weren&#39;t supposed to fire will no longer fire.</li>
-				<li class="bugfix">Vines, Biomass, and Carp need 7 active players.</li>
-				<li class="bugfix">Powercreeper, Meteors (Waves/Showers), and Immovable Rods (Small/Large) need 7 active players with at least 1 Engineer.</li>
-			</ul>
-			<h3 class="author">toomykins updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">boxstation&#39;s medbay now has a  light switch</li>
-				<li class="tweak">roidstation&#39;s HoP OFFICE, HoP personal quarters and the abandoned smithy now have a light switch</li>
-				<li class="rscadd">boxstation tradefloor now has a double airlock system</li>
-				<li class="tweak">boxstation research outposts now has a soldering iron</li>
-				<li class="tweak">boxstation AI integrity restorer is now named correctly.</li>
-				<li class="tweak">boxstation incinerator air outlet now has unique frequency and id_tag</li>
-				<li class="tweak">boxstation HoS office shutters now start at the correct density</li>
-				<li class="tweak">Antag objectives are now enabled by default for new accounts.</li>
 			</ul>
 		</div>
 		<!--
