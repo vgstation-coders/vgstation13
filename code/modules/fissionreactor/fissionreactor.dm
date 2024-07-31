@@ -141,7 +141,7 @@
 			var/turf/turftosearch=locate(origin.x+searchx,origin.y+ys,origin.z)
 			var/list/contents = turftosearch.contents
 			for (var/i=1,i<contents.len,i++)
-				if(istype(contents[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
+				if(istype(contents[i],/obj/machinery/fissionreactor) || istype(contents[i],/obj/machinery/atmospherics/unary/fissionreactor_coolantport) )
 					goto correctobjW
 			return  //return because the setup is invalid.
 			correctobjW: //unless it's fine, in which case skip the return.
@@ -150,7 +150,7 @@
 			var/turf/turftosearch=locate(origin.x+searchx,origin.y+ys,origin.z)
 			var/list/contents = turftosearch.contents
 			for (var/i=1,i<contents.len,i++)
-				if(istype(contents[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
+				if(istype(contents[i],/obj/machinery/fissionreactor) || istype(contents[i],/obj/machinery/atmospherics/unary/fissionreactor_coolantport) )
 					goto correctobjE
 			return
 			correctobjE:
@@ -159,7 +159,7 @@
 			var/turf/turftosearch=locate(origin.x+xs,origin.y+searchy,origin.z)
 			var/list/contents = turftosearch.contents
 			for (var/i=1,i<contents.len,i++)
-				if(istype(contents[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
+				if(istype(contents[i],/obj/machinery/fissionreactor) || istype(contents[i],/obj/machinery/atmospherics/unary/fissionreactor_coolantport) )
 					goto correctobjS
 			return
 			correctobjS:
@@ -168,7 +168,7 @@
 			var/turf/turftosearch=locate(origin.x+xs,origin.y+searchy,origin.z)
 			var/list/contents = turftosearch.contents
 			for (var/i=1,i<contents.len,i++)
-				if(istype(contents[i],/obj/machinery/fissionreactor) || /obj/machinery/atmospherics/unary/fissionreactor_coolantport )
+				if(istype(contents[i],/obj/machinery/fissionreactor) || istype(contents[i],/obj/machinery/atmospherics/unary/fissionreactor_coolantport) )
 					goto correctobjN
 			return
 			correctobjN:
@@ -256,6 +256,16 @@
 	else
 		fuel.life=0
 		
+	for(var/i=1, i<coolant_ports.len,i++)
+		var/real_index= ((i+coolantport_counter)%coolant_ports)+1 //this way we spread out any first index prefrence.
+		var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/coolant_port=coolant_ports[real_index]
+
+		coolant_port.transfer_reactor()
+		
+	coolantport_counter++
+	coolantport_counter=(coolantport_counter%coolant_ports)+1 //shift it around.	
+	
+	
 
 /datum/fission_fuel
 	var/datum/reagents/fuel= null
@@ -344,20 +354,20 @@
 	var/adjacency_reactivity_bonus=1.0 //addative per neighbor. max of 4x this number.
 	var/num_adjacent_fuel_rods=0
 	var/list/lofrds=associated_reactor.fuel_rods
-	for (var/i=1,i<lofrds.len,i++) //probably not the most efficent way... but it works well enough
-		if (lofrds[i].loc.y==src.loc.y)
-			if (lofrds[i].loc.y==src.loc.y+1 || lofrds[i].loc.y==src.loc.y-1)
+	for (var/obj/machinery/fissionreactor/fissionreactor_fuelrod/fuel_rod in lofrds) //probably not the most efficent way... but it works well enough
+		if (fuel_rod.loc.y==src.loc.y)
+			if (fuel_rod.loc.y==src.loc.y+1 || fuel_rod.loc.y==src.loc.y-1)
 				num_adjacent_fuel_rods++
-		if (lofrds[i].loc.x==src.loc.x)
-			if (lofrds[i].loc.x==src.loc.x+1 || lofrds[i].loc.x==src.loc.x-1)
+		if (fuel_rod.loc.x==src.loc.x)
+			if (fuel_rod.loc.x==src.loc.x+1 || fuel_rod.loc.x==src.loc.x-1)
 				num_adjacent_fuel_rods++
 	
 	return 1.0+num_adjacent_fuel_rods*adjacency_reactivity_bonus
 
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/proc/get_iscontrolled()
 	var/list/lofrds=associated_reactor.control_rods
-	for (var/i=1,i<lofrds.len,i++)
-		if ((lofrds[i].loc.x-src.loc.x)^2<=1 &&  (lofrds[i].loc.y-src.loc.y)^2<=1  ) //ensure it's within 1 tile
+	for (var/obj/machinery/fissionreactor/fissionreactor_controlrod/control_rod in  lofrds)
+		if ((control_rod.loc.x-src.loc.x)**2<=1 &&  (control_rod.loc.y-src.loc.y)**2<=1  ) //ensure it's within 1 tile
 			return TRUE
 	return FALSE
 	
@@ -373,5 +383,24 @@
 	name="isotopic separational combiner." //just about the most technobable you could get.
 	var/datum/reagents/held_elements=new /datum/reagents
 	use_power = MACHINE_POWER_USE_IDLE
-	idle_power_usage = 25
-	active_power_usage = 100
+	idle_power_usage = 200
+	active_power_usage = 1000
+
+
+/obj/machinery/computer/fissioncontroller
+	name="fission reactor controller"
+	idle_power_usage = 500
+	active_power_usage = 500
+	var/datum/fission_reactor_holder/associated_reactor=null
+	
+/obj/machinery/computer/fissioncontroller/process()
+	if(!associated_reactor) //no reactor? no processing to be done.
+		return
+	if(!associated_reactor.fuel) //no fuel? no reactions to be done.
+		return
+	if(associated_reactor.fuel.life<=0) //fuel depleted? no reactions to be done.
+		return
+
+	associated_reactor.fissioncycle()
+//SS_WAIT_MACHINERY
+
