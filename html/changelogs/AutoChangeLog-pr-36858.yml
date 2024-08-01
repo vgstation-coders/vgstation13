@@ -1,6 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- bugfix: Fixed a bug where a person that has carp pheromones in their system would
-    not stink up the place properly if someone nearby was dead, which would unpredictably
-    cause the message to not reliably show up to other players in the area.
