@@ -266,13 +266,17 @@
 	if (targets.len > 1)
 		second_target = targets[2]
 	var/obj/item/projectile/soulbullet/SB = new (starting)
-	SB.original = target
-	SB.target = target
+	if(starting != target)
+		SB.target = target
+		SB.original = target
+	else
+		SB.target = second_target
+		SB.original = second_target
 	SB.current = starting
 	SB.starting = starting
 	SB.secondary_target = second_target
-	SB.yo = target.y - starting.y
-	SB.xo = target.x - starting.x
+	SB.yo = SB.target.y - SB.starting.y
+	SB.xo = SB.target.x - SB.starting.x
 	SB.shade = user
 	SB.blade = blade
 	blade.forceMove(SB)
