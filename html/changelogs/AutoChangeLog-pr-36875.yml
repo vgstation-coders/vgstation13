@@ -1,0 +1,8 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- bugfix: Fixed a year-old bug where the Staff of Swip-Swap couldn't be wielded. Now
+    it can be wielded to empower the projectile, which allows it to go through windows.
+- bugfix: (Admins) Changing the "detachable_cell" variable for energy weapons will
+    now also handle whether it will give the gun the respective "Detach Cell" verb
+    or not.
