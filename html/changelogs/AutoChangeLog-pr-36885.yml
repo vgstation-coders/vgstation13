@@ -1,6 +1,0 @@
-author: DeityLink
-delete-after: true
-changes:
-- bugfix: Added keybinds for Soul Blade spells (courtesy of Yred). In regular mode,
-    press Insert to Spin and End to Perforate. In Hotkey mode, press F to Spin and
-    R to Perforate.

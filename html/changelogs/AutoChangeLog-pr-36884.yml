@@ -1,6 +1,0 @@
-author: DeityLink
-delete-after: true
-changes:
-- bugfix: Using click-drag to perform the Perforate spell as a Soul Blade no longer
-    sends you always south if you click-drag from the Soul Blade's tile. (courtesy
-    of Yred)
