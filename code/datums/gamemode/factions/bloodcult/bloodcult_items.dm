@@ -1252,13 +1252,19 @@ var/list/arcane_tomes = list()
 		body_parts_covered = FULL_HEAD|HIDEHAIR
 		body_parts_visible_override = 0
 		hides_identity = HIDES_IDENTITY_ALWAYS
-		to_chat(user, "<span class='notice'>The hood's textile reacts with your soul and produces a shadow over your face that will hide your identity.</span>")
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			H.update_name()
+			to_chat(user, "<span class='notice'>The hood's textile reacts with your soul and produces a shadow over your face that will hide your identity.</span>")
 	else
 		icon_state = initial(icon_state)
 		body_parts_covered = EARS|HEAD|HIDEHAIR
 		body_parts_visible_override = FACE
 		hides_identity = HIDES_IDENTITY_DEFAULT
-		to_chat(user, "<span class='notice'>You dispel the shadow covering your face.</span>")
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			H.update_name()
+			to_chat(user, "<span class='notice'>You dispel the shadow covering your face.</span>")
 
 	user.update_inv_head()
 	anon_mode = !anon_mode
