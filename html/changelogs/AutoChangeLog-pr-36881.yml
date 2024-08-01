@@ -1,5 +1,0 @@
-author: DeityLink
-delete-after: true
-changes:
-- bugfix: Fixed soulblade that don't have a shade in them behaving weirdly when thrown
-    at non-cultists.
