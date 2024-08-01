@@ -34,7 +34,7 @@
 	desc = "EMP rocket for the Nanotrasen rocket launcher."
 	icon_state = "rpground_emp"
 	projectile_type = "/obj/item/projectile/rocket/blank/emp"
-	starting_materials = list(MAT_IRON = 10000, MAT_URANIUM = 250)
+	starting_materials = list(MAT_IRON = 10000)
 	icon_suffix = "emp"
 
 /obj/item/ammo_casing/rocket_rpg/stun
@@ -42,7 +42,7 @@
 	desc = "Stun rocket for the Nanotrasen rocket launcher. Not a flashbang."
 	icon_state = "rpground_stun"
 	projectile_type = "/obj/item/projectile/rocket/blank/stun"
-	starting_materials = list(MAT_IRON = 25000, MAT_SILVER = 500)
+	starting_materials = list(MAT_IRON = 25000)
 	icon_suffix = "stun"
 
 /obj/item/ammo_casing/rocket_rpg/extreme
