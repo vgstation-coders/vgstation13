@@ -113,7 +113,7 @@
 	else
 		if (ismob(A))
 			var/mob/M = A
-			if (!iscultist(M) && (M != shade.master))
+			if (!iscultist(M))
 				A.hitby(blade)
 			else if (!M.get_active_hand())//cultists and the blade's master can catch the blade on the fly
 				blade.forceMove(loc)
