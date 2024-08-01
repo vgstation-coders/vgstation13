@@ -1,0 +1,5 @@
+author: DeityLink
+delete-after: true
+changes:
+- bugfix: Fixed the Toggle Anonymity cult hood button failing to update your character's
+    visible name when examined or hovered.
