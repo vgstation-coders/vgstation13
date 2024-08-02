@@ -315,3 +315,30 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 2000)
 	build_path = /obj/item/weapon/circuitboard/shield_cap
+
+// fission (machine) boards.
+
+
+
+
+/datum/design/fission_control_rod
+	name = "Internal circuitry (Control rod)"
+	desc = "Allows for the construction of circuit boards used to build a control rods for a fission reactor"
+	id = "fission_control_rod"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/fission_control_rod
+
+/datum/design/fission_fuel_rod
+	name = "Internal circuitry (Fuel rod)"
+	desc = "Allows for the construction of circuit boards used to build a fuel rods for a fission reactor"
+	id = "fission_fuel_rod"
+	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/fission_fuel_rod
+
+

@@ -355,6 +355,14 @@
 	build_path = /obj/machinery/computer/stacking_unit
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
+/obj/item/weapon/circuitboard/fisson_reactor
+	name = "Circuit board (Fission Reactor Controller)"
+	desc = "A circuit board for running a fission reactor."
+	build_path = /obj/machinery/computer/fissioncontroller
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=4"
+	var/safety_disabled=FALSE
+
+
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
 		var/obj/item/tool/solder/S = I
@@ -390,6 +398,10 @@
 /obj/item/weapon/circuitboard/supplycomp/solder_improve(mob/user)
 	to_chat(user, "<span class='notice'>You [contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>")
 	contraband_enabled = !contraband_enabled
+
+/obj/item/weapon/circuitboard/fisson_reactor/solder_improve(mob/user)
+	to_chat(user, "<span class='notice'>You [safety_disabled ? "re" : "dis"]connect the auto-SCRAM fuse.</span>")
+	safety_disabled = !safety_disabled
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)

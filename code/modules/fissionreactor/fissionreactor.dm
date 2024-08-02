@@ -348,7 +348,7 @@
 	name="fission reactor control rod assembly"
 	
 /obj/machinery/fissionreactor/fissionreactor_fuelrod
-	name="fission reactor control fuel assembly"	
+	name="fission reactor fuel rod assembly"	
 
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/proc/get_reactivity()
 	var/adjacency_reactivity_bonus=1.0 //addative per neighbor. max of 4x this number.
@@ -391,7 +391,10 @@
 	name="fission reactor controller"
 	idle_power_usage = 500
 	active_power_usage = 500
+	circuit=/obj/item/weapon/circuitboard/fisson_reactor
+	var/can_autoscram=TRUE //automatic safeties if it gets too hot or power is cut.
 	var/datum/fission_reactor_holder/associated_reactor=null
+	
 	
 /obj/machinery/computer/fissioncontroller/process()
 	if(!associated_reactor) //no reactor? no processing to be done.
@@ -403,4 +406,8 @@
 
 	associated_reactor.fissioncycle()
 //SS_WAIT_MACHINERY
+
+
+
+
 
