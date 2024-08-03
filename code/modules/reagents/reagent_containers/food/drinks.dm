@@ -553,6 +553,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/chifir
 	name = "Siberian Chifir"
 	desc = "Only a true siberian can appreciate its deep and rich flavor. Embrace siberian tradition!"
+	icon = 'icons/obj/cafe.dmi'
 	icon_state = "tea"
 	item_state = "mug_empty"
 /obj/item/weapon/reagent_containers/food/drinks/chifir/New()

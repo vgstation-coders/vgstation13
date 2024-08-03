@@ -306,7 +306,8 @@
 		return
 	if(src == target)
 		var/obj/item/mecha_parts/mecha_equipment/passive/rack/R = get_equipment(/obj/item/mecha_parts/mecha_equipment/passive/rack)
-		R.rack.AltClick(user)
+		if(R)
+			R.rack.AltClick(user)
 		return
 	var/dir_to_target = get_dir(src,target)
 	if(dir_to_target && !(dir_to_target & src.dir))//wrong direction

@@ -138,7 +138,7 @@ var/global/list/rad_collectors = list()
 	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 		if(get_dist(R, center) <= range) //Better than using orange() every process.
 			R.receive_pulse(power)
-	for(var/obj/item/weapon/am_containment/decelerator/D in decelerators)
+	for(var/obj/item/weapon/am_containment/D in decelerators)
 		if(get_dist(D, center) <= range)
 			D.receive_pulse(power)
 

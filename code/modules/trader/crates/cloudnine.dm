@@ -158,21 +158,16 @@ var/global/list/cloudnine_stuff = list(
 		return ..()
 	return FALSE
 
-var/list/decelerators = list()
 /obj/item/weapon/am_containment/decelerator
 	name = "antimatter decelerator"
-	desc = "Acts as a 'filter' to trap antiparticles emitted by radiation. In function, it can be used to power an antimatter engine and refuel itself with nearby radiation."
+	desc = "A large experimental antimatter tank that refuels 25x faster than its regular counterparts."
+	icon_state = "jar_big"
+	fuel = 10000
+	fuel_max = 10000
+	gauge_offset = 2
 
-/obj/item/weapon/am_containment/decelerator/New()
-	..()
-	decelerators += src
-
-/obj/item/weapon/am_containment/decelerator/Destroy()
-	decelerators -= src
-	..()
-
-/obj/item/weapon/am_containment/decelerator/proc/receive_pulse(power)
-	fuel = min(fuel_max, fuel + round(power/100))
+/obj/item/weapon/am_containment/decelerator/receive_pulse(power)
+	fuel = min(fuel_max, fuel + round(power))
 
 #define OMNIMODE_WIRE 0
 #define OMNIMODE_TOOL 1

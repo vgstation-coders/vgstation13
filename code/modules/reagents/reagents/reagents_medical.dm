@@ -82,6 +82,25 @@
 	T.add_toxinlevel(5)
 	T.add_planthealth(50)
 
+/datum/reagent/panacea
+	name = "Panacea"
+	id = PANACEA
+	description = "A variant of Adminordrazine that has been subjected to medical sciences to make it incredibly potent. It's magic, stolen from the gods."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#EECE19" //rgb: 238, 206, 25
+	density = ARBITRARILY_LARGE_NUMBER
+	specheatcap = ARBITRARILY_LARGE_NUMBER
+
+/datum/reagent/panacea/on_mob_life(mob/living/M, alien)
+	..()
+	if(volume >= 0.2)
+		M.rejuvenate()
+
+/datum/reagent/panacea/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
+	..()
+	if((method == INGEST) && (volume >= 0.2))
+		M.rejuvenate()
+
 /datum/reagent/albuterol
 	name = "Albuterol"
 	id = ALBUTEROL

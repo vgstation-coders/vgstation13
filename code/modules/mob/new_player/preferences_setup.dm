@@ -553,7 +553,7 @@
 
 	// Observers get a tourist or vacationer outfit.
 	else
-		if (prob(100/3) || fat == "_fat") //Currently no fat sprites for vacationer outfits.
+		if (prob(100/3))
 			clothes_s = new /icon(uniform_dmi, "tourist_s")
 			clothes_s.Blend(new /icon(feet_dmi, "black"), ICON_UNDERLAY)
 			clothes_s.Blend(new /icon('icons/mob/clothing_accessories.dmi', "wristwatch"), ICON_UNDERLAY)

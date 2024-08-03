@@ -114,6 +114,8 @@ var/list/special_fruits = list()
 	if(seed.juicy)
 		splat_decal(get_turf(hit_atom))
 		splat_reagent_reaction(get_turf(hit_atom),user)
+		var/splasharea = (seed.juicy*ceil(seed.potency/100)) //2 at 200 potency
+		reagents.splashplosion(splasharea, TRUE)
 		visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
 		return
