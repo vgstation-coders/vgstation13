@@ -516,7 +516,7 @@
 			if(iscrowbar(W))
 				W.playtoolsound(src, 100)
 				user.visible_message("<span class='warning'>[user] starts prying external plating off \the [src].</span>", "<span class='notice'>You start prying the external plating off \the [src].</span>")
-					if(do_after(user, src, construction_length/2))
+					if(do_after(user, src, construction_length/2.0))
 						user.visible_message("<span class='warning'>[user] pries the external plating off \the [src].</span>", "<span class='notice'>You pry the external plating off the \the [src].</span>")
 						add_hiddenprint(user)
 						add_fingerprint(user)

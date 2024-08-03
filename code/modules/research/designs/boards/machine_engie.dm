@@ -323,7 +323,7 @@
 
 /datum/design/fission_control_rod
 	name = "Internal circuitry (Control rod)"
-	desc = "Allows for the construction of circuit boards used to build a control rods for a fission reactor"
+	desc = "Allows for the construction of circuit boards used to build control rods for a fission reactor"
 	id = "fission_control_rod"
 	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
 	build_type = IMPRINTER
@@ -333,7 +333,7 @@
 
 /datum/design/fission_fuel_rod
 	name = "Internal circuitry (Fuel rod)"
-	desc = "Allows for the construction of circuit boards used to build a fuel rods for a fission reactor"
+	desc = "Allows for the construction of circuit boards used to build fuel rods for a fission reactor"
 	id = "fission_fuel_rod"
 	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4)
 	build_type = IMPRINTER
