@@ -539,6 +539,10 @@
 					var/obj/machinery/computer/arcade/arcade = B
 					var/obj/item/weapon/circuitboard/arcade/C = circuit
 					arcade.import_game_data(C)
+				else if(istype(circuit,/obj/item/weapon/circuitboard/fisson_reactor))
+					var/obj/machinery/computer/fissioncontroller/SC = B
+					var/obj/item/weapon/circuitboard/fisson_reactor/C = circuit
+					SC.autoscram = !C.safety_disabled
 				var/obj/machinery/MA = B
 				if(istype(MA))
 					MA.power_change()

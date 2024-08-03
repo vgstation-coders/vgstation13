@@ -408,6 +408,121 @@
 //SS_WAIT_MACHINERY
 
 
+/obj/structure/girder/reactor
+	material=/obj/item/stack/sheet/plasteel
+	construction_length=60
+	var/pipeadded=FALSE
+	
+/obj/structure/girder/reactor/attackby(obj/item/W as obj, mob/user as mob) //this proc uses a lot of weird checks that will probably break with the multiple construction steps, so lets just use our own override. (it's also just messy in general and hard to follow)
+	switch(state)
+		if(0) // fresh built frame
+			if(istype(W, /obj/item/stack/rods))
+				var/obj/item/stack/rods/R = W
+				if(R.amount < 4)
+					to_chat(user, "<span class='warning'>You need more rods to finish the support struts.</span>")
+					return
+				user.visible_message("<span class='notice'>[user] starts inserting internal support struts into \the [src].</span>", "<span class='notice'>You start inserting internal support struts into \the [src].</span>")
+				if(do_after(user, src,construction_length))
+					var/obj/item/stack/rods/O = W
+					if(O.amount < 4)
+						to_chat(user, "<span class='warning'>You need more rods to finish the support struts.</span>")
+					O.use(4)
+					user.visible_message("<span class='notice'>[user] inserts internal support struts into \the [src].</span>", "<span class='notice'>You insert internal support struts into \the [src].</span>")
+					add_hiddenprint(user)
+					add_fingerprint(user)
+					state++
+				return
+			if(W.is_wrench(user))
+				W.playtoolsound(src, 100)
+				user.visible_message("<span class='notice'>[user] starts disassembling \the [src].</span>", "<span class='notice'>You start disassembling \the [src].</span>")
+				if(do_after(user, src, construction_length))
+					user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", "<span class='notice'>You dissasemble \the [src].</span>")
+					new material(get_turf(src), 2)
+					qdel(src)
+				return
+			to_chat(user, "<span class='notice'>You can't find a use for \the [W]</span>")
+			return
+					
+		if(1) // added rods
+			if(W.is_screwdriver(user)) //fasten the rods
+				W.playtoolsound(src, 100)
+				user.visible_message("<span class='notice'>[user] starts securing \the [src]'s internal support struts.</span>", "<span class='notice'>You start securing \the [src]'s internal support struts.</span>")
+				if(do_after(user, src, construction_length))
+					user.visible_message("<span class='notice'>[user] secures \the [src]'s internal support struts.</span>", "<span class='notice'>You secure \the [src]'s internal support struts.</span>")
+					add_hiddenprint(user)
+					add_fingerprint(user)
+					state++
+				return
+			if(W.is_wirecutter(user)) //remove the rods
+				W.playtoolsound(src, 100)
+				user.visible_message("<span class='warning'>[user] starts removing \the [src]'s internal support struts.</span>", "<span class='notice'>You start removing \the [src]'s internal support struts.</span>")
+				if(do_after(user, src, construction_length))
+					user.visible_message("<span class='warning'>[user] removes \the [src]'s internal support struts.</span>", "<span class='notice'>You remove \the [src]'s internal support struts.</span>")
+					add_hiddenprint(user)
+					add_fingerprint(user)
+					new /obj/item/stack/rods(get_turf(src), 4)
+					state--
+				return
+			to_chat(user, "<span class='notice'>You can't find a use for \the [W]</span>")
+			return
+		if(2) // secured rods
+			if(W.is_screwdriver(user))
+				W.playtoolsound(src, 100)
+				user.visible_message("<span class='warning'>[user] starts unsecuring \the [src]'s internal support struts.</span>", "<span class='notice'>You start unsecuring \the [src]'s internal support struts.</span>")
+				if(do_after(user, src, construction_length))
+					user.visible_message("<span class='warning'>[user] unsecures \the [src]'s internal support struts.</span>", "<span class='notice'>You unsecure \the [src]'s internal support struts.</span>")
+					add_hiddenprint(user)
+					add_fingerprint(user)
+					state--
+				return
+			if(istype(W, /obj/item/stack/sheet/plasteel))
+				var/obj/item/stack/sheet/plasteel/R = W
+				if(R.amount < 2)
+					to_chat(user, "<span class='warning'>You need more plasteel to finish the outer plating.</span>")
+					return
+				user.visible_message("<span class='notice'>[user] starts placing external plating into \the [src].</span>", "<span class='notice'>You start placing external plating into \the [src].</span>")
+				if(do_after(user, src,construction_length))
+					var/obj/item/stack/sheet/plasteel/O = W
+					if(O.amount < 2)
+						to_chat(user, "<span class='warning'>You need more sheets to finish the outer plating.</span>")
+					O.use(2)
+					user.visible_message("<span class='notice'>[user] places external plating into \the [src].</span>", "<span class='notice'>You place external plating into \the [src].</span>")
+					add_hiddenprint(user)
+					add_fingerprint(user)
+					state++
+				return
+			to_chat(user, "<span class='notice'>You can't find a use for \the [W]</span>")	
+			return
+		if(3) // plating added
+			if(iswelder(W))
+				var/obj/item/tool/weldingtool/WT = W
+				user.visible_message("<span class='notice'>[user] starts welding the external plating to \the [src]'s frame.</span>", "<span class='notice'>You start welding the external plating to \the [src]'s frame.</span>")
+				if(WT.do_weld(user,src,construction_length,0))
+					user.visible_message("<span class='notice'>[user] welds the external plating to \the [src]'s frame.</span>", "<span class='notice'>You weld the external plating to \the [src]'s frame.</span>")
+					
+					//TODO
+					//MAKE THIS ACTUALLY BUILD THE REACTOR CASING
+					//AAAAAAAAAAAAAAAAAAAAA
+					//AAAAAAAAAAAAAAAAAAAAA
+					//AAAAAAAAAAAAAAAAAAAAA
+					//AAAAAAAAAAAAAAAAAAAAA
+					//AAAAAAAAAAAAAAAAAAAAA
+					//AAAAAAAAAAAAAAAAAAAAA
+					//AAAAAAAAAAAAAAAAAAAAA
+					//AAAAAAAAAAAAAAAAAAAAA
+					//AAAAAAAAAAAAAAAAAAAAA
 
-
+				return
+			if(iscrowbar(W))
+				W.playtoolsound(src, 100)
+				user.visible_message("<span class='warning'>[user] starts prying external plating off \the [src].</span>", "<span class='notice'>You start prying the external plating off \the [src].</span>")
+					if(do_after(user, src, construction_length/2))
+						user.visible_message("<span class='warning'>[user] pries the external plating off \the [src].</span>", "<span class='notice'>You pry the external plating off the \the [src].</span>")
+						add_hiddenprint(user)
+						add_fingerprint(user)
+						new material(get_turf(src), 2)
+						state--
+			to_chat(user, "<span class='notice'>You can't find a use for \the [W]</span>")
+			return
+	..()
 

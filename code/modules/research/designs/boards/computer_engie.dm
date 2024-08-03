@@ -184,3 +184,13 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
 	build_path = /obj/item/weapon/circuitboard/security/engineering
+
+/datum/design/fisson_reactor_controller
+	name = "Circuit Design (R-UST Mk. 7 core controller)"
+	desc = "Allows for the construction of circuit boards used to safely control a fission reactor."
+	id = "rust_core_control"
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Misc"
+	build_path = /obj/item/weapon/circuitboard/fisson_reactor
