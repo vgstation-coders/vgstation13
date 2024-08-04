@@ -87,7 +87,10 @@
 			extracted_fibers[fiber]=A.suit_fibers[fiber]
 	return extracted_fibers
 
-/obj/item/device/detective_scanner/afterattack(atom/A as obj|turf|area, mob/user as mob)
+//this is now preattack instead of afterattack so you can scan boxes and stuff rather than slapping your scanner in there immediately
+//ideally someone would unfuck the entire altclick pipeline to make this altclick behavior that doesn't call afterattack
+//also this should be a separate proc to cut down on copypasta in the /forger subtype
+/obj/item/device/detective_scanner/preattack(atom/A as obj|turf|area, mob/user as mob) 
 	if(!in_range(A,user))
 		return
 	if(loc != user)
@@ -280,7 +283,7 @@
 	custom_forgery[3] = customblood ? customblood.Copy() : null
 
 //shameless copy pasting
-/obj/item/device/detective_scanner/forger/afterattack(atom/A as obj|turf|area, mob/user as mob)
+/obj/item/device/detective_scanner/forger/preattack(atom/A as obj|turf|area, mob/user as mob)
 	if(istype(A,/obj/machinery/computer/secure_data))
 		var/obj/machinery/computer/secure_data/SD = A
 		if (istype(user) && SD.authenticated && (SD.screen == 3.0) && SD.active1)
