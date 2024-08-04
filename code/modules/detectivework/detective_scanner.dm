@@ -77,6 +77,7 @@
 	if(scanmode)
 		scanitem(A, user)
 		return 1 //this will not call attack or afterattack afterwards.
+	..()
 	
 /obj/item/device/detective_scanner/afterattack(atom/A as obj|turf|area, mob/user as mob) 
 	scanitem(A, user)
