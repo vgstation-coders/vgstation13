@@ -485,8 +485,8 @@
 		return
 
 	if(istype(W, /obj/item/weapon/hand_labeler))
-		to_chat(usr, "<span class='notice'>You begin positioning the label on \the [src]...</span>")
-		if(do_after(user, src, 3 SECONDS))
+		var/obj/item/weapon/hand_labeler/L = W
+		if(L.mode)
 			return
 
 	if(!can_be_inserted(W))
