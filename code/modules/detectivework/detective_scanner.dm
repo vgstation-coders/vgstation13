@@ -36,7 +36,7 @@
 /obj/item/device/detective_scanner/AltClick(var/mob/user)
 	var/freq = 45000 - scanmode * 25000
 	user.playsound_local(user, 'sound/misc/pda_snake_eat.ogg', 30, scanmode, freq, 0, 0, 0)
-	to_chat(user, "You switch \the [src] to [scanmode ? "scan-only" : "normal"] mode.")
+	to_chat(user, "You switch \the [src] to [scanmode ? "normal" : "scan-only"] mode.")
 	scanmode = !scanmode
 	desc = "[initial(desc)] [scanmode ? "It is currently in scan-only mode." : ""] "
 	icon_state = "forensic[scanmode ? "_y" : ""]"
