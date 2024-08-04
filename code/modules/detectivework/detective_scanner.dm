@@ -2,9 +2,9 @@
 
 
 /obj/item/device/detective_scanner
-	name = "Scanner"
+	name = "forensic canner"
 	desc = "Used to scan objects for DNA and fingerprints."
-	icon_state = "forensic1"
+	icon_state = "forensic"
 	var/amount = 20.0
 	var/list/stored = list()
 	w_class = W_CLASS_SMALL
@@ -12,6 +12,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
+	var/scanmode = FALSE //altclicked behavior prevents you from sticking it into boxes
 
 /obj/item/device/detective_scanner/attackby(obj/item/weapon/f_card/W as obj, mob/user as mob)
 	..()
@@ -32,7 +33,89 @@
 			W.add_fingerprint(user)
 	return
 
+/obj/item/device/detective_scanner/AltClick(var/mob/user)
+	var/freq = 45000 - scanmode * 25000
+	user.playsound_local(user, 'sound/misc/pda_snake_eat.ogg', 30, scanmode, freq, 0, 0, 0)
+	to_chat(user, "You switch \the [src] to [scanmode ? "scan-only" : "normal"] mode.")
+	scanmode = !scanmode
+	desc = "[initial(desc)] [scanmode ? "It is currently in scan-only mode." : ""] "
+	icon_state = "forensic[scanmode ? "_y" : ""]"
+	update_icon()
+
 /obj/item/device/detective_scanner/attack(mob/living/carbon/human/M as mob, mob/user as mob)
+	scanhuman(M, user)
+
+/obj/item/device/detective_scanner/proc/extract_fingerprints(var/atom/A)
+	var/list/extracted_prints=list()
+	if(!A.fingerprints || !A.fingerprints.len)
+		if(A.fingerprints)
+			QDEL_NULL(A.fingerprints)
+	else
+		for(var/i in A.fingerprints)
+			extracted_prints[i]=A.fingerprints[i]
+	return extracted_prints
+
+/obj/item/device/detective_scanner/proc/extract_blood(var/atom/A)
+	var/list/extracted_blood=list()
+	if(A.blood_DNA)
+		for(var/blood in A.blood_DNA)
+			extracted_blood[blood]=A.blood_DNA[blood]
+	return extracted_blood
+
+/obj/item/device/detective_scanner/proc/extract_fibers(var/atom/A)
+	var/list/extracted_fibers=list()
+	if(A.suit_fibers)
+		for(var/fiber in A.suit_fibers)
+			extracted_fibers[fiber]=A.suit_fibers[fiber]
+	return extracted_fibers
+
+//this is now preattack instead of afterattack so you can scan boxes and stuff rather than slapping your scanner in there immediately
+/obj/item/device/detective_scanner/preattack(atom/A as obj|turf|area, mob/user as mob) 
+	if(!in_range(A,user))
+		return
+	if(loc != user)
+		return
+	scanitem(A, user)
+	return scanmode
+
+/obj/item/device/detective_scanner/proc/add_data(var/atom/A, var/list/blood_DNA_found,var/list/fingerprints_found,var/list/fibers_found)
+	//I love associative lists.
+	var/list/data_entry = stored["\ref [A]"]
+	if(islist(data_entry)) //Yay, it was already stored!
+		//Merge the fingerprints.
+		var/list/data_prints = data_entry[1]
+		for(var/print in fingerprints_found)
+			var/merged_print = data_prints[print]
+			if(!merged_print)
+				data_prints[print] = A.fingerprints[print]
+			else
+				data_prints[print] = stringmerge(data_prints[print],A.fingerprints[print])
+
+		//Now the fibers
+		var/list/fibers = data_entry[2]
+		if(!fibers)
+			fibers = list()
+		if(fibers_found.len)
+			for(var/j = 1, j <= fibers_found.len, j++)	//Fibers~~~
+				if(!fibers.Find(fibers_found[j]))	//It isn't!  Add!
+					fibers += fibers_found[j]
+		var/list/blood = data_entry[3]
+		if(!blood)
+			blood = list()
+		if(blood_DNA_found.len)
+			for(var/main_blood in A.blood_DNA)
+				if(!blood[main_blood])
+					blood[main_blood] = A.blood_DNA[blood]
+		return 1
+	var/list/sum_list[4]	//Pack it back up!
+	sum_list[1] = fingerprints_found.Copy()
+	sum_list[2] = fibers_found.Copy()
+	sum_list[3] = blood_DNA_found.Copy()
+	sum_list[4] = "\The [A] in \the [get_area(A)]"
+	stored["\ref [A]"] = sum_list
+	return 0
+
+/obj/item/device/detective_scanner/proc/scanhuman(var/mob/living/carbon/human/M, var/mob/user)
 	if (!ishuman(M))
 		to_chat(user, "<span class='warning'>[M] is not human and cannot have fingerprints.</span>")
 		return 0
@@ -61,40 +144,9 @@
 		spawn(15)
 			for(var/blood in M.blood_DNA)
 				to_chat(user, "<span class='notice'>Blood type: [M.blood_DNA[blood]]\nDNA: [blood]</span>")
-	return
+	return 1
 
-/obj/item/device/detective_scanner/proc/extract_fingerprints(var/atom/A)
-	var/list/extracted_prints=list()
-	if(!A.fingerprints || !A.fingerprints.len)
-		if(A.fingerprints)
-			QDEL_NULL(A.fingerprints)
-	else
-		for(var/i in A.fingerprints)
-			extracted_prints[i]=A.fingerprints[i]
-	return extracted_prints
-
-/obj/item/device/detective_scanner/proc/extract_blood(var/atom/A)
-	var/list/extracted_blood=list()
-	if(A.blood_DNA)
-		for(var/blood in A.blood_DNA)
-			extracted_blood[blood]=A.blood_DNA[blood]
-	return extracted_blood
-
-/obj/item/device/detective_scanner/proc/extract_fibers(var/atom/A)
-	var/list/extracted_fibers=list()
-	if(A.suit_fibers)
-		for(var/fiber in A.suit_fibers)
-			extracted_fibers[fiber]=A.suit_fibers[fiber]
-	return extracted_fibers
-
-//this is now preattack instead of afterattack so you can scan boxes and stuff rather than slapping your scanner in there immediately
-//ideally someone would unfuck the entire altclick pipeline to make this altclick behavior that doesn't call afterattack
-//also this should be a separate proc to cut down on copypasta in the /forger subtype
-/obj/item/device/detective_scanner/preattack(atom/A as obj|turf|area, mob/user as mob) 
-	if(!in_range(A,user))
-		return
-	if(loc != user)
-		return
+/obj/item/device/detective_scanner/proc/scanitem(var/atom/A, var/mob/user)
 	if(istype(A,/obj/machinery/computer/forensic_scanning)) //breaks shit.
 		return
 	if(istype(A,/obj/item/weapon/f_card))
@@ -139,6 +191,7 @@
 					blood_DNA_found[entry] = S.paint_overlay.blood_DNA[entry]
 	//General
 	if (fingerprints_found.len == 0 && blood_DNA_found.len == 0 && fibers_found.len == 0)
+		flick("forensic_r", src)
 		user.visible_message("\The [user] scans \the [A] with \a [src], the air around [user.gender == MALE ? "him" : "her"] humming[prob(70) ? " gently." : "."]" ,\
 		"<span class='notice'>Unable to locate any fingerprints, materials, fibers, or blood on [A]!</span>",\
 		"You hear a faint hum of electrical equipment.")
@@ -151,6 +204,7 @@
 	//PRINTS
 	if(fingerprints_found.len>0)
 		to_chat(user, "<span class='notice'>Isolated [fingerprints_found.len] fingerprints: Data Stored: Scan with Hi-Res Forensic Scanner to retrieve.</span>")
+		flick("forensic_g", src)
 		playsound(src, 'sound/items/detscan.ogg', 50, 1)
 
 		var/list/complete_prints = list()
@@ -169,6 +223,7 @@
 	//FIBERS
 	if(fibers_found.len)
 		to_chat(user, "<span class='notice'>Fibers/Materials Data Stored: Scan with Hi-Res Forensic Scanner to retrieve.</span>")
+		flick("forensic_g", src)
 		playsound(src, 'sound/items/detscan.ogg', 50, 1)
 
 	//Blood
@@ -189,42 +244,6 @@
 		"You hear a faint hum of electrical equipment, and someone making a thoughtful noise.")
 		return 0
 
-/obj/item/device/detective_scanner/proc/add_data(var/atom/A, var/list/blood_DNA_found,var/list/fingerprints_found,var/list/fibers_found)
-	//I love associative lists.
-	var/list/data_entry = stored["\ref [A]"]
-	if(islist(data_entry)) //Yay, it was already stored!
-		//Merge the fingerprints.
-		var/list/data_prints = data_entry[1]
-		for(var/print in fingerprints_found)
-			var/merged_print = data_prints[print]
-			if(!merged_print)
-				data_prints[print] = A.fingerprints[print]
-			else
-				data_prints[print] = stringmerge(data_prints[print],A.fingerprints[print])
-
-		//Now the fibers
-		var/list/fibers = data_entry[2]
-		if(!fibers)
-			fibers = list()
-		if(fibers_found.len)
-			for(var/j = 1, j <= fibers_found.len, j++)	//Fibers~~~
-				if(!fibers.Find(fibers_found[j]))	//It isn't!  Add!
-					fibers += fibers_found[j]
-		var/list/blood = data_entry[3]
-		if(!blood)
-			blood = list()
-		if(blood_DNA_found.len)
-			for(var/main_blood in A.blood_DNA)
-				if(!blood[main_blood])
-					blood[main_blood] = A.blood_DNA[blood]
-		return 1
-	var/list/sum_list[4]	//Pack it back up!
-	sum_list[1] = fingerprints_found.Copy()
-	sum_list[2] = fibers_found.Copy()
-	sum_list[3] = blood_DNA_found.Copy()
-	sum_list[4] = "\The [A] in \the [get_area(A)]"
-	stored["\ref [A]"] = sum_list
-	return 0
 
 /proc/get_timestamp()
 	return time2text(world.time + 432000, "hh:mm:ss")
