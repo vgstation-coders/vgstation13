@@ -206,7 +206,7 @@ var/list/seedbush_spawns = list(
 
 	for(var/obj/machinery/door/airlock/AL in target)
 		if(!istype(AL, /obj/machinery/door/airlock/external))
-			new /obj/machinery/door/mineral/wood/log(AL.loc)
+			new /obj/machinery/door/mineral/rock_door(AL.loc)
 			qdel(AL)
 
 	for(var/obj/machinery/light/L in target)
@@ -629,3 +629,10 @@ var/list/seedbush_spawns = list(
 	name = "Coconuts"
 	icon = 'icons/misc/beach.dmi'
 	icon_state = "coconuts"
+
+/obj/machinery/door/mineral/rock_door
+	name = "Rock door"
+	desc = "It's a lot of effort to use this thing..."
+	icon = 'icons/obj/doors/rockdoor.dmi'
+	icon_state = "rockdoor_closed"
+	prefix = "rock"
