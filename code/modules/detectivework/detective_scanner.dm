@@ -2,7 +2,7 @@
 
 
 /obj/item/device/detective_scanner
-	name = "forensic canner"
+	name = "forensic scanner"
 	desc = "Used to scan objects for DNA and fingerprints."
 	icon_state = "forensic"
 	var/amount = 20.0
