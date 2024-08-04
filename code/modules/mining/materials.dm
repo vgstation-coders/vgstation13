@@ -282,12 +282,11 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/silver
 	cointype=/obj/item/weapon/coin/silver
 	color = "#D0D0D0" //rgb: 208, 208, 208
-	brunt_damage_mod = 0.5
-	sharpness_mod = 1.5
+	brunt_damage_mod = 0.2
+	sharpness_mod = 1.8
 	quality_mod = 1.5
 	melt_temperature = MELTPOINT_SILVER
 	cc_per_sheet = CC_PER_SHEET_SILVER
-
 
 /datum/material/uranium
 	name="Uranium"
