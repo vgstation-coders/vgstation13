@@ -911,17 +911,17 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/unathi/mantle,
 		),
 		/datum/species/plasmaman = list(
-			slot_w_uniform_str = /obj/item/clothing/under/color/prisoner,
-			slot_shoes_str = /obj/item/clothing/shoes/orange,
-			slot_ears_str = /obj/item/device/radio/headset,
-			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/prisoner,
-			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/prisoner,
+			slot_w_uniform_str = /obj/item/clothing/under/leather_rags,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_wear_suit_str = /obj/item/clothing/suit/unathi/robe/plasmaman,
+			slot_head_str = /obj/item/clothing/head/bearpelt/brown/plasmaman,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_back_str = /obj/item/weapon/tank/plasma/plasmaman,
 		),
 		/datum/species/vox = list(
-			slot_ears_str = /obj/item/device/radio/headset,
-			slot_w_uniform_str = /obj/item/clothing/under/color/prisoner,
-			slot_shoes_str = /obj/item/clothing/shoes/orange,
+			slot_w_uniform_str = /obj/item/clothing/under/leather_rags,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_wear_suit_str = /obj/item/clothing/suit/unathi/mantle,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 			slot_back_str = /obj/item/weapon/tank/nitrogen,
 		),
@@ -937,7 +937,21 @@
 			slot_w_uniform_str = /obj/item/clothing/under/leather_rags,
 			slot_shoes_str = /obj/item/clothing/shoes/sandal,
 			slot_wear_suit_str = /obj/item/clothing/suit/unathi/robe,
-		)
+		),
+		/datum/species/plasmaman = list(
+			slot_w_uniform_str = /obj/item/clothing/under/leather_rags,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_wear_suit_str = /obj/item/clothing/suit/unathi/robe/plasmaman,
+			slot_head_str = /obj/item/clothing/head/bearpelt/brown/plasmaman,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+		),
+		/datum/species/vox = list(
+			slot_w_uniform_str = /obj/item/clothing/under/leather_rags,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_wear_suit_str = /obj/item/clothing/suit/unathi/robe,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
+			slot_back_str = /obj/item/weapon/tank/nitrogen,
+		),
 	)
 
 /datum/outfit/special/tribalfemale/equip_backbag(var/mob/living/carbon/human/H)

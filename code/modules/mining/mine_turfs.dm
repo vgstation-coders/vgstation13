@@ -12,6 +12,15 @@ var/global/list/mineralSpawnChance[]
 		"Diamond"   = 1,
 		"Cave"      = 1,
 	)
+	mineralSpawnChance["random_safe"] = list(
+		"Iron"      = 50,
+		"Plasma"    = 25,
+		"Ice"		= 10,
+		"Uranium"   = 5,
+		"Gold"      = 5,
+		"Silver"    = 5,
+		"Diamond"   = 1,
+	)
 	mineralSpawnChance["snow"] = list(
 		"Nanotrasite" = 24,
 		"Electrum"  = 8,
@@ -84,10 +93,6 @@ var/global/list/mineralSpawnChance[]
 	icon_state = "cave_wall"
 	base_icon_state = "cave_wall"
 	mined_type = /turf/unsimulated/floor/asteroid/underground
-
-/turf/unsimulated/mineral/random/air
-	name = "cave wall"
-	mined_type = /turf/simulated/floor/asteroid/air
 
 /turf/unsimulated/mineral/air
 	oxygen = MOLES_O2STANDARD
@@ -834,6 +839,11 @@ var/list/icon_state_to_appearance = list()
 				warning("Unknown mineral ID: [mineral_name]")
 
 	. = ..()
+
+/turf/unsimulated/mineral/random/air
+	name = "cave wall"
+	mined_type = /turf/simulated/floor/asteroid/air
+	mineralPool = "random_safe"
 
 /turf/unsimulated/mineral/random/snow
 	icon_state = "snow_rock"

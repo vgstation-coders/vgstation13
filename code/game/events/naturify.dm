@@ -1,6 +1,6 @@
 var/list/flora_types = list(
 									/obj/structure/flora/ausbushes/lavendergrass = 10,
-									/obj/structure/flora/ausbushes/sparsegrass = 30,
+									/obj/structure/flora/ausbushes/sparsegrass = 35,
 	                             	/obj/structure/flora/ausbushes/fullgrass = 20,
 								  	/obj/structure/flora/rock/pile = 15,
 									/obj/structure/flora/rock = 6,
@@ -10,6 +10,9 @@ var/list/flora_types = list(
 									/obj/structure/flora/ausbushes/sunnybush = 3,
 									/obj/structure/flora/ausbushes/genericbush = 3,
 									/obj/structure/flora/ausbushes/pointybush = 3,
+									/obj/structure/flora/ausbushes/ywflowers = 14,
+									/obj/structure/flora/ausbushes/brflowers = 14,
+									/obj/structure/flora/ausbushes/ppflowers = 14,
 									/obj/structure/seedbush = 10,
 							 )
 
@@ -25,15 +28,16 @@ var/list/animal_types = list(
 							 )
 
 var/list/cave_decor_types = list(
-								  	/obj/structure/flora/rock/pile = 40,
-									/obj/structure/flora/rock = 15,
-									/obj/item/device/flashlight/torch = 8,
-									/obj/item/weapon/pickaxe/shovel = 3,
+								  	/obj/structure/flora/rock/pile = 160,
+									/obj/structure/flora/rock = 60,
+									/obj/item/device/flashlight/torch = 20,
+									/obj/item/weapon/pickaxe/shovel = 6,
 									/obj/item/weapon/melee/bone_club = 1,
 									/obj/item/weapon/melee/wooden_club = 1,
+									/obj/structure/boulder = 12
 							 )
 
-var/list/ignored_cave_deletion_types = list(/obj/structure/window, /obj/machinery/door/airlock/external, /obj/structure/grille, /obj/structure/plasticflaps/mining)
+var/list/ignored_cave_deletion_types = list(/obj/structure/window, /obj/machinery/door/airlock, /obj/structure/grille, /obj/structure/plasticflaps/mining, /obj/machinery/door/poddoor)
 
 var/list/medicine_cow_possible_reagents = list(ALLICIN, TANNIC_ACID, THYMOL, PHYTOCARISOL, PHYTOSINE)
 
@@ -109,21 +113,12 @@ var/list/seedbush_spawns = list(
 				caveify_room(target)
 				generate_bear_den(target)
 			else if(istype(target, /area/maintenance))
-				if(prob(80))
-					clear_objects_in_room(target, ignored_cave_deletion_types)
-					break_room(target)
-					caveify_room(target)
-				else
-					break_room(target)
-					grassify_room(target, spawn_flora=TRUE)
+				clear_objects_in_room(target, ignored_cave_deletion_types)
+				break_room(target)
+				caveify_room(target)
 			else
-				if(prob(92))
-					break_room(target)
-					grassify_room(target, spawn_flora=TRUE)
-				else
-					clear_objects_in_room(target, ignored_cave_deletion_types)
-					break_room(target)
-					caveify_room(target)
+				break_room(target)
+				grassify_room(target, spawn_flora=TRUE)
 	for(var/area/target in areas)
 		if(target.name != "Space" && target.z == target_zlevel)
 			for(var/turf/simulated/wall/W in target)
@@ -153,12 +148,10 @@ var/list/seedbush_spawns = list(
 	for(var/obj/machinery/door/unpowered/shuttle/S in target)
 		new /obj/machinery/door/mineral/wood/log(S.loc)
 		qdel(S)
-	for(var/obj/machinery/door/poddoor/P in target)
-		qdel(P)
 
 	if(spawn_flora)
 		for(var/turf/simulated/floor/F in target)
-			if(!F.has_dense_content() && prob(35))
+			if(!F.has_dense_content() && prob(55))
 				var/flora_type = pickweight(flora_types)
 				new flora_type(F)
 
@@ -194,6 +187,11 @@ var/list/seedbush_spawns = list(
 		if(!F.has_dense_content() && prob(25))
 			var/cave_decor_type = pickweight(cave_decor_types)
 			new cave_decor_type(F)
+
+	for(var/obj/machinery/door/airlock/AL in target)
+		if(!istype(AL, /obj/machinery/door/airlock/external))
+			new /obj/machinery/door/mineral/wood/log(AL.loc)
+			qdel(AL)
 
 	for(var/obj/machinery/light/L in target)
 		var/obj/structure/hanging_lantern/HL = new /obj/structure/hanging_lantern/dim(L.loc)
@@ -327,8 +325,234 @@ var/list/seedbush_spawns = list(
 			to_chat(user, "<span class='notice'>There's not enough dirt left here to dig anymore!</span>")
 		return
 
-
 /obj/structure/flora/tree/shitty
 	icon = 'icons/obj/flora/trees.dmi'
 	icon_state = "shittytree"
 	randomize_on_creation = FALSE
+
+
+/obj/item/clothing/suit/unathi/robe/plasmaman
+	name = "plasmaman robes"
+	desc = "Somehow these robes keep a plasmaman safe, even outside of plasma."
+	species_restricted = list(PLASMAMAN_SHAPED)
+	species_fit = list(PLASMAMAN_SHAPED)
+	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+
+/obj/item/clothing/head/bearpelt/brown/plasmaman
+	name = "plasmaman wolf pelt"
+	desc = "Somehow this wolf pelt keep a plasmaman safe, even outside of plasma."
+	species_restricted = list(PLASMAMAN_SHAPED)
+	species_fit = list(PLASMAMAN_SHAPED)
+	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
+	hides_identity = HIDES_IDENTITY_NEVER
+	body_parts_covered = FULL_HEAD|HIDEHAIR
+
+/obj/item/clothing/head/helmet/space/plasmaman
+	name = "plasmaman helmet"
+	desc = "A special containment helmet designed to protect a plasmaman's volatile body from outside exposure and quickly extinguish it in emergencies."
+
+
+
+
+
+/obj/item/weapon/melee/defib_basic
+	name = "emergency defibrillator"
+	desc = "Used to restore fibrillating patients."
+	var/defib_delay = 30
+	var/ignores_clothes = FALSE
+
+/obj/item/weapon/melee/defib_basic/attack(mob/M, mob/user)
+	if(!ishuman(M))
+		to_chat(user, "<span class='warning'>You can't defibrillate [M]. You don't even know where to put the [src]!</span>")
+	else
+		var/mob/living/carbon/human/target = M
+		if(!(target.stat == 2 || target.stat == DEAD))
+			to_chat(user, "<span class='warning'>[src] buzzes: Vital signs detected.</span>")
+		else
+			attempt_defib(target, user)
+	return
+
+/obj/item/weapon/melee/defib_basic/proc/display_start_message(mob/living/carbon/human/target, mob/user)
+	user.visible_message("<span class='notice'>[user] starts setting up the [src] on [target]'s chest.</span>", \
+	"<span class='notice'>You start setting up the [src] on [target]'s chest.</span>")
+
+/obj/item/weapon/melee/defib_basic/proc/attempt_defib(mob/living/carbon/human/target, mob/user)
+	display_start_message(target, user)
+	if(target.mind && !target.client && target.get_heart() && target.get_organ(LIMB_HEAD) && target.has_brain() && !target.mind.suiciding && target.health+target.getOxyLoss() > config.health_threshold_dead)
+		target.ghost_reenter_alert("Someone is about to try to defibrillate your body. Return to it if you want to be resurrected!")
+	if(do_after(user,target,defib_delay))
+		if(pre_defib_check(target, user))
+			perform_defib(target, user)
+			return TRUE
+	return FALSE
+
+/obj/item/weapon/melee/defib_basic/proc/pre_defib_check(mob/living/carbon/human/target, mob/user)
+	return TRUE
+
+/obj/item/weapon/melee/defib_basic/proc/post_defib_actions(mob/living/carbon/human/target, mob/user)
+	return
+
+/obj/item/weapon/melee/defib_basic/proc/perform_defib(mob/living/carbon/human/target, mob/user)
+	spark(src, 5, FALSE)
+	playsound(src,'sound/items/defib.ogg',50,1)
+	update_icon()
+	to_chat(user, "<span class='notice'>You shock [target] with the [src].</span>")
+	var/datum/organ/internal/heart/heart = target.get_heart()
+	if(!heart)
+		target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Subject requires a heart.</span>")
+		target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
+		return
+	var/datum/organ/external/head/head = target.get_organ(LIMB_HEAD)
+	if(!head || head.status & ORGAN_DESTROYED)
+		target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Severe cranial damage detected.</span>")
+		return
+	if((M_HUSK in target.mutations) && (M_NOCLONE in target.mutations))
+		target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Irremediable genetic damage detected.</span>")
+		return
+	if(!target.has_brain())
+		target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. No central nervous system detected.</span>")
+		return
+	if(!target.has_attached_brain())
+		target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Central nervous system detachment detected.</span>")
+		return
+	if(target.mind && target.mind.suiciding)
+		target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Unrecoverable nerve trauma detected.</span>") // They suicided so they fried their brain. Space Magic.
+		return
+	if(!ignores_clothes)
+		if(istype(target.wear_suit,/obj/item/clothing/suit/armor) && (target.wear_suit.body_parts_covered & UPPER_TORSO) && prob(95)) //75 ? Let's stay realistic here
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
+			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
+			return
+		if(istype(target.w_uniform,/obj/item/clothing/under) && (target.w_uniform.body_parts_covered & UPPER_TORSO) && prob(50))
+			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
+			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
+			return
+	if(target.mind && !target.client) //Let's call up the ghost! Also, bodies with clients only, thank you.
+		target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. [target.ghost_reenter_alert("Someone has tried to defibrillate your body. Return to it if you want to be resurrected!") ? "Vital signs are too weak, please try again in five seconds" : "No brainwaves detected"].</span>")
+		return
+	target.apply_damage(-target.getOxyLoss(),OXY)
+	target.updatehealth()
+	target.visible_message("<span class='danger'>[target]'s body convulses a bit.</span>")
+	if(target.health > config.health_threshold_dead)
+		target.timeofdeath = 0
+		target.visible_message("<span class='notice'>[src] beeps: Defibrillation successful.</span>")
+
+		target.resurrect()
+
+		target.tod = null
+		target.stat = target.status_flags & BUDDHAMODE ? CONSCIOUS : UNCONSCIOUS
+		target.regenerate_icons()
+		target.update_canmove()
+		target.flash_eyes(visual = 1)
+		target.apply_effect(10, EYE_BLUR) //I'll still put this back in to avoid dumb "pounce back up" behavior
+		target.apply_effect(10, PARALYZE)
+		target.update_canmove()
+		has_been_shade.Remove(target.mind)
+		to_chat(target, "<span class='notice'>You suddenly feel a spark and your consciousness returns, dragging you back to the mortal plane.</span>")
+		post_defib_actions(target, user)
+	else
+		target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
+	return
+
+/obj/item/weapon/melee/defib_basic/electric_eel
+	name = "defibrillating eel"
+	desc = "Slimy..."
+	icon = 'icons/obj/fish_items.dmi'
+	icon_state = "electric_eel_full"
+	var/charge = 50
+	var/max_charge = 50
+	var/recharge_rate_per_tick = 1
+	var/revive_charge_usage = 15
+	var/attack_charge_usage = 5
+
+/obj/item/weapon/melee/defib_basic/electric_eel/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/item/weapon/melee/defib_basic/electric_eel/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+
+/obj/item/weapon/melee/defib_basic/electric_eel/process()
+	..()
+	charge = min(max_charge, charge + recharge_rate_per_tick)
+	update_icon()
+
+/obj/item/weapon/melee/defib_basic/electric_eel/update_icon()
+	if(charge > max_charge * 0.7)
+		icon_state = "electric_eel_full"
+	else if(charge > max_charge * 0.2)
+		icon_state = "electric_eel_half"
+	else
+		icon_state = "electric_eel_low"
+
+/obj/item/weapon/melee/defib_basic/electric_eel/examine(mob/user)
+	..()
+	if(charge > max_charge * 0.7)
+		to_chat(user, "<span class='notice'>It's brimming with electricity!</span>")
+	else if(charge > max_charge * 0.3)
+		to_chat(user, "<span class='notice'>It's got some electricity in it.</span>")
+	else
+		to_chat(user, "<span class='notice'>There's hardly any electricity left in it.</span>")
+
+/obj/item/weapon/melee/defib_basic/electric_eel/attack(mob/M, mob/user)
+	if(user.a_intent == I_HURT)
+		var/charge_fullness = charge / max_charge
+		var/electric_damage = rand(5, 17) * charge_fullness
+		var/brute_damage = rand(4, 7)
+		var/mob/living/carbon/human/H = M
+		if(istype(H))
+			if (charge > attack_charge_usage && H.electrocute_act(electric_damage, src, def_zone = LIMB_CHEST))
+				var/datum/organ/internal/heart/heart = H.get_heart()
+				if(heart)
+					heart.damage += rand(2,4)
+				H.audible_scream()
+				charge = max(0, charge - attack_charge_usage)
+				playsound(src, "sparks", 70, 1)
+			H.adjustBruteLoss(brute_damage)
+			spawn()
+				user.attack_log += "\[[time_stamp()]\]<font color='red'> Shocked [H] ([H.ckey]) with [src]</font>"
+				H.attack_log += "\[[time_stamp()]\]<font color='orange'> Shocked by [user] ([user.ckey]) with [src]</font>"
+				log_attack("<font color='red'>[user] ([user.ckey]) shocked [H] ([H.ckey]) with [src]</font>" )
+				H.assaulted_by(user)
+			playsound(src,'sound/effects/fishslap.ogg', 60, 1)
+			if(prob(15))
+				user.drop_from_inventory(src)
+				user.visible_message("<span class='notice'>[src] slips right out of [user]'s hand!.</span>", \
+					"<span class='notice'>[src] slips right out of your hand!</span>")
+			update_icon()
+		else
+			var/mob/living/L = M
+			if(istype(L))
+				if (charge > attack_charge_usage)
+					L.take_organ_damage(burn=electric_damage)
+					charge = max(0, charge - attack_charge_usage)
+					playsound(L, "sparks", 70, 1)
+					spark(L.loc, 5)
+				L.take_organ_damage(brute=brute_damage)
+				playsound(src,'sound/effects/fishslap.ogg', 60, 1)
+				update_icon()
+				if(prob(15))
+					user.drop_from_inventory(src)
+					user.visible_message("<span class='notice'>[src] slips right out of [user]'s hand!.</span>", \
+						"<span class='notice'>[src] slips right out of your hand!</span>")
+				return
+			else
+				to_chat(user, "<span class='notice'>You can't hit [M] with the [src]! That's just wrong!</span>")
+				return
+	else
+		return ..()
+
+/obj/item/weapon/defib_basic/proc/electric_eel(mob/living/carbon/human/target, mob/user)
+	user.visible_message("<span class='notice'>[user] starts pressing the [src] onto [target]'s chest.</span>", \
+	"<span class='notice'>You start pressing the [src] onto [target]'s chest</span>")
+
+/obj/item/weapon/melee/defib_basic/electric_eel/pre_defib_check(mob/living/carbon/human/target, mob/user)
+	if(charge < revive_charge_usage)
+		to_chat(user, "<span class='notice'>[src] doesn't feel lively enough to revive someone! Wait some time.</span>")
+		return FALSE
+
+/obj/item/weapon/melee/defib_basic/electric_eel/post_defib_actions(mob/living/carbon/human/target, mob/user)
+	charge = min(0, charge-revive_charge_usage)
