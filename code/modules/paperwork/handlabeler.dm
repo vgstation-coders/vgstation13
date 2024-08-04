@@ -14,6 +14,7 @@
 	if(mode) //There's very few cases where you'd want to label something and also follow normal attack behavior
 		afterattack(target, user, proximity_flag, click_parameters)
 		return 1
+	..()
 
 /obj/item/weapon/hand_labeler/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
