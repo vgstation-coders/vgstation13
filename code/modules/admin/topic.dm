@@ -3679,13 +3679,16 @@
 							spawn(rand(0,3000))
 								biohazard_alert(dis_level)
 			if("mass_equip_outfit")
-				var/choice = input("Do you want to delete existing clothing instead of drop?") in list("Yeah!", "Nah.", "Cancel")
-				if(choice == "Cancel")
+				var/const/yes_choice = "Yeah!"
+				var/const/no_choice = "Nah."
+				var/const/cancel_choice = "Cancel"
+				var/choice = input("Do you want to delete existing clothing instead of drop?") in list(yes_choice, no_choice, cancel_choice)
+				if(choice == cancel_choice)
 					return
 				var/outfit_type = select_loadout()
 				if(!outfit_type || !ispath(outfit_type))
 					return
-				var/delete_items = choice == "Yeah" ? TRUE : FALSE
+				var/delete_items = choice == yes_choice ? TRUE : FALSE
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","EQU")
 				for(var/mob/living/carbon/human/H in player_list)
