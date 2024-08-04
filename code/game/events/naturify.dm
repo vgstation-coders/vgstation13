@@ -528,7 +528,7 @@ var/list/seedbush_spawns = list(
 	icon_state = "electric_eel_full"
 	var/charge = 50
 	var/max_charge = 50
-	var/recharge_rate_per_tick = 0.25
+	var/recharge_rate_per_tick = 0.15
 	var/revive_charge_usage = 15
 	var/attack_charge_usage = 5
 
@@ -618,6 +618,7 @@ var/list/seedbush_spawns = list(
 	if(charge < revive_charge_usage)
 		to_chat(user, "<span class='notice'>[src] doesn't feel lively enough to revive someone! Wait some time.</span>")
 		return FALSE
+	return TRUE
 
 /obj/item/weapon/melee/defib_basic/electric_eel/post_defib_actions(mob/living/carbon/human/target, mob/user)
 	charge = min(0, charge-revive_charge_usage)
