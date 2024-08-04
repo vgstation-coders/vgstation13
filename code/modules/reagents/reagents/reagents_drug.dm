@@ -260,6 +260,7 @@
 	color = "#89CBF0" //baby blue
 	custom_metabolism = 0.01
 	overdose_am = 30
+	sport = 2 * SPORTINESS_SUGAR
 	data = "no motor mouth"
 
 /datum/reagent/hyperzine/methamphetamine/on_mob_life(var/mob/living/M)
