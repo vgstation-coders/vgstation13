@@ -34,6 +34,9 @@
 	return
 
 /obj/item/device/detective_scanner/AltClick(var/mob/user)
+	if(!in_range(src,user) || (!ishigherbeing(user) || user.incapacitated()))
+		..()
+		return
 	scanmode = !scanmode
 	var/freq = 30000 + scanmode * 25000
 	user.playsound_local(user, 'sound/misc/pda_snake_eat.ogg', 30, scanmode, freq, 0, 0, 0)
@@ -69,14 +72,14 @@
 			extracted_fibers[fiber]=A.suit_fibers[fiber]
 	return extracted_fibers
 
-//this is now preattack instead of afterattack so you can scan boxes and stuff rather than slapping your scanner in there immediately
+//alt-mode uses preattack so you can scan boxes and lockers without hassle
 /obj/item/device/detective_scanner/preattack(atom/A as obj|turf|area, mob/user as mob) 
-	if(!in_range(A,user))
-		return
-	if(loc != user)
-		return
+	if(scanmode)
+		scanitem(A, user)
+		return 1 //this will not call attack or afterattack afterwards.
+	
+/obj/item/device/detective_scanner/afterattack(atom/A as obj|turf|area, mob/user as mob) 
 	scanitem(A, user)
-	return scanmode
 
 /obj/item/device/detective_scanner/proc/add_data(var/atom/A, var/list/blood_DNA_found,var/list/fingerprints_found,var/list/fibers_found)
 	//I love associative lists.
@@ -147,6 +150,11 @@
 	return 1
 
 /obj/item/device/detective_scanner/proc/scanitem(var/atom/A, var/mob/user)
+	if(!in_range(A,user))
+		return
+	if(loc != user)
+		return
+	
 	if(istype(A,/obj/machinery/computer/forensic_scanning)) //breaks shit.
 		return
 	if(istype(A,/obj/item/weapon/f_card))
