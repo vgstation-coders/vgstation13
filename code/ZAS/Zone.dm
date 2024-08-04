@@ -282,6 +282,15 @@ Class Procs:
 			else
 				T.flying_dust(closest_turf,-dust_differential,min(99,abs(differential*2)))
 
+/zone/proc/blow_dust_motes_but_with_turf(var/turf/target_turf, var/differential)
+	if (!target_turf)
+		return
+	var/dust_differential = log(abs(differential) * 3)
+	for (var/turf/T in contents)
+		if (differential > 0)
+			T.flying_dust(target_turf,dust_differential,min(99,abs(differential*2)))
+		else
+			T.flying_dust(target_turf,-dust_differential,min(99,abs(differential*2)))
 
 #ifdef ZAS_COLOR
 #undef ZAS_COLOR
