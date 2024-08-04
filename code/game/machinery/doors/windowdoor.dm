@@ -47,7 +47,7 @@
 	setDensity(FALSE)
 	..()
 
-/obj/machinery/door/update_icon()
+/obj/machinery/door/window/update_icon()
 	return
 
 /obj/machinery/door/window/proc/smart_toggle() //For "smart" windows

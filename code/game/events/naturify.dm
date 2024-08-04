@@ -37,6 +37,19 @@ var/list/cave_decor_types = list(
 									/obj/structure/boulder = 12
 							 )
 
+var/list/beach_decor_types = list(
+									/obj/structure/flora/rock/pile = 30,
+									/obj/structure/flora/coconut = 16,
+									/obj/item/weapon/grown/log/tree = 4,
+									/obj/item/weapon/melee/defib_basic/electric_eel = 4,
+							 )
+
+var/list/beach_animal_types = list(
+									/mob/living/simple_animal/crab = 10,
+									/mob/living/simple_animal/hostile/carp/baby/friendly = 15,
+									/mob/living/simple_animal/hostile/carp/friendly = 10,
+							 )
+
 var/list/ignored_cave_deletion_types = list(/obj/structure/window, /obj/machinery/door/airlock, /obj/structure/grille, /obj/structure/plasticflaps/mining, /obj/machinery/door/poddoor)
 
 var/list/medicine_cow_possible_reagents = list(ALLICIN, TANNIC_ACID, THYMOL, PHYTOCARISOL, PHYTOSINE)
@@ -116,6 +129,9 @@ var/list/seedbush_spawns = list(
 				clear_objects_in_room(target, ignored_cave_deletion_types)
 				break_room(target)
 				caveify_room(target)
+			else if(istype(target, /area/medical))
+				break_room(target)
+				beachify_room(target)
 			else
 				break_room(target)
 				grassify_room(target, spawn_flora=TRUE)
@@ -200,6 +216,46 @@ var/list/seedbush_spawns = list(
 		HL.update()
 		qdel(L)
 
+/proc/beachify_room(var/area/target)
+	for(var/turf/T in target)
+		if(istype(T, /turf/simulated/floor/))
+			T.ChangeTurf(/turf/simulated/floor/beach/sand)
+		else if(istype(T, /turf/simulated/wall) || istype(T, /turf/simulated/wall/r_wall))
+			T.ChangeTurf(/turf/unsimulated/mineral/random/air, tell_universe = 1)
+
+	for(var/obj/machinery/light/L in target)
+		var/obj/structure/hanging_lantern/HL = new /obj/structure/hanging_lantern(L.loc)
+		HL.dir = L.dir
+		HL.lantern_can_be_removed = FALSE
+		HL.update()
+		qdel(L)
+
+	for(var/obj/machinery/door/airlock/AL in target)
+		if(!istype(AL, /obj/machinery/door/airlock/external))
+			new /obj/machinery/door/mineral/wood/log(AL.loc)
+			qdel(AL)
+	for(var/obj/machinery/door/unpowered/shuttle/S in target)
+		new /obj/machinery/door/mineral/wood/log(S.loc)
+		qdel(S)
+
+	for(var/turf/simulated/floor/F in target)
+		if(!F.has_dense_content() && prob(5))
+			for(var/obj/O in F)
+				qdel(O)
+			new/obj/structure/flora/tree/palm(F)
+
+
+	for(var/turf/simulated/floor/F in target)
+		if(!F.has_dense_content() && prob(13))
+			var/flora_type = pickweight(beach_decor_types)
+			new flora_type(F)
+
+	for(var/turf/simulated/floor/F in target)
+		if(!F.has_dense_content() && prob(4))
+			var/animal_type = pickweight(beach_animal_types)
+			new animal_type(F)
+
+
 /proc/generate_bear_den(var/area/target)
 	for(var/turf/simulated/floor/F in target)
 		if(!F.has_dense_content() && prob(15))
@@ -280,6 +336,7 @@ var/list/seedbush_spawns = list(
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "grass1"
 	plane = PLATING_PLANE
+	flammable = FALSE
 	var/dirt_left = 10
 
 /turf/simulated/floor/planetary_grass/update_icon()
@@ -330,6 +387,15 @@ var/list/seedbush_spawns = list(
 	icon_state = "shittytree"
 	randomize_on_creation = FALSE
 
+/obj/structure/flora/tree/palm
+	name = "Palm tree"
+	desc = "The coconut-nut is a giant nut!"
+	icon = 'icons/misc/beach2.dmi'
+	icon_state = "palm1"
+	pixel_x = 0
+
+/obj/structure/flora/tree/palm/New()
+	icon_state = "palm[rand(1,2)]"
 
 /obj/item/clothing/suit/unathi/robe/plasmaman
 	name = "plasmaman robes"
@@ -457,12 +523,12 @@ var/list/seedbush_spawns = list(
 
 /obj/item/weapon/melee/defib_basic/electric_eel
 	name = "defibrillating eel"
-	desc = "Slimy..."
+	desc = "Slimy... but also a highly versatile weapon."
 	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "electric_eel_full"
 	var/charge = 50
 	var/max_charge = 50
-	var/recharge_rate_per_tick = 1
+	var/recharge_rate_per_tick = 0.25
 	var/revive_charge_usage = 15
 	var/attack_charge_usage = 5
 
@@ -476,7 +542,6 @@ var/list/seedbush_spawns = list(
 
 
 /obj/item/weapon/melee/defib_basic/electric_eel/process()
-	..()
 	charge = min(max_charge, charge + recharge_rate_per_tick)
 	update_icon()
 
@@ -556,3 +621,10 @@ var/list/seedbush_spawns = list(
 
 /obj/item/weapon/melee/defib_basic/electric_eel/post_defib_actions(mob/living/carbon/human/target, mob/user)
 	charge = min(0, charge-revive_charge_usage)
+
+
+/obj/structure/flora/coconut
+	plane = OBJ_PLANE
+	name = "Coconuts"
+	icon = 'icons/misc/beach.dmi'
+	icon_state = "coconuts"
