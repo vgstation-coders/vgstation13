@@ -384,17 +384,15 @@ var/list/particle_string_to_type = list(
 	width = 96
 	height = 96
 	count = 20
-	spawning = 1.5
+	spawning = 2
 
-	color = "#CCCCCC99"
+	color = "#FFFFFF99"
 	lifespan = 1 SECONDS
 	fade = 0.5 SECONDS
 	icon = 'icons/effects/effects_particles.dmi'
 	icon_state = "zas_dust"
 	position = generator("box", list(-15,-15), list(15,15))
 	velocity = list(0,0)
-
-	blend_mode = BLEND_ADD
 
 /turf
 	var/last_dust_time = 0
@@ -407,11 +405,11 @@ var/list/particle_string_to_type = list(
 	last_dust_strength = wind_strength
 	var/this_dust_time = last_dust_time
 	add_particles(PS_ZAS_DUST)
-	adjust_particles(PVAR_SPAWNING, 1.5, PS_ZAS_DUST)
+	adjust_particles(PVAR_SPAWNING, 2, PS_ZAS_DUST)
 	adjust_particles(PVAR_VELOCITY, dir2dust(dest,wind_strength), PS_ZAS_DUST)
 	adjust_particles(PVAR_LIFESPAN, 3 SECONDS / abs(wind_strength), PS_ZAS_DUST)
 	adjust_particles(PVAR_FADE, 1.5 SECONDS / abs(wind_strength), PS_ZAS_DUST)
-	adjust_particles(PVAR_COLOR, "#888888[num2hex(wind_opacity)]", PS_ZAS_DUST)
+	adjust_particles(PVAR_COLOR, "#FFFFFF[num2hex(wind_opacity)]", PS_ZAS_DUST)
 
 	spawn(SSair.wait*2)
 		if (last_dust_time == this_dust_time)
