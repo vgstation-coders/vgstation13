@@ -85,7 +85,7 @@
 		/turf/simulated/floor/engine,
 		/turf/simulated/floor/beach,
 		/turf/simulated/floor/shuttle,
-		/turf/simulated/floor/plating/snow
+		/turf/simulated/floor/plating/snow,
 		/turf/simulated/floor/planetary_grass
 	)
 
