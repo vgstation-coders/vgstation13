@@ -75,11 +75,11 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			if(W_CLASS_MEDIUM)
 				thermal_mass = 1.0
 			if(W_CLASS_LARGE)
-				thermal_mass = 10.0
+				thermal_mass = 5.0
 			if(W_CLASS_HUGE)
-				thermal_mass = 25.0 //combo breaker but 100kg is way too heavy
+				thermal_mass = 20.0
 			if(W_CLASS_GIANT)
-				thermal_mass = 100
+				thermal_mass = 50.0
 	if(thermal_mass)
 		initial_thermal_mass = thermal_mass
 	if(flammable)
@@ -425,11 +425,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return SUICIDE_ACT_BRUTELOSS
 
 /obj/ignite()
-	if(!isturf(loc)) //Prevent things from burning if worn, held, or inside something else. Storage containers will eject their contents when ignited, allowing for burning of the contents.
-		return
-	ash_covered = TRUE
-	remove_particles(PS_SMOKE)
-	return ..()
+	if(..())
+		ash_covered = TRUE
+		remove_particles(PS_SMOKE)
 
 /obj/item/checkburn()
 	if(!flammable)
