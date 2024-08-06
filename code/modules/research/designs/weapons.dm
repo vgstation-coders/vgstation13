@@ -292,7 +292,7 @@
 	desc = "Watch the backblast, you idiot."
 	id = "RPG"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 50000, MAT_GLASS = 15000, MAT_PLASTIC = 25000)
+	materials = list(MAT_IRON = 50000, MAT_GLASS = 15000, MAT_PLASTIC = 25000, MAT_GOLD = 6000)
 	build_path = /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
@@ -320,7 +320,7 @@
 	desc = "EMP rocket for the Nanotrasen rocket launcher."
 	id = "emp_rocket"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 20000)
+	materials = list(MAT_IRON = 20000, MAT_URANIUM = 500)
 	build_path = /obj/item/ammo_casing/rocket_rpg/emp
 
 /datum/design/rocket_rpg/stun
@@ -328,7 +328,7 @@
 	desc = "Stun rocket for the Nanotrasen rocket launcher. Not a flashbang."
 	id = "emp_rocket"
 	build_type = AMMOLATHE
-	materials = list(MAT_IRON = 20000)
+	materials = list(MAT_IRON = 20000, MAT_SILVER = 1000)
 	build_path = /obj/item/ammo_casing/rocket_rpg/stun
 
 //Shotgun single ammunition (mostly) isn't printable, but is defined here to keep the material cost consistent
