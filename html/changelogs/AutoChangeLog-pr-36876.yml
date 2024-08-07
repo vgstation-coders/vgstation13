@@ -1,8 +1,0 @@
-author: boy2mantwicethefam
-delete-after: true
-changes:
-- tweak: A neo-ultra-capitalism mode Old Vendotron will no longer kill itself by summoning
-    a lot of hostile creatures that it would proceed to go to combat with, and now
-    the creatures it creates become part of the same faction as it.
-- bugfix: Fixed the Old Vendotron's plate attack so that it will no longer throw plates
-    on its own tile. It will now properly throw them away.

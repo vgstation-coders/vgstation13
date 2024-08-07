@@ -1,5 +1,0 @@
-author: Eneocho
-delete-after: true
-changes:
-- tweak: The Caber can now self recharge once per minute and has the proper sharpness
-    flags when on its detonated state.
