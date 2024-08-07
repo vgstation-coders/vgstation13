@@ -1,0 +1,7 @@
+author: hacker-on-steroids
+delete-after: true
+changes:
+- rscadd: ripley killdozer kit - adds tons of armor and allows you to put guns onto
+    the ripley
+- rscadd: add killdozer kit to uplink (10tc)
+- rscadd: add killdozer kit to r&d (illegal 2)
