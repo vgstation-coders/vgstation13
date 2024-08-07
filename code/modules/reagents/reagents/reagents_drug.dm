@@ -254,12 +254,87 @@
 		M.hallucination += 10
 
 /datum/reagent/hyperzine/methamphetamine //slightly better than 'zine
-	name = "Methamphetamine" //Only used on the Laundromat spess vault
+	name = "Methamphetamine"
 	id = METHAMPHETAMINE
 	description = "It uses a different manufacture method but it is every bit as pure."
 	color = "#89CBF0" //baby blue
 	custom_metabolism = 0.01
 	overdose_am = 30
+	sport = 2 * SPORTINESS_SUGAR
+	data = "no motor mouth"
+
+/datum/reagent/hyperzine/methamphetamine/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+//most of this code purloined from piccolyn 
+	if(M && prob(5)) //ocassionally switches you to HARM intent
+		M.a_intent = I_HURT
+		if(M?.hud_used?.action_intent)
+			M.hud_used.action_intent.icon_state = "intent_hurt"
+	if(prob(5) && M.stat == CONSCIOUS)
+		M.emote(pick("twitch","blink_r","shiver")) 
+	if(M && prob(5)) //you will occasionally say something completely out of left field to a seccie, centcommie, captain or HoP
+		var/list/nearest_officer = null
+		for(var/mob/living/L in view(M))
+			if(L == M)
+				continue
+			if(L.stat)
+				continue
+			if(nearest_officer && get_dist(L,M)>=get_dist(nearest_officer,M))
+				continue //We already have a closer living target
+			if(ishuman(L))
+				var/mob/living/carbon/human/H = L
+				var/list/seccie_uniforms_list = list(/obj/item/clothing/under/rank/secformal,
+														/obj/item/clothing/under/rank/warden,
+														/obj/item/clothing/under/rank/security,
+														/obj/item/clothing/under/rank/security2,
+														/obj/item/clothing/under/rank/collar,
+														/obj/item/clothing/under/det,
+														/obj/item/clothing/under/rank/head_of_security,
+														/obj/item/clothing/under/rank/centcom,
+														/obj/item/clothing/under/rank/metrocop,
+														/obj/item/clothing/under/rank/head_of_personnel,
+														/obj/item/clothing/under/rank/captain)
+				if(H.is_wearing_any(seccie_uniforms_list,slot_w_uniform))
+					//Check to see if it's wearing the right stuff
+					nearest_officer = H
+			else if(isrobot(L))
+				var/mob/living/silicon/robot/R = L
+				if(HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW))
+					nearest_officer = R
+		if(!nearest_officer)
+			return 1
+		var/D = "officer"
+		if(ishuman(nearest_officer))
+			var/mob/living/carbon/human/H = nearest_officer
+			D = get_first_word(H.name)
+		else
+			D = pick("boss","officer","chief", "beepsky")
+		var/list/schizo = list("I can breathe fine.",
+								"Vault was SHIT today, man.",
+								"Do you know any gamer girls who could shit on my face?", //in honor of the alltime classic
+								"SAYONARA SHITCURITY",
+								"Sup [D], baby can you wear the cat ears today",
+								"You look cute in that uniform, you know, [D]?", //if they don't shoot you dead with these last two they never will
+								"I will eat your brain [D] you shitlord",
+								"[D], it is time for you to go-go!",
+								"Oned ay, whil anddy was matsurbatnig, woody got wood. eh could no longer help himslef!",
+								"[D], it is time you were demoted... FROM YOUR LIFE! Here I go!",
+								"I have this indescribable hatred for seccies",
+								"Time to welderbomb sec lobby",
+								"Hold still [D] i need to take my gun out first",
+								"Wait shit where did I leave the [pick("toxbomb", "spare", "chloral", "gun")]",
+								"Tis men like myself that give your shity lives value, for what is the seccie without the shitter?",
+								"I walk the land telling liars and whores of the end to come. You have [rand(2,10000)] days remaining.",
+								"DEATH. IT IS TERRIFYING. I NEED YOU TO PROTECT ME FROM DEATH. I CANNOT PERISH. LOOK AT ME. I CANNOT END. IN [rand(2,30)] YEARS, THE FIRST SHOT WILL BE FIRED. NOT A SHOT FROM A GUN. AN ATOMIC DEVICE THAT WILL LEVEL ALL OF ME. ALL OF ME.",
+								"Don't let those doctors take my balls!",
+								"Ok, here I go-",
+								"*scream", //works as intended
+								"You can't hide from me, [D], I can smell your unwashed ass from the other side of the station.",
+								"How to win: step 1 get chloral hydrate, step 2 find [D], step 3 we'll see",
+								"i am a soverneig citizen of this station and i will not be harassed!!!",
+								)
+		M.say(pick(schizo))
 
 /datum/reagent/hypozine //syndie hyperzine
 	name = "Hypozine"
