@@ -1,0 +1,10 @@
+author: boy2mantwicethefam
+delete-after: true
+changes:
+- tweak: Slimes will now become ravenous in the presence of monkeys, causing them
+    to become hungry and thus try to eat anything they can reach (including the monkeys),
+    which also allows the slimes to feed far sooner on the monkeys than they otherwise
+    would.
+- tweak: Slimes can now store slightly more nutrition, meaning that they can develop
+    into adult slimes and then split by eating two monkeys in a smaller form instead
+    of having to eat a monkey in a smaller form and another monkey in a larger form.
