@@ -4225,5 +4225,12 @@
 	required_catalysts = list(ZOMBIEPOWDER = 5)
 	result_amount = 5
 
+/datum/chemical_reaction/squash
+	name = "Squash"
+	id = SQUASH
+	result = SQUASH
+	required_reagents = list(MANLYDORF = 1, DEGENERATECALCIUM = 1, HYPERZINE = 1)
+	result_amount = 2
+
 #undef ALERT_AMOUNT_ONLY
 #undef ALERT_ALL_REAGENTS

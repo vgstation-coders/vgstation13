@@ -527,6 +527,7 @@
 #define MIMOSA			"mimosa"
 #define LEMONDROP		"lemondrop"
 #define FEVERFEW		"feverfew"
+#define SQUASH			"squash"
 
 #define ACRYLIC			"acrylic"
 #define ACETONE			"acetone"

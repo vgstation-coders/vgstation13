@@ -508,3 +508,56 @@
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#4c1e00" //rgb: 76, 30, 0
 	density = 1.01
+
+/datum/reagent/squash
+	name = "Squash"
+	id = SQUASH
+	description = "High quality squash, makes you thick and stout, but can have extreme recoil on non-dwarves."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#F5CD62" //rgb: 245, 205, 98
+	density = 4 //thick?
+	custom_metabolism = 0.05
+	var/keklookatthisdude = 0
+
+/datum/reagent/squash/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(prob(1))
+			H.say(pick("ROCK AND STONE!", "I am a dwarf and I'm digging a hole!"))
+		if((H.dna.GetSEState(SMALLSIZEBLOCK)) == FALSE) //you skip all this shit if you are a dwarf
+			switch(tick)
+				if(1 to 15)
+					H.adjustBruteLoss(rand(2,6))
+					H.Jitter(5)
+					if(prob(15) && H.feels_pain())
+						to_chat(H, "<span class='warning'>Your bones itch!</span>")
+				if(16 to INFINITY)
+					if(!keklookatthisdude)
+						H.dna.SetSEState(SMALLSIZEBLOCK, TRUE)
+						domutcheck(H,null,MUTCHK_FORCED)
+						to_chat(H,"<span class='warning'>You feel as tough as a dwarf and suddenly shrink!</span>")
+						message_admins("Look at this dude: [key_name(M)] became tiny (on squash (dwarf reagent))! ([formatJumpTo(M)])")
+						keklookatthisdude = 1
+
+/datum/reagent/squash/reagent_deleted()
+	if(..())
+		return 1
+
+	if(!holder)
+		return
+	var/mob/M =  holder.my_atom
+
+	if(ishuman(M))
+		if(keklookatthisdude) //you skip this if you were a TRVE (gene) dwarf
+			var/mob/living/carbon/human/H = M
+			keklookatthisdude = 0
+			H.dna.SetSEState(SMALLSIZEBLOCK, FALSE)
+			domutcheck(H,null,MUTCHK_FORCED)
+			for (var/datum/organ/external/E in H.organs)
+				if(E.min_broken_damage == E.max_damage) //You went out of your way to harden your bones, your bones are safe
+					return
+				else
+					E.fracture() //every bone in me body is broke - demoman
