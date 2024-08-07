@@ -883,6 +883,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=flicklights'>Ghost Mode</A><BR>
 			<A href='?src=\ref[src];secretsfun=monkey'>Turn all humans into monkeys</A><BR>
 			<BR>
+			<A href='?src=\ref[src];secretsfun=mass_equip_outfit'>Equip outfit on all player humans</A><BR>
 			<A href='?src=\ref[src];secretsfun=sec_all_clothes'>Remove ALL clothing</A><BR>
 			<A href='?src=\ref[src];secretsfun=retardify'>Make all players retarded</A><BR>
 			<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns (traitor revolvers)</A><BR>
@@ -901,6 +902,11 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=mechanics_motivator'>Incentivize Mechanics to do their job</A><BR>
+			<BR>
+			<B>Major Station Transformations</B><BR>
+			<A href='?src=\ref[src];secretsfun=naturify'>Return the station to nature</A><BR>
+			<A href='?src=\ref[src];secretsfun=christmas_vic'>Make the station christmasy</A><BR>
+			<BR>
 			<B>Final Solutions</B><BR>
 			<I>(Warning, these will end the round!)</I><BR>
 			<BR>
@@ -908,7 +914,6 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=supermattercascade'>Start a Supermatter Cascade</A><BR>
 			<A href='?src=\ref[src];secretsfun=meteorstorm'>Trigger an undending Meteor Storm</A><BR>
 			<A href='?src=\ref[src];secretsfun=halloween'>Trigger the blood moon</A><BR>
-			<A href='?src=\ref[src];secretsfun=christmas_vic'>Make the station christmasy</A><BR>
 			"}
 
 	if(check_rights(R_SERVER,0))

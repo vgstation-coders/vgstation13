@@ -643,6 +643,7 @@
 #include "code\game\dna\genes\speech.dm"
 #include "code\game\dna\genes\vg_disabilities.dm"
 #include "code\game\dna\genes\vg_powers.dm"
+#include "code\game\events\naturify.dm"
 #include "code\game\gamemodes\gameticker.dm"
 #include "code\game\gamemodes\highscores.dm"
 #include "code\game\gamemodes\intercept_report.dm"
