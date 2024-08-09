@@ -250,6 +250,7 @@
 	item_state = "lichking_armour"
 	species_restricted = list(UNDEAD_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|HANDS
+	head_type=/obj/item/clothing/head/helmet/space/rig/wizard/lich_king
 
 //Medical Rig
 /obj/item/clothing/head/helmet/space/rig/medical
