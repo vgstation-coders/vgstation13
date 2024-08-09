@@ -1,5 +1,0 @@
-author: SonixApache
-delete-after: true
-changes:
-- experiment: You can now use hand labelers on storage items like boxes and backpacks,
-    among other things. If you notice something breaking with labelling, report it.

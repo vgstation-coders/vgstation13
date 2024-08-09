@@ -1,6 +1,0 @@
-author: SonixApache
-delete-after: true
-changes:
-- rscadd: Detective scanners can now be alt-clicked to switch to scan-only mode, which
-    prevents it from being put into boxes/coats/etc. Do note that this also prevents
-    the scanner from taking fingerprint cards.

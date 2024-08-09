@@ -1,6 +1,0 @@
-author: Pancakemines
-delete-after: true
-changes:
-- tweak: Surgery freezers now blink when containing brains with a player ghost inside
-    them.
-- imageadd: Added new pulsing heart surgery box sprite.
