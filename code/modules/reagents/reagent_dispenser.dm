@@ -375,6 +375,54 @@
 /obj/structure/reagent_dispensers/beerkeg/wrenchable()
 	return 1
 
+/obj/structure/reagent_dispensers/beerkeg/blob_act()
+	explosion(src.loc,0,3,5,7,10)
+	qdel(src)
+
+/obj/structure/reagent_dispensers/brewerybeerkeg //beer keg with some randomized chems
+	//name and desc are defined in the New() call
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "beertankTEMP"
+	amount_per_transfer_from_this = 10
+	var/safechance = 45
+	var/goodchance = 50
+//	var/dangerchance = 5	 //implied by the other two
+
+/obj/structure/reagent_dispensers/brewerybeerkeg/New()
+	. = ..()
+	var/list/safeingredients = list(APPLEJUICE, BANANA, LEMONJUICE, PLUMPHJUICE, WATERMELONJUICE, SUGAR, CORNSYRUP, MINTESSENCE, GARGLEBLASTER, WHISKEY, VODKA, TRIPLESEC, ICE)
+	var/list/specialingredients = list(CARROTJUICE, LIMEJUICE, TOMATOJUICE, ORANGEJUICE, IMIDAZOLINE, INACUSIATE, ETHYLREDOXRAZINE, SPRINKLES, ALLICIN, HONEY, MAPLESYRUP, CHILLWAX, HONKSERUM, GYRO, MEDCOFFEE, MONSTERMASH, SMOKYROOM, SPORTDRINK, QUANTUM)
+	var/list/dangerousingredients = list(DANS_WHISKEY, POISONBERRYJUICE, BLISTEROL, CHEMICAL_WASTE, VIRUSFOOD, IMPEDREZENE, SALTWATER, SIMPOLINOL, SUX, PWINE, MUTAGEN, PLASMA, VOMIT, CYANIDE, DIAMONDDUST, MERCURY, FROSTOIL, CONDENSEDCAPSAICIN, SILICATE, SQUASH, NEUROTOXIN)
+	if(station_does_not_tip) //good luck with your cyanide beer I guess
+		safechance = 20
+		goodchance = 20
+//		dangerchance = 60
+	for(var/i = 0, i < 4, i++)
+		if(prob(safechance))
+			reagents.add_reagent(pick(safeingredients), rand(125,175))
+		else if(prob(goodchance))
+			reagents.add_reagent(pick(specialingredients), rand(125,175))
+		else
+			reagents.add_reagent(pick(dangerousingredients), rand(125,175))
+	reagents.add_reagent(BEER, 500) //fill the remaining space with beer (anywhere from 300u to 500u)
+	var/list/firstname = list("[pick(clown_names)]'s" = 150, "Old [pick(first_names_male)]'s" = 150, "Granny [pick(first_names_female)]'s" = 150, "The [pick(adjectives)]" = 150, "Fancy" = 50, "The Dogshit" = 100, "Horny" = 70, "Sneed's" = 110, "The Communist" = 75, "The Salty" = 25, "Syndicate" = 50, "Uncle Ian's" = 110, "Tum'mie" = 30, "Disco" = 75, "Supermatter" = 75, "Plasma" = 75, "Honking" = 50, "Scrungulartiy" = 110, "Slow Moe's" = 100)
+	var/list/secondname = list("Retard" = 50, "Greyshirt" = 50, "Clown" = 75, "- Formerly Chuck's" = 100, "Loser" = 50, "Imbecile" = 50, "Selects" = 100, "Kit'tens" = 25, "im being forced to work on a beer manufacture please send help" = 75, "Elysium" = 50, "Cascade" = 50, "Loose" = 50, "Mimes" = 50, "howdoitypethislabel????" = 70, "Time to Go-Go" = 100, "Spitoon" = 50, "Liberator" = 50)
+	name = "[pickweight(firstname)] [pickweight(secondname)]-brand beer keg"
+	desc = "Guaranteed quality from [pickweight(firstname)] [pickweight(secondname)] brewery, best before [rand(2300,2540)]."
+//TODO: add a dozen or so different sprites for the keg and roll randomly between them
+
+/obj/structure/reagent_dispensers/brewerybeerkeg/suicide_act(var/mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is placing \his mouth underneath the keg nozzle and drowning \his sorrows! It looks like \he's trying to commit suicide.</span>")
+	reagents.trans_to(user, amount_per_transfer_from_this)
+	return(SUICIDE_ACT_TOXLOSS)
+
+/obj/structure/reagent_dispensers/brewerybeerkeg/wrenchable()
+	return 1
+
+/obj/structure/reagent_dispensers/brewerybeerkeg/blob_act()
+	explosion(src.loc,0,3,5,7,10)
+	qdel(src)
+
 /obj/structure/reagent_dispensers/bloodkeg
 	name = "old keg"
 	desc = "A very old-looking keg. Some red liquid periodically drips from it."
@@ -391,10 +439,6 @@
 
 /obj/structure/reagent_dispensers/bloodkeg/cultify()
 	return
-
-/obj/structure/reagent_dispensers/beerkeg/blob_act()
-	explosion(src.loc,0,3,5,7,10)
-	qdel(src)
 
 /obj/structure/reagent_dispensers/virusfood
 	name = "Virus Food Dispenser"
