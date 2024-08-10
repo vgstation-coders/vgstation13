@@ -46,7 +46,7 @@
 	icon_state = "lantern"
 	item_state = "lantern"
 	desc = "A mining lantern."
-	brightness_on = 6
+	brightness_on = 1
 	range_on = 6
 	light_color = LIGHT_COLOR_TUNGSTEN
 
@@ -57,7 +57,7 @@
 /obj/item/device/flashlight/lantern/on/dim
 	name = "dim lantern"
 	brightness_on = 0.6
-	range_on = 3
+	range_on = 5
 
 /*****************************Pickaxe********************************/
 

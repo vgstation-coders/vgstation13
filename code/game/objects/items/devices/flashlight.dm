@@ -15,7 +15,7 @@
 	actions_types = list(/datum/action/item_action/toggle_light)
 	flammable = TRUE
 	var/on = 0
-	var/brightness_on = 4 //luminosity when on
+	var/brightness_on = 1 //luminosity when on
 	var/range_on = 4 //range when on
 	var/has_sound = 1 //The CLICK sound when turning on/off
 	var/sound_on = 'sound/items/flashlight_on.ogg'
@@ -142,8 +142,8 @@
 	damtype = "fire"
 	hitsound = 'sound/items/cautery.ogg'
 	flags = FPRINT
-	brightness_on = 1.5
-	range_on = 4
+	brightness_on = 1
+	range_on = 5
 	has_sound = 1
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE
@@ -157,7 +157,7 @@
 	item_state = ""
 	flags = FPRINT
 	siemens_coefficient = 1
-	brightness_on = 2
+	brightness_on = 1
 	range_on = 2
 	has_sound = 0
 
@@ -199,7 +199,7 @@
 	desc = "A desk lamp with an adjustable mount."
 	icon_state = "lamp"
 	item_state = "lamp"
-	brightness_on = 5
+	brightness_on = 1
 	w_class = W_CLASS_LARGE
 	flammable = FALSE
 	flags = FPRINT
@@ -223,7 +223,7 @@
 	desc = "A classic green-shaded desk lamp."
 	icon_state = "lampgreen"
 	item_state = "lampgreen"
-	brightness_on = 5
+	brightness_on = 1
 
 /obj/item/device/flashlight/lamp/verb/toggle_light()
 	set name = "Toggle light"
@@ -290,7 +290,7 @@ var/list/obj/item/device/flashlight/lamp/lamps = list()
 	name = "flare"
 	desc = "A red Nanotrasen issued flare. There are instructions on the side, it reads 'pull cord, make light'."
 	w_class = W_CLASS_SMALL
-	brightness_on = 6
+	brightness_on = 1
 	range_on = 4
 	icon_state = "flare"
 	item_state = "flare"
