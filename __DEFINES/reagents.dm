@@ -101,6 +101,7 @@
 #define TRICORDRAZINE 			"tricordrazine"
 #define SIMPOLINOL			"simpolinol"
 #define ADMINORDRAZINE 			"adminordrazine"
+#define PANACEA				"panacea"
 #define PROCIZINE 			"procizine"
 #define SYNAPTIZINE 			"synaptizine"
 #define IMPEDREZENE 			"impedrezene"
@@ -526,6 +527,7 @@
 #define MIMOSA			"mimosa"
 #define LEMONDROP		"lemondrop"
 #define FEVERFEW		"feverfew"
+#define SQUASH			"squash"
 
 #define ACRYLIC			"acrylic"
 #define ACETONE			"acetone"
@@ -568,7 +570,8 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define BICARIDINES list(BICARIDINE, OPIUM)
 #define SPACE_DRUGGS list(SPACE_DRUGS, MESCALINE)
 #define SYNAPTIZINES list(SYNAPTIZINE, CYTISINE)
-#define HYPERZINES list(HYPERZINE, COCAINE, METHAMPHETAMINE)
+#define HYPERZINES list(HYPERZINE, COCAINE, LIQUIDPCP, METHAMPHETAMINE) //all hyperzine calls call this, except a couple recipes which call safehyperzines
+#define SAFEHYPERZINES list(HYPERZINE, COCAINE) //here so some recipes don't get fucked up and turn recursive
 #define IMIDAZOLINES list(IMIDAZOLINE, ZEAXANTHIN)
 #define STOXINS list(STOXIN, STOXIN2, VALERENIC_ACID)
 #define SACIDS list(SACID, FORMIC_ACID)

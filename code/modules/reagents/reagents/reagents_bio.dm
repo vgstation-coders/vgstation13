@@ -305,7 +305,7 @@
 	if(prob(5)) //5% chance of stinking per life()
 		for(var/mob/living/carbon/C in oview(stench_radius, M)) //All other carbons in 4 tile radius (excluding our mob)
 			if(C.stat)
-				return
+				continue
 			if(istype(C.wear_mask))
 				var/obj/item/clothing/mask/c_mask = C.wear_mask
 				if(c_mask.body_parts_covered & MOUTH)

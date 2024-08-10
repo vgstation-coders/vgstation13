@@ -498,6 +498,40 @@
 		user.update_inv_hands()
 	return
 
+/obj/item/weapon/melee/wooden_club
+	name = "wooden club"
+	desc = "Grug go bonk!"
+	icon_state = "woodenclub"
+	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 14
+	throwforce = 12
+	throw_speed = 1
+	throw_range = 7
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
+	var/brain_damage_amount = 3
+
+/obj/item/weapon/melee/wooden_club/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	var/mob/living/living_target = target
+	if(istype(living_target))
+		living_target.adjustBrainLoss(brain_damage_amount)
+
+/obj/item/weapon/melee/bone_club
+	name = "bone club"
+	desc = "It's more of a hammer, really."
+	icon_state = "boneclub"
+	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 19
+	throwforce = 12
+	throw_speed = 1
+	throw_range = 7
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_BIOLOGICAL
+	flammable = FALSE
+
 /obj/item/weapon/bat
 	name = "baseball bat"
 	desc = "Good for reducing a doubleheader to a zeroheader."

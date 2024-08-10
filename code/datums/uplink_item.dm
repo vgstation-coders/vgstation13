@@ -322,6 +322,12 @@ var/list/discounted_items_of_the_round = list()
 	//jobs_with_discount = list("Assistant")
 	//would've liked to add a discount for dark skinned or nearsighted characters (closest to one eyed we have) but dunno how
 
+/datum/uplink_item/dangerous/mech_killdozer
+        name = "Killdozer Bundle"
+        desc = "Three random weapons and a modkit that lets you turn a mining mech into an (almost) unstoppable machine of destruction."
+        item = /obj/item/weapon/storage/box/syndie_kit/mech_killdozer
+        cost = 10
+
 // STEALTHY WEAPONS
 // Any Syndicate item with applying lethal force to people without being easily detected (Ex: Syndicate Soap, Parapen, E-Bow)
 

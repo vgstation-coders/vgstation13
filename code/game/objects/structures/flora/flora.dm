@@ -81,7 +81,7 @@
 
 	var/falling_dir = 0 //Direction in which spawned logs are thrown.
 
-	var/const/randomize_on_creation = 1
+	var/randomize_on_creation = 1
 	var/const/log_type = /obj/item/weapon/grown/log/tree
 	var/holo = FALSE
 	var/image/transparent

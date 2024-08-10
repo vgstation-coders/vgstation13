@@ -114,6 +114,8 @@ var/list/special_fruits = list()
 	if(seed.juicy)
 		splat_decal(get_turf(hit_atom))
 		splat_reagent_reaction(get_turf(hit_atom),user)
+		var/splasharea = (seed.juicy*ceil(seed.potency/100)) //2 at 200 potency
+		reagents.splashplosion(splasharea, TRUE)
 		visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
 		return
@@ -566,6 +568,13 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 		new /obj/item/clothing/head/pumpkinhead(get_turf(src)) //Don't move it
 		qdel(src)
 		return
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin/squash
+	name = "slammed squash"
+	desc = "Sometimes used to stop zombies invading your lawn."
+	potency = 10
+	filling_color = "#F5CD62"
+	plantname = "squash"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/lime
 	name = "lime"

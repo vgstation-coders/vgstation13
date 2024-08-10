@@ -2976,11 +2976,10 @@
 	reagents.add_reagent(TOMATOJUICE, 2)
 	bitesize = 5
 
-/* No more of this
 /obj/item/weapon/reagent_containers/food/snacks/telebacon
-	name = "Tele Bacon"
-	desc = "It tastes a little odd but it is still delicious."
-	icon_state = "bacon"
+	name = "Tracking Bacon"
+	desc = "Bacon used by a teleporter."
+	icon_state = "telebacon"
 	var/obj/item/beacon/bacon/baconbeacon
 	bitesize = 2
 	base_crumb_chance = 0
@@ -2993,8 +2992,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/telebacon/after_consume()
 	if(!reagents.total_volume)
 		baconbeacon.forceMove(usr)
-		baconbeacon.digest_delay()
-*/
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/spellburger
 	name = "Spell Burger"

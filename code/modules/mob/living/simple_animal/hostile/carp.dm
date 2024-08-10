@@ -208,6 +208,34 @@
 	..(TRUE)
 	qdel(src)
 
+// Note: these 'friendly' carps behave like retaliate mobs.
+
+/mob/living/simple_animal/hostile/carp/friendly
+	desc = "A denizen of deep space. This one seems somewhat docile."
+	var/angry = FALSE
+
+/mob/living/simple_animal/hostile/carp/friendly/CanAttack(var/atom/the_target)
+	if(angry)
+		return ..()
+	return FALSE
+
+/mob/living/simple_animal/hostile/carp/friendly/adjustBruteLoss(var/damage)
+	..(damage)
+	angry = TRUE
+
+/mob/living/simple_animal/hostile/carp/baby/friendly
+	desc = "A baby space carp. This one seems somewhat docile docile."
+	var/angry = FALSE
+
+/mob/living/simple_animal/hostile/carp/baby/friendly/CanAttack(var/atom/the_target)
+	if(angry)
+		return ..()
+	return FALSE
+
+/mob/living/simple_animal/hostile/carp/baby/friendly/adjustBruteLoss(var/damage)
+	..(damage)
+	angry = TRUE
+
 #undef PHEROMONES_NO_EFFECT
 #undef PHEROMONES_NEUTRAL
 #undef PHEROMONES_FOLLOW
