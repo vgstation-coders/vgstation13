@@ -1731,13 +1731,30 @@ var/global/objects_thrown_when_explode = FALSE
 				perp.infect_disease2(D, notes="(Blood, from picking up \a [src])")
 
 /obj/item/proc/playtoolsound(atom/A, var/volume = 75, vary = TRUE, extrarange = null)
-	if(A && toolsounds)
-		var/tool_sound = pick(toolsounds)
-		playsound(A, tool_sound, volume, TRUE, vary)
+	if(!A)
+		return
+	var/tool_sound
+	if(toolsounds)
+		tool_sound = pick(toolsounds)
+	else if(surgerysound)
+		tool_sound = surgerysound
+	else if(hitsound)
+		tool_sound = hitsound
+	if(tool_sound)
+		playsound(A, tool_sound, volume, vary, extrarange)
 
 /obj/item/proc/playsurgerysound(atom/A, var/volume = 75)
-	if(A && surgerysound)
-		playsound(A, surgerysound, volume, vary = TRUE)
+	if(!A)
+		return
+	var/tool_sound
+	if(surgerysound)
+		tool_sound = surgerysound
+	else if(toolsounds)
+		tool_sound = pick(toolsounds)
+	else if(hitsound)
+		tool_sound = hitsound
+	if(tool_sound)
+		playsound(A, tool_sound, volume, vary = TRUE)
 
 /obj/item/proc/NoiseDampening()	// checked on headwear by flashbangs
 	return FALSE
