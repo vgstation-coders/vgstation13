@@ -37,7 +37,10 @@
 				"<span class='notice'>You start chopping at \the [src] with \the [W].</span>", \
 				"<span class='warning'>You hear the sound of wood being cut.</span>")
 		W.playtoolsound(src, 100)
-		if(do_after(user, src, 50))
+		var/choptime = 50
+		if(istype(W, /obj/item/weapon/fireaxe))
+			choptime = 10
+		if(do_after(user, src, choptime))
 			user.visible_message("<span class='warning'>[user] smashes through \the [src] with \the [W].</span>", \
 						"<span class='notice'>You smash through \the [src].</span>")
 			W.playtoolsound(src, 100)

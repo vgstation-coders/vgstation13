@@ -640,8 +640,8 @@
   * * mob/user - the user who will see the progress bar
   * * atom/target - the atom the progress bar will be attached to
   * * delay - duration in deciseconds of the delay
-  * * numticks - how many times the failure conditions will be checked throughout the duration
-  * * needhand - if TRUE, the item in the hands of the user needs to stay the same throughout the duration
+  * * numticks - how many times the failure conditions will be checked throughout the duration. default 10
+  * * needhand - if TRUE, the item in the hands of the user needs to stay the same throughout the duration.
   * * use_user_turf - if TRUE, the turf of the user is checked instead of its location
   * * custom_checks - if specified, the return value of this callback (called every `delay/numticks` seconds) will determine whether the action succeeded
   */
