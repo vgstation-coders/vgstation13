@@ -384,15 +384,15 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "beertankTEMP"
 	amount_per_transfer_from_this = 10
-	var/safechance = 45
+	var/safechance = 50
 	var/goodchance = 50
-//	var/dangerchance = 5	 //implied by the other two
+//	var/dangerchance = 0
 
 /obj/structure/reagent_dispensers/brewerybeerkeg/New()
 	. = ..()
 	var/list/safeingredients = list(APPLEJUICE, BANANA, LEMONJUICE, PLUMPHJUICE, WATERMELONJUICE, SUGAR, CORNSYRUP, MINTESSENCE, GARGLEBLASTER, WHISKEY, VODKA, TRIPLESEC, ICE)
 	var/list/specialingredients = list(CARROTJUICE, LIMEJUICE, TOMATOJUICE, ORANGEJUICE, IMIDAZOLINE, INACUSIATE, ETHYLREDOXRAZINE, SPRINKLES, ALLICIN, HONEY, MAPLESYRUP, CHILLWAX, HONKSERUM, GYRO, MEDCOFFEE, MONSTERMASH, SPORTDRINK, QUANTUM)
-	var/list/dangerousingredients = list(DANS_WHISKEY, POISONBERRYJUICE, BLISTEROL, CHEMICAL_WASTE, VIRUSFOOD, IMPEDREZENE, SALTWATER, SIMPOLINOL, SUX, PWINE, MUTAGEN, PLASMA, VOMIT, CYANIDE, DIAMONDDUST, MERCURY, FROSTOIL, CONDENSEDCAPSAICIN, SILICATE, SQUASH, NEUROTOXIN)
+	var/list/dangerousingredients = list(DANS_WHISKEY, POISONBERRYJUICE, BLISTEROL, CHEMICAL_WASTE, VIRUSFOOD, IMPEDREZENE, SALTWATER, SIMPOLINOL, SUX, PWINE, MUTAGEN, PLASMA, VOMIT, CYANIDE, DIAMONDDUST, MERCURY, FROSTOIL, CONDENSEDCAPSAICIN, SILICATE, SQUASH, NEUROTOXIN, DIABEETUSOL)
 	if(station_does_not_tip) //good luck with your cyanide beer I guess
 		safechance = 20
 		goodchance = 20
@@ -422,6 +422,11 @@
 /obj/structure/reagent_dispensers/brewerybeerkeg/blob_act()
 	explosion(src.loc,0,3,5,7,10)
 	qdel(src)
+
+/obj/structure/reagent_dispensers/brewerybeerkeg/contraband
+	safechance = 46
+	goodchance = 50
+	//dangerchance = 4 //averages to around 12% chance of at least 1 bad chem 
 
 /obj/structure/reagent_dispensers/bloodkeg
 	name = "old keg"
