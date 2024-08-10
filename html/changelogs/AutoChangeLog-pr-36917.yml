@@ -1,0 +1,4 @@
+author: jwhitak
+delete-after: true
+changes:
+- bugfix: Friendly carp ranching will no longer result in hostile carp.
