@@ -492,6 +492,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("peg limb",			/obj/item/weapon/peglimb,				2,		time = 50									),
 	new/datum/stack_recipe("clipboard",			/obj/item/weapon/storage/bag/clipboard,	1													),
 	new/datum/stack_recipe("bowl",				/obj/item/trash/bowl,					1													),
+	new/datum/stack_recipe("wooden bucket",		/obj/item/weapon/reagent_containers/glass/bucket/wooden,2,time = 50							),
 	null,
 	new/datum/stack_recipe("boomerang",			/obj/item/weapon/boomerang,				6,		time = 50									),
 	new/datum/stack_recipe("buckler",			/obj/item/weapon/shield/riot/buckler,	5,		time = 50									),
