@@ -304,6 +304,12 @@ var/list/headset_modes = list(
 		for(var/T in syndicate_code_response)
 			rendered_message = replacetext(rendered_message, html_encode(T), "<i style='color: red;'>[html_encode(T)]</i>")
 
+	var/regex/tilde = regex("\\~(.*?)\\~","g")
+	rendered_message = tilde.Replace(rendered_message, "<i>$1</i>")
+
+	var/regex/asterisk = regex("\\*(.*?)\\*","g")
+	rendered_message = asterisk.Replace(rendered_message, "<b>$1</b>")
+	
 	//AI mentions
 	if(isAI(src) && speech.frequency && !findtextEx(speech.job,"AI") && (speech.name != name))
 		var/mob/living/silicon/ai/ai = src
