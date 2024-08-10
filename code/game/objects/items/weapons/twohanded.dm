@@ -79,6 +79,7 @@
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
 	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
 	slowdown = FIREAXE_SLOWDOWN
+	toolsounds = list('sound/effects/woodcuttingshort.ogg')
 
 	var/list/forbidden_floors = list(
 		/turf/simulated/floor/vault,
