@@ -1,7 +1,0 @@
-author: jwhitak
-delete-after: true
-changes:
-- rscadd: You can now wet hides in a sink/groundwater, and air dry them slowly. Hot
-    rooms still dry them faster.
-- rscadd: Wet leather now tells you if it's drying, and how much it has left to dry.
-- bugfix: Fixed wet leather deleting itself in your hands.
