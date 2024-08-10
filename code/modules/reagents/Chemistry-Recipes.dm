@@ -4234,6 +4234,13 @@
 	required_catalysts = list(ZOMBIEPOWDER = 5)
 	result_amount = 5
 
+/datum/chemical_reaction/vomit //yes you can electrolize vomit for low efficiency sacid and nutriment, or make vomit from sacid and nutriment, if you need chemically made vomit for some reason
+	name = "Vomit"
+	id = VOMIT
+	result = VOMIT
+	required_reagents = list(NUTRIMENT = 1, SACID = 1)
+	required_catalysts = list(ENZYME = 5)
+
 /datum/chemical_reaction/squash
 	name = "Squash"
 	id = SQUASH
