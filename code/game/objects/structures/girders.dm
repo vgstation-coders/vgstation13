@@ -46,7 +46,6 @@
 			W.playtoolsound(src, 100)
 			new material(get_turf(src), 2)
 			qdel(src)
-		return
 	else
 		..()
 

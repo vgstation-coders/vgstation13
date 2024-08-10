@@ -29,7 +29,6 @@
 						"<span class='notice'>You smash through \the [src].</span>")
 			W.playtoolsound(src, 100)
 			dismantle_wall()
-		return
 	else
 		..()
 
