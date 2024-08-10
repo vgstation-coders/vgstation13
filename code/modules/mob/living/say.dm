@@ -304,11 +304,11 @@ var/list/headset_modes = list(
 		for(var/T in syndicate_code_response)
 			rendered_message = replacetext(rendered_message, html_encode(T), "<i style='color: red;'>[html_encode(T)]</i>")
 
-	var/regex/tilde = regex("\\~(.*?)\\~","g")
-	rendered_message = tilde.Replace(rendered_message, "<i>$1</i>")
+	var/regex/italics_tilde = regex("\\~(.*?)\\~","g")
+	rendered_message = italics_tilde.Replace(rendered_message, "<i>$1</i>")
 
-	var/regex/asterisk = regex("\\*(.*?)\\*","g")
-	rendered_message = asterisk.Replace(rendered_message, "<b>$1</b>")
+	var/regex/bold_asterisk = regex("\\*(.*?)\\*","g")
+	rendered_message = bold_asterisk.Replace(rendered_message, "<b>$1</b>")
 	
 	//AI mentions
 	if(isAI(src) && speech.frequency && !findtextEx(speech.job,"AI") && (speech.name != name))
