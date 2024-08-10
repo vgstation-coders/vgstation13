@@ -178,7 +178,7 @@
 	group = "Hospitality"
 	containsdesc = "A starter kit for running a cafe. Includes a hot drinks brewer, two boxes of mugs, and a kettle."
 
-/datum/supply_packs/brewerybeer //the beer is very likely to be poisoned if the station does not tip
+/datum/supply_packs/brewerybeer //safe variant
 	name = "Brewery Beer Keg"
 	contains = list(/obj/structure/reagent_dispensers/brewerybeerkeg)
 	cost = 60
@@ -186,6 +186,16 @@
 	containername = "Brewery Beer Keg"
 	group = "Hospitality"
 	containsdesc = "A special beer keg containing a custom flavoured beer, made with effort and dedication in a small town brewery."
+
+/datum/supply_packs/brewerybeercontraband
+	name = "Off-brand Beer Keg"
+	contains = list(/obj/structure/reagent_dispensers/brewerybeerkeg/contraband)
+	cost = 40
+	containertype = /obj/structure/largecrate
+	containername = "Off-brand Beer Keg"
+	contraband = 1
+	group = "Hospitality"
+	containsdesc = "A beer keg containing the assorted failed brews of experimental small town beer research."
 
 /datum/supply_packs/bar
 	name = "Advanced bartending equipment"
