@@ -81,7 +81,7 @@
 
 	var/falling_dir = 0 //Direction in which spawned logs are thrown.
 
-	var/const/randomize_on_creation = 1
+	var/randomize_on_creation = 1
 	var/const/log_type = /obj/item/weapon/grown/log/tree
 	var/holo = FALSE
 	var/image/transparent
@@ -165,7 +165,7 @@
 /obj/structure/flora/tree/attackby(obj/item/W, mob/living/user)
 	..()
 
-	if(istype(W, /obj/item/weapon))
+	if(istype(W, /obj/item))
 		if(W.sharpness_flags & (CHOPWOOD|SERRATED_BLADE))
 			health -= (user.get_strength() * W.force)
 			playsound(loc, 'sound/effects/woodcuttingshort.ogg', 50, 1)

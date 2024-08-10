@@ -359,6 +359,11 @@
 	seed_type = "pumpkin"
 	vending_cat = "vegetables"
 
+/obj/item/seeds/squashseed
+	name = "packet of slammed squash seeds"
+	seed_type = "squash"
+	vending_cat = "vegetables"
+
 /obj/item/seeds/limeseed
 	name = "packet of lime seeds"
 	seed_type = "lime"
@@ -1451,6 +1456,23 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin)
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,6))
+	mutants = list("squash")
+	lifespan = 50
+	maturation = 6
+	production = 6
+	yield = 3
+	potency = 10
+	growth_stages = 3
+	fluid_consumption = 6
+
+/datum/seed/squash
+	name = "squash"
+	seed_name = "squash"
+	display_name = "slammed squash vine"
+	plant_dmi = 'icons/obj/hydroponics/squash.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin/squash)
+	harvest_repeat = 1
+	chems = list(NUTRIMENT = list(1,12), SQUASH = list(1,6)) //half of the nutrients turn into SQUASH
 
 	lifespan = 50
 	maturation = 6

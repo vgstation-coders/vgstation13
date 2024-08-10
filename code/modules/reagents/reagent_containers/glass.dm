@@ -597,3 +597,11 @@
 	..()
 	icon_state = "kettle[pick("_red","_blue","_purple","_green")]"
 	reagents.add_reagent(TEA,75)
+
+/obj/item/weapon/reagent_containers/glass/bucket/wooden
+	name = "wooden bucket"
+	icon_state = "woodenbucket"
+	item_state = "woodenbucket"
+	species_fit = list(INSECT_SHAPED)
+	starting_materials = list(MAT_WOOD = 4000)
+	w_type = RECYK_WOOD //wood

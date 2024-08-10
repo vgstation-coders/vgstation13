@@ -56,6 +56,9 @@ var/list/poddoors = list()
 	poddoors -= src
 	..()
 
+/obj/machinery/door/poddoor/update_icon()
+	return
+
 /obj/machinery/door/poddoor/Bumped(atom/AM)
 	if(!density)
 		return ..()
