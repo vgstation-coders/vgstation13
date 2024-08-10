@@ -1,5 +1,0 @@
-author: jwhitak
-delete-after: true
-changes:
-- tweak: Wooden walls and girders now take time to chop down (5 seconds). Fireaxes
-    are faster (1 second).
