@@ -291,6 +291,7 @@
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=1"
 	attack_verb = list("chops", "tears", "cuts")
 	surgerysound = 'sound/items/hatchetsurgery.ogg'
+	toolsounds = list('sound/effects/woodcuttingshort.ogg')
 
 /obj/item/weapon/hatchet/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
