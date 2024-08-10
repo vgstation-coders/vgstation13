@@ -14,6 +14,7 @@ var/list/flora_types = list(
 									/obj/structure/flora/ausbushes/brflowers = 14,
 									/obj/structure/flora/ausbushes/ppflowers = 14,
 									/obj/structure/seedbush = 10,
+									/obj/structure/sink/puddle = 3,
 							 )
 
 var/list/animal_types = list(
@@ -34,7 +35,8 @@ var/list/cave_decor_types = list(
 									/obj/item/weapon/pickaxe/shovel = 6,
 									/obj/item/weapon/melee/bone_club = 1,
 									/obj/item/weapon/melee/wooden_club = 1,
-									/obj/structure/boulder = 12
+									/obj/structure/boulder = 12,
+									/obj/structure/sink/puddle = 12,
 							 )
 
 var/list/beach_decor_types = list(
@@ -276,6 +278,21 @@ var/list/seedbush_spawns = list(
 	// Recursive check to uncharge all cells. Bit laggy!
 	for(var/turf/T in target)
 		uncharge_all_cells_recursive(T)
+
+	for(var/obj/structure/sink/S in target)
+		if(!istype(S, /obj/structure/sink/puddle))
+			new /obj/structure/sink/puddle(S.loc)
+			qdel(S)
+
+	for(var/obj/item/weapon/reagent_containers/glass/bucket/buckets in target)
+		if(!istype(buckets, /obj/item/weapon/reagent_containers/glass/bucket/wooden))
+			new /obj/item/weapon/reagent_containers/glass/bucket/wooden(buckets.loc)
+			qdel(buckets)
+
+	for(var/obj/machinery/portable_atmospherics/hydroponics/grow in target)
+		if(!istype(grow, /obj/machinery/portable_atmospherics/hydroponics/soil))
+			new /obj/machinery/portable_atmospherics/hydroponics/soil(grow.loc)
+			qdel(grow)
 
 /proc/uncharge_all_cells_recursive(var/atom/A)
 	var/obj/item/weapon/cell/C = A

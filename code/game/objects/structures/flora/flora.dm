@@ -165,7 +165,7 @@
 /obj/structure/flora/tree/attackby(obj/item/W, mob/living/user)
 	..()
 
-	if(istype(W, /obj/item/weapon))
+	if(istype(W, /obj/item))
 		if(W.sharpness_flags & (CHOPWOOD|SERRATED_BLADE))
 			health -= (user.get_strength() * W.force)
 			playsound(loc, 'sound/effects/woodcuttingshort.ogg', 50, 1)
