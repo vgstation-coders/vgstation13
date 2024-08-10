@@ -1,6 +1,0 @@
-author: jwhitak
-delete-after: true
-changes:
-- bugfix: Fixes certain sounds from being heard from further away than intended.
-- tweak: Tools/surgery tools without sounds will attempt to play other possibly related
-    sounds before giving up.
