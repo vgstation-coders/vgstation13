@@ -365,6 +365,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 				var/atom/movable/victim = pick(target,user)
 				if(victim)
 					do_teleport(victim, get_turf(victim), 1*source.quality, asoundin = 'sound/effects/phasein.ogg')
+		if(prob(20/source.quality))
+			to_chat(user, "<span class = 'warning'>\The [source] phases out of reality!</span>")
+			qdel(source)
 
 /datum/material/plastic
 	name="Plastic"
