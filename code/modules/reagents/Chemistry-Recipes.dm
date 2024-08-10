@@ -1930,7 +1930,7 @@
 	required_container = /obj/item/slime_extract/yellow
 
 /datum/chemical_reaction/slime_extract/slimeglow/on_reaction(var/datum/reagents/holder)
-	var/obj/item/device/flashlight/lamp/slime/P = new /obj/item/device/flashlight/lamp/slime
+	var/obj/item/device/flashlight/slime/P = new /obj/item/device/flashlight/slime
 	P.forceMove(get_turf(holder.my_atom))
 	..()
 
