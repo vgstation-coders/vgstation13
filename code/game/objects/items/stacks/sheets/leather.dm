@@ -276,7 +276,17 @@
 
 /obj/item/stack/sheet/wetleather/examine(mob/user)
 	..()
-	to_chat(user, "<span class='info'>It's around [round(1-(wetness/initial(wetness)),0.01)*100]% dry.</span>")
+	switch(round(1-(wetness/initial(wetness)),0.01)*100) //returns dryness percent
+		if(0 to 20)
+			to_chat(user, "<span class='info'>It's soaking wet!</span>")
+		if(20 to 40)
+			to_chat(user, "<span class='info'>It's wet.</span>")
+		if(40 to 60)
+			to_chat(user, "<span class='info'>It's damp.</span>")
+		if(60 to 80)
+			to_chat(user, "<span class='info'>It's still a little damp in places.</span>")
+		if(80 to 100)
+			to_chat(user, "<span class='info'>It's almost completely dry!</span>")
 	to_chat(user, "<span class='info'>It's [dryingspeeddesc]</span>")
 
 /obj/item/stack/leather_strip
