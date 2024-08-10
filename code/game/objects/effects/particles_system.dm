@@ -116,6 +116,10 @@
 			holder.particles.color = new_value
 		if (PVAR_SCALE)
 			holder.particles.scale = new_value
+		if (PVAR_LIFESPAN)
+			holder.particles.lifespan = new_value
+		if (PVAR_FADE)
+			holder.particles.fade = new_value
 		if (PVAR_PLANE)
 			holder.plane = new_value
 		if (PVAR_LAYER)
@@ -161,6 +165,7 @@ var/list/particle_string_to_type = list(
 	PS_NARSIEHASRISEN1 = /particles/narsie_has_risen,
 	PS_NARSIEHASRISEN2 = /particles/narsie_has_risen/next,
 	PS_NARSIEHASRISEN3 = /particles/narsie_has_risen/last,
+	PS_ZAS_DUST = /particles/zas_dust,
 	)
 
 /particles
@@ -373,3 +378,62 @@ var/list/particle_string_to_type = list(
 	icon_state = "risen"
 
 	plane = ABOVE_HUD_PLANE
+
+//ZAS DUST
+/particles/zas_dust
+	width = 96
+	height = 96
+	count = 20
+	spawning = 2
+
+	color = "#FFFFFF99"
+	lifespan = 1 SECONDS
+	fade = 0.5 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "zas_dust"
+	position = generator("box", list(-15,-15), list(15,15))
+	velocity = list(0,0)
+
+/turf
+	var/last_dust_time = 0
+	var/last_dust_strength = 0
+
+/turf/proc/flying_dust(var/turf/dest, var/wind_strength = 3, var/wind_opacity = 128)
+	if (last_dust_time == SSair.times_fired && last_dust_strength > wind_strength)
+		return
+	last_dust_time = SSair.times_fired
+	last_dust_strength = wind_strength
+	var/this_dust_time = last_dust_time
+	add_particles(PS_ZAS_DUST)
+	adjust_particles(PVAR_SPAWNING, 2, PS_ZAS_DUST)
+	adjust_particles(PVAR_VELOCITY, dir2dust(dest,wind_strength), PS_ZAS_DUST)
+	adjust_particles(PVAR_LIFESPAN, 3 SECONDS / abs(wind_strength), PS_ZAS_DUST)
+	adjust_particles(PVAR_FADE, 1.5 SECONDS / abs(wind_strength), PS_ZAS_DUST)
+	adjust_particles(PVAR_COLOR, "#FFFFFF[num2hex(wind_opacity)]", PS_ZAS_DUST)
+
+	spawn(SSair.wait*2)
+		if (last_dust_time == this_dust_time)
+			adjust_particles(PVAR_SPAWNING, 0, PS_ZAS_DUST)
+
+/turf/proc/dir2dust(var/turf/dest, var/wind_strength = 3)
+	if(!dest)
+		return list(0,0)
+	switch(get_dir(src, dest))
+		if (NORTH)
+			return list(0,wind_strength)
+		if (SOUTH)
+			return list(0,-wind_strength)
+		if (EAST)
+			return list(wind_strength,0)
+		if (WEST)
+			return list(-wind_strength,0)
+		if (NORTHEAST)
+			return list(wind_strength,wind_strength)
+		if (SOUTHEAST)
+			return list(wind_strength,-wind_strength)
+		if (NORTHWEST)
+			return list(-wind_strength,wind_strength)
+		if (SOUTHWEST)
+			return list(-wind_strength,-wind_strength)
+		else
+			return list(0,0)
