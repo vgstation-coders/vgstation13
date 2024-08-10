@@ -213,6 +213,8 @@
 /mob/living/simple_animal/hostile/carp/friendly
 	desc = "A denizen of deep space. This one seems somewhat docile."
 	var/angry = FALSE
+	species_type = /mob/living/simple_animal/hostile/carp/friendly
+	childtype = /mob/living/simple_animal/hostile/carp/baby/friendly
 
 /mob/living/simple_animal/hostile/carp/friendly/CanAttack(var/atom/the_target)
 	if(angry)
@@ -226,6 +228,8 @@
 /mob/living/simple_animal/hostile/carp/baby/friendly
 	desc = "A baby space carp. This one seems somewhat docile docile."
 	var/angry = FALSE
+	species_type = /mob/living/simple_animal/hostile/carp/friendly
+	childtype = /mob/living/simple_animal/hostile/carp/baby/friendly
 
 /mob/living/simple_animal/hostile/carp/baby/friendly/CanAttack(var/atom/the_target)
 	if(angry)
