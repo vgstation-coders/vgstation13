@@ -114,6 +114,8 @@ var/runechat_icon = null
 		if(word)
 			text = replacetext(text, word, "<b>[word]</b>")
 
+	text = check_emphasis(text)
+
 	// Append radio icon if comes from a radio
 	if (extra_classes.Find("spoken_into_radio"))
 		if (!runechat_icon)

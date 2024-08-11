@@ -304,11 +304,7 @@ var/list/headset_modes = list(
 		for(var/T in syndicate_code_response)
 			rendered_message = replacetext(rendered_message, html_encode(T), "<i style='color: red;'>[html_encode(T)]</i>")
 
-	var/regex/italics_tilde = regex("\\~(.*?)\\~","g")
-	rendered_message = italics_tilde.Replace(rendered_message, "<i>$1</i>")
-
-	var/regex/bold_asterisk = regex("\\*(.*?)\\*","g")
-	rendered_message = bold_asterisk.Replace(rendered_message, "<b>$1</b>")
+	rendered_message = check_emphasis(rendered_message)
 	
 	//AI mentions
 	if(isAI(src) && speech.frequency && !findtextEx(speech.job,"AI") && (speech.name != name))
@@ -336,6 +332,15 @@ var/list/headset_modes = list(
 	else if (istype(speech.speaker, /obj/item/device/assembly/speaker) || istype(speech.speaker, /obj/item/device/assembly_frame)) //Speakers will still work if no_goonchat_for_obj is set to TRUE
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
 	return rendered_message
+
+/proc/check_emphasis(text)
+	var/regex/italics = regex("\\~(.*?)\\~","g")
+	text = italics.Replace(text, "<i>$1</i>")
+
+	var/regex/bold = regex("\\*(.*?)\\*","g")
+	text = bold.Replace(text, "<b>$1</b>")
+
+	return text
 
 /mob/living/proc/hear_radio_only()
 	return 0
