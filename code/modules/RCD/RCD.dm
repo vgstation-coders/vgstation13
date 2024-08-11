@@ -110,7 +110,8 @@
 			if(!T || ((C.flags & RCD_Z_DOWN) && !HasBelow(T.z)) || ((C.flags & RCD_Z_UP) && !HasAbove(T.z)))
 				continue
 			dat += C.schematic_list_line(interface,FALSE,src.selected==C)
-
+			for(var/client/client in interface.clients)
+				C.send_list_assets(client)
 		dat += "</ul>"
 
 	interface.updateLayout(dat)
@@ -256,7 +257,6 @@
 	if(selected)
 		for(var/client/client in interface.clients)
 			selected.send_assets(client)
-
 		interface.updateContent("schematic_options", selected.get_HTML(args))
 	else
 		interface.updateContent("schematic_options", " ")
