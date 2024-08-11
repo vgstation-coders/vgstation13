@@ -107,7 +107,7 @@ params:
 /datum/rcd_schematic/proc/build_ui()
 	master.interface.updateLayout("<div id='schematic_options'> </div>")
 
-datum/rcd_schematic/proc/send_list_assets(var/client/client) //this is called when opening the menu to make sure the listed options have their icons.
+/datum/rcd_schematic/proc/send_list_assets(var/client/client) //this is called when opening the menu to make sure the listed options have their icons.
 	return //registering happens on the same proc unlike send_assets, since this is more specialized.
 
 /datum/rcd_schematic/proc/schematic_list_line(var/datum/html_interface/interface, var/fav=FALSE,var/selected=FALSE)
