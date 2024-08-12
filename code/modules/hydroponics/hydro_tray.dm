@@ -10,6 +10,8 @@
 
 	var/draw_warnings = 1 // Set to 0 to stop it from drawing the alert lights.
 	var/tmp/update_icon_after_process = 0 // Will try to only call update_icon() when necessary.
+	var/last_update_icon = 0 // Since we're calling it more frequently than process(), let's at least make sure we're only calling it once per tick.
+	var/delayed_update_icon = 0
 
 	// Plant maintenance vars
 	var/waterlevel = 100		// Water (max 100)
@@ -611,6 +613,10 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/on_reagent_change()
 	. = ..()
-	update_icon()
+	delayed_update_icon = 1
+	spawn(1)
+		//since reagents might change multiple times during a tick as they get processed, let's wait for the tick after they've all been processed.
+		//thanks to last_update_icon, this call should regardless only happen once per tick.
+		update_icon()
 
 /datum/locking_category/hydro_tray

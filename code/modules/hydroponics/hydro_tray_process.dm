@@ -6,7 +6,7 @@
 	if(force_update)
 		force_update = 0
 	else if(world.time < (lastcycle + cycledelay))
-		if(update_icon_after_process)
+		if(update_icon_after_process > 0 && !delayed_update_icon)
 			update_icon()
 		return
 	lastcycle = world.time
@@ -35,7 +35,7 @@
 	// If there is no seed data (and hence nothing planted),
 	// or the plant is dead, process nothing further.
 	if(!seed || dead)
-		if(update_icon_after_process)
+		if(update_icon_after_process && !delayed_update_icon)
 			update_icon() //Harvesting would fail to set alert icons properly.
 		return
 
@@ -126,7 +126,7 @@
 				if(2)
 					msg_admin_attack("space vines ([seed.display_name]) have spread out of a tray. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>, last touched by [key_name_last_user]. Seed id: [seed.uid]. ([bad_stuff()])")
 
-	if(update_icon_after_process)
+	if(update_icon_after_process && !delayed_update_icon)
 		update_icon()
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/affect_growth(var/amount)
@@ -154,14 +154,23 @@
 		name += " ([labeled])"
 
 /obj/machinery/portable_atmospherics/hydroponics/update_icon()
+	//optimizations so we don't call update_icon() more than we need to
+	delayed_update_icon = 0
+	if (last_update_icon == world.time)
+		//we've already updated the icon on this tick
+		return
+	last_update_icon = world.time
+
 	update_icon_after_process = 0
 	overlays.len = 0
 
 	update_name() //fuck it i'll make it not happen constantly later
 
 	// Updates the plant overlay.
-	if(get_full_toxinlevel() > get_full_waterlevel() || get_full_toxinlevel() > TOXINLEVEL_MAX/2)
-		overlays += image(icon = icon, icon_state = "hydrotray_toxin")
+	var/image/toxins_overlay = image(icon, src, "[icon_state]_toxin")
+	toxins_overlay.alpha = get_full_toxinlevel() * 2.55
+	overlays += toxins_overlay
+
 	if(!isnull(seed))
 		if(draw_warnings && get_full_planthealth() <= (seed.endurance / 2))
 			overlays += image('icons/obj/hydroponics/hydro_tools.dmi',"over_lowhealth3")
