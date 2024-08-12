@@ -275,9 +275,9 @@
 	seed_type = "deathnettle"
 	vending_cat = "weeds"
 
-/obj/item/seeds/weeds
-	name = "packet of weed seeds"
-	seed_type = "weeds"
+/obj/item/seeds/dandelionseed
+	name = "packet of dandelion seeds"
+	seed_type = "dandelions"
 	vending_cat = "weeds"
 
 /obj/item/seeds/harebell
@@ -1385,11 +1385,11 @@
 	production = 10
 	yield = 3
 
-/datum/seed/weeds
-	name = "weeds"
-	seed_name = "weed"
-	display_name = "weeds"
-	plant_dmi = 'icons/obj/hydroponics/weeds.dmi'
+/datum/seed/dandelions
+	name = "dandelions"
+	seed_name = "dandelion"
+	display_name = "dandelions"
+	plant_dmi = 'icons/obj/hydroponics/dandelions.dmi'
 	lifespan = 100
 	maturation = 5
 	production = 1
