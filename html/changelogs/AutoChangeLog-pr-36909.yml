@@ -1,0 +1,4 @@
+author: CrazyAmphibian
+delete-after: true
+changes:
+- bugfix: The lich hardsuit will now use the correct helmet
