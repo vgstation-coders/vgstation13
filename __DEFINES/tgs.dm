@@ -1,7 +1,7 @@
 // tgstation-server DMAPI
 // The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in IETF RFC 2119.
 
-#define TGS_DMAPI_VERSION "7.2.0"
+#define TGS_DMAPI_VERSION "7.2.1"
 
 // All functions and datums outside this document are subject to change with any version and should not be relied on.
 
@@ -163,7 +163,7 @@
 	return
 
 /**
- * Consumers MUST this when your initializations are complete and your game is ready to play before any player interactions happen.
+ * Consumers MUST call this when world initializations are complete and the game is ready to play before any player interactions happen.
  *
  * This may use [/world/var/sleep_offline] to make this happen so ensure no changes are made to it while this call is running.
  * Afterwards, consider explicitly setting it to what you want to avoid this BYOND bug: http://www.byond.com/forum/post/2575184
