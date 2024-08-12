@@ -1,0 +1,7 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Lights have been added to HoS office on packed station.
+- tweak: A missing cable has been added to packed station gateway room.
+- tweak: The paper and nanopaper on packed station mechanics have been made easier
+    to access, swapping the places of the bin and a locker in the room.
