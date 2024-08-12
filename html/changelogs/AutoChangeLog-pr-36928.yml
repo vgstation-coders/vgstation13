@@ -1,0 +1,4 @@
+author: DeityLink
+delete-after: true
+changes:
+- bugfix: Fixed dust motes remaining forever on turfs that change type
