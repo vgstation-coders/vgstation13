@@ -296,4 +296,4 @@
 
 	var/list/huds = list() // List of active huds on a mob
 
-	var/is_dexterous = FALSE //surely this won't make everyone undexterous
+	var/is_dexterous = FALSE //allows mobs to be made dextrous, mostly for monkeys
