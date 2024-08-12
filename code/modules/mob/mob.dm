@@ -2236,5 +2236,15 @@ Use this proc preferably at the end of an equipment loadout
 		spawn()
 			src.update_music()
 
+/proc/check_emphasis(text)
+	var/regex/italics = regex("\\_(.*?)\\_","g")
+	text = italics.Replace(text, "<i>$1</i>")
+
+	var/regex/bold = regex("\\|(.*?)\\|","g")
+	text = bold.Replace(text, "<b>$1</b>")
+
+	return text
+
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

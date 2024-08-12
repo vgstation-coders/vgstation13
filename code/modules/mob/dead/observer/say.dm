@@ -38,7 +38,7 @@
 			return
 
 	say_testing(src, "/mob/dead/observer/Hear(): source=[source], frequency=[speech.frequency], source_turf=[formatJumpTo(source_turf)]")
-
+	rendered_speech = check_emphasis(rendered_speech)
 	if (get_dist(source_turf, src) <= get_view_range())
 		rendered_speech = "<B>[rendered_speech]</B>"
 		if (client?.prefs.mob_chat_on_map && (client.prefs.obj_chat_on_map || ismob(speech.speaker)))

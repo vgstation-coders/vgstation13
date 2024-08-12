@@ -333,14 +333,6 @@ var/list/headset_modes = list(
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
 	return rendered_message
 
-/proc/check_emphasis(text)
-	var/regex/italics = regex("\\~(.*?)\\~","g")
-	text = italics.Replace(text, "<i>$1</i>")
-
-	var/regex/bold = regex("\\*(.*?)\\*","g")
-	text = bold.Replace(text, "<b>$1</b>")
-
-	return text
 
 /mob/living/proc/hear_radio_only()
 	return 0
