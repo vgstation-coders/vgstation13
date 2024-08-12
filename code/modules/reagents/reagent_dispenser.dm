@@ -418,7 +418,7 @@
 	if(name == "Uncle Ian's Selects-brand beer keg")
 		reagents.add_reagent(MINTESSENCE, 500)
 		hardcodedname = TRUE
-	if(name == "The Unfunny Clown-brand beer keg" || name == "Honking Clown-brand beer keg" || name == "Aunt Scootaloo's Clown-brand beer keg)
+	if(name == "The Unfunny Clown-brand beer keg" || name == "Honking Clown-brand beer keg" || name == "Aunt Scootaloo's Clown-brand beer keg")
 		if(prob(50)
 			reagents.add_reagent(HONKSERUM, 500)
 		else if(prob(50)
