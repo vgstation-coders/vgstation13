@@ -9,6 +9,12 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = ARBITRARILY_LARGE_NUMBER
 	specheatcap = ARBITRARILY_LARGE_NUMBER
+	plant_nutrition = 2
+	plant_watering = 2
+	plant_pests = -5
+	plant_weeds = -5
+	plant_toxins = -5
+	plant_health = 50
 
 /datum/reagent/adminordrazine/on_mob_life(var/mob/living/carbon/M)
 	if(..())
@@ -72,15 +78,6 @@
 		D2.stage--
 		if(D2.stage < 1)
 			D2.cure(M)
-
-/datum/reagent/adminordrazine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(2)
-	T.add_waterlevel(2)
-	T.add_weedlevel(5)
-	T.add_pestlevel(5)
-	T.add_toxinlevel(5)
-	T.add_planthealth(50)
 
 /datum/reagent/panacea
 	name = "Panacea"
@@ -295,6 +292,7 @@
 	density = 1.49033
 	specheatcap = 0.55536
 	overdose_am = 60
+	plant_toxins = -10
 
 /datum/reagent/anti_toxin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -345,10 +343,6 @@
 				H.dizziness = max(H.dizziness, 20)
 				if(prob(10))
 					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
-
-/datum/reagent/anti_toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(-10)
 
 /datum/reagent/arithrazine
 	name = "Arithrazine"
@@ -486,6 +480,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
+	plant_toxins = -5
+	plant_health = 5
 
 /datum/reagent/clonexadone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -499,8 +495,6 @@ var/global/list/charcoal_doesnt_remove=list(
 
 /datum/reagent/clonexadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_toxinlevel(-5)
-	T.add_planthealth(5)
 	if(T.seed && !T.dead)
 		var/datum/seed/S = T.seed
 		var/deviation
@@ -598,6 +592,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
 	specheatcap = 3.47
+	plant_toxins = -3
+	plant_health = 3
 
 /datum/reagent/cryoxadone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -608,11 +604,6 @@ var/global/list/charcoal_doesnt_remove=list(
 		M.adjustOxyLoss(-1)
 		M.heal_organ_damage(1,1)
 		M.adjustToxLoss(-1)
-
-/datum/reagent/cryoxadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(-3)
-	T.add_planthealth(3)
 
 /datum/reagent/cryptobiolin
 	name = "Cryptobiolin"

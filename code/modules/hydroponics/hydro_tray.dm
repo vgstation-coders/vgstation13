@@ -609,4 +609,8 @@
 				things += chemical_id
 	return english_list(things, "nothing")
 
+/obj/machinery/portable_atmospherics/hydroponics/on_reagent_change()
+	. = ..()
+	update_icon()
+
 /datum/locking_category/hydro_tray

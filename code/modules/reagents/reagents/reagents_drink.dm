@@ -291,6 +291,8 @@
 	alpha = 240
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "White and nutritious goodness!"
+	plant_nutrition = 1
+	plant_watering = 1
 
 /datum/reagent/drink/milk/on_mob_life(var/mob/living/M)
 	if(..())
@@ -304,11 +306,6 @@
 		holder.remove_reagent("zamspicytoxin", 10 * REAGENTS_METABOLISM)
 	if(prob(50))
 		M.heal_organ_damage(1, 0)
-
-/datum/reagent/drink/milk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(1)
-	T.add_waterlevel(1)
 
 /datum/reagent/drink/milk/chocolate
 	name = "Chocolate Milk"
@@ -326,16 +323,13 @@
 	color = "#eaeaea" //rgb(234, 234, 234)
 	nutriment_factor = 2.5 * REAGENTS_METABOLISM
 	glass_desc = "Artificially white nutrition!"
-
+	plant_toxins = 10
+	plant_health = -20
 
 /datum/reagent/drink/milk/mommimilk/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	M.adjustToxLoss(1)
-/datum/reagent/drink/milk/mommimilk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(10)
-	T.add_planthealth(-20)
 
 /datum/reagent/drink/milk/soymilk
 	name = "Soy Milk"
@@ -508,12 +502,9 @@
 	adj_dizzy = -5
 	adj_drowsy = -3
 	glass_desc = "Soda water. Why not make a scotch and soda?"
-
-/datum/reagent/drink/cold/sodawater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(1)
-	T.add_waterlevel(1)
-	T.add_planthealth(1)
+	plant_nutrition = 1
+	plant_watering = 1
+	plant_health = 1
 
 /datum/reagent/drink/cold/ice
 	name = "Ice"
