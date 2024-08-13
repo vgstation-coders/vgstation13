@@ -1,0 +1,10 @@
+author: Eneocho
+delete-after: true
+changes:
+- tweak: 'Changes the sharp, brunt, and quality modifiers for a couple materials:'
+- tweak: Gold brunt modifier goes from 0.5x to 0.9x, and quality modifier from 1.7x
+    to 1.8x
+- tweak: Silver brunt modifier goes from 0.7x to 0.2x, and sharpness modifier from
+    0.7x to 1.8x
+- tweak: Mythril quality modifier goes from 1.5x to 3x, to account for it being so
+    scarce and generally being outperformed by Phazon and Bananium.
