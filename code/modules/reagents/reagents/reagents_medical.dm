@@ -404,11 +404,10 @@
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_ECOLOGY)
-			T.reagents.remove_reagent(id, 1)
-		if(prob(15))
-			T.mutate(GENE_ECOLOGY)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
