@@ -268,9 +268,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/gold
 	cointype=/obj/item/weapon/coin/gold
 	color = "#F7C430" //rgb: 247, 196, 48
-	brunt_damage_mod = 0.5
+	brunt_damage_mod = 0.9
 	sharpness_mod = 0.5
-	quality_mod = 1.7
+	quality_mod = 1.8
 	melt_temperature = MELTPOINT_GOLD
 	cc_per_sheet = CC_PER_SHEET_GOLD
 
@@ -282,12 +282,11 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/silver
 	cointype=/obj/item/weapon/coin/silver
 	color = "#D0D0D0" //rgb: 208, 208, 208
-	brunt_damage_mod = 0.7
-	sharpness_mod = 0.7
+	brunt_damage_mod = 0.2
+	sharpness_mod = 1.8
 	quality_mod = 1.5
 	melt_temperature = MELTPOINT_SILVER
 	cc_per_sheet = CC_PER_SHEET_SILVER
-
 
 /datum/material/uranium
 	name="Uranium"
@@ -457,8 +456,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	color = "#FFEDD2" //rgb: 255,237,238
 	brunt_damage_mod = 1.4
 	sharpness_mod = 0.6
-	quality_mod = 1.5
-	armor_mod = 1.75
+	quality_mod = 3 //stupidly rare material (not to mention blacksmithing itself almost never happens)
+	armor_mod = 1.75 //if only armorsmithing were a thing
 	cc_per_sheet = CC_PER_SHEET_MYTHRIL
 
 /datum/material/telecrystal
