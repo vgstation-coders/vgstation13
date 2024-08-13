@@ -3924,7 +3924,7 @@ var/station_jackpot = 1000000
 		to_chat(user,"<span class='notice'>The winning numbers are [english_list(winning_numbers)]</span>")
 
 #define LOTTO_SAMPLE 6
-#define LOTTO_BALLCOUNT 32 //lottery is a topdefine/bottomdefine system
+#define LOTTO_BALLCOUNT 18 //lottery is a topdefine/bottomdefine system
 #if LOTTO_BALLCOUNT < LOTTO_SAMPLE
 #define LOTTO_BALLCOUNT LOTTO_SAMPLE
 #endif
