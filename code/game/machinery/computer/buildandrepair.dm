@@ -400,7 +400,7 @@
 	contraband_enabled = !contraband_enabled
 
 /obj/item/weapon/circuitboard/fisson_reactor/solder_improve(mob/user)
-	to_chat(user, "<span class='notice'>You [safety_disabled ? "re" : "dis"]connect the auto-SCRAM fuse.</span>")
+	to_chat(user, "<span class='[safety_disabled ? "notice" : "warning"]'>You [safety_disabled ? "re" : "dis"]connect the auto-SCRAM fuse.</span>")
 	safety_disabled = !safety_disabled
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
@@ -540,9 +540,9 @@
 					var/obj/item/weapon/circuitboard/arcade/C = circuit
 					arcade.import_game_data(C)
 				else if(istype(circuit,/obj/item/weapon/circuitboard/fisson_reactor))
-					var/obj/machinery/computer/fissioncontroller/SC = B
+					var/obj/machinery/computer/fissioncontroller/RC = B
 					var/obj/item/weapon/circuitboard/fisson_reactor/C = circuit
-					SC.autoscram = !C.safety_disabled
+					RC.can_autoscram = !C.safety_disabled
 				var/obj/machinery/MA = B
 				if(istype(MA))
 					MA.power_change()
