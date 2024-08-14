@@ -63,8 +63,10 @@ var/list/trayhit_sound = list('sound/items/trayhit1.ogg', 'sound/items/trayhit2.
 		extrarange = 0
 	if(!vol) //don't do that
 		return
-	if(source.silence_sprayed) //shhhh
-		return
+	if(istype(source,/atom/movable))
+		var/atom/movable/AM = source
+		if(AM.silence_sprayed) //shhhh
+			return
 
 	if(turf_source)
 		vol *= turf_source.volume_mult

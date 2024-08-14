@@ -58,7 +58,6 @@ var/global/list/ghdel_profiling = list()
 
 	var/arcanetampered = 0 //A looot of things can be
 
-	var/silence_sprayed = FALSE //sprayed by silencing spray
 
 	var/image/moody_light
 	var/list/moody_lights
@@ -1150,12 +1149,3 @@ its easier to just keep the beam vertical.
 
 /atom/proc/silicate_act(var/atom/A, var/mob/user)
 	return FALSE
-
-/atom/proc/make_silent(var/duration)
-	silence_sprayed = TRUE
-	if(duration > 0)
-		spawn(duration)
-			silence_sprayed = FALSE
-
-/atom/proc/remove_silence()
-	silence_sprayed = FALSE
