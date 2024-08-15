@@ -7,7 +7,7 @@
 	can_butcher = TRUE
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/grue
 	name = "grue"
-	real_name = "grue"y
+	real_name = "grue"
 	minbodytemp = 150 //resistant to cold
 
 	a_intent=I_HURT //Initialize these
