@@ -1,7 +1,0 @@
-author: Eneocho
-delete-after: true
-changes:
-- tweak: Phazon weapons and hammers (blacksmithing) will no longer delete themselves
-    when used a bunch, and will instead teleport to a random tile within a radius
-    around itself, scaling with quality, up to a radius of 13 tiles with legendary
-    weapons.

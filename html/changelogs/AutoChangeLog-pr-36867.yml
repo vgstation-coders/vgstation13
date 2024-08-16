@@ -1,5 +1,0 @@
-author: west3436
-delete-after: true
-changes:
-- rscadd: Added Silencing Spray which can be used to silence any mob/obj/machine which
-    it's sprayed on.
