@@ -1,0 +1,5 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Lotto tickets with numbers from the random event are now more likely to be
+    winners, as the highest ballcount is now 18 and not 32.
