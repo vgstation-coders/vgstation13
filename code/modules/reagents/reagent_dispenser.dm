@@ -405,7 +405,7 @@
 		safechance = 20
 		goodchance = 20
 //		dangerchance = 60
-		desc += "This one doesn't seem safe to drink."
+		desc += " This one doesn't seem that safe to drink."
 
 //TODO: make it so the reagents lists are associated to the name somehow (seed shit?) so if you happen to find the same beer twice, it has the same ingredients
 	if(name == "Slow Moe's Time to Go-Go-brand beer keg") //hardcoded instances for extra funny
