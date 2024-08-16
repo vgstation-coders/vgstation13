@@ -1390,13 +1390,60 @@
 	seed_name = "dandelion"
 	display_name = "dandelions"
 	plant_dmi = 'icons/obj/hydroponics/dandelions.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/dandelion)
 	lifespan = 100
+	harvest_repeat = 1
+	chems = list(DYE_DANDELIONS = list(1,20))
 	maturation = 5
+	production = 3
+	maturation_max = 2
 	production = 1
-	yield = -1
+	yield = 2
 	potency = -1
-	growth_stages = 4
+	growth_stages = 5
 	immutable = -1
+	visible_roots_in_hydro_tray = 1
+
+/datum/seed/dandelions/update_product(var/maturation_level)
+	switch(maturation_level)
+		if (2)
+			plant_icon_state = "produce-2"
+			products = list(/obj/item/weapon/grown/dandelion)
+		else
+			plant_icon_state = "produce"
+			products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/dandelion)
+
+/datum/seed/dandelions/wind_act(var/obj/machinery/portable_atmospherics/hydroponics/tray, var/differential, var/list/connecting_turfs)
+	if (!istype(tray))
+		return
+	if (tray.harvest < 2)
+		return
+	var/turf/T = get_turf(tray)
+	var/turf/U = get_step(T,get_dir(T,pick(connecting_turfs)))
+	var/log_differential = log(abs(differential) * 3)
+	if (U)
+		if (differential > 0)
+			T.flying_pollen(U,log_differential)
+		else
+			T.flying_pollen(U,-log_differential)
+	spawn(10)
+		for (var/obj/machinery/portable_atmospherics/hydroponics/other_tray in U)//TODO: have it work on grass and possibly with other weeds/pollen/seeds
+			if (!other_tray.seed)
+				other_tray.seed = SSplant.seeds["dandelions"]
+				other_tray.add_planthealth(tray.seed.endurance)
+				other_tray.lastcycle = world.time
+				other_tray.weedlevel = 0
+				other_tray.update_icon()
+
+/datum/seed/dandelions/apply_particles(var/obj/machinery/portable_atmospherics/hydroponics/tray)
+	if (!istype(tray))
+		return
+	if (tray.harvest < 2)
+		return
+
+	tray.add_particles(PS_DANDELIONS)
+	tray.adjust_particles(PVAR_SPAWNING, 0.05, PS_DANDELIONS)
+	tray.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), PS_DANDELIONS)
 
 /datum/seed/whitebeets
 	name = "whitebeet"

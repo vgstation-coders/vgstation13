@@ -337,4 +337,12 @@
 	description = "Neurological medication made from mutated herbs."
 	color = "#9000ff" //rgb: 144, 0 255
 
+/datum/reagent/nutriment/dandelion_petals
+	name = "Dandelion Petals Dye"
+	id = DYE_DANDELIONS
+	description = "Dandelion petals mixed into fine pigments, ready for use in arts & crafts."
+	color = "#FECC23" //rgb: 254, 204, 35
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	flags = CHEMFLAG_PIGMENT
+
 //End of plant-specific reagents

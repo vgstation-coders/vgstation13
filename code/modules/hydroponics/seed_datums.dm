@@ -40,7 +40,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/endurance = 100             // Maximum plant HP when growing.
 	var/yield = 0                   // Amount of product.
 	var/lifespan = 0                // Time before the plant dies.
-	var/maturation = 0              // Time taken before the plant is mature.
+	var/maturation = 0              // Time taken before the plant can be harvested.
+	var/maturation_max = 1			// If above 1, the plant may reach further stages of maturation past the first one.
 	var/production = 0              // Time before harvesting can be undertaken again.
 	var/growth_stages = 6           // Number of stages the plant passes through before it is mature.
 	var/harvest_repeat = 0          // If 1, this plant will fruit repeatedly. If 2, the plant will self-harvest.
@@ -65,6 +66,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/biolum                      // Plant is bioluminescent.
 	var/biolum_colour               // The colour of the plant's radiance.
 	var/splat_type = /obj/effect/decal/cleanable/fruit_smudge //Decal to create if the fruit is splatter-able and subsequently splattered.
+	var/visible_roots_in_hydro_tray = 0
 
 	var/mob_drop					// Seed type dropped by the mobs when it dies without an host
 
@@ -485,7 +487,15 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		to_chat(user, "<span class='warning'>You fail to harvest anything useful.</span>")
 	else
 		to_chat(user, "You harvest from the [display_name].")
+
+		if (istype(holder, /obj/machinery/portable_atmospherics/hydroponics))
+			var/obj/machinery/portable_atmospherics/hydroponics/tray = holder
+			update_product(tray.harvest)//because the same seed datum might be shared by multiple trays, we only call update_product() right before harvest.
+
 		generate_product((holder && holder.Adjacent(user)) || !holder ? get_turf(user) : get_turf(holder), user)
+
+/datum/seed/proc/update_product(var/maturation_level)
+	return
 
 /datum/seed/proc/generate_product(var/turf/T, mob/harvester)
 	add_newline_to_controller()
@@ -676,3 +686,10 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		R = chemical_reagents_list[rid]
 		reagent_names += R.name
 	return reagent_names
+
+
+/datum/seed/proc/wind_act(var/obj/machinery/portable_atmospherics/hydroponics/tray, var/differential, var/list/connecting_turfs)
+	return
+
+/datum/seed/proc/apply_particles(var/obj/machinery/portable_atmospherics/hydroponics/tray)
+	return

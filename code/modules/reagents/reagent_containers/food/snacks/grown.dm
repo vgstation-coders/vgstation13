@@ -342,14 +342,28 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "\"I'll sweeten thy sad grave: thou shalt not lack the flower that's like thy face, pale primrose, nor the azured hare-bell, like thy veins; no, nor the leaf of eglantine, whom not to slander, out-sweeten’d not thy breath.\""
 	potency = 1
 	filling_color = "#D4B2C9"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "harebell"
 	plantname = "harebells"
 	fragrance = INCENSE_HAREBELLS
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/dandelion
+	name = "dandelion"
+	desc = "A vibrant yellow flower, but smells like a wet dog."
+	potency = 1
+	filling_color = "#FECC23"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "dandelion"
+	plantname = "dandelions"
+	fragrance = INCENSE_LEAFY
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/moonflower
 	name = "moonflower"
 	desc = "Store in a location at least 50 yards away from werewolves."
 	potency = 25
 	filling_color = "#E6E6FA"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "moonflower"
 	plantname = "moonflowers"
 	fragrance = INCENSE_MOONFLOWERS
 	slot_flags = SLOT_HEAD

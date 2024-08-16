@@ -229,12 +229,12 @@
 	if(prob(5))
 		to_chat(M,"<span class='warning'>[pick("You feel like giggling!", "You feel clumsy!", "You want to honk!")]</span>")
 
-/datum/reagent/incense/cabbage
+/datum/reagent/incense/leafy
 	name = "Leafy Incense"
 	id = INCENSE_LEAFY
 	description = "This fragrance smells of fresh greens, delicious to most animals."
 
-/datum/reagent/incense/cabbage/reagent_deleted()
+/datum/reagent/incense/leafy/reagent_deleted()
 	if(..())
 		return 1
 	if(!holder)
@@ -242,7 +242,7 @@
 	var/mob/M =  holder.my_atom
 	walk(M,0) //Cancel walk if it ran out
 
-/datum/reagent/incense/cabbage/on_mob_life(var/mob/living/M)
+/datum/reagent/incense/leafy/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	if(isanimal(M) || ismonkey(M))

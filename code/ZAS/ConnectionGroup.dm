@@ -81,6 +81,8 @@ Class Procs:
 			var/mob/M = AM
 			M.airflow_stun(differential)
 
+		AM.wind_act(differential, connecting_turfs)
+
 		if(AM.check_airflow_movable(differential))
 			//Check for things that are in range of the midpoint turfs.
 			var/list/close_turfs = list()
