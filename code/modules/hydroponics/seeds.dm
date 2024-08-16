@@ -1426,6 +1426,7 @@
 			T.flying_pollen(U,log_differential)
 		else
 			T.flying_pollen(U,-log_differential)
+		T.adjust_particles(PVAR_SPAWNING, 0.5, PS_DANDELIONS)
 	spawn(10)
 		for (var/obj/machinery/portable_atmospherics/hydroponics/other_tray in U)//TODO: have it work on grass and possibly with other weeds/pollen/seeds
 			if (!other_tray.seed)
