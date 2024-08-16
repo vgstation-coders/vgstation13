@@ -1,0 +1,11 @@
+author: DeityLink
+delete-after: true
+changes:
+- tweak: Hydro Tray lights now update immediately after pouring a reagent into it
+    (reagents still get processed by the tray over time, but the lights anticipate
+    how much the reagents currently held will change the tray's variables)
+- tweak: Paint reagents are now slightly toxic to hydroponics plants, except flax
+    oil which is slightly nutritious.
+- tweak: Water and Holy Water now hydrate trays just as much
+- tweak: Toxins in hydro tray and soil now become progressively more visible as it
+    builds up, instead of suddenly becoming visible past a threshold.
