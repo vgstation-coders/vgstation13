@@ -366,8 +366,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 				if(victim)
 					do_teleport(victim, get_turf(victim), 1*source.quality, asoundin = 'sound/effects/phasein.ogg')
 		if(prob(20/source.quality))
-			to_chat(user, "<span class = 'warning'>\The [source] phases out of reality!</span>")
-			qdel(source)
+			to_chat(user, "<span class = 'warning'>\The [source] teleports away!</span>")
+			do_teleport(source, get_turf(source), 1.45*source.quality, asoundin = 'sound/effects/phasein.ogg') //teleports to a random tile within up to 13 tiles of itself, based on quality
 
 /datum/material/plastic
 	name="Plastic"
