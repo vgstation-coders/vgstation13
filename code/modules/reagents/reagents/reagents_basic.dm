@@ -256,11 +256,13 @@
 			var/mob/living/carbon/C = M
 			var/datum/disease2/effect/E = C.has_active_symptom(/datum/disease2/effect/thick_skin)
 			C.make_visible(INVISIBLESPRAY,FALSE)
+			M.remove_silence()
 			if(E)
 				E.multiplier = max(E.multiplier - rand(1,3), 1)
 				to_chat(C, "<span class='notice'>The water quenches your dry skin.</span>")
 		else
 			M.make_visible(INVISIBLESPRAY)
+			M.remove_silence()
 		if(isliving(M))
 			var/mob/living/L = M
 			L.ExtinguishMob()
@@ -317,6 +319,8 @@
 
 	if(O.invisibility)
 		O.make_visible(INVISIBLESPRAY)
+
+	O.remove_silence()
 
 	O.clean_act(CLEANLINESS_WATER)//removes glue and extinguishes fire
 

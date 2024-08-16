@@ -58,6 +58,7 @@ var/global/list/ghdel_profiling = list()
 
 	var/arcanetampered = 0 //A looot of things can be
 
+
 	var/image/moody_light
 	var/list/moody_lights
 
