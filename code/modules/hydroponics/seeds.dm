@@ -1443,6 +1443,7 @@
 
 	tray.add_particles(PS_DANDELIONS)
 	tray.adjust_particles(PVAR_SPAWNING, 0.05, PS_DANDELIONS)
+	tray.adjust_particles(PVAR_PLANE, OBJ_PLANE, PS_DANDELIONS)
 	tray.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), PS_DANDELIONS)
 
 /datum/seed/whitebeets
