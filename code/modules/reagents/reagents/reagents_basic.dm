@@ -192,9 +192,10 @@
 		return
 	T.add_toxinlevel(2)
 	if(T.reagents.get_reagent_amount(id) > 0)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_MORPHOLOGY)
-			T.reagents.remove_reagent(id, 1)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 
 /datum/reagent/silicon
 	name = "Silicon"
