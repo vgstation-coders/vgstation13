@@ -9,6 +9,7 @@
 	custom_metabolism = 2
 	specheatcap = 4.183
 	alpha = 128
+	plant_watering = 2
 
 /datum/reagent/holywater/on_mob_life(mob/living/M)
 	if(..())
@@ -89,10 +90,6 @@
 			C.adjustBruteLoss(5)
 			C.visible_message("<span class='danger'>The [src] erodes \the [M].</span>")
 
-/datum/reagent/holywater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_waterlevel(1)
-
 /datum/reagent/holysalts
 	name = "Holy Salts"
 	id = HOLYSALTS
@@ -101,6 +98,12 @@
 	color = "#C1CCD7" //rgb: 80, 80, 84
 	density = 2.09
 	specheatcap = 1.65
+	plant_nutrition = 5
+	plant_watering = -5
+	plant_pests = -10
+	plant_weeds = -20
+	plant_toxins = 8
+	plant_health = -2
 
 /datum/reagent/holysalts/reaction_obj(var/obj/O, var/volume)
 	if(..())
@@ -133,16 +136,6 @@
 			C.purge = 3
 			C.adjustBruteLoss(5)
 			C.visible_message("<span class='danger'>The [src] erodes \the [M].</span>")
-
-/datum/reagent/holysalts/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_waterlevel(-5)
-	T.add_nutrientlevel(5)
-	T.add_toxinlevel(8)
-	T.add_weedlevel(-20)
-	T.add_pestlevel(-10)
-	if(T.seed && !T.dead)
-		T.add_planthealth(-2)
 
 /datum/reagent/incense
 	id = EXPLICITLY_INVALID_REAGENT_ID

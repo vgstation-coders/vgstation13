@@ -47,6 +47,8 @@
 	mug_name = "mug of tomato juice"
 	mug_desc = "Are you sure this is tomato juice?"
 	flags = CHEMFLAG_PIGMENT
+	plant_nutrition = 5
+	plant_watering = 1
 
 	data = list(
 		"viruses" = null,
@@ -271,11 +273,6 @@
 	if(istype(O, /obj/item/clothing/mask/stone))
 		var/obj/item/clothing/mask/stone/S = O
 		S.spikes()
-
-/datum/reagent/blood/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(5, TRUE)
-	T.add_waterlevel(1)
 
 /datum/reagent/carp_pheromones
 	name = "Carp Pheromones"
