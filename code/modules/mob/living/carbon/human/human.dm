@@ -1769,7 +1769,7 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 		if(!G.dexterity_check())//some gloves might make it harder to interact with complex technologies, or fit your index in a gun's trigger
 			return FALSE
 	if(getBrainLoss() >= 60)
-		if(!reagents.has_reagent(METHYLIN))//methylin supercedes brain damage, but not uncomfortable gloves
+		if(!(reagents.has_reagent(METHYLIN) ||  is_dexterous))//methylin and the is_dextrous var supercede brain damage, but not uncomfortable gloves
 			return FALSE
 	return TRUE//humans are dexterous enough by default
 
