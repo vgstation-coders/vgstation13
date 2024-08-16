@@ -1,5 +1,0 @@
-author: west3436
-delete-after: true
-changes:
-- bugfix: You can no longer grab "fire" out of a burning bookcase.
-- tweak: Wooden tables and chairs will now burn twice as fast.

@@ -1,4 +1,0 @@
-author: west3436
-delete-after: true
-changes:
-- bugfix: Fixed Flatpack Fabricators not using parts shared via Bluespace Matter Bins.

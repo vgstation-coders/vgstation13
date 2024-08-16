@@ -1,5 +1,0 @@
-author: west3436
-delete-after: true
-changes:
-- rscadd: Added a Fire Suppression preset to Air Alarms which replaces Oxygen and
-    Plasma with Nitrogen in its area.
