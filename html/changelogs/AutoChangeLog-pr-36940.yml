@@ -1,0 +1,5 @@
+author: Eneocho
+delete-after: true
+changes:
+- tweak: All botany mutagens now take the same average time to tick and to get consumed
+    (as fast as the previous fast chems).
