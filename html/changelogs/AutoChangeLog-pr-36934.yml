@@ -1,0 +1,5 @@
+author: falcon2346
+delete-after: true
+changes:
+- rscadd: Added the is_dexterous variable to mob.dmi that mimics most of the effects
+    of methylin.
