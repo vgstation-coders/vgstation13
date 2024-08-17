@@ -82,7 +82,7 @@
 
 	dat += "<h2>Reagent Data</h2>"
 
-	if(!grown_reagents) //checking if the thing is produce or seed
+	if(!grown_reagents || istype(target,/obj/machinery/portable_atmospherics/hydroponics))
 		dat += "This plant will produce: "
 		var/datum/reagent/N
 		for (var/rid in grown_seed.chems)
