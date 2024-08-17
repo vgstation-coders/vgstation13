@@ -559,21 +559,6 @@
 			var/mob/living/carbon/human/H = user
 			to_chat(user, "<span class='good'>Would you like to know more?</span> <a href='?src=\ref[H.glasses];scan=\ref[src]'>\[Scan\]</a>")
 
-/obj/machinery/portable_atmospherics/hydroponics/proc/receive_pulse(var/pulse_strength)
-	if (seed && !closed_system)//if the lid is closed, the plant is radiation immune.
-		pulse_strength /= 50
-		if (prob(pulse_strength))
-			if (age <= 4)
-				//young plants mutate more easily
-				if (length(seed.mutants))
-					mutate_species()
-				else
-					mutate()
-			else if (prob(pulse_strength/2))
-				//older plants have between 1.125% and 1.875% chance to mutate per burst
-				//at 15 burst total this amounts to about 19% chance of at least one small mutation occurring
-				mutate()
-
 /obj/machinery/portable_atmospherics/hydroponics/proc/hydrovision(mob/user)
 	hydro_hud_scan(user, src)
 	return FALSE
