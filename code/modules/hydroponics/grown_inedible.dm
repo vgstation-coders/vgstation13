@@ -397,7 +397,7 @@
 	spawn(10)
 		for (var/obj/machinery/portable_atmospherics/hydroponics/tray in T)
 			if (!tray.seed)
-				tray.seed = SSplant.seeds["dandelions"]
+				tray.seed = SSplant.seeds[plantname]
 				tray.add_planthealth(tray.seed.endurance)
 				tray.lastcycle = world.time
 				tray.weedlevel = 0
@@ -409,9 +409,9 @@
 	var/log_differential = log(abs(differential) * 3)
 	if (U)
 		if (differential > 0)
-			T.flying_pollen(U,log_differential)
+			T.flying_pollen(U,log_differential,PS_DANDELIONS)
 		else
-			T.flying_pollen(U,-log_differential)
+			T.flying_pollen(U,-log_differential,PS_DANDELIONS)
 	sow_trays(U)
 	seeds_left--
 	if (seeds_left <= 0)

@@ -473,16 +473,16 @@ var/list/particle_string_to_type = list(
 /turf
 	var/last_pollen_time = 0
 
-/turf/proc/flying_pollen(var/turf/dest, var/wind_strength = 3)
+/turf/proc/flying_pollen(var/turf/dest, var/wind_strength = 3, var/pollen = PS_DANDELIONS)
 	if (last_pollen_time == world.time)
 		return
 	last_pollen_time = world.time
 	var/this_pollen_time = last_pollen_time
 
-	add_particles(PS_DANDELIONS)
-	adjust_particles(PVAR_SPAWNING, 1, PS_DANDELIONS)
-	adjust_particles(PVAR_VELOCITY, dir2dust(dest,wind_strength), PS_DANDELIONS)
+	add_particles(pollen)
+	adjust_particles(PVAR_SPAWNING, 1, pollen)
+	adjust_particles(PVAR_VELOCITY, dir2dust(dest,wind_strength), pollen)
 
 	spawn(SSair.wait)
 		if (last_pollen_time == this_pollen_time)
-			adjust_particles(PVAR_SPAWNING, 0, PS_DANDELIONS)
+			adjust_particles(PVAR_SPAWNING, 0, pollen)
