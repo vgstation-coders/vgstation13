@@ -1374,52 +1374,6 @@ Game Mode config tags:
 		T2 = get_turf(B)
 	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
 
-/proc/seedify(obj/item/O, obj/machinery/seed_extractor/extractor = null, mob/living/user = null)
-	if(!O)
-		CRASH("Something called seedify() without anything to make seeds of.")
-
-	var/min_seeds = 1
-	var/max_seeds = 4
-	var/seedloc = O.loc
-	var/datum/seed/new_seed_type
-
-	if(extractor)
-		seedloc = get_turf(extractor)
-		min_seeds = extractor.min_seeds
-		max_seeds = extractor.max_seeds
-
-	var/produce = rand(min_seeds,max_seeds)
-
-	if(istype(O, /obj/item/weapon/grown))
-		var/obj/item/weapon/grown/F = O
-		if(F.plantname)
-			new_seed_type = SSplant.seeds[F.plantname]
-	else
-		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
-			var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
-			if(F.plantname)
-				new_seed_type = SSplant.seeds[F.plantname]
-		else
-			var/obj/item/F = O
-			if(F.nonplant_seed_type)
-				while(min_seeds <= produce)
-					new F.nonplant_seed_type(seedloc)
-					min_seeds++
-				qdel(F)
-				return TRUE
-
-	if(new_seed_type)
-		while(min_seeds <= produce)
-			var/obj/item/seeds/seeds = new(seedloc)
-			seeds.seed_type = new_seed_type.name
-			seeds.update_seed()
-			min_seeds++
-	else
-		return FALSE
-
-	qdel(O)
-	return TRUE
-
 //Same as block(Start, End), but only returns the border turfs
 //'Start' must be lower-left, 'End' must be upper-right
 /proc/block_borders(turf/Start, turf/End)

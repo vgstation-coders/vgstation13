@@ -341,8 +341,6 @@
 	attack_verb = list("slaps")
 	var/seeds_left = 3
 
-
-
 /obj/item/weapon/grown/dandelion/MiddleAltClick(var/mob/living/user)
 	attack_self(user)
 
