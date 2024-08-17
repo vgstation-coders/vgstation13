@@ -401,7 +401,7 @@
 	var/list/specialingredients = list()
 	var/list/dangerousingredients = list(DANS_WHISKEY, POISONBERRYJUICE, BLISTEROL, CHEMICAL_WASTE, VIRUSFOOD, IMPEDREZENE, SALTWATER, SIMPOLINOL, SUX, PWINE, MUTAGEN, PLASMA, VOMIT, CYANIDE, DIAMONDDUST, MERCURY, FROSTOIL, CONDENSEDCAPSAICIN, SILICATE, NEUROTOXIN, DIABEETUSOL, LUBE, MOMMIMILK, PACID, PUNCTUALITE)
 
-	switch(rand(1,520000))
+	switch(rand(1,520))
 		if(1 to 120)
 			//normal shit
 			selectedfirstname = pickweight(firstname)
