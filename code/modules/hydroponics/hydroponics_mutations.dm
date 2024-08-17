@@ -15,6 +15,7 @@
 		return
 	if(age < 3 && length(seed.mutants) && gene)
 		mutate_species()
+		return
 	if(!gene)
 		gene = pick(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
 
@@ -58,7 +59,7 @@
 					else
 						visible_message("<span class='notice'>\The [seed.display_name] sheds its thorns away...</span>")
 				if(PLANT_JUICY)
-					//clever way of going from 0 to 1 to 2. 
+					//clever way of going from 0 to 1 to 2.
 					seed.juicy = (seed.juicy + 1) % 3
 					generic_mutation_message("wobbles!")
 				if(PLANT_LIGNEOUS)
@@ -111,7 +112,7 @@
 						//lower better
 						var/hardcap = 0.1
 						var/max_change = 0.15 //percent
-						seed.lowkpa_tolerance -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.lowkpa_tolerance*100),0.01),max_change*seed.lowkpa_tolerance),0.1) 
+						seed.lowkpa_tolerance -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.lowkpa_tolerance*100),0.01),max_change*seed.lowkpa_tolerance),0.1)
 					//higher better
 					var/hardcap = 500
 					var/max_change = 0.15 //percent
