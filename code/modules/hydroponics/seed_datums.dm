@@ -697,7 +697,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	if (maturation_level > products_per_maturation_level.len)
 		plant_icon_state = "produce"
 		return
-	products = products_per_maturation_level[products_per_maturation_level]
+	products = products_per_maturation_level[maturation_level]
 	plant_icon_state = "produce[(maturation_level > 1) ? "-[maturation_level]" : ""]"
 
 /datum/seed/proc/wind_act(var/obj/machinery/portable_atmospherics/hydroponics/tray, var/differential, var/list/connecting_turfs)

@@ -302,7 +302,10 @@
 			if(dead)
 				S.overlays += image(seed.plant_dmi,"dead")
 			else if(harvest)
-				S.overlays += image(seed.plant_dmi,"harvest")
+				if (harvest > 1)
+					S.overlays += image(seed.plant_dmi,"harvest-[harvest]")
+				else
+					S.overlays += image(seed.plant_dmi,"harvest")
 			else if(age < seed.maturation)
 				var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
 				S.overlays += image(seed.plant_dmi,"stage-[t_growthstate]")
