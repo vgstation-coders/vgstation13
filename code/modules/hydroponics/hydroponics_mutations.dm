@@ -11,6 +11,8 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/mutate(var/gene)
 	if(!seed)
 		return
+	if(dead)
+		return
 	if(seed.immutable)
 		return
 	if(age < 3 && length(seed.mutants) && gene)
@@ -202,19 +204,27 @@
 				if(PLANT_SPREAD)
 					seed.spread = (seed.spread + 1) % 3
 					if(src && seed && seed.spread == 1)
-						visible_message("<span class='notice'>\The [seed.display_name] shift[seed.plural ? "":"s"] in the tray!</span>")
+						if (closed_system)
+							visible_message("<span class='notice'>\The [seed.display_name] shift[seed.plural ? "":"s"] in the tray, but remain[seed.plural ? "":"s"] contained by the lid!</span>")
+						else
+							visible_message("<span class='notice'>\The [seed.display_name] shift[seed.plural ? "":"s"] in the tray!</span>")
 						spawn(20)
 							var/datum/seed/newseed = seed.diverge()
 							newseed.spread = 1
 							var/turf/T = get_turf(src)
-							new /obj/effect/plantsegment(T, newseed)
+							if (!closed_system)
+								new /obj/effect/plantsegment(T, newseed)
 							msg_admin_attack("a random chance hydroponics mutation has spawned limited growth creeper vines ([newseed.display_name]). <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
 					else if(src && seed && seed.spread == 2)
-						visible_message("<span class='notice'>\The [seed.display_name] spasm[seed.plural ? "":"s"] visibly, violently thrashing in the tray!</span>")
+						if (closed_system)
+							visible_message("<span class='notice'>\The [seed.display_name] spasm[seed.plural ? "":"s"] visibly, violently thrashing in the tray, although contained behind [seed.plural ? "their":"its"] lid!</span>")
+						else
+							visible_message("<span class='notice'>\The [seed.display_name] spasm[seed.plural ? "":"s"] visibly, violently thrashing in the tray!</span>")
 						var/datum/seed/newseed = seed.diverge()
 						newseed.spread = 2
 						var/turf/T = get_turf(src)
-						new /obj/effect/plantsegment(T, newseed)
+						if (!closed_system)
+							new /obj/effect/plantsegment(T, newseed)
 						msg_admin_attack("a random chance hydroponics mutation has spawned space vines ([newseed.display_name]). <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
 					else
 						visible_message("<span class='notice'>\The [seed.display_name] recede[seed.plural ? "":"s"] into the tray.</span>")
