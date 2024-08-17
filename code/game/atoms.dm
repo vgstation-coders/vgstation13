@@ -253,6 +253,9 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/is_open_container()
 	return flags & OPENCONTAINER
 
+/atom/proc/reagent_transfer_message(var/transfer_amt)
+	return "<span class='notice'>You transfer [transfer_amt] units of the solution to \the [src.name].</span>"
+
 // For when we want an open container that doesn't show its reagents on examine
 /atom/proc/hide_own_reagents()
 	return FALSE
