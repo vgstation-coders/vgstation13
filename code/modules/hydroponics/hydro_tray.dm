@@ -81,8 +81,6 @@
 	)
 
 	RefreshParts()
-	if(closed_system)
-		flags &= ~OPENCONTAINER
 
 /obj/machinery/portable_atmospherics/hydroponics/RefreshParts()
 	var/capcount = 0
