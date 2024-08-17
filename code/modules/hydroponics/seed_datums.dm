@@ -13,6 +13,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/seed_name                  // Plant name for seed packet.
 	var/seed_noun = "seeds"        // Descriptor for packet.
 	var/display_name               // Prettier name.
+	var/plural = 0				   // Whether we say that the <display_name> "has", or the <display_name> "have".
 	var/roundstart                 // If set, seed will not display variety number.
 	var/mysterious                 // Only used for the random seed packets.
 
@@ -617,6 +618,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.uid = 0
 	new_seed.roundstart = 0
 	new_seed.large = large
+	new_seed.plural = plural
 
 	//Copy over everything else.
 	if(products)

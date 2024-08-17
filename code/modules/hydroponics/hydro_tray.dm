@@ -320,11 +320,11 @@
 				S.pollen = seed.pollen
 				S.add_particles(seed.pollen)
 				S.adjust_particles(PVAR_SPAWNING, 0.05, seed.pollen)
-				S.adjust_particles(PVAR_PLANE, ABOVE_HUMAN_PLANE, seed.pollen)
+				S.adjust_particles(PVAR_PLANE, FLOAT_PLANE, seed.pollen)
 				S.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), seed.pollen)
 
 			if(seed.biolum)
-				S.set_light(round(seed.potency/10))
+				S.set_light(get_biolum())
 				if(seed.biolum_colour)
 					S.light_color = seed.biolum_colour
 
@@ -418,6 +418,9 @@
 
 	else
 		return ..()
+
+/obj/machinery/portable_atmospherics/hydroponics/proc/get_biolum()
+	return (1 + Ceiling(seed.potency/10))
 
 /obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
 	..()

@@ -234,7 +234,7 @@
 	if(light_on)
 		light_out += internal_light
 	if(seed&&seed.biolum)
-		light_out += (1 + Ceiling(seed.potency/10))
+		light_out += get_biolum()
 		if(seed.biolum_colour)
 			light_color = seed.biolum_colour
 		else
@@ -245,7 +245,7 @@
 	if(T?.dynamic_lighting)
 		light_available = T.get_lumcount() * 10
 
-	if(!seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)
+	if(seed && !seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)
 		improper_light = 1
 	else
 		improper_light = 0
