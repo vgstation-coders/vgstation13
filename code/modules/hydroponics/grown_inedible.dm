@@ -52,6 +52,7 @@
 	potency = newValue
 
 /obj/item/weapon/grown/log
+	plantname = "towercap"
 	name = "tower-cap log"
 	desc = "It's better than bad, it's good!"
 	icon = 'icons/obj/hydroponics/towercap.dmi'
@@ -322,6 +323,7 @@
 		to_chat(M, "<span class = 'userwarning'>\The [src] has been forced onto you by \the [user]! Find somebody else to give it to before it consumes your head!</span>")
 
 /obj/item/weapon/grown/dandelion
+	plantname = "dandelions"
 	name = "dandelion"
 	desc = "A fuzzy flower, the head consists of a mass of seeds called a pappus, ready to be carried by the wind."
 	gender = NEUTER
