@@ -83,6 +83,8 @@ var/list/hydro_trays = list()
 	)
 
 	RefreshParts()
+	if(closed_system)
+		flags &= ~OPENCONTAINER
 
 /obj/machinery/portable_atmospherics/hydroponics/Destroy()
 	hydro_trays -= src
