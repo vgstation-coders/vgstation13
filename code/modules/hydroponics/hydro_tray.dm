@@ -315,6 +315,14 @@
 			S.plant_name = seed.display_name
 			S.name = "potted [S.plant_name]"
 
+			S.plantname = seed.name
+			if (seed.pollen && harvest >= seed.pollen_at_level)
+				S.pollen = seed.pollen
+				S.add_particles(pollen)
+				S.adjust_particles(PVAR_SPAWNING, 0.05, pollen)
+				S.adjust_particles(PVAR_PLANE, OBJ_PLANE, pollen)
+				S.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), pollen)
+
 			if(seed.biolum)
 				S.set_light(round(seed.potency/10))
 				if(seed.biolum_colour)
