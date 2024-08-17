@@ -318,10 +318,10 @@
 			S.plantname = seed.name
 			if (seed.pollen && harvest >= seed.pollen_at_level)
 				S.pollen = seed.pollen
-				S.add_particles(pollen)
-				S.adjust_particles(PVAR_SPAWNING, 0.05, pollen)
-				S.adjust_particles(PVAR_PLANE, OBJ_PLANE, pollen)
-				S.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), pollen)
+				S.add_particles(seed.pollen)
+				S.adjust_particles(PVAR_SPAWNING, 0.05, seed.pollen)
+				S.adjust_particles(PVAR_PLANE, OBJ_PLANE, seed.pollen)
+				S.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), seed.pollen)
 
 			if(seed.biolum)
 				S.set_light(round(seed.potency/10))
