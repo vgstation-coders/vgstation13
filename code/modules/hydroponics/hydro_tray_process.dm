@@ -29,7 +29,7 @@
 	// There's a chance for a weed explosion to happen if the weeds take over.
 	// Plants that are themselves weeds (weed_tolerance > 80) are unaffected.
 	if (get_weedlevel() >= WEEDLEVEL_MAX && prob(10))
-		if(!seed || get_weedlevel() >= seed.weed_tolerance + 20)
+		if(!seed || get_weedlevel() >= seed.weed_tolerance + 20 || dead)
 			weed_invasion()
 
 	// If there is no seed data (and hence nothing planted),
