@@ -302,18 +302,19 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	if(shows_archives && user.client)
 		var/list/shown_images = list()
 		var/tstring = ""
-		var/image/displayer
-		for(var/turf/T in spiral_block(T,user.client.view))
+		var/image/displayer = image('icons/effects/effects.dmi',"wave1")
+		displayer.plane = NARSIE_PLANE
+		shown_images += displayer
+		user.client.images += displayer
+		for(var/turf/T in spiral_block(get_turf(user),user.client.view))
 			tstring = "[T.x],[T.y],[T.z]"
 			if(tstring in blueprint_archives)
 				for(var/I in blueprint_archives[tstring])
 					shown_images += I
 					user.client.images += I
-				displayer = image('icons/effects/effects.dmi',T,"planner_ready")
-				displayer.plane = NARSIE_PLANE
-				shown_images += displayer
-				user.client.images += displayer
-				animate(displayer, alpha = 0, time = 2)
+				displayer.loc = T
+				displayer.alpha = 255
+				animate(displayer, alpha = 0, time = 1)
 				sleep(1)
 		spawn(10 SECONDS)
 			user.client.images -= shown_images
