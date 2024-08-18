@@ -107,7 +107,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	put_mob(L, user)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/get_floaters()
-	var/list/floaters = contents - beaker
+	var/list/floaters = list()
+	for(var/atom/thing in contents)
+		if(thing != beaker && !isobserver(thing))
+			floaters += thing
 	if(floaters.len)
 		return floaters
 	return 0
@@ -409,10 +412,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		icon_state = "pod[on]"
 
 	for(var/atom/movable/floater in get_floaters())
-		if (!isobserver(floater))
-			vis_contents += floater
-			floater.pixel_y = rand(8,32)
-			floater.pixel_x = rand(-1,1)
+		vis_contents += floater
+		floater.pixel_y = rand(8,32)
+		floater.pixel_x = rand(-1,1)
 
 	if(occupant)
 		vis_contents += occupant
