@@ -162,6 +162,11 @@
 /obj/machinery/portable_atmospherics/hydroponics/update_icon()
 	//optimizations so we don't call update_icon() more than we need to
 	delayed_update_icon = 0
+	if (lid_toggling)
+		if (lid_toggling == 2)
+			lid_toggling = 1
+		else
+			return
 	if (last_update_icon == world.time)
 		//we've already updated the icon on this tick
 		return
@@ -228,7 +233,7 @@
 		var/image/plant_image = image(seed.plant_dmi,src,plant_appearance)
 		plant_image.layer = HYDROPONIC_TRAY_PLANT_LAYER
 		overlays += plant_image
-		
+
 		seed.apply_particles(src)
 
 	//Draw the cover.
@@ -299,7 +304,7 @@
 		var/light_available = 5
 		if(T?.dynamic_lighting)
 			light_available = T.get_lumcount() * 10
-	
+
 		if(!seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)
 			improper_light = 1
 		else

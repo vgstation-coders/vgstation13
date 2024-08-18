@@ -1094,6 +1094,7 @@
 	potency = 30
 	biolum = 1
 	biolum_colour = "#B5ABDD"
+	moody_lights = 1
 
 	large = 0
 
@@ -1113,6 +1114,7 @@
 	potency = 30
 	biolum = 1
 	biolum_colour = "#FF9900"
+	moody_lights = 1
 
 	large = 0
 
@@ -1650,6 +1652,7 @@
 	biolum = 1
 	biolum_colour = "#FFFFFF"
 	thorny = 1
+	moody_lights = 1
 
 /datum/seed/purpleshardlime
 	name = "purpleshardlime"
@@ -1667,6 +1670,7 @@
 	biolum = 1
 	biolum_colour = "#DBBEF0"
 	thorny = 1
+	moody_lights = 1
 
 /datum/seed/grass
 	name = "grass"

@@ -51,6 +51,8 @@
 	var/internal_light_range = 1
 	var/light_on = 0
 
+	var/lid_toggling = 0
+
 	var/key_name_last_user = ""
 
 	hack_abilities = list(
@@ -96,6 +98,22 @@
 	//decay_reduction = scancount
 	weed_coefficient = WEEDLEVEL_MAX/mattercount/5
 	internal_light_range = capcount
+
+/obj/machinery/portable_atmospherics/hydroponics/emp_act(var/severity)
+	if(is_soil)
+		return
+	switch(severity)
+		if(1)
+			if(prob(75))
+				close_lid()
+				if (light_on)
+					light_toggle()
+		if(2)
+			if(prob(35))
+				close_lid()
+				if (light_on)
+					light_toggle()
+
 
 //Makes the plant not-alive, with proper sanity.
 /obj/machinery/portable_atmospherics/hydroponics/proc/die()
@@ -570,12 +588,32 @@
 
 	if(!usr || usr.isUnconscious() || usr.restrained())
 		return
-
+	if (lid_toggling)
+		return
+	lid_toggling = 1
+	add_fingerprint(usr)
 	closed_system = !closed_system
 	to_chat(usr, "You [closed_system ? "close" : "open"] the tray's lid.")
 
-	update_icon()
-	add_fingerprint(usr)
+	if (closed_system)
+		anim(target = src, a_icon = icon, flick_anim = "back_anim", sleeptime = 5, lay = HYDROPONIC_TRAY_BACK_LID_LAYER)
+		anim(target = src, a_icon = icon, flick_anim = "front_anim", sleeptime = 5, lay = HYDROPONIC_TRAY_FRONT_LID_LAYER)
+		playsound(src, 'sound/machines/pressurehiss.ogg', 20, 1)
+		spawn(5)
+			playsound(src, 'sound/items/Deconstruct.ogg', 20, 1)
+			lid_toggling = 0
+			update_icon()
+	else
+		lid_toggling = 2
+		update_icon()
+		playsound(src, 'sound/effects/turret/open.wav', 20, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 20, 1)
+		anim(target = src, a_icon = icon, flick_anim = "back_anim_rewind", sleeptime = 5, lay = HYDROPONIC_TRAY_BACK_LID_LAYER)
+		anim(target = src, a_icon = icon, flick_anim = "front_anim_rewind", sleeptime = 5, lay = HYDROPONIC_TRAY_FRONT_LID_LAYER)
+		spawn(5)
+			playsound(src, 'sound/machines/click.ogg', 20, 1)
+			lid_toggling = 0
+
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/light_toggle()
 	set name = "Toggle Light"
@@ -584,6 +622,7 @@
 	if(!usr || usr.isUnconscious() || usr.restrained())
 		return
 	light_on = !light_on
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	check_light()
 	update_icon()
 	add_fingerprint(usr)
@@ -625,10 +664,41 @@
 						add_nutrientlevel(6)
 						update_icon()
 
-/obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/usr)
+/obj/machinery/portable_atmospherics/hydroponics/CtrlClick(var/mob/user)
 	if((usr.incapacitated() || !Adjacent(usr)))
 		return
 	close_lid()
+
+/obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/user)
+	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check()))
+		if(issilicon(user) && !attack_ai(user))
+			return ..()
+		var/list/choices = list(
+			list("Toggle Tray Lid", "radial_lid"),
+			list("Toggle Light", "radial_light"),
+			list("Set Tray Label", "radial_label"),
+		)
+
+		var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, nameof(src::radial_check()), user))
+		if(!radial_check(usr))
+			return
+
+		switch(task)
+			if("Toggle Tray Lid")
+				close_lid()
+			if("Toggle Light")
+				light_toggle()
+			if("Set Tray Label")
+				set_label()
+		return
+	return ..()
+
+/obj/machinery/portable_atmospherics/hydroponics/proc/radial_check(mob/living/user)
+	if(!istype(user))
+		return FALSE
+	if(user.incapacitated() || !user.Adjacent(src))
+		return FALSE
+	return TRUE
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/bad_stuff()
 	var/list/things = list()
