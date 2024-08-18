@@ -23,7 +23,8 @@
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!cult)
 		return
-	sun.eclipse_manager.eclipse_start(cult.eclipse_window)
+	if (sun.eclipse == ECLIPSE_NOT_YET)
+		sun.eclipse_manager.eclipse_start(cult.eclipse_window)
 
 /proc/eclipse_trigger_random()
 	if (!sun || !sun.eclipse_manager)

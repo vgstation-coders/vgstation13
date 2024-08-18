@@ -179,11 +179,12 @@
 // Emulates targetting a specific body part, and miss chances
 // May return null if missed
 // miss_chance_mod may be negative.
-/proc/get_zone_with_miss_chance(zone, var/mob/target, var/miss_chance_mod = 0)
+// If excessive_misses is toggled on, then if it misses it will always miss instead of hitting a limb, and can also miss targets lying down
+/proc/get_zone_with_miss_chance(zone, var/mob/target, var/miss_chance_mod = 0, var/excessive_misses)
 	zone = check_zone(zone)
 
-	// you can only miss if your target is standing and not restrained
-	if(!target.locked_to && !target.lying)
+	// you can only miss if your target is standing and not restrained, excessive misses can still miss!
+	if((!target.locked_to && !target.lying) || excessive_misses)
 		var/miss_chance = 10
 		switch(zone)
 			if(LIMB_HEAD)
@@ -206,7 +207,7 @@
 				miss_chance = 50
 		miss_chance = max(miss_chance + miss_chance_mod, 0)
 		if(prob(miss_chance))
-			if(prob(70))
+			if(prob(70) || excessive_misses)
 				return null
 			else
 				var/t = rand(1, 10)

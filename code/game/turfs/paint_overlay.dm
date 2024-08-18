@@ -19,6 +19,8 @@
 /turf/proc/get_paint_state()
 	var/paint_icon_state = icon_state
 	switch (icon)
+		if ('icons/turf/floors_wood.dmi')
+			paint_icon_state = "wood_[icon_state]"
 		if ('icons/turf/nfloors.dmi')
 			paint_icon_state = "floor"
 		if ('icons/turf/snow.dmi')

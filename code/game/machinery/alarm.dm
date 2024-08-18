@@ -116,6 +116,8 @@
 	var/target_temperature = T0C+20
 	// What gasses are scrubbed on this preset.
 	var/list/scrubbed_gases = list()
+	// Automatically switch to the fire suppression preset when a fire is detected.
+	var/suppression_mode = FALSE
 
 /datum/airalarm_configuration/proc/deep_config_copy()
 	var/datum/airalarm_configuration/to_return = new /datum/airalarm_configuration()
@@ -150,6 +152,7 @@
 	data["temperature_threshold"] = temperature_threshold.raw_values
 	data["target_temperature"] = target_temperature
 	data["scrubbed_gases"] = scrubbed_gases
+	data["suppression_mode"] = suppression_mode
 	return data
 
 
@@ -265,6 +268,22 @@
 	target_temperature = T0C+20
 	scrubbed_gases = list( GAS_OXYGEN, GAS_NITROGEN, GAS_CARBON, GAS_PLASMA, GAS_SLEEPING, GAS_CRYOTHEUM )
 
+/datum/airalarm_configuration/preset/fire_suppression
+	name = "Fire Suppression"
+	desc = "Replaces combustible gasses with inert gasses."
+	core = TRUE
+	gas_thresholds = list( 	GAS_OXYGEN = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_NITROGEN = new /datum/airalarm_threshold(16, 18, 135, 140),
+							GAS_CARBON = new /datum/airalarm_threshold(-1, -1, -1, -1),
+							GAS_PLASMA = new /datum/airalarm_threshold(-1, -1, 0.2, 0.5),
+							GAS_SLEEPING = new /datum/airalarm_threshold(-1, -1, -1, -1),
+							GAS_CRYOTHEUM = new /datum/airalarm_threshold(-1, -1, -1, -1) )
+	other_gas_threshold = new /datum/airalarm_threshold(-1, -1, 0.5, 1)
+	pressure_threshold = new /datum/airalarm_threshold(-1, -1, -1, -1)
+	temperature_threshold = new /datum/airalarm_threshold(T0C-50, T0C-25, T0C+25, T0C+50)
+	target_temperature = T0C
+	scrubbed_gases = list( GAS_OXYGEN, GAS_PLASMA )
+
 //these are used for the UIs and new ones can be added and existing ones edited at the CAC
 var/global/list/airalarm_presets = list(
 	"Human" = new /datum/airalarm_configuration/preset/human,
@@ -272,6 +291,7 @@ var/global/list/airalarm_presets = list(
 	"Coldroom" = new /datum/airalarm_configuration/preset/coldroom,
 	"Plasmaman" = new /datum/airalarm_configuration/preset/plasmaman,
 	"Vacuum" = new /datum/airalarm_configuration/preset/vacuum,
+	"Fire Suppression" = new /datum/airalarm_configuration/preset/fire_suppression,
 )
 var/global/list/air_alarms = list()
 
@@ -320,6 +340,7 @@ var/global/list/air_alarms = list()
 
 	machine_flags = WIREJACK
 
+	var/auto_suppress = FALSE //automatically switch to the fire suppression preset when a fire is detected
 
 /obj/machinery/alarm/xenobio
 	req_one_access = list(access_rd, access_atmospherics, access_engine_minor, access_xenobiology)
@@ -490,6 +511,11 @@ var/global/list/air_alarms = list()
 		*/
 		if(RCON_YES)
 			remote_control = 1
+	if(auto_suppress)
+		var/area/this_area = get_area(src)
+		if(this_area.fire)
+			preset_key = "Fire Suppression"
+			apply_preset(1)
 	return
 
 /obj/machinery/alarm/proc/calculate_local_danger_level(const/datum/gas_mixture/environment)
@@ -850,6 +876,7 @@ var/global/list/air_alarms = list()
 	data["screen"]=screen
 	data["cycle_after_preset"] = cycle_after_preset
 	data["firedoor_override"] = this_area.doors_overridden
+	data["suppression_mode"] = auto_suppress
 
 	var/list/vents=list()
 	if(this_area.air_vent_names.len)
@@ -1048,6 +1075,10 @@ var/global/list/air_alarms = list()
 		if(href_list["preset"] in airalarm_presets)
 			preset_key = href_list["preset"]
 			apply_preset(!cycle_after_preset)
+		return 1
+
+	if(href_list["auto_suppress"])
+		auto_suppress = !auto_suppress
 		return 1
 
 /obj/machinery/alarm/attackby(obj/item/W as obj, mob/user as mob)

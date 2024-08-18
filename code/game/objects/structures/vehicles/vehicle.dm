@@ -358,7 +358,7 @@
 /obj/structure/bed/chair/vehicle/bullet_act(var/obj/item/projectile/Proj)
 	var/hitrider = 0
 	if(istype(Proj, /obj/item/projectile/ion))
-		Proj.on_hit(src, 2)
+		Proj.on_hit(src, 100)
 		return
 
 	if(occupant)

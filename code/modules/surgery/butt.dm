@@ -152,10 +152,6 @@
 	user.visible_message("<span class='notice'>[user] finishes cauterizing [target]'s ass with \the [tool].</span>",		\
 	"<span class='notice'>You have cauterized [target]'s ass with \the [tool].</span>")
 	var/obj/item/clothing/head/butt/B = new(target.loc)
-	if(target.mind.wizard_spells)
-		B.spells.Add(target.mind.wizard_spells)
-		for(var/spell/spell in target.mind.wizard_spells)
-			target.remove_spell(spell)
 	B.transfer_buttdentity(target)
 	target.op_stage.butt = SURGERY_NO_BUTT
 
@@ -295,9 +291,6 @@
 	affected.status |= ORGAN_BLEEDING
 
 	var/obj/item/clothing/head/butt/B = tool
-	if(B.spells)
-		for(var/spell/spell in B.spells)
-			target.add_spell(spell, iswizard = TRUE)
 	user.u_equip(B,1)
 	qdel(B)
 

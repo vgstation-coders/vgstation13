@@ -10,6 +10,7 @@
 	right = in_right
 	name = "\a [in_left] and \a [in_right]"
 	..()
+	update_icon()
 
 /obj/item/weapon/gun/akimbo/dropped(mob/user)
 	..()
@@ -60,16 +61,17 @@
 	qdel(src)
 
 /obj/item/weapon/gun/akimbo/update_icon(mob/user)
-	//right over left
-	icon = left.icon
-	icon_state = left.icon_state
-	item_state = left.item_state
-	inhand_states = left.inhand_states
-	if(wielded)
-		wielded.icon = right.icon
-		wielded.icon_state = right.icon_state
-		wielded.item_state = right.item_state
-		wielded.inhand_states = right.inhand_states
-	overlays += image("icon" = right.icon, "icon_state" = right.icon_state, "pixel_x" = 6, "pixel_y" = -5)
+	if(left && right)
+		//right over left
+		icon = left.icon
+		icon_state = left.icon_state
+		item_state = left.item_state
+		inhand_states = left.inhand_states
+		if(wielded)
+			wielded.icon = right.icon
+			wielded.icon_state = right.icon_state
+			wielded.item_state = right.item_state
+			wielded.inhand_states = right.inhand_states
+		overlays += image("icon" = right.icon, "icon_state" = right.icon_state, "pixel_x" = 6, "pixel_y" = -5)
 	if(user)
 		user.update_inv_hands()

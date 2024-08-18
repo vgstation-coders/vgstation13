@@ -320,6 +320,66 @@
 				desc = "Discount Sauce now in a family sized package."
 				icon_state = "discount_sauce"
 				condiment_overlay = DISCOUNT
+			if(MUTAGEN)
+				name = "unstable mutagen bottle"
+				desc = "Drinking is not recommended."
+				icon_state = "mutagen"
+			if(UNTABLE_MUTAGEN)
+				name = "untable mutagen bottle"
+				desc = "Cleaning tables is not recommended."
+				icon_state = "mutagen"
+			if(RADIUM)
+				name = "radium bottle"
+				desc = "Despite it's inviting shape, 10 out of every 10 watch manufacturers don't recommend drinking it."
+				icon_state = "radium_glow"
+			if(URANIUM)
+				name = "uranium bottle"
+				desc = "Cherenkov radiation in a bottle. Don't worry about it."
+				icon_state = "uranium_blueglow"
+			if(KELOTANE)
+				name = "kelotane bottle"
+				desc = "Just what grandma used to give you."
+				icon_state = "kelotane"
+			if(TANNIC_ACID)
+				name = "tannic acid bottle"
+				desc = "Despite the name, it actually helps with burns."
+				icon_state = "tannicacid"
+			if(BICARIDINE)
+				name = "bicaridine bottle"
+				desc = "Can replace the booboo kisses grandma would give."
+				icon_state = "bicaridine"
+			if(OPIUM)
+				name = "opium bottle"
+				desc = "Space China still recoils at the sight of poppies."
+				icon_state = "opium"
+			if(COCAINE)
+				name = "cocaine baggie"
+				desc = "You feel stimulated just by looking at it."
+				icon_state = "cocaine_[pick(1,2,3)]"
+			if(METHAMPHETAMINE)
+				name = "meth baggie"
+				desc = pick("Guess I got what I deserve...", "Kept you waiting there too long my love...", "All that time without a word...", "Didn't know you'd think that I'd forget? Or I'd regret...", "The special love I had for you...", "My Baby Blue...", "I AM the danger.", "I AM the one who KNOCKS!", "We use a different process but it is every bit as pure.")
+				icon_state = "meth"
+			if(HYPERZINE)
+				name = "hyperzine bottle"
+				desc = "Abuse with caution."
+				icon_state = "hyperzine"
+			if(CREATINE)
+				name = "creatine bottle"
+				desc = "Pure muscle in a bottle. But can you handle being SWOLE?"
+				icon_state = "creatine"
+			if(DEXALIN)
+				name = "dexalin bottle"
+				desc = "That special helper when you are close to drowning."
+				icon_state = "dexalins"
+			if(THYMOL)
+				name = "thymol bottle"
+				desc = "Weirdly scarce compared to its counterparts."
+				icon_state = "thymol"
+			if(DEXALINP)
+				name = "dexalin plus bottle"
+				desc = "You won't even notice when your lungs pop!"
+				icon_state = "dexalins"
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."

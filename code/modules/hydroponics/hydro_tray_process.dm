@@ -6,7 +6,7 @@
 	if(force_update)
 		force_update = 0
 	else if(world.time < (lastcycle + cycledelay))
-		if(update_icon_after_process)
+		if(update_icon_after_process > 0 && !delayed_update_icon)
 			update_icon()
 		return
 	lastcycle = world.time
@@ -35,7 +35,7 @@
 	// If there is no seed data (and hence nothing planted),
 	// or the plant is dead, process nothing further.
 	if(!seed || dead)
-		if(update_icon_after_process)
+		if(update_icon_after_process && !delayed_update_icon)
 			update_icon() //Harvesting would fail to set alert icons properly.
 		return
 
@@ -90,14 +90,20 @@
 	// If enough time (in cycles, not ticks) has passed since the plant was harvested, we're ready to harvest again.
 	if(!dead && seed.products && seed.products.len)
 		if (age > seed.production)
-			if ((age - lastproduce) > seed.production && !harvest)
-				harvest = 1
-				lastproduce = age
-				if(seed.harvest_repeat == 2)
-					autoharvest()
+			if ((age - lastproduce) > seed.production)
+				if (!harvest)
+					harvest = 1
+					lastproduce = age
+					if(seed.harvest_repeat == 2)
+						autoharvest()
+				else if (harvest < seed.maturation_max)
+					harvest++
+					lastproduce = age
+					//might have to implement auto-harvest support for plants that auto-harvest at later stages at some point
 		else
-			if(harvest) //It's a baby plant ready to harvest... must have aged backwards!
-				harvest = 0
+			if(harvest > 0) //It's a baby plant ready to harvest... must have aged backwards!
+				harvest--
+				seed.update_product(harvest)
 				lastproduce = age
 
 	var/turf/T = get_turf(src)
@@ -126,7 +132,7 @@
 				if(2)
 					msg_admin_attack("space vines ([seed.display_name]) have spread out of a tray. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>, last touched by [key_name_last_user]. Seed id: [seed.uid]. ([bad_stuff()])")
 
-	if(update_icon_after_process)
+	if(update_icon_after_process && !delayed_update_icon)
 		update_icon()
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/affect_growth(var/amount)
@@ -154,27 +160,47 @@
 		name += " ([labeled])"
 
 /obj/machinery/portable_atmospherics/hydroponics/update_icon()
+	//optimizations so we don't call update_icon() more than we need to
+	delayed_update_icon = 0
+	if (last_update_icon == world.time)
+		//we've already updated the icon on this tick
+		return
+	last_update_icon = world.time
+
 	update_icon_after_process = 0
 	overlays.len = 0
+	stop_particles()
 
 	update_name() //fuck it i'll make it not happen constantly later
 
 	// Updates the plant overlay.
-	if(get_toxinlevel() > get_waterlevel() || get_toxinlevel() > TOXINLEVEL_MAX/2)
-		overlays += image(icon = icon, icon_state = "hydrotray_toxin")
+	var/image/toxins_overlay = image(icon, src, "[icon_state]_toxin")
+	toxins_overlay.alpha = get_full_toxinlevel() * 2.55
+	overlays += toxins_overlay
+
 	if(!isnull(seed))
-		if(draw_warnings && get_planthealth() <= (seed.endurance / 2))
+		if(draw_warnings && get_full_planthealth() <= (seed.endurance / 2))
 			overlays += image('icons/obj/hydroponics/hydro_tools.dmi',"over_lowhealth3")
+		var/plant_appearance = ""
 		if(dead)
-			overlays += image(seed.plant_dmi,"dead")
+			plant_appearance = "dead"
 		else if(harvest)
-			overlays += image(seed.plant_dmi,"harvest")
+			if (harvest > 1)
+				plant_appearance = "harvest-[harvest]"
+			else
+				plant_appearance = "harvest"
 		else if(age < seed.maturation)
 			var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
-			overlays += image(seed.plant_dmi,"stage-[t_growthstate]")
+			plant_appearance = "stage-[t_growthstate]"
 			lastproduce = age
 		else
-			overlays += image(seed.plant_dmi,"stage-[seed.growth_stages]")
+			plant_appearance = "stage-[seed.growth_stages]"
+
+		if (!is_soil && seed.visible_roots_in_hydro_tray)
+			overlays += image(seed.plant_dmi,"roots-[plant_appearance]")
+		overlays += image(seed.plant_dmi,plant_appearance)
+
+		seed.apply_particles(src)
 
 	//Draw the cover.
 	if(closed_system)
@@ -183,22 +209,22 @@
 	//Updated the various alert icons.
 	if(!draw_warnings)
 		return
-	if(get_nutrientlevel() <= NUTRIENTLEVEL_MAX / 5)
+	if(get_full_nutrientlevel() <= NUTRIENTLEVEL_MAX / 5)
 		overlays += image(icon = icon, icon_state = "over_lownutri3")
-	if(get_weedlevel() >= WEEDLEVEL_MAX/2 || get_pestlevel() >= PESTLEVEL_MAX/2 || improper_heat || improper_light || improper_kpa || missing_gas)
+	if(get_full_weedlevel() >= WEEDLEVEL_MAX/2 || get_full_pestlevel() >= PESTLEVEL_MAX/2 || improper_heat || improper_light || improper_kpa || missing_gas)
 		overlays += image(icon = icon, icon_state = "over_alert3")
-	if(get_waterlevel() <= WATERLEVEL_MAX/5 && get_toxinlevel() <= TOXINLEVEL_MAX/5)
+	if(get_full_waterlevel() <= WATERLEVEL_MAX/5 && get_full_toxinlevel() <= TOXINLEVEL_MAX/5)
 		overlays += image(icon = icon, icon_state = "over_lowwater3")
 
 	if(!seed)
 		return
 	if(seed.toxin_affinity < 5)
-		if(get_waterlevel() <= WATERLEVEL_MAX/5)
+		if(get_full_waterlevel() <= WATERLEVEL_MAX/5)
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
 	else if(seed.toxin_affinity <= 7)
-		if(get_waterlevel() < WATERLEVEL_MAX/5 || get_toxinlevel() < TOXINLEVEL_MAX/5)
+		if(get_full_waterlevel() < WATERLEVEL_MAX/5 || get_full_toxinlevel() < TOXINLEVEL_MAX/5)
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
-	else if(get_toxinlevel() < TOXINLEVEL_MAX/5)
+	else if(get_full_toxinlevel() < TOXINLEVEL_MAX/5)
 		overlays += image(icon = icon, icon_state = "over_lowwater3")
 	if(harvest)
 		overlays += image(icon = icon, icon_state = "over_harvest3")
@@ -208,7 +234,7 @@
 	if(light_on)
 		light_out += internal_light
 	if(seed&&seed.biolum)
-		light_out += (1 + Ceiling(seed.potency/10))
+		light_out += get_biolum()
 		if(seed.biolum_colour)
 			light_color = seed.biolum_colour
 		else
@@ -219,7 +245,7 @@
 	if(T?.dynamic_lighting)
 		light_available = T.get_lumcount() * 10
 
-	if(!seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)
+	if(seed && !seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)
 		improper_light = 1
 	else
 		improper_light = 0

@@ -582,6 +582,10 @@
 		to_chat(user, "<span class='warning'>You do not have enough space to write a proper rune.</span>")
 		return
 
+	if(istype(user.loc, /turf/space))
+		to_chat(user, "<span class='warning'>Get over a solid surface first!</span>")
+		return
+
 	var/turf/T = get_turf(user)
 	var/obj/effect/rune/rune = locate() in T
 

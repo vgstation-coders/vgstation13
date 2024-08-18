@@ -9,7 +9,7 @@
 	default_admin_voice = "Common Sense"
 	admin_voice_style = "warning"
 	var/survivor_type = "survivor"
-	var/summons_received
+	var/list/summons_received = list()
 
 /datum/role/survivor/crusader
 	id = CRUSADER
@@ -35,9 +35,13 @@
 	AppendObjective(S)
 
 /datum/role/survivor/GetBought()
-	if(!summons_received)
-		return ""
-	return "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
+	var/dat
+	dat += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
+	for(var/list/L in summons_received)
+		var/item = L["item_name"]
+		var/item_image = L["icon"]
+		dat += "[item_image] [item]<BR>"
+  return dat
 
 //Note this is a wizard subtype
 
@@ -60,9 +64,13 @@
 	return TRUE
 
 /datum/role/wizard/summon_magic/GetBought()
-	if(!summons_received)
-		return ""
-	return "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
+	var/dat
+	dat += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
+	for(var/list/L in summons_received)
+		var/item = L["item_name"]
+		var/item_image = L["icon"]
+		dat += "[item_image] [item]<BR>"
+  return dat
 
 /datum/role/wizard/summon_magic/artifact
 	name = MAGICIAN_ARTIFACT
@@ -91,7 +99,10 @@
 	return TRUE
 
 /datum/role/wizard/summon_potions/GetBought()
-	if(!summons_received)
-		return ""
-	return "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
-
+	var/dat
+	dat += "<BR>The [name] received the following as a result of a summoning spell after becoming a [name]:<BR>"
+	for(var/list/L in summons_received)
+		var/item = L["item_name"]
+		var/item_image = L["icon"]
+		dat += "[item_image] [item]<BR>"
+	return dat

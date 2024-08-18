@@ -66,7 +66,10 @@
 		var/T = get_turf(target)
 
 		for(var/step_n = 1 to circle_radius)
-			T = get_step(T, m_dir)
+			if(circle_radius > 50)
+				return
+			else
+				T = get_step(T, m_dir)
 
 		points.Add(T)
 

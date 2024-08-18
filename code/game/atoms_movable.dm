@@ -59,6 +59,8 @@
 
 	var/atom/movable/border_dummy/border_dummy //Used for border objects. The old Uncross() method fails miserably with pixel movement or large hitboxes.
 
+	var/silence_sprayed = FALSE //sprayed by silencing spray
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
@@ -306,9 +308,15 @@
 		M.canmove = 1
 
 	category.unlock(AM)
+	if((category.flags & LOCKED_STAY_INSIDE) && AM.loc == src)
+		AM.forceMove(src.loc)
 	//AM.reset_glide_size() // FIXME: Currently broken.
 
 	return TRUE
+
+/atom/movable/proc/unlock_atoms(var/category, var/subtypes = FALSE)
+	for(var/atom/movable/AM in get_locked(category, subtypes))
+		unlock_atom(AM)
 
 /atom/movable/proc/unlock_from()
 	if(!locked_to)
@@ -1344,3 +1352,12 @@
 			change_dir(new_dir)
 			sleep(1)
 	change_dir(prev_dir)
+
+/atom/movable/proc/make_silent(var/duration)
+	silence_sprayed = TRUE
+	if(duration > 0)
+		spawn(duration)
+			silence_sprayed = FALSE
+
+/atom/movable/proc/remove_silence()
+	silence_sprayed = FALSE

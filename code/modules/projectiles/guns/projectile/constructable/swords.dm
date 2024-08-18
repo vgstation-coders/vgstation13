@@ -36,8 +36,7 @@
 /obj/item/weapon/sword/weaponcraft/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, /obj/item/weapon/metal_blade))
-		to_chat(user, "You attach \the [W] to \the [src].")
-		user.create_in_hands(src,new /obj/item/weapon/sword/executioner(loc),W)
+		user.create_in_hands(src,new /obj/item/weapon/sword/executioner(loc),W,msg="You attach \the [W] to \the [src].")
 	if(W.type == /obj/item/weapon/reagent_containers/hypospray || W.type == /obj/item/weapon/reagent_containers/hypospray/creatine)
 		to_chat(user, "You wrap \the [src]'s grip around \the [W], affixing it to the base of \the [src].")
 		user.drop_item(W, force_drop = 1)
@@ -165,8 +164,7 @@
 		if(B.volume > max_beaker_volume)
 			to_chat(user, "<span class='warning'>That beaker is too large to fit into \the [src]'s beaker port.</span>")
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return 1
 		beaker = W
 		to_chat(user, "You insert \the [W] into \the [src]'s beaker port.")

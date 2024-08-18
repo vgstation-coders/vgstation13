@@ -228,7 +228,6 @@ var/global/list/atmos_controllers = list()
 		datum_data["short_name"] = gas_datum.short_name || gas_datum.name
 		gas_datums += list(datum_data)
 	data["gas_datums"]=gas_datums
-	
 	if(bspipe_list.len>0)
 		data["bspipe_exist"] = TRUE
 	var/list/bspipes=list()
@@ -404,6 +403,8 @@ var/global/list/atmos_controllers = list()
 				selected_preset = new /datum/airalarm_configuration/preset/coldroom
 			if("Plasmaman")
 				selected_preset = new /datum/airalarm_configuration/preset/plasmaman
+			if("Fire Suppression")
+				selected_preset = new /datum/airalarm_configuration/preset/fire_suppression
 		return 1
 
 	if(href_list["apply_preset_batch"])
@@ -594,6 +595,10 @@ var/global/list/atmos_controllers = list()
 			if(href_list["preset"] in airalarm_presets)
 				current.preset_key = href_list["preset"]
 				current.apply_preset(!current.cycle_after_preset)
+			return 1
+
+		if(href_list["auto_suppress"])
+			current.auto_suppress = !current.auto_suppress
 			return 1
 
 		if(href_list["temperature"])

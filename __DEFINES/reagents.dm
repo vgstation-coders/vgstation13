@@ -101,6 +101,7 @@
 #define TRICORDRAZINE 			"tricordrazine"
 #define SIMPOLINOL			"simpolinol"
 #define ADMINORDRAZINE 			"adminordrazine"
+#define PANACEA				"panacea"
 #define PROCIZINE 			"procizine"
 #define SYNAPTIZINE 			"synaptizine"
 #define IMPEDREZENE 			"impedrezene"
@@ -172,7 +173,7 @@
 #define POLYPGELATIN				"polypgelatin"
 #define COCO 			"coco"
 #define AMATOXIN 			"amatoxin"
-#define AMANATIN 			"amanatin"
+#define AMANITIN 			"amanitin"
 #define PSILOCYBIN 			"psilocybin"
 #define SPRINKLES 			"sprinkles"
 #define SYNDICREAM 			"syndicream"
@@ -215,6 +216,7 @@
 #define NOTHING 			"nothing"
 #define POTATO 			"potato"
 #define MILK 			"milk"
+#define CHOCOLATEMILK	"chocolatemilk"
 #define MOMMIMILK 			"mommimilk"
 #define SOYMILK 			"soymilk"
 #define CREAM 			"cream"
@@ -525,12 +527,15 @@
 #define MIMOSA			"mimosa"
 #define LEMONDROP		"lemondrop"
 #define FEVERFEW		"feverfew"
+#define SQUASH			"squash"
 
 #define ACRYLIC			"acrylic"
 #define ACETONE			"acetone"
 #define NANOPAINT		"nano_paint"
 #define FLAXOIL			"flax_oil"
 #define WAX				"wax"
+
+#define DYE_DANDELIONS	"dandelion_dye"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -567,7 +572,8 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define BICARIDINES list(BICARIDINE, OPIUM)
 #define SPACE_DRUGGS list(SPACE_DRUGS, MESCALINE)
 #define SYNAPTIZINES list(SYNAPTIZINE, CYTISINE)
-#define HYPERZINES list(HYPERZINE, COCAINE, METHAMPHETAMINE)
+#define HYPERZINES list(HYPERZINE, COCAINE, LIQUIDPCP, METHAMPHETAMINE) //all hyperzine calls call this, except a couple recipes which call safehyperzines
+#define SAFEHYPERZINES list(HYPERZINE, COCAINE) //here so some recipes don't get fucked up and turn recursive
 #define IMIDAZOLINES list(IMIDAZOLINE, ZEAXANTHIN)
 #define STOXINS list(STOXIN, STOXIN2, VALERENIC_ACID)
 #define SACIDS list(SACID, FORMIC_ACID)
@@ -595,7 +601,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define INCENSE_NOVAFLOWERS	"novaflowers"
 #define INCENSE_BANANA		"bananas"
 #define INCENSE_BOOZE		"helmets"
-#define INCENSE_LEAFY		"cabbage"
+#define INCENSE_LEAFY		"leafy"
 #define INCENSE_VAPOR		"vaporsacs"
 #define INCENSE_DENSE		"grasses"
 #define INCENSE_CRAVE		"vales"
