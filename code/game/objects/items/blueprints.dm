@@ -302,12 +302,13 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 	if(shows_archives && user.client)
 		var/list/shown_images = list()
 		var/tstring = ""
-		for(var/turf/T in view(user.client.view))
+		for(var/turf/T in spiral_block(user.client.view))
 			tstring = "[T.x],[T.y],[T.z]"
 			if(tstring in blueprint_archives)
 				for(var/I in blueprint_archives[tstring])
 					shown_images += I
-		user.client.images += shown_images
+					user.client.images += I
+				sleep(1)
 		spawn(10 SECONDS)
 			user.client.images -= shown_images
 
