@@ -58,7 +58,7 @@
 		else
 			if(prob(80))
 				age += 1 * HYDRO_SPEED_MULTIPLIER
-				update_icon_after_process = 1
+			update_icon_after_process = 1
 
 	//Highly mutable plants have a chance of mutating every tick.
 	if(seed.immutable == -1)
@@ -210,7 +210,12 @@
 					plant_appearance = "harvest"
 			else if(age < seed.maturation)
 				var/t_growthstate = clamp(1+round((age * seed.growth_stages) / seed.maturation),1,seed.growth_stages)
-				plant_appearance = "stage-[t_growthstate]"
+				if (t_growthstate > growth_level)
+					//this should give us a chance to witness stages we wouldn't otherwise see due to the plant's maturation var being inferior or equal to its growth_stages var.
+					growth_level++
+					if (t_growthstate > growth_level+1)
+						growth_level++
+				plant_appearance = "stage-[growth_level]"
 				lastproduce = age
 			else
 				plant_appearance = "stage-[seed.growth_stages]"

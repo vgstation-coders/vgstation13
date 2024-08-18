@@ -31,6 +31,7 @@
 	var/harvest = 0            // Is it ready to harvest?
 	var/age = 0                // Current plant age
 	var/sampled = 0            // Have we taken a sample?
+	var/growth_level = 0
 
 	// Harvest/mutation mods.
 	var/list/mutation_levels = list()	// Increases as mutagenic compounds are added, determines potency of resulting mutation when it's called.
@@ -134,6 +135,7 @@
 	seed = null
 	dead = 0
 	age = 0
+	growth_level = 0
 	sampled = 0
 	harvest = 0
 	improper_light = 0
