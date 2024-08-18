@@ -135,6 +135,10 @@ Why is FLOAT_PLANE added to a bunch of these?
 	#define OPEN_DOOR_LAYER				1
 	#define BELOW_OBJ_LAYER				2
 	#define MACHINERY_LAYER				2.5
+	#define HYDROPONIC_TRAY_LAYER		2.5
+	#define HYDROPONIC_TRAY_BACK_LID_LAYER		2.501
+	#define HYDROPONIC_TRAY_PLANT_LAYER			2.502
+	#define HYDROPONIC_TRAY_FRONT_LID_LAYER		2.503
 	// OBJ_LAYER 	 					3
 	#define ABOVE_OBJ_LAYER				4
 	#define SIDE_WINDOW_LAYER			5

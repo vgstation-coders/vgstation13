@@ -606,6 +606,7 @@
 	nutrient_consumption = 3
 	biolum = 1
 	biolum_colour = "#00ff00"
+	moody_lights = 1
 
 /datum/seed/berry/poison
 	name = "poisonberries"
@@ -645,6 +646,7 @@
 	yield = 4
 	potency = 10
 	growth_stages = 5
+	constrained = 1
 
 /datum/seed/nettle/death
 	name = "deathnettle"
@@ -658,6 +660,7 @@
 
 	maturation = 8
 	yield = 2
+	constrained = 1
 
 //Tomatoes/variants.
 /datum/seed/tomato
@@ -681,6 +684,7 @@
 	ideal_heat = 298
 	juicy = 1
 	splat_type = /obj/effect/decal/cleanable/tomato_smudge
+	constrained = 1
 
 /datum/seed/tomato/blood
 	name = "bloodtomato"
@@ -704,6 +708,7 @@
 	yield = 2
 	growth_stages = 2
 	juicy = 0
+	constrained = 0
 
 /datum/seed/tomato/blue
 	name = "bluetomato"
@@ -744,6 +749,7 @@
 	potency = 20
 	ideal_light = 9
 	ideal_heat = 298
+	constrained = 1
 
 /datum/seed/eggplant/eggs
 	name = "realeggplant"
@@ -814,6 +820,7 @@
 	potency = 5
 	ideal_light = 8
 	large = 0
+	constrained = 1
 
 
 /datum/seed/ambrosia/cruciatus
@@ -888,6 +895,7 @@
 	maturation = 8
 	yield = 4
 	potency = 0
+	constrained = 1
 
 /datum/seed/mushroom/hallucinogenic
 	name = "reishi"
@@ -980,6 +988,7 @@
 	growth_stages = 4
 	biolum = 1
 	biolum_colour = "#006622"
+	moody_lights = 1
 
 /datum/seed/mushroom/walking
 	name = "walkingmushroom"
@@ -1029,6 +1038,7 @@
 	yield = 2
 	growth_stages = 4
 	nutrient_consumption = 2
+	constrained = 1
 
 /datum/seed/flower/poppy
 	name = "poppies"
@@ -1535,6 +1545,7 @@
 	potency = 10
 	growth_stages = 3
 	fluid_consumption = 6
+	constrained = 1
 
 /datum/seed/squash
 	name = "squash"
@@ -1552,6 +1563,7 @@
 	potency = 10
 	growth_stages = 3
 	fluid_consumption = 6
+	constrained = 1
 
 /datum/seed/lime
 	name = "lime"
@@ -1745,6 +1757,7 @@
 	growth_stages = 4
 	spread = 2
 	fluid_consumption = 0.5
+	constrained = 1
 
 /datum/seed/diona
 	name = "diona"
@@ -1764,6 +1777,7 @@
 	production = 10
 	yield = 1
 	potency = 30
+	constrained = 1
 
 /datum/seed/clown
 	name = "clown"
@@ -1781,6 +1795,7 @@
 	production = 1
 	yield = 10
 	potency = 30
+	constrained = 1
 
 /datum/seed/moshrum
 	name = "moshrum"
@@ -1802,6 +1817,7 @@
 	yield = 2
 	potency = 30
 	ideal_light = 0
+	constrained = 1
 
 /datum/seed/nofruit
 	name = "nofruit"
@@ -1958,6 +1974,7 @@
 	endurance = 25 //Fragile...
 	voracious = 1 //Eats pests!
 	juicy = 2 //And here's where the slipperiness comes in
+	constrained = 1
 
 /datum/seed/aloe
 	name = "aloe"
@@ -2023,3 +2040,4 @@
 	potency = 5
 	ideal_light = 8
 	nutrient_consumption = 2
+	constrained = 1

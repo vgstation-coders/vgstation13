@@ -76,6 +76,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/mob_drop					// Seed type dropped by the mobs when it dies without an host
 
 	var/large = 1					// Is the plant large? For clay pots.
+	var/constrained = 0				// Whether the plant uses alternate sprites when the cover is down
+	var/moody_lights = 0
 	var/list/mutation_log = list() // Who did what
 
 /datum/seed/New()

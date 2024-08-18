@@ -1,10 +1,11 @@
 /obj/machinery/portable_atmospherics/hydroponics
 	name = "hydroponics tray"
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
-	icon_state = "hydrotray3"
+	icon_state = "hydrotray3-lightsoff"
 	anchored = 1
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
 	volume = 100
+	layer = HYDROPONIC_TRAY_LAYER
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT
 
@@ -47,7 +48,7 @@
 
 	//var/decay_reduction = 0     //How much is mutation decay reduced by?
 	var/weed_coefficient = 10    //Coefficient to the chance of weeds appearing
-	var/internal_light = 1
+	var/internal_light_range = 1
 	var/light_on = 0
 
 	var/key_name_last_user = ""
@@ -94,7 +95,7 @@
 			mattercount += SP.rating
 	//decay_reduction = scancount
 	weed_coefficient = WEEDLEVEL_MAX/mattercount/5
-	internal_light = capcount
+	internal_light_range = capcount
 
 //Makes the plant not-alive, with proper sanity.
 /obj/machinery/portable_atmospherics/hydroponics/proc/die()
@@ -106,6 +107,7 @@
 	// When the plant dies, weeds thrive and pests die off.
 	add_weedlevel(10 * HYDRO_SPEED_MULTIPLIER)
 	pestlevel = 0
+	check_light()
 	update_icon()
 
 //Calls necessary sanity when a plant is removed from the tray.
@@ -119,7 +121,7 @@
 	improper_light = 0
 	improper_kpa = 0
 	improper_heat = 0
-	set_light(0)
+	check_light()
 	update_icon()
 
 //Harvests the product of a plant.
@@ -583,6 +585,7 @@
 		return
 	light_on = !light_on
 	check_light()
+	update_icon()
 	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/set_label()
