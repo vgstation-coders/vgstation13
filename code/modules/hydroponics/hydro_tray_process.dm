@@ -241,6 +241,15 @@
 		var/image/back_lid = image(icon,src,"lid_back")
 		back_lid.layer = HYDROPONIC_TRAY_BACK_LID_LAYER
 		overlays += back_lid
+
+		//and the visible gases in there
+		for(var/g in XGM.overlay_limit)
+			if(air_contents.molar_density(g) > XGM.overlay_limit[g])
+				var/obj/effect/overlay/gas_overlay/GO = XGM.tile_overlay[g]
+				var/image/I = image(icon ,src , GO.icon_state)
+				I.layer = HYDROPONIC_TRAY_ATMOS_LAYER
+				overlays += I
+
 		var/image/front_lid = image(icon,src,"lid_front")
 		front_lid.layer = HYDROPONIC_TRAY_FRONT_LID_LAYER
 		overlays += front_lid

@@ -665,9 +665,12 @@
 						update_icon()
 
 /obj/machinery/portable_atmospherics/hydroponics/CtrlClick(var/mob/user)
-	if((usr.incapacitated() || !Adjacent(usr)))
-		return
-	close_lid()
+	if (anchored)
+		if((usr.incapacitated() || !Adjacent(usr)))
+			return
+		close_lid()
+	else
+		..()
 
 /obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/user)
 	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check()))
