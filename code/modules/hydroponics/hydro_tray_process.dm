@@ -218,7 +218,9 @@
 				plant_appearance = "stage-[growth_level]"
 				lastproduce = age
 			else
-				plant_appearance = "stage-[seed.growth_stages]"
+				if (seed.growth_stages > growth_level)
+					growth_level++
+				plant_appearance = "stage-[growth_level]"
 			if (seed.moody_lights)
 				update_moody_light_index("plant", seed.plant_dmi, "[plant_appearance]-moody")
 			else if (seed.biolum)
