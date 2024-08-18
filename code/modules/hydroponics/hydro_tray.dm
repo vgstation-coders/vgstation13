@@ -647,6 +647,10 @@
 	..()
 	update_name()
 
+/obj/machinery/portable_atmospherics/hydroponics/variable_edited(variable_name, old_value, new_value)
+	.=..()
+	update_icon()
+
 /obj/machinery/portable_atmospherics/hydroponics/HasProximity(mob/living/simple_animal/M)
 	if(seed && !dead && seed.voracious == 2 && age > seed.maturation)
 		if(istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/hostile/lizard) && !M.locked_to && !M.anchored)
