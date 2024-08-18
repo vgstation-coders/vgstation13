@@ -5,7 +5,7 @@
 	density = 0
 	use_power = MACHINE_POWER_USE_NONE
 	draw_warnings = 0
-
+	is_soil = 1
 	machine_flags = 0 // THIS SHOULD NOT EVER BE UNWRENCHED AND IT SHOULD NOT EVER SPAWN MACHINE FRAMES, MY GOD
 
 /obj/machinery/portable_atmospherics/hydroponics/soil/attackby(var/obj/item/W, var/mob/user)

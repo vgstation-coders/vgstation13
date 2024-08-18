@@ -535,6 +535,8 @@
 #define FLAXOIL			"flax_oil"
 #define WAX				"wax"
 
+#define DYE_DANDELIONS	"dandelion_dye"
+
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
 
@@ -599,7 +601,7 @@ var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stop
 #define INCENSE_NOVAFLOWERS	"novaflowers"
 #define INCENSE_BANANA		"bananas"
 #define INCENSE_BOOZE		"helmets"
-#define INCENSE_LEAFY		"cabbage"
+#define INCENSE_LEAFY		"leafy"
 #define INCENSE_VAPOR		"vaporsacs"
 #define INCENSE_DENSE		"grasses"
 #define INCENSE_CRAVE		"vales"

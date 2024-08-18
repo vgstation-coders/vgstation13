@@ -12,6 +12,7 @@
 	var/tmp/update_icon_after_process = 0 // Will try to only call update_icon() when necessary.
 	var/last_update_icon = 0 // Since we're calling it more frequently than process(), let's at least make sure we're only calling it once per tick.
 	var/delayed_update_icon = 0
+	var/is_soil = 0
 
 	// Plant maintenance vars
 	var/waterlevel = 100		// Water (max 100)
@@ -178,7 +179,7 @@
 	//Remove the seed if something is already planted.
 	if(seed)
 		remove_plant()
-	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds","glowshroom","grass"))]
+	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","dandelions","glowshroom","grass"))]
 	if(!seed)
 		return //Weed does not exist, someone fucked up.
 
@@ -301,7 +302,10 @@
 			if(dead)
 				S.overlays += image(seed.plant_dmi,"dead")
 			else if(harvest)
-				S.overlays += image(seed.plant_dmi,"harvest")
+				if (harvest > 1)
+					S.overlays += image(seed.plant_dmi,"harvest-[harvest]")
+				else
+					S.overlays += image(seed.plant_dmi,"harvest")
 			else if(age < seed.maturation)
 				var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
 				S.overlays += image(seed.plant_dmi,"stage-[t_growthstate]")
@@ -311,8 +315,16 @@
 			S.plant_name = seed.display_name
 			S.name = "potted [S.plant_name]"
 
+			S.plantname = seed.name
+			if (seed.pollen && harvest >= seed.pollen_at_level)
+				S.pollen = seed.pollen
+				S.add_particles(seed.pollen)
+				S.adjust_particles(PVAR_SPAWNING, 0.05, seed.pollen)
+				S.adjust_particles(PVAR_PLANE, FLOAT_PLANE, seed.pollen)
+				S.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), seed.pollen)
+
 			if(seed.biolum)
-				S.set_light(round(seed.potency/10))
+				S.set_light(get_biolum())
 				if(seed.biolum_colour)
 					S.light_color = seed.biolum_colour
 
@@ -371,7 +383,7 @@
 	else if(istype(O, /obj/item/weapon/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.
 
-	else if(O.is_wrench(user) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
+	else if(O.is_wrench(user) && is_soil) //Soil isn't a portable atmospherics machine by any means
 		return //Don't call parent. I mean, soil shouldn't be a child of portable_atmospherics at all, but that's not very feasible.
 
 	else if(istype(O, /obj/item/apiary))
@@ -407,12 +419,19 @@
 	else
 		return ..()
 
+/obj/machinery/portable_atmospherics/hydroponics/proc/get_biolum()
+	return (1 + Ceiling(seed.potency/10))
+
 /obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
 	..()
 	if(primarytype == /mob/living/carbon/slime/green)
 		has_slime=1
 		to_chat(user, "You attach the slime extract to \the [src]'s internal mechanisms.")
 		return TRUE
+
+/obj/machinery/portable_atmospherics/hydroponics/wind_act(var/differential, var/list/connecting_turfs)
+	if (seed)
+		seed.wind_act(src, differential, connecting_turfs)
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
 	if(harvest)
@@ -497,7 +516,7 @@
 			if(missing_gas)
 				to_chat(user, "The tray's <span class='alert'>improper gas environment alert</span> is blinking.")
 
-		if(!istype(src,/obj/machinery/portable_atmospherics/hydroponics/soil))
+		if(!is_soil)
 
 			var/turf/T = loc
 			var/datum/gas_mixture/environment

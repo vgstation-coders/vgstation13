@@ -3,6 +3,8 @@
 	name = "flora"
 	var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
 	var/shovelaway = FALSE
+	var/pollen = null
+	var/plantname = null
 
 /obj/structure/flora/New()
 	..()
@@ -60,6 +62,27 @@
 		I.forceMove(loc)
 		user.put_in_active_hand(I)
 		overlays -= overlays[overlays.len]
+
+/obj/structure/flora/wind_act(var/differential, var/list/connecting_turfs)
+	if (!pollen)
+		return
+	var/turf/T = get_turf(src)
+	var/turf/U = get_step(T,get_dir(T,pick(connecting_turfs)))
+	var/log_differential = log(abs(differential) * 3)
+	if (U)
+		if (differential > 0)
+			T.flying_pollen(U,log_differential, pollen)
+		else
+			T.flying_pollen(U,-log_differential, pollen)
+		T.adjust_particles(PVAR_SPAWNING, 0.5, pollen)
+	spawn(10)
+		for (var/obj/machinery/portable_atmospherics/hydroponics/other_tray in U)//TODO: have it work on grass
+			if (!other_tray.seed)
+				other_tray.seed = SSplant.seeds[plantname]
+				other_tray.add_planthealth(other_tray.seed.endurance)
+				other_tray.lastcycle = world.time
+				other_tray.weedlevel = 0
+				other_tray.update_icon()
 
 /obj/structure/flora/tree
 	name = "tree"

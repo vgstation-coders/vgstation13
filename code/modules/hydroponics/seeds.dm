@@ -275,9 +275,14 @@
 	seed_type = "deathnettle"
 	vending_cat = "weeds"
 
-/obj/item/seeds/weeds
-	name = "packet of weed seeds"
-	seed_type = "weeds"
+/obj/item/seeds/dandelionseed
+	name = "packet of dandelion seeds"
+	seed_type = "dandelions"
+	vending_cat = "weeds"
+
+/obj/item/seeds/mockdelionseed
+	name = "packet of dandelion(?) seeds"
+	seed_type = "mockdelions"
 	vending_cat = "weeds"
 
 /obj/item/seeds/harebell
@@ -524,6 +529,7 @@
 	name = "chili"
 	seed_name = "chili"
 	display_name = "chili plants"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/chili.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/chili)
 	chems = list(CAPSAICIN = list(3,5), NUTRIMENT = list(1,25))
@@ -542,6 +548,7 @@
 	name = "icechili"
 	seed_name = "chilly pepper"
 	display_name = "chilly pepper plants"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/chiliice.dmi'
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper)
@@ -554,6 +561,7 @@
 	name = "ghostpepper"
 	seed_name = "ghostpepper"
 	display_name = "ghost pepper plants"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/chilighost.dmi'
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper)
@@ -625,6 +633,7 @@
 	name = "nettle"
 	seed_name = "nettle"
 	display_name = "nettles"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/nettle.dmi'
 	products = list(/obj/item/weapon/grown/nettle)
 	mutants = list("deathnettle")
@@ -641,6 +650,7 @@
 	name = "deathnettle"
 	seed_name = "death nettle"
 	display_name = "death nettles"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/deathnettle.dmi'
 	products = list(/obj/item/weapon/grown/deathnettle)
 	mutants = null
@@ -720,6 +730,7 @@
 	name = "eggplant"
 	seed_name = "eggplant"
 	display_name = "eggplants"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/eggplant.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/eggplant)
 	mutants = list("realeggplant")
@@ -738,6 +749,7 @@
 	name = "realeggplant"
 	seed_name = "egg-plant"
 	display_name = "egg-plants"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/eggy.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	mutants = null
@@ -833,6 +845,7 @@
 	seed_name = "chanterelle"
 	seed_noun = "spores"
 	display_name = "chanterelle mushrooms"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/chanter.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chanterelle)
 	mutants = list("reishi","amanita","plumphelmet")
@@ -865,6 +878,7 @@
 	name = "plumphelmet"
 	seed_name = "plump helmet"
 	display_name = "plump helmet mushrooms"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/plump.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet)
 	mutants = list("walkingmushroom","towercap")
@@ -878,7 +892,8 @@
 /datum/seed/mushroom/hallucinogenic
 	name = "reishi"
 	seed_name = "reishi"
-	display_name = "reishi"
+	display_name = "reishi mushrooms"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/reishi.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/reishi)
 	mutants = list("libertycap","glowshroom")
@@ -894,6 +909,7 @@
 	name = "libertycap"
 	seed_name = "liberty cap"
 	display_name = "liberty cap mushrooms"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/liberty.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/libertycap)
 	mutants = null
@@ -908,6 +924,7 @@
 	name = "amanita"
 	seed_name = "fly amanita"
 	display_name = "fly amanita mushrooms"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/amanita.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/amanita)
 	mutants = list("destroyingangel","plastic")
@@ -923,6 +940,7 @@
 	name = "destroyingangel"
 	seed_name = "destroying angel"
 	display_name = "destroying angel mushrooms"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/angel.dmi'
 	mutants = null
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/angel)
@@ -936,6 +954,7 @@
 	name = "towercap"
 	seed_name = "tower cap"
 	display_name = "tower caps"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/towercap.dmi'
 	mutants = null
 	products = list(/obj/item/weapon/grown/log)
@@ -948,6 +967,7 @@
 	name = "glowshroom"
 	seed_name = "glowshroom"
 	display_name = "glowshrooms"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/glowshroom.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/glowshroom)
 	mutants = null
@@ -965,6 +985,7 @@
 	name = "walkingmushroom"
 	seed_name = "walking mushroom"
 	display_name = "walking mushrooms"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/walkingmushroom.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/walkingmushroom)
 	mutants = null
@@ -979,7 +1000,8 @@
 /datum/seed/mushroom/plastic
 	name = "plastic"
 	seed_name = "plastellium"
-	display_name = "plastellium"
+	display_name = "plastellium mushrooms"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/plastellium.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/plastellium)
 	mutants = null
@@ -996,6 +1018,7 @@
 	name = "harebells"
 	seed_name = "harebell"
 	display_name = "harebells"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/harebell.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/harebell)
 	chems = list(NUTRIMENT = list(1,20))
@@ -1011,6 +1034,7 @@
 	name = "poppies"
 	seed_name = "poppy"
 	display_name = "poppies"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/poppy.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/poppy)
 	chems = list(NUTRIMENT = list(1,20), OPIUM = list(1,10))
@@ -1031,6 +1055,7 @@
 	name = "sunflowers"
 	seed_name = "sunflower"
 	display_name = "sunflowers"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/sunflower.dmi'
 	products = list(/obj/item/weapon/grown/sunflower)
 	mutants = list("moonflowers","novaflowers")
@@ -1047,6 +1072,7 @@
 	name = "moonflowers"
 	seed_name = "moonflower"
 	display_name = "moonflowers"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/moonflower.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower)
 	mutants = null
@@ -1065,6 +1091,7 @@
 	name = "novaflowers"
 	seed_name = "novaflower"
 	display_name = "novaflowers"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/novaflower.dmi'
 	products = list(/obj/item/weapon/grown/novaflower)
 	mutants = null
@@ -1083,6 +1110,7 @@
 	name = "mustardplants"
 	seed_name = "mustardplant"
 	display_name = "mustardplants"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/mustardplant.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mustardplant)
 	chems = list(MUSTARD_POWDER = list(4,10))
@@ -1100,6 +1128,7 @@
 	name = "grapes"
 	seed_name = "grape"
 	display_name = "grapevines"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/grape.dmi'
 	mutants = list("greengrapes")
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes)
@@ -1120,6 +1149,7 @@
 	name = "greengrapes"
 	seed_name = "green grape"
 	display_name = "green grapevines"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/greengrape.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes)
 	mutants = null
@@ -1130,6 +1160,7 @@
 	name = "peanut"
 	seed_name = "peanut"
 	display_name = "peanut vines"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/peanut.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/peanut)
 	mutants = list("rocknut")
@@ -1162,6 +1193,7 @@
 	name = "cabbage"
 	seed_name = "cabbage"
 	display_name = "cabbages"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/cabbage.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage)
 	mutants = list("plasmacabbage")
@@ -1182,6 +1214,7 @@
 	name = "plasmacabbage"
 	seed_name = "plasma cabbage"
 	display_name = "plasma cabbages"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/cabbageplasma.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/plasmacabbage)
 	harvest_repeat = 1
@@ -1203,6 +1236,7 @@
 	name = "shand"
 	seed_name = "S'randar's hand"
 	display_name = "S'randar's hand leaves"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/shand.dmi'
 	products = list(/obj/item/stack/medical/bruise_pack/tajaran)
 	chems = list(OPIUM = list(0,10))
@@ -1218,6 +1252,7 @@
 	name = "mtear"
 	seed_name = "Messa's tear"
 	display_name = "Messa's tear leaves"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/mtear.dmi'
 	products = list(/obj/item/stack/medical/ointment/tajaran)
 	chems = list(HONEY = list(1,10), TANNIC_ACID = list(3,5))
@@ -1279,6 +1314,7 @@
 	name = "potato"
 	seed_name = "potato"
 	display_name = "potatoes"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/potato.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/potato)
 	chems = list(NUTRIMENT = list(1,10))
@@ -1295,6 +1331,7 @@
 	name = "soybean"
 	seed_name = "soybean"
 	display_name = "soybeans"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/soybean.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans)
 	mutants = list("koibean")
@@ -1311,6 +1348,7 @@
 	name = "koibean"
 	seed_name = "koibean"
 	display_name = "koibeans"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/koibean.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans)
 	harvest_repeat = 1
@@ -1326,6 +1364,7 @@
 	name = "wheat"
 	seed_name = "wheat"
 	display_name = "wheat stalks"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/wheat.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/wheat)
 	chems = list(NUTRIMENT = list(1,25))
@@ -1342,6 +1381,7 @@
 	name = "rice"
 	seed_name = "rice"
 	display_name = "rice stalks"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/rice.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk)
 	chems = list(NUTRIMENT = list(1,25))
@@ -1359,6 +1399,7 @@
 	name = "carrot"
 	seed_name = "carrot"
 	display_name = "carrots"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/carrot.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/carrot)
 	mutants = list("diamondcarrot")
@@ -1376,6 +1417,7 @@
 	name = "diamondcarrot"
 	seed_name = "diamond carrot"
 	display_name = "diamond carrots"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/diamondcarrot.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/carrot/diamond)
 	mutants = null
@@ -1385,11 +1427,38 @@
 	production = 10
 	yield = 3
 
-/datum/seed/weeds
-	name = "weeds"
-	seed_name = "weed"
-	display_name = "weeds"
-	plant_dmi = 'icons/obj/hydroponics/weeds.dmi'
+/datum/seed/dandelions
+	name = "dandelions"
+	seed_name = "dandelion"
+	display_name = "dandelions"
+	plural = 1
+	plant_dmi = 'icons/obj/hydroponics/dandelions.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/dandelion)
+	mutants = list("dandelions(?)")
+	lifespan = 100
+	harvest_repeat = 1
+	chems = list(DYE_DANDELIONS = list(1,20))
+	maturation = 5
+	production = 3
+	maturation_max = 2
+	yield = 2
+	potency = 10
+	growth_stages = 5
+	visible_roots_in_hydro_tray = 1
+
+	products_per_maturation_level = list(
+		list(/obj/item/weapon/reagent_containers/food/snacks/grown/dandelion),
+		list(/obj/item/weapon/grown/dandelion),
+		)
+	pollen = PS_DANDELIONS
+	pollen_at_level = 2
+
+/datum/seed/mockdelions
+	name = "dandelions(?)"
+	seed_name = "dandelion(?)"
+	display_name = "dandelions(?)"
+	plural = 1
+	plant_dmi = 'icons/obj/hydroponics/dandelions_old.dmi'
 	lifespan = 100
 	maturation = 5
 	production = 1
@@ -1402,6 +1471,7 @@
 	name = "whitebeet"
 	seed_name = "white-beet"
 	display_name = "white-beets"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/whitebeet.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet)
 	chems = list(NUTRIMENT = list(0,20), SUGAR = list(1,5))
@@ -1417,6 +1487,7 @@
 	name = "sugarcane"
 	seed_name = "sugarcane"
 	display_name = "sugarcanes"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/sugarcane.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/sugarcane)
 	harvest_repeat = 1
@@ -1485,7 +1556,7 @@
 /datum/seed/lime
 	name = "lime"
 	seed_name = "lime"
-	display_name = "lime trees"
+	display_name = "lime tree"
 	plant_dmi = 'icons/obj/hydroponics/lime.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/lime)
 	harvest_repeat = 1
@@ -1503,7 +1574,7 @@
 /datum/seed/lemon
 	name = "lemon"
 	seed_name = "lemon"
-	display_name = "lemon trees"
+	display_name = "lemon tree"
 	plant_dmi = 'icons/obj/hydroponics/lemon.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/lemon)
 	harvest_repeat = 1
@@ -1521,7 +1592,7 @@
 /datum/seed/orange
 	name = "orange"
 	seed_name = "orange"
-	display_name = "orange trees"
+	display_name = "orange tree"
 	plant_dmi = 'icons/obj/hydroponics/orange.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/orange)
 	harvest_repeat = 1
@@ -1661,6 +1732,7 @@
 	name = "kudzu"
 	seed_name = "kudzu"
 	display_name = "kudzu vines"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/kudzu.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod)
 	chems = list(NUTRIMENT = list(1,50), ALLICIN = list(2,10))
@@ -1678,7 +1750,7 @@
 	name = "diona"
 	seed_name = "diona"
 	seed_noun = "nodes"
-	display_name = "diona nodes"
+	display_name = "diona node"
 	plant_dmi = 'icons/obj/hydroponics/dionanode.dmi'
 	products = list(/mob/living/carbon/monkey/diona)
 	mob_drop = /obj/item/seeds/dionanode
@@ -1698,6 +1770,7 @@
 	seed_name = "clown"
 	seed_noun = "pods"
 	display_name = "laughing clowns"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/replicapod.dmi'
 	products = list(/mob/living/simple_animal/hostile/retaliate/clown)
 	product_requires_player = 1
@@ -1714,6 +1787,7 @@
 	seed_name = "moshrum"
 	seed_noun = "nodules"
 	display_name = "moshrum nodes"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/walkingmushroom.dmi'
 	products = list(/mob/living/carbon/monkey/mushroom)
 	mob_drop = /obj/item/seeds/mushroommanspore
@@ -1938,6 +2012,7 @@
 	name = "flax"
 	seed_name = "flax"
 	display_name = "flax stalks"
+	plural = 1
 	plant_dmi = 'icons/obj/hydroponics/flax.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/flax)
 	chems = list(FLAXOIL = list(6,5))

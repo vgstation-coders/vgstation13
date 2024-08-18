@@ -2272,6 +2272,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/plumpmycelium = 2,
 		/obj/item/seeds/reishimycelium = 2,
 		/obj/item/seeds/harebell = 3,
+		/obj/item/seeds/dandelionseed = 3,
 		)//,/obj/item/seeds/synthbuttseed = 3)
 	premium = list(
 		/obj/item/toy/waterflower = 1,
