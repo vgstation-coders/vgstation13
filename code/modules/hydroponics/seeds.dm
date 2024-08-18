@@ -845,6 +845,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus)
 	mutants = null
 	chems = list(NUTRIMENT = list(1), PHYTOCARISOL = list(1,8), KATHALAI = list(1,8), COCAINE = list(1,10,1), MESCALINE = list(1,10))
+	moody_lights = 1
 
 //Mushrooms/varieties.
 /datum/seed/mushroom
@@ -1636,6 +1637,8 @@
 	production = 6
 	yield = 5
 
+	large = 0
+
 /datum/seed/shardlime
 	name = "shardlime"
 	seed_name = "shardlime"
@@ -1654,6 +1657,8 @@
 	thorny = 1
 	moody_lights = 1
 
+	large = 0
+
 /datum/seed/purpleshardlime
 	name = "purpleshardlime"
 	seed_name = "purple shardlime"
@@ -1671,6 +1676,8 @@
 	biolum_colour = "#DBBEF0"
 	thorny = 1
 	moody_lights = 1
+
+	large = 0
 
 /datum/seed/grass
 	name = "grass"

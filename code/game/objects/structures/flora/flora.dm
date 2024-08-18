@@ -433,7 +433,10 @@
 // /vg/
 /obj/structure/flora/pottedplant/random/New()
 	..()
-	icon_state = "plant-[rand(1,26)]"
+	var/potted_plant_type = "[rand(1,26)]"
+	icon_state = "plant-[potted_plant_type]"
+	if (potted_plant_type in list("7","9","20"))
+		update_moody_light_index("plant", icon, "[icon_state]-moody")
 
 /obj/structure/flora/pottedplant/claypot
 	name = "clay pot"

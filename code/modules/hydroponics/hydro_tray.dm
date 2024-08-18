@@ -322,18 +322,18 @@
 			if(seed.large)
 				S.icon_state += "-large"
 
+			var/plant_appearance = ""
 			if(dead)
-				S.overlays += image(seed.plant_dmi,"dead")
+				plant_appearance = "dead"
 			else if(harvest)
 				if (harvest > 1)
-					S.overlays += image(seed.plant_dmi,"harvest-[harvest]")
+					plant_appearance = "harvest-[harvest]"
 				else
-					S.overlays += image(seed.plant_dmi,"harvest")
-			else if(age < seed.maturation)
-				var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
-				S.overlays += image(seed.plant_dmi,"stage-[t_growthstate]")
+					plant_appearance = "harvest"
 			else
-				S.overlays += image(seed.plant_dmi,"stage-[seed.growth_stages]")
+				plant_appearance = "stage-[growth_level]"
+
+			S.overlays += image(seed.plant_dmi,plant_appearance)
 
 			S.plant_name = seed.display_name
 			S.name = "potted [S.plant_name]"
@@ -345,6 +345,16 @@
 				S.adjust_particles(PVAR_SPAWNING, 0.05, seed.pollen)
 				S.adjust_particles(PVAR_PLANE, FLOAT_PLANE, seed.pollen)
 				S.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), seed.pollen)
+
+			if (seed.moody_lights)
+				S.update_moody_light_index("plant", seed.plant_dmi, "[plant_appearance]-moody")
+			else if (seed.biolum)
+				var/image/luminosity_gradient = image(icon, src, "moody_plant_mask")
+				luminosity_gradient.blend_mode = BLEND_INSET_OVERLAY
+				var/image/mask = image(seed.plant_dmi, src, plant_appearance)
+				mask.appearance_flags = KEEP_TOGETHER
+				mask.overlays += luminosity_gradient
+				S.update_moody_light_index("plant", image_override = mask)
 
 			if(seed.biolum)
 				S.set_light(get_biolum())

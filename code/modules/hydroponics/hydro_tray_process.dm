@@ -222,7 +222,7 @@
 					growth_level++
 				plant_appearance = "stage-[growth_level]"
 			if (seed.moody_lights)
-				update_moody_light_index("plant", seed.plant_dmi, "[plant_appearance]-moody")
+				update_moody_light_index("plant", seed.plant_dmi, "[plant_appearance][(seed.constrained && closed_system) ? "-constrained" : ""]-moody")
 			else if (seed.biolum)
 				var/image/luminosity_gradient = image(icon, src, "moody_plant_mask")
 				luminosity_gradient.blend_mode = BLEND_INSET_OVERLAY
