@@ -1425,6 +1425,7 @@
 	potency = 10
 	growth_stages = 3
 	fluid_consumption = 6
+	visible_roots_in_hydro_tray = 1
 
 /datum/seed/carrots/diamond
 	name = "diamondcarrot"

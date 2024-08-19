@@ -1,7 +1,7 @@
 /obj/machinery/portable_atmospherics/hydroponics
 	name = "hydroponics tray"
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
-	icon_state = "hydrotray3-lightsoff"
+	icon_state = "hydrotray-lightsoff"
 	anchored = 1
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
 	volume = 100
@@ -14,6 +14,7 @@
 	var/last_update_icon = 0 // Since we're calling it more frequently than process(), let's at least make sure we're only calling it once per tick.
 	var/delayed_update_icon = 0
 	var/is_soil = 0
+	var/is_plastic = 0
 
 	// Plant maintenance vars
 	var/waterlevel = 100		// Water (max 100)
@@ -49,12 +50,14 @@
 
 	//var/decay_reduction = 0     //How much is mutation decay reduced by?
 	var/weed_coefficient = 10    //Coefficient to the chance of weeds appearing
-	var/internal_light_range = 1
+	var/internal_light_range = 1	//light range provided by the tray's internal light. Can be improved with better capacitors.
 	var/light_on = 0
 
 	var/lid_toggling = 0
 
 	var/key_name_last_user = ""
+
+	var/image/visible_gas = null
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
@@ -101,7 +104,7 @@
 	internal_light_range = capcount
 
 /obj/machinery/portable_atmospherics/hydroponics/emp_act(var/severity)
-	if(is_soil)
+	if(is_soil || is_plastic)
 		return
 	switch(severity)
 		if(1)
@@ -536,7 +539,7 @@
 	else if(seed && dead)
 		to_chat(user, "[src] is full of dead plant matter.")
 	else
-		to_chat(user, "[src] has nothing planted.")
+		to_chat(user, "You can grow plants in there.[(is_soil||is_plastic) ? "" : " It's full of sensors that will inform you of the plant's well-being"]")
 	if (Adjacent(user) || isobserver(user) || issilicon(user) || hydrovision(user))
 		to_chat(user, "Water: [get_waterlevel()]/100")
 		if(seed && seed.toxin_affinity >= 5)
@@ -561,7 +564,7 @@
 			if(missing_gas)
 				to_chat(user, "The tray's <span class='alert'>improper gas environment alert</span> is blinking.")
 
-		if(!is_soil)
+		if(!is_soil && !is_plastic)
 
 			var/turf/T = loc
 			var/datum/gas_mixture/environment
@@ -689,7 +692,7 @@
 		..()
 
 /obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/user)
-	if(isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check()))
+	if(!is_soil && !is_plastic && (isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check())))
 		if(issilicon(user) && !attack_ai(user))
 			return ..()
 		var/list/choices = list(

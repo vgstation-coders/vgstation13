@@ -880,7 +880,7 @@ to destroy them and players will be able to make replacements.
 
 /obj/item/weapon/circuitboard/hydroponics/finish_building(var/obj/machinery/portable_atmospherics/hydroponics/new_machine, var/mob/user)
 	new_machine.waterlevel = 0
-	new_machine.update_icon()
+	new_machine.update_icon(TRUE)
 
 /obj/item/weapon/circuitboard/gibber
 	name = "Circuit Board (Gibber)"

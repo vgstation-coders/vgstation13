@@ -77,7 +77,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	var/large = 1					// Is the plant large? For clay pots.
 	var/constrained = 0				// Whether the plant uses alternate sprites when the cover is down
-	var/moody_lights = 0
+	var/moody_lights = 0			// Whether the plant has moody lights (can really improve the looks of bioluminescent plants)
 	var/list/mutation_log = list() // Who did what
 
 /datum/seed/New()

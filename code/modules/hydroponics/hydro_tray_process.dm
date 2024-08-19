@@ -8,6 +8,8 @@
 	else if(world.time < (lastcycle + cycledelay))
 		if(update_icon_after_process > 0 && !delayed_update_icon)
 			update_icon()
+		else
+			update_visible_gas()
 		return
 	lastcycle = world.time
 
@@ -37,6 +39,8 @@
 	if(!seed || dead)
 		if(update_icon_after_process && !delayed_update_icon)
 			update_icon() //Harvesting would fail to set alert icons properly.
+		else
+			update_visible_gas()
 		return
 
 	// On each tick, there's a chance the pest population will increase.
@@ -134,6 +138,8 @@
 
 	if(update_icon_after_process && !delayed_update_icon)
 		update_icon()
+	else
+		update_visible_gas()
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/affect_growth(var/amount)
 	if(!seed)
@@ -159,17 +165,32 @@
 	if(labeled)
 		name += " ([labeled])"
 
-/obj/machinery/portable_atmospherics/hydroponics/update_icon()
+/obj/machinery/portable_atmospherics/hydroponics/proc/update_visible_gas()
+	overlays -= visible_gas
+	if (closed_system)
+		if (!visible_gas)
+			visible_gas = image(icon, src, "blank")
+		visible_gas.overlays.len = 0
+		for(var/g in XGM.overlay_limit)
+			if(air_contents.molar_density(g) > XGM.overlay_limit[g])
+				var/obj/effect/overlay/gas_overlay/GO = XGM.tile_overlay[g]
+				var/image/I = image(icon ,src , GO.icon_state)
+				I.layer = HYDROPONIC_TRAY_ATMOS_LAYER
+				visible_gas.overlays += I
+		overlays += visible_gas
+
+/obj/machinery/portable_atmospherics/hydroponics/update_icon(var/forced = FALSE)
 	//optimizations so we don't call update_icon() more than we need to
 	delayed_update_icon = 0
-	if (lid_toggling)
-		if (lid_toggling == 2)
-			lid_toggling = 1
-		else
+	if (!forced)
+		if (lid_toggling)
+			if (lid_toggling == 2)
+				lid_toggling = 1
+			else
+				return
+		if (last_update_icon == world.time)
+			//we've already updated the icon on this tick
 			return
-	if (last_update_icon == world.time)
-		//we've already updated the icon on this tick
-		return
 	last_update_icon = world.time
 
 	update_icon_after_process = 0
@@ -185,7 +206,8 @@
 	overlays += toxins_overlay
 	//how much water is in there
 	if (!is_soil)
-		icon_state = (light_on ? "hydrotray3-lightson" : "hydrotray3-lightsoff")
+		if (!is_plastic)
+			icon_state = (light_on ? "hydrotray-lightson" : "hydrotray-lightsoff")
 		var/water_lvl = 0
 		var/full_waterlevel = get_full_waterlevel()
 		if (full_waterlevel > 0)
@@ -226,7 +248,7 @@
 			else if (seed.biolum)
 				var/image/luminosity_gradient = image(icon, src, "moody_plant_mask")
 				luminosity_gradient.blend_mode = BLEND_INSET_OVERLAY
-				var/image/mask = image(seed.plant_dmi, src, plant_appearance)
+				var/image/mask = image(seed.plant_dmi, src, "[plant_appearance][(seed.constrained && closed_system) ? "-constrained" : ""]")
 				mask.appearance_flags = KEEP_TOGETHER
 				mask.overlays += luminosity_gradient
 				update_moody_light_index("plant", image_override = mask)
@@ -250,12 +272,7 @@
 		overlays += back_lid
 
 		//and the visible gases in there
-		for(var/g in XGM.overlay_limit)
-			if(air_contents.molar_density(g) > XGM.overlay_limit[g])
-				var/obj/effect/overlay/gas_overlay/GO = XGM.tile_overlay[g]
-				var/image/I = image(icon ,src , GO.icon_state)
-				I.layer = HYDROPONIC_TRAY_ATMOS_LAYER
-				overlays += I
+		update_visible_gas()
 
 		var/image/front_lid = image(icon,src,"lid_front")
 		front_lid.layer = HYDROPONIC_TRAY_FRONT_LID_LAYER
@@ -263,9 +280,9 @@
 
 	if (light_on)
 		if(closed_system)
-			update_moody_light_index("lights", icon, "hydrotray3-closed-moody")
+			update_moody_light_index("lights", icon, "hydrotray-closed-moody")
 		else
-			update_moody_light_index("lights", icon, "hydrotray3-open-moody")
+			update_moody_light_index("lights", icon, "hydrotray-open-moody")
 		if (seed)
 			var/image/luminosity_gradient = image(icon, src, "moody_plant_mask")
 			luminosity_gradient.blend_mode = BLEND_INSET_OVERLAY
