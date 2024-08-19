@@ -81,8 +81,6 @@
 	)
 
 	RefreshParts()
-	if(closed_system)
-		flags &= ~OPENCONTAINER
 
 /obj/machinery/portable_atmospherics/hydroponics/RefreshParts()
 	var/capcount = 0
@@ -275,6 +273,9 @@
 		return
 
 	else if(seed && isshovel(O))
+		if(closed_system)
+			to_chat(user, "<span class='warning'>You can't transplant the plant while the lid is shut.</span>")
+			return
 		if(arcanetampered)
 			to_chat(user,"<span class='sinister'>You cannot dig into the soil.</span>")
 			return
@@ -349,7 +350,10 @@
 		var/obj/item/seeds/seeds = seed.spawn_seed_packet(get_turf(user))
 		if(arcanetampered)
 			seeds.arcanetampered = arcanetampered
-		to_chat(user, "You take a sample from the [seed.display_name].")
+		if(closed_system)
+			to_chat(user, "You carefully pass \the [O] through the tray's access port, and take a sample from the [seed.display_name].")
+		else
+			to_chat(user, "You take a sample from the [seed.display_name].")
 		add_planthealth(-rand(3,5)*10)
 
 		if(prob(30))
@@ -364,7 +368,10 @@
 	else if (ishoe(O))
 
 		if(get_weedlevel() > 0)
-			user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You remove the weeds from the [src].</span>")
+			if(closed_system)
+				user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You pass \the [O] through the access port and remove the weeds from the [src].</span>")
+			else
+				user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You remove the weeds from the [src].</span>")
 			weedlevel = 0
 			update_icon()
 		else
@@ -479,6 +486,12 @@
 	else
 		examine(user) //using examine() to display the reagents inside the tray as well
 
+/obj/machinery/portable_atmospherics/hydroponics/reagent_transfer_message(var/transfer_amt)
+	if (closed_system)
+		return "<span class='notice'>You open \the [src.name]'s injection port and transfer [transfer_amt] units of the solution in it.</span>"
+	else
+		return "<span class='notice'>You transfer [transfer_amt] units of the solution to \the [src.name].</span>"
+
 /obj/machinery/portable_atmospherics/hydroponics/examine(mob/user)
 	..()
 	view_contents(user)
@@ -521,7 +534,7 @@
 			var/turf/T = loc
 			var/datum/gas_mixture/environment
 
-			if(closed_system && (connected_port || holding))
+			if(closed_system)
 				environment = air_contents
 
 			if(!environment)
@@ -558,10 +571,6 @@
 
 	closed_system = !closed_system
 	to_chat(usr, "You [closed_system ? "close" : "open"] the tray's lid.")
-	if(closed_system)
-		flags &= ~OPENCONTAINER
-	else
-		flags |= OPENCONTAINER
 
 	update_icon()
 	add_fingerprint(usr)
