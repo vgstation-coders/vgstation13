@@ -1,8 +1,9 @@
 /obj/machinery/portable_atmospherics/hydroponics
 	name = "hydroponics tray"
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
-	icon_state = "hydrotray-lightsoff"
+	icon_state = "hydrotray"
 	anchored = 1
+	dir = EAST
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
 	volume = 100
 	layer = HYDROPONIC_TRAY_LAYER

@@ -165,6 +165,7 @@
 	if(labeled)
 		name += " ([labeled])"
 
+//This lets us update gas visually more frequently without having to call the whole update_icon() each time
 /obj/machinery/portable_atmospherics/hydroponics/proc/update_visible_gas()
 	overlays -= visible_gas
 	if (closed_system)
@@ -200,14 +201,29 @@
 
 	update_name() //fuck it i'll make it not happen constantly later
 
+	if (!is_soil)
+		if (!is_plastic)
+			if (light_on)
+				overlays += image(icon = icon, icon_state = "lightson")
+			else
+				overlays += image(icon = icon, icon_state = "lightsoff")
+			if (anchored)
+				icon_state = "hydrotray"
+				pixel_y = 0
+			else
+				icon_state = "blank"
+				pixel_y = 3
+				var/image/I = image(icon = icon, icon_state = "hydrotray_mobile")
+				I.pixel_y = -3
+				overlays += I
+
 	//how toxic is the water
 	var/image/toxins_overlay = image(icon, src, "[icon_state]_toxin")
 	toxins_overlay.alpha = get_full_toxinlevel() * 2.55
 	overlays += toxins_overlay
+
 	//how much water is in there
 	if (!is_soil)
-		if (!is_plastic)
-			icon_state = (light_on ? "hydrotray-lightson" : "hydrotray-lightsoff")
 		var/water_lvl = 0
 		var/full_waterlevel = get_full_waterlevel()
 		if (full_waterlevel > 0)
@@ -337,6 +353,8 @@
 		var/light_available = 5
 		if(T?.dynamic_lighting)
 			light_available = T.get_lumcount() * 10
+		if(light_on)
+			light_available += 3//a little boost so dim lit hydroponic rooms relying on tray lights are viable
 
 		if(!seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)
 			improper_light = 1
