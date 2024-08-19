@@ -465,6 +465,11 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/get_biolum()
 	return (1 + Ceiling(seed.potency/10))
 
+/obj/machinery/portable_atmospherics/hydroponics/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
+	. = ..()
+	if (.)
+		update_icon()
+
 /obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
 	..()
 	if(primarytype == /mob/living/carbon/slime/green)
@@ -612,8 +617,8 @@
 	to_chat(usr, "You [closed_system ? "close" : "open"] the tray's lid.")
 
 	if (closed_system)
-		anim(target = src, a_icon = icon, flick_anim = "back_anim", sleeptime = 5, lay = HYDROPONIC_TRAY_BACK_LID_LAYER)
-		anim(target = src, a_icon = icon, flick_anim = "front_anim", sleeptime = 5, lay = HYDROPONIC_TRAY_FRONT_LID_LAYER)
+		anim(target = src, a_icon = icon, flick_anim = "back_anim", sleeptime = 5, lay = HYDROPONIC_TRAY_BACK_LID_LAYER, offY = pixel_y)
+		anim(target = src, a_icon = icon, flick_anim = "front_anim", sleeptime = 5, lay = HYDROPONIC_TRAY_FRONT_LID_LAYER, offY = pixel_y)
 		playsound(src, 'sound/machines/pressurehiss.ogg', 20, 1)
 		spawn(5)
 			playsound(src, 'sound/items/Deconstruct.ogg', 20, 1)
@@ -624,8 +629,8 @@
 		update_icon()
 		playsound(src, 'sound/effects/turret/open.wav', 20, 1)
 		playsound(src, 'sound/items/Deconstruct.ogg', 20, 1)
-		anim(target = src, a_icon = icon, flick_anim = "back_anim_rewind", sleeptime = 5, lay = HYDROPONIC_TRAY_BACK_LID_LAYER)
-		anim(target = src, a_icon = icon, flick_anim = "front_anim_rewind", sleeptime = 5, lay = HYDROPONIC_TRAY_FRONT_LID_LAYER)
+		anim(target = src, a_icon = icon, flick_anim = "back_anim_rewind", sleeptime = 5, lay = HYDROPONIC_TRAY_BACK_LID_LAYER, offY = pixel_y)
+		anim(target = src, a_icon = icon, flick_anim = "front_anim_rewind", sleeptime = 5, lay = HYDROPONIC_TRAY_FRONT_LID_LAYER, offY = pixel_y)
 		spawn(5)
 			playsound(src, 'sound/machines/click.ogg', 20, 1)
 			lid_toggling = 0

@@ -210,6 +210,8 @@
 			if (anchored)
 				icon_state = "hydrotray"
 				pixel_y = 0
+				if (connected_port)
+					overlays += image(icon = icon, icon_state = "connector")
 			else
 				icon_state = "blank"
 				pixel_y = 3
