@@ -176,7 +176,7 @@
 			if(air_contents.molar_density(g) > XGM.overlay_limit[g])
 				var/obj/effect/overlay/gas_overlay/GO = XGM.tile_overlay[g]
 				var/image/I = image(icon ,src , GO.icon_state)
-				I.layer = HYDROPONIC_TRAY_ATMOS_LAYER
+				I.layer = HYDROPONIC_TRAY_ATMOS_LAYER + cargo_cart_offset
 				visible_gas.overlays += I
 		overlays += visible_gas
 
@@ -199,11 +199,17 @@
 	stop_particles()
 	kill_moody_light_all()
 
+	var/powered_and_working = !(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	var/light_actually_on = light_on && powered_and_working
+	var/cargo_cart_offset = 0
+	if (istype(locked_to,/obj/machinery/cart/cargo))
+		cargo_cart_offset = CARGO_CART_OFFSET
+
 	update_name() //fuck it i'll make it not happen constantly later
 
 	if (!is_soil)
 		if (!is_plastic)
-			if (light_on)
+			if (light_actually_on)
 				overlays += image(icon = icon, icon_state = "lightson")
 			else
 				overlays += image(icon = icon, icon_state = "lightsoff")
@@ -215,9 +221,12 @@
 			else
 				icon_state = "blank"
 				pixel_y = 3
-				var/image/I = image(icon = icon, icon_state = "hydrotray_mobile")
+				var/image/I = image(icon = icon, icon_state = "hydrotray_mobile_static")//if I don't do that, unanchored trays don't appear on photos. Photography remains as cursed as ever.
 				I.pixel_y = -3
 				overlays += I
+				var/image/J = image(icon = icon, icon_state = "hydrotray_mobile")
+				J.pixel_y = -3
+				overlays += J
 
 	//how toxic is the water
 	var/image/toxins_overlay = image(icon, src, "[icon_state]_toxin")
@@ -236,7 +245,7 @@
 	// Updates the plant overlay.
 	var/plant_appearance = ""
 	if(!isnull(seed))
-		if(draw_warnings && get_full_planthealth() <= (seed.endurance / 2))
+		if(draw_warnings && powered_and_working && get_full_planthealth() <= (seed.endurance / 2))
 			overlays += image('icons/obj/hydroponics/hydro_tools.dmi',"over_lowhealth3")
 			update_moody_light_index("health", icon, "over_lowhealth3-moody")
 
@@ -275,10 +284,10 @@
 
 		if (!is_soil && seed.visible_roots_in_hydro_tray)
 			var/image/roots_image = image(seed.plant_dmi,src,"roots-[plant_appearance]")
-			roots_image.layer = HYDROPONIC_TRAY_PLANT_LAYER
+			roots_image.layer = HYDROPONIC_TRAY_PLANT_LAYER + cargo_cart_offset
 			overlays += roots_image
 		var/image/plant_image = image(seed.plant_dmi,src,plant_appearance)
-		plant_image.layer = HYDROPONIC_TRAY_PLANT_LAYER
+		plant_image.layer = HYDROPONIC_TRAY_PLANT_LAYER + cargo_cart_offset
 		overlays += plant_image
 
 		seed.apply_particles(src)
@@ -286,17 +295,17 @@
 	//Draw the cover.
 	if(closed_system)
 		var/image/back_lid = image(icon,src,"lid_back")
-		back_lid.layer = HYDROPONIC_TRAY_BACK_LID_LAYER
+		back_lid.layer = HYDROPONIC_TRAY_BACK_LID_LAYER + cargo_cart_offset
 		overlays += back_lid
 
 		//and the visible gases in there
 		update_visible_gas()
 
 		var/image/front_lid = image(icon,src,"lid_front")
-		front_lid.layer = HYDROPONIC_TRAY_FRONT_LID_LAYER
+		front_lid.layer = HYDROPONIC_TRAY_FRONT_LID_LAYER + cargo_cart_offset
 		overlays += front_lid
 
-	if (light_on)
+	if (light_actually_on)
 		if(closed_system)
 			update_moody_light_index("lights", icon, "hydrotray-closed-moody")
 		else
@@ -310,7 +319,7 @@
 			update_moody_light_index("plant_lights", image_override = mask)
 
 	//Updated the various alert icons.
-	if(!draw_warnings)
+	if(!draw_warnings || !powered_and_working)
 		return
 	if(get_full_nutrientlevel() <= NUTRIENTLEVEL_MAX / 5)
 		overlays += image(icon = icon, icon_state = "over_lownutri3")
@@ -341,7 +350,10 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_light(var/turf/T)
 	var/light_out_range = 0
-	if(light_on)
+	var/light_actually_on = light_on
+	if (stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		light_actually_on = 0
+	if(light_actually_on)
 		light_out_range += internal_light_range
 	if(seed && !dead && seed.biolum)
 		light_out_range += get_biolum()
@@ -355,7 +367,7 @@
 		var/light_available = 5
 		if(T?.dynamic_lighting)
 			light_available = T.get_lumcount() * 10
-		if(light_on)
+		if(light_actually_on)
 			light_available += 3//a little boost so dim lit hydroponic rooms relying on tray lights are viable
 
 		if(!seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)

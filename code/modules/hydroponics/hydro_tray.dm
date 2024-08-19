@@ -172,6 +172,11 @@
 	seed.autoharvest(get_output())
 	after_harvest()
 
+/obj/machinery/portable_atmospherics/hydroponics/power_change()
+	..()
+	check_light()
+	update_icon()
+
 /obj/machinery/portable_atmospherics/hydroponics/proc/after_harvest()
 
 	// Reset values.
@@ -616,9 +621,13 @@
 	closed_system = !closed_system
 	to_chat(usr, "You [closed_system ? "close" : "open"] the tray's lid.")
 
+	var/cargo_cart_offset = 0
+	if (istype(locked_to,/obj/machinery/cart/cargo))
+		cargo_cart_offset = CARGO_CART_OFFSET
+
 	if (closed_system)
-		anim(target = src, a_icon = icon, flick_anim = "back_anim", sleeptime = 5, lay = HYDROPONIC_TRAY_BACK_LID_LAYER, offY = pixel_y)
-		anim(target = src, a_icon = icon, flick_anim = "front_anim", sleeptime = 5, lay = HYDROPONIC_TRAY_FRONT_LID_LAYER, offY = pixel_y)
+		anim(target = src, a_icon = icon, flick_anim = "back_anim", sleeptime = 5, lay = HYDROPONIC_TRAY_BACK_LID_LAYER+cargo_cart_offset, offY = pixel_y)
+		anim(target = src, a_icon = icon, flick_anim = "front_anim", sleeptime = 5, lay = HYDROPONIC_TRAY_FRONT_LID_LAYER+cargo_cart_offset, offY = pixel_y)
 		playsound(src, 'sound/machines/pressurehiss.ogg', 20, 1)
 		spawn(5)
 			playsound(src, 'sound/items/Deconstruct.ogg', 20, 1)
@@ -629,8 +638,8 @@
 		update_icon()
 		playsound(src, 'sound/effects/turret/open.wav', 20, 1)
 		playsound(src, 'sound/items/Deconstruct.ogg', 20, 1)
-		anim(target = src, a_icon = icon, flick_anim = "back_anim_rewind", sleeptime = 5, lay = HYDROPONIC_TRAY_BACK_LID_LAYER, offY = pixel_y)
-		anim(target = src, a_icon = icon, flick_anim = "front_anim_rewind", sleeptime = 5, lay = HYDROPONIC_TRAY_FRONT_LID_LAYER, offY = pixel_y)
+		anim(target = src, a_icon = icon, flick_anim = "back_anim_rewind", sleeptime = 5, lay = HYDROPONIC_TRAY_BACK_LID_LAYER+cargo_cart_offset, offY = pixel_y)
+		anim(target = src, a_icon = icon, flick_anim = "front_anim_rewind", sleeptime = 5, lay = HYDROPONIC_TRAY_FRONT_LID_LAYER+cargo_cart_offset, offY = pixel_y)
 		spawn(5)
 			playsound(src, 'sound/machines/click.ogg', 20, 1)
 			lid_toggling = 0

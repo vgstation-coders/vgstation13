@@ -131,6 +131,7 @@ Why is FLOAT_PLANE added to a bunch of these?
 #define OBJ_PLANE 				(4 + FLOAT_PLANE)			// For objects which appear below humans.
 
 	#define BELOW_TABLE_LAYER			0
+	#define CARGO_CART_OFFSET			0.1
 	#define TABLE_LAYER					0.5
 	#define OPEN_DOOR_LAYER				1
 	#define BELOW_OBJ_LAYER				2
