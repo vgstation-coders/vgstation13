@@ -404,7 +404,6 @@
 	switch(rand(1,520))
 		if(1 to 120)
 			//normal shit
-			selectedfirstname = pickweight(firstname)
 			specialingredients += list(CARROTJUICE, LIMEJUICE, TOMATOJUICE, ORANGEJUICE, HONEY, MAPLESYRUP)
 		if(121 to 240)
 			//HONK
@@ -430,6 +429,10 @@
 					selectedsecondname = "BULK RATIONS"
 					basechem = null
 					if(prob(50))
+						flags |= NOREACT //50:50 odds for the thing to explode into meat/cheese
+					else
+						desc += " Looks like the contents were just squished inside..."
+					if(prob(50))
 						src.reagents.add_reagent(CLONEXADONE, 166)
 						src.reagents.add_reagent(BLOOD, 830)
 						amount_per_transfer_from_this = 6 //exactly one meat slab per cycle
@@ -437,10 +440,6 @@
 						src.reagents.add_reagent(ENZYME, 110)
 						src.reagents.add_reagent(MILK, 880)
 						amount_per_transfer_from_this = 45 //you know the drill by now
-					if(prob(50))
-						flags |= NOREACT //50:50 odds for the thing to explode into meat/cheese
-					else
-						desc += " Looks like the contents were just squished inside..."
 				if(2)
 					//vomit keg
 					selectedfirstname = "help i'm being forced to work on a beer manufacture"
