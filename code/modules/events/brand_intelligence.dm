@@ -41,20 +41,19 @@
 			var/obj/machinery/vending/infectedMachine = pick(vendingMachines)
 			vendingMachines.Remove(infectedMachine)
 			infectedVendingMachines.Add(infectedMachine)
+			infectedVendingMachines[infectedMachine] = infectedMachine.shut_up
 			infectedMachine.shut_up = 0
 			infectedMachine.shoot_inventory = 1
 
-			if(IsMultiple(activeFor, 12))
-				originMachine.speak(pick("Try our aggressive new marketing strategies!", \
-										 "You should buy products to feed your lifestyle obession!", \
-										 "Consume!", \
-										 "Your money can buy happiness!", \
-										 "Engage direct marketing!", \
-										 "Advertising is legalized lying! But don't let that put you off our great deals!", \
-										 "You don't want to buy anything? Yeah, well I didn't want to buy your mom either."))
+			originMachine.speak(pick("Try our aggressive new marketing strategies!", \
+									 "You should buy products to feed your lifestyle obession!", \
+									 "Consume!", \
+									 "Your money can buy happiness!", \
+									 "Engage direct marketing!", \
+									 "Advertising is legalized lying! But don't let that put you off our great deals!", \
+									 "You don't want to buy anything? Yeah, well I didn't want to buy your mom either."))
 
 /datum/event/brand_intelligence/end()
 	for(var/obj/machinery/vending/infectedMachine in infectedVendingMachines)
-		if(prob(90))
-			infectedMachine.shut_up = 1
-			infectedMachine.shoot_inventory = 0
+		infectedMachine.shut_up = infectedVendingMachines[infectedMachine]
+		infectedMachine.shoot_inventory = 0
