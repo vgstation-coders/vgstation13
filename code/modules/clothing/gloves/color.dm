@@ -85,7 +85,7 @@
 	. = ..()
 	siemens_coefficient = pick(0,0.5,0.5,0.5,0.5,0.75,1.5)
 
-	if(Holiday == APRIL_FOOLS_DAY && !siemens_coefficient == 0)
+	if(Holiday == APRIL_FOOLS_DAY && siemens_coefficient != 0)
 		name = "insulted gloves"
 		desc = "These gloves will mock the wearer when shocked."
 
