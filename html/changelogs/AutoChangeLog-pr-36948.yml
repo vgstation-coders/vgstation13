@@ -1,0 +1,5 @@
+author: Eneocho
+delete-after: true
+changes:
+- tweak: Holomen no longer suffocate on low air conditions nor get intoxicated by
+    atmospheric gases.
