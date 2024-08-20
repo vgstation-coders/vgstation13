@@ -40,6 +40,7 @@
 			if(current_temp < TEMPERATURE_PLASMA)
 				current_temp = TEMPERATURE_PLASMA
 			fuel_time+= 10
+			fuel_update_light()
 			return 1
 	else if(istype(I, /obj/item/stack/ore/plasma))
 		to_chat(user, "<span class = 'notice'>You toss \the [I] into \the [src].</span>")
@@ -48,6 +49,7 @@
 			if(current_temp < TEMPERATURE_PLASMA)
 				current_temp = TEMPERATURE_PLASMA
 			fuel_time += 15
+			fuel_update_light()
 			return 1
 	else if(istype(I, /obj/item/stack/sheet/wood))
 		var/obj/item/stack/sheet/wood/W = I
@@ -56,6 +58,7 @@
 			if(current_temp < MELTPOINT_GOLD)
 				current_temp = MELTPOINT_GOLD
 			fuel_time += 10
+			fuel_update_light()
 			return 1
 	else if(istype(I, /obj/item/weapon/grown/log))
 		to_chat(user, "<span class = 'notice'>You toss \the [I] into \the [src].</span>")
@@ -64,6 +67,7 @@
 		if(current_temp < MELTPOINT_STEEL)
 			current_temp = MELTPOINT_STEEL
 		fuel_time += 5
+		fuel_update_light()
 		return 1
 	else if(I.is_hot() && status == FALSE)
 		to_chat(user, "<span class = 'notice'>You attempt to light \the [src] with \the [I].</span>")
@@ -94,22 +98,27 @@
 			status = FALSE
 			current_temp = 0
 			processing_objects.Remove(src)
-			set_light(0,0)
 		if(FALSE)//turning it on
 			status = TRUE
 			processing_objects.Add(src)
-			switch(current_temp)
-				if(MELTPOINT_GOLD)
-					set_light(2,2)
-				if(MELTPOINT_STEEL)
-					set_light(2,3)
-				if(TEMPERATURE_PLASMA to INFINITY)
-					set_light(3,3)
-				else
-					set_light(2,2)
+	fuel_update_light()
 	on_fire = status
 	update_icon()
 	return status
+
+/obj/structure/forge/proc/fuel_update_light()
+	if(!status) //Forge is off
+		set_light(0,0)
+	else //Forge is lit!
+		switch(current_temp)
+			if(MELTPOINT_GOLD)
+				set_light(2,2)
+			if(MELTPOINT_STEEL)
+				set_light(2,3)
+			if(TEMPERATURE_PLASMA to INFINITY)
+				set_light(3,3)
+			else
+				set_light(2,2)
 
 /obj/structure/forge/attack_hand(mob/user)
 	if(heating)
