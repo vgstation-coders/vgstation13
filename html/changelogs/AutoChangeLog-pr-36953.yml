@@ -1,0 +1,5 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- bugfix: Ghost names no longer show up in the list of things ejected from a cryo
+    cell.
