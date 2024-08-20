@@ -115,11 +115,11 @@
 
 	else if (W.is_wrench(user))
 		if(connected_port)
+			pixel_x = 0
+			pixel_y = 0
 			disconnect()
 			W.playtoolsound(src, 50)
 			to_chat(user, "<span class='notice'>You disconnect [name] from the port.</span>")
-			pixel_x = 0
-			pixel_y = 0
 			return 1
 		else
 			var/obj/machinery/atmospherics/unary/portables_connector/possible_port = locate(/obj/machinery/atmospherics/unary/portables_connector/) in loc

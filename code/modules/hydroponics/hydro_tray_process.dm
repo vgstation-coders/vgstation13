@@ -34,6 +34,28 @@
 		if(!seed || get_weedlevel() >= seed.weed_tolerance + 20)
 			weed_invasion()
 
+	// If we're connected to a pipe lets make sure that gas is flowing through
+	if (connected_port)
+		var/datum/pipe_network/P = connected_port.return_network(src)
+		if (P)
+			P.update = 1
+
+	var/turf/T = get_turf(src)
+	var/datum/gas_mixture/environment
+
+	// If our lid is closed, we exchange gas only with ourselves and any potential connected pipenet.
+	if(closed_system)
+		environment = air_contents
+	else
+		if(istype(T))
+			environment = T.return_air()
+		else
+			environment = space_gas
+		// If our lid is open and we're holding some gas, let's release any gas in the tray to the air
+		// Incidentally since the tray might still be connected to a pipenet, this allows it to behave like a passive vent that only lets air flow out of the pipes.
+		if (air_contents?.total_moles > 0.01)
+			environment.merge(air_contents.remove(air_contents.total_moles))
+
 	// If there is no seed data (and hence nothing planted),
 	// or the plant is dead, process nothing further.
 	if(!seed || dead)
@@ -110,16 +132,6 @@
 				seed.update_product(harvest)
 				lastproduce = age
 
-	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/environment
-	// If we're closed, take from our internal sources.
-	if(closed_system)
-		environment = air_contents
-	else if(!environment && istype(T))
-		environment = T.return_air()
-	else
-		environment = space_gas
-
 	process_health()
 	check_light(T)
 	check_gasses(environment)
@@ -168,6 +180,9 @@
 //This lets us update gas visually more frequently without having to call the whole update_icon() each time
 /obj/machinery/portable_atmospherics/hydroponics/proc/update_visible_gas()
 	overlays -= visible_gas
+	var/cargo_cart_offset = 0
+	if (istype(locked_to,/obj/machinery/cart/cargo))
+		cargo_cart_offset = CARGO_CART_OFFSET
 	if (closed_system)
 		if (!visible_gas)
 			visible_gas = image(icon, src, "blank")
@@ -395,11 +410,6 @@
 	if(seed.exude_gasses && seed.exude_gasses.len)
 		for(var/gas in seed.exude_gasses)
 			environment.adjust_gas(gas, max(1,round((seed.exude_gasses[gas]*round(seed.potency))/seed.exude_gasses.len)))
-	// If we're attached to a pipenet, then we should let the pipenet know we might have modified some gasses
-	if (closed_system && connected_port)
-		var/datum/pipe_network/P = connected_port.return_network(src)
-		if (P)
-			P.update = 1
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_kpa(var/datum/gas_mixture/environment)
 	var/pressure = environment.return_pressure()

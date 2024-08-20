@@ -473,7 +473,7 @@
 /obj/machinery/portable_atmospherics/hydroponics/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
 	. = ..()
 	if (.)
-		update_icon()
+		power_change()//calls update_icon()
 
 /obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
 	..()
