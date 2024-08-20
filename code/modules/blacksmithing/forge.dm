@@ -15,6 +15,7 @@
 	var/fuel_time //How long is left, in deciseconds
 	var/current_temp
 	var/current_thermal_energy
+	light_color = LIGHT_COLOR_ORANGE
 
 /obj/structure/forge/update_icon()
 	if(status)
@@ -66,11 +67,12 @@
 		return 1
 	else if(I.is_hot() && status == FALSE)
 		to_chat(user, "<span class = 'notice'>You attempt to light \the [src] with \the [I].</span>")
-		if(do_after(user, I, 3 SECONDS))
+		if(do_after(user, src, 3 SECONDS))
 			if(!has_fuel())
 				to_chat(user, "<span class = 'warning'>\The [src] does not light.</span>")
 				return 0
-			toggle_lit()
+			if(status == FALSE) //spam clicking the forge is bad
+				toggle_lit()
 			return 1
 	else if(iscrowbar(I))
 		to_chat(user, "<span class = 'notice'>You begin to disassemble \the [src].</span>")
@@ -92,9 +94,19 @@
 			status = FALSE
 			current_temp = 0
 			processing_objects.Remove(src)
+			set_light(0,0)
 		if(FALSE)//turning it on
 			status = TRUE
 			processing_objects.Add(src)
+			switch(current_temp)
+				if(MELTPOINT_GOLD)
+					set_light(2,2)
+				if(MELTPOINT_STEEL)
+					set_light(2,3)
+				if(TEMPERATURE_PLASMA to INFINITY)
+					set_light(3,3)
+				else
+					set_light(2,2)
 	on_fire = status
 	update_icon()
 	return status

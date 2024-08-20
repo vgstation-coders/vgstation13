@@ -858,7 +858,7 @@ a {
 	if(additional_description)
 		desc = "[initial(desc)] \n [additional_description]"
 
-/obj/proc/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality)
+/obj/proc/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality = 0)
 	if(mat)
 		/*var/icon/original = icon(icon, icon_state) Icon operations keep making mustard gas
 		if(mat.color)
