@@ -331,6 +331,9 @@ var/global/powernets_broke = 0
 		if(H.gloves)
 			var/obj/item/clothing/gloves/G = H.gloves
 
+			if(G.name == "insulted gloves")
+				G.say(pick("Hah, dumbass", "Get fucked idiot", "You moron, what did you expect?", "Next time try the other yellow gloves, numbskull."))
+
 			if(G.siemens_coefficient == 0)									// to avoid spamming with insulated glvoes on
 				return 0
 
