@@ -487,7 +487,7 @@
 
 	if(station_does_not_tip) //good luck with your cyanide beer I guess
 		dangerchance = 60
-		desc += " This one doesn't might not be safe to drink."
+		desc += " This one might not be safe to drink."
 
 	if(basechem)
 		for(var/i = 0, i < 4, i++)
