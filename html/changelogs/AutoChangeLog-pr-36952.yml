@@ -1,0 +1,5 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- spellcheck: The mounted sleepers and jail cells on mechs no longer print the object
+    types to the occupant when they run out of power.
