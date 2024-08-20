@@ -1,0 +1,4 @@
+author: DeityLink
+delete-after: true
+changes:
+- bugfix: Fixed seconds display when checking your wristwatch.
