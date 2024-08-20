@@ -85,6 +85,10 @@
 	. = ..()
 	siemens_coefficient = pick(0,0.5,0.5,0.5,0.5,0.75,1.5)
 
+	if((prob(5) || Holiday == APRIL_FOOLS_DAY)) && !siemens_coefficient == 0)
+		name = "insulted gloves"
+		desc = "These gloves will mock the wearer when shocked."
+
 /obj/item/clothing/gloves/black
 	desc = "These gloves are quite comfortable, and will keep you warm!"
 	name = "black gloves"
