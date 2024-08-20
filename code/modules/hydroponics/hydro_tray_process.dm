@@ -2,6 +2,12 @@
 	//Do this even if we're not ready for a plant cycle.
 	process_reagents()
 
+	if (!is_soil && !is_plastic)
+		if (seed)
+			use_power = MACHINE_POWER_USE_ACTIVE
+		else
+			use_power = MACHINE_POWER_USE_IDLE
+
 	// Update values every cycle rather than every process() tick.
 	if(force_update)
 		force_update = 0

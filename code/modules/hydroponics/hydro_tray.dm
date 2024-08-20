@@ -6,6 +6,10 @@
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
 	volume = 100
 
+	use_power = MACHINE_POWER_USE_IDLE
+	idle_power_usage = 10
+	active_power_usage = 50
+
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT
 
 	var/draw_warnings = 1 // Set to 0 to stop it from drawing the alert lights.
@@ -13,6 +17,7 @@
 	var/last_update_icon = 0 // Since we're calling it more frequently than process(), let's at least make sure we're only calling it once per tick.
 	var/delayed_update_icon = 0
 	var/is_soil = 0
+	var/is_plastic = 0
 
 	// Plant maintenance vars
 	var/waterlevel = 100		// Water (max 100)
