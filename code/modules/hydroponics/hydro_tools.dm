@@ -82,12 +82,13 @@
 
 	dat += "<h2>Reagent Data</h2>"
 
-	if(!grown_reagents) //checking if the thing is produce or seed
+	if(!grown_reagents || istype(target,/obj/machinery/portable_atmospherics/hydroponics))
 		dat += "This plant will produce: "
 		var/datum/reagent/N
 		for (var/rid in grown_seed.chems)
 			N = chemical_reagents_list[rid]
 			dat += "<br>- [N.id]"
+		dat += "<br>" //so it doesn't overlap with the next part
 
 	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
 		dat += "This sample contains: "
