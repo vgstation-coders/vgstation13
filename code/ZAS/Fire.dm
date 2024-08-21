@@ -704,28 +704,27 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	burn_duration++
 
 /obj/effect/fire/proc/setfirelight(firelevel, firetemp)
-	// Update fire color.
+	// Update fire appearance.
 	if(last_vis_refresh + ((10 + rand(-2,2)) SECONDS) > world.time)
 		return
 
 	var/range
 	var/power
+	switch(firetemp)
+		if(T20C to AUTOIGNITION_TRIGGER)
+			icon_state = "1"
+			range = 3
+			power = 1
+		if(AUTOIGNITION_TRIGGER to FLAME_TEMPERATURE_PLASTIC)
+			icon_state = "2"
+			range = 5
+			power = 2
+		if(FLAME_TEMPERATURE_PLASTIC to ARBITRARILY_LARGE_NUMBER)
+			icon_state = "3"
+			range = 7
+			power = 3
 
-	if(firelevel > 6)
-		icon_state = "key3"
-		range = 7
-		power = 3
-	else if(firelevel > 2.5)
-		icon_state = "key2"
-		range = 5
-		power = 2
-	else
-		icon_state = "key1"
-		range = 3
-		power = 1
-
-	color = heat2color(firetemp)
-	set_light(range, power, color)
+	set_light(range, power)
 	last_vis_refresh = world.time
 
 /datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
