@@ -354,6 +354,7 @@ var/list/apiaries_list = list()
 		H.update_icon()
 		reagents.trans_to(H,reagents_per_honeycomb)
 		H.authentify()
+	update_icon()
 	return 1
 
 /obj/machinery/apiary/proc/empty_beehive()
