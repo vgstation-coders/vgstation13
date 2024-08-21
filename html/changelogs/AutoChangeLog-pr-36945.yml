@@ -1,0 +1,5 @@
+author: Eneocho
+delete-after: true
+changes:
+- bugfix: Plant analyzers will now tell you the chems a plant is making when scanning
+    a tray, as was intended.
