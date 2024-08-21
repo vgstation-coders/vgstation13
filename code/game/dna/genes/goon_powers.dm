@@ -181,7 +181,7 @@
 		if(!handle_suit)
 			target.bodytemperature = max(T0C + 29, target.bodytemperature - 5)
 			target.adjustFireLoss(10)
-			target.ExtinguishMob()
+			target.extinguish()
 
 			target.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [target]!</span>")
 

@@ -467,7 +467,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/turf/location = get_turf(src)
 	var/mob/living/M = get_holder_of_type(src,/mob/living)
 	if(isliving(loc))
-		M.IgniteMob()
+		M.ignite()
 	smoketime--
 	if (smoketime == 5 && ismob(loc))
 		to_chat(M, "<span class='warning'>Your [name] is about to go out.</span>")

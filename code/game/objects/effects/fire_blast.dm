@@ -105,7 +105,7 @@
 /obj/effect/fire_blast/proc/burn_mob(mob/living/L, var/adjusted_fire_damage)
 	if(!L.on_fire)
 		L.adjust_fire_stacks(0.5)
-		L.IgniteMob()
+		L.ignite()
 
 	if(L.mutations.Find(M_RESIST_HEAT)) //Heat resistance protects you from damage, but you still get set on fire
 		return

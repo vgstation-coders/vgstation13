@@ -407,7 +407,7 @@
 			else if(prob(35))
 				to_chat(H, "<span class='danger'>The holy flames continue to burn your flesh!</span>")
 			H.fire_stacks += 5
-			H.IgniteMob()
+			H.ignite()
 
 /datum/role/vampire/proc/remove_blood(var/amount)
 	blood_usable = max(0, blood_usable - amount)
@@ -532,13 +532,13 @@
 				else
 					to_chat(src, "<span class='danger'>You continue to burn!</span>")
 				fire_stacks += 5
-				IgniteMob()
+				ignite()
 		audible_scream()
 	else
 		switch(health)
 			if((-INFINITY) to 60)
 				fire_stacks++
-				IgniteMob()
+				ignite()
 	adjustFireLoss(3)
 
 /*

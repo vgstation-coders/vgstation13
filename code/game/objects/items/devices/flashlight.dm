@@ -390,7 +390,7 @@ var/list/obj/item/device/flashlight/lamp/lamps = list()
 	qdel(src)
 	if(!fuel)
 		return (SUICIDE_ACT_TOXLOSS)
-	user.IgniteMob()
+	user.ignite()
 	return (SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_FIRELOSS)
 
 /obj/item/device/flashlight/flare/ever_bright/New()

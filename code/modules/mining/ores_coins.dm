@@ -75,7 +75,7 @@
 		for(var/atom/atm in T) //extinguishing things
 			if(isliving(atm)) // For extinguishing mobs on fire
 				var/mob/living/M = atm
-				M.ExtinguishMob()
+				M.extinguish()
 			if(atm.on_fire) // For extinguishing objects on fire
 				atm.extinguish()
 

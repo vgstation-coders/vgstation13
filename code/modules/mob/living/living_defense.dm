@@ -277,21 +277,31 @@
 
 // End BS12 momentum-transfer code.
 //Mobs on Fire
-/mob/living/proc/IgniteMob()
-	if(fire_stacks > 0 && !on_fire)
-		on_fire = 1
-		set_light(src.light_range + 3)
-		update_fire()
+/mob/living/ignite()
+	if(on_fire)
+		return 0
+	if(check_fire_protection())
+		return 0
+	if(!firelightdummy)
+		firelightdummy = new (src)
+	on_fire = 1
+	update_fire()
+	return 1
+
+/mob/living/extinguish()
+	..()
+	message_admins("extinguish() called on [src]")
+	update_fire()
+
+/mob/living/check_fire_protection()
+	if(fire_stacks<0)
+		fire_stacks++
 		return 1
 	else
 		return 0
 
-/mob/living/proc/ExtinguishMob()
-	if(on_fire)
-		on_fire = 0
-		fire_stacks = 0
-		set_light(src.light_range - 3)
-		update_fire()
+/mob/living/burnSolidFuel()
+	return
 
 /mob/living/proc/update_fire()
 	return
@@ -306,6 +316,7 @@
 /mob/living/proc/handle_fire()
 	if((flags & INVULNERABLE) && on_fire)
 		extinguish()
+		message_admins("extinguished: if((flags & INVULNERABLE) && on_fire)")
 	if(fire_stacks < 0)
 		fire_stacks++ //If we've doused ourselves in water to avoid fire, dry off slowly
 		fire_stacks = min(0, fire_stacks)//So we dry ourselves back to default, nonflammable.
@@ -313,23 +324,32 @@
 		return 1
 
 	var/oxy=0
-	var/turf/T=loc
+	var/turf/T=get_turf(src)
 	if(istype(T))
-		var/datum/gas_mixture/G = loc.return_air() // Check if we're standing in an oxygenless environment
+		var/datum/gas_mixture/G = T.return_air() // Check if we're standing in an oxygenless environment
 		if(G)
 			oxy = G.molar_density(GAS_OXYGEN)
-	if(oxy < (1 / CELL_VOLUME) || fire_stacks <= 0)
-		ExtinguishMob() //If there's no oxygen in the tile we're on, put out the fire
+	if(oxy < (1 / CELL_VOLUME) || fire_stacks < 0)
+		extinguish() //If there's no oxygen in the tile we're on, put out the fire
+		message_admins("extinguished: if(oxy < (1 / CELL_VOLUME) || fire_stacks < 0)")
 		return 1
-	var/turf/location = get_turf(src)
-	location.hotspot_expose(700, SMALL_FLAME, 1)
+	T.hotspot_expose(700, SMALL_FLAME, 1)
 
-/mob/living/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/mob/living/fire_act(datum/gas_mixture/air, temperature, exposed_volume)
 	if(mutations.Find(M_UNBURNABLE))
 		return
 
 	adjust_fire_stacks(0.5)
-	IgniteMob()
+	ignite()
+
+	var/turf/T = get_turf(src)
+	var/flevel = air.calculate_firelevel(T)
+	var/pressure = air.return_pressure()
+	FireBurn(flevel,temperature, pressure)
+
+/mob/living/proc/FireBurn(var/firelevel = 0, var/temperature, var/pressure)
+	var/mx = 5 * max(firelevel,1.5)/ZAS_firelevel_multiplier * min(pressure / ONE_ATMOSPHERE, 1)
+	apply_damage(2.5*mx, BURN)
 
 //Mobs on Fire end
 

@@ -86,7 +86,7 @@
 	if(istype(get_turf(src),/turf/unsimulated/floor/brimstone))
 		FireBurn(11, 9001, ONE_ATMOSPHERE) // lag free weird way of doing it
 		fire_stacks = 11
-		IgniteMob() // ffffFIRE!!!! FIRE!!! FIRE!!
+		ignite() // ffffFIRE!!!! FIRE!!! FIRE!!
 	return 1
 
 // Apply connect damage
@@ -567,7 +567,7 @@ Thanks.
 	else
 		reagents.clear_reagents()
 	heal_overall_damage(1000, 1000)
-	ExtinguishMob()
+	extinguish()
 	fire_stacks = 0
 	/*
 	if(locked_to)
@@ -1136,7 +1136,7 @@ Thanks.
 				sleep(1 SECONDS)
 			CM.fire_stacks = 0
 			CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>","<span class='notice'>You extinguish yourself.</span>")
-			ExtinguishMob()
+			extinguish()
 			return
 
 		CM.resist_restraints()
