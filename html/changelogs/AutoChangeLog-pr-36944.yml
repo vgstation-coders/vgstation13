@@ -1,0 +1,5 @@
+author: DeityLink
+delete-after: true
+changes:
+- tweak: Hydroponic trays containing dead weeds may now be overtaken by fresh new
+    weeds.
