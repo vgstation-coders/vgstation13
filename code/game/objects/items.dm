@@ -87,6 +87,8 @@
 
 	var/is_cookvessel //If true, the item is a cooking vessel.
 
+	var/blocks_tracking = FALSE //Blocks mind and AI tracking
+
 	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
 
 	var/last_burn
