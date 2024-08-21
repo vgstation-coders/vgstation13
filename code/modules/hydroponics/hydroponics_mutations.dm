@@ -17,6 +17,7 @@
 		return
 	if(age < 3 && length(seed.mutants) && gene)
 		mutate_species()
+		return
 	if(!gene)
 		gene = pick(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
 
