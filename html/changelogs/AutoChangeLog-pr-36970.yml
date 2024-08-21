@@ -1,0 +1,4 @@
+author: west3436
+delete-after: true
+changes:
+- bugfix: Igniters will now start fires 100% of the time
