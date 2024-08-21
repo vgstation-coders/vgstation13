@@ -665,7 +665,7 @@
 /mob/living/simple_animal/hostile/grue/proc/grue_stat_updates(var/feed_verbose = FALSE) //update stats, called by lifestage_updates() as well as handle_feed()
 
 	//health regen in darkness
-	lightparams.regenbonus = lightparams.base_regenbonus * (1.5 ** eatencount) //increased health regen in darkness
+	lightparams.regenbonus = lightparams.base_regenbonus * (1.1 ** eatencount) //increased health regen in darkness
 
 	//melee damage, 50 damage limit
 	melee_damage_lower = min(50, base_melee_dam_lw + (5 * eatencount))
