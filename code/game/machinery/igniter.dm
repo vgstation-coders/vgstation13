@@ -30,8 +30,11 @@ var/global/list/igniters = list()
 	return
 
 /obj/machinery/igniter/process()	//ugh why is this even in process()?
-	if (src.on && !(stat & (NOPOWER|FORCEDISABLE)) )
-		try_hotspot_expose(1000,MEDIUM_FLAME,1)
+	if (src.on && !(stat & (NOPOWER|FORCEDISABLE)))
+		var/turf/simulated/T = get_turf(src)
+		if(!T || !istype(T))
+			return 0
+		T.hotspot_expose(1000,FULL_FLAME,0)
 	return 1
 
 /obj/machinery/igniter/proc/toggle_state()
