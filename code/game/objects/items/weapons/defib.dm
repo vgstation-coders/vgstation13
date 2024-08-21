@@ -25,6 +25,8 @@
 	var/defib_message_fail_override = null
 	var/defib_message_success_override = null
 
+	var/ignores_clothes = FALSE
+
 /obj/item/weapon/melee/defibrillator/New()
 	return ..()
 
@@ -162,14 +164,15 @@
 		if(target.mind && target.mind.suiciding)
 			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Unrecoverable nerve trauma detected.</span>") // They suicided so they fried their brain. Space Magic.
 			return
-		if(istype(target.wear_suit,/obj/item/clothing/suit/armor) && (target.wear_suit.body_parts_covered & UPPER_TORSO) && prob(95)) //75 ? Let's stay realistic here
-			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
-			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
-			return
-		if(istype(target.w_uniform,/obj/item/clothing/under) && (target.w_uniform.body_parts_covered & UPPER_TORSO) && prob(50))
-			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
-			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
-			return
+		if(!ignores_clothes)
+			if(istype(target.wear_suit,/obj/item/clothing/suit/armor) && (target.wear_suit.body_parts_covered & UPPER_TORSO) && prob(95)) //75 ? Let's stay realistic here
+				defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
+				target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
+				return
+			if(istype(target.w_uniform,/obj/item/clothing/under) && (target.w_uniform.body_parts_covered & UPPER_TORSO) && prob(50))
+				defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
+				target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
+				return
 		if(target.mind && !target.client) //Let's call up the ghost! Also, bodies with clients only, thank you.
 			defib_message_fail(target, "<span class='warning'>[src] buzzes: Defibrillation failed. [target.ghost_reenter_alert("Someone has tried to defibrillate your body. Return to it if you want to be resurrected!") ? "Vital signs are too weak, please try again in five seconds" : "No brainwaves detected"].</span>")
 			return

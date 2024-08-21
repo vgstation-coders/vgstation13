@@ -592,9 +592,7 @@ var/static/list/ai_icon_states = list(
 
 
 /mob/living/silicon/ai/proc/switchCamera(var/obj/machinery/camera/C)
-
-
-	src.cameraFollow = null
+	stop_ai_tracking()
 
 	if(!C || isDead()) //C.can_use())
 		return FALSE
@@ -677,7 +675,7 @@ var/static/list/ai_icon_states = list(
 	set category = "AI Commands"
 	set name = "Jump To Network"
 	unset_machine()
-	src.cameraFollow = null
+	stop_ai_tracking()
 	var/cameralist[0]
 
 	if(usr.isDead())

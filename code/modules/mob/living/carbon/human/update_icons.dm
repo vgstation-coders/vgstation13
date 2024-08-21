@@ -192,6 +192,8 @@ var/global/list/damage_icon_parts = list()
 			var/icon/temp
 			if (istype(part, /datum/organ/external/groin) || istype(part, /datum/organ/external/head))
 				temp = part.get_icon(g,fat)
+			else if(part.has_fat)
+				temp = part.get_icon(isFat = fat)
 			else
 				temp = part.get_icon()
 

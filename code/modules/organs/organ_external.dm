@@ -1300,6 +1300,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	max_damage = 115
 	min_broken_damage = 70
 	body_part = LOWER_TORSO
+	has_fat = TRUE //for humans this is a blank sprite, fat belly covers groin pixels
 	vital = 1
 	generic_type = /obj/item/organ
 
@@ -1391,6 +1392,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "l_leg"
 	max_damage = 75
 	min_broken_damage = 30
+	has_fat = TRUE
 	body_part = LEG_LEFT
 	icon_position = LEFT
 	generic_type = /obj/item/organ/external/l_leg
@@ -1427,6 +1429,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "r_leg"
 	max_damage = 75
 	min_broken_damage = 30
+	has_fat = TRUE
 	body_part = LEG_RIGHT
 	icon_position = RIGHT
 	generic_type = /obj/item/organ/external/r_leg
@@ -1555,7 +1558,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/hand/get_icon(gender = "", isFat = 0)
 	var/obj/item/organ/external/hand_obj = new generic_type()
 	var/overriding_icon = hand_obj.forced_icon_file
-	return ..(forced_icon_file = overriding_icon)
+	return ..(isFat = isFat, forced_icon_file = overriding_icon)
 
 /datum/organ/external/hand/robotize()
 	generic_type = initial(generic_type)
@@ -1584,6 +1587,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "r_hand"
 	body_part = HAND_RIGHT
 	grasp_id = GRASP_RIGHT_HAND
+	has_fat = TRUE
 	can_grasp = 1
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
 	generic_type = /obj/item/organ/external/r_hand
@@ -1594,6 +1598,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	icon_name = "l_hand"
 	body_part = HAND_LEFT
 	grasp_id = GRASP_LEFT_HAND
+	has_fat = TRUE
 	can_grasp = 1
 	slots_to_drop = list(slot_gloves, slot_handcuffed)
 	generic_type = /obj/item/organ/external/l_hand

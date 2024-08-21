@@ -1,3 +1,5 @@
+var/list/hydro_trays = list()
+
 /obj/machinery/portable_atmospherics/hydroponics
 	name = "hydroponics tray"
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
@@ -10,6 +12,9 @@
 
 	var/draw_warnings = 1 // Set to 0 to stop it from drawing the alert lights.
 	var/tmp/update_icon_after_process = 0 // Will try to only call update_icon() when necessary.
+	var/last_update_icon = 0 // Since we're calling it more frequently than process(), let's at least make sure we're only calling it once per tick.
+	var/delayed_update_icon = 0
+	var/is_soil = 0
 
 	// Plant maintenance vars
 	var/waterlevel = 100		// Water (max 100)
@@ -63,6 +68,7 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/New()
 	..()
+	hydro_trays += src
 	create_reagents(200)
 	connect()
 	update_icon()
@@ -78,8 +84,10 @@
 	)
 
 	RefreshParts()
-	if(closed_system)
-		flags &= ~OPENCONTAINER
+
+/obj/machinery/portable_atmospherics/hydroponics/Destroy()
+	hydro_trays -= src
+	..()
 
 /obj/machinery/portable_atmospherics/hydroponics/RefreshParts()
 	var/capcount = 0
@@ -176,7 +184,7 @@
 	//Remove the seed if something is already planted.
 	if(seed)
 		remove_plant()
-	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds","glowshroom","grass"))]
+	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","dandelions","glowshroom","grass"))]
 	if(!seed)
 		return //Weed does not exist, someone fucked up.
 
@@ -272,6 +280,9 @@
 		return
 
 	else if(seed && isshovel(O))
+		if(closed_system)
+			to_chat(user, "<span class='warning'>You can't transplant the plant while the lid is shut.</span>")
+			return
 		if(arcanetampered)
 			to_chat(user,"<span class='sinister'>You cannot dig into the soil.</span>")
 			return
@@ -299,7 +310,10 @@
 			if(dead)
 				S.overlays += image(seed.plant_dmi,"dead")
 			else if(harvest)
-				S.overlays += image(seed.plant_dmi,"harvest")
+				if (harvest > 1)
+					S.overlays += image(seed.plant_dmi,"harvest-[harvest]")
+				else
+					S.overlays += image(seed.plant_dmi,"harvest")
 			else if(age < seed.maturation)
 				var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
 				S.overlays += image(seed.plant_dmi,"stage-[t_growthstate]")
@@ -309,8 +323,16 @@
 			S.plant_name = seed.display_name
 			S.name = "potted [S.plant_name]"
 
+			S.plantname = seed.name
+			if (seed.pollen && harvest >= seed.pollen_at_level)
+				S.pollen = seed.pollen
+				S.add_particles(seed.pollen)
+				S.adjust_particles(PVAR_SPAWNING, 0.05, seed.pollen)
+				S.adjust_particles(PVAR_PLANE, FLOAT_PLANE, seed.pollen)
+				S.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), seed.pollen)
+
 			if(seed.biolum)
-				S.set_light(round(seed.potency/10))
+				S.set_light(get_biolum())
 				if(seed.biolum_colour)
 					S.light_color = seed.biolum_colour
 
@@ -335,7 +357,10 @@
 		var/obj/item/seeds/seeds = seed.spawn_seed_packet(get_turf(user))
 		if(arcanetampered)
 			seeds.arcanetampered = arcanetampered
-		to_chat(user, "You take a sample from the [seed.display_name].")
+		if(closed_system)
+			to_chat(user, "You carefully pass \the [O] through the tray's access port, and take a sample from the [seed.display_name].")
+		else
+			to_chat(user, "You take a sample from the [seed.display_name].")
 		add_planthealth(-rand(3,5)*10)
 
 		if(prob(30))
@@ -350,7 +375,10 @@
 	else if (ishoe(O))
 
 		if(get_weedlevel() > 0)
-			user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You remove the weeds from the [src].</span>")
+			if(closed_system)
+				user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You pass \the [O] through the access port and remove the weeds from the [src].</span>")
+			else
+				user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You remove the weeds from the [src].</span>")
 			weedlevel = 0
 			update_icon()
 		else
@@ -369,7 +397,7 @@
 	else if(istype(O, /obj/item/weapon/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.
 
-	else if(O.is_wrench(user) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
+	else if(O.is_wrench(user) && is_soil) //Soil isn't a portable atmospherics machine by any means
 		return //Don't call parent. I mean, soil shouldn't be a child of portable_atmospherics at all, but that's not very feasible.
 
 	else if(istype(O, /obj/item/apiary))
@@ -405,12 +433,19 @@
 	else
 		return ..()
 
+/obj/machinery/portable_atmospherics/hydroponics/proc/get_biolum()
+	return (1 + Ceiling(seed.potency/10))
+
 /obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
 	..()
 	if(primarytype == /mob/living/carbon/slime/green)
 		has_slime=1
 		to_chat(user, "You attach the slime extract to \the [src]'s internal mechanisms.")
 		return TRUE
+
+/obj/machinery/portable_atmospherics/hydroponics/wind_act(var/differential, var/list/connecting_turfs)
+	if (seed)
+		seed.wind_act(src, differential, connecting_turfs)
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
 	if(harvest)
@@ -458,6 +493,12 @@
 	else
 		examine(user) //using examine() to display the reagents inside the tray as well
 
+/obj/machinery/portable_atmospherics/hydroponics/reagent_transfer_message(var/transfer_amt)
+	if (closed_system)
+		return "<span class='notice'>You open \the [src.name]'s injection port and transfer [transfer_amt] units of the solution in it.</span>"
+	else
+		return "<span class='notice'>You transfer [transfer_amt] units of the solution to \the [src.name].</span>"
+
 /obj/machinery/portable_atmospherics/hydroponics/examine(mob/user)
 	..()
 	view_contents(user)
@@ -495,12 +536,12 @@
 			if(missing_gas)
 				to_chat(user, "The tray's <span class='alert'>improper gas environment alert</span> is blinking.")
 
-		if(!istype(src,/obj/machinery/portable_atmospherics/hydroponics/soil))
+		if(!is_soil)
 
 			var/turf/T = loc
 			var/datum/gas_mixture/environment
 
-			if(closed_system && (connected_port || holding))
+			if(closed_system)
 				environment = air_contents
 
 			if(!environment)
@@ -523,6 +564,21 @@
 			var/mob/living/carbon/human/H = user
 			to_chat(user, "<span class='good'>Would you like to know more?</span> <a href='?src=\ref[H.glasses];scan=\ref[src]'>\[Scan\]</a>")
 
+/obj/machinery/portable_atmospherics/hydroponics/proc/receive_pulse(var/pulse_strength)
+	if (seed && !closed_system)//if the lid is closed, the plant is radiation immune.
+		pulse_strength /= 50
+		if (prob(pulse_strength))
+			if (age <= 4)
+				//young plants mutate more easily
+				if (length(seed.mutants))
+					mutate_species()
+				else
+					mutate()
+			else if (prob(pulse_strength/2))
+				//older plants have between 1.125% and 1.875% chance to mutate per burst
+				//at 15 burst total this amounts to about 19% chance of at least one small mutation occurring
+				mutate()
+
 /obj/machinery/portable_atmospherics/hydroponics/proc/hydrovision(mob/user)
 	hydro_hud_scan(user, src)
 	return FALSE
@@ -537,10 +593,6 @@
 
 	closed_system = !closed_system
 	to_chat(usr, "You [closed_system ? "close" : "open"] the tray's lid.")
-	if(closed_system)
-		flags &= ~OPENCONTAINER
-	else
-		flags |= OPENCONTAINER
 
 	update_icon()
 	add_fingerprint(usr)
@@ -608,5 +660,13 @@
 			if (chemical_id in reagents_to_log)
 				things += chemical_id
 	return english_list(things, "nothing")
+
+/obj/machinery/portable_atmospherics/hydroponics/on_reagent_change()
+	. = ..()
+	delayed_update_icon = 1
+	spawn(1)
+		//since reagents might change multiple times during a tick as they get processed, let's wait for the tick after they've all been processed.
+		//thanks to last_update_icon, this call should regardless only happen once per tick.
+		update_icon()
 
 /datum/locking_category/hydro_tray

@@ -11,10 +11,13 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/mutate(var/gene)
 	if(!seed)
 		return
+	if(dead)
+		return
 	if(seed.immutable)
 		return
 	if(age < 3 && length(seed.mutants) && gene)
 		mutate_species()
+		return
 	if(!gene)
 		gene = pick(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
 
@@ -43,40 +46,40 @@
 					if(prob(50))
 						check_success = seed.add_random_chemical()
 						if(check_success)
-							visible_message("<span class='notice'>\The [seed.display_name] develops a strange-looking gland.</span>")
+							visible_message("<span class='notice'>\The [seed.display_name] develop[seed.plural ? "":"s"] a strange-looking gland.</span>")
 
 		if(GENE_MORPHOLOGY)
 			var/mutation_type = pick(PLANT_PRODUCTS, PLANT_THORNY, PLANT_JUICY, PLANT_LIGNEOUS, PLANT_STINGING, PLANT_APPEARANCE)
 			switch(mutation_type)
 				if(PLANT_PRODUCTS)
 					seed.products += pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown))
-					visible_message("<span class='notice'>\The [seed.display_name] seems to be growing something weird.</span>")
+					visible_message("<span class='notice'>\The [seed.display_name] seem[seed.plural ? "":"s"] to be growing something weird.</span>")
 				if(PLANT_THORNY)
 					seed.thorny = !seed.thorny
 					if(seed.thorny)
-						visible_message("<span class='notice'>\The [seed.display_name] spontaneously develops mean-looking thorns!</span>")
+						visible_message("<span class='notice'>\The [seed.display_name] spontaneously develop[seed.plural ? "":"s"] mean-looking thorns!</span>")
 					else
-						visible_message("<span class='notice'>\The [seed.display_name] sheds its thorns away...</span>")
+						visible_message("<span class='notice'>\The [seed.display_name] shed[seed.plural ? " their":"s its"] thorns away...</span>")
 				if(PLANT_JUICY)
-					//clever way of going from 0 to 1 to 2. 
+					//clever way of going from 0 to 1 to 2.
 					seed.juicy = (seed.juicy + 1) % 3
 					generic_mutation_message("wobbles!")
 				if(PLANT_LIGNEOUS)
 					seed.ligneous = !seed.ligneous
 					if(seed.ligneous)
-						visible_message("<span class='notice'>\The [seed.display_name] seems to grow a cover of robust bark.</span>")
+						visible_message("<span class='notice'>\The [seed.display_name] seem[seed.plural ? "":"s"] to grow a cover of robust bark.</span>")
 					else
-						visible_message("<span class='notice'>\The [seed.display_name]'s bark slowly sheds away...</span>")
+						visible_message("<span class='notice'>\The [seed.display_name][seed.plural ? "'":"'s"] bark slowly sheds away...</span>")
 				if(PLANT_STINGING)
 					seed.stinging = !seed.stinging
 					if(seed.stinging)
-						visible_message("<span class='notice'>\The [seed.display_name] sprouts a coat of chemical stingers!</span>")
+						visible_message("<span class='notice'>\The [seed.display_name] sprout[seed.plural ? "":"s"] a coat of chemical stingers!</span>")
 					else
-						visible_message("<span class='notice'>\The [seed.display_name]'s stingers dry off and break...</span>")
+						visible_message("<span class='notice'>\The [seed.display_name][seed.plural ? "'":"'s"] stingers dry off and break...</span>")
 				if(PLANT_APPEARANCE)
 					seed.randomize_icon()
 					update_icon()
-					visible_message("<span class='notice'>\The [seed.display_name] suddenly looks a little different.</span>")
+					visible_message("<span class='notice'>\The [seed.display_name] suddenly look[seed.plural ? "":"s"] a little different.</span>")
 
 		if(GENE_BIOLUMINESCENCE)
 			var/mutation_type = pick(seed.biolum ? 10 : 0;	PLANT_BIOLUM_COLOR, seed.biolum ? 1 : 10; PLANT_BIOLUM)
@@ -84,14 +87,14 @@
 				if(PLANT_BIOLUM)
 					seed.biolum = !seed.biolum
 					if(seed.biolum)
-						visible_message("<span class='notice'>\The [seed.display_name] begins to glow!</span>")
+						visible_message("<span class='notice'>\The [seed.display_name] begin[seed.plural ? "":"s"] to glow!</span>")
 						if(!seed.biolum_colour)
 							seed.biolum_colour = "#[get_random_colour(1)]"
 					else
-						visible_message("<span class='notice'>\The [seed.display_name]'s glow dims...</span>")
+						visible_message("<span class='notice'>\The [seed.display_name][seed.plural ? "'":"'s"] glow dims...</span>")
 				if(PLANT_BIOLUM_COLOR)
 					seed.biolum_colour = "#[get_random_colour(0,75,190)]"
-					visible_message("<span class='notice'>\The [seed.display_name]'s glow <font color='[seed.biolum_colour]'>changes colour</font>!</span>")
+					visible_message("<span class='notice'>\The [seed.display_name][seed.plural ? "'":"'s"] glow <font color='[seed.biolum_colour]'>changes colour</font>!</span>")
 			update_icon()
 
 		if(GENE_ECOLOGY)
@@ -111,7 +114,7 @@
 						//lower better
 						var/hardcap = 0.1
 						var/max_change = 0.15 //percent
-						seed.lowkpa_tolerance -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.lowkpa_tolerance*100),0.01),max_change*seed.lowkpa_tolerance),0.1) 
+						seed.lowkpa_tolerance -= round(min(hardcap - hardcap/2*round(log(10,hardcap/seed.lowkpa_tolerance*100),0.01),max_change*seed.lowkpa_tolerance),0.1)
 					//higher better
 					var/hardcap = 500
 					var/max_change = 0.15 //percent
@@ -175,10 +178,10 @@
 				if(PLANT_HEMATOPHAGE)
 					seed.hematophage = !seed.hematophage
 					if(seed.hematophage)
-						visible_message("<span class='notice'>\The [seed.display_name] shudders thirstily, turning red at the roots!</span>")
+						visible_message("<span class='notice'>\The [seed.display_name] shudder[seed.plural ? "":"s"] thirstily, turning red at the roots!</span>")
 						add_nutrientlevel(-80)
 					else
-						visible_message("<span class='notice'>\The [seed.display_name]'s red roots slowly wash their color out...</span>")
+						visible_message("<span class='notice'>\The [seed.display_name][seed.plural ? "'":"'s"] red roots slowly wash their color out...</span>")
 		if(GENE_DEVELOPMENT)
 			var/mutation_type
 			if(seed.yield == -1)
@@ -202,22 +205,30 @@
 				if(PLANT_SPREAD)
 					seed.spread = (seed.spread + 1) % 3
 					if(src && seed && seed.spread == 1)
-						visible_message("<span class='notice'>\The [seed.display_name] shifts in the tray!</span>")
+						if (closed_system)
+							visible_message("<span class='notice'>\The [seed.display_name] shift[seed.plural ? "":"s"] in the tray, but remain[seed.plural ? "":"s"] contained by the lid!</span>")
+						else
+							visible_message("<span class='notice'>\The [seed.display_name] shift[seed.plural ? "":"s"] in the tray!</span>")
 						spawn(20)
 							var/datum/seed/newseed = seed.diverge()
 							newseed.spread = 1
 							var/turf/T = get_turf(src)
-							new /obj/effect/plantsegment(T, newseed)
+							if (!closed_system)
+								new /obj/effect/plantsegment(T, newseed)
 							msg_admin_attack("a random chance hydroponics mutation has spawned limited growth creeper vines ([newseed.display_name]). <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
 					else if(src && seed && seed.spread == 2)
-						visible_message("<span class='notice'>\The [seed.display_name] spasms visibly, violently thrashing in the tray!</span>")
+						if (closed_system)
+							visible_message("<span class='notice'>\The [seed.display_name] spasm[seed.plural ? "":"s"] visibly, violently thrashing in the tray, although contained behind [seed.plural ? "their":"its"] lid!</span>")
+						else
+							visible_message("<span class='notice'>\The [seed.display_name] spasm[seed.plural ? "":"s"] visibly, violently thrashing in the tray!</span>")
 						var/datum/seed/newseed = seed.diverge()
 						newseed.spread = 2
 						var/turf/T = get_turf(src)
-						new /obj/effect/plantsegment(T, newseed)
+						if (!closed_system)
+							new /obj/effect/plantsegment(T, newseed)
 						msg_admin_attack("a random chance hydroponics mutation has spawned space vines ([newseed.display_name]). <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
 					else
-						visible_message("<span class='notice'>\The [seed.display_name] recedes into the tray.</span>")
+						visible_message("<span class='notice'>\The [seed.display_name] recede[seed.plural ? "":"s"] into the tray.</span>")
 				if(PLANT_HARVEST)
 					var/new_harvest
 					if(seed.harvest_repeat == 2)
@@ -225,9 +236,9 @@
 					else
 						new_harvest = !seed.harvest_repeat
 					if(seed.harvest_repeat < new_harvest)
-						visible_message("<span class='notice'>\The [seed.display_name] roots deep and sprouts new stalks!</span>")
+						visible_message("<span class='notice'>\The [seed.display_name] root[seed.plural ? "":"s"] deep and sprouts new stalks!</span>")
 					else
-						visible_message("<span class='notice'>\The [seed.display_name] wilts away some of its roots.</span>")
+						visible_message("<span class='notice'>\The [seed.display_name] wilt[seed.plural ? "":"s"] away some of [seed.plural ? "their":"its"] roots.</span>")
 					seed.harvest_repeat = new_harvest
 				if(PLANT_YIELD)
 					if(seed.yield <= 0)
@@ -241,9 +252,9 @@
 					//Toggle true or false
 					seed.teleporting = !seed.teleporting
 					if(seed.teleporting)
-						visible_message("<span class='notice'>\The [seed.display_name] wobbles unstably, glowing blue for a moment!</span>")
+						visible_message("<span class='notice'>\The [seed.display_name] wobble[seed.plural ? "":"s"] unstably, glowing blue for a moment!</span>")
 					else
-						visible_message("<span class='notice'>\The [seed.display_name] slowly becomes spatial-temporally stable again.</span>")
+						visible_message("<span class='notice'>\The [seed.display_name] slowly become[seed.plural ? "":"s"] spatial-temporally stable again.</span>")
 				if(PLANT_GAS)
 					if(length(seed.consume_gasses) && prob(50))
 						seed.consume_gasses -= pick(seed.consume_gasses)
@@ -268,6 +279,7 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/mutate_species()
 	var/previous_plant = seed.display_name
+	var/previous_plural = seed.plural
 	var/newseed = seed.get_mutant_variant()
 
 	seed = SSplant.seeds[newseed]
@@ -281,4 +293,4 @@
 	sampled = 0
 
 	update_icon()
-	visible_message("<span class='alert'>The</span> <span class='italics,alert'>[previous_plant]</span> <span class='alert'>has suddenly mutated into</span> <span class='italics,alert'>[seed.display_name]!</span>")
+	visible_message("<span class='alert'>The</span> <span class='italics,alert'>[previous_plant]</span> <span class='alert'>[previous_plural ? "have" : "has"] suddenly mutated into</span> <span class='italics,alert'>[seed.display_name]!</span>")

@@ -367,7 +367,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	if(check_fire_protection())
 		return 0
 
-	if(!istype(loc, /turf)) //worn or held items don't ignite (for now >:^) )
+	if(!isturf(loc)) //worn or held items don't ignite (for now >:^) )
 		return 0
 
 	if(!flammable)
@@ -389,8 +389,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	return 1
 
 /atom/movable/ignite()
-	..()
-	if(!firelightdummy)
+	if(..() && !firelightdummy)
 		firelightdummy = new (src)
 
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
@@ -607,15 +606,22 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	QDEL_NULL(firelightdummy)
 	qdel(src)
 
+
+/obj/effect/fire/burnSolidFuel()
+	return 0
+
+/obj/effect/fire/burnLiquidFuel()
+	return 0
+
 /obj/effect/fire/process()
 	if(timestopped)
 		return 0
 	. = 1
 
 	//Fires shouldn't spawn in areas or mobs, but it has happened...
-	if(istype(loc,/area) || istype(loc,/mob))
+	if(!istype(loc,/turf))
 		qdel(src)
-		CRASH("Fire was created at [loc] instead of a turf.")
+		CRASH("Fire was created at src->loc: [src]->[loc] instead of a turf.")
 
 	// Get location and check if it is in a proper ZAS zone.
 	var/turf/simulated/S = get_turf(loc)
@@ -648,14 +654,15 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	setfirelight(firelevel, air_contents.temperature)
 
 	//Burn mobs.
-	for(var/mob/living/carbon/human/M in loc)
+	for(var/mob/living/carbon/human/M in S)
 		if(M.mutations.Find(M_UNBURNABLE))
 			continue
 		M.FireBurn(firelevel, FLAME_TEMPERATURE_PLASTIC, air_contents.return_pressure())
 
 	//Burn items in the turf.
-	for(var/atom/A in loc)
-		A.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
+	for(var/atom/A in S)
+		if(A.loc == S)
+			A.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
 
 	//Burn the turf, too.
 	S.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
@@ -759,7 +766,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 	var/solid_burn_products
 	var/liquid_burn_products
 	if(T)
-		if(T.flammable) //burn the turf
+		if(T.on_fire) //burn the turf
 			solid_burn_products = T.burnSolidFuel()
 			if(solid_burn_products)
 				combustion_energy += solid_burn_products["heat_out"]
@@ -767,7 +774,7 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 				combustion_co2_prod += solid_burn_products["co2_prod"]
 				max_temperature = max(max_temperature, solid_burn_products["max_temperature"])
 		for(var/atom/A in T)
-			if(A.flammable) //burn items on the turf
+			if(A.on_fire) //burn items on the turf
 				solid_burn_products = A.burnSolidFuel()
 				if(solid_burn_products)
 					combustion_energy += solid_burn_products["heat_out"]

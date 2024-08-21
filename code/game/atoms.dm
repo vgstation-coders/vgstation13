@@ -58,6 +58,7 @@ var/global/list/ghdel_profiling = list()
 
 	var/arcanetampered = 0 //A looot of things can be
 
+
 	var/image/moody_light
 	var/list/moody_lights
 
@@ -251,6 +252,9 @@ var/global/list/ghdel_profiling = list()
 // false if closed
 /atom/proc/is_open_container()
 	return flags & OPENCONTAINER
+
+/atom/proc/reagent_transfer_message(var/transfer_amt)
+	return "<span class='notice'>You transfer [transfer_amt] units of the solution to \the [src.name].</span>"
 
 // For when we want an open container that doesn't show its reagents on examine
 /atom/proc/hide_own_reagents()
@@ -557,6 +561,9 @@ its easier to just keep the beam vertical.
 		color = ""
 	if (cleanliness >= CLEANLINESS_WATER)//I mean, not sure why we'd ever add a rank below water but, futur-proofing and all that jazz
 		extinguish()//Fire.dm
+
+/atom/proc/wind_act(var/differential, var/list/connecting_turfs)
+	return
 
 //Called on every object in a shuttle which rotates
 /atom/proc/map_element_rotate(var/angle)

@@ -59,6 +59,8 @@
 
 	var/atom/movable/border_dummy/border_dummy //Used for border objects. The old Uncross() method fails miserably with pixel movement or large hitboxes.
 
+	var/silence_sprayed = FALSE //sprayed by silencing spray
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
@@ -1350,3 +1352,12 @@
 			change_dir(new_dir)
 			sleep(1)
 	change_dir(prev_dir)
+
+/atom/movable/proc/make_silent(var/duration)
+	silence_sprayed = TRUE
+	if(duration > 0)
+		spawn(duration)
+			silence_sprayed = FALSE
+
+/atom/movable/proc/remove_silence()
+	silence_sprayed = FALSE

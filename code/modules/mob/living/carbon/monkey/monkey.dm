@@ -461,6 +461,8 @@
 		return TRUE
 	if(reagents.has_reagent(METHYLIN))
 		return TRUE
+	if(is_dexterous)
+		return TRUE
 	return FALSE//monkeys can't use complex things by default unless they're high on methylin
 
 /mob/living/carbon/monkey/reset_layer()

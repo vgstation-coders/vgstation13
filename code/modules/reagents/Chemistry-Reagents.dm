@@ -49,6 +49,14 @@
 	var/paint_light = PAINTLIGHT_NONE
 	var/adj_temp = 0//keep between -1.5,20 to prevent people from freezing/burning themselves
 
+	//adjusts the values of hydro trays and soils by this value per process
+	var/plant_nutrition = 0
+	var/plant_watering = 0
+	var/plant_pests = 0
+	var/plant_weeds = 0
+	var/plant_toxins = 0
+	var/plant_health = 0
+
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS, var/allow_permeability = TRUE, var/list/splashplosion=list())
 	set waitfor = 0
 
@@ -218,6 +226,14 @@
 		return
 
 	holder.remove_reagent(src.id, 1)
+
+	T.add_nutrientlevel(plant_nutrition, id == BLOOD)
+	T.add_waterlevel(plant_watering)
+	T.add_pestlevel(plant_pests)
+	T.add_weedlevel(plant_weeds)
+	T.add_toxinlevel(plant_toxins)
+	T.add_planthealth(plant_health)
+
 
 //Called after add_reagents creates a new reagent
 /datum/reagent/proc/on_introduced(var/data)
