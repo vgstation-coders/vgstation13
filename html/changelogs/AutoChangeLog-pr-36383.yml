@@ -1,6 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- tweak: AIs can now track mobs as they move, rather than jumping to them every second.
-- tweak: AI messages when they stop being able to follow a target are now more general,
-    as cameras are not the only thing that stops tracking.

@@ -1,5 +1,0 @@
-author: CrazyAmphibian
-delete-after: true
-changes:
-- rscadd: The RPD will now display icons next to the names of pipes (you may have
-    to re-open the menu to see them)
