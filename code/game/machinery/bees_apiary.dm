@@ -26,6 +26,8 @@ var/list/apiaries_list = list()
 	pass_flags_self = PASSTABLE
 	w_type = RECYK_WOOD
 	flammable = TRUE
+	thermal_mass = 20//same as apiary kits
+	fire_sprite = "fire_apiary"
 	var/beezeez = 0//beezeez removes 1 toxic and adds 1 nutrilevel per cycle
 	var/nutrilevel = 0//consumed every round based on how many bees the apiary is sustaining.
 	var/yieldmod = 1
@@ -113,6 +115,8 @@ var/list/apiaries_list = list()
 		return
 	I.color = mix_color_from_reagents(reagents.reagent_list)
 	overlays += I
+	if (on_fire)
+		overlays += fire_overlay
 
 /obj/machinery/apiary/examine(mob/user)
 	..()
@@ -531,6 +535,9 @@ var/list/apiaries_list = list()
 	icon_state = "apiary-wild-inprogress0"
 	density = 0
 	anchored = 1
+	w_type = RECYK_WOOD
+	flammable = TRUE
+	thermal_mass = 20
 	var/base_icon_state = "apiary-wild-inprogress"
 	var/prefix = ""
 	var/remaining_work = 10
@@ -641,7 +648,8 @@ var/list/apiaries_list = list()
 
 /obj/machinery/apiary/wild/update_icon()
 	overlays.len = 0
-	return
+	if (on_fire)
+		overlays += fire_overlay
 
 /obj/machinery/apiary/wild/angry
 	name = "angry-bee hive"
