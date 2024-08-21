@@ -57,3 +57,4 @@
 	for(var/obj/machinery/vending/infectedMachine in infectedVendingMachines)
 		infectedMachine.shut_up = infectedVendingMachines[infectedMachine]
 		infectedMachine.shoot_inventory = 0
+	command_alert(/datum/command_alert/vending_machines_end)
