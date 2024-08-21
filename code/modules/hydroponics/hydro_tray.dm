@@ -445,24 +445,8 @@ var/list/hydro_trays = list()
 	else if(O.is_wrench(user) && is_soil) //Soil isn't a portable atmospherics machine by any means
 		return //Don't call parent. I mean, soil shouldn't be a child of portable_atmospherics at all, but that's not very feasible.
 
-	else if(istype(O, /obj/item/apiary))
-
-		if(seed)
-			to_chat(user, "<span class='alert'>[src] is already occupied!</span>")
-		else
-			user.drop_item(O, force_drop = 1)
-			var/obj/item/apiary/IA = O
-			var/obj/machinery/apiary/A = new IA.buildtype(src.loc)
-			A.itemform = O
-			O.forceMove(A)
-			A.icon = src.icon
-			A.icon_state = src.icon_state
-			A.hydrotray_type = src.type
-			A.component_parts = component_parts.Copy()
-			A.contents = contents.Copy()
-			contents.len = 0
-			component_parts.len = 0
-			qdel(src)
+	else if(istype(O, /obj/item/apiary))//Because not everyone is gonna read the changelog
+		to_chat(user,"<span class='warning'>[is_soil ? "" : "You're not sure why you'd put an apiary in an hydroponics tray of all things. Like, it doesn't really makes much sense does it? "]You should build the kit directly on top of the floor.</span>")
 
 	else if((O.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE)) && harvest)
 		if(arcanetampered)
