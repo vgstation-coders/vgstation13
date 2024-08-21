@@ -290,7 +290,6 @@
 
 /mob/living/extinguish()
 	..()
-	message_admins("extinguish() called on [src]")
 	update_fire()
 
 /mob/living/check_fire_protection()
@@ -316,7 +315,6 @@
 /mob/living/proc/handle_fire()
 	if((flags & INVULNERABLE) && on_fire)
 		extinguish()
-		message_admins("extinguished: if((flags & INVULNERABLE) && on_fire)")
 	if(fire_stacks < 0)
 		fire_stacks++ //If we've doused ourselves in water to avoid fire, dry off slowly
 		fire_stacks = min(0, fire_stacks)//So we dry ourselves back to default, nonflammable.
@@ -331,7 +329,6 @@
 			oxy = G.molar_density(GAS_OXYGEN)
 	if(oxy < (1 / CELL_VOLUME) || fire_stacks < 0)
 		extinguish() //If there's no oxygen in the tile we're on, put out the fire
-		message_admins("extinguished: if(oxy < (1 / CELL_VOLUME) || fire_stacks < 0)")
 		return 1
 	T.hotspot_expose(700, SMALL_FLAME, 1)
 
