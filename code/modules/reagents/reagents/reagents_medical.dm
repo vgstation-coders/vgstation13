@@ -621,6 +621,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	density = 3.9
 	specheatcap = 0.12812
 	custom_metabolism = 0.1
+	fission_time=600
+	fission_power=-15000
 
 /datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1719,3 +1721,39 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#899613" //rgb: 137, 150, 19
 	density = 0.67
 	specheatcap = 4.18
+
+
+/datum/reagent/regenerate_calcium
+	name = "Regenerate Calcium"
+	description = "Highly irradiated calcium. For some reason it's actually quite helpful to ingest."
+	id = REGENERATECALCIUM
+	density = 4.1
+	specheatcap = 0.15
+	custom_metabolism= 0.5 //the candle the burns twice as bright...
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#088c2e"
+	
+/datum/reagent/regenerate_calcium/on_mob_life(var/mob/living/M) //burns half as long...
+	if(..())
+		return 1
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.species.anatomy_flags & NO_BONES)
+			return
+
+		var/remaininghealing=3
+		for(var/datum/organ/external/E in H.organs)
+			if(!E.is_organic())
+				continue
+			
+			for(var/datum/wound/W in E.wounds) 
+				if(W.damage_type==CUT || W.damage_type==BRUISE) //fixes limb brute damage
+					remaininghealing=W.heal_damage(remaininghealing,1)
+					if(!remaininghealing)
+						break
+
+			if(E.brute_dam<=E.max_damage*0.5)
+				E.status&= ~ORGAN_BROKEN //fixes broken limbs
+			if(!remaininghealing)
+				return 1

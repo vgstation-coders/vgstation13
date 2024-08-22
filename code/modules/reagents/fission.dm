@@ -21,3 +21,5 @@
 /datum/reagent/plasma/irradiate() //primary purpose: a very lossy way to get phazon via plasma. powergaymers rejoice.
 	return list(PHAZON=0.05) //fun fact. 1 sheet of plas = 20 units. 1 sheet of phaz = 1 unit. funny, huh?
 	
+/datum/reagent/degeneratecalcium/irradiate()
+	return list(REGENERATECALCIUM=1.0)

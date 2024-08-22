@@ -537,6 +537,7 @@
 #define RADON			"radon"
 #define LEAD			"lead"
 #define THALLIUM		"thallium"
+#define REGENERATECALCIUM	"regeneratecalcium"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
