@@ -49,7 +49,7 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 		grab_snow(3)
 
 /obj/structure/snow/process()
-	..()
+	set waitfor = 0
 	if(world.time < next_update)
 		return
 	if (snow_amount < SNOWCOVERING_MAX)
