@@ -520,7 +520,14 @@ var/list/headset_modes = list(
 			I.affect_speech(speech, src)
 
 	if(getBrainLoss() >= 60)
-		speech.message = derpspeech(speech.message, stuttering)
+		if(braindamagespeechcooldown)
+			speech.message = null
+			emote("gibber")
+		else
+			braindamagespeechcooldown = TRUE
+			speech.message = derpspeech(speech.message, stuttering)
+			spawn(1 SECONDS)
+			braindamagespeechcooldown = FALSE
 
 	if(stuttering || (undergoing_hypothermia() == MODERATE_HYPOTHERMIA && prob(25)) )
 		speech.message = stutter(speech.message)
