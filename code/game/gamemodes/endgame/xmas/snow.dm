@@ -73,6 +73,7 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 		qdel(src)
 		return
 
+	next_update=world.time + TICK_JIGGLE(300)
 	update_icon()
 
 	// Start process(), if we need to.
