@@ -101,7 +101,7 @@
 	var/speech_mode = VOICE_CHANGER_SAYS
 	canstage = 0
 	origin_tech = Tc_SYNDICATE + "=4"
-	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger,)
+	actions_types = list(/datum/action/item_action/toggle_mask, /datum/action/item_action/change_appearance_mask, /datum/action/item_action/toggle_voicechanger,change_voice_mode)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED,INSECT_SHAPED)
 	permeability_coefficient = 0.90
 	blocks_tracking = TRUE
