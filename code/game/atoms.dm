@@ -1114,7 +1114,7 @@ its easier to just keep the beam vertical.
 	moody_light = null
 
 //Multi-overlay moody lights. don't combine both procs on a single atom, use one or the other.
-/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff", offX = 0, offY = 0)
+/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0, var/image_override = null)
 	if (!index)
 		return
 	if (isnull(moody_lights))
@@ -1123,8 +1123,11 @@ its easier to just keep the beam vertical.
 		overlays -= moody_lights[index]
 	var/area/here = get_area(src)
 	if (here && here.dynamic_lighting)
-		moody_light = image(moody_icon, src, moody_state)
-		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
+		if (image_override)
+			moody_light = image_override
+		else
+			moody_light = image(moody_icon, src, moody_state)
+		moody_light.appearance_flags |= RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 		moody_light.plane = LIGHTING_PLANE
 		moody_light.blend_mode = BLEND_ADD
 		moody_light.alpha = moody_alpha
