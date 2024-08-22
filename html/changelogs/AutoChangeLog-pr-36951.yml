@@ -1,0 +1,5 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Catbeasts defiling rooms for threat generation should now happen as soon
+    as they enter the room.
