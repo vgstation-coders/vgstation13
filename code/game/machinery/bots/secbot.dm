@@ -348,7 +348,7 @@ Auto Patrol: []"},
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/wizrobe))
 			threatcount += PERP_LEVEL_ARREST/2
 
-		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
+		if(!isjusthuman(perp))
 			threatcount += PERP_LEVEL_ARREST/2
 		var/visible_id = perp.get_visible_id()
 		if(!visible_id)
