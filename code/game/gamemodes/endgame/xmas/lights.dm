@@ -46,6 +46,7 @@
 	lights.color = cl
 	overlays += lights
 	luminosity = 2
+	set_light(light_range_on, light_power_on)
 
 
 /obj/machinery/xmas_light/power_change()

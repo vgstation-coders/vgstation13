@@ -4,6 +4,8 @@
 #define SNOWCOVERING_MEDIUM 1
 #define SNOWCOVERING_LITTLE 0
 
+#define SNOWCOVERING_MAX 10
+
 #define TICK_JIGGLE(X) rand(((X)-((X)*0.1)),((X)+((X)*0.1)))
 
 var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
@@ -18,9 +20,8 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 	alpha = 230
 	anchored = 1
 	density = 0
-	mouse_opacity = 1
 
-	var/snow_amount = SNOWCOVERING_FULL
+	var/snow_amount = SNOWCOVERING_MAX
 
 	var/next_update = 0 // world.time
 
@@ -45,34 +46,47 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 /obj/structure/snow/attackby(obj/item/W,mob/user)
 	if(isshovel(W))//using a shovel or spade harvests some snow and let's you click on the lower layers
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
-		snow_amount = SNOWCOVERING_LITTLE
-		icon_state = "snow_dug"
-		new /obj/item/stack/sheet/snow(get_turf(src), 1)
-		new /obj/item/stack/sheet/snow(get_turf(src), 1)
-		new /obj/item/stack/sheet/snow(get_turf(src), 1)
-
-		if(snow_amount==SNOWCOVERING_LITTLE)
-			qdel(src)
-			return
-
-		// Start process(), if we need to.
-		if(!(src in processing_objects))
-			processing_objects.Add(src)
+		grab_snow(3)
 
 /obj/structure/snow/process()
 	..()
 	if(world.time < next_update)
 		return
-	switch(snow_amount)
-		if(SNOWCOVERING_LITTLE)
-			icon_state = "snow_grabbed"
-			mouse_opacity = 1
-			snow_amount = SNOWCOVERING_MEDIUM
-		if(SNOWCOVERING_MEDIUM)
-			icon_state = "snow"
-			snow_amount = SNOWCOVERING_FULL
-			processing_objects.Remove(src)
+	if (snow_amount < SNOWCOVERING_MAX)
+		snow_amount++
+		update_icon()
+	else
+		processing_objects.Remove(src)
 	next_update=world.time + TICK_JIGGLE(300) // 30 seconds
+
+/obj/structure/snow/proc/grab_snow(var/amount_to_remove=1,var/mob/living/carbon/grabber=null)
+	var/turf/T = get_turf(src)
+	amount_to_remove = min(amount_to_remove, snow_amount)
+	for(var/i = 1 to amount_to_remove)
+		if (grabber)
+			grabber.put_in_hands(new /obj/item/stack/sheet/snow(loc))
+		else
+			new /obj/item/stack/sheet/snow(T, 1)
+		snow_amount--
+
+	if (snow_amount <= 0)
+		qdel(src)
+		return
+
+	update_icon()
+
+	// Start process(), if we need to.
+	if(!(src in processing_objects))
+		processing_objects.Add(src)
+
+/obj/structure/snow/update_icon()
+	switch(snow_amount)
+		if (0 to 3)
+			icon_state = "snow_dug"
+		if (4 to 9)
+			icon_state = "snow_grabbed"
+		else
+			icon_state = "snow"
 
 /obj/structure/snow/Crossed(mob/user)
 	..()
@@ -81,28 +95,16 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 
 
 /obj/structure/snow/attack_hand(mob/user)
-	if(snow_amount != SNOWCOVERING_FULL)
-		return
 	playsound(src, "rustle", 50, 1)
 	to_chat(user, "<span class='notice'>You start digging the snow with your hands.</span>")
 	if(do_after(user, src, 30))
-		snow_amount = SNOWCOVERING_MEDIUM
 		to_chat(user, "<span class='notice'>You form a snowball in your hands.</span>")
-		user.put_in_hands(new /obj/item/stack/sheet/snow(loc))
-		icon_state = "snow_grabbed"
+		grab_snow(1,user)
 
-		if(snow_amount==SNOWCOVERING_LITTLE)
-			qdel(src)
-			return
-
-		// Start process(), if we need to.
-		if(!(src in processing_objects))
-			processing_objects.Add(src)
-	return
 
 //////COSMIC SNOW(the one that spreads everywhere)//////
 
-/* No.
+/* No. Someday maybe...
 /obj/structure/snow/cosmic
 	desc = "Winter is coming."
 
