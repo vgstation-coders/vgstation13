@@ -236,8 +236,6 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 /datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 	switch (phase)
 		if ("station")
-			location = 1
-
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))
 				var/datum/shuttle/escape/E = shuttle
 				E.open_all_doors()
@@ -253,6 +251,9 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				send2ickdiscord("The **Emergency Shuttle** has docked with the station.")
 				command_alert(/datum/command_alert/emergency_shuttle_docked)
 				world << sound('sound/AI/shuttledock.ogg')
+
+			location = 1
+
 			if(ticker)
 				ticker.shuttledocked_time = world.time / 10
 				ticker.mode.ShuttleDocked(1)
