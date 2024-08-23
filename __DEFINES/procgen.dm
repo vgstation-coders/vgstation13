@@ -43,3 +43,9 @@
 #define PG_ASTEROID			/datum/procgen/biome/asteroid
 #define PG_COMET			/datum/procgen/biome/comet
 #define PG_ROCK				/datum/procgen/biome/rock
+
+//History
+#define PG_UNEXPLORED	/datum/procgen/civilization/unexplored
+#define PG_YOUNG_CIV	/datum/procgen/civilization/young
+#define PG_OLD_CIV		/datum/procgen/civilization/old
+#define PG_FUTURE_CIV	/datum/procgen/civilization/future

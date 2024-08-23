@@ -2371,6 +2371,7 @@
 #include "code\modules\procgen\generator_inputs\atmospheres.dm"
 #include "code\modules\procgen\generator_inputs\biomes.dm"
 #include "code\modules\procgen\generator_inputs\celestial_bodies.dm"
+#include "code\modules\procgen\generator_inputs\civilizations.dm"
 #include "code\modules\projectiles\ammunition.dm"
 #include "code\modules\projectiles\gun.dm"
 #include "code\modules\projectiles\projectile.dm"
