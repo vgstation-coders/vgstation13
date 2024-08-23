@@ -120,7 +120,7 @@
 	dat += {"
 		<div style="padding-bottom:1em;" id="schematic_options2">
 		</div>
-		<div id="schematic_options">
+		<div id="schematic_options1">
 		</div>
 
 		<h2>Available schematics</h2>
@@ -165,10 +165,10 @@
 			schematichtml=replacetext(replacetext(schematichtml,"id=\"layer_selected\"","id=\"layer_selectedauto\""),"id=\"layer_center_selected\"","id=\"layer_center_selectedauto\"")
 		schematichtml+=multitext
 		schematichtml+=autotext
-		interface.updateContent("schematic_options", schematichtml )
+		interface.updateContent("schematic_options1", schematichtml )
 		interface.updateContent("schematic_options2", schematichtml )
 	else
-		interface.updateContent("schematic_options", " ")
+		interface.updateContent("schematic_options1", " ")
 		interface.updateContent("schematic_options2", " ")
 
 

@@ -209,7 +209,7 @@ left:160px;
 	image-rendering:pixelated;
 }
 
-#schematic_options{ /*this is a really, really awful way to lay things out.*/
+#schematic_options1{ /*this is a really, really awful way to lay things out.*/
 	visibility: hidden;
 }
 #schematic_options2{ /*but it's not my fault IE doesn't support sticky positioning.*/
