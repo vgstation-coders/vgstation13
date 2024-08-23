@@ -75,9 +75,27 @@
 			num_seeds = rand(4,16)
 	var/list/voronoi_matrix = generate_voronoi(new_map_size,num_seeds)
 
-	//Select an available z-level to use.
-	//Spawn areas for each biome in accordange with the Voronoi Diagram.
-	//
+	///build_map()
+		//Select an available z-level to use.
+		//Spawn areas for each biome in accordance with the Voronoi Diagram.
+		//Spawn base turfs within each biome.
+		//Spawn solid walls within each biome, if applicable.
+		//Apply biome smoothening.
+		//Carve out caves or clearings irrespective of biome borders.
+
+	///decorate_map()
+		//Spawn biome-specific plants and decorations.
+
+	///populate_map()
+		//Spawn mobs
+		//Maybe tie into civilization level?
+		//Maybe add danger level?
+
+	//spawn_loot()
+		//spawn items in accordance with civilization level, both on the ground and in containers
+
+	//generate_vaults()
+		//spawn pre-existing vaults on the map
 
 /datum/procgen/generation/proc/get_body_type()
 	var/list/datum/procgen/celestial_body/potential_bodies = list()
