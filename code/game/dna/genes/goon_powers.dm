@@ -68,6 +68,7 @@
 /datum/dna/gene/basic/stealth/chameleon/deactivate(var/mob/M, var/connected, var/flags)
 	if(!..())
 		return 0
+	M.alphas["chameleon_stealth"] = 255
 	M.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 	return 1
 
