@@ -236,14 +236,6 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 /datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 	switch (phase)
 		if ("station")
-			if(shuttle && istype(shuttle,/datum/shuttle/escape))
-				var/datum/shuttle/escape/E = shuttle
-				E.open_all_doors()
-				if(!E.move_to_dock(E.dock_station, 0, E.dir)) //Throw everything forward, on chance that there's anybody in the shuttle
-					message_admins("WARNING: THE EMERGENCY SHUTTLE COULDN'T MOVE TO THE STATION! PANIC PANIC PANIC")
-			else
-				message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
-
 			if (!casual)
 				settimeleft(SHUTTLELEAVETIME)
 				send2mainirc("The Emergency Shuttle has docked with the station.")
@@ -253,6 +245,14 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				world << sound('sound/AI/shuttledock.ogg')
 
 			location = 1
+
+			if(shuttle && istype(shuttle,/datum/shuttle/escape))
+				var/datum/shuttle/escape/E = shuttle
+				E.open_all_doors()
+				if(!E.move_to_dock(E.dock_station, 0, E.dir)) //Throw everything forward, on chance that there's anybody in the shuttle
+					message_admins("WARNING: THE EMERGENCY SHUTTLE COULDN'T MOVE TO THE STATION! PANIC PANIC PANIC")
+			else
+				message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
 
 			if(ticker)
 				ticker.shuttledocked_time = world.time / 10
