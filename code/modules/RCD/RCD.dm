@@ -95,9 +95,9 @@
 	var/dat = ""
 
 	dat += {"
-		<b>Selected:</b> <span id="selectedname"></span>
-		<h2>Options</h2>
 		<div id="schematic_options">
+		</div>
+		<div id="schematic_options2">
 		</div>
 		<h2>Available schematics</h2>
 		<div id='fav_list'></div>
@@ -258,8 +258,10 @@
 		for(var/client/client in interface.clients)
 			selected.send_assets(client)
 		interface.updateContent("schematic_options", selected.get_HTML(args))
+		interface.updateContent("schematic_options2", selected.get_HTML(args)) //don't question it, it just works.
 	else
 		interface.updateContent("schematic_options", " ")
+		interface.updateContent("schematic_options2", " ")
 
 // Called by schematics to delay their actions
 /obj/item/device/rcd/proc/delay(var/mob/user, var/atom/target, var/amount)
