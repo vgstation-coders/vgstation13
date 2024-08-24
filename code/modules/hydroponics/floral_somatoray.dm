@@ -57,11 +57,16 @@
 		overlays += "floral_somatoray-emagged"
 
 /obj/item/floral_somatoray/pickup(var/mob/user)
-	user.register_event(/event/after_move, src, /obj/item/floral_somatoray/proc/cancel_ray)
+	user.register_event(/event/after_move, src, /obj/item/floral_somatoray/proc/ray_moved)
 
 /obj/item/floral_somatoray/dropped(var/mob/user)
-	user.unregister_event(/event/after_move, src, /obj/item/floral_somatoray/proc/cancel_ray)
+	user.unregister_event(/event/after_move, src, /obj/item/floral_somatoray/proc/ray_moved)
 	cancel_ray()
+
+/obj/item/floral_somatoray/proc/ray_moved()
+	var/turf/T = get_turf(src)
+	if (charging_ray && (T != charging_ray.loc))
+		cancel_ray()
 
 /obj/item/floral_somatoray/proc/cancel_ray()
 	isSomatoraying = FALSE
@@ -96,7 +101,7 @@
 	if ((T.z != U.z)||(get_dist(user,target) > world.view))
 		to_chat(user, "<span class='warning'>The [target] is too far, the radiation would dissipate before it reaches it.</span>")
 		return
-	if((!isturf(target) && !isturf(target.loc)) || !test_reach(T,U,PASSTABLE|PASSGLASS|PASSGRILLE|PASSMOB|PASSMACHINE|PASSGIRDER|PASSRAILING))
+	if((!isturf(target) && !isturf(target.loc)) || !test_reach(T,target,PASSTABLE|PASSGLASS|PASSGRILLE|PASSMOB|PASSMACHINE|PASSGIRDER|PASSRAILING))
 		to_chat(user, "<span class='warning'>You can't aim at the [target] from here.</span>")
 		return
 	var/current_gene = genes[mode]
@@ -140,9 +145,12 @@
 
 	var/atom/actual_target
 	if (target && (U == get_turf(target)))//target didn't move
-		actual_target = get_reach(T,target,PASSTABLE|PASSGLASS|PASSGRILLE|PASSRAILING)//something might still get caught in-between
+		if (T == U)
+			actual_target = target
+		else
+			actual_target = get_reach(T,target,PASSTABLE|PASSGLASS|PASSGRILLE|PASSRAILING)//something might still get caught in-between
 	if (!actual_target)
-		actual_target = get_reach(T,U,PASSTABLE|PASSGLASS|PASSGRILLE|PASSRAILING)
+		actual_target = get_reach(T,U,PASSTABLE|PASSGLASS|PASSGRILLE|PASSRAILING)//target moved away, let's try to hit something still
 
 	//Firing Ray Effect
 	if (T!=actual_target && T!=actual_target.loc)
