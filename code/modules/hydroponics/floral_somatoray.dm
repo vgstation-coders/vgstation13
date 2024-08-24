@@ -101,13 +101,13 @@
 	if ((T.z != U.z)||(get_dist(user,target) > world.view))
 		to_chat(user, "<span class='warning'>The [target] is too far, the radiation would dissipate before it reaches it.</span>")
 		return
-	if((!isturf(target) && !isturf(target.loc)) || !test_reach(T,target,PASSTABLE|PASSGLASS|PASSGRILLE|PASSMOB|PASSMACHINE|PASSGIRDER|PASSRAILING))
+	if((target != user) && ((!isturf(target) && !isturf(target.loc)) || !test_reach(T,target,PASSTABLE|PASSGLASS|PASSGRILLE|PASSMOB|PASSMACHINE|PASSGIRDER|PASSRAILING)))
 		to_chat(user, "<span class='warning'>You can't aim at \the [target] from here.</span>")
 		return
 	var/current_gene = genes[mode]
 	playsound(user,'sound/weapons/wave_reversed_and_longer.ogg', 15)
 
-
+	var/firing_angle
 	//Charging Ray Effect
 	isSomatoraying = TRUE
 	if (T!=U)
@@ -119,20 +119,19 @@
 		animate(charging_ray, alpha = 100, time = 10)
 		var/disty = U.y - T.y
 		var/distx = U.x - T.x
-		var/newangle
 		if(!disty)
 			if(distx >= 0)
-				newangle = 90
+				firing_angle = 90
 			else
-				newangle = 270
+				firing_angle = 270
 		else
-			newangle = arctan(distx/disty)
+			firing_angle = arctan(distx/disty)
 			if(disty < 0)
-				newangle += 180
+				firing_angle += 180
 			else if(distx < 0)
-				newangle += 360
+				firing_angle += 360
 		var/matrix/M = matrix()
-		charging_ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
+		charging_ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),firing_angle)
 
 	if(!do_after(user,U,charge_speed))
 		cancel_ray()
@@ -162,38 +161,26 @@
 		var/atom/movable/overlay/firing_ray = anim(target = user, a_icon = 'icons/effects/96x96.dmi', flick_anim = "floral_somatoray_hit",sleeptime = 5, offX = -32, offY = -32, col = colo, alph = 150,plane = ABOVE_LIGHTING_PLANE)
 		var/disty = actual_target.y - T.y
 		var/distx = actual_target.x - T.x
-		var/newangle
-		if(!disty)
-			if(distx >= 0)
-				newangle = 90
-			else
-				newangle = 270
-		else
-			newangle = arctan(distx/disty)
-			if(disty < 0)
-				newangle += 180
-			else if(distx < 0)
-				newangle += 360
 		var/matrix/M = matrix()
-		firing_ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),newangle)
+		firing_ray.transform = turn(M.Scale(1,sqrt(distx*distx+disty*disty)),firing_angle)
 
-		//custom tracker effect
-		spawn()
-			var/matrix/N = matrix()
-			for(var/i = 0;i < 3;i++)
-				var/obj/effect/tracker/Tr = new (T)
-				Tr.target = actual_target
-				Tr.plane = ABOVE_LIGHTING_PLANE
-				Tr.icon = 'icons/obj/hydroponics/hydro_tools.dmi'
-				if (emagged)
-					Tr.icon += genes[pick(genes)]
-				else
-					Tr.icon += genes[current_gene]
-				Tr.icon_state = "floral_somatoray_ray"
-				Tr.transform = turn(N,newangle)
-				Tr.refresh = 0.5
-				Tr.alpha = 100
-				sleep(1)
+	//custom tracker effect
+	spawn()
+		var/matrix/N = matrix()
+		for(var/i = 0;i < 3;i++)
+			var/obj/effect/tracker/Tr = new (T)
+			Tr.target = actual_target
+			Tr.plane = ABOVE_LIGHTING_PLANE
+			Tr.icon = 'icons/obj/hydroponics/hydro_tools.dmi'
+			if (emagged)
+				Tr.icon += genes[pick(genes)]
+			else
+				Tr.icon += genes[current_gene]
+			Tr.icon_state = "floral_somatoray_ray"
+			Tr.transform = turn(N,firing_angle)
+			Tr.refresh = 0.5
+			Tr.alpha = 100
+			sleep(1)
 
 	//Now to finally deal with the hit target
 	if (istype(actual_target,/obj/machinery/portable_atmospherics/hydroponics))
