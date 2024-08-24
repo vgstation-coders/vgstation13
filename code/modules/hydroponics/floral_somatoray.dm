@@ -135,11 +135,14 @@
 	if(!isSomatoraying)
 		return
 	cancel_ray()
+
 	playsound(user,'sound/weapons/wave.ogg', 30)
-	var/atom/actual_target = get_reach(T,target,PASSTABLE|PASSGLASS|PASSGRILLE|PASSRAILING)
-	//if a dense mob or machine stands in-between, it will get hit by the ray instead
+
+	var/atom/actual_target
+	if (target && (U == get_turf(target)))//target didn't move
+		actual_target = get_reach(T,target,PASSTABLE|PASSGLASS|PASSGRILLE|PASSRAILING)//something might still get caught in-between
 	if (!actual_target)
-		actual_target = U
+		actual_target = get_reach(T,U,PASSTABLE|PASSGLASS|PASSGRILLE|PASSRAILING)
 
 	//Firing Ray Effect
 	if (T!=actual_target && T!=actual_target.loc)
