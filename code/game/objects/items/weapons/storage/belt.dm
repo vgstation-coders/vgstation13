@@ -529,7 +529,7 @@
 		"/obj/item/weapon/minihoe",
 		"/obj/item/weapon/hatchet",
 		"/obj/item/weapon/bee_net",
-		"/obj/item/weapon/gun/energy/floragun",
+		"/obj/item/floral_somatoray",
 		"/obj/item/weapon/fishtools",
 		"/obj/item/fish_eggs")
 
