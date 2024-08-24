@@ -1,0 +1,33 @@
+author: DeityLink
+delete-after: true
+changes:
+- rscadd: Added Moody Lights to Hydroponic trays. This concerns not only their warning
+    lights, but also the tray's own light toggle which lights up the plant quite nicely
+    in the dark, and the plant's own bioluminescence. Plant may have custom moody
+    light overlays, but ones that don't just glow all over if the bioluminescent gene
+    is spliced into them.
+- rscadd: Alt-Click on Hydroponic trays now brings up a radial menu to quickly toggle
+    its light, its lid, or set its label.
+- rscadd: Ctrl-Click (while anchored) lets you quickly toggle the lid, which was what
+    Alt-Click previously did.
+- rscadd: Hydroponic trays now react to EMPs, having a chance to turn off their light
+    and toggle their lid.
+- imageadd: Re-sprited the hydroponic tray lids. Added animations and sounds when
+    you toggle them.
+- imageadd: Hydroponic tray sprites have been tweaked to display whether their internal
+    light is on or off.
+- imageadd: The water level in hydroponic trays now visibly goes down.
+- imageadd: Some large plants now have an alternative appearance when constrained
+    by a closed lid.
+- imageadd: If a plant exudes plasma or sleeping gas and its lid is closed, you can
+    now see the gas through the lid.
+- imageadd: Improved the way plants grow visually so that more of their sprited stages
+    may appear over the course of their growth.
+- imageadd: Hydroponic Trays now have a different sprite when they are un-anchored.
+- imageadd: Hydroponic Trays now have a visible vent when wrenched on top of a connector.
+- bugfix: Fixed some more the way Hydroponic Trays transfer gas when connected to
+    a pipenet, or when their lid is open in general. You may now even use them as
+    slow, one-way, passive vents.
+- tweak: Newly built hydroponic trays now require you to fill them with water.
+- rscadd: You can now build plastic hydroponic trays! Easy to build, but just like
+    with soil it won't provide you with any of the sensor data.
