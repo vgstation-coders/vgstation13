@@ -606,6 +606,7 @@
 	nutrient_consumption = 3
 	biolum = 1
 	biolum_colour = "#00ff00"
+	moody_lights = 1
 
 /datum/seed/berry/poison
 	name = "poisonberries"
@@ -645,6 +646,7 @@
 	yield = 4
 	potency = 10
 	growth_stages = 5
+	constrained = 1
 
 /datum/seed/nettle/death
 	name = "deathnettle"
@@ -658,6 +660,7 @@
 
 	maturation = 8
 	yield = 2
+	constrained = 1
 
 //Tomatoes/variants.
 /datum/seed/tomato
@@ -681,6 +684,7 @@
 	ideal_heat = 298
 	juicy = 1
 	splat_type = /obj/effect/decal/cleanable/tomato_smudge
+	constrained = 1
 
 /datum/seed/tomato/blood
 	name = "bloodtomato"
@@ -704,6 +708,7 @@
 	yield = 2
 	growth_stages = 2
 	juicy = 0
+	constrained = 0
 
 /datum/seed/tomato/blue
 	name = "bluetomato"
@@ -744,6 +749,7 @@
 	potency = 20
 	ideal_light = 9
 	ideal_heat = 298
+	constrained = 1
 
 /datum/seed/eggplant/eggs
 	name = "realeggplant"
@@ -814,6 +820,7 @@
 	potency = 5
 	ideal_light = 8
 	large = 0
+	constrained = 1
 
 
 /datum/seed/ambrosia/cruciatus
@@ -838,6 +845,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus)
 	mutants = null
 	chems = list(NUTRIMENT = list(1), PHYTOCARISOL = list(1,8), KATHALAI = list(1,8), COCAINE = list(1,10,1), MESCALINE = list(1,10))
+	moody_lights = 1
 
 //Mushrooms/varieties.
 /datum/seed/mushroom
@@ -888,6 +896,7 @@
 	maturation = 8
 	yield = 4
 	potency = 0
+	constrained = 1
 
 /datum/seed/mushroom/hallucinogenic
 	name = "reishi"
@@ -980,6 +989,7 @@
 	growth_stages = 4
 	biolum = 1
 	biolum_colour = "#006622"
+	moody_lights = 1
 
 /datum/seed/mushroom/walking
 	name = "walkingmushroom"
@@ -1029,6 +1039,7 @@
 	yield = 2
 	growth_stages = 4
 	nutrient_consumption = 2
+	constrained = 1
 
 /datum/seed/flower/poppy
 	name = "poppies"
@@ -1084,6 +1095,7 @@
 	potency = 30
 	biolum = 1
 	biolum_colour = "#B5ABDD"
+	moody_lights = 1
 
 	large = 0
 
@@ -1103,6 +1115,7 @@
 	potency = 30
 	biolum = 1
 	biolum_colour = "#FF9900"
+	moody_lights = 1
 
 	large = 0
 
@@ -1412,6 +1425,7 @@
 	potency = 10
 	growth_stages = 3
 	fluid_consumption = 6
+	visible_roots_in_hydro_tray = 1
 
 /datum/seed/carrots/diamond
 	name = "diamondcarrot"
@@ -1535,6 +1549,7 @@
 	potency = 10
 	growth_stages = 3
 	fluid_consumption = 6
+	constrained = 1
 
 /datum/seed/squash
 	name = "squash"
@@ -1552,6 +1567,7 @@
 	potency = 10
 	growth_stages = 3
 	fluid_consumption = 6
+	constrained = 1
 
 /datum/seed/lime
 	name = "lime"
@@ -1622,6 +1638,8 @@
 	production = 6
 	yield = 5
 
+	large = 0
+
 /datum/seed/shardlime
 	name = "shardlime"
 	seed_name = "shardlime"
@@ -1638,6 +1656,9 @@
 	biolum = 1
 	biolum_colour = "#FFFFFF"
 	thorny = 1
+	moody_lights = 1
+
+	large = 0
 
 /datum/seed/purpleshardlime
 	name = "purpleshardlime"
@@ -1655,6 +1676,9 @@
 	biolum = 1
 	biolum_colour = "#DBBEF0"
 	thorny = 1
+	moody_lights = 1
+
+	large = 0
 
 /datum/seed/grass
 	name = "grass"
@@ -1745,6 +1769,7 @@
 	growth_stages = 4
 	spread = 2
 	fluid_consumption = 0.5
+	constrained = 1
 
 /datum/seed/diona
 	name = "diona"
@@ -1764,6 +1789,7 @@
 	production = 10
 	yield = 1
 	potency = 30
+	constrained = 1
 
 /datum/seed/clown
 	name = "clown"
@@ -1781,6 +1807,7 @@
 	production = 1
 	yield = 10
 	potency = 30
+	constrained = 1
 
 /datum/seed/moshrum
 	name = "moshrum"
@@ -1802,6 +1829,7 @@
 	yield = 2
 	potency = 30
 	ideal_light = 0
+	constrained = 1
 
 /datum/seed/nofruit
 	name = "nofruit"
@@ -1958,6 +1986,7 @@
 	endurance = 25 //Fragile...
 	voracious = 1 //Eats pests!
 	juicy = 2 //And here's where the slipperiness comes in
+	constrained = 1
 
 /datum/seed/aloe
 	name = "aloe"
@@ -2023,3 +2052,4 @@
 	potency = 5
 	ideal_light = 8
 	nutrient_consumption = 2
+	constrained = 1

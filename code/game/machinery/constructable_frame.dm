@@ -278,7 +278,7 @@
 		if(3)
 			icon_state = "box_2"
 
-/obj/item/weapon/circuitboard/proc/finish_building(var/obj/machinery/new_machine, var/mob/user) //Something that will get done after the last step of construction. Currently unused.
+/obj/item/weapon/circuitboard/proc/finish_building(var/obj/machinery/new_machine, var/mob/user) //Something that will get done after the last step of construction.
 	return
 
 //Machine Frame Circuit Boards
@@ -877,6 +877,10 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/stock_parts/capacitor = 1,
 							/obj/item/weapon/reagent_containers/glass/beaker = 2,
 							/obj/item/weapon/stock_parts/console_screen = 1)
+
+/obj/item/weapon/circuitboard/hydroponics/finish_building(var/obj/machinery/portable_atmospherics/hydroponics/new_machine, var/mob/user)
+	new_machine.waterlevel = 0
+	new_machine.update_icon(TRUE)
 
 /obj/item/weapon/circuitboard/gibber
 	name = "Circuit Board (Gibber)"
