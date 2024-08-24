@@ -10,6 +10,10 @@ var/list/hydro_trays = list()
 	volume = 100
 	layer = HYDROPONIC_TRAY_LAYER
 
+	use_power = MACHINE_POWER_USE_IDLE
+	idle_power_usage = 10
+	active_power_usage = 50
+
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT
 
 	var/draw_warnings = 1 // Set to 0 to stop it from drawing the alert lights.
