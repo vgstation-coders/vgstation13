@@ -102,7 +102,7 @@
 		to_chat(user, "<span class='warning'>The [target] is too far, the radiation would dissipate before it reaches it.</span>")
 		return
 	if((!isturf(target) && !isturf(target.loc)) || !test_reach(T,target,PASSTABLE|PASSGLASS|PASSGRILLE|PASSMOB|PASSMACHINE|PASSGIRDER|PASSRAILING))
-		to_chat(user, "<span class='warning'>You can't aim at the [target] from here.</span>")
+		to_chat(user, "<span class='warning'>You can't aim at \the [target] from here.</span>")
 		return
 	var/current_gene = genes[mode]
 	playsound(user,'sound/weapons/wave_reversed_and_longer.ogg', 15)
