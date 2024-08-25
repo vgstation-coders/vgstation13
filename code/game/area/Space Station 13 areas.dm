@@ -2851,6 +2851,7 @@ var/list/shack_names = list("abandoned","deserted","forsaken","stranded","isolat
 			allthings.change_area(src, new_area)
 
 	new_area.tag = "[new_area.type]/\ref[ME]"
+	areas |= new_area
 
 	var/pick_name = pick(shack_names)
 	shack_names -= pick_name
