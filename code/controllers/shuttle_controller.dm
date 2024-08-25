@@ -42,7 +42,6 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	var/voting_cache = 0
 
 	var/warmup_sound = 0
-	var/takeoff = 0
 
 	var/was_early_launched = FALSE //had timer shortened to 10 seconds
 
@@ -343,7 +342,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 			online = 0
 
-/datum/emergency_shuttle/proc/process(tick)
+/datum/emergency_shuttle/proc/process()
 	if(!online || shutdown)
 		return
 
@@ -353,11 +352,6 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 	if(timeleft < 0)		// Sanity
 		timeleft = 0
 
-
-	for(var/obj/machinery/status_display/S in status_displays)
-		if(S.mode == 1)
-			S.update()
-
 	if(timeleft > 6)
 		warmup_sound = 0
 
@@ -366,10 +360,9 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 			/* --- Shuttle is in transit toward centcom --- */
 			if(direction == 2)
-				if(tick % 20 == 0)
-					for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
-						spawn()
-							P.shoot_exhaust(backward = 3)
+				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
+					spawn()
+						P.shoot_exhaust(backward = 3)
 
 				var/collision_imminent = FALSE
 				for(var/datum/shuttle/escape/pod/pod in escape_pods)
@@ -422,8 +415,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 				warmup_sound = 1
 				hyperspace_sounds("begin")
 			// Just before it leaves, close the damn doors!
-			if(timeleft <= 2 && !takeoff)
-				takeoff = 1
+			if(timeleft == 2 || timeleft == 1)
 				for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
 					spawn(0)
 						D.close()
