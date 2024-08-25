@@ -1,5 +1,0 @@
-author: Eneocho
-delete-after: true
-changes:
-- rscadd: Lucky coins on a string have a second chance to be pulled out successfully,
-    scaling with coin luck (not yours).
