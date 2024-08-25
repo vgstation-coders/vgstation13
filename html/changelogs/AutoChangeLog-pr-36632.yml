@@ -1,0 +1,5 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Lighting and object subsystems are now notably faster, with about 2.2 seconds
+    shaved off server initialization overall on boxstation as an example
