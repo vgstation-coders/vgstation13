@@ -3745,11 +3745,19 @@
 	required_reagents = list(FORMIC_ACID = 1, PHENOL = 1, RADIUM = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/metatable
+	name = "Metatable Mutagen"
+	id = METATABLE_MUTAGEN
+	result = METATABLE_MUTAGEN
+	required_reagents = list(UNTABLE_MUTAGEN = 1, CHARCOAL = 1)
+	required_catalysts = list(ENZYME = 5)
+	result_amount = 2
+
 /datum/chemical_reaction/metastable
 	name = "Metastable Mutagen"
 	id = METASTABLE_MUTAGEN
 	result = METASTABLE_MUTAGEN
-	required_reagents = list(MUTAGENS = 1, CHARCOAL = 1)
+	required_reagents = list(MUTAGEN = 1, CHARCOAL = 1)
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 2
 
