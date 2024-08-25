@@ -479,6 +479,68 @@
 		O.visible_message("<span class='warning'>\The [O] melts.</span>")
 		qdel(O)
 
+/datum/reagent/mutagen/metastable
+	name = "Metastable Mutagen"
+	id = METASTABLE_MUTAGEN
+	description = "Causes controlled mutations in plants."
+
+/datum/reagent/mutagen/metastable/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(30))
+			T.mutate(GENE_PHYTOCHEMISTRY, PLANT_CHEMICAL)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
+
+/datum/reagent/mutagen/metatable
+	name = "Metatable Mutagen"
+	id = METATABLE_MUTAGEN
+	description = "Causes controlled mutations in plants and tables."
+
+/datum/reagent/mutagen/metatable/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(30))
+			T.mutate(GENE_PHYTOCHEMISTRY, PLANT_CHEMICAL)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
+
+/datum/reagent/mutagen/metatable/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	if(!(O.dissolvable() == PACID))
+		return
+	var/list/tabletypes = list(/obj/structure/table,
+								/obj/structure/table/woodentable,
+								/obj/structure/table/woodentable/poker,
+								/obj/structure/table/glass,
+								/obj/structure/table/glass/plasma,
+								/obj/structure/table/plastic,
+								/obj/structure/table/reinforced,
+								/obj/structure/table/reinforced/clockwork
+								)
+	if(istype(O,/obj/structure/table))
+		var/selectedtable = pick(tabletypes)
+		O.visible_message("<span class='warning'>\The [O] suddenly changes shape!</span>")
+		new selectedtable(O.loc) //the new call for tables automatically deletes the previous one, so no need for a qdel here
+
 /datum/reagent/nanites
 	name = "Nanites"
 	id = NANITES
