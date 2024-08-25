@@ -119,10 +119,6 @@
 	explosion_block = 9999
 	walltype = "alloy"
 
-/turf/unsimulated/wall/ayy/canSmoothWith() // SMOOTH DAT WALL
-	var/static/list/smoothables = list(/turf/unsimulated/wall/ayy)
-	return smoothables
-
 /turf/unsimulated/wall/r_rock
 	name = "riveted porous rock"
 	desc = "Asteroid rock reinforced by a wall with massive rivets embedded in the struts."
@@ -130,10 +126,6 @@
 	icon_state = "rock_rf"
 	explosion_block = 9999
 	walltype = "rock_rf"
-
-/turf/unsimulated/wall/r_rock/canSmoothWith() // SMOOTH DAT WALL
-	var/static/list/smoothables = list(/turf/unsimulated/wall/r_rock)
-	return smoothables
 
 //////////////////////////////
 // FLOORS (Some ayy-themed floors, with walking sound effects!)

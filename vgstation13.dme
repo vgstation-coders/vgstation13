@@ -1759,7 +1759,6 @@
 #include "code\modules\lighting\lighting_atom.dm"
 #include "code\modules\lighting\lighting_corner.dm"
 #include "code\modules\lighting\lighting_overlay.dm"
-#include "code\modules\lighting\lighting_setup.dm"
 #include "code\modules\lighting\lighting_source.dm"
 #include "code\modules\lighting\lighting_turf.dm"
 #include "code\modules\lighting\~lighting_undefs.dm"

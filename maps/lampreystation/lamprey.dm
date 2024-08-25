@@ -324,9 +324,7 @@
 	icon = 'icons/lamprey.dmi'
 	icon_state = "statuelock_underlay"
 	opacity = 0
-
-/turf/unsimulated/wall/statuelock/canSmoothWith()
-	return null
+	smooths = 0
 
 /turf/unsimulated/wall/statuelock/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/voxpearl))
