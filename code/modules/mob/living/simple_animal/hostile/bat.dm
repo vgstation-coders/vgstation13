@@ -84,7 +84,7 @@
 	var/shuttletarget = null
 	var/enroute = 0
 
-	supernatural = 1
+	supernatural = TRUE
 
 
 /mob/living/simple_animal/hostile/scarybat/cult/Found(var/atom/the_target)
@@ -166,6 +166,7 @@
 	speed = 5
 	maxHealth = 15
 	health = 15
+	supernatural = TRUE
 	var/book_cover
 
 	harm_intent_damage = 8

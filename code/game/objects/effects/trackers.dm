@@ -8,6 +8,7 @@
 	icon_state = "soul2"
 	mouse_opacity = 0
 	animate_movement = 0
+	density = 0
 	var/absolute_X = 0
 	var/absolute_Y = 0
 	var/atom/target = null
@@ -33,6 +34,8 @@
 	color = "red"
 
 /obj/effect/tracker/proc/process_step()
+	if (gcDestroyed)
+		return
 	if(!target)
 		target = pick(player_list)
 		return
@@ -48,9 +51,11 @@
 
 	var/dist = sqrt(abs(dx)**2 + abs(dy)**2)
 	if(dist > maxdist)
+		on_expire()
 		qdel(src)
 		return
 	else if(dist < 16)
+		on_expire()
 		qdel(src)
 		return
 
@@ -70,9 +75,32 @@
 
 	speed += acceleration
 
-	x = absolute_X/WORLD_ICON_SIZE
-	y = absolute_Y/WORLD_ICON_SIZE
+	var/next_x = absolute_X/WORLD_ICON_SIZE
+	var/next_y = absolute_Y/WORLD_ICON_SIZE
+
+	if (density && ((x != next_x) || (y != next_y)))//changing tile, let's check for collisions if enabled
+		var/turf/T_old = locate(x,y,z)
+		var/turf/T_new = locate(next_x,next_y,z)
+		if (!T_new.Cross(src,T_old))
+			if (to_bump(T_new))
+				on_expire()
+				qdel(src)
+				return
+		for (var/atom/A in T_new)
+			if (A == src)
+				continue
+			if (!A.Cross(src,T_old))
+				if (to_bump(A))
+					on_expire()
+					qdel(src)
+					return
+
+	if (!gcDestroyed)
+		x = next_x
+		y = next_y
+
 	update_icon()
+	on_step()
 
 	sleep(refresh)
 	process_step()
@@ -90,6 +118,16 @@
 
 /obj/effect/tracker/singularity_pull()
 	return
+
+/obj/effect/tracker/proc/on_expire()
+	return
+
+/obj/effect/tracker/proc/on_step()
+	return
+
+//used by dense trakers such as boomerangs
+/obj/effect/tracker/to_bump(var/atom/Obstacle)
+	return FALSE
 
 /proc/make_tracker_effects(tr_source, tr_destination, var/tr_number = 10, var/custom_icon_state = "soul", var/number_of_icons = 3, var/tr_type = /obj/effect/tracker/soul, var/force_size)
 	spawn()

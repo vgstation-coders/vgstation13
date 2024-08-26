@@ -36,6 +36,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
+	supernatural = TRUE
 	faction = "forest"
 	held_items = list()
 

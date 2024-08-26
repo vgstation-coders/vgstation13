@@ -156,8 +156,10 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/throw_impact(atom/hit_atom, var/speed, mob/user, var/list/impact_whitelist)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
-		playsound(src, src.throw_impact_sound, 80, 1)
-		M.hitby(src,speed,src.dir,impact_whitelist)
+		if (M.hitby(src,speed,src.dir,impact_whitelist))
+			playsound(loc,'sound/effects/slap2.ogg', 15, 1)//grabbed the item
+		else
+			playsound(src, src.throw_impact_sound, 80, 1)
 		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by [user] ([user ? user.ckey : "what"])</font>")
 
 	else if(isobj(hit_atom))
@@ -170,8 +172,9 @@ var/global/list/ghdel_profiling = list()
 	else if(isturf(hit_atom) && !istype(src,/obj/mecha))//heavy mechs don't just bounce off walls, also it can fuck up rocket dashes
 		var/turf/T = hit_atom
 		if(T.density)
-			spawn(2)
-				step(src, turn(src.dir, 180))
+			if (isturf(loc))
+				spawn(2)
+					step(src, turn(src.dir, 180))
 			if(istype(src,/mob/living))
 				var/mob/living/M = src
 				M.take_organ_damage(10)

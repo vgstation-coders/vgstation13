@@ -1429,8 +1429,10 @@ var/list/all_bible_styles = list(
 	bookstyle = "Holy Grimoire"
 
 /datum/religion/belmont/equip_chaplain(var/mob/living/carbon/human/H)
-	H.equip_or_collect(new /obj/item/clothing/suit/vamphunter, slot_w_uniform)
-	H.equip_or_collect(new /obj/item/clothing/head/vamphunter, slot_shoes)
+	H.collect_in_backpack(new /obj/item/clothing/suit/vamphunter)
+	H.collect_in_backpack(new /obj/item/clothing/head/vamphunter)
+	H.collect_in_backpack(new /obj/item/weapon/storage/box/castlevania(H))
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater/sacredwater, slot_r_store)
 
 /datum/religion/esports
 	name = "E-Sports"

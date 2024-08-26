@@ -102,7 +102,7 @@
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
-			R.handle_splashed_reagent(self.id)
+			R.handle_splashed_reagent(self.id, method, volume)
 
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
@@ -118,7 +118,7 @@
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
-			R.handle_splashed_reagent(self.id)
+			R.handle_splashed_reagent(self.id, method, volume)
 
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase

@@ -319,6 +319,8 @@ var/list/datum/stack_recipe/silver_recipes = list ( \
 	new/datum/stack_recipe/dorf("chain", /obj/item/stack/chains, 2, 1, 20, 5, inherit_material = TRUE),
 	null,
 	blacksmithing_recipes,
+	null,
+	new/datum/stack_recipe/blacksmithing("battle cross", /obj/item/weapon/boomerang/cross,	16, time = 8 SECONDS, required_strikes = 20),
 	)
 
 /obj/item/stack/sheet/mineral/silver/New(var/loc, var/amount=null)
