@@ -9,6 +9,12 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = ARBITRARILY_LARGE_NUMBER
 	specheatcap = ARBITRARILY_LARGE_NUMBER
+	plant_nutrition = 2
+	plant_watering = 2
+	plant_pests = -5
+	plant_weeds = -5
+	plant_toxins = -5
+	plant_health = 50
 
 /datum/reagent/adminordrazine/on_mob_life(var/mob/living/carbon/M)
 	if(..())
@@ -73,14 +79,24 @@
 		if(D2.stage < 1)
 			D2.cure(M)
 
-/datum/reagent/adminordrazine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+/datum/reagent/panacea
+	name = "Panacea"
+	id = PANACEA
+	description = "A variant of Adminordrazine that has been subjected to medical sciences to make it incredibly potent. It's magic, stolen from the gods."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#EECE19" //rgb: 238, 206, 25
+	density = ARBITRARILY_LARGE_NUMBER
+	specheatcap = ARBITRARILY_LARGE_NUMBER
+
+/datum/reagent/panacea/on_mob_life(mob/living/M, alien)
 	..()
-	T.add_nutrientlevel(2)
-	T.add_waterlevel(2)
-	T.add_weedlevel(5)
-	T.add_pestlevel(5)
-	T.add_toxinlevel(5)
-	T.add_planthealth(50)
+	if(volume >= 0.2)
+		M.rejuvenate()
+
+/datum/reagent/panacea/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
+	..()
+	if((method == INGEST) && (volume >= 0.2))
+		M.rejuvenate()
 
 /datum/reagent/albuterol
 	name = "Albuterol"
@@ -276,6 +292,7 @@
 	density = 1.49033
 	specheatcap = 0.55536
 	overdose_am = 60
+	plant_toxins = -10
 
 /datum/reagent/anti_toxin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -327,10 +344,6 @@
 				if(prob(10))
 					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
 
-/datum/reagent/anti_toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(-10)
-
 /datum/reagent/arithrazine
 	name = "Arithrazine"
 	id = ARITHRAZINE
@@ -356,7 +369,7 @@
 	id = BICARIDINE
 	description = "Bicaridine is an analgesic medication and can be used to treat blunt trauma."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#5962F8" //rgb: 89, 98, 248
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.96
 	specheatcap = 0.57
@@ -385,11 +398,10 @@
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_ECOLOGY)
-			T.reagents.remove_reagent(id, 1)
-		if(prob(15))
-			T.mutate(GENE_ECOLOGY)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
@@ -467,6 +479,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
+	plant_toxins = -5
+	plant_health = 5
 
 /datum/reagent/clonexadone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -480,8 +494,6 @@ var/global/list/charcoal_doesnt_remove=list(
 
 /datum/reagent/clonexadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_toxinlevel(-5)
-	T.add_planthealth(5)
 	if(T.seed && !T.dead)
 		var/datum/seed/S = T.seed
 		var/deviation
@@ -579,6 +591,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
 	specheatcap = 3.47
+	plant_toxins = -3
+	plant_health = 3
 
 /datum/reagent/cryoxadone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -589,11 +603,6 @@ var/global/list/charcoal_doesnt_remove=list(
 		M.adjustOxyLoss(-1)
 		M.heal_organ_damage(1,1)
 		M.adjustToxLoss(-1)
-
-/datum/reagent/cryoxadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(-3)
-	T.add_planthealth(3)
 
 /datum/reagent/cryptobiolin
 	name = "Cryptobiolin"
@@ -668,7 +677,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = DEXALIN
 	description = "Dexalin is used in the treatment of oxygen deprivation."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#4CE9FF" //rgb: 74, 230, 252
 	density = 2.28
 	specheatcap = 0.91
 
@@ -690,9 +699,10 @@ var/global/list/charcoal_doesnt_remove=list(
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_XENOPHYSIOLOGY)
-			T.reagents.remove_reagent(id, 1)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
@@ -701,7 +711,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = DEXALINP
 	description = "Dexalin Plus is used in the treatment of oxygen deprivation. Its highly effective."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#4CE9FF" //rgb: 74, 230, 252
 	density = 4.14
 	specheatcap = 0.29
 
@@ -913,7 +923,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = KELOTANE
 	description = "Kelotane is a drug used to treat burns."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#C2733F" //rgb: 94, 15, 63
 	density = 2.3
 	specheatcap = 0.51
 
@@ -932,11 +942,10 @@ var/global/list/charcoal_doesnt_remove=list(
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_ECOPHYSIOLOGY)
-			T.reagents.remove_reagent(id, 1)
-		if(prob(15))
-			T.mutate(GENE_ECOPHYSIOLOGY)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 

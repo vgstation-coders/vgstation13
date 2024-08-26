@@ -2,6 +2,7 @@
 	name = "implant"
 	icon = 'icons/obj/device.dmi'
 	icon_state = "implant"
+	w_class = W_CLASS_TINY
 	_color = "b"
 	/// The mob this has been implanted into.
 	var/mob/living/imp_in

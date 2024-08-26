@@ -440,38 +440,17 @@
 	..()
 	if(istype(W, /obj/item/weapon/soap))
 		if(do_after(user, src, 1 SECONDS))
-			user.drop_item(src)
-			if(!user.drop_item(W))
-				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
-				return
-			var/obj/item/weapon/soap_sock/I = new (get_turf(loc))
-			W.transfer_fingerprints_to(I)
-			I.base_soap = W
-			I.base_sock = src
-			W.forceMove(I)
-			src.forceMove(I)
-			user.put_in_hands(I)
-			to_chat(user, "<span class='notice'>You place \the [W] into \the [src].</span>")
+			user.create_in_hands(src, new /obj/item/weapon/brick_sock/soap(loc, src, W), W, msg = "<span class='notice'>You place \the [W] into \the [src].</span>", move_in = TRUE)
 	else if(istype(W, /obj/item/stack/sheet/mineral/brick))
-		var/obj/item/stack/sheet/mineral/brick/S = W
 		if(do_after(user, src, 1 SECONDS))
-			user.drop_item(src)
-			if(!user.drop_item(S))
-				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
-				return
-			var/obj/item/weapon/brick_sock/I = new (get_turf(loc))
-			if(!S.use(1))
-				return
-			I.base_sock = src
-			src.forceMove(I)
-			user.put_in_hands(I)
-			to_chat(user, "<span class='notice'>You place a brick into \the [src].</span>")
+			user.create_in_hands(src, new /obj/item/weapon/brick_sock(loc, src), W, msg = "<span class='notice'>You place a brick into \the [src].</span>", move_in = TRUE)
 
 /obj/item/clothing/shoes/jestershoes
 	name = "Jester Shoes"
 	desc = "As worn by the clowns of old."
 	icon_state = "jestershoes"
 	item_state = "jestershoes"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/aviatorboots
 	name = "Aviator Boots"
@@ -485,12 +464,14 @@
 	desc = "Freedom isn't free, neither were these shoes."
 	icon_state = "libertyshoes"
 	item_state = "libertyshoes"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/megaboots
 	name = "DRN-001 Boots"
 	desc = "Large armored boots, very weak to large spikes."
 	icon_state = "megaboots"
 	item_state = "megaboots"
+	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/protoboots
 	name = "Prototype Boots"

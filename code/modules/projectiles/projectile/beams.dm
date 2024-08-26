@@ -57,7 +57,6 @@ var/list/beam_master = list()
 				if (PROJECTILE_COLLISION_REBOUND)
 					return new /rayCastHit(info, RAY_CAST_REBOUND)
 				if (PROJECTILE_COLLISION_MISS)
-					A.visible_message("<span class='notice'>\The [fired_beam] misses \the [A] narrowly!</span>")
 					return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 				if (PROJECTILE_COLLISION_PORTAL)
 					return new /rayCastHit(info, RAY_CAST_PORTAL)
@@ -213,7 +212,6 @@ var/list/beam_master = list()
 	eyeblur = 50
 	var/tang = 0
 	layer = PROJECTILE_LAYER
-	var/turf/last = null
 	kill_count = 12
 	var/mob/firer_mob = null
 	var/yellow = 0
@@ -279,89 +277,59 @@ var/list/beam_master = list()
 		if(count >= kill_count)
 			break
 		count++
-		var/obj/effect/overlay/beam/persist/X=new /obj/effect/overlay/beam/persist(T)
-		X.BeamSource=src
-		ouroverlays += X
+		var/obj/effect/overlay/beam/persist/lightning_segment = new /obj/effect/overlay/beam/persist(T)
+		lightning_segment.BeamSource=src
+		ouroverlays += lightning_segment
 		if((N+WORLD_ICON_SIZE*2>length) && (N+WORLD_ICON_SIZE<=length))
-			X.icon=Iend
+			lightning_segment.icon=Iend
 		else if(N==0)
-			X.icon=Istart
+			lightning_segment.icon=Istart
 		else if(N+WORLD_ICON_SIZE>length)
-			X.icon=null
+			lightning_segment.icon=null
 		else
-			X.icon=I
+			lightning_segment.icon=I
 
-		var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE/2)
-		var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
-		if(DX==0)
-			Pixel_x=0
-		if(DY==0)
-			Pixel_y=0
-		if(Pixel_x>WORLD_ICON_SIZE)
-			for(var/a=0, a<=Pixel_x,a+=WORLD_ICON_SIZE)
-				X.x++
-				Pixel_x-=WORLD_ICON_SIZE
-		if(Pixel_x<-WORLD_ICON_SIZE)
-			for(var/a=0, a>=Pixel_x,a-=WORLD_ICON_SIZE)
-				X.x--
-				Pixel_x+=WORLD_ICON_SIZE
-		if(Pixel_y>WORLD_ICON_SIZE)
-			for(var/a=0, a<=Pixel_y,a+=WORLD_ICON_SIZE)
-				X.y++
-				Pixel_y-=WORLD_ICON_SIZE
-		if(Pixel_y<-WORLD_ICON_SIZE)
-			for(var/a=0, a>=Pixel_y,a-=WORLD_ICON_SIZE)
-				X.y--
-				Pixel_y+=WORLD_ICON_SIZE
+		// We set pixel_x to the position it should be based on the angle of the lightning, then we reduce pixel_x by a factor of 32 and add it to the
+		// x position variable instead, resulting in the same overall position. Then, we do the same for y.
+		lightning_segment.pixel_x = round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE)/WORLD_ICON_SIZE)
+		lightning_segment.pixel_y = round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE)/WORLD_ICON_SIZE)
+		if(lightning_segment.pixel_x >= 0)
+			lightning_segment.x += Floor( lightning_segment.pixel_x / WORLD_ICON_SIZE )
+		else
+			lightning_segment.x += Ceiling( lightning_segment.pixel_x / WORLD_ICON_SIZE )
+		if(lightning_segment.pixel_y >= 0)
+			lightning_segment.y += Floor( lightning_segment.pixel_y / WORLD_ICON_SIZE )
+		else
+			lightning_segment.y += Ceiling( lightning_segment.pixel_y / WORLD_ICON_SIZE )
+		lightning_segment.pixel_y %= 32
+		lightning_segment.pixel_x %= 32
 
-		//Now that we've calculated the total offset in pixels, we move each beam parts to their closest corresponding turfs
-		var/x_increm = 0
-		var/y_increm = 0
 
-		while(Pixel_x >= WORLD_ICON_SIZE || Pixel_x <= -WORLD_ICON_SIZE)
-			if(Pixel_x > 0)
-				Pixel_x -= WORLD_ICON_SIZE
-				x_increm++
-			else
-				Pixel_x += WORLD_ICON_SIZE
-				x_increm--
-
-		while(Pixel_y >= WORLD_ICON_SIZE || Pixel_y <= -WORLD_ICON_SIZE)
-			if(Pixel_y > 0)
-				Pixel_y -= WORLD_ICON_SIZE
-				y_increm++
-			else
-				Pixel_y += WORLD_ICON_SIZE
-				y_increm--
-
-		X.x += x_increm
-		X.y += y_increm
-
-		X.pixel_x=Pixel_x
-		X.pixel_y=Pixel_y
-		var/turf/TT = get_turf(X.loc)
-		while((TT.timestopped || timestopped || X.timestopped) && count)
+		var/turf/TT = get_turf(lightning_segment.loc)
+		while((TT.timestopped || timestopped || lightning_segment.timestopped) && count)
 			sleep(2)
+
 		if(TT == firer.loc)
 			continue
-		if(TT.density && !passdense)
-			QDEL_NULL(X)
+		if(TT.density)
+			QDEL_NULL(lightning_segment)
 			break
 		for(var/atom/movable/O in TT)
-			if(!O.Cross(src) && !passdense)
-				qdel(X)
+			if(!O.Cross(src))
+				qdel(lightning_segment)
 				broke = 1
 				break
 		for(var/mob/living/O in TT.contents)
 			if(istype(O, /mob/living))
-				if(O.density && !passdense)
-					QDEL_NULL(X)
+				if(O.density)
+					QDEL_NULL(lightning_segment)
 					broke = 1
 					break
 		if(broke)
-			if(X)
-				QDEL_NULL(X)
+			if(lightning_segment)
+				QDEL_NULL(lightning_segment)
 			break
+
 	spawn(10)
 		for(var/atom/thing in ouroverlays)
 			if(!thing.timestopped && thing.loc && !thing.loc.timestopped)
@@ -393,7 +361,7 @@ var/list/beam_master = list()
 				var/turf/simulated/floor/f = current
 				if(f && istype(f))
 					f.break_tile()
-					f.hotspot_expose(1000,CELL_VOLUME,1)
+					f.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
 			if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
 //				to_chat(world, "deleting")
 				//del(src) //Delete if it passes the world edge
@@ -422,7 +390,6 @@ var/list/beam_master = list()
 //				to_chat(world, "breaking")
 				break
 			else
-				last = get_turf(src.loc)
 				step_towards(src, current) //Move~
 				if(src.loc != current)
 					tang = adjustAngle(get_angle(src.loc,current))
@@ -452,6 +419,8 @@ var/list/beam_master = list()
 	var/spell/lightning/our_spell
 	weaken = 0
 	stun = 0
+	stutter = 0
+	eyeblur = 0
 /obj/item/projectile/beam/lightning/spell/to_bump(atom/A as mob|obj|turf|area)
 	. = ..()
 	if(.)
@@ -466,12 +435,17 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/practice/stormtrooper
 	fire_sound = "sound/weapons/blaster-storm.ogg"
+	excessive_missing = TRUE
+	projectile_miss_chance = 99999
+	projectile_miss_message_replace = TRUE
 
-/obj/item/projectile/beam/practice/stormtrooper/on_hit(var/atom/target, var/blocked = 0)
-	if(..(target, blocked))
-		var/mob/living/L = target
-		var/message = pick("\the [src] narrowly whizzes past [L]!","\the [src] almost hits [L]!","\the [src] straight up misses its target.","[L]'s hair is singed off by \the [src]!","\the [src] misses [L] by a millimetre!","\the [src] doesn't hit","\the [src] misses its intended target.","[L] has a lucky escape from \the [src]!")
-		target.loc.visible_message("<span class='danger'>[message]</span>")
+/obj/item/projectile/beam/practice/stormtrooper/to_bump(atom/A)
+	var/selected_message = pick("\The [src] narrowly whizzes past [A]!","\The [src] almost hits [A]!",
+								"\The [src] straight up misses [A].","[A]'s hair is singed off by \the [src]!",
+								"\The [src] misses [A] by a millimetre!","\The [src] doesn't hit [A]!",
+								"\The [src] misses [A].","[A] has a lucky escape from \the [src]!")
+	projectile_miss_message = "<span class='danger'>[selected_message]</span>"
+	return ..()
 
 /obj/item/projectile/beam/scorchray
 	name = "scorch ray"
@@ -480,245 +454,49 @@ var/list/beam_master = list()
 	fire_sound = 'sound/weapons/ray1.ogg'
 
 /obj/item/projectile/beam/scorchray/on_hit(var/atom/target, var/blocked = 0)
-	if(istype(target, /mob/living))
-		var/mob/living/M = target
-		if(ishuman(target))
-			var/mob/living/carbon/human/H = M
-			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-			if (H.isDead())
-				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (To-Do: Add animations for mushmen, catbeasts, skrell, and unathi)
-					return 0
-				if(isgrey(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
+	if(!..())
+		return 0
+	var/mob/living/carbon/human/H = target
+	if(!istype(H) || !H.isDead() || !(H.species.anatomy_flags & NO_BLOOD)) //Not human, not dead or doesn't have blood
+		return 1 // This way it should only apply to the more fleshy species (To-Do: Add animations for mushmen, catbeasts, skrell, and unathi)
+	var/lying_animation = "dust-h2-nohead" //Defaults to humanoid ashing sprites if it doesn't get changed
+	var/standing_animation = "dust-h-nohead"
+	if(isgrey(H))
+		lying_animation = "dust-g2-nohead"
+		standing_animation = "dust-g-nohead"
+	else if(isvox(H))
+		lying_animation = "dust-v2-nohead"
+		standing_animation = "dust-v-nohead"
+	else if(isinsectoid(H))
+		lying_animation = "dust-i2-nohead"
+		standing_animation = "dust-i-nohead"
+	H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+	playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
+	H.drop_all() // So their gear doesn't all get deleted
+	var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+	if(head_organ)
+		head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
+	if(H.lying)
+		anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = lying_animation, sleeptime = 15)
+	else
+		anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = standing_animation, sleeptime = 15)
+	new /obj/effect/decal/cleanable/ash(get_turf(target))
+	qdel(H)
+	return 1
 
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(isvox(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(isinsectoid(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(ishuman(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1) // Their body melts, but the head flies off
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-		else
-			return 1
-
-/obj/item/projectile/beam/immolationray
+/obj/item/projectile/beam/scorchray/immolationray
 	name = "immolation ray"
 	icon_state = "immolationray"
 	damage = 45
-	fire_sound = 'sound/weapons/ray1.ogg'
 
-/obj/item/projectile/beam/immolationray/on_hit(var/atom/target, var/blocked = 0)
-	if(istype(target, /mob/living))
-		var/mob/living/M = target
-		if(ishuman(target))
-			var/mob/living/carbon/human/H = M
-			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-			if (H.isDead())
-				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (To-Do: Add animations for mushmen, catbeasts, skrell, and unathi)
-					return 0
-				if(isgrey(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(isvox(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(isinsectoid(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(ishuman(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-		else
-			return 1
-
-/obj/item/projectile/beam/immolationray/upgraded // Exclusively used by the hoverdisc drone
+/obj/item/projectile/beam/scorchray/immolationray/upgraded // Exclusively used by the hoverdisc drone
 	damage = 55
 	destroy = 1
 
-/obj/item/projectile/beam/atomizationray
+/obj/item/projectile/beam/scorchray/atomizationray
 	name = "atomization ray"
 	icon_state = "atomray"
 	damage = 40
-	fire_sound = 'sound/weapons/ray1.ogg'
-
-/obj/item/projectile/beam/atomizationray/on_hit(var/atom/target, var/blocked = 0)
-	if(istype(target, /mob/living))
-		var/mob/living/M = target
-		if(ishuman(target))
-			var/mob/living/carbon/human/H = M
-			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-			if (H.isDead())
-				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (To-Do: Add animations for mushmen, catbeasts, skrell, and unathi)
-					return 0
-				if(isgrey(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(isvox(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(isinsectoid(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(ishuman(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-		else
-			return 1
 
 /obj/item/projectile/beam/lightlaser
 	name = "light laser"

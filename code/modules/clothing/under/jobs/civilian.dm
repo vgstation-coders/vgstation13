@@ -248,7 +248,7 @@
 	item_state = "bridgeofficer"
 	_color = "bridgeofficer"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 
 

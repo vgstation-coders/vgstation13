@@ -147,14 +147,8 @@
 /obj/item/robot_parts/robot_suit/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if(istype(W, /obj/item/stack/sheet/metal) && !l_arm && !r_arm && !l_leg && !r_leg && !chest && !head)
-		var/obj/item/weapon/ed209_assembly/B = new /obj/item/weapon/ed209_assembly
-		B.forceMove(get_turf(src))
-		to_chat(user, "You armed the robot frame")
-		W:use(1)
-		if (user.get_inactive_hand()==src)
-			user.before_take_item(src)
-			user.put_in_inactive_hand(B)
-		qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/ed209_assembly, W, 1, "You armed the robot frame")
+		return
 	if(istype(W, /obj/item/robot_parts/l_leg))
 		if(src.l_leg)
 			return

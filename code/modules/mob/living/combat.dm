@@ -150,3 +150,19 @@
 
 /mob/living/proc/calcTackleRange()
 	return 0
+
+//Attacker accuracy will decrease the miss chance
+//Defender accuracy will increase the miss chance
+//Used in /mob/living/carbon/proc/attacked_by(), in /code/modules/mob/living/carbon/combat.dm
+/proc/get_total_accuracy_modifier(var/mob/living/carbon/attacker, var/mob/living/carbon/defender)
+	var/total_accuracy = 0
+	var/attacker_accuracy_modifier = attacker.get_attacker_accuracy_increase()
+	var/defender_accuracy_modifier = defender.get_defender_accuracy_decrease()
+	total_accuracy = total_accuracy - attacker_accuracy_modifier + defender_accuracy_modifier
+	return total_accuracy
+
+/mob/living/proc/get_attacker_accuracy_increase()
+	return 0
+
+/mob/living/proc/get_defender_accuracy_decrease()
+	return 0

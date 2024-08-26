@@ -24,8 +24,7 @@
 /turf/simulated/wall/shuttle/isSmoothableNeighbor(atom/A)
 	if (get_area(A) != get_area(src))
 		return 0
-
-	return ..()
+	return is_type_in_list(A, canSmoothWith()) && !(cannotSmoothWith() && (is_type_in_list(A, cannotSmoothWith())))
 
 /turf/simulated/wall/shuttle/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
@@ -85,6 +84,8 @@
 /obj/structure/shuttle/diag_wall/initialize()
 	var/turf/T = get_turf(src)
 	if(T)
+		if(!T.dynamic_lighting)
+			update_moody_light('icons/lighting/moody_lights.dmi', "diag_wall")
 		T.dynamic_lighting = 1
 		if(SSlighting && SSlighting.initialized && !T.lighting_overlay)
 			new /atom/movable/lighting_overlay(T, TRUE)
@@ -109,6 +110,9 @@
 	..()
 	T = get_turf(destination)
 	if(T)
+		kill_moody_light()
+		if(!T.dynamic_lighting)
+			update_moody_light('icons/lighting/moody_lights.dmi', "diag_wall")
 		T.dynamic_lighting = 1
 		if(!T.lighting_overlay)
 			new /atom/movable/lighting_overlay(T, TRUE)

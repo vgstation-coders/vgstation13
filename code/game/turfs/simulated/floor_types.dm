@@ -386,9 +386,13 @@
 
 /turf/simulated/floor/beach/water/New()
 	..()
-	var/image/water = image("icon"='icons/misc/beach.dmi',"icon_state"="water5")
-	water.plane = ABOVE_HUMAN_PLANE
-	overlays += water
+	if(!BW)
+		BW = new
+	vis_contents.Add(BW)
+
+/turf/simulated/floor/beach/water/Destroy()
+	vis_contents.Cut()
+	..()
 
 /turf/simulated/floor/grass
 	name = "Grass patch"

@@ -54,6 +54,17 @@
 	particle_systems -= particle_string
 
 //-----------------------------------------------
+/atom/proc/stop_particles(var/particle_string)
+	if (!particle_string) //If we don't specify which particle we want to stop, just stop all of them
+		for (var/string in particle_systems)
+			stop_particles(string)
+	if (!(particle_string in particle_systems))
+		return
+
+	var/obj/abstract/particles_holder/holder = particle_systems[particle_string]
+	holder.particles.spawning = 0
+
+//-----------------------------------------------
 /atom/proc/transfer_particles(var/atom/target, var/particle_string)
 	if (!target)
 		return
@@ -116,6 +127,10 @@
 			holder.particles.color = new_value
 		if (PVAR_SCALE)
 			holder.particles.scale = new_value
+		if (PVAR_LIFESPAN)
+			holder.particles.lifespan = new_value
+		if (PVAR_FADE)
+			holder.particles.fade = new_value
 		if (PVAR_PLANE)
 			holder.plane = new_value
 		if (PVAR_LAYER)
@@ -161,6 +176,8 @@ var/list/particle_string_to_type = list(
 	PS_NARSIEHASRISEN1 = /particles/narsie_has_risen,
 	PS_NARSIEHASRISEN2 = /particles/narsie_has_risen/next,
 	PS_NARSIEHASRISEN3 = /particles/narsie_has_risen/last,
+	PS_ZAS_DUST = /particles/zas_dust,
+	PS_DANDELIONS = /particles/dandelions,
 	)
 
 /particles
@@ -373,3 +390,99 @@ var/list/particle_string_to_type = list(
 	icon_state = "risen"
 
 	plane = ABOVE_HUD_PLANE
+
+//ZAS DUST
+/particles/zas_dust
+	width = 96
+	height = 96
+	count = 20
+	spawning = 2
+
+	color = "#FFFFFF99"
+	lifespan = 1 SECONDS
+	fade = 0.5 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "zas_dust"
+	position = generator("box", list(-15,-15), list(15,15))
+	velocity = list(0,0)
+
+/turf
+	var/last_dust_time = 0
+	var/last_dust_strength = 0
+
+/turf/proc/flying_dust(var/turf/dest, var/wind_strength = 3, var/wind_opacity = 128)
+	if (last_dust_time == SSair.times_fired && last_dust_strength > wind_strength)
+		return
+	last_dust_time = SSair.times_fired
+	last_dust_strength = wind_strength
+	var/this_dust_time = last_dust_time
+	add_particles(PS_ZAS_DUST)
+	adjust_particles(PVAR_SPAWNING, 2, PS_ZAS_DUST)
+	adjust_particles(PVAR_VELOCITY, dir2dust(dest,wind_strength), PS_ZAS_DUST)
+	adjust_particles(PVAR_LIFESPAN, 3 SECONDS / abs(wind_strength), PS_ZAS_DUST)
+	adjust_particles(PVAR_FADE, 1.5 SECONDS / abs(wind_strength), PS_ZAS_DUST)
+	adjust_particles(PVAR_COLOR, "#FFFFFF[num2hex(wind_opacity)]", PS_ZAS_DUST)
+
+	spawn(SSair.wait*2)
+		if (last_dust_time == this_dust_time)
+			adjust_particles(PVAR_SPAWNING, 0, PS_ZAS_DUST)
+
+/turf/proc/dir2dust(var/turf/dest, var/wind_strength = 3)
+	if(!dest)
+		return list(0,0)
+	switch(get_dir(src, dest))
+		if (NORTH)
+			return list(0,wind_strength)
+		if (SOUTH)
+			return list(0,-wind_strength)
+		if (EAST)
+			return list(wind_strength,0)
+		if (WEST)
+			return list(-wind_strength,0)
+		if (NORTHEAST)
+			return list(wind_strength,wind_strength)
+		if (SOUTHEAST)
+			return list(wind_strength,-wind_strength)
+		if (NORTHWEST)
+			return list(-wind_strength,wind_strength)
+		if (SOUTHWEST)
+			return list(-wind_strength,-wind_strength)
+		else
+			return list(0,0)
+
+
+//DANDELIONS
+/particles/dandelions
+	width = 96
+	height = 96
+	count = 10
+	spawning = 1
+
+	lifespan = 3 SECONDS
+	fadein = 0.3 SECONDS
+	fade = 0.5 SECONDS
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "dandelions"
+	position = generator("box", list(-12,-12), list(12,12))
+	velocity = list(0,0)
+	friction = 0.1
+	drift = generator("box", list(-0.1,-0.1), list(0.1,0.1))
+
+	plane = ABOVE_HUMAN_PLANE
+
+/turf
+	var/last_pollen_time = 0
+
+/turf/proc/flying_pollen(var/turf/dest, var/wind_strength = 3, var/pollen = PS_DANDELIONS)
+	if (last_pollen_time == world.time)
+		return
+	last_pollen_time = world.time
+	var/this_pollen_time = last_pollen_time
+
+	add_particles(pollen)
+	adjust_particles(PVAR_SPAWNING, 1, pollen)
+	adjust_particles(PVAR_VELOCITY, dir2dust(dest,wind_strength), pollen)
+
+	spawn(SSair.wait)
+		if (last_pollen_time == this_pollen_time)
+			adjust_particles(PVAR_SPAWNING, 0, pollen)

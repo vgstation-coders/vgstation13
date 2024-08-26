@@ -321,7 +321,7 @@
 		A.area_turfs -= src
 	if (!N || !allow)
 		return
-
+	remove_particles()
 	var/datum/gas_mixture/env
 
 	var/old_opacity = opacity

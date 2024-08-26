@@ -484,6 +484,11 @@
 		to_chat(user, "<span class='notice'>You [(storage_locked)? "" : "un"]lock \the [src] with \the [stkey].</span>")
 		return
 
+	if(istype(W, /obj/item/weapon/hand_labeler))
+		var/obj/item/weapon/hand_labeler/L = W
+		if(L.mode)
+			return
+
 	if(!can_be_inserted(W))
 		if(istype(W, /obj/item/weapon/glue))
 			return

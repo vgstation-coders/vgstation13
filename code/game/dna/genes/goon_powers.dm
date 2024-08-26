@@ -21,6 +21,17 @@
 /datum/dna/gene/basic/psychic_resist/New()
 	block = PSYRESISTBLOCK
 
+/datum/dna/gene/basic/psychic_resist/activate(var/mob/M, var/connected, var/flags)
+	..()
+	INVOKE_EVENT(M, /event/camera_sight_changed, "mover" = M)
+	return 1
+
+/*/datum/dna/gene/basic/psychic_resist/deactivate(var/mob/M, var/connected, var/flags)
+	if(!..())
+		return 0
+	INVOKE_EVENT(M, /event/camera_sight_changed, "mover" = M)
+	return 1*/ // Allows retracking, uncomment to enable
+
 /////////////////////////
 // Stealth Enhancers
 /////////////////////////
@@ -57,6 +68,7 @@
 /datum/dna/gene/basic/stealth/chameleon/deactivate(var/mob/M, var/connected, var/flags)
 	if(!..())
 		return 0
+	M.alphas["chameleon_stealth"] = 255
 	M.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 	return 1
 

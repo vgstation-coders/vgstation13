@@ -29,18 +29,8 @@
 		if(W.is_hot())
 			to_chat(user, "You slightly melt the plastic on the top of \the [src] with \the [W].")
 			melted = 1
-	if(melted)
-		if(istype(W, /obj/item/stack/rods))
-			to_chat(user, "You press \the [W] into the melted plastic on the top of \the [src].")
-			var/obj/item/stack/rods/R = W
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/gun_assembly/I = new (get_turf(user), "spraybottle_assembly")
-				user.put_in_hands(I)
-			else
-				new /obj/item/weapon/gun_assembly(get_turf(src.loc), "spraybottle_assembly")
-			R.use(1)
-			qdel(src)
+	else if(istype(W, /obj/item/stack/rods))
+		user.create_in_hands(src, new /obj/item/weapon/gun_assembly(loc, "spraybottle_assembly"), W, msg = "You press \the [W] into the melted plastic on the top of \the [src].")
 
 
 /obj/item/weapon/reagent_containers/spray/afterattack(atom/A as mob|obj, mob/user as mob, var/adjacency_flag, var/click_params)

@@ -146,7 +146,7 @@
 /obj/machinery/computer/general_air_control/atmos_automation/Topic(href,href_list)
 	if(..())
 		return 1
-	if(secret_check_two(usr, href_list))
+	if(AAC_age_check(usr, href_list))
 		return 1
 	if(href_list["on"])
 		on = !on
@@ -291,6 +291,12 @@
 
 		onclose(usr, "AAC_assemblies")
 
+/obj/machinery/computer/general_air_control/atmos_automation/proc/AAC_age_check(var/mob/M,var/list/href_list)
+	if(href_list["read"])
+		if(M.client && !M.client.holder && M.client.player_age < 7)
+			to_chat(M, "<span class=warning>Importing functionality is unavailable for new personnel. Please wait an additional [7 - M.client.player_age] days before use.</span>")
+			message_admins("[key_name(M)] attempted to import an AAC script despite their player age of [M.client.player_age].")
+			return TRUE
 
 /obj/machinery/computer/general_air_control/atmos_automation/proc/MakeCompare(var/datum/automation/a, var/datum/automation/b, var/comparetype)
 	var/datum/automation/compare/compare=new(src)

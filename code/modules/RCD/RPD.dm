@@ -104,6 +104,14 @@
 
 	modifiers -= list("alt", "shift", "ctrl")
 
+/obj/item/device/rcd/rpd/attack_self(var/mob/user)
+	..()
+	for(var/cat in schematics)
+		var/list/L = schematics[cat]
+		for(var/datum/rcd_schematic/C in L)
+			for(var/client/client in interface.clients)
+				C.send_list_assets(client)
+	
 
 /obj/item/device/rcd/rpd/rebuild_ui()
 	var/dat = ""
@@ -129,11 +137,12 @@
 		dat += "<b>[cat]:</b><ul style='list-style-type:disc'>"
 		var/list/L = schematics[cat]
 		for(var/datum/rcd_schematic/C in L)
+			for(var/client/client in interface.clients)
+				C.send_list_assets(client)
 			var/turf/T = get_turf(src)
 			if(!T || ((C.flags & RCD_Z_DOWN) && !HasBelow(T.z)) || ((C.flags & RCD_Z_UP) && !HasAbove(T.z)))
 				continue
 			dat += C.schematic_list_line(interface,FALSE,src.selected==C)
-
 		dat += "</ul>"
 
 	interface.updateLayout(dat)

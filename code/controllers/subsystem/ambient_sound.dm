@@ -19,7 +19,9 @@ var/datum/subsystem/ambientsound/SSambience
 		return
 	for (var/client/C in clients)
 		if(C && (C.prefs.toggles & SOUND_AMBIENCE))
-			C.handle_ambience()
+			var/mob/new_player/NP = C.mob
+			if(!istype(NP))
+				C.handle_ambience()
 
 /*
 Ambience system.

@@ -151,13 +151,10 @@
 			if(!I || !src)
 				return
 
-			if(!user.drop_item(I))
-				to_chat(user, "<span class='warning'>You can't let go of \the [I]! You quickly unsecure it from \the [src].</span>")
+			if(!user.drop_item(I, failmsg = "<span class='warning'>You can't let go of \the [I]! You quickly unsecure it from \the [src].</span>"))
 				return
 
-			user.drop_item(src, force_drop = 1)
-
-			var/obj/item/weapon/spear/S = new /obj/item/weapon/spear
+			var/obj/item/weapon/spear/S = new /obj/item/weapon/spear(loc)
 
 			S.base_force = 5 + I.force
 			S.force = S.base_force
@@ -178,36 +175,13 @@
 			if(prefix)
 				S.name = "[prefix] [S.name]"
 
-			user.put_in_hands(S)
-			user.visible_message("<span class='danger'>[user] creates a spear with \a [I] and \a [src]!</span>",\
-			"<span class='notice'>You fasten \the [I] to the top of \the [src], creating \a [S].</span>")
-
-			QDEL_NULL(I)
-			qdel(src)
+			user.create_in_hands(src, S, I, vismsg = "<span class='danger'>[user] creates a spear with \a [I] and \a [src]!</span>", msg = "<span class='notice'>You fasten \the [I] to the top of \the [src], creating \a [S].</span>")
 
 	else if(I.is_wirecutter(user))
-		var/obj/item/weapon/melee/baton/cattleprod/P = new /obj/item/weapon/melee/baton/cattleprod
-
-		user.before_take_item(I)
-		user.before_take_item(src)
-
-		user.put_in_hands(P)
-		to_chat(user, "<span class='notice'>You fasten the wirecutters to the top of the rod with the cable, prongs outward.</span>")
-		qdel(I)
-		I =  null
-		qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/melee/baton/cattleprod, I, msg = "<span class='notice'>You fasten the wirecutters to the top of the rod with the cable, prongs outward.</span>")
 
 	else if(istype(I, /obj/item/stack/rods))
-		to_chat(user, "You fasten the metal rods together.")
-		var/obj/item/stack/rods/R = I
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/rail_assembly/Q = new (get_turf(user))
-			user.put_in_hands(Q)
-		else
-			new /obj/item/weapon/rail_assembly(get_turf(src.loc))
-		R.use(1)
-		qdel(src)
+		user.create_in_hands(src, /obj/item/weapon/rail_assembly, I, msg = "You fasten the metal rods together.")
 
 /obj/item/weapon/kitchen/utensil/knife/tactical
 	name = "tactical knife"
@@ -523,6 +497,40 @@
 	if(user)
 		user.update_inv_hands()
 	return
+
+/obj/item/weapon/melee/wooden_club
+	name = "wooden club"
+	desc = "Grug go bonk!"
+	icon_state = "woodenclub"
+	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 14
+	throwforce = 12
+	throw_speed = 1
+	throw_range = 7
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
+	var/brain_damage_amount = 3
+
+/obj/item/weapon/melee/wooden_club/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	var/mob/living/living_target = target
+	if(istype(living_target))
+		living_target.adjustBrainLoss(brain_damage_amount)
+
+/obj/item/weapon/melee/bone_club
+	name = "bone club"
+	desc = "It's more of a hammer, really."
+	icon_state = "boneclub"
+	hitsound = "sound/weapons/baseball_hit_flesh.ogg"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 19
+	throwforce = 12
+	throw_speed = 1
+	throw_range = 7
+	w_class = W_CLASS_LARGE
+	w_type = RECYK_BIOLOGICAL
+	flammable = FALSE
 
 /obj/item/weapon/bat
 	name = "baseball bat"

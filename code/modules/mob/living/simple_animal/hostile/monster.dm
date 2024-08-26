@@ -80,9 +80,9 @@
 /mob/living/simple_animal/hostile/monster/cyber_horror/UnarmedAttack(atom/A)
 	if(ismob(A))
 		delayNextAttack(10)
-	if(A.attack_animal(src)) //Returns 0 if blocked
+	if(A.attack_animal(src)) //Returns 0 if blocked, returns 1 if the attack went through
 		var/mob/living/L = A
-		if(L.reagents)
+		if(istype(L) && L.reagents)
 			if(prob(nanobot_chance))
 				visible_message("<b><span class='warning'>[src] injects something into [L]!</span>")
 				L.reagents.add_reagent(MEDNANOBOTS, 2)

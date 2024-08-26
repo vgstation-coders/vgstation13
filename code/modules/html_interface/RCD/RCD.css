@@ -199,4 +199,10 @@ left:160px;
 	font-weight:bold;
 }
 
-
+#list_icon{
+	background-color:rgba(0,0,0,0);
+	color:rgba(0,0,0,0);
+	border:none;
+	height:1em;
+	image-rendering:pixelated;
+}
