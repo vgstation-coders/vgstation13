@@ -1,0 +1,8 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- bugfix: Ghosts can now properly admin possess objects.
+- bugfix: Deleting an item now properly releases possession, if any.
+- tweak: Posessing and releasing is now handled in one verb.
+- tweak: The possession verb now releases the mob from the previous object it was
+    possessing.
