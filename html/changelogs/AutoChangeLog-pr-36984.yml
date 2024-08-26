@@ -1,0 +1,4 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- bugfix: The chameleon DNA gene now properly sets mob alpha back to normal when deactivated.
