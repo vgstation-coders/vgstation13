@@ -253,7 +253,7 @@
 	//Yeah nah let's put you in a blacksmith_placeholder
 	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc, S, R, req_strikes)
 	I.name = "unforged [R.name]"
-	return 0
+	return I
 
 var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes", list(
 	new/datum/stack_recipe/blacksmithing("hammer head", /obj/item/item_head/hammer_head,			4, time = 5 SECONDS, required_strikes = 6),
