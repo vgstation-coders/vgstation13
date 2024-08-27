@@ -8,24 +8,16 @@
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "grille0"
 	. = ..()
-	if(~flags & ATOM_INITIALIZED)
-		if(full_path)
-			new full_path(loc)
+	if(full_path)
+		new full_path(loc)
 
-		for(var/direction in cardinal)
-			var/turf/there = get_step(src, direction)
-			var/found_connection = FALSE
-			if(locate(/obj/structure/grille/window_spawner) in there)
-				found_connection = TRUE
-			else if(locate(/obj/structure/grille) in there)
-				for(var/obj/structure/window/window_there in there)
-					if(window_there.type == window_path && window_there.dir == get_dir(there, src))
-						found_connection = TRUE
-						break
-			if(!found_connection)
-				var/obj/structure/window/new_window = new window_path(loc)
-				new_window.change_dir(direction)
-				new_window.update_nearby_tiles()
+	for(var/direction in cardinal)
+		var/turf/there = get_step(src, direction)
+		if((locate(/obj/structure/grille) in there) && get_area(src) == get_area(there))
+			continue
+		var/obj/structure/window/new_window = new window_path(loc)
+		new_window.change_dir(direction)
+		new_window.update_nearby_tiles()
 
 /obj/structure/grille/window_spawner/full
 	full_path = /obj/structure/window/full
