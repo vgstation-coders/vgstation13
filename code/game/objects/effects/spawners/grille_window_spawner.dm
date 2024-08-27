@@ -13,11 +13,10 @@
 
 	for(var/direction in cardinal)
 		var/turf/there = get_step(src, direction)
-		if((locate(/obj/structure/grille) in there) && get_area(src) == get_area(there))
+		if(get_area(src) == get_area(there) && (locate(/obj/structure/grille) in there))
 			continue
 		var/obj/structure/window/new_window = new window_path(loc)
-		new_window.change_dir(direction)
-		new_window.update_nearby_tiles()
+		new_window.dir = direction
 
 /obj/structure/grille/window_spawner/full
 	full_path = /obj/structure/window/full
