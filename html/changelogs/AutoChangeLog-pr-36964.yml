@@ -1,0 +1,9 @@
+author: jwhitak
+delete-after: true
+changes:
+- rscadd: Blacksmiths can now estimate the quality of their result before quenching
+    their work by examining it.
+- rscadd: Smithing now has several new visual effects, including lighting, hot sparks,
+    and visibly different unforged items.
+- bugfix: Fixed several blacksmithing bugs, including lighting cold forges that can't
+    heat anything.
