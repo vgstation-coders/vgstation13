@@ -1,23 +1,4 @@
 //Biomes and their temperature-precipitation mappings, flora, and structures are defined here.
-var/list/datum/procgen/biome/biomes = list(
-	/datum/procgen/biome/permafrost,
-	/datum/procgen/biome/ice_sheet,
-	/datum/procgen/biome/tundra,
-	/datum/procgen/biome/taiga,
-	/datum/procgen/biome/forest,
-	/datum/procgen/biome/plains,
-	/datum/procgen/biome/shrubland,
-	/datum/procgen/biome/swamp,
-	/datum/procgen/biome/rainforest,
-	/datum/procgen/biome/savanna,
-	/datum/procgen/biome/desert,
-	/datum/procgen/biome/magma,
-	/datum/procgen/biome/ash,
-	/datum/procgen/biome/asteroid,
-	/datum/procgen/biome/comet,
-	/datum/procgen/biome/rock
-)
-
 /datum/procgen/biome
 	var/list/temperature = list()
 	var/list/precipitation = list()

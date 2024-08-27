@@ -1,5 +1,18 @@
 //Procedural celestial body generator
 
+var/list/datum/zLevel/available_zlevels = list(
+	/datum/zLevel/ProcGenL1,
+	/datum/zLevel/ProcGenL2,
+	/datum/zLevel/ProcGenM1,
+	/datum/zLevel/ProcGenM2,
+	/datum/zLevel/ProcGenM3,
+	/datum/zLevel/ProcGenS1,
+	/datum/zLevel/ProcGenS2,
+	/datum/zLevel/ProcGenS3,
+	/datum/zLevel/ProcGenS4,
+	/datum/zLevel/ProcGenS5
+)
+
 /**
  * Outputs a Voronoi Diagram in matrix form given map size and number of seed points.
  *
@@ -47,86 +60,60 @@
 /datum/procgen
 	var/name
 	var/desc
-
-/datum/procgen/generation
-	var/datum/procgen/celestial_body/body
-	var/datum/procgen/atmosphere/atmosphere
-	var/preciptation
-	var/temperature
+	var/list/datum/procgen/space_object/space_objects
+	var/list/datum/procgen/atmosphere/atmospheres
+	var/list/datum/procgen/biome/biomes
+	var/datum/procgen/space_object/space_obj
+	var/map_size
 	var/civilization
+
+//All lists are generated at runtime to assist in adding new content easier.
+/datum/procgen/New()
+	space_objects = typesof(/datum/procgen/space_object) - /datum/procgen/space_object
+	atmospheres = typesof(/datum/procgen/atmosphere) - /datum/procgen/atmosphere
+	biomes = typesof(/datum/procgen/biome) - /datum/procgen/biome
 
 /datum/procgen/generation/proc/generate()
 	//Determine top-level celestial body characteristics
-	body = get_body_type()
-	atmosphere = get_atmosphere(body)
-	preciptation = get_precipitation(atmosphere)
-	temperature = get_temperature()
-	civilization = get_civilization(body)
+	map_size = pick_zlevel()
+	space_obj = pick_space_object(map_size)
+	space_obj.initialize_planet()
+	space_obj.generate_biome_map(map_size)
 
-	//Determine map size and generate a Voronoi Diagram sized to fit the map.
-	var/new_map_size = pick(body.map_size)
-	var/num_seeds
-	switch(new_map_size)
-		if(PG_SMALL)
-			num_seeds = rand(2,4)
-		if(PG_MEDIUM)
-			num_seeds = rand(3,8)
-		if(PG_LARGE)
-			num_seeds = rand(4,16)
-	var/list/voronoi_matrix = generate_voronoi(new_map_size,num_seeds)
+/datum/procgen/generation/proc/pick_zlevel()
+	var/list/available_maps = list()
+// 	for(var/datum/zLevel/Z in available_zlevels)
+// 		if(!Z)
+// 			CRASH("Procedural generation attempted with no available maps!")
+// 		else
+// 			available_maps |= Z.x
+	var/new_map_size
+	var/i = 0
+	while(!new_map_size)
+		var/pot_map_size = pick(space_obj.valid_map_sizes)
+		if(!(pot_map_size in available_maps))
+			if(i>=20) //circuit breaker
+				CRASH("Attempted to spawn an invalid space object given available map sizes.")
+			else
+				i++
+				continue
+		else
+			new_map_size = pot_map_size
+	return new_map_size
 
-	///build_map()
-		//Select an available z-level to use.
-		//Spawn areas for each biome in accordance with the Voronoi Diagram.
-		//Spawn base turfs within each biome.
-		//Spawn solid walls within each biome, if applicable.
-		//Apply biome smoothening.
-		//Carve out caves or clearings irrespective of biome borders.
-
-	///decorate_map()
-		//Spawn biome-specific plants and decorations.
-
-	///populate_map()
-		//Spawn mobs
-		//Maybe tie into civilization level?
-		//Maybe add danger level?
-
-	//spawn_loot()
-		//spawn items in accordance with civilization level, both on the ground and in containers
-
-	//generate_vaults()
-		//spawn pre-existing vaults on the map
-
-/datum/procgen/generation/proc/get_body_type()
-	var/list/datum/procgen/celestial_body/potential_bodies = list()
-	for(var/datum/procgen/celestial_body/B in celestial_bodies)
-		if(!B.weight || B.weight == 0)
+/datum/procgen/generation/proc/pick_space_object(var/list/map_sizes)
+	var/list/datum/procgen/space_object/potential_objects = list()
+	for(var/datum/procgen/space_object/S in space_objects)
+		if(!S.weight || S.weight == 0)
 			continue
 		else
-			potential_bodies += B
-			potential_bodies[B] = B.weight
-	return pickweight(potential_bodies)
-
-/datum/procgen/generation/proc/get_atmosphere(var/datum/procgen/celestial_body/B)
-	return pick(B.body_atmospheres)
-
-/datum/procgen/generation/proc/get_precipitation(var/datum/procgen/celestial_body/B)
-	return pick(B.body_precipitation)
-
-/datum/procgen/generation/proc/get_temperature()
-	return pick(PG_FROZEN,PG_COLD,PG_BRISK,PG_TEMPERATE,PG_WARM,PG_HOT,PG_LAVA)
-
-/datum/procgen/generation/proc/get_civilization(var/datum/procgen/celestial_body/B)
-	var/civ_out
-	var/list/datum/procgen/civilization/potential_civs = list()
-	if(istype(B, PG_ASTEROID) || istype(B, PG_MOON))
-		civ_out = PG_UNEXPLORED
-	else
-		for(var/datum/procgen/civilization/C in civilizations)
-			if(!C.weight || C.weight == 0)
-				continue
+			var/valid_msize = FALSE
+			for(var/msize in S.map_size)
+				if(msize in map_sizes)
+					valid_msize = TRUE
+			if(valid_msize)
+				space_objects += S
+				space_objects[S] = S.weight
 			else
-				potential_civs += C
-				potential_civs[C] = C.weight
-		civ_out = pickweight(potential_civs)
-	return civ_out
+				continue
+	return pickweight(space_objects)

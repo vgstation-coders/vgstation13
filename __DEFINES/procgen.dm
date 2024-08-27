@@ -49,3 +49,8 @@
 #define PG_YOUNG_CIV	/datum/procgen/civilization/young
 #define PG_OLD_CIV		/datum/procgen/civilization/old
 #define PG_FUTURE_CIV	/datum/procgen/civilization/future
+
+//Altitude
+#define PG_LOW_ALT	-50
+#define PG_MED_ALT	0
+#define PG_HIGH_ALT	50
