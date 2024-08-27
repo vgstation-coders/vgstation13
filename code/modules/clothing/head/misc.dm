@@ -839,3 +839,9 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
 	icon_state = "hunter"
 	item_state = "hunter_headband"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
+
+/obj/item/clothing/head/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/head/hunter/rangeTackleBonus()
+	return 1

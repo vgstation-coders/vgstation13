@@ -19,11 +19,11 @@
 	w_type = RECYK_WOOD
 	flammable = TRUE
 
-	var/mob/originator = null
+	var/mob/living/carbon/originator = null
 	var/thrown = FALSE
 	var/throw_mult = 1
-	var/stun = 2
-	var/weaken = 3
+	var/stun = 0
+	var/weaken = 2
 	var/sound_throw = 'sound/weapons/boomerang_start.ogg'
 	var/sound_loop = 'sound/weapons/boomerang_loop.ogg'
 	var/sound_bump = 'sound/weapons/kick.ogg'
@@ -36,6 +36,33 @@
 
 /obj/item/weapon/boomerang/proc/return_check()//lets you add conditions for the boomerang to come back
 	return TRUE
+
+/obj/item/weapon/boomerang/proc/apply_status_effects(var/mob/living/carbon/C, var/minimal_effect = 0)
+	if (ishuman(C))
+		var/mob/living/carbon/human/H = C
+		if(istype(H.head, /obj/item/clothing/head/helmet))
+			return
+	else if (ismonkey(C))
+		var/mob/living/carbon/monkey/M = C
+		if(istype(M.hat, /obj/item/clothing/head/helmet))
+			return
+	C.Stun(max(minimal_effect,stun))
+	C.Knockdown(max(minimal_effect,weaken))
+
+/obj/item/weapon/boomerang/proc/on_return()
+	if (istype(originator) && clumsy_check(originator) && prob(30))
+		to_chat(originator, "<span class='warning'>Your clumsy hands fail to catch \the [src]!")
+		apply_status_effects(originator,1)
+		playsound(src, throw_impact_sound, 80, 1)
+		log_attack("<font color='red'>[originator] ([originator ? originator.ckey : "what"]) was hit by [src] thrown by themselves because they're just that clumsy.</font>")
+		return TRUE
+	return (istype(originator) && originator.can_catch(src, throw_speed*throw_mult) && originator.put_in_hands(src))
+
+/obj/item/weapon/boomerang/pickup(var/mob/user)
+	thrown = FALSE
+
+/obj/item/weapon/boomerang/dropped(var/mob/user)
+	reset_plane_and_layer()
 
 /obj/item/weapon/boomerang/attack_self(var/mob/living/user)
 	if (!user.in_throw_mode)
@@ -68,6 +95,7 @@
 	B.damage = throwforce
 	B.projectile_speed = 0.66/throw_mult
 	B.icon_state = "[icon_state]-spin"
+	B.overlays += overlays
 	B.plane = plane
 	B.color = color
 	B.luminosity = luminosity
@@ -96,6 +124,7 @@
 	projectile_speed = 0.66
 	lock_angle = 1
 	kill_count = 7
+	grillepasschance = 0
 	var/obj/item/weapon/boomerang/boomerang
 
 /obj/item/projectile/boomerang/to_bump(var/atom/A)
@@ -107,11 +136,9 @@
 			qdel(src)
 			return
 		else if (iscarbon(A))
-			var/mob/living/carbon/C = A
-			C.Stun(boomerang.stun)
-			C.Knockdown(boomerang.weaken)
-			forceMove(C.loc)
-			C.Bumped(boomerang)
+			boomerang.apply_status_effects(A)
+			forceMove(A.loc)
+			A.Bumped(boomerang)
 			bumped = TRUE
 			bullet_die()
 			return
@@ -124,8 +151,10 @@
 	return_to_sender()
 
 /obj/item/projectile/boomerang/on_step()
-	if (boomerang)
+	if (boomerang && !boomerang.gcDestroyed)
 		boomerang.on_step(src)
+	else
+		bullet_die()
 
 /obj/item/projectile/boomerang/proc/return_to_sender()
 	if (!boomerang)
@@ -134,7 +163,8 @@
 	var/turf/T = get_turf(src)
 	if (!boomerang.return_check())
 		boomerang.forceMove(T)
-		boomerang.reset_plane_and_layer()
+		boomerang.thrown = FALSE
+		boomerang.dropped()
 		boomerang = null
 		return
 	//if there is no air, no return trip
@@ -146,7 +176,8 @@
 	if (atmosphere < ONE_ATMOSPHERE/2)
 		visible_message("\The [boomerang] dramatically fails to come back due to the lack of air pressure.")
 		boomerang.forceMove(T)
-		boomerang.reset_plane_and_layer()
+		boomerang.thrown = FALSE
+		boomerang.dropped()
 		boomerang = null
 		return
 
@@ -182,27 +213,30 @@
 	var/turf/T = get_turf(src)
 	if (T && boomerang)
 		boomerang.forceMove(T)
-		boomerang.reset_plane_and_layer()
+		boomerang.thrown = FALSE
+		boomerang.dropped()
 		boomerang.originator = null
 		boomerang = null
 	..()
 
 /obj/effect/tracker/boomerang/on_step()
-	if (boomerang)
+	if (boomerang && !boomerang.gcDestroyed)
 		boomerang.on_step(src)
+	else
+		qdel(src)
 
 /obj/effect/tracker/boomerang/Bumped(var/atom/movable/AM)
 	make_contact(AM)
 
 /obj/effect/tracker/boomerang/to_bump(var/atom/Obstacle)
-	make_contact(Obstacle)
+	return make_contact(Obstacle)
 
 /obj/effect/tracker/boomerang/proc/make_contact(var/atom/Obstacle)
 	if (boomerang)
 		if (Obstacle == boomerang.originator)
-			if (on_expire())
+			if (on_expire(FALSE))
 				qdel(src)
-				return
+				return TRUE
 		boomerang.throw_impact(Obstacle,boomerang.throw_speed*boomerang.throw_mult,boomerang.originator)
 		if (boomerang.loc != src)//boomerang got grabbed most likely
 			boomerang.originator = null
@@ -210,26 +244,28 @@
 			qdel(src)
 			return TRUE
 		else if (iscarbon(Obstacle))
-			var/mob/living/carbon/C = Obstacle
-			C.Stun(boomerang.stun)
-			C.Knockdown(boomerang.weaken)
+			boomerang.apply_status_effects(Obstacle)
 			return FALSE
 		Obstacle.Bumped(boomerang)
 		if (!ismob(Obstacle))
+			on_expire(TRUE)
 			qdel(src)
 			return TRUE
 		return FALSE
 	else
 		qdel(src)
+		return FALSE
 
-/obj/effect/tracker/boomerang/on_expire()
+/obj/effect/tracker/boomerang/on_expire(var/bumped_atom = FALSE)
 	if (boomerang && boomerang.originator && Adjacent(boomerang.originator))
-		var/mob/living/carbon/C = boomerang.originator
-		if (istype(C) && C.can_catch(boomerang, boomerang.throw_speed*boomerang.throw_mult) && C.put_in_hands(boomerang))
+		if (boomerang.on_return())
 			playsound(loc,'sound/effects/slap2.ogg', 15, 1)
-			boomerang.originator = null
+			if (boomerang)
+				boomerang.originator = null
 			boomerang = null
 			return TRUE
+	else if (boomerang && bumped_atom)
+		playsound(loc,boomerang.sound_bump, 50, 1)
 	return FALSE
 
 
@@ -247,11 +283,11 @@
 
 	throwforce = 2
 	force = 1
-	stun = 1
+	stun = 0
 	weaken = 0
 
 	sound_bump = 'sound/effects/pop.ogg'
-	throw_impact_sound = 'sound/effects/pop.ogg'
+	throw_impact_sound = 'sound/weapons/tap.ogg'
 
 	starting_materials = list(MAT_PLASTIC = 1200)
 	melt_temperature = MELTPOINT_PLASTIC
@@ -268,6 +304,9 @@
 	melt_temperature = MELTPOINT_SILVER
 	w_type = 0
 	luminosity = 2
+
+	stun = 1
+	weaken = 2
 
 	sound_throw = 'sound/weapons/boomerang_cross_start.ogg'
 	sound_loop = 'sound/weapons/boomerang_cross_loop.ogg'
@@ -319,3 +358,53 @@
 		update_moody_light(icon, "[icon_state]-moody")
 	..()
 
+//Kamina
+/obj/item/weapon/boomerang/kaminaglasses
+	name = "Kamina's glasses"
+	desc = "I'm going to tell you something important now, so you better dig the wax out of those huge ears of yours and listen! The reputation of Team Gurren echoes far and wide. When they talk about its badass leader - the man of indomitable spirit and masculinity - they're talking about me! The mighty Kamina!"
+
+	icon_state = "kaminaglasses"
+
+	throwforce = 15
+	force = 10
+	stun = 0
+	weaken = 0
+
+	sound_bump = 'sound/effects/Glasshit.ogg'
+	throw_impact_sound = 'sound/weapons/bladeslice.ogg'
+
+	w_type = RECYK_GLASS
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS/2)
+	melt_temperature = MELTPOINT_GLASS
+
+	var/obj/item/clothing/glasses/kaminaglasses/KG = null
+
+/obj/item/weapon/boomerang/kaminaglasses/Destroy()
+	playsound(get_turf(src),'sound/effects/lagann_eyecatch2.ogg', 30, 0)
+	..()
+
+/obj/item/weapon/boomerang/kaminaglasses/dropped(var/mob/user)
+	if (!thrown)
+		if (KG)
+			KG.forceMove(get_turf(src))
+			KG = null
+		qdel(src)
+	else
+		..()
+
+/obj/item/weapon/boomerang/kaminaglasses/on_return()
+	if (istype(originator) && KG)
+		if (KG.mob_can_equip(originator, slot_glasses, TRUE) == CAN_EQUIP)
+			originator.equip_to_slot(KG, slot_glasses)
+			KG = null
+			loc = originator.loc//just to be sure that the sound is centered on them
+			qdel(src)
+			return TRUE
+	return ..()
+
+//Simon
+/obj/item/weapon/boomerang/kaminaglasses/simonglasses
+	name = "Simon's glasses"
+	desc = "Just who the hell do you think I am?"
+
+	icon_state = "simonglasses"

@@ -8,6 +8,8 @@
 	body_parts_covered = EYES
 	slot_flags = SLOT_EYES
 	flammable = FALSE
+	w_type = RECYK_GLASS
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS/4)
 	var/vision_flags = 0
 	var/darkness_view = 0//Base human is 2
 	var/invisa_view = 0
@@ -363,16 +365,38 @@ BLIND     // can't see anything
 	desc = "Just who the hell do you think I am?"
 	icon_state = "simonglasses"
 	item_state = "simonglasses"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	species_fit = list(GREY_SHAPED)
 	cover_hair = 1
+
+/obj/item/clothing/glasses/simonglasses/attack_self(var/mob/living/user)
+	var/obj/item/weapon/boomerang/kaminaglasses/simonglasses/boomerang = new(user.loc)
+	user.drop_item(src, boomerang)
+	boomerang.KG = src
+	boomerang.overlays += overlays
+	user.put_in_active_hand(boomerang)
+	playsound(user.loc,'sound/effects/lagann_eyecatch.ogg', 30, 0)
+	if (!user.in_throw_mode)
+		user.throw_mode_on()
 
 /obj/item/clothing/glasses/kaminaglasses
 	name = "Kamina's glasses"
 	desc = "I'm going to tell you something important now, so you better dig the wax out of those huge ears of yours and listen! The reputation of Team Gurren echoes far and wide. When they talk about its badass leader - the man of indomitable spirit and masculinity - they're talking about me! The mighty Kamina!"
 	icon_state = "kaminaglasses"
 	item_state = "kaminaglasses"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	species_fit = list(GREY_SHAPED)
 	cover_hair = 1
+
+/obj/item/clothing/glasses/kaminaglasses/attack_self(var/mob/living/user)
+	var/obj/item/weapon/boomerang/kaminaglasses/boomerang = new(user.loc)
+	user.drop_item(src, boomerang)
+	boomerang.KG = src
+	boomerang.overlays += overlays
+	user.put_in_active_hand(boomerang)
+	playsound(user.loc,'sound/effects/lagann_eyecatch.ogg', 30, 0)
+	if (!user.in_throw_mode)
+		user.throw_mode_on()
 
 /obj/item/clothing/glasses/contacts
 	name = "contact lenses"

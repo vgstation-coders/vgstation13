@@ -426,6 +426,20 @@ var/list/tag_suits_list = list()
 	body_parts_covered = FULL_TORSO|FEET
 	species_fit = list(INSECT_SHAPED)
 
+/obj/item/clothing/suit/hunter
+	name ="modern vampire hunter's overcoat"
+	desc = "An iconic blue overcoat similar to the one worn by a vampire hunter that vanquished Dracula 800 years ago. The sleeves have been ripped off for a better range of motion."
+	icon_state = "hunter_overcoat"
+	item_state = "hunter_overcoat"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
+	body_parts_covered = FULL_TORSO
+
+/obj/item/clothing/suit/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/suit/hunter/rangeTackleBonus()
+	return 1
+
 /obj/item/clothing/suit/chickensuit
 	name = "chicken suit"
 	desc = "A suit made long ago by the ancient empire KFC."
@@ -1187,12 +1201,3 @@ var/list/tag_suits_list = list()
 	item_state = "wftr"
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 	body_parts_covered = FULL_TORSO
-
-/obj/item/clothing/suit/hunter
-	name ="modern vampire hunter's overcoat"
-	desc = "An iconic blue overcoat similar to the one worn by a vampire hunter that vanquished Dracula 800 years ago. The sleeves have been ripped off for a better range of motion."
-	icon_state = "hunter_overcoat"
-	item_state = "hunter_overcoat"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
-	body_parts_covered = FULL_TORSO
-

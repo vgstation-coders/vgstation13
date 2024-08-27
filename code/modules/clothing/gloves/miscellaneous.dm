@@ -472,3 +472,8 @@
 	item_state = "hunter_gloves"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
 
+/obj/item/clothing/gloves/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/gloves/hunter/rangeTackleBonus()
+	return 1

@@ -606,12 +606,23 @@
 		M.dash_dir = dir
 		src.throwing = 2
 
-	var/afterimage = 0
+	//-----------Cool Afterimages---------------------
+	var/afterimage = ""
 	if(istype(src,/mob/living/simple_animal/construct/armoured/perfect))
 		var/mob/living/simple_animal/construct/armoured/perfect/M = src
 		M.dash_dir = dir
 		src.throwing = 2
-		afterimage = 1
+		afterimage = "red"
+	else if (ishuman(src))
+		var/mob/living/carbon/human/H = src
+		if (istype(H.w_uniform, /obj/item/clothing/under/hunter)\
+			&& istype(H.wear_suit, /obj/item/clothing/suit/hunter)\
+			&& istype(H.shoes, /obj/item/clothing/shoes/hunter)\
+			&& istype(H.head, /obj/item/clothing/head/hunter)\
+			&& istype(H.gloves, /obj/item/clothing/gloves/hunter))
+			afterimage = "richter tackle"
+			anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "castlevania_tackle_flick", plane = ABOVE_LIGHTING_PLANE)
+	//------------------------------------------------
 
 	var/dist_x = abs(target.x - src.x)
 	var/dist_y = abs(target.y - src.y)
@@ -651,8 +662,11 @@
 			if(kinetic_acceleration>kinetic_sum)
 				fly_speed += kinetic_acceleration-kinetic_sum
 				kinetic_sum = kinetic_acceleration
-			if(afterimage)
-				new /obj/effect/afterimage/red(loc,src)
+			switch(afterimage)
+				if ("red")
+					new /obj/effect/afterimage/red(loc,src)
+				if ("richter tackle")
+					new /obj/effect/afterimage/richter_tackle(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -692,8 +706,11 @@
 			if(kinetic_acceleration>0)
 				fly_speed += kinetic_acceleration
 				kinetic_acceleration = 0
-			if(afterimage)
-				new /obj/effect/afterimage/red(loc,src)
+			switch(afterimage)
+				if ("red")
+					new /obj/effect/afterimage/red(loc,src)
+				if ("richter tackle")
+					new /obj/effect/afterimage/richter_tackle(loc,src)
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge

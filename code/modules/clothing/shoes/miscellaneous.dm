@@ -625,3 +625,9 @@
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
+
+/obj/item/clothing/shoes/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/shoes/hunter/rangeTackleBonus()
+	return 1

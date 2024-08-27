@@ -250,6 +250,7 @@
 		M.unarmed_attack_mob(src)
 		return 1
 
+/*
 /mob/living/simple_animal/construct/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)
 	if(O.force)
@@ -267,6 +268,7 @@
 	else
 		to_chat(usr, "<span class='warning'>This weapon is ineffective, it does no damage.</span>")
 		user.visible_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
+*/
 
 /mob/living/simple_animal/construct/mode()
 	set name = "Activate Held Object"

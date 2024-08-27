@@ -34,6 +34,7 @@
 	color = "red"
 
 /obj/effect/tracker/proc/process_step()
+	set waitfor = 0
 	if (gcDestroyed)
 		return
 	if(!target)
@@ -51,11 +52,11 @@
 
 	var/dist = sqrt(abs(dx)**2 + abs(dy)**2)
 	if(dist > maxdist)
-		on_expire()
+		on_expire(FALSE)
 		qdel(src)
 		return
 	else if(dist < 16)
-		on_expire()
+		on_expire(FALSE)
 		qdel(src)
 		return
 
@@ -83,7 +84,7 @@
 		var/turf/T_new = locate(next_x,next_y,z)
 		if (!T_new.Cross(src,T_old))
 			if (to_bump(T_new))
-				on_expire()
+				on_expire(TRUE)
 				qdel(src)
 				return
 		for (var/atom/A in T_new)
@@ -91,7 +92,7 @@
 				continue
 			if (!A.Cross(src,T_old))
 				if (to_bump(A))
-					on_expire()
+					on_expire(TRUE)
 					qdel(src)
 					return
 
@@ -119,7 +120,7 @@
 /obj/effect/tracker/singularity_pull()
 	return
 
-/obj/effect/tracker/proc/on_expire()
+/obj/effect/tracker/proc/on_expire(var/bumped_atom = FALSE)
 	return
 
 /obj/effect/tracker/proc/on_step()

@@ -1010,6 +1010,12 @@
 	_color = "hunter"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
 
+/obj/item/clothing/under/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/under/hunter/rangeTackleBonus()
+	return 1
+
 ///////////////////////////////////////////////////////////////////////////
 
 /obj/item/clothing/under/toga
