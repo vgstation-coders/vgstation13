@@ -1,0 +1,15 @@
+author: DeityLink
+delete-after: true
+changes:
+- tweak: Apiaries no longer require you to build them into an hydroponics tray! Just
+    click an adjacent floor while holding the kit.
+- imageadd: Apiaries have new sprites to commemorate their graduation from being tray-bound.
+- imageadd: Apiary kits now have in-hand icons.
+- tweak: You no longer need a hatchet to harvest an apiary and can now do so bare-handed.
+    Doing it this way no longer deconstructs the apiary so you can just calm the bees
+    and let them return to it on their own. Hatchets (or alternatively crowbars) are
+    still required to deconstruct them, which still also harvests them at the same
+    time if they contain honey.
+- soundadd: Added sounds for building/deconstructing apiaries, and for pouring BeezEz
+    in them.
+- rscadd: Apiaries and hives can burn down at long last.
