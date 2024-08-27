@@ -1,6 +1,6 @@
 /obj/structure/grille/window_spawner
 	icon = 'icons/obj/window_grille_spawner.dmi'
-	icon_state = "window_grille"
+	icon_state = "windowgrille"
 	var/window_path = /obj/structure/window
 	var/full_path
 
@@ -19,28 +19,32 @@
 		new_window.dir = direction
 
 /obj/structure/grille/window_spawner/full
+	icon_state = "windowgrille_full"
 	full_path = /obj/structure/window/full
 
 /obj/structure/grille/window_spawner/reinforced
-	icon_state = "reinforced_window_grille"
+	icon_state = "rwindowgrille"
 	window_path = /obj/structure/window/reinforced
 
 /obj/structure/grille/window_spawner/reinforced/tinted
 	window_path = /obj/structure/window/reinforced/tinted
 
 /obj/structure/grille/window_spawner/reinforced/full
+	icon_state = "rwindowgrille_full"
 	full_path = /obj/structure/window/full/reinforced
 
 /obj/structure/grille/window_spawner/plasma
-	icon_state = "reinforced_plasma_window_grille"
+	icon_state = "rpwindowgrille"
 	window_path = /obj/structure/window/plasma
 
 /obj/structure/grille/window_spawner/plasma/full
+	icon_state = "rpwindowgrille_full"
 	full_path = /obj/structure/window/full/plasma
 
 /obj/structure/grille/window_spawner/reinforced_plasma
-	icon_state = "reinforced_plasma_window_grille"
+	icon_state = "rpwindowgrille"
 	window_path = /obj/structure/window/reinforced/plasma
 
 /obj/structure/grille/window_spawner/reinforced_plasma/full
+	icon_state = "rpwindowgrille_full"
 	full_path = /obj/structure/window/full/reinforced/plasma
