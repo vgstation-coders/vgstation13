@@ -773,9 +773,11 @@ var/list/impact_master = list()
 		return //cannot shoot yourself
 	if(istype(A, /obj/item/projectile))
 		return
-	if(isliving(A) || (locate(/mob/living) in A) || (locate(/mob/living) in A.locked_atoms))
-		result = 2 //We hit someone, return 1!
-		return
+	if(ismovable(A))
+		var/atom/movable/AM = A
+		if(isliving(AM) || (locate(/mob/living) in AM) || (locate(/mob/living) in AM.locked_atoms))
+			result = 2 //We hit someone, return 1!
+			return
 	result = 1
 	return
 
