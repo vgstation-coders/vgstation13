@@ -96,10 +96,10 @@
 		stop_aim()
 		return
 	if(canbe_fired())
-		var/firing_check = can_hit(user,usr) //0 if it cannot hit them, 1 if it is capable of hitting, and 2 if a special check is preventing it from firing.
+		var/firing_check = can_hit(user,M) //0 if it cannot hit them, 1 if it is capable of hitting, and 2 if a special check is preventing it from firing.
 		if(firing_check > 0)
 			if(firing_check == 1)
-				Fire(user,usr, reflex = 1)
+				Fire(user,M, reflex = 1)
 		else if(!told_cant_shoot)
 			to_chat(M, "<span class='warning'>They can't be hit from here!</span>")
 			told_cant_shoot = 1
@@ -108,7 +108,7 @@
 	else
 		click_empty(M)
 
-	usr.dir = get_cardinal_dir(src, user)
+	M.dir = get_cardinal_dir(src, user)
 
 	if (!firerate) // If firerate is set to lower aim after one shot, untarget the target
 		user.NotTargeted(src)
