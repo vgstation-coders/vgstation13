@@ -93,8 +93,13 @@
 	if(!M.client || src != M.get_active_hand())
 		stop_aim()
 		return
-	if(M.client.target_can_move && !M.client.target_can_run && user.m_intent != "run")
+	if(M.client.target_can_click && target) // this var only gets filled in from the click event calls, so that's a way of knowing
 		return
+	if(M.client.target_can_move)
+		if(!M.client.target_can_run && user.m_intent != "run")
+			return
+		else if(!target)
+			return
 	if(canbe_fired())
 		var/firing_check = can_hit(user,M) //0 if it cannot hit them, 1 if it is capable of hitting, and 2 if a special check is preventing it from firing.
 		if(firing_check > 0)
@@ -102,7 +107,6 @@
 				Fire(user,M, reflex = 1)
 		else if(!told_cant_shoot)
 			to_chat(M, "<span class='warning'>They can't be hit from here!</span>")
-			to_chat(user, "<span class='warning'>Luckily, you can't be hit from here!</span>")
 			told_cant_shoot = 1
 			spawn(30)
 				told_cant_shoot = 0
