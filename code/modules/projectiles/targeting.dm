@@ -86,7 +86,6 @@
 		return
 	lock_time = world.time + 15
 	var/mob/living/M = loc
-	message_admins("HE MOVED, SHOOT HIM!")
 	if(M == user)
 		return
 	if(!istype(M))
