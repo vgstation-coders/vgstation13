@@ -182,10 +182,6 @@
 		targeted_by = list()
 	targeted_by += I
 	I.lock_time = world.time + 20 //Target has 2 second to realize they're targeted and stop (or target the opponent).
-	to_chat(src, "((<span class='danger'>Your character is being targeted. They have 2 seconds to stop any click or move actions. </span>While targeted, they may \
-	drag and drop items in or into the map, speak, and click on interface buttons. Clicking on the map objects (floors and walls are fine), their items \
-	 (other than a weapon to de-target), or moving will result in being fired upon. <span class='warning'>The aggressor may also fire manually, </span>\
-	 so try not to get on their bad side.\black ))")
 
 	if(targeted_by.len == 1)
 		spawn(0)
@@ -205,17 +201,26 @@
 		else
 			I.lower_aim()
 			return
-		if(m_intent == "run" && T.client.target_can_move == 1 && T.client.target_can_run == 0 && (ishuman(T)))
-			to_chat(src, "<spanclass='warning'>Your captive is allowing you to walk. Make sure to change your move intent to walk before trying to move, or you will be fired upon.</span>")//Self explanitory.
-
+		var/msg = ""
+		if(!T.client.target_can_click)
+			msg += "While targeted, they may drag and drop items in or into the map, speak, and click on interface buttons. \
+					Clicking on the map objects (floors and walls are fine), their items (other than a weapon to de-target) will result in being fired upon.\n"
+		if(!T.client.target_can_move)
+			msg += "Moving will result in being fired upon.\n"
+		else if(m_intent == "run" && !T.client.target_can_run && (ishuman(T))) //Self explanitory.
+			msg += "<span class='warning'>Your captive is allowing you to walk. \
+					Make sure to change your move intent to walk before trying to move, or you will be fired upon.</span>\n"
+		to_chat(src, "<span class='danger'>Your character is being targeted. They have 2 seconds to stop any of the following actions: </span>\n \
+						[msg]\n \
+						<span class='warning'>The aggressor may also fire manually, so try not to get on their bad side.</span>")
+		
 			//set_m_intent("walk") -there's a real fucked up exploit behind this, so it's been removed. Needs testing. -Angelite-
 		
-		if(T.client)
-			if(!T.client.target_can_move || !T.client.target_can_run)
-				register_event(/event/moved, I, nameof(I::TargetMoved()))
-				register_event(/event/relaymoved, I, nameof(I::TargetMoved()))
-			if(!T.client.target_can_click)
-				register_event(/event/clickon, I, nameof(I::TargetActed()))
+		if(!T.client.target_can_move || !T.client.target_can_run)
+			register_event(/event/moved, I, nameof(I::TargetMoved()))
+			register_event(/event/relaymoved, I, nameof(I::TargetMoved()))
+		if(!T.client.target_can_click)
+			register_event(/event/clickon, I, nameof(I::TargetActed()))
 
 /mob/living/proc/NotTargeted(var/obj/item/weapon/gun/I)
 	unregister_event(/event/moved, I, nameof(I::TargetMoved()))
