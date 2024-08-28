@@ -96,7 +96,7 @@
 	if(M.client.target_can_click && target) // this var only gets filled in from the click event calls, so that's a way of knowing
 		return
 	if(M.client.target_can_move)
-		if(!M.client.target_can_run && user.m_intent != "run")
+		if(!M.client.target_can_run && !user.locked_to && user.m_intent != "run") // if the user is relaymoving i'm pretty sure that's NOT walking
 			return
 		else if(!target)
 			return
