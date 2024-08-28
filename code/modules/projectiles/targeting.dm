@@ -85,6 +85,8 @@
 	if(target && (isturf(target) || istype(target,/obj/abstract/screen))) // these are okay to click
 		return
 	lock_time = world.time + 15
+	//if(I.last_moved_mob == src) //If they were the last ones to move, give them more of a grace period, so that an automatic weapon can hold down a room better.
+		//I.lock_time = world.time + 15 //just look at the logic of this... it did nothing!!! uncomment if you want this to work again too. be sure to add the variable back.
 	var/mob/living/M = loc
 	if(M == user || !istype(M))
 		return
