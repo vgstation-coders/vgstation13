@@ -221,6 +221,12 @@
 			register_event(/event/relaymoved, I, nameof(I::TargetMoved()))
 		if(!T.client.target_can_click)
 			register_event(/event/clickon, I, nameof(I::TargetActed()))
+		register_event(/event/logout, T, nameof(src::TargeterLogout()))
+
+/mob/living/proc/TargeterLogout(mob/living/user)
+	for(var/obj/item/weapon/gun/G in user)
+		NotTargeted(G)
+	unregister_event(/event/logout, user, nameof(src::TargeterLogout()))
 
 /mob/living/proc/NotTargeted(var/obj/item/weapon/gun/I)
 	unregister_event(/event/moved, I, nameof(I::TargetMoved()))
