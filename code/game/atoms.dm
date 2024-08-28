@@ -508,7 +508,7 @@ its easier to just keep the beam vertical.
 			bug.removed(usr)
 
 /atom/proc/relaymove()
-	return
+	INVOKE_EVENT(src, /event/relaymoved, "mover" = src)
 
 // Try to override a mob's eastface(), westface() etc. (CTRL+RIGHTARROW, CTRL+LEFTARROW). Return 1 if successful, which blocks the mob's own eastface() etc.
 // Called first on the mob's loc (turf, locker, mech), then on whatever the mob is buckled to, if anything.
