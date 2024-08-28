@@ -90,10 +90,10 @@
 		return
 	if(!istype(M))
 		return
-	if(M.client && M.client.target_can_move && !M.client.target_can_run && user.m_intent != "run")
-		return
-	if(src != M.get_active_hand())
+	if(!M.client || src != M.get_active_hand())
 		stop_aim()
+		return
+	if(M.client && M.client.target_can_move && !M.client.target_can_run && user.m_intent != "run")
 		return
 	if(canbe_fired())
 		var/firing_check = can_hit(user,M) //0 if it cannot hit them, 1 if it is capable of hitting, and 2 if a special check is preventing it from firing.
