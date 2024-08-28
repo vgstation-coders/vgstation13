@@ -102,6 +102,7 @@
 				Fire(user,M, reflex = 1)
 		else if(!told_cant_shoot)
 			to_chat(M, "<span class='warning'>They can't be hit from here!</span>")
+			to_chat(user, "<span class='warning'>Luckily, you can't be hit from here!</span>")
 			told_cant_shoot = 1
 			spawn(30)
 				told_cant_shoot = 0
