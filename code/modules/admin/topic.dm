@@ -3896,6 +3896,8 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					var/mobtype = input("What mob would you like?", "Mob Swarm") as null|anything in typesof(/mob/living)
 					message_admins("[key_name_admin(usr)] triggered a mob swarm.")
 					new /datum/event/mob_swarm(mobtype, amt)
+			if("procgen") //update this
+				spawn_space_object()
 			if("pick_event")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","ALL")

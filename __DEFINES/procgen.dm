@@ -1,3 +1,15 @@
+//Dedicated Z level
+#define PG_Z			100
+
+//Generator States
+#define PG_INACTIVE		-1
+#define PG_INIT			0
+#define PG_MAPPING		1
+#define PG_DECORATION	2
+#define PG_POPULATION	3
+#define PG_LOOT			4
+//#define PG_VAULT 		5 //for spawning vaults
+
 //Planet Types
 #define PG_ASTEROIDS	/datum/procgen/celestial_body/asteroids
 #define PG_MOON			/datum/procgen/celestial_body/moon
@@ -51,6 +63,6 @@
 #define PG_FUTURE_CIV	/datum/procgen/civilization/future
 
 //Altitude
-#define PG_LOW_ALT	-50
+#define PG_LOW_ALT	-2.5
 #define PG_MED_ALT	0
-#define PG_HIGH_ALT	50
+#define PG_HIGH_ALT	2.5

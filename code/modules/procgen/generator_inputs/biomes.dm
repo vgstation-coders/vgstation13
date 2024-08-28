@@ -4,8 +4,24 @@
 	var/list/precipitation = list()
 	var/list/turf/floor_turfs = list()
 	var/list/turf/wall_turfs = list()
+	var/turf/water_turf
 	var/list/obj/structure/flora = list()
 	var/list/obj/structure/structures = list()
+	var/area/biome_area
+
+/datum/procgen/biome/proc/choose_turf(var/height)
+	var/turf/T
+	switch(height)
+		if(0 to 2.5)
+			T = water_turf
+		if(2.5 to 7.5)
+			T = pick(floor_turfs)
+		if(7.5 to 10)
+			T = pick(wall_turfs)
+	return T
+
+/datum/procgen/biome/proc/choose_area()
+	return biome_area
 
 /datum/procgen/biome/permafrost
 	name = "Permafrost"

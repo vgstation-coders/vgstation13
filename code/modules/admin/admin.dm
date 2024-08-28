@@ -845,6 +845,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=gravanomalies'>Spawn a gravitational anomaly (aka lagitational anomolag)</A><BR>
 			<A href='?src=\ref[src];secretsfun=timeanomalies'>Spawn wormholes</A><BR>
 			<A href='?src=\ref[src];secretsfun=mobswarm'>Any mob infestation (specify type only)</A><BR>
+			<A href='?src=\ref[src];secretsfun=procgen'>Procedurally-generate a space object</A><BR>
 			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>

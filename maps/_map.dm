@@ -31,16 +31,6 @@
 	var/zDerelict = 4
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
-	var/zProcGenL1 = 100
-	var/zProcGenL2 = 101
-	var/zProcGenM1 = 102
-	var/zProcGenM2 = 103
-	var/zProcGenM3 = 104
-	var/zProcGenS1 = 105
-	var/zProcGenS2 = 106
-	var/zProcGenS3 = 107
-	var/zProcGenS4 = 108
-	var/zProcGenS5 = 109
 
 	//Holomap offsets
 	var/list/holomap_offset_x = list()
@@ -299,66 +289,12 @@ var/global/list/accessable_z_levels = list()
 		var/generator = pick(typesof(/obj/structure/radial_gen/movable/snow_nature/snow_forest) + typesof(/obj/structure/radial_gen/movable/snow_nature/snow_grass))
 		new generator(T)
 
-//ProcGen zlevels
-/datum/zLevel/ProcGenL1
-	name = "large procgen map 1"
-	teleJammed = 1
-	movementJammed = 1
-	bluespace_jammed = 1
-
-/datum/zLevel/ProcGenL2
-	name = "large procgen map 2"
-	teleJammed = 1
-	movementJammed = 1
-	bluespace_jammed = 1
-
-/datum/zLevel/ProcGenM1
-	name = "medium procgen map 1"
-	teleJammed = 1
-	movementJammed = 1
-	bluespace_jammed = 1
-
-/datum/zLevel/ProcGenM2
-	name = "medium procgen map 2"
-	teleJammed = 1
-	movementJammed = 1
-	bluespace_jammed = 1
-
-/datum/zLevel/ProcGenM3
-	name = "medium procgen map 3"
-	teleJammed = 1
-	movementJammed = 1
-	bluespace_jammed = 1
-
-/datum/zLevel/ProcGenS1
-	name = "small procgen map 1"
-	teleJammed = 1
-	movementJammed = 1
-	bluespace_jammed = 1
-
-/datum/zLevel/ProcGenS2
-	name = "small procgen map 2"
-	teleJammed = 1
-	movementJammed = 1
-	bluespace_jammed = 1
-
-/datum/zLevel/ProcGenS3
-	name = "small procgen map 3"
-	teleJammed = 1
-	movementJammed = 1
-	bluespace_jammed = 1
-
-/datum/zLevel/ProcGenS4
-	name = "small procgen map 4"
-	teleJammed = 1
-	movementJammed = 1
-	bluespace_jammed = 1
-
-/datum/zLevel/ProcGenS5
-	name = "small procgen map 5"
-	teleJammed = 1
-	movementJammed = 1
-	bluespace_jammed = 1
+//Procedural Space Object Generation
+/datum/zLevel/procgen
+	name = "procedurally-generated space object"
+	movementJammed = TRUE
+	bluespace_jammed = TRUE
+	base_turf = /turf/space/void
 
 // Debug ///////////////////////////////////////////////////////
 

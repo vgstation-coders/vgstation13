@@ -1,12 +1,5 @@
 //Cvilizations are defined here. Civilizations represent the random items which can be found on the planet and vary by tech level. Different races appear on certain planets.
 
-var/list/datum/procgen/civilization/civilizations = list(
-	/datum/procgen/civilization/unexplored,
-	/datum/procgen/civilization/young,
-	/datum/procgen/civilization/old,
-	/datum/procgen/civilization/future
-)
-
 /datum/procgen/civilization
 	var/weight
 	var/human_items = list()
