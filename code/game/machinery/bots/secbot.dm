@@ -348,7 +348,7 @@ Auto Patrol: []"},
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/wizrobe))
 			threatcount += PERP_LEVEL_ARREST/2
 
-		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
+		if(!isjusthuman(perp))
 			threatcount += PERP_LEVEL_ARREST/2
 		var/visible_id = perp.get_visible_id()
 		if(!visible_id)
@@ -381,7 +381,7 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/secbot/proc/speak(var/message)
 	visible_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"",\
-		drugged_message="<span class='game say'><span class='name'>[src]</span> beeps, \"[pick("Wait! Let's be friends!","Wait for me!","You're so cool!","Who's your favourite pony?","I-It's not like I like you or anything...","Wanna see a magic trick?","Let's go have fun, assistant-kun~")]\"")
+		drugged_message="<span class='game say'><span class='name'>[src]</span> beeps, \"[pick("Wait! Let's be friends!","Wait for me!","You're so cool!","I-It's not like I like you or anything...","Wanna see a magic trick?","Let's go have fun, assistant-kun~")]\"")
 	return
 
 /obj/machinery/bot/secbot/explode()
