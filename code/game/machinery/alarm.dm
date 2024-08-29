@@ -330,6 +330,7 @@ var/global/list/air_alarms = list()
 	var/buildstage = 2 //2 is built, 1 is building, 0 is frame.
 	var/cycle_after_preset = 1 // Whether we automatically cycle when presets are changed
 
+	var/target_temperature //Manual override for target temperature changing, usable for maps/admin vv edits
 	var/regulating_temperature = 0
 
 	var/datum/radio_frequency/radio_connection
@@ -437,6 +438,10 @@ var/global/list/air_alarms = list()
 	var/turf/simulated/location = loc
 	if(!istype(location))
 		return//returns if loc is not simulated
+
+	if(!isnull(target_temperature))
+		set_temperature(target_temperature, FALSE)
+		target_temperature = null
 
 	var/datum/gas_mixture/environment = location.return_air()
 
