@@ -330,7 +330,6 @@ var/global/list/air_alarms = list()
 	var/buildstage = 2 //2 is built, 1 is building, 0 is frame.
 	var/cycle_after_preset = 1 // Whether we automatically cycle when presets are changed
 
-	var/target_temperature = T0C+20
 	var/regulating_temperature = 0
 
 	var/datum/radio_frequency/radio_connection
@@ -444,27 +443,36 @@ var/global/list/air_alarms = list()
 	// Handle temperature adjustment here.
 	if(environment.temperature < config.target_temperature - 2 || environment.temperature > config.target_temperature  + 2 || regulating_temperature)
 		//If it goes too far, we should adjust ourselves back before stopping.
-		var/actual_target_temperature = target_temperature
+		var/actual_target_temperature = config.target_temperature
 		if(config.temperature_threshold.assess_danger(actual_target_temperature))
 			//use the max or min safe temperature
 			actual_target_temperature = clamp(actual_target_temperature, config.temperature_threshold.min_1(), config.temperature_threshold.max_1())
-
+		var/thermo_changed = FALSE
 		if(!regulating_temperature)
-			regulating_temperature = 1
-			visible_message("\The [src] clicks as it starts [environment.temperature > config.target_temperature  ? "cooling" : "heating"] the room.",\
+			if(environment.temperature > config.target_temperature)
+				regulating_temperature = "cooling"
+			else
+				regulating_temperature = "heating"
+			thermo_changed = TRUE
+		else if(regulating_temperature == "heating" && environment.temperature > config.target_temperature)
+			regulating_temperature = "cooling"
+			thermo_changed = TRUE
+		else if(regulating_temperature == "cooling" && environment.temperature < config.target_temperature)
+			regulating_temperature = "heating"
+			thermo_changed = TRUE
+		if(thermo_changed)
+			visible_message("\The [src] clicks as it starts [regulating_temperature] the room.",\
 			"You hear a click and a faint electronic hum.")
 
 		var/datum/gas_mixture/gas = environment.remove_volume(0.25 * CELL_VOLUME)
 		if(gas)
 			var/heat_capacity = gas.heat_capacity()
 			var/energy_used = min(abs(heat_capacity * (gas.temperature - actual_target_temperature)), MAX_ENERGY_CHANGE)
-			var/cooled = 0 //1 means we cooled this tick, 0 means we warmed. Used for the message below.
 
 			// We need to cool ourselves, but only if the gas isn't already colder than what we can do.
 			if (environment.temperature > actual_target_temperature && gas.temperature >= MIN_TEMPERATURE)
 				gas.temperature -= energy_used / heat_capacity
 				use_power(energy_used/3) //these are heat pumps, so they can have a >100% efficiency, typically about 300%
-				cooled = 1
 			// We need to warm ourselves, but only if the gas isn't already hotter than what we can do.
 			else if (environment.temperature < actual_target_temperature && gas.temperature <= MAX_TEMPERATURE)
 				gas.temperature += energy_used / heat_capacity
@@ -473,9 +481,9 @@ var/global/list/air_alarms = list()
 			environment.merge(gas)
 
 			if (abs(environment.temperature - actual_target_temperature) <= 0.5)
-				regulating_temperature = 0
-				visible_message("\The [src] clicks quietly as it stops [cooled ? "cooling" : "heating"] the room.",\
+				visible_message("\The [src] clicks quietly as it stops [regulating_temperature] the room.",\
 				"You hear a click as a faint electronic humming stops.")
+				regulating_temperature = 0
 
 	var/old_level = local_danger_level
 	var/new_danger = calculate_local_danger_level(environment)
@@ -976,13 +984,13 @@ var/global/list/air_alarms = list()
 		else
 			max_temperature = temperature_threshold.max_1() - T0C
 			min_temperature = temperature_threshold.min_1() - T0C
-		var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
+		var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE - T0C]C or above [MAX_TEMPERATURE - T0C]C by itself. ", "Thermostat Controls") as num|null
 		if(input_temperature==null)
 			return 1
-		if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
+		if(input_temperature > max_temperature || input_temperature < min_temperature)
 			to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
 		else
-			input_temperature = input_temperature + T0C
+			input_temperature = round(input_temperature + T0C,0.01)
 			set_temperature(input_temperature)
 		return 1
 
