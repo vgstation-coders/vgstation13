@@ -11,10 +11,10 @@
 //#define PG_VAULT 		5 //for spawning vaults
 
 //Planet Types
-#define PG_ASTEROIDS	/datum/procgen/celestial_body/asteroids
-#define PG_MOON			/datum/procgen/celestial_body/moon
-#define PG_PLANET		/datum/procgen/celestial_body/planet
-#define PG_XENO			/datum/procgen/celestial_body/xeno
+#define PG_ASTEROIDS	/datum/procedural_space_object/asteroids
+#define PG_MOON			/datum/procedural_space_object/moon
+#define PG_PLANET		/datum/procedural_space_object/planet
+#define PG_XENO			/datum/procedural_space_object/xeno
 
 //Atmos Levels
 #define PG_VACUUM		/datum/procedural_atmosphere/vacuum
@@ -54,7 +54,7 @@
 #define PG_ASH				/datum/procedural_biome/ash
 #define PG_ASTEROID			/datum/procedural_biome/asteroid
 #define PG_COMET			/datum/procedural_biome/comet
-#define PG_ROCK				/datum/procgen/biome/rock
+#define PG_ROCK				/datum/procedural_biome/rock
 
 //History
 #define PG_UNEXPLORED	/datum/procedural_civilization/unexplored
