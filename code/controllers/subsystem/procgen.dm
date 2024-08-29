@@ -8,7 +8,7 @@ var/datum/subsystem/procgen/SSprocgen
 	display_order = SS_DISPLAY_PROCGEN
 
 	var/rows_remaining = 0
-	var/datum/procgen/generation/PG
+	var/datum/procedural_generator/PG
 
 /datum/subsystem/procgen/New()
 	NEW_SS_GLOBAL(SSprocgen)

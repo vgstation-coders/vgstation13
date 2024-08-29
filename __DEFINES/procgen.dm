@@ -17,10 +17,10 @@
 #define PG_XENO			/datum/procgen/celestial_body/xeno
 
 //Atmos Levels
-#define PG_VACUUM		/datum/procgen/atmosphere/vacuum
-#define PG_THIN			/datum/procgen/atmosphere/thin
-#define	PG_BREATHABLE	/datum/procgen/atmosphere/breathable
-#define PG_TOXIC		/datum/procgen/atmosphere/toxic
+#define PG_VACUUM		/datum/procedural_atmosphere/vacuum
+#define PG_THIN			/datum/procedural_atmosphere/thin
+#define	PG_BREATHABLE	/datum/procedural_atmosphere/breathable
+#define PG_TOXIC		/datum/procedural_atmosphere/toxic
 
 //Preciptation Levels
 #define PG_NO_PRECIP	0
@@ -39,28 +39,28 @@
 #define	PG_LAVA			6
 
 //Biomes
-#define PG_PERMAFROST		/datum/procgen/biome/permafrost
-#define PG_ICE_SHEET		/datum/procgen/biome/ice_sheet
-#define PG_TUNDRA			/datum/procgen/biome/tundra
-#define PG_TAIGA			/datum/procgen/biome/taiga
-#define PG_FOREST			/datum/procgen/biome/forest
-#define PG_PLAINS			/datum/procgen/biome/plains
-#define PG_SHRUBLAND		/datum/procgen/biome/shrubland
-#define PG_SWAMPLAND		/datum/procgen/biome/swamp
-#define PG_RAINFOREST		/datum/procgen/biome/rainforest
-#define PG_SAVANNA			/datum/procgen/biome/savanna
-#define PG_DESERT			/datum/procgen/biome/desert
-#define PG_MAGMA			/datum/procgen/biome/magma
-#define PG_ASH				/datum/procgen/biome/ash
-#define PG_ASTEROID			/datum/procgen/biome/asteroid
-#define PG_COMET			/datum/procgen/biome/comet
+#define PG_PERMAFROST		/datum/procedural_biome/permafrost
+#define PG_ICE_SHEET		/datum/procedural_biome/ice_sheet
+#define PG_TUNDRA			/datum/procedural_biome/tundra
+#define PG_TAIGA			/datum/procedural_biome/taiga
+#define PG_FOREST			/datum/procedural_biome/forest
+#define PG_PLAINS			/datum/procedural_biome/plains
+#define PG_SHRUBLAND		/datum/procedural_biome/shrubland
+#define PG_SWAMPLAND		/datum/procedural_biome/swamp
+#define PG_RAINFOREST		/datum/procedural_biome/rainforest
+#define PG_SAVANNA			/datum/procedural_biome/savanna
+#define PG_DESERT			/datum/procedural_biome/desert
+#define PG_MAGMA			/datum/procedural_biome/magma
+#define PG_ASH				/datum/procedural_biome/ash
+#define PG_ASTEROID			/datum/procedural_biome/asteroid
+#define PG_COMET			/datum/procedural_biome/comet
 #define PG_ROCK				/datum/procgen/biome/rock
 
 //History
-#define PG_UNEXPLORED	/datum/procgen/civilization/unexplored
-#define PG_YOUNG_CIV	/datum/procgen/civilization/young
-#define PG_OLD_CIV		/datum/procgen/civilization/old
-#define PG_FUTURE_CIV	/datum/procgen/civilization/future
+#define PG_UNEXPLORED	/datum/procedural_civilization/unexplored
+#define PG_YOUNG_CIV	/datum/procedural_civilization/young
+#define PG_OLD_CIV		/datum/procedural_civilization/old
+#define PG_FUTURE_CIV	/datum/procedural_civilization/future
 
 //Altitude
 #define PG_LOW_ALT	-2.5

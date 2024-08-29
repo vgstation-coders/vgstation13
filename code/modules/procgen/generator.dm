@@ -122,40 +122,39 @@
     return ((value - min_value) / (max_value - min_value)) * (new_max - new_min) + new_min
 
 /proc/spawn_space_object() //update with configurable inputs and a menu
-	var/datum/procgen/generation/proc_gen = new
+	var/datum/procedural_generator/proc_gen = new
 	SSprocgen.PG = proc_gen
 	SSprocgen.flags -= SS_NO_FIRE
 	SSprocgen.ignite()
 
-/datum/procgen
+/datum/procedural_generator
 	var/name
 	var/desc
 	var/map_size
 
-	var/list/datum/procgen/space_object/space_objects
-	var/list/datum/procgen/atmosphere/atmospheres
-	var/list/datum/procgen/biome/biomes
-	var/list/datum/procgen/civilization/civilizations
+	var/list/datum/procedural_space_object/space_objects
+	var/list/datum/procedural_atmosphere/atmospheres
+	var/list/datum/procedural_biome/biomes
+	var/list/datum/procedural_civilization/civilizations
 
-/datum/procgen/generation
-	var/datum/procgen/space_object/space_obj
+	var/datum/procedural_space_object/space_obj
 	var/datum/zLevel/procgen_z
 	var/gen_state = PG_INACTIVE
 	var/rows_completed = 0
 
 //All lists are generated at runtime to assist in adding new content easier.
-/datum/procgen/generation/New()
-	space_objects = typesof(/datum/procgen/space_object) - /datum/procgen/space_object
-	atmospheres = typesof(/datum/procgen/atmosphere) - /datum/procgen/atmosphere
-	biomes = typesof(/datum/procgen/biome) - /datum/procgen/biome
-	civilizations = typesof(/datum/procgen/civilization) - /datum/procgen/civilization
+/datum/procedural_generator/New()
+	space_objects = typesof(/datum/procedural_space_object) - /datum/procedural_space_object
+	atmospheres = typesof(/datum/procedural_atmosphere) - /datum/procedural_atmosphere
+	biomes = typesof(/datum/procedural_biome) - /datum/procedural_biome
+	civilizations = typesof(/datum/procedural_civilization) - /datum/procedural_civilization
 	gen_state = PG_INIT
 
 /datum/procgen/Del()
 	qdel(SSprocgen.PG)
 	..()
 
-/datum/procgen/generation/proc/generate()
+/datum/procedural_generator/proc/generate()
 	//Determine top-level celestial body characteristics
 	var/space_obj_path = pick_space_object()
 	space_obj = new space_obj_path
@@ -165,7 +164,7 @@
 	space_obj.padding = (PG_LARGE - map_size)/2
 	space_obj.initialize_planet()
 
-/datum/procgen/generation/proc/setup_zlevel()
+/datum/procedural_generator/proc/setup_zlevel()
 	var/new_map_size = pick(space_obj.valid_map_sizes)
 	message_admins("new_map_size = [new_map_size]")
 	map.addZLevel(new /datum/zLevel/procgen, z_to_use = PG_Z, make_base_turf = TRUE)
@@ -175,8 +174,8 @@
 		T.ChangeTurf(/turf/space)
 	return new_map_size
 
-/datum/procgen/generation/proc/pick_space_object()
-	for(var/datum/procgen/space_object/S in space_objects)
+/datum/procedural_generator/proc/pick_space_object()
+	for(var/datum/procedural_space_object/S in space_objects)
 		if(!S.weight || S.weight == 0)
 			continue
 		else
@@ -186,7 +185,7 @@
 		CRASH("Failed to pick a space object to generate!")
 	return pickweight(space_objects)
 
-/datum/procgen/generation/proc/process()
+/datum/procedural_generator/proc/process()
 	switch(gen_state)
 		if(PG_INACTIVE)
 			return

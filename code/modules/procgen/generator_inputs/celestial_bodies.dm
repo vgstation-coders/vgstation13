@@ -1,31 +1,34 @@
-/datum/procgen/space_object
-	var/list/valid_atmospheres = list()
-	var/datum/procgen/atmosphere/atmos
-	var/list/valid_biomes = list()
-	var/weight
+/datum/procedural_space_object
+	var/weight //chance for this object to be spawned
+
 	var/list/valid_map_sizes = list()
-	var/heightmap_amplification = 0 //how likely this planet is to be mountainous
+	var/map_size
+
+	var/list/valid_atmospheres = list()
+	var/datum/procedural_atmosphere/atmos
+	var/list/valid_biomes = list()
 	var/list/valid_civs = list()
-	var/datum/procgen/civilization/civ
+	var/datum/procedural_civilization/civ
 
 	var/padding
+	var/heightmap_amplification = 0 //how likely this planet is to be mountainous
 	var/list/voronoi_matrix = list() //biome map
 	var/list/noise_matrix = list() //base heightmap
 //	var/list/heightmap = list() //heightmap blended with biome map
 
-/datum/procgen/space_object/proc/initialize_planet()
+/datum/procedural_space_object/proc/initialize_planet()
 	atmos = get_atmosphere()
 	voronoi_matrix = generate_biome_map()
 	noise_matrix = generate_heightmap()
 	civ = colonize()
 
-/datum/procgen/space_object/proc/get_atmosphere()
+/datum/procedural_space_object/proc/get_atmosphere()
 	var/atmospath = pick(valid_atmospheres)
-	var/datum/procgen/atmosphere/A = new atmospath
+	var/datum/procedural_atmosphere/A = new atmospath
 	A.initialize_atmosphere()
 	return A
 
-/datum/procgen/space_object/proc/generate_biome_map()
+/datum/procedural_space_object/proc/generate_biome_map()
 	var/num_seeds
 	var/list/vmatrix = list()
 	switch(map_size)
@@ -39,15 +42,15 @@
 	message_admins("vmatrix length: [vmatrix.len]")
 	return label_biomes(vmatrix)
 
-/datum/procgen/space_object/proc/generate_heightmap()
+/datum/procedural_space_object/proc/generate_heightmap()
 	return generate_perlin_noise(map_size, heightmap_amplification)
 //	noise_matrix = generate_perlin_noise(map_size, heightmap_amplification)
 //	filter_heightmap() //modifies the heightmap to better fit different biomes
 
-/datum/procgen/space_object/proc/colonize()
+/datum/procedural_space_object/proc/colonize()
 	var/list/civs = list()
 	for(var/civpath in valid_civs)
-		var/datum/procgen/civilization/C = new civpath
+		var/datum/procedural_civilization/C = new civpath
 		if(!C.weight || C.weight == 0)
 			continue
 		else
@@ -57,7 +60,7 @@
 		CRASH("Failed to pick a civilization level!")
 	return pickweight(civs)
 
-/datum/procgen/space_object/proc/label_biomes(var/list/vmatrix)
+/datum/procedural_space_object/proc/label_biomes(var/list/vmatrix)
 	var/list/id_to_biome_map = list()
 	var/list/available_biomes = valid_biomes.Copy()
 	var/list/ids = unique_ids(vmatrix)
@@ -73,7 +76,7 @@
 			vmatrix[x][y] |= id_to_biome_map[id]
 	return vmatrix
 
-/datum/procgen/space_object/proc/unique_ids(voronoi_matrix)
+/datum/procedural_space_object/proc/unique_ids(voronoi_matrix)
     var/list/ids = list()
 
     for (var/x = 1 to length(voronoi_matrix))
@@ -83,14 +86,14 @@
                 ids += id
     return ids
 
-/datum/procgen/space_object/proc/build_map(var/row_index)
+/datum/procedural_space_object/proc/build_map(var/row_index)
 	var/i = 1
 	var/list/turf/updated_turfs = list()
 	var/turf/new_turf
 //	var/area/new_area
 	while(i <= map_size)
 		for(var/turf/T in locate(padding + i,row_index,PG_Z))
-			var/datum/procgen/biome/B = voronoi_matrix[i][row_index]
+			var/datum/procedural_biome/B = voronoi_matrix[i][row_index]
 			var/heightmap_val = noise_matrix[i][row_index]
 			if(!B || !istype(B))
 				CRASH("Failed to build map: missing biome!")
@@ -103,9 +106,7 @@
 			break
 		i++
 
-/datum/procgen/space_object/asteroids
-	name = "Asteroid Field"
-	desc = "One or more asteroids floating through space."
+/datum/procedural_space_object/asteroids // One or more asteroids floating through space.
 	valid_atmospheres = list(PG_VACUUM)
 	valid_biomes = list(PG_ASTEROID, PG_COMET)
 	weight = PG_ASTEROID_WEIGHT
@@ -113,9 +114,7 @@
 	heightmap_amplification = PG_HIGH_ALT
 	valid_civs = list(PG_UNEXPLORED)
 
-/datum/procgen/space_object/moon
-	name = "Moon"
-	desc = "A lifeless mass of rock, lava, or ice."
+/datum/procedural_space_object/moon // A lifeless mass of rock, lava, or ice.
 	valid_atmospheres = list(PG_VACUUM, PG_THIN)
 	valid_biomes = list(PG_PERMAFROST, PG_ICE_SHEET, PG_ROCK, PG_MAGMA, PG_ASH)
 	weight = PG_MOON_WEIGHT
@@ -123,9 +122,7 @@
 	heightmap_amplification = PG_LOW_ALT
 	valid_civs = list(PG_UNEXPLORED, PG_YOUNG_CIV)
 
-/datum/procgen/space_object/planet
-	name = "Planet"
-	desc = "A planet which may contain an atmosphere, flora, and fauna."
+/datum/procedural_space_object/planet // A planet which may contain an atmosphere, flora, and fauna.
 	valid_atmospheres = list(PG_THIN, PG_BREATHABLE)
 	valid_biomes = list(PG_PERMAFROST, PG_ICE_SHEET, PG_TUNDRA, PG_FOREST, PG_PLAINS, PG_SHRUBLAND, PG_SWAMPLAND, PG_RAINFOREST, PG_SAVANNA, PG_DESERT, PG_MAGMA, PG_ASH)
 	weight = PG_PLANET_WEIGHT
@@ -133,9 +130,7 @@
 	heightmap_amplification = PG_MED_ALT
 	valid_civs = list(PG_UNEXPLORED, PG_YOUNG_CIV, PG_OLD_CIV, PG_FUTURE_CIV)
 
-/datum/procgen/space_object/xeno
-	name = "Xeno Planet"
-	desc = "A planet which may contain a toxic atmosphere along with mysterious flora and fauna."
+/datum/procedural_space_object/xeno // A planet which may contain a toxic atmosphere along with mysterious flora and fauna.
 	valid_atmospheres = list(PG_BREATHABLE, PG_TOXIC)
 	valid_biomes = list(PG_PERMAFROST, PG_ICE_SHEET, PG_TUNDRA, PG_FOREST, PG_PLAINS, PG_SHRUBLAND, PG_SWAMPLAND, PG_RAINFOREST, PG_SAVANNA, PG_DESERT, PG_MAGMA, PG_ASH) //TODO: update with xeno biomes
 	weight = PG_XENO_WEIGHT
