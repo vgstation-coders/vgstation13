@@ -1,0 +1,13 @@
+author: DeityLink
+delete-after: true
+changes:
+- bugfix: Fixed christmas lights now actually emitting any light. Their lit up sprite
+    also now appears over darkness.
+- bugfix: Fixed snow tiles not regenerating snow like they should sometimes.
+- bugfix: Fixed each snow tile and christmas light having a duplicate on top of them.
+- tweak: Reworked the way snow tiles hold snow so instead of losing snow from the
+    duplicate tile you get even more! Each tile now has 10 snow which it regenerates
+    by one every 30 seconds. You can grab 1 snow by hand, or 3 at a time by shovel.
+    If the tile reaches 0 snow it disappears.
+- imageadd: Re-added the grabbed and digged snow tile sprites so you can easily see
+    whether a tile is full of snow, or whether it's one shovel hit away from disappearing.
