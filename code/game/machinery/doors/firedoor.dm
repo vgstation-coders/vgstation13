@@ -361,7 +361,7 @@ var/global/list/alert_overlays_global = list()
 
 	if(isEmag(C))
 		if(density)
-			flick("door_spark", src)
+			door_animate("spark")
 			sleep(6)
 			force_open(user, C)
 			sleep(8)
@@ -371,9 +371,22 @@ var/global/list/alert_overlays_global = list()
 
 	do_interaction(user, C)
 
+/obj/machinery/door/firedoor/door_animate(var/animation)
+	switch (animation)
+		if ("opening")
+			flick("door_opening", src)
+		if ("closing")
+			flick("door_closing", src)
+		if("spark")
+			flick("door_spark", src)
+			anim(target = src, a_icon = icon, flick_anim = "door_spark-moody", sleeptime = 10, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
+		if("deny")
+			flick("door_deny", src)
+			anim(target = src, a_icon = icon, flick_anim = "door_deny-moody", sleeptime = 5, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
+
 /obj/machinery/door/firedoor/emag_ai(mob/living/silicon/ai/A)
 	if(density)
-		flick("door_spark", src)
+		door_animate("spark")
 		sleep(6)
 		open()
 		sleep(8)
@@ -432,7 +445,7 @@ var/global/list/alert_overlays_global = list()
 	if(alarmed && density && lockdown && !access_granted)
 		if(horror_force(user))
 			return
-
+		door_animate("deny")
 		to_chat(user, "<span class='warning'>Access denied. Please wait for authorities to arrive, or for the alert to clear.</span>")
 		return
 
@@ -519,12 +532,17 @@ var/global/list/alert_overlays_global = list()
 
 /obj/machinery/door/firedoor/update_icon()
 	overlays.len = 0
+	kill_moody_light_all()
 	if(density)
 		icon_state = "door_closed"
 		if(blocked)
 			overlays += image(icon = icon, icon_state = "welded")
 		if(pdiff_alert)
-			overlays += image(icon = icon, icon_state = "palert")
+			var/image/I = image(icon = icon, icon_state = "palert")
+			I.plane = ABOVE_LIGHTING_PLANE
+			I.layer = ABOVE_LIGHTING_LAYER
+			overlays += I
+			update_moody_light_index("palert", icon, "palert")
 		if(dir_alerts)
 			for(var/d=1;d<=4;d++)
 				var/cdir = cardinal[d]
@@ -534,14 +552,17 @@ var/global/list/alert_overlays_global = list()
 
 						var/list/state_list = alert_overlays_local["alert_[ALERT_STATES[i]]"]
 						if(flow_flags & ON_BORDER)
-							overlays += turn(state_list["[turn(cdir, dir2angle(src.dir))]"], dir2angle(src.dir))
+							var/image/I = image(turn(state_list["[turn(cdir, dir2angle(src.dir))]"], dir2angle(src.dir)))
+							overlays += I
+							update_moody_light_index("alert_[ALERT_STATES[i]]", image_override = I)
 						else
-							overlays += state_list["[cdir]"]
+							var/image/I = image(state_list["[cdir]"])
+							overlays += I
+							update_moody_light_index("alert_[ALERT_STATES[i]]", image_override = I)
 	else
 		icon_state = "door_open"
 		if(blocked)
 			overlays += image(icon = icon, icon_state = "welded_open")
-	return
 
 // CHECK PRESSURE
 /obj/machinery/door/firedoor/process()
