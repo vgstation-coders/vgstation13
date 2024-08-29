@@ -1,0 +1,10 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- bugfix: Coinboxes can now come out of vending machines again.
+- tweak: Coinboxes and vendpacks now eject from crowbar destroying vending machines.
+    Vendpacks still require inserted cardboard for this.
+- tweak: Coinboxes can now be recycled for metal, under the electronics category.
+- tweak: To compensate coinboxes being recyclable, and as to not be an infinite metal
+    source, they are now required in their frame build step. A no access requirement
+    version of them can be built as a metal stack recipe to aid this.
