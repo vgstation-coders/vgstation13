@@ -1,5 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: Mech syringe guns now actually fire their syringes properly, making them
-    finally useful for something other than getting fast research done.

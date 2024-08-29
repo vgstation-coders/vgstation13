@@ -1,5 +1,0 @@
-author: Eneocho
-delete-after: true
-changes:
-- rscadd: Cows will mutate their milk type when exposed to Phazon, unless they themselves
-    can make Phazon, in which case they will not mutate their milk further.
