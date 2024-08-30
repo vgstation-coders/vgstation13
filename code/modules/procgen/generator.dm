@@ -1,4 +1,5 @@
 //Procedural celestial body generator
+var/global/procgen_state = PG_INACTIVE
 
 /**
  * Outputs a Voronoi Diagram in list-of-list form given map size and number of seed points.
@@ -22,26 +23,27 @@
 	for (var/i = 1 to num_points)
 		var/seed_x = rand(1, size)
 		var/seed_y = rand(1, size)
-		seeds += list("id" = i, "x" = seed_x, "y" = seed_y)
+		seeds += list(list(seed_x,seed_y))
 
 	// Assign each cell in the grid to the nearest seed point
-	for (var/x = 1 to size)
-		for (var/y = 1 to size)
-			var/nearest_seed_id = 0
-			var/min_distance = size * size
+	for (var/y = 1 to size)
+		for (var/x = 1 to size)
+			var/nearest_seed_index = 0
+			var/list/rdists = list()
 
 			// Calculate the distance to each seed and find the closest one
-			for (var/seed in seeds)
-				var/seed_x = seeds["x"]
-				var/seed_y = seeds["y"]
-				var/distance = (x - seed_x) ** 2 + (y - seed_y) ** 2
-
-				if (distance < min_distance)
-					min_distance = distance
-					nearest_seed_id = seeds["id"]
-
+			var/i = 0
+			while(i++ < seeds.len)
+				var/nearest_seed_x = seeds[i][1]
+				var/nearest_seed_y = seeds[i][2]
+				var/distance = sqrt((x - nearest_seed_x) ** 2 + (y - nearest_seed_y) ** 2)
+				rdists += distance
+			var/pot_min = min(rdists)
+			nearest_seed_index = rdists.Find(pot_min)
 			// Assign the group identifier to the matrix based on the nearest seed
-			vo_matrix[x][y] |= nearest_seed_id
+			vo_matrix[y][x] = nearest_seed_index
+			file("voronoi.txt") << "[nearest_seed_index],"
+		file("voronoi.txt") << ";"
 	return vo_matrix
 
 /**
@@ -54,36 +56,44 @@
  * * mod - Modifier (flat amplitude adjustment)
  */
 /proc/generate_perlin_noise(size, mod = 0)
-    var/list/noise_matrix = new/list(size,size)
-    var/list/row
-    var/noise_value
-    var/max_noise = 100
-    var/min_noise = -0.001
+	var/list/noise_matrix = new/list(size,size)
+	var/list/row
+	var/noise_value
+	var/max_noise = 1*(10**9)
+	var/min_noise = -1*(10**9)
 
-    // Frequency and amplitude settings for the noise generation
-    var/frequency = 5 / size
-    var/amplitude = 1.0
+	// Frequency and amplitude settings for the noise generation
+	var/frequency = 5.0 / size
+	var/amplitude = 100.0
 
-    // Generate raw Perlin noise values
-    for (var/x = 1 to size)
-        row = list()
-        for (var/y = 1 to size)
-            noise_value = PerlinNoise(x * frequency, y * frequency) * amplitude
+	var/list/mins = list()
+	var/list/maxs = list()
 
-            // Track the min and max values to normalize later
-            if (noise_value > max_noise)
-                max_noise = noise_value
-            if (noise_value < min_noise)
-                min_noise = noise_value
-            row += noise_value
-        noise_matrix += row
+	// Generate raw Perlin noise values
+	for (var/x = 1 to size)
+		row = list()
+		for (var/y = 1 to size)
+			noise_value = PerlinNoise(x * frequency, y * frequency) * amplitude
 
-    // Normalize the noise values to the range of -10 to 10
-    for (var/x = 1 to size)
-        for (var/y = 1 to size)
-            noise_matrix[x][y] |= Normalize(noise_matrix[x][y], min_noise, max_noise, -10, 10) + mod
+			// Track the min and max values to normalize later
+			if (noise_value > max_noise)
+				max_noise = noise_value
+			if (noise_value < min_noise)
+				min_noise = noise_value
+			row += noise_value
+			//message_admins("[noise_value]")
+		mins += min(row)
+		maxs += max(row)
+		noise_matrix += list(row)
 
-    return noise_matrix
+	// Normalize the noise values to the range of -10 to 10
+	for (var/y = 1 to size)
+		for (var/x = 1 to size)
+			//noise_matrix[y][x] = normalize(noise_matrix[y][x], min(mins), max(maxs), -10, 10) + mod
+			file("perlin.txt") << "[noise_matrix[y][x]],"
+		file("perlin.txt") << ";"
+
+	return noise_matrix
 
 // Function to generate Perlin noise at a given coordinate
 /proc/PerlinNoise(x, y)
@@ -96,14 +106,14 @@
     var/fade_x = Fade(t_x)
     var/fade_y = Fade(t_y)
 
-    var/p1 = RandomGradient(floor_x, floor_y)
-    var/p2 = RandomGradient(floor_x + 1, floor_y)
-    var/p3 = RandomGradient(floor_x, floor_y + 1)
-    var/p4 = RandomGradient(floor_x + 1, floor_y + 1)
+    var/p1 = DotGridGradient(floor_x, floor_y, t_x, t_y)
+    var/p2 = DotGridGradient(floor_x + 1, floor_y, t_x - 1, t_y)
+    var/p3 = DotGridGradient(floor_x, floor_y + 1, t_x, t_y - 1)
+    var/p4 = DotGridGradient(floor_x + 1, floor_y + 1, t_x - 1, t_y - 1)
 
-    var/inter_x1 = p1 + fade_x * (p2 - p1)
-    var/inter_x2 = p3 + fade_x * (p4 - p3)
-    var/inter_y = inter_x1 + fade_y * (inter_x2 - inter_x1)
+    var/inter_x1 = mix(p1, p2, fade_x)
+    var/inter_x2 = mix(p3, p4, fade_x)
+    var/inter_y = mix(inter_x1, inter_x2, fade_y)
 
     return inter_y
 
@@ -111,26 +121,38 @@
 /proc/Fade(t)
     return t * t * t * (t * (t * 6 - 15) + 10)
 
+/proc/DotGridGradient(ix, iy, x, y)
+    var/gradient = RandomGradient(ix, iy)
+    var/dx = x
+    var/dy = y
+    return (dx * gradient[1] + dy * gradient[2])
+
 // Evil fucking bit mixing function to return a random gradient at a given point
 /proc/RandomGradient(x, y)
-    var/hash = (x * 374761393 + y * 668265263) % 2147483647
-    hash = (hash << 13) ^ hash
-    return (1.0 - ((hash * (hash * hash * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0)
+    var/hash = (x * 374761393 + y * 668265263) % 0xFFFFFF
+    hash = (hash << 13) & 0xFFFFFF
+    hash = (hash * (hash * hash * 15731 + 789221) + 1376312589) & 0xFFFFFF
 
-// Function to normalize a value from one range to another
-/proc/Normalize(value, min_value, max_value, new_min, new_max)
-    return ((value - min_value) / (max_value - min_value)) * (new_max - new_min) + new_min
+    var/direction = hash & 3
+    if (direction == 0)
+        return list(1.0, 0)  // Vector pointing to (1, 0)
+    else if (direction == 1)
+        return list(-1.0, 0)  // Vector pointing to (-1, 0)
+    else if (direction == 2)
+        return list(0, 1.0)  // Vector pointing to (0, 1)
+    else
+        return list(0, -1.0)  // Vector pointing to (0, -1)
 
 /proc/spawn_space_object() //update with configurable inputs and a menu
 	var/datum/procedural_generator/proc_gen = new
 	SSprocgen.PG = proc_gen
-	SSprocgen.flags -= SS_NO_FIRE
+	procgen_state = PG_INIT
+	SSprocgen.can_fire = TRUE
 	SSprocgen.ignite()
 
 /datum/procedural_generator
-	var/name
-	var/desc
 	var/map_size
+	var/rows_completed = 0
 
 	var/list/datum/procedural_space_object/space_objects
 	var/list/datum/procedural_atmosphere/atmospheres
@@ -139,8 +161,6 @@
 
 	var/datum/procedural_space_object/space_obj
 	var/datum/zLevel/procgen_z
-	var/gen_state = PG_INACTIVE
-	var/rows_completed = 0
 
 //All lists are generated at runtime to assist in adding new content easier.
 /datum/procedural_generator/New()
@@ -148,31 +168,23 @@
 	atmospheres = typesof(/datum/procedural_atmosphere) - /datum/procedural_atmosphere
 	biomes = typesof(/datum/procedural_biome) - /datum/procedural_biome
 	civilizations = typesof(/datum/procedural_civilization) - /datum/procedural_civilization
-	gen_state = PG_INIT
 
 /datum/procgen/Del()
 	qdel(SSprocgen.PG)
 	..()
 
-/datum/procedural_generator/proc/generate()
-	//Determine top-level celestial body characteristics
+////////////////////////////////////////////////////////////////////////////////
+// Initialization State - PG_INIT
+////////////////////////////////////////////////////////////////////////////////
+
+// Selects a space object, configures it, constructs the matrices used to map it, and spawns a zlevel of the appropriate size.
+/datum/procedural_generator/proc/construct_space_obj()
 	var/space_obj_path = pick_space_object()
 	space_obj = new space_obj_path
-	message_admins("space_obj = [space_obj]")
-	map_size = setup_zlevel()
-	space_obj.map_size = map_size
-	space_obj.padding = (PG_LARGE - map_size)/2
+	map_size = space_obj.get_map_size()
 	space_obj.initialize_planet()
-
-/datum/procedural_generator/proc/setup_zlevel()
-	var/new_map_size = pick(space_obj.valid_map_sizes)
-	message_admins("new_map_size = [new_map_size]")
-	map.addZLevel(new /datum/zLevel/procgen, z_to_use = PG_Z, make_base_turf = TRUE)
-	message_admins("map.zLevels.len = [map.zLevels.len]")
-	procgen_z = map.zLevels[PG_Z]
-	for(var/turf/T in block(locate(space_obj.padding + 1,space_obj.padding + 1,PG_Z),locate(space_obj.padding + new_map_size + 1,space_obj.padding + new_map_size + 1,PG_Z)))
-		T.ChangeTurf(/turf/space)
-	return new_map_size
+	setup_zlevel()
+	procgen_state = PG_MAPPING
 
 /datum/procedural_generator/proc/pick_space_object()
 	for(var/datum/procedural_space_object/S in space_objects)
@@ -185,23 +197,18 @@
 		CRASH("Failed to pick a space object to generate!")
 	return pickweight(space_objects)
 
-/datum/procedural_generator/proc/process()
-	switch(gen_state)
-		if(PG_INACTIVE)
-			return
-		if(PG_INIT)
-			generate()
-			gen_state = PG_MAPPING
-		if(PG_MAPPING)
-			if(rows_completed == map_size)
-				//gen_state = PG_DECORATION
-				gen_state = PG_INACTIVE
-				return
-			space_obj.build_map(rows_completed + 1)
-			rows_completed++
-		if(PG_DECORATION)
-			//spawn decorations
-		if(PG_POPULATION)
-			//spawn mobs
-		if(PG_LOOT)
-			//spawn loot
+/datum/procedural_generator/proc/setup_zlevel()
+	map.addZLevel(new /datum/zLevel/procgen, z_to_use = PG_Z, make_base_turf = TRUE)
+	procgen_z = map.zLevels[PG_Z]
+	for(var/turf/T in block(locate(space_obj.padding + 1,space_obj.padding + 1,PG_Z),locate(space_obj.padding + map_size + 1,space_obj.padding + map_size + 1,PG_Z)))
+		T.ChangeTurf(/turf/space)
+	return
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Mapping State - PG_MAPPING
+////////////////////////////////////////////////////////////////////////////////
+/datum/procedural_generator/proc/generate_map()
+	rows_completed = space_obj.build_map(rows_completed + 1)
+	if(rows_completed == map_size)
+		procgen_state = PG_DECORATION

@@ -155,6 +155,10 @@ var/const/Sqrt2	= 1.41421356
 		return 1
 	return clamp( (b - x)/(b - a), min, max )
 
+// Function to normalize a value from one range to another using min-max feature scaling
+/proc/normalize(value, min_value, max_value, new_min, new_max)
+    return ((value - min_value) * (new_max - new_min)) / (max_value - min_value) + new_min
+
 /proc/Mean(...)
 	var/values 	= 0
 	var/sum		= 0

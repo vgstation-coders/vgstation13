@@ -3,6 +3,7 @@
 
 	var/list/valid_map_sizes = list()
 	var/map_size
+	var/padding
 
 	var/list/valid_atmospheres = list()
 	var/datum/procedural_atmosphere/atmos
@@ -10,11 +11,16 @@
 	var/list/valid_civs = list()
 	var/datum/procedural_civilization/civ
 
-	var/padding
 	var/heightmap_amplification = 0 //how likely this planet is to be mountainous
 	var/list/voronoi_matrix = list() //biome map
 	var/list/noise_matrix = list() //base heightmap
 //	var/list/heightmap = list() //heightmap blended with biome map
+
+/datum/procedural_space_object/proc/get_map_size()
+	var/new_map_size = pick(valid_map_sizes)
+	map_size = new_map_size
+	padding = (PG_LARGE - map_size)/2
+	return new_map_size
 
 /datum/procedural_space_object/proc/initialize_planet()
 	atmos = get_atmosphere()
@@ -39,7 +45,6 @@
 		if(PG_LARGE)
 			num_seeds = rand(4,16)
 	vmatrix = generate_voronoi(map_size,num_seeds)
-	message_admins("vmatrix length: [vmatrix.len]")
 	return label_biomes(vmatrix)
 
 /datum/procedural_space_object/proc/generate_heightmap()
@@ -73,18 +78,18 @@
 	for (var/x = 1 to length(vmatrix))
 		for (var/y = 1 to length(vmatrix[x]))
 			var/id = vmatrix[x][y]
-			vmatrix[x][y] |= id_to_biome_map[id]
+			vmatrix[x][y] = id_to_biome_map[id]
 	return vmatrix
 
 /datum/procedural_space_object/proc/unique_ids(voronoi_matrix)
-    var/list/ids = list()
+	var/list/ids = list()
 
-    for (var/x = 1 to length(voronoi_matrix))
-        for (var/y = 1 to length(voronoi_matrix[x]))
-            var/id = voronoi_matrix[x][y]
-            if (!ids.Find(id)) // Add the ID only if it's not already in the list
-                ids += id
-    return ids
+	for (var/x = 1 to length(voronoi_matrix))
+		for (var/y = 1 to length(voronoi_matrix[x]))
+			var/id = voronoi_matrix[x][y]
+			if (!ids.Find(id)) // Add the ID only if it's not already in the list
+				ids += id
+	return ids
 
 /datum/procedural_space_object/proc/build_map(var/row_index)
 	var/i = 1
@@ -105,7 +110,12 @@
 		if(i > 500) //circuit breaker
 			break
 		i++
+	return row_index++
 
+
+////////////////////////////////////////////////////////////////////////////////
+// Space Object Types
+////////////////////////////////////////////////////////////////////////////////
 /datum/procedural_space_object/asteroids // One or more asteroids floating through space.
 	valid_atmospheres = list(PG_VACUUM)
 	valid_biomes = list(PG_ASTEROID, PG_COMET)

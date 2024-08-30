@@ -5,13 +5,12 @@
 	var/composition //gas_mix
 	var/list/valid_precip = list()//can it rain
 	var/precipitation
-	var/list/valid_temps = list(PG_FROZEN,PG_COLD,PG_BRISK,PG_TEMPERATE,PG_WARM,PG_HOT,PG_LAVA)
 	var/temperature
 	var/datum/gas_mixture/mix
 
 /datum/procedural_atmosphere/proc/initialize_atmosphere()
 	precipitation = pick(PG_NO_PRECIP, PG_L_PRECIP, PG_M_PRECIP, PG_H_PRECIP, PG_VH_PRECIP)
-	temperature = pick(valid_temps)
+	temperature = pick(PG_FROZEN,PG_COLD,PG_BRISK,PG_TEMPERATE,PG_WARM,PG_HOT,PG_LAVA)
 	//setup air mix
 
 /datum/procedural_atmosphere/vacuum // No air

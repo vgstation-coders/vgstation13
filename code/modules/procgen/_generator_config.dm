@@ -1,10 +1,15 @@
 //Settings for configurating the procedural generator.
 
 //Celestial body weights
-#define PG_ASTEROID_WEIGHT	40
-#define PG_MOON_WEIGHT		25
-#define PG_PLANET_WEIGHT	25
-#define PG_XENO_WEIGHT		10
+//#define PG_ASTEROID_WEIGHT	40
+//#define PG_MOON_WEIGHT		25
+//#define PG_PLANET_WEIGHT	25
+//#define PG_XENO_WEIGHT		10
+
+#define PG_ASTEROID_WEIGHT	100
+#define PG_MOON_WEIGHT		0
+#define PG_PLANET_WEIGHT	0
+#define PG_XENO_WEIGHT		0
 
 //Celestial body sizes
 #define PG_SMALL	100

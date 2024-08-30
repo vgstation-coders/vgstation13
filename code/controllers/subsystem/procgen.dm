@@ -7,6 +7,8 @@ var/datum/subsystem/procgen/SSprocgen
 	priority      = SS_PRIORITY_PROCGEN
 	display_order = SS_DISPLAY_PROCGEN
 
+	can_fire = FALSE //inactive until required
+
 	var/rows_remaining = 0
 	var/datum/procedural_generator/PG
 
@@ -18,15 +20,29 @@ var/datum/subsystem/procgen/SSprocgen
 
 /datum/subsystem/procgen/fire(var/resumed = FALSE)
 	if(!PG)
-		flags |= SS_NO_FIRE
+		can_fire = FALSE
 		pause()
-	else if(!resumed)
-		rows_remaining = PG.gen_state == PG_INIT ? 1 : PG.map_size - PG.rows_completed
-	while(rows_remaining)
-		if(!rows_remaining || PG.gcDestroyed)
-			continue
+	switch(procgen_state)
+		if(PG_INACTIVE)
+			can_fire = FALSE
+		if(PG_INIT)
+			rows_remaining = 1
+			PG.construct_space_obj()
+		if(PG_MAPPING)
+			if(!resumed)
+				rows_remaining = PG.map_size - PG.rows_completed
+			while(rows_remaining)
+				if(!rows_remaining || PG.gcDestroyed)
+					continue
 
-		PG.process()
+				PG.generate_map()
 
-		if (MC_TICK_CHECK)
-			break
+				if (MC_TICK_CHECK)
+					break
+		if(PG_DECORATION)
+			can_fire = FALSE
+		if(PG_POPULATION)
+			can_fire = FALSE
+		if(PG_LOOT)
+			can_fire = FALSE
+
