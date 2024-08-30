@@ -194,7 +194,7 @@
 			return SUICIDE_ACT_BRUTELOSS
 	else if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
-		user.IgniteMob()
+		user.ignite()
 		return SUICIDE_ACT_FIRELOSS
 	else if (force >= 10)
 		user.visible_message("<span class='danger'>[user] is bludgeoning \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")

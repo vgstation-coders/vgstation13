@@ -775,7 +775,7 @@
 	for(var/mob/living/cookedalive as anything in occupant)
 		if(cookedalive.fire_stacks < 5)
 			cookedalive.adjust_fire_stacks(1)
-			cookedalive.IgniteMob()
+			cookedalive.ignite()
 
 	return
 
@@ -802,7 +802,7 @@
 	if(equipment.len >= max_equip)
 		return 0
 	return max_equip - equipment.len
-	
+
 /obj/mecha/proc/is_killdozer()
 	for(var/obj/I in equipment)
 		if(istype(I, /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit))

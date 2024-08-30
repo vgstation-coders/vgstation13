@@ -64,7 +64,7 @@
 /obj/item/weapon/pickaxe/plasmacutter/heat_axe/proc/HellFire(var/mob/living/victim)
 	if(isliving(victim) && active) //Just to be sure.
 		victim.adjust_fire_stacks(1)
-		if(victim.IgniteMob())
+		if(victim.ignite())
 			to_chat(victim, "<span class='danger'>You are lit on fire from the intense heat of the [name]!</span>")
 
 /obj/item/weapon/pickaxe/plasmacutter/heat_axe/preattack(atom/target, mob/user, proximity_flag)

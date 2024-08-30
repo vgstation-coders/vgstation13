@@ -33,7 +33,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 /obj/machinery/atmospherics/unary/cryo_cell/Entered(var/atom/movable/Obj, var/atom/OldLoc)
 	. = ..()
-	
+
 	if(OldLoc.type != src.type)
 		spawn(rand(0,6))
 			if(OldLoc.type != src.type)
@@ -641,7 +641,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		M.drop_item(I) // to avoid visual fuckery bobing. Doesn't do anything to items with cant_drop to avoid magic healing tube abuse.
 	update_icon()
 	nanomanager.update_uis(src)
-	M.ExtinguishMob()
+	M.extinguish()
 	M.throw_alert(SCREEN_ALARM_CRYO, /obj/abstract/screen/alert/object/cryo, new_master = src)
 	if(user)
 		if(M == user)

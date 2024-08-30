@@ -582,7 +582,7 @@
 		else
 			visible_message("<span class='warning'>\The [user] attempts to put out the fire on \the [target] with \the [src].</span>")
 			if(prob(extinguishingProb))
-				M.ExtinguishMob()
+				M.extinguish()
 				visible_message("<span class='notice'>\The [user] puts out the fire on \the [target].</span>")
 		return
 

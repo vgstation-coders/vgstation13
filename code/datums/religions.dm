@@ -261,7 +261,7 @@ var/list/tgui_religion_data
 	if (B.my_rel != src) // BLASPHEMY
 		to_chat(preacher, "<span class='warning'>You are a heathen to this God. You feel [B.my_rel.deity_name]'s wrath strike you for this blasphemy.</span>")
 		preacher.fire_stacks += 5
-		preacher.IgniteMob()
+		preacher.ignite()
 		preacher.audible_scream()
 		return FALSE
 	if (preacher != religiousLeader.current)

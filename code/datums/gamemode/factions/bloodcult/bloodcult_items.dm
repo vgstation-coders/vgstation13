@@ -1402,7 +1402,7 @@ var/list/arcane_tomes = list()
 
 	next_extinguish = world.time + extinguish_cooldown
 	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
-	H.ExtinguishMob()
+	H.extinguish()
 
 //plasmaman stuff
 /obj/item/clothing/suit/cultrobes/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
@@ -1519,7 +1519,7 @@ var/list/arcane_tomes = list()
 
 	next_extinguish = world.time + extinguish_cooldown
 	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
-	H.ExtinguishMob()
+	H.extinguish()
 
 //plasmaman stuff
 /obj/item/clothing/suit/space/cult/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
