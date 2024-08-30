@@ -1,0 +1,5 @@
+author: west3436
+delete-after: true
+changes:
+- bugfix: Fixed a bug where players would appear to be on fire without actually burning.
+- tweak: Mobs will now catch on fire as soon as they step into a fire.
