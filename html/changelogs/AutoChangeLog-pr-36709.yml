@@ -1,0 +1,8 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Placing stacks into storage items now automatically adds it to stacks of
+    the same type, if possible.
+- tweak: Ore satchels and derivatives now show the number of ores in all stacks per
+    type.
+- bugfix: Sheet snatchers no longer cause bad screen issues.
