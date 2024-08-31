@@ -2,7 +2,7 @@
 //Basically sends a cheap projectile that moves from a turf A to a turf B in a "straight" line. Returns true if it reaches turf B without hitting anything on the way there (other than turf B itself)
 //Useful for instance to check if an item thrown/projectile fired from a A to B would reach its target
 
-/proc/test_reach(var/turf/origin,var/turf/destination,var/_pass_flags=0)
+/proc/test_reach(var/turf/origin,var/atom/destination,var/_pass_flags=0)
 	if (!origin || !destination)
 		return FALSE
 	if (origin.z != destination.z)
@@ -14,11 +14,24 @@
 	qdel(test)
 	return result
 
+/proc/get_reach(var/turf/origin,var/atom/destination,var/_pass_flags=0)
+	if (!origin || !destination)
+		return FALSE
+	if (origin.z != destination.z)
+		return FALSE
+	if (origin == destination)
+		return TRUE
+	var/obj/test_reach/test = new(origin,destination,_pass_flags)
+	var/turf/reached_turf = test.main(TRUE)
+	qdel(test)
+	return reached_turf
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 /obj/test_reach
 	invisibility = 101
 	pass_flags = 0
+	density = 1//objects without density can go through mobs regardless of pass flags so this must be set to 1
 
 	var/dist_x
 	var/dist_y
@@ -29,10 +42,11 @@
 	var/bumped = 0
 	var/max_range = 100
 	var/turf/starting
-	var/turf/target
+	var/atom/target
 
 	var/result = FALSE
 	var/finished = FALSE
+	var/atom/bumped_atom = null
 
 /obj/test_reach/New(var/turf/loc,var/turf/destination,var/_pass_flags)
 	..()
@@ -40,7 +54,7 @@
 	target = destination
 	pass_flags = _pass_flags
 
-/obj/test_reach/proc/main()
+/obj/test_reach/proc/main(var/get_reach=FALSE)
 	//let's do our first movement by carefully going around any adjacent wall if another cardinal direction toward our destination is possible
 	//this fixes a quirk with bresenham paths where it may decide to run into adjacent walls on its first step even when it doesn't make "sense"
 	var/orientation = get_dir(loc,target)
@@ -80,7 +94,15 @@
 	while(loc && !finished)
 		loop()
 
-	return result
+	if (get_reach)
+		if (bumped_atom)
+			return bumped_atom
+		else if (result)
+			return target
+		else
+			return loc
+	else
+		return result
 
 /obj/test_reach/proc/loop()
 	if(loc && !finished)
@@ -103,7 +125,7 @@
 			return
 		Move(step)
 		error += distA
-		if (loc == target)
+		if (loc == target || loc == target.loc)
 			result = TRUE
 			finished = TRUE
 	else
@@ -116,13 +138,12 @@
 		dir = dA
 		if(error < 0)
 			dir = dA + dB
-		if (loc == target)
+		if (loc == target || loc == target.loc)
 			result = TRUE
 			finished = TRUE
 
 /obj/test_reach/to_bump(var/atom/A)
 	if (A == target)
 		result = TRUE
-		finished = TRUE
-	else
-		finished = TRUE
+	finished = TRUE
+	bumped_atom = A
