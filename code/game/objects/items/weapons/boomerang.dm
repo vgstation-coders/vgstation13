@@ -92,7 +92,7 @@
 	B.starting = starting
 	B.yo = target.y - starting.y
 	B.xo = target.x - starting.x
-	B.damage = throwforce
+	//B.damage = throwforce //Actual damage is down by calls to throw_impact(). The projectile damage should remain at zero unless you want to break open crates with it
 	B.projectile_speed = 0.66/throw_mult
 	B.icon_state = "[icon_state]-spin"
 	B.overlays += overlays
@@ -118,7 +118,7 @@
 	name = "boomerang"
 	icon = 'icons/obj/boomerang.dmi'
 	icon_state = "boomerang-spin"
-	damage = 5
+	damage = 0
 	flag = "energy"
 	custom_impact = 1
 	projectile_speed = 0.66

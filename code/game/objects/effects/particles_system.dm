@@ -182,6 +182,7 @@ var/list/particle_string_to_type = list(
 	PS_CROSS_ORB = /particles/cross_orb,
 	PS_SACRED_FLAME = /particles/sacred_flame,
 	PS_SACRED_FLAME2 = /particles/sacred_flame/alt,
+	PS_BIBLE_PAGE = /particles/bible_page,
 	)
 
 /particles
@@ -549,3 +550,22 @@ var/list/particle_string_to_type = list(
 
 /particles/sacred_flame/alt
 	plane = LIGHTING_PLANE
+
+//BIBLE PAGE
+/particles/bible_page
+	width = 96
+	height = 96
+	count = 1
+
+	lifespan = 10
+	fade = 5
+	spawning = 0//we set the spawning after velocity has been adjusted
+
+	icon = 'icons/effects/effects_particles.dmi'
+	icon_state = "bible_page"
+	rotation = generator("num", 0,360)
+	spin = 10
+	grow = generator("box", list(-0.3,-0.3), list(0,0))
+
+	appearance_flags = RESET_COLOR|RESET_ALPHA
+	plane = ABOVE_LIGHTING_PLANE

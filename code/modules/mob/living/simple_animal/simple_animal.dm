@@ -450,6 +450,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(!Proj)
 		return PROJECTILE_COLLISION_DEFAULT
 	Proj.on_hit(src, 0)
+	if(supernatural && isholyweapon(Proj))
+		playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "holy",sleeptime = 5, lay = NARSIE_GLOW,plane = ABOVE_LIGHTING_PLANE)
+		purge = 3
 	adjustBruteLoss(Proj.damage)
 	return PROJECTILE_COLLISION_DEFAULT
 
@@ -568,7 +572,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		playsound(loc, O.hitsound, 50, 1, -1)
 	..()
 
-/mob/living/simple_animal/thrown_defense(var/obj/O)
+/mob/living/simple_animal/thrown_defense(var/obj/O,var/speed = 5)
 	if(supernatural && isholyweapon(O))
 		playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "holy",sleeptime = 5, lay = NARSIE_GLOW,plane = ABOVE_LIGHTING_PLANE)

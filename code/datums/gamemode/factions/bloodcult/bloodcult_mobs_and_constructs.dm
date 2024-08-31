@@ -13,6 +13,13 @@
 	var/turf/crashing = null
 	spell_on_use_inhand = /spell/juggerdash //standard jug gets forcewall, but this seems better for perfect
 
+/mob/living/simple_animal/construct/armoured/perfect/special_thrown_behaviour()
+	dash_dir = dir
+	throwing = 2//dashing through windows and grilles
+
+/mob/living/simple_animal/construct/armoured/perfect/get_afterimage()
+	return "red"
+
 /mob/living/simple_animal/construct/armoured/perfect/to_bump(var/atom/obstacle)
 	if(src.throwing)
 		var/breakthrough = 0

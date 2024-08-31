@@ -362,10 +362,10 @@
 		return PROJECTILE_COLLISION_BLOCKED
 	return (..(P))
 
-/mob/living/simple_animal/construct/armoured/thrown_defense(var/obj/O)
+/mob/living/simple_animal/construct/armoured/thrown_defense(var/obj/O,var/speed = 5)
 	. = ..()
 	if (. <= 1)//juggerblock doesn't protect from holy weapons
-		if(juggerblock(O.throwforce,O))
+		if(juggerblock(O.throwforce*(speed/5),O))
 			return 0
 	return .
 

@@ -576,6 +576,20 @@
 					throwing = 0
 					. = 0
 
+/atom/movable/proc/special_thrown_behaviour()
+	return
+
+/atom/movable/proc/get_afterimage()
+	return ""
+
+/atom/movable/proc/spawn_afterimage(var/afterimage,var/afterimage_step)
+	switch(afterimage)
+		if ("red")
+			new /obj/effect/afterimage/red(loc,src)
+		if ("richter tackle")
+			var/obj/effect/afterimage/richter_tackle/RT = new (loc,src)
+			RT.overlays += image('icons/effects/effects.dmi', src, "castlevania_tackle", dir = turn(SOUTH, 90 * afterimage_step))
+
 /atom/movable/proc/throw_at(atom/target, range, speed, override = TRUE, var/fly_speed = 0, var/list/whitelist) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
 	set waitfor = FALSE
 	if(!target || !src)
@@ -596,33 +610,9 @@
 		if(M_HULK in usr.mutations)
 			src.throwing = 2 // really strong throw!
 
-	if(istype(src,/obj/mecha))
-		var/obj/mecha/M = src
-		M.dash_dir = dir
-		src.throwing = 2// mechas will crash through windows, grilles, tables, people, you name it
-
-	if(istype(src,/mob/living/simple_animal/hostile/humanoid/nurseunit))
-		var/mob/living/simple_animal/hostile/humanoid/nurseunit/M = src
-		M.dash_dir = dir
-		src.throwing = 2
-
-	//-----------Cool Afterimages---------------------
-	var/afterimage = ""
-	if(istype(src,/mob/living/simple_animal/construct/armoured/perfect))
-		var/mob/living/simple_animal/construct/armoured/perfect/M = src
-		M.dash_dir = dir
-		src.throwing = 2
-		afterimage = "red"
-	else if (ishuman(src))
-		var/mob/living/carbon/human/H = src
-		if (istype(H.w_uniform, /obj/item/clothing/under/hunter)\
-			&& istype(H.wear_suit, /obj/item/clothing/suit/hunter)\
-			&& istype(H.shoes, /obj/item/clothing/shoes/hunter)\
-			&& istype(H.head, /obj/item/clothing/head/hunter)\
-			&& istype(H.gloves, /obj/item/clothing/gloves/hunter))
-			afterimage = "richter tackle"
-			anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "castlevania_tackle_flick", plane = ABOVE_LIGHTING_PLANE)
-	//------------------------------------------------
+	special_thrown_behaviour()
+	var/afterimage = get_afterimage()
+	var/afterimage_step = 0
 
 	var/dist_x = abs(target.x - src.x)
 	var/dist_y = abs(target.y - src.y)
@@ -662,11 +652,8 @@
 			if(kinetic_acceleration>kinetic_sum)
 				fly_speed += kinetic_acceleration-kinetic_sum
 				kinetic_sum = kinetic_acceleration
-			switch(afterimage)
-				if ("red")
-					new /obj/effect/afterimage/red(loc,src)
-				if ("richter tackle")
-					new /obj/effect/afterimage/richter_tackle(loc,src)
+			spawn_afterimage(afterimage,afterimage_step)
+			afterimage_step++
 			if(error < 0)
 				var/atom/step = get_step(src, dy)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
@@ -706,11 +693,8 @@
 			if(kinetic_acceleration>0)
 				fly_speed += kinetic_acceleration
 				kinetic_acceleration = 0
-			switch(afterimage)
-				if ("red")
-					new /obj/effect/afterimage/red(loc,src)
-				if ("richter tackle")
-					new /obj/effect/afterimage/richter_tackle(loc,src)
+			spawn_afterimage(afterimage,afterimage_step)
+			afterimage_step++
 			if(error < 0)
 				var/atom/step = get_step(src, dx)
 				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge

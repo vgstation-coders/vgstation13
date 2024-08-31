@@ -67,12 +67,15 @@ var/list/tgui_religion_data
 			var/datum/religion/religion = new path
 			var/obj/item/weapon/storage/fancy/incensebox/incensebox_path = religion.preferred_incense
 			var/incense_fragrance = initial(incensebox_path.fragrance)
+			var/list/bible_style = all_bible_styles[religion.bookstyle]
+			if (islist(bible_style))
+				bible_style = bible_style["icon"]
 			data_religions += list(list(
 				"name" = religion.name,
 				"keywords" = religion.keys,
 				"deityName" = religion.deity_name,
 				"bibleStyle" = religion.bookstyle,
-				"bibleStyleIcon" = all_bible_styles[religion.bookstyle],
+				"bibleStyleIcon" = bible_style,
 				"bibleName" = religion.bible_name,
 				"maleAdept" = religion.male_adept,
 				"femaleAdept" = religion.female_adept,
@@ -82,7 +85,6 @@ var/list/tgui_religion_data
 				"preferredIncense" = incense_fragrance,
 				"notes" = religion.ui_notes(),
 			))
-
 		var/list/data_bible_styles = data["bibleStyles"]
 		for(var/name in all_bible_styles)
 			var/icon_name = all_bible_styles[name]

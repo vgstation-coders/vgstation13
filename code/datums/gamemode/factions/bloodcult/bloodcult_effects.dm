@@ -115,7 +115,6 @@
 	transform = matrix()
 	pixel_x = 0
 	pixel_y = 0
-	overlays += image('icons/effects/effects.dmi', src, "castlevania_tackle", dir = pick(cardinal))
 
 /obj/effect/afterimage/New(var/turf/loc, var/atom/model, var/fadout = 5, var/initial_alpha = 255, var/lay = NARSIE_GLOW, var/pla = ABOVE_LIGHTING_PLANE)
 	..()

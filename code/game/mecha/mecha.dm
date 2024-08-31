@@ -194,6 +194,10 @@
 	selected = null
 	..()
 
+/obj/mecha/special_thrown_behaviour()
+	dash_dir = dir
+	throwing = 2//dashing through windows and grilles
+
 /obj/mecha/can_apply_inertia()
 	return 1 //No anchored check - so that mechas can fly off into space
 
@@ -802,7 +806,7 @@
 	if(equipment.len >= max_equip)
 		return 0
 	return max_equip - equipment.len
-	
+
 /obj/mecha/proc/is_killdozer()
 	for(var/obj/I in equipment)
 		if(istype(I, /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit))
