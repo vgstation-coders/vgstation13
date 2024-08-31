@@ -1,5 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- rscadd: Admins now get a message if a bag of holding was quick equipped into another
-    bag of holding really fast with hotkeys.
