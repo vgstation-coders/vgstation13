@@ -1,0 +1,4 @@
+author: hacker-on-steroids
+delete-after: true
+changes:
+- bugfix: vent pumps no longer appear on when unpowered
