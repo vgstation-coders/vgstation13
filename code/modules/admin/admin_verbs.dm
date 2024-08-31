@@ -1201,7 +1201,7 @@ var/list/admin_verbs_mod = list(
 	var/clipmax_y = INFINITY
 	var/clipmin_z = 0
 	var/clipmax_z = INFINITY
-	if(alert("Clip map to bounds?","Map element loading","Yes","No") == "Yes")
+	if(alert("Clip map to bounds?","Map element loading","No","Yes") == "Yes")
 		clipmin_x = input(usr, "Minimum X to clip at", "Map element loading", "1") as null|num
 		if(clipmin_x == null)
 			return
