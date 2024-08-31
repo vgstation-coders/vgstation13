@@ -1,6 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: The hobo shacks and mine surprises now have dynamic lighting again.
-- bugfix: Ghosts and admins can now jump to the areas of mining surprises and hobo
-    shacks.

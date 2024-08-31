@@ -1,5 +1,0 @@
-author: SonixApache
-delete-after: true
-changes:
-- tweak: slimefolk now get a proper feedback message if they don't have any limbs
-    to regenerate with their special ability
