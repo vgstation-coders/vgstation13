@@ -622,7 +622,7 @@
 
 /obj/item/weapon/dnainjector/nofail/antijumpy
 	name = "DNA-Injector (Anti-Jumpy)"
-	desc = "Awwe.."
+	desc = "Awwe."
 	datatype = DNA2_BUF_SE
 	value = 0x001
 	//block = 2
