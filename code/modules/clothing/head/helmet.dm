@@ -184,7 +184,7 @@
 	name = "DRN-001 Helmet"
 	desc = "The helmet of the DRN-001 model. A simple, sturdy blue helmet."
 	icon_state = "megahelmet"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	flags = FPRINT
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 	item_state = "megahelmet"

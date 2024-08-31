@@ -104,24 +104,25 @@
 
 	modifiers -= list("alt", "shift", "ctrl")
 
+/obj/item/device/rcd/rpd/attack_self(var/mob/user)
+	..()
+	for(var/cat in schematics)
+		var/list/L = schematics[cat]
+		for(var/datum/rcd_schematic/C in L)
+			for(var/client/client in interface.clients)
+				C.send_list_assets(client)
+	
 
 /obj/item/device/rcd/rpd/rebuild_ui()
 	var/dat = ""
-	var/multitext=""
-	var/autotext=""
-	
-	if (has_metal_slime)//build_all
-		multitext=" <div style='margin-top:1em;'><b>Multilayer Mode: </b><a href='?src=\ref[interface];toggle_multi=1'><span class='[build_all? "schem_selected" : "schem"]'>[build_all ? "On" : "Off"]</span></a></div> "
-	if (has_yellow_slime)//build_all
-		autotext=" <div style='margin-top:1em;'><b>Autowrench: </b><a href='?src=\ref[interface];toggle_auto=1'><span class='[autowrench? "schem_selected" : "schem"]'>[autowrench ? "On" : "Off"]</span></a></div> "
 
+	//i don't know why i have to add padding to the bottom of the RPD, but it doesn't look right otherwise.
 	dat += {"
-		<b>Selected:</b> <span id="selectedname"></span>
-		<h2>Options</h2>
-		<div id="schematic_options">
+		<div style="padding-bottom:1em;" id="schematic_options2">
 		</div>
-		[multitext]
-		[autotext]
+		<div id="schematic_options1">
+		</div>
+
 		<h2>Available schematics</h2>
 		<div id='fav_list'></div>
 	"}
@@ -129,11 +130,12 @@
 		dat += "<b>[cat]:</b><ul style='list-style-type:disc'>"
 		var/list/L = schematics[cat]
 		for(var/datum/rcd_schematic/C in L)
+			for(var/client/client in interface.clients)
+				C.send_list_assets(client)
 			var/turf/T = get_turf(src)
 			if(!T || ((C.flags & RCD_Z_DOWN) && !HasBelow(T.z)) || ((C.flags & RCD_Z_UP) && !HasAbove(T.z)))
 				continue
 			dat += C.schematic_list_line(interface,FALSE,src.selected==C)
-
 		dat += "</ul>"
 
 	interface.updateLayout(dat)
@@ -146,6 +148,14 @@
 
 /obj/item/device/rcd/rpd/update_options_menu()
 	if(selected)
+		var/multitext=""
+		var/autotext=""
+	
+		if (has_metal_slime)//build_all
+			multitext=" <div style='margin-top:1em;'><b>Multilayer Mode: </b><a href='?src=\ref[interface];toggle_multi=1'><span class='[build_all? "schem_selected" : "schem"]'>[build_all ? "On" : "Off"]</span></a></div> "
+		if (has_yellow_slime)//build_all
+			autotext=" <div style='margin-top:1em;'><b>Autowrench: </b><a href='?src=\ref[interface];toggle_auto=1'><span class='[autowrench? "schem_selected" : "schem"]'>[autowrench ? "On" : "Off"]</span></a></div> "
+	
 		for(var/client/client in interface.clients)
 			selected.send_assets(client)
 		var/schematichtml=selected.get_HTML(args)
@@ -153,9 +163,13 @@
 			schematichtml=replacetext(replacetext(schematichtml,"id=\"layer\"","id=\"layer_selected\""),"id=\"layer_center\"","id=\"layer_center_selected\"")
 		if (autowrench)
 			schematichtml=replacetext(replacetext(schematichtml,"id=\"layer_selected\"","id=\"layer_selectedauto\""),"id=\"layer_center_selected\"","id=\"layer_center_selectedauto\"")
-		interface.updateContent("schematic_options", schematichtml )
+		schematichtml+=multitext
+		schematichtml+=autotext
+		interface.updateContent("schematic_options1", schematichtml )
+		interface.updateContent("schematic_options2", schematichtml )
 	else
-		interface.updateContent("schematic_options", " ")
+		interface.updateContent("schematic_options1", " ")
+		interface.updateContent("schematic_options2", " ")
 
 
 /obj/item/device/rcd/rpd/Topic(var/href, var/list/href_list)

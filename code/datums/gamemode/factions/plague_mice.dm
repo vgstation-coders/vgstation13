@@ -86,13 +86,13 @@
 			plague.origin = pick("Black Plague", "Javorian Pox", "Gray Death", "Doom of Pandyssia", "Thrassian Plague",
 								"Redlight", "Khaara Bacterium", "MEV-1")
 
-		plague.spread = SPREAD_BLOOD|SPREAD_CONTACT|SPREAD_AIRBORNE|SPREAD_COLONY//gotta ensure that our mice can spread that disease
+		plague.spread = SPREAD_BLOOD|SPREAD_CONTACT|SPREAD_AIRBORNE //gotta ensure that our mice can spread that disease
 
 		plague.color = "#ADAEAA"
 		plague.pattern = 3
 		plague.pattern_color = "#EE9A9C"
 		plague.max_stage = 4 //4 stages, unlocks the really dangerous symptoms rather than just DNA Degradation
-		plague.speed = 4 //Takes about 50 seconds to advance to the next stage
+		plague.speed = 2 //Takes about 100 seconds to advance to the next stage, max stage in 5 minutes
 
 		plague.makerandom(list(90,100),list(40,75),anti,bad,null)
 		for(var/datum/disease2/effect/e in plague.effects)

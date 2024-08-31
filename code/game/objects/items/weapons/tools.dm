@@ -65,15 +65,7 @@
 	if(user.is_in_modules(src))
 		return
 	if(istype(W, /obj/item/weapon/handcuffs/cable) && !istype(src, /obj/item/tool/wrench/socket))
-		to_chat(user, "<span class='notice'>You wrap the cable restraint around the top of the wrench.</span>")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/tool/wrench_wired/I = new (get_turf(user))
-			user.put_in_hands(I)
-		else
-			new /obj/item/tool/wrench_wired(get_turf(src.loc))
-		qdel(src)
-		qdel(W)
+		user.create_in_hands(src, /obj/item/tool/wrench_wired, W, msg = "<span class='notice'>You wrap the cable restraint around the top of the wrench.</span>")
 
 /obj/item/tool/wrench/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
@@ -445,7 +437,7 @@
 	if (src.welding)
 		if(isliving(A))
 			var/mob/living/L = A
-			L.IgniteMob()
+			L.ignite()
 			remove_fuel(1)
 
 /obj/item/tool/weldingtool/attack_self(mob/user as mob)

@@ -5,6 +5,7 @@
 #define DENSE_WHEN_LOCKING           2
 #define CANT_BE_MOVED_BY_LOCKED_MOBS 4
 #define LOCKED_CAN_LIE_AND_STAND     8
+#define LOCKED_STAY_INSIDE			16
 
 // Flags for atom.lockflags
 #define DENSE_WHEN_LOCKED            1

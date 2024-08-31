@@ -66,7 +66,7 @@
 	adjective = "slippery"
 	color = "#ffff00"
 
-/obj/item/incense_stick/cabbage
+/obj/item/incense_stick/leafy
 	fragrance = INCENSE_LEAFY
 	adjective = "fresh"
 	color = "#33cc33"
@@ -350,7 +350,7 @@
 	new /obj/item/incense_stick/vapor(src)
 	new /obj/item/incense_stick/booze(src)
 	new /obj/item/incense_stick/banana(src)
-	new /obj/item/incense_stick/cabbage(src)
+	new /obj/item/incense_stick/leafy(src)
 	new /obj/item/incense_stick/vale(src)
 	new /obj/item/incense_stick/cornoil(src)
 
@@ -398,7 +398,7 @@
 	fragrance = INCENSE_BANANA
 	adjective = "slippery"
 
-/obj/item/incense_oilbox/cabbage
+/obj/item/incense_oilbox/leafy
 	fragrance = INCENSE_LEAFY
 	adjective = "fresh"
 

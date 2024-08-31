@@ -1233,8 +1233,8 @@ Use this proc preferably at the end of an equipment loadout
 	set name = "Github Report"
 	set category = "OOC"
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
-					Revision: [return_revision()]
-					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
+					Version: [byond_version].[byond_build] Revision: [return_revision()]
+					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&byondver=[byond_version].[byond_build]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
 	src << browse(dat, "window=github;size=480x480")
 
 /client/verb/changes()
@@ -1352,13 +1352,16 @@ Use this proc preferably at the end of an equipment loadout
 	set category = "IC"
 	unset_machine()
 	reset_view(null)
-	if(istype(src, /mob/living))
-		var/mob/living/M = src
-		if(M.cameraFollow)
-			M.cameraFollow = null
-		if(istype(src, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = M
-			H.handle_regular_hud_updates()
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		H.handle_regular_hud_updates()
+
+/mob/living/silicon/ai/cancel_camera()
+	set name = "Cancel Camera View"
+	set category = "IC"
+	stop_ai_tracking()
+	unset_machine()
+	reset_view(null)
 
 // http://www.byond.com/forum/?post=2219001#comment22205313
 // TODO: Clean up and identify the args, document

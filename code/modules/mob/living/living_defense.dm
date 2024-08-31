@@ -64,7 +64,7 @@
 
 	var/absorb = run_armor_check(def_zone, P.flag, armor_penetration = P.armor_penetration)
 	if(absorb >= 100)
-		P.on_hit(src,2)
+		P.on_hit(src,100)
 		return PROJECTILE_COLLISION_BLOCKED
 	if(!P.nodamage)
 		var/damage = run_armor_absorb(def_zone, P.flag, P.damage)
@@ -277,21 +277,30 @@
 
 // End BS12 momentum-transfer code.
 //Mobs on Fire
-/mob/living/proc/IgniteMob()
-	if(fire_stacks > 0 && !on_fire)
-		on_fire = 1
-		set_light(src.light_range + 3)
-		update_fire()
+/mob/living/ignite()
+	if(on_fire)
+		return 0
+	if(check_fire_protection())
+		return 0
+	if(!firelightdummy)
+		firelightdummy = new (src)
+	on_fire = 1
+	update_fire()
+	return 1
+
+/mob/living/extinguish()
+	..()
+	update_fire()
+
+/mob/living/check_fire_protection()
+	if(fire_stacks<0)
+		fire_stacks++
 		return 1
 	else
 		return 0
 
-/mob/living/proc/ExtinguishMob()
-	if(on_fire)
-		on_fire = 0
-		fire_stacks = 0
-		set_light(src.light_range - 3)
-		update_fire()
+/mob/living/burnSolidFuel()
+	return
 
 /mob/living/proc/update_fire()
 	return
@@ -313,23 +322,31 @@
 		return 1
 
 	var/oxy=0
-	var/turf/T=loc
+	var/turf/T=get_turf(src)
 	if(istype(T))
-		var/datum/gas_mixture/G = loc.return_air() // Check if we're standing in an oxygenless environment
+		var/datum/gas_mixture/G = T.return_air() // Check if we're standing in an oxygenless environment
 		if(G)
 			oxy = G.molar_density(GAS_OXYGEN)
-	if(oxy < (1 / CELL_VOLUME) || fire_stacks <= 0)
-		ExtinguishMob() //If there's no oxygen in the tile we're on, put out the fire
+	if(oxy < (1 / CELL_VOLUME) || fire_stacks < 0)
+		extinguish() //If there's no oxygen in the tile we're on, put out the fire
 		return 1
-	var/turf/location = get_turf(src)
-	location.hotspot_expose(700, SMALL_FLAME, 1)
+	T.hotspot_expose(700, SMALL_FLAME, 1)
 
-/mob/living/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/mob/living/fire_act(datum/gas_mixture/air, temperature, exposed_volume)
 	if(mutations.Find(M_UNBURNABLE))
 		return
 
 	adjust_fire_stacks(0.5)
-	IgniteMob()
+	ignite()
+
+	var/turf/T = get_turf(src)
+	var/flevel = air.calculate_firelevel(T)
+	var/pressure = air.return_pressure()
+	FireBurn(flevel,temperature, pressure)
+
+/mob/living/proc/FireBurn(var/firelevel = 0, var/temperature, var/pressure)
+	var/mx = 5 * max(firelevel,1.5)/ZAS_firelevel_multiplier * min(pressure / ONE_ATMOSPHERE, 1)
+	apply_damage(2.5*mx, BURN)
 
 //Mobs on Fire end
 

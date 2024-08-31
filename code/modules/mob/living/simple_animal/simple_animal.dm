@@ -444,6 +444,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/attack_animal(mob/living/simple_animal/M)
 	M.unarmed_attack_mob(src)
+	return 1
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
@@ -709,9 +710,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/update_fire()
 	return
-/mob/living/simple_animal/IgniteMob()
+/mob/living/simple_animal/ignite()
 	return 0
-/mob/living/simple_animal/ExtinguishMob()
+/mob/living/simple_animal/extinguish()
 	return
 
 /mob/living/simple_animal/revive(refreshbutcher = 1)

@@ -58,6 +58,7 @@
 	icon_state = "mailman"
 	item_state = "b_suit"
 	_color = "mailman"
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/sexyclown
@@ -519,7 +520,7 @@
 	icon_state = "libertyshirt"
 	item_state = "libertyshirt"
 	_color = "libertyshirt"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/under/bikersuit
 	name = "biker's outfit"
@@ -541,7 +542,8 @@
 	icon_state = "mega"
 	item_state = "mega"
 	_color = "mega"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+	body_parts_covered = HIDETAIL
 
 /obj/item/clothing/under/proto
 	name = "The Prototype Suit"
@@ -581,7 +583,7 @@
 	icon_state = "maid"
 	item_state = "maid"
 	_color = "maid"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/darkholme
 	name = "\improper Darkholme"
@@ -655,7 +657,7 @@
 	icon_state = "clownpiece"
 	item_state = "clownpiece"
 	_color = "clownpiece"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/cia
 	name = "casual IAA outfit"
@@ -872,6 +874,7 @@
 	icon_state = "tourist"
 	item_state = "g_suit"
 	_color = "tourist"
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/varsity

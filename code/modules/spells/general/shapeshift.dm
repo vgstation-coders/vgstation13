@@ -32,12 +32,12 @@
 	if(humanform)
 		identity = user.dna.Clone()
 		appearance = user.my_appearance.Copy()
-		user.set_species("Vampire")
+		user.set_species("Vampire", transfer_damage = TRUE)
 		user.name = "Nosferatu"
 		user.real_name = "Nosferatu"
 		humanform = FALSE
 	else
-		user.set_species(identity.species, 0)
+		user.set_species(identity.species, 0, transfer_damage = TRUE)
 		user.set_default_language(user.init_language)
 		user.name = identity.real_name
 		user.real_name = identity.real_name

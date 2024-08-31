@@ -73,7 +73,7 @@
 		return tool_state
 	return null
 
-/mob/living/silicon/robot/mommi/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = FALSE, dontsay = null)
+/mob/living/silicon/robot/mommi/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = FALSE, dontsay = null, failmsg)
 	if(!target)
 		target = loc
 	if(!istype(to_drop))

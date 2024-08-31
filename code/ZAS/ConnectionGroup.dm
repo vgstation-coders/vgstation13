@@ -81,6 +81,8 @@ Class Procs:
 			var/mob/M = AM
 			M.airflow_stun(differential)
 
+		AM.wind_act(differential, connecting_turfs)
+
 		if(AM.check_airflow_movable(differential))
 			//Check for things that are in range of the midpoint turfs.
 			var/list/close_turfs = list()
@@ -89,6 +91,7 @@ Class Procs:
 					close_turfs += U
 			if(!close_turfs.len)
 				continue
+
 
 			AM.airflow_dest = pick(close_turfs) //Pick a random midpoint to fly towards.
 
@@ -133,6 +136,8 @@ Class Procs:
 	if(abs(differential) >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
 		flow(A.movables(), differential)
 		flow(B.movables(), -differential)
+		A.blow_dust_motes(src, differential)
+		B.blow_dust_motes(src, -differential)
 
 	if(equiv)
 		if(direct)
@@ -193,6 +198,7 @@ Class Procs:
 	var/differential = A.air.return_pressure() - air.return_pressure()
 	if(abs(differential) >= zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
 		flow(A.movables(), abs(differential), differential < 0)
+		A.blow_dust_motes(src, differential)
 
 	if(equiv)
 		A.air.copy_from(air)

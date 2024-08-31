@@ -741,7 +741,7 @@ var/list/tag_suits_list = list()
 	name = "Liberty Coat"
 	desc = "Smells faintly of freedom."
 	icon_state = "libertycoat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO|ARMS
 
 /obj/item/clothing/suit/storage/draculacoat
@@ -777,7 +777,7 @@ var/list/tag_suits_list = list()
 	name = "Apron"
 	desc = "Simple white apron."
 	icon_state = "maidapron"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO
 
 /obj/item/clothing/suit/clownpiece

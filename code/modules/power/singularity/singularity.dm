@@ -93,6 +93,9 @@ var/list/obj/machinery/singularity/white_hole_candidates
 		color= initial(color)
 	..()
 
+/obj/machinery/singularity/proc/seeks_beacon()
+	return TRUE
+
 /obj/machinery/singularity/proc/link_a_wormhole()
 	var/obj/machinery/singularity/other = null
 	do

@@ -23,7 +23,7 @@
 	user.emote("fart")
 	sleep(1 SECONDS) //Wait for it
 	user.fire_stacks += 5
-	user.IgniteMob()
+	user.ignite()
 	user.audible_scream()
 	return SUICIDE_ACT_FIRELOSS //Set ablaze and burned to crisps
 
@@ -127,13 +127,13 @@
 		if(V) //Vampire trying to use it
 			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
 			user.fire_stacks += 5
-			user.IgniteMob()
+			user.ignite()
 			user.audible_scream()
 			V.smitecounter += 50 //Once we are extinguished, we will be quite vulnerable regardless
 		else if(isanycultist(user)) //Cultist trying to use it
 			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
 			user.fire_stacks += 5
-			user.IgniteMob()
+			user.ignite()
 			user.audible_scream()
 		else //Literally anyone else than a Cultist using it, at this point it's just a big book
 			..() //WHACK

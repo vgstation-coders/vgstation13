@@ -26,7 +26,7 @@
 
 	next_extinguish = world.time + extinguish_cooldown
 	to_chat(H, "<span class='warning'>Your suit automatically extinguishes the fire.</span>")
-	H.ExtinguishMob()
+	H.extinguish()
 
 /obj/item/clothing/suit/space/plasmaman/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
 	if(H.bodytemperature < T0C+37)

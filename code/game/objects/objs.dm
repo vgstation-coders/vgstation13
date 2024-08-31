@@ -75,11 +75,11 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			if(W_CLASS_MEDIUM)
 				thermal_mass = 1.0
 			if(W_CLASS_LARGE)
-				thermal_mass = 10.0
+				thermal_mass = 5.0
 			if(W_CLASS_HUGE)
-				thermal_mass = 25.0 //combo breaker but 100kg is way too heavy
+				thermal_mass = 20.0
 			if(W_CLASS_GIANT)
-				thermal_mass = 100
+				thermal_mass = 50.0
 	if(thermal_mass)
 		initial_thermal_mass = thermal_mass
 	if(flammable)
@@ -411,7 +411,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/suicide_act(var/mob/living/user)
 	if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
-		user.IgniteMob()
+		user.ignite()
 		return SUICIDE_ACT_FIRELOSS
 	else if (sharpness >= 1)
 		user.visible_message("<span class='danger'>[user] impales himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
@@ -425,11 +425,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return SUICIDE_ACT_BRUTELOSS
 
 /obj/ignite()
-	if(!isturf(loc)) //Prevent things from burning if worn, held, or inside something else. Storage containers will eject their contents when ignited, allowing for burning of the contents.
-		return
-	ash_covered = TRUE
-	remove_particles(PS_SMOKE)
-	return ..()
+	if(..())
+		ash_covered = TRUE
+		remove_particles(PS_SMOKE)
 
 /obj/item/checkburn()
 	if(!flammable)
@@ -682,7 +680,12 @@ a {
 /obj/proc/can_quick_store(var/obj/item/I) //proc used to check that the current object can store another through quick equip
 	return 0
 
+/client
+	var/last_quick_stored = 0
+
 /obj/proc/quick_store(var/obj/item/I,mob/user) //proc used to handle quick storing
+	if(user?.client)
+		user.client.last_quick_stored = world.time
 	return 0
 
 /**
@@ -860,7 +863,7 @@ a {
 	if(additional_description)
 		desc = "[initial(desc)] \n [additional_description]"
 
-/obj/proc/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality)
+/obj/proc/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality = 0)
 	if(mat)
 		/*var/icon/original = icon(icon, icon_state) Icon operations keep making mustard gas
 		if(mat.color)

@@ -58,6 +58,7 @@ var/global/list/ghdel_profiling = list()
 
 	var/arcanetampered = 0 //A looot of things can be
 
+
 	var/image/moody_light
 	var/list/moody_lights
 
@@ -174,7 +175,7 @@ var/global/list/ghdel_profiling = list()
 			if(istype(src,/mob/living))
 				var/mob/living/M = src
 				M.take_organ_damage(10)
-	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user)
+	INVOKE_EVENT(src, /event/throw_impact, "hit_atom" = hit_atom, "speed" = speed, "user" = user, "thrown_atom" = src)
 
 /atom/Destroy()
 	QDEL_NULL(reagents)
@@ -252,6 +253,9 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/is_open_container()
 	return flags & OPENCONTAINER
 
+/atom/proc/reagent_transfer_message(var/transfer_amt)
+	return "<span class='notice'>You transfer [transfer_amt] units of the solution to \the [src.name].</span>"
+
 // For when we want an open container that doesn't show its reagents on examine
 /atom/proc/hide_own_reagents()
 	return FALSE
@@ -300,13 +304,12 @@ var/global/list/ghdel_profiling = list()
 		return 1
 	return
 
-/atom/proc/recursive_in_contents_of(var/atom/container, var/atom/searching_for = src)
-	if(isturf(searching_for))
+/atom/proc/recursive_in_contents_of(atom/container)
+	if(!loc)
 		return FALSE
 	if(loc == container)
 		return TRUE
-	return recursive_in_contents_of(container, src.loc)
-
+	return loc.recursive_in_contents_of(container)
 
 /atom/proc/projectile_check()
 	return
@@ -558,6 +561,9 @@ its easier to just keep the beam vertical.
 		color = ""
 	if (cleanliness >= CLEANLINESS_WATER)//I mean, not sure why we'd ever add a rank below water but, futur-proofing and all that jazz
 		extinguish()//Fire.dm
+
+/atom/proc/wind_act(var/differential, var/list/connecting_turfs)
+	return
 
 //Called on every object in a shuttle which rotates
 /atom/proc/map_element_rotate(var/angle)
@@ -1087,7 +1093,7 @@ its easier to just keep the beam vertical.
 	return FALSE
 
 //Single overlay moody light
-/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff", offX = 0, offY = 0)
+/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0)
 	overlays -= moody_light
 	var/area/here = get_area(src)
 	if (here && here.dynamic_lighting)
@@ -1108,7 +1114,7 @@ its easier to just keep the beam vertical.
 	moody_light = null
 
 //Multi-overlay moody lights. don't combine both procs on a single atom, use one or the other.
-/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff", offX = 0, offY = 0)
+/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0, var/image_override = null)
 	if (!index)
 		return
 	if (isnull(moody_lights))
@@ -1117,8 +1123,11 @@ its easier to just keep the beam vertical.
 		overlays -= moody_lights[index]
 	var/area/here = get_area(src)
 	if (here && here.dynamic_lighting)
-		moody_light = image(moody_icon, src, moody_state)
-		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
+		if (image_override)
+			moody_light = image_override
+		else
+			moody_light = image(moody_icon, src, moody_state)
+		moody_light.appearance_flags |= RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 		moody_light.plane = LIGHTING_PLANE
 		moody_light.blend_mode = BLEND_ADD
 		moody_light.alpha = moody_alpha

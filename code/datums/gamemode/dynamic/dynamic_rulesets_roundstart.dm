@@ -289,7 +289,7 @@
 
 /datum/dynamic_ruleset/roundstart/cwc/execute()
 	var/datum/faction/wizard/civilwar/wpf/WPF = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/wpf, null, 1)
-	var/datum/faction/wizard/civilwar/wpf/PFW = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/pfw, null, 1)
+	var/datum/faction/wizard/civilwar/pfw/PFW = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/pfw, null, 1)
 	for(var/mob/new_player/M in assigned)
 		var/datum/role/wizard/newWizard = new
 		if (WPF.members.len < PFW.members.len)

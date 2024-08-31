@@ -255,7 +255,7 @@
 	icon_state = "bridgeofficer_jacket"
 	item_state = "bridgeofficer_jacket"
 	blood_overlay_type = "coat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 //Internal Affairs
 /obj/item/clothing/suit/storage/internalaffairs

@@ -43,8 +43,10 @@
 
 // Updates the position for AM.
 /datum/locking_category/proc/update_lock(var/atom/movable/AM)
-	var/new_loc = owner.loc
-
+	if(flags & LOCKED_STAY_INSIDE)
+		if(owner.loc != AM.loc)
+			AM.forceMove(owner)
+		return
 	var/new_x = x_offset
 	var/new_y = y_offset
 
@@ -70,7 +72,7 @@
 				new_x = -y_offset
 				new_y = x_offset
 
-
+	var/new_loc = owner.loc
 	if ((new_x || new_y) && isturf(new_loc))
 		var/newer_loc = locate(owner.x + new_x, owner.y + new_y, owner.z)
 		if (newer_loc) // Edge (no pun intended) case for map borders.

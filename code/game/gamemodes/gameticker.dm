@@ -317,6 +317,7 @@ var/datum/controller/gameticker/ticker
 	post_roundstart()
 	log_admin("Roundstart complete in [(get_game_time() - total_tick) / 10] seconds.")
 	message_admins("Roundstart complete in [(get_game_time() - total_tick) / 10] seconds.")
+	log_admin("Round started with [new_players_ready.len] players. There are [clients.len] players total. There are currently [admins.len] admins online")
 	return 1
 
 /mob/living/carbon/human/proc/make_fake_ai()

@@ -441,6 +441,7 @@ var/list/global/id_cards = list()
 	access = AGENT_CARD_DEFAULT_ACCESS
 	base_access = list(access_syndicate)
 	origin_tech = Tc_SYNDICATE + "=3"
+	blocks_tracking = TRUE
 	var/registered_user=null
 	var/copy_appearance = FALSE
 

@@ -53,7 +53,7 @@
 
 	var/mob/living/carbon/human/O = new(src)
 	if(Mo.greaterform)
-		O.set_species(Mo.greaterform)
+		O.set_species(Mo.greaterform) //Damage transfer is handled later in the code
 	Mo.transferImplantsTo(O)
 
 	if (M.dna.GetUIState(DNA_UI_GENDER))

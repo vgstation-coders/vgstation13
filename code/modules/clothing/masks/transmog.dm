@@ -56,8 +56,7 @@
 				chosen_type = skin_to_mask[i]
 				break
 		if(chosen_type)
-			to_chat(user, "<span class='notice'>You wrap \the [W] around \the [src].</span>")
-			user.create_in_hands(src,new chosen_type(get_turf(src)),W)
+			user.create_in_hands(src,new chosen_type(get_turf(src)),W,msg="<span class='notice'>You wrap \the [W] around \the [src].</span>")
 
 /obj/item/clothing/mask/morphing/proc/toggle_cursed()
 	cursed = !cursed

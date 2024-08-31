@@ -679,6 +679,7 @@
 			user.delayNextAttack(8)
 			if (prob(20))
 				opened = 2
+				wiresexposed = 0 //The cover is gone
 				user.visible_message("<span class='warning'>The APC cover was knocked down with the [W.name] by [user.name]!</span>", \
 					"<span class='warning'>You knock down the APC cover with your [W.name]!</span>", \
 					"You hear something metallic being hit, and falling on the floor.")

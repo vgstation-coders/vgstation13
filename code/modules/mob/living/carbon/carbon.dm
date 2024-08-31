@@ -50,6 +50,7 @@
 	if(check_shields(0, M))
 		return 0
 	M.unarmed_attack_mob(src)
+	return 1
 
 /mob/living/carbon/relaymove(var/mob/user, direction)
 	if(user in src.stomach_contents)

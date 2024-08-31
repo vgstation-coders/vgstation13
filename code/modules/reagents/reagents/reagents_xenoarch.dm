@@ -43,3 +43,5 @@
 	description = "A viscous, toxic liquid left over from many chemical processes."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#ADFF2F"   //rgb: 173, 255, 47, toxic green
+	plant_toxins = 2
+	plant_health = -2

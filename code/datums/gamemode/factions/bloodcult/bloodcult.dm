@@ -239,7 +239,7 @@
 		if (BLOODCULT_STAGE_NORMAL)
 			dat += "<br>Eclipse progress: [round((eclipse_progress/eclipse_target)*100)]%"
 		else
-			if (sun && sun.eclipse_manager)
+			if (sun && sun.eclipse != ECLIPSE_NOT_YET)
 				var/seconds_to_eclipse = (sun.eclipse_manager.eclipse_start_time - cult_founding_time)/10
 				dat += "<br>Eclipse arrival: [round(seconds_to_eclipse/3600)]h [add_zero(num2text(round(seconds_to_eclipse/60) % 60), 2)]m [add_zero(num2text(round(seconds_to_eclipse) % 60), 2)]s"
 
@@ -516,6 +516,22 @@
 	var/list/dat = ..()
 
 	dat += "<br>accumulated devotion: [total_devotion]"
+	if (stage == BLOODCULT_STAGE_NORMAL)
+		var/eclipse_remaining = eclipse_target - eclipse_progress
+		var/eclipse_ticks_to_go_at_current_rate = 999999
+		if (eclipse_increments > 0)
+			eclipse_ticks_to_go_at_current_rate = eclipse_remaining / max(0.1, eclipse_increments)
+			if(SSticker.initialized)
+				eclipse_ticks_to_go_at_current_rate *= (SSticker.wait/10)
+			var/hours_to_go = round(eclipse_ticks_to_go_at_current_rate/3600)
+			var/minutes_to_go = add_zero(num2text(round(eclipse_ticks_to_go_at_current_rate/60) % 60), 2)
+			var/seconds_to_go = add_zero(num2text(round(eclipse_ticks_to_go_at_current_rate) % 60), 2)
+			dat += "<br>estimated time until Eclipse: [hours_to_go]h [minutes_to_go]m [seconds_to_go]s"
+		else
+			dat += "<br>with no cultists left around, the Eclipse won't manifest this round."
+	else if (sun && sun.eclipse_manager)
+		var/seconds_to_eclipse = (sun.eclipse_manager.eclipse_start_time - cult_founding_time)/10
+		dat += "<br>the Eclipse arrived after [round(seconds_to_eclipse/3600)]h [add_zero(num2text(round(seconds_to_eclipse/60) % 60), 2)]m [add_zero(num2text(round(seconds_to_eclipse) % 60), 2)]s"
 	dat += "<br>available rituals: "
 	for (var/ritual_slot in rituals)
 		if (rituals[ritual_slot])
@@ -567,6 +583,12 @@
 			var/mob/M = R.antag.current
 			to_chat(M, "<span class='sinister'>This number might rise up to 9 as more people arrive aboard the station. The first Artificer, Wraith, and Juggernaut each do not take up a slot. Check your panel to the left to set your role and get more information.</span>")
 	AnnounceObjectives()
+	if (sun)
+		switch(sun.eclipse)
+			if (ECLIPSE_ONGOING)
+				stage(BLOODCULT_STAGE_READY)
+			if (ECLIPSE_OVER)
+				stage(BLOODCULT_STAGE_MISSED)
 	..()
 
 //we don't really have a use for that right now but there are plans for it.
