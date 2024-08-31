@@ -500,7 +500,7 @@
 					if(observer.invisibility == 0 || observer.mind && (find_active_faction_by_member(observer.mind.GetRole(LEGACY_CULTIST)) || find_active_faction_by_member(iscultist(observer))))
 						to_chat(mob, "<span class='warning'>You cannot get past holy grounds while you are in this plane of existence!</span>")
 						blocked = TRUE
-				else if(!blocked && !Move_object(direct) && !Dir_object(direct))
+				if(!blocked && !Move_object(direct) && !Dir_object(direct))
 					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
 			if(istype(T, /turf/simulated/open)) // Stair movement down
