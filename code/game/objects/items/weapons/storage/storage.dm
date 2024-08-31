@@ -421,6 +421,7 @@
 	return can_be_inserted(I,1)
 
 /obj/item/weapon/storage/quick_store(var/obj/item/I,mob/user)
+	..()
 	return handle_item_insertion(I,0)
 
 //Call this proc to handle the removal of an item from the storage item. The item will be moved to the atom sent as new_target

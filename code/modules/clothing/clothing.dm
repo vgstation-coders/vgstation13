@@ -138,6 +138,7 @@
 			return 1
 
 /obj/item/clothing/quick_store(var/obj/item/I,mob/user)
+	..()
 	for(var/obj/item/clothing/accessory/storage/A in accessories)
 		if(A.hold && A.hold.handle_item_insertion(I,0))
 			return 1
