@@ -38,14 +38,15 @@
 	return TRUE
 
 /obj/item/weapon/boomerang/proc/apply_status_effects(var/mob/living/carbon/C, var/minimal_effect = 0)
+	var/obj/item/I = null
 	if (ishuman(C))
 		var/mob/living/carbon/human/H = C
-		if(istype(H.head, /obj/item/clothing/head/helmet))
-			return
+		I = H.head
 	else if (ismonkey(C))
 		var/mob/living/carbon/monkey/M = C
-		if(istype(M.hat, /obj/item/clothing/head/helmet))
-			return
+		I = M.hat
+	if (istype(I) && (I.armor["melee"] > 0 || I.armor["bullet"] > 0))
+		return
 	C.Stun(max(minimal_effect,stun))
 	C.Knockdown(max(minimal_effect,weaken))
 
