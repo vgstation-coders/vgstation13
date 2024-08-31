@@ -126,23 +126,26 @@
 	kill_count = 7
 	grillepasschance = 0
 	var/obj/item/weapon/boomerang/boomerang
+	var/list/hit_atoms = list()
 
 /obj/item/projectile/boomerang/to_bump(var/atom/A)
-	if (boomerang)
-		boomerang.throw_impact(A,boomerang.throw_speed*boomerang.throw_mult,boomerang.originator)
-		if (boomerang.loc != src)//boomerang got grabbed most likely
-			boomerang.originator = null
-			boomerang = null
-			qdel(src)
-			return
-		else if (iscarbon(A))
-			boomerang.apply_status_effects(A)
-			forceMove(A.loc)
+	if (!(A in hit_atoms))
+		hit_atoms += A
+		if (boomerang)
+			boomerang.throw_impact(A,boomerang.throw_speed*boomerang.throw_mult,boomerang.originator)
+			if (boomerang.loc != src)//boomerang got grabbed most likely
+				boomerang.originator = null
+				boomerang = null
+				qdel(src)
+				return
+			else if (iscarbon(A))
+				boomerang.apply_status_effects(A)
+				forceMove(A.loc)
+				A.Bumped(boomerang)
+				bumped = TRUE
+				bullet_die()
+				return
 			A.Bumped(boomerang)
-			bumped = TRUE
-			bullet_die()
-			return
-		A.Bumped(boomerang)
 	return ..(A)
 
 /obj/item/projectile/boomerang/OnDeath()
@@ -195,6 +198,7 @@
 	Tr.refresh = projectile_speed
 	Tr.luminosity = luminosity
 	Tr.boomerang = boomerang
+	Tr.hit_atoms = hit_atoms.Copy()
 	boomerang.forceMove(Tr)
 	boomerang = null
 
@@ -208,6 +212,7 @@
 	density = 1
 	pass_flags = PASSTABLE | PASSRAILING
 	var/obj/item/weapon/boomerang/boomerang
+	var/list/hit_atoms = list()
 
 /obj/effect/tracker/boomerang/Destroy()
 	var/turf/T = get_turf(src)
@@ -233,24 +238,26 @@
 
 /obj/effect/tracker/boomerang/proc/make_contact(var/atom/Obstacle)
 	if (boomerang)
-		if (Obstacle == boomerang.originator)
-			if (on_expire(FALSE))
+		if (!(Obstacle in hit_atoms))
+			hit_atoms += Obstacle
+			if (Obstacle == boomerang.originator)
+				if (on_expire(FALSE))
+					qdel(src)
+					return TRUE
+			boomerang.throw_impact(Obstacle,boomerang.throw_speed*boomerang.throw_mult,boomerang.originator)
+			if (boomerang.loc != src)//boomerang got grabbed most likely
+				boomerang.originator = null
+				boomerang = null
 				qdel(src)
 				return TRUE
-		boomerang.throw_impact(Obstacle,boomerang.throw_speed*boomerang.throw_mult,boomerang.originator)
-		if (boomerang.loc != src)//boomerang got grabbed most likely
-			boomerang.originator = null
-			boomerang = null
-			qdel(src)
-			return TRUE
-		else if (iscarbon(Obstacle))
-			boomerang.apply_status_effects(Obstacle)
-			return FALSE
-		Obstacle.Bumped(boomerang)
-		if (!ismob(Obstacle))
-			on_expire(TRUE)
-			qdel(src)
-			return TRUE
+			else if (iscarbon(Obstacle))
+				boomerang.apply_status_effects(Obstacle)
+				return FALSE
+			Obstacle.Bumped(boomerang)
+			if (!ismob(Obstacle))
+				on_expire(TRUE)
+				qdel(src)
+				return TRUE
 		return FALSE
 	else
 		qdel(src)
