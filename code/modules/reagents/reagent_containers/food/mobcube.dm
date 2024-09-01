@@ -78,11 +78,15 @@
 		to_chat(M, "<span class='warning'>\The [src] expands!</span>")
 	if(!contained_mob)
 		return
+	var/mob/C = contained_mob
 	if(ispath(contained_mob))
-		new contained_mob(get_turf(src))
+		C = new contained_mob(get_turf(src))
 	else if(ismob(contained_mob))
-		var/mob/C = contained_mob
 		C.forceMove(get_turf(src))
+	if(istype(C,/mob/living/simple_animal/hostile))
+		var/mob/opener = get_mob_by_key(fingerprintslast)
+		log_admin("[key_name(fingerprintslast)] just opened \a [src] containing \a [initial(C.name)] at [src.x],[src.y],[src.z]")
+		message_admins("<span class='danger'>[key_name(fingerprintslast)] just opened \a [src] containing \a [initial(C.name)] at [src.x],[src.y],[src.z][opener ? " [formatJumpTo(opener,"(JMP)")]" : ""]</span>")
 	contained_mob = null
 	qdel(src)
 
