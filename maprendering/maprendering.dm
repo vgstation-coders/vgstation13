@@ -1,4 +1,4 @@
-#define MAPRENDER_IN_ROUND_CHECK_TICK ( config.maprender_lags_game ? IN_ROUND_CHECK_TICK : 0 )
+#define MAPRENDER_IN_ROUND_CHECK_TICK ( !config.maprender_lags_game ? IN_ROUND_CHECK_TICK : 0 )
 
 /client/proc/maprender()
 	set category = "Mapping"
