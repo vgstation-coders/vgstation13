@@ -110,13 +110,15 @@
 		else
 			to_chat(user, "<span class = 'caution'> The telepad locator has become uncalibrated.</span>")
 
-
-/obj/item/weapon/rcs/attackby(var/obj/item/W, var/mob/user)
-	if(isEmag(W) && !emagged)
+/obj/item/weapon/rcs/emag_act(mob/user)
+	if(!emagged)
 		emagged = 1
 		spark(src, 5)
 		to_chat(user, "<span class = 'caution'>You emag the RCS. Click on it to toggle between modes.</span>")
 
+/obj/item/weapon/rcs/attackby(var/obj/item/W, var/mob/user)
+	if(isEmag(W))
+		emag_act(user)
 	else if(W.is_screwdriver(user))
 		if(cell)
 			cell.updateicon()
