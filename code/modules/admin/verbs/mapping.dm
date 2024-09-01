@@ -38,9 +38,10 @@
 
 	if(camera_range_display)
 		for(var/obj/machinery/camera/C in cameranet.cameras)
-			var/image/camrange = image('icons/480x480.dmi',C.loc,"25percent",pixel_x = -224 * PIXEL_MULTIPLIER,pixel_y = -224 * PIXEL_MULTIPLIER)
-			images += camrange
-			camera_range_images += camrange
+			for (var/turf/T in view(C.view_range, C))
+				var/image/camrange = image('icons/turf/areas.dmi',T,"green")
+				images += camrange
+				camera_range_images += camrange
 
 	feedback_add_details("admin_verb","mCRD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
