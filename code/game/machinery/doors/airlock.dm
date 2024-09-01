@@ -1612,4 +1612,4 @@ About the new airlock wires panel:
 
 /obj/machinery/door/airlock/tackled(mob/living/carbon/human/user)
 	if(ishuman(user) && isEmag(user.wear_id))
-		emag_act()
+		emag_act(user)

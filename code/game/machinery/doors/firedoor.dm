@@ -360,13 +360,7 @@ var/global/list/alert_overlays_global = list()
 			to_chat(user, "<span class = 'attack'>\The [src] is not welded or otherwise blocked.</span>")
 
 	if(isEmag(C))
-		if(density)
-			door_animate("spark")
-			sleep(6)
-			force_open(user, C)
-			sleep(8)
-		blocked = TRUE
-		update_icon()
+		emag_act(user)
 		return
 
 	do_interaction(user, C)
@@ -384,7 +378,7 @@ var/global/list/alert_overlays_global = list()
 			flick("door_deny", src)
 			anim(target = src, a_icon = icon, flick_anim = "door_deny-moody", sleeptime = 5, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
 
-/obj/machinery/door/firedoor/emag_ai(mob/living/silicon/ai/A)
+/obj/machinery/door/firedoor/emag_act(mob/user)
 	if(density)
 		door_animate("spark")
 		sleep(6)
