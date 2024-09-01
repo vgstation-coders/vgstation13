@@ -67,6 +67,7 @@
 							else if(A.locs.len > 1) //Fix for multitile objects I wish I didn't have to do this its probably slow
 								if(A.locs[1] != A.loc)
 									allturfcontents -= A
+							MAPRENDER_IN_ROUND_CHECK_TICK
 
 						if(!allturfcontents.len)
 							continue
