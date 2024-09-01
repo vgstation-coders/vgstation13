@@ -378,3 +378,6 @@ BSQL_THREAD_LIMIT 50
 
 ## Uncomment to enable verbose BSQL communication logs
 #BSQL_DEBUG
+
+## Comment to make the map rendering verb not lag the game during rounds when done
+MAPRENDER_LAGS_GAME

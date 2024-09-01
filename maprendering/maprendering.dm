@@ -1,3 +1,5 @@
+#define MAPRENDER_IN_ROUND_CHECK_TICK ( config.maprender_lags_game ? IN_ROUND_CHECK_TICK : 0 )
+
 /client/proc/maprender()
 	set category = "Mapping"
 	set name = "Generate Map Render"
@@ -5,6 +7,9 @@
 	if(!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
+	if(config.maprender_lags_game)
+		if(alert("Sure you want to do this? It should NEVER be done in an active round and cannot be cancelled", "generate maps", "Yes", "No") == "No")
+			return
 
 	var/allz = alert("Do you wish to generate a specific zlevel or all zlevels?", "Generate what levels?", "All", "Specific", "Cancel")
 
@@ -72,15 +77,15 @@
 						for(var/A in allturfcontents)
 							var/icon/icontoblend = getFlatIcon(A,A:dir, cache = 0)
 							map_icon.Blend(icontoblend, ICON_OVERLAY, ((a-1)*WORLD_ICON_SIZE)+1, ((b-1)*WORLD_ICON_SIZE)+1)
-							IN_ROUND_CHECK_TICK
+							MAPRENDER_IN_ROUND_CHECK_TICK
 						sleep(-1)
-						IN_ROUND_CHECK_TICK
-					IN_ROUND_CHECK_TICK
+						MAPRENDER_IN_ROUND_CHECK_TICK
+					MAPRENDER_IN_ROUND_CHECK_TICK
 				for(var/A in pixel_shift_objects)
 					var/icon/icontoblend = getFlatIcon(A, A:dir, cache = 0)
 					//This part is tricky since we've skipped a and b, since these are map objects they have valid x,y. a and b should be the modulo'd value of x,y with icon_size
 					map_icon.Blend(icontoblend, ICON_OVERLAY, (((A:x % icon_size)-1)*WORLD_ICON_SIZE)+1+A:pixel_x, (((A:y % icon_size)-1)*WORLD_ICON_SIZE)+1+A:pixel_y)
-					IN_ROUND_CHECK_TICK
+					MAPRENDER_IN_ROUND_CHECK_TICK
 
 				if(y >= world.maxy)
 					map_icon.DrawBox(rgb(255,255,255,255), x1 = 1, y1 = 1, x2 = WORLD_ICON_SIZE*icon_size, y2 = WORLD_ICON_SIZE*(icon_size-world.maxy % icon_size))
@@ -96,8 +101,8 @@
 				if(fexists(resultpath))
 					fdel(resultpath)
 				fcopy(result_icon, resultpath)
-				IN_ROUND_CHECK_TICK
-			IN_ROUND_CHECK_TICK
-		IN_ROUND_CHECK_TICK
+				MAPRENDER_IN_ROUND_CHECK_TICK
+			MAPRENDER_IN_ROUND_CHECK_TICK
+		MAPRENDER_IN_ROUND_CHECK_TICK
 	to_chat(world, "<b>The map has been rendered successfully<b>")
 	src << sound('sound/effects/maprendercomplete.ogg')
