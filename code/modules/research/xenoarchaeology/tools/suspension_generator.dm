@@ -251,15 +251,18 @@
 
 /obj/machinery/suspension_gen/proc/attempt_unlock(var/obj/item/weapon/card/C)
 	if(!open)
-		if(istype(C, /obj/item/weapon/card/emag) && cell.charge > 0)
-			//put sparks here
-			if(prob(95))
-				locked = 0
+		if(isEmag(C))
+			emag_act()
 		else if(istype(C, /obj/item/weapon/card/id) && check_access(C))
 			locked = 0
-
 		if(!locked)
 			return 1
+
+/obj/machinery/suspension_gen/emag_act(mob/user)
+	if(cell.charge > 0)
+		. = ..()
+		if(prob(95))
+			locked = 0
 
 //checks for whether the machine can be activated or not should already have occurred by this point
 /obj/machinery/suspension_gen/proc/activate()

@@ -549,7 +549,7 @@ var/global/num_vending_terminals = 1
 		var/obj/item/weapon/spacecash/C = W
 		pay_with_cash(C, user)
 
-	else if(istype(W, /obj/item/weapon/card/emag))
+	else if(isEmag(W))
 		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
 		to_chat(user, "<span class='notice'>You swipe \the [W] through [src]</span>")
 		if (emag_act())

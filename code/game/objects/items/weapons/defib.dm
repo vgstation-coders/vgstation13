@@ -82,18 +82,14 @@
 	if(user)
 		user.update_inv_hands()
 
-/obj/item/weapon/melee/defibrillator/attackby(obj/item/weapon/W,mob/user)
-	if(istype(W,/obj/item/weapon/card/emag))
-		emagged = !src.emagged
-		if(emagged)
-			to_chat(user, "<span class='warning'>You short out [src]'s safety protocols.</span>")
-			overlays += image(icon = icon, icon_state = "defib_emag")
-		else
-			to_chat(user, "<span class='notice'>You reset [src]'s safety protocols.</span>")
-			overlays.len = 0
+/obj/item/weapon/melee/defibrillator/emag_act(mob/user)
+	emagged = !emagged
+	if(emagged)
+		to_chat(user, "<span class='warning'>You short out [src]'s safety protocols.</span>")
+		overlays += image(icon = icon, icon_state = "defib_emag")
 	else
-		. = ..()
-	return
+		to_chat(user, "<span class='notice'>You reset [src]'s safety protocols.</span>")
+		overlays.len = 0
 
 /obj/item/weapon/melee/defibrillator/attack(mob/M,mob/user)
 	if(!ishuman(M))

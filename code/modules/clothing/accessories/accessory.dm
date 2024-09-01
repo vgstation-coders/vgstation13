@@ -322,16 +322,7 @@
 
 /obj/item/clothing/accessory/holobadge/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
-	if (istype(O, /obj/item/weapon/card/emag))
-		if (emagged)
-			to_chat(user, "<span class='warning'>[src] is already cracked.</span>")
-			return
-		else
-			emagged = 1
-			to_chat(user, "<span class='warning'>You swipe [O] and crack the holobadge security checks.</span>")
-			return
-
-	else if(istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
+	if(istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
 
 		var/obj/item/weapon/card/id/id_card = null
 
@@ -350,6 +341,13 @@
 			to_chat(user, "[src] rejects your insufficient access rights.")
 		return
 	..()
+
+/obj/item/clothing/accessory/holobadge/emag_act(mob/user)
+	if (emagged)
+		to_chat(user, "<span class='warning'>[src] is already cracked.</span>")
+	else
+		emagged = 1
+		to_chat(user, "<span class='warning'>You swipe the cryptographic sequencer and crack the holobadge security checks.</span>")
 
 /obj/item/clothing/accessory/holobadge/attack(mob/living/carbon/human/M, mob/living/user)
 	if(isliving(user))

@@ -104,17 +104,13 @@
 		wrenchAnchor(user, I)
 		power_change()
 		return
-	if(!emagged && istype(I,/obj/item/weapon/card/emag))
-		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
-		emagged = 1
-		to_chat(user, "<span class='notice'>You disable the safety features.</span>")
-		return
 	..()
 
-/obj/machinery/disposal/compactor/emag_ai(mob/living/silicon/ai/A)
-	emagged = 1
-	to_chat(A, "<span class='notice'>You disable the safety features.</span>")
-	
+/obj/machinery/disposal/compactor/emag_act(mob/user)
+	if(!emagged)
+		. = ..()
+		emagged = 1
+		to_chat(user, "<span class='notice'>You disable the safety features.</span>")
 
 /obj/machinery/disposal/compactor/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()

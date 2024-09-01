@@ -24,13 +24,11 @@
 		speech.message = pick(insultmsgs)
 		insults--
 
-/obj/item/device/megaphone/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
+/obj/item/device/megaphone/emag_act(mob/user)
+	if(!emagged)
 		to_chat(user, "<span class='warning'>You overload \the [src]'s voice synthesizer.</span>")
 		emagged = 1
 		insults = rand(1, 3) //to prevent dickflooding
-		return
-	return
 
 /obj/item/device/megaphone/madscientist
 	name = "mad scientist megaphone"

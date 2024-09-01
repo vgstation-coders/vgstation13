@@ -715,7 +715,7 @@
 				to_chat(user, "<span class='notice'>Unable to repair with the maintenance panel closed.</span>")
 		else
 			to_chat(user, "<span class='notice'>[src] does not need a repair.</span>")
-	else if (istype(W, /obj/item/weapon/card/emag) && emagged < 2)
+	else if (isEmag(W) && emagged < 2)
 		emag_act(user)
 	else
 		if(isobj(W))

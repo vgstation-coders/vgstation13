@@ -81,7 +81,7 @@
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 
-	else if (istype(W, /obj/item/weapon/card/emag) && !emagged)		// trying to unlock with an emag card
+	else if (isEmag(W) && !emagged)		// trying to unlock with an emag card
 		if(opened)
 			to_chat(user, "You must close the cover to swipe an ID card.")
 		else

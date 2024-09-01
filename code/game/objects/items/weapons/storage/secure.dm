@@ -37,16 +37,6 @@
 
 /obj/item/weapon/storage/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(code_locked)
-		if ( istype(W, /obj/item/weapon/card/emag) && (!src.emagged))
-			emagged = 1
-			src.overlays += image('icons/obj/storage/storage.dmi', icon_sparking)
-			sleep(6)
-			overlays.len = 0
-			overlays += image('icons/obj/storage/storage.dmi', icon_locking)
-			code_locked = 0
-			to_chat(user, "You short out the lock on [src].")
-			return
-
 		if (W.is_screwdriver(user))
 			if (do_after(user, src, 20))
 				src.open =! src.open
@@ -76,6 +66,15 @@
 	// -> storage/attackby() what with handle insertion, etc
 	. = ..()
 
+/obj/item/weapon/storage/secure/emag_act(mob/user)
+	if(code_locked && !emagged)
+		emagged = 1
+		src.overlays += image('icons/obj/storage/storage.dmi', icon_sparking)
+		sleep(6)
+		overlays.len = 0
+		overlays += image('icons/obj/storage/storage.dmi', icon_locking)
+		code_locked = 0
+		to_chat(user, "You short out the lock on [src].")
 
 /obj/item/weapon/storage/secure/MouseDropFrom(over_object, src_location, over_location)
 	if (code_locked)
