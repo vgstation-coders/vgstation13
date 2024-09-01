@@ -1611,5 +1611,5 @@ About the new airlock wires panel:
 		aiControlDisabled = 0
 
 /obj/machinery/door/airlock/tackled(mob/living/carbon/human/user)
-	if(ishuman(user) && isEmag(user.wear_id)
+	if(ishuman(user) && isEmag(user.wear_id))
 		emag_act()
