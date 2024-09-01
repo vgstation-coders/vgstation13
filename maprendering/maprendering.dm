@@ -59,14 +59,15 @@
 							//Remove the following line to allow lighting to be considered, if you do this it must be blended with BLEND_MULTIPLY instead of ICON_OVERLAY
 							if(A.type == /atom/movable/lighting_overlay)
 								allturfcontents -= A
-						//Due to processing order, a pixelshifted object will be overriden in certain directions,
-						//we'll apply it at the end, they're almost always at the top layer anyway
-							else if(A.pixel_x || A.pixel_y)
-								allturfcontents -= A
-								pixel_shift_objects += A
 							else if(A.locs.len > 1) //Fix for multitile objects I wish I didn't have to do this its probably slow
 								if(A.locs[1] != A.loc)
 									allturfcontents -= A
+									continue
+						//Due to processing order, a pixelshifted object will be overriden in certain directions,
+						//we'll apply it at the end, they're almost always at the top layer anyway
+							if(A.pixel_x || A.pixel_y)
+								allturfcontents -= A
+								pixel_shift_objects += A
 							MAPRENDER_IN_ROUND_CHECK_TICK
 
 						if(!allturfcontents.len)
