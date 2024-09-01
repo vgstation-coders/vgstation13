@@ -37,10 +37,6 @@ var/intercom_range_display_status = 0
 /obj/effect/debugging/marker/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
-/client/proc/do_not_use_these()
-	set category = "Mapping"
-	set name = "-None of these are for ingame use!!"
-
 /client/proc/camera_view()
 	set category = "Mapping"
 	set name = "Camera Range Display"
@@ -128,7 +124,6 @@ var/intercom_range_display_status = 0
 	if(!check_rights(R_DEBUG))
 		return
 
-	src.verbs += /client/proc/do_not_use_these 			//-errorage
 	src.verbs += /client/proc/camera_view 				//-errorage
 	src.verbs += /client/proc/sec_camera_report 		//-errorage
 	src.verbs += /client/proc/intercom_view 			//-errorage
