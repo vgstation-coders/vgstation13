@@ -1337,7 +1337,7 @@ About the new airlock wires panel:
 						to_chat(user, "<span class='warning'>You need to be wielding \the [F] to do that.</span>")
 				else
 					spawn(0)	close(1)
-	else if (istype(I, /obj/item/weapon/card/emag))
+	else if(isEmag(I))
 		emag_act(src)
 	else if(istype(I, /obj/item/stack/rods) && boltsDestroyed)
 		var/obj/item/stack/rods/rawd=I
@@ -1611,5 +1611,5 @@ About the new airlock wires panel:
 		aiControlDisabled = 0
 
 /obj/machinery/door/airlock/tackled(mob/living/carbon/human/user)
-	if(ishuman(user) && istype(user.wear_id, /obj/item/weapon/card/emag))
+	if(ishuman(user) && isEmag(user.wear_id)
 		emag_act()
