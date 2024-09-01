@@ -143,6 +143,7 @@
 /obj/item/clothing/under/aqua
 	name = "aqua jumpsuit"
 	icon_state = "aqua"
+	item_state = "a_suit"
 	_color = "aqua"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
