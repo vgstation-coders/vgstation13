@@ -81,3 +81,5 @@
 	var/tangibility = 1 //can this mob be interacted with things hitting it and etc?
 
 	var/braindamagespeechcooldown = FALSE //used to avoid braindamage proc spamming when checking the like 80 replacements
+
+	var/list/luminosity_sources = list()
