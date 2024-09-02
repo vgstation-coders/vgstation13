@@ -72,7 +72,7 @@
 		animation.transform = trans
 	if (target && ismovable(target))
 		var/atom/movable/AM = target
-		AM.lock_atom(animation, /datum/locking_category/buckle)
+		AM.lock_atom(animation, /datum/locking_category/animation)
 	if(a_icon_state)
 		animation.icon_state = a_icon_state
 	else
@@ -84,6 +84,9 @@
 		qdel(animation)
 
 	return animation
+
+/datum/locking_category/animation
+	flags = DONT_MESS_WITH_DENSITY
 
 /*
 //called when the tile is cultified
