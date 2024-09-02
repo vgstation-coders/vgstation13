@@ -266,7 +266,7 @@
 	ign.secured = 1
 	ign.holder = src
 	var/obj/item/device/assembly/timer/tmr = new(src)
-	tmr.time=5
+	tmr.time=10
 	tmr.secured = 1
 	tmr.holder = src
 	a_left = tmr
