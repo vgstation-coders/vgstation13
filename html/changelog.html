@@ -73,6 +73,13 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2024.09.02</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">The mode change buttons on assemblies now properly refresh them.</li>
+				<li class="tweak">Assembly windows now refresh as the timers tick down, instead of manually with the refresh button.</li>
+				<li class="tweak">Unnecessary close and refresh buttons have now been removed from the UIs of timers, proximity sensors, infrared sensors and light tile remotes as these functions happen normally now.</li>
+			</ul>
 			<h2 class="date">2024.08.31</h2>
 			<h3 class="author">DeityLink updated:</h3>
 			<ul class="changes bgimages16">
@@ -1810,21 +1817,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="rscadd">Added a sound for when someone is successfully knocked out with the rolling pin.</li>
 				<li class="rscadd">Made the rolling pin and briefcase&#39;s behavior when targeting head far more consistent; tweaked some of its probabilities.</li>
 				<li class="tweak">The rolling pin&#39;s hitsound is now less metallic, using the baseball bat&#39;s hitsound for mobs instead.</li>
-			</ul>
-			<h2 class="date">2023.12.08</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="experiment">Implemented a new subsystem that revamps the way reagent containers normalize their temperature in relation to the environment. This new method makes reagents reach room temperature quite faster on average (except when using a Stasis Beaker), and has been finely adjusted so temperature changes are more noticeable while also feeling realistic. You can Alt Middle click a beaker or food item to blow some air on them and accelerate the process. As an added bonus, this system consumes a negligible amount of CPU compared to the one in effect until now, and is much simpler to read and adjust, thus more maintainable.</li>
-				<li class="experiment">The thermal dissipation subsystem has been disabled</li>
-			</ul>
-			<h3 class="author">DorainGrey updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes Horizon ERT, Nuke Squads and death squads.</li>
-				<li class="bugfix">Fixes minor bug with coinpress &amp; miner ore processor on asteroid.</li>
-				<li class="bugfix">Snaxi Cargo Conveyors Fixed</li>
-				<li class="bugfix">Snaxi Atmos reworked to not route through reinforced walls</li>
-				<li class="bugfix">Snaxi SMES charge automatically</li>
-				<li class="bugfix">General Engineering reworks</li>
 			</ul>
 		</div>
 		<!--
