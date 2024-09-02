@@ -112,8 +112,7 @@
 
 /obj/item/device/assembly/prox_sensor/proc/countdown()
 	if(timing)
-		updateUsrDialog()
-		if(time >= 0)
+		if(time > 0)
 			spawn(10)
 				time--
 				countdown()
@@ -121,6 +120,7 @@
 			timing = 0
 			toggle_scan()
 			time = default_time
+		updateUsrDialog()
 
 /obj/item/device/assembly/prox_sensor/dropped()
 	spawn(0)

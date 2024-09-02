@@ -59,7 +59,6 @@
 
 /obj/item/device/assembly/timer/proc/countdown()
 	if(timing)
-		updateUsrDialog()
 		if(time > 0)
 			spawn(10)
 				time--
@@ -69,6 +68,7 @@
 				timing = 0
 			timer_end()
 			time = default_time
+		updateUsrDialog()
 
 /obj/item/device/assembly/timer/update_icon()
 	overlays.len = 0
