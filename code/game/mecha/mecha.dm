@@ -194,6 +194,10 @@
 	selected = null
 	..()
 
+/obj/mecha/special_thrown_behaviour()
+	dash_dir = dir
+	throwing = 2//dashing through windows and grilles
+
 /obj/mecha/can_apply_inertia()
 	return 1 //No anchored check - so that mechas can fly off into space
 

@@ -206,7 +206,11 @@
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
-#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod) || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller))
+#define isholyweapon(I) (istype(I, /obj/item/weapon/storage/bible)\
+						 || istype(I, /obj/item/weapon/nullrod)\
+						 || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller/true)\
+						 || istype(I, /obj/item/projectile/hookshot/whip/vampkiller/true)\
+						 || istype(I, /obj/item/weapon/boomerang/cross))
 
 #define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 

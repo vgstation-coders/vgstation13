@@ -1644,7 +1644,7 @@ var/global/objects_thrown_when_explode = FALSE
 		usr.put_in_hand(OI.hand_index, src)
 		add_fingerprint(usr)
 
-/obj/item/proc/pre_throw(atom/movable/target)
+/obj/item/proc/pre_throw(var/atom/movable/target,var/mob/living/user)
 	return
 
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)

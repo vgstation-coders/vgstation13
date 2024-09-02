@@ -424,7 +424,7 @@
 
 /datum/role/vampire/handle_reagent(var/reagent_id)
 	switch(reagent_id)
-		if (HOLYWATER,INCENSE_HAREBELLS)
+		if (HOLYWATER,INCENSE_HAREBELLS,SACREDWATER)
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))
 				return
@@ -436,12 +436,9 @@
 				to_chat(H, "<span class='warning'>A freezing liquid permeates your bloodstream. You're still too human to be smited!</span>")
 				smitecounter += 2 //Basically nothing, unless you drank multiple bottles of holy water (250 units to catch on fire !)
 
-/*
-	Commented out for now.
-
-/datum/role/vampire/handle_splashed_reagent(var/reagent_id)
+/datum/role/vampire/handle_splashed_reagent(var/reagent_id, var/method, var/volume)
 	switch (reagent_id)
-		if (HOLYWATER)
+		if (HOLYWATER,SACREDWATER)
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))
 				return
@@ -482,8 +479,6 @@
 					if(H.dissolvable())
 						H.take_organ_damage(min(15, volume * 2))
 						smitecounter += 5
-
-*/
 
 /*
 -- Helpers --
