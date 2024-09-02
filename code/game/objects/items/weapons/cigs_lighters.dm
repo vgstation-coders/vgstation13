@@ -61,6 +61,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	lit = 1
 	update_brightness()
 
+
 /obj/item/weapon/match/extinguish()
 	if (lit > 0)
 		visible_message("<span class='notice'>\The [name] goes out.</span>")
@@ -359,9 +360,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		if(Z.is_hot())
 			if (clumsy_check(user) && (prob(50)))
 				light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \his [name] </span><span class='danger'>as well as themselves</span><span class='rose'> with \the [W]. Damn, that's cool.</span>")
-				user.adjust_fire_stacks(0.5)
-				user.on_fire = 1
-				user.update_icon = 1
+				user.ignite()
 				playsound(user.loc, 'sound/effects/bamf.ogg', 50, 0)
 			else
 				light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \his [name] with \the [W]. Damn, that's cool.</span>")
