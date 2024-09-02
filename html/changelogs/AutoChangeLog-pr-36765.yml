@@ -1,0 +1,9 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- bugfix: The mode change buttons on assemblies now properly refresh them.
+- tweak: Assembly windows now refresh as the timers tick down, instead of manually
+    with the refresh button.
+- tweak: Unnecessary close and refresh buttons have now been removed from the UIs
+    of timers, proximity sensors, infrared sensors and light tile remotes as these
+    functions happen normally now.
