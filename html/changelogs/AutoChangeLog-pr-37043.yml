@@ -1,4 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: Putting stacks in storage now properly updates their materials.
