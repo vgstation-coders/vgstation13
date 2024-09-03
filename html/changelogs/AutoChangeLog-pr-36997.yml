@@ -1,0 +1,8 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- bugfix: Players can now actually disallow item use when targeting with guns. As
+    described, this will not count for turf or HUD clicks.
+- bugfix: Moving in a vehicle now counts as moving when targeted with a gun.
+- tweak: The message the player receives on being targeted now more helpfully tells
+    them which restrictions are or are not in place.
