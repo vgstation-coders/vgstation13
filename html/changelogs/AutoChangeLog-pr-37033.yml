@@ -1,0 +1,4 @@
+author: DeityLink
+delete-after: true
+changes:
+- bugfix: Fixed stuff landing in disposals through windows.
