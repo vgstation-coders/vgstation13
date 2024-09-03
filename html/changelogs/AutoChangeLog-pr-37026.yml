@@ -1,0 +1,5 @@
+author: DeityLink
+delete-after: true
+changes:
+- bugfix: Door Moody Lights no longer look much brighter than they should when door
+    lights are flashing during their opening/closing/deny/emag animations.
