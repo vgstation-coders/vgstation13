@@ -1,0 +1,5 @@
+author: DeityLink
+delete-after: true
+changes:
+- bugfix: Fixed being able to walk through closed Firelocks after clicking on them
+    while not having permission due to dangerous atmos conditions.
