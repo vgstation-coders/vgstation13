@@ -514,25 +514,25 @@ About the new airlock wires panel:
 				overlays.len = 0
 			if(panel_open)
 				flick("o_door_opening", src)
-				anim(target = src, a_icon = icon, flick_anim = "o_door_opening-moody", sleeptime = animation_delay, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
+				anim(target = src, a_icon = icon, flick_anim = "o_door_opening-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 			else
 				flick("door_opening", src)
-				anim(target = src, a_icon = icon, flick_anim = "door_opening-moody", sleeptime = animation_delay, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
+				anim(target = src, a_icon = icon, flick_anim = "door_opening-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 		if("closing")
 			if(overlays)
 				overlays.len = 0
 			if(panel_open)
 				flick("o_door_closing", src)
-				anim(target = src, a_icon = icon, flick_anim = "o_door_closing-moody", sleeptime = animation_delay, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
+				anim(target = src, a_icon = icon, flick_anim = "o_door_closing-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 			else
 				flick("door_closing", src)
-				anim(target = src, a_icon = icon, flick_anim = "door_closing-moody", sleeptime = animation_delay, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
+				anim(target = src, a_icon = icon, flick_anim = "door_closing-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 		if("spark")
 			flick("door_spark", src)
-			anim(target = src, a_icon = icon, flick_anim = "door_spark-moody", sleeptime = animation_delay, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
+			anim(target = src, a_icon = icon, flick_anim = "door_spark-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 		if("deny")
 			flick("door_deny", src)
-			anim(target = src, a_icon = icon, flick_anim = "door_deny-moody", sleeptime = animation_delay, plane = ABOVE_LIGHTING_PLANE, blend = BLEND_ADD)
+			anim(target = src, a_icon = icon, flick_anim = "door_deny-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 	return
 
 /obj/machinery/door/airlock/attack_ai(mob/user as mob)
