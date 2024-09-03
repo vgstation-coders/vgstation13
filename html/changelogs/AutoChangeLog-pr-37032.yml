@@ -1,5 +1,0 @@
-author: DeityLink
-delete-after: true
-changes:
-- bugfix: Fixed the leather glove & handwraps not showing up on the character's sprite
-    when worn.
