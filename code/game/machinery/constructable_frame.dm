@@ -797,7 +797,7 @@ to destroy them and players will be able to make replacements.
 
 /obj/item/weapon/circuitboard/reagentgrinder
 	name = "Circuit Board (All-In-One Grinder)"
-	desc = "A circuit board used to run a machine that grinds or juices solid items.."
+	desc = "A circuit board used to run a machine that grinds or juices solid items."
 	build_path = /obj/machinery/reagentgrinder
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"

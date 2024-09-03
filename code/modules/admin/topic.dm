@@ -5806,7 +5806,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					return FALSE
 				vars[href_list["change_zone_del"]] = new_limit
 			if ("z_del")
-				var/new_limit = input(usr, "Input the new z-level..", "Setting [href_list["change_zone_del"]]") as null|num
+				var/new_limit = input(usr, "Input the new z-level.", "Setting [href_list["change_zone_del"]]") as null|num
 				if (new_limit < 1 || new_limit > 6)
 					to_chat(usr, "<span class='warning'>Please enter a number between 1 and 6.</span>")
 					return FALSE

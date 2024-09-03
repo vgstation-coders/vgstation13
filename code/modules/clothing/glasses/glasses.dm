@@ -328,7 +328,7 @@ BLIND     // can't see anything
 
 /obj/item/clothing/glasses/welding/superior
 	name = "superior welding goggles"
-	desc = "Welding goggles made from more expensive materials, strangely smells like potatoes. Allows for better vision than normal goggles.."
+	desc = "Welding goggles made from more expensive materials, strangely smells like potatoes. Allows for better vision than normal goggles."
 	icon_state = "rwelding-g"
 	item_state = "rwelding-g"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
