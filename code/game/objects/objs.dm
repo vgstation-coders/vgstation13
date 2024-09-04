@@ -450,19 +450,24 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		CRASH("[src] tried to burn despite not being flammable!")
 	if(on_fire)
 		return
+	if(!smoking)
+		checksmoke()
+	..()
+
+/obj/item/proc/checksmoke()
 	var/datum/gas_mixture/G = return_air()
 	if(!G)
 		return
-	if(G.temperature >= (autoignition_temperature * 0.75))
+	while(G.temperature >= (autoignition_temperature * 0.75))
 		if(!smoking)
 			add_particles(PS_SMOKE)
 			smoking = TRUE
 		var/rate = clamp(lerp(G.temperature,autoignition_temperature * 0.75,autoignition_temperature,0.1,1),0.1,1)
 		adjust_particles(PVAR_SPAWNING,rate,PS_SMOKE)
-	else
-		remove_particles(PS_SMOKE)
-		smoking = FALSE
-	..()
+		sleep(10 SECONDS)
+		G = return_air()
+	remove_particles(PS_SMOKE)
+	smoking = FALSE
 
 /obj/singularity_act()
 	if(flags & INVULNERABLE)
