@@ -459,6 +459,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(!G)
 		return
 	while(G.temperature >= (autoignition_temperature * 0.75))
+		if(!G)
+			break
 		if(!smoking)
 			add_particles(PS_SMOKE)
 			smoking = TRUE
