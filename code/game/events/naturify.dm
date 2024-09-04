@@ -419,7 +419,7 @@ var/list/seedbush_spawns = list(
 	desc = "Somehow these robes keep a plasmaman safe, even outside of plasma."
 	species_restricted = list(PLASMAMAN_SHAPED)
 	species_fit = list(PLASMAMAN_SHAPED)
-	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
+	clothing_flags = PLASMAGUARD
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 
 /obj/item/clothing/head/bearpelt/brown/plasmaman
@@ -427,7 +427,7 @@ var/list/seedbush_spawns = list(
 	desc = "Somehow this wolf pelt keep a plasmaman safe, even outside of plasma."
 	species_restricted = list(PLASMAMAN_SHAPED)
 	species_fit = list(PLASMAMAN_SHAPED)
-	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
+	clothing_flags = PLASMAGUARD
 	hides_identity = HIDES_IDENTITY_NEVER
 	body_parts_covered = FULL_HEAD|HIDEHAIR
 
