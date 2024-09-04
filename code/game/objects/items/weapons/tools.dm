@@ -437,7 +437,7 @@
 	if (src.welding)
 		if(isliving(A))
 			var/mob/living/L = A
-			L.IgniteMob()
+			L.ignite()
 			remove_fuel(1)
 
 /obj/item/tool/weldingtool/attack_self(mob/user as mob)

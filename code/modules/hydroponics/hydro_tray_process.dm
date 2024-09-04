@@ -2,12 +2,20 @@
 	//Do this even if we're not ready for a plant cycle.
 	process_reagents()
 
+	if (!is_soil && !is_plastic)
+		if (seed)
+			use_power = MACHINE_POWER_USE_ACTIVE
+		else
+			use_power = MACHINE_POWER_USE_IDLE
+
 	// Update values every cycle rather than every process() tick.
 	if(force_update)
 		force_update = 0
 	else if(world.time < (lastcycle + cycledelay))
 		if(update_icon_after_process > 0 && !delayed_update_icon)
 			update_icon()
+		else
+			update_visible_gas()
 		return
 	lastcycle = world.time
 
@@ -32,11 +40,35 @@
 		if(!seed || get_weedlevel() >= seed.weed_tolerance + 20 || dead)
 			weed_invasion()
 
+	// If we're connected to a pipe lets make sure that gas is flowing through
+	if (connected_port)
+		var/datum/pipe_network/P = connected_port.return_network(src)
+		if (P)
+			P.update = 1
+
+	var/turf/T = get_turf(src)
+	var/datum/gas_mixture/environment
+
+	// If our lid is closed, we exchange gas only with ourselves and any potential connected pipenet.
+	if(closed_system)
+		environment = air_contents
+	else
+		if(istype(T))
+			environment = T.return_air()
+		else
+			environment = space_gas
+		// If our lid is open and we're holding some gas, let's release any gas in the tray to the air
+		// Incidentally since the tray might still be connected to a pipenet, this allows it to behave like a passive vent that only lets air flow out of the pipes.
+		if (air_contents?.total_moles > 0.01)
+			environment.merge(air_contents.remove(air_contents.total_moles))
+
 	// If there is no seed data (and hence nothing planted),
 	// or the plant is dead, process nothing further.
 	if(!seed || dead)
 		if(update_icon_after_process && !delayed_update_icon)
 			update_icon() //Harvesting would fail to set alert icons properly.
+		else
+			update_visible_gas()
 		return
 
 	// On each tick, there's a chance the pest population will increase.
@@ -58,7 +90,7 @@
 		else
 			if(prob(80))
 				age += 1 * HYDRO_SPEED_MULTIPLIER
-				update_icon_after_process = 1
+			update_icon_after_process = 1
 
 	//Highly mutable plants have a chance of mutating every tick.
 	if(seed.immutable == -1)
@@ -106,16 +138,6 @@
 				seed.update_product(harvest)
 				lastproduce = age
 
-	var/turf/T = get_turf(src)
-	var/datum/gas_mixture/environment
-	// If we're closed, take from our internal sources.
-	if(closed_system)
-		environment = air_contents
-	else if(!environment && istype(T))
-		environment = T.return_air()
-	else
-		environment = space_gas
-
 	process_health()
 	check_light(T)
 	check_gasses(environment)
@@ -134,6 +156,8 @@
 
 	if(update_icon_after_process && !delayed_update_icon)
 		update_icon()
+	else
+		update_visible_gas()
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/affect_growth(var/amount)
 	if(!seed)
@@ -159,96 +183,218 @@
 	if(labeled)
 		name += " ([labeled])"
 
-/obj/machinery/portable_atmospherics/hydroponics/update_icon()
+//This lets us update gas visually more frequently without having to call the whole update_icon() each time
+/obj/machinery/portable_atmospherics/hydroponics/proc/update_visible_gas()
+	overlays -= visible_gas
+	var/cargo_cart_offset = 0
+	if (istype(locked_to,/obj/machinery/cart/cargo))
+		cargo_cart_offset = CARGO_CART_OFFSET
+	if (closed_system)
+		if (!visible_gas)
+			visible_gas = image(icon, src, "blank")
+		visible_gas.overlays.len = 0
+		for(var/g in XGM.overlay_limit)
+			if(air_contents.molar_density(g) > XGM.overlay_limit[g])
+				var/obj/effect/overlay/gas_overlay/GO = XGM.tile_overlay[g]
+				var/image/I = image(icon ,src , GO.icon_state)
+				I.layer = HYDROPONIC_TRAY_ATMOS_LAYER + cargo_cart_offset
+				visible_gas.overlays += I
+		overlays += visible_gas
+
+/obj/machinery/portable_atmospherics/hydroponics/update_icon(var/forced = FALSE)
 	//optimizations so we don't call update_icon() more than we need to
 	delayed_update_icon = 0
-	if (last_update_icon == world.time)
-		//we've already updated the icon on this tick
-		return
+	if (!forced)
+		if (lid_toggling)
+			if (lid_toggling == 2)
+				lid_toggling = 1
+			else
+				return
+		if (last_update_icon == world.time)
+			//we've already updated the icon on this tick
+			return
 	last_update_icon = world.time
 
 	update_icon_after_process = 0
 	overlays.len = 0
 	stop_particles()
+	kill_moody_light_all()
+
+	var/powered_and_working = !(stat & (BROKEN|NOPOWER|FORCEDISABLE))
+	var/light_actually_on = light_on && powered_and_working
+	var/cargo_cart_offset = 0
+	if (istype(locked_to,/obj/machinery/cart/cargo))
+		cargo_cart_offset = CARGO_CART_OFFSET
 
 	update_name() //fuck it i'll make it not happen constantly later
 
-	// Updates the plant overlay.
+	if (!is_soil)
+		if (!is_plastic)
+			if (light_actually_on)
+				overlays += image(icon = icon, icon_state = "lightson")
+			else
+				overlays += image(icon = icon, icon_state = "lightsoff")
+			if (anchored)
+				icon_state = "hydrotray"
+				pixel_y = 0
+				if (connected_port)
+					overlays += image(icon = icon, icon_state = "connector")
+			else
+				icon_state = "blank"
+				pixel_y = 3
+				var/image/I = image(icon = icon, icon_state = "hydrotray_mobile_static")//if I don't do that, unanchored trays don't appear on photos. Photography remains as cursed as ever.
+				I.pixel_y = -3
+				overlays += I
+				var/image/J = image(icon = icon, icon_state = "hydrotray_mobile")
+				J.pixel_y = -3
+				overlays += J
+
+	//how toxic is the water
 	var/image/toxins_overlay = image(icon, src, "[icon_state]_toxin")
 	toxins_overlay.alpha = get_full_toxinlevel() * 2.55
 	overlays += toxins_overlay
 
+	//how much water is in there
+	if (!is_soil)
+		var/water_lvl = 0
+		var/full_waterlevel = get_full_waterlevel()
+		if (full_waterlevel > 0)
+			water_lvl = clamp(1 + round(get_full_waterlevel()/(WATERLEVEL_MAX/4)),1,4)
+		var/image/water_overlay = image(icon, src, "waterlevel_[water_lvl]")
+		overlays += water_overlay
+
+	// Updates the plant overlay.
+	var/plant_appearance = ""
 	if(!isnull(seed))
-		if(draw_warnings && get_full_planthealth() <= (seed.endurance / 2))
+		if(draw_warnings && powered_and_working && get_full_planthealth() <= (seed.endurance / 2))
 			overlays += image('icons/obj/hydroponics/hydro_tools.dmi',"over_lowhealth3")
-		var/plant_appearance = ""
+			update_moody_light_index("health", icon, "over_lowhealth3-moody")
+
 		if(dead)
 			plant_appearance = "dead"
-		else if(harvest)
-			if (harvest > 1)
-				plant_appearance = "harvest-[harvest]"
-			else
-				plant_appearance = "harvest"
-		else if(age < seed.maturation)
-			var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
-			plant_appearance = "stage-[t_growthstate]"
-			lastproduce = age
 		else
-			plant_appearance = "stage-[seed.growth_stages]"
+			if(harvest)
+				if (harvest > 1)
+					plant_appearance = "harvest-[harvest]"
+				else
+					plant_appearance = "harvest"
+			else if(age < seed.maturation)
+				var/t_growthstate = clamp(1+round((age * seed.growth_stages) / seed.maturation),1,seed.growth_stages)
+				if (t_growthstate > growth_level)
+					//this should give us a chance to witness stages we wouldn't otherwise see due to the plant's maturation var being inferior or equal to its growth_stages var.
+					growth_level++
+					if (t_growthstate > growth_level+1)
+						growth_level++
+				plant_appearance = "stage-[growth_level]"
+				lastproduce = age
+			else
+				if (seed.growth_stages > growth_level)
+					growth_level++
+				plant_appearance = "stage-[growth_level]"
+			if (seed.moody_lights)
+				update_moody_light_index("plant", seed.plant_dmi, "[plant_appearance][(seed.constrained && closed_system) ? "-constrained" : ""]-moody")
+			else if (seed.biolum)
+				var/image/luminosity_gradient = image(icon, src, "moody_plant_mask")
+				luminosity_gradient.blend_mode = BLEND_INSET_OVERLAY
+				var/image/mask = image(seed.plant_dmi, src, "[plant_appearance][(seed.constrained && closed_system) ? "-constrained" : ""]")
+				mask.appearance_flags = KEEP_TOGETHER
+				mask.overlays += luminosity_gradient
+				update_moody_light_index("plant", image_override = mask)
+		if (seed.constrained && closed_system)
+			plant_appearance += "-constrained"
 
 		if (!is_soil && seed.visible_roots_in_hydro_tray)
-			overlays += image(seed.plant_dmi,"roots-[plant_appearance]")
-		overlays += image(seed.plant_dmi,plant_appearance)
+			var/image/roots_image = image(seed.plant_dmi,src,"roots-[plant_appearance]")
+			roots_image.layer = HYDROPONIC_TRAY_PLANT_LAYER + cargo_cart_offset
+			overlays += roots_image
+		var/image/plant_image = image(seed.plant_dmi,src,plant_appearance)
+		plant_image.layer = HYDROPONIC_TRAY_PLANT_LAYER + cargo_cart_offset
+		overlays += plant_image
 
 		seed.apply_particles(src)
 
 	//Draw the cover.
 	if(closed_system)
-		overlays += image(icon = icon, icon_state = "hydrocover")
+		var/image/back_lid = image(icon,src,"lid_back")
+		back_lid.layer = HYDROPONIC_TRAY_BACK_LID_LAYER + cargo_cart_offset
+		overlays += back_lid
+
+		//and the visible gases in there
+		update_visible_gas()
+
+		var/image/front_lid = image(icon,src,"lid_front")
+		front_lid.layer = HYDROPONIC_TRAY_FRONT_LID_LAYER + cargo_cart_offset
+		overlays += front_lid
+
+	if (light_actually_on)
+		if(closed_system)
+			update_moody_light_index("lights", icon, "hydrotray-closed-moody")
+		else
+			update_moody_light_index("lights", icon, "hydrotray-open-moody")
+		if (seed)
+			var/image/luminosity_gradient = image(icon, src, "moody_plant_mask")
+			luminosity_gradient.blend_mode = BLEND_INSET_OVERLAY
+			var/image/mask = image(seed.plant_dmi, src, plant_appearance)
+			mask.appearance_flags = KEEP_TOGETHER
+			mask.overlays += luminosity_gradient
+			update_moody_light_index("plant_lights", image_override = mask)
 
 	//Updated the various alert icons.
-	if(!draw_warnings)
+	if(!draw_warnings || !powered_and_working)
 		return
 	if(get_full_nutrientlevel() <= NUTRIENTLEVEL_MAX / 5)
 		overlays += image(icon = icon, icon_state = "over_lownutri3")
+		update_moody_light_index("nutri", icon, "over_lownutri3-moody")
 	if(get_full_weedlevel() >= WEEDLEVEL_MAX/2 || get_full_pestlevel() >= PESTLEVEL_MAX/2 || improper_heat || improper_light || improper_kpa || missing_gas)
 		overlays += image(icon = icon, icon_state = "over_alert3")
+		update_moody_light_index("alert", icon, "over_alert3-moody")
 	if(get_full_waterlevel() <= WATERLEVEL_MAX/5 && get_full_toxinlevel() <= TOXINLEVEL_MAX/5)
 		overlays += image(icon = icon, icon_state = "over_lowwater3")
+		update_moody_light_index("water", icon, "over_lowwater3-moody")
 
 	if(!seed)
 		return
 	if(seed.toxin_affinity < 5)
 		if(get_full_waterlevel() <= WATERLEVEL_MAX/5)
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
+			update_moody_light_index("water", icon, "over_lowwater3-moody")
 	else if(seed.toxin_affinity <= 7)
 		if(get_full_waterlevel() < WATERLEVEL_MAX/5 || get_full_toxinlevel() < TOXINLEVEL_MAX/5)
 			overlays += image(icon = icon, icon_state = "over_lowwater3")
+			update_moody_light_index("water", icon, "over_lowwater3-moody")
 	else if(get_full_toxinlevel() < TOXINLEVEL_MAX/5)
 		overlays += image(icon = icon, icon_state = "over_lowwater3")
+		update_moody_light_index("water", icon, "over_lowwater3-moody")
 	if(harvest)
 		overlays += image(icon = icon, icon_state = "over_harvest3")
+		update_moody_light_index("harvest", icon, "over_harvest3-moody")
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_light(var/turf/T)
-	var/light_out = 0
-	if(light_on)
-		light_out += internal_light
-	if(seed&&seed.biolum)
-		light_out += get_biolum()
+	var/light_out_range = 0
+	var/light_actually_on = light_on
+	if (stat & (BROKEN|NOPOWER|FORCEDISABLE))
+		light_actually_on = 0
+	if(light_actually_on)
+		light_out_range += internal_light_range
+	if(seed && !dead && seed.biolum)
+		light_out_range += get_biolum()
 		if(seed.biolum_colour)
 			light_color = seed.biolum_colour
 		else
 			light_color = null
-	set_light(light_out)
+	set_light(light_out_range)
 
-	var/light_available = 5
-	if(T?.dynamic_lighting)
-		light_available = T.get_lumcount() * 10
+	if (seed)
+		var/light_available = 5
+		if(T?.dynamic_lighting)
+			light_available = T.get_lumcount() * 10
+		if(light_actually_on)
+			light_available += 3//a little boost so dim lit hydroponic rooms relying on tray lights are viable
 
-	if(seed && !seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)
-		improper_light = 1
-	else
-		improper_light = 0
+		if(!seed.biolum && abs(light_available - seed.ideal_light) > seed.light_tolerance)
+			improper_light = 1
+		else
+			improper_light = 0
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_gasses(var/datum/gas_mixture/environment)
 	// Handle gas consumption.
@@ -270,11 +416,6 @@
 	if(seed.exude_gasses && seed.exude_gasses.len)
 		for(var/gas in seed.exude_gasses)
 			environment.adjust_gas(gas, max(1,round((seed.exude_gasses[gas]*round(seed.potency))/seed.exude_gasses.len)))
-	// If we're attached to a pipenet, then we should let the pipenet know we might have modified some gasses
-	if (closed_system && connected_port)
-		var/datum/pipe_network/P = connected_port.return_network(src)
-		if (P)
-			P.update = 1
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/check_kpa(var/datum/gas_mixture/environment)
 	var/pressure = environment.return_pressure()

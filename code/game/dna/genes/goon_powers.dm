@@ -68,6 +68,7 @@
 /datum/dna/gene/basic/stealth/chameleon/deactivate(var/mob/M, var/connected, var/flags)
 	if(!..())
 		return 0
+	M.alphas["chameleon_stealth"] = 255
 	M.unregister_event(/event/moved, src, nameof(src::mob_moved()))
 	return 1
 
@@ -181,7 +182,7 @@
 		if(!handle_suit)
 			target.bodytemperature = max(T0C + 29, target.bodytemperature - 5)
 			target.adjustFireLoss(10)
-			target.ExtinguishMob()
+			target.extinguish()
 
 			target.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [target]!</span>")
 

@@ -4993,6 +4993,14 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 			if("can rotate")
 				new_value = input(usr,"0 - rotation disabled, 1 - rotation enabled","Shuttle editing",S.can_rotate) as num
 				S.can_rotate = new_value
+			if("destroy areas")
+				new_value = input(usr,"Allow this shuttle to crush into areas? Currently set to: [S.destroy_everything ? "True" : "False"]","Shuttle editing") as null|anything in list("CRUSH","No crush")
+				if(new_value == "CRUSH")
+					S.destroy_everything = TRUE
+				else if(new_value == "No crush")
+					S.destroy_everything = FALSE
+				else
+					return
 			if("DEFINED LOCATIONS")
 				to_chat(usr, "To prevent accidental mistakes, you can only set these locations to docking ports in the shuttle's memory (use the \"Add a destination docking port to a shuttle\" command)")
 
@@ -5800,7 +5808,7 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					return FALSE
 				vars[href_list["change_zone_del"]] = new_limit
 			if ("z_del")
-				var/new_limit = input(usr, "Input the new z-level..", "Setting [href_list["change_zone_del"]]") as null|num
+				var/new_limit = input(usr, "Input the new z-level.", "Setting [href_list["change_zone_del"]]") as null|num
 				if (new_limit < 1 || new_limit > 6)
 					to_chat(usr, "<span class='warning'>Please enter a number between 1 and 6.</span>")
 					return FALSE

@@ -20,7 +20,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	// Output.
 	var/list/products              // Possible fruit/other product paths.
 	var/list/mutants               // Possible predefined mutant varieties, if any.
-	var/list/chems                 // Chemicals that plant produces in products/injects into victim in (Total units, Potency)
+	var/list/chems=list()          // Chemicals that plant produces in products/injects into victim in (Total units, Potency)
 	var/list/consume_gasses=list() // The plant will absorb these gasses during its life.
 	var/list/exude_gasses=list()   // The plant will exude these gasses during its life.
 
@@ -76,6 +76,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/mob_drop					// Seed type dropped by the mobs when it dies without an host
 
 	var/large = 1					// Is the plant large? For clay pots.
+	var/constrained = 0				// Whether the plant uses alternate sprites when the cover is down
+	var/moody_lights = 0			// Whether the plant has moody lights (can really improve the looks of bioluminescent plants)
 	var/list/mutation_log = list() // Who did what
 
 /datum/seed/New()

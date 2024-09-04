@@ -184,6 +184,7 @@
 
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
+	..()
 	if(user.incapacitated())
 		unlock_atom(user)
 		return

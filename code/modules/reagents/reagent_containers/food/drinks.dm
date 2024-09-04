@@ -824,7 +824,7 @@
 	to_chat(user, "You pull the tab, you feel the drink heat up in your hands, and its horrible fumes hits your nose like a ton of bricks. You drop the soup in disgust.")
 	var/turf/T = get_turf(user.loc)
 	var/obj/item/weapon/reagent_containers/food/drinks/discount_ramen_hot/A = new /obj/item/weapon/reagent_containers/food/drinks/discount_ramen_hot(T)
-	A.desc += " It feels warm.." //This is required
+	A.desc += " It feels warm." //This is required
 	user.drop_from_inventory(src)
 	qdel(src)
 

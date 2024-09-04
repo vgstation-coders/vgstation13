@@ -25,8 +25,9 @@
 
 	AM.anchored = TRUE
 
-	if (flags & DENSE_WHEN_LOCKING || AM.lockflags & DENSE_WHEN_LOCKED)
-		owner.setDensity(TRUE)
+	if (!(flags & DONT_MESS_WITH_DENSITY))
+		if (flags & DENSE_WHEN_LOCKING || AM.lockflags & DENSE_WHEN_LOCKED)
+			owner.setDensity(TRUE)
 
 	AM.pixel_x += pixel_x_offset * PIXEL_MULTIPLIER
 	AM.pixel_y += pixel_y_offset * PIXEL_MULTIPLIER
@@ -89,21 +90,22 @@
 
 	AM.anchored = initial(AM.anchored)
 
-	// Okay so now we have to loop through ALL of the owner's locked atoms and their categories to see if the owner still needs to be dense.
-	var/found = FALSE
-	if (flags & DENSE_WHEN_LOCKING || AM.lockflags & DENSE_WHEN_LOCKED)
-		for (var/atom/movable/candidate in owner.locked_atoms)
-			if (candidate.lockflags & DENSE_WHEN_LOCKED)
-				found = TRUE
-				break
+	if (!(flags & DONT_MESS_WITH_DENSITY))
+		// Okay so now we have to loop through ALL of the owner's locked atoms and their categories to see if the owner still needs to be dense.
+		var/found = FALSE
+		if (flags & DENSE_WHEN_LOCKING || AM.lockflags & DENSE_WHEN_LOCKED)
+			for (var/atom/movable/candidate in owner.locked_atoms)
+				if (candidate.lockflags & DENSE_WHEN_LOCKED)
+					found = TRUE
+					break
 
-			var/datum/locking_category/cat = owner.locked_atoms[candidate]
-			if (cat.flags & DENSE_WHEN_LOCKING)
-				found = TRUE
-				break
+				var/datum/locking_category/cat = owner.locked_atoms[candidate]
+				if (cat.flags & DENSE_WHEN_LOCKING)
+					found = TRUE
+					break
 
-	if (!found)
-		owner.setDensity(initial(owner.density))
+		if (!found)
+			owner.setDensity(initial(owner.density))
 
 	if (ismob(AM))
 		var/mob/M = AM

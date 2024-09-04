@@ -54,7 +54,6 @@
 	var/tmp/lock_time = -100
 	var/mouthshoot = 0 ///To stop people from suiciding twice... >.>
 	var/automatic = 0 //Used to determine if you can target multiple people.
-	var/tmp/mob/living/last_moved_mob //Used to fire faster at more than one person.
 	var/tmp/told_cant_shoot = 0 //So that it doesn't spam them with the fact they cannot hit them.
 	var/firerate = 1 	// 0 for one bullet after tarrget moves and aim is lowered,
 						//1 for keep shooting until aim is lowered

@@ -387,6 +387,22 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 					attack_hand(M, TRUE)
 		in_use = is_in_use
 
+/obj/item/updateUsrDialog()
+	if(in_use)
+		var/is_in_use = 0
+		if(usr)
+			_using |= usr
+		if(_using && _using.len)
+			for(var/mob/M in _using) // Only check things actually messing with us.
+				if (!M || !M.client || !in_range(loc,M))  // NOT ON MOB
+					_using.Remove(M)
+					continue
+				is_in_use = 1
+				src.attack_self(M)
+
+		// check for TK users
+		in_use = is_in_use
+
 /obj/proc/updateDialog()
 	// Check that people are actually using the machine. If not, don't update anymore.
 	if(in_use)
@@ -411,7 +427,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/suicide_act(var/mob/living/user)
 	if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
-		user.IgniteMob()
+		user.ignite()
 		return SUICIDE_ACT_FIRELOSS
 	else if (sharpness >= 1)
 		user.visible_message("<span class='danger'>[user] impales himself on \the [src]! It looks like \he's trying to commit suicide.</span>")
@@ -680,7 +696,12 @@ a {
 /obj/proc/can_quick_store(var/obj/item/I) //proc used to check that the current object can store another through quick equip
 	return 0
 
+/client
+	var/last_quick_stored = 0
+
 /obj/proc/quick_store(var/obj/item/I,mob/user) //proc used to handle quick storing
+	if(user?.client)
+		user.client.last_quick_stored = world.time
 	return 0
 
 /**
@@ -858,7 +879,7 @@ a {
 	if(additional_description)
 		desc = "[initial(desc)] \n [additional_description]"
 
-/obj/proc/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality)
+/obj/proc/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality = 0)
 	if(mat)
 		/*var/icon/original = icon(icon, icon_state) Icon operations keep making mustard gas
 		if(mat.color)

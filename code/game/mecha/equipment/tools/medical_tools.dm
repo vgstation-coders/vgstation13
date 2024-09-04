@@ -478,43 +478,24 @@
 		return
 	set_ready_state(0)
 	chassis.use_power(energy_drain)
+	var/turf/curloc = get_turf(chassis)
 	var/turf/trg = get_turf(target)
 	var/obj/item/weapon/reagent_containers/syringe/S = syringes[1]
-	S.forceMove(get_turf(chassis))
 	reagents.trans_to(S, min(S.volume, reagents.total_volume))
 	syringes -= S
 	S.icon = 'icons/obj/chemical.dmi'
 	S.icon_state = "syringeproj"
 	playsound(chassis, 'sound/items/syringeproj.ogg', 50, 1)
 	log_message("Launched [S] from [src], targeting [target].")
-	spawn(-1)
-		src = null //if src is deleted, still process the syringe
-		for(var/i=0, i<6, i++)
-			if(!S)
-				break
-			if(step_towards(S,trg))
-				var/list/mobs = new
-				for(var/mob/living/carbon/M in S.loc)
-					mobs += M
-				var/mob/living/carbon/M = safepick(mobs)
-				if(M)
-					S.icon_state = initial(S.icon_state)
-					S.icon = initial(S.icon)
-					S.reagents.trans_to(M, S.reagents.total_volume)
-					M.take_organ_damage(2)
-					S.visible_message("<span class=\"attack\"> [M] was hit by the syringe!</span>")
-					break
-				else if(S.loc == trg)
-					S.icon_state = initial(S.icon_state)
-					S.icon = initial(S.icon)
-					S.update_icon()
-					break
-			else
-				S.icon_state = initial(S.icon_state)
-				S.icon = initial(S.icon)
-				S.update_icon()
-				break
-			sleep(1)
+	var/obj/item/projectile/bullet/syringe/A = new (src, S)
+	A.firer = chassis.occupant
+	A.original = target
+	A.current = curloc
+	A.starting = curloc
+	A.yo = trg.y - curloc.y
+	A.xo = trg.x - curloc.x
+	A.OnFired()
+	A.process()
 	do_after_cooldown()
 	return 1
 

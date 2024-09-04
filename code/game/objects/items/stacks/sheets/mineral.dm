@@ -202,6 +202,7 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic table parts", /obj/item/weapon/table_parts/plastic, 5, on_floor = 1), \
 	new/datum/stack_recipe("water-cooler", /obj/structure/reagent_dispensers/water_cooler, 4, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("warning cone", /obj/item/weapon/caution/cone, 2, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe/hydro_tray("hydroponics tray", /obj/machinery/portable_atmospherics/hydroponics/plastic, 5, time = 3 SECONDS, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe_list("curtains",list(
 		new/datum/stack_recipe("white curtains", /obj/structure/curtain, 4, one_per_turf = 1, on_floor = 1), \
 		new/datum/stack_recipe("black curtains", /obj/structure/curtain/black, 4, one_per_turf = 1, on_floor = 1), \
@@ -218,6 +219,11 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 /obj/item/stack/sheet/mineral/plastic/New(var/loc, var/amount=null)
 	recipes = plastic_recipes
 	..()
+
+/datum/stack_recipe/hydro_tray/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/machinery/portable_atmospherics/hydroponics/plastic/R)
+	R.waterlevel = 0
+	R.update_icon(TRUE)
+	return R
 
 /*
  * Gold
@@ -313,6 +319,8 @@ var/list/datum/stack_recipe/silver_recipes = list ( \
 	new/datum/stack_recipe/dorf("chain", /obj/item/stack/chains, 2, 1, 20, 5, inherit_material = TRUE),
 	null,
 	blacksmithing_recipes,
+	null,
+	new/datum/stack_recipe/blacksmithing("battle cross", /obj/item/weapon/boomerang/cross,	16, time = 8 SECONDS, required_strikes = 20),
 	)
 
 /obj/item/stack/sheet/mineral/silver/New(var/loc, var/amount=null)

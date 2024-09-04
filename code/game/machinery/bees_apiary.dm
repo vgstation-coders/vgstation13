@@ -8,7 +8,7 @@
 
 /*
 
-> apiary tray
+> apiary
 > angry-bee hive
 
 */
@@ -17,13 +17,17 @@ var/list/apiary_reservation = list()
 var/list/apiaries_list = list()
 
 /obj/machinery/apiary
-	name = "apiary tray"
-	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
-	icon_state = "hydrotray3"
+	name = "apiary"
+	icon = 'icons/obj/apiary_bees_etc.dmi'
+	icon_state = "apiary"
+	var/apiary_icon = "apiary"
 	density = 1
 	anchored = 1
 	pass_flags_self = PASSTABLE
-	var/apiary_icon = "apiary"
+	w_type = RECYK_WOOD
+	flammable = TRUE
+	thermal_mass = 20//same as apiary kits
+	fire_sprite = "fire_apiary"
 	var/beezeez = 0//beezeez removes 1 toxic and adds 1 nutrilevel per cycle
 	var/nutrilevel = 0//consumed every round based on how many bees the apiary is sustaining.
 	var/yieldmod = 1
@@ -38,8 +42,7 @@ var/list/apiaries_list = list()
 	var/worker_bees_inside = 0
 	var/list/bees_outside_hive = list()
 
-	var/hydrotray_type = /obj/machinery/portable_atmospherics/hydroponics
-	var/obj/item/itemform = null //The item used to build this
+	var/kit_type = /obj/item/apiary
 
 	var/obj/item/weapon/reagent_containers/glass/consume = null
 
@@ -59,7 +62,7 @@ var/list/apiaries_list = list()
 /obj/machinery/apiary/New()
 	..()
 	apiaries_list.Add(src)
-	overlays += image('icons/obj/apiary_bees_etc.dmi', icon_state=apiary_icon)
+	update_icon()
 	create_reagents(100)
 	consume = new()
 	spawn(EXILE_RESTRICTION)
@@ -73,22 +76,47 @@ var/list/apiaries_list = list()
 			B.mob.home = null
 	..()
 
+/obj/machinery/apiary/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
+	. = ..()
+	if (.)
+		update_icon()
+
+/obj/machinery/apiary/attack_hand(var/mob/user)
+	if(reagents.total_volume <= 0)
+		alert(user,"There's no honey to harvest yet!","[name]","Ok")
+		return
+
+	if(alert(user,"Harvest the honeycombs?[((queen_bees_inside || worker_bees_inside) && species.angery) ? " Be ready to handle some angry bees!" : ""]","[name]","Yes","No")== "Yes")
+		user.visible_message("<span class='notice'>\the [user] begins dismantling the apiary.</span>","<span class='danger'>You begin harvesting the honeycombs.</span>")
+
+		if((queen_bees_inside || worker_bees_inside) && species.angery)
+			user.visible_message("<span class='danger'>The [species.common_name] don't like that.</span>")
+			angry_swarm(user)
+
+		if(do_after(user, loc, 50))
+			if(harvest_honeycombs())
+				to_chat(user, "<span class='notice'>You successfully harvest the honeycombs.</span>")
+			else
+				to_chat(user, "<span class='notice'>You somehow didn't find a single honeycomb in there.</span>")
+
 /obj/machinery/apiary/update_icon()
 	overlays.len = 0
-	overlays += image('icons/obj/apiary_bees_etc.dmi', icon_state=apiary_icon)
+	icon_state = "[apiary_icon][anchored ? "-anchored" : ""]"
 
 	var/image/I = null
 	switch(reagents.total_volume)
 		if(30 to 60)
-			I = image('icons/obj/apiary_bees_etc.dmi', icon_state="honey_1")
+			I = image('icons/obj/apiary_bees_etc.dmi', icon_state="[apiary_icon]_honey_1")
 		if(60 to 90)
-			I = image('icons/obj/apiary_bees_etc.dmi', icon_state="honey_2")
+			I = image('icons/obj/apiary_bees_etc.dmi', icon_state="[apiary_icon]_honey_2")
 		if(90 to INFINITY)
-			I = image('icons/obj/apiary_bees_etc.dmi', icon_state="honey_3")
+			I = image('icons/obj/apiary_bees_etc.dmi', icon_state="[apiary_icon]_honey_3")
 	if(!I)
 		return
 	I.color = mix_color_from_reagents(reagents.reagent_list)
 	overlays += I
+	if (on_fire)
+		overlays += fire_overlay
 
 /obj/machinery/apiary/examine(mob/user)
 	..()
@@ -96,30 +124,30 @@ var/list/apiaries_list = list()
 	if (species)
 		species_name = species.common_name
 	if(!worker_bees_inside && !queen_bees_inside)
-		to_chat(user, "<span class='info'>There doesn't seem to be any [species_name] in it.</span>")
+		to_chat(user, "<span class='info'>There doesn't seem to be any [species_name]s in it.</span>")
 	else
 		if(worker_bees_inside < 10)
-			to_chat(user, "<span class='info'>You can hear a few [species_name] buzzing inside.</span>")
+			to_chat(user, "<span class='info'>You can hear a few [species_name]s buzzing inside.</span>")
 		else if(worker_bees_inside > 35)
-			to_chat(user, "<span class='danger'>The [species_name] are over-crowded!</span>")
+			to_chat(user, "<span class='danger'>The [species_name]s are over-crowded!</span>")
 		else
 			to_chat(user, "<span class='info'>You hear a loud buzzing from the inside.</span>")
 
 		if(nutrilevel < 0)
-			to_chat(user, "<span class='danger'>The [species_name] inside appear to be starving.</span>")
+			to_chat(user, "<span class='danger'>The [species_name]s inside appear to be starving.</span>")
 		else if(nutrilevel < 10)
-			to_chat(user, "<span class='warning'>The [species_name] inside appear to be low on food reserves.</span>")
+			to_chat(user, "<span class='warning'>The [species_name]s inside appear to be low on food reserves.</span>")
 
 		if(beezeez > 0)
-			to_chat(user, "<span class='info'>The [species_name] are collecting the beezeez pellets.</span>")
+			to_chat(user, "<span class='info'>The [species_name]s are collecting the beezeez pellets.</span>")
 
 		if(toxic > 5)
 			if (toxic < 33)
-				to_chat(user, "<span class='warning'>The [species_name] look a bit on edge, their diet might be toxic.</span>")
+				to_chat(user, "<span class='warning'>The [species_name]s look a bit on edge, their diet might be toxic.</span>")
 			else if (toxic < 50)
-				to_chat(user, "<span class='warning'>The [species_name] are starting to act violent, the hive's toxicity is rising.</span>")
+				to_chat(user, "<span class='warning'>The [species_name]s are starting to act violent, the hive's toxicity is rising.</span>")
 			else
-				to_chat(user, "<span class='danger'>The [species_name] are violent and exhausted, the hive's toxicity is reaching critical levels.</span>")
+				to_chat(user, "<span class='danger'>The [species_name]s are violent and exhausted, the hive's toxicity is reaching critical levels.</span>")
 
 	if (species?.worker_product)
 		switch(reagents.total_volume)
@@ -176,41 +204,29 @@ var/list/apiaries_list = list()
 				to_chat(user, "<span class='notice'>You pour the BeezEez into \the [src]. A relaxed humming appears to pick up.</span>")
 			else
 				to_chat(user, "<span class='notice'>You pour the BeezEez into \the [src]. Now it just needs some bees.</span>")
+			playsound(src, "sand", 50, 0)
 		else
 			to_chat(user, "<span class='notice'>There is no BeezEez in \the [O].</span>")
+			return
 		user.drop_from_inventory(O)
 		var/obj/item/trash/beezeez/TrashItem = new /obj/item/trash/beezeez(user)
 		user.put_in_hands(TrashItem)
 		qdel(O)
-	else if(istype(O, /obj/item/weapon/hatchet))
-		if(reagents.total_volume > 0)
-			user.visible_message("<span class='notice'>\the [user] begins harvesting the honeycombs.</span>","<span class='danger'>You begin harvesting the honeycombs.</span>")
-		else
-			to_chat(user, "<span class='notice'>You begin to dislodge the apiary from the tray.</span>")
+	else if(istype(O, /obj/item/weapon/hatchet) || iscrowbar(O))
+		user.visible_message("<span class='notice'>\the [user] begins dismantling the apiary.</span>","<span class='danger'>You begin to dismantle the apiary.</span>")
 
 		if((queen_bees_inside || worker_bees_inside) && species.angery)
 			user.visible_message("<span class='danger'>The [species.common_name] don't like that.</span>")
 			angry_swarm(user)
 
-		if(do_after(user, src, 50))
-			var/obj/machinery/created_tray = new hydrotray_type(src.loc)
-			created_tray.component_parts = list()
-			for(var/obj/I in src.component_parts)
-				created_tray.component_parts += I
-				I.forceMove(created_tray)
-				component_parts -= I
-			for(var/obj/I in src.contents)
-				I.forceMove(created_tray)
-				contents -= I
-			if(itemform)
-				itemform.forceMove(loc)
-			else //if there is no stored itemform, just make a normal apiary
-				new /obj/item/apiary(loc)
+		if(do_after(user, loc, 50))
+			new kit_type(loc)
 
 			if(harvest_honeycombs())
-				to_chat(user, "<span class='notice'>You successfully harvest the honeycombs. The empty apiary can be relocated.</span>")
+				to_chat(user, "<span class='notice'>You finish dismantling the apiary after harvesting the honeycombs that were inside.</span>")
 			else
-				to_chat(user, "<span class='notice'>You dislodge the apiary from the tray.</span>")
+				to_chat(user, "<span class='notice'>You finish dismantling the apiary.</span>")
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 
 			if (queen_bees_inside || worker_bees_inside)
 				empty_beehive()
@@ -328,6 +344,9 @@ var/list/apiaries_list = list()
 	var/image/I = image('icons/obj/food.dmi', icon_state="honeycomb-color")
 	I.color = mix_color_from_reagents(reagents.reagent_list)
 
+	var/image/glint = image('icons/obj/food.dmi',icon_state="honeycomb-glint")
+	glint.blend_mode = BLEND_ADD
+
 	for (var/i = 1 to number_of_honeycombs)
 		var/obj/item/weapon/reagent_containers/food/snacks/honeycomb/H = new(T)
 		H.reagents.clear_reagents()
@@ -335,9 +354,11 @@ var/list/apiaries_list = list()
 		H.icon_state = "[species.prefix]honeycomb-base"
 		H.extra_food_overlay.overlays.len = 0 // removing the one added in the honeycomb's New()
 		H.extra_food_overlay.overlays += I
+		H.extra_food_overlay.overlays += glint
 		H.update_icon()
 		reagents.trans_to(H,reagents_per_honeycomb)
 		H.authentify()
+	update_icon()
 	return 1
 
 /obj/machinery/apiary/proc/empty_beehive()
@@ -514,6 +535,9 @@ var/list/apiaries_list = list()
 	icon_state = "apiary-wild-inprogress0"
 	density = 0
 	anchored = 1
+	w_type = RECYK_WOOD
+	flammable = TRUE
+	thermal_mass = 20
 	var/base_icon_state = "apiary-wild-inprogress"
 	var/prefix = ""
 	var/remaining_work = 10
@@ -549,6 +573,8 @@ var/list/apiaries_list = list()
 				qdel(B_mob)
 		qdel(src)
 
+/obj/structure/wild_apiary/attack_hand(var/mob/user)
+	to_chat(user,"<span class='warning'>You don't think you can harvest that one by hand. Gotta break it apart.</span>")
 
 /obj/structure/wild_apiary/bullet_act(var/obj/item/projectile/P)
 	. = ..()
@@ -591,9 +617,10 @@ var/list/apiaries_list = list()
 		health -= P.damage
 		updateHealth()
 
-/obj/machinery/apiary/wild/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(..())
-		return
+/obj/structure/apiary/wild/attack_hand(var/mob/user)
+	to_chat(user,"<span class='warning'>You don't think you can harvest that one by hand. Gotta break it apart.</span>")
+
+/obj/machinery/apiary/wild/attackby(var/obj/item/O, var/mob/user)
 	if(istype(O, /obj/item/queen_bee))
 		to_chat(user, "<span class='warning'>This type of bee hive isn't fit for domesticated bees.</span>")
 	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/beezeez))
@@ -605,6 +632,8 @@ var/list/apiaries_list = list()
 		O.on_attack(src, user)
 		health -= O.force
 		updateHealth()
+	else
+		return ..()
 
 /obj/machinery/apiary/wild/proc/updateHealth()
 	if(health <= 0)
@@ -619,7 +648,8 @@ var/list/apiaries_list = list()
 
 /obj/machinery/apiary/wild/update_icon()
 	overlays.len = 0
-	return
+	if (on_fire)
+		overlays += fire_overlay
 
 /obj/machinery/apiary/wild/angry
 	name = "angry-bee hive"

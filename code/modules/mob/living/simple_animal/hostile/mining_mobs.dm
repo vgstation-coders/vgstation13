@@ -819,7 +819,7 @@
 /mob/living/simple_animal/hostile/asteroid/magmaw/fire_act(var/datum/gas_mixture/air, var/exposed_temperature, var/exposed_volume)
 	fire_resurrect(exposed_temperature)
 
-/mob/living/simple_animal/hostile/asteroid/magmaw/IgniteMob()
+/mob/living/simple_animal/hostile/asteroid/magmaw/ignite()
 	fire_resurrect(PLASMA_MINIMUM_BURN_TEMPERATURE)
 
 /mob/living/simple_animal/hostile/asteroid/magmaw/FireBurn(var/firelevel, var/last_temperature, var/pressure)

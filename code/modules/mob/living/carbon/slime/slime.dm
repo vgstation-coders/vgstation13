@@ -1022,7 +1022,7 @@
 
 	qdel (src)
 
-/mob/living/carbon/slime/IgniteMob()
+/mob/living/carbon/slime/ignite()
 	return 0
 
 /mob/living/carbon/slime/ApplySlip(var/obj/effect/overlay/puddle/P)

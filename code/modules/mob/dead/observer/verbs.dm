@@ -459,7 +459,7 @@
 /mob/dead/observer/verb/find_arena()
 	set category = "Ghost"
 	set name = "Find Arenas"
-	set desc = "Try to find an Arena to polish your robust bomb placement skills.."
+	set desc = "Try to find an Arena to polish your robust bomb placement skills."
 
 	if(!arenas.len)
 		to_chat(usr, "There are no arenas in the world! Ask the admins to spawn one.")

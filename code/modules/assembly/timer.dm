@@ -60,15 +60,15 @@
 	return
 
 /obj/item/device/assembly/timer/process()
-	if(timing && (time > 0))
-		time--
-	if(timing && time <= 0)
-		if(!repeat)
-			timing = 0
-		timer_end()
-		time = default_time
-	return
-
+	if(timing)
+		if(time > 0)
+			time--
+		else
+			if(!repeat)
+				timing = 0
+			timer_end()
+			time = default_time
+		updateUsrDialog()
 
 /obj/item/device/assembly/timer/update_icon()
 	overlays.len = 0
@@ -88,11 +88,8 @@
 	var/second = time % 60
 	var/minute = (time - second) / 60
 	var/dat = text("<TT><B>Timing Unit</B>\n[] []:[]\n<A href='?src=\ref[];tp=-30'>-</A> <A href='?src=\ref[];tp=-1'>-</A> <A href='?src=\ref[];tp=1'>+</A> <A href='?src=\ref[];tp=30'>+</A>\n</TT>", (timing ? text("<A href='?src=\ref[];time=0'>Timing</A>", src) : text("<A href='?src=\ref[];time=1'>Not Timing</A>", src)), minute, second, src, src, src, src)
-
 	dat += "<BR><BR><A href='?src=\ref[src];set_default_time=1'>After countdown, reset time to [(default_time - default_time%60)/60]:[(default_time % 60)]</A>"
-	dat += {"<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>
-		<BR><BR><A href='?src=\ref[src];toggle_mode=1'>Mode: [repeat ? TIMEMODE_REPEAT : TIMEMODE_ONCE]</A>
-		<BR><BR><A href='?src=\ref[src];close=1'>Close</A>"}
+	dat += "<BR><BR><A href='?src=\ref[src];toggle_mode=1'>Mode: [repeat ? TIMEMODE_REPEAT : TIMEMODE_ONCE]</A>"
 	user << browse(dat, "window=timer")
 	onclose(user, "timer")
 	return
@@ -119,18 +116,11 @@
 	
 	if(href_list["toggle_mode"])
 		repeat = !repeat
-		return
-
-	if(href_list["close"])
-		usr << browse(null, "window=timer")
-		return
 
 	if(href_list["set_default_time"])
 		default_time = time
 
-	if(usr)
-		attack_self(usr)
-
+	updateUsrDialog()
 	return
 
 /obj/item/device/assembly/timer/send_to_past(var/duration)

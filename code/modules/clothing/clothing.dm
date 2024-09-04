@@ -138,6 +138,7 @@
 			return 1
 
 /obj/item/clothing/quick_store(var/obj/item/I,mob/user)
+	..()
 	for(var/obj/item/clothing/accessory/storage/A in accessories)
 		if(A.hold && A.hold.handle_item_insertion(I,0))
 			return 1
@@ -582,7 +583,7 @@
 		else
 			visible_message("<span class='warning'>\The [user] attempts to put out the fire on \the [target] with \the [src].</span>")
 			if(prob(extinguishingProb))
-				M.ExtinguishMob()
+				M.extinguish()
 				visible_message("<span class='notice'>\The [user] puts out the fire on \the [target].</span>")
 		return
 
