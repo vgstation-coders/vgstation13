@@ -60,7 +60,7 @@
 /datum/species/plasmaman/handle_environment(var/datum/gas_mixture/environment, var/mob/living/carbon/human/host)
 	//For now we just assume suit and head are capable of containing the plasmaman
 	var/flags_found = FALSE
-	if(host.wear_suit && (host.wear_suit.clothing_flags & CONTAINPLASMAMAN) && host.head && (host.head.clothing_flags & CONTAINPLASMAMAN))
+	if(host.wear_suit && (host.wear_suit.clothing_flags & PLASMAGUARD) && host.head && (host.head.clothing_flags & PLASMAGUARD))
 		flags_found = TRUE
 
 	if(!flags_found)
