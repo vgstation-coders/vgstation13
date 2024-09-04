@@ -874,6 +874,12 @@ its easier to just keep the beam vertical.
 	if(recursive)
 		for(var/atom/A in contents)
 			A.arcane_act(user,TRUE)
+	if(reagents)
+		for(var/datum/reagent/R in reagents.reagent_list)
+			if(R.arcane_id)
+				var/oldamt = R.volume
+				reagents.del_reagent(R.id)
+				reagents.add_reagent(R.arcane_id, oldamt)
 	return "E'MAGI!"
 
 //Called on holy_water's reaction_obj()

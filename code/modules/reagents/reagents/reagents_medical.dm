@@ -107,6 +107,7 @@
 	pain_resistance = 15
 	density = 5.98
 	specheatcap = 1.75
+	arcane_id = IMPEDREZENE
 
 /datum/reagent/alkycosine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -125,6 +126,7 @@
 	pain_resistance = 10
 	density = 2.98
 	specheatcap = 0.77
+	arcane_id = IMPEDREZENE
 
 /datum/reagent/alkysine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -180,6 +182,7 @@
 	data = list(
 		"threshold" = 35,
 		)
+	arcane_id = PLACEBO //now we found somewhere for it
 
 /datum/reagent/antipathogenic/tomato_soup/on_mob_life(var/mob/living/M)
 	..()
@@ -198,6 +201,7 @@
 	data = list(
 		"threshold" = 30,
 		)
+	arcane_id = PLACEBO //now we found somewhere for it
 
 /datum/reagent/antipathogenic/allicin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -245,6 +249,7 @@
 	data = list(
 		"threshold" = 50,
 		)
+	arcane_id = RADIUM
 
 /datum/reagent/antipathogenic/spaceacillin/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(0.2)
@@ -260,6 +265,7 @@
 	data = list(
 		"threshold" = 95,
 		)
+	arcane_id = RADIUM
 
 /datum/reagent/antipathogenic/nanofloxacin/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
@@ -276,6 +282,7 @@
 	density = 1.49033
 	specheatcap = 0.55536
 	overdose_am = 60
+	arcane_id = TOXIN
 
 /datum/reagent/anti_toxin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -341,6 +348,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.67
 	specheatcap = 0.72198
+	arcane_id = URANIUM
 
 /datum/reagent/arithrazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -360,6 +368,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.96
 	specheatcap = 0.57
+	arcane_id = BICARODYNE
 
 /datum/reagent/bicaridine/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -446,6 +455,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	data = 0
 	density = 1.01
 	specheatcap = 3.88
+	arcane_id = LIQUIDPCP
 
 /datum/reagent/citalopram/on_mob_life(var/mob/living/M as mob)
 	if(..())
@@ -467,6 +477,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
+	arcane_id = BLOOD
 
 /datum/reagent/clonexadone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -515,6 +526,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	var/armstronged_at = 0 //world.time
 	density = 134.21
 	specheatcap = 5.14318
+	arcane_id = NANITES
 
 /datum/reagent/comnanobots/reagent_deleted()
 	if(..())
@@ -579,6 +591,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
 	specheatcap = 3.47
+	arcane_id = LEPORAZINE
 
 /datum/reagent/cryoxadone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -621,6 +634,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	density = 3.9
 	specheatcap = 0.12812
 	custom_metabolism = 0.1
+	arcane_id = MILK
 
 /datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
 	if(..())
@@ -656,6 +670,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.75
 	specheatcap = 0.36
+	arcane_id = CONDENSEDCAPSAICIN
 
 /datum/reagent/dermaline/on_mob_life(var/mob/living/M)
 	if(..())
@@ -671,6 +686,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 2.28
 	specheatcap = 0.91
+	arcane_id = LEXORIN
 
 /datum/reagent/dexalin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -704,6 +720,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 4.14
 	specheatcap = 0.29
+	arcane_id = LEXORIN
 
 /datum/reagent/dexalinp/on_mob_life(var/mob/living/M)
 	if(..())
@@ -723,6 +740,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	density = 1.44
 	specheatcap = 60
 	overdose_am = 5
+	arcane_id = DIABEETUSOL
 
 	var/on_a_diet
 	var/oldmetabolism
@@ -763,6 +781,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#605048" //rgb: 96, 80, 72
 	density = 1.63
 	specheatcap = 0.36
+	arcane_id = ETHANOL
 
 /datum/reagent/ethylredoxrazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -785,6 +804,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	overdose_am = REAGENTS_OVERDOSE
 	density = 3.25
 	specheatcap = 0.5220
+	arcane_id = URANIUM
 
 /datum/reagent/hyronalin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -800,6 +820,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.92
 	specheatcap = 5.45
+	arcane_id = GRUE_BILE
 
 /datum/reagent/imidazoline/on_mob_life(var/mob/living/M)
 	if(..())
@@ -862,6 +883,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.58
 	specheatcap = 1.65
+	arcane_id = GRUE_BILE
 
 /datum/reagent/inacusiate/on_mob_life(var/mob/living/M)
 	if(..())
@@ -882,6 +904,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	pain_resistance = 25
 	density = 1.66
 	specheatcap = 0.8
+	arcane_id = OXYGEN
 
 /datum/reagent/inaprovaline/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -901,6 +924,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 2.3
 	specheatcap = 0.51
+	arcane_id = CONDENSEDCAPSAICIN
 
 /datum/reagent/kelotane/on_mob_life(var/mob/living/M)
 	if(..())
@@ -933,6 +957,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 5.65
 	specheatcap = ARBITRARILY_LARGE_NUMBER //Good luck heating something with leporazine in it
+	arcane_id = FROSTOIL
 
 /datum/reagent/leporazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -971,6 +996,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.2
 	density = 4.92
 	specheatcap = 0.15053
+	arcane_id = URANIUM
 
 //The anti-nutriment
 /datum/reagent/lipozine
@@ -982,6 +1008,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#BBEDA4" //rgb: 187, 237, 164
 	density = 2.63
 	specheatcap = 0.38113
+	arcane_id = CHEESYGLOOP
 
 /datum/reagent/lipozine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1003,6 +1030,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	var/percent_machine = 0
 	density = 96.64
 	specheatcap = 0.19999
+	arcane_id = NANITES
 
 /datum/reagent/mednanobots/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1090,6 +1118,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	overdose_am = REAGENTS_OVERDOSE/2
 	density = 4.09
 	specheatcap = 4.559
+	arcane_id = IMPEDREZENE
 
 /datum/reagent/methylin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1111,6 +1140,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#3E3959" //rgb: 62, 57, 89
 	density = 236.6
 	specheatcap = 0.19999
+	arcane_id = NANITES
 
 /datum/reagent/oxycodone
 	name = "Oxycodone"
@@ -1121,6 +1151,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.05
 	density = 1.26
 	specheatcap = 24.59
+	arcane_id = PLACEBO
 
 /datum/reagent/oxycodone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1148,6 +1179,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C855DC"
 	pain_resistance = 60
 	density = 1.26
+	arcane_id = PLACEBO
 
 /datum/reagent/paroxetine
 	name = "Paroxetine"
@@ -1159,6 +1191,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	data = 0
 	density = 1.19
 	specheatcap = 3.99
+	arcane_id = LIQUIDPCP
 
 /datum/reagent/paroxetine/on_mob_life(var/mob/living/M as mob)
 	if(..())
@@ -1187,6 +1220,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 22.25
 	specheatcap = 10.55
+	arcane_id = DISCOUNT
 
 /datum/reagent/peptobismol/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1206,6 +1240,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = 10
+	arcane_id = LEXORIN
 
 /datum/reagent/peridaxon/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1240,6 +1275,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#00FF00"
 	custom_metabolism = 0.01
+	arcane_id = IMPEDREZENE
 
 /datum/reagent/phalanximine
 	name = "Phalanximine"
@@ -1249,6 +1285,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#1A1A1A" //rgb: 26, 26, 26
 	density = 2.46
 	specheatcap = 0.124393
+	arcane_id = DANBACCO
 
 /datum/reagent/phalanximine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1355,6 +1392,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	overdose_tick = 35
 	density = 109.81
 	specheatcap = 13.59
+	arcane_id = BLOOD
 
 /datum/reagent/rezadone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1391,6 +1429,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.97
 	specheatcap = 0.51261
+	arcane_id = MUTAGEN
 
 /datum/reagent/ryetalyn/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1438,6 +1477,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#A5A5FF" //rgb: 165, 165, 255
 	density = 1.58
 	specheatcap = 0.44
+	arcane_id = PACID
 
 /datum/reagent/simpolinol/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1469,6 +1509,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.2
 	density = 1.564
 	specheatcap = 1.725
+	arcane_id = CHLORALHYDRATE
 
 /datum/reagent/srejuvenate/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1512,6 +1553,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#833484" //rgb: 131, 52, 132
 	custom_metabolism = 0.1
+	arcane_id = MEDNANOBOTS
 
 /datum/reagent/stabilizine/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -1566,6 +1608,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	pain_resistance = 40
 	density = 1.04
 	specheatcap = 18.53
+	arcane_id = CYANIDE
 
 /datum/reagent/synaptizine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1591,6 +1634,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	overdose_am = REAGENTS_OVERDOSE
 	density = 4.67
 	specheatcap = 0.57
+	arcane_id = BICARODYNE
 
 /datum/reagent/synthocarisol/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1608,6 +1652,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.1
 	density = 1.2
 	specheatcap = 1.79
+	arcane_id = PLACEBO
 
 /datum/reagent/tramadol/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1626,6 +1671,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.58
 	specheatcap = 0.44
+	arcane_id = GLYCEROL
 
 /datum/reagent/tricordrazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1650,6 +1696,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	alpha = 142
 	density = 1.33
 	specheatcap = 3.88
+	arcane_id = GLYCEROL
 
 /datum/reagent/trinitrine/on_mob_life(var/mob/living/M)
 	if(prob(10))
@@ -1679,6 +1726,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	data = list(
 		"antigen" = list(),
 		)
+	arcane_id = AUTISTNANITES //jenny mccarthy pls go
 
 /datum/reagent/vaccine/handle_data_mix(var/list/added_data=null, var/added_volume, var/mob/admin)
 	if (added_data)
@@ -1704,3 +1752,4 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#899613" //rgb: 137, 150, 19
 	density = 0.67
 	specheatcap = 4.18
+	arcane_id = MUTAGEN

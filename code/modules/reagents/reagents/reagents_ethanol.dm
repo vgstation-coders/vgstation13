@@ -19,6 +19,7 @@
 	var/blur_start = 260 //Amount absorbed after which mob starts getting blurred vision
 	var/pass_out = 450 //Amount absorbed after which mob starts passing out
 	var/common_tick = 1 //Needed to add all ethanol subtype's ticks
+	arcane_id = ETHYLREDOXRAZINE
 
 /datum/reagent/ethanol/on_mob_life(var/mob/living/M)
 	if(..())
@@ -109,6 +110,7 @@
 	pass_out = 225
 	glass_icon_state = "whiskeyglass"
 	glass_desc = "The silky, smokey whiskey goodness inside the glass makes the drink look very classy."
+	arcane_id = DANS_WHISKEY
 
 /datum/reagent/ethanol/specialwhiskey
 	name = "Special Blend Whiskey"
@@ -117,6 +119,7 @@
 	color = "#664300" //rgb: 102, 67, 0
 	slur_start = 30
 	pass_out = 225
+	arcane_id = DANS_WHISKEY
 
 /datum/reagent/ethanol/gin
 	name = "Gin"
@@ -127,6 +130,7 @@
 	pass_out = 260
 	glass_icon_state = "ginvodkaglass"
 	glass_desc = "A crystal clear glass of Griffeater gin."
+	arcane_id = WAIFU
 
 /datum/reagent/ethanol/absinthe
 	name = "Absinthe"
@@ -157,6 +161,7 @@
 	confused_start = 145
 	glass_icon_state = "bwineglass"
 	glass_desc = "A particular favorite of doctors."
+	arcane_id = PWINE
 
 /datum/reagent/ethanol/wwine
 	name = "White Wine"
@@ -168,6 +173,7 @@
 	confused_start = 145
 	glass_icon_state = "wwineglass"
 	glass_desc = "A drink enjoyed by intellectuals and middle-aged female alcoholics alike."
+	arcane_id = PWINE
 
 /datum/reagent/ethanol/plumphwine
 	name = "Plump Helmet Wine"
@@ -177,6 +183,7 @@
 	dizzy_adj = 3 //dorf wine is a bit stronger than regular stuff
 	slur_start = 60
 	confused_start = 135
+	arcane_id = PWINE
 
 /datum/reagent/ethanol/pwine
 	name = "Poison Wine"
@@ -188,6 +195,7 @@
 	confused_start = 1
 	glass_name = "glass of Vintage 2018 Special Reserve"
 	glass_icon_state = "pwineglass"
+	arcane_id = WINE
 
 /datum/reagent/ethanol/pwine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -251,6 +259,7 @@
 	description = "A thick, light blue liquid extracted from strange plants."
 	color = "#66ffff" //rgb(102, 255, 255)
 	blur_start = 40 //Blur very early
+	arcane_id = MINDBREAKER
 
 /datum/reagent/ethanol/smokyroom
 	name = "Smoky Room"
@@ -259,6 +268,7 @@
 	color = "#664300"
 	glass_icon_state = "smokyroom"
 	glass_name = "\improper Smoky Room"
+	arcane_id = DETCOFFEE
 
 /datum/reagent/ethanol/smokyroom/on_mob_life(var/mob/living/M)
 	if(..())
@@ -315,6 +325,7 @@
 	color = "#664300"
 	glass_icon_state = "bad_touch"
 	glass_name = "\improper Bad Touch"
+	arcane_id = SYNAPTIZINE
 
 /datum/reagent/ethanol/bad_touch/on_mob_life(var/mob/living/M) //Hallucinate and take hallucination damage.
 	if(..())
@@ -330,6 +341,7 @@
 	custom_metabolism = 1
 	glass_icon_state = "electric_sheep"
 	glass_name = "\improper Electric Sheep"
+	arcane_id = AUTISTNANITES
 
 /datum/reagent/ethanol/electric_sheep/on_mob_life(var/mob/living/M) //If it's human, shoot sparks every tick! If MoMMI, cause alcohol effects.
 	if(..())
@@ -351,6 +363,7 @@
 	custom_metabolism = 2
 	glass_icon_state = "suicide"
 	glass_name = "\improper Suicide"
+	arcane_id = PAROXETINE
 
 /datum/reagent/ethanol/suicide/on_mob_life(var/mob/living/M)  //Instant vomit. Every tick.
 	if(..())
@@ -368,6 +381,7 @@
 	glass_icon_state = "metabuddy"
 	glass_name = "\improper Metabuddy"
 	glass_desc = "The glass is etched with the name of a very deserving spaceman. There's a special note etched in the bottom..."
+	arcane_id = CHILLWAX
 
 /datum/reagent/ethanol/metabuddy/on_mob_life(var/mob/living/L)
 	if(..())
@@ -397,6 +411,7 @@
 	color = "#D0206F"
 	glass_icon_state = "waifu"
 	glass_name = "\improper Waifu"
+	arcane_id = HUSBANDO
 
 /datum/reagent/ethanol/waifu/on_mob_life(var/mob/living/M)
 	if(..())
@@ -426,6 +441,7 @@
 	color = "#2043D0"
 	glass_icon_state = "husbando"
 	glass_name = "\improper Husbando"
+	arcane_id = WAIFU
 
 /datum/reagent/ethanol/husbando/on_mob_life(var/mob/living/M) //it's copypasted from waifu
 	if(..())
@@ -455,6 +471,7 @@
 	color = "#20D03B"
 	glass_icon_state = "tomboy"
 	glass_name = "\improper Tomboy"
+	arcane_id = HUSBANDO
 
 /datum/reagent/ethanol/tomboy/on_mob_life(var/mob/living/M)
 	if(..())
@@ -481,6 +498,7 @@
 	color = "#664300"
 	custom_metabolism = 0.01
 	dupeable = FALSE
+	arcane_id = MOONROCKS
 
 /datum/reagent/ethanol/scientists_serendipity/when_drinkingglass_master_reagent(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
 	if(volume < 10)
@@ -509,6 +527,7 @@
 	custom_metabolism = 2 //Ten times the normal rate.
 	glass_icon_state = "beepsky_classic"
 	name = "\improper Beepsky Classic"
+	arcane_id = BEEPSKYSMASH
 
 /datum/reagent/ethanol/beepskyclassic/on_mob_life(var/mob/living/M)
 	if(..())
@@ -531,6 +550,7 @@
 	glass_icon_state = "spiders"
 	name = "\improper This glass is full of spiders"
 	glass_desc = "Seriously, dude, don't touch it."
+	arcane_id = CLONEXADONE
 
 /datum/reagent/ethanol/spiders/on_mob_life(var/mob/living/M)
 	if(..())
@@ -549,6 +569,7 @@
 	color = "#009933" //rgb(0, 153, 51)
 	glass_icon_state = "weed_eater"
 	glass_name = "\improper Weed Eater"
+	arcane_id = PLANTBGONE
 
 /datum/reagent/ethanol/weedeater/on_mob_life(var/mob/living/M)
 	if(..())
@@ -565,6 +586,7 @@
 	color = "#009933" //rgb(0, 153, 51)
 	glass_icon_state = "magicadeluxe"
 	glass_name = "magica deluxe"
+	arcane_id = MAGICA
 
 /datum/reagent/ethanol/magicadeluxe/on_mob_life(var/mob/living/M)
 	if(..())
@@ -618,6 +640,7 @@
 	glass_icon_state = "gravsingulo"
 	glass_name = "\improper Gravitational Singulo"
 	glass_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in grape flavor!"
+	arcane_id = SINGULO
 
 /datum/reagent/ethanol/drink/gravsingulo/on_mob_life(var/mob/living/M)
 	if(..())
@@ -661,6 +684,7 @@
 	mug_icon_state = "gravsingularitea"
 	mug_name = "\improper Gravitational Singularitea"
 	mug_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in herbal flavour!"
+	arcane_id = SINGULARITEA
 
 /datum/reagent/drink/tea/gravsingularitea/on_mob_life(var/mob/living/M)
 	if(..())
@@ -847,6 +871,7 @@
 	color = "#3AD1F0" //rgb: 58, 209, 240
 	glass_icon_state = "curacaoglass"
 	glass_desc = "Why's it blue if it tastes like an orange?"
+	arcane_id = FISHBLEACH //da ba dee da ba die
 
 /datum/reagent/ethanol/drink/ale
 	name = "Ale"
@@ -879,6 +904,7 @@
 	color = "#ff6a8f"
 	glass_icon_state = "pinklady"
 	glass_desc = "A delightful blush-pink cocktail, garnished with a cherry and the rind of a lemon."
+	arcane_id = WAIFU
 
 /////////////////////////////////////////////////////////////////Cocktail Entities//////////////////////////////////////////////
 
@@ -998,6 +1024,7 @@
 	glass_icon_state = "whiterussianglass"
 	glass_name = "\improper White Russian"
 	glass_desc = "A very nice looking drink. But that's just, like, your opinion, man."
+	arcane_id = BLACKRUSSIAN
 
 /datum/reagent/ethanol/drink/screwdrivercocktail
 	name = "Screwdriver"
@@ -1018,6 +1045,7 @@
 	glass_icon_state = "booger"
 	glass_name = "\improper Booger"
 	glass_desc = "The color reminds you of something that came out of the clown's nose."
+	arcane_id = MUCUS
 
 /datum/reagent/ethanol/drink/bloody_mary
 	name = "Bloody Mary"
@@ -1028,6 +1056,7 @@
 	glass_icon_state = "bloodymaryglass"
 	glass_name = "\improper Bloody Mary"
 	glass_desc = "Tomato juice, mixed with vodka and a lil' bit of lime. Tastes like liquid murder."
+	arcane_id = BLOOD
 
 /datum/reagent/ethanol/drink/gargle_blaster
 	name = "Pan-Galactic Gargle Blaster"
@@ -1038,6 +1067,7 @@
 	glass_icon_state = "gargleblasterglass"
 	glass_name = "\improper Pan-Galactic Gargle Blaster"
 	glass_desc = "Does... does this mean that Arthur and Ford are on the station? Oh joy."
+	arcane_id = BAD_TOUCH
 
 /datum/reagent/ethanol/drink/brave_bull
 	name = "Brave Bull"
@@ -1068,6 +1098,7 @@
 	glass_icon_state = "toxinsspecialglass"
 	glass_name = "\improper Toxins Special"
 	glass_desc = "Whoah, this thing is on FIRE!"
+	arcane_id = PLASMA
 
 /datum/reagent/ethanol/drink/beepsky_smash
 	name = "Beepsky Smash"
@@ -1078,6 +1109,7 @@
 	glass_icon_state = "beepskysmashglass"
 	glass_name = "\improper Beepsky Smash"
 	glass_desc = "Heavy, hot and strong. Best enjoyed with your hands behind your back."
+	arcane_id = BEEPSKY_CLASSIC
 
 /datum/reagent/ethanol/drink/irish_cream
 	name = "Irish Cream"
@@ -1087,6 +1119,7 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "irishcreamglass"
 	glass_desc = "It's cream, mixed with whiskey. What else would you expect from the Irish?"
+	arcane_id = POTATO
 
 /datum/reagent/ethanol/drink/manly_dorf
 	name = "The Manly Dorf"
@@ -1097,6 +1130,7 @@
 	glass_icon_state = "manlydorfglass"
 	glass_name = "The Manly Dorf"
 	glass_desc = "A dwarfy concoction made from ale and beer. Intended for stout dwarves only."
+	arcane_id = WAIFU
 
 /datum/reagent/ethanol/drink/longislandicedtea
 	name = "Long Island Iced Tea"
@@ -1124,6 +1158,7 @@
 	color = "#bd1c1e" //rgb: 189, 28, 30
 	glass_icon_state = "sacrificialmary"
 	glass_name = "\improper Sacrificial Mary"
+	arcane_id = BLOOD
 
 /datum/reagent/ethanol/drink/boysenberry_blizzard
 	name = "Boysenberry Blizzard"
@@ -1133,6 +1168,7 @@
 	color = "#aa4cbd" //rgb: 170, 76, 189
 	glass_icon_state = "boysenberryblizzard"
 	glass_name = "\improper Boysenberry Blizzard"
+	arcane_id = PLASMA
 
 /datum/reagent/ethanol/drink/moonshine
 	name = "Moonshine"
@@ -1158,6 +1194,7 @@
 	color = "#d64054" //rgb: 214, 64, 84
 	glass_icon_state = "cosmopolitan"
 	glass_name = "cosmopolitan"
+	arcane_id = WAIFU
 
 /datum/reagent/ethanol/drink/corpsereviver
 	name = "Corpse Reviver No. 2"
@@ -1167,6 +1204,7 @@
 	color = "#FFFFFF" //rgb: 255, 255, 255
 	glass_icon_state = "corpsereviver"
 	glass_name = "\improper Corpse Reviver No. 2"
+	arcane_id = ZOMBIEPOWDER
 
 /datum/reagent/ethanol/drink/bluelagoon
 	name = "Blue Lagoon"
@@ -1176,6 +1214,7 @@
 	color = "#82f0ff" //rgb: 130, 240, 255
 	glass_icon_state = "bluelagoon"
 	glass_name = "\improper Blue Lagoon"
+	arcane_id = FISHBLEACH
 
 /datum/reagent/ethanol/drink/sexonthebeach
 	name = "Sex On The Beach"
@@ -1275,6 +1314,7 @@
 	color = "#f29224" //rgb: 242, 146, 36
 	glass_icon_state = "fireballglass"
 	glass_desc = "Red-hot cinnamon whisky in a shot glass."
+	arcane_id = CONDENSEDCAPSAICIN
 
 /datum/reagent/ethanol/drink/c4cocktail
 	name = "C-4 Cocktail"
@@ -1296,6 +1336,7 @@
 	glass_name = "\improper Dragon's Blood"
 	flammable = 1
 	light_color = "#540303"
+	arcane_id = BLOOD
 
 /datum/reagent/ethanol/drink/dragonspit
 	name = "Dragon's Spit"
@@ -1307,6 +1348,7 @@
 	glass_name = "\improper Dragon's Spit"
 	light_color = "#ff7003"
 	flammable = 1
+	arcane_id = CONDENSEDCAPSAICIN
 
 /datum/reagent/ethanol/drink/firecider
 	name = "Fire Cider"
@@ -1338,6 +1380,7 @@
 	glass_name = "\improper Manhattan Fireball"
 	light_color = "#540303"
 	flammable = 1
+	arcane_id = CONDENSEDCAPSAICIN
 
 /datum/reagent/ethanol/drink/fireballcola
 	name = "Fireball Cola"
@@ -1348,6 +1391,7 @@
 	glass_icon_state = "fireballcola"
 	glass_name = "\improper Fireball Cola"
 	glass_desc = "Cinnamon whisky and cola - like a regular whiskey cola, but with more burning."
+	arcane_id = CONDENSEDCAPSAICIN
 
 /datum/reagent/ethanol/drink/firerita
 	name = "Fire-rita"
@@ -1358,6 +1402,7 @@
 	glass_icon_state = "firerita"
 	glass_name = "firerita"
 	glass_desc = "Looks pretty, offends a sane person's taste buds. Then again, anyone who orders this probably lacks one of those two traits."
+	arcane_id = CONDENSEDCAPSAICIN
 
 /datum/reagent/ethanol/drink/magica
 	name = "Magica"
@@ -1368,6 +1413,7 @@
 	glass_icon_state = "magica"
 	glass_name = "magica"
 	glass_desc = "Bitter, with an annoying aftertaste of spice. Supposedly inspired by wearers of bath robes."
+	arcane_id = MAGICADELUXE
 
 /datum/reagent/ethanol/drink/b52
 	name = "B-52"
@@ -1387,6 +1433,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "irishcoffeeglass"
+	arcane_id = POTATO
 
 /datum/reagent/ethanol/drink/margarita
 	name = "Margarita"
@@ -1405,6 +1452,7 @@
 	glass_icon_state = "blackrussianglass"
 	glass_name = "\improper Black Russian"
 	glass_desc = "For the lactose-intolerant. Still as classy as a White Russian."
+	arcane_id = WHITERUSSIAN
 
 /datum/reagent/ethanol/drink/manhattan
 	name = "Manhattan"
@@ -1423,6 +1471,7 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "proj_manhattanglass"
 	glass_name = "\improper Manhattan Project"
+	arcane_id = URANIUM //we knew the cocktail would no longer be the same
 
 /datum/reagent/ethanol/drink/whiskeysoda
 	name = "Whiskey Soda"
@@ -1440,6 +1489,7 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "antifreeze"
 	glass_name = "\improper Anti-freeze"
+	arcane_id = FROSTOIL
 
 /datum/reagent/ethanol/drink/barefoot
 	name = "Barefoot"
@@ -1470,6 +1520,7 @@
 	glass_icon_state = "demonsblood"
 	glass_name = "\improper Demon's Blood"
 	glass_desc = "Just looking at this thing makes the hair on the back of your neck stand up."
+	arcane_id = BLOOD
 
 /datum/reagent/ethanol/drink/vodkatonic
 	name = "Vodka and Tonic"
@@ -1524,6 +1575,7 @@
 	glass_icon_state = "singulo"
 	glass_name = "\improper Singulo"
 	glass_desc = "IT'S LOOSE!"
+	arcane_id = GRAVSINGULO
 
 /datum/reagent/ethanol/drink/sangria
 	name = "Sangria"
@@ -1610,6 +1662,7 @@
 	color = BLOB_MEAT
 	glass_icon_state = "evoluatorglass"
 	glass_desc = "Blob evoluated with oxigen. Prickly!"
+	arcane_id = SPORE
 
 /datum/reagent/ethanol/drink/blob_beer
 	name = "Blob beer"
@@ -1619,6 +1672,7 @@
 	color = BLOB_MEAT
 	glass_icon_state = "blobbeerglass"
 	glass_desc = "Acidic beer with a grand foam head. Subtle hints of apple."
+	arcane_id = SPORE
 
 /datum/reagent/ethanol/drink/liberator
 	name = "Liberator"
@@ -1628,6 +1682,7 @@
 	color = DEFAULT_BLOOD
 	glass_icon_state = "liberatorglass"
 	glass_desc = "Fruity and strong, for when you need a quick recharge."
+	arcane_id = SPORE
 
 /datum/reagent/ethanol/drink/spore
 	name = "Spore"
@@ -1638,6 +1693,7 @@
 	custom_metabolism = 0.1
 	glass_icon_state = "sporeglass"
 	glass_desc = "A tasteless drink with an almost unbearable aftertaste."
+	arcane_id = BLOBANINE
 
 /datum/reagent/ethanol/drink/spore/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1742,6 +1798,7 @@
 	glass_icon_state = "changelingsting"
 	glass_name = "\improper Changeling Sting"
 	glass_desc = "Stings, but not deadly."
+	arcane_id = CHANGELINGSTAB
 
 /datum/reagent/ethanol/drink/changelingsting/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1755,6 +1812,7 @@
 	description = "A bit less mild than the sting. Not that you've ever been stabbed either, surely."
 	glass_name = "\improper Changeling Stab"
 	glass_desc = "Stabs, but metaphorically."
+	arcane_id = CHANGELINGSTING
 
 /datum/reagent/ethanol/drink/changelingsting/stab/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1780,6 +1838,7 @@
 	glass_icon_state = "irishcarbomb"
 	glass_name = "\improper Irish Car Bomb"
 	glass_desc = "Something about this drink troubles you."
+	arcane_id = POTATO
 
 /datum/reagent/ethanol/drink/irishcarbomb/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1797,6 +1856,7 @@
 	glass_name = "\improper Syndicate Bomb"
 	glass_desc = "Somebody set up us the bomb!"
 	glass_isGlass = 0
+	arcane_id = AMMONIUMNITRATE
 
 /datum/reagent/ethanol/drink/driestmartini
 	name = "Driest Martini"
@@ -1865,6 +1925,7 @@
 	description = "A little help finding the bartender."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	arcane_id = METABUDDY
 
 /datum/reagent/ethanol/drink/pintpointer/when_drinkingglass_master_reagent(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
 	var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/P = new (get_turf(D))
@@ -1888,6 +1949,7 @@
 	glass_icon_state = "monster_mash"
 	glass_name = "\improper Monster Mash"
 	glass_desc = "Will get you graveyard smashed."
+	arcane_id = MUTAGEN
 
 /datum/reagent/ethanol/drink/monstermash/on_mob_life(var/mob/living/M)
 	if(..())

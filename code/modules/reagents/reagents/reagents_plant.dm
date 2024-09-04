@@ -8,6 +8,7 @@
 	color = "#604030" //rgb: 96, 64, 48
 	density = 0.65
 	specheatcap = 35.37
+	arcane_id = SODIUMCHLORIDE
 
 /datum/reagent/diethylamine/ammoniumnitrate
 	name = "Ammonium Nitrate"
@@ -48,6 +49,7 @@
 	color = "#664330" // rgb: 102, 67, 48
 	density = 5.4
 	specheatcap = 15
+	arcane_id = SODIUMCHLORIDE
 
 /datum/reagent/fertilizer/eznutrient
 	name = "EZ Nutrient"
@@ -132,6 +134,7 @@
 	color = "#49002E" //rgb: 73, 0, 46
 	density = 1.08
 	specheatcap = 4.18
+	arcane_id = FERTILIZER
 
 //Clear off wallrot fungi
 /datum/reagent/toxin/plantbgone/reaction_turf(var/turf/simulated/T, var/volume)
@@ -199,6 +202,7 @@
 	color = "#49002E" //rgb: 73, 0, 46
 	density = 1.08
 	specheatcap = 4.18
+	arcane_id = FERTILIZER
 
 /datum/reagent/toxin/insecticide/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())

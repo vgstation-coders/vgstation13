@@ -7,6 +7,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 111, 136, 79
 	nutriment_factor = 4 * REAGENTS_METABOLISM
+	arcane_id = PEPTOBISMOL
 
 /datum/reagent/discount/New()
 	..()
@@ -46,6 +47,7 @@
 	name = "Mannitol"
 	id = MANNITOL
 	description = "The only medicine a <B>REAL MAN</B> needs."
+	arcane_id = WAIFU
 
 /datum/reagent/irradiatedbeans
 	name = "Irradiated Beans"
@@ -54,6 +56,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
+	arcane_id = URANIUM
 
 /datum/reagent/irradiatedbeans/on_mob_life(var/mob/living/M)
 	if(..())
@@ -70,6 +73,7 @@
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	density = 5.59
 	specheatcap = 2.71
+	arcane_id = TOXIN
 
 /datum/reagent/toxicwaste/on_mob_life(var/mob/living/M)
 	if(..())
@@ -85,6 +89,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
+	arcane_id = IRRADIATEDBEANS
 
 /datum/reagent/mutatedbeans
 	name = "Mutated Beans"
@@ -93,6 +98,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
+	arcane_id = URANIUM
 
 /datum/reagent/mutatedbeans/on_mob_life(var/mob/living/M)
 	if(..())
@@ -123,6 +129,7 @@
 	description = "We don't know much about it, but we damn well know that it hates the human skeleton."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
+	arcane_id = DIAMONDDUST
 
 /datum/reagent/moonrocks/on_mob_life(var/mob/living/M)
 	if(..())
@@ -146,6 +153,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 1 * REAGENTS_METABOLISM
+	arcane_id = DEGENERATECALCIUM
 
 /datum/reagent/greenramen
 	name = "Greenish Ramen Noodles"
@@ -154,6 +162,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
+	arcane_id = HELL_RAMEN
 
 /datum/reagent/greenramen/on_mob_life(var/mob/living/M)
 	if(..())
@@ -172,6 +181,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
+	arcane_id = HELL_RAMEN
 
 /datum/reagent/glowingramen/on_mob_life(var/mob/living/M)
 	if(..())
@@ -187,6 +197,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#6F884F" //rgb: 255,255,255 //to-do
 	nutriment_factor = 2 * REAGENTS_METABOLISM
+	arcane_id = HELL_RAMEN
 
 /datum/reagent/fake_creep // Used to spread xenomorph creep. Why? Well, why not?
 	name = "Dan's Grape Drank"

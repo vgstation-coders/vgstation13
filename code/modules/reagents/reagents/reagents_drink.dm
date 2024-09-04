@@ -430,6 +430,7 @@
 	adj_temp = 20
 	mug_icon_state = "tea"
 	mug_desc = "A warm mug of tea."
+	arcane_id = GRAVSINGULARITEA
 
 /datum/reagent/drink/tea/on_mob_life(var/mob/living/M)
 	if(..())
@@ -695,6 +696,7 @@
 	glass_icon_state = "doctorsdelightglass"
 	glass_name = "\improper Doctor's Delight"
 	glass_desc = "A rejuvenating mixture of juices, guaranteed to keep you healthy until the next toolboxing takes place."
+	arcane_id = FORMIC_ACID
 
 /datum/reagent/drink/doctor_delight/on_mob_life(var/mob/living/M)
 	if(..())
@@ -722,6 +724,7 @@
 	glass_icon_state = "bananahonkglass"
 	glass_name = "\improper Banana Honk"
 	glass_desc = "A cocktail from the clown planet."
+	arcane_id = HONKSERUM
 
 /datum/reagent/drink/silencer
 	name = "Silencer"
@@ -732,6 +735,7 @@
 	glass_icon_state = "silencerglass"
 	glass_name = "\improper Silencer"
 	glass_desc = "The mime's favorite, though you won't hear him ask for it."
+	arcane_id = HONKSERUM
 
 /datum/reagent/drink/silencer/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1008,6 +1012,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	mug_name = "\improper Lifeline"
 	mug_desc = "Some days, the only thing that keeps you going is cryo and caffeine."
 	color = "#390600"
+	arcane_id = PHENOL
 
 /datum/reagent/drink/coffee/medcoffee/on_mob_life(var/mob/living/M)
 	if(..())

@@ -438,6 +438,7 @@ var/procizine_tolerance = 0
 	density = 19.3
 	specheatcap = 0.129
 	whitelisted_ids = list(MERCURY)
+	arcane_id = MERCURY
 
 /datum/reagent/sodium_silicate
 	name = "Sodium Silicate"
@@ -481,6 +482,7 @@ var/procizine_tolerance = 0
 	color = "#8E18A9" //rgb: 142, 24, 169
 	density = 1.58
 	specheatcap = 1.44
+	arcane_id = ROGAN
 
 /datum/reagent/temp_hearer/locutogen/on_mob_life(var/mob/living/M)
 	if(..())
