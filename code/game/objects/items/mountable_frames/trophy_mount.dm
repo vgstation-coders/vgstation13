@@ -30,10 +30,8 @@
 	else
 		name = "[held_item.name]"
 		desc = "\A [held_item] mounted on a wooden trophy mount for display."
-		var/mutable_appearance/temp = new(held_item.appearance)
+		var/mutable_appearance/temp = mutable_appearance(dir = SOUTH, copy = held_item.appearance)
 		temp.transform = matrix()
-		temp.dir = SOUTH
-		temp.plane = FLOAT_PLANE
 		if(params_list && params_list.len)
 			var/clamp_x = clicked.Width() / 2
 			var/clamp_y = clicked.Height() / 2

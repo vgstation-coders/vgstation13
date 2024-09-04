@@ -346,13 +346,8 @@ var/global/ingredientLimit = 10
 	return new_food
 
 /obj/machinery/cooking/proc/apply_color(var/obj/item/weapon/reagent_containers/food/snacks/_snack, var/_color)
-	var/mutable_appearance/ma = new(_snack)
+	var/mutable_appearance/ma = mutable_appearance(pixel_x = 0, pixel_y = 0, color = _color, copy = _snack)
 	ma.appearance = _snack.appearance
-	ma.color = _color
-	ma.plane = FLOAT_PLANE
-	ma.layer = FLOAT_LAYER
-	ma.pixel_x = 0
-	ma.pixel_y = 0
 	_snack.extra_food_overlay.overlays.len = 0//no need to redraw all the layers that will get hidden by their colored variants
 	_snack.extra_food_overlay.overlays += ma
 	_snack.update_icon()

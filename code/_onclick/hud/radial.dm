@@ -1,5 +1,6 @@
 #define NEXT_PAGE_ID "__next__"
 #define DEFAULT_CHECK_DELAY 2 SECONDS
+#define extract_image(E) mutable_appearance(layer = ABOVE_HUD_LAYER, plane = ABOVE_HUD_PLANE, appearance_flags = RESET_TRANSFORM, copy = E)
 
 /obj/abstract/screen/radial
 	icon = 'icons/mob/radial.dmi'
@@ -315,16 +316,6 @@
 			choices_locked[id] = choice_locked
 
 	setup_menu()
-
-
-/datum/radial_menu/proc/extract_image(E)
-	var/mutable_appearance/MA = new /mutable_appearance(E)
-	if(MA)
-		MA.layer = ABOVE_HUD_LAYER
-		MA.plane = ABOVE_HUD_PLANE
-		MA.appearance_flags |= RESET_TRANSFORM
-	return MA
-
 
 /datum/radial_menu/proc/next_page()
 	if(pages > 1)

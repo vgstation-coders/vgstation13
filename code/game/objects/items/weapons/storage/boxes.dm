@@ -883,9 +883,7 @@
 /obj/item/weapon/storage/box/smartbox/clothing_box/New()
     ..()
     if(contents.len)
-        var/mutable_appearance/M = new(contents[1])
-        M.layer = FLOAT_LAYER
-        M.plane = FLOAT_PLANE
+        var/mutable_appearance/M = mutable_appearance(copy = contents[1])
         M.transform *= 0.5
         overlays += M
 

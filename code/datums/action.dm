@@ -111,10 +111,7 @@
 /datum/action/item_action/target_appearance/ApplyIcon(obj/abstract/screen/movable/action_button/current_button) // useful when you want to preserve the target's overlays on the button
 	current_button.overlays = null
 	if(target)
-		var/mutable_appearance/mut = new(target.appearance)
-		mut.plane = FLOAT_PLANE
-		mut.layer = FLOAT_LAYER
-		current_button.overlays += mut
+		current_button.overlays += mutable_appearance(copy = target.appearance)
 
 //Presets for item actions
 /datum/action/item_action

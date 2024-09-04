@@ -165,7 +165,7 @@
 	var/image/new_overlay = image(icon = icon, icon_state = chosen_icon_state)
 	overlays.Cut()
 	overlays += new_overlay
-	var/mutable_appearance/pai_icon = new(src) //we also update the mob's appearance so it appears properly on the scoreboard.
+	var/mutable_appearance/pai_icon = mutable_appearance(copy = src) //we also update the mob's appearance so it appears properly on the scoreboard.
 	pai_icon.name = pai.name //But don't override their name
 	pai_icon.verbs = pai.verbs //THANKS, LUMMOX
 	pai.appearance = pai_icon

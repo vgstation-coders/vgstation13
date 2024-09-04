@@ -557,9 +557,7 @@
 
 	for (var/lay in I.overlays)
 		var/mutable_appearance/overlay_ref = lay
-		var/mutable_appearance/new_overlay = new (overlay_ref)
-		new_overlay.appearance_flags = overlay_ref.appearance_flags
-		new_overlay.color = overlay_ref.color
+		var/mutable_appearance/new_overlay = mutable_appearance(appearance_flags = overlay_ref.appearance_flags, color = overlay_ref.color, copy = overlay_ref)
 		new_overlay = replace_overlays_icon(new_overlay,replacement)
 		new_overlays += new_overlay
 
