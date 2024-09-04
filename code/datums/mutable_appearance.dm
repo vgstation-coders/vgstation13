@@ -23,8 +23,9 @@
 		appearance.icon = icon
 	if(icon_state != "")
 		appearance.icon_state = icon_state
-	appearance.layer = layer
-	appearance.plane = plane
+	if(layer)
+		appearance.layer = layer
+	appearance.plane = plane || copy ? copy.plane || FLOAT_PLANE
 	appearance.alpha = alpha
 	appearance.appearance_flags |= appearance_flags
 	if(dir)
