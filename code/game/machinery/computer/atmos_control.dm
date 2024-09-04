@@ -430,10 +430,7 @@ var/global/list/atmos_controllers = list()
 			var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE - T0C]C or above [MAX_TEMPERATURE - T0C]C by itself. ", "Thermostat Controls") as num|null
 			if(input_temperature==null)
 				return 1
-			if(input_temperature > max_temperature || input_temperature < min_temperature)
-				to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
-			else
-				input_temperature = round(input_temperature + T0C,0.01)
+			input_temperature = round(clamp(input_temperature, min_temperature, max_temperature) + T0C, 0.01)
 			selected_preset.target_temperature = input_temperature
 			return 1
 		else if(href_list["set_preset_setting"] == "scrubbed_gases")
@@ -616,11 +613,8 @@ var/global/list/atmos_controllers = list()
 			var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE - T0C]C or above [MAX_TEMPERATURE - T0C]C by itself. ", "Thermostat Controls") as num|null
 			if(input_temperature==null)
 				return 1
-			if(input_temperature > max_temperature || input_temperature < min_temperature)
-				to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
-			else
-				input_temperature = round(input_temperature + T0C,0.01)
-				current.set_temperature(input_temperature)
+			input_temperature = round(clamp(input_temperature, min_temperature, max_temperature) + T0C, 0.01)
+			current.set_temperature(input_temperature)
 			return 1
 
 #undef ACA_SCREEN_DETAILSVIEW
