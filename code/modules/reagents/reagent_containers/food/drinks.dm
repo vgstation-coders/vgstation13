@@ -614,9 +614,10 @@
 	reagents.chem_temp = COOKTEMP_READY
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen
-	name = "\improper cup ramen"
+	name = "\proper cup ramen"
 	desc = "A taste that reminds you of your school years."
 	icon_state = "ramen"
+
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/New()
 	..()
 	reagents.add_reagent(DRY_RAMEN, 30)
@@ -624,14 +625,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating //vendor version
-	name = "\improper cup ramen"
-	desc = "Just add 12ml water, self heats!"
-	icon_state = "ramen"
-/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating/New()
-	..()
-	reagents.add_reagent(CALCIUMOXIDE, 2)
-	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
-	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+	desc = "Just add 10u water, self heats!"
 
 /obj/item/weapon/reagent_containers/food/drinks/groans
 	name = "Groans Soda"
