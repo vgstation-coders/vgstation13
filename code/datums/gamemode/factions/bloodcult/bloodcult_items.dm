@@ -1218,7 +1218,7 @@ var/list/arcane_tomes = list()
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
-	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
+	clothing_flags = PLASMAGUARD
 	mech_flags = MECH_SCAN_FAIL
 	actions_types = list(/datum/action/item_action/toggle_anon)
 	var/anon_mode = FALSE
@@ -1360,7 +1360,7 @@ var/list/arcane_tomes = list()
 	siemens_coefficient = 0
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
-	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
+	clothing_flags = PLASMAGUARD|ONESIZEFITSALL
 	mech_flags = MECH_SCAN_FAIL
 	hood = new /obj/item/clothing/head/culthood()
 	auto_hood = TRUE
@@ -1466,7 +1466,7 @@ var/list/arcane_tomes = list()
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
-	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
+	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	mech_flags = MECH_SCAN_FAIL
 	body_parts_visible_override = 0
@@ -1495,7 +1495,7 @@ var/list/arcane_tomes = list()
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED, PLASMAMAN_SHAPED)
-	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
+	clothing_flags = PLASMAGUARD|ONESIZEFITSALL
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	mech_flags = MECH_SCAN_FAIL
 
