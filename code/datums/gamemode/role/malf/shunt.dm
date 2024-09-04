@@ -63,7 +63,7 @@
 	failsafe = abs(starting.x - target.x) + abs(starting.y - target.y)
 	init_angle()
 
-	ma = new(src)
+	ma = mutable_appearance(layer = src.layer, plane = src.plane, copy =src)
 	ma.invisibility = 0
 	rider.client.images |= ma
 
