@@ -13,7 +13,7 @@
 #define HIVELORD_REINFORCEABLE  (1 << 7)
 #define BASILISK_REINFORCEABLE  (1 << 8)
 #define CANEXTINGUISH 		    (1 << 9)
-#define CONTAINPLASMAMAN        (1 << 10)
+//#define CONTAINPLASMAMAN        (1 << 10) //Merged into PLASMAGUARD
 #define IGNORE_LUBE             (1 << 11)
 #define MAGPULSE		        (1 << 12) //prevents slipping in space, singulo pulling, etc
 #define GENDERFIT			    (1 << 13) //Toggles gender fitting so it appends _f for female mob icon.
