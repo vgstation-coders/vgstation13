@@ -194,6 +194,10 @@
 	selected = null
 	..()
 
+/obj/mecha/special_thrown_behaviour()
+	dash_dir = dir
+	throwing = 2//dashing through windows and grilles
+
 /obj/mecha/can_apply_inertia()
 	return 1 //No anchored check - so that mechas can fly off into space
 
@@ -351,6 +355,7 @@
 //////////////////////////////////
 
 /obj/mecha/relaymove(mob/user,direction)
+	..()
 	if(user != src.occupant) //While not "realistic", this piece is player friendly.
 		user.forceMove(get_turf(src))
 		to_chat(user, "You climb out from [src]")
@@ -775,7 +780,7 @@
 	for(var/mob/living/cookedalive as anything in occupant)
 		if(cookedalive.fire_stacks < 5)
 			cookedalive.adjust_fire_stacks(1)
-			cookedalive.IgniteMob()
+			cookedalive.ignite()
 
 	return
 
@@ -802,7 +807,7 @@
 	if(equipment.len >= max_equip)
 		return 0
 	return max_equip - equipment.len
-	
+
 /obj/mecha/proc/is_killdozer()
 	for(var/obj/I in equipment)
 		if(istype(I, /obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit))

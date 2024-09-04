@@ -20,7 +20,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	// Output.
 	var/list/products              // Possible fruit/other product paths.
 	var/list/mutants               // Possible predefined mutant varieties, if any.
-	var/list/chems                 // Chemicals that plant produces in products/injects into victim in (Total units, Potency)
+	var/list/chems=list()          // Chemicals that plant produces in products/injects into victim in (Total units, Potency)
 	var/list/consume_gasses=list() // The plant will absorb these gasses during its life.
 	var/list/exude_gasses=list()   // The plant will exude these gasses during its life.
 

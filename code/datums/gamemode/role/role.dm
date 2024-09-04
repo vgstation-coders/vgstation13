@@ -579,7 +579,7 @@
 /datum/role/proc/handle_reagent(var/reagent_id)
 	return
 
-/datum/role/proc/handle_splashed_reagent(var/reagent_id)
+/datum/role/proc/handle_splashed_reagent(var/reagent_id, var/method, var/volume)
 	return
 
 //Does the role have special clothing restrictions?

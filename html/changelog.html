@@ -73,6 +73,133 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2024.09.04</h2>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Thermostats now properly work when setting new temperatures.</li>
+			</ul>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Updated rust-g to version 3.4.0.</li>
+			</ul>
+			<h2 class="date">2024.09.03</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed being able to walk through closed Firelocks after clicking on them while not having permission due to dangerous atmos conditions.</li>
+				<li class="bugfix">Fixed the leather glove &amp; handwraps not showing up on the character&#39;s sprite when worn.</li>
+				<li class="bugfix">Door Moody Lights no longer look much brighter than they should when door lights are flashing during their opening/closing/deny/emag animations.</li>
+				<li class="bugfix">Fixed stuff landing in disposals through windows.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="spellcheck">The merch computer entry for small cages now has a capitalised title, better grammar, and no extra full stop.</li>
+				<li class="spellcheck">Every other erroneous double full stop has also been fixed.</li>
+				<li class="bugfix">Players can now actually disallow item use when targeting with guns. As described, this will not count for turf or HUD clicks.</li>
+				<li class="bugfix">Moving in a vehicle now counts as moving when targeted with a gun.</li>
+				<li class="tweak">The message the player receives on being targeted now more helpfully tells them which restrictions are or are not in place.</li>
+				<li class="bugfix">Putting stacks in storage now properly updates their materials.</li>
+			</ul>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Cigarettes will no longer ignite smokers. Big Tobacco wins again.</li>
+			</ul>
+			<h2 class="date">2024.09.02</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Chaplains who adhere to the Belmont religion now spawn with a box containing clothing reminiscent of Richter Belmont, and a flask of Sacred Water in their pocket. They can also throw their bible to hit people around them with it.</li>
+				<li class="rscadd">Sacred Water is a new reagent that turns Holy Water into more of itself when in contact with it. When splashed on a floor, it creates sacred flames that only burn the unholy (that is, vampires, cultists, and any other supernatural creature)</li>
+				<li class="rscadd">Players may now forge a Battle Cross out of silver at an anvil. Battle Crosses are basically boomerangs that deal bonus damage to supernatural creatures, but they only return to the hands of those of the Belmont religion.</li>
+				<li class="experiment">Boomerangs have been rewritten from scratch and now behave more like you would expect from a boomerang in a video game. They are now a lot more reliable so their damage has been lowered from 16 to 10, but they still feel really strong so I&#39;m looking forward to feedback by players who have been on both ends of a boomerang throw.</li>
+				<li class="imageadd">Boomerangs have also gotten a re-sprite.</li>
+				<li class="imageadd">Attacking supernatural creatures with holy weapons now displays a visual effect.</li>
+				<li class="imageadd">Kamina and Simon&#39;s glasses have gotten some visual adjustments on top of proper object icons. Furthermore, you can now unleash their power by using them in your hand and throwing them.</li>
+				<li class="bugfix">Fixed the wrong icon appearing for some bibles in the religion picker interface.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">The mode change buttons on assemblies now properly refresh them.</li>
+				<li class="tweak">Assembly windows now refresh as the timers tick down, instead of manually with the refresh button.</li>
+				<li class="tweak">Unnecessary close and refresh buttons have now been removed from the UIs of timers, proximity sensors, infrared sensors and light tile remotes as these functions happen normally now.</li>
+			</ul>
+			<h2 class="date">2024.08.31</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The Floral Somatoray has been refactored and should now behave more as you might expect. You can use it on trays both at range and adjacently, although if someone is standing in-between they might get hit instead.</li>
+				<li class="rscadd">You can once again change the brute damage of bees by using the Floral Somatoray on apiaries while it&#39;s set to Morphology, while Development controls the yield. There are plans to allow further genetic alterations of bees in the future.</li>
+				<li class="rscadd">You can now use a solder to &#34;un-emag&#34; a floral somatoray.</li>
+				<li class="imageadd">The Floral Somatoray has had a sprite pass with its appearance depending on its currently selected mode. The rays it fire also change color based on the selected mode.</li>
+				<li class="soundadd">The Floral Somatoray makes a new sound when charging and firing at stuff.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="spellcheck">Typos on the mysterious d20 and mechanical toyboxes have been fixed</li>
+				<li class="bugfix">The hobo shacks and mine surprises now have dynamic lighting again.</li>
+				<li class="bugfix">Ghosts and admins can now jump to the areas of mining surprises and hobo shacks.</li>
+				<li class="bugfix">Normal ghosts can now haunt into the chapel again.</li>
+				<li class="rscadd">Admins now get a message if a bag of holding was quick equipped into another bag of holding really fast with hotkeys.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">slimefolk now get a proper feedback message if they don&#39;t have any limbs to regenerate with their special ability</li>
+			</ul>
+			<h3 class="author">hacker-on-steroids updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">vent pumps no longer appear on when unpowered</li>
+			</ul>
+			<h2 class="date">2024.08.30</h2>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Placing stacks into storage items now automatically adds it to stacks of the same type, if possible.</li>
+				<li class="tweak">Ore satchels and derivatives now show the number of ores in all stacks per type.</li>
+				<li class="bugfix">Sheet snatchers no longer cause bad screen issues.</li>
+			</ul>
+			<h3 class="author">west3436 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed a bug where players would appear to be on fire without actually burning.</li>
+				<li class="tweak">Mobs will now catch on fire as soon as they step into a fire.</li>
+			</ul>
+			<h2 class="date">2024.08.29</h2>
+			<h3 class="author">CrazyAmphibian updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Changed the RPD menu so that the options are always visible</li>
+			</ul>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Moody Lights have been added to all airlocks, firelocks, and blast doors.</li>
+				<li class="bugfix">Fixed christmas lights now actually emitting any light. Their lit up sprite also now appears over darkness.</li>
+				<li class="bugfix">Fixed snow tiles not regenerating snow like they should sometimes.</li>
+				<li class="bugfix">Fixed each snow tile and christmas light having a duplicate on top of them.</li>
+				<li class="tweak">Reworked the way snow tiles hold snow so instead of losing snow from the duplicate tile you get even more! Each tile now has 10 snow which it regenerates by one every 30 seconds. You can grab 1 snow by hand, or 3 at a time by shovel. If the tile reaches 0 snow it disappears.</li>
+				<li class="imageadd">Re-added the grabbed and digged snow tile sprites so you can easily see whether a tile is full of snow, or whether it&#39;s one shovel hit away from disappearing.</li>
+			</ul>
+			<h3 class="author">Eneocho updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Cows will mutate their milk type when exposed to Phazon, unless they themselves can make Phazon, in which case they will not mutate their milk further.</li>
+			</ul>
+			<h3 class="author">SECBATON-GRIFFON updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Coinboxes can now come out of vending machines again.</li>
+				<li class="tweak">Coinboxes and vendpacks now eject from crowbar destroying vending machines. Vendpacks still require inserted cardboard for this.</li>
+				<li class="tweak">Coinboxes can now be recycled for metal, under the electronics category.</li>
+				<li class="tweak">To compensate coinboxes being recyclable, and as to not be an infinite metal source, they are now required in their frame build step. A no access requirement version of them can be built as a metal stack recipe to aid this.</li>
+				<li class="bugfix">Mech syringe guns now actually fire their syringes properly, making them finally useful for something other than getting fast research done.</li>
+			</ul>
+			<h2 class="date">2024.08.27</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Apiaries no longer require you to build them into an hydroponics tray! Just click an adjacent floor while holding the kit.</li>
+				<li class="imageadd">Apiaries have new sprites to commemorate their graduation from being tray-bound.</li>
+				<li class="imageadd">Apiary kits now have in-hand icons.</li>
+				<li class="tweak">You no longer need a hatchet to harvest an apiary and can now do so bare-handed. Doing it this way no longer deconstructs the apiary so you can just calm the bees and let them return to it on their own. Hatchets (or alternatively crowbars) are still required to deconstruct them, which still also harvests them at the same time if they contain honey.</li>
+				<li class="soundadd">Added sounds for building/deconstructing apiaries, and for pouring BeezEz in them.</li>
+				<li class="rscadd">Apiaries and hives can burn down at long last.</li>
+			</ul>
+			<h3 class="author">jwhitak updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Blacksmiths can now estimate the quality of their result before quenching their work by examining it.</li>
+				<li class="rscadd">Smithing now has several new visual effects, including lighting, hot sparks, and visibly different unforged items.</li>
+				<li class="bugfix">Fixed several blacksmithing bugs, including lighting cold forges that can&#39;t heat anything.</li>
+			</ul>
 			<h2 class="date">2024.08.26</h2>
 			<h3 class="author">SECBATON-GRIFFON updated:</h3>
 			<ul class="changes bgimages16">
@@ -1686,109 +1813,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">jellyveggie2 updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="rscadd">Added precise charge and max capacity numbers to SMES UI</li>
-			</ul>
-			<h2 class="date">2023.12.10</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="experiment">The Paint &amp; Linen Update is here! A world of acrylic, fabric, and glue opens before you.</li>
-				<li class="experiment">Detailed changelog here: `https://github.com/vgstation-coders/vgstation13/pull/35451`</li>
-				<li class="rscadd">Reworked from scratch how paint mixes and interact with floors, walls, and everything in general. You can craft acrylic paint in Chemistry by first mixing glue, and then adding some pigments.</li>
-				<li class="rscadd">Glue is a new (previously unused) reagent that applies to object the same effect that school glue applies, but for only a minute. Can be washed off with water. Creates splatters on the floor that slow down mobs.</li>
-				<li class="rscadd">You can use Paint Rollers from Art Vendors to paint floors and walls without consuming reagents, and painting only parts of a tile.</li>
-				<li class="rscadd">Paint Remover has been reworked into Acetone, and can be obtained either from the Art Vendor, or brewed in Chemistry.</li>
-				<li class="rscadd">Added a new Vox Trader bundle: the Nano Painter&#39;s toolbox. Nano Paint when applied over a whole tile will cause it to emit its own light. When used on canvas the parts painted with it will glow in the dark.</li>
-				<li class="rscadd">Nano Paint may also be crafted in Xenobiology by adding Phazon to a Pyrite Slime.</li>
-				<li class="rscadd">Added a new Botany plant, Flax, whose product can be either grinded for Flax Oil which is a type of paint that partially matches the color of its surrounding reagents (pouring the mixture between two beakers a few times will cause the flax oil to match the other reagents&#39; color completely). Flax may also be processed into cloth using either a Spinning Wheel crafted out of Wood, or an Electric Loom produced by R&amp;D.</li>
-				<li class="rscadd">Cloth can now be used to craft some simple items by hand, or more intricate clothing by using Knitting Needles crafted out of wood, or a Sewing Machine produced by R&amp;D.</li>
-				<li class="rscadd">After adding some pigments inside a cauldron, you can dye crafted items in it either fully, or partially depending on the item. Bedsheets can be dyed as well.</li>
-				<li class="rscadd">Using Knitting Needles or a Sewing Machine, you can toggle the appearance of bedsheets between their old plaid look and their new wider look.</li>
-				<li class="rscadd">R&amp;D may also now print the High Roller, a large paint roller that lets you easily and efficiently apply reagents over a large area. This applies to paint, but also bleach, acetone, lube, everything you can think of. If the reagent is a pigment, it will cover floors like paint does.</li>
-				<li class="imageadd">Re-Sprited Painting Brushes, Palettes, Paint Buckets, and added in-hand icons for all.</li>
-				<li class="rscadd">Metal Buckets similar to Paint Buckets can now be crafted from metal sheets.</li>
-				<li class="tweak">the old Bucket is now called Plastic Bucket, and can be crafted from Plastic, or from the Biogenerator.</li>
-				<li class="tweak">the Colorful Syndrome disease effect has been reworked, and now splatters the surroundings of the infected mob with paint instead of using chem smoke.</li>
-				<li class="rscadd">You can now toggle hoods on mannequins or other players by using the stripping menu.</li>
-				<li class="tweak">Some machines now automatically appear higher when built on top of tables, or when tables are placed below them, and return to their default offset when the table is removed or flipped.</li>
-			</ul>
-			<h2 class="date">2023.12.09</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Fixed Nuka Cola bottles having the same hole that soda cans get when you open them, instead their cap gets visibly removed.</li>
-				<li class="rscadd">Opening a Nuka Cola bottle now actually gives you a bottle cap.</li>
-			</ul>
-			<h3 class="author">DorainGrey updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Horizon: Fixes IAA Maint Door Access &amp; Virology Access Panels (Again)</li>
-				<li class="bugfix">Snaxi: Fixes Medicine Cabinet being missing from Medbay</li>
-			</ul>
-			<h3 class="author">Mintgreen01 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added new Pomf the Chicken toy. All the credit goes to Janez420Ivan and &gt;&gt;454993992-kun.</li>
-				<li class="rscdel">Replaced Sylveon with Pomf the Chicken as a pomf coin reward.</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added a sound for when someone is successfully knocked out with the rolling pin.</li>
-				<li class="rscadd">Made the rolling pin and briefcase&#39;s behavior when targeting head far more consistent; tweaked some of its probabilities.</li>
-				<li class="tweak">The rolling pin&#39;s hitsound is now less metallic, using the baseball bat&#39;s hitsound for mobs instead.</li>
-			</ul>
-			<h2 class="date">2023.12.08</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="experiment">Implemented a new subsystem that revamps the way reagent containers normalize their temperature in relation to the environment. This new method makes reagents reach room temperature quite faster on average (except when using a Stasis Beaker), and has been finely adjusted so temperature changes are more noticeable while also feeling realistic. You can Alt Middle click a beaker or food item to blow some air on them and accelerate the process. As an added bonus, this system consumes a negligible amount of CPU compared to the one in effect until now, and is much simpler to read and adjust, thus more maintainable.</li>
-				<li class="experiment">The thermal dissipation subsystem has been disabled</li>
-			</ul>
-			<h3 class="author">DorainGrey updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes Horizon ERT, Nuke Squads and death squads.</li>
-				<li class="bugfix">Fixes minor bug with coinpress &amp; miner ore processor on asteroid.</li>
-				<li class="bugfix">Snaxi Cargo Conveyors Fixed</li>
-				<li class="bugfix">Snaxi Atmos reworked to not route through reinforced walls</li>
-				<li class="bugfix">Snaxi SMES charge automatically</li>
-				<li class="bugfix">General Engineering reworks</li>
-			</ul>
-			<h2 class="date">2023.12.06</h2>
-			<h3 class="author">DorainGrey updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Escape Pod Emagging does not break Horizon Shuttle</li>
-			</ul>
-			<h2 class="date">2023.12.05</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed Bleach having a ridiculous SpecHeatCap. This should once again allow the brewing of Alkycosine using a bunsen burner.</li>
-				<li class="bugfix">Fixes some drinks losing their blood overlay when their sprite was updated</li>
-			</ul>
-			<h2 class="date">2023.12.03</h2>
-			<h3 class="author">DorainGrey updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed a few bugs with lightswitches in botany on NRV Horizon</li>
-				<li class="bugfix">Fixed TEG Engine on Horizon</li>
-				<li class="tweak">Horizons IAA Office has been Swapped With Casino for more central crew area.</li>
-			</ul>
-			<h3 class="author">RealestEstate updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Added new gold and silver tile sprites.</li>
-				<li class="tweak">The classic gold and silver (aka alternate) tiles can still be created. Using them to reinforce girders will result in the classic gold and silver walls.</li>
-			</ul>
-			<h2 class="date">2023.12.02</h2>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Vampires are now able to consume any type of blood through regular consumption or injection rather than just compatible blood types.</li>
-			</ul>
-			<h3 class="author">brndd updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Wheelstation: telecomms cooling should work faster now</li>
-			</ul>
-			<h3 class="author">nervere updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed jukeboxes not properly starting/stopping.</li>
-				<li class="bugfix">Fixed the Ape Mode admin button having some flaws/inconsistencies when the Ape faction/role was assigned to players.</li>
-				<li class="bugfix">Fixed a runtime occurring when exiting advanced medical scanners.</li>
-				<li class="rscadd">Revamped a programmable turret to be fully customizable by admins for bussing purposes. Find it in the &#34;Fun Secrets&#34; part of the Secrets Panel.</li>
-				<li class="bugfix">Constructable turrets no longer shoot you for the mere crime of... laying down.</li>
-				<li class="bugfix">Constructable turrets no longer shoot the majority of command staff when &#34;shoot all but security/heads&#34; mode is enabled.</li>
-				<li class="tweak">The Special Tab for adminhelps is now enabled by default for new player accounts.</li>
-				<li class="bugfix">Fixed nanopaste not being stackable.</li>
 			</ul>
 		</div>
 		<!--

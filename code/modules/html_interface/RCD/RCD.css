@@ -2,6 +2,8 @@
 /*updated by crazyamphibian*/
 
 body{
+background-image:none;
+background-color:#272727; /*it's very sensitive to the order of things here, for some reason.*/
 line-height:100%
 }
 
@@ -205,4 +207,24 @@ left:160px;
 	border:none;
 	height:1em;
 	image-rendering:pixelated;
+}
+
+#schematic_options{ /*because we removed the gradient earlier, we have to re-add it back*/
+	background:linear-gradient(rgb(57,57,57) 0%,rgb(72,72,72) 4%  , rgb(39,39,39) 100%);
+	width:100%;
+	left:-50px
+	top:0px;
+	padding:1em;
+	margin-top:-7px;
+	margin-left:-10px;
+}
+#schematic_options1{ /*this is a really, really awful way to lay things out.*/
+	visibility: hidden;
+}
+#schematic_options2{ /*but it's not my fault IE doesn't support sticky positioning.*/
+	position:fixed;
+	background:linear-gradient(rgb(57,57,57) 0%,rgb(72,72,72) 4%  , rgb(39,39,39) 100%); /*emulating the background of nanotrasen.css. it's an image, but images don't play nice here.*/
+	width:100%;
+	left:0px;
+	top:0em;
 }

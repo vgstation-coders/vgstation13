@@ -26,6 +26,11 @@
 // atom/movable/mover: the movable itself.
 /event/moved
 
+// Called whenever an /atom/movable relay-moves.
+// Arguments:
+// atom/movable/mover: the movable itself.
+/event/relaymoved
+
 // Called right before an /atom/movable attempts to move or change dir.
 /event/before_move
 

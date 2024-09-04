@@ -55,6 +55,10 @@
 			if(!(H.organs_by_name[organ_name] in priority_organs))
 				priority_organs.Add(H.organs_by_name[organ_name])
 
+		if(!priority_organs.len)
+			to_chat(user, "<span class='notice'>You have nothing to regenerate.</span>")
+			return
+
 		var/has_regenerated = FALSE
 		for(var/datum/organ/external/O in priority_organs)
 			if(O.status & ORGAN_DESTROYED)

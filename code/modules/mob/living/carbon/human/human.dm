@@ -2228,6 +2228,26 @@ var/datum/record_organ //This is just a dummy proc, not storing any variables he
 	else
 		become_zombie = TRUE
 
+/mob/living/carbon/human/drop_hands(var/atom/Target, force_drop = 0)
+	if (istype(gloves, /obj/item/clothing/gloves/hunter))
+		for(var/obj/item/I in held_items)
+			if (istype(I, /obj/item/weapon/gun/hookshot/whip))
+				to_chat(src, "<span class='notice'>You hold your grip onto your [I]</span>")
+			else
+				drop_item(I, Target, force_drop = force_drop)
+	else
+		..()
+
+/mob/living/carbon/human/get_afterimage()
+	if (istype(w_uniform, /obj/item/clothing/under/hunter)\
+		&& istype(wear_suit, /obj/item/clothing/suit/hunter)\
+		&& istype(shoes, /obj/item/clothing/shoes/hunter)\
+		&& istype(head, /obj/item/clothing/head/hunter)\
+		&& istype(gloves, /obj/item/clothing/gloves/hunter))
+		playsound(src, 'sound/weapons/authenticrichtertackleslide.ogg', 70, 0)
+		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "castlevania_tackle_flick", plane = ABOVE_LIGHTING_PLANE)
+		return "richter tackle"
+
 /mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
 	var/atom/movable/item = get_active_hand()
 	if(what)

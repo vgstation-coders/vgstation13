@@ -38,6 +38,7 @@
 #define STOXIN 			"stoxin"
 #define INAPROVALINE 			"inaprovaline"
 #define HOLYWATER 			"holywater"
+#define SACREDWATER 		"sacredwater"
 #define SEROTROTIUM 			"serotrotium"
 #define SILICATE 			"silicate"
 #define OXYGEN 			"oxygen"

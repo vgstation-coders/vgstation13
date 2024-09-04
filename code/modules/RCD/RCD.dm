@@ -95,8 +95,6 @@
 	var/dat = ""
 
 	dat += {"
-		<b>Selected:</b> <span id="selectedname"></span>
-		<h2>Options</h2>
 		<div id="schematic_options">
 		</div>
 		<h2>Available schematics</h2>
