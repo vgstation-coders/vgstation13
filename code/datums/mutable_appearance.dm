@@ -14,6 +14,10 @@
  * plane - The plane to use for the appearance.
  * alpha - Our appearance's alpha
  * appearance_flags - Our appearance's appearance_flags
+ * dir - Our appearance's direction
+ * pixel_x - Our appearance's x pixel offset
+ * pixel_y - Our appearance's y pixel offset
+ * color - Our appearance's color
  * copy - Mutable appearance to copy, this is set in the new() call itself
 **/
 
