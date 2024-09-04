@@ -427,13 +427,10 @@ var/global/list/atmos_controllers = list()
 		if(href_list["set_preset_setting"] == "target_temperature")
 			var/max_temperature = MAX_TARGET_TEMPERATURE - T0C //these defines should come from code\game\machinery\alarm.dm
 			var/min_temperature = MIN_TARGET_TEMPERATURE - T0C
-			var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
+			var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE - T0C]C or above [MAX_TEMPERATURE - T0C]C by itself. ", "Thermostat Controls") as num|null
 			if(input_temperature==null)
 				return 1
-			if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
-				to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
-			else
-				input_temperature = input_temperature + T0C
+			input_temperature = round(clamp(input_temperature, min_temperature, max_temperature) + T0C, 0.01)
 			selected_preset.target_temperature = input_temperature
 			return 1
 		else if(href_list["set_preset_setting"] == "scrubbed_gases")
@@ -613,14 +610,11 @@ var/global/list/atmos_controllers = list()
 			else
 				max_temperature = temperature_threshold.max_1() - T0C
 				min_temperature = temperature_threshold.min_1() - T0C
-			var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE]C or above [MAX_TEMPERATURE]C by itself. ", "Thermostat Controls") as num|null
+			var/input_temperature = input("What temperature (in C) would you like the system to target? (Capped between [min_temperature]C and [max_temperature]C).\n\nNote that the cooling unit in this air alarm can not go below [MIN_TEMPERATURE - T0C]C or above [MAX_TEMPERATURE - T0C]C by itself. ", "Thermostat Controls") as num|null
 			if(input_temperature==null)
 				return 1
-			if(!input_temperature || input_temperature >= max_temperature || input_temperature <= min_temperature)
-				to_chat(usr, "<span class='warning'>Temperature must be between [min_temperature]C and [max_temperature]C.</span>")
-			else
-				input_temperature = input_temperature + T0C
-				current.set_temperature(input_temperature)
+			input_temperature = round(clamp(input_temperature, min_temperature, max_temperature) + T0C, 0.01)
+			current.set_temperature(input_temperature)
 			return 1
 
 #undef ACA_SCREEN_DETAILSVIEW
