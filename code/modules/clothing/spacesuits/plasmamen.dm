@@ -11,7 +11,7 @@
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_restricted = list(PLASMAMAN_SHAPED)
 	species_fit = list(PLASMAMAN_SHAPED)
-	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
+	clothing_flags = PLASMAGUARD
 	pressure_resistance = 40 * ONE_ATMOSPHERE //we can't change, so some resistance is needed
 
 	icon_state = "plasmaman_suit"
@@ -37,7 +37,7 @@
 /obj/item/clothing/head/helmet/space/plasmaman
 	name = "plasmaman helmet"
 	desc = "A special containment helmet designed to protect a plasmaman's volatile body from outside exposure and quickly extinguish it in emergencies."
-	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
+	clothing_flags = PLASMAGUARD
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	species_restricted = list(PLASMAMAN_SHAPED)
 	species_fit = list(PLASMAMAN_SHAPED)
@@ -223,14 +223,14 @@
 	icon_state = "plasmamanMiner_suit"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
-	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE|CONTAINPLASMAMAN
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE|PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/plasmaman/miner
 	name = "plasmaman miner helmet"
 	icon_state = "plasmamanMiner_helmet0"
 	base_state = "plasmamanMiner_helmet"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
-	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE|CONTAINPLASMAMAN
+	clothing_flags = GOLIATH_REINFORCEABLE|HIVELORD_REINFORCEABLE|BASILISK_REINFORCEABLE|PLASMAGUARD
 
 
 // MEDSCI
