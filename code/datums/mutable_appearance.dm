@@ -19,8 +19,10 @@
 
 /proc/mutable_appearance(icon, icon_state = "", layer = FLOAT_LAYER, plane = FLOAT_PLANE, alpha = 255, appearance_flags = NONE, dir, pixel_x, pixel_y, color, mutable_appearance/copy)
 	var/mutable_appearance/appearance = new(copy)
-	appearance.icon = icon
-	appearance.icon_state = icon_state
+	if(icon)
+		appearance.icon = icon
+	if(icon_state != "")
+		appearance.icon_state = icon_state
 	appearance.layer = layer
 	appearance.plane = plane
 	appearance.alpha = alpha
