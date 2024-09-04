@@ -48,7 +48,7 @@
 	var/area/prospective
 	while(!thearea)
 		if(!areas_to_check.len) //If everything fails, don't crash the server
-			to_chat(holder, "The spell matrix was unable to locate a suitable area for an unknown reason. Sorry.")
+			to_chat(user, "The spell matrix was unable to locate a suitable area for an unknown reason. Sorry.")
 			return
 		prospective = pick(areas_to_check)
 		if(prospective.type != /area)
@@ -57,7 +57,7 @@
 				areas_to_check -= prospective
 				continue
 			var/turf/T = pick(prospective_turfs)
-			if(!(T.z == holder.z)) //Selected turf is not in the same z-level
+			if(!(T.z == user.z)) //Selected turf is not in the same z-level
 				areas_to_check -= prospective
 				continue
 			thearea = prospective //We found it
@@ -67,7 +67,7 @@
 			continue
 	var/list/L = list()
 	for(var/turf/T in get_area_turfs(thearea.type))
-		if(!T.density && (T.z == holder.z)) //In case an area somehow shows up in multiple z-levels
+		if(!T.density && (T.z == user.z)) //In case an area somehow shows up in multiple z-levels
 			var/clear = 1
 			for(var/obj/O in T)
 				if(O.density)
@@ -81,22 +81,21 @@
 		return 0
 
 	var/list/backup_L = L.Copy()
-	for(var/atom/movable/target in targets)
-		target.unlock_from()
-		var/attempt = null
-		var/success = 0
-		while(L.len)
-			attempt = pick(L)
-			success = target.Move(attempt)
-			if(!success)
-				L.Remove(attempt)
-			else
-				score.dimensionalpushes++
-				break
+	unlock_from()
+	var/attempt = null
+	var/success = 0
+	while(L.len)
+		attempt = pick(L)
+		success = Move(attempt)
 		if(!success)
 			L.Remove(attempt)
 		else
-			return 1
+			score.dimensionalpushes++
+			break
+	if(!success)
+		L.Remove(attempt)
+	else
+		return 1
 	if(!success)
 		forceMove(pick(backup_L))
 	return 0

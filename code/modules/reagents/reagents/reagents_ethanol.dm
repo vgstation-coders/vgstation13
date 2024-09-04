@@ -1344,7 +1344,6 @@
 	glass_icon_state = "dragonsspit"
 	glass_name = "\improper Dragon's Spit"
 	light_color = "#ff7003"
-	flammable = 1
 	arcane_id = CONDENSEDCAPSAICIN
 	can_be_lit = 1
 
@@ -1377,7 +1376,6 @@
 	glass_icon_state = "manhattanfireball"
 	glass_name = "\improper Manhattan Fireball"
 	light_color = "#540303"
-	flammable = 1
 	arcane_id = CONDENSEDCAPSAICIN
 	can_be_lit = 1
 
