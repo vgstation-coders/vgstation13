@@ -16,10 +16,11 @@
 	desc = "Does card things."
 	icon = 'icons/obj/card.dmi'
 	w_class = W_CLASS_TINY
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	var/associated_account_number = 0
 
 	var/list/files = list(  )
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	quick_equip_priority = list(slot_wear_id)
 
 /obj/item/weapon/card/data
@@ -448,6 +449,7 @@ var/list/global/id_cards = list()
 	access = AGENT_CARD_DEFAULT_ACCESS
 	base_access = list(access_syndicate)
 	origin_tech = Tc_SYNDICATE + "=3"
+	blocks_tracking = TRUE
 	var/registered_user=null
 	var/copy_appearance = FALSE
 

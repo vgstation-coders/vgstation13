@@ -126,17 +126,23 @@
 /obj/effect/afterimage/black
 	image_color = "black"
 
-/obj/effect/afterimage/New(var/turf/loc, var/atom/model, var/fadout = 5)
+/obj/effect/afterimage/richter_tackle/New()
+	..()
+	transform = matrix()
+	pixel_x = 0
+	pixel_y = 0
+
+/obj/effect/afterimage/New(var/turf/loc, var/atom/model, var/fadout = 5, var/initial_alpha = 255, var/lay = NARSIE_GLOW, var/pla = ABOVE_LIGHTING_PLANE)
 	..()
 	if(model)
-		src.appearance = model.appearance
+		appearance = model.appearance
 		invisibility = 0
-		alpha = 255
+		alpha = initial_alpha
 		dir = model.dir
 		if (image_color)
 			color = image_color
-		layer = NARSIE_GLOW
-		plane = ABOVE_LIGHTING_PLANE
+		layer = lay
+		plane = pla
 	animate(src,alpha = 0, time = fadout)
 	spawn(fadout)
 		qdel(src)
@@ -489,6 +495,9 @@
 	animate(src, alpha = 0, time = 3)
 	..()
 
+/obj/effect/bloodcult_jaunt/visible
+	invisibility = 0
+	alpha = 255
 
 ///////////////////////////////////////BLOODSTONE DEFENSES////////////////////////////////////////////////
 

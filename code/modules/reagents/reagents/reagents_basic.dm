@@ -35,17 +35,14 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 3.214
 	specheatcap = 1.34
+	plant_toxins = 8
+	plant_weeds = -2
 
 /datum/reagent/chlorine/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
 	M.take_organ_damage(REM, 0, ignore_inorganics = TRUE)
-
-/datum/reagent/chlorine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(8)
-	T.add_weedlevel(-2)
 
 /datum/reagent/copper
 	name = "Copper"
@@ -64,6 +61,7 @@
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.696
 	specheatcap = 0.824
+	plant_toxins = 25
 
 /datum/reagent/fluorine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -72,10 +70,6 @@
 	M.adjustToxLoss(REM)
 	if(prob(5) && !M.isUnconscious())
 		M.emote("stare")
-
-/datum/reagent/fluorine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(25)
 
 /datum/reagent/hydrogen
 	name = "Hydrogen"
@@ -145,11 +139,8 @@
 	color = "#832828" //rgb: 131, 40, 40
 	density = 1.823
 	specheatcap = 0.769
-
-/datum/reagent/phosphorus/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(1)
-	T.add_weedlevel(3)
+	plant_nutrition = 1
+	plant_weeds = 3
 
 /datum/reagent/potassium
 	name = "Potassium"
@@ -201,9 +192,10 @@
 		return
 	T.add_toxinlevel(2)
 	if(T.reagents.get_reagent_amount(id) > 0)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_MORPHOLOGY)
-			T.reagents.remove_reagent(id, 1)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 
 /datum/reagent/silicon
 	name = "Silicon"
@@ -242,6 +234,7 @@
 	specheatcap = 4.184
 	density = 1
 	glass_desc = "The father of all refreshments."
+	plant_watering = 2
 
 /datum/reagent/water/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
@@ -263,14 +256,16 @@
 			var/mob/living/carbon/C = M
 			var/datum/disease2/effect/E = C.has_active_symptom(/datum/disease2/effect/thick_skin)
 			C.make_visible(INVISIBLESPRAY,FALSE)
+			M.remove_silence()
 			if(E)
 				E.multiplier = max(E.multiplier - rand(1,3), 1)
 				to_chat(C, "<span class='notice'>The water quenches your dry skin.</span>")
 		else
 			M.make_visible(INVISIBLESPRAY)
+			M.remove_silence()
 		if(isliving(M))
 			var/mob/living/L = M
-			L.ExtinguishMob()
+			L.extinguish()
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))
@@ -297,7 +292,8 @@
 		else if(isslimeperson(H))
 
 			H.adjustToxLoss(rand(1,3))
-	M.clean_act(CLEANLINESS_WATER)
+	if(method == TOUCH)
+		M.clean_act(CLEANLINESS_WATER)
 
 /datum/reagent/water/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
@@ -313,10 +309,8 @@
 
 	var/hotspot = (locate(/obj/effect/fire) in T)
 	if(hotspot)
-		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles())
-		lowertemp.temperature = max(min(lowertemp.temperature-2000, lowertemp.temperature / 2), 0)
-		lowertemp.react()
-		T.assume_air(lowertemp)
+		var/datum/gas_mixture/G = T.return_air()
+		G.temperature = max(G.temperature - (0.10 * rand(1,5)),T20C) //water extinguishers can only cool to 20C
 		qdel(hotspot)
 
 /datum/reagent/water/reaction_obj(var/obj/O, var/volume)
@@ -325,6 +319,8 @@
 
 	if(O.invisibility)
 		O.make_visible(INVISIBLESPRAY)
+
+	O.remove_silence()
 
 	O.clean_act(CLEANLINESS_WATER)//removes glue and extinguishes fire
 
@@ -354,7 +350,3 @@
 	if(istype(M,/mob/living/simple_animal/bee))
 		var/mob/living/simple_animal/bee/B = M
 		B.calming()
-
-/datum/reagent/water/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_waterlevel(2)

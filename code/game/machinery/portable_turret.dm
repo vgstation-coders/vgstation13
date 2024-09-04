@@ -406,7 +406,7 @@ Status: []<BR>"},
 					if(L.lying) // if the perp is lying down, it's still a target but a less-important target
 						secondarytargets += L
 						continue
-					else 
+					else
 						targets += L // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
 
 	if(check_anomalies || emagged)
@@ -621,8 +621,7 @@ Status: []<BR>"},
 
 		if(3)
 			if(istype(W, /obj/item/weapon/gun/energy) || istype(W, /obj/item/weapon/gun/projectile/roulette_revolver)) // the gun installation part
-				if(!user.drop_item(W, src))
-					to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+				if(!user.drop_item(W, src, failmsg = TRUE))
 					return
 				playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 				installed = W
@@ -638,8 +637,7 @@ Status: []<BR>"},
 
 		if(4)
 			if(isprox(W))
-				if(!user.drop_item(W, src))
-					to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+				if(!user.drop_item(W, src, failmsg = TRUE))
 					return
 				playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 				build_step = 5

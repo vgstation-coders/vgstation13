@@ -646,6 +646,12 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	force_report = 1
 	message = "Destruction of the Blood Stone has been confirmed. The Cult's power aboard the station will be greatly diminished."
 
+/datum/command_alert/narsie_has_risen
+	name = "Nar-Sie Has Risen"
+	alert_title = "Emergency Evacuation"
+	force_report = 1
+	message = "The station will not stay in this plane for much longer. At great expense, we are dispatching an Emergency Shuttle to your Escape dock within the next minute, and it will be leaving after an short stop. We recommend keeping any Enemies of the Corporation off the vessel. It's leaving with or without you."
+
 //////////////BLOOD CULT
 
 /*
@@ -721,7 +727,14 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Machine Learning Alert"
 
 /datum/command_alert/vending_machines/announce()
-	message = "Rampant brand intelligence has been detected aboard [station_name()], please stand-by."
+	message = "Rampant brand intelligence has been detected aboard [station_name()], be watchful for aggressive vending machines. If you find one of them broadcasting unusually agressive slogans, shut its speakers down."
+
+/datum/command_alert/vending_machines_end
+	name = "Rampant Brand Intelligence Purged"
+	alert_title = "Machine Learning Alert End"
+
+/datum/command_alert/vending_machines_end/announce()
+	message = "The rampant brand intelligence aboard [station_name()] has been purged. Vending machine behaviour should return to normal."
 
 /datum/command_alert/comms_blackout
 	name = "Ionospheric Anomalies - Telecommunications Failure"

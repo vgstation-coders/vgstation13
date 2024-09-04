@@ -89,17 +89,14 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "beerglass"
 	glass_desc = "A cold pint of pale lager."
+	plant_nutrition = 1
+	plant_watering = 1
 
 /datum/reagent/ethanol/beer/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
 	M.jitteriness = max(M.jitteriness - 3, 0)
-
-/datum/reagent/ethanol/beer/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(1)
-	T.add_waterlevel(1)
 
 /datum/reagent/ethanol/whiskey
 	name = "Whiskey"
@@ -1334,7 +1331,7 @@
 	color = "#b01522" //176, 21, 34
 	glass_icon_state = "dragonsblood"
 	glass_name = "\improper Dragon's Blood"
-	flammable = 1
+	can_be_lit = 1
 	light_color = "#540303"
 	arcane_id = BLOOD
 
@@ -1349,6 +1346,7 @@
 	light_color = "#ff7003"
 	flammable = 1
 	arcane_id = CONDENSEDCAPSAICIN
+	can_be_lit = 1
 
 /datum/reagent/ethanol/drink/firecider
 	name = "Fire Cider"
@@ -1381,6 +1379,7 @@
 	light_color = "#540303"
 	flammable = 1
 	arcane_id = CONDENSEDCAPSAICIN
+	can_be_lit = 1
 
 /datum/reagent/ethanol/drink/fireballcola
 	name = "Fireball Cola"
@@ -1424,7 +1423,7 @@
 	glass_icon_state = "b52glass"
 	glass_name = "\improper B-52"
 	light_color = "#000080"
-	flammable = 1
+	can_be_lit = 1
 
 /datum/reagent/ethanol/drink/irishcoffee
 	name = "Irish Coffee"

@@ -518,39 +518,34 @@
 
 	to_chat(usr, "<span class='notice'>You start washing your hands.</span>")
 
-	busy = 1
-	sleep(40)
-	busy = 0
+	busy = TRUE
+	if (do_after(M,src, 40))
+		M.clean_blood()
+		if(ishuman(M))
+			M:update_inv_gloves()
+			var/mob/living/carbon/human/HM = M
 
-	if(!Adjacent(M))
-		return		//Person has moved away from the sink
+			if(!HM.gloves && HM.species && HM.species.anatomy_flags & ACID4WATER)
+				HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
+				HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
 
-	M.clean_blood()
-	if(ishuman(M))
-		M:update_inv_gloves()
-		var/mob/living/carbon/human/HM = M
-
-		if(!HM.gloves && HM.species && HM.species.anatomy_flags & ACID4WATER)
-			HM.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
-			HM.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
-
-	for(var/mob/V in viewers(src, null))
-		V.show_message("<span class='notice'>[M] washes their hands using \the [src].</span>")
+		M.visible_message("<span class='notice'>[M] washes \his hands using \the [src].</span>","<span class='notice'>You wash your hands using \the [src].</span>")
+	busy = FALSE
 
 /obj/structure/sink/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(busy)
 		return 1
 	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running water.","<span class='notice'>You put \the [M] underneath the running water.</span>")
-	busy = 1
-	sleep(40)
-	busy = 0
-	M.clean_blood()
-	if(M.reagents.maximum_volume > M.reagents.total_volume)
-		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
-		M.reagents.add_reagent(WATER, min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
-		user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>","<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
-	else
-		user.visible_message("<span class='notice'>[user] removes \the [M], cleaner than before.</span>","<span class='notice'>You remove \the [M] from \the [src], it's all nice and sparkly now but somehow didnt get it any wetter.</span>")
+	busy = TRUE
+	if (do_after(user,src, 40))
+		M.clean_blood()
+		if(M.reagents.maximum_volume > M.reagents.total_volume)
+			playsound(src, 'sound/effects/slosh.ogg', 25, 1)
+			M.reagents.add_reagent(WATER, min(M.reagents.maximum_volume - M.reagents.total_volume, 50))
+			user.visible_message("<span class='notice'>[user] finishes soaking \the [M], \he could clean the entire station with that.</span>","<span class='notice'>You finish soaking \the [M], you feel as if you could clean anything now, even the Chef's backroom...</span>")
+		else
+			user.visible_message("<span class='notice'>[user] removes \the [M], cleaner than before.</span>","<span class='notice'>You remove \the [M] from \the [src], it's all nice and sparkly now but somehow didnt get it any wetter.</span>")
+	busy = FALSE
 	return 1
 
 /obj/structure/sink/attackby(obj/item/O as obj, mob/user as mob)
@@ -604,6 +599,22 @@
 			to_chat(user, "<span class='notice'>You clean the blood out of the nib of \the [P].</span>")
 			P.colour = "black"
 			P.bloodied = FALSE
+
+	else if(istype(O, /obj/item/stack/sheet/hairlesshide))
+		var/obj/item/stack/sheet/hairlesshide/H = O
+		user.visible_message("<span class='notice'>[user] puts \the [H] underneath the running water and begins soaking it.","<span class='notice'>You put \the [H] underneath the running water and begin soaking it.</span>")
+		busy = TRUE
+		if (do_after(user, src, 10*H.amount))
+			var/obj/item/stack/sheet/wetleather/WL = new(src)
+			WL.amount = H.amount
+			WL.source_string = H.source_string
+			WL.name = H.source_string ? "wet [H.source_string] leather" : "wet leather"
+			user.create_in_hands(H, WL, msg = "<span class='notice'>You finish up, creating [WL].</span>")
+			QDEL_NULL(H)
+		else
+			to_chat(user, "<span class='notice'>You stop soaking \the [H].</span>")
+		busy = FALSE
+		return
 
 	if (!isturf(user.loc))
 		return

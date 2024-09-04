@@ -184,6 +184,8 @@
 	if(user.drop_item(I, src))
 		user.visible_message("[user.name] places \the [I] into the [src].", "You place \the [I] into the [src].")
 
+	I.extinguish()
+
 	update_icon()
 
 // can breath normally in the disposal
@@ -454,7 +456,7 @@
 		qdel(H)
 
 /obj/machinery/disposal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if (istype(mover,/obj/item) && mover.throwing)
+	if (istype(mover,/obj/item) && mover.throwing && Adjacent(mover))
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return

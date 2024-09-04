@@ -37,6 +37,9 @@ JOBS_HAVE_MINIMAL_ACCESS
 ## Remove # here if you wish to have cargo forwards sent always be a set amount (for debugging)
 #CARGO_FORWARDING_AMOUNT_OVERRIDE 5
 
+## Remove # here if you wish to have all lights on by default at roundstart
+ROUNDSTART_LIGHTS_ON
+
 ## (SECURITY RISK ON PUBLIC SERVERS) Automatically give localhost clients +HOST access.
 LOCALHOST_AUTOADMIN
 

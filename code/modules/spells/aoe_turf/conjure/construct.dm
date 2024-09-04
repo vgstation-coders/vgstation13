@@ -481,6 +481,9 @@
 	if (rune)
 		to_chat(user,"<span class='warning'>You cannot draw on top of an already existing rune.</span>")
 		return 1
+	if(istype(T, /turf/space))
+		to_chat(user, "<span class='warning'>Get over a solid surface first!</span>")
+		return 1
 	return 0
 
 /spell/aoe_turf/conjure/path_entrance/on_creation(var/obj/effect/rune/R, var/mob/user)
@@ -520,6 +523,9 @@
 	var/obj/effect/rune/rune = locate() in T
 	if (rune)
 		to_chat(user,"<span class='warning'>You cannot draw on top of an already existing rune.</span>")
+		return 1
+	if(istype(T, /turf/space))
+		to_chat(user, "<span class='warning'>Get over a solid surface first!</span>")
 		return 1
 	return 0
 

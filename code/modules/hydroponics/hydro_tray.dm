@@ -1,15 +1,27 @@
+var/list/hydro_trays = list()
+
 /obj/machinery/portable_atmospherics/hydroponics
 	name = "hydroponics tray"
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
-	icon_state = "hydrotray3"
+	icon_state = "hydrotray"
 	anchored = 1
+	dir = EAST
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
 	volume = 100
+	layer = HYDROPONIC_TRAY_LAYER
+
+	use_power = MACHINE_POWER_USE_IDLE
+	idle_power_usage = 10
+	active_power_usage = 50
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | MULTIOUTPUT
 
 	var/draw_warnings = 1 // Set to 0 to stop it from drawing the alert lights.
 	var/tmp/update_icon_after_process = 0 // Will try to only call update_icon() when necessary.
+	var/last_update_icon = 0 // Since we're calling it more frequently than process(), let's at least make sure we're only calling it once per tick.
+	var/delayed_update_icon = 0
+	var/is_soil = 0
+	var/is_plastic = 0
 
 	// Plant maintenance vars
 	var/waterlevel = 100		// Water (max 100)
@@ -27,6 +39,7 @@
 	var/harvest = 0            // Is it ready to harvest?
 	var/age = 0                // Current plant age
 	var/sampled = 0            // Have we taken a sample?
+	var/growth_level = 0
 
 	// Harvest/mutation mods.
 	var/list/mutation_levels = list()	// Increases as mutagenic compounds are added, determines potency of resulting mutation when it's called.
@@ -44,10 +57,14 @@
 
 	//var/decay_reduction = 0     //How much is mutation decay reduced by?
 	var/weed_coefficient = 10    //Coefficient to the chance of weeds appearing
-	var/internal_light = 1
+	var/internal_light_range = 1	//light range provided by the tray's internal light. Can be improved with better capacitors.
 	var/light_on = 0
 
+	var/lid_toggling = 0
+
 	var/key_name_last_user = ""
+
+	var/image/visible_gas = null
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
@@ -63,6 +80,7 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/New()
 	..()
+	hydro_trays += src
 	create_reagents(200)
 	connect()
 	update_icon()
@@ -78,8 +96,10 @@
 	)
 
 	RefreshParts()
-	if(closed_system)
-		flags &= ~OPENCONTAINER
+
+/obj/machinery/portable_atmospherics/hydroponics/Destroy()
+	hydro_trays -= src
+	..()
 
 /obj/machinery/portable_atmospherics/hydroponics/RefreshParts()
 	var/capcount = 0
@@ -93,7 +113,23 @@
 			mattercount += SP.rating
 	//decay_reduction = scancount
 	weed_coefficient = WEEDLEVEL_MAX/mattercount/5
-	internal_light = capcount
+	internal_light_range = capcount
+
+/obj/machinery/portable_atmospherics/hydroponics/emp_act(var/severity)
+	if(is_soil || is_plastic)
+		return
+	switch(severity)
+		if(1)
+			if(prob(75))
+				close_lid()
+				if (light_on)
+					light_toggle()
+		if(2)
+			if(prob(35))
+				close_lid()
+				if (light_on)
+					light_toggle()
+
 
 //Makes the plant not-alive, with proper sanity.
 /obj/machinery/portable_atmospherics/hydroponics/proc/die()
@@ -105,6 +141,7 @@
 	// When the plant dies, weeds thrive and pests die off.
 	add_weedlevel(10 * HYDRO_SPEED_MULTIPLIER)
 	pestlevel = 0
+	check_light()
 	update_icon()
 
 //Calls necessary sanity when a plant is removed from the tray.
@@ -113,12 +150,13 @@
 	seed = null
 	dead = 0
 	age = 0
+	growth_level = 0
 	sampled = 0
 	harvest = 0
 	improper_light = 0
 	improper_kpa = 0
 	improper_heat = 0
-	set_light(0)
+	check_light()
 	update_icon()
 
 //Harvests the product of a plant.
@@ -134,7 +172,7 @@
 	if(!seed.check_harvest(user))
 		return
 
-	seed.harvest(user)
+	seed.harvest(user, src)
 	after_harvest()
 	return
 
@@ -144,6 +182,11 @@
 
 	seed.autoharvest(get_output())
 	after_harvest()
+
+/obj/machinery/portable_atmospherics/hydroponics/power_change()
+	..()
+	check_light()
+	update_icon()
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/after_harvest()
 
@@ -176,7 +219,7 @@
 	//Remove the seed if something is already planted.
 	if(seed)
 		remove_plant()
-	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds","glowshroom","grass"))]
+	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","dandelions","glowshroom","grass"))]
 	if(!seed)
 		return //Weed does not exist, someone fucked up.
 
@@ -272,6 +315,9 @@
 		return
 
 	else if(seed && isshovel(O))
+		if(closed_system)
+			to_chat(user, "<span class='warning'>You can't transplant the plant while the lid is shut.</span>")
+			return
 		if(arcanetampered)
 			to_chat(user,"<span class='sinister'>You cannot dig into the soil.</span>")
 			return
@@ -296,21 +342,42 @@
 			if(seed.large)
 				S.icon_state += "-large"
 
+			var/plant_appearance = ""
 			if(dead)
-				S.overlays += image(seed.plant_dmi,"dead")
+				plant_appearance = "dead"
 			else if(harvest)
-				S.overlays += image(seed.plant_dmi,"harvest")
-			else if(age < seed.maturation)
-				var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
-				S.overlays += image(seed.plant_dmi,"stage-[t_growthstate]")
+				if (harvest > 1)
+					plant_appearance = "harvest-[harvest]"
+				else
+					plant_appearance = "harvest"
 			else
-				S.overlays += image(seed.plant_dmi,"stage-[seed.growth_stages]")
+				plant_appearance = "stage-[growth_level]"
+
+			S.overlays += image(seed.plant_dmi,plant_appearance)
 
 			S.plant_name = seed.display_name
 			S.name = "potted [S.plant_name]"
 
+			S.plantname = seed.name
+			if (seed.pollen && harvest >= seed.pollen_at_level)
+				S.pollen = seed.pollen
+				S.add_particles(seed.pollen)
+				S.adjust_particles(PVAR_SPAWNING, 0.05, seed.pollen)
+				S.adjust_particles(PVAR_PLANE, FLOAT_PLANE, seed.pollen)
+				S.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), seed.pollen)
+
+			if (seed.moody_lights)
+				S.update_moody_light_index("plant", seed.plant_dmi, "[plant_appearance]-moody")
+			else if (seed.biolum)
+				var/image/luminosity_gradient = image(icon, src, "moody_plant_mask")
+				luminosity_gradient.blend_mode = BLEND_INSET_OVERLAY
+				var/image/mask = image(seed.plant_dmi, src, plant_appearance)
+				mask.appearance_flags = KEEP_TOGETHER
+				mask.overlays += luminosity_gradient
+				S.update_moody_light_index("plant", image_override = mask)
+
 			if(seed.biolum)
-				S.set_light(round(seed.potency/10))
+				S.set_light(get_biolum())
 				if(seed.biolum_colour)
 					S.light_color = seed.biolum_colour
 
@@ -335,7 +402,10 @@
 		var/obj/item/seeds/seeds = seed.spawn_seed_packet(get_turf(user))
 		if(arcanetampered)
 			seeds.arcanetampered = arcanetampered
-		to_chat(user, "You take a sample from the [seed.display_name].")
+		if(closed_system)
+			to_chat(user, "You carefully pass \the [O] through the tray's access port, and take a sample from the [seed.display_name].")
+		else
+			to_chat(user, "You take a sample from the [seed.display_name].")
 		add_planthealth(-rand(3,5)*10)
 
 		if(prob(30))
@@ -350,7 +420,10 @@
 	else if (ishoe(O))
 
 		if(get_weedlevel() > 0)
-			user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You remove the weeds from the [src].</span>")
+			if(closed_system)
+				user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You pass \the [O] through the access port and remove the weeds from the [src].</span>")
+			else
+				user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You remove the weeds from the [src].</span>")
 			weedlevel = 0
 			update_icon()
 		else
@@ -369,27 +442,11 @@
 	else if(istype(O, /obj/item/weapon/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.
 
-	else if(O.is_wrench(user) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
+	else if(O.is_wrench(user) && is_soil) //Soil isn't a portable atmospherics machine by any means
 		return //Don't call parent. I mean, soil shouldn't be a child of portable_atmospherics at all, but that's not very feasible.
 
-	else if(istype(O, /obj/item/apiary))
-
-		if(seed)
-			to_chat(user, "<span class='alert'>[src] is already occupied!</span>")
-		else
-			user.drop_item(O, force_drop = 1)
-			var/obj/item/apiary/IA = O
-			var/obj/machinery/apiary/A = new IA.buildtype(src.loc)
-			A.itemform = O
-			O.forceMove(A)
-			A.icon = src.icon
-			A.icon_state = src.icon_state
-			A.hydrotray_type = src.type
-			A.component_parts = component_parts.Copy()
-			A.contents = contents.Copy()
-			contents.len = 0
-			component_parts.len = 0
-			qdel(src)
+	else if(istype(O, /obj/item/apiary))//Because not everyone is gonna read the changelog
+		to_chat(user,"<span class='warning'>[is_soil ? "" : "You're not sure why you'd put an apiary in an hydroponics tray of all things. Like, it doesn't really makes much sense does it? "]You should build the kit directly on top of the floor.</span>")
 
 	else if((O.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE)) && harvest)
 		if(arcanetampered)
@@ -405,12 +462,24 @@
 	else
 		return ..()
 
+/obj/machinery/portable_atmospherics/hydroponics/proc/get_biolum()
+	return (1 + Ceiling(seed.potency/10))
+
+/obj/machinery/portable_atmospherics/hydroponics/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS)
+	. = ..()
+	if (.)
+		power_change()//calls update_icon()
+
 /obj/machinery/portable_atmospherics/hydroponics/slime_act(primarytype,mob/user)
 	..()
 	if(primarytype == /mob/living/carbon/slime/green)
 		has_slime=1
 		to_chat(user, "You attach the slime extract to \the [src]'s internal mechanisms.")
 		return TRUE
+
+/obj/machinery/portable_atmospherics/hydroponics/wind_act(var/differential, var/list/connecting_turfs)
+	if (seed)
+		seed.wind_act(src, differential, connecting_turfs)
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
 	if(harvest)
@@ -458,6 +527,12 @@
 	else
 		examine(user) //using examine() to display the reagents inside the tray as well
 
+/obj/machinery/portable_atmospherics/hydroponics/reagent_transfer_message(var/transfer_amt)
+	if (closed_system)
+		return "<span class='notice'>You open \the [src.name]'s injection port and transfer [transfer_amt] units of the solution in it.</span>"
+	else
+		return "<span class='notice'>You transfer [transfer_amt] units of the solution to \the [src.name].</span>"
+
 /obj/machinery/portable_atmospherics/hydroponics/examine(mob/user)
 	..()
 	view_contents(user)
@@ -470,7 +545,7 @@
 	else if(seed && dead)
 		to_chat(user, "[src] is full of dead plant matter.")
 	else
-		to_chat(user, "[src] has nothing planted.")
+		to_chat(user, "You can grow plants in there.[(is_soil||is_plastic) ? "" : " It's full of sensors that will inform you of the plant's well-being"]")
 	if (Adjacent(user) || isobserver(user) || issilicon(user) || hydrovision(user))
 		to_chat(user, "Water: [get_waterlevel()]/100")
 		if(seed && seed.toxin_affinity >= 5)
@@ -495,12 +570,12 @@
 			if(missing_gas)
 				to_chat(user, "The tray's <span class='alert'>improper gas environment alert</span> is blinking.")
 
-		if(!istype(src,/obj/machinery/portable_atmospherics/hydroponics/soil))
+		if(!is_soil && !is_plastic)
 
 			var/turf/T = loc
 			var/datum/gas_mixture/environment
 
-			if(closed_system && (connected_port || holding))
+			if(closed_system)
 				environment = air_contents
 
 			if(!environment)
@@ -523,6 +598,21 @@
 			var/mob/living/carbon/human/H = user
 			to_chat(user, "<span class='good'>Would you like to know more?</span> <a href='?src=\ref[H.glasses];scan=\ref[src]'>\[Scan\]</a>")
 
+/obj/machinery/portable_atmospherics/hydroponics/proc/receive_pulse(var/pulse_strength)
+	if (seed && !closed_system)//if the lid is closed, the plant is radiation immune.
+		pulse_strength /= 50
+		if (prob(pulse_strength))
+			if (age <= 4)
+				//young plants mutate more easily
+				if (length(seed.mutants))
+					mutate_species()
+				else
+					mutate()
+			else if (prob(pulse_strength/2))
+				//older plants have between 1.125% and 1.875% chance to mutate per burst
+				//at 15 burst total this amounts to about 19% chance of at least one small mutation occurring
+				mutate()
+
 /obj/machinery/portable_atmospherics/hydroponics/proc/hydrovision(mob/user)
 	hydro_hud_scan(user, src)
 	return FALSE
@@ -534,16 +624,36 @@
 
 	if(!usr || usr.isUnconscious() || usr.restrained())
 		return
-
+	if (lid_toggling)
+		return
+	lid_toggling = 1
+	add_fingerprint(usr)
 	closed_system = !closed_system
 	to_chat(usr, "You [closed_system ? "close" : "open"] the tray's lid.")
-	if(closed_system)
-		flags &= ~OPENCONTAINER
-	else
-		flags |= OPENCONTAINER
 
-	update_icon()
-	add_fingerprint(usr)
+	var/cargo_cart_offset = 0
+	if (istype(locked_to,/obj/machinery/cart/cargo))
+		cargo_cart_offset = CARGO_CART_OFFSET
+
+	if (closed_system)
+		anim(target = src, a_icon = icon, flick_anim = "back_anim", sleeptime = 5, lay = HYDROPONIC_TRAY_BACK_LID_LAYER+cargo_cart_offset, offY = pixel_y)
+		anim(target = src, a_icon = icon, flick_anim = "front_anim", sleeptime = 5, lay = HYDROPONIC_TRAY_FRONT_LID_LAYER+cargo_cart_offset, offY = pixel_y)
+		playsound(src, 'sound/machines/pressurehiss.ogg', 20, 1)
+		spawn(5)
+			playsound(src, 'sound/items/Deconstruct.ogg', 20, 1)
+			lid_toggling = 0
+			update_icon()
+	else
+		lid_toggling = 2
+		update_icon()
+		playsound(src, 'sound/effects/turret/open.wav', 20, 1)
+		playsound(src, 'sound/items/Deconstruct.ogg', 20, 1)
+		anim(target = src, a_icon = icon, flick_anim = "back_anim_rewind", sleeptime = 5, lay = HYDROPONIC_TRAY_BACK_LID_LAYER+cargo_cart_offset, offY = pixel_y)
+		anim(target = src, a_icon = icon, flick_anim = "front_anim_rewind", sleeptime = 5, lay = HYDROPONIC_TRAY_FRONT_LID_LAYER+cargo_cart_offset, offY = pixel_y)
+		spawn(5)
+			playsound(src, 'sound/machines/click.ogg', 20, 1)
+			lid_toggling = 0
+
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/light_toggle()
 	set name = "Toggle Light"
@@ -552,7 +662,9 @@
 	if(!usr || usr.isUnconscious() || usr.restrained())
 		return
 	light_on = !light_on
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	check_light()
+	update_icon()
 	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/set_label()
@@ -575,6 +687,10 @@
 	..()
 	update_name()
 
+/obj/machinery/portable_atmospherics/hydroponics/variable_edited(variable_name, old_value, new_value)
+	.=..()
+	update_icon()
+
 /obj/machinery/portable_atmospherics/hydroponics/HasProximity(mob/living/simple_animal/M)
 	if(seed && !dead && seed.voracious == 2 && age > seed.maturation)
 		if(istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/hostile/lizard) && !M.locked_to && !M.anchored)
@@ -592,10 +708,44 @@
 						add_nutrientlevel(6)
 						update_icon()
 
-/obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/usr)
-	if((usr.incapacitated() || !Adjacent(usr)))
+/obj/machinery/portable_atmospherics/hydroponics/CtrlClick(var/mob/user)
+	if (anchored)
+		if((usr.incapacitated() || !Adjacent(usr)))
+			return
+		close_lid()
+	else
+		..()
+
+/obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/user)
+	if(!is_soil && !is_plastic && (isAdminGhost(user) || (!user.incapacitated() && Adjacent(user) && user.dexterity_check())))
+		if(issilicon(user) && !attack_ai(user))
+			return ..()
+		var/list/choices = list(
+			list("Toggle Tray Lid", "radial_lid"),
+			list("Toggle Light", "radial_light"),
+			list("Set Tray Label", "radial_label"),
+		)
+
+		var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, nameof(src::radial_check()), user))
+		if(!radial_check(usr))
+			return
+
+		switch(task)
+			if("Toggle Tray Lid")
+				close_lid()
+			if("Toggle Light")
+				light_toggle()
+			if("Set Tray Label")
+				set_label()
 		return
-	close_lid()
+	return ..()
+
+/obj/machinery/portable_atmospherics/hydroponics/proc/radial_check(mob/living/user)
+	if(!istype(user))
+		return FALSE
+	if(user.incapacitated() || !user.Adjacent(src))
+		return FALSE
+	return TRUE
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/bad_stuff()
 	var/list/things = list()
@@ -608,5 +758,13 @@
 			if (chemical_id in reagents_to_log)
 				things += chemical_id
 	return english_list(things, "nothing")
+
+/obj/machinery/portable_atmospherics/hydroponics/on_reagent_change()
+	. = ..()
+	delayed_update_icon = 1
+	spawn(1)
+		//since reagents might change multiple times during a tick as they get processed, let's wait for the tick after they've all been processed.
+		//thanks to last_update_icon, this call should regardless only happen once per tick.
+		update_icon()
 
 /datum/locking_category/hydro_tray

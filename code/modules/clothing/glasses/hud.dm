@@ -73,26 +73,15 @@
 /obj/item/clothing/glasses/hud/health/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, /obj/item/clothing/glasses/hud/security/scouter))
-		var/worn = FALSE
-		if(user.is_wearing_item(src, slot_glasses))
-			worn = TRUE
 		if(do_after(user, src, 1 SECONDS))
-			user.drop_item(src)
-			if(!user.drop_item(W))
-				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
-				return
-			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed(hhud = src, shud = W)
-			W.transfer_fingerprints_to(I)
-			I.base_health = src
-			I.base_sec = W
-			W.forceMove(I)
-			src.forceMove(I)
+			var/worn = FALSE
+			if(user.is_wearing_item(src, slot_glasses))
+				worn = TRUE
+			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed(loc, src, W)
+			user.create_in_hands(src, I, W, move_in = TRUE, msg = "<span class='notice'>You synchronize \the [W] with \the [src].</span>")
 			var/mob/living/carbon/human/H = user
 			if(worn && istype(H))
 				H.equip_to_slot_if_possible(I,slot_glasses,EQUIP_FAILACTION_DROP)
-			else
-				user.put_in_hands(I)
-			to_chat(user, "<span class='notice'>You synchronize \the [W] with \the [src].</span>")
 
 /obj/item/clothing/glasses/hud/health/cmo
 	name = "advanced health scanner HUD"
@@ -179,26 +168,7 @@
 /obj/item/clothing/glasses/hud/security/scouter/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, /obj/item/clothing/glasses/hud/health))
-		var/worn = FALSE
-		if(user.is_wearing_item(src, slot_glasses))
-			worn = TRUE
-		if(do_after(user, src, 1 SECONDS))
-			user.drop_item(src)
-			if(!user.drop_item(W))
-				to_chat(user, "<span class='warning'>You can't let go of \the [W].</span>")
-				return
-			var/obj/item/clothing/glasses/hud/combinedsecmed/I = new /obj/item/clothing/glasses/hud/combinedsecmed(hhud = W, shud = src)
-			W.transfer_fingerprints_to(I)
-			I.base_health = W
-			I.base_sec = src
-			W.forceMove(I)
-			src.forceMove(I)
-			var/mob/living/carbon/human/H = user
-			if(worn && istype(H))
-				H.equip_to_slot_if_possible(I,slot_glasses,EQUIP_FAILACTION_DROP)
-			else
-				user.put_in_hands(I)
-			to_chat(user, "<span class='notice'>You synchronize \the [W] with \the [src].</span>")
+		W.attackby(src, user)
 
 
 /obj/item/clothing/glasses/hud/security/jensenshades

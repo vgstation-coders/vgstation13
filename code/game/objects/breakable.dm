@@ -136,14 +136,7 @@
 
 /obj/item/transfer_obj_blood_data(obj/item/A, obj/item/B)
 	..()
-	if(!blood_overlays[B.type]) //If there isn't a precreated blood overlay make one
-		B.set_blood_overlay()
-	if(B.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
-		B.overlays.Remove(B.blood_overlay)
-	else
-		B.blood_overlay = blood_overlays["[B.type][B.icon_state]"]
-	B.blood_overlay.color = B.blood_color
-	B.overlays += B.blood_overlay
+	B.set_blood_overlay()
 
 /obj/proc/generate_break_text(glanced = FALSE, suppress_glance_text) //Generates text for when an object is hit.
 	if(glanced)

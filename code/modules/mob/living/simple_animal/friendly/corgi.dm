@@ -64,10 +64,11 @@
 	spinaroo(spin_emotes)
 	. = ..()
 	nutrition = max(nutrition-hunger_rate, 0)
-	if(nutrition > 150 && health < maxHealth)
-		nutrition = nutrition-10 //Heal by spending nutrition
-		health++
-	if(nutrition < 150 && prob(15))
+	if(.)
+		if(nutrition > 150 && health < maxHealth)
+			nutrition = nutrition-10 //Heal by spending nutrition
+			health++
+	if(nutrition < 150 && prob(1))
 		for(var/mob/living/carbon/human/H in view(7, src))
 			if(H.client)
 				emote("me", 1, "whines hungrily.") //Only whine if we see a human with a client in our view
@@ -533,6 +534,16 @@
 
 /mob/living/simple_animal/corgi/Ian/narsie/cultify()
 	health = maxHealth
+
+/mob/living/simple_animal/corgi/Ian/narsie/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if(istype(O, /obj/item/weapon/storage/bible))
+		var/turf/T = get_turf(src)
+		playsound(T, 'sound/effects/bonk.ogg', 80, 1)
+		new /mob/living/simple_animal/corgi/Ian(T)
+		anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "deconversion", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+		qdel(src)
+		return
+	..()
 
 /mob/living/simple_animal/corgi/regenerate_icons()
 	overlays = list()

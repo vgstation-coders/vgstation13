@@ -131,6 +131,8 @@
 /datum/gas_mixture/proc/thermal_energy()
 	return temperature * heat_capacity()
 
+/datum/gas_mixture/proc/molar_ratio(g) //ratio of moles of the input gas to total mols of all gasses in the area
+	return total_moles && (src[g] / total_moles) //&& short circuits if total_moles is 0, and returns the second expression if it is not.
 
 /datum/gas_mixture/proc/molar_density(g) //Per liter. You should probably be using pressure instead, but considering this had to be made, you wouldn't be the first not to.
 	return (g ? src[g] : total_moles) / volume

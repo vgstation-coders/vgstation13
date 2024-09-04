@@ -60,7 +60,7 @@
 		icon_state = "candle[i]"
 	wick.icon_state = "[icon_state]-wick"
 	overlays += wick
-	update_blood_overlay()
+	set_blood_overlay()
 	if (lit)
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.appearance_flags = RESET_COLOR
@@ -170,7 +170,7 @@
 		return
 	update_icon()
 	if(istype(T)) //Start a fire if possible
-		T.hotspot_expose(source_temperature, 5, surfaces = 0)
+		try_hotspot_expose(source_temperature, SMALL_FLAME, 0)
 
 /obj/item/candle/attack_self(mob/user as mob)
 	if(lit)

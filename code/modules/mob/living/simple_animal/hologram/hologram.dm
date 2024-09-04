@@ -5,12 +5,16 @@
 	icon_state = "holo2"
 	icon_living = "holo2"
 	icon_dead = null
+	min_oxy = 0
+	max_tox = 0
+	max_co2 = 0 //we're made of light we don't have lungs
 	mob_property_flags = MOB_HOLOGRAPHIC
 	var/atom/atom_to_mimic
 	var/login_text = "You are a hologram. You can perform a few basic functions, and are unable to leave the holodeck.\
 		\n<span class='danger'>You know nothing of this station or its crew except what you learn from this point on.</span>\
 		\n<span class='danger'>Do not damage the holodeck. Do not harm crew members without their consent.</span>"
 	blooded = FALSE
+	var/holodeck_bound = TRUE
 
 /mob/living/simple_animal/hologram/death(var/gibbed = FALSE)
 	..(gibbed)
@@ -112,7 +116,8 @@
 /mob/living/simple_animal/hologram/advanced/Life()
 	..()
 	regular_hud_updates()
-	if(!istype(get_area(src), /area/holodeck) || (mind && !client))
+
+	if(holodeck_bound && !istype(get_area(src), /area/holodeck) || (mind && !client))
 		dissipate()
 
 /mob/living/simple_animal/hologram/proc/dissipate()

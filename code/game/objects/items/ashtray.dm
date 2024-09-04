@@ -33,8 +33,7 @@
 			P.update_brightness()
 			add_fingerprint(user)
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return
 		var/obj/item/clothing/mask/cigarette/cig = W
 		if(istype(cig, /obj/item/trash/cigbutt))
@@ -92,7 +91,7 @@
 	w_type = RECYK_PLASTIC
 	empty_desc = "Cheap plastic ashtray."
 	throwforce = 3
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 
 /obj/item/ashtray/plastic/die()
 	..()

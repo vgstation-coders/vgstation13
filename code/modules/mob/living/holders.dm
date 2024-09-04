@@ -173,6 +173,11 @@
 	desc = "Pretty heavy!"
 	item_state = "cow"
 
+/obj/item/weapon/holder/animal/chocolatecow
+	name = "chocolate cow holder"
+	desc = "Where else would chocolate milk come from?"
+	item_state = "cow"
+
 //CATS
 
 /obj/item/weapon/holder/animal/cat

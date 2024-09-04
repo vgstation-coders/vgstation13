@@ -14,7 +14,9 @@ var/list/special_fruits = list()
 	var/hydroflags = 0
 	var/datum/seed/seed
 	var/fragrance
-	autoignition_temperature = AUTOIGNITION_FABRIC
+	var/blunttype = /obj/item/clothing/mask/cigarette/blunt/rolled
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 
 	icon = 'icons/obj/hydroponics/apple.dmi'
 	icon_state = "produce"
@@ -112,6 +114,8 @@ var/list/special_fruits = list()
 	if(seed.juicy)
 		splat_decal(get_turf(hit_atom))
 		splat_reagent_reaction(get_turf(hit_atom),user)
+		var/splasharea = (seed.juicy*ceil(seed.potency/100)) //2 at 200 potency
+		reagents.splashplosion(splasharea, TRUE)
 		visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
 		return
@@ -338,14 +342,28 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	desc = "\"I'll sweeten thy sad grave: thou shalt not lack the flower that's like thy face, pale primrose, nor the azured hare-bell, like thy veins; no, nor the leaf of eglantine, whom not to slander, out-sweeten’d not thy breath.\""
 	potency = 1
 	filling_color = "#D4B2C9"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "harebell"
 	plantname = "harebells"
 	fragrance = INCENSE_HAREBELLS
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/dandelion
+	name = "dandelion"
+	desc = "A vibrant yellow flower, but smells like a wet dog."
+	potency = 1
+	filling_color = "#FECC23"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "dandelion"
+	plantname = "dandelions"
+	fragrance = INCENSE_LEAFY
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/moonflower
 	name = "moonflower"
 	desc = "Store in a location at least 50 yards away from werewolves."
 	potency = 25
 	filling_color = "#E6E6FA"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
+	item_state = "moonflower"
 	plantname = "moonflowers"
 	fragrance = INCENSE_MOONFLOWERS
 	slot_flags = SLOT_HEAD
@@ -507,15 +525,10 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/paper))
-		qdel(O)
-		to_chat(user, "<span class='notice'>You roll a blunt out of \the [src].</span>")
-		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(src.loc)
-		B.name = "[src.name] blunt"
-		B.filling = "[src.name]"
-		reagents.trans_to(B, (reagents.total_volume))
-		user.put_in_hands(B)
-		user.drop_from_inventory(src)
-		qdel(src)
+		var/createmsg = "blunt out of \the [src]"
+		if(blunttype == /obj/item/clothing/mask/cigarette/blunt/deus/rolled)
+			createmsg = "godly blunt"
+		user.create_in_hands(src, new blunttype(src.loc, src), O, msg = "<span class='notice'>You roll a [createmsg].</span>")
 	else
 		return ..()
 
@@ -525,19 +538,7 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	potency = 10
 	filling_color = "#229E11"
 	plantname = "ambrosiadeus"
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/paper))
-		qdel(O)
-		to_chat(user, "<span class='notice'>You roll a godly blunt.</span>")
-		var/obj/item/clothing/mask/cigarette/blunt/deus/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/deus/rolled(src.loc)
-		reagents.trans_to(B, (reagents.total_volume))
-		B.light_color = filling_color
-		user.put_in_hands(B)
-		user.drop_from_inventory(src)
-		qdel(src)
-	else
-		return ..()
+	blunttype = /obj/item/clothing/mask/cigarette/blunt/deus/rolled
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/apple
 	name = "apple"
@@ -581,6 +582,13 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 		new /obj/item/clothing/head/pumpkinhead(get_turf(src)) //Don't move it
 		qdel(src)
 		return
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin/squash
+	name = "slammed squash"
+	desc = "Sometimes used to stop zombies invading your lawn."
+	potency = 10
+	filling_color = "#F5CD62"
+	plantname = "squash"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/lime
 	name = "lime"
@@ -1019,26 +1027,13 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 		return
 	verbs -= /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf
 	switching = 0
-	var/N = rand(1,3)
 	if(get_turf(user))
-		switch(N)
-			if(1)
-				playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
-			if(2)
-				playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
-			if(3)
-				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
+		playsound(user, "sound/weapons/genhit[rand(1,3)].ogg", 50, 1)
 	if(W)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
 	else
 		user.visible_message("[user] smacks \the [src].","You smack \the [src].")
-	if(src.loc == user)
-		user.drop_item(src, force_drop = 1)
-		var/I = new current_path(get_turf(user))
-		user.put_in_hands(I)
-	else
-		new current_path(get_turf(src))
-	qdel(src)
+	user.create_in_hands(src,current_path)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/avocado
 	name = "avocado"
@@ -1059,27 +1054,12 @@ var/list/strange_seed_product_blacklist = subtypesof(/obj/item/weapon/reagent_co
 	..()
 	if(W.sharpness_flags & SHARP_BLADE)
 		if(cut && cant_eat_msg)
-			user.visible_message("\The [user] removes the pit from \the [src] with \the [W].","You remove the pit from \the [src] with \the [W].")
-			new /obj/item/seeds/avocadoseed/whole(get_turf(user))
-			if(loc == user)
-				if(src in user.held_items)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted/P = new(get_turf(src))
-					user.put_in_hands(P)
-					qdel(src)
-					return
-			new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src))
-			qdel(src)
+			new /obj/item/seeds/avocadoseed/whole(loc)
+			new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(loc)
+			user.create_in_hands(src, /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted, vismsg = "\The [user] removes the pit from \the [src] with \the [W].", msg = "You remove the pit from \the [src] with \the [W].")
 		else if(!cut)
-			user.visible_message("\The [user] slices \the [src] in half with \the [W].","You slice \the [src] in half with \the [W].")
 			var/list/halves = list(new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut(get_turf(src)), new /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut/pitted(get_turf(src)))
-			if(loc == user)
-				if(src in user.held_items)
-					user.drop_item(src, force_drop = 1)
-					user.put_in_hands(pick(halves))
-					qdel(src)
-					return
-			qdel(src)
+			user.create_in_hands(src, pick(halves), vismsg = "\The [user] slices \the [src] in half with \the [W].", msg = "You slice \the [src] in half with \the [W].")
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/avocado/cut
 	name = "avocado half"

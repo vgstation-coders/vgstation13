@@ -501,6 +501,7 @@ var/global/msg_id = 0
 			(istype(I,/obj/item/weapon/spacecash) && id && id.virtual_wallet)
 
 /obj/item/device/pda/quick_store(var/obj/item/I,mob/user)
+	..()
 	return !(attackby(I,user))
 
 /obj/item/device/pda/proc/add_to_virtual_wallet(var/amount, var/mob/user, var/atom/giver)
@@ -540,7 +541,7 @@ var/global/msg_id = 0
 		M.show_message("<span class='warning'>Your [src] explodes!</span>", 1)
 
 	if(T)
-		T.hotspot_expose(700,125,surfaces=istype(loc,/turf))
+		try_hotspot_expose(700,SMALL_FLAME,0)
 
 		explosion(T, -1, -1, 2, 3, whodunnit = user)
 

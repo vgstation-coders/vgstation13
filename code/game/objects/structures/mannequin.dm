@@ -783,7 +783,7 @@
 				bloodsies.color	 = clothToUpdate.blood_color
 				mannequin_overlay.overlays += bloodsies
 
-		clothToUpdate.generate_accessory_overlays(mannequin_overlay)
+		clothToUpdate.generate_accessory_overlays(mannequin_overlay, species)
 
 		if(istype(clothToUpdate,/obj/item/clothing/head))
 			var/obj/item/clothing/head/hat = clothToUpdate
@@ -820,7 +820,7 @@
 						bloodsies.color	= above.blood_color
 						bloodsies.pixel_y = (2 * i) * PIXEL_MULTIPLIER
 						mannequin_overlay.overlays += bloodsies
-				//above.generate_accessory_overlays(O)
+				//above.generate_accessory_overlays(O, species)
 				i++
 
 /obj/structure/mannequin/proc/update_icon_hand(mutable_appearance/hand_overlay, index)
@@ -1026,8 +1026,10 @@
 	health = 30
 	maxHealth = 30
 	trueForm = /mob/living/simple_animal/hostile/mannequin/wood
-	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 2.5
+	w_class = W_CLASS_HUGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
+
 
 /obj/structure/mannequin/wood/New(turf/loc, var/f_style, var/h_style, var/list/items_to_wear, var/list/items_to_hold, var/mob_to_capture)
 	..()
@@ -1214,8 +1216,10 @@
 		"vox"		=	/obj/structure/mannequin/wood/vox,
 		"corgi"		=	/obj/structure/mannequin/wood/corgi,
 		)
-	autoignition_temperature = AUTOIGNITION_WOOD
-	fire_fuel = 5
+	w_class = W_CLASS_HUGE
+	w_type = RECYK_WOOD
+	flammable = TRUE
+
 
 
 

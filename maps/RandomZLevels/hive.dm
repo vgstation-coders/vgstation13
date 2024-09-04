@@ -58,7 +58,7 @@
 	/obj/item/weapon/gun/stickybomb,
 	/obj/item/weapon/gun/projectile/rocketlauncher/nikita,
 	/obj/item/weapon/cloakingcloak/hive,
-	/obj/item/weapon/invisible_spray,
+	/obj/item/weapon/syndie_spray/invisible_spray,
 	/obj/item/clothing/gloves/powerfist,
 	/obj/item/clothing/glasses/hud/thermal/eyepatch
 	)

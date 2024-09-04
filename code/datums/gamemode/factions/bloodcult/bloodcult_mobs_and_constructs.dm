@@ -13,6 +13,13 @@
 	var/turf/crashing = null
 	spell_on_use_inhand = /spell/juggerdash //standard jug gets forcewall, but this seems better for perfect
 
+/mob/living/simple_animal/construct/armoured/perfect/special_thrown_behaviour()
+	dash_dir = dir
+	throwing = 2//dashing through windows and grilles
+
+/mob/living/simple_animal/construct/armoured/perfect/get_afterimage()
+	return "red"
+
 /mob/living/simple_animal/construct/armoured/perfect/to_bump(var/atom/obstacle)
 	if(src.throwing)
 		var/breakthrough = 0
@@ -836,3 +843,43 @@ var/list/astral_projections = list()
 				0,0,1,0,
 				0,0,0,1,
 				0,0,0,0)
+
+
+////////////////////Harvester/////////////////////////
+
+
+/mob/living/simple_animal/construct/harvester/perfect
+	desc = "The reward of those who sacrificed their life so that Nar-Sie could rise."
+	icon_state = "harvester2"
+	icon_living = "harvester2"
+	icon_dead = "harvester2"
+
+	var/ready = FALSE
+
+	construct_spells = list(
+			/spell/targeted/harvest,
+			/spell/aoe_turf/knock/harvester,
+		)
+
+
+/mob/living/simple_animal/construct/harvester/perfect/New()
+	..()
+	flick("harvester2_spawn",src)
+	spawn(10)
+		ready = TRUE
+		if (mind)
+			var/datum/role/streamer/streamer_role = mind.GetRole(STREAMER)
+			if(streamer_role && streamer_role.team == ESPORTS_CULTISTS)
+				if(streamer_role.followers.len == 0 && streamer_role.subscribers.len == 0) //No followers and subscribers, use normal cult colors.
+					construct_color = rgb(235,0,0) // STREAMER (no subs) -> RED
+				else
+					construct_color = rgb(30,255,30) // STREAMER (with subs) -> GREEN
+			else
+				construct_color = rgb(235,0,0)
+		else
+			construct_color = rgb(235,0,0)
+		update_icons()
+
+/mob/living/simple_animal/construct/harvester/perfect/update_icons()
+	if (ready)
+		..()

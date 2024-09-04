@@ -4,7 +4,7 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "taclight"
 	accessory_exclusion = ACCESSORY_LIGHT
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = FALSE
 	var/obj/item/device/flashlight/tactical/source_light
 	ignoreinteract = TRUE
 
@@ -120,7 +120,7 @@
 
 /obj/item/clothing/accessory/taclight/proc/update_brightness(obj/item/clothing/C)
 	if(src.source_light && src.source_light.on)
-		C.set_light(src.source_light.brightness_on)
+		C.set_light(src.source_light.range_on, src.source_light.brightness_on)
 	else
 		C.set_light(0)
 	update_icon()

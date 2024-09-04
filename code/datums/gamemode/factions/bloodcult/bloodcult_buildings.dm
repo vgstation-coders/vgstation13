@@ -108,7 +108,11 @@
 	//			playsound(src, W.hitsound, 50, 1, -1)
 			if (sound_damaged)
 				playsound(src, sound_damaged, 75, 1)
-			takeDamage(W.force)
+			if(isholyweapon(W))
+				playsound(loc, 'sound/weapons/welderattack.ogg', 50, 1)
+				takeDamage(W.force*2)
+			else
+				takeDamage(W.force)
 			if (W.attack_verb)
 				visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
 			else
@@ -916,16 +920,16 @@
 		switch(altar_task)
 			if(ALTARTASK_SACRIFICE_HUMAN)
 				var/mob/O = get_locked(lock_type)[1]
-				if (ishuman(O))
-					if (O.mind)
-						C.gain_devotion(500, DEVOTION_TIER_4, "altar_sacrifice_human", O)
-					else//monkey-human
-						C.gain_devotion(200, DEVOTION_TIER_4, "altar_sacrifice_human_nomind", O)
-				else//monkey
-					C.gain_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_monkey", O)
+				if (O.mind)
+					C.gain_devotion(500, DEVOTION_TIER_4, "altar_sacrifice_human", O)
+				else//monkey-human
+					C.gain_devotion(200, DEVOTION_TIER_4, "altar_sacrifice_human_nomind", O)
 			if(ALTARTASK_SACRIFICE_ANIMAL)
 				var/mob/O = get_locked(lock_type)[1]
-				C.gain_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_animal", O)
+				if (ismonkey(O))
+					C.gain_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_monkey", O)
+				else
+					C.gain_devotion(200, DEVOTION_TIER_3, "altar_sacrifice_animal", O)
 
 #undef ALTARTASK_NONE
 #undef ALTARTASK_GEM
@@ -1219,7 +1223,7 @@ var/list/cult_spires = list()
 	if (isturf(loc))
 		var/turf/simulated/L = loc
 		if(istype(L))
-			L.hotspot_expose(TEMPERATURE_FLAME, 125, surfaces = 1)//we start fires in plasma atmos
+			try_hotspot_expose(TEMPERATURE_FLAME, SMALL_FLAME, 0)//we start fires in plasma atmos
 			var/datum/gas_mixture/env = L.return_air()
 			if (env.total_moles > 0)//we cannot manipulate temperature in a vacuum
 				if(env.temperature != set_temperature + T0C)
@@ -1469,7 +1473,7 @@ var/list/cult_spires = list()
 
 /obj/structure/cult/pillar/update_icon()
 	icon_state = "pillar[alt ? "alt": ""]2"
-	set_light(1, 2, LIGHT_COLOR_RED)
+	set_light(1.5, 2.5, LIGHT_COLOR_RED)
 	overlays.len = 0
 	if (health < maxHealth/3)
 		icon_state = "pillar[alt ? "alt": ""]0"
@@ -1659,6 +1663,19 @@ var/list/cult_spires = list()
 			takeDamage(50)
 		if (3)
 			takeDamage(10)
+
+/obj/structure/cult/bloodstone/singularity_act(var/singularity_size=0,var/obj/machinery/singularity/S)
+	switch(singularity_size)
+		if(1 to 4)
+			ex_act(3)
+		if(5 to 8)
+			ex_act(2)
+		if(9 to INFINITY)
+			ex_act(1)
+	return 0
+
+/obj/structure/cult/bloodstone/singularity_pull(S, current_size, repel = FALSE)//we don't want that one to come unanchored
+	return
 
 /obj/structure/cult/bloodstone/update_icon()
 	if (!ready)

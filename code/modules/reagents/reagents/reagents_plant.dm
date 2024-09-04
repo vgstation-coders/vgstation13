@@ -9,6 +9,8 @@
 	density = 0.65
 	specheatcap = 35.37
 	arcane_id = SODIUMCHLORIDE
+	plant_nutrition = 1
+	plant_health = 1
 
 /datum/reagent/diethylamine/ammoniumnitrate
 	name = "Ammonium Nitrate"
@@ -23,8 +25,8 @@
 		return
 	T.reagents.remove_reagent(id, 0.1)
 	if(T.reagents.get_reagent_amount(id) > 0)
-		T.add_nutrientlevel(1)
-		T.add_planthealth(1)
+		T.add_nutrientlevel(plant_nutrition)
+		T.add_planthealth(plant_health)
 		if(prob(10))
 			T.add_pestlevel(-1)
 		if(T.seed && !T.dead)
@@ -57,10 +59,7 @@
 	color = "#A4AF1C" // rgb: 164, 175, 28
 	density = 1.32
 	specheatcap = 0.60
-
-/datum/reagent/fertilizer/eznutrient/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(10)
+	plant_nutrition = 10
 
 /datum/reagent/fertilizer/left4zed
 	name = "Left-4-Zed"
@@ -69,6 +68,7 @@
 	color = "#5B406C" // rgb: 91, 64, 108
 	density = 1.32
 	specheatcap = 0.60
+	plant_nutrition = 10
 
 /datum/reagent/fertilizer/left4zed/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
@@ -77,7 +77,7 @@
 		T = holder.my_atom //Try to find the mob through the holder
 	if(!istype(T)) //Still can't find it, abort
 		return
-	T.add_nutrientlevel(10)
+	T.add_nutrientlevel(plant_nutrition)
 	if(T.reagents.get_reagent_amount(id) >= 1)
 		if(prob(1))
 			T.mutate(GENE_PHYTOCHEMISTRY)
@@ -105,6 +105,9 @@
 	color = "#3E901C" // rgb: 62, 144, 28
 	density = 1.32
 	specheatcap = 0.60
+	plant_nutrition = 1
+	plant_pests = 10
+	plant_weeds = 10
 
 /datum/reagent/fertilizer/robustharvest/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
@@ -115,12 +118,12 @@
 		return
 	T.reagents.remove_reagent(id, 0.1)
 	if(T.reagents.get_reagent_amount(id) > 0)
-		T.add_nutrientlevel(1)
+		T.add_nutrientlevel(plant_nutrition)
 		if(prob(3))
-			T.add_weedlevel(10)
+			T.add_weedlevel(plant_weeds)
 		if(T.seed && !T.dead)
 			if(prob(3))
-				T.add_pestlevel(10)
+				T.add_pestlevel(plant_pests)
 			var/chance = unmix(T.seed.potency, 15, 150)*35
 			if(!T.seed.immutable && prob(chance))
 				T.check_for_divergence(1)
@@ -203,6 +206,7 @@
 	density = 1.08
 	specheatcap = 4.18
 	arcane_id = FERTILIZER
+	plant_pests = -8
 
 /datum/reagent/toxin/insecticide/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
 	if(..())
@@ -227,9 +231,6 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#150A03" //rgb: 21, 10, 3
 
-/datum/reagent/kelotane/tannic_acid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-
 /datum/reagent/dermaline/kathalai
 	name = "Kathalai"
 	id = KATHALAI
@@ -242,9 +243,6 @@
 	description = "Opium is an exceptional natural analgesic."
 	pain_resistance = 80
 	color = "#AE9260" //rgb: 174, 146, 96
-
-/datum/reagent/bicaridine/opium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
 
 /datum/reagent/space_drugs/mescaline
 	name = "Mescaline"
@@ -263,9 +261,6 @@
 	id = COCAINE
 	description = "Cocaine is a powerful nervous system stimulant."
 	color = "#FFFFFF" //rgb: 255, 255, 255
-
-/datum/reagent/hyperzine/cocaine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
 
 /datum/reagent/imidazoline/zeaxanthin
 	name = "Zeaxanthin"
@@ -328,9 +323,6 @@
 	description = "Thymol is used in the treatment of respiratory problems."
 	color = "#790D27" //rgb: 121, 13, 39
 
-/datum/reagent/dexalin/thymol/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-
 /datum/reagent/synthocarisol/phytocarisol
 	name = "Phytocarisol"
 	id = PHYTOCARISOL
@@ -348,5 +340,13 @@
 	id = PHYTOSINE
 	description = "Neurological medication made from mutated herbs."
 	color = "#9000ff" //rgb: 144, 0 255
+
+/datum/reagent/nutriment/dandelion_petals
+	name = "Dandelion Petals Dye"
+	id = DYE_DANDELIONS
+	description = "Dandelion petals mixed into fine pigments, ready for use in arts & crafts."
+	color = "#FECC23" //rgb: 254, 204, 35
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	flags = CHEMFLAG_PIGMENT
 
 //End of plant-specific reagents

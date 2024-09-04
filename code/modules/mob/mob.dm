@@ -21,8 +21,6 @@
 /mob/recycle(var/datum/materials)
 	return RECYK_BIOLOGICAL
 
-/mob/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio)
-
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
 	for(var/datum/mind/mind in heard_by)
 		for(var/M in mind.heard_before)
@@ -213,7 +211,7 @@
 				client.screen -= hud_used.cult_tattoo_display
 			hud_used.cult_tattoo_display = null
 
-/mob/proc/cultify()
+/mob/proc/cultify(var/obj/machinery/singularity/narsie/N)
 	return
 
 /mob/proc/clockworkify()
@@ -543,21 +541,24 @@
 // Used in job equipping so shit doesn't pile up at the start loc.
 /mob/living/carbon/human/proc/equip_or_collect(var/obj/item/W, var/slot)
 	if(!equip_to_slot_or_drop(W, slot))
-		// Do I have a backpack?
-		var/obj/item/weapon/storage/B = back
+		collect_in_backpack(W)
 
-		// Do I have a plastic bag?
-		if(!B)
-			var/index = find_held_item_by_type(/obj/item/weapon/storage/bag/plasticbag)
-			if(index)
-				B = held_items[index]
+/mob/living/carbon/human/proc/collect_in_backpack(var/obj/item/W)
+	// Do I have a backpack?
+	var/obj/item/weapon/storage/B = back
 
-		if(!B)
-			// Gimme one.
-			B=new /obj/item/weapon/storage/bag/plasticbag(null) // Null in case of failed equip.
-			if(!put_in_hands(B,slot_back))
-				return // Fuck it
-		B.handle_item_insertion(W,1)
+	// Do I have a plastic bag?
+	if(!B)
+		var/index = find_held_item_by_type(/obj/item/weapon/storage/bag/plasticbag)
+		if(index)
+			B = held_items[index]
+
+	if(!B)
+		// Gimme one.
+		B=new /obj/item/weapon/storage/bag/plasticbag(null) // Null in case of failed equip.
+		if(!put_in_hands(B,slot_back))
+			return // Fuck it
+	B.handle_item_insertion(W,1)
 
 //The list of slots by priority. equip_to_appropriate_slot() uses this list. Doesn't matter if a mob type doesn't have a slot.
 var/static/list/slot_equipment_priority = list( \
@@ -1235,8 +1236,8 @@ Use this proc preferably at the end of an equipment loadout
 	set name = "Github Report"
 	set category = "OOC"
 	var/dat = {"	<title>/vg/station Github Ingame Reporting</title>
-					Revision: [return_revision()]
-					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
+					Version: [byond_version].[byond_build] Revision: [return_revision()]
+					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]&byondver=[byond_version].[byond_build]&revision=[return_revision()]' style='border:none' width='480' height='480' scroll=no></iframe>"}
 	src << browse(dat, "window=github;size=480x480")
 
 /client/verb/changes()
@@ -1268,6 +1269,13 @@ Use this proc preferably at the end of an equipment loadout
 	if(prefs.lastchangelog != changelog_hash)
 		prefs.SetChangelog(ckey, changelog_hash)
 		winset(src, "rpane.changelog", "background-color=none;font-style=;")
+
+/client/verb/check_my_byond_version()
+	set name = "Check My BYOND Version"
+	set category = "OOC"
+	var/output = {"Your BYOND version is: <b>[byond_version].[byond_build]</b><br>
+		You can view all of the latest server-compatible BYOND builds here: https://www.byond.com/download/build/[world.byond_version]/"}
+	usr << browse(output, "window=byond-version-data");
 
 /mob/verb/observe()
 	set name = "Observe"
@@ -1347,13 +1355,16 @@ Use this proc preferably at the end of an equipment loadout
 	set category = "IC"
 	unset_machine()
 	reset_view(null)
-	if(istype(src, /mob/living))
-		var/mob/living/M = src
-		if(M.cameraFollow)
-			M.cameraFollow = null
-		if(istype(src, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = M
-			H.handle_regular_hud_updates()
+	if(ishuman(src))
+		var/mob/living/carbon/human/H = src
+		H.handle_regular_hud_updates()
+
+/mob/living/silicon/ai/cancel_camera()
+	set name = "Cancel Camera View"
+	set category = "IC"
+	stop_ai_tracking()
+	unset_machine()
+	reset_view(null)
 
 // http://www.byond.com/forum/?post=2219001#comment22205313
 // TODO: Clean up and identify the args, document
@@ -2230,6 +2241,9 @@ Use this proc preferably at the end of an equipment loadout
 	if(src.client && src.client.media && !src.client.media.forced)
 		spawn()
 			src.update_music()
+
+/mob/proc/isUnholy()
+	return (isanycultist(src) || isvampire(src))
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

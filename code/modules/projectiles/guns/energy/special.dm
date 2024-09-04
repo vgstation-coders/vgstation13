@@ -287,7 +287,7 @@
 				H.zombify(arcanetampered ? null : user)
 		else
 			success = FALSE
-			
+
 	else if(istype(target, /mob/living/simple_animal/hostile/necro/zombie/))
 		success = TRUE
 		var/mob/living/simple_animal/S = target
@@ -447,132 +447,6 @@
 		projectile_type = "/obj/item/projectile/swap/advanced"
 	else
 		projectile_type = initial(projectile_type)
-
-/obj/item/weapon/gun/energy/floragun
-	name = "floral somatoray"
-	desc = "A tool that discharges controlled radiation which induces mutation in plant cells."
-	icon_state = "floramut100"
-	item_state = null
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	charge_cost = 100
-	projectile_type = "/obj/item/projectile/energy/floramut"
-	origin_tech = Tc_MATERIALS + "=2;" + Tc_BIOTECH + "=3;" + Tc_POWERSTORAGE + "=3"
-	mech_flags = null // So it can be scanned by the Device Analyser
-	modifystate = "floramut"
-	var/charge_tick = 0
-	var/mode = 1
-	var/list/genes = list(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_DEVELOPMENT, GENE_XENOPHYSIOLOGY)
-	var/emagged = FALSE
-	var/isSomatoraying = FALSE
-
-/obj/item/weapon/gun/energy/floragun/isHandgun()
-	return TRUE
-
-/obj/item/weapon/gun/energy/floragun/New()
-	..()
-	processing_objects.Add(src)
-
-/obj/item/weapon/gun/energy/floragun/Destroy()
-	processing_objects.Remove(src)
-	..()
-
-/obj/item/weapon/gun/energy/floragun/process()
-	charge_tick++
-	if(charge_tick < 4)
-		return 0
-	charge_tick = 0
-	if(!power_supply)
-		return 0
-	power_supply.give(100)
-	update_icon()
-	return 1
-
-/obj/item/weapon/gun/energy/floragun/attack_self(mob/living/user as mob)
-	//loops through all genes
-	mode = mode % length(genes) + 1
-	to_chat(user, "<span class='warning'>\The [src] is now set to modify [genes[mode]] traits.</span>")
-
-/obj/item/weapon/gun/energy/floragun/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isEmag(W) || issolder(W))
-		if (emagged)
-			to_chat(user, "The safeties are already de-activated.")
-		else
-			emagged = TRUE
-			projectile_type = "/obj/item/projectile/energy/floramut/emag"
-			to_chat(user, "<span class='warning'>You short out the safety limit of the [src.name]!</span>")
-			desc += " It seems to have it's safety features de-activated."
-			playsound(user, 'sound/effects/sparks4.ogg', 50, 1)
-			modifystate = "floraemag"
-			update_icon()
-
-/obj/item/weapon/gun/energy/floragun/attack(atom/movable/target, mob/living/user as mob)
-	afterattack(target,user,1)
-
-/obj/item/weapon/gun/energy/floragun/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
-	afterattack(target,user,1)
-
-/obj/item/weapon/gun/energy/floragun/afterattack(atom/movable/target, mob/living/user, flag, params, struggle = 0)
-	if(isSomatoraying)
-		return
-	isSomatoraying = TRUE
-	if(emagged)
-		if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
-			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-			make_tracker_effects(get_turf(user), get_turf(tray))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
-			if(do_after(user,tray, 10))
-				for(var/gene in genes)
-					if(prob(50))
-						tray.mutate(gene)
-
-		if(ishuman(target))
-			var/mob/living/carbon/human/H = target
-			make_tracker_effects(get_turf(user), get_turf(H))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
-			if((H.species.flags & IS_PLANT))
-				H.apply_radiation((rand(10,30)),RAD_EXTERNAL)
-				H.Knockdown(5)
-				H.Stun(5)
-				user.show_message("<span class='warning'>[H] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
-			else
-				H.show_message("<span class='warning'>The radiation beam singes you!</span>")
-				if(prob(80))
-					randmutb(H)
-					domutcheck(H,null)
-				else
-					H.adjustFireLoss(rand(3, 10))
-					randmutg(H)
-					domutcheck(H,null)
-		if(istype(target, /obj/machinery/apiary))
-			var/obj/machinery/apiary/A = target
-			make_tracker_effects(get_turf(user), get_turf(A))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
-			A.angry_swarm()
-	else
-		if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
-			var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-			make_tracker_effects(get_turf(user), get_turf(tray))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
-			if(do_after(user,tray, 10))
-				if(prob(50))
-					tray.mutate((genes[mode]))
-		if(istype(target, /obj/machinery/apiary))
-			var/obj/machinery/apiary/A = target
-			make_tracker_effects(get_turf(user), get_turf(A))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
-			if(!A.yieldmod)
-				A.yieldmod += 1
-			else if (prob(1/(A.yieldmod * A.yieldmod) *100))//This formula gives you diminishing returns based on yield. 100% with 1 yield, decreasing to 25%, 11%, 6, 4, 2...
-				A.yieldmod += 1
-		if(ishuman(target))
-			var/mob/living/carbon/human/H = target
-			make_tracker_effects(get_turf(user), get_turf(H))
-			playsound(user,'sound/effects/stealthoff.ogg', 50)
-			if((H.species.flags & IS_PLANT) && (H.nutrition < 500))
-				H.nutrition += 30
-			else 
-				H.show_message("<span class='notice'>The radiation beam dissipates harmlessly through your body.</span>")
-	isSomatoraying = FALSE
 
 /obj/item/weapon/gun/energy/meteorgun
 	name = "meteor gun"

@@ -235,6 +235,13 @@
 
 
 	dat += "<br>Accumulated devotion: [total_devotion]"
+	switch(stage)
+		if (BLOODCULT_STAGE_NORMAL)
+			dat += "<br>Eclipse progress: [round((eclipse_progress/eclipse_target)*100)]%"
+		else
+			if (sun && sun.eclipse != ECLIPSE_NOT_YET)
+				var/seconds_to_eclipse = (sun.eclipse_manager.eclipse_start_time - cult_founding_time)/10
+				dat += "<br>Eclipse arrival: [round(seconds_to_eclipse/3600)]h [add_zero(num2text(round(seconds_to_eclipse/60) % 60), 2)]m [add_zero(num2text(round(seconds_to_eclipse) % 60), 2)]s"
 
 	if (cult_won)
 		dat += "<br><font color='green'><B>[end_message]</B></font>"
@@ -322,7 +329,7 @@
 	var/list/valid_rituals = list()
 
 	for (var/datum/bloodcult_ritual/R in possible_rituals)
-		if (R.pre_conditions(src))
+		if (R.pre_conditions())
 			valid_rituals += R
 
 	if (valid_rituals.len < 1)
@@ -414,7 +421,8 @@
 							if (M)
 								to_chat(M, "<span class='sinister'>Someone has completed a ritual, rewarding the entire cult...soon another ritual will take its place.</span>")
 						spawn(10 MINUTES)
-							replace_rituals(ritual_slot)
+							if (!rituals[ritual_slot])
+								replace_rituals(ritual_slot)
 
 #define HUDICON_BLINKDURATION 10
 /datum/faction/bloodcult/update_hud_icons(var/offset = 0,var/factions_with_icons = 0)
@@ -455,6 +463,9 @@
 /datum/faction/bloodcult/proc/UpdateCap()
 	if (stage == BLOODCULT_STAGE_DEFEATED)
 		cultist_cap = 0
+		return
+	if (stage == BLOODCULT_STAGE_NARSIE)
+		cultist_cap = 666
 		return
 	var/living_players = 0
 	var/new_cap = 0
@@ -500,6 +511,58 @@
 	if (R.antag.name in deconverted)
 		deconverted -= R.antag.name
 
+
+/datum/faction/bloodcult/AdminPanelEntry(var/datum/admins/A)
+	var/list/dat = ..()
+
+	dat += "<br>accumulated devotion: [total_devotion]"
+	if (stage == BLOODCULT_STAGE_NORMAL)
+		var/eclipse_remaining = eclipse_target - eclipse_progress
+		var/eclipse_ticks_to_go_at_current_rate = 999999
+		if (eclipse_increments > 0)
+			eclipse_ticks_to_go_at_current_rate = eclipse_remaining / max(0.1, eclipse_increments)
+			if(SSticker.initialized)
+				eclipse_ticks_to_go_at_current_rate *= (SSticker.wait/10)
+			var/hours_to_go = round(eclipse_ticks_to_go_at_current_rate/3600)
+			var/minutes_to_go = add_zero(num2text(round(eclipse_ticks_to_go_at_current_rate/60) % 60), 2)
+			var/seconds_to_go = add_zero(num2text(round(eclipse_ticks_to_go_at_current_rate) % 60), 2)
+			dat += "<br>estimated time until Eclipse: [hours_to_go]h [minutes_to_go]m [seconds_to_go]s"
+		else
+			dat += "<br>with no cultists left around, the Eclipse won't manifest this round."
+	else if (sun && sun.eclipse_manager)
+		var/seconds_to_eclipse = (sun.eclipse_manager.eclipse_start_time - cult_founding_time)/10
+		dat += "<br>the Eclipse arrived after [round(seconds_to_eclipse/3600)]h [add_zero(num2text(round(seconds_to_eclipse/60) % 60), 2)]m [add_zero(num2text(round(seconds_to_eclipse) % 60), 2)]s"
+	dat += "<br>available rituals: "
+	for (var/ritual_slot in rituals)
+		if (rituals[ritual_slot])
+			var/datum/bloodcult_ritual/my_ritual = rituals[ritual_slot]
+			dat += "[my_ritual.name] - "
+		else
+			dat += "<i>cooldown</i> - "
+	dat += "<a href='?src=\ref[src];replaceritual=1'>\[Replace\]</a><br>"
+	return dat
+
+/datum/faction/bloodcult/Topic(href, href_list)
+	..()
+
+	if(!usr.check_rights(R_ADMIN))
+		message_admins("[usr] tried to access bloodcult faction Topic() without permissions.")
+		return
+	if(!usr.client || !usr.client.holder)
+		return
+	if(href_list["replaceritual"])
+		var/choice = alert(usr,"Which ritual do you want to replace?","Replace Ritual","first ritual","second ritual","third ritual")
+		switch(choice)
+			if ("first ritual")
+				replace_rituals(RITUAL_FACTION_1)
+				usr.client.holder.check_antagonists()
+			if ("second ritual")
+				replace_rituals(RITUAL_FACTION_2)
+				usr.client.holder.check_antagonists()
+			if ("third ritual")
+				replace_rituals(RITUAL_FACTION_3)
+				usr.client.holder.check_antagonists()
+
 /datum/faction/bloodcult/HandleNewMind(var/datum/mind/M)
 	. = ..()
 	M.special_role = "Cultist"
@@ -520,6 +583,12 @@
 			var/mob/M = R.antag.current
 			to_chat(M, "<span class='sinister'>This number might rise up to 9 as more people arrive aboard the station. The first Artificer, Wraith, and Juggernaut each do not take up a slot. Check your panel to the left to set your role and get more information.</span>")
 	AnnounceObjectives()
+	if (sun)
+		switch(sun.eclipse)
+			if (ECLIPSE_ONGOING)
+				stage(BLOODCULT_STAGE_READY)
+			if (ECLIPSE_OVER)
+				stage(BLOODCULT_STAGE_MISSED)
 	..()
 
 //we don't really have a use for that right now but there are plans for it.

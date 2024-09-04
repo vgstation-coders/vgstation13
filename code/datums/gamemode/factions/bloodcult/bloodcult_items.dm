@@ -361,7 +361,7 @@ var/list/arcane_tomes = list()
 	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 1
 	attack_verb = list("slaps")
-	autoignition_temperature = AUTOIGNITION_PAPER
+	flammable = TRUE
 	mech_flags = MECH_SCAN_FAIL
 	var/obj/abstract/mind_ui_element/hoverable/bloodcult_spell/talisman/linked_ui
 	var/blood_text = ""
@@ -1252,13 +1252,19 @@ var/list/arcane_tomes = list()
 		body_parts_covered = FULL_HEAD|HIDEHAIR
 		body_parts_visible_override = 0
 		hides_identity = HIDES_IDENTITY_ALWAYS
-		to_chat(user, "<span class='notice'>The hood's textile reacts with your soul and produces a shadow over your face that will hide your identity.</span>")
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			H.update_name()
+			to_chat(user, "<span class='notice'>The hood's textile reacts with your soul and produces a shadow over your face that will hide your identity.</span>")
 	else
 		icon_state = initial(icon_state)
 		body_parts_covered = EARS|HEAD|HIDEHAIR
 		body_parts_visible_override = FACE
 		hides_identity = HIDES_IDENTITY_DEFAULT
-		to_chat(user, "<span class='notice'>You dispel the shadow covering your face.</span>")
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			H.update_name()
+			to_chat(user, "<span class='notice'>You dispel the shadow covering your face.</span>")
 
 	user.update_inv_head()
 	anon_mode = !anon_mode
@@ -1396,7 +1402,7 @@ var/list/arcane_tomes = list()
 
 	next_extinguish = world.time + extinguish_cooldown
 	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
-	H.ExtinguishMob()
+	H.extinguish()
 
 //plasmaman stuff
 /obj/item/clothing/suit/cultrobes/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
@@ -1513,7 +1519,7 @@ var/list/arcane_tomes = list()
 
 	next_extinguish = world.time + extinguish_cooldown
 	to_chat(H, "<span class='warning'>Your armor automatically extinguishes the fire.</span>")
-	H.ExtinguishMob()
+	H.extinguish()
 
 //plasmaman stuff
 /obj/item/clothing/suit/space/cult/regulate_temp_of_wearer(var/mob/living/carbon/human/H)
@@ -1620,7 +1626,7 @@ var/list/arcane_tomes = list()
 	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 1
 	attack_verb = list("slaps")
-	autoignition_temperature = AUTOIGNITION_PAPER
+	flammable = TRUE
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)
@@ -1728,18 +1734,18 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/on_reagent_change()
 	..()
-	overlays.len = 0
+	update_icon()
+	for(var/datum/reagent/R in reagents.reagent_list)
+		if(R.id == BLOOD)
+			R.handle_data_mix(list("virus2" = list(DISEASE_CULT = global_diseases[DISEASE_CULT])))
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/update_icon()
+	..()
 	if (reagents.reagent_list.len > 0)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "cult")
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += filling
-
-	for(var/datum/reagent/R in reagents.reagent_list)
-		if(R.id == BLOOD)
-			var/datum/reagent/blood/B = R
-			var/datum/disease2/disease/cultvirus = global_diseases[DISEASE_CULT]
-			B.data["virus2"]["[cultvirus.uniqueID]-[cultvirus.subID]"] += cultvirus.getcopy()
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/throw_impact(var/atom/hit_atom)
 	if(reagents.total_volume)
@@ -1874,6 +1880,8 @@ var/list/arcane_tomes = list()
 			var/obj/item/I = stored_gear[slot]
 			stored_gear -= slot
 			I.forceMove(T)
+		for(var/obj/A in contents)
+			A.forceMove(T)
 	if (remaining)
 		QDEL_NULL(remaining)
 	..()
@@ -1977,7 +1985,7 @@ var/list/arcane_tomes = list()
 			i = 2
 		else i = 3
 		icon_state = "bloodcandle[i]"
-	update_blood_overlay()
+	set_blood_overlay()
 	if (lit)
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.blend_mode = BLEND_ADD

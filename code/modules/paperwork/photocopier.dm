@@ -207,20 +207,12 @@
 	else if(href_list["remove"])
 		copying = 0
 		if(copy)
-			if(!istype(usr,/mob/living/silicon/ai)) //surprised this check didn't exist before, putting stuff in AI's hand is bad
-				copy.forceMove(usr.loc)
-				usr.put_in_hands(copy)
-			else
-				copy.forceMove(src.loc)
+			usr.put_in_hands(copy)
 			to_chat(usr, "<span class='notice'>You take [copy] out of [src].</span>")
 			copy = null
 			updateUsrDialog()
 		else if(photocopy)
-			if(!istype(usr,/mob/living/silicon/ai)) //same with this one, wtf
-				photocopy.forceMove(usr.loc)
-				usr.put_in_hands(photocopy)
-			else
-				photocopy.forceMove(src.loc)
+			usr.put_in_hands(photocopy)
 			to_chat(usr, "<span class='notice'>You take [photocopy] out of [src].</span>")
 			photocopy = null
 			updateUsrDialog()

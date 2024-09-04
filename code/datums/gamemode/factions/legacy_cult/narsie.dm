@@ -31,6 +31,9 @@ var/global/list/narsie_list = list()
 	narsie_list.Remove(src)
 	..()
 
+/obj/machinery/singularity/narsie/seeks_beacon()
+	return FALSE//Don't want Nar-Sie hungering for singularity beacons
+
 /obj/machinery/singularity/narsie/large
 	name = "Nar-Sie"
 	icon = 'icons/obj/narsie.dmi'
@@ -58,11 +61,13 @@ var/global/list/narsie_list = list()
 				narsie_spawn_animation()
 				if(!narsie_cometh)//so we don't initiate Hell more than one time.
 					if (emergency_shuttle)
+						emergency_shuttle.extremely_hihg_speed = TRUE
 						emergency_shuttle.incall()
 						emergency_shuttle.can_recall = 0
-						if(emergency_shuttle.endtime > world.timeofday + 2400 && emergency_shuttle.location != 1 && !emergency_shuttle.departed)
-							emergency_shuttle.settimeleft(240)
-
+						if(emergency_shuttle.endtime > world.timeofday + 600 && emergency_shuttle.location != 1 && !emergency_shuttle.departed)
+							emergency_shuttle.settimeleft(60)
+						spawn(5 SECONDS)
+							command_alert(/datum/command_alert/narsie_has_risen)
 					ticker.StartThematic("endgame")
 
 					SetUniversalState(/datum/universal_state/hell)
@@ -180,7 +185,7 @@ var/global/list/narsie_list = list()
 			if(M.flags & INVULNERABLE)
 				return 0
 
-			M.cultify()
+			M.cultify(src)
 
 	//ITEM PROCESSING
 		else if (istype(A, /obj/))

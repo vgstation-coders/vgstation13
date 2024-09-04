@@ -10,6 +10,7 @@
 	slot_flags = 0
 	w_class = W_CLASS_SMALL
 	quick_equip_priority = list(slot_w_uniform)
+	species_fit = list(VOX_SHAPED)
 	var/accessory_exclusion = DECORATION
 	var/obj/item/clothing/attached_to = null
 	var/image/inv_overlay
@@ -69,7 +70,7 @@
 	to_chat(user, "<span class='notice'>You remove [src] from [attached_to].</span>")
 	attached_to.overlays -= inv_overlay
 	attached_to = null
-	forceMove(get_turf(user || src))
+	forceMove(get_turf(src))
 	if(user)
 		user.put_in_hands(src)
 		add_fingerprint(user)
@@ -92,24 +93,26 @@
 /obj/item/proc/generate_accessory_overlays()
 	return
 
-/obj/item/clothing/generate_accessory_overlays(mutable_appearance/accessory_overlay_final)
-	if(accessories.len)
-		for(var/obj/item/clothing/accessory/accessory in accessories)
-			var/mutable_appearance/accessory_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[accessory._color || accessory.icon_state]")
-			accessory_overlay.color = accessory.color
-			for(var/part in accessory.dyed_parts)
-				var/list/dye_data = accessory.dyed_parts[part]
-				var/dye_color = dye_data[1]
-				var/dye_alpha = dye_data[2]
-
-				var/_state = accessory.dye_base_iconstate_override
-				if (!_state)
-					_state = accessory.icon_state
-
-				var/mutable_appearance/worn_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[_state]-[part]", alpha = dye_alpha, appearance_flags = RESET_COLOR)
-				worn_overlay.color = dye_color
-				accessory_overlay.overlays += worn_overlay
-			accessory_overlay_final.overlays += accessory_overlay
+/obj/item/clothing/generate_accessory_overlays(mutable_appearance/accessory_overlay_final, datum/species/species)
+	if(!accessories.len)
+		return
+	if(!species && ishuman(loc))
+		var/mob/living/carbon/human/wearer = loc
+		species = wearer.species
+	for(var/obj/item/clothing/accessory/accessory in accessories)
+		var/mutable_appearance/accessory_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[accessory._color || accessory.icon_state]")
+		if(species && (species.name in accessory.species_fit) && icon_exists(species.accessory_icons, accessory_overlay.icon_state))
+			accessory_overlay.icon = species.accessory_icons
+		accessory_overlay.color = accessory.color
+		for(var/part in accessory.dyed_parts)
+			var/list/dye_data = accessory.dyed_parts[part]
+			var/dye_color = dye_data[1]
+			var/dye_alpha = dye_data[2]
+			var/_state = accessory.dye_base_iconstate_override || accessory.icon_state
+			var/mutable_appearance/worn_overlay = mutable_appearance('icons/mob/clothing_accessories.dmi', "[_state]-[part]", alpha = dye_alpha, appearance_flags = RESET_COLOR)
+			worn_overlay.color = dye_color
+			accessory_overlay.overlays += worn_overlay
+		accessory_overlay_final.overlays += accessory_overlay
 
 //Defining this at item level to prevent CASTING HELL
 /obj/item/proc/description_accessories()
@@ -473,9 +476,10 @@
 	var/rad_threshold = 45
 	var/triggered = FALSE
 	var/event_key
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
+	flammable = TRUE
 
 /obj/item/clothing/accessory/rad_patch/proc/check_rads(mob/living/carbon/human/user, rads)
 	if(triggered)

@@ -293,7 +293,7 @@
 		napalm.adjust_gas(GAS_PLASMA, toxinsToDeduce)
 		target_tile.assume_air(napalm)
 		spawn (0)
-			target_tile.hotspot_expose(temperature, 400, surfaces=1)
+			target_tile.hotspot_expose(temperature, MEDIUM_FLAME, 1)
 	for(var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve
 		var/turf/T = get_turf(F)
 		T.ChangeTurf(/turf/simulated/wall/mineral/plasma/)
@@ -504,28 +504,35 @@ About the new airlock wires panel:
 	else
 		icon_state = "door_open"
 
-	return
+	update_moody_light(icon, "[icon_state]-moody")
 
 /obj/machinery/door/airlock/door_animate(var/animation)
+	kill_moody_light()
 	switch(animation)
 		if("opening")
 			if(overlays)
 				overlays.len = 0
 			if(panel_open)
 				flick("o_door_opening", src)
+				anim(target = src, a_icon = icon, flick_anim = "o_door_opening-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 			else
 				flick("door_opening", src)
+				anim(target = src, a_icon = icon, flick_anim = "door_opening-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 		if("closing")
 			if(overlays)
 				overlays.len = 0
 			if(panel_open)
 				flick("o_door_closing", src)
+				anim(target = src, a_icon = icon, flick_anim = "o_door_closing-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 			else
 				flick("door_closing", src)
+				anim(target = src, a_icon = icon, flick_anim = "door_closing-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 		if("spark")
 			flick("door_spark", src)
+			anim(target = src, a_icon = icon, flick_anim = "door_spark-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 		if("deny")
 			flick("door_deny", src)
+			anim(target = src, a_icon = icon, flick_anim = "door_deny-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
 	return
 
 /obj/machinery/door/airlock/attack_ai(mob/user as mob)

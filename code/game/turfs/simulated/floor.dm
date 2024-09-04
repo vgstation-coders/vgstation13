@@ -44,6 +44,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	var/image/floor_overlay
 
 	melt_temperature = 1643.15 // Melting point of steel
+	thermal_mass = 1
 
 	plane = TURF_PLANE
 
@@ -101,14 +102,14 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 						src.break_tile_to_plating()
 					else
 						src.break_tile()
-					src.hotspot_expose(500,CELL_VOLUME,surfaces=1)
+					src.hotspot_expose(500,FULL_FLAME,1)
 					if(prob(33))
 						var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 						M.amount = 1
 		if(3.0)
 			if (prob(50))
 				src.break_tile()
-				src.hotspot_expose(500,CELL_VOLUME,surfaces=1)
+				src.hotspot_expose(500,FULL_FLAME,1)
 	return
 
 /turf/simulated/floor/blob_act()
@@ -366,6 +367,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	else if(is_mineral_floor())
 		burnt = 1
 	update_paint_overlay()
+	extinguish()
 
 //This proc will delete the floor_tile and the update_iocn() proc will then change the icon_state of the turf
 //This proc auto corrects the grass tiles' siding.

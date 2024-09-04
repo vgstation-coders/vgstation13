@@ -140,6 +140,7 @@
 	icon_living = "fleshdeer"
 	icon_dead = "fleshdeer_dead"
 
+	supernatural = TRUE
 	canRegenerate = 1
 	maxRegenTime = 150
 	minRegenTime = 60

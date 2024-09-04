@@ -1,14 +1,14 @@
 //Poisonous chemicals
 
-/datum/reagent/amanatin
-	name = "Alpha-Amanatin"
-	id = AMANATIN
+/datum/reagent/amanitin
+	name = "Alpha-Amanitin"
+	id = AMANITIN
 	description = "A deadly poison derived from certain species of Amanita. Sits in the victim's system for a long period of time, then ravages the body."
 	color = "#792300" //rgb: 121, 35, 0
 	custom_metabolism = 0.01
 	var/activated = 0
 
-/datum/reagent/amanatin/on_mob_life(var/mob/living/M)
+/datum/reagent/amanitin/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
@@ -140,7 +140,7 @@
 	id = CHEFSPECIAL
 	description = "An extremely toxic chemical that will surely end in death."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#CF3600" //rgb: 207, 54, 0
+	color = "#D957F9" //rgb: 217, 82, 249
 	custom_metabolism = 0.01
 	overdose_tick = 165
 	density = 0.687 //Let's assume it's a compound of cyanide
@@ -458,9 +458,10 @@
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_PHYTOCHEMISTRY)
-			T.reagents.remove_reagent(id, 1)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
@@ -487,6 +488,68 @@
 		I.desc = "Looks like this was \an [O] some time ago."
 		O.visible_message("<span class='warning'>\The [O] melts.</span>")
 		qdel(O)
+
+/datum/reagent/mutagen/metastable
+	name = "Metastable Mutagen"
+	id = METASTABLE_MUTAGEN
+	description = "Causes controlled mutations in plants."
+
+/datum/reagent/mutagen/metastable/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(30))
+			T.mutate(GENE_PHYTOCHEMISTRY, PLANT_CHEMICAL)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
+
+/datum/reagent/mutagen/metatable
+	name = "Metatable Mutagen"
+	id = METATABLE_MUTAGEN
+	description = "Causes controlled mutations in plants and tables."
+
+/datum/reagent/mutagen/metatable/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(30))
+			T.mutate(GENE_PHYTOCHEMISTRY, PLANT_CHEMICAL)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
+
+/datum/reagent/mutagen/metatable/reaction_obj(var/obj/O, var/volume)
+	if(..())
+		return 1
+
+	if(!(O.dissolvable() == PACID))
+		return
+	var/list/tabletypes = list(/obj/structure/table,
+								/obj/structure/table/woodentable,
+								/obj/structure/table/woodentable/poker,
+								/obj/structure/table/glass,
+								/obj/structure/table/glass/plasma,
+								/obj/structure/table/plastic,
+								/obj/structure/table/reinforced,
+								/obj/structure/table/reinforced/clockwork
+								)
+	if(istype(O,/obj/structure/table))
+		var/selectedtable = pick(tabletypes)
+		O.visible_message("<span class='warning'>\The [O] suddenly changes shape!</span>")
+		new selectedtable(O.loc) //the new call for tables automatically deletes the previous one, so no need for a qdel here
 
 /datum/reagent/nanites
 	name = "Nanites"
@@ -659,6 +722,7 @@
 	custom_metabolism = 0.01
 	density = 1.4 //Let's just assume it's alpha-solanine
 	arcane_id = ANTI_TOXIN
+	plant_toxins = 2
 
 /datum/reagent/toxin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -666,10 +730,6 @@
 
 	//Toxins are really weak, but without being treated, last very long
 	M.adjustToxLoss(0.2)
-
-/datum/reagent/toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(2)
 
 /datum/reagent/xenomicrobes
 	name = "Xenomicrobes"

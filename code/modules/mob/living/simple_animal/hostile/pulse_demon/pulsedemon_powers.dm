@@ -232,7 +232,10 @@
 		return FALSE
 	if(istype(user,/mob/living/simple_animal/hostile/pulse_demon))
 		var/mob/living/simple_animal/hostile/pulse_demon/PD = user
-		if (PD.charge < charge_cost) // Custom charge handling
+		if(PD.emp_lock)
+			to_chat(PD, "<span class='warning'>You cannot use this ability while unable to regenerate.</span>")
+			return FALSE
+		if(PD.charge < charge_cost) // Custom charge handling
 			to_chat(PD, "<span class='warning'>You are too low on power, this spell needs a charge of [charge_cost]W to cast.</span>")
 			return FALSE
 	else //only pulse demons allowed
@@ -422,6 +425,7 @@
 	L.yo = TTarget.y - T.y
 	L.xo = TTarget.x - T.x
 	L.process()
+	unlock_from() // just in case
 	forceMove(TTarget)
 
 /spell/pulse_demon/remote_hijack
@@ -646,6 +650,26 @@
 		PD.current_robot = null
 		PD.current_bot = null
 		PD.current_weapon = null
+		PD.change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
 	else
 		owner.forceMove(get_turf(owner))
 	Remove(owner)
+
+/datum/action/pd_change_camera
+	name = "Change camera view"
+	desc = "Move to another camera in the area."
+	icon_icon = 'icons/mob/screen_ai.dmi'
+	button_icon_state = "camera"
+
+/datum/action/pd_change_camera/Trigger()
+	if(ispulsedemon(owner))
+		var/mob/living/simple_animal/hostile/pulse_demon/PD = owner
+		var/list/camstouse = list()
+		var/area/ourarea = get_area(PD)
+		for (var/obj/machinery/camera/C in cameranet.cameras)
+			if(get_area(C) == ourarea)
+				camstouse["[C.c_tag]"] += C
+		var/camtag = input(PD,"Choose a camera to jump to","Area cameras") as null|anything in camstouse
+		if(camtag)
+			var/obj/machinery/camera/ourcam = camstouse[camtag]
+			ourcam.attack_pulsedemon(PD)

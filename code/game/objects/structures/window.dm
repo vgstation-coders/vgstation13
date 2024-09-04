@@ -61,9 +61,9 @@ var/list/one_way_windows
 	return unsmoothables
 
 /obj/structure/window/isSmoothableNeighbor(atom/A)
-	if(isobj(A))
-		var/obj/O = A
-		return ..() && O.anchored && O.density
+	if(A?.density && ismovable(A))
+		var/atom/movable/O = A
+		return O.anchored && ..() 
 
 /obj/structure/window/relativewall()
 	icon_state = anchored && density ? "[base_state][..()]" : initial(icon_state)
@@ -144,9 +144,11 @@ var/list/one_way_windows
 		if(sound)
 			playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
 		if(!damage_overlay)
-			damage_overlay = new(src)
+			damage_overlay = mutable_appearance(src)
 			damage_overlay.icon = icon('icons/obj/structures/window.dmi')
 			damage_overlay.dir = src.dir
+			damage_overlay.layer = OBJ_LAYER
+			damage_overlay.blend_mode = BLEND_ADD
 
 		overlays -= damage_overlay
 

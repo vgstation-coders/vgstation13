@@ -27,7 +27,7 @@
 	var/bottleheight = 23 //To offset the molotov rag and fire - beer and ale are 23
 	var/smashtext = "bottle of " //To handle drinking glasses and the flask of holy water
 	var/smashname = "broken bottle" //As above
-	var/flammable = 0
+	var/can_be_lit = 0
 	var/flammin = 0
 	var/flammin_color = null
 	var/base_icon_state = "glassbottle"
@@ -590,6 +590,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/chifir
 	name = "Siberian Chifir"
 	desc = "Only a true siberian can appreciate its deep and rich flavor. Embrace siberian tradition!"
+	icon = 'icons/obj/cafe.dmi'
 	icon_state = "tea"
 	item_state = "mug_empty"
 /obj/item/weapon/reagent_containers/food/drinks/chifir/New()
@@ -860,7 +861,7 @@
 	to_chat(user, "You pull the tab, you feel the drink heat up in your hands, and its horrible fumes hits your nose like a ton of bricks. You drop the soup in disgust.")
 	var/turf/T = get_turf(user.loc)
 	var/obj/item/weapon/reagent_containers/food/drinks/discount_ramen_hot/A = new /obj/item/weapon/reagent_containers/food/drinks/discount_ramen_hot(T)
-	A.desc += " It feels warm.." //This is required
+	A.desc += " It feels warm." //This is required
 	user.drop_from_inventory(src)
 	qdel(src)
 
@@ -906,7 +907,7 @@
 	..()
 	if (flags & OPENCONTAINER)
 		overlays += image(icon = icon, icon_state = "soda_open")
-		update_blood_overlay()
+		set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
 	if(!is_open_container())
@@ -1050,7 +1051,7 @@
 	overlays.len = 0
 	if (!(flags & OPENCONTAINER))
 		overlays += image(icon = icon, icon_state = "bottle_cap")
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum
 	name = "Nuka Cola Quantum"
@@ -1080,7 +1081,7 @@
 	overlays.len = 0
 	if (!(flags & OPENCONTAINER))
 		overlays += image(icon = icon, icon_state = "bottle_cap")
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink
 	name = "Brawndo"
@@ -1698,7 +1699,7 @@
 	..()
 	if (reagents.reagent_list.len > 0)
 		mug_reagent_overlay()
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup
 	name = "\improper cup"
@@ -2186,9 +2187,10 @@
 			if(lit)
 				new /obj/effect/decal/cleanable/ash(get_turf(src))
 				var/turf/loca = get_turf(src)
+				var/fueltemp = possible_fuels[FUEL]
 				if(loca)
 					new /obj/effect/fire(loca)
-					loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
+					loca.hotspot_expose(fueltemp["max_temperature"], FULL_FLAME,1)
 			else
 				new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
 
@@ -2247,6 +2249,24 @@
 			var/obj/item/weapon/reagent_containers/food/snacks/donut/D = I
 			D.dip(src, user)
 
+/obj/item/weapon/reagent_containers/food/drinks/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(!(molotov == 1))
+		return
+	if(lit)
+		return
+	ignite()
+
+/obj/item/weapon/reagent_containers/food/drinks/ignite()
+	if(lit)
+		return
+	light("<span class='danger'>The raging fire sets \the [src] alight.</span>")
+
+/obj/item/weapon/reagent_containers/food/drinks/extinguish()
+	lit = 0
+	update_brightness()
+	update_icon()
+	..()
+
 /obj/item/weapon/reagent_containers/food/drinks/molotov
 	name = "incendiary cocktail"
 	smashtext = ""
@@ -2270,10 +2290,10 @@
 		visible_message(flavor_text)
 		processing_objects.Add(src)
 		update_icon()
-	if(!lit && flammable)
+	if(!lit && can_be_lit)
 		lit = 1
 		visible_message(flavor_text)
-		flammable = 0
+		can_be_lit = 0
 		update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/blow_act(var/mob/living/user)
@@ -2334,7 +2354,7 @@
 	var/turf/loca = get_turf(src)
 	if(lit && loca)
 //		to_chat(world, "<span  class='warning'>Burning...</span>")
-		loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
+		loca.hotspot_expose(700, SMALL_FLAME)
 	return
 
 // Sliding from one table to another

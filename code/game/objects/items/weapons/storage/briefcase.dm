@@ -9,9 +9,10 @@
 	throw_speed = 1
 	throw_range = 4
 	w_class = W_CLASS_LARGE
+	w_type = RECYK_BIOLOGICAL //leather
+	flammable = TRUE
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 16
-	autoignition_temperature = AUTOIGNITION_ORGANIC //fancy leather briefcases
 	hitsound = "swing_hit"
 	var/obj/item/weapon/handcuffs/casecuff = null
 
@@ -25,6 +26,10 @@
 	name = "orderly briefcase"
 	desc = "A briefcase with a medical cross emblazoned on each side. It has a faintly sterile smell to it."
 	icon_state = "medbriefcase"
+
+/obj/item/weapon/storage/briefcase/insurance
+	name = "insurance briefcase"
+	desc = "A briefcase containing all the necessary tools for an insurance salesman."
 
 /obj/item/weapon/storage/briefcase/orderly/New()
 	..()
@@ -41,6 +46,14 @@
 	new /obj/item/weapon/paper/demotion_key(src)
 	new /obj/item/weapon/paper/commendation_key(src)
 	new /obj/item/weapon/pen/NT(src)
+
+/obj/item/weapon/storage/briefcase/insurance/New()
+	..()
+	var/obj/item/weapon/folder/red/F = new /obj/item/weapon/folder/red(src)
+	F.name = "Plans and Subscriptions"
+	F.desc = "Inventory of all plan options and current policies."
+	new /obj/item/weapon/pen/NT(src)
+	dispense_cash(rand(10000,100000),src)
 
 /obj/item/weapon/storage/briefcase/attack(mob/living/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))

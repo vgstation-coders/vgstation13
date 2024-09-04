@@ -76,6 +76,7 @@
 	var/copy_logs = null
 	var/cargo_forwarding_on_roundstart = 0
 	var/cargo_forwarding_amount_override = 0
+	var/roundstart_lights_on = 0
 
 	// BSQL things
 	var/bsql_debug = 0
@@ -282,6 +283,9 @@
 
 				if ("cargo_forwarding_amount_override")
 					cargo_forwarding_amount_override = text2num(value)
+				
+				if("roundstart_lights_on")
+					roundstart_lights_on = 1
 
 				if ("use_recursive_explosions")
 					use_recursive_explosions = 1

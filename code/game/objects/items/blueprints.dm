@@ -22,7 +22,8 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "blueprints"
 	attack_verb = list("attacks", "baps", "hits")
-	autoignition_temperature = AUTOIGNITION_PAPER
+	w_type = RECYK_WOOD
+	flammable = TRUE
 
 	var/header = "<small>property of Nanotrasen. For heads of staff only. Store in high-secure storage.</small>"
 

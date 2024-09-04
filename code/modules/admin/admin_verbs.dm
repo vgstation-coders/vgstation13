@@ -223,8 +223,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/edit_motd,
 	)
 var/list/admin_verbs_possess = list(
-	/proc/possess,
-	/proc/release
+	/client/proc/possess
 	)
 var/list/admin_verbs_permissions = list(
 	/client/proc/edit_admin_permissions
@@ -295,8 +294,7 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/cmd_debug_tog_aliens,
 	/client/proc/enable_debug_verbs,
 	/client/proc/mob_list,
-	/proc/possess,
-	/proc/release,
+	/client/proc/possess,
 	/client/proc/gc_dump_hdl,
 	/client/proc/create_map_element
 	)

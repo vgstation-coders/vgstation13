@@ -108,7 +108,7 @@
 	var/atom/blocker
 	var/list/dance_platforms = list()
 	var/dance_count = 0
-	var/dance_target = 240
+	var/dance_target = 120
 	var/obj/effect/cult_ritual/dance/dance_manager
 	var/image/crystals
 	var/image/top_crystal
@@ -342,9 +342,15 @@
 		if (platform.dancer)
 			dance_manager.dancers += platform.dancer
 			if(iscultist(platform.dancer))
-				C.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
+				platform.dancer.say("Tok-lyr rqa'nap g'lt-ulotf!","C")
+				if (iscarbon(platform.dancer))
+					var/mob/living/carbon/CA = platform.dancer
+					if (CA.get_cult_power() < 80)
+						to_chat(platform.dancer, "<span class='warning'>You feel like you could dance more effectively by wearing proper cult attire.</span>")
+					else if (!istype(CA.get_active_hand(), /obj/item/candle/blood) && !istype(CA.get_inactive_hand(), /obj/item/candle/blood))
+						to_chat(platform.dancer, "<span class='warning'>Holding a lit blood candle would help you focus your mind on the ritual while you dance.</span>")
 			else
-				to_chat(C, "<span class='sinister'>The tentacles shift and force your body to move alongside them, performing some kind of dance.</span>")
+				to_chat(platform.dancer, "<span class='sinister'>The tentacles shift and force your body to move alongside them, performing some kind of dance.</span>")
 
 	dance_manager.tear = src
 	dance_manager.we_can_dance()
@@ -434,3 +440,91 @@ DRAIN BLOOD: 	Travel 	Blood 	Self
 BLOOD BOIL: 	Destroy See 	Blood
 
 */
+
+//Previously hosted in the secret repo.
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//						MANIFEST GHOST							  //
+//																  //
+////////////////////////////////////////////////////////////////////
+//Used to let cultists allow ghosts back into the game as some near-invincible warriors. Removed since it was obviously OP and un-fun to play against.
+//This version just lets you turn nearby ghosts visible.
+
+/datum/rune_spell/manifestghost
+	secret = TRUE
+	name = "Manifest Ghosts"
+	desc = "Imbues nearby ghosts with residues of occult magic, turning them slightly tangible, able to be seen and to draw in blood."
+	desc_talisman = "Imbues nearby ghosts with residues of occult magic, turning them slightly tangible, able to be seen and to draw in blood."
+	invocation = "Gal'h'rfikk harfrandid mud'gib!"
+	word1 = /datum/rune_word/blood
+	word2 = /datum/rune_word/see
+	word3 = /datum/rune_word/travel
+	page = ""
+
+/datum/rune_spell/manifestghost/cast()
+	if (istype(spell_holder, /obj/effect/rune))
+		var/obj/effect/rune/R = spell_holder
+		R.one_pulse()
+
+	var/turf/T = get_turf(spell_holder)
+	playsound(T, 'sound/effects/conceal.ogg', 50, 0, -2)
+
+	var/datum/role/cultist/C = activator.mind.GetRole(CULTIST)
+	for(var/mob/dead/O in range(T,7))
+		if(O.invisibility != 0)
+			var/dist = cheap_pythag(O.x - T.x, O.y - T.y)
+			if (dist>=8)
+				continue
+			shadow(O,T,"rune_blind")
+			C.gain_devotion(50, DEVOTION_TIER_3, "visible_ghost", O)
+			spawn(5)
+				O.cultify()
+				O.visible_message("<span class='sinister'>Black dust flies around and consolidates around the ghostly shape of \the [O].</span>","<span class='sinister'>The dust emanating from [activator]'s [spell_holder] sticks to your form, you are now visible to all mortals and can write in blood.</span>")
+
+	qdel(spell_holder)
+
+////////////////////////////////////////////////////////////////////
+//																  //
+//							BLOOD BOIL							  //
+//																  //
+////////////////////////////////////////////////////////////////////
+//Used to require 3 cultists to cast and would deal heavy damage to every non-cultists in view, with also a chance of detonating every rune in view.
+//This version just lets you boil nearby blood in containers to 100°C, and clean every blood splatter in range.
+
+/datum/rune_spell/bloodboil
+	secret = TRUE
+	name = "Blood Boil"
+	desc = "Boils blood in visible containers. Not in humans unfortunately. Also evaporates all visible blood splatters."
+	desc_talisman = "Boils blood in visible containers. Not in humans unfortunately. Also evaporates all visible blood splatters."
+	invocation = "Dedo ol'btoh!"
+	word1 = /datum/rune_word/destroy
+	word2 = /datum/rune_word/see
+	word3 = /datum/rune_word/blood
+	page = ""
+
+/datum/rune_spell/bloodboil/cast()
+	if (istype(spell_holder, /obj/effect/rune))
+		var/obj/effect/rune/R = spell_holder
+		R.one_pulse()
+
+	var/turf/T = get_turf(spell_holder)
+	playsound(T, 'sound/effects/blow.ogg', 75, 0, -3)
+
+	for(var/obj/item/weapon/reagent_containers/RC in dview(world.view, T, INVISIBILITY_MAXIMUM))
+		if(RC.reagents.has_reagent(BLOOD))
+			if (RC.reagents.chem_temp < 373.15)
+				playsound(RC.loc, 'sound/effects/bubbles.ogg', 80, 1)
+				RC.reagents.chem_temp = 373.15
+				RC.update_icon()
+
+	for(var/obj/effect/decal/cleanable/C in dview(world.view, T, INVISIBILITY_MAXIMUM))
+		if (C.counts_as_blood)
+			var/erase_color = DEFAULT_BLOOD
+			if (C.basecolor)
+				erase_color = C.basecolor
+			anim(target = get_turf(C), a_icon = 'icons/effects/deityrunes.dmi', flick_anim = "[pick(rune_words_english)]-erase", lay = C.layer+0.1, col = erase_color, plane = C.plane)
+			qdel(C)
+
+
+	qdel(spell_holder)

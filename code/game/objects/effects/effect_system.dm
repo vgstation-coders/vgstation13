@@ -11,8 +11,9 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	icon = 'icons/effects/effects.dmi'
 	mouse_opacity = 0
 	flags = 0
+	density = 0
 	w_type = NOT_RECYCLABLE
-	pass_flags = PASSTABLE|PASSGRILLE|PASSMACHINE|PASSRAILING
+	pass_flags = PASSTABLE | PASSGRILLE | PASSMACHINE | PASSGIRDER | PASSRAILING
 
 /obj/effect/dissolvable()
 	return 0
@@ -28,25 +29,14 @@ would spawn and follow the beaker, even if it is carried or thrown.
 
 /obj/effect/water/New()
 	. = ..()
-	//var/turf/T = src.loc
-	//if (istype(T, /turf))
-	//	T.firelevel = 0 //TODO: FIX
 
 	spawn(70)
 		qdel(src)
 
 /obj/effect/water/Destroy()
-	//var/turf/T = src.loc
-	//if (istype(T, /turf))
-	//	T.firelevel = 0 //TODO: FIX
-
 	..()
 
 /obj/effect/water/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	//var/turf/T = src.loc
-	//if (istype(T, /turf))
-	//	T.firelevel = 0 //TODO: FIX
-
 	if (--life < 1)
 		//SN src = null
 		qdel(src)
@@ -167,33 +157,19 @@ steam.start() -- spawns the effect
 
 /obj/effect/sparks/New(var/travel_dir)
 	..()
-	var/turf/T = loc
-	if(istype(T))
-		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 
 /obj/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
 	move_dir=travel_dir
 	energy=rand(1,max_energy)
 	processing_objects.Add(src)
-	var/turf/T = loc
-	if (istype(T, /turf))
-		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
 
 /obj/effect/sparks/Destroy()
 	processing_objects.Remove(src)
-	var/turf/T = src.loc
-
-	if (istype(T, /turf))
-		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
-
 	..()
 
 /obj/effect/sparks/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
-	var/turf/T = src.loc
-	if (istype(T, /turf))
-		T.hotspot_expose(SPARK_TEMP, 100, surfaces = surfaceburn)
-	return
+
 
 /obj/effect/sparks/process()
 	if(energy==0)
@@ -201,6 +177,7 @@ steam.start() -- spawns the effect
 		qdel(src)
 		return
 	else
+		try_hotspot_expose(SPARK_TEMP, SMALL_FLAME, surfaceburn)
 		step(src,move_dir)
 	energy--
 
@@ -213,7 +190,7 @@ steam.start() -- spawns the effect
 	else
 		location = get_turf(loca)
 
-/datum/effect/system/spark_spread/start(surfaceburn = TRUE)
+/datum/effect/system/spark_spread/start(surfaceburn = TRUE, silent = FALSE)
 	if (holder)
 		location = get_turf(holder)
 	if(!location)
@@ -224,7 +201,8 @@ steam.start() -- spawns the effect
 	else
 		directions = alldirs.Copy()
 
-	playsound(location, "sparks", 100, 1)
+	if(!silent)
+		playsound(location, "sparks", 100, 1)
 	for (var/i = 1 to number)
 		var/nextdir=pick_n_take(directions)
 		if(nextdir)
@@ -234,12 +212,22 @@ steam.start() -- spawns the effect
 			else
 				var/obj/effect/sparks/nosurfaceburn/sparks = new /obj/effect/sparks/nosurfaceburn(location)
 				sparks.start(nextdir)
-// This sparks.
-/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = TRUE) //surfaceburn means the sparks can ignite things on the ground. set it to false to keep eg. portals like in the time agent event from burning down the station
+/**
+  * This sparks.
+  *
+  * Generates some sparks at specified location
+  * Arguments:
+  * * atom/loc - where the sparks are set off
+  * * amount - how many sparks, default 3
+  * * cardinals - if true, sparks will not spread diagonally, default TRUE
+  * * surfaceburn - if it starts fires, default FALSE
+  * * silent - if TRUE, the initial spark won't make noise, default FALSE
+  */
+/proc/spark(var/atom/loc, var/amount = 3, var/cardinals = TRUE, var/surfaceburn = FALSE, var/silent = FALSE)
 	loc = get_turf(loc)
 	var/datum/effect/system/spark_spread/S = new
 	S.set_up(amount, cardinals, loc)
-	S.start(surfaceburn)
+	S.start(surfaceburn, silent)
 
 #undef SPARK_TEMP
 
@@ -379,37 +367,6 @@ steam.start() -- spawns the effect
 	R.burn_skin(2)
 	R.bodytemperature = min(60, R.bodytemperature + (30 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
-/////////////////////////////////////////////
-// Fire Smoke
-/////////////////////////////////////////////
-
-
-/obj/effect/smoke/fire
-	name = "fire smoke"
-	icon_state = "firesmoke"
-
-/obj/effect/smoke/fire/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-	..()
-	for(var/mob/living/carbon/human/R in get_turf(src))
-		affect(R)
-
-/obj/effect/smoke/fire/affect(var/mob/living/carbon/human/R)
-	if (!..())
-		return 0
-	if (R.wear_suit != null)
-		return 0
-	R.burn_skin(0.75)
-	if (R.resting)	//crawling prevents suffocation but not burning
-		return 0
-	R.adjustOxyLoss(1)
-	if (R.coughedtime != 1)
-		R.coughedtime = 1
-		R.emote("gasp", null, null, TRUE)
-		spawn (20)
-			R.coughedtime = 0
-	R.updatehealth()
-	return
-
 /obj/effect/smoke/transparent
 	opacity = FALSE
 
@@ -475,9 +432,6 @@ steam.start() -- spawns the effect
 
 /datum/effect/system/smoke_spread/transparent
 	smoke_type = /obj/effect/smoke/transparent
-
-/datum/effect/system/smoke_spread/fire
-	smoke_type = /obj/effect/smoke/fire
 
 /////////////////////////////////////////////
 // Chem smoke

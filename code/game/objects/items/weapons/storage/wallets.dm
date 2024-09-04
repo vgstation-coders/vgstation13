@@ -5,8 +5,10 @@
 	icon = 'icons/obj/wallet.dmi'
 	icon_state = "wallet"
 	w_class = W_CLASS_SMALL
+	w_type = RECYK_BIOLOGICAL //leather
+	flammable = TRUE
 	use_to_pickup = TRUE
-	autoignition_temperature = AUTOIGNITION_ORGANIC //leather
+
 	can_only_hold = list(
 		"/obj/item/weapon/spacecash",
 		"/obj/item/weapon/card",

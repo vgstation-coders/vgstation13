@@ -21,7 +21,6 @@
 	throw_speed = 4
 	throw_range = 20
 	force = 0
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 
 
 /*
@@ -684,6 +683,7 @@
 	desc = "A seemingly innocent sunflower...with a twist."
 	icon = 'icons/obj/hydroponics/sunflower.dmi'
 	icon_state = "produce"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/flowers.dmi', "right_hand" = 'icons/mob/in-hand/right/flowers.dmi')
 	item_state = "sunflower"
 	var/empty = 0
 	flags = OPENCONTAINER
@@ -1448,14 +1448,7 @@
 /obj/item/toy/balloon/inflated/glove/pair/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/toy/crayon/red))
-		to_chat(user, "You color \the [src] light red using \the [W].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/clothing/gloves/anchor_arms/A = new (get_turf(user))
-			user.put_in_hands(A)
-		else
-			new /obj/item/clothing/gloves/anchor_arms(get_turf(src.loc))
-		qdel(src)
+		user.create_in_hands(src, /obj/item/clothing/gloves/anchor_arms, msg = "You color \the [src] light red using \the [W].")
 
 /obj/item/toy/balloon/decoy
 	name = "inflatable decoy"

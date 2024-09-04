@@ -128,7 +128,7 @@
 /datum/gas/cryotheum
 	id = GAS_CRYOTHEUM
 	name = "Cryotheum"
-	short_name = "O<sub>2</sub>C"
+	short_name = "O<sub>2</sub>β"
 	specific_heat = 10
 
 	molar_mass = 0.032

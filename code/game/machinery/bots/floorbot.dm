@@ -12,20 +12,13 @@
 	flags = 0
 	var/created_name = "Floorbot"
 	var/skin = null
+	var/sensor = 0
 
-/obj/item/weapon/toolbox_tiles_sensor
+/obj/item/weapon/toolbox_tiles/sensor
 	desc = "It's a toolbox with tiles sticking out the top and a sensor attached."
 	name = "tiles, toolbox and sensor arrangement"
-	icon = 'icons/obj/aibots.dmi'
 	icon_state = "toolbox_tiles_sensor"
-	force = 3.0
-	throwforce = 10.0
-	throw_speed = 2
-	throw_range = 5
-	w_class = W_CLASS_MEDIUM
-	flags = 0
-	var/created_name = "Floorbot"
-	var/skin = null
+	sensor = 1
 
 // Tell other floorbots what we're fucking with so two floorbots don't dick with the same tile.
 var/global/list/floorbot_targets=list()
@@ -458,41 +451,21 @@ var/global/list/floorbot_targets=list()
 /obj/item/weapon/storage/toolbox/attackby(var/obj/item/stack/tile/metal/T, mob/user as mob)
 	if(!istype(T, /obj/item/stack/tile/metal) || contents.len >= 1 || floorbot_type() == "no_build") //Only do this if the thing is empty
 		return ..()
-	user.remove_from_mob(T)
-	QDEL_NULL(T)
-	var/obj/item/weapon/toolbox_tiles/B = new /obj/item/weapon/toolbox_tiles
-	B.skin = floorbot_type()
-	B.icon_state = "[B.skin]toolbox_tiles"
-	user.put_in_hands(B)
-	to_chat(user, "<span class='notice'>You add the tiles into the empty toolbox. They protrude from the top.</span>")
-	user.drop_from_inventory(src)
-	qdel(src)
+	user.create_in_hands(src, new /obj/item/weapon/toolbox_tiles(loc, src), T, msg = "<span class='notice'>You add the tiles into the empty toolbox. They protrude from the top.</span>")
+
+/obj/item/weapon/toolbox_tiles/New(Loc, obj/item/weapon/storage/toolbox/oldtb)
+	..()
+	skin = oldtb.floorbot_type()
+	icon_state = "[skin]toolbox_tiles"
 
 /obj/item/weapon/toolbox_tiles/attackby(var/obj/item/W, mob/user as mob)
 	..()
-	if(isprox(W))
-		QDEL_NULL(W)
-		var/obj/item/weapon/toolbox_tiles_sensor/B = new /obj/item/weapon/toolbox_tiles_sensor()
-		B.created_name = created_name
-		B.skin = skin
-		B.icon_state = "[B.skin]toolbox_tiles_sensor"
-		user.put_in_hands(B)
+	if(isprox(W) && !sensor)
+		qdel(W)
+		icon_state = "[skin]toolbox_tiles_sensor"
+		sensor = 1
 		to_chat(user, "<span class='notice'>You add the sensor to the toolbox and tiles!</span>")
-		user.drop_from_inventory(src)
-		qdel(src)
-
-	else if (istype(W, /obj/item/weapon/pen))
-		var/t = copytext(stripped_input(user, "Enter new robot name", name, created_name),1,MAX_NAME_LEN)
-		if (!t)
-			return
-		if (!in_range(src, usr) && loc != usr)
-			return
-
-		created_name = t
-
-/obj/item/weapon/toolbox_tiles_sensor/attackby(var/obj/item/W, mob/user as mob)
-	..()
-	if(istype(W, /obj/item/robot_parts/l_arm) || istype(W, /obj/item/robot_parts/r_arm))
+	else if(istype(W, /obj/item/robot_parts/l_arm) || istype(W, /obj/item/robot_parts/r_arm))
 		qdel(W)
 		var/turf/T = get_turf(user.loc)
 		var/obj/machinery/bot/floorbot/A = new /obj/machinery/bot/floorbot(T)
@@ -502,9 +475,9 @@ var/global/list/floorbot_targets=list()
 		to_chat(user, "<span class='notice'>You add the robot arm to the odd looking toolbox assembly! Boop beep!</span>")
 		user.drop_from_inventory(src)
 		qdel(src)
-	else if (istype(W, /obj/item/weapon/pen))
-		var/t = stripped_input(user, "Enter new robot name", name, created_name)
 
+	else if (istype(W, /obj/item/weapon/pen))
+		var/t = copytext(stripped_input(user, "Enter new robot name", name, created_name),1,MAX_NAME_LEN)
 		if (!t)
 			return
 		if (!in_range(src, usr) && loc != usr)
