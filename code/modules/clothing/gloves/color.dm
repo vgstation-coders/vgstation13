@@ -93,6 +93,10 @@
 	name = "insulted gloves"
 	desc = "These gloves will mock the wearer when shocked."
 
+/obj/item/clothing/gloves/fyellow/insulted/New()
+	. = ..()
+	siemens_coefficient = pick(0.25,0.5,0.5,0.5,0.5,0.75,1.5)
+
 /obj/item/clothing/gloves/black
 	desc = "These gloves are quite comfortable, and will keep you warm!"
 	name = "black gloves"
