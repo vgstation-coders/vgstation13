@@ -625,7 +625,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating //vendor version
-	desc = "Just add 10u water, self heats!"
+	desc = "Self-heating: just add 10u water!"
 
 /obj/item/weapon/reagent_containers/food/drinks/groans
 	name = "Groans Soda"
