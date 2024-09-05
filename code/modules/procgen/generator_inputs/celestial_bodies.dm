@@ -47,8 +47,8 @@
 	vmatrix = generate_voronoi(map_size,num_seeds)
 	return label_biomes(vmatrix)
 
-/datum/procedural_space_object/proc/generate_heightmap()
-	return generate_perlin_noise(map_size, heightmap_amplification)
+/datum/procedural_space_object/proc/get_heightmap()
+	return generate_heightmap(map_size)
 //	noise_matrix = generate_perlin_noise(map_size, heightmap_amplification)
 //	filter_heightmap() //modifies the heightmap to better fit different biomes
 
