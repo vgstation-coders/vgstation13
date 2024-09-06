@@ -614,7 +614,7 @@
 	reagents.chem_temp = COOKTEMP_READY
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen
-	name = "\proper cup ramen"
+	name = "\improper cup ramen"
 	desc = "A taste that reminds you of your school years."
 	icon_state = "ramen"
 
