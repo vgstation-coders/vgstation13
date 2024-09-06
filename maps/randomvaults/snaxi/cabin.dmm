@@ -51,14 +51,7 @@
 	},
 /area)
 "x" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced{
-	dir = 4
-	},
-/obj/structure/window/reinforced,
+/obj/structure/grille/window_spawner/reinforced,
 /turf/simulated/floor/plating,
 /area)
 "E" = (
@@ -73,17 +66,6 @@
 "I" = (
 /obj/structure/filingcabinet/chestdrawer,
 /turf/simulated/floor/carpet,
-/area)
-"O" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced{
-	dir = 8
-	},
-/obj/structure/window/reinforced{
-	dir = 1
-	},
-/obj/structure/window/reinforced,
-/turf/simulated/floor/plating,
 /area)
 "S" = (
 /obj/structure/bed/chair/comfy/black{
@@ -168,7 +150,7 @@ T
 (6,1,1) = {"
 T
 T
-O
+x
 d
 h
 h
