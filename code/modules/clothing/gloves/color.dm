@@ -85,13 +85,14 @@
 	. = ..()
 	siemens_coefficient = pick(0,0.5,0.5,0.5,0.5,0.75,1.5)
 
-	if(Holiday == APRIL_FOOLS_DAY)
+	if(Holiday == APRIL_FOOLS_DAY && permeability_coefficient != 0.051)
 		new /obj/item/clothing/gloves/fyellow/insulted(src)
 		qdel(src)
 
 /obj/item/clothing/gloves/fyellow/insulted
 	name = "insulted gloves"
 	desc = "These gloves will mock the wearer when shocked."
+	permeability_coefficient = 0.051 //small meaningless change to make them different from the regular (i don't wanna make a useless var)
 
 /obj/item/clothing/gloves/fyellow/insulted/New()
 	. = ..()
