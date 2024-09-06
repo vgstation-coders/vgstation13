@@ -195,6 +195,12 @@
 	item_state = "anchorarms"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/gloves/anchor_arms/offenseTackleBonus()
+	return 15
+
+/obj/item/clothing/gloves/anchor_arms/defenseTackleBonus()
+	return 15
+
 /obj/item/clothing/gloves/neorussian
 	name = "neo-Russian gloves"
 	desc = "Utilizes a non-slip technology that allows you to never drop your precious bottles of vodka."
