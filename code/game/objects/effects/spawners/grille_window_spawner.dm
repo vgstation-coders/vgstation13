@@ -34,11 +34,11 @@
 	full_path = /obj/structure/window/full/reinforced
 
 /obj/structure/grille/window_spawner/plasma
-	icon_state = "rpwindowgrille"
+	icon_state = "pwindowgrille"
 	window_path = /obj/structure/window/plasma
 
 /obj/structure/grille/window_spawner/plasma/full
-	icon_state = "rpwindowgrille_full"
+	icon_state = "pwindowgrille_full"
 	full_path = /obj/structure/window/full/plasma
 
 /obj/structure/grille/window_spawner/reinforced_plasma
