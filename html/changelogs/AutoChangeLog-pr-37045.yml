@@ -1,6 +1,0 @@
-author: west3436
-delete-after: true
-changes:
-- bugfix: MoMMIs, Engineering cyborgs, and any cyborgs which have a fire shield installed
-    will no longer catch on fire or take damage from fire.
-- bugfix: Objects will properly stop smoking once they are removed from a hot room.
