@@ -165,7 +165,7 @@
 	},
 /area/vault/laundromat/drug_lab)
 "fH" = (
-/obj/structure/grille/window_spawner/plasma/full,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/engine{
 	icon_state = "floor4"
 	},

@@ -33,7 +33,7 @@
 /area/vault/oldarmory)
 "ak" = (
 /obj/structure/sign/vacuum,
-/obj/structure/grille/window_spawner/plasma/full,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/space,
 /area/vault/oldarmory)
 "am" = (
@@ -44,7 +44,7 @@
 /turf/simulated/floor/plating,
 /area/vault/oldarmory)
 "ap" = (
-/obj/structure/grille/window_spawner/plasma/full,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/space,
 /area/vault/oldarmory)
 "aq" = (
@@ -355,7 +355,7 @@
 /turf/simulated/wall/r_wall,
 /area/vault/oldarmory)
 "bz" = (
-/obj/structure/grille/window_spawner/plasma/full,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/shuttle/brig,
 /area/vault/oldarmory)
 "bB" = (

@@ -1246,7 +1246,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/visible{
 	dir = 4
 	},
-/obj/structure/grille/window_spawner/plasma/full,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/engine{
 	name = "o2 floor";
 	nitrogen = 0;
@@ -2437,7 +2437,7 @@
 /turf/simulated/floor,
 /area/vault/powered/mini_station_construction)
 "Zh" = (
-/obj/structure/grille/window_spawner/plasma/full,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/engine{
 	name = "o2 floor";
 	nitrogen = 0;

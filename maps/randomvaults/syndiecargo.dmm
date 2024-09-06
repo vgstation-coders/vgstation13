@@ -191,7 +191,7 @@
 	},
 /area/vault/syndiecargo)
 "aJ" = (
-/obj/structure/grille/window_spawner/plasma/full,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/shuttle/plating,
 /area/vault/syndiecargo)
 "aK" = (
@@ -503,7 +503,7 @@
 	id_tag = 350;
 	name = "Shutters"
 	},
-/obj/structure/grille/window_spawner/plasma/full,
+/obj/structure/grille/window_spawner/reinforced_plasma/full,
 /turf/simulated/floor/shuttle/plating,
 /area/vault/syndiecargo)
 

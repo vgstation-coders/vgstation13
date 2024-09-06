@@ -638,7 +638,7 @@
 /turf/simulated/floor/plating,
 /area/mining_bar)
 "Da" = (
-/obj/structure/grille/window_spawner/plasma,
+/obj/structure/grille/window_spawner/reinforced_plasma,
 /turf/simulated/floor/plating,
 /area/mining_bar)
 "Iz" = (
