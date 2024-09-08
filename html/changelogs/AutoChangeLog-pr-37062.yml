@@ -1,0 +1,6 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Extra panes on synergy permabrig glass have been removed.
+- tweak: Extra air alarms in synergy secure armory and HoS office have been removed.
+- tweak: Disposals machinery on synergy is now accessible without breaking glass.
