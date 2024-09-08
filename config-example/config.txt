@@ -378,3 +378,6 @@ BSQL_THREAD_LIMIT 50
 
 ## Uncomment to enable verbose BSQL communication logs
 #BSQL_DEBUG
+
+## Location of .git/refs/heads/Bleeding-Edge
+BRANCH_HEAD .git/refs/heads/Bleeding-Edge

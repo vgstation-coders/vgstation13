@@ -208,6 +208,7 @@
 	var/reagents_heat_air = 0 //Whether or not reagents exchanging heat with the surrounding air actually heat or the cool air. If off, the energy change only applies to the reagents.
 
 	var/library_url = ""
+	var/branch_head = ""
 
 /datum/configuration/New()
 	. = ..()
@@ -283,7 +284,7 @@
 
 				if ("cargo_forwarding_amount_override")
 					cargo_forwarding_amount_override = text2num(value)
-				
+
 				if("roundstart_lights_on")
 					roundstart_lights_on = 1
 
@@ -642,7 +643,8 @@
 					discord_password = value
 				if("library_url")
 					library_url = value
-
+				if("branch_head")
+					branch_head = value
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 

@@ -1,5 +1,9 @@
 /proc/return_revision()
-	return file2text(".git/refs/heads/Bleeding-Edge")
+	var/output =  "Sorry, the revision info is unavailable."
+	output = file2text(config.branch_head)
+	if(!output || output == "")
+		output = "Unable to load revision info from HEAD"
+	return output
 
 /client/verb/showrevinfo()
 	set category = "OOC"
