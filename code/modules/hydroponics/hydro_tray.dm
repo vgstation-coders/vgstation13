@@ -337,6 +337,7 @@ var/list/hydro_trays = list()
 
 			var/obj/structure/flora/pottedplant/claypot/S = new(get_turf(C))
 			transfer_fingerprints(C, S)
+			S.paint_layers = C.paint_layers.Copy()
 			qdel(C)
 
 			if(seed.large)
@@ -353,12 +354,11 @@ var/list/hydro_trays = list()
 			else
 				plant_appearance = "stage-[growth_level]"
 
-			S.overlays += image(seed.plant_dmi,plant_appearance)
-
+			S.plant_image = image(seed.plant_dmi,plant_appearance)
 			S.plant_name = seed.display_name
 			S.name = "potted [S.plant_name]"
-
 			S.plantname = seed.name
+
 			if (seed.pollen && harvest >= seed.pollen_at_level)
 				S.pollen = seed.pollen
 				S.add_particles(seed.pollen)
@@ -382,6 +382,7 @@ var/list/hydro_trays = list()
 					S.light_color = seed.biolum_colour
 
 			remove_plant()
+			S.update_icon()
 			update_icon()
 		else
 			C.being_potted = FALSE
