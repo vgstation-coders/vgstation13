@@ -1,0 +1,10 @@
+author: DeityLink
+delete-after: true
+changes:
+- rscadd: You can now empty an ashtray's contents in a disposal unit by simply clicking
+    on the bin with the ashtray. If the ashtray is empty it will be thrown in it instead.
+- imageadd: Ashtrays have an new sprite for when they have at least one cigarette
+    in them.
+- soundadd: Ashtrays now make sound when hit and thrown.
+- rscadd: Broken ashtrays are now properly considered trash items (and thus may persist
+    through rounds)
