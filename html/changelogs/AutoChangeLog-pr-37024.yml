@@ -1,0 +1,7 @@
+author: DeityLink
+delete-after: true
+changes:
+- rscadd: You can now paint clay pots using a painting brush or paint roller. Nano
+    paint glows in the dark on them.
+- rscadd: Added the ability to craft clay pots directly out of sandstone to remove
+    some of the tedium of producing those, and also raising awareness of their existence.
