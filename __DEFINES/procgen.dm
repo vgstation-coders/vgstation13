@@ -63,6 +63,11 @@
 #define PG_FUTURE_CIV	/datum/procedural_civilization/future
 
 //Altitude
-#define PG_LOW_ALT	-2.5
-#define PG_MED_ALT	0
-#define PG_HIGH_ALT	2.5
+#define PG_LOW_ALT	9
+#define PG_MED_ALT	7
+#define PG_HIGH_ALT	5
+
+//Water
+#define PG_NO_WATER		0
+#define PG_MED_WATER	1
+#define PG_HIGH_WATER	2

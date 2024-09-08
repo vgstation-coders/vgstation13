@@ -294,7 +294,7 @@ var/global/list/accessable_z_levels = list()
 	name = "procedurally-generated space object"
 	movementJammed = TRUE
 	bluespace_jammed = TRUE
-	base_turf = /turf/space/void
+	base_area = /area/procplanet
 
 // Debug ///////////////////////////////////////////////////////
 

@@ -1,144 +1,142 @@
 //Procedural celestial body generator
-var/global/procgen_state = PG_INACTIVE
-
-/**
- * Outputs a Voronoi Diagram in list-of-list form given map size and number of seed points.
- *
- * http://pcg.wikidot.com/pcg-algorithm:voronoi-diagram
- *
- * Arguments:
- * * size - Map size (square) [10,500]
- * * num_points - Total number of distinct zones [0,size**2]. For more realistic maps, use values less than 10.
- * * random_num - Use a random number of a seed points [TRUE,FALSE]
- */
-/proc/generate_voronoi(var/size, var/num_points, var/random_num = FALSE)
-	size = clamp(size,10,500)
-	if(!num_points || num_points <= 1 || random_num)
-		num_points = rand(2,10)
-
-	var/list/seeds = list()
-	var/list/vo_matrix = new/list(size,size)
-
-	// Generate random seed points with unique group identifiers
-	for (var/i = 1 to num_points)
-		var/seed_x = rand(1, size)
-		var/seed_y = rand(1, size)
-		seeds += list(list(seed_x,seed_y))
-
-	// Assign each cell in the grid to the nearest seed point
-	for (var/y = 1 to size)
-		for (var/x = 1 to size)
-			var/nearest_seed_index = 0
-			var/list/rdists = list()
-
-			// Calculate the distance to each seed and find the closest one
-			var/i = 0
-			while(i++ < seeds.len)
-				var/nearest_seed_x = seeds[i][1]
-				var/nearest_seed_y = seeds[i][2]
-				var/distance = sqrt((x - nearest_seed_x) ** 2 + (y - nearest_seed_y) ** 2)
-				rdists += distance
-			var/pot_min = min(rdists)
-			nearest_seed_index = rdists.Find(pot_min)
-			// Assign the group identifier to the matrix based on the nearest seed
-			vo_matrix[y][x] = nearest_seed_index
-			file("voronoi.txt") << "[nearest_seed_index],"
-		file("voronoi.txt") << ";"
-	return vo_matrix
-
-/**
- * Outputs a heightmap in list-of-list form given map size.
- *
- *
- * Arguments:
- * * size - Map size (square) [10,world.maxx]
- */
-/proc/generate_heightmap(size)
-	var/seed = rand(1,100)
-	var/noise_string1 = rustg_dbp_generate("[seed]","10","50","[size]","-1","0.01")
-	seed = rand(1,100)
-	var/noise_string2 = rustg_dbp_generate("[seed]","10","25","[size]","-1","0.01")
-	var/number
-	var/noise_string
-	for(var/i = 1 to size*size)
-		number = text2num(noise_string1[i]) - text2num(noise_string2[i])
-		noise_string += num2text(number)
-	var/list/noise_matrix = new/list(size,size)
-	var/lastindex = 1
-	for(var/j = 0 to size)
-		var/list/row = new/list(size)
-		for(var/k = 1 to size + 1)
-			row += noise_string[lastindex]
-			lastindex++
-		noise_matrix += list(row)
-	return noise_matrix
-
-/proc/spawn_space_object() //update with configurable inputs and a menu
-	var/datum/procedural_generator/proc_gen = new
-	SSprocgen.PG = proc_gen
-	procgen_state = PG_INIT
-	SSprocgen.can_fire = TRUE
-	SSprocgen.ignite()
+var/procgen_state = PG_INACTIVE
+var/list/atmospheres = typesof(/datum/procedural_atmosphere) - /datum/procedural_atmosphere
+var/list/biomes = typesof(/datum/procedural_biome) - /datum/procedural_biome
+var/list/civilizations = typesof(/datum/procedural_civilization) - /datum/procedural_civilization
 
 /datum/procedural_generator
-	var/map_size
-	var/rows_completed = 0
+	var/name
+	var/list/valid_map_sizes = list()
+	var/map_size // [100,200,300]
+	var/heightmap_string
+	var/list/heightmap_list
 
-	var/list/datum/procedural_space_object/space_objects
-	var/list/datum/procedural_atmosphere/atmospheres
-	var/list/datum/procedural_biome/biomes
-	var/list/datum/procedural_civilization/civilizations
+	var/weight //chance for this generator to be selected
+	var/accuracy = 10 //best value for good-looking terrain
+	var/stamp = 60 //how large the terrain features appear
 
-	var/datum/procedural_space_object/space_obj
-	var/datum/zLevel/procgen_z
+	var/list/valid_waters = list()
+	var/water
+	var/list/valid_altitudes = list()
+	var/altitude
+	var/list/valid_biomes = list()
+	var/datum/procedural_biome/biome
+	var/list/valid_atmospheres = list()
+	var/datum/procedural_atmosphere/atmosphere
+	var/list/valid_civs = list()
+	var/datum/procedural_civilization/civilization
 
-//All lists are generated at runtime to assist in adding new content easier.
+	var/list/turfmap = list()
+	var/area/procgen_area_type = /area/planet
+
+	var/datum/zLevel/procgen/procgen_z
+	var/procgen_z_id = 100
+
 /datum/procedural_generator/New()
-	space_objects = typesof(/datum/procedural_space_object) - /datum/procedural_space_object
-	atmospheres = typesof(/datum/procedural_atmosphere) - /datum/procedural_atmosphere
-	biomes = typesof(/datum/procedural_biome) - /datum/procedural_biome
-	civilizations = typesof(/datum/procedural_civilization) - /datum/procedural_civilization
+	//Map Definition (low intensity)
+	map_size = pick(valid_map_sizes)
+	water = pick(valid_waters)
+	altitude = pick(valid_altitudes)
+	var/biometype = pick(valid_biomes)
+	biome = new biometype
+	var/atmospheretype = pick(valid_atmospheres)
+	atmosphere = new atmospheretype
+	var/civtype = pick(valid_civs)
+	civilization = new civtype
 
-/datum/procgen/Del()
-	qdel(SSprocgen.PG)
-	..()
+	//Map Creation (medium intensity)
+	heightmap_string = generate_heightmap()
+	heightmap_list = filter_heightmap(heightmap_string)
+	turfmap = build_turfmap()
 
-////////////////////////////////////////////////////////////////////////////////
-// Initialization State - PG_INIT
-////////////////////////////////////////////////////////////////////////////////
+	//Z-Level Mapping (high intensity)
+//	SSprocgen.PG = src
+	procgen_z = new /datum/zLevel/procgen
+	map.addZLevel(procgen_z,procgen_z_id)
+	var/strout
+	for(var/i = 1 to map_size)
+		for(var/j = 1 to map_size)
+			// var/turf/T = locate(i,j,procgen_z_id)
+			// T.ChangeTurf(turfmap[i][j])
+			strout += turfmap[i][j]
+			if(i%map_size)
+				strout += ","
+			else
+				strout += ";"
+	rustg_file_write("[strout]","procedural_generator_debug.txt")
 
-// Selects a space object, configures it, constructs the matrices used to map it, and spawns a zlevel of the appropriate size.
-/datum/procedural_generator/proc/construct_space_obj()
-	var/space_obj_path = pick_space_object()
-	space_obj = new space_obj_path
-	map_size = space_obj.get_map_size()
-	space_obj.initialize_planet()
-	setup_zlevel()
-	procgen_state = PG_MAPPING
+/**
+ * Outputs a heightmap in string form.
+ *
+ *
+ * Arguments:
+ * * debug - Prints the string to a comma-separated text file in the server directory for visulization.
+ */
+/datum/procedural_generator/proc/generate_heightmap()
+	var/seed = rand(1,100)
+	var/cnoise = rustg_cnoise_generate("45","[stamp/3]","4","3","[map_size]","[map_size]")
+	var/pnoise1 = rustg_dbp_generate("[seed]","[accuracy]","[stamp]","[map_size]","-1","0.01")
+	var/pnoise2 = rustg_dbp_generate("[seed]","[accuracy]","[stamp/2]","[map_size]","-1","0.01")
+	var/pnoise3 = rustg_dbp_generate("[seed]","[accuracy]","[stamp/4]","[map_size]","-1","0.01")
+	var/pnoise4 = rustg_dbp_generate("[seed]","[accuracy]","[stamp/6]","[map_size]","-1","0.01")
 
-/datum/procedural_generator/proc/pick_space_object()
-	for(var/datum/procedural_space_object/S in space_objects)
-		if(!S.weight || S.weight == 0)
-			continue
-		else
-			space_objects += S
-			space_objects[S] = S.weight
-	if(!length(space_objects))
-		CRASH("Failed to pick a space object to generate!")
-	return pickweight(space_objects)
+	var/cave_threshold = 5
+	var/value
+	var/noise_string
 
-/datum/procedural_generator/proc/setup_zlevel()
-	map.addZLevel(new /datum/zLevel/procgen, z_to_use = PG_Z, make_base_turf = TRUE)
-	procgen_z = map.zLevels[PG_Z]
-	for(var/turf/T in block(locate(space_obj.padding + 1,space_obj.padding + 1,PG_Z),locate(space_obj.padding + map_size + 1,space_obj.padding + map_size + 1,PG_Z)))
-		T.ChangeTurf(/turf/space)
-	return
+	for(var/i = 1 to map_size*map_size)
+		value = 4 * text2num(pnoise1[i]) + 2 * text2num(pnoise2[i]) + 2 * text2num(pnoise3[i]) + text2num(pnoise4[i])
+		if(value > cave_threshold)
+			value += 2 * (text2num(cnoise[i]) - 1)
+		noise_string += num2text(value)
 
+	return noise_string
 
-////////////////////////////////////////////////////////////////////////////////
-// Mapping State - PG_MAPPING
-////////////////////////////////////////////////////////////////////////////////
-/datum/procedural_generator/proc/generate_map()
-	rows_completed = space_obj.build_map(rows_completed + 1)
-	if(rows_completed == map_size)
-		procgen_state = PG_DECORATION
+// Clamps the heightmap values and outputs a list of lists.
+// 0 - water
+// 1 - floor
+// 2 - turf
+/datum/procedural_generator/proc/filter_heightmap(input_string)
+	var/list/noise_matrix = new/list(map_size,map_size)
+	var/list/row = list()
+	for(var/i = 1 to length(input_string))
+		var/newval
+		switch(text2num(input_string[i]))
+			// if(-10 to water - 1) FIX LATER
+			// 	input_string[i] = 0
+			// if(water to altitude - 1)
+			// 	input_string[i] = 1
+			// if(altitude to 10)
+			// 	input_string[i] = 2
+			if(0 to 1)
+				newval = 0
+			if(2 to 5)
+				newval = 1
+			if(6 to 9)
+				newval = 2
+		if(!(i % (map_size + 1)))
+			noise_matrix += list(row)
+			row = list()
+		row += newval
+
+	return noise_matrix
+
+/**
+ * Outputs a turf matrix in list-of-list form using a heightmap.
+ */
+/datum/procedural_generator/proc/build_turfmap()
+	var/list/turfs = new/list(map_size,map_size)
+	for(var/i = 1 to map_size)
+		var/list/row = list()
+		for(var/j = 1 to map_size)
+			switch(heightmap_list[i][j])
+				if(0)
+					row += "[biome.water_turf]"
+				if(1)
+					row += "[pick(biome.floor_turfs)]"
+				if(2)
+					row += "[pick(biome.wall_turfs)]"
+				else
+					CRASH("Heightmap corrupted - incorrect value received!")
+		turfs += row
+	return turfs

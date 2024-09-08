@@ -3059,3 +3059,7 @@ var/list/shack_names = list("abandoned","deserted","forsaken","stranded","isolat
 	name = "\improper HELL"
 	requires_power = 0
 	dynamic_lighting = 0
+
+//Procedurally-Generated Planets
+/area/procplanet
+	name = "\improper Planet Surface"
