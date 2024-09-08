@@ -1,0 +1,5 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- tweak: Extra erroneous window panels on packed bridge wing have been removed.
+- tweak: The misaligned shuttle diagonal wall on the medical escape pod has been fixed.
