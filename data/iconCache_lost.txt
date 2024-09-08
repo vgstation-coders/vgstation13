@@ -1,27 +1,3 @@
 //Orphan savefile buffer 'type' found on Sat Mar 02 14:02:05 2024
 type = /icon
 //End of exported data.
-//Orphan savefile buffer 'type' found on Fri Sep 06 18:52:12 2024
-type = /icon
-//End of exported data.
-//Orphan savefile buffer 'type' found on Fri Sep 06 18:52:12 2024
-type = /icon
-//End of exported data.
-//Orphan savefile buffer 'icon' found on Fri Sep 06 18:52:12 2024
-icon = filedata("name=;ext=.dmi;length=418;crc32=0x299cc537;encoding=base64",{"
-iVBORw0KGgoAAAANSUhEUgAAACoAAAAgCAMAAABThhoPAAAAP1BMVEXAwMAAAAClpKMpKSnKysrf
-39+OUSccHBydWSxRPDHLx8ORkZFNTU1nPSWNUCdyRSkzMzN+Sy1aQjdiQzFLOC1r2jHfAAAAAXRS
-TlMAQObYZgAAAGZ6VFh0RGVzY3JpcHRpb24AAHicU1ZwcnX39FNw8fXkKkstKs7Mz1OwVTDRM+Di
-LM9MKckAcYy4ODNSM9MzSoAcYyOu4pLEklQgU0mJizMls6gYyDTk4kwrSsxNhbCVFVz9XMAmAgCa
-8hgMlb0KEwAAAJ9JREFUOI3tkNEOwiAMRVnv3NpZKBP//1ttZ4wzSvTNlx2Su0FPLgkpHRx8Zfhw
-RgkYxxMBoGmeJmZPGYZ3l5YzlFQVChIVyTlrlp0hzvYpzIUX9vQ/q0ZEnvIsxepUF0uxbEYWaSZz
-VEQ+S7FGCZcYXx7shZ0a97rYBMlXVV+dp0CILXoQu6pA79XARO1+ITZ6os9blmt//KL+Kh78nxtM
-1gcwwysZbgAAAABJRU5ErkJggg==
-"})
-//End of exported data.
-//Orphan savefile buffer 'type' found on Fri Sep 06 18:52:12 2024
-type = /icon
-//End of exported data.
-//Orphan savefile buffer 'type' found on Fri Sep 06 18:52:12 2024
-type = /icon
-//End of exported data.
