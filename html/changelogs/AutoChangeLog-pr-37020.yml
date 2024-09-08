@@ -1,5 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- rscadd: Hostile mobs spawned in mob cubes are now logged to admins, telling them
-    who opened it and where.

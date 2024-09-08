@@ -1,5 +1,0 @@
-author: DeityLink
-delete-after: true
-changes:
-- tweak: The area lights that appear during alerts are now additive, meaning that
-    they don't make your eyes hurt as much, and improve visibility and mood overall.

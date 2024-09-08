@@ -1,8 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- tweak: Self heating cup ramen now only requires the container for the reaction,
-    and does not use calcium oxide within, now only requiring 10u of water to heat
-    and not 12.
-- spellcheck: The millilitres on cup ramen's description have been changed to reference
-    units, for consistency.

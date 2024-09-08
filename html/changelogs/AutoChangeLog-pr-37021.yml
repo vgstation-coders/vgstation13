@@ -1,4 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: Mobs that end up inside large wooden crates now show up when they get dismantled.

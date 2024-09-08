@@ -1,5 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- tweak: Pickaxes, shovels, mining drills and plasma torches now have appropriate
-    hit sounds when attacking people, instead of none at all.
