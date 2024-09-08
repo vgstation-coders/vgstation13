@@ -1,0 +1,5 @@
+author: DeityLink
+delete-after: true
+changes:
+- bugfix: Fixed airlocks appearing black for an instant when they flicker their lights
+    in an area that doesn't have dynamic lighting.
