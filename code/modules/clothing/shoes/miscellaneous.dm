@@ -230,7 +230,6 @@
 		"Dramatic" = 'sound/effects/dramatic_short.ogg',
 		"Random" = CLOWNSHOES_RANDOM_SOUND)
 	var/random_sound = 0
-	var/emagged = 0
 
 /obj/item/clothing/shoes/clown_shoes/advanced/attack_self(mob/living/user)
 	if(user.mind && !clumsy_check(user))

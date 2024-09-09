@@ -20,7 +20,6 @@
 		GENE_XENOPHYSIOLOGY		=	"#8AFF81",
 		)
 	var/isSomatoraying = FALSE
-	var/emagged = FALSE
 	var/charge_speed = 10//how many ticks do you have to stand before the radiation comes out
 
 	var/image/mode_color

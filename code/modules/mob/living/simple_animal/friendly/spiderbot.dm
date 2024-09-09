@@ -38,7 +38,6 @@
 
 	var/obj/item/held_item = null //Storage for single item they can hold.
 	var/lob_range = 3
-	var/emagged = 0               //IS WE EXPLODEN?
 	var/syndie = 0                //IS WE SYNDICAT? (currently unused)
 	speed = 1                    //Spiderbots gotta go fast.
 	pass_flags = PASSTABLE | PASSRAILING

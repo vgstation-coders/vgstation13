@@ -18,7 +18,6 @@
 
 	var/charges = 10
 	var/ready = 0
-	var/emagged = 0
 	var/defib_delay = 30
 
 	var/defib_tool = "paddles"

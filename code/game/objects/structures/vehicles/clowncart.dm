@@ -34,7 +34,6 @@
 	var/trail //Trail from banana pie
 	var/colour1 = "#000000" //Change it by using stamps
 	var/colour2 = "#3D3D3D" //Default is boring black
-	var/emagged = 0			//Does something maybe
 	var/honk				//Timer to prevent spamming honk
 
 /obj/structure/bed/chair/vehicle/clowncart/process()

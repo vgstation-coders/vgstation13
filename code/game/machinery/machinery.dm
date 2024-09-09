@@ -124,7 +124,6 @@ Class Procs:
 	penetration_dampening = 5
 
 	var/stat = 0
-	var/emagged = 0
 	var/use_power = MACHINE_POWER_USE_IDLE
 		//0 = dont run the auto
 		//1 = run auto, use idle

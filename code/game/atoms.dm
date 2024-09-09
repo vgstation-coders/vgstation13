@@ -56,6 +56,7 @@ var/global/list/ghdel_profiling = list()
 	/// The chat color var, without alpha.
 	var/chat_color_hover
 
+	var/emagged = 0 // Some things other than machinery can be
 	var/arcanetampered = 0 //A looot of things can be
 
 

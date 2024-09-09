@@ -21,7 +21,6 @@
 	var/l_set = 0
 	var/l_setshort = 0
 	var/l_hacking = 0
-	var/emagged = 0
 	var/open = 0
 	w_class = W_CLASS_MEDIUM
 	fits_max_w_class = W_CLASS_SMALL

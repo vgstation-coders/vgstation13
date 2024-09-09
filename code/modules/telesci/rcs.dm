@@ -77,7 +77,6 @@
 	throw_range = 5
 	var/obj/item/weapon/cell/high/cell = null
 	var/mode    = MODE_NORMAL
-	var/emagged = FALSE
 	var/send_cost = 1500
 	var/send_note = FALSE
 	var/no_station = FALSE

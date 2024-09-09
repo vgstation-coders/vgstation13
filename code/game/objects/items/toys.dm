@@ -912,7 +912,6 @@
 	name = "toy nuke-op"
 	desc = "Mildly explosive."
 	icon_state = "newcop"
-	var/emagged = 0
 
 /obj/item/toy/gasha/newcop/emag_act(mob/user)
 	if(!emagged)

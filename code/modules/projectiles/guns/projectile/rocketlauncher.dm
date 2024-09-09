@@ -135,7 +135,6 @@
 	fire_sound = 'sound/weapons/rocket.ogg'
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg/nikita"
 	var/obj/item/projectile/rocket/nikita/fired = null
-	var/emagged = 0
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/update_icon()
 	return

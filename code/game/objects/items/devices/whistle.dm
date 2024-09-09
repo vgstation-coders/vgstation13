@@ -12,7 +12,6 @@
 
 	var/nextuse = 0
 	var/cooldown = 2 SECONDS
-	var/emagged = 0
 	var/insults = 0//just in case
 
 /obj/item/device/hailer/proc/say_your_thing()

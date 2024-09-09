@@ -9,7 +9,6 @@
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	flammable = TRUE
-	var/emagged = 0.0
 	var/recording = 0.0
 	var/playing = 0.0
 	var/timerecorded = 0.0
