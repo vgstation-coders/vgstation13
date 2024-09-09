@@ -106,6 +106,7 @@
 		return
 	if(isEmag(I))
 		emag_act(user)
+		return
 	..()
 
 /obj/machinery/disposal/compactor/emag_act(mob/user)
