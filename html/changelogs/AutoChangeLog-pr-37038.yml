@@ -1,0 +1,4 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- bugfix: Thermometers and stethoscopes can now fit in medical belts
