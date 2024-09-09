@@ -99,9 +99,15 @@ Please contact me on #coderbus IRC. ~Carn x //FUCK YOU CARN
 	update_overlays_standing()
 	update_transform()
 	update_hands_icons()
+	update_luminosity()
 	if(istype(loc,/obj/structure/inflatable/shelter))
 		var/obj/O = loc
 		O.update_icon() //Shelters use an overlay of the human inside, so if we change state we want the appearance to reflect that.
+
+/mob/living/carbon/human/proc/update_luminosity()//due to moody lights we might want people to show up in the dark even if they aren't actually emitting light
+	luminosity = 0
+	for (var/obj/item/I in contents)
+		luminosity = max(luminosity, I.luminosity)
 
 /mob/living/carbon/human/proc/update_overlays_standing()
 	if(species && species.override_icon)
