@@ -104,6 +104,8 @@
 		wrenchAnchor(user, I)
 		power_change()
 		return
+	if(isEmag(I))
+		emag_act(user)
 	..()
 
 /obj/machinery/disposal/compactor/emag_act(mob/user)
