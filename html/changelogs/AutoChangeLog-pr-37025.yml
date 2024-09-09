@@ -1,0 +1,7 @@
+author: DeityLink
+delete-after: true
+changes:
+- rscadd: Psychedelic Jumpsuit now glows in the dark, even while worn! Same with the
+    clown variants.
+- imageadd: The Pyschedelic Jumpsuit's in-hand icons are now actually psychedelic.
+- imageadd: Added in-hand icons for the Purple and Aqua jumpsuits.
