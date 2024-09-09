@@ -802,7 +802,7 @@ var/list/admin_verbs_mod = list(
 		//effect vars
 		"stun", "weaken", "paralyze", "irradiate", "eyeblur", "drowsy", "agony", "jittery",
 		//appearance/misc vars
-		"icon", "icon_state", "color", "silenced", "manual variable entry"
+		"icon (upload dmi)", "icon_state", "color", "silenced", "manual variable entry"
 	)
 
 	var/inputvar
@@ -827,7 +827,11 @@ var/list/admin_verbs_mod = list(
 		if("damage_type")
 			newvalue = input(usr, "What type of damage should the projectile deal (it can only deal one, sorry)?", "Var: [inputvar]") as null|anything in list("brute", "oxy", "tox", "fire", "clone", "brain")
 		if("nodamage")
-			newvalue = input(usr, "Should the gun do damage on hit?", "Var: [inputvar]") as null|anything in list(TRUE, FALSE)
+			newvalue = input(usr, "Should the gun NOT do damage on hit?", "Var: [inputvar]") as null|anything in list("True", "False")
+			if(newvalue == "True")
+				newvalue = TRUE
+			else
+				newvalue = FALSE
 		if("what armor resists (flag)")
 			newvalue = input(usr, "What armor type should resist this damage?", "Var: [inputvar]") as null|anything in list("melee", "bullet", "laser", "energy", "bomb", "bio", "rad")
 			inputvar = "flag"
@@ -846,6 +850,11 @@ var/list/admin_verbs_mod = list(
 			if(isnull(inputvar))
 				return
 			newvalue = variable_set(usr)
+		if("icon (upload dmi)")
+			newvalue = input(usr, "Choose an icon file for your new projectile!", "Var: [inputvar]") as null|icon
+			inputvar = "icon"
+		if("icon_state")
+			newvalue = input(usr, "What icon_state to set?", "Var: [inputvar]") as null|text
 		else
 			newvalue = variable_set(usr)
 	if(isnull(newvalue))
