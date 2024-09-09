@@ -92,10 +92,8 @@
 		amount++
 	active_power_usage = 300 / (avg_rate / amount)
 	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
-		if(SM.rating >= 3)
-			phasic_scanning = TRUE
-		else
-			phasic_scanning = FALSE
+		//Phasic or higher scanners skip scanning animation
+		phasic_scanning = (SM.rating >= 3)
 
 /obj/machinery/suit_modifier/initialize()
 	if(!plasmaman_suits)
