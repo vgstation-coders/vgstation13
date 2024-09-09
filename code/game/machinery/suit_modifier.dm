@@ -315,8 +315,7 @@
 			spawn(rand(4 SECONDS, 5 SECONDS) / apply_multiplier)
 				playsound(src, 'sound/misc/click.ogg', 50, 1)
 			if(do_after(H, src, 8 SECONDS / apply_multiplier, needhand = FALSE))
-				if(R.cell)
-					R.cell.forceMove(get_turf(src))
+				R.cell?.forceMove(get_turf(src))
 				cell.forceMove(R)
 				R.cell = cell
 				cell = null
