@@ -1,8 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: Timer and proximity sensor assemblies now accurately tick their timers down
-    to the second instead of every two seconds, and timed from the moment they were
-    activated. For consistency, all pre-spawned chem grenades now have their arm time
-    doubled as to make them activate in the same amount of time as before this change.
-- bugfix: Proximity sensors now count down to zero in the same manner as timers.
