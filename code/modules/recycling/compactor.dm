@@ -104,16 +104,15 @@
 		wrenchAnchor(user, I)
 		power_change()
 		return
-	if(isEmag(I))
+	if(isEmag(I) && can_emag())
 		emag_act(user)
-		return
+		return 1
 	..()
 
 /obj/machinery/disposal/compactor/emag_act(mob/user)
-	if(!emagged)
-		. = ..()
-		emagged = 1
-		to_chat(user, "<span class='notice'>You disable the safety features.</span>")
+	emagged = !emagged
+	to_chat(user, "<span class='notice'>You disable the safety features.</span>")
+	. = ..()
 
 /obj/machinery/disposal/compactor/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
