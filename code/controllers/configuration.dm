@@ -207,6 +207,8 @@
 	var/thermal_dissipation = 1 //Whether or not thermal dissipation occurs.
 	var/reagents_heat_air = 0 //Whether or not reagents exchanging heat with the surrounding air actually heat or the cool air. If off, the energy change only applies to the reagents.
 
+	var/maprender_lags_game = 0 //If the map render checks tick or not to get done during a round
+
 	var/library_url = ""
 
 /datum/configuration/New()
@@ -696,6 +698,8 @@
 					config.silent_borg = 1
 				if("borer_takeover_immediately")
 					config.borer_takeover_immediately = 1
+				if("maprender_lags_game")
+					config.maprender_lags_game = 1
 				if("hardcore_mode")
 					hardcore_mode = value
 				if("humans_speak")
