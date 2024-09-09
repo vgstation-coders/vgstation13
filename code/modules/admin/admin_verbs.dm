@@ -806,8 +806,7 @@ var/list/admin_verbs_mod = list(
 	)
 
 	var/inputvar
-	if(!G.bullet_overrides)
-		G.bullet_overrides = list()
+	G.bullet_overrides ||= list()
 	if(!G.bullet_overrides.len)
 		inputvar = input(usr, "What variable would you like to change?", "Gun Variables") as null|anything in projectile_vars
 	else
