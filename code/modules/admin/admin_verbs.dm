@@ -785,7 +785,7 @@ var/list/admin_verbs_mod = list(
 
 /client/proc/gun_override(var/obj/item/weapon/gun/G in world)
 	set category = "Fun"
-	set name = "Override Gun Variables"
+	set name = "Override Projectile Vars"
 	set desc = "Give a gun special rules"
 
 	//dumb temporary override please fix this if we can get a list of these
@@ -802,7 +802,7 @@ var/list/admin_verbs_mod = list(
 		//effect vars
 		"stun", "weaken", "paralyze", "irradiate", "eyeblur", "drowsy", "agony", "jittery",
 		//appearance/misc vars
-		"icon", "icon_state", "color", "silenced",
+		"icon", "icon_state", "color", "silenced", "manual variable entry"
 	)
 
 	var/inputvar
@@ -841,6 +841,11 @@ var/list/admin_verbs_mod = list(
 			newvalue = input(usr, "What color (RGB format, example: #00ff00)?", "Var: [inputvar]") as null|color
 		if("silenced")
 			newvalue = input(usr, "Should the gun have no text when fired?", "Var: [inputvar]") as null|anything in list(TRUE, FALSE)
+		if("manual variable entry")
+			inputvar = input(usr, "What variable name to manually insert and then edit (verify it!)?", "Var: [inputvar]") as null|text
+			if(isnull(inputvar))
+				return
+			newvalue = variable_set(usr)
 		else
 			newvalue = variable_set(usr)
 	if(isnull(newvalue))
