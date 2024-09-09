@@ -671,6 +671,9 @@ Class Procs:
 /obj/machinery/proc/getEmagCost(var/mob/user, var/obj/item/weapon/card/emag/emag)
 	return emag_cost
 
+/obj/machinery/can_emag()
+	return machine_flags & EMAGGABLE
+
 /obj/machinery/attackby(var/obj/item/O, var/mob/user)
 	..()
 
@@ -678,12 +681,6 @@ Class Procs:
 
 	if(O.is_cookvessel && is_cooktop)
 		return 1
-
-	if(isEmag(O) && machine_flags & EMAGGABLE)
-		var/obj/item/weapon/card/emag/E = O
-		if(E.canUse(user,src))
-			emag_act(user)
-			return 1
 
 	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
