@@ -63,6 +63,7 @@
 	item_state = "card-id"
 	slot_flags = SLOT_ID
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=2"
+	flags = FPRINT | NO_ATTACK_MSG //because of overrides
 
 	/**
 	 * Number of uses left.  -1 = infinite
