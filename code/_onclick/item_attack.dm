@@ -27,6 +27,7 @@
 		var/obj/item/weapon/card/emag/E = W
 		if(E.canUse(user,src))
 			emag_act(user)
+			return 1
 
 /mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null, var/def_zone = null)
 	if(!no_delay)

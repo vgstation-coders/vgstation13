@@ -674,7 +674,7 @@ Class Procs:
 	return machine_flags & EMAGGABLE
 
 /obj/machinery/attackby(var/obj/item/O, var/mob/user)
-	..()
+	. = ..()
 
 	add_fingerprint(user)
 
