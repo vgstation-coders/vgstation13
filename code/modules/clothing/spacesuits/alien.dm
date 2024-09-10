@@ -487,6 +487,7 @@
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
 	name = "vox atmos pressure helmet"
@@ -495,6 +496,7 @@
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 	_color = "atmos"
 
 /obj/item/clothing/suit/space/vox/civ/engineer/ce
@@ -504,6 +506,7 @@
 	armor = list(melee = 10, bullet = 5, laser = 10, energy = 5, bomb = 10, bio = 100, rad = 50)
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
 	name = "vox chief engineer pressure helmet"
@@ -511,6 +514,7 @@
 	desc = "A very alien-looking helmet for vox crewmembers. Has some radiation and heat protection."
 	clothing_flags = PLASMAGUARD
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 	_color = "ce"
 
 //Science
