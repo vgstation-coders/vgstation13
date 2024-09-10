@@ -1,4 +1,0 @@
-author: west3436
-delete-after: true
-changes:
-- bugfix: Fixed borgs and humans with robotic limbs catching on fire when repaired.
