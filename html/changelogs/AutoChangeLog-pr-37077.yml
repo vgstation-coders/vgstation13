@@ -1,5 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: The armed beartraps on the meteorological station vault now look as they're
-    supposed to.
