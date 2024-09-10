@@ -618,6 +618,9 @@
 		return 1 //No afterattack here
 
 /obj/item/weapon/reagent_containers/food/snacks/proc/slice_act(mob/user,obj/item/W)
+	var/atom/place_to_spawn = loc
+	if(istype(loc,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) // so things slice off these plates properly
+		place_to_spawn = place_to_spawn.loc
 	if(slice_path && slices_num && slices_num > 0)
 		var/slices_lost = 0
 		if(W.is_sharp() >= 1.2)
@@ -628,9 +631,6 @@
 			"<span class='notice'>You inaccurately slice \the [src] with \the [W]!</span>")
 			slices_lost = rand(1, min(1, round(slices_num/2))) //Randomly lose a few slices along the way, but at least one and up to half
 		var/reagents_per_slice = reagents.total_volume/slices_num //Figure out how much reagents each slice inherits (losing slices loses reagents)
-		var/atom/place_to_spawn = loc
-		if(istype(loc,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) // so things slice off these plates properly
-			place_to_spawn = place_to_spawn.loc
 		for(var/i = 1 to (slices_num - slices_lost)) //Transfer those reagents
 			var/obj/item/weapon/reagent_containers/food/snacks/slice = new slice_path(place_to_spawn)
 			if(istype(src, /obj/item/weapon/reagent_containers/food/snacks/customizable)) //custom sliceable foods have overlays we need to apply
@@ -667,13 +667,16 @@
 		return 1
 	if(contents.len) //Food item is not sliceable but still has items hidden inside. Using a knife on it should be an easy way to get them out.
 		for(var/atom/movable/A in src)
-			A.forceMove(get_turf(src))
+			A.forceMove(place_to_spawn)
 		visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
 		return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/slice_act(mob/user,obj/item/W) // to stop plate duplication memes
 	for(var/obj/item/weapon/reagent_containers/food/snacks/S in src)
 		. |= S.slice_act(user,W)
+	if(!contents.len) // get rid of this if we're done here (ie the item we hold got baleeeeted)
+		new trash(loc)
+		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	..()
