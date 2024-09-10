@@ -164,8 +164,8 @@
 
 /mob/living/silicon/robot/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(!module)
-		return ..()
-	if(module && locate(/obj/item/borg/fire_shield, module.modules))
+		..()
+	if(locate(/obj/item/borg/fire_shield, module.modules))
 		return
 	..()
 
