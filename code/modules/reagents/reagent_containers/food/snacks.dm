@@ -58,10 +58,12 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
 	QDEL_NULL(dip)
-	var/turf/T = get_turf(src)
+	var/atom/place_to_spawn = loc
+	if(istype(loc,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) // consistency
+		place_to_spawn = place_to_spawn.loc
 	if(contents.len)
 		for(var/atom/movable/A in src)
-			A.forceMove(T)
+			A.forceMove(place_to_spawn)
 		visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
 	..()
 
