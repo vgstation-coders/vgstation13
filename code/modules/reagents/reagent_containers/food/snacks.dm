@@ -617,10 +617,10 @@
 		contents += W
 		return 1 //No afterattack here
 
-/obj/item/weapon/reagent_containers/food/snacks/proc/slice_act(mob/user,var/sharpness)
+/obj/item/weapon/reagent_containers/food/snacks/proc/slice_act(mob/user,obj/item/W)
 	if(slice_path && slices_num && slices_num > 0)
 		var/slices_lost = 0
-		if(sharpness >= 1.2)
+		if(W.is_sharp() >= 1.2)
 			user.visible_message("<span class='notice'>[user] slices \the [src].</span>", \
 			"<span class='notice'>You slice \the [src].</span>")
 		else
@@ -668,9 +668,9 @@
 		visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
 		return 1
 
-/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/slice_act(mob/user) // to stop plate duplication memes
+/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/slice_act(mob/user,obj/item/W) // to stop plate duplication memes
 	for(var/obj/item/weapon/reagent_containers/food/snacks/S in src)
-		. |= S.slice_act()
+		. |= S.slice_act(user,W)
 
 /obj/item/weapon/reagent_containers/food/snacks/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	..()
