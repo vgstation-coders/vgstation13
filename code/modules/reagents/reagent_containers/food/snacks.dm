@@ -329,10 +329,12 @@
 
 			if(fullness <= (550 * (1 + M.overeatduration / 1000))) //The mob will accept
 				target.visible_message("<span class='danger'>[user] attempts to feed [target] \the [src].</span>", \
-				"<span class='userdanger'>[user] attempts to feed you \the [src].</span>")
+				"<span class='userdanger'>[user] attempts to feed you \the [src].</span>", \
+				"<span class='userdanger'>You feel \a [src] being pushed into your mouth.</span>")
 			else //The mob is overfed and will refuse
 				target.visible_message("<span class='danger'>[user] cannot force anymore of \the [src] down [target]'s throat!</span>", \
-				"<span class='userdanger'>[user] cannot force anymore of \the [src] down your throat!</span>")
+				"<span class='userdanger'>[user] cannot force anymore of \the [src] down your throat!</span>", \
+				"<span class='userdanger'>[src] cannot be forced down your throat any more!</span>")
 				return 0
 
 			if(!do_mob(user, target))
@@ -343,7 +345,8 @@
 
 			add_logs(user, target, "fed", object="[reagentlist(src)]")
 			target.visible_message("<span class='danger'>[user] feeds [target] \the [src].</span>", \
-			"<span class='userdanger'>[user] feeds you \the [src].</span>")
+			"<span class='userdanger'>[user] feeds you \the [src].</span>", \
+			"<span class='userdanger'>You have been fed \a [src].</span>")
 
 		return consume(target)
 
