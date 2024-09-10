@@ -591,7 +591,7 @@
 		if(!isturf(src.loc) || !(locate(/obj/structure/table) in src.loc) && !(locate(/obj/item/weapon/tray) in src.loc))
 			to_chat(user, "<span class='notice'>You cannot slice \the [src] here! You need a table or at least a tray.</span>")
 			return 1
-		if(slice_act(user,W.is_sharp()))
+		if(slice_act(user,W))
 			return 1
 		
 	if (istype(W, /obj/item/candle)) //candles added on afterattack
