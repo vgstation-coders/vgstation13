@@ -923,6 +923,8 @@
 	desc = "Do you know the definition of insanity?"
 	icon_state = "clownpsyche"
 	item_state = "clownpsyche"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	luminosity = 2
 	_color = "clownpsyche"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(INSECT_SHAPED)

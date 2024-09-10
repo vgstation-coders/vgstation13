@@ -587,6 +587,8 @@
 	name = "clown psychedelic shoes"
 	icon_state = "clownshoespsyche"
 	item_state = "clownshoespsyche"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	luminosity = 2
 	_color = "clownshoespsyche"
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 	species_fit = list(VOX_SHAPED)

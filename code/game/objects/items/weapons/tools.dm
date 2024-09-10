@@ -434,11 +434,6 @@
 			to_chat(user, "<span class='warning'>That was stupid of you.</span>")
 			explosion(get_turf(A),-1,0,3)
 			return
-	if (src.welding)
-		if(isliving(A))
-			var/mob/living/L = A
-			L.ignite()
-			remove_fuel(1)
 
 /obj/item/tool/weldingtool/attack_self(mob/user as mob)
 	toggle(user)

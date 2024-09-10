@@ -243,6 +243,12 @@
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
 	A.OnFired()
+	var/obj/item/weapon/gun/G = installed
+	if(G.bullet_overrides)
+		for(var/bvar in A.vars)
+			for(var/o in G.bullet_overrides)
+				if(bvar == o)
+					A.vars[bvar] = G.bullet_overrides[o]
 	spawn()
 		A.process()
 	return

@@ -79,6 +79,7 @@
 	armor = list(melee = 20, bullet = 0, laser = 0,energy = 0, bomb = 25, bio = 100, rad = 0)
 	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/tool/wrench/socket)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
 /obj/item/clothing/head/helmet/space/plasmaman/atmostech
@@ -87,6 +88,7 @@
 	base_state = "plasmamanAtmos_helmet"
 	armor = list(melee = 20, bullet = 0, laser = 0,energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/plasmaman/atmostech/New()
 	actions_types += /datum/action/item_action/toggle_helmet_mask
@@ -116,12 +118,14 @@
 	name = "plasmaman chief engineer suit"
 	icon_state = "plasmaman_CE"
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/plasmaman/engineer/ce
 	name = "plasmaman chief engineer helmet"
 	icon_state = "plasmaman_CE_helmet0"
 	base_state = "plasmaman_CE_helmet"
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 400 * ONE_ATMOSPHERE
 
 
 //SERVICE
