@@ -636,9 +636,7 @@
 			qdel(src) //So long and thanks for all the fish
 			return 1
 		if(contents.len) //Food item is not sliceable but still has items hidden inside. Using a knife on it should be an easy way to get them out.
-			for(var/atom/movable/A in src)
-				A.forceMove(get_turf(src))
-			visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
+			dump_items_within()
 			return 1
 
 	if (istype(W, /obj/item/candle)) //candles added on afterattack
@@ -663,6 +661,16 @@
 		add_fingerprint(user)
 		contents += W
 		return 1 //No afterattack here
+
+/obj/item/weapon/reagent_containers/food/snacks/proc/dump_items_within()
+	for(var/atom/movable/A in src)
+		A.forceMove(get_turf(src))
+	visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
+
+/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom/dump_items_within() // to stop plate duplication memes
+	for(var/obj/item/weapon/reagent_containers/food/snacks/S in src)
+		if(S.contents.len)
+			S.dump_items_within()
 
 /obj/item/weapon/reagent_containers/food/snacks/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	..()
