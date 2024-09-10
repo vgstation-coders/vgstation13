@@ -210,6 +210,7 @@
 	var/maprender_lags_game = 0 //If the map render checks tick or not to get done during a round
 
 	var/library_url = ""
+	var/branch_head = ""
 
 /datum/configuration/New()
 	. = ..()
@@ -285,7 +286,7 @@
 
 				if ("cargo_forwarding_amount_override")
 					cargo_forwarding_amount_override = text2num(value)
-				
+
 				if("roundstart_lights_on")
 					roundstart_lights_on = 1
 
@@ -644,7 +645,8 @@
 					discord_password = value
 				if("library_url")
 					library_url = value
-
+				if("branch_head")
+					branch_head = value
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
