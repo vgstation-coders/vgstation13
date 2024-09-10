@@ -628,8 +628,11 @@
 			"<span class='notice'>You inaccurately slice \the [src] with \the [W]!</span>")
 			slices_lost = rand(1, min(1, round(slices_num/2))) //Randomly lose a few slices along the way, but at least one and up to half
 		var/reagents_per_slice = reagents.total_volume/slices_num //Figure out how much reagents each slice inherits (losing slices loses reagents)
+		var/atom/place_to_spawn = loc
+		if(istype(loc,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) // so things slice off these plates properly
+			place_to_spawn = place_to_spawn.loc
 		for(var/i = 1 to (slices_num - slices_lost)) //Transfer those reagents
-			var/obj/item/weapon/reagent_containers/food/snacks/slice = new slice_path(src.loc)
+			var/obj/item/weapon/reagent_containers/food/snacks/slice = new slice_path(place_to_spawn)
 			if(istype(src, /obj/item/weapon/reagent_containers/food/snacks/customizable)) //custom sliceable foods have overlays we need to apply
 				var/obj/item/weapon/reagent_containers/food/snacks/customizable/C = src
 				var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
