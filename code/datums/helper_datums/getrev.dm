@@ -1,6 +1,6 @@
 /proc/return_revision()
 	var/output =  "Sorry, the revision info is unavailable."
-	output = file2text(config.branch_head)
+	output = file2text("[config.branch_head]")
 	if(!output || output == "")
 		output = "Unable to load revision info from HEAD"
 	return output
