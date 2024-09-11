@@ -30,11 +30,11 @@ var/list/civilizations = typesof(/datum/procedural_civilization) - /datum/proced
 	var/area/procgen_area_type = /area/planet
 
 	var/datum/zLevel/procgen/procgen_z
-	var/procgen_z_id = 100
 
 /datum/procedural_generator/New()
 	//Map Definition (low intensity)
-	map_size = pick(valid_map_sizes)
+	//map_size = pick(valid_map_sizes)
+	map_size = PG_SMALL
 	water = pick(valid_waters)
 	altitude = pick(valid_altitudes)
 	var/biometype = pick(valid_biomes)
@@ -50,27 +50,23 @@ var/list/civilizations = typesof(/datum/procedural_civilization) - /datum/proced
 	turfmap = build_turfmap()
 
 	//Z-Level Mapping (high intensity)
-	procgen_z = new /datum/zLevel/procgen
-	map.addZLevel(procgen_z,procgen_z_id)
-	var/strout
-	var/row = 1
-	for(var/i = 1 to length(heightmap))
-		// var/turf/T = locate(i,j,procgen_z_id)
-		// T.ChangeTurf(turfmap[i][j])
-		strout += turfmap[i]
-		if(!(i % map_size))
-			row++
-			strout += ";"
-		else
-			strout += ","
-	rustg_file_write("[strout]","procedural_generator_debug.txt")
+	world.maxz += 1
+	map.addZLevel(new /datum/zLevel/procgen,world.maxz,TRUE,TRUE)
+	procgen_z = world.maxz
+	message_admins("Spawning a [src.name] of size [map_size] at z-level [procgen_z].")
+	log_admin("Spawning a [src.name] of size [map_size] at z-level [procgen_z].")
+	place_turfs()
+
+
+/datum/procedural_generator/proc/place_turfs()
+	for(var/pos_x = 1 to length(turfmap))
+		for(var/pos_y = 1 to length(turfmap))
+			var/turf/T = locate(pos_x,pos_y,procgen_z)
+			var/turf/newturf = text2path(turfmap[pos_x][pos_y])
+			T.ChangeTurf(newturf)
 
 /**
  * Outputs a heightmap in string form.
- *
- *
- * Arguments:
- * * debug - Prints the string to a comma-separated text file in the server directory for visulization.
  */
 /datum/procedural_generator/proc/generate_heightmap()
 	var/seed = rand(1,100)
@@ -114,20 +110,20 @@ var/list/civilizations = typesof(/datum/procedural_civilization) - /datum/proced
  */
 /datum/procedural_generator/proc/build_turfmap()
 	var/list/turfs = list()
+	var/list/row = list()
 	for(var/i = 1 to length(heightmap))
 		var/val = text2num(heightmap[i])
-		var/list/row = list()
-		var/turfstr
+		var/turf/newturf
 		switch(val)
 			if(0)
-				turfstr = "[biome.water_turf]"
+				newturf = biome.water_turf
 			if(1)
-				turfstr = "[pick(biome.floor_turfs)]"
+				newturf = pick(biome.floor_turfs)
 			if(2)
-				turfstr = "[pick(biome.wall_turfs)]"
+				newturf = pick(biome.wall_turfs)
 			else
 				CRASH("Heightmap corrupted - received [val], expected a number!")
-		row += turfstr
+		row += "[newturf]"
 		if(!(i % map_size))
 			turfs += list(row)
 			row = list()

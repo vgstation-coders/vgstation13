@@ -4,7 +4,7 @@
 	var/list/precipitation = list()
 	var/list/turf/floor_turfs = list()
 	var/list/turf/wall_turfs = list()
-	var/turf/water_turf
+	var/turf/water_turf = /turf/unsimulated/beach/water
 	var/list/obj/structure/flora = list()
 	var/list/obj/structure/structures = list()
 	var/area/biome_area
