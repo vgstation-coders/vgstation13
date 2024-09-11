@@ -384,6 +384,3 @@ MAPRENDER_LAGS_GAME
 
 ## Location of .git/refs/heads/Bleeding-Edge
 BRANCH_HEAD .git/refs/heads/Bleeding-Edge
-
-## Preload resources
-PRELOAD_RSC 1

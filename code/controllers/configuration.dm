@@ -211,7 +211,6 @@
 
 	var/library_url = ""
 	var/branch_head = ""
-	var/preload_rsc = 1
 
 /datum/configuration/New()
 	. = ..()
@@ -648,8 +647,6 @@
 					library_url = value
 				if("branch_head")
 					branch_head = value
-				if("preload_rsc")
-					preload_rsc = value
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
