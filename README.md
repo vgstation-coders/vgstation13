@@ -86,7 +86,10 @@ Included in the repo is an IRC bot capable of relaying adminhelps to a specified
 
 ### LICENSE
 
-All code is licensed under the [GNU GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.html) unless specified otherwise.
+All code after (this commit) is licensed under [GNU AGPL v3](http://www.gnu.org/licenses/agpl-3.0.html).
+All code before (this commit) is licensed under the [GNU GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.html). (Including tools unless their readme specifies otherwise.)
+
+See LICENSE and GPLv3.txt for more details.
 
 TGUI and the tgstation-server DMAPI are licensed under the MIT license.
 
