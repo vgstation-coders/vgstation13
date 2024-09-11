@@ -211,6 +211,11 @@
 
 	var/library_url = ""
 	var/branch_head = ""
+	var/stats_addr = ""
+
+	//Resources
+	var/rsclist = ""
+	var/rscstring = ""
 
 /datum/configuration/New()
 	. = ..()
@@ -647,6 +652,12 @@
 					library_url = value
 				if("branch_head")
 					branch_head = value
+				if("stats_addr")
+					stats_addr = value
+				if("rsclist")
+					rsclist = value
+				if("rscstring")
+					rscstring = value
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
