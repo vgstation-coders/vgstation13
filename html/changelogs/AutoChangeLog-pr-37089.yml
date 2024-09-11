@@ -1,0 +1,4 @@
+author: west3436
+delete-after: true
+changes:
+- tweak: Updated 'client procs.dm' for AGPL compliance.
