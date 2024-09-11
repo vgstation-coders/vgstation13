@@ -19,9 +19,15 @@
 		- If so, is there any protection against somebody spam-clicking a link?
 	If you have any  questions about this stuff feel free to ask. ~Carn
 	*/
+var/bunker_up = 0 //this round
+var/bunker_saved = 0 //saved to file
+var/bunker_setting = 0
+var/updated_stats = 0
 /client
 	var/account_joined = ""
 	var/account_age
+	var/fingerprint
+	var/related_accounts_fingerprint
 
 /client/Topic(href, href_list, hsrc)
 	//var/timestart = world.timeofday
@@ -40,6 +46,9 @@
 		message_admins("Attempted use of scripts within a topic call, by [src]")
 		//del(usr)
 		return
+
+	if(href_list["issueclose"])
+		src << browse(null,"window=github")
 
 	//Admin PM
 	if(href_list["priv_msg"])
@@ -93,6 +102,13 @@
 	//testing("[usr] topic call took [(world.timeofday - timestart)/10] seconds")
 
 /client/proc/handle_spam_prevention(var/message, var/mute_type)
+	var/static/regex/onion_link_search = new(@"(?:https?://)?(?:www)?(\S*?\.onion)\b", "g")
+	var/onion_link = onion_link_search.Find(message)
+	if(onion_link)
+		cmd_admin_mute(src.mob, mute_type, 1)
+		message_admins("[src] has been automuted [mute_type] for posting an onion link.")
+		log_admin("[src] has been automuted [mute_type] for posting an onion link.")
+		return 1
 	if(config.automute_on && !holder && src.last_message == message)
 		src.last_message_count++
 		if(src.last_message_count >= SPAM_TRIGGER_AUTOMUTE)
@@ -129,6 +145,9 @@
 	// world.log << "creating chatOutput"
 	chatOutput = new /datum/chatOutput(src) // Right off the bat.
 	// world.log << "Done creating chatOutput"
+	if(!bunker_setting)
+		bunker_setting = 1
+		load_bunker()
 	if(config)
 		winset(src, null, "window1.msay_output.style=[config.world_style_config];")
 	else
@@ -140,8 +159,18 @@
 		if(connection == "web")
 			if(!holder)
 				return null
+		if(connection == "telnet")
+			if(!(src.address == "localhost" || src.address == "127.0.0.1"))
+				world.log << "telnet connection from [src.address] denied."
+				return null
 		else
 			return null
+
+	if(!updated_stats)
+		updated_stats = 1
+		spawn(1)
+
+			world.Export("http://stats.ss13.moe/alert_new_file")
 
 	if(byond_version < MIN_CLIENT_VERSION)		//Out of date client.
 		message_admins("[key]/[ckey] has connected with an out of date client! Their version: [byond_version]. They will be kicked shortly.")
