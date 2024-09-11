@@ -211,7 +211,7 @@
 
 	var/library_url = ""
 	var/branch_head = ""
-	var/preload_rsc
+	var/preload_rsc = 1
 
 /datum/configuration/New()
 	. = ..()
