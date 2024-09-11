@@ -384,3 +384,12 @@ MAPRENDER_LAGS_GAME
 
 ## Location of .git/refs/heads/Bleeding-Edge
 BRANCH_HEAD .git/refs/heads/Bleeding-Edge
+
+## HTTP URL for external stats tracking
+# STATS_ADDR
+
+## Location of rsc folder
+# RSCLIST
+
+## Location of rsc string
+# RSCSTRING
