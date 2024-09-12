@@ -1,0 +1,5 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- bugfix: Fast food vault cookbots, spessmart bots and dusky no longer drop meat when
+    gibbed.
