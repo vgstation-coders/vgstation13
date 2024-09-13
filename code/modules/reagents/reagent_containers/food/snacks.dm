@@ -58,12 +58,10 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
 	QDEL_NULL(dip)
-	var/atom/place_to_spawn = loc
-	if(istype(loc,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) // consistency
-		place_to_spawn = place_to_spawn.loc
+	var/turf/T = get_turf(src)
 	if(contents.len)
 		for(var/atom/movable/A in src)
-			A.forceMove(place_to_spawn)
+			A.forceMove(T)
 		visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
 	..()
 
@@ -620,9 +618,6 @@
 		return 1 //No afterattack here
 
 /obj/item/weapon/reagent_containers/food/snacks/proc/slice_act(mob/user,obj/item/W)
-	var/atom/place_to_spawn = loc
-	if(istype(loc,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) // so things slice off these plates properly
-		place_to_spawn = place_to_spawn.loc
 	if(slice_path && slices_num && slices_num > 0)
 		var/slices_lost = 0
 		if(W.is_sharp() >= 1.2)
@@ -634,7 +629,7 @@
 			slices_lost = rand(1, min(1, round(slices_num/2))) //Randomly lose a few slices along the way, but at least one and up to half
 		var/reagents_per_slice = reagents.total_volume/slices_num //Figure out how much reagents each slice inherits (losing slices loses reagents)
 		for(var/i = 1 to (slices_num - slices_lost)) //Transfer those reagents
-			var/obj/item/weapon/reagent_containers/food/snacks/slice = new slice_path(place_to_spawn)
+			var/obj/item/weapon/reagent_containers/food/snacks/slice = new slice_path(get_turf(src))
 			if(istype(src, /obj/item/weapon/reagent_containers/food/snacks/customizable)) //custom sliceable foods have overlays we need to apply
 				var/obj/item/weapon/reagent_containers/food/snacks/customizable/C = src
 				var/obj/item/weapon/reagent_containers/food/snacks/customizable/S = slice
@@ -669,7 +664,7 @@
 		return 1
 	if(contents.len) //Food item is not sliceable but still has items hidden inside. Using a knife on it should be an easy way to get them out.
 		for(var/atom/movable/A in src)
-			A.forceMove(place_to_spawn)
+			A.forceMove(get_turf(src))
 		visible_message("<span class='warning'>The items sloppily placed within fall out of \the [src]!</span>")
 		return 1
 
