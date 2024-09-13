@@ -1163,6 +1163,8 @@ function loadPage(list) {
 				return
 			//Warning for manually avoiding the check
 			if(ispath(newvalue, /obj/item/projectile/hookshot) && !istype(G, /obj/item/weapon/gun/hookshot))
+				if(!check_rights(R_DEBUG))
+					return
 				var/warnthem = input(usr, "Hookshot projectiles will crash the server. Are you sure?", "WARNING") as anything in list("Yes, have me be deadminned", "No, cancel it!")
 				if(warnthem == "No, cancel it!")
 					return
