@@ -648,7 +648,7 @@ var/global/list/protected_objects = list(
 			if(prob(15))
 				L.Knockdown(1)
 				L.Stun(1)
-				L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
+				L.visible_message("<span class='danger'>\The [src] knocks down \the [L]!</span>")
 
 
 /datum/locking_category/mimic

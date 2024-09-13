@@ -153,7 +153,7 @@
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	visible_message("<span class='warning'>\the [src] rattles and prints out a sheet of paper.</span>", 1)
+	visible_message("<span class='warning'>\The [src] rattles and prints out a sheet of paper.</span>", 1)
 
 	sleep(1 SECONDS)
 

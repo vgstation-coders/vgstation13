@@ -123,7 +123,7 @@
 
 /obj/machinery/dna_scannernew/crowbarDestroy(mob/user, obj/item/tool/crowbar/I)
 	if(occupant)
-		to_chat(user, "<span class='warning'>\the [src] is occupied.</span>")
+		to_chat(user, "<span class='warning'>\The [src] is occupied.</span>")
 		return FALSE
 	return ..()
 
