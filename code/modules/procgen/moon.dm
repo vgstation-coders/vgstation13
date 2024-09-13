@@ -3,7 +3,7 @@
 	valid_map_sizes = list(PG_SMALL, PG_MEDIUM)
 	weight = PG_MOON_WEIGHT
 	valid_altitudes = list(PG_LOW_ALT)
-	valid_waters = list(PG_NO_WATER)
+	valid_water_levels = list(PG_NO_WATER)
 	valid_biomes = list(PG_PERMAFROST, PG_ICE_SHEET, PG_ROCK, PG_MAGMA, PG_ASH)
 	valid_atmospheres = list(PG_VACUUM, PG_THIN)
 	valid_civs = list(PG_UNEXPLORED, PG_YOUNG_CIV)

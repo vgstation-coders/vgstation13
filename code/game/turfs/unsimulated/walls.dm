@@ -13,7 +13,7 @@
 
 /turf/unsimulated/wall/isSmoothableNeighbor(atom/A, bordercheck)
 	return smooths && istype(A, src.type)
-	
+
 /turf/unsimulated/wall/canSmoothWith()
 	return smooths
 
