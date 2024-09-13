@@ -168,6 +168,7 @@
 	stun = 1
 	weaken = 1
 	stutter = 1
+	lock_angle = TRUE
 
 /obj/item/projectile/snowball/to_bump(atom/A as mob|obj|turf|area)
 	.=..()
