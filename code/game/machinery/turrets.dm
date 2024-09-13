@@ -235,6 +235,9 @@
 	else
 		var/obj/item/weapon/gun/energy/E = installed
 		A = new E.projectile_type(loc)
+	var/obj/item/weapon/gun/G = installed
+	if(G.bullet_type_override && ispath(G.bullet_type_override, /obj/item/projectile))
+		A = new G.bullet_type_override
 	A.original = target
 	A.starting = T
 	A.shot_from = installed
@@ -243,7 +246,6 @@
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
 	A.OnFired()
-	var/obj/item/weapon/gun/G = installed
 	if(G.bullet_overrides)
 		for(var/bvar in A.vars)
 			for(var/o in G.bullet_overrides)
@@ -702,7 +704,7 @@
 		if(!check_rights(R_ADMIN))
 			return
 		var/list/valid_turret_projectiles = existing_typesof(/obj/item/projectile/bullet) + existing_typesof(/obj/item/projectile/energy)
-		var/userinput = filter_list_input("New projectile typepath", "You can only pick one!", valid_turret_projectiles)
+		var/userinput = filter_typelist_input("New projectile typepath", "You can only pick one!", valid_turret_projectiles)
 		if(!userinput)
 			to_chat(usr, "<span class='warning'><b>No projetile typepath entered. The turret's projectile remains unchanged.</b></span>")
 			return

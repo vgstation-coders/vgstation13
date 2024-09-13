@@ -84,6 +84,8 @@
 	//Then set an associative value equal to the new value you want to change it to.
 	//aka if you want to change the damage to 25, add a list with entry: text damage and associated value num 25
 	var/list/bullet_overrides
+	//And this overrides whatever's in the chamber.
+	var/bullet_type_override
 
 /obj/item/weapon/gun/New()
 	..()
@@ -259,6 +261,9 @@
 	if(!process_chambered() || jammed) //CHECK
 		return click_empty(user)
 
+	if(bullet_type_override && ispath(bullet_type_override, /obj/item/projectile))
+		in_chamber = new bullet_type_override
+
 	if(!in_chamber)
 		return
 	if(defective)
@@ -308,8 +313,6 @@
 
 		user.apply_inertia(get_dir(target, user))
 
-	play_firesound(user, reflex)
-
 	in_chamber.original = target
 	in_chamber.forceMove(get_turf(user))
 	in_chamber.starting = get_turf(user)
@@ -345,6 +348,8 @@
 			for(var/o in bullet_overrides)
 				if(bvar == o)
 					in_chamber.vars[bvar] = bullet_overrides[o]
+
+	play_firesound(user, reflex)
 
 	spawn()
 		if(in_chamber)

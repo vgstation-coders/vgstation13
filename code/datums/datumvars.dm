@@ -139,6 +139,8 @@
 		body += "<option value='?_src_=vars;edit_transform=\ref[D]'>Edit Transform Matrix</option>"
 	if(isapperanceeditable(D))
 		body += "<option value='?_src_=vars;toggle_aliasing=\ref[D]'>Toggle Transform Aliasing</option>"
+	if(istype(D,/obj/item/weapon/gun))
+		body += "<option value='?_src_=vars;projectile_edit=\ref[D]'>Edit Projectile Variables</option>"
 
 	body += "<option value='?_src_=vars;proc_call=\ref[D]'>Proc call</option>"
 	body += "<option value>---</option>"
@@ -977,6 +979,17 @@ function loadPage(list) {
 
 		DAT.vars["transform"] = modify_matrix_menu(M)
 
+	else if(href_list["projectile_edit"])
+		if (!check_rights(R_FUN))
+			return
+
+		var/obj/item/weapon/gun/G = locate(href_list["projectile_edit"])
+		if(!istype(G))
+			to_chat(src, "Target must be a obj/item/weapon/gun!")
+			return
+
+		gun_override(G)
+
 	else if(href_list["toggle_aliasing"])
 		if(!check_rights(R_DEBUG))
 			return
@@ -1028,3 +1041,132 @@ function loadPage(list) {
 		if(!istype(DAT, /datum))
 			return
 		src.debug_variables(DAT)
+
+/**
+ * A FUN proc that, when given a /obj/item/weapon/gun, can allow you to change most projectile variables and types.
+ */
+/proc/gun_override(var/obj/item/weapon/gun/G)
+	if (!check_rights(R_FUN))
+		return
+
+	var/list/projectile_vars = list(
+		//this is the ultimate
+		"base projectile typepath",
+		//damage/main vars
+		"damage", "damage_type", "nodamage", "what armor resists (flag)", "projectile_speed", "travel_range",
+		//effect vars
+		"stun", "weaken", "paralyze", "irradiate", "eyeblur", "drowsy", "agony", "jittery",
+		//appearance/misc vars
+		"icon (upload dmi)", "icon_state", "color", "silenced", "manual variable entry"
+	)
+
+	var/inputvar
+	G.bullet_overrides ||= list()
+	if(!G.bullet_overrides.len)
+		inputvar = input(usr, "What variable would you like to change?", "Gun Variables") as null|anything in projectile_vars
+	else
+		var/existing_bullet_override_pick = input(usr, "Would you like to edit an existing variable or add a new one?", "Gun Variables") as null|anything in G.bullet_overrides + G.bullet_type_override + "(ADD VAR)"
+		if(!existing_bullet_override_pick)
+			return
+		else if(G.bullet_type_override && G.bullet_type_override == existing_bullet_override_pick)
+			inputvar = "base projectile typepath"
+		else if(existing_bullet_override_pick == "(ADD VAR)")
+			inputvar = input(usr, "What variable would you like to change?", "Gun Variables") as null|anything in projectile_vars
+		else
+			inputvar = existing_bullet_override_pick
+	if(!inputvar)
+		return
+	var/newvalue
+	switch(inputvar)
+		if("base projectile typepath")
+			newvalue = find_projectile_type(G)
+		if("damage","irradiate")
+			newvalue = input(usr, "How much damage should the projectile deal?", "Var: [inputvar]") as null|num
+		if("damage_type")
+			newvalue = input(usr, "What type of damage should the projectile deal (it can only deal one, sorry)?", "Var: [inputvar]") as null|anything in list("brute", "oxy", "tox", "fire", "clone", "brain")
+		if("nodamage")
+			newvalue = input(usr, "Should the gun NOT do damage on hit?", "Var: [inputvar]") as null|anything in list("True", "False")
+			if(newvalue == "True")
+				newvalue = TRUE
+			else
+				newvalue = FALSE
+		if("what armor resists (flag)")
+			newvalue = input(usr, "What armor type should resist this damage?", "Var: [inputvar]") as null|anything in list("melee", "bullet", "laser", "energy", "bomb", "bio", "rad")
+			inputvar = "flag"
+		if("projectile_speed")
+			newvalue = input(usr, "How much time (in deciseconds) should the bullet delay between tile movements? (examples, Taser electrode is 1, Glock bullets are 0.5)?", "Var: [inputvar]") as null|num
+		if("travel_range")
+			newvalue = input(usr, "How far should the projectile travel before vanishing? (0 to go indefinitely)", "Gun Variables") as null|num
+		if("stun","weaken","paralyze","eyeblur","agony","jittery")
+			newvalue = input(usr, "New effect value? Most go down 1 per tick.", "Var: [inputvar]") as null|num
+		if("color")
+			newvalue = input(usr, "What color (RGB format, example: #00ff00)?", "Var: [inputvar]") as null|color
+		if("silenced")
+			newvalue = input(usr, "Should the gun have no text when fired?", "Var: [inputvar]") as null|anything in list(TRUE, FALSE)
+		if("manual variable entry")
+			inputvar = input(usr, "What variable name to manually insert and then edit (verify it!)?", "Var: [inputvar]") as null|text
+			if(isnull(inputvar))
+				return
+			newvalue = variable_set(usr)
+		if("icon (upload dmi)")
+			newvalue = input(usr, "Choose an icon file for your new projectile!", "Var: [inputvar]") as null|icon
+			inputvar = "icon"
+		if("icon_state")
+			newvalue = input(usr, "What icon_state to set?", "Var: [inputvar]") as null|text
+		else
+			newvalue = variable_set(usr)
+	if(isnull(newvalue))
+		return
+	if(inputvar == "base projectile typepath")
+		G.bullet_type_override = newvalue
+	else
+		G.bullet_overrides[inputvar] = newvalue
+	to_chat(usr,"Current list of projectile edits:")
+	if(G.bullet_type_override)
+		to_chat(usr,"Type Override: [G.bullet_type_override]")
+	for(var/result in G.bullet_overrides)
+		to_chat(usr,"[result]: [G.bullet_overrides[result]]")
+	log_admin("[key_name(usr)] overrode [G]'s projectile variable [inputvar] to [newvalue].")
+	message_admins("<span class='adminnotice'>[key_name_admin(usr)] overrode [G]'s projectile variable [inputvar] to [newvalue].</span>", 1)
+	feedback_add_details("admin_verb","GOR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/**
+ * Allows you to pick a valid projectile that can fire out of a given /obj/item/weapon/gun
+ */
+/proc/find_projectile_type(var/obj/item/weapon/gun/G)
+	var/newvalue
+	//Hookshots crash the server if shot from anything that isn't a hookshot
+	//And they lock up if they fire anything that isn't a hookshot projectile
+	if(istype(G, /obj/item/weapon/gun/hookshot))
+		newvalue = filter_typelist_input("What projectile type would you like to use?","Gun Variables", typesof(/obj/item/projectile/hookshot))
+		return newvalue
+	var/list/commontypes = list("taser", "laser", "glock", "low yield rocket", "pizza rocket", "Show me everything.", "manual typepath")
+	var/projtype = input(usr, "What projectile type would you like to use?", "Gun Variables") as null|anything in commontypes
+	switch(projtype)
+		if("taser")
+			newvalue = /obj/item/projectile/energy/electrode
+		if("laser")
+			newvalue = /obj/item/projectile/beam
+		if("glock")
+			newvalue = /obj/item/projectile/bullet/auto380
+		if("low yield rocket")
+			newvalue = /obj/item/projectile/rocket/lowyield
+		if("pizza rocket")
+			newvalue = /obj/item/projectile/rocket/clown/pizza
+		if("Show me everything.")
+			newvalue = filter_typelist_input("Here's everything.","Gun Variables", typesof(/obj/item/projectile) - typesof(/obj/item/projectile/hookshot))
+			if(isnull(newvalue))
+				return
+		if("manual typepath")
+			newvalue = text2path(input(usr, "What typepath?", "Gun Variables", "/obj/item/projectile") as null|text)
+			if(!ispath(newvalue, /obj/item/projectile))
+				return
+			//Warning for manually avoiding the check
+			if(ispath(newvalue, /obj/item/projectile/hookshot) && !istype(G, /obj/item/weapon/gun/hookshot))
+				var/warnthem = input(usr, "Hookshot projectiles will crash the server. Are you sure?", "WARNING") as anything in list("Yes, have me be deadminned", "No, cancel it!")
+				if(warnthem == "No, cancel it!")
+					return
+				else
+					log_admin("[key_name(usr)] was warned about crashing the server from hookshot projectiles.")
+					message_admins("<span class='adminnotice'>[key_name_admin(usr)] is doing something that might crash the server!</span>", 1)
+	return newvalue
