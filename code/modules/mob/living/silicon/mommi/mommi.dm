@@ -341,3 +341,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(gives_milk && udder && prob(5))
 		udder.add_reagent(MOMMIMILK, rand(5, 10))
 	..()
+
+/mob/living/silicon/robot/mommi/ignite()
+	return 0
+
+/mob/living/silicon/robot/mommi/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	return 0

@@ -54,7 +54,6 @@
 	var/tmp/lock_time = -100
 	var/mouthshoot = 0 ///To stop people from suiciding twice... >.>
 	var/automatic = 0 //Used to determine if you can target multiple people.
-	var/tmp/mob/living/last_moved_mob //Used to fire faster at more than one person.
 	var/tmp/told_cant_shoot = 0 //So that it doesn't spam them with the fact they cannot hit them.
 	var/firerate = 1 	// 0 for one bullet after tarrget moves and aim is lowered,
 						//1 for keep shooting until aim is lowered
@@ -79,6 +78,12 @@
 	var/gun_miss_chance_value //Additive miss chance
 	var/gun_miss_message //Message that shows up as an addition to the message text
 	var/gun_miss_message_replace //If toggled on, will cause gun_miss_message to replace the entire missing message
+
+	//This is a list that allows admins to alter projectile properties mid-round via assoc list.
+	//Usage: vv the gun, C a new list, add text variable equal to the variable name you want to change,
+	//Then set an associative value equal to the new value you want to change it to.
+	//aka if you want to change the damage to 25, add a list with entry: text damage and associated value num 25
+	var/list/bullet_overrides
 
 /obj/item/weapon/gun/New()
 	..()
@@ -334,6 +339,12 @@
 		in_chamber.projectile_miss_message = gun_miss_message
 	if(gun_miss_message_replace)
 		in_chamber.projectile_miss_message_replace = gun_miss_message_replace
+
+	if(bullet_overrides)
+		for(var/bvar in in_chamber.vars)
+			for(var/o in bullet_overrides)
+				if(bvar == o)
+					in_chamber.vars[bvar] = bullet_overrides[o]
 
 	spawn()
 		if(in_chamber)

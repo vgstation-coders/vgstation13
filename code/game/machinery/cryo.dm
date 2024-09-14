@@ -33,7 +33,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 /obj/machinery/atmospherics/unary/cryo_cell/Entered(var/atom/movable/Obj, var/atom/OldLoc)
 	. = ..()
-	
+
 	if(OldLoc.type != src.type)
 		spawn(rand(0,6))
 			if(OldLoc.type != src.type)
@@ -107,7 +107,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	put_mob(L, user)
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/get_floaters()
-	var/list/floaters = contents - beaker
+	var/list/floaters = list()
+	for(var/atom/thing in contents)
+		if(thing != beaker && !isobserver(thing))
+			floaters += thing
 	if(floaters.len)
 		return floaters
 	return 0
@@ -409,10 +412,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		icon_state = "pod[on]"
 
 	for(var/atom/movable/floater in get_floaters())
-		if (!isobserver(floater))
-			vis_contents += floater
-			floater.pixel_y = rand(8,32)
-			floater.pixel_x = rand(-1,1)
+		vis_contents += floater
+		floater.pixel_y = rand(8,32)
+		floater.pixel_x = rand(-1,1)
 
 	if(occupant)
 		vis_contents += occupant
@@ -639,7 +641,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		M.drop_item(I) // to avoid visual fuckery bobing. Doesn't do anything to items with cant_drop to avoid magic healing tube abuse.
 	update_icon()
 	nanomanager.update_uis(src)
-	M.ExtinguishMob()
+	M.extinguish()
 	M.throw_alert(SCREEN_ALARM_CRYO, /obj/abstract/screen/alert/object/cryo, new_master = src)
 	if(user)
 		if(M == user)

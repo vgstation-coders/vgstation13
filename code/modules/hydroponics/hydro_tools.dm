@@ -82,12 +82,13 @@
 
 	dat += "<h2>Reagent Data</h2>"
 
-	if(!grown_reagents) //checking if the thing is produce or seed
+	if(!grown_reagents || istype(target,/obj/machinery/portable_atmospherics/hydroponics))
 		dat += "This plant will produce: "
 		var/datum/reagent/N
 		for (var/rid in grown_seed.chems)
 			N = chemical_reagents_list[rid]
 			dat += "<br>- [N.id]"
+		dat += "<br>" //so it doesn't overlap with the next part
 
 	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
 		dat += "This sample contains: "
@@ -355,14 +356,102 @@
 	throw_range = 3
 	flags = FPRINT
 	var/being_potted = FALSE
+	var/list/paint_layers = list("paint-full" = null, "paint-rim" = null, "paint-stripe" = null)
 
 /obj/item/claypot/attackby(var/obj/item/O,var/mob/user)
 	if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O,/obj/item/weapon/grown))
 		to_chat(user, "<span class='warning'>You have to transplant the plant into the pot directly from the hydroponic tray, using a spade.</span>")
 	else if(isshovel(O))
 		to_chat(user, "<span class='warning'>There is no plant to remove in \the [src].</span>")
+	else if(istype(O, /obj/item/painting_brush))
+		var/obj/item/painting_brush/P = O
+		if (P.paint_color)
+			paint_act(P.paint_color,user, P.nano_paint != PAINTLIGHT_NONE)
+		else
+			to_chat(user, "<span class='warning'>There is no paint on \the [P].</span>")
+		return 1
+	else if(istype(O, /obj/item/paint_roller))
+		var/obj/item/paint_roller/P = O
+		if (P.paint_color)
+			paint_act(P.paint_color,user, P.nano_paint != PAINTLIGHT_NONE)
+		else
+			to_chat(user, "<span class='warning'>There is no paint on \the [P].</span>")
+		return 1
 	else
 		to_chat(user, "<span class='warning'>You cannot plant \the [O] in \the [src].</span>")
+
+/obj/item/claypot/proc/paint_act(var/_color, var/mob/user, var/nano_paint)
+	var/list/choices = list("Full" = "paint-full", "Rim" = "paint-rim", "Stripe" = "paint-stripe")
+	var/paint_target = input("Which part do you want to paint?","Clay Pot Painting",1) as null|anything in choices
+	if (!paint_target)
+		return
+	switch(paint_target)
+		if ("Full")
+			to_chat(user, "<span class='notice'>You begin to cover \the [src] in paint.</span>")
+		if ("Rim")
+			to_chat(user, "<span class='notice'>You begin to paint \the [src]'s rim.</span>")
+		if ("Stripe")
+			to_chat(user, "<span class='notice'>You begin to paint a stripe on \the [src].</span>")
+	playsound(loc, "mop", 10, 1)
+	if (do_after(user, src, 20))
+		if (_color == "#FFFFFF")
+			_color = "#FEFEFE" //null color prevention
+		if (paint_target == "Full")
+			paint_layers["paint-rim"] = null
+			paint_layers["paint-stripe"] = null
+		paint_layers[choices[paint_target]]	= list(_color, nano_paint)
+		update_icon()
+		user.regenerate_icons()
+
+/obj/item/claypot/update_icon()
+	overlays.len = 0
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = null
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = null
+	var/image/left_I = image(inhand_states["left_hand"], src, "")
+	var/image/right_I = image(inhand_states["right_hand"], src, "")
+
+	for (var/entry in paint_layers)
+		if (!paint_layers[entry])
+			kill_moody_light_index(entry)
+		else
+			var/list/paint_layer = paint_layers[entry]
+			var/image/I = image(icon, src, "[icon_state]-[entry]")
+			I.color = paint_layer[1]
+			overlays += I
+
+			//dynamic in-hands
+			var/image/left_layer = image(inhand_states["left_hand"], src, "[item_state]-[entry]")
+			var/image/right_layer = image(inhand_states["right_hand"], src, "[item_state]-[entry]")
+			left_layer.appearance_flags = RESET_COLOR
+			left_layer.color = paint_layer[1]
+			left_I.overlays += left_layer
+			right_layer.appearance_flags = RESET_COLOR
+			right_layer.color = paint_layer[1]
+			right_I.overlays += right_layer
+
+			if (paint_layer[2])
+				update_moody_light_index(entry, image_override = I)
+
+				//dynamic in-hands moody lights
+				var/image/left_moody = image(left_layer)
+				var/image/right_moody = image(right_layer)
+				left_moody.blend_mode = BLEND_ADD
+				left_moody.plane = LIGHTING_PLANE
+				left_moody.color = paint_layer[1]
+				left_I.overlays += left_moody
+				right_moody.blend_mode = BLEND_ADD
+				right_moody.plane = LIGHTING_PLANE
+				right_moody.color = paint_layer[1]
+				right_I.overlays += right_moody
+
+			else
+				kill_moody_light_index(entry)
+
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = left_I
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = right_I
+	set_blood_overlay()
+	if (on_fire && fire_overlay)
+		overlays += fire_overlay
 
 /obj/item/claypot/throw_impact(atom/hit_atom)
 	if(!..() && prob(40))
@@ -370,3 +459,9 @@
 		new/obj/effect/decal/cleanable/clay_fragments(src.loc)
 		src.visible_message("<span class='warning'>\The [src.name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
 		qdel(src)
+
+/obj/item/claypot/clean_act(var/cleanliness)
+	..()
+	if (cleanliness >= CLEANLINESS_BLEACH)
+		paint_layers = list("paint_full" = null, "paint_rim" = null, "paint_stripe" = null)
+		update_icon()

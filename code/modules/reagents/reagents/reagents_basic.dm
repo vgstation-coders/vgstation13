@@ -265,7 +265,7 @@
 			M.remove_silence()
 		if(isliving(M))
 			var/mob/living/L = M
-			L.ExtinguishMob()
+			L.extinguish()
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))

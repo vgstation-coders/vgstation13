@@ -433,7 +433,10 @@
 // /vg/
 /obj/structure/flora/pottedplant/random/New()
 	..()
-	icon_state = "plant-[rand(1,26)]"
+	var/potted_plant_type = "[rand(1,26)]"
+	icon_state = "plant-[potted_plant_type]"
+	if (potted_plant_type in list("7","9","20"))
+		update_moody_light_index("plant", icon, "[icon_state]-moody")
 
 /obj/structure/flora/pottedplant/claypot
 	name = "clay pot"
@@ -443,6 +446,8 @@
 	anchored = 0
 	density = FALSE
 	var/plant_name = ""
+	var/image/plant_image = null
+	var/list/paint_layers = list("paint-full" = null, "paint-rim" = null, "paint-stripe" = null)
 
 /obj/structure/flora/pottedplant/claypot/examine(mob/user)
 	..()
@@ -468,14 +473,72 @@
 				I.forceMove(loc)
 			var/obj/item/claypot/C = new(loc)
 			transfer_fingerprints(src, C)
+			C.paint_layers = paint_layers.Copy()
+			C.update_icon()
 			qdel(src)
 
 	else if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O,/obj/item/weapon/grown))
 		to_chat(user, "<span class='warning'>There is already a plant in \the [src]</span>")
 
+	else if(istype(O, /obj/item/painting_brush))
+		var/obj/item/painting_brush/P = O
+		if (P.paint_color)
+			paint_act(P.paint_color,user, P.nano_paint != PAINTLIGHT_NONE)
+		else
+			to_chat(user, "<span class='warning'>There is no paint on \the [P].</span>")
+		return 1
+	else if(istype(O, /obj/item/paint_roller))
+		var/obj/item/paint_roller/P = O
+		if (P.paint_color)
+			paint_act(P.paint_color,user, P.nano_paint != PAINTLIGHT_NONE)
+		else
+			to_chat(user, "<span class='warning'>There is no paint on \the [P].</span>")
+		return 1
+
 	else
 		..()
 
+/obj/structure/flora/pottedplant/claypot/proc/paint_act(var/_color, var/mob/user, var/nano_paint)
+	var/list/choices = list("Full" = "paint-full", "Rim" = "paint-rim", "Stripe" = "paint-stripe")
+	var/paint_target = input("Which part do you want to paint?","Clay Pot Painting",1) as null|anything in choices
+	if (!paint_target)
+		return
+	switch(paint_target)
+		if ("Full")
+			to_chat(user, "<span class='notice'>You begin to cover the pot in paint.</span>")
+		if ("Rim")
+			to_chat(user, "<span class='notice'>You begin to paint the pot's rim.</span>")
+		if ("Stripe")
+			to_chat(user, "<span class='notice'>You begin to paint a stripe on the pot.</span>")
+	playsound(loc, "mop", 10, 1)
+	if (do_after(user, src, 20))
+		if (_color == "#FFFFFF")
+			_color = "#FEFEFE" //null color prevention
+		if (paint_target == "Full")
+			paint_layers["paint-rim"] = null
+			paint_layers["paint-stripe"] = null
+		paint_layers[choices[paint_target]]	= list(_color, nano_paint)
+		update_icon()
+
+/obj/structure/flora/pottedplant/claypot/update_icon()
+	overlays.len = 0
+	for (var/entry in paint_layers)
+		if (!paint_layers[entry])
+			kill_moody_light_index(entry)
+		else
+			var/list/paint_layer = paint_layers[entry]
+			var/image/I = image(icon, src, "[icon_state]-[entry]")
+			I.color = paint_layer[1]
+			overlays += I
+			if (paint_layer[2])
+				update_moody_light_index(entry, image_override = I)
+			else
+				kill_moody_light_index(entry)
+	overlays += plant_image
+	if ("plant" in moody_lights)
+		overlays += moody_lights["plant"]
+	if (on_fire && fire_overlay)
+		overlays += fire_overlay
 
 //newbushes
 

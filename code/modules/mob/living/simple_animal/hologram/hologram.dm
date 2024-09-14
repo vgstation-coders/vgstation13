@@ -5,6 +5,9 @@
 	icon_state = "holo2"
 	icon_living = "holo2"
 	icon_dead = null
+	min_oxy = 0
+	max_tox = 0
+	max_co2 = 0 //we're made of light we don't have lungs
 	mob_property_flags = MOB_HOLOGRAPHIC
 	var/atom/atom_to_mimic
 	var/login_text = "You are a hologram. You can perform a few basic functions, and are unable to leave the holodeck.\

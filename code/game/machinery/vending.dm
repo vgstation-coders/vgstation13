@@ -141,7 +141,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/circuitboard/vendomat,\
 		/obj/item/weapon/stock_parts/matter_bin,\
 		/obj/item/weapon/stock_parts/manipulator,\
-		/obj/item/weapon/stock_parts/scanning_module\
+		/obj/item/weapon/stock_parts/scanning_module,\
+		/obj/item/weapon/storage/lockbox/coinbox\
 	)
 
 	RefreshParts()
@@ -154,8 +155,6 @@ var/global/num_vending_terminals = 1
 		last_slogan = world.time + rand(0, slogan_delay)
 
 		power_change()
-
-	coinbox = new(src)
 
 	for(var/langname in slogan_languages)
 		if(istext(langname))
@@ -190,6 +189,10 @@ var/global/num_vending_terminals = 1
 		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating
 	shoot_chance = manipcount * 3
+	
+	coinbox = locate() in component_parts
+	if(!coinbox)
+		coinbox = new(src)
 
 /obj/machinery/vending/Destroy()
 	if(wires)
@@ -201,15 +204,18 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/splashable()
 	return FALSE
 
+/obj/machinery/vending/spillContents(destroy_chance)
+	. = ..()
+	dump_vendpack_and_coinbox()
+
 /obj/machinery/vending/proc/dump_vendpack_and_coinbox()
 	if(product_records.len && cardboard) //Only spit out if we have slotted cardboard
+		var/obj/structure/vendomatpack/custom/newpack = new(src.loc)
 		if(is_custom_machine)
-			var/obj/structure/vendomatpack/custom/newpack = new(src.loc)
 			for(var/obj/item/I in custom_stock)
 				I.forceMove(newpack)
 				custom_stock.Remove(I)
 		else
-			var/obj/structure/vendomatpack/partial/newpack = new(src.loc)
 			newpack.stock = products
 			newpack.secretstock = contraband
 			newpack.preciousstock = premium
@@ -220,7 +226,8 @@ var/global/num_vending_terminals = 1
 			newpack.targetvendomat = src.type
 
 	if(coinbox)
-		coinbox.forceMove(get_turf(src))
+		coinbox.forceMove(src.loc)
+		coinbox = null
 
 /obj/machinery/vending/examine(var/mob/user)
 	..()
@@ -286,7 +293,6 @@ var/global/num_vending_terminals = 1
 				if(user.machine==src)
 					newmachine.attack_hand(user)
 				component_parts = 0
-				qdel(coinbox)
 				qdel(src)
 			else
 				is_being_filled = FALSE
@@ -1087,6 +1093,9 @@ var/global/num_vending_terminals = 1
 			if(real_coin.string_attached)
 				if(prob(50))
 					to_chat(user, "<SPAN CLASS='notice'>You successfully pulled \the [coin] out before \the [src] could swallow it.</SPAN>")
+					return_coin = 1
+				else if(prob(real_coin.luckiness/10))
+					to_chat(user, "<SPAN CLASS='notice'>You just barely were able to pull \the [coin] out before [src] could swallow it, lucky!</SPAN>")
 					return_coin = 1
 				else
 					to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull \the [coin] out fast enough, the machine ate it, string and all.</SPAN>")
@@ -2768,7 +2777,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/mask/gas/oni = 3,
 		/obj/item/clothing/head/helmet/samurai = 3,
 		/obj/item/clothing/suit/armor/samurai = 3,
-		/obj/item/toy/syndicateballoon/green = 1,
+		/obj/item/clothing/gloves/fyellow/insulted = 3,
+		/obj/item/toy/syndicateballoon/green = 1
 		)
 
 	pack = /obj/structure/vendomatpack/autodrobe

@@ -289,6 +289,7 @@ var/list/valid_ninja_suits = list(
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	pressure_resistance = 200 * ONE_ATMOSPHERE
+	blocks_tracking = TRUE
 	var/cooldown = 0
 	var/shuriken_icon = "radial_print"
 	actions_types = list(

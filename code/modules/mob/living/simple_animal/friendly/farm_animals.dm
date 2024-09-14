@@ -169,6 +169,11 @@
 	if(stat == CONSCIOUS)
 		if(milkable_reagents && prob(reagent_regen_chance_per_tick))
 			milkable_reagents.add_reagent(milktype, rand(min_reagent_regen_per_tick, max_reagent_regen_per_tick))
+	if(src.reagents.has_reagent(PHAZON) && milktype != PHAZON) //if you roll the 1 in around 540 chances, you deserve your fountain of infinite phazon, godspeed
+		var/list/blocked_chems = list(ADMINORDRAZINE, PROCIZINE)
+		milktype = pick((chemical_reagents_list - blocked_chems)) //paismoke reacts instantly inside the cow, so it just constantly makes a smoke cloud harmlessly
+		name = "[lowertext(milktype)] cow"
+		desc = "It smells faintly of grass and [milktype]."
 
 /mob/living/simple_animal/cow/attack_hand(mob/living/carbon/M as mob)
 	if(!stat && M.a_intent == I_DISARM && icon_state != icon_dead)

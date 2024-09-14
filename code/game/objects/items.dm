@@ -87,6 +87,8 @@
 
 	var/is_cookvessel //If true, the item is a cooking vessel.
 
+	var/blocks_tracking = FALSE //Blocks mind and AI tracking
+
 	var/list/quick_equip_priority = list() //stuff to override the quick equip thing so it goes in this first
 
 	var/last_burn
@@ -192,7 +194,7 @@
 			return SUICIDE_ACT_BRUTELOSS
 	else if (is_hot())
 		user.visible_message("<span class='danger'>[user] is immolating \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
-		user.IgniteMob()
+		user.ignite()
 		return SUICIDE_ACT_FIRELOSS
 	else if (force >= 10)
 		user.visible_message("<span class='danger'>[user] is bludgeoning \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
@@ -1642,7 +1644,7 @@ var/global/objects_thrown_when_explode = FALSE
 		usr.put_in_hand(OI.hand_index, src)
 		add_fingerprint(usr)
 
-/obj/item/proc/pre_throw(atom/movable/target)
+/obj/item/proc/pre_throw(var/atom/movable/target,var/mob/living/user)
 	return
 
 /obj/item/proc/recharger_process(var/obj/machinery/recharger/charger)

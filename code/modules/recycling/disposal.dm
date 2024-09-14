@@ -149,7 +149,7 @@
 	if(isrobot(user) && !istype(I, /obj/item/weapon/storage/bag/trash) && !isgripper(user.get_active_hand()) && !isMoMMI(user) )
 		return
 
-	if(istype(I, /obj/item/weapon/storage/bag/))
+	if(istype(I, /obj/item/weapon/storage/bag))
 		var/obj/item/weapon/storage/bag/B = I
 		if(B.contents.len == 0)
 			if(user.drop_item(I, src))
@@ -158,6 +158,19 @@
 		to_chat(user, "<span class='notice'>You empty \the [B].</span>")
 		B.mass_remove(src)
 		B.update_icon()
+		update_icon()
+		return
+
+	if(istype(I, /obj/item/ashtray))
+		var/obj/item/ashtray/A = I
+		if(A.contents.len == 0)
+			if(user.drop_item(I, src))
+				to_chat(user, "<span class='notice'>You throw away \the empty [A].</span>")
+				return
+		to_chat(user, "<span class='notice'>You empty \the [A].</span>")
+		for (var/obj/item/O in A.contents)
+			O.forceMove(src)
+		A.update_icon()
 		update_icon()
 		return
 
@@ -456,7 +469,7 @@
 		qdel(H)
 
 /obj/machinery/disposal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if (istype(mover,/obj/item) && mover.throwing)
+	if (istype(mover,/obj/item) && mover.throwing && Adjacent(mover))
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return

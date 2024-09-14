@@ -511,17 +511,23 @@ var/list/impact_master = list()
 	return 1
 
 
+/obj/item/projectile/proc/on_step()
+	return
+
 /obj/item/projectile/proc/process_step()
 	if(src.loc)
+		var/sleeptime = projectile_speed
 		if(dist_x > dist_y)
-			bresenham_step(dist_x,dist_y,dx,dy)
+			sleeptime *= bresenham_step(dist_x,dist_y,dx,dy)
 		else
-			bresenham_step(dist_y,dist_x,dy,dx)
+			sleeptime *= bresenham_step(dist_y,dist_x,dy,dx)
 		if(linear_movement)
 			update_pixel()
 			pixel_x = PixelX
 			pixel_y = PixelY
-
+		if (sleeptime)//so we don't act twice on the the same frame
+			kill_count--
+			on_step()
 		bumped = 0
 
 		if (tracker_datum && tracker_datum.changed)
@@ -554,7 +560,7 @@ var/list/impact_master = list()
 				if(rotate)
 					target_angle = round(Get_Angle(current,target))
 
-		sleep(projectile_speed)
+		sleep(sleeptime)
 
 
 /obj/item/projectile/proc/bresenham_step(var/distA, var/distB, var/dA, var/dB)
@@ -568,7 +574,6 @@ var/list/impact_master = list()
 				new decay_type(T)
 			bullet_die()
 			return 1
-	kill_count--
 	total_steps++
 	if(error < 0)
 		var/atom/step = get_step(src, dB)
@@ -773,9 +778,11 @@ var/list/impact_master = list()
 		return //cannot shoot yourself
 	if(istype(A, /obj/item/projectile))
 		return
-	if(istype(A, /mob/living))
-		result = 2 //We hit someone, return 1!
-		return
+	if(ismovable(A))
+		var/atom/movable/AM = A
+		if(isliving(AM) || (locate(/mob/living) in AM) || (locate(/mob/living) in AM.locked_atoms))
+			result = 2 //We hit someone, return 1!
+			return
 	result = 1
 	return
 

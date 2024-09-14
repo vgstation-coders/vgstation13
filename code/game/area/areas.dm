@@ -12,7 +12,7 @@ var/area/space_area
 	var/list/obj/machinery/light_switch/lightswitches = list()
 	var/list/obj/machinery/light/lights = list()
 	var/list/area_turfs
-	plane = ABOVE_LIGHTING_PLANE
+	plane = LIGHTING_PLANE
 	layer = MAPPING_AREA_LAYER
 	var/base_turf_type = null
 	var/shuttle_can_crush = TRUE
@@ -346,8 +346,10 @@ var/area/space_area
 /area/proc/updateicon()
 	if (!areaapc)
 		icon_state = null
+		luminosity = 0
 		return
 	if ((fire || eject || party || radalert) && ((!requires_power)?(!requires_power):power_environ))//If it doesn't require power, can still activate this proc.
+		luminosity = 1
 		// Highest priority at the top.
 		if(radalert && !fire)
 			icon_state = "radiation"
@@ -364,6 +366,7 @@ var/area/space_area
 	else
 	//	new lighting behaviour with obj lights
 		icon_state = null
+		luminosity = 0
 
 
 /*

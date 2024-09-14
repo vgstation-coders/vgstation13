@@ -69,7 +69,7 @@
 				if(!host.on_fire)
 					to_chat(host, "<span class='warning'>Your body reacts with the atmosphere and bursts into flame!</span>")
 				host.adjust_fire_stacks(0.5)
-				host.IgniteMob()
+				host.ignite()
 	else
 		var/obj/item/clothing/suit/PS=host.wear_suit
 		if(istype(PS))

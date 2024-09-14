@@ -74,19 +74,41 @@
 
 /obj/item/clothing/update_icon()
 	..()
-
 	overlays.len = 0
 	dynamic_overlay.len = 0
+	var/image/dyn_overlay_worn
+	var/image/dyn_overlay_left
+	var/image/dyn_overlay_right
+
+	if ((luminosity > 0) || (dyed_parts.len > 0))
+		dyn_overlay_worn = image('icons/effects/32x32.dmi', src, "blank")
+		dyn_overlay_left = image('icons/effects/32x32.dmi', src, "blank")
+		dyn_overlay_right = image('icons/effects/32x32.dmi', src, "blank")
+
+	if (luminosity > 0)
+		update_moody_light_index("luminous_clothing", image_override = image(icon, src, icon_state))
+		//dynamic in-hands moody lights
+		var/image/worn_moody = image(cloth_icon, src, "[icon_state][(cloth_layer == UNIFORM_LAYER) ? "_s" : ""]")
+		var/image/left_moody = image(inhand_states["left_hand"], src, item_state)
+		var/image/right_moody = image(inhand_states["right_hand"], src, item_state)
+		worn_moody.blend_mode = BLEND_ADD
+		worn_moody.plane = LIGHTING_PLANE
+		dyn_overlay_worn.overlays += worn_moody
+		left_moody.blend_mode = BLEND_ADD
+		left_moody.plane = LIGHTING_PLANE
+		dyn_overlay_left.overlays += left_moody
+		right_moody.blend_mode = BLEND_ADD
+		right_moody.plane = LIGHTING_PLANE
+		dyn_overlay_right.overlays += right_moody
+
 	if (dyed_parts.len > 0)
 		if (!cloth_layer || !cloth_icon)
 			return
-		var/image/dyn_overlay_worn = image('icons/effects/32x32.dmi', src, "blank")
-		var/image/dyn_overlay_left = image('icons/effects/32x32.dmi', src, "blank")
-		var/image/dyn_overlay_right = image('icons/effects/32x32.dmi', src, "blank")
 		for (var/part in dyed_parts)
 			var/list/dye_data = dyed_parts[part]
 			var/dye_color = dye_data[1]
 			var/dye_alpha = dye_data[2]
+			//TODO: dye_date[3] to allow glowing clothing?
 
 			var/_state = dye_base_iconstate_override
 			if (!_state)
@@ -120,9 +142,14 @@
 			right_overlay.alpha = dye_alpha
 			dyn_overlay_right.overlays += right_overlay
 
+	if ((luminosity > 0) || (dyed_parts.len > 0))
 		dynamic_overlay["[cloth_layer]"] = dyn_overlay_worn
 		dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = dyn_overlay_left
 		dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = dyn_overlay_right
+
+	set_blood_overlay()//re-applying blood stains
+	if (on_fire && fire_overlay)
+		overlays += fire_overlay
 
 
 /obj/item/clothing/can_quick_store(var/obj/item/I)
@@ -138,6 +165,7 @@
 			return 1
 
 /obj/item/clothing/quick_store(var/obj/item/I,mob/user)
+	..()
 	for(var/obj/item/clothing/accessory/storage/A in accessories)
 		if(A.hold && A.hold.handle_item_insertion(I,0))
 			return 1
@@ -582,7 +610,7 @@
 		else
 			visible_message("<span class='warning'>\The [user] attempts to put out the fire on \the [target] with \the [src].</span>")
 			if(prob(extinguishingProb))
-				M.ExtinguishMob()
+				M.extinguish()
 				visible_message("<span class='notice'>\The [user] puts out the fire on \the [target].</span>")
 		return
 

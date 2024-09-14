@@ -150,12 +150,12 @@
 	return 1
 
 /obj/structure/railing/canSmoothWith()
-	return list(/obj/structure/railing)
+	return 1
 
 /obj/structure/railing/isSmoothableNeighbor(atom/A)
-	if(istype(A,/obj/structure/railing))
-		var/obj/structure/railing/O = A
-		return O.anchored && O.dir == src.dir && ..()
+	if(A?.dir == src.dir && istype(A,/obj/structure/railing))
+		var/atom/movable/O = A
+		return O.anchored
 
 /obj/structure/railing/relativewall()
 	if(anchored)

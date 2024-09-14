@@ -156,8 +156,10 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/throw_impact(atom/hit_atom, var/speed, mob/user, var/list/impact_whitelist)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
-		playsound(src, src.throw_impact_sound, 80, 1)
-		M.hitby(src,speed,src.dir,impact_whitelist)
+		if (M.hitby(src,speed,src.dir,impact_whitelist))
+			playsound(loc,'sound/effects/slap2.ogg', 15, 1)//grabbed the item
+		else
+			playsound(src, src.throw_impact_sound, 80, 1)
 		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by [user] ([user ? user.ckey : "what"])</font>")
 
 	else if(isobj(hit_atom))
@@ -170,8 +172,9 @@ var/global/list/ghdel_profiling = list()
 	else if(isturf(hit_atom) && !istype(src,/obj/mecha))//heavy mechs don't just bounce off walls, also it can fuck up rocket dashes
 		var/turf/T = hit_atom
 		if(T.density)
-			spawn(2)
-				step(src, turn(src.dir, 180))
+			if (isturf(loc))
+				spawn(2)
+					step(src, turn(src.dir, 180))
 			if(istype(src,/mob/living))
 				var/mob/living/M = src
 				M.take_organ_damage(10)
@@ -252,6 +255,9 @@ var/global/list/ghdel_profiling = list()
 // false if closed
 /atom/proc/is_open_container()
 	return flags & OPENCONTAINER
+
+/atom/proc/reagent_transfer_message(var/transfer_amt)
+	return "<span class='notice'>You transfer [transfer_amt] units of the solution to \the [src.name].</span>"
 
 // For when we want an open container that doesn't show its reagents on examine
 /atom/proc/hide_own_reagents()
@@ -505,7 +511,7 @@ its easier to just keep the beam vertical.
 			bug.removed(usr)
 
 /atom/proc/relaymove()
-	return
+	INVOKE_EVENT(src, /event/relaymoved, "mover" = src)
 
 // Try to override a mob's eastface(), westface() etc. (CTRL+RIGHTARROW, CTRL+LEFTARROW). Return 1 if successful, which blocks the mob's own eastface() etc.
 // Called first on the mob's loc (turf, locker, mech), then on whatever the mob is buckled to, if anything.
@@ -1090,7 +1096,7 @@ its easier to just keep the beam vertical.
 	return FALSE
 
 //Single overlay moody light
-/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff", offX = 0, offY = 0)
+/atom/proc/update_moody_light(var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0)
 	overlays -= moody_light
 	var/area/here = get_area(src)
 	if (here && here.dynamic_lighting)
@@ -1111,7 +1117,7 @@ its easier to just keep the beam vertical.
 	moody_light = null
 
 //Multi-overlay moody lights. don't combine both procs on a single atom, use one or the other.
-/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", moody_alpha = 255, moody_color = "#ffffff", offX = 0, offY = 0)
+/atom/proc/update_moody_light_index(var/index, var/moody_icon = 'icons/lighting/moody_lights.dmi', var/moody_state = "white", var/moody_alpha = 255, var/moody_color = "#ffffff", var/offX = 0, var/offY = 0, var/image_override = null)
 	if (!index)
 		return
 	if (isnull(moody_lights))
@@ -1120,8 +1126,11 @@ its easier to just keep the beam vertical.
 		overlays -= moody_lights[index]
 	var/area/here = get_area(src)
 	if (here && here.dynamic_lighting)
-		moody_light = image(moody_icon, src, moody_state)
-		moody_light.appearance_flags = RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
+		if (image_override)
+			moody_light = image_override
+		else
+			moody_light = image(moody_icon, src, moody_state)
+		moody_light.appearance_flags |= RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM
 		moody_light.plane = LIGHTING_PLANE
 		moody_light.blend_mode = BLEND_ADD
 		moody_light.alpha = moody_alpha
