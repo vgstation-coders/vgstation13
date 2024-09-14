@@ -386,5 +386,5 @@
 	body = ""
 	var/list/thenews = file2list("config/news/trivial.txt")
 	for(var/i in 1 to rand(3,5))
-		body += "-[pick_n_take(thenews)]\n"
+		body += "/ [pick_n_take(thenews)] /" // because newlines don't work, this will have to do
 	body = replacetext(body,"{{AFFECTED}}",affected_dest.name)
