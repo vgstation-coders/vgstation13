@@ -28,6 +28,7 @@ var/global/list/blueprint_archives = list()
 
 	var/header = "<small>property of Nanotrasen. For heads of staff only. Store in high-secure storage.</small>"
 	var/shows_archives = TRUE
+	var/last_shown_archive
 
 	var/can_create_areas_in = list(AREA_SPACE,AREA_CONSTRUCT)
 	var/can_rename_areas = list(AREA_STATION, AREA_BLUEPRINTS)
@@ -309,14 +310,10 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 				for(var/I in blueprint_archives[tstring])
 					shown_images += I
 					user.client.images += I
-				var/image/displayer = image('icons/effects/effects.dmi',T,"mechaportal_break")
-				displayer.plane = NARSIE_PLANE
-				shown_images += displayer
-				user.client.images += displayer
-				animate(displayer, alpha = 0, time = 2)
-				sleep(1)
+		last_shown_archive = world.time
 		spawn(10 SECONDS)
-			user.client.images -= shown_images
+			if(world.time - last_shown_archive >= 99)
+				user.client.images -= shown_images
 
 /obj/item/blueprints/proc/update_room(mob/user)
 	if(shows_archives)
