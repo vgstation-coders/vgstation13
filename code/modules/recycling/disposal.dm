@@ -271,8 +271,16 @@
 		ui.set_auto_update(1)
 
 /obj/machinery/disposal/AltClick(mob/user)
+	if(user.loc == src)
+		to_chat(user, "<span class='warning'>You cannot reach the controls from inside.</span>")
+		return
+	if(mode==-1)
+		to_chat(user, "<span class='warning'>The disposal units power is disabled.</span>")
+		return
 	if(!user.incapacitated() && Adjacent(user))
 		flush = !flush
+		to_chat(user, "<span class='notice'>The disposal handle is now [flush ? "" : "dis"]engaged.</span>")
+
 	return ..()
 
 // handle machine interaction
