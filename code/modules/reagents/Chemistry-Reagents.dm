@@ -23,6 +23,7 @@
 	var/nutriment_factor = 0
 	var/pain_resistance = 0
 	var/sport = SPORTINESS_NONE //High sport helps you show off on a treadmill. Multiplicative
+	var/harms_animal_type //What kind of animal does this harm?
 	var/custom_metabolism = REAGENTS_METABOLISM
 	var/overdose_am = 0
 	var/overdose_tick = 0
@@ -138,6 +139,16 @@
 	src = null
 
 	M.reagent_act(self.id, method, volume)
+
+	if(harms_animal_type && istype(M,harms_animal_type))
+		M.health -= 5
+		if(prob(10))
+			if(istype(M.loc, /turf/simulated))
+				var/turf/simulated/T = M.loc
+				T.add_vomit_floor(M, 1, 0, 1)
+			M.Stun(5)
+			M.visible_message("<span class='warning'>[M] throws up!</span>","<span class='danger'>You throw up!</span>")
+			playsound(M.loc, 'sound/effects/splat.ogg', 50, 1)
 
 /datum/reagent/proc/reaction_obj(var/obj/O, var/volume, var/list/splashplosion=list())
 	set waitfor = 0

@@ -159,18 +159,7 @@
 	reagent_state = REAGENT_STATE_SOLID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
-
-/datum/reagent/coco/reaction_animal(mob/living/simple_animal/M, method, volume)
-	..()
-	if(iscorgi(M))
-		M.health -= 5
-		if(prob(10))
-			if(istype(M.loc, /turf/simulated))
-				var/turf/simulated/T = M.loc
-				T.add_vomit_floor(M, 1, 0, 1)
-			M.Stun(5)
-			M.visible_message("<span class='warning'>[M] throws up!</span>","<span class='danger'>You throw up!</span>")
-			playsound(M.loc, 'sound/effects/splat.ogg', 50, 1)
+	harms_animal_type = /mob/living/simple_animal/corgi
 
 /datum/reagent/condensedcapsaicin
 	name = "Condensed Capsaicin"

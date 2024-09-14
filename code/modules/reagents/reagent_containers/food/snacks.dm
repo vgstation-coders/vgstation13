@@ -1653,6 +1653,7 @@
 	icon_state = "avocadoburger"
 	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadoburger/New()
 	..()
@@ -2907,6 +2908,7 @@
 	crumb_icon = "dribbles"
 	filling_color = "#CBD15B"
 	valid_utensils = UTENSILE_SPOON
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadosoup/New()
 	..()
@@ -3226,6 +3228,7 @@
 	desc = "Salted avocado on a slice of toast. For the authentic experience, make sure you pay an exorbitant price for it."
 	icon_state = "avocadotoast"
 	food_flags = FOOD_DIPPABLE
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadotoast/New()
 	..()
@@ -5752,6 +5755,7 @@
 	base_crumb_chance = 0
 	crumb_icon = "dribbles"
 	valid_utensils = UTENSILE_SPOON
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake/New()
 	..()
@@ -6308,6 +6312,7 @@
 	icon_state = "garlicbread"
 	bitesize = 3
 	food_flags = FOOD_DIPPABLE
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/garlicbread/New()
 	..()
@@ -7254,6 +7259,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A simple sushi consisting of avocado and rice."
 	icon = 'icons/obj/seafood.dmi'
 	icon_state = "sushi_avocado"
+	harmfultocorgis = TRUE
 
 ////	END SUSHI	////
 
