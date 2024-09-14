@@ -45,13 +45,14 @@ var/global/list/blueprint_archives = list()
 
 	var/mob/editor
 
-/obj/item/blueprints/initialize()
+// below is non functional, uncomment if you want to have a go at this being available from a roundstart snapshot
+/*/obj/item/blueprints/initialize()
 	. = ..()
 	if(shows_archives && !blueprint_archives.len)
 		for(var/area/A in areas)
 			if(get_area_type(A) == AREA_STATION)
 				for(var/turf/T in A.area_turfs)
-					update_turf_image(T)
+					update_turf_image(T)*/
 
 /obj/item/blueprints/proc/update_turf_image(var/turf/T)
 	var/image/overlay = image(T.icon,T,T.icon_state,T.layer,T.dir,T.pixel_x,T.pixel_y)
