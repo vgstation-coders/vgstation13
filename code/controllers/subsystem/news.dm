@@ -3,8 +3,8 @@ var/datum/subsystem/news/SSnews
 /datum/subsystem/news
 	name     = "News"
 	wait     = 1 MINUTES
-	flags    = SS_NO_INIT | SS_KEEP_TIMING
-	priority = SS_PRIORITY_EVENT
+	flags    = SS_KEEP_TIMING
+	priority = SS_PRIORITY_NEWS
 
 /datum/subsystem/news/Initialize(timeofday)
 	setup_news()
