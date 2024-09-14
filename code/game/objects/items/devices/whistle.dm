@@ -5,9 +5,10 @@
 	item_state = "flashbang"	//looks exactly like a flash (and nothing like a flashbang)
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_COMBAT + "=1"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_ELECTRONIC
 	flags = FPRINT
 	siemens_coefficient = 1
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 
 	var/nextuse = 0
 	var/cooldown = 2 SECONDS
@@ -94,3 +95,24 @@
 
 	// ~ sound and cooldown ~ //
 	do_your_sound(user)
+
+/obj/item/device/hailer/lifeguard
+	name = "Lifeguard Hailer"
+	desc = "Used by sun-tanned lifeguards to stop people from running on the beach."
+
+/obj/item/device/hailer/lifeguard/say_your_thing()
+	if(emagged)
+		..()
+	else
+		return "HALT - BEACH VIOLATION!"
+
+/obj/item/device/hailer/lifeguard/do_your_sound(var/mob/user)
+	if(emagged && insults)
+		playsound(user, 'sound/voice/binsult.ogg', 100, 1, vary = 0)
+		insults--
+	else
+		playsound(user, 'sound/machines/warning-buzzer.ogg', 100, 1, vary = 0)
+	if(user)
+		var/list/bystanders = get_hearers_in_view(world.view, user)
+		flick_overlay(image('icons/mob/talk.dmi', user, "hail", MOB_LAYER+1), clients_in_moblist(bystanders), 2 SECONDS)
+	nextuse = world.time + cooldown

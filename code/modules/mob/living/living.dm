@@ -86,7 +86,7 @@
 	if(istype(get_turf(src),/turf/unsimulated/floor/brimstone))
 		FireBurn(11, 9001, ONE_ATMOSPHERE) // lag free weird way of doing it
 		fire_stacks = 11
-		IgniteMob() // ffffFIRE!!!! FIRE!!! FIRE!!
+		ignite() // ffffFIRE!!!! FIRE!!! FIRE!!
 	return 1
 
 // Apply connect damage
@@ -135,7 +135,7 @@
 			G.invisibility = 0
 			to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
 		spawn(1)
-			dust()
+			gib()
 
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
@@ -567,7 +567,7 @@ Thanks.
 	else
 		reagents.clear_reagents()
 	heal_overall_damage(1000, 1000)
-	ExtinguishMob()
+	extinguish()
 	fire_stacks = 0
 	/*
 	if(locked_to)
@@ -1136,7 +1136,7 @@ Thanks.
 				sleep(1 SECONDS)
 			CM.fire_stacks = 0
 			CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>","<span class='notice'>You extinguish yourself.</span>")
-			ExtinguishMob()
+			extinguish()
 			return
 
 		CM.resist_restraints()
@@ -1342,7 +1342,6 @@ Thanks.
 				now_pushing = 0
 				return
 
-			tmob.LAssailant = src
 			tmob.assaulted_by(src, TRUE)
 
 		now_pushing = 0
@@ -1536,11 +1535,7 @@ Thanks.
 				usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
 
 				log_attack("<font color='red'>[usr.name] ([usr.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				if(!iscarbon(usr))
-					M.LAssailant = null
-				else
-					M.LAssailant = usr
-					M.assaulted_by(usr)
+				M.assaulted_by(usr)
 				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
@@ -1550,7 +1545,7 @@ Thanks.
 			to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
 			return FAILED_THROW
 
-		if(I.pre_throw(target))
+		if(I.pre_throw(target,src))
 			return FAILED_THROW
 
 	remove_from_mob(item)

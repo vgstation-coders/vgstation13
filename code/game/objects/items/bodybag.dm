@@ -40,7 +40,6 @@
 	icon_opened = "bodybag_open"
 	density = 0
 	sound_file = 'sound/items/zip.ogg'
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	w_type = NOT_RECYCLABLE
 
 /obj/structure/closet/body_bag/attackby(obj/item/W, mob/user)
@@ -160,7 +159,7 @@
 		O.name = "used stasis bag"
 		O.icon = src.icon
 		O.icon_state = "bodybag_used"
-		O.desc = "Pretty useless now.."
+		O.desc = "Pretty useless now."
 		qdel(src)
 
 /obj/structure/closet/body_bag/cryobag/MouseDropFrom(over_object, src_location, over_location)

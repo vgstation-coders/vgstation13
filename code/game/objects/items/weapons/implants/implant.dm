@@ -2,6 +2,7 @@
 	name = "implant"
 	icon = 'icons/obj/device.dmi'
 	icon_state = "implant"
+	w_class = W_CLASS_TINY
 	_color = "b"
 	/// The mob this has been implanted into.
 	var/mob/living/imp_in
@@ -48,11 +49,18 @@
 	if(istype(W, /obj/item/weapon/implanter))
 		var/obj/item/weapon/implanter/L = W
 		if(!L.imp)
-			forceMove(L)
-			user.show_message("<span class='warning'>You load \the [src] into \the [L].</span>")
-			L.imp = src
-			L.update()
-			return
+			if(!user.is_holding_item(src)) //Implant is not held
+				forceMove(L)
+				user.show_message("<span class='warning'>You load \the [src] into \the [L].</span>")
+				L.imp = src
+				L.update()
+			else if(user.drop_item(src, get_turf(user))) //Implant is held, try to drop it first
+				forceMove(L)
+				user.show_message("<span class='warning'>You load \the [src] into \the [L].</span>")
+				L.imp = src
+				L.update()
+			else //super-glued to user's hands
+				user.show_message("<span class='warning'>\The [src] is stuck in your hand!</span>")
 
 // Used by the implants that are activated by emotes.
 /obj/item/weapon/implant/proc/trigger(emote, mob/source)

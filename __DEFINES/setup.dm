@@ -1127,16 +1127,60 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define MT_UPDATE 1
 #define MT_REINIT 2
 
+//////////////////
+// FIRE
+//////////////////
+
+// high heating value for burning objects, assuming perfect combustion (MJ/kg)
+#define HHV_WOOD 18.0
+#define HHV_PLASTIC 46.4 // Polypropylene
+#define HHV_FABRIC 19.4 // Cotton
+#define HHV_WAX 42.0 // Paraffin wax
+#define HHV_BIOLOGICAL 38.0 // Body fat
+
+// combustion requires about 14% oxygen concentration
+#define MINOXY2BURN 0.14
+
+// minimum burn time
+#define MIN_BURN_TIME 3 SECONDS
+
+// stoichiometric combustion ratios in oxygen
+#define FUEL_OX_RATIO_WOOD (1/6) // C6H10O5 (cellulose)
+#define FUEL_OX_RATIO_PLASTIC (2/9) // C3H6 ((poly)propylene)
+#define FUEL_OX_RATIO_FABRIC (1/6) // C6H10O5 (cellulose)
+#define FUEL_OX_RATIO_WAX (1/38) // C25H52 (paraffin wax)
+#define FUEL_OX_RATIO_BIOLOGICAL (1/78) // C55H104O6 ("average" triglyceride)
+
+// maximum flame temperature (K)
+#define FLAME_TEMPERATURE_WOOD 1300.15
+#define FLAME_TEMPERATURE_PLASTIC 1773.15
+#define FLAME_TEMPERATURE_FABRIC 1073.15
+#define FLAME_TEMPERATURE_WAX 973.15
+#define FLAME_TEMPERATURE_BIOLOGICAL 1173.15
+
+// molecular weight (km/mol)
+#define MOLECULAR_WEIGHT_WOOD 0.16
+#define MOLECULAR_WEIGHT_PLASTIC 0.042
+#define MOLECULAR_WEIGHT_FABRIC 0.16
+#define MOLECULAR_WEIGHT_WAX 0.35
+#define MOLECULAR_WEIGHT_BIOLOGICAL 0.86
+
+// Autoignition temperatures (K)
 #define AUTOIGNITION_WOOD  573.15
-#define AUTOIGNITION_PAPER 519.15
-#define AUTOIGNITION_PLASTIC 689.15 //autoignition temperature of ABS plastic
+#define AUTOIGNITION_PLASTIC 661.15 //polypropylene
 #define AUTOIGNITION_FABRIC 523.15
-#define AUTOIGNITION_PROTECTIVE 573.15 //autoignition temperature of protective clothing like firesuits or kevlar vests
-#define AUTOIGNITION_ORGANIC 633.15 //autoignition temperature of animal fats
-// Assuming this is http://en.wikipedia.org/wiki/Butane
-// (Autoignition temp 288°C, or 561.15°K)
-// Used in fueltanks exploding.
-#define AUTOIGNITION_WELDERFUEL 561.15
+#define AUTOIGNITION_WAX 518.15
+#define AUTOIGNITION_BIOLOGICAL 633.15 //animal fat
+#define AUTOIGNITION_WELDERFUEL 561.15 //butane
+#define AUTOIGNITION_TRIGGER 500.00 //temperature at which an area begins checking for autoignition
+
+// flame sizes (% of cell volume occupied by a flame)
+#define SMALL_FLAME 25 //a match, a candle, or a lighter (1% chance to ignite)
+#define MEDIUM_FLAME 250 //a single burning object on the ground (10%)
+#define LARGE_FLAME 675 //a healthy campfire (25%)
+#define FULL_FLAME 2500 //floor to ceiling flames
+
+//////////////////
 
 // snow business
 #define SNOWBALL_MINIMALTEMP 265	//about -10°C, the minimal temperature at which a thrown snowball can cool you down.
@@ -1635,9 +1679,8 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_DISK				"diskspawn"
 #define HOLOMAP_MARKER_SKIPJACK			"skipjack"
 #define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
+#define HOLOMAP_MARKER_TEARREALITY		"tearreality"
 #define HOLOMAP_MARKER_BLOODSTONE		"bloodstone"
-#define HOLOMAP_MARKER_BLOODSTONE_BROKEN	"bloodstone-broken"
-#define HOLOMAP_MARKER_BLOODSTONE_ANCHOR	"bloodstone-narsie"
 #define HOLOMAP_MARKER_CULT_ALTAR		"altar"
 #define HOLOMAP_MARKER_CULT_FORGE		"forge"
 #define HOLOMAP_MARKER_CULT_SPIRE		"spire"
@@ -1844,7 +1887,7 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 
 // /datum/reagent/var/sport
 #define SPORTINESS_NONE 1
-#define SPORTINESS_SUGAR 1.2
+#define SPORTINESS_SUGAR 1.5
 #define SPORTINESS_SPORTS_DRINK 5
 
 //Luck-related defines
@@ -1903,3 +1946,55 @@ var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define CANDLES_NONE 0
 #define CANDLES_UNLIT 1
 #define CANDLES_LIT 2
+
+#define MINDUI_FLAG_PROCESSING	1
+#define MINDUI_FLAG_TOOLTIP		2
+
+#define MINDUI_MAX_CULT_SLOTS	14
+
+#define ECLIPSE_NOT_YET	0
+#define ECLIPSE_ONGOING	1
+#define ECLIPSE_OVER	2
+
+#define HEX_MODE_ROAMING 0
+#define HEX_MODE_GUARD	 1
+#define HEX_MODE_ESCORT	 2
+
+//Particles system defines
+#define PS_STEAM			"Steam"
+#define PS_SMOKE			"Smoke"
+#define PS_TEAR_REALITY		"Tear Reality"
+#define PS_CANDLE			"Candle"
+#define PS_CANDLE2			"Candle2"
+#define PS_CULT_GAUGE		"Cult Gauge"
+#define PS_CULT_SMOKE		"Cult Smoke"
+#define PS_CULT_SMOKE2		"Cult Smoke2"
+#define PS_CULT_SMOKE_BOX	"Cult Smoke Box"
+#define PS_CULT_HALO		"Cult Halo"
+#define PS_SPACE_RUNES		"Space Runes"
+#define PS_NARSIEHASRISEN1	"Nar-SieHasRisen1"
+#define PS_NARSIEHASRISEN2	"Nar-SieHasRisen2"
+#define PS_NARSIEHASRISEN3	"Nar-SieHasRisen3"
+#define PS_ZAS_DUST			"ZAS Dust"
+#define PS_DANDELIONS		"Dandelions"
+#define PS_CROSS_DUST		"Cross Dust"
+#define PS_CROSS_ORB		"Cross Orb"
+#define PS_SACRED_FLAME		"Sacred Flame"
+#define PS_SACRED_FLAME2	"Sacred Flame2"
+#define PS_BIBLE_PAGE		"Bible Page"
+
+//Particles variable defines
+#define PVAR_SPAWNING	"spawning"
+#define PVAR_POSITION	"position"
+#define PVAR_VELOCITY	"velocity"
+#define PVAR_ICON_STATE	"icon_state"
+#define PVAR_COLOR		"color"
+#define PVAR_SCALE		"scale"
+#define PVAR_PLANE		"plane"
+#define PVAR_LAYER		"layer"
+#define PVAR_PIXEL_X	"pixel_x"
+#define PVAR_PIXEL_Y	"pixel_y"
+#define PVAR_LIFESPAN	"lifespan"
+#define PVAR_FADE		"fade"
+
+#define ZAS_DUST_TURFS_PER_TICK	20

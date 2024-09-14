@@ -169,6 +169,7 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
+	var/obj/structure/current_crate
 	var/print_delay = 1 SECONDS
 	var/obj/item/weapon/paper/manifest/current_manifest = null
 	var/next_sound = 0
@@ -214,6 +215,7 @@
 
 /obj/machinery/crate_weigher/Crossed(atom/movable/A)
 	if(istype(A,/obj/structure)) //Ideally crate types stay these
+		current_crate = A
 		icon_state = "down"
 		if (world.time > next_sound)
 			playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
@@ -240,11 +242,21 @@
 					CF.weighed = TRUE
 
 /obj/machinery/crate_weigher/Uncrossed(atom/movable/A)
+	..()
 	if(istype(A,/obj/structure)) //Ideally crate types stay these
-		icon_state = "up"
-		if (world.time > next_sound)
-			playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
-			next_sound = world.time + sound_delay
+		remove_crate()
+
+/obj/machinery/crate_weigher/Move(NewLoc, Dir, step_x, step_y, glide_size_override)
+	. = ..()
+	if(current_crate && current_crate.loc != src.loc)
+		remove_crate()
+
+/obj/machinery/crate_weigher/proc/remove_crate()
+	current_crate = null
+	icon_state = "up"
+	if (world.time > next_sound)
+		playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
+		next_sound = world.time + sound_delay
 
 /obj/item/weapon/circuitboard/crate_weigher
 	name = "Circuit Board (Crate Weigher)"

@@ -79,6 +79,8 @@
 	..()
 	if(bullet_marks)
 		to_chat(user, "It has [bullet_marks > 1 ? "some holes" : "a hole"] in it.")
+	if(locate(/obj/effect/ash) in src)
+		to_chat(user, "It is covered in ashes.")
 
 /turf/proc/process()
 	set waitfor = FALSE
@@ -127,8 +129,17 @@
 	//THIS IS OLD TURF ENTERED CODE
 	var/loopsanity = 100
 
+
+
+	var/obj/A_obj = A
 	if(!src.has_gravity())
 		inertial_drift(A)
+	else if(istype(A_obj))
+		var/obj/effect/overlay/puddle/ice/this_puddle = locate(/obj/effect/overlay/puddle/ice) in src
+		if(!this_puddle || !A_obj.last_move)
+			A.inertia_dir = 0
+		else
+			A.process_inertia_ignore_gravity(src)
 	else
 		A.inertia_dir = 0
 
@@ -166,11 +177,11 @@
 				if(B.is_locking(B.mob_lock_type))
 					contents_brought += recursive_type_check(B)
 
-			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
+			var/locked_to_current_z = FALSE//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
 
 			var/datum/zLevel/ZL = map.zLevels[z]
 			if(ZL.transitionLoops)
-				locked_to_current_z = z
+				locked_to_current_z = TRUE
 
 			var/obj/item/weapon/disk/nuclear/nuclear = locate() in contents_brought
 			if(nuclear)
@@ -191,7 +202,7 @@
 			for(var/mob/living/L in contents_brought)
 				if(L.locked_to_z != 0)
 					if(src.z == L.locked_to_z)
-						locked_to_current_z = map.zMainStation
+						locked_to_current_z = TRUE
 					else
 						to_chat(L, "<span class='warning'>You find your way back.</span>")
 						move_to_z = L.locked_to_z
@@ -310,7 +321,7 @@
 		A.area_turfs -= src
 	if (!N || !allow)
 		return
-
+	remove_particles()
 	var/datum/gas_mixture/env
 
 	var/old_opacity = opacity
@@ -337,6 +348,10 @@
 	if(N == /turf/space)
 		for(var/obj/effect/decal/cleanable/C in src)
 			qdel(C)//enough with footprints floating in space
+
+	if(!istype(N, /turf/simulated))
+		for(var/obj/effect/overlay/puddle/ice/P in src)
+			qdel(P)
 
 	//Rebuild turf
 	var/turf/T = src
@@ -580,6 +595,9 @@
 	if(istype(src, get_underlying_turf())) //Don't cultify the base turf, ever
 		return
 	ChangeTurf(get_base_turf(src.z))
+
+/turf/proc/decultify()
+	update_icon()
 
 /turf/proc/clockworkify()
 	return

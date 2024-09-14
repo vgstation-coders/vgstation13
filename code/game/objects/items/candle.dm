@@ -41,6 +41,8 @@
 		lit = 0
 		update_icon()
 		set_light(0)
+		remove_particles(PS_CANDLE)
+		remove_particles(PS_CANDLE2)
 
 /obj/item/candle/update_icon()
 	overlays.len = 0
@@ -58,7 +60,7 @@
 		icon_state = "candle[i]"
 	wick.icon_state = "[icon_state]-wick"
 	overlays += wick
-	update_blood_overlay()
+	set_blood_overlay()
 	if (lit)
 		var/image/I = image(icon,src,"[icon_state]_lit")
 		I.appearance_flags = RESET_COLOR
@@ -106,8 +108,13 @@
 		if(!quiet)
 			visible_message(flavor_text)
 		set_light(CANDLE_LUM)
+		add_particles(PS_CANDLE)
+		add_particles(PS_CANDLE2)
 		processing_objects.Add(src)
 		update_icon()
+		if(iscarbon(loc))
+			var/mob/living/carbon/M = loc
+			M.update_inv_hands()
 
 /obj/item/candle/proc/flicker(var/amount = rand(5, 15))
 	if(flickering)
@@ -117,7 +124,7 @@
 		for(var/i = 0; i < amount; i++)
 			if(prob(95))
 				if(prob(30))
-					lit = 0
+					extinguish()
 				else
 					var/candleflick = pick(0.5, 0.7, 0.9, 1, 1.3, 1.5, 2)
 					set_light(candleflick * CANDLE_LUM)
@@ -151,8 +158,7 @@
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	if(env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
-		src.lit = 0
-		set_light(0)
+		extinguish()
 		processing_objects.Remove(src)
 		update_icon()
 		return
@@ -164,13 +170,11 @@
 		return
 	update_icon()
 	if(istype(T)) //Start a fire if possible
-		T.hotspot_expose(source_temperature, 5, surfaces = 0)
+		try_hotspot_expose(source_temperature, SMALL_FLAME, 0)
 
 /obj/item/candle/attack_self(mob/user as mob)
 	if(lit)
-		lit = 0
-		update_icon()
-		set_light(0)
+		extinguish()
 		to_chat(user, "<span class='warning'>You pinch \the [src]'s wick.</span>")
 		if(iscarbon(loc))
 			var/mob/living/carbon/M = loc

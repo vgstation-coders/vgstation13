@@ -29,7 +29,7 @@
 	icon_state = "chemmask0"
 	clothing_flags = MASKINTERNALS
 	w_class = W_CLASS_SMALL
-	autoignition_temperature = AUTOIGNITION_PROTECTIVE
+	w_type = RECYK_PLASTIC
 	var/power = 0
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01

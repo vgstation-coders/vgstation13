@@ -71,11 +71,7 @@
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
-		if(!iscarbon(user))
-			M.LAssailant = null
-		else
-			M.LAssailant = user
-			M.assaulted_by(user)
+		M.assaulted_by(user)
 		src.add_fingerprint(user)
 		for(var/mob/O in viewers(M))
 			if (O.client)
@@ -175,11 +171,7 @@
 			target.visible_message("<span class='danger'>[target] has been stunned with \the [src] by [user]!</span>",\
 				drugged_message="<span class='notice'>[user] smacks [target] with the fishing rod!</span>")
 
-			if(!iscarbon(user))
-				target.LAssailant = null
-			else
-				target.LAssailant = user
-				target.assaulted_by(user)
+			target.assaulted_by(user)
 		return
 	else
 		return ..()
@@ -236,12 +228,14 @@
 	slot_flags = null
 	force = 18
 	throwforce = 0
-	w_class = 5
+	w_class = W_CLASS_HUGE
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
 	sharpness = 1.5
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	mech_flags = MECH_SCAN_ILLEGAL
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
@@ -332,7 +326,7 @@
 
 /obj/item/weapon/caber
 	name = "\improper Ullapool Caber"
-	desc = "A potato-masher style hand grenade. Only explodes when swung against a target while the safety grip is on."
+	desc = "A potato-masher style hand grenade. Only explodes when swung against a target while the safety grip is on. Can recharge once a minute."
 	icon_state = "ullapoolcaber"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	siemens_coefficient = 0 //wooden handle
@@ -343,8 +337,8 @@
 	w_class = W_CLASS_SMALL //fits in your pocket
 	attack_verb = list("blasts", "smacks", "smashes")
 	var/exploded = FALSE
-	var/admintier = FALSE
-	var/rechargetime = 30 //1 minute between each boom, only used by the admincaber
+	var/admintier = TRUE
+	var/rechargetime = 30 //1 minute between each boom
 	var/timer = 0
 
 /obj/item/weapon/caber/New()
@@ -363,7 +357,7 @@
 		attack_verb = list("blasts", "explodes")
 	if(!cant_drop)
 		attack_verb = list("smacks", "smashes")
-	if(admintier && exploded) //only admin tier cabers have a recharge timer
+	if(admintier && exploded)
 		timer += 1
 	if(admintier && timer == rechargetime)
 		timer = 0
@@ -387,12 +381,11 @@
 			exploded = TRUE
 			icon_state = "ullapoolcaberexploded"
 			sharpness = 1.3 //ragged metal edges are kinda like a serrated knife
-			sharpness_flags = SHARP_BLADE //ever cut yourself when opening a can of whatever with a can opener? same deal here
+			sharpness_flags = SHARP_TIP | SERRATED_BLADE | INSULATED_EDGE //ever cut yourself when opening a can of whatever with a can opener? same deal here, sharp spikes, uneven ragged metal and wooden handle
 		else
 			playsound(target, 'sound/misc/caber_hitsound.ogg', 100, 0)
 	else
 		playsound(target, 'sound/misc/caber_hitsound.ogg', 100, 0)
-//TO DO: make inhand update properly when exploded or restored
 //TO DO: less self damage the more inebriated you are, with max immunity at or near liver death levels
 //TO DO: explosion when used against walls or windows
 

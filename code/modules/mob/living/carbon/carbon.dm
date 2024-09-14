@@ -50,6 +50,7 @@
 	if(check_shields(0, M))
 		return 0
 	M.unarmed_attack_mob(src)
+	return 1
 
 /mob/living/carbon/relaymove(var/mob/user, direction)
 	if(user in src.stomach_contents)
@@ -756,10 +757,12 @@
 	return TRUE
 
 
-/mob/living/carbon/proc/check_can_revive() // doesn't check suicides
+/mob/living/carbon/proc/check_can_revive()
 	if (!isDead())
 		return CAN_REVIVE_NO
 	if (!mind)
+		return CAN_REVIVE_NO
+	if (mind.suiciding)
 		return CAN_REVIVE_NO
 	if (client)
 		return CAN_REVIVE_IN_BODY

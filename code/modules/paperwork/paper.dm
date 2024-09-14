@@ -14,12 +14,13 @@
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_CARDBOARD = 40)
 	w_type = RECYK_WOOD
+	flammable = TRUE
 	throw_range = 1
 	throw_speed = 1
 	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 1
 	attack_verb = list("slaps")
-	autoignition_temperature = AUTOIGNITION_PAPER
+
 
 	var/info		//What's actually written on the paper.
 	var/info_links	//A different version of the paper which includes html links at fields and EOF
@@ -260,6 +261,8 @@
 		\[row\] - Creates a new table row.<br>
 		\[cell\] - Creates a new table cell.<br>
 		\[sign\] : Inserts a signature of your name in a foolproof way.<br>
+		\[stationname\] : Inserts the name of the station.<br>
+		\[logo\] : Inserts a medium-size Nanotrasen logo.<br>
 		\[field\] : Inserts an invisible field which lets you start type from there. Useful for forms.<br>
 		\[date\] : Inserts the current date in the format DAY MONTH, YEAR.<br>
 		\[time\] : Inserts the current station time.<br>

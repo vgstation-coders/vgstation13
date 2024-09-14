@@ -31,10 +31,8 @@
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED,INSECT_SHAPED, GREY_SHAPED)
-	autoignition_temperature = AUTOIGNITION_PROTECTIVE
+	flammable = FALSE
 
-	autoignition_temperature = 0
-	fire_fuel = 0
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()
@@ -76,6 +74,7 @@
 	flags = FPRINT
 	body_parts_covered = HEAD|EYES
 	light_power = 0.5
+	flammable = FALSE
 	var/onfire = 0.0
 	var/status = 0
 	var/fire_resist = T0C+1300	//this is the max temp it can stand before you start to cook. although it might not burn away, you take damage
@@ -95,8 +94,7 @@
 		else
 			return
 
-	if (istype(location, /turf))
-		location.hotspot_expose(700, 1)
+	try_hotspot_expose(700, SMALL_FLAME, -1)
 
 /obj/item/clothing/head/cakehat/attack_self(mob/user as mob)
 	if(status > 1)
@@ -221,7 +219,9 @@
 	name = "kitty ears"
 	desc = "A pair of kitty ears. Meow!"
 	icon_state = "kitty"
+	species_fit = list(VOX_SHAPED)
 	flags = FPRINT
+	body_parts_covered = HIDETAIL
 	var/haircolored = TRUE
 	var/cringe = FALSE
 	var/anime = FALSE
@@ -279,8 +279,6 @@
 	var/s_tone = 0.0
 	var/created_name = "Buttbot"
 
-	var/list/spells = list()
-
 /obj/item/clothing/head/butt/proc/transfer_buttdentity(var/mob/living/carbon/H)
 	name = "[H.real_name]'s butt"
 	return
@@ -292,6 +290,7 @@
 	item_state = "paper"
 	siemens_coefficient = 2
 	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
+	blocks_tracking = TRUE
 
 /obj/item/clothing/head/celtic
 	name = "\improper Celtic crown"

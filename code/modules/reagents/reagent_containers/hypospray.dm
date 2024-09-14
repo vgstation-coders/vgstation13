@@ -68,11 +68,7 @@
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to inject [M.name] ([M.key]). Reagents: [contained]</font>")
 			msg_admin_attack("[user.name] ([user.ckey]) injected [M.name] ([M.key]) with [src.name]. Reagents: [contained] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			log_attack("<font color='red'>[user.name] ([user.ckey]) injected [M.name] ([M.ckey]) with [src.name] Reagents: [contained]</font>" )
-			if(!iscarbon(user))
-				M.LAssailant = null
-			else
-				M.LAssailant = user
-				M.assaulted_by(user)
+			M.assaulted_by(user)
 
 			var/trans = reagents.trans_to(M, amount_per_transfer_from_this)
 			to_chat(user, "<span class='notice'>[trans] units injected. [reagents.total_volume] units remaining in [src].</span>")
@@ -93,6 +89,7 @@
 	flags = FPRINT
 	starting_materials = list(MAT_PLASTIC = 200)
 	w_type = RECYK_ELECTRONIC
+	var/examine_text = TRUE //Lazy proc for determining whether the examine text shows up, overridden by the self-refilling autoinjector
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/attack(mob/M as mob, mob/user as mob)
 	..()
@@ -106,10 +103,11 @@
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/examine(mob/user)
 	..()
-	if(reagents && reagents.reagent_list.len)
-		to_chat(user, "<span class='info'>It is ready for injection.</span>")
-	else
-		to_chat(user, "<span class='info'>The [name] has been spent.</span>")
+	if(examine_text)
+		if(reagents && reagents.reagent_list.len)
+			to_chat(user, "<span class='info'>It is ready for injection.</span>")
+		else
+			to_chat(user, "<span class='info'>The [name] has been spent.</span>")
 
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector
 	name = "biofoam injector"

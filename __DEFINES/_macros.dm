@@ -206,7 +206,11 @@
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
-#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod) || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller))
+#define isholyweapon(I) (istype(I, /obj/item/weapon/storage/bible)\
+						 || istype(I, /obj/item/weapon/nullrod)\
+						 || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller/true)\
+						 || istype(I, /obj/item/projectile/hookshot/whip/vampkiller/true)\
+						 || istype(I, /obj/item/weapon/boomerang/cross))
 
 #define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 
@@ -222,7 +226,7 @@
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
-#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()))
+#define iscleanaway(A) (istype(A,/obj/effect/decal/cleanable) || (istype(A,/obj/effect/overlay) && !istype(A,/obj/effect/overlay/puddle) && !istype(A, /obj/effect/overlay/hologram)) || istype(A,/obj/effect/rune_legacy) || (A.ErasableRune()) || istype(A,/obj/effect/ash))
 
 #define ismatrix(A) (istype(A, /matrix))
 

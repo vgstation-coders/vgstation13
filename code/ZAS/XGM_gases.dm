@@ -59,6 +59,7 @@
 /datum/gas/plasma
 	id = GAS_PLASMA
 	name = "Plasma"
+	short_name = "Plasma"
 
 	//Note that this has a significant impact on TTV yield.
 	//Because it is so high, any leftover plasma soaks up a lot of heat and drops the yield pressure.
@@ -127,7 +128,7 @@
 /datum/gas/cryotheum
 	id = GAS_CRYOTHEUM
 	name = "Cryotheum"
-	short_name = "O<sub>2</sub>C"
+	short_name = "O<sub>2</sub>β"
 	specific_heat = 10
 
 	molar_mass = 0.032

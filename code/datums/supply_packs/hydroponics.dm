@@ -146,6 +146,15 @@
 	containsicon = /mob/living/simple_animal/cow
 	containsdesc = "Contains the whole cow."
 
+/datum/supply_packs/chocolatecow
+	name = "Chocolate Cow"
+	cost = 45 //you pay a premium for choccy milk
+	containertype = /obj/structure/largecrate/chocolatecow
+	containername = "chocolate cow crate"
+	group = "Hydroponics"
+	containsicon = /mob/living/simple_animal/cow/chocolate
+	containsdesc = "How else do you expect to explain chocolate milk?"
+
 /datum/supply_packs/goat
 	name = "Goat"
 	cost = 25
@@ -234,8 +243,8 @@
 	name = "Exotic seeds"
 	contains = list(/obj/item/seeds/dionanode,
 					/obj/item/seeds/dionanode,
-					/obj/item/seeds/libertymycelium,
-					/obj/item/seeds/reishimycelium,
+					/obj/item/seeds/random,
+					/obj/item/seeds/random,
 					/obj/item/seeds/random,
 					/obj/item/seeds/random,
 					/obj/item/seeds/random,

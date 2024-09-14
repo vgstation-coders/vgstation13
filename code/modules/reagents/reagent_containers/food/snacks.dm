@@ -7,7 +7,8 @@
 	desc = "yummy"
 	icon_state = null
 	log_reagents = 1
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE //<--- clueless
 
 	var/food_flags	//Possible flags: FOOD_LIQUID, FOOD_MEAT, FOOD_ANIMAL, FOOD_SWEET
 					//FOOD_LIQUID	- for stuff like soups
@@ -56,6 +57,7 @@
 	var/image/extra_food_overlay
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
+	QDEL_NULL(dip)
 	var/turf/T = get_turf(src)
 	if(contents.len)
 		for(var/atom/movable/A in src)
@@ -105,7 +107,7 @@
 
 				if (istype(TrashItem, /obj/item/trash/plate))
 					var/obj/item/trash/plate/P = TrashItem
-					P.trash_color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
+					P.trash_color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(src)), override_dir = dir	), 1, 1)
 					P.update_icon()
 
 				if(ismob(old_loc))
@@ -284,7 +286,7 @@
 			overlays += I
 
 	update_temperature_overlays()
-	update_blood_overlay()//re-applying blood stains
+	set_blood_overlay()//re-applying blood stains
 	if (on_fire && fire_overlay)
 		overlays += fire_overlay
 
@@ -417,7 +419,7 @@
 			C.icon_state = crumb_icon
 			C.name = crumb_icon
 			C.dir = pick(cardinal)
-			C.color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIcon(src, dir, 0), 1, 1)
+			C.color = filling_color != "#FFFFFF" ? filling_color : AverageColor(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(src)), override_dir = dir), 1, 1)
 			if (random_filling_colors?.len > 0)
 				filling_color = pick(random_filling_colors)
 		if (virus2?.len)
@@ -1279,8 +1281,8 @@
 	name = "huge mushroom slice"
 	desc = "A slice from a huge mushroom."
 	icon_state = "hugemushroomslice"
-	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
+	food_flags = FOOD_SKELETON_FRIENDLY
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/hugemushroomslice/New()
 	..()
@@ -1296,8 +1298,8 @@
 	name = "tomato slice"
 	desc = "A slice from a huge tomato."
 	icon_state = "tomatomeat"
-	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
+	food_flags = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/tomatomeat/New()
 	..()
@@ -1545,7 +1547,6 @@
 	name = "veggie burger"
 	desc = "Technically vegetarian."
 	icon_state = "veggieburger"
-	food_flags = FOOD_MEAT
 	base_crumb_chance = 20
 
 /obj/item/weapon/reagent_containers/food/snacks/veggieburger/New()
@@ -2975,11 +2976,10 @@
 	reagents.add_reagent(TOMATOJUICE, 2)
 	bitesize = 5
 
-/* No more of this
 /obj/item/weapon/reagent_containers/food/snacks/telebacon
-	name = "Tele Bacon"
-	desc = "It tastes a little odd but it is still delicious."
-	icon_state = "bacon"
+	name = "Tracking Bacon"
+	desc = "Bacon used by a teleporter."
+	icon_state = "telebacon"
 	var/obj/item/beacon/bacon/baconbeacon
 	bitesize = 2
 	base_crumb_chance = 0
@@ -2992,8 +2992,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/telebacon/after_consume()
 	if(!reagents.total_volume)
 		baconbeacon.forceMove(usr)
-		baconbeacon.digest_delay()
-*/
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/spellburger
 	name = "Spell Burger"
@@ -3590,14 +3589,14 @@
 	..()
 	if(!safeforfat)
 		reagents.add_reagent(MINTTOXIN, 1)
+		bitesize = 1
 	else
 		reagents.add_reagent(MINTESSENCE, 2)
-	bitesize = 1
+		bitesize = 2
 
 //the syndie version for muh tators
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint
 	name = "mint candy"
-	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/nano
 	desc = "It's not just a mint!"
@@ -5712,6 +5711,8 @@
 	icon_state = "higashikata"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/higashikata/New()
 	..()
@@ -5727,6 +5728,8 @@
 	icon_state = "sundae"
 	food_flags = FOOD_SWEET | FOOD_ANIMAL | FOOD_LACTOSE //milk
 	base_crumb_chance = 0
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/sundae/New()
 	..()
@@ -5743,6 +5746,8 @@
 	trash = /obj/item/weapon/reagent_containers/food/drinks/drinkingglass
 	valid_utensils = 0
 	base_crumb_chance = 0
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadomilkshake/New()
 	..()
@@ -6084,7 +6089,6 @@
 	slot_flags = SLOT_MASK
 	goes_in_mouth = TRUE
 	throwforce = 1
-	autoignition_temperature = 0
 	w_type = RECYK_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 100)
 	species_fit = list(INSECT_SHAPED)
@@ -6195,26 +6199,13 @@
 		return
 	verbs -= /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/verb/pick_leaf
 	switching = 0
-	var/N = rand(1,3)
 	if(get_turf(user))
-		switch(N)
-			if(1)
-				playsound(user, 'sound/weapons/genhit1.ogg', 50, 1)
-			if(2)
-				playsound(user, 'sound/weapons/genhit2.ogg', 50, 1)
-			if(3)
-				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
+		playsound(user, "sound/weapons/genhit[rand(1,3)].ogg", 50, 1)
 	if(W)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
 	else
 		user.visible_message("[user] smacks \the [src].","You smack \the [src].")
-	if(src.loc == user)
-		user.drop_item(src, force_drop = 1)
-		var/I = new current_path(get_turf(user))
-		user.put_in_hands(I)
-	else
-		new current_path(get_turf(src))
-	qdel(src)
+	user.create_in_hands(src,current_path)
 
 /obj/item/weapon/reagent_containers/food/snacks/sundayroast
 	name = "Sunday roast"
@@ -6442,6 +6433,7 @@
 	bitesize = 2
 	crumb_icon = "dribbles"
 	filling_color = "#FF9933"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/vanishingstew/New()
 	..()
@@ -6480,6 +6472,7 @@
 	food_flags = FOOD_LIQUID | FOOD_ANIMAL //blood is animal sourced
 	crumb_icon = "dribbles"
 	filling_color = "#720D00"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/primordialsoup/New()
 	..()
@@ -6775,6 +6768,8 @@
 	bitesize = 2
 	food_flags = FOOD_ANIMAL | FOOD_LACTOSE
 	base_crumb_chance = 0
+	crumb_icon = "dribbles"
+	valid_utensils = UTENSILE_SPOON
 
 /obj/item/weapon/reagent_containers/food/snacks/yogurt/New()
 	..()
@@ -8180,7 +8175,6 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	desc = "A diona nymph steamed in sulphuric acid then stuffed with fried rice. Ruthlessly delicious!"
 	trash = /obj/item/trash/used_tray/type2
 	icon_state = "yahireatsbugs"
-	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/nymphsperil/New()
@@ -8466,7 +8460,6 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	name = "Diona Roast"
 	desc = "A slow cooked diona nymph. Very nutritious, and surprisingly tasty!"
 	icon_state = "dionaroast"
-	food_flags = FOOD_MEAT
 	base_crumb_chance = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/dionaroast/New()

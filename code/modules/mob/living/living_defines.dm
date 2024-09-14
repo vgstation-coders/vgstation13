@@ -40,8 +40,6 @@
 	var/mob_swap_flags = 0
 	var/mob_push_flags = 0
 
-	var/cameraFollow = null
-
 	var/tod = null // Time of death
 	var/update_slimes = 1
 
@@ -52,10 +50,6 @@
 	var/silent = null 		//Can't talk. Value goes down every life proc.
 
 	var/locked_to_z = 0 // Locked to a Z-level if nonzero.
-
-	// Fix ashifying in hot fires.
-	//autoignition_temperature=0
-	//fire_fuel=0
 
 	var/list/icon/pipes_shown = list()
 	var/last_played_vent
@@ -85,3 +79,7 @@
 	var/blood_color2	//color of this creature's blood for gibbing purposes (humanoids have their own species-defined values)
 	var/flesh_color2	//color of this creature's flesh for meat purposes (humanoids have their own species-defined values)
 	var/tangibility = 1 //can this mob be interacted with things hitting it and etc?
+
+	var/braindamagespeechcooldown = FALSE //used to avoid braindamage proc spamming when checking the like 80 replacements
+
+	var/list/luminosity_sources = list()

@@ -1,11 +1,24 @@
+/mob/dead
+	var/appearance_backup //so they recover their original appearance when de-cultified
+
 /mob/dead/dust()	//ghosts can't be vaporised.
 	return
 
 /mob/dead/gib()		//ghosts can't be gibbed.
 	return
 
-/mob/dead/cultify()
-	if(invisibility != 0 || icon_state != "ghost-narsie")
+/mob/dead/cultify(var/obj/machinery/singularity/narsie/N)
+	if (N)//cultified by Nar-Sie
+		if(iscultist(src) && client && !isantagbanned(src) && !jobban_isbanned(src, CULTIST))
+			var/mob/living/simple_animal/construct/harvester/perfect/new_body = new (loc)
+			new_body.name = "[mind.name] the Harvester"
+			new_body.real_name = mind.name
+			mind.transfer_to(new_body)
+			new_body.key = mind.key
+			new_body.DisplayUI("Cultist")
+			return
+	if(invisibility != 0)
+		appearance_backup = appearance
 		icon = 'icons/mob/mob.dmi'
 		icon_state = "ghost-narsie"
 		overlays = 0
@@ -23,8 +36,17 @@
 				overlays += H.overlays_standing[HEAD_LAYER]
 				overlays += H.overlays_standing[HANDCUFF_LAYER]
 		invisibility = 0
+		alpha = 0
+		animate(src, alpha = 127, time = 0.5 SECONDS)
 		//to_chat(src, "<span class='sinister'>Even as a non-corporal being, you can feel Nar-Sie's presence altering you. You are now visible to everyone.</span>")
 		flick("rune_seer",src)
+
+/mob/dead/proc/decultify()
+	if(invisibility == 0)
+		invisibility = 60
+		anim(target = loc, a_icon = 'icons/effects/160x160.dmi', flick_anim = "incense", offX = -WORLD_ICON_SIZE*2+pixel_x, offY = -WORLD_ICON_SIZE*2+pixel_y)
+		if (appearance_backup)
+			appearance = appearance_backup
 
 /mob/dead/update_canmove()
 	return
