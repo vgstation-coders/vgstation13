@@ -261,7 +261,7 @@
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		// the ui does not exist, so we'll create a new() one
-		// for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
+		// for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm 
 		ui = new(user, src, ui_key, template_path, "Waste Disposal Unit", 430, 150)
 		// when the ui is first opened this is the data it will use
 		ui.set_initial_data(data)
@@ -273,14 +273,11 @@
 /obj/machinery/disposal/AltClick(mob/user)
 	if(user.loc == src)
 		to_chat(user, "<span class='warning'>You cannot reach the controls from inside.</span>")
-		return
-	if(mode==-1)
+	else if(mode==-1)
 		to_chat(user, "<span class='warning'>The disposal units power is disabled.</span>")
-		return
-	if(!user.incapacitated() && Adjacent(user))
+	else if(!user.incapacitated() && Adjacent(user))
 		flush = !flush
 		to_chat(user, "<span class='notice'>The disposal handle is now [flush ? "" : "dis"]engaged.</span>")
-
 	return ..()
 
 // handle machine interaction
