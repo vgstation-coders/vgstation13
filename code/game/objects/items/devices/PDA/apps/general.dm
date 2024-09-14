@@ -226,7 +226,7 @@ var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, yo
         <b>On this day,</b><br>
         <li>[onthisday]</li><br><br>
         <b>Did you know...</b><br>
-        <li>[pick(facts))]</li><br>"}
+        <li>[pick(facts)]</li><br>"}
 
 /datum/pda_app/manifest
 	name = "View Crew Manifest"
