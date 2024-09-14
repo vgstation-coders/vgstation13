@@ -14,7 +14,7 @@
 
 /obj/item/weapon/paper/hydroponics
 	name = "paper- 'Greetings from Billy Bob'"
-	info = "<B>Hey fellow botanist!</B><br>n<br>nI didn't trust the station folk so I left<br>na couple of weeks ago. But here's some<br>ninstructions on how to operate things here.<br>nYou can grow plants and each iteration they become<br>nstronger, more potent and have better yield, if you<br>nknow which ones to pick. Use your botanist's analyzer<br>nfor that. You can turn harvested plants into seeds<br>nat the seed extractor, and replant them for better stuff!<br>nSometimes if the weed level gets high in the tray<br>nmutations into different mushroom or weed species have<br>nbeen witnessed. On the rare occassion even weeds mutate!<br>n<br>nEither way, have fun!<br>n<br>nBest regards,<br>nBilly Bob Johnson.<br>n<br>nPS.<br>nHere's a few tips:<br>nIn nettles, potency = damage<br>nIn amanitas, potency = deadliness + side effect<br>nIn Liberty caps, potency = drug power + effect<br>nIn chilis, potency = heat<br>n<B>Nutrients keep mushrooms alive!</B><br>n<B>Water keeps weeds such as nettles alive!</B><br>n<B>All other plants need both.</B>"
+	info = "<B>Hey fellow botanist!</B><br><br>I didn't trust the station folk so I left<br>a couple of weeks ago. But here's some<br>instructions on how to operate things here.<br>You can grow plants and each iteration they become<br>stronger, more potent and have better yield, if you<br>know which ones to pick. Use your botanist's analyzer<br>for that. You can turn harvested plants into seeds<br>at the seed extractor, and replant them for better stuff!<br>Sometimes if the weed level gets high in the tray<br>mutations into different mushroom or weed species have<br>been witnessed. On the rare occassion even weeds mutate!<br><br>Either way, have fun!<br><br>nBest regards,<br>Billy Bob Johnson.<br><br>PS.<br>Here's a few tips:<br>In nettles, potency = damage<br>In amanitas, potency = deadliness + side effect<br>In Liberty caps, potency = drug power + effect<br>In chilis, potency = heat<br><B>Nutrients keep mushrooms alive!</B><br><B>Water keeps weeds such as nettles alive!</B><br><B>All other plants need both.</B>"
 
 /obj/item/weapon/paper/jobs
 	name = "paper- 'Job Information'"
@@ -50,7 +50,7 @@
 
 /obj/item/weapon/paper/diy_soda
 	name = "paper- 'Instructions'"
-	info = "Thank you for purchasing Dr. Pecker's DIY Soda Kit!<br>nIt has been scientifically proven to bring your tastebuds into the delicious state and turn your teeth into a molar solution!<br>nNow as you may have guessed, you will have to mix this delicious beverage yourself.<br>nDon't worry, it's pretty basic stuff. Just remember to never lick the spoon!<br>nFirst, mix the contents of all three <b>small vials</b> into the <b>large flask</b>.<br>nThen, mix the contents of the <b>small flasks</b> into the <b>large flask</b>.<br>nAnd finally, get ready for our secret trademarked ingredient: <br>n<b>The element of surprise!</b>"
+	info = "Thank you for purchasing Dr. Pecker's DIY Soda Kit!<br>It has been scientifically proven to bring your tastebuds into the delicious state and turn your teeth into a molar solution!<br>Now as you may have guessed, you will have to mix this delicious beverage yourself.<br>Don't worry, it's pretty basic stuff. Just remember to never lick the spoon!<br>First, mix the contents of all three <b>small vials</b> into the <b>large flask</b>.<br>Then, mix the contents of the <b>small flasks</b> into the <b>large flask</b>.<br>And finally, get ready for our secret trademarked ingredient: <br><b>The element of surprise!</b>"
 
 /obj/item/weapon/paper/spectrometry_decommission
 	name = "paper- 'Re:Spectrometry Decommission'"
@@ -69,12 +69,17 @@
 *     Head of Personnel     *
 *                           *
 ****************************/
+/obj/item/weapon/paper/hop
+	info = "paperwork goblin"
+
 /obj/item/weapon/paper/hop/additional_access
 	name = "Form AA/422"
 	fields = 8
+
+/obj/item/weapon/paper/hop/additional_access/New()
 	info = {"<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center> <br>
 	<span style=\"font-size:25px\"><center><b><i>AA/422: Additional Access Application</center></b></i></span> <br>
-	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station </b><span class=\"paper_field\"></span> </center></i></b></span> <br>
+	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station [station_name()] </b><span class=\"paper_field\"></span> </center></i></b></span> <br>
 	<hr> <br>
 	<b>Employee Name: </b><span class=\"paper_field\"></span> <br>
 	<b>Employee Signature: </b><span class=\"paper_field\"></span> <br>
@@ -88,13 +93,16 @@
 	<hr>
 	<b>I, the undersigned, approve the requested access for the oversigned:</b> <span class=\"paper_field\"></span><br>
 	<i><span style=\"font-size:15px\">The Head of Personnel must sign above and stamp this form to authorize the request before additional access can be applied to the requesting employee's ID. The Head(s) of Staff for the department(s) to which access is being granted must also be contacted and verbally authorize the request, where applicable. These guidelines must be followed or this form is void and illegal.</span></i>"}
+	..()
 
 /obj/item/weapon/paper/hop/job_transfer
 	name = "Form JBE/27"
 	fields = 8
+	
+/obj/item/weapon/paper/hop/job_transfer/New()	
 	info = {"<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center> <br>
 	<span style=\"font-size:25px\"><center><b><i>JBE/27: Job Transfer Request</center></b></i></span> <br>
-	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station Exodus </center></i></b></span> <br>
+	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station [station_name()] </center></i></b></span> <br>
 	<hr> <br>
 	<b>Employee Name: </b><span class=\"paper_field\"></span> <br>
 	<b>Employee Signature: </b><span class=\"paper_field\"></span> <br>
@@ -110,13 +118,16 @@
 	<b>HoP Name: </b><span class=\"paper_field\"></span> <br>
 	<b>HoP Signature: </b><span class=\"paper_field\"></span> <br>
 	<i><span style=\"font-size:15px\">The Head of Personnel must sign above and stamp this form to authorize the request before a job transfer can be applied to the requesting employee's ID. The Head(s) of Staff for the department(s) involved with the transfer must also be contacted and verbally authorize the transfer, where applicable. These guidelines must be followed or this form is void and illegal.</span></i>"}
+	..()
 
 /obj/item/weapon/paper/hop/demotion
 	name = "Form SLH/3A"
 	fields = 4
+	
+/obj/item/weapon/paper/hop/demotion/New()
 	info = {"<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center> <br>
 	<span style=\"font-size:25px\"><center><b><i>SLH-3A: Human Resources Demotion Record</center></b></i></span> <br>
-	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station Exodus </center></i></b></span> <br>
+	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station [station_name()] </center></i></b></span> <br>
 	<hr> <br>
 	<b>Demoted Employee: </b><span class=\"paper_field\"></span> <br>
 	<b>Former Assignment: </b><span class=\"paper_field\"></span> <br>
@@ -126,13 +137,16 @@
 	<hr> <br>
 	<b>Supervisor Signature: </b><span class=\"paper_field\"></span> <br>
 	<i><span style=\"font-size:15px\">If authorized, the document must be signed and stamped by the employee's supervisor. The Head of Personnel on site may then remove all departmental access from the ID and apply a <br>"Demoted\" job title. Incomplete or unstamped demotion records are void, and illegal demotions will be prosecuted in accordance with the law.</i></span>"}
+	..()
 
 /obj/item/weapon/paper/hop/replacement
 	name = "Form AA/418"
 	fields = 6
+	
+/obj/item/weapon/paper/hop/replacement/New()
 	info = {"<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center> <br>
 	<span style=\"font-size:25px\"><center><b><i>AA/418: ID Card / PDA Replacement Request</center></b></i></span> <br>
-	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station Exodus </center></i></b></span> <br>
+	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station [station_name()] </center></i></b></span> <br>
 	<hr> <br>
 	<b>Employee Name: </b><span class=\"paper_field\"></span> <br>
 	<b>Employee Signature: </b><span class=\"paper_field\"></span> <br>
@@ -144,13 +158,16 @@
 	<b>HoP Name: </b><span class=\"paper_field\"></span> <br>
 	<b>HoP Signature: </b><span class=\"paper_field\"></span> <br>
 	<i><span style=\"font-size:15px\">The Head of Personnel must sign above and stamp this form to authorize the request before a replacement identification card and/or personal data assistant may be issued. These guidelines must be followed or this form is void and illegal.</span></i>"}
+	..()
 
 /obj/item/weapon/paper/hop/evaluation
 	name = "Form SLH/5"
 	fields = 8
+	
+/obj/item/weapon/paper/hop/evaluation/New()
 	info = {"<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center> <br>
 	<span style=\"font-size:25px\"><center><b><i>SLH-5: Human Resources Employee Evaluation</center></b></i></span> <br>
-	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station Exodus </center></i></b></span> <br>
+	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station [station_name()] </center></i></b></span> <br>
 	<hr> <br>
 	<b>Employee: </b><span class=\"paper_field\"></span> <br>
 	<b>Assignment: </b><span class=\"paper_field\"></span> <br>
@@ -174,13 +191,16 @@
 	<hr> <br>
 	<b>Supervisor Signature: </b><span class=\"paper_field\"></span> <br>
 	<i><span style=\"font-size:15px\">To complete the evaluation, the employee's supervisor must sign above and stamp the document with the department stamp. Incomplete or unstamped evaluations will not be processed.</span></i>"}
+	..()
 
 /obj/item/weapon/paper/hop/weapon_permit
 	name = "Form AK/74"
 	fields = 7
+	
+/obj/item/weapon/paper/hop/weapon_permit/New()
 	info = {"<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"></center> <br>
 	<span style=\"font-size:25px\"><center><b><i>AK/74: Weapons Permit Application</center></b></i></span> <br>
-	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station Exodus </center></i></b></span> <br>
+	<span style=\"font-size:25px\"><center><i><b> NanoTrasen Science Station [station_name()] </center></i></b></span> <br>
 	<hr> <br>
 	<b>Employee Name: </b><span class=\"paper_field\"></span> <br>
 	<b>Employee Signature: </b><span class=\"paper_field\"></span> <br>
@@ -196,6 +216,7 @@
 	<b>HoP Name: </b><span class=\"paper_field\"></span> <br>
 	<b>HoP Signature: </b><span class=\"paper_field\"></span> <br>
 	<i><span style=\"font-size:15px\">The Head of Personnel must sign above and stamp this form to authorize this application before a weapon permit can be applied to the requesting employee's ID. The Warden or Head of Security must also approve the issuing of any firearms from the armory, where applicable. These guidelines must be followed or this form is void and illegal.</span></i>"}
+	..()
 
 
 /****************************

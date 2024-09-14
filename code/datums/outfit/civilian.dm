@@ -541,7 +541,7 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/red,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-			slot_l_store_str = /obj/item/weapon/storage/bag/bookbag,
+			slot_belt_str = /obj/item/weapon/storage/bag/bookbag,
 			slot_head_str = list(
 				"Curator" = /obj/item/clothing/head/beret,
 			),
@@ -552,7 +552,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/librarian,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/librarian,
-			slot_l_store_str = /obj/item/weapon/storage/bag/bookbag,
+			slot_belt_str = /obj/item/weapon/storage/bag/bookbag,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 		),
 		/datum/species/vox/ = list(
@@ -561,7 +561,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/librarian,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/librarian,
-			slot_l_store_str = /obj/item/weapon/storage/bag/bookbag,
+			slot_belt_str = /obj/item/weapon/storage/bag/bookbag,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath/vox,
 		),
 	)

@@ -2,7 +2,7 @@
 /// Droppers.
 ////////////////////////////////////////////////////////////////////////////////
 /obj/item/weapon/reagent_containers/dropper
-	name = "Dropper"
+	name = "dropper"
 	desc = "A dropper. Transfers 5 units."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "dropper0"
@@ -42,16 +42,12 @@
 			update_icon()
 			return
 	user.visible_message("<span class='danger'>[user] squirts something into [M]'s eyes!</span>", "<span class='notice'>You squirt something into [M]'s eyes.</span>")
-	src.reagents.reaction_dropper(M)
-	src.reagents.remove_any(amount_per_transfer_from_this)
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been squirted with [src.name] by [user.name] ([user.ckey]). Reagents: [reagents.get_reagent_ids(1)]</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to squirt [M.name] ([M.key]). Reagents: [reagents.get_reagent_ids(1)]</font>")
 	msg_admin_attack("[user.name] ([user.ckey]) squirted [M.name] ([M.key]) with [src.name]. Reagents: [reagents.get_reagent_ids(1)] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	src.reagents.reaction_dropper(M)
+	src.reagents.remove_any(amount_per_transfer_from_this)
+	M.assaulted_by(user)
 	update_icon()
 	return
 

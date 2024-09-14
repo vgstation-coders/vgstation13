@@ -1,0 +1,57 @@
+"a" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 8},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 4},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"c" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 1},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"d" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 4},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"e" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 8},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 4},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"f" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 8},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 1},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"h" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 8},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"i" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat{color = "#000000"},/mob/living/simple_animal/hostile/faithless/cult,/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"j" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/structure/mannequin/cult{mapping_suit = /obj/item/clothing/suit/cultrobes; mapping_hand_right = /obj/item/weapon/tome},/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"k" = (/obj/effect/decal/cleanable/wizrune,/turf/simulated/floor/asteroid,/area/vault/soulblade_sanctum)
+"l" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/item/weapon/melee/soulblade,/obj/structure/cult/altar{trapped = 1},/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"p" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 8},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 4},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 1},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"r" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/structure/painting/narsie{pixel_y = 31},/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"s" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat{color = "#000000"},/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"u" = (/turf/space,/area/vault/soulblade_sanctum)
+"w" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 1},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 4},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"x" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 1},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 8},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"y" = (/obj/abstract/map/paint_coat{color = "#000000"},/mob/living/simple_animal/hostile/creature/cult,/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"z" = (/turf/simulated/floor/asteroid,/area/vault/soulblade_sanctum)
+"A" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 1},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 8},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"B" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/structure/mannequin/cult{mapping_gloves = /obj/item/clothing/gloves/black/cult},/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"C" = (/obj/abstract/map/paint_coat{color = "#000000"},/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"E" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"G" = (/obj/abstract/map/paint_coat{color = "#000000"},/mob/living/simple_animal/hostile/hex{glow_color = "#EB0000"},/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"K" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/structure/mannequin/cult{mapping_hand_left = /obj/item/weapon/reagent_containers/food/drinks/cult},/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"L" = (/turf/unsimulated/mineral,/area/vault/soulblade_sanctum)
+"O" = (/obj/abstract/map/paint_coat{color = "#000000"},/mob/living/simple_animal/hostile/scarybat/cult,/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"P" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/structure/mannequin/cult{mapping_shoes = /obj/item/clothing/shoes/cult},/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"Q" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/item/candle/blood{lit = 1; wax = 36000},/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"R" = (/obj/machinery/door/mineral/cult,/obj/abstract/map/paint_coat{color = "#000000"},/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"S" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/structure/cult/pylon,/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+"T" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 4},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 1},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"W" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 1},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"Y" = (/obj/abstract/map/paint_coat{color = "#000000"},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 1},/obj/abstract/map/paint_coat/paint_stroke{color = "#FF0000"; icon_state = "wall_side"; coat_luminosity = 1; dir = 4},/turf/simulated/wall/mineral/brick,/area/vault/soulblade_sanctum)
+"Z" = (/obj/abstract/map/paint_coat{color = "#000000"},/mob/living/simple_animal/hostile/faithless/cult,/turf/simulated/floor/engine/cult,/area/vault/soulblade_sanctum)
+
+(1,1,1) = {"
+uuuuuuLLLLuuuuLLuuuu
+uuuLLLLLLLLLLLLLLuuu
+uuuLLAWWWYLLLAWWWYuu
+uuuLLaQCOaLLLaOCQaLu
+uLuLzaCKChWWWdCPCaLu
+LLzzzaOCCRCCCRssiaLu
+LzzAWEWYRAWWWYRAWdLu
+LzkeSCSeCaQrQaCaLLLu
+LzzRCGCRCaGlGaCaLLLL
+LzkpSCSpCaCCCaCaLLzz
+LzzhWcWEWEwRxdRhWYzz
+LLzzzayCCRCCCRCCZazu
+LLLzzaCjCfWWWTCBCaLL
+LLLzzaQCyaLLLaZCQaLL
+uLLzzhWWWdLLLhWWWdLL
+uuuzzzLLLLLLLLLLLLLL
+uuzzLLLLLLLLLLLLLLLu
+uuuzzzzzzLLLLLLzzzuu
+uuuuuuzzzuLLLuuuuuuu
+uuuuuuuuuuuuuuuuuuuu
+"}

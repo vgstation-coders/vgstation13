@@ -75,18 +75,13 @@
 		for(var/atom/atm in T) //extinguishing things
 			if(isliving(atm)) // For extinguishing mobs on fire
 				var/mob/living/M = atm
-				M.ExtinguishMob()
+				M.extinguish()
 			if(atm.on_fire) // For extinguishing objects on fire
 				atm.extinguish()
 
-/obj/item/stack/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
-	var/location = get_turf(user)
-	for(var/obj/item/stack/ore/glass/sandToConvert in location)
-		drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, sandToConvert.amount, user)
-		sandToConvert.use(sandToConvert.amount)
-
-	drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
-	use(1)
+/obj/item/stack/ore/glass/New(var/loc, var/amount=null)
+	recipes = sand_recipes
+	..()
 
 /obj/item/stack/ore/plasma
 	name = "\improper plasma ore"
@@ -396,6 +391,7 @@
 	throwforce = 1
 	w_class = W_CLASS_TINY
 	w_type = RECYK_METAL
+	quick_equip_priority = list(slot_wear_id)
 	var/string_attached
 	var/material=MAT_IRON // Ore ID, used with coinbags.
 	var/credits = 0 // How many credits is this coin worth?
@@ -514,7 +510,7 @@
 	credits = 1000
 
 /obj/item/weapon/coin/mythril
-	material="mythril"
+	material=MAT_MYTHRIL
 	name = "mythril coin"
 	desc = "An expensive coin minted long ago from extremely rare, light, non-conductive metal."
 	icon_state = "coin_mythril"

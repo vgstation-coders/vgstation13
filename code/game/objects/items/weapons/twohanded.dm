@@ -79,6 +79,16 @@
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
 	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
 	slowdown = FIREAXE_SLOWDOWN
+	toolsounds = list('sound/effects/woodcuttingshort.ogg')
+
+	var/list/forbidden_floors = list(
+		/turf/simulated/floor/vault,
+		/turf/simulated/floor/engine,
+		/turf/simulated/floor/beach,
+		/turf/simulated/floor/shuttle,
+		/turf/simulated/floor/plating/snow,
+		/turf/simulated/floor/planetary_grass
+	)
 
 /obj/item/weapon/fireaxe/update_wield(mob/user)
 	..()
@@ -106,7 +116,10 @@
 			W.shatter()
 		else
 			QDEL_NULL(A)
-	else if(A && wielded && (istype(A, /turf/simulated/floor))) //removes floor plating
+	else if(A && wielded && istype(A, /turf/simulated/floor) && user.a_intent == I_HELP) //removes floor plating
+		if(is_type_in_list(A,forbidden_floors))
+			to_chat(user, "<span class='notice'>\The [src] isn't strong enough to break \the [A].</span>")
+			return
 		var/turf/simulated/floor/T = A
 		to_chat(viewers(user), "<span class='danger'>[user] begins to remove the plating using \the [src]!</span>")
 		var/breaktime = 6 SECONDS
@@ -124,17 +137,7 @@
 
 /obj/item/weapon/fireaxe/attackby(obj/item/I, mob/user)
 	if(istype(I,/obj/item/tool/crowbar/halligan))
-		var/obj/item/tool/crowbar/halligan/H = I
-		to_chat(user, "<span class='notice'>You attach \the [src] and [H] to carry them easier.</span>")
-		var/obj/item/tool/irons/SI = new (user.loc)
-		SI.fireaxe = H
-		SI.halligan = src
-		user.drop_item(H)
-		H.forceMove(SI)
-		user.drop_item(src)
-		forceMove(SI)
-		user.put_in_hands(SI)
-		return 1
+		return I.attackby(src, user)
 	return ..()
 
 /obj/item/weapon/fireaxe/proc/on_do_after(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)

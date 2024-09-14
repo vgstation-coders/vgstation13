@@ -22,7 +22,7 @@
 	hud_state = "vampire_hypno"
 
 	var/blood_cost = 10
-	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+	valid_targets = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
 
 /spell/targeted/hypnotise/cast_check(skipcharge = 0, mob/user = usr)
 	. = ..()

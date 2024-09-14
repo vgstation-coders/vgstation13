@@ -65,15 +65,7 @@
 	if(user.is_in_modules(src))
 		return
 	if(istype(W, /obj/item/weapon/handcuffs/cable) && !istype(src, /obj/item/tool/wrench/socket))
-		to_chat(user, "<span class='notice'>You wrap the cable restraint around the top of the wrench.</span>")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/tool/wrench_wired/I = new (get_turf(user))
-			user.put_in_hands(I)
-		else
-			new /obj/item/tool/wrench_wired(get_turf(src.loc))
-		qdel(src)
-		qdel(W)
+		user.create_in_hands(src, /obj/item/tool/wrench_wired, W, msg = "<span class='notice'>You wrap the cable restraint around the top of the wrench.</span>")
 
 /obj/item/tool/wrench/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
@@ -286,7 +278,7 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = FALSE
 
 	//R&D tech level
 	origin_tech = Tc_ENGINEERING + "=1"
@@ -386,8 +378,8 @@
 		var/mob/M = location
 		if(M.is_holding_item(src))
 			location = get_turf(M)
-	if (istype(location, /turf) && welding)
-		location.hotspot_expose(source_temperature, 5,surfaces=istype(loc,/turf))
+	if (welding)
+		try_hotspot_expose(source_temperature, MEDIUM_FLAME, -1)
 
 /obj/item/tool/weldingtool/attack(mob/M as mob, mob/user as mob)
 	if(hasorgans(M))
@@ -442,11 +434,6 @@
 			to_chat(user, "<span class='warning'>That was stupid of you.</span>")
 			explosion(get_turf(A),-1,0,3)
 			return
-	if (src.welding)
-		if(isliving(A))
-			var/mob/living/L = A
-			L.IgniteMob()
-			remove_fuel(1)
 
 /obj/item/tool/weldingtool/attack_self(mob/user as mob)
 	toggle(user)
@@ -551,12 +538,20 @@
 			to_chat(usr, "<span class='notice'>You switch the [src] off.</span>")
 		else
 			visible_message("<span class='notice'>\The [src] shuts off!</span>")
-		playsound(src,'sound/effects/zzzt.ogg',20,1)
-		set_light(0)
-		src.force = 3
-		src.damtype = "brute"
-		update_icon()
-		src.welding = 0
+		shut_off()
+
+/obj/item/tool/weldingtool/extinguish()
+	..()
+	if (welding)
+		shut_off()
+
+/obj/item/tool/weldingtool/proc/shut_off()
+	playsound(src,'sound/effects/zzzt.ogg',20,1)
+	set_light(0)
+	force = 3
+	damtype = "brute"
+	update_icon()
+	welding = 0
 
 //Decides whether or not to damage a player's eyes based on what they're wearing as protection
 //Note: This should probably be moved to mob
@@ -755,7 +750,7 @@
 	if(istype(I,/obj/item/weapon/fireaxe))
 		var/obj/item/weapon/fireaxe/F = I
 		to_chat(user, "<span class='notice'>You attach \the [F] and [src] to carry them easier.</span>")
-		var/obj/item/tool/irons/SI = new (user.loc)
+		var/obj/item/tool/irons/SI = new (get_turf(src))
 		SI.fireaxe = F
 		SI.halligan = src
 		user.drop_item(F)

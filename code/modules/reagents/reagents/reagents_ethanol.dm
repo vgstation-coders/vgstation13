@@ -88,17 +88,14 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "beerglass"
 	glass_desc = "A cold pint of pale lager."
+	plant_nutrition = 1
+	plant_watering = 1
 
 /datum/reagent/ethanol/beer/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
 	M.jitteriness = max(M.jitteriness - 3, 0)
-
-/datum/reagent/ethanol/beer/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(1)
-	T.add_waterlevel(1)
 
 /datum/reagent/ethanol/whiskey
 	name = "Whiskey"
@@ -624,17 +621,20 @@
 		return 1
 
 	switch(tick)
-		if(0 to 65)
+		if(0 to 33)
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
-		if(65 to 130)
+		if(34 to 66)
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
-		if(130 to 250)
+		if(67)
+			M.visible_message("<span class='warning'>[M] starts to emit a gravitational field!</span>","<span class='warning'>You feel your organs rearrange as you start pulling stuff towards you!</span>")
+			M.adjustBruteLoss(1)
+		if(68 to 99)
 			if(prob(5))
 				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
 			M.adjustBruteLoss(1)
-		if(250 to INFINITY)
+		if(100 to INFINITY)
 			M.visible_message("<span class='alert'>[M]'s entire mass collapses inwards, leaving a singularity behind!</span>","<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
 			var/turf/T = get_turf(M)
 			//Can only make a singulo if active mind, otherwise a singulo toy
@@ -645,10 +645,10 @@
 				new /obj/item/toy/spinningtoy(T)
 				M.gib()
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange((tick+30)/50, M))
+	for(var/atom/X in orange((tick+30)/20, M))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
-		X.singularity_pull(M, tick/50, tick/50)
+		X.singularity_pull(M, tick/20, tick/20)
 
 /datum/reagent/drink/tea/gravsingularitea
 	name = "Gravitational Singularitea"
@@ -664,17 +664,20 @@
 		return 1
 
 	switch(tick)
-		if(0 to 65)
+		if(0 to 33)
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
-		if(65 to 130)
+		if(34 to 66)
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
-		if(130 to 250)
+		if(67)
+			M.visible_message("<span class='warning'>[M] starts to emit a gravitational field!</span>","<span class='warning'>You feel your organs rearrange as you start pulling stuff towards you!</span>")
+			M.adjustBruteLoss(1)
+		if(68 to 99)
 			if(prob(5))
 				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
 			M.adjustBruteLoss(1)
-		if(250 to INFINITY)
+		if(100 to INFINITY)
 			M.visible_message("<span class='alert'>[M]'s entire mass collapses inwards, leaving a singularity behind!</span>","<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
 			var/turf/T = get_turf(M)
 			//Can only make a singulo if active mind, otherwise a singulo toy
@@ -685,10 +688,10 @@
 				new /obj/item/toy/spinningtoy(T)
 				M.gib()
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange((tick+30)/50, M))
+	for(var/atom/X in orange((tick+30)/20, M))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
-		X.singularity_pull(M, tick/50, tick/50)
+		X.singularity_pull(M, tick/20, tick/20)
 
 /datum/reagent/ethanol/drink
 	id = EXPLICITLY_INVALID_REAGENT_ID
@@ -1288,7 +1291,7 @@
 	color = "#b01522" //176, 21, 34
 	glass_icon_state = "dragonsblood"
 	glass_name = "\improper Dragon's Blood"
-	flammable = 1
+	can_be_lit = 1
 	light_color = "#540303"
 
 /datum/reagent/ethanol/drink/dragonspit
@@ -1300,7 +1303,7 @@
 	glass_icon_state = "dragonsspit"
 	glass_name = "\improper Dragon's Spit"
 	light_color = "#ff7003"
-	flammable = 1
+	can_be_lit = 1
 
 /datum/reagent/ethanol/drink/firecider
 	name = "Fire Cider"
@@ -1331,7 +1334,7 @@
 	glass_icon_state = "manhattanfireball"
 	glass_name = "\improper Manhattan Fireball"
 	light_color = "#540303"
-	flammable = 1
+	can_be_lit = 1
 
 /datum/reagent/ethanol/drink/fireballcola
 	name = "Fireball Cola"
@@ -1372,7 +1375,7 @@
 	glass_icon_state = "b52glass"
 	glass_name = "\improper B-52"
 	light_color = "#000080"
-	flammable = 1
+	can_be_lit = 1
 
 /datum/reagent/ethanol/drink/irishcoffee
 	name = "Irish Coffee"

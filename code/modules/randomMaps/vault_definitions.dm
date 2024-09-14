@@ -186,6 +186,10 @@ var/list/existing_vaults = list()
 	file_path = "maps/randomvaults/amelab.dmm"
 	spawn_cost = 3
 
+/datum/map_element/vault/soulblade_sanctum
+	file_path = "maps/randomvaults/soulblade_sanctum.dmm"
+	spawn_cost = 3
+
 /datum/map_element/vault/meteorlogical_station
 	file_path = "maps/randomvaults/meteorlogical_station.dmm"
 	spawn_cost = 4
@@ -292,3 +296,33 @@ var/list/existing_vaults = list()
 
 /datum/map_element/dungeon/laundromat_drug_lab
 	file_path = "maps/randomvaults/dungeons/laundromat_drug_lab.dmm"
+
+/datum/map_element/vault/thestranger
+	file_path = "maps/randomvaults/thestranger.dmm"
+	spawn_cost = 2
+
+/area/vault/thestranger
+	name = "The Stranger"
+
+/datum/map_element/vault/poddock_crash
+	file_path = "maps/randomvaults/pod_dock_crash.dmm"
+	spawn_cost = 1
+
+/area/vault/dockruins
+	name = "Ruined Pod Dock"
+
+/datum/map_element/vault/radioactivedust
+	file_path = "maps/randomvaults/ButtonPusher.dmm"
+	spawn_cost = 2
+
+/area/vault/radioactivelab
+	name = "Material Synthesis Research"
+	requires_power = 1
+
+/area/vault/radioactivecatwalk
+	name = "Research Laboratory Catwalk"
+	dynamic_lighting = 0
+
+/datum/map_element/vault/croesus_vault
+	file_path = "maps/randomvaults/croesus_vault.dmm"
+	spawn_cost = 3

@@ -8,24 +8,29 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_WOOD
+	flammable = TRUE
 	force = 2.5 //A big book, solely used for non-Chaplains trying to use it on people
 	flags = FPRINT
 	attack_verb = list("whacks", "slaps", "slams", "forcefully blesses")
-	autoignition_temperature = AUTOIGNITION_PAPER //bible-burning heathen
 	var/mob/affecting = null
 	var/datum/religion/my_rel = new /datum/religion
 	actions_types = list(/datum/action/item_action/convert)
 	rustle_sound = "pageturn"
 
-	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = 2
+/obj/item/weapon/storage/bible/throw_at(var/atom/targ, var/range, var/speed, var/override = 1, var/fly_speed = 0)
+	var/mob/living/user = usr
+	if (istype(user) && istype(my_rel, /datum/religion/belmont) && user?.mind && istype(user.mind.faith, /datum/religion/belmont))
+		new /obj/effect/bible_spin(get_turf(src),usr,src)
+		return
+	..()
 
 /obj/item/weapon/storage/bible/suicide_act(var/mob/living/user)
 	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")
 	user.emote("fart")
 	sleep(1 SECONDS) //Wait for it
 	user.fire_stacks += 5
-	user.IgniteMob()
+	user.ignite()
 	user.audible_scream()
 	return SUICIDE_ACT_FIRELOSS //Set ablaze and burned to crisps
 
@@ -58,8 +63,8 @@
 //"Special" Bible with a little gift on introduction
 /obj/item/weapon/storage/bible/booze
 
-	autoignition_temperature = 0 //Not actually paper
-	fire_fuel = 0
+	flammable = FALSE //Not actually paper
+
 	items_to_spawn = list(
 		/obj/item/weapon/reagent_containers/food/drinks/beer = 2,
 		/obj/item/weapon/spacecash = 3,
@@ -68,8 +73,8 @@
 //Even more "Special" Bible with a nicer gift on introduction
 /obj/item/weapon/storage/bible/traitor_gun
 
-	autoignition_temperature = 0 //Not actually paper
-	fire_fuel = 0
+	flammable = FALSE //Not actually paper
+
 	items_to_spawn = list(
 		/obj/item/weapon/gun/projectile/luger/small,
 		/obj/item/ammo_storage/magazine/mc9mm,
@@ -81,11 +86,7 @@
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
-		M.assaulted_by(user)
+	M.assaulted_by(user)
 
 	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
@@ -133,13 +134,13 @@
 		if(V) //Vampire trying to use it
 			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
 			user.fire_stacks += 5
-			user.IgniteMob()
+			user.ignite()
 			user.audible_scream()
 			V.smitecounter += 50 //Once we are extinguished, we will be quite vulnerable regardless
 		else if(isanycultist(user)) //Cultist trying to use it
 			to_chat(user, "<span class='danger'>[my_rel.deity_name] channels through \the [src] and sets you ablaze for your blasphemy!</span>")
 			user.fire_stacks += 5
-			user.IgniteMob()
+			user.ignite()
 			user.audible_scream()
 		else //Literally anyone else than a Cultist using it, at this point it's just a big book
 			..() //WHACK
@@ -280,6 +281,8 @@
 		owner.mind.faith.convertAct(owner, subject, B) // usr = preacher ; target = subject
 		return TRUE
 
+// Cult Deconversion
+
 /datum/deconversion_ritual
 	var/datum/role/cultist/cultist = null
 	var/cult_chaplain = FALSE
@@ -372,3 +375,70 @@
 		cultist.deconversion = null
 	cultist = null
 	..()
+
+// Belmont Bible Spin
+
+/obj/effect/bible_spin
+	var/mob/living/owner
+	var/obj/item/weapon/storage/bible/source
+	var/image/bible_image
+	var/current_spin = 0
+	var/lifetime = 5 SECONDS
+	var/lifetime_max = 5 SECONDS
+	var/distance = 0
+	var/distance_min = 8
+	var/distance_amplitude = 24
+	var/spin_speed = 30
+
+/obj/effect/bible_spin/New(var/turf/loc, var/_owner, var/_source)
+	..()
+	if (!_owner || !_source)
+		qdel(src)
+		return
+	playsound(src, 'sound/items/bible_throw.ogg', 70, 0)
+	owner = _owner
+	source = _source
+	source.forceMove(src)
+	owner.lock_atom(src)
+	current_spin = dir2angle_t(owner.dir)
+	bible_image = image(source.icon, source, source.icon_state)
+	bible_image.plane = ABOVE_LIGHTING_PLANE
+	overlays += bible_image
+	spawn()
+		process_spin()
+
+/obj/effect/bible_spin/proc/process_spin()
+	set waitfor = 0
+
+	while(owner && !owner.gcDestroyed && source && !source.gcDestroyed && (source.loc == src) && lifetime > 0)
+		update_spin()
+		var/obj/effect/afterimage/A = new(loc, null, 15)
+		animate(A)
+		A.appearance = appearance
+		A.pixel_x = pixel_x
+		A.pixel_y = pixel_y
+		animate(A,alpha = 0, time = 10)
+		A.layer--
+		A.add_particles(PS_BIBLE_PAGE)
+		A.adjust_particles(PVAR_VELOCITY, list(pixel_x/2, pixel_y/2), PS_BIBLE_PAGE)
+		A.adjust_particles(PVAR_SPAWNING, 2, PS_BIBLE_PAGE)
+		if ((lifetime % 10) == 0)
+			playsound(src, 'sound/items/bible_spin.ogg', 50, 0)
+			for (var/mob/living/L in range(1, src))
+				if (!L.mind || !L.mind.faith || !istype(L.mind.faith, /datum/religion/belmont))
+					source.throw_impact(L,source.throw_speed*2,owner)
+		lifetime--
+		spawn(1)//making sure we're only spawning one page per afterimage
+			A.adjust_particles(PVAR_SPAWNING, 0, PS_BIBLE_PAGE)
+		sleep(1)
+
+	if (source && !source.gcDestroyed)
+		source.forceMove(loc)
+		if (owner)
+			owner.put_in_hands(source)
+	qdel(src)
+
+/obj/effect/bible_spin/proc/update_spin()
+	current_spin += spin_speed
+	distance = distance_min + distance_amplitude*sin(180*(lifetime/lifetime_max))
+	animate(src, pixel_x = distance*cos(current_spin), pixel_y = distance*sin(current_spin), time = 1)

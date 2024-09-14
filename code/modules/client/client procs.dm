@@ -19,9 +19,15 @@
 		- If so, is there any protection against somebody spam-clicking a link?
 	If you have any  questions about this stuff feel free to ask. ~Carn
 	*/
+var/bunker_up = 0 //this round
+var/bunker_saved = 0 //saved to file
+var/bunker_setting = 0
+var/updated_stats = 0
 /client
 	var/account_joined = ""
 	var/account_age
+	var/fingerprint
+	var/related_accounts_fingerprint
 
 /client/Topic(href, href_list, hsrc)
 	//var/timestart = world.timeofday
@@ -40,6 +46,9 @@
 		message_admins("Attempted use of scripts within a topic call, by [src]")
 		//del(usr)
 		return
+
+	if(href_list["issueclose"])
+		src << browse(null,"window=github")
 
 	//Admin PM
 	if(href_list["priv_msg"])
@@ -93,6 +102,13 @@
 	//testing("[usr] topic call took [(world.timeofday - timestart)/10] seconds")
 
 /client/proc/handle_spam_prevention(var/message, var/mute_type)
+	var/static/regex/onion_link_search = new(@"(?:https?://)?(?:www)?(\S*?\.onion)\b", "g")
+	var/onion_link = onion_link_search.Find(message)
+	if(onion_link)
+		cmd_admin_mute(src.mob, mute_type, 1)
+		message_admins("[src] has been automuted [mute_type] for posting an onion link.")
+		log_admin("[src] has been automuted [mute_type] for posting an onion link.")
+		return 1
 	if(config.automute_on && !holder && src.last_message == message)
 		src.last_message_count++
 		if(src.last_message_count >= SPAM_TRIGGER_AUTOMUTE)
@@ -129,6 +145,9 @@
 	// world.log << "creating chatOutput"
 	chatOutput = new /datum/chatOutput(src) // Right off the bat.
 	// world.log << "Done creating chatOutput"
+	if(!bunker_setting)
+		bunker_setting = 1
+		load_bunker()
 	if(config)
 		winset(src, null, "window1.msay_output.style=[config.world_style_config];")
 	else
@@ -140,8 +159,18 @@
 		if(connection == "web")
 			if(!holder)
 				return null
+		if(connection == "telnet")
+			if(!(src.address == "localhost" || src.address == "127.0.0.1"))
+				world.log << "telnet connection from [src.address] denied."
+				return null
 		else
 			return null
+
+	if(!updated_stats && config.stats_addr)
+		updated_stats = 1
+		spawn(1)
+
+			world.Export("[config.stats_addr]")
 
 	if(byond_version < MIN_CLIENT_VERSION)		//Out of date client.
 		message_admins("[key]/[ckey] has connected with an out of date client! Their version: [byond_version]. They will be kicked shortly.")
@@ -157,6 +186,18 @@
 	// Change the way they should download resources.
 	if(config.resource_urls)
 		src.preload_rsc = pick(config.resource_urls)
+	else if(config.rsclist && config.rscstring)
+		var/rsclist = flist("[config.rsclist]")
+		var/rscString = "[config.rscstring]"
+		try
+			rscString += rsclist[1]
+		catch(var/exception/e)
+			rscString = 1
+			world.log << "An exception occurred while fetching preload rsc url. [e.name] | File: [e.file] Line: [e.line]"
+			world.log << e.desc
+
+		world.log << "Setting [src.key] preload rsc to [rscString]"
+		preload_rsc = rscString
 	else
 		src.preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
 
@@ -188,8 +229,50 @@
 	if( (world.address == address || !address) && !host )
 		host = key
 		world.update_status()
+	//Admin Authorisation
+	var/static/list/localhost_addresses = list("127.0.0.1","::1")
+	if(config.localhost_autoadmin)
+		if((!address && !world.port) || (address in localhost_addresses))
+			holder = new /datum/admins("Host", R_HOST, src.ckey)
+	else
+		holder = admin_datums[ckey]
+
+	if(holder)
+		if(prefs.toggles & AUTO_DEADMIN)
+			message_admins("[src] was automatically de-admined.")
+			deadmin()
+			verbs += /client/proc/readmin
+			deadmins += ckey
+			holder = null
+			to_chat(src, "<span class='interface'>You are now de-admined.</span>")
+		else
+			holder.associate(src)
+			admin_memo_show()
 
 	log_client_to_db()
+
+//Keeping this because it's hilarious
+/*
+	if((isnum(account_age) && account_age < 14) && (country_code && country_code == "NL"))
+		message_admins("[key]/[ckey] has connected with a Netherlands IP and an account age of [account_age], it is possible they're toomykins so keep an eye on them or something.")
+	*/
+
+//VPN check
+	//if((isnum(account_age) && account_age <= 5))
+	/*var/list/val[] = world.Export("http://check.getipintel.net/check.php?ip=[src.address]&contact=<HOST EMAIL>&flags=m")
+	if(val && val.len && ("CONTENT" in val))
+		var/String = file2text(val["CONTENT"])  //  Convert the HTML file to text
+		var/vpn = text2num(String)
+		if(isnum(vpn))
+			if(vpn > 0.85)
+				del(src)
+			if(vpn > 0)
+				message_admins("[key]/[ckey] has connected with a VPN and an account age of [account_age] and a bad ip score of [vpn] (higher is more likely), it is possible they're ban evading so keep an eye on them.")
+			if(vpn < 0)
+				log_admin("[key]/[ckey]'s vpn check errored out with a value of [vpn], be advised")
+			else
+				log_admin("[key]/[ckey]'s vpn check returned no vpn detected.")*/
+
 
 	send_resources()
 
@@ -274,27 +357,8 @@
 	if(!tooltips)
 		tooltips = new /datum/tooltip(src)
 
-	//Admin Authorisation
-	var/static/list/localhost_addresses = list("127.0.0.1","::1")
-	if(config.localhost_autoadmin)
-		if((!address && !world.port) || (address in localhost_addresses))
-			holder = new /datum/admins("Host", R_HOST, src.ckey)
-	else
-		holder = admin_datums[ckey]
-
-	if(holder)
-		if(prefs.toggles & AUTO_DEADMIN)
-			message_admins("[src] was automatically de-admined.")
-			deadmin()
-			verbs += /client/proc/readmin
-			deadmins += ckey
-			holder = null
-			to_chat(src, "<span class='interface'>You are now de-admined.</span>")
-		else
-			holder.associate(src)
-			admin_memo_show()
-
 	fps = (prefs.fps < 0) ? RECOMMENDED_CLIENT_FPS : prefs.fps
+
 	//////////////
 	//DISCONNECT//
 	//////////////
@@ -364,10 +428,25 @@
 		if(!isnum(sql_id))
 			return
 
+	else if(bunker_up)
+		// This should be a config/ thing.
+		//var/url = pick("byond://game.tgstation13.org:1337","byond://baystation12.net:8000")
+		//src << link(url)
+
+		//var/Server/s = random_server_list[key]
+		//world.log << "Sending [src.key] to random server: [url]"
+		//src << link(s.url)
+		world.log << "Denying [src.key] access due to panic bunker."
+		sleep(30)
+		del(src)
+		return
+
 	var/admin_rank = "Player"
 
 	if(istype(holder))
 		admin_rank = holder.rank
+		if(bunker_up)
+			to_chat(src, "<font size=8><span class='warning'>PANIC BUNKER IS ON</span></font>")
 
 	if(sql_id)
 		//Player already identified previously, we need to just update the 'lastseen', 'ip' and 'computer_id' variables
@@ -417,6 +496,9 @@
 	if(!isnum(player_age))
 		player_age = 0
 	if(age < MINIMUM_NON_SUS_ACCOUNT_AGE)
+		for(var/client/X in admins)
+			if(X.prefs.toggles & SOUND_ADMINHELP)
+				X << 'sound/effects/adminhelp.ogg'
 		message_admins("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age]  First seen = [player_age]")
 		log_admin(("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age] First seen = [player_age]"))
 	testing("[src]/[ckey(key)] logged in with age of [age]/[player_age]/[Joined]")
@@ -539,6 +621,88 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 			to_chat(src, "<span style='recruit'>The game is currently looking for [role_id] candidates.  Your current answer is <a href='?src=\ref[prefs]&preference=set_role&role_id=[role_id]'>[get_role_desire_str(role_desired)]</a>.</span>")
 	return role_desired & ROLEPREF_ENABLE
 
+/client/proc/toggle_bunker()
+	set name = "Toggle Panic Bunker"
+	set desc = "Panic!"
+	set category = "Panic"
+
+	if(!holder)
+		src << "<span class='warning'>Need to be an admin m8</span>"
+		return
+	if(!check_rights(R_ADMIN))
+		return
+	if(alert(src,"Turn the bunker [bunker_up ? "off" : "on"]?","Toggle bunker","Yes","No") == "Yes")
+		bunker_up = !bunker_up
+		to_chat(world, "<span class='admin'>[key] turned the panic bunker [bunker_up ? "ON" : "OFF"]!</span>")
+		log_admin("[key_name(src)] turned the panic bunker [bunker_up ? "ON" : "OFF"]!")
+		var/isperms = check_rights(R_PERMISSIONS,0)
+		if(isperms && alert(src,"Save setting to file? (will load this setting every round)","Save Settings?","Yes","No") == "Yes")
+			var/ourfile = file("data/bunker.txt")
+			fdel(ourfile)
+			ourfile << bunker_up
+			bunker_saved = bunker_up
+			log_admin("[key_name(src)] saved the bunker setting ([bunker_saved ? "ON" : "OFF"]) to file.")
+			message_admins("[key_name(src)] saved the bunker setting ([bunker_saved ? "ON" : "OFF"]) to file.")
+			return
+		to_chat(usr,"<span class='notice'>The bunker will reset to the setting currently saved to file ([bunker_saved ? "ON" : "OFF"]) on a new round.[isperms ? "" : " Ask someone with +PERMISSIONS if you want to change it permanently."]</span>")
+
+/client/proc/check_bunker()
+	set name = "Check Panic Bunker"
+	set desc = "Panic!"
+	set category = "Panic"
+
+	if(!holder)
+		src << "<span class='warning'>Need to be an admin m8</span>"
+		return
+	if(!check_rights(R_ADMIN))
+		return
+
+	to_chat(usr, "The panic bunker is currently [bunker_up ? "ON" : "OFF"].\nThe bunker's setting currently saved to file is [bunker_saved ? "ON" : "OFF"].")
+
+/client/proc/bunker_cheat()
+	set name = ".bunkercheat"
+	set desc = "Cheating the panic bunker permissions requirement. Use when needed only please."
+	set category = null
+
+	if(!holder)
+		src << "<span class='warning'>Need to be an admin m8</span>"
+		return
+	if(!check_rights(R_ADMIN))
+		return
+
+	var/bup = alert(src, "Turn the bunker ON or OFF?","Toggle Bunker","ON","OFF","Cancel")
+	switch(bup)
+		if("ON")
+			bunker_up = 1
+		if("OFF")
+			bunker_up = 0
+		else
+			return
+	to_chat(world, "<span class='admin'>[key] turned the panic bunker [bunker_up ? "ON" : "OFF"]!</span>")
+	log_admin("[key_name(src)] turned the panic bunker [bunker_up ? "ON" : "OFF"]!")
+
+	if(alert(src, "Save to file?","Save bunker to file?","YES","NO") == "YES")
+		bunker_saved = bunker_up
+		log_admin("[key_name(src)] saved the bunker setting ([bunker_saved ? "ON" : "OFF"]) to file using the secret repo.")
+		message_admins("[key_name(src)] saved the bunker setting ([bunker_saved ? "ON" : "OFF"]) to file using the secret repo.")
+
+/client/proc/load_bunker()
+	if(!fexists("data/bunker.txt"))
+		var/F = file("data/bunker.txt")
+		F << 1
+		bunker_up = 1
+		bunker_saved = 1
+	else
+		for(var/t in file2list("data/bunker.txt"))
+			if(!t)	continue
+			t = trim(t)
+			if (length(t) == 0)
+				continue
+			var/yes = text2num(t)
+			if(isnum(yes))
+				bunker_up = yes
+				bunker_saved = yes
+
 /client/proc/colour_transition(var/list/colour_to = default_colour_matrix,var/time = 10)	// call this with no parametres to reset to default.
 	if(!color)
 		color = default_colour_matrix
@@ -576,6 +740,11 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 		winset(usr, "mainwindow.mainvsplit", "right=mapwindow;left=rpane;splitter=[newsplit]")
 	else
 		winset(usr, "mainwindow.mainvsplit", "right=rpane;left=mapwindow;splitter=[newsplit]")
+
+/client/verb/removeClick()
+	set name = ".click"
+	set hidden = 1
+	return
 
 /client/proc/update_special_views()
 	if(prefs.space_parallax)	//Updating parallax for clients that have parallax turned on.

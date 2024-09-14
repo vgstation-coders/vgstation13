@@ -27,7 +27,7 @@
 	var/bottleheight = 23 //To offset the molotov rag and fire - beer and ale are 23
 	var/smashtext = "bottle of " //To handle drinking glasses and the flask of holy water
 	var/smashname = "broken bottle" //As above
-	var/flammable = 0
+	var/can_be_lit = 0
 	var/flammin = 0
 	var/flammin_color = null
 	var/base_icon_state = "glassbottle"
@@ -43,7 +43,7 @@
 		gulp_size = 5
 	else
 		gulp_size = max(round(reagents.total_volume / 5), 5)
-	
+
 	if(is_empty())
 		update_icon() //we just got emptied, so let's update our icon once, if only to remove the ice overlay.
 
@@ -83,6 +83,7 @@
 		H.audible_scream()
 		H.adjustHalLoss(50)
 		H.vessel.trans_to(reagents,reagents.maximum_volume)
+	update_icon()
 	if (can_flip && (M_SOBER in user.mutations) && (user.a_intent == I_GRAB))
 		if (flipping && (M_CLUMSY in user.mutations) && prob(20))
 			to_chat(user, "<span class='warning'>Your clumsy fingers fail to catch back \the [src].</span>")
@@ -235,11 +236,7 @@
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has attacked [M.name] ([M.ckey]) with a bottle!</font>")
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been smashed with a bottle by [user.name] ([user.ckey])</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] with a bottle. ([M.ckey])</font>")
-		if(!iscarbon(user))
-			M.LAssailant = null
-		else
-			M.LAssailant = user
-			M.assaulted_by(user)
+		M.assaulted_by(user)
 
 		//The reagents in the bottle splash all over the target, thanks for the idea Nodrak
 		if(src.reagents)
@@ -278,11 +275,7 @@
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [M.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
-		if(!iscarbon(user))
-			M.LAssailant = null
-		else
-			M.LAssailant = user
-			M.assaulted_by(user)
+		M.assaulted_by(user)
 
 		if(reagents.total_volume)
 			if (ishuman(M))
@@ -560,6 +553,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/chifir
 	name = "Siberian Chifir"
 	desc = "Only a true siberian can appreciate its deep and rich flavor. Embrace siberian tradition!"
+	icon = 'icons/obj/cafe.dmi'
 	icon_state = "tea"
 	item_state = "mug_empty"
 /obj/item/weapon/reagent_containers/food/drinks/chifir/New()
@@ -623,6 +617,7 @@
 	name = "\improper cup ramen"
 	desc = "A taste that reminds you of your school years."
 	icon_state = "ramen"
+
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/New()
 	..()
 	reagents.add_reagent(DRY_RAMEN, 30)
@@ -630,14 +625,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating //vendor version
-	name = "\improper cup ramen"
-	desc = "Just add 12ml water, self heats!"
-	icon_state = "ramen"
-/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/heating/New()
-	..()
-	reagents.add_reagent(CALCIUMOXIDE, 2)
-	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
-	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+	desc = "Self-heating: just add 10u water!"
 
 /obj/item/weapon/reagent_containers/food/drinks/groans
 	name = "Groans Soda"
@@ -830,7 +818,7 @@
 	to_chat(user, "You pull the tab, you feel the drink heat up in your hands, and its horrible fumes hits your nose like a ton of bricks. You drop the soup in disgust.")
 	var/turf/T = get_turf(user.loc)
 	var/obj/item/weapon/reagent_containers/food/drinks/discount_ramen_hot/A = new /obj/item/weapon/reagent_containers/food/drinks/discount_ramen_hot(T)
-	A.desc += " It feels warm.." //This is required
+	A.desc += " It feels warm." //This is required
 	user.drop_from_inventory(src)
 	qdel(src)
 
@@ -876,7 +864,7 @@
 	..()
 	if (flags & OPENCONTAINER)
 		overlays += image(icon = icon, icon_state = "soda_open")
-		update_blood_overlay()
+		set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(var/mob/user)
 	if(!is_open_container())
@@ -1020,7 +1008,7 @@
 	overlays.len = 0
 	if (!(flags & OPENCONTAINER))
 		overlays += image(icon = icon, icon_state = "bottle_cap")
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum
 	name = "Nuka Cola Quantum"
@@ -1050,7 +1038,7 @@
 	overlays.len = 0
 	if (!(flags & OPENCONTAINER))
 		overlays += image(icon = icon, icon_state = "bottle_cap")
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink
 	name = "Brawndo"
@@ -1544,14 +1532,10 @@
 /obj/item/weapon/reagent_containers/food/drinks/thermos/update_temperature_overlays()
 	//we only care about the steam
 
-	if (!particles)
-		particles = new/particles/steam
-
-	particles.spawning = 0
-
 	if(!cap && reagents && reagents.total_volume)
-		if (reagents.chem_temp >= STEAMTEMP)
-			steam_spawn_adjust(reagents.chem_temp)
+		steam_spawn_adjust(reagents.chem_temp)
+	else
+		steam_spawn_adjust(0)
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos/full/New()
 	..()
@@ -1672,7 +1656,7 @@
 	..()
 	if (reagents.reagent_list.len > 0)
 		mug_reagent_overlay()
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/flagmug/britcup
 	name = "\improper cup"
@@ -2160,8 +2144,10 @@
 			if(lit)
 				new /obj/effect/decal/cleanable/ash(get_turf(src))
 				var/turf/loca = get_turf(src)
+				var/fueltemp = possible_fuels[FUEL]
 				if(loca)
-					loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
+					new /obj/effect/fire(loca)
+					loca.hotspot_expose(fueltemp["max_temperature"], FULL_FLAME,1)
 			else
 				new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
 
@@ -2220,6 +2206,24 @@
 			var/obj/item/weapon/reagent_containers/food/snacks/donut/D = I
 			D.dip(src, user)
 
+/obj/item/weapon/reagent_containers/food/drinks/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(!(molotov == 1))
+		return
+	if(lit)
+		return
+	ignite()
+
+/obj/item/weapon/reagent_containers/food/drinks/ignite()
+	if(lit)
+		return
+	light("<span class='danger'>The raging fire sets \the [src] alight.</span>")
+
+/obj/item/weapon/reagent_containers/food/drinks/extinguish()
+	lit = 0
+	update_brightness()
+	update_icon()
+	..()
+
 /obj/item/weapon/reagent_containers/food/drinks/molotov
 	name = "incendiary cocktail"
 	smashtext = ""
@@ -2243,13 +2247,18 @@
 		visible_message(flavor_text)
 		processing_objects.Add(src)
 		update_icon()
-	if(!lit && flammable)
+	if(!lit && can_be_lit)
 		lit = 1
 		visible_message(flavor_text)
-		flammable = 0
-		name = "Flaming [name]"
-		desc += " Damn that looks hot!"
-		icon_state += "-flamin"
+		can_be_lit = 0
+		update_icon()
+
+/obj/item/weapon/reagent_containers/food/drinks/blow_act(var/mob/living/user)
+	if(lit)
+		lit = 0
+		visible_message("<span  class='rose'>The light on \the [name] goes out.</span>")
+		processing_objects.Remove(src)
+		set_light(0)
 		update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/update_brightness(var/mob/user = null)
@@ -2302,7 +2311,7 @@
 	var/turf/loca = get_turf(src)
 	if(lit && loca)
 //		to_chat(world, "<span  class='warning'>Burning...</span>")
-		loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
+		loca.hotspot_expose(700, SMALL_FLAME)
 	return
 
 // Sliding from one table to another

@@ -6,7 +6,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 2000, MAT_GLASS = 500, MAT_URANIUM = 500)
 	category = "Misc"
-	build_path = /obj/item/weapon/gun/energy/floragun
+	build_path = /obj/item/floral_somatoray
 
 /datum/design/janicart_upgrade
 	name = "Janicart Upgrade Module"
@@ -76,6 +76,16 @@
 	build_path = /obj/item/weapon/fishtools/fishtank_helper
 	req_tech = list(Tc_MATERIALS = 2, Tc_BIOTECH = 2, Tc_PROGRAMMING = 2)
 	materials = list(MAT_GLASS = 500, MAT_IRON = 1000)
+	category = "Misc"
+
+/datum/design/library_scanner
+	name = "Barcode Scanner"
+	desc = "Used in registering books for checkin/checkout and longterm archive."
+	id = "libscanner"
+	build_type = PROTOLATHE
+	build_path = /obj/item/weapon/barcodescanner
+	req_tech = list(Tc_PROGRAMMING = 1)
+	materials = list(MAT_GLASS = 300, MAT_IRON = 500)
 	category = "Misc"
 
 /datum/design/dses

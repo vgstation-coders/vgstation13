@@ -86,7 +86,7 @@
 	if(istype(get_turf(src),/turf/unsimulated/floor/brimstone))
 		FireBurn(11, 9001, ONE_ATMOSPHERE) // lag free weird way of doing it
 		fire_stacks = 11
-		IgniteMob() // ffffFIRE!!!! FIRE!!! FIRE!!
+		ignite() // ffffFIRE!!!! FIRE!!! FIRE!!
 	return 1
 
 // Apply connect damage
@@ -123,19 +123,19 @@
 			G.overlays = 0
 			if(istype(G.mind.current, /mob/living/carbon/human/))
 				var/mob/living/carbon/human/H = G.mind.current
-				G.overlays += H.obj_overlays[ID_LAYER]
-				G.overlays += H.obj_overlays[EARS_LAYER]
-				G.overlays += H.obj_overlays[SUIT_LAYER]
-				G.overlays += H.obj_overlays[GLASSES_LAYER]
-				G.overlays += H.obj_overlays[GLASSES_OVER_HAIR_LAYER]
-				G.overlays += H.obj_overlays[BELT_LAYER]
-				G.overlays += H.obj_overlays[BACK_LAYER]
-				G.overlays += H.obj_overlays[HEAD_LAYER]
-				G.overlays += H.obj_overlays[HANDCUFF_LAYER]
+				G.overlays += H.overlays_standing[ID_LAYER]
+				G.overlays += H.overlays_standing[EARS_LAYER]
+				G.overlays += H.overlays_standing[SUIT_LAYER]
+				G.overlays += H.overlays_standing[GLASSES_LAYER]
+				G.overlays += H.overlays_standing[GLASSES_OVER_HAIR_LAYER]
+				G.overlays += H.overlays_standing[BELT_LAYER]
+				G.overlays += H.overlays_standing[BACK_LAYER]
+				G.overlays += H.overlays_standing[HEAD_LAYER]
+				G.overlays += H.overlays_standing[HANDCUFF_LAYER]
 			G.invisibility = 0
 			to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
 		spawn(1)
-			dust()
+			gib()
 
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
@@ -567,7 +567,7 @@ Thanks.
 	else
 		reagents.clear_reagents()
 	heal_overall_damage(1000, 1000)
-	ExtinguishMob()
+	extinguish()
 	fire_stacks = 0
 	/*
 	if(locked_to)
@@ -739,7 +739,7 @@ Thanks.
 		stop_pulling()
 		. = ..()
 
-	if ((s_active && !is_holder_of(src, s_active)))
+	if (s_active && !is_holder_of(src, s_active) && !s_active.Adjacent(src))
 		s_active.close(src)
 
 	if(update_slimes)
@@ -748,13 +748,6 @@ Thanks.
 
 	if(T != loc)
 		handle_hookchain(Dir)
-
-	if(client && client.eye && istype(client.eye,/turf/simulated/wall))
-		var/turf/simulated/wall/W = client.eye
-		if (!Adjacent(W))
-			client.eye = src
-			client.perspective = MOB_PERSPECTIVE
-			W.peeper = null
 
 	if(.)
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
@@ -1034,7 +1027,7 @@ Thanks.
 					return //closed but not welded...
 
 		//okay, so the closet is either welded or locked... resist!!!
-		L.visible_message("<span class='danger'>The [C] begins to shake violenty!</span>",
+		L.visible_message("<span class='danger'>\The [C] begins to shake violenty!</span>",
 						  "<span class='warning'>You lean on the back of [C] and start pushing the door open (this will take about [breakout_time] minutes).</span>")
 		spawn(0)
 			if(do_after(usr, C, breakout_time * 60 * 10, 30, custom_checks = new /callback(C, /obj/structure/closet/proc/on_do_after))) 	//minutes * 60seconds * 10deciseconds
@@ -1143,7 +1136,7 @@ Thanks.
 				sleep(1 SECONDS)
 			CM.fire_stacks = 0
 			CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>","<span class='notice'>You extinguish yourself.</span>")
-			ExtinguishMob()
+			extinguish()
 			return
 
 		CM.resist_restraints()
@@ -1349,7 +1342,6 @@ Thanks.
 				now_pushing = 0
 				return
 
-			tmob.LAssailant = src
 			tmob.assaulted_by(src, TRUE)
 
 		now_pushing = 0
@@ -1543,11 +1535,7 @@ Thanks.
 				usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
 
 				log_attack("<font color='red'>[usr.name] ([usr.ckey]) Has thrown [M.name] ([M.ckey]) from [start_T_descriptor] with the target [end_T_descriptor]</font>")
-				if(!iscarbon(usr))
-					M.LAssailant = null
-				else
-					M.LAssailant = usr
-					M.assaulted_by(usr)
+				M.assaulted_by(usr)
 				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
@@ -1557,7 +1545,7 @@ Thanks.
 			to_chat(usr, "<span class='warning'>It's stuck to your hand!</span>")
 			return FAILED_THROW
 
-		if(I.pre_throw(target))
+		if(I.pre_throw(target,src))
 			return FAILED_THROW
 
 	remove_from_mob(item)

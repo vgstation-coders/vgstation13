@@ -57,3 +57,34 @@
 		if(istype(W))
 			return 1
 	return 0
+
+/obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit
+	name = "ripley killdozer kit"
+	desc = "A set of thick armor plates and gun mounts."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "modkit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
+	is_activateable = FALSE
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=2;"
+	starting_materials = list(MAT_IRON = 112500, MAT_GLASS = 500)
+	
+/obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/can_attach(obj/mecha/working/W)
+	if(!..())
+		return 0
+	if(istype(W,/obj/mecha/working/ripley))
+		return 1
+	
+/obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/attach(obj/mecha/working/ripley/R)
+	..()
+	R.mech_sprites = list("killdozer","killdozer_clean")
+	R.icon_state = "killdozer"
+	R.initial_icon = "killdozer"
+	R.silicon_icon_state = "killdozer"
+	R.damage_absorption = list("brute"=0.01,"fire"=0.05,"bullet"=0.01,"laser"=0.05,"energy"=0.05,"bomb"=0.1) //good fucking luck killing it without ions
+	R.step_in = 2.5 //make it as slow as the mk2 ripley
+	R.fast_pressure_step_in = 2.5
+	R.slow_pressure_step_in = 4
+	R.enclosed = TRUE //so bullets no longer hit the pilot
+
+/obj/item/mecha_parts/mecha_equipment/passive/killdozer_kit/detach()
+	return 0

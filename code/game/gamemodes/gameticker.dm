@@ -128,6 +128,7 @@ var/datum/controller/gameticker/ticker
 	theme.update_icon()
 
 /datum/controller/gameticker/proc/setup()
+	var/total_tick = get_game_time()
 	//Create and announce mode
 	if(master_mode=="secret")
 		hide_mode = 1
@@ -215,27 +216,28 @@ var/datum/controller/gameticker/ticker
 		CHECK_TICK
 
 	//Now that we have all of the occupied areas, we handle the lights being on or off, before actually putting the players into their bodies.
-	if(roundstart_occupied_area_paths.len)
-		var/tick = get_game_time()
-		var/obj/machinery/light_switch/LS
-		var/obj/machinery/light/lightykun
-		var/obj/item/device/flashlight/lamp/lampychan
-		for(var/area/A in areas)
-			if(A.type in roundstart_occupied_area_paths)
-				for(var/obj/O in A)
-					LS = O
-					lightykun = O
-					lampychan = O
-					if(istype(LS))
-						LS.toggle_switch(1, playsound = FALSE)
-					else if(istype(lightykun))
-						lightykun.on = 1
-						lightykun.update()
-					else if(istype(lampychan))
-						lampychan.toggle_onoff(1)
+	if(config.roundstart_lights_on || roundstart_occupied_area_paths.len)
+		var/light_tick = get_game_time()
+		var/area/A
+		for(var/obj/item/device/flashlight/lamp/lampychan in lamps)
+			A = get_area(lampychan)
+			if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+				lampychan.toggle_onoff(1)
+		for(var/obj/machinery/light_switch/LS in lightswitches)
+			A = get_area(LS)
+			if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+				LS.toggle_switch(1, FALSE, FALSE)
+				roundstart_occupied_area_paths -= A.type // lights are covered by this so skip these areas
+		if(roundstart_occupied_area_paths.len)
+			for(var/obj/machinery/light/lightykun in alllights)
+				A = get_area(lightykun)
+				if(config.roundstart_lights_on || (A.type in roundstart_occupied_area_paths))
+					lightykun.on = 1
+					lightykun.update()
 		//Force the lighting subsystem to update.
 		SSlighting.fire(FALSE, FALSE)
-		log_admin("Turned the lights on in [(get_game_time() - tick) / 10] seconds.")
+		log_admin("Turned the lights on in [(get_game_time() - light_tick) / 10] seconds.")
+		message_admins("Turned the lights on in [(get_game_time() - light_tick) / 10] seconds.")
 
 	var/list/clowns = list()
 	var/already_an_ai = FALSE
@@ -313,6 +315,9 @@ var/datum/controller/gameticker/ticker
 	Master.RoundStart()
 	wageSetup()
 	post_roundstart()
+	log_admin("Roundstart complete in [(get_game_time() - total_tick) / 10] seconds.")
+	message_admins("Roundstart complete in [(get_game_time() - total_tick) / 10] seconds.")
+	log_admin("Round started with [new_players_ready.len] players. There are [clients.len] players total. There are currently [admins.len] admins online")
 	return 1
 
 /mob/living/carbon/human/proc/make_fake_ai()
@@ -634,27 +639,27 @@ var/datum/controller/gameticker/ticker
 	if(platinum_tier.len)
 		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(platinum)]'> <b>Platinum Trophy</b> (never removed his clothes, kept his bomb dispenser until the end, and escaped on the shuttle):"}
 		for (var/mob/M in platinum_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(gold_tier.len)
 		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(gold)]'> <b>Gold Trophy</b> (kept his bomb dispenser until the end, and escaped on the shuttle):"}
 		for (var/mob/M in gold_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(silver_tier.len)
 		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(silver)]'> <b>Silver Trophy</b> (kept his bomb dispenser until the end, and escaped in a pod):"}
 		for (var/mob/M in silver_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(bronze_tier.len)
 		text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(bronze)]'> <b>Bronze Trophy</b> (kept his bomb dispenser until the end):"}
 		for (var/mob/M in bronze_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.real_name]</b>"}
 	if(special_tier.len)
 		text += "<br><b>Special Mention</b> to those adorable MoMMis:"
 		for (var/mob/M in special_tier)
-			var/icon/flat = getFlatIcon(M, SOUTH, 1, 1)
+			var/icon/flat = getFlatIconDeluxe(sort_image_datas(get_content_image_datas(M)), override_dir = SOUTH)
 			text += {"<br><img class='icon' src='data:image/png;base64,[iconsouth2base64(flat)]'> <b>[M.key]</b> as <b>[M.name]</b>"}
 
 	return text
@@ -720,6 +725,8 @@ var/datum/controller/gameticker/ticker
 					qdel(obj)
 
 		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
+		roundstart_timestamp = world.time
+
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
 

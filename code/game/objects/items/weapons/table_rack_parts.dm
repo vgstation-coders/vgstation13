@@ -109,7 +109,7 @@
 	flags = 0
 	table_type = /obj/structure/table/woodentable
 	sheet_type = /obj/item/stack/sheet/wood
-	autoignition_temperature = AUTOIGNITION_WOOD
+	flammable = TRUE
 
 /obj/item/weapon/table_parts/wood/cultify()
 	return
@@ -198,7 +198,7 @@
 	icon_state = "plastic_tableparts"
 	starting_materials = list(MAT_PLASTIC = 3750)
 	w_type = RECYK_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
+	flammable = TRUE
 	table_type = /obj/structure/table/plastic
 	sheet_type = /obj/item/stack/sheet/mineral/plastic
 	sheet_amount = 5
@@ -227,16 +227,7 @@
 			to_chat(user, "You begin slicing through \the [src].")
 			WT.playtoolsound(user, 50)
 			if(do_after(user, src, 60))
-				to_chat(user, "You cut \the [src] into a gun stock.")
-				if(src.loc == user)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/metal_gun_stock/I = new (user.loc)
-					user.put_in_hands(I)
-					qdel(src)
-				else
-					new /obj/item/weapon/metal_gun_stock(loc)
-					qdel(src)
-			return
+				user.create_in_hands(src, /obj/item/weapon/metal_gun_stock, msg = "You cut \the [src] into a gun stock.")
 
 /obj/item/weapon/rack_parts/attack_self(mob/user)
 	var/obj/structure/rack/R = new /obj/structure/rack(user.loc)

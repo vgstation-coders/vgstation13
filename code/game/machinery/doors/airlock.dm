@@ -26,6 +26,7 @@
 
 	custom_aghost_alerts=1
 	var/aiControlDisabled = 0 //If 1, AI control is disabled until the AI hacks back in and disables the lock. If 2, the AI has bypassed the lock. If -1, the control is enabled but the AI had bypassed it earlier, so if it is disabled again the AI would have no trouble getting back in.
+	var/boltsDestroyed=0 //if 1, do not allow the door to be bolted
 	var/hackProof = 0 // if 1, this door can't be hacked by the AI
 	var/secondsMainPowerLost = 0 //The number of seconds until power is restored.
 	var/secondsBackupPowerLost = 0 //The number of seconds until power is restored.
@@ -279,9 +280,6 @@
 	icon = 'icons/obj/doors/Doorplasma.dmi'
 	mineral = "plasma"
 
-	autoignition_temperature = AUTOIGNITION_WELDERFUEL
-	fire_fuel = 10
-
 /obj/machinery/door/airlock/plasma/ignite(temperature)
 	PlasmaBurn(temperature)
 
@@ -295,7 +293,7 @@
 		napalm.adjust_gas(GAS_PLASMA, toxinsToDeduce)
 		target_tile.assume_air(napalm)
 		spawn (0)
-			target_tile.hotspot_expose(temperature, 400, surfaces=1)
+			target_tile.hotspot_expose(temperature, MEDIUM_FLAME, 1)
 	for(var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve
 		var/turf/T = get_turf(F)
 		T.ChangeTurf(/turf/simulated/wall/mineral/plasma/)
@@ -506,9 +504,10 @@ About the new airlock wires panel:
 	else
 		icon_state = "door_open"
 
-	return
+	update_moody_light(icon, "[icon_state]-moody")
 
 /obj/machinery/door/airlock/door_animate(var/animation)
+	kill_moody_light()
 	switch(animation)
 		if("opening")
 			if(overlays)
@@ -528,7 +527,26 @@ About the new airlock wires panel:
 			flick("door_spark", src)
 		if("deny")
 			flick("door_deny", src)
-	return
+
+	var/area/here = get_area(src)
+	if (here && here.dynamic_lighting)
+		switch(animation)
+			if("opening")
+				if(panel_open)
+					anim(target = src, a_icon = icon, flick_anim = "o_door_opening-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+				else
+					anim(target = src, a_icon = icon, flick_anim = "door_opening-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+			if("closing")
+				if(panel_open)
+					anim(target = src, a_icon = icon, flick_anim = "o_door_closing-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+				else
+					anim(target = src, a_icon = icon, flick_anim = "door_closing-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+			if("spark")
+				anim(target = src, a_icon = icon, flick_anim = "door_spark-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+			if("deny")
+				anim(target = src, a_icon = icon, flick_anim = "door_deny-moody", sleeptime = animation_delay, plane = LIGHTING_PLANE, blend = BLEND_ADD)
+
+
 
 /obj/machinery/door/airlock/attack_ai(mob/user as mob)
 	if(!allowed(user) && !isobserver(user))
@@ -839,6 +857,9 @@ About the new airlock wires panel:
 					//drop door bolts
 					if(src.isWireCut(AIRLOCK_WIRE_DOOR_BOLTS))
 						to_chat(usr, "You can't drop the door bolts - The door bolt dropping wire has been cut.")
+					else if (src.boltsDestroyed)
+						to_chat(usr, "You can't drop the door bolts - The door's bolts have been chopped.")
+						playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 					else if(src.locked!=1)
 						if(isobserver(usr) && !canGhostWrite(usr,src,"dropped bolts on"))
 							to_chat(usr, "<span class='warning'>Nope.</span>")
@@ -1220,16 +1241,32 @@ About the new airlock wires panel:
 			bashed_in(user, TRUE)
 		return
 	if(istype(I, /obj/item/tool/crowbar/halligan))
-		var/breaktime = 10 SECONDS
-		if(!operating && density && src.arePowerSystemsOn() && !((stat) & NOPOWER) && !welded)
-			if(locked && !lifted)
-				to_chat(user, "<span class='notice'>You begin to lift \the [src] out of its track, exposing the bolts.</span>")
-				playsound(src, 'sound/effects/rustle-metal.ogg', 50, 1)
-				if(do_after(user,src,breaktime))
-					to_chat(user, "<span class='notice'>You begin to lift the airlock out of its track, exposing the bolts.</span>")
-					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-					animate(src, pixel_y = pixel_y + 5, time = 1)
-					lifted = TRUE
+		if (src.busy)
+			return
+		var/breaktime = 8 SECONDS
+		if((!operating && src.arePowerSystemsOn() && !((stat) & NOPOWER) || locked) && !welded)
+			if(locked)
+				if (!lifted)
+					src.busy=1
+					to_chat(user, "<span class='notice'>You begin to lift \the [src] out of its track, exposing the bolts.</span>")
+					playsound(src, 'sound/effects/rustle-metal.ogg', 50, 1)
+					if(do_after(user,src,breaktime))
+						to_chat(user, "<span class='notice'>You lift the airlock out of its track, exposing the bolts.</span>")
+						playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+						animate(src, pixel_y += 5 , time = 1)
+						lifted = TRUE
+					src.busy=0
+				else
+					src.busy=1
+					to_chat(user, "<span class='notice'>You begin to lower \the [src] back into of its track..</span>")
+					playsound(src, 'sound/effects/rustle-metal.ogg', 50, 1)
+					if(do_after(user,src,breaktime/4))
+						to_chat(user, "<span class='notice'>You lower the airlock back into its track.</span>")
+						playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+						pixel_y = initial(pixel_y)
+						lifted = FALSE
+						update_icon()
+					src.busy=0
 			else
 				pry(user)
 			return
@@ -1256,22 +1293,25 @@ About the new airlock wires panel:
 	else if (iscrowbar(I) || istype(I, /obj/item/weapon/fireaxe))
 		if(src.busy)
 			return
-		src.busy = 1
 		var/beingcrowbarred = null
 		if(lifted)
 			if(istype(I, /obj/item/weapon/fireaxe))
 				if(istype(user,/mob/living/carbon/human))
 					var/mob/living/carbon/human/H = user
-					var/breaktime = 30 SECONDS
+					var/breaktime = 20 SECONDS
 					if(H.get_strength() >= 2)
-						breaktime = 15 SECONDS
+						breaktime = 10 SECONDS
 					to_chat(user, "<span class='notice'>You begin chopping the bolts down.</span>")
+					src.busy = 1
 					if(!do_after(user, src, breaktime, 10, custom_checks = new /callback(I, /obj/item/weapon/fireaxe/proc/on_do_after)))
+						src.busy = 0
 						return
 					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+					boltsDestroyed=1
 					to_chat(user, "<span class='notice'>You finish chopping the bolts.</span>")
 					pixel_y = initial(pixel_y)
-					toggle_bolts()
+					locked = FALSE
+					src.busy=0
 					lifted = FALSE
 					update_icon()
 			return
@@ -1310,9 +1350,20 @@ About the new airlock wires panel:
 						to_chat(user, "<span class='warning'>You need to be wielding \the [F] to do that.</span>")
 				else
 					spawn(0)	close(1)
-		src.busy = 0
 	else if (istype(I, /obj/item/weapon/card/emag))
 		emag_act(src)
+	else if(istype(I, /obj/item/stack/rods) && boltsDestroyed)
+		var/obj/item/stack/rods/rawd=I
+		if(rawd.amount <4)
+			to_chat(user, "<span class='warning'>You need 4 rods to repair the airlock's bolts.</span>")
+		else
+			playsound(loc, "sound/machines/click.ogg", 50, 1, -1)
+			to_chat(user, "<span class='notice'>You begin to replace the airlock's bolts</span>")
+			if (do_after(user,src,5 SECONDS))
+				rawd.use(4)
+				boltsDestroyed=0
+				playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
+				to_chat(user, "<span class='notice'>You replace the airlock's bolts.</span>")
 	else
 		..(I, user)
 	add_fingerprint(user)
@@ -1339,16 +1390,21 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/proc/pry(mob/user as mob)
 	if(istype(user,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
-		var/breaktime = 10 SECONDS
+		var/breaktime = 8 SECONDS
 		if(H.get_strength() >= 2)
-			breaktime = 5 SECONDS
-		to_chat(user, "<span class='notice'>\The [src]'s motors grind as you pry it open.</span>")
+			breaktime = 4 SECONDS
+		playsound(src,"sound/weapons/circsawhit.ogg")
+		src.busy=1
+		to_chat(user, "<span class='notice'>\The [src]'s motors grind as you pry it [density ? "open" : "shut"].</span>")
 		if(do_after(user,src,breaktime))
-			if(!(stat & (NOPOWER)) || src.arePowerSystemsOn())
-				spark(src, 5)
-				playsound(src,"sparks",75,1,-1)
-			open(1)
+			src.busy=0
+			if (density)
+				open(1)
+			else
+				close(1)
 			return 1
+		else
+			src.busy=0
 		return 0
 	else
 		return 0
@@ -1512,12 +1568,15 @@ About the new airlock wires panel:
 	locked = 0
 	playsound(loc, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 	open()
-	locked = 1
-	playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
+	if (!boltsDestroyed)
+		locked = 1
+		playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 	return
 
 /obj/machinery/door/airlock/proc/toggle_bolts()
-	locked = !locked
+	lifted = FALSE
+	pixel_y = initial(pixel_y)
+	locked = boltsDestroyed ? FALSE : !locked
 	if (locked == TRUE)
 		playsound(loc, "sound/machines/door_bolt.ogg", 50, 1, -1)
 	if (locked == FALSE)

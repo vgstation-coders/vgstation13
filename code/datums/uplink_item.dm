@@ -8,6 +8,7 @@ var/list/discounted_items_of_the_round = list()
 
 	var/list/static/forbidden_items = list(
 		/datum/uplink_item/badass/bundle,
+		/datum/uplink_item/badass/random,
 		/datum/uplink_item/badass/experimental_gear,
 		/datum/uplink_item/implants/uplink,
 	)
@@ -321,6 +322,12 @@ var/list/discounted_items_of_the_round = list()
 	//jobs_with_discount = list("Assistant")
 	//would've liked to add a discount for dark skinned or nearsighted characters (closest to one eyed we have) but dunno how
 
+/datum/uplink_item/dangerous/mech_killdozer
+        name = "Killdozer Bundle"
+        desc = "Three random weapons and a modkit that lets you turn a mining mech into an (almost) unstoppable machine of destruction."
+        item = /obj/item/weapon/storage/box/syndie_kit/mech_killdozer
+        cost = 10
+
 // STEALTHY WEAPONS
 // Any Syndicate item with applying lethal force to people without being easily detected (Ex: Syndicate Soap, Parapen, E-Bow)
 
@@ -547,7 +554,7 @@ var/list/discounted_items_of_the_round = list()
 
 /datum/uplink_item/sabotage_tools/does_not_tip_note
 	name = "\"Does Not Tip\" database backdoor"
-	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the Cargo workers at Central Command. Ensures that all pizza orders will be poisoned from the moment the screen flashes red, without giving any obvious hints to such. Appears as a PDA until inspected more closely."
+	desc = "Lets you add or remove your station to the \"does not tip\" list kept by the Cargo workers at Central Command. Ensures that all pizza and beer orders will be poisoned from the moment the screen flashes red, without giving any obvious hints to such. Appears as a PDA until inspected more closely."
 	item = /obj/item/device/does_not_tip_backdoor
 	num_in_stock = 1
 	cost = 10
@@ -559,6 +566,14 @@ var/list/discounted_items_of_the_round = list()
 	cost = 8
 	discounted_cost = 6
 	jobs_with_discount = SCIENCE_POSITIONS
+
+/datum/uplink_item/sabotage_tools/radstorm_remote
+	name = "Dirty Bomb Artillery Remote"
+	desc = "This device can fire a remote syndicate bluespace artillery every 15 minutes, detonating a dirty bomb on direct intercept with the station, causing an artificial radstorm. The cannon will NOT fire if a radstom is already ongoing."
+	item = /obj/item/device/radstorm_remote
+	cost = 12
+	discounted_cost = 10
+	jobs_with_discount = ENGINEERING_POSITIONS
 
 /datum/uplink_item/sabotage_tools/reportintercom
 	name = "NT Central Command Report Falsifier"
@@ -1139,14 +1154,29 @@ var/list/discounted_items_of_the_round = list()
 /datum/uplink_item/jobspecific/clown_mime/invisible_spray
 	name = "Can of Invisible Spray"
 	desc = "Spray something to render it invisible for five minutes! Can only be used once. Permanence not guaranteed when exposed to water, may not render all parts invisible, especially for humans."
-	item = /obj/item/weapon/invisible_spray
+	item = /obj/item/weapon/syndie_spray/invisible_spray
+	cost = 6
+	jobs_excluded = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/clown_mime/silent_spray
+	name = "Can of Silencing Spray"
+	desc = "Spray something to render it silent for five minutes! Can only be used once. Permanence not guaranteed when exposed to water."
+	item = /obj/item/weapon/syndie_spray/silent_spray
 	cost = 6
 	jobs_excluded = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/clown_mime/invisible_spray/permanent
 	name = "Can of Permanent Invisible Spray"
 	desc = "Spray something to render it permanently invisible! Can only be used once. Permanence not guaranteed when exposed to water, may not render all parts invisible, especially for humans."
-	item = /obj/item/weapon/invisible_spray/permanent
+	item = /obj/item/weapon/syndie_spray/invisible_spray/permanent
+	cost = 4
+	jobs_excluded = list()
+	jobs_exclusive = list("Clown", "Mime")
+
+/datum/uplink_item/jobspecific/clown_mime/silent_spray/permanent
+	name = "Can of Permanent Silencing Spray"
+	desc = "Spray something to render it permanently silent! Can only be used once. Permanence not guaranteed when exposed to water."
+	item = /obj/item/weapon/syndie_spray/silent_spray/permanent
 	cost = 4
 	jobs_excluded = list()
 	jobs_exclusive = list("Clown", "Mime")
@@ -1263,6 +1293,14 @@ var/list/discounted_items_of_the_round = list()
 	cost = 4
 	discounted_cost = 2
 	jobs_with_discount = list("Internal Affairs Agent")
+
+/datum/uplink_item/jobspecific/command/jobdisk
+	name = "Alternate Jobs Database"
+	desc = "A disk which scrambles the jobs database when installed in the Labor Management Console."
+	item = /obj/item/weapon/disk/jobdisk
+	cost = 6
+	discounted_cost = 3
+	jobs_with_discount = list("Captain", "Head of Personnel")
 
 /datum/uplink_item/jobspecific/trader
 	category = "Trader Specials"

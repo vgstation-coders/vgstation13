@@ -19,7 +19,11 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 	..("L:[lighting_update_lights.len]|C:[lighting_update_corners.len]|O:[lighting_update_overlays.len]")
 
 /datum/subsystem/lighting/Initialize(timeofday)
-	create_all_lighting_overlays()
+	for(var/area/A in areas)
+		if(A.dynamic_lighting)
+			for(var/turf/T in A.area_turfs)
+				if(T.dynamic_lighting)
+					new /atom/movable/lighting_overlay(T, TRUE)
 	..()
 
 /datum/subsystem/lighting/fire(resumed=FALSE, allow_breaks=TRUE)

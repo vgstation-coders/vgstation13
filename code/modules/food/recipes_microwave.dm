@@ -2742,6 +2742,26 @@
 		)
 	result = /obj/item/claypot
 
+//I hate this please for the love of god someone enable microwaves to batch produce items
+/datum/recipe/waxcake
+	reagents = list(WAX = 5)
+	result = /obj/item/stack/sheet/wax
+/datum/recipe/waxcake_times_two
+	reagents = list(WAX = 10)
+	result = /obj/item/stack/sheet/wax/times_two
+/datum/recipe/waxcake_times_three
+	reagents = list(WAX = 15)
+	result = /obj/item/stack/sheet/wax/times_three
+/datum/recipe/waxcake_times_four
+	reagents = list(WAX = 20)
+	result = /obj/item/stack/sheet/wax/times_four
+/datum/recipe/waxcake_times_ten
+	reagents = list(WAX = 50)
+	result = /obj/item/stack/sheet/wax/times_ten
+/datum/recipe/waxcake_times_twenty
+	reagents = list(WAX = 100)
+	result = /obj/item/stack/sheet/wax/bigstack
+
 /datum/recipe/cinnamonroll
 	reagents = list(MILK = 5, SUGARS = 10, FLOUR = 5, CINNAMON = 5)
 	items = list(
@@ -3783,3 +3803,19 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/roach,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/roachesonstick
+
+/datum/recipe/sugarcube
+	reagents = list(SODIUMCHLORIDE = 10)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/saltcube
+	cookable_with = COOKABLE_WITH_MIXING
+	
+/datum/recipe/saltcube
+	reagents = list(SUGARS = 10)
+	result = /obj/item/weapon/reagent_containers/food/snacks/multispawner/sugarcube
+	cookable_with = COOKABLE_WITH_MIXING
+
+/datum/recipe/trackingbacon
+	reagents = list(CORNOIL = 10, SODIUMCHLORIDE = 5) //fried, salted, and not actually bacon
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/telebacon

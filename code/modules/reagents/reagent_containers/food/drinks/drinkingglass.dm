@@ -21,7 +21,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
-	flammable = 0
+	can_be_lit = 0
 	if(!molotov)
 		lit = 0
 		light_color = null
@@ -47,10 +47,6 @@
 			if(R.light_color)
 				light_color = R.light_color
 
-			if(R.flammable)
-				if(!lit)
-					flammable = 1
-
 			name = R.glass_name ? R.glass_name : "glass of " + R.name //uses glass of [reagent name] if a glass name isn't defined
 			desc = R.glass_desc ? R.glass_desc : R.description //uses the description if a glass description isn't defined
 			isGlass = R.glass_isGlass
@@ -69,6 +65,20 @@
 				filling.icon += mix_color_from_reagents(reagents.reagent_list)
 				filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 				overlays += filling
+
+			if(R.can_be_lit)
+				if(lit)
+					var/image/I = image(icon, src, "[icon_state]-flamin")
+					I.blend_mode = BLEND_ADD
+					if (isturf(loc))
+						I.plane = ABOVE_LIGHTING_PLANE
+					else
+						I.plane = ABOVE_HUD_PLANE // inventory
+					overlays += I
+					name = "flaming [name]"
+					desc += " Damn that looks hot!"
+				else
+					can_be_lit = 1
 	else
 		icon_state = "glass_empty"
 		item_state = "glass_empty"
@@ -81,7 +91,7 @@
 		M.update_inv_hands()
 
 	update_temperature_overlays()
-	update_blood_overlay()
+	set_blood_overlay()
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/attack_self(mob/user)
 	if(switching)

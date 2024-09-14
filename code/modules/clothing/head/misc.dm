@@ -222,7 +222,7 @@
 	desc = "A working man's cap."
 	icon_state = "flat_cap"
 	item_state = "detective"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	siemens_coefficient = 0.9
 
 /obj/item/clothing/head/flatcap/linen
@@ -532,7 +532,7 @@
 	desc = "Show everyone just how patriotic you are."
 	icon_state = "libertyhat"
 	item_state = "libertyhat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/maidhat
@@ -540,7 +540,7 @@
 	desc = "Do these even do anything besides look cute?"
 	icon_state = "maidhat"
 	item_state = "maidhat"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/maidhat
@@ -556,14 +556,14 @@
 	desc = "A funny hat worn by extremely boring people."
 	icon_state = "mitre"
 	item_state = "mitre"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/clownpiece
 	name = "Clownpiece's jester hat"
 	desc = "A purple polka-dotted jester's hat with yellow pompons."
 	icon_state = "clownpiece"
 	item_state = "clownpiece"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	vertical_offset = 4
 
 /obj/item/clothing/head/headband
@@ -825,3 +825,23 @@ var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel
 	desc = "It survived an explosive implant, it'll survive you."
 	flags = FPRINT
 	icon_state = "syndiefootballhelmet"
+
+/obj/item/clothing/head/trucker
+	name = "cable appreciation hat"
+	desc = "Trucker hat with \"I FUCKING LOVE CABLES\" written on the front in a large and obnoxious font."
+	flags = FPRINT
+	icon_state = "trucker"
+	item_state = "trucker"
+
+/obj/item/clothing/head/hunter
+	name = "white bandana"
+	desc = "An old piece of cloth that keeps hair out of your monster slaying business."
+	icon_state = "hunter"
+	item_state = "hunter_headband"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_castlevania.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_castlevania.dmi')
+
+/obj/item/clothing/head/hunter/offenseTackleBonus()
+	return 3
+
+/obj/item/clothing/head/hunter/rangeTackleBonus()
+	return 1
