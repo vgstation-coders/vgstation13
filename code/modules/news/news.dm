@@ -78,7 +78,7 @@ var/scheduledNews = null
 	sendto.messages += news
 
 	for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
-		NEWSCASTER.newsAlert(news.channel_name)
+		NEWSCASTER.newsAlert(news.channel_name,news.headline)
 
 	if(news.update_type)
 		spawn(rand(news.update_delay_min,news.update_delay_max))
