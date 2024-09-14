@@ -1329,7 +1329,7 @@
 	dir = 4
 	},
 /obj/item/weapon/storage/lockbox/diskettebox/open/research,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /obj/item/device/reagent_scanner/adv,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
@@ -4037,10 +4037,10 @@
 /area/vault/mothership_lab/maintenance)
 "Qq" = (
 /obj/structure/rack,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
 /obj/effect/decal/warning_stripes{
 	icon_state = "bot"
 	},
@@ -4433,7 +4433,7 @@
 /obj/structure/window/reinforced,
 /obj/item/clothing/gloves/latex,
 /obj/item/clothing/gloves/latex,
-/obj/item/clothing/glasses/science,
+/obj/item/clothing/glasses/scanner/science,
 /turf/unsimulated/floor/lab_sterile,
 /area/vault/mothership_lab/research)
 "Uk" = (
@@ -4718,9 +4718,9 @@
 /area/vault/mothership_lab/armory)
 "Xf" = (
 /obj/structure/rack,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
+/obj/item/weapon/zambiscuit_package,
 /obj/structure/window/reinforced{
 	dir = 1
 	},

@@ -154,6 +154,7 @@
 	for(var/obj/item/I in targets)
 		var/atom/fake_heater/FH = new /atom/fake_heater()
 		I.attempt_heating(FH, user)
+		I.process_temperature()
 		qdel(FH)
 
 /atom/fake_heater

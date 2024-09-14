@@ -110,6 +110,7 @@
 				TTF.anchored = 1
 				if(istype(TTF,/obj/structure/transit_tube_frame/station))
 					var/obj/structure/transit_tube_frame/station/TTS = TTF
+					TTS.electronics = new(TTF)
 					if(req_access && req_access.len > 0)
 						TTS.electronics.conf_access = req_access
 					else if(req_one_access && req_one_access.len > 0)

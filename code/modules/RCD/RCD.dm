@@ -18,6 +18,9 @@
 	melt_temperature    = MELTPOINT_STEEL // Lots of metal
 	origin_tech         = Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=2"
 
+	var/frequency = 0
+	var/id = null
+
 	//list of schematics, in definitions of RCD subtypes, no organization is needed, in New() these get organized.
 	var/list/schematics = list(/datum/rcd_schematic/test)
 	// Make sparks. LOTS OF SPARKS.
@@ -84,17 +87,15 @@
 		dropped_by.hud_used.toggle_show_schematics_display(null,1, src)
 
 /obj/item/device/rcd/attack_self(var/mob/user)
-	var/turf/T = get_turf(src)
-	if(T?.z != z_last_checked)
-		rebuild_ui()
+	//var/turf/T = get_turf(src)
+	//if(T?.z != z_last_checked) i don't know why this in in here. commented out instead of removed in case it FSU
+	rebuild_ui()
 	interface.show(user)
 
 /obj/item/device/rcd/proc/rebuild_ui()
 	var/dat = ""
 
 	dat += {"
-		<b>Selected:</b> <span id="selectedname"></span>
-		<h2>Options</h2>
 		<div id="schematic_options">
 		</div>
 		<h2>Available schematics</h2>
@@ -107,8 +108,9 @@
 			var/turf/T = get_turf(src)
 			if(!T || ((C.flags & RCD_Z_DOWN) && !HasBelow(T.z)) || ((C.flags & RCD_Z_UP) && !HasAbove(T.z)))
 				continue
-			dat += C.schematic_list_line(interface)
-
+			dat += C.schematic_list_line(interface,FALSE,src.selected==C)
+			for(var/client/client in interface.clients)
+				C.send_list_assets(client)
 		dat += "</ul>"
 
 	interface.updateLayout(dat)
@@ -120,9 +122,9 @@
 	rebuild_favs()
 
 /obj/item/device/rcd/proc/rebuild_favs()
-	var/dat = "<b>Favorites:</b> <span title='You can cycle through these with ctrl+mousewheel outside of the UI.'>(?)</span><ul style='list-style-type:disc'>"
+	var/dat = "<b>Favorites:</b> <span style='color:#fff;' title='You can cycle through these with ctrl+mousewheel outside of the UI.'>(?)</span><ul style='list-style-type:disc'>"
 	for (var/datum/rcd_schematic/C in favorites)
-		dat += C.schematic_list_line(interface, TRUE)
+		dat += C.schematic_list_line(interface, TRUE,src.selected==C)
 
 	dat += "</ul>"
 
@@ -142,7 +144,6 @@
 		switch (href_list["act"])
 			if ("select")
 				try_switch(usr, C)
-
 			if ("fav")
 				favorites |= C
 				rebuild_ui()
@@ -194,6 +195,7 @@
 	do_spark()
 
 	selected = C
+	rebuild_ui()
 	update_options_menu()
 	rebuild_favs()
 	interface.updateContent("selectedname", selected.name)
@@ -247,6 +249,8 @@
 	if (sparky && next_spark < world.time)
 		spark(src, 5, FALSE)
 		next_spark = world.time + 0.5 SECONDS
+	else
+		playsound(src, 'sound/machines/click.ogg', 20, 1)
 
 /obj/item/device/rcd/proc/get_energy(var/mob/user)
 	return INFINITY
@@ -258,7 +262,6 @@
 	if(selected)
 		for(var/client/client in interface.clients)
 			selected.send_assets(client)
-
 		interface.updateContent("schematic_options", selected.get_HTML(args))
 	else
 		interface.updateContent("schematic_options", " ")

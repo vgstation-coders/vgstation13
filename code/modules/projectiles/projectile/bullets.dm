@@ -521,9 +521,10 @@
 		M.gib()
 	else if(istype(atarget, /obj/machinery/singularity/narsie) && blessed && damage >= 200) //MINE IS THE ROD THAT SHALL PIERCE THE HEAVENS
 		var/obj/machinery/singularity/narsie/N = atarget
-		if(!N.wounded)
-			N.visible_message("<span class = 'danger'>\The [src] strikes \the [N], wounding them. This god can bleed!</span>", range = 20)
-		N.wounded++
+		N.visible_message("<span class = 'danger'>\The [src] strikes \the [N], ripping through them and splattering blood around. This god can bleed!<span class = 'sinister'>...of course it can...it's a god of blood...and now you have its attention.</span></span>", range = 20)
+		if (firer)
+			N.acquire(firer)
+			new /obj/effect/cult_ritual/confusion(firer.loc)
 		bullet_die()
 		return
 	else
@@ -904,8 +905,10 @@
 	custom_impact = 1
 	rotate = 0
 	var/hard = 0
+	var/radius = 1//big glob of liquid, splashes a bit on surroundings
+	var/atom/splashed_atom = null
 
-/obj/item/projectile/bullet/liquid_blob/New(atom/T, var/hardness = null)
+/obj/item/projectile/bullet/liquid_blob/New(atom/T, var/hardness = null, var/mixed_color=null, var/mixed_alpha=255, var/_rad=1)
 	..(T)
 	hard = hardness
 	if(hard)
@@ -913,37 +916,34 @@
 		create_reagents(10)
 	else
 		create_reagents(50)
+	icon += mixed_color
+	alpha = mixed_alpha
+	radius = _rad
 
-/obj/item/projectile/bullet/liquid_blob/OnFired()
-	src.icon += mix_color_from_reagents(reagents.reagent_list)
-	src.alpha = mix_alpha_from_reagents(reagents.reagent_list)
-	..()
+/obj/item/projectile/bullet/liquid_blob/to_bump(var/atom/A)
+	splashed_atom = A//doesn't matter if it's actually the atom we end up splashing since we only use that var on bullet_die()
+	. = ..()
+	if (. && A)
+		if ((special_collision == PROJECTILE_COLLISION_DEFAULT) || (special_collision == PROJECTILE_COLLISION_BLOCKED))
+			if(istype(A, /mob))
+				if(hard)
+					var/splash_verb = pick("dousing","completely soaking","drenching","splashing")
+					A.visible_message("<span class='warning'>\The [src] smashes into [A], [splash_verb] \him!</span>",
+											"<span class='warning'>\The [src] smashes into you, [splash_verb] you!</span>")
+				else
+					var/splash_verb = pick("douses","completely soaks","drenches","splashes")
+					A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
+											"<span class='warning'>\The [src] [splash_verb] you!</span>")
 
-/obj/item/projectile/bullet/liquid_blob/on_hit(atom/A as mob|obj|turf|area)
-	if(!A)
-		return
-	..()
+
+/obj/item/projectile/bullet/liquid_blob/bullet_die()
 	if(reagents.total_volume)
-		for(var/datum/reagent/R in reagents.reagent_list)
-			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))
-		if(istype(A, /mob))
-			if(hard)
-				var/splash_verb = pick("dousing","completely soaking","drenching","splashing")
-				A.visible_message("<span class='warning'>\The [src] smashes into [A], [splash_verb] \him!</span>",
-										"<span class='warning'>\The [src] smashes into you, [splash_verb] you!</span>")
-			else
-				var/splash_verb = pick("douses","completely soaks","drenches","splashes")
-				A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
-										"<span class='warning'>\The [src] [splash_verb] you!</span>")
-			splash_sub(reagents, get_turf(A), reagents.total_volume/2)
-		else
-			splash_sub(reagents, get_turf(src), reagents.total_volume/2)
-		splash_sub(reagents, A, reagents.total_volume)
-		return 1
-
-/obj/item/projectile/bullet/liquid_blob/OnDeath()
-	if(get_turf(src))
-		playsound(src, 'sound/effects/slosh.ogg', 20, 1)
+		var/turf/T = get_turf(splashed_atom)
+		if (!T.density && T.Adjacent(src))
+			loc = T
+		playsound(loc, 'sound/effects/slosh.ogg', 20, 1)
+		reagents.splashplosion(radius)
+	..()
 
 /obj/item/projectile/bullet/pellet
 	name = "buckshot pellet"
@@ -1095,3 +1095,23 @@
 	..()
 	reagents.add_reagent(DIABEETUSOL, 4)
 	reagents.add_reagent(SUGAR, 5)
+
+/obj/item/projectile/bullet/rocksalt
+	name = "rock-salt slug"
+	icon_state = "rsshell"
+	damage = 10
+	agony = 20
+	penetration = 1
+
+/obj/item/projectile/bullet/rocksalt/New()
+	..()
+	create_reagents(10)
+	reagents.add_reagent(HOLYSALTS, 5)
+	reagents.add_reagent(HOLYWATER, 5)
+
+/obj/item/projectile/bullet/rocksalt/on_hit(var/atom/atarget, var/blocked = 0)
+	..()
+	if(!blocked && ishuman(atarget))
+		reagents.trans_to(atarget, reagents.total_volume)
+	else
+		reagents.reaction(atarget)

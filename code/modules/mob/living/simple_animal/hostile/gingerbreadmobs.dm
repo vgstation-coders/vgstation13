@@ -36,6 +36,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 	speed = 5
+	supernatural = TRUE
 
 	blooded = FALSE
 
@@ -239,5 +240,5 @@
 	attacktext = "honks"
 	melee_damage_lower = 5
 	melee_damage_upper = 15
-	attack_sound = "sound/weapons/honk.ogg"
+	attack_sound = "sound/items/bikehorn.ogg"
 	speed = 3

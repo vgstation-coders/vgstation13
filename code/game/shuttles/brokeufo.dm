@@ -4,6 +4,7 @@
 /datum/map_element/vault/brokeufo
 	name = "Broken UFO"
 	file_path = "maps/randomvaults/brokeufo.dmm"
+	spawn_cost = 3
 
 /datum/map_element/vault/brokeufo/initialize(list/objects)
 	..()

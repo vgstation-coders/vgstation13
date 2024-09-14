@@ -22,11 +22,10 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/detach()
-	..()
 	if(istype(chassis, /obj/mecha/working))
 		var/obj/mecha/working/W = chassis
 		W.hydraulic_clamp = null
-	return
+	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/action(atom/target)
 	if(!action_checks(target))
@@ -232,11 +231,7 @@
 				M.attack_log +="\[[time_stamp()]\]<font color='orange'> Mech Drilled by [chassis.occupant.name] ([chassis.occupant.ckey]) with [src.name]</font>"
 				chassis.occupant.attack_log += "\[[time_stamp()]\]<font color='red'> Mech Drilled [M.name] ([M.ckey]) with [src.name]</font>"
 				log_attack("<font color='red'>[chassis.occupant.name] ([chassis.occupant.ckey]) mech drilled [M.name] ([M.ckey]) with [src.name]</font>" )
-				if(!iscarbon(chassis.occupant))
-					M.LAssailant = null
-				else
-					M.LAssailant = chassis.occupant
-					M.assaulted_by(chassis.occupant)
+				M.assaulted_by(chassis.occupant)
 			log_message("Drilled through [target]")
 			occupant_message("<span class='red'><b>You drill into \the [target].</b></span>")
 			chassis.visible_message("<span class='red'><b>[chassis] drills into \the [target]!</b></span>", "You hear a drill breaking something.")
@@ -393,7 +388,7 @@
 								if(W.reagents.has_reagent(WATER))
 									if(isliving(atm)) // For extinguishing mobs on fire
 										var/mob/living/M = atm // Why isn't this handled by the reagent? - N3X
-										M.ExtinguishMob()
+										M.extinguish()
 									if(atm.on_fire) // For extinguishing objects on fire
 										atm.extinguish()
 									if(atm.molten) // Molten shit.
@@ -437,9 +432,8 @@
 		return ..()
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/detach()
-	..()
 	chassis.proc_res["dyndomove"] = null
-	return
+	..()
 
 /obj/item/mecha_parts/mecha_equipment/jetpack/attach(obj/mecha/M as obj)
 	..()
@@ -803,7 +797,7 @@
 		return chassis.dynattackby(W,user)
 	chassis.log_message("Attacked by [W]. Attacker - [user]")
 	if(prob(chassis.deflect_chance*deflect_coeff))
-		to_chat(user, "<span class='warning'>The [W] bounces off [chassis] armor.</span>")
+		to_chat(user, "<span class='warning'>\The [W] bounces off [chassis] armor.</span>")
 		chassis.log_append_to_last("Armor saved.")
 	else
 		chassis.occupant_message("<span class='red'><b>[user] hits [chassis] with [W].</b></span>")
@@ -875,8 +869,8 @@
 	if(!action_checks(A))
 		return chassis.dynhitby(A)
 	if(prob(chassis.deflect_chance*deflect_coeff) || istype(A, /mob/living) || istype(A, /obj/item/mecha_parts/mecha_tracking))
-		chassis.occupant_message("<span class='notice'>The [A] bounces off the armor.</span>")
-		chassis.visible_message("The [A] bounces off the [chassis] armor")
+		chassis.occupant_message("<span class='notice'>\The [A] bounces off the armor.</span>")
+		chassis.visible_message("\The [A] bounces off the [chassis] armor")
 		chassis.log_append_to_last("Armor saved.")
 		if(istype(A, /mob/living))
 			var/mob/living/M = A

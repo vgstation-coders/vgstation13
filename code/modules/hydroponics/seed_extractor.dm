@@ -1,3 +1,49 @@
+/proc/seedify(obj/item/O, obj/machinery/seed_extractor/extractor = null, mob/living/user = null)
+	if(!O)
+		CRASH("Something called seedify() without anything to make seeds of.")
+
+	var/min_seeds = 1
+	var/max_seeds = 4
+	var/seedloc = O.loc
+	var/datum/seed/new_seed_type
+
+	if(extractor)
+		seedloc = get_turf(extractor)
+		min_seeds = extractor.min_seeds
+		max_seeds = extractor.max_seeds
+
+	var/produce = rand(min_seeds,max_seeds)
+
+	if(istype(O, /obj/item/weapon/grown))
+		var/obj/item/weapon/grown/F = O
+		if(F.plantname)
+			new_seed_type = SSplant.seeds[F.plantname]
+	else
+		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
+			if(F.plantname)
+				new_seed_type = SSplant.seeds[F.plantname]
+		else
+			var/obj/item/F = O
+			if(F.nonplant_seed_type)
+				while(min_seeds <= produce)
+					new F.nonplant_seed_type(seedloc)
+					min_seeds++
+				qdel(F)
+				return TRUE
+
+	if(new_seed_type)
+		while(min_seeds <= produce)
+			var/obj/item/seeds/seeds = new(seedloc)
+			seeds.seed_type = new_seed_type.name
+			seeds.update_seed()
+			min_seeds++
+	else
+		return FALSE
+
+	qdel(O)
+	return TRUE
+
 /obj/machinery/seed_extractor
 	name = "seed extractor"
 	desc = "Extracts and bags seeds from produce."
@@ -5,6 +51,8 @@
 	icon_state = "sextractor"
 	density = 1
 	anchored = 1
+	light_range_on = 2
+	light_color = LIGHT_COLOR_CYAN
 	var/piles = list()
 
 	var/min_seeds = 1 //better manipulators improve this
@@ -29,6 +77,11 @@
 	)
 
 	RefreshParts()
+	update_icon()
+
+/obj/machinery/seed_extractor/power_change()
+	..()
+	update_icon()
 
 /obj/machinery/seed_extractor/RefreshParts()
 	var/B=0
@@ -113,6 +166,14 @@
 		return
 
 	..()
+
+/obj/machinery/seed_extractor/update_icon()
+	if(stat & (FORCEDISABLE|NOPOWER))
+		icon_state = "sextractor-off"
+		kill_moody_light()
+	else
+		icon_state = "sextractor"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_sextractor")
 
 //Code shamelessly ported over and adapted from tgstation's github repo, PR #2973, credit to Kelenius for the original code
 /datum/seed_pile //Maybe there's a better way to do this.
@@ -220,7 +281,7 @@
 					dat += "<span title=\"This plant is carnivorous and poses a significant threat to living things around it.\">CARN </span>"
 			switch(P.seed.juicy)
 				if(1)
-					dat += "<span title=\"This plant's fruit is soft-skinned and abudantly juicy\">SPLAT</span>"
+					dat += "<span title=\"This plant's fruit is soft-skinned and abudantly juicy\">SPLAT </span>"
 				if(2)
 					dat += "<span title=\"This plant's fruit is excessively soft and juicy.\">SLIP </span>"
 			if(P.seed.immutable > 0)
@@ -229,8 +290,12 @@
 				dat += "<span title=\"This plant is a highly specialized hematophage that will only draw nutrients from blood.\">BLOOD </span>"
 			if(P.seed.alter_temp)
 				dat += "<span title=\"This plant will gradually alter the local room temperature to match it's ideal habitat.\">TEMP </span>"
+			if(P.seed.consume_gasses.len)
+				dat += "<span title=\"This plant will consume gas from the environment.\">CGAS </span>"
+			if(P.seed.gas_absorb)
+				dat += "<span title=\"This plant will convert consumed gas to reagents.\">ABSOR </span>"
 			if(P.seed.exude_gasses.len)
-				dat += "<span title=\"This plant will exude gas into the environment.\">GAS </span>"
+				dat += "<span title=\"This plant will exude gas into the environment.\">EGAS </span>"
 			if(P.seed.thorny)
 				dat += "<span title=\"This plant possesses a cover of sharp thorns.\">THORN </span>"
 			if(P.seed.stinging)

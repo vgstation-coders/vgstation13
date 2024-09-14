@@ -1,7 +1,7 @@
 /datum/event/spacevine
 
 /datum/event/spacevine/can_start(var/list/active_with_role)
-	if(active_with_role.len > 6)
+	if(active_with_role["Any"] > 6)
 		return 20
 	return 0
 
@@ -11,7 +11,7 @@
 /datum/event/biomass
 
 /datum/event/biomass/can_start(var/list/active_with_role)
-	if(active_with_role.len > 6)
+	if(active_with_role["Any"] > 6)
 		return 15
 	return 0
 

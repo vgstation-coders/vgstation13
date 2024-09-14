@@ -790,7 +790,7 @@
 /area/shuttle/brokeufo/start)
 "WO" = (
 /obj/structure/table/reinforced,
-/obj/item/weapon/storage/pill_bottle/zambiscuits,
+/obj/item/weapon/zambiscuit_package,
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit_butter,
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit,
 /obj/item/weapon/reagent_containers/food/snacks/zambiscuit,

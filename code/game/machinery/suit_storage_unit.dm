@@ -29,7 +29,8 @@
 	var/image/openimage
 	var/image/closeimage
 
-	machine_flags = SCREWTOGGLE | EMAGGABLE
+	machine_flags = SCREWTOGGLE | EMAGGABLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | WELD_FIXED
+	state=2
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
@@ -222,7 +223,13 @@
 	var/dat
 	if(..())
 		return
+	if(!anchored)
+		to_chat(user, "The [src] must be secured to the floor first.")
+		return
 	if(stat & (FORCEDISABLE|NOPOWER))
+		return
+	if(state!=2)
+		to_chat(user, "The [src] must be securely welded to the floor first.")
 		return
 	if(emagged)
 
@@ -298,6 +305,8 @@
 /obj/machinery/suit_storage_unit/Topic(href, href_list) //I fucking HATE this proc
 	if(..())
 		return 1
+	if((!anchored) || (state!=2) ) //no opening this if it's not completely secured
+		return
 	else
 		usr.set_machine(src)
 		if (href_list["toggleUV"])
@@ -644,14 +653,28 @@
 			stat &= !BROKEN
 			emagged = FALSE
 			to_chat(user, "<span class='notice'>You repair the blown out electronics in the suit storage unit.</span>")
-	if((stat & (FORCEDISABLE|NOPOWER)) && iscrowbar(I) && !islocked)
+	if((stat & (FORCEDISABLE|NOPOWER)) && iscrowbar(I) && !islocked && ((helmet) || (suit) || (boots) || (mask)) )
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		to_chat(user, "<span class='notice'>You begin prying the equipment out of the suit storage unit</span>")
 		if(do_after(user, src,20))
 			dump_everything()
 			update_icon()
-	if(stat & (FORCEDISABLE|NOPOWER))
+		update_icon()
+		updateUsrDialog() //prevents refiring of the crowbar action to disassemble it when prying out equipment with an open pannel.
 		return
+	if(iswelder(I)& (isUV | issuperUV) )
+		to_chat(user, "<span class='warning'>Wait for the [src] to finish cauterising.</span>")
+		return
+	if (iscrowbar(I) & panel_open)
+		if((occupant) || (helmet) || (suit) || (boots) || (mask)) //don't allow deconstruction if there's anything inside
+			to_chat(usr, "<span class='red'>Empty the [src] before disassembling it.</span>")
+			return
+		return ..()
+	if(stat & (FORCEDISABLE|NOPOWER))
+		if(!(I.is_wrench(user) | iscrowbar(I) | I.is_screwdriver(user) ))
+			return
+		else //still allow wrenches, screwdrivers, and crowbars to interact with it while it's unpowered.
+			return ..()
 	if(..())
 		return 1
 	if ( istype(I, /obj/item/weapon/grab) )
@@ -755,3 +778,20 @@
 			R.cell.give(30)
 
 //////////////////////////////REMINDER: Make it lock once you place some fucker inside.
+
+
+/obj/machinery/suit_storage_unit/New()
+	. = ..()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/suit_storage_unit,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/weapon/stock_parts/capacitor,
+		/obj/item/weapon/stock_parts/console_screen
+	)
+
+	RefreshParts()
+
+

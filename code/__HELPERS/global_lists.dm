@@ -17,7 +17,7 @@ var/global/list/areas = list()
 var/global/list/active_components = list() 	//List of all components that have registered for updating
 
 var/global/list/chemical_reactions_list				//list of all /datum/chemical_reaction datums. Used during chemical reactions
-var/global/list/chemical_reagents_list				//list of all /datum/reagent datums indexed by reagent id. Used by chemistry stuff
+var/global/list/datum/reagent/chemical_reagents_list	//list of all /datum/reagent datums indexed by reagent id. Used by chemistry stuff
 var/global/list/landmarks_list = list()				//list of all landmarks created
 var/global/list/surgery_steps = list()				//list of all surgery steps  |BS12
 var/global/list/mechas_list = list()				//list of all mechs. Used by hostile mobs target tracking.
@@ -38,6 +38,7 @@ var/global/list/table_recipes = list() //list of all table craft recipes
 var/global/list/med_hud_users = list() //list of all entities using a medical HUD.
 var/global/list/sec_hud_users = list() //list of all entities using a security HUD.
 var/list/diagnostic_hud_users = list() // list of all entities using a diagnostic HUD.
+var/list/wage_hud_users = list() // list of all entities using a wage HUD.
 
 //Lists for things that make various sounds
 var/global/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg') //list of sounds a fire makes

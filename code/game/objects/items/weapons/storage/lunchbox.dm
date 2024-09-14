@@ -4,7 +4,7 @@
 /obj/item/weapon/storage/lunchbox/plastic/nt/proc/pickfood()
 	var/entree = pick(list(/obj/item/weapon/reagent_containers/food/snacks/sandwich,
 								/obj/item/weapon/reagent_containers/food/snacks/grilledcheese,
-								/obj/item/weapon/reagent_containers/food/snacks/jellysandwich,
+								/obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry,
 								/obj/item/weapon/reagent_containers/food/snacks/pbj,
                                 /obj/item/weapon/reagent_containers/food/snacks/meatbreadslice,
 								/obj/item/weapon/reagent_containers/food/snacks/monkeyburger,
@@ -28,7 +28,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/potatosalad,
 								/obj/item/weapon/reagent_containers/food/snacks/herbsalad))
 
-	new entree(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/E = new entree(src)
+	if(E.is_empty())
+		E.reagents.add_reagent(NUTRIMENT, 6)
 
 	var/snack = pick(list(/obj/item/weapon/reagent_containers/food/snacks/fries/cone,
                                 /obj/item/weapon/reagent_containers/food/snacks/sosjerky,
@@ -46,9 +48,11 @@
 								/obj/item/weapon/reagent_containers/food/snacks/chips/cookable/hot,
 								/obj/item/weapon/reagent_containers/food/snacks/fruitsalad))
 
-	new snack(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/S = new snack(src)
+	if(S.is_empty())
+		S.reagents.add_reagent(NUTRIMENT, 3)
 
-	var/sweet = pick(list(/obj/item/weapon/reagent_containers/food/snacks/donut,
+	var/sweet = pick(list(/obj/item/weapon/reagent_containers/food/snacks/donut/normal,
 								/obj/item/weapon/reagent_containers/food/snacks/donut/jelly,
 								/obj/item/weapon/reagent_containers/food/snacks/candiedapple,
 								/obj/item/weapon/reagent_containers/food/snacks/applecakeslice,
@@ -68,7 +72,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
 								/obj/item/weapon/reagent_containers/food/snacks/ricepudding))
 
-	new sweet(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/D = new sweet(src)
+	if(D.is_empty())
+		D.reagents.add_reagent(NUTRIMENT, 3)
 
 	var/drink = pick(list(/obj/item/weapon/reagent_containers/food/drinks/coffee,
                                 /obj/item/weapon/reagent_containers/food/drinks/latte,
@@ -130,7 +136,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/curry/crab,
 								/obj/item/weapon/reagent_containers/food/snacks/curry/lemon))
 
-	new entree_syndie(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/E = new entree_syndie(src)
+	if(E.is_empty())
+		E.reagents.add_reagent(NUTRIMENT, 9)
 
 	var/snack_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/cheesyfries/punnet,
                                 /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/nuclear,
@@ -156,7 +164,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/eggplantparm,
 								/obj/item/weapon/reagent_containers/food/snacks/risotto))
 
-	new snack_syndie(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/S = new snack_syndie(src)
+	if(S.is_empty())
+		S.reagents.add_reagent(NUTRIMENT, 5)
 
 	var/sweet_syndie = pick(list(/obj/item/weapon/reagent_containers/food/snacks/cinnamonroll,
 								/obj/item/weapon/reagent_containers/food/snacks/jectie,
@@ -180,7 +190,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/cookie/holiday,
 								/obj/item/weapon/reagent_containers/food/snacks/ricepudding))
 
-	new sweet_syndie(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/D = new sweet_syndie(src)
+	if(D.is_empty())
+		D.reagents.add_reagent(NUTRIMENT, 5)
 
 	var/drink_syndie = pick(list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka,
 								/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white,
@@ -266,7 +278,9 @@
 								/obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie,
 								/obj/item/weapon/reagent_containers/food/snacks/spidereggsham))
 
-	new entree_zam(src)
+	var/obj/item/weapon/reagent_containers/food/snacks/E = new entree_zam(src)
+	if(E.is_empty())
+		E.reagents.add_reagent(NUTRIMENT, 6)
 
 	var/snack_zam = pick(list(/obj/item/weapon/reagent_containers/food/snacks/zam_spiderslider/wrapped,
                                 /obj/item/weapon/reagent_containers/food/snacks/zam_mooncheese/wrapped,
@@ -341,13 +355,15 @@
 	fits_max_w_class = 2
 	max_combined_w_class = 14
 	w_class = W_CLASS_MEDIUM
-	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks","/obj/item/weapon/reagent_containers/food/drinks","/obj/item/weapon/reagent_containers/food/condiment","/obj/item/weapon/kitchen/utensil","/obj/item/voucher")
 
 	allow_quick_gather = TRUE
 	allow_quick_empty = TRUE
 	use_to_pickup = TRUE
 
 	var/has_lunch = FALSE
+
+/obj/item/weapon/storage/lunchbox/return_air()//prevents hot food from getting cold while in it.
+	return
 
 // -----------------------------
 //          CARDBOARD LUNCHBOXES
@@ -425,7 +441,7 @@
 	..()
 	if(has_lunch == TRUE)
 		pickfood()
-	switch(rand(1,14))
+	switch(rand(1,18))
 		if(1)
 			name = "Ian lunchbox"
 			desc = "A little plastic lunchbox. This one has a portrait of Ian on the side."
@@ -496,6 +512,39 @@
 			desc = "A little plastic lunchbox. This one has a picture of Amy decorating the side, the nymphomaniac urban legend of Nanotrasen space stations."
 			icon_state = "lunchbox_pinup"
 			item_state = "toolbox_lightblue"
+		if(15)
+			name = "Ablative lunchbox"
+			desc = "A little plastic lunchbox. This one is has a decorative design similar to an ablative vest on the side."
+			icon_state = "lunchbox_ablative"
+			item_state = "toolbox_lightblue2"
+		if(16)
+			name = "Nuclear lunchbox"
+			desc = "A little plastic lunchbox. This one has a design on the side that looks similar to a nuclear fission device."
+			icon_state = "lunchbox_nuke"
+			item_state = "toolbox_brown"
+		if(17)
+			name = "ERT lunchbox"
+			desc = "A little plastic lunchbox. This one has a scene decorating the side that depicts four ERT members striking action poses."
+			icon_state = "lunchbox_ert"
+			item_state = "toolbox_lightblue"
+		if(18)
+			name = "Shuttle lunchbox"
+			desc = "A little plastic lunchbox. This one is decorated to look like a little escape shuttle."
+			icon_state = "lunchbox_shuttle"
+			item_state = "toolbox_lightblue2"
+
+/obj/item/weapon/storage/lunchbox/plastic/nt/random/bullet_act(var/obj/item/projectile/P) // Ablative lunchboxes protect lunch from lasers!
+	if(icon_state == "lunchbox_ablative")
+		if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
+			visible_message("<span class='danger'>The [P.name] gets reflected by the [src]!</span>")
+
+			if(!istype(P, /obj/item/projectile/beam)) //beam has its own rebound-call-logic
+				P.reflected = 1
+				P.rebound(src)
+
+			return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
+
+	return (..(P))
 
 /obj/item/weapon/storage/lunchbox/plastic/nt/random/pre_filled
 	has_lunch = TRUE

@@ -7,33 +7,18 @@
 #define CHECKED_OUT 2
 #define CHECKOUT_BOOK 3
 #define EXTERNAL_ARCHIVE 4
-#define UPLOAD_NEW_TILE 5
+#define UPLOAD_NEW_TITLE 5
 #define PRINT_BIBLE 6
-#define PRINT_NEW_BOOK 7
-#define PRINT_MANUAL 7 // ?????????????????
+#define PRINT_MANUAL 7
 #define FORBIDDEN_LORE 8
-
-#define MAIN_MENU_STR "0"
-#define INVENTORY_STR "1"
-#define CHECKED_OUT_STR "2"
-#define CHECKOUT_BOOK_STR "3"
-#define EXTERNAL_ARCHIVE_STR "4"
-#define UPLOAD_NEW_TILE_STR "5"
-#define PRINT_BIBLE_STR "6"
-#define PRINT_NEW_BOOK_STR "7"
-#define PRINT_MANUAL_STR "7" // ?????????????????
-#define FORBIDDEN_LORE_STR "8"
-
+#define PRINT_QUEUE 9
 
 /obj/machinery/computer/library/checkout
 	name = "Check-In/Out Computer"
 	icon = 'icons/obj/library.dmi'
 	icon_state = "computer"
-	anchored = 1
-	density = 1
-	req_access = list(access_library) //This access requirement is currently only used for the delete button showing
+	req_access = list(access_library) //This access requirement is currently only used for the delete button showing and importing inventories
 	var/arcanecheckout = 0
-	//var/screenstate = 0 // 0 - Main Menu, 1 - Inventory, 2 - Checked Out, 3 - Check Out a Book
 	var/buffer_book
 	var/buffer_mob
 	var/upload_category = "Fiction"
@@ -42,16 +27,28 @@
 	var/checkoutperiod = 5 // In minutes
 	var/obj/machinery/libraryscanner/scanner // Book scanner that will be used when uploading books to the Archive
 
-	var/bibledelay = 0 // LOL NO SPAM (1 minute delay) -- Doohl
+	var/busy = 0
+	var/book_cooldown = 6 SECONDS
+	var/max_queue_size = 10
+	var/list/printing_queue = list()
 	var/booklist
 	pass_flags = PASSTABLE
-	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK
+	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | SHUTTLEWRENCH
 
 	hack_abilities = list(
 		/datum/malfhack_ability/toggle/disable,
 		/datum/malfhack_ability/oneuse/overload_quiet,
 		/datum/malfhack_ability/oneuse/emag
 	)
+
+	var/last_id_processed = -1
+
+/obj/machinery/computer/library/checkout/Destroy()
+	QDEL_LIST(printing_queue)
+	checkouts.Cut()
+	inventory.Cut()
+	scanner = null
+	..()
 
 /obj/machinery/computer/library/checkout/attack_hand(var/mob/user)
 	if(..())
@@ -72,9 +69,10 @@
 				<li><A href='?src=\ref[src];switchscreen=[CHECKED_OUT]'>View Checked Out Inventory</A></li>
 				<li><A href='?src=\ref[src];switchscreen=[CHECKOUT_BOOK]'>Check out a Book</A></li>
 				<li><A href='?src=\ref[src];switchscreen=[EXTERNAL_ARCHIVE]'>Connect to External Archive</A></li>
-				<li><A href='?src=\ref[src];switchscreen=[UPLOAD_NEW_TILE]'>Upload New Title to Archive</A></li>
+				<li><A href='?src=\ref[src];switchscreen=[UPLOAD_NEW_TITLE]'>Upload New Title to Archive</A></li>
 				<li><A href='?src=\ref[src];switchscreen=[PRINT_BIBLE]'>Print a Bible</A></li>
-				<li><A href='?src=\ref[src];switchscreen=[PRINT_MANUAL]'>Print a Manual</A></li>"}
+				<li><A href='?src=\ref[src];switchscreen=[PRINT_MANUAL]'>Print a Manual</A></li>
+				<li><A href='?src=\ref[src];switchscreen=[PRINT_QUEUE]'>View Queue</A></li>"}
 			if(src.emagged)
 				dat += "<li><A href='?src=\ref[src];switchscreen=[FORBIDDEN_LORE]'>Access the Forbidden Lore Vault</A></li>"
 			dat += "</ol>"
@@ -95,11 +93,9 @@
 			dat += "<h3>Checked Out Books</h3><BR>"
 			for(var/datum/borrowbook/b in checkouts)
 				var/timetaken = world.time - b.getdate
-				//timetaken *= 10
 				timetaken /= 600
 				timetaken = round(timetaken)
 				var/timedue = b.duedate - world.time
-				//timedue *= 10
 				timedue /= 600
 				if(timedue <= 0)
 					timedue = "<font color=red><b>(OVERDUE)</b> [timedue]</font>"
@@ -134,10 +130,37 @@
 				</ul>"}
 				var/pagelist = get_pagelist()
 
+				var/list/category_elements = list()
+				for(var/i=1,i<=library_section_names.len, ++i)
+					category_elements += "<option value='[library_section_names[i]]'>[library_section_names[i]]</option>"
+				category_elements = category_elements.Join("")
+
+				var/script = {"
+					<script type="text/javascript">
+						function toggleForm() {
+							var form = document.getElementById('category-form');
+							if (form.style.display === 'none' || form.style.display === '') {
+								form.style.display = 'block';
+							} else {
+								form.style.display = 'none';
+							}
+						}
+					</script>"}
+
 				dat += {"<h2>Search Settings</h2><br />
 					<A href='?src=\ref[src];settitle=1'>Filter by Title: [query.title]</A><br />
-					<A href='?src=\ref[src];setcategory=1'>Filter by Category: [query.category]</A><br />
 					<A href='?src=\ref[src];setauthor=1'>Filter by Author: [query.author]</A><br />
+					<A href="javascript:toggleForm();">Filter by Categories: [query.categories ? query.categories.Join(", ") : ""]</A><br />
+					<form id='category-form' name='setcategories' action='?src=\ref[src]' method='get' style='display:none; width: 130px'>
+						<input type='hidden' name='src' value='\ref[src]'>
+						<input type='hidden' name='setcategories' value='1'>
+						<select name='categories' multiple style='width: 100%; height: 80px; display: inline-block;'>
+							[category_elements]
+						</select>
+						<input type='submit' value='Set Categories' onclick='toggleForm();'>
+					</form>
+					[script]
+					[query.order_by ? "Sorting By: [uppertext(copytext(query.order_by, 1, 2))][copytext(query.order_by, 2)] <A href='?src=\ref[src];clearsort=1'>Remove Sort</A><br />" : ""]
 					<A href='?src=\ref[src];search=1'>\[Start Search\]</A><br />"}
 				dat += pagelist
 
@@ -149,23 +172,24 @@
 
 				dat += {"<table border=\"0\">
 					<tr>
-						<td>Author</td>
-						<td>Title</td>
-						<td>Category</td>
+						<td><A href='?src=\ref[src];orderby=author'>Author</A> [get_sort_arrow("author")]</td>
+						<td><A href='?src=\ref[src];orderby=title'>Title</A> [get_sort_arrow("title")]</td>
+						<td style='white-space: nowrap;'><A href='?src=\ref[src];orderby=category'>Category</A> [get_sort_arrow("category")]</td>
 						<td>Description</td>
 						<td>Controls</td>
 					</tr>"}
 
 				for(var/datum/cachedbook/CB in get_page(page_num))
+					if(CB) last_id_processed = CB.id
 					var/author = CB.author
-					var/controls =  "<A href='?src=\ref[src];preview=[CB]'>\[Preview\]</A> <A href='?src=\ref[src];id=[CB.id]'>\[Order\]</A>"
+					var/controls =  "<A href='?src=\ref[src];preview=[CB.id]'>\[Preview\]</A> <A href='?src=\ref[src];id=[CB.id]'>\[Order\]</A>"
 					if(isAdminGhost(user))
 						author += " (<A style='color:red' href='?src=\ref[src];delbyckey=[ckey(CB.ckey)]'>[ckey(CB.ckey)])</A>)"
 					if(isAdminGhost(user) || allowed(user))
 						controls +=  " <A style='color:red' href='?src=\ref[src];del=[CB.id]'>\[Delete\]</A>"
 					dat += {"<tr>
 						<td>[author]</td>
-						<td>[CB.title]</td>
+						<td>[CB.title] ([CB.id])</td>
 						<td>[CB.category]</td>
 						<td>[CB.description]</td>
 						<td>
@@ -176,10 +200,10 @@
 				dat += "</table><br />[pagelist]"
 
 			dat += "<br /><A href='?src=\ref[src];switchscreen=[MAIN_MENU]'>(Return to main menu)</A><BR>"
-		if(UPLOAD_NEW_TILE)
+		if(UPLOAD_NEW_TITLE)
 			dat += "<h3>Upload a New Title</h3>"
 			if(!scanner)
-				for(var/obj/machinery/libraryscanner/S in range(9))
+				for(var/obj/machinery/libraryscanner/S in range(9, src))
 					scanner = S
 					break
 			if(!scanner)
@@ -223,6 +247,14 @@
 				Are you absolutely sure you want to proceed? EldritchTomes Inc. takes no responsibilities for loss of sanity resulting from this action.<p>
 				<A href='?src=\ref[src];arccheckout=1'>Yes.</A><BR>
 				<A href='?src=\ref[src];switchscreen=[MAIN_MENU]'>No.</A><BR>"}
+
+		if(PRINT_QUEUE)
+			dat += "<h3>Printer Queue</h3>"
+			dat += "   <A href='?src=\ref[src];clearqueue=1'>Stop the presses!</A><BR>"
+			dat += "   <A href='?src=\ref[src];import_template=1'>Import Template</A><BR><BR><BR>"
+			for(var/obj/item/B in printing_queue)
+				dat+="[B.name] <A href='?src=\ref[src];delqueue=[printing_queue.Find(B)]'>(Delete)</A><BR>"
+			dat+= "<A href='?src=\ref[src];switchscreen=[MAIN_MENU]'>(Return to main menu)</A>"
 
 	var/datum/browser/B = new /datum/browser/clean(user, "library", "Book Inventory Management")
 	B.set_content(dat)
@@ -271,18 +303,38 @@
 			query.title = sanitize(newtitle)
 		else
 			query.title = null
-	if(href_list["setcategory"])
-		var/newcategory = input("Choose a category to search for:") in (list("Any") + library_section_names)
-		if(newcategory == "Any")
-			query.category = null
+	if(href_list["setcategories"])
+		var/list/newcategories
+		if(!islist(href_list["categories"]))
+			newcategories = list(href_list["categories"])
 		else
-			query.category = sanitize(newcategory)
+			newcategories = href_list["categories"]
+		if(newcategories)
+			if("Any" in newcategories)
+				query.categories = null
+			else
+				query.categories = list()
+				for(var/category in newcategories)
+					query.categories += sanitize(category)
+
+
 	if(href_list["setauthor"])
 		var/newauthor = input("Enter an author to search for:") as text|null
 		if(newauthor)
 			query.author = sanitize(newauthor)
 		else
 			query.author = null
+	if(href_list["orderby"])
+		var/neworderby = href_list["orderby"]
+		if(query.order_by == neworderby)
+			query.descending = !query.descending
+		else
+			query.order_by = neworderby
+			query.descending = FALSE
+
+	if(href_list["clearsort"])
+		query.order_by = null
+		query.descending = FALSE
 
 	if(href_list["search"])
 		num_results = src.get_num_results()
@@ -324,57 +376,36 @@
 			return
 
 	if(href_list["switchscreen"])
-		switch(href_list["switchscreen"])
-			if(MAIN_MENU_STR)
-				screenstate = MAIN_MENU
-			if(INVENTORY_STR)
-				screenstate = INVENTORY
-			if(CHECKED_OUT_STR)
-				screenstate = CHECKED_OUT
-			if(CHECKOUT_BOOK_STR)
-				screenstate = CHECKOUT_BOOK
-			if(EXTERNAL_ARCHIVE_STR)
-				screenstate = EXTERNAL_ARCHIVE
-			if(UPLOAD_NEW_TILE_STR)
-				screenstate = UPLOAD_NEW_TILE
-			if(PRINT_BIBLE_STR)
-				if(!bibledelay)
+		var/command = text2num(href_list["switchscreen"])
+		if(command == PRINT_BIBLE)
+			if(!busy || printing_queue.len<max_queue_size)
+				var/obj/item/weapon/storage/bible/B = new
+				B = new(src)
+				if (usr.mind && usr.mind.faith) // The user has a faith
+					var/datum/religion/R = usr.mind.faith
+					var/obj/item/weapon/storage/bible/HB = R.holy_book
+					if (!HB)
+						B = chooseBible(R, usr)
+					else
+						B.icon_state = HB.icon_state
+						B.item_state = HB.item_state
+					B.name = R.bible_name
+					B.my_rel = R
 
-					bibledelay = 1
+				else if (ticker.religions.len) // No faith
+					var/datum/religion/R = input(usr, "Which holy book?") as anything in ticker.religions
+					if(!R.holy_book)
+						return
+					B.icon_state = R.holy_book.icon_state
+					B.item_state = R.holy_book.item_state
+					B.name = R.bible_name
+					B.my_rel = R
+				printbook(B)
 
-					var/obj/item/weapon/storage/bible/B = new
-					B = new(src.loc)
-					if (usr.mind && usr.mind.faith) // The user has a faith
-						var/datum/religion/R = usr.mind.faith
-						var/obj/item/weapon/storage/bible/HB = R.holy_book
-						if (!HB)
-							B = chooseBible(R, usr)
-						else
-							B.icon_state = HB.icon_state
-							B.item_state = HB.item_state
-						B.name = R.bible_name
-						B.my_rel = R
-
-					else if (ticker.religions.len) // No faith
-						var/datum/religion/R = input(usr, "Which holy book?") as anything in ticker.religions
-						if(!R.holy_book)
-							return
-						B.icon_state = R.holy_book.icon_state
-						B.item_state = R.holy_book.item_state
-						B.name = R.bible_name
-						B.my_rel = R
-					B.forceMove(src.loc)
-
-					spawn(60)
-						bibledelay = 0
-
-				else
-					visible_message("<b>[src]</b>'s monitor flashes, \"Bible printer currently unavailable, please wait a moment.\"")
-
-			if(PRINT_NEW_BOOK_STR)
-				screenstate = PRINT_NEW_BOOK
-			if(FORBIDDEN_LORE_STR)
-				screenstate = FORBIDDEN_LORE
+			else
+				visible_message("<b>[src]</b>'s monitor flashes, \"Printer queue is full.\"")
+		else
+			screenstate = command
 	if(href_list["arccheckout"])
 		if(src.emagged)
 			src.arcanecheckout = 1
@@ -442,7 +473,6 @@
 						if(!response)
 							to_chat(usr, query.ErrorMsg())
 						else
-							world.log << response
 							if (scanner.cache)
 								log_admin("[usr.name]/[usr.key] has uploaded the book titled [scanner.cache.name], [length(scanner.cache.dat)] characters in length")
 								message_admins("[key_name_admin(usr)] has uploaded the book titled [scanner.cache.name], [length(scanner.cache.dat)] characters in length")
@@ -458,27 +488,26 @@
 				return
 
 		if(!SSdbcore.IsConnected())
-			alert("Connection to Archive has been severed. Aborting.")
+			to_chat(usr,"<span class='warning'>Connection to Archive has been severed. Aborting.</span>")
 			return
 
 		var/datum/cachedbook/newbook = getItemByID(href_list["id"], library_table) // Sanitized in getItemByID
 		if(!newbook || !newbook.id)
-			alert("No book found")
+			to_chat(usr,"<span class='warning'>No book found!</span>")
 			return
 		if((newbook.forbidden == 2 && !emagged) || newbook.forbidden == 1)
-			alert("This book is forbidden and cannot be printed.")
+			to_chat(usr,"<span class='warning'>This book is forbidden and cannot be printed!</span>")
 			return
+		if(busy && printing_queue.len>=max_queue_size)
+			to_chat(usr,"<span class='warning'>The printer queue is full!</span>")
+			return
+		make_external_book(newbook, FALSE)
 
-		if(bibledelay)
-			for (var/mob/V in hearers(src))
-				V.show_message("<b>[src]</b>'s monitor flashes, \"Printer unavailable. Please allow a short time before attempting to print.\"")
-		else
-			bibledelay = 1
-			spawn(60)
-				bibledelay = 0
-			make_external_book(newbook)
 	if(href_list["manual"])
 		if(!href_list["manual"])
+			return
+		if(busy && printing_queue.len>=max_queue_size)
+			to_chat(usr,"<span class='warning'>The printer queue is full!</span>")
 			return
 		var/manual_id = text2num(href_list["manual"])
 		var/the_manual_type
@@ -491,30 +520,95 @@
 		if (!the_manual_type)
 			visible_message("<b>[src]</b>'s monitor flashes, \"The manual requested cannot be found in the database. Please contact an administrator.\"")
 			return
-
-		if(bibledelay)
-			for (var/mob/V in hearers(src))
-				V.show_message("<b>[src]</b>'s monitor flashes, \"Printer unavailable. Please allow a short time before attempting to print.\"")
-		else
-			bibledelay = 1
-			spawn(60)
-				bibledelay = 0
-			new the_manual_type(get_turf(src))
+		var/obj/newmanual = new the_manual_type(src)
+		printbook(newmanual)
 
 	if(href_list["preview"])
-		var/datum/cachedbook/PVB = href_list["preview"]
+		var/datum/cachedbook/PVB = getItemByID(href_list["preview"], library_table)
 		if(!istype(PVB) || PVB.programmatic)
 			return
-		var/list/_http = world.Export("http://ss13.moe/index.php/book?id=[PVB.id]")
+		/*var/list/_http = world.Export("[config.library_url]?id=[PVB.id]")
 		if(!_http || !_http["CONTENT"])
 			return
 		var/http = file2text(_http["CONTENT"])
 		if(!http)
+			return*/
+		usr << browse("<TT><I>[PVB.title] by [PVB.author].</I></TT> <BR>" + "[PVB.content]", "window=[PVB.title];size=600x800")
+
+	if(href_list["delqueue"])
+		var/slot = text2num(href_list["delqueue"])
+		var/obj/O = printing_queue[slot]
+		if(O)
+			printing_queue-=O
+			qdel(O)
+
+	if(href_list["clearqueue"])
+		for(var/obj/O in printing_queue)
+			printing_queue-=O
+			qdel(O)
+
+	if(href_list["import_template"])
+		if(!SSdbcore.IsConnected())
+			to_chat(usr,"<span class='warning'>Connection to Archive has been severed. Aborting.</span>")
 			return
-		usr << browse("<TT><I>[PVB.title] by [PVB.author].</I></TT> <BR>" + "[http]", "window=[PVB.title];size=600x800")
+		if(printing_queue.len)
+			to_chat(usr,"<span class='warning>Cannot load a template while there is a printing queue.</span>")
+			return
+		if(!allowed(usr))
+			to_chat(usr,"<span class='warning>Large print jobs are only permitted for library staff.</span>")
+			return
+		var/code = input("Input exported library template code:","Large Order","") as message|null
+		if(!code || (!issilicon(usr) && !Adjacent(usr)))
+			return
+		var/list/full_template = splittext(code,",")
+		if(full_template.len>10)
+			var/confirm=alert("Are you sure you wish to queue this print job? It is [full_template.len] items long.","Large Order","Yes","No")
+			if(confirm == "No")
+				return
+		for(var/element in full_template)
+			var/getid = text2num(element)
+			if(!isnum(getid))
+				continue
+			var/datum/cachedbook/newbook = getItemByID(getid, library_table) // Sanitized in getItemByID
+			if(!newbook || !newbook.id)
+				continue
+			if((newbook.forbidden == 2 && !emagged) || newbook.forbidden == 1)
+				continue
+			make_external_book(newbook, TRUE)
+			screenstate = PRINT_QUEUE
+	/*if(href_list["export_template"])
+		var/output_code = ""
+		var(for/obj/item/I in inventory)
+			output_code += get_id_by_content(I)
+
+		Needs query support
+	*/
+
 
 	add_fingerprint(usr)
 	updateUsrDialog()
+
+//If already printing but less than max_queue_size items in queue, attempts to add to queue
+//If not busy, prints immediately and initiates loop
+//Forcequeue: add it even if already over max queue size
+/obj/machinery/computer/library/checkout/proc/printbook(obj/item/B, forcequeue=FALSE)
+	if(busy)
+		if(forcequeue || (printing_queue.len<max_queue_size))
+			printing_queue+=B
+		return //Sanity
+	playsound(loc, "sound/effects/dotmatrixprinter.ogg", 40, 1)
+	anim(target = src, a_icon = 'icons/obj/library.dmi', flick_anim = "computer_ani")
+	busy = TRUE
+	spawn(1.4 SECONDS)
+		B.forceMove(loc)
+	spawn(book_cooldown)
+		busy = FALSE
+		if(printing_queue.len)
+			var/obj/item/I = printing_queue[1]
+			printing_queue-=I
+			printbook(I)
+			updateUsrDialog()
+
 
 /obj/machinery/computer/library/checkout/proc/delete_item(var/datum/cachedbook/B, mob/user)
 	if(!istype(B) || !user)
@@ -537,24 +631,24 @@
 
 /obj/machinery/computer/library/checkout/proc/request_delete_item(var/datum/cachedbook/B, mob/requester)
 	log_admin("[src]: [requester.name]/[requester.key] requested [B.title] be deleted permanently.")
-	var/raw = "[src]: Request to permanently delete [B] from the library database. <A href='?src=\ref[src];preview=[B]'>\[Preview\]</A> <A style='color:red' href='?src=\ref[src];del=[B.id]'>\[Delete\]</A>"
+	var/raw = "[src]: Request to permanently delete [B] from the library database. <A href='?src=\ref[src];preview=[B.id]'>\[Preview\]</A> <A style='color:red' href='?src=\ref[src];del=[B.id]'>\[Delete\]</A>"
 	var/formal = "<span class='notice'><b>  [src]: [key_name(requester, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[requester]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[requester]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[requester]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[requester]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) (<a href='?_src_=holder;role_panel=\ref[requester]'>RP</a>) (<A HREF='?_src_=holder;BlueSpaceArtillery=\ref[requester]'>BSA</A>) (<A HREF='?_src_=holder;CentcommReply=\ref[requester]'>RPLY</A>):</b> [raw]</span>"
 	send_prayer_to_admins(formal, raw, 'sound/effects/msn.ogg', "Centcomm", key_name(requester), get_turf(requester))
 
 /obj/machinery/computer/library/checkout/proc/get_scanner_title(var/obj/machinery/libraryscanner/LS)
-	return LS.cache.title
+	return LS.cache.title || "Untitled Book"
 
 /obj/machinery/computer/library/checkout/proc/get_scanner_author(var/obj/machinery/libraryscanner/LS)
-	return LS.cache.author
+	return LS.cache.author || "Anonymous"
 
 /obj/machinery/computer/library/checkout/proc/get_scanner_dat(var/obj/machinery/libraryscanner/LS)
-	return LS.cache.dat
+	return LS.cache.dat || "..."
 
 /obj/machinery/computer/library/checkout/proc/get_scanner_category(var/obj/machinery/libraryscanner/LS, var/upload_category)
-	return upload_category
+	return upload_category || "Fiction"
 
 /obj/machinery/computer/library/checkout/proc/get_scanner_desc(var/obj/machinery/libraryscanner/LS)
-	return LS.cache.book_desc
+	return LS.cache.book_desc || "No description available"
 
 /obj/machinery/computer/library/checkout/proc/has_cached_data()
 	return scanner.cache
@@ -563,44 +657,36 @@
  * Library Scanner
  */
 
-/obj/machinery/computer/library/checkout/proc/make_external_book(var/datum/cachedbook/newbook)
+/obj/machinery/computer/library/checkout/proc/make_external_book(var/datum/cachedbook/newbook, forceprint = FALSE)
 	if(!newbook || !newbook.id)
 		return
-	var/obj/item/weapon/book/B = new newbook.path(src.loc)
-	B.icon_state = "book[rand(1,9)]"
-	B.item_state = B.icon_state
+	var/obj/item/weapon/book/B = new newbook.path(src)
+
 	if (!newbook.programmatic)
-		var/list/_http = world.Export("http://ss13.moe/index.php/book?id=[newbook.id]")
+		/*var/list/_http = world.Export("[config.library_url]?id=[newbook.id]")
 		if(!_http || !_http["CONTENT"])
 			return
 		var/http = file2text(_http["CONTENT"])
 		if(!http)
-			return
+			return*/
 		B.name = "Book: [newbook.title]"
 		B.title = newbook.title
 		B.author = newbook.author
-		B.dat = http
-
-	src.visible_message("[src]'s printer hums as it produces a completely bound book. How did it do that?")
+		//B.dat = http
+		B.dat = newbook.content
+		if(newbook.cover)
+			B.icon_state = newbook.cover
+		else
+			B.icon_state = "book[rand(1,9)]"
+	B.item_state = B.icon_state
+	printbook(B, forceprint)
 
 #undef MAIN_MENU
 #undef INVENTORY
 #undef CHECKED_OUT
 #undef CHECKOUT_BOOK
 #undef EXTERNAL_ARCHIVE
-#undef UPLOAD_NEW_TILE
+#undef UPLOAD_NEW_TITLE
 #undef PRINT_BIBLE
-#undef PRINT_NEW_BOOK
 #undef PRINT_MANUAL
 #undef FORBIDDEN_LORE
-
-#undef MAIN_MENU_STR
-#undef INVENTORY_STR
-#undef CHECKED_OUT_STR
-#undef CHECKOUT_BOOK_STR
-#undef EXTERNAL_ARCHIVE_STR
-#undef UPLOAD_NEW_TILE_STR
-#undef PRINT_BIBLE_STR
-#undef PRINT_NEW_BOOK_STR
-#undef PRINT_MANUAL_STR
-#undef FORBIDDEN_LORE_STR

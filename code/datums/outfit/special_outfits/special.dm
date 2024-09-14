@@ -182,7 +182,7 @@
 			slot_head_str = /obj/item/clothing/head/det_hat,
 			slot_s_store_str = /obj/item/weapon/gun/projectile,
 			slot_r_store_str = /obj/item/weapon/cloaking_device,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/monocle,
 		)
 	)
 
@@ -316,7 +316,7 @@
 			slot_gloves_str = /obj/item/clothing/gloves/latex,
 			slot_head_str = /obj/item/clothing/head/welding,
 			slot_ears_str = /obj/item/device/radio/headset,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/monocle,
 			slot_wear_suit_str = /obj/item/clothing/suit/apron,
 			slot_wear_mask_str = /obj/item/clothing/mask/surgical,
 			slot_l_store_str = /obj/item/tool/scalpel,
@@ -354,9 +354,8 @@
 			slot_w_uniform_str = /obj/item/clothing/under/rank/clown,
 			slot_shoes_str = /obj/item/clothing/shoes/clown_shoes,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_head_str = /obj/item/clothing/head/chaplain_hood,
 			slot_ears_str = /obj/item/device/radio/headset,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/monocle,
 			slot_wear_suit_str = /obj/item/clothing/suit/chaplain_hoodie,
 			slot_r_store_str = /obj/item/weapon/bikehorn,
 		),
@@ -484,7 +483,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/combat,
 			slot_gloves_str = /obj/item/clothing/gloves/combat,
 			slot_ears_str = /obj/item/device/radio/headset/heads/captain,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/eyepatch,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/eyepatch,
 			slot_head_str = /obj/item/clothing/head/beret/centcom, // the duality of man
 			slot_wear_suit_str = /obj/item/clothing/suit/armor/swat/officer,
 			slot_wear_mask_str = /obj/item/clothing/mask/cigarette/cigar/havana,
@@ -507,7 +506,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/combat,
 			slot_gloves_str = /obj/item/clothing/gloves/combat,
 			slot_ears_str = /obj/item/device/radio/headset/heads/captain,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/eyepatch,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/eyepatch,
 			slot_head_str = /obj/item/clothing/head/hgpiratecap,
 			slot_wear_suit_str = /obj/item/clothing/suit/hgpirate,
 			slot_wear_mask_str = /obj/item/clothing/mask/cigarette/cigar/havana,
@@ -902,3 +901,58 @@
 		H.update_mutations(0)
 		H.update_inv_w_uniform(0)
 		H.update_inv_wear_suit()
+
+/datum/outfit/special/tribalmale
+	outfit_name = "Male Tribesman"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/leather_rags,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_wear_suit_str = /obj/item/clothing/suit/unathi/mantle,
+		),
+		/datum/species/plasmaman = list(
+			slot_w_uniform_str = /obj/item/clothing/under/leather_rags,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_wear_suit_str = /obj/item/clothing/suit/unathi/robe/plasmaman,
+			slot_head_str = /obj/item/clothing/head/bearpelt/brown/plasmaman,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_back_str = /obj/item/weapon/tank/plasma/plasmaman,
+		),
+		/datum/species/vox = list(
+			slot_w_uniform_str = /obj/item/clothing/under/leather_rags,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_wear_suit_str = /obj/item/clothing/suit/unathi/mantle,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
+			slot_back_str = /obj/item/weapon/tank/nitrogen,
+		),
+	)
+
+/datum/outfit/special/tribalmale/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
+/datum/outfit/special/tribalfemale
+	outfit_name = "Female Tribesman"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/leather_rags,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_wear_suit_str = /obj/item/clothing/suit/unathi/robe,
+		),
+		/datum/species/plasmaman = list(
+			slot_w_uniform_str = /obj/item/clothing/under/leather_rags,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_wear_suit_str = /obj/item/clothing/suit/unathi/robe/plasmaman,
+			slot_head_str = /obj/item/clothing/head/bearpelt/brown/plasmaman,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+		),
+		/datum/species/vox = list(
+			slot_w_uniform_str = /obj/item/clothing/under/leather_rags,
+			slot_shoes_str = /obj/item/clothing/shoes/sandal,
+			slot_wear_suit_str = /obj/item/clothing/suit/unathi/robe,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
+			slot_back_str = /obj/item/weapon/tank/nitrogen,
+		),
+	)
+
+/datum/outfit/special/tribalfemale/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE

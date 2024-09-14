@@ -1,6 +1,6 @@
 
 /mob/living/carbon/hitby(var/obj/item/I, var/speed, var/dir)
-	if(istype(I) && isturf(I.loc) && in_throw_mode) //Only try to catch things while we have throwing mode active (also only items please)
+	if(istype(I) && (isturf(I.loc) || istype(I,/obj/item/weapon/boomerang)) && in_throw_mode) //Only try to catch things while we have throwing mode active (also only items please)
 		if(can_catch(I, speed) && put_in_hands(I))
 			visible_message("<span class='warning'>\The [src] catches \the [I][speed > EMBED_THROWING_SPEED ? ". Wow!" : "!"]</span>")
 			throw_mode_off()
@@ -25,6 +25,7 @@
 /mob/living/carbon/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE, var/flavor)
 	if(!I || !user)
 		return FALSE
+	var/accuracy_modifier = get_total_accuracy_modifier(user, src) //Negative value make it more likely to hit, and the opposite for positive values
 	target_zone = null
 	var/power = I.force
 	if (ishuman(user))
@@ -33,13 +34,20 @@
 	if (crit)
 		power *= CRIT_MULTIPLIER
 	if(def_zone)
-		target_zone = get_zone_with_miss_chance(def_zone, src)
+		target_zone = get_zone_with_miss_chance(def_zone, src, accuracy_modifier)
 	else if(originator)
 		if(ismob(originator))
 			var/mob/M = originator
-			target_zone = get_zone_with_miss_chance(M.zone_sel.selecting, src)
+			target_zone = get_zone_with_miss_chance(M.zone_sel.selecting, src, accuracy_modifier)
 	else
-		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src)
+		target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, src, accuracy_modifier)
+
+	var/missing_due_to_no_limb_text //Offers an unique missing sound message to clue players in as to why they missed
+	if(ishuman(src)) //Human check, because it isn't easy to override all this code
+		var/datum/organ/external/affecting = get_organ(target_zone)
+		if(affecting.status & ORGAN_DESTROYED) //Target zone ended up on a missing limb, count it as a miss
+			missing_due_to_no_limb_text = "[user] misses [src] with \the [I] due to aiming at where their <span class='danger'>[affecting.display_name]</span> used to be!"
+			target_zone = null
 
 	if(user == src) // Attacking yourself can't miss
 		if(isnull(user.zone_sel)) //If the mob attacks itself without a client controlling it and therefore has no zone select active. This could happen if a catatonic person wielding a sword slips.
@@ -48,7 +56,10 @@
 			target_zone = user.zone_sel.selecting
 
 	if(!target_zone && !src.stat)
-		visible_message("<span class='borange'>[user] misses [src] with \the [I]!</span>")
+		if(missing_due_to_no_limb_text)
+			visible_message("<span class='borange'>[missing_due_to_no_limb_text]</span>")
+		else
+			visible_message("<span class='borange'>[user] misses [src] with \the [I]!</span>")
 		add_logs(user, src, "missed", admin=1, object=I, addition="intended damage: [power]")
 		if(I.miss_sound)
 			playsound(loc, I.miss_sound, 50)
@@ -62,20 +73,31 @@
 
 	user.do_attack_animation(src, I)
 
-	var/datum/organ/external/affecting = get_organ(target_zone)
-	var/armor
-	if(affecting)
-		var/hit_area = affecting.display_name
-		armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].", armor_penetration = I.armor_penetration)
-		if(armor >= 100)
-			add_logs(user, src, "armor bounced", admin=1, object=I, addition="weapon force vs armor: [power] - [armor]")
-			return TRUE //We still connected
-		if(!power)
-			add_logs(user, src, "ineffectively attacked", admin=1, object=I, addition="weapon force: [power]")
-			return TRUE
+	var/armor = 0
+	var/datum/organ/external/affecting
+
+	if (ishuman(src))
+		affecting = get_organ(target_zone)
+		if(affecting)
+			var/hit_area = affecting.display_name
+			armor = run_armor_check(affecting, "melee", "Your armor protects your [hit_area].", "Your armor softens the hit to your [hit_area].", armor_penetration = I.armor_penetration)
+	else
+		armor = run_armor_check(target_zone, "melee", "Your armor protects your [target_zone].", "Your armor softens the hit to your [target_zone].", armor_penetration = I.armor_penetration)
+
+	if(armor >= 100)
+		add_logs(user, src, "armor bounced", admin=1, object=I, addition="weapon force vs armor: [power] - [armor]")
+		return TRUE //We still connected
+	if(!power)
+		add_logs(user, src, "ineffectively attacked", admin=1, object=I, addition="weapon force: [power]")
+		return TRUE
+
 	var/damage = run_armor_absorb(target_zone, I.damtype, power)
 
-	var/actual_damage_done = apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+	var/actual_damage_done
+	if (affecting)
+		actual_damage_done = apply_damage(damage, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
+	else
+		actual_damage_done = apply_damage(damage, I.damtype, target_zone, armor , I.is_sharp(), used_weapon = I)
 
 	if(originator)
 		add_logs(originator, src, "damaged", admin=1, object=I, addition="DMG: [actual_damage_done]")

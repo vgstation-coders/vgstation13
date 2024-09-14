@@ -52,7 +52,6 @@
 			bhangmap_base.Blend("#FFBD00",ICON_MULTIPLY)
 			bhangcanvas.Blend(bhangmap_base,ICON_OVERLAY)
 		extraMiniMaps["[HOLOMAP_EXTRA_BHANGBASEMAP]_[z]"] = bhangcanvas
-		sensed_explosions["z[z]"] = list()
 	//----------------------------------
 
 	//Station Holomaps display the map of the Z-Level they were built on.

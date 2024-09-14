@@ -75,18 +75,13 @@
 		for(var/atom/atm in T) //extinguishing things
 			if(isliving(atm)) // For extinguishing mobs on fire
 				var/mob/living/M = atm
-				M.ExtinguishMob()
+				M.extinguish()
 			if(atm.on_fire) // For extinguishing objects on fire
 				atm.extinguish()
 
-/obj/item/stack/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
-	var/location = get_turf(user)
-	for(var/obj/item/stack/ore/glass/sandToConvert in location)
-		drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, sandToConvert.amount, user)
-		sandToConvert.use(sandToConvert.amount)
-
-	drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
-	use(1)
+/obj/item/stack/ore/glass/New(var/loc, var/amount=null)
+	recipes = sand_recipes
+	..()
 
 /obj/item/stack/ore/plasma
 	name = "\improper plasma ore"
@@ -386,7 +381,7 @@
 /*****************************Coin********************************/
 
 /obj/item/weapon/coin
-	icon = 'icons/obj/items.dmi'
+	icon = 'icons/obj/coins.dmi'
 	name = "coin"
 	desc = "Long phased out in favor of galactic credits."
 	icon_state = "coin"
@@ -396,6 +391,7 @@
 	throwforce = 1
 	w_class = W_CLASS_TINY
 	w_type = RECYK_METAL
+	quick_equip_priority = list(slot_wear_id)
 	var/string_attached
 	var/material=MAT_IRON // Ore ID, used with coinbags.
 	var/credits = 0 // How many credits is this coin worth?
@@ -514,7 +510,7 @@
 	credits = 1000
 
 /obj/item/weapon/coin/mythril
-	material="mythril"
+	material=MAT_MYTHRIL
 	name = "mythril coin"
 	desc = "An expensive coin minted long ago from extremely rare, light, non-conductive metal."
 	icon_state = "coin_mythril"
@@ -525,7 +521,7 @@
 	if(istype(W,/obj/item/stack/cable_coil) )
 		var/obj/item/stack/cable_coil/CC = W
 		if(string_attached)
-			to_chat(user, "<span class='notice'>There already is a string attached to this coin.</span>")
+			to_chat(user, "<span class='notice'>There already is a string attached to this [name].</span>")
 			return
 
 		if(CC.amount <= 0)
@@ -533,9 +529,9 @@
 			QDEL_NULL(CC)
 			return
 
-		overlays += image('icons/obj/items.dmi',"coin_string_overlay")
+		overlays += image('icons/obj/coins.dmi',"coin_string_overlay")
 		string_attached = 1
-		to_chat(user, "<span class='notice'>You attach a string to the coin.</span>")
+		to_chat(user, "<span class='notice'>You attach a string to \the [name].</span>")
 		CC.use(1)
 	else if(istype(W,/obj/item/tool/wirecutters) )
 		if(!string_attached)
@@ -547,7 +543,7 @@
 		CC.update_icon()
 		overlays = list()
 		string_attached = null
-		to_chat(user, "<span class='notice'>You detach the string from the coin.</span>")
+		to_chat(user, "<span class='notice'>You detach the string from \the [name].</span>")
 	else
 		..()
 
@@ -581,3 +577,15 @@
 	throwforce = 4
 
 ///////////////////////////////////////////////////////////
+
+/obj/item/weapon/coin/nuka
+	material=MAT_IRON
+	name = "bottle cap"
+	desc = "Standard Nuka-Cola bottle cap featuring 21 crimps and ridges, and somehow more or less matching the shape of a coin."
+	icon_state = "bottle_cap"
+	credits = 0.01
+	siemens_coefficient = 1
+	melt_temperature=MELTPOINT_STEEL
+	force = 0
+	throwforce = 0
+	throw_range = 3

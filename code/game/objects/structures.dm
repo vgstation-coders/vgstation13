@@ -1,6 +1,12 @@
 /obj/structure
 	icon = 'icons/obj/structures.dmi'
 	penetration_dampening = 5
+	var/hasbolts = FALSE
+
+/obj/structure/examine(mob/user)
+	..()
+	if(hasbolts)
+		to_chat(user,"<span class='info'>This one is bolted into place.</span>")
 
 /obj/structure/blob_act(var/destroy = 0)
 	..()
@@ -59,3 +65,10 @@
 
 /obj/structure/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)
+
+/obj/structure/Bumped(var/atom/A)
+	if(istype(A,/obj/effect/foam/fire) || istype(A,/obj/effect/water)) //snowflaked until clean_act is updated to affect dense objects (probably never)
+		extinguish()
+		var/turf/T = get_turf(src)
+		T.extinguish()
+	..()

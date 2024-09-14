@@ -7,28 +7,18 @@
 	var/w_condition = 1
 	var/ismetal = 0
 	var/ispipe = 0
+	var/drilled = 0
 
 /obj/item/weapon/hatchet/tomahawk/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/tool/surgicaldrill))
+	if(!drilled && istype(W, /obj/item/tool/surgicaldrill))
 		to_chat(user, "You begin drilling a hole through the handle of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 30))
 			to_chat(user, "You drill a hole through the handle of \the [src].")
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				if(ismetal)
-					var/obj/item/weapon/hatchet/tomahawk/metal/drilled/I = new (get_turf(user))
-					user.put_in_hands(I)
-				else
-					var/obj/item/weapon/hatchet/tomahawk/drilled/I = new (get_turf(user))
-					user.put_in_hands(I)
-			else
-				if(ismetal)
-					new /obj/item/weapon/hatchet/tomahawk/metal/drilled(get_turf(src.loc))
-				else
-					new /obj/item/weapon/hatchet/tomahawk/drilled(get_turf(src.loc))
-			qdel(src)
+			drilled = 1
+	if(drilled && istype(W, /obj/item/ashtray))
+		user.create_in_hands(src,new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(src.loc)),W,msg="You affix \the [W] to the end of \the [src].")
 
 /obj/item/weapon/hatchet/tomahawk/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	var/parent_return = ..()
@@ -66,28 +56,20 @@
 /obj/item/weapon/hatchet/tomahawk/proc/shatter(mob/user)
 	if(ismetal)
 		return
-	to_chat(user, "<span class='warning'>\The [src]'s blade shatters!</span>")
-	playsound(user, "shatter", 50, 1)
-	if(src.loc == user)
-		user.drop_item(src, force_drop = 1)
-		if(istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
-			var/obj/item/weapon/hatchet/tomahawk/pipe/P = src
-			if(P.current_blunt)
-				to_chat(user, "The crushed [P.blunt_name] falls out of \the [src].")
-			var/obj/item/weapon/broken_pipe_tomahawk/I = new (get_turf(user))
-			user.put_in_hands(I)
-		else
-			var/obj/item/tool/wrench/I = new (get_turf(user))
-			user.put_in_hands(I)
+	var/obj/item/I
+	if(istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
+		var/obj/item/weapon/hatchet/tomahawk/pipe/P = src
+		if(P.current_blunt)
+			to_chat(user, "The crushed [P.blunt_name] falls out of \the [src].")
+		I = new /obj/item/weapon/broken_pipe_tomahawk(get_turf(src.loc))
 	else
-		if(istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
-			new /obj/item/weapon/broken_pipe_tomahawk(get_turf(src.loc))
-		else
-			new /obj/item/tool/wrench(get_turf(src.loc))
-	qdel(src)
+		I = new /obj/item/tool/wrench(get_turf(src.loc))
+	user.create_in_hands(src,I,sound="shatter",msg="<span class='warning'>\The [src]'s blade shatters!</span>")
 
 /obj/item/weapon/hatchet/tomahawk/examine(mob/user)
 	..()
+	if(drilled)
+		to_chat(user, "<span class='info'>There is a hole drilled through the handle.</span>")
 	if(ismetal)
 		return
 	switch(w_condition)
@@ -103,23 +85,7 @@
 			to_chat(user, "<span class='warning'>\The [src] looks like it could fall apart at any moment!</span>")
 
 /obj/item/weapon/hatchet/tomahawk/drilled
-
-/obj/item/weapon/hatchet/tomahawk/drilled/examine(mob/user)
-	..()
-	to_chat(user, "<span class='info'>There is a hole drilled through the handle.</span>")
-
-/obj/item/weapon/hatchet/tomahawk/drilled/attackby(obj/item/weapon/W, mob/user)
-	..()
-	if(istype(W, /obj/item/ashtray))
-		to_chat(user, "You affix \the [W] to the end of \the [src].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/hatchet/tomahawk/pipe/I = new (get_turf(user))
-			user.put_in_hands(I)
-		else
-			new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(src.loc))
-		qdel(src)
-		qdel(W)
+	drilled = 1
 
 /obj/item/weapon/hatchet/tomahawk/metal
 	ismetal = 1
@@ -127,23 +93,7 @@
 	icon_state = "tomahawk_metal"
 
 /obj/item/weapon/hatchet/tomahawk/metal/drilled
-
-/obj/item/weapon/hatchet/tomahawk/metal/drilled/examine(mob/user)
-	..()
-	to_chat(user, "<span class='info'>There is a hole drilled through the handle.</span>")
-
-/obj/item/weapon/hatchet/tomahawk/metal/drilled/attackby(obj/item/weapon/W, mob/user)
-	..()
-	if(istype(W, /obj/item/ashtray))
-		to_chat(user, "You affix \the [W] to the end of \the [src].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/hatchet/tomahawk/pipe/metal/I = new (get_turf(user))
-			user.put_in_hands(I)
-		else
-			new /obj/item/weapon/hatchet/tomahawk/pipe/metal(get_turf(src.loc))
-		qdel(src)
-		qdel(W)
+	drilled = 1
 
 /obj/item/weapon/hatchet/tomahawk/pipe
 	name = "pipe tomahawk"
@@ -304,17 +254,8 @@
 
 /obj/item/weapon/broken_pipe_tomahawk/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/shard))
-		to_chat(user, "You fasten \the [W] to \the [src].")
-		if(current_blunt)
+		if(user.create_in_hands(src,new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(src.loc)),W,msg="You fasten \the [W] to \the [src].") && current_blunt)
 			to_chat(user, "The crushed [blunt_name] falls out in the process.")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/hatchet/tomahawk/pipe/I = new (get_turf(user))
-			user.put_in_hands(I)
-		else
-			new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(src.loc))
-		qdel(src)
-		qdel(W)
 	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown))
 		if(current_blunt)
 			to_chat(user, "<span class='notice'>There is already crushed [blunt_name] in the bowl.</span>")

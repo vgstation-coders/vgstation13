@@ -44,11 +44,13 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	var/image/floor_overlay
 
 	melt_temperature = 1643.15 // Melting point of steel
+	thermal_mass = 1
 
 	plane = TURF_PLANE
 
 	holomap_draw_override = HOLOMAP_DRAW_PATH
 
+	var/datum/paint_overlay/plating_paint = null
 
 /turf/simulated/floor/New()
 	create_floor_tile()
@@ -100,14 +102,14 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 						src.break_tile_to_plating()
 					else
 						src.break_tile()
-					src.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
+					src.hotspot_expose(500,FULL_FLAME,1)
 					if(prob(33))
 						var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 						M.amount = 1
 		if(3.0)
 			if (prob(50))
 				src.break_tile()
-				src.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
+				src.hotspot_expose(500,FULL_FLAME,1)
 	return
 
 /turf/simulated/floor/blob_act()
@@ -204,6 +206,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		if(istype(src,/turf/simulated/floor)) //Was throwing runtime errors due to a chance of it changing to space halfway through.
 			if(air)
 				update_visuals(air)*/
+	update_paint_overlay()
 
 /turf/simulated/floor/return_siding_icon_state()
 	..()
@@ -322,8 +325,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		broken = 1
 	else if(is_slime_floor())
 		spawn(rand(2,10))
-			make_plating()
-		return //slime burns up or completely loses form
+			make_plating()//slime burns up or completely loses form
 	else if(is_mineral_floor())
 		if(material=="diamond")
 			return //diamond doesn't break
@@ -336,6 +338,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			return
 
 		src.icon_state = "[material]_broken"
+	update_paint_overlay()
 
 /turf/simulated/floor/proc/burn_tile()
 	if(istype(src,/turf/simulated/floor/engine))
@@ -363,6 +366,8 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		burnt = 1
 	else if(is_mineral_floor())
 		burnt = 1
+	update_paint_overlay()
+	extinguish()
 
 //This proc will delete the floor_tile and the update_iocn() proc will then change the icon_state of the turf
 //This proc auto corrects the grass tiles' siding.
@@ -388,6 +393,8 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	intact = 0
 	broken = 0
 	burnt = 0
+	remove_paint_overlay()
+	paint_overlay = plating_paint
 	//No longer phazon, not a teleport destination
 	if(material=="phazon")
 		phazontiles -= src
@@ -398,6 +405,7 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		if(I.level == LEVEL_BELOW_FLOOR && !istype(I,/obj/item/projectile))
 			I.hide(intact)
 	update_icon()
+	update_paint_overlay()
 	levelupdate()
 
 //This proc will make the turf from a floor tile. The expected argument is the tile to make the turf with
@@ -406,6 +414,17 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 /turf/simulated/floor/proc/make_tiled_floor(var/obj/item/stack/tile/metal/T = null)
 	if(floor_tile)
 		QDEL_NULL(floor_tile)
+	plating_paint = paint_overlay
+	remove_paint_overlay()
+	paint_overlay = T.paint_overlay
+	if (paint_overlay)
+		paint_overlay.my_turf = src
+	T.paint_overlay = null
+	if (T.stacked_paint.len > 0)
+		var/datum/paint_overlay/paint = T.stacked_paint[1]
+		T.stacked_paint -= paint
+		T.paint_overlay = paint
+	T.update_icon()
 	floor_tile = new T.type(null)
 	material = floor_tile.material
 	//Becomes a teleport destination for other phazon tiles
@@ -437,23 +456,30 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			if(I.w_class == W_CLASS_TINY && !istype(I,/obj/item/projectile))
 				I.hide(intact)
 	update_icon()
+	update_paint_overlay()
 	levelupdate()
 	playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 
+/turf/simulated/floor/proc/remove_floor_tile()
+	if(floor_tile)
+		floor_tile.forceMove(src)
+		if (paint_overlay)
+			floor_tile.overlays.len = 0
+			floor_tile.paint_overlay = paint_overlay.Copy()
+			floor_tile.update_icon()
+		floor_tile = null
 
 /turf/simulated/floor/singularity_pull(S, current_size)
 	if(current_size >= STAGE_FIVE)
 		if(prob(75))
 			if(floor_tile && !broken && !burnt)
-				floor_tile.forceMove(src)
-				floor_tile = null
+				remove_floor_tile()
 			make_plating()
 		return
 	if(current_size == STAGE_FOUR)
 		if(prob(30))
 			if(floor_tile && !broken && !burnt)
-				floor_tile.forceMove(src)
-				floor_tile = null
+				remove_floor_tile()
 			make_plating()
 
 /turf/simulated/floor/attackby(obj/item/C as obj, mob/user as mob)
@@ -477,15 +503,13 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 				overlays -= advanced_graffiti_overlay
 				advanced_graffiti_overlay = null
 				qdel(advanced_graffiti)
-				floor_tile.forceMove(src)
-				floor_tile = null
+				remove_floor_tile()
 			else
 				//No longer phazon, not a teleport destination
 				if(material=="phazon")
 					phazontiles -= src
 				to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
-				floor_tile.forceMove(src)
-				floor_tile = null
+				remove_floor_tile()
 
 		make_plating()
 		// Can't play sounds from areas. - N3X
@@ -529,6 +553,33 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 					make_tiled_floor(T)
 			else
 				to_chat(user, "<span class='warning'>This section is too damaged to support a tile. Use a welder to fix the damage.</span>")
+		else if(iscrowbar(user.get_inactive_hand()))
+			var/obj/item/stack/tile/T = C
+			if(istype(T))
+				if(T.type == floor_tile.type)
+					return
+				if(T.use(1))
+					if(is_wood_floor())
+						qdel(floor_tile)
+						make_tiled_floor(T)
+						return
+					else
+						floor_tile.forceMove(src)
+						floor_tile = null
+						make_tiled_floor(T)
+						return
+			return
+		else if(istype(user.get_inactive_hand(), /obj/item/tool/screwdriver))
+			if(is_wood_floor())
+				var/obj/item/stack/tile/T = C
+				if(istype(T))
+					if(T.type == floor_tile.type)
+						return
+					if(T.use(1))
+						floor_tile.forceMove(src)
+						floor_tile = null
+						make_tiled_floor(T)
+			return
 	else if(isshovel(C))
 		if(is_grass_floor())
 			playsound(src, 'sound/items/shovel.ogg', 50, 1)

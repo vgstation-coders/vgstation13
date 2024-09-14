@@ -76,7 +76,7 @@
 
 /spell/spider_eggs
 	name = "Lay Eggs"
-	desc = "Lay some eggs that will give birth to more spiderlings after a few minutes.."
+	desc = "Lay some eggs that will give birth to more spiderlings after a few minutes."
 	user_type = USER_TYPE_SPIDER
 
 	charge_max = 0

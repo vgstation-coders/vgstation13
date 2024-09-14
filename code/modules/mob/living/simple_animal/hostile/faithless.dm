@@ -32,7 +32,7 @@
 	minbodytemp = 0
 	speed = 5
 
-	supernatural = 1
+	supernatural = TRUE
 
 	faction = "faithless"
 

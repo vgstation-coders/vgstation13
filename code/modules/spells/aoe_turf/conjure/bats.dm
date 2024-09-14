@@ -47,6 +47,7 @@
 /spell/aoe_turf/conjure/bats/on_creation(atom/movable/AM, mob/user)
 	var/datum/role/vampire/V = isvampire(user)
 	var/mob/living/simple_animal/hostile/scarybat/SB = AM
+	SB.supernatural = TRUE
 	if (V && V.faction)
 		SB.vamp_fac = V.faction
 		V.faction.members += SB

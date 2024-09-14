@@ -5,9 +5,11 @@
 	icon_state = "lipstick"
 	flags = FPRINT
 	w_class = W_CLASS_TINY
+	w_type = RECYK_WAX
+	flammable = TRUE
 	var/colour = "red"
 	var/open = 0
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+
 
 
 /obj/item/weapon/lipstick/purple
@@ -139,14 +141,83 @@
 	else
 		to_chat(user, "<span class='notice'>Where are the eyes on that?</span>")
 
-//you can wipe off eyeshadow with paper!
+/obj/item/weapon/facepaint_spray
+	name = "face paint spray"
+	desc = "A can of Dr. Frankenstein's instant facepaint. There is a dial on the top for pattern selection."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "face_paint"
+	flags = FPRINT
+	w_class = W_CLASS_TINY
+
+	var/selected_pattern = 1
+	var/list/pattern_list = list(
+		"Deathly Pallor" = "pallor",
+		"Zombie Fever" = "zombie",
+		"Martian Menace" = "alien",
+		"Impish Visage" = "devil"
+	)
+
+/obj/item/weapon/facepaint_spray/attack(mob/M, mob/user)
+	if(!istype(M, /mob))
+		return
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(H.face_style)	//if they already have facepaint on
+			to_chat(user, "<span class='notice'>You need to wipe off the old facepaint first!</span>")
+			return
+
+		var/pattern = pattern_list[pattern_list[selected_pattern]]
+
+		if(H == user)
+			user.visible_message("<span class='notice'>[user] sprays their face with \the [src].</span>", \
+								 "<span class='notice'>You shut your eyes and spray your face with \the [src], trying not to inhale any paint.</span>")
+			H.face_style = pattern
+			H.update_body()
+
+		else
+			user.visible_message("<span class='warning'>[user] begins to spray [H]'s face with \the [src].</span>", \
+								 "<span class='notice'>You begin to apply \the [src].</span>")
+			if(do_after(user,H, 20))	//user needs to keep their active hand, H does not.
+				user.visible_message("<span class='notice'>[user] does [H]'s eyes with \the [src].</span>", \
+									 "<span class='notice'>You apply \the [src].</span>")
+				H.face_style = pattern
+				H.update_body()
+
+	else
+		to_chat(user, "<span class='notice'>Where are the eyes on that?</span>")
+
+/obj/item/weapon/facepaint_spray/attack_self(mob/user as mob)
+	selected_pattern += 1
+	selected_pattern = selected_pattern > pattern_list.len ? 1 : selected_pattern
+	to_chat(user, "<span class='notice'>You set the spray to \"[pattern_list[selected_pattern]]\" mode</span>")
+
+/obj/item/weapon/facepaint_spray/examine(mob/user, size, show_name)
+	. = ..()
+	to_chat(user, "<span class='notice'>It is set to \"[pattern_list[selected_pattern]]\" mode</span>")
+
+//you can wipe off makeup with paper!
 /obj/item/weapon/paper/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!ishuman(M))
 		return
 
 	var/mob/living/carbon/human/H = M
 
-	if(user.zone_sel.selecting == "eyes")
+	if(user.zone_sel.selecting == "head")
+		if(H == user)
+			to_chat(user, "<span class='notice'>You wipe off the face paint with [src].</span>")
+			H.face_style = null
+			H.update_body()
+		else
+			user.visible_message("<span class='warning'>[user] begins to wipe [H]'s face paint  off with \the [src].</span>", \
+									"<span class='notice'>You begin to wipe off [H]'s face paint .</span>")
+			if(do_after(user, H, 10) && do_after(H, null, 10, 5, 0))	//user needs to keep their active hand, H does not.
+				user.visible_message("<span class='notice'>[user] wipes [H]'s face paint  off with \the [src].</span>", \
+										"<span class='notice'>You wipe off [H]'s face paint .</span>")
+				H.face_style = null
+				H.update_body()
+
+	else if(user.zone_sel.selecting == "eyes")
 		if(H == user)
 			to_chat(user, "<span class='notice'>You wipe off the eyeshadow with [src].</span>")
 			H.eye_style = null
@@ -159,6 +230,7 @@
 										"<span class='notice'>You wipe off [H]'s eyeshadow.</span>")
 				H.eye_style = null
 				H.update_body()
+
 	else if(user.zone_sel.selecting == "mouth")
 		if(H == user)
 			to_chat(user, "<span class='notice'>You wipe off the lipstick with [src].</span>")
@@ -346,20 +418,21 @@
 	..()
 	H.reagents.add_reagent(TOXIN,1)
 
-/obj/item/weapon/invisible_spray
-	name = "can of invisible spray"
-	desc = "A can of... invisibility? The label reads: \"Wears off after five minutes.\""
+/obj/item/weapon/syndie_spray
+	name = "syndicate spray"
+	desc = "A can of... nothing?"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "invisible_spray"
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
 	var/permanent = 0
-	var/invisible_time = 5 MINUTES
+	var/effect_time = 5 MINUTES
 	var/sprays_left = 1
+	var/effect_adjective = ""
 	var/static/list/prohibited_objects = list( //For fun removal
 		)
 
-/obj/item/weapon/invisible_spray/examine(var/mob/user)
+/obj/item/weapon/syndie_spray/examine(var/mob/user)
 	..()
 	if(loc != user)
 		return
@@ -368,8 +441,7 @@
 	else
 		to_chat(user, "<span class='notice'>The can feels empty.</span>")
 
-
-/obj/item/weapon/invisible_spray/preattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
+/obj/item/weapon/syndie_spray/preattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
 		return 0
 	if(!istype(target))
@@ -377,8 +449,8 @@
 	if(!sprays_left)
 		to_chat(user, "\The [src] is empty.")
 		return
-	if(target.invisibility || target.alpha <= 1)
-		to_chat(user, "\The [target] is already invisible!")
+	if(effect_active(target))
+		to_chat(user, "\The [target] is already [effect_adjective]!")
 		return
 	if(is_type_in_list(target,prohibited_objects))
 		to_chat(user, "<span class='notice'>For some reason, you don't think that would work.</span>")
@@ -389,33 +461,89 @@
 		to_chat(user, "\The [src] is empty.")
 		return
 	if(permanent)
-		invisible_time = 0
+		effect_time = 0
 	var/mob/M = target
 	if(M == user)
 		to_chat(user, "You spray yourself with \the [src].")
-		user.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1)
+		apply_spray_effect(user, effect_time)
 	else if (ismob(M))
 		to_chat(user, "You spray [M] with \the [src].")
-		M.make_invisible(INVISIBLESPRAY, invisible_time, FALSE, 1)
+		apply_spray_effect(M, effect_time)
 	var/obj/O = target
 	if(isobj(O))
 		if(locate(O) in get_contents_in_object(user))
-			O.make_invisible(INVISIBLESPRAY, invisible_time, 1)
+			apply_spray_effect(O, effect_time)
 		else
-			O.make_invisible(INVISIBLESPRAY, invisible_time, 1)
+			apply_spray_effect(O, effect_time)
 		to_chat(user, "You spray \the [O] with \the [src].")
-
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 	sprays_left--
+	return 1
+
+/obj/item/weapon/syndie_spray/proc/effect_active(atom/movable/target)
+	return 0
+
+/obj/item/weapon/syndie_spray/proc/apply_spray_effect(atom/movable/target,var/duration)
+	return 1
+
+/obj/item/weapon/syndie_spray/invisible_spray
+	name = "can of invisible spray"
+	desc = "A can of... invisibility? The label reads: \"Wears off after five minutes.\""
+	icon_state = "invisible_spray"
+	effect_adjective = "invisible"
+
+/obj/item/weapon/syndie_spray/invisible_spray/effect_active(atom/movable/target)
+	if(target.invisibility || target.alpha <= 1)
+		return 1
+
+/obj/item/weapon/syndie_spray/invisible_spray/apply_spray_effect(atom/movable/target, duration)
+	if(ismob(target))
+		var/mob/M = target
+		M.make_invisible(INVISIBLESPRAY, duration, FALSE, 1)
+		return 1
+	else if(isobj(target))
+		var/obj/O = target
+		O.make_invisible(INVISIBLESPRAY, duration, FALSE, 1)
+		return 1
+
+/obj/item/weapon/syndie_spray/invisible_spray/preattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
+	if(!..())
+		return
 	if(istype(target, /obj/machinery/power/supermatter))
 		return 0
 	if(istype(target, /obj/machinery/singularity))
 		animate(target, color = grayscale, time = 6 SECONDS)
 		return 0
+
+/obj/item/weapon/syndie_spray/invisible_spray/permanent
+	desc = "A can of... invisibility?"
+	permanent = 1
+
+/obj/item/weapon/syndie_spray/silent_spray
+	name = "can of silencing spray"
+	desc = "A can of... silence? The label reads: \"Wears off after five minutes.\""
+	icon_state = "silent_spray"
+	effect_adjective = "silent"
+
+/obj/item/weapon/syndie_spray/silent_spray/effect_active(atom/movable/target)
+	if(target.silence_sprayed)
+		return 1
+
+/obj/item/weapon/syndie_spray/silent_spray/apply_spray_effect(atom/movable/target, duration)
+	target.make_silent(duration)
 	return 1
 
-/obj/item/weapon/invisible_spray/permanent
-	desc = "A can of... invisibility?"
+/obj/item/weapon/syndie_spray/silent_spray/preattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
+	if(!..())
+		return
+	if(istype(target, /obj/machinery/power/supermatter))
+		return 0
+	if(istype(target, /obj/machinery/singularity))
+		animate(target, color = grayscale, time = 6 SECONDS)
+		return 0
+
+/obj/item/weapon/syndie_spray/silent_spray/permanent
+	desc = "A can of... silence?"
 	permanent = 1
 
 /obj/item/weapon/razor

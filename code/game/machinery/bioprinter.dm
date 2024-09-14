@@ -23,6 +23,7 @@
 	var/list/products = list(
 		"heart"            = list(/obj/item/organ/internal/heart,  50),
 		"insectoid heart"  = list(/obj/item/organ/internal/heart/insectoid, 50),
+		"vox heart" 	   = list(/obj/item/organ/internal/heart/vox, 50),
 		"human lungs"      = list(/obj/item/organ/internal/lungs,  30),
 		"vox lungs"        = list(/obj/item/organ/internal/lungs/vox,  30),
 		"plasmaman lungs"  = list(/obj/item/organ/internal/lungs/plasmaman,  30),

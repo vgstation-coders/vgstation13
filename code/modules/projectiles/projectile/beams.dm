@@ -46,7 +46,8 @@ var/list/beam_master = list()
 
 	var/turf/T = vector2turf(info.point, z)
 	T.last_beam_damage = fired_beam.damage
-
+	fired_beam.final_turf = final_turf
+	fired_beam.previous_turf = previous_turf
 	if(!A.Cross(fired_beam, T) || (!isturf(fired_beam.original) && A == fired_beam.original))
 		var/ret = fired_beam.to_bump(A)
 		if(ret)
@@ -56,7 +57,6 @@ var/list/beam_master = list()
 				if (PROJECTILE_COLLISION_REBOUND)
 					return new /rayCastHit(info, RAY_CAST_REBOUND)
 				if (PROJECTILE_COLLISION_MISS)
-					A.visible_message("<span class='notice'>\The [fired_beam] misses \the [A] narrowly!</span>")
 					return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 				if (PROJECTILE_COLLISION_PORTAL)
 					return new /rayCastHit(info, RAY_CAST_PORTAL)
@@ -71,7 +71,7 @@ var/list/beam_master = list()
 	linear_movement = 0 //this will set out icon_state to ..._pixel if 1
 	layer = ABOVE_LIGHTING_LAYER
 	plane = ABOVE_LIGHTING_PLANE
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
+	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE | PASSRAILING
 	damage = 30
 	damage_type = BURN
 	flag = "laser"
@@ -82,6 +82,8 @@ var/list/beam_master = list()
 	var/beam_color = null
 	var/beam_shift = null// the beam will animate() toward this color after being fired
 	var/list/ray/past_rays = list() //full of rays
+	var/turf/final_turf = null
+	var/turf/previous_turf = null
 
 /obj/item/projectile/beam/Destroy()
 	QDEL_LIST_NULL(past_rays)
@@ -100,32 +102,37 @@ var/list/beam_master = list()
 		hits = shot_ray.cast(travel_range)
 	else
 		hits = shot_ray.cast(MAX_BEAM_DISTANCE)
-
+	final_turf = shot_ray.final_turf
+	previous_turf = shot_ray.previous_turf
 	if(!gcDestroyed)
 		past_rays += shot_ray
-	else
-		shot_ray.fired_beam = null // hard-delete prevention
 
+	var/distance = MAX_BEAM_DISTANCE
 	if(isnull(hits) || hits.len == 0)
 		if(travel_range)
-			shot_ray.draw(travel_range, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
-		else
-			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+			distance = travel_range
 
 	else
 		var/rayCastHit/last_hit = hits[hits.len]
 
-		shot_ray.draw(last_hit.distance, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+		distance = last_hit.distance
 
 		if(last_hit.hit_type == RAY_CAST_REBOUND)
+			final_turf=null
 			ASSERT(!gcDestroyed)
 			spawn()
 				rebound(last_hit.hit_atom)
 
 		if(last_hit.hit_type == RAY_CAST_PORTAL)
+			final_turf=null
 			ASSERT(!gcDestroyed)
 			spawn()
 				portal(last_hit.hit_atom)
+
+	shot_ray.draw(distance, icon, icon_state, color_override = beam_color, color_shift = beam_shift)
+
+	if(gcDestroyed)
+		qdel(shot_ray)
 
 /obj/item/projectile/beam/process()
 	var/vector/origin = atom2vector(starting)
@@ -205,10 +212,10 @@ var/list/beam_master = list()
 	eyeblur = 50
 	var/tang = 0
 	layer = PROJECTILE_LAYER
-	var/turf/last = null
 	kill_count = 12
 	var/mob/firer_mob = null
 	var/yellow = 0
+	var/passdense = 0
 
 /obj/item/projectile/beam/lightning/proc/adjustAngle(angle)
 	angle = round(angle) + 45
@@ -234,22 +241,14 @@ var/list/beam_master = list()
 			firer_mob.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot himself with a <b>[type]</b>"
 			if(firer_mob.key || firer_mob.ckey)
 				msg_admin_attack("[key_name(firer_mob)] shot himself with a [type], [pick("top kek!","for shame.","he definitely meant to do that","probably not the last time either.")] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer_mob.x];Y=[firer_mob.y];Z=[firer_mob.z]'>JMP</a>)")
-			if(!iscarbon(firer_mob))
-				M.LAssailant = null
-			else
-				M.LAssailant = firer_mob
-				M.assaulted_by(firer_mob)
+			M.assaulted_by(firer_mob)
 		else
 			log_attack("<font color='red'>[key_name(firer_mob)] shot [key_name(M)] with a [type]</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			firer_mob.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			if((firer_mob.key || firer_mob.ckey) && (M.key || M.ckey))
 				msg_admin_attack("[key_name(firer_mob)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer_mob.x];Y=[firer_mob.y];Z=[firer_mob.z]'>JMP</a>)")
-			if(!iscarbon(firer_mob))
-				M.LAssailant = null
-			else
-				M.LAssailant = firer_mob
-				M.assaulted_by(firer_mob)
+			M.assaulted_by(firer_mob)
 	else
 		..()
 
@@ -278,89 +277,59 @@ var/list/beam_master = list()
 		if(count >= kill_count)
 			break
 		count++
-		var/obj/effect/overlay/beam/persist/X=new /obj/effect/overlay/beam/persist(T)
-		X.BeamSource=src
-		ouroverlays += X
+		var/obj/effect/overlay/beam/persist/lightning_segment = new /obj/effect/overlay/beam/persist(T)
+		lightning_segment.BeamSource=src
+		ouroverlays += lightning_segment
 		if((N+WORLD_ICON_SIZE*2>length) && (N+WORLD_ICON_SIZE<=length))
-			X.icon=Iend
+			lightning_segment.icon=Iend
 		else if(N==0)
-			X.icon=Istart
+			lightning_segment.icon=Istart
 		else if(N+WORLD_ICON_SIZE>length)
-			X.icon=null
+			lightning_segment.icon=null
 		else
-			X.icon=I
+			lightning_segment.icon=I
 
-		var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE/2)
-		var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
-		if(DX==0)
-			Pixel_x=0
-		if(DY==0)
-			Pixel_y=0
-		if(Pixel_x>WORLD_ICON_SIZE)
-			for(var/a=0, a<=Pixel_x,a+=WORLD_ICON_SIZE)
-				X.x++
-				Pixel_x-=WORLD_ICON_SIZE
-		if(Pixel_x<-WORLD_ICON_SIZE)
-			for(var/a=0, a>=Pixel_x,a-=WORLD_ICON_SIZE)
-				X.x--
-				Pixel_x+=WORLD_ICON_SIZE
-		if(Pixel_y>WORLD_ICON_SIZE)
-			for(var/a=0, a<=Pixel_y,a+=WORLD_ICON_SIZE)
-				X.y++
-				Pixel_y-=WORLD_ICON_SIZE
-		if(Pixel_y<-WORLD_ICON_SIZE)
-			for(var/a=0, a>=Pixel_y,a-=WORLD_ICON_SIZE)
-				X.y--
-				Pixel_y+=WORLD_ICON_SIZE
+		// We set pixel_x to the position it should be based on the angle of the lightning, then we reduce pixel_x by a factor of 32 and add it to the
+		// x position variable instead, resulting in the same overall position. Then, we do the same for y.
+		lightning_segment.pixel_x = round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE)/WORLD_ICON_SIZE)
+		lightning_segment.pixel_y = round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE)/WORLD_ICON_SIZE)
+		if(lightning_segment.pixel_x >= 0)
+			lightning_segment.x += Floor( lightning_segment.pixel_x / WORLD_ICON_SIZE )
+		else
+			lightning_segment.x += Ceiling( lightning_segment.pixel_x / WORLD_ICON_SIZE )
+		if(lightning_segment.pixel_y >= 0)
+			lightning_segment.y += Floor( lightning_segment.pixel_y / WORLD_ICON_SIZE )
+		else
+			lightning_segment.y += Ceiling( lightning_segment.pixel_y / WORLD_ICON_SIZE )
+		lightning_segment.pixel_y %= 32
+		lightning_segment.pixel_x %= 32
 
-		//Now that we've calculated the total offset in pixels, we move each beam parts to their closest corresponding turfs
-		var/x_increm = 0
-		var/y_increm = 0
 
-		while(Pixel_x >= WORLD_ICON_SIZE || Pixel_x <= -WORLD_ICON_SIZE)
-			if(Pixel_x > 0)
-				Pixel_x -= WORLD_ICON_SIZE
-				x_increm++
-			else
-				Pixel_x += WORLD_ICON_SIZE
-				x_increm--
-
-		while(Pixel_y >= WORLD_ICON_SIZE || Pixel_y <= -WORLD_ICON_SIZE)
-			if(Pixel_y > 0)
-				Pixel_y -= WORLD_ICON_SIZE
-				y_increm++
-			else
-				Pixel_y += WORLD_ICON_SIZE
-				y_increm--
-
-		X.x += x_increm
-		X.y += y_increm
-
-		X.pixel_x=Pixel_x
-		X.pixel_y=Pixel_y
-		var/turf/TT = get_turf(X.loc)
-		while((TT.timestopped || timestopped || X.timestopped) && count)
+		var/turf/TT = get_turf(lightning_segment.loc)
+		while((TT.timestopped || timestopped || lightning_segment.timestopped) && count)
 			sleep(2)
+
 		if(TT == firer.loc)
 			continue
 		if(TT.density)
-			QDEL_NULL(X)
+			QDEL_NULL(lightning_segment)
 			break
 		for(var/atom/movable/O in TT)
 			if(!O.Cross(src))
-				qdel(X)
+				qdel(lightning_segment)
 				broke = 1
 				break
 		for(var/mob/living/O in TT.contents)
 			if(istype(O, /mob/living))
 				if(O.density)
-					QDEL_NULL(X)
+					QDEL_NULL(lightning_segment)
 					broke = 1
 					break
 		if(broke)
-			if(X)
-				QDEL_NULL(X)
+			if(lightning_segment)
+				QDEL_NULL(lightning_segment)
 			break
+
 	spawn(10)
 		for(var/atom/thing in ouroverlays)
 			if(!thing.timestopped && thing.loc && !thing.loc.timestopped)
@@ -421,7 +390,6 @@ var/list/beam_master = list()
 //				to_chat(world, "breaking")
 				break
 			else
-				last = get_turf(src.loc)
 				step_towards(src, current) //Move~
 				if(src.loc != current)
 					tang = adjustAngle(get_angle(src.loc,current))
@@ -451,6 +419,8 @@ var/list/beam_master = list()
 	var/spell/lightning/our_spell
 	weaken = 0
 	stun = 0
+	stutter = 0
+	eyeblur = 0
 /obj/item/projectile/beam/lightning/spell/to_bump(atom/A as mob|obj|turf|area)
 	. = ..()
 	if(.)
@@ -460,20 +430,22 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/practice
 	name = "laser"
 	icon_state = "laser"
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
 	damage = 0
-	damage_type = BURN
-	flag = "laser"
 	eyeblur = 2
 
 /obj/item/projectile/beam/practice/stormtrooper
 	fire_sound = "sound/weapons/blaster-storm.ogg"
+	excessive_missing = TRUE
+	projectile_miss_chance = 99999
+	projectile_miss_message_replace = TRUE
 
-/obj/item/projectile/beam/practice/stormtrooper/on_hit(var/atom/target, var/blocked = 0)
-	if(..(target, blocked))
-		var/mob/living/L = target
-		var/message = pick("\the [src] narrowly whizzes past [L]!","\the [src] almost hits [L]!","\the [src] straight up misses its target.","[L]'s hair is singed off by \the [src]!","\the [src] misses [L] by a millimetre!","\the [src] doesn't hit","\the [src] misses its intended target.","[L] has a lucky escape from \the [src]!")
-		target.loc.visible_message("<span class='danger'>[message]</span>")
+/obj/item/projectile/beam/practice/stormtrooper/to_bump(atom/A)
+	var/selected_message = pick("\The [src] narrowly whizzes past [A]!","\The [src] almost hits [A]!",
+								"\The [src] straight up misses [A].","[A]'s hair is singed off by \the [src]!",
+								"\The [src] misses [A] by a millimetre!","\The [src] doesn't hit [A]!",
+								"\The [src] misses [A].","[A] has a lucky escape from \the [src]!")
+	projectile_miss_message = "<span class='danger'>[selected_message]</span>"
+	return ..()
 
 /obj/item/projectile/beam/scorchray
 	name = "scorch ray"
@@ -482,245 +454,49 @@ var/list/beam_master = list()
 	fire_sound = 'sound/weapons/ray1.ogg'
 
 /obj/item/projectile/beam/scorchray/on_hit(var/atom/target, var/blocked = 0)
-	if(istype(target, /mob/living))
-		var/mob/living/M = target
-		if(ishuman(target))
-			var/mob/living/carbon/human/H = M
-			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-			if (H.isDead())
-				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (To-Do: Add animations for mushmen, catbeasts, skrell, and unathi)
-					return 0
-				if(isgrey(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
+	if(!..())
+		return 0
+	var/mob/living/carbon/human/H = target
+	if(!istype(H) || !H.isDead() || !(H.species.anatomy_flags & NO_BLOOD)) //Not human, not dead or doesn't have blood
+		return 1 // This way it should only apply to the more fleshy species (To-Do: Add animations for mushmen, catbeasts, skrell, and unathi)
+	var/lying_animation = "dust-h2-nohead" //Defaults to humanoid ashing sprites if it doesn't get changed
+	var/standing_animation = "dust-h-nohead"
+	if(isgrey(H))
+		lying_animation = "dust-g2-nohead"
+		standing_animation = "dust-g-nohead"
+	else if(isvox(H))
+		lying_animation = "dust-v2-nohead"
+		standing_animation = "dust-v-nohead"
+	else if(isinsectoid(H))
+		lying_animation = "dust-i2-nohead"
+		standing_animation = "dust-i-nohead"
+	H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
+	playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
+	H.drop_all() // So their gear doesn't all get deleted
+	var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+	if(head_organ)
+		head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
+	if(H.lying)
+		anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = lying_animation, sleeptime = 15)
+	else
+		anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = standing_animation, sleeptime = 15)
+	new /obj/effect/decal/cleanable/ash(get_turf(target))
+	qdel(H)
+	return 1
 
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(isvox(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(isinsectoid(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(ishuman(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1) // Their body melts, but the head flies off
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-		else
-			return 1
-
-/obj/item/projectile/beam/immolationray
+/obj/item/projectile/beam/scorchray/immolationray
 	name = "immolation ray"
 	icon_state = "immolationray"
 	damage = 45
-	fire_sound = 'sound/weapons/ray1.ogg'
 
-/obj/item/projectile/beam/immolationray/on_hit(var/atom/target, var/blocked = 0)
-	if(istype(target, /mob/living))
-		var/mob/living/M = target
-		if(ishuman(target))
-			var/mob/living/carbon/human/H = M
-			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-			if (H.isDead())
-				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (To-Do: Add animations for mushmen, catbeasts, skrell, and unathi)
-					return 0
-				if(isgrey(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(isvox(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(isinsectoid(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(ishuman(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-		else
-			return 1
-
-/obj/item/projectile/beam/immolationray/upgraded // Exclusively used by the hoverdisc drone
+/obj/item/projectile/beam/scorchray/immolationray/upgraded // Exclusively used by the hoverdisc drone
 	damage = 55
 	destroy = 1
 
-/obj/item/projectile/beam/atomizationray
+/obj/item/projectile/beam/scorchray/atomizationray
 	name = "atomization ray"
 	icon_state = "atomray"
 	damage = 40
-	fire_sound = 'sound/weapons/ray1.ogg'
-
-/obj/item/projectile/beam/atomizationray/on_hit(var/atom/target, var/blocked = 0)
-	if(istype(target, /mob/living))
-		var/mob/living/M = target
-		if(ishuman(target))
-			var/mob/living/carbon/human/H = M
-			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
-			if (H.isDead())
-				if (H.species.anatomy_flags & NO_BLOOD) // This way it should only apply to the more fleshy species (To-Do: Add animations for mushmen, catbeasts, skrell, and unathi)
-					return 0
-				if(isgrey(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(isvox(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-v-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(isinsectoid(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-i-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-
-				if(ishuman(H))
-					H.visible_message("<span class='danger'>[H.name]'s body disintegrates into ash!</span>")
-					playsound(target.loc, 'sound/items/Welder.ogg', 100, 1)
-
-					if(H.lying)
-						H.drop_all() // So their gear doesn't all get deleted
-						head_organ.droplimb(1,1) // Their body melts, but the head flies off (so they can be revived)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2-nohead", sleeptime = 15)
-					else
-						H.drop_all()
-						head_organ.droplimb(1,1)
-						anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h-nohead", sleeptime = 15)
-
-					new /obj/effect/decal/cleanable/ash(get_turf(target))
-					qdel(H)
-		else
-			return 1
 
 /obj/item/projectile/beam/lightlaser
 	name = "light laser"
@@ -744,14 +520,12 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/humanelaser/to_bump(atom/A as mob|obj|turf|area)
 	if(ishuman(A))
 		damage = 10
-	if(istype(A,/obj/effect/blob))
-		damage = 40
+	if(istype(A,/obj/effect/blob)) //It will deal half of its damage to a nearby blob tile on hit.
 		var/obj/effect/blob/B = A
-		var/splash_damage = damage/B.fire_resist - B.health
-		if(splash_damage > 0)
-			for(var/obj/effect/B2 in orange(1,B))
-				B2.bullet_act(src, null, splash_damage)
-				break
+		var/actual_damage = damage/B.fire_resist //More resistant tiles such as strong blobs will cause less damage to be spread
+		for(var/obj/effect/blob/B2 in orange(1,B))
+			B2.bullet_act(src, null, actual_damage)
+			break
 	return ..()
 
 /obj/item/projectile/beam/heavylaser
@@ -806,10 +580,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 
 /obj/item/projectile/beam/lasertag
 	name = "lasertag beam"
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
 	damage = 0
-	damage_type = BURN
-	flag = "laser"
 	icon_state = "bluelaser"
 	var/list/enemy_vest_types = list(/obj/item/clothing/suit/tag/redtag)
 
@@ -880,7 +651,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	icon_state = "heatray"
 	animate_movement = 0
 	linear_movement = 0
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	var/drawn = 0
 	var/tang = 0
 	var/turf/last = null
@@ -1108,11 +879,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			firer.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			msg_admin_attack("[key_name(firer)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)") //BS12 EDIT ALG
-			if(!iscarbon(firer))
-				M.LAssailant = null
-			else
-				M.LAssailant = firer
-				M.assaulted_by(firer)
+			M.assaulted_by(firer)
 		else
 			M.attack_log += "\[[time_stamp()]\] <b>UNKNOWN/(no longer exists)</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			msg_admin_attack("UNKNOWN/(no longer exists) shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)") //BS12 EDIT ALG
@@ -1154,52 +921,64 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	fire_sound = null
 	custom_impact = 1
 	penetration = 0
-	pass_flags = PASSTABLE
+	pass_flags = PASSTABLE | PASSRAILING
 	var/has_splashed = FALSE
+	var/atom/splashed_atom = null
 
-/obj/item/projectile/beam/liquid_stream/New(atom/A, var/t_range)
+/obj/item/projectile/beam/liquid_stream/New(atom/A, var/t_range=3, var/m_color, var/m_alpha=255)
 	..(A)
 	create_reagents(20)
-	if(t_range)
-		travel_range = t_range
-	else
-		travel_range = 0
-
-/obj/item/projectile/beam/liquid_stream/OnFired()
-	beam_color = mix_color_from_reagents(reagents.reagent_list)
-	alpha = mix_alpha_from_reagents(reagents.reagent_list)
-	..()
+	travel_range = t_range
+	beam_color = m_color
+	alpha = m_alpha
 
 /obj/item/projectile/beam/liquid_stream/on_hit(var/atom/A, var/blocked = 0)
-	if(reagents.total_volume)
-		for(var/datum/reagent/R in reagents.reagent_list)
-			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))//so here we're just doubling our quantity of reagents from 10 to 20
-		if(istype(A, /mob))
-			if(firer.zone_sel.selecting == TARGET_MOUTH && def_zone == LIMB_HEAD && ishuman(A)) //if aiming at head and is humanoid
-				var/mob/living/carbon/human/victim = A
-				if(!victim.check_body_part_coverage(MOUTH)) //if not covered with mask or something
-					victim.visible_message("<span class='warning'>[A] swallows \the [src]!</span>",
-										"<span class='warning'>You swallow \the [src]!</span>")
-					reagents.trans_to(A, reagents.total_volume) //20% chance to get in mouth and in system, if mouth targeting was possible at all with projectiles this chance should be scrapped
-					has_splashed = TRUE //guess we arent stacking with the splash
-					return 1
-				else
-					A.visible_message("<span class='warning'>\The [src] gets blocked from [A]'s mouth!</span>",
-									"<span class='warning'>\The [src] gets blocked from your mouth!</span>")//just block mouth, no turf splash
+	if(reagents.total_volume && istype(A, /mob))
+		if(firer.zone_sel.selecting == TARGET_MOUTH && def_zone == LIMB_HEAD && ishuman(A)) //if aiming at head and is humanoid
+			var/mob/living/carbon/human/victim = A
+			if(!victim.check_body_part_coverage(MOUTH)) //if not covered with mask or something
+				victim.visible_message("<span class='warning'>[A] swallows \the [src]!</span>",
+									"<span class='warning'>You swallow \the [src]!</span>")
+				reagents.trans_to(A, reagents.total_volume)
+				has_splashed = TRUE //guess we arent stacking with the splash
+				qdel(src)
+				return 1
 			else
-				var/splash_verb = pick("douses","completely soaks","drenches","splashes")
-				A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
-									"<span class='warning'>\The [src] [splash_verb] you!</span>")
-				splash_sub(reagents, get_turf(A), reagents.total_volume/2, firer)//then we splash 10 of those on the turf in front (or under in case of mobs) of the hit atom
+				A.visible_message("<span class='warning'>\The [src] gets blocked from [A]'s mouth!</span>",
+								"<span class='warning'>\The [src] gets blocked from your mouth!</span>")//just block mouth, no turf splash
 		else
-			splash_sub(reagents, get_turf(src), reagents.total_volume/2, firer)
-		splash_sub(reagents, A, reagents.total_volume, firer)//and 10 more on the atom itself
-		has_splashed = TRUE
-		return 1
+			var/splash_verb = pick("douses","completely soaks","drenches","splashes")
+			A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
+								"<span class='warning'>\The [src] [splash_verb] you!</span>")
 
-/obj/item/projectile/beam/liquid_stream/OnDeath()
-	if(!has_splashed && loc)
-		splash_sub(reagents, get_turf(src), reagents.total_volume)
+/obj/item/projectile/beam/liquid_stream/to_bump(var/atom/A)
+	splashed_atom = A//doesn't matter if it's actually the atom we end up splashing since we only use that var on bullet_die()
+	. = ..()
+
+/obj/item/projectile/beam/liquid_stream/bullet_die()//splashes reagents on the hit atom, or in front of it in case of turfs and border objects
+	if(reagents && reagents.total_volume && !has_splashed && ((bumped && splashed_atom) || final_turf))
+		if (splashed_atom && !isturf(splashed_atom) && (previous_turf && previous_turf.Adjacent(splashed_atom)))
+			if (splashed_atom.flow_flags & ON_BORDER)
+				loc = previous_turf
+			else
+				loc = get_turf(splashed_atom)
+		else if (isturf(splashed_atom))
+			loc = final_turf
+		else
+			loc = previous_turf
+		playsound(loc, 'sound/effects/slosh.ogg', 20, 1)
+		reagents.splashplosion(0)
+		has_splashed = TRUE
+	..()
+//I never want to deal wity ray casts ever again
+/obj/item/projectile/beam/liquid_stream/fireto(var/vector/origin, var/vector/direction)//splashes reagents on the turf if the projectile ran out
+	..()
+	if (reagents && reagents.total_volume && final_turf && !has_splashed)
+		loc = final_turf
+		reagents.splashplosion(0)
+		has_splashed = TRUE
+		qdel(src)
+
 
 /obj/item/projectile/beam/liquid_stream/proc/adjust_strength(var/t_range)
 	if(t_range)
@@ -1223,3 +1002,14 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	smoke.set_up(3, 0, T)
 	smoke.start()
 	return 1
+
+/obj/item/projectile/beam/armawhip
+	name = "bullwhip"
+	icon = 'icons/obj/projectiles.dmi'
+	icon_state = "whip"
+	fire_sound = 'sound/weapons/whip_crack.ogg'
+	travel_range = 5
+	damage = 10
+	damage_type = BRUTE
+	pass_flags = PASSTABLE | PASSRAILING
+	eyeblur = 0
