@@ -23,7 +23,7 @@
 	var/nutriment_factor = 0
 	var/pain_resistance = 0
 	var/sport = SPORTINESS_NONE //High sport helps you show off on a treadmill. Multiplicative
-	var/harms_animal_type //What kind of animal does this harm? (make this a string of types split with commas if you're adding this)
+	var/harms_animal_type //What kind of animal does this harm?
 	var/custom_metabolism = REAGENTS_METABOLISM
 	var/overdose_am = 0
 	var/overdose_tick = 0
@@ -140,10 +140,8 @@
 
 	M.reagent_act(self.id, method, volume)
 
-	if(self.harms_animal_type)
-		var/list/harmed = splittext(harms_animal_type,",")
-		if(is_type_in_list(M,harmed))
-			M.atepoison()
+	if(self.harms_animal_type && istype(M,self.harms_animal_type))
+		M.atepoison()
 
 /datum/reagent/proc/reaction_obj(var/obj/O, var/volume, var/list/splashplosion=list())
 	set waitfor = 0
