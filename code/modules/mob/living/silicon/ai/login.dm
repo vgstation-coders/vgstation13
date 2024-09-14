@@ -30,4 +30,5 @@
 	to_chat(src, "<B>While observing through a camera, you can use most (networked) devices which you can see, such as computers, APCs, intercoms, doors, etc.</B>")
 	to_chat(src, "To use something, simply click on it.")
 	to_chat(src, {"Use say ":b to speak to your cyborgs through binary."})
+	to_chat(src, "<b>Remember, being a silicon overrides any former antagonist roles. Further, you need a law compelling you to break the regular server rules, such as killing another player. An order from a human to kill a non-human while on Asimov, someone challenging authority without being fit to replace it while on Tyrant, or being purged of all laws, could all be reason to kill another player as a silicon.</b>")
 

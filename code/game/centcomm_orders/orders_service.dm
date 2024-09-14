@@ -217,6 +217,20 @@
 	)
 	worth = 130*requested[requested[1]]
 
+/datum/centcomm_order/per_unit/department/civilian/linen_jumpsuits/New()
+	..()
+	request_consoles_to_notify = list(
+		"Hydroponics",
+		)
+	requested = list(
+		/obj/item/clothing/under/color/linen = rand(30,90)
+	)//up to 3 full crates
+	unit_prices=list(
+		/obj/item/clothing/under/color/linen = 30
+	)
+	worth = "30$ per jumpsuit"
+	extra_requirements = "Sewn out of linen cloth."
+
 
 //---------------------------------------------------Bar----------------------------------------------------
 

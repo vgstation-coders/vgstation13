@@ -30,7 +30,7 @@
 	Proc: Precedence
 	Compares two operators, decides which is higher in the order of operations, and returns <SHIFT> or <REDUCE>.
 */
-/datum/n_Parser/nS_Parser/proc/Precedence(var/datum/node/expression/operator/top, var/datum/node/expression/operator/input)
+/datum/n_Parser/nS_Parser/proc/Precedence(var/datum/node/expression/operation/top, var/datum/node/expression/operation/input)
 	if(istype(top))
 		top = top.precedence
 
@@ -99,7 +99,7 @@
 	- <GetBinaryOperator()>
 	- <GetUnaryOperator()>
 */
-/datum/n_Parser/nS_Parser/proc/GetOperator(O, type = /datum/node/expression/operator, L[])
+/datum/n_Parser/nS_Parser/proc/GetOperator(O, type = /datum/node/expression/operation, L[])
 	if(istype(O, type))
 		return O		//O is already the desired type
 
@@ -130,7 +130,7 @@
 	- <GetUnaryOperator()>
 */
 /datum/n_Parser/nS_Parser/proc/GetBinaryOperator(O)
-	return GetOperator(O, /datum/node/expression/operator/binary, options.binary_operators)
+	return GetOperator(O, /datum/node/expression/operation/binary, options.binary_operators)
 
 /*
 	Proc: GetUnaryOperator
@@ -142,7 +142,7 @@
 	- <GetBinaryOperator()>
 */
 /datum/n_Parser/nS_Parser/proc/GetUnaryOperator(O)
-	return GetOperator(O, /datum/node/expression/operator/unary,  options.unary_operators)
+	return GetOperator(O, /datum/node/expression/operation/unary,  options.unary_operators)
 
 /*
 	Proc: Reduce
@@ -150,7 +150,7 @@
 	of the val stack.
 */
 /datum/n_Parser/nS_Parser/proc/Reduce(var/datum/stack/opr, var/datum/stack/val)
-	var/datum/node/expression/operator/O = opr.Pop()
+	var/datum/node/expression/operation/O = opr.Pop()
 	if(!O)
 		return
 
@@ -160,8 +160,8 @@
 
 	//Take O and assign its operands, popping one or two values from the val stack
 	//depending on whether O is a binary or unary operator.
-	if(istype(O, /datum/node/expression/operator/binary))
-		var/datum/node/expression/operator/binary/B=O
+	if(istype(O, /datum/node/expression/operation/binary))
+		var/datum/node/expression/operation/binary/B=O
 		B.exp2 = val.Pop()
 		B.exp = val.Pop()
 		val.Push(B)
@@ -239,7 +239,7 @@
 			val.Push(ParseParenExpression())
 
 		else if(istype(curToken, /datum/token/symbol))												//Operator found.
-			var/datum/node/expression/operator/curOperator											//Figure out whether it is unary or binary and get a new instance.
+			var/datum/node/expression/operation/curOperator											//Figure out whether it is unary or binary and get a new instance.
 			if(src.expecting == OPERATOR)
 				curOperator = GetBinaryOperator(curToken)
 				if(!curOperator)
@@ -357,7 +357,7 @@
 /datum/n_Parser/nS_Parser/proc/ParseParenExpression()
 	if(!CheckToken("(", /datum/token/symbol))
 		return
-	return new/datum/node/expression/operator/unary/group(ParseExpression(list(")")))
+	return new/datum/node/expression/operation/unary/group(ParseExpression(list(")")))
 
 /*
 	Proc: ParseParamExpression

@@ -3338,7 +3338,7 @@
 	},
 /area/holodeck/source_meetinghall)
 "jL" = (
-/obj/item/toy/gasha/carptoy,
+/obj/item/toy/plushie/carp,
 /turf/simulated/floor/beach/water,
 /area/holodeck/source_beach)
 "jM" = (

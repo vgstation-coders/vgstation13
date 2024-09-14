@@ -5,12 +5,15 @@
 	globalscreen = TRUE
 
 /obj/abstract/screen/movable/action_button/Click(location,control,params)
+	if(usr.click_delayer.blocked())
+		return
 	var/list/modifiers = params2list(params)
 	if(modifiers["shift"])
 		moved = FALSE
 		usr.update_action_buttons() //redraw buttons that are no longer considered "moved"
 		return TRUE
 	linked_action.Trigger()
+	usr.click_delayer.setDelay(1)
 	return TRUE
 
 /obj/abstract/screen/movable/action_button/MouseDrop(over_object, src_location, over_location, src_control, over_control, params)

@@ -16,6 +16,12 @@
 	var/sound_effect_open = 'sound/machines/click.ogg'
 	var/sound_effect_close = 'sound/machines/click.ogg'
 
+/obj/structure/closet/crate/proc/jiggle(var/obj/item/I)
+	var/jx = I.w_class == W_CLASS_TINY ? 7 : 3
+	var/jy = I.w_class == W_CLASS_TINY ? 3 : 1
+	I.pixel_x = rand(-jx,jx)
+	I.pixel_y = rand(-jy,jy)
+
 /obj/structure/closet/crate/basic
 	has_lock_type = /obj/structure/closet/crate/secure/basic
 
@@ -124,6 +130,9 @@
 	var/target_temp = T0C - 40
 	var/cooling_power = 40
 
+/obj/structure/closet/crate/freezer/get_heat_conductivity()
+	return HEAT_CONDUCTIVITY_REFRIGERATOR
+
 /obj/structure/closet/crate/freezer/return_air()
 	var/datum/gas_mixture/gas = (..())
 	if(!gas)
@@ -146,6 +155,39 @@
 	icon_state = "surgeryfreezer"
 	icon_opened = "surgeryfreezeropen"
 	icon_closed = "surgeryfreezer"
+
+/obj/structure/closet/crate/freezer/surgery/close(mob/user)
+	..()
+	update_icon()
+
+	var/list/inside = recursive_type_check(src, /mob/living/carbon/brain)
+	for(var/mob/living/carbon/brain/braine in inside)
+		if(braine.mind && !braine.client) //!braine.client = mob has ghosted out of their body
+			var/mob/dead/observer/ghost = mind_can_reenter(braine.mind)
+			if(ghost)
+				var/mob/ghostmob = ghost.get_top_transmogrification()
+				if(ghostmob)
+					to_chat(ghostmob, "<span class='interface'><span class='big bold'>Your brain has been placed into a surgery freezer.</span> \
+						Re-entering your corpse will cause the freezer's heart to pulse, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
+
+/obj/structure/closet/crate/freezer/surgery/update_icon()
+	..()
+
+	var/list/inside = recursive_type_check(src, /mob/living/carbon/brain)
+	for(var/mob/living/carbon/brain/brained in inside)
+		if(brained.mind && brained.mind.suiciding)
+			continue
+		if(brained && brained.client)
+			icon_state = "surgeryfreezerbrained"
+			return
+
+/obj/structure/closet/crate/freezer/surgery/on_login(var/mob/M)
+	..()
+	update_icon()
+
+/obj/structure/closet/crate/freezer/surgery/on_logout(var/mob/M)
+	..()
+	update_icon()
 
 /obj/structure/closet/crate/bin
 	desc = "A large bin."
@@ -438,6 +480,10 @@
 		return 0
 	playsound(src, sound_effect_open, 15, 1, -3)
 
+	for(var/obj/item/I in contents)
+		if(I.w_class <= W_CLASS_SMALL)
+			jiggle(I)
+
 	dump_contents()
 
 	icon_state = icon_opened
@@ -723,7 +769,7 @@
 			new/obj/item/weapon/gun/projectile/hecate(src)
 			new/obj/item/ammo_storage/box/BMG50(src)
 			new/obj/item/device/radio/headset/headset_earmuffs(src)
-			new/obj/item/clothing/glasses/thermal(src)
+			new/obj/item/clothing/glasses/hud/thermal(src)
 		if("gravitywell")
 			new/obj/item/clothing/suit/radiation(src)
 			new/obj/item/clothing/head/radiation(src)

@@ -24,7 +24,7 @@ var/list/non_standard_maint_areas = list(
 	holder_ref = "\ref[M]"
 	name = M.name//for easier VV debugging
 	ticker.runescape_skulls[holder_ref] = src
-	skull = image('icons/mob/hud.dmi',M,"runescape_skull")
+	skull = new/image/hud('icons/mob/hud.dmi',M,"runescape_skull")
 	skull.plane = ABOVE_LIGHTING_PLANE
 	skull.layer = NARSIE_GLOW
 	skull.pixel_y = 20 * PIXEL_MULTIPLIER
@@ -57,9 +57,11 @@ var/list/non_standard_maint_areas = list(
 		for (var/client/C in clients)
 			C.images += skull
 
-
 /mob/proc/assaulted_by(var/mob/M,var/weak_assault=FALSE)
-	//might be nice to move the LAssailant stuff here at some point
+	if(!iscarbon(M))
+		QDEL_NULL(lastassailant)
+	else
+		lastassailant = makeweakref(M)
 
 	if (M == src)
 		return

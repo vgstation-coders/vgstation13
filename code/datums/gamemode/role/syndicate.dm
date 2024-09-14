@@ -128,15 +128,14 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
-/datum/role/traitor/GetScoreboard()
-	. = ..()
+/datum/role/traitor/GetBought()
 	if(can_be_smooth)
 		if(uplink_items_bought?.len)
-			. += "The traitor bought:<BR>"
+			. = "The traitor bought:<BR>"
 			for(var/entry in uplink_items_bought)
 				. += "[entry]<BR>"
 		else
-			. += "The traitor was a smooth operator this round.<BR>"
+			return "The traitor was a smooth operator this round.<BR>"
 
 /datum/role/traitor/proc/equip_traitor(mob/living/carbon/human/traitor_mob, var/uses = 20)
 	. = FALSE

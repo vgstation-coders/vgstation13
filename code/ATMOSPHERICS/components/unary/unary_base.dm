@@ -6,6 +6,7 @@
 	var/datum/gas_mixture/air_contents
 	var/obj/machinery/atmospherics/node1
 	var/datum/pipe_network/network
+	var/frequency = -1
 
 /obj/machinery/atmospherics/unary/New()
 	..()
@@ -43,7 +44,8 @@
 /obj/machinery/atmospherics/unary/update_icon(var/adjacent_procd,node_list)
 	node_list = list(node1)
 	..(adjacent_procd,node_list)
-
+	
+/obj/machinery/atmospherics/unary/proc/set_frequency(new_frequency)
 
 /obj/machinery/atmospherics/unary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	dir = pipe.dir
@@ -58,6 +60,10 @@
 	if (node1)
 		node1.initialize()
 		node1.build_network()
+	if(pipe.frequency)
+		set_frequency(pipe.frequency)
+	if(pipe.id_tag)
+		id_tag = pipe.id_tag
 	return 1
 
 //this is used when a machine_flags = WRENCHMOVE machine gets anchored down

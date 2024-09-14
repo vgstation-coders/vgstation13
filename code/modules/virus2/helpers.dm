@@ -1,6 +1,6 @@
 //Build random disease type
 /proc/get_random_weighted_disease(var/operation = WDISH)
-	var/list/possibles = subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined)
+	var/list/possibles = subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined) - /datum/disease2/disease/meme/super
 	var/list/weighted_list = list()
 	for(var/P in possibles)
 		var/datum/disease2/disease/D = new P
@@ -144,10 +144,10 @@
 			if(r_foot.status & ORGAN_BLEEDING)
 				bleeding = 1
 		if (HANDS)//walking over infected blood, broken dishes
-			var/datum/organ/external/l_hand = organs_by_name[LIMB_LEFT_HAND]
+			var/datum/organ/external/hand/l_hand = organs_by_name[LIMB_LEFT_HAND]
 			if(l_hand.status & ORGAN_BLEEDING)
 				bleeding = 1
-			var/datum/organ/external/r_hand = organs_by_name[LIMB_RIGHT_HAND]
+			var/datum/organ/external/hand/r_hand = organs_by_name[LIMB_RIGHT_HAND]
 			if(r_hand.status & ORGAN_BLEEDING)
 				bleeding = 1
 	return bleeding
@@ -198,6 +198,10 @@ var/list/infected_contact_mobs = list()
 			if (O && !istype(src, /mob/living/simple_animal/mouse/plague))
 				O.total_infections++
 			plague.update_hud_icons()
+		//--Cult Stuff--
+		if (disease.category == DISEASE_CULT)
+			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+			cult?.check_ritual("cursed_infection", src)
 		//----------------
 
 		for (var/obj/item/device/pda/p in contents)

@@ -175,13 +175,12 @@
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	surgerysound = 'sound/items/scalpel.ogg'
 
-
 /obj/item/tool/scalpel/laser
 	name = "basic laser scalpel"
 	desc = "A scalpel augmented with a directed laser, allowing for bloodless incisions and built-in cautery. This one looks basic and could be improved."
 	icon_state = "scalpel_laser1"
 	item_state = "laserscalpel1"
-	heat_production = 0
+	heat_production = 1000000
 	source_temperature = TEMPERATURE_PLASMA //Even if it's laser based, it depends on plasma
 	damtype = "fire"
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | HOT_EDGE
@@ -207,7 +206,7 @@
 		return
 	else
 		to_chat(user, "You return the scalpel to cutting mode.")
-		heat_production = 0
+		heat_production = initial(heat_production)
 		sharpness = initial(sharpness)
 		sharpness_flags = initial(sharpness_flags)
 	cauterymode = !cauterymode
@@ -227,19 +226,17 @@
 			held.add_fingerprint(user)
 			held.forceMove(get_turf(src))
 			held = null
-			heat_production = 0
+			heat_production = initial(heat_production)
 			sharpness = initial(sharpness)
 			sharpness_flags = initial(sharpness_flags)
 			cauterymode = 0
 	else if(istype(used_item, /obj/item/tool/cautery/laser))
 		if(held)
 			to_chat(user, "<span class='notice'>There's already a cautery attached to \the [src].</span>")
-		else if(!held && user.drop_item(used_item, src))
+		else if(!held && user.drop_item(used_item, src, failmsg = TRUE))
 			to_chat(user, "<span class='notice'>You attach \the [used_item] to \the [src].</span>")
 			playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 			src.held = used_item
-		else
-			to_chat(user, "<span class='danger'>You can't let go of \the [used_item]!</span>")
 
 /*
 /obj/item/tool/scalpel/laser/old //unused laser scalpel
@@ -262,6 +259,7 @@
 	item_state = "laserscalpel2"
 	force = 15.0
 	toolspeed = 0.4
+	heat_production = 10000000
 
 /obj/item/tool/scalpel/laser/tier2/New()
 	..()
@@ -321,7 +319,9 @@
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
+
 	surgerysound = 'sound/items/bonegel.ogg'
 
 /obj/item/tool/bonegel/suicide_act(var/mob/living/user)
@@ -340,7 +340,9 @@
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
+
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=3"
 	var/usage_amount = 10
 	surgerysound = 'sound/items/fixovein.ogg'

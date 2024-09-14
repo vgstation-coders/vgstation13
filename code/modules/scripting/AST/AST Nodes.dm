@@ -62,18 +62,18 @@
 	Class: operator
 	See <Binary Operators> and <Unary Operators> for subtypes.
 */
-/datum/node/expression/operator
+/datum/node/expression/operation //operator would be a better name for the type, and BYOND itself accepts it, but a number of external tools do not.
 	var/datum/node/expression/exp
 	var/token = "" // Used when giving type mismatches.
 	var/tmp/name
 	var/tmp/precedence
 
-/datum/node/expression/operator/New()
+/datum/node/expression/operation/New()
 	.=..()
 	if(!src.name)
 		src.name = "[src.type]"
 
-/datum/node/expression/operator/ToString()
+/datum/node/expression/operation/ToString()
 	return "operator: [name]"
 
 /*

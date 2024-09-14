@@ -12,6 +12,15 @@ var/global/list/mineralSpawnChance[]
 		"Diamond"   = 1,
 		"Cave"      = 1,
 	)
+	mineralSpawnChance["random_safe"] = list(
+		"Iron"      = 50,
+		"Plasma"    = 25,
+		"Ice"		= 10,
+		"Uranium"   = 5,
+		"Gold"      = 5,
+		"Silver"    = 5,
+		"Diamond"   = 1,
+	)
 	mineralSpawnChance["snow"] = list(
 		"Nanotrasite" = 24,
 		"Electrum"  = 8,
@@ -146,7 +155,8 @@ var/global/list/mineralSpawnChance[]
 /turf/unsimulated/mineral/New()
 	mineral_turfs += src
 	. = ..()
-	MineralSpread()
+	if(istype(src))
+		MineralSpread()
 	update_icon()
 
 var/list/icon_state_to_appearance = list()
@@ -627,6 +637,12 @@ var/list/icon_state_to_appearance = list()
 	..()
 	icon_state = pick("cavefl_1","cavefl_2","cavefl_3","cavefl_4")
 
+/turf/unsimulated/floor/asteroid/underground/airless // Used by the pod station vault
+	name = "paved asteroid"
+	oxygen = 0.01
+	nitrogen = 0.01
+	temperature = TCMB
+
 /turf/unsimulated/floor/asteroid/New()
 	..()
 	if(prob(20) && icon_state == "asteroid")
@@ -823,6 +839,11 @@ var/list/icon_state_to_appearance = list()
 				warning("Unknown mineral ID: [mineral_name]")
 
 	. = ..()
+
+/turf/unsimulated/mineral/random/air
+	name = "cave wall"
+	mined_type = /turf/simulated/floor/asteroid/air
+	mineralPool = "random_safe"
 
 /turf/unsimulated/mineral/random/snow
 	icon_state = "snow_rock"

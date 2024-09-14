@@ -3,6 +3,7 @@
 /mob/living/simple_animal/hostile/humanoid/vox
 	name = "vox"
 	desc = "A bird-like creature. This one is feral."
+	see_in_dark = 3
 
 	icon = 'icons/mob/hostile_humanoid.dmi'
 	icon_state = "vox"
@@ -238,6 +239,8 @@
 	attacktext = "stabs"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 
+	see_in_dark = 5 // Can see a little better in the dark
+
 	corpse = /obj/effect/landmark/corpse/vox/spaceraider_assassin
 
 	items_to_drop = list(/obj/item/weapon/gun/energy/laser/retro, /obj/item/weapon/kitchen/utensil/knife/tactical)
@@ -335,6 +338,8 @@
 	name = "Vox Deadeye"
 	desc = "A vox raider in a pressure suit. This one is hefting a large mosin rifle, and you're in their sights..."
 	icon_state = "voxraider_deadeye"
+
+	see_in_dark = 10
 	vision_range = 10
 	aggro_vision_range = 10
 	idle_vision_range = 10 // He's got good eyes
@@ -371,6 +376,7 @@
 	health = 300
 	maxHealth = 300
 
+	see_in_dark = 10
 	vision_range = 10
 	aggro_vision_range = 10
 	idle_vision_range = 10 // He's the boss, nothing gets past him
@@ -386,13 +392,16 @@
 
 	var/berserk = 0
 	var/last_bigheal = 0
-	var/const/bigheal_cooldown = 45 SECONDS // Can heal himself when his health gets very low, but has to wait before doing it again
+	var/const/bigheal_cooldown = 30 SECONDS // Can heal himself when his health gets very low, but has to wait before doing it again
+
+	var/last_handchop = 0
+	var/const/handchop_cooldown = 15 SECONDS // Uh oh
 
 	corpse = /obj/effect/landmark/corpse/vox/spaceraider_leader
 
 	items_to_drop = list(/obj/item/weapon/gun/projectile/shotgun/pump/combat/shorty, /obj/item/weapon/melee/energy/hfmachete)
 
-	speak = list("When the reinforcements get here...","Kraaaah, this take too much time!","Stupid fleshies.","Of ten, take four for slaves, kill five, and leave one to tell tale.")
+	speak = list("When the reinforcements get here...","Kraaaah, this take too much time!","Stupid fleshies.","For every ten prisoners... kill five, take four for slaves, and leave one to tell tale.")
 	speak_chance = 5
 
 	ranged = 1
@@ -407,21 +416,8 @@
 
 /mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader/Life()
 	..()
-	if(health <= (maxHealth/2) && berserk == 0) // Will go berserk if he loses half his health
-		visible_message("<span class='warning'>[src] lowers his shotgun and charges with his machete raised!</span>")
-		berserk = 1
-		move_to_delay = 1.8 // Chaaaaaaaaaaarge
-		ranged = 0
-		noloot_retreat = 1
-		noloot_minimum = 1
-
-	if(health > (maxHealth/2) && berserk == 1) // Will calm down again if he heals himself above half health
-		visible_message("<span class='warning'>[src] lowers his machete to a defensive position and raises his shotgun!</span>")
-		berserk = 0
-		move_to_delay = 2 // Back to normal speed
-		ranged = 1
-		noloot_retreat = 3
-		noloot_minimum = 3
+	if(health <= (maxHealth/2)) // Will go berserk if he loses half his health
+		berserk()
 
 	if((last_bigheal + bigheal_cooldown < world.time) && health < 75) // After he heals he has to wait quite a while before doing it again. Don't give him time to do it again
 		health+=150
@@ -429,6 +425,40 @@
 		playsound(src, 'sound/misc/shriek1.ogg', 50, 1)
 		new /obj/item/weapon/reagent_containers/syringe/giant(src.loc)
 		last_bigheal = world.time
+
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader/AttackingTarget()
+	if(istype(target, /mob/living))
+		var/mob/living/M = target
+		if(ishuman(M) && (last_handchop + handchop_cooldown < world.time))
+			handChop(M)
+		else
+			..()
+
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader/proc/berserk()
+	visible_message("<span class='warning'>[src] lowers his shotgun and charges with his machete raised!</span>")
+	ranged = 0
+	move_to_delay = 1.6 // Chaaaaaaaaaaarge
+	noloot_retreat = 2 // Will attempt to get close
+	noloot_minimum = 1
+
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader/proc/handChop(var/mob/living/carbon/human/H)
+	var/datum/organ/external/toChop = H.pick_usable_organ(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)
+	if(toChop)
+		toChop.droplimb(1,1)
+		visible_message("<span class='warning'>[src] slices [H]'s hand clean off with a well placed slash!</span>")
+		playsound(src, 'sound/weapons/machete_hit01.ogg', 50, 1)
+		H.update_icons()
+		say(pick("Another for the collection!","Still feel brave, fool?","Need a hand? Krahahahaaa!","That is the fate of all weaklings!"), all_languages[LANGUAGE_VOX])
+		last_handchop = world.time
+	else
+		return
+
+//Named subtype present in the lab vault
+/mob/living/simple_animal/hostile/humanoid/vox/spaceraider/leader/named
+	name = "Hakiyikachiyayi the Handchopper"
+	desc = "A notorious shoal raider, wanted dead or alive in at least twelve sectors."
+
+	corpse = /obj/effect/landmark/corpse/vox/spaceraider_leader_named
 
 /////////VOX SHARPSHOOTERS
 //Armed with crossbows

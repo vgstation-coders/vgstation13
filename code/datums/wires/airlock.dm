@@ -56,7 +56,7 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 /datum/wires/airlock/GetInteractWindow()
 	var/obj/machinery/door/airlock/A = holder
 	. += ..()
-	. += text("<br>\n[]<br>\n[]<br>\n[]<br>\n[]<br>\n[]<br>\n[]", (A.locked ? "The door bolts have fallen!" : "The door bolts look up."),
+	. += text("<br>\n[]<br>\n[]<br>\n[]<br>\n[]<br>\n[]<br>\n[]", (A.locked ? "The door bolts have fallen!" : "The door bolts [A.boltsDestroyed ? "have been chopped!" : "look up."]"),
 	(A.lights ? "The door bolt lights are on." : "The door bolt lights are off!"),
 	((A.arePowerSystemsOn() && !(A.stat & NOPOWER)) ? "The test light is on." : "The test light is off!"),
 	(A.aiControlDisabled==0 ? "The 'AI control allowed' light is on." : "The 'AI control allowed' light is off."),
@@ -96,7 +96,7 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 			if(!mended)
 				//Cutting this wire also drops the door bolts, and mending it does not raise them. (This is what happens now, except there are a lot more wires going to door bolts at present)
 				if(A.locked!=1)
-					A.locked = 1
+					A.locked = A.boltsDestroyed ? 0 : 1
 				A.update_icon()
 
 		if(AIRLOCK_WIRE_AI_CONTROL)
@@ -145,7 +145,7 @@ var/const/AIRLOCK_WIRE_ONOPEN = 4096
 			//one wire for door bolts. Sending a pulse through this drops door bolts if they're not down (whether power's on or not),
 			//raises them if they are down (only if power's on)
 			if(!A.locked)
-				A.locked = 1
+				A.locked = A.boltsDestroyed ? 0 : 1
 				playsound(A, "sound/machines/door_bolt.ogg", 50, 1, -1)
 				for(var/mob/M in range(1, A))
 					to_chat(M, "You hear a metallic clunk from the bottom of the door.")

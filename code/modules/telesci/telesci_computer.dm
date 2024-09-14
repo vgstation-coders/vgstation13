@@ -125,24 +125,10 @@
 		to_chat(user, "<span class='warning'>There is already a cell in \the [name].</span>")
 		return TRUE
 
-	if(user.drop_item(W, src))
+	if(user.drop_item(W, src, failmsg = TRUE))
 		cell = W
 		user.visible_message("[user] inserts a cell into \the [src].", "You insert a cell into \the [src].")
 		nanomanager.update_uis(src)
-	else
-		to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
-
-
-/obj/machinery/computer/telescience/update_icon()
-	if(stat & BROKEN)
-		icon_state = "teleportb"
-		return
-
-	if(stat & (NOPOWER|FORCEDISABLE))
-		src.icon_state = "teleport0"
-
-	else
-		icon_state = initial(icon_state)
 
 /obj/machinery/computer/telescience/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER|FORCEDISABLE))

@@ -50,9 +50,6 @@ emp_act
 
 
 /mob/living/carbon/human/getarmor(var/def_zone, var/type)
-	var/armorval = 0
-	var/organnum = 0
-
 	if(def_zone)
 		if(isorgan(def_zone))
 			return checkarmor(def_zone, type)
@@ -61,14 +58,14 @@ emp_act
 		//If a specific bodypart is targetted, check how that bodypart is protected and return the value.
 
 	//If you don't specify a bodypart, it checks ALL your bodyparts for protection, and averages out the values
+	var/armorval = 0
+	var/organnum = 0
 	for(var/datum/organ/external/organ in organs)
 		armorval += checkarmor(organ, type)
 		organnum++
 	return (armorval/max(organnum, 1))
 
 /mob/living/carbon/human/getarmorabsorb(var/def_zone, var/type)
-	var/armorval = 0
-	var/organnum = 0
 	if(def_zone)
 		if(isorgan(def_zone))
 			return checkarmorabsorb(def_zone, type)
@@ -77,10 +74,42 @@ emp_act
 		//If a specific bodypart is targetted, check how that bodypart is protected and return the value.
 
 	//If you don't specify a bodypart, it checks ALL your bodyparts for protection, and averages out the values
+	var/armorval = 0
+	var/organnum = 0
 	for(var/datum/organ/external/organ in organs)
 		armorval += checkarmorabsorb(organ, type)
 		organnum++
 	return (armorval/max(organnum, 1))
+
+/mob/living/carbon/human/proc/getthermalprot(var/def_zone)
+	if(def_zone)
+		if(isorgan(def_zone))
+			return checkthermalprot(def_zone)
+		var/datum/organ/external/affecting = get_organ(ran_zone(def_zone))
+		return checkthermalprot(affecting)
+		//If a specific bodypart is targetted, check how that bodypart is protected and return the value.
+
+	//If you don't specify a bodypart, it checks ALL your bodyparts for protection, and averages out the values
+	var/thermal_prot = 0
+	var/organnum = 0
+	for(var/datum/organ/external/organ in organs)
+		thermal_prot += checkthermalprot(organ, type)
+		organnum++
+	return (thermal_prot/max(organnum, 1))
+
+/mob/living/carbon/human/proc/checkthermalprot(var/datum/organ/external/def_zone)
+	var/thermal_pass = 1 //1 means no protection, 0 means total protection
+	for(var/ci in get_clothing_items())
+		if(isitem(ci))
+			var/obj/item/C = ci
+			if(C.body_parts_covered & def_zone.body_part)
+				thermal_pass *= C.heat_conductivity
+			if(istype(C, /obj/item/clothing))
+				var/obj/item/clothing/CC = C
+				for(var/obj/item/clothing/accessory/A in CC.accessories)
+					if(A.body_parts_covered & def_zone.body_part)
+						thermal_pass *= A.heat_conductivity
+	return thermal_pass
 
 
 /mob/living/carbon/human/proc/get_siemens_coefficient_organ(var/datum/organ/external/def_zone)
@@ -134,7 +163,6 @@ emp_act
 					if(A.body_parts_covered & def_zone.body_part)
 						protection += A.get_armor_absorb(type)
 	return protection
-
 
 /mob/living/carbon/human/proc/check_body_part_coverage(var/body_part_flags=0, var/obj/item/ignored)
 	if(!body_part_flags)
@@ -221,12 +249,13 @@ emp_act
 
 	if (!affecting)
 		return FALSE
-	if(affecting.status & ORGAN_DESTROYED)
-		if(originator)
-			to_chat(originator, "What [affecting.display_name]?")
-		else
-			to_chat(user, "What [affecting.display_name]?")
-		return FALSE
+
+	// if(affecting.status & ORGAN_DESTROYED)
+	// 	if(originator)
+	// 		to_chat(originator, "What [affecting.display_name]?")
+	// 	else
+	// 		to_chat(user, "What [affecting.display_name]?")
+	// 	return FALSE
 	var/hit_area = affecting.display_name
 
 	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NO_ATTACK_MSG))
@@ -583,8 +612,9 @@ emp_act
 			show_message("<span class='warning'>The blob attacks you!</span>")
 			var/dam_zone = pick(organs_by_name)
 			var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
-
-			apply_damage(run_armor_absorb(affecting, "melee", rand(30,40)), BRUTE, affecting, run_armor_check(affecting, "melee"))
+			//Blobs do 50% brute damage and 50% burn damage, and reduce armor value by 50% multiplicatively, so 80% damage reduction becomes 40%.
+			apply_damage(run_armor_absorb(affecting, "melee", rand(15,20)), BRUTE, affecting, run_armor_check(affecting, "melee", modifier = 0.5))
+			apply_damage(run_armor_absorb(affecting, "melee", rand(15,20)), BURN, affecting, run_armor_check(affecting, "melee", modifier = 0.5))
 
 /mob/living/carbon/human/dissolvable()
 	if(species && species.anatomy_flags & ACID4WATER)
@@ -594,3 +624,45 @@ emp_act
 
 /mob/living/carbon/human/beam_defense(var/obj/effect/beam/B)
 	return is_wearing_item(/obj/item/clothing/suit/reticulatedvest) ? 0.4 : 1
+
+/mob/living/carbon/human/FireBurn(firelevel = 0, temperature, pressure)
+	var/head_exposure = 1
+	var/chest_exposure = 1
+	var/groin_exposure = 1
+	var/legs_exposure = 1
+	var/arms_exposure = 1
+
+	//Get heat transfer coefficients for clothing.
+	for(var/obj/item/clothing/C in src)
+		if(is_holding_item(C))
+			continue
+		if(C.max_heat_protection_temperature >= temperature)
+			if(!is_slot_hidden(C.body_parts_covered,FULL_HEAD))
+				head_exposure = 0
+			if(!is_slot_hidden(C.body_parts_covered,UPPER_TORSO))
+				chest_exposure = 0
+			if(!is_slot_hidden(C.body_parts_covered,LOWER_TORSO))
+				groin_exposure = 0
+			if(!is_slot_hidden(C.body_parts_covered,LEGS))
+				legs_exposure = 0
+			if(!is_slot_hidden(C.body_parts_covered,ARMS))
+				arms_exposure = 0
+
+	//minimize this for low-pressure enviroments
+	var/mx = 5 * max(firelevel,1.5)/ZAS_firelevel_multiplier * min(pressure / ONE_ATMOSPHERE, 1)
+
+	//Always check these damage procs first if fire damage isn't working. They're probably what's wrong.
+	var/fire_tile_modifier = 4 //multiplier for damage received while standing on a fire tile
+	apply_damage(fire_tile_modifier*HEAD_FIRE_DAMAGE_MULTIPLIER*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*CHEST_FIRE_DAMAGE_MULTIPLIER*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
+	apply_damage(fire_tile_modifier*GROIN_FIRE_DAMAGE_MULTIPLIER*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
+	apply_damage(fire_tile_modifier*LEGS_FIRE_DAMAGE_MULTIPLIER*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*LEGS_FIRE_DAMAGE_MULTIPLIER*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
+	apply_damage(fire_tile_modifier*ARMS_FIRE_DAMAGE_MULTIPLIER*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")
+
+	if(head_exposure || chest_exposure || groin_exposure || legs_exposure || arms_exposure)
+		dizziness = 5
+		confused = 5
+		if(prob(25))
+			audible_scream()

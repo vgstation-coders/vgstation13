@@ -15,8 +15,8 @@
 	icon_state = "firstaid"
 	throw_speed = 2
 	throw_range = 8
-	autoignition_temperature = AUTOIGNITION_PAPER
-
+	w_type = RECYK_PLASTIC
+	flammable = TRUE
 
 /obj/item/weapon/storage/firstaid/fire
 	name = "fire first-aid kit"
@@ -129,6 +129,9 @@
 	..()
 	colour_overlay = image('icons/obj/chemical.dmi',"bottle_colour")
 	overlays += colour_overlay
+
+/obj/item/weapon/storage/pill_bottle/return_air()//keeping your pills at room temperature while in space
+	return
 
 /obj/item/weapon/storage/pill_bottle/CtrlClick()
 	if(isturf(loc))
@@ -396,7 +399,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	desc = "Toxin 'Free'!"
 	icon_state = "mintboxgeneric"
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/mint/syndiemint/discount/safe = 50)
-	
+
 /obj/item/weapon/storage/pill_bottle/mint/nano
 	name = "NanoFresh"
 	desc = "An explosion of freshness in each candy!"
@@ -420,19 +423,6 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/lollipop = 4)
 
 /obj/item/weapon/storage/pill_bottle/lollipops/New()
-	..()
-	overlays = null
-
-/obj/item/weapon/storage/pill_bottle/zambiscuits
-	name = "Zam Biscuit Package"
-	desc = "A package of Zam biscuits, popular fare for hungry grey laborers. They go perfectly with a cup of Earl's Grey tea. "
-	icon = 'icons/obj/food_container.dmi'
-	icon_state = "zambiscuits"
-	storage_slots = 3
-	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/zambiscuit", "/obj/item/weapon/reagent_containers/food/snacks/zambiscuit_radical")
-	items_to_spawn = list(/obj/item/weapon/reagent_containers/food/snacks/zambiscuit = 3)
-
-/obj/item/weapon/storage/pill_bottle/zambiscuits/New()
 	..()
 	overlays = null
 

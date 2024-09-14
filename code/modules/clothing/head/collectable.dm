@@ -40,6 +40,14 @@
 	desc = "A top hat worn by only the most prestigious hat collectors."
 	icon_state = "tophat"
 	item_state = "that"
+	vertical_offset = 1
+
+/obj/item/clothing/head/collectable/tooophat
+	name = "collectable top hat"
+	desc = "A top hat worn by only the most prestigious hat collectors."
+	icon_state = "tooophat"
+	item_state = "that"
+	vertical_offset = 9
 
 /obj/item/clothing/head/collectable/captain
 	name = "collectable captain's hat"

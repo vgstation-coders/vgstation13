@@ -124,7 +124,7 @@
 			for(var/i = 1; i < alarm_types_clear.len; i++)
 				alarm_types_clear[i] = 0
 
-/mob/living/silicon/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0)
+/mob/living/silicon/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0, failmsg)
 	return 1
 
 /mob/living/silicon/emp_act(severity)
@@ -155,7 +155,7 @@
 /mob/living/silicon/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj.nodamage)
 		adjustBruteLoss(Proj.damage)
-	Proj.on_hit(src,2)
+	Proj.robot_on_hit(src,100) //Unique variant of on_hit
 	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/silicon/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)

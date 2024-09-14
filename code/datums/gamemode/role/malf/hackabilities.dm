@@ -241,7 +241,7 @@
 			T.cover.shake_animation(4, 4, 0.2 SECONDS, 20)
 	else
 		machine.shake_animation(4, 4, 0.2 SECONDS, 20)
-	spark(machine)
+	spark(machine, surfaceburn = TRUE)
 	spawn(4 SECONDS)
 		if(machine)
 			explosion(get_turf(machine), -1, 2, 3, 4) // Welding tank sized explosion
@@ -482,6 +482,13 @@
 		return
 
 	MF.stage(FACTION_ENDGAME)
+	switch(A.chosen_core_icon_state)
+		if("ai-malf-shodan")
+			command_alert(/datum/command_alert/malf_announce/shodan)
+		if("ai-xerxes")
+			command_alert(/datum/command_alert/malf_announce/xerxes)
+		else
+			command_alert(/datum/command_alert/malf_announce)
 	M.core_upgrades -= src
 
 //--------------------------------------------------------
@@ -499,6 +506,20 @@
 	A.eyeobj.high_res = 1
 	to_chat(A, "<span class='warning'>High Resolution camera software installed.</span>")
 	A.update_perception()
+
+//--------------------------------------------------------
+
+/datum/malfhack_ability/core/explode
+	name = "Explosive Core"
+	desc = "Rigs your core to explode upon your untimely deactivation."
+	icon = "radial_alertboom"
+	cost = 20
+
+/datum/malfhack_ability/core/explode/activate(mob/living/silicon/ai/A)
+	if(!..())
+		return
+	A.explosive = TRUE
+	to_chat(A, "<span class='warning'>Your core will now detonate if it gets destroyed.</span>")
 
 //--------------------------------------------------------
 

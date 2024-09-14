@@ -30,6 +30,9 @@
 	icon_state = ""
 	anchored = 1
 
+/obj/effect/cult_ritual/get_cult_power()
+	return 1
+
 /obj/effect/cult_ritual/cultify()
 	return
 
@@ -107,17 +110,23 @@
 /obj/effect/afterimage/black
 	image_color = "black"
 
-/obj/effect/afterimage/New(var/turf/loc, var/atom/model, var/fadout = 5)
+/obj/effect/afterimage/richter_tackle/New()
+	..()
+	transform = matrix()
+	pixel_x = 0
+	pixel_y = 0
+
+/obj/effect/afterimage/New(var/turf/loc, var/atom/model, var/fadout = 5, var/initial_alpha = 255, var/lay = NARSIE_GLOW, var/pla = ABOVE_LIGHTING_PLANE)
 	..()
 	if(model)
-		src.appearance = model.appearance
+		appearance = model.appearance
 		invisibility = 0
-		alpha = 255
+		alpha = initial_alpha
 		dir = model.dir
 		if (image_color)
 			color = image_color
-		layer = NARSIE_GLOW
-		plane = ABOVE_LIGHTING_PLANE
+		layer = lay
+		plane = pla
 	animate(src,alpha = 0, time = fadout)
 	spawn(fadout)
 		qdel(src)
@@ -232,8 +241,6 @@
 					M.see_invisible_override = SEE_INVISIBLE_LEVEL_TWO
 					M.apply_vision_overrides()
 					M.flags |= INVULNERABLE
-		if(noncult_victims.len > 0 && activator)
-			TriggerCultRitual(/datum/bloodcult_ritual/spirited_away, activator, list("victims" = noncult_victims))
 	starting = loc
 	target = destination
 	initial_pixel_x = pixel_x
@@ -472,6 +479,9 @@
 	animate(src, alpha = 0, time = 3)
 	..()
 
+/obj/effect/bloodcult_jaunt/visible
+	invisibility = 0
+	alpha = 255
 
 ///////////////////////////////////////BLOODSTONE DEFENSES////////////////////////////////////////////////
 
@@ -631,11 +641,13 @@ var/bloodstone_backup = 0
 /obj/effect/stun_indicator/singularity_act()
 	return
 
+/*
 ///////////////////////////////////OFFERINGS EFFECT////////////////////////////
 /obj/effect/cult_offerings
 	anchored = 1
 	mouse_opacity = 0
 	icon_state = "offerings"
+*/
 
 ///////////////////////////////////THROWN DAGGER TRAP////////////////////////////
 
@@ -663,39 +675,79 @@ var/bloodstone_backup = 0
 //used by the cultdance emote. other cult dances have their own procs
 /obj/effect/cult_ritual/dance
 	var/list/dancers = list()
+	var/list/extras = list()
+	var/datum/rune_spell/tearreality/tear
 
 /obj/effect/cult_ritual/dance/New(var/turf/loc, var/mob/first_dancer)
 	..()
-	if (!first_dancer)
-		qdel(src)
-		return
 
-	dancers += first_dancer
-	//processing_objects.Add(src)
-
-	we_can_dance()
+	if (first_dancer)
+		dancers += first_dancer
+		we_can_dance()
 
 
 /obj/effect/cult_ritual/dance/Destroy()
-	//processing_objects.Remove(src)
 	dancers = list()
+	tear = null
+	for (var/obj/effect/cult_ritual/dance_platform/P in extras)
+		P.dance_manager = null
+	extras = list()
 	..()
 
+/obj/effect/cult_ritual/dance/proc/i_can_dance(var/mob/living/carbon/M)
+	if (!M.incapacitated())
+		return  TRUE
+	else if (istype(M) && istype(M.handcuffed,/obj/item/weapon/handcuffs/cult)) //prisoners will be forced to dance even if incapacitated
+		return TRUE
+	return FALSE
+
 /obj/effect/cult_ritual/dance/proc/we_can_dance()
-	while(TRUE)
-		for (var/mob/M in dancers)
-			if (get_dist(src,M) > 1 || M.incapacitated() || M.occult_muted())
-				dancers -= M
-				continue
-		if (dancers.len <= 0)
-			qdel(src)
-			return
-		dance_step()
-		sleep(3)
-		dance_step()
-		sleep(3)
-		dance_step()
-		sleep(6)
+	set waitfor = 0
+
+	if (dancers.len <= 0)
+		qdel(src)
+		return
+
+	if (tear)
+		add_particles(PS_TEAR_REALITY)
+		icon = 'icons/obj/cult.dmi'
+		icon_state = "tear"
+		while(src && loc)
+			for (var/mob/M in dancers)
+				if (get_dist(src,M) > 1 || !i_can_dance(M) || M.occult_muted())
+					dancers -= M
+					continue
+			if ((dancers.len <= 0) && (tear.dance_count < tear.dance_target))
+				qdel(src)
+				return
+			dance_move()
+			sleep(3)
+			dance_move()
+			sleep(3)
+			dance_move()
+			if (tear.dance_count < tear.dance_target+10)
+				adjust_particles(PVAR_SPAWNING, clamp(0.1 + 0.00375 * tear.dance_count,0.1,1), PS_TEAR_REALITY)
+				var/scale = clamp(1 + 0.00416 * tear.dance_count,1,1.9)
+				adjust_particles(PVAR_SCALE, list(scale, scale), PS_TEAR_REALITY)
+			else
+				remove_particles(PS_TEAR_REALITY)
+			tear.update_crystals()
+			sleep(6)
+	else
+		while(TRUE)
+			for (var/mob/M in dancers)
+				if (get_dist(src,M) > 1 || M.incapacitated() || M.occult_muted())
+					dancers -= M
+					continue
+			if (dancers.len <= 0)
+				qdel(src)
+				return
+			dance_step()
+			sleep(3)
+			dance_step()
+			sleep(3)
+			dance_step()
+			sleep(6)
 
 /obj/effect/cult_ritual/dance/proc/add_dancer(var/mob/dancer)
 	if(dancer in dancers)
@@ -750,3 +802,512 @@ var/bloodstone_backup = 0
 					sleep(0.75)
 					M.dir = SOUTH
 					INVOKE_EVENT(M, /event/face)
+
+
+
+/obj/effect/cult_ritual/dance/proc/dance_move()
+	var/dance_move = pick("clock","counter","spin")
+	switch(dance_move)
+		if ("clock")
+			for (var/obj/effect/cult_ritual/dance_platform/P in extras)
+				P.moving = TRUE
+			for (var/mob/M in dancers)
+				INVOKE_EVENT(M, /event/before_move)
+				switch (get_dir(src,M))
+					if (NORTHWEST,NORTH)
+						M.forceMove(get_step(M,EAST))
+						M.dir = EAST
+					if (NORTHEAST,EAST)
+						M.forceMove(get_step(M,SOUTH))
+						M.dir = SOUTH
+					if (SOUTHEAST,SOUTH)
+						M.forceMove(get_step(M,WEST))
+						M.dir = WEST
+					if (SOUTHWEST,WEST)
+						M.forceMove(get_step(M,NORTH))
+						M.dir = NORTH
+				INVOKE_EVENT(M, /event/after_move)
+				INVOKE_EVENT(M, /event/moved, "mover" = M)
+			for (var/obj/effect/cult_ritual/dance_platform/P in extras)
+				switch (get_dir(src,P))
+					if (NORTHWEST,NORTH)
+						step_to(P, get_step(P,EAST))
+					if (NORTHEAST,EAST)
+						step_to(P, get_step(P,SOUTH))
+					if (SOUTHEAST,SOUTH)
+						step_to(P, get_step(P,WEST))
+					if (SOUTHWEST,WEST)
+						step_to(P, get_step(P,NORTH))
+				P.moving = FALSE
+		if ("counter")
+			for (var/obj/effect/cult_ritual/dance_platform/P in extras)
+				P.moving = TRUE
+			for (var/mob/M in dancers)
+				INVOKE_EVENT(M, /event/before_move)
+				switch (get_dir(src,M))
+					if (NORTHEAST,NORTH)
+						M.forceMove(get_step(M,WEST))
+						M.dir = WEST
+					if (SOUTHEAST,EAST)
+						M.forceMove(get_step(M,NORTH))
+						M.dir = NORTH
+					if (SOUTHWEST,SOUTH)
+						M.forceMove(get_step(M,EAST))
+						M.dir = EAST
+					if (NORTHWEST,WEST)
+						M.forceMove(get_step(M,SOUTH))
+						M.dir = SOUTH
+				INVOKE_EVENT(M, /event/after_move)
+				INVOKE_EVENT(M, /event/moved, "mover" = M)
+			for (var/obj/effect/cult_ritual/dance_platform/P in extras)
+				switch (get_dir(src,P))
+					if (NORTHEAST,NORTH)
+						step_to(P, get_step(P,WEST))
+					if (SOUTHEAST,EAST)
+						step_to(P, get_step(P,NORTH))
+					if (SOUTHWEST,SOUTH)
+						step_to(P, get_step(P,EAST))
+					if (NORTHWEST,WEST)
+						step_to(P, get_step(P,SOUTH))
+				P.moving = FALSE
+		if ("spin")
+			for (var/mob/M in dancers)
+				spawn()
+					M.dir = SOUTH
+					INVOKE_EVENT(M, /event/face)
+					sleep(0.75)
+					M.dir = EAST
+					INVOKE_EVENT(M, /event/face)
+					sleep(0.75)
+					M.dir = NORTH
+					INVOKE_EVENT(M, /event/face)
+					sleep(0.75)
+					M.dir = WEST
+					INVOKE_EVENT(M, /event/face)
+					sleep(0.75)
+					M.dir = SOUTH
+					INVOKE_EVENT(M, /event/face)
+
+///////////////////////////////////DANCE PLATEFORMS////////////////////////////////////
+//Tear Reality rune uses those
+
+var/list/dance_platform_prisoners = list()
+
+/obj/effect/cult_ritual/dance_platform
+	anchored = 1
+	icon = 'icons/obj/cult.dmi'
+	icon_state = "blank"
+	layer = ABOVE_OBJ_LAYER
+	plane = OBJ_PLANE
+	alpha = 0
+	var/moving = FALSE
+	var/mob/living/dancer = null
+	var/datum/rune_spell/tearreality/source = null
+	var/prisoner = FALSE
+	var/obj/effect/cult_ritual/dance/dance_manager
+
+/obj/effect/cult_ritual/dance_platform/New(var/turf/loc, var/datum/rune_spell/tearreality/runespell)
+	..()
+	if (!runespell)
+		qdel(src)
+		return
+
+	var/image/I_circle = image(icon, src, "dance_platform_empty")
+	I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+	I_circle.layer = ABOVE_TILE_LAYER
+	I_circle.appearance_flags |= RESET_COLOR
+	overlays += I_circle
+	transform *= 0.3
+	source = runespell
+	processing_objects += src
+	idle_pulse()
+
+	spawn(5)
+		animate(src, alpha = 255, transform = matrix(), time = 4)
+
+/obj/effect/cult_ritual/dance_platform/Destroy()
+	if (dancer && prisoner)
+		dancer.SetStunned(-4)
+	dancer = null
+	source = null
+	dance_manager = null
+	processing_objects -= src
+	..()
+
+/obj/effect/cult_ritual/dance_platform/process()
+	if (dancer && prisoner)
+		dancer.SetStunned(4)
+
+	if (dancer)
+		if (dancer.loc != loc)
+			dancer = null
+			source.lost_dancer()
+			prisoner = FALSE
+			overlays.len = 0
+			var/image/I_circle = image(icon, src, "dance_platform_empty")
+			I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+			I_circle.layer = ABOVE_TILE_LAYER
+			I_circle.appearance_flags |= RESET_COLOR
+			overlays += I_circle
+		else
+			source.dance_increment(dancer)
+	else
+		for (var/mob/living/carbon/C in loc)
+			if (valid_dancer(C))
+				break
+
+/obj/effect/cult_ritual/dance_platform/Crossed(var/atom/movable/mover)
+	valid_dancer(mover)
+
+/obj/effect/cult_ritual/dance_platform/proc/valid_dancer(var/atom/movable/mover)
+	if (!dancer && !moving)
+		if (iscarbon(mover))
+			var/mob/living/carbon/C = mover
+			if (C.mind && !C.isDead())
+				if (iscultist(C))
+					dancer = C
+					overlays.len = 0
+					var/image/I_circle = image(icon, src, "dance_platform_full")
+					I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+					I_circle.layer = ABOVE_TILE_LAYER
+					I_circle.appearance_flags |= RESET_COLOR
+					var/image/I_markings = image(icon, src,"dance_platform_markings")
+					I_markings.plane = relative_plane(OBJ_PLANE)
+					I_markings.layer = BELOW_TABLE_LAYER
+					overlays += I_circle
+					overlays += I_markings
+					source.dancer_check(C)
+					return TRUE
+				else
+					if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
+						dancer = C
+						prisoner = TRUE
+						dancer.SetStunned(4)
+						overlays.len = 0
+						var/image/I_circle = image(icon, src, "dance_platform_full")
+						I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+						I_circle.layer = ABOVE_TILE_LAYER
+						I_circle.appearance_flags |= RESET_COLOR
+						var/image/I_markings = image(icon, src,"dance_platform_markings")
+						I_markings.plane = relative_plane(OBJ_PLANE)
+						I_markings.layer = BELOW_TABLE_LAYER
+						overlays += I_circle
+						overlays += I_markings
+						var/image/I = image('icons/obj/cult.dmi', src, "dance_prisoner")
+						I.plane = relative_plane(ABOVE_LIGHTING_PLANE)
+						I.layer = NARSIE_GLOW
+						overlays += I
+						var/mob_ref = "\ref[C]"
+						if (!(mob_ref in dance_platform_prisoners))//prevents chat spamming by dragging the prisoner across all the dance platforms
+							dance_platform_prisoners += mob_ref
+							to_chat(C, "<span class='danger'>Dark tentacles emerge from the rune and trap your legs in place. The occult bindings on your arms seem to react to them. You will need to resist out of those or get some outside help if you are to escape this circle.</span>")
+							spawn(20 SECONDS)
+								dance_platform_prisoners -= mob_ref
+						source.dancer_check(C)
+						return TRUE
+		else if (isshade(mover) || isconstruct(mover))
+			var/mob/living/simple_animal/SA = mover
+			if (SA.mind && !SA.isDead())
+				if (iscultist(SA))
+					dancer = SA
+					overlays.len = 0
+					var/image/I_circle = image(icon, src, "dance_platform_full")
+					I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+					I_circle.layer = ABOVE_TILE_LAYER
+					I_circle.appearance_flags |= RESET_COLOR
+					var/image/I_markings = image(icon, src,"dance_platform_markings")
+					I_markings.plane = relative_plane(OBJ_PLANE)
+					I_markings.layer = BELOW_TABLE_LAYER
+					overlays += I_circle
+					overlays += I_markings
+					source.dancer_check(SA)
+					return TRUE
+	return FALSE
+
+/obj/effect/cult_ritual/dance_platform/Uncrossed(var/atom/movable/mover)
+	if (!moving && dancer && mover == dancer)
+		overlays.len = 0
+		var/image/I_circle = image(icon, src, "dance_platform_empty")
+		I_circle.plane = relative_plane(ABOVE_TURF_PLANE)
+		I_circle.layer = ABOVE_TILE_LAYER
+		I_circle.appearance_flags |= RESET_COLOR
+		overlays += I_circle
+		if (prisoner)
+			dancer.SetStunned(0)
+			prisoner = FALSE
+			anim(target = loc, a_icon = 'icons/obj/cult.dmi', flick_anim = "dancer_prisoner-stop", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+		if (dance_manager)
+			dance_manager.dancers -= dancer
+		dancer = null
+		source.lost_dancer()
+
+/obj/structure/dance_check
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "blank"
+	density = 0
+	mouse_opacity = 0
+	invisibility = 101
+	var/datum/rune_spell/tearreality/source
+
+/obj/structure/dance_check/New(turf/loc, var/_source)
+	..()
+	if (_source)
+		source = _source
+	else
+		qdel(src)
+
+/obj/structure/dance_check/to_bump(var/atom/A)
+	source.blocker = A//So we can tell the rune's activator exactly what is blocking the dance path
+
+
+///////////////////////////////////TEAR SPAWNERS////////////////////////////////////
+//Used by the tear reality rune to spawn obsidian pillars and gateways across the station
+/obj/effect/cult_ritual/tear_spawners
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "blank"
+	density = 0
+	mouse_opacity = 0
+	invisibility = 101
+	var/datum/rune_spell/tearreality/source = null
+	var/finished = FALSE
+	var/direction = 0
+	var/steps = 0
+
+	var/near_turfs = list()
+	var/far_turfs = list()
+
+/obj/effect/cult_ritual/tear_spawners/New(turf/loc, var/datum/rune_spell/tearreality/_source)
+	if (!_source)
+		qdel(src)
+		return
+	source = _source
+	if (source.destroying_self)
+		qdel(src)
+		return
+	..()
+	if (!finished)
+		start_loop()
+
+/obj/effect/cult_ritual/tear_spawners/Destroy()
+	source = null
+	..()
+
+/obj/effect/cult_ritual/tear_spawners/proc/perform_step()
+	move_step()
+	after_step()
+
+/obj/effect/cult_ritual/tear_spawners/proc/start_loop()
+	set waitfor = 0
+	spawn()
+		while(!finished && direction)
+			perform_step()
+			sleep(1)
+
+/obj/effect/cult_ritual/tear_spawners/proc/execute(var/level)
+	return
+/obj/effect/cult_ritual/tear_spawners/proc/after_step()
+	return
+/obj/effect/cult_ritual/tear_spawners/proc/move_step()
+	switch(direction)
+		if (SOUTH)
+			y--
+			if (y <= TRANSITIONEDGE)
+				finished = TRUE
+				qdel(src)
+				return
+		if (NORTH)
+			y++
+			if (y >= (world.maxy - TRANSITIONEDGE))
+				finished = TRUE
+				qdel(src)
+		if (EAST)
+			x++
+			if (x >= (world.maxx - TRANSITIONEDGE))
+				finished = TRUE
+				qdel(src)
+		if (WEST)
+			x--
+			if (x <= TRANSITIONEDGE)
+				finished = TRUE
+				qdel(src)
+				return
+
+	steps++
+
+/obj/effect/cult_ritual/tear_spawners/vertical_spawner
+	direction = SOUTH
+	var/steps_to_pillars_and_gateways = 16
+	var/steps_to_pillars = 8
+
+	var/ready_to_spawn_pillars_and_gateways = FALSE
+
+/obj/effect/cult_ritual/tear_spawners/vertical_spawner/after_step()
+	if (steps == steps_to_pillars)
+		new /obj/effect/cult_ritual/tear_spawners/horizontal_spawner/alt/left(loc,source)
+		new /obj/effect/cult_ritual/tear_spawners/horizontal_spawner/alt/right(loc,source)
+	if (steps == steps_to_pillars_and_gateways)
+		new /obj/effect/cult_ritual/tear_spawners/horizontal_spawner/left(loc,source)
+		new /obj/effect/cult_ritual/tear_spawners/horizontal_spawner/right(loc,source)
+		ready_to_spawn_pillars_and_gateways = TRUE
+		steps = 0
+
+	if (ready_to_spawn_pillars_and_gateways)
+		if (isfloor(loc))
+			new /obj/effect/cult_ritual/tear_spawners/gateway_spawner/special(loc, source)
+			ready_to_spawn_pillars_and_gateways = FALSE
+
+/obj/effect/cult_ritual/tear_spawners/vertical_spawner/up
+	direction = NORTH
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner
+	var/steps_to_spire = 8
+	var/steps_to_gateway = 15
+	var/also_spawn_gateways = TRUE
+
+	var/ready_to_spawn_pillar = FALSE
+	var/ready_to_spawn_gateway = FALSE
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner/after_step()
+	if (steps == steps_to_spire)
+		ready_to_spawn_pillar = TRUE
+	if (also_spawn_gateways && steps == steps_to_gateway)
+		ready_to_spawn_gateway = TRUE
+	if (steps == (2*steps_to_spire))
+		ready_to_spawn_pillar = TRUE
+		steps = 0
+
+	if (ready_to_spawn_pillar)
+		if (isfloor(loc))
+			new /obj/effect/cult_ritual/tear_spawners/pillar_spawner(loc, source, direction)
+			ready_to_spawn_pillar = FALSE
+
+	if (ready_to_spawn_gateway)
+		if (isfloor(loc))
+			new /obj/effect/cult_ritual/tear_spawners/gateway_spawner(loc, source)
+			ready_to_spawn_gateway = FALSE
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner/alt
+	steps = 4
+	also_spawn_gateways = FALSE
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner/left
+	direction = WEST
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner/right
+	direction = EAST
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner/alt/left
+	direction = WEST
+
+/obj/effect/cult_ritual/tear_spawners/horizontal_spawner/alt/right
+	direction = EAST
+
+/obj/effect/cult_ritual/tear_spawners/pillar_spawner
+	finished = TRUE
+	var/obj/structure/cult/pillar
+
+/obj/effect/cult_ritual/tear_spawners/pillar_spawner/New(turf/loc, var/datum/rune_spell/tearreality/_source, var/_direction)
+	if (!_direction)
+		qdel(src)
+		return
+	..()
+	if (source)
+		source.pillar_spawners += src
+	direction = _direction
+
+	for(var/direc in cardinal)
+		var/turf/T = get_step(src, direc)
+		near_turfs += T
+		var/turf/U = get_step(T, direc)
+		far_turfs += U
+
+	for(var/direc in diagonal)
+		var/turf/T = get_step(src, direc)
+		far_turfs += T
+
+/obj/effect/cult_ritual/tear_spawners/pillar_spawner/move_step()
+	return
+
+/obj/effect/cult_ritual/tear_spawners/pillar_spawner/execute(var/level)
+	switch(level)
+		if (1)
+			var/turf/T = loc
+			if (T && !T.holy)
+				T.cultify()
+		if (2)
+			var/turf/T = loc
+			if (T && !T.holy)
+				switch(direction)
+					if (EAST)
+						pillar = new /obj/structure/cult/pillar/alt(loc)
+					if (WEST)
+						pillar = new /obj/structure/cult/pillar(loc)
+			for (var/turf/U in near_turfs)
+				if (!U.holy)
+					U.cultify()
+		if (3)
+			if (pillar)
+				pillar.update_icon()
+			for (var/turf/T in far_turfs)
+				if (!T.holy)
+					T.cultify()
+
+/obj/effect/cult_ritual/tear_spawners/pillar_spawner/proc/cancel()
+	if (!pillar)
+		qdel(src)
+		return
+	spawn(rand(1 SECONDS, 5 SECONDS))
+		if (pillar)
+			pillar.takeDamage(100)
+		for (var/turf/T in far_turfs)
+			T.decultify()
+		sleep(rand(10 SECONDS, 20 SECONDS))
+		if (pillar)
+			pillar.takeDamage(100)
+		for (var/turf/T in near_turfs)
+			T.decultify()
+		sleep(rand(20 SECONDS, 30 SECONDS))
+		var/turf/T = loc
+		T.decultify()
+
+/obj/effect/cult_ritual/tear_spawners/gateway_spawner
+	finished = TRUE
+
+/obj/effect/cult_ritual/tear_spawners/gateway_spawner/New(turf/loc, var/datum/rune_spell/tearreality/_source)
+	..()
+	source?.gateway_spawners += src
+
+	for(var/direc in cardinal)
+		var/turf/T = get_step(src, direc)
+		near_turfs += T
+		var/turf/U = get_step(T, direc)
+		far_turfs += U
+
+	for(var/direc in diagonal)
+		var/turf/T = get_step(src, direc)
+		far_turfs += T
+
+/obj/effect/cult_ritual/tear_spawners/gateway_spawner/move_step()
+	return
+
+/obj/effect/cult_ritual/tear_spawners/gateway_spawner/special
+	finished = FALSE
+
+/obj/effect/cult_ritual/tear_spawners/gateway_spawner/special/start_loop()
+	spawn()
+		x++
+		if (isfloor(loc))
+			new /obj/effect/cult_ritual/tear_spawners/pillar_spawner(loc, source, EAST)
+		sleep(1)
+		x -= 2
+		if (isfloor(loc))
+			new /obj/effect/cult_ritual/tear_spawners/pillar_spawner(loc, source, WEST)
+		sleep(1)
+		x++
+	finished = TRUE
+
+/obj/effect/cult_ritual/tear_spawners/gateway_spawner/execute(var/level)
+	if (level == 3)
+		var/turf/T = loc
+		if (T && !T.holy)
+			new /obj/effect/gateway/active/cult(loc)

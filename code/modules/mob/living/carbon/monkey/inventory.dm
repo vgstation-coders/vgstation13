@@ -15,10 +15,10 @@
 			update_inv_back(redraw_mob)
 		if(slot_head)
 			src.hat = W
-			update_inv_hat(redraw_mob)
+			update_inv_head(redraw_mob)
 		if(slot_w_uniform)
 			src.uniform = W
-			update_inv_uniform(redraw_mob)
+			update_inv_w_uniform(redraw_mob)
 		if(slot_glasses)
 			src.glasses = W
 			update_inv_glasses(redraw_mob)
@@ -101,7 +101,7 @@
 		hat = null
 		success = 1
 		slot = slot_head
-		update_inv_hat()
+		update_inv_head()
 		INVOKE_EVENT(src, /event/unequipped, W)
 	else if(W == glasses)
 		glasses = null
@@ -113,7 +113,7 @@
 		uniform = null
 		success = 1
 		slot = slot_w_uniform
-		update_inv_uniform()
+		update_inv_w_uniform()
 		INVOKE_EVENT(src, /event/unequipped, W)
 	else
 		success = ..()

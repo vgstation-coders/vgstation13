@@ -19,7 +19,7 @@
 	var/list/misc_spells = list()
 
 	//Unlike the list above, the available_artifacts list builds itself from all subtypes of /datum/spellbook_artifact
-	var/static/list/available_artifacts = list()
+	var/list/available_artifacts = list()
 
 	var/static/list/available_potions = list(
 		/obj/item/potion/healing = Sp_BASE_PRICE,
@@ -63,6 +63,8 @@
 
 	for(var/wizard_spell in getAllWizSpells())
 		var/spell/S = new wizard_spell
+		if(S.spell_flags & NO_SPELLBOOK)
+			continue
 		all_spells += wizard_spell
 		if(!S.holiday_required.len || (Holiday in S.holiday_required))
 			switch(S.specialization)
@@ -120,39 +122,43 @@
 
 			var/spell_name = spell.name
 			var/spell_cooldown = get_spell_cooldown_string(spell.charge_max, spell.charge_type)
+			var/spell_range = get_spell_range_string(spell.range)
 
-			dat += "<strong>[spell_name]</strong>[spell_cooldown]<br>"
+			dat += "<strong>[spell_name]</strong>[spell_cooldown]<br>Range: [spell_range]<br>"
 
 			//Get spell properties
 			var/list/properties = get_spell_properties(spell.spell_flags, user)
 			var/property_data
 			for(var/P in properties)
-				property_data += "[P] "
+				property_data += "[P]<br>"
 
 			if(property_data)
-				dat += "<span style=\"color:blue\">[property_data]</span><br>"
+				dat += "[property_data]"
 
 			//Get the upgrades
 			var/upgrade_data = ""
 
 			for(var/upgrade in spell.spell_levels)
+				var/upgrade_button = "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade ([spell.get_upgrade_price(upgrade)] points)</a>"
 				var/lvl = spell.spell_levels[upgrade]
 				var/max = spell.level_max[upgrade]
 
 				//If maximum upgrade level is 0, skip
 				if(!max)
 					continue
-
-				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] (<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade ([spell.get_upgrade_price(upgrade)] points)</a>)  "
+				if(lvl >= max)
+					upgrade_button = "<strong>MAXED</strong>"
+				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] ([upgrade_button])</a>  "
 
 			if(upgrade_data)
-				dat += "[upgrade_data]<br><br>"
+				dat += "[upgrade_data]<br>"
 			dat+= "<br>"
 
 //FORMATTING
 //<b>Fireball</b> - 10 seconds (buy for 1 spell point)
 //<i>(Description)</i>
 //Requires robes to cast
+//Lost on mind transfer
 
 	if(shown_offensive_spells.len)
 		dat += "<span style=\"color:red\"><strong>OFFENSIVE SPELLS:</strong></span><br><br>"
@@ -219,9 +225,9 @@
 	var/list/properties = get_spell_properties(flags, user)
 	var/property_data
 	for(var/P in properties)
-		property_data += "[P] "
+		property_data += "[P]<br>"
 	if(property_data)
-		dat += "<span style=\"color:blue\">[property_data]</span><br>"
+		dat += "[property_data]"
 	dat += "<br>"
 	return dat
 
@@ -229,7 +235,7 @@
 	var/list/properties = list()
 
 	if(flags & NEEDSCLOTHES)
-		var/new_prop = "Requires wizard robes to cast."
+		var/new_prop = "<span style=\"color:blue\">Requires wizard robes to cast.</span>"
 
 		//If user has the robeless spell, strike the text out
 		if(user)
@@ -239,8 +245,11 @@
 
 		properties.Add(new_prop)
 
+	if(flags & LOSE_IN_TRANSFER)
+		properties.Add("<span style=\"color:red\">Lost on mind transfer.</span>")
+
 	if(flags & STATALLOWED)
-		properties.Add("Can be cast while unconscious.")
+		properties.Add("<span style=\"color:green\">Can be cast while unconscious.</span>")
 
 	return properties
 
@@ -253,6 +262,13 @@
 			return " - [charges] charge\s"
 		if(Sp_RECHARGE)
 			return " - cooldown: [(charges/10)]s"
+
+/obj/item/weapon/spellbook/proc/get_spell_range_string(var/range)
+	if(range == 1)
+		return "Adjacent"
+	if((range == SELFCAST) || (range == 0))
+		return "Self"
+	return range
 
 /obj/item/weapon/spellbook/proc/get_spell_price(spell/spell_type)
 	if(ispath(spell_type, /spell))
@@ -285,9 +301,12 @@
 
 		//stat collection: spellbook purchases
 		var/datum/role/wizard/W = user.mind.GetRole(WIZARD)
-		if(istype(W) && istype(W.stat_datum, /datum/stat/role/wizard))
-			var/datum/stat/role/wizard/WD = W.stat_datum
-			WD.spellbook_purchases.Add("REFUND-" + S.name)
+		if(istype(W))
+			W.spells_from_spellbook -= S
+			W.spells_from_absorb -= S //Those get removed too
+			if(istype(W.stat_datum, /datum/stat/role/wizard))
+				var/datum/stat/role/wizard/WD = W.stat_datum
+				WD.spellbook_purchases.Add("REFUND-" + S.name)
 
 		return 1
 
@@ -300,7 +319,7 @@
 		return
 
 	if(L.mind.special_role == "apprentice")
-		to_chat(L, "If you got caught sneaking a peak from your teacher's spellbook, you'd likely be expelled from the Wizard Academy. Better not.")
+		to_chat(L, "If you got caught sneaking a peak from a senior wizard's spellbook, you'd likely be expelled from the Wizard Academy. Better not.")
 		return
 
 	if(href_list["refund"])
@@ -312,7 +331,12 @@
 		var/buy_type = text2path(href_list["spell"])
 
 		if(ispath(buy_type, /spell)) //Passed a spell typepath
-			if(locate(buy_type) in usr.spell_list)
+			var/found_same_spell = FALSE
+			for(var/spell/spell_path_to_check in usr.spell_list)
+				if(buy_type == spell_path_to_check.type)
+					found_same_spell = TRUE
+					break
+			if(found_same_spell)
 				to_chat(usr, "<span class='notice'>You already know that spell. Perhaps you'd like to upgrade it instead?</span>")
 
 			else if(buy_type in all_spells)
@@ -324,9 +348,11 @@
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 					feedback_add_details("wizard_spell_learned", added.abbreviation)
 					var/datum/role/wizard/W = usr.mind.GetRole(WIZARD)
-					if(istype(W) && istype(W.stat_datum, /datum/stat/role/wizard))
-						var/datum/stat/role/wizard/WD = W.stat_datum
-						WD.spellbook_purchases.Add(added.name)
+					if(istype(W))
+						W.spells_from_spellbook += added
+						if(istype(W.stat_datum, /datum/stat/role/wizard))
+							var/datum/stat/role/wizard/WD = W.stat_datum
+							WD.spellbook_purchases.Add(added.name)
 
 		else if(ispath(buy_type, /obj/item/potion))
 			if(buy_type in available_potions)

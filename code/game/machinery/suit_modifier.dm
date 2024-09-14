@@ -146,9 +146,9 @@
 			process_module_installation(H)
 			return
 		if(istype(worn_suit, /obj/item/clothing/suit/space/plasmaman))
-			process_suit_paint(H, plasmaman_suits)
+			process_suit_replace(H, plasmaman_suits)
 		else if(istype(worn_suit, /obj/item/clothing/suit/space/vox))
-			process_suit_paint(H, vox_suits)
+			process_suit_replace(H, vox_suits)
 		else
 			say("Unable to detect compatible spacesuit on [H].", class = "binaryradio")
 	else if((modules_to_install.len || cell) && !activated)
@@ -191,31 +191,29 @@
 			filtered_suit_list[entry] = list(suit_list[entry][SUIT_INDEX], suit_list[entry][HELMET_INDEX])
 	return filtered_suit_list
 
-/obj/machinery/suit_modifier/proc/process_suit_paint(mob/living/carbon/human/guy, list/suit_list)
+/obj/machinery/suit_modifier/proc/process_suit_replace(mob/living/carbon/human/guy, list/suit_list)
 	if(activated)
 		return
 	lock_atom(guy)
-	var/obj/item/clothing/suit/space/chosen_job = input(guy, "What kind of paint do you wish to apply?") as null|anything in filter_suit_list(guy, suit_list)
+	var/obj/item/clothing/suit/space/chosen_job = input(guy, "What kind of model do you wish to apply?") as null|anything in filter_suit_list(guy, suit_list)
 	if(!chosen_job || activated || guy.incapacitated() || guy.loc != loc)
 		unlock_atom(guy)
 		return
 	var/obj/item/clothing/suit/space/chosen_suit = suit_list[chosen_job][SUIT_INDEX]
-	var/obj/item/clothing/head/helmet/space/plasmaman/chosen_helmet = suit_list[chosen_job][HELMET_INDEX]
+	var/obj/item/clothing/head/helmet/space/chosen_helmet = suit_list[chosen_job][HELMET_INDEX]
 	activated = TRUE
 	use_power = MACHINE_POWER_USE_ACTIVE
 	activation_animation()
 	working_animation()
-	var/obj/item/clothing/suit/space/suit = guy.get_item_by_slot(slot_wear_suit)
-	suit.desc = "The colors are a bit dodgy."
-	suit.icon_state = initial(chosen_suit.icon_state)
-	guy.update_inv_wear_suit()
-	var/obj/item/clothing/head/helmet/space/helmet = guy.get_item_by_slot(slot_head)
-	if(istype(helmet))
-		helmet.icon_state = initial(chosen_helmet.icon_state)
-		desc = "The colors are a bit dodgy."
-		if(istype(helmet, /obj/item/clothing/head/helmet/space/plasmaman))
-			var/obj/item/clothing/head/helmet/space/plasmaman/special_snowflake = helmet
-			special_snowflake.base_state = initial(chosen_helmet.base_state)
+	var/obj/item/clothing/suit/space/oldsuit = guy.get_item_by_slot(slot_wear_suit)
+	if(oldsuit)
+		guy.equip_to_slot(new chosen_suit, slot_wear_suit)
+		qdel(oldsuit)
+		guy.update_inv_wear_suit()
+	var/obj/item/clothing/head/helmet/space/oldhelmet = guy.get_item_by_slot(slot_head)
+	if(oldhelmet)
+		guy.equip_to_slot(new chosen_helmet, slot_head)
+		qdel(oldhelmet)
 		guy.update_inv_head()
 	finished_animation()
 	unlock_atom(guy)
@@ -232,7 +230,9 @@
 	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
 	R.deactivate_suit()
 	for(var/obj/item/rig_module/RM in modules_to_install)
-		if(locate(RM.type) in R.modules) //One already installed
+		var/install_result=RM.can_install(R)
+		if(!install_result[1]) //more versatile check, allows for custom install conditions.
+			say(install_result[2], class = "binaryradio")
 			continue
 		if(do_after(H, src, 8 SECONDS / apply_multiplier, needhand = FALSE))
 			say("Installing [RM] into \the [R].", class = "binaryradio")

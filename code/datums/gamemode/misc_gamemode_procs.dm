@@ -112,31 +112,31 @@
 
 	var/list/threat_detected = round(starting_threat)
 
-	switch(threat_detected)
-		if(0 to 19)
-			update_playercounts()
-			if(!living_antags.len)
-				intercepttext += "<b>Peaceful Waypoint</b></center><BR>"
-				intercepttext += "Your station orbits deep within controlled, core-sector systems and serves as a waypoint for routine traffic through Nanotrasen's trade empire. Due to the combination of high security, interstellar traffic, and low strategic value, it makes any direct threat of violence unlikely. Your primary enemies will be incompetence and bored crewmen: try to organize team-building events to keep staffers interested and productive."
-			else
+	update_playercounts()
+	if(!living_antags.len)
+		intercepttext += "<b>Peaceful Waypoint</b></center><BR>"
+		intercepttext += "Your station orbits deep within controlled, core-sector systems and serves as a waypoint for routine traffic through Nanotrasen's trade empire. Due to the combination of high security, interstellar traffic, and low strategic value, it makes any direct threat of violence unlikely. Your primary enemies will be incompetence and bored crewmen: try to organize team-building events to keep staffers interested and productive."
+	else
+		switch(threat_detected)
+			if(0 to 19)
 				intercepttext += "<b>Core Territory</b></center><BR>"
 				intercepttext += "Your station orbits within reliably mundane, secure space. Although Nanotrasen has a firm grip on security in your region, the valuable resources and strategic position aboard your station make it a potential target for infiltrations. Monitor crew for non-loyal behavior, but expect a relatively tame shift free of large-scale destruction. We expect great things from your station."
-		if(20 to 39)
-			intercepttext += "<b>Anomalous Exogeology</b></center><BR>"
-			intercepttext += "Although your station lies within what is generally considered Nanotrasen-controlled space, the course of its orbit has caused it to cross unusually close to exogeological features with anomalous readings. Although these features offer opportunities for our research department, it is known that these little understood readings are often correlated with increased activity from competing interstellar organizations and individuals, among them the Wizard Federation, Cult of the Geometer of Blood, and the remaining Vampire Lords - all known competitors for Anomaly Type B sites. Exercise elevated caution."
-		if(40 to 65)
-			intercepttext += "<b>Contested System</b></center><BR>"
-			intercepttext += "Your station's orbit passes along the edge of Nanotrasen's sphere of influence. While subversive elements remain the most likely threat against your station, hostile organizations are bolder here, where our grip is weaker. Exercise increased caution against elite Syndicate strike forces, or Executives forbid, some kind of ill-conceived unionizing attempt."
-		if(66 to 79)
-			intercepttext += "<b>Uncharted Space</b></center><BR>"
-			intercepttext += "Congratulations and thank you for participating in the NT 'Frontier' space program! Your station is actively orbiting a high value system far from the nearest support stations. Little is known about your region of space, and the opportunity to encounter the unknown invites greater glory. You are encouraged to elevate security as necessary to protect Nanotrasen assets."
-		if(80 to 94)
-			intercepttext += "<b>Black Orbit</b></center><BR>"
-			intercepttext += "As part of a mandatory security protocol, we are required to inform you that as a result of your orbital pattern directly behind an astrological body (oriented from our nearest observatory), your station will be under decreased monitoring and support. It is anticipated that your extreme location and decreased surveillance could pose security risks. Avoid unnecessary risks and attempt to keep your station in one piece."
-		if(95 to 100)
-			intercepttext += "<b>Impending Doom</b></center><BR>"
-			intercepttext += "Your station is somehow in the middle of hostile territory, in clear view of any enemy of the corporation. Your likelihood to survive is low, and station destruction is expected and almost inevitable. Secure any sensitive material and neutralize any enemy you will come across. It is important that you at least try to maintain the station.<BR>"
-			intercepttext += "Good luck."
+			if(20 to 39)
+				intercepttext += "<b>Anomalous Exogeology</b></center><BR>"
+				intercepttext += "Although your station lies within what is generally considered Nanotrasen-controlled space, the course of its orbit has caused it to cross unusually close to exogeological features with anomalous readings. Although these features offer opportunities for our research department, it is known that these little understood readings are often correlated with increased activity from competing interstellar organizations and individuals, among them the Wizard Federation, Cult of the Geometer of Blood, and the remaining Vampire Lords - all known competitors for Anomaly Type B sites. Exercise elevated caution."
+			if(40 to 65)
+				intercepttext += "<b>Contested System</b></center><BR>"
+				intercepttext += "Your station's orbit passes along the edge of Nanotrasen's sphere of influence. While subversive elements remain the most likely threat against your station, hostile organizations are bolder here, where our grip is weaker. Exercise increased caution against elite Syndicate strike forces, or Executives forbid, some kind of ill-conceived unionizing attempt."
+			if(66 to 79)
+				intercepttext += "<b>Uncharted Space</b></center><BR>"
+				intercepttext += "Congratulations and thank you for participating in the NT 'Frontier' space program! Your station is actively orbiting a high value system far from the nearest support stations. Little is known about your region of space, and the opportunity to encounter the unknown invites greater glory. You are encouraged to elevate security as necessary to protect Nanotrasen assets."
+			if(80 to 94)
+				intercepttext += "<b>Black Orbit</b></center><BR>"
+				intercepttext += "As part of a mandatory security protocol, we are required to inform you that as a result of your orbital pattern directly behind an astrological body (oriented from our nearest observatory), your station will be under decreased monitoring and support. It is anticipated that your extreme location and decreased surveillance could pose security risks. Avoid unnecessary risks and attempt to keep your station in one piece."
+			if(95 to 100)
+				intercepttext += "<b>Impending Doom</b></center><BR>"
+				intercepttext += "Your station is somehow in the middle of hostile territory, in clear view of any enemy of the corporation. Your likelihood to survive is low, and station destruction is expected and almost inevitable. Secure any sensitive material and neutralize any enemy you will come across. It is important that you at least try to maintain the station.<BR>"
+				intercepttext += "Good luck."
 
 	intercepttext += "</body></html>"
 
@@ -296,6 +296,14 @@
 	to_chat(killer, "<b>Your laws have been changed!</b>")
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
+	
+/proc/check_traitorborg(mob/living/silicon/killer)
+	if(!isrobot(killer))
+		return FALSE
+	var/mob/living/silicon/robot/KR = killer
+	if(KR.laws?.zeroth == "Accomplish your objectives at all costs.")
+		return TRUE
+	return FALSE
 
 /proc/equip_time_agent(var/mob/living/carbon/human/H, var/datum/role/time_agent/T, var/is_twin = FALSE)
 	H.delete_all_equipped_items()
