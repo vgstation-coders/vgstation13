@@ -532,6 +532,7 @@
 #define NANOPAINT		"nano_paint"
 #define FLAXOIL			"flax_oil"
 #define WAX				"wax"
+#define DYE_DANDELIONS "dandelion_dye"
 
 #define PLUTONIUM		"plutonium"
 #define RADON			"radon"

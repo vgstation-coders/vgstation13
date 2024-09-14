@@ -154,7 +154,7 @@
 
 	flags = XGM_GAS_NOTEWORTHY | XGM_GAS_LOGGED
 
-/datum/gas/cryotheum/is_human_safe(moles, datum/gas_mixture/mixture)
+/datum/gas/radon/is_human_safe(moles, datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
 
 
