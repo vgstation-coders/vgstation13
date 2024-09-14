@@ -107,6 +107,9 @@
 			to_chat(owner, "<span class = 'warning'>Your [display_name] malfunctions!</span>")
 	take_damage(damage, 0, 1, used_weapon = "EMP")
 
+/**
+ * This returns the amount of DAMAGE on the limb, unlike what the proc suggests
+ */
 /datum/organ/external/proc/get_health()
 	return (burn_dam + brute_dam)
 
@@ -169,6 +172,11 @@
 	if(!is_existing()) //No limb there
 		return 0
 
+	//These are here to prevent a 'weakness cascade' from dealing unfair damage amounts to species with weaknesses
+	var/bonus_brute_damage = 0
+	var/bonus_burn_damage = 0
+	var/original_brute = brute
+	var/original_burn = burn
 	if(!no_damage_modifier)
 		if(!is_organic())
 			brute *= 0.66 //~2/3 damage for ROBOLIMBS
@@ -180,6 +188,11 @@
 					brute *= species.brute_mod
 				if(species.burn_mod)
 					burn *= species.burn_mod
+	//We only care about weaknesses, not resists
+	if(original_brute < brute)
+		bonus_brute_damage = brute - original_brute
+	if(original_burn < burn)
+		bonus_burn_damage = burn - original_burn
 
 	//If limb took enough damage, try to cut or tear it off
 	if(body_part != UPPER_TORSO && body_part != LOWER_TORSO) //As hilarious as it is, getting hit on the chest too much shouldn't effectively gib you.
@@ -260,7 +273,11 @@
 				//How much burn damage is left to inflict
 				burn = max(0, burn - can_inflict)
 		//If there are still hurties to dispense
-		if(burn || brute)
+		//Then we need to be fair and remove the damage weaknesses applied for this limb
+		//After all, other limbs can have different weaknesses/resists
+		brute -= bonus_brute_damage
+		burn -= bonus_burn_damage
+		if(burn > 0 || brute > 0)
 			if(!is_organic())
 				droplimb(1) //Non-organic limbs just drop off with no further complications
 			else
