@@ -323,9 +323,10 @@
 // eject the contents of the disposal unit
 /obj/machinery/disposal/proc/eject(var/atom/location = loc)
 	if(Adjacent(location))
-		var/turf/T = get_turf(location)
-		if(!T || is_blocked_turf(T,src))
-			return
+		if(location != loc)
+			var/turf/T = get_turf(location)
+			if(!T || is_blocked_turf(T,src))
+				location = loc
 		for(var/atom/movable/AM in src)
 			AM.forceMove(location)
 			AM.pipe_eject(0)
