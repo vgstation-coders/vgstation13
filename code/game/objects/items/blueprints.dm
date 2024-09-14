@@ -312,7 +312,7 @@ these cannot rename rooms that are in by default BUT can rename rooms that are c
 					user.client.images += I
 		last_shown_archive = world.time
 		spawn(10 SECONDS)
-			if(world.time - last_shown_archive >= 99)
+			if(world.time - last_shown_archive >= 99) // sanity for mass clicking of this
 				user.client.images -= shown_images
 
 /obj/item/blueprints/proc/update_room(mob/user)
