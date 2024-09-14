@@ -7709,6 +7709,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "peanutbutter"
 	base_crumb_chance = 0
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/peanutbutter/New()
 	..()
@@ -7721,6 +7722,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "saltednuts"
 	base_crumb_chance = 0
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/saltednuts/New()
 	..()
@@ -7734,6 +7736,7 @@ var/global/list/bomb_like_items = list(/obj/item/device/transfer_valve, /obj/ite
 	icon = 'icons/obj/food2.dmi'
 	icon_state = "pbj"
 	base_crumb_chance = 0
+	harmfultocorgis = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/pbj/New()
 	..()
