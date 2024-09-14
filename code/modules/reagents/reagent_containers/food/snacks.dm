@@ -707,7 +707,7 @@
 			M.delayNextAttack(10)
 			if(harmfultocorgis)
 				var/mob/living/simple_animal/corgi/C = M
-				C.health -= 5
+				C.atepoison()
 			if(!reagents || !reagents.total_volume)
 				M.visible_message("[M] [pick("burps from enjoyment", "yaps for more", "woofs twice", "looks at the area where \the [src] was")].", "<span class='notice'>You swallow up the last of \the [src].")
 				qdel(src)
