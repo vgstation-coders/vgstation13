@@ -22,6 +22,8 @@ Here it is: Buttbot.
 	var/sincelastfart = 0
 	flags = HEAR
 
+	var/obj/item/clothing/head/butt/stored_ass
+
 /obj/machinery/bot/buttbot/attack_hand(mob/living/user as mob)
 	. = ..()
 	if (.)
@@ -60,7 +62,7 @@ Here it is: Buttbot.
 	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	playsound(src, 'sound/effects/superfart.ogg', 50, 1) //A fitting end
 	var/turf/Tsec = get_turf(src)
-	new /obj/item/clothing/head/butt(Tsec)
+	stored_ass.forceMove(Tsec)
 
 	if (prob(50))
 		new /obj/item/robot_parts/l_arm(Tsec)
@@ -79,9 +81,9 @@ Here it is: Buttbot.
 		var/obj/machinery/bot/buttbot/A = new /obj/machinery/bot/buttbot(T)
 		A.name = src.created_name
 		to_chat(user, "<span class='notice'>You roughly shove the robot arm into the ass! Butt Butt!</span>")//I don't even.
-
 		user.drop_from_inventory(src)
-		qdel(src)
+		A.stored_ass = src
+		src.forceMove(A)
 	else if (istype(W, /obj/item/weapon/pen))
 		var/t = stripped_input(user, "Enter new robot name", src.name, src.created_name)
 

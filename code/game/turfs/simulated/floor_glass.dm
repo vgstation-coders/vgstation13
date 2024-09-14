@@ -5,7 +5,7 @@
 	// Oldspace for people who don't have parallax.
 	icon = 'icons/turf/space.dmi'
 	icon_state = "0"
-	plane = TURF_PLANE
+	plane = SPACE_BACKGROUND_PLANE
 	intact = 0 // make pipes appear above space
 
 	var/health=80 // 2x that of an rwindow
@@ -52,6 +52,10 @@
 	current_damage_overlay = damage_overlay
 	overlays += damage_overlay
 
+/turf/simulated/floor/glass/AddDecal(var/image/decal)
+	decal.layer = DECAL_LAYER
+	decal.plane = GLASSTILE_PLANE
+	..()
 
 /turf/simulated/floor/glass/examine(var/mob/user)
 	..()
@@ -298,6 +302,42 @@
 		log_attack("[user.name] ([user.ckey]) window slammed [M.name] ([M.ckey]) ([gstate]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 		return TRUE
 	return FALSE
+
+/turf/simulated/floor/glass/silicate_act(var/obj/item/device/silicate_sprayer/S, var/mob/user)
+	if(!S.get_amount())
+		to_chat(user, "<span class='notice'>\The [S] is out of silicate!</span>")
+		return 1
+	var/mode = MODE_REPAIR
+	if(istype(S,/obj/item/device/silicate_sprayer/advanced))
+		var/obj/item/device/silicate_sprayer/advanced/SA = S
+		mode = SA.mode
+
+	var/diff = initial(health) - health
+	if(!diff && (mode == MODE_REPAIR)) // Not damaged.
+		to_chat(user, "<span class='notice'>\The [src] is already in perfect condition!</span>")
+		return 1
+
+	if(diff > 0)
+		diff = min(diff, S.get_amount() / SILICATE_PER_DAMAGE)
+
+		health += diff
+		healthcheck(user, FALSE)
+
+		user.visible_message("<span class='notice'>[user] repairs \the [src] with their [S]!</span>", "<span class='notice'>You repair \the [src] with your [S].</span>")
+
+	else // No diff, but we didn't exit earlier, so mode must be reinforce
+		var/extra_health = health - initial(health)
+		if(health >= initial(health) * MAX_WINDOW_HEALTH_MULTIPLIER)
+			to_chat(user, "<span class='notice'>You can't reinforce \the [src] any further!</span>")
+			return 1
+		diff = min(S.get_amount() / SILICATE_PER_REINFORCE, (initial(health) * MAX_WINDOW_HEALTH_MULTIPLIER) - (initial(health) + extra_health))
+		health += diff
+		healthcheck(user)
+		user.visible_message("<span class='notice'>[user] reinforced \the [src] with their [S]!</span>", "<span class='notice'>You reinforce \the [src] with your [S].</span>")
+
+	playsound(src, 'sound/effects/refill.ogg', 10, 1, -6)
+	S.remove_silicate(diff * SILICATE_PER_DAMAGE)
+	return 1
 
 /turf/simulated/floor/glass/airless
 	icon_state = "floor"

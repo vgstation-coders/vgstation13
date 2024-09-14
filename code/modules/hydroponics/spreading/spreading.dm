@@ -1,5 +1,5 @@
 #define DEFAULT_SEED "glowshroom"
-#define CREEPER_GROWTH_DISTANCE 4
+#define CREEPER_GROWTH_DISTANCE_LIMIT 4
 
 /obj/effect/plantsegment
 	name = "space vines"
@@ -10,7 +10,7 @@
 	opacity = 0
 	density = 0
 	plane = ABOVE_HUMAN_PLANE
-	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE
+	pass_flags = PASSTABLE | PASSGRILLE | PASSGIRDER | PASSMACHINE | PASSRAILING
 	mouse_opacity = 1
 
 	health = 10
@@ -84,7 +84,10 @@
 		plane = ABOVE_TURF_PLANE
 	mature_time = Ceiling(seed.maturation/2)
 	spread_chance = round(40 + triangular_seq(seed.potency*2, 30)) // Diminishing returns formula, see maths.dm
-	spread_distance_limit = limited_growth ? (CREEPER_GROWTH_DISTANCE) : 0
+	if (limited_growth)
+		spread_distance_limit = clamp(ceil((25 - seed.maturation) / 6), 1, CREEPER_GROWTH_DISTANCE_LIMIT)
+	else
+		spread_distance_limit = 0
 	update_icon()
 
 	if(start_fully_mature)
@@ -246,4 +249,4 @@
 /obj/effect/plantsegment/proc/is_mature()
 	return (health >= (maxHealth/2) && age > mature_time)
 
-#undef CREEPER_GROWTH_DISTANCE
+#undef CREEPER_GROWTH_DISTANCE_LIMIT

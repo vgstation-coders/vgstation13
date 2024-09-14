@@ -108,7 +108,7 @@
 	if(!client)
 		return 0
 
-	if(secret_check_one(src,href_list))
+	if(voting_age_check(src,href_list))
 		return 0
 
 	if(href_list["show_preferences"])
@@ -263,7 +263,7 @@
 								return
 
 						vote_on_numval_poll(pollid, optionid, rating)
-			if("MULTICHOICE")
+			if("SELECT_ALL_THAT_APPLY")
 				var/id_min = text2num(href_list["minoptionid"])
 				var/id_max = text2num(href_list["maxoptionid"])
 
@@ -356,6 +356,10 @@
 
 	job_master.AssignRole(src, rank, 1)
 
+	if(job_master.alt_database_active)
+		rank = src.mind.assigned_role
+		job = job_master.GetJob(rank)
+
 	var/mob/living/carbon/human/character = create_human(client.prefs)	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
@@ -434,6 +438,9 @@
 		to_chat(character, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
 		to_chat(character, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
 
+	for(var/datum/faction/F in ticker.mode.factions) /* Ensure all existing factions receive notice of the latejoin to handle what they need to. */
+		register_event(/event/late_arrival, F, nameof(F::OnLateArrival())) //Wrapped in nameof() to ensure that the parent proc doesn't get called. Possibly a BYOND bug?
+
 	if(character.mind.assigned_role != "MODE")
 		if(character.mind.assigned_role != "Cyborg")
 			data_core.manifest_inject(character)
@@ -449,7 +456,7 @@
 						handle_render(M,"<span class='game say'>PDA Message - <span class='name'>Trader [character.real_name] has arrived in the sector from space.</span></span>",character) //handle_render generates a Follow link
 			else
 				AnnounceArrival(character, rank)
-				CallHook("Arrival", list("character" = character, "rank" = rank))
+				INVOKE_EVENT(src, /event/late_arrival, "character" = character, "rank" = rank)
 			character.DormantGenes(20,10,0,0) // 20% chance of getting a dormant bad gene, in which case they also get 10% chance of getting a dormant good gene
 		else
 			character.Robotize()
@@ -466,7 +473,13 @@
 		//Error! We have no targetable spawn!
 		return
 	var/turf/start_point = locate(TRANSITIONEDGE + 2, rand((TRANSITIONEDGE + 2), world.maxy - (TRANSITIONEDGE + 2)), endpoint.z)
-	target.forceMove(start_point)
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+		var/obj/item/airbag/A = new(start_point, TRUE)
+		A.deploy(H)
+		target = A
+	else
+		target.forceMove(start_point)
 	target.throw_at(endpoint)
 
 
@@ -484,11 +497,13 @@
 		Broadcast_Message(speech, vmask=null, data=0, compression=0, level=list(0,1))
 		qdel(speech)
 
+/proc/voting_age_check(var/mob/M,var/list/href_list)
+	if(href_list["votepollid"] && href_list["votetype"])
+		if(M.client && !M.client.holder && M.client.player_age < 30)
+			message_admins("[key_name(M)] attempted to vote in poll # [href_list["votepollid"]] despite their player age of [M.client.player_age].")
+			return TRUE
+
 /mob/new_player/proc/LateChoices()
-	var/mills = world.time // 1/10 of a second, not real milliseconds but whatever
-	//var/secs = ((mills % 36000) % 600) / 10 //Not really needed, but I'll leave it here for refrence.. or something
-	var/mins = (mills % 36000) / 600
-	var/hours = mills / 36000
 
 	var/list/highprior = new()
 	var/list/heads = new()
@@ -512,7 +527,7 @@
 		.manifest tr.requested_department td {background-color: #00FF00}
 		.manifest th.reqhead td {background-color: #844}
 		.manifest tr.reqalt td {background-color: #FCC}
-		</style></head><body><center>Round Duration: [round(hours)]h [round(mins)]m<br>"}
+		</style></head><body><center>Shift duration: [getShiftDuration()]<br>"}
 	if(emergency_shuttle) //In case Nanotrasen decides reposess CentComm's shuttles.
 		if(emergency_shuttle.direction == 2) //Shuttle is going to centcomm, not recalled
 			dat += "<font color='red'><b>The station has been evacuated.</b></font><br>"

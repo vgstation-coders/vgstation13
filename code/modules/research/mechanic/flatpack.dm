@@ -238,19 +238,19 @@
 							Fl_ACTION = "weld the plates",
 							Co_DELAY = 30)
 			if("screwdriver")
-				steps[steps.len] = list(Co_KEY=/obj/item/tool/screwdriver,
+				steps[steps.len] = list(Co_KEY="is_screwdriver",
 							Co_VIS_MSG = "{USER} tighten{S} the screws in {HOLDER}",
 							Co_START_MSG = "{USER} start{s} tightening the screws in {HOLDER}",
 							Fl_ACTION = "tighten the screws",
 							Co_DELAY = 30)
 			if("wrench")
-				steps[steps.len] = list(Co_KEY=/obj/item/tool/wrench,
+				steps[steps.len] = list(Co_KEY="is_wrench",
 							Co_VIS_MSG = "{USER} secure{S} the bolts in {HOLDER}",
 							Co_START_MSG = "{USER} start{s} securing the bolts in {HOLDER}",
 							Fl_ACTION = "secure the bolts",
 							Co_DELAY = 30)
 			if("wirecutter")
-				steps[steps.len] = list(Co_KEY=/obj/item/tool/wirecutters,
+				steps[steps.len] = list(Co_KEY="is_wirecutter",
 							Co_VIS_MSG = "{USER} strip{s} the wiring in {HOLDER}",
 							Co_START_MSG = "{USER} start{s} stripping the wiring in {HOLDER}",
 							Fl_ACTION = "strip the wiring",
@@ -267,7 +267,16 @@
 			current_step = steps[rand(1, steps.len)] //misprints ahoy
 			misprinted = 1
 
-		var/obj/item/current_tool = current_step[Co_KEY]
+		var/obj/item/current_tool
+		switch(current_step[Co_KEY])
+			if("is_screwdriver")
+				current_tool = /obj/item/tool/screwdriver
+			if("is_wrench")
+				current_tool = /obj/item/tool/wrench
+			if("is_wirecutter")
+				current_tool = /obj/item/tool/wirecutters
+			else
+				current_tool = current_step[Co_KEY]
 
 		instructions += "<b>You see a small pictogram of \a [initial(current_tool.name)].</b><br> The minute script says: \"Be sure to [current_step[Fl_ACTION]] [pick("on a clear carpet", "with an adult", "with your friends", "under the captain's watchful gaze")].\"<br>"
 	return list("instructions" = instructions, "misprint" = misprinted)

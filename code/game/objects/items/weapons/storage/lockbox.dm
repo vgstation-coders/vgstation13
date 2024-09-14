@@ -275,11 +275,14 @@
 	throwforce = 10
 	storage_slots = 20
 	req_one_access = list(access_qm)
-	locked = 1
-	broken = 0
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL)
+	w_type = RECYK_ELECTRONIC
 	icon_locked = "coinbox+l"
 	icon_closed = "coinbox"
 	icon_broken = "coinbox+b"
+
+/obj/item/weapon/storage/lockbox/coinbox/allaccess	
+	req_one_access = null
 
 /obj/item/weapon/storage/lockbox/lawgiver
 	name = "lockbox (lawgiver)"
@@ -399,6 +402,19 @@
 		new /obj/item/weapon/disk(src)
 	update_icon()
 
+/obj/item/weapon/storage/lockbox/diskettebox/large/full/New()
+	..()
+	for(var/i = 1 to storage_slots)
+		new /obj/item/weapon/disk(src)
+	update_icon()
+
+/obj/item/weapon/storage/lockbox/diskettebox/archive
+	name = "archival diskette box"
+	desc = "Please copy in library."
+	storage_slots = 9
+	mech_flags = MECH_SCAN_FAIL
+
+
 //---------------------------------PRESETS END-----------------------------
 
 /obj/item/weapon/storage/lockbox/diskettebox/update_icon()
@@ -470,6 +486,7 @@
 	health = 200
 	storage_slots = 1
 	fits_max_w_class = W_CLASS_LARGE
+	req_one_access = null
 
 /obj/item/weapon/storage/lockbox/advanced/ex_act()
 	react()

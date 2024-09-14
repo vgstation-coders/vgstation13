@@ -213,6 +213,7 @@
 	stacked.amount = release_amount
 	stacked.update_materials()
 	stacked.forceMove(out_T)
+	stacked.update_icon()
 	stack.amount -= release_amount
 
 	if(stack.amount == 0)

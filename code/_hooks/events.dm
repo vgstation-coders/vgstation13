@@ -26,6 +26,11 @@
 // atom/movable/mover: the movable itself.
 /event/moved
 
+// Called whenever an /atom/movable relay-moves.
+// Arguments:
+// atom/movable/mover: the movable itself.
+/event/relaymoved
+
 // Called right before an /atom/movable attempts to move or change dir.
 /event/before_move
 
@@ -78,6 +83,12 @@
 // Arguments:
 // mob/user: The living mob that's logging in.
 /event/living_login
+
+// Called by new_player.dm when a character latejoins
+// Arguments:
+// mob/living/carbon/human/character: The character that has arrived on the station.
+// rank: The character's job. Should be something like "Chemist", NOT the job datum.
+/event/late_arrival
 
 // Called whenever a mob takes damage.
 // Truthy return values will prevent the damage.
@@ -209,6 +220,7 @@
 // atom/hit_atom: the atom hit by the throw impact
 // speed: the speed at which the thrown atom was thrown
 // mob/living/user: the mob who threw the atom, if any
+// thrown_atom: the atom that was thrown
 /event/throw_impact
 
 //Called by examine
@@ -217,12 +229,6 @@
 /event/examined
 
 /event/ui_act
-
-// Called when living calls a life() tick
-// Arguments:
-// mob/living/L: thing that ticker
-// life_ticks: the amounts of lifetick processed
-/lazy_event/on_life
 
 // Called by attack_self
 // Arguments:
@@ -270,6 +276,17 @@
 // Arguments:
 // time: shuttle timer
 /event/shuttletimer
+// Called by miscellaneous functions not covered by entered, equipped and unequipped events for cameranet updates
+// Arguments:
+// atom/movable/mover: the atom changing status on the cameranet
+/event/camera_sight_changed
+
+// Called by both area/Entered and area/Exited if the atom changing areas is a mob
+// Arguments:
+// mob: the mob changing areas
+// newarea: the new area being entered
+// oldarea: the old area being left
+/event/mob_area_changed
 
 // Note: the following are used by datum/component/ai subtypes to give instructions to each other.
 // AI components are expected to INVOKE_EVENT these to send commands to other components
@@ -375,6 +392,18 @@
 		registered_events -= event_type
 	if(!registered_events.len)
 		registered_events = null
+
+/**
+  * Checks if a datum has a registered event.
+  * Arguments:
+  * * event/event_type Required. The typepath of the event to unregister.
+  * * datum/target Required. The object that's been previously registered.
+  * * procname Required. The proc of the object.
+  */
+/datum/proc/has_event(event/event_type, datum/target, procname)
+	if(!target || !procname)
+		return registered_events && registered_events[event_type]
+	return registered_events && registered_events[event_type] && registered_events[event_type]["[ref(target)]:[procname]"]
 
 #undef EVENT_HANDLER_OBJREF_INDEX
 #undef EVENT_HANDLER_PROCNAME_INDEX

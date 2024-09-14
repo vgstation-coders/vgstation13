@@ -1,6 +1,7 @@
+var/list/decelerators = list()
 /obj/item/weapon/am_containment
 	name = "antimatter containment jar"
-	desc = "Holds antimatter. A few of these could blow an entire 21st-century lunar installation."
+	desc = "Holds antimatter. A few of these could blow an entire 21st-century lunar installation. Can be refueled if exposed to radiation."
 	icon = 'icons/obj/machines/new_ame.dmi'
 	icon_state = "jar"
 	item_state = "am_jar"
@@ -20,7 +21,13 @@
 
 /obj/item/weapon/am_containment/New()
 	..()
+	decelerators += src
 	update_icon()
+
+	
+/obj/item/weapon/am_containment/Destroy()
+	decelerators -= src
+	..()
 
 /obj/item/weapon/am_containment/update_icon()
 	overlays.len = 0
@@ -72,3 +79,6 @@
 	fuel = 30000
 	fuel_max = 30000
 	gauge_offset = 6
+
+/obj/item/weapon/am_containment/proc/receive_pulse(power)
+	fuel = min(fuel_max, fuel + round(power/25))

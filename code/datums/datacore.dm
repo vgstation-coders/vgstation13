@@ -116,7 +116,6 @@
 		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = NORTH, ignore_spawn_items = TRUE),  "", dir = NORTH)
 		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = EAST, ignore_spawn_items = TRUE),  "", dir = EAST)
 		result.Insert(getFlatIconDeluxe(sort_image_datas(get_content_image_datas(H)), override_dir = WEST, ignore_spawn_items = TRUE),  "", dir = WEST)
-		result.Crop(1,1,32,32)
 
 		G.fields["photo"]		= result
 		L.fields["image"]		= result

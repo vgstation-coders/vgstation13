@@ -226,6 +226,7 @@
 		return
 	var/mob/living/carbon/human/C = R.antag.current
 	to_chat(C, "<span class='notice'>We distort our form to prevent AI-tracking.</span>")
+	INVOKE_EVENT(C, /event/camera_sight_changed, "mover" = C)
 	C.digitalcamo = 1
 
 /datum/power/changeling/rapidregeneration
@@ -238,7 +239,7 @@
 /datum/power/changeling/armblade
 	name = "Arm Blade"
 	desc = "We transform one of our arms into an organic blade that can cut through flesh and bone."
-	helptext = "The blade can be retracted by using the same spell used to manifest it. It has a chance to deflect projectiles."
+	helptext = "The blade can be retracted by using the same spell used to manifest it. It has a chance to protect against attacks and block projectiles. It also has a powerful spin attack that can be used once every 30 seconds, attacking everyone near you 3 times over 1.5 seconds."
 	cost = 3
 	spellpath = /spell/changeling/armblade
 /*

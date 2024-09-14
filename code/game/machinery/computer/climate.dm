@@ -5,6 +5,7 @@ var/list/climatecomps = list()
 	desc = "A computer designed to report on the weather conditions nearby."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "climate"
+	moody_state = "overlay_climate-wall"
 	light_color = LIGHT_COLOR_CYAN
 	circuit = "/obj/item/weapon/circuitboard/labor"
 

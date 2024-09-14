@@ -143,7 +143,6 @@
 	if(!flashbulb)
 		return
 	else
-		flashbulb.forceMove(get_turf(loc))
 		usr.put_in_hands(flashbulb)
 		to_chat(usr, "You remove the broken [flashbulb.name] from \the [src].")
 		flashbulb = null
@@ -154,8 +153,7 @@
 		if(cell)
 			to_chat(user, "<span class='warning'>There is already a power cell inside \the [src].</span>")
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return 1
 		cell = W
 		user.visible_message("[user] inserts \the [W] into \the [src].","You insert \the [W] into \the [src].")
@@ -177,8 +175,7 @@
 		else if(B.status == LIGHT_BURNED)
 			to_chat(user, "<span class='warning'>That [B.name] is burned out, it won't function in \the [src].</span>")
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+		if(!user.drop_item(W, src, failmsg = TRUE))
 			return 1
 		flashbulb = B
 		user.visible_message("[user] inserts \the [W] into \the [src].","You insert \the [W] into \the [src].")
@@ -194,17 +191,11 @@
 			return
 		to_chat(user, "You cut the wires out of the film chamber.")
 		W.playtoolsound(user, 50)
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/obj/item/device/camera/I = new decon_path(get_turf(user), empty = TRUE)
-			handle_camera(I)
-			user.put_in_hands(I)
-		else
-			var/obj/item/device/camera/I = new decon_path(get_turf(loc), empty = TRUE)
-			handle_camera(I)
-		var/obj/item/stack/cable_coil/C = new (get_turf(user))
+		var/obj/item/device/camera/I = new decon_path(get_turf(loc), empty = TRUE)
+		handle_camera(I)
+		var/obj/item/stack/cable_coil/C = new (get_turf(loc))
 		C.amount = 5
-		qdel(src)
+		user.create_in_hands(src, I)
 
 /obj/item/device/blinder/proc/handle_camera(obj/item/device/camera/camera)
 	if(flashbulb)

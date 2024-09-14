@@ -102,7 +102,7 @@
 					src.occupant_message("You hit [target].")
 					src.visible_message("<span class='red'><b>[src.name] hits [target]</b></span>")
 					if(!istype(target, /turf/simulated/wall))
-						target:attackby(src,src.occupant)
+						target:attackby(src.fist,src.occupant)
 					else if(prob(5))
 						target:dismantle_wall(1)
 						src.occupant_message("<span class='notice'>You smash through the wall.</span>")

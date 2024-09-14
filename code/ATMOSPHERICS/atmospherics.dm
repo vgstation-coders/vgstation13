@@ -349,6 +349,7 @@ Pipelines + Other Objects -> Pipe network
 #define VENT_SOUND_DELAY 30
 
 /obj/machinery/atmospherics/Entered(atom/movable/Obj)
+	. = ..()
 	if(istype(Obj, /mob/living))
 		var/mob/living/L = Obj
 		L.ventcrawl_layer = src.piping_layer

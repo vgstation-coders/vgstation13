@@ -45,7 +45,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	density = 1
 	anchored = 0
 	machine_flags = WRENCHMOVE | FIXED2WORK | EMAGGABLE
-	req_access = list(access_engine_minor)
+	req_access = list()
 
 
 	var/consumption = 0 //How much are we set to draw off the net? Clamped between 0 and 2 GIGAWATT (2,000,000,000 Watts)
@@ -61,7 +61,7 @@ list("category" = "machinery", "name" = "MSGS", "path" = /obj/machinery/atmosphe
 	on = !on
 	if(!get_powernet())
 		on = FALSE
-		visible_message("<span class='warning'>The [src] buzzes and shuts off.</span>")
+		visible_message("<span class='warning'>\The [src] buzzes and shuts off.</span>")
 	update_icon()
 
 /obj/machinery/power/antiquesynth/get_monitor_status()

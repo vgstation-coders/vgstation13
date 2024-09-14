@@ -12,6 +12,9 @@
 	fits_max_w_class = W_CLASS_LARGE
 	max_combined_w_class = 28
 
+/obj/item/weapon/storage/backpack/holding/return_air()//prevents hot food from getting cold while in it.
+	return
+
 /obj/item/weapon/storage/backpack/holding/miniblackhole
 	name = "miniature black hole"
 	desc = "A miniature black hole that opens into a localized pocket of Blue Space."
@@ -29,13 +32,22 @@
 	user.drop_item(src)
 	qdel(user)
 
-/obj/item/weapon/storage/backpack/holding/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/storage/backpack/holding/quick_store(var/obj/item/I,mob/user)
+	if(user?.client)
+		var/list/recursive_list = recursive_type_check(I, /obj/item/weapon/storage/backpack/holding)
+		if(recursive_list.len)
+			var/report = " created a baguloose from quick equipping in [(world.time - user.client.last_quick_stored) / 10] seconds, might be worth noting."
+			message_admins("[key_name_admin(user)][report]") // any info about the baguloose is shown below anyways
+			log_game("[key_name(user)][report]")
+	return ..()
+
+/obj/item/weapon/storage/backpack/holding/handle_item_insertion(obj/item/W, prevent_warning)
 	. = ..()
 	if(W == src)
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
 	var/list/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)
 	if(recursive_list.len) // Placing a bag of holding into another will singuloose when stored inside other objects too, such as when on your back or on a diona's back and stuffed in
-		singulocreate(recursive_list, user)
+		singulocreate(recursive_list, usr)
 		return
 
 //BoH+BoH=Singularity, WAS commented out

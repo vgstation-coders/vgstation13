@@ -215,10 +215,13 @@ var/list/station_holomaps = list()
 	overlays.len = 0
 	if(stat & BROKEN)
 		icon_state = "station_mapb"
+		kill_moody_light()
 	else if((stat & (FORCEDISABLE|NOPOWER)) || !anchored)
 		icon_state = "station_map0"
+		kill_moody_light()
 	else
 		icon_state = "station_map"
+		update_moody_light('icons/lighting/moody_lights.dmi', "overlay_holomap")
 
 		if(bogus)
 			holomap_datum.station_map.overlays.len = 0

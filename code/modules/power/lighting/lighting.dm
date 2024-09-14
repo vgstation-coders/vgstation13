@@ -2,6 +2,23 @@
 //
 // consists of light fixtures (/obj/machinery/light) and light tube/bulb items (/obj/item/weapon/light)
 
+var/global/list/light_colors = list(
+	"default" = LIGHT_COLOR_TUNGSTEN, \
+	"default (HE)" = LIGHT_COLOR_HALOGEN, \
+	"red" = LIGHT_COLOR_RED, \
+	"green" = LIGHT_COLOR_GREEN, \
+	"blue" = LIGHT_COLOR_BLUE, \
+	"cyan" = LIGHT_COLOR_CYAN, \
+	"pink" = LIGHT_COLOR_PINK, \
+	"yellow" = LIGHT_COLOR_YELLOW, \
+	"brown" = LIGHT_COLOR_BROWN, \
+	"orange" = LIGHT_COLOR_ORANGE, \
+	"purple" = LIGHT_COLOR_PURPLE, \
+	"fire" = LIGHT_COLOR_FIRE, \
+	"flare" = LIGHT_COLOR_FLARE, \
+	"slime" = LIGHT_COLOR_SLIME_LAMP, \
+	)
+
 /obj/machinery/light_construct
 	name = "light fixture frame"
 	desc = "A light fixture under construction."
@@ -11,14 +28,8 @@
 	plane = ABOVE_HUMAN_PLANE
 	layer = LIGHT_FIXTURE_LAYER
 	var/stage = 1
-	var/fixture_type = "tube"
+	var/fixture_type = /obj/machinery/light/built
 	var/sheets_refunded = 2
-	var/obj/machinery/light/newlight = null
-
-/obj/machinery/light_construct/New()
-	..()
-	if (fixture_type == "bulb")
-		icon_state = "bulb-construct-stage1"
 
 /obj/machinery/light_construct/examine(mob/user)
 	..()
@@ -54,20 +65,15 @@
 			var/obj/item/stack/cable_coil/coil = W
 			coil.use(1)
 			switch(fixture_type)
-				if ("tube")
+				if (/obj/machinery/light/built)
 					src.icon_state = "tube-empty"
-				if("bulb")
+				if(/obj/machinery/light/small/built)
 					src.icon_state = "bulb-empty"
 			src.stage = 2
 			user.visible_message("[user.name] adds wires to \the [src].", \
 				"You add wires to \the [src]")
-
-			switch(fixture_type)
-				if("tube")
-					newlight = new /obj/machinery/light/built(src.loc)
-				if ("bulb")
-					newlight = new /obj/machinery/light/small/built(src.loc)
-
+			
+			var/obj/machinery/light/newlight = new fixture_type(src.loc)
 			newlight.dir = src.dir
 			src.transfer_fingerprints_to(newlight)
 			qdel(src)
@@ -90,13 +96,8 @@
 /obj/machinery/light_construct/small
 	name = "small light fixture frame"
 	desc = "A small light fixture under construction."
-	icon = 'icons/obj/lighting.dmi'
 	icon_state = "bulb-construct-stage1"
-	anchored = 1
-	plane = OBJ_PLANE
-	layer = ABOVE_DOOR_LAYER
-	stage = 1
-	fixture_type = "bulb"
+	fixture_type = /obj/machinery/light/small/built
 	sheets_refunded = 1
 
 var/global/list/obj/machinery/light/alllights = list()
@@ -108,8 +109,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	icon_state = "ltube1"
 	desc = "A lighting fixture."
 	anchored = 1
-	plane = OBJ_PLANE
-	layer = ABOVE_DOOR_LAYER
+	plane = ABOVE_HUMAN_PLANE
+	layer = LIGHT_FIXTURE_LAYER
 	use_power = MACHINE_POWER_USE_ACTIVE
 	idle_power_usage = 2
 	active_power_usage = 20
@@ -119,8 +120,10 @@ var/global/list/obj/machinery/light/alllights = list()
 	var/static_power_used = 0
 	var/flickering = 0
 	var/obj/item/weapon/light/current_bulb = null
+	var/area/lights_area
 	var/spawn_with_bulb = /obj/item/weapon/light/tube
 	var/fitting = "tube"
+	var/rgb_upgrade = FALSE //add plastic to enable RGB mode
 
 	// No ghost interaction.
 	ghost_read=0
@@ -136,6 +139,9 @@ var/global/list/obj/machinery/light/alllights = list()
 	else
 		update(0)
 	alllights += src
+	lights_area = get_area(src)
+	if(lights_area)
+		lights_area.lights += src
 
 	if(map.broken_lights)
 		switch(fitting)
@@ -222,6 +228,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	seton(0)
 	..()
 	alllights -= src
+	if(lights_area)
+		lights_area.lights -= src
 
 /obj/machinery/light/update_icon()
 
@@ -229,6 +237,8 @@ var/global/list/obj/machinery/light/alllights = list()
 		switch(current_bulb.status)		// set icon_states
 			if(LIGHT_OK)
 				icon_state = "l[current_bulb.base_state][on]"
+				if(on)
+					color = current_bulb.brightness_color
 			if(LIGHT_BURNED)
 				icon_state = "l[current_bulb.base_state]-burned"
 				on = 0
@@ -288,6 +298,8 @@ var/global/list/obj/machinery/light/alllights = list()
 // examine verb
 /obj/machinery/light/examine(mob/user)
 	..()
+	if(rgb_upgrade)
+		to_chat(user, "<span class='info'>it is NT-35322 RGB compliant!</span>")
 	if(current_bulb)
 		switch(current_bulb.status)
 			if(LIGHT_OK)
@@ -302,8 +314,52 @@ var/global/list/obj/machinery/light/alllights = list()
 // attack with item - insert light (if right type), otherwise try to break the light
 
 /obj/machinery/light/attackby(obj/item/W, mob/living/user)
-	user.delayNextAttack(8)
+	if(ismultitool(W)) //RGB gamer lights
+		if(!rgb_upgrade)
+			to_chat(user, "There's nothing to connect \the [W] to on \the [src].")
+			return
+		var/which = alert(user, "What would you like to change?", "Programmable Lights", "Color", "Power", "Range")
+		var/list/choice_color_list = list("custom") + light_colors
 
+		switch(which)
+			if("Color")
+				var/colorchoice = input(user,"Select a color to set [src] to.","[src]") in choice_color_list
+				if(!Adjacent(user))
+					return
+				if(colorchoice == "custom")
+					current_bulb.brightness_color = input("Please select a color for the tile.", "[src]") as color
+				else
+					current_bulb.brightness_color = choice_color_list[colorchoice]
+			if("Power")
+				var/new_power = input("Desired power (must be below [initial(current_bulb.brightness_power)]): ", "Light bulb power", "") as num
+				current_bulb.brightness_power = clamp(new_power, 0, initial(current_bulb.brightness_power))
+			if("Range")
+				var/new_range = input("Desired range (must be below [initial(current_bulb.brightness_range)]): ", "Light bulb range", "") as num
+				current_bulb.brightness_range = clamp(new_range, 0, initial(current_bulb.brightness_range))
+		update()
+		return
+		
+	if (istype(W,/obj/item/stack/light_w))
+		if(rgb_upgrade)
+			to_chat(user, "This light is already customizable.")
+			return
+		var/obj/item/stack/light_w/lightstack = W
+		lightstack.use(1)
+		rgb_upgrade = TRUE
+		to_chat(user, "You insert \the [W] into \the [src], allowing multitool customization.")
+		return
+	
+	
+	if(rgb_upgrade && iscrowbar(W))
+		W.playtoolsound(src, 75)
+		user.visible_message("[user.name] removes some plastic from \the [src].", \
+			"You remove some plastic from \the [src].", "You hear a noise.")
+		rgb_upgrade = FALSE
+		current_bulb.brightness_color = initial(current_bulb.brightness_color)
+		drop_stack(/obj/item/stack/light_w, get_turf(src), 1, user)
+		return
+	user.delayNextAttack(8)
+	
 	// attempt to insert light
 	if(istype(W, /obj/item/weapon/light))
 		if(current_bulb)
@@ -313,8 +369,7 @@ var/global/list/obj/machinery/light/alllights = list()
 			src.add_fingerprint(user)
 			var/obj/item/weapon/light/L = W
 			if(L.fitting == fitting)
-				if(!user.drop_item(L, src))
-					user << "<span class='warning'>You can't let go of \the [L]!</span>"
+				if(!user.drop_item(L, src, failmsg = TRUE))
 					return
 
 				to_chat(user, "You insert \the [L.name].")
@@ -333,10 +388,9 @@ var/global/list/obj/machinery/light/alllights = list()
 				return
 
 		// attempt to break the light
-		//If xenos decide they want to smash a light bulb with a toolbox, who am I to stop them? /N
+		//If xenos decide they want to smash a light bulb with a toolbox, who am I to stop them?
 
 	else if(current_bulb && current_bulb.status != LIGHT_BROKEN)
-
 
 		user.do_attack_animation(src, W)
 		if(prob(1+W.force * 5))
@@ -397,7 +451,7 @@ var/global/list/obj/machinery/light/alllights = list()
 		return FALSE
 	if(!this_area.haslightswitch || !this_area.requires_power)
 		return TRUE
-	for(var/obj/machinery/light_switch/L in this_area)
+	for(var/obj/machinery/light_switch/L in this_area.lightswitches)
 		if(L.on)
 			success = TRUE
 		break
@@ -563,8 +617,8 @@ var/global/list/obj/machinery/light/alllights = list()
 /*
  * Called when area power state changes.
  */
-/obj/machinery/light/power_change()
-	spawn(10)
+/obj/machinery/light/power_change(var/non_instant = TRUE)
+	spawn(10 * non_instant)
 		seton(has_power())
 
 // called when on fire

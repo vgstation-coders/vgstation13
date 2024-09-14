@@ -169,6 +169,7 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
+	var/obj/structure/current_crate
 	var/print_delay = 1 SECONDS
 	var/obj/item/weapon/paper/manifest/current_manifest = null
 	var/next_sound = 0
@@ -214,6 +215,7 @@
 
 /obj/machinery/crate_weigher/Crossed(atom/movable/A)
 	if(istype(A,/obj/structure)) //Ideally crate types stay these
+		current_crate = A
 		icon_state = "down"
 		if (world.time > next_sound)
 			playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
@@ -240,11 +242,21 @@
 					CF.weighed = TRUE
 
 /obj/machinery/crate_weigher/Uncrossed(atom/movable/A)
+	..()
 	if(istype(A,/obj/structure)) //Ideally crate types stay these
-		icon_state = "up"
-		if (world.time > next_sound)
-			playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
-			next_sound = world.time + sound_delay
+		remove_crate()
+
+/obj/machinery/crate_weigher/Move(NewLoc, Dir, step_x, step_y, glide_size_override)
+	. = ..()
+	if(current_crate && current_crate.loc != src.loc)
+		remove_crate()
+
+/obj/machinery/crate_weigher/proc/remove_crate()
+	current_crate = null
+	icon_state = "up"
+	if (world.time > next_sound)
+		playsound(get_turf(src), 'sound/effects/spring.ogg', 60, 1)
+		next_sound = world.time + sound_delay
 
 /obj/item/weapon/circuitboard/crate_weigher
 	name = "Circuit Board (Crate Weigher)"
@@ -284,7 +296,25 @@
 	else
 		initialised_type = get_weighted_order()
 	initialised_order = new initialised_type
-	containertype = initialised_order.must_be_in_crate ? /obj/structure/closet/crate : /obj/structure/largecrate
+	//Sadly cannot use switch here
+	if(initialised_order.must_be_in_crate)
+		if(istype(initialised_order,/datum/centcomm_order/department/engineering))
+			containertype = /obj/structure/closet/crate/secure/engisec
+			access = list(access_engine_minor)
+		else if(istype(initialised_order,/datum/centcomm_order/department/medical))
+			containertype = /obj/structure/closet/crate/secure/medsec
+			access = list(access_medical)
+		else if(istype(initialised_order,/datum/centcomm_order/department/science))
+			containertype = /obj/structure/closet/crate/secure/scisec
+			access = list(access_science)
+		else
+			containertype = /obj/structure/closet/crate
+	else
+		containertype = /obj/structure/largecrate
+	var/max_capacity = INFINITY // large crates can hold anything on creation i'm pretty sure
+	if(ispath(containertype,/obj/structure/closet))
+		var/obj/structure/closet/C = containertype
+		max_capacity = initial(C.storage_capacity)
 	acct_by_string = initialised_order.acct_by_string
 	for(var/i in initialised_order.requested)
 		amount = initialised_order.requested[i]
@@ -297,8 +327,9 @@
 			containername = initial(thing.name)
 		if(isnum(amount))
 			var/our_amount = amount
-			if(istype(i,/obj/item/stack))
-				our_amount = 1
+			if(ispath(i,/obj/item/stack))
+				var/obj/item/stack/S = i
+				our_amount = ceil(our_amount/(initial(S.max_amount))) //compress the values of stacks down like this, ceil allows for wiggle room to overfill
 			for(var/j in 1 to our_amount)
 				contains += i
 		if(istype(initialised_order,/datum/centcomm_order/per_unit))
@@ -306,16 +337,8 @@
 			worth = PU.unit_prices[i] * amount
 		else
 			worth = initialised_order.worth
-	//Sadly cannot use switch here
-	if(istype(initialised_order,/datum/centcomm_order/department/engineering))
-		containertype = initialised_order.must_be_in_crate ? /obj/structure/closet/crate/secure/engisec : /obj/structure/largecrate
-		access = list(access_engine_minor)
-	else if(istype(initialised_order,/datum/centcomm_order/department/medical))
-		containertype = initialised_order.must_be_in_crate ? /obj/structure/closet/crate/secure/medsec : /obj/structure/largecrate
-		access = list(access_medical)
-	else if(istype(initialised_order,/datum/centcomm_order/department/science))
-		containertype = initialised_order.must_be_in_crate ? /obj/structure/closet/crate/secure/scisec : /obj/structure/largecrate
-		access = list(access_science)
+		if(contains.len >= max_capacity) //stop overfilling the crates
+			break
 	..()
 
 /datum/cargo_forwarding/janicart

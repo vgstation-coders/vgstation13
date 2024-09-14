@@ -13,13 +13,14 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/seed_name                  // Plant name for seed packet.
 	var/seed_noun = "seeds"        // Descriptor for packet.
 	var/display_name               // Prettier name.
+	var/plural = 0				   // Whether we say that the <display_name> "has", or the <display_name> "have".
 	var/roundstart                 // If set, seed will not display variety number.
 	var/mysterious                 // Only used for the random seed packets.
 
 	// Output.
 	var/list/products              // Possible fruit/other product paths.
 	var/list/mutants               // Possible predefined mutant varieties, if any.
-	var/list/chems                 // Chemicals that plant produces in products/injects into victim in (Total units, Potency)
+	var/list/chems=list()          // Chemicals that plant produces in products/injects into victim in (Total units, Potency)
 	var/list/consume_gasses=list() // The plant will absorb these gasses during its life.
 	var/list/exude_gasses=list()   // The plant will exude these gasses during its life.
 
@@ -40,7 +41,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/endurance = 100             // Maximum plant HP when growing.
 	var/yield = 0                   // Amount of product.
 	var/lifespan = 0                // Time before the plant dies.
-	var/maturation = 0              // Time taken before the plant is mature.
+	var/maturation = 0              // Time taken before the plant can be harvested.
+	var/maturation_max = 1			// If above 1, the plant may reach further stages of maturation past the first one.
 	var/production = 0              // Time before harvesting can be undertaken again.
 	var/growth_stages = 6           // Number of stages the plant passes through before it is mature.
 	var/harvest_repeat = 0          // If 1, this plant will fruit repeatedly. If 2, the plant will self-harvest.
@@ -56,6 +58,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/teleporting = 0				// If 1, causes teleportation when thrown.
 	var/juicy = 0					// 0 = no, 1 = splatters when thrown, 2 = slips
 	var/noreact = 0					// If 1, chems do not react inside the plant.
+	var/gas_absorb = 0              // If 1, absorbs the gasses from consume_gasses and turns them into reagents inside the fruit.
 
 	// Cosmetics.
 	var/plant_dmi = 'icons/obj/hydroponics/apple.dmi'// DMI  to use for the plant growing in the tray.
@@ -65,9 +68,16 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	var/biolum_colour               // The colour of the plant's radiance.
 	var/splat_type = /obj/effect/decal/cleanable/fruit_smudge //Decal to create if the fruit is splatter-able and subsequently splattered.
 
+	var/visible_roots_in_hydro_tray = 0	//If 1, roots will be displayed in hydro trays (see dandelions.dmi)
+	var/list/products_per_maturation_level = list() //Lists the different values for the products var depending on the current harvest level
+	var/pollen = null					//Particles to display when harvest is ready
+	var/pollen_at_level = 1				//Harvest level required to display particles
+
 	var/mob_drop					// Seed type dropped by the mobs when it dies without an host
 
 	var/large = 1					// Is the plant large? For clay pots.
+	var/constrained = 0				// Whether the plant uses alternate sprites when the cover is down
+	var/moody_lights = 0			// Whether the plant has moody lights (can really improve the looks of bioluminescent plants)
 	var/list/mutation_log = list() // Who did what
 
 /datum/seed/New()
@@ -93,6 +103,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		consume_gasses = list()
 		var/gas = pick(GAS_OXYGEN, GAS_NITROGEN, GAS_PLASMA, GAS_CARBON)
 		consume_gasses[gas] = rand(3,9)
+		if(prob(10))
+			gas_absorb = 1
 
 	if(prob(5))
 		exude_gasses = list()
@@ -370,10 +382,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					teleporting 		= gene.values[1]
 					alter_temp 			= gene.values[2]
 					noreact 			= gene.values[3]
+					gas_absorb          = gene.values[6]
 				if(GENEGUN_MODE_SPLICE)
 					teleporting 		= max(gene.values[1], teleporting)
 					alter_temp 			= max(gene.values[2], alter_temp)
 					noreact 			= max(gene.values[3], noreact)
+					gas_absorb          = max(gene.values[6], gas_absorb)
 			var/list/new_gasses = gene.values[4]
 			if(islist(new_gasses))
 				if(!exude_gasses || mode == GENEGUN_MODE_PURGE)
@@ -460,7 +474,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(alter_temp    			? alter_temp    		: 0),
 				(noreact				? noreact				: 0),
 				(exude_gasses    		? exude_gasses    		: 0),
-				(consume_gasses    		? consume_gasses    	: 0)
+				(consume_gasses    		? consume_gasses    	: 0),
+				(gas_absorb             ? gas_absorb            : 0)
 			)
 	return (P ? P : 0)
 
@@ -472,14 +487,19 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		SSplant.seeds[name] = src
 
 //Place the plant products at the feet of the user.
-/datum/seed/proc/harvest(var/mob/user)
+/datum/seed/proc/harvest(var/mob/user, var/atom/movable/holder)
 	if(!user)
 		return
 	if(isnull(products) || !products.len || yield <= 0)
 		to_chat(user, "<span class='warning'>You fail to harvest anything useful.</span>")
 	else
 		to_chat(user, "You harvest from the [display_name].")
-		generate_product(get_turf(user), user)
+
+		if (istype(holder, /obj/machinery/portable_atmospherics/hydroponics))
+			var/obj/machinery/portable_atmospherics/hydroponics/tray = holder
+			update_product(tray.harvest)//because the same seed datum might be shared by multiple trays, we only call update_product() right before harvest.
+
+		generate_product((holder && holder.Adjacent(user)) || !holder ? get_turf(user) : get_turf(holder), user)
 
 /datum/seed/proc/generate_product(var/turf/T, mob/harvester)
 	add_newline_to_controller()
@@ -600,10 +620,13 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.uid = 0
 	new_seed.roundstart = 0
 	new_seed.large = large
+	new_seed.plural = plural
 
 	//Copy over everything else.
 	if(products)
 		new_seed.products = products.Copy()
+	if(products_per_maturation_level)
+		new_seed.products_per_maturation_level = products_per_maturation_level.Copy()
 	if(mutants)
 		new_seed.mutants = mutants.Copy()
 	if(chems)
@@ -635,6 +658,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.yield =				yield
 	new_seed.lifespan =				lifespan
 	new_seed.maturation =			maturation
+	new_seed.maturation_max =		maturation_max
+	new_seed.pollen = 				pollen
+	new_seed.pollen_at_level = 		pollen_at_level
 	new_seed.production =			production
 	new_seed.growth_stages =		growth_stages
 	new_seed.harvest_repeat =		harvest_repeat
@@ -653,6 +679,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.biolum =				biolum
 	new_seed.biolum_colour =		biolum_colour
 	new_seed.alter_temp =			alter_temp
+	new_seed.gas_absorb =           gas_absorb
+	new_seed.noreact =              noreact
 	new_seed.plant_dmi =			plant_dmi
 	new_seed.mutation_log =			mutation_log
 	new_seed.mutation_log += "([timestamp()]) Diverged from seed with uid: [uid]."
@@ -668,3 +696,40 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		R = chemical_reagents_list[rid]
 		reagent_names += R.name
 	return reagent_names
+
+/datum/seed/proc/update_product(var/maturation_level)
+	if (maturation_level > products_per_maturation_level.len)
+		plant_icon_state = "produce"
+		return
+	products = products_per_maturation_level[maturation_level]
+	plant_icon_state = "produce[(maturation_level > 1) ? "-[maturation_level]" : ""]"
+
+/datum/seed/proc/wind_act(var/obj/machinery/portable_atmospherics/hydroponics/tray, var/differential, var/list/connecting_turfs)
+	if (!pollen || !istype(tray) || tray.harvest < pollen_at_level)
+		return
+	var/turf/T = get_turf(tray)
+	var/turf/U = get_step(T,get_dir(T,pick(connecting_turfs)))
+	var/log_differential = log(abs(differential) * 3)
+	if (U)
+		if (differential > 0)
+			T.flying_pollen(U,log_differential, pollen)
+		else
+			T.flying_pollen(U,-log_differential, pollen)
+		T.adjust_particles(PVAR_SPAWNING, 0.5, pollen)
+	spawn(10)
+		for (var/obj/machinery/portable_atmospherics/hydroponics/other_tray in U)//TODO: have it work on grass
+			if (!other_tray.seed)
+				other_tray.seed = SSplant.seeds[name]
+				other_tray.add_planthealth(other_tray.seed.endurance)
+				other_tray.lastcycle = world.time
+				other_tray.weedlevel = 0
+				other_tray.update_icon()
+
+/datum/seed/proc/apply_particles(var/obj/machinery/portable_atmospherics/hydroponics/tray)
+	if (!pollen || !istype(tray) || tray.harvest < pollen_at_level)
+		return
+
+	tray.add_particles(pollen)
+	tray.adjust_particles(PVAR_SPAWNING, 0.05, pollen)
+	tray.adjust_particles(PVAR_PLANE, OBJ_PLANE, pollen)
+	tray.adjust_particles(PVAR_POSITION, generator("box", list(-12,4), list(12,12)), pollen)

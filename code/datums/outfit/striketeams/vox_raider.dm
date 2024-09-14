@@ -8,7 +8,7 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/carapace,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/carapace,
 			slot_belt_str = /obj/item/weapon/melee/telebaton,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/monocle,
 			slot_l_store_str = /obj/item/device/chameleon,
 		),
 		"Engineer" = list(
@@ -21,7 +21,7 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/carapace,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/carapace,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/full,
-			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
+			slot_glasses_str = /obj/item/clothing/glasses/hud/thermal/monocle,
 			slot_l_store_str = /obj/item/weapon/card/emag,
 			ACCESORY_ITEM = list(/obj/item/weapon/gun/dartgun/vox/raider, /obj/item/device/multitool),
 		),

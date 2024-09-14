@@ -124,25 +124,106 @@
 	if(istype(W, /obj/item/device/rcd/rpd) || istype(W, /obj/item/device/pipe_painter))
 		return // Coloring pipes.
 
-	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/red))
-		src.color = PIPE_COLOR_RED
-		to_chat(user, "<span class='warning'>You paint the pipe red.</span>")
-		update_icon()
-		return 1
-	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/blue))
-		src.color = PIPE_COLOR_BLUE
-		to_chat(user, "<span class='warning'>You paint the pipe blue.</span>")
-		update_icon()
-		return 1
-	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/green))
-		src.color = PIPE_COLOR_GREEN
-		to_chat(user, "<span class='warning'>You paint the pipe green.</span>")
-		update_icon()
-		return 1
-	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/yellow))
-		src.color = PIPE_COLOR_ORANGE
-		to_chat(user, "<span class='warning'>You paint the pipe yellow.</span>")
-		update_icon()
-		return 1
+	return ..()
 
+/obj/machinery/atmospherics/unary/cap/bluespace
+	name = "bluespace pipe endcap"
+	desc = "A bluespace-powered pipe endcap that can instantaneously transfer gases between two points. It will only transfer gases to other pipes with the same color, which can be changed with a multitool."
+	icon = 'icons/obj/pipes.dmi'
+	icon_state = "bscap"
+	level = LEVEL_ABOVE_FLOOR
+	can_be_coloured = 0
+	color = "#FFFFFF"
+	var/network_color = "#b4b4b4"    // default grey color that all pipes have
+	
+	var/color_r = 180
+	var/color_g = 180
+	var/color_b = 180
+
+	var/image/color_overlay
+	
+var/global/list/pipe_colors = list(
+	"custom", \
+	"grey" = rgb(180,180,180), \
+	"blue" = rgb(0,0,183), \
+	"cyan" = rgb(0,184,184), \
+	"green" = rgb(0,185,0), \
+	"pink" = rgb(255,102,204), \
+	"purple" = rgb(128,0,128), \
+	"red" = rgb(183,0,0), \
+	"orange" = rgb(183,121,0), \
+	"white" = rgb(255,255,255), \
+)
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/update_icon()
+	overlays = 0
+	alpha = invisibility ? 128 : 255
+	icon_state = "bscap"
+	update_moody_light('icons/lighting/moody_lights.dmi', "overlay_bscap")
+	color_overlay = image('icons/obj/pipes.dmi', icon_state = "bscap-overlay")
+	color_overlay.color = rgb(color_r,color_g,color_b)
+	overlays += color_overlay
+	
+
+var/global/list/obj/machinery/atmospherics/unary/cap/bluespace/bspipe_list = list()
+var/global/list/obj/machinery/atmospherics/unary/cap/bluespace/bspipe_item_list = list()
+
+/obj/machinery/atmospherics/unary/cap/bluespace/New()
+	..()
+	bspipe_list.Add(src)
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/Destroy()
+	bspipe_list.Remove(src)
+	..()
+	
+	
+/obj/machinery/atmospherics/unary/cap/bluespace/proc/merge_all()
+	var/datum/pipe_network/main_network
+	for(var/obj/machinery/atmospherics/unary/cap/bluespace/bscap in bspipe_list)
+		if(!bscap.network)
+			continue
+		if(src.network_color != bscap.network_color)
+			continue
+		if(src.z != bscap.z)
+			continue
+		if(!main_network)
+			main_network = bscap.network
+			continue
+		else
+			main_network.merge(bscap.network)
+				
+/obj/machinery/atmospherics/unary/cap/bluespace/build_network()
+	if(!network && node1)
+		network = new /datum/pipe_network
+		network.normal_members += src
+		network.build_network(node1, src)
+		merge_all()
+		
+		
+/obj/machinery/atmospherics/unary/cap/bluespace/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if(istype(O,/obj/item/device/multitool))
+		var/list/choice_list = pipe_colors
+
+		var/choice = input(user,"Select a color to set [src] to.","[src]") in choice_list
+		if(!Adjacent(user))
+			return
+
+		var/new_color
+		if(choice == "custom")
+			new_color = input("Please select a color for the tile.", "[src]",rgb(color_r,color_g,color_b)) as color
+			if(new_color)
+				color_r = hex2num(copytext(new_color, 2, 4))
+				color_g = hex2num(copytext(new_color, 4, 6))
+				color_b = hex2num(copytext(new_color, 6, 8))
+		else
+			new_color = choice_list[choice]
+			color_r = hex2num(copytext(new_color, 2, 4))
+			color_g = hex2num(copytext(new_color, 4, 6))
+			color_b = hex2num(copytext(new_color, 6, 8))
+			
+		update_icon()
+		
+		network_color = new_color
+		qdel(network)
+		merge_all()
 	return ..()

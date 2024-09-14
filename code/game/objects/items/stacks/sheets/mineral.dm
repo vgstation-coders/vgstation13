@@ -38,6 +38,7 @@ Mineral Sheets
 
 var/list/datum/stack_recipe/sandstone_recipes = list ( \
 	new/datum/stack_recipe("pile of dirt", /obj/machinery/portable_atmospherics/hydroponics/soil, 3, time = 10, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe("plant pot", /obj/item/claypot, 3, time = 3 SECONDS, one_per_turf = 0, on_floor = 0), \
 	new/datum/stack_recipe("sandstone door", /obj/machinery/door/mineral/sandstone, 10, one_per_turf = 1, on_floor = 1), \
 /*	new/datum/stack_recipe("sandstone wall", ???), \
 		new/datum/stack_recipe("sandstone floor", ???),\ */
@@ -177,17 +178,19 @@ var/list/datum/stack_recipe/plasma_recipes = list ( \
 	throw_range = 3
 	origin_tech = Tc_MATERIALS + "=3"
 	melt_temperature = MELTPOINT_PLASTIC
-	autoignition_temperature = AUTOIGNITION_PLASTIC
 	sheettype = "plastic"
 	perunit = CC_PER_SHEET_PLASTIC
 	mat_type = MAT_PLASTIC
 	w_type = RECYK_PLASTIC
+	flammable = TRUE
 	starting_materials = list(MAT_PLASTIC = CC_PER_SHEET_PLASTIC)
 
 var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic floor tile", /obj/item/stack/tile/mineral/plastic, 1, 4, 20), \
+	new/datum/stack_recipe("plastic bucket", /obj/item/weapon/reagent_containers/glass/bucket, 3, time = 3 SECONDS, one_per_turf = 0, on_floor = 0), \
 	new/datum/stack_recipe("plastic crate", /obj/structure/closet/pcrate, 10, one_per_turf = 1, on_floor = 1, one_per_turf = 1), \
 	new/datum/stack_recipe("plastic ashtray", /obj/item/ashtray/plastic, 1, on_floor = 1), \
+	new/datum/stack_recipe("lunch box", /obj/item/weapon/storage/lunchbox/plastic, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0), \
 	new/datum/stack_recipe("plastic fork", /obj/item/weapon/kitchen/utensil/fork/plastic, 1, on_floor = 1), \
 	new/datum/stack_recipe("plastic spork", /obj/item/weapon/kitchen/utensil/spork/plastic, 1, on_floor = 1), \
 	new/datum/stack_recipe("plastic spoon", /obj/item/weapon/kitchen/utensil/spoon/plastic, 1, on_floor = 1), \
@@ -200,6 +203,7 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 	new/datum/stack_recipe("plastic table parts", /obj/item/weapon/table_parts/plastic, 5, on_floor = 1), \
 	new/datum/stack_recipe("water-cooler", /obj/structure/reagent_dispensers/water_cooler, 4, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("warning cone", /obj/item/weapon/caution/cone, 2, one_per_turf = 1, on_floor = 1), \
+	new/datum/stack_recipe/hydro_tray("hydroponics tray", /obj/machinery/portable_atmospherics/hydroponics/plastic, 5, time = 3 SECONDS, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe_list("curtains",list(
 		new/datum/stack_recipe("white curtains", /obj/structure/curtain, 4, one_per_turf = 1, on_floor = 1), \
 		new/datum/stack_recipe("black curtains", /obj/structure/curtain/black, 4, one_per_turf = 1, on_floor = 1), \
@@ -216,6 +220,11 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 /obj/item/stack/sheet/mineral/plastic/New(var/loc, var/amount=null)
 	recipes = plastic_recipes
 	..()
+
+/datum/stack_recipe/hydro_tray/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/machinery/portable_atmospherics/hydroponics/plastic/R)
+	R.waterlevel = 0
+	R.update_icon(TRUE)
+	return R
 
 /*
  * Gold
@@ -238,6 +247,7 @@ var/list/datum/stack_recipe/plastic_recipes = list ( \
 
 var/list/datum/stack_recipe/gold_recipes = list ( \
 	new/datum/stack_recipe("golden floor tile", /obj/item/stack/tile/mineral/gold, 1, 4, 20), \
+	new/datum/stack_recipe("alternate golden floor tile", /obj/item/stack/tile/mineral/gold/gold_old, 1, 4, 20), \
 	new/datum/stack_recipe("golden door", /obj/machinery/door/mineral/gold, 10, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe("gold tooth", /obj/item/stack/teeth/gold, 1, 1, 20), \
 	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20,one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),\
@@ -303,12 +313,15 @@ var/list/datum/stack_recipe/phazon_recipes = list( \
 
 var/list/datum/stack_recipe/silver_recipes = list ( \
 	new/datum/stack_recipe("silver floor tile", /obj/item/stack/tile/mineral/silver, 1, 4, 20), \
+	new/datum/stack_recipe("alternate silver floor tile", /obj/item/stack/tile/mineral/silver/silver_old, 1, 4, 20), \
 	new/datum/stack_recipe("silver door", /obj/machinery/door/mineral/silver, 10, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20,one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),\
 	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
 	new/datum/stack_recipe/dorf("chain", /obj/item/stack/chains, 2, 1, 20, 5, inherit_material = TRUE),
 	null,
 	blacksmithing_recipes,
+	null,
+	new/datum/stack_recipe/blacksmithing("battle cross", /obj/item/weapon/boomerang/cross,	16, time = 8 SECONDS, required_strikes = 20),
 	)
 
 /obj/item/stack/sheet/mineral/silver/New(var/loc, var/amount=null)

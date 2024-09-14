@@ -225,19 +225,19 @@
 
 	R.illegal_weapons = TRUE
 	R.SetEmagged()
-	
+
 /obj/item/borg/upgrade/bootyborg
 	name = "cyborg Backdoor Rearranging Activation Protocol upgrade"
 	icon_state = "gooncode"
-	
+
 /obj/item/borg/upgrade/bootyborg/New()
 	..()
 	required_modules = default_nanotrasen_robot_modules + emergency_nanotrasen_robot_modules
-	
+
 /obj/item/borg/upgrade/bootyborg/attempt_action(var/mob/living/silicon/robot/R, var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
-	
+
 	if(R.modtype == SECURITY_MODULE || R.modtype == COMBAT_MODULE)
 		R.base_icon = "booty-red"
 	else if(R.modtype == ENGINEERING_MODULE || R.modtype == SUPPLY_MODULE)
@@ -249,7 +249,7 @@
 	else if(R.modtype == JANITOR_MODULE)
 		R.base_icon = "booty-green"
 	else
-		R.base_icon = "booty-blue"		
+		R.base_icon = "booty-blue"
 	R.icon_state = R.base_icon
 
 //Medical Stuff
@@ -314,23 +314,6 @@
 	modules_to_add = list(/obj/item/weapon/gripper/magnetic)
 
 //Service Stuff
-/obj/item/borg/upgrade/cook
-	name = "service cyborg cooking upgrade board"
-	desc = "Used to give a service cyborg cooking tools and upgrade their service gripper to be able to handle food."
-	icon_state = "cyborg_upgrade2"
-	required_modules = list(SERVICE_MODULE)
-	modules_to_add = list(/obj/item/weapon/kitchen/utensil/knife/large, /obj/item/weapon/kitchen/rollingpin, /obj/item/weapon/storage/bag/food/borg)
-
-/obj/item/borg/upgrade/cook/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(..())
-		return FAILED_TO_ADD
-
-	var/obj/item/weapon/gripper/service/G = locate_component(/obj/item/weapon/gripper/service, R, user)
-	if(!G)
-		return FAILED_TO_ADD
-
-	G.can_hold.Add(/obj/item/weapon/reagent_containers/food)
-
 /obj/item/borg/upgrade/hydro
 	name = "service cyborg H.U.E.Y. upgrade board"
 	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and glass containers."
@@ -346,7 +329,7 @@
 	if(!G)
 		return FAILED_TO_ADD
 
-	G.can_hold.Add(/obj/item/seeds, /obj/item/weapon/reagent_containers/glass, /obj/item/weapon/disk/botany)
+	G.can_hold.Add(/obj/item/seeds, /obj/item/weapon/disk/botany)
 
 /obj/item/borg/upgrade/honk
 	name = "service cyborg H.O.N.K. upgrade board"
@@ -534,5 +517,5 @@
 	required_upgrades = list(/obj/item/borg/upgrade/xenoarch)
 	modules_to_add = list(/obj/item/weapon/pickaxe/excavationdrill/adv,/obj/item/device/xenoarch_scanner/adv,/obj/item/device/artifact_finder)
 	modules_to_remove = list(/obj/item/weapon/pickaxe/excavationdrill)
-	
+
 #undef FAILED_TO_ADD

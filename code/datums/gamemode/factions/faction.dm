@@ -33,6 +33,8 @@ var/list/factions_with_hud_icons = list()
 	var/required_pref = ""
 	var/list/restricted_species = list()
 	var/list/members = list()
+	var/peak_member_amount = 0
+	var/role_peak_member_typefilter
 	var/max_roles = 0
 	var/accept_latejoiners = FALSE
 	var/datum/objective_holder/objective_holder
@@ -159,6 +161,9 @@ var/list/factions_with_hud_icons = list()
 /datum/faction/proc/CheckObjectives()
 	return objective_holder.GetObjectiveString(check_success = TRUE)
 
+/datum/faction/proc/OnLateArrival(mob/living/carbon/human/character, rank)
+	return
+
 /datum/faction/proc/GetScoreboard()
 	var/count = 1
 	var/score_results = ""
@@ -284,8 +289,13 @@ var/list/factions_with_hud_icons = list()
 	return dat
 
 /datum/faction/proc/process()
+	var/total
 	for (var/datum/role/R in members)
 		R.process()
+		if(!role_peak_member_typefilter || istype(R,role_peak_member_typefilter))
+			total++
+	if(total > peak_member_amount)
+		peak_member_amount = total
 
 /datum/faction/proc/stage(var/value)
 	stage = value

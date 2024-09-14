@@ -35,17 +35,30 @@
 /spell/targeted/push/cast(var/list/targets)
 	..()
 	var/area/thearea
-	var/area/prospective = pick(areas)
+	var/list/areas_to_check = areas.Copy() //Should gradually narrow down the list of areas to get to all the good areas
+	var/area/prospective
 	while(!thearea)
+		if(!areas_to_check.len) //If everything fails, don't crash the server
+			to_chat(holder, "The spell matrix was unable to locate a suitable area for an unknown reason. Sorry.")
+			return
+		prospective = pick(areas_to_check)
 		if(prospective.type != /area)
-			var/turf/T = pick(get_area_turfs(prospective.type))
-			if(T.z == holder.z)
-				thearea = prospective
-				break
-		prospective = pick(areas)
+			var/list/prospective_turfs = get_area_turfs(prospective.type)
+			if(!prospective_turfs.len) //An in-game area somehow lost its turfs, search for another one
+				areas_to_check -= prospective
+				continue
+			var/turf/T = pick(prospective_turfs)
+			if(!(T.z == holder.z)) //Selected turf is not in the same z-level
+				areas_to_check -= prospective
+				continue
+			thearea = prospective //We found it
+			break
+		else //We selected space, don't do this
+			areas_to_check -= prospective
+			continue
 	var/list/L = list()
 	for(var/turf/T in get_area_turfs(thearea.type))
-		if(!T.density)
+		if(!T.density && (T.z == holder.z)) //In case an area somehow shows up in multiple z-levels
 			var/clear = 1
 			for(var/obj/O in T)
 				if(O.density)
@@ -57,7 +70,7 @@
 		to_chat(holder, "The spell matrix was unable to locate a suitable destination for an unknown reason. Sorry.")
 		return
 
-	var/list/backup_L = L
+	var/list/backup_L = L.Copy()
 	for(var/atom/movable/target in targets)
 		target.unlock_from()
 		var/attempt = null
