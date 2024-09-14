@@ -38,7 +38,7 @@ var/scheduledNews = null
 	if(!scheduledNews)
 		var/delay = rand(eventTimeLower, eventTimeUpper) MINUTES
 		scheduledNews = world.timeofday + delay
-		log_debug("News cycle refreshed. Next post in [delay/600] minutes.")
+		message_admins("News cycle refreshed. Next post in [delay/600] minutes.")
 	else if(world.timeofday >scheduledNews)
 		var/datum/trade_destination/affected_dest = prob(90) || !news_types.len ? pickweight(weighted_mundaneevent_locations) : null
 		var/datum/feed_message/news/newspost

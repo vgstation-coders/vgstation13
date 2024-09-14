@@ -4061,10 +4061,9 @@ access_sec_doors,access_salvage_captain,access_cent_ert,access_syndicate,access_
 					newspost = new type(newsdest)
 				else
 					type = input("Select a news message to broadcast!") in subtypesof(/datum/feed_message/news)
-					newspost = new type()
 					dest = input("Where will it happen, if applicable?") in subtypesof(/datum/trade_destination)
 					newsdest = new dest()
-					newspost.affected_dest = newsdest
+					newspost = new type(newsdest)
 				if(newsdest.get_custom_eventstring(type))
 					newspost.body = newsdest.get_custom_eventstring(type)
 				announce_newscaster_news(newspost)
