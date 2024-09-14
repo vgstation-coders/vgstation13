@@ -33,14 +33,13 @@ var/setup_news = 0
 	news_types = subtypesof(/datum/feed_message/news/misc) - non_update_news_types
 	setup_news = 1
 
-	spawn()
-		news_cycle()
-
-/proc/news_cycle()
-	while(TRUE)
-		var/delay = rand(eventTimeLower, eventTimeUpper)
-		log_debug("News cycle refreshed. Next post in [delay] minutes.")
-		sleep(delay MINUTES)
+var/scheduledNews = null
+/proc/checkNews()
+	if(!scheduledNews)
+		var/delay = rand(eventTimeLower, eventTimeUpper) MINUTES
+		scheduledNews = world.timeofday + delay
+		log_debug("News cycle refreshed. Next post in [delay/600] minutes.")
+	else if(world.timeofday >scheduledNews)
 		var/datum/trade_destination/affected_dest = prob(90) || !news_types.len ? pickweight(weighted_mundaneevent_locations) : null
 		var/datum/feed_message/news/newspost
 		var/type
@@ -54,6 +53,8 @@ var/setup_news = 0
 			newspost = new type()
 			news_types -= newspost
 		announce_newscaster_news(newspost)
+		scheduledNews = null
+		checkNews()
 
 /proc/announce_newscaster_news(datum/feed_message/news/news)
 
