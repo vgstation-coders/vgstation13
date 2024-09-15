@@ -184,6 +184,7 @@ var/global/list/obj/effect/bmode/buildholder/buildmodeholders = list()
 /obj/effect/bmode/buildmode/New()
 	..()
 	area_overlay = image('icons/turf/areas.dmi', "yellow")
+	area_overlay.blend_mode = BLEND_OVERLAY//area default blend mode is BLEND_ADD, so alert lights look better. Which means we gotta override it here.
 
 /obj/effect/bmode/buildmode/Destroy()
 	copycat = null
