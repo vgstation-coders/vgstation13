@@ -223,9 +223,7 @@
 /turf/simulated/floor/shuttle/brig,
 /area/vault/meteorlogical)
 "aM" = (
-/obj/item/weapon/beartrap{
-	armed = 1
-	},
+/obj/item/weapon/beartrap/armed,
 /turf/simulated/floor/shuttle/brig,
 /area/vault/meteorlogical)
 "aN" = (

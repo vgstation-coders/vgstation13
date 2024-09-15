@@ -227,8 +227,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		return
 
 	//Setup
-	var/turf/T = get_turf(src)
-	if(!T)
+	var/turf/simulated/T = get_turf(src)
+	if(!T || !istype(T))
 		extinguish()
 		return
 	var/datum/thermal_material/material = src.thermal_material
@@ -300,8 +300,8 @@ var/ZAS_fuel_energy_release_rate = zas_settings.Get(/datum/ZAS_Setting/fire_fuel
 		return
 
 	//Setup
-	var/turf/T = get_turf(src)
-	if(!T)
+	var/turf/simulated/T = get_turf(src)
+	if(!T || !istype(T))
 		extinguish()
 		return
 
