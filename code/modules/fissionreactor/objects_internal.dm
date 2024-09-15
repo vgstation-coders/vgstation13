@@ -7,14 +7,131 @@ included:
 */
 
 /obj/machinery/fissionreactor
+	anchored=1
+	density=1
 	var/datum/fission_reactor_holder/associated_reactor=null
 	name="fission reactor part"
 	
+/obj/machinery/fissionreactor/New() //update surrounding so that they are colored
+	..()
+	for(var/obj/machinery/fissionreactor/part in range(src,1) )
+		part.update_icon()
+		
+/obj/machinery/fissionreactor/Destroy()
+	for(var/obj/machinery/fissionreactor/part in range(src,1) )
+		loc=null
+		part.update_icon()
+	if(associated_reactor)
+		associated_reactor.init_parts()
+	..()
+
 /obj/machinery/fissionreactor/fissionreactor_controlrod
 	name="fission reactor control rod assembly"
+	icon='icons/obj/fissionreactor/controlrod.dmi'
+	icon_state="controlrod"
+	
+	var/image/overlay_N 
+	var/image/overlay_S 
+	var/image/overlay_E   //"see vending.dm and dmi for some examples" said dilt
+	var/image/overlay_W   //oh i did, and this looks like a horrible mess.
+	var/image/overlay_NE  //totally not my fault :clueless:
+	var/image/overlay_SE  //i'm going to keep this code because it's going to make people really mad :)
+	var/image/overlay_NW  //the alternative is to re-compute the images when determining appearance (worse performance)
+	var/image/overlay_SW  //or store them in a list (more memory usage (like 4 bytes))
+	
+/obj/machinery/fissionreactor/fissionreactor_controlrod/examine()
+	..()
+	to_chat(usr,"The lights indicate that there are [overlays.len] adjacent fuel rod assemblies")
+	switch(icon_state)
+		if("controlrod_0") 
+			to_chat(usr,"The rod is hardly inserted.") //haha that's what she said
+		if("controlrod_1")
+			to_chat(usr,"The rod is partially inserted.")
+		if("controlrod_2")
+			to_chat(usr,"The rod is just under halfway inserted.")
+		if("controlrod_3")
+			to_chat(usr,"The rod is just over halfway inserted.")
+		if("controlrod_4")
+			to_chat(usr,"The rod is mostly inserted.")
+		if("controlrod_5")
+			to_chat(usr,"The rod is nearly fully inserted.") 
+
+/obj/machinery/fissionreactor/fissionreactor_controlrod/New()
+	overlay_N = image(icon, src,"cr_overlay_N")
+	overlay_S = image(icon, src,"cr_overlay_S")
+	overlay_E = image(icon, src,"cr_overlay_E")
+	overlay_W = image(icon, src,"cr_overlay_W")
+	overlay_NE = image(icon, src,"cr_overlay_NE")
+	overlay_SE = image(icon, src,"cr_overlay_SE")
+	overlay_NW = image(icon, src,"cr_overlay_NW")
+	overlay_SW = image(icon, src,"cr_overlay_SW")
+	..()
+	
+	
+/obj/machinery/fissionreactor/fissionreactor_controlrod/update_icon()
+	icon_state="controlrod"
+	if(associated_reactor)
+		var/statetouse=floor(associated_reactor.control_rod_insertion*5+0.5)
+		icon_state="controlrod_[statetouse]"
+	overlays=null
+	if(  locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, NORTH) )
+		overlays+=overlay_N
+	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, SOUTH) )
+		overlays+=overlay_S
+	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, EAST) )
+		overlays+=overlay_E
+	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, WEST) )
+		overlays+=overlay_W
+	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, NORTHEAST) )
+		overlays+=overlay_NE
+	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, SOUTHEAST) )
+		overlays+=overlay_SE
+	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, NORTHWEST) )
+		overlays+=overlay_NW
+	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, SOUTHWEST) )
+		overlays+=overlay_SW
+		
+		
 	
 /obj/machinery/fissionreactor/fissionreactor_fuelrod
-	name="fission reactor fuel rod assembly"	
+	icon='icons/obj/fissionreactor/fuelrod.dmi'
+	icon_state="fuelrod"
+	name="fission reactor fuel rod assembly"
+	
+	var/image/overlay_N
+	var/image/overlay_S
+	var/image/overlay_E
+	var/image/overlay_W
+	
+
+
+/obj/machinery/fissionreactor/fissionreactor_fuelrod/New()
+	overlay_N = image(icon, src,"fuelrod_overlay_N")
+	overlay_S = image(icon, src,"fuelrod_overlay_S")
+	overlay_E = image(icon, src,"fuelrod_overlay_E") 
+	overlay_W = image(icon, src,"fuelrod_overlay_W") 
+	..()
+
+/obj/machinery/fissionreactor/fissionreactor_fuelrod/examine()
+	..()
+	to_chat(usr,"The lights indicate that there are [overlays.len] adjacent fuel rod assemblies")
+	if(icon_state=="fuelrod_active")
+		to_chat(usr,"The center emits a blue glow.")
+	
+/obj/machinery/fissionreactor/fissionreactor_fuelrod/update_icon()
+	icon_state="fuelrod"
+	if(associated_reactor && associated_reactor.considered_on())
+		icon_state="fuelrod_active"
+	overlays=null
+	if(  locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, NORTH) )
+		overlays+=overlay_N
+	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, SOUTH) )
+		overlays+=overlay_S
+	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, EAST) )
+		overlays+=overlay_E
+	if( locate(/obj/machinery/fissionreactor/fissionreactor_fuelrod) in get_step(src, WEST) )
+		overlays+=overlay_W
+
 
 /obj/machinery/fissionreactor/fissionreactor_fuelrod/proc/get_reactivity()
 	var/adjacency_reactivity_bonus=1.0 //addative per neighbor. max of 4x this number.

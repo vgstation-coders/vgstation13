@@ -10,3 +10,24 @@ the machine which makes fuel rods have things in them.
 	use_power = MACHINE_POWER_USE_IDLE
 	idle_power_usage = 200
 	active_power_usage = 1000
+	icon='icons/obj/fissionreactor/fuelmaker.dmi'
+	icon_state="fuelmaker"
+	var/obj/item/weapon/fuelrod/heldrod = null
+	
+/obj/machinery/atmospherics/unary/fissionfuelmaker/update_icon()
+	..()
+	if(!powered())
+		icon_state="fuelmaker_off[heldrod?"_insert":""]"
+		return
+	if(stat & BROKEN)
+		icon_state="fuelmaker_broken[heldrod?"_insert":""]"
+		return
+	icon_state="fuelmaker[heldrod?"_insert":""]"
+	
+	
+/obj/machinery/atmospherics/unary/fissionfuelmaker/examine()
+	..()
+	if(heldrod)
+		to_chat(usr,"There is a fuel rod inserted into it.")
+	else
+		to_chat(usr,"The fuel rod receptacle is empty.")

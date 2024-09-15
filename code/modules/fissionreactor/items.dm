@@ -7,6 +7,27 @@ includes:
 '*/
 
 
+/obj/item/weapon/fuelrod
+	name="fuel rod"
+	icon='icons/obj/fissionreactor/items.dmi'
+	icon_state="i_fuelrod_empty"
+	var/datum/fission_fuel/fueldata=null
+	
+
+/obj/item/weapon/fuelrod/New()
+	..()
+	fueldata = new /datum/fission_fuel
+
+/obj/item/weapon/fuelrod/update_icon()
+	..()
+	icon_state="i_fuelrod_empty"
+	if(!fueldata)
+		return
+	if(fueldata.fuel.total_volume>0)
+		if(fueldata.life>0)
+			icon_state="i_fuelrod"
+		else
+			icon_state="i_fuelrod_depleted"
 
 
 
