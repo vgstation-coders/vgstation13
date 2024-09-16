@@ -1,8 +1,0 @@
-author: SECBATON-GRIFFON
-delete-after: true
-changes:
-- bugfix: Putting non sliceable objects on a plate and cutting them no longer leaves
-    behind a non-plated pseudo duplication of the food within, instead, any items
-    placed inside the food on a plate is moved out.
-- bugfix: Sliceable objects can now be sliced when put on a plate, leaving the plate
-    behind.
