@@ -1,0 +1,6 @@
+author: jwhitak
+delete-after: true
+changes:
+- bugfix: Suit Modification Station has working animation again.
+- tweak: The Suit Modification Station can speed up even further with a phasic or
+    better scanning module.
