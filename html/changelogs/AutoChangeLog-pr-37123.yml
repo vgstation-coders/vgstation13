@@ -1,0 +1,5 @@
+author: jwhitak
+delete-after: true
+changes:
+- bugfix: Plasmaman Suits no longer get stuck in an infinite cycle of attempting to
+    put out a non-existing fire.
