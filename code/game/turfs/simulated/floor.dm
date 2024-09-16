@@ -467,6 +467,9 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			floor_tile.overlays.len = 0
 			floor_tile.paint_overlay = paint_overlay.Copy()
 			floor_tile.update_icon()
+		var/obj/structure/PC = locate(/obj/structure/plated_catwalk) in src
+		if(PC && istype(PC))
+			qdel(PC)
 		floor_tile = null
 
 /turf/simulated/floor/singularity_pull(S, current_size)
@@ -549,6 +552,13 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		else if(is_plating())
 			if(!broken && !burnt)
 				var/obj/item/stack/tile/T = C
+				if(istype(T,/obj/item/stack/tile/plated_catwalk))
+					var/obj/item/stack/tile/plated_catwalk/PC = T
+					if(PC.use(1))
+						new /obj/structure/plated_catwalk(src)
+						floor_tile = new /obj/item/stack/tile/plated_catwalk
+						playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
+						return //snowflaked since it's a structure occupying a turf
 				if(T.use(1))
 					make_tiled_floor(T)
 			else

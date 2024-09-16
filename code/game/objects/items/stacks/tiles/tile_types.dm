@@ -152,3 +152,34 @@
 	else
 		current_slowdown *= 0.01
 	..()
+
+/obj/item/stack/tile/plated_catwalk
+	name = "plated catwalk"
+	singular_name = "plated catwalk"
+	desc = "Plated catwalks which provide easy access to cables and pipes."
+	icon_state = "ptile"
+	force = 1.0
+	throwforce = 5
+	throw_speed = 5
+	throw_range = 10
+	material = "metal"
+	w_class = W_CLASS_MEDIUM
+	w_type = RECYK_METAL
+	flags = FPRINT
+	siemens_coefficient = 0
+	max_amount = 60
+
+/obj/item/stack/tile/plated_catwalk/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	. = 1
+	if(!proximity_flag)
+		return
+	if(!istype(target,/turf/simulated/floor))
+		return ..()
+	var/turf/simulated/floor/F = target
+	if(F.floor_tile)
+		to_chat(user, "<span class='warning'>Remove the floor tile first!</span>")
+		return
+	else if(locate(/obj/structure/plated_catwalk) in F)
+		to_chat(user, "<span class='warning'>There is already a plated catwalk at this location!</span>")
+		return
+	return 0

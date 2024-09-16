@@ -164,6 +164,16 @@
 			if (!R && replace)
 				user.put_in_hands(M)
 		return 1
+	else if(istype(W,/obj/item/stack/rods))
+		var/obj/item/stack/rods/R = W
+		if(R.amount < 2)
+			to_chat(user, "<span class='warning'>You need at least two rods to do this.</span>")
+		if(R.use(2) && use(1))
+			var/obj/item/stack/tile/plated_catwalk/PC = (locate(/obj/item/stack/tile/plated_catwalk) in get_turf(user))
+			if(PC)
+				PC.add(1)
+			else
+				new /obj/item/stack/tile/plated_catwalk(get_turf(user))
 	return ..()
 
 /obj/item/stack/tile/metal/afterattack(atom/target, mob/user, adjacent, params)
