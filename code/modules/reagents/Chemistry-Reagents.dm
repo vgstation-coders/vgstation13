@@ -49,7 +49,8 @@
 	var/paint_light = PAINTLIGHT_NONE
 	var/adj_temp = 0//keep between -1.5,20 to prevent people from freezing/burning themselves
 	var/fission_time = null //null means it will have no effect on fuel lifetime. unit is in seconds. this is assuming a 1 rod reactor with 0% insertion (this will never happen.).
-	var/fission_power= 0 //watts of power. can be negative, too.
+	var/fission_power= 0 //watts of power. how much ooomph does it have?
+	var/fission_absorbtion=0 //watts. how much energy does this sap to facilitate its reactions?
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS, var/allow_permeability = TRUE, var/list/splashplosion=list())
 	set waitfor = 0

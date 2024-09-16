@@ -2,7 +2,8 @@
 IN THIS FILE:
 datums for the fission reactor, which includes the fuel and reactor
 */
-
+#define FISSIONREACTOR_MELTDOWNTEMP 5500 //temp when shit goes wrong
+#define FISSIONREACTOR_DANGERTEMP 4500 //temp to start warning you and to SCRAM
 
 /datum/fission_reactor_holder
 	var/list/fuel_rods=list() //phase 0 vars, set upon construction
@@ -11,15 +12,17 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/list/casing_parts=list()
 	var/heat_capacity=0
 	var/fuel_reactivity=1
+	var/fuel_reactivity_with_rods=0
 	var/fuel_rods_affected_by_rods=0
 	
 	var/coolantport_counter=0 // this varible exists to ensure that all coolant ports get treated equally, because if we didn't it would have a flow prefrence towards the ports with lower indexes.
 	var/control_rod_insertion=1  //phase 1 vars. modified during runtime
 	var/SCRAM=FALSE //all caps because AAAAAAAAAAAAAAAAAAA EVERYBODY PANIC WE'RE ALL GONNA DIE.
-	var/temperature=0 //this is set last
+	var/temperature=T20C //this is set last
 	
 	var/datum/gas_mixture/coolant
 
+	var/graceperiodtick=FALSE // set to true when we hit meltdown temp. gives you a bit of time to GTFO or save it. this will result in peak kino (i hope)
 	
 	var/zlevel=0 //positional varibles
 	var/origin_x=0
@@ -229,6 +232,7 @@ datums for the fission reactor, which includes the fuel and reactor
 	
 	fuel_reactivity=0
 	fuel_rods_affected_by_rods=0
+	fuel_reactivity_with_rods=0
 
 /datum/fission_reactor_holder/proc/init_parts() //this assigns the reactor to the parts and vice versa
 	clear_parts()
@@ -265,43 +269,76 @@ datums for the fission reactor, which includes the fuel and reactor
 	for (var/i=1,i<=fuel_rods.len,i++)
 		fuel_rods[i].update_icon()
 		fuel_reactivity+=fuel_rods[i].get_reactivity()
+		fuel_reactivity_with_rods+=fuel_rods[i].get_iscontrolled() ? fuel_rods[i].get_reactivity() : 0
 		fuel_rods_affected_by_rods+=fuel_rods[i].get_iscontrolled() ? 1 : 0
 	fuel_reactivity/=fuel_rods.len //average them out.
+	fuel_reactivity_with_rods/=fuel_rods.len
 	
-/datum/fission_reactor_holder/proc/fissioncycle() //what makes the heat.
+	
+/datum/fission_reactor_holder/proc/update_all_icos()
 	for (var/i=1,i<=control_rods.len,i++)
 		control_rods[i].update_icon()
 		
 	for (var/i=1,i<=fuel_rods.len,i++)
 		fuel_rods[i].update_icon()
-
+	
+/datum/fission_reactor_holder/proc/fissioncycle() //what makes the heat.
 
 	if(!fuel)
 		return
-	var/totalpowerfactor=(fuel_reactivity*fuel_rods.len)-(fuel_reactivity*fuel_rods_affected_by_rods*control_rod_insertion) //multiplier for power output
-	var/speedofuse=fuel_rods.len-(1.0-control_rod_insertion)*fuel_rods_affected_by_rods
+	if(fuel.life<=0)
+		return
+	if(fuel.wattage<=0)
+		return
+		
+	var/speedfactor=fuel_rods.len - (fuel_rods_affected_by_rods*control_rod_insertion)
+	var/powerfactor=(fuel_reactivity*fuel_rods.len) - (fuel_reactivity_with_rods*control_rod_insertion)
 	
-	temperature+=totalpowerfactor*fuel.wattage/heat_capacity
-	if (fuel.lifetime>0) //god forbid we divide by 0.
-		fuel.life-= (fuel.lifetime-speedofuse)/fuel.lifetime
+
+	var/totalpowertodump=0
+	if(fuel.wattage < fuel.absorbance) //slow down the reaction if there's not enuff powah
+		totalpowertodump=0
+		speedfactor*=(fuel.absorbance-fuel.wattage)/fuel.wattage
+	else
+		totalpowertodump=fuel.wattage-fuel.absorbance
+	
+
+	if (fuel.lifetime>0)
+		fuel.life-= (2*speedfactor)/fuel.lifetime //multiply this by 2 because it ticks every 2 seconds
 		fuel.life=max(0,fuel.life)
 	else
 		fuel.life=0
-		
-	for(var/i=1, i<=coolant_ports.len,i++)
-		var/real_index= ((i+coolantport_counter)%coolant_ports)+1 //this way we spread out any first index prefrence.
-		var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/coolant_port=coolant_ports[real_index]
+		return
+	
+	temperature+=totalpowertodump*powerfactor/heat_capacity
+	
 
+	
+	if(temperature>=FISSIONREACTOR_MELTDOWNTEMP)
+		if(graceperiodtick)
+			//TODO: FSU when it gets too hot
+			world.log << "kabooom!"
+		graceperiodtick=TRUE
+	else
+		graceperiodtick=FALSE
+	
+	
+/datum/fission_reactor_holder/proc/coolantcycle()
+	for(var/i=1, i<=coolant_ports.len,i++)
+		var/real_index= ((i+coolantport_counter)%coolant_ports.len)+1 //this way we spread out any first index prefrence.
+		var/obj/machinery/atmospherics/unary/fissionreactor_coolantport/coolant_port=coolant_ports[real_index]
 		coolant_port.transfer_reactor()
 		
 	coolantport_counter++
-	coolantport_counter=(coolantport_counter%coolant_ports)+1 //shift it around.	
+	coolantport_counter=(coolantport_counter%coolant_ports.len)+1 //shift it around.	
 	
+	var/chp=coolant.heat_capacity()
 	
-	
-	
-	
-	
+	//unrealistically, the heat transfer is 100% between the 2 sources.
+	//too bad.
+	var/newtemp=(chp*coolant.temperature + heat_capacity*temperature)/(chp+heat_capacity)
+	coolant.temperature=newtemp
+	temperature=newtemp
 	
 	
 	
@@ -312,8 +349,10 @@ datums for the fission reactor, which includes the fuel and reactor
 	var/datum/reagents/fuel= null
 	var/life=1.0 //1.0 is full life, 0 is depleted. MAKE SURE it is always 0-1 or shit WILL go wrong.
 	
-	var/lifetime=0 //these are rederived when making a new one, so these can be whatever.
-	var/wattage=0
+	//these are rederived when making a new one, so these can be whatever.
+	var/lifetime=0  //time in seconds that the fuel will burn for at base.
+	var/wattage=0 // heat which will be added.
+	var/absorbance=0 //subtraced from above to get total emission.
 
 /datum/fission_fuel/New()
 	var/datum/reagents/fuel= new /datum/reagents //this probably isn't the best way to do things, but that's a problem for future me (someone else) to deal with.
@@ -323,17 +362,21 @@ datums for the fission reactor, which includes the fuel and reactor
 	if(!fuel)
 		lifetime=0
 		wattage=0
+		absorbance=0
 		return	
 	var/thislifetime=0
 	var/thiswattage=0	
+	var/thisabsorbance=0
 	
 	for(var/datum/reagent/R in fuel.reagent_list)
 		if (R.fission_time != null)
 			thislifetime+=R.fission_time* (fuel.amount_cache[R.id] + 0)/(fuel.total_volume) //fuel time is a weighted average
 		thiswattage+=R.fission_power
+		thisabsorbance+=R.fission_absorbtion
 
 	lifetime=max(thislifetime,0)
 	wattage=max(thiswattage,0)
+	absorbance=max(thisabsorbance,0)
 	
 /datum/fission_fuel/proc/get_products()	//fission products.
 	var/datum/reagents/products = new /datum/reagents

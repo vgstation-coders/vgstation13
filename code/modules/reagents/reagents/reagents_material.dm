@@ -80,7 +80,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#500064" //rgb: 80, 0, 100
 	fission_time=3600 //60 minutes.
-	fission_power=-25000
+	fission_absorbtion=25000
 
 /datum/reagent/plasma/New()
 	..()

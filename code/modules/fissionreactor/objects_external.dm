@@ -20,6 +20,30 @@ included:
 	idle_power_usage = 0
 	active_power_usage = 0
 
+/obj/machinery/atmospherics/unary/fissionreactor_coolantport/examine()
+	..()
+	if(associated_reactor && associated_reactor.considered_on())
+		to_chat(usr,"the outer plating looks like it could be cut,<span class='danger'> but it seems like a <u>really</u> bad idea.</span>")
+	else
+		to_chat(usr,"the outer plating looks like it could be cut.")
+
+
+/obj/machinery/atmospherics/unary/fissionreactor_coolantport/attackby(var/obj/I,var/mob/user)
+	if(iswelder(I))
+		if(associated_reactor && associated_reactor.considered_on())
+			if(user.a_intent==I_HELP)
+				to_chat(usr,"<span class='danger'>this seems like a really bad idea.</span>")
+				return
+			var/obj/item/tool/weldingtool/WT = I
+			user.visible_message("<span class='notice'>[user] starts welding \the [src]'s external plating off its frame.</span>", "<span class='notice'>You start welding \the [src]'s external plating off its frame.</span>")
+			if(WT.do_weld(user,src,60,0))
+				qdel(src)
+				var/obj/structure/girder/reactor/newcase= new /obj/structure/girder/reactor
+				newcase.loc=src.loc
+				newcase.pipeadded=TRUE
+				newcase.state=3
+
+
 
 /obj/machinery/atmospherics/unary/fissionreactor_coolantport/proc/transfer_reactor() //transfer coolant from/to the reactor
 	if(!associated_reactor)
@@ -53,7 +77,52 @@ included:
 	circuit=/obj/item/weapon/circuitboard/fisson_reactor
 	var/can_autoscram=TRUE //automatic safeties if it gets too hot or power is cut.
 	var/datum/fission_reactor_holder/associated_reactor=null
+	var/obj/item/weapon/fuelrod/currentfuelrod=null
 	var/poweroutagemsg=FALSE
+
+/*/proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE, var/frequency = 0)*/
+
+/obj/machinery/computer/fissioncontroller/attackby(var/obj/I,var/mob/user)
+	if(istype(I,/obj/item/weapon/fuelrod))
+		if(currentfuelrod)
+			to_chat(user,"There's already a fuel rod inserted into \the [src].")
+		else
+			var/obj/item/weapon/fuelrod/newrod=I
+			if(!user.drop_item(newrod))
+				return
+			to_chat(user,"You insert the fuel rod into \the [src].")
+			newrod.loc=null
+			currentfuelrod=newrod
+			playsound(src,'sound/items/crowbar.ogg',50)
+			if(associated_reactor)
+				associated_reactor.fuel=newrod.fueldata
+		return
+	if(iscrowbar(I) && currentfuelrod)
+		if(associated_reactor && associated_reactor.considered_on())
+			if(user.a_intent==I_HELP) //spreading rads is in fact not very helpful
+				to_chat(user,"<span class='notice'>You're not sure it's safe to remove the fuel rod.</span>")
+				return
+			user.visible_message("<span class='warning'>[user] starts prying the fuel rod out of \the [src], even though the reactor is active!</span>", "<span class='warning'>You start prying the fuel rod out of \the [src], even though the reactor is active!</span>")
+			playsound(src,'sound/items/crowbar.ogg',50)
+			if(do_after(user, src,30))
+				currentfuelrod.loc=src.loc
+				currentfuelrod=null
+				playsound(src,'sound/machines/door_unbolt.ogg',50)
+				if(associated_reactor)
+					associated_reactor.fuel=null
+				//TODO: SPREAD RADS
+			return
+				
+		user.visible_message("<span class='notice'>[user] starts prying the fuel rod out of \the [src].</span>", "<span class='notice'>You start prying the fuel rod out of \the [src].</span>")
+		playsound(src,'sound/items/crowbar.ogg',50)
+		if(do_after(user, src,20))
+			currentfuelrod.loc=src.loc
+			currentfuelrod=null
+			playsound(src,'sound/machines/door_unbolt.ogg',50)
+			if(associated_reactor)
+				associated_reactor.fuel=null
+		return
+	..()
 
 /obj/machinery/computer/fissioncontroller/attack_hand(mob/user)
 	if(..())
@@ -66,6 +135,8 @@ included:
 			associated_reactor=null
 			return
 		associated_reactor.init_parts()
+		if(currentfuelrod)
+			associated_reactor.fuel=currentfuelrod.fueldata
 		say("Reactor setup success.", class = "binaryradio")
 		update_icon()
 	
@@ -73,18 +144,25 @@ included:
 /obj/machinery/computer/fissioncontroller/update_icon()
 	if(!powered())
 		icon_state="control0"
+		return
 	if(stat & BROKEN)
 		icon_state="controlb"
+		return
 	if(!associated_reactor)
 		icon_state="control_noreactor"
+		return
 	if(!associated_reactor.fuel)
 		icon_state="control_nofuel"
+		return
 	if(associated_reactor.fuel.life <=0)
 		icon_state="control_depleted"
+		return
 	if(associated_reactor.temperature>=4500)
 		icon_state="control_danger"
+		return
 	if(!associated_reactor.considered_on())
 		icon_state="control_idle"
+		return
 	icon_state="control"
 
 /obj/machinery/computer/fissioncontroller/examine()
@@ -124,8 +202,10 @@ included:
 /obj/machinery/computer/fissioncontroller/process()
 	update_icon()
 	if(!associated_reactor) //no reactor? no processing to be done.
-		return
+		return	
 		
+	associated_reactor.update_all_icos()
+	associated_reactor.coolantcycle()
 	if(!powered()) //with my last breath, i curse zoidberg!
 		if(!poweroutagemsg)
 			poweroutagemsg=TRUE
@@ -145,8 +225,8 @@ included:
 	if(associated_reactor.fuel.life<=0)
 		say("Reactor fuel depleted.", class = "binaryradio")
 	
-	if(associated_reactor.temperature>=4500)
-		if(associated_reactor.temperature>=5000)
+	if(associated_reactor.temperature>=FISSIONREACTOR_DANGERTEMP)
+		if(associated_reactor.temperature>=FISSIONREACTOR_MELTDOWNTEMP)
 			say("Reactor at critical temperature: [associated_reactor.temperature]K. Evacuate immediately.", class = "binaryradio")
 			if(can_autoscram && !associated_reactor.SCRAM )
 				say("critical temperature reached, engaging SCRAM.", class = "binaryradio")
@@ -177,6 +257,22 @@ included:
 	else
 		to_chat(usr,"the outer plating looks like it could be cut.")
 
+
+/obj/structure/fission_reactor_case/attackby(var/obj/I,var/mob/user)
+	if(iswelder(I))
+		if(associated_reactor && associated_reactor.considered_on())
+			if(user.a_intent==I_HELP)
+				to_chat(usr,"<span class='danger'>this seems like a really bad idea.</span>")
+				return
+			var/obj/item/tool/weldingtool/WT = I
+			user.visible_message("<span class='notice'>[user] starts welding \the [src]'s external plating off its frame.</span>", "<span class='notice'>You start welding \the [src]'s external plating off its frame.</span>")
+			if(WT.do_weld(user,src,60,0))
+				qdel(src)
+				var/obj/structure/girder/reactor/newcase= new /obj/structure/girder/reactor
+				newcase.loc=src.loc
+				newcase.state=3
+
+
 /obj/structure/girder/reactor
 	name="reactor casing girder"
 	material=/obj/item/stack/sheet/plasteel
@@ -193,8 +289,32 @@ included:
 			to_chat(usr, "The reinforcing rods are not fastened. It looks like you could cut through them easily.")
 		if(2)
 			to_chat(usr, "The internal structure is firm, but the outer plating is missing sheets. It looks like you could unsecure the support rods.")
+			if(pipeadded)
+				var/dirstr=""
+				if (dir&NORTH)
+					dirstr="north"
+				if (dir&SOUTH)
+					dirstr="soth"
+				if (dir&EAST)
+					dirstr="east"
+				if (dir&WEST)
+					dirstr="west"
+				to_chat(usr,"There's piping installed, it's facing [dirstr]. It looks like a wrench could take it out. You think a crowbar might be able to turn where it's facing.")
+			else
+				to_chat(usr,"It looks like you could fit in some piping right now.")
 		if(3)
 			to_chat(usr, "The outer plating sits loose on the frame and needs to be bonded. It looks like you could pry it off.")
+			if(pipeadded)
+				var/dirstr=""
+				if (dir&NORTH)
+					dirstr="north"
+				if (dir&SOUTH)
+					dirstr="soth"
+				if (dir&EAST)
+					dirstr="east"
+				if (dir&WEST)
+					dirstr="west"
+				to_chat(usr,"There's piping installed, it's facing [dirstr].")
 			
 /obj/structure/girder/reactor/attackby(obj/item/W as obj, mob/user as mob) //this proc uses a lot of weird checks that will probably break with the multiple construction steps, so lets just use our own override. (it's also just messy in general and hard to follow)
 	switch(state)
@@ -274,6 +394,39 @@ included:
 					add_fingerprint(user)
 					state++
 				return
+			if(istype(W, /obj/item/pipe ))
+				if(pipeadded)
+					to_chat(user, "<span class='notice'>There's already a piping added!</span>")	
+					return
+				var/obj/item/pipe/P = W
+				if(P.pipe_type==0)
+					to_chat(user, "<span class='notice'>This isn't the right pipe to use!</span>")	
+					return
+				pipeadded=TRUE
+			if(pipeadded && W.is_wrench(user))
+				W.playtoolsound(src, 100)	
+				to_chat(user, "<span class='notice'>You remove the piping from \the [src]</span>")	
+				var/obj/item/pipe/np= new /obj/item/pipe
+				np.loc=src.loc
+				pipeadded=FALSE
+				return
+			if(pipeadded && iscrowbar(W))
+				W.playtoolsound(src, 100)
+				var/nds=""
+				if(dir&NORTH)
+					dir=EAST
+					nds="east"
+				else if(dir&EAST)
+					dir=SOUTH
+					nds="south"
+				else if(dir&SOUTH)
+					dir=WEST
+					nds="west"
+				else if(dir&WEST)
+					dir=NORTH
+					nds="north"
+				to_chat(user, "<span class='notice'>You turn \the [src]'s piping. It is now facing [nds]</span>")	
+				
 			to_chat(user, "<span class='notice'>You can't find a use for \the [W]</span>")	
 			return
 		if(3) // plating added
