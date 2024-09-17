@@ -191,7 +191,8 @@
 	user.register_event(/event/moved, src, nameof(src::on_move()))
 
 /obj/item/clothing/accessory/stethoscope/dropped(mob/user)
-	on_move(user)
+	user.unregister_event(/event/moved, src, nameof(src::on_move()))
+	clear_listening()
 	. = ..()
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
@@ -221,8 +222,9 @@
 	return ..(M,user)
 
 /obj/item/clothing/accessory/stethoscope/proc/on_move(atom/movable/mover)
-	mover.unregister_event(/event/moved, src, nameof(src::on_move()))
-	clear_listening()
+	if(listening)
+		mover.unregister_event(/event/moved, src, nameof(src::on_move()))
+		clear_listening()
 
 /obj/item/clothing/accessory/stethoscope/proc/clear_listening()
 	if(listening)
@@ -236,7 +238,8 @@
 		if(listening && M.Adjacent(listening))
 			to_chat(M,"*thump*")
 		else
-			on_move(M)
+			user.unregister_event(/event/moved, src, nameof(src::on_move()))
+			clear_listening()
 
 //Medals
 /obj/item/clothing/accessory/medal
