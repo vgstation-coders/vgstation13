@@ -1,0 +1,5 @@
+author: DeityLink
+delete-after: true
+changes:
+- bugfix: Snowballs thrown by snowmen are now properly visible as they travel, after
+    9 fucking years.
