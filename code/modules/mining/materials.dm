@@ -372,7 +372,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/plastic
 	name="Plastic"
 	id=MAT_PLASTIC
-	value=0
+	value=VALUE_MISC
 	oretype=null
 	sheettype=/obj/item/stack/sheet/mineral/plastic
 	cointype=null
@@ -382,7 +382,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/cardboard
 	name="Cardboard"
 	id=MAT_CARDBOARD
-	value=0
+	value=VALUE_MISC
 	oretype=null
 	sheettype=/obj/item/stack/sheet/cardboard
 	cointype=null
@@ -391,7 +391,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/wood
 	name="Wood"
 	id=MAT_WOOD
-	value=0
+	value=VALUE_MISC
 	oretype=null
 	sheettype=/obj/item/stack/sheet/wood
 	cointype=null
@@ -401,7 +401,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/fabric
 	name="Fabric"
 	id=MAT_FABRIC
-	value=0
+	value=VALUE_MISC
 	oretype=null
 	sheettype=/obj/item/stack/sheet/cloth
 	cointype=null

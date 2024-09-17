@@ -461,8 +461,6 @@
 /obj/machinery/mineral/processing_unit/recycle
 	name = "recycling furnace"
 
-	credits = -1
-
 /obj/machinery/mineral/processing_unit/recycle/grab_ores()
 	var/turf/in_T = get_step(src, in_dir)
 	var/turf/out_T = get_step(src, out_dir)
@@ -475,6 +473,8 @@
 			continue
 
 		if(!(A.w_type in list(NOT_RECYCLABLE, RECYK_BIOLOGICAL)))
+			if(A.materials && !istype(A,/obj/item/stack/sheet)) // no infinite money glitches allowed
+				credits += A.materials.getValue()
 			if(A.recycle(ore))
 				ore.addFrom(A.materials, FALSE)
 				qdel(A)
