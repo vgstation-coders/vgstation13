@@ -1,0 +1,7 @@
+author: SECBATON-GRIFFON
+delete-after: true
+changes:
+- rscadd: Alt clicking now toggles the engage on flushing for disposal bins, if the
+    user is not inside the bin itself.
+- rscadd: Click dragging from a disposal bin to an adjacent, non dense turf now ejects
+    the contents onto it.
