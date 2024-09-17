@@ -47,7 +47,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 
 	var/extremely_hihg_speed = FALSE
 
-	var/last_second_tick
+	var/last_second_tick = 0
 
 	// call the shuttle
 	// if not called before, set the endtime to T+600 seconds
@@ -110,7 +110,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 		if(direction >= 0)
 			if(world.time - last_second_tick >= 1 SECONDS)
 				INVOKE_EVENT(src, /event/shuttletimer, "time" = timeleft)
-			last_second_tick = world.time
+				last_second_tick = world.time
 			return timeleft
 		else
 			return SHUTTLEARRIVETIME-timeleft
