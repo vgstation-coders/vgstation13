@@ -124,7 +124,7 @@ var/list/headset_modes = list(
 
 	//Muting
 	var/turf/T = get_turf(src)
-	if(T?.mute_time > world.time)
+	if(T && T.mute_time > world.time)
 		return
 
 	var/message_mode = get_message_mode(message)
