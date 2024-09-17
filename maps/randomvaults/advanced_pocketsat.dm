@@ -77,7 +77,7 @@
 	locked = 0
 	playsound(src, "sound/machines/door_unbolt.ogg", 50, 1, -1)
 	for(var/mob/M in range(1, src))
-		to_chat(M, "You hear a metallic clunk from the bottom of the door.")
+		M.show_message("You hear a metallic clunk from the bottom of the door.")
 	update_icon()
 
 /obj/machinery/computer/arcade/syndicate/New()
