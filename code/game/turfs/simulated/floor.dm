@@ -52,6 +52,10 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 	var/datum/paint_overlay/plating_paint = null
 
+	//plated catwalk vars
+	var/hatch_installed = FALSE
+	var/hatch_open = FALSE
+
 /turf/simulated/floor/New()
 	create_floor_tile()
 	..()
@@ -122,6 +126,12 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 /turf/simulated/floor/update_icon()
 	if(lava)
 		return
+	else if(is_plated_catwalk())
+		icon = 'icons/turf/catwalks.dmi'
+		plane = TURF_PLANE
+		layer = PAINT_LAYER
+		relativewall()
+		relativewall_neighbours()
 	else if(is_metal_floor())
 		if(!broken && !burnt)
 			icon_state = icon_regular_floor
@@ -297,6 +307,9 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 /turf/simulated/floor/is_plating()
 	return !floor_tile
 
+/turf/simulated/floor/is_plated_catwalk()
+	return istype(floor_tile,/obj/item/stack/tile/plated_catwalk)
+
 /turf/simulated/floor/is_mineral_floor()
 	return istype(floor_tile,/obj/item/stack/tile/mineral)
 
@@ -467,9 +480,6 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 			floor_tile.overlays.len = 0
 			floor_tile.paint_overlay = paint_overlay.Copy()
 			floor_tile.update_icon()
-		var/obj/structure/PC = locate(/obj/structure/plated_catwalk) in src
-		if(PC && istype(PC))
-			qdel(PC)
 		floor_tile = null
 
 /turf/simulated/floor/singularity_pull(S, current_size)
@@ -507,6 +517,12 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 				advanced_graffiti_overlay = null
 				qdel(advanced_graffiti)
 				remove_floor_tile()
+			else if(is_plated_catwalk())
+				if(hatch_installed)
+					to_chat(user, "<span class='notice'>The hatch falls apart after removing \the [src].</span>")
+					new /obj/item/stack/rods(src,2)
+				icon = 'icons/turf/floors.dmi'
+				overlays.Cut()
 			else
 				//No longer phazon, not a teleport destination
 				if(material=="phazon")
@@ -530,6 +546,8 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 
 			make_plating()
 			C.playtoolsound(src, 80)
+		else if(is_plated_catwalk())
+			toggle_hatch(C,user)
 		return
 	else if(istype(C, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = C
@@ -543,6 +561,8 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 					return
 			else
 				to_chat(user, "<span class='warning'>You need more rods.</span>")
+		else if (is_plated_catwalk())
+			install_hatch(C,user)
 		else
 			to_chat(user, "<span class='warning'>You must remove the plating first.</span>")
 		return
@@ -552,13 +572,6 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		else if(is_plating())
 			if(!broken && !burnt)
 				var/obj/item/stack/tile/T = C
-				if(istype(T,/obj/item/stack/tile/plated_catwalk))
-					var/obj/item/stack/tile/plated_catwalk/PC = T
-					if(PC.use(1))
-						new /obj/structure/plated_catwalk(src)
-						floor_tile = new /obj/item/stack/tile/plated_catwalk
-						playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-						return //snowflaked since it's a structure occupying a turf
 				if(T.use(1))
 					make_tiled_floor(T)
 			else
@@ -695,3 +708,58 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 		current_slowdown = floor_tile.adjust_slowdown(L, current_slowdown)
 
 	return ..()
+
+/turf/simulated/floor/levelupdate()
+	if(is_plated_catwalk())
+		return
+	else
+		..()
+
+/turf/simulated/floor/proc/install_hatch(obj/item/stack/rods/R, mob/user)
+	if(is_plated_catwalk())
+		if(hatch_installed)
+			to_chat(user, "<span class='warning'>\The [src] already has a hatch installed.</span>")
+			return
+		if (R.amount >= 2)
+			to_chat(user, "<span class='notice'>You place the rods inside the catwalk frame.</span>")
+			playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
+			R.use(2)
+			hatch_installed = TRUE
+			hatch_open = FALSE
+			update_icon()
+
+/turf/simulated/floor/proc/toggle_hatch(obj/item/C, mob/user)
+	if(is_plated_catwalk())
+		if(!hatch_installed)
+			to_chat(user, "<span class='warning'>\The [src] is missing a maintenance hatch!</span>")
+			return
+		to_chat(user, "<span class='notice'>You [hatch_open ? "replace" : "remove"] the [src]'s maintenance hatch.</span>")
+		C.playtoolsound(src, 80)
+		hatch_open = !hatch_open
+		update_icon()
+
+/turf/simulated/floor/canSmoothWith()
+	return is_plated_catwalk()
+
+/turf/simulated/floor/relativewall()
+	if(is_plated_catwalk())
+		icon_state = "pcat[..()]"
+		overlays.Cut()
+		overlays += mutable_appearance(icon='icons/turf/floors.dmi', icon_state="plating", layer = CATWALK_LAYER, plane = ABOVE_PLATING_PLANE)
+		if(!hatch_open && hatch_installed)
+			overlays += mutable_appearance(icon='icons/turf/catwalks.dmi', icon_state="[icon_state]_olay", layer = PAINT_LAYER, plane = TURF_PLANE)
+	else
+		..()
+
+/turf/simulated/floor/isSmoothableNeighbor(atom/A)
+	if(istype(A, /turf/simulated/floor))
+		var/turf/simulated/floor/F = A
+		return F.is_plated_catwalk()
+
+/turf/simulated/floor/examine(mob/user)
+	..()
+	if(is_plated_catwalk())
+		if(hatch_installed)
+			to_chat(user, "<span class='notice'>The maintenance hatch has been installed.</span>")
+		else
+			to_chat(user, "<span class='warning'>\The [src] is missing a maintenance hatch!</span>")

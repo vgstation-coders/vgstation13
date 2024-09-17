@@ -540,3 +540,12 @@
 	oxygen=0 // BIRDS HATE OXYGEN FOR SOME REASON
 	nitrogen = MOLES_O2STANDARD+MOLES_N2STANDARD // So it totals to the same pressure
 	//icon = 'icons/turf/shuttle-debug.dmi'
+
+// Plated catwalks
+/turf/simulated/floor/plated_catwalk
+	icon = 'icons/turf/catwalks.dmi'
+	icon_state = "pcat0"
+	name = "plated catwalk"
+	desc = "A hybrid floor tile-catwalk which provides visibility and easy access to pipes and wires beneath it."
+	plane = TURF_PLANE
+	layer = PAINT_LAYER
