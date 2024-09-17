@@ -12,6 +12,9 @@
 /datum/cult_tattoo/proc/getTattoo(var/mob/M)
 	bearer = M
 
+/datum/cult_tattoo/proc/Display()
+	return TRUE
+
 /mob/proc/checkTattoo(var/tattoo_name)
 	if (!tattoo_name)
 		return
@@ -31,7 +34,7 @@
 ///////////////////////////
 var/list/blood_communion = list()
 
-/datum/cult_tattoo/bloodpool 
+/datum/cult_tattoo/bloodpool
 	name = TATTOO_POOL
 	desc = "All blood costs reduced by 20%. Tributes are split with other bearers of this mark."
 	icon_state = "bloodpool"
@@ -39,9 +42,15 @@ var/list/blood_communion = list()
 
 /datum/cult_tattoo/bloodpool/getTattoo(var/mob/M)
 	..()
-	if (iscultist(M))
-		blood_communion.Add(iscultist(M))
+	var/datum/role/cultist/C = iscultist(M)
+	if (C)
+		blood_communion.Add(C)
+		C.blood_pool = TRUE
 
+/datum/cult_tattoo/bloodpool/Display()//Since that tattoo is now unlocked fairly early, better let cultists hide it easily by leaving the pool
+	var/datum/role/cultist/C = iscultist(bearer)
+	if (C)
+		return C.blood_pool
 
 /datum/cult_tattoo/silent
 	name = TATTOO_SILENT
@@ -54,13 +63,6 @@ var/list/blood_communion = list()
 	desc = "Materialize a sharp dagger in your hand for a small cost in blood. Use to retrieve."
 	icon_state = "dagger"
 	tier = 1
-
-/datum/cult_tattoo/dagger/getTattoo(var/mob/M)
-	..()
-	/*
-	if (iscultist(M))
-		M.add_spell(new /spell/cult/blood_dagger, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	*/
 
 ///////////////////////////
 //                       //

@@ -139,7 +139,7 @@
 	charge_max = 100
 	max_targets = 1
 	spell_flags = WAIT_FOR_CLICK
-	compatible_mobs = list(/mob/living)
+	valid_targets = list(/mob/living)
 	hud_state = "rambler-vow"
 
 /spell/targeted/lockinvow/cast(list/targets, mob/user = user)

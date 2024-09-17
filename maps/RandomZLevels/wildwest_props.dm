@@ -4,9 +4,7 @@
 	desc = null
 	icon = 'icons/turf/meat.dmi'
 	icon_state = "meat255"
-
-/turf/unsimulated/wall/meat/canSmoothWith()
-	return null
+	smooths = 0
 
 /turf/unsimulated/wall/guts
 	name = "guts"
@@ -14,10 +12,6 @@
 	icon = 'icons/turf/meat.dmi'
 	icon_state = "guts0"
 	walltype = "guts"
-
-/turf/unsimulated/wall/guts/canSmoothWith()
-	var/static/list/smoothables = list(/turf/unsimulated/wall/guts)
-	return smoothables
 
 /turf/simulated/floor/plating/flesh
 	name = "?"

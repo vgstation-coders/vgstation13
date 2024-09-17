@@ -81,11 +81,13 @@
 	name = "leafy meat"
 	desc = "It's got an awful lot of protein for a vegetable."
 	icon_state = "diona_meat"
+	food_flags = FOOD_SKELETON_FRIENDLY
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/nymphmeat // Can also be used to make veggie burgers like normal diona meat.
 	name = "nymph meat"
 	desc = "A chunk of meat from a diona nymph. It looks dense and fibrous."
 	icon_state = "nymphmeat"
+	food_flags = FOOD_SKELETON_FRIENDLY
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/grey
 	name = "grey meat"

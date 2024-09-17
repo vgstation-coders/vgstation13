@@ -132,7 +132,7 @@
 /datum/centcomm_order/department/medical/harmful_disease/BuildToExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
 	if (istype(V))
 		// Bacteria and memetics are blacklisted as their combined badness can never be 13 or over
-		var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined) - /datum/disease2/disease/bacteria - /datum/disease2/disease/meme)
+		var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined) - /datum/disease2/disease/bacteria - /datum/disease2/disease/meme - /datum/disease2/disease/meme/super)
 		var/datum/disease2/disease/new_virus = new virus_choice
 
 		var/list/anti = list(

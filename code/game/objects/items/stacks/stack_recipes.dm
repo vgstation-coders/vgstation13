@@ -253,7 +253,7 @@
 	//Yeah nah let's put you in a blacksmith_placeholder
 	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc, S, R, req_strikes)
 	I.name = "unforged [R.name]"
-	return 0
+	return I
 
 var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes", list(
 	new/datum/stack_recipe/blacksmithing("hammer head", /obj/item/item_head/hammer_head,			4, time = 5 SECONDS, required_strikes = 6),
@@ -411,6 +411,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("cannonball", /obj/item/cannonball/iron, 20, time = 4 SECONDS, one_per_turf = 0, on_floor = 1),
 	new/datum/stack_recipe("frying pan", /obj/item/weapon/reagent_containers/pan, 10, time = 4 SECONDS, one_per_turf = 0, on_floor = 0),
 	new/datum/stack_recipe("lunch box", /obj/item/weapon/storage/lunchbox/metal, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0),
+	new/datum/stack_recipe("coinbox", /obj/item/weapon/storage/lockbox/coinbox/allaccess, 1, time = 2 SECONDS, one_per_turf = 0, on_floor = 0),
 	null,
 	blacksmithing_recipes,
 	null,
@@ -492,6 +493,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("peg limb",			/obj/item/weapon/peglimb,				2,		time = 50									),
 	new/datum/stack_recipe("clipboard",			/obj/item/weapon/storage/bag/clipboard,	1													),
 	new/datum/stack_recipe("bowl",				/obj/item/trash/bowl,					1													),
+	new/datum/stack_recipe("wooden bucket",		/obj/item/weapon/reagent_containers/glass/bucket/wooden,2,time = 50							),
 	null,
 	new/datum/stack_recipe("boomerang",			/obj/item/weapon/boomerang,				6,		time = 50									),
 	new/datum/stack_recipe("buckler",			/obj/item/weapon/shield/riot/buckler,	5,		time = 50									),
@@ -499,6 +501,7 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("sword handle",		/obj/item/sword_handle,					1,2,10,	time = 2 SECONDS,							other_reqs = list(/obj/item/stack/sheet/metal = 1)),
 	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50									),
 	new/datum/stack_recipe("baseball bat",		/obj/item/weapon/bat,					10,		time = 8 SECONDS							),
+	new/datum/stack_recipe("wooden club",		/obj/item/weapon/melee/wooden_club,					8,		time = 8 SECONDS					),
 	)
 
 /* =========================================================================
@@ -611,6 +614,19 @@ var/list/datum/stack_recipe/cloth_recipes_with_tool = list (
 	new_clothing.update_icon()
 	return R
 
+/* =========================================================================
+							WAX RECIPES
+========================================================================= */
+var/list/datum/stack_recipe/wax_recipes = list (
+	new/datum/stack_recipe/wax("candle",                           /obj/item/candle                            ),
+	)
+
+/datum/stack_recipe/wax/finish_building(var/mob/usr, var/obj/item/stack/S, var/obj/R)
+	R.color = S.color
+	if (R.color in colors_all)
+		R.name = "[colors_all[R.color]] [R.name]"
+	return R
+
 /* ========================================================================
 							LEATHER RECIPES
 ======================================================================== */
@@ -668,4 +684,12 @@ var/list/datum/stack_recipe/ralloy_recipes = list (
 	null,
 	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = TRUE, on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
 	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
+	)
+
+/* ========================================================================
+							SAND RECIPES
+======================================================================== */
+
+var/list/datum/stack_recipe/sand_recipes = list (
+	new/datum/stack_recipe("sandstone", /obj/item/stack/sheet/mineral/sandstone, 1, 1, 50),
 	)

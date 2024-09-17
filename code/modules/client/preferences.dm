@@ -1570,7 +1570,7 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 			for(var/role_id in table_type)
 				dat += "<tr><td>[capitalize(role_id)]</td>"
 				if(table_type[role_id]) //if mode is available on the server
-					if(jobban_isbanned(user, role_id) || (role_id == "pai candidate" && jobban_isbanned(user, "pAI")))
+					if(jobban_isbanned(user, role_id) || (role_id == "pai candidate" && jobban_isbanned(user, "pAI")) || (role_id == MALF && jobban_isbanned(user, "AI")))
 						dat += "<td class='bannedColumn' colspan='5'><b>\[BANNED]</b></td>"
 					else
 						var/wikiroute = role_wiki[role_id]

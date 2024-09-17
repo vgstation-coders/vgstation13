@@ -9,6 +9,12 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = ARBITRARILY_LARGE_NUMBER
 	specheatcap = ARBITRARILY_LARGE_NUMBER
+	plant_nutrition = 2
+	plant_watering = 2
+	plant_pests = -5
+	plant_weeds = -5
+	plant_toxins = -5
+	plant_health = 50
 
 /datum/reagent/adminordrazine/on_mob_life(var/mob/living/carbon/M)
 	if(..())
@@ -73,14 +79,24 @@
 		if(D2.stage < 1)
 			D2.cure(M)
 
-/datum/reagent/adminordrazine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+/datum/reagent/panacea
+	name = "Panacea"
+	id = PANACEA
+	description = "A variant of Adminordrazine that has been subjected to medical sciences to make it incredibly potent. It's magic, stolen from the gods."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#EECE19" //rgb: 238, 206, 25
+	density = ARBITRARILY_LARGE_NUMBER
+	specheatcap = ARBITRARILY_LARGE_NUMBER
+
+/datum/reagent/panacea/on_mob_life(mob/living/M, alien)
 	..()
-	T.add_nutrientlevel(2)
-	T.add_waterlevel(2)
-	T.add_weedlevel(5)
-	T.add_pestlevel(5)
-	T.add_toxinlevel(5)
-	T.add_planthealth(50)
+	if(volume >= 0.2)
+		M.rejuvenate()
+
+/datum/reagent/panacea/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS)
+	..()
+	if((method == INGEST) && (volume >= 0.2))
+		M.rejuvenate()
 
 /datum/reagent/albuterol
 	name = "Albuterol"
@@ -158,6 +174,7 @@
 	id = FEVERFEW
 	description = "Feverfew is a natural anticoagulant useful in fending off viruses, but it leaves one vulnerable to pain and bleeding."
 	color = "#b5651d"
+	custom_metabolism = 0.2
 	pain_resistance = -25
 	data = list ("threshold" = 80)
 
@@ -175,8 +192,9 @@
 	color = "#731008" //rgb: 115, 16, 8
 	density = 0.63
 	specheatcap = 4.21
+	custom_metabolism = REAGENTS_METABOLISM
 	data = list(
-		"threshold" = 10,
+		"threshold" = 35,
 		)
 
 /datum/reagent/antipathogenic/tomato_soup/on_mob_life(var/mob/living/M)
@@ -274,6 +292,7 @@
 	density = 1.49033
 	specheatcap = 0.55536
 	overdose_am = 60
+	plant_toxins = -10
 
 /datum/reagent/anti_toxin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -325,10 +344,6 @@
 				if(prob(10))
 					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
 
-/datum/reagent/anti_toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(-10)
-
 /datum/reagent/arithrazine
 	name = "Arithrazine"
 	id = ARITHRAZINE
@@ -338,7 +353,7 @@
 	custom_metabolism = 0.05
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.67
-	specheatcap = 721.98
+	specheatcap = 0.72198
 
 /datum/reagent/arithrazine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -354,7 +369,7 @@
 	id = BICARIDINE
 	description = "Bicaridine is an analgesic medication and can be used to treat blunt trauma."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#5962F8" //rgb: 89, 98, 248
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.96
 	specheatcap = 0.57
@@ -383,11 +398,10 @@
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_ECOLOGY)
-			T.reagents.remove_reagent(id, 1)
-		if(prob(15))
-			T.mutate(GENE_ECOLOGY)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
@@ -465,6 +479,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
+	plant_toxins = -5
+	plant_health = 5
 
 /datum/reagent/clonexadone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -478,8 +494,6 @@ var/global/list/charcoal_doesnt_remove=list(
 
 /datum/reagent/clonexadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
-	T.add_toxinlevel(-5)
-	T.add_planthealth(5)
 	if(T.seed && !T.dead)
 		var/datum/seed/S = T.seed
 		var/deviation
@@ -512,7 +526,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	var/has_been_armstrong = 0
 	var/armstronged_at = 0 //world.time
 	density = 134.21
-	specheatcap = 5143.18
+	specheatcap = 5.14318
 
 /datum/reagent/comnanobots/reagent_deleted()
 	if(..())
@@ -577,6 +591,8 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.47
 	specheatcap = 3.47
+	plant_toxins = -3
+	plant_health = 3
 
 /datum/reagent/cryoxadone/on_mob_life(var/mob/living/M)
 	if(..())
@@ -587,11 +603,6 @@ var/global/list/charcoal_doesnt_remove=list(
 		M.adjustOxyLoss(-1)
 		M.heal_organ_damage(1,1)
 		M.adjustToxLoss(-1)
-
-/datum/reagent/cryoxadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_toxinlevel(-3)
-	T.add_planthealth(3)
 
 /datum/reagent/cryptobiolin
 	name = "Cryptobiolin"
@@ -617,7 +628,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#ccffb3" //rgb: 204, 255, 179
 	density = 3.9
-	specheatcap = 128.12
+	specheatcap = 0.12812
 	custom_metabolism = 0.1
 
 /datum/reagent/degeneratecalcium/on_mob_life(var/mob/living/M)
@@ -666,7 +677,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = DEXALIN
 	description = "Dexalin is used in the treatment of oxygen deprivation."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#4CE9FF" //rgb: 74, 230, 252
 	density = 2.28
 	specheatcap = 0.91
 
@@ -688,9 +699,10 @@ var/global/list/charcoal_doesnt_remove=list(
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_XENOPHYSIOLOGY)
-			T.reagents.remove_reagent(id, 1)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
@@ -699,7 +711,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = DEXALINP
 	description = "Dexalin Plus is used in the treatment of oxygen deprivation. Its highly effective."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#4CE9FF" //rgb: 74, 230, 252
 	density = 4.14
 	specheatcap = 0.29
 
@@ -711,6 +723,21 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	if(holder.has_any_reagents(LEXORINS))
 		holder.remove_reagents(LEXORINS, 2 * REM)
+
+/datum/reagent/dexalinp/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	if(!holder)
+		return
+	if(!T)
+		T = holder.my_atom //Try to find the mob through the holder
+	if(!istype(T)) //Still can't find it, abort
+		return
+	var/amount = T.reagents.get_reagent_amount(id)
+	if(amount >= 1)
+		if(prob(30))
+			T.mutate(GENE_XENOPHYSIOLOGY)
+			T.reagents.remove_reagent(id, 1)
+	else if(amount > 0)
+		T.reagents.remove_reagent(id, amount)
 
 /datum/reagent/dietine
 	name = "Dietine"
@@ -782,7 +809,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.05
 	overdose_am = REAGENTS_OVERDOSE
 	density = 3.25
-	specheatcap = 52.20
+	specheatcap = 0.5220
 
 /datum/reagent/hyronalin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -822,13 +849,15 @@ var/global/list/charcoal_doesnt_remove=list(
 			var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
 			if(eyes_covered)
 				return
-			else //eyedrops, why not
+			if(TARGET_EYES in zone_sels) /* If you're targeting eyes specifically, splashing the reagent into them will also work. */
 				var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 				if(istype(E) && !E.robotic)
 					M.eye_blurry = 0
 					M.eye_blind = 0
 					if(E.damage > 0)
 						E.damage = 0 //cosmic technologies
+					if(M.sdisabilities & BLIND)
+						M.sdisabilities ^= BLIND
 					to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
 
 /datum/reagent/imidazoline/reaction_dropper_mob(var/mob/living/M)
@@ -845,6 +874,8 @@ var/global/list/charcoal_doesnt_remove=list(
 				M.eye_blind = 0
 				if(E.damage > 0)
 					E.damage = 0 //cosmic technologies
+				if(M.sdisabilities & BLIND)
+					M.sdisabilities ^= BLIND
 				to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
 
 /datum/reagent/inacusiate
@@ -863,6 +894,8 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	M.ear_damage = 0
 	M.ear_deaf = 0
+	if(M.sdisabilities & DEAF)
+		M.sdisabilities ^= DEAF
 
 /datum/reagent/inaprovaline
 	name = "Inaprovaline"
@@ -890,7 +923,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	id = KELOTANE
 	description = "Kelotane is a drug used to treat burns."
 	reagent_state = REAGENT_STATE_LIQUID
-	color = "#C8A5DC" //rgb: 200, 165, 220
+	color = "#C2733F" //rgb: 94, 15, 63
 	density = 2.3
 	specheatcap = 0.51
 
@@ -909,11 +942,10 @@ var/global/list/charcoal_doesnt_remove=list(
 		return
 	var/amount = T.reagents.get_reagent_amount(id)
 	if(amount >= 1)
-		if(prob(15))
+		if(prob(30))
 			T.mutate(GENE_ECOPHYSIOLOGY)
-			T.reagents.remove_reagent(id, 1)
-		if(prob(15))
-			T.mutate(GENE_ECOPHYSIOLOGY)
+			if(prob(50))
+				T.reagents.remove_reagent(id, 1)
 	else if(amount > 0)
 		T.reagents.remove_reagent(id, amount)
 
@@ -962,7 +994,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C0C0C0"
 	custom_metabolism = 0.2
 	density = 4.92
-	specheatcap = 150.53
+	specheatcap = 0.15053
 
 //The anti-nutriment
 /datum/reagent/lipozine
@@ -973,7 +1005,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	nutriment_factor = -10 * REAGENTS_METABOLISM
 	color = "#BBEDA4" //rgb: 187, 237, 164
 	density = 2.63
-	specheatcap = 381.13
+	specheatcap = 0.38113
 
 /datum/reagent/lipozine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -994,7 +1026,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	var/spawning_horror = 0
 	var/percent_machine = 0
 	density = 96.64
-	specheatcap = 199.99
+	specheatcap = 0.19999
 
 /datum/reagent/mednanobots/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1081,7 +1113,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	custom_metabolism = 0.03
 	overdose_am = REAGENTS_OVERDOSE/2
 	density = 4.09
-	specheatcap = 45.59
+	specheatcap = 4.559
 
 /datum/reagent/methylin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1102,7 +1134,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	dupeable = FALSE
 	color = "#3E3959" //rgb: 62, 57, 89
 	density = 236.6
-	specheatcap = 199.99
+	specheatcap = 0.19999
 
 /datum/reagent/oxycodone
 	name = "Oxycodone"
@@ -1240,7 +1272,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#1A1A1A" //rgb: 26, 26, 26
 	density = 2.46
-	specheatcap = 12439.3 //Good fucking luck
+	specheatcap = 0.124393
 
 /datum/reagent/phalanximine/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1382,7 +1414,7 @@ var/global/list/charcoal_doesnt_remove=list(
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	overdose_am = REAGENTS_OVERDOSE
 	density = 1.97
-	specheatcap = 512.61
+	specheatcap = 0.51261
 
 /datum/reagent/ryetalyn/on_mob_life(var/mob/living/M)
 	if(..())
@@ -1412,7 +1444,8 @@ var/global/list/charcoal_doesnt_remove=list(
 
 	M.alpha = 255
 	M.disabilities = 0
-	M.sdisabilities = 0
+	if(M.sdisabilities & MUTE) /* We don't want other sdisabilities (damage-induced blindness & deafness) to be cured since they're not genetic, but muteness gets a pass. */
+		M.sdisabilities ^= MUTE
 
 	//Makes it more obvious that it worked.
 	M.remove_jitter()

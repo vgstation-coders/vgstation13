@@ -6,17 +6,9 @@
 
 	Are you adding a toxic reagent? Remember to update bees_apiary.dm 's lists of toxic reagents accordingly.
 
-	Not sure what to have your density and SHC as? No IRL equivalent you can google? Use the components of the reagent
-		density = (for(components of recipe) total_mass += component density* component volume)/volume of result. E.G
-			6 SALINE = 3 SODIUMCHLORIDE, 5 WATER, 1 AMMONIA
-				density = ((1 + (2.09*3) + (1*5) + (0.51*1))/6) = 2.22 (rounded to 2dp)
+	REGARDING SPECHEATCAP, IF YOU'RE NOT SURE JUST KEEP IT AT WATER'S OR AT 1. IF YOU GET SOMETHING IN THE HUNDREDS OR HIGHER YOU'RE PROBABLY DOING SOMETHING VERY WRONG
 
-		SHC = (for(components of recipe) total_SHC *= component SHC)
-
-
-	NO DON'T DO THAT, IF YOU'RE NOT SURE JUST KEEP IT AT WATER'S. IF YOU GET SOMETHING ABOVE 10 LET ALONE IN THE HUNDREDS YOU'RE PROBABLY DOING SOMETHING VERY WRONG
-
-	It is very common to use REAGENTS_METABOLISM (0.2) or REM / REGEANTS_EFFECT_MULTIPLIER (0.5) in this file.
+	It is very common to use REAGENTS_METABOLISM (0.2) or REM / REGEANTS_EFFECT_MULTIPLIER (0.5) in the reagent files.
 
 */
 
@@ -47,7 +39,7 @@
 	var/glass_desc = null //for reagents with a different desc in a glass
 	var/glass_name = null //defaults to "glass of [reagent name]"
 	var/light_color = null
-	var/flammable = 0
+	var/can_be_lit = 0
 	var/glass_isGlass = 1
 	var/mug_icon_state = null
 	var/mug_name = null
@@ -56,6 +48,14 @@
 	var/tolerance_increase = null  //for tolerance, if set above 0, will increase each by that amount on tick.
 	var/paint_light = PAINTLIGHT_NONE
 	var/adj_temp = 0//keep between -1.5,20 to prevent people from freezing/burning themselves
+
+	//adjusts the values of hydro trays and soils by this value per process
+	var/plant_nutrition = 0
+	var/plant_watering = 0
+	var/plant_pests = 0
+	var/plant_weeds = 0
+	var/plant_toxins = 0
+	var/plant_health = 0
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/list/zone_sels = ALL_LIMBS, var/allow_permeability = TRUE, var/list/splashplosion=list())
 	set waitfor = 0
@@ -102,7 +102,7 @@
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
-			R.handle_splashed_reagent(self.id)
+			R.handle_splashed_reagent(self.id, method, volume)
 
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
@@ -118,7 +118,7 @@
 	if (M.mind)
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
-			R.handle_splashed_reagent(self.id)
+			R.handle_splashed_reagent(self.id, method, volume)
 
 	if(self.tolerance_increase)
 		M.tolerated_chems[self.id] += self.tolerance_increase
@@ -226,6 +226,14 @@
 		return
 
 	holder.remove_reagent(src.id, 1)
+
+	T.add_nutrientlevel(plant_nutrition, id == BLOOD)
+	T.add_waterlevel(plant_watering)
+	T.add_pestlevel(plant_pests)
+	T.add_weedlevel(plant_weeds)
+	T.add_toxinlevel(plant_toxins)
+	T.add_planthealth(plant_health)
+
 
 //Called after add_reagents creates a new reagent
 /datum/reagent/proc/on_introduced(var/data)

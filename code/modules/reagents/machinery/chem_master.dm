@@ -83,7 +83,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			manipcount += SP.rating-1
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
-	max_bottle_size = initial(max_bottle_size) + lasercount*5
+	if(!condi) //everything except the condimaster
+		max_bottle_size = initial(max_bottle_size) + lasercount*5
+	else
+		max_bottle_size = initial(max_bottle_size) + lasercount*12.5
 	max_pill_count = initial(max_pill_count) + manipcount*5
 	max_pill_size = initial(max_pill_size) + manipcount*25
 
@@ -142,8 +145,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		if(B.w_class > W_CLASS_SMALL)
 			to_chat(user, "<span class='warning'>\The [B] is too big to fit.</span>")
 			return
-		if(!user.drop_item(B, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [B]!</span>")
+		if(!user.drop_item(B, src, failmsg = TRUE))
 			return
 
 		src.container = B
@@ -161,8 +163,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		if(src.loaded_pill_bottle)
 			to_chat(user, "<span class='warning'>There already is a pill bottle loaded in the machine.</span>")
 			return
-		if(!user.drop_item(B, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [B]!</span>")
+		if(!user.drop_item(B, src, failmsg = TRUE))
 			return
 
 		src.loaded_pill_bottle = B
@@ -813,6 +814,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	chem_board = /obj/item/weapon/circuitboard/condimaster
 	windowtype = "condi_master"
 	moody_state = "overlay_condimaster"
+	max_bottle_size = 50
 
 /obj/machinery/chem_master/electrolytic
 	name = "\improper Electrolytic ChemMaster"

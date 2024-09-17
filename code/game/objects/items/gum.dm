@@ -4,6 +4,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "gum_wrapped"
 	w_class = W_CLASS_TINY
+	w_type = RECYK_BIOLOGICAL
 	var/wrapped = TRUE
 	var/chewed = FALSE
 	var/chem_volume = 35
@@ -11,7 +12,7 @@
 	var/image/color_overlay
 	var/atom/target = null
 	var/sprite_shrunk = FALSE //I couldn't think of a satisfactory way to check if our transform matrix is minty fresh, so this is used to track if we're shrunk from being stuck to a vending machine
-	autoignition_temperature = AUTOIGNITION_PAPER
+	flammable = TRUE
 	goes_in_mouth = TRUE
 	gender = PLURAL
 	uncountable = TRUE
@@ -212,15 +213,8 @@
 		return
 	if(H.shoes)
 		var/obj/item/clothing/shoes/S = H.shoes
-		if(!blood_overlays[S.type]) //If there isn't a precreated blood overlay make one
-			S.set_blood_overlay()
-		if(S.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
-			S.overlays.Remove(S.blood_overlay)
-		else
-			S.blood_overlay = blood_overlays["[S.type][S.icon_state]"]
-		S.blood_overlay.color = "#FFB2C4"
-		S.overlays += S.blood_overlay
 		S.blood_color = "#FFB2C4"
+		S.set_blood_overlay()
 		H.update_inv_shoes(1)
 	else
 		H.feet_blood_color = "#FFB2C4"

@@ -23,6 +23,7 @@
 	var/base_insulation = 0
 	var/unslippable = 0 //Whether the mob can be slipped
 	var/list/body_alphas = list()	//Alpha values applied to just the body sprite of humans/monkeys, rather than their whole icon
+	var/list/overlays_standing[TOTAL_LAYERS]
 	var/coughedtime = null
 	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
 	var/obj/item/device/station_map/displayed_holomap = null
@@ -32,7 +33,7 @@
 
 /mob/living/carbon/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
 	..()
-	hud_list[CONVERSION_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[CONVERSION_HUD] = new/image/hud('icons/mob/hud.dmi', src, "hudblank")
 	register_event(/event/after_move, src, /mob/living/carbon/proc/update_holomaps)
 	spawn()
 		pulse_loop()

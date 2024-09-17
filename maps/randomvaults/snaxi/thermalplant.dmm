@@ -710,7 +710,7 @@
 /obj/machinery/air_sensor{
 	frequency = 1666;
 	id_tag = "sensor";
-	output = 63
+	metrics_monitored = list("pressure", "temperature", "oxygen", "plasma", "nitrogen", "carbon_dioxide")
 	},
 /obj/structure/geyser/critical,
 /turf/simulated/floor/engine,

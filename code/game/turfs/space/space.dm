@@ -22,16 +22,15 @@
 	if(!parallax_appearances)
 		parallax_appearances = list()
 		for(var/i in 0 to 25)
-			var/I = "[i]"
-			icon_state = I
-			var/image/parallax_overlay = image('icons/turf/space_parallax1.dmi', I)
+			icon_state = "[i]"
+			var/image/parallax_overlay = image('icons/turf/space_parallax1.dmi', icon_state)
 			parallax_overlay.plane = SPACE_DUST_PLANE
 			parallax_overlay.alpha = 80
 			parallax_overlay.blend_mode = BLEND_ADD
 			overlays += parallax_overlay
-			parallax_appearances[I] = appearance
+			parallax_appearances += appearance
 			overlays.Cut()
-	appearance = parallax_appearances["[((x + y) ^ ~(x * y) + z) % 26]"]
+	appearance = parallax_appearances[rand(1,26)]
 
 /turf/space/spawned_by_map_element(var/datum/map_element/ME, var/list/objects)
 	initialize()

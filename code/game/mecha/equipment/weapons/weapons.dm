@@ -637,3 +637,24 @@
 			projectiles--
 	else
 		..()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/random_weapon
+	var/list/blacklisted = list(
+		/obj/item/mecha_parts/mecha_equipment/weapon,
+		/obj/item/mecha_parts/mecha_equipment/weapon/energy,
+		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic,
+		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam,
+		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable,
+		//leaving the banana mortar in because its funny
+		/obj/item/mecha_parts/mecha_equipment/weapon/honker,
+		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/mousetrap_mortar,
+		/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/creampie_mortar,
+		///obj/item/mecha_parts/mecha_equipment/weapon/energy/pulse,
+		///obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack,
+		)
+
+/obj/item/mecha_parts/mecha_equipment/weapon/random_weapon/New()
+	..()
+	var/weapontype = pick(existing_typesof(/obj/item/mecha_parts/mecha_equipment/weapon) - blacklisted)
+	new weapontype (loc)
+	qdel(src)

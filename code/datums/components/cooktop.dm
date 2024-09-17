@@ -22,7 +22,7 @@
 			P.cookvessel = null
 			P.on_cook_stop()
 			P.render_cookvessel()
-			P.particles = null
+			P.remove_particles()
 
 /datum/component/cooktop/proc/on_attackby(mob/attacker, obj/item/item)
 	var/obj/P = parent
@@ -33,7 +33,7 @@
 		P.cookvessel = item
 		P.cookvessel.cook_start()
 		P.on_cook_start()
-		P.particles = item.particles
+		item.link_particles(P)
 		P.render_cookvessel()
 
 /datum/component/cooktop/proc/on_examine(mob/user)

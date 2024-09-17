@@ -374,7 +374,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#365E30" //rgb: 54, 94, 48
 	density = 9.68
-	specheatcap = 101.01
+	specheatcap = 1.0101
 
 /datum/reagent/fishbleach
 	name = "Fish Bleach"
@@ -714,6 +714,8 @@
 	color = "#664330" //rgb: 102, 67, 48
 	density = 6.54
 	specheatcap = 17.56
+	plant_nutrition = 10
+	plant_health = 1
 
 /datum/reagent/nutriment/on_mob_life(var/mob/living/M)
 
@@ -722,11 +724,6 @@
 
 	if(prob(50))
 		M.heal_organ_damage(1, 0)
-
-/datum/reagent/nutriment/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(10)
-	T.add_planthealth(1)
 
 /datum/reagent/pancake_mix
 	name = "Pancake Mix"
@@ -755,6 +752,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 10 * REAGENTS_METABOLISM
 	color = "#00FFFF" //rgb: 211, 90, 13
+	plant_nutrition = 5
 
 /datum/reagent/polypgelatin/on_mob_life(var/mob/living/M)
 
@@ -763,10 +761,6 @@
 
 	if(M.getFireLoss() && prob(20))
 		M.heal_organ_damage(0, 1)
-
-/datum/reagent/polypgelatin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(5)
 
 /datum/reagent/potassiumcarbonate
 	name = "Potassium Carbonate"
@@ -824,6 +818,12 @@
 	color = "#FFFFFF" //rgb: 255, 255, 255
 	density = 2.09
 	specheatcap = 1.65
+	plant_nutrition = 5
+	plant_watering = -5
+	plant_pests = -10
+	plant_weeds = -20
+	plant_toxins = 8
+	plant_health = -2
 
 /datum/reagent/sodiumchloride/reaction_turf(var/turf/simulated/T, var/volume)
 	if(..())
@@ -842,16 +842,6 @@
 		for(var/mob/living/simple_animal/borer/B in borers)
 			B.health -= 1
 			to_chat(B, "<span class='warning'>Something in your host's bloodstream burns you!</span>")
-
-/datum/reagent/sodiumchloride/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_waterlevel(-5)
-	T.add_nutrientlevel(5)
-	T.add_toxinlevel(8)
-	T.add_weedlevel(-20)
-	T.add_pestlevel(-10)
-	if(T.seed && !T.dead)
-		T.add_planthealth(-2)
 
 /datum/reagent/softcores
 	name = "Softcores"
@@ -925,12 +915,9 @@
 	sport = SPORTINESS_SUGAR
 	density = 1.59
 	specheatcap = 1.244
-
-/datum/reagent/sugar/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(1)
-	T.add_pestlevel(20)
-	T.add_weedlevel(20)
+	plant_nutrition = 1
+	plant_pests = 20
+	plant_weeds = 20
 
 /datum/reagent/sugar/cornsyrup
 	name = "High-Fructose Corn Syrup"

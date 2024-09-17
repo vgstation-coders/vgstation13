@@ -93,6 +93,9 @@ var/list/obj/machinery/singularity/white_hole_candidates
 		color= initial(color)
 	..()
 
+/obj/machinery/singularity/proc/seeks_beacon()
+	return TRUE
+
 /obj/machinery/singularity/proc/link_a_wormhole()
 	var/obj/machinery/singularity/other = null
 	do
@@ -674,7 +677,7 @@ var/list/obj/machinery/singularity/white_hole_candidates
 		if(M.stat == CONSCIOUS)
 			if(istype(M,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = M
-				if(H.hasHUD(HUD_MESON) && current_size < 11)
+				if((H.hasHUD(HUD_MESON) || istype(H.glasses, /obj/item/clothing/glasses/scanner/meson) || istype(H.glasses, /obj/item/clothing/glasses/scanner/dual/chiefengineer)) && current_size < 11)
 					to_chat(H, "<span class='notice'>You stare directly into \the [src], good thing you had your protective eyewear on!</span>")
 					return
 				else
@@ -977,17 +980,8 @@ var/list/obj/machinery/singularity/white_hole_candidates
 			qdel(target_singulo)
 
 			var/message = "<span class='recruit'>An admin has begun DEADCHAT-CONTROLLED SINGULARITY!<br>It is on <b>ANARCHY</b> mode.<br>Simply type UP, DOWN, LEFT, or RIGHT to move the singularity.<br>Cooldown per person is currently [new_singulo.input_cooldown/10] seconds.<br>"
-			for(var/mob/M in player_list)
-				if(istype(M, /mob/new_player) || !M.client)
-					continue
-				if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD)) //admins can toggle deadchat on and off. This is a proc in admin.dm and is only give to Administrators and above
-					to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")
-				else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
-					to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")
-				else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
-					var/mob/living/carbon/brain/B = M
-					if(B.brain_dead_chat())
-						to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")
+			for(var/mob/M in get_deadchat_hearers())
+				to_chat(M, message + formatFollow(new_singulo))
 		else if(option_chosen == "Democracy")
 			var/interval = input("Please enter the interval that the singulo makes a move in seconds.", "Interval") as num
 			if(!interval)
@@ -1011,17 +1005,8 @@ var/list/obj/machinery/singularity/white_hole_candidates
 			qdel(target_singulo)
 
 			var/message = "<span class='recruit'>An admin has begun DEADCHAT-CONTROLLED SINGULARITY!<br>It is on <b>DEMOCRACY</b> mode.<br>Simply type UP, DOWN, LEFT, or RIGHT to cast a vote on which direction it should move. Your vote will be your latest message.<br>The singulo will move every [new_singulo.democracy_cooldown/10] seconds. Votes start now!<br>"
-			for(var/mob/M in player_list)
-				if(istype(M, /mob/new_player) || !M.client)
-					continue
-				if(M.client && M.client.holder && M.client.holder.rights & R_ADMIN && (M.client.prefs.toggles & CHAT_DEAD))
-					to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")
-				else if(M.client && M.stat == DEAD && !istype(M, /mob/dead/observer/deafmute) && (M.client.prefs.toggles & CHAT_DEAD))
-					to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")
-				else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
-					var/mob/living/carbon/brain/B = M
-					if(B.brain_dead_chat())
-						to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")
+			for(var/mob/M in get_deadchat_hearers())
+				to_chat(M, message + formatFollow(new_singulo))
 
 /obj/machinery/singularity/special
 	name = "specialarity"

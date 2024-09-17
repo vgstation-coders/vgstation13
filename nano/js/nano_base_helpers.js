@@ -197,6 +197,38 @@ NanoBaseHelpers = function ()
 				if(level==1) return '"<span class="average">Minor Alert</span>"';
 				return '"<span class="bad">Major Alert</span>"';
 			},
+			scrubberAndGasToToggle: function(scrubber, gas) {
+				return scrubber["scrub_" + gas] ? '0' : '1';
+			},
+			scrubberAndGasToClass: function(scrubber, gas) {
+				return scrubber["scrub_" + gas] ? 'linkOn' : '';
+			},
+			generateScrubberGasOptions: function(gasDatums, scrubberData) {
+				var toReturn = "";
+				for (var i = 0; i < gasDatums.length; i++) {
+					var gasID = gasDatums[i]["id"];
+					var linkOn = scrubberData["scrub_" + gasID] == 1 ? ' linkOn' : '';
+					var parameters = {id_tag: scrubberData["id_tag"], command: gasID, val: scrubberData["scrub_" + gasID] ? '0' : '1'};
+					toReturn += '<div unselectable="on" class="link linkActive noIcon' + linkOn + '" data-href="' + NanoUtility.generateHref(parameters) + '" >' + gasDatums[i]["short_name"] + '</div>'
+				}
+				return toReturn;
+			},
+			generateScrubberGasOptionsCentral: function(gasDatums, scrubbedGases) {
+				var toReturn = "";
+				for (var i = 0; i < gasDatums.length; i++) {
+					var gasID = gasDatums[i]["id"];
+					var linkOn = '';
+					for(var j = 0; j < scrubbedGases.length; j++){
+						if(scrubbedGases[j] == gasID){
+							linkOn = ' linkOn'; 
+						}
+					}
+					var parameters = {set_preset_setting: 'scrubbed_gases', gas: gasID};
+					var test = '';
+					toReturn += '<div unselectable="on" class="link linkActive noIcon' + linkOn + '" data-href="' + NanoUtility.generateHref(parameters) + '" >' + gasDatums[i]["short_name"] + '</div>'
+				}
+				return toReturn;
+			},
 			generateHref: function (parameters) {
 				var body = $('body'); // We store data in the body tag, it's as good a place as any
 				_urlParameters = body.data('urlParameters');

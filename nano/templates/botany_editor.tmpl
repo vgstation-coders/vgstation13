@@ -57,6 +57,17 @@ Used In File(s): \code\modules\hydroponics\seed_machines.dm
 				{{/if}}
 			</div>
 		</div>
+		{{if data.mode == 1}}
+			<br>
+			<div class = "item">
+				<div class = "itemLabel">
+					Multi-Splice:
+				</div>
+				<div class = "itemContent">
+				{{:helper.link(data.times_to_splice, null, {'change_splice_amount' : 1}, null)}}
+				</div>
+			</div>
+		{{/if}}
 	{{else}}
 		<div class="notice">No target seed packet loaded</div>
 	{{/if}}

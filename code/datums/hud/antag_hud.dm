@@ -6,15 +6,6 @@
 	name = "antag hud"
 	priority = 1
 
-/datum/visioneffect/antag/on_clean_up(var/mob/M)
-	..()
-	if(!M)
-		return
-	if(M.client)
-		for(var/image/hud in M.client.images)
-			if(findtext(hud.icon_state, "-logo"))
-				M.client.images -= hud
-
 /datum/visioneffect/antag/process_hud(var/mob/M)
 	if(!M.client)
 		return
@@ -33,7 +24,7 @@
 				I_base.Insert(J,null,frame = F, delay = 10/target.mind.antag_roles.len)
 				F++
 
-			var/image/I = image(I_base)
+			var/image/I = new/image/hud(I_base)
 			I.loc = target
 			I.appearance_flags |= RESET_COLOR|RESET_ALPHA
 			I.pixel_x = 20 * PIXEL_MULTIPLIER
@@ -46,6 +37,6 @@
 			var/mob/living/silicon/silicon_target = target
 			if(!silicon_target.laws||(silicon_target.laws&&(silicon_target.laws.zeroth||!silicon_target.laws.inherent.len))||silicon_target.mind.special_role=="traitor")
 				if(isrobot(silicon_target))//Different icons for robutts and AI.
-					M.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalborg")
+					M.client.images += new/image/hud('icons/mob/hud.dmi',silicon_target,"hudmalborg")
 				else
-					M.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalai")
+					M.client.images += new/image/hud('icons/mob/hud.dmi',silicon_target,"hudmalai")

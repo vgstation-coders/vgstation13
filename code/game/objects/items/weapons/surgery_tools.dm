@@ -233,12 +233,10 @@
 	else if(istype(used_item, /obj/item/tool/cautery/laser))
 		if(held)
 			to_chat(user, "<span class='notice'>There's already a cautery attached to \the [src].</span>")
-		else if(!held && user.drop_item(used_item, src))
+		else if(!held && user.drop_item(used_item, src, failmsg = TRUE))
 			to_chat(user, "<span class='notice'>You attach \the [used_item] to \the [src].</span>")
 			playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 			src.held = used_item
-		else
-			to_chat(user, "<span class='danger'>You can't let go of \the [used_item]!</span>")
 
 /*
 /obj/item/tool/scalpel/laser/old //unused laser scalpel
@@ -321,7 +319,9 @@
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
+
 	surgerysound = 'sound/items/bonegel.ogg'
 
 /obj/item/tool/bonegel/suicide_act(var/mob/living/user)
@@ -340,7 +340,9 @@
 	force = 0
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
-	autoignition_temperature = AUTOIGNITION_ORGANIC
+	w_type = RECYK_BIOLOGICAL
+	flammable = TRUE
+
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=3"
 	var/usage_amount = 10
 	surgerysound = 'sound/items/fixovein.ogg'

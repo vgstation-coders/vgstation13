@@ -24,6 +24,8 @@
 	speak_chance = 1
 	turns_per_move = 10
 
+	var/hunger_rate = 0.5 //Passive hunger, takes less per tick than a human due to size
+
 	speak_override = TRUE
 
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
@@ -61,12 +63,16 @@
 		return 0 //under effects of time magick
 	spinaroo(spin_emotes)
 	. = ..()
-	nutrition = max(nutrition-0.5, 0) //Passive hunger, takes less per tick than a human due to size
-	if(nutrition > 150 && health < maxHealth)
-		nutrition = nutrition-10 //Heal by spending nutrition
-		health++
-	if(nutrition < 150 && prob(20))
-		emote("me", 1, "whines hungrily.")
+	nutrition = max(nutrition-hunger_rate, 0)
+	if(.)
+		if(nutrition > 150 && health < maxHealth)
+			nutrition = nutrition-10 //Heal by spending nutrition
+			health++
+	if(nutrition < 150 && prob(1))
+		for(var/mob/living/carbon/human/H in view(7, src))
+			if(H.client)
+				emote("me", 1, "whines hungrily.") //Only whine if we see a human with a client in our view
+				break
 	if(.)
 		regular_hud_updates()
 		standard_damage_overlay_updates()
@@ -470,6 +476,75 @@
 	inventory_head = new/obj/item/clothing/head/christmas/santahat/red(src)
 	regenerate_icons()
 
+//scary but still friendly
+/mob/living/simple_animal/corgi/Ian/cultify()
+	var/turf/T = get_turf(src)
+	new /mob/living/simple_animal/corgi/Ian/narsie(T)
+	new /obj/effect/gibspawner/generic(T)
+	qdel(src)
+
+/mob/living/simple_animal/corgi/Ian/narsie
+	name = "Nar-Sian"
+	real_name = "Nar-Sian"
+	gender = MALE
+	desc = "It's a hellish abomination vaguely in the shape of a corgi. How cute."
+
+	faction = "cult"
+
+	icon_state = "narsian"
+	icon_living = "narsian"
+	icon_dead = "narsian_dead"
+
+	speak = list("Ta'gh fara'qha fel d'amar det!", "...mgar...", "N'ath reth sh'yro eth d'raggathnor!", "Grrrr!")
+	speak_emote = list("grunts", "murmurs")
+	emote_hear = list("barks eerily.", "emits some unholy noise.")
+	emote_see = list("drools from his gaping maw.", "stares your way hungrily.")
+	emote_sound = list("sound/voice/corgibark_echo.ogg")
+
+	min_oxy = 0
+	max_oxy = 0
+	min_tox = 0
+	max_tox = 0
+	min_co2 = 0
+	max_co2 = 0
+	min_n2 = 0
+	max_n2 = 0
+	minbodytemp = 0
+	maxbodytemp = 9001
+
+/mob/living/simple_animal/corgi/Ian/narsie/New()
+	..()
+	add_particles(PS_CULT_SMOKE)
+	add_particles(PS_CULT_SMOKE2)
+	adjust_particles(PVAR_SPAWNING,0.19,PS_CULT_SMOKE)
+	adjust_particles(PVAR_SPAWNING,0.21,PS_CULT_SMOKE2)
+
+/mob/living/simple_animal/corgi/Ian/narsie/reset_appearance()
+	name = "Nar-Sian"
+	real_name = "Nar-Sian"
+	speak = list("Ta'gh fara'qha fel d'amar det!", "...mgar...", "N'ath reth sh'yro eth d'raggathnor!", "Grrrr!")
+	speak_emote = list("grunts", "murmurs")
+	emote_hear = list("barks eerily.", "emits some unholy noise.")
+	emote_see = list("drools from his gaping maw.", "stares your way hungrily.")
+	emote_sound = list("sound/voice/corgibark_echo.ogg")
+	min_oxy = 0
+	minbodytemp = 0
+	maxbodytemp = 9001
+	set_light(0)
+
+/mob/living/simple_animal/corgi/Ian/narsie/cultify()
+	health = maxHealth
+
+/mob/living/simple_animal/corgi/Ian/narsie/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if(istype(O, /obj/item/weapon/storage/bible))
+		var/turf/T = get_turf(src)
+		playsound(T, 'sound/effects/bonk.ogg', 80, 1)
+		new /mob/living/simple_animal/corgi/Ian(T)
+		anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "deconversion", lay = NARSIE_GLOW, plane = ABOVE_LIGHTING_PLANE)
+		qdel(src)
+		return
+	..()
+
 /mob/living/simple_animal/corgi/regenerate_icons()
 	overlays = list()
 
@@ -573,6 +648,7 @@
 	icon_dead = "doby_dead"
 	spin_emotes = list("prances around.","chases her nub of a tail.")
 	is_pet = TRUE
+	hunger_rate = 0.05 //Sasha is extremely resilient against hunger
 	holder_type = /obj/item/weapon/holder/animal/mutt
 	species_type = /mob/living/simple_animal/corgi/sasha
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal

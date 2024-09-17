@@ -6,4 +6,5 @@
 	hud_state = "wiz_noclothes"
 	price = 2 * Sp_BASE_PRICE
 	specialization = SSUTILITY
+	range = SELFCAST
 //The no_clothes check exists in spell_code.dm

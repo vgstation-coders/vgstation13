@@ -695,7 +695,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				custom_pain_msg = "Pain sears [which_organ ? " your " + which_organ.display_name : ""]!"
 			H.custom_pain(custom_pain_msg, post_mod_predicted_dmg >= SCALD_AGONIZING, post_mod_predicted_dmg >= SCALD_PAINFUL)
 		L.apply_effect(burn_dmg, AGONY) //pain
-		L.apply_damage(burn_dmg, BURN, which_organ)
 
 #undef SCALD_PAINFUL
 #undef SCALD_AGONIZING
@@ -1070,9 +1069,9 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if (istype(my_atom,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) && reagent_list.len)
 		to_chat(user, "<span class='info'>It contains [total_volume] units of what looks like [get_master_reagent_name()].</span>")
 		return
-	to_chat(user, "It contains:")
 	if(!user.hallucinating())
 		if(reagent_list.len)
+			to_chat(user, "It contains:")
 			for(var/datum/reagent/R in reagent_list)
 				if(blood_type && R.id == BLOOD)
 					var/type = R.data["blood_type"]
@@ -1080,9 +1079,13 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				else
 					to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
 		else
-			to_chat(user, "<span class='info'>Nothing.</span>")
+			if (istype(my_atom,/obj/machinery/portable_atmospherics/hydroponics))
+				to_chat(user, "It contains <span class='info'>no reagents</span>.")//I mean, there's probably a big ass plant in there.
+			else
+				to_chat(user, "It contains <span class='info'>nothing</span>.")
 
 	else //Show stupid things to hallucinating mobs
+		to_chat(user, "It contains:")
 		var/list/fake_reagents = list("Water", "Orange juice", "Banana juice", "Tungsten", "Chloral Hydrate", "Helium",\
 			"Sea water", "Energy drink", "Gushin' Granny", "Salt", "Sugar", "something yellow", "something red", "something blue",\
 			"something suspicious", "something smelly", "something sweet", "Soda", "something that reminds you of home",\

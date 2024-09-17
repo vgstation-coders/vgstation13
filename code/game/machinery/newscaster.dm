@@ -1162,8 +1162,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	throw_speed = 1
 	pressure_resistance = 1
 	attack_verb = list("baps", "smacks", "whaps")
-	autoignition_temperature = AUTOIGNITION_PAPER
-	fire_fuel = TRUE
+	flammable = TRUE
 
 	var/screen = 0
 	var/pages = 0

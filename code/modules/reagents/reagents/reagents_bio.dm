@@ -47,6 +47,8 @@
 	mug_name = "mug of tomato juice"
 	mug_desc = "Are you sure this is tomato juice?"
 	flags = CHEMFLAG_PIGMENT
+	plant_nutrition = 5
+	plant_watering = 1
 
 	data = list(
 		"viruses" = null,
@@ -198,6 +200,7 @@
 						var/blood_total_before = V.blood_total
 						var/blood_usable_before = V.blood_usable
 						var/divisor = (locate(/datum/power/vampire/mature) in V.current_powers) ? min(2,foundmob.stat + 1) : (min(2,foundmob.stat + 1)*2)
+						divisor = divisor * BLOOD_UNIT_DRAIN_MULTIPLIER
 						if (!(targetref in V.feeders))
 							V.feeders[targetref] = 0
 						if (V.feeders[targetref] < MAX_BLOOD_PER_TARGET)
@@ -271,11 +274,6 @@
 		var/obj/item/clothing/mask/stone/S = O
 		S.spikes()
 
-/datum/reagent/blood/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
-	..()
-	T.add_nutrientlevel(5, TRUE)
-	T.add_waterlevel(1)
-
 /datum/reagent/carp_pheromones
 	name = "Carp Pheromones"
 	id = CARPPHEROMONES
@@ -304,7 +302,7 @@
 	if(prob(5)) //5% chance of stinking per life()
 		for(var/mob/living/carbon/C in oview(stench_radius, M)) //All other carbons in 4 tile radius (excluding our mob)
 			if(C.stat)
-				return
+				continue
 			if(istype(C.wear_mask))
 				var/obj/item/clothing/mask/c_mask = C.wear_mask
 				if(c_mask.body_parts_covered & MOUTH)
