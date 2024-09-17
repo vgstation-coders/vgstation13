@@ -68,7 +68,7 @@
 	"}
 
 	if(smelter_data["credits"] != -1)
-		dat += "<br>Current unclaimed credits: $[num2septext(smelter_data["credits"])]<br>"
+		dat += "<br>Current unclaimed credits: $[num2septext(round(smelter_data["credits"],0.01))]<br>"
 
 		if(istype(id))
 			dat += "You have [id.GetBalance(format = 1)] credits in your bank account. <A href='?src=\ref[src];eject=1'>Eject ID.</A><br>"
