@@ -42,7 +42,7 @@
 
 	var/mob/living/carbon/C = target
 	if ((C.sdisabilities & BLIND) || (C.sight & BLIND))
-		to_chat(user, "<span class='warning'>\the [C] is blind!</span>")
+		to_chat(user, "<span class='warning'>\The [C] is blind!</span>")
 		return TRUE
 	var/success = C.vampire_affected(user.mind)
 	switch(success)

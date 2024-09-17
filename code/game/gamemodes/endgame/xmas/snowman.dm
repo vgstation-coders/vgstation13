@@ -145,7 +145,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/snowman/death(gibbed)
 	visible_message("<span class='game say'><span class='name'>[name]</span> murmurs, \"[pick("Oh my snowballs...","I will...be back...")]\"</span>")
-	visible_message("\the [src] collapses in a pile of snow.")
+	visible_message("\The [src] collapses in a pile of snow.")
 	var/turf/T = get_turf(src)
 	new /obj/item/stack/sheet/snow(T, 1)
 	new /obj/item/stack/sheet/snow(T, 1)

@@ -669,7 +669,7 @@ var/bloodstone_backup = 0
 	playsound(T, 'sound/weapons/hivehand_empty.ogg', 75, 1)
 	. = ..()
 	if (.)
-		visible_message("<span class='warning'>\the [src] nails \the [A] to \the [T].</span>")
+		visible_message("<span class='warning'>\The [src] nails \the [A] to \the [T].</span>")
 
 ///////////////////////////////////CULT DANCE////////////////////////////////////
 //used by the cultdance emote. other cult dances have their own procs

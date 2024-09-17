@@ -167,7 +167,7 @@
 			animate(src, alpha=50, time=300)
 
 	else if(isliving(A))
-		visible_message("<span class='warning'>\the [src] sticks itself on \the [A].</span>")
+		visible_message("<span class='warning'>\The [src] sticks itself on \the [A].</span>")
 		src.forceMove(A)
 		self_overlay = new(icon,src,icon_state,10,dir)
 		self_overlay.pixel_x = pixel_x

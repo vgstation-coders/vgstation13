@@ -586,7 +586,7 @@ var/global/global_cricket_population = 0
 		return
 
 	if(alert(user,"Harvest the honeycombs?[((queen_bees_inside || worker_bees_inside) && species.angery) ? " Be ready to handle some angry bees!" : ""]","[name]","Yes","No")== "Yes")
-		user.visible_message("<span class='notice'>\the [user] begins dismantling the apiary.</span>","<span class='danger'>You begin harvesting the honeycombs.</span>")
+		user.visible_message("<span class='notice'>\The [user] begins dismantling the apiary.</span>","<span class='danger'>You begin harvesting the honeycombs.</span>")
 
 		if((queen_bees_inside || worker_bees_inside) && species.angery)
 			playsound(loc, 'sound/effects/fan.ogg', 75, 1, -1)

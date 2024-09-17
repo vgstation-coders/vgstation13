@@ -610,7 +610,7 @@
 			return 0
 
 		if(contents.len >= storage_slots) //There's a rational limit to this madness people
-			to_chat(user, "<span class='warning'>\the [src] is already too full to fit \the [W].</span>")
+			to_chat(user, "<span class='warning'>\The [src] is already too full to fit \the [W].</span>")
 			return 0
 
 		if(user.drop_item(W, src))

@@ -433,7 +433,7 @@
 /mob/living/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
 		if(B.stuck_to)
-			visible_message("<span class='warning'>\the [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
+			visible_message("<span class='warning'>\The [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
 			B.deactivate()
 			B.unstick()
 
@@ -860,7 +860,7 @@ Thanks.
 		if(!istype(CM) || !CM.handcuffed)
 			var/datum/chain/tether_datum = L.tether.chain_datum
 			if(tether_datum.extremity_B == src)
-				L.visible_message("<span class='danger'>\the [L] quickly grabs and removes \the [L.tether] tethered to his body!</span>",
+				L.visible_message("<span class='danger'>\The [L] quickly grabs and removes \the [L.tether] tethered to his body!</span>",
 							  "<span class='warning'>You quickly grab and remove \the [L.tether] tethered to your body.</span>")
 				L.tether = null
 				tether_datum.extremity_B = null
@@ -869,7 +869,7 @@ Thanks.
 	//Trying to unstick a stickybomb
 	for(var/obj/item/stickybomb/B in L)
 		if(B.stuck_to)
-			L.visible_message("<span class='danger'>\the [L] is trying to reach and pull off \the [B] stuck on his body!</span>",
+			L.visible_message("<span class='danger'>\The [L] is trying to reach and pull off \the [B] stuck on his body!</span>",
 						  "<span class='warning'>You reach for \the [B] stuck on your body and start pulling.</span>")
 			if(do_after(L, src, 30, 10, FALSE))
 				L.visible_message("<span class='danger'>After struggling for an instant, \the [L] manages unstick \the [B] from his body!</span>",
