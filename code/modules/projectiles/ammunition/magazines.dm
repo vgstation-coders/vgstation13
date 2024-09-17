@@ -341,29 +341,13 @@
 
 /obj/item/ammo_storage/magazine/lawgiver/update_icon()
 	overlays.len = 0
-	// We only have 5 overlays but potentially more
-	// than 5 ammo types. Ammo types after the 5th don't
-	// get an overlay.
-	var/static/list/available_overlays = list(
+	var/static/list/available_overlays = list( //five ammo types get overlays
 		"stun", "laser", "rapid", "flare", "ricochet",
 	)
 	for(var/i in 1 to min(available_overlays.len, ammo_counters.len))
 		var/datum/lawgiver_mode/mode = ammo_counters[i]
-		var/ammo_left
-		var/fifth_of_total = mode.ammo_per_shot/5
-		if(ammo_counters[mode]<=mode.ammo_per_shot-(fifth_of_total*4))
-			ammo_left = 1	//1 blip
-		if(ammo_counters[mode]<=mode.ammo_per_shot-(fifth_of_total*3))
-			ammo_left = 2	//2 blip
-		if(ammo_counters[mode]<=mode.ammo_per_shot-(fifth_of_total*2))
-			ammo_left = 3	//3blip
-		if(ammo_counters[mode]<=mode.ammo_per_shot-(fifth_of_total))
-			ammo_left = 4 	//4blip
-		if(ammo_counters[mode]<=mode.ammo_per_shot)
-			ammo_left = 5 	//5blip
-		//I think there's a clean way to do this with ceil() and modulo
-		//ceil(magazine.ammo_counters-(firing_mode_datum.ammo_per_shot/5))
-		overlays += image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-[available_overlays[i]]-[ammo_left]")
+		var/ammo_left = ceil(5-((mode.ammo_per_shot-ammo_counters[mode])/(mode.ammo_per_shot/5))) //takes the number of shots left compared to the max and makes it a ratio of five since there are 5 states for each overlay.
+		overlays += image('icons/obj/ammo.dmi', src, "lawgiver-[available_overlays[i]]-[ammo_left]")
 
 /obj/item/ammo_storage/magazine/lawgiver/proc/isEmpty()
 	for(var/datum/lawgiver_mode/mode in ammo_counters)
@@ -395,19 +379,53 @@
 	charger.try_use_power(100 * charger.charging_speed_modifier + 100 * charger.charging_speed_modifier * charger.efficiency_modifier)
 	charger.update_icon()
 
-/obj/item/ammo_storage/magazine/lawgiver/proc/honkgiver_ammo_conversion(var/obj/item/ammo_storage/magazine/lawgiver/honkgiver/HGM)//pass clowned type
-	for(var/datum/lawgiver_mode/mode in ammo_counters)
-		ammo_counters[mode] //max number of shots per mode/max
+/obj/item/ammo_storage/magazine/lawgiver/attackby(var/atom/A, var/mob/user)
+	if(istype(A,/obj/item/toy/crayon/rainbow)&& !istype(src,/obj/item/ammo_storage/magazine/lawgiver/honkgiver))
+		var/obj/item/ammo_storage/magazine/lawgiver/honkgiver/HGM = new /obj/item/ammo_storage/magazine/lawgiver/honkgiver(loc)
+		honkgiver_ammo_conversion(HGM)
+		HGM.original_type = type
+		transfer_fingerprints(src,HGM)
+		qdel(src)
+	else
+		..()
+
+/obj/item/ammo_storage/magazine/lawgiver/proc/honkgiver_ammo_conversion(var/obj/item/ammo_storage/magazine/lawgiver/honkgiver/HGM)
+	var/i = 1
+	for(var/datum/lawgiver_mode/mode in HGM.ammo_counters)
+		if(i<=HGM.ammo_counters.len)
+			HGM.ammo_counters[mode] = floor(ammo_counters[ammo_counters[i]] * mode.ammo_per_shot/ammo_counters[i].ammo_per_shot)
+		else
+			return
+		i++
 
 /obj/item/ammo_storage/magazine/lawgiver/demolition
 	desc = "State-of-the-art bluespace technology allows this magazine to generate new rounds from energy, requiring only a power source to refill the full suite of ammunition types. This model is outfitted with high-explosive rounds."
 	compatible_gun_type = /obj/item/weapon/gun/lawgiver/demolition
 
-//HONKGIVER //TODO overlay states for all the different shots. make them green.
 /obj/item/ammo_storage/magazine/lawgiver/honkgiver
 	desc = "State-of-the-HONK clownspace technology allows this magazine to generate new rounds by honking it with a simple bike horn."
 	compatible_gun_type = /obj/item/weapon/gun/lawgiver/honkgiver
 	icon_state = "honkgiver"
+	var/obj/item/ammo_storage/magazine/lawgiver/original_type = null
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/decontaminate()
+	..()
+	if(original_type)
+		var/obj/item/ammo_storage/magazine/lawgiver/LGM = new original_type(loc)
+		honkgiver_ammo_conversion(LGM)
+		transfer_fingerprints(src,LGM)
+		qdel(src)
+	else
+		visible_message("<span class='notice'>\The [src] resists your efforts to declownify it! It must truly be a timeless relic of clownliness...</span>")
+
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/ultimate
+
+/obj/item/ammo_storage/magazine/lawgiver/honkgiver/ultimate/New()
+	..()
+	for(var/datum/lawgiver_mode/mode in ammo_counters)
+		ammo_counters[mode] = 9999999
+	update_icon()
 
 /obj/item/ammo_storage/magazine/invisible
 	desc = "Reading how many shots you had left just got a lot more difficult."
