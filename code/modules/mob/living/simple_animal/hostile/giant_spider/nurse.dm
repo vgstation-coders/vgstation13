@@ -119,6 +119,8 @@
 		hud_used.spider_queen_counter.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'><br><font color='#FFFF00'>[spider_count]/[queen_req]</font></div>"
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/proc/spin_web(var/turf/T)
+	if(!T)
+		return 0
 	if(!T.has_gravity(src))
 		return 0
 	if(!locate(/obj/effect/spider/stickyweb) in T)
