@@ -109,7 +109,7 @@ var/global/datum/emergency_shuttle/emergency_shuttle
 		var/timeleft = round((endtime - world.time)/10 ,1)
 		if(direction >= 0)
 			if(world.time - last_second_tick >= 1 SECONDS)
-				INVOKE_EVENT(src, /event/shuttletimer, "time" = timeleft)
+				INVOKE_EVENT(src, /event/shuttletimer, "time" = timeleft, "direction" = direction)
 				last_second_tick = world.time
 			return timeleft
 		else

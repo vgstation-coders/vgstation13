@@ -275,7 +275,9 @@
 
 // Arguments:
 // time: shuttle timer
+// direction: shuttle direction
 /event/shuttletimer
+
 // Called by miscellaneous functions not covered by entered, equipped and unequipped events for cameranet updates
 // Arguments:
 // atom/movable/mover: the atom changing status on the cameranet
