@@ -142,7 +142,7 @@
 		if(magazine_overlay)
 			overlays -= magazine_overlay
 			magazine_overlay = null
-	
+		
 
 /obj/item/weapon/gun/projectile/proc/chamber_round() //Only used by guns with magazine
 	if(chambered || !stored_magazine)
